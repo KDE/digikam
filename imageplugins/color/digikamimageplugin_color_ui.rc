@@ -13,6 +13,7 @@
       <Action name="imageplugin_adjustcurves" />
       <Separator />
       <Action name="imageplugin_invert" />
+      <Action name="imageplugin_film" />
       <Action name="imageplugin_blackwhite" />
       <Action name="imageplugin_channelmixer" />
       <Action name="imageplugin_whitebalance" />

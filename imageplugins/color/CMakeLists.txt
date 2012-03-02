@@ -10,6 +10,7 @@ SET(digikamimageplugin_color_PART_SRCS autocorrectiontool.cpp
                                        adjustcurvestool.cpp
                                        adjustlevelstool.cpp
                                        imageplugin_color.cpp
+                                       filmtool.cpp
    )
 
 

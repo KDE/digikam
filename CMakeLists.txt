@@ -789,6 +789,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/decorate/borderfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/decorate/bordersettings.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/decorate/texturefilter.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/film/filmfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/fx/blurfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/fx/blurfxfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/fx/colorfxfilter.cpp
@@ -1557,6 +1558,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/cb
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/curves
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/decorate
+	${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/film
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/fx
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/greycstoration
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/hsl

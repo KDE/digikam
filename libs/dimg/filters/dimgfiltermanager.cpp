@@ -86,6 +86,7 @@
 #include "tonalityfilter.h"
 #include "unsharpmaskfilter.h"
 #include "wbfilter.h"
+#include "filmfilter.h"
 
 namespace Digikam
 {
@@ -142,6 +143,7 @@ void DImgFilterManager::DImgFilterManagerPriv::setupCoreGenerators()
             << ImgFilterPtr(new BasicDImgFilterGenerator<DistortionFXFilter>())
             << ImgFilterPtr(new BasicDImgFilterGenerator<EmbossFilter>())
             << ImgFilterPtr(new BasicDImgFilterGenerator<EqualizeFilter>())
+            << ImgFilterPtr(new BasicDImgFilterGenerator<FilmFilter>())
             << ImgFilterPtr(new BasicDImgFilterGenerator<FilmGrainFilter>())
             << ImgFilterPtr(new BasicDImgFilterGenerator<FreeRotationFilter>())
             << ImgFilterPtr(new BasicDImgFilterGenerator<GreycstorationFilter>())
@@ -190,6 +192,7 @@ void DImgFilterManager::DImgFilterManagerPriv::setupFilterIcons()
     filterIcons.insert("digikam:DistortionFXFilter",   "distortionfx");
     filterIcons.insert("digikam:EmbossFilter",         "embosstool");
     filterIcons.insert("digikam:EqualizeFilter",       "autocorrection");
+    //filterIcons.insert("digikam:FilmFilter",           "");         //FIXME: icon needed
     filterIcons.insert("digikam:FilmGrainFilter",      "filmgrain");
     filterIcons.insert("digikam:FreeRotationFilter",   "freerotation");
     //filterIcons.insert("digikam:GreycstorationFilter", "");         //FIXME

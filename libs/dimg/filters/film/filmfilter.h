@@ -1,0 +1,143 @@
+/*
+ * FilmFilter.h
+ *
+ *  Created on: Feb 5, 2012
+ *      Author: matze
+ */
+
+#ifndef FILMFILTER_H_
+#define FILMFILTER_H_
+
+#include <QString>
+#include <QList>
+#include <QListWidgetItem>
+#include <QSharedPointer>
+
+#include "dimgthreadedfilter.h"
+#include "levelsfilter.h"
+
+using namespace Digikam;
+
+namespace Digikam {
+
+class DIGIKAM_EXPORT FilmContainer
+{
+public:
+    enum CNFilmProfile {
+        CNNeutral = 0,
+        CNKodakGold100,
+        CNKodakGold200,
+        CNKodakEktar100,
+        CNKodakProfessionalPortra160NC,
+        CNKodakProfessionalPortra160VC,
+        CNKodakProfessionalPortra400NC,
+        CNKodakProfessionalPortra400VC,
+        CNKodakProfessionalPortra800Box,
+        CNKodakProfessionalPortra800P1,
+        CNKodakProfessionalPortra800P2,
+        CNKodakProfessionalNewPortra160,
+        CNKodakProfessionalNewPortra400,
+        CNKodakFarbwelt100,
+        CNKodakFarbwelt200,
+        CNKodakFarbwelt400,
+        CNKodakRoyalGold400,
+        CNAgfaphotoVistaPlus200,
+        CNAgfaphotoVistaPlus400,
+        CNFujicolorPro160S,
+        CNFujicolorPro160C,
+        CNFujicolorNPL160,
+        CNFujicolorPro400H,
+        CNFujicolorPro800Z,
+        CNFujicolorSuperiaReala,
+        CNFujicolorSuperia100,
+        CNFujicolorSuperia200,
+        CNFujicolorSuperiaXtra400,
+        CNFujicolorSuperiaXtra800,
+        CNFujicolorTrueDefinition400,
+        CNFujicolorSuperia1600
+    };
+
+    class ListItem : public QListWidgetItem
+    {
+    public:
+        ListItem(const QString& text, QListWidget* parent, CNFilmProfile type) :
+            QListWidgetItem(text, parent, type + QListWidgetItem::UserType)
+            {}
+
+    };
+
+    explicit FilmContainer();
+    explicit FilmContainer(CNFilmProfile profile, double gamma, bool sixteenBit);
+
+    void setWhitePoint(const DColor& wp);
+    DColor whitePoint() const;
+    void setStrength(double strength);
+    double strength() const;
+    void setSixteenBit(bool val);
+    void setGamma(double val);
+    double gamma() const;
+    void setCNType(CNFilmProfile profile);
+    CNFilmProfile cnType() const;
+    LevelsContainer toLevels() const;
+    BCGContainer toBCG() const;
+
+    static const QMap<int, QString> profileMap;
+    static QList<ListItem*> profileItemList(QListWidget* view);
+
+private:
+    int whitePointForChannel(int channel) const;
+    double blackPointForChannel(int ch) const;
+    double gammaForChannel(int channel) const;
+
+    static QMap<int, QString> profileMapInitializer();
+
+    class FilmContainerPriv;
+    QSharedPointer<FilmContainerPriv> d;
+};
+
+class DIGIKAM_EXPORT FilmFilter: public DImgThreadedFilter
+{
+public:
+    explicit FilmFilter(QObject* parent=0);
+    explicit FilmFilter(DImg* orgImage, QObject* parent=0, const FilmContainer& settings=FilmContainer());
+
+    virtual ~FilmFilter();
+
+    static QString FilterIdentifier()
+    {
+        return "digikam:FilmFilter";
+    }
+
+    static QString DisplayableName()
+    {
+        return I18N_NOOP("Color Negative Inverter");
+    }
+
+    static QList<int> SupportedVersions()
+    {
+        return QList<int>() << 1;
+    }
+
+    static int CurrentVersion()
+    {
+        return 1;
+    }
+
+    virtual QString filterIdentifier() const
+    {
+        return FilterIdentifier();
+    }
+
+    virtual FilterAction filterAction();
+    virtual void readParameters(const FilterAction& action);
+
+private:
+    void filterImage();
+
+    class FilmFilterPriv;
+    FilmFilterPriv* d;
+};
+
+}
+
+#endif /* FILMFILTER_H_ */

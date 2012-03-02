@@ -54,6 +54,7 @@
 #include "channelmixertool.h"
 #include "adjustcurvestool.h"
 #include "adjustlevelstool.h"
+#include "filmtool.h"
 
 using namespace DigikamColorImagePlugin;
 
@@ -93,6 +94,7 @@ public:
     KAction*               channelMixerAction;
     KAction*               curvesAction;
     KAction*               levelsAction;
+    KAction*			   filmAction;
 
     IccProfilesMenuAction* profileMenuAction;
 };
@@ -187,6 +189,12 @@ ImagePlugin_Color::ImagePlugin_Color(QObject* parent, const QVariantList&)
     connect(d->levelsAction, SIGNAL(triggered(bool)),
             this, SLOT(slotLevelsAdjust()));
 
+    d->filmAction = new KAction(KIcon("film"), i18n("Film ..."), this);
+    d->filmAction->setShortcut(KShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_I));
+    actionCollection()->addAction("imageplugin_film", d->filmAction);
+    connect(d->filmAction, SIGNAL(triggered(bool)),
+    		this, SLOT(slotFilm()));
+
     setXMLFile("digikamimageplugin_color_ui.rc");
 
     kDebug() << "ImagePlugin_Color plugin loaded";
@@ -216,6 +224,7 @@ void ImagePlugin_Color::setEnabledActions(bool b)
     d->channelMixerAction->setEnabled(b);
     d->curvesAction->setEnabled(b);
     d->levelsAction->setEnabled(b);
+    d->filmAction->setEnabled(b);
 }
 
 void ImagePlugin_Color::slotInvert()
@@ -398,4 +407,10 @@ void ImagePlugin_Color::slotLevelsAdjust()
 {
     AdjustLevelsTool* tool = new AdjustLevelsTool(this);
     loadTool(tool);
+}
+
+void ImagePlugin_Color::slotFilm()
+{
+	FilmTool* tool = new FilmTool(this);
+	loadTool(tool);
 }
