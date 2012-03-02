@@ -3,8 +3,8 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2004-07-20
- * Description : film negative tool
+ * Date        : 2012-02-05
+ * Description : film color negative inverter tool
  *
  * Copyright (C) 2012 by Matthias Welwarsky <matthias at welwarsky dot de>
  *
