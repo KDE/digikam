@@ -7,7 +7,7 @@
  * Description : digiKam image editor plugin to correct color
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -36,7 +36,7 @@
 
 namespace Digikam
 {
-class IccProfile;
+    class IccProfile;
 }
 
 using namespace Digikam;
@@ -47,7 +47,7 @@ class ImagePlugin_Color : public ImagePlugin
 
 public:
 
-    ImagePlugin_Color(QObject* parent, const QVariantList& args);
+    ImagePlugin_Color(QObject* const parent, const QVariantList& args);
     ~ImagePlugin_Color();
 
     void setEnabledSelectionActions(bool b);

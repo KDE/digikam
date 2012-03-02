@@ -7,7 +7,7 @@
  * Description : digiKam image editor plugin to correct color
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -79,6 +79,7 @@ public:
         channelMixerAction(0),
         curvesAction(0),
         levelsAction(0),
+        filmAction(0),
         profileMenuAction(0)
     {}
 
@@ -99,7 +100,7 @@ public:
     IccProfilesMenuAction* profileMenuAction;
 };
 
-ImagePlugin_Color::ImagePlugin_Color(QObject* parent, const QVariantList&)
+ImagePlugin_Color::ImagePlugin_Color(QObject* const parent, const QVariantList&)
     : ImagePlugin(parent, "ImagePlugin_Color"),
       d(new ImagePlugin_ColorPriv)
 {
@@ -411,6 +412,6 @@ void ImagePlugin_Color::slotLevelsAdjust()
 
 void ImagePlugin_Color::slotFilm()
 {
-	FilmTool* tool = new FilmTool(this);
-	loadTool(tool);
+    FilmTool* tool = new FilmTool(this);
+    loadTool(tool);
 }
