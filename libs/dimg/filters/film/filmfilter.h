@@ -24,22 +24,27 @@
 #ifndef FILMFILTER_H_
 #define FILMFILTER_H_
 
+// Qt includes
+
 #include <QString>
 #include <QList>
 #include <QListWidgetItem>
 #include <QSharedPointer>
 
+// KDE includes
+
 #include "dimgthreadedfilter.h"
 #include "levelsfilter.h"
 
-using namespace Digikam;
-
-namespace Digikam {
+namespace Digikam
+{
 
 class DIGIKAM_EXPORT FilmContainer
 {
 public:
-    enum CNFilmProfile {
+
+    enum CNFilmProfile
+    {
         CNNeutral = 0,
         CNKodakGold100,
         CNKodakGold200,
@@ -76,32 +81,38 @@ public:
     class ListItem : public QListWidgetItem
     {
     public:
-        ListItem(const QString& text, QListWidget* parent, CNFilmProfile type) :
-            QListWidgetItem(text, parent, type + QListWidgetItem::UserType)
-            {}
 
+        ListItem(const QString& text, QListWidget* const parent, CNFilmProfile type)
+            : QListWidgetItem(text, parent, type + QListWidgetItem::UserType)
+        {
+        }
     };
 
     explicit FilmContainer();
     explicit FilmContainer(CNFilmProfile profile, double gamma, bool sixteenBit);
 
-    void setWhitePoint(const DColor& wp);
+    void   setWhitePoint(const DColor& wp);
     DColor whitePoint() const;
-    void setStrength(double strength);
+
+    void   setStrength(double strength);
     double strength() const;
-    void setSixteenBit(bool val);
-    void setGamma(double val);
+
+    void   setSixteenBit(bool val);
+    void   setGamma(double val);
     double gamma() const;
-    void setCNType(CNFilmProfile profile);
+
+    void          setCNType(CNFilmProfile profile);
     CNFilmProfile cnType() const;
+
     LevelsContainer toLevels() const;
-    BCGContainer toBCG() const;
+    BCGContainer    toBCG() const;
 
     static const QMap<int, QString> profileMap;
-    static QList<ListItem*> profileItemList(QListWidget* view);
+    static QList<ListItem*> profileItemList(QListWidget* const view);
 
 private:
-    int whitePointForChannel(int channel) const;
+
+    int    whitePointForChannel(int channel) const;
     double blackPointForChannel(int ch) const;
     double gammaForChannel(int channel) const;
 
@@ -111,12 +122,14 @@ private:
     QSharedPointer<FilmContainerPriv> d;
 };
 
+// ---------------------------------------------------------------------------------------------------
+
 class DIGIKAM_EXPORT FilmFilter: public DImgThreadedFilter
 {
 public:
-    explicit FilmFilter(QObject* parent=0);
-    explicit FilmFilter(DImg* orgImage, QObject* parent=0, const FilmContainer& settings=FilmContainer());
 
+    explicit FilmFilter(QObject* const parent=0);
+    explicit FilmFilter(DImg* const orgImage, QObject* const parent=0, const FilmContainer& settings=FilmContainer());
     virtual ~FilmFilter();
 
     static QString FilterIdentifier()
@@ -148,12 +161,15 @@ public:
     virtual void readParameters(const FilterAction& action);
 
 private:
+
     void filterImage();
+
+private:
 
     class FilmFilterPriv;
     FilmFilterPriv* d;
 };
 
-}
+} // namespace Digikam
 
 #endif /* FILMFILTER_H_ */
