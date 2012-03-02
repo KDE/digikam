@@ -112,7 +112,7 @@ void CMSEXPORT _cmsMAT3per(cmsMAT3* r, const cmsMAT3* a, const cmsMAT3* b)
 
 
 // Inverse of a matrix b = a^(-1)
-cmsBool  CMSEXPORT _cmsMAT3inverse(const cmsMAT3* a, cmsMAT3* b)
+cmsBool CMSEXPORT _cmsMAT3inverse(const cmsMAT3* a, cmsMAT3* b)
 {
    cmsFloat64Number det, c0, c1, c2;
 
@@ -297,6 +297,8 @@ static cmsBool cmsAdaptMatrixFromD50(cmsMAT3* r, const cmsCIExyY* DestWhitePt)
 
 LCMSAPI int LCMSEXPORT dkCmsErrorAction(int nAction)
 {
+    Q_UNUSED(nAction);
+
     // TODO: Where is error logging?
     return 0;
 }
@@ -411,7 +413,7 @@ LCMSAPI QString LCMSEXPORT dkCmsTakeProductInfo(cmsHPROFILE hProfile)
         strcat(Info, Copyright);
     }
 
-    #define K007 static_cast<cmsTagSignature>( 0x4B303037 )
+#define K007 static_cast<cmsTagSignature>( 0x4B303037 )
 
     if (cmsIsTag(hProfile, K007))
     {
@@ -439,7 +441,7 @@ LCMSAPI QString LCMSEXPORT dkCmsTakeProductInfo(cmsHPROFILE hProfile)
         */
     }
 
-    #undef K007
+#undef K007
 
     return QString::fromLatin1(Info);
 }
