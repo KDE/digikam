@@ -12,6 +12,7 @@ General        : KIPI JPEGLossLess tool is now disabled in digiKam. A dedicated 
                  in digiKam core to rotate/flip image using multithreading, parallelization, and image versioning.
 KipiInterface  : Handle progress events from kipi tools through digiKam Progress Manager.
 ImageEditor    : Template Superimpose feature have been moved to PhotoLayoutEditor kipi-plugin.
+ImageEditor    : New film color negative inverter filter.
 
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
@@ -74,5 +75,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 056 ==> 294585 : Crash on facebook export.
 057 ==> 294995 : Delete photos and their management in the database Mysql.
 058 ==> 295104 : Sdt namespace ambiguity in BlurFilter [patch].
-059 ==> 294884 : Digikam crash at startup (due to notification window).
+059 ==> 294884 : digiKam crash at startup (due to notification window).
 060 ==> 
