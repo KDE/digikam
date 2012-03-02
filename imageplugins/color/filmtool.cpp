@@ -154,13 +154,13 @@ const QString FilmTool::FilmToolPriv::configHistogramScaleEntry("Histogram Scale
 
 // --------------------------------------------------------
 
-FilmTool::FilmTool(QObject* parent)
+FilmTool::FilmTool(QObject* const parent)
     : EditorToolThreaded(parent),
       d(new FilmToolPriv)
 {
     setObjectName("film");
     setToolName(i18n("Film"));
-    //setToolIcon(SmallIcon("film"));
+    //setToolIcon(SmallIcon("film")); TODO
 
     ImageIface iface(0, 0);
     d->originalImage = iface.getOriginalImg();
@@ -182,11 +182,10 @@ FilmTool::FilmTool(QObject* parent)
                                 EditorToolSettings::Cancel);
 
     d->gboxSettings->setTools(EditorToolSettings::Histogram);
-    d->gboxSettings->setHistogramType(Digikam::LRGBC);
+    d->gboxSettings->setHistogramType(LRGBC);
 
     // we don't need to use the Gradient in this tool
     d->gboxSettings->histogramBox()->setGradientVisible(false);
-
     d->gboxSettings->histogramBox()->setChannel(ColorChannels);
 
     // -------------------------------------------------------------
@@ -222,8 +221,7 @@ FilmTool::FilmTool(QObject* parent)
     d->blueInputLevels->setToolTip( i18n( "Input intensity." ) );
     d->blueInputLevels->installEventFilter(this);
 
-    d->gboxSettings->histogramBox()->
-            setHistogramMargin(d->redInputLevels->gradientOffset());
+    d->gboxSettings->histogramBox()->setHistogramMargin(d->redInputLevels->gradientOffset());
 
     inputLevelsLayout->setContentsMargins(d->redInputLevels->gradientOffset(), 0,
                                           d->redInputLevels->gradientOffset(), 0);
@@ -318,8 +316,8 @@ FilmTool::FilmTool(QObject* parent)
 
     connect(d->previewWidget, SIGNAL(signalResized()),
             this, SLOT(slotEffect()));
-    connect(d->previewWidget, SIGNAL(signalCapturedPointFromOriginal(Digikam::DColor,QPoint)),
-            this, SLOT(slotColorSelectedFromTarget(Digikam::DColor,QPoint)));
+    connect(d->previewWidget, SIGNAL(signalCapturedPointFromOriginal(Digikam::DColor, QPoint)),
+            this, SLOT(slotColorSelectedFromTarget(Digikam::DColor, QPoint)));
     connect(d->strengthInput, SIGNAL(valueChanged(double)),
             this, SLOT(slotSaturationChanged(double)));
     connect(d->gammaInput, SIGNAL(valueChanged(double)),
@@ -349,23 +347,23 @@ void FilmTool::slotResetSettings()
 
     FilmContainer::CNFilmProfile cnType = FilmContainer::CNNeutral;
 
-    QString profileName = QString("Neutral");
+    QString profileName                   = QString("Neutral");
     QList<QListWidgetItem*> matchingItems = d->cnType->findItems(profileName, Qt::MatchExactly);
     d->cnType->setCurrentItem(matchingItems.first());
 
-    double gamma = 1.0;
+    double gamma      = 1.0;
     d->gammaInput->setValue(gamma);
     gammaInputChanged(gamma);
 
     double saturation = 1.0;
     d->strengthInput->setValue(saturation);
 
-    d->filmContainer = FilmContainer(cnType, gamma, d->originalImage->sixteenBit());
+    d->filmContainer  = FilmContainer(cnType, gamma, d->originalImage->sixteenBit());
     d->filmContainer.setStrength(saturation);
 
-    int red = max;
+    int red   = max;
     int green = max;
-    int blue = max;
+    int blue  = max;
 
     red   = sb ? red : red / 256;
     green = sb ? green : green / 256;
@@ -377,7 +375,6 @@ void FilmTool::slotResetSettings()
 
     d->levelsHistogramWidget->reset();
     d->gboxSettings->histogramBox()->histogram()->reset();
-
     d->gboxSettings->histogramBox()->setChannel(ColorChannels);
     d->gboxSettings->histogramBox()->setScale(LogScaleHistogram);
 
@@ -388,14 +385,12 @@ void FilmTool::slotResetSettings()
 
 void FilmTool::slotChannelChanged()
 {
-    d->levelsHistogramWidget->setChannelType(
-            d->gboxSettings->histogramBox()->channel());
+    d->levelsHistogramWidget->setChannelType(d->gboxSettings->histogramBox()->channel());
 }
 
 void FilmTool::slotScaleChanged()
 {
-   d->levelsHistogramWidget->setScaleType(
-           d->gboxSettings->histogramBox()->scale());
+   d->levelsHistogramWidget->setScaleType(d->gboxSettings->histogramBox()->scale());
 }
 
 void FilmTool::slotAdjustSliders()
@@ -423,7 +418,8 @@ void FilmTool::slotAdjustSliders()
 void FilmTool::setLevelsFromFilm()
 {
     LevelsContainer l = d->filmContainer.toLevels();
-    for (int i = RedChannel; i <= BlueChannel; i++) {
+    for (int i = RedChannel; i <= BlueChannel; i++)
+    {
         d->levels->setLevelLowInputValue(i, l.lInput[i]);
         d->levels->setLevelHighInputValue(i, l.hInput[i]);
         d->levels->setLevelLowOutputValue(i, l.lOutput[i]);
@@ -453,12 +449,12 @@ void FilmTool::slotGammaInputChanged(double val)
 
 void FilmTool::slotFilmItemActivated(QListWidgetItem* item)
 {
-    double gamma = d->filmContainer.gamma();
+    double gamma    = d->filmContainer.gamma();
     double strength = d->filmContainer.strength();
-    DColor wp = d->filmContainer.whitePoint();
+    DColor wp       = d->filmContainer.whitePoint();
 
     FilmContainer::CNFilmProfile type = (FilmContainer::CNFilmProfile)(item->type()-QListWidgetItem::UserType);
-    d->filmContainer = FilmContainer(type, gamma, d->originalImage->sixteenBit());
+    d->filmContainer                  = FilmContainer(type, gamma, d->originalImage->sixteenBit());
     d->filmContainer.setStrength(strength);
     d->filmContainer.setWhitePoint(wp);
     setLevelsFromFilm();
@@ -515,26 +511,26 @@ void FilmTool::readSettings()
     bool sb = d->originalImage->sixteenBit();
     int max = sb ? 65535 : 255;
 
-    FilmContainer::CNFilmProfile cnType = (FilmContainer::CNFilmProfile)
-            group.readEntry(d->configFilmProfileEntry, (int)FilmContainer::CNNeutral);
+    FilmContainer::CNFilmProfile cnType   = (FilmContainer::CNFilmProfile)
+                                            group.readEntry(d->configFilmProfileEntry, (int)FilmContainer::CNNeutral);
 
-    QString profileName = group.readEntry(d->configFilmProfileName, QString("Neutral"));
+    QString profileName                   = group.readEntry(d->configFilmProfileName, QString("Neutral"));
     QList<QListWidgetItem*> matchingItems = d->cnType->findItems(profileName, Qt::MatchExactly);
     d->cnType->setCurrentItem(matchingItems.first());
 
-    double gamma = group.readEntry(d->configGammaInputEntry, 1.0);
+    double gamma      = group.readEntry(d->configGammaInputEntry, 1.0);
     d->gammaInput->setValue(gamma);
     gammaInputChanged(gamma);
 
     double saturation = group.readEntry(d->configStrengthEntry, 1.0);
     d->strengthInput->setValue(saturation);
 
-    d->filmContainer = FilmContainer(cnType, gamma, d->originalImage->sixteenBit());
+    d->filmContainer  = FilmContainer(cnType, gamma, d->originalImage->sixteenBit());
     d->filmContainer.setStrength(saturation);
 
-    int red = group.readEntry(d->configWhitePointEntry.arg(1), max);
+    int red   = group.readEntry(d->configWhitePointEntry.arg(1), max);
     int green = group.readEntry(d->configWhitePointEntry.arg(2), max);
-    int blue = group.readEntry(d->configWhitePointEntry.arg(3), max);
+    int blue  = group.readEntry(d->configWhitePointEntry.arg(3), max);
 
     red   = sb ? red : red / 256;
     green = sb ? green : green / 256;
@@ -547,8 +543,7 @@ void FilmTool::readSettings()
     d->levelsHistogramWidget->reset();
     d->gboxSettings->histogramBox()->histogram()->reset();
 
-    ChannelType ch = (ChannelType)group.readEntry(d->configHistogramChannelEntry,
-            (int)ColorChannels);
+    ChannelType ch = (ChannelType)group.readEntry(d->configHistogramChannelEntry, (int)ColorChannels);
 
     // restore the previous channel
     d->gboxSettings->histogramBox()->setChannel(ch);
@@ -565,7 +560,7 @@ void FilmTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
-    bool sb = d->originalImage->sixteenBit();
+    bool sb                   = d->originalImage->sixteenBit();
 
     group.writeEntry(d->configHistogramChannelEntry, (int)d->gboxSettings->histogramBox()->channel());
     group.writeEntry(d->configHistogramScaleEntry,   (int)d->gboxSettings->histogramBox()->scale());
@@ -581,16 +576,15 @@ void FilmTool::writeSettings()
 
    group.writeEntry(d->configFilmProfileName, d->cnType->currentItem()->text());
 
-    int red = d->filmContainer.whitePoint().red();
+    int red   = d->filmContainer.whitePoint().red();
     int green = d->filmContainer.whitePoint().green();
-    int blue = d->filmContainer.whitePoint().blue();
+    int blue  = d->filmContainer.whitePoint().blue();
 
-    group.writeEntry(d->configWhitePointEntry.arg(1), sb ? red : red * 256);
+    group.writeEntry(d->configWhitePointEntry.arg(1), sb ? red   : red   * 256);
     group.writeEntry(d->configWhitePointEntry.arg(2), sb ? green : green * 256);
-    group.writeEntry(d->configWhitePointEntry.arg(3), sb ? blue : blue * 256);
+    group.writeEntry(d->configWhitePointEntry.arg(3), sb ? blue  : blue  * 256);
 
     config->sync();
-
 }
 
 void FilmTool::prepareEffect()
@@ -626,8 +620,7 @@ void FilmTool::putPreviewData()
 void FilmTool::putFinalData()
 {
     ImageIface iface(0, 0);
-    iface.putOriginalImage(i18n("Film"),
-            filter()->filterAction(), filter()->getTargetImage().bits());
+    iface.putOriginalImage(i18n("Film"), filter()->filterAction(), filter()->getTargetImage().bits());
 }
 
 bool FilmTool::eventFilter(QObject* obj, QEvent* ev)

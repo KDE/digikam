@@ -31,7 +31,8 @@
 
 class QListWidgetItem;
 
-namespace Digikam {
+namespace Digikam
+{
     class FilmProfile;
 }
 
@@ -46,10 +47,11 @@ class FilmTool : public EditorToolThreaded
 
 public:
 
-    FilmTool(QObject* parent);
+    FilmTool(QObject* const parent);
     ~FilmTool();
 
 private Q_SLOTS:
+
     void slotResetSettings();
     void slotScaleChanged();
     void slotChannelChanged();
@@ -62,6 +64,7 @@ private Q_SLOTS:
     void slotResetWhitePoint();
 
 private:
+
     void readSettings();
     void writeSettings();
     void prepareEffect();
@@ -80,6 +83,5 @@ private:
 };
 
 }  // namespace DigikamColorImagePlugin
-
 
 #endif /* FILMTOOL_H_ */
