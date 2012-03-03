@@ -120,7 +120,8 @@ void MaintenanceMngr::slotStage2()
 {
     if (d->settings.thumbnails)
     {
-        ThumbsGenerator* tool = new ThumbsGenerator(d->settings.scanThumbs);
+        bool rebuildAll = d->settings.scanThumbs == false;
+        ThumbsGenerator* tool = new ThumbsGenerator(rebuildAll);
         tool->setNotificationEnabled(false);
 
         connect(tool, SIGNAL(signalComplete()),
@@ -139,7 +140,8 @@ void MaintenanceMngr::slotStage3()
 {
     if (d->settings.fingerPrints)
     {
-        FingerPrintsGenerator* tool = new FingerPrintsGenerator(d->settings.scanFingerPrints);
+        bool rebuildAll = d->settings.scanFingerPrints == false;
+        FingerPrintsGenerator* tool = new FingerPrintsGenerator(rebuildAll);
         tool->setNotificationEnabled(false);
 
         connect(tool, SIGNAL(signalComplete()),
