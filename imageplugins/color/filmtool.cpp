@@ -270,9 +270,10 @@ FilmTool::FilmTool(QObject* const parent)
     d->gammaInput = new RDoubleNumInput();
     d->gammaInput->setDecimals(2);
     d->gammaInput->setRange(0.1, 3.0, 0.01);
-    d->gammaInput->setDefaultValue(1.0);
+    d->gammaInput->setDefaultValue(1.8);
     d->gammaInput->setToolTip( i18n( "Gamma input value." ) );
-    d->gammaInput->setWhatsThis( i18n("Select the gamma input value here."));
+    d->gammaInput->setWhatsThis( i18n("Linear raw scans of film negatives require application of a gamma curve. "
+            "Standard values are 1.8 or 2.2."));
 
     // -------------------------------------------------------------
 
@@ -349,7 +350,7 @@ void FilmTool::slotResetSettings()
     QList<QListWidgetItem*> matchingItems = d->cnType->findItems(profileName, Qt::MatchExactly);
     d->cnType->setCurrentItem(matchingItems.first());
 
-    double gamma      = 1.0;
+    double gamma      = 1.8;
     d->gammaInput->setValue(gamma);
     gammaInputChanged(gamma);
 
@@ -516,7 +517,7 @@ void FilmTool::readSettings()
     QList<QListWidgetItem*> matchingItems = d->cnType->findItems(profileName, Qt::MatchExactly);
     d->cnType->setCurrentItem(matchingItems.first());
 
-    double gamma      = group.readEntry(d->configGammaInputEntry, 1.0);
+    double gamma      = group.readEntry(d->configGammaInputEntry, 1.8);
     d->gammaInput->setValue(gamma);
     gammaInputChanged(gamma);
 
