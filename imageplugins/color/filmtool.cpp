@@ -205,20 +205,17 @@ FilmTool::FilmTool(QObject* const parent)
 
     d->redInputLevels = new DGradientSlider();
     d->redInputLevels->setColors(QColor("Red"), QColor("White"));
-    d->redInputLevels->setWhatsThis( i18n("Select the input intensity of the histogram here."));
-    d->redInputLevels->setToolTip( i18n( "Input intensity." ) );
+    d->redInputLevels->setToolTip( i18n( "Input range of red color channel." ) );
     d->redInputLevels->installEventFilter(this);
 
     d->greenInputLevels = new DGradientSlider();
     d->greenInputLevels->setColors(QColor("Green"), QColor("White"));
-    d->greenInputLevels->setWhatsThis( i18n("Select the input intensity of the histogram here."));
-    d->greenInputLevels->setToolTip( i18n( "Input intensity." ) );
+    d->greenInputLevels->setToolTip( i18n( "Input range of green color channel." ) );
     d->greenInputLevels->installEventFilter(this);
 
     d->blueInputLevels = new DGradientSlider();
     d->blueInputLevels->setColors(QColor("Blue"), QColor("White"));
-    d->blueInputLevels->setWhatsThis( i18n("Select the input intensity of the histogram here."));
-    d->blueInputLevels->setToolTip( i18n( "Input intensity." ) );
+    d->blueInputLevels->setToolTip( i18n( "Input range of blue color channel." ) );
     d->blueInputLevels->installEventFilter(this);
 
     d->gboxSettings->histogramBox()->setHistogramMargin(d->redInputLevels->gradientOffset());
@@ -626,7 +623,17 @@ void FilmTool::putFinalData()
 
 bool FilmTool::eventFilter(QObject* obj, QEvent* ev)
 {
-    // pass the event on to the parent class
+    // swallow mouse evens for level sliders to make them immutable
+    if (obj == d->redInputLevels || obj == d->greenInputLevels || obj == d->blueInputLevels)
+    {
+        if (ev->type() == QEvent::MouseButtonPress ||
+                ev->type() == QEvent::MouseButtonRelease ||
+                ev->type() == QEvent::MouseMove ||
+                ev->type() == QEvent::MouseButtonDblClick)
+            return true;
+    }
+
+    // pass all other events to the parent class
     return EditorToolThreaded::eventFilter(obj, ev);
 }
 
