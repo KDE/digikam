@@ -94,8 +94,8 @@ public:
     void   setWhitePoint(const DColor& wp);
     DColor whitePoint() const;
 
-    void   setStrength(double strength);
-    double strength() const;
+    void   setExposure(double strength);
+    double exposure() const;
 
     void   setSixteenBit(bool val);
     void   setGamma(double val);

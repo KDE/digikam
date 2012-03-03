@@ -128,7 +128,7 @@ public:
 
     FilmContainerPriv()
         : gamma(1.0),
-          strength(1.0),
+          exposure(1.0),
           sixteenBit(false),
           profile(FilmProfile(1.0, 1.0, 1.0)),
           cnType(CNNeutral),
@@ -137,7 +137,7 @@ public:
     }
 
     double        gamma;
-    double        strength;
+    double        exposure;
     bool          sixteenBit;
     FilmProfile   profile;
     CNFilmProfile cnType;
@@ -168,14 +168,14 @@ DColor FilmContainer::whitePoint() const
     return d->whitePoint;
 }
 
-void FilmContainer::setStrength(double strength)
+void FilmContainer::setExposure(double strength)
 {
-    d->strength = strength;
+    d->exposure = strength;
 }
 
-double FilmContainer::strength() const
+double FilmContainer::exposure() const
 {
-    return d->strength;
+    return d->exposure;
 }
 
 void FilmContainer::setSixteenBit(bool val)
@@ -341,7 +341,7 @@ LevelsContainer FilmContainer::toLevels() const
 
     for (int i = LuminosityChannel; i <= AlphaChannel; i++)
     {
-        l.lInput[i]  = blackPointForChannel(i) * d->strength;
+        l.lInput[i]  = blackPointForChannel(i) * d->exposure;
         l.hInput[i]  = whitePointForChannel(i) * d->profile.wp(i);
         l.lOutput[i] = 0;
         l.hOutput[i] = max;
@@ -481,7 +481,7 @@ FilterAction FilmFilter::filterAction()
 
     action.addParameter(QString("CNType"),               d->film.cnType());
     action.addParameter(QString("ProfileName"),          FilmContainer::profileMap[d->film.cnType()]);
-    action.addParameter(QString("Strength"),             d->film.strength());
+    action.addParameter(QString("Exposure"),             d->film.exposure());
     action.addParameter(QString("Gamma"),                d->film.gamma());
     action.addParameter(QString("WhitePointRed"),        d->film.whitePoint().red());
     action.addParameter(QString("WhitePointGreen"),      d->film.whitePoint().green());
@@ -501,7 +501,7 @@ void FilmFilter::readParameters(const FilterAction& action)
     bool sb      = action.parameter(QString("WhitePointSixteenBit")).toBool();
 
     d->film.setWhitePoint(DColor(red, green, blue, alpha, sb));
-    d->film.setStrength(action.parameter(QString("Strength")).toDouble());
+    d->film.setExposure(action.parameter(QString("Exposure")).toDouble());
     d->film.setGamma(action.parameter(QString("Gamma")).toDouble());
     d->film.setCNType((FilmContainer::CNFilmProfile)(action.parameter(QString("CNType")).toInt()));
 }

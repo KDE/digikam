@@ -93,8 +93,8 @@ public:
         destinationPreviewData(0),
         histoSegments(0),
         resetButton(0),
-        pickOrangeMask(0),
-        strengthInput(0),
+        pickWhitePoint(0),
+        exposureInput(0),
         gammaInput(0),
         cnType(0),
         levelsHistogramWidget(0),
@@ -109,7 +109,7 @@ public:
 
     static const QString configGroupName;
     static const QString configGammaInputEntry;
-    static const QString configStrengthEntry;
+    static const QString configExposureEntry;
     static const QString configFilmProfileEntry;
     static const QString configFilmProfileName;
     static const QString configWhitePointEntry;
@@ -121,11 +121,11 @@ public:
     int                  histoSegments;
 
     QPushButton*         resetButton;
-    QToolButton*         pickOrangeMask;
+    QToolButton*         pickWhitePoint;
 
     FilmContainer        filmContainer;
 
-    RDoubleNumInput*     strengthInput;
+    RDoubleNumInput*     exposureInput;
     RDoubleNumInput*     gammaInput;
     QListWidget*         cnType;
 
@@ -145,7 +145,7 @@ public:
 };
 const QString FilmTool::FilmToolPriv::configGroupName("film Tool");
 const QString FilmTool::FilmToolPriv::configGammaInputEntry("GammaInput");
-const QString FilmTool::FilmToolPriv::configStrengthEntry("Strength");
+const QString FilmTool::FilmToolPriv::configExposureEntry("Exposure");
 const QString FilmTool::FilmToolPriv::configFilmProfileEntry("FilmProfile");
 const QString FilmTool::FilmToolPriv::configFilmProfileName("FilmProfileName");
 const QString FilmTool::FilmToolPriv::configWhitePointEntry("WhitePoint_%1");
@@ -236,38 +236,39 @@ FilmTool::FilmTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
-    d->pickOrangeMask = new QToolButton();
-    d->pickOrangeMask->setIcon(KIcon("color-picker-black"));
-    d->pickOrangeMask->setCheckable(true);
-    d->pickOrangeMask->setToolTip( i18n( "Orange mask color picker" ) );
-    d->pickOrangeMask->setWhatsThis(i18n("With this button, you can pick the color of the orange mask "
-            "of the scanned color negative. It represents the darkest black tone of the positive image "
+    d->pickWhitePoint = new QToolButton();
+    d->pickWhitePoint->setIcon(KIcon("color-picker-white"));
+    d->pickWhitePoint->setCheckable(true);
+    d->pickWhitePoint->setToolTip( i18n( "White point color picker" ) );
+    d->pickWhitePoint->setWhatsThis(i18n("With this button, you can pick the color of the orange mask "
+            "of the scanned color negative. It represents white point of the negative, "
+            "or the darkest black tone of the positive image "
             "after inversion. It is also the reference point for applying the film profile."));
 
     d->resetButton = new QPushButton(i18n("&Reset"));
     d->resetButton->setIcon(KIconLoader::global()->loadIcon("document-revert", KIconLoader::Toolbar));
-    d->resetButton->setToolTip( i18n( "Reset current channel levels' values." ) );
-    d->resetButton->setWhatsThis(i18n("If you press this button, all levels' values "
-                                      "from the currently selected channel "
-                                      "will be reset to the default values."));
+    d->resetButton->setToolTip( i18n( "Reset white point." ) );
+    d->resetButton->setWhatsThis(i18n("If you press this button, the white point is "
+                                      "reset to pure white."));
 
     QLabel* space = new QLabel();
     space->setFixedWidth(d->gboxSettings->spacingHint());
 
     QHBoxLayout* l3 = new QHBoxLayout();
-    l3->addWidget(d->pickOrangeMask);
+    l3->addWidget(d->pickWhitePoint);
     l3->addWidget(space);
     l3->addWidget(d->resetButton);
     l3->addStretch(10);
 
     // -------------------------------------------------------------
 
-    d->strengthInput = new RDoubleNumInput();
-    d->strengthInput->setDecimals(2);
-    d->strengthInput->setRange(0.0, 40.0, 0.01);
-    d->strengthInput->setDefaultValue(1.0);
-    d->strengthInput->setToolTip( i18n( "Strength value." ) );
-    d->strengthInput->setWhatsThis( i18n("Select the conversion strength value here."));
+    d->exposureInput = new RDoubleNumInput();
+    d->exposureInput->setDecimals(2);
+    d->exposureInput->setRange(0.0, 40.0, 0.01);
+    d->exposureInput->setDefaultValue(1.0);
+    d->exposureInput->setToolTip( i18n( "Exposure correction." ) );
+    d->exposureInput->setWhatsThis( i18n("Move the slider to higher values until maximum brightness is achieved "
+                            "without clipping any color channel. Use the output histogram to evaluate each channel."));
 
     d->gammaInput = new RDoubleNumInput();
     d->gammaInput->setDecimals(2);
@@ -284,7 +285,7 @@ FilmTool::FilmTool(QObject* const parent)
     grid->addWidget(d->greenInputLevels,  2, 0, 1, 7);
     grid->addWidget(d->blueInputLevels,   3, 0, 1, 7);
     grid->addWidget(d->cnType,            4, 0, 1, 7);
-    grid->addWidget(d->strengthInput,     5, 0, 1, 7);
+    grid->addWidget(d->exposureInput,     5, 0, 1, 7);
     grid->addWidget(d->gammaInput,        6, 0, 1, 7);
     grid->addLayout(l3,                   7, 0, 1, 7);
 
@@ -309,7 +310,7 @@ FilmTool::FilmTool(QObject* const parent)
 
     // Button Slots -------------------------------------------------
 
-    connect(d->pickOrangeMask, SIGNAL(toggled(bool)),
+    connect(d->pickWhitePoint, SIGNAL(toggled(bool)),
             this, SLOT(slotPickerColorButtonActived(bool)));
 
     // Slots --------------------------------------------------------
@@ -318,8 +319,8 @@ FilmTool::FilmTool(QObject* const parent)
             this, SLOT(slotEffect()));
     connect(d->previewWidget, SIGNAL(signalCapturedPointFromOriginal(Digikam::DColor, QPoint)),
             this, SLOT(slotColorSelectedFromTarget(Digikam::DColor, QPoint)));
-    connect(d->strengthInput, SIGNAL(valueChanged(double)),
-            this, SLOT(slotSaturationChanged(double)));
+    connect(d->exposureInput, SIGNAL(valueChanged(double)),
+            this, SLOT(slotExposureChanged(double)));
     connect(d->gammaInput, SIGNAL(valueChanged(double)),
             this, SLOT(slotGammaInputChanged(double)));
     connect(d->resetButton, SIGNAL(clicked()),
@@ -355,11 +356,11 @@ void FilmTool::slotResetSettings()
     d->gammaInput->setValue(gamma);
     gammaInputChanged(gamma);
 
-    double saturation = 1.0;
-    d->strengthInput->setValue(saturation);
+    double exposure = 1.0;
+    d->exposureInput->setValue(exposure);
 
     d->filmContainer  = FilmContainer(cnType, gamma, d->originalImage->sixteenBit());
-    d->filmContainer.setStrength(saturation);
+    d->filmContainer.setExposure(exposure);
 
     int red   = max;
     int green = max;
@@ -412,7 +413,7 @@ void FilmTool::slotAdjustSliders()
             (double)d->levels->getLevelHighInputValue(BlueChannel) / d->histoSegments);
 
     d->gammaInput->setValue(d->filmContainer.gamma());
-    d->strengthInput->setValue(d->filmContainer.strength());
+    d->exposureInput->setValue(d->filmContainer.exposure());
 }
 
 void FilmTool::setLevelsFromFilm()
@@ -429,9 +430,9 @@ void FilmTool::setLevelsFromFilm()
     slotAdjustSliders();
 }
 
-void FilmTool::slotSaturationChanged(double val)
+void FilmTool::slotExposureChanged(double val)
 {
-    d->filmContainer.setStrength(val);
+    d->filmContainer.setExposure(val);
     setLevelsFromFilm();
     slotTimer();
 }
@@ -450,12 +451,12 @@ void FilmTool::slotGammaInputChanged(double val)
 void FilmTool::slotFilmItemActivated(QListWidgetItem* item)
 {
     double gamma    = d->filmContainer.gamma();
-    double strength = d->filmContainer.strength();
+    double strength = d->filmContainer.exposure();
     DColor wp       = d->filmContainer.whitePoint();
 
     FilmContainer::CNFilmProfile type = (FilmContainer::CNFilmProfile)(item->type()-QListWidgetItem::UserType);
     d->filmContainer                  = FilmContainer(type, gamma, d->originalImage->sixteenBit());
-    d->filmContainer.setStrength(strength);
+    d->filmContainer.setExposure(strength);
     d->filmContainer.setWhitePoint(wp);
     setLevelsFromFilm();
     slotTimer();
@@ -482,7 +483,7 @@ void FilmTool::slotColorSelectedFromTarget(const Digikam::DColor& color, const Q
 
     d->filmContainer.setWhitePoint(wp00);
     d->previewWidget->setCapturePointMode(false);
-    d->pickOrangeMask->setChecked(false);
+    d->pickWhitePoint->setChecked(false);
 
     setLevelsFromFilm();
     slotTimer();
@@ -522,11 +523,11 @@ void FilmTool::readSettings()
     d->gammaInput->setValue(gamma);
     gammaInputChanged(gamma);
 
-    double saturation = group.readEntry(d->configStrengthEntry, 1.0);
-    d->strengthInput->setValue(saturation);
+    double exposure = group.readEntry(d->configExposureEntry, 1.0);
+    d->exposureInput->setValue(exposure);
 
     d->filmContainer  = FilmContainer(cnType, gamma, d->originalImage->sixteenBit());
-    d->filmContainer.setStrength(saturation);
+    d->filmContainer.setExposure(exposure);
 
     int red   = group.readEntry(d->configWhitePointEntry.arg(1), max);
     int green = group.readEntry(d->configWhitePointEntry.arg(2), max);
@@ -568,13 +569,13 @@ void FilmTool::writeSettings()
     double gamma = d->gammaInput->value();
     group.writeEntry(d->configGammaInputEntry, gamma);
 
-    double saturation = d->strengthInput->value();
-    group.writeEntry(d->configStrengthEntry, saturation);
+    double exposure = d->exposureInput->value();
+    group.writeEntry(d->configExposureEntry, exposure);
 
     int cnType = (int)d->filmContainer.cnType();
     group.writeEntry(d->configFilmProfileEntry, cnType);
 
-   group.writeEntry(d->configFilmProfileName, d->cnType->currentItem()->text());
+    group.writeEntry(d->configFilmProfileName, d->cnType->currentItem()->text());
 
     int red   = d->filmContainer.whitePoint().red();
     int green = d->filmContainer.whitePoint().green();

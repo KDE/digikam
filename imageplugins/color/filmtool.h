@@ -57,7 +57,7 @@ private Q_SLOTS:
     void slotChannelChanged();
     void slotAdjustSliders();
     void slotFilmItemActivated(QListWidgetItem* item);
-    void slotSaturationChanged(double val);
+    void slotExposureChanged(double val);
     void slotGammaInputChanged(double val);
     void slotColorSelectedFromTarget(const Digikam::DColor& color, const QPoint& p);
     void slotPickerColorButtonActived(bool checked);
