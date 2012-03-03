@@ -2812,13 +2812,14 @@ void DigikamApp::slotMaintenance()
     MaintenanceDlg* dlg = new MaintenanceDlg(this);
     if (dlg->exec() == QDialog::Accepted)
     {
+        d->maintenanceAction->setEnabled(false);
+
         MaintenanceMngr* mngr = new MaintenanceMngr(this);
 
         connect(mngr, SIGNAL(signalComplete()),
                 this, SLOT(slotMaintenanceDone()));
 
         mngr->setSettings(dlg->settings());
-        d->maintenanceAction->setEnabled(false);
     }
 }
 
