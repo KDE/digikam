@@ -166,7 +166,7 @@ void ThumbsGenerator::slotStart()
 
     if (d->allPicturesPath.isEmpty())
     {
-        slotCancel();
+        slotDone();
         return;
     }
 
@@ -176,8 +176,15 @@ void ThumbsGenerator::slotStart()
 
 void ThumbsGenerator::processOne()
 {
-    if (canceled() || d->allPicturesPath.isEmpty())
+    if (canceled())
     {
+        slotCancel();
+        return;
+    }
+
+    if (d->allPicturesPath.isEmpty())
+    {
+        slotDone();
         return;
     }
 
@@ -188,13 +195,21 @@ void ThumbsGenerator::processOne()
 
 void ThumbsGenerator::slotGotThumbnail(const LoadingDescription& desc, const QPixmap& pix)
 {
-    if (canceled() || d->allPicturesPath.isEmpty())
+    if (canceled())
     {
+        slotCancel();
+        return;
+    }
+
+    if (d->allPicturesPath.isEmpty())
+    {
+        slotDone();
         return;
     }
 
     if (d->allPicturesPath.first() != desc.filePath)
     {
+        slotCancel();
         return;
     }
 
