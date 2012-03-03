@@ -594,6 +594,7 @@ Comment=The scan of the new items in database has completed.
 Comment[ca]=L'actualització de la base de dades d'elements nous ha finalitzat.
 Comment[cs]=Prohledávání nových položek v databázi bylo dokončeno.
 Comment[da]=Scanning efter nye elementer i databasen er gennemført.
+Comment[de]=Das Einlesen neuer Einträge in der Datenbank ist abgeschlossen.
 Comment[el]=Η ενημέρωση νέων αντικειμένων στη βάση δεδομένων έχει ολοκληρωθεί.
 Comment[gl]=Completouse o exame dos elementos novos da base de datos.
 Comment[is]=Leit nýrra atriða í gagnagrunni er lokið.
