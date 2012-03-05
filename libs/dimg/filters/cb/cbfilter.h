@@ -73,6 +73,8 @@ public:
 
     explicit CBFilter(QObject* parent = 0);
     explicit CBFilter(DImg* orgImage, QObject* parent=0, const CBContainer& settings=CBContainer());
+    explicit CBFilter(const CBContainer& settings, DImgThreadedFilter* master,
+            const DImg& orgImage, DImg& destImage, int progressBegin=0, int progressEnd=100);
     virtual ~CBFilter();
 
     static QString          FilterIdentifier()

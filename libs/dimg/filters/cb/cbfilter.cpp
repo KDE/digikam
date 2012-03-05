@@ -76,6 +76,17 @@ CBFilter::CBFilter(DImg* orgImage, QObject* parent, const CBContainer& settings)
     initFilter();
 }
 
+CBFilter::CBFilter(const CBContainer& settings, DImgThreadedFilter* master,
+            const DImg& orgImage, DImg& destImage, int progressBegin, int progressEnd)
+    : DImgThreadedFilter(master, orgImage, destImage, progressBegin, progressEnd, "CBFilter"),
+      d(new CBFilterPriv)
+{
+    d->settings = settings;
+    reset();
+    initFilter();
+    destImage = m_destImage;
+}
+
 CBFilter::~CBFilter()
 {
     cancelFilter();

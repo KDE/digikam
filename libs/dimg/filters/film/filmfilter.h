@@ -33,8 +33,11 @@
 
 // KDE includes
 
+// Local includes
+
 #include "dimgthreadedfilter.h"
 #include "levelsfilter.h"
+#include "cbfilter.h"
 
 namespace Digikam
 {
@@ -105,7 +108,7 @@ public:
     CNFilmProfile cnType() const;
 
     LevelsContainer toLevels() const;
-    BCGContainer    toBCG() const;
+    CBContainer     toCB() const;
 
     static const QMap<int, QString> profileMap;
     static QList<ListItem*> profileItemList(QListWidget* const view);
@@ -114,7 +117,6 @@ private:
 
     int    whitePointForChannel(int channel) const;
     double blackPointForChannel(int ch) const;
-    double gammaForChannel(int channel) const;
 
     static QMap<int, QString> profileMapInitializer();
 
