@@ -6,8 +6,8 @@
  * Date        : 2007-01-05
  * Description : Metadata handling
  *
- * Copyright (C) 2007-2011 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
- * Copyright (C) 2007-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2012 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2007-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -151,7 +151,7 @@ MetadataHub& MetadataHub::operator=(const MetadataHub& other)
     return *this;
 }
 
-MetadataHub* MetadataHub::clone()
+MetadataHub* MetadataHub::clone() const
 {
     return new MetadataHub(*this);
 }
@@ -370,9 +370,9 @@ void MetadataHub::load(const QDateTime& dateTime,
 
 // template method to share code for dateTime, colorLabel, pickLabel, and rating
 template <class T> void MetadataHub::MetadataHubPriv::loadWithInterval(const T& data,
-        T& storage,
-        T& highestStorage,
-        MetadataHub::Status& status)
+                                                                       T& storage,
+                                                                       T& highestStorage,
+                                                                       MetadataHub::Status& status)
 {
     switch (status)
     {
@@ -445,7 +445,7 @@ template <class T> void MetadataHub::MetadataHubPriv::loadSingleValue(const T& d
     }
 }
 
-// --------------------------------------------------
+// ------------------------------------------------------------------------------------------------------------
 
 bool MetadataHub::write(ImageInfo info, WriteMode writeMode)
 {
@@ -851,7 +851,7 @@ bool MetadataHub::willWriteMetadata(WriteMode writeMode, const MetadataSettingsC
            );
 }
 
-// --------------------------------------------------
+// ---------------------------------------------------------------------------------------------------------
 
 MetadataHub::Status MetadataHub::dateTimeStatus() const
 {
@@ -1087,7 +1087,7 @@ void MetadataHub::notifyTagDeleted(int tagId)
     d->tags.remove(tagId);
 }
 
-// --------------------------------------------------
+// --------------------------------------------------------------------------------------------------------
 
 void MetadataHub::setDateTime(const QDateTime& dateTime, Status status)
 {
@@ -1161,7 +1161,7 @@ void MetadataHub::applyChangeNotifications()
 {
 }
 
-// --------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
 
 class MetadataHubOnTheRoad::MetadataHubOnTheRoadPriv
 {
@@ -1177,7 +1177,7 @@ public:
     bool       invalid;
 };
 
-MetadataHubOnTheRoad::MetadataHubOnTheRoad(QObject* parent)
+MetadataHubOnTheRoad::MetadataHubOnTheRoad(QObject* const parent)
     : QObject(parent), d(new MetadataHubOnTheRoadPriv)
 {
     connect(TagsCache::instance(), SIGNAL(tagDeleted(int)),
@@ -1204,13 +1204,13 @@ MetadataHubOnTheRoad::MetadataHubOnTheRoad(const MetadataHub& other)
 {
 }
 
-MetadataHubOnTheRoad::MetadataHubOnTheRoad(const MetadataHubOnTheRoad& other, QObject* parent)
+MetadataHubOnTheRoad::MetadataHubOnTheRoad(const MetadataHubOnTheRoad& other, QObject* const parent)
     : QObject(parent), MetadataHub(other), d(new MetadataHubOnTheRoadPriv)
 {
     applyChangeNotifications();
 }
 
-MetadataHub* MetadataHubOnTheRoad::clone()
+MetadataHub* MetadataHubOnTheRoad::clone() const
 {
     return new MetadataHubOnTheRoad(*this, parent());
 }

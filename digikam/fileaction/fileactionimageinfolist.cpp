@@ -33,14 +33,14 @@ namespace Digikam
 {
 
 void TwoProgressItemsContainer::createProgressItem(QAtomicPointer<ProgressItem>& ptr,
-                                                   const QString& action, FileActionProgressItemCreator* creator)
+                                                   const QString& action, FileActionProgressItemCreator* const creator)
 {
     if (ptr)
     {
         return;
     }
     ProgressItem* item = creator->createProgressItem(action);
-    
+
     if (!ptr.testAndSetOrdered(0, item))
     {
         delete item;
@@ -62,7 +62,8 @@ void TwoProgressItemsContainer::checkFinish(QAtomicPointer<ProgressItem>& ptr)
     }
 }
 
-void FileActionProgressItemContainer::schedulingForDB(int numberOfInfos, const QString& action, FileActionProgressItemCreator* creator)
+void FileActionProgressItemContainer::schedulingForDB(int numberOfInfos, const QString& action, 
+                                                      FileActionProgressItemCreator* const creator)
 {
     createFirstItem(action, creator);
     firstItem->incTotalItems(numberOfInfos);
@@ -78,7 +79,8 @@ void FileActionProgressItemContainer::dbFinished()
     checkFinish(firstItem);
 }
 
-void FileActionProgressItemContainer::schedulingForWrite(int numberOfInfos, const QString& action, FileActionProgressItemCreator* creator)
+void FileActionProgressItemContainer::schedulingForWrite(int numberOfInfos, const QString& action, 
+                                                         FileActionProgressItemCreator* const creator)
 {
     createSecondItem(action, creator);
     secondItem->incTotalItems(numberOfInfos);
@@ -97,19 +99,17 @@ void FileActionProgressItemContainer::finishedWriting()
 FileActionImageInfoList FileActionImageInfoList::create(const QList<ImageInfo>& infos)
 {
     FileActionImageInfoList list;
-    list = infos;
+    list           = infos;
     list.container = new FileActionProgressItemContainer;
     return list;
 }
 
-FileActionImageInfoList FileActionImageInfoList::continueTask(const QList<ImageInfo>& infos, FileActionProgressItemContainer* container)
+FileActionImageInfoList FileActionImageInfoList::continueTask(const QList<ImageInfo>& infos, FileActionProgressItemContainer* const container)
 {
     FileActionImageInfoList list;
-    list = infos;
+    list           = infos;
     list.container = container;
     return list;
 }
 
-
 } // namespace Digikam
-

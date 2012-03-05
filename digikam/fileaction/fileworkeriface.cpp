@@ -142,10 +142,10 @@ void FileActionMngrFileWorker::transform(FileActionImageInfoList infos, int acti
 
     foreach(const ImageInfo& info, infos)
     {
-        QString path = info.filePath();
-        QString format = info.format();
+        QString path                                = info.filePath();
+        QString format                              = info.format();
         KExiv2::ImageOrientation currentOrientation = (KExiv2::ImageOrientation)info.orientation();
-        bool isRaw = info.format().startsWith(QLatin1String("RAW"));
+        bool isRaw                                  = info.format().startsWith(QLatin1String("RAW"));
 
         bool rotateAsJpeg     = false;
         bool rotateLossy      = false;
