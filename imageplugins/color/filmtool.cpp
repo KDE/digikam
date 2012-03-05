@@ -467,17 +467,10 @@ void FilmTool::slotColorSelectedFromTarget(const Digikam::DColor& color, const Q
     DColor wp10 = d->originalImage->getPixelColor(p.x()+1, p.y());
     DColor wp11 = d->originalImage->getPixelColor(p.x()+1, p.y()+1);
 
-    wp00.setRed(QMIN(wp00.red(), wp01.red()));
-    wp00.setGreen(QMIN(wp00.green(), wp01.green()));
-    wp00.setBlue(QMIN(wp00.blue(), wp01.blue()));
-
-    wp00.setRed(QMIN(wp00.red(), wp10.red()));
-    wp00.setGreen(QMIN(wp00.green(), wp10.green()));
-    wp00.setBlue(QMIN(wp00.blue(), wp10.blue()));
-
-    wp00.setRed(QMIN(wp00.red(), wp11.red()));
-    wp00.setGreen(QMIN(wp00.green(), wp11.green()));
-    wp00.setBlue(QMIN(wp00.blue(), wp11.blue()));
+    wp00.blendAdd(wp01);
+    wp00.blendAdd(wp10);
+    wp00.blendAdd(wp11);
+    wp00.multiply(0.25);
 
     d->filmContainer.setWhitePoint(wp00);
     d->previewWidget->setCapturePointMode(false);
