@@ -56,8 +56,8 @@ class FileActionMngrPrivProgressItemCreator : public QObject, public FileActionP
 
 public:
 
-    ProgressItem* createProgressItem(const QString& action);
-    void addProgressItem(ProgressItem* item);
+    ProgressItem* createProgressItem(const QString& action) const;
+    void addProgressItem(ProgressItem* const item);
 
     QAtomicInt activeProgressItems;
 
@@ -70,13 +70,15 @@ public Q_SLOTS:
     void slotProgressItemCompleted();
 };
 
+// -----------------------------------------------------------------------------------------------------------
+
 class FileActionMngr::FileActionMngrPriv : public QObject
 {
     Q_OBJECT
 
 public:
 
-    FileActionMngrPriv(FileActionMngr* q);
+    FileActionMngrPriv(FileActionMngr* const q);
     ~FileActionMngrPriv();
 
 Q_SIGNALS:

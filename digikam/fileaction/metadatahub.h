@@ -6,8 +6,8 @@
  * Date        : 2007-01-05
  * Description : Metadata handling
  *
- * Copyright (C) 2007-2011 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
- * Copyright (C) 2007-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2012 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2007-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -72,8 +72,18 @@ public:
     class TagStatus
     {
     public:
-        explicit TagStatus(Status status, bool hasTag = false) : status(status), hasTag(hasTag) {};
-        TagStatus() : status(MetadataInvalid), hasTag(false) {};
+
+        explicit TagStatus(Status status, bool hasTag = false)
+            : status(status),
+              hasTag(hasTag)
+        {
+        };
+
+        TagStatus()
+            : status(MetadataInvalid),
+              hasTag(false)
+        {
+        };
 
         Status status;
         bool   hasTag;
@@ -119,6 +129,7 @@ public:
     */
     MetadataHub();
     virtual ~MetadataHub();
+
     /// Copies by value - no sharing involved.
     MetadataHub& operator=(const MetadataHub&);
     MetadataHub(const MetadataHub&);
@@ -127,7 +138,7 @@ public:
      * Creates a copy (as always, by value) of this hub.
      * Shall be reimplemented by subclasses to return an object of the correct type.
      */
-    virtual MetadataHub* clone();
+    virtual MetadataHub* clone() const;
 
     void reset();
 
@@ -390,12 +401,13 @@ class MetadataHubOnTheRoad : public QObject, public MetadataHub
 
 public:
 
-    MetadataHubOnTheRoad(QObject* parent = 0);
+    MetadataHubOnTheRoad(QObject* const parent = 0);
     MetadataHubOnTheRoad& operator=(const MetadataHub&);
     MetadataHubOnTheRoad(const MetadataHub&);
-    MetadataHubOnTheRoad(const MetadataHubOnTheRoad&, QObject* parent = 0);
+    MetadataHubOnTheRoad(const MetadataHubOnTheRoad&, QObject* const parent = 0);
     ~MetadataHubOnTheRoad();
-    virtual MetadataHub* clone();
+
+    virtual MetadataHub* clone() const;
 
 protected Q_SLOTS:
 

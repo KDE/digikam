@@ -37,7 +37,7 @@
 namespace Digikam
 {
 
-FileActionMngr::FileActionMngrPriv::FileActionMngrPriv(FileActionMngr* q)
+FileActionMngr::FileActionMngrPriv::FileActionMngrPriv(FileActionMngr* const q)
     : q(q)
 {
     dbWorker   = new FileActionMngrDatabaseWorker(this);
@@ -191,7 +191,7 @@ FileActionMngrPrivProgressItemCreator* FileActionMngr::FileActionMngrPriv::fileP
     return &fileProgress;
 }
 
-ProgressItem* FileActionMngrPrivProgressItemCreator::createProgressItem(const QString& action)
+ProgressItem* FileActionMngrPrivProgressItemCreator::createProgressItem(const QString& action) const
 {
     return new ProgressItem(0, ProgressManager::instance()->getUniqueID(), action, QString(), true, true);
     /*
@@ -210,13 +210,15 @@ ProgressItem* FileActionMngrPrivProgressItemCreator::createProgressItem(const QS
     */
 }
 
-void FileActionMngrPrivProgressItemCreator::addProgressItem(ProgressItem* item)
+void FileActionMngrPrivProgressItemCreator::addProgressItem(ProgressItem* const item)
 {
     activeProgressItems.ref();
+
     connect(item, SIGNAL(progressItemCompleted(ProgressItem*)),
             this, SLOT(slotProgressItemCompleted()),
             Qt::DirectConnection
            );
+
     ProgressManager::addProgressItem(item);
 }
 

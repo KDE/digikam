@@ -60,7 +60,7 @@ FileActionImageInfoList ImageInfoTaskSplitter::next()
         erase(begin(), begin() + m_n);
     }
 
-    return FileActionImageInfoList::continueTask(list, progress());;
+    return FileActionImageInfoList::continueTask(list, progress());
 }
 
 bool ImageInfoTaskSplitter::hasNext() const
