@@ -7,7 +7,7 @@
  * Description : image editor canvas management class
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2004-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -164,7 +164,7 @@ public:
     QString                  errorMessage;
 };
 
-Canvas::Canvas(QWidget* parent)
+Canvas::Canvas(QWidget* const parent)
     : Q3ScrollView(parent), d(new CanvasPrivate)
 {
     d->im     = new DImgInterface();
@@ -207,20 +207,20 @@ Canvas::Canvas(QWidget* parent)
     connect(d->im, SIGNAL(signalLoadingStarted(QString)),
             this, SIGNAL(signalLoadingStarted(QString)));
 
-    connect(d->im, SIGNAL(signalImageLoaded(QString,bool)),
-            this, SLOT(slotImageLoaded(QString,bool)));
+    connect(d->im, SIGNAL(signalImageLoaded(QString, bool)),
+            this, SLOT(slotImageLoaded(QString, bool)));
 
-    connect(d->im, SIGNAL(signalImageSaved(QString,bool)),
-            this, SLOT(slotImageSaved(QString,bool)));
+    connect(d->im, SIGNAL(signalImageSaved(QString, bool)),
+            this, SLOT(slotImageSaved(QString, bool)));
 
-    connect(d->im, SIGNAL(signalLoadingProgress(QString,float)),
-            this, SIGNAL(signalLoadingProgress(QString,float)));
+    connect(d->im, SIGNAL(signalLoadingProgress(QString, float)),
+            this, SIGNAL(signalLoadingProgress(QString, float)));
 
     connect(d->im, SIGNAL(signalSavingStarted(QString)),
             this, SIGNAL(signalSavingStarted(QString)));
 
-    connect(d->im, SIGNAL(signalSavingProgress(QString,float)),
-            this, SIGNAL(signalSavingProgress(QString,float)));
+    connect(d->im, SIGNAL(signalSavingProgress(QString, float)),
+            this, SIGNAL(signalSavingProgress(QString, float)));
 
     connect(this, SIGNAL(signalSelected(bool)),
             this, SLOT(slotSelected()));
@@ -257,7 +257,7 @@ void Canvas::reset()
     d->tileCache.clear();
 }
 
-void Canvas::load(const QString& filename, IOFileSettingsContainer* IOFileSettings)
+void Canvas::load(const QString& filename, IOFileSettingsContainer* const IOFileSettings)
 {
     reset();
 
@@ -1326,7 +1326,7 @@ void Canvas::setSoftProofingEnabled(bool enable)
     viewport()->update();
 }
 
-void Canvas::setExposureSettings(ExposureSettingsContainer* expoSettings)
+void Canvas::setExposureSettings(ExposureSettingsContainer* const expoSettings)
 {
     d->im->setExposureSettings(expoSettings);
     d->tileCache.clear();
@@ -1379,8 +1379,7 @@ void Canvas::slotCopy()
     QApplication::setOverrideCursor (Qt::WaitCursor);
 
     QScopedArrayPointer<uchar> data(d->im->getImageSelection());
-    DImg selDImg = DImg(w, h, d->im->sixteenBit(), d->im->hasAlpha(), data.data());
-
+    DImg selDImg        = DImg(w, h, d->im->sixteenBit(), d->im->hasAlpha(), data.data());
     QImage selImg       = selDImg.copyQImage();
     QMimeData* mimeData = new QMimeData();
     mimeData->setImageData(selImg);

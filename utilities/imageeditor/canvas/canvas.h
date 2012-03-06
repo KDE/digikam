@@ -7,7 +7,7 @@
  * Description : image editor canvas management class
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2004-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -65,10 +65,10 @@ class DIGIKAM_EXPORT Canvas : public Q3ScrollView
 
 public:
 
-    Canvas(QWidget* parent=0);
+    Canvas(QWidget* const parent=0);
     ~Canvas();
 
-    void    load(const QString& filename, IOFileSettingsContainer* IOFileSettings);
+    void    load(const QString& filename, IOFileSettingsContainer* const IOFileSettings);
     void    preload(const QString& filename);
 
     void    resetImage();
@@ -113,7 +113,7 @@ public:
 
     void  setBackgroundColor(const QColor& color);
     void  setICCSettings(const ICCSettingsContainer& cmSettings);
-    void  setExposureSettings(ExposureSettingsContainer* expoSettings);
+    void  setExposureSettings(ExposureSettingsContainer* const expoSettings);
     void  setSoftProofingEnabled(bool enable);
 
     void  setExifOrient(bool exifOrient);
