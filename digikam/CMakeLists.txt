@@ -146,9 +146,10 @@ ENDIF(WIN32)
 
 SET(digikamdatabase_LIB_SRCS
         ${libdatabase_SRCS}
-        ${libhaar_SRCS}
+        ${libdatabasecore_SRCS}
         ${libdatabasemodels_SRCS}
         ${libsqlite2_SRCS}
+        ${libhaar_SRCS}
         ${libpgf_SRCS}
         ${pgfutils_SRCS}
 )
