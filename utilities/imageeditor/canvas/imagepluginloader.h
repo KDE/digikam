@@ -7,7 +7,7 @@
  * Description : image plugins loader for image editor.
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2004-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -46,7 +46,7 @@ class DIGIKAM_EXPORT ImagePluginLoader : public QObject
 
 public:
 
-    explicit ImagePluginLoader(QObject* parent, SplashScreen* splash=0);
+    explicit ImagePluginLoader(QObject* const parent, SplashScreen* const splash=0);
     ~ImagePluginLoader();
 
     static ImagePluginLoader* instance();

@@ -7,7 +7,7 @@
  * Description : image plugins loader for image editor.
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2004-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -112,22 +112,20 @@ public:
     QMap<QString, KService::Ptr> pluginServiceMap;
 };
 
-ImagePluginLoader* ImagePluginLoader::m_instance=0;
+ImagePluginLoader* ImagePluginLoader::m_instance = 0;
 
 ImagePluginLoader* ImagePluginLoader::instance()
 {
     return m_instance;
 }
 
-ImagePluginLoader::ImagePluginLoader(QObject* parent, SplashScreen* splash)
+ImagePluginLoader::ImagePluginLoader(QObject* const parent, SplashScreen* const splash)
     : QObject(parent), d(new ImagePluginLoaderPrivate)
 {
-    m_instance = this;
-    d->splash  = splash;
-
-    QStringList imagePluginsList2Load;
-
+    m_instance                  = this;
+    d->splash                   = splash;
     const KService::List offers = KServiceTypeTrader::self()->query("Digikam/ImagePlugin");
+
     foreach(const KService::Ptr& service, offers)
     {
         if (service)
@@ -135,6 +133,8 @@ ImagePluginLoader::ImagePluginLoader(QObject* parent, SplashScreen* splash)
             d->pluginServiceMap[service->name()] = service;
         }
     }
+
+    QStringList imagePluginsList2Load;
 
     foreach(const KService::Ptr& service, d->pluginServiceMap)
     {
@@ -150,12 +150,14 @@ ImagePluginLoader::ImagePluginLoader(QObject* parent, SplashScreen* splash)
 ImagePluginLoader::~ImagePluginLoader()
 {
     QList<QString> pluginNames = d->pluginMap.keys();
+
     foreach(const QString& name, pluginNames)
     {
         ImagePlugin* plugin   = d->pluginMap.value(name);
         KService::Ptr service = d->pluginServiceMap.value(name);
         delete plugin;
     }
+
     delete d;
     m_instance = 0;
 }
@@ -172,7 +174,7 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& pluginsToLoad)
     foreach(const QString& name, pluginsToLoad)
     {
         KService::Ptr service = d->pluginServiceMap.value(name);
-        ImagePlugin* plugin;
+        ImagePlugin* plugin   = 0;
 
         if ( pluginIsLoaded(name) )
         {
@@ -214,9 +216,7 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& pluginsToLoad)
         }
     }
 
-    d->splash = 0;       // Splashcreen is only displayed at the first time.
-    // If user change plugins list to use in setup, don't try to
-    // use the old splashscreen instance.
+    d->splash = 0; // Splashcreen is only displayed at the first time.
 }
 
 ImagePlugin* ImagePluginLoader::pluginIsLoaded(const QString& name) const
