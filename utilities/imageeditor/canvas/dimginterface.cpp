@@ -7,7 +7,7 @@
  * Description : DImg interface for image editor
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2004-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -167,6 +167,30 @@ public:
     IccTransform               monitorICCtrans;
 };
 
+// --------------------------------------------------------------
+
+DImgInterface::UndoState::UndoState()
+    : hasUndo(false),
+      hasRedo(false),
+      hasChanges(false),
+      hasUndoableChanges(false)
+{
+}
+
+DImgInterface::UndoState DImgInterface::undoState() const
+{
+    UndoState state;
+    state.hasUndo = d->undoMan->anyMoreUndo();
+    state.hasRedo = d->undoMan->anyMoreRedo();
+    state.hasUndoableChanges = !d->undoMan->isAtOrigin();
+    // Includes the edit step performed by RAW import, which is not undoable
+    state.hasChanges = d->undoMan->hasChanges();
+
+    return state;
+}
+
+// --------------------------------------------------------------
+
 DImgInterface* DImgInterface::m_defaultInterface = 0;
 
 DImgInterface* DImgInterface::defaultInterface()
@@ -174,7 +198,7 @@ DImgInterface* DImgInterface::defaultInterface()
     return m_defaultInterface;
 }
 
-void DImgInterface::setDefaultInterface(DImgInterface* defaultInterface)
+void DImgInterface::setDefaultInterface(DImgInterface* const defaultInterface)
 {
     m_defaultInterface = defaultInterface;
 }
@@ -185,19 +209,17 @@ DImgInterface::DImgInterface()
     d->undoMan = new UndoManager(this);
     d->thread  = new SharedLoadSaveThread;
 
-    connect( d->thread, SIGNAL(signalImageLoaded(LoadingDescription,DImg)),
-             this, SLOT(slotImageLoaded(LoadingDescription,DImg)) );
+    connect( d->thread, SIGNAL(signalImageLoaded(LoadingDescription, DImg)),
+             this, SLOT(slotImageLoaded(LoadingDescription, DImg)) );
 
-    connect( d->thread, SIGNAL(signalImageSaved(QString,bool)),
-             this, SLOT(slotImageSaved(QString,bool)) );
+    connect( d->thread, SIGNAL(signalImageSaved(QString, bool)),
+             this, SLOT(slotImageSaved(QString, bool)) );
 
-    connect( d->thread, SIGNAL(signalLoadingProgress(LoadingDescription,float)),
-             this, SLOT(slotLoadingProgress(LoadingDescription,float)) );
+    connect( d->thread, SIGNAL(signalLoadingProgress(LoadingDescription, float)),
+             this, SLOT(slotLoadingProgress(LoadingDescription, float)) );
 
-    connect( d->thread, SIGNAL(signalSavingProgress(QString,float)),
-             this, SLOT(slotSavingProgress(QString,float)) );
-
-    //readMetadataFromFile();
+    connect( d->thread, SIGNAL(signalSavingProgress(QString, float)),
+             this, SLOT(slotSavingProgress(QString, float)) );
 }
 
 DImgInterface::~DImgInterface()
@@ -212,12 +234,12 @@ DImgInterface::~DImgInterface()
     }
 }
 
-void DImgInterface::setDisplayingWidget(QWidget* widget)
+void DImgInterface::setDisplayingWidget(QWidget* const widget)
 {
     d->displayingWidget = widget;
 }
 
-void DImgInterface::load(const QString& filePath, IOFileSettingsContainer* iofileSettings)
+void DImgInterface::load(const QString& filePath, IOFileSettingsContainer* const iofileSettings)
 {
     LoadingDescription description(filePath, LoadingDescription::ConvertForEditor);
 
@@ -381,7 +403,7 @@ ICCSettingsContainer DImgInterface::getICCSettings() const
     return d->cmSettings;
 }
 
-void DImgInterface::setExposureSettings(ExposureSettingsContainer* expoSettings)
+void DImgInterface::setExposureSettings(ExposureSettingsContainer* const expoSettings)
 {
     d->expoSettings = expoSettings;
 }
@@ -534,7 +556,7 @@ void DImgInterface::rollbackToOrigin()
     emit signalUndoStateChanged();
 }
 
-QMap<QString, QVariant> DImgInterface::ioAttributes(IOFileSettingsContainer* iofileSettings,
+QMap<QString, QVariant> DImgInterface::ioAttributes(IOFileSettingsContainer* const iofileSettings,
                                                     const QString& mimeType) const
 {
     QMap<QString, QVariant> attributes;
@@ -590,21 +612,21 @@ QMap<QString, QVariant> DImgInterface::ioAttributes(IOFileSettingsContainer* iof
     return attributes;
 }
 
-void DImgInterface::saveAs(const QString& filePath, IOFileSettingsContainer* iofileSettings,
+void DImgInterface::saveAs(const QString& filePath, IOFileSettingsContainer* const iofileSettings,
                            bool setExifOrientationTag, const QString& givenMimeType,
                            const QString& intendedFilePath)
 {
     saveAs(filePath, iofileSettings, setExifOrientationTag, givenMimeType, VersionFileOperation(), intendedFilePath);
 }
 
-void DImgInterface::saveAs(const QString& filePath, IOFileSettingsContainer* iofileSettings,
+void DImgInterface::saveAs(const QString& filePath, IOFileSettingsContainer* const iofileSettings,
                            bool setExifOrientationTag, const QString& givenMimeType,
                            const VersionFileOperation& op)
 {
     saveAs(filePath, iofileSettings, setExifOrientationTag, givenMimeType, op, op.saveFile.filePath());
 }
 
-void DImgInterface::saveAs(const QString& filePath, IOFileSettingsContainer* iofileSettings,
+void DImgInterface::saveAs(const QString& filePath, IOFileSettingsContainer* const iofileSettings,
                            bool setExifOrientationTag, const QString& givenMimeType,
                            const VersionFileOperation& op, const QString& intendedFilePath)
 {
@@ -858,23 +880,6 @@ void DImgInterface::setModified()
     emit signalUndoStateChanged();
 }
 
-DImgInterface::UndoState::UndoState()
-    : hasUndo(false), hasRedo(false), hasChanges(false), hasUndoableChanges(false)
-{
-}
-
-DImgInterface::UndoState DImgInterface::undoState() const
-{
-    UndoState state;
-    state.hasUndo = d->undoMan->anyMoreUndo();
-    state.hasRedo = d->undoMan->anyMoreRedo();
-    state.hasUndoableChanges = !d->undoMan->isAtOrigin();
-    // Includes the edit step performed by RAW import, which is not undoable
-    state.hasChanges = d->undoMan->hasChanges();
-
-    return state;
-}
-
 void DImgInterface::readMetadataFromFile(const QString& file)
 {
     DMetadata meta(file);
@@ -964,7 +969,7 @@ void DImgInterface::getSelectedArea(int& x, int& y, int& w, int& h)
     h = d->selH;
 }
 
-void DImgInterface::paintOnDevice(QPaintDevice* p,
+void DImgInterface::paintOnDevice(QPaintDevice* const p,
                                   int sx, int sy, int sw, int sh,
                                   int dx, int dy, int dw, int dh,
                                   int /*antialias*/)
@@ -1001,7 +1006,7 @@ void DImgInterface::paintOnDevice(QPaintDevice* p,
     painter.end();
 }
 
-void DImgInterface::paintOnDevice(QPaintDevice* p,
+void DImgInterface::paintOnDevice(QPaintDevice* const p,
                                   int sx, int sy, int sw, int sh,
                                   int dx, int dy, int dw, int dh,
                                   int mx, int my, int mw, int mh,
@@ -1185,13 +1190,13 @@ void DImgInterface::setResolvedInitialHistory(const DImageHistory& history)
     d->resolvedInitialHistory = history;
 }
 
-void DImgInterface::putImage(const QString& caller, const FilterAction& action, uchar* data, int w, int h)
+void DImgInterface::putImage(const QString& caller, const FilterAction& action, uchar* const data, int w, int h)
 {
     putImage(caller, action, data, w, h, d->image.sixteenBit());
 }
 
 void DImgInterface::putImage(const QString& caller, const FilterAction& action,
-                             uchar* data, int w, int h, bool sixteenBit)
+                             uchar* const data, int w, int h, bool sixteenBit)
 {
     d->undoMan->addAction(new UndoActionIrreversible(this, caller));
     putImageData(data, w, h, sixteenBit);
@@ -1199,7 +1204,7 @@ void DImgInterface::putImage(const QString& caller, const FilterAction& action,
     setModified();
 }
 
-void DImgInterface::putImageData(uchar* data, int w, int h, bool sixteenBit)
+void DImgInterface::putImageData(uchar* const data, int w, int h, bool sixteenBit)
 {
     if (d->image.isNull())
     {
@@ -1229,7 +1234,7 @@ void DImgInterface::putImageData(uchar* data, int w, int h, bool sixteenBit)
     d->image.putImageData(w, h, sixteenBit, d->image.hasAlpha(), data);
 }
 
-void DImgInterface::setUndoImageData(const DImageHistory& history, uchar* data, int w, int h, bool sixteenBit)
+void DImgInterface::setUndoImageData(const DImageHistory& history, uchar* const data, int w, int h, bool sixteenBit)
 {
     // called from UndoManager
     putImageData(data, w, h, sixteenBit);
@@ -1266,7 +1271,7 @@ uchar* DImgInterface::getImageSelection() const
     return 0;
 }
 
-void DImgInterface::putImageSelection(const QString& caller, const FilterAction& action, uchar* data)
+void DImgInterface::putImageSelection(const QString& caller, const FilterAction& action, uchar* const data)
 {
     if (!data || d->image.isNull())
     {

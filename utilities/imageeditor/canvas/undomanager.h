@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2005-2006 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2005-2006 by Joern Ahrens <joern.ahrens@kdemail.net>
- * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -47,26 +47,26 @@ class DIGIKAM_EXPORT UndoManager
 
 public:
 
-    UndoManager(DImgInterface* iface);
+    UndoManager(DImgInterface* const iface);
     ~UndoManager();
 
-    void addAction(UndoAction* action);
+    void addAction(UndoAction* const action);
     void undo();
     void redo();
     void rollbackToOrigin();
-    bool putImageDataAndHistory(DImg* img, int stepsBack);
+    bool putImageDataAndHistory(DImg* const img, int stepsBack);
 
     void clear(bool clearCache=true);
 
-    bool anyMoreUndo() const;
-    bool anyMoreRedo() const;
-    int  availableUndoSteps() const;
-    int  availableRedoSteps() const;
+    bool        anyMoreUndo() const;
+    bool        anyMoreRedo() const;
+    int         availableUndoSteps() const;
+    int         availableRedoSteps() const;
     QStringList getUndoHistory() const;
     QStringList getRedoHistory() const;
-    bool isAtOrigin() const;
-    void setOrigin() const;
-    bool hasChanges() const;
+    bool        isAtOrigin() const;
+    void        setOrigin() const;
+    bool        hasChanges() const;
 
     void clearPreviousOriginData();
 
@@ -81,7 +81,7 @@ private:
     void redoStep(bool execute, bool flyingRollback);
     void makeSnapshot(int index);
     void restoreSnapshot(int index, const DImageHistory& history);
-    void getSnapshot(int index, DImg* img);
+    void getSnapshot(int index, DImg* const img);
 
 private:
 

@@ -7,8 +7,8 @@
  * Description : methods that implement color management tasks
  *
  * Copyright (C) 2005-2006 by F.J. Cruz <fj.cruz@supercable.es>
- * Copyright (C) 2005-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -47,7 +47,7 @@ IccPostLoadingManager::IccPostLoadingManager(DImg& image, const QString& filePat
 {
 }
 
-IccTransform IccPostLoadingManager::postLoadingManage(QWidget* parent)
+IccTransform IccPostLoadingManager::postLoadingManage(QWidget* const parent)
 {
     if (image().hasAttribute("missingProfileAskUser"))
     {

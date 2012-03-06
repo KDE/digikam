@@ -6,7 +6,7 @@
  * Date        : 2009-09-16
  * Description : Dialog to adjust soft proofing settings
  *
- * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -42,7 +42,7 @@ class SoftProofDialog : public KDialog
 
 public:
 
-    SoftProofDialog(QWidget* parent);
+    SoftProofDialog(QWidget* const parent);
     ~SoftProofDialog();
 
     bool shallEnableSoftProofView() const;

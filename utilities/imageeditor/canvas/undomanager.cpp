@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2005-2006 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2005-2006 Joern Ahrens <joern.ahrens@kdemail.net>
- * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -67,7 +67,7 @@ public:
     DImgInterface*     dimgiface;
 };
 
-UndoManager::UndoManager(DImgInterface* iface)
+UndoManager::UndoManager(DImgInterface* const iface)
     : d(new UndoManagerPriv)
 {
     d->dimgiface = iface;
@@ -81,7 +81,7 @@ UndoManager::~UndoManager()
     delete d;
 }
 
-void UndoManager::addAction(UndoAction* action)
+void UndoManager::addAction(UndoAction* const action)
 {
     if (!action)
     {
@@ -107,7 +107,7 @@ void UndoManager::addAction(UndoAction* action)
 
     if (isAtOrigin())
     {
-        QVariant      originDataBeforeStep = d->dimgiface->getImg()->fileOriginData();
+        QVariant      originDataBeforeStep    = d->dimgiface->getImg()->fileOriginData();
         DImageHistory originHistoryBeforeStep = d->dimgiface->getResolvedInitialHistory();
         action->setFileOriginData(originDataBeforeStep, originHistoryBeforeStep);
     }
@@ -375,7 +375,7 @@ void UndoManager::restoreSnapshot(int index, const DImageHistory& history)
     }
 }
 
-void UndoManager::getSnapshot(int index, DImg* img)
+void UndoManager::getSnapshot(int index, DImg* const img)
 {
     int    newW, newH;
     bool   sixteenBit, hasAlpha;
@@ -399,7 +399,7 @@ void UndoManager::clearPreviousOriginData()
     }
 }
 
-bool UndoManager::putImageDataAndHistory(DImg* img, int stepsBack)
+bool UndoManager::putImageDataAndHistory(DImg* const img, int stepsBack)
 {
     if (stepsBack <= 0 || stepsBack > d->undoActions.size())
     {
@@ -455,7 +455,7 @@ bool UndoManager::putImageDataAndHistory(DImg* img, int stepsBack)
     }
 
     // adjust history
-    UndoAction* action = d->undoActions.at(step);
+    UndoAction* action              = d->undoActions.at(step);
     DImageHistory historyBeforeStep = action->getHistory();
     img->setImageHistory(historyBeforeStep);
 

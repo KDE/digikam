@@ -7,7 +7,7 @@
  * Description : DImg interface for image editor
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2004-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -58,13 +58,29 @@ class DIGIKAM_EXPORT DImgInterface : public QObject
 
 public:
 
+    class UndoState
+    {
+    public:
+
+        UndoState();
+
+        bool hasUndo;
+        bool hasRedo;
+        bool hasChanges;
+        bool hasUndoableChanges;
+    };
+
+public:
+
     static DImgInterface* defaultInterface();
-    static void setDefaultInterface(DImgInterface* defaultInterface);
+    static void setDefaultInterface(DImgInterface* const defaultInterface);
+
+public:
 
     DImgInterface();
     ~DImgInterface();
 
-    void   load(const QString& filename, IOFileSettingsContainer* iofileSettings);
+    void   load(const QString& filename, IOFileSettingsContainer* const iofileSettings);
     void   applyTransform(const IccTransform& transform);
     void   updateColorManagement();
     void   setSoftProofingEnabled(bool enabled);
@@ -72,21 +88,22 @@ public:
     void                 setICCSettings(const ICCSettingsContainer& cmSettings);
     ICCSettingsContainer getICCSettings() const;
 
-    void                       setExposureSettings(ExposureSettingsContainer* expoSettings);
+    void                       setExposureSettings(ExposureSettingsContainer* const expoSettings);
     ExposureSettingsContainer* getExposureSettings() const;
 
     void   setExifOrient(bool exifOrient);
-    void   setDisplayingWidget(QWidget* widget);
+    void   setDisplayingWidget(QWidget* const widget);
 
     void   undo();
     void   redo();
     void   restore();
     void   rollbackToOrigin();
 
-    void   saveAs(const QString& file, IOFileSettingsContainer* iofileSettings,
+    void   saveAs(const QString& file, IOFileSettingsContainer* const iofileSettings,
                   bool setExifOrientationTag, const QString& mimeType,
                   const QString& intendedFilePath);
-    void   saveAs(const QString& file, IOFileSettingsContainer* iofileSettings,
+
+    void   saveAs(const QString& file, IOFileSettingsContainer* const iofileSettings,
                   bool setExifOrientationTag, const QString& mimeType,
                   const VersionFileOperation& operation);
 
@@ -100,16 +117,6 @@ public:
     void    setUndoManagerOrigin();
     void    resetImage();
 
-    class UndoState
-    {
-    public:
-        UndoState();
-        bool hasUndo;
-        bool hasRedo;
-        bool hasChanges;
-        bool hasUndoableChanges;
-    };
-
     UndoState undoState() const;
 
     QString ensureHasCurrentUuid() const;
@@ -117,11 +124,11 @@ public:
 
     void    zoom(double val);
 
-    void    paintOnDevice(QPaintDevice* p,
+    void    paintOnDevice(QPaintDevice* const p,
                           int sx, int sy, int sw, int sh,
                           int dx, int dy, int dw, int dh,
                           int antialias);
-    void    paintOnDevice(QPaintDevice* p,
+    void    paintOnDevice(QPaintDevice* const p,
                           int sx, int sy, int sw, int sh,
                           int dx, int dy, int dw, int dh,
                           int mx, int my, int mw, int mh,
@@ -163,16 +170,16 @@ public:
     DImg*  getImg() const;
     uchar* getImage() const;
 
-    void   putImage(const QString& caller, const FilterAction& action, uchar* data, int w, int h);
-    void   putImage(const QString& caller, const FilterAction& action, uchar* data, int w, int h, bool sixteenBit);
+    void   putImage(const QString& caller, const FilterAction& action, uchar* const data, int w, int h);
+    void   putImage(const QString& caller, const FilterAction& action, uchar* const data, int w, int h, bool sixteenBit);
 
     uchar* getImageSelection() const;
-    void   putImageSelection(const QString& caller, const FilterAction& action, uchar* data);
+    void   putImageSelection(const QString& caller, const FilterAction& action, uchar* const data);
 
     void   putIccProfile(const IccProfile& profile);
 
     /// For internal usage by UndoManager
-    void   setUndoImageData(const DImageHistory& history, uchar* data, int w, int h, bool sixteenBit);
+    void   setUndoImageData(const DImageHistory& history, uchar* const data, int w, int h, bool sixteenBit);
     void   imageUndoChanged(const DImageHistory& history);
     void   setFileOriginData(const QVariant& data);
 
@@ -220,12 +227,12 @@ private Q_SLOTS:
 
 private:
 
-    void   saveAs(const QString& file, IOFileSettingsContainer* iofileSettings,
+    void   saveAs(const QString& file, IOFileSettingsContainer* const iofileSettings,
                   bool setExifOrientationTag, const QString& mimeType,
                   const VersionFileOperation& operation, const QString& intendedFilePath);
 
-    void   putImageData(uchar* data, int w, int h, bool sixteenBit);
-    void   applyBuiltinFilter(const DImgBuiltinFilter& filter, UndoAction* action);
+    void   putImageData(uchar* const data, int w, int h, bool sixteenBit);
+    void   applyBuiltinFilter(const DImgBuiltinFilter& filter, UndoAction* const action);
     void   applyReversibleBuiltinFilter(const DImgBuiltinFilter& filter);
 
     void   load(const LoadingDescription& description);
@@ -233,7 +240,7 @@ private:
     void   resetValues();
     void   saveNext();
 
-    QMap<QString, QVariant> ioAttributes(IOFileSettingsContainer* iofileSettings, const QString& givenMimeType) const;
+    QMap<QString, QVariant> ioAttributes(IOFileSettingsContainer* const iofileSettings, const QString& givenMimeType) const;
 
 private:
 

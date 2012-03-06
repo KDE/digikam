@@ -6,9 +6,9 @@
  * Date        : 2005-02-06
  * Description : undo actions manager for image editor.
  *
- * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2005 by Joern Ahrens <joern.ahrens@kdemail.net>
- * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005      by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Copyright (C) 2005      by Joern Ahrens <joern.ahrens@kdemail.net>
+ * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -52,7 +52,7 @@ public:
     DImgInterface* iface;
 };
 
-UndoAction::UndoAction(DImgInterface* iface)
+UndoAction::UndoAction(DImgInterface* const iface)
     : d(new UndoActionPriv)
 {
     d->iface   = iface;
@@ -91,7 +91,7 @@ bool UndoAction::hasFileOriginData() const
 
 void UndoAction::setFileOriginData(const QVariant& data, const DImageHistory& resolvedInitialHistory)
 {
-    d->fileOrigin = data;
+    d->fileOrigin                = data;
     d->fileOriginResolvedHistory = resolvedInitialHistory;
 }
 
@@ -107,7 +107,7 @@ DImageHistory UndoAction::fileOriginResolvedHistory() const
 
 // ---------------------------------------------------------------------------------------------
 
-UndoActionReversible::UndoActionReversible(DImgInterface* iface, const DImgBuiltinFilter& reversibleFilter)
+UndoActionReversible::UndoActionReversible(DImgInterface* const iface, const DImgBuiltinFilter& reversibleFilter)
     : UndoAction(iface), m_filter(reversibleFilter)
 {
     setTitle(m_filter.i18nDisplayableName());
@@ -125,7 +125,7 @@ DImgBuiltinFilter UndoActionReversible::getReverseFilter() const
 
 // ---------------------------------------------------------------------------------------------
 
-UndoActionIrreversible::UndoActionIrreversible(DImgInterface* iface, const QString& title)
+UndoActionIrreversible::UndoActionIrreversible(DImgInterface* const iface, const QString& title)
     : UndoAction(iface)
 {
     setTitle(title);
