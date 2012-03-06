@@ -41,7 +41,7 @@ class ImagePlugin_Decorate : public ImagePlugin
 
 public:
 
-    ImagePlugin_Decorate(QObject* parent, const QVariantList& args);
+    ImagePlugin_Decorate(QObject* const parent, const QVariantList& args);
     ~ImagePlugin_Decorate();
 
     void setEnabledActions(bool b);

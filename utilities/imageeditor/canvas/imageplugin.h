@@ -62,6 +62,10 @@ public:
 
 protected:
 
+    /** Used to set actions category into KDE config shortcuts dialog for Image EditorTool.
+     *  One plugin can host more than one tool with more than one action shortcuts. 
+     *  Define a category, will group actions by plugin name in shortcuts list.
+     */
     void setActionCategory(const QString& name);
 
 private Q_SLOTS:

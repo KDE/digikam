@@ -6,7 +6,7 @@
  * Date        : 2005-02-17
  * Description : a plugin to transform image geometry.
  *
- * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -74,7 +74,7 @@ public:
     KAction* perspectiveAction;
 };
 
-ImagePlugin_Transform::ImagePlugin_Transform(QObject* parent, const QVariantList&)
+ImagePlugin_Transform::ImagePlugin_Transform(QObject* const parent, const QVariantList&)
     : ImagePlugin(parent, "ImagePlugin_Transform"),
       d(new ImagePlugin_TransformPriv)
 {
@@ -110,12 +110,7 @@ ImagePlugin_Transform::ImagePlugin_Transform(QObject* parent, const QVariantList
 
     //-----------------------------------------------------------------------------------
 
-    QString pluginName(i18n("Free Rotation"));
-
-    // we want to have an actionCategory for this plugin (if possible), set a name for it
-    setActionCategory(pluginName);
-
-    d->freerotationAction = new KAction(KIcon("freerotation"), QString("%1...").arg(pluginName), this);
+    d->freerotationAction = new KAction(KIcon("freerotation"), QString("%1...").arg(i18n("Free Rotation")), this);
     actionCollection()->addAction("imageplugin_freerotation", d->freerotationAction );
     connect(d->freerotationAction, SIGNAL(triggered(bool)),
             this, SLOT(slotFreeRotation()));
@@ -138,6 +133,7 @@ ImagePlugin_Transform::ImagePlugin_Transform(QObject* parent, const QVariantList
     connect(autoAdjustAction, SIGNAL(triggered(bool)),
             this, SIGNAL(signalAutoAdjustAction()));
 
+    setActionCategory(i18n("Transform"));
     setXMLFile("digikamimageplugin_transform_ui.rc");
 
     kDebug() << "ImagePlugin_Transform plugin loaded";

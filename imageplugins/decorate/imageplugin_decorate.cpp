@@ -61,7 +61,7 @@ public:
     KAction* insertTextAction;
 };
 
-ImagePlugin_Decorate::ImagePlugin_Decorate(QObject* parent, const QVariantList&)
+ImagePlugin_Decorate::ImagePlugin_Decorate(QObject* const parent, const QVariantList&)
     : ImagePlugin(parent, "ImagePlugin_Decorate"),
       d(new ImagePlugin_DecoratePriv)
 {
@@ -81,6 +81,7 @@ ImagePlugin_Decorate::ImagePlugin_Decorate(QObject* parent, const QVariantList&)
     connect(d->textureAction, SIGNAL(triggered(bool)),
             this, SLOT(slotTexture()));
 
+    setActionCategory(i18n("Decorate"));
     setXMLFile("digikamimageplugin_decorate_ui.rc");
 
     kDebug() << "ImagePlugin_Decorate plugin loaded";

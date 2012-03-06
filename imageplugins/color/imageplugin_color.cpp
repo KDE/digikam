@@ -190,12 +190,13 @@ ImagePlugin_Color::ImagePlugin_Color(QObject* const parent, const QVariantList&)
     connect(d->levelsAction, SIGNAL(triggered(bool)),
             this, SLOT(slotLevelsAdjust()));
 
-    d->filmAction = new KAction(KIcon("film"), i18n("Film ..."), this);
+    d->filmAction = new KAction(KIcon("film"), i18n("Reversal Film..."), this);
     d->filmAction->setShortcut(KShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_I));
     actionCollection()->addAction("imageplugin_film", d->filmAction);
     connect(d->filmAction, SIGNAL(triggered(bool)),
-    		this, SLOT(slotFilm()));
+            this, SLOT(slotFilm()));
 
+    setActionCategory(i18n("Colors"));
     setXMLFile("digikamimageplugin_color_ui.rc");
 
     kDebug() << "ImagePlugin_Color plugin loaded";

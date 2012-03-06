@@ -6,7 +6,7 @@
  * Date        : 2004-02-14
  * Description : a digiKam image plugin to apply special effects.
  *
- * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -119,6 +119,7 @@ ImagePlugin_FxFilters::ImagePlugin_FxFilters(QObject* parent, const QVariantList
     connect(d->filmgrainAction, SIGNAL(triggered(bool)),
             this, SLOT(slotFilmGrain()));
 
+    setActionCategory(i18n("Effects"));
     setXMLFile( "digikamimageplugin_fxfilters_ui.rc" );
 
     kDebug() << "ImagePlugin_FxFilters plugin loaded";

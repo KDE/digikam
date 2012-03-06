@@ -6,7 +6,7 @@
  * Date        : 2005-03-26
  * Description : a digiKam image editor plugin to enhance photograph
  *
- * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -90,7 +90,7 @@ public:
     KAction* inPaintingAction;
 };
 
-ImagePlugin_Enhance::ImagePlugin_Enhance(QObject* parent, const QVariantList&)
+ImagePlugin_Enhance::ImagePlugin_Enhance(QObject* const parent, const QVariantList&)
     : ImagePlugin(parent, "ImagePlugin_Enhance"),
       d(new ImagePlugin_EnhancePriv)
 {
@@ -160,6 +160,7 @@ ImagePlugin_Enhance::ImagePlugin_Enhance(QObject* parent, const QVariantList&)
 
     HotPixelsTool::registerFilter();
 
+    setActionCategory(i18n("Enhance"));
     setXMLFile( "digikamimageplugin_enhance_ui.rc" );
 
     kDebug() << "ImagePlugin_Enhance plugin loaded";
