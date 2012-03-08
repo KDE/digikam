@@ -7,7 +7,7 @@
  * Description : a widget to select image collections using
  *               digiKam album folder views
  *
- * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -86,7 +86,7 @@ public:
     SearchTextBar*  tagSearchBar;
     SearchTextBar*  searchSearchBar;
 
-    void prepareTreeView(AbstractCheckableAlbumTreeView* treeView)
+    void prepareTreeView(AbstractCheckableAlbumTreeView* const treeView)
     {
 
         treeView->checkableModel()->setShowCount(false);
@@ -101,10 +101,10 @@ public:
     }
 
     void fillCollectionsFromCheckedModel(QList<KIPI::ImageCollection>& collectionList,
-                                         AbstractCheckableAlbumModel* model,
+                                         AbstractCheckableAlbumModel* const model,
                                          const QString& ext)
     {
-        foreach(Album* album, model->checkedAlbums())
+        foreach(Album* const album, model->checkedAlbums())
         {
             if (!album)
             {
@@ -117,7 +117,7 @@ public:
     }
 };
 
-KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface* const iface, QWidget* parent)
+KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface* const iface, QWidget* const parent)
     : KIPI::ImageCollectionSelector(parent),
       d(new KipiImageCollectionSelectorPriv)
 {
@@ -204,13 +204,13 @@ KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface* const if
 
     // ------------------------------------------------------------------------------------
 
-    connect(d->albumModel, SIGNAL(checkStateChanged(Album*,Qt::CheckState)),
+    connect(d->albumModel, SIGNAL(checkStateChanged(Album*, Qt::CheckState)),
             this, SIGNAL(selectionChanged()));
 
-    connect(d->tagModel, SIGNAL(checkStateChanged(Album*,Qt::CheckState)),
+    connect(d->tagModel, SIGNAL(checkStateChanged(Album*, Qt::CheckState)),
             this, SIGNAL(selectionChanged()));
 
-    connect(d->searchModel, SIGNAL(checkStateChanged(Album*,Qt::CheckState)),
+    connect(d->searchModel, SIGNAL(checkStateChanged(Album*, Qt::CheckState)),
             this, SIGNAL(selectionChanged()));
 
     // ------------------------------------------------------------------------------------
