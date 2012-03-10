@@ -26,20 +26,22 @@
 
 // Qt includes
 
+#include <QObject>
 #include <QList>
 #include <QAction>
 #include <QString>
 
 class KAction;
 
-class kipiLoader
+class kipiLoader : public QObject
 {
+    Q_OBJECT
 
 public:
 
-    kipiLoader();
-    ~kipiLoader();	    
- 	
+    kipiLoader(QObject* const parent);
+    virtual ~kipiLoader();
+
     // KIPI Actions collections access.
     const QList<QAction*>& menuImageActions();
     const QList<QAction*>& menuBatchActions();
@@ -49,17 +51,16 @@ public:
 
 private:
 
-void loadPlugins();
+    void loadPlugins();
 
 private slots:
 
-void slotKipiPluginPlug();
+    void slotKipiPluginPlug();
 
 private:
 
     class kipiLoaderPriv;
     kipiLoader* const d;
-
 };
 
 }  // namespace Digikam

@@ -21,9 +21,7 @@
  *
  * ============================================================ */
 
-//Check if headers are complete
-
-#include "digikamapp.h"
+#include "kipiloader.moc"
 
 // Qt includes
 
@@ -40,22 +38,48 @@
 #include <libkipi/interface.h>
 #include <libkipi/plugin.h>
 
+// local includes
+
+#include "digikamapp.h"
+
 namespace Digikam
 {
 
-kipiLoader::kipiLoader()
+class kipiLoader::kipiLoaderPriv
 {
-   // Load KIPI Plugins.
+public:
+
+    kipiLoaderPriv()
+    {
+        kipipluginsActionCollection = 0;
+        kipiPluginLoader            = 0;
+        kipiInterface               = 0;
+    }
+
+    KActionCollection*  kipipluginsActionCollection;
+    KIPI::PluginLoader* kipiPluginLoader;
+    KipiInterface*      kipiInterface;
+
+    // TODO : host all action collections here.
+};
+
+kipiLoader::kipiLoader(QObject* const parent)
+    : QObject(parent), d(new kipiLoaderPriv)
+{
+    // Load KIPI Plugins.
     loadPlugins();
 }
 
-// Need to pass d-pointer
+kipiLoader::~kipiLoader()
+{
+    delete d;
+}
 
 void kipiLoader::loadPlugins()
 {
     d->kipipluginsActionCollection = new KActionCollection(this, KGlobal::mainComponent());
 
-//NEEDS REVIEW: Splashscreen can be called from here?
+    // TODO : NEEDS REVIEW: Splashscreen can be called from here?
     if (d->splashScreen)
     {
         d->splashScreen->message(i18n("Loading Kipi Plugins"));
@@ -84,10 +108,13 @@ void kipiLoader::loadPlugins()
 
     d->kipiInterface->slotCurrentAlbumChanged(AlbumManager::instance()->currentAlbum());
 
+    // FIXME : this code must still in DigikamApp
     // Setting the initial menu options after all plugins have been loaded
+/*
     d->view->slotAlbumSelected(AlbumManager::instance()->currentAlbum());
 
     d->imagePluginsLoader = new ImagePluginLoader(this, d->splashScreen);
+*/
 }
 
 void kipiLoader::slotKipiPluginPlug()
