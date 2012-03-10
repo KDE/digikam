@@ -1,276 +1,136 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
-
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN"
+"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd"
+[
+ <!ATTLIST svg
+  xmlns:xlink CDATA #FIXED "http://www.w3.org/1999/xlink">
+]>
+<!-- Created with Sodipodi ("http://www.sodipodi.com/") -->
 <svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
+   xml:space="preserve"
+   width="128pt"
+   height="128pt"
+   viewBox="0 0 507.946 507.946"
+   id="svg49"
+   sodipodi:version="0.27"
+   sodipodi:docname="/mnt/windows/Themes/Work/Blue-Sphere/stop-2.svg"
+   sodipodi:docbase="/mnt/windows/Themes/Work/Blue-Sphere/"
    xmlns="http://www.w3.org/2000/svg"
-   xmlns:xlink="http://www.w3.org/1999/xlink"
-   version="1.2"
-   width="1000"
-   height="1000"
-   id="svg5496">
-  <metadata
-     id="metadata5594">
-    <rdf:RDF>
-      <cc:Work
-         rdf:about="">
-        <dc:format>image/svg+xml</dc:format>
-        <dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
-      </cc:Work>
-    </rdf:RDF>
-  </metadata>
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink">
   <defs
-     id="defs5498">
-    <linearGradient
-       id="linearGradient5312">
-      <stop
-         id="stop5314"
-         style="stop-color:#baffff;stop-opacity:1"
-         offset="0" />
-      <stop
-         id="stop5316"
-         style="stop-color:#baffff;stop-opacity:0"
-         offset="1" />
-    </linearGradient>
-    <linearGradient
-       id="linearGradient5298">
-      <stop
-         id="stop5300"
-         style="stop-color:#baffff;stop-opacity:1"
-         offset="0" />
-      <stop
-         id="stop5302"
-         style="stop-color:#baffff;stop-opacity:0"
-         offset="1" />
-    </linearGradient>
-    <linearGradient
-       id="linearGradient5243">
-      <stop
-         id="stop5245"
-         style="stop-color:#000000;stop-opacity:1"
-         offset="0" />
-      <stop
-         id="stop5247"
-         style="stop-color:#000000;stop-opacity:0"
-         offset="1" />
-    </linearGradient>
-    <linearGradient
-       id="linearGradient5237">
-      <stop
-         id="stop5239"
-         style="stop-color:#000000;stop-opacity:1"
-         offset="0" />
-    </linearGradient>
-    <filter
-       x="-0.35791525"
-       y="-0.36209866"
-       width="1.7158304"
-       height="1.7241973"
-       color-interpolation-filters="sRGB"
-       id="filter3778">
-      <feGaussianBlur
-         id="feGaussianBlur3780"
-         stdDeviation="255.88839" />
-    </filter>
-    <filter
-       color-interpolation-filters="sRGB"
-       id="filter3788">
-      <feGaussianBlur
-         id="feGaussianBlur3790"
-         stdDeviation="27.670704" />
-    </filter>
-    <filter
-       color-interpolation-filters="sRGB"
-       id="filter3799">
-      <feGaussianBlur
-         id="feGaussianBlur3801"
-         stdDeviation="38.667111" />
-    </filter>
-    <filter
-       color-interpolation-filters="sRGB"
-       id="filter3793">
-      <feGaussianBlur
-         stdDeviation="9.9656342"
-         id="feGaussianBlur3795" />
-    </filter>
-    <filter
-       color-interpolation-filters="sRGB"
-       id="filter3801">
-      <feGaussianBlur
-         stdDeviation="16.994255"
-         id="feGaussianBlur3803" />
-    </filter>
-    <filter
-       color-interpolation-filters="sRGB"
-       id="filter3807">
-      <feGaussianBlur
-         stdDeviation="17.130938"
-         id="feGaussianBlur3809" />
-    </filter>
-    <filter
-       color-interpolation-filters="sRGB"
-       id="filter3813">
-      <feGaussianBlur
-         stdDeviation="17.07019"
-         id="feGaussianBlur3815" />
-    </filter>
-    <filter
-       color-interpolation-filters="sRGB"
-       id="filter3833">
-      <feGaussianBlur
-         stdDeviation="20.798373"
-         id="feGaussianBlur3835" />
-    </filter>
-    <filter
-       color-interpolation-filters="sRGB"
-       id="filter3775">
-      <feGaussianBlur
-         id="feGaussianBlur3777"
-         stdDeviation="43.900343" />
-    </filter>
-    <filter
-       color-interpolation-filters="sRGB"
-       id="filter3781">
-      <feGaussianBlur
-         id="feGaussianBlur3783"
-         stdDeviation="19.692155" />
-    </filter>
-    <linearGradient
-       x1="124.5625"
-       y1="127.70818"
-       x2="214.71875"
-       y2="127.70818"
-       id="linearGradient5249"
-       xlink:href="#linearGradient5243"
-       gradientUnits="userSpaceOnUse" />
-    <linearGradient
-       x1="124.5625"
-       y1="127.70818"
-       x2="214.71875"
-       y2="127.70818"
-       id="linearGradient5249-4"
-       xlink:href="#linearGradient5243-7"
-       gradientUnits="userSpaceOnUse" />
-    <linearGradient
-       id="linearGradient5243-7">
-      <stop
-         id="stop5245-6"
-         style="stop-color:#000000;stop-opacity:1"
-         offset="0" />
-      <stop
-         id="stop5247-4"
-         style="stop-color:#000000;stop-opacity:0"
-         offset="1" />
-    </linearGradient>
-    <filter
-       color-interpolation-filters="sRGB"
-       id="filter5290">
-      <feGaussianBlur
-         id="feGaussianBlur5292"
-         stdDeviation="2.4413872" />
-    </filter>
+     id="defs62">
     <radialGradient
-       cx="598.65167"
-       cy="324.26382"
-       r="384.6203"
-       fx="598.65167"
-       fy="324.26382"
-       id="radialGradient5318"
-       xlink:href="#linearGradient5312"
+       id="radialGradient93"
+       cx="218.9404"
+       cy="219.7715"
+       r="150.7063"
+       fx="218.9404"
+       fy="219.7715"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(1.2501686,0.01786919,-0.01282349,0.89716056,-136.0099,26.564556)" />
-    <filter
-       x="-0.11916279"
-       y="-0.12084906"
-       width="1.2383256"
-       height="1.2416981"
-       color-interpolation-filters="sRGB"
-       id="filter5326">
-      <feGaussianBlur
-         id="feGaussianBlur5328"
-         stdDeviation="36.683849" />
-    </filter>
-    <filter
-       x="-0.60265225"
-       y="-0.5984599"
-       width="2.2053044"
-       height="2.1969199"
-       color-interpolation-filters="sRGB"
-       id="filter5340">
-      <feGaussianBlur
-         id="feGaussianBlur5342"
-         stdDeviation="492.71829" />
-    </filter>
-    <filter
-       x="-0.12053045"
-       y="-0.11969198"
-       width="1.2410609"
-       height="1.2393841"
-       color-interpolation-filters="sRGB"
-       id="filter5344">
-      <feGaussianBlur
-         id="feGaussianBlur5346"
-         stdDeviation="98.543658" />
-    </filter>
-    <filter
-       x="-0.11651786"
-       y="-0.12369668"
-       width="1.2330357"
-       height="1.2473934"
-       color-interpolation-filters="sRGB"
-       id="filter5348">
-      <feGaussianBlur
-         id="feGaussianBlur5350"
-         stdDeviation="37.371135" />
-    </filter>
+       style="stroke:#000000;stroke-opacity:0.986014;stroke-width:0.981612;">
+      <stop
+         offset="0.000000"
+         style="stop-color:#25a6ca;stop-opacity:1;"
+         id="stop94" />
+      <stop
+         offset="1.000000"
+         style="stop-color:#2ea6b9;stop-opacity:0.843137;"
+         id="stop95" />
+    </radialGradient>
+    <radialGradient
+       id="aigrd1"
+       cx="218.9404"
+       cy="219.7715"
+       r="150.7063"
+       fx="218.9404"
+       fy="219.7715"
+       gradientUnits="userSpaceOnUse"
+       style="stroke:#000000;stroke-opacity:0.986014;stroke-width:0.981612;">
+      <stop
+         offset="0"
+         style="stop-color:#73ffff;stroke:#000000;stroke-opacity:0.986014;stroke-width:0.981612;"
+         id="stop53" />
+      <stop
+         offset="0.2809"
+         style="stop-color:#2EA6B9;stroke:#000000;stroke-opacity:0.986014;stroke-width:0.981612;"
+         id="stop54" />
+      <stop
+         offset="1"
+         style="stop-color:#006b8b;stroke:#000000;stroke-opacity:0.986014;stroke-width:0.981612;"
+         id="stop55" />
+    </radialGradient>
+    <linearGradient
+       xlink:href="#aigrd1"
+       id="linearGradient91"
+       x1="-0.295723"
+       y1="-0.264591"
+       x2="0.622574"
+       y2="0.365762"
+       gradientUnits="objectBoundingBox"
+       gradientTransform="matrix(0.996114,0,0,1.0039,0.496124,0.492186)"
+       spreadMethod="pad" />
+    <radialGradient
+       xlink:href="#aigrd1"
+       id="radialGradient92"
+       cx="-8.09344e-05"
+       cy="-7.68867e-05"
+       fx="-8.09344e-05"
+       fy="-7.68867e-05"
+       r="0.789127"
+       gradientUnits="objectBoundingBox"
+       gradientTransform="matrix(1.06784,0,0,0.936469,0.342219,0.344712)"
+       spreadMethod="pad" />
   </defs>
-  <g
-     id="layer1" />
-  <rect
-     width="769.75946"
-     height="725.08594"
-     x="240.54984"
-     y="-6.8728523"
-     id="rect5330"
-     style="fill:#e8ffff;fill-opacity:1;stroke:#000000;stroke-width:6.35400009;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;filter:url(#filter5348)" />
-  <flowRoot
-     transform="matrix(7.08993,0,0,5.6937052,-600.10985,-388.08436)"
-     id="flowRoot3785"
-     xml:space="preserve"
-     style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1.00006616;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:Sans"><flowRegion
-       id="flowRegion3787"
-       style="stroke:url(#linearGradient5249)"><rect
-         width="872.85223"
-         height="797.25085"
-         x="120.27492"
-         y="51.546391"
-         id="rect3789"
-         style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1.00006616;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" /></flowRegion><flowPara
-       id="flowPara3791"
-       style="font-size:144px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1.00006616;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:Verdana;-inkscape-font-specification:Verdana">X</flowPara></flowRoot>  <flowRoot
-     transform="matrix(7.1582528,0,0,5.6053131,-609.51951,-380.79283)"
-     id="flowRoot3785-7"
-     xml:space="preserve"
-     style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#baffff;fill-opacity:0.39682539;stroke:#000000;stroke-width:1.00006616;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;filter:url(#filter5290);font-family:Sans"><flowRegion
-       id="flowRegion3787-9"
-       style="stroke:url(#linearGradient5249-4)"><rect
-         width="872.85223"
-         height="797.25085"
-         x="120.27492"
-         y="51.546391"
-         id="rect3789-5"
-         style="fill:#baffff;fill-opacity:0.39682539;stroke:#000000;stroke-width:1.00006616;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" /></flowRegion><flowPara
-       id="flowPara3791-3"
-       style="font-size:144px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#baffff;fill-opacity:0.39682539;stroke:#000000;stroke-width:1.00006616;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:Verdana;-inkscape-font-specification:Verdana">X</flowPara></flowRoot>  <rect
-     width="697.59448"
-     height="673.53949"
-     x="254.29553"
-     y="6.8728523"
-     id="rect5354"
-     style="opacity:0.86371669;fill:none;stroke:#000000;stroke-width:6.35400009;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+  <sodipodi:namedview
+     id="base">
+    <sodipodi:guide
+       orientation="horizontal"
+       position="70.460571"
+       id="sodipodi:guide125" />
+    <sodipodi:guide
+       orientation="horizontal"
+       position="48.656151"
+       id="sodipodi:guide126" />
+    <sodipodi:guide
+       orientation="vertical"
+       position="66.018929"
+       id="sodipodi:guide127" />
+    <sodipodi:guide
+       orientation="horizontal"
+       position="90.246056"
+       id="sodipodi:guide20" />
+    <sodipodi:guide
+       orientation="horizontal"
+       position="29.274448"
+       id="sodipodi:guide21" />
+    <sodipodi:guide
+       orientation="vertical"
+       position="97.110413"
+       id="sodipodi:guide22" />
+    <sodipodi:guide
+       orientation="vertical"
+       position="34.927444"
+       id="sodipodi:guide23" />
+    <sodipodi:guide
+       orientation="horizontal"
+       position="59.962147"
+       id="sodipodi:guide24" />
+  </sodipodi:namedview>
+  <path
+     style="font-size:12;stroke:none;stroke-width:0.979268;stroke-opacity:0.986014;fill:#a4c9ee;fill-opacity:0.7;"
+     d="M134.757,263.776c0,66.739,54.298,121.04,121.039,121.04c66.739,0,121.039-54.301,121.039-121.04c0-66.741-54.3-121.039-121.039-121.039c-66.741,0-121.039,54.298-121.039,121.039z"
+     id="path51"
+     transform="matrix(1.89511,0,0,1.91236,-231.458,-247.971)" />
+  <path
+     style="font-size:12;fill:url(#radialGradient92);fill-rule:evenodd;stroke:#1c6671;stroke-width:7.72505;stroke-opacity:0.988235;"
+     d="M356.643,263.366c0,57.027-46.23,103.257-103.256,103.257c-57.027,0-103.256-46.229-103.256-103.257c0-57.027,46.229-103.256,103.256-103.256     c57.025,0,103.256,46.229,103.256,103.256z"
+     id="path56"
+     transform="matrix(2.04451,0,0,2.04451,-264.353,-281.723)" />
+  <path
+     style="font-size:12;opacity:0.7;fill:#ffffff;stroke:#1c6772;stroke-width:3.86972;stroke-opacity:0.988235;"
+     d="M 246.07 280.233 L 164.73 280.777 C 151.122 280.863 145.143 265.54 145.421 255.258 C 144.775 247.053 148.852 232.142 164.429 230.994 L 244.216 229.011 L 241.953 153.421 C 241.796 138.289 257.675 128.71 267.404 129.607 C 278.285 128.656 290.708 137.925 291.688 150.233 C 291.688 155.507 293.031 209.592 293.209 230.76 L 369.189 227.788 C 382.351 226.748 395.032 239.215 395.06 249.825 C 395.088 260.706 393.504 274.842 374.095 275.209 L 297.205 277.016 L 299.416 360.521 C 299.502 371.358 285.104 379.184 276.67 378.906 C 268.465 379.552 251.244 376.861 250.096 361.284 L 246.07 280.233 z "
+     id="path124"
+     sodipodi:nodetypes="ccccccccccccccccc"
+     transform="matrix(0.908402,-0.864764,0.864764,0.908402,-204.249,273.607)" />
 </svg>
