@@ -7,7 +7,7 @@
  * Description : database migration dialog
  *
  * Copyright (C) 2009-2011 by Holger Foerster <Hamsi2k at freenet dot de>
- * Copyright (C) 2010-2011 by Gilles Caulier<caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2012 by Gilles Caulier<caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -47,8 +47,9 @@ class DatabaseServer : public QObject
 
 public:
 
-    DatabaseServer(QCoreApplication* application);
+    DatabaseServer(QCoreApplication* const application = 0);
     ~DatabaseServer();
+
     DatabaseServerError createDatabase();
     void registerOnDBus();
     void startPolling();

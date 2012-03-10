@@ -31,7 +31,7 @@
 
 // Local includes
 
-#include <databaseserver.h>
+#include "databaseserver.h"
 
 using namespace Digikam;
 

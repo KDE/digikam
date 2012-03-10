@@ -50,7 +50,7 @@
 namespace Digikam
 {
 
-PollThread::PollThread(QObject* parent)
+PollThread::PollThread(QObject* const parent)
     : QThread(parent), stop(false), waitTime(10)
 {
 }
@@ -84,7 +84,7 @@ bool PollThread::checkDigikamInstancesRunning()
         foreach(const QString& service, serviceNames)
         {
             if (service.startsWith(digikamStartupService) ||
-                service.startsWith(digikamService) ||
+                service.startsWith(digikamService)        ||
                 service.startsWith(digikamKioService))
             {
                 kDebug() << "At least service ["<< service <<"] is using the database server";
