@@ -28,13 +28,14 @@
 
 #include <QObject>
 #include <QList>
-#include <QAction>
 #include <QString>
 
-class KAction;
+class QAction;
 
 namespace Digikam
 {
+
+class SplashScreen;
 
 class KipiPluginLoader : public QObject
 {
@@ -52,6 +53,8 @@ public:
     const QList<QAction*>& menuImportActions();
     const QList<QAction*>& menuExportActions();
 
+    void setSplashScreen(SplashScreen* const splash);
+
 private:
 
     void loadPlugins();
@@ -63,7 +66,7 @@ private slots:
 private:
 
     class KipiPluginLoaderPriv;
-    KipiPluginLoader* const d;
+    KipiPluginLoaderPriv* const d;
 };
 
 }  // namespace Digikam

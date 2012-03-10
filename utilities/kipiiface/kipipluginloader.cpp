@@ -27,6 +27,7 @@
 
 #include <QSignalMapper>
 #include <QStringList>
+#include <QAction>
 
 // KDE includes
 
@@ -37,10 +38,13 @@
 
 #include <libkipi/interface.h>
 #include <libkipi/plugin.h>
+#include <libkipi/pluginloader.h>
 
 // local includes
 
+#include "kipiinterface.h"
 #include "digikamapp.h"
+#include "splashscreen.h"
 
 namespace Digikam
 {
@@ -54,13 +58,22 @@ public:
         kipipluginsActionCollection = 0;
         kipiPluginLoader            = 0;
         kipiInterface               = 0;
+        splashScreen                = 0;
     }
 
     KActionCollection*  kipipluginsActionCollection;
     KIPI::PluginLoader* kipiPluginLoader;
     KipiInterface*      kipiInterface;
+    SplashScreen*       splashScreen;
 
-    // TODO : host all action collections here.
+    QList<QAction*>     kipiFileActionsExport;
+    QList<QAction*>     kipiFileActionsImport;
+    QList<QAction*>     kipiPrintActions;
+    QList<QAction*>     kipiMetadataActions;
+    QList<QAction*>     kipiImageActions;
+    QList<QAction*>     kipiToolsActions;
+    QList<QAction*>     kipiBatchActions;
+    QList<QAction*>     kipiAlbumActions;
 };
 
 KipiPluginLoader::KipiPluginLoader(QObject* const parent)
@@ -73,6 +86,11 @@ KipiPluginLoader::KipiPluginLoader(QObject* const parent)
 KipiPluginLoader::~KipiPluginLoader()
 {
     delete d;
+}
+
+void KipiPluginLoader::setSplashScreen(SplashScreen* const splash)
+{
+    d->splashScreen = splash;
 }
 
 void KipiPluginLoader::loadPlugins()
@@ -119,6 +137,7 @@ void KipiPluginLoader::loadPlugins()
 
 void KipiPluginLoader::slotKipiPluginPlug()
 {
+/* TODO : add this method in this class
     unplugActionList(QString::fromLatin1("file_actions_export"));
     unplugActionList(QString::fromLatin1("file_actions_import"));
     unplugActionList(QString::fromLatin1("image_jpeglossless_actions"));
@@ -128,14 +147,13 @@ void KipiPluginLoader::slotKipiPluginPlug()
     unplugActionList(QString::fromLatin1("tool_actions"));
     unplugActionList(QString::fromLatin1("batch_actions"));
     unplugActionList(QString::fromLatin1("album_actions"));
-
+*/
     d->kipiImageActions.clear();
     d->kipiFileActionsExport.clear();
     d->kipiFileActionsImport.clear();
     d->kipiToolsActions.clear();
     d->kipiBatchActions.clear();
     d->kipiAlbumActions.clear();
-    d->kipiJpeglosslessActions.clear();
     d->kipiPrintActions.clear();
     d->kipiMetadataActions.clear();
 
