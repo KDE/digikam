@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAMAPP_H
-#define DIGIKAMAPP_H
+#ifndef KIPIPLUGINLOADER_H
+#define KIPIPLUGINLOADER_H
 
 // Qt includes
 
@@ -33,14 +33,17 @@
 
 class KAction;
 
-class kipiLoader : public QObject
+namespace Digikam
+{
+
+class KipiPluginLoader : public QObject
 {
     Q_OBJECT
 
 public:
 
-    kipiLoader(QObject* const parent);
-    virtual ~kipiLoader();
+    KipiPluginLoader(QObject* const parent);
+    virtual ~KipiPluginLoader();
 
     // KIPI Actions collections access.
     const QList<QAction*>& menuImageActions();
@@ -59,8 +62,10 @@ private slots:
 
 private:
 
-    class kipiLoaderPriv;
-    kipiLoader* const d;
+    class KipiPluginLoaderPriv;
+    KipiPluginLoader* const d;
 };
 
 }  // namespace Digikam
+
+#endif // KIPIPLUGINLOADER_H

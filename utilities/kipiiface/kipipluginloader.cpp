@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "kipiloader.moc"
+#include "kipipluginloader.moc"
 
 // Qt includes
 
@@ -45,11 +45,11 @@
 namespace Digikam
 {
 
-class kipiLoader::kipiLoaderPriv
+class KipiPluginLoader::KipiPluginLoaderPriv
 {
 public:
 
-    kipiLoaderPriv()
+    KipiPluginLoaderPriv()
     {
         kipipluginsActionCollection = 0;
         kipiPluginLoader            = 0;
@@ -63,19 +63,19 @@ public:
     // TODO : host all action collections here.
 };
 
-kipiLoader::kipiLoader(QObject* const parent)
-    : QObject(parent), d(new kipiLoaderPriv)
+KipiPluginLoader::KipiPluginLoader(QObject* const parent)
+    : QObject(parent), d(new KipiPluginLoaderPriv)
 {
     // Load KIPI Plugins.
     loadPlugins();
 }
 
-kipiLoader::~kipiLoader()
+KipiPluginLoader::~KipiPluginLoader()
 {
     delete d;
 }
 
-void kipiLoader::loadPlugins()
+void KipiPluginLoader::loadPlugins()
 {
     d->kipipluginsActionCollection = new KActionCollection(this, KGlobal::mainComponent());
 
@@ -117,7 +117,7 @@ void kipiLoader::loadPlugins()
 */
 }
 
-void kipiLoader::slotKipiPluginPlug()
+void KipiPluginLoader::slotKipiPluginPlug()
 {
     unplugActionList(QString::fromLatin1("file_actions_export"));
     unplugActionList(QString::fromLatin1("file_actions_import"));
