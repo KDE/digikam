@@ -32,7 +32,7 @@
 
 // KDE includes
 
-#include "kurl.h"
+#include <kurl.h>
 
 // libkgeomap includes
 
@@ -67,6 +67,8 @@ public:
     {
     }
 
+public:
+
     static GPSImageInfo fromIdCoordinatesRatingDateTime(const qlonglong p_id, const KGeoMap::GeoCoordinates& p_coordinates,
                                                         const int p_rating, const QDateTime& p_creationDate)
     {
@@ -81,8 +83,10 @@ public:
 
     static bool fromImageInfo(const ImageInfo& imageInfo, GPSImageInfo* const gpsImageInfo);
 
+public:
+
     qlonglong                   id;
-    KGeoMap::GeoCoordinates        coordinates;
+    KGeoMap::GeoCoordinates     coordinates;
     int                         rating;
     QDateTime                   dateTime;
     KUrl                        url;

@@ -38,10 +38,10 @@
 
 #include <libkgeomap/kgeomap_widget.h>
 
-// digiKam includes
+// local includes
 
-#include <imageinfo.h>
-#include <imageposition.h>
+#include "imageinfo.h"
+#include "imageposition.h"
 
 namespace Digikam
 {
@@ -61,11 +61,11 @@ public:
     }
 
     QList<QPointer<KGeoMap::KGeoMapWidget> > mapWidgets;
-    GPSImageInfoSorter::SortOptions    sortOrder;
-    QPointer<QMenu>                    sortMenu;
-    KAction*                           sortActionOldestFirst;
-    KAction*                           sortActionYoungestFirst;
-    KAction*                           sortActionRating;
+    GPSImageInfoSorter::SortOptions          sortOrder;
+    QPointer<QMenu>                          sortMenu;
+    KAction*                                 sortActionOldestFirst;
+    KAction*                                 sortActionYoungestFirst;
+    KAction*                                 sortActionRating;
 
 };
 
