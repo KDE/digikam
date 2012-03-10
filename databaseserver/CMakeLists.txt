@@ -12,11 +12,9 @@ QT4_ADD_DBUS_ADAPTOR(digikamdatabaseserver_SRCS org.kde.digikam.DatabaseServer.x
 KDE4_ADD_EXECUTABLE(digikamdatabaseserver ${digikamdatabaseserver_SRCS})
 
 TARGET_LINK_LIBRARIES(digikamdatabaseserver
-                      digikamcore
                       digikamdatabase
                       ${KDE4_KDECORE_LIBS}
                       ${QT_QTSQL_LIBRARY}
-                      ${QT_QT3SUPPORT_LIBRARY}
 
                       # To link under Solaris (see B.K.O #274484)
                       ${MATH_LIBRARY}
