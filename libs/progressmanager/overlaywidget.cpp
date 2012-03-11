@@ -32,7 +32,7 @@
 namespace Digikam
 {
 
-OverlayWidget::OverlayWidget(QWidget* alignWidget, QWidget* parent, const char* name)
+OverlayWidget::OverlayWidget(QWidget* const alignWidget, QWidget* const parent, const char* name)
     : KHBox(parent), mAlignWidget(0)
 {
     setObjectName(name);
@@ -61,7 +61,7 @@ void OverlayWidget::reposition()
     move(pParent);
 }
 
-void OverlayWidget::setAlignWidget(QWidget* w)
+void OverlayWidget::setAlignWidget(QWidget* const w)
 {
     if (w == mAlignWidget)
         return;
@@ -90,6 +90,11 @@ void OverlayWidget::resizeEvent(QResizeEvent* ev)
 {
     reposition();
     QFrame::resizeEvent(ev);
+}
+
+QWidget* OverlayWidget::alignWidget() const
+{
+    return mAlignWidget;
 }
 
 } // namespace Digikam

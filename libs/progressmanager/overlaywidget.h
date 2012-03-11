@@ -52,11 +52,11 @@ class DIGIKAM_EXPORT OverlayWidget : public KHBox
 
 public:
 
-    OverlayWidget(QWidget* alignWidget, QWidget* parent, const char* name = 0);
+    OverlayWidget(QWidget* const alignWidget, QWidget* const parent, const char* name = 0);
     ~OverlayWidget();
 
-    QWidget* alignWidget() const { return mAlignWidget; }
-    void setAlignWidget(QWidget* alignWidget);
+    QWidget* alignWidget() const;
+    void     setAlignWidget(QWidget* const alignWidget);
 
 protected:
 

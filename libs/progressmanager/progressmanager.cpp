@@ -7,7 +7,8 @@
  * Description : progress manager
  *
  * Copyright (C) 2007-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2004 Till Adam <adam at kde dot org>
+ * Copyright (C) 2012      by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2004      by Till Adam <adam at kde dot org>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General

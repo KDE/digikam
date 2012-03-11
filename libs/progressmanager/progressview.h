@@ -7,7 +7,8 @@
  * Description : progress manager
  *
  * Copyright (C) 2007-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2004 Till Adam <adam at kde dot org>
+ * Copyright (C) 2012      by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2004      by Till Adam <adam at kde dot org>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -48,7 +49,7 @@ class TransactionItem : public KVBox
 
 public:
 
-    TransactionItem(QWidget* parent, ProgressItem* item, bool first);
+    TransactionItem(QWidget* const parent, ProgressItem* const item, bool first);
     ~TransactionItem();
 
     void hideHLine();
@@ -65,7 +66,7 @@ public:
 
     ProgressItem* item() const;
 
-    void addSubTransaction(ProgressItem* item);
+    void addSubTransaction(ProgressItem* const item);
 
     // The progressitem is deleted immediately, we take 5s to go out,
     // so better not use mItem during this time.
@@ -89,7 +90,7 @@ class TransactionItemView : public QScrollArea
 
 public:
 
-    explicit TransactionItemView(QWidget* parent=0, const char* name=0);
+    explicit TransactionItemView(QWidget* const parent=0, const char* name=0);
     virtual ~TransactionItemView() {}
 
     TransactionItem* addTransactionItem(ProgressItem* item, bool first);
@@ -118,7 +119,7 @@ class DIGIKAM_EXPORT ProgressView : public OverlayWidget
 
 public:
 
-    ProgressView(QWidget* alignWidget, QWidget* parent, const char* name = 0);
+    ProgressView(QWidget* const alignWidget, QWidget* const parent, const char* name = 0);
     ~ProgressView();
 
     void setVisible(bool b);

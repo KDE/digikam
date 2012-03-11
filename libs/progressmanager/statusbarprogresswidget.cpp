@@ -97,7 +97,7 @@ public:
     QTimer*         notificationTimer;  // To popup list when new item is added
 };
 
-StatusbarProgressWidget::StatusbarProgressWidget(ProgressView* progressView, QWidget* parent, bool button)
+StatusbarProgressWidget::StatusbarProgressWidget(ProgressView* const progressView, QWidget* const parent, bool button)
     : QFrame(parent), d(new StatusbarProgressWidgetPriv)
 {
     d->progressView      = progressView;

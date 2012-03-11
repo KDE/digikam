@@ -7,7 +7,8 @@
  * Description : progress manager
  *
  * Copyright (C) 2007-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2004 Till Adam <adam at kde dot org>
+ * Copyright (C) 2012      by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2004      by Till Adam <adam at kde dot org>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -59,7 +60,7 @@ namespace Digikam
 
 class TransactionItem;
 
-TransactionItemView::TransactionItemView(QWidget* parent, const char* name)
+TransactionItemView::TransactionItemView(QWidget* const parent, const char* name)
     : QScrollArea( parent )
 {
     setObjectName( name );
@@ -70,7 +71,7 @@ TransactionItemView::TransactionItemView(QWidget* parent, const char* name)
     setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed );
 }
 
-TransactionItem* TransactionItemView::addTransactionItem(ProgressItem* item, bool first)
+TransactionItem* TransactionItemView::addTransactionItem(ProgressItem* const item, bool first)
 {
     TransactionItem* ti = new TransactionItem(m_bigBox, item, first);
     m_bigBox->layout()->addWidget(ti);
@@ -169,7 +170,7 @@ public:
     ProgressItem* item;
 };
 
-TransactionItem::TransactionItem(QWidget* parent, ProgressItem* item, bool first)
+TransactionItem::TransactionItem(QWidget* const parent, ProgressItem* const item, bool first)
     : KVBox(parent), d(new TransactionItemPriv)
 {
     d->item = item;
@@ -284,7 +285,7 @@ void TransactionItem::slotItemCanceled()
     }
 }
 
-void TransactionItem::addSubTransaction(ProgressItem* item)
+void TransactionItem::addSubTransaction(ProgressItem* const item)
 {
     Q_UNUSED(item);
 }
@@ -308,7 +309,7 @@ public:
     QMap<const ProgressItem*, TransactionItem*> transactionsToListviewItems;
 };
 
-ProgressView::ProgressView(QWidget* alignWidget, QWidget* parent, const char* name)
+ProgressView::ProgressView(QWidget* const alignWidget, QWidget* const parent, const char* name)
     : OverlayWidget(alignWidget, parent, name), d(new ProgressViewPriv)
 {
     setFrameStyle(QFrame::Panel | QFrame::Sunken);

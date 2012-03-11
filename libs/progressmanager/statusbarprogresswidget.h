@@ -36,6 +36,7 @@
 
 namespace Digikam
 {
+
 class ProgressItem;
 class ProgressView;
 
@@ -45,7 +46,7 @@ class DIGIKAM_EXPORT StatusbarProgressWidget : public QFrame
 
 public:
 
-    StatusbarProgressWidget(ProgressView* progressView, QWidget* parent, bool button = true);
+    StatusbarProgressWidget(ProgressView* const progressView, QWidget* const parent, bool button = true);
     ~StatusbarProgressWidget();
     
 public Q_SLOTS:
