@@ -107,6 +107,9 @@ public:
     void          setCNType(CNFilmProfile profile);
     CNFilmProfile cnType() const;
 
+    void setApplyBalance(bool val);
+    bool applyBalance() const;
+
     LevelsContainer toLevels() const;
     CBContainer     toCB() const;
 

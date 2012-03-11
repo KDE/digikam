@@ -131,7 +131,8 @@ public:
           sixteenBit(false),
           profile(FilmProfile(1.0, 1.0, 1.0)),
           cnType(CNNeutral),
-          whitePoint(DColor(QColor("white"), false))
+          whitePoint(DColor(QColor("white"), false)),
+          applyBalance(true)
     {
     }
 
@@ -141,6 +142,7 @@ public:
     FilmProfile   profile;
     CNFilmProfile cnType;
     DColor        whitePoint;
+    bool          applyBalance;
 };
 
 FilmContainer::FilmContainer() :
@@ -300,6 +302,16 @@ void FilmContainer::setCNType(CNFilmProfile profile)
 FilmContainer::CNFilmProfile FilmContainer::cnType() const
 {
     return d->cnType;
+}
+
+void FilmContainer::setApplyBalance(bool val)
+{
+    d->applyBalance = val;
+}
+
+bool FilmContainer::applyBalance() const
+{
+    return d->applyBalance;
 }
 
 int FilmContainer::whitePointForChannel(int ch) const
@@ -465,8 +477,13 @@ void FilmFilter::filterImage()
     // invert the image to have a positive image
     InvertFilter(this, tmpGamma, tmpInv, 60, 70);
 
-    // finale step is to balance the color channels according to the profile
-    CBFilter(cb, this, tmpInv, m_destImage, 70, 100);
+    // final step is to balance the color channels according to the profile
+    if (d->film.applyBalance())
+        CBFilter(cb, this, tmpInv, m_destImage, 70, 100);
+    else {
+        m_destImage = tmpInv;
+        postProgress(100);
+    }
 }
 
 FilterAction FilmFilter::filterAction()
@@ -478,6 +495,7 @@ FilterAction FilmFilter::filterAction()
     action.addParameter(QString("ProfileName"),          FilmContainer::profileMap[d->film.cnType()]);
     action.addParameter(QString("Exposure"),             d->film.exposure());
     action.addParameter(QString("Gamma"),                d->film.gamma());
+    action.addParameter(QString("ApplyColorBalance"),    d->film.applyBalance());
     action.addParameter(QString("WhitePointRed"),        d->film.whitePoint().red());
     action.addParameter(QString("WhitePointGreen"),      d->film.whitePoint().green());
     action.addParameter(QString("WhitePointBlue"),       d->film.whitePoint().blue());
@@ -494,11 +512,13 @@ void FilmFilter::readParameters(const FilterAction& action)
     double blue  = action.parameter(QString("WhitePointBlue")).toDouble();
     double alpha = action.parameter(QString("WhitePointAlpha")).toDouble();
     bool sb      = action.parameter(QString("WhitePointSixteenBit")).toBool();
+    bool balance = action.parameter(QString("ApplyColorBalance")).toBool();
 
     d->film.setWhitePoint(DColor(red, green, blue, alpha, sb));
     d->film.setExposure(action.parameter(QString("Exposure")).toDouble());
     d->film.setGamma(action.parameter(QString("Gamma")).toDouble());
     d->film.setCNType((FilmContainer::CNFilmProfile)(action.parameter(QString("CNType")).toInt()));
+    d->film.setApplyBalance(balance);
 }
 
 } // namespace Digikam
