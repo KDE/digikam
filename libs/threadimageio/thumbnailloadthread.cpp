@@ -132,7 +132,7 @@ public:
     KIO::PreviewJob*                kdeJob;
 
     QList<LoadingDescription>       lastDescriptions;
-
+    QStringList                     previewPlugins;
 public:
 
     LoadingDescription        createLoadingDescription(const QString& filePath, int size, bool setLastDescription = true);
@@ -776,12 +776,15 @@ void ThumbnailLoadThread::startKdePreviewJob()
 
 #if KDE_IS_VERSION(4,7,0)
     KFileItemList items;
+    if (d->previewPlugins.isEmpty())
+      d->previewPlugins = KIO::PreviewJob::availablePlugins();
+    
     for (KUrl::List::ConstIterator it = list.begin() ; it != list.end() ; ++it)
     {
         if ((*it).isValid())
             items.append(KFileItem(KFileItem::Unknown, KFileItem::Unknown, *it, true));
     }
-    d->kdeJob = KIO::filePreview(items, QSize(d->creator->storedSize(), d->creator->storedSize())); // FIXME: do not know if size 0 is allowed
+    d->kdeJob = KIO::filePreview(items, QSize(d->creator->storedSize(), d->creator->storedSize()), &d->previewPlugins); // FIXME: do not know if size 0 is allowed
 #else
     d->kdeJob = KIO::filePreview(list, d->creator->storedSize());                                   // FIXME: do not know if size 0 is allowed
 #endif
