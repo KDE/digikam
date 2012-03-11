@@ -33,11 +33,11 @@ typedef struct
     JOCTET eoi[2];
 } digikam_source_mgr;
 
-void init_source (j_decompress_ptr cinfo);
+void    init_source (j_decompress_ptr cinfo);
 boolean fill_input_buffer (j_decompress_ptr cinfo);
-void skip_input_data (j_decompress_ptr cinfo, long nbytes);
-void term_source (j_decompress_ptr cinfo);
-void jpeg_memory_src (j_decompress_ptr cinfo, const JOCTET* buffer, size_t bufsize);
+void    skip_input_data (j_decompress_ptr cinfo, long nbytes);
+void    term_source (j_decompress_ptr cinfo);
+void    jpeg_memory_src (j_decompress_ptr cinfo, const JOCTET* buffer, size_t bufsize);
 
 } // namespace Digikam
 

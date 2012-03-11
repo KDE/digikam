@@ -43,7 +43,7 @@ extern "C"
 namespace Digikam
 {
 
-void init_source (j_decompress_ptr cinfo)
+void init_source (j_decompress_ptr /*cinfo*/)
 {
 }
 
@@ -77,13 +77,13 @@ void skip_input_data (j_decompress_ptr cinfo, long nbytes)
     }
 }
 
-void term_source (j_decompress_ptr cinfo)
+void term_source (j_decompress_ptr /*cinfo*/)
 {
 }
 
 void jpeg_memory_src (j_decompress_ptr cinfo, const JOCTET* buffer, size_t bufsize)
 {
-    digikam_source_mgr* src=0;
+    digikam_source_mgr* src = 0;
 
     if (cinfo->src == NULL)
     {
