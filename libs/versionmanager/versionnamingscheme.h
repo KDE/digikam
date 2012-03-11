@@ -7,7 +7,7 @@
  * Description : Interface for version file naming
  *
  * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
- * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
+ * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -44,8 +44,9 @@ public:
     /**
      * Creates and analyzes file names of versioned files.
      */
-
-    virtual ~VersionNamingScheme() {}
+    virtual ~VersionNamingScheme()
+    {
+    }
 
     /**
      * Analyzes the given file name.

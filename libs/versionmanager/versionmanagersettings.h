@@ -7,7 +7,7 @@
  * Description : settings container for versioning
  *
  * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
- * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
+ * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -80,6 +80,7 @@ public:
     IntermediateBehavior saveIntermediateVersions;
     ShowInViewFlags      showInViewFlags;
     EditorClosingMode    editorClosingMode;
+
     /// Image format string as defined for database, in upper case
     QString              format;
 };

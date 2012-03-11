@@ -7,7 +7,7 @@
  * Description : description of actions when saving a file with versioning
  *
  * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
- * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
+ * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -45,9 +45,16 @@ class DIGIKAM_EXPORT VersionFileInfo
 {
 public:
 
-    VersionFileInfo() {}
+    VersionFileInfo()
+    {
+    }
+
     VersionFileInfo(const QString& path, const QString& fileName, const QString& format)
-        : path(path), fileName(fileName), format(format) {}
+        : path(path),
+          fileName(fileName),
+          format(format)
+    {
+    }
 
     bool    isNull() const;
 
@@ -99,20 +106,20 @@ public:
 
 public:
 
-    Tasks                     tasks;
+    Tasks                      tasks;
 
-    VersionFileInfo           loadedFile;
+    VersionFileInfo            loadedFile;
 
-    VersionFileInfo           saveFile;
+    VersionFileInfo            saveFile;
 
-    VersionFileInfo           intermediateForLoadedFile;
+    VersionFileInfo            intermediateForLoadedFile;
 
-    QMap<int,VersionFileInfo> intermediates;
+    QMap<int, VersionFileInfo> intermediates;
 
     /**
      * Returns a list with all saving locations, for main result or intermediates
      */
-    QStringList               allFilePaths() const;
+    QStringList                allFilePaths() const;
 };
 
 } // namespace Digikam
