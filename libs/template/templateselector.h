@@ -6,7 +6,7 @@
  * Date        : 2009-06-23
  * Description : a widget to select metadata template.
  *
- * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -41,13 +41,13 @@ public:
 
     enum SelectorItems
     {
-        REMOVETEMPLATE=0,
-        DONTCHANGE=1
+        REMOVETEMPLATE = 0,
+        DONTCHANGE     = 1
     };
 
 public:
 
-    TemplateSelector(QWidget* parent);
+    TemplateSelector(QWidget* const parent);
     virtual ~TemplateSelector();
 
     Template  getTemplate() const;

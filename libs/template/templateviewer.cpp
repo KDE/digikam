@@ -6,7 +6,7 @@
  * Date        : 2009-06-29
  * Description : metadata template viewer.
  *
- * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -152,7 +152,7 @@ public:
     DTextList*      subjectsList;
 };
 
-TemplateViewer::TemplateViewer(QWidget* parent=0)
+TemplateViewer::TemplateViewer(QWidget* const parent=0)
     : RExpanderBox(parent), d(new TemplateViewerPriv)
 {
     setFrameStyle(QFrame::NoFrame);
