@@ -78,6 +78,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 059 ==> 294884 : digiKam crash at startup (due to notification window).
 060 ==> 295294 : Startup reads far too many files.
 061 ==> 291921 : Geolocation: Severe rendering problems of map/satellite view.
-062 ==> 
-
-
+062 ==> 292316 : digiKam no thumbnail for .mov, .mp4 movies.
+063 ==> 
