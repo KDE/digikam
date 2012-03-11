@@ -1571,6 +1571,7 @@ SET(libpresentationview_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/lighttable
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/nepomuk
 	${CMAKE_CURRENT_SOURCE_DIR}/utilities/qmlShow
+	${CMAKE_CURRENT_SOURCE_DIR}/utilities/slideshow/qmlview
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/main
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/manager
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/views

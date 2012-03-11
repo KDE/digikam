@@ -1799,12 +1799,14 @@ void DigikamView::slotSlideShowRecursive()
 
 void DigikamView::slotSlideShowQml()
 {
-	QStringList list;
+        /*QStringList list;
 	foreach (const ImageInfo& info, d->iconView->imageInfos())
     {
         list << info.filePath();
-    }
-	QmlShow* qmlShow = new QmlShow(list);
+    }*/
+	SlideShowSettings settings;
+	settings.readFromConfig();
+        QmlShow* qmlShow = new QmlShow(d->iconView->imageInfos(),settings);
 	qmlShow->setWindowState(Qt::WindowFullScreen);
 	qmlShow->show();
 }

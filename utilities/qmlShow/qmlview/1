@@ -1,0 +1,23 @@
+import QtQuick 1.0
+
+Window
+{
+	id:editbox
+	x:50
+	y:50
+	width: 2*x
+	height:2*y
+	color: "black"
+	opacity: 0.7
+	property string name: "";
+	TextInput
+	{
+		id: image_name;
+		text:editbox.name;
+		x: 5;
+		y: 5;
+		width:parent.width-10;
+		color: "blue";
+		focus: true;
+	}
+}

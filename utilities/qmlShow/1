@@ -27,25 +27,23 @@
 // Qt includes
 
 #include <QMainWindow>
+
 //local includes
 
 #include"imageinfo.h"
 #include"imageinfolist.h"
-#include"databaseinfocontainers.h"
-#include"slideshowsettings.h"
 
 namespace Digikam
 {
-class ImageInfo;
+class Imageinfo;
 class ImageInfoList;
-class ImageCommonContainer;
-class ImageMetadataContainer;
 class QmlShow : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    QmlShow(const ImageInfoList&,SlideShowSettings settings);
+
+    QmlShow(const ImageInfoList);
     ~QmlShow();
 
 public slots:
@@ -54,9 +52,7 @@ public slots:
     void prevImage();
     void pause();
     void play();
-    void changePicture(int);
-	void setMetaData();
-
+    void gridChanged(int);
 private:
 
     class QmlShowPriv;
