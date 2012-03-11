@@ -7,7 +7,8 @@
  * Description : perform lossless rotation/flip to JPEG file
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2012 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  *
  * Parts of the loading code is taken from qjpeghandler.cpp, copyright follows:
  * Copyright (C) 1992-2007 Trolltech ASA. All rights reserved.
@@ -218,8 +219,8 @@ bool loadJPEGScaled(QImage& image, const QString& path, int maximumSize)
 
     // We only take RGB with 1 or 3 components, or CMYK with 4 components
     if (!(
-            (cinfo.out_color_space == JCS_RGB  && (cinfo.output_components == 3 || cinfo.output_components == 1))
-            || (cinfo.out_color_space == JCS_CMYK &&  cinfo.output_components == 4)
+            (cinfo.out_color_space == JCS_RGB  && (cinfo.output_components == 3 || cinfo.output_components == 1)) ||
+            (cinfo.out_color_space == JCS_CMYK &&  cinfo.output_components == 4)
         ))
     {
         jpeg_destroy_decompress(&cinfo);
@@ -231,10 +232,10 @@ bool loadJPEGScaled(QImage& image, const QString& path, int maximumSize)
     {
         case 3:
         case 4:
-            img = QImage( cinfo.output_width, cinfo.output_height, QImage::Format_RGB32 );
+            img = QImage(cinfo.output_width, cinfo.output_height, QImage::Format_RGB32);
             break;
         case 1: // B&W image
-            img = QImage( cinfo.output_width, cinfo.output_height, QImage::Format_Indexed8);
+            img = QImage(cinfo.output_width, cinfo.output_height, QImage::Format_Indexed8);
             img.setNumColors(256);
 
             for (int i = 0 ; i < 256 ; ++i)
@@ -246,7 +247,7 @@ bool loadJPEGScaled(QImage& image, const QString& path, int maximumSize)
     }
 
     uchar* data = img.bits();
-    int bpl = img.bytesPerLine();
+    int bpl     = img.bytesPerLine();
 
     while (cinfo.output_scanline < cinfo.output_height)
     {
@@ -266,7 +267,7 @@ bool loadJPEGScaled(QImage& image, const QString& path, int maximumSize)
 
             for (uint i = cinfo.output_width; --i; )
             {
-                in -= 3;
+                in     -= 3;
                 out[i] = qRgb(in[0], in[1], in[2]);
             }
         }
@@ -280,8 +281,8 @@ bool loadJPEGScaled(QImage& image, const QString& path, int maximumSize)
 
             for (uint i = cinfo.output_width; --i; )
             {
-                in -= 4;
-                int k = in[3];
+                in     -= 4;
+                int k  = in[3];
                 out[i] = qRgb(k * in[0] / 255, k * in[1] / 255, k * in[2] / 255);
             }
         }
@@ -314,12 +315,12 @@ JpegRotator::JpegRotator(const QString& file)
     : m_file(file), m_destFile(file)
 {
     m_metadata.load(file);
-    m_orientation = m_metadata.getImageOrientation();
+    m_orientation  = m_metadata.getImageOrientation();
     QFileInfo info(file);
     m_documentName = info.fileName();
 }
 
-void JpegRotator::setCurrentOrientation(KExiv2Iface::KExiv2::ImageOrientation orientation)
+void JpegRotator::setCurrentOrientation(KExiv2::ImageOrientation orientation)
 {
     m_orientation = orientation;
 }
@@ -336,18 +337,18 @@ void JpegRotator::setDestinationFile(const QString dest)
 
 bool JpegRotator::autoExifTransform()
 {
-    return exifTransform(KExiv2Iface::RotationMatrix::NoTransformation);
+    return exifTransform(RotationMatrix::NoTransformation);
 }
 
 bool JpegRotator::exifTransform(TransformAction action)
 {
-    KExiv2Iface::RotationMatrix matrix;
+    RotationMatrix matrix;
     matrix *= m_orientation;
     matrix *= action;
     return exifTransform(matrix);
 }
 
-bool JpegRotator::exifTransform(const KExiv2Iface::RotationMatrix &matrix)
+bool JpegRotator::exifTransform(const RotationMatrix& matrix)
 {
     FileWriteLocker lock(m_destFile);
 
@@ -377,10 +378,11 @@ bool JpegRotator::exifTransform(const KExiv2Iface::RotationMatrix &matrix)
         return true;
     }
 
-    QString dest = m_destFile;
-    QString src  = m_file;
-    QString dir  = fi.absolutePath();
+    QString     dest = m_destFile;
+    QString     src  = m_file;
+    QString     dir  = fi.absolutePath();
     QStringList unlinkLater;
+
     for (int i=0; i<actions.size(); i++)
     {
         SafeTemporaryFile temp(dir + "/JpegRotator-XXXXXX.digikamtempfile.jpg");
@@ -422,14 +424,14 @@ bool JpegRotator::exifTransform(const KExiv2Iface::RotationMatrix &matrix)
 }
 
 
-void JpegRotator::updateMetadata(const QString& fileName, const KExiv2Iface::RotationMatrix &matrix)
+void JpegRotator::updateMetadata(const QString& fileName, const RotationMatrix &matrix)
 {
     // Reset the Exif orientation tag of the temp image to normal
     m_metadata.setImageOrientation(DMetadata::ORIENTATION_NORMAL);
 
     QMatrix qmatrix = matrix.toMatrix();
     QRect r(QPoint(0,0), m_originalSize);
-    QSize newSize = qmatrix.mapRect(r).size();
+    QSize newSize   = qmatrix.mapRect(r).size();
 
     // Get the new image dimension of the temp image. Using a dummy QImage object here
     // has a sense because the Exif dimension information can be missing from original image.
@@ -442,6 +444,7 @@ void JpegRotator::updateMetadata(const QString& fileName, const KExiv2Iface::Rot
     {
         m_metadata.setExifThumbnail(exifThumb.transformed(qmatrix));
     }
+
     QImage imagePreview;
     if (m_metadata.getImagePreview(imagePreview))
     {
@@ -466,14 +469,12 @@ void JpegRotator::updateMetadata(const QString& fileName, const KExiv2Iface::Rot
     ::utime(QFile::encodeName(fileName), &ut);
 }
 
-
-
 bool JpegRotator::performJpegTransform(TransformAction action, const QString& src, QFile& dest)
 {
-    QByteArray in  = QFile::encodeName(src);
-    QByteArray out = QFile::encodeName(dest.fileName());
+    QByteArray in                   = QFile::encodeName(src);
+    QByteArray out                  = QFile::encodeName(dest.fileName());
 
-    JCOPY_OPTION copyoption = JCOPYOPT_ALL;
+    JCOPY_OPTION copyoption         = JCOPYOPT_ALL;
     jpeg_transform_info transformoption;
 
     transformoption.force_grayscale = false;
@@ -485,7 +486,7 @@ bool JpegRotator::performJpegTransform(TransformAction action, const QString& sr
     transformoption.crop            = false;
     #endif
 
-    transformoption.transform = (Digikam::JXFORM_CODE)action;
+    transformoption.transform = (JXFORM_CODE)action;
 
 
     if (transformoption.transform == JXFORM_NONE)
@@ -497,8 +498,8 @@ bool JpegRotator::performJpegTransform(TransformAction action, const QString& sr
     struct jpeg_decompress_struct srcinfo;
     struct jpeg_compress_struct   dstinfo;
     struct jpegutils_jpeg_error_mgr jsrcerr, jdsterr;
-    jvirt_barray_ptr* src_coef_arrays;
-    jvirt_barray_ptr* dst_coef_arrays;
+    jvirt_barray_ptr* src_coef_arrays = 0;
+    jvirt_barray_ptr* dst_coef_arrays = 0;
 
     // Initialize the JPEG decompression object with default error handling
     srcinfo.err                 = jpeg_std_error(&jsrcerr);
@@ -512,8 +513,8 @@ bool JpegRotator::performJpegTransform(TransformAction action, const QString& sr
     dstinfo.err->emit_message   = jpegutils_jpeg_emit_message;
     dstinfo.err->output_message = jpegutils_jpeg_output_message;
 
-    FILE* input_file;
-    FILE* output_file;
+    FILE* input_file  = 0;
+    FILE* output_file = 0;
 
     input_file = fopen(in, "rb");
 
@@ -693,9 +694,7 @@ bool copyFile(const QString& src, const QString& dst)
     }
 
     const int MAX_IPC_SIZE = (1024*32);
-
     char buffer[MAX_IPC_SIZE];
-
     qint64 len;
 
     while ((len = sFile.read(buffer, MAX_IPC_SIZE)) != 0)

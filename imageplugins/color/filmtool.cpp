@@ -39,6 +39,7 @@
 #include <QTimer>
 #include <QToolButton>
 #include <QListWidget>
+#include <QCheckBox>
 
 // KDE includes
 
@@ -115,6 +116,7 @@ public:
     static const QString configWhitePointEntry;
     static const QString configHistogramChannelEntry;
     static const QString configHistogramScaleEntry;
+    static const QString configApplyColorBalance;
 
     uchar*               destinationPreviewData;
 
@@ -128,6 +130,7 @@ public:
     RDoubleNumInput*     exposureInput;
     RDoubleNumInput*     gammaInput;
     QListWidget*         cnType;
+    QCheckBox*           colorBalanceInput;
 
     HistogramWidget*     levelsHistogramWidget;
 
@@ -151,6 +154,7 @@ const QString FilmTool::FilmToolPriv::configFilmProfileName("FilmProfileName");
 const QString FilmTool::FilmToolPriv::configWhitePointEntry("WhitePoint_%1");
 const QString FilmTool::FilmToolPriv::configHistogramChannelEntry("Histogram Channel");
 const QString FilmTool::FilmToolPriv::configHistogramScaleEntry("Histogram Scale");
+const QString FilmTool::FilmToolPriv::configApplyColorBalance("Apply Color Balance");
 
 // --------------------------------------------------------
 
@@ -233,6 +237,13 @@ FilmTool::FilmTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
+    d->colorBalanceInput = new QCheckBox(i18n("Color Balance"));
+    d->colorBalanceInput->setCheckState(Qt::Checked);
+    d->colorBalanceInput->setToolTip(i18n("Check to apply the built-in color balance of the film profile. "
+                                          "Un-check if you want to apply color balance yourself."));
+
+    // -------------------------------------------------------------
+
     d->pickWhitePoint = new QToolButton();
     d->pickWhitePoint->setIcon(KIcon("color-picker-white"));
     d->pickWhitePoint->setCheckable(true);
@@ -278,14 +289,15 @@ FilmTool::FilmTool(QObject* const parent)
     // -------------------------------------------------------------
 
     QGridLayout* grid = new QGridLayout();
-    grid->addLayout(inputLevelsLayout,    0, 0, 1, 7);
-    grid->addWidget(d->redInputLevels,    1, 0, 1, 7);
-    grid->addWidget(d->greenInputLevels,  2, 0, 1, 7);
-    grid->addWidget(d->blueInputLevels,   3, 0, 1, 7);
-    grid->addWidget(d->cnType,            4, 0, 1, 7);
-    grid->addWidget(d->exposureInput,     5, 0, 1, 7);
-    grid->addWidget(d->gammaInput,        6, 0, 1, 7);
-    grid->addLayout(l3,                   7, 0, 1, 7);
+    grid->addLayout(inputLevelsLayout,    0, 0, 1, 4);
+    grid->addWidget(d->redInputLevels,    1, 0, 1, 4);
+    grid->addWidget(d->greenInputLevels,  2, 0, 1, 4);
+    grid->addWidget(d->blueInputLevels,   3, 0, 1, 4);
+    grid->addWidget(d->cnType,            4, 0, 1, 4);
+    grid->addWidget(d->exposureInput,     5, 0, 1, 4);
+    grid->addWidget(d->gammaInput,        6, 0, 1, 4);
+    grid->addLayout(l3,                   7, 0, 1, 2);
+    grid->addWidget(d->colorBalanceInput, 7, 2, 1, 2, Qt::AlignRight);
 
     // TODO: fill in rest of settings elements
 
@@ -326,6 +338,9 @@ FilmTool::FilmTool(QObject* const parent)
 
     connect(d->cnType, SIGNAL(itemActivated(QListWidgetItem*)),
             this, SLOT(slotFilmItemActivated(QListWidgetItem*)));
+
+    connect(d->colorBalanceInput, SIGNAL(stateChanged(int)),
+            this, SLOT(slotColorBalanceStateChanged(int)));
 
     slotTimer();
 }
@@ -495,6 +510,14 @@ void FilmTool::slotResetWhitePoint()
     slotEffect();
 }
 
+void FilmTool::slotColorBalanceStateChanged(int state)
+{
+    bool apply = state == Qt::Checked;
+    d->filmContainer.setApplyBalance(apply);
+
+    slotEffect();
+}
+
 void FilmTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
@@ -531,6 +554,10 @@ void FilmTool::readSettings()
     DColor whitePoint = DColor(red, green, blue, max, sb);
     d->filmContainer.setWhitePoint(whitePoint);
     setLevelsFromFilm();
+
+    bool apply = group.readEntry(d->configApplyColorBalance, true);
+    d->filmContainer.setApplyBalance(apply);
+    d->colorBalanceInput->setCheckState(apply? Qt::Checked : Qt::Unchecked);
 
     d->levelsHistogramWidget->reset();
     d->gboxSettings->histogramBox()->histogram()->reset();
@@ -576,6 +603,8 @@ void FilmTool::writeSettings()
     group.writeEntry(d->configWhitePointEntry.arg(2), sb ? green : green * 256);
     group.writeEntry(d->configWhitePointEntry.arg(3), sb ? blue  : blue  * 256);
 
+    bool apply = d->colorBalanceInput->checkState() == Qt::Checked;
+    group.writeEntry(d->configApplyColorBalance, apply);
     config->sync();
 }
 

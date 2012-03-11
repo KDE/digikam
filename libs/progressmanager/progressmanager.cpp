@@ -83,7 +83,7 @@ public:
     ProgressItemMap children;
 };
 
-ProgressItem::ProgressItem(ProgressItem* parent, const QString& id,
+ProgressItem::ProgressItem(ProgressItem* const parent, const QString& id,
                            const QString& label, const QString& status,
                            bool canBeCanceled, bool hasThumb)
     : d(new ProgressItemPriv)
@@ -117,12 +117,12 @@ void ProgressItem::setComplete()
     }
 }
 
-void ProgressItem::addChild(ProgressItem* kiddo)
+void ProgressItem::addChild(ProgressItem* const kiddo)
 {
     d->children.insert(kiddo, true);
 }
 
-void ProgressItem::removeChild(ProgressItem* kiddo)
+void ProgressItem::removeChild(ProgressItem* const kiddo)
 {
     d->children.remove(kiddo);
 
@@ -321,17 +321,19 @@ public:
     {
     }
 
+    void addItem(ProgressItem* const t, ProgressItem* const parent);
+    void removeItem(ProgressItem* const t);
+
+public:
+
     QMutex                        mutex;
     QHash<QString, ProgressItem*> transactions;
     QAtomicInt                    uID;
-
-    void addItem(ProgressItem* t, ProgressItem* parent);
-    void removeItem(ProgressItem* t);
 };
 
 K_GLOBAL_STATIC(ProgressManagerCreator, creator)
 
-void ProgressManager::ProgressManagerPriv::addItem(ProgressItem* t, ProgressItem* parent)
+void ProgressManager::ProgressManagerPriv::addItem(ProgressItem* const t, ProgressItem* const parent)
 {
     if (!t)
     {
@@ -347,7 +349,7 @@ void ProgressManager::ProgressManagerPriv::addItem(ProgressItem* t, ProgressItem
     }
 }
 
-void ProgressManager::ProgressManagerPriv::removeItem(ProgressItem* t)
+void ProgressManager::ProgressManagerPriv::removeItem(ProgressItem* const t)
 {
     if (!t)
     {
@@ -404,13 +406,13 @@ ProgressManager* ProgressManager::instance()
     return creator.isDestroyed() ? 0 : &creator->object;
 }
 
-ProgressItem* ProgressManager::createProgressItemImpl(ProgressItem* parent,
-                                                             const QString& id,
-                                                             const QString& label,
-                                                             const QString& status,
-                                                             bool  cancellable,
-                                                             bool  hasThumb
-                                                            )
+ProgressItem* ProgressManager::createProgressItemImpl(ProgressItem* const parent,
+                                                      const QString& id,
+                                                      const QString& label,
+                                                      const QString& status,
+                                                      bool  cancellable,
+                                                      bool  hasThumb
+                                                     )
 {
     ProgressItem* t = findItembyId(id);
 
@@ -434,7 +436,7 @@ ProgressItem* ProgressManager::createProgressItemImpl(const QString& parent,
     return createProgressItemImpl(p, id, label, status, canBeCanceled, hasThumb);
 }
 
-bool ProgressManager::addProgressItem(ProgressItem* t, ProgressItem* parent)
+bool ProgressManager::addProgressItem(ProgressItem* const t, ProgressItem* const parent)
 {
     if (!instance()->findItembyId(t->id()))
     {
@@ -450,7 +452,7 @@ bool ProgressManager::addProgressItem(ProgressItem* t, ProgressItem* parent)
     }
 }
 
-void ProgressManager::addProgressItemImpl(ProgressItem* t, ProgressItem* parent)
+void ProgressManager::addProgressItemImpl(ProgressItem* const t, ProgressItem* const parent)
 {
     if (t->thread() != thread())
     {

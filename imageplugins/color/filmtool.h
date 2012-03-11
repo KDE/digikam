@@ -62,6 +62,7 @@ private Q_SLOTS:
     void slotColorSelectedFromTarget(const Digikam::DColor& color, const QPoint& p);
     void slotPickerColorButtonActived(bool checked);
     void slotResetWhitePoint();
+    void slotColorBalanceStateChanged(int);
 
 private:
 
