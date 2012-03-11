@@ -46,7 +46,7 @@ class DIGIKAM_EXPORT ProgressItem : public QObject
 
 public:
 
-    ProgressItem(ProgressItem* parent, const QString& id, const QString& label,
+    ProgressItem(ProgressItem* const parent, const QString& id, const QString& label,
                  const QString& status, bool canBeCanceled, bool hasThumb);
     virtual ~ProgressItem();
 
@@ -158,8 +158,8 @@ public:
      */
     void advance(unsigned int v);
 
-    void addChild(ProgressItem* kiddo);
-    void removeChild(ProgressItem* kiddo);
+    void addChild(ProgressItem* const kiddo);
+    void removeChild(ProgressItem* const kiddo);
 
 Q_SIGNALS:
 
@@ -323,7 +323,7 @@ public:
      * canceled) and ongoing children prevent parents from finishing.
      * @return The ProgressItem representing the operation.
      */
-    static ProgressItem* createProgressItem(ProgressItem* parent,
+    static ProgressItem* createProgressItem(ProgressItem* const parent,
                                             const QString& id,
                                             const QString& label,
                                             const QString& status = QString(),
@@ -357,7 +357,7 @@ public:
      * @param parent Specify an already existing item as the parent of this one (can be null).
      * @return true if ProgressItem have been added to manager, else false.
      */
-    static bool addProgressItem(ProgressItem* t, ProgressItem* parent=0);
+    static bool addProgressItem(ProgressItem* const t, ProgressItem* const parent=0);
 
     /**
      * Ask all listeners to show the progress dialog, because there is
@@ -397,6 +397,8 @@ Q_SIGNALS:
      */
     void showProgressView();
 
+    void completeTransactionDeferred(ProgressItem* item);
+
 public Q_SLOTS:
 
     /**
@@ -416,10 +418,6 @@ private Q_SLOTS:
     void slotTransactionCompleted(ProgressItem* item);
     void slotTransactionCompletedDeferred(ProgressItem* item);
 
-signals:
-
-    void completeTransactionDeferred(ProgressItem* item);
-
 private:
 
     ProgressManager();
@@ -429,7 +427,7 @@ private:
 
     void emitShowProgressViewImpl();
 
-    virtual ProgressItem* createProgressItemImpl(ProgressItem* parent,
+    virtual ProgressItem* createProgressItemImpl(ProgressItem* const parent,
                                                  const QString& id,
                                                  const QString& label,
                                                  const QString& status,
@@ -443,7 +441,7 @@ private:
                                                  bool  cancellable,
                                                  bool  hasThumb);
 
-    virtual void addProgressItemImpl(ProgressItem* t, ProgressItem* parent);
+    virtual void addProgressItemImpl(ProgressItem* const t, ProgressItem* const parent);
 
 private:
 
