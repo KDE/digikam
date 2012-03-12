@@ -76,6 +76,7 @@
 #include "tagmodificationhelper.h"
 #include "tagspopupmenu.h"
 #include "fileactionmngr.h"
+#include "kipipluginloader.h"
 #include "dimg.h"
 
 namespace Digikam
@@ -85,7 +86,7 @@ class ContextMenuHelper::ContextMenuHelperPriv
 {
 public:
 
-    ContextMenuHelperPriv(ContextMenuHelper* q) :
+    ContextMenuHelperPriv(ContextMenuHelper* const q) :
         gotoAlbumAction(0),
         gotoDateAction(0),
         setThumbnailAction(0),
@@ -117,9 +118,11 @@ public:
 
     ContextMenuHelper*           q;
 
+public:
+
     QModelIndex indexForAlbumFromAction(QObject* sender) const
     {
-        QAction* action;
+        QAction* action = 0;
 
         if ((action = qobject_cast<QAction*>(sender)))
         {
@@ -636,7 +639,7 @@ void ContextMenuHelper::slotDeselectAllAlbumItems()
 void ContextMenuHelper::addImportMenu()
 {
     KMenu* menuImport = new KMenu(i18n("Import"), d->parent);
-    const QList<QAction*> importActions = DigikamApp::instance()->menuImportActions();
+    const QList<QAction*> importActions = KipiPluginLoader::instance()->menuImportActions();
 
     if (!importActions.isEmpty())
     {
@@ -655,7 +658,7 @@ void ContextMenuHelper::addImportMenu()
 void ContextMenuHelper::addExportMenu()
 {
     KMenu* menuExport = new KMenu(i18n("Export"), d->parent);
-    const QList<QAction*> exportActions = DigikamApp::instance()->menuExportActions();
+    const QList<QAction*> exportActions = KipiPluginLoader::instance()->menuExportActions();
 #if 0
     QAction* selectAllAction = 0;
     selectAllAction = d->stdActionCollection->action("selectAll");
@@ -678,7 +681,7 @@ void ContextMenuHelper::addExportMenu()
 void ContextMenuHelper::addBatchMenu()
 {
     KMenu* menuKIPIBatch = new KMenu(i18n("Batch Process"), d->parent);
-    const QList<QAction*> batchActions = DigikamApp::instance()->menuBatchActions();
+    const QList<QAction*> batchActions = KipiPluginLoader::instance()->menuBatchActions();
 #if 0
     QAction* selectAllAction = 0;
     selectAllAction = d->stdActionCollection->action("selectAll");
@@ -700,7 +703,7 @@ void ContextMenuHelper::addBatchMenu()
 
 void ContextMenuHelper::addAlbumActions()
 {
-    const QList<QAction*>& albumActions = DigikamApp::instance()->menuAlbumActions();
+    const QList<QAction*>& albumActions = KipiPluginLoader::instance()->menuAlbumActions();
 
     if (!albumActions.isEmpty())
     {

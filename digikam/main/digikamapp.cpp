@@ -85,11 +85,6 @@
 #include <solid/storagedrive.h>
 #include <solid/storagevolume.h>
 
-// LibKIPI includes
-
-#include <libkipi/interface.h>
-#include <libkipi/plugin.h>
-
 // Libkdcraw includes
 
 #include <libkdcraw/kdcraw.h>
@@ -152,6 +147,7 @@
 #include "maintenancemngr.h"
 #include "newitemsfinder.h"
 #include "thumbsgenerator.h"
+#include "kipipluginloader.h"
 
 #ifdef USE_SCRIPT_IFACE
 #include "scriptiface.h"
@@ -231,6 +227,7 @@ DigikamApp::DigikamApp()
     IccSettings::instance()->loadAllProfilesProperties();
     MetadataSettings::instance();
     ProgressManager::instance();
+    KipiPluginLoader::instance();
     ThumbnailLoadThread::setDisplayingWidget(this);
 
     // creation of the engine on first use - when drawing -
@@ -284,7 +281,7 @@ DigikamApp::DigikamApp()
 
     AlbumManager::instance()->startScan();
 
-    // Load KIPI Plugins.
+    // Load Plugins.
     loadPlugins();
 
     // preload additional windows
@@ -440,26 +437,6 @@ void DigikamApp::closeEvent(QCloseEvent* e)
     FileActionMngr::instance()->requestShutDown();
 
     KXmlGuiWindow::closeEvent(e);
-}
-
-const QList<QAction*>& DigikamApp::menuBatchActions()
-{
-    return d->kipiBatchActions;
-}
-
-const QList<QAction*>& DigikamApp::menuAlbumActions()
-{
-    return d->kipiAlbumActions;
-}
-
-const QList<QAction*>& DigikamApp::menuImportActions()
-{
-    return d->kipiFileActionsImport;
-}
-
-const QList<QAction*>& DigikamApp::menuExportActions()
-{
-    return d->kipiFileActionsExport;
 }
 
 void DigikamApp::autoDetect()
@@ -871,7 +848,6 @@ void DigikamApp::setupActions()
     connect(d->imageMapViewAction, SIGNAL(triggered()), d->view, SLOT(slotMapWidgetView()));
     d->imageViewSelectionAction->addAction(d->imageMapViewAction);
 
-
     // -----------------------------------------------------------
 
 #ifdef USE_SCRIPT_IFACE
@@ -907,7 +883,6 @@ void DigikamApp::setupActions()
     connect(d->imageLightTableAction, SIGNAL(triggered()), d->view, SLOT(slotImageLightTable()));
     actionCollection()->addAction("image_lighttable", d->imageLightTableAction);
 
-
     d->imageAddLightTableAction = new KAction(KIcon("lighttableadd"), i18n("Add to Light Table"), this);
     d->imageAddLightTableAction->setShortcut(KShortcut(Qt::SHIFT+Qt::CTRL+Qt::Key_L));
     d->imageAddLightTableAction->setWhatsThis(i18n("Add selected items to the light table thumbbar."));
@@ -934,7 +909,7 @@ void DigikamApp::setupActions()
     actionCollection()->addAction("image_add_to_new_queue", d->imageAddNewQueueAction);
 
     // NOTE: see B.K.O #252130 and #283281 : we need to disable these actions when BQM is running.
-    
+
     connect(QueueMgrWindow::queueManagerWindow(), SIGNAL(signalBqmIsBusy(bool)),
             d->bqmAction, SLOT(setDisabled(bool)));
 
@@ -2416,7 +2391,8 @@ void DigikamApp::slotEditKeys()
     KShortcutsDialog dialog(KShortcutsEditor::AllActions,
                             KShortcutsEditor::LetterShortcutsAllowed, this);
     dialog.addCollection(actionCollection(), i18nc("general keyboard shortcuts", "General"));
-    dialog.addCollection(d->kipipluginsActionCollection, i18nc("KIPI-Plugins keyboard shortcuts", "KIPI-Plugins"));
+    dialog.addCollection(KipiPluginLoader::instance()->pluginsActionCollection(), 
+                         i18nc("KIPI-Plugins keyboard shortcuts", "KIPI-Plugins"));
     dialog.configure();
 }
 
@@ -2430,14 +2406,14 @@ void DigikamApp::slotConfToolbars()
     {
         createGUI(xmlFile());
         applyMainWindowSettings(d->config->group("General Settings"));
-        plugActionList( QString::fromLatin1("file_actions_import"),    d->kipiFileActionsImport );
-        plugActionList( QString::fromLatin1("image_print_actions"),    d->kipiPrintActions);
-        plugActionList( QString::fromLatin1("image_metadata_actions"), d->kipiMetadataActions);
-        plugActionList( QString::fromLatin1("image_actions"),          d->kipiImageActions );
-        plugActionList( QString::fromLatin1("tool_actions"),           d->kipiToolsActions );
-        plugActionList( QString::fromLatin1("batch_actions"),          d->kipiBatchActions );
-        plugActionList( QString::fromLatin1("album_actions"),          d->kipiAlbumActions );
-        plugActionList( QString::fromLatin1("file_actions_export"),    d->kipiFileActionsExport );
+        plugActionList(QString::fromLatin1("file_actions_import"),    KipiPluginLoader::instance()->menuImportActions());
+        plugActionList(QString::fromLatin1("image_print_actions"),    KipiPluginLoader::instance()->menuPrintActions());
+        plugActionList(QString::fromLatin1("image_metadata_actions"), KipiPluginLoader::instance()->menuMetadataActions());
+        plugActionList(QString::fromLatin1("image_actions"),          KipiPluginLoader::instance()->menuImageActions());
+        plugActionList(QString::fromLatin1("tool_actions"),           KipiPluginLoader::instance()->menuToolsActions());
+        plugActionList(QString::fromLatin1("batch_actions"),          KipiPluginLoader::instance()->menuBatchActions());
+        plugActionList(QString::fromLatin1("album_actions"),          KipiPluginLoader::instance()->menuAlbumActions());
+        plugActionList(QString::fromLatin1("file_actions_export"),    KipiPluginLoader::instance()->menuExportActions());
     }
 
     delete dlg;
@@ -2535,232 +2511,15 @@ void DigikamApp::slotDBStat()
 
 void DigikamApp::loadPlugins()
 {
-    d->kipipluginsActionCollection = new KActionCollection(this, KGlobal::mainComponent());
-
-    if (d->splashScreen)
-    {
-        d->splashScreen->message(i18n("Loading KIPI Plugins..."));
-    }
-
-    QStringList ignores;
-    d->kipiInterface = new KipiInterface( this, "Digikam_KIPI_interface" );
-
-    ignores.append( "HelloWorld" );
-    ignores.append( "KameraKlient" );
-
-    // These plugins have been renamed with 0.2.0-rc1
-    ignores.append( "Facebook Exporter" );
-    ignores.append( "SmugMug Exporter" );
-    ignores.append( "SlideShow" );
-    ignores.append( "PrintWizard" );
-    ignores.append( "SimpleViewer" );
-    ignores.append( "KioExport" );
-
-    // These plugins have been replaced by digiKam core solution with 2.6.0
-    ignores.append( "JPEGLossless" );
-
-    d->kipiPluginLoader = new KIPI::PluginLoader( ignores, d->kipiInterface );
-
-    connect( d->kipiPluginLoader, SIGNAL(replug()),
-             this, SLOT(slotKipiPluginPlug()) );
-
-    d->kipiPluginLoader->loadPlugins();
-
-    d->kipiInterface->slotCurrentAlbumChanged(AlbumManager::instance()->currentAlbum());
+    // Load KIPI plugins
+    KipiPluginLoader::instance()->setSplashScreen(d->splashScreen);
+    KipiPluginLoader::instance()->loadPlugins();
 
     // Setting the initial menu options after all plugins have been loaded
     d->view->slotAlbumSelected(AlbumManager::instance()->currentAlbum());
 
+    // Load Image Editor plugins.
     d->imagePluginsLoader = new ImagePluginLoader(this, d->splashScreen);
-}
-
-void DigikamApp::slotKipiPluginPlug()
-{
-    unplugActionList(QString::fromLatin1("file_actions_export"));
-    unplugActionList(QString::fromLatin1("file_actions_import"));
-    unplugActionList(QString::fromLatin1("image_print_actions"));
-    unplugActionList(QString::fromLatin1("image_metadata_actions"));
-    unplugActionList(QString::fromLatin1("image_actions"));
-    unplugActionList(QString::fromLatin1("tool_actions"));
-    unplugActionList(QString::fromLatin1("batch_actions"));
-    unplugActionList(QString::fromLatin1("album_actions"));
-
-    d->kipiImageActions.clear();
-    d->kipiFileActionsExport.clear();
-    d->kipiFileActionsImport.clear();
-    d->kipiToolsActions.clear();
-    d->kipiBatchActions.clear();
-    d->kipiAlbumActions.clear();
-    d->kipiPrintActions.clear();
-    d->kipiMetadataActions.clear();
-
-    // Remove Advanced slideshow kipi-plugin action from View/Slideshow menu.
-    foreach(QAction* action, d->slideShowAction->menu()->actions())
-    {
-        if (action->objectName() == QString("advancedslideshow"))
-        {
-            d->slideShowAction->removeAction(action);
-            break;
-        }
-    }
-
-    d->kipipluginsActionCollection->clear();
-
-    KIPI::PluginLoader::PluginList list = d->kipiPluginLoader->pluginList();
-    int cpt                             = 0;
-
-    // List of obsolete kipi-plugins to not load.
-    QStringList pluginActionsDisabled;
-    pluginActionsDisabled << QString("gpssync2");                       // Experimental plugin renamed gpssync during GoSC2010.
-    pluginActionsDisabled << QString("raw_converter_single");           // Obsolete since 0.9.5 and new Raw Import tool.
-    pluginActionsDisabled << QString("batch_rename_images");            // Obsolete since 1.0.0, replaced by AdvancedRename.
-    pluginActionsDisabled << QString("batch_border_images");            // Obsolete since 1.2.0, replaced by BQM border tool.
-    pluginActionsDisabled << QString("batch_convert_images");           // Obsolete since 1.2.0, replaced by BQM convert tool.
-    pluginActionsDisabled << QString("batch_color_images");             // Obsolete since 1.2.0, replaced by BQM color tool.
-    pluginActionsDisabled << QString("batch_filter_images");            // Obsolete since 1.2.0, replaced by BQM enhance tool.
-
-    for ( KIPI::PluginLoader::PluginList::ConstIterator it = list.constBegin() ;
-          it != list.constEnd() ; ++it )
-    {
-        KIPI::Plugin* plugin = (*it)->plugin();
-
-        if ( !plugin || !(*it)->shouldLoad() )
-        {
-            continue;
-        }
-
-        ++cpt;
-
-        plugin->setup( this );
-
-        // Add actions to kipipluginsActionCollection
-        QList<QAction*> allPluginActions = plugin->actionCollection()->actions();
-
-        if (allPluginActions.count() > 3)
-        {
-            KActionCategory* category = new KActionCategory(plugin->objectName(), d->kipipluginsActionCollection);
-            foreach(QAction* action, allPluginActions)
-            {
-                QString actionName(action->objectName());
-
-                if (!pluginActionsDisabled.contains(actionName))
-                {
-                    category->addAction(actionName, action);
-                }
-            }
-        }
-        else
-        {
-            foreach(QAction* action, allPluginActions)
-            {
-                QString actionName(action->objectName());
-
-                if (!pluginActionsDisabled.contains(actionName))
-                {
-                    d->kipipluginsActionCollection->addAction(actionName, action);
-                }
-            }
-        }
-
-        // Plugin category identification using KAction method based.
-
-        QList<KAction*> actions = plugin->actions();
-        foreach(KAction* action, actions)
-        {
-            QString actionName(action->objectName());
-
-            if (!pluginActionsDisabled.contains(actionName))
-            {
-                switch (plugin->category(action))
-                {
-                    case KIPI::BatchPlugin:
-                    {
-                        d->kipiBatchActions.append(action);
-                        break;
-                    }
-                    case KIPI::CollectionsPlugin:
-                    {
-                        d->kipiAlbumActions.append(action);
-                        break;
-                    }
-                    case KIPI::ImportPlugin:
-                    {
-                        d->kipiFileActionsImport.append(action);
-                        break;
-                    }
-                    case KIPI::ExportPlugin:
-                    {
-                        d->kipiFileActionsExport.append(action);
-                        break;
-                    }
-                    case KIPI::ImagesPlugin:
-                    {
-                        if (plugin->objectName() == "PrintImages")
-                        {
-                            d->kipiPrintActions.append(action);
-                        }
-                        else if (plugin->objectName() == "GPSSync" ||
-                                 plugin->objectName() == "MetadataEdit" ||
-                                 plugin->objectName() == "TimeAdjust")
-                        {
-                            d->kipiMetadataActions.append(action);
-                        }
-                        else
-                        {
-                            d->kipiImageActions.append(action);
-                        }
-
-                        break;
-                    }
-                    case KIPI::ToolsPlugin:
-                    {
-                        if (actionName == QString("advancedslideshow"))
-                        {
-                            // Add Advanced slideshow kipi-plugin action to View/Slideshow menu.
-                            d->slideShowAction->addAction(action);
-                        }
-                        else
-                        {
-                            d->kipiToolsActions.append(action);
-                        }
-
-                        break;
-                    }
-                    default:
-                    {
-                        kDebug() << "No menu found for a plugin!";
-                        break;
-                    }
-                }
-            }
-            else
-            {
-                kDebug() << "Plugin '" << actionName << "' disabled.";
-            }
-        }
-    }
-
-    // load KIPI actions settings
-    d->kipipluginsActionCollection->readSettings();
-
-    // Check if the kipiFileActionsExport are empty, if so, add an empty action which tells the user that no export plugins are
-    // available. It is more user-friendly to present some menu entry, instead of leaving it completely empty.
-    if (d->kipiFileActionsExport.empty())
-    {
-        QAction* noPluginsLoaded = new QAction(i18n("No export plugins available"), this);
-        noPluginsLoaded->setEnabled(false);
-        d->kipiFileActionsExport << noPluginsLoaded;
-    }
-
-    // Create GUI menu in according with plugins.
-    plugActionList(QString::fromLatin1("file_actions_export"),        d->kipiFileActionsExport);
-    plugActionList(QString::fromLatin1("file_actions_import"),        d->kipiFileActionsImport);
-    plugActionList(QString::fromLatin1("image_print_actions"),        d->kipiPrintActions);
-    plugActionList(QString::fromLatin1("image_metadata_actions"),     d->kipiMetadataActions);
-    plugActionList(QString::fromLatin1("image_actions"),              d->kipiImageActions);
-    plugActionList(QString::fromLatin1("tool_actions"),               d->kipiToolsActions);
-    plugActionList(QString::fromLatin1("batch_actions"),              d->kipiBatchActions);
-    plugActionList(QString::fromLatin1("album_actions"),              d->kipiAlbumActions);
 }
 
 void DigikamApp::populateThemes()

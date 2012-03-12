@@ -78,12 +78,6 @@ public:
 
     static DigikamApp* instance();
 
-    // KIPI Actions collections access.
-    const QList<QAction*>& menuBatchActions();
-    const QList<QAction*>& menuAlbumActions();
-    const QList<QAction*>& menuImportActions();
-    const QList<QAction*>& menuExportActions();
-
     KActionMenu* slideShowMenu() const;
 
     void autoDetect();
@@ -171,8 +165,6 @@ private Q_SLOTS:
     void slotSetCheckedExifOrientationAction(const ImageInfo& info);
     void slotResetExifOrientationActions();
     void slotTransformAction();
-
-    void slotKipiPluginPlug();
 
     void slotOpenSolidCamera(QAction*);
     void slotOpenManualCamera(QAction*);

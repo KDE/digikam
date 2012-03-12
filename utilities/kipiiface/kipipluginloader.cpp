@@ -94,7 +94,7 @@ public:
 };
 
 KipiPluginLoader::KipiPluginLoader()
-    : QObject(), d(new KipiPluginLoaderPriv)
+    : QObject(DigikamApp::instance()), d(new KipiPluginLoaderPriv)
 {
 }
 

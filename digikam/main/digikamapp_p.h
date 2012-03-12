@@ -46,10 +46,6 @@
 #include <kcombobox.h>
 #include <ksqueezedtextlabel.h>
 
-// LibKIPI includes
-
-#include <libkipi/pluginloader.h>
-
 // Local includes
 
 #include <config-digikam.h>
@@ -59,7 +55,6 @@
 #include "daboutdata.h"
 #include "imagepluginloader.h"
 #include "splashscreen.h"
-#include "kipiinterface.h"
 #include "dzoombar.h"
 #include "statusnavigatebar.h"
 #include "digikamview.h"
@@ -102,7 +97,6 @@ public:
         cardReaderMenu(0),
         config(0),
 
-        kipipluginsActionCollection(0),
         newAction(0),
         moveSelectionToAlbumAction(0),
         deleteAction(0),
@@ -192,7 +186,6 @@ public:
         splashScreen(0),
         dcopIface(0),
         imagePluginsLoader(0),
-        kipiInterface(0),
         view(0),
         cameraList(0),
         tagsActionManager(0),
@@ -200,7 +193,6 @@ public:
         statusLabel(0),
         statusNavigateBar(0),
         about(0),
-        kipiPluginLoader(0),
         modelCollection(0)
     {
     }
@@ -209,16 +201,6 @@ public:
     bool                                autoShowZoomToolTip;
     bool                                validIccPath;
 
-    // KIPI plugins support
-    QList<QAction*>                     kipiFileActionsExport;
-    QList<QAction*>                     kipiFileActionsImport;
-    QList<QAction*>                     kipiPrintActions;
-    QList<QAction*>                     kipiMetadataActions;
-    QList<QAction*>                     kipiImageActions;
-    QList<QAction*>                     kipiToolsActions;
-    QList<QAction*>                     kipiBatchActions;
-    QList<QAction*>                     kipiAlbumActions;
-
     KActionMenu*                        cameraMenu;
     KActionMenu*                        usbMediaMenu;
     KActionMenu*                        cardReaderMenu;
@@ -226,9 +208,6 @@ public:
     QHash<QString, QDateTime>           cameraAppearanceTimes;
 
     KSharedConfig::Ptr                  config;
-
-    // KIPI actionCollection
-    KActionCollection*                  kipipluginsActionCollection;
 
     // Album Actions
     KAction*                            newAction;
@@ -343,7 +322,6 @@ public:
     SplashScreen*                       splashScreen;
     DCOPIface*                          dcopIface;
     ImagePluginLoader*                  imagePluginsLoader;
-    KipiInterface*                      kipiInterface;
     DigikamView*                        view;
     CameraList*                         cameraList;
     TagsActionMngr*                     tagsActionManager;
@@ -354,8 +332,6 @@ public:
     KComboBox*                          mapViewSwitcher;
 
     DAboutData*                         about;
-
-    KIPI::PluginLoader*                 kipiPluginLoader;
 
     DigikamModelCollection*             modelCollection;
 };
