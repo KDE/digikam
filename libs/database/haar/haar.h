@@ -10,9 +10,9 @@
  *               by Charles E. Jacobs, Adam Finkelstein and David H. Salesin.
  *               http://www.cs.washington.edu/homes/salesin/abstracts.html
  *
- * Copyright (C) 2003 by Ricardo Niederberger Cabral <nieder at mail dot ru>
- * Copyright (C) 2008-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2008-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2003      by Ricardo Niederberger Cabral <nieder at mail dot ru>
+ * Copyright (C) 2008-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -142,7 +142,7 @@ public:
     }
 
     /// Load a set of coefficients
-    void fill(Haar::Idx* coefs)
+    void fill(Haar::Idx* const coefs)
     {
         // For maximum performance, we use a flat array.
         // First 16k for negative values, second 16k for positive values.
@@ -235,14 +235,14 @@ public:
     Calculator();
     ~Calculator();
 
-    int  calcHaar(ImageData* imageData, SignatureData* sigData);
+    int  calcHaar(ImageData* const imageData, SignatureData* const sigData);
 
-    void transform(ImageData* data);
+    void transform(ImageData* const data);
 
 private:
 
     void        haar2D(Unit a[]);
-    inline void getmLargests(Unit* cdata, Idx* sig);
+    inline void getmLargests(Unit* const cdata, Idx* const sig);
 };
 
 }  // namespace Haar

@@ -10,9 +10,9 @@
  *               by Charles E. Jacobs, Adam Finkelstein and David H. Salesin.
  *               http://www.cs.washington.edu/homes/salesin/abstracts.html
  *
- * Copyright (C) 2003 by Ricardo Niederberger Cabral <nieder at mail dot ru>
- * Copyright (C) 2008-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2008-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2003      by Ricardo Niederberger Cabral <nieder at mail dot ru>
+ * Copyright (C) 2008-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -252,7 +252,7 @@ void Calculator::haar2D(Unit a[])
     Fully inplace calculation; order of result is interleaved though,
     but we don't care about that.
 */
-void Calculator::transform(ImageData* data)
+void Calculator::transform(ImageData* const data)
 {
     // RGB -> YIQ colorspace conversion; Y luminance, I,Q chrominance.
     // If RGB in [0..255] then Y in [0..255] and I,Q in [-127..127].
@@ -286,7 +286,7 @@ void Calculator::transform(ImageData* data)
     and store their indices in sig[].
     Skips entry 0.
 */
-void Calculator::getmLargests(Unit* cdata, Idx* sig)
+void Calculator::getmLargests(Unit* const cdata, Idx* const sig)
 {
     int       cnt, i;
     valStruct val;
@@ -344,7 +344,7 @@ void Calculator::getmLargests(Unit* cdata, Idx* sig)
     The order of occurrence of the coordinates in sig doesn't matter.
     Complexity is 3 x NUM_PIXELS^2 x 2log(NUM_COEFS).
 */
-int Calculator::calcHaar(ImageData* data, SignatureData* sigData)
+int Calculator::calcHaar(ImageData* const data, SignatureData* const sigData)
 {
     sigData->avg[0]=data->data1[0];
     sigData->avg[1]=data->data2[0];
