@@ -3289,6 +3289,11 @@ void DigikamApp::slotTransformAction()
     }
 }
 
+KActionMenu* DigikamApp::slideShowMenu() const
+{
+    return d->slideShowAction;
+}
+
 #ifdef USE_SCRIPT_IFACE
 void DigikamApp::slotScriptConsole()
 {

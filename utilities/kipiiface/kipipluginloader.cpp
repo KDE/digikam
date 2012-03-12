@@ -34,6 +34,7 @@
 
 #include <kactioncategory.h>
 #include <kactioncollection.h>
+#include <kmenu.h>
 #include <kactionmenu.h>
 #include <kdebug.h>
 
@@ -198,17 +199,15 @@ void KipiPluginLoader::slotKipiPluginPlug()
     d->kipiPrintActions.clear();
     d->kipiMetadataActions.clear();
 
-/* FIXME
     // Remove Advanced slideshow kipi-plugin action from View/Slideshow menu.
-    foreach(QAction* action, d->slideShowAction->menu()->actions())
+    foreach(QAction* const action, d->app->slideShowMenu()->menu()->actions())
     {
         if (action->objectName() == QString("advancedslideshow"))
         {
-            d->slideShowAction->removeAction(action);
+            d->app->slideShowMenu()->removeAction(action);
             break;
         }
     }
-*/
 
     d->kipipluginsActionCollection->clear();
 
@@ -325,7 +324,7 @@ void KipiPluginLoader::slotKipiPluginPlug()
                         if (actionName == QString("advancedslideshow"))
                         {
                             // Add Advanced slideshow kipi-plugin action to View/Slideshow menu.
-// FIXME                            d->slideShowAction->addAction(action);
+                             d->app->slideShowMenu()->addAction(action);
                         }
                         else
                         {

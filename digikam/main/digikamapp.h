@@ -47,6 +47,7 @@
 #include "digikam_export.h"
 
 class KAction;
+class KActionMenu;
 
 namespace Solid
 {
@@ -83,6 +84,8 @@ public:
     const QList<QAction*>& menuAlbumActions();
     const QList<QAction*>& menuImportActions();
     const QList<QAction*>& menuExportActions();
+
+    KActionMenu* slideShowMenu() const;
 
     void autoDetect();
     void downloadFrom(const QString& cameraGuiPath);
