@@ -92,6 +92,51 @@ KipiPluginLoader::~KipiPluginLoader()
     delete d;
 }
 
+KActionCollection* KipiPluginLoader::pluginsActionCollection() const
+{
+    return d->kipipluginsActionCollection;
+}
+
+const QList<QAction*>& KipiPluginLoader::menuExportActions()
+{
+    return d->kipiFileActionsExport;
+}
+
+const QList<QAction*>& KipiPluginLoader::menuImportActions()
+{
+    return d->kipiFileActionsImport;
+}
+
+const QList<QAction*>& KipiPluginLoader::menuMetadataActions()
+{
+    return d->kipiMetadataActions;
+}
+
+const QList<QAction*>& KipiPluginLoader::menuPrintActions()
+{
+    return d->kipiPrintActions;
+}
+
+const QList<QAction*>& KipiPluginLoader::menuImageActions()
+{
+    return d->kipiImageActions;
+}
+
+const QList<QAction*>& KipiPluginLoader::menuToolsActions()
+{
+    return d->kipiToolsActions;
+}
+
+const QList<QAction*>& KipiPluginLoader::menuBatchActions()
+{
+    return d->kipiBatchActions;
+}
+
+const QList<QAction*>& KipiPluginLoader::menuAlbumActions()
+{
+    return d->kipiAlbumActions;
+}
+
 void KipiPluginLoader::setSplashScreen(SplashScreen* const splash)
 {
     d->splashScreen = splash;

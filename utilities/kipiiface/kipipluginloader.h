@@ -33,6 +33,8 @@
 
 class QAction;
 
+class KActionCollection;
+
 namespace Digikam
 {
 
@@ -47,12 +49,18 @@ public:
     KipiPluginLoader(QObject* const parent);
     virtual ~KipiPluginLoader();
 
-    // KIPI Actions collections access.
+    /// KIPI menu collections.
+    const QList<QAction*>& menuExportActions();
+    const QList<QAction*>& menuImportActions();
+    const QList<QAction*>& menuMetadataActions();
+    const QList<QAction*>& menuPrintActions();
     const QList<QAction*>& menuImageActions();
+    const QList<QAction*>& menuToolsActions();
     const QList<QAction*>& menuBatchActions();
     const QList<QAction*>& menuAlbumActions();
-    const QList<QAction*>& menuImportActions();
-    const QList<QAction*>& menuExportActions();
+
+    /// KIPI action collections.
+    KActionCollection* pluginsActionCollection() const;
 
     void setSplashScreen(SplashScreen* const splash);
 
