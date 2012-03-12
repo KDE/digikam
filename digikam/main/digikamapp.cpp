@@ -2512,8 +2512,7 @@ void DigikamApp::slotDBStat()
 void DigikamApp::loadPlugins()
 {
     // Load KIPI plugins
-    KipiPluginLoader::instance()->setSplashScreen(d->splashScreen);
-    KipiPluginLoader::instance()->loadPlugins();
+    new KipiPluginLoader(this, d->splashScreen);
 
     // Setting the initial menu options after all plugins have been loaded
     d->view->slotAlbumSelected(AlbumManager::instance()->currentAlbum());

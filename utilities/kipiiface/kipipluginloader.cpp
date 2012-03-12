@@ -53,14 +53,7 @@
 namespace Digikam
 {
 
-class KipiPluginLoaderCreator
-{
-public:
-
-    KipiPluginLoader object;
-};
-
-K_GLOBAL_STATIC(KipiPluginLoaderCreator, kipiPluginLoaderCreator)
+KipiPluginLoader* KipiPluginLoader::m_instance = 0;
 
 // -----------------------------------------------------------------------------------------------
 
@@ -93,19 +86,23 @@ public:
     QList<QAction*>     kipiAlbumActions;
 };
 
-KipiPluginLoader::KipiPluginLoader()
-    : QObject(DigikamApp::instance()), d(new KipiPluginLoaderPriv)
+KipiPluginLoader::KipiPluginLoader(QObject* const parent, SplashScreen* const splash)
+    : QObject(parent), d(new KipiPluginLoaderPriv)
 {
+    m_instance      = this;
+    d->splashScreen = splash;
+    loadPlugins();
 }
 
 KipiPluginLoader::~KipiPluginLoader()
 {
     delete d;
+    m_instance = 0;
 }
 
 KipiPluginLoader* KipiPluginLoader::instance()
 {
-    return &kipiPluginLoaderCreator->object;
+    return m_instance;
 }
 
 KActionCollection* KipiPluginLoader::pluginsActionCollection() const
@@ -151,11 +148,6 @@ const QList<QAction*>& KipiPluginLoader::menuBatchActions()
 const QList<QAction*>& KipiPluginLoader::menuAlbumActions()
 {
     return d->kipiAlbumActions;
-}
-
-void KipiPluginLoader::setSplashScreen(SplashScreen* const splash)
-{
-    d->splashScreen = splash;
 }
 
 void KipiPluginLoader::loadPlugins()
