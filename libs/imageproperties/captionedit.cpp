@@ -60,7 +60,7 @@ public:
     CaptionValues   lastDeletedValues;
 };
 
-CaptionEdit::CaptionEdit(QWidget* parent)
+CaptionEdit::CaptionEdit(QWidget* const parent)
     : KVBox(parent), d(new CaptionEditPriv)
 {
 

@@ -6,8 +6,8 @@
  * Date        : 2010-07-15
  * Description : central Map view
  *
- * Copyright (C) 2010 by Gabriel Voicu <ping dot gabi at gmail dot com>
- * Copyright (C) 2010, 2011 by Michael G. Hansen <mike at mghansen dot de>
+ * Copyright (C) 2010      by Gabriel Voicu <ping dot gabi at gmail dot com>
+ * Copyright (C) 2010-2011 by Michael G. Hansen <mike at mghansen dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -79,8 +79,7 @@ QItemSelectionModel* ImageGPSModelHelper::selectionModel() const
 bool ImageGPSModelHelper::itemCoordinates(const QModelIndex& index, KGeoMap::GeoCoordinates* const coordinates) const
 {
     const GPSImageInfo currentGPSImageInfo = index.data(RoleGPSImageInfo).value<GPSImageInfo>();
-
-    *coordinates = currentGPSImageInfo.coordinates;
+    *coordinates                           = currentGPSImageInfo.coordinates;
 
     if (currentGPSImageInfo.coordinates.hasCoordinates())
     {
@@ -116,24 +115,24 @@ QPixmap ImageGPSModelHelper::pixmapFromRepresentativeIndex(const QPersistentMode
 
 QPersistentModelIndex ImageGPSModelHelper::bestRepresentativeIndexFromList(const QList<QPersistentModelIndex>& list, const int sortKey)
 {
-    QModelIndex bestIndex = list.first();
+    QModelIndex bestIndex         = list.first();
     GPSImageInfo bestGPSImageInfo = bestIndex.data(RoleGPSImageInfo).value<GPSImageInfo>();
 
     for (int i=1; i<list.count(); ++i)
     {
         const QModelIndex currentIndex(list.at(i));
         const GPSImageInfo currentGPSImageInfo = currentIndex.data(RoleGPSImageInfo).value<GPSImageInfo>();
-
-        const bool currentFitsBetter = GPSImageInfoSorter::fitsBetter(
-                bestGPSImageInfo, KGeoMap::KGeoMapSelectedNone,
-                currentGPSImageInfo, KGeoMap::KGeoMapSelectedNone,
-                KGeoMap::KGeoMapSelectedNone, GPSImageInfoSorter::SortOptions(sortKey)
-            );
+        const bool currentFitsBetter           = GPSImageInfoSorter::fitsBetter(bestGPSImageInfo,
+                                                                                KGeoMap::KGeoMapSelectedNone,
+                                                                                currentGPSImageInfo,
+                                                                                KGeoMap::KGeoMapSelectedNone,
+                                                                                KGeoMap::KGeoMapSelectedNone,
+                                                                                GPSImageInfoSorter::SortOptions(sortKey));
 
         if (currentFitsBetter)
         {
             bestGPSImageInfo = currentGPSImageInfo;
-            bestIndex = currentIndex;
+            bestIndex        = currentIndex;
         }
     }
 
@@ -144,7 +143,7 @@ void ImageGPSModelHelper::slotThumbnailLoaded(const LoadingDescription& loadingD
 {
     for (int i=0; i<d->itemModel->rowCount(); ++i)
     {
-        const QStandardItem* const item     = static_cast<QStandardItem*>(d->itemModel->item(i));
+        const QStandardItem* const item        = static_cast<QStandardItem*>(d->itemModel->item(i));
         const GPSImageInfo currentGPSImageInfo = item->data(RoleGPSImageInfo).value<GPSImageInfo>();
 
         if (currentGPSImageInfo.url.path() == loadingDescription.filePath)
