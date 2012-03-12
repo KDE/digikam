@@ -53,6 +53,17 @@
 namespace Digikam
 {
 
+class KipiPluginLoaderCreator
+{
+public:
+
+    KipiPluginLoader object;
+};
+
+K_GLOBAL_STATIC(KipiPluginLoaderCreator, kipiPluginLoaderCreator)
+
+// -----------------------------------------------------------------------------------------------
+
 class KipiPluginLoader::KipiPluginLoaderPriv
 {
 public:
@@ -82,15 +93,19 @@ public:
     QList<QAction*>     kipiAlbumActions;
 };
 
-KipiPluginLoader::KipiPluginLoader(QObject* const parent)
-    : QObject(parent), d(new KipiPluginLoaderPriv)
+KipiPluginLoader::KipiPluginLoader()
+    : QObject(), d(new KipiPluginLoaderPriv)
 {
-    loadPlugins();
 }
 
 KipiPluginLoader::~KipiPluginLoader()
 {
     delete d;
+}
+
+KipiPluginLoader* KipiPluginLoader::instance()
+{
+    return &kipiPluginLoaderCreator->object;
 }
 
 KActionCollection* KipiPluginLoader::pluginsActionCollection() const

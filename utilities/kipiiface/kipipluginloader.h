@@ -46,8 +46,7 @@ class KipiPluginLoader : public QObject
 
 public:
 
-    KipiPluginLoader(QObject* const parent);
-    virtual ~KipiPluginLoader();
+    void loadPlugins();
 
     /// KIPI menu collections.
     const QList<QAction*>& menuExportActions();
@@ -64,9 +63,12 @@ public:
 
     void setSplashScreen(SplashScreen* const splash);
 
+    static KipiPluginLoader* instance();
+
 private:
 
-    void loadPlugins();
+    KipiPluginLoader();
+    ~KipiPluginLoader();
 
 private Q_SLOTS:
 
@@ -76,6 +78,8 @@ private:
 
     class KipiPluginLoaderPriv;
     KipiPluginLoaderPriv* const d;
+
+    friend class KipiPluginLoaderCreator;
 };
 
 }  // namespace Digikam
