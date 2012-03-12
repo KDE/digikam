@@ -59,7 +59,7 @@ private:
 
     void loadPlugins();
 
-private slots:
+private Q_SLOTS:
 
     void slotKipiPluginPlug();
 
