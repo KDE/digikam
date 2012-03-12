@@ -6,7 +6,7 @@
  * Date        : 2010-04-13
  * Description : Thread object scheduling
  *
- * Copyright (C) 2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -50,7 +50,7 @@ class ParkingThread : public QThread
 {
 public:
 
-    ParkingThread(QObject* parent = 0)
+    ParkingThread(QObject* const parent = 0)
         : QThread(parent), running(true)
     {
         start();
@@ -63,14 +63,14 @@ public:
         wait();
     }
 
-    void parkObject(QObject* object)
+    void parkObject(QObject* const object)
     {
         object->moveToThread(this);
         QMutexLocker locker(&mutex);
         condVar.wakeAll();
     }
 
-    void moveToCurrentThread(QObject* parkedObject)
+    void moveToCurrentThread(QObject* const parkedObject)
     {
         if (parkedObject->thread() == QThread::currentThread())
         {
@@ -147,7 +147,7 @@ class WorkerObjectRunnable : public QRunnable
 {
 public:
 
-    WorkerObjectRunnable(WorkerObject* object, ParkingThread* parkingThread);
+    WorkerObjectRunnable(WorkerObject* const object, ParkingThread* const parkingThread);
 
 protected:
 
@@ -161,7 +161,7 @@ protected:
 
 // --------------------------------------------------------------------------------------------------
 
-WorkerObjectRunnable::WorkerObjectRunnable(WorkerObject* object, ParkingThread* parkingThread)
+WorkerObjectRunnable::WorkerObjectRunnable(WorkerObject* const object, ParkingThread* const parkingThread)
     : object(object), parkingThread(parkingThread)
 {
     setAutoDelete(true);
@@ -259,7 +259,7 @@ ThreadManager::~ThreadManager()
     delete d;
 }
 
-void ThreadManager::initialize(WorkerObject* object)
+void ThreadManager::initialize(WorkerObject* const object)
 {
     connect(object, SIGNAL(destroyed(QObject*)),
             this, SLOT(slotDestroyed(QObject*)));
@@ -269,7 +269,7 @@ void ThreadManager::initialize(WorkerObject* object)
     d->parkingThread->parkObject(object);
 }
 
-void ThreadManager::initialize(DynamicThread* dynamicThread)
+void ThreadManager::initialize(DynamicThread* const dynamicThread)
 {
     connect(dynamicThread, SIGNAL(destroyed(QObject*)),
             this, SLOT(slotDestroyed(QObject*)));

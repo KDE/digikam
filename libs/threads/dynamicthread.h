@@ -6,7 +6,7 @@
  * Date        : 2010-04-13
  * Description : Dynamically active thread
  *
- * Copyright (C) 2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -54,10 +54,12 @@ public:
         Deactivating
     };
 
+public:
+
     /** This class extends QRunnable, so you have to reimplement
      *  virtual void run(). In all aspects the class will act similar to a QThread.
      */
-    DynamicThread(QObject* parent = 0);
+    DynamicThread(QObject* const parent = 0);
 
     /** The destructor calls stop() and wait(), but if you, in your destructor,
      *  delete any data that is accessed by your run() method,
@@ -82,8 +84,10 @@ public:
 public Q_SLOTS:
 
     void start();
+
     /** Stop computation, sets the running flag to false. */
     void stop();
+
     /** Waits until the thread finishes. Typically, call stop() before. */
     void wait();
 
@@ -144,5 +148,3 @@ private:
 } // namespace Digikam
 
 #endif // DYNAMICTHREAD_H
-
-

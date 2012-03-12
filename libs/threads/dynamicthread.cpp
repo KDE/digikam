@@ -6,7 +6,7 @@
  * Date        : 2010-04-13
  * Description : Dynamically active thread
  *
- * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -44,7 +44,8 @@ class DynamicThread::DynamicThreadPriv : public QRunnable
 {
 public:
 
-    DynamicThreadPriv(DynamicThread* q) : q(q)
+    DynamicThreadPriv(DynamicThread* const q)
+        : q(q)
     {
         setAutoDelete(false);
 
@@ -82,7 +83,125 @@ public:
     QWaitCondition                condVar;
 };
 
-DynamicThread::DynamicThread(QObject* parent)
+void DynamicThread::DynamicThreadPriv::takingThread()
+{
+    QMutexLocker locker(&mutex);
+    // The thread we requested from the pool has now "arrived"
+    threadRequested = false;
+}
+
+bool DynamicThread::DynamicThreadPriv::transitionToRunning()
+{
+    QMutexLocker locker(&mutex);
+
+    switch (state)
+    {
+        case DynamicThread::Scheduled:
+        {
+            // ensure that a newly scheduled thread does not run
+            // while an old, deactivated one has not yet called transitionToInactive
+            while (assignedThread)
+            {
+                condVar.wait(&mutex);
+            }
+
+            state            = DynamicThread::Running;
+            running          = true;
+            assignedThread   = QThread::currentThread();
+            previousPriority = assignedThread->priority();
+
+            if (priority != QThread::InheritPriority)
+            {
+                assignedThread->setPriority(priority);
+            }
+
+            return true;
+        }
+        case DynamicThread::Deactivating:
+        {
+            return false;
+        }
+        case DynamicThread::Running:
+        {
+            kDebug() << "Transition to Running: Invalid Running state" << q;
+            return false;
+        }
+        case DynamicThread::Inactive:
+        {
+            kDebug() << "Transition to Running: Invalid Inactive state" << q;
+            return false;
+        }
+        default:
+        {
+            kDebug() << "Transition to Running: Should never reach here: assert?" << q;
+            return false;
+        }
+    }
+}
+
+void DynamicThread::DynamicThreadPriv::transitionToInactive()
+{
+    QMutexLocker locker(&mutex);
+
+    switch (state)
+    {
+        case DynamicThread::Scheduled:
+        case DynamicThread::Deactivating:
+        case DynamicThread::Running:
+        {
+            if (previousPriority != QThread::InheritPriority)
+            {
+                assignedThread->setPriority(previousPriority);
+                previousPriority = QThread::InheritPriority;
+            }
+
+            assignedThread = 0;
+
+            if (state != DynamicThread::Scheduled)
+            {
+                state = DynamicThread::Inactive;
+            }
+
+            condVar.wakeAll();
+            break;
+        }
+        case DynamicThread::Inactive:
+        {
+            kDebug() << "Transition to Inactive: Invalid Inactive state" << q;
+            break;
+        }
+    }
+}
+
+void DynamicThread::DynamicThreadPriv::run()
+{
+    if (emitSignals)
+    {
+        emit q->started();
+    }
+
+    if (transitionToRunning())
+    {
+        takingThread();
+        q->run();
+    }
+    else
+    {
+        takingThread();
+    }
+
+    if (emitSignals)
+    {
+        emit q->finished();
+    }
+
+    transitionToInactive();
+    // as soon as we are inactive, we may get deleted!
+}
+
+// -----------------------------------------------------------------------------------------------
+
+DynamicThread::DynamicThread(QObject* const parent)
     : QObject(parent), d(new DynamicThreadPriv(this))
 {
     setAutoDelete(false);
@@ -223,122 +342,6 @@ void DynamicThread::stop(QMutexLocker& locker)
             break;
         }
     }
-}
-
-void DynamicThread::DynamicThreadPriv::takingThread()
-{
-    QMutexLocker locker(&mutex);
-    // The thread we requested from the pool has now "arrived"
-    threadRequested = false;
-}
-
-bool DynamicThread::DynamicThreadPriv::transitionToRunning()
-{
-    QMutexLocker locker(&mutex);
-
-    switch (state)
-    {
-        case DynamicThread::Scheduled:
-        {
-            // ensure that a newly scheduled thread does not run
-            // while an old, deactivated one has not yet called transitionToInactive
-            while (assignedThread)
-            {
-                condVar.wait(&mutex);
-            }
-
-            state            = DynamicThread::Running;
-            running          = true;
-            assignedThread   = QThread::currentThread();
-            previousPriority = assignedThread->priority();
-
-            if (priority != QThread::InheritPriority)
-            {
-                assignedThread->setPriority(priority);
-            }
-
-            return true;
-        }
-        case DynamicThread::Deactivating:
-        {
-            return false;
-        }
-        case DynamicThread::Running:
-        {
-            kDebug() << "Transition to Running: Invalid Running state" << q;
-            return false;
-        }
-        case DynamicThread::Inactive:
-        {
-            kDebug() << "Transition to Running: Invalid Inactive state" << q;
-            return false;
-        }
-        default:
-        {
-            kDebug() << "Transition to Running: Should never reach here: assert?" << q;
-            return false;
-        }
-    }
-}
-
-void DynamicThread::DynamicThreadPriv::transitionToInactive()
-{
-    QMutexLocker locker(&mutex);
-
-    switch (state)
-    {
-        case DynamicThread::Scheduled:
-        case DynamicThread::Deactivating:
-        case DynamicThread::Running:
-        {
-            if (previousPriority != QThread::InheritPriority)
-            {
-                assignedThread->setPriority(previousPriority);
-                previousPriority = QThread::InheritPriority;
-            }
-
-            assignedThread = 0;
-
-            if (state != DynamicThread::Scheduled)
-            {
-                state = DynamicThread::Inactive;
-            }
-
-            condVar.wakeAll();
-            break;
-        }
-        case DynamicThread::Inactive:
-        {
-            kDebug() << "Transition to Inactive: Invalid Inactive state" << q;
-            break;
-        }
-    }
-}
-
-void DynamicThread::DynamicThreadPriv::run()
-{
-    if (emitSignals)
-    {
-        emit q->started();
-    }
-
-    if (transitionToRunning())
-    {
-        takingThread();
-        q->run();
-    }
-    else
-    {
-        takingThread();
-    }
-
-    if (emitSignals)
-    {
-        emit q->finished();
-    }
-
-    transitionToInactive();
-    // as soon as we are inactive, we may get deleted!
 }
 
 void DynamicThread::wait(QMutexLocker& locker)

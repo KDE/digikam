@@ -6,7 +6,7 @@
  * Date        : 2010-04-13
  * Description : Thread object scheduling
  *
- * Copyright (C) 2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -47,8 +47,8 @@ public:
 
     static ThreadManager* instance();
 
-    void initialize(WorkerObject* object);
-    void initialize(DynamicThread* dynamicThread);
+    void initialize(WorkerObject* const object);
+    void initialize(DynamicThread* const dynamicThread);
 
 public Q_SLOTS:
 
