@@ -80,4 +80,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 061 ==> 291921 : Geolocation: Severe rendering problems of map/satellite view.
 062 ==> 292316 : digiKam no thumbnail for .mov, .mp4 movies.
 063 ==> 233222 : Thumbnails displayed are from incorrect images.
-064 ==> 
+064 ==> 235733 : No possibility to cancel a delete file operation.
+065 ==> 
+
