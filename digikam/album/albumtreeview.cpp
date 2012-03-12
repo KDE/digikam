@@ -1058,7 +1058,10 @@ void AbstractAlbumTreeView::handleCustomContextMenuAction(QAction* action, Album
 
 void AbstractAlbumTreeView::albumSettingsChanged()
 {
-    d->delegate->updateHeight();
+    if (d->delegate)
+    {
+        d->delegate->updateHeight();
+    }
 }
 
 // ----------------------------------------------------------------------------------------------

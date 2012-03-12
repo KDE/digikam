@@ -83,5 +83,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 064 ==> 235733 : No possibility to cancel a delete file operation.
 065 ==> 267509 : Button to stop collection scan during startup.
 066 ==> 223232 : digiKam Does Not Detect the Color Profile in DCF Files.
-067 ==> 
-
+067 ==> 295340 : Digikam crashed while tagging faces.
+068 ==>
