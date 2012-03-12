@@ -45,7 +45,6 @@ public:
      *  several identical workers objects.
      *  See ParallelAdapter for guidance how to use it.
      */
-
     ParallelWorkers();
     virtual ~ParallelWorkers();
 
@@ -54,11 +53,12 @@ public:
     void schedule();
     void deactivate(WorkerObject::DeactivatingMode mode = WorkerObject::FlushSignals);
 
-    void add(WorkerObject* worker);
+    void add(WorkerObject* const worker);
     void setPriority(QThread::Priority priority);
 
     /// Returns true if the current number of added workers has reached the optimalWorkerCount()
     bool optimalWorkerCountReached() const;
+
     /** Regarding the number of logical CPUs on the current machine,
         returns the optimal count of concurrent workers */
     static int  optimalWorkerCount();
@@ -73,10 +73,10 @@ public:
 protected:
 
     // Internal implementation
-    
-    int ParallelWorkers_qt_metacall(QMetaObject::Call _c, int _id, void **_a);
+
+    int ParallelWorkers_qt_metacall(QMetaObject::Call _c, int _id, void** _a);
     virtual QObject* asQObject() = 0;
-    virtual int WorkerObject_qt_metacall(QMetaObject::Call _c, int _id, void **_a) = 0;
+    virtual int WorkerObject_qt_metacall(QMetaObject::Call _c, int _id, void** _a) = 0;
 
 protected:
 
@@ -84,7 +84,10 @@ protected:
     int                  m_currentIndex;
 };
 
+// -------------------------------------------------------------------------------------------------
+
 template <class A>
+
 class ParallelAdapter : public A, public ParallelWorkers
 {
 public:
@@ -105,21 +108,21 @@ public:
 
     // Internal Implentation
 
-    virtual int qt_metacall(QMetaObject::Call _c, int _id, void **_a)
+    virtual int qt_metacall(QMetaObject::Call _c, int _id, void** _a)
         { return ParallelWorkers::ParallelWorkers_qt_metacall(_c, _id, _a); }
 
-    int WorkerObject_qt_metacall(QMetaObject::Call _c, int _id, void **_a)
+    int WorkerObject_qt_metacall(QMetaObject::Call _c, int _id, void** _a)
         { return WorkerObject::qt_metacall(_c, _id, _a); }
 
     virtual QObject* asQObject() { return this; }
 
     void schedule() { ParallelWorkers::schedule(); }
     void deactivate(WorkerObject::DeactivatingMode mode = WorkerObject::FlushSignals)
-    { ParallelWorkers::deactivate(mode); }
+        { ParallelWorkers::deactivate(mode); }
 
     bool connect(const char* signal, const QObject* receiver, const char* method,
                  Qt::ConnectionType type = Qt::AutoConnection) const
-    { return ParallelWorkers::connect(signal, receiver, method, type); }
+        { return ParallelWorkers::connect(signal, receiver, method, type); }
 };
 
 } // namespace Digikam

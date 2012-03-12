@@ -50,7 +50,7 @@ ParallelWorkers::ParallelWorkers()
 
 ParallelWorkers::~ParallelWorkers()
 {
-    foreach(WorkerObject* object, m_workers)
+    foreach(WorkerObject* const object, m_workers)
     {
         delete object;
     }
@@ -68,7 +68,7 @@ bool ParallelWorkers::optimalWorkerCountReached() const
 
 void ParallelWorkers::schedule()
 {
-    foreach(WorkerObject* object, m_workers)
+    foreach(WorkerObject* const object, m_workers)
     {
         object->schedule();
     }
@@ -76,7 +76,7 @@ void ParallelWorkers::schedule()
 
 void ParallelWorkers::deactivate(WorkerObject::DeactivatingMode mode)
 {
-    foreach(WorkerObject* object, m_workers)
+    foreach(WorkerObject* const object, m_workers)
     {
         object->deactivate(mode);
     }
@@ -84,13 +84,13 @@ void ParallelWorkers::deactivate(WorkerObject::DeactivatingMode mode)
 
 void ParallelWorkers::setPriority(QThread::Priority priority)
 {
-    foreach(WorkerObject* object, m_workers)
+    foreach(WorkerObject* const object, m_workers)
     {
         object->setPriority(priority);
     }
 }
 
-void ParallelWorkers::add(WorkerObject* worker)
+void ParallelWorkers::add(WorkerObject* const worker)
 {
     /*
     if (!asQObject()->inherits(worker->metaObject()->className()))
@@ -124,11 +124,11 @@ void ParallelWorkers::add(WorkerObject* worker)
     return true;
 }*/
 
-bool ParallelWorkers::connect(const char* signal,
-                              const QObject* receiver, const char* method,
+bool ParallelWorkers::connect(const char* const signal,
+                              const QObject* const receiver, const char* const method,
                               Qt::ConnectionType type) const
 {
-    foreach(WorkerObject* object, m_workers)
+    foreach(WorkerObject* const object, m_workers)
     {
         if (!QObject::connect(object, signal, receiver, method, type))
         {
@@ -143,8 +143,9 @@ int ParallelWorkers::ParallelWorkers_qt_metacall(QMetaObject::Call _c, int _id, 
     _id = WorkerObject_qt_metacall(_c, _id, _a);
     if (_id < 0)
         return _id;
-    if (_c == QMetaObject::InvokeMetaMethod) {
 
+    if (_c == QMetaObject::InvokeMetaMethod)
+    {
         // This is the common ancestor's meta object, below WorkerObject
         const QMetaObject* mobj = asQObject()->metaObject();
         const int properMethods = mobj->methodCount() - mobj->methodOffset();
@@ -183,16 +184,16 @@ int ParallelWorkers::ParallelWorkers_qt_metacall(QMetaObject::Call _c, int _id, 
 
         // Invoke across-thread
         method.invoke(obj, Qt::QueuedConnection,
-                        args[0],
-                        args[1],
-                        args[2],
-                        args[3],
-                        args[4],
-                        args[5],
-                        args[6],
-                        args[7],
-                        args[8],
-                        args[9]);
+                      args[0],
+                      args[1],
+                      args[2],
+                      args[3],
+                      args[4],
+                      args[5],
+                      args[6],
+                      args[7],
+                      args[8],
+                      args[9]);
 
         _id -= properMethods;
     }
