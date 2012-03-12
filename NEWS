@@ -79,4 +79,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 060 ==> 295294 : Startup reads far too many files.
 061 ==> 291921 : Geolocation: Severe rendering problems of map/satellite view.
 062 ==> 292316 : digiKam no thumbnail for .mov, .mp4 movies.
-063 ==> 
+063 ==> 233222 : Thumbnails displayed are from incorrect images.
+064 ==> 
