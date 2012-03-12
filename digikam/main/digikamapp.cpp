@@ -442,11 +442,6 @@ void DigikamApp::closeEvent(QCloseEvent* e)
     KXmlGuiWindow::closeEvent(e);
 }
 
-const QList<QAction*>& DigikamApp::menuImageActions()
-{
-    return d->kipiImageActions;
-}
-
 const QList<QAction*>& DigikamApp::menuBatchActions()
 {
     return d->kipiBatchActions;

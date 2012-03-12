@@ -79,7 +79,6 @@ public:
     static DigikamApp* instance();
 
     // KIPI Actions collections access.
-    const QList<QAction*>& menuImageActions();
     const QList<QAction*>& menuBatchActions();
     const QList<QAction*>& menuAlbumActions();
     const QList<QAction*>& menuImportActions();
