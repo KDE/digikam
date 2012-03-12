@@ -48,12 +48,11 @@
 
 // Local includes
 
-#include <config-digikam.h>
+#include "config-digikam.h"
 #include "albummanager.h"
 #include "albumsettings.h"
 #include "cameralist.h"
 #include "daboutdata.h"
-#include "imagepluginloader.h"
 #include "splashscreen.h"
 #include "dzoombar.h"
 #include "statusnavigatebar.h"
@@ -185,7 +184,6 @@ public:
         filterStatusBar(0),
         splashScreen(0),
         dcopIface(0),
-        imagePluginsLoader(0),
         view(0),
         cameraList(0),
         tagsActionManager(0),
@@ -321,7 +319,6 @@ public:
     FilterStatusBar*                    filterStatusBar;
     SplashScreen*                       splashScreen;
     DCOPIface*                          dcopIface;
-    ImagePluginLoader*                  imagePluginsLoader;
     DigikamView*                        view;
     CameraList*                         cameraList;
     TagsActionMngr*                     tagsActionManager;

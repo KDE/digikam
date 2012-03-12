@@ -148,6 +148,7 @@
 #include "newitemsfinder.h"
 #include "thumbsgenerator.h"
 #include "kipipluginloader.h"
+#include "imagepluginloader.h"
 
 #ifdef USE_SCRIPT_IFACE
 #include "scriptiface.h"
@@ -306,7 +307,7 @@ DigikamApp::~DigikamApp()
         // Delete after close
         ImageWindow::imageWindow()->setAttribute(Qt::WA_DeleteOnClose, true);
         // pass ownership of object - needed by ImageWindow destructor
-        d->imagePluginsLoader->setParent(ImageWindow::imageWindow());
+        ImagePluginLoader::instance()->setParent(ImageWindow::imageWindow());
         // close the window
         ImageWindow::imageWindow()->close();
     }
@@ -2518,7 +2519,7 @@ void DigikamApp::loadPlugins()
     d->view->slotAlbumSelected(AlbumManager::instance()->currentAlbum());
 
     // Load Image Editor plugins.
-    d->imagePluginsLoader = new ImagePluginLoader(this, d->splashScreen);
+    new ImagePluginLoader(this, d->splashScreen);
 }
 
 void DigikamApp::populateThemes()
