@@ -41,6 +41,7 @@
 #include "albumdb.h"
 #include "databaseaccess.h"
 #include "databaseinfocontainers.h"
+#include "databaseoperationgroup.h"
 #include "dimagehistory.h"
 #include "collectionmanager.h"
 #include "collectionlocation.h"
@@ -818,21 +819,56 @@ QList<ImageInfo> ImageInfo::groupedImages() const
     return ImageInfoList(DatabaseAccess().db()->getImagesRelatingTo(m_data->id, DatabaseRelation::Grouped));
 }
 
-void ImageInfo::addToGroup(const ImageInfo& leader)
+void ImageInfo::addToGroup(const ImageInfo& givenLeader)
 {
-    if (!m_data || leader.isNull() || leader.id() == m_data->id)
+    if (!m_data || givenLeader.isNull() || givenLeader.id() == m_data->id)
     {
         return;
     }
 
-    QList<ImageInfo> ownGroup = groupedImages();
-    foreach(const ImageInfo& info, ownGroup)
+    // Take care: Once we start this, we cannot rely on change notifications and cache invalidation!
+    DatabaseOperationGroup group;
+
+    // Handle grouping on an already grouped image, and prevent circular grouping
+    ImageInfo leader;
+    QList<qlonglong> alreadySeen;
+    alreadySeen << m_data->id;
+    for (leader = givenLeader; leader.isGrouped(); )
     {
-        ImageInfo(info).addToGroup(leader);
+        ImageInfo nextLeader = leader.groupImage();
+        // is the new leader currently grouped on this image, or do we have a circular grouping?
+        if (alreadySeen.contains(nextLeader.id()))
+        {
+            // break loop (special case: remove b->a where we want to add a->b)
+            leader.removeFromGroup();
+            break;
+        }
+        else
+        {
+            alreadySeen << leader.id();
+            leader = nextLeader;
+        }
     }
 
-    DatabaseAccess().db()->removeAllImageRelationsFrom(m_data->id, DatabaseRelation::Grouped);
-    DatabaseAccess().db()->addImageRelation(m_data->id, leader.id(), DatabaseRelation::Grouped);
+    // Already grouped correctly?
+    if (groupImageId() == leader.id())
+    {
+        return;
+    }
+
+    // All images grouped on this image need a new group leader
+    QList<qlonglong> idsToBeGrouped  = DatabaseAccess().db()->getImagesRelatingTo(m_data->id, DatabaseRelation::Grouped);
+    // and finally, this image needs to be grouped
+    idsToBeGrouped << m_data->id;
+
+    foreach(qlonglong ids, idsToBeGrouped)
+    {
+        // remove current grouping
+        DatabaseAccess().db()->removeAllImageRelationsFrom(ids, DatabaseRelation::Grouped);
+        // add the new grouping
+        DatabaseAccess().db()->addImageRelation(ids, leader.id(), DatabaseRelation::Grouped);
+    }
+
 }
 
 void ImageInfo::removeFromGroup()
