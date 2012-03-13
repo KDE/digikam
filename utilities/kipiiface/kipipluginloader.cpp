@@ -253,13 +253,22 @@ void KipiPluginLoader::slotKipiPluginPlug()
     // load KIPI actions settings
     d->kipipluginsActionCollection->readSettings();
 
-    // Check if the kipiFileActionsExport are empty, if so, add an empty action which tells the user that no export plugins are
-    // available. It is more user-friendly to present some menu entry, instead of leaving it completely empty.
+    // Check if the Export/Import Plugin lists are empty, if so, add an empty action which tells the user that no 
+    // export.import plugins are available. It is more user-friendly to present some menu entry, 
+    // instead of leaving it completely empty.
+
     if (kipiActionsByCategory(KIPI::ExportPlugin).empty())
     {
-        QAction* noPluginsLoaded = new QAction(i18n("No export plugins available"), d->app);
-        noPluginsLoaded->setEnabled(false);
-        d->kipiActionsMap.insert(KIPI::ExportPlugin, noPluginsLoaded);
+        QAction* noExport = new QAction(i18n("No export tool available"), d->app);
+        noExport->setEnabled(false);
+        d->kipiActionsMap.insert(KIPI::ExportPlugin, noExport);
+    }
+
+    if (kipiActionsByCategory(KIPI::ImportPlugin).empty())
+    {
+        QAction* noImport = new QAction(i18n("No import tool available"), d->app);
+        noImport->setEnabled(false);
+        d->kipiActionsMap.insert(KIPI::ImportPlugin, noImport);
     }
 
     // Create plugin GUI menus in application.
