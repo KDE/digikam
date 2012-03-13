@@ -2407,14 +2407,7 @@ void DigikamApp::slotConfToolbars()
     {
         createGUI(xmlFile());
         applyMainWindowSettings(d->config->group("General Settings"));
-
-        KipiPluginLoader* const pl = KipiPluginLoader::instance();
-        plugActionList(QString::fromLatin1("file_actions_export"), pl->kipiActionsByCategory(KIPI::ExportPlugin));
-        plugActionList(QString::fromLatin1("file_actions_import"), pl->kipiActionsByCategory(KIPI::ImportPlugin));
-        plugActionList(QString::fromLatin1("image_kipi_actions"),  pl->kipiActionsByCategory(KIPI::ImagesPlugin));
-        plugActionList(QString::fromLatin1("tool_actions"),        pl->kipiActionsByCategory(KIPI::ToolsPlugin));
-        plugActionList(QString::fromLatin1("batch_actions"),       pl->kipiActionsByCategory(KIPI::BatchPlugin));
-        plugActionList(QString::fromLatin1("album_actions"),       pl->kipiActionsByCategory(KIPI::CollectionsPlugin));
+        KipiPluginLoader::instance()->kipiPlugActions();
     }
 
     delete dlg;

@@ -147,12 +147,8 @@ void KipiPluginLoader::loadPlugins()
 
 void KipiPluginLoader::slotKipiPluginPlug()
 {
-    d->app->unplugActionList(QString::fromLatin1("file_actions_export"));
-    d->app->unplugActionList(QString::fromLatin1("file_actions_import"));
-    d->app->unplugActionList(QString::fromLatin1("image_kipi_actions"));
-    d->app->unplugActionList(QString::fromLatin1("tool_actions"));
-    d->app->unplugActionList(QString::fromLatin1("batch_actions"));
-    d->app->unplugActionList(QString::fromLatin1("album_actions"));
+    // Remove plugin GUI menus in application.
+    kipiPlugActions(true);
 
     d->kipiActionsMap.clear();
 
@@ -266,13 +262,30 @@ void KipiPluginLoader::slotKipiPluginPlug()
         d->kipiActionsMap.insert(KIPI::ExportPlugin, noPluginsLoaded);
     }
 
-    // Create GUI menu in according with plugins.
-    d->app->plugActionList(QString::fromLatin1("file_actions_export"), kipiActionsByCategory(KIPI::ExportPlugin));
-    d->app->plugActionList(QString::fromLatin1("file_actions_import"), kipiActionsByCategory(KIPI::ImportPlugin));
-    d->app->plugActionList(QString::fromLatin1("image_kipi_actions"),  kipiActionsByCategory(KIPI::ImagesPlugin));
-    d->app->plugActionList(QString::fromLatin1("tool_actions"),        kipiActionsByCategory(KIPI::ToolsPlugin));
-    d->app->plugActionList(QString::fromLatin1("batch_actions"),       kipiActionsByCategory(KIPI::BatchPlugin));
-    d->app->plugActionList(QString::fromLatin1("album_actions"),       kipiActionsByCategory(KIPI::CollectionsPlugin));
+    // Create plugin GUI menus in application.
+    kipiPlugActions();
+}
+
+void KipiPluginLoader::kipiPlugActions(bool unplug)
+{
+    if (unplug)
+    {
+        d->app->unplugActionList(QString::fromLatin1("file_actions_export"));
+        d->app->unplugActionList(QString::fromLatin1("file_actions_import"));
+        d->app->unplugActionList(QString::fromLatin1("image_kipi_actions"));
+        d->app->unplugActionList(QString::fromLatin1("tool_actions"));
+        d->app->unplugActionList(QString::fromLatin1("batch_actions"));
+        d->app->unplugActionList(QString::fromLatin1("album_actions"));
+    }
+    else
+    {
+        d->app->plugActionList(QString::fromLatin1("file_actions_export"), kipiActionsByCategory(KIPI::ExportPlugin));
+        d->app->plugActionList(QString::fromLatin1("file_actions_import"), kipiActionsByCategory(KIPI::ImportPlugin));
+        d->app->plugActionList(QString::fromLatin1("image_kipi_actions"),  kipiActionsByCategory(KIPI::ImagesPlugin));
+        d->app->plugActionList(QString::fromLatin1("tool_actions"),        kipiActionsByCategory(KIPI::ToolsPlugin));
+        d->app->plugActionList(QString::fromLatin1("batch_actions"),       kipiActionsByCategory(KIPI::BatchPlugin));
+        d->app->plugActionList(QString::fromLatin1("album_actions"),       kipiActionsByCategory(KIPI::CollectionsPlugin));
+    }
 }
 
 } //namespace Digikam

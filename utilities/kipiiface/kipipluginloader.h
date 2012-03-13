@@ -51,7 +51,6 @@ class KipiPluginLoader : public QObject
 public:
 
     KipiPluginLoader(QObject* const parent, SplashScreen* const splash);
-    ~KipiPluginLoader();
 
     /** Return a list of all plugin actions accordingly of plugin category.
      *  See KIPI::Category enum for details.
@@ -61,6 +60,10 @@ public:
     /** Return the instance of action collection for all KIPI plugins.
      */
     KActionCollection* pluginsActionCollection() const;
+
+    /** Plug or unplug plugins actions list to application
+     */
+    void kipiPlugActions(bool unplug=false);
 
     /** Return the instance of this singleton plugin loader
      */
@@ -72,6 +75,7 @@ private Q_SLOTS:
 
 private:
 
+    ~KipiPluginLoader();
     void loadPlugins();
 
 private:
