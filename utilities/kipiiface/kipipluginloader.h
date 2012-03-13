@@ -52,8 +52,6 @@ public:
     /// KIPI menu collections.
     const QList<QAction*>& menuExportActions();
     const QList<QAction*>& menuImportActions();
-    const QList<QAction*>& menuMetadataActions();
-    const QList<QAction*>& menuPrintActions();
     const QList<QAction*>& menuImageActions();
     const QList<QAction*>& menuToolsActions();
     const QList<QAction*>& menuBatchActions();

@@ -78,8 +78,6 @@ public:
 
     QList<QAction*>     kipiFileActionsExport;
     QList<QAction*>     kipiFileActionsImport;
-    QList<QAction*>     kipiPrintActions;
-    QList<QAction*>     kipiMetadataActions;
     QList<QAction*>     kipiImageActions;
     QList<QAction*>     kipiToolsActions;
     QList<QAction*>     kipiBatchActions;
@@ -118,16 +116,6 @@ const QList<QAction*>& KipiPluginLoader::menuExportActions()
 const QList<QAction*>& KipiPluginLoader::menuImportActions()
 {
     return d->kipiFileActionsImport;
-}
-
-const QList<QAction*>& KipiPluginLoader::menuMetadataActions()
-{
-    return d->kipiMetadataActions;
-}
-
-const QList<QAction*>& KipiPluginLoader::menuPrintActions()
-{
-    return d->kipiPrintActions;
 }
 
 const QList<QAction*>& KipiPluginLoader::menuImageActions()
@@ -190,9 +178,7 @@ void KipiPluginLoader::slotKipiPluginPlug()
 {
     d->app->unplugActionList(QString::fromLatin1("file_actions_export"));
     d->app->unplugActionList(QString::fromLatin1("file_actions_import"));
-    d->app->unplugActionList(QString::fromLatin1("image_print_actions"));
-    d->app->unplugActionList(QString::fromLatin1("image_metadata_actions"));
-    d->app->unplugActionList(QString::fromLatin1("image_actions"));
+    d->app->unplugActionList(QString::fromLatin1("image_kipi_actions"));
     d->app->unplugActionList(QString::fromLatin1("tool_actions"));
     d->app->unplugActionList(QString::fromLatin1("batch_actions"));
     d->app->unplugActionList(QString::fromLatin1("album_actions"));
@@ -203,8 +189,6 @@ void KipiPluginLoader::slotKipiPluginPlug()
     d->kipiToolsActions.clear();
     d->kipiBatchActions.clear();
     d->kipiAlbumActions.clear();
-    d->kipiPrintActions.clear();
-    d->kipiMetadataActions.clear();
 
     // Remove Advanced slideshow kipi-plugin action from View/Slideshow menu.
     foreach(QAction* const action, d->app->slideShowMenu()->menu()->actions())
@@ -309,21 +293,7 @@ void KipiPluginLoader::slotKipiPluginPlug()
                     }
                     case KIPI::ImagesPlugin:
                     {
-                        if (plugin->objectName() == "PrintImages")
-                        {
-                            d->kipiPrintActions.append(action);
-                        }
-                        else if (plugin->objectName() == "GPSSync"      ||
-                                 plugin->objectName() == "MetadataEdit" ||
-                                 plugin->objectName() == "TimeAdjust")
-                        {
-                            d->kipiMetadataActions.append(action);
-                        }
-                        else
-                        {
-                            d->kipiImageActions.append(action);
-                        }
-
+                        d->kipiImageActions.append(action);
                         break;
                     }
                     case KIPI::ToolsPlugin:
@@ -369,9 +339,7 @@ void KipiPluginLoader::slotKipiPluginPlug()
     // Create GUI menu in according with plugins.
     d->app->plugActionList(QString::fromLatin1("file_actions_export"),    d->kipiFileActionsExport);
     d->app->plugActionList(QString::fromLatin1("file_actions_import"),    d->kipiFileActionsImport);
-    d->app->plugActionList(QString::fromLatin1("image_print_actions"),    d->kipiPrintActions);
-    d->app->plugActionList(QString::fromLatin1("image_metadata_actions"), d->kipiMetadataActions);
-    d->app->plugActionList(QString::fromLatin1("image_actions"),          d->kipiImageActions);
+    d->app->plugActionList(QString::fromLatin1("image_kipi_actions"),     d->kipiImageActions);
     d->app->plugActionList(QString::fromLatin1("tool_actions"),           d->kipiToolsActions);
     d->app->plugActionList(QString::fromLatin1("batch_actions"),          d->kipiBatchActions);
     d->app->plugActionList(QString::fromLatin1("album_actions"),          d->kipiAlbumActions);

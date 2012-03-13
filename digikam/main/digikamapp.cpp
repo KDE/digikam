@@ -2408,9 +2408,7 @@ void DigikamApp::slotConfToolbars()
         createGUI(xmlFile());
         applyMainWindowSettings(d->config->group("General Settings"));
         plugActionList(QString::fromLatin1("file_actions_import"),    KipiPluginLoader::instance()->menuImportActions());
-        plugActionList(QString::fromLatin1("image_print_actions"),    KipiPluginLoader::instance()->menuPrintActions());
-        plugActionList(QString::fromLatin1("image_metadata_actions"), KipiPluginLoader::instance()->menuMetadataActions());
-        plugActionList(QString::fromLatin1("image_actions"),          KipiPluginLoader::instance()->menuImageActions());
+        plugActionList(QString::fromLatin1("image_kipi_actions"),     KipiPluginLoader::instance()->menuImageActions());
         plugActionList(QString::fromLatin1("tool_actions"),           KipiPluginLoader::instance()->menuToolsActions());
         plugActionList(QString::fromLatin1("batch_actions"),          KipiPluginLoader::instance()->menuBatchActions());
         plugActionList(QString::fromLatin1("album_actions"),          KipiPluginLoader::instance()->menuAlbumActions());

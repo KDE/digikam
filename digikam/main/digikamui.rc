@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="204" name="digikam" >
+<gui version="206" name="digikam" >
 
  <MenuBar>
 
@@ -56,19 +56,15 @@
      <Action name="image_add_to_current_queue" />
      <Action name="image_add_to_new_queue" />
      <Action name="image_find_similar" />
-   <Separator />
-     <ActionList name="image_print_actions"/>
-   <Separator />
      <Action name="image_write_metadata" />
      <Action name="image_read_metadata" />
-     <ActionList name="image_metadata_actions"/>
    <Separator />
      <Action name="image_rotate"/>
      <Action name="image_flip"/>
      <Action name="image_transform_exif"/>
      <Action name="image_set_exif_orientation"/>
    <Separator />
-     <ActionList name="image_actions"/>
+     <ActionList name="image_kipi_actions"/>
    <Separator />
   </Menu>
 
