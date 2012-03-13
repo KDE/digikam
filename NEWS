@@ -85,4 +85,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 066 ==> 223232 : digiKam Does Not Detect the Color Profile in DCF Files.
 067 ==> 295340 : Digikam crashed while tagging faces.
 068 ==> 278927 : Not all files read.
-069 ==> 
+069 ==> 261879 : Ubuntu unity compatibility bugs: export menu disappeared.
+070 ==> 
+
