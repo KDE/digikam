@@ -4,11 +4,7 @@ TUTORIAL HOW TO INSTALL DIGIKAM UNDER MACOSX
 1 - INSTALLING MACPORT
 ----------------------
 
-digiKam can be installed through MacPort project. Current version avaialble can be found here:
-
-http://www.macports.org/ports.php?by=name&substr=digikam
-
-To install it, please follow these instructions to enter in a console:
+digiKam can be installed through MacPort project. To install it, please follow these instructions to enter in a console:
 
 * Install development environnement from apple (http://developer.apple.com/xcode).
   It's free, you just need to create an acount on apple.com to download it.
