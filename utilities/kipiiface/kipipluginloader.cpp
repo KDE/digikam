@@ -272,30 +272,22 @@ void KipiPluginLoader::slotKipiPluginPlug()
     // Check if the Export/Import/tools Plugin lists are empty, if so, add an empty action which tells the user that no 
     // Export/Import/tools plugins are available. It is more user-friendly to present some menu entry, 
     // instead of leaving it completely empty.
-
-    if (kipiActionsByCategory(KIPI::ExportPlugin).empty())
-    {
-        QAction* action = new QAction(i18n("No tool available"), d->app);
-        action->setEnabled(false);
-        d->kipiActionsMap.insert(KIPI::ExportPlugin, action);
-    }
-
-    if (kipiActionsByCategory(KIPI::ImportPlugin).empty())
-    {
-        QAction* action = new QAction(i18n("No tool available"), d->app);
-        action->setEnabled(false);
-        d->kipiActionsMap.insert(KIPI::ImportPlugin, action);
-    }
-
-    if (kipiActionsByCategory(KIPI::ToolsPlugin).empty())
-    {
-        QAction* action = new QAction(i18n("No tool available"), d->app);
-        action->setEnabled(false);
-        d->kipiActionsMap.insert(KIPI::ToolsPlugin, action);
-    }
+    checkEmptyCategory(KIPI::ExportPlugin);
+    checkEmptyCategory(KIPI::ImportPlugin);
+    checkEmptyCategory(KIPI::ToolsPlugin);
 
     // Create plugin GUI menus in application.
     kipiPlugActions();
+}
+
+void KipiPluginLoader::checkEmptyCategory(KIPI::Category category)
+{
+    if (kipiActionsByCategory(category).empty())
+    {
+        QAction* action = new QAction(i18n("No tool available"), d->app);
+        action->setEnabled(false);
+        d->kipiActionsMap.insert(category, action);
+    }
 }
 
 void KipiPluginLoader::kipiPlugActions(bool unplug)

@@ -80,6 +80,7 @@ private:
 
     ~KipiPluginLoader();
     void loadPlugins();
+    void checkEmptyCategory(KIPI::Category category);
 
 private:
 
