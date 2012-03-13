@@ -77,15 +77,6 @@ Q_SIGNALS:
 
     void editorCurrentUrlChanged(const KUrl& url);
 
-    void imageRenameSucceeded(const KUrl&);
-    void imageRenameFailed(const KUrl&);
-    void renamingAborted();
-
-protected Q_SLOTS:
-
-    void slotDIOResult(KJob* kjob);
-    void slotRenamed(KIO::Job*, const KUrl&, const KUrl& newURL);
-
 protected:
 
     QWidget* m_widget;

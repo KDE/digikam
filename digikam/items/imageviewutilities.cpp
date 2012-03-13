@@ -60,8 +60,6 @@
 namespace Digikam
 {
 
-const QString renameFileProperty("AdvancedRename source file");
-
 ImageViewUtilities::ImageViewUtilities(QWidget* parentWidget)
     : QObject(parentWidget)
 {
@@ -99,47 +97,20 @@ void ImageViewUtilities::rename(const KUrl& imageUrl, const QString& newName)
     }
 
     ImageInfo info(imageUrl.toLocalFile());
-
-    KIO::CopyJob* job = DIO::rename(info, newName);
-    job->setProperty(renameFileProperty.toAscii(), imageUrl.toLocalFile());
-
-    connect(job, SIGNAL(result(KJob*)),
-            this, SLOT(slotDIOResult(KJob*)));
-
-    connect(job, SIGNAL(copyingDone(KIO::Job*,KUrl,KUrl,time_t,bool,bool)),
-            this, SLOT(slotRenamed(KIO::Job*,KUrl,KUrl)));
-}
-
-void ImageViewUtilities::slotRenamed(KIO::Job* job, const KUrl&, const KUrl& newURL)
-{
-    // reconstruct file path from digikamalbums:// URL
-    KUrl fileURL;
-    fileURL.setPath(newURL.user());
-    fileURL.addPath(newURL.path());
-
-    // refresh thumbnail
-    ThumbnailLoadThread::deleteThumbnail(fileURL.toLocalFile());
-    // clean LoadingCache as well - be pragmatic, do it here.
-    LoadingCacheInterface::fileChanged(fileURL.toLocalFile());
-
-    KUrl url(job->property(renameFileProperty.toAscii()).toString());
-    emit imageRenameSucceeded(url);
+    DIO::rename(info, newName);
 }
 
 bool ImageViewUtilities::deleteImages(const QList<ImageInfo>& infos, bool deletePermanently)
 {
-    KUrl::List urlList;
-    KUrl::List kioUrlList;
+    if (infos.isEmpty())
+    {
+        return false;
+    }
 
+    KUrl::List urlList;
     foreach(const ImageInfo& info, infos)
     {
         urlList << info.fileUrl();
-        kioUrlList << info.databaseUrl();
-    }
-
-    if (urlList.count() <= 0)
-    {
-        return false;
     }
 
     DeleteDialog dialog(m_widget);
@@ -155,17 +126,7 @@ bool ImageViewUtilities::deleteImages(const QList<ImageInfo>& infos, bool delete
 
     bool useTrash = !dialog.shouldDelete();
 
-    // trash does not like non-local URLs, put is not implemented
-
-#ifdef WIN32
-    KIO::Job* job = DIO::del(kioUrlList, useTrash);
-#else
-    KIO::Job* job = DIO::del(useTrash ? urlList : kioUrlList, useTrash);
-#endif
-
-    connect(job, SIGNAL(result(KJob*)),
-            this, SLOT(slotDIOResult(KJob*)));
-
+    DIO::del(infos, useTrash);
     return true;
 }
 
@@ -174,58 +135,11 @@ void ImageViewUtilities::deleteImagesDirectly(const QList<ImageInfo>& infos, boo
     // This method deletes the selected items directly, without confirmation.
     // It is not used in the default setup.
 
-    KUrl::List kioUrlList;
-    KUrl::List urlList;
-
-    foreach(const ImageInfo& info, infos)
-    {
-        urlList << info.fileUrl();
-        kioUrlList << info.databaseUrl();
-    }
-
-    if (kioUrlList.count() <= 0)
+    if (infos.isEmpty())
     {
         return;
     }
-
-    // trash does not like non-local URLs, put is not implemented
-
-#ifdef WIN32
-    KIO::Job* job = DIO::del(kioUrlList , useTrash);
-#else
-    KIO::Job* job = DIO::del(useTrash ? urlList : kioUrlList , useTrash);
-#endif
-
-    connect(job, SIGNAL(result(KJob*)),
-            this, SLOT(slotDIOResult(KJob*)));
-}
-
-void ImageViewUtilities::slotDIOResult(KJob* kjob)
-{
-    KIO::Job* job = static_cast<KIO::Job*>(kjob);
-
-    if (job->error())
-    {
-        // this slot can be used by others, too.
-        // check if image renaming property is set.
-        QVariant v = job->property(renameFileProperty.toAscii());
-
-        if (!v.isNull())
-        {
-            if (job->error() == KIO::Job::KilledJobError)
-            {
-                emit renamingAborted();
-            }
-            else
-            {
-                KUrl url(v.toString());
-                emit imageRenameFailed(url);
-            }
-        }
-
-        job->ui()->setWindow(m_widget);
-        job->ui()->showErrorMessage();
-    }
+    DIO::del(infos, useTrash);
 }
 
 void ImageViewUtilities::notifyFileContentChanged(const KUrl::List& urls)
@@ -241,16 +155,7 @@ void ImageViewUtilities::notifyFileContentChanged(const KUrl::List& urls)
 
 void ImageViewUtilities::createNewAlbumForInfos(const QList<ImageInfo>& infos, Album* currentAlbum)
 {
-    KUrl::List       kioURLs;
-    QList<qlonglong> imageIDs;
-
-    foreach(const ImageInfo& info, infos)
-    {
-        imageIDs << info.id();
-        kioURLs << info.databaseUrl();
-    }
-
-    if (kioURLs.isEmpty() || imageIDs.isEmpty())
+    if (infos.isEmpty())
     {
         return;
     }
@@ -270,9 +175,7 @@ void ImageViewUtilities::createNewAlbumForInfos(const QList<ImageInfo>& infos, A
         return;
     }
 
-    KIO::Job* job = DIO::move(kioURLs, imageIDs, (PAlbum*)album);
-    connect(job, SIGNAL(result(KJob*)),
-            this, SLOT(slotDIOResult(KJob*)));
+    DIO::move(infos, (PAlbum*)album);
 }
 
 void ImageViewUtilities::insertToLightTableAuto(const QList<ImageInfo>& all, const QList<ImageInfo>& selected, const ImageInfo& current)

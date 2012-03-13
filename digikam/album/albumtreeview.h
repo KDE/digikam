@@ -511,9 +511,6 @@ public Q_SLOTS:
     void setCurrentAlbum(PAlbum* album, bool selectInAlbumManager = true);
     void setCurrentAlbum(int albumId, bool selectInAlbumManager = true);
 
-private Q_SLOTS:
-
-    void slotDIOResult(KJob* job);
 };
 
 // -------------------------------------------------------------------------------------

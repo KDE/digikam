@@ -201,14 +201,7 @@ void AlbumModificationHelper::slotAlbumDelete(PAlbum* album)
 
     // Currently trash kioslave can handle only full paths.
     // pass full folder path to the trashing job
-    //TODO: Use digikamalbums:// url?
-    KUrl u;
-    u.setProtocol("file");
-    u.setPath(album->folderPath());
-    KIO::Job* job = DIO::del(u, useTrash);
-
-    connect(job, SIGNAL(result(KJob*)),
-            this, SLOT(slotDIOResult(KJob*)));
+    DIO::del(album, useTrash);
 }
 
 void AlbumModificationHelper::slotAlbumRename()
@@ -259,17 +252,6 @@ void AlbumModificationHelper::addAlbumChildrenToList(KUrl::List& list, Album* al
             addAlbumChildrenToList(list, *it);
             ++it;
         }
-    }
-}
-
-void AlbumModificationHelper::slotDIOResult(KJob* kjob)
-{
-    KIO::Job* job = static_cast<KIO::Job*>(kjob);
-
-    if (job->error())
-    {
-        job->ui()->setWindow(d->dialogParent);
-        job->ui()->showErrorMessage();
     }
 }
 

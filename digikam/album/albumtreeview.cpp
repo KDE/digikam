@@ -1422,9 +1422,6 @@ void AlbumTreeView::setAlbumModel(AlbumModel* model)
     {
         m_dragDropHandler = new AlbumDragDropHandler(albumModel());
 
-        connect(m_dragDropHandler, SIGNAL(dioResult(KJob*)),
-                this, SLOT(slotDIOResult(KJob*)));
-
         model->setDragDropHandler(m_dragDropHandler);
     }
 }
@@ -1447,17 +1444,6 @@ PAlbum* AlbumTreeView::currentAlbum() const
 PAlbum* AlbumTreeView::albumForIndex(const QModelIndex& index) const
 {
     return dynamic_cast<PAlbum*> (m_albumFilterModel->albumForIndex(index));
-}
-
-void AlbumTreeView::slotDIOResult(KJob* kjob)
-{
-    KIO::Job* job = static_cast<KIO::Job*>(kjob);
-
-    if (job->error())
-    {
-        job->ui()->setWindow(this);
-        job->ui()->showErrorMessage();
-    }
 }
 
 void AlbumTreeView::setCurrentAlbum(PAlbum* album, bool selectInAlbumManager)

@@ -102,9 +102,7 @@ bool AlbumDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* 
 
         if (choice == moveAction)
         {
-            KIO::Job* job = DIO::move(droppedAlbum, destAlbum);
-            connect(job, SIGNAL(result(KJob*)),
-                    this, SIGNAL(dioResult(KJob*)));
+            DIO::move(droppedAlbum, destAlbum);
         }
 
         return true;
@@ -129,9 +127,7 @@ bool AlbumDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* 
 
         // Check if items dropped come from outside current album.
         // This can be the case with recursive content album mode.
-        KUrl::List       extUrls;
         ImageInfoList    extImgInfList;
-        QList<qlonglong> extImageIDs;
 
         for (QList<qlonglong>::const_iterator it = imageIDs.constBegin(); it != imageIDs.constEnd(); ++it)
         {
@@ -139,13 +135,11 @@ bool AlbumDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* 
 
             if (info.albumId() != destAlbum->id())
             {
-                extUrls.append(info.databaseUrl());
-                extImgInfList.append(info);
-                extImageIDs << *it;
+                extImgInfList << info;
             }
         }
 
-        if (extUrls.isEmpty())
+        if (extImgInfList.isEmpty())
         {
             // Setting the dropped image as the album thumbnail
             // If the ctrl key is pressed, when dropping the image, the
@@ -239,20 +233,16 @@ bool AlbumDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* 
 
         if (move)
         {
-            KIO::Job* job = DIO::move(extUrls, extImageIDs, destAlbum);
-            connect(job, SIGNAL(result(KJob*)),
-                    this, SIGNAL(dioResult(KJob*)));
+            DIO::move(extImgInfList, destAlbum);
         }
         else if (copy)
         {
-            KIO::Job* job = DIO::copy(extUrls, extImageIDs, destAlbum);
-            connect(job, SIGNAL(result(KJob*)),
-                    this, SIGNAL(dioResult(KJob*)));
+            DIO::copy(extImgInfList, destAlbum);
         }
         else if (setThumbnail)
         {
             QString errMsg;
-            AlbumManager::instance()->updatePAlbumIcon(destAlbum, imageIDs.first(), errMsg);
+            AlbumManager::instance()->updatePAlbumIcon(destAlbum, extImgInfList.first().id(), errMsg);
         }
 
         return true;
@@ -291,8 +281,6 @@ bool AlbumDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* 
     // -- DnD from an external source ---------------------
     else if (KUrl::List::canDecode(e->mimeData()))
     {
-        KUrl destURL(destAlbum->databaseUrl());
-
         KUrl::List srcURLs = KUrl::List::fromMimeData(e->mimeData());
 
         bool move = false, copy = false;
@@ -337,15 +325,11 @@ bool AlbumDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* 
 
         if (move)
         {
-            KIO::Job* job = DIO::move(srcURLs, destAlbum);
-            connect(job, SIGNAL(result(KJob*)),
-                    this, SIGNAL(dioResult(KJob*)));
+            DIO::move(srcURLs, destAlbum);
         }
         else if (copy)
         {
-            KIO::Job* job = DIO::copy(srcURLs, destAlbum);
-            connect(job, SIGNAL(result(KJob*)),
-                    this, SIGNAL(dioResult(KJob*)));
+            DIO::copy(srcURLs, destAlbum);
         }
 
         return true;

@@ -230,6 +230,7 @@ DigikamApp::DigikamApp()
     ProgressManager::instance();
     KipiPluginLoader::instance();
     ThumbnailLoadThread::setDisplayingWidget(this);
+    DIO::instance();
 
     // creation of the engine on first use - when drawing -
     // can take considerable time and cause a noticeable hang in the UI thread.
@@ -341,6 +342,7 @@ DigikamApp::~DigikamApp()
     ThumbnailLoadThread::cleanUp();
     AlbumThumbnailLoader::instance()->cleanUp();
     LoadingCacheInterface::cleanUp();
+    DIO::cleanUp();
 
     // close database server
     if (AlbumSettings::instance()->getInternalDatabaseServer())
@@ -2692,21 +2694,7 @@ void DigikamApp::slotImportAddFolders()
         return;
     }
 
-    KIO::Job* job = DIO::copy(urls, pAlbum);
-
-    connect(job, SIGNAL(result(KJob*)),
-            this, SLOT(slotDIOResult(KJob*)));
-}
-
-void DigikamApp::slotDIOResult(KJob* kjob)
-{
-    KIO::Job* job = static_cast<KIO::Job*>(kjob);
-
-    if (job->error())
-    {
-        job->ui()->setWindow(this);
-        job->ui()->showErrorMessage();
-    }
+    DIO::copy(urls, pAlbum);
 }
 
 void DigikamApp::slotToggleShowBar()

@@ -1279,10 +1279,6 @@ void ImageWindow::deleteCurrentItem(bool ask, bool permanently)
 
     //PAlbum* palbum = AlbumManager::instance()->findPAlbum(d->currentImageInfo.albumId());
 
-    // provide a digikamalbums:// URL to KIO
-    KUrl kioURL = d->currentImageInfo.databaseUrl();
-    KUrl fileURL = d->currentUrl();
-
     bool useTrash;
 
     if (ask)
@@ -1292,7 +1288,7 @@ void ImageWindow::deleteCurrentItem(bool ask, bool permanently)
         DeleteDialog dialog(this);
 
         KUrl::List urlList;
-        urlList.append(fileURL);
+        urlList << d->currentUrl();
 
         if (!dialog.confirmDeleteList(urlList,
                                       DeleteDialogMode::Files,
@@ -1312,41 +1308,12 @@ void ImageWindow::deleteCurrentItem(bool ask, bool permanently)
     // bring all (sidebar) to a defined state without letting them sit on the deleted file
     emit signalNoCurrentItem();
 
-    // trash does not like non-local URLs, put is not implemented
-    if (useTrash)
-    {
-        kioURL = fileURL;
-    }
-
-    /*int index = d->urlList.indexOf(d->currentUrl());
-
-    if (d->currentImageInfo.isNull())
-    {
-        // no database information: Do it the old way
-
-        SyncJobResult deleteResult = SyncJob::del(kioURL, useTrash);
-
-        if (!deleteResult)
-        {
-            KMessageBox::error(this, deleteResult.errorString);
-            return;
-        }
-
-        emit signalFileDeleted(d->currentUrl());
-
-    }
-    else
-    {
-    }*/
-
     // We have database information, which means information will get through
     // everywhere. Just do it asynchronously.
 
     removeCurrent();
 
-    KIO::Job* job = DIO::del(kioURL, useTrash);
-    job->ui()->setWindow(this);
-    job->ui()->setAutoErrorHandlingEnabled(true);
+    DIO::del(d->currentImageInfo, useTrash);
 }
 
 void ImageWindow::removeCurrent()

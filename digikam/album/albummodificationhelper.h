@@ -120,10 +120,6 @@ public Q_SLOTS:
     void slotAlbumResetIcon(PAlbum* album);
     void slotAlbumResetIcon();
 
-private Q_SLOTS:
-
-    void slotDIOResult(KJob* kjob);
-
 private:
 
     void addAlbumChildrenToList(KUrl::List& list, Album* album);

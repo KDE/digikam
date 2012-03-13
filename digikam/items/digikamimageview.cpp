@@ -158,9 +158,6 @@ DigikamImageView::DigikamImageView(QWidget* parent)
     connect(imageModel()->dragDropHandler(), SIGNAL(addToGroup(ImageInfo,QList<ImageInfo>)),
             FileActionMngr::instance(), SLOT(addToGroup(ImageInfo,QList<ImageInfo>)));
 
-    connect(imageModel()->dragDropHandler(), SIGNAL(dioResult(KJob*)),
-            d->utilities, SLOT(slotDIOResult(KJob*)));
-
     connect(settings, SIGNAL(setupChanged()),
             this, SLOT(slotSetupChanged()));
 

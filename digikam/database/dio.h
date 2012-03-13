@@ -35,39 +35,68 @@ namespace Digikam
 class PAlbum;
 class ImageInfo;
 
-namespace DIO
+class DIO : public QObject
 {
-/// Copy an album to another album
-KIO::Job* copy(const PAlbum* src, const PAlbum* dest);
+    Q_OBJECT
 
-/// Copy items to another album
-KIO::Job* copy(const KUrl::List& srcList, const QList<qlonglong> ids, const PAlbum* dest);
+public:
 
-/// Copy an external file to another album
-KIO::Job* copy(const KUrl& src, const PAlbum* dest);
+    static void cleanUp();
 
-/// Copy external files to another album
-KIO::Job* copy(const KUrl::List& srcList, const PAlbum* dest);
+    /// Copy an album to another album
+    static void copy(const PAlbum* src, const PAlbum* dest);
 
-/// Move an album into another album
-KIO::Job* move(const PAlbum* src, const PAlbum* dest);
+    /// Copy items to another album
+    static void copy(const QList<ImageInfo> infos, const PAlbum* dest);
 
-/// Move items to another album
-KIO::Job* move(const KUrl::List& srcList, const QList<qlonglong> ids, const PAlbum* dest);
+    /// Copy an external file to another album
+    static void copy(const KUrl& src, const PAlbum* dest);
 
-/// Move external files another album
-KIO::Job* move(const KUrl& src, const PAlbum* dest);
+    /// Copy external files to another album
+    static void copy(const KUrl::List& srcList, const PAlbum* dest);
 
-/// Move external files into another album
-KIO::Job* move(const KUrl::List& srcList, const PAlbum* dest);
+    /// Move an album into another album
+    static void move(const PAlbum* src, const PAlbum* dest);
 
-KIO::Job* del(const KUrl& src, bool useTrash = true);
+    /// Move items to another album
+    static void move(const QList<ImageInfo> infos, const PAlbum* dest);
 
-KIO::Job* del(const KUrl::List& srcList, bool useTrash = true);
+    /// Move external files another album
+    static void move(const KUrl& src, const PAlbum* dest);
 
-/// Rename item to new name
-KIO::CopyJob* rename(const ImageInfo& info, const QString& newName);
-}
+    /// Move external files into another album
+    static void move(const KUrl::List& srcList, const PAlbum* dest);
+
+    static void del(const QList<ImageInfo>& infos, bool useTrash);
+    static void del(const ImageInfo& info, bool useTrash);
+    static void del(PAlbum* album, bool useTrash);
+
+    /// Rename item to new name
+    static void rename(const ImageInfo& info, const QString& newName);
+
+    static DIO* instance();
+
+Q_SIGNALS:
+
+    void imageRenameSucceeded(const KUrl&);
+    void imageRenameFailed(const KUrl&);
+    void renamingAborted(const KUrl&);
+
+protected Q_SLOTS:
+
+    void slotResult(KJob* kjob);
+    void slotRenamed(KIO::Job*, const KUrl&, const KUrl& newURL);
+    KIO::Job* createJob(int operation, const KUrl::List& src, const KUrl& dest);
+
+private:
+
+    DIO();
+    ~DIO();
+
+    friend class DIOCreator;
+    class DIOPriv;
+    DIOPriv* const d;
+};
 
 } // namespace Digikam
 

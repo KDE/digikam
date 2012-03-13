@@ -34,8 +34,9 @@
 
 // Local includes
 
-#include "thumbnailloadthread.h"
+#include "dio.h"
 #include "imageviewutilities.h"
+#include "thumbnailloadthread.h"
 
 namespace Digikam
 {
@@ -67,13 +68,13 @@ AdvancedRenameProcessDialog::AdvancedRenameProcessDialog(const NewNamesList& lis
     connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(LoadingDescription,QPixmap)),
             this, SLOT(slotGotThumbnail(LoadingDescription,QPixmap)));
 
-    connect(d->utilities, SIGNAL(imageRenameSucceeded(KUrl)),
+    connect(DIO::instance(), SIGNAL(imageRenameSucceeded(KUrl, int)),
             this, SLOT(slotRenameSuccess(KUrl)));
 
-    connect(d->utilities, SIGNAL(imageRenameFailed(KUrl)),
+    connect(DIO::instance(), SIGNAL(imageRenameFailed(KUrl, int)),
             this, SLOT(slotRenameFailed(KUrl)));
 
-    connect(d->utilities, SIGNAL(renamingAborted()),
+    connect(DIO::instance(), SIGNAL(renamingAborted(KUrl, int)),
             this, SLOT(slotCancel()));
 
     setModal(true);

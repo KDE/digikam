@@ -272,8 +272,12 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
         else if (palbum)
         {
             // Check if items dropped come from outside current album.
-            KUrl::List       extUrls, intUrls;
-            QList<qlonglong> extImageIDs, intImageIDs;
+            QList<ImageInfo> extImages, intImages;
+
+            if (imageIDs.isEmpty())
+            {
+                return false;
+            }
 
             for (QList<qlonglong>::const_iterator it = imageIDs.constBegin(); it != imageIDs.constEnd(); ++it)
             {
@@ -281,27 +285,20 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
 
                 if (info.albumId() != album->id())
                 {
-                    extUrls << info.databaseUrl();
-                    extImageIDs << *it;
+                    extImages << info;
                 }
                 else
                 {
-                    intUrls << info.databaseUrl();
-                    intImageIDs << *it;
+                    intImages << info;
                 }
             }
 
-            if (intUrls.isEmpty() && extUrls.isEmpty())
-            {
-                return false;
-            }
-
-            bool onlyExternal = (intUrls.isEmpty() && !extUrls.isEmpty());
-            bool onlyInternal = (!intUrls.isEmpty() && extUrls.isEmpty());
-            bool mixed        = (!intUrls.isEmpty() && !extUrls.isEmpty());
+            bool onlyExternal = (intImages.isEmpty() && !extImages.isEmpty());
+            bool onlyInternal = (!intImages.isEmpty() && extImages.isEmpty());
+            bool mixed        = (!intImages.isEmpty() && !extImages.isEmpty());
 
             // Check for drop of image on itself
-            if (intImageIDs.size() == 1 && intImageIDs.first() == droppedOnInfo.id())
+            if (intImages.size() == 1 && intImages.first() == droppedOnInfo)
             {
                 return false;
             }
@@ -323,16 +320,12 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
 
                 if (action == MoveAction)
                 {
-                    KIO::Job* job = DIO::move(extUrls, extImageIDs, palbum);
-                    connect(job, SIGNAL(result(KJob*)),
-                            this, SIGNAL(dioResult(KJob*)));
+                    DIO::move(extImages, palbum);
                     return true;
                 }
                 else if (action == CopyAction)
                 {
-                    KIO::Job* job = DIO::copy(extUrls, extImageIDs, palbum);
-                    connect(job, SIGNAL(result(KJob*)),
-                            this, SIGNAL(dioResult(KJob*)));
+                    DIO::copy(extImages, palbum);
                     return true;
                 }
             }
@@ -344,9 +337,7 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
 
                 if (action == CopyAction)
                 {
-                    KIO::Job* job = DIO::copy(intUrls, intImageIDs, palbum);
-                    connect(job, SIGNAL(result(KJob*)),
-                            this, SIGNAL(dioResult(KJob*)));
+                    DIO::copy(intImages, palbum);
                     return true;
                 }
                 else if (action == MoveAction)
@@ -362,16 +353,12 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
 
                 if (action == MoveAction)
                 {
-                    KIO::Job* job = DIO::move(extUrls, extImageIDs, palbum);
-                    connect(job, SIGNAL(result(KJob*)),
-                            this, SIGNAL(dioResult(KJob*)));
+                    DIO::move(extImages, palbum);
                     return true;
                 }
                 else if (action == CopyAction)
                 {
-                    KIO::Job* job = DIO::copy(extUrls+intUrls, extImageIDs+intImageIDs, palbum);
-                    connect(job, SIGNAL(result(KJob*)),
-                            this, SIGNAL(dioResult(KJob*)));
+                    DIO::copy(extImages+intImages, palbum);
                     return true;
                 }
             }
@@ -429,15 +416,11 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
 
         if (action == MoveAction)
         {
-            KIO::Job* job = DIO::move(srcURLs, palbum);
-            connect(job, SIGNAL(result(KJob*)),
-                    this, SIGNAL(dioResult(KJob*)));
+            DIO::move(srcURLs, palbum);
         }
         else if (action == CopyAction)
         {
-            KIO::Job* job = DIO::copy(srcURLs, palbum);
-            connect(job, SIGNAL(result(KJob*)),
-                    this, SIGNAL(dioResult(KJob*)));
+            DIO::copy(srcURLs, palbum);
         }
 
         return true;
