@@ -41,8 +41,8 @@
 
 // LibKIPI includes
 
-#include <libkipi/interface.h>
 #include <libkipi/plugin.h>
+#include <libkipi/interface.h>
 #include <libkipi/pluginloader.h>
 
 // local includes
@@ -104,34 +104,9 @@ KActionCollection* KipiPluginLoader::pluginsActionCollection() const
     return d->kipipluginsActionCollection;
 }
 
-QList<QAction*> KipiPluginLoader::menuExportActions() const
+QList<QAction*> KipiPluginLoader::kipiActionsByCategory(KIPI::Category category) const
 {
-    return d->kipiActionsMap.values(KIPI::ExportPlugin);
-}
-
-QList<QAction*> KipiPluginLoader::menuImportActions() const
-{
-    return d->kipiActionsMap.values(KIPI::ImportPlugin);
-}
-
-QList<QAction*> KipiPluginLoader::menuImageActions() const
-{
-    return d->kipiActionsMap.values(KIPI::ImagesPlugin);
-}
-
-QList<QAction*> KipiPluginLoader::menuToolsActions() const
-{
-    return d->kipiActionsMap.values(KIPI::ToolsPlugin);
-}
-
-QList<QAction*> KipiPluginLoader::menuBatchActions() const
-{
-    return d->kipiActionsMap.values(KIPI::BatchPlugin);
-}
-
-QList<QAction*> KipiPluginLoader::menuAlbumActions() const
-{
-    return d->kipiActionsMap.values(KIPI::CollectionsPlugin);
+    return d->kipiActionsMap.values(category);
 }
 
 void KipiPluginLoader::loadPlugins()
@@ -260,51 +235,16 @@ void KipiPluginLoader::slotKipiPluginPlug()
 
             if (!pluginActionsDisabled.contains(actionName))
             {
-                switch (plugin->category(action))
+                int cat = plugin->category(action);
+
+                if (cat == KIPI::ToolsPlugin && actionName == QString("advancedslideshow"))
                 {
-                    case KIPI::BatchPlugin:
-                    {
-                        d->kipiActionsMap.insert(KIPI::BatchPlugin, action);
-                        break;
-                    }
-                    case KIPI::CollectionsPlugin:
-                    {
-                        d->kipiActionsMap.insert(KIPI::CollectionsPlugin, action);
-                        break;
-                    }
-                    case KIPI::ImportPlugin:
-                    {
-                        d->kipiActionsMap.insert(KIPI::ImportPlugin, action);
-                        break;
-                    }
-                    case KIPI::ExportPlugin:
-                    {
-                        d->kipiActionsMap.insert(KIPI::ExportPlugin, action);
-                        break;
-                    }
-                    case KIPI::ImagesPlugin:
-                    {
-                        d->kipiActionsMap.insert(KIPI::ImagesPlugin, action);
-                        break;
-                    }
-                    case KIPI::ToolsPlugin:
-                    {
-                        if (actionName == QString("advancedslideshow"))
-                        {
-                            // Add Advanced slideshow kipi-plugin action to View/Slideshow menu.
-                             d->app->slideShowMenu()->addAction(action);
-                        }
-                        else
-                        {
-                            d->kipiActionsMap.insert(KIPI::ToolsPlugin, action);
-                        }
-                        break;
-                    }
-                    default:
-                    {
-                        kDebug() << "No menu found for a plugin!";
-                        break;
-                    }
+                    // Wrap Advanced Slideshow kipi-plugin action to View/Slideshow menu.
+                    d->app->slideShowMenu()->addAction(action);
+                }
+                else
+                {
+                    d->kipiActionsMap.insert(cat, qobject_cast<QAction*>(action));
                 }
             }
             else
@@ -319,7 +259,7 @@ void KipiPluginLoader::slotKipiPluginPlug()
 
     // Check if the kipiFileActionsExport are empty, if so, add an empty action which tells the user that no export plugins are
     // available. It is more user-friendly to present some menu entry, instead of leaving it completely empty.
-    if (d->kipiActionsMap.values(KIPI::ExportPlugin).empty())
+    if (kipiActionsByCategory(KIPI::ExportPlugin).empty())
     {
         QAction* noPluginsLoaded = new QAction(i18n("No export plugins available"), d->app);
         noPluginsLoaded->setEnabled(false);
@@ -327,12 +267,12 @@ void KipiPluginLoader::slotKipiPluginPlug()
     }
 
     // Create GUI menu in according with plugins.
-    d->app->plugActionList(QString::fromLatin1("file_actions_export"), d->kipiActionsMap.values(KIPI::ExportPlugin));
-    d->app->plugActionList(QString::fromLatin1("file_actions_import"), d->kipiActionsMap.values(KIPI::ImportPlugin));
-    d->app->plugActionList(QString::fromLatin1("image_kipi_actions"),  d->kipiActionsMap.values(KIPI::ImagesPlugin));
-    d->app->plugActionList(QString::fromLatin1("tool_actions"),        d->kipiActionsMap.values(KIPI::ToolsPlugin));
-    d->app->plugActionList(QString::fromLatin1("batch_actions"),       d->kipiActionsMap.values(KIPI::BatchPlugin));
-    d->app->plugActionList(QString::fromLatin1("album_actions"),       d->kipiActionsMap.values(KIPI::CollectionsPlugin));
+    d->app->plugActionList(QString::fromLatin1("file_actions_export"), kipiActionsByCategory(KIPI::ExportPlugin));
+    d->app->plugActionList(QString::fromLatin1("file_actions_import"), kipiActionsByCategory(KIPI::ImportPlugin));
+    d->app->plugActionList(QString::fromLatin1("image_kipi_actions"),  kipiActionsByCategory(KIPI::ImagesPlugin));
+    d->app->plugActionList(QString::fromLatin1("tool_actions"),        kipiActionsByCategory(KIPI::ToolsPlugin));
+    d->app->plugActionList(QString::fromLatin1("batch_actions"),       kipiActionsByCategory(KIPI::BatchPlugin));
+    d->app->plugActionList(QString::fromLatin1("album_actions"),       kipiActionsByCategory(KIPI::CollectionsPlugin));
 }
 
 } //namespace Digikam

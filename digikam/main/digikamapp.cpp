@@ -2407,12 +2407,14 @@ void DigikamApp::slotConfToolbars()
     {
         createGUI(xmlFile());
         applyMainWindowSettings(d->config->group("General Settings"));
-        plugActionList(QString::fromLatin1("file_actions_import"),    KipiPluginLoader::instance()->menuImportActions());
-        plugActionList(QString::fromLatin1("image_kipi_actions"),     KipiPluginLoader::instance()->menuImageActions());
-        plugActionList(QString::fromLatin1("tool_actions"),           KipiPluginLoader::instance()->menuToolsActions());
-        plugActionList(QString::fromLatin1("batch_actions"),          KipiPluginLoader::instance()->menuBatchActions());
-        plugActionList(QString::fromLatin1("album_actions"),          KipiPluginLoader::instance()->menuAlbumActions());
-        plugActionList(QString::fromLatin1("file_actions_export"),    KipiPluginLoader::instance()->menuExportActions());
+
+        KipiPluginLoader* const pl = KipiPluginLoader::instance();
+        plugActionList(QString::fromLatin1("file_actions_export"), pl->kipiActionsByCategory(KIPI::ExportPlugin));
+        plugActionList(QString::fromLatin1("file_actions_import"), pl->kipiActionsByCategory(KIPI::ImportPlugin));
+        plugActionList(QString::fromLatin1("image_kipi_actions"),  pl->kipiActionsByCategory(KIPI::ImagesPlugin));
+        plugActionList(QString::fromLatin1("tool_actions"),        pl->kipiActionsByCategory(KIPI::ToolsPlugin));
+        plugActionList(QString::fromLatin1("batch_actions"),       pl->kipiActionsByCategory(KIPI::BatchPlugin));
+        plugActionList(QString::fromLatin1("album_actions"),       pl->kipiActionsByCategory(KIPI::CollectionsPlugin));
     }
 
     delete dlg;

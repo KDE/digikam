@@ -31,6 +31,10 @@
 #include <QList>
 #include <QString>
 
+// LibKIPI includes
+
+#include <libkipi/plugin.h>
+
 class QAction;
 
 class KActionCollection;
@@ -49,17 +53,17 @@ public:
     KipiPluginLoader(QObject* const parent, SplashScreen* const splash);
     ~KipiPluginLoader();
 
-    /// KIPI menu collections.
-    QList<QAction*> menuExportActions() const;
-    QList<QAction*> menuImportActions() const;
-    QList<QAction*> menuImageActions()  const;
-    QList<QAction*> menuToolsActions()  const;
-    QList<QAction*> menuBatchActions()  const;
-    QList<QAction*> menuAlbumActions()  const;
+    /** Return a list of all plugin actions accordingly of plugin category.
+     *  See KIPI::Category enum for details.
+     */
+    QList<QAction*> kipiActionsByCategory(KIPI::Category category) const;
 
-    /// KIPI action collections.
+    /** Return the instance of action collection for all KIPI plugins.
+     */
     KActionCollection* pluginsActionCollection() const;
 
+    /** Return the instance of this singleton plugin loader
+     */
     static KipiPluginLoader* instance();
 
 private Q_SLOTS:
