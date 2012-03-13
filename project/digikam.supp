@@ -24,11 +24,43 @@
 }
 
 {
+   GLib lib
+   Memcheck:Leak
+   ...
+   obj:/usr/lib64/libglib*.so.*
+   obj:/usr/lib64/libglib*.so.*
+}
+
+{
+   GLib lib
+   Memcheck:Leak
+   ...
+   obj:/lib64/libglib*.so.*
+   obj:/lib64/libglib*.so.*
+}
+
+{
    GObject lib
    Memcheck:Leak
    ...
    obj:/usr/lib/libgobject*.so.*
    obj:/usr/lib/libgobject*.so.*
+}
+
+{
+   GObject lib
+   Memcheck:Leak
+   ...
+   obj:/usr/lib64/libgobject*.so.*
+   obj:/usr/lib64/libgobject*.so.*
+}
+
+{
+   GObject lib
+   Memcheck:Leak
+   ...
+   obj:/lib64/libgobject*.so.*
+   obj:/lib64/libgobject*.so.*
 }
 
 {
@@ -111,21 +143,6 @@
    obj:/usr/lib/libasound.so.*
 }
 
-{
-   GLib lib
-   Memcheck:Leak
-   ...
-   obj:/usr/lib64/libglib*.so.*
-   obj:/usr/lib64/libglib*.so.*
-}
-
-{
-   GObject lib
-   Memcheck:Leak
-   ...
-   obj:/usr/lib64/libgobject*.so.*
-   obj:/usr/lib64/libgobject*.so.*
-}
 
 {
    dbus lib
