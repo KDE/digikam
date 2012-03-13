@@ -6,6 +6,7 @@
    fun:_ZN3DOM9DOMStringC1EPKc
    fun:_ZN5khtml16LocalNameFactory11initIdTableEv
 }
+
 {
    Exiv2 registerNS
    Memcheck:Leak
@@ -108,4 +109,100 @@
    ...
    obj:/usr/lib/libasound.so.*
    obj:/usr/lib/libasound.so.*
+}
+
+{
+   GLib lib
+   Memcheck:Leak
+   ...
+   obj:/usr/lib64/libglib*.so.*
+   obj:/usr/lib64/libglib*.so.*
+}
+
+{
+   GObject lib
+   Memcheck:Leak
+   ...
+   obj:/usr/lib64/libgobject*.so.*
+   obj:/usr/lib64/libgobject*.so.*
+}
+
+{
+   dbus lib
+   Memcheck:Leak
+   ...
+   obj:/usr/lib64/libdbus*.so.*
+   obj:/usr/lib64/libdbus*.so.*
+}
+
+{
+   fontconfig lib
+   Memcheck:Leak
+   ...
+   obj:/usr/lib64/libfontconfig.so.*
+   obj:/usr/lib64/libfontconfig.so.*
+}
+
+{
+   freetype lib
+   Memcheck:Leak
+   ...
+   obj:/usr/lib64/libfreetype.so.*
+   obj:/usr/lib64/libfreetype.so.*
+}
+
+{
+   solid lib
+   Memcheck:Leak
+   ...
+   obj:/usr/lib64/libsolid.so.*
+   obj:/usr/lib64/libsolid.so.*
+}
+
+{
+   marble lib
+   Memcheck:Leak
+   ...
+   obj:/usr/lib64/libmarblewidget.so.*
+   obj:/usr/lib64/libmarblewidget.so.*
+}
+
+{
+   qt lib
+   Memcheck:Leak
+   ...
+   obj:/usr/lib64/libQt*.so.*
+   obj:/usr/lib64/libQt*.so.*
+}
+
+{
+   kde lib
+   Memcheck:Leak
+   ...
+   obj:/usr/lib64/libkde*.so.*
+   obj:/usr/lib64/libkde*.so.*
+}
+
+{
+   khtml lib
+   Memcheck:Leak
+   ...
+   obj:/usr/lib64/libkhtml.so.*
+   obj:/usr/lib64/libkhtml.so.*
+}
+
+{
+   sqlite3 lib
+   Memcheck:Leak
+   ...
+   obj:/usr/lib64/libsqlite3.so.*
+   obj:/usr/lib64/libsqlite3.so.*
+}
+
+{
+   asound lib
+   Memcheck:Leak
+   ...
+   obj:/usr/lib64/libasound.so.*
+   obj:/usr/lib64/libasound.so.*
 }
