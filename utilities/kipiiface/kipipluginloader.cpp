@@ -134,6 +134,8 @@ void KipiPluginLoader::loadPlugins()
     QStringList ignores;
     d->kipiInterface = new KipiInterface(d->app, "Digikam_KIPI_interface");
 
+    // List of obsoletes plugins to not load
+
     ignores.append( "HelloWorld" );
     ignores.append( "KameraKlient" );
 
@@ -180,7 +182,8 @@ void KipiPluginLoader::slotKipiPluginPlug()
     KIPI::PluginLoader::PluginList list = d->kipiPluginLoader->pluginList();
     int cpt                             = 0;
 
-    // List of obsolete kipi-plugins to not load.
+    // List of obsolete tool actions to not load
+
     QStringList pluginActionsDisabled;
     pluginActionsDisabled << QString("gpssync2");                       // Experimental plugin renamed gpssync during GoSC2010.
     pluginActionsDisabled << QString("raw_converter_single");           // Obsolete since 0.9.5 and new Raw Import tool.
