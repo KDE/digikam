@@ -26,7 +26,6 @@
 
 // Qt includes
 
-#include <QSignalMapper>
 #include <QStringList>
 #include <QAction>
 #include <QMultiMap>
@@ -41,8 +40,6 @@
 
 // LibKIPI includes
 
-#include <libkipi/plugin.h>
-#include <libkipi/interface.h>
 #include <libkipi/pluginloader.h>
 
 // local includes
