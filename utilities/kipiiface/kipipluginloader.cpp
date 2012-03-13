@@ -29,6 +29,7 @@
 #include <QSignalMapper>
 #include <QStringList>
 #include <QAction>
+#include <QMultiMap>
 
 // KDE includes
 
@@ -70,18 +71,13 @@ public:
         splashScreen                = 0;
     }
 
-    KActionCollection*  kipipluginsActionCollection;
-    KIPI::PluginLoader* kipiPluginLoader;
-    KipiInterface*      kipiInterface;
-    SplashScreen*       splashScreen;
-    DigikamApp*         app;
+    KActionCollection*       kipipluginsActionCollection;
+    KIPI::PluginLoader*      kipiPluginLoader;
+    KipiInterface*           kipiInterface;
+    SplashScreen*            splashScreen;
+    DigikamApp*              app;
 
-    QList<QAction*>     kipiFileActionsExport;
-    QList<QAction*>     kipiFileActionsImport;
-    QList<QAction*>     kipiImageActions;
-    QList<QAction*>     kipiToolsActions;
-    QList<QAction*>     kipiBatchActions;
-    QList<QAction*>     kipiAlbumActions;
+    QMultiMap<int, QAction*> kipiActionsMap;   // Map <KIPI::Category, KIPI plugin action>
 };
 
 KipiPluginLoader::KipiPluginLoader(QObject* const parent, SplashScreen* const splash)
@@ -108,34 +104,34 @@ KActionCollection* KipiPluginLoader::pluginsActionCollection() const
     return d->kipipluginsActionCollection;
 }
 
-const QList<QAction*>& KipiPluginLoader::menuExportActions()
+QList<QAction*> KipiPluginLoader::menuExportActions() const
 {
-    return d->kipiFileActionsExport;
+    return d->kipiActionsMap.values(KIPI::ExportPlugin);
 }
 
-const QList<QAction*>& KipiPluginLoader::menuImportActions()
+QList<QAction*> KipiPluginLoader::menuImportActions() const
 {
-    return d->kipiFileActionsImport;
+    return d->kipiActionsMap.values(KIPI::ImportPlugin);
 }
 
-const QList<QAction*>& KipiPluginLoader::menuImageActions()
+QList<QAction*> KipiPluginLoader::menuImageActions() const
 {
-    return d->kipiImageActions;
+    return d->kipiActionsMap.values(KIPI::ImagesPlugin);
 }
 
-const QList<QAction*>& KipiPluginLoader::menuToolsActions()
+QList<QAction*> KipiPluginLoader::menuToolsActions() const
 {
-    return d->kipiToolsActions;
+    return d->kipiActionsMap.values(KIPI::ToolsPlugin);
 }
 
-const QList<QAction*>& KipiPluginLoader::menuBatchActions()
+QList<QAction*> KipiPluginLoader::menuBatchActions() const
 {
-    return d->kipiBatchActions;
+    return d->kipiActionsMap.values(KIPI::BatchPlugin);
 }
 
-const QList<QAction*>& KipiPluginLoader::menuAlbumActions()
+QList<QAction*> KipiPluginLoader::menuAlbumActions() const
 {
-    return d->kipiAlbumActions;
+    return d->kipiActionsMap.values(KIPI::CollectionsPlugin);
 }
 
 void KipiPluginLoader::loadPlugins()
@@ -183,12 +179,7 @@ void KipiPluginLoader::slotKipiPluginPlug()
     d->app->unplugActionList(QString::fromLatin1("batch_actions"));
     d->app->unplugActionList(QString::fromLatin1("album_actions"));
 
-    d->kipiImageActions.clear();
-    d->kipiFileActionsExport.clear();
-    d->kipiFileActionsImport.clear();
-    d->kipiToolsActions.clear();
-    d->kipiBatchActions.clear();
-    d->kipiAlbumActions.clear();
+    d->kipiActionsMap.clear();
 
     // Remove Advanced slideshow kipi-plugin action from View/Slideshow menu.
     foreach(QAction* const action, d->app->slideShowMenu()->menu()->actions())
@@ -273,27 +264,27 @@ void KipiPluginLoader::slotKipiPluginPlug()
                 {
                     case KIPI::BatchPlugin:
                     {
-                        d->kipiBatchActions.append(action);
+                        d->kipiActionsMap.insert(KIPI::BatchPlugin, action);
                         break;
                     }
                     case KIPI::CollectionsPlugin:
                     {
-                        d->kipiAlbumActions.append(action);
+                        d->kipiActionsMap.insert(KIPI::CollectionsPlugin, action);
                         break;
                     }
                     case KIPI::ImportPlugin:
                     {
-                        d->kipiFileActionsImport.append(action);
+                        d->kipiActionsMap.insert(KIPI::ImportPlugin, action);
                         break;
                     }
                     case KIPI::ExportPlugin:
                     {
-                        d->kipiFileActionsExport.append(action);
+                        d->kipiActionsMap.insert(KIPI::ExportPlugin, action);
                         break;
                     }
                     case KIPI::ImagesPlugin:
                     {
-                        d->kipiImageActions.append(action);
+                        d->kipiActionsMap.insert(KIPI::ImagesPlugin, action);
                         break;
                     }
                     case KIPI::ToolsPlugin:
@@ -305,9 +296,8 @@ void KipiPluginLoader::slotKipiPluginPlug()
                         }
                         else
                         {
-                            d->kipiToolsActions.append(action);
+                            d->kipiActionsMap.insert(KIPI::ToolsPlugin, action);
                         }
-
                         break;
                     }
                     default:
@@ -319,7 +309,7 @@ void KipiPluginLoader::slotKipiPluginPlug()
             }
             else
             {
-                kDebug() << "Plugin '" << actionName << "' disabled.";
+                kDebug() << "Plugin '" << actionName << "' is disabled.";
             }
         }
     }
@@ -329,20 +319,20 @@ void KipiPluginLoader::slotKipiPluginPlug()
 
     // Check if the kipiFileActionsExport are empty, if so, add an empty action which tells the user that no export plugins are
     // available. It is more user-friendly to present some menu entry, instead of leaving it completely empty.
-    if (d->kipiFileActionsExport.empty())
+    if (d->kipiActionsMap.values(KIPI::ExportPlugin).empty())
     {
         QAction* noPluginsLoaded = new QAction(i18n("No export plugins available"), d->app);
         noPluginsLoaded->setEnabled(false);
-        d->kipiFileActionsExport << noPluginsLoaded;
+        d->kipiActionsMap.insert(KIPI::ExportPlugin, noPluginsLoaded);
     }
 
     // Create GUI menu in according with plugins.
-    d->app->plugActionList(QString::fromLatin1("file_actions_export"),    d->kipiFileActionsExport);
-    d->app->plugActionList(QString::fromLatin1("file_actions_import"),    d->kipiFileActionsImport);
-    d->app->plugActionList(QString::fromLatin1("image_kipi_actions"),     d->kipiImageActions);
-    d->app->plugActionList(QString::fromLatin1("tool_actions"),           d->kipiToolsActions);
-    d->app->plugActionList(QString::fromLatin1("batch_actions"),          d->kipiBatchActions);
-    d->app->plugActionList(QString::fromLatin1("album_actions"),          d->kipiAlbumActions);
+    d->app->plugActionList(QString::fromLatin1("file_actions_export"), d->kipiActionsMap.values(KIPI::ExportPlugin));
+    d->app->plugActionList(QString::fromLatin1("file_actions_import"), d->kipiActionsMap.values(KIPI::ImportPlugin));
+    d->app->plugActionList(QString::fromLatin1("image_kipi_actions"),  d->kipiActionsMap.values(KIPI::ImagesPlugin));
+    d->app->plugActionList(QString::fromLatin1("tool_actions"),        d->kipiActionsMap.values(KIPI::ToolsPlugin));
+    d->app->plugActionList(QString::fromLatin1("batch_actions"),       d->kipiActionsMap.values(KIPI::BatchPlugin));
+    d->app->plugActionList(QString::fromLatin1("album_actions"),       d->kipiActionsMap.values(KIPI::CollectionsPlugin));
 }
 
 } //namespace Digikam

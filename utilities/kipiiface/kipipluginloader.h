@@ -50,12 +50,12 @@ public:
     ~KipiPluginLoader();
 
     /// KIPI menu collections.
-    const QList<QAction*>& menuExportActions();
-    const QList<QAction*>& menuImportActions();
-    const QList<QAction*>& menuImageActions();
-    const QList<QAction*>& menuToolsActions();
-    const QList<QAction*>& menuBatchActions();
-    const QList<QAction*>& menuAlbumActions();
+    QList<QAction*> menuExportActions() const;
+    QList<QAction*> menuImportActions() const;
+    QList<QAction*> menuImageActions()  const;
+    QList<QAction*> menuToolsActions()  const;
+    QList<QAction*> menuBatchActions()  const;
+    QList<QAction*> menuAlbumActions()  const;
 
     /// KIPI action collections.
     KActionCollection* pluginsActionCollection() const;
