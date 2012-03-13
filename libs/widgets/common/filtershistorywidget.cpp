@@ -101,6 +101,7 @@ FiltersHistoryWidget::~FiltersHistoryWidget()
 {
     delete d->model;
     delete d->delegate;
+    delete d;
 }
 
 void FiltersHistoryWidget::setCurrentURL(const KUrl& url)
