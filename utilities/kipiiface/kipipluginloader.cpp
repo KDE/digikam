@@ -71,6 +71,13 @@ public:
         splashScreen                = 0;
     }
 
+    static const QString     imagesActionName;
+    static const QString     toolsActionName;
+    static const QString     importActionName;
+    static const QString     exportActionName;
+    static const QString     batchActionName;
+    static const QString     collectionsActionName;
+
     KActionCollection*       kipipluginsActionCollection;
     KIPI::PluginLoader*      kipiPluginLoader;
     KipiInterface*           kipiInterface;
@@ -79,6 +86,12 @@ public:
 
     QMultiMap<int, QAction*> kipiActionsMap;   // Map <KIPI::Category, KIPI plugin action>
 };
+const QString KipiPluginLoader::KipiPluginLoaderPriv::imagesActionName(QString::fromLatin1("image_kipi_actions"));
+const QString KipiPluginLoader::KipiPluginLoaderPriv::toolsActionName(QString::fromLatin1("tool_kipi_actions"));
+const QString KipiPluginLoader::KipiPluginLoaderPriv::importActionName(QString::fromLatin1("import_kipi_actions"));
+const QString KipiPluginLoader::KipiPluginLoaderPriv::exportActionName(QString::fromLatin1("export_kipi_actions"));
+const QString KipiPluginLoader::KipiPluginLoaderPriv::batchActionName(QString::fromLatin1("batch_kipi_actions"));
+const QString KipiPluginLoader::KipiPluginLoaderPriv::collectionsActionName(QString::fromLatin1("album_kipi_actions"));
 
 KipiPluginLoader::KipiPluginLoader(QObject* const parent, SplashScreen* const splash)
     : QObject(parent), d(new KipiPluginLoaderPriv)
@@ -279,21 +292,21 @@ void KipiPluginLoader::kipiPlugActions(bool unplug)
 {
     if (unplug)
     {
-        d->app->unplugActionList(QString::fromLatin1("file_actions_export"));
-        d->app->unplugActionList(QString::fromLatin1("file_actions_import"));
-        d->app->unplugActionList(QString::fromLatin1("image_kipi_actions"));
-        d->app->unplugActionList(QString::fromLatin1("tool_actions"));
-        d->app->unplugActionList(QString::fromLatin1("batch_actions"));
-        d->app->unplugActionList(QString::fromLatin1("album_actions"));
+        d->app->unplugActionList(d->exportActionName);
+        d->app->unplugActionList(d->importActionName);
+        d->app->unplugActionList(d->imagesActionName);
+        d->app->unplugActionList(d->toolsActionName);
+        d->app->unplugActionList(d->batchActionName);
+        d->app->unplugActionList(d->collectionsActionName);
     }
     else
     {
-        d->app->plugActionList(QString::fromLatin1("file_actions_export"), kipiActionsByCategory(KIPI::ExportPlugin));
-        d->app->plugActionList(QString::fromLatin1("file_actions_import"), kipiActionsByCategory(KIPI::ImportPlugin));
-        d->app->plugActionList(QString::fromLatin1("image_kipi_actions"),  kipiActionsByCategory(KIPI::ImagesPlugin));
-        d->app->plugActionList(QString::fromLatin1("tool_actions"),        kipiActionsByCategory(KIPI::ToolsPlugin));
-        d->app->plugActionList(QString::fromLatin1("batch_actions"),       kipiActionsByCategory(KIPI::BatchPlugin));
-        d->app->plugActionList(QString::fromLatin1("album_actions"),       kipiActionsByCategory(KIPI::CollectionsPlugin));
+        d->app->plugActionList(d->exportActionName,      kipiActionsByCategory(KIPI::ExportPlugin));
+        d->app->plugActionList(d->importActionName,      kipiActionsByCategory(KIPI::ImportPlugin));
+        d->app->plugActionList(d->imagesActionName,      kipiActionsByCategory(KIPI::ImagesPlugin));
+        d->app->plugActionList(d->toolsActionName,       kipiActionsByCategory(KIPI::ToolsPlugin));
+        d->app->plugActionList(d->batchActionName,       kipiActionsByCategory(KIPI::BatchPlugin));
+        d->app->plugActionList(d->collectionsActionName, kipiActionsByCategory(KIPI::CollectionsPlugin));
     }
 }
 

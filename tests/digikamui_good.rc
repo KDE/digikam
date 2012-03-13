@@ -46,7 +46,7 @@
      <Action name="image_find_similar"/>
      <Action name="image_set_exif_orientation"/>
    <Separator/>
-     <ActionList name="image_actions"/>
+     <ActionList name="image_kipi_actions"/>
    <Separator/>
      <Action name="image_rename"/>
      <Action name="image_delete"/>
@@ -92,11 +92,11 @@
         <Action name="fingerprints_rebuild"/>
         <Action name="sync_metadata"/>
       <Separator/>
-        <ActionList name="album_actions"/>
+        <ActionList name="album_kipi_actions"/>
       <Separator/>
-        <ActionList name="tool_actions"/>
+        <ActionList name="tool_kipi_actions"/>
       <Separator/>
-        <ActionList name="batch_actions"/>
+        <ActionList name="batch_kipi_actions"/>
   </Menu>
 
   <Menu name="Import"><text>I&amp;mport</text>
@@ -107,11 +107,11 @@
       <Action name="import_addImages"/>
       <Action name="import_addFolders"/>
       <Separator/>
-      <ActionList name="file_actions_import"/>
+      <ActionList name="import_kipi_actions"/>
   </Menu>
 
    <Menu name="Export"><text>&amp;Export</text>
-        <ActionList name="file_actions_export"/>
+        <ActionList name="export_kipi_actions"/>
    </Menu>
 
   <Menu name="settings" noMerge="1"><Text>&amp;Settings</Text>
