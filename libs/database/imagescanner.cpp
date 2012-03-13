@@ -55,19 +55,19 @@ namespace Digikam
 {
 
 ImageScanner::ImageScanner(const QFileInfo& info, const ItemScanInfo& scanInfo)
-    : m_hasImage(false), m_hasMetadata(false),
+    : m_hasImage(false), m_hasMetadata(false), m_loadedFromDisk(false),
       m_fileInfo(info), m_scanInfo(scanInfo), m_scanMode(ModifiedScan), m_hasHistoryToResolve(false)
 {
 }
 
 ImageScanner::ImageScanner(const QFileInfo& info)
-    : m_hasImage(false), m_hasMetadata(false),
+    : m_hasImage(false), m_hasMetadata(false), m_loadedFromDisk(false),
       m_fileInfo(info), m_scanMode(ModifiedScan), m_hasHistoryToResolve(false)
 {
 }
 
 ImageScanner::ImageScanner(qlonglong imageid)
-    : m_hasImage(false), m_hasMetadata(false), m_scanMode(ModifiedScan), m_hasHistoryToResolve(false)
+    : m_hasImage(false), m_hasMetadata(false), m_loadedFromDisk(false), m_scanMode(ModifiedScan), m_hasHistoryToResolve(false)
 {
     ItemShortInfo shortInfo;
     {
@@ -1185,8 +1185,13 @@ void ImageScanner::copyProperties(qlonglong source, qlonglong dest)
 
 void ImageScanner::loadFromDisk()
 {
-    m_metadata.registerMetadataSettings();
+    if (m_loadedFromDisk)
+    {
+        return;
+    }
+    m_loadedFromDisk = true;
 
+    m_metadata.registerMetadataSettings();
     m_hasMetadata = m_metadata.load(m_fileInfo.filePath());
 
     if (m_scanInfo.category == DatabaseItem::Image)

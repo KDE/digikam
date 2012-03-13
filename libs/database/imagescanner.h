@@ -127,6 +127,14 @@ public:
     const ItemScanInfo& itemScanInfo() const;
 
     /**
+     * Loads data from disk (metadata, image file properties).
+     * This method is called from any of the main entry points above.
+     * You can call it before if you want to control the time when it is executed.
+     * Calling it a second time with data already loaded will do nothing.
+     */
+    void loadFromDisk();
+
+    /**
      * Copy all relevant attributes like comments, tags, rating from source to destination.
      */
     static void copyProperties(qlonglong source, qlonglong destination);
@@ -233,7 +241,6 @@ protected:
     void scanAudioFile();
 
     void prepareImage();
-    void loadFromDisk();
     QString uniqueHash();
     QString detectFormat();
     QString detectVideoFormat();
@@ -243,6 +250,7 @@ protected:
 
     bool         m_hasImage;
     bool         m_hasMetadata;
+    bool         m_loadedFromDisk;
 
     QFileInfo    m_fileInfo;
 
