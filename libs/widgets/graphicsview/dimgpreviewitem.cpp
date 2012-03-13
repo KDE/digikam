@@ -96,6 +96,7 @@ DImgPreviewItem::~DImgPreviewItem()
 {
     Q_D(DImgPreviewItem);
     delete d->previewThread;
+    delete d->preloadThread;
 }
 
 void DImgPreviewItem::setDisplayingWidget(QWidget* widget)
