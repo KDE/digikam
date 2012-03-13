@@ -1,13 +1,4 @@
 {
-   KHTML DOM 
-   Memcheck:Leak
-   ...
-   fun:_ZN3DOM13DOMStringImplC1EPKc
-   fun:_ZN3DOM9DOMStringC1EPKc
-   fun:_ZN5khtml16LocalNameFactory11initIdTableEv
-}
-
-{
    Exiv2 registerNS
    Memcheck:Leak
    ...
@@ -16,7 +7,81 @@
 }
 
 {
-   GLib lib
+   KHTML DOM
+   Memcheck:Leak
+   ...
+   fun:_ZN3DOM13DOMStringImplC1EPKc
+   fun:_ZN3DOM9DOMStringC1EPKc
+   fun:_ZN5khtml16LocalNameFactory11initIdTableEv
+}
+
+{
+   USB_1
+   Memcheck:Leak
+   ...
+   obj:/usr/lib/libusb*.so.*
+   obj:/usr/lib/libusb*.so.*
+}
+
+{
+   USB_2
+   Memcheck:Leak
+   ...
+   obj:/usr/lib64/libusb*.so.*
+   obj:/usr/lib64/libusb*.so.*
+}
+
+{
+   KJS_1
+   Memcheck:Leak
+   ...
+   obj:/usr/lib/libkhtml*.so.*
+   obj:/usr/lib/libkhtml*.so.*
+}
+
+{
+   KJS_2
+   Memcheck:Leak
+   ...
+   obj:/usr/lib64/libkhtml*.so.*
+   obj:/usr/lib64/libkhtml*.so.*
+}
+
+{
+   GSTREAMER_1
+   Memcheck:Leak
+   ...
+   obj:/usr/lib/libgstreamer*.so.*
+   obj:/usr/lib/libgstreamer*.so.*
+}
+
+{
+   GSTREAMER_2
+   Memcheck:Leak
+   ...
+   obj:/usr/lib64/libgstreamer*.so.*
+   obj:/usr/lib64/libgstreamer*.so.*
+}
+
+{
+   XCB_1
+   Memcheck:Leak
+   ...
+   obj:/usr/lib/libxcb*.so.*
+   obj:/usr/lib/libxcb*.so.*
+}
+
+{
+   XCB_2
+   Memcheck:Leak
+   ...
+   obj:/usr/lib64/libxcb*.so.*
+   obj:/usr/lib64/libxcb*.so.*
+}
+
+
+{
+   GLIB_1
    Memcheck:Leak
    ...
    obj:/usr/lib/libglib*.so.*
@@ -24,7 +89,7 @@
 }
 
 {
-   GLib lib
+   GLIB_2
    Memcheck:Leak
    ...
    obj:/usr/lib64/libglib*.so.*
@@ -32,7 +97,7 @@
 }
 
 {
-   GLib lib
+   GLIB_3
    Memcheck:Leak
    ...
    obj:/lib64/libglib*.so.*
@@ -40,7 +105,7 @@
 }
 
 {
-   GObject lib
+   GOBJECT_1
    Memcheck:Leak
    ...
    obj:/usr/lib/libgobject*.so.*
@@ -48,7 +113,7 @@
 }
 
 {
-   GObject lib
+   GOBJECT_2
    Memcheck:Leak
    ...
    obj:/usr/lib64/libgobject*.so.*
@@ -56,7 +121,7 @@
 }
 
 {
-   GObject lib
+   GOBJECT_3
    Memcheck:Leak
    ...
    obj:/lib64/libgobject*.so.*
@@ -64,7 +129,7 @@
 }
 
 {
-   dbus lib
+   DBUS_1
    Memcheck:Leak
    ...
    obj:/usr/lib/libdbus*.so.*
@@ -72,80 +137,7 @@
 }
 
 {
-   fontconfig lib
-   Memcheck:Leak
-   ...
-   obj:/usr/lib/libfontconfig.so.*
-   obj:/usr/lib/libfontconfig.so.*
-}
-
-{
-   freetype lib
-   Memcheck:Leak
-   ...
-   obj:/usr/lib/libfreetype.so.*
-   obj:/usr/lib/libfreetype.so.*
-}
-
-{
-   solid lib
-   Memcheck:Leak
-   ...
-   obj:/usr/lib/libsolid.so.*
-   obj:/usr/lib/libsolid.so.*
-}
-
-{
-   marble lib
-   Memcheck:Leak
-   ...
-   obj:/usr/lib/libmarblewidget.so.*
-   obj:/usr/lib/libmarblewidget.so.*
-}
-
-{
-   qt lib
-   Memcheck:Leak
-   ...
-   obj:/usr/lib/libQt*.so.*
-   obj:/usr/lib/libQt*.so.*
-}
-
-{
-   kde lib
-   Memcheck:Leak
-   ...
-   obj:/usr/lib/libkde*.so.*
-   obj:/usr/lib/libkde*.so.*
-}
-
-{
-   khtml lib
-   Memcheck:Leak
-   ...
-   obj:/usr/lib/libkhtml.so.*
-   obj:/usr/lib/libkhtml.so.*
-}
-
-{
-   sqlite3 lib
-   Memcheck:Leak
-   ...
-   obj:/usr/lib/libsqlite3.so.*
-   obj:/usr/lib/libsqlite3.so.*
-}
-
-{
-   asound lib
-   Memcheck:Leak
-   ...
-   obj:/usr/lib/libasound.so.*
-   obj:/usr/lib/libasound.so.*
-}
-
-
-{
-   dbus lib
+   DBUS_2
    Memcheck:Leak
    ...
    obj:/usr/lib64/libdbus*.so.*
@@ -153,7 +145,15 @@
 }
 
 {
-   fontconfig lib
+   FONTCONFIG_1
+   Memcheck:Leak
+   ...
+   obj:/usr/lib/libfontconfig.so.*
+   obj:/usr/lib/libfontconfig.so.*
+}
+
+{
+   FONTCONFIG_2
    Memcheck:Leak
    ...
    obj:/usr/lib64/libfontconfig.so.*
@@ -161,7 +161,15 @@
 }
 
 {
-   freetype lib
+   FREETYPE_1
+   Memcheck:Leak
+   ...
+   obj:/usr/lib/libfreetype.so.*
+   obj:/usr/lib/libfreetype.so.*
+}
+
+{
+   FREETYPE_2
    Memcheck:Leak
    ...
    obj:/usr/lib64/libfreetype.so.*
@@ -169,7 +177,15 @@
 }
 
 {
-   solid lib
+   SOLID_1
+   Memcheck:Leak
+   ...
+   obj:/usr/lib/libsolid.so.*
+   obj:/usr/lib/libsolid.so.*
+}
+
+{
+   SOLID_2
    Memcheck:Leak
    ...
    obj:/usr/lib64/libsolid.so.*
@@ -177,7 +193,15 @@
 }
 
 {
-   marble lib
+   MARBLE_1
+   Memcheck:Leak
+   ...
+   obj:/usr/lib/libmarblewidget.so.*
+   obj:/usr/lib/libmarblewidget.so.*
+}
+
+{
+   MARBLE_2
    Memcheck:Leak
    ...
    obj:/usr/lib64/libmarblewidget.so.*
@@ -185,7 +209,15 @@
 }
 
 {
-   qt lib
+   QT_1
+   Memcheck:Leak
+   ...
+   obj:/usr/lib/libQt*.so.*
+   obj:/usr/lib/libQt*.so.*
+}
+
+{
+   QT_2
    Memcheck:Leak
    ...
    obj:/usr/lib64/libQt*.so.*
@@ -193,7 +225,15 @@
 }
 
 {
-   kde lib
+   KDE_1
+   Memcheck:Leak
+   ...
+   obj:/usr/lib/libkde*.so.*
+   obj:/usr/lib/libkde*.so.*
+}
+
+{
+   KDE_2
    Memcheck:Leak
    ...
    obj:/usr/lib64/libkde*.so.*
@@ -201,7 +241,15 @@
 }
 
 {
-   khtml lib
+   KHTML_1
+   Memcheck:Leak
+   ...
+   obj:/usr/lib/libkhtml.so.*
+   obj:/usr/lib/libkhtml.so.*
+}
+
+{
+   KHTML_2
    Memcheck:Leak
    ...
    obj:/usr/lib64/libkhtml.so.*
@@ -209,7 +257,15 @@
 }
 
 {
-   sqlite3 lib
+   SQLITE3_1
+   Memcheck:Leak
+   ...
+   obj:/usr/lib/libsqlite3.so.*
+   obj:/usr/lib/libsqlite3.so.*
+}
+
+{
+   SQLITE3_2
    Memcheck:Leak
    ...
    obj:/usr/lib64/libsqlite3.so.*
@@ -217,7 +273,15 @@
 }
 
 {
-   asound lib
+   ASOUND_1
+   Memcheck:Leak
+   ...
+   obj:/usr/lib/libasound.so.*
+   obj:/usr/lib/libasound.so.*
+}
+
+{
+   ASOUND_2
    Memcheck:Leak
    ...
    obj:/usr/lib64/libasound.so.*
