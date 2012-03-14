@@ -190,13 +190,13 @@ void WorkerObject::removeRunnable(WorkerObjectRunnable* runnable)
 
 void WorkerObject::schedule()
 {
-    if (d->inDestruction)
-    {
-        return;
-    }
-
     {
         QMutexLocker locker(&d->mutex);
+
+        if (d->inDestruction)
+        {
+            return;
+        }
 
         switch (d->state)
         {
