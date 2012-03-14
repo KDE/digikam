@@ -82,6 +82,7 @@ public:
 
 // -- Static values -------------------------------
 
+// NOTE: these strings are used in digikamrc XML file as action names.
 const QString KipiPluginLoader::KipiPluginLoaderPriv::imagesActionName(QString::fromLatin1("image_kipi_actions"));
 const QString KipiPluginLoader::KipiPluginLoaderPriv::toolsActionName(QString::fromLatin1("tool_kipi_actions"));
 const QString KipiPluginLoader::KipiPluginLoaderPriv::importActionName(QString::fromLatin1("import_kipi_actions"));
