@@ -58,29 +58,43 @@ public:
     /** Return a list of all plugin actions accordingly of plugin category.
      *  See KIPI::Category enum for details.
      */
-    QList<QAction*> kipiActionsByCategory(KIPI::Category category) const;
+    QList<QAction*> kipiActionsByCategory(KIPI::Category cat) const;
 
     /** Return the instance of action collection for all KIPI plugins.
      */
     KActionCollection* pluginsActionCollection() const;
 
-    /** Plug or unplug plugins actions list to application
+    /** Plug or unplug plugins actions list to application.
      */
     void kipiPlugActions(bool unplug=false);
 
-    /** Return the instance of this singleton plugin loader
+    /** Return the instance of this singleton plugin loader.
      */
     static KipiPluginLoader* instance();
 
 private Q_SLOTS:
 
+    /** Called by KIPI::PluginLoader when plugins list must be re-loaded in application.
+     */
     void slotKipiPluginPlug();
 
 private:
 
+    /** Disabled destructor.
+     */
     ~KipiPluginLoader();
+
+    /** Load all enabled plugins in application accordingly with KIPI setup page.
+     */
     void loadPlugins();
-    void checkEmptyCategory(KIPI::Category category);
+
+    /** Check if a category exist, else fill it with an single action displaying an "Empty" message.
+     */
+    void checkEmptyCategory(KIPI::Category cat);
+
+    /** Wrapper to return plugin category name for KDE Shortcuts Editor.
+     */
+    QString categoryName(KIPI::Category cat) const;
 
 private:
 
