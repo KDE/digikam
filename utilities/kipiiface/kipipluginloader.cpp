@@ -28,7 +28,7 @@
 
 #include <QStringList>
 #include <QAction>
-#include <QMultiMap>
+#include <QMap>
 
 // KDE includes
 
