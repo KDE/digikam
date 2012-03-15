@@ -42,7 +42,7 @@ class DIO::DIOPriv : public WorkerObject
 
 public:
 
-    DIOPriv(DIO* q);
+    DIOPriv(DIO* const q);
 
     void albumToAlbum(int operation, const PAlbum* src, const PAlbum* dest);
     void imagesToAlbum(int operation, const QList<ImageInfo> ids, const PAlbum* dest);
@@ -65,7 +65,7 @@ Q_SIGNALS:
 
 public:
 
-    DIO* q;
+    DIO* const q;
 };
 
 } // namespace Digikam

@@ -7,6 +7,7 @@
  * Description : low level files management interface.
  *
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Copyright (C) 2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -67,7 +68,9 @@ namespace
     const QString renameFileProperty("DIO Rename source file");
 }
 
-DIO::DIOPriv::DIOPriv(DIO* q)
+// ------------------------------------------------------------------------------------------------
+
+DIO::DIOPriv::DIOPriv(DIO* const q)
     : q(q)
 {
     connectAndSchedule(this, SIGNAL(jobToProcess(int, KUrl::List, KUrl)),
@@ -83,6 +86,7 @@ DIO::DIOPriv::DIOPriv(DIO* q)
 void DIO::DIOPriv::processJob(int operation, const KUrl::List& srcList, const KUrl& dest)
 {
     KUrl::List list = srcList, remoteList;
+
     for (KUrl::List::iterator it = list.begin(); it != list.end(); ++it)
     {
         if (it->isLocalFile())
@@ -96,9 +100,9 @@ void DIO::DIOPriv::processJob(int operation, const KUrl::List& srcList, const KU
         }
         else
         {
-            QString path = it->path();
+            QString path        = it->path();
             QString sidecarPath = DMetadata::sidecarFilePathForFile(path);
-            KUrl sidecarUrl = *it;
+            KUrl sidecarUrl     = *it;
             sidecarUrl.setPath(sidecarPath);
             remoteList << sidecarUrl;
         }
@@ -132,9 +136,10 @@ void DIO::DIOPriv::albumToAlbum(int operation, const PAlbum* src, const PAlbum* 
 
 void DIO::DIOPriv::imagesToAlbum(int operation, const QList<ImageInfo> infos, const PAlbum* dest)
 {
-    QStringList filenames;
+    QStringList      filenames;
     QList<qlonglong> ids;
-    KUrl::List urls;
+    KUrl::List       urls;
+
     foreach(const ImageInfo& info, infos)
     {
         filenames << info.name();
@@ -177,6 +182,8 @@ void DIO::DIOPriv::deleteFiles(const QList<ImageInfo>& infos, bool useTrash)
     emit jobToProcess(useTrash ? Trash : Delete, urls, KUrl());
 }
 
+// ------------------------------------------------------------------------------------------------
+
 class DIOCreator
 {
 public:
@@ -185,6 +192,8 @@ public:
 };
 
 K_GLOBAL_STATIC(DIOCreator, creator)
+
+// ------------------------------------------------------------------------------------------------
 
 DIO* DIO::instance()
 {
@@ -209,7 +218,8 @@ void DIO::cleanUp()
 
 KIO::Job* DIO::createJob(int operation, const KUrl::List& src, const KUrl& dest)
 {
-    KIO::Job* job;
+    KIO::Job* job = 0;
+
     if (operation == Copy)
     {
         job = KIO::copy(src, dest);
@@ -383,7 +393,7 @@ void DIO::del(const ImageInfo& info, bool useTrash)
     del(QList<ImageInfo>() << info, useTrash);
 }
 
-void DIO::del(PAlbum* album, bool useTrash)
+void DIO::del(const PAlbum* album, bool useTrash)
 {
     if (!album)
     {

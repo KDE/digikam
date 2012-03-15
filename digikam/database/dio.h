@@ -7,6 +7,7 @@
  * Description : low level files management interface.
  *
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Copyright (C) 2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -69,7 +70,7 @@ public:
 
     static void del(const QList<ImageInfo>& infos, bool useTrash);
     static void del(const ImageInfo& info, bool useTrash);
-    static void del(PAlbum* album, bool useTrash);
+    static void del(const PAlbum* album, bool useTrash);
 
     /// Rename item to new name
     static void rename(const ImageInfo& info, const QString& newName);
