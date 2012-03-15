@@ -301,7 +301,7 @@ QString KipiPluginLoader::categoryName(KIPI::Category cat) const
             return i18n("Images Tools");
             break;
         case KIPI::ToolsPlugin:
-            return i18n("Miscs Tools");
+            return i18n("Miscellaneous Tools");
             break;
         case KIPI::BatchPlugin:
             return i18n("Batch Tools");
