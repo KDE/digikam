@@ -42,6 +42,7 @@
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kedittoolbar.h>
+#include <kde_file.h>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kmenubar.h>
@@ -1115,7 +1116,15 @@ void QueueMgrWindow::processed(const KUrl& url, const KUrl& tmp)
 
     if (!dest.isEmpty())
     {
-        if (::rename(QFile::encodeName(tmp.toLocalFile()), QFile::encodeName(dest.toLocalFile())) != 0)
+        if (DMetadata::hasSidecar(tmp.toLocalFile()))
+        {
+            if (KDE::rename(DMetadata::sidecarPath(tmp.toLocalFile()),
+                            DMetadata::sidecarPath(dest.toLocalFile())) != 0)
+            {
+                addHistoryMessage(i18n("Failed to save sidecar file..."), DHistoryView::ErrorEntry);
+            }
+        }
+        if (KDE::rename(tmp.toLocalFile(), dest.toLocalFile()) != 0)
         {
             if (d->currentProcessItem)
             {
