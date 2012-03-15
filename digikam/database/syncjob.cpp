@@ -6,9 +6,9 @@
  * Date        : 2004-10-04
  * Description : synchronize Input/Output jobs.
  *
- * Copyright (C) 2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
- * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004      by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Copyright (C) 2006-2012 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * Concept copied from kdelibs/kio/kio/netaccess.h/cpp
  *   This file is part of the KDE libraries
@@ -110,7 +110,7 @@ SyncJobResult SyncJob::del(const KUrl::List& urls, bool useTrash)
     return sj.d->result;
 }
 
-QPixmap SyncJob::getTagThumbnail(TAlbum* album)
+QPixmap SyncJob::getTagThumbnail(TAlbum* const album)
 {
     SyncJob sj;
     return sj.getTagThumbnailPriv(album);
@@ -118,7 +118,7 @@ QPixmap SyncJob::getTagThumbnail(TAlbum* album)
 
 bool SyncJob::delPriv(const KUrl::List& urls)
 {
-    KIO::Job* job = KIO::del( urls );
+    KIO::Job* job = KIO::del(urls);
 
     connect( job, SIGNAL(result(KJob*)),
              this, SLOT(slotResult(KJob*)) );
@@ -129,7 +129,7 @@ bool SyncJob::delPriv(const KUrl::List& urls)
 
 bool SyncJob::trashPriv(const KUrl::List& urls)
 {
-    KIO::Job* job = KIO::trash( urls );
+    KIO::Job* job = KIO::trash(urls);
 
     connect( job, SIGNAL(result(KJob*)),
              this, SLOT(slotResult(KJob*)) );
@@ -150,15 +150,15 @@ void SyncJob::slotResult(KJob* job)
     quitWaitingLoop();
 }
 
-QPixmap SyncJob::getTagThumbnailPriv(TAlbum* album)
+QPixmap SyncJob::getTagThumbnailPriv(TAlbum* const album)
 {
     delete d->thumbnail;
 
     d->thumbnail                 = new QPixmap();
     AlbumThumbnailLoader* loader = AlbumThumbnailLoader::instance();
 
-    connect(loader, SIGNAL(signalThumbnail(Album*,QPixmap)),
-            this, SLOT(slotGotThumbnailFromIcon(Album*,QPixmap)),
+    connect(loader, SIGNAL(signalThumbnail(Album*, QPixmap)),
+            this, SLOT(slotGotThumbnailFromIcon(Album*, QPixmap)),
             Qt::QueuedConnection);
 
     connect(loader, SIGNAL(signalFailed(Album*)),

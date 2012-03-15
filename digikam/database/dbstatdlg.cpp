@@ -6,7 +6,7 @@
  * Date        : 2009-05-28
  * Description : database statistics dialog
  *
- * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -50,7 +50,7 @@
 namespace Digikam
 {
 
-DBStatDlg::DBStatDlg(QWidget* parent)
+DBStatDlg::DBStatDlg(QWidget* const parent)
     : InfoDlg(parent)
 {
     kapp->setOverrideCursor(Qt::WaitCursor);

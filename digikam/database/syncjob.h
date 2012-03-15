@@ -6,9 +6,9 @@
  * Date        : 2004-10-04
  * Description : synchronize Input/Output jobs.
  *
- * Copyright (C) 2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
- * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C)      2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Copyright (C) 2006-2012 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * Concept copied from kdelibs/kio/kio/netaccess.h/cpp
  *   This file is part of the KDE libraries
@@ -60,7 +60,7 @@ class SyncJobResult
 {
 public:
 
-    bool success;
+    bool    success;
     QString errorString;
 
     operator bool() const
@@ -81,7 +81,7 @@ public:
     static SyncJobResult del(const KUrl::List& urls, bool useTrash);
 
     /* Load the image or icon for the tag thumbnail */
-    static QPixmap getTagThumbnail(TAlbum* album);
+    static QPixmap getTagThumbnail(TAlbum* const album);
     static QPixmap getTagThumbnail(const QString& name, int size);
 
 private:
@@ -95,7 +95,7 @@ private:
     bool delPriv(const KUrl::List& urls);
     bool trashPriv(const KUrl::List& urls);
 
-    QPixmap getTagThumbnailPriv(TAlbum* album);
+    QPixmap getTagThumbnailPriv(TAlbum* const album);
 
 private Q_SLOTS:
 
