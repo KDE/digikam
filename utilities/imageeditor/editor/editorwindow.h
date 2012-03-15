@@ -206,7 +206,7 @@ protected:
     bool startingSaveNewVersionInFormat(const KUrl& url, const QString& format);
     bool checkPermissions(const KUrl& url);
     bool checkOverwrite(const KUrl& url);
-    bool moveLocalFile(const QString& src, const QString& dest, bool destinationExisted);
+    bool moveLocalFile(const QString& src, const QString& dest);
     void moveFile();
     void colorManage();
     void execSavingProgressDialog();
@@ -401,6 +401,7 @@ private:
                                     const KUrl& targetUrl,
                                     const QString& autoFilter);
 
+    bool localFileRename(const QString& src, const QString& destPath);
     void movingSaveFileFinished(bool successful);
 
     void addAction2ContextMenu(const QString& actionName, bool addDisabled = false);
