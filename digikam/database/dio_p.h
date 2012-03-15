@@ -52,6 +52,8 @@ public:
 
     void deleteFiles(const QList<ImageInfo>& infos, bool useTrash);
 
+    bool directLocalFileMove(const QString& src, const QString& destPath);
+
 public Q_SLOTS:
 
     void processJob(int operation, const KUrl::List& src, const KUrl& dest);
@@ -62,11 +64,46 @@ Q_SIGNALS:
     void jobToProcess(int operation, const KUrl::List& src, const KUrl& dest);
     void renameToProcess(const KUrl& src, const KUrl& dest);
     void jobToCreate(int operation, const KUrl::List& src, const KUrl& dest);
+    void remoteFilesToStat(int operation, const KUrl::List& srcToStat, const KUrl& dest);
 
 public:
 
     DIO* const q;
 };
+
+namespace
+{
+
+class SidecarFinder
+{
+public:
+
+    SidecarFinder(const KUrl::List& files);
+    SidecarFinder(const KUrl& file);
+
+    KUrl::List localFiles;
+    KUrl::List remoteFiles;
+    KUrl::List possibleRemoteSidecars;
+
+private:
+
+    void process(const KUrl::List&);
+};
+
+enum Operation
+{
+    Copy    = 1 << 0,
+    Move    = 1 << 1,
+    Rename  = 1 << 2,
+    Trash   = 1 << 3,
+    Delete  = 1 << 4,
+    SourceStatusUnknown = 1 << 20,
+
+    OperationMask = 0xffff,
+    FlagMask      = 0xffff0000
+};
+
+} // anonymous namespace
 
 } // namespace Digikam
 
