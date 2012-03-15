@@ -50,6 +50,7 @@ extern "C"
 
 // KDE includes
 
+#include <kde_file.h>
 #include <kiconloader.h>
 #include <kio/renamedialog.h>
 #include <klocale.h>
@@ -861,7 +862,14 @@ void CameraController::slotCheckRename(const QString& folder, const QString& fil
     }
 
     // move the file to the destination file
-    if (rename(QFile::encodeName(temp), QFile::encodeName(dest)) != 0)
+    if (DMetadata::hasSidecar(temp))
+    {
+        if (KDE::rename(DMetadata::sidecarPath(temp), DMetadata::sidecarPath(dest)) != 0)
+        {
+            sendLogMsg(i18n("Failed to save sidecar file for %1...", file), DHistoryView::ErrorEntry,  folder, file);
+        }
+    }
+    if (KDE::rename(temp, dest) != 0)
     {
         // rename failed. delete the temp file
         unlink(QFile::encodeName(temp));
