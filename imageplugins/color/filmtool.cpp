@@ -70,7 +70,7 @@
 #include "imageiface.h"
 #include "imagelevels.h"
 #include "imageregionwidget.h"
-#include "filmfilter.h"
+#include "filmfilter_p.h"
 
 using namespace KDcrawIface;
 

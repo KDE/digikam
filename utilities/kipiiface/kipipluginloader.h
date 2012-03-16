@@ -71,9 +71,7 @@ public:
     /** Return the instance of this singleton plugin loader.
      */
     static KipiPluginLoader* instance();
-
-//    void applyPlugins();
-
+   
 private Q_SLOTS:
 
     /** Called by KIPI::PluginLoader when plugins list must be re-loaded in application.
@@ -97,8 +95,6 @@ private:
     /** Wrapper to return plugin category name for KDE Shortcuts Editor.
      */
     QString categoryName(KIPI::Category cat) const;
-
-//    void initPlugins();
 
 private:
 

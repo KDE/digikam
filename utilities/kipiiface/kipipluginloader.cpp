@@ -61,7 +61,7 @@ public:
         kipipluginsActionCollection = 0;
         kipiPluginLoader            = 0;
         kipiInterface               = 0;
-        splashScreen                = 0;
+        splashScreen                = 0;      
     }
 
     static const QString        imagesActionName;
@@ -78,6 +78,7 @@ public:
 
     KActionCollection*          kipipluginsActionCollection; // Collection used to host all plugin actions for KDE shortcuts editor
     QMap<int, KActionCategory*> kipiCategoryMap;             // KActionCategory map shorted by KIPI::Category
+    
 };
 
 // -- Static values -------------------------------
@@ -99,8 +100,6 @@ KipiPluginLoader::KipiPluginLoader(QObject* const parent, SplashScreen* const sp
 {
     m_instance      = this;
     d->splashScreen = splash;
-//    initPlugins();
-    loadPlugins();
 }
 
 KipiPluginLoader::~KipiPluginLoader()
@@ -316,33 +315,5 @@ QString KipiPluginLoader::categoryName(KIPI::Category cat) const
     }
 }
 
-/*
-void KipiPluginLoader::initPlugins()
-{
-        KIPI::PluginLoader::PluginList list = KIPI::PluginLoader::instance()->pluginList();
-        d->pluginsNumber->setText(i18np("1 Kipi plugin found",
-                                        "%1 Kipi plugins found",
-                                        list.count()));
-
-        int activated = 0;
-        KIPI::PluginLoader::PluginList::const_iterator it = list.constBegin();
-
-        for (; it != list.constEnd(); ++it)
-        {
-            if ((*it)->shouldLoad())
-            {
-                ++activated;
-            }
-        }
-
-        d->pluginsNumberActivated->setText(i18nc("%1: number of plugins activated",
-                                                 "(%1 activated)", activated));
-}
-
-void KipiPluginLoader::applyPlugins()
-{
-        d->kipiConfig->apply();
-}
-*/
 
 } //namespace Digikam

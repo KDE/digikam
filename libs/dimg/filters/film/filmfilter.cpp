@@ -21,6 +21,10 @@
  *
  * ============================================================ */
 
+// C++ includes
+
+#include <cmath>
+
 // Qt includes
 
 #include <QListWidget>
@@ -28,122 +32,14 @@
 // KDE includes
 
 #include <kdebug.h>
-#include <cmath>
 
 // Local includes
 
-#include "filmfilter.h"
+#include "filmfilter_p.h"
 #include "invertfilter.h"
 
 namespace Digikam
 {
-
-class FilmProfile
-{
-public:
-
-    FilmProfile(double rdm=0, double gdm=0, double bdm=0)
-        : redDmax(rdm),
-          greenDmax(gdm),
-          blueDmax(bdm),
-          rBalance(1.0),
-          gBalance(1.0),
-          bBalance(1.0),
-          wpRed(1.0),
-          wpGreen(1.0),
-          wpBlue(1.0)
-    {
-    }
-
-    double dmax(int channel) const
-    {
-        switch (channel)
-        {
-            case RedChannel:    return redDmax;
-            case GreenChannel:  return greenDmax;
-            case BlueChannel:   return blueDmax;
-            default:            return 0.0;
-        }
-    }
-
-    FilmProfile& setBalance(double rB, double gB, double bB)
-    {
-        rBalance = rB;
-        gBalance = gB;
-        bBalance = bB;
-        return *this;
-    }
-
-    double balance(int channel) const
-    {
-        switch (channel)
-        {
-            case RedChannel:    return rBalance;
-            case GreenChannel:  return gBalance;
-            case BlueChannel:   return bBalance;
-            default:            return 1.0;
-        }
-    }
-
-    FilmProfile& setWp(double rWp, double gWp, double bWp)
-    {
-        wpRed   = rWp;
-        wpGreen = gWp;
-        wpBlue  = bWp;
-        return *this;
-    }
-
-    double wp(int channel) const
-    {
-        switch (channel)
-        {
-            case RedChannel:    return wpRed;
-            case GreenChannel:  return wpGreen;
-            case BlueChannel:   return wpBlue;
-            default:            return 1.0;
-        }
-    }
-
-private:
-
-    double redDmax;
-    double greenDmax;
-    double blueDmax;
-
-    double rBalance;
-    double gBalance;
-    double bBalance;
-
-    double wpRed;
-    double wpGreen;
-    double wpBlue;
-};
-
-// --------------------------------------------------------------------------------------------------------
-
-class FilmContainer::FilmContainerPriv
-{
-public:
-
-    FilmContainerPriv()
-        : gamma(1.0),
-          exposure(1.0),
-          sixteenBit(false),
-          profile(FilmProfile(1.0, 1.0, 1.0)),
-          cnType(CNNeutral),
-          whitePoint(DColor(QColor("white"), false)),
-          applyBalance(true)
-    {
-    }
-
-    double        gamma;
-    double        exposure;
-    bool          sixteenBit;
-    FilmProfile   profile;
-    CNFilmProfile cnType;
-    DColor        whitePoint;
-    bool          applyBalance;
-};
 
 FilmContainer::FilmContainer() :
     d(QSharedPointer<FilmContainerPriv>(new FilmContainerPriv))
@@ -419,17 +315,6 @@ QMap<int, QString> FilmContainer::profileMapInitializer()
 const QMap<int, QString> FilmContainer::profileMap = FilmContainer::profileMapInitializer();
 
 // ------------------------------------------------------------------
-
-class FilmFilter::FilmFilterPriv
-{
-public:
-
-    FilmFilterPriv()
-    {
-    }
-
-    FilmContainer film;
-};
 
 FilmFilter::FilmFilter(QObject* const parent)
     : DImgThreadedFilter(parent, "FilmFilter"),
