@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "dio.h"
+#include "dio.moc"
 #include "dio_p.h"
 
 // Qt includes
