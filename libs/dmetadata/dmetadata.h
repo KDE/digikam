@@ -29,6 +29,10 @@
 
 #include <QtCore/QByteArray>
 
+// KDE includes
+
+#include <kurl.h>
+
 // LibKExiv2 includes
 
 #include <libkexiv2/kexiv2.h>
@@ -168,6 +172,14 @@ public:
     static double apexShutterSpeedToExposureTime(double shutterSpeed);
 
     static KExiv2::AltLangMap toAltLangMap(const QVariant& var);
+
+    static QString sidecarPath(const QString& path);
+    /** Like KExiv2::sidecarFilePathForFile, but works for remote URLs */
+    static KUrl sidecarUrl(const KUrl& url);
+    /** Gives a file url for a local path */
+    static KUrl sidecarUrl(const QString& path);
+    /** Performs a QFileInfo based check if the given local file has a sidecar */
+    static bool hasSidecar(const QString& path);
 
     //------------------------------------------------------------------------------------------------
     // Pushed to libkexiv2 for KDE4.4

@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#include "dio.h"
-#include "dio_p.h"
+#include "dio.moc"
+#include "dio_p.moc"
 
 // Qt includes
 
@@ -32,6 +32,7 @@
 
 // KDE includes
 
+#include <kde_file.h>
 #include <kio/job.h>
 #include <kio/deletejob.h>
 #include <kio/jobuidelegate.h>
@@ -56,16 +57,41 @@ namespace Digikam
 
 namespace
 {
-    enum Operation
-    {
-        Copy,
-        Move,
-        Rename,
-        Trash,
-        Delete
-    };
-
     const QString renameFileProperty("DIO Rename source file");
+    const QString noErrorMessageProperty("DIO Ignore Error Message");
+}
+
+// ------------------------------------------------------------------------------------------------
+
+SidecarFinder::SidecarFinder(const KUrl::List& files)
+{
+    process(files);
+}
+
+SidecarFinder::SidecarFinder(const KUrl& file)
+{
+    process(KUrl::List() << file);
+}
+
+void SidecarFinder::process(const KUrl::List& files)
+{
+    foreach (const KUrl& url, files)
+    {
+        if (url.isLocalFile())
+        {
+            if (DMetadata::hasSidecar(url.toLocalFile()))
+            {
+                localFiles << DMetadata::sidecarUrl(url);
+                kDebug()   << "Detected a sidecar" << localFiles.last();
+            }
+            localFiles << url;
+        }
+        else
+        {
+            possibleRemoteSidecars << DMetadata::sidecarUrl(url);
+            remoteFiles            << url;
+        }
+    }
 }
 
 // ------------------------------------------------------------------------------------------------
@@ -85,35 +111,15 @@ DIO::DIOPriv::DIOPriv(DIO* const q)
 
 void DIO::DIOPriv::processJob(int operation, const KUrl::List& srcList, const KUrl& dest)
 {
-    KUrl::List list = srcList, remoteList;
+    SidecarFinder finder(srcList);
 
-    for (KUrl::List::iterator it = list.begin(); it != list.end(); ++it)
+    emit jobToCreate(operation, finder.localFiles, dest);
+
+    if (!finder.remoteFiles.isEmpty())
     {
-        if (it->isLocalFile())
-        {
-            QString sidecar = DMetadata::sidecarFilePathForFile(it->toLocalFile());
-            if (QFileInfo(sidecar).exists())
-            {
-                it = list.insert(it, KUrl::fromPath(sidecar))+1;
-                //kDebug() << "Detected a sidecar" << sidecar;
-            }
-        }
-        else
-        {
-            QString path        = it->path();
-            QString sidecarPath = DMetadata::sidecarFilePathForFile(path);
-            KUrl sidecarUrl     = *it;
-            sidecarUrl.setPath(sidecarPath);
-            remoteList << sidecarUrl;
-        }
-    }
-
-    emit jobToCreate(operation, list, dest);
-
-    if (!remoteList.isEmpty())
-    {
-        kWarning() << "Copying sidecar files from remote destination is not implemented";
-        //emit remoteFilesToStat(operation, srcList, dest
+        emit jobToCreate(operation, finder.remoteFiles, dest);
+        // stat'ing is unreliable; just try to copy and suppress error message
+        emit jobToCreate(operation | SourceStatusUnknown, finder.possibleRemoteSidecars, dest);
     }
 }
 
@@ -218,7 +224,14 @@ void DIO::cleanUp()
 
 KIO::Job* DIO::createJob(int operation, const KUrl::List& src, const KUrl& dest)
 {
+    if (src.isEmpty())
+    {
+        return 0;
+    }
+
     KIO::Job* job = 0;
+    int flags     = operation & FlagMask;
+    operation     &= OperationMask;
 
     if (operation == Copy)
     {
@@ -250,6 +263,11 @@ KIO::Job* DIO::createJob(int operation, const KUrl::List& src, const KUrl& dest)
         job = KIO::del(src);
     }
 
+    if (flags & SourceStatusUnknown)
+    {
+        job->setProperty(noErrorMessageProperty.toAscii(), true);
+    }
+
     connect(job, SIGNAL(result(KJob*)),
             this, SLOT(slotResult(KJob*)));
 
@@ -279,6 +297,11 @@ void DIO::slotResult(KJob* kjob)
             }
         }
 
+        if (job->property(noErrorMessageProperty.toAscii()).isValid())
+        {
+            return;
+        }
+
         QWidget* w = QApplication::activeWindow();
         if (w)
         {
@@ -304,7 +327,7 @@ void DIO::slotRenamed(KIO::Job* job, const KUrl&, const KUrl& newURL)
     emit imageRenameSucceeded(url);
 }
 
-// Album -> Album
+// Album -> Album -----------------------------------------------------
 
 void DIO::copy(const PAlbum* src, const PAlbum* dest)
 {
@@ -324,7 +347,7 @@ void DIO::move(const PAlbum* src, const PAlbum* dest)
     instance()->d->albumToAlbum(Move, src, dest);
 }
 
-// Images -> Album
+// Images -> Album ----------------------------------------------------
 
 void DIO::copy(const QList<ImageInfo> infos, const PAlbum* dest)
 {
@@ -344,7 +367,7 @@ void DIO::move(const QList<ImageInfo> infos, const PAlbum* dest)
     instance()->d->imagesToAlbum(Move, infos, dest);
 }
 
-// External files -> album
+// External files -> album --------------------------------------------
 
 void DIO::copy(const KUrl& src, const PAlbum* dest)
 {
@@ -374,14 +397,14 @@ void DIO::move(const KUrl::List& srcList, const PAlbum* dest)
     instance()->d->filesToAlbum(Move, srcList, dest);
 }
 
-// Rename
+// Rename --------------------------------------------------------------
 
 void DIO::rename(const ImageInfo& info, const QString& newName)
 {
     instance()->d->renameFile(info, newName);
 }
 
-// Delete
+// Delete --------------------------------------------------------------
 
 void DIO::del(const QList<ImageInfo>& infos, bool useTrash)
 {

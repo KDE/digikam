@@ -44,6 +44,10 @@ public:
 
     static void cleanUp();
 
+    /**
+     * All DIO methods will take care for sidecar files, if they exist
+     */
+
     /// Copy an album to another album
     static void copy(const PAlbum* src, const PAlbum* dest);
 
@@ -94,9 +98,12 @@ private:
     DIO();
     ~DIO();
 
-    friend class DIOCreator;
+private:
+
     class DIOPriv;
     DIOPriv* const d;
+
+    friend class DIOCreator;
 };
 
 } // namespace Digikam

@@ -33,6 +33,7 @@
 
 #include <QDomDocument>
 #include <QFile>
+#include <QFileInfo>
 
 // KDE includes
 
@@ -2687,6 +2688,29 @@ KExiv2::AltLangMap DMetadata::toAltLangMap(const QVariant& var)
     }
 
     return map;
+}
+
+KUrl DMetadata::sidecarUrl(const KUrl& url)
+{
+    QString sidecarPath = sidecarFilePathForFile(url.path());
+    KUrl sidecarUrl(url);
+    sidecarUrl.setPath(sidecarPath);
+    return sidecarUrl;
+}
+
+KUrl DMetadata::sidecarUrl(const QString& path)
+{
+    return KUrl::fromPath(sidecarFilePathForFile(path));
+}
+
+QString DMetadata::sidecarPath(const QString& path)
+{
+    return sidecarFilePathForFile(path);
+}
+
+bool DMetadata::hasSidecar(const QString& path)
+{
+    return QFileInfo(sidecarFilePathForFile(path)).exists();
 }
 
 // ---------- Pushed to libkexiv2 for KDE 4.4 --------------

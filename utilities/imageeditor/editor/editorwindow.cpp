@@ -121,6 +121,7 @@
 #include "colorcorrectiondlg.h"
 #include "dimginterface.h"
 #include "dlogoaction.h"
+#include "dmetadata.h"
 #include "dzoombar.h"
 #include "editorstackview.h"
 #include "editortool.h"
@@ -2637,7 +2638,29 @@ bool EditorWindow::checkOverwrite(const KUrl& url)
     return result == KMessageBox::Yes;
 }
 
-bool EditorWindow::moveLocalFile(const QString& src, const QString& destPath, bool destinationExisted)
+bool EditorWindow::moveLocalFile(const QString& src, const QString& dst)
+{
+    QString sidecarSrc = DMetadata::sidecarFilePathForFile(src);
+    if (QFileInfo(sidecarSrc).exists())
+    {
+        QString sidecarDst = DMetadata::sidecarFilePathForFile(dst);
+        if (!localFileRename(sidecarSrc, sidecarDst))
+        {
+            kError() << "Failed to move sidecar file";
+        }
+    }
+
+    if (!localFileRename(src, dst))
+    {
+        KMessageBox::error(this,
+                           i18n("Failed to overwrite original file"),
+                           i18n("Error Saving File"));
+        return false;
+    }
+    return true;
+}
+
+bool EditorWindow::localFileRename(const QString& src, const QString& destPath)
 {
     QString dest = destPath;
     // check that we're not replacing a symlink
@@ -2650,7 +2673,7 @@ bool EditorWindow::moveLocalFile(const QString& src, const QString& destPath, bo
                  << dest << ". Storing image there.";
     }
 
-#ifndef _WIN32
+#ifndef Q_OS_WIN32
     QByteArray dstFileName = QFile::encodeName(dest);
 
     // Store old permissions:
@@ -2663,32 +2686,23 @@ bool EditorWindow::moveLocalFile(const QString& src, const QString& destPath, bo
     mode_t filePermissions = (S_IREAD | S_IWRITE | S_IROTH | S_IWOTH | S_IRGRP | S_IWGRP) & ~curr_umask;
 
     // For existing files, use the mode of the original file.
-    if (destinationExisted)
-    {
-        struct stat stbuf;
+    struct stat stbuf;
 
-        if (::stat(dstFileName, &stbuf) == 0)
-        {
-            filePermissions = stbuf.st_mode;
-        }
+    if (::stat(dstFileName, &stbuf) == 0)
+    {
+        filePermissions = stbuf.st_mode;
     }
 
 #endif
 
     // rename tmp file to dest
-    int ret;
-
     // KDE::rename() takes care of QString -> bytestring encoding
-    ret = KDE::rename(src, dest);
-
-    if (ret != 0)
+    if (KDE::rename(src, dest) != 0)
     {
-        KMessageBox::error(this, i18n("Failed to overwrite original file"),
-                           i18n("Error Saving File"));
         return false;
     }
 
-#ifndef _WIN32
+#ifndef Q_OS_WIN32
 
     // restore permissions
     if (::chmod(dstFileName, filePermissions) != 0)
@@ -2715,19 +2729,18 @@ void EditorWindow::moveFile()
             // check if we need to move the current file to an intermediate name
             if (m_savingContext.versionFileOperation.tasks & VersionFileOperation::MoveToIntermediate)
             {
-                kDebug() << "MoveToIntermediate: Moving " << m_savingContext.srcURL.toLocalFile() << "to" <<
-                         m_savingContext.versionFileOperation.intermediateForLoadedFile.filePath() <<
-                         moveLocalFile(m_savingContext.srcURL.toLocalFile(),
-                                       m_savingContext.versionFileOperation.intermediateForLoadedFile.filePath(),
-                                       false);
+                //kDebug() << "MoveToIntermediate: Moving " << m_savingContext.srcURL.toLocalFile() << "to" <<
+                  //       m_savingContext.versionFileOperation.intermediateForLoadedFile.filePath() <<
+                moveLocalFile(m_savingContext.srcURL.toLocalFile(),
+                              m_savingContext.versionFileOperation.intermediateForLoadedFile.filePath());
+
                 LoadingCacheInterface::fileChanged(m_savingContext.destinationURL.toLocalFile());
                 ThumbnailLoadThread::deleteThumbnail(m_savingContext.destinationURL.toLocalFile());
             }
         }
 
         bool moveSuccessful = moveLocalFile(m_savingContext.saveTempFileName,
-                                            m_savingContext.destinationURL.toLocalFile(),
-                                            m_savingContext.destinationExisted);
+                                            m_savingContext.destinationURL.toLocalFile());
 
         if (m_savingContext.executedOperation == SavingContextContainer::SavingStateVersion)
         {
@@ -2748,8 +2761,15 @@ void EditorWindow::moveFile()
 
         kDebug() << "moving a remote file via KIO";
 
-        KIO::CopyJob* moveJob = KIO::move(KUrl(m_savingContext.saveTempFileName),
+        if (DMetadata::hasSidecar(m_savingContext.saveTempFileName))
+        {
+            KIO::move(DMetadata::sidecarUrl(m_savingContext.saveTempFileName),
+                      DMetadata::sidecarUrl(m_savingContext.destinationURL));
+        }
+
+        KIO::CopyJob* moveJob = KIO::move(KUrl::fromPath(m_savingContext.saveTempFileName),
                                           m_savingContext.destinationURL);
+
         connect(moveJob, SIGNAL(result(KJob*)),
                 this, SLOT(slotKioMoveFinished(KJob*)));
     }

@@ -83,8 +83,11 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 064 ==> 235733 : No possibility to cancel a delete file operation.
 065 ==> 267509 : Button to stop collection scan during startup.
 066 ==> 223232 : digiKam Does Not Detect the Color Profile in DCF Files.
-067 ==> 295340 : Digikam crashed while tagging faces.
+067 ==> 295340 : digiKam crashed while tagging faces.
 068 ==> 278927 : Not all files read.
 069 ==> 261879 : Ubuntu unity compatibility bugs: export menu disappeared.
-070 ==> 
-
+070 ==> 280426 : Exif data from jpegs deleted when using XML sidecars and adding keyword tags.
+071 ==> 282903 : Image corrupted after writing metadata due to sidecar XMP.
+072 ==> 264204 : Existing XMP sidecar file gets overwritten by digiKam.
+073 ==> 273565 : digiKam doesn't read EXIF if XMP sidecar file exists.
+074 ==> 
