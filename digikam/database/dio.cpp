@@ -23,7 +23,7 @@
  * ============================================================ */
 
 #include "dio.moc"
-#include "dio_p.h"
+#include "dio_p.moc"
 
 // Qt includes
 
@@ -230,9 +230,8 @@ KIO::Job* DIO::createJob(int operation, const KUrl::List& src, const KUrl& dest)
     }
 
     KIO::Job* job = 0;
-
-    int flags = operation & FlagMask;
-    operation &= OperationMask;
+    int flags     = operation & FlagMask;
+    operation     &= OperationMask;
 
     if (operation == Copy)
     {
@@ -328,7 +327,7 @@ void DIO::slotRenamed(KIO::Job* job, const KUrl&, const KUrl& newURL)
     emit imageRenameSucceeded(url);
 }
 
-// Album -> Album
+// Album -> Album -----------------------------------------------------
 
 void DIO::copy(const PAlbum* src, const PAlbum* dest)
 {
@@ -348,7 +347,7 @@ void DIO::move(const PAlbum* src, const PAlbum* dest)
     instance()->d->albumToAlbum(Move, src, dest);
 }
 
-// Images -> Album
+// Images -> Album ----------------------------------------------------
 
 void DIO::copy(const QList<ImageInfo> infos, const PAlbum* dest)
 {
@@ -368,7 +367,7 @@ void DIO::move(const QList<ImageInfo> infos, const PAlbum* dest)
     instance()->d->imagesToAlbum(Move, infos, dest);
 }
 
-// External files -> album
+// External files -> album --------------------------------------------
 
 void DIO::copy(const KUrl& src, const PAlbum* dest)
 {
@@ -398,14 +397,14 @@ void DIO::move(const KUrl::List& srcList, const PAlbum* dest)
     instance()->d->filesToAlbum(Move, srcList, dest);
 }
 
-// Rename
+// Rename --------------------------------------------------------------
 
 void DIO::rename(const ImageInfo& info, const QString& newName)
 {
     instance()->d->renameFile(info, newName);
 }
 
-// Delete
+// Delete --------------------------------------------------------------
 
 void DIO::del(const QList<ImageInfo>& infos, bool useTrash)
 {

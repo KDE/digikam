@@ -24,8 +24,6 @@
 #ifndef DIO_P_H
 #define DIO_P_H
 
-// KDE includes
-
 // Local includes
 
 #include "workerobject.h"
@@ -71,6 +69,8 @@ public:
     DIO* const q;
 };
 
+// -----------------------------------------------------------------------------------------
+
 namespace
 {
 
@@ -92,15 +92,15 @@ private:
 
 enum Operation
 {
-    Copy    = 1 << 0,
-    Move    = 1 << 1,
-    Rename  = 1 << 2,
-    Trash   = 1 << 3,
-    Delete  = 1 << 4,
+    Copy                = 1 << 0,
+    Move                = 1 << 1,
+    Rename              = 1 << 2,
+    Trash               = 1 << 3,
+    Delete              = 1 << 4,
     SourceStatusUnknown = 1 << 20,
 
-    OperationMask = 0xffff,
-    FlagMask      = 0xffff0000
+    OperationMask       = 0xffff,
+    FlagMask            = 0xffff0000
 };
 
 } // anonymous namespace

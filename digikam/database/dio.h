@@ -98,9 +98,12 @@ private:
     DIO();
     ~DIO();
 
-    friend class DIOCreator;
+private:
+
     class DIOPriv;
     DIOPriv* const d;
+
+    friend class DIOCreator;
 };
 
 } // namespace Digikam
