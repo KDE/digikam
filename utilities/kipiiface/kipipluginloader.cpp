@@ -55,6 +55,8 @@ class KipiPluginLoader::KipiPluginLoaderPriv
 {
 public:
 
+    KIPI::ConfigWidget* kipiConfig;
+
     KipiPluginLoaderPriv()
     {
         app                         = DigikamApp::instance();
@@ -62,18 +64,8 @@ public:
         kipiPluginLoader            = 0;
         kipiInterface               = 0;
         splashScreen                = 0;
-        pluginsNumber(0),
-        pluginsNumberActivated(0),
-        kipiConfig(0)
-    {
+      
     }
-
-    QLabel*             pluginsNumber;
-    QLabel*             pluginsNumberActivated;
-
-    KIPI::ConfigWidget* kipiConfig;
-
-
     static const QString        imagesActionName;
     static const QString        toolsActionName;
     static const QString        importActionName;
@@ -88,6 +80,7 @@ public:
 
     KActionCollection*          kipipluginsActionCollection; // Collection used to host all plugin actions for KDE shortcuts editor
     QMap<int, KActionCategory*> kipiCategoryMap;             // KActionCategory map shorted by KIPI::Category
+    
 };
 
 // -- Static values -------------------------------
@@ -109,8 +102,6 @@ KipiPluginLoader::KipiPluginLoader(QObject* const parent, SplashScreen* const sp
 {
     m_instance      = this;
     d->splashScreen = splash;
-    initPlugins();
-    loadPlugins();
 }
 
 KipiPluginLoader::~KipiPluginLoader()
@@ -324,34 +315,6 @@ QString KipiPluginLoader::categoryName(KIPI::Category cat) const
             return i18n("Unknown Tools");
             break;
     }
-}
-
-
-void KipiPluginLoader::initPlugins()
-{
-        KIPI::PluginLoader::PluginList list = KIPI::PluginLoader::instance()->pluginList();
-        d->pluginsNumber->setText(i18np("1 Kipi plugin found",
-                                        "%1 Kipi plugins found",
-                                        list.count()));
-
-        int activated = 0;
-        KIPI::PluginLoader::PluginList::const_iterator it = list.constBegin();
-
-        for (; it != list.constEnd(); ++it)
-        {
-            if ((*it)->shouldLoad())
-            {
-                ++activated;
-            }
-        }
-
-        d->pluginsNumberActivated->setText(i18nc("%1: number of plugins activated",
-                                                 "(%1 activated)", activated));
-}
-
-void KipiPluginLoader::applyPlugins()
-{
-        d->kipiConfig->apply();
 }
 
 
