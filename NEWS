@@ -90,4 +90,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 071 ==> 282903 : Image corrupted after writing metadata due to sidecar XMP.
 072 ==> 264204 : Existing XMP sidecar file gets overwritten by digiKam.
 073 ==> 273565 : digiKam doesn't read EXIF if XMP sidecar file exists.
-074 ==> 
+074 ==> 296141 : Make digiKam compile on ARM.
+075 ==> 
