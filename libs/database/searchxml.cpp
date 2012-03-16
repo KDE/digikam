@@ -645,7 +645,7 @@ void SearchXmlWriter::writeValue(const QList<qlonglong>& valueList)
     }
 }
 
-void SearchXmlWriter::writeValue(const QList<double>& valueList, int precision)
+void SearchXmlWriter::writeValue(const QList<qreal>& valueList, int precision)
 {
     QString listitem("listitem");
     foreach(double i, valueList)

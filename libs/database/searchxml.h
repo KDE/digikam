@@ -231,7 +231,7 @@ public:
     void writeValue(const QDateTime& dateTime);
     void writeValue(const QList<int>& valueList);
     void writeValue(const QList<qlonglong>& valueList);
-    void writeValue(const QList<double>& valueList, int precision = 8);
+    void writeValue(const QList<qreal>& valueList, int precision = 8);
     void writeValue(const QStringList& valueList);
     void writeValue(const QList<QDateTime>& valueList);
 

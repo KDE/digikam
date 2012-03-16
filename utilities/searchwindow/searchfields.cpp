@@ -1209,7 +1209,7 @@ void SearchFieldRangeInt::write(SearchXmlWriter& writer)
 
             if (m_reciprocal)
             {
-                writer.writeValue(QList<double>() << m_secondBox->fractionMagicValue() << m_firstBox->fractionMagicValue());
+                writer.writeValue(QList<qreal>() << m_secondBox->fractionMagicValue() << m_firstBox->fractionMagicValue());
             }
             else
             {
