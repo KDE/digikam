@@ -55,17 +55,15 @@ class KipiPluginLoader::KipiPluginLoaderPriv
 {
 public:
 
-    KIPI::ConfigWidget* kipiConfig;
-
     KipiPluginLoaderPriv()
     {
         app                         = DigikamApp::instance();
         kipipluginsActionCollection = 0;
         kipiPluginLoader            = 0;
         kipiInterface               = 0;
-        splashScreen                = 0;
-      
+        splashScreen                = 0;      
     }
+
     static const QString        imagesActionName;
     static const QString        toolsActionName;
     static const QString        importActionName;
