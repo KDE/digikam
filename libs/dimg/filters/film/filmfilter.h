@@ -123,6 +123,8 @@ private:
 
     static QMap<int, QString> profileMapInitializer();
 
+private:
+
     class FilmContainerPriv;
     QSharedPointer<FilmContainerPriv> d;
 };
