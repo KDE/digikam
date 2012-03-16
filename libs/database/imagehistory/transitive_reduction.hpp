@@ -91,7 +91,7 @@ transitive_reduction(const Graph& g, GraphTR& tr,
         //do that. So what I'm doint is, collection the successors of *it here
         {
             typename Graph::out_edge_iterator oi,oi_end;
-            for( tie(oi, oi_end) = out_edges( *it, g ); oi != oi_end; ++oi ) {
+            for( boost::tuples::tie(oi, oi_end) = out_edges( *it, g ); oi != oi_end; ++oi ) {
                 neighbors.push_back( target( *oi, g ) );
             }
         }
