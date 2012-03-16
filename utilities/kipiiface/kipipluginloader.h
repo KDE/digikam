@@ -72,7 +72,7 @@ public:
      */
     static KipiPluginLoader* instance();
 
-//    void applyPlugins();
+    void applyPlugins();
 
 private Q_SLOTS:
 
@@ -98,7 +98,7 @@ private:
      */
     QString categoryName(KIPI::Category cat) const;
 
-//    void initPlugins();
+    void initPlugins();
 
 private:
 

@@ -62,7 +62,17 @@ public:
         kipiPluginLoader            = 0;
         kipiInterface               = 0;
         splashScreen                = 0;
+        pluginsNumber(0),
+        pluginsNumberActivated(0),
+        kipiConfig(0)
+    {
     }
+
+    QLabel*             pluginsNumber;
+    QLabel*             pluginsNumberActivated;
+
+    KIPI::ConfigWidget* kipiConfig;
+
 
     static const QString        imagesActionName;
     static const QString        toolsActionName;
@@ -99,7 +109,7 @@ KipiPluginLoader::KipiPluginLoader(QObject* const parent, SplashScreen* const sp
 {
     m_instance      = this;
     d->splashScreen = splash;
-//    initPlugins();
+    initPlugins();
     loadPlugins();
 }
 
@@ -316,7 +326,7 @@ QString KipiPluginLoader::categoryName(KIPI::Category cat) const
     }
 }
 
-/*
+
 void KipiPluginLoader::initPlugins()
 {
         KIPI::PluginLoader::PluginList list = KIPI::PluginLoader::instance()->pluginList();
@@ -343,6 +353,6 @@ void KipiPluginLoader::applyPlugins()
 {
         d->kipiConfig->apply();
 }
-*/
+
 
 } //namespace Digikam
