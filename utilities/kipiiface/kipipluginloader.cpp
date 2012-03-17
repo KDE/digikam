@@ -61,7 +61,7 @@ public:
         kipipluginsActionCollection = 0;
         kipiPluginLoader            = 0;
         kipiInterface               = 0;
-        splashScreen                = 0;      
+        splashScreen                = 0;
     }
 
     static const QString        imagesActionName;
@@ -78,7 +78,6 @@ public:
 
     KActionCollection*          kipipluginsActionCollection; // Collection used to host all plugin actions for KDE shortcuts editor
     QMap<int, KActionCategory*> kipiCategoryMap;             // KActionCategory map shorted by KIPI::Category
-    
 };
 
 // -- Static values -------------------------------
@@ -100,6 +99,8 @@ KipiPluginLoader::KipiPluginLoader(QObject* const parent, SplashScreen* const sp
 {
     m_instance      = this;
     d->splashScreen = splash;
+
+    loadPlugins();
 }
 
 KipiPluginLoader::~KipiPluginLoader()
@@ -314,6 +315,5 @@ QString KipiPluginLoader::categoryName(KIPI::Category cat) const
             break;
     }
 }
-
 
 } //namespace Digikam
