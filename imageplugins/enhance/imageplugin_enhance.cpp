@@ -47,7 +47,7 @@
 #include "antivignettingtool.h"
 #include "lensdistortiontool.h"
 #include "hotpixelstool.h"
-#include <config-digikam.h>
+#include "config-digikam.h"
 
 #ifdef HAVE_GLIB2
 #include "lensautofixtool.h"

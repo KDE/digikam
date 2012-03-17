@@ -28,7 +28,7 @@
 
 // Local includes
 
-#include <config-digikam.h>
+#include "config-digikam.h"
 #include "dimgthreadedfilter.h"
 #include "digikam_export.h"
 

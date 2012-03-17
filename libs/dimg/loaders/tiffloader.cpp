@@ -60,7 +60,7 @@ extern "C"
 
 // Local includes
 
-#include <config-digikam.h>
+#include "config-digikam.h"
 #include "dimg.h"
 #include "dimgloaderobserver.h"
 #include "dmetadata.h"

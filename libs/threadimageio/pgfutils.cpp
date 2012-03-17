@@ -46,7 +46,7 @@ extern "C"
 // LibPGF includes
 
 #include "PGFimage.h"
-#include <config-digikam.h>
+#include "config-digikam.h"
 
 namespace Digikam
 {

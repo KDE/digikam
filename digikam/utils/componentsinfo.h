@@ -44,7 +44,7 @@
 
 // Local includes
 
-#include <config-digikam.h>
+#include "config-digikam.h"
 #include "libsinfodlg.h"
 #include "rawcameradlg.h"
 #include "dbstatdlg.h"

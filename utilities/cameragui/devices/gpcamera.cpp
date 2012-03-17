@@ -56,7 +56,7 @@ extern "C"
 
 // Local includes
 
-#include <config-digikam.h>
+#include "config-digikam.h"
 #include "dmetadata.h"
 
 #ifdef HAVE_GPHOTO2

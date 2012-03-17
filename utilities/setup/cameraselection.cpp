@@ -49,7 +49,7 @@
 
 // Local includes
 
-#include <config-digikam.h>
+#include "config-digikam.h"
 #include "gpcamera.h"
 
 namespace Digikam

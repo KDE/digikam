@@ -44,7 +44,7 @@
 #include "albumthumbnailloader.h"
 #include "collectionlocation.h"
 #include "collectionmanager.h"
-#include <config-digikam.h>
+#include "config-digikam.h"
 #include "loadingcacheinterface.h"
 #include "modeltest.h"
 #include "scancontroller.h"
