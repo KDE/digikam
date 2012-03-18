@@ -57,7 +57,6 @@ extern "C"
 #include <jasper/jas_version.h>
 #include <png.h>
 #include <tiffvers.h>
-#include <lcms.h>
 
     // Avoid Warnings under Win32
 #undef HAVE_STDLIB_H
@@ -72,6 +71,7 @@ extern "C"
 
 #include "greycstorationfilter.h"
 #include "pgfutils.h"
+#include "digikam-lcms.h"
 
 #ifndef USE_EXT_LIBLENSFUN
 #   ifdef HAVE_GLIB2
