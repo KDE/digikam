@@ -245,7 +245,6 @@ SetupMetadata::SetupMetadata(QWidget* parent)
     d->writeXMPSidecarBox->setEnabled(KExiv2::supportXmp());
 
     d->writingModeCombo    = new KComboBox;
-    //d->writingModeCombo->addItem(i18n("Write to image only"),                           KExiv2::WRITETOIMAGEONLY);
     d->writingModeCombo->addItem(i18n("Write to XMP sidecar for read-only image only"), KExiv2::WRITETOSIDECARONLY4READONLYFILES);
     d->writingModeCombo->addItem(i18n("Write to XMP sidecar only"),                     KExiv2::WRITETOSIDECARONLY);
     d->writingModeCombo->addItem(i18n("Write to image and XMP Sidecar"),                KExiv2::WRITETOSIDECARANDIMAGE);
@@ -608,7 +607,8 @@ void SetupMetadata::applySettings()
 
     if (d->writeXMPSidecarBox->isChecked())
     {
-        set.metadataWritingMode   = (KExiv2::MetadataWritingMode)d->writingModeCombo->currentIndex();
+        set.metadataWritingMode   = (KExiv2::MetadataWritingMode)
+                                    d->writingModeCombo->itemData(d->writingModeCombo->currentIndex()).toInt();
     }
     else
     {
@@ -687,7 +687,7 @@ void SetupMetadata::readSettings()
     else
     {
         d->writeXMPSidecarBox->setChecked(true);
-        d->writingModeCombo->setCurrentIndex(set.metadataWritingMode);
+        d->writingModeCombo->setCurrentIndex(d->writingModeCombo->findData(set.metadataWritingMode));
     }
 
 #ifdef HAVE_NEPOMUK
