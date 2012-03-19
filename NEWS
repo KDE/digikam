@@ -91,4 +91,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 072 ==> 264204 : Existing XMP sidecar file gets overwritten by digiKam.
 073 ==> 273565 : digiKam doesn't read EXIF if XMP sidecar file exists.
 074 ==> 296141 : Make digiKam compile on ARM.
-075 ==> 
+075 ==> 277618 : Metadata are incompletely imported from XMP sidecar and Tags are not created.
+076 ==> 
