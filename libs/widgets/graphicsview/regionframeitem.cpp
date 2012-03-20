@@ -639,8 +639,8 @@ void RegionFrameItem::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
 {
     const QSizeF maxSize = parentDImgItem()->boundingRect().size();
     const QPointF point  = mapToParent(event->pos());
-    qreal posX           = qBound(qreal(0.0), point.x(), maxSize.width());
-    qreal posY           = qBound(qreal(0.0), point.y(), maxSize.height());
+    qreal posX           = qBound(0., point.x(), maxSize.width());
+    qreal posY           = qBound(0., point.y(), maxSize.height());
     QRectF r             = rect();
 
     // Adjust edge
