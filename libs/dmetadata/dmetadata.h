@@ -173,6 +173,8 @@ public:
 
     static KExiv2::AltLangMap toAltLangMap(const QVariant& var);
 
+    // These methods have been factored to libkexiv2 2.3.0. Remove it after KDE 4.8.2
+#if KEXIV2_VERSION < 0x020300
     static QString sidecarPath(const QString& path);
     /** Like KExiv2::sidecarFilePathForFile, but works for remote URLs */
     static KUrl sidecarUrl(const KUrl& url);
@@ -180,6 +182,7 @@ public:
     static KUrl sidecarUrl(const QString& path);
     /** Performs a QFileInfo based check if the given local file has a sidecar */
     static bool hasSidecar(const QString& path);
+#endif // KEXIV2_VERSION < 0x020300
 
     //------------------------------------------------------------------------------------------------
     // Pushed to libkexiv2 for KDE4.4

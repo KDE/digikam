@@ -2690,6 +2690,8 @@ KExiv2::AltLangMap DMetadata::toAltLangMap(const QVariant& var)
     return map;
 }
 
+#if KEXIV2_VERSION < 0x020300
+
 KUrl DMetadata::sidecarUrl(const KUrl& url)
 {
     QString sidecarPath = sidecarFilePathForFile(url.path());
@@ -2712,6 +2714,7 @@ bool DMetadata::hasSidecar(const QString& path)
 {
     return QFileInfo(sidecarFilePathForFile(path)).exists();
 }
+#endif // KEXIV2_VERSION < 0x020300
 
 // ---------- Pushed to libkexiv2 for KDE 4.4 --------------
 
