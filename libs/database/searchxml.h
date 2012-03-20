@@ -227,10 +227,12 @@ public:
     void writeValue(const QString& value);
     void writeValue(int value);
     void writeValue(qlonglong value);
+    void writeValue(float value, int precision = 6);
     void writeValue(double value, int precision = 8);
     void writeValue(const QDateTime& dateTime);
     void writeValue(const QList<int>& valueList);
     void writeValue(const QList<qlonglong>& valueList);
+    void writeValue(const QList<float>& valueList, int precision = 6);
     void writeValue(const QList<double>& valueList, int precision = 8);
     void writeValue(const QStringList& valueList);
     void writeValue(const QList<QDateTime>& valueList);

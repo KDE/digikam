@@ -617,6 +617,11 @@ void SearchXmlWriter::writeValue(qlonglong value)
     writeCharacters(QString::number(value));
 }
 
+void SearchXmlWriter::writeValue(float value, int precision)
+{
+    writeCharacters(QString::number(value, 'g', precision));
+}
+
 void SearchXmlWriter::writeValue(double value, int precision)
 {
     writeCharacters(QString::number(value, 'g', precision));
@@ -642,6 +647,15 @@ void SearchXmlWriter::writeValue(const QList<qlonglong>& valueList)
     foreach(int i, valueList)
     {
         writeTextElement(listitem, QString::number(i));
+    }
+}
+
+void SearchXmlWriter::writeValue(const QList<float>& valueList, int precision)
+{
+    QString listitem("listitem");
+    foreach(double i, valueList)
+    {
+        writeTextElement(listitem, QString::number(i, 'g', precision));
     }
 }
 
