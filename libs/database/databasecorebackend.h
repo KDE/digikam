@@ -36,7 +36,6 @@
 // Local includes
 
 #include "digikam_export.h"
-#include "databaseerrorhandler.h"
 #include "databaseparameters.h"
 #include "sqlquery.h"
 
@@ -44,10 +43,12 @@ namespace Digikam
 {
 
 class ThumbnailSchemaUpdater;
+class DatabaseErrorHandler;
 class DatabaseCoreBackendPrivate;
 
 class DIGIKAM_EXPORT DatabaseLocking
 {
+
 public:
 
     DatabaseLocking();
@@ -58,9 +59,10 @@ public:
     int    lockCount;
 };
 
+// ------------------------------------------------------------------------------------------------------------
+
 class DIGIKAM_EXPORT DatabaseCoreBackend : public QObject
 {
-
     Q_OBJECT
 
 public:

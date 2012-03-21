@@ -30,7 +30,6 @@
 #include "databasecorebackend.h"
 #include "databasecorebackend_p.h"
 #include "databasecorebackend.moc"
-#include "databaseerrorhandler.moc"
 
 // Qt includes
 

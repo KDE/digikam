@@ -35,6 +35,7 @@
 
 #include "digikam_export.h"
 #include "databaseparameters.h"
+#include "databaseerrorhandler.h"
 
 namespace Digikam
 {
@@ -45,6 +46,7 @@ public:
 
     DatabaseCoreBackendPrivate(DatabaseCoreBackend* backend);
     virtual ~DatabaseCoreBackendPrivate() {}
+
     void init(const QString& connectionName, DatabaseLocking* locking);
 
     QString connectionName(QThread* thread);

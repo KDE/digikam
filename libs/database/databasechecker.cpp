@@ -26,6 +26,7 @@
 // Qt includes
 
 #include <QSqlDatabase>
+#include <QSqlError>
 
 // KDE includes
 

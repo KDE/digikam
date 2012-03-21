@@ -26,8 +26,9 @@
 
 // Qt includes
 
-#include <QtCore/QMetaType>
-#include <QtSql/QSqlError>
+#include <QObject>
+#include <QMetaType>
+#include <QSqlError>
 
 // Local includes
 
@@ -38,12 +39,15 @@ namespace Digikam
 
 class DIGIKAM_EXPORT DatabaseErrorAnswer
 {
+
 public:
 
-    virtual ~DatabaseErrorAnswer() {};
+    virtual ~DatabaseErrorAnswer();
     virtual void connectionErrorContinueQueries() = 0;
     virtual void connectionErrorAbortQueries() = 0;
 };
+
+// -----------------------------------------------------------------
 
 class DIGIKAM_EXPORT DatabaseErrorHandler : public QObject
 {
@@ -51,8 +55,8 @@ class DIGIKAM_EXPORT DatabaseErrorHandler : public QObject
 
 public:
 
-    DatabaseErrorHandler() {};
-    ~DatabaseErrorHandler() {};
+    DatabaseErrorHandler();
+    ~DatabaseErrorHandler();
 
 public Q_SLOTS:
 

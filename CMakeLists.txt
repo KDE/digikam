@@ -1230,6 +1230,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
     SET(libdatabasecore_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databasecorebackend.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databaseparameters.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databaseerrorhandler.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/thumbnaildatabaseaccess.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/thumbnaildb.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/thumbnailschemaupdater.cpp
