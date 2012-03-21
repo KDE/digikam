@@ -19,7 +19,7 @@ ENDIF(NOT PGF_FOUND)
 # Disable liblqr C code warnings.
 SET_SOURCE_FILES_PROPERTIES(${liblqr_SRCS} PROPERTIES COMPILE_FLAGS "-w")
 
-# Disable liblqr C code warnings.
+# Disable liblenfun C code warnings.
 SET_SOURCE_FILES_PROPERTIES(${liblensfun_SRCS} PROPERTIES COMPILE_FLAGS "-w")
 
 SET(digikamcore_LIB_SRCS
@@ -125,12 +125,13 @@ IF(GLIB2_FOUND)
 ENDIF(GLIB2_FOUND)
 
 SET_TARGET_PROPERTIES(digikamcore PROPERTIES VERSION 2.0.0 SOVERSION 2)
+
 IF(WIN32)
     SET_TARGET_PROPERTIES(digikamcore PROPERTIES COMPILE_FLAGS -DJPEG_STATIC)
     SET_TARGET_PROPERTIES(digikamcore PROPERTIES OUTPUT_NAME digikamlib)
 ENDIF(WIN32)
-INSTALL(TARGETS digikamcore ${INSTALL_TARGETS_DEFAULT_ARGS})
 
+INSTALL(TARGETS digikamcore ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 # Shared libdigikamdatabase ########################################################
 
@@ -146,7 +147,6 @@ ENDIF(WIN32)
 
 SET(digikamdatabase_LIB_SRCS
         ${libdatabase_SRCS}
-        ${libdatabasecore_SRCS}
         ${libdatabasemodels_SRCS}
         ${libsqlite2_SRCS}
         ${libhaar_SRCS}
@@ -184,6 +184,27 @@ ENDIF(PGF_FOUND)
 SET_TARGET_PROPERTIES(digikamdatabase PROPERTIES VERSION 2.0.0 SOVERSION 2)
 
 INSTALL(TARGETS digikamdatabase ${INSTALL_TARGETS_DEFAULT_ARGS} )
+
+
+# Shared libdigikamkioslave ################################################################
+
+SET(digikamkioslave_LIB_SRCS
+        ${libdatabasecore_SRCS}
+)
+
+KDE4_ADD_LIBRARY(digikamkioslave SHARED ${digikamkioslave_LIB_SRCS})
+
+TARGET_LINK_LIBRARIES(digikamkioslave
+                      digikamcore
+                      ${QT_QTSQL_LIBRARY}
+
+                      ${KDE4_KIO_LIBS}
+)
+
+SET_TARGET_PROPERTIES(digikamkioslave PROPERTIES VERSION 2.0.0 SOVERSION 2)
+
+INSTALL(TARGETS digikamkioslave ${INSTALL_TARGETS_DEFAULT_ARGS})
+
 
 # digiKam nepomuk services #########################################################
 
