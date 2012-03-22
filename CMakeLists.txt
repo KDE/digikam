@@ -1228,16 +1228,16 @@ IF(DIGIKAM_CAN_BE_COMPILED)
        )
 
     SET(libdatabasecore_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databasecorebackend.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databaseparameters.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databaseerrorhandler.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/thumbnaildatabaseaccess.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/thumbnaildb.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/thumbnailschemaupdater.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databaseconfigelement.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlquery.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/dbactiontype.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/tagregion.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/core/databasecorebackend.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/core/databaseparameters.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/core/databaseerrorhandler.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/core/thumbnaildatabaseaccess.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/core/thumbnaildb.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/core/thumbnailschemaupdater.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/core/databaseconfigelement.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/core/sqlquery.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/core/dbactiontype.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/core/tagregion.cpp
        )
 
     # We must set this variable here at top level because it is used in both
@@ -1548,6 +1548,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/kmemoryinfo
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/kinotify
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/core
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/haar
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imagehistory
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/faces

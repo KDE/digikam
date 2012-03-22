@@ -56,14 +56,14 @@ private:
 
 private:
 
-    bool                    m_setError;
+    bool                     m_setError;
 
-    int                     m_currentVersion;
-    int                     m_currentRequiredVersion;
+    int                      m_currentVersion;
+    int                      m_currentRequiredVersion;
 
     ThumbnailDatabaseAccess* m_access;
 
-    InitializationObserver* m_observer;
+    InitializationObserver*  m_observer;
 };
 
 }  // namespace Digikam

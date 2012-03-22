@@ -29,6 +29,7 @@
 #include "digikam_export.h"
 #include "databaseparameters.h"
 #include "databaseerrorhandler.h"
+
 class QMutexLocker;
 
 namespace Digikam
@@ -54,20 +55,19 @@ public:
 
     DatabaseCoreBackend* backend() const;
     QString lastError();
-    static DatabaseParameters parameters();
-
-
-    static void initDatabaseErrorHandler(DatabaseErrorHandler* errorhandler);
-    static void setParameters(const DatabaseParameters& parameters);
-    static bool checkReadyForUse(InitializationObserver* observer);
-    static bool isInitialized();
-
-    static void cleanUpDatabase();
 
     /**
       * Set the "last error" message. This method is not for public use.
       */
     void setLastError(const QString& error);
+
+    static DatabaseParameters parameters();
+
+    static void initDatabaseErrorHandler(DatabaseErrorHandler* errorhandler);
+    static void setParameters(const DatabaseParameters& parameters);
+    static bool checkReadyForUse(InitializationObserver* observer);
+    static bool isInitialized();
+    static void cleanUpDatabase();
 
 private:
 
