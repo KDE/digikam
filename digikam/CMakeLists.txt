@@ -186,24 +186,24 @@ SET_TARGET_PROPERTIES(digikamdatabase PROPERTIES VERSION 2.0.0 SOVERSION 2)
 INSTALL(TARGETS digikamdatabase ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 
-# Shared libdigikamkioslave ################################################################
+# Shared libdigikamdatabasecore ################################################################
 
-SET(digikamkioslave_LIB_SRCS
+SET(digikamdatabasecore_LIB_SRCS
         ${libdatabasecore_SRCS}
 )
 
-KDE4_ADD_LIBRARY(digikamkioslave SHARED ${digikamkioslave_LIB_SRCS})
+KDE4_ADD_LIBRARY(digikamdatabasecore SHARED ${digikamdatabasecore_LIB_SRCS})
 
-TARGET_LINK_LIBRARIES(digikamkioslave
+TARGET_LINK_LIBRARIES(digikamdatabasecore
                       digikamcore
                       ${QT_QTSQL_LIBRARY}
 
                       ${KDE4_KIO_LIBS}
 )
 
-SET_TARGET_PROPERTIES(digikamkioslave PROPERTIES VERSION 2.0.0 SOVERSION 2)
+SET_TARGET_PROPERTIES(digikamdatabasecore PROPERTIES VERSION 2.0.0 SOVERSION 2)
 
-INSTALL(TARGETS digikamkioslave ${INSTALL_TARGETS_DEFAULT_ARGS})
+INSTALL(TARGETS digikamdatabasecore ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 
 # digiKam nepomuk services #########################################################

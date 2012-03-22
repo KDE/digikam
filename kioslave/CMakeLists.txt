@@ -2,26 +2,26 @@ SET_DEBUG_AREA_CODE(${AREA_CODE_KIOSLAVES})
 
 # # digiKam Tags kio slave ###########################################################
 
-SET(kio_digikamtags_PART_SRCS digikamtags.cpp )
+SET(kio_digikamtags_PART_SRCS digikamtags.cpp)
 
 KDE4_ADD_PLUGIN(kio_digikamtags ${kio_digikamtags_PART_SRCS})
 
 TARGET_LINK_LIBRARIES(kio_digikamtags
                       digikamdatabase
-                      digikamkioslave
+                      digikamdatabasecore
                       ${KDE4_KIO_LIBS}
                       ${QT_QTCORE_LIBRARY}
                      )
 
 # # digiKam Albums kio slave #########################################################
 
-SET(kio_digikamalbums_PART_SRCS digikamalbums.cpp )
+SET(kio_digikamalbums_PART_SRCS digikamalbums.cpp)
 
 KDE4_ADD_PLUGIN(kio_digikamalbums ${kio_digikamalbums_PART_SRCS})
 
 TARGET_LINK_LIBRARIES(kio_digikamalbums
                       digikamdatabase
-                      digikamkioslave
+                      digikamdatabasecore
                       ${KDE4_KIO_LIBS}
                       ${QT_QTCORE_LIBRARY}
                      )
@@ -34,7 +34,7 @@ KDE4_ADD_PLUGIN(kio_digikamdates ${kio_digikamdates_PART_SRCS})
 
 TARGET_LINK_LIBRARIES(kio_digikamdates
                       digikamdatabase
-                      digikamkioslave
+                      digikamdatabasecore
                       ${KDE4_KIO_LIBS}
                       ${QT_QTCORE_LIBRARY}
                      )
@@ -47,20 +47,20 @@ KDE4_ADD_PLUGIN(kio_digikammapimages ${kio_digikammapimages_PART_SRCS})
 
 TARGET_LINK_LIBRARIES(kio_digikammapimages
                       digikamdatabase
-                      digikamkioslave
+                      digikamdatabasecore
                       ${KDE4_KIO_LIBS}
                       ${QT_QTCORE_LIBRARY}
                      )
 
 # # digiKam Search kio slave #########################################################
 
-SET(kio_digikamsearch_PART_SRCS digikamsearch.cpp )
+SET(kio_digikamsearch_PART_SRCS digikamsearch.cpp)
 
 KDE4_ADD_PLUGIN(kio_digikamsearch ${kio_digikamsearch_PART_SRCS})
 
 TARGET_LINK_LIBRARIES(kio_digikamsearch
                       digikamdatabase
-                      digikamkioslave
+                      digikamdatabasecore
                       ${KDE4_KIO_LIBS}
                       ${QT_QTCORE_LIBRARY}
                      )
