@@ -8,7 +8,7 @@ KDE4_ADD_PLUGIN(kio_digikamtags ${kio_digikamtags_PART_SRCS})
 
 TARGET_LINK_LIBRARIES(kio_digikamtags
                       digikamdatabase
-                      digikamdatabasecore
+                      digikamcore
                       ${KDE4_KIO_LIBS}
                       ${QT_QTCORE_LIBRARY}
                      )
@@ -21,7 +21,7 @@ KDE4_ADD_PLUGIN(kio_digikamalbums ${kio_digikamalbums_PART_SRCS})
 
 TARGET_LINK_LIBRARIES(kio_digikamalbums
                       digikamdatabase
-                      digikamdatabasecore
+                      digikamcore
                       ${KDE4_KIO_LIBS}
                       ${QT_QTCORE_LIBRARY}
                      )
@@ -34,7 +34,7 @@ KDE4_ADD_PLUGIN(kio_digikamdates ${kio_digikamdates_PART_SRCS})
 
 TARGET_LINK_LIBRARIES(kio_digikamdates
                       digikamdatabase
-                      digikamdatabasecore
+                      digikamcore
                       ${KDE4_KIO_LIBS}
                       ${QT_QTCORE_LIBRARY}
                      )
@@ -47,7 +47,7 @@ KDE4_ADD_PLUGIN(kio_digikammapimages ${kio_digikammapimages_PART_SRCS})
 
 TARGET_LINK_LIBRARIES(kio_digikammapimages
                       digikamdatabase
-                      digikamdatabasecore
+                      digikamcore
                       ${KDE4_KIO_LIBS}
                       ${QT_QTCORE_LIBRARY}
                      )
@@ -60,7 +60,7 @@ KDE4_ADD_PLUGIN(kio_digikamsearch ${kio_digikamsearch_PART_SRCS})
 
 TARGET_LINK_LIBRARIES(kio_digikamsearch
                       digikamdatabase
-                      digikamdatabasecore
+                      digikamcore
                       ${KDE4_KIO_LIBS}
                       ${QT_QTCORE_LIBRARY}
                      )

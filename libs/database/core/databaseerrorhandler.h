@@ -37,7 +37,7 @@
 namespace Digikam
 {
 
-class DIGIKAM_DATABASECORE_EXPORT DatabaseErrorAnswer
+class DIGIKAM_EXPORT DatabaseErrorAnswer
 {
 
 public:
@@ -49,7 +49,7 @@ public:
 
 // -----------------------------------------------------------------
 
-class DIGIKAM_DATABASECORE_EXPORT DatabaseErrorHandler : public QObject
+class DIGIKAM_EXPORT DatabaseErrorHandler : public QObject
 {
     Q_OBJECT
 

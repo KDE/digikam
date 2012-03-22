@@ -40,7 +40,7 @@
 namespace Digikam
 {
 
-class DIGIKAM_DATABASECORE_EXPORT DatabaseCoreBackendPrivate : public DatabaseErrorAnswer
+class DIGIKAM_EXPORT DatabaseCoreBackendPrivate : public DatabaseErrorAnswer
 {
 public:
 

@@ -28,11 +28,11 @@ SET(digikamcore_LIB_SRCS
         ${libdimgloaders_SRCS}
         ${libdimgfilters_SRCS}
         ${libdmetadata_SRCS}
-        ${libdatabasecore_SRCS}
         ${libjpegutils_SRCS}
-        ${libthreadimageio_SRCS}
         ${libprogressmanager_SRCS}
         ${libthememanager_SRCS}
+        ${libdatabasecore_SRCS}
+        ${libthreadimageio_SRCS}
         ${libpgf_SRCS}
         ${pgfutils_SRCS}
         ${libdigikamhelpers_SRCS}
@@ -184,26 +184,6 @@ ENDIF(PGF_FOUND)
 SET_TARGET_PROPERTIES(digikamdatabase PROPERTIES VERSION 2.0.0 SOVERSION 2)
 
 INSTALL(TARGETS digikamdatabase ${INSTALL_TARGETS_DEFAULT_ARGS} )
-
-
-# Shared libdigikamdatabasecore ################################################################
-
-SET(digikamdatabasecore_LIB_SRCS
-        ${libdatabasecore_SRCS}
-)
-
-KDE4_ADD_LIBRARY(digikamdatabasecore SHARED ${digikamdatabasecore_LIB_SRCS})
-
-TARGET_LINK_LIBRARIES(digikamdatabasecore
-                      digikamcore
-                      ${QT_QTSQL_LIBRARY}
-
-                      ${KDE4_KIO_LIBS}
-)
-
-SET_TARGET_PROPERTIES(digikamdatabasecore PROPERTIES VERSION 2.0.0 SOVERSION 2)
-
-INSTALL(TARGETS digikamdatabasecore ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 
 # digiKam nepomuk services #########################################################

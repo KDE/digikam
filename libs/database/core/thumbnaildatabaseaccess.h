@@ -40,7 +40,7 @@ class InitializationObserver;
 class ThumbnailDB;
 class ThumbnailDatabaseAccessStaticPriv;
 
-class DIGIKAM_DATABASECORE_EXPORT ThumbnailDatabaseAccess
+class DIGIKAM_EXPORT ThumbnailDatabaseAccess
 {
 public:
 
