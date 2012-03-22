@@ -94,5 +94,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 075 ==> 277618 : Metadata are incompletely imported from XMP sidecar and Tags are not created.
 076 ==> 220545 : Cannot write XMP sidecar files.
 077 ==> 279710 : Geo-location coordinates and metadata tags mutual exclusive in xmp sidecar file.
-078 ==> 
+078 ==> 289223 : XMP sidecars not written for M2TS and MTS video files.
+079 ==> 290816 : Preview mode shows portrait raws in horizontal when a third party app adds xmp files.
+080 ==> 
+
 
