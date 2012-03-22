@@ -40,7 +40,7 @@ namespace Digikam
  * and controls whether it should be used as field entry or as value
  * (prepared to an sql statement with positional binding).
  */
-class DIGIKAM_EXPORT DBActionType
+class DIGIKAM_DATABASECORE_EXPORT DBActionType
 {
 public:
     DBActionType();

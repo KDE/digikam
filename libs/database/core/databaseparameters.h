@@ -44,7 +44,7 @@
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT DatabaseParameters
+class DIGIKAM_DATABASECORE_EXPORT DatabaseParameters
 {
 
 public:
@@ -153,7 +153,7 @@ public:
     static void removeFromUrl(KUrl& url);
 };
 
-DIGIKAM_EXPORT QDebug operator<<(QDebug dbg, const DatabaseParameters& t);
+DIGIKAM_DATABASECORE_EXPORT QDebug operator<<(QDebug dbg, const DatabaseParameters& t);
 
 }  // namespace Digikam
 

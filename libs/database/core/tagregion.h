@@ -41,7 +41,7 @@ namespace Digikam
 
 class DImg;
 
-class DIGIKAM_EXPORT TagRegion
+class DIGIKAM_DATABASECORE_EXPORT TagRegion
 {
 public:
 
@@ -111,7 +111,7 @@ protected:
     Type     m_type;
 };
 
-QDebug DIGIKAM_EXPORT operator<<(QDebug dbg, const TagRegion& r);
+QDebug DIGIKAM_DATABASECORE_EXPORT operator<<(QDebug dbg, const TagRegion& r);
 
 } // namespace Digikam
 

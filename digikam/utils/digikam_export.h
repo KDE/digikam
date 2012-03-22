@@ -49,6 +49,18 @@
 
 // --------------------------------------------------------
 
+#ifndef DIGIKAM_DATABASECORE_EXPORT
+# if defined(MAKE_DIGIKAMDATABASECORE_LIB)
+/* We are building this library */
+#  define DIGIKAM_DATABASECORE_EXPORT KDE_EXPORT
+# else
+/* We are using this library */
+#  define DIGIKAM_DATABASECORE_EXPORT KDE_IMPORT
+# endif
+#endif
+
+// --------------------------------------------------------
+
 #ifndef DIGIKAM_BIN_EXPORT
 /* for now this is included in the binary and doesn't need exporting */
 #define DIGIKAM_BIN_EXPORT

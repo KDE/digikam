@@ -46,7 +46,7 @@ class ThumbnailSchemaUpdater;
 class DatabaseErrorHandler;
 class DatabaseCoreBackendPrivate;
 
-class DIGIKAM_EXPORT DatabaseLocking
+class DIGIKAM_DATABASECORE_EXPORT DatabaseLocking
 {
 
 public:
@@ -61,7 +61,7 @@ public:
 
 // ------------------------------------------------------------------------------------------------------------
 
-class DIGIKAM_EXPORT DatabaseCoreBackend : public QObject
+class DIGIKAM_DATABASECORE_EXPORT DatabaseCoreBackend : public QObject
 {
     Q_OBJECT
 

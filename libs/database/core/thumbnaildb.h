@@ -64,7 +64,7 @@ enum Type
 
 } // namespace DatabaseThumbnail
 
-class DIGIKAM_EXPORT DatabaseThumbnailInfo
+class DIGIKAM_DATABASECORE_EXPORT DatabaseThumbnailInfo
 {
 
 public:
@@ -81,7 +81,7 @@ public:
     QByteArray              data;
 };
 
-class DIGIKAM_EXPORT ThumbnailDB
+class DIGIKAM_DATABASECORE_EXPORT ThumbnailDB
 {
 
 public:

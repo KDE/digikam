@@ -37,7 +37,7 @@
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT DatabaseActionElement
+class DIGIKAM_DATABASECORE_EXPORT DatabaseActionElement
 {
 public:
 
@@ -48,7 +48,7 @@ public:
     QString statement;
 };
 
-class DIGIKAM_EXPORT DatabaseAction
+class DIGIKAM_DATABASECORE_EXPORT DatabaseAction
 {
 public:
 
@@ -57,7 +57,7 @@ public:
     QList<DatabaseActionElement> dbActionElements;
 };
 
-class DIGIKAM_EXPORT DatabaseConfigElement
+class DIGIKAM_DATABASECORE_EXPORT DatabaseConfigElement
 {
 public:
 
