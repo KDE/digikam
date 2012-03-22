@@ -60,13 +60,15 @@ namespace Digikam
 KipiImageInfo::KipiImageInfo(KIPI::Interface* const interface, const KUrl& url)
     : KIPI::ImageInfoShared(interface, url)
 {
-    // Check if item is registered in DB. Call scan-controller to parse it before to get info from DB.
-    ScanController::instance()->scanFileDirectly(url.path());
-
     m_info = ImageInfo(url);
     if (m_info.isNull())
     {
-        kDebug() << "DB Info is null (" << url.path() << ")";
+        // Check if item is registered in DB. Call scan-controller to parse it before to get info from DB.
+        ScanController::instance()->scanFileDirectly(url.path());
+        if (m_info.isNull())
+        {
+            kDebug() << "DB Info is null (" << url.path() << ")";
+        }
     }
 }
 
