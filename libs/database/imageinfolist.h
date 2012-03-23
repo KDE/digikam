@@ -53,6 +53,7 @@ public:
 
     void loadGroupImageIds() const;
     void loadTagIds() const;
+    bool static namefileLessThan(const ImageInfo &d1, const ImageInfo &d2);
 };
 
 typedef ImageInfoList::iterator ImageInfoListIterator;

@@ -48,6 +48,11 @@ QList<qlonglong> ImageInfoList::toImageIdList() const
     return idList;
 }
 
+bool ImageInfoList::namefileLessThan(const ImageInfo &d1, const ImageInfo &d2)
+{
+    return d1.name().toLower() < d2.name().toLower(); // sort by name
+}
+
 // Implementations of batch loading methods: See imageinfo.cpp (next to the corresponding single-item implementation)
 
 } // namespace Digikam
