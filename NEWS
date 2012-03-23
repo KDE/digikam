@@ -96,6 +96,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 077 ==> 279710 : Geo-location coordinates and metadata tags mutual exclusive in xmp sidecar file.
 078 ==> 289223 : XMP sidecars not written for M2TS and MTS video files.
 079 ==> 290816 : Preview mode shows portrait raws in horizontal when a third party app adds xmp files.
-080 ==> 
+080 ==> 273137 : Make XMP Side Car Files Hidden Or Use Separate Database To Store Them.
+081 ==> 
 
 
