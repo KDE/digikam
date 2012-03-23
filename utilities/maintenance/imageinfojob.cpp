@@ -139,6 +139,9 @@ void ImageInfoJob::slotData(KIO::Job*, const QByteArray& data)
         itemsList.append(info);
     }
 
+    // Sort the itemList based on name
+    qSort(itemsList.begin(), itemsList.end(), ImageInfoList::namefileLessThan);
+
     emit signalItemsInfo(itemsList);
 }
 
