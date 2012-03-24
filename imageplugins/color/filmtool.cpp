@@ -163,7 +163,7 @@ FilmTool::FilmTool(QObject* const parent)
       d(new FilmToolPriv)
 {
     setObjectName("film");
-    setToolName(i18n("Film"));
+    setToolName(i18n("Color Negative Film"));
     //setToolIcon(SmallIcon("film")); TODO
 
     ImageIface iface(0, 0);
