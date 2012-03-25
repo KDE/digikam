@@ -98,6 +98,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 079 ==> 290816 : Preview mode shows portrait raws in horizontal when a third party app adds xmp files.
 080 ==> 273137 : Make XMP Side Car Files Hidden Or Use Separate Database To Store Them.
 081 ==> 252458 : Sort order in SlideShow.
-082 ==> 
+082 ==> 277370 : Unclear licensing for profiles/prophoto.icm and profiles/srgb-d65.icm.
+083 ==> 
 
 
