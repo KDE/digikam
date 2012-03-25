@@ -32,6 +32,10 @@
 #include <QByteArray>
 #include <QVariant>
 
+// KDE includes
+
+#include <kdebug.h>
+
 // Local includes
 
 #include "digikam_export.h"
@@ -75,10 +79,14 @@ public:
     static QByteArray uniqueHash(const QString& filePath, const DImg& img, bool loadMetadata);
     static HistoryImageId createHistoryImageId(const QString& filePath, const DImg& img, const DMetadata& metadata);
 
-    static unsigned char*   new_failureTolerant(size_t unsecureSize);
-    static unsigned short*  new_short_failureTolerant(size_t unsecureSize);
+    static unsigned char*  new_failureTolerant(size_t unsecureSize)
+        { return new_failureTolerant<unsigned char>(unsecureSize); }
+    static unsigned short*  new_short_failureTolerant(size_t unsecureSize)
+        { return new_failureTolerant<unsigned short>(unsecureSize); }
 
     static int checkAllocation(qint64 fullSize);
+
+    template <typename Type> static Type* new_failureTolerant(size_t unsecureSize);
 
 protected:
 
@@ -119,6 +127,30 @@ private:
 
     DImgLoader();
 };
+
+template <typename Type>
+Q_INLINE_TEMPLATE Type* DImgLoader::new_failureTolerant(size_t size)
+{
+    if (!checkAllocation(size))
+    {
+        return 0;
+    }
+
+    Type* reserved = 0;
+
+    try
+    {
+        reserved = new Type[size];
+    }
+    catch (std::bad_alloc& ex)
+    {
+        kError() << "Failed to allocate chunk of memory of size" << size << ex.what();
+        reserved = 0;
+    }
+
+    return reserved;
+}
+
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(DImgLoader::LoadFlags)
 
