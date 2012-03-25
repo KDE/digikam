@@ -99,6 +99,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 080 ==> 273137 : Make XMP Side Car Files Hidden Or Use Separate Database To Store Them.
 081 ==> 252458 : Sort order in SlideShow.
 082 ==> 277370 : Unclear licensing for profiles/prophoto.icm and profiles/srgb-d65.icm.
-083 ==> 
+083 ==> 221985 : Update histogram before preview.
+084 ==> 
+
 
 
