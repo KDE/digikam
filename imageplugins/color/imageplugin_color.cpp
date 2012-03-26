@@ -190,7 +190,7 @@ ImagePlugin_Color::ImagePlugin_Color(QObject* const parent, const QVariantList&)
     connect(d->levelsAction, SIGNAL(triggered(bool)),
             this, SLOT(slotLevelsAdjust()));
 
-    d->filmAction = new KAction(KIcon("film"), i18n("Color Negative..."), this);
+    d->filmAction = new KAction(KIcon("colorneg"), i18n("Color Negative..."), this);
     d->filmAction->setShortcut(KShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_I));
     actionCollection()->addAction("imageplugin_film", d->filmAction);
     connect(d->filmAction, SIGNAL(triggered(bool)),
