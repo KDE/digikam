@@ -176,6 +176,7 @@ ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* parent)
     d->detailsCombo->insertItem(MsnMaps,       QString("MSN Maps"));
     d->detailsCombo->insertItem(MultiMap,      QString("MultiMap"));
     d->detailsCombo->insertItem(OpenStreetMap, QString("OpenStreetMap"));
+    d->detailsCombo->insertItem(LocAlizeMaps,  QString("loc.alize.us Maps"));
 
     // --------------------------------------------------------
 
@@ -266,6 +267,16 @@ void ImagePropertiesGPSTab::slotGPSDetails()
             url.append(",");
             url.append(val.setNum(info.coordinates.lon(), 'g', 12));
             url.append("&spn=0.05,0.05&t=h&om=1");
+            break;
+        }
+
+        case LocAlizeMaps:
+        {
+            url.append("http://loc.alize.us/#/geo:");
+            url.append(val.setNum(info.coordinates.lat(), 'g', 12));
+            url.append(",");
+            url.append(val.setNum(info.coordinates.lon(), 'g', 12));
+            url.append(",4,k/");
             break;
         }
 
