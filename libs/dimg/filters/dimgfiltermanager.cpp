@@ -86,7 +86,7 @@
 #include "tonalityfilter.h"
 #include "unsharpmaskfilter.h"
 #include "wbfilter.h"
-#include "filmfilter.h"
+#include "filmfilter_p.h"
 
 namespace Digikam
 {
