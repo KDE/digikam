@@ -102,4 +102,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 083 ==> 221985 : Update histogram before preview.
 084 ==> 208286 : Lock zoom when switching photos : add context menu in preview thumbbar.
 085 ==> 182110 : Geolocation tab : add "loc.alize.us" support to the more info web service link.
-086 ==>  
+086 ==> 216636 : Option to set parent album in Album -> New Album.
+087 ==> 
+
