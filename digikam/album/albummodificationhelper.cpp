@@ -122,20 +122,17 @@ PAlbum* AlbumModificationHelper::slotAlbumNew(PAlbum* parent)
     // if we create an album under root, need to supply the album root path.
     QString albumRootPath;
 
-    if (parent->isRoot())
-    {
-        //TODO: Let user choose an album root
-        albumRootPath = CollectionManager::instance()->oneAlbumRootPath();
-    }
+    albumRootPath = CollectionManager::instance()->oneAlbumRootPath();
 
     QString     title;
     QString     comments;
     QString     category;
     QDate       date;
     QStringList albumCategories;
+    int         parentSelector;
 
     if (!AlbumPropsEdit::createNew(parent, title, comments, date, category,
-                                   albumCategories))
+                                   albumCategories, parentSelector))
     {
         return 0;
     }
@@ -150,7 +147,7 @@ PAlbum* AlbumModificationHelper::slotAlbumNew(PAlbum* parent)
     QString errMsg;
     PAlbum* album = 0;
 
-    if (parent->isRoot())
+    if (parent->isRoot() || parentSelector == 1)
     {
         album = AlbumManager::instance()->createPAlbum(albumRootPath, title, comments,
                                                        date, category, errMsg);

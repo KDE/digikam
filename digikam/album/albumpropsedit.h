@@ -53,6 +53,7 @@ public:
     QString     title() const;
     QString     comments() const;
     QDate       date() const;
+    int         parent() const;
     QString     category() const;
     QStringList albumCategories() const;
 
@@ -68,7 +69,8 @@ public:
                           QString&     comments,
                           QDate&       date,
                           QString&     category,
-                          QStringList& albumCategories);
+                          QStringList& albumCategories,
+                          int&         parentSelector);
 
 private Q_SLOTS:
 
