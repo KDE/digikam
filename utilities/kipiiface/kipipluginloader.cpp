@@ -290,30 +290,32 @@ void KipiPluginLoader::kipiPlugActions(bool unplug)
 
 QString KipiPluginLoader::categoryName(KIPI::Category cat) const
 {
+    QString res;
     switch (cat)
     {
         case KIPI::ExportPlugin:
-            return i18n("Export Tools");
+            res = i18n("Export Tools");
             break;
         case KIPI::ImportPlugin:
-            return i18n("Import Tools");
+            res = i18n("Import Tools");
             break;
         case KIPI::ImagesPlugin:
-            return i18n("Images Tools");
+            res = i18n("Images Tools");
             break;
         case KIPI::ToolsPlugin:
-            return i18n("Miscellaneous Tools");
+            res = i18n("Miscellaneous Tools");
             break;
         case KIPI::BatchPlugin:
-            return i18n("Batch Tools");
+            res = i18n("Batch Tools");
             break;
         case KIPI::CollectionsPlugin:
-            return i18n("Albums Tools");
+            res = i18n("Albums Tools");
             break;
         default:
-            return i18n("Unknown Tools");
+            res = i18n("Unknown Tools");
             break;
     }
+    return res;
 }
 
 } //namespace Digikam
