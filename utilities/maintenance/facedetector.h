@@ -44,7 +44,7 @@ class FaceDetector : public MaintenanceTool
 
 public:
 
-    explicit FaceDetector(const FaceScanSettings& settings, ProgressItem* parent=0);
+    explicit FaceDetector(const FaceScanSettings& settings, ProgressItem* parent = 0);
     ~FaceDetector();
 
 private Q_SLOTS:

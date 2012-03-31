@@ -140,9 +140,11 @@ void ToolsView::addTool(BatchTool* tool)
         case BatchTool::MetadataTool:
             d->baseTools->addTool(tool);
             break;
+
         case BatchTool::KipiTool:
             // TODO
             break;
+
         default:      // User customized tools.
             //            d->customTools->addTool(tool);
             break;
@@ -166,9 +168,11 @@ bool ToolsView::removeTool(BatchTool* tool)
             case BatchTool::MetadataTool:
                 ret = d->baseTools->removeTool(tool);
                 break;
+
             case BatchTool::KipiTool:
                 // TODO
                 break;
+
             default:      // User customized tools.
                 //                ret = d->customTools->removeTool(tool);
                 break;

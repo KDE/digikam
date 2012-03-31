@@ -43,7 +43,7 @@ class SetupCamera : public QScrollArea
 
 public:
 
-    SetupCamera( QWidget* parent = 0 );
+    SetupCamera(QWidget* parent = 0);
     ~SetupCamera();
 
     void applySettings();

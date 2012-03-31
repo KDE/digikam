@@ -62,7 +62,7 @@ DatabaseOptionDialog::DatabaseOptionDialog(Rule* parent) :
     QGridLayout* mainLayout = new QGridLayout(this);
     mainLayout->addWidget(customLabel,       0, 0, 1, 1);
     mainLayout->addWidget(separatorLineEdit, 0, 1, 1, 1);
-    mainLayout->addWidget(dbkeySelectorView, 1, 0, 1,-1);
+    mainLayout->addWidget(dbkeySelectorView, 1, 0, 1, -1);
     mainWidget->setLayout(mainLayout);
 
     // --------------------------------------------------------

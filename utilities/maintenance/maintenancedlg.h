@@ -42,7 +42,7 @@ class MaintenanceDlg : public KDialog
 
 public:
 
-    explicit MaintenanceDlg(QWidget* parent=0);
+    explicit MaintenanceDlg(QWidget* parent = 0);
     ~MaintenanceDlg();
 
     MaintenanceSettings settings() const;

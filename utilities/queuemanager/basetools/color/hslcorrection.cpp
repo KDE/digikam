@@ -66,10 +66,10 @@ BatchToolSettings HSLCorrection::defaultSettings()
     BatchToolSettings prm;
     HSLContainer defaultPrm = m_settingsView->defaultSettings();
 
-    prm.insert("Hue",        (double)defaultPrm.hue);
+    prm.insert("Hue", (double)defaultPrm.hue);
     prm.insert("Saturation", (double)defaultPrm.saturation);
-    prm.insert("Lightness",  (double)defaultPrm.lightness);
-    prm.insert("Vibrance",   (double)defaultPrm.vibrance);
+    prm.insert("Lightness", (double)defaultPrm.lightness);
+    prm.insert("Vibrance", (double)defaultPrm.vibrance);
 
     return prm;
 }
@@ -89,10 +89,10 @@ void HSLCorrection::slotSettingsChanged()
     BatchToolSettings prm;
     HSLContainer currentPrm = m_settingsView->settings();
 
-    prm.insert("Hue",        (double)currentPrm.hue);
+    prm.insert("Hue", (double)currentPrm.hue);
     prm.insert("Saturation", (double)currentPrm.saturation);
-    prm.insert("Lightness",  (double)currentPrm.lightness);
-    prm.insert("Vibrance",   (double)currentPrm.vibrance);
+    prm.insert("Lightness", (double)currentPrm.lightness);
+    prm.insert("Vibrance", (double)currentPrm.vibrance);
 
     BatchTool::slotSettingsChanged(prm);
 }

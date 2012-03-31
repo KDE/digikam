@@ -64,7 +64,7 @@ ScriptIface::ScriptIface(QWidget* parent)
       d(new ScriptIfacePriv)
 {
     setCaption(i18n("Script Console"));
-    setButtons(Help|User1|Close);
+    setButtons(Help | User1 | Close);
     setDefaultButton(User1);
     setButtonText(User1, i18n("Evaluate"));
     setButtonIcon(User1, KIcon("run-build"));
@@ -104,13 +104,13 @@ void ScriptIface::slotEvaluate()
     QString script      = d->edit->toPlainText();
     QScriptValue result = d->engine->evaluate(script);
     d->label->setText(result.toString());
-/*
-    if(d->label->text() == QString())
-    {
-        d->label->setText("hello");
-    }
-    else d->label->clear();
-*/
+    /*
+        if(d->label->text() == QString())
+        {
+            d->label->setText("hello");
+        }
+        else d->label->clear();
+    */
 }
 
 void ScriptIface::ImportQtBindings()

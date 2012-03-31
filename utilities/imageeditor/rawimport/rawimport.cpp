@@ -219,7 +219,7 @@ void RawImport::slotLoadingFailed()
 
 void RawImport::slotLoadingProgress(float v)
 {
-    EditorToolIface::editorToolIface()->setToolProgress((int)(v*100));
+    EditorToolIface::editorToolIface()->setToolProgress((int)(v * 100));
 }
 
 void RawImport::slotScaleChanged()

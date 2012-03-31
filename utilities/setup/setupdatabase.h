@@ -39,7 +39,7 @@ class SetupDatabase : public QScrollArea
 
 public:
 
-    explicit SetupDatabase(KPageDialog* dialog, QWidget* parent=0);
+    explicit SetupDatabase(KPageDialog* dialog, QWidget* parent = 0);
     ~SetupDatabase();
 
     void applySettings();

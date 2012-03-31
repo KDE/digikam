@@ -122,7 +122,7 @@ bool UndoCache::putData(int level, int w, int h, bool sixteenBit, bool hasAlpha,
     ds << sixteenBit;
     ds << hasAlpha;
 
-    QByteArray ba((char*)data, w*h*(sixteenBit ? 8 : 4));
+    QByteArray ba((char*)data, w * h * (sixteenBit ? 8 : 4));
     ds << ba;
 
     file.close();
@@ -152,7 +152,7 @@ uchar* UndoCache::getData(int level, int& w, int& h, bool& sixteenBit, bool& has
     ds >> sixteenBit;
     ds >> hasAlpha;
 
-    uchar* data = new uchar[w*h*(sixteenBit ? 8 : 4)];
+    uchar* data = new uchar[w * h * (sixteenBit ? 8 : 4)];
 
     if (!data)
     {
@@ -161,7 +161,7 @@ uchar* UndoCache::getData(int level, int& w, int& h, bool& sixteenBit, bool& has
 
     QByteArray ba;
     ds >> ba;
-    memcpy (data, ba.data(), ba.size());
+    memcpy(data, ba.data(), ba.size());
 
     file.close();
 

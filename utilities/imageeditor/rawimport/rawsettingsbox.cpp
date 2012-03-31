@@ -165,7 +165,7 @@ public:
 RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget* parent)
     : EditorToolSettings(parent), d(new RawSettingsBoxPriv)
 {
-    setButtons(Default|Ok|Cancel);
+    setButtons(Default | Ok | Cancel);
     setTools(Histogram);
     setHistogramType(LRGBC);
 
@@ -267,7 +267,7 @@ RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget* parent)
     QGridLayout* curveLayout = new QGridLayout(d->curveBox);
 
     ColorGradientWidget* vGradient = new ColorGradientWidget(Qt::Vertical, 10, d->curveBox);
-    vGradient->setColors( QColor( "white" ), QColor( "black" ) );
+    vGradient->setColors(QColor("white"), QColor("black"));
 
     QLabel* spacev = new QLabel(d->curveBox);
     spacev->setFixedWidth(1);
@@ -286,7 +286,7 @@ RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget* parent)
     spaceh->setFixedHeight(1);
 
     ColorGradientWidget* hGradient = new ColorGradientWidget(Qt::Horizontal, 10, d->curveBox);
-    hGradient->setColors( QColor( "black" ), QColor( "white" ) );
+    hGradient->setColors(QColor("black"), QColor("white"));
 
     curveLayout->addWidget(vGradient,        0, 0, 1, 1);
     curveLayout->addWidget(spacev,           0, 1, 1, 1);
@@ -481,7 +481,7 @@ void RawSettingsBox::writeSettings()
     KConfigGroup group        = config->group(d->optionGroupName);
 
     group.writeEntry(d->optionHistogramChannelEntry, (int)histogramBox()->channel());
-    group.writeEntry(d->optionHistogramScaleEntry,   (int)histogramBox()->scale());
+    group.writeEntry(d->optionHistogramScaleEntry, (int)histogramBox()->scale());
 
     d->decodingSettingsBox->writeSettings(group);
 
@@ -508,8 +508,8 @@ DRawDecoding RawSettingsBox::settings() const
 {
     DRawDecoding settings(d->decodingSettingsBox->settings());
 
-    settings.bcg.brightness   = (double)d->brightnessInput->value()/250.0;
-    settings.bcg.contrast     = (double)(d->contrastInput->value()/100.0) + 1.00;
+    settings.bcg.brightness   = (double)d->brightnessInput->value() / 250.0;
+    settings.bcg.contrast     = (double)(d->contrastInput->value() / 100.0) + 1.00;
     settings.bcg.gamma        = d->gammaInput->value();
     settings.wb.saturation    = d->saturationInput->value();
     settings.wb.exposition    = d->fineExposureInput->value();

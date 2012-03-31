@@ -50,7 +50,7 @@ class DIGIKAM_EXPORT ImagePlugin : public QObject, public KXMLGUIClient
 
 public:
 
-    explicit ImagePlugin(QObject* const parent, const char* name=0);
+    explicit ImagePlugin(QObject* const parent, const char* name = 0);
     virtual ~ImagePlugin();
 
     virtual void setEnabledSelectionActions(bool enable);
@@ -63,7 +63,7 @@ public:
 protected:
 
     /** Used to set actions category into KDE config shortcuts dialog for Image EditorTool.
-     *  One plugin can host more than one tool with more than one action shortcuts. 
+     *  One plugin can host more than one tool with more than one action shortcuts.
      *  Define a category, will group actions by plugin name in shortcuts list.
      */
     void setActionCategory(const QString& name);

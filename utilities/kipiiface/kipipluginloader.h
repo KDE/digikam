@@ -66,12 +66,12 @@ public:
 
     /** Plug or unplug plugins actions list to application.
      */
-    void kipiPlugActions(bool unplug=false);
+    void kipiPlugActions(bool unplug = false);
 
     /** Return the instance of this singleton plugin loader.
      */
     static KipiPluginLoader* instance();
-   
+
 private Q_SLOTS:
 
     /** Called by KIPI::PluginLoader when plugins list must be re-loaded in application.

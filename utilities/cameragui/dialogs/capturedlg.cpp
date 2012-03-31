@@ -68,7 +68,7 @@ CaptureDlg::CaptureDlg(QWidget* parent, CameraController* controller,
 {
     d->controller = controller;
     setCaption(i18n("Capture from %1", cameraTitle));
-    setButtons(Help|Cancel|Ok);
+    setButtons(Help | Cancel | Ok);
     setDefaultButton(Ok);
     setButtonText(Ok, i18n("Capture"));
     setModal(true);
@@ -78,7 +78,7 @@ CaptureDlg::CaptureDlg(QWidget* parent, CameraController* controller,
     setMainWidget(d->captureWidget);
     restoreDialogSize(KGlobal::config()->group("Capture Tool Dialog"));
 
-    d->timer = new QTimer( this );
+    d->timer = new QTimer(this);
     connect( d->timer, SIGNAL(timeout()),
              this, SLOT(slotPreview()) );
     d->timer->setSingleShot(true);

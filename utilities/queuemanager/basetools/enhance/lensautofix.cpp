@@ -162,17 +162,17 @@ void LensAutoFix::slotSettingsChanged()
     BatchToolSettings prm;
     LensFunContainer  settings = d->cameraSelector->settings();
 
-    prm.insert("UseMetadata",     (bool)d->cameraSelector->useMetadata());
+    prm.insert("UseMetadata", (bool)d->cameraSelector->useMetadata());
 
-    prm.insert("filterCCA",       (bool)settings.filterCCA);
-    prm.insert("filterVIG",       (bool)settings.filterVIG);
-    prm.insert("filterCCI",       (bool)settings.filterCCI);
-    prm.insert("filterDST",       (bool)settings.filterDST);
-    prm.insert("filterGEO",       (bool)settings.filterGEO);
+    prm.insert("filterCCA", (bool)settings.filterCCA);
+    prm.insert("filterVIG", (bool)settings.filterVIG);
+    prm.insert("filterCCI", (bool)settings.filterCCI);
+    prm.insert("filterDST", (bool)settings.filterDST);
+    prm.insert("filterGEO", (bool)settings.filterGEO);
 
-    prm.insert("cropFactor",      (double)settings.cropFactor);
-    prm.insert("focalLength",     (double)settings.focalLength);
-    prm.insert("aperture",        (double)settings.aperture);
+    prm.insert("cropFactor", (double)settings.cropFactor);
+    prm.insert("focalLength", (double)settings.focalLength);
+    prm.insert("aperture", (double)settings.aperture);
     prm.insert("subjectDistance", (double)settings.subjectDistance);
 
     prm.insert("cameraMake",      settings.cameraMake);

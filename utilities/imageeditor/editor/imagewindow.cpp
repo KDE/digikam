@@ -444,9 +444,9 @@ void ImageWindow::setupUserArea()
     m_stackView->setCanvas(m_canvas);
     m_stackView->setViewMode(EditorStackView::CanvasMode);
 
-    m_splitter->setFrameStyle( QFrame::NoFrame );
-    m_splitter->setFrameShadow( QFrame::Plain );
-    m_splitter->setFrameShape( QFrame::NoFrame );
+    m_splitter->setFrameStyle(QFrame::NoFrame);
+    m_splitter->setFrameShadow(QFrame::Plain);
+    m_splitter->setFrameShape(QFrame::NoFrame);
     m_splitter->setOpaqueResize(false);
 
     // Code to check for the now depreciated HorizontalThumbar directive. It
@@ -570,7 +570,7 @@ void ImageWindow::setupActions()
     // Pop up dialog to ask user whether to permanently delete
 
     d->fileDeletePermanentlyAction = new KAction(KIcon("edit-delete"), i18n("Delete File Permanently"), this);
-    d->fileDeletePermanentlyAction->setShortcut(KShortcut(Qt::SHIFT+Qt::Key_Delete));
+    d->fileDeletePermanentlyAction->setShortcut(KShortcut(Qt::SHIFT + Qt::Key_Delete));
     connect(d->fileDeletePermanentlyAction, SIGNAL(triggered()),
             this, SLOT(slotDeleteCurrentItemPermanently()));
     actionCollection()->addAction("image_delete_permanently", d->fileDeletePermanentlyAction);
@@ -638,7 +638,7 @@ void ImageWindow::loadImageInfos(const ImageInfoList& imageInfoList, const Image
 
     if (!caption.isEmpty())
     {
-        setCaption(i18n("Image Editor - %1",caption));
+        setCaption(i18n("Image Editor - %1", caption));
     }
     else
     {
@@ -820,7 +820,7 @@ void ImageWindow::slotContextMenu()
         connect(assignTagsMenu, SIGNAL(signalPopupTagsView()),
                 d->rightSideBar, SLOT(slotPopupTagsView()));
 
-        if (!DatabaseAccess().db()->hasTags( idList ))
+        if (!DatabaseAccess().db()->hasTags(idList))
         {
             m_contextMenu->menuAction()->setEnabled(false);
         }
@@ -864,7 +864,7 @@ void ImageWindow::slotChanged()
 {
     QString mpixels;
     QSize dims(m_canvas->imageWidth(), m_canvas->imageHeight());
-    mpixels.setNum(dims.width()*dims.height()/1000000.0, 'f', 2);
+    mpixels.setNum(dims.width()*dims.height() / 1000000.0, 'f', 2);
     QString str = (!dims.isValid()) ? i18n("Unknown") : i18n("%1x%2 (%3Mpx)",
                                                              dims.width(), dims.height(), mpixels);
 
@@ -1346,37 +1346,37 @@ void ImageWindow::slotFileMetadataChanged(const KUrl& url)
     }
 }
 
-    /*
-     * Should all be done by DCategorizedView
-     *
+/*
+ * Should all be done by DCategorizedView
+ *
 void ImageWindow::slotRowsAboutToBeRemoved(const QModelIndex& parent, int start, int end)
 {
 
-    // ignore when closed
-    if (!isVisible() || !d->currentIsValid())
-    {
-        return;
-    }
+// ignore when closed
+if (!isVisible() || !d->currentIsValid())
+{
+    return;
+}
 
-    QModelIndex currentIndex = d->currentIndex();
-    if (currentIndex.row() >= start && currentIndex.row() <= end)
-    {
-        promptUserSave(d->currentUrl(), AlwaysNewVersion, false);
+QModelIndex currentIndex = d->currentIndex();
+if (currentIndex.row() >= start && currentIndex.row() <= end)
+{
+    promptUserSave(d->currentUrl(), AlwaysNewVersion, false);
 
-        // ensure selection
-        int totalToRemove = end - start + 1;
-        if (d->imageFilterModel->rowCount(parent) > totalToRemove)
+    // ensure selection
+    int totalToRemove = end - start + 1;
+    if (d->imageFilterModel->rowCount(parent) > totalToRemove)
+    {
+        if (end == d->imageFilterModel->rowCount(parent) - 1)
         {
-            if (end == d->imageFilterModel->rowCount(parent) - 1)
-            {
-                loadIndex(d->imageFilterModel->index(start - 1, 0));    // last remaining, no next one left
-            }
-            else
-            {
-                loadIndex(d->imageFilterModel->index(end + 1, 0));    // next remaining
-            }
+            loadIndex(d->imageFilterModel->index(start - 1, 0));    // last remaining, no next one left
+        }
+        else
+        {
+            loadIndex(d->imageFilterModel->index(end + 1, 0));    // next remaining
         }
     }
+}
 }*/
 
 /*
@@ -1480,7 +1480,7 @@ void ImageWindow::slideShow(SlideShowSettings& settings)
             settings.pictInfoMap.insert(info.fileUrl(), pictInfo);
             settings.fileList << info.fileUrl();
 
-            m_nameLabel->setProgressValue((int)((i++/cnt)*100.0));
+            m_nameLabel->setProgressValue((int)((i++ / cnt) * 100.0));
             kapp->processEvents();
         }
     }
@@ -1581,7 +1581,7 @@ void ImageWindow::dropEvent(QDropEvent* e)
         }
 
         loadImageInfos(imageInfoList, imageInfoList.first(),
-                       i18n("Album \"%1\"",ATitle));
+                       i18n("Album \"%1\"", ATitle));
         e->accept();
     }
     else if (DAlbumDrag::decode(e->mimeData(), urls, albumID))
@@ -1605,7 +1605,7 @@ void ImageWindow::dropEvent(QDropEvent* e)
         }
 
         loadImageInfos(imageInfoList, imageInfoList.first(),
-                       i18n("Album \"%1\"",ATitle));
+                       i18n("Album \"%1\"", ATitle));
         e->accept();
     }
     else if (DTagDrag::canDecode(e->mimeData()))
@@ -1636,7 +1636,7 @@ void ImageWindow::dropEvent(QDropEvent* e)
         }
 
         loadImageInfos(imageInfoList, imageInfoList.first(),
-                       i18n("Album \"%1\"",ATitle));
+                       i18n("Album \"%1\"", ATitle));
         e->accept();
     }
     else

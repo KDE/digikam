@@ -47,13 +47,13 @@ public:
 
     enum StackViewMode
     {
-        CanvasMode=0,
+        CanvasMode = 0,
         ToolViewMode
     };
 
 public:
 
-    EditorStackView(QWidget* parent=0);
+    EditorStackView(QWidget* parent = 0);
     ~EditorStackView();
 
     void    setCanvas(Canvas* canvas);

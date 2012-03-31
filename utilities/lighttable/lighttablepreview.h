@@ -46,7 +46,7 @@ class LightTablePreview : public ImagePreviewView
 
 public:
 
-    LightTablePreview(QWidget* parent=0);
+    LightTablePreview(QWidget* parent = 0);
     ~LightTablePreview();
 
     void setDragAndDropEnabled(bool b);

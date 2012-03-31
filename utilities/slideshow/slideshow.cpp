@@ -136,14 +136,14 @@ SlideShow::SlideShow(const SlideShowSettings& settings)
 
     setAttribute(Qt::WA_DeleteOnClose);
     setAttribute(Qt::WA_OpaquePaintEvent);
-    setWindowState( windowState() | Qt::WindowFullScreen );
+    setWindowState(windowState() | Qt::WindowFullScreen);
 
-    setWindowTitle( KDialog::makeStandardCaption(i18n("Slideshow")) );
-    setContextMenuPolicy( Qt::PreventContextMenu );
+    setWindowTitle(KDialog::makeStandardCaption(i18n("Slideshow")));
+    setContextMenuPolicy(Qt::PreventContextMenu);
 
     // ---------------------------------------------------------------
 
-    QRect deskRect = KGlobalSettings::desktopGeometry( kapp->activeWindow() );
+    QRect deskRect = KGlobalSettings::desktopGeometry(kapp->activeWindow());
     d->deskX       = deskRect.x();
     d->deskY       = deskRect.y();
     d->deskWidth   = deskRect.width();
@@ -195,7 +195,7 @@ SlideShow::SlideShow(const SlideShowSettings& settings)
     d->ratingWidget->setFading(false);
     d->ratingWidget->installEventFilter(this);
     d->labelsBox->setVisible(false);
-    d->labelsBox->layout()->setAlignment(d->ratingWidget, Qt::AlignVCenter|Qt::AlignLeft);
+    d->labelsBox->layout()->setAlignment(d->ratingWidget, Qt::AlignVCenter | Qt::AlignLeft);
 
     connect(d->ratingWidget, SIGNAL(signalRatingChanged(int)),
             this, SLOT(slotRatingChanged(int)));
@@ -256,7 +256,7 @@ void SlideShow::setCurrent(const KUrl& url)
     if (index != -1)
     {
         d->currentImage = url;
-        d->fileIndex    = index-1;
+        d->fileIndex    = index - 1;
     }
 }
 
@@ -281,7 +281,7 @@ void SlideShow::loadNextImage()
     if (!d->settings.loop)
     {
         d->toolBar->setEnabledPrev(d->fileIndex > 0);
-        d->toolBar->setEnabledNext(d->fileIndex < num-1);
+        d->toolBar->setEnabledNext(d->fileIndex < num - 1);
     }
 
     if (d->fileIndex < num)
@@ -308,14 +308,14 @@ void SlideShow::loadPrevImage()
     {
         if (d->settings.loop)
         {
-            d->fileIndex = num-1;
+            d->fileIndex = num - 1;
         }
     }
 
     if (!d->settings.loop)
     {
         d->toolBar->setEnabledPrev(d->fileIndex > 0);
-        d->toolBar->setEnabledNext(d->fileIndex < num-1);
+        d->toolBar->setEnabledNext(d->fileIndex < num - 1);
     }
 
     if (d->fileIndex >= 0 && d->fileIndex < num)
@@ -390,15 +390,15 @@ void SlideShow::updatePixmap()
             // Preview extraction is complete... Draw the image.
 
             QPixmap pix(d->preview.smoothScale(width(), height(), Qt::KeepAspectRatio).convertToPixmap());
-            p.drawPixmap((width()-pix.width())/2,
-                         (height()-pix.height())/2, pix,
+            p.drawPixmap((width() - pix.width()) / 2,
+                         (height() - pix.height()) / 2, pix,
                          0, 0, pix.width(), pix.height());
 
             QString str;
             PhotoInfoContainer photoInfo = d->settings.pictInfoMap[d->currentImage].photoInfo;
             QString            comment   = d->settings.pictInfoMap[d->currentImage].comment;
             QString            title     = d->settings.pictInfoMap[d->currentImage].title;
-            int offset                   = d->toolBar->height()+30;
+            int offset                   = d->toolBar->height() + 30;
 
             // Display Labels.
 
@@ -415,12 +415,13 @@ void SlideShow::updatePixmap()
                 d->labelsBox->move(10, height() - offset - d->clWidget->minimumHeight());
                 offset += d->clWidget->minimumHeight();
             }
-            
+
             // Display Titles.
-            
+
             if (d->settings.printTitle)
             {
                 str.clear();
+
                 if (!title.isEmpty())
                 {
                     str += title;
@@ -433,15 +434,16 @@ void SlideShow::updatePixmap()
             if (d->settings.printCapIfNoTitle)
             {
                 str.clear();
+
                 if (title.isEmpty())
                 {
                     str += comment;
                     printComments(p, offset, str);
                 }
             }
-            
+
             // Display Comments.
-            
+
             if (d->settings.printComment)
             {
                 str = comment;
@@ -490,7 +492,7 @@ void SlideShow::updatePixmap()
                         str += QString(" / ");
                     }
 
-                    str += i18n("%1 ISO",photoInfo.sensitivity);
+                    str += i18n("%1 ISO", photoInfo.sensitivity);
                 }
 
                 printInfoText(p, offset, str);
@@ -567,7 +569,7 @@ void SlideShow::updatePixmap()
 
             p.setPen(Qt::white);
             p.drawText(0, 0, d->pixmap.width(), d->pixmap.height(),
-                       Qt::AlignCenter|Qt::TextWordWrap,
+                       Qt::AlignCenter | Qt::TextWordWrap,
                        i18n("Cannot display image\n\"%1\"",
                             d->currentImage.fileName()));
         }
@@ -590,14 +592,14 @@ void SlideShow::updatePixmap()
         }
 
         QFont fn(font());
-        fn.setPointSize(fn.pointSize()+10);
+        fn.setPointSize(fn.pointSize() + 10);
         fn.setBold(true);
 
         p.setFont(fn);
         p.setPen(Qt::white);
         p.drawPixmap(50, 100, logo);
-        p.drawText(60 + logo.width(), 100 + logo.height()/3,   i18n("Slideshow Completed."));
-        p.drawText(60 + logo.width(), 100 + 2*logo.height()/3, i18n("Click To Exit..."));
+        p.drawText(60 + logo.width(), 100 + logo.height() / 3,   i18n("Slideshow Completed."));
+        p.drawText(60 + logo.width(), 100 + 2 * logo.height() / 3, i18n("Click To Exit..."));
 
         d->endOfShow = true;
         d->toolBar->setEnabledPlay(false);
@@ -613,14 +615,14 @@ void SlideShow::printInfoText(QPainter& p, int& offset, const QString& str)
         offset += 20;
         p.setPen(Qt::black);
 
-        for (int x=19; x<=21; ++x)
-            for (int y=offset+1; y>=offset-1; --y)
+        for (int x = 19; x <= 21; ++x)
+            for (int y = offset + 1; y >= offset - 1; --y)
             {
-                p.drawText(x, height()-y, str);
+                p.drawText(x, height() - y, str);
             }
 
         p.setPen(Qt::white);
-        p.drawText(20, height()-offset, str);
+        p.drawText(20, height() - offset, str);
     }
 }
 
@@ -641,9 +643,9 @@ void SlideShow::printComments(QPainter& p, int& offset, const QString& comments)
         uint commentsLinesLengthLocal = d->maxStringLen;
 
         for (currIndex = commentsIndex ;
-             currIndex < (uint)comments.length() && !breakLine ; ++currIndex )
+             currIndex < (uint)comments.length() && !breakLine ; ++currIndex)
         {
-            if ( comments.at(currIndex) == QChar('\n') || comments.at(currIndex).isSpace() )
+            if (comments.at(currIndex) == QChar('\n') || comments.at(currIndex).isSpace())
             {
                 breakLine = true;
             }
@@ -659,7 +661,7 @@ void SlideShow::printComments(QPainter& p, int& offset, const QString& comments)
         for (currIndex = commentsIndex ;
              currIndex <= commentsIndex + commentsLinesLengthLocal &&
              currIndex < (uint)comments.length() && !breakLine ;
-             ++currIndex )
+             ++currIndex)
         {
             breakLine = (comments.at(currIndex) == QChar('\n')) ? true : false;
 
@@ -687,7 +689,7 @@ void SlideShow::printComments(QPainter& p, int& offset, const QString& comments)
         commentsByLines.prepend(newLine.trimmed());
     }
 
-    for (int i = 0 ; i < (int)commentsByLines.count() ; ++i )
+    for (int i = 0 ; i < (int)commentsByLines.count() ; ++i)
     {
         printInfoText(p, offset, commentsByLines.at(i));
     }
@@ -709,7 +711,7 @@ void SlideShow::slotPause()
     if (d->toolBar->isHidden())
     {
         int w = d->toolBar->width();
-        d->toolBar->move(d->deskWidth-w-1,0);
+        d->toolBar->move(d->deskWidth - w - 1, 0);
         d->toolBar->show();
     }
 }
@@ -746,7 +748,7 @@ void SlideShow::wheelEvent(QWheelEvent* e)
         slotNext();
     }
 
-    if (e->delta() > 0 && d->fileIndex-1 >= 0)
+    if (e->delta() > 0 && d->fileIndex - 1 >= 0)
     {
         d->timer->stop();
         d->pause = true;
@@ -769,7 +771,7 @@ void SlideShow::mousePressEvent(QMouseEvent* e)
         d->toolBar->setPaused(true);
         slotNext();
     }
-    else if (e->button() == Qt::RightButton && d->fileIndex-1 >= 0)
+    else if (e->button() == Qt::RightButton && d->fileIndex - 1 >= 0)
     {
         d->timer->stop();
         d->pause = true;
@@ -824,7 +826,7 @@ void SlideShow::mouseMoveEvent(QMouseEvent* e)
 
     QPoint pos(e->pos());
 
-    QRect sizeRect(QPoint(0,0), d->toolBar->size());
+    QRect sizeRect(QPoint(0, 0), d->toolBar->size());
     QRect topLeft, topRight, bottomLeft, bottomRight;
     QRect topLeftLarger, topRightLarger, bottomLeftLarger, bottomRightLarger;
     makeCornerRectangles(QRect(d->deskY, d->deskY, d->deskWidth, d->deskHeight), d->toolBar->size(),
@@ -864,7 +866,7 @@ void SlideShow::slotMouseMoveTimeOut()
 {
     QPoint pos(QCursor::pos());
 
-    QRect sizeRect(QPoint(0,0), d->toolBar->size());
+    QRect sizeRect(QPoint(0, 0), d->toolBar->size());
     QRect topLeft, topRight, bottomLeft, bottomRight;
     QRect topLeftLarger, topRightLarger, bottomLeftLarger, bottomRightLarger;
     makeCornerRectangles(QRect(d->deskY, d->deskY, d->deskWidth, d->deskHeight), d->toolBar->size(),
@@ -883,14 +885,14 @@ void SlideShow::slotMouseMoveTimeOut()
 // from Okular's presentation widget
 void SlideShow::inhibitScreenSaver()
 {
-    QDBusMessage message = QDBusMessage::createMethodCall( "org.freedesktop.ScreenSaver", "/ScreenSaver",
-                                                           "org.freedesktop.ScreenSaver", "Inhibit" );
-    message << QString( "digiKam" );
-    message << i18nc( "Reason for inhibiting the screensaver activation, when the presentation mode is active", "Giving a presentation" );
+    QDBusMessage message = QDBusMessage::createMethodCall("org.freedesktop.ScreenSaver", "/ScreenSaver",
+                                                          "org.freedesktop.ScreenSaver", "Inhibit");
+    message << QString("digiKam");
+    message << i18nc("Reason for inhibiting the screensaver activation, when the presentation mode is active", "Giving a presentation");
 
-    QDBusReply<uint> reply = QDBusConnection::sessionBus().call( message );
+    QDBusReply<uint> reply = QDBusConnection::sessionBus().call(message);
 
-    if ( reply.isValid() )
+    if (reply.isValid())
     {
         d->screenSaverCookie = reply.value();
     }
@@ -898,12 +900,12 @@ void SlideShow::inhibitScreenSaver()
 
 void SlideShow::allowScreenSaver()
 {
-    if ( d->screenSaverCookie != -1 )
+    if (d->screenSaverCookie != -1)
     {
-        QDBusMessage message = QDBusMessage::createMethodCall( "org.freedesktop.ScreenSaver", "/ScreenSaver",
-                                                               "org.freedesktop.ScreenSaver", "UnInhibit" );
+        QDBusMessage message = QDBusMessage::createMethodCall("org.freedesktop.ScreenSaver", "/ScreenSaver",
+                                                              "org.freedesktop.ScreenSaver", "UnInhibit");
         message << (uint)d->screenSaverCookie;
-        QDBusConnection::sessionBus().send( message );
+        QDBusConnection::sessionBus().send(message);
     }
 }
 
@@ -927,18 +929,18 @@ void SlideShow::slotPickLabelChanged(int pick)
 
 bool SlideShow::eventFilter(QObject* obj, QEvent* ev)
 {
-    if ( obj == d->ratingWidget || obj == d->clWidget || obj == d->plWidget ||
-         obj == d->clWidget->colorLabelWidget()       ||
-         obj == d->plWidget->pickLabelWidget())
+    if (obj == d->ratingWidget || obj == d->clWidget || obj == d->plWidget ||
+        obj == d->clWidget->colorLabelWidget()       ||
+        obj == d->plWidget->pickLabelWidget())
     {
-        if ( ev->type() == QEvent::Enter)
+        if (ev->type() == QEvent::Enter)
         {
             d->pause = true;
             d->toolBar->setPaused(true);
             return false;
         }
 
-        if ( ev->type() == QEvent::Leave)
+        if (ev->type() == QEvent::Leave)
         {
             d->pause = false;
             d->toolBar->setPaused(false);

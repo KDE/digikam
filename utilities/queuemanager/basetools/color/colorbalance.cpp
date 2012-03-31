@@ -66,9 +66,9 @@ BatchToolSettings ColorBalance::defaultSettings()
     BatchToolSettings prm;
     CBContainer defaultPrm = m_settingsView->defaultSettings();
 
-    prm.insert("Red",   (double)defaultPrm.red);
+    prm.insert("Red", (double)defaultPrm.red);
     prm.insert("Green", (double)defaultPrm.green);
-    prm.insert("Blue",  (double)defaultPrm.blue);
+    prm.insert("Blue", (double)defaultPrm.blue);
 
     return prm;
 }
@@ -87,9 +87,9 @@ void ColorBalance::slotSettingsChanged()
     BatchToolSettings prm;
     CBContainer currentPrm = m_settingsView->settings();
 
-    prm.insert("Red",   (double)currentPrm.red);
+    prm.insert("Red", (double)currentPrm.red);
     prm.insert("Green", (double)currentPrm.green);
-    prm.insert("Blue",  (double)currentPrm.blue);
+    prm.insert("Blue", (double)currentPrm.blue);
 
     BatchTool::slotSettingsChanged(prm);
 }

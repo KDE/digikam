@@ -69,7 +69,7 @@ public:
 
     enum WaterMarkPositon
     {
-        TopLeft=0,
+        TopLeft = 0,
         TopRight,
         BottomLeft,
         BottomRight,
@@ -166,7 +166,7 @@ WaterMark::WaterMark(QObject* parent)
     d->imageFileUrlRequester->setClickMessage(i18n("Click to select watermark image."));
     label->setText(i18n("Watermark image:"));
     imageSettingsGroupBoxLayout->addWidget(label);
-    imageSettingsGroupBoxLayout->addWidget(d->imageFileUrlRequester );
+    imageSettingsGroupBoxLayout->addWidget(d->imageFileUrlRequester);
 
     d->textSettingsGroupBox = new QGroupBox(vbox);
     d->textSettingsGroupBox->setTitle(i18n("Text settings"));
@@ -185,7 +185,7 @@ WaterMark::WaterMark(QObject* parent)
 
     QLabel* label2       = new QLabel();
     d->fontChooserWidget = new KFontComboBox(vbox);
-    d->fontChooserWidget->setWhatsThis( i18n("Here you can choose the font to be used."));
+    d->fontChooserWidget->setWhatsThis(i18n("Here you can choose the font to be used."));
     label2->setText(i18n("Font:"));
     textSettingsGroupBoxLayout->addWidget(label2);
     textSettingsGroupBoxLayout->addWidget(d->fontChooserWidget);
@@ -204,17 +204,17 @@ WaterMark::WaterMark(QObject* parent)
     d->textOpacity->setValue(100);
     d->textOpacity->setSliderEnabled(true);
     d->textOpacity->setWhatsThis(i18n("Set the opacity of the watermark text. 100 is fully opaque, 0 is fully transparent."));
-    textSettingsGroupBoxLayout->addWidget(textOpacityLabel );
+    textSettingsGroupBoxLayout->addWidget(textOpacityLabel);
     textSettingsGroupBoxLayout->addWidget(d->textOpacity);
 
     KHBox* useBackgroundHBox = new KHBox();
     useBackgroundHBox->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     useBackgroundHBox->setSpacing(5);
-    d->useBackgroundCheckBox = new QCheckBox(useBackgroundHBox );
+    d->useBackgroundCheckBox = new QCheckBox(useBackgroundHBox);
     d->useBackgroundCheckBox->setWhatsThis(i18n("Check this if you want a background fill behind the text"));
     QLabel* useBackgroundLabel = new QLabel(useBackgroundHBox);
     useBackgroundLabel->setText(i18n("Use background"));
-    textSettingsGroupBoxLayout->addWidget(useBackgroundHBox );
+    textSettingsGroupBoxLayout->addWidget(useBackgroundHBox);
 
     QLabel* backgroundColorLabel = new QLabel();
     d->backgroundColorButton = new KColorButton(QColor(0xCC, 0xCC, 0xCC));
@@ -230,7 +230,7 @@ WaterMark::WaterMark(QObject* parent)
     d->backgroundOpacity->setValue(0xCC);
     d->backgroundOpacity->setSliderEnabled(true);
     d->backgroundOpacity->setWhatsThis(i18n("Set the opacity of the watermark background. 100 is fully opaque, 0 is fully transparent."));
-    textSettingsGroupBoxLayout->addWidget(backgroundOpacityLabel );
+    textSettingsGroupBoxLayout->addWidget(backgroundOpacityLabel);
     textSettingsGroupBoxLayout->addWidget(d->backgroundOpacity);
 
     d->imageSettingsGroupBox->setVisible(true);
@@ -329,7 +329,7 @@ BatchToolSettings WaterMark::defaultSettings()
     BatchToolSettings settings;
 
     settings.insert("Use image",          true);
-    settings.insert("Watermark image",    QString() );
+    settings.insert("Watermark image",    QString());
     settings.insert("Text",               QString());
     settings.insert("Font",               QFont());
     settings.insert("Color",              Qt::black);
@@ -459,27 +459,31 @@ bool WaterMark::toolOperations()
             case WaterMarkPriv::TopLeft:
                 alignMode = Qt::AlignLeft;
                 break;
+
             case WaterMarkPriv::TopRight:
                 alignMode = Qt::AlignRight;
                 break;
+
             case WaterMarkPriv::BottomLeft:
                 alignMode = Qt::AlignLeft;
                 break;
+
             case WaterMarkPriv::Center:
                 alignMode = Qt::AlignCenter;
                 break;
+
             default :    // BottomRight
                 alignMode = Qt::AlignRight;
                 break;
         }
 
-        font.setPointSizeF(fontSize );
+        font.setPointSizeF(fontSize);
         QFontMetrics fontMt(font);
         QRect fontRect = fontMt.boundingRect(radius, radius, image().width(), image().height(), 0, text);
 
         // Add a transparent layer.
-        QRect backgroundRect(fontRect.x()-radius, fontRect.y()-radius,
-                             fontRect.width()+2*radius, fontRect.height()+2*radius);
+        QRect backgroundRect(fontRect.x() - radius, fontRect.y() - radius,
+                             fontRect.width() + 2 * radius, fontRect.height() + 2 * radius);
         DImg backgroundLayer(backgroundRect.width(), backgroundRect.height(), image().sixteenBit(), true);
         DColor transparent(QColor(0, 0, 0));
         transparent.setAlpha(0);
@@ -529,29 +533,33 @@ bool WaterMark::toolOperations()
 
     watermarkImage.convertToDepthOfImage(&image());
 
-    QRect watermarkRect(0,0,watermarkImage.width(), watermarkImage.height());
+    QRect watermarkRect(0, 0, watermarkImage.width(), watermarkImage.height());
 
     switch (placement)
     {
         case WaterMarkPriv::TopLeft:
             watermarkRect.moveTopLeft(QPoint(marginW, marginH));
             break;
+
         case WaterMarkPriv::TopRight:
-            watermarkRect.moveTopRight(QPoint(image().width()-marginW, marginH));
+            watermarkRect.moveTopRight(QPoint(image().width() - marginW, marginH));
             break;
+
         case WaterMarkPriv::BottomLeft:
-            watermarkRect.moveBottomLeft(QPoint(marginW, image().height()-marginH));
+            watermarkRect.moveBottomLeft(QPoint(marginW, image().height() - marginH));
             break;
+
         case WaterMarkPriv::Center:
             watermarkRect.moveCenter(QPoint((int)(image().width() / 2), (int)(image().height() / 2)));
             break;
+
         default :    // BottomRight
-            watermarkRect.moveBottomRight(QPoint(image().width()-marginW, image().height()-marginH));
+            watermarkRect.moveBottomRight(QPoint(image().width() - marginW, image().height() - marginH));
             break;
     }
 
     image().bitBlendImage(composer, &watermarkImage, 0, 0, watermarkImage.width(), watermarkImage.height(),
-                          watermarkRect.left(), watermarkRect.top() );
+                          watermarkRect.left(), watermarkRect.top());
 
     delete composer;
 
@@ -571,9 +579,9 @@ int WaterMark::queryFontSize(const QString& text, const QFont& font, int length)
         QFontMetrics fontMt(fnt);
         fontRect = fontMt.boundingRect(0, 0, image().width(), image().height(), 0, text);
 
-        if (fontRect.width() > lround((image().width() * length)/100.0))
+        if (fontRect.width() > lround((image().width() * length) / 100.0))
         {
-            return (i-1);
+            return (i - 1);
         }
     }
 

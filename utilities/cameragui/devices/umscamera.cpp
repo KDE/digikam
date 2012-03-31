@@ -195,7 +195,9 @@ void UMSCamera::getItemInfo(const QString& folder, const QString& itemName, CamI
 
             // Fall back to file system info
             if (info.mtime.isNull())
+            {
                 info.mtime = ImageScanner::creationDateFromFilesystem(fi);
+            }
         }
         else
         {
@@ -313,20 +315,20 @@ bool UMSCamera::downloadItem(const QString& folder, const QString& itemName, con
     QFile sFile(src);
     QFile dFile(dest);
 
-    if ( !sFile.open(QIODevice::ReadOnly) )
+    if (!sFile.open(QIODevice::ReadOnly))
     {
         kWarning() << "Failed to open source file for reading: " << src;
         return false;
     }
 
-    if ( !dFile.open(QIODevice::WriteOnly) )
+    if (!dFile.open(QIODevice::WriteOnly))
     {
         sFile.close();
         kWarning() << "Failed to open dest file for writing: " << dest;
         return false;
     }
 
-    const int MAX_IPC_SIZE = (1024*32);
+    const int MAX_IPC_SIZE = (1024 * 32);
 
     char buffer[MAX_IPC_SIZE];
 
@@ -418,20 +420,20 @@ bool UMSCamera::uploadItem(const QString& folder, const QString& itemName, const
     QFile sFile(src);
     QFile dFile(dest);
 
-    if ( !sFile.open(QIODevice::ReadOnly) )
+    if (!sFile.open(QIODevice::ReadOnly))
     {
         kWarning() << "Failed to open source file for reading: " << src;
         return false;
     }
 
-    if ( !dFile.open(QIODevice::WriteOnly) )
+    if (!dFile.open(QIODevice::WriteOnly))
     {
         sFile.close();
         kWarning() << "Failed to open dest file for writing: " << dest;
         return false;
     }
 
-    const int MAX_IPC_SIZE = (1024*32);
+    const int MAX_IPC_SIZE = (1024 * 32);
 
     char buffer[MAX_IPC_SIZE];
 
@@ -508,7 +510,7 @@ void UMSCamera::listFolders(const QString& folder, QStringList& subFolderList)
     }
 
     QDir dir(folder);
-    dir.setFilter(QDir::Dirs|QDir::Executable);
+    dir.setFilter(QDir::Dirs | QDir::Executable);
 
     const QFileInfoList list = dir.entryInfoList();
 

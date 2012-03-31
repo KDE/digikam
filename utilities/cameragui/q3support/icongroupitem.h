@@ -65,7 +65,7 @@ public:
     int       count() const;
     int       index(IconItem* item) const;
 
-    void      clear(bool update=true);
+    void      clear(bool update = true);
     void      sort();
 
     void insertItem(IconItem* item);

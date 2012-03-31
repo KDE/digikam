@@ -53,14 +53,14 @@ class AlbumCustomizer::AlbumCustomizerPriv
 public:
 
     AlbumCustomizerPriv()
-      : autoAlbumDateCheck(0),
-        autoAlbumExtCheck(0),
-        folderDateLabel(0),
-        customizer(0),
-        tooltipToggleButton(0),
-        customExample(0),
-        folderDateFormat(0),
-        tooltipDialog(0)
+        : autoAlbumDateCheck(0),
+          autoAlbumExtCheck(0),
+          folderDateLabel(0),
+          customizer(0),
+          tooltipToggleButton(0),
+          customExample(0),
+          folderDateFormat(0),
+          tooltipDialog(0)
     {
     }
 
@@ -132,7 +132,7 @@ AlbumCustomizer::AlbumCustomizer(QWidget* parent)
     albumVlay->setMargin(KDialog::spacingHint());
     albumVlay->setSpacing(KDialog::spacingHint());
 
-    setWhatsThis( i18n("Set how digiKam creates albums automatically when downloading."));
+    setWhatsThis(i18n("Set how digiKam creates albums automatically when downloading."));
     d->autoAlbumExtCheck->setWhatsThis(i18n("Enable this option if you want to download your "
                                             "pictures into automatically created file extension-based sub-albums of the destination "
                                             "album. This way, you can separate JPEG and RAW files as they are downloaded from your camera."));
@@ -242,10 +242,15 @@ void AlbumCustomizer::slotCustomizerChanged()
     if (folderDateFormat() == CustomDateFormat)
     {
         QDate date(1968, 12, 26);
+
         if (customDateFormatIsValid())
+        {
             d->customExample->setText(i18n("Ex.: %1", date.toString(customDateFormat())));
+        }
         else
+        {
             d->customExample->setText(i18n("Format is not valid..."));
+        }
     }
     else
     {

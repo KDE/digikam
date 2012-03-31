@@ -71,24 +71,24 @@ BatchToolSettings ChannelMixer::defaultSettings()
     BatchToolSettings prm;
     MixerContainer defaultPrm = m_settingsView->defaultSettings();
 
-    prm.insert("bPreserveLum",   (bool)defaultPrm.bPreserveLum);
-    prm.insert("bMonochrome",    (bool)defaultPrm.bMonochrome);
+    prm.insert("bPreserveLum", (bool)defaultPrm.bPreserveLum);
+    prm.insert("bMonochrome", (bool)defaultPrm.bMonochrome);
 
     // Standard settings.
-    prm.insert("redRedGain",     (double)defaultPrm.redRedGain);
-    prm.insert("redGreenGain",   (double)defaultPrm.redGreenGain);
-    prm.insert("redBlueGain",    (double)defaultPrm.redBlueGain);
-    prm.insert("greenRedGain",   (double)defaultPrm.greenRedGain);
+    prm.insert("redRedGain", (double)defaultPrm.redRedGain);
+    prm.insert("redGreenGain", (double)defaultPrm.redGreenGain);
+    prm.insert("redBlueGain", (double)defaultPrm.redBlueGain);
+    prm.insert("greenRedGain", (double)defaultPrm.greenRedGain);
     prm.insert("greenGreenGain", (double)defaultPrm.greenGreenGain);
-    prm.insert("greenBlueGain",  (double)defaultPrm.greenBlueGain);
-    prm.insert("blueRedGain",    (double)defaultPrm.blueRedGain);
-    prm.insert("blueGreenGain",  (double)defaultPrm.blueGreenGain);
-    prm.insert("blueBlueGain",   (double)defaultPrm.blueBlueGain);
+    prm.insert("greenBlueGain", (double)defaultPrm.greenBlueGain);
+    prm.insert("blueRedGain", (double)defaultPrm.blueRedGain);
+    prm.insert("blueGreenGain", (double)defaultPrm.blueGreenGain);
+    prm.insert("blueBlueGain", (double)defaultPrm.blueBlueGain);
 
     // Monochrome settings.
-    prm.insert("blackRedGain",   (double)defaultPrm.blackRedGain);
+    prm.insert("blackRedGain", (double)defaultPrm.blackRedGain);
     prm.insert("blackGreenGain", (double)defaultPrm.blackGreenGain);
-    prm.insert("blackBlueGain",  (double)defaultPrm.blackBlueGain);
+    prm.insert("blackBlueGain", (double)defaultPrm.blackBlueGain);
 
     return prm;
 }
@@ -124,24 +124,24 @@ void ChannelMixer::slotSettingsChanged()
     BatchToolSettings prm;
     MixerContainer currentPrm = m_settingsView->settings();
 
-    prm.insert("bPreserveLum",   (bool)currentPrm.bPreserveLum);
-    prm.insert("bMonochrome",    (bool)currentPrm.bMonochrome);
+    prm.insert("bPreserveLum", (bool)currentPrm.bPreserveLum);
+    prm.insert("bMonochrome", (bool)currentPrm.bMonochrome);
 
     // Standard settings.
-    prm.insert("redRedGain",     (double)currentPrm.redRedGain);
-    prm.insert("redGreenGain",   (double)currentPrm.redGreenGain);
-    prm.insert("redBlueGain",    (double)currentPrm.redBlueGain);
-    prm.insert("greenRedGain",   (double)currentPrm.greenRedGain);
+    prm.insert("redRedGain", (double)currentPrm.redRedGain);
+    prm.insert("redGreenGain", (double)currentPrm.redGreenGain);
+    prm.insert("redBlueGain", (double)currentPrm.redBlueGain);
+    prm.insert("greenRedGain", (double)currentPrm.greenRedGain);
     prm.insert("greenGreenGain", (double)currentPrm.greenGreenGain);
-    prm.insert("greenBlueGain",  (double)currentPrm.greenBlueGain);
-    prm.insert("blueRedGain",    (double)currentPrm.blueRedGain);
-    prm.insert("blueGreenGain",  (double)currentPrm.blueGreenGain);
-    prm.insert("blueBlueGain",   (double)currentPrm.blueBlueGain);
+    prm.insert("greenBlueGain", (double)currentPrm.greenBlueGain);
+    prm.insert("blueRedGain", (double)currentPrm.blueRedGain);
+    prm.insert("blueGreenGain", (double)currentPrm.blueGreenGain);
+    prm.insert("blueBlueGain", (double)currentPrm.blueBlueGain);
 
     // Monochrome settings.
-    prm.insert("blackRedGain",   (double)currentPrm.blackRedGain);
+    prm.insert("blackRedGain", (double)currentPrm.blackRedGain);
     prm.insert("blackGreenGain", (double)currentPrm.blackGreenGain);
-    prm.insert("blackBlueGain",  (double)currentPrm.blackBlueGain);
+    prm.insert("blackBlueGain", (double)currentPrm.blackBlueGain);
 
     BatchTool::slotSettingsChanged(prm);
 }

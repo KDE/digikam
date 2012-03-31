@@ -55,7 +55,7 @@ class IconView : public Q3ScrollView
 
 public:
 
-    explicit IconView(QWidget* parent=0, const char* name=0);
+    explicit IconView(QWidget* parent = 0, const char* name = 0);
     virtual ~IconView();
 
     IconGroupItem* firstGroup() const;
@@ -75,7 +75,7 @@ public:
     int  countSelected() const;
     int  groupCount() const;
 
-    virtual void clear(bool update=true);
+    virtual void clear(bool update = true);
     void sort();
 
     void clearSelection();

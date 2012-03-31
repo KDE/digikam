@@ -1124,6 +1124,7 @@ void QueueMgrWindow::processed(const KUrl& url, const KUrl& tmp)
                 addHistoryMessage(i18n("Failed to save sidecar file..."), DHistoryView::ErrorEntry);
             }
         }
+
         if (KDE::rename(tmp.toLocalFile(), dest.toLocalFile()) != 0)
         {
             if (d->currentProcessItem)

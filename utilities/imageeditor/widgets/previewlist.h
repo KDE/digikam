@@ -47,7 +47,7 @@ class DIGIKAM_EXPORT PreviewThreadWrapper : public QObject
 
 public:
 
-    PreviewThreadWrapper(QObject* parent=0);
+    PreviewThreadWrapper(QObject* parent = 0);
     ~PreviewThreadWrapper();
 
     void registerFilter(int id, DImgThreadedFilter* filter);
@@ -79,7 +79,7 @@ class DIGIKAM_EXPORT PreviewListItem : public QListWidgetItem
 
 public:
 
-    PreviewListItem(QListWidget* parent=0);
+    PreviewListItem(QListWidget* parent = 0);
     ~PreviewListItem();
 
     void setPixmap(const QPixmap& pix);

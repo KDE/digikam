@@ -58,11 +58,11 @@ Filter::Filter()
 QString Filter::toString()
 {
     return QString("%1|%2|%3|%4|%5")
-                   .arg(name)
-                   .arg(onlyNew ? "true" : "false")
-                   .arg(fileFilter.join(";"))
-                   .arg(pathFilter.join(";"))
-                   .arg(mimeFilter);
+           .arg(name)
+           .arg(onlyNew ? "true" : "false")
+           .arg(fileFilter.join(";"))
+           .arg(pathFilter.join(";"))
+           .arg(mimeFilter);
 }
 
 void Filter::fromString(const QString& filter)
@@ -75,10 +75,12 @@ void Filter::fromString(const QString& filter)
     {
         fileFilter = s.value(2).split(';');
     }
+
     if (!s.value(3).isEmpty())
     {
         pathFilter = s.value(3).split(';');
     }
+
     if (!s.value(4).isEmpty())
     {
         mimeFilter = s.value(4);
@@ -205,14 +207,14 @@ void FilterComboBox::saveSettings()
 
 const QRegExp& FilterComboBox::regexp(const QString& wildcard)
 {
-   if (!d->filterHash.contains(wildcard))
-   {
-      QRegExp rx(wildcard.toLower());
-      rx.setPatternSyntax(QRegExp::Wildcard);
-      d->filterHash[wildcard] = rx;
-   }
+    if (!d->filterHash.contains(wildcard))
+    {
+        QRegExp rx(wildcard.toLower());
+        rx.setPatternSyntax(QRegExp::Wildcard);
+        d->filterHash[wildcard] = rx;
+    }
 
-   return d->filterHash[wildcard];
+    return d->filterHash[wildcard];
 }
 
 bool FilterComboBox::match(const QStringList& wildcards, const QString& name)
@@ -256,6 +258,7 @@ bool FilterComboBox::matchesCurrentFilter(const CamItemInfo& item)
     //kDebug() << item.downloaded << item.folder << item.name;
 
     Filter* currentFilter = d->filters.value(d->currentFilter);
+
     if (!currentFilter)
     {
         return true;

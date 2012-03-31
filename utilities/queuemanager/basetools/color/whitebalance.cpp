@@ -67,13 +67,13 @@ BatchToolSettings WhiteBalance::defaultSettings()
     BatchToolSettings prm;
     WBContainer defaultPrm = m_settingsView->defaultSettings();
 
-    prm.insert("black",       (double)defaultPrm.black);
+    prm.insert("black", (double)defaultPrm.black);
     prm.insert("temperature", (double)defaultPrm.temperature);
-    prm.insert("green",       (double)defaultPrm.green);
-    prm.insert("dark",        (double)defaultPrm.dark);
-    prm.insert("gamma",       (double)defaultPrm.gamma);
-    prm.insert("saturation",  (double)defaultPrm.saturation);
-    prm.insert("exposition",  (double)defaultPrm.exposition);
+    prm.insert("green", (double)defaultPrm.green);
+    prm.insert("dark", (double)defaultPrm.dark);
+    prm.insert("gamma", (double)defaultPrm.gamma);
+    prm.insert("saturation", (double)defaultPrm.saturation);
+    prm.insert("exposition", (double)defaultPrm.exposition);
 
     return prm;
 }
@@ -98,13 +98,13 @@ void WhiteBalance::slotSettingsChanged()
     BatchToolSettings prm;
     WBContainer currentPrm = m_settingsView->settings();
 
-    prm.insert("black",       (double)currentPrm.black);
+    prm.insert("black", (double)currentPrm.black);
     prm.insert("temperature", (double)currentPrm.temperature);
-    prm.insert("green",       (double)currentPrm.green);
-    prm.insert("dark",        (double)currentPrm.dark);
-    prm.insert("gamma",       (double)currentPrm.gamma);
-    prm.insert("saturation",  (double)currentPrm.saturation);
-    prm.insert("exposition",  (double)currentPrm.exposition);
+    prm.insert("green", (double)currentPrm.green);
+    prm.insert("dark", (double)currentPrm.dark);
+    prm.insert("gamma", (double)currentPrm.gamma);
+    prm.insert("saturation", (double)currentPrm.saturation);
+    prm.insert("exposition", (double)currentPrm.exposition);
 
     BatchTool::slotSettingsChanged(prm);
 }

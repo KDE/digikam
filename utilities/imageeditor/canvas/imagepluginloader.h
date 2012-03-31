@@ -46,7 +46,7 @@ class DIGIKAM_EXPORT ImagePluginLoader : public QObject
 
 public:
 
-    explicit ImagePluginLoader(QObject* const parent, SplashScreen* const splash=0);
+    explicit ImagePluginLoader(QObject* const parent, SplashScreen* const splash = 0);
     ~ImagePluginLoader();
 
     static ImagePluginLoader* instance();

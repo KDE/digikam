@@ -62,7 +62,7 @@ public:
 
 private:
 
-    void readSettings(bool restore=false);
+    void readSettings(bool restore = false);
     void fillCombos(bool report);
     void setWidgetsEnabled(bool enabled);
     void profileInfo(const IccProfile&);

@@ -359,13 +359,21 @@ ImageInfo LightTableView::rightImageInfo() const
 void LightTableView::setLeftImageInfo(const ImageInfo& info)
 {
     d->leftPreview->setImageInfo(info);
-    if (info.isNull()) d->leftPreview->setDragAndDropMessage();
+
+    if (info.isNull())
+    {
+        d->leftPreview->setDragAndDropMessage();
+    }
 }
 
 void LightTableView::setRightImageInfo(const ImageInfo& info)
 {
     d->rightPreview->setImageInfo(info);
-    if (info.isNull()) d->rightPreview->setDragAndDropMessage();
+
+    if (info.isNull())
+    {
+        d->rightPreview->setDragAndDropMessage();
+    }
 }
 
 void LightTableView::slotLeftPreviewLoaded(bool success)
@@ -440,12 +448,12 @@ void LightTableView::slotDeleteRightItem()
 
 bool LightTableView::leftPreviewLoading() const
 {
-     return (d->leftPreview->previewItem()->state() == DImgPreviewItem::Loading);
+    return (d->leftPreview->previewItem()->state() == DImgPreviewItem::Loading);
 }
 
 bool LightTableView::rightPreviewLoading() const
 {
-     return (d->rightPreview->previewItem()->state() == DImgPreviewItem::Loading);
+    return (d->rightPreview->previewItem()->state() == DImgPreviewItem::Loading);
 }
 
 }  // namespace Digikam

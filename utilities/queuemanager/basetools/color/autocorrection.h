@@ -39,7 +39,7 @@ class AutoCorrection : public BatchTool
 
 public:
 
-    AutoCorrection(QObject* parent=0);
+    AutoCorrection(QObject* parent = 0);
     ~AutoCorrection();
 
     BatchToolSettings defaultSettings();
@@ -57,7 +57,7 @@ private:
 
     enum AutoCorrectionType
     {
-        AutoLevelsCorrection=0,
+        AutoLevelsCorrection = 0,
         NormalizeCorrection,
         EqualizeCorrection,
         StretchContrastCorrection,

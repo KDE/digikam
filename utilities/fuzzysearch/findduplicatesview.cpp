@@ -221,14 +221,14 @@ FindDuplicatesView::FindDuplicatesView(QWidget* parent)
     // ---------------------------------------------------------------
 
     QGridLayout* mainLayout = new QGridLayout();
-    mainLayout->addWidget(d->listView,           0, 0, 1,-1);
+    mainLayout->addWidget(d->listView,           0, 0, 1, -1);
     mainLayout->addWidget(d->includeAlbumsLabel, 1, 0, 1, 1);
-    mainLayout->addWidget(d->albumSelectCB,      1, 1, 1,-1);
-    mainLayout->addWidget(d->tagSelectCB,        2, 1, 1,-1);
+    mainLayout->addWidget(d->albumSelectCB,      1, 1, 1, -1);
+    mainLayout->addWidget(d->tagSelectCB,        2, 1, 1, -1);
     mainLayout->addWidget(d->similarityLabel,    3, 0, 1, 1);
     mainLayout->addWidget(d->similarity,         3, 2, 1, 1);
-    mainLayout->addWidget(d->updateFingerPrtBtn, 4, 0, 1,-1);
-    mainLayout->addWidget(d->scanDuplicatesBtn,  5, 0, 1,-1);
+    mainLayout->addWidget(d->updateFingerPrtBtn, 4, 0, 1, -1);
+    mainLayout->addWidget(d->scanDuplicatesBtn,  5, 0, 1, -1);
     mainLayout->setRowStretch(0, 10);
     mainLayout->setColumnStretch(1, 10);
     mainLayout->setMargin(KDialog::spacingHint());

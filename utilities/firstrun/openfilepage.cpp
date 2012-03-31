@@ -104,7 +104,7 @@ OpenFilePage::OpenFilePage(KAssistantDialog* dlg)
 
     setPageWidget(vbox);
 
-    QPixmap leftPix = KStandardDirs::locate("data","digikam/data/assistant-openfile.png");
+    QPixmap leftPix = KStandardDirs::locate("data", "digikam/data/assistant-openfile.png");
     setLeftBottomPix(leftPix.scaledToWidth(128, Qt::SmoothTransformation));
 }
 

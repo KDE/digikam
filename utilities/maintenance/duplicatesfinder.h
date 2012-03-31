@@ -45,9 +45,9 @@ class DuplicatesFinder : public MaintenanceTool
 
 public:
 
-    DuplicatesFinder(const QStringList& albumsIdList, const QStringList& tagsIdList, int similarity=90, ProgressItem* parent=0);
+    DuplicatesFinder(const QStringList& albumsIdList, const QStringList& tagsIdList, int similarity = 90, ProgressItem* parent = 0);
     /// Version to find all duplicates over whole collections
-    DuplicatesFinder(int similarity=90, ProgressItem* parent=0);
+    DuplicatesFinder(int similarity = 90, ProgressItem* parent = 0);
     ~DuplicatesFinder();
 
 private Q_SLOTS:

@@ -40,7 +40,7 @@ class SketchWidget : public QWidget
 
 public:
 
-    SketchWidget(QWidget* parent=0);
+    SketchWidget(QWidget* parent = 0);
     ~SketchWidget();
 
     QColor  penColor() const;
@@ -82,9 +82,9 @@ protected:
 
     void mousePressEvent(QMouseEvent*);
     void mouseMoveEvent(QMouseEvent*);
-    void wheelEvent (QWheelEvent*);
+    void wheelEvent(QWheelEvent*);
     void mouseReleaseEvent(QMouseEvent*);
-    void keyPressEvent (QKeyEvent*);
+    void keyPressEvent(QKeyEvent*);
     void keyReleaseEvent(QKeyEvent*);
     void paintEvent(QPaintEvent*);
 

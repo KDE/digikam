@@ -35,7 +35,7 @@ class LensAutoFix : public BatchTool
 
 public:
 
-    LensAutoFix(QObject* parent=0);
+    LensAutoFix(QObject* parent = 0);
     ~LensAutoFix();
 
     BatchToolSettings defaultSettings();

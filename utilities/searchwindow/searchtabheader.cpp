@@ -343,7 +343,7 @@ SearchWindow* SearchTabHeader::searchWindow()
 void SearchTabHeader::selectedSearchChanged(Album* a)
 {
 
-    SAlbum* album = dynamic_cast<SAlbum*> (a);
+    SAlbum* album = dynamic_cast<SAlbum*>(a);
 
     // Signal from SearchFolderView that a search has been selected.
 
@@ -486,11 +486,11 @@ void SearchTabHeader::saveSearch()
 
     while (oldAlbum)
     {
-        QString label = i18n( "Search name already exists."
-                              "\nPlease enter a new name:" );
+        QString label = i18n("Search name already exists."
+                             "\nPlease enter a new name:");
         bool ok;
-        QString newTitle = KInputDialog::getText( i18n("Name exists"), label,
-                                                  name, &ok, this );
+        QString newTitle = KInputDialog::getText(i18n("Name exists"), label,
+                                                 name, &ok, this);
 
         if (!ok)
         {

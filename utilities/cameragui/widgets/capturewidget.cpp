@@ -80,15 +80,15 @@ void CaptureWidget::updatePixmap()
     {
         QPixmap pix = QPixmap::fromImage(d->preview.scaled(contentsRect().size(),
                                                            Qt::KeepAspectRatio, Qt::SmoothTransformation));
-        p.drawPixmap((contentsRect().width()-pix.width())/2,
-                     (contentsRect().height()-pix.height())/2, pix,
+        p.drawPixmap((contentsRect().width() - pix.width()) / 2,
+                     (contentsRect().height() - pix.height()) / 2, pix,
                      0, 0, pix.width(), pix.height());
     }
     else
     {
         p.setPen(QPen(palette().text().color()));
         p.drawText(0, 0, d->pixmap.width(), d->pixmap.height(),
-                   Qt::AlignCenter|Qt::TextWordWrap,
+                   Qt::AlignCenter | Qt::TextWordWrap,
                    i18n("Cannot display camera preview"));
     }
 

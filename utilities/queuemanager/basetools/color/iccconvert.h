@@ -39,7 +39,7 @@ class IccConvert : public BatchTool
 
 public:
 
-    IccConvert(QObject* parent=0);
+    IccConvert(QObject* parent = 0);
     ~IccConvert();
 
     BatchToolSettings defaultSettings();

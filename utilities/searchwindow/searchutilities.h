@@ -59,7 +59,7 @@ public:
 
     AnimatedClearButton(QWidget* parent = 0);
 
-    QSize sizeHint () const;
+    QSize sizeHint() const;
 
     void setPixmap(const QPixmap& p);
     QPixmap pixmap();

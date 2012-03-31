@@ -133,7 +133,7 @@ FacePipelineExtendedPackage::Ptr PackageLoadingDescriptionList::take(const Loadi
 
     for (it = begin(); it != end(); ++it)
     {
-        if ( *(*it) == description)
+        if (*(*it) == description)
         {
             package = *it;
             erase(it);
@@ -206,7 +206,7 @@ void ParallelPipes::process(FacePipelineExtendedPackage::Ptr package)
 {
     // Here, we send the package to one of the workers, in turn
     m_methods.at(m_currentIndex).invoke(m_workers.at(m_currentIndex), Qt::QueuedConnection,
-                                     Q_ARG(FacePipelineExtendedPackage::Ptr, package));
+                                        Q_ARG(FacePipelineExtendedPackage::Ptr, package));
 
     if (++m_currentIndex == m_workers.size())
     {
@@ -226,12 +226,14 @@ ScanStateFilter::ScanStateFilter(FacePipeline::FilterMode mode, FacePipeline::Fa
 FacePipelineExtendedPackage::Ptr ScanStateFilter::filter(const ImageInfo& info)
 {
     FaceIface iface;
+
     switch (mode)
     {
         case FacePipeline::ScanAll:
         {
             return d->buildPackage(info);
         }
+
         case FacePipeline::SkipAlreadyScanned:
         {
             if (!iface.hasBeenScanned(info))
@@ -241,6 +243,7 @@ FacePipelineExtendedPackage::Ptr ScanStateFilter::filter(const ImageInfo& info)
 
             break;
         }
+
         case FacePipeline::ReadUnconfirmedFaces:
         case FacePipeline::ReadFacesForTraining:
         case FacePipeline::ReadConfirmedFaces:
@@ -568,7 +571,7 @@ void DatabaseWriter::process(FacePipelineExtendedPackage::Ptr package)
             if (!package->image.isNull())
             {
                 iface.storeThumbnails(d->thumbnailLoadThread, package->filePath,
-                                          package->databaseFaces.toDatabaseFaceList(), package->image);
+                                      package->databaseFaces.toDatabaseFaceList(), package->image);
             }
         }
     }
@@ -617,7 +620,7 @@ void DatabaseWriter::process(FacePipelineExtendedPackage::Ptr package)
         if (!package->image.isNull())
         {
             iface.storeThumbnails(d->thumbnailLoadThread, package->filePath,
-                                      add.toDatabaseFaceList(), package->image);
+                                  add.toDatabaseFaceList(), package->image);
         }
 
         package->databaseFaces << add;
@@ -728,7 +731,8 @@ QString Benchmarker::result() const
     int negativeImages = trueNegativeImages + falsePositiveImages;
     int trueFaces = truePositiveFaces + falseNegativeFaces;
     QString specificityWarning, sensitivityWarning;
-    if (negativeImages < 0.2*totalImages)
+
+    if (negativeImages < 0.2 * totalImages)
     {
         specificityWarning = QString("<p><b>Note:</b><br/> "
                                      "Only %1 of the %2 test images have <i>no</i> depicted faces. "
@@ -738,6 +742,7 @@ QString Benchmarker::result() const
                              .arg(negativeImages).arg(totalImages);
         negativeImages = qMax(negativeImages, 1);
     }
+
     if (trueFaces == 0)
     {
         sensitivityWarning = QString("<p><b>Note:</b><br/> "
@@ -745,6 +750,7 @@ QString Benchmarker::result() const
                                      "This means that sensitivity and PPV have no meaning and will be zero. </p>");
         trueFaces = 1;
     }
+
     // collection properties
     double pixelCoverage = facePixels / totalPixels;
     // per-image
@@ -779,10 +785,10 @@ QString Benchmarker::result() const
                    "Given face with no images on it, the detector will with a probability "
                    "of %5% falsely find a face on it. "
                    "</p>")
-                .arg(totalImages).arg(faces).arg(pixelCoverage*100, 0, 'f', 1)
-                .arg(specificity*100, 0, 'f', 1).arg(falsePositiveRate*100, 0, 'f', 1)
-                .arg(sensitivity*100, 0, 'f', 1).arg(ppv*100, 0, 'f', 1)
-                .arg(specificityWarning).arg(sensitivityWarning);
+           .arg(totalImages).arg(faces).arg(pixelCoverage * 100, 0, 'f', 1)
+           .arg(specificity * 100, 0, 'f', 1).arg(falsePositiveRate * 100, 0, 'f', 1)
+           .arg(sensitivity * 100, 0, 'f', 1).arg(ppv * 100, 0, 'f', 1)
+           .arg(specificityWarning).arg(sensitivityWarning);
 }
 
 // ----------------------------------------------------------------------------------------
@@ -916,7 +922,7 @@ void FacePipeline::FacePipelinePriv::sendFromFilter(const QList<FacePipelineExte
 void FacePipeline::FacePipelinePriv::skipFromFilter(const QList<ImageInfo>& infosForSkipping)
 {
     infosForFiltering -= infosForSkipping.size();
-    emit (q->skipped(infosForSkipping));
+    emit(q->skipped(infosForSkipping));
     // everything skipped?
     checkFinished();
 }
@@ -964,6 +970,7 @@ void FacePipeline::FacePipelinePriv::send(FacePipelineExtendedPackage::Ptr packa
 {
     start();
     ++totalPackagesAdded;
+
     if (senderFlowControl(package))
     {
         ++packagesOnTheRoad;
@@ -974,8 +981,8 @@ void FacePipeline::FacePipelinePriv::send(FacePipelineExtendedPackage::Ptr packa
 void FacePipeline::FacePipelinePriv::finishProcess(FacePipelineExtendedPackage::Ptr package)
 {
     packagesOnTheRoad--;
-    emit (q->processed(*package));
-    emit (q->progressValueChanged(float(packagesOnTheRoad + delayedPackages.size()) / totalPackagesAdded));
+    emit(q->processed(*package));
+    emit(q->progressValueChanged(float(packagesOnTheRoad + delayedPackages.size()) / totalPackagesAdded));
     package = 0;
 
     if (previewThread)
@@ -995,6 +1002,7 @@ bool FacePipeline::FacePipelinePriv::senderFlowControl(FacePipelineExtendedPacka
         delayedPackages << package;
         return false;
     }
+
     return true;
 }
 
@@ -1020,7 +1028,7 @@ void FacePipeline::FacePipelinePriv::checkFinished()
     if (hasFinished())
     {
         totalPackagesAdded = 0;
-        emit (q->finished());
+        emit(q->finished());
         // stop threads
         stop();
     }
@@ -1033,25 +1041,25 @@ void FacePipeline::FacePipelinePriv::start()
         return;
     }
 
-    emit (q->scheduled());
+    emit(q->scheduled());
 
     WorkerObject*  workerObject = 0;
     ParallelPipes* pipes        = 0;
 
     foreach(QObject* element, pipeline)
     {
-        if ( (workerObject = qobject_cast<WorkerObject*>(element)) )
+        if ((workerObject = qobject_cast<WorkerObject*>(element)))
         {
             workerObject->schedule();
         }
-        else if ( (pipes = qobject_cast<ParallelPipes*>(element)) )
+        else if ((pipes = qobject_cast<ParallelPipes*>(element)))
         {
             pipes->schedule();
         }
     }
 
     started = true;
-    emit (q->started(i18n("Applying face changes")));
+    emit(q->started(i18n("Applying face changes")));
 }
 
 void FacePipeline::FacePipelinePriv::stop()
@@ -1072,15 +1080,15 @@ void FacePipeline::FacePipelinePriv::stop()
 
     foreach(QObject* element, pipeline)
     {
-        if ( (workerObject = qobject_cast<WorkerObject*>(element)) )
+        if ((workerObject = qobject_cast<WorkerObject*>(element)))
         {
             workerObject->deactivate();
         }
-        else if ( (pipes = qobject_cast<ParallelPipes*>(element)) )
+        else if ((pipes = qobject_cast<ParallelPipes*>(element)))
         {
             pipes->deactivate();
         }
-        else if ( (thread = qobject_cast<DynamicThread*>(element)) )
+        else if ((thread = qobject_cast<DynamicThread*>(element)))
         {
             thread->stop();
         }
@@ -1096,11 +1104,11 @@ void FacePipeline::FacePipelinePriv::applyPriority()
 
     foreach(QObject* element, pipeline)
     {
-        if ( (workerObject = qobject_cast<WorkerObject*>(element)) )
+        if ((workerObject = qobject_cast<WorkerObject*>(element)))
         {
             workerObject->setPriority(priority);
         }
-        else if ( (pipes = qobject_cast<ParallelPipes*>(element)) )
+        else if ((pipes = qobject_cast<ParallelPipes*>(element)))
         {
             pipes->setPriority(priority);
         }
@@ -1160,6 +1168,7 @@ QString FacePipeline::benchmarkResult() const
     {
         return QString();
     }
+
     return d->benchmarker->result();
 }
 
@@ -1198,7 +1207,7 @@ void FacePipeline::plugParallelFaceDetectors()
     const int n          = qMin(3, QThread::idealThreadCount());
     d->parallelDetectors = new ParallelPipes;
 
-    for (int i=0; i<n; ++i)
+    for (int i = 0; i < n; ++i)
     {
         DetectionWorker* worker = new DetectionWorker(d);
 
@@ -1286,10 +1295,10 @@ void FacePipeline::construct()
     connect(d, SIGNAL(startProcess(FacePipelineExtendedPackage::Ptr)),
             d->pipeline.first(), SLOT(process(FacePipelineExtendedPackage::Ptr)));
 
-    for (int i = 0; i < d->pipeline.size()-1; ++i)
+    for (int i = 0; i < d->pipeline.size() - 1; ++i)
     {
         connect(d->pipeline.at(i), SIGNAL(processed(FacePipelineExtendedPackage::Ptr)),
-                d->pipeline.at(i+1), SLOT(process(FacePipelineExtendedPackage::Ptr)));
+                d->pipeline.at(i + 1), SLOT(process(FacePipelineExtendedPackage::Ptr)));
     }
 
     connect(d->pipeline.last(), SIGNAL(processed(FacePipelineExtendedPackage::Ptr)),
@@ -1364,12 +1373,12 @@ bool FacePipeline::process(const ImageInfo& info, const DImg& image)
     d->send(package);
 }*/
 
-void FacePipeline::train(const ImageInfo& info, const QList<DatabaseFace> &databaseFaces)
+void FacePipeline::train(const ImageInfo& info, const QList<DatabaseFace>& databaseFaces)
 {
     train(info, databaseFaces, DImg());
 }
 
-void FacePipeline::train(const ImageInfo& info, const QList<DatabaseFace> &databaseFaces, const DImg& image)
+void FacePipeline::train(const ImageInfo& info, const QList<DatabaseFace>& databaseFaces, const DImg& image)
 {
     FacePipelineExtendedPackage::Ptr package = d->buildPackage(info, databaseFaces, image);
     package->databaseFaces.setRole(FacePipelineDatabaseFace::ForTraining);
@@ -1411,8 +1420,8 @@ DatabaseFace FacePipeline::addManually(const ImageInfo& info, const DImg& image,
 }
 
 DatabaseFace FacePipeline::editRegion(const ImageInfo& info, const DImg& image,
-                                       const DatabaseFace& databaseFace,
-                                       const TagRegion& newRegion)
+                                      const DatabaseFace& databaseFace,
+                                      const TagRegion& newRegion)
 {
     FacePipelineDatabaseFace face = databaseFace;
     face.assignedTagId            = -1;
@@ -1441,7 +1450,7 @@ void FacePipeline::process(const QList<ImageInfo>& infos)
 
 void FacePipeline::setDetectionAccuracy(double value)
 {
-    emit (d->accuracyChanged(value));
+    emit(d->accuracyChanged(value));
 }
 
 } // namespace Digikam

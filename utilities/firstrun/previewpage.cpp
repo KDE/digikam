@@ -100,7 +100,7 @@ PreviewPage::PreviewPage(KAssistantDialog* dlg)
 
     setPageWidget(vbox);
 
-    QPixmap leftPix = KStandardDirs::locate("data","digikam/data/assistant-preview.png");
+    QPixmap leftPix = KStandardDirs::locate("data", "digikam/data/assistant-preview.png");
     setLeftBottomPix(leftPix.scaledToWidth(128, Qt::SmoothTransformation));
 }
 

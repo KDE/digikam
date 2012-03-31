@@ -42,7 +42,7 @@ class SetupCollections : public QScrollArea
 
 public:
 
-    explicit SetupCollections(KPageDialog* dialog, QWidget* parent=0);
+    explicit SetupCollections(KPageDialog* dialog, QWidget* parent = 0);
     ~SetupCollections();
 
     void applySettings();

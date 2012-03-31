@@ -37,7 +37,7 @@ class Convert8to16 : public BatchTool
 
 public:
 
-    Convert8to16(QObject* parent=0);
+    Convert8to16(QObject* parent = 0);
     ~Convert8to16();
 
     BatchToolSettings defaultSettings()

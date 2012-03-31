@@ -40,7 +40,7 @@ class Restoration : public BatchTool
 
 public:
 
-    Restoration(QObject* parent=0);
+    Restoration(QObject* parent = 0);
     ~Restoration();
 
     BatchToolSettings defaultSettings();
@@ -61,7 +61,7 @@ private:
 
     enum RestorationPreset
     {
-        ReduceUniformNoise=0,
+        ReduceUniformNoise = 0,
         ReduceJPEGArtefacts,
         ReduceTexturing
     };

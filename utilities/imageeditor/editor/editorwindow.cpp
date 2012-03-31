@@ -1978,14 +1978,15 @@ void EditorWindow::setupTempSaveFile(const KUrl& url)
     // if the destination url is on local file system, try to set the temp file
     // location to the destination folder, otherwise use a local default
     QString tempDir;
+
     if (url.isLocalFile())
     {
-        #ifdef _WIN32
+#ifdef _WIN32
         KUrl parent(url.directory());
         tempDir = parent.toLocalFile();
-        #else
+#else
         tempDir = url.directory();
-        #endif
+#endif
     }
     else
     {
@@ -1994,7 +1995,7 @@ void EditorWindow::setupTempSaveFile(const KUrl& url)
 
     QString path = url.path();
     int lastDot  = path.lastIndexOf(QLatin1Char('.'));
-    QString suffix = path.mid(lastDot+1);
+    QString suffix = path.mid(lastDot + 1);
 
     // use magic file extension which tells the digikamalbums ioslave to ignore the file
     m_savingContext.saveTempFile = new SafeTemporaryFile(tempDir + "/EditorWindow-XXXXXX.digikamtempfile." + suffix);
@@ -2641,9 +2642,11 @@ bool EditorWindow::checkOverwrite(const KUrl& url)
 bool EditorWindow::moveLocalFile(const QString& src, const QString& dst)
 {
     QString sidecarSrc = DMetadata::sidecarFilePathForFile(src);
+
     if (QFileInfo(sidecarSrc).exists())
     {
         QString sidecarDst = DMetadata::sidecarFilePathForFile(dst);
+
         if (!localFileRename(sidecarSrc, sidecarDst))
         {
             kError() << "Failed to move sidecar file";
@@ -2657,6 +2660,7 @@ bool EditorWindow::moveLocalFile(const QString& src, const QString& dst)
                            i18n("Error Saving File"));
         return false;
     }
+
     return true;
 }
 
@@ -2730,7 +2734,7 @@ void EditorWindow::moveFile()
             if (m_savingContext.versionFileOperation.tasks & VersionFileOperation::MoveToIntermediate)
             {
                 //kDebug() << "MoveToIntermediate: Moving " << m_savingContext.srcURL.toLocalFile() << "to" <<
-                  //       m_savingContext.versionFileOperation.intermediateForLoadedFile.filePath() <<
+                //       m_savingContext.versionFileOperation.intermediateForLoadedFile.filePath() <<
                 moveLocalFile(m_savingContext.srcURL.toLocalFile(),
                               m_savingContext.versionFileOperation.intermediateForLoadedFile.filePath());
 

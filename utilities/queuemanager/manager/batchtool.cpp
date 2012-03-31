@@ -338,11 +338,13 @@ void BatchTool::setOutputUrlFromInputUrl()
 
     QString path(workingUrl().toLocalFile());
     QString suffix = outputSuffix();
+
     if (suffix.isEmpty())
     {
         QFileInfo fi(inputUrl().fileName());
         suffix = fi.completeSuffix();
     }
+
     SafeTemporaryFile temp(workingUrl().toLocalFile() + "/BatchTool-XXXXXX.digikamtempfile." + suffix);
     temp.setAutoRemove(false);
     temp.open();
@@ -380,7 +382,7 @@ bool BatchTool::savefromDImg() const
         // In case of output support is not set for ex. with all tool which do not convert to new format.
         d->image.prepareMetadataToSave(outputUrl().toLocalFile(), DImg::formatToMimeType(detectedFormat),
                                        resetOrientation);
-        return( d->image.save(outputUrl().toLocalFile(), detectedFormat, d->observer) );
+        return(d->image.save(outputUrl().toLocalFile(), detectedFormat, d->observer));
     }
 
     d->image.prepareMetadataToSave(outputUrl().toLocalFile(), frm, resetOrientation);
@@ -414,7 +416,7 @@ bool BatchTool::apply()
             QString tmp;
             tmp.append(QString("[%1 items] : ").arg(pol.size()));
 
-            for (int i=0 ; i<size ; ++i)
+            for (int i = 0 ; i < size ; ++i)
             {
                 tmp.append("(");
                 tmp.append(QString::number(pol.point(i).x()));

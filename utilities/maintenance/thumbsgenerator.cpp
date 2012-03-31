@@ -114,7 +114,7 @@ void ThumbsGenerator::slotStart()
     }
 
     for (AlbumList::const_iterator it = palbumList.constBegin();
-         !canceled() && (it != palbumList.constEnd()); ++it )
+         !canceled() && (it != palbumList.constEnd()); ++it)
     {
         if (!(*it))
         {

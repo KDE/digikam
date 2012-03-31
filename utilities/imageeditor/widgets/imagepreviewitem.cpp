@@ -62,7 +62,7 @@ void ImagePreviewItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 
     // scale "as if" scaling to whole image, but clip output to our exposed region
     DImg scaledImage     = d->image.smoothScaleClipped(completeSize.width(), completeSize.height(),
-                           drawRect.x(), drawRect.y(), drawRect.width(), drawRect.height());
+                                                       drawRect.x(), drawRect.y(), drawRect.width(), drawRect.height());
 
     if (d->cachedPixmaps.find(drawRect, &pix, &pixSourceRect))
     {
@@ -77,7 +77,7 @@ void ImagePreviewItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
     }
     else
     {
-	// TODO: factoring ICC settings code using ImageIface/DImgInterface methods.
+        // TODO: factoring ICC settings code using ImageIface/DImgInterface methods.
 
         // Apply CM settings.
 

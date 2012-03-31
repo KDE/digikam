@@ -66,7 +66,7 @@ public:
 
 public:
 
-    PreviewToolBar(QWidget* parent=0);
+    PreviewToolBar(QWidget* parent = 0);
     ~PreviewToolBar();
 
     void setPreviewModeMask(int mask);

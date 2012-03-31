@@ -79,12 +79,13 @@ void MaintenanceTool::slotStart()
 void MaintenanceTool::slotDone()
 {
     QTime now, t = now.addMSecs(d->duration.elapsed());
+
     if (d->notification)
     {
         // Pop-up a message to bring user when all is done.
         KNotificationWrapper(id(),
-                            i18n("Process is done.\nDuration: %1", t.toString()),
-                            kapp->activeWindow(), label());
+                             i18n("Process is done.\nDuration: %1", t.toString()),
+                             kapp->activeWindow(), label());
     }
 
     emit signalComplete();

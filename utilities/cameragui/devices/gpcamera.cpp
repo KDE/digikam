@@ -208,7 +208,7 @@ bool GPCamera::doConnect()
 
     int modelNum = -1, portNum = -1;
     modelNum     = gp_abilities_list_lookup_model(abilList, m_model.toLatin1());
-    portNum      = gp_port_info_list_lookup_path (infoList, m_port.toLatin1());
+    portNum      = gp_port_info_list_lookup_path(infoList, m_port.toLatin1());
 
     gp_abilities_list_get_abilities(abilList, modelNum, &d->cameraAbilities);
 
@@ -236,14 +236,14 @@ bool GPCamera::doConnect()
             printGphotoErrorDescription(errorCode);
             gp_camera_unref(d->camera);
             d->camera = 0;
-            gp_abilities_list_free (abilList);
-            gp_port_info_list_free (infoList);
+            gp_abilities_list_free(abilList);
+            gp_port_info_list_free(infoList);
             return false;
         }
     }
 
-    gp_abilities_list_free (abilList);
-    gp_port_info_list_free (infoList);
+    gp_abilities_list_free(abilList);
+    gp_port_info_list_free(infoList);
 
     if (d->cameraAbilities.file_operations &
         GP_FILE_OPERATION_PREVIEW)
@@ -333,7 +333,7 @@ bool GPCamera::getFreeSpace(unsigned long& kBSize, unsigned long& kBAvail)
     d->status = 0;
     d->status = new GPStatus();
 
-    int errorCode = gp_camera_get_storageinfo (d->camera, &sinfos, &nrofsinfos, d->status->context);
+    int errorCode = gp_camera_get_storageinfo(d->camera, &sinfos, &nrofsinfos, d->status->context);
 
     if (errorCode != GP_OK)
     {
@@ -374,12 +374,15 @@ bool GPCamera::getFreeSpace(unsigned long& kBSize, unsigned long& kBAvail)
                             case GP_STORAGEINFO_AC_READWRITE:
                                 kDebug() << "Storage access: R/W";
                                 break;
+
                             case GP_STORAGEINFO_AC_READONLY:
                                 kDebug() << "Storage access: RO";
                                 break;
+
                             case GP_STORAGEINFO_AC_READONLY_WITH_DELETE:
                                 kDebug() << "Storage access: RO + Del";
                                 break;
+
                             default:
                                 break;
                         }
@@ -392,15 +395,19 @@ bool GPCamera::getFreeSpace(unsigned long& kBSize, unsigned long& kBAvail)
                             case GP_STORAGEINFO_ST_FIXED_ROM:
                                 kDebug() << "Storage type: fixed ROM";
                                 break;
+
                             case GP_STORAGEINFO_ST_REMOVABLE_ROM:
                                 kDebug() << "Storage type: removable ROM";
                                 break;
+
                             case GP_STORAGEINFO_ST_FIXED_RAM:
                                 kDebug() << "Storage type: fixed RAM";
                                 break;
+
                             case GP_STORAGEINFO_ST_REMOVABLE_RAM:
                                 kDebug() << "Storage type: removable RAM";
                                 break;
+
                             case GP_STORAGEINFO_ST_UNKNOWN:
                             default:
                                 kDebug() << "Storage type: unknown";
@@ -435,6 +442,7 @@ bool GPCamera::getFreeSpace(unsigned long& kBSize, unsigned long& kBAvail)
 
                     break;
                 }
+
                 case GP_STORAGEINFO_FST_UNDEFINED:
                 case GP_STORAGEINFO_FST_GENERICFLAT:
                 case GP_STORAGEINFO_FST_GENERICHIERARCHICAL:
@@ -892,7 +900,9 @@ void GPCamera::getItemInfoInternal(const QString& folder, const QString& itemNam
 
             // Fall back to camera file system info
             if (info.mtime.isNull())
+            {
                 info.mtime = QDateTime::fromTime_t(cfinfo.file.mtime);
+            }
         }
         else
         {
@@ -1038,8 +1048,8 @@ bool GPCamera::getMetadata(const QString& folder, const QString& itemName, DMeta
             kDebug() << "Exif header found at position " << i;
             i = i + sizeof(exifHeader);
             QByteArray data;
-            data.resize(exifData.size()-i);
-            memcpy(data.data(), exifData.data()+i, data.size());
+            data.resize(exifData.size() - i);
+            memcpy(data.data(), exifData.data() + i, data.size());
             meta.setExif(data);
             return true;
         }
@@ -1097,7 +1107,7 @@ bool GPCamera::downloadItem(const QString& folder, const QString& itemName,
                                    GP_FILE_TYPE_NORMAL, cfile,
                                    d->status->context);
 
-    if ( errorCode != GP_OK)
+    if (errorCode != GP_OK)
     {
         kDebug() << "Failed to get camera item!";
         printGphotoErrorDescription(errorCode);
@@ -1586,30 +1596,30 @@ void GPCamera::getSupportedCameras(int& count, QStringList& clist)
 
     context = gp_context_new();
 
-    gp_abilities_list_new( &abilList );
-    gp_abilities_list_load( abilList, context );
+    gp_abilities_list_new(&abilList);
+    gp_abilities_list_load(abilList, context);
 
-    count = gp_abilities_list_count( abilList );
+    count = gp_abilities_list_count(abilList);
 
-    if ( count < 0 )
+    if (count < 0)
     {
         kDebug() << "Failed to get list of cameras!";
         printGphotoErrorDescription(count);
-        gp_context_unref( context );
+        gp_context_unref(context);
         return;
     }
     else
     {
         for (int i = 0 ; i < count ; ++i)
         {
-            gp_abilities_list_get_abilities( abilList, i, &abil );
+            gp_abilities_list_get_abilities(abilList, i, &abil);
             const char* cname = abil.model;
-            clist.append( QString::fromLocal8Bit( cname ) );
+            clist.append(QString::fromLocal8Bit(cname));
         }
     }
 
-    gp_abilities_list_free( abilList );
-    gp_context_unref( context );
+    gp_abilities_list_free(abilList);
+    gp_context_unref(context);
 #else
     Q_UNUSED(count);
     Q_UNUSED(clist);
@@ -1624,28 +1634,28 @@ void GPCamera::getSupportedPorts(QStringList& plist)
 
     plist.clear();
 
-    gp_port_info_list_new( &list );
-    gp_port_info_list_load( list );
+    gp_port_info_list_new(&list);
+    gp_port_info_list_load(list);
 
-    int numPorts = gp_port_info_list_count( list );
+    int numPorts = gp_port_info_list_count(list);
 
-    if ( numPorts < 0)
+    if (numPorts < 0)
     {
         kDebug() << "Failed to get list of port!";
         printGphotoErrorDescription(numPorts);
-        gp_port_info_list_free( list );
+        gp_port_info_list_free(list);
         return;
     }
     else
     {
         for (int i = 0 ; i < numPorts ; ++i)
         {
-            gp_port_info_list_get_info( list, i, &info );
-            plist.append( info.path );
+            gp_port_info_list_get_info(list, i, &info);
+            plist.append(info.path);
         }
     }
 
-    gp_port_info_list_free( list );
+    gp_port_info_list_free(list);
 #else
     Q_UNUSED(plist);
 #endif /* HAVE_GPHOTO2 */
@@ -1663,11 +1673,11 @@ void GPCamera::getCameraSupportedPorts(const QString& model, QStringList& plist)
 
     context = gp_context_new();
 
-    gp_abilities_list_new (&abilList);
-    gp_abilities_list_load (abilList, context);
-    i = gp_abilities_list_lookup_model (abilList, model.toLocal8Bit().data());
-    gp_abilities_list_get_abilities (abilList, i, &abilities);
-    gp_abilities_list_free (abilList);
+    gp_abilities_list_new(&abilList);
+    gp_abilities_list_load(abilList, context);
+    i = gp_abilities_list_lookup_model(abilList, model.toLocal8Bit().data());
+    gp_abilities_list_get_abilities(abilList, i, &abilities);
+    gp_abilities_list_free(abilList);
 
     if (abilities.port & GP_PORT_SERIAL)
     {
@@ -1679,7 +1689,7 @@ void GPCamera::getCameraSupportedPorts(const QString& model, QStringList& plist)
         plist.append("usb");
     }
 
-    gp_context_unref( context );
+    gp_context_unref(context);
 #else
     Q_UNUSED(model);
     Q_UNUSED(plist);
@@ -1769,15 +1779,15 @@ bool GPCamera::findConnectedUsbCamera(int vendorId, int productId, QString& mode
     context = gp_context_new();
 
     // get list of all ports
-    gp_port_info_list_new( &list );
-    gp_port_info_list_load( list );
+    gp_port_info_list_new(&list);
+    gp_port_info_list_load(list);
 
-    int numPorts = gp_port_info_list_count( list );
+    int numPorts = gp_port_info_list_count(list);
 
     for (int i = 0 ; i < numPorts ; ++i)
     {
         // create a port object from info
-        gp_port_info_list_get_info( list, i, &info );
+        gp_port_info_list_get_info(list, i, &info);
         GPPort* gpport = 0;
         gp_port_new(&gpport);
         gp_port_set_info(gpport, info);
@@ -1789,9 +1799,9 @@ bool GPCamera::findConnectedUsbCamera(int vendorId, int productId, QString& mode
             GPPortInfoList*      portinfo = 0;
 
             // create three lists
-            gp_list_new (&camList);
-            gp_port_info_list_new( &portinfo );
-            gp_abilities_list_new( &abilList );
+            gp_list_new(&camList);
+            gp_port_info_list_new(&portinfo);
+            gp_abilities_list_new(&abilList);
 
             // append one port info to
             gp_port_info_list_append(portinfo, info);
@@ -1826,7 +1836,7 @@ bool GPCamera::findConnectedUsbCamera(int vendorId, int productId, QString& mode
                 }
             }
 
-            gp_abilities_list_free( abilList );
+            gp_abilities_list_free(abilList);
             gp_port_info_list_free(portinfo);
             gp_list_free(camList);
         }
@@ -1839,8 +1849,8 @@ bool GPCamera::findConnectedUsbCamera(int vendorId, int productId, QString& mode
         }
     }
 
-    gp_port_info_list_free( list );
-    gp_context_unref( context );
+    gp_port_info_list_free(list);
+    gp_context_unref(context);
 
     return success;
 #else

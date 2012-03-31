@@ -41,7 +41,7 @@ class ChannelMixer : public BatchTool
 
 public:
 
-    ChannelMixer(QObject* parent=0);
+    ChannelMixer(QObject* parent = 0);
     ~ChannelMixer();
 
     BatchToolSettings defaultSettings();

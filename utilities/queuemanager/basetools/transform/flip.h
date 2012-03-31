@@ -39,7 +39,7 @@ class Flip : public BatchTool
 
 public:
 
-    Flip(QObject* parent=0);
+    Flip(QObject* parent = 0);
     ~Flip();
 
     BatchToolSettings defaultSettings();

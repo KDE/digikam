@@ -96,7 +96,7 @@ AnimatedClearButton::AnimatedClearButton(QWidget* parent)
             this, SLOT(updateAnimationSettings()));
 }
 
-QSize AnimatedClearButton::sizeHint () const
+QSize AnimatedClearButton::sizeHint() const
 {
     QFontMetrics fm(font());
     return QSize(d->pixmap.width(), fm.lineSpacing());
@@ -232,7 +232,7 @@ void CustomStepsDoubleSpinBox::stepBy(int steps)
         if (steps > 0)
         {
             // find the next value in m_values after current value
-            for (nextStep=0; nextStep<m_values.count(); ++nextStep)
+            for (nextStep = 0; nextStep < m_values.count(); ++nextStep)
             {
                 if (v <= m_values.at(nextStep))
                 {
@@ -244,7 +244,7 @@ void CustomStepsDoubleSpinBox::stepBy(int steps)
             // go as many steps in m_values as we need
             int stepsToGo = steps;
 
-            for ( ; stepsToGo > 0 && nextStep < m_values.count(); --stepsToGo)
+            for (; stepsToGo > 0 && nextStep < m_values.count(); --stepsToGo)
             {
                 v = m_values.at(nextStep++);
             }
@@ -260,7 +260,7 @@ void CustomStepsDoubleSpinBox::stepBy(int steps)
         }
         else
         {
-            for (nextStep=m_values.count() - 1; nextStep>= 0; --nextStep)
+            for (nextStep = m_values.count() - 1; nextStep >= 0; --nextStep)
             {
                 if (v >= m_values.at(nextStep))
                 {
@@ -271,7 +271,7 @@ void CustomStepsDoubleSpinBox::stepBy(int steps)
 
             int stepsToGo = -steps;
 
-            for ( ; stepsToGo > 0 && nextStep >= 0; --stepsToGo)
+            for (; stepsToGo > 0 && nextStep >= 0; --stepsToGo)
             {
                 v = m_values.at(nextStep--);
             }
@@ -381,7 +381,7 @@ void CustomStepsIntSpinBox::stepBy(int steps)
         if (steps > 0)
         {
             // find the next value in m_values after current value
-            for (nextStep=0; nextStep<m_values.count(); ++nextStep)
+            for (nextStep = 0; nextStep < m_values.count(); ++nextStep)
             {
                 if (v <= m_values.at(nextStep))
                 {
@@ -393,7 +393,7 @@ void CustomStepsIntSpinBox::stepBy(int steps)
             // go as many steps in m_values as we need
             int stepsToGo = steps;
 
-            for ( ; stepsToGo > 0 && nextStep < m_values.count(); --stepsToGo)
+            for (; stepsToGo > 0 && nextStep < m_values.count(); --stepsToGo)
             {
                 v = m_values.at(nextStep++);
             }
@@ -409,7 +409,7 @@ void CustomStepsIntSpinBox::stepBy(int steps)
         }
         else
         {
-            for (nextStep=m_values.count() - 1; nextStep>= 0; --nextStep)
+            for (nextStep = m_values.count() - 1; nextStep >= 0; --nextStep)
             {
                 if (v >= m_values.at(nextStep))
                 {
@@ -420,7 +420,7 @@ void CustomStepsIntSpinBox::stepBy(int steps)
 
             int stepsToGo = -steps;
 
-            for ( ; stepsToGo > 0 && nextStep >= 0; --stepsToGo)
+            for (; stepsToGo > 0 && nextStep >= 0; --stepsToGo)
             {
                 v = m_values.at(nextStep--);
             }

@@ -66,19 +66,19 @@ QWidget* Restoration::createSettingsWidget()
     cimgLogoLabel->setText(QString());
     cimgLogoLabel->setUrl("http://cimg.sourceforge.net");
     cimgLogoLabel->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-cimg.png")));
-    cimgLogoLabel->setToolTip( i18n("Visit CImg library website"));
+    cimgLogoLabel->setToolTip(i18n("Visit CImg library website"));
 
     new QLabel(i18n("Filter:"), vbox);
     m_comboBox = new KComboBox(vbox);
     m_comboBox->insertItem(ReduceUniformNoise,  i18n("Reduce Uniform Noise"));
     m_comboBox->insertItem(ReduceJPEGArtefacts, i18n("Reduce JPEG Artifacts"));
     m_comboBox->insertItem(ReduceTexturing,     i18n("Reduce Texturing"));
-    m_comboBox->setWhatsThis( i18n("<p>Select the filter preset to use for photograph restoration here:</p>"
-                                   "<p><b>None</b>: Most common values. Puts settings to default.<br/>"
-                                   "<b>Reduce Uniform Noise</b>: reduce small image artifacts such as sensor noise.<br/>"
-                                   "<b>Reduce JPEG Artifacts</b>: reduce large image artifacts, such as a JPEG compression mosaic.<br/>"
-                                   "<b>Reduce Texturing</b>: reduce image artifacts, such as paper texture, or Moire patterns "
-                                   "on scanned images.</p>"));
+    m_comboBox->setWhatsThis(i18n("<p>Select the filter preset to use for photograph restoration here:</p>"
+                                  "<p><b>None</b>: Most common values. Puts settings to default.<br/>"
+                                  "<b>Reduce Uniform Noise</b>: reduce small image artifacts such as sensor noise.<br/>"
+                                  "<b>Reduce JPEG Artifacts</b>: reduce large image artifacts, such as a JPEG compression mosaic.<br/>"
+                                  "<b>Reduce Texturing</b>: reduce image artifacts, such as paper texture, or Moire patterns "
+                                  "on scanned images.</p>"));
 
     QLabel* space = new QLabel(vbox);
     vbox->setStretchFactor(space, 10);

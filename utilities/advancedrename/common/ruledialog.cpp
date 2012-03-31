@@ -85,7 +85,7 @@ RuleDialog::RuleDialog(Rule* parent)
     headerLayout->addWidget(d->dialogIcon,        0, 0, 4, 1);
     headerLayout->addWidget(d->dialogTitle,       1, 1, 1, 1);
     headerLayout->addWidget(d->dialogDescription, 2, 1, 1, 1);
-    headerLayout->addWidget(line,                 4, 0, 1,-1);
+    headerLayout->addWidget(line,                 4, 0, 1, -1);
     headerLayout->setColumnStretch(1, 10);
     header->setLayout(headerLayout);
 

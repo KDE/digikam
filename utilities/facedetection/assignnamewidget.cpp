@@ -212,6 +212,7 @@ void AssignNameWidget::AssignNameWidgetPriv::checkWidgets()
     {
         case InvalidMode:
             break;
+
         case UnconfirmedEditMode:
         case ConfirmedEditMode:
 
@@ -219,6 +220,7 @@ void AssignNameWidget::AssignNameWidgetPriv::checkWidgets()
             {
                 case InvalidTagEntryWidgetMode:
                     break;
+
                 case AddTagsComboBoxMode:
 
                     if (!comboBox)
@@ -228,6 +230,7 @@ void AssignNameWidget::AssignNameWidgetPriv::checkWidgets()
                     }
 
                     break;
+
                 case AddTagsLineEditMode:
 
                     if (!lineEdit)
@@ -262,6 +265,7 @@ void AssignNameWidget::AssignNameWidgetPriv::checkWidgets()
             }
 
             break;
+
         case ConfirmedMode:
         {
             clickLabel = new RClickLabel;
@@ -314,6 +318,7 @@ void AssignNameWidget::AssignNameWidgetPriv::updateLayout()
     {
         case InvalidMode:
             break;
+
         case UnconfirmedEditMode:
         case ConfirmedEditMode:
 
@@ -321,6 +326,7 @@ void AssignNameWidget::AssignNameWidgetPriv::updateLayout()
             {
                 case InvalidLayout:
                     break;
+
                 case FullLine:
                 {
                     layout->addWidget(addTagsWidget(),  0, 0);
@@ -334,6 +340,7 @@ void AssignNameWidget::AssignNameWidgetPriv::updateLayout()
 
                     break;
                 }
+
                 case TwoLines:
                 case Compact:
                 {
@@ -390,6 +397,7 @@ void AssignNameWidget::AssignNameWidgetPriv::updateVisualStyle()
     {
         case InvalidVisualStyle:
             break;
+
         case TranslucentDarkRound:
         {
             q->setStyleSheet(
@@ -453,6 +461,7 @@ void AssignNameWidget::AssignNameWidgetPriv::updateVisualStyle()
             );
             break;
         }
+
         case TranslucentThemedFrameless:
         {
             QColor bg = kapp->palette().color(QPalette::Base);
@@ -473,6 +482,7 @@ void AssignNameWidget::AssignNameWidgetPriv::updateVisualStyle()
             );
             break;
         }
+
         case StyledFrame:
         {
             q->setStyleSheet(QString());
@@ -535,7 +545,7 @@ AssignNameWidget::~AssignNameWidget()
 
 void AssignNameWidget::setDefaultModel()
 {
-    setModel(0,0,0);
+    setModel(0, 0, 0);
 }
 
 void AssignNameWidget::setModel(TagModel* model, TagPropertiesFilterModel* filteredModel, CheckableAlbumFilterModel* filterModel)
@@ -722,6 +732,7 @@ void AssignNameWidget::slotActionSelected(const TaggingAction& action)
     {
         d->confirmButton->setEnabled(action.isValid());
     }
+
     emit selected(action, d->info, d->faceIdentifier);
 }
 
@@ -738,6 +749,7 @@ void AssignNameWidget::keyPressEvent(QKeyEvent* e)
         case Qt::Key_Return:
             slotConfirm();
             return;
+
         case Qt::Key_Escape:
             slotReject();
             return;

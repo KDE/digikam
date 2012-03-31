@@ -130,7 +130,7 @@ FilterAction::Category EditorTool::toolCategory() const
     return d->category;
 }
 
-void EditorTool::setToolCategory ( const FilterAction::Category category)
+void EditorTool::setToolCategory(const FilterAction::Category category)
 {
     d->category = category;
 }
@@ -537,7 +537,7 @@ void EditorToolThreaded::slotOk()
     toolView()->setEnabled(false);
 
     EditorToolIface::editorToolIface()->setToolStartProgress(d->progressMess.isEmpty() ? toolName() : d->progressMess);
-    kapp->setOverrideCursor( Qt::WaitCursor );
+    kapp->setOverrideCursor(Qt::WaitCursor);
 
     if (d->delFilter && d->threadedFilter)
     {

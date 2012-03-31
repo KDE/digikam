@@ -557,6 +557,7 @@ bool UndoManager::hasChanges() const
     {
         DImageHistory currentHistory = d->dimgiface->getImageHistory();
         DImageHistory initialHistory = d->dimgiface->getInitialImageHistory();
+
         if (currentHistory == initialHistory)
         {
             return false;

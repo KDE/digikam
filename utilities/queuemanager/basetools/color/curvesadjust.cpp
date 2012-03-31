@@ -104,7 +104,7 @@ BatchToolSettings CurvesAdjust::defaultSettings()
 {
     BatchToolSettings prm;
     CurvesContainer defaultPrm = m_settingsView->defaultSettings();
-    prm.insert("curvesType",                (int)defaultPrm.curvesType);
+    prm.insert("curvesType", (int)defaultPrm.curvesType);
     prm.insert("curvesDepth",               defaultPrm.sixteenBit);
     prm.insert("values[LuminosityChannel]", defaultPrm.values[LuminosityChannel]);
     prm.insert("values[RedChannel]",        defaultPrm.values[RedChannel]);
@@ -135,7 +135,7 @@ void CurvesAdjust::slotSettingsChanged()
     BatchToolSettings prm;
     CurvesContainer currentPrm = m_settingsView->settings();
 
-    prm.insert("curvesType",                (int)currentPrm.curvesType);
+    prm.insert("curvesType", (int)currentPrm.curvesType);
     prm.insert("curvesDepth",               currentPrm.sixteenBit);
     prm.insert("values[LuminosityChannel]", currentPrm.values[LuminosityChannel]);
     prm.insert("values[RedChannel]",        currentPrm.values[RedChannel]);

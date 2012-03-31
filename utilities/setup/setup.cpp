@@ -701,6 +701,7 @@ KPageWidgetItem* Setup::SetupPrivate::pageItem(Setup::Page page) const
             return page_versioning;
 
 #ifdef USE_SCRIPT_IFACE
+
         case Setup::ScriptManagerPage:
             return page_scriptmanager;
 #endif

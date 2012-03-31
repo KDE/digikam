@@ -44,7 +44,7 @@ public:
 
     enum DateFormatOptions
     {
-        IsoDateFormat=0,
+        IsoDateFormat = 0,
         TextDateFormat,
         LocalDateFormat,
         CustomDateFormat
@@ -52,7 +52,7 @@ public:
 
 public:
 
-    AlbumCustomizer(QWidget* parent=0);
+    AlbumCustomizer(QWidget* parent = 0);
     ~AlbumCustomizer();
 
     void readSettings(KConfigGroup& group);

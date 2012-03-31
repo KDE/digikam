@@ -44,7 +44,7 @@ class WaterMark : public BatchTool
 
 public:
 
-    WaterMark(QObject* parent=0);
+    WaterMark(QObject* parent = 0);
     ~WaterMark();
 
     BatchToolSettings defaultSettings();

@@ -53,7 +53,7 @@ public:
 
     enum ToolSettingsViewMode
     {
-        MessageView=0,
+        MessageView = 0,
         SettingsView
     };
 

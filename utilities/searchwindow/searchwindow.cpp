@@ -164,11 +164,13 @@ void SearchWindow::keyPressEvent(QKeyEvent* e)
             case Qt::Key_Select:
                 searchOk();
                 break;
+
             case Qt::Key_F4:
             case Qt::Key_Escape:
             case Qt::Key_Back:
                 searchCancel();
                 break;
+
             default:
                 break;
         }

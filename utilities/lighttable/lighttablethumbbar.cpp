@@ -56,7 +56,8 @@ template <typename T, class Container>
 void removeAnyInInterval(Container& list, const T& begin, const T& end)
 {
     typename Container::iterator it;
-    for (it = list.begin(); it != list.end(); )
+
+    for (it = list.begin(); it != list.end();)
     {
         if ((*it) >= begin && (*it) <= end)
         {
@@ -73,8 +74,8 @@ class LightTableImageListModel : public ImageListModel
 {
 public:
 
-    LightTableImageListModel(QObject *parent = 0)
-       : ImageListModel(parent), m_exclusive(false)
+    LightTableImageListModel(QObject* parent = 0)
+        : ImageListModel(parent), m_exclusive(false)
     {
     }
 
@@ -99,6 +100,7 @@ public:
         {
             return m_rightIndexes.contains(index.row());
         }
+
         return ImageListModel::data(index, role);
     }
 
@@ -115,6 +117,7 @@ public:
             {
                 m_leftIndexes.clear();
             }
+
             m_leftIndexes << index.row();
             return true;
         }
@@ -124,6 +127,7 @@ public:
             {
                 m_rightIndexes.clear();
             }
+
             m_rightIndexes << index.row();
             return true;
         }
@@ -212,7 +216,9 @@ void LightTableThumbBar::setItems(const ImageInfoList& list)
     foreach(ImageInfo info, list)
     {
         if (!d->imageInfoModel->hasImage(info))
+        {
             d->imageInfoModel->addImageInfo(info);
+        }
     }
 }
 
@@ -231,7 +237,7 @@ void LightTableThumbBar::showContextMenuOnInfo(QContextMenuEvent* e, const Image
 {
     // temporary actions ----------------------------------
 
-    QAction* leftPanelAction=0, *rightPanelAction=0, *editAction=0, *removeAction=0, *clearAllAction=0;
+    QAction* leftPanelAction = 0, *rightPanelAction = 0, *editAction = 0, *removeAction = 0, *clearAllAction = 0;
 
     leftPanelAction  = new QAction(SmallIcon("arrow-left"),        i18n("Show on left panel"),  this);
     rightPanelAction = new QAction(SmallIcon("arrow-right"),       i18n("Show on right panel"), this);
@@ -337,9 +343,13 @@ void LightTableThumbBar::toggleTag(int tagID)
     if (!info.isNull())
     {
         if (!info.tagIds().contains(tagID))
+        {
             FileActionMngr::instance()->assignTag(info, tagID);
+        }
         else
+        {
             FileActionMngr::instance()->removeTag(info, tagID);
+        }
     }
 }
 
@@ -372,7 +382,9 @@ bool LightTableThumbBar::isOnRightPanel(const ImageInfo& info) const
 QModelIndex LightTableThumbBar::findItemByInfo(const ImageInfo& info) const
 {
     if (!info.isNull())
+    {
         return d->imageInfoModel->indexForImageInfo(info);
+    }
 
     return QModelIndex();
 }
@@ -380,7 +392,9 @@ QModelIndex LightTableThumbBar::findItemByInfo(const ImageInfo& info) const
 ImageInfo LightTableThumbBar::findItemByIndex(const QModelIndex& index) const
 {
     if (index.isValid())
+    {
         return d->imageInfoModel->imageInfo(index);
+    }
 
     return ImageInfo();
 }
@@ -388,7 +402,9 @@ ImageInfo LightTableThumbBar::findItemByIndex(const QModelIndex& index) const
 void LightTableThumbBar::removeItemByInfo(const ImageInfo& info)
 {
     if (info.isNull())
+    {
         return;
+    }
 
     d->imageInfoModel->removeImageInfo(info);
     emit signalContentChanged();
@@ -406,8 +422,8 @@ void LightTableThumbBar::paintEvent(QPaintEvent* e)
         QPainter p(viewport());
         p.setPen(QPen(kapp->palette().color(QPalette::Text)));
         p.drawText(0, 0, width(), height(),
-                    Qt::AlignCenter|Qt::TextWordWrap,
-                    i18n("Drag and drop images here"));
+                   Qt::AlignCenter | Qt::TextWordWrap,
+                   i18n("Drag and drop images here"));
         p.end();
         return;
     }

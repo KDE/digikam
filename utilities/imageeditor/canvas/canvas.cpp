@@ -112,7 +112,7 @@ public:
         initialZoom      = true;
         tileTmpPix       = new QPixmap(tileSize, tileSize);
 
-        tileCache.setMaxCost((10*1024*1024)/(tileSize*tileSize*4));
+        tileCache.setMaxCost((10 * 1024 * 1024) / (tileSize * tileSize * 4));
     }
 
     bool                     autoZoom;
@@ -186,7 +186,7 @@ Canvas::Canvas(QWidget* const parent)
     palette.setColor(viewport()->backgroundRole(), Qt::WA_NoBackground);
     viewport()->setPalette(palette);
     viewport()->setMouseTracking(false);
-    setFrameStyle( QFrame::NoFrame );
+    setFrameStyle(QFrame::NoFrame);
     setFocusPolicy(Qt::ClickFocus);
 
     d->rubber = new DRubberBand(this);
@@ -382,12 +382,12 @@ QRect Canvas::getSelectedArea() const
 {
     int x, y, w, h;
     d->im->getSelectedArea(x, y, w, h);
-    return ( QRect(x, y, w, h) );
+    return (QRect(x, y, w, h));
 }
 
 QRect Canvas::visibleArea() const
 {
-    return ( QRect(contentsX(), contentsY(), visibleWidth(), visibleHeight()) );
+    return (QRect(contentsX(), contentsY(), visibleWidth(), visibleHeight()));
 }
 
 DImgInterface* Canvas::interface() const
@@ -411,7 +411,7 @@ double Canvas::calcAutoZoomFactor() const
     double srcHeight = d->im->origHeight();
     double dstWidth  = contentsRect().width();
     double dstHeight = contentsRect().height();
-    return qMin(dstWidth/srcWidth, dstHeight/srcHeight);
+    return qMin(dstWidth / srcWidth, dstHeight / srcHeight);
 }
 
 void Canvas::updateAutoZoom()
@@ -453,10 +453,10 @@ void Canvas::updateContentsSize(bool deleteRubber)
     if (visibleWidth() > wZ || visibleHeight() > hZ)
     {
         // Center the image
-        int centerx   = contentsRect().width()/2;
-        int centery   = contentsRect().height()/2;
-        int xoffset   = int(centerx - wZ/2);
-        int yoffset   = int(centery - hZ/2);
+        int centerx   = contentsRect().width() / 2;
+        int centery   = contentsRect().height() / 2;
+        int xoffset   = int(centerx - wZ / 2);
+        int yoffset   = int(centery - hZ / 2);
         xoffset       = qMax(xoffset, 0);
         yoffset       = qMax(yoffset, 0);
         d->pixmapRect = QRect(xoffset, yoffset, wZ, hZ);
@@ -595,7 +595,7 @@ void Canvas::paintViewport(const QRect& er, bool antialias)
                     if (d->rubber->isActive() && d->pressedMoved && !d->pressedMoving)
                     {
                         QRect rr(d->rubber->rubberBandAreaOnContents());
-                        rr = QRect(rr.x(), rr.y(), rr.width()-1, rr.height()-1);
+                        rr = QRect(rr.x(), rr.y(), rr.width() - 1, rr.height() - 1);
                         QRect r(i, j, d->tileSize, d->tileSize);
 
                         d->im->paintOnDevice(pix, sx, sy, sw, sh,
@@ -605,7 +605,7 @@ void Canvas::paintViewport(const QRect& er, bool antialias)
                                              rr.width(), rr.height(),
                                              antialias);
 
-                        rr.translate(-i -d->pixmapRect.x(), -j -d->pixmapRect.y());
+                        rr.translate(-i - d->pixmapRect.x(), -j - d->pixmapRect.y());
 
                         QPainter p(pix);
                         p.setPen(d->rubber->palette().color(QPalette::Active, QPalette::Highlight));
@@ -615,10 +615,10 @@ void Canvas::paintViewport(const QRect& er, bool antialias)
 
                         if (rr.width() >= d->snapArea && rr.height() >= d->snapArea)
                         {
-                            p.drawRect(QRect(rr.x()-halfSA,            rr.y()-halfSA,             d->snapArea, d->snapArea));
-                            p.drawRect(QRect(rr.x()-halfSA,            rr.y()+rr.height()-halfSA, d->snapArea, d->snapArea));
-                            p.drawRect(QRect(rr.x()+rr.width()-halfSA, rr.y()+rr.height()-halfSA, d->snapArea, d->snapArea));
-                            p.drawRect(QRect(rr.x()+rr.width()-halfSA, rr.y()-halfSA,             d->snapArea, d->snapArea));
+                            p.drawRect(QRect(rr.x() - halfSA,            rr.y() - halfSA,             d->snapArea, d->snapArea));
+                            p.drawRect(QRect(rr.x() - halfSA,            rr.y() + rr.height() - halfSA, d->snapArea, d->snapArea));
+                            p.drawRect(QRect(rr.x() + rr.width() - halfSA, rr.y() + rr.height() - halfSA, d->snapArea, d->snapArea));
+                            p.drawRect(QRect(rr.x() + rr.width() - halfSA, rr.y() - halfSA,             d->snapArea, d->snapArea));
                         }
 
                         p.end();
@@ -638,7 +638,7 @@ void Canvas::paintViewport(const QRect& er, bool antialias)
 
                 painter.drawPixmap(pt.x(), pt.y(),
                                    *pix,
-                                   ir.x()-r.x(), ir.y()-r.y(),
+                                   ir.x() - r.x(), ir.y() - r.y(),
                                    ir.width(), ir.height());
             }
         }
@@ -646,10 +646,10 @@ void Canvas::paintViewport(const QRect& er, bool antialias)
     else if (!d->im->imageValid() && !d->errorMessage.isEmpty())
     {
         QRect fullRect(0, 0, visibleWidth(), visibleHeight());
-        QRect textRect = painter.boundingRect(fullRect, Qt::AlignCenter|Qt::TextWordWrap, d->errorMessage);
+        QRect textRect = painter.boundingRect(fullRect, Qt::AlignCenter | Qt::TextWordWrap, d->errorMessage);
         painter.fillRect(textRect, kapp->palette().color(QPalette::Base));
         painter.setPen(QPen(kapp->palette().color(QPalette::Text)));
-        painter.drawText(textRect, Qt::AlignCenter|Qt::TextWordWrap, d->errorMessage);
+        painter.drawText(textRect, Qt::AlignCenter | Qt::TextWordWrap, d->errorMessage);
 
         clipRegion -= textRect;
     }
@@ -707,8 +707,8 @@ void Canvas::contentsMousePressEvent(QMouseEvent* e)
             }
             else
             {
-                d->dragStartRect=d->rubber->rubberBandAreaOnContents();
-                d->dragStart=e->pos();
+                d->dragStartRect = d->rubber->rubberBandAreaOnContents();
+                d->dragStart = e->pos();
             }
 
             viewport()->setMouseTracking(false);
@@ -817,7 +817,7 @@ void Canvas::contentsMouseMoveEvent(QMouseEvent* e)
             }
             else
             {
-                QPoint tr = e->pos()-d->dragStart;
+                QPoint tr = e->pos() - d->dragStart;
                 QRect nr = d->dragStartRect;
                 nr.translate(tr);
 
@@ -862,23 +862,23 @@ void Canvas::contentsMouseMoveEvent(QMouseEvent* e)
 
         QRect r(d->rubber->rubberBandAreaOnContents());
 
-        QRect lt(r.x()-halfSA,           r.y()-halfSA,            d->snapArea,            d->snapArea);
+        QRect lt(r.x() - halfSA,           r.y() - halfSA,            d->snapArea,            d->snapArea);
 
-        QRect rt(r.x()+r.width()-halfSA, r.y()-halfSA,            d->snapArea,            d->snapArea);
+        QRect rt(r.x() + r.width() - halfSA, r.y() - halfSA,            d->snapArea,            d->snapArea);
 
-        QRect lb(r.x()-halfSA,           r.y()+r.height()-halfSA, d->snapArea,            d->snapArea);
+        QRect lb(r.x() - halfSA,           r.y() + r.height() - halfSA, d->snapArea,            d->snapArea);
 
-        QRect rb(r.x()+r.width()-halfSA, r.y()+r.height()-halfSA, d->snapArea,            d->snapArea);
+        QRect rb(r.x() + r.width() - halfSA, r.y() + r.height() - halfSA, d->snapArea,            d->snapArea);
 
-        QRect ls(r.x()-halfSA,           r.y()+halfSA,            d->snapArea,            r.height()-d->snapArea);
+        QRect ls(r.x() - halfSA,           r.y() + halfSA,            d->snapArea,            r.height() - d->snapArea);
 
-        QRect rs(r.x()+r.width()-halfSA, r.y()+halfSA,            d->snapArea,            r.height()-d->snapArea);
+        QRect rs(r.x() + r.width() - halfSA, r.y() + halfSA,            d->snapArea,            r.height() - d->snapArea);
 
-        QRect ts(r.x()+halfSA,           r.y()-halfSA,            r.width()-d->snapArea,  d->snapArea);
+        QRect ts(r.x() + halfSA,           r.y() - halfSA,            r.width() - d->snapArea,  d->snapArea);
 
-        QRect bs(r.x()+halfSA,           r.y()+r.height()-halfSA, r.width()-d->snapArea,  d->snapArea);
+        QRect bs(r.x() + halfSA,           r.y() + r.height() - halfSA, r.width() - d->snapArea,  d->snapArea);
 
-        QRect dg(r.x()+halfSA,           r.y()+halfSA,            r.width()-d->snapArea,  r.height()-d->snapArea);
+        QRect dg(r.x() + halfSA,           r.y() + halfSA,            r.width() - d->snapArea,  r.height() - d->snapArea);
 
         d->ltActive   = false;
 
@@ -1128,14 +1128,14 @@ void Canvas::setZoomFactorSnapped(double zoom)
 {
     double fit = calcAutoZoomFactor();
 
-    if (fabs(zoom-fit) < 0.05)
+    if (fabs(zoom - fit) < 0.05)
     {
         // If 1.0 or 0.5 are even closer to zoom than fit, then choose these.
-        if  (fabs(zoom-fit) > fabs(zoom-1.0) )
+        if (fabs(zoom - fit) > fabs(zoom - 1.0))
         {
             zoom = 1.0;
         }
-        else if  (fabs(zoom-fit) > fabs(zoom-0.5) )
+        else if (fabs(zoom - fit) > fabs(zoom - 0.5))
         {
             zoom = 0.5;
         }
@@ -1146,12 +1146,12 @@ void Canvas::setZoomFactorSnapped(double zoom)
     }
     else
     {
-        if (fabs(zoom-1.0) < 0.05)
+        if (fabs(zoom - 1.0) < 0.05)
         {
             zoom = 1.0;
         }
 
-        if (fabs(zoom-0.5) < 0.05)
+        if (fabs(zoom - 0.5) < 0.05)
         {
             zoom = 0.5;
         }
@@ -1200,7 +1200,7 @@ void Canvas::fitToSelect()
     int xSel, ySel, wSel, hSel;
     d->im->getSelectedArea(xSel, ySel, wSel, hSel);
 
-    if (wSel && hSel )
+    if (wSel && hSel)
     {
         // If selected area, use center of selection
         // and recompute zoom factor accordingly.
@@ -1210,7 +1210,7 @@ void Canvas::fitToSelect()
         double srcHeight = hSel;
         double dstWidth  = contentsRect().width();
         double dstHeight = contentsRect().height();
-        d->zoom          = qMin(dstWidth/srcWidth, dstHeight/srcHeight);
+        d->zoom          = qMin(dstWidth / srcWidth, dstHeight / srcHeight);
         d->autoZoom      = false;
 
         emit signalToggleOffFitToWindow();
@@ -1287,7 +1287,7 @@ void Canvas::slotCrop()
     int x, y, w, h;
     d->im->getSelectedArea(x, y, w, h);
 
-    if (!w && !h )  // No current selection.
+    if (!w && !h)   // No current selection.
     {
         return;
     }
@@ -1371,12 +1371,12 @@ void Canvas::slotCopy()
     int x, y, w, h;
     d->im->getSelectedArea(x, y, w, h);
 
-    if (!w && !h )  // No current selection.
+    if (!w && !h)   // No current selection.
     {
         return;
     }
 
-    QApplication::setOverrideCursor (Qt::WaitCursor);
+    QApplication::setOverrideCursor(Qt::WaitCursor);
 
     QScopedArrayPointer<uchar> data(d->im->getImageSelection());
     DImg selDImg        = DImg(w, h, d->im->sixteenBit(), d->im->hasAlpha(), data.data());
@@ -1384,12 +1384,12 @@ void Canvas::slotCopy()
     QMimeData* mimeData = new QMimeData();
     mimeData->setImageData(selImg);
     QApplication::clipboard()->setMimeData(mimeData, QClipboard::Clipboard);
-    QApplication::restoreOverrideCursor ();
+    QApplication::restoreOverrideCursor();
 }
 
 void Canvas::slotSelected()
 {
-    int x=0, y=0, w=0, h=0;
+    int x = 0, y = 0, w = 0, h = 0;
 
     if (d->rubber->isActive() && d->pressedMoved)
     {
@@ -1405,7 +1405,7 @@ void Canvas::slotSelected()
 
 QRect Canvas::calcSelectedArea() const
 {
-    int x=0, y=0, w=0, h=0;
+    int x = 0, y = 0, w = 0, h = 0;
     QRect r(d->rubber->rubberBandAreaOnContents());
 
     if (r.isValid())
@@ -1483,8 +1483,8 @@ void Canvas::slotCornerButtonPressed()
     d->panIconPopup->setMainWidget(pan);
 
     QPoint g = mapToGlobal(viewport()->pos());
-    g.setX(g.x()+ viewport()->size().width());
-    g.setY(g.y()+ viewport()->size().height());
+    g.setX(g.x() + viewport()->size().width());
+    g.setY(g.y() + viewport()->size().height());
     d->panIconPopup->popup(QPoint(g.x() - d->panIconPopup->width(),
                                   g.y() - d->panIconPopup->height()));
 
@@ -1554,12 +1554,12 @@ void Canvas::keyPressEvent(QKeyEvent* e)
 
     int mult = 1;
 
-    if ( (e->modifiers() & Qt::ControlModifier))
+    if ((e->modifiers() & Qt::ControlModifier))
     {
         mult = 10;
     }
 
-    switch ( e->key() )
+    switch (e->key())
     {
         case Qt::Key_Right:
         {

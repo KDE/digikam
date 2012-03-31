@@ -83,7 +83,7 @@ void NewItemsFinder::slotStart()
 {
     MaintenanceTool::slotStart();
 
-    switch(d->mode)
+    switch (d->mode)
     {
         case ScanDeferredFiles:
         {
@@ -92,6 +92,7 @@ void NewItemsFinder::slotStart()
             ScanController::instance()->allowToScanDeferredFiles();
             break;
         }
+
         case CompleteCollectionScan:
         {
             kDebug() << "scan mode: CompleteCollectionScan";
@@ -99,6 +100,7 @@ void NewItemsFinder::slotStart()
             ScanController::instance()->completeCollectionScan();
             break;
         }
+
         case ScheduleCollectionScan:
         {
             kDebug() << "scan mode: ScheduleCollectionScan";

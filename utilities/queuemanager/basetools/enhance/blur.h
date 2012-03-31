@@ -41,7 +41,7 @@ class Blur : public BatchTool
 
 public:
 
-    Blur(QObject* parent=0);
+    Blur(QObject* parent = 0);
     ~Blur();
 
     BatchToolSettings defaultSettings();

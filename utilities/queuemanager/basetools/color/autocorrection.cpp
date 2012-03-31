@@ -113,6 +113,7 @@ bool AutoCorrection::toolOperations()
             image().putImageData(autolevels.getTargetImage().bits());
             break;
         }
+
         case NormalizeCorrection:
         {
             NormalizeFilter normalize(&image(), &image());
@@ -120,6 +121,7 @@ bool AutoCorrection::toolOperations()
             image().putImageData(normalize.getTargetImage().bits());
             break;
         }
+
         case EqualizeCorrection:
         {
             EqualizeFilter equalize(&image(), &image());
@@ -127,6 +129,7 @@ bool AutoCorrection::toolOperations()
             image().putImageData(equalize.getTargetImage().bits());
             break;
         }
+
         case StretchContrastCorrection:
         {
             StretchFilter stretch(&image(), &image());
@@ -134,6 +137,7 @@ bool AutoCorrection::toolOperations()
             image().putImageData(stretch.getTargetImage().bits());
             break;
         }
+
         case AutoExposureCorrection:
         {
             AutoExpoFilter expo(&image(), &image());

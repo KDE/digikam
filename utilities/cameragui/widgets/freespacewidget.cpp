@@ -120,7 +120,7 @@ FreeSpaceWidget::FreeSpaceWidget(QWidget* parent, int width)
 {
     setAttribute(Qt::WA_DeleteOnClose);
     setFixedWidth(width);
-    setMaximumHeight(fontMetrics().height()+4);
+    setMaximumHeight(fontMetrics().height() + 4);
     d->timer   = new QTimer(this);
     d->toolTip = new FreeSpaceToolTip(this);
 
@@ -206,7 +206,7 @@ void FreeSpaceWidget::addInformation(unsigned long kBSize,
             d->isValid  = true;
         }
     }
-    d->percentUsed = lround(100.0 - (100.0*kBAvail/kBSize));
+    d->percentUsed = lround(100.0 - (100.0 * kBAvail / kBSize));
 
     updateToolTip();
     update();
@@ -283,15 +283,15 @@ void FreeSpaceWidget::paintEvent(QPaintEvent*)
     QPainter p(this);
 
     p.setPen(palette().mid().color());
-    p.drawRect(0, 0, width()-1, height()-1);
-    p.drawPixmap(2, height()/2-d->iconPix.height()/2,
+    p.drawRect(0, 0, width() - 1, height() - 1);
+    p.drawPixmap(2, height() / 2 - d->iconPix.height() / 2,
                  d->iconPix, 0, 0, d->iconPix.width(), d->iconPix.height());
 
     if (isValid())
     {
         // We will compute the estimated % of space size used to download and process.
         unsigned long eUsedKb = d->dSizeKb + d->kBUsed;
-        int peUsed            = (int)(100.0*((double)eUsedKb/(double)d->kBSize));
+        int peUsed            = (int)(100.0 * ((double)eUsedKb / (double)d->kBSize));
         int pClamp            = peUsed > 100 ? 100 : peUsed;
         QColor barcol         = QColor(62, 255, 62);          // Smooth Green.
 
@@ -306,16 +306,16 @@ void FreeSpaceWidget::paintEvent(QPaintEvent*)
 
         p.setBrush(barcol);
         p.setPen(palette().light().color());
-        QRect gRect(d->iconPix.height()+3, 2,
-                    (int)(((double)width()-3.0-d->iconPix.width()-2.0)*(pClamp/100.0)),
-                    height()-5);
+        QRect gRect(d->iconPix.height() + 3, 2,
+                    (int)(((double)width() - 3.0 - d->iconPix.width() - 2.0) * (pClamp / 100.0)),
+                    height() - 5);
         p.drawRect(gRect);
 
-        QRect tRect(d->iconPix.height()+3, 2, width()-3-d->iconPix.width()-2, height()-5);
+        QRect tRect(d->iconPix.height() + 3, 2, width() - 3 - d->iconPix.width() - 2, height() - 5);
         QString text        = QString("%1%").arg(peUsed);
         QFontMetrics fontMt = p.fontMetrics();
-//        QRect fontRect      = fontMt.boundingRect(tRect.x(), tRect.y(),
-//                                                  tRect.width(), tRect.height(), 0, text);
+        //        QRect fontRect      = fontMt.boundingRect(tRect.x(), tRect.y(),
+        //                                                  tRect.width(), tRect.height(), 0, text);
         p.setPen(Qt::black);
         p.drawText(tRect, Qt::AlignCenter, text);
     }
@@ -389,9 +389,9 @@ void FreeSpaceWidget::slotTimeout()
 
         if (info.isValid())
         {
-            addInformation((unsigned long)(info.size()/1024.0),
-                           (unsigned long)(info.used()/1024.0),
-                           (unsigned long)(info.available()/1024.0),
+            addInformation((unsigned long)(info.size() / 1024.0),
+                           (unsigned long)(info.used() / 1024.0),
+                           (unsigned long)(info.available() / 1024.0),
                            info.mountPoint());
         }
     }

@@ -75,22 +75,22 @@ BatchToolSettings Sharpen::defaultSettings()
     SharpContainer defaultPrm = m_settingsView->defaultSettings();
 
     // sharpen method
-    settings.insert("SharpenFilterType",    (int)defaultPrm.method);
+    settings.insert("SharpenFilterType", (int)defaultPrm.method);
 
     // simple sharp
-    settings.insert("SimpleSharpRadius",    (int)defaultPrm.ssRadius);
+    settings.insert("SimpleSharpRadius", (int)defaultPrm.ssRadius);
 
     // unsharp mask
-    settings.insert("UnsharpMaskRadius",    (double)defaultPrm.umRadius);
-    settings.insert("UnsharpMaskAmount",    (double)defaultPrm.umAmount);
+    settings.insert("UnsharpMaskRadius", (double)defaultPrm.umRadius);
+    settings.insert("UnsharpMaskAmount", (double)defaultPrm.umAmount);
     settings.insert("UnsharpMaskThreshold", (double)defaultPrm.umThreshold);
 
     // refocus
-    settings.insert("RefocusRadius",        (double)defaultPrm.rfRadius);
-    settings.insert("RefocusCorrelation",   (double)defaultPrm.rfCorrelation);
-    settings.insert("RefocusNoise",         (double)defaultPrm.rfNoise);
-    settings.insert("RefocusGauss",         (double)defaultPrm.rfGauss);
-    settings.insert("RefocusMatrixSize",    (int)defaultPrm.rfMatrix);
+    settings.insert("RefocusRadius", (double)defaultPrm.rfRadius);
+    settings.insert("RefocusCorrelation", (double)defaultPrm.rfCorrelation);
+    settings.insert("RefocusNoise", (double)defaultPrm.rfNoise);
+    settings.insert("RefocusGauss", (double)defaultPrm.rfGauss);
+    settings.insert("RefocusMatrixSize", (int)defaultPrm.rfMatrix);
 
     return settings;
 }
@@ -126,22 +126,22 @@ void Sharpen::slotSettingsChanged()
     SharpContainer prm = m_settingsView->settings();
 
     // sharpen method
-    settings.insert("SharpenFilterType",    (int)prm.method);
+    settings.insert("SharpenFilterType", (int)prm.method);
 
     // simple sharp
-    settings.insert("SimpleSharpRadius",    (int)prm.ssRadius);
+    settings.insert("SimpleSharpRadius", (int)prm.ssRadius);
 
     // unsharp mask
-    settings.insert("UnsharpMaskRadius",    (double)prm.umRadius);
-    settings.insert("UnsharpMaskAmount",    (double)prm.umAmount);
+    settings.insert("UnsharpMaskRadius", (double)prm.umRadius);
+    settings.insert("UnsharpMaskAmount", (double)prm.umAmount);
     settings.insert("UnsharpMaskThreshold", (double)prm.umThreshold);
 
     // refocus
-    settings.insert("RefocusRadius",        (double)prm.rfRadius);
-    settings.insert("RefocusCorrelation",   (double)prm.rfCorrelation);
-    settings.insert("RefocusNoise",         (double)prm.rfNoise);
-    settings.insert("RefocusGauss",         (double)prm.rfGauss);
-    settings.insert("RefocusMatrixSize",    (int)prm.rfMatrix);
+    settings.insert("RefocusRadius", (double)prm.rfRadius);
+    settings.insert("RefocusCorrelation", (double)prm.rfCorrelation);
+    settings.insert("RefocusNoise", (double)prm.rfNoise);
+    settings.insert("RefocusGauss", (double)prm.rfGauss);
+    settings.insert("RefocusMatrixSize", (int)prm.rfMatrix);
 
     BatchTool::slotSettingsChanged(settings);
 }

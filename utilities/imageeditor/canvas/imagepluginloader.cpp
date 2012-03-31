@@ -97,7 +97,7 @@ public:
     {
         splash = 0;
 
-        for (int i=0 ; QString(ObsoleteImagePluginsList[i]) != QString("-1") ; ++i)
+        for (int i = 0 ; QString(ObsoleteImagePluginsList[i]) != QString("-1") ; ++i)
         {
             obsoleteImagePluginsList << ObsoleteImagePluginsList[i];
         }
@@ -176,7 +176,7 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& pluginsToLoad)
         KService::Ptr service = d->pluginServiceMap.value(name);
         ImagePlugin* plugin   = 0;
 
-        if ( pluginIsLoaded(name) )
+        if (pluginIsLoaded(name))
         {
             continue;
         }
@@ -230,7 +230,7 @@ ImagePlugin* ImagePluginLoader::pluginInstance(const QString& libraryName) const
     {
         if (service->library() == libraryName)
         {
-            return ( pluginIsLoaded(service->name()) );
+            return (pluginIsLoaded(service->name()));
         }
     }
 
@@ -243,7 +243,7 @@ bool ImagePluginLoader::pluginLibraryIsLoaded(const QString& libraryName) const
     {
         if (service->library() == libraryName)
         {
-            if ( pluginIsLoaded(service->name()) )
+            if (pluginIsLoaded(service->name()))
             {
                 return true;
             }

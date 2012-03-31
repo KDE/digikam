@@ -66,7 +66,7 @@ public:
 
     bool  move(int x, int y);
 
-    void  setSelected(bool val, bool cb=true);
+    void  setSelected(bool val, bool cb = true);
     bool  isSelected() const;
 
     void  setHighlighted(bool val);

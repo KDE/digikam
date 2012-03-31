@@ -39,7 +39,7 @@ class Convert2PNG : public BatchTool
 
 public:
 
-    Convert2PNG(QObject* parent=0);
+    Convert2PNG(QObject* parent = 0);
     ~Convert2PNG();
 
     QString outputSuffix() const;

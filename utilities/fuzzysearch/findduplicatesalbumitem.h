@@ -55,7 +55,7 @@ public:
     SAlbum* album() const;
     KUrl    refUrl() const;
 
-    void setThumb(const QPixmap& pix, bool hasThumb=true);
+    void setThumb(const QPixmap& pix, bool hasThumb = true);
 
     bool operator<(const QTreeWidgetItem& other) const;
 

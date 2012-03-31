@@ -53,19 +53,19 @@
 namespace Digikam
 {
 
-static inline double unitToInches( PrintOptionsPage::Unit unit )
+static inline double unitToInches(PrintOptionsPage::Unit unit)
 {
-    if ( unit == PrintOptionsPage::Inches )
+    if (unit == PrintOptionsPage::Inches)
     {
         return 1.0;
     }
-    else if ( unit == PrintOptionsPage::Centimeters )
+    else if (unit == PrintOptionsPage::Centimeters)
     {
-        return 1/2.54;
+        return 1 / 2.54;
     }
     else   // Millimeters
     {
-        return 1/25.4;
+        return 1 / 25.4;
     }
 }
 
@@ -99,7 +99,7 @@ public:
     void initColorManagement()
     {
         colorManaged   = new QCheckBox(i18n("Use Color Management for Printing"), cmbox);
-        colorManaged->setChecked( false );
+        colorManaged->setChecked(false);
         cmPreferences  = new QPushButton(i18n("Settings..."), cmbox);
         QWidget* space = new QWidget(cmbox);
         cmbox->setStretchFactor(space, 10);
@@ -126,26 +126,26 @@ public:
             "}"
         );
 
-        QGridLayout* layout = new QGridLayout( mPositionFrame );
+        QGridLayout* layout = new QGridLayout(mPositionFrame);
         layout->setMargin(0);
         layout->setSpacing(1);
 
-        for ( int row = 0; row < 3; ++row )
+        for (int row = 0; row < 3; ++row)
         {
-            for ( int col = 0; col < 3; ++col )
+            for (int col = 0; col < 3; ++col)
             {
-                QToolButton* button = new QToolButton( mPositionFrame );
-                button->setFixedSize( 40, 40 );
-                button->setCheckable( true );
-                layout->addWidget( button, row, col );
+                QToolButton* button = new QToolButton(mPositionFrame);
+                button->setFixedSize(40, 40);
+                button->setCheckable(true);
+                layout->addWidget(button, row, col);
 
                 Qt::Alignment alignment;
 
-                if ( row == 0 )
+                if (row == 0)
                 {
                     alignment = Qt::AlignTop;
                 }
-                else if ( row == 1 )
+                else if (row == 1)
                 {
                     alignment = Qt::AlignVCenter;
                 }
@@ -154,11 +154,11 @@ public:
                     alignment = Qt::AlignBottom;
                 }
 
-                if ( col == 0 )
+                if (col == 0)
                 {
                     alignment |= Qt::AlignLeft;
                 }
-                else if ( col == 1 )
+                else if (col == 1)
                 {
                     alignment |= Qt::AlignHCenter;
                 }
@@ -167,14 +167,14 @@ public:
                     alignment |= Qt::AlignRight;
                 }
 
-                mPositionGroup.addButton( button, int ( alignment ) );
+                mPositionGroup.addButton(button, int (alignment));
             }
         }
     }
 };
 
 PrintOptionsPage::PrintOptionsPage(QWidget* parent, const QSize& imageSize)
-    : QWidget(), d ( new PrintOptionsPagePrivate )
+    : QWidget(), d(new PrintOptionsPagePrivate)
 {
     d->setupUi(this);
     d->mParent              = parent;
@@ -186,9 +186,9 @@ PrintOptionsPage::PrintOptionsPage(QWidget* parent, const QSize& imageSize)
     //color management
     d->initColorManagement();
 
-    d->mScaleGroup.addButton( d->mNoScale, NoScale );
-    d->mScaleGroup.addButton( d->mScaleToPage, ScaleToPage );
-    d->mScaleGroup.addButton( d->mScaleTo, ScaleToCustomSize );
+    d->mScaleGroup.addButton(d->mNoScale, NoScale);
+    d->mScaleGroup.addButton(d->mScaleToPage, ScaleToPage);
+    d->mScaleGroup.addButton(d->mScaleTo, ScaleToCustomSize);
 
     connect(d->kcfg_PrintWidth, SIGNAL(valueChanged(double)),
             this, SLOT(adjustHeightToRatio()));
@@ -230,12 +230,12 @@ Qt::Alignment PrintOptionsPage::alignment() const
 {
     int id = d->mPositionGroup.checkedId();
     kWarning() << "alignment=" << id;
-    return Qt::Alignment ( id );
+    return Qt::Alignment(id);
 }
 
 PrintOptionsPage::ScaleMode PrintOptionsPage::scaleMode() const
 {
-    return PrintOptionsPage::ScaleMode( d->mScaleGroup.checkedId() );
+    return PrintOptionsPage::ScaleMode(d->mScaleGroup.checkedId());
 }
 
 bool PrintOptionsPage::enlargeSmallerImages() const
@@ -245,63 +245,63 @@ bool PrintOptionsPage::enlargeSmallerImages() const
 
 PrintOptionsPage::Unit PrintOptionsPage::scaleUnit() const
 {
-    return PrintOptionsPage::Unit( d->kcfg_PrintUnit->currentIndex() );
+    return PrintOptionsPage::Unit(d->kcfg_PrintUnit->currentIndex());
 }
 
 double PrintOptionsPage::scaleWidth() const
 {
-    return d->kcfg_PrintWidth->value() * unitToInches( scaleUnit() );
+    return d->kcfg_PrintWidth->value() * unitToInches(scaleUnit());
 }
 
 double PrintOptionsPage::scaleHeight() const
 {
-    return d->kcfg_PrintHeight->value() * unitToInches ( scaleUnit() );
+    return d->kcfg_PrintHeight->value() * unitToInches(scaleUnit());
 }
 
 void PrintOptionsPage::adjustWidthToRatio()
 {
-    if ( !d->kcfg_PrintKeepRatio->isChecked() )
+    if (!d->kcfg_PrintKeepRatio->isChecked())
     {
         return;
     }
 
     double width = d->mImageSize.width() * d->kcfg_PrintHeight->value() / d->mImageSize.height();
 
-    SignalBlocker blocker( d->kcfg_PrintWidth );
-    d->kcfg_PrintWidth->setValue( width ? width : 1. );
+    SignalBlocker blocker(d->kcfg_PrintWidth);
+    d->kcfg_PrintWidth->setValue(width ? width : 1.);
 }
 
 void PrintOptionsPage::adjustHeightToRatio()
 {
-    if ( !d->kcfg_PrintKeepRatio->isChecked() )
+    if (!d->kcfg_PrintKeepRatio->isChecked())
     {
         return;
     }
 
     double height = d->mImageSize.height() * d->kcfg_PrintWidth->value() / d->mImageSize.width();
 
-    SignalBlocker blocker( d->kcfg_PrintHeight );
-    d->kcfg_PrintHeight->setValue( height ? height : 1. );
+    SignalBlocker blocker(d->kcfg_PrintHeight);
+    d->kcfg_PrintHeight->setValue(height ? height : 1.);
 }
 
 void PrintOptionsPage::loadConfig()
 {
-    QAbstractButton* button = d->mPositionGroup.button( DigikamConfig::printPosition() );
+    QAbstractButton* button = d->mPositionGroup.button(DigikamConfig::printPosition());
 
-    if ( button )
+    if (button)
     {
-        button->setChecked ( true );
+        button->setChecked(true);
     }
     else
     {
         kWarning() << "Unknown button for position group";
     }
 
-    button = d->mScaleGroup.button( DigikamConfig::printScaleMode() );
+    button = d->mScaleGroup.button(DigikamConfig::printScaleMode());
 
-    if ( button )
+    if (button)
     {
-        button->setChecked ( true );
+        button->setChecked(true);
     }
     else
     {
@@ -310,7 +310,7 @@ void PrintOptionsPage::loadConfig()
 
     d->mConfigDialogManager->updateWidgets();
 
-    if ( d->kcfg_PrintKeepRatio->isChecked() )
+    if (d->kcfg_PrintKeepRatio->isChecked())
     {
         adjustHeightToRatio();
     }
@@ -324,17 +324,17 @@ void PrintOptionsPage::loadConfig()
 void PrintOptionsPage::saveConfig()
 {
     int position        = d->mPositionGroup.checkedId();
-    DigikamConfig::setPrintPosition( position );
+    DigikamConfig::setPrintPosition(position);
 
-    ScaleMode scaleMode = ScaleMode( d->mScaleGroup.checkedId() );
-    DigikamConfig::setPrintScaleMode( scaleMode );
+    ScaleMode scaleMode = ScaleMode(d->mScaleGroup.checkedId());
+    DigikamConfig::setPrintScaleMode(scaleMode);
 
     d->mConfigDialogManager->updateSettings();
 
     DigikamConfig::self()->writeConfig();
 }
 
-void PrintOptionsPage::slotAlertSettings( bool t)
+void PrintOptionsPage::slotAlertSettings(bool t)
 {
     if (t && !d->cmEnabled)
     {

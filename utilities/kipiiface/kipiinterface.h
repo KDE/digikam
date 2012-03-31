@@ -51,10 +51,10 @@
 
 namespace KIPI
 {
-    class ImageInfo;
-    class ImageCollection;
-    class ImageCollectionSelector;
-    class UploadWidget;
+class ImageInfo;
+class ImageCollection;
+class ImageCollectionSelector;
+class UploadWidget;
 }
 
 namespace Digikam
@@ -66,7 +66,7 @@ class KipiInterface : public KIPI::Interface
 
 public:
 
-    explicit KipiInterface(QObject* const parent, const char* name=0);
+    explicit KipiInterface(QObject* const parent, const char* name = 0);
     ~KipiInterface();
 
     KIPI::ImageCollection        currentAlbum();

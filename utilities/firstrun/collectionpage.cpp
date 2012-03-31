@@ -104,13 +104,13 @@ CollectionPage::CollectionPage(KAssistantDialog* dlg)
                              "More folders can be added later under the <i>Settings</i> menu. "
                              "</p> "
                              "<p><i>Note:</i> removable media (such as USB drives or DVDs) and remote file systems "
-                             "(such as NFS, or Samba mounted with cifs/smbfs) are supported.</p>") );
+                             "(such as NFS, or Samba mounted with cifs/smbfs) are supported.</p>"));
 #else
     textLabel1->setText(i18n("<p>Please enter a location where you want to store your images.</p> "
                              "<p>You can choose any local folder, even one that already contains images."
                              "<br/> "
                              "More folders can be added later under the <i>Settings</i> menu. "
-                             "</p> ") );
+                             "</p> "));
 #endif
 
     d->rootAlbumPathRequester = new KUrlRequester(widget);
@@ -138,7 +138,7 @@ CollectionPage::CollectionPage(KAssistantDialog* dlg)
 
     setPageWidget(widget);
 
-    QPixmap leftPix = KStandardDirs::locate("data","digikam/data/assistant-collection.png");
+    QPixmap leftPix = KStandardDirs::locate("data", "digikam/data/assistant-collection.png");
     setLeftBottomPix(leftPix.scaledToWidth(128, Qt::SmoothTransformation));
 
     connect(d->rootAlbumPathRequester, SIGNAL(urlSelected(KUrl)),

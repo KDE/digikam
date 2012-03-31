@@ -124,18 +124,23 @@ int Resize::presetLengthValue(WidthPreset preset)
         case Tiny:
             length = 480;
             break;
+
         case Small:
             length = 640;
             break;
+
         case Medium:
             length = 800;
             break;
+
         case Big:
             length = 1024;
             break;
+
         case Large:
             length = 1280;
             break;
+
         default:   // Huge
             length = 1600;
             break;

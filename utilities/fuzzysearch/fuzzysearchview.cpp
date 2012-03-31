@@ -87,7 +87,7 @@ public:
 
     enum FuzzySearchTab
     {
-        SIMILARS=0,
+        SIMILARS = 0,
         SKETCH,
         DUPLICATES
     };
@@ -284,7 +284,7 @@ QWidget* FuzzySearchView::setupFindSimilarPanel()
     d->labelFile   = new KSqueezedTextLabel(0);
     QLabel* folder = new QLabel(i18n("<b>Folder</b>:"));
     d->labelFolder = new KSqueezedTextLabel(0);
-    int hgt        = fontMetrics().height()-2;
+    int hgt        = fontMetrics().height() - 2;
     file->setMaximumHeight(hgt);
     folder->setMaximumHeight(hgt);
     d->labelFile->setMaximumHeight(hgt);
@@ -327,13 +327,13 @@ QWidget* FuzzySearchView::setupFindSimilarPanel()
 
     QWidget* mainWidget     = new QWidget();
     QGridLayout* mainLayout = new QGridLayout();
-    mainLayout->addWidget(imageBox,       0, 0, 1,-1);
+    mainLayout->addWidget(imageBox,       0, 0, 1, -1);
     mainLayout->addWidget(file,           1, 0, 1, 1);
-    mainLayout->addWidget(d->labelFile,   1, 1, 1,-1);
+    mainLayout->addWidget(d->labelFile,   1, 1, 1, -1);
     mainLayout->addWidget(folder,         2, 0, 1, 1);
-    mainLayout->addWidget(d->labelFolder, 2, 1, 1,-1);
+    mainLayout->addWidget(d->labelFolder, 2, 1, 1, -1);
     mainLayout->addWidget(resultsLabel,   3, 0, 1, 1);
-    mainLayout->addWidget(d->levelImage,  3, 2, 1,-1);
+    mainLayout->addWidget(d->levelImage,  3, 2, 1, -1);
     mainLayout->addWidget(saveBox,        4, 0, 1, 3);
     mainLayout->setRowStretch(5, 10);
     mainLayout->setColumnStretch(1, 10);
@@ -640,12 +640,14 @@ void FuzzySearchView::slotTabChanged(int tab)
             d->folderView->setVisible(true);
             break;
         }
+
         case FuzzySearchViewPriv::SKETCH:
         {
             AlbumManager::instance()->setCurrentAlbum(d->sketchSAlbum);
             d->folderView->setVisible(true);
             break;
         }
+
         default:  // DUPLICATES
         {
             AlbumManager::instance()->setCurrentAlbum(d->findDuplicatesPanel->currentFindDuplicatesAlbum());
@@ -660,7 +662,7 @@ void FuzzySearchView::slotAlbumSelected(Album* album)
 
     kDebug() << "Selected new album" << album;
 
-    SAlbum* salbum = dynamic_cast<SAlbum*> (album);
+    SAlbum* salbum = dynamic_cast<SAlbum*>(album);
 
     if (!salbum || !salbum->isHaarSearch())
     {
@@ -778,7 +780,7 @@ void FuzzySearchView::slotDirtySketch()
         delete d->timerSketch;
     }
 
-    d->timerSketch = new QTimer( this );
+    d->timerSketch = new QTimer(this);
     connect( d->timerSketch, SIGNAL(timeout()),
              this, SLOT(slotTimerSketchDone()) );
     d->timerSketch->setSingleShot(true);
@@ -870,7 +872,7 @@ void FuzzySearchView::slotLevelImageChanged()
         delete d->timerImage;
     }
 
-    d->timerImage = new QTimer( this );
+    d->timerImage = new QTimer(this);
     connect( d->timerImage, SIGNAL(timeout()),
              this, SLOT(slotTimerImageDone()) );
     d->timerImage->setSingleShot(true);

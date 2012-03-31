@@ -43,7 +43,7 @@ class Resize : public BatchTool
 
 public:
 
-    Resize(QObject* parent=0);
+    Resize(QObject* parent = 0);
     ~Resize();
 
     BatchToolSettings defaultSettings();
@@ -57,7 +57,7 @@ private:
 
     enum WidthPreset
     {
-        Tiny=0,
+        Tiny = 0,
         Small,
         Medium,
         Big,

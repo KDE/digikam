@@ -217,7 +217,9 @@ FaceDetector::FaceDetector(const FaceScanSettings& settings, ProgressItem* paren
     }
 
     if (ProgressManager::addProgressItem(this))
+    {
         QTimer::singleShot(500, this, SLOT(slotStart()));
+    }
 }
 
 FaceDetector::~FaceDetector()

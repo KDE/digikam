@@ -118,7 +118,9 @@ void MetadataSynchronizer::slotStart()
             this, SLOT(slotCancel()));
 
     if (ProgressManager::addProgressItem(this))
+    {
         QTimer::singleShot(500, this, SLOT(slotParseAlbums()));
+    }
 }
 
 MetadataSynchronizer::~MetadataSynchronizer()
@@ -144,7 +146,10 @@ void MetadataSynchronizer::slotParseAlbums()
 
 void MetadataSynchronizer::processOneAlbum()
 {
-    if (canceled()) return;
+    if (canceled())
+    {
+        return;
+    }
 
     if (d->albumsIt == d->palbumList.end())     // All albums are parsed.
     {

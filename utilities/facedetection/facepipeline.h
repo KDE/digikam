@@ -251,8 +251,8 @@ public Q_SLOTS:
     /**
      * Train the given faces.
      */
-    void train(const ImageInfo& info, const QList<DatabaseFace> &faces);
-    void train(const ImageInfo& info, const QList<DatabaseFace> &faces, const DImg& image);
+    void train(const ImageInfo& info, const QList<DatabaseFace>& faces);
+    void train(const ImageInfo& info, const QList<DatabaseFace>& faces, const DImg& image);
     /**
      * Remove the given face.
      */

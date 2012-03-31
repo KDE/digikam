@@ -98,6 +98,7 @@ void EditorStackView::setToolView(QWidget* view)
 
     // TODO: to remove when PreviewWidget will be unused...
     PreviewWidget* old_preview = previewWidget_old();
+
     if (old_preview)
     {
         connect(old_preview, SIGNAL(signalZoomFactorChanged(double)),
@@ -110,6 +111,7 @@ void EditorStackView::setToolView(QWidget* view)
     }
 
     GraphicsDImgView* preview = previewWidget();
+
     if (preview)
     {
         connect(preview->layout(), SIGNAL(zoomFactorChanged(double)),
@@ -149,6 +151,7 @@ void EditorStackView::increaseZoom()
     else
     {
         PreviewWidget* old_preview = previewWidget_old();
+
         if (old_preview)
         {
             old_preview->slotIncreaseZoom();
@@ -156,6 +159,7 @@ void EditorStackView::increaseZoom()
         }
 
         GraphicsDImgView* preview = previewWidget();
+
         if (preview)
         {
             preview->layout()->increaseZoom();
@@ -172,6 +176,7 @@ void EditorStackView::decreaseZoom()
     else
     {
         PreviewWidget* old_preview = previewWidget_old();
+
         if (old_preview)
         {
             old_preview->slotDecreaseZoom();
@@ -179,6 +184,7 @@ void EditorStackView::decreaseZoom()
         }
 
         GraphicsDImgView* preview = previewWidget();
+
         if (preview)
         {
             preview->layout()->decreaseZoom();
@@ -194,6 +200,7 @@ void EditorStackView::toggleFitToWindow()
     d->canvas->toggleFitToWindow();
 
     PreviewWidget* old_preview = previewWidget_old();
+
     if (old_preview)
     {
         old_preview->toggleFitToWindow();
@@ -201,6 +208,7 @@ void EditorStackView::toggleFitToWindow()
     }
 
     GraphicsDImgView* preview = previewWidget();
+
     if (preview)
     {
         preview->layout()->toggleFitToWindow();
@@ -224,6 +232,7 @@ void EditorStackView::zoomTo100Percent()
     else
     {
         PreviewWidget* old_preview = previewWidget_old();
+
         if (old_preview)
         {
             old_preview->setZoomFactor(1.0);
@@ -231,6 +240,7 @@ void EditorStackView::zoomTo100Percent()
         }
 
         GraphicsDImgView* preview = previewWidget();
+
         if (preview)
         {
             preview->layout()->setZoomFactor(1.0);
@@ -247,6 +257,7 @@ void EditorStackView::setZoomFactor(double zoom)
     else
     {
         PreviewWidget* old_preview = previewWidget_old();
+
         if (old_preview)
         {
             old_preview->setZoomFactor(zoom);
@@ -254,6 +265,7 @@ void EditorStackView::setZoomFactor(double zoom)
         }
 
         GraphicsDImgView* preview = previewWidget();
+
         if (preview)
         {
             preview->layout()->setZoomFactor(zoom);
@@ -271,6 +283,7 @@ double EditorStackView::zoomMax() const
     {
         GraphicsDImgView* preview  = previewWidget();
         PreviewWidget* old_preview = previewWidget_old();
+
         if (old_preview)
         {
             return old_preview->zoomMax();
@@ -296,6 +309,7 @@ double EditorStackView::zoomMin() const
     {
         GraphicsDImgView* preview  = previewWidget();
         PreviewWidget* old_preview = previewWidget_old();
+
         if (old_preview)
         {
             return old_preview->zoomMin();
@@ -327,6 +341,7 @@ void EditorStackView::slotZoomSliderChanged(int size)
     else
     {
         PreviewWidget* old_preview = previewWidget_old();
+
         if (old_preview)
         {
             old_preview->setZoomFactorSnapped(z);
@@ -334,6 +349,7 @@ void EditorStackView::slotZoomSliderChanged(int size)
         }
 
         GraphicsDImgView* preview = previewWidget();
+
         if (preview)
         {
             return preview->layout()->setZoomFactorSnapped(z);
@@ -354,6 +370,7 @@ void EditorStackView::slotZoomChanged(double zoom)
     else
     {
         PreviewWidget* old_preview = previewWidget_old();
+
         if (old_preview)
         {
             max = old_preview->maxZoom();
@@ -363,6 +380,7 @@ void EditorStackView::slotZoomChanged(double zoom)
         }
 
         GraphicsDImgView* preview = previewWidget();
+
         if (preview)
         {
             max = preview->layout()->atMaxZoom();
@@ -383,6 +401,7 @@ void EditorStackView::slotToggleOffFitToWindow(bool b)
 GraphicsDImgView* EditorStackView::previewWidget() const
 {
     GraphicsDImgView* preview = dynamic_cast<GraphicsDImgView*>(d->toolView);
+
     if (preview)
     {
         return preview;
@@ -394,6 +413,7 @@ GraphicsDImgView* EditorStackView::previewWidget() const
 PreviewWidget* EditorStackView::previewWidget_old() const
 {
     PreviewWidget* preview = dynamic_cast<PreviewWidget*>(d->toolView);
+
     if (preview)
     {
         return preview;
@@ -404,7 +424,7 @@ PreviewWidget* EditorStackView::previewWidget_old() const
 
 bool EditorStackView::isZoomablePreview() const
 {
-    return (previewWidget_old() || previewWidget() );
+    return (previewWidget_old() || previewWidget());
 }
 
 }  // namespace Digikam

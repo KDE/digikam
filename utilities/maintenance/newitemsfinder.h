@@ -50,8 +50,8 @@ public:
 
 public:
 
-    NewItemsFinder(FinderMode mode=CompleteCollectionScan, const QStringList& foldersToScan=QStringList(), 
-                   ProgressItem* parent=0);
+    NewItemsFinder(FinderMode mode = CompleteCollectionScan, const QStringList& foldersToScan = QStringList(),
+                   ProgressItem* parent = 0);
     ~NewItemsFinder();
 
 private Q_SLOTS:
