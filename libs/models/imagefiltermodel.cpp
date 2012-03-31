@@ -420,8 +420,8 @@ void ImageFilterModel::ImageFilterModelPrivate::packageFinished(const ImageFilte
     if (sentOut == 0 && sentOutForReAdd == 0 && !imageModel->isRefreshing())
     {
         q->invalidate(); // use invalidate, not invalidateFilter only. Sorting may have changed as well.
-        emit q->filterMatches(hasOneMatch);
-        emit q->filterMatchesForText(hasOneMatchForText);
+        emit (q->filterMatches(hasOneMatch));
+        emit (q->filterMatchesForText(hasOneMatchForText));
         filterer->deactivate();
         preparer->deactivate();
     }

@@ -916,7 +916,7 @@ void FacePipeline::FacePipelinePriv::sendFromFilter(const QList<FacePipelineExte
 void FacePipeline::FacePipelinePriv::skipFromFilter(const QList<ImageInfo>& infosForSkipping)
 {
     infosForFiltering -= infosForSkipping.size();
-    emit q->skipped(infosForSkipping);
+    emit (q->skipped(infosForSkipping));
     // everything skipped?
     checkFinished();
 }
@@ -974,8 +974,8 @@ void FacePipeline::FacePipelinePriv::send(FacePipelineExtendedPackage::Ptr packa
 void FacePipeline::FacePipelinePriv::finishProcess(FacePipelineExtendedPackage::Ptr package)
 {
     packagesOnTheRoad--;
-    emit q->processed(*package);
-    emit q->progressValueChanged(float(packagesOnTheRoad + delayedPackages.size()) / totalPackagesAdded);
+    emit (q->processed(*package));
+    emit (q->progressValueChanged(float(packagesOnTheRoad + delayedPackages.size()) / totalPackagesAdded));
     package = 0;
 
     if (previewThread)
@@ -1020,7 +1020,7 @@ void FacePipeline::FacePipelinePriv::checkFinished()
     if (hasFinished())
     {
         totalPackagesAdded = 0;
-        emit q->finished();
+        emit (q->finished());
         // stop threads
         stop();
     }
@@ -1033,7 +1033,7 @@ void FacePipeline::FacePipelinePriv::start()
         return;
     }
 
-    emit q->scheduled();
+    emit (q->scheduled());
 
     WorkerObject*  workerObject = 0;
     ParallelPipes* pipes        = 0;
@@ -1051,7 +1051,7 @@ void FacePipeline::FacePipelinePriv::start()
     }
 
     started = true;
-    emit q->started(i18n("Applying face changes"));
+    emit (q->started(i18n("Applying face changes")));
 }
 
 void FacePipeline::FacePipelinePriv::stop()
@@ -1441,7 +1441,7 @@ void FacePipeline::process(const QList<ImageInfo>& infos)
 
 void FacePipeline::setDetectionAccuracy(double value)
 {
-    emit d->accuracyChanged(value);
+    emit (d->accuracyChanged(value));
 }
 
 } // namespace Digikam

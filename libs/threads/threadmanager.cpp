@@ -181,7 +181,7 @@ void WorkerObjectRunnable::run()
     // It won't be deleted until Inactive, and as long a runnable is set.
     object->addRunnable(this);
 
-    emit object->started();
+    emit (object->started());
 
     if (object->transitionToRunning())
     {
@@ -203,7 +203,7 @@ void WorkerObjectRunnable::run()
     }
 
     object->transitionToInactive();
-    emit object->finished();
+    emit (object->finished());
 
     // if this is rescheduled, it will wait in the other thread at moveToCurrentThread() above until we park
     parkingThread->parkObject(object);
