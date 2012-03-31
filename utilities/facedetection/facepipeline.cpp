@@ -429,7 +429,8 @@ void PreviewLoader::slotImageLoaded(const LoadingDescription& loadingDescription
 
     if (img.isNull())
     {
-        return d->finishProcess(package);
+        d->finishProcess(package);
+        return;
     }
 
     package->image = img;
