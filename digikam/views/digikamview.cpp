@@ -64,6 +64,7 @@
 #include "globals.h"
 #include "metadatahub.h"
 #include "fileactionmngr.h"
+#include "qmlShow.h"
 #include "queuemgrwindow.h"
 #include "scancontroller.h"
 #include "sidebar.h"
@@ -1759,6 +1760,21 @@ void DigikamView::slotSlideShowBuilderComplete(const SlideShowSettings& settings
 
     slide->show();
 }
+
+void DigikamView::slotSlideShowQml()
+{
+        /*QStringList list;
+	foreach (const ImageInfo& info, d->iconView->imageInfos())
+    {
+        list << info.filePath();
+    }*/
+	SlideShowSettings settings;
+	settings.readFromConfig();
+        QmlShow* qmlShow = new QmlShow(d->iconView->imageInfos(),settings);
+	qmlShow->setWindowState(Qt::WindowFullScreen);
+	qmlShow->show();
+}
+
 
 void DigikamView::toggleShowBar(bool b)
 {

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   version="1.0"
+   width="1000"
+   height="1000"
+   id="svg5496">
+  <metadata
+     id="metadata5594">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs5498">
+    <linearGradient
+       id="linearGradient5211">
+      <stop
+         id="stop5213"
+         style="stop-color:#000000;stop-opacity:1"
+         offset="0" />
+    </linearGradient>
+    <filter
+       x="-0.35791525"
+       y="-0.36209866"
+       width="1.7158304"
+       height="1.7241973"
+       color-interpolation-filters="sRGB"
+       id="filter3778">
+      <feGaussianBlur
+         id="feGaussianBlur3780"
+         stdDeviation="255.88839" />
+    </filter>
+    <filter
+       color-interpolation-filters="sRGB"
+       id="filter3788">
+      <feGaussianBlur
+         id="feGaussianBlur3790"
+         stdDeviation="27.670704" />
+    </filter>
+    <filter
+       color-interpolation-filters="sRGB"
+       id="filter3799">
+      <feGaussianBlur
+         id="feGaussianBlur3801"
+         stdDeviation="38.667111" />
+    </filter>
+    <filter
+       color-interpolation-filters="sRGB"
+       id="filter5217">
+      <feGaussianBlur
+         stdDeviation="23.152921"
+         id="feGaussianBlur5219" />
+    </filter>
+    <filter
+       color-interpolation-filters="sRGB"
+       id="filter3777">
+      <feGaussianBlur
+         id="feGaussianBlur3779"
+         stdDeviation="17.059226" />
+    </filter>
+  </defs>
+  <g
+     id="layer1" />
+  <path
+     d="m 579.29514,414.09692 a 857.92952,848.01766 0 1 1 -1715.85904,0 857.92952,848.01766 0 1 1 1715.85904,0 z"
+     transform="matrix(1.1055464,0,0,1.1135006,359.56236,-407.18249)"
+     id="path3041"
+     style="fill:#8b8a9a;fill-opacity:0.62962964;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter3777)" />
+  <path
+     d="m 984.58149,87.004402 a 960.35242,884.36121 0 1 1 -1920.70483,0 960.35242,884.36121 0 1 1 1920.70483,0 z"
+     id="path3782"
+     style="fill:#1e1e1e;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter3788)" />
+  <path
+     d="m 984.5815,96.916298 a 958.14978,883.25989 0 1 1 -1916.29956,0 958.14978,883.25989 0 1 1 1916.29956,0 z"
+     transform="translate(-4.4052863,-8.8105727)"
+     id="path3768"
+     style="fill:#000000;fill-opacity:0.3386243;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+  <path
+     d="m 808.37002,53.083702 a 799.55945,746.91632 0 1 1 -1599.1189,0 799.55945,746.91632 0 1 1 1599.1189,0 z"
+     transform="matrix(0.92291538,0,0,0.91600792,-60.994849,-58.31672)"
+     id="path3792"
+     style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter3799)" />
+  <path
+     d="m 709.2511,-41.85022 a 792.95154,737.88544 0 1 1 -1585.90308,0 792.95154,737.88544 0 1 1 1585.90308,0 z"
+     id="path3803"
+     style="fill:#000000;fill-opacity:0.61904764;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+  <g
+     id="g2996"
+     style="fill:#000000;fill-opacity:1;filter:url(#filter5217)">
+    <path
+       d="m 419.24399,-22.336769 a 491.40894,434.70792 0 1 1 -982.81787,0 491.40894,434.70792 0 1 1 982.81787,0 z"
+       id="path2994"
+       style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+  </g>
+  <path
+     d="m 419.244,-20.618557 a 489.69074,415.80756 0 1 1 -979.38147,0 489.69074,415.80756 0 1 1 979.38147,0 z"
+     transform="matrix(1,0,0,1.0170797,0,7.4540133)"
+     id="path5221"
+     style="fill:#fefeff;fill-opacity:0.17460315;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+</svg>
