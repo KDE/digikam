@@ -64,7 +64,7 @@
 #include "globals.h"
 #include "metadatahub.h"
 #include "fileactionmngr.h"
-#include "qmlShow.h"
+#include "qmlshow.h"
 #include "queuemgrwindow.h"
 #include "scancontroller.h"
 #include "sidebar.h"

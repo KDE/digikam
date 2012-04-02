@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "qmlShow.moc"
+#include "qmlshow.moc"
 
 // C++ includes
 
@@ -88,7 +88,7 @@ QmlShow::QmlShow(const ImageInfoList& list, const SlideShowSettings& settings)
     ctxt->setContextProperty("myModel", QVariant::fromValue(nameslist));
 
     // FIXME: Use KStandardDirs and install qml file properly (see data/database/dbconfig.xml as example)
-    QString dir(KStandardDirs::installPath("data") + QString("digikam/qmlShow/qmlview.qml"));
+    QString dir(KStandardDirs::installPath("data") + QString("digikam/qmlshow/qmlview.qml"));
     d->ui->setSource(QUrl::fromLocalFile(QFile::encodeName(dir).data()));
     setCentralWidget(d->ui);
     d->screen_height=qApp->desktop()->screenGeometry(-1).height();

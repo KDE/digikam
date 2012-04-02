@@ -1029,7 +1029,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
 
 
     SET(libpresentationview_SRCS
-	${CMAKE_CURRENT_SOURCE_DIR}/utilities/qmlShow/qmlShow.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/utilities/qmlshow/qmlshow.cpp
 	)
 
     SET(libslideshow_SRCS
@@ -1633,7 +1633,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/kipiiface
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/lighttable
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/nepomuk
-	${CMAKE_CURRENT_SOURCE_DIR}/utilities/qmlShow
+	${CMAKE_CURRENT_SOURCE_DIR}/utilities/qmlshow
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/main
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/manager
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/views
