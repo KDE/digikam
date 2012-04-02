@@ -91,10 +91,10 @@ QmlShow::QmlShow(const ImageInfoList& list, const SlideShowSettings& settings)
     QString dir(KStandardDirs::installPath("data") + QString("digikam/qmlshow/qmlview.qml"));
     d->ui->setSource(QUrl::fromLocalFile(QFile::encodeName(dir).data()));
     setCentralWidget(d->ui);
-    d->screen_height=qApp->desktop()->screenGeometry(-1).height();
-    d->screen_width=qApp->desktop()->screenGeometry(-1).width();
+    d->screen_height = qApp->desktop()->screenGeometry(-1).height();
+    d->screen_width  = qApp->desktop()->screenGeometry(-1).width();
 
-    this->setAttribute(Qt::WA_DeleteOnClose,true);
+    setAttribute(Qt::WA_DeleteOnClose,true);
 
     connect(d->ui->engine(), SIGNAL(quit()),
             this, SLOT(close()));
@@ -122,10 +122,10 @@ QmlShow::QmlShow(const ImageInfoList& list, const SlideShowSettings& settings)
             this, SLOT(setMetaData()));
 
     d->imageno = 0;
-
     d->ui->show();
     d->ui->setResizeMode(QDeclarativeView::SizeRootObjectToView);
     showMaximized();
+
     if(!list.isEmpty())
     {
         changePicture(d->imageno);
@@ -150,7 +150,7 @@ void QmlShow::nextImage()
         return;
     }
 
-    d->imageno+=1;
+    d->imageno += 1;
     changePicture(d->imageno);
 }
 
@@ -210,14 +210,14 @@ void QmlShow::changePicture(int index)
 void QmlShow::setMetaData()
 {
     QDeclarativeContext* ctxt = d->ui->rootContext();
+    QObject* object           = d->ui->rootObject();
+    QObject* editBox          = 0;
     MetadataHubOnTheRoad hub  = MetadataHub();
     hub.load(d->list->at(d->imageno));
-    QObject* object  = d->ui->rootObject();
-    QObject* editBox = 0;
 
-    foreach(editBox,object->children())
+    foreach(editBox, object->children())
     {
-        if(editBox->objectName().compare("editbox")==0) break;
+        if(editBox->objectName().compare("editbox") == 0) break;
     }
 
     editBox->setProperty("name",        d->list->at(d->imageno).name());
@@ -227,7 +227,7 @@ void QmlShow::setMetaData()
     editBox->setProperty("rating",      hub.rating());
     QString imagedata;
 
-    if(d->settings.printName) 
+    if(d->settings.printName)
     {
         imagedata.append(d->list->at(d->imageno).imageCommonContainer().fileName+"\n");
     }
