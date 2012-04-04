@@ -50,6 +50,7 @@
 #include "imageattributeswatch.h"
 #include "imagecomments.h"
 #include "imageposition.h"
+#include "imagecopyright.h"
 #include "globals.h"
 #include "scancontroller.h"
 #include "tagscache.h"
@@ -176,6 +177,13 @@ QMap<QString, QVariant> KipiImageInfo::attributes()
         // Get file size from database.
         qlonglong size       = m_info.fileSize();
         res["filesize"]      = size;
+
+        // Get copyright information of picture from database.
+        ImageCopyright rights = m_info.imageCopyright();
+        res["creators"]       = rights.creator();
+        res["credit"]         = rights.credit();
+        res["rights"]         = rights.rights();
+        res["source"]         = rights.source();
 
         // NOTE: add here a kipi-plugins access to future picture attributes stored by digiKam database
     }
@@ -342,6 +350,48 @@ void KipiImageInfo::addAttributes(const QMap<QString, QVariant>& res)
             position.apply();
         }
 
+        // Copyright information management from plugins.
+
+        if (attributes.contains("creators") ||
+            attributes.contains("credit")   ||
+            attributes.contains("rights")   ||
+            attributes.contains("source"))
+        {
+            ImageCopyright rights = m_info.imageCopyright();
+
+            if (attributes.contains("creators"))
+            {
+                QStringList list = attributes["creators"].toStringList();
+                if (!list.isEmpty())
+                {
+                    rights.removeCreators();
+                    foreach(QString val, list)
+                    {
+                        rights.setCreator(val, ImageCopyright::AddEntryToExisting);
+                    }
+                }
+                attributes.remove("creators");
+            }
+
+            if (attributes.contains("credit"))
+            {
+                rights.setCredit(attributes["credit"].toString());
+                attributes.remove("credit");
+            }
+
+            if (attributes.contains("rights"))
+            {
+                rights.setRights(attributes["rights"].toString());
+                attributes.remove("rights");
+            }
+
+            if (attributes.contains("source"))
+            {
+                rights.setSource(attributes["source"].toString());
+                attributes.remove("source");
+            }
+        }
+
         // NOTE: add here a kipi-plugins access to future picture attributes stored by digiKam database
 
         // Remove read-only attributes.
@@ -436,14 +486,21 @@ void KipiImageInfo::delAttributes(const QStringList& res)
             attributes.removeAll("picklabel");
         }
 
-        // GPS location management from plugins.
-
+        // Remove GPS location management from database.
         if (attributes.contains("gpslocation"))
         {
             ImagePosition position = m_info.imagePosition();
             position.remove();
             position.apply();
             attributes.removeAll("gpslocation");
+        }
+
+        // Remove copyrights information from database.
+        if (attributes.contains("copyrights"))
+        {
+            ImageCopyright rights = m_info.imageCopyright();
+            rights.removeAll();
+            attributes.removeAll("copyrights");
         }
 
         // NOTE: add here a kipi-plugins access to future picture attributes stored by digiKam database
@@ -471,6 +528,7 @@ void KipiImageInfo::clearAttributes()
     attr.append("colorlabel");
     attr.append("picklabel");
     attr.append("gpslocation");
+    attr.append("copyrights");
 
     // NOTE: add here a kipi-plugins access to future picture attributes stored by digiKam database
 
