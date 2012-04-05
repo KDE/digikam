@@ -47,7 +47,8 @@
 #include "contentawareresizetool.h"
 #endif /* HAVE_GLIB2 */
 
-using namespace DigikamTransformImagePlugin;
+namespace DigikamTransformImagePlugin
+{
 
 K_PLUGIN_FACTORY( TransformFactory, registerPlugin<ImagePlugin_Transform>(); )
 K_EXPORT_PLUGIN ( TransformFactory("digikamimageplugin_transform") )
@@ -204,3 +205,5 @@ void ImagePlugin_Transform::slotFreeRotation()
 
     loadTool(tool);
 }
+
+} // namespace DigikamTransformImagePlugin

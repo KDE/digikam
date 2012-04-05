@@ -53,7 +53,8 @@
 #include "lensautofixtool.h"
 #endif // HAVE_GLIB2
 
-using namespace DigikamEnhanceImagePlugin;
+namespace DigikamEnhanceImagePlugin
+{
 
 K_PLUGIN_FACTORY( EnhanceFactory, registerPlugin<ImagePlugin_Enhance>(); )
 K_EXPORT_PLUGIN ( EnhanceFactory("digikamimageplugin_enhance") )
@@ -287,3 +288,5 @@ void ImagePlugin_Enhance::slotAntiVignetting()
     AntiVignettingTool* tool = new AntiVignettingTool(this);
     loadTool(tool);
 }
+
+} // namespace DigikamEnhanceImagePlugin

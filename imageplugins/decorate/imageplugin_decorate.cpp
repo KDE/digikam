@@ -40,7 +40,8 @@
 #include "bordertool.h"
 #include "texturetool.h"
 
-using namespace DigikamDecorateImagePlugin;
+namespace DigikamDecorateImagePlugin
+{
 
 K_PLUGIN_FACTORY( DecorateFactory, registerPlugin<ImagePlugin_Decorate>(); )
 K_EXPORT_PLUGIN ( DecorateFactory("digikamimageplugin_decorate") )
@@ -116,3 +117,5 @@ void ImagePlugin_Decorate::slotTexture()
     TextureTool* tool = new TextureTool(this);
     loadTool(tool);
 }
+
+} // namespace DigikamDecorateImagePlugin

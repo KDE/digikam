@@ -35,6 +35,9 @@
 
 using namespace Digikam;
 
+namespace DigikamDecorateImagePlugin
+{
+
 class ImagePlugin_Decorate : public ImagePlugin
 {
     Q_OBJECT
@@ -57,5 +60,7 @@ private:
     class ImagePlugin_DecoratePriv;
     ImagePlugin_DecoratePriv* const d;
 };
+
+} // namespace DigikamDecorateImagePlugin
 
 #endif /* IMAGEPLUGIN_DECORATE_H */

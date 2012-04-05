@@ -41,6 +41,9 @@ namespace Digikam
 
 using namespace Digikam;
 
+namespace DigikamColorImagePlugin
+{
+
 class ImagePlugin_Color : public ImagePlugin
 {
     Q_OBJECT
@@ -81,5 +84,7 @@ private:
     class ImagePlugin_ColorPriv;
     ImagePlugin_ColorPriv* const d;
 };
+
+} // namespace DigikamColorImagePlugin
 
 #endif /* IMAGEPLUGIN_COLOR_H */

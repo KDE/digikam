@@ -56,7 +56,8 @@
 #include "adjustlevelstool.h"
 #include "filmtool.h"
 
-using namespace DigikamColorImagePlugin;
+namespace DigikamColorImagePlugin
+{
 
 K_PLUGIN_FACTORY( ColorPluginFactory, registerPlugin<ImagePlugin_Color>(); )
 K_EXPORT_PLUGIN ( ColorPluginFactory("digikamimageplugin_color") )
@@ -416,3 +417,5 @@ void ImagePlugin_Color::slotFilm()
     FilmTool* tool = new FilmTool(this);
     loadTool(tool);
 }
+
+} // namespace DigikamColorImagePlugin

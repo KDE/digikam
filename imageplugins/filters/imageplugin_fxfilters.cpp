@@ -44,7 +44,8 @@
 #include "raindroptool.h"
 #include "filmgraintool.h"
 
-using namespace DigikamFxFiltersImagePlugin;
+namespace DigikamFxFiltersImagePlugin
+{
 
 K_PLUGIN_FACTORY( FxFiltersFactory, registerPlugin<ImagePlugin_FxFilters>(); )
 K_EXPORT_PLUGIN ( FxFiltersFactory("digikamimageplugin_fxfilters") )
@@ -189,3 +190,5 @@ void ImagePlugin_FxFilters::slotFilmGrain()
     FilmGrainTool* tool = new FilmGrainTool(this);
     loadTool(tool);
 }
+
+} // namespace DigikamFxFiltersImagePlugin

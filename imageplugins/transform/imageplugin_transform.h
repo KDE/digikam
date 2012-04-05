@@ -35,6 +35,9 @@
 
 using namespace Digikam;
 
+namespace DigikamTransformImagePlugin
+{
+
 class ImagePlugin_Transform : public ImagePlugin
 {
     Q_OBJECT
@@ -66,5 +69,7 @@ private:
     class ImagePlugin_TransformPriv;
     ImagePlugin_TransformPriv* const d;
 };
+
+} // namespace DigikamTransformImagePlugin
 
 #endif /* IMAGEPLUGIN_TRANSFORM_H */
