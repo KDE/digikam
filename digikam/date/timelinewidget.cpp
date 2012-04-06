@@ -1243,13 +1243,12 @@ int TimeLineWidget::statForDateTime(const QDateTime& dt, SelectionMode& selected
 
     selected         = Unselected;
 
+    QMap<TimeLineWidgetPriv::YearRefPair, TimeLineWidgetPriv::StatPair>::const_iterator it;
     switch (d->timeUnit)
     {
         case Day:
         {
-            QMap<TimeLineWidgetPriv::YearRefPair, TimeLineWidgetPriv::StatPair>::const_iterator it =
-                d->dayStatMap.constFind(TimeLineWidgetPriv::YearRefPair(year, day));
-
+            it = d->dayStatMap.constFind(TimeLineWidgetPriv::YearRefPair(year, day));
             if (it != d->dayStatMap.constEnd())
             {
                 count     = it.value().first;
@@ -1261,9 +1260,7 @@ int TimeLineWidget::statForDateTime(const QDateTime& dt, SelectionMode& selected
 
         case Week:
         {
-            QMap<TimeLineWidgetPriv::YearRefPair, TimeLineWidgetPriv::StatPair>::const_iterator it =
-                d->weekStatMap.constFind(TimeLineWidgetPriv::YearRefPair(yearForWeek, week));
-
+            it = d->weekStatMap.constFind(TimeLineWidgetPriv::YearRefPair(yearForWeek, week));
             if (it != d->weekStatMap.constEnd())
             {
                 count     = it.value().first;
@@ -1275,9 +1272,7 @@ int TimeLineWidget::statForDateTime(const QDateTime& dt, SelectionMode& selected
 
         case Month:
         {
-            QMap<TimeLineWidgetPriv::YearRefPair, TimeLineWidgetPriv::StatPair>::const_iterator it =
-                d->monthStatMap.constFind(TimeLineWidgetPriv::YearRefPair(year, month));
-
+            it = d->monthStatMap.constFind(TimeLineWidgetPriv::YearRefPair(year, month));
             if (it != d->monthStatMap.constEnd())
             {
                 count     = it.value().first;
