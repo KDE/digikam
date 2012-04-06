@@ -148,6 +148,8 @@ private:
                             const QDateTime& ref, const int& separatorPosition,
                             const QColor& dateColor, const QColor& subDateColor);
 
+    void          handleSelectionRange(QDateTime& selEndDateTime);
+
 private:
 
     class TimeLineWidgetPriv;

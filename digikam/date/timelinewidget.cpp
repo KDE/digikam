@@ -1700,20 +1700,30 @@ void TimeLineWidget::mousePressEvent(QMouseEvent* e)
         QPoint pt(e->x(), e->y());
 
         bool ctrlPressed    = e->modifiers() & Qt::ControlButton;
+        bool shiftPressed   = e->modifiers() & Qt::ShiftButton;
         QDateTime ref       = dateTimeForPoint(pt, d->selMouseEvent);
-        d->selStartDateTime = QDateTime();
 
         if (d->selMouseEvent)
         {
-            if (!ctrlPressed)
+            if (!ctrlPressed && !shiftPressed)
             {
                 resetSelection();
             }
 
-            d->selStartDateTime = ref;
-            d->selMinDateTime   = ref;
-            d->selMaxDateTime   = ref;
             setDateTimeSelected(ref, Selected);
+            if (!shiftPressed)
+            {
+                d->selStartDateTime = ref;
+                d->selMinDateTime   = ref;
+                d->selMaxDateTime   = ref;
+            }
+            else
+            {
+                bool sel;
+                QDateTime selEndDateTime = dateTimeForPoint(pt, sel);
+                setCursorDateTime(selEndDateTime);
+                handleSelectionRange(selEndDateTime);
+            }
         }
 
         if (!ref.isNull())
@@ -1770,60 +1780,7 @@ void TimeLineWidget::mouseMoveEvent(QMouseEvent* e)
 
         setCursorDateTime(selEndDateTime);
 
-        // Clamp start and end date-time of current contiguous selection.
-
-        if (!selEndDateTime.isNull() && !d->selStartDateTime.isNull())
-        {
-            if (selEndDateTime > d->selStartDateTime &&
-                selEndDateTime > d->selMaxDateTime)
-            {
-                d->selMaxDateTime = selEndDateTime;
-            }
-            else if (selEndDateTime < d->selStartDateTime &&
-                     selEndDateTime < d->selMinDateTime)
-            {
-                d->selMinDateTime = selEndDateTime;
-            }
-
-            QDateTime dt = d->selMinDateTime;
-
-            do
-            {
-                setDateTimeSelected(dt, Unselected);
-                dt = nextDateTime(dt);
-            }
-            while (dt <= d->selMaxDateTime);
-        }
-
-        // Now perform selections on Date Maps.
-
-        if (d->selMouseEvent)
-        {
-            if (!d->selStartDateTime.isNull() && !selEndDateTime.isNull())
-            {
-                QDateTime dt = d->selStartDateTime;
-
-                if (selEndDateTime > d->selStartDateTime)
-                {
-                    do
-                    {
-                        setDateTimeSelected(dt, Selected);
-                        dt = nextDateTime(dt);
-                    }
-                    while (dt <= selEndDateTime);
-                }
-                else
-                {
-                    do
-                    {
-                        setDateTimeSelected(dt, Selected);
-                        dt = prevDateTime(dt);
-                    }
-                    while (dt >= selEndDateTime);
-                }
-            }
-        }
-
+        handleSelectionRange(selEndDateTime);
         update();
     }
 }
@@ -1963,6 +1920,65 @@ QDateTime TimeLineWidget::firstDayOfWeek(int year, int weekNumber) const
 void TimeLineWidget::slotThemeChanged()
 {
     update();
+}
+
+
+void TimeLineWidget::handleSelectionRange(QDateTime& selEndDateTime)
+{
+    // Clamp start and end date-time of current contiguous selection.
+
+    if (!selEndDateTime.isNull())
+        if (!d->selStartDateTime.isNull())
+        {
+            if (selEndDateTime > d->selStartDateTime &&
+                    selEndDateTime > d->selMaxDateTime)
+            {
+                d->selMaxDateTime = selEndDateTime;
+            }
+            else if (selEndDateTime < d->selStartDateTime &&
+                    selEndDateTime < d->selMinDateTime)
+            {
+                d->selMinDateTime = selEndDateTime;
+            }
+
+            QDateTime dt = d->selMinDateTime;
+
+            do
+            {
+                setDateTimeSelected(dt, Unselected);
+                dt = nextDateTime(dt);
+            }
+            while (dt <= d->selMaxDateTime);
+        }
+
+    // Now perform selections on Date Maps.
+
+    if (d->selMouseEvent)
+    {
+        if (!d->selStartDateTime.isNull() && !selEndDateTime.isNull())
+        {
+            QDateTime dt = d->selStartDateTime;
+
+            if (selEndDateTime > d->selStartDateTime)
+            {
+                do
+                {
+                    setDateTimeSelected(dt, Selected);
+                    dt = nextDateTime(dt);
+                }
+                while (dt <= selEndDateTime);
+            }
+            else
+            {
+                do
+                {
+                    setDateTimeSelected(dt, Selected);
+                    dt = prevDateTime(dt);
+                }
+                while (dt >= selEndDateTime);
+            }
+        }
+    }
 }
 
 }  // namespace Digikam
