@@ -58,20 +58,20 @@ public:
 
     enum SelectionMode
     {
-        Unselected=0,      // No selection.
+        Unselected = 0,    // No selection.
         FuzzySelection,    // Partially selected.
         Selected           // Fully selected.
     };
 
     enum ScaleMode
     {
-        LinScale=0,        // Linear scale.
+        LinScale = 0,      // Linear scale.
         LogScale           // Logarithmic scale.
     };
 
 public:
 
-    TimeLineWidget(QWidget* parent=0);
+    TimeLineWidget(QWidget* parent = 0);
     ~TimeLineWidget();
 
     void      setTimeUnit(TimeUnit timeUnit);
