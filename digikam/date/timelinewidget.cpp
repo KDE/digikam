@@ -1244,11 +1244,13 @@ int TimeLineWidget::statForDateTime(const QDateTime& dt, SelectionMode& selected
     selected         = Unselected;
 
     QMap<TimeLineWidgetPriv::YearRefPair, TimeLineWidgetPriv::StatPair>::const_iterator it;
+
     switch (d->timeUnit)
     {
         case Day:
         {
             it = d->dayStatMap.constFind(TimeLineWidgetPriv::YearRefPair(year, day));
+
             if (it != d->dayStatMap.constEnd())
             {
                 count     = it.value().first;
@@ -1261,6 +1263,7 @@ int TimeLineWidget::statForDateTime(const QDateTime& dt, SelectionMode& selected
         case Week:
         {
             it = d->weekStatMap.constFind(TimeLineWidgetPriv::YearRefPair(yearForWeek, week));
+
             if (it != d->weekStatMap.constEnd())
             {
                 count     = it.value().first;
@@ -1273,6 +1276,7 @@ int TimeLineWidget::statForDateTime(const QDateTime& dt, SelectionMode& selected
         case Month:
         {
             it = d->monthStatMap.constFind(TimeLineWidgetPriv::YearRefPair(year, month));
+
             if (it != d->monthStatMap.constEnd())
             {
                 count     = it.value().first;
@@ -1711,6 +1715,7 @@ void TimeLineWidget::mousePressEvent(QMouseEvent* e)
             }
 
             setDateTimeSelected(ref, Selected);
+
             if (!shiftPressed)
             {
                 d->selStartDateTime = ref;
@@ -1927,29 +1932,28 @@ void TimeLineWidget::handleSelectionRange(QDateTime& selEndDateTime)
 {
     // Clamp start and end date-time of current contiguous selection.
 
-    if (!selEndDateTime.isNull())
-        if (!d->selStartDateTime.isNull())
+    if (!selEndDateTime.isNull() && !d->selStartDateTime.isNull())
+    {
+        if (selEndDateTime > d->selStartDateTime &&
+            selEndDateTime > d->selMaxDateTime)
         {
-            if (selEndDateTime > d->selStartDateTime &&
-                    selEndDateTime > d->selMaxDateTime)
-            {
-                d->selMaxDateTime = selEndDateTime;
-            }
-            else if (selEndDateTime < d->selStartDateTime &&
-                    selEndDateTime < d->selMinDateTime)
-            {
-                d->selMinDateTime = selEndDateTime;
-            }
-
-            QDateTime dt = d->selMinDateTime;
-
-            do
-            {
-                setDateTimeSelected(dt, Unselected);
-                dt = nextDateTime(dt);
-            }
-            while (dt <= d->selMaxDateTime);
+            d->selMaxDateTime = selEndDateTime;
         }
+        else if (selEndDateTime < d->selStartDateTime &&
+                 selEndDateTime < d->selMinDateTime)
+        {
+            d->selMinDateTime = selEndDateTime;
+        }
+
+        QDateTime dt = d->selMinDateTime;
+
+        do
+        {
+            setDateTimeSelected(dt, Unselected);
+            dt = nextDateTime(dt);
+        }
+        while (dt <= d->selMaxDateTime);
+    }
 
     // Now perform selections on Date Maps.
 
