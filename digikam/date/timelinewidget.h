@@ -120,7 +120,7 @@ private:
 
     int           maxCount() const;
     int           indexForDateTime(const QDateTime& date) const;
-    int           statForDateTime(const QDateTime& dt, SelectionMode* selected) const;
+    int           statForDateTime(const QDateTime& dt, SelectionMode& selected) const;
     void          setRefDateTime(const QDateTime& dateTime);
 
     void          paintEvent(QPaintEvent*);
@@ -130,7 +130,7 @@ private:
     void          mouseMoveEvent(QMouseEvent*);
     void          mouseReleaseEvent(QMouseEvent*);
 
-    QDateTime     dateTimeForPoint(const QPoint& pt, bool* isOnSelectionArea);
+    QDateTime     dateTimeForPoint(const QPoint& pt, bool& isOnSelectionArea);
     QDateTime     firstDayOfWeek(int year, int weekNumber) const;
 
     void          resetSelection();
