@@ -33,6 +33,7 @@
 #include <QPainter>
 #include <QPen>
 #include <QPixmap>
+#include <QTimer>
 
 // KDE includes
 
@@ -73,6 +74,8 @@ public:
         barWidth(20),
         nbItems(10),
         startPos(96),
+        slotNextTimer(0),
+        slotPreviousTimer(0),
         calendar(KGlobal::locale()->calendar()),
         timeUnit(TimeLineWidget::Month),
         scaleMode(TimeLineWidget::LinScale)
@@ -100,6 +103,9 @@ public:
     QDateTime                    selMinDateTime;    // Lower date available on histogram.
     QDateTime                    selMaxDateTime;    // Higher date available on histogram.
 
+    QTimer*                      slotNextTimer;
+    QTimer*                      slotPreviousTimer;
+
     QPixmap                      pixmap;            // Used for widget double buffering.
 
     QMap<YearRefPair, StatPair>  dayStatMap;        // Store Days count statistics.
@@ -124,6 +130,18 @@ TimeLineWidget::TimeLineWidget(QWidget* parent)
     QDateTime ref = QDateTime::currentDateTime();
     setCursorDateTime(ref);
     setRefDateTime(ref);
+
+    d->slotNextTimer     = new QTimer(this);
+    d->slotPreviousTimer = new QTimer(this);
+
+    d->slotNextTimer->setInterval(10);
+    d->slotPreviousTimer->setInterval(10);
+
+    connect(d->slotNextTimer, SIGNAL(timeout()),
+            this, SLOT(slotNext()));
+
+    connect(d->slotPreviousTimer, SIGNAL(timeout()),
+            this, SLOT(slotPrevious()));
 
     connect(ThemeManager::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
@@ -1818,6 +1836,8 @@ void TimeLineWidget::mouseMoveEvent(QMouseEvent* e)
 void TimeLineWidget::mouseReleaseEvent(QMouseEvent*)
 {
     d->validMouseEvent = false;
+    d->slotNextTimer->stop();
+    d->slotPreviousTimer->stop();
 
     // Only dispatch changes about selection when user release mouse selection
     // to prevent multiple queries on database.
@@ -1859,8 +1879,12 @@ QDateTime TimeLineWidget::dateTimeForPoint(const QPoint& pt, bool& isOnSelection
                 // Point is outside visible widget area. We scrolling widget contents.
                 if (d->validMouseEvent)
                 {
-                    slotNext();
+                    d->slotNextTimer->start();
                 }
+            }
+            else
+            {
+                d->slotNextTimer->stop();
             }
 
             return ref;
@@ -1891,8 +1915,12 @@ QDateTime TimeLineWidget::dateTimeForPoint(const QPoint& pt, bool& isOnSelection
                 // Point is outside visible widget area. We scrolling widget contents.
                 if (d->validMouseEvent)
                 {
-                    slotPrevious();
+                    d->slotPreviousTimer->start();
                 }
+            }
+            else
+            {
+                d->slotPreviousTimer->stop();
             }
 
             return ref;
