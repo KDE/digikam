@@ -105,6 +105,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 086 ==> 216636 : Option to set parent album in Album -> New Album.
 087 ==> 287099 : digiKam crash when using facerecognition.
 088 ==> 151849 : Add Right-MouseButton-menu entry to exit fullscreen [patch].
-089 ==> 
+089 ==> 251887 : Holding SHIFT in timeline to select range. 
+090 ==> 
 
 
