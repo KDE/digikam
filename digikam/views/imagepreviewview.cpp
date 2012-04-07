@@ -378,12 +378,6 @@ void ImagePreviewView::showContextMenu(const ImageInfo& info, QGraphicsSceneCont
 
     cmhelper.addAction("full_screen");
     cmhelper.addSeparator();
-    // --------------------------------------------------------
-
-    cmhelper.addAction(d->peopleToggleAction, true);
-    cmhelper.addAction(d->addPersonAction, true);
-    cmhelper.addAction(d->forgetFacesAction, true);
-    cmhelper.addSeparator();
 
     // --------------------------------------------------------
 
@@ -395,6 +389,13 @@ void ImagePreviewView::showContextMenu(const ImageInfo& info, QGraphicsSceneCont
         cmhelper.addGotoMenu(idList);
         cmhelper.addSeparator();
     }
+
+    // --------------------------------------------------------
+
+    cmhelper.addAction(d->peopleToggleAction, true);
+    cmhelper.addAction(d->addPersonAction, true);
+    cmhelper.addAction(d->forgetFacesAction, true);
+    cmhelper.addSeparator();
 
     // --------------------------------------------------------
 
