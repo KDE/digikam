@@ -71,6 +71,11 @@ void MaintenanceTool::setNotificationEnabled(bool b)
     d->notification = b;
 }
 
+void MaintenanceTool::start()
+{
+    slotStart();
+}
+
 void MaintenanceTool::slotStart()
 {
     d->duration.start();

@@ -615,7 +615,8 @@ void FuzzySearchView::setActive(bool val)
 
             if (result == KMessageBox::Yes)
             {
-                new FingerPrintsGenerator(true);
+                FingerPrintsGenerator* tool = new FingerPrintsGenerator(true);
+                tool->start();
             }
         }
 

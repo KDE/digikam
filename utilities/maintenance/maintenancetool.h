@@ -49,6 +49,8 @@ public:
      */
     void setNotificationEnabled(bool b);
 
+    void start();
+
 Q_SIGNALS:
 
     /** Emit when process is done (not canceled).

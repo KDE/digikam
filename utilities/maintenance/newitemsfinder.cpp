@@ -70,8 +70,6 @@ NewItemsFinder::NewItemsFinder(FinderMode mode, const QStringList& foldersToScan
 
     d->mode          = mode;
     d->foldersToScan = foldersToScan;
-
-    QTimer::singleShot(500, this, SLOT(slotStart()));
 }
 
 NewItemsFinder::~NewItemsFinder()

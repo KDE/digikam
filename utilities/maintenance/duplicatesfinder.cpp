@@ -69,8 +69,6 @@ DuplicatesFinder::DuplicatesFinder(const QStringList& albumsIdList, const QStrin
     d->similarity   = similarity;
     d->albumsIdList = albumsIdList;
     d->tagsIdList   = tagsIdList;
-
-    QTimer::singleShot(500, this, SLOT(slotStart()));
 }
 
 DuplicatesFinder::DuplicatesFinder(int similarity, ProgressItem* parent)
@@ -82,8 +80,6 @@ DuplicatesFinder::DuplicatesFinder(int similarity, ProgressItem* parent)
     QStringList albumsIdList;
     foreach(Album* a, palbumList)
         d->albumsIdList << QString::number(a->id());
-
-    QTimer::singleShot(500, this, SLOT(slotStart()));
 }
 
 DuplicatesFinder::~DuplicatesFinder()

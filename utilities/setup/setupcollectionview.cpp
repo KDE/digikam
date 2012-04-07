@@ -493,7 +493,8 @@ void SetupCollectionModel::apply()
     // Trigger collection scan
     if (!newItems.isEmpty() || !deletedItems.isEmpty())
     {
-        new NewItemsFinder();
+        NewItemsFinder* tool = new NewItemsFinder();
+        tool->start();
     }
 }
 

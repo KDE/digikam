@@ -88,8 +88,6 @@ ThumbsGenerator::ThumbsGenerator(bool rebuildAll, int albumId, ProgressItem* par
             this, SLOT(slotGotThumbnail(LoadingDescription, QPixmap)));
 
     setLabel(i18n("Thumbs"));
-
-    QTimer::singleShot(500, this, SLOT(slotStart()));
 }
 
 ThumbsGenerator::~ThumbsGenerator()
@@ -195,21 +193,13 @@ void ThumbsGenerator::processOne()
 
 void ThumbsGenerator::slotGotThumbnail(const LoadingDescription& desc, const QPixmap& pix)
 {
-    if (canceled())
-    {
-        slotCancel();
-        return;
-    }
-
     if (d->allPicturesPath.isEmpty())
     {
-        slotDone();
         return;
     }
 
     if (d->allPicturesPath.first() != desc.filePath)
     {
-        slotCancel();
         return;
     }
 

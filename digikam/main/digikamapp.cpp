@@ -292,7 +292,8 @@ DigikamApp::DigikamApp()
     setAutoSaveSettings("General Settings", true);
 
     // Now, enable finished the collection scan as deferred process
-    new NewItemsFinder(NewItemsFinder::ScanDeferredFiles);
+    NewItemsFinder* tool = new NewItemsFinder(NewItemsFinder::ScanDeferredFiles);
+    tool->start();
 
     LoadSaveThread::setInfoProvider(new DatabaseLoadSaveFileInfoProvider);
 }
@@ -2596,7 +2597,8 @@ void DigikamApp::slotMaintenanceDone()
 
 void DigikamApp::slotRebuildAlbumThumbnails()
 {
-    new ThumbsGenerator(true, AlbumManager::instance()->currentAlbum()->id());
+    ThumbsGenerator* tool = new ThumbsGenerator(true, AlbumManager::instance()->currentAlbum()->id());
+    tool->start();
 }
 
 void DigikamApp::slotRecurseAlbums(bool checked)

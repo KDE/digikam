@@ -77,8 +77,6 @@ MetadataSynchronizer::MetadataSynchronizer(SyncDirection direction, ProgressItem
 {
     d->palbumList = AlbumManager::instance()->allPAlbums();
     d->direction  = direction;
-
-    QTimer::singleShot(500, this, SLOT(slotStart()));
 }
 
 MetadataSynchronizer::MetadataSynchronizer(Album* album, SyncDirection direction, ProgressItem* parent)
@@ -87,8 +85,6 @@ MetadataSynchronizer::MetadataSynchronizer(Album* album, SyncDirection direction
 {
     d->palbumList.append(album);
     d->direction = direction;
-
-    QTimer::singleShot(500, this, SLOT(slotStart()));
 }
 
 MetadataSynchronizer::MetadataSynchronizer(const ImageInfoList& list, SyncDirection direction, ProgressItem* parent)
@@ -97,8 +93,6 @@ MetadataSynchronizer::MetadataSynchronizer(const ImageInfoList& list, SyncDirect
 {
     d->imageInfoList = list;
     d->direction     = direction;
-
-    QTimer::singleShot(500, this, SLOT(slotStart()));
 }
 
 // Common methods ----------------------------------------------------------------------------

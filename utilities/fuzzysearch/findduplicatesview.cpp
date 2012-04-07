@@ -440,6 +440,8 @@ void FindDuplicatesView::slotFindDuplicates()
 
     connect(finder, SIGNAL(signalComplete()),
             this, SLOT(slotComplete()));
+
+    finder->start();
 }
 
 void FindDuplicatesView::slotComplete()
@@ -560,7 +562,8 @@ void FindDuplicatesView::resetAlbumsAndTags()
 
 void FindDuplicatesView::slotUpdateFingerPrints()
 {
-    new FingerPrintsGenerator(false);
+    FingerPrintsGenerator* tool = new FingerPrintsGenerator(false);
+    tool->start();
 }
 
 }  // namespace Digikam

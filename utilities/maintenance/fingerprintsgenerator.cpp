@@ -84,8 +84,6 @@ FingerPrintsGenerator::FingerPrintsGenerator(bool rebuildAll, ProgressItem* pare
             this, SLOT(slotGotImagePreview(LoadingDescription,DImg)));
 
     setLabel(i18n("Finger-prints"));
-
-    QTimer::singleShot(500, this, SLOT(slotStart()));
 }
 
 FingerPrintsGenerator::~FingerPrintsGenerator()
@@ -128,6 +126,13 @@ void FingerPrintsGenerator::processOne()
 {
     if (canceled())
     {
+        slotCancel();
+        return;
+    }
+
+    if (d->allPicturesPath.isEmpty())
+    {
+        slotDone();
         return;
     }
 

@@ -840,7 +840,8 @@ void CameraUI::finishDialog()
     d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode,
                                           i18n("Scanning for new files, please wait..."));
 
-    new NewItemsFinder(NewItemsFinder::ScheduleCollectionScan, d->foldersToScan.toList());
+    NewItemsFinder* tool = new NewItemsFinder(NewItemsFinder::ScheduleCollectionScan, d->foldersToScan.toList());
+    tool->start();
 
     d->foldersToScan.clear();
 

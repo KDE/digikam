@@ -215,11 +215,6 @@ FaceDetector::FaceDetector(const FaceScanSettings& settings, ProgressItem* paren
     {
         d->albumTodoList = settings.albums;
     }
-
-    if (ProgressManager::addProgressItem(this))
-    {
-        QTimer::singleShot(500, this, SLOT(slotStart()));
-    }
 }
 
 FaceDetector::~FaceDetector()
