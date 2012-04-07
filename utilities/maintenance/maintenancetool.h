@@ -42,7 +42,7 @@ class MaintenanceTool : public ProgressItem
 public:
 
     MaintenanceTool(const QString& id, ProgressItem* parent = 0);
-    ~MaintenanceTool();
+    virtual ~MaintenanceTool();
 
     /** If true, show a notification message on desktop notification manager
      * with time elpased to run process.
