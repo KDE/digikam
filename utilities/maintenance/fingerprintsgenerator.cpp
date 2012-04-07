@@ -116,7 +116,7 @@ void FingerPrintsGenerator::slotStart()
 
     if (d->allPicturesPath.isEmpty())
     {
-        slotCancel();
+        slotDone();
         return;
     }
 
