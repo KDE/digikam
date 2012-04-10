@@ -68,13 +68,13 @@ AdvancedRenameProcessDialog::AdvancedRenameProcessDialog(const NewNamesList& lis
     connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(LoadingDescription,QPixmap)),
             this, SLOT(slotGotThumbnail(LoadingDescription,QPixmap)));
 
-    connect(DIO::instance(), SIGNAL(imageRenameSucceeded(KUrl, int)),
+    connect(DIO::instance(), SIGNAL(imageRenameSucceeded(KUrl)),
             this, SLOT(slotRenameSuccess(KUrl)));
 
-    connect(DIO::instance(), SIGNAL(imageRenameFailed(KUrl, int)),
+    connect(DIO::instance(), SIGNAL(imageRenameFailed(KUrl)),
             this, SLOT(slotRenameFailed(KUrl)));
 
-    connect(DIO::instance(), SIGNAL(renamingAborted(KUrl, int)),
+    connect(DIO::instance(), SIGNAL(renamingAborted(KUrl)),
             this, SLOT(slotCancel()));
 
     setModal(true);
