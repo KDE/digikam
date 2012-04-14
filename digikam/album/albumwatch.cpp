@@ -215,7 +215,14 @@ void AlbumWatch::slotAlbumAdded(Album* a)
         if (!d->dirWatch->contains(dir))
         {
             d->dirWatchAddedDirs << dir;
+            // On OS X, file watch is broken in the OS and thus in Qt.
+            // Fixing is beyond our scope. See bug #289330.
+            // Disable file watch for OS X and hope for future improvements
+            #ifdef Q_WS_MAC
+            d->dirWatch->addDir(dir, KDirWatch::WatchDirOnly);
+            #else
             d->dirWatch->addDir(dir, KDirWatch::WatchFiles | KDirWatch::WatchDirOnly);
+            #endif
         }
     }
 }
