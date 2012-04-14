@@ -35,6 +35,7 @@ Description[ro]=Modul digiKam pentru intrările/ieșirile imaginilor pe hartă
 Description[sv]=I/O-slav för Digikams kartbilder
 Description[uk]=Додаток карти зображень digiKam
 Description[x-test]=xxdigiKam mapimages kioslavexx
+Description[zh_CN]=digiKam 图像映射 kioslave
 Description[zh_TW]=digiKam mapimages kioslave
 Class=:local
 Icon=digikam
