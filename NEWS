@@ -107,6 +107,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 088 ==> 151849 : Add Right-MouseButton-menu entry to exit fullscreen [patch].
 089 ==> 251887 : Holding SHIFT in timeline to select range. 
 090 ==> 289330 : Album file watch failing (QKqueueFileSystemWatcherEngine:addPaths: open: Too many open files in system).
-091 ==> 
+091 ==> 287267 : IptcCore tags are written incorrectly.
+092 ==> 
 
 
