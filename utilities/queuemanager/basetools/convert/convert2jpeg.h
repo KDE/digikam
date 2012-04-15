@@ -39,7 +39,7 @@ class Convert2JPEG : public BatchTool
 
 public:
 
-    Convert2JPEG(QObject* parent=0);
+    Convert2JPEG(QObject* parent = 0);
     ~Convert2JPEG();
 
     QString outputSuffix() const;

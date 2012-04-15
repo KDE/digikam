@@ -56,7 +56,8 @@
 #include "adjustlevelstool.h"
 #include "filmtool.h"
 
-using namespace DigikamColorImagePlugin;
+namespace DigikamColorImagePlugin
+{
 
 K_PLUGIN_FACTORY( ColorPluginFactory, registerPlugin<ImagePlugin_Color>(); )
 K_EXPORT_PLUGIN ( ColorPluginFactory("digikamimageplugin_color") )
@@ -190,7 +191,7 @@ ImagePlugin_Color::ImagePlugin_Color(QObject* const parent, const QVariantList&)
     connect(d->levelsAction, SIGNAL(triggered(bool)),
             this, SLOT(slotLevelsAdjust()));
 
-    d->filmAction = new KAction(KIcon("film"), i18n("Reversal Film..."), this);
+    d->filmAction = new KAction(KIcon("colorneg"), i18n("Color Negative..."), this);
     d->filmAction->setShortcut(KShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_I));
     actionCollection()->addAction("imageplugin_film", d->filmAction);
     connect(d->filmAction, SIGNAL(triggered(bool)),
@@ -416,3 +417,5 @@ void ImagePlugin_Color::slotFilm()
     FilmTool* tool = new FilmTool(this);
     loadTool(tool);
 }
+
+} // namespace DigikamColorImagePlugin

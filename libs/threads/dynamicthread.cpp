@@ -177,7 +177,7 @@ void DynamicThread::DynamicThreadPriv::run()
 {
     if (emitSignals)
     {
-        emit q->started();
+        emit (q->started());
     }
 
     if (transitionToRunning())
@@ -192,7 +192,7 @@ void DynamicThread::DynamicThreadPriv::run()
 
     if (emitSignals)
     {
-        emit q->finished();
+        emit (q->finished());
     }
 
     transitionToInactive();

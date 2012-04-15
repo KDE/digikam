@@ -165,6 +165,7 @@ public:
         slideShowRecursiveAction(0),
         bqmAction(0),
         maintenanceAction(0),
+	slideShowQmlAction(0),
 #ifdef USE_SCRIPT_IFACE
         scriptConsoleAction(0),
 #endif
@@ -291,6 +292,7 @@ public:
     KAction*                            slideShowRecursiveAction;
     KAction*                            bqmAction;
     KAction*                            maintenanceAction;
+    KAction*				slideShowQmlAction;
 
 #ifdef USE_SCRIPT_IFACE
     KAction*                            scriptConsoleAction;

@@ -80,8 +80,8 @@ public:
     /** Show a setup dialog. The specified page will be selected.
         True is returned if the dialog was closed with Ok.
      */
-    static bool exec(Page page=LastPageUsed);
-    static bool exec(QWidget* parent, Page page=LastPageUsed);
+    static bool exec(Page page = LastPageUsed);
+    static bool exec(QWidget* parent, Page page = LastPageUsed);
     /** Show a setup dialog. Only the specified page will be available.
      */
     static bool execSinglePage(Page page);
@@ -98,7 +98,7 @@ private Q_SLOTS:
 
 private:
 
-    Setup(QWidget* parent=0);
+    Setup(QWidget* parent = 0);
     ~Setup();
 
     Setup::Page activePageIndex() const;

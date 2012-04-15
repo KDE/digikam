@@ -152,7 +152,7 @@ void BatchToolsManager::unregisterTool(BatchTool* tool)
     }
 
     for (BatchToolsList::iterator it = d->toolsList.begin();
-         it != d->toolsList.end(); )
+         it != d->toolsList.end();)
     {
         if (*it == tool)
         {

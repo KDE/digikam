@@ -58,7 +58,7 @@ public:
     void assignTool(int index, const BatchToolSet& set);
     void unassignTool(int index);
 
-    void setThumb(const QPixmap& pix, bool hasThumb=true);
+    void setThumb(const QPixmap& pix, bool hasThumb = true);
 
     void setProgressIcon(const QPixmap& icon);
 

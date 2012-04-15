@@ -284,9 +284,11 @@ void FaceScanDialog::doSaveState()
         case FaceScanSettings::Skip:
             handling = "Skip";
             break;
+
         case FaceScanSettings::Rescan:
             handling = "Rescan";
             break;
+
         case FaceScanSettings::Merge:
             handling = "Merge";
             break;
@@ -417,7 +419,7 @@ void FaceScanDialog::setupUi()
 
     selectAlbumsLayout->addWidget(includeAlbumsLabel, 0, 0, 1, 2);
     selectAlbumsLayout->addWidget(d->albumSelectCB,   1, 0);
-    selectAlbumsLayout->addWidget(d->albumClearButton,1, 1);
+    selectAlbumsLayout->addWidget(d->albumClearButton, 1, 1);
     selectAlbumsLayout->addWidget(d->tagSelectCB,     2, 0);
     selectAlbumsLayout->addWidget(d->tagClearButton,  2, 1);
     selectAlbumsLayout->setRowStretch(3, 1);
@@ -480,9 +482,9 @@ void FaceScanDialog::setupUi()
     d->benchmarkButton = new QCheckBox;
     d->benchmarkButton->setText(i18nc("@option:check", "Benchmark face detection"));
     d->benchmarkButton->setToolTip(i18nc("@info:tooltip",
-                                          "This will run face detection and compare the results "
-                                          "with faces already marked, which are taken as ground truth. "
-                                          "At the end, benchmark results will be presented. "));
+                                         "This will run face detection and compare the results "
+                                         "with faces already marked, which are taken as ground truth. "
+                                         "At the end, benchmark results will be presented. "));
 
     advancedLayout->addWidget(cpuExplanation);
     advancedLayout->addWidget(d->useFullCpuButton);

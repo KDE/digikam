@@ -7,6 +7,7 @@
  * Description : fingerprints generator
  *
  * Copyright (C) 2008-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2012 by Andi Clemens <andi dot clemens at googlemail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -84,8 +85,6 @@ FingerPrintsGenerator::FingerPrintsGenerator(bool rebuildAll, ProgressItem* pare
             this, SLOT(slotGotImagePreview(LoadingDescription,DImg)));
 
     setLabel(i18n("Finger-prints"));
-
-    QTimer::singleShot(500, this, SLOT(slotStart()));
 }
 
 FingerPrintsGenerator::~FingerPrintsGenerator()
@@ -116,7 +115,7 @@ void FingerPrintsGenerator::slotStart()
 
     if (d->allPicturesPath.isEmpty())
     {
-        slotCancel();
+        slotDone();
         return;
     }
 
@@ -128,6 +127,13 @@ void FingerPrintsGenerator::processOne()
 {
     if (canceled())
     {
+        slotCancel();
+        return;
+    }
+
+    if (d->allPicturesPath.isEmpty())
+    {
+        slotDone();
         return;
     }
 

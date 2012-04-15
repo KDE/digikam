@@ -49,7 +49,7 @@ class CameraThumbsCtrl::CameraThumbsCtrlPriv
 public:
 
     CameraThumbsCtrlPriv()
-      : controller(0)
+        : controller(0)
     {}
 
     QCache<KUrl, CachedItem> cache;  // Camera info/thumb cache based on item url keys.
@@ -211,6 +211,7 @@ void CameraThumbsCtrl::procressKDEPreview(const KFileItem& item, const QPixmap& 
     {
         return;
     }
+
     QString file   = item.url().fileName();
     QString folder = item.url().toLocalFile().remove(QString("/") + file);
     QPixmap thumb;
@@ -273,8 +274,8 @@ void CameraThumbsCtrl::clearCache()
 
 void CameraThumbsCtrl::setCacheSize(int numberOfItems)
 {
-    d->cache.setMaxCost( (numberOfItems * 256 * 256 * QPixmap::defaultDepth() / 8) +
-                         (numberOfItems * 1024 * 2));
+    d->cache.setMaxCost((numberOfItems * 256 * 256 * QPixmap::defaultDepth() / 8) +
+                        (numberOfItems * 1024 * 2));
 }
 
 }  // namespace Digikam

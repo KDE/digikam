@@ -91,7 +91,7 @@ class DIGIKAM_EXPORT UndoActionIrreversible : public UndoAction
 public:
 
     explicit UndoActionIrreversible(DImgInterface* const iface,
-                                    const QString& caller=i18n("Unknown"));
+                                    const QString& caller = i18n("Unknown"));
     ~UndoActionIrreversible();
 };
 

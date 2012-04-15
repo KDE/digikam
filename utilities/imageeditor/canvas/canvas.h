@@ -65,7 +65,7 @@ class DIGIKAM_EXPORT Canvas : public Q3ScrollView
 
 public:
 
-    Canvas(QWidget* const parent=0);
+    Canvas(QWidget* const parent = 0);
     ~Canvas();
 
     void    load(const QString& filename, IOFileSettingsContainer* const IOFileSettings);
@@ -159,8 +159,8 @@ public Q_SLOTS:
     void slotCrop();
 
     void slotRestore();
-    void slotUndo(int steps=1);
-    void slotRedo(int steps=1);
+    void slotUndo(int steps = 1);
+    void slotRedo(int steps = 1);
 
     void slotCopy();
 

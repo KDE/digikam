@@ -392,7 +392,9 @@ void CameraController::run()
         {
             // Special case with thumbs handling. We don't need progress bar in gui.
             if (command->action != CameraCommand::cam_thumbsinfo)
+            {
                 emit signalBusy(true);
+            }
 
             executeCommand(command);
             delete command;
@@ -404,11 +406,14 @@ void CameraController::run()
 
 void CameraController::executeCommand(CameraCommand* cmd)
 {
-    if (!cmd) return;
+    if (!cmd)
+    {
+        return;
+    }
 
     switch (cmd->action)
     {
-        case(CameraCommand::cam_connect):
+        case (CameraCommand::cam_connect):
         {
             sendLogMsg(i18n("Connecting to camera..."));
 
@@ -427,7 +432,8 @@ void CameraController::executeCommand(CameraCommand* cmd)
 
             break;
         }
-        case(CameraCommand::cam_cameraInformation):
+
+        case (CameraCommand::cam_cameraInformation):
         {
             sendLogMsg(i18n("Getting camera information..."));
 
@@ -440,7 +446,8 @@ void CameraController::executeCommand(CameraCommand* cmd)
             emit signalCameraInformation(summary, manual, about);
             break;
         }
-        case(CameraCommand::cam_freeSpace):
+
+        case (CameraCommand::cam_freeSpace):
         {
             sendLogMsg(i18n("Getting available free space on camera..."));
             unsigned long kBSize  = 0;
@@ -449,7 +456,8 @@ void CameraController::executeCommand(CameraCommand* cmd)
             emit signalFreeSpace(kBSize, kBAvail);
             break;
         }
-        case(CameraCommand::cam_preview):
+
+        case (CameraCommand::cam_preview):
         {
             sendLogMsg(i18n("Getting preview..."));
             QImage preview;
@@ -457,7 +465,8 @@ void CameraController::executeCommand(CameraCommand* cmd)
             emit signalPreview(preview);
             break;
         }
-        case(CameraCommand::cam_capture):
+
+        case (CameraCommand::cam_capture):
         {
             sendLogMsg(i18n("Capture image..."));
             CamItemInfo itemInfo;
@@ -465,7 +474,8 @@ void CameraController::executeCommand(CameraCommand* cmd)
             emit signalUploaded(itemInfo);
             break;
         }
-        case(CameraCommand::cam_listfolders):
+
+        case (CameraCommand::cam_listfolders):
         {
             sendLogMsg(i18n("Listing folders..."));
 
@@ -478,7 +488,8 @@ void CameraController::executeCommand(CameraCommand* cmd)
 
             break;
         }
-        case(CameraCommand::cam_listfiles):
+
+        case (CameraCommand::cam_listfiles):
         {
             QString folder   = cmd->map["folder"].toString();
             bool useMetadata = cmd->map["useMetadata"].toBool();
@@ -501,7 +512,8 @@ void CameraController::executeCommand(CameraCommand* cmd)
 
             break;
         }
-        case(CameraCommand::cam_thumbsinfo):
+
+        case (CameraCommand::cam_thumbsinfo):
         {
             QList<QVariant> list = cmd->map["list"].toList();
 
@@ -535,7 +547,8 @@ void CameraController::executeCommand(CameraCommand* cmd)
 
             break;
         }
-        case(CameraCommand::cam_metadata):
+
+        case (CameraCommand::cam_metadata):
         {
             QString folder = cmd->map["folder"].toString();
             QString file   = cmd->map["file"].toString();
@@ -548,7 +561,8 @@ void CameraController::executeCommand(CameraCommand* cmd)
 
             break;
         }
-        case(CameraCommand::cam_download):
+
+        case (CameraCommand::cam_download):
         {
             QString   folder         = cmd->map["folder"].toString();
             QString   file           = cmd->map["file"].toString();
@@ -662,7 +676,8 @@ void CameraController::executeCommand(CameraCommand* cmd)
             emit signalInternalCheckRename(folder, file, dest, temp);
             break;
         }
-        case(CameraCommand::cam_open):
+
+        case (CameraCommand::cam_open):
         {
             QString folder = cmd->map["folder"].toString();
             QString file   = cmd->map["file"].toString();
@@ -683,7 +698,8 @@ void CameraController::executeCommand(CameraCommand* cmd)
 
             break;
         }
-        case(CameraCommand::cam_upload):
+
+        case (CameraCommand::cam_upload):
         {
             QString folder = cmd->map["destFolder"].toString();
 
@@ -711,7 +727,8 @@ void CameraController::executeCommand(CameraCommand* cmd)
 
             break;
         }
-        case(CameraCommand::cam_delete):
+
+        case (CameraCommand::cam_delete):
         {
             QString folder = cmd->map["folder"].toString();
             QString file   = cmd->map["file"].toString();
@@ -731,7 +748,8 @@ void CameraController::executeCommand(CameraCommand* cmd)
 
             break;
         }
-        case(CameraCommand::cam_lock):
+
+        case (CameraCommand::cam_lock):
         {
             QString folder = cmd->map["folder"].toString();
             QString file   = cmd->map["file"].toString();
@@ -752,6 +770,7 @@ void CameraController::executeCommand(CameraCommand* cmd)
 
             break;
         }
+
         default:
         {
             kWarning() << " unknown action specified";
@@ -813,28 +832,33 @@ void CameraController::slotCheckRename(const QString& folder, const QString& fil
                     cancel = true;
                     break;
                 }
+
                 case KIO::R_SKIP:
                 {
                     skip = true;
                     break;
                 }
+
                 case KIO::R_AUTO_SKIP:
                 {
                     d->skipAll = true;
                     skip       = true;
                     break;
                 }
+
                 case KIO::R_OVERWRITE:
                 {
                     overwrite = true;
                     break;
                 }
+
                 case KIO::R_OVERWRITE_ALL:
                 {
                     d->overwriteAll = true;
                     overwrite       = true;
                     break;
                 }
+
                 default:
                     break;
             }
@@ -869,6 +893,7 @@ void CameraController::slotCheckRename(const QString& folder, const QString& fil
             sendLogMsg(i18n("Failed to save sidecar file for %1...", file), DHistoryView::ErrorEntry,  folder, file);
         }
     }
+
     if (KDE::rename(temp, dest) != 0)
     {
         // rename failed. delete the temp file
@@ -940,7 +965,7 @@ void CameraController::slotDeleteFailed(const QString& folder, const QString& fi
     emit signalDeleted(folder, file, false);
     sendLogMsg(i18n("Failed to delete %1...", file), DHistoryView::ErrorEntry, folder, file);
 
-    QString msg = i18n("Failed to delete file \"%1\".",file);
+    QString msg = i18n("Failed to delete file \"%1\".", file);
 
     if (!d->canceled)
     {
@@ -966,7 +991,7 @@ void CameraController::slotLockFailed(const QString& folder, const QString& file
     emit signalLocked(folder, file, false);
     sendLogMsg(i18n("Failed to lock %1...", file), DHistoryView::ErrorEntry, folder, file);
 
-    QString msg = i18n("Failed to toggle lock file \"%1\".",file);
+    QString msg = i18n("Failed to toggle lock file \"%1\".", file);
 
     if (!d->canceled)
     {

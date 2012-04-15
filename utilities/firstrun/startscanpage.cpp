@@ -61,7 +61,7 @@ StartScanPage::StartScanPage(KAssistantDialog* dlg)
 
     setPageWidget(vbox);
 
-    QPixmap leftPix = KStandardDirs::locate("data","digikam/data/assistant-scancollection.png");
+    QPixmap leftPix = KStandardDirs::locate("data", "digikam/data/assistant-scancollection.png");
     setLeftBottomPix(leftPix.scaledToWidth(128, Qt::SmoothTransformation));
 }
 

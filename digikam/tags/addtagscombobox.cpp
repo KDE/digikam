@@ -141,7 +141,7 @@ QString AddTagsComboBox::text() const
 
 void AddTagsComboBox::setText(const QString& text)
 {
-    return d->lineEdit->setText(text);
+    d->lineEdit->setText(text);
 }
 
 TaggingAction AddTagsComboBox::currentTaggingAction()

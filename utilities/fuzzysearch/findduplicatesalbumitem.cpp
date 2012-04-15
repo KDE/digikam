@@ -91,11 +91,11 @@ bool FindDuplicatesAlbumItem::hasValidThumbnail() const
 void FindDuplicatesAlbumItem::setThumb(const QPixmap& pix, bool hasThumb)
 {
     int iconSize = treeWidget()->iconSize().width();
-    QPixmap pixmap(iconSize+2, iconSize+2);
+    QPixmap pixmap(iconSize + 2, iconSize + 2);
     pixmap.fill(Qt::transparent);
     QPainter p(&pixmap);
-    p.drawPixmap((pixmap.width()/2)  - (pix.width()/2),
-                 (pixmap.height()/2) - (pix.height()/2), pix);
+    p.drawPixmap((pixmap.width() / 2)  - (pix.width() / 2),
+                 (pixmap.height() / 2) - (pix.height() / 2), pix);
 
     QIcon icon = QIcon(pixmap);
     //  We make sure the preview icon stays the same regardless of the role

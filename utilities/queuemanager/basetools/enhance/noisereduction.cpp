@@ -71,12 +71,12 @@ BatchToolSettings NoiseReduction::defaultSettings()
     BatchToolSettings prm;
     NRContainer defaultPrm = m_settingsView->defaultSettings();
 
-    prm.insert("YThreshold",    (double)defaultPrm.thresholds[0]);
-    prm.insert("CrThreshold",   (double)defaultPrm.thresholds[1]);
-    prm.insert("CbThreshold",   (double)defaultPrm.thresholds[2]);
-    prm.insert("YSoftness",     (double)defaultPrm.softness[0]);
-    prm.insert("CrSoftness",    (double)defaultPrm.softness[1]);
-    prm.insert("CbSoftness",    (double)defaultPrm.softness[2]);
+    prm.insert("YThreshold", (double)defaultPrm.thresholds[0]);
+    prm.insert("CrThreshold", (double)defaultPrm.thresholds[1]);
+    prm.insert("CbThreshold", (double)defaultPrm.thresholds[2]);
+    prm.insert("YSoftness", (double)defaultPrm.softness[0]);
+    prm.insert("CrSoftness", (double)defaultPrm.softness[1]);
+    prm.insert("CbSoftness", (double)defaultPrm.softness[2]);
 
     return prm;
 }
@@ -98,12 +98,12 @@ void NoiseReduction::slotSettingsChanged()
     BatchToolSettings prm;
     NRContainer currentPrm = m_settingsView->settings();
 
-    prm.insert("YThreshold",    (double)currentPrm.thresholds[0]);
-    prm.insert("CrThreshold",   (double)currentPrm.thresholds[1]);
-    prm.insert("CbThreshold",   (double)currentPrm.thresholds[2]);
-    prm.insert("YSoftness",     (double)currentPrm.softness[0]);
-    prm.insert("CrSoftness",    (double)currentPrm.softness[1]);
-    prm.insert("CbSoftness",    (double)currentPrm.softness[2]);
+    prm.insert("YThreshold", (double)currentPrm.thresholds[0]);
+    prm.insert("CrThreshold", (double)currentPrm.thresholds[1]);
+    prm.insert("CbThreshold", (double)currentPrm.thresholds[2]);
+    prm.insert("YSoftness", (double)currentPrm.softness[0]);
+    prm.insert("CrSoftness", (double)currentPrm.softness[1]);
+    prm.insert("CbSoftness", (double)currentPrm.softness[2]);
 
     BatchTool::slotSettingsChanged(prm);
 }

@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2008-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2008-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2009      by Andi Clemens <andi dot clemens at googlemail dot com>
+ * Copyright (C) 2009-2012 by Andi Clemens <andi dot clemens at googlemail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -221,14 +221,14 @@ FindDuplicatesView::FindDuplicatesView(QWidget* parent)
     // ---------------------------------------------------------------
 
     QGridLayout* mainLayout = new QGridLayout();
-    mainLayout->addWidget(d->listView,           0, 0, 1,-1);
+    mainLayout->addWidget(d->listView,           0, 0, 1, -1);
     mainLayout->addWidget(d->includeAlbumsLabel, 1, 0, 1, 1);
-    mainLayout->addWidget(d->albumSelectCB,      1, 1, 1,-1);
-    mainLayout->addWidget(d->tagSelectCB,        2, 1, 1,-1);
+    mainLayout->addWidget(d->albumSelectCB,      1, 1, 1, -1);
+    mainLayout->addWidget(d->tagSelectCB,        2, 1, 1, -1);
     mainLayout->addWidget(d->similarityLabel,    3, 0, 1, 1);
     mainLayout->addWidget(d->similarity,         3, 2, 1, 1);
-    mainLayout->addWidget(d->updateFingerPrtBtn, 4, 0, 1,-1);
-    mainLayout->addWidget(d->scanDuplicatesBtn,  5, 0, 1,-1);
+    mainLayout->addWidget(d->updateFingerPrtBtn, 4, 0, 1, -1);
+    mainLayout->addWidget(d->scanDuplicatesBtn,  5, 0, 1, -1);
     mainLayout->setRowStretch(0, 10);
     mainLayout->setColumnStretch(1, 10);
     mainLayout->setMargin(KDialog::spacingHint());
@@ -440,6 +440,8 @@ void FindDuplicatesView::slotFindDuplicates()
 
     connect(finder, SIGNAL(signalComplete()),
             this, SLOT(slotComplete()));
+
+    finder->start();
 }
 
 void FindDuplicatesView::slotComplete()
@@ -560,7 +562,8 @@ void FindDuplicatesView::resetAlbumsAndTags()
 
 void FindDuplicatesView::slotUpdateFingerPrints()
 {
-    new FingerPrintsGenerator(false);
+    FingerPrintsGenerator* tool = new FingerPrintsGenerator(false);
+    tool->start();
 }
 
 }  // namespace Digikam

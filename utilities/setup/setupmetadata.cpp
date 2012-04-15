@@ -161,12 +161,12 @@ SetupMetadata::SetupMetadata(QWidget* parent)
     QGridLayout* fieldsLayout = new QGridLayout;
 
     d->fieldsGroup->setWhatsThis(i18nc("@info:whatsthis",
-                                    "<para>In addition to the pixel content, image files usually "
-                                    "contain a variety of metadata. A lot of the parameters you can use "
-                                    "in digiKam to manage files, such as rating or comment, can be written "
-                                    "to the files' metadata.</para> "
-                                    "<para>Storing in metadata allows to preserve this information "
-                                    "when moving or sending the files to different systems.</para>"));
+                                       "<para>In addition to the pixel content, image files usually "
+                                       "contain a variety of metadata. A lot of the parameters you can use "
+                                       "in digiKam to manage files, such as rating or comment, can be written "
+                                       "to the files' metadata.</para> "
+                                       "<para>Storing in metadata allows to preserve this information "
+                                       "when moving or sending the files to different systems.</para>"));
 
     QLabel* fieldsIconLabel = new QLabel;
     fieldsIconLabel->setPixmap(SmallIcon("format-list-unordered", KIconLoader::SizeMedium));
@@ -176,39 +176,39 @@ SetupMetadata::SetupMetadata(QWidget* parent)
     d->saveTagsBox          = new QCheckBox;
     d->saveTagsBox->setText(i18nc("@option:check", "Image tags"));
     d->saveTagsBox->setWhatsThis(i18nc("@info:whatsthis", "Turn on this option to store the image tags "
-                                      "in the XMP and IPTC tags."));
+                                       "in the XMP and IPTC tags."));
 
     d->saveCommentsBox = new QCheckBox;
     d->saveCommentsBox->setText(i18nc("@option:check", "Captions and title"));
     d->saveCommentsBox->setWhatsThis(i18nc("@info:whatsthis", "Turn on this option to store image caption and title "
-                                          "in the JFIF Comment section, the EXIF tag, the XMP tag, "
-                                          "and the IPTC tag."));
+                                           "in the JFIF Comment section, the EXIF tag, the XMP tag, "
+                                           "and the IPTC tag."));
 
     d->saveRatingBox = new QCheckBox;
     d->saveRatingBox->setText(i18nc("@option:check", "Rating"));
     d->saveRatingBox->setWhatsThis(i18nc("@info:whatsthis", "Turn on this option to store the image rating "
-                                        "in the EXIF tag and the XMP tags."));
+                                         "in the EXIF tag and the XMP tags."));
 
     d->savePickLabelBox = new QCheckBox;
     d->savePickLabelBox->setText(i18nc("@option:check", "Pick label"));
     d->savePickLabelBox->setWhatsThis(i18nc("@info:whatsthis", "Turn on this option to store the image pick label "
-                                           "in the XMP tags."));
+                                            "in the XMP tags."));
 
     d->saveColorLabelBox = new QCheckBox;
     d->saveColorLabelBox->setText(i18nc("@option:check", "Color label"));
     d->saveColorLabelBox->setWhatsThis(i18nc("@info:whatsthis", "Turn on this option to store the image color label "
-                                            "in the XMP tags."));
+                                             "in the XMP tags."));
 
     d->saveDateTimeBox = new QCheckBox;
     d->saveDateTimeBox->setText(i18nc("@option:check", "Timestamps"));
     d->saveDateTimeBox->setWhatsThis(i18nc("@info:whatsthis", "Turn on this option to store the image date and time "
-                                          "in the EXIF, XMP, and IPTC tags."));
+                                           "in the EXIF, XMP, and IPTC tags."));
 
     d->saveTemplateBox = new QCheckBox;
     d->saveTemplateBox->setText(i18nc("@option:check", "Metadata templates (Copyright etc.)"));
     d->saveTemplateBox->setWhatsThis(i18nc("@info:whatsthis", "Turn on this option to store the metadata "
-                                          "template in the XMP and the IPTC tags. "
-                                          "You can set template values to Template setup page."));
+                                           "template in the XMP and the IPTC tags. "
+                                           "You can set template values to Template setup page."));
 
     fieldsLayout->addWidget(fieldsIconLabel,       0, 0);
     fieldsLayout->addWidget(fieldsLabel,           0, 1);
@@ -235,7 +235,7 @@ SetupMetadata::SetupMetadata(QWidget* parent)
     d->readXMPSidecarBox   = new QCheckBox;
     d->readXMPSidecarBox->setText(i18nc("@option:check", "Read from sidecar files"));
     d->readXMPSidecarBox->setWhatsThis(i18nc("@info:whatsthis",
-                                            "Turn on this option to read metadata from XMP sidecar files when reading metadata."));
+                                             "Turn on this option to read metadata from XMP sidecar files when reading metadata."));
     d->readXMPSidecarBox->setEnabled(KExiv2::supportXmp());
 
     d->writeXMPSidecarBox  = new QCheckBox;
@@ -257,8 +257,8 @@ SetupMetadata::SetupMetadata(QWidget* parent)
     d->writeRawFilesBox = new QCheckBox;
     d->writeRawFilesBox->setText(i18nc("@option:check", "If possible write Metadata to RAW files (experimental)"));
     d->writeRawFilesBox->setWhatsThis(i18nc("@info:whatsthis", "Turn on this option to write metadata into RAW TIFF/EP files. "
-                                           "This feature requires the Exiv2 shared library, version >= 0.18.0. It is still "
-                                           "experimental, and is disabled by default."));
+                                            "This feature requires the Exiv2 shared library, version >= 0.18.0. It is still "
+                                            "experimental, and is disabled by default."));
     d->writeRawFilesBox->setEnabled(KExiv2::supportMetadataWritting("image/x-raw"));
 
     d->updateFileTimeStampBox = new QCheckBox;
@@ -365,14 +365,14 @@ SetupMetadata::SetupMetadata(QWidget* parent)
     d->rotateByContents->setToolTip(i18nc("@info:tooltip",
                                           "If possible rotate files by changing the pixel data"));
     d->rotateByContents->setWhatsThis(i18nc("@info:whatsthis",
-                                        "<para>A file can be rotated in two ways:<br/> "
-                                        "You can change the contents, rearranging the individual pixels of the image data.<br/> "
-                                        "Or you can set a flag that the file is to be rotated before it is shown.</para> "
-                                        "<para>Select this option if you want the file to be rotated by changing the content. "
-                                        "This is a lossless operation for JPEG files. For other formats it is a lossy operation, "
-                                        "which you need to enable explicitly. "
-                                        "It is not support for RAW and other read-only formats, "
-                                        "which will be rotated by flag only.</para>"));
+                                            "<para>A file can be rotated in two ways:<br/> "
+                                            "You can change the contents, rearranging the individual pixels of the image data.<br/> "
+                                            "Or you can set a flag that the file is to be rotated before it is shown.</para> "
+                                            "<para>Select this option if you want the file to be rotated by changing the content. "
+                                            "This is a lossless operation for JPEG files. For other formats it is a lossy operation, "
+                                            "which you need to enable explicitly. "
+                                            "It is not support for RAW and other read-only formats, "
+                                            "which will be rotated by flag only.</para>"));
 
     d->allowLossyRotate->setToolTip(i18nc("@info:tooltip",
                                           "Rotate files by changing the pixel data even if the operation will incur quality loss"));
@@ -578,13 +578,16 @@ void SetupMetadata::applySettings()
     MetadataSettingsContainer set;
 
     set.rotationBehavior = MetadataSettingsContainer::RotateByInternalFlag;
+
     if (d->allowRotateByMetadata->isChecked())
     {
         set.rotationBehavior |= MetadataSettingsContainer::RotateByMetadataFlag;
     }
+
     if (d->rotateByContents->isChecked())
     {
         set.rotationBehavior |= MetadataSettingsContainer::RotateByLosslessRotation;
+
         if (d->allowLossyRotate->isChecked())
         {
             set.rotationBehavior |= MetadataSettingsContainer::RotateByLossyRotation;
@@ -661,6 +664,7 @@ void SetupMetadata::readSettings()
     {
         d->rotateByFlag->setChecked(true);
     }
+
     d->allowRotateByMetadata->setChecked(set.rotationBehavior & MetadataSettingsContainer::RotateByMetadataFlag);
     d->allowLossyRotate->setChecked(set.rotationBehavior & MetadataSettingsContainer::RotateByLossyRotation);
 

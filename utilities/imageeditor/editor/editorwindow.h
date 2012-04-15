@@ -185,7 +185,7 @@ protected:
     void toggleStandardActions(bool val);
     void toggleZoomActions(bool val);
     void toggleNonDestructiveActions();
-    void toggleToolActions(EditorTool* tool=0);
+    void toggleToolActions(EditorTool* tool = 0);
 
     void printImage(const KUrl& url);
 
@@ -222,14 +222,14 @@ protected:
 
     void toggleGUI2FullScreen();
 
-    virtual ThumbBarDock* thumbBar() const=0;
-    virtual Sidebar* rightSideBar() const=0;
+    virtual ThumbBarDock* thumbBar() const = 0;
+    virtual Sidebar* rightSideBar() const = 0;
 
-    virtual void slideShow(SlideShowSettings& settings)=0;
+    virtual void slideShow(SlideShowSettings& settings) = 0;
 
-    virtual void setupConnections()=0;
-    virtual void setupActions()=0;
-    virtual void setupUserArea()=0;
+    virtual void setupConnections() = 0;
+    virtual void setupActions() = 0;
+    virtual void setupUserArea() = 0;
 
     void resetOrigin();
     void resetOriginSwitchFile();
@@ -248,21 +248,21 @@ protected:
      */
     virtual KUrl saveDestinationUrl() = 0;
 
-    virtual void saveIsComplete()=0;
-    virtual void saveAsIsComplete()=0;
-    virtual void saveVersionIsComplete()=0;
+    virtual void saveIsComplete() = 0;
+    virtual void saveAsIsComplete() = 0;
+    virtual void saveVersionIsComplete() = 0;
 
     KCategorizedView* createToolSelectionView();
 
 protected Q_SLOTS:
 
     virtual bool saveOrSaveAs();
-    virtual bool saveAs()=0;
-    virtual bool save()=0;
-    virtual bool saveNewVersion()=0;
-    virtual bool saveCurrentVersion()=0;
-    virtual bool saveNewVersionAs()=0;
-    virtual bool saveNewVersionInFormat(const QString&)=0;
+    virtual bool saveAs() = 0;
+    virtual bool save() = 0;
+    virtual bool saveNewVersion() = 0;
+    virtual bool saveCurrentVersion() = 0;
+    virtual bool saveNewVersionAs() = 0;
+    virtual bool saveNewVersionInFormat(const QString&) = 0;
 
     void slotEditKeys();
 
@@ -291,16 +291,16 @@ protected Q_SLOTS:
 
     virtual void slotComponentsInfo();
 
-    virtual void slotFilePrint()=0;
-    virtual void slotDeleteCurrentItem()=0;
-    virtual void slotBackward()=0;
-    virtual void slotForward()=0;
-    virtual void slotFirst()=0;
-    virtual void slotLast()=0;
-    virtual void slotUpdateItemInfo()=0;
-    virtual void slotChanged()=0;
-    virtual void slotContextMenu()=0;
-    virtual void slotRevert()=0;
+    virtual void slotFilePrint() = 0;
+    virtual void slotDeleteCurrentItem() = 0;
+    virtual void slotBackward() = 0;
+    virtual void slotForward() = 0;
+    virtual void slotFirst() = 0;
+    virtual void slotLast() = 0;
+    virtual void slotUpdateItemInfo() = 0;
+    virtual void slotChanged() = 0;
+    virtual void slotContextMenu() = 0;
+    virtual void slotRevert() = 0;
     virtual void slotDiscardChanges();
     virtual void slotOpenOriginal();
 

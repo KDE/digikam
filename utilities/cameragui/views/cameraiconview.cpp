@@ -229,11 +229,13 @@ CachedItem CameraIconView::getThumbInfo(const CamItemInfo& itemInfo) const
 void CameraIconView::slotThumbInfoReady(const CamItemInfo& info)
 {
     CameraIconItem* item = findItem(info.folder, info.name);
+
     if (item)
     {
         // Updating item, thumb controller will be called to refresh icon item. See repaint() method for details.
         item->update();
     }
+
     viewport()->update();
 }
 
@@ -257,27 +259,32 @@ void CameraIconView::addItem(const CamItemInfo& info)
     newinfo.downloadName = downloadName;
     CameraIconItem* item = new CameraIconItem(d->groupItem, newinfo);
     QString sep;
+
     if (!newinfo.folder.isEmpty() && !newinfo.folder.endsWith('/'))
     {
         sep = '/';
     }
-    d->itemDict.insert(newinfo.folder+sep+newinfo.name, item);
+
+    d->itemDict.insert(newinfo.folder + sep + newinfo.name, item);
 }
 
 void CameraIconView::removeItem(const CamItemInfo& info)
 {
     CameraIconItem* item = findItem(info.folder, info.name);
+
     if (!item)
     {
         return;
     }
 
     QString sep;
+
     if (!info.folder.isEmpty() && !info.folder.endsWith('/'))
     {
         sep = '/';
     }
-    d->itemDict.remove(info.folder+sep+info.name);
+
+    d->itemDict.remove(info.folder + sep + info.name);
 
     setDelayedRearrangement(true);
     delete item;
@@ -288,19 +295,25 @@ CamItemInfo CameraIconView::findItemInfo(const QString& folder, const QString& f
 {
     CamItemInfo     info;
     CameraIconItem* item = findItem(folder, filename);
-    if (item) info = item->itemInfo();
+
+    if (item)
+    {
+        info = item->itemInfo();
+    }
+
     return info;
 }
 
 CameraIconItem* CameraIconView::findItem(const QString& folder, const QString& filename) const
 {
     QString sep;
+
     if (!folder.isEmpty() && !folder.endsWith('/'))
     {
         sep = '/';
     }
 
-    return d->itemDict.value(folder+sep+filename);
+    return d->itemDict.value(folder + sep + filename);
 }
 
 QMap<QString, int> CameraIconView::countItemsByFolders() const
@@ -314,9 +327,10 @@ QMap<QString, int> CameraIconView::countItemsByFolders() const
     {
         iconItem = static_cast<CameraIconItem*>(item);
         path     = iconItem->itemInfo().folder;
+
         if (!path.isEmpty() && path.endsWith('/'))
         {
-            path.truncate(path.length()-1);
+            path.truncate(path.length() - 1);
         }
 
         it = map.find(path);
@@ -337,20 +351,33 @@ QMap<QString, int> CameraIconView::countItemsByFolders() const
 void CameraIconView::setDownloaded(const CamItemInfo& itemInfo, int status)
 {
     CameraIconItem* iconItem = findItem(itemInfo.folder, itemInfo.name);
-    if (iconItem) iconItem->setDownloaded(status);
+
+    if (iconItem)
+    {
+        iconItem->setDownloaded(status);
+    }
 }
 
 bool CameraIconView::isDownloaded(const CamItemInfo& itemInfo)
 {
     CameraIconItem* iconItem = findItem(itemInfo.folder, itemInfo.name);
-    if (iconItem) return iconItem->isDownloaded();
+
+    if (iconItem)
+    {
+        return iconItem->isDownloaded();
+    }
+
     return false;
 }
 
 void CameraIconView::toggleLock(const CamItemInfo& itemInfo)
 {
     CameraIconItem* iconItem = findItem(itemInfo.folder, itemInfo.name);
-    if (iconItem) iconItem->toggleLock();
+
+    if (iconItem)
+    {
+        iconItem->toggleLock();
+    }
 }
 
 void CameraIconView::ensureItemVisible(CameraIconItem* item)
@@ -366,6 +393,7 @@ void CameraIconView::ensureItemVisible(const CamItemInfo& itemInfo)
 void CameraIconView::ensureItemVisible(const QString& folder, const QString& filename)
 {
     CameraIconItem* item = findItem(folder, filename);
+
     if (!item)
     {
         return;
@@ -377,7 +405,12 @@ void CameraIconView::ensureItemVisible(const QString& folder, const QString& fil
 bool CameraIconView::isSelected(const CamItemInfo& itemInfo)
 {
     CameraIconItem* iconItem = findItem(itemInfo.folder, itemInfo.name);
-    if (iconItem) return iconItem->isSelected();
+
+    if (iconItem)
+    {
+        return iconItem->isSelected();
+    }
+
     return false;
 }
 
@@ -430,11 +463,11 @@ void CameraIconView::slotUpdateDownloadNames(bool hasSelection)
     QList<ParseSettings> cameraFiles;
 
     for (IconItem* item = (revOrder ? lastItem() : firstItem()); item;
-         (revOrder ? item = item->prevItem() : item=item->nextItem()))
+         (revOrder ? item = item->prevItem() : item = item->nextItem()))
     {
         CameraIconItem* viewItem = static_cast<CameraIconItem*>(item);
 
-        if ( (hasSelection && item->isSelected()) || !hasSelection)
+        if ((hasSelection && item->isSelected()) || !hasSelection)
         {
             QFileInfo fi;
             fi.setFile(QDir(viewItem->itemInfo().folder), viewItem->itemInfo().name);
@@ -449,12 +482,12 @@ void CameraIconView::slotUpdateDownloadNames(bool hasSelection)
     d->renamer->renameManager()->parseFiles();
 
     for (IconItem* item = (revOrder ? lastItem() : firstItem()); item;
-         (revOrder ? item = item->prevItem() : item=item->nextItem()))
+         (revOrder ? item = item->prevItem() : item = item->nextItem()))
     {
         QString downloadName;
         CameraIconItem* viewItem = static_cast<CameraIconItem*>(item);
 
-        if ( (hasSelection && item->isSelected()) || !hasSelection)
+        if ((hasSelection && item->isSelected()) || !hasSelection)
         {
             if (!useDefault)
             {
@@ -464,7 +497,7 @@ void CameraIconView::slotUpdateDownloadNames(bool hasSelection)
             }
             else
             {
-                downloadName = getCasedName( d->renamer->changeCase(), viewItem->itemInfo() );
+                downloadName = getCasedName(d->renamer->changeCase(), viewItem->itemInfo());
             }
         }
 
@@ -480,7 +513,7 @@ void CameraIconView::slotUpdateDownloadNames(bool hasSelection)
             }
         }
 
-        viewItem->setDownloadName( downloadName );
+        viewItem->setDownloadName(downloadName);
     }
 
     viewport()->setUpdatesEnabled(true);
@@ -513,16 +546,18 @@ QString CameraIconView::getCasedName(const RenameCustomizer::Case ccase, const C
 
     switch (ccase)
     {
-        case(RenameCustomizer::UPPER):
+        case (RenameCustomizer::UPPER):
         {
             dname = itemInfo.name.toUpper();
             break;
         }
-        case(RenameCustomizer::LOWER):
+
+        case (RenameCustomizer::LOWER):
         {
             dname = itemInfo.name.toLower();
             break;
         }
+
         default:
         {
             dname = itemInfo.name;
@@ -590,8 +625,8 @@ void CameraIconView::slotContextMenu(IconItem* item, const QPoint&)
     QAction* viewAction      = menu.addAction(SmallIcon("editimage"),
                                               i18nc("View the selected image", "&View"));
     menu.addSeparator();
-    QAction* downAction      = menu.addAction(SmallIcon("computer"),i18n("Download"));
-    QAction* downDelAction   = menu.addAction(SmallIcon("computer"),i18n("Download && Delete"));
+    QAction* downAction      = menu.addAction(SmallIcon("computer"), i18n("Download"));
+    QAction* downDelAction   = menu.addAction(SmallIcon("computer"), i18n("Download && Delete"));
     QAction* encryptedAction = menu.addAction(SmallIcon("object-locked"), i18n("Toggle Lock"));
     menu.addSeparator();
     QAction* deleteAction    = menu.addAction(SmallIcon("edit-delete"), i18n("Delete"));
@@ -719,15 +754,15 @@ void CameraIconView::startDrag()
     int w = icon.width();
     int h = icon.height();
 
-    QPixmap pix(w+4, h+4);
+    QPixmap pix(w + 4, h + 4);
     QString text(QString::number(lst.count()));
 
     QPainter p(&pix);
-    p.fillRect(0, 0, pix.width()-1, pix.height()-1, QColor(Qt::white));
+    p.fillRect(0, 0, pix.width() - 1, pix.height() - 1, QColor(Qt::white));
     p.setPen(QPen(Qt::black, 1));
-    p.drawRect(0, 0, pix.width()-1, pix.height()-1);
+    p.drawRect(0, 0, pix.width() - 1, pix.height() - 1);
     p.drawPixmap(2, 2, icon);
-    QRect r = p.boundingRect(2, 2, w, h, Qt::AlignLeft|Qt::AlignTop, text);
+    QRect r = p.boundingRect(2, 2, w, h, Qt::AlignLeft | Qt::AlignTop, text);
     r.setWidth(qMax(r.width(), r.height()));
     r.setHeight(qMax(r.width(), r.height()));
     p.fillRect(r, QColor(0, 80, 0));
@@ -750,8 +785,8 @@ void CameraIconView::contentsDragEnterEvent(QDragEnterEvent* e)
         return;
     }
 
-    if ( (!KUrl::List::canDecode(e->mimeData()) && !DCameraDragObject::canDecode(e->mimeData()) )
-         || e->source() == this)
+    if ((!KUrl::List::canDecode(e->mimeData()) && !DCameraDragObject::canDecode(e->mimeData()))
+        || e->source() == this)
     {
         e->ignore();
         return;
@@ -768,8 +803,8 @@ void CameraIconView::contentsDropEvent(QDropEvent* e)
         return;
     }
 
-    if ( (!KUrl::List::canDecode(e->mimeData()) && !DCameraDragObject::canDecode(e->mimeData()) )
-         || e->source() == this)
+    if ((!KUrl::List::canDecode(e->mimeData()) && !DCameraDragObject::canDecode(e->mimeData()))
+        || e->source() == this)
     {
         e->ignore();
         return;
@@ -804,7 +839,7 @@ void CameraIconView::uploadItemPopupMenu(const KUrl::List& srcURLs)
     popMenu.addTitle(SmallIcon("digikam"), d->cameraUI->cameraTitle());
     QAction* uploadAction = popMenu.addAction(SmallIcon("media-flash-smart-media"), i18n("&Upload to camera"));
     popMenu.addSeparator();
-    popMenu.addAction( SmallIcon("dialog-cancel"), i18n("C&ancel") );
+    popMenu.addAction(SmallIcon("dialog-cancel"), i18n("C&ancel"));
 
     popMenu.setMouseTracking(true);
     QAction* choice = popMenu.exec(QCursor::pos());
@@ -822,7 +857,7 @@ QRect CameraIconView::itemRect() const
 
 void CameraIconView::setThumbnailSize(int size)
 {
-    if ( d->thumbSize != size)
+    if (d->thumbSize != size)
     {
         if (size > ThumbnailSize::Huge)
         {
@@ -868,7 +903,7 @@ void CameraIconView::updateItemRectsPixmap()
 
     if (fn.pointSize() > 0)
     {
-        fn.setPointSize(qMax(fn.pointSize()-2, 6));
+        fn.setPointSize(qMax(fn.pointSize() - 2, 6));
     }
 
     fm = QFontMetrics(fn);
@@ -888,13 +923,13 @@ void CameraIconView::updateItemRectsPixmap()
     d->itemRegPixmap.fill(kapp->palette().color(QPalette::Base));
     QPainter p1(&d->itemRegPixmap);
     p1.setPen(kapp->palette().color(QPalette::Midlight));
-    p1.drawRect(0, 0, d->itemRect.width()-1, d->itemRect.height()-1);
+    p1.drawRect(0, 0, d->itemRect.width() - 1, d->itemRect.height() - 1);
 
     d->itemSelPixmap = QPixmap(d->itemRect.width(), d->itemRect.height());
     d->itemSelPixmap.fill(kapp->palette().color(QPalette::Highlight));
     QPainter p2(&d->itemSelPixmap);
     p2.setPen(kapp->palette().color(QPalette::Midlight));
-    p2.drawRect(0, 0, d->itemRect.width()-1, d->itemRect.height()-1);
+    p2.drawRect(0, 0, d->itemRect.width() - 1, d->itemRect.height() - 1);
 
     clearThumbnailBorderCache();
 }
@@ -966,12 +1001,12 @@ void CameraIconView::itemsSelectionSizeInfo(unsigned long& fSizeKB, unsigned lon
                 if (settings.convertJpeg)
                 {
                     // Estimated size is around 5 x original size when JPEG=>PNG.
-                    dSize += size*5;
+                    dSize += size * 5;
                 }
                 else if (settings.autoRotate)
                 {
                     // We need a double size to perform rotation.
-                    dSize += size*2;
+                    dSize += size * 2;
                 }
                 else
                 {

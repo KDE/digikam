@@ -56,7 +56,7 @@ class TagChangeset;
 class NepomukService : public Nepomuk::Service
 {
     Q_OBJECT
-    Q_CLASSINFO( "D-Bus Interface", "org.kde.digikam.DigikamNepomukService" )
+    Q_CLASSINFO("D-Bus Interface", "org.kde.digikam.DigikamNepomukService")
 
 public:
 

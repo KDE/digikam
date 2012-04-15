@@ -44,7 +44,7 @@ class AssistantDlg : public KAssistantDialog
 
 public:
 
-    AssistantDlg(QWidget* parent=0);
+    AssistantDlg(QWidget* parent = 0);
     ~AssistantDlg();
 
     QString firstAlbumPath() const;

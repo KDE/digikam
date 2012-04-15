@@ -562,29 +562,29 @@ QMap<QString, QVariant> DImgInterface::ioAttributes(IOFileSettingsContainer* con
     QMap<QString, QVariant> attributes;
 
     // JPEG file format.
-    if ( mimeType.toUpper() == QString("JPG") || mimeType.toUpper() == QString("JPEG") ||
-         mimeType.toUpper() == QString("JPE"))
+    if (mimeType.toUpper() == QString("JPG") || mimeType.toUpper() == QString("JPEG") ||
+        mimeType.toUpper() == QString("JPE"))
     {
         attributes.insert("quality",     iofileSettings->JPEGCompression);
         attributes.insert("subsampling", iofileSettings->JPEGSubSampling);
     }
 
     // PNG file format.
-    if ( mimeType.toUpper() == QString("PNG") )
+    if (mimeType.toUpper() == QString("PNG"))
     {
         attributes.insert("quality", iofileSettings->PNGCompression);
     }
 
     // TIFF file format.
-    if ( mimeType.toUpper() == QString("TIFF") || mimeType.toUpper() == QString("TIF") )
+    if (mimeType.toUpper() == QString("TIFF") || mimeType.toUpper() == QString("TIF"))
     {
         attributes.insert("compress", iofileSettings->TIFFCompression);
     }
 
     // JPEG 2000 file format.
-    if ( mimeType.toUpper() == QString("JP2") || mimeType.toUpper() == QString("JPX") ||
-         mimeType.toUpper() == QString("JPC") || mimeType.toUpper() == QString("PGX") ||
-         mimeType.toUpper() == QString("J2K"))
+    if (mimeType.toUpper() == QString("JP2") || mimeType.toUpper() == QString("JPX") ||
+        mimeType.toUpper() == QString("JPC") || mimeType.toUpper() == QString("PGX") ||
+        mimeType.toUpper() == QString("J2K"))
     {
         if (iofileSettings->JPEG2000LossLess)
         {
@@ -597,7 +597,7 @@ QMap<QString, QVariant> DImgInterface::ioAttributes(IOFileSettingsContainer* con
     }
 
     // PGF file format.
-    if ( mimeType.toUpper() == QString("PGF"))
+    if (mimeType.toUpper() == QString("PGF"))
     {
         if (iofileSettings->PGFLossLess)
         {
@@ -653,13 +653,14 @@ void DImgInterface::saveAs(const QString& filePath, IOFileSettingsContainer* con
         d->image.getImageHistory().moveCurrentReferredImage(op.intermediateForLoadedFile.path,
                                                             op.intermediateForLoadedFile.fileName);
     }
+
     if (op.tasks & VersionFileOperation::Replace)
     {
         // The current file will be replaced. Remove hint at file path (file path will be a different image)
         d->image.getImageHistory().purgePathFromReferredImages(op.saveFile.path, op.saveFile.fileName);
     }
 
-    QMap<int,VersionFileInfo>::const_iterator it;
+    QMap<int, VersionFileInfo>::const_iterator it;
 
     for (it = op.intermediates.begin(); it != op.intermediates.end(); ++it)
     {
@@ -712,7 +713,7 @@ void DImgInterface::saveNext()
         d->undoMan->putImageDataAndHistory(&file.image, currentStep - file.historyStep);
     }
 
-    QMap<QString,QVariant>::const_iterator it;
+    QMap<QString, QVariant>::const_iterator it;
 
     for (it = file.ioAttributes.constBegin(); it != file.ioAttributes.constEnd(); ++it)
     {
@@ -720,9 +721,9 @@ void DImgInterface::saveNext()
     }
 
     file.image.prepareMetadataToSave(file.intendedFilePath, file.mimeType,
-                                      file.setExifOrientationTag);
+                                     file.setExifOrientationTag);
     //kDebug() << "Adjusting image" << file.mimeType << file.fileName << file.setExifOrientationTag << file.ioAttributes
-      //       << "image:" << file.image.size() << file.image.isNull();
+    //       << "image:" << file.image.size() << file.image.isNull();
 
     d->thread->save(file.image, file.filePath, file.mimeType);
 }
@@ -1024,17 +1025,17 @@ void DImgInterface::paintOnDevice(QPaintDevice* const p,
     uint* data  = (uint*)img.bits();
     uchar r, g, b, a;
 
-    for (int j=0; j < (int)img.height(); ++j)
+    for (int j = 0; j < (int)img.height(); ++j)
     {
-        for (int i=0; i < (int)img.width(); ++i)
+        for (int i = 0; i < (int)img.width(); ++i)
         {
-            if (i < (mx-dx) || i > (mx-dx+mw-1) ||
-                j < (my-dy) || j > (my-dy+mh-1))
+            if (i < (mx - dx) || i > (mx - dx + mw - 1) ||
+                j < (my - dy) || j > (my - dy + mh - 1))
             {
                 a = (*data >> 24) & 0xff;
                 r = (*data >> 16) & 0xff;
                 g = (*data >>  8) & 0xff;
-                b = (*data      ) & 0xff;
+                b = (*data) & 0xff;
 
                 r += (uchar)((RCOL - r) * OPACITY);
                 g += (uchar)((GCOL - g) * OPACITY);
@@ -1337,7 +1338,7 @@ QString DImgInterface::getImageFilePath() const
 
 QString DImgInterface::getImageFileName() const
 {
-    return getImageFilePath().section( '/', -1 );
+    return getImageFilePath().section('/', -1);
 }
 
 QString DImgInterface::getImageFormat() const

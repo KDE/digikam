@@ -418,17 +418,19 @@ void NepomukService::slotImageTagChange(const ImageTagChangeset& changeset)
         return;
     }
 
-    kDebug() << changeset.ids() << changeset.tags() << (changeset.operation()==ImageTagChangeset::Added);
+    kDebug() << changeset.ids() << changeset.tags() << (changeset.operation() == ImageTagChangeset::Added);
 
     switch (changeset.operation())
     {
         case ImageTagChangeset::Added:
             syncTagsToNepomuk(changeset.ids(), changeset.tags(), true);
             break;
+
         case ImageTagChangeset::Removed:
         case ImageTagChangeset::RemovedAll:
             syncTagsToNepomuk(changeset.ids(), changeset.tags(), false);
             break;
+
         default:
             break;
     }
@@ -463,7 +465,7 @@ void NepomukService::slotFullSyncJobResult(KJob* job)
     Q_UNUSED(job);
 
     // when initial full sync is done
-    if ( (--d->fullSyncJobs) == 0)
+    if ((--d->fullSyncJobs) == 0)
     {
         markAsSyncedToNepomuk();
     }
@@ -519,7 +521,7 @@ static int digikamToNepomukRating(int digikamRating)
         return 0;
     }
 
-    return 2*digikamRating;
+    return 2 * digikamRating;
 }
 
 void NepomukService::syncToNepomuk(const QList<qlonglong>& imageIds, SyncToNepomukSettings syncSettings)
@@ -635,7 +637,7 @@ void NepomukService::syncTagsToNepomuk(const QList<qlonglong>& imageIds, const Q
                 if (!info.isNull())
                 {
                     Nepomuk::Resource res(info.fileUrl());
-                    kDebug()<< res.resourceUri() << addOrRemove << res.properties();
+                    kDebug() << res.resourceUri() << addOrRemove << res.properties();
 
                     if (addOrRemove)
                     {
@@ -647,7 +649,7 @@ void NepomukService::syncTagsToNepomuk(const QList<qlonglong>& imageIds, const Q
                     }
 
                     d->addIgnoreUri(res.resourceUri(), NaoTags);
-                    kDebug()<< "after change:" << res.properties();
+                    kDebug() << "after change:" << res.properties();
                 }
             }
         }
@@ -816,7 +818,7 @@ void NepomukService::syncNepomukToDigikam()
     QList<int> ratings;
     int rating;
 
-    while ( it.next() )
+    while (it.next())
     {
         fileUrl = KUrl(it.binding(pathBinding).uri());
         rating  = it.binding(valueBinding).literal().toInt();
@@ -836,7 +838,7 @@ void NepomukService::syncNepomukToDigikam()
     QList<QString> comments;
     QString comment;
 
-    while ( it.next() )
+    while (it.next())
     {
         fileUrl = KUrl(it.binding(pathBinding).uri());
         comment = it.binding(valueBinding).literal().toString();
@@ -856,7 +858,7 @@ void NepomukService::syncNepomukToDigikam()
     QList<QUrl> tags;
     QUrl tag;
 
-    while ( it.next() )
+    while (it.next())
     {
         fileUrl = KUrl(it.binding(pathBinding).uri());
         tag     = it.binding(valueBinding).uri();
@@ -921,7 +923,7 @@ void NepomukService::syncRatingToDigikam(const KUrl::List& fileUrls, const QList
     QList<int> ratingsForInfos;
     const int size = fileUrls.size();
 
-    for (int i=0; i<size; ++i)
+    for (int i = 0; i < size; ++i)
     {
         // If the path is not in digikam collections, info will be null.
         // It does the same check first that we would be doing here
@@ -942,7 +944,7 @@ void NepomukService::syncRatingToDigikam(const KUrl::List& fileUrls, const QList
         DatabaseTransaction transaction(&access);
         const int infosSize = infos.size();
 
-        for (int i=0; i<infosSize; ++i)
+        for (int i = 0; i < infosSize; ++i)
         {
             infos[i].setRating(ratingsForInfos.at(i));
         }
@@ -960,7 +962,7 @@ void NepomukService::syncCommentToDigikam(const KUrl::List& fileUrls, const QStr
     QList<QString> commentsForInfos;
     const int size = fileUrls.size();
 
-    for (int i=0; i<size; ++i)
+    for (int i = 0; i < size; ++i)
     {
         // If the path is not in digikam collections, info will be null.
         // It does the same check first that we would be doing here
@@ -981,7 +983,7 @@ void NepomukService::syncCommentToDigikam(const KUrl::List& fileUrls, const QStr
         DatabaseTransaction transaction(&access);
         const int infosSize = infos.size();
 
-        for (int i=0; i<infosSize; ++i)
+        for (int i = 0; i < infosSize; ++i)
         {
             DatabaseAccess access;
             ImageComments comments = infos.at(i).imageComments(access);
@@ -1001,7 +1003,7 @@ void NepomukService::syncTagsToDigikam(const KUrl::List& fileUrls, const QList<Q
     QList<int> tagIdsForInfos;
     const int size = fileUrls.size();
 
-    for (int i=0; i<size; ++i)
+    for (int i = 0; i < size; ++i)
     {
         // If the path is not in digikam collections, info will be null.
         // It does the same check first that we would be doing here
@@ -1026,7 +1028,7 @@ void NepomukService::syncTagsToDigikam(const KUrl::List& fileUrls, const QList<Q
         DatabaseTransaction transaction(&access);
         const int infosSize = infos.size();
 
-        for (int i=0; i<infosSize; ++i)
+        for (int i = 0; i < infosSize; ++i)
         {
             infos[i].setTag(tagIdsForInfos.at(i));
         }

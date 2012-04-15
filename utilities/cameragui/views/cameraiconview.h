@@ -86,7 +86,7 @@ public:
     CamItemInfo     findItemInfo(const QString& folder, const QString& file) const;
     CamItemInfo     firstItemSelected() const;
     CamItemInfoList selectedItems() const;
-    CamItemInfoList allItems(bool lastPhotoFirst=false) const;
+    CamItemInfoList allItems(bool lastPhotoFirst = false) const;
 
     /** Return a map of folder and items counted
      */

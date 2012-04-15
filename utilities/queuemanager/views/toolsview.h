@@ -43,7 +43,7 @@ class ToolsView : public KTabWidget
 
 public:
 
-    ToolsView(QWidget* parent=0);
+    ToolsView(QWidget* parent = 0);
     ~ToolsView();
 
     void addTool(BatchTool* tool);
@@ -52,7 +52,7 @@ public:
     void setBusy(bool b);
 
     void showHistory();
-    void addHistoryEntry(const QString& msg, DHistoryView::EntryType type, int queueId=-1, qlonglong itemId=-1);
+    void addHistoryEntry(const QString& msg, DHistoryView::EntryType type, int queueId = -1, qlonglong itemId = -1);
 
 Q_SIGNALS:
 

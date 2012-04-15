@@ -75,12 +75,12 @@ BatchToolSettings AntiVignetting::defaultSettings()
     AntiVignettingContainer defaultPrm = m_settingsView->defaultSettings();
 
     prm.insert("addvignetting", (bool)defaultPrm.addvignetting);
-    prm.insert("density",       (double)defaultPrm.density);
-    prm.insert("power",         (double)defaultPrm.power);
-    prm.insert("innerradius",   (double)defaultPrm.innerradius);
-    prm.insert("outerradius",   (double)defaultPrm.outerradius);
-    prm.insert("xshift",        (double)defaultPrm.xshift);
-    prm.insert("yshift",        (double)defaultPrm.yshift);
+    prm.insert("density", (double)defaultPrm.density);
+    prm.insert("power", (double)defaultPrm.power);
+    prm.insert("innerradius", (double)defaultPrm.innerradius);
+    prm.insert("outerradius", (double)defaultPrm.outerradius);
+    prm.insert("xshift", (double)defaultPrm.xshift);
+    prm.insert("yshift", (double)defaultPrm.yshift);
 
     return prm;
 }
@@ -104,12 +104,12 @@ void AntiVignetting::slotSettingsChanged()
     AntiVignettingContainer currentPrm = m_settingsView->settings();
 
     prm.insert("addvignetting", (bool)currentPrm.addvignetting);
-    prm.insert("density",       (double)currentPrm.density);
-    prm.insert("power",         (double)currentPrm.power);
-    prm.insert("innerradius",   (double)currentPrm.innerradius);
-    prm.insert("outerradius",   (double)currentPrm.outerradius);
-    prm.insert("xshift",        (double)currentPrm.xshift);
-    prm.insert("yshift",        (double)currentPrm.yshift);
+    prm.insert("density", (double)currentPrm.density);
+    prm.insert("power", (double)currentPrm.power);
+    prm.insert("innerradius", (double)currentPrm.innerradius);
+    prm.insert("outerradius", (double)currentPrm.outerradius);
+    prm.insert("xshift", (double)currentPrm.xshift);
+    prm.insert("yshift", (double)currentPrm.yshift);
 
     BatchTool::slotSettingsChanged(prm);
 }

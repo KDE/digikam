@@ -124,8 +124,8 @@ RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
     d->renameDefaultCaseType->insertItem(1, i18nc("Filename to uppercase",   "Upper"));
     d->renameDefaultCaseType->insertItem(2, i18nc("Filename to lowercase",   "Lower"));
     d->renameDefaultCaseType->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
-    d->renameDefaultCaseType->setWhatsThis( i18n("Set the method to use to change the case "
-                                                 "of the image filenames."));
+    d->renameDefaultCaseType->setWhatsThis(i18n("Set the method to use to change the case "
+                                                "of the image filenames."));
 
     boxLayout1->setMargin(KDialog::spacingHint());
     boxLayout1->setSpacing(KDialog::spacingHint());
@@ -222,12 +222,12 @@ RenameCustomizer::Case RenameCustomizer::changeCase() const
 
     if (d->renameDefaultCaseType->currentIndex() == 1)
     {
-        type=UPPER;
+        type = UPPER;
     }
 
     if (d->renameDefaultCaseType->currentIndex() == 2)
     {
-        type=LOWER;
+        type = LOWER;
     }
 
     return type;
@@ -243,8 +243,8 @@ void RenameCustomizer::slotRadioButtonClicked(int id)
     }
 
     btn->setChecked(true);
-    d->renameDefaultBox->setEnabled( btn == d->renameDefault );
-    d->advancedRenameWidget->setEnabled( btn == d->renameCustom );
+    d->renameDefaultBox->setEnabled(btn == d->renameDefault);
+    d->advancedRenameWidget->setEnabled(btn == d->renameCustom);
     slotRenameOptionsChanged();
 }
 
@@ -262,7 +262,7 @@ void RenameCustomizer::readSettings()
 
     KConfigGroup group   = config->group("Camera Settings");
     int def              = group.readEntry("Rename Method",        0);
-    int chcaseT          = group.readEntry("Case Type",            (int)NONE);
+    int chcaseT          = group.readEntry("Case Type", (int)NONE);
     QString manualRename = group.readEntry("Manual Rename String", QString());
 
     slotRadioButtonClicked(def);

@@ -162,50 +162,6 @@ void DImgLoader::loadingFailed()
     m_image->m_priv->height = 0;
 }
 
-unsigned char* DImgLoader::new_failureTolerant(size_t size)
-{
-    if (!checkAllocation(size))
-    {
-        return 0;
-    }
-
-    unsigned char* reserved = 0;
-
-    try
-    {
-        reserved = new uchar[size];
-    }
-    catch (std::bad_alloc& ex)
-    {
-        kError() << "Failed to allocate chunk of memory of size" << size << ex.what();
-        reserved = 0;
-    }
-
-    return reserved;
-}
-
-unsigned short* DImgLoader::new_short_failureTolerant(size_t size)
-{
-    if (!checkAllocation(size))
-    {
-        return 0;
-    }
-
-    unsigned short* reserved = 0;
-
-    try
-    {
-        reserved = new unsigned short[size];
-    }
-    catch (std::bad_alloc& ex)
-    {
-        kError() << "Failed to allocate chunk of memory of size" << size << ex.what();
-        reserved = 0;
-    }
-
-    return reserved;
-}
-
 int DImgLoader::checkAllocation(qint64 fullSize)
 {
     if (fullSize > std::numeric_limits<int>::max())

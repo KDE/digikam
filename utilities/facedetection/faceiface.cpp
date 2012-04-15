@@ -134,7 +134,7 @@ QList<KFaceIface::Face> FaceIface::toFaces(const QList<DatabaseFace>& databaseFa
 }
 
 QList<DatabaseFace> FaceIface::toDatabaseFaces(const DImg& image, qlonglong imageid,
-                                    const QList<KFaceIface::Face>& faceList) const
+                                               const QList<KFaceIface::Face>& faceList) const
 {
     QList<DatabaseFace> faces;
     foreach(const KFaceIface::Face& face, faceList)
@@ -201,7 +201,7 @@ void FaceIface::fillImageInFaces(ThumbnailImageCatcher* catcher, const QString& 
     QList<QImage> details = catcher->waitForThumbnails();
     kDebug() << details.size();
 
-    for (int i=0; i<faces.size(); ++i)
+    for (int i = 0; i < faces.size(); ++i)
     {
         KFaceIface::Face& face = faces[i];
         QImage detail          = details[i];
@@ -259,7 +259,7 @@ QList<DatabaseFace> FaceIface::writeUnconfirmedResults(const DImg& image, qlongl
     QList<DatabaseFace> currentFaces = databaseFaces(imageid);
 
     // merge new with existing entries
-    for (int i=0; i<newFaces.size(); ++i)
+    for (int i = 0; i < newFaces.size(); ++i)
     {
         DatabaseFace& newFace = newFaces[i];
 
@@ -284,7 +284,7 @@ QList<DatabaseFace> FaceIface::writeUnconfirmedResults(const DImg& image, qlongl
             if (newFace.isUnknownName())
             {
                 // we have no name in the new face. Do we have one in the old faces?
-                for (int i=0; i<overlappingEntries.size(); ++i)
+                for (int i = 0; i < overlappingEntries.size(); ++i)
                 {
                     const DatabaseFace& oldFace = overlappingEntries.at(i);
 
@@ -303,7 +303,7 @@ QList<DatabaseFace> FaceIface::writeUnconfirmedResults(const DImg& image, qlongl
             else
             {
                 // we have a name in the new face. Do we have names in overlapping faces?
-                for (int i=0; i<overlappingEntries.size(); ++i)
+                for (int i = 0; i < overlappingEntries.size(); ++i)
                 {
                     DatabaseFace& oldFace = overlappingEntries[i];
 

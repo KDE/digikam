@@ -9,6 +9,7 @@
 * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
 * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
 * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+* Copyright (C) 2012 by Andi Clemens <andi dot clemens at googlemail dot com>
 *
 * This program is free software; you can redistribute it
 * and/or modify it under the terms of the GNU General
@@ -217,9 +218,9 @@ void CameraUI::setupUserArea()
     d->historyView  = new DHistoryView(vbox);
     d->rightSideBar = new ImagePropertiesSideBarCamGui(widget, d->splitter, KMultiTabBar::Right, true);
     d->rightSideBar->setObjectName("CameraGui Sidebar Right");
-    d->splitter->setFrameStyle( QFrame::NoFrame );
-    d->splitter->setFrameShadow( QFrame::Plain );
-    d->splitter->setFrameShape( QFrame::NoFrame );
+    d->splitter->setFrameStyle(QFrame::NoFrame);
+    d->splitter->setFrameShadow(QFrame::Plain);
+    d->splitter->setFrameShape(QFrame::NoFrame);
     d->splitter->setOpaqueResize(false);
     d->splitter->setStretchFactor(0, 10);      // set iconview default size to max.
 
@@ -234,7 +235,7 @@ void CameraUI::setupUserArea()
     d->advBox->setObjectName("Camera Settings Expander");
 
     d->renameCustomizer = new RenameCustomizer(d->advBox, d->cameraTitle);
-    d->renameCustomizer->setWhatsThis( i18n("Set how digiKam will rename files as they are downloaded."));
+    d->renameCustomizer->setWhatsThis(i18n("Set how digiKam will rename files as they are downloaded."));
     d->view->setRenameCustomizer(d->renameCustomizer);
     d->advBox->addItem(d->renameCustomizer, SmallIcon("insert-image"), i18n("File Renaming Options"),
                        QString("RenameCustomizer"), true);
@@ -289,21 +290,21 @@ void CameraUI::setupActions()
     // -- Edit menu ----------------------------------------------------
 
     d->selectAllAction = new KAction(i18n("Select All"), this);
-    d->selectAllAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_A));
+    d->selectAllAction->setShortcut(KShortcut(Qt::CTRL + Qt::Key_A));
     connect(d->selectAllAction, SIGNAL(triggered()), d->view, SLOT(slotSelectAll()));
     actionCollection()->addAction("cameraui_selectall", d->selectAllAction);
 
     // -----------------------------------------------------------------
 
     d->selectNoneAction = new KAction(i18n("Select None"), this);
-    d->selectNoneAction->setShortcut(KShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_A));
+    d->selectNoneAction->setShortcut(KShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_A));
     connect(d->selectNoneAction, SIGNAL(triggered()), d->view, SLOT(slotSelectNone()));
     actionCollection()->addAction("cameraui_selectnone", d->selectNoneAction);
 
     // -----------------------------------------------------------------
 
     d->selectInvertAction = new KAction(i18n("Invert Selection"), this);
-    d->selectInvertAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_Asterisk));
+    d->selectInvertAction->setShortcut(KShortcut(Qt::CTRL + Qt::Key_Asterisk));
     connect(d->selectInvertAction, SIGNAL(triggered()), d->view, SLOT(slotSelectInvert()));
     actionCollection()->addAction("cameraui_selectinvert", d->selectInvertAction);
 
@@ -316,7 +317,7 @@ void CameraUI::setupActions()
     // -----------------------------------------------------------
 
     d->selectLockedItemsAction = new KAction(KIcon("object-locked"), i18n("Select Locked Items"), this);
-    d->selectLockedItemsAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_L));
+    d->selectLockedItemsAction->setShortcut(KShortcut(Qt::CTRL + Qt::Key_L));
     connect(d->selectLockedItemsAction, SIGNAL(triggered()), d->view, SLOT(slotSelectLocked()));
     actionCollection()->addAction("cameraui_selectlockeditems", d->selectLockedItemsAction);
 
@@ -330,7 +331,7 @@ void CameraUI::setupActions()
     // -----------------------------------------------------------------
 
     d->downloadNewAction = new KAction(KIcon("get-hot-new-stuff"), i18n("Download New"), this);
-    d->downloadNewAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_N));
+    d->downloadNewAction->setShortcut(KShortcut(Qt::CTRL + Qt::Key_N));
     connect(d->downloadNewAction, SIGNAL(triggered()), this, SLOT(slotDownloadNew()));
     actionCollection()->addAction("cameraui_imagedownloadnew", d->downloadNewAction);
 
@@ -350,7 +351,7 @@ void CameraUI::setupActions()
     // -------------------------------------------------------------------------
 
     d->downloadDelNewAction = new KAction(i18n("Download/Delete New"), this);
-    d->downloadDelNewAction->setShortcut(KShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_N));
+    d->downloadDelNewAction->setShortcut(KShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_N));
     connect(d->downloadDelNewAction, SIGNAL(triggered()), this, SLOT(slotDownloadAndDeleteNew()));
     actionCollection()->addAction("cameraui_imagedownloaddeletenew", d->downloadDelNewAction);
 
@@ -370,14 +371,14 @@ void CameraUI::setupActions()
     // -------------------------------------------------------------------------
 
     d->uploadAction = new KAction(KIcon("media-flash-smart-media"), i18n("Upload..."), this);
-    d->uploadAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_U));
+    d->uploadAction->setShortcut(KShortcut(Qt::CTRL + Qt::Key_U));
     connect(d->uploadAction, SIGNAL(triggered()), this, SLOT(slotUpload()));
     actionCollection()->addAction("cameraui_imageupload", d->uploadAction);
 
     // -------------------------------------------------------------------------
 
     d->lockAction = new KAction(KIcon("object-locked"), i18n("Toggle Lock"), this);
-    d->lockAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_L));
+    d->lockAction->setShortcut(KShortcut(Qt::CTRL + Qt::Key_L));
     connect(d->lockAction, SIGNAL(triggered()), this, SLOT(slotToggleLock()));
     actionCollection()->addAction("cameraui_imagelock", d->lockAction);
 
@@ -433,7 +434,7 @@ void CameraUI::setupActions()
                                                         "cameraui_fullscreen", this, SLOT(slotToggleFullScreen()));
 
     d->showLogAction = new KToggleAction(KIcon("view-history"), i18n("Show History"), this);
-    d->showLogAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_H));
+    d->showLogAction->setShortcut(KShortcut(Qt::CTRL + Qt::Key_H));
     connect(d->showLogAction, SIGNAL(triggered()), this, SLOT(slotShowLog()));
     actionCollection()->addAction("cameraui_showlog", d->showLogAction);
 
@@ -473,7 +474,7 @@ void CameraUI::setupActions()
 
     KAction* altBackwardAction = new KAction(i18n("Previous Image"), this);
     actionCollection()->addAction("cameraui_backward_shift_space", altBackwardAction);
-    altBackwardAction->setShortcut( KShortcut(Qt::SHIFT+Qt::Key_Space) );
+    altBackwardAction->setShortcut(KShortcut(Qt::SHIFT + Qt::Key_Space));
     connect(altBackwardAction, SIGNAL(triggered()), d->view, SLOT(slotPrevItem()));
 
     // ---------------------------------------------------------------------------------
@@ -551,8 +552,8 @@ void CameraUI::setupConnections()
 
     // -------------------------------------------------------------------------
 
-    connect(CollectionManager::instance(), SIGNAL(locationStatusChanged(CollectionLocation,int)),
-            this, SLOT(slotCollectionLocationStatusChanged(CollectionLocation,int)));
+    connect(CollectionManager::instance(), SIGNAL(locationStatusChanged(CollectionLocation, int)),
+            this, SLOT(slotCollectionLocationStatusChanged(CollectionLocation, int)));
 
     connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
             this, SLOT(slotSidebarTabTitleStyleChanged()));
@@ -561,7 +562,7 @@ void CameraUI::setupConnections()
 void CameraUI::setupStatusBar()
 {
     d->statusProgressBar = new StatusProgressBar(statusBar());
-    d->statusProgressBar->setAlignment(Qt::AlignLeft|Qt::AlignVCenter);
+    d->statusProgressBar->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     d->statusProgressBar->setNotificationTitle(d->cameraTitle, KIcon("camera-photo").pixmap(22));
     statusBar()->addWidget(d->statusProgressBar, 100);
 
@@ -667,7 +668,7 @@ void CameraUI::readSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
 
-    d->view->setThumbnailSize(group.readEntry("ThumbnailSize",            (int)ThumbnailSize::Large));
+    d->view->setThumbnailSize(group.readEntry("ThumbnailSize", (int)ThumbnailSize::Large));
     d->showLogAction->setChecked(group.readEntry("ShowLog",               false));
     d->lastPhotoFirstAction->setChecked(group.readEntry("LastPhotoFirst", true));
     d->albumCustomizer->readSettings(group);
@@ -840,7 +841,8 @@ void CameraUI::finishDialog()
     d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode,
                                           i18n("Scanning for new files, please wait..."));
 
-    new NewItemsFinder(NewItemsFinder::ScheduleCollectionScan, d->foldersToScan.toList());
+    NewItemsFinder* tool = new NewItemsFinder(NewItemsFinder::ScheduleCollectionScan, d->foldersToScan.toList());
+    tool->start();
 
     d->foldersToScan.clear();
 
@@ -1087,9 +1089,9 @@ void CameraUI::slotRefreshIconViewTimer()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group(d->importFiltersConfigGroupName);
     QStringList fileNames = group.readEntry("IgnoreNames",
-            FilterComboBox::defaultIgnoreNames).toLower().split(' ');
+                                            FilterComboBox::defaultIgnoreNames).toLower().split(' ');
     QStringList fileExts = group.readEntry("IgnoreExtensions",
-            FilterComboBox::defaultIgnoreExtensions).toLower().split(' ');
+                                           FilterComboBox::defaultIgnoreExtensions).toLower().split(' ');
     QFileInfo   fi;
 
     // NOTE: see B.K.O #181726: list of accepted file extensions from Album Settings.
@@ -1260,7 +1262,7 @@ void CameraUI::slotUploadItems(const KUrl::List& urls)
         for (KUrl::List::const_iterator it = urls.constBegin() ; it != urls.constEnd() ; ++it)
         {
             QFileInfo fi((*it).toLocalFile());
-            totalKbSize += fi.size()/1024;
+            totalKbSize += fi.size() / 1024;
         }
 
         if (totalKbSize >= d->cameraFreeSpace->kBAvail())
@@ -1413,19 +1415,20 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album* album)
             if (pa)
             {
                 CollectionLocation cl = CollectionManager::instance()->locationForAlbumRootId(pa->albumRootId());
+
                 if (!cl.isAvailable() || cl.isNull())
                 {
                     KMessageBox::information(this, i18n("Collection which host your default target album set to process "
-                                            "download from camera device is not available. Please select another one from "
-                                            "camera configuration dialog."));
+                                                        "download from camera device is not available. Please select another one from "
+                                                        "camera configuration dialog."));
                     return;
                 }
             }
             else
             {
                 KMessageBox::information(this, i18n("Your default target album set to process download "
-                                         "from camera device is not available. Please select another one from "
-                                         "camera configuration dialog."));
+                                                    "from camera device is not available. Please select another one from "
+                                                    "camera configuration dialog."));
                 return;
             }
 
@@ -1541,12 +1544,15 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album* album)
                 case AlbumCustomizer::TextDateFormat:
                     dirName = dateTime.date().toString(Qt::TextDate);
                     break;
+
                 case AlbumCustomizer::LocalDateFormat:
                     dirName = dateTime.date().toString(Qt::LocalDate);
                     break;
+
                 case AlbumCustomizer::IsoDateFormat:
                     dirName = dateTime.date().toString(Qt::ISODate);
                     break;
+
                 default:        // Custom
                     dirName = dateTime.date().toString(d->albumCustomizer->customDateFormat());
                     break;
@@ -1685,7 +1691,7 @@ void CameraUI::slotDownloaded(const QString& folder, const QString& file, int st
         if (status == CamItemInfo::DownloadedYes)
         {
             int curr = d->statusProgressBar->progressValue();
-            d->statusProgressBar->setProgressValue(curr+1);
+            d->statusProgressBar->setProgressValue(curr + 1);
             d->renameCustomizer->setStartIndex(d->renameCustomizer->startIndex() + 1);
 
             DownloadHistory::setDownloaded(d->controller->cameraMD5ID(),
@@ -1727,7 +1733,7 @@ void CameraUI::slotSkipped(const QString& folder, const QString& file)
     }
 
     int curr = d->statusProgressBar->progressValue();
-    d->statusProgressBar->setProgressValue(curr+1);
+    d->statusProgressBar->setProgressValue(curr + 1);
 }
 
 void CameraUI::slotMarkAsDownloaded()
@@ -1749,6 +1755,7 @@ void CameraUI::slotToggleLock()
 {
     CamItemInfoList list = d->view->selectedItems();
     int count            = list.count();
+
     if (count > 0)
     {
         d->statusProgressBar->setProgressValue(0);
@@ -1778,9 +1785,11 @@ void CameraUI::slotLocked(const QString& folder, const QString& file, bool statu
     if (status)
     {
         CamItemInfo info = d->view->findItemInfo(folder, file);
+
         if (!info.isNull())
         {
             d->view->toggleLock(info);
+
             if (d->rightSideBar->url() == info.url())
             {
                 slotItemsSelected(d->view->findItemInfo(folder, file), true);
@@ -1789,7 +1798,7 @@ void CameraUI::slotLocked(const QString& folder, const QString& file, bool statu
     }
 
     int curr = d->statusProgressBar->progressValue();
-    d->statusProgressBar->setProgressValue(curr+1);
+    d->statusProgressBar->setProgressValue(curr + 1);
 }
 
 
@@ -1872,7 +1881,7 @@ void CameraUI::deleteItems(bool onlySelected, bool onlyDownloaded)
         d->statusProgressBar->setProgressTotalSteps(deleteList.count());
         d->statusProgressBar->progressBarMode(StatusProgressBar::ProgressBarMode);
 
-        for ( ; itFolder != folders.constEnd(); ++itFolder, ++itFile)
+        for (; itFolder != folders.constEnd(); ++itFolder, ++itFile)
         {
             d->controller->deleteFile(*itFolder, *itFile);
             // the currentlyDeleting list is used to prevent loading items which
@@ -1908,13 +1917,14 @@ void CameraUI::slotDeleted(const QString& folder, const QString& file, bool stat
     }
 
     int curr = d->statusProgressBar->progressValue();
-    d->statusProgressBar->setProgressTotalSteps(curr+1);
+    d->statusProgressBar->setProgressTotalSteps(curr + 1);
     refreshFreeSpace();
 }
 
 void CameraUI::slotFileView()
 {
     CamItemInfo info = d->view->firstItemSelected();
+
     if (!info.isNull())
     {
         slotFileView(info);
@@ -1929,6 +1939,7 @@ void CameraUI::slotFileView(const CamItemInfo& info)
 void CameraUI::slotMetadata(const QString& folder, const QString& file, const DMetadata& meta)
 {
     CamItemInfo info = d->view->findItemInfo(folder, file);
+
     if (!info.isNull())
     {
         d->rightSideBar->itemChanged(info, meta);
@@ -2049,7 +2060,7 @@ void CameraUI::slotEditKeys()
 {
     KShortcutsDialog dialog(KShortcutsEditor::AllActions,
                             KShortcutsEditor::LetterShortcutsAllowed, this);
-    dialog.addCollection( actionCollection(), i18n( "General" ) );
+    dialog.addCollection(actionCollection(), i18n("General"));
     dialog.configure();
 }
 
@@ -2083,7 +2094,7 @@ void CameraUI::slotToggleFullScreen()
 {
     if (d->fullScreen) // out of fullscreen
     {
-        setWindowState( windowState() & ~Qt::WindowFullScreen ); // reset
+        setWindowState(windowState() & ~Qt::WindowFullScreen);   // reset
 
         slotShowMenuBar();
         statusBar()->show();
@@ -2123,7 +2134,7 @@ void CameraUI::slotToggleFullScreen()
 
             QList<KToolBar*> toolbars = toolBars();
             KToolBar* mainToolbar = 0;
-            foreach(KToolBar* toolbar, toolbars)
+            foreach(KToolBar * toolbar, toolbars)
             {
                 if (toolbar->objectName() == "ToolBar")
                 {
@@ -2133,22 +2144,22 @@ void CameraUI::slotToggleFullScreen()
             }
 
             // add fullscreen action if necessary
-            if ( mainToolbar && !mainToolbar->actions().contains(d->fullScreenAction) )
+            if (mainToolbar && !mainToolbar->actions().contains(d->fullScreenAction))
             {
                 mainToolbar->addAction(d->fullScreenAction);
-                d->removeFullScreenButton=true;
+                d->removeFullScreenButton = true;
             }
             else
             {
                 // If FullScreen button is enabled in toolbar settings,
                 // we shall not remove it when leaving of fullscreen mode.
-                d->removeFullScreenButton=false;
+                d->removeFullScreenButton = false;
             }
         }
 
         d->rightSideBar->backup();
 
-        setWindowState( windowState() | Qt::WindowFullScreen ); // set
+        setWindowState(windowState() | Qt::WindowFullScreen);   // set
         d->fullScreen = true;
     }
 }
@@ -2181,7 +2192,7 @@ void CameraUI::hideToolBars()
 
 void CameraUI::slotCameraFreeSpaceInfo(unsigned long kBSize, unsigned long kBAvail)
 {
-    d->cameraFreeSpace->addInformation(kBSize, kBSize-kBAvail, kBAvail, QString());
+    d->cameraFreeSpace->addInformation(kBSize, kBSize - kBAvail, kBAvail, QString());
 }
 
 bool CameraUI::cameraDeleteSupport() const

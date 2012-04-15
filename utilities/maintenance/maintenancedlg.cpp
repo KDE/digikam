@@ -130,7 +130,7 @@ MaintenanceDlg::MaintenanceDlg(QWidget* parent)
 {
     setHelp("digikam");
     setCaption(i18n("Maintenance"));
-    setButtons(Ok|Help|Cancel);
+    setButtons(Ok | Help | Cancel);
     setDefaultButton(Cancel);
 
     QWidget* page      = new QWidget(this);
@@ -280,7 +280,9 @@ void MaintenanceDlg::readSettings()
     d->faceScannedHandling->setCurrentIndex(group.readEntry(d->configFaceScannedHandling, (int)prm.faceSettings.alreadyScannedHandling));
 
     for (int i = MaintenanceDlgPriv::NewItems ; i < MaintenanceDlgPriv::Stretch ; ++i)
+    {
         slotItemToggled(i, d->expanderBox->isChecked(i));
+    }
 }
 
 void MaintenanceDlg::writeSettings()
@@ -305,23 +307,28 @@ void MaintenanceDlg::writeSettings()
 
 void MaintenanceDlg::slotItemToggled(int index, bool b)
 {
-    switch(index)
+    switch (index)
     {
         case MaintenanceDlgPriv::Thumbnails:
             d->scanThumbs->setEnabled(b);
             break;
+
         case MaintenanceDlgPriv::FingerPrints:
             d->scanFingerPrints->setEnabled(b);
             break;
+
         case MaintenanceDlgPriv::Duplicates:
             d->hbox->setEnabled(b);
             break;
+
         case MaintenanceDlgPriv::Metadata:
             d->hbox2->setEnabled(b);
             break;
+
         case MaintenanceDlgPriv::FaceDetection:
             d->hbox3->setEnabled(b);
             break;
+
         default :  // NewItems
             break;
     }

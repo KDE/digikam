@@ -88,11 +88,11 @@ CamItemInfo CameraItem::info() const
 void CameraItem::setThumb(const QPixmap& pix, bool hasThumb)
 {
     int iconSize = treeWidget()->iconSize().width();
-    QPixmap pixmap(iconSize+2, iconSize+2);
+    QPixmap pixmap(iconSize + 2, iconSize + 2);
     pixmap.fill(Qt::transparent);
     QPainter p(&pixmap);
-    p.drawPixmap((pixmap.width()/2)  - (pix.width()/2),
-                 (pixmap.height()/2) - (pix.height()/2), pix);
+    p.drawPixmap((pixmap.width() / 2)  - (pix.width() / 2),
+                 (pixmap.height() / 2) - (pix.height() / 2), pix);
 
     QIcon icon = QIcon(pixmap);
     //  We make sure the preview icon stays the same regardless of the role
@@ -214,7 +214,7 @@ void CameraMessageBox::informationList(CameraThumbsCtrl* ctrl,
 
     KDialog* dialog = new KDialog(parent, Qt::Dialog);
     dialog->setCaption(caption.isEmpty() ? i18n("Information") : caption);
-    dialog->setButtons(KDialog::Ok );
+    dialog->setButtons(KDialog::Ok);
     dialog->setObjectName("information");
     dialog->setModal(true);
     dialog->setDefaultButton(KDialog::Ok);
@@ -332,10 +332,12 @@ int CameraMessageBox::createMessageBox(CameraThumbsCtrl* ctrl,
     //--------------------------------------------------------------------------------
 
     QPointer<QCheckBox> checkbox = 0;
+
     if (!ask.isEmpty())
     {
         checkbox = new QCheckBox(ask, mainWidget);
         mainLayout->addWidget(checkbox);
+
         if (checkboxReturn)
         {
             checkbox->setChecked(*checkboxReturn);
@@ -347,6 +349,7 @@ int CameraMessageBox::createMessageBox(CameraThumbsCtrl* ctrl,
     //--------------------------------------------------------------------------------
 
     KDialog::ButtonCode defaultCode = dialog->defaultButton();
+
     if (defaultCode != KDialog::NoDefault)
     {
         dialog->setButtonFocus(defaultCode);
@@ -358,12 +361,13 @@ int CameraMessageBox::createMessageBox(CameraThumbsCtrl* ctrl,
     QPointer<KDialog> guardedDialog = dialog;
 
     const int result = guardedDialog->exec();
+
     if (checkbox && checkboxReturn)
     {
         *checkboxReturn = checkbox->isChecked();
     }
 
-    delete (KDialog*) guardedDialog;
+    delete(KDialog*) guardedDialog;
     return result;
 }
 

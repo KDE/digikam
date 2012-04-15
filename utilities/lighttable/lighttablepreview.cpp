@@ -76,7 +76,7 @@ void LightTablePreview::setDragAndDropMessage()
         QPainter p(&pix);
         p.setPen(QPen(kapp->palette().color(QPalette::Text)));
         p.drawText(0, 0, pix.width(), pix.height(),
-                   Qt::AlignCenter|Qt::TextWordWrap,
+                   Qt::AlignCenter | Qt::TextWordWrap,
                    msg);
         p.end();
         previewItem()->setImage(DImg(pix.toImage()));
@@ -85,12 +85,18 @@ void LightTablePreview::setDragAndDropMessage()
 
 void LightTablePreview::dragEnterEvent(QDragEnterEvent* e)
 {
-    if (dragEventWrapper(e->mimeData())) e->accept();
+    if (dragEventWrapper(e->mimeData()))
+    {
+        e->accept();
+    }
 }
 
 void LightTablePreview::dragMoveEvent(QDragMoveEvent* e)
 {
-    if (dragEventWrapper(e->mimeData())) e->accept();
+    if (dragEventWrapper(e->mimeData()))
+    {
+        e->accept();
+    }
 }
 
 bool LightTablePreview::dragEventWrapper(const QMimeData* data) const
@@ -109,6 +115,7 @@ bool LightTablePreview::dragEventWrapper(const QMimeData* data) const
             return true;
         }
     }
+
     return false;
 }
 

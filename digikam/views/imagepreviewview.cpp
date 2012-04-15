@@ -7,7 +7,7 @@
  * Description : a embedded view to show the image preview widget.
  *
  * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at googlemail dot com>
+ * Copyright (C) 2009-2012 by Andi Clemens <andi dot clemens at googlemail dot com>
  * Copyright (C) 2010-2011 by Aditya Bhatt <adityabhatt1991 at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -378,12 +378,6 @@ void ImagePreviewView::showContextMenu(const ImageInfo& info, QGraphicsSceneCont
 
     cmhelper.addAction("full_screen");
     cmhelper.addSeparator();
-    // --------------------------------------------------------
-
-    cmhelper.addAction(d->peopleToggleAction, true);
-    cmhelper.addAction(d->addPersonAction, true);
-    cmhelper.addAction(d->forgetFacesAction, true);
-    cmhelper.addSeparator();
 
     // --------------------------------------------------------
 
@@ -395,6 +389,13 @@ void ImagePreviewView::showContextMenu(const ImageInfo& info, QGraphicsSceneCont
         cmhelper.addGotoMenu(idList);
         cmhelper.addSeparator();
     }
+
+    // --------------------------------------------------------
+
+    cmhelper.addAction(d->peopleToggleAction, true);
+    cmhelper.addAction(d->addPersonAction, true);
+    cmhelper.addAction(d->forgetFacesAction, true);
+    cmhelper.addSeparator();
 
     // --------------------------------------------------------
 

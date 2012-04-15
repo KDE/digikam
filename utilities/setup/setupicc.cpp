@@ -521,13 +521,13 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog)
             this, SLOT(processLcmsUrl(QString)));
 
     connect(d->infoProofProfiles, SIGNAL(clicked()),
-            this, SLOT(slotClickedProof()) );
+            this, SLOT(slotClickedProof()));
 
     connect(d->infoInProfiles, SIGNAL(clicked()),
-            this, SLOT(slotClickedIn()) );
+            this, SLOT(slotClickedIn()));
 
     connect(d->infoMonitorProfiles, SIGNAL(clicked()),
-            this, SLOT(slotClickedMonitor()) );
+            this, SLOT(slotClickedMonitor()));
 
     connect(d->infoWorkProfiles, SIGNAL(clicked()),
             this, SLOT(slotClickedWork()));

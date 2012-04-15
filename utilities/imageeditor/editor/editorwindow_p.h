@@ -313,12 +313,12 @@ public:
 #else
         setCategoryDrawer(new KCategoryDrawerV2);       // deprecated, but needed for KDE 4.4 compatibility
 #endif
-        setSelectionMode( QAbstractItemView::SingleSelection );
+        setSelectionMode(QAbstractItemView::SingleSelection);
 
-        setMouseTracking( true );
-        viewport()->setAttribute( Qt::WA_Hover );
+        setMouseTracking(true);
+        viewport()->setAttribute(Qt::WA_Hover);
 
-        setFrameShape( QFrame::NoFrame );
+        setFrameShape(QFrame::NoFrame);
     }
 
     void adjustGridSize()

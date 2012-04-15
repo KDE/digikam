@@ -258,7 +258,7 @@ void SearchGroup::read(SearchXmlCachingReader& reader)
             SearchFieldGroup* fieldGroup = 0;
             foreach(fieldGroup, m_fieldGroups)
             {
-                if ( (field = fieldGroup->fieldForName(name)) )
+                if ((field = fieldGroup->fieldForName(name)))
                 {
                     break;
                 }
@@ -633,6 +633,7 @@ void SearchGroupLabel::adjustOperatorOptions()
             }
 
             break;
+
         case SearchXml::AndNot:
         case SearchXml::OrNot:
 

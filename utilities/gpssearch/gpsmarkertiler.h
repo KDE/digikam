@@ -77,7 +77,7 @@ public:
 
     virtual Tile* tileNew();
     virtual void tileDelete(Tile* const tile);
-    virtual void prepareTiles(const KGeoMap::GeoCoordinates& upperLeft,const KGeoMap::GeoCoordinates& lowerRight, int level);
+    virtual void prepareTiles(const KGeoMap::GeoCoordinates& upperLeft, const KGeoMap::GeoCoordinates& lowerRight, int level);
     virtual void regenerateTiles();
     virtual KGeoMap::AbstractMarkerTiler::Tile* getTile(const KGeoMap::TileIndex& tileIndex, const bool stopIfEmpty = false);
     virtual int getTileMarkerCount(const KGeoMap::TileIndex& tileIndex);

@@ -94,8 +94,11 @@ void CameraFolderView::addRootFolder(const QString& folder, int nbItems, const Q
 {
     d->rootFolder = new CameraFolderItem(d->virtualFolder, folder, folder, pixmap);
     d->rootFolder->setExpanded(true);
+
     if (nbItems != -1)
+    {
         d->rootFolder->setCount(nbItems);
+    }
 }
 
 CameraFolderItem* CameraFolderView::addFolder(const QString& folder, const QString& subFolder,
@@ -136,7 +139,7 @@ CameraFolderItem* CameraFolderView::addFolder(const QString& folder, const QStri
 CameraFolderItem* CameraFolderView::findFolder(const QString& folderPath)
 {
     QTreeWidgetItemIterator it(this);
-    
+
     while (*it)
     {
         CameraFolderItem* lvItem = dynamic_cast<CameraFolderItem*>(*it);

@@ -7,6 +7,7 @@
  * Description : batch thumbnails generator
  *
  * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2012 by Andi Clemens <andi dot clemens at googlemail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -88,8 +89,6 @@ ThumbsGenerator::ThumbsGenerator(bool rebuildAll, int albumId, ProgressItem* par
             this, SLOT(slotGotThumbnail(LoadingDescription, QPixmap)));
 
     setLabel(i18n("Thumbs"));
-
-    QTimer::singleShot(500, this, SLOT(slotStart()));
 }
 
 ThumbsGenerator::~ThumbsGenerator()
@@ -114,7 +113,7 @@ void ThumbsGenerator::slotStart()
     }
 
     for (AlbumList::const_iterator it = palbumList.constBegin();
-         !canceled() && (it != palbumList.constEnd()); ++it )
+         !canceled() && (it != palbumList.constEnd()); ++it)
     {
         if (!(*it))
         {
@@ -195,21 +194,13 @@ void ThumbsGenerator::processOne()
 
 void ThumbsGenerator::slotGotThumbnail(const LoadingDescription& desc, const QPixmap& pix)
 {
-    if (canceled())
-    {
-        slotCancel();
-        return;
-    }
-
     if (d->allPicturesPath.isEmpty())
     {
-        slotDone();
         return;
     }
 
     if (d->allPicturesPath.first() != desc.filePath)
     {
-        slotCancel();
         return;
     }
 

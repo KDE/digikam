@@ -39,7 +39,7 @@ class AssignTemplate : public BatchTool
 
 public:
 
-    AssignTemplate(QObject* parent=0);
+    AssignTemplate(QObject* parent = 0);
     ~AssignTemplate();
 
     BatchToolSettings defaultSettings();

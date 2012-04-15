@@ -39,7 +39,7 @@ class RemoveMetadata : public BatchTool
 
 public:
 
-    RemoveMetadata(QObject* parent=0);
+    RemoveMetadata(QObject* parent = 0);
     ~RemoveMetadata();
 
     BatchToolSettings defaultSettings();
@@ -53,7 +53,7 @@ private:
 
     enum RemoveAction
     {
-        Tiny=0,
+        Tiny = 0,
         Small,
         Medium,
         Big,

@@ -55,34 +55,34 @@ public:
 
     enum GuideToolMode
     {
-        HVGuideMode=0,
+        HVGuideMode = 0,
         PickColorMode
     };
 
     enum ColorPointSrc
     {
-        OriginalImage=0,
+        OriginalImage = 0,
         PreviewImage,
         TargetPreviewImage
     };
 
 public:
 
-    explicit ImageGuideWidget(QWidget* parent=0,
-                              bool spotVisible=true, int guideMode=PickColorMode,
-                              const QColor& guideColor=Qt::red, int guideSize=1,
-                              bool blink=false, bool useImageSelection=false);
+    explicit ImageGuideWidget(QWidget* parent = 0,
+                              bool spotVisible = true, int guideMode = PickColorMode,
+                              const QColor& guideColor = Qt::red, int guideSize = 1,
+                              bool blink = false, bool useImageSelection = false);
     ~ImageGuideWidget();
 
     ImageIface* imageIface() const;
 
     QPoint getSpotPosition() const;
     DColor getSpotColor(int getColorFrom) const;
-    void   setSpotVisible(bool spotVisible, bool blink=false);
+    void   setSpotVisible(bool spotVisible, bool blink = false);
     int    previewMode() const;
     void   resetSpotPosition();
     void   updatePreview();
-    void   setPoints(const QPolygon& p, bool drawLine=false);
+    void   setPoints(const QPolygon& p, bool drawLine = false);
     void   resetPoints();
 
     void   setPaintColor(const QColor& color);

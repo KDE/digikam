@@ -7,6 +7,7 @@
  * Description : maintenance tool
  *
  * Copyright (C) 2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2012 by Andi Clemens <andi dot clemens at googlemail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -71,6 +72,11 @@ void MaintenanceTool::setNotificationEnabled(bool b)
     d->notification = b;
 }
 
+void MaintenanceTool::start()
+{
+    slotStart();
+}
+
 void MaintenanceTool::slotStart()
 {
     d->duration.start();
@@ -79,12 +85,13 @@ void MaintenanceTool::slotStart()
 void MaintenanceTool::slotDone()
 {
     QTime now, t = now.addMSecs(d->duration.elapsed());
+
     if (d->notification)
     {
         // Pop-up a message to bring user when all is done.
         KNotificationWrapper(id(),
-                            i18n("Process is done.\nDuration: %1", t.toString()),
-                            kapp->activeWindow(), label());
+                             i18n("Process is done.\nDuration: %1", t.toString()),
+                             kapp->activeWindow(), label());
     }
 
     emit signalComplete();

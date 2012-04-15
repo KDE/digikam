@@ -40,7 +40,7 @@ class NoiseReduction : public BatchTool
 
 public:
 
-    NoiseReduction(QObject* parent=0);
+    NoiseReduction(QObject* parent = 0);
     ~NoiseReduction();
 
     BatchToolSettings defaultSettings();

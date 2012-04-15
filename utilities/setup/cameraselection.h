@@ -49,7 +49,7 @@ class CameraSelection : public KDialog
 
 public:
 
-    CameraSelection( QWidget* parent = 0 );
+    CameraSelection(QWidget* parent = 0);
     ~CameraSelection();
 
     void setCamera(const QString& title, const QString& model,

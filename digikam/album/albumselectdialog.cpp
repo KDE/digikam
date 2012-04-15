@@ -76,7 +76,6 @@ AlbumSelectDialog::AlbumSelectDialog(QWidget* parent, PAlbum* albumToSelect, con
     setButtons(Help|Ok|Cancel);
     setDefaultButton(Ok);
     setHelp("targetalbumdialog.anchor", "digikam");
-    enableButtonOk(false);
 
     // -------------------------------------------------------------
 

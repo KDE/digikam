@@ -85,7 +85,7 @@ void NormalSearchTreeView::addCustomContextMenuActions(ContextMenuHelper& cmh,
 
     EditableSearchTreeView::addCustomContextMenuActions(cmh, album);
 
-    SAlbum* salbum = dynamic_cast<SAlbum*> (album);
+    SAlbum* salbum = dynamic_cast<SAlbum*>(album);
 
     d->editAction->setEnabled(salbum);
     cmh.addAction(d->editAction);
@@ -96,7 +96,7 @@ void NormalSearchTreeView::handleCustomContextMenuAction(QAction* action, AlbumP
 {
 
     Album* a = album;
-    SAlbum* salbum = dynamic_cast<SAlbum*> (a);
+    SAlbum* salbum = dynamic_cast<SAlbum*>(a);
 
     if (action == d->newAction && salbum)
     {

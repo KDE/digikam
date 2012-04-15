@@ -7,6 +7,7 @@
  * Description : new items finder.
  *
  * Copyright (C) 2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2012 by Andi Clemens <andi dot clemens at googlemail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -70,8 +71,6 @@ NewItemsFinder::NewItemsFinder(FinderMode mode, const QStringList& foldersToScan
 
     d->mode          = mode;
     d->foldersToScan = foldersToScan;
-
-    QTimer::singleShot(500, this, SLOT(slotStart()));
 }
 
 NewItemsFinder::~NewItemsFinder()
@@ -83,7 +82,7 @@ void NewItemsFinder::slotStart()
 {
     MaintenanceTool::slotStart();
 
-    switch(d->mode)
+    switch (d->mode)
     {
         case ScanDeferredFiles:
         {
@@ -92,6 +91,7 @@ void NewItemsFinder::slotStart()
             ScanController::instance()->allowToScanDeferredFiles();
             break;
         }
+
         case CompleteCollectionScan:
         {
             kDebug() << "scan mode: CompleteCollectionScan";
@@ -99,6 +99,7 @@ void NewItemsFinder::slotStart()
             ScanController::instance()->completeCollectionScan();
             break;
         }
+
         case ScheduleCollectionScan:
         {
             kDebug() << "scan mode: ScheduleCollectionScan";

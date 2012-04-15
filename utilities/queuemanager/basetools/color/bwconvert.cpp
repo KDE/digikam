@@ -81,11 +81,11 @@ BatchToolSettings BWConvert::defaultSettings()
     BatchToolSettings prm;
     BWSepiaContainer defaultPrm = m_settingsView->defaultSettings();
 
-    prm.insert("filmType",   (int)defaultPrm.filmType);
+    prm.insert("filmType", (int)defaultPrm.filmType);
     prm.insert("filterType", (int)defaultPrm.filterType);
-    prm.insert("toneType",   (int)defaultPrm.toneType);
-    prm.insert("contrast",   (double)defaultPrm.bcgPrm.contrast);
-    prm.insert("strength",   (double)defaultPrm.strength);
+    prm.insert("toneType", (int)defaultPrm.toneType);
+    prm.insert("contrast", (double)defaultPrm.bcgPrm.contrast);
+    prm.insert("strength", (double)defaultPrm.strength);
     prm.insert("curvesType", defaultPrm.curvesPrm.curvesType);
     prm.insert("curves",     defaultPrm.curvesPrm.values[LuminosityChannel]);
 
@@ -112,12 +112,12 @@ void BWConvert::slotSettingsChanged()
     BatchToolSettings prm;
     BWSepiaContainer currentPrm = m_settingsView->settings();
 
-    prm.insert("filmType",    (int)currentPrm.filmType);
-    prm.insert("filterType",  (int)currentPrm.filterType);
-    prm.insert("toneType",    (int)currentPrm.toneType);
-    prm.insert("contrast",    (double)currentPrm.bcgPrm.contrast);
-    prm.insert("strength",    (double)currentPrm.strength);
-    prm.insert("curvesType",  (int)currentPrm.curvesPrm.curvesType);
+    prm.insert("filmType", (int)currentPrm.filmType);
+    prm.insert("filterType", (int)currentPrm.filterType);
+    prm.insert("toneType", (int)currentPrm.toneType);
+    prm.insert("contrast", (double)currentPrm.bcgPrm.contrast);
+    prm.insert("strength", (double)currentPrm.strength);
+    prm.insert("curvesType", (int)currentPrm.curvesPrm.curvesType);
     prm.insert("curves",     currentPrm.curvesPrm.values[LuminosityChannel]);
 
     BatchTool::slotSettingsChanged(prm);
@@ -143,12 +143,12 @@ bool BWConvert::toolOperations()
     curves.values[LuminosityChannel] = settings()["curves"].value<QPolygon>();
     prm.curvesPrm                    = curves;
 
-/*
-    // NOTE: For testing
-    CurvesFilter bw(&image(), 0L, prm.curvesPrm);
-    bw.startFilterDirectly();
-    image().putImageData(bw.getTargetImage().bits());
-*/
+    /*
+        // NOTE: For testing
+        CurvesFilter bw(&image(), 0L, prm.curvesPrm);
+        bw.startFilterDirectly();
+        image().putImageData(bw.getTargetImage().bits());
+    */
 
     BWSepiaFilter bw(&image(), 0L, prm);
     bw.startFilterDirectly();

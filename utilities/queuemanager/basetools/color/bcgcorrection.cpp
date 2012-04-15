@@ -67,8 +67,8 @@ BatchToolSettings BCGCorrection::defaultSettings()
     BCGContainer defaultPrm = m_settingsView->defaultSettings();
 
     prm.insert("Brightness", (double)defaultPrm.brightness);
-    prm.insert("Contrast",   (double)defaultPrm.contrast);
-    prm.insert("Gamma",      (double)defaultPrm.gamma);
+    prm.insert("Contrast", (double)defaultPrm.contrast);
+    prm.insert("Gamma", (double)defaultPrm.gamma);
 
     return prm;
 }
@@ -88,8 +88,8 @@ void BCGCorrection::slotSettingsChanged()
     BCGContainer currentPrm = m_settingsView->settings();
 
     prm.insert("Brightness", (double)currentPrm.brightness);
-    prm.insert("Contrast",   (double)currentPrm.contrast);
-    prm.insert("Gamma",      (double)currentPrm.gamma);
+    prm.insert("Contrast", (double)currentPrm.contrast);
+    prm.insert("Gamma", (double)currentPrm.gamma);
 
     BatchTool::slotSettingsChanged(prm);
 }

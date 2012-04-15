@@ -77,7 +77,7 @@ QRect RatingStarDrawer::drawStarPolygons(QPainter* painter, int numberOfStars) c
         drawnRect.adjust(0, 0, 0, starPolygonSize.height());
     }
 
-    for (int i=0; i<numberOfStars; ++i)
+    for (int i = 0; i < numberOfStars; ++i)
     {
         painter->drawPolygon(polygon, Qt::WindingFill);
         polygon.translate(starPolygonSize.width(), 0);
@@ -94,7 +94,7 @@ RatingComboBoxDelegate::RatingComboBoxDelegate(QObject* parent)
 {
 }
 
-QSize RatingComboBoxDelegate::sizeHint ( const QStyleOptionViewItem& option, const QModelIndex& index ) const
+QSize RatingComboBoxDelegate::sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
     QVariant value = index.data(Qt::DisplayRole);
 
@@ -147,12 +147,12 @@ void RatingComboBoxDelegate::drawRating(QPainter* painter, const QRect& rect, in
 
     painter->setBrush(kapp->palette().color(QPalette::Link));
     // move painter while drawing polygons
-    painter->translate( rect.topLeft() );
+    painter->translate(rect.topLeft());
     QRect drawRect = drawStarPolygons(painter, rating);
     painter->translate(drawRect.topRight());
 
     painter->setBrush(QBrush());
-    drawStarPolygons(painter, RatingMax-rating);
+    drawStarPolygons(painter, RatingMax - rating);
 
     painter->restore();
 }
@@ -203,8 +203,10 @@ QVariant RatingComboBoxModel::ratingValueToDisplay(RatingComboBox::RatingValue v
     {
         case RatingComboBox::Null:
             return i18n("(No Value Selected)");
+
         case RatingComboBox::NoRating:
             return i18n("No Rating assigned");
+
         case RatingComboBox::Rating0:
         case RatingComboBox::Rating1:
         case RatingComboBox::Rating2:

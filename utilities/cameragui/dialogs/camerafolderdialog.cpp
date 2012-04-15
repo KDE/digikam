@@ -65,8 +65,8 @@ CameraFolderDialog::CameraFolderDialog(QWidget* parent, const QMap<QString, int>
     : KDialog(parent), d(new CameraFolderDialogPriv)
 {
     setHelp("camerainterface.anchor", "digikam");
-    setCaption(i18n("%1 - Select Camera Folder",cameraName));
-    setButtons(Help|Ok|Cancel);
+    setCaption(i18n("%1 - Select Camera Folder", cameraName));
+    setButtons(Help | Ok | Cancel);
     setDefaultButton(Ok);
     enableButtonOk(false);
     setModal(true);
@@ -110,14 +110,14 @@ CameraFolderDialog::CameraFolderDialog(QWidget* parent, const QMap<QString, int>
 
             if (folder != QString("/") && !folder.isEmpty())
             {
-                QString root = folder.section( '/', 0, -2 );
+                QString root = folder.section('/', 0, -2);
 
                 if (root.isEmpty())
                 {
                     root = QString("/");
                 }
 
-                QString sub = folder.section( '/', -1 );
+                QString sub = folder.section('/', -1);
                 kDebug() << "Camera folder: '" << folder << "' (root='" << root << "', sub='" << sub << "')";
                 d->folderView->addFolder(root, sub, it.value());
             }
@@ -130,7 +130,7 @@ CameraFolderDialog::CameraFolderDialog(QWidget* parent, const QMap<QString, int>
     resize(500, 500);
 
     // make sure the ok button is properly set up
-    enableButtonOk( d->folderView->currentItem() != 0 );
+    enableButtonOk(d->folderView->currentItem() != 0);
 }
 
 CameraFolderDialog::~CameraFolderDialog()

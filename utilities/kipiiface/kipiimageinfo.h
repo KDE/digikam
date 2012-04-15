@@ -50,7 +50,7 @@
 
 namespace KIPI
 {
-    class Interface;
+class Interface;
 }
 
 namespace Digikam
@@ -76,7 +76,7 @@ public:
     void                    delAttributes(const QStringList& res);
     void                    clearAttributes();
 
-/// DEPRECATED METHODS with libkipi 1.5.0. Use attributes()/addAttributes() methods instead.
+    /// DEPRECATED METHODS with libkipi 1.5.0. Use attributes()/addAttributes() methods instead.
 
 #if KIPI_VERSION < 0x010500
 
@@ -96,7 +96,7 @@ public:
     void      setAngle(int orientation);
 
     QDateTime time(KIPI::TimeSpec);
-    void      setTime(const QDateTime& date, KIPI::TimeSpec spec = KIPI::FromInfo );
+    void      setTime(const QDateTime& date, KIPI::TimeSpec spec = KIPI::FromInfo);
 
 #endif // KIPI_VERSION < 0x010500
 

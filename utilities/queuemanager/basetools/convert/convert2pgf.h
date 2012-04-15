@@ -39,7 +39,7 @@ class Convert2PGF : public BatchTool
 
 public:
 
-    Convert2PGF(QObject* parent=0);
+    Convert2PGF(QObject* parent = 0);
     ~Convert2PGF();
 
     QString outputSuffix() const;

@@ -39,7 +39,7 @@ class Rotate : public BatchTool
 
 public:
 
-    Rotate(QObject* parent=0);
+    Rotate(QObject* parent = 0);
     ~Rotate();
 
     BatchToolSettings defaultSettings();

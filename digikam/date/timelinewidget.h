@@ -7,6 +7,7 @@
  * Description : a widget to display date and time statistics of pictures
  *
  * Copyright (C) 2007-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2011-2012 by Andi Clemens <andi dot clemens at googlemail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -58,20 +59,20 @@ public:
 
     enum SelectionMode
     {
-        Unselected=0,      // No selection.
+        Unselected = 0,    // No selection.
         FuzzySelection,    // Partially selected.
         Selected           // Fully selected.
     };
 
     enum ScaleMode
     {
-        LinScale=0,        // Linear scale.
+        LinScale = 0,      // Linear scale.
         LogScale           // Logarithmic scale.
     };
 
 public:
 
-    TimeLineWidget(QWidget* parent=0);
+    TimeLineWidget(QWidget* parent = 0);
     ~TimeLineWidget();
 
     void      setTimeUnit(TimeUnit timeUnit);
@@ -120,7 +121,7 @@ private:
 
     int           maxCount() const;
     int           indexForDateTime(const QDateTime& date) const;
-    int           statForDateTime(const QDateTime& dt, SelectionMode* selected) const;
+    int           statForDateTime(const QDateTime& dt, SelectionMode& selected) const;
     void          setRefDateTime(const QDateTime& dateTime);
 
     void          paintEvent(QPaintEvent*);
@@ -130,7 +131,7 @@ private:
     void          mouseMoveEvent(QMouseEvent*);
     void          mouseReleaseEvent(QMouseEvent*);
 
-    QDateTime     dateTimeForPoint(const QPoint& pt, bool* isOnSelectionArea);
+    QDateTime     dateTimeForPoint(const QPoint& pt, bool& isOnSelectionArea);
     QDateTime     firstDayOfWeek(int year, int weekNumber) const;
 
     void          resetSelection();
@@ -147,6 +148,8 @@ private:
     void          paintItem(QPainter& p, const QRect& barRect,
                             const QDateTime& ref, const int& separatorPosition,
                             const QColor& dateColor, const QColor& subDateColor);
+
+    void          handleSelectionRange(QDateTime& selEndDateTime);
 
 private:
 

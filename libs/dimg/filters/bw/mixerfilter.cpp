@@ -72,8 +72,8 @@ void MixerFilter::filterImage()
     int  progress;
 
     register uint i;
-    double   rnorm;    // red channel normalizer use in RGB mode.
-    double   mnorm;    // monochrome normalizer used in Monochrome mode.
+    double   rnorm = 1;    // red channel normalizer use in RGB mode.
+    double   mnorm = 1;    // monochrome normalizer used in Monochrome mode.
 
     if (m_settings.bMonochrome)
     {

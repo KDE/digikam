@@ -245,6 +245,7 @@ void FaceGroup::itemStateChanged(int itemState)
         case DImgPreviewItem::ImageLoadingFailed:
             d->visibilityController->hide();
             break;
+
         case DImgPreviewItem::ImageLoaded:
 
             if (d->state == FacesLoaded)
@@ -431,7 +432,7 @@ QList<QGraphicsItem*> FaceGroup::FaceGroupPriv::hotItems(const QPointF& scenePos
 
     const int distance = 15;
 
-    QRectF hotSceneRect = QRectF(scenePos, QSize(0,0)).adjusted(-distance, -distance, distance, distance);
+    QRectF hotSceneRect = QRectF(scenePos, QSize(0, 0)).adjusted(-distance, -distance, distance, distance);
 
     QList<QGraphicsItem*> closeItems = view->scene()->items(hotSceneRect, Qt::IntersectsItemBoundingRect);
 
@@ -559,8 +560,10 @@ AssignNameWidget::Mode FaceGroup::FaceGroupPriv::assignWidgetMode(DatabaseFace::
         case DatabaseFace::UnknownName:
         case DatabaseFace::UnconfirmedName:
             return AssignNameWidget::UnconfirmedEditMode;
+
         case DatabaseFace::ConfirmedName:
             return AssignNameWidget::ConfirmedMode;
+
         default:
             return AssignNameWidget::InvalidMode;
     }
@@ -644,7 +647,7 @@ void FaceGroup::slotAssigned(const TaggingAction& action, const ImageInfo&, cons
     TagRegion currentRegion = TagRegion(item->originalRect());
 
     if (!face.isConfirmedName() || face.region() != currentRegion
-        || action.shallCreateNewTag() || (action.shallAssignTag() && action.tagId() != face.tagId()) )
+        || action.shallCreateNewTag() || (action.shallAssignTag() && action.tagId() != face.tagId()))
     {
         int tagId = 0;
 
@@ -712,7 +715,7 @@ void FaceGroup::addFace()
     d->manuallyAddWrapItem = new ClickDragReleaseItem(d->view->previewItem());
     d->manuallyAddWrapItem->setFocus();
     d->view->setFocus();
-    
+
     connect(d->manuallyAddWrapItem, SIGNAL(started(QPointF)),
             this, SLOT(slotAddItemStarted(QPointF)));
 

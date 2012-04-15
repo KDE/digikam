@@ -138,7 +138,7 @@ ColorCorrectionDlg::ColorCorrectionDlg(Mode mode, const DImg& preview,
 
     setCaption(caption);
 
-    setButtons(Help|Ok|Cancel);
+    setButtons(Help | Ok | Cancel);
     setDefaultButton(Ok);
     setButtonFocus(Ok);
     setModal(true);
@@ -265,7 +265,7 @@ QLayout* ColorCorrectionDlg::createProfilesInfo() const
         vbox->addWidget(imageProfInfo, 0, Qt::AlignLeft);
 
         connect(imageProfInfo, SIGNAL(clicked()),
-                this, SLOT(slotImageProfInfo()) );
+                this, SLOT(slotImageProfInfo()));
     }
 
     QLabel* workspaceProfileTitle   = new QLabel(i18n("Working Color Space:"));
@@ -279,7 +279,7 @@ QLayout* ColorCorrectionDlg::createProfilesInfo() const
     vbox->addWidget(workspaceProfInfo, 0, Qt::AlignLeft);
 
     connect(workspaceProfInfo, SIGNAL(clicked()),
-            this, SLOT(slotWorkspaceProfInfo()) );
+            this, SLOT(slotWorkspaceProfInfo()));
 
     return vbox;
 }

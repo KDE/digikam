@@ -458,7 +458,7 @@ void GPSSearchView::slotAlbumSelected(Album* a)
 {
     /// @todo This re-sets the region selection unwantedly...
 
-    SAlbum* const salbum = dynamic_cast<SAlbum*> (a);
+    SAlbum* const salbum = dynamic_cast<SAlbum*>(a);
 
     if (!salbum)
     {
@@ -479,7 +479,7 @@ void GPSSearchView::slotAlbumSelected(Album* a)
         );
 
         /// @todo Currently, invalid coordinates are stored as -200:
-        if (list.at(1)!=-200)
+        if (list.at(1) != -200)
         {
             d->mapSearchWidget->setRegionSelection(coordinates);
             d->gpsMarkerTiler->setRegionSelection(coordinates);
@@ -506,8 +506,8 @@ bool GPSSearchView::checkName(QString& name)
 
     while (!checked)
     {
-        QString label = i18n( "Search name already exists.\n"
-                              "Please enter a new name:" );
+        QString label = i18n("Search name already exists.\n"
+                             "Please enter a new name:");
         bool ok;
         QString newTitle = KInputDialog::getText(i18n("Name exists"), label, name, &ok, this);
 
@@ -535,7 +535,7 @@ bool GPSSearchView::checkAlbum(const QString& name) const
     {
         const SAlbum* const album = (SAlbum*)(*it);
 
-        if ( album->title() == name )
+        if (album->title() == name)
         {
             return false;
         }

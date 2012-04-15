@@ -75,6 +75,7 @@ ADD_DEPENDENCIES(digikamcore digikam-gitversion)
 TARGET_LINK_LIBRARIES(digikamcore
         ${QT_QT3SUPPORT_LIBRARY}
         ${QT_QTSQL_LIBRARY}
+	${QT_QTDECLARATIVE_LIBRARY}
 
         ${KDE4_KDECORE_LIBS}
         ${KDE4_KIO_LIBS}
@@ -250,6 +251,7 @@ SET(digikam_SRCS ${libdimgimagewindow_SRCS}
                  ${libtemplate_SRCS}
                  ${libdatabaseui_SRCS}
                  ${libfacedetection_SRCS}
+		 ${libpresentationview_SRCS}
                  main/main.cpp
 )
 
@@ -266,6 +268,7 @@ KDE4_ADD_EXECUTABLE(digikam ${digikam_SRCS})
 TARGET_LINK_LIBRARIES(digikam
         ${QT_QTSQL_LIBRARY}
         ${QT_QT3SUPPORT_LIBRARY}
+		${QT_QTDECLARATIVE_LIBRARY}
 
         ${KDE4_KPARTS_LIBS}
         ${KDE4_PHONON_LIBS}

@@ -98,6 +98,7 @@ public:
 
     AlbumPropsEditPriv() :
         categoryCombo(0),
+        parentCombo(0),
         titleEdit(0),
         commentsEdit(0),
         datePicker(0),
@@ -106,6 +107,7 @@ public:
     }
 
     KComboBox*   categoryCombo;
+    KComboBox*   parentCombo;
     KLineEdit*   titleEdit;
     KTextEdit*   commentsEdit;
 
@@ -166,6 +168,13 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
     d->categoryCombo->setEditable(true);
     categoryLabel->setBuddy(d->categoryCombo);
 
+    QLabel* parentLabel = new QLabel(page);
+    parentLabel->setText(i18n("Ch&ild Of:"));
+
+    d->parentCombo = new KComboBox(page);
+    parentLabel->setBuddy(d->parentCombo);
+
+
     QLabel* commentsLabel = new QLabel(page);
     commentsLabel->setText(i18n("Ca&ption:"));
 
@@ -188,9 +197,21 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
     QPushButton* dateHighButton = new QPushButton(i18nc("Selects the date of the newest image",
                                                         "Newest"), buttonRow);
 
-    setTabOrder(d->titleEdit, d->categoryCombo);
-    setTabOrder(d->categoryCombo, d->commentsEdit);
-    setTabOrder(d->commentsEdit, d->datePicker);
+    if (create)
+    {
+        setTabOrder(d->titleEdit, d->categoryCombo);
+        setTabOrder(d->categoryCombo, d->parentCombo);
+        setTabOrder(d->parentCombo, d->commentsEdit);
+        setTabOrder(d->commentsEdit, d->datePicker);
+    }
+    else
+    {
+        setTabOrder(d->titleEdit, d->categoryCombo);
+        setTabOrder(d->categoryCombo, d->commentsEdit);
+        setTabOrder(d->commentsEdit, d->datePicker);
+        d->parentCombo->hide();
+        parentLabel->hide();
+    }
     d->commentsEdit->setTabChangesFocus(true);
     d->titleEdit->selectAll();
     d->titleEdit->setFocus();
@@ -205,11 +226,26 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
     grid->addWidget(d->titleEdit,     2, 1, 1, 1);
     grid->addWidget(categoryLabel,    3, 0, 1, 1);
     grid->addWidget(d->categoryCombo, 3, 1, 1, 1);
-    grid->addWidget(commentsLabel,    4, 0, 1, 1, Qt::AlignLeft | Qt::AlignTop);
-    grid->addWidget(d->commentsEdit,  4, 1, 1, 1);
-    grid->addWidget(dateLabel,        5, 0, 1, 1, Qt::AlignLeft | Qt::AlignTop);
-    grid->addWidget(d->datePicker,    5, 1, 1, 1);
-    grid->addWidget(buttonRow,        6, 1, 1, 1);
+
+    if (create)
+    {
+        grid->addWidget(parentLabel,      4, 0, 1, 1);
+        grid->addWidget(d->parentCombo,   4, 1, 1, 1);
+        grid->addWidget(commentsLabel,    5, 0, 1, 1, Qt::AlignLeft | Qt::AlignTop);
+        grid->addWidget(d->commentsEdit,  5, 1, 1, 1);
+        grid->addWidget(dateLabel,        6, 0, 1, 1, Qt::AlignLeft | Qt::AlignTop);
+        grid->addWidget(d->datePicker,    6, 1, 1, 1);
+        grid->addWidget(buttonRow,        7, 1, 1, 1);
+    }
+    else
+    {
+        grid->addWidget(commentsLabel,    4, 0, 1, 1, Qt::AlignLeft | Qt::AlignTop);
+        grid->addWidget(d->commentsEdit,  4, 1, 1, 1);
+        grid->addWidget(dateLabel,        5, 0, 1, 1, Qt::AlignLeft | Qt::AlignTop);
+        grid->addWidget(d->datePicker,    5, 1, 1, 1);
+        grid->addWidget(buttonRow,        6, 1, 1, 1);
+    }
+
     grid->setMargin(0);
     grid->setSpacing(KDialog::spacingHint());
     page->setLayout(grid);
@@ -236,6 +272,8 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
     {
         d->titleEdit->setText(i18n("New Album"));
         d->datePicker->setDate(QDate::currentDate());
+        d->parentCombo->addItem(QString("Selected Album (Default)"));
+        d->parentCombo->addItem(QString("Root"));
     }
     else
     {
@@ -284,6 +322,11 @@ QDate AlbumPropsEdit::date() const
     d->datePicker->dateLineEnterPressed();
 
     return d->datePicker->date();
+}
+
+int AlbumPropsEdit::parent() const
+{
+    return d->parentCombo->currentIndex();
 }
 
 QString AlbumPropsEdit::category() const
@@ -338,7 +381,7 @@ bool AlbumPropsEdit::editProps(PAlbum* album, QString& title,
 }
 
 bool AlbumPropsEdit::createNew(PAlbum* parent, QString& title, QString& comments,
-                               QDate& date, QString& category, QStringList& albumCategories)
+                               QDate& date, QString& category, QStringList& albumCategories, int& parentSelector)
 {
     QPointer<AlbumPropsEdit> dlg = new AlbumPropsEdit(parent, true);
 
@@ -349,6 +392,7 @@ bool AlbumPropsEdit::createNew(PAlbum* parent, QString& title, QString& comments
     date            = dlg->date();
     category        = dlg->category();
     albumCategories = dlg->albumCategories();
+    parentSelector  = dlg->parent();
 
     delete dlg;
     return ok;

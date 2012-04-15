@@ -59,7 +59,7 @@ class Rotate::RotatePriv
 public:
 
     RotatePriv() :
-        CUSTOM_ANGLE(DImg::ROT270+1),
+        CUSTOM_ANGLE(DImg::ROT270 + 1),
         label(0),
         useExif(0),
         comboBox(0),
@@ -180,6 +180,7 @@ bool Rotate::toolOperations()
     {
         JpegRotator rotator(inputUrl().toLocalFile());
         rotator.setDestinationFile(outputUrl().toLocalFile());
+
         if (useExif)
         {
             return rotator.autoExifTransform();
@@ -191,12 +192,15 @@ bool Rotate::toolOperations()
                 case DImg::ROT90:
                     return rotator.exifTransform(KExiv2Iface::RotationMatrix::Rotate90);
                     break;
+
                 case DImg::ROT180:
                     return rotator.exifTransform(KExiv2Iface::RotationMatrix::Rotate180);
                     break;
+
                 case DImg::ROT270:
                     return rotator.exifTransform(KExiv2Iface::RotationMatrix::Rotate270);
                     break;
+
                 default:
 
                     // there is no loss less methode to turn JPEG image with a custom angle.
@@ -235,6 +239,7 @@ bool Rotate::toolOperations()
             case DImg::ROT270:
                 image().rotate((DImg::ANGLE)rotation);
                 break;
+
             default:      // Custom value
                 FreeRotationFilter fr(&image(), 0L, prm);
                 fr.startFilterDirectly();

@@ -52,7 +52,7 @@ public:
     bool hasValidThumbnail() const;
     CamItemInfo info() const;
 
-    void setThumb(const QPixmap& pix, bool hasThumb=true);
+    void setThumb(const QPixmap& pix, bool hasThumb = true);
 
 private:
 
@@ -68,7 +68,7 @@ class CameraItemList : public QTreeWidget
 
 public:
 
-    CameraItemList(QWidget* parent=0);
+    CameraItemList(QWidget* parent = 0);
     virtual ~CameraItemList();
 
     void setThumbCtrl(CameraThumbsCtrl* ctrl);
@@ -96,7 +96,7 @@ class CameraMessageBox
 public:
 
     static void informationList(CameraThumbsCtrl* ctrl,
-                                QWidget *parent,
+                                QWidget* parent,
                                 const QString& text,
                                 const CamItemInfoList& items,
                                 const QString& caption = QString(),

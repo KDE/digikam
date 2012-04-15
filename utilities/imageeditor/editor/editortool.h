@@ -127,7 +127,7 @@ public:
 
     enum RenderingMode
     {
-        NoneRendering=0,
+        NoneRendering = 0,
         PreviewRendering,
         FinalRendering
     };
@@ -158,7 +158,7 @@ protected:
     /** If true, delete filter instance when preview or final rendering is processed.
         If false, filter instance will be managed outside for ex. with ContentAwareResizing tool.
      */
-    void deleteFilterInstance(bool b=true);
+    void deleteFilterInstance(bool b = true);
 
     virtual void setToolView(QWidget* view);
     virtual void prepareEffect() {};

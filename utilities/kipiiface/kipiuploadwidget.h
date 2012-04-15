@@ -42,7 +42,7 @@ class KipiUploadWidget : public KIPI::UploadWidget
 
 public:
 
-    explicit KipiUploadWidget(KipiInterface* const iface, QWidget* const parent=0);
+    explicit KipiUploadWidget(KipiInterface* const iface, QWidget* const parent = 0);
     ~KipiUploadWidget();
 
     KIPI::ImageCollection selectedImageCollection() const;

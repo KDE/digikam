@@ -52,13 +52,13 @@ class AdvancedSettings::AdvancedSettingsPriv
 public:
 
     AdvancedSettingsPriv()
-      : formatLabel(0),
-        autoRotateCheck(0),
-        convertJpegCheck(0),
-        fixDateTimeCheck(0),
-        losslessFormat(0),
-        dateTimeEdit(0),
-        templateSelector(0)
+        : formatLabel(0),
+          autoRotateCheck(0),
+          convertJpegCheck(0),
+          fixDateTimeCheck(0),
+          losslessFormat(0),
+          dateTimeEdit(0),
+          templateSelector(0)
     {
     }
 
@@ -102,21 +102,21 @@ AdvancedSettings::AdvancedSettings(QWidget* parent)
     onFlyVlay->setMargin(KDialog::spacingHint());
     onFlyVlay->setSpacing(KDialog::spacingHint());
 
-    setWhatsThis( i18n("Set here all options to fix/transform JPEG files automatically "
-                       "as they are downloaded."));
-    d->autoRotateCheck->setWhatsThis( i18n("Enable this option if you want images automatically "
-                                           "rotated or flipped using EXIF information provided by the camera."));
-    d->templateSelector->setWhatsThis( i18n("Select here which metadata template you want to apply "
-                                            "to images."));
-    d->fixDateTimeCheck->setWhatsThis( i18n("Enable this option to set date and time metadata "
-                                            "tags to the right values if your camera does not set "
-                                            "these tags correctly when pictures are taken. The values will "
-                                            "be saved in the DateTimeDigitized and DateTimeCreated EXIF, XMP, and IPTC tags."));
-    d->convertJpegCheck->setWhatsThis( i18n("Enable this option to automatically convert "
-                                            "all JPEG files to a lossless image format. <b>Note:</b> Image conversion can take a "
-                                            "while on a slow computer."));
-    d->losslessFormat->setWhatsThis( i18n("Select your preferred lossless image file format to "
-                                          "convert to. <b>Note:</b> All metadata will be preserved during the conversion."));
+    setWhatsThis(i18n("Set here all options to fix/transform JPEG files automatically "
+                      "as they are downloaded."));
+    d->autoRotateCheck->setWhatsThis(i18n("Enable this option if you want images automatically "
+                                          "rotated or flipped using EXIF information provided by the camera."));
+    d->templateSelector->setWhatsThis(i18n("Select here which metadata template you want to apply "
+                                           "to images."));
+    d->fixDateTimeCheck->setWhatsThis(i18n("Enable this option to set date and time metadata "
+                                           "tags to the right values if your camera does not set "
+                                           "these tags correctly when pictures are taken. The values will "
+                                           "be saved in the DateTimeDigitized and DateTimeCreated EXIF, XMP, and IPTC tags."));
+    d->convertJpegCheck->setWhatsThis(i18n("Enable this option to automatically convert "
+                                           "all JPEG files to a lossless image format. <b>Note:</b> Image conversion can take a "
+                                           "while on a slow computer."));
+    d->losslessFormat->setWhatsThis(i18n("Select your preferred lossless image file format to "
+                                         "convert to. <b>Note:</b> All metadata will be preserved during the conversion."));
 
     // ---------------------------------------------------------------------------------------
 

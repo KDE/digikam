@@ -122,8 +122,11 @@ KActionCollection* KipiPluginLoader::pluginsActionCollection() const
 QList<QAction*> KipiPluginLoader::kipiActionsByCategory(KIPI::Category cat) const
 {
     KActionCategory* category = d->kipiCategoryMap[cat];
+
     if (category)
+    {
         return category->actions();
+    }
 
     return QList<QAction*>();
 }
@@ -142,19 +145,19 @@ void KipiPluginLoader::loadPlugins()
 
     // List of obsoletes plugins to not load
 
-    ignores.append( "HelloWorld" );
-    ignores.append( "KameraKlient" );
+    ignores.append("HelloWorld");
+    ignores.append("KameraKlient");
 
     // These plugins have been renamed with 0.2.0-rc1
-    ignores.append( "Facebook Exporter" );
-    ignores.append( "SmugMug Exporter" );
-    ignores.append( "SlideShow" );
-    ignores.append( "PrintWizard" );
-    ignores.append( "SimpleViewer" );
-    ignores.append( "KioExport" );
+    ignores.append("Facebook Exporter");
+    ignores.append("SmugMug Exporter");
+    ignores.append("SlideShow");
+    ignores.append("PrintWizard");
+    ignores.append("SimpleViewer");
+    ignores.append("KioExport");
 
     // These plugins have been replaced by digiKam core solution with 2.6.0
-    ignores.append( "JPEGLossless" );
+    ignores.append("JPEGLossless");
 
     d->kipiPluginLoader = new KIPI::PluginLoader(ignores, d->kipiInterface);
 
@@ -203,7 +206,7 @@ void KipiPluginLoader::slotKipiPluginPlug()
     {
         KIPI::Plugin* plugin = (*it)->plugin();
 
-        if ( !plugin || !(*it)->shouldLoad() )
+        if (!plugin || !(*it)->shouldLoad())
         {
             continue;
         }
@@ -219,6 +222,7 @@ void KipiPluginLoader::slotKipiPluginPlug()
             if (!pluginActionsDisabled.contains(actionName))
             {
                 KActionCategory* category = d->kipiCategoryMap[cat];
+
                 if (!category)
                 {
                     category = new KActionCategory(categoryName(cat), d->kipipluginsActionCollection);
@@ -243,8 +247,8 @@ void KipiPluginLoader::slotKipiPluginPlug()
     // load KIPI actions settings
     d->kipipluginsActionCollection->readSettings();
 
-    // Check if the Export/Import/tools Plugin lists are empty, if so, add an empty action which tells the user that no 
-    // Export/Import/tools plugins are available. It is more user-friendly to present some menu entry, 
+    // Check if the Export/Import/tools Plugin lists are empty, if so, add an empty action which tells the user that no
+    // Export/Import/tools plugins are available. It is more user-friendly to present some menu entry,
     // instead of leaving it completely empty.
     checkEmptyCategory(KIPI::ExportPlugin);
     checkEmptyCategory(KIPI::ImportPlugin);
@@ -257,6 +261,7 @@ void KipiPluginLoader::slotKipiPluginPlug()
 void KipiPluginLoader::checkEmptyCategory(KIPI::Category cat)
 {
     KActionCategory* category = d->kipiCategoryMap[cat];
+
     if (!category)
     {
         QAction* action = new QAction(i18n("No tool available"), d->app);
@@ -290,30 +295,40 @@ void KipiPluginLoader::kipiPlugActions(bool unplug)
 
 QString KipiPluginLoader::categoryName(KIPI::Category cat) const
 {
+    QString res;
+
     switch (cat)
     {
         case KIPI::ExportPlugin:
-            return i18n("Export Tools");
+            res = i18n("Export Tools");
             break;
+
         case KIPI::ImportPlugin:
-            return i18n("Import Tools");
+            res = i18n("Import Tools");
             break;
+
         case KIPI::ImagesPlugin:
-            return i18n("Images Tools");
+            res = i18n("Images Tools");
             break;
+
         case KIPI::ToolsPlugin:
-            return i18n("Miscellaneous Tools");
+            res = i18n("Miscellaneous Tools");
             break;
+
         case KIPI::BatchPlugin:
-            return i18n("Batch Tools");
+            res = i18n("Batch Tools");
             break;
+
         case KIPI::CollectionsPlugin:
-            return i18n("Albums Tools");
+            res = i18n("Albums Tools");
             break;
+
         default:
-            return i18n("Unknown Tools");
+            res = i18n("Unknown Tools");
             break;
     }
+
+    return res;
 }
 
 } //namespace Digikam

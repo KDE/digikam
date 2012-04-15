@@ -37,7 +37,7 @@ class Invert : public BatchTool
 
 public:
 
-    Invert(QObject* parent=0);
+    Invert(QObject* parent = 0);
     ~Invert();
 
     BatchToolSettings defaultSettings()

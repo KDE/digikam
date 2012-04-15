@@ -1,5 +1,5 @@
 *****************************************************************************************************
-digiKam 2.6.0-beta3 - Release date: 2012-04-01
+digiKam 2.6.0-rc - Release date: 2012-05-06
 
 NEW FEATURES:
 
@@ -97,6 +97,18 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 078 ==> 289223 : XMP sidecars not written for M2TS and MTS video files.
 079 ==> 290816 : Preview mode shows portrait raws in horizontal when a third party app adds xmp files.
 080 ==> 273137 : Make XMP Side Car Files Hidden Or Use Separate Database To Store Them.
-081 ==> 
+081 ==> 252458 : Sort order in SlideShow.
+082 ==> 277370 : Unclear licensing for profiles/prophoto.icm and profiles/srgb-d65.icm.
+083 ==> 221985 : Update histogram before preview.
+084 ==> 208286 : Lock zoom when switching photos : add context menu in preview thumbbar.
+085 ==> 182110 : Geolocation tab : add "loc.alize.us" support to the more info web service link.
+086 ==> 216636 : Option to set parent album in Album -> New Album.
+087 ==> 287099 : digiKam crash when using facerecognition.
+088 ==> 151849 : Add Right-MouseButton-menu entry to exit fullscreen [patch].
+089 ==> 251887 : Holding SHIFT in timeline to select range. 
+090 ==> 289330 : Album file watch failing (QKqueueFileSystemWatcherEngine:addPaths: open: Too many open files in system).
+091 ==> 287267 : IptcCore tags are written incorrectly.
+092 ==> 298178 :  Move photos dialog default button is Cancel, not Ok
+093 ==>
 
 

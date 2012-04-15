@@ -255,7 +255,7 @@ void SketchWidget::sketchImageToXML(QXmlStreamWriter& writer)
 {
     writer.writeStartElement("SketchImage");
 
-    for (int i=0; i<=d->eventIndex; ++i)
+    for (int i = 0; i <= d->eventIndex; ++i)
     {
         const DrawEvent& event = d->drawEventList.at(i);
 
@@ -267,9 +267,9 @@ void SketchWidget::sketchImageToXML(QXmlStreamWriter& writer)
         // Write the lines contained in the QPainterPath
 
         // Initial position is 0,0
-        QPointF pos(0,0);
+        QPointF pos(0, 0);
 
-        for (int j=0; j<event.path.elementCount(); ++j)
+        for (int j = 0; j < event.path.elementCount(); ++j)
         {
             const QPainterPath::Element& element = event.path.elementAt(j);
 
@@ -391,7 +391,7 @@ void SketchWidget::addPath(QXmlStreamReader& reader)
         event.penColor.setNamedColor(color.toString());
     }
 
-    QPointF begin(0,0), end(0,0);
+    QPointF begin(0, 0), end(0, 0);
 
     while (!reader.atEnd())
     {
@@ -513,7 +513,7 @@ void SketchWidget::mouseMoveEvent(QMouseEvent* e)
     }
 }
 
-void SketchWidget::wheelEvent (QWheelEvent* e)
+void SketchWidget::wheelEvent(QWheelEvent* e)
 {
     if (rect().contains(e->x(), e->y()))
     {
@@ -627,7 +627,7 @@ void SketchWidget::updateDrawCursor()
 
     QPainter p(&pix);
     p.setRenderHint(QPainter::Antialiasing, true);
-    p.drawEllipse( 1, 1, size-2, size-2);
+    p.drawEllipse(1, 1, size - 2, size - 2);
 
     d->drawCursor = QCursor(pix);
 }

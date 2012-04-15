@@ -37,7 +37,7 @@ class SetupMisc : public QScrollArea
 
 public:
 
-    SetupMisc(QWidget* parent=0);
+    SetupMisc(QWidget* parent = 0);
     ~SetupMisc();
 
     void applySettings();

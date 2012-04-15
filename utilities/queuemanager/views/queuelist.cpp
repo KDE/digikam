@@ -121,10 +121,10 @@ void QueueListViewItem::setPixmap(const QPixmap& pix)
 void QueueListViewItem::setThumb(const QPixmap& pix, bool hasThumb)
 {
     QSize iSize = treeWidget()->iconSize();
-    QPixmap pixmap(iSize.width()+2, iSize.height()+2);
+    QPixmap pixmap(iSize.width() + 2, iSize.height() + 2);
     pixmap.fill(Qt::transparent);
     QPainter p(&pixmap);
-    p.drawPixmap((pixmap.width()/2) - (pix.width()/2), (pixmap.height()/2) - (pix.height()/2), pix);
+    p.drawPixmap((pixmap.width() / 2) - (pix.width() / 2), (pixmap.height() / 2) - (pix.height() / 2), pix);
     d->preview  = pixmap;
     setPixmap(d->preview);
     d->hasThumb = hasThumb;
@@ -137,7 +137,7 @@ void QueueListViewItem::setProgressIcon(const QPixmap& icon)
     mask.fill(QColor(128, 128, 128, 192));
     QPainter p(&preview);
     p.drawPixmap(0, 0, mask);
-    p.drawPixmap((preview.width()/2) - (icon.width()/2), (preview.height()/2) - (icon.height()/2), icon);
+    p.drawPixmap((preview.width() / 2) - (icon.width() / 2), (preview.height() / 2) - (icon.height() / 2), icon);
     setPixmap(preview);
 }
 
@@ -336,15 +336,15 @@ void QueueListView::startDrag(Qt::DropActions /*supportedActions*/)
     int w = icon.width();
     int h = icon.height();
 
-    QPixmap pix(w+4,h+4);
+    QPixmap pix(w + 4, h + 4);
     QString text(QString::number(items.count()));
 
     QPainter p(&pix);
-    p.fillRect(0, 0, pix.width()-1, pix.height()-1, QColor(Qt::white));
+    p.fillRect(0, 0, pix.width() - 1, pix.height() - 1, QColor(Qt::white));
     p.setPen(QPen(Qt::black, 1));
-    p.drawRect(0, 0, pix.width()-1, pix.height()-1);
+    p.drawRect(0, 0, pix.width() - 1, pix.height() - 1);
     p.drawPixmap(2, 2, icon);
-    QRect r = p.boundingRect(2, 2, w, h, Qt::AlignLeft|Qt::AlignTop, text);
+    QRect r = p.boundingRect(2, 2, w, h, Qt::AlignLeft | Qt::AlignTop, text);
     r.setWidth(qMax(r.width(), r.height()));
     r.setHeight(qMax(r.width(), r.height()));
     p.fillRect(r, QColor(0, 80, 0));
@@ -601,12 +601,12 @@ void QueueListView::leaveEvent(QEvent* e)
 
 void QueueListView::slotAddItems(const ImageInfoList& list)
 {
-    if ( list.count() == 0 )
+    if (list.count() == 0)
     {
         return;
     }
 
-    for ( ImageInfoList::ConstIterator it = list.begin(); it != list.end(); ++it )
+    for (ImageInfoList::ConstIterator it = list.begin(); it != list.end(); ++it)
     {
         ImageInfo info = *it;
 
@@ -642,11 +642,13 @@ void QueueListView::slotAddItems(const ImageInfoList& list)
 void QueueListView::drawRow(QPainter* p, const QStyleOptionViewItem& opt, const QModelIndex& index) const
 {
     QueueListViewItem* item = dynamic_cast<QueueListViewItem*>(itemFromIndex(index));
+
     if (item && !item->hasValidThumbnail())
     {
         ImageInfo info = item->info();
         d->thumbLoadThread->find(info.fileUrl().toLocalFile());
     }
+
     QTreeWidget::drawRow(p, opt, index);
 }
 
@@ -721,6 +723,7 @@ void QueueListView::removeItems(int removeType)
 
                     break;
                 }
+
                 case QueueListViewPriv::ItemsDone:
                 {
                     if (item->isDone())
@@ -731,6 +734,7 @@ void QueueListView::removeItems(int removeType)
 
                     break;
                 }
+
                 default:  // ItemsAll
                 {
                     delete item;

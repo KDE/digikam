@@ -75,7 +75,7 @@ public:
 
 public:
 
-    BatchTool(const QString& name, BatchToolGroup group, QObject* parent=0);
+    BatchTool(const QString& name, BatchToolGroup group, QObject* parent = 0);
     ~BatchTool();
 
     /** Get description of an error which appear during apply() method.
@@ -233,7 +233,7 @@ protected:
     /** Re-implement this method to customize all batch operations done by this tool.
         This method is called by apply().
      */
-    virtual bool toolOperations()=0;
+    virtual bool toolOperations() = 0;
 
     /** For delayed creation of a settings widget:
      *  If your tool's settings widget takes long to create, you can
@@ -245,12 +245,12 @@ protected:
 
 protected Q_SLOTS:
 
-    virtual void slotSettingsChanged()=0;
+    virtual void slotSettingsChanged() = 0;
 
     /** Re-implement this method to customize how all settings values must be assigned to settings widget.
         This method is called by setSettings().
      */
-    virtual void slotAssignSettings2Widget()=0;
+    virtual void slotAssignSettings2Widget() = 0;
 
 public:
 

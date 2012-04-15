@@ -39,7 +39,7 @@ class ColorBalance : public BatchTool
 
 public:
 
-    ColorBalance(QObject* parent=0);
+    ColorBalance(QObject* parent = 0);
     ~ColorBalance();
 
     BatchToolSettings defaultSettings();

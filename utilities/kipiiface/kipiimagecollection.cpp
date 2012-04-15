@@ -82,7 +82,7 @@ KipiImageCollection::~KipiImageCollection()
 
 QString KipiImageCollection::name()
 {
-    if ( d->album->type() == Album::TAG )
+    if (d->album->type() == Album::TAG)
     {
         return i18n("Tag: %1", d->album->title());
     }
@@ -94,12 +94,12 @@ QString KipiImageCollection::name()
 
 QString KipiImageCollection::category()
 {
-    if ( d->album->type() == Album::PHYSICAL )
+    if (d->album->type() == Album::PHYSICAL)
     {
         PAlbum* p = dynamic_cast<PAlbum*>(d->album);
         return p->category();
     }
-    else if ( d->album->type() == Album::TAG )
+    else if (d->album->type() == Album::TAG)
     {
         TAlbum* p = dynamic_cast<TAlbum*>(d->album);
         return i18n("Tag: %1", p->tagPath());
@@ -112,7 +112,7 @@ QString KipiImageCollection::category()
 
 QDate KipiImageCollection::date()
 {
-    if ( d->album->type() == Album::PHYSICAL )
+    if (d->album->type() == Album::PHYSICAL)
     {
         PAlbum* p = dynamic_cast<PAlbum*>(d->album);
         return p->date();
@@ -125,7 +125,7 @@ QDate KipiImageCollection::date()
 
 QString KipiImageCollection::comment()
 {
-    if ( d->album->type() == Album::PHYSICAL )
+    if (d->album->type() == Album::PHYSICAL)
     {
         PAlbum* p = dynamic_cast<PAlbum*>(d->album);
         return p->caption();
@@ -138,7 +138,7 @@ QString KipiImageCollection::comment()
 
 KUrl::List KipiImageCollection::images()
 {
-    switch ( d->type )
+    switch (d->type)
     {
         case AllItems:
         {
@@ -163,10 +163,12 @@ KUrl::List KipiImageCollection::images()
 
             break;
         }
+
         case SelectedItems:
         {
             return DigikamApp::instance()->view()->selectedUrls();
         }
+
         default:
             break;
     }
@@ -189,12 +191,15 @@ KUrl::List KipiImageCollection::imagesFromPAlbum(PAlbum* const album) const
         case ImageSortSettings::SortByFileName:
             sortOrder = AlbumDB::ByItemName;
             break;
+
         case ImageSortSettings::SortByFilePath:
             sortOrder = AlbumDB::ByItemPath;
             break;
+
         case ImageSortSettings::SortByCreationDate:
             sortOrder = AlbumDB::ByItemDate;
             break;
+
         case ImageSortSettings::SortByRating:
             sortOrder = AlbumDB::ByItemRating;
             break;

@@ -41,7 +41,7 @@ class CurvesAdjust : public BatchTool
 
 public:
 
-    CurvesAdjust(QObject* parent=0);
+    CurvesAdjust(QObject* parent = 0);
     ~CurvesAdjust();
 
     BatchToolSettings defaultSettings();

@@ -101,7 +101,7 @@ MetadataPage::MetadataPage(KAssistantDialog* dlg)
 
     setPageWidget(vbox);
 
-    QPixmap leftPix = KStandardDirs::locate("data","digikam/data/assistant-metadata.png");
+    QPixmap leftPix = KStandardDirs::locate("data", "digikam/data/assistant-metadata.png");
     setLeftBottomPix(leftPix.scaledToWidth(128, Qt::SmoothTransformation));
 }
 

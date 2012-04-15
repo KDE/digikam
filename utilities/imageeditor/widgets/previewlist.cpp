@@ -246,7 +246,7 @@ PreviewList::PreviewList(QObject* /*parent*/)
     setWordWrap(false);
     setMovement(QListView::Static);
     setSpacing(5);
-    setGridSize(QSize(130,130 + fontMetrics().height()));
+    setGridSize(QSize(130, 130 + fontMetrics().height()));
     setMinimumHeight(400);
     setResizeMode(QListView::Adjust);
     setTextElideMode(Qt::ElideRight);
@@ -344,7 +344,7 @@ int PreviewList::currentId() const
 {
     PreviewListItem* item = dynamic_cast<PreviewListItem*>(currentItem());
 
-    if (item )
+    if (item)
     {
         return item->id();
     }
@@ -358,7 +358,7 @@ void PreviewList::slotProgressTimerDone()
     QPixmap pixmap(128, 128);
     pixmap.fill(Qt::transparent);
     QPainter p(&pixmap);
-    p.drawPixmap((pixmap.width()/2) - (ppix.width()/2), (pixmap.height()/2) - (ppix.height()/2), ppix);
+    p.drawPixmap((pixmap.width() / 2) - (ppix.width() / 2), (pixmap.height() / 2) - (ppix.height() / 2), ppix);
 
     int busy                      = 0;
     int it                        = 0;

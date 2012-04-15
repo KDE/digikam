@@ -50,6 +50,7 @@
 #include "imageattributeswatch.h"
 #include "imagecomments.h"
 #include "imageposition.h"
+#include "imagecopyright.h"
 #include "globals.h"
 #include "scancontroller.h"
 #include "tagscache.h"
@@ -60,13 +61,17 @@ namespace Digikam
 KipiImageInfo::KipiImageInfo(KIPI::Interface* const interface, const KUrl& url)
     : KIPI::ImageInfoShared(interface, url)
 {
-    // Check if item is registered in DB. Call scan-controller to parse it before to get info from DB.
-    ScanController::instance()->scanFileDirectly(url.path());
-
     m_info = ImageInfo(url);
+
     if (m_info.isNull())
     {
-        kDebug() << "DB Info is null (" << url.path() << ")";
+        // Check if item is registered in DB. Call scan-controller to parse it before to get info from DB.
+        ScanController::instance()->scanFileDirectly(url.path());
+
+        if (m_info.isNull())
+        {
+            kDebug() << "DB Info is null (" << url.path() << ")";
+        }
     }
 }
 
@@ -80,9 +85,9 @@ PAlbum* KipiImageInfo::parentAlbum() const
 }
 
 #if KIPI_VERSION >= 0x010200
-void KipiImageInfo::cloneData( ImageInfoShared* const other )
+void KipiImageInfo::cloneData(ImageInfoShared* const other)
 #else
-void KipiImageInfo::cloneData( ImageInfoShared* other )
+void KipiImageInfo::cloneData(ImageInfoShared* other)
 #endif
 {
 #if KIPI_VERSION >= 0x010500
@@ -173,6 +178,13 @@ QMap<QString, QVariant> KipiImageInfo::attributes()
         qlonglong size       = m_info.fileSize();
         res["filesize"]      = size;
 
+        // Get copyright information of picture from database.
+        ImageCopyright rights = m_info.imageCopyright();
+        res["creators"]       = rights.creator();
+        res["credit"]         = rights.credit();
+        res["rights"]         = rights.rights();
+        res["source"]         = rights.source();
+
         // NOTE: add here a kipi-plugins access to future picture attributes stored by digiKam database
     }
 
@@ -199,6 +211,7 @@ void KipiImageInfo::addAttributes(const QMap<QString, QVariant>& res)
                 _url = _url.upUrl();
                 _url.addPath(newName);
             }
+
             attributes.remove("name");
         }
 
@@ -262,6 +275,7 @@ void KipiImageInfo::addAttributes(const QMap<QString, QVariant>& res)
             {
                 m_info.setRating(rating);
             }
+
             attributes.remove("rating");
         }
 
@@ -274,6 +288,7 @@ void KipiImageInfo::addAttributes(const QMap<QString, QVariant>& res)
             {
                 m_info.setColorLabel(color);
             }
+
             attributes.remove("colorlabel");
         }
 
@@ -286,6 +301,7 @@ void KipiImageInfo::addAttributes(const QMap<QString, QVariant>& res)
             {
                 m_info.setPickLabel(pick);
             }
+
             attributes.remove("picklabel");
         }
 
@@ -306,6 +322,7 @@ void KipiImageInfo::addAttributes(const QMap<QString, QVariant>& res)
                 {
                     position.setLatitude(lat);
                 }
+
                 attributes.remove("latitude");
             }
 
@@ -318,6 +335,7 @@ void KipiImageInfo::addAttributes(const QMap<QString, QVariant>& res)
                 {
                     position.setLongitude(lng);
                 }
+
                 attributes.remove("longitude");
             }
 
@@ -332,6 +350,48 @@ void KipiImageInfo::addAttributes(const QMap<QString, QVariant>& res)
             position.apply();
         }
 
+        // Copyright information management from plugins.
+
+        if (attributes.contains("creators") ||
+            attributes.contains("credit")   ||
+            attributes.contains("rights")   ||
+            attributes.contains("source"))
+        {
+            ImageCopyright rights = m_info.imageCopyright();
+
+            if (attributes.contains("creators"))
+            {
+                QStringList list = attributes["creators"].toStringList();
+                if (!list.isEmpty())
+                {
+                    rights.removeCreators();
+                    foreach(QString val, list)
+                    {
+                        rights.setCreator(val, ImageCopyright::AddEntryToExisting);
+                    }
+                }
+                attributes.remove("creators");
+            }
+
+            if (attributes.contains("credit"))
+            {
+                rights.setCredit(attributes["credit"].toString());
+                attributes.remove("credit");
+            }
+
+            if (attributes.contains("rights"))
+            {
+                rights.setRights(attributes["rights"].toString());
+                attributes.remove("rights");
+            }
+
+            if (attributes.contains("source"))
+            {
+                rights.setSource(attributes["source"].toString());
+                attributes.remove("source");
+            }
+        }
+
         // NOTE: add here a kipi-plugins access to future picture attributes stored by digiKam database
 
         // Remove read-only attributes.
@@ -343,7 +403,9 @@ void KipiImageInfo::addAttributes(const QMap<QString, QVariant>& res)
 
         // Check if others attributes are not yet managed here...
         if (!attributes.isEmpty())
+        {
             kWarning() << "These attributes are not yet managed by digiKam KIPI interface: " << attributes;
+        }
     }
 
     // To update sidebar content. Some kipi-plugins use this way to refresh sidebar
@@ -396,7 +458,7 @@ void KipiImageInfo::delAttributes(const QStringList& res)
         // Remove all tags of a picture from database.
         if (attributes.contains("tags") ||                   // NOTE: for compatibility. Deprecated and replaced by "tagspath".
             attributes.contains("tagspath")
-        )
+           )
         {
             m_info.removeAllTags();
             attributes.removeAll("tags");
@@ -424,8 +486,7 @@ void KipiImageInfo::delAttributes(const QStringList& res)
             attributes.removeAll("picklabel");
         }
 
-        // GPS location management from plugins.
-
+        // Remove GPS location management from database.
         if (attributes.contains("gpslocation"))
         {
             ImagePosition position = m_info.imagePosition();
@@ -434,10 +495,20 @@ void KipiImageInfo::delAttributes(const QStringList& res)
             attributes.removeAll("gpslocation");
         }
 
+        // Remove copyrights information from database.
+        if (attributes.contains("copyrights"))
+        {
+            ImageCopyright rights = m_info.imageCopyright();
+            rights.removeAll();
+            attributes.removeAll("copyrights");
+        }
+
         // NOTE: add here a kipi-plugins access to future picture attributes stored by digiKam database
 
         if (!attributes.isEmpty())
+        {
             kWarning() << "These attributes are not yet managed by digiKam KIPI interface: " << attributes;
+        }
     }
 
     // To update sidebar content. Some kipi-plugins use this way to refresh sidebar
@@ -457,6 +528,7 @@ void KipiImageInfo::clearAttributes()
     attr.append("colorlabel");
     attr.append("picklabel");
     attr.append("gpslocation");
+    attr.append("copyrights");
 
     // NOTE: add here a kipi-plugins access to future picture attributes stored by digiKam database
 
@@ -472,7 +544,12 @@ void KipiImageInfo::clearAttributes()
 QString KipiImageInfo::name()
 {
     QMap<QString, QVariant> map = attributes();
-    if (!map.isEmpty()) return map.value("name", QString()).toString();
+
+    if (!map.isEmpty())
+    {
+        return map.value("name", QString()).toString();
+    }
+
     return QString();
 }
 
@@ -488,7 +565,12 @@ void KipiImageInfo::setName(const QString& newName)
 QString KipiImageInfo::title()
 {
     QMap<QString, QVariant> map = attributes();
-    if (!map.isEmpty()) return map.value("name", QString()).toString();
+
+    if (!map.isEmpty())
+    {
+        return map.value("name", QString()).toString();
+    }
+
     return QString();
 }
 
@@ -504,11 +586,16 @@ void KipiImageInfo::setTitle(const QString& newName)
 QString KipiImageInfo::description()
 {
     QMap<QString, QVariant> map = attributes();
-    if (!map.isEmpty()) return map.value("comment", QString()).toString();
+
+    if (!map.isEmpty())
+    {
+        return map.value("comment", QString()).toString();
+    }
+
     return QString();
 }
 
-void KipiImageInfo::setDescription( const QString& description )
+void KipiImageInfo::setDescription(const QString& description)
 {
     QMap<QString, QVariant> map;
     map.insert("comment", description);
@@ -518,7 +605,12 @@ void KipiImageInfo::setDescription( const QString& description )
 int KipiImageInfo::angle()
 {
     QMap<QString, QVariant> map = attributes();
-    if (!map.isEmpty()) return map.value("angle", 0).toInt();
+
+    if (!map.isEmpty())
+    {
+        return map.value("angle", 0).toInt();
+    }
+
     return 0;
 }
 
@@ -532,13 +624,18 @@ void KipiImageInfo::setAngle(int orientation)
 QDateTime KipiImageInfo::time(KIPI::TimeSpec)
 {
     QMap<QString, QVariant> map = attributes();
-    if (!map.isEmpty()) return map.value("date", QDateTime()).toDateTime();
+
+    if (!map.isEmpty())
+    {
+        return map.value("date", QDateTime()).toDateTime();
+    }
+
     return QDateTime();
 }
 
 void KipiImageInfo::setTime(const QDateTime& date, KIPI::TimeSpec)
 {
-    if ( !date.isValid() )
+    if (!date.isValid())
     {
         kWarning() << "Invalid datetime specified";
         return;

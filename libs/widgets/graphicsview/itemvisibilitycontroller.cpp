@@ -567,7 +567,7 @@ void ItemVisibilityController::ItemVisibilityControllerPriv::cleanupChildren(QAb
         {
             foreach(QObject* item, child->items)
             {
-                emit q->hiddenAndRemoved(item);
+                emit (q->hiddenAndRemoved(item));
             }
             delete child;
             it = childControls.erase(it);

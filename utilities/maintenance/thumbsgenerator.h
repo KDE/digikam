@@ -43,7 +43,7 @@ class ThumbsGenerator : public MaintenanceTool
 
 public:
 
-    explicit ThumbsGenerator(bool rebuildAll=true, int albumId=-1, ProgressItem* parent=0);
+    explicit ThumbsGenerator(bool rebuildAll = true, int albumId = -1, ProgressItem* parent = 0);
     ~ThumbsGenerator();
 
 private:

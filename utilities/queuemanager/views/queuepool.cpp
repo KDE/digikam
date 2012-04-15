@@ -67,7 +67,7 @@ QueuePool::QueuePool(QWidget* parent)
     // -- FileWatch connections ------------------------------
 
     LoadingCacheInterface::connectToSignalFileChanged(this,
-            SLOT(slotFileChanged(QString)));
+                                                      SLOT(slotFileChanged(QString)));
 }
 
 QueuePool::~QueuePool()
@@ -128,7 +128,7 @@ QString QueuePool::queueTitle(int index) const
 void QueuePool::slotAddQueue()
 {
     QueueListView* queue = new QueueListView(this);
-    int index            = addTab(queue, SmallIcon("bqm-diff"), QString("#%1").arg(count()+1));
+    int index            = addTab(queue, SmallIcon("bqm-diff"), QString("#%1").arg(count() + 1));
 
     connect(queue, SIGNAL(signalQueueContentsChanged()),
             this, SIGNAL(signalQueueContentsChanged()));

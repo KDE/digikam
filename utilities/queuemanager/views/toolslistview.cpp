@@ -58,34 +58,42 @@ ToolListViewGroup::ToolListViewGroup(QTreeWidget* parent, BatchTool::BatchToolGr
             setIcon(0, SmallIcon("digikam"));
             setText(0, i18n("Color"));
             break;
+
         case BatchTool::EnhanceTool:
             setIcon(0, SmallIcon("digikam"));
             setText(0, i18n("Enhance"));
             break;
+
         case BatchTool::TransformTool:
             setIcon(0, SmallIcon("digikam"));
             setText(0, i18n("Transform"));
             break;
+
         case BatchTool::DecorateTool:
             setIcon(0, SmallIcon("digikam"));
             setText(0, i18n("Decorate"));
             break;
+
         case BatchTool::FiltersTool:
             setIcon(0, SmallIcon("digikam"));
             setText(0, i18n("Filters"));
             break;
+
         case BatchTool::ConvertTool:
             setIcon(0, SmallIcon("digikam"));
             setText(0, i18n("Convert"));
             break;
+
         case BatchTool::MetadataTool:
             setIcon(0, SmallIcon("digikam"));
             setText(0, i18n("Metadata"));
             break;
+
         case BatchTool::KipiTool:
             setIcon(0, SmallIcon("kipi"));
             setText(0, i18n("Kipi-plugins"));
             break;
+
         default:      // User customized tools.
             setIcon(0, SmallIcon("user-properties"));
             setText(0, i18n("Custom Tools"));
@@ -260,15 +268,15 @@ void ToolsListView::startDrag(Qt::DropActions /*supportedActions*/)
     int w = icon.width();
     int h = icon.height();
 
-    QPixmap pix(w+4,h+4);
+    QPixmap pix(w + 4, h + 4);
     QString text(QString::number(items.count()));
 
     QPainter p(&pix);
-    p.fillRect(0, 0, pix.width()-1, pix.height()-1, QColor(Qt::white));
+    p.fillRect(0, 0, pix.width() - 1, pix.height() - 1, QColor(Qt::white));
     p.setPen(QPen(Qt::black, 1));
-    p.drawRect(0, 0, pix.width()-1, pix.height()-1);
+    p.drawRect(0, 0, pix.width() - 1, pix.height() - 1);
     p.drawPixmap(2, 2, icon);
-    QRect r = p.boundingRect(2, 2, w, h, Qt::AlignLeft|Qt::AlignTop, text);
+    QRect r = p.boundingRect(2, 2, w, h, Qt::AlignLeft | Qt::AlignTop, text);
     r.setWidth(qMax(r.width(), r.height()));
     r.setHeight(qMax(r.width(), r.height()));
     p.fillRect(r, QColor(0, 80, 0));

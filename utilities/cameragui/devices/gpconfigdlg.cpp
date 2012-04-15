@@ -73,7 +73,7 @@ GPConfigDlg::GPConfigDlg(Camera* camera, CameraWidget* widget, QWidget* parent)
 {
     d->widgetRoot = widget;
     d->camera     = camera;
-    setButtons(Ok|Cancel);
+    setButtons(Ok | Cancel);
     setDefaultButton(Ok);
     setModal(true);
 
@@ -122,6 +122,7 @@ void GPConfigDlg::appendWidget(QWidget* parent, CameraWidget* widget)
 
             break;
         }
+
         case GP_WIDGET_SECTION:
         {
             if (!d->tabWidget)
@@ -144,6 +145,7 @@ void GPConfigDlg::appendWidget(QWidget* parent, CameraWidget* widget)
 
             break;
         }
+
         case GP_WIDGET_TEXT:
         {
             gp_widget_get_value(widget, &widget_value_string);
@@ -151,17 +153,18 @@ void GPConfigDlg::appendWidget(QWidget* parent, CameraWidget* widget)
             Q3Grid* grid = new Q3Grid(2, Qt::Horizontal, parent);
             parent->layout()->addWidget(grid);
             grid->setSpacing(spacingHint());
-            new QLabel(QString::fromLocal8Bit( widget_label )+':', grid);
+            new QLabel(QString::fromLocal8Bit(widget_label) + ':', grid);
             QLineEdit* lineEdit = new QLineEdit(widget_value_string, grid);
             d->wmap.insert(widget, lineEdit);
 
             if (!whats_this.isEmpty())
             {
-                grid->setWhatsThis( whats_this);
+                grid->setWhatsThis(whats_this);
             }
 
             break;
         }
+
         case GP_WIDGET_RANGE:
         {
             float widget_low;
@@ -170,24 +173,25 @@ void GPConfigDlg::appendWidget(QWidget* parent, CameraWidget* widget)
             gp_widget_get_range(widget, &widget_low, &widget_high, &widget_increment);
             gp_widget_get_value(widget, &widget_value_float);
 
-            Q3GroupBox* groupBox = new Q3GroupBox(1, Qt::Horizontal,widget_label, parent);
+            Q3GroupBox* groupBox = new Q3GroupBox(1, Qt::Horizontal, widget_label, parent);
             parent->layout()->addWidget(groupBox);
             QSlider* slider = new QSlider(
-                ( int )widget_low,
-                ( int )widget_high,
-                ( int )widget_increment,
-                ( int )widget_value_float,
+                (int)widget_low,
+                (int)widget_high,
+                (int)widget_increment,
+                (int)widget_value_float,
                 Qt::Horizontal,
-                groupBox );
+                groupBox);
             d->wmap.insert(widget, slider);
 
             if (!whats_this.isEmpty())
             {
-                groupBox->setWhatsThis( whats_this);
+                groupBox->setWhatsThis(whats_this);
             }
 
             break;
         }
+
         case GP_WIDGET_TOGGLE:
         {
             gp_widget_get_value(widget, &widget_value_int);
@@ -199,11 +203,12 @@ void GPConfigDlg::appendWidget(QWidget* parent, CameraWidget* widget)
 
             if (!whats_this.isEmpty())
             {
-                checkBox->setWhatsThis( whats_this);
+                checkBox->setWhatsThis(whats_this);
             }
 
             break;
         }
+
         case GP_WIDGET_RADIO:
         {
             gp_widget_get_value(widget, &widget_value_string);
@@ -241,11 +246,12 @@ void GPConfigDlg::appendWidget(QWidget* parent, CameraWidget* widget)
 
             if (!whats_this.isEmpty())
             {
-                buttonGroup->setWhatsThis( whats_this);
+                buttonGroup->setWhatsThis(whats_this);
             }
 
             break;
         }
+
         case GP_WIDGET_MENU:
         {
             gp_widget_get_value(widget, &widget_value_string);
@@ -271,11 +277,12 @@ void GPConfigDlg::appendWidget(QWidget* parent, CameraWidget* widget)
 
             if (!whats_this.isEmpty())
             {
-                comboBox->setWhatsThis( whats_this);
+                comboBox->setWhatsThis(whats_this);
             }
 
             break;
         }
+
         case GP_WIDGET_BUTTON:
         {
             // TODO
@@ -287,6 +294,7 @@ void GPConfigDlg::appendWidget(QWidget* parent, CameraWidget* widget)
 
             break;
         }
+
         case GP_WIDGET_DATE:
         {
             // TODO
@@ -295,6 +303,7 @@ void GPConfigDlg::appendWidget(QWidget* parent, CameraWidget* widget)
 
             break;
         }
+
         default:
             return;
     }
@@ -329,9 +338,11 @@ void GPConfigDlg::updateWidgetValue(CameraWidget* widget)
         case GP_WIDGET_WINDOW:
             // nothing to do
             break;
+
         case GP_WIDGET_SECTION:
             // nothing to do
             break;
+
         case GP_WIDGET_TEXT:
         {
             QLineEdit* lineEdit = static_cast<QLineEdit*>(d->wmap[widget]);
@@ -339,6 +350,7 @@ void GPConfigDlg::updateWidgetValue(CameraWidget* widget)
 
             break;
         }
+
         case GP_WIDGET_RANGE:
         {
             QSlider* slider = static_cast<QSlider*>(d->wmap[widget]);
@@ -347,6 +359,7 @@ void GPConfigDlg::updateWidgetValue(CameraWidget* widget)
 
             break;
         }
+
         case GP_WIDGET_TOGGLE:
         {
             QCheckBox* checkBox = static_cast<QCheckBox*>(d->wmap[widget]);
@@ -355,6 +368,7 @@ void GPConfigDlg::updateWidgetValue(CameraWidget* widget)
 
             break;
         }
+
         case GP_WIDGET_RADIO:
         {
             Q3ButtonGroup* buttonGroup = static_cast<Q3VButtonGroup*>(d->wmap[widget]);
@@ -362,6 +376,7 @@ void GPConfigDlg::updateWidgetValue(CameraWidget* widget)
 
             break;
         }
+
         case GP_WIDGET_MENU:
         {
             QComboBox* comboBox = static_cast<QComboBox*>(d->wmap[widget]);
@@ -369,9 +384,11 @@ void GPConfigDlg::updateWidgetValue(CameraWidget* widget)
 
             break;
         }
+
         case GP_WIDGET_BUTTON:
             // nothing to do
             break;
+
         case GP_WIDGET_DATE:
         {
             // not implemented

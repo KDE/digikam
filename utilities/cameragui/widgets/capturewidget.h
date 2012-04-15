@@ -44,7 +44,7 @@ class CaptureWidget : public QWidget
 
 public:
 
-    CaptureWidget(QWidget* parent=0);
+    CaptureWidget(QWidget* parent = 0);
     ~CaptureWidget();
 
     void setPreview(const QImage& preview);

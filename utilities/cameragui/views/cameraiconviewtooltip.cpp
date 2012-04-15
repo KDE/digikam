@@ -177,7 +177,7 @@ QString CameraIconViewToolTip::fillTipContents(const CamItemInfo& info) const
             else
             {
                 QString mpixels;
-                mpixels.setNum(info.width*info.height/1000000.0, 'f', 2);
+                mpixels.setNum(info.width * info.height / 1000000.0, 'f', 2);
                 str = i18nc("width x height (megapixels Mpx)", "%1x%2 (%3Mpx)",
                             info.width, info.height, mpixels);
             }
@@ -208,7 +208,7 @@ QString CameraIconViewToolTip::fillTipContents(const CamItemInfo& info) const
 
                 if (str.length() > cnt.maxStringLength)
                 {
-                    str = str.left(cnt.maxStringLength-3) + "...";
+                    str = str.left(cnt.maxStringLength - 3) + "...";
                 }
 
                 metaStr += cnt.cellBeg + i18n("Make/Model:") + cnt.cellMid + Qt::escape(str) + cnt.cellEnd;
@@ -222,7 +222,7 @@ QString CameraIconViewToolTip::fillTipContents(const CamItemInfo& info) const
 
                     if (str.length() > cnt.maxStringLength)
                     {
-                        str = str.left(cnt.maxStringLength-3) + "...";
+                        str = str.left(cnt.maxStringLength - 3) + "...";
                     }
 
                     metaStr += cnt.cellBeg + i18n("Created:") + cnt.cellMid + Qt::escape(str) + cnt.cellEnd;
@@ -247,7 +247,7 @@ QString CameraIconViewToolTip::fillTipContents(const CamItemInfo& info) const
 
                 if (str.length() > cnt.maxStringLength)
                 {
-                    str = str.left(cnt.maxStringLength-3) + "...";
+                    str = str.left(cnt.maxStringLength - 3) + "...";
                 }
 
                 metaStr += cnt.cellBeg + i18n("Aperture/Focal:") + cnt.cellMid + Qt::escape(str) + cnt.cellEnd;
@@ -262,7 +262,7 @@ QString CameraIconViewToolTip::fillTipContents(const CamItemInfo& info) const
 
                 if (str.length() > cnt.maxStringLength)
                 {
-                    str = str.left(cnt.maxStringLength-3) + "...";
+                    str = str.left(cnt.maxStringLength - 3) + "...";
                 }
 
                 metaStr += cnt.cellBeg + i18n("Exposure/Sensitivity:") + cnt.cellMid + Qt::escape(str) + cnt.cellEnd;
@@ -289,7 +289,7 @@ QString CameraIconViewToolTip::fillTipContents(const CamItemInfo& info) const
 
                 if (str.length() > cnt.maxStringLength)
                 {
-                    str = str.left(cnt.maxStringLength-3) + "...";
+                    str = str.left(cnt.maxStringLength - 3) + "...";
                 }
 
                 metaStr += cnt.cellBeg + i18n("Mode/Program:") + cnt.cellMid + Qt::escape(str) + cnt.cellEnd;
@@ -301,7 +301,7 @@ QString CameraIconViewToolTip::fillTipContents(const CamItemInfo& info) const
 
                 if (str.length() > cnt.maxStringLength)
                 {
-                    str = str.left(cnt.maxStringLength-3) + "...";
+                    str = str.left(cnt.maxStringLength - 3) + "...";
                 }
 
                 metaStr += cnt.cellBeg + i18n("Flash:") + cnt.cellMid + Qt::escape(str) + cnt.cellEnd;
@@ -313,7 +313,7 @@ QString CameraIconViewToolTip::fillTipContents(const CamItemInfo& info) const
 
                 if (str.length() > cnt.maxStringLength)
                 {
-                    str = str.left(cnt.maxStringLength-3) + "...";
+                    str = str.left(cnt.maxStringLength - 3) + "...";
                 }
 
                 metaStr += cnt.cellBeg + i18n("White Balance:") + cnt.cellMid + Qt::escape(str) + cnt.cellEnd;

@@ -106,7 +106,7 @@ void AbstractSearchGroupContainer::readGroup(SearchXmlCachingReader& reader)
 void AbstractSearchGroupContainer::finishReadingGroups()
 {
     // remove superfluous groups
-    while (m_groups.size() > (m_groupIndex+1))
+    while (m_groups.size() > (m_groupIndex + 1))
     {
         delete m_groups.takeLast();
     }
@@ -257,7 +257,7 @@ void SearchView::read(const QString& xml)
 void SearchView::addGroupToLayout(SearchGroup* group)
 {
     // insert at last-but-one position; leave stretch at the bottom
-    d->layout->insertWidget(d->layout->count()-1, group);
+    d->layout->insertWidget(d->layout->count() - 1, group);
 }
 
 SearchGroup* SearchView::createSearchGroup()

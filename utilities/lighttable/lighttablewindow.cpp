@@ -272,9 +272,9 @@ void LightTableWindow::setupUserArea()
     hlay->setMargin(0);
     hlay->setStretchFactor(d->hSplitter, 10);
 
-    d->hSplitter->setFrameStyle( QFrame::NoFrame );
-    d->hSplitter->setFrameShadow( QFrame::Plain );
-    d->hSplitter->setFrameShape( QFrame::NoFrame );
+    d->hSplitter->setFrameStyle(QFrame::NoFrame);
+    d->hSplitter->setFrameShadow(QFrame::Plain);
+    d->hSplitter->setFrameShape(QFrame::NoFrame);
     d->hSplitter->setOpaqueResize(false);
     d->hSplitter->setStretchFactor(1, 10);      // set previewview+thumbbar container default size to max.
 
@@ -461,14 +461,14 @@ void LightTableWindow::setupActions()
     actionCollection()->addAction("lighttable_last", d->lastAction);
 
     d->setItemLeftAction = new KAction(KIcon("arrow-left"), i18n("On left"), this);
-    d->setItemLeftAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_L));
+    d->setItemLeftAction->setShortcut(KShortcut(Qt::CTRL + Qt::Key_L));
     d->setItemLeftAction->setEnabled(false);
     d->setItemLeftAction->setWhatsThis(i18n("Show item on left panel"));
     connect(d->setItemLeftAction, SIGNAL(triggered()), this, SLOT(slotSetItemLeft()));
     actionCollection()->addAction("lighttable_setitemleft", d->setItemLeftAction);
 
     d->setItemRightAction = new KAction(KIcon("arrow-right"), i18n("On right"), this);
-    d->setItemRightAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_R));
+    d->setItemRightAction->setShortcut(KShortcut(Qt::CTRL + Qt::Key_R));
     d->setItemRightAction->setEnabled(false);
     d->setItemRightAction->setWhatsThis(i18n("Show item on right panel"));
     connect(d->setItemRightAction, SIGNAL(triggered()), this, SLOT(slotSetItemRight()));
@@ -481,13 +481,13 @@ void LightTableWindow::setupActions()
     actionCollection()->addAction("lighttable_edititem", d->editItemAction);
 
     d->removeItemAction = new KAction(KIcon("list-remove"), i18n("Remove item from LightTable"), this);
-    d->removeItemAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_K));
+    d->removeItemAction->setShortcut(KShortcut(Qt::CTRL + Qt::Key_K));
     d->removeItemAction->setEnabled(false);
     connect(d->removeItemAction, SIGNAL(triggered()), this, SLOT(slotRemoveItem()));
     actionCollection()->addAction("lighttable_removeitem", d->removeItemAction);
 
     d->clearListAction = new KAction(KIcon("edit-clear"), i18n("Remove all items from LightTable"), this);
-    d->clearListAction->setShortcut(KShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_K));
+    d->clearListAction->setShortcut(KShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_K));
     d->clearListAction->setEnabled(false);
     connect(d->clearListAction, SIGNAL(triggered()), this, SLOT(slotClearItemsList()));
     actionCollection()->addAction("lighttable_clearlist", d->clearListAction);
@@ -510,21 +510,21 @@ void LightTableWindow::setupActions()
     // -- Standard 'View' menu actions ---------------------------------------------
 
     d->syncPreviewAction = new KToggleAction(KIcon("view-split-left-right"), i18n("Synchronize"), this);
-    d->syncPreviewAction->setShortcut(KShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_Y));
+    d->syncPreviewAction->setShortcut(KShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_Y));
     d->syncPreviewAction->setEnabled(false);
     d->syncPreviewAction->setWhatsThis(i18n("Synchronize preview from left and right panels"));
     connect(d->syncPreviewAction, SIGNAL(triggered()), this, SLOT(slotToggleSyncPreview()));
     actionCollection()->addAction("lighttable_syncpreview", d->syncPreviewAction);
 
     d->navigateByPairAction = new KToggleAction(KIcon("system-run"), i18n("By Pair"), this);
-    d->navigateByPairAction->setShortcut(KShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_P));
+    d->navigateByPairAction->setShortcut(KShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_P));
     d->navigateByPairAction->setEnabled(false);
     d->navigateByPairAction->setWhatsThis(i18n("Navigate by pairs with all items"));
     connect(d->navigateByPairAction, SIGNAL(triggered()), this, SLOT(slotToggleNavigateByPair()));
     actionCollection()->addAction("lighttable_navigatebypair", d->navigateByPairAction);
 
     d->clearOnCloseAction = new KToggleAction(KIcon("edit-clear"), i18n("Clear On Close"), this);
-    d->clearOnCloseAction->setShortcut(KShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_C));
+    d->clearOnCloseAction->setShortcut(KShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_C));
     d->clearOnCloseAction->setEnabled(true);
     d->clearOnCloseAction->setToolTip(i18n("Clear light table when it is closed"));
     d->clearOnCloseAction->setWhatsThis(i18n("Remove all images from the light table when it is closed"));
@@ -631,7 +631,7 @@ void LightTableWindow::setupActions()
 
     KAction* altBackwardAction = new KAction(i18n("Previous Image"), this);
     actionCollection()->addAction("lighttable_backward_shift_space", altBackwardAction);
-    altBackwardAction->setShortcut( KShortcut(Qt::SHIFT+Qt::Key_Space) );
+    altBackwardAction->setShortcut(KShortcut(Qt::SHIFT + Qt::Key_Space));
     connect(altBackwardAction, SIGNAL(triggered()), this, SLOT(slotBackward()));
 
     // ---------------------------------------------------------------------------------
@@ -793,6 +793,7 @@ void LightTableWindow::slotRightPreviewLoaded(bool b)
         d->thumbView->setOnRightPanel(d->previewView->rightImageInfo());
 
         QModelIndex index = d->thumbView->findItemByInfo(d->previewView->rightImageInfo());
+
         if (index.isValid())
         {
             d->thumbView->setOnRightPanel(d->thumbView->findItemByIndex(index));
@@ -865,6 +866,7 @@ void LightTableWindow::slotLeftDroppedItems(const ImageInfoList& list)
     // Note that the thumbbar stores all ImageInfo reference
     // in memory for preview object.
     QModelIndex index = d->thumbView->findItemByInfo(info);
+
     if (index.isValid())
     {
         slotSetItemOnLeftPanel(info);
@@ -882,6 +884,7 @@ void LightTableWindow::slotRightDroppedItems(const ImageInfoList& list)
     // Note that the thumbbar stores all ImageInfo reference
     // in memory for preview object.
     QModelIndex index = d->thumbView->findItemByInfo(info);
+
     if (index.isValid())
     {
         slotSetItemOnRightPanel(info);
@@ -1095,28 +1098,28 @@ void LightTableWindow::slotRemoveItem()
 
 void LightTableWindow::slotRemoveItem(const ImageInfo& info)
 {
-/*
-    if (!d->previewView->leftImageInfo().isNull())
-    {
-        if (d->previewView->leftImageInfo() == info)
+    /*
+        if (!d->previewView->leftImageInfo().isNull())
         {
-            d->previewView->setLeftImageInfo();
-            d->leftSideBar->slotNoCurrentItem();
+            if (d->previewView->leftImageInfo() == info)
+            {
+                d->previewView->setLeftImageInfo();
+                d->leftSideBar->slotNoCurrentItem();
+            }
         }
-    }
 
-    if (!d->previewView->rightImageInfo().isNull())
-    {
-        if (d->previewView->rightImageInfo() == info)
+        if (!d->previewView->rightImageInfo().isNull())
         {
-            d->previewView->setRightImageInfo();
-            d->rightSideBar->slotNoCurrentItem();
+            if (d->previewView->rightImageInfo() == info)
+            {
+                d->previewView->setRightImageInfo();
+                d->rightSideBar->slotNoCurrentItem();
+            }
         }
-    }
 
-    d->thumbView->removeItemByInfo(info);
-    d->thumbView->setSelected(d->thumbView->currentItem());
-*/
+        d->thumbView->removeItemByInfo(info);
+        d->thumbView->setSelected(d->thumbView->currentItem());
+    */
 
     // When either the image from the left or right panel is removed,
     // there are various situations to account for.
@@ -1181,7 +1184,7 @@ void LightTableWindow::slotRemoveItem(const ImageInfo& info)
     // removal of the left panel item?
     if (!curr_linfo.isNull())
     {
-        if ( curr_linfo.id() == infoId )
+        if (curr_linfo.id() == infoId)
         {
             leftPanelActive = true;
             // Delete the item A_L of the left panel:
@@ -1315,7 +1318,7 @@ void LightTableWindow::slotRemoveItem(const ImageInfo& info)
         slotSetItemOnLeftPanel(new_linfo);
 
         //  make this the selected item if the left was active before
-        if ( leftPanelActive)
+        if (leftPanelActive)
         {
             d->thumbView->setCurrentInfo(new_linfo);
         }
@@ -1406,7 +1409,7 @@ void LightTableWindow::slideShow(SlideShowSettings& settings)
         settings.pictInfoMap.insert((*it).fileUrl(), pictInfo);
         settings.fileList.append((*it).fileUrl());
 
-        d->statusProgressBar->setProgressValue((int)((i++/(float)list.count())*100.0));
+        d->statusProgressBar->setProgressValue((int)((i++ / (float)list.count()) * 100.0));
         kapp->processEvents();
     }
 
@@ -1444,7 +1447,7 @@ void LightTableWindow::slotToggleFullScreen()
 {
     if (d->fullScreen) // out of fullscreen
     {
-        setWindowState( windowState() & ~Qt::WindowFullScreen ); // reset
+        setWindowState(windowState() & ~Qt::WindowFullScreen);   // reset
 
         slotShowMenuBar();
         statusBar()->show();
@@ -1495,23 +1498,23 @@ void LightTableWindow::slotToggleFullScreen()
             }
 
             // add fullscreen action if necessary
-            if ( mainToolbar && !mainToolbar->actions().contains(d->fullScreenAction) )
+            if (mainToolbar && !mainToolbar->actions().contains(d->fullScreenAction))
             {
                 mainToolbar->addAction(d->fullScreenAction);
-                d->removeFullScreenButton=true;
+                d->removeFullScreenButton = true;
             }
             else
             {
                 // If FullScreen button is enabled in toolbar settings,
                 // we shall not remove it when leaving of fullscreen mode.
-                d->removeFullScreenButton=false;
+                d->removeFullScreenButton = false;
             }
         }
 
         d->leftSideBar->backup();
         d->rightSideBar->backup();
 
-        setWindowState( windowState() | Qt::WindowFullScreen ); // set
+        setWindowState(windowState() | Qt::WindowFullScreen);   // set
         d->fullScreen = true;
     }
 }
@@ -1546,7 +1549,7 @@ void LightTableWindow::slotEditKeys()
 {
     KShortcutsDialog dialog(KShortcutsEditor::AllActions,
                             KShortcutsEditor::LetterShortcutsAllowed, this);
-    dialog.addCollection( actionCollection(), i18n( "General" ) );
+    dialog.addCollection(actionCollection(), i18n("General"));
     dialog.configure();
 }
 

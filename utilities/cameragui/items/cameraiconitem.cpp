@@ -119,6 +119,7 @@ void CameraIconItem::setDownloaded(int status)
     {
         d->progressTimer->stop();
     }
+
     update();
 }
 
@@ -137,6 +138,7 @@ void CameraIconItem::toggleLock()
     {
         d->itemInfo.writePermissions = 0;
     }
+
     update();
 }
 
@@ -144,9 +146,9 @@ void CameraIconItem::calcRect(const QString& itemName, const QString& newName, c
 {
     CameraIconView* view = static_cast<CameraIconView*>(iconView());
     const int border     = 8;
-    int thumbSize        = view->thumbnailSize() - (2*border);
+    int thumbSize        = view->thumbnailSize() - (2 * border);
     d->pixSize           = thumb.size();
-    d->pixSize.scale(thumbSize+1, thumbSize+1, Qt::KeepAspectRatio);
+    d->pixSize.scale(thumbSize + 1, thumbSize + 1, Qt::KeepAspectRatio);
     d->pixRect           = QRect(0, 0, 0, 0);
     d->textRect          = QRect(0, 0, 0, 0);
     d->extraRect         = QRect(0, 0, 0, 0);
@@ -157,7 +159,7 @@ void CameraIconItem::calcRect(const QString& itemName, const QString& newName, c
     d->pixRect.setHeight(thumbSize);
 
     QFontMetrics fm(iconView()->font());
-    QRect r = QRect(fm.boundingRect(0, 0, thumbSize+(2*border), 0xFFFFFFFF, Qt::AlignHCenter | Qt::AlignTop, itemName));
+    QRect r = QRect(fm.boundingRect(0, 0, thumbSize + (2 * border), 0xFFFFFFFF, Qt::AlignHCenter | Qt::AlignTop, itemName));
     d->textRect.setWidth(r.width());
     d->textRect.setHeight(r.height());
 
@@ -167,11 +169,11 @@ void CameraIconItem::calcRect(const QString& itemName, const QString& newName, c
 
         if (fn.pointSize() > 0)
         {
-            fn.setPointSize(qMax(fn.pointSize()-2, 6));
+            fn.setPointSize(qMax(fn.pointSize() - 2, 6));
         }
 
         fm = QFontMetrics(fn);
-        r  = QRect(fm.boundingRect(0, 0, thumbSize+(2*border), 0xFFFFFFFF, Qt::AlignHCenter | Qt::TextWordWrap, newName));
+        r  = QRect(fm.boundingRect(0, 0, thumbSize + (2 * border), 0xFFFFFFFF, Qt::AlignHCenter | Qt::TextWordWrap, newName));
         d->extraRect.setWidth(r.width());
         d->extraRect.setHeight(r.height());
 
@@ -182,18 +184,18 @@ void CameraIconItem::calcRect(const QString& itemName, const QString& newName, c
     int w = qMax(d->textRect.width(), d->pixRect.width());
     int h = d->textRect.height() + d->pixRect.height() ;
 
-    itemRect.setWidth(w+border);
-    itemRect.setHeight(h+border);
+    itemRect.setWidth(w + border);
+    itemRect.setHeight(h + border);
 
     // Center the pix and text rect
     d->pixRect  = QRect(border, border, d->pixRect.width(), d->pixRect.height());
-    d->textRect = QRect((itemRect.width() - d->textRect.width())/2,
+    d->textRect = QRect((itemRect.width() - d->textRect.width()) / 2,
                         itemRect.height() - d->textRect.height() + border,
                         d->textRect.width(), d->textRect.height());
 
     if (!d->extraRect.isEmpty())
     {
-        d->extraRect = QRect((itemRect.width() - d->extraRect.width())/2,
+        d->extraRect = QRect((itemRect.width() - d->extraRect.width()) / 2,
                              itemRect.height() - d->extraRect.height() + border,
                              d->extraRect.width(), d->extraRect.height());
     }
@@ -226,13 +228,13 @@ void CameraIconItem::paintItem(QPainter* p)
     QFont fn(view->font());
     QRect r(rect());
 
-    QString itemName     = ImageDelegate::squeezedText(p->fontMetrics(), r.width()-5, d->itemInfo.name);
-    QString downloadName = ImageDelegate::squeezedText(p->fontMetrics(), r.width()-5, d->itemInfo.downloadName);
+    QString itemName     = ImageDelegate::squeezedText(p->fontMetrics(), r.width() - 5, d->itemInfo.name);
+    QString downloadName = ImageDelegate::squeezedText(p->fontMetrics(), r.width() - 5, d->itemInfo.downloadName);
 
     calcRect(itemName, downloadName, item.second);
 
     p->setPen(isSelected() ? kapp->palette().color(QPalette::HighlightedText)
-                           : kapp->palette().color(QPalette::Text));
+              : kapp->palette().color(QPalette::Text));
 
     QRect pixmapDrawRect(d->pixRect.x() + (d->pixRect.width()  - d->pixSize.width())  / 2,
                          d->pixRect.y() + (d->pixRect.height() - d->pixSize.height()) / 2,
@@ -254,30 +256,30 @@ void CameraIconItem::paintItem(QPainter* p)
     }
 
     QPixmap borderPix = view->thumbnailBorderPixmap(pixmapDrawRect.size());
-    p->drawPixmap(pixmapDrawRect.x()-3, pixmapDrawRect.y()-3, borderPix);
+    p->drawPixmap(pixmapDrawRect.x() - 3, pixmapDrawRect.y() - 3, borderPix);
 
     p->restore();
-    p->drawText(d->textRect, Qt::AlignHCenter|Qt::AlignTop, itemName);
+    p->drawText(d->textRect, Qt::AlignHCenter | Qt::AlignTop, itemName);
 
     if (!downloadName.isEmpty())
     {
         if (fn.pointSize() > 0)
         {
-            fn.setPointSize(qMax(fn.pointSize()-2, 6));
+            fn.setPointSize(qMax(fn.pointSize() - 2, 6));
         }
 
         QFont oldFn = p->font();
         p->setFont(fn);
         p->setPen(isSelected() ? kapp->palette().color(QPalette::HighlightedText)
-                               : kapp->palette().color(QPalette::Link));
-        p->drawText(d->extraRect, Qt::AlignHCenter|Qt::AlignTop, downloadName);
+                  : kapp->palette().color(QPalette::Link));
+        p->drawText(d->extraRect, Qt::AlignHCenter | Qt::AlignTop, downloadName);
         p->setFont(oldFn);
     }
 
     if (this == iconView()->currentItem())
     {
         p->setPen(QPen(isSelected() ? Qt::white : Qt::black, 1, Qt::DotLine));
-        p->drawRect(1, 1, r.width()-3, r.height()-3);
+        p->drawRect(1, 1, r.width() - 3, r.height() - 3);
     }
 
     // Draw download status icon.
@@ -290,11 +292,13 @@ void CameraIconItem::paintItem(QPainter* p)
             downloaded = view->newPicturePixmap();
             break;
         }
+
         case CamItemInfo::DownloadedYes:
         {
             downloaded = view->downloadedPixmap();
             break;
         }
+
         case CamItemInfo::DownloadStarted:
         {
             QPixmap mask(d->pixSize);
@@ -316,11 +320,13 @@ void CameraIconItem::paintItem(QPainter* p)
             p->restore();
             break;
         }
+
         case CamItemInfo::DownloadFailed:
         {
             downloaded = view->downloadFailedPixmap();
             break;
         }
+
         case CamItemInfo::DownloadUnknown:
         {
             downloaded = view->downloadUnknownPixmap();
@@ -346,7 +352,7 @@ void CameraIconItem::paintItem(QPainter* p)
 
         r = view->itemRect();
         p->setPen(QPen(view->palette().color(QPalette::Highlight), 3, Qt::SolidLine));
-        p->drawRect(1, 1, r.width()-3, r.height()-3);
+        p->drawRect(1, 1, r.width() - 3, r.height() - 3);
     }
 }
 

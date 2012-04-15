@@ -56,7 +56,7 @@ public:
     void rollbackToOrigin();
     bool putImageDataAndHistory(DImg* const img, int stepsBack);
 
-    void clear(bool clearCache=true);
+    void clear(bool clearCache = true);
 
     bool        anyMoreUndo() const;
     bool        anyMoreRedo() const;

@@ -78,7 +78,7 @@ SoftProofDialog::SoftProofDialog(QWidget* const parent)
 {
     setCaption(i18n("Soft Proofing Options"));
 
-    setButtons(Ok|Cancel);
+    setButtons(Ok | Cancel);
     setDefaultButton(Ok);
     setButtonFocus(Ok);
     setModal(true);
@@ -105,14 +105,14 @@ SoftProofDialog::SoftProofDialog(QWidget* const parent)
     QLabel* proofLabel       = new QLabel(i18n("Profile of the output device to simulate:"));
     d->deviceProfileBox      = new IccProfilesComboBox;
     proofLabel->setBuddy(d->deviceProfileBox);
-    d->deviceProfileBox->setWhatsThis( i18n("<p>Select the profile for your output device "
-                                            "(usually, your printer). This profile will be used to do a soft proof, so you will "
-                                            "be able to preview how an image will be rendered via an output device.</p>"));
+    d->deviceProfileBox->setWhatsThis(i18n("<p>Select the profile for your output device "
+                                           "(usually, your printer). This profile will be used to do a soft proof, so you will "
+                                           "be able to preview how an image will be rendered via an output device.</p>"));
 
     d->infoProofProfiles      = new QPushButton;
     d->infoProofProfiles->setIcon(SmallIcon("dialog-information"));
-    d->infoProofProfiles->setWhatsThis( i18n("Press this button to get detailed "
-                                             "information about the selected proofing profile.</p>"));
+    d->infoProofProfiles->setWhatsThis(i18n("Press this button to get detailed "
+                                            "information about the selected proofing profile.</p>"));
 
     d->deviceProfileBox->replaceProfilesSqueezed(IccSettings::instance()->outputProfiles());
 

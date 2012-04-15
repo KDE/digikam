@@ -130,7 +130,7 @@ public:
 EditorToolSettings::EditorToolSettings(QWidget* parent)
     : QScrollArea(parent), d(new EditorToolSettingsPriv)
 {
-    setFrameStyle( QFrame::NoFrame );
+    setFrameStyle(QFrame::NoFrame);
     setWidgetResizable(true);
 
     d->settingsArea = new QWidget;
@@ -239,7 +239,7 @@ EditorToolSettings::EditorToolSettings(QWidget* parent)
 
     // ---------------------------------------------------------------
 
-    gridSettings->addWidget(toolDescriptor,    0, 0, 1,-1);
+    gridSettings->addWidget(toolDescriptor,    0, 0, 1, -1);
     gridSettings->addWidget(d->histogramBox,   1, 0, 2, 2);
     gridSettings->addWidget(d->plainPage,      4, 0, 1, 2);
     gridSettings->addWidget(d->guideBox,       5, 0, 1, 2);
@@ -298,7 +298,7 @@ EditorToolSettings::EditorToolSettings(QWidget* parent)
 
     // ---------------------------------------------------------------
 
-    setButtons(Default|Ok|Cancel);
+    setButtons(Default | Ok | Cancel);
     setTools(NoTool);
 }
 

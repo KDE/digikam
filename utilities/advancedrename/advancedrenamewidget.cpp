@@ -376,7 +376,7 @@ void AdvancedRenameWidget::setupWidgets()
         mainLayout->addWidget(d->renameInput,           0, 0, 1, 1);
         mainLayout->addWidget(d->modifiersToolButton,   0, 1, 1, 1);
         mainLayout->addWidget(d->tooltipToggleButton,   0, 2, 1, 1);
-        mainLayout->addWidget(d->optionsLabel,          1, 0, 1,-1);
+        mainLayout->addWidget(d->optionsLabel,          1, 0, 1, -1);
         mainLayout->setColumnStretch(0, 10);
     }
     else
@@ -393,7 +393,7 @@ void AdvancedRenameWidget::setupWidgets()
         d->modifiersButton->setIcon(modifiersIcon);
         d->modifiersButton->setToolTip(modifiersTooltip);
 
-        mainLayout->addWidget(d->renameInput,           0, 0, 1,-1);
+        mainLayout->addWidget(d->renameInput,           0, 0, 1, -1);
         mainLayout->addWidget(d->optionsButton,         1, 0, 1, 1);
         mainLayout->addWidget(d->modifiersButton,       1, 1, 1, 1);
         mainLayout->addWidget(d->tooltipToggleButton,   1, 3, 1, 1);

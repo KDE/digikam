@@ -54,7 +54,8 @@ public:
         GoogleMaps,
         MsnMaps,
         MultiMap,
-        OpenStreetMap
+        OpenStreetMap,
+        LocAlizeMaps
     };
 
 public:

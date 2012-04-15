@@ -163,9 +163,11 @@ void CameraHistoryUpdater::proccessMap(const QByteArray& id, CHUpdateItemMap& ma
             case DownloadHistory::NotDownloaded:
                 (*it).downloaded = CamItemInfo::NewPicture;
                 break;
+
             case DownloadHistory::Downloaded:
                 (*it).downloaded = CamItemInfo::DownloadedYes;
                 break;
+
             default: // DownloadHistory::StatusUnknown
                 (*it).downloaded = CamItemInfo::DownloadUnknown;
                 break;

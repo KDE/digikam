@@ -349,6 +349,7 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver* observer)
         loadingFailed();
         return false;
     }
+    return true;
 }
 
 bool PGFLoader::save(const QString& filePath, DImgLoaderObserver* observer)
@@ -494,6 +495,7 @@ bool PGFLoader::save(const QString& filePath, DImgLoaderObserver* observer)
 
         return false;
     }
+    return true;
 }
 
 bool PGFLoader::hasAlpha() const

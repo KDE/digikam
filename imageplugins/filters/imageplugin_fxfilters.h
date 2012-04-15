@@ -35,6 +35,9 @@
 
 using namespace Digikam;
 
+namespace DigikamFxFiltersImagePlugin
+{
+
 class ImagePlugin_FxFilters : public ImagePlugin
 {
     Q_OBJECT
@@ -62,5 +65,7 @@ private:
     class ImagePlugin_FxFiltersPriv;
     ImagePlugin_FxFiltersPriv* const d;
 };
+
+} // namespace DigikamFxFiltersImagePlugin
 
 #endif /* IMAGEPLUGIN_FXFILTERS_H */

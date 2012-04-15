@@ -40,7 +40,7 @@ class SetupAlbumView : public QScrollArea
 
 public:
 
-    SetupAlbumView(QWidget* parent=0);
+    SetupAlbumView(QWidget* parent = 0);
     ~SetupAlbumView();
 
     void applySettings();

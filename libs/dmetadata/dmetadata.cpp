@@ -1446,14 +1446,14 @@ bool DMetadata::removeMetadataTemplate() const
 
     // Remove Contact info.
 
-    removeXmpTag("Xmp.iptc.CiAdrCity");
-    removeXmpTag("Xmp.iptc.CiAdrCtry");
-    removeXmpTag("Xmp.iptc.CiAdrExtadr");
-    removeXmpTag("Xmp.iptc.CiAdrPcode");
-    removeXmpTag("Xmp.iptc.CiAdrRegion");
-    removeXmpTag("Xmp.iptc.CiEmailWork");
-    removeXmpTag("Xmp.iptc.CiTelWork");
-    removeXmpTag("Xmp.iptc.CiUrlWork");
+    removeXmpTag("Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiAdrCity");
+    removeXmpTag("Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiAdrCtry");
+    removeXmpTag("Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiAdrExtadr");
+    removeXmpTag("Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiAdrPcode");
+    removeXmpTag("Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiAdrRegion");
+    removeXmpTag("Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiEmailWork");
+    removeXmpTag("Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiTelWork");
+    removeXmpTag("Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiUrlWork");
 
     // Remove IPTC Subjects.
 
@@ -1559,42 +1559,42 @@ bool DMetadata::setCreatorContactInfo(const IptcCoreContactInfo& info) const
         return false;
     }
 
-    if (!setXmpTagString("Xmp.iptc.CiAdrCity", info.city, false))
+    if (!setXmpTagString("Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiAdrCity", info.city, false))
     {
         return false;
     }
 
-    if (!setXmpTagString("Xmp.iptc.CiAdrCtry", info.country, false))
+    if (!setXmpTagString("Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiAdrCtry", info.country, false))
     {
         return false;
     }
 
-    if (!setXmpTagString("Xmp.iptc.CiAdrExtadr", info.address, false))
+    if (!setXmpTagString("Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiAdrExtadr", info.address, false))
     {
         return false;
     }
 
-    if (!setXmpTagString("Xmp.iptc.CiAdrPcode", info.postalCode, false))
+    if (!setXmpTagString("Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiAdrPcode", info.postalCode, false))
     {
         return false;
     }
 
-    if (!setXmpTagString("Xmp.iptc.CiAdrRegion", info.provinceState, false))
+    if (!setXmpTagString("Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiAdrRegion", info.provinceState, false))
     {
         return false;
     }
 
-    if (!setXmpTagString("Xmp.iptc.CiEmailWork", info.email, false))
+    if (!setXmpTagString("Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiEmailWork", info.email, false))
     {
         return false;
     }
 
-    if (!setXmpTagString("Xmp.iptc.CiTelWork", info.phone, false))
+    if (!setXmpTagString("Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiTelWork", info.phone, false))
     {
         return false;
     }
 
-    if (!setXmpTagString("Xmp.iptc.CiUrlWork", info.webUrl, false))
+    if (!setXmpTagString("Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiUrlWork", info.webUrl, false))
     {
         return false;
     }
@@ -2195,21 +2195,21 @@ QVariant DMetadata::getMetadataField(MetadataInfo::Field field) const
             return QVariant::fromValue(info);
         }
         case MetadataInfo::IptcCoreContactInfoCity:
-            return getXmpTagVariant("Xmp.iptc.CiAdrCity");
+            return getXmpTagVariant("Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiAdrCity");
         case MetadataInfo::IptcCoreContactInfoCountry:
-            return getXmpTagVariant("Xmp.iptc.CiAdrCtry");
+            return getXmpTagVariant("Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiAdrCtry");
         case MetadataInfo::IptcCoreContactInfoAddress:
-            return getXmpTagVariant("Xmp.iptc.CiAdrExtadr");
+            return getXmpTagVariant("Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiAdrExtadr");
         case MetadataInfo::IptcCoreContactInfoPostalCode:
-            return getXmpTagVariant("Xmp.iptc.CiAdrPcode");
+            return getXmpTagVariant("Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiAdrPcode");
         case MetadataInfo::IptcCoreContactInfoProvinceState:
-            return getXmpTagVariant("Xmp.iptc.CiAdrRegion");
+            return getXmpTagVariant("Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiAdrRegion");
         case MetadataInfo::IptcCoreContactInfoEmail:
-            return getXmpTagVariant("Xmp.iptc.CiEmailWork");
+            return getXmpTagVariant("Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiEmailWork");
         case MetadataInfo::IptcCoreContactInfoPhone:
-            return getXmpTagVariant("Xmp.iptc.CiTelWork");
+            return getXmpTagVariant("Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiTelWork");
         case MetadataInfo::IptcCoreContactInfoWebUrl:
-            return getXmpTagVariant("Xmp.iptc.CiUrlWork");
+            return getXmpTagVariant("Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiUrlWork");
 
         default:
             return QVariant();

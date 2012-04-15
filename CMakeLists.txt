@@ -20,7 +20,7 @@ SET(DIGIKAM_MINOR_VERSION "6")
 SET(DIGIKAM_PATCH_VERSION "0")
 
 #digiKam release date
-SET(DIGIKAM_RELEASE_DATE "2012-04-01")
+SET(DIGIKAM_RELEASE_DATE "2012-05-06")
 
 # Suffix to add at end of version string. Usual values are:
 # "-git"   : alpha code unstable from git. Do not use in production
@@ -29,7 +29,7 @@ SET(DIGIKAM_RELEASE_DATE "2012-04-01")
 # "-beta3" : beta3 release.
 # "-rc"    : release candidate.
 # ""       : final release. Can be used in production.
-SET(DIGIKAM_SUFFIX_VERSION "-beta3")
+SET(DIGIKAM_SUFFIX_VERSION "-rc")
 
 # ==================================================================================================
 # Set env. variables accordingly.
@@ -1027,6 +1027,11 @@ IF(DIGIKAM_CAN_BE_COMPILED)
 
     ENDIF(USE_SCRIPT_IFACE)
 
+
+    SET(libpresentationview_SRCS
+	${CMAKE_CURRENT_SOURCE_DIR}/utilities/qmlshow/qmlshow.cpp
+	)
+
     SET(libslideshow_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/slideshow/toolbar.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/slideshow/slideshow.cpp
@@ -1628,6 +1633,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/kipiiface
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/lighttable
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/nepomuk
+	${CMAKE_CURRENT_SOURCE_DIR}/utilities/qmlshow
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/main
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/manager
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/views

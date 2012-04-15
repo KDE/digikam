@@ -39,7 +39,7 @@ class BWConvert : public BatchTool
 
 public:
 
-    BWConvert(QObject* parent=0);
+    BWConvert(QObject* parent = 0);
     ~BWConvert();
 
     BatchToolSettings defaultSettings();

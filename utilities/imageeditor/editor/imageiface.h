@@ -52,13 +52,13 @@ class DIGIKAM_EXPORT ImageIface
 {
 public:
 
-    explicit ImageIface(int w=0, int h=0);
+    explicit ImageIface(int w = 0, int h = 0);
     ~ImageIface();
 
     /** Use this method to use the current selection in editor instead the full
      *  image to render the preview.
      */
-    void setPreviewType(bool useSelect=false);
+    void setPreviewType(bool useSelect = false);
 
     /** Return 'true' if the preview is rendered using the current selection in editor.
      *  Return 'false' if the preview is rendered using the full image in editor.
@@ -102,7 +102,7 @@ public:
      *  If w == -1 and h == -1, the size is unchanged.
      *  Caller is an i18n'ed string that will be shown as the undo/redo action name.
      */
-    void   putOriginalImage(const QString& caller, const FilterAction& action, uchar* data, int w=-1, int h=-1);
+    void   putOriginalImage(const QString& caller, const FilterAction& action, uchar* data, int w = -1, int h = -1);
 
     /** Set the color profile of the original image.
      */
@@ -191,7 +191,7 @@ public:
      *  if putPreviewImage has not been called) on the given paint device.
      *   at x|y, with given maximum width and height.
      */
-    void paint(QPaintDevice* device, int x, int y, int w, int h, QPainter* painter=0);
+    void paint(QPaintDevice* device, int x, int y, int w, int h, QPainter* painter = 0);
 
 private:
 
