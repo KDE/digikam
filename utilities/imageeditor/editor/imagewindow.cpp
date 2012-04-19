@@ -1305,6 +1305,8 @@ void ImageWindow::deleteCurrentItem(bool ask, bool permanently)
         useTrash = !permanently;
     }
 
+    DIO::del(d->currentImageInfo, useTrash);
+
     // bring all (sidebar) to a defined state without letting them sit on the deleted file
     emit signalNoCurrentItem();
 
@@ -1312,8 +1314,6 @@ void ImageWindow::deleteCurrentItem(bool ask, bool permanently)
     // everywhere. Just do it asynchronously.
 
     removeCurrent();
-
-    DIO::del(d->currentImageInfo, useTrash);
 }
 
 void ImageWindow::removeCurrent()
