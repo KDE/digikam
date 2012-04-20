@@ -108,6 +108,8 @@ public:
 
     QPixmap                      pixmap;            // Used for widget double buffering.
 
+    QRect                        focusRect;
+
     QMap<YearRefPair, StatPair>  dayStatMap;        // Store Days count statistics.
     QMap<YearRefPair, StatPair>  weekStatMap;       // Store Weeks count statistics.
     QMap<YearRefPair, StatPair>  monthStatMap;      // Store Month count statistics.
@@ -257,13 +259,7 @@ void TimeLineWidget::setCursorDateTime(const QDateTime& dateTime)
         {
             // Go to the first day of week.
             int weekYear = date.year(); // Changed for week shared between 2 years (Dec/Jan).
-
-            // FIXME: Remove this when KDE 4.7 is approx. 6 months old, so that most distributions should have included it (April 2012?)
-#if KDE_IS_VERSION(4,7,0)
-            int weekNb   = d->calendar->week(date, &weekYear);
-#else
             int weekNb   = d->calendar->weekNumber(date, &weekYear);
-#endif
 
             dt           = firstDayOfWeek(weekYear, weekNb);
             break;
@@ -318,17 +314,15 @@ int TimeLineWidget::cursorInfo(QString& infoDate) const
 
         case Week:
         {
-            // FIXME: Remove this when KDE 4.7 is approx. 6 months old, so that most distributions should have included it (April 2012?)
-#if KDE_IS_VERSION(4,7,0)
-            int weekNb = d->calendar->week(date);
-#else
             int weekNb = d->calendar->weekNumber(date);
-#endif
-            infoDate = i18nc("Week #weeknumber - month name - year string",
-                             "Week #%1 - %2 %3",
+            QDate endDate = d->calendar->addDays(date, 7);
+            infoDate = i18nc("Week #weeknumber - month name - year string\nStart:\tEnd: ",
+                             "Week #%1 - %2 %3\n%4\t%5",
                              weekNb,
                              d->calendar->monthName(date),
-                             d->calendar->formatDate(date, "%Y"));
+                             d->calendar->formatDate(date, "%Y"),
+                             "Start: " + d->calendar->dayString(date),
+                             "End: " + d->calendar->dayString(endDate));
             break;
         }
 
@@ -594,12 +588,7 @@ void TimeLineWidget::slotDatesMap(const QMap<QDateTime, int>& datesStatMap)
         int month = it.key().date().month();
         int day   = d->calendar->dayOfYear(it.key().date());
         int yearForWeek = year;  // Used with week shared between 2 years decade (Dec/Jan).
-        // FIXME: Remove this when KDE 4.7 is approx. 6 months old, so that most distributions should have included it (April 2012?)
-#if KDE_IS_VERSION(4,7,0)
-        int week  = d->calendar->week(it.key().date(), &yearForWeek);
-#else
         int week  = d->calendar->weekNumber(it.key().date(), &yearForWeek);
-#endif
 
         // Stats Years values.
 
@@ -796,12 +785,7 @@ void TimeLineWidget::paintItem(QPainter& p, const QRect& barRect,
 
         case Week:
         {
-            // FIXME: Remove this when KDE 4.7 is approx. 6 months old, so that most distributions should have included it (April 2012?)
-#if KDE_IS_VERSION(4,7,0)
-            int week = d->calendar->week(ref.date());
-#else
             int week = d->calendar->weekNumber(ref.date());
-#endif
 
             {
                 p.save();
@@ -890,6 +874,123 @@ void TimeLineWidget::paintItem(QPainter& p, const QRect& barRect,
                            separatorPosition, barRect.bottom() + d->bottomMargin / 4);
 
             break;
+        }
+    }
+}
+
+void TimeLineWidget::keyPressEvent(QKeyEvent *e)
+{
+    QDateTime ref       = d->cursorDateTime;
+    bool isScrollNext;
+
+    bool ctrlPressed    = e->modifiers() & Qt::ControlButton;
+    bool shiftPressed   = e->modifiers() & Qt::ShiftButton;
+
+    if (!ctrlPressed && !shiftPressed)
+    {
+        resetSelection();
+    }
+
+    if (!shiftPressed)
+    {
+        d->selStartDateTime = ref;
+        d->selMinDateTime   = ref;
+        d->selMaxDateTime   = ref;
+    }
+
+    update();
+
+    switch (e->key())
+    {
+        case Qt::Key_J:
+        {
+            QDateTime dt = prevDateTime(ref);
+            setDateTimeSelected(dt, Selected);
+
+            isScrollNext = false;
+            keyScroll(isScrollNext);
+
+            ref = nextDateTime(ref);
+
+            if (!dt.isNull())
+                setCursorDateTime(dt);
+
+            break;
+        }
+
+        case Qt::Key_K:
+        {
+            QDateTime dt = nextDateTime(ref);
+
+            setDateTimeSelected(dt, Selected);
+
+            isScrollNext = true;
+            keyScroll(isScrollNext); // passed true to scroll to the next item.
+
+            ref = prevDateTime(ref);
+
+            if (!dt.isNull())
+                setCursorDateTime(dt);
+
+            break;
+        }
+
+        default:
+        {
+            e->ignore();
+            break;
+        }
+    }
+}
+
+void TimeLineWidget::keyReleaseEvent(QKeyEvent *)
+{
+    updateAllSelection();
+    emit signalSelectionChanged();
+    update();
+}
+
+void TimeLineWidget::keyScroll(bool isScrollNext)
+{
+    QRect barRect;
+    QRect deskRect = KGlobalSettings::desktopGeometry(this);
+    int items      = deskRect.width() / d->barWidth;
+
+    d->nbItems      = (int)((width() / 2.0) / (float)d->barWidth);
+    d->startPos     = (int)((width() / 2.0) - ((float)(d->barWidth) / 2.0));
+
+    if (isScrollNext)
+    {
+        barRect.setTop(0);
+        barRect.setBottom(height() - d->bottomMargin + 1);
+        for (int i = 0; i < items; ++i)
+        {
+            barRect.setLeft(d->startPos + i * d->barWidth);
+            barRect.setRight(d->startPos + (i + 1)*d->barWidth);
+
+            if (barRect.intersects(d->focusRect) && i >= d->nbItems)
+            {
+                // Scroll to the next item. Because the focus rect is outside the visible area.
+                slotNext();
+                break;
+            }
+        }
+    }
+    else
+    {
+        barRect.setTop(0);
+        barRect.setBottom(height() - d->bottomMargin + 1);
+        for (int i = 0; i < items; ++i)
+        {
+            barRect.setRight(d->startPos - i * d->barWidth);
+            barRect.setLeft(d->startPos - (i + 1)*d->barWidth);
+
+            if (barRect.intersects(d->focusRect) && i >= d->nbItems - 1)
+            {
+                // Scroll to the previous item. Because the focus rect is outside the visible area.
+                slotPrevious();
+                break;
+            }
         }
     }
 }
@@ -1089,6 +1190,7 @@ void TimeLineWidget::paintEvent(QPaintEvent*)
         QPoint p1(focusRect.left(), height() - d->bottomMargin);
         QPoint p2(focusRect.right(), height() - d->bottomMargin);
         focusRect.setBottom(focusRect.bottom() + d->bottomMargin / 2);
+        d->focusRect = focusRect;
 
         p.setPen(palette().color(QPalette::Active, QPalette::Shadow));
         p.drawLine(p1.x(), p1.y() + 1, p2.x(), p2.y() + 1);
@@ -1234,12 +1336,7 @@ int TimeLineWidget::statForDateTime(const QDateTime& dt, SelectionMode& selected
     int month        = dt.date().month();
     int day          = d->calendar->dayOfYear(dt.date());
     int yearForWeek  = year;  // Used with week shared between 2 years decade (Dec/Jan).
-    // FIXME: Remove this when KDE 4.7 is approx. 6 months old, so that most distributions should have included it (April 2012?)
-#if KDE_IS_VERSION(4,7,0)
-    int week         = d->calendar->week(dt.date(), &yearForWeek);
-#else
     int week         = d->calendar->weekNumber(dt.date(), &yearForWeek);
-#endif
 
     selected         = Unselected;
 
@@ -1308,12 +1405,7 @@ void TimeLineWidget::setDateTimeSelected(const QDateTime& dt, SelectionMode sele
     int year        = dt.date().year();
     int month       = dt.date().month();
     int yearForWeek = year;  // Used with week shared between 2 years decade (Dec/Jan).
-    // FIXME: Remove this when KDE 4.7 is approx. 6 months old, so that most distributions should have included it (April 2012?)
-#if KDE_IS_VERSION(4,7,0)
-    int week        = d->calendar->week(dt.date(), &yearForWeek);
-#else
     int week        = d->calendar->weekNumber(dt.date(), &yearForWeek);
-#endif
 
     QDateTime dts, dte;
 
@@ -1367,12 +1459,7 @@ void TimeLineWidget::updateWeekSelection(const QDateTime& dts, const QDateTime& 
     do
     {
         yearForWeek = dt.date().year();
-        // FIXME: Remove this when KDE 4.7 is approx. 6 months old, so that most distributions should have included it (April 2012?)
-#if KDE_IS_VERSION(4,7,0)
-        week        = d->calendar->week(dt.date(), &yearForWeek);
-#else
         week        = d->calendar->weekNumber(dt.date(), &yearForWeek);
-#endif
         dtsWeek     = firstDayOfWeek(yearForWeek, week);
         dteWeek     = dtsWeek.addDays(7);
         it          = d->weekStatMap.find(TimeLineWidgetPriv::YearRefPair(yearForWeek, week));
@@ -1737,6 +1824,7 @@ void TimeLineWidget::mousePressEvent(QMouseEvent* e)
         }
 
         d->validMouseEvent = true;
+        setFocus();
         update();
     }
 }
@@ -1903,12 +1991,7 @@ QDateTime TimeLineWidget::firstDayOfWeek(int year, int weekNumber) const
     do
     {
         dt      = dt.addDays(1);
-        // FIXME: Remove this when KDE 4.7 is approx. 6 months old, so that most distributions should have included it (April 2012?)
-#if KDE_IS_VERSION(4,7,0)
-        weekNum = d->calendar->week(dt.date(), &weekYear);
-#else
         weekNum = d->calendar->weekNumber(dt.date(), &weekYear);
-#endif
     }
     while (weekNum != 1 && weekYear != year);
 

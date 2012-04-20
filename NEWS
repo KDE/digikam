@@ -111,6 +111,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 092 ==> 298178 : Move photos dialog default button is Cancel, not Ok
 093 ==> 296798 : Crop selection not remembered.
 094 ==> 297970 : Wrong image deleted
-095 ==>
+095 ==> 158766 : Using keyboard with timeline view.
 
  

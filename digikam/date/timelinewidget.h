@@ -131,6 +131,10 @@ private:
     void          mouseMoveEvent(QMouseEvent*);
     void          mouseReleaseEvent(QMouseEvent*);
 
+    void          keyPressEvent(QKeyEvent *e);
+    void          keyReleaseEvent(QKeyEvent *);
+    void          keyScroll(bool isScrollNext);
+
     QDateTime     dateTimeForPoint(const QPoint& pt, bool& isOnSelectionArea);
     QDateTime     firstDayOfWeek(int year, int weekNumber) const;
 
