@@ -766,6 +766,11 @@ void VersionImageFilterSettings::setVersionManagerSettings(const VersionManagerS
 {
     m_excludeTagFilter.clear();
 
+    if (!settings.enabled)
+    {
+    	return;
+    }
+
     if (!(settings.showInViewFlags & VersionManagerSettings::ShowOriginal))
     {
         m_excludeTagFilter << TagsCache::instance()->getOrCreateInternalTag(InternalTagName::originalVersion());
