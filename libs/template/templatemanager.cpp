@@ -227,7 +227,7 @@ bool TemplateManager::load()
             {
                 locationInf.countryCode = val2;
             }
-            else if (name2 == QString::fromLatin1("clocationprovincestate"))
+            else if (name2 == QString::fromLatin1("locationprovincestate"))
             {
                 locationInf.provinceState = val2;
             }
@@ -414,9 +414,9 @@ bool TemplateManager::save()
             contactpostalcode.setAttribute(QString::fromLatin1("value"), t.contactInfo().postalCode);
             elem.appendChild(contactpostalcode);
 
-            QDomElement contactprovinceSstate = doc.createElement(QString::fromLatin1("contactprovinceSstate"));
-            contactprovinceSstate.setAttribute(QString::fromLatin1("value"), t.contactInfo().provinceState);
-            elem.appendChild(contactprovinceSstate);
+            QDomElement contactprovincestate = doc.createElement(QString::fromLatin1("contactprovincestate"));
+            contactprovincestate.setAttribute(QString::fromLatin1("value"), t.contactInfo().provinceState);
+            elem.appendChild(contactprovincestate);
 
             QDomElement contactemail = doc.createElement(QString::fromLatin1("contactemail"));
             contactemail.setAttribute(QString::fromLatin1("value"), t.contactInfo().email);
