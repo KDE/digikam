@@ -259,7 +259,12 @@ void TimeLineWidget::setCursorDateTime(const QDateTime& dateTime)
         {
             // Go to the first day of week.
             int weekYear = date.year(); // Changed for week shared between 2 years (Dec/Jan).
+
+#if KDE_IS_VERSION(4,7,0)
+            int weekNb   = d->calendar->week(date, &weekYear);
+#else
             int weekNb   = d->calendar->weekNumber(date, &weekYear);
+#endif
 
             dt           = firstDayOfWeek(weekYear, weekNb);
             break;
@@ -314,7 +319,11 @@ int TimeLineWidget::cursorInfo(QString& infoDate) const
 
         case Week:
         {
+#if KDE_IS_VERSION(4,7,0)
+            int weekNb = d->calendar->week(date);
+#else
             int weekNb = d->calendar->weekNumber(date);
+#endif
             QDate endDate = d->calendar->addDays(date, 7);
             infoDate = i18nc("Week #weeknumber - month name - year string\nStart:\tEnd: ",
                              "Week #%1 - %2 %3\n%4\t%5",
@@ -588,7 +597,12 @@ void TimeLineWidget::slotDatesMap(const QMap<QDateTime, int>& datesStatMap)
         int month = it.key().date().month();
         int day   = d->calendar->dayOfYear(it.key().date());
         int yearForWeek = year;  // Used with week shared between 2 years decade (Dec/Jan).
+
+#if KDE_IS_VERSION(4,7,0)
+        int week  = d->calendar->week(it.key().date(), &yearForWeek);
+#else
         int week  = d->calendar->weekNumber(it.key().date(), &yearForWeek);
+#endif
 
         // Stats Years values.
 
@@ -785,7 +799,11 @@ void TimeLineWidget::paintItem(QPainter& p, const QRect& barRect,
 
         case Week:
         {
+#if KDE_IS_VERSION(4,7,0)
+            int week = d->calendar->week(ref.date());
+#else
             int week = d->calendar->weekNumber(ref.date());
+#endif
 
             {
                 p.save();
@@ -1336,7 +1354,12 @@ int TimeLineWidget::statForDateTime(const QDateTime& dt, SelectionMode& selected
     int month        = dt.date().month();
     int day          = d->calendar->dayOfYear(dt.date());
     int yearForWeek  = year;  // Used with week shared between 2 years decade (Dec/Jan).
+
+#if KDE_IS_VERSION(4,7,0)
+    int week         = d->calendar->week(dt.date(), &yearForWeek);
+#else
     int week         = d->calendar->weekNumber(dt.date(), &yearForWeek);
+#endif
 
     selected         = Unselected;
 
@@ -1405,7 +1428,12 @@ void TimeLineWidget::setDateTimeSelected(const QDateTime& dt, SelectionMode sele
     int year        = dt.date().year();
     int month       = dt.date().month();
     int yearForWeek = year;  // Used with week shared between 2 years decade (Dec/Jan).
+
+#if KDE_IS_VERSION(4,7,0)
+    int week        = d->calendar->week(dt.date(), &yearForWeek);
+#else
     int week        = d->calendar->weekNumber(dt.date(), &yearForWeek);
+#endif
 
     QDateTime dts, dte;
 
@@ -1459,7 +1487,12 @@ void TimeLineWidget::updateWeekSelection(const QDateTime& dts, const QDateTime& 
     do
     {
         yearForWeek = dt.date().year();
+
+#if KDE_IS_VERSION(4,7,0)
+        week        = d->calendar->week(dt.date(), &yearForWeek);
+#else
         week        = d->calendar->weekNumber(dt.date(), &yearForWeek);
+#endif
         dtsWeek     = firstDayOfWeek(yearForWeek, week);
         dteWeek     = dtsWeek.addDays(7);
         it          = d->weekStatMap.find(TimeLineWidgetPriv::YearRefPair(yearForWeek, week));
@@ -1991,7 +2024,12 @@ QDateTime TimeLineWidget::firstDayOfWeek(int year, int weekNumber) const
     do
     {
         dt      = dt.addDays(1);
+
+#if KDE_IS_VERSION(4,7,0)
+        weekNum = d->calendar->week(dt.date(), &weekYear);
+#else
         weekNum = d->calendar->weekNumber(dt.date(), &weekYear);
+#endif
     }
     while (weekNum != 1 && weekYear != year);
 
