@@ -39,6 +39,7 @@
 
 #include "digikam_export.h"
 #include "collectionscannerobserver.h"
+#include "imageinfo.h"
 
 namespace Digikam
 {
@@ -112,16 +113,29 @@ public:
     void scheduleCollectionScanRelaxed(const QString& path);
 
     /**
-     * The file pointed to by file path will be scanned.
-     * The scan is finished when returning from the method.
+     * If necessary (modified or newly created, scans the file directly
+     * Returns the up-to-date ImageInfo.
      */
-    void scanFileDirectly(const QString& filePath);
+    ImageInfo scannedInfo(const QString& filePath);
 
     /**
-     * This variant shall be used when a new file is created which is a version
-     * of another image, and all relevant attributes shall be copied.
+     * When writing metadata to the file, the file content on disk changes,
+     * but the information is taken from the database; therefore,
+     * the resulting scanning process can be optimized.
+     *
+     * Thus, if you write metadata of an ImageInfo from the database to disk,
+     * do this in the scope of a FileMetadataWrite object.
      */
-    void scanFileDirectlyCopyAttributes(const QString& filePath, qlonglong parentVersion);
+    class FileMetadataWrite
+    {
+    public:
+        FileMetadataWrite(const ImageInfo& info);
+        ~FileMetadataWrite();
+        void changed(bool wasChanged);
+    protected:
+        ImageInfo m_info;
+        bool      m_changed;
+    };
 
     /** If the controller is currently processing a database update
      *  (typically after first run),
@@ -213,6 +227,12 @@ protected:
     virtual void run();
 
 private:
+
+    /**
+     * The file pointed to by file path will be scanned.
+     * The scan is finished when returning from the method.
+     */
+    void scanFileDirectly(const QString& filePath);
 
     virtual void moreSchemaUpdateSteps(int numberOfSteps);
     virtual void schemaUpdateProgress(const QString& message, int numberOfSteps);

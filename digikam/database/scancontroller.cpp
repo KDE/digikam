@@ -515,6 +515,48 @@ void ScanController::slotRelaxedScanning()
     d->condVar.wakeAll();
 }
 
+ImageInfo ScanController::scannedInfo(const QString& filePath)
+{
+    CollectionScanner scanner;
+    scanner.recordHints(d->itemHints);
+    scanner.recordHints(d->itemChangeHints);
+
+    ImageInfo info(filePath);
+    if (info.isNull())
+    {
+        qlonglong id = scanner.scanFile(filePath, CollectionScanner::NormalScan);
+        return ImageInfo(id);
+    }
+    else
+    {
+        scanner.scanFile(info, CollectionScanner::NormalScan);
+        return info;
+    }
+}
+
+ScanController::FileMetadataWrite::FileMetadataWrite(const ImageInfo& info)
+    : m_info(info), m_changed(false)
+{
+    // This class does not implement the optimization which is possible
+    // Idea: Get modification time before and after the operation,
+    // if file was properly scanned at all times (seen from mod times)
+    // use a shortened scan which only updates the hard values,
+    // and also take care to reuse the thumbnail.
+}
+
+void ScanController::FileMetadataWrite::changed(bool wasChanged)
+{
+    m_changed = m_changed || wasChanged;
+}
+
+ScanController::FileMetadataWrite::~FileMetadataWrite()
+{
+    if (m_changed)
+    {
+        ScanController::instance()->scanFileDirectly(m_info.filePath());
+    }
+}
+
 void ScanController::scanFileDirectly(const QString& filePath)
 {
     suspendCollectionScan();
@@ -526,6 +568,14 @@ void ScanController::scanFileDirectly(const QString& filePath)
 
     resumeCollectionScan();
 }
+
+/*
+
+    / **
+     * This variant shall be used when a new file is created which is a version
+     * of another image, and all relevant attributes shall be copied.
+     * /
+    void scanFileDirectlyCopyAttributes(const QString& filePath, qlonglong parentVersion);
 
 void ScanController::scanFileDirectlyCopyAttributes(const QString& filePath, qlonglong parentVersion)
 {
@@ -540,6 +590,7 @@ void ScanController::scanFileDirectlyCopyAttributes(const QString& filePath, qlo
 
     resumeCollectionScan();
 }
+*/
 
 void ScanController::abortInitialization()
 {
