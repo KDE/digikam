@@ -345,7 +345,17 @@ void ImageScanner::scanImageInformation()
     }
     else // ModifiedScan
     {
-        // Does _not_ update rating and orientation!
+        // Does _not_ update rating and orientation (unless dims were exchanged)!
+        /*int orientation = m_metadata.getImageOrientation();
+        QVariantList data = DatabaseAccess().db()->getImageInformation(m_scanInfo.id,
+                                                                       DatabaseFields::Width |
+                                                                       DatabaseFields::Height |
+                                                                       DatabaseFields::Orientation);
+        if (data.size() == 3 && data[2].isValid() && data[2].toInt() != orientation)
+        {
+            // be careful not to overwrite our value set in the database
+            // But there is a special case: if the dims were
+        }*/
         DatabaseAccess().db()->changeImageInformation(m_scanInfo.id, infos,
                 DatabaseFields::Width      |
                 DatabaseFields::Height     |
@@ -1145,42 +1155,6 @@ void ImageScanner::scanAudioFile()
             DatabaseFields::Rating       |
             DatabaseFields::CreationDate |
             DatabaseFields::Format);
-}
-
-void ImageScanner::copyProperties(qlonglong source, qlonglong dest)
-{
-    kDebug() << "Copying properties from" << source << "to" << dest;
-    DatabaseAccess access;
-
-    DatabaseFields::ImageInformation imageInfoFields =
-        DatabaseFields::Rating |
-        DatabaseFields::CreationDate |
-        DatabaseFields::DigitizationDate;
-    QVariantList imageInfos = access.db()->getImageInformation(source, imageInfoFields);
-
-    if (!imageInfos.isEmpty())
-    {
-        access.db()->changeImageInformation(dest, imageInfos, imageInfoFields);
-    }
-
-    QVariantList positionData = access.db()->getImagePosition(source, DatabaseFields::ImagePositionsAll);
-
-    if (!positionData.isEmpty())
-    {
-        access.db()->addImagePosition(dest, positionData, DatabaseFields::ImagePositionsAll);
-    }
-
-    ImageComments commentsSource(access, source);
-    ImageComments commentsDest(access, dest);
-    commentsDest.replaceFrom(commentsSource);
-    commentsDest.apply(access);
-
-    ImageCopyright copyrightSource(source);
-    ImageCopyright copyrightDest(dest);
-    copyrightDest.replaceFrom(source);
-
-    access.db()->copyImageTags(source, dest);
-    access.db()->copyImageProperties(source, dest);
 }
 
 void ImageScanner::loadFromDisk()

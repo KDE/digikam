@@ -135,11 +135,6 @@ public:
     void loadFromDisk();
 
     /**
-     * Copy all relevant attributes like comments, tags, rating from source to destination.
-     */
-    static void copyProperties(qlonglong source, qlonglong destination);
-
-    /**
      * Returns a suitable creation date from file system information.
      * Use this as a fallback if metadata is not available.
      */

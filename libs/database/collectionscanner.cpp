@@ -58,6 +58,8 @@
 #include "databasebackend.h"
 #include "databasetransaction.h"
 #include "databaseoperationgroup.h"
+#include "imagecomments.h"
+#include "imagecopyright.h"
 #include "imageinfo.h"
 #include "imagescanner.h"
 #include "tagscache.h"
@@ -1117,15 +1119,61 @@ void CollectionScanner::rescanFile(const QFileInfo& info, const ItemScanInfo& sc
     d->finishScanner(scanner);
 }
 
-void CollectionScanner::copyFileProperties(const ImageInfo& source, const ImageInfo& dest)
+void CollectionScanner::copyFileProperties(const ImageInfo& source, const ImageInfo& d)
 {
-    if (source.isNull() || dest.isNull())
+    if (source.isNull() || d.isNull())
     {
         return;
     }
+    ImageInfo dest(d);
 
     DatabaseOperationGroup group;
-    ImageScanner::copyProperties(source.id(), dest.id());
+
+    kDebug() << "Copying properties from" << source.id() << "to" << dest.id();
+
+    // Rating, creation dates
+    DatabaseFields::ImageInformation imageInfoFields =
+        DatabaseFields::Rating |
+        DatabaseFields::CreationDate |
+        DatabaseFields::DigitizationDate;
+    QVariantList imageInfos = DatabaseAccess().db()->getImageInformation(source.id(), imageInfoFields);
+    if (!imageInfos.isEmpty())
+    {
+        DatabaseAccess().db()->changeImageInformation(dest.id(), imageInfos, imageInfoFields);
+    }
+
+    // Copy public tags
+    foreach (int tagId, TagsCache::instance()->publicTags(source.tagIds()))
+    {
+        dest.setTag(tagId);
+    }
+    // Copy color and pick label
+    dest.setPickLabel(source.pickLabel());
+    dest.setColorLabel(source.colorLabel());
+    // important: skip other internal tags, such a history tags. Therefore AlbumDB::copyImageTags is not to be used.
+
+    // GPS data
+    QVariantList positionData = DatabaseAccess().db()->getImagePosition(source.id(), DatabaseFields::ImagePositionsAll);
+    if (!positionData.isEmpty())
+    {
+        DatabaseAccess().db()->addImagePosition(dest.id(), positionData, DatabaseFields::ImagePositionsAll);
+    }
+
+    // Comments
+    {
+        DatabaseAccess access;
+        ImageComments commentsSource(access, source.id());
+        ImageComments commentsDest(access, dest.id());
+        commentsDest.replaceFrom(commentsSource);
+        commentsDest.apply(access);
+    }
+
+    // Copyright info
+    ImageCopyright copyrightDest(dest.id());
+    copyrightDest.replaceFrom(source.id());
+
+    // Image Properties
+    DatabaseAccess().db()->copyImageProperties(source.id(), dest.id());
 }
 
 void CollectionScanner::itemsWereRemoved(const QList<qlonglong> &removedIds)

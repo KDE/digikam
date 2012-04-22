@@ -131,12 +131,6 @@ public:
     void scanFile(const ImageInfo& info, FileScanMode mode = ModifiedScan);
 
     /**
-     * When a file is derived from another file, typically through editing,
-     * copy all relevant attributes from source file to the new file.
-     */
-    void copyFileProperties(const ImageInfo& source, const ImageInfo& dest);
-
-    /**
      * Call this to enable the progress info signals.
      * Default is off.
      */
@@ -169,6 +163,12 @@ public:
      * Set an observer to be able to cancel a running scan
      */
     void setObserver(CollectionScannerObserver* observer);
+
+    /**
+     * When a file is derived from another file, typically through editing,
+     * copy all relevant attributes from source file to the new file.
+     */
+    static void copyFileProperties(const ImageInfo& source, const ImageInfo& dest);
 
     /**
      * Returns if the initial scan of the database has been done.
