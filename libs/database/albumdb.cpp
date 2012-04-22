@@ -9,6 +9,7 @@
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2012 by Andi Clemens <andi dot clemens at googlemail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -47,6 +48,8 @@ extern "C"
 
 // KDE includes
 
+#include <kconfig.h>
+#include <kconfiggroup.h>
 #include <klocale.h>
 #include <kdebug.h>
 
@@ -71,10 +74,13 @@ public:
     {
     }
 
-    DatabaseBackend* db;
-    QList<int>       recentlyAssignedTags;
+    static const QString configGroupName;
+    static const QString configRecentlyUsedTags;
 
-    int              uniqueHashVersion;
+    DatabaseBackend*     db;
+    QList<int>           recentlyAssignedTags;
+
+    int                  uniqueHashVersion;
 
 public:
 
@@ -82,14 +88,21 @@ public:
     QList<qlonglong> execRelatedImagesQuery(SqlQuery& query, qlonglong id, DatabaseRelation::Type type);
 };
 
+const QString AlbumDB::AlbumDBPriv::configGroupName("AlbumDB Settings");
+const QString AlbumDB::AlbumDBPriv::configRecentlyUsedTags("Recently Used Tags");
+
+// --------------------------------------------------------
+
 AlbumDB::AlbumDB(DatabaseBackend* backend)
     : d(new AlbumDBPriv)
 {
     d->db = backend;
+    readSettings();
 }
 
 AlbumDB::~AlbumDB()
 {
+    writeSettings();
     delete d;
 }
 
@@ -3045,6 +3058,7 @@ void AlbumDB::addItemTag(qlonglong imageID, int tagID)
         {
             d->recentlyAssignedTags.pop_back();
         }
+        writeSettings();
     }
 }
 
@@ -4555,6 +4569,22 @@ QList<QVariant> AlbumDB::getImageIdsFromArea(qreal lat1, qreal lat2, qreal lng1,
                     boundValues,&values);
 
     return values;
+}
+
+void AlbumDB::readSettings()
+{
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group(d->configGroupName);
+
+    d->recentlyAssignedTags = group.readEntry(d->configRecentlyUsedTags, QList<int>());
+}
+
+void AlbumDB::writeSettings()
+{
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group(d->configGroupName);
+
+    group.writeEntry(d->configRecentlyUsedTags, d->recentlyAssignedTags);
 }
 
 }  // namespace Digikam
