@@ -1155,8 +1155,8 @@ public:
      * Returns a QMap<QString,int> of ImageInformation.format
      * -> count of items with that format.
      */
-    QMap<QString,int> getFormatStatistics();
-    QMap<QString,int> getFormatStatistics(DatabaseItem::Category category);
+    QMap<QString, int> getFormatStatistics();
+    QMap<QString, int> getFormatStatistics(DatabaseItem::Category category);
 
     // ----------- Moving and Copying Items -----------
 
