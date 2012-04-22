@@ -86,13 +86,9 @@ void FileActionMngrFileWorker::writeMetadataToFiles(FileActionImageInfoList info
 
         hub.load(info);
         QString filePath = info.filePath();
-        bool fileChanged = hub.write(filePath, MetadataHub::FullWrite);
 
-        if (fileChanged)
-        {
-            ScanController::instance()->scanFileDirectly(filePath);
-        }
-
+        ScanController::FileMetadataWrite writeScope(info);
+        writeScope.changed(hub.write(filePath, MetadataHub::FullWrite));
         // hub emits fileMetadataChanged
 
         infos.writtenToOne();
@@ -114,14 +110,8 @@ void FileActionMngrFileWorker::writeMetadata(FileActionImageInfoList infos, Meta
         QString filePath = info.filePath();
 
         // apply to file metadata
-        bool fileChanged = hub->write(filePath, MetadataHub::FullWrite, writeSettings);
-
-        // trigger db scan (to update file size etc.)
-        if (fileChanged)
-        {
-            ScanController::instance()->scanFileDirectly(filePath);
-        }
-
+        ScanController::FileMetadataWrite writeScope(info);
+        writeScope.changed(hub->write(filePath, MetadataHub::FullWrite, writeSettings));
         // hub emits fileMetadataChanged
 
         infos.writtenToOne();

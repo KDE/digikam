@@ -99,6 +99,9 @@ public Q_SLOTS:
     /** Flip or rotate. Note: The NoTransformation action is interpreted as Exif auto-rotate */
     void transform(const QList<ImageInfo>& infos, KExiv2Iface::RotationMatrix::TransformationAction action);
 
+    void copyAttributes(const ImageInfo& source, const QStringList& derivedPaths);
+    void copyAttributes(const ImageInfo& source, const QString& derivedPath);
+
 public:
 
     // Declared public due to use by FileActionMngrWorker, FileActionMngrDatabaseWorker, and FileActionMngrFileWorker

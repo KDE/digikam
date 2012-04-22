@@ -263,4 +263,17 @@ void FileActionMngr::transform(const QList<ImageInfo>& infos, KExiv2Iface::Rotat
         d->transform(splitter.next(), action);
 }
 
+void FileActionMngr::copyAttributes(const ImageInfo& source, const QString& derivedPath)
+{
+    copyAttributes(source, QStringList() << derivedPath);
+}
+
+void FileActionMngr::copyAttributes(const ImageInfo& source, const QStringList& derivedPaths)
+{
+    FileActionImageInfoList taskList = FileActionImageInfoList::create(QList<ImageInfo>() << source);
+    taskList.schedulingForDB(i18n("Copying attributes"), d->dbProgressCreator());
+    d->copyAttributes(taskList, derivedPaths);
+}
+
+
 } // namespace Digikam

@@ -95,6 +95,7 @@ Q_SIGNALS:
     void signalApplyMetadata(const FileActionImageInfoList& infos, MetadataHub* hub);
     void signalEditGroup(int groupAction, const ImageInfo& pick, const FileActionImageInfoList& infos);
     void signalTransform(const FileActionImageInfoList& infos, int orientation);
+    void signalCopyAttributes(const FileActionImageInfoList& infos, const QStringList& derivedPaths);
 
 public:
 
@@ -143,6 +144,11 @@ public:
     void transform(const FileActionImageInfoList& infos, int orientation)
     {
         emit signalTransform(infos, orientation);
+    }
+
+    void copyAttributes(const FileActionImageInfoList& infos, const QStringList& derivedPaths)
+    {
+        emit signalCopyAttributes(infos, derivedPaths);
     }
 
 public:

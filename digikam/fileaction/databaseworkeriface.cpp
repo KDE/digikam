@@ -29,9 +29,11 @@
 
 // Local includes
 
+#include "collectionscanner.h"
 #include "databaseoperationgroup.h"
 #include "imageinfotasksplitter.h"
 #include "fileactionmngr_p.h"
+#include "scancontroller.h"
 
 namespace Digikam
 {
@@ -273,6 +275,20 @@ void FileActionMngrDatabaseWorker::applyMetadata(FileActionImageInfoList infos, 
     for (ImageInfoTaskSplitter splitter(infos); splitter.hasNext(); )
         emit writeMetadata(splitter.next(), hub->clone());
     delete hub;
+    infos.dbFinished();
+}
+
+void FileActionMngrDatabaseWorker::copyAttributes(FileActionImageInfoList infos, const QStringList& derivedPaths)
+{
+    if (infos.size() == 1)
+    {
+        foreach (const QString& path, derivedPaths)
+        {
+            ImageInfo dest = ScanController::instance()->scannedInfo(path);
+            CollectionScanner::copyFileProperties(infos.first(), dest);
+        }
+        infos.dbProcessedOne();
+    }
     infos.dbFinished();
 }
 
