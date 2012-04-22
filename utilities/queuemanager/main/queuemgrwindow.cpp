@@ -71,6 +71,7 @@
 #include "album.h"
 #include "drawdecoding.h"
 #include "batchtoolsmanager.h"
+#include "fileactionmngr.h"
 #include "actionthread.h"
 #include "queuepool.h"
 #include "queuelist.h"
@@ -1144,17 +1145,8 @@ void QueueMgrWindow::processed(const KUrl& url, const KUrl& tmp)
 
             // -- Now copy the digiKam attributes from original file to the new file ------------
 
-            KUrl srcDirURL(QDir::cleanPath(url.directory()));
-            PAlbum* srcAlbum = AlbumManager::instance()->findPAlbum(srcDirURL);
-
-            KUrl dstDirURL(QDir::cleanPath(dest.directory()));
-            PAlbum* dstAlbum = AlbumManager::instance()->findPAlbum(dstDirURL);
-
-            if (dstAlbum && srcAlbum)
-            {
-                ImageInfo oldInfo(url.toLocalFile());
-                ScanController::instance()->scanFileDirectlyCopyAttributes(dest.toLocalFile(), oldInfo.id());
-            }
+            ImageInfo source(url.toLocalFile());
+            FileActionMngr::instance()->copyAttributes(source, dest.toLocalFile());
         }
     }
 

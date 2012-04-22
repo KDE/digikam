@@ -47,6 +47,7 @@
 #include "albummanager.h"
 #include "albumsettings.h"
 #include "databaseaccess.h"
+#include "fileactionmngr.h"
 #include "imageattributeswatch.h"
 #include "imagecomments.h"
 #include "imageposition.h"
@@ -61,17 +62,11 @@ namespace Digikam
 KipiImageInfo::KipiImageInfo(KIPI::Interface* const interface, const KUrl& url)
     : KIPI::ImageInfoShared(interface, url)
 {
-    m_info = ImageInfo(url);
+    m_info = ScanController::instance()->scannedInfo(url.toLocalFile());
 
     if (m_info.isNull())
     {
-        // Check if item is registered in DB. Call scan-controller to parse it before to get info from DB.
-        ScanController::instance()->scanFileDirectly(url.path());
-
-        if (m_info.isNull())
-        {
-            kDebug() << "DB Info is null (" << url.path() << ")";
-        }
+        kDebug() << "DB Info is null (" << url.path() << ")";
     }
 }
 
@@ -96,20 +91,9 @@ void KipiImageInfo::cloneData(ImageInfoShared* other)
     KUrl otherUrl = other->path();
 #endif
 
-    KUrl srcDirURL(QDir::cleanPath(_url.directory()));
-    PAlbum* srcAlbum = AlbumManager::instance()->findPAlbum(srcDirURL);
-
-    KUrl dstDirURL(QDir::cleanPath(otherUrl.directory()));
-    PAlbum* dstAlbum = AlbumManager::instance()->findPAlbum(dstDirURL);
-
-    if (dstAlbum && srcAlbum)
-    {
-        ImageInfo parentInf(otherUrl.toLocalFile());
-        kDebug() << "Clone DB Info:";
-        kDebug() << "from : " << parentInf.fileUrl().path();
-        kDebug() << "to   : " << _url.path();
-        ScanController::instance()->scanFileDirectlyCopyAttributes(_url.toLocalFile(), parentInf.id());
-    }
+    ImageInfo parentInf(otherUrl.toLocalFile());
+    kDebug() << "Clone DB Info from" << parentInf.fileUrl().path() << "to" << _url.path();
+    FileActionMngr::instance()->copyAttributes(parentInf, _url.toLocalFile());
 }
 
 QMap<QString, QVariant> KipiImageInfo::attributes()
