@@ -98,6 +98,7 @@
 #include "dio.h"
 #include "dmetadata.h"
 #include "editorstackview.h"
+#include "fileactionmngr.h"
 #include "globals.h"
 #include "iccsettingscontainer.h"
 #include "imageattributeswatch.h"
@@ -1080,7 +1081,10 @@ void ImageWindow::saveIsComplete()
 
     // put image in cache, the LoadingCacheInterface cares for the details
     LoadingCacheInterface::putImage(m_savingContext.destinationURL.toLocalFile(), m_canvas->currentImage());
-    ScanController::instance()->scanFileDirectly(m_savingContext.destinationURL.toLocalFile());
+    ScanController::instance()->scannedInfo(m_savingContext.destinationURL.toLocalFile());
+    // reset the orientation flag in the database
+    DMetadata meta(m_canvas->currentImage().getMetadata());
+    d->currentImageInfo.setOrientation(meta.getImageOrientation());
 
     // Pop-up a message to bring user when save is done.
     KNotificationWrapper("editorsavefilecompleted", i18n("save file is completed..."),
@@ -1122,27 +1126,38 @@ void ImageWindow::saveAsIsComplete()
     }
 
     // copy the metadata of the original file to the new file
+    kDebug() << "was versioned"
+             << (m_savingContext.executedOperation == SavingContextContainer::SavingStateVersion)
+             << "current" << d->currentImageInfo.id() << d->currentImageInfo.name()
+             << "destinations" << m_savingContext.versionFileOperation.allFilePaths();
+
+    ImageInfo sourceInfo = d->currentImageInfo;
+    // Set new current index. Employ synchronous scanning for this main file.
+    d->currentImageInfo = ScanController::instance()->scannedInfo(m_savingContext.destinationURL.toLocalFile());
+
+    if (m_savingContext.destinationExisted)
+    {
+        // reset the orientation flag in the database
+        DMetadata meta(m_canvas->currentImage().getMetadata());
+        d->currentImageInfo.setOrientation(meta.getImageOrientation());
+    }
+
+    QStringList derivedFilePaths;
     if (m_savingContext.executedOperation == SavingContextContainer::SavingStateVersion)
     {
-        foreach(const QString& path, m_savingContext.versionFileOperation.allFilePaths())
-        {
-            ScanController::instance()->scanFileDirectlyCopyAttributes(path, d->currentImageInfo.id());
-        }
+        derivedFilePaths = m_savingContext.versionFileOperation.allFilePaths();
     }
     else
     {
-        ScanController::instance()->
-        scanFileDirectlyCopyAttributes(m_savingContext.destinationURL.toLocalFile(), d->currentImageInfo.id());
+        derivedFilePaths << m_savingContext.destinationURL.toLocalFile();
     }
+    // Will ensure files are scanned, and then copy attributes in a thread
+    FileActionMngr::instance()->copyAttributes(sourceInfo, derivedFilePaths);
 
-    // Set new current index
-    d->currentImageInfo = ImageInfo(m_savingContext.destinationURL.toLocalFile());
-
+    // The model updates asynchronously, so we need to force addition of the main entry
     if (!d->imageInfoModel->hasImage(d->currentImageInfo))
     {
         d->imageInfoModel->addImageInfoSynchronously(d->currentImageInfo);
-        // Note: Due to the asynchronous process, we do not yet have an index for the just added info!
-        //d->imageInfoModel->addImageInfo(d->currentImageInfo);
     }
 
     // set origin of DImgInterface: "As if" the last saved image was loaded directly
