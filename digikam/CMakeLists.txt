@@ -75,7 +75,6 @@ ADD_DEPENDENCIES(digikamcore digikam-gitversion)
 TARGET_LINK_LIBRARIES(digikamcore
         ${QT_QT3SUPPORT_LIBRARY}
         ${QT_QTSQL_LIBRARY}
-	${QT_QTDECLARATIVE_LIBRARY}
 
         ${KDE4_KDECORE_LIBS}
         ${KDE4_KIO_LIBS}
@@ -107,6 +106,10 @@ TARGET_LINK_LIBRARIES(digikamcore
 IF(USE_SCRIPT_IFACE)
     TARGET_LINK_LIBRARIES(digikamcore ${QT_QTSCRIPT_LIBRARY})
 ENDIF(USE_SCRIPT_IFACE)
+
+IF(USE_PRESENTATION_MODE)
+    TARGET_LINK_LIBRARIES(digikam ${QT_QTDECLARATIVE_LIBRARY})
+ENDIF(USE_PRESENTATION_MODE)
 
 IF(PGF_FOUND)
     TARGET_LINK_LIBRARIES(digikamcore ${PGF_LIBRARIES})
@@ -251,13 +254,16 @@ SET(digikam_SRCS ${libdimgimagewindow_SRCS}
                  ${libtemplate_SRCS}
                  ${libdatabaseui_SRCS}
                  ${libfacedetection_SRCS}
-		 ${libpresentationview_SRCS}
                  main/main.cpp
 )
 
 IF(USE_SCRIPT_IFACE)
     SET(digikam_SRCS ${digikam_SRCS} ${libscriptiface_SRCS})
 ENDIF(USE_SCRIPT_IFACE)
+
+IF(USE_PRESENTATION_MODE)
+    SET(digikam_SRCS ${digikam_SRCS} ${libpresentationview_SRCS})
+ENDIF(USE_PRESENTATION_MODE)
 
 QT4_ADD_DBUS_ADAPTOR(digikam_SRCS main/org.kde.digikam.xml main/digikamapp.h Digikam::DigikamApp)
 
@@ -268,7 +274,6 @@ KDE4_ADD_EXECUTABLE(digikam ${digikam_SRCS})
 TARGET_LINK_LIBRARIES(digikam
         ${QT_QTSQL_LIBRARY}
         ${QT_QT3SUPPORT_LIBRARY}
-		${QT_QTDECLARATIVE_LIBRARY}
 
         ${KDE4_KPARTS_LIBS}
         ${KDE4_PHONON_LIBS}
@@ -301,10 +306,13 @@ IF (NOT WIN32 AND GPHOTO2_FOUND)
     TARGET_LINK_LIBRARIES(digikam ${LIBUSB_LIBRARIES})
 ENDIF (NOT WIN32 AND GPHOTO2_FOUND)
 
-
 IF(USE_SCRIPT_IFACE)
     TARGET_LINK_LIBRARIES(digikam ${QT_QTSCRIPT_LIBRARY})
 ENDIF(USE_SCRIPT_IFACE)
+
+IF(USE_PRESENTATION_MODE)
+    TARGET_LINK_LIBRARIES(digikam ${QT_QTDECLARATIVE_LIBRARY})
+ENDIF(USE_PRESENTATION_MODE)
 
 IF(KDEPIMLIBS_FOUND)
   TARGET_LINK_LIBRARIES(digikam ${KDE4_KABC_LIBS})

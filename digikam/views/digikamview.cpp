@@ -64,7 +64,6 @@
 #include "globals.h"
 #include "metadatahub.h"
 #include "fileactionmngr.h"
-#include "qmlshow.h"
 #include "queuemgrwindow.h"
 #include "scancontroller.h"
 #include "sidebar.h"
@@ -79,6 +78,10 @@
 #include "faceiface.h"
 #include "fileactionprogress.h"
 #include "versionmanagersettings.h"
+
+#ifdef USE_PRESENTATION_MODE
+#include "qmlshow.h"
+#endif // USE_PRESENTATION_MODE
 
 namespace Digikam
 {
@@ -1761,21 +1764,6 @@ void DigikamView::slotSlideShowBuilderComplete(const SlideShowSettings& settings
     slide->show();
 }
 
-void DigikamView::slotSlideShowQml()
-{
-        /*QStringList list;
-	foreach (const ImageInfo& info, d->iconView->imageInfos())
-    {
-        list << info.filePath();
-    }*/
-	SlideShowSettings settings;
-	settings.readFromConfig();
-        QmlShow* qmlShow = new QmlShow(d->iconView->imageInfos(),settings);
-	qmlShow->setWindowState(Qt::WindowFullScreen);
-	qmlShow->show();
-}
-
-
 void DigikamView::toggleShowBar(bool b)
 {
     d->stackedview->thumbBarDock()->showThumbBar(b);
@@ -1894,5 +1882,25 @@ void DigikamView::imageTransform(KExiv2Iface::RotationMatrix::TransformationActi
 {
     FileActionMngr::instance()->transform(d->iconView->selectedImageInfos(), transform);
 }
+
+#ifdef USE_PRESENTATION_MODE
+
+void DigikamView::slotSlideShowQml()
+{
+/*
+    QStringList list;
+    foreach (const ImageInfo& info, d->iconView->imageInfos())
+    {
+        list << info.filePath();
+    }
+*/
+    SlideShowSettings settings;
+    settings.readFromConfig();
+    QmlShow* qmlShow = new QmlShow(d->iconView->imageInfos(),settings);
+    qmlShow->setWindowState(Qt::WindowFullScreen);
+    qmlShow->show();
+}
+
+#endif // USE_PRESENTATION_MODE
 
 }  // namespace Digikam

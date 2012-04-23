@@ -44,6 +44,7 @@
 
 // Local includes
 
+#include "config-digikam.h"
 #include "searchtextbar.h"
 #include "imageinfo.h"
 #include "digikammodelcollection.h"
@@ -124,7 +125,6 @@ public Q_SLOTS:
     void slotSlideShowAll();
     void slotSlideShowSelection();
     void slotSlideShowRecursive();
-    void slotSlideShowQml();
 
     // Album action slots
     void slotNewAlbum();
@@ -196,6 +196,10 @@ public Q_SLOTS:
     void slotLeftSideBarActivate(SidebarWidget* widget);
     void slotLeftSideBarActivateAlbums();
     void slotLeftSideBarActivateTags();
+
+#ifdef USE_PRESENTATION_MODE
+    void slotSlideShowQml();
+#endif // USE_PRESENTATION_MODE
 
 private:
 

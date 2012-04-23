@@ -6,7 +6,7 @@
  * Date        : 2009-08-03
  * Description : digiKam config header
  *
- * Copyright (C) 2009-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -48,8 +48,11 @@
 /* Define to 1 if thumbnails database is used */
 #cmakedefine USE_THUMBS_DB 1
 
-/* Define to 1 if script interface is used */
+/* Define to 1 if script interface is enabled */
 #cmakedefine USE_SCRIPT_IFACE 1
+
+/* Define to 1 if presentation mode is enabled */
+#cmakedefine USE_PRESENTATION_MODE 1
 
 /* Define to 1 if advanced debug messages are enabled */
 #cmakedefine USE_ADVANCEDDEBUGMSG 1

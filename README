@@ -115,6 +115,7 @@ computer to compile digiKam.
 CMake compilation option de customized for digiKam:
 
 Use CMake "-DENABLE_SCRIPTIFACE=yes"      flag to compile digiKam with experimental scripting interface                          (disabled by default).
+Use CMake "-DENABLE_PRESENTATIONMODE=yes" flag to compile digiKam with presentation mode                                         (disabled by default).
 Use CMake "-DENABLE_THUMB_DB=no"          flag to compile digiKam without thumbnail database support                             (enabled by default ).
 Use CMake "-DENABLE_INTERNALMYSQL=no"     flag to compile digiKam without internal MySQL server                                  (enabled by default ).
 Use CMake "-DENABLE_ADVANCEDDEBUGMSG=yes" flag to compile digiKam with more internal debug messages, especially in image loaders (disabled by default).

@@ -2,9 +2,10 @@
 PROJECT(digikam)
 
 MESSAGE(STATUS "----------------------------------------------------------------------------------")
-MESSAGE(STATUS "Starting CMake configuration for: digikam")
+MESSAGE(STATUS "Starting CMake configuration for: digiKam")
 
 OPTION(ENABLE_SCRIPTIFACE      "Build digiKam with experimental scripting support (default=OFF)"  OFF)
+OPTION(ENABLE_PRESENTATIONMODE "Build digiKam with presentation mode support (default=OFF)"       OFF)
 OPTION(ENABLE_THUMBS_DB        "Build digiKam with thumbnails database support (default=ON)"      ON)
 OPTION(ENABLE_INTERNALMYSQL    "Look for MySQL server executable at build time (default=ON)"      ON)
 OPTION(ENABLE_ADVANCEDDEBUGMSG "Build digiKam with more internal debug message (default=OFF)"     OFF)
@@ -334,8 +335,9 @@ MACRO_BOOL_TO_01(LENSFUN_FOUND USE_EXT_LIBLENSFUN)
 MACRO_OPTIONAL_FIND_PACKAGE(Lqr-1)
 MACRO_BOOL_TO_01(LQR-1_FOUND USE_EXT_LIBLQR-1)
 
-MACRO_BOOL_TO_01(ENABLE_SCRIPTIFACE USE_SCRIPT_IFACE)
-MACRO_BOOL_TO_01(ENABLE_THUMBS_DB USE_THUMBS_DB)
+MACRO_BOOL_TO_01(ENABLE_SCRIPTIFACE      USE_SCRIPT_IFACE)
+MACRO_BOOL_TO_01(ENABLE_PRESENTATIONMODE USE_PRESENTATION_MODE)
+MACRO_BOOL_TO_01(ENABLE_THUMBS_DB        USE_THUMBS_DB)
 MACRO_BOOL_TO_01(ENABLE_ADVANCEDDEBUGMSG USE_ADVANCEDDEBUGMSG)
 
 # Win32 compilation with Nepomuk is broken. It's temporally disabled.
@@ -596,6 +598,10 @@ IF(DIGIKAM_CAN_BE_COMPILED)
     IF(USE_SCRIPT_IFACE)
         INCLUDE_DIRECTORIES(${QT_QTSCRIPT_INCLUDE_DIR})
     ENDIF(USE_SCRIPT_IFACE)
+
+    IF(USE_PRESENTATION_MODE)
+        INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/utilities/qmlshow)
+    ENDIF(USE_PRESENTATION_MODE)
 
     IF(NEPOMUK_FOUND)
         INCLUDE_DIRECTORIES(${SOPRANO_INCLUDE_DIR} ${NEPOMUK_INCLUDE_DIR})
@@ -1027,10 +1033,13 @@ IF(DIGIKAM_CAN_BE_COMPILED)
 
     ENDIF(USE_SCRIPT_IFACE)
 
+    IF(USE_PRESENTATION_MODE)
 
     SET(libpresentationview_SRCS
-	${CMAKE_CURRENT_SOURCE_DIR}/utilities/qmlshow/qmlshow.cpp
-	)
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/qmlshow/qmlshow.cpp
+       )
+
+    ENDIF(USE_PRESENTATION_MODE)
 
     SET(libslideshow_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/slideshow/toolbar.cpp
@@ -1633,7 +1642,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/kipiiface
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/lighttable
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/nepomuk
-	${CMAKE_CURRENT_SOURCE_DIR}/utilities/qmlshow
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/main
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/manager
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/views
