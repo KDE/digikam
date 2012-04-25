@@ -114,4 +114,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 095 ==> 158766 : Using keyboard with timeline view.
 096 ==> 298491 : Typos in templatemanager.cpp.
 097 ==> 297490 : Copy tags when creating a new version.
-098 ==> 
+098 ==> 297804 : Saving an image loses portait orientation.
+099 ==> 
+
