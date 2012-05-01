@@ -59,6 +59,7 @@ public:
         running(false),
         cancel(false),
         exifSetOrientation(true),
+        createNewVersion(true),
         tool(0)
     {
     }
@@ -75,6 +76,7 @@ public:
     bool           running;
     bool           cancel;
     bool           exifSetOrientation;
+    bool           createNewVersion;
 
     QMutex         mutex;
 
@@ -208,6 +210,7 @@ void ActionThread::run()
                 d->tool->setSettings(settings);
                 d->tool->setInputUrl(inUrl);
                 d->tool->setOutputUrlFromInputUrl();
+                d->tool->setBranchHistory(d->createNewVersion);
 
                 outUrl   = d->tool->outputUrl();
                 success  = d->tool->apply();

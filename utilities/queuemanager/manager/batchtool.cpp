@@ -56,6 +56,7 @@ public:
     BatchToolPriv() :
         exifResetOrientation(false),
         exifCanEditOrientation(true),
+        branchHistory(true),
         cancel(false),
         last(false),
         settingsWidget(0),
@@ -65,6 +66,7 @@ public:
 
     bool                      exifResetOrientation;
     bool                      exifCanEditOrientation;
+    bool                      branchHistory;
     bool                      cancel;
     bool                      last;
 
@@ -288,6 +290,16 @@ bool BatchTool::getResetExifOrientationAllowed() const
     return d->exifCanEditOrientation;
 }
 
+void BatchTool::setBranchHistory(bool branch)
+{
+    d->branchHistory = branch;
+}
+
+bool BatchTool::getBranchHistory() const
+{
+    return d->branchHistory;
+}
+
 void BatchTool::setRawDecodingSettings(const DRawDecoding& settings)
 {
     d->rawDecodingSettings = settings;
@@ -376,6 +388,12 @@ bool BatchTool::savefromDImg() const
     QString frm                 = outputSuffix().toUpper();
     bool resetOrientation       = getResetExifOrientationAllowed() &&
                                   (getNeedResetExifOrientation() || detectedFormat == DImg::RAW);
+
+    if (d->branchHistory)
+    {
+        // image has its original history
+        d->image.setHistoryBranch();
+    }
 
     if (frm.isEmpty())
     {

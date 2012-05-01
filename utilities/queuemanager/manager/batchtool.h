@@ -174,6 +174,14 @@ public:
      */
     bool getNeedResetExifOrientation() const;
 
+    /**
+     * Sets if the history added by tools shall be made a branch (new version).
+     * Applies only when the file is actually saved on disk, and takes the history
+     * since the loading from disk to set the first added step as creating a branch.
+     */
+    void setBranchHistory(bool branch = true);
+    bool getBranchHistory() const;
+
     /** Set-up RAW decoding settings no use during tool operations.
      */
     void setRawDecodingSettings(const DRawDecoding& settings);
