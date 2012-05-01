@@ -861,20 +861,8 @@ void DImgInterface::switchToLastSaved(const DImageHistory& resolvedCurrentHistor
 
 void DImgInterface::setHistoryIsBranch(bool isBranching)
 {
-    int firstStep = d->resolvedInitialHistory.size();
-    DImageHistory& history = d->image.getImageHistory();
-
-    if (firstStep < history.size())
-    {
-        if (isBranching)
-        {
-            history[firstStep].action.addFlag(FilterAction::ExplicitBranch);
-        }
-        else
-        {
-            history[firstStep].action.removeFlag(FilterAction::ExplicitBranch);
-        }
-    }
+    // The first added step (on top of the initial history) will be marked as branch
+    d->image.setHistoryBranchAfter(d->resolvedInitialHistory);
 }
 
 void DImgInterface::setModified()

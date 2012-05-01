@@ -3118,7 +3118,6 @@ void DImg::setImageHistory(const DImageHistory& history)
     m_priv->imageHistory = history;
 }
 
-
 bool DImg::hasImageHistory() const
 {
     if (m_priv->imageHistory.isEmpty())
@@ -3134,6 +3133,33 @@ bool DImg::hasImageHistory() const
 DImageHistory DImg::getOriginalImageHistory() const
 {
     return attribute("originalImageHistory").value<DImageHistory>();
+}
+
+void DImg::setHistoryBranch(bool isBranch)
+{
+    setHistoryBranchAfter(getOriginalImageHistory(), isBranch);
+}
+
+void DImg::setHistoryBranchAfter(const DImageHistory& historyBeforeBranch, bool isBranch)
+{
+    int addedSteps = m_priv->imageHistory.size() - historyBeforeBranch.size();
+    setHistoryBranchForLastSteps(addedSteps, isBranch);
+}
+
+void DImg::setHistoryBranchForLastSteps(int numberOfLastHistorySteps, bool isBranch)
+{
+    int firstStep = m_priv->imageHistory.size() - numberOfLastHistorySteps;
+    if (firstStep < m_priv->imageHistory.size())
+    {
+        if (isBranch)
+        {
+            m_priv->imageHistory[firstStep].action.addFlag(FilterAction::ExplicitBranch);
+        }
+        else
+        {
+            m_priv->imageHistory[firstStep].action.removeFlag(FilterAction::ExplicitBranch);
+        }
+    }
 }
 
 QString DImg::colorModelToString(COLORMODEL colorModel)

@@ -350,6 +350,16 @@ public:
     bool                 hasImageHistory() const;
     DImageHistory        getOriginalImageHistory() const;
     void                 addFilterAction(const FilterAction& action);
+    /** Sets a step in the history to constitute the beginning of a branch.
+     *  Use setHistoryBranch() to take getOriginalImageHistory() and set the first added step as a branch.
+     *  Use setHistoryBranchForLastSteps(n) to start the branch before the last n steps in the history.
+     *  (Assume the history had 3 steps and you added 2, call setHistoryBranchForLastSteps(2))
+     *  Use setHistoryBranchAfter() if have a copy of the history before branching,
+     *  the first added step on top of that history will be made a branch.
+     */
+    void                 setHistoryBranchAfter(const DImageHistory& historyBeforeBranch, bool isBranch = true);
+    void                 setHistoryBranchForLastSteps(int numberOfLastHistorySteps, bool isBranch = true);
+    void                 setHistoryBranch(bool isBranch = true);
 
     /**
      * When saving, several changes to the image metadata are necessary
