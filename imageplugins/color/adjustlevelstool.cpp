@@ -762,7 +762,6 @@ void AdjustLevelsTool::readSettings()
 
     {
         bool sb        = d->originalImage->sixteenBit();
-        int max        = sb ? 65535 : 255;
         double gamma   = 0.0;
         int lowInput   = 0;
         int lowOutput  = 0;
@@ -774,8 +773,8 @@ void AdjustLevelsTool::readSettings()
             gamma      = group.readEntry(d->configGammaChannelEntry.arg(i), 1.0);
             lowInput   = group.readEntry(d->configLowInputChannelEntry.arg(i), 0);
             lowOutput  = group.readEntry(d->configLowOutputChannelEntry.arg(i), 0);
-            highInput  = group.readEntry(d->configHighInputChannelEntry.arg(i), max);
-            highOutput = group.readEntry(d->configHighOutputChannelEntry.arg(i), max);
+            highInput  = group.readEntry(d->configHighInputChannelEntry.arg(i), 65535);
+            highOutput = group.readEntry(d->configHighOutputChannelEntry.arg(i), 65535);
 
             d->levels->setLevelGammaValue(i, gamma);
             d->levels->setLevelLowInputValue(i, sb ? lowInput : lowInput / 256);
