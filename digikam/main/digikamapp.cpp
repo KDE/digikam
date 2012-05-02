@@ -1515,6 +1515,8 @@ void DigikamApp::slotSelectionChanged(int selectionCount)
     d->imageWriteMetadataAction->setEnabled(selectionCount > 0);
     d->imageReadMetadataAction->setEnabled(selectionCount > 0);
     d->imageDeleteAction->setEnabled(selectionCount > 0);
+    d->imageRotateActionMenu->setEnabled(selectionCount > 0);
+    d->imageFlipActionMenu->setEnabled(selectionCount > 0);
     d->imageExifOrientationActionMenu->setEnabled(selectionCount > 0);
     d->slideShowSelectionAction->setEnabled(selectionCount > 0);
     d->moveSelectionToAlbumAction->setEnabled(selectionCount > 0);
