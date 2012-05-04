@@ -48,6 +48,9 @@ class QWidget;
 namespace Digikam
 {
 
+class DImgBuiltinFilter;
+class DImgThreadedFilter;
+
 /** A map of batch tool settings (setting key, setting value).
  */
 typedef QMap<QString, QVariant> BatchToolSettings;
@@ -237,6 +240,14 @@ protected:
     /** Return true if cancel() have been called. Use this method to stop loop in your toolOperations() implementation.
      */
     bool isCancelled() const;
+
+    /**
+     * Use this if you have a filter ready to run.
+     * Will call startFilterDirectly and apply the result to image().
+     */
+    void applyFilter(DImgThreadedFilter* filter);
+    void applyFilterChangedProperties(DImgThreadedFilter* filter);
+    void applyFilter(DImgBuiltinFilter* filter);
 
     /** Re-implement this method to customize all batch operations done by this tool.
         This method is called by apply().

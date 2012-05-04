@@ -40,7 +40,9 @@
 
 // Local includes
 
+#include "dimgbuiltinfilter.h"
 #include "dimgloaderobserver.h"
+#include "dimgthreadedfilter.h"
 #include "filereadwritelock.h"
 
 namespace Digikam
@@ -452,6 +454,35 @@ bool BatchTool::apply()
     }
 
     return toolOperations();
+}
+
+void BatchTool::applyFilter(DImgThreadedFilter* filter)
+{
+    filter->startFilterDirectly();
+    if (isCancelled())
+    {
+        return;
+    }
+    d->image.putImageData(filter->getTargetImage().bits());
+    d->image.addFilterAction(filter->filterAction());
+}
+
+void BatchTool::applyFilterChangedProperties(DImgThreadedFilter* filter)
+{
+    filter->startFilterDirectly();
+    if (isCancelled())
+    {
+        return;
+    }
+    DImg trg = filter->getTargetImage();
+    d->image.putImageData(trg.width(), trg.height(), trg.sixteenBit(), trg.hasAlpha(), trg.bits());
+    d->image.addFilterAction(filter->filterAction());
+}
+
+void BatchTool::applyFilter(DImgBuiltinFilter* filter)
+{
+    filter->apply(d->image);
+    d->image.addFilterAction(filter->filterAction());
 }
 
 }  // namespace Digikam
