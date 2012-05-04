@@ -225,11 +225,12 @@ bool LensAutoFix::toolOperations()
     }
 
     LensFunFilter filter(&image(), 0L, prm);
-    filter.startFilterDirectly();
-    image().putImageData(filter.getTargetImage().bits());
+    applyFilter(&filter);
+
     KExiv2Data data = image().getMetadata();
     filter.registerSettingsToXmp(data);
     image().setMetadata(data);
+
     return savefromDImg();
 }
 

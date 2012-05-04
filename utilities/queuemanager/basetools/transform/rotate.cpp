@@ -43,6 +43,7 @@
 // Local includes
 
 #include "dimg.h"
+#include "dimgbuiltinfilter.h"
 #include "dmetadata.h"
 #include "jpegutils.h"
 #include "freerotationfilter.h"
@@ -202,18 +203,8 @@ bool Rotate::toolOperations()
                     break;
 
                 default:
-
-                    // there is no loss less methode to turn JPEG image with a custom angle.
-                    if (!loadToDImg())
-                    {
-                        return false;
-                    }
-
-                    FreeRotationFilter fr(&image(), 0L, prm);
-                    fr.startFilterDirectly();
-                    DImg trg = fr.getTargetImage();
-                    image().putImageData(trg.width(), trg.height(), trg.sixteenBit(), trg.hasAlpha(), trg.bits());
-                    return (savefromDImg());
+                    // there is no lossless methode to turn JPEG image with a custom angle.
+                    // fall through
                     break;
             }
         }
@@ -228,24 +219,38 @@ bool Rotate::toolOperations()
 
     if (useExif)
     {
+        // Exif rotation is currently not recorded to image history
         image().rotateAndFlip(LoadSaveThread::exifOrientation(image(), inputUrl().toLocalFile()));
     }
     else
     {
+        DImgBuiltinFilter filter;
         switch (rotation)
         {
             case DImg::ROT90:
+            {
+                DImgBuiltinFilter filter(DImgBuiltinFilter::Rotate90);
+                applyFilter(&filter);
+                break;
+            }
             case DImg::ROT180:
+            {
+                DImgBuiltinFilter filter(DImgBuiltinFilter::Rotate180);
+                applyFilter(&filter);
+                break;
+            }
             case DImg::ROT270:
-                image().rotate((DImg::ANGLE)rotation);
+            {
+                DImgBuiltinFilter filter(DImgBuiltinFilter::Rotate270);
+                applyFilter(&filter);
                 break;
-
+            }
             default:      // Custom value
+            {
                 FreeRotationFilter fr(&image(), 0L, prm);
-                fr.startFilterDirectly();
-                DImg trg = fr.getTargetImage();
-                image().putImageData(trg.width(), trg.height(), trg.sixteenBit(), trg.hasAlpha(), trg.bits());
+                applyFilterChangedProperties(&fr);
                 break;
+            }
         }
     }
 

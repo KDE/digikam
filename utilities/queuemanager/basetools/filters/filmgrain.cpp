@@ -166,8 +166,7 @@ bool FilmGrain::toolOperations()
     prm.chromaRedHighlights     = settings()["chromaRedHighlights"].toInt();
 
     FilmGrainFilter fg(&image(), 0L, prm);
-    fg.startFilterDirectly();
-    image().putImageData(fg.getTargetImage().bits());
+    applyFilter(&fg);
 
     return savefromDImg();
 }

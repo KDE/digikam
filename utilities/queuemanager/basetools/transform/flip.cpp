@@ -39,6 +39,7 @@
 // Local includes
 
 #include "dimg.h"
+#include "dimgbuiltinfilter.h"
 #include "jpegutils.h"
 
 namespace Digikam
@@ -122,7 +123,17 @@ bool Flip::toolOperations()
         return false;
     }
 
-    image().flip(flip);
+    DImgBuiltinFilter filter;
+    switch (flip)
+    {
+        case DImg::HORIZONTAL:
+            filter = DImgBuiltinFilter(DImgBuiltinFilter::FlipHorizontally);
+            break;
+        case DImg::VERTICAL:
+            filter = DImgBuiltinFilter(DImgBuiltinFilter::FlipVertically);
+            break;
+    }
+    applyFilter(&filter);
 
     return (savefromDImg());
 }

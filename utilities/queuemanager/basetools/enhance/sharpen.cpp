@@ -172,8 +172,7 @@ bool Sharpen::toolOperations()
             }
 
             SharpenFilter filter(&image(), 0L, radius, sigma);
-            filter.startFilterDirectly();
-            image().putImageData(filter.getTargetImage().bits());
+            applyFilter(&filter);
             break;
         }
 
@@ -184,8 +183,7 @@ bool Sharpen::toolOperations()
             double th = settings()["UnsharpMaskThreshold"].toDouble();
 
             UnsharpMaskFilter filter(&image(), 0L, r, a, th);
-            filter.startFilterDirectly();
-            image().putImageData(filter.getTargetImage().bits());
+            applyFilter(&filter);
             break;
         }
 
@@ -198,8 +196,7 @@ bool Sharpen::toolOperations()
             int matrixSize     = settings()["RefocusMatrixSize"].toInt();
 
             RefocusFilter filter(&image(), 0L, matrixSize, radius, gauss, correlation, noise);
-            filter.startFilterDirectly();
-            image().putImageData(filter.getTargetImage().bits());
+            applyFilter(&filter);
             break;
         }
     }

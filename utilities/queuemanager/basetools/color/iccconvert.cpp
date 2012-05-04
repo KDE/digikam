@@ -119,13 +119,14 @@ bool IccConvert::toolOperations()
     transform.setOutputProfile(out);
 
     IccTransformFilter icc(&image(), 0L, transform);
-    icc.startFilterDirectly();
-    DImg imDest     = icc.getTargetImage();
-    image().putImageData(imDest.bits());
-    image().setIccProfile(imDest.getIccProfile());
+    applyFilter(&icc);
+
+    image().setIccProfile(icc.getTargetImage().getIccProfile());
+
     DMetadata meta(image().getMetadata());
     meta.removeExifColorSpace();
     image().setMetadata(meta.data());
+
     return (savefromDImg());
 }
 

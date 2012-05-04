@@ -126,9 +126,8 @@ bool WhiteBalance::toolOperations()
     prm.saturation  = settings()["saturation"].toDouble();
     prm.exposition  = settings()["exposition"].toDouble();
 
-    WBFilter bcg(&image(), 0L, prm);
-    bcg.startFilterDirectly();
-    image().putImageData(bcg.getTargetImage().bits());
+    WBFilter wb(&image(), 0L, prm);
+    applyFilter(&wb);
 
     return (savefromDImg());
 }

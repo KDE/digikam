@@ -175,8 +175,7 @@ bool ChannelMixer::toolOperations()
     prm.blackBlueGain  = settings()["blackBlueGain"].toDouble();
 
     MixerFilter mixer(&image(), 0L, prm);
-    mixer.startFilterDirectly();
-    image().putImageData(mixer.getTargetImage().bits());
+    applyFilter(&mixer);
 
     return (savefromDImg());
 }

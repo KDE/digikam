@@ -62,8 +62,7 @@ bool Invert::toolOperations()
     }
 
     InvertFilter inv(&image(), 0L);
-    inv.startFilterDirectly();
-    image().putImageData(inv.getTargetImage().bits());
+    applyFilter(&inv);
 
     return (savefromDImg());
 }

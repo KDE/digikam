@@ -163,8 +163,7 @@ bool CurvesAdjust::toolOperations()
     prm.values[AlphaChannel]      = settings()["values[AlphaChannel]"].value<QPolygon>();
 
     CurvesFilter curves(&image(), 0L, prm);
-    curves.startFilterDirectly();
-    image().putImageData(curves.getTargetImage().bits());
+    applyFilter(&curves);
 
     return (savefromDImg());
 }

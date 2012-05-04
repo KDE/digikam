@@ -107,8 +107,7 @@ bool ColorBalance::toolOperations()
     prm.blue  = settings()["Blue"].toDouble();
 
     CBFilter cb(&image(), 0L, prm);
-    cb.startFilterDirectly();
-    image().putImageData(cb.getTargetImage().bits());
+    applyFilter(&cb);
 
     return (savefromDImg());
 }

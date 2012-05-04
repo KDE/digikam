@@ -151,8 +151,7 @@ bool BWConvert::toolOperations()
     */
 
     BWSepiaFilter bw(&image(), 0L, prm);
-    bw.startFilterDirectly();
-    image().putImageData(bw.getTargetImage().bits());
+    applyFilter(&bw);
 
     return (savefromDImg());
 }

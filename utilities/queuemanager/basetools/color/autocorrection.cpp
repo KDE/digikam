@@ -109,40 +109,35 @@ bool AutoCorrection::toolOperations()
         case AutoLevelsCorrection:
         {
             AutoLevelsFilter autolevels(&image(), &image());
-            autolevels.startFilterDirectly();
-            image().putImageData(autolevels.getTargetImage().bits());
+            applyFilter(&autolevels);
             break;
         }
 
         case NormalizeCorrection:
         {
             NormalizeFilter normalize(&image(), &image());
-            normalize.startFilterDirectly();
-            image().putImageData(normalize.getTargetImage().bits());
+            applyFilter(&normalize);
             break;
         }
 
         case EqualizeCorrection:
         {
             EqualizeFilter equalize(&image(), &image());
-            equalize.startFilterDirectly();
-            image().putImageData(equalize.getTargetImage().bits());
+            applyFilter(&equalize);
             break;
         }
 
         case StretchContrastCorrection:
         {
             StretchFilter stretch(&image(), &image());
-            stretch.startFilterDirectly();
-            image().putImageData(stretch.getTargetImage().bits());
+            applyFilter(&stretch);
             break;
         }
 
         case AutoExposureCorrection:
         {
             AutoExpoFilter expo(&image(), &image());
-            expo.startFilterDirectly();
-            image().putImageData(expo.getTargetImage().bits());
+            applyFilter(&expo);
             break;
         }
     }

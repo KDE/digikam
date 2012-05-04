@@ -107,8 +107,7 @@ bool BCGCorrection::toolOperations()
     prm.gamma      = settings()["Gamma"].toDouble();
 
     BCGFilter bcg(&image(), 0L, prm);
-    bcg.startFilterDirectly();
-    image().putImageData(bcg.getTargetImage().bits());
+    applyFilter(&bcg);
 
     return (savefromDImg());
 }

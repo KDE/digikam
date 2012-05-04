@@ -162,9 +162,7 @@ bool Border::toolOperations()
     prm.orgHeight             = image().height();
 
     BorderFilter bd(&image(), 0L, prm);
-    bd.startFilterDirectly();
-    DImg trg = bd.getTargetImage();
-    image().putImageData(trg.width(), trg.height(), trg.sixteenBit(), trg.hasAlpha(), trg.bits());
+    applyFilterChangedProperties(&bd);
 
     return (savefromDImg());
 }

@@ -41,6 +41,7 @@
 // Local includes
 
 #include "dimg.h"
+#include "dimgbuiltinfilter.h"
 
 namespace Digikam
 {
@@ -173,7 +174,8 @@ bool Resize::toolOperations()
         return false;
     }
 
-    image().resize(newSize.width(), newSize.height());
+    DImgBuiltinFilter filter(DImgBuiltinFilter::Resize, newSize);
+    applyFilter(&filter);
 
     return (savefromDImg());
 }

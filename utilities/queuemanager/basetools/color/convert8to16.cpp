@@ -32,6 +32,7 @@
 // Local includes
 
 #include "dimg.h"
+#include "dimgbuiltinfilter.h"
 
 namespace Digikam
 {
@@ -56,7 +57,8 @@ bool Convert8to16::toolOperations()
         return false;
     }
 
-    image().convertDepth(64);
+    DImgBuiltinFilter filter(DImgBuiltinFilter::ConvertTo16Bit);
+    applyFilter(&filter);
 
     return (savefromDImg());
 }

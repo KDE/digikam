@@ -184,8 +184,7 @@ bool LocalContrast::toolOperations()
     prm.stage[3].blur    = settings()["stage4_blur"].toDouble();
 
     LocalContrastFilter lc(&image(), 0L, prm);
-    lc.startFilterDirectly();
-    image().putImageData(lc.getTargetImage().bits());
+    applyFilter(&lc);
 
     return (savefromDImg());
 }

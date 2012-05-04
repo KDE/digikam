@@ -124,8 +124,7 @@ bool NoiseReduction::toolOperations()
     prm.softness[2]   = settings()["CbSoftness"].toDouble();
 
     NRFilter wnr(&image(), 0L, prm);
-    wnr.startFilterDirectly();
-    image().putImageData(wnr.getTargetImage().bits());
+    applyFilter(&wnr);
 
     return (savefromDImg());
 }

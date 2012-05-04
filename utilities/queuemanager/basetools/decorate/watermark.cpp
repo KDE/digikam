@@ -558,6 +558,8 @@ bool WaterMark::toolOperations()
             break;
     }
 
+    // TODO: Create watermark filter, move code there, implement FilterAction
+
     image().bitBlendImage(composer, &watermarkImage, 0, 0, watermarkImage.width(), watermarkImage.height(),
                           watermarkRect.left(), watermarkRect.top());
 

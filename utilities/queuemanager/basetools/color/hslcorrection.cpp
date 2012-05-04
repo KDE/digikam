@@ -111,8 +111,7 @@ bool HSLCorrection::toolOperations()
     prm.vibrance   = settings()["Vibrance"].toDouble();
 
     HSLFilter hsl(&image(), 0L, prm);
-    hsl.startFilterDirectly();
-    image().putImageData(hsl.getTargetImage().bits());
+    applyFilter(&hsl);
 
     return (savefromDImg());
 }

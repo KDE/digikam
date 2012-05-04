@@ -152,14 +152,9 @@ bool Restoration::toolOperations()
     m_cimgIface->setOriginalImage(image());
     m_cimgIface->setSettings(settings);
     m_cimgIface->setup();
-    m_cimgIface->startFilterDirectly();
 
-    if (isCancelled())
-    {
-        return false;
-    }
+    applyFilter(m_cimgIface);
 
-    image().putImageData(m_cimgIface->getTargetImage().bits());
     delete m_cimgIface;
     m_cimgIface = 0;
 

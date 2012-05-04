@@ -131,8 +131,7 @@ bool AntiVignetting::toolOperations()
     prm.yshift        = settings()["yshift"].toDouble();
 
     AntiVignettingFilter vig(&image(), 0L, prm);
-    vig.startFilterDirectly();
-    image().putImageData(vig.getTargetImage().bits());
+    applyFilter(&vig);
 
     return (savefromDImg());
 }

@@ -113,8 +113,7 @@ bool Blur::toolOperations()
     double radius = settings()["Radius"].toInt();
 
     BlurFilter blur(&image(), 0L, radius);
-    blur.startFilterDirectly();
-    image().putImageData(blur.getTargetImage().bits());
+    applyFilter(&blur);
 
     return savefromDImg();
 }
