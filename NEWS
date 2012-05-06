@@ -115,8 +115,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 096 ==> 298491 : Typos in templatemanager.cpp.
 097 ==> 297490 : Copy tags when creating a new version.
 098 ==> 297804 : Saving an image loses portait orientation.
-099 ==> 298380 : versioning settings active after digikam start even if versioning is switched off.
+099 ==> 298380 : Versioning settings active after digikam start even if versioning is switched off.
 100 ==> 288494 : Raw Images disappear after a batch conversion to Jpeg.
 101 ==> 274775 : "Find similar search" results are displayed when digiKam starts, although another album is selected.
-102 ==> 
+102 ==> 293500 : Photos disappear from albums after processing in the batch queue.
+103 ==> 
 
