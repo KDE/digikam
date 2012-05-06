@@ -97,7 +97,7 @@ public:
 
     FuzzySearchViewPriv() :
         // initially be active to update sketch panel when the search list is restored
-        active(true),
+        active(false),
         fingerprintsChecked(false),
         resetButton(0),
         saveBtnSketch(0),
@@ -857,10 +857,7 @@ void FuzzySearchView::dropEvent(QDropEvent* e)
             return;
         }
 
-        setCurrentImage(imageIDs.first());
-        slotCheckNameEditImageConditions();
-        createNewFuzzySearchAlbumFromImage(SAlbum::getTemporaryHaarTitle(DatabaseSearch::HaarImageSearch));
-        d->tabWidget->setCurrentIndex((int)FuzzySearchViewPriv::SIMILARS);
+        setImageInfo(ImageInfo(imageIDs.first()));
 
         e->acceptProposedAction();
     }
@@ -871,19 +868,21 @@ void FuzzySearchView::slotLevelImageChanged()
     if (d->timerImage)
     {
         d->timerImage->stop();
-        delete d->timerImage;
     }
-
-    d->timerImage = new QTimer(this);
-    connect( d->timerImage, SIGNAL(timeout()),
-             this, SLOT(slotTimerImageDone()) );
-    d->timerImage->setSingleShot(true);
-    d->timerImage->start(500);
+    else
+    {
+        d->timerImage = new QTimer(this);
+        connect( d->timerImage, SIGNAL(timeout()),
+                 this, SLOT(slotTimerImageDone()) );
+        d->timerImage->setSingleShot(true);
+        d->timerImage->setInterval(500);
+    }
+    d->timerImage->start();
 }
 
 void FuzzySearchView::slotTimerImageDone()
 {
-    if (!d->imageInfo.isNull())
+    if (!d->imageInfo.isNull() && d->active)
     {
         setImageInfo(d->imageInfo);
     }

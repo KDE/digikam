@@ -164,9 +164,12 @@ SAlbum* SearchModificationHelper::slotCreateTimeLineSearch(const QString& desire
 {
     QString name = desiredName;
 
-    if (!overwriteIfExisting && !checkName(name))
+    if (!overwriteIfExisting)
     {
-        return 0;
+        if (!checkName(name))
+        {
+            return 0;
+        }
     }
 
     if (dateRanges.isEmpty())
@@ -212,9 +215,12 @@ SAlbum* SearchModificationHelper::createFuzzySearchFromSketch(const QString& pro
 
     QString name = proposedName;
 
-    if (!overwriteIfExisting && !checkName(name))
+    if (!overwriteIfExisting)
     {
-        return 0;
+        if (!checkName(name))
+        {
+            return 0;
+        }
     }
 
     // We query database here
@@ -259,9 +265,12 @@ SAlbum* SearchModificationHelper::createFuzzySearchFromImage(const QString& prop
 
     QString name = proposedName;
 
-    if (!overwriteIfExisting && !checkName(name))
+    if (!overwriteIfExisting)
     {
-        return 0;
+        if (!checkName(name))
+        {
+            return 0;
+        }
     }
 
     // We query database here

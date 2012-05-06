@@ -117,5 +117,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 098 ==> 297804 : Saving an image loses portait orientation.
 099 ==> 298380 : versioning settings active after digikam start even if versioning is switched off.
 100 ==> 288494 : Raw Images disappear after a batch conversion to Jpeg.
-101 ==>
+101 ==> 274775 : "Find similar search" results are displayed when digiKam starts, although another album is selected.
+102 ==> 
 
