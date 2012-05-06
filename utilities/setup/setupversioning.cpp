@@ -405,6 +405,8 @@ SetupVersioning::SetupVersioning(QWidget* parent)
 
     readSettings();
 
+    enableToggled(d->enableNonDestructive->isChecked());
+
     // --------------------------------------------------------
 
     /*setAutoFillBackground(false);
