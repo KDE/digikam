@@ -1,23 +1,32 @@
 TUTORIAL HOW TO INSTALL DIGIKAM UNDER MACOSX
 --------------------------------------------
 
-1 - INSTALLING MACPORT
+1 - INTRODUCTION
+----------------
+
+digiKam can be installed through MacPort project. This guide explain how to compile code from KDE git repositories, 
+not to install a specific released version provided by MacPort team as package to compile.
+
+
+2 - INSTALLING MACPORT
 ----------------------
 
-digiKam can be installed through MacPort project. To install it, please follow these instructions to enter in a console:
 
-* Install development environnement from apple (http://developer.apple.com/xcode).
+* Install development environnement Xcode from apple (http://developer.apple.com/xcode).
   It's free, you just need to create an acount on apple.com to download it.
 
-* Install "macport" using DMG package (http://www.macports.org/install.php).
+  NOTE: since Xcode 4.3.2, you need to install Xcode Command Line Tools extension package to be able to use Macport on your computer.
+  See this url for details : http://guide.macports.org/#installing.xcode.
+
+* Install MacPort using DMG package (http://www.macports.org/install.php).
 
 * From a terminal, initialize Macport on your computer and install digiKam. This stage require some hours to compile whole environement.
 
 > sudo port -v selfupdate
 
-More information: http://guide.macports.org
+See complete MacPort guide for more information : http://guide.macports.org
 
-2 - INSTALL DEPENDENCIES
+3 - INSTALL DEPENDENCIES
 ------------------------
 
 Install all compilation and run-time dependencies:
@@ -30,7 +39,7 @@ Install all compilation and run-time dependencies:
 > sudo port -v install libgpod
 > sudo port -v install libgphoto2
 
-3 - RUN COMMON SETUP FOR KDE APPLICATIONS
+4 - RUN COMMON SETUP FOR KDE APPLICATIONS
 -----------------------------------------
 
 From a terminal, using your account user-name (here replace "foo" by your account), initialize KDE and Dbus services.
@@ -40,7 +49,7 @@ From a terminal, using your account user-name (here replace "foo" by your accoun
 > launchctl load -w /Library/LaunchAgents/org.freedesktop.dbus-session.plist
 
 
-4 - INSTALLATION TO COMPILE CURRENT DIGIKAM CODE FROM GIT/MASTER
+5 - INSTALLATION TO COMPILE CURRENT DIGIKAM CODE FROM GIT/MASTER
 ----------------------------------------------------------------
 
 * In you prefered directory dedicated to store and compile source code, checkout digiKam Software Compilation 
@@ -61,3 +70,8 @@ From a terminal, using your account user-name (here replace "foo" by your accoun
 > sudo make install/fast
 
 * digiKam must be available on Applications/Macports/KDE menu of your Apple computer.
+
+6 - AUTHORS
+-----------
+
+Gilles Caulier <caulier dot gilles at gmail dot com>
