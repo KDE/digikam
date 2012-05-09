@@ -42,12 +42,10 @@ Install all compilation and run-time dependencies:
 4 - RUN COMMON SETUP FOR KDE APPLICATIONS
 -----------------------------------------
 
-From a terminal, using your account user-name (here replace "foo" by your account), initialize KDE and Dbus services.
+From a terminal, initialize KDE and Dbus services.
 
-> sudo chown -R foo ~/Library/Preferences/KDE
-> sudo chown -R foo /Library/LaunchAgents/org.freedesktop.dbus-session.plist
 > launchctl load -w /Library/LaunchAgents/org.freedesktop.dbus-session.plist
-
+> /opt/local/bin/kbuildsycoca4
 
 5 - INSTALLATION TO COMPILE CURRENT DIGIKAM CODE FROM GIT/MASTER
 ----------------------------------------------------------------
