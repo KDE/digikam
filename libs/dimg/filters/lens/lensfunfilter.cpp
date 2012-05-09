@@ -155,9 +155,9 @@ void LensFunFilter::filterImage()
 
     // Calc necessary steps for progress bar
 
-    int steps = (d->iface->settings().filterCCA) ? 1 : 0 +
-                (d->iface->settings().filterVIG || d->iface->settings().filterCCI) ? 1 : 0 +
-                (d->iface->settings().filterDST || d->iface->settings().filterGEO) ? 1 : 0;
+    int steps = ((d->iface->settings().filterCCA) ? 1 : 0)                                   +
+                ((d->iface->settings().filterVIG || d->iface->settings().filterCCI) ? 1 : 0) +
+                ((d->iface->settings().filterDST || d->iface->settings().filterGEO) ? 1 : 0);
 
     kDebug() << "LensFun Modifier Flags: " << modflags << "  Steps:" << steps;
 
