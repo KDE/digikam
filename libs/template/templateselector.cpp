@@ -72,7 +72,7 @@ public:
     Template          metadataTemplate;
 };
 
-TemplateSelector::TemplateSelector(QWidget* const parent = 0)
+TemplateSelector::TemplateSelector(QWidget* const parent)
     : KHBox(parent), d(new TemplateSelectorPriv)
 {
     d->label         = new QLabel(i18n("Template: "), this);

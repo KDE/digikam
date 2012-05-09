@@ -152,7 +152,7 @@ public:
     DTextList*      subjectsList;
 };
 
-TemplateViewer::TemplateViewer(QWidget* const parent=0)
+TemplateViewer::TemplateViewer(QWidget* const parent)
     : RExpanderBox(parent), d(new TemplateViewerPriv)
 {
     setFrameStyle(QFrame::NoFrame);
