@@ -82,7 +82,7 @@ public:
     }
 };
 
-DatabaseServerStarter::DatabaseServerStarter(QObject* parent=0)
+DatabaseServerStarter::DatabaseServerStarter(QObject* const parent)
     : QObject(parent)
 {
 }

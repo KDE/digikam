@@ -64,7 +64,7 @@ public:
     DFontSelect::FontMode mode;
 };
 
-DFontSelect::DFontSelect(const QString& text=QString(), QWidget* parent=0)
+DFontSelect::DFontSelect(const QString& text, QWidget* const parent)
     : KHBox(parent), d(new DFontSelectPriv)
 {
     d->label     = new QLabel(this);
