@@ -58,7 +58,7 @@ namespace Digikam
 Mat* RefocusMatrix::allocate_matrix(int nrows, int ncols)
 {
     Mat* result = new Mat;
-    memset(result, 0, sizeof(result));
+    memset(result, 0, sizeof(Mat));
 
     result->cols = ncols;
     result->rows = nrows;
@@ -105,7 +105,7 @@ void RefocusMatrix::init_c_mat(CMat* mat, const int radius)
 CMat* RefocusMatrix::allocate_c_mat(const int radius)
 {
     CMat* result = new CMat;
-    memset(result, 0, sizeof(result));
+    memset(result, 0, sizeof(CMat));
     init_c_mat(result, radius);
     return (result);
 }
