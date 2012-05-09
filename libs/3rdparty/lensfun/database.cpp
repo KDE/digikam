@@ -37,7 +37,7 @@ lfError lfDatabase::Load ()
 #ifdef CONF_DATADIR
     dirs [ndirs++] = (char *)CONF_DATADIR;
 #else
-    extern gchar *_lf_get_database_dir ();
+//    extern char* _lf_get_database_dir ();
     dirs [ndirs++] = _lf_get_database_dir ();
 #endif
     int static_ndirs = ndirs;
