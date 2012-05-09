@@ -53,7 +53,7 @@ public:
 
 public:
 
-    DFontSelect(const QString& text, QWidget* parent);
+    DFontSelect(const QString& text, QWidget* const parent=0);
     virtual ~DFontSelect();
 
     void setMode(FontMode mode);
