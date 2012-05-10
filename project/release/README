@@ -1,7 +1,0 @@
-This is the release script wizard.
-
-You need to install ruby package first.
-
-You first need to modify the rc config file and change the version.
-
-To create the tarball, run ruby script as well
