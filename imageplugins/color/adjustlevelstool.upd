@@ -1,0 +1,6 @@
+# Prevent black image in adjustlevels after upgrading to digikam 2.6.0
+Id=adjustlevels2.6.0
+File=digikamrc
+RemoveGroup=adjustlevels Tool
+# End of file
+
