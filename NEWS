@@ -119,5 +119,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 100 ==> 288494 : Raw Images disappear after a batch conversion to Jpeg.
 101 ==> 274775 : "Find similar search" results are displayed when digiKam starts, although another album is selected.
 102 ==> 293500 : Photos disappear from albums after processing in the batch queue.
-103 ==> 
+103 ==> 290983 - digiKam crashes when selecting: Image - Geo-location option.
+104 ==> 
 
