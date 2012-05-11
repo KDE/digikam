@@ -67,10 +67,6 @@
 #cmakedefine USE_LCMS_VERSION_1000 1
 #cmakedefine USE_LCMS_VERSION_2000 1
 
-#ifdef USE_EXT_LIBPGF
-#define PGFCodecVersionID 0x${PGF_CODEC_VERSION_ID}
-#endif
-
 #define LIBEXEC_INSTALL_DIR "${LIBEXEC_INSTALL_DIR}"
 
 /*
