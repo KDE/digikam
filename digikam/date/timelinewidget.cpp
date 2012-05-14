@@ -330,8 +330,8 @@ int TimeLineWidget::cursorInfo(QString& infoDate) const
                              weekNb,
                              d->calendar->monthName(date),
                              d->calendar->formatDate(date, "%Y"),
-                             "Start: " + d->calendar->dayString(date),
-                             "End: " + d->calendar->dayString(endDate));
+                             "Start: " + d->calendar->formatDate(date,    KLocale::Day, KLocale::LongNumber),
+                             "End: "   + d->calendar->formatDate(endDate, KLocale::Day, KLocale::LongNumber));
             break;
         }
 
