@@ -491,7 +491,7 @@ LCMSAPI DWORD LCMSEXPORT dkCmsTakeHeaderFlags(cmsHPROFILE hProfile)
 
 LCMSAPI const BYTE* LCMSEXPORT dkCmsTakeProfileID(cmsHPROFILE hProfile)
 {
-    cmsUInt8Number* ProfileID = new cmsUInt8Number();
+    cmsUInt8Number* ProfileID = new cmsUInt8Number[16];
     cmsGetHeaderProfileID(hProfile, ProfileID);
     return static_cast<BYTE*>( ProfileID );
 }
