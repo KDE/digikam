@@ -859,7 +859,7 @@ void DImgInterface::switchToLastSaved(const DImageHistory& resolvedCurrentHistor
     setUndoManagerOrigin();
 }
 
-void DImgInterface::setHistoryIsBranch(bool isBranching)
+void DImgInterface::setHistoryIsBranch(bool /*isBranching*/)
 {
     // The first added step (on top of the initial history) will be marked as branch
     d->image.setHistoryBranchAfter(d->resolvedInitialHistory);
