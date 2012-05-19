@@ -125,6 +125,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 106 ==> 289454 : Two faces tagged instead of one.
 107 ==> 300277 : digiKam crashed on exit after adding tags to several hundred photos.
 108 ==> 267579 : Keep scroll position don't remember the picture viewed but the viewed line number.
-109 ==> 
-
-
+109 ==> 295263 : When tagging, "Writing metadata to files" messages never clear from progress queue.
+110 ==> 
