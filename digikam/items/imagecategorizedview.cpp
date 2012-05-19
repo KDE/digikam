@@ -445,10 +445,11 @@ void ImageCategorizedView::setThumbnailSize(int size)
 
 void ImageCategorizedView::setThumbnailSize(const ThumbnailSize& s)
 {
-    //d->model->setThumbnailSize(size);
+    // we abuse this pair of method calls to restore scroll position
+    layoutAboutToBeChanged();
     ThumbnailSize size(imageThumbnailModel()->thumbnailLoadThread()->thumbnailPixmapSize(s.size()));
     d->delegate->setThumbnailSize(size);
-    //viewport()->update();
+    layoutWasChanged();
 }
 
 void ImageCategorizedView::setCurrentWhenAvailable(qlonglong imageId)
