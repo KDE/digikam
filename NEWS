@@ -123,5 +123,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 104 ==> 297549 : digiKam crashes during batch raw converting.
 105 ==> 299886 : ShowFoto crash while saving PNG.
 106 ==> 289454 : Two faces tagged instead of one.
-107 ==> 
+107 ==> 300277 : digiKam crashed on exit after adding tags to several hundred photos.
+108 ==> 
+
 
