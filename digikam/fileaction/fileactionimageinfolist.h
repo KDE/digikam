@@ -51,26 +51,17 @@ public:
 
 class TwoProgressItemsContainer : public QSharedData
 {
-public:
-
-    ProgressItem* first()  const { return firstItem;  }
-    ProgressItem* second() const { return secondItem; }
-
-    void createFirstItem(const QString& action, FileActionProgressItemCreator* const creator)
-        { createProgressItem(firstItem, action, creator);  }
-    void createSecondItem(const QString& action, FileActionProgressItemCreator* const creator)
-        { createProgressItem(secondItem, action, creator); }
-
-    void checkFinishFirst()  { checkFinish(firstItem);  }
-    void checkFinishSecond() { checkFinish(secondItem); }
-
 protected:
 
     QAtomicPointer<ProgressItem> firstItem;
     QAtomicPointer<ProgressItem> secondItem;
 
-    void createProgressItem(QAtomicPointer<ProgressItem>& ptr, const QString& action, FileActionProgressItemCreator* const creator);
-    void checkFinish(QAtomicPointer<ProgressItem>& ptr);
+    // Note: It is currently not safe to schedule after the framework had a chance to
+    // advance all already scheduled items. For this, we'd need to add a mechanism (flag to block completion?)
+
+    void scheduleOnProgressItem(QAtomicPointer<ProgressItem>& ptr, int total,
+                                const QString& action, FileActionProgressItemCreator* const creator);
+    void advance(QAtomicPointer<ProgressItem>& ptr, int n);
 };
 
 // -------------------------------------------------------------------------------------------------------------------

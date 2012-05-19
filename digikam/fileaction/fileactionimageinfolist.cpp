@@ -32,27 +32,27 @@
 namespace Digikam
 {
 
-void TwoProgressItemsContainer::createProgressItem(QAtomicPointer<ProgressItem>& ptr,
-                                                   const QString& action, FileActionProgressItemCreator* const creator)
+void TwoProgressItemsContainer::scheduleOnProgressItem(QAtomicPointer<ProgressItem>& ptr, int total,
+                                                       const QString& action, FileActionProgressItemCreator* const creator)
 {
-    if (ptr)
+    if (!ptr)
     {
-        return;
+        ProgressItem* item = creator->createProgressItem(action);
+        if (ptr.testAndSetOrdered(0, item))
+        {
+            creator->addProgressItem(item);
+        }
+        else
+        {
+            delete item;
+        }
     }
-    ProgressItem* item = creator->createProgressItem(action);
-
-    if (!ptr.testAndSetOrdered(0, item))
-    {
-        delete item;
-        return;
-    }
-
-    creator->addProgressItem(item);
+    ptr->incTotalItems(total);
 }
 
-void TwoProgressItemsContainer::checkFinish(QAtomicPointer<ProgressItem>& ptr)
+void TwoProgressItemsContainer::advance(QAtomicPointer<ProgressItem>& ptr, int n)
 {
-    if (ptr->totalCompleted())
+    if (ptr->advance(n))
     {
         ProgressItem* item = ptr;
         if (item && ptr.testAndSetOrdered(item, 0))
@@ -65,35 +65,33 @@ void TwoProgressItemsContainer::checkFinish(QAtomicPointer<ProgressItem>& ptr)
 void FileActionProgressItemContainer::schedulingForDB(int numberOfInfos, const QString& action, 
                                                       FileActionProgressItemCreator* const creator)
 {
-    createFirstItem(action, creator);
-    firstItem->incTotalItems(numberOfInfos);
+    scheduleOnProgressItem(firstItem, numberOfInfos, action, creator);
 }
 
 void FileActionProgressItemContainer::dbProcessed(int numberOfInfos)
 {
-    firstItem->advance(numberOfInfos);
+    advance(firstItem, numberOfInfos);
 }
 
 void FileActionProgressItemContainer::dbFinished()
 {
-    checkFinish(firstItem);
+    //checkFinish(firstItem);
 }
 
 void FileActionProgressItemContainer::schedulingForWrite(int numberOfInfos, const QString& action, 
                                                          FileActionProgressItemCreator* const creator)
 {
-    createSecondItem(action, creator);
-    secondItem->incTotalItems(numberOfInfos);
+    scheduleOnProgressItem(secondItem, numberOfInfos, action, creator);
 }
 
 void FileActionProgressItemContainer::written(int numberOfInfos)
 {
-    secondItem->advance(numberOfInfos);
+    advance(secondItem, numberOfInfos);
 }
 
 void FileActionProgressItemContainer::finishedWriting()
 {
-    checkFinish(secondItem);
+    //checkFinish(secondItem);
 }
 
 FileActionImageInfoList FileActionImageInfoList::create(const QList<ImageInfo>& infos)
