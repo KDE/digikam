@@ -74,14 +74,21 @@ protected:
 
     // Internal implementation
 
-    int ParallelWorkers_qt_metacall(QMetaObject::Call _c, int _id, void** _a);
+    // Replaces slot call distribution of the target QObject
+    int replacementQtMetacall(QMetaObject::Call _c, int _id, void** _a);
+    const QMetaObject *replacementMetaObject() const;
+    // Return the target QObject (double inheritance)
     virtual QObject* asQObject() = 0;
-    virtual int WorkerObject_qt_metacall(QMetaObject::Call _c, int _id, void** _a) = 0;
+    // The qt_metacall of WorkerObject, one level above the target QObject
+    virtual int WorkerObjectQtMetacall(QMetaObject::Call _c, int _id, void** _a) = 0;
+    // The moc-generated metaObject of the target object
+    virtual const QMetaObject *mocMetaObject() const = 0;
 
 protected:
 
     QList<WorkerObject*> m_workers;
     int                  m_currentIndex;
+    QMetaObject*         m_replacementMetaObject;
 };
 
 // -------------------------------------------------------------------------------------------------
@@ -103,16 +110,21 @@ public:
      * use ParallelAdapter's connect to have a connection from all added WorkerObjects.
      */
 
-    ParallelAdapter()  {}
+    ParallelAdapter() {}
     ~ParallelAdapter() {}
 
     // Internal Implentation
+    // I know this is a hack
 
-    virtual int qt_metacall(QMetaObject::Call _c, int _id, void** _a)
-        { return ParallelWorkers::ParallelWorkers_qt_metacall(_c, _id, _a); }
-
-    int WorkerObject_qt_metacall(QMetaObject::Call _c, int _id, void** _a)
+    int WorkerObjectQtMetacall(QMetaObject::Call _c, int _id, void** _a)
         { return WorkerObject::qt_metacall(_c, _id, _a); }
+    const QMetaObject *mocMetaObject() const
+        { return A::metaObject(); }
+
+    virtual const QMetaObject *metaObject() const
+        { return ParallelWorkers::replacementMetaObject(); }
+    virtual int qt_metacall(QMetaObject::Call _c, int _id, void** _a)
+        { return ParallelWorkers::replacementQtMetacall(_c, _id, _a); }
 
     virtual QObject* asQObject() { return this; }
 

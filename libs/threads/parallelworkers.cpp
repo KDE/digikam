@@ -44,7 +44,8 @@ namespace Digikam
 {
 
 ParallelWorkers::ParallelWorkers()
-    : m_currentIndex(0)
+    : m_currentIndex(0),
+      m_replacementMetaObject(0)
 {
 }
 
@@ -54,6 +55,7 @@ ParallelWorkers::~ParallelWorkers()
     {
         delete object;
     }
+    delete m_replacementMetaObject;
 }
 
 int ParallelWorkers::optimalWorkerCount()
@@ -138,9 +140,9 @@ bool ParallelWorkers::connect(const char* const signal,
     return true;
 }
 
-int ParallelWorkers::ParallelWorkers_qt_metacall(QMetaObject::Call _c, int _id, void **_a)
+int ParallelWorkers::replacementQtMetacall(QMetaObject::Call _c, int _id, void **_a)
 {
-    _id = WorkerObject_qt_metacall(_c, _id, _a);
+    _id = WorkerObjectQtMetacall(_c, _id, _a);
     if (_id < 0)
         return _id;
 
@@ -198,6 +200,19 @@ int ParallelWorkers::ParallelWorkers_qt_metacall(QMetaObject::Call _c, int _id, 
         _id -= properMethods;
     }
     return _id;
+}
+
+const QMetaObject *ParallelWorkers::replacementMetaObject() const
+{
+    if (!m_replacementMetaObject)
+    {
+        // We skip the extraData added in Qt 4.8, which gives the static_qt_metacall, bypassing
+        // our overriding of the qt_metacall virtual
+        QMetaObject *rmo = new QMetaObject(*mocMetaObject());
+        rmo->d.extradata = 0;
+        const_cast<ParallelWorkers*>(this)->m_replacementMetaObject = rmo;
+    }
+    return m_replacementMetaObject;
 }
 
 } // namespace Digikam
