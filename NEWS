@@ -122,5 +122,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 103 ==> 290983 : digiKam crashes when selecting: Image - Geo-location option.
 104 ==> 297549 : digiKam crashes during batch raw converting.
 105 ==> 299886 : ShowFoto crash while saving PNG.
-106 ==> 
+106 ==> 289454 : Two faces tagged instead of one.
+107 ==> 
 

@@ -82,6 +82,7 @@ AddTagsLineEdit::AddTagsLineEdit(QWidget* parent)
     setCompletionBox(d->completionBox);
 
     setCompletionMode(KGlobalSettings::CompletionPopup);
+    setTrapReturnKey(true);
 
     connect(d->completionBox, SIGNAL(currentCompletionTextChanged(QString)),
             this, SLOT(slotCompletionBoxTextChanged(QString)) );
