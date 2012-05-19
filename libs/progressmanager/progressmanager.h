@@ -143,8 +143,8 @@ public:
     void         setTotalItems(unsigned int v);
     void         incTotalItems(unsigned int v = 1);
     unsigned int totalItems() const;
-    void         setCompletedItems(unsigned int v);
-    void         incCompletedItems(unsigned int v = 1);
+    bool         setCompletedItems(unsigned int v);
+    bool         incCompletedItems(unsigned int v = 1);
     unsigned int completedItems() const;
     bool         totalCompleted() const;
 
@@ -156,8 +156,9 @@ public:
     /**
      * Advance total items processed by n values and update percentage in progressbar.
      * @param v The value to advance.
+     * @return true if totalCompleted()
      */
-    void advance(unsigned int v);
+    bool advance(unsigned int v);
 
     void addChild(ProgressItem* const kiddo);
     void removeChild(ProgressItem* const kiddo);

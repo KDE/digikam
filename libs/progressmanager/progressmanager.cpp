@@ -219,10 +219,11 @@ void ProgressItem::updateProgress()
     setProgress(total? d->completed * 100 / total : 0);
 }
 
-void ProgressItem::advance(unsigned int v)
+bool ProgressItem::advance(unsigned int v)
 {
-    incCompletedItems(v);
+    bool complete = incCompletedItems(v);
     updateProgress();
+    return complete;
 }
 
 void ProgressItem::setTotalItems(unsigned int v)
@@ -240,9 +241,10 @@ unsigned int ProgressItem::totalItems() const
     return d->total;
 }
 
-void ProgressItem::setCompletedItems(unsigned int v)
+bool ProgressItem::setCompletedItems(unsigned int v)
 {
     d->completed.fetchAndStoreOrdered(v);
+    return v == (unsigned int)d->total;
 }
 
 unsigned int ProgressItem::completedItems() const
@@ -250,9 +252,10 @@ unsigned int ProgressItem::completedItems() const
     return d->completed;
 }
 
-void ProgressItem::incCompletedItems(unsigned int v)
+bool ProgressItem::incCompletedItems(unsigned int v)
 {
-    d->completed.fetchAndAddOrdered(v);
+    int previous = d->completed.fetchAndAddOrdered(v);
+    return (previous+v) == d->total;
 }
 
 bool ProgressItem::totalCompleted() const
