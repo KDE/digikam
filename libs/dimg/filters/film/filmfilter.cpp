@@ -172,16 +172,16 @@ void FilmContainer::setCNType(CNFilmProfile profile)
             d->profile = FilmProfile(2.12, 2.37, 2.56); // fix, check
             break;
         case CNFujicolorSuperiaReala:
-            d->profile = FilmProfile(1.79, 2.14, 2.49); // fix, check
+            d->profile = FilmProfile(1.79, 2.14, 2.49); // check
             break;
         case CNFujicolorSuperia100:
-            d->profile = FilmProfile(2.37, 2.77, 3.14); // fix, check
+            d->profile = FilmProfile(2.02, 2.46, 2.81); // fix, check
             break;
         case CNFujicolorSuperia200:
-            d->profile = FilmProfile(2.33, 2.71, 2.97); // fix, check
+            d->profile = FilmProfile(2.11, 2.50, 2.79); // check
             break;
         case CNFujicolorSuperiaXtra400:
-            d->profile = FilmProfile(2.11, 2.58, 2.96); // fix, check
+            d->profile = FilmProfile(2.11, 2.58, 2.96); // check
             break;
         case CNFujicolorSuperiaXtra800:
             d->profile = FilmProfile(2.44, 2.83, 3.18); // fix, check
