@@ -141,7 +141,7 @@ void FilmContainer::setCNType(CNFilmProfile profile)
             d->profile = FilmProfile(1.86, 2.33, 2.77); // fix, check
             break;
         case CNKodakFarbwelt200:
-            d->profile = FilmProfile(1.82, 2.29, 2.72); // fix, check
+            d->profile = FilmProfile(1.55, 2.03, 2.42); // check
             break;
         case CNKodakFarbwelt400:
             d->profile = FilmProfile(1.93, 2.43, 2.95); // fix, check
