@@ -127,6 +127,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 108 ==> 267579 : Keep scroll position don't remember the picture viewed but the viewed line number.
 109 ==> 295263 : When tagging, "Writing metadata to files" messages never clear from progress queue.
 110 ==> 300301 : Crash when applying comments and keywords on a set of jpeg.
-111 ==>
+111 ==> 231598 : Metadata on Albums are lost when album moved from local collection to a network collection.
+112 ==> 
 
 
