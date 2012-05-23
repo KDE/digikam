@@ -231,13 +231,19 @@ bool UMSCamera::getThumbnail(const QString& folder, const QString& itemName, QIm
         return true;
     }
 
+    KSharedConfig::Ptr config  = KGlobal::config();
+    KConfigGroup group         = config->group("Camera Settings");
+    bool turnHighQualityThumbs = group.readEntry("TurnHighQualityThumbs", false);
+
     // Try to get thumbnail from Exif data (poor quality).
-
-    thumbnail = metadata.getExifThumbnail(true);
-
-    if (!thumbnail.isNull())
+    if(!turnHighQualityThumbs)
     {
-        return true;
+        thumbnail = metadata.getExifThumbnail(true);
+
+        if (!thumbnail.isNull())
+        {
+            return true;
+        }
     }
 
     // THM files: try to get thumbnail from '.thm' files if we didn't manage to get

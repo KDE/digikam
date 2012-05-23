@@ -176,6 +176,7 @@ public:
 
     static const QString configGroupName;
     static const QString configUseMetadataDateEntry;
+    static const QString configTrunHighQualityThumbs;
     static const QString configUseDefaultTargetAlbum;
     static const QString configDefaultTargetAlbumId;
     static const QString importFiltersConfigGroupName;
@@ -189,6 +190,7 @@ public:
     QPushButton*         importEditButton;
 
     QCheckBox*           useDateFromMetadata;
+    QCheckBox*           turnHighQualityThumbs;
     QCheckBox*           useDefaultTargetAlbum;
 
     AlbumSelectWidget*   target1AlbumSelector;
@@ -206,6 +208,7 @@ public:
 
 const QString SetupCamera::SetupCameraPriv::configGroupName("Camera Settings");
 const QString SetupCamera::SetupCameraPriv::configUseMetadataDateEntry("UseThemeBackgroundColor");
+const QString SetupCamera::SetupCameraPriv::configTrunHighQualityThumbs("TurnHighQualityThumbs");
 const QString SetupCamera::SetupCameraPriv::configUseDefaultTargetAlbum("UseDefaultTargetAlbum");
 const QString SetupCamera::SetupCameraPriv::configDefaultTargetAlbumId("DefaultTargetAlbumId");
 const QString SetupCamera::SetupCameraPriv::importFiltersConfigGroupName("Import Filters");
@@ -297,6 +300,7 @@ SetupCamera::SetupCamera(QWidget* parent)
 
     QVBoxLayout* layout      = new QVBoxLayout(panel2);
     d->useDateFromMetadata   = new QCheckBox(i18n("Use date from metadata to sort items instead file-system date (makes connection slower)"), panel2);
+    d->turnHighQualityThumbs = new QCheckBox(i18n("Turn on high quality thumbnail loading (slower loading)"), panel2);
     d->useDefaultTargetAlbum = new QCheckBox(i18n("Use a default target album to download from camera"), panel2);
     d->target1AlbumSelector  = new AlbumSelectWidget(panel2);
 
@@ -305,6 +309,7 @@ SetupCamera::SetupCamera(QWidget* parent)
     layout->setMargin(KDialog::spacingHint());
     layout->setSpacing(KDialog::spacingHint());
     layout->addWidget(d->useDateFromMetadata);
+    layout->addWidget(d->turnHighQualityThumbs);
     layout->addWidget(d->useDefaultTargetAlbum);
     layout->addWidget(d->target1AlbumSelector);
     layout->addStretch();
@@ -437,6 +442,7 @@ void SetupCamera::readSettings()
     KConfigGroup group        = config->group(d->configGroupName);
 
     d->useDateFromMetadata->setChecked(group.readEntry(d->configUseMetadataDateEntry, false));
+    d->turnHighQualityThumbs->setChecked(group.readEntry(d->configTrunHighQualityThumbs, false));
     d->useDefaultTargetAlbum->setChecked(group.readEntry(d->configUseDefaultTargetAlbum, false));
     PAlbum* album = AlbumManager::instance()->findPAlbum(group.readEntry(d->configDefaultTargetAlbumId, 0));
     d->target1AlbumSelector->setCurrentAlbum(album);
@@ -507,6 +513,7 @@ void SetupCamera::applySettings()
     KConfigGroup group        = config->group(d->configGroupName);
 
     group.writeEntry(d->configUseMetadataDateEntry, d->useDateFromMetadata->isChecked());
+    group.writeEntry(d->configTrunHighQualityThumbs, d->turnHighQualityThumbs->isChecked());
     group.writeEntry(d->configUseDefaultTargetAlbum, d->useDefaultTargetAlbum->isChecked());
     PAlbum* album = d->target1AlbumSelector->currentAlbum();
     group.writeEntry(d->configDefaultTargetAlbumId, album ? album->id() : 0);
