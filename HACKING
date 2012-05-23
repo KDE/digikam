@@ -255,15 +255,14 @@ If you found a context to crash digiKam, you can provide a backtrace using GDB d
 digiKam need to be compiled with all debug info else the backtrace will not suitable.
 There is a configure option for that:
 
-# make -f Makefile.cvs
-# ./configure --enable-debug=full
-# make
-# su
-# make install.
+$> cmake . -DCMAKE_BUILD_TYPE=debugfull
+$> make
+$> su
+$> make install/fast
 
 To make a backtrace with GDB use following command:
 
-# gdb digikam
+$> gdb digikam
 > run
 > ...
 > _crash here_
@@ -272,7 +271,7 @@ To make a backtrace with GDB use following command:
 > _the backtrace is here_
 > quit
 
-Post this backtrace at the right place (B.K.O or devel ML) for investigations by developers.
+Post this backtrace at the right place (KDE Bugzilla or developement mailing list) for investigations by developers.
 
 For Windows users, take a look on this tutorial :
 
