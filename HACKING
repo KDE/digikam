@@ -405,11 +405,13 @@ Speed up the code-compile-test cycle
 Assuming you have setup your environment in ~/.bashrc as is suggested for KDE4 development,
 you can add something like this to your ~/.bashrc:
 
-function digikam_start {
+function digikam_start
+{
 LD_LIBRARY_PATH=${KDE_BUILD}/extragear/graphics/lib:${LD_LIBRARY_PATH} ${KDE_BUILD}/extragear/graphics/digikam/digikam/digikam
 }
 
-function digikam_start_gdb {
+function digikam_start_gdb
+{
 LD_LIBRARY_PATH=${KDE_BUILD}/extragear/graphics/lib:${LD_LIBRARY_PATH}  gdb ${KDE_BUILD}/extragear/graphics/digikam/digikam/digikam
 }
 
@@ -417,14 +419,27 @@ This allows you to run digikam after compiling without the need of a "make insta
 if you changed code in the libraries.
 
 ========================================================================
-Working with branches from subversion repository
+Working with branches from Subversion repository
 ========================================================================
 
 To implement new feature it usual to use a dedicated developement branche from svn and let the
-trunk code as stable for production. To synchronize branche with trunk, use this command into your
+trunk code as stable for production. To synchronize branche with trunk, use these commands into your
 local branch checkout:
 
-svn merge -r_COMMIT_ID_:HEAD svn+ssh://_YOUR_ACCOUNT_@svn.kde.org/home/kde/trunk/extragear/graphics/digikam
+$> svn merge -r_COMMIT_ID_:HEAD svn+ssh://_YOUR_ACCOUNT_@svn.kde.org/home/kde/trunk/extragear/graphics/digikam
 
 _COMMIT_ID_    is the last revision from trunk which have been synchronized to your development branche.
 _YOUR_ACCOUNT_ is your subversion login name.
+
+========================================================================
+Working with branches from Git repository
+========================================================================
+
+As with Subversion, it usual to use a dedicated developement branche from Git and let the
+master code as stable for production. To synchronize branche with master, use these commands into your
+local branch checkout:
+
+$> git rebase master
+$> git pull
+$> git push
+
