@@ -41,11 +41,11 @@ class ImportFilters : public KDialog
 
 public:
 
-    ImportFilters(QWidget* parent = 0);
+    ImportFilters(QWidget* const parent = 0);
     ~ImportFilters();
 
     void setData(const Filter& filter);
-    void getData(Filter* filter);
+    void getData(Filter* const filter);
 
 protected Q_SLOTS:
 

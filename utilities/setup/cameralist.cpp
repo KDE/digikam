@@ -7,7 +7,7 @@
  * Description : Cameras list container
  *
  * Copyright (C) 2003-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -69,7 +69,7 @@ public:
     QString            file;
 };
 
-CameraList::CameraList(QObject* parent, const QString& file)
+CameraList::CameraList(QObject* const parent, const QString& file)
     : QObject(parent), d(new CameraListPrivate)
 {
     d->file = file;
@@ -183,7 +183,7 @@ bool CameraList::save()
     return true;
 }
 
-void CameraList::insert(CameraType* ctype)
+void CameraList::insert(CameraType* const ctype)
 {
     if (!ctype)
     {
@@ -194,7 +194,7 @@ void CameraList::insert(CameraType* ctype)
     insertPrivate(ctype);
 }
 
-void CameraList::remove(CameraType* ctype)
+void CameraList::remove(CameraType* const ctype)
 {
     if (!ctype)
     {
@@ -205,7 +205,7 @@ void CameraList::remove(CameraType* ctype)
     removePrivate(ctype);
 }
 
-void CameraList::insertPrivate(CameraType* ctype)
+void CameraList::insertPrivate(CameraType* const ctype)
 {
     if (!ctype)
     {
@@ -216,7 +216,7 @@ void CameraList::insertPrivate(CameraType* ctype)
     emit signalCameraAdded(ctype);
 }
 
-void CameraList::removePrivate(CameraType* ctype)
+void CameraList::removePrivate(CameraType* const ctype)
 {
     if (!ctype)
     {
@@ -241,12 +241,12 @@ void CameraList::clear()
     }
 }
 
-QList<CameraType*>* CameraList::cameraList()
+QList<CameraType*>* CameraList::cameraList() const
 {
     return &d->clist;
 }
 
-CameraType* CameraList::find(const QString& title)
+CameraType* CameraList::find(const QString& title) const
 {
     foreach(CameraType* ctype, d->clist)
     {

@@ -7,7 +7,7 @@
  * Description : Cameras list container
  *
  * Copyright (C) 2003-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -46,19 +46,19 @@ class CameraList : public QObject
 
 public:
 
-    CameraList(QObject* parent, const QString& file);
+    CameraList(QObject* const parent, const QString& file);
     ~CameraList();
 
     bool load();
     bool save();
     void clear();
 
-    void insert(CameraType* ctype);
-    void remove(CameraType* ctype);
+    void insert(CameraType* const ctype);
+    void remove(CameraType* const ctype);
 
-    CameraType*         find(const QString& title);
     CameraType*         autoDetect(bool& retry);
-    QList<CameraType*>* cameraList();
+    CameraType*         find(const QString& title) const;
+    QList<CameraType*>* cameraList() const;
 
     bool changeCameraStartIndex(const QString& cameraTitle, int startIndex);
 
@@ -73,8 +73,8 @@ Q_SIGNALS:
 
 private:
 
-    void insertPrivate(CameraType* ctype);
-    void removePrivate(CameraType* ctype);
+    void insertPrivate(CameraType* const ctype);
+    void removePrivate(CameraType* const ctype);
 
 private:
 

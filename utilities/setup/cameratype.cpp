@@ -7,7 +7,7 @@
  * Description : Camera settings container.
  *
  * Copyright (C) 2003-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -67,7 +67,7 @@ CameraType::CameraType()
 
 CameraType::CameraType(const QString& title, const QString& model,
                        const QString& port, const QString& path,
-                       int startingNumber, KAction* action)
+                       int startingNumber, KAction* const action)
     : d(new CameraTypePrivate)
 {
     setTitle(title);
@@ -137,7 +137,7 @@ void CameraType::setStartingNumber(int sn)
     d->startingNumber = sn;
 }
 
-void CameraType::setAction(KAction* action)
+void CameraType::setAction(KAction* const action)
 {
     d->action = action;
 }
@@ -147,7 +147,7 @@ void CameraType::setValid(bool valid)
     d->valid = valid;
 }
 
-void CameraType::setCurrentCameraUI(CameraUI* cameraui)
+void CameraType::setCurrentCameraUI(CameraUI* const cameraui)
 {
     d->currentCameraUI = cameraui;
 }

@@ -54,10 +54,15 @@ public:
 
     ImportFiltersPriv()
     {
-    }
-
-    ~ImportFiltersPriv()
-    {
+        filterName       = 0;
+        mimeCheckBox     = 0;
+        mimeLabel        = 0;
+        mimeButton       = 0;
+        fileNameCheckBox = 0;
+        fileNameEdit     = 0;
+        pathCheckBox     = 0;
+        pathEdit         = 0;
+        newFilesCheckBox = 0;
     }
 
     QLineEdit*          filterName;
@@ -73,7 +78,7 @@ public:
 
 // ----------------------------------------------------------------------------------------
 
-ImportFilters::ImportFilters(QWidget* parent)
+ImportFilters::ImportFilters(QWidget* const parent)
     : KDialog(parent), d(new ImportFiltersPriv)
 {
     setButtons(KDialog::Cancel | KDialog::Ok);
@@ -208,7 +213,7 @@ void ImportFilters::setData(const Filter& filter)
     d->newFilesCheckBox->setChecked(filter.onlyNew);
 }
 
-void ImportFilters::getData(Filter* filter)
+void ImportFilters::getData(Filter* const filter)
 {
     filter->name       = d->filterName->text();
     filter->mimeFilter = d->mimeLabel->text();

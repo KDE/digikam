@@ -7,7 +7,7 @@
  * Description : camera setup tab.
  *
  * Copyright (C) 2003-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2003-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2003-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -43,7 +43,7 @@ class SetupCamera : public QScrollArea
 
 public:
 
-    SetupCamera(QWidget* parent = 0);
+    SetupCamera(QWidget* const parent = 0);
     ~SetupCamera();
 
     void applySettings();
@@ -88,7 +88,7 @@ class CameraAutoDetectThread : public DBusyThread
 
 public:
 
-    CameraAutoDetectThread(QObject* parent);
+    CameraAutoDetectThread(QObject* const parent);
     virtual ~CameraAutoDetectThread();
 
     int     result() const;

@@ -7,7 +7,7 @@
  * Description : Camera type selection dialog
  *
  * Copyright (C) 2003-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -96,7 +96,7 @@ public:
     SearchTextBar* searchBar;
 };
 
-CameraSelection::CameraSelection(QWidget* parent)
+CameraSelection::CameraSelection(QWidget* const parent)
     : KDialog(parent), d(new CameraSelectionPriv)
 {
     kapp->setOverrideCursor(Qt::WaitCursor);
@@ -505,12 +505,12 @@ void CameraSelection::slotPortChanged()
     }
 }
 
-QString CameraSelection::currentTitle()
+QString CameraSelection::currentTitle() const
 {
     return d->titleEdit->text();
 }
 
-QString CameraSelection::currentModel()
+QString CameraSelection::currentModel() const
 {
     QTreeWidgetItem* item = d->listView->currentItem();
 
@@ -529,12 +529,12 @@ QString CameraSelection::currentModel()
     return model;
 }
 
-QString CameraSelection::currentPortPath()
+QString CameraSelection::currentPortPath() const
 {
     return d->portPathComboBox->currentText();
 }
 
-QString CameraSelection::currentCameraPath()
+QString CameraSelection::currentCameraPath() const
 {
     return d->umsMountURL->url().toLocalFile();
 }

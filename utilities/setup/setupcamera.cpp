@@ -7,7 +7,7 @@
  * Description : camera setup tab.
  *
  * Copyright (C) 2003-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -71,7 +71,7 @@ class SetupCameraItem : public QTreeWidgetItem
 
 public:
 
-    SetupCameraItem(QTreeWidget* parent, CameraType* ctype)
+    SetupCameraItem(QTreeWidget* const parent, CameraType* const ctype)
         : QTreeWidgetItem(parent), m_ctype(0)
     {
         setCameraType(ctype);
@@ -82,7 +82,7 @@ public:
         delete m_ctype;
     };
 
-    void setCameraType(CameraType* ctype)
+    void setCameraType(CameraType* const ctype)
     {
         delete m_ctype;
 
@@ -124,7 +124,7 @@ public:
     QString port;
 };
 
-CameraAutoDetectThread::CameraAutoDetectThread(QObject* parent)
+CameraAutoDetectThread::CameraAutoDetectThread(QObject* const parent)
     : DBusyThread(parent), d(new CameraAutoDetectThreadPriv)
 {
     d->result = -1;
@@ -167,10 +167,18 @@ public:
         removeButton(0),
         editButton(0),
         autoDetectButton(0),
+        importAddButton(0),
+        importRemoveButton(0),
+        importEditButton(0),
+        useDateFromMetadata(0),
+        turnHighQualityThumbs(0),
         useDefaultTargetAlbum(0),
         target1AlbumSelector(0),
         listView(0),
-        tab(0)
+        importListView(0),
+        tab(0),
+        ignoreNamesEdit(0),
+        ignoreExtensionsEdit(0)
     {
     }
 
@@ -213,14 +221,14 @@ const QString SetupCamera::SetupCameraPriv::configUseDefaultTargetAlbum("UseDefa
 const QString SetupCamera::SetupCameraPriv::configDefaultTargetAlbumId("DefaultTargetAlbumId");
 const QString SetupCamera::SetupCameraPriv::importFiltersConfigGroupName("Import Filters");
 
-SetupCamera::SetupCamera(QWidget* parent)
+SetupCamera::SetupCamera(QWidget* const parent)
     : QScrollArea(parent), d(new SetupCameraPriv)
 {
-    d->tab = new KTabWidget(viewport());
+    d->tab            = new KTabWidget(viewport());
     setWidget(d->tab);
     setWidgetResizable(true);
 
-    QWidget* panel = new QWidget(d->tab);
+    QWidget* panel    = new QWidget(d->tab);
     panel->setAutoFillBackground(false);
 
     QGridLayout* grid = new QGridLayout(panel);
