@@ -1624,6 +1624,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/devices
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/dialogs
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/items
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/models
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/views
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/widgets
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/main
