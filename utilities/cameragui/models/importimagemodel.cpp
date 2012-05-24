@@ -45,6 +45,7 @@ public:
     QHash<qlonglong, int>   idHash;
     QHash<QString, qlonglong>           fileUrlHash;
 
+    bool                                keepFileUrlCache;
     //bool                    incremental
 
     class ImportImageModelIncrementalUpdater* incrementalUpdater;
@@ -64,7 +65,6 @@ public:
 
     ImportImageModelIncrementalUpdater(ImportImageModel::ImportImageModelPriv* d);
 
-    //void                  appendInfos(const QList<ImportImageModel>& infos, const QList<QVariant>& extraValues);
     void                  aboutToBeRemovedInModel(const IntPairList& aboutToBeRemoved);
     QList<IntPair>        oldIndexes();
 
@@ -72,11 +72,9 @@ public:
 
 public:
 
-    QHash<qlonglong, int> oldIds;
-    //QList<QVariant>       oldExtraValues;
+    QHash<qlonglong, int>        oldIds;
     QList<ImportImageModel>      newInfos;
-    //QList<QVariant>       newExtraValues;
-    QList<IntPairList>    modelRemovals;
+    QList<IntPairList>           modelRemovals;
 };
 
 ImportImageModel::ImportImageModel(CameraController *controller, QObject *parent)
