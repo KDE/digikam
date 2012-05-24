@@ -12,6 +12,7 @@ SET(libcameragui_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/cameramessagebox.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/items/camerafolderitem.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/items/cameraiconitem.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/models/importimagemodel.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/views/camerafolderview.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/views/cameraiconview.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/views/cameraiconviewtooltip.cpp
