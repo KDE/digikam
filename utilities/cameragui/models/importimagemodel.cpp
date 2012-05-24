@@ -21,13 +21,11 @@
  *
  * ============================================================ */
 
+#include "importimagemodel.moc"
+
 // Qt includes
 
 #include <QHash>
-
-// Local includes
-#include "importimagemodel.h"
-
 
 namespace Digikam
 {
@@ -38,15 +36,16 @@ public:
 
     ImportImageModelPriv()
     {
-        keepFileUrlCache = false;
+        keepFileUrlCache   = false;
+        incrementalUpdater = 0;
     }
 
-    CamItemInfoList         infos;
-    QHash<qlonglong, int>   idHash;
-    QHash<QString, qlonglong>           fileUrlHash;
+    CamItemInfoList                           infos;
+    QHash<qlonglong, int>                     idHash;
+    QHash<QString, qlonglong>                 fileUrlHash;
 
-    bool                                keepFileUrlCache;
-    //bool                    incremental
+    bool                                      keepFileUrlCache;
+    //bool                                    incremental
 
     class ImportImageModelIncrementalUpdater* incrementalUpdater;
 
@@ -55,6 +54,8 @@ public:
         return index.isValid() && index.row() >= 0 && index.row() < infos.size();
     }
 };
+
+// ----------------------------------------------------------------------------------------------------
 
 typedef QPair<int, int> IntPair;
 typedef QList<IntPair>  IntPairList;
@@ -72,16 +73,18 @@ public:
 
 public:
 
-    QHash<qlonglong, int>        oldIds;
-    QList<ImportImageModel>      newInfos;
-    QList<IntPairList>           modelRemovals;
+    QHash<qlonglong, int>    oldIds;
+    QList<ImportImageModel>  newInfos;
+    QList<IntPairList>       modelRemovals;
 };
 
-ImportImageModel::ImportImageModel(CameraController *controller, QObject *parent)
+// ----------------------------------------------------------------------------------------------------
+
+ImportImageModel::ImportImageModel(CameraController* const controller, QObject* const parent)
     : QAbstractListModel(parent),
       d(new ImportImageModelPriv)
 {
-    //Connections with the controller
+    //TODO: Connections with the controller
 }
 
 ImportImageModel::~ImportImageModel()
@@ -94,7 +97,7 @@ bool ImportImageModel::isEmpty() const
     return d->infos.isEmpty();
 }
 
-CamItemInfo ImportImageModel::camItemInfo(const QModelIndex &index) const
+CamItemInfo ImportImageModel::camItemInfo(const QModelIndex& index) const
 {
     if(!d->isValid(index))
     {
@@ -104,12 +107,12 @@ CamItemInfo ImportImageModel::camItemInfo(const QModelIndex &index) const
     return d->infos.at(index.row());
 }
 
-CamItemInfo& ImportImageModel::camItemInfoRef(const QModelIndex &index) const
+CamItemInfo& ImportImageModel::camItemInfoRef(const QModelIndex& index) const
 {
     return d->infos[index.row()];
 }
 
-qlonglong ImportImageModel::camItemId(const QModelIndex &index) const
+qlonglong ImportImageModel::camItemId(const QModelIndex& index) const
 {
     if(!d->isValid(index))
     {
@@ -120,7 +123,7 @@ qlonglong ImportImageModel::camItemId(const QModelIndex &index) const
 }
 
 //FIXME:
-QList<CamItemInfo> ImportImageModel::camItemInfos(const QList<QModelIndex> &indexes) const
+QList<CamItemInfo> ImportImageModel::camItemInfos(const QList<QModelIndex>& indexes) const
 {
     QList<CamItemInfo> infos;
     foreach(const QModelIndex& index, indexes)
@@ -132,7 +135,7 @@ QList<CamItemInfo> ImportImageModel::camItemInfos(const QList<QModelIndex> &inde
     return infos;
 }
 
-QList<qlonglong> ImportImageModel::camItemIds(const QList<QModelIndex> &indexes) const
+QList<qlonglong> ImportImageModel::camItemIds(const QList<QModelIndex>& indexes) const
 {
     QList<qlonglong> ids;
     foreach(const QModelIndex& index, indexes)
@@ -168,12 +171,12 @@ qlonglong ImportImageModel::camItemId(int row) const
     return d->infos.at(row).id;
 }
 
-QModelIndex ImportImageModel::indexForCamItemInfo(const CamItemInfo &info) const
+QModelIndex ImportImageModel::indexForCamItemInfo(const CamItemInfo& info) const
 {
     return indexForCamItemId(info.id);
 }
 
-QList<QModelIndex> ImportImageModel::indexesForCamItemInfo(const CamItemInfo &info) const
+QList<QModelIndex> ImportImageModel::indexesForCamItemInfo(const CamItemInfo& info) const
 {
     return indexesForCamItemId(info.id);
 }
@@ -203,7 +206,7 @@ QList<QModelIndex> ImportImageModel::indexesForCamItemId(qlonglong id) const
     return indexes;
 }
 
-int ImportImageModel::numberOfIndexesForCamItemInfo(const CamItemInfo &info) const
+int ImportImageModel::numberOfIndexesForCamItemInfo(const CamItemInfo& info) const
 {
     return numberOfIndexesForCamItemId(info.id);
 }
@@ -280,7 +283,7 @@ QModelIndex ImportImageModel::indexForUrl(const KUrl &fileUrl) const
     return QModelIndex();
 }
 
-QList<QModelIndex> ImportImageModel::indexesForUrl(const KUrl &fileUrl) const
+QList<QModelIndex> ImportImageModel::indexesForUrl(const KUrl& fileUrl) const
 {
     if(d->keepFileUrlCache)
     {

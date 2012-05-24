@@ -51,15 +51,15 @@ public:
     enum ImportImageModelRoles
     {
         /// An ImportImageModel* pointer to this model
-        ImportImageModelPointerRole   = Qt::UserRole,
-        ImportImageModelInternalId    = Qt::UserRole + 1,
+        ImportImageModelPointerRole = Qt::UserRole,
+        ImportImageModelInternalId  = Qt::UserRole + 1,
 
         /// Returns a thumbnail pixmap. May be implemented by subclasses.
         /// Returns either a valid pixmap or a null QVariant.
-        ThumbnailRole   = Qt::UserRole + 2
+        ThumbnailRole               = Qt::UserRole + 2
     };
 
-    ImportImageModel(Digikam::CameraController* controller, QObject* parent = 0);
+    ImportImageModel(Digikam::CameraController* const controller, QObject* const parent = 0);
     ~ImportImageModel();
 
     /** Returns the CamItemInfo object, reference from the underlying data pointed to by the index.
@@ -120,11 +120,11 @@ public:
     bool isEmpty() const;
 
     // QAbstractListModel implementation
-    virtual int rowCount(const QModelIndex &parent) const;
-    virtual QVariant data(const QModelIndex &index, int role) const;
+    virtual int rowCount(const QModelIndex& parent) const;
+    virtual QVariant data(const QModelIndex& index, int role) const;
     virtual QVariant headerData(int section, Qt::Orientation orientation, int role) const;
-    virtual Qt::ItemFlags flags(const QModelIndex &index) const;
-    virtual QModelIndex index(int row, int column, const QModelIndex &parent) const;
+    virtual Qt::ItemFlags flags(const QModelIndex& index) const;
+    virtual QModelIndex index(int row, int column, const QModelIndex& parent) const;
 
     // DragDrop methods
     DECLARE_MODEL_DRAG_DROP_METHODS
