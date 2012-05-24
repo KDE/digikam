@@ -406,6 +406,7 @@ void CameraController::run()
 
 void CameraController::executeCommand(CameraCommand* cmd)
 {
+    static int numberOfItems; // to give the appropriate id for each CamItemInfo.
     if (!cmd)
     {
         return;
@@ -506,6 +507,12 @@ void CameraController::executeCommand(CameraCommand* cmd)
             if (!itemsList.isEmpty())
             {
                 emit signalFileList(itemsList);
+            }
+
+            foreach(CamItemInfo info, itemsList)
+            {
+                numberOfItems++;
+                info.id += numberOfItems;
             }
 
             sendLogMsg(i18n("The files in %1 have been listed.", folder));
