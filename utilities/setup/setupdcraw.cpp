@@ -6,7 +6,7 @@
  * Date        : 2007-02-06
  * Description : setup RAW decoding settings.
  *
- * Copyright (C) 2007-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -87,7 +87,7 @@ public:
 const QString SetupDcraw::SetupDcrawPriv::configGroupName("ImageViewer Settings");
 const QString SetupDcraw::SetupDcrawPriv::configUseRawImportToolEntry("UseRawImportTool");
 
-SetupDcraw::SetupDcraw(QWidget* parent)
+SetupDcraw::SetupDcraw(QWidget* const parent)
     : QScrollArea(parent), d(new SetupDcrawPriv)
 {
     d->tab = new KTabWidget;
@@ -103,7 +103,7 @@ SetupDcraw::SetupDcraw(QWidget* parent)
                                   "from the image sensor of a digital camera.<nl/>"
                                   "Opening a raw file requires extensive data interpretation and processing."));
     rawExplanation->setWordWrap(true);
-    QLabel* rawIcon = new QLabel;
+    QLabel* rawIcon     = new QLabel;
     rawIcon->setPixmap(SmallIcon("camera-photo", KIconLoader::SizeLarge));
     QHBoxLayout* header = new QHBoxLayout;
     header->addWidget(rawIcon);
@@ -114,10 +114,10 @@ SetupDcraw::SetupDcraw(QWidget* parent)
     QGroupBox* behaviorBox = new QGroupBox;
     QGridLayout* boxLayout = new QGridLayout;
 
-    QLabel* openIcon = new QLabel;
+    QLabel* openIcon       = new QLabel;
     openIcon->setPixmap(SmallIcon("document-open", KIconLoader::SizeMedium));
 
-    QLabel* openIntro = new QLabel(i18nc("@label", "Open raw files in the image editor"));
+    QLabel* openIntro      = new QLabel(i18nc("@label", "Open raw files in the image editor"));
 
     d->openSimple  = new QRadioButton(i18nc("@option:radio Open raw files...",
                                             "Fast and simple, as 8 bit image"));
@@ -141,10 +141,10 @@ SetupDcraw::SetupDcraw(QWidget* parent)
 
     // --------------------------------------------------------
 
-    d->settingsPanel = new QWidget;
+    d->settingsPanel            = new QWidget;
     QVBoxLayout* settingsLayout = new QVBoxLayout;
 
-    d->dcrawSettings    = new DcrawSettingsWidget(0, 0 /* no advanced settings shown */);
+    d->dcrawSettings = new DcrawSettingsWidget(0, 0 /* no advanced settings shown */);
     d->dcrawSettings->setItemIcon(0, SmallIcon("kdcraw"));
     d->dcrawSettings->setItemIcon(1, SmallIcon("whitebalance"));
     d->dcrawSettings->setItemIcon(2, SmallIcon("lensdistortion"));
@@ -197,7 +197,7 @@ void SetupDcraw::slotSixteenBitsImageToggled(bool)
 void SetupDcraw::slotBehaviorChanged()
 {
     RawDecodingSettings settings = d->dcrawSettings->settings();
-    settings.sixteenBitsImage = !d->openSimple->isChecked();
+    settings.sixteenBitsImage    = !d->openSimple->isChecked();
     d->dcrawSettings->setSettings(settings);
 }
 
@@ -205,7 +205,6 @@ void SetupDcraw::applySettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
-
     group.writeEntry(d->configUseRawImportToolEntry, d->openTool->isChecked());
 
     d->dcrawSettings->writeSettings(group);
