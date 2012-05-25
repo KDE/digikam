@@ -81,13 +81,13 @@ public:
         True is returned if the dialog was closed with Ok.
      */
     static bool exec(Page page = LastPageUsed);
-    static bool exec(QWidget* parent, Page page = LastPageUsed);
+    static bool exec(QWidget* const parent, Page page = LastPageUsed);
     /** Show a setup dialog. Only the specified page will be available.
      */
     static bool execSinglePage(Page page);
-    static bool execSinglePage(QWidget* parent, Page page);
+    static bool execSinglePage(QWidget* const parent, Page page);
 
-    static bool execTemplateEditor(QWidget* parent, const Template& t);
+    static bool execTemplateEditor(QWidget* const parent, const Template& t);
     void setTemplate(const Template& t);
 
     QSize sizeHint() const;
@@ -98,7 +98,7 @@ private Q_SLOTS:
 
 private:
 
-    Setup(QWidget* parent = 0);
+    Setup(QWidget* const parent = 0);
     ~Setup();
 
     Setup::Page activePageIndex() const;
