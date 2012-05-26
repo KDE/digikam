@@ -470,6 +470,7 @@ void FilmTool::slotFilmItemActivated(QListWidgetItem* item)
     FilmContainer::CNFilmProfile type = (FilmContainer::CNFilmProfile)(item->type()-QListWidgetItem::UserType);
     d->filmContainer                  = FilmContainer(type, gamma, d->originalImage->sixteenBit());
     d->filmContainer.setExposure(strength);
+    d->filmContainer.setApplyBalance(d->colorBalanceInput->checkState() == Qt::Checked);
     d->filmContainer.setWhitePoint(wp);
     setLevelsFromFilm();
     slotTimer();

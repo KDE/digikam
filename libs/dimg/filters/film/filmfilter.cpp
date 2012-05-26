@@ -107,7 +107,6 @@ void FilmContainer::setCNType(CNFilmProfile profile)
             break;
         case CNKodakEktar100:
             d->profile = FilmProfile(1.40, 1.85, 2.34);
-            d->profile.setBalance(1, 0.94, 0.60); // ok
             break;
         case CNKodakProfessionalPortra160NC:
             d->profile = FilmProfile(1.49, 1.96, 2.46); // check
@@ -132,7 +131,6 @@ void FilmContainer::setCNType(CNFilmProfile profile)
             break;
         case CNKodakProfessionalNewPortra160:
             d->profile = FilmProfile(1.41, 1.88, 2.32);
-            d->profile.setBalance(1, .98, 0.86); // check
             break;
         case CNKodakProfessionalNewPortra400:
             d->profile = FilmProfile(1.69, 2.15, 2.68); // check
@@ -141,7 +139,7 @@ void FilmContainer::setCNType(CNFilmProfile profile)
             d->profile = FilmProfile(1.86, 2.33, 2.77); // fix, check
             break;
         case CNKodakFarbwelt200:
-            d->profile = FilmProfile(1.82, 2.29, 2.72); // fix, check
+            d->profile = FilmProfile(1.55, 2.03, 2.42); // check
             break;
         case CNKodakFarbwelt400:
             d->profile = FilmProfile(1.93, 2.43, 2.95); // fix, check
@@ -151,7 +149,6 @@ void FilmContainer::setCNType(CNFilmProfile profile)
             break;
         case CNAgfaphotoVistaPlus200:
             d->profile = FilmProfile(1.70, 2.13, 2.50);
-            d->profile.setBalance(1.0, 1.10, 0.94); // fix, check
             break;
         case CNAgfaphotoVistaPlus400:
             d->profile = FilmProfile(1.86, 2.35, 2.67); // fix, check
@@ -172,16 +169,16 @@ void FilmContainer::setCNType(CNFilmProfile profile)
             d->profile = FilmProfile(2.12, 2.37, 2.56); // fix, check
             break;
         case CNFujicolorSuperiaReala:
-            d->profile = FilmProfile(2.07, 2.36, 2.73); // fix, check
+            d->profile = FilmProfile(1.79, 2.14, 2.49); // check
             break;
         case CNFujicolorSuperia100:
-            d->profile = FilmProfile(2.37, 2.77, 3.14); // fix, check
+            d->profile = FilmProfile(2.02, 2.46, 2.81); // fix, check
             break;
         case CNFujicolorSuperia200:
-            d->profile = FilmProfile(2.33, 2.71, 2.97); // fix, check
+            d->profile = FilmProfile(2.11, 2.50, 2.79); // check
             break;
         case CNFujicolorSuperiaXtra400:
-            d->profile = FilmProfile(2.11, 2.58, 2.96); // fix, check
+            d->profile = FilmProfile(2.11, 2.58, 2.96); // check
             break;
         case CNFujicolorSuperiaXtra800:
             d->profile = FilmProfile(2.44, 2.83, 3.18); // fix, check
@@ -230,7 +227,24 @@ double FilmContainer::blackPointForChannel(int ch) const
     if (ch == LuminosityChannel || ch == AlphaChannel)
         return 0.0;
 
-    return pow(10, -d->profile.dmax(ch)) * (d->sixteenBit ? 65535 : 255);
+    return pow(10, -d->profile.dmax(ch));
+}
+
+double FilmContainer::gammaForChannel(int ch) const
+{
+    int max = d->sixteenBit ? 65535 : 255;
+
+    if (ch == GreenChannel || ch == BlueChannel)
+    {
+        double bpc = blackPointForChannel(ch)*d->exposure;
+        double wpc = (double)whitePointForChannel(ch)/(double)max;
+        double bpr = blackPointForChannel(RedChannel)*d->exposure;
+        double wpr = (double)whitePointForChannel(RedChannel)/(double)max;
+
+        return log10( bpc / wpc ) / log10( bpr / wpr );
+    }
+
+    return 1.0;
 }
 
 LevelsContainer FilmContainer::toLevels() const
@@ -240,11 +254,14 @@ LevelsContainer FilmContainer::toLevels() const
 
     for (int i = LuminosityChannel; i <= AlphaChannel; i++)
     {
-        l.lInput[i]  = blackPointForChannel(i) * d->exposure;
+        l.lInput[i]  = blackPointForChannel(i) * max * d->exposure;
         l.hInput[i]  = whitePointForChannel(i) * d->profile.wp(i);
         l.lOutput[i] = 0;
         l.hOutput[i] = max;
-        l.gamma[i]   = 1.0;
+        if (d->applyBalance)
+            l.gamma[i]   = gammaForChannel(i);
+        else
+            l.gamma[i] = 1.0;
     }
 
     return l;
@@ -350,25 +367,20 @@ void FilmFilter::filterImage()
 
     // level the image first, this removes the orange mask and corrects
     // colors according to the density ranges of the film profile
-    LevelsFilter(l, this, m_orgImage, tmpLevel, 0, 30);
+    LevelsFilter(l, this, m_orgImage, tmpLevel, 0, 40);
 
     // in case of a linear raw scan, gamma needs to be
     // applied after leveling the image, otherwise the image will
     // look too bright. The standard value is 2.2, but 1.8 is also
     // frequently found in literature
     gamma.gamma = d->film.gamma();
-    CBFilter(gamma, this, tmpLevel, tmpGamma, 30, 60);
+    CBFilter(gamma, this, tmpLevel, tmpGamma, 40, 80);
 
     // invert the image to have a positive image
-    InvertFilter(this, tmpGamma, tmpInv, 60, 70);
+    InvertFilter(this, tmpGamma, tmpInv, 80, 100);
 
-    // final step is to balance the color channels according to the profile
-    if (d->film.applyBalance())
-        CBFilter(cb, this, tmpInv, m_destImage, 70, 100);
-    else {
-        m_destImage = tmpInv;
-        postProgress(100);
-    }
+    m_destImage = tmpInv;
+    postProgress(100);
 }
 
 FilterAction FilmFilter::filterAction()

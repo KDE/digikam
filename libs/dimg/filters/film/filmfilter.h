@@ -120,6 +120,7 @@ private:
 
     int    whitePointForChannel(int channel) const;
     double blackPointForChannel(int ch) const;
+    double gammaForChannel(int ch) const;
 
     static QMap<int, QString> profileMapInitializer();
 
