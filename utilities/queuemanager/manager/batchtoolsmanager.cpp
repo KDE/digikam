@@ -6,7 +6,7 @@
  * Date        : 2008-11-24
  * Description : Batch Tools Manager.
  *
- * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -72,7 +72,7 @@ public:
     BatchToolsList toolsList;
 };
 
-BatchToolsManager::BatchToolsManager(QObject* parent)
+BatchToolsManager::BatchToolsManager(QObject* const parent)
     : QObject(parent), d(new BatchToolsManagerPriv)
 {
     // Convert
@@ -134,7 +134,7 @@ BatchToolsList BatchToolsManager::toolsList() const
     return d->toolsList;
 }
 
-void BatchToolsManager::registerTool(BatchTool* tool)
+void BatchToolsManager::registerTool(BatchTool* const tool)
 {
     if (!tool)
     {
@@ -144,7 +144,7 @@ void BatchToolsManager::registerTool(BatchTool* tool)
     d->toolsList.append(tool);
 }
 
-void BatchToolsManager::unregisterTool(BatchTool* tool)
+void BatchToolsManager::unregisterTool(BatchTool* const tool)
 {
     if (!tool)
     {

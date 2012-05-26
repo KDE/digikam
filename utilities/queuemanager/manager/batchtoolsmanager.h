@@ -6,7 +6,7 @@
  * Date        : 2008-11-24
  * Description : Batch Tools Manager.
  *
- * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -41,11 +41,11 @@ class BatchToolsManager : public QObject
 
 public:
 
-    BatchToolsManager(QObject* parent = 0);
+    BatchToolsManager(QObject* const parent = 0);
     ~BatchToolsManager();
 
-    void registerTool(BatchTool* tool);
-    void unregisterTool(BatchTool* tool);
+    void registerTool(BatchTool* const tool);
+    void unregisterTool(BatchTool* const tool);
 
     BatchTool* findTool(const QString& name, BatchTool::BatchToolGroup group) const;
 

@@ -6,7 +6,7 @@
  * Date        : 2009-02-15
  * Description : queue pool info container.
  *
- * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -41,14 +41,20 @@ class ItemInfoSet
 {
 public:
 
-    ItemInfoSet() : queueId(0) {};
+    ItemInfoSet()
+        : queueId(0)
+    {
+    };
+
     ItemInfoSet(int id, const ImageInfo& inf)
     {
         queueId = id;
         info    = inf;
     };
 
-    ~ItemInfoSet() {};
+    ~ItemInfoSet()
+    {
+    };
 
     int       queueId;
     ImageInfo info;
