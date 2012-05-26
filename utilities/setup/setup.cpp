@@ -172,7 +172,7 @@ public:
     KPageWidgetItem* pageItem(Setup::Page page) const;
 };
 
-Setup::Setup(QWidget* parent)
+Setup::Setup(QWidget* const parent)
     : KPageDialog(parent), d(new SetupPrivate)
 {
     setCaption(i18n("Configure"));
@@ -405,7 +405,7 @@ bool Setup::exec(Page page)
     return exec(0, page);
 }
 
-bool Setup::exec(QWidget* parent, Page page)
+bool Setup::exec(QWidget* const parent, Page page)
 {
     QPointer<Setup> setup = new Setup(parent);
     setup->showPage(page);
@@ -419,7 +419,7 @@ bool Setup::execSinglePage(Page page)
     return execSinglePage(0, page);
 }
 
-bool Setup::execSinglePage(QWidget* parent, Page page)
+bool Setup::execSinglePage(QWidget* const parent, Page page)
 {
     QPointer<Setup> setup = new Setup(parent);
     setup->showPage(page);
@@ -429,7 +429,7 @@ bool Setup::execSinglePage(QWidget* parent, Page page)
     return success;
 }
 
-bool Setup::execTemplateEditor(QWidget* parent, const Template& t)
+bool Setup::execTemplateEditor(QWidget* const parent, const Template& t)
 {
     QPointer<Setup> setup = new Setup(parent);
     setup->showPage(TemplatePage);
