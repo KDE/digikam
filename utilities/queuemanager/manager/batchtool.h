@@ -6,7 +6,7 @@
  * Date        : 2008-11-24
  * Description : Batch Tool Container.
  *
- * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -78,7 +78,7 @@ public:
 
 public:
 
-    BatchTool(const QString& name, BatchToolGroup group, QObject* parent = 0);
+    BatchTool(const QString& name, BatchToolGroup group, QObject* const parent = 0);
     ~BatchTool();
 
     /** Get description of an error which appear during apply() method.
@@ -110,7 +110,7 @@ public:
 
     /** Manage customized settings widget on settings view.
      */
-    void setSettingsWidget(QWidget* settingsWidget);
+    void setSettingsWidget(QWidget* const settingsWidget);
     QWidget* settingsWidget() const;
 
     /** Manage settings values to tool. See BatchToolSettings container for details.
@@ -313,7 +313,7 @@ public:
 
     AssignedBatchTools() {};
 
-    QString targetSuffix(bool* extSet = 0) const
+    QString targetSuffix(bool* const extSet = 0) const
     {
         QString suffix;
         foreach(BatchToolSet set, m_toolsMap)
