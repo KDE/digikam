@@ -129,6 +129,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 110 ==> 300301 : Crash when applying comments and keywords on a set of jpeg.
 111 ==> 231598 : Metadata on Albums are lost when album moved from local collection to a network collection.
 112 ==> 257865 : Essential toolbar icons in size 32x32 are still in crystal style (oxygen style in all other sizes).
-113 ==> 
+113 ==> 295430 : Image in preview does not rotate when rotate button is clicked.
+114 ==> 
 
 
