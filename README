@@ -124,7 +124,8 @@ Use CMake "-DENABLE_NEPOMUKSUPPORT=off"   flag to compile digiKam without Nepomu
 Use CMake "-DKDE4_BUILD_TESTS=on"         flag to compile digiKam source code unit tests                                         (disabled by default).
 Use CMake "-DENABLE_LCMS2=on"             flag to compile digiKam source code against lcms2 instead lcms1                        (disabled by default).
 
-To support Video thumbnails under Linux, please install "mplayerthumbs" package.
+digiKam do not have any video thumbnailer. Video support is delegate to KDE. To support Video thumbnails, 
+please install "ffmpegthumbs" package, which is the kdemultimedia Video thumbnail generator for KDE4 file managers.
 
 -- INSTALLATION --------------------------------------------------------
 
