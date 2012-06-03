@@ -111,7 +111,7 @@ protected:
     void drawCreationDate(QPainter* p, const QRect& dateRect, const QDateTime& date) const;
     void drawModificationDate(QPainter* p, const QRect& dateRect, const QDateTime& date) const;
     void drawImageSize(QPainter* p, const QRect& dimsRect, const QSize& dims) const;
-    void drawFileSize(QPainter* p, const QRect& r, int bytes) const;
+    void drawFileSize(QPainter* p, const QRect& r, qlonglong bytes) const;
     void drawTags(QPainter* p, const QRect& r, const QString& tagsString, bool isSelected) const;
     void drawImageFormat(QPainter* p, const QRect& r, const QString& f) const;
     void drawColorLabelRect(QPainter* p, const QStyleOptionViewItem& option, bool isSelected, int colorId) const;

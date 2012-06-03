@@ -132,3 +132,4 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 113 ==> 295430 : Image in preview does not rotate when rotate button is clicked.
 114 ==> 300920 : Tags are stored multiple times.
 115 ==> 299598 : When I hit the import button digiKam flashes the name of the connected camera and then crashes.
+116 ==> 276920 : Digikam shows wrong file size in thumbnail info for files >2Gb.
