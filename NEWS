@@ -71,7 +71,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 052 ==> 294423 : Build error under Solaris [patch].
 053 ==> 286437 : "No flag" filter doesn't work.
 054 ==> 281877 : Redo same result as discard changes.
-055 ==> 294105 : Please support lcms2
+055 ==> 294105 : Please support lcms2.
 056 ==> 294585 : Crash on facebook export.
 057 ==> 294995 : Delete photos and their management in the database Mysql.
 058 ==> 295104 : Sdt namespace ambiguity in BlurFilter [patch].
@@ -105,7 +105,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 086 ==> 216636 : Option to set parent album in Album -> New Album.
 087 ==> 287099 : digiKam crash when using facerecognition.
 088 ==> 151849 : Add Right-MouseButton-menu entry to exit fullscreen [patch].
-089 ==> 251887 : Holding SHIFT in timeline to select range. 
+089 ==> 251887 : Holding SHIFT in timeline to select range.
 090 ==> 289330 : Album file watch failing (QKqueueFileSystemWatcherEngine:addPaths: open: Too many open files in system).
 091 ==> 287267 : IptcCore tags are written incorrectly.
 092 ==> 298178 : Move photos dialog default button is Cancel, not Ok
@@ -132,3 +132,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 113 ==> 295430 : Image in preview does not rotate when rotate button is clicked.
 114 ==> 300920 : Tags are stored multiple times.
 115 ==> 299598 : When I hit the import button digiKam flashes the name of the connected camera and then crashes.
+116 ==> 276920 : digiKam shows wrong file size in thumbnail info for files >2Gb.
+117 ==> 205824 : EXIF UserComments with special characters get tagged as ASCII.
+118 ==> 277206 : Problems exporting RAW (CR2) from editor : original file disappear from icon view.
