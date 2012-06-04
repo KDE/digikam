@@ -53,11 +53,19 @@ public:
 
     QAtomicInt ref;
 
-    inline DSharedData()                   : ref(0) { }
-    inline DSharedData(const DSharedData&) : ref(0) { }
+    inline DSharedData()
+        : ref(0)
+    {
+    }
 
-    /** Returns true if the reference count is not 0.
-     *  For the normal use case, you do not need this method.
+    inline DSharedData(const DSharedData&)
+        : ref(0)
+    {
+    }
+
+    /**
+     * Returns true if the reference count is not 0.
+     * For the normal use case, you do not need this method.
      */
     inline bool isReferenced() const
     {
@@ -91,7 +99,9 @@ public:
      *   copy constructor of class T may not be used.
      */
 
-    /** Various operators for accessing the pointer const and non-const */
+    /**
+     * Various operators for accessing the pointer const and non-const
+     */
     inline T& operator*()
     {
         return *d;
@@ -137,10 +147,11 @@ public:
         return d;
     }
 
-    /** This method carries out a const_cast, so it returns a non-const pointer
-     *  from a const DSharedDataPointer.
-     *  Typically, this should only be used if you know it should be used
-     *  (to implement a lazy loading caching technique or similar)
+    /**
+     * This method carries out a const_cast, so it returns a non-const pointer
+     * from a const DSharedDataPointer.
+     * Typically, this should only be used if you know it should be used
+     * (to implement a lazy loading caching technique or similar)
      */
     inline T* constCastData() const
     {
@@ -162,7 +173,8 @@ public:
         d = 0;
     }
 
-    explicit inline DSharedDataPointer(T* data) : d(data)
+    explicit inline DSharedDataPointer(T* const data)
+        : d(data)
     {
         if (d)
         {
@@ -178,7 +190,8 @@ public:
         }
     }
 
-    inline DSharedDataPointer(const DSharedDataPointer<T>& o) : d(o.d)
+    inline DSharedDataPointer(const DSharedDataPointer<T>& o)
+        : d(o.d)
     {
         if (d)
         {
@@ -186,13 +199,13 @@ public:
         }
     }
 
-    inline DSharedDataPointer<T> & operator=(const DSharedDataPointer<T>& o)
+    inline DSharedDataPointer<T>& operator=(const DSharedDataPointer<T>& o)
     {
         delete assign(o);
         return *this;
     }
 
-    inline DSharedDataPointer& operator=(T* o)
+    inline DSharedDataPointer& operator=(T* const o)
     {
         delete assign(o);
         return *this;
@@ -220,7 +233,7 @@ public:
             // store old value
             T* x = d;
             // assign new value
-            d = o.d;
+            d    = o.d;
 
             // dereference old value,
             // return value and ownership if dereferenced
@@ -233,7 +246,7 @@ public:
         return 0;
     }
 
-    inline T* assign(T* o)
+    inline T* assign(T* const o)
     {
         if (o != d)
         {
@@ -246,7 +259,7 @@ public:
             // store old value
             T* x = d;
             // assign new value
-            d = o;
+            d    = o;
 
             // dereference old value,
             // return value and ownership if dereferenced
@@ -262,7 +275,7 @@ public:
     /**
      * Semantics like assign, but no new pointer is assigned to this.
      */
-    inline T* unassign()
+    inline T* unassign() const
     {
         return assign(0);
     }
