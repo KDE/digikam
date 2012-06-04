@@ -17,11 +17,11 @@ OPTION(ENABLE_LCMS2            "Link digiKam to LCMS2 instead LCMS1 (experimenta
 
 # digiKam version
 SET(DIGIKAM_MAJOR_VERSION "2")
-SET(DIGIKAM_MINOR_VERSION "6")
+SET(DIGIKAM_MINOR_VERSION "7")
 SET(DIGIKAM_PATCH_VERSION "0")
 
 #digiKam release date
-SET(DIGIKAM_RELEASE_DATE "2012-06-03")
+SET(DIGIKAM_RELEASE_DATE "2012-07-08")
 
 # Suffix to add at end of version string. Usual values are:
 # "-git"   : alpha code unstable from git. Do not use in production
