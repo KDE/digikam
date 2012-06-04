@@ -40,7 +40,7 @@ AutoExpoFilter::AutoExpoFilter(QObject* const parent)
     initFilter();
 }
 
-AutoExpoFilter::AutoExpoFilter(DImg* orgImage, const DImg* refImage, QObject* const parent)
+AutoExpoFilter::AutoExpoFilter(DImg* const orgImage, const DImg* const refImage, QObject* const parent)
     : WBFilter(orgImage, parent),
       m_refImage(*refImage)
 {

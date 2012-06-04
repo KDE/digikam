@@ -45,7 +45,7 @@ StretchFilter::StretchFilter(QObject* const parent)
     initFilter();
 }
 
-StretchFilter::StretchFilter(DImg* orgImage, const DImg* refImage, QObject* const parent)
+StretchFilter::StretchFilter(DImg* const orgImage, const DImg* const refImage, QObject* const parent)
     : DImgThreadedFilter(orgImage, parent, "StretchFilter"),
       m_refImage(*refImage)
 {
@@ -70,7 +70,8 @@ void StretchFilter::filterImage()
 
 /** Performs histogram normalization of the image. The algorithm normalizes
     the pixel values from an image for to span the full range
-    of color values. This is a contrast enhancement technique.*/
+    of color values. This is a contrast enhancement technique.
+*/
 void StretchFilter::stretchContrastImage()
 {
     if (m_orgImage.sixteenBit() != m_refImage.sixteenBit())

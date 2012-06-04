@@ -47,7 +47,7 @@ AutoLevelsFilter::AutoLevelsFilter(QObject* const parent)
     initFilter();
 }
 
-AutoLevelsFilter::AutoLevelsFilter(DImg* orgImage, const DImg* refImage, QObject* const parent)
+AutoLevelsFilter::AutoLevelsFilter(DImg* const orgImage, const DImg* const refImage, QObject* const parent)
     : DImgThreadedFilter(orgImage, parent, "AutoLevelsFilter"),
       m_refImage(*refImage)
 {
@@ -74,7 +74,8 @@ void AutoLevelsFilter::filterImage()
     This method maximizes the tonal range in the Red,
     Green, and Blue channels. It search the image shadow and highlight
     limit values and adjust the Red, Green, and Blue channels
-    to a full histogram range.*/
+    to a full histogram range.
+*/
 void AutoLevelsFilter::autoLevelsCorrectionImage()
 {
     if (m_orgImage.sixteenBit() != m_refImage.sixteenBit())
@@ -95,7 +96,7 @@ void AutoLevelsFilter::autoLevelsCorrectionImage()
     postProgress(10);
 
     int sizeSixteenBit = w * h * 8;
-    int sizeEightBit = w * h * 4;
+    int sizeEightBit   = w * h * 4;
 
     // Create the new empty destination image data space.
     if (runningFlag())

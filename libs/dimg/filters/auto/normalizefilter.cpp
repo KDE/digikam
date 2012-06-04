@@ -45,7 +45,7 @@ NormalizeFilter::NormalizeFilter(QObject* const parent)
     initFilter();
 }
 
-NormalizeFilter::NormalizeFilter(DImg* orgImage, const DImg* refImage, QObject* const parent)
+NormalizeFilter::NormalizeFilter(DImg* const orgImage, const DImg* const refImage, QObject* const parent)
     : DImgThreadedFilter(orgImage, parent, "NormalizeFilter"),
       m_refImage(*refImage)
 {
@@ -72,7 +72,8 @@ void NormalizeFilter::filterImage()
     image so that the darkest point becomes black, and the
     brightest point becomes as bright as possible without
     altering its hue. This is often a magic fix for
-    images that are dim or washed out.*/
+    images that are dim or washed out.
+*/
 void NormalizeFilter::normalizeImage()
 {
     if (m_orgImage.sixteenBit() != m_refImage.sixteenBit())
