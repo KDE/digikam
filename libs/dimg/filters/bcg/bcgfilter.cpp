@@ -6,9 +6,9 @@
  * Date        : 2005-03-06
  * Description : a Brightness/Contrast/Gamma image filter.
  *
- * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
+ * Copyright (C) 2005      by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -73,20 +73,22 @@ void BCGContainer::writeToFilterAction(FilterAction& action, const QString& pref
 BCGContainer BCGContainer::fromFilterAction(const FilterAction& action, const QString& prefix)
 {
     BCGContainer settings;
-    settings.channel =    action.parameter(prefix + "channel", settings.channel);
+    settings.channel    = action.parameter(prefix + "channel",    settings.channel);
     settings.brightness = action.parameter(prefix + "brightness", settings.brightness);
-    settings.contrast =   action.parameter(prefix + "contrast", settings.contrast);
-    settings.gamma =      action.parameter(prefix + "gamma", settings.gamma);
+    settings.contrast   = action.parameter(prefix + "contrast",   settings.contrast);
+    settings.gamma      = action.parameter(prefix + "gamma",      settings.gamma);
     return settings;
 }
 
-// ---
+// -----------------------------------------------------------------------------------------------
 
-class BCGFilterPriv
+class BCGFilter::BCGFilterPriv
 {
 public:
 
-    BCGFilterPriv() {}
+    BCGFilterPriv()
+    {
+    }
 
     int          map16[65536];
     int          map[256];
@@ -94,7 +96,7 @@ public:
     BCGContainer settings;
 };
 
-BCGFilter::BCGFilter(QObject* parent)
+BCGFilter::BCGFilter(QObject* const parent)
     : DImgThreadedFilter(parent, "BCGFilter"),
       d(new BCGFilterPriv)
 {
@@ -102,7 +104,7 @@ BCGFilter::BCGFilter(QObject* parent)
     initFilter();
 }
 
-BCGFilter::BCGFilter(DImg* orgImage, QObject* parent, const BCGContainer& settings)
+BCGFilter::BCGFilter(DImg* const orgImage, QObject* const parent, const BCGContainer& settings)
     : DImgThreadedFilter(orgImage, parent, "BCGFilter"),
       d(new BCGFilterPriv)
 {
@@ -111,7 +113,7 @@ BCGFilter::BCGFilter(DImg* orgImage, QObject* parent, const BCGContainer& settin
     initFilter();
 }
 
-BCGFilter::BCGFilter(const BCGContainer& settings, DImgThreadedFilter* master,
+BCGFilter::BCGFilter(const BCGContainer& settings, DImgThreadedFilter* const master,
                      const DImg& orgImage, const DImg& destImage, int progressBegin, int progressEnd)
     : DImgThreadedFilter(master, orgImage, destImage, progressBegin, progressEnd, "WBFilter"),
       d(new BCGFilterPriv)
