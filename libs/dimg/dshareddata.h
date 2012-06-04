@@ -275,7 +275,7 @@ public:
     /**
      * Semantics like assign, but no new pointer is assigned to this.
      */
-    inline T* unassign() const
+    inline T* unassign()
     {
         return assign(0);
     }
