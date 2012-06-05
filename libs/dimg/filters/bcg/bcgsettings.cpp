@@ -6,7 +6,7 @@
  * Date        : 2010-02-09
  * Description : BCG settings view.
  *
- * Copyright (C) 2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -55,7 +55,7 @@ using namespace KDcrawIface;
 namespace Digikam
 {
 
-class BCGSettingsPriv
+class BCGSettings::BCGSettingsPriv
 {
 public:
 
@@ -74,13 +74,13 @@ public:
 
     RDoubleNumInput*     gInput;
 };
-const QString BCGSettingsPriv::configBrightnessAdjustmentEntry("BrightnessAdjustment");
-const QString BCGSettingsPriv::configContrastAdjustmentEntry("ContrastAdjustment");
-const QString BCGSettingsPriv::configGammaAdjustmentEntry("GammaAdjustment");
+const QString BCGSettings::BCGSettingsPriv::configBrightnessAdjustmentEntry("BrightnessAdjustment");
+const QString BCGSettings::BCGSettingsPriv::configContrastAdjustmentEntry("ContrastAdjustment");
+const QString BCGSettings::BCGSettingsPriv::configGammaAdjustmentEntry("GammaAdjustment");
 
 // --------------------------------------------------------
 
-BCGSettings::BCGSettings(QWidget* parent)
+BCGSettings::BCGSettings(QWidget* const parent)
     : QWidget(parent),
       d(new BCGSettingsPriv)
 {

@@ -374,7 +374,7 @@ void ItemViewImageDelegate::drawImageSize(QPainter* p, const QRect& dimsRect, co
     }
 }
 
-void ItemViewImageDelegate::drawFileSize(QPainter* p, const QRect& r, int bytes) const
+void ItemViewImageDelegate::drawFileSize(QPainter* p, const QRect& r, qlonglong bytes) const
 {
     Q_D(const ItemViewImageDelegate);
     p->setFont(d->fontXtra);

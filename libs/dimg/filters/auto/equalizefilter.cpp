@@ -6,7 +6,7 @@
  * Date        : 2005-24-01
  * Description : equalize image filter.
  *
- * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -40,14 +40,14 @@
 namespace Digikam
 {
 
-EqualizeFilter::EqualizeFilter(QObject* parent)
+EqualizeFilter::EqualizeFilter(QObject* const parent)
     : DImgThreadedFilter(parent)
 {
     initFilter();
 }
 
 
-EqualizeFilter::EqualizeFilter(DImg* orgImage, const DImg* refImage, QObject* parent)
+EqualizeFilter::EqualizeFilter(DImg* const orgImage, const DImg* const refImage, QObject* const parent)
     : DImgThreadedFilter(orgImage, parent, "EqualizeFilter"),
       m_refImage(*refImage)
 {
@@ -77,7 +77,8 @@ void EqualizeFilter::filterImage()
     as each other value. Sometimes Equalize works wonderfully at
     enhancing the contrasts in an image. Other times it gives
     garbage. It is a very powerful operation, which can either work
-    miracles on an image or destroy it.*/
+    miracles on an image or destroy it.
+*/
 void EqualizeFilter::equalizeImage()
 {
     if (m_orgImage.sixteenBit() != m_refImage.sixteenBit())
@@ -253,7 +254,7 @@ FilterAction EqualizeFilter::filterAction()
     return DefaultFilterAction<EqualizeFilter>();
 }
 
-void EqualizeFilter::readParameters(const Digikam::FilterAction& /*action*/)
+void EqualizeFilter::readParameters(const FilterAction& /*action*/)
 {
     return; //Digikam::DImgThreadedFilter::readParameters(action);
 }

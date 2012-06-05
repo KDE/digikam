@@ -6,7 +6,7 @@
  * Date        : 2005-24-01
  * Description : auto levels image filter.
  *
- * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -41,13 +41,13 @@
 namespace Digikam
 {
 
-AutoLevelsFilter::AutoLevelsFilter(QObject* parent)
+AutoLevelsFilter::AutoLevelsFilter(QObject* const parent)
     : DImgThreadedFilter(parent)
 {
     initFilter();
 }
 
-AutoLevelsFilter::AutoLevelsFilter(DImg* orgImage, const DImg* refImage, QObject* parent)
+AutoLevelsFilter::AutoLevelsFilter(DImg* const orgImage, const DImg* const refImage, QObject* const parent)
     : DImgThreadedFilter(orgImage, parent, "AutoLevelsFilter"),
       m_refImage(*refImage)
 {
@@ -74,7 +74,8 @@ void AutoLevelsFilter::filterImage()
     This method maximizes the tonal range in the Red,
     Green, and Blue channels. It search the image shadow and highlight
     limit values and adjust the Red, Green, and Blue channels
-    to a full histogram range.*/
+    to a full histogram range.
+*/
 void AutoLevelsFilter::autoLevelsCorrectionImage()
 {
     if (m_orgImage.sixteenBit() != m_refImage.sixteenBit())
@@ -95,7 +96,7 @@ void AutoLevelsFilter::autoLevelsCorrectionImage()
     postProgress(10);
 
     int sizeSixteenBit = w * h * 8;
-    int sizeEightBit = w * h * 4;
+    int sizeEightBit   = w * h * 4;
 
     // Create the new empty destination image data space.
     if (runningFlag())

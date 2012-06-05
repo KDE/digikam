@@ -6,9 +6,9 @@
  * Date        : 2005-03-06
  * Description : a Brightness/Contrast/Gamma image filter.
  *
- * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
+ * Copyright (C) 2005      by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -37,16 +37,15 @@ namespace Digikam
 {
 
 class DImg;
-class BCGFilterPriv;
 
 class DIGIKAM_EXPORT BCGFilter : public DImgThreadedFilter
 {
 
 public:
 
-    explicit BCGFilter(QObject* parent=0);
-    explicit BCGFilter(DImg* orgImage, QObject* parent=0, const BCGContainer& settings=BCGContainer());
-    explicit BCGFilter(const BCGContainer& settings, DImgThreadedFilter* master,
+    explicit BCGFilter(QObject* const parent=0);
+    explicit BCGFilter(DImg* const orgImage, QObject* const parent=0, const BCGContainer& settings=BCGContainer());
+    explicit BCGFilter(const BCGContainer& settings, DImgThreadedFilter* const master,
                        const DImg& orgImage, const DImg& destImage, int progressBegin=0, int progressEnd=100);
     virtual ~BCGFilter();
 
@@ -54,14 +53,17 @@ public:
     {
         return "digikam:BCGFilter";
     }
+
     static QString          DisplayableName()
     {
         return I18N_NOOP("Brightness / Contrast / Gamma Filter");
     }
+
     static QList<int>       SupportedVersions()
     {
         return QList<int>() << 1;
     }
+
     static int              CurrentVersion()
     {
         return 1;
@@ -71,7 +73,9 @@ public:
     {
         return FilterIdentifier();
     }
+
     virtual FilterAction    filterAction();
+
     void                    readParameters(const FilterAction& action);
 
 private:
@@ -87,6 +91,7 @@ private:
 
 private:
 
+    class BCGFilterPriv;
     BCGFilterPriv* const d;
 };
 
