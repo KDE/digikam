@@ -439,17 +439,17 @@ master code as stable for production. To synchronize branche with master, use th
 local branch checkout:
 
 $>git checkout master
-$>git pull -rebase
-$>git checkout -b my_devel_branch remotes/origin/development/3.0.0
-  Branch my_devel_branch set up to track remote branch development/my-devel_branch from origin.
-  Switched to a new branch 'my_devel_branch'
+$>git pull --rebase
+$>git checkout -b MY_DEVEL_BRANCH remotes/origin/development/MY_DEVEL_BRANCH
+  Branch MY_DEVEL_BRANCH set up to track remote branch development/MY_DEVEL_BRANCH from origin.
+  Switched to a new branch 'MY_DEVEL_BRANCH'
 $>git merge master
   Merge made by the 'recursive' strategy.
   ...
 $>git push
   ...
 
-The 2 first lines take a sure that your local master repository is up to date. The 3rd line create in local the "my-devel-branch"
-development branch. If you have already created this branch, just run "git checkout my_devel_branch". 
-Merge between master and "my_devel_branch" branch is done with 4th line. Git can ask you to resolve conflicts here.
+The 2 first lines take a sure that your local master repository is up to date. The 3rd line create in local the "MY_DEVEL_BRANCH"
+development branch. If you have already created this branch, just run "git checkout MY_DEVEL_BRANCH". 
+Merge between master and "MY_DEVEL_BRANCH" branch is done with 4th line. Git can ask you to resolve conflicts here.
 When it's done, it will ask you a commit comment. Finally push your merge into remote KDE repository.
