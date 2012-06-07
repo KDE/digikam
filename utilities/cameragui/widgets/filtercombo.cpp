@@ -29,11 +29,11 @@
 
 // KDE includes
 
-#include <KLocale>
-#include <KDebug>
-#include <KGlobal>
-#include <KConfigGroup>
-#include <KMimeType>
+#include <klocale.h>
+#include <kdebug.h>
+#include <kglobal.h>
+#include <kconfiggroup.h>
+#include <kmimetype.h>
 
 // Local includes
 

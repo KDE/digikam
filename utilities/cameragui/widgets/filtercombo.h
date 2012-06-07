@@ -26,7 +26,7 @@
 
 // KDE includes
 
-#include <KComboBox>
+#include <kcombobox.h>
 
 namespace Digikam
 {
