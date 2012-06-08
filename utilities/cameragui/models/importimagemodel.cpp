@@ -78,7 +78,7 @@ class ImportImageModelIncrementalUpdater
 {
 public:
 
-    ImportImageModelIncrementalUpdater(ImportImageModel::ImportImageModelPriv* d);
+    ImportImageModelIncrementalUpdater(ImportImageModel::ImportImageModelPriv* const d);
 
     void            appendInfos(const QList<CamItemInfo>& infos);
     void            aboutToBeRemovedInModel(const IntPairList& aboutToBeRemoved);
@@ -502,13 +502,13 @@ void ImportImageModel::emitDataChangedForSelections(const QItemSelection& select
 
 // ------------ Preprocessing -------------
 
-void ImportImageModel::setPreprocessor(QObject* preprocessor)
+void ImportImageModel::setPreprocessor(QObject* const preprocessor)
 {
     unsetPreprocessor(d->preprocessor);
     d->preprocessor = preprocessor;
 }
 
-void ImportImageModel::unsetPreprocessor(QObject* preprocessor)
+void ImportImageModel::unsetPreprocessor(QObject* const preprocessor)
 {
     if (preprocessor && d->preprocessor == preprocessor)
     {
@@ -834,7 +834,7 @@ void ImportImageModel::removeRowPairs(const QList<QPair<int, int> >& toRemove)
 
 // ------------ ImportImageModelIncrementalUpdater ------------
 
-ImportImageModelIncrementalUpdater::ImportImageModelIncrementalUpdater(ImportImageModel::ImportImageModelPriv *d)
+ImportImageModelIncrementalUpdater::ImportImageModelIncrementalUpdater(ImportImageModel::ImportImageModelPriv* const d)
 {
     oldIds = d->idHash;
 }

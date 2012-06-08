@@ -152,11 +152,11 @@ public:
     static qlonglong   retrieveCamItemId(const QModelIndex& index);
 
     // QAbstractListModel implementation
-    virtual int rowCount(const QModelIndex& parent) const;
-    virtual QVariant data(const QModelIndex& index, int role) const;
-    virtual QVariant headerData(int section, Qt::Orientation orientation, int role) const;
+    virtual int           rowCount(const QModelIndex& parent) const;
+    virtual QVariant      data(const QModelIndex& index, int role) const;
+    virtual QVariant      headerData(int section, Qt::Orientation orientation, int role) const;
     virtual Qt::ItemFlags flags(const QModelIndex& index) const;
-    virtual QModelIndex index(int row, int column, const QModelIndex& parent) const;
+    virtual QModelIndex   index(int row, int column, const QModelIndex& parent) const;
 
     // DragDrop methods
     DECLARE_MODEL_DRAG_DROP_METHODS
@@ -173,8 +173,8 @@ public:
      * and make or already hold a connection modelReset() -> your slot.
      * There is only one preprocessor at a time, a previously set object will be disconnected.
      */
-    void setPreprocessor(QObject* preprocessor);
-    void unsetPreprocessor(QObject* preprocessor);
+    void setPreprocessor(QObject* const preprocessor);
+    void unsetPreprocessor(QObject* const preprocessor);
 
     /**
      * Enable sending of itemInfosAboutToBeRemoved and itemsInfosRemoved signals.
