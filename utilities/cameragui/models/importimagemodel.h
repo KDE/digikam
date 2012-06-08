@@ -59,34 +59,44 @@ public:
         ThumbnailRole               = Qt::UserRole + 2
     };
 
+public:
+
     ImportImageModel(Digikam::CameraController* const controller, QObject* const parent = 0);
     ~ImportImageModel();
 
-    /** Returns the CamItemInfo object, reference from the underlying data pointed to by the index.
+    /**
+     *  Returns the CamItemInfo object, reference from the underlying data pointed to by the index.
      *  For camItemInfo and camItemInfoId If the index is not valid they will return a null CamItemInfo, and 0
-     *  respectively, camItemInfoRef must not be called with an invalid index as it will crash. */
+     *  respectively, camItemInfoRef must not be called with an invalid index as it will crash.
+     */
     CamItemInfo      camItemInfo(const QModelIndex& index) const;
     CamItemInfo&     camItemInfoRef(const QModelIndex& index) const;
     qlonglong        camItemId(const QModelIndex& index) const;
     CamItemInfoList  camItemInfos(const QList<QModelIndex>& indexes) const;
     QList<qlonglong> camItemIds(const QList<QModelIndex>& indexes) const;
 
-    /** Returns the CamItemInfo object, reference from the underlying data of
-     *  the given row (parent is the invalid QModelIndex, column is 0).
-     *  Note that camItemInfoRef must not be called with an invalid index as it will crash. */
+    /**
+     * Returns the CamItemInfo object, reference from the underlying data of
+     * the given row (parent is the invalid QModelIndex, column is 0).
+     * Note that camItemInfoRef must not be called with an invalid index as it will crash.
+     */
     CamItemInfo  camItemInfo(int row) const;
     CamItemInfo& camItemInfoRef(int row) const;
     qlonglong    camItemId(int row) const;
 
-    /** Return the index of a given CamItemInfo, it it exists in the model. */
+    /**
+     * Return the index of a given CamItemInfo, it it exists in the model.
+     */
     QModelIndex        indexForCamItemInfo(const CamItemInfo& info) const;
     QList<QModelIndex> indexesForCamItemInfo(const CamItemInfo& info) const;
     QModelIndex        indexForCamItemId(qlonglong id) const;
     QList<QModelIndex> indexesForCamItemId(qlonglong id) const;
 
-    /** Returns the index or CamItemInfo object from the underlying data for
-     *  the given file url. In case of multiple occurrences of the same file, the simpler
-     *  overrides returns any one found first, use the QList methods to retrieve all occurrences. */
+    /**
+     * Returns the index or CamItemInfo object from the underlying data for
+     * the given file url. In case of multiple occurrences of the same file, the simpler
+     * overrides returns any one found first, use the QList methods to retrieve all occurrences.
+     */
     QModelIndex        indexForUrl(const KUrl& fileUrl) const;
     QList<QModelIndex> indexesForUrl(const KUrl& fileUrl) const;
     CamItemInfo        camItemInfo(const KUrl& fileUrl) const;
@@ -95,7 +105,9 @@ public:
     void addCamItemInfo(const CamItemInfo& info);
     void addCamItemInfos(const QList<CamItemInfo>& infos);
 
-    /** Clears the CamItemInfos and resets the model.*/
+    /**
+     * Clears the CamItemInfos and resets the model.
+     */
     void clearCamItemInfos();
 
     /**
@@ -107,7 +119,9 @@ public:
     void addCamItemInfoSynchronously(const CamItemInfo& info);
     void addCamItemInfosSynchronously(const QList<CamItemInfo>& infos);
 
-    /** Clears and adds infos. */
+    /**
+     * Clears and adds infos.
+     */
     void setCamItemInfos(const QList<CamItemInfo>& infos);
 
     QList<CamItemInfo> camItemInfos() const;
@@ -130,8 +144,10 @@ public:
     int numberOfIndexesForCamItemInfo(const CamItemInfo& info) const;
     int numberOfIndexesForCamItemId(qlonglong id) const;
 
-    /** Retrieve the CamItemInfo object from the data() function of the given index
-     *  The index may be from a QSortFilterProxyModel as long as an ImportImageModel is at the end. */
+    /**
+     * Retrieve the CamItemInfo object from the data() function of the given index
+     * The index may be from a QSortFilterProxyModel as long as an ImportImageModel is at the end.
+     */
     static CamItemInfo retrieveCamItemInfo(const QModelIndex& index);
     static qlonglong   retrieveCamItemId(const QModelIndex& index);
 
@@ -175,40 +191,50 @@ public:
 
 Q_SIGNALS:
 
-    /** Informs that ItemInfos will be added to the model.
-     *  This signal is sent before the model data is changed and views are informed. */
+    /**
+     * Informs that ItemInfos will be added to the model.
+     * This signal is sent before the model data is changed and views are informed.
+     */
     void itemInfosAboutToBeAdded(const QList<CamItemInfo>& infos);
 
-    /** Informs that ItemInfos have been added to the model.
-     *  This signal is sent after the model data is changed and views are informed. */
+    /**
+     * Informs that ItemInfos have been added to the model.
+     * This signal is sent after the model data is changed and views are informed.
+     */
     void itemInfosAdded(const QList<CamItemInfo>& infos);
 
-    /** Informs that CamItemInfos will be removed from the model.
-     *  This signal is sent before the model data is changed and views are informed.
-     *  Note: You need to explicitly enable sending of this signal. It is not sent
-     *  in clearCamItemInfos().
+    /**
+     * Informs that CamItemInfos will be removed from the model.
+     * This signal is sent before the model data is changed and views are informed.
+     * Note: You need to explicitly enable sending of this signal. It is not sent
+     * in clearCamItemInfos().
      */
     void itemInfosAboutToBeRemoved(const QList<CamItemInfo>& infos);
 
-
-    /** Informs that CamItemInfos have been removed from the model.
-     *  This signal is sent after the model data is changed and views are informed.
-     *  Note: You need to explicitly enable sending of this signal. It is not sent
-     *  in clearCamItemInfos().
+    /**
+     * Informs that CamItemInfos have been removed from the model.
+     * This signal is sent after the model data is changed and views are informed.
+     * Note: You need to explicitly enable sending of this signal. It is not sent
+     * in clearCamItemInfos().
      */
     void itemInfosRemoved(const QList<CamItemInfo>& infos);
 
-    /** Connect to this signal only if you are the current preprocessor */
+    /**
+     * Connect to this signal only if you are the current preprocessor.
+     */
     void preprocess(const QList<CamItemInfo>& infos);
     void processAdded(const QList<CamItemInfo>& infos);
 
-    /** Signals that the model is right now ready to start an incremental refresh.
-     *  This is guaranteed only for the scope of emitting this signal. */
+    /**
+     * Signals that the model is right now ready to start an incremental refresh.
+     * This is guaranteed only for the scope of emitting this signal.
+     */
     void readyForIncrementalRefresh();
 
-    /** Signals that the model has finished currently with all scheduled
-     *  refreshing, full or incremental, and all preprocessing.
-     *  The model is in polished, clean situation right now.
+    /**
+     * Signals that the model has finished currently with all scheduled
+     * refreshing, full or incremental, and all preprocessing.
+     * The model is in polished, clean situation right now.
      */
     void allRefreshingFinished();
 
@@ -219,23 +245,28 @@ public Q_SLOTS:
 
 protected:
 
-    /** Subclasses that add CamItemInfos in batches shall call startRefresh()
-     *  when they start sending batches and finishRefresh() when they have finished.
-     *  No incremental refreshes will be started while listing.
-     *  A clearCamItemInfos() always stops listing, calling finishRefresh() is then not necessary.
+    /**
+     * Subclasses that add CamItemInfos in batches shall call startRefresh()
+     * when they start sending batches and finishRefresh() when they have finished.
+     * No incremental refreshes will be started while listing.
+     * A clearCamItemInfos() always stops listing, calling finishRefresh() is then not necessary.
      */
     void startRefresh();
     void finishRefresh();
 
-    /** As soon as the model is ready to start an incremental refresh, the signal
-     *  readyForIncrementalRefresh() will be emitted. The signal will be emitted inline
-     *  if the model is ready right now. */
+    /**
+     * As soon as the model is ready to start an incremental refresh, the signal
+     * readyForIncrementalRefresh() will be emitted. The signal will be emitted inline
+     * if the model is ready right now.
+     */
     void requestIncrementalRefresh();
     bool hasIncrementalRefreshPending() const;
 
-    /** Starts an incremental refresh operation. You shall only call this method from a slot
-     *  connected to readyForIncrementalRefresh(). To initiate an incremental refresh,
-     *  call requestIncrementalRefresh() */
+    /**
+     * Starts an incremental refresh operation. You shall only call this method from a slot
+     * connected to readyForIncrementalRefresh(). To initiate an incremental refresh,
+     * call requestIncrementalRefresh().
+     */
     void startIncrementalRefresh();
     void finishIncrementalRefresh();
 
