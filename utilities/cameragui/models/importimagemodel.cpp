@@ -95,7 +95,7 @@ public:
 
 // ----------------------------------------------------------------------------------------------------
 
-ImportImageModel::ImportImageModel(CameraController* const controller, QObject* const parent)
+ImportImageModel::ImportImageModel(CameraController* const /*controller*/, QObject* const parent)
     : QAbstractListModel(parent),
       d(new ImportImageModelPriv)
 {
