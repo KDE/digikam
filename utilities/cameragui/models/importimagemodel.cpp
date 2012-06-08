@@ -62,7 +62,10 @@ public:
 
     inline bool isValid(const QModelIndex& index)
     {
-        return index.isValid() && index.row() >= 0 && index.row() < infos.size();
+        return (index.isValid()    &&
+                (index.row() >= 0) &&
+                (index.row() < infos.size())
+               );
     }
 };
 
@@ -85,9 +88,9 @@ public:
 
 public:
 
-    QHash<qlonglong, int>    oldIds;
-    QList<CamItemInfo>       newInfos;
-    QList<IntPairList>       modelRemovals;
+    QHash<qlonglong, int> oldIds;
+    QList<CamItemInfo>    newInfos;
+    QList<IntPairList>    modelRemovals;
 };
 
 // ----------------------------------------------------------------------------------------------------
@@ -173,7 +176,7 @@ CamItemInfo& ImportImageModel::camItemInfoRef(int row) const
 
 qlonglong ImportImageModel::camItemId(int row) const
 {
-    if (row < 0 || row >= d->infos.size())
+    if (row < 0 || (row >= d->infos.size()))
     {
         return -1;
     }
@@ -451,6 +454,7 @@ QList<CamItemInfo> ImportImageModel::uniqueCamItemInfos() const
 {
     QList<CamItemInfo> uniqueInfos;
     const int size = d->infos.size();
+
     for (int i = 0; i < size; ++i)
     {
         const CamItemInfo& info = d->infos.at(i);
@@ -590,14 +594,14 @@ void ImportImageModel::publiciseInfos(const QList<CamItemInfo>& infos)
 
     emit itemInfosAboutToBeAdded(infos);
     const int firstNewIndex = d->infos.size();
-    const int lastNewIndex = d->infos.size() + infos.size() -1;
+    const int lastNewIndex  = d->infos.size() + infos.size() -1;
     beginInsertRows(QModelIndex(), firstNewIndex, lastNewIndex);
     d->infos << infos;
 
     for (int i = firstNewIndex; i <= lastNewIndex; ++i)
     {
         const CamItemInfo& info = d->infos.at(i);
-        qlonglong id = info.id;
+        qlonglong id            = info.id;
         d->idHash.insertMulti(id, i);
 
         if (d->keepFileUrlCache)
@@ -666,7 +670,7 @@ static bool pairsContain(const List& list, T value)
         half   = n >> 1;
         middle = begin + half;
 
-        if (middle->first <= value && middle->second >= value)
+        if ((middle->first <= value) && (middle->second >= value))
         {
             return true;
         }
@@ -754,12 +758,13 @@ void ImportImageModel::removeRowPairs(const QList<QPair<int, int> >& toRemove)
     // Keep in mind that when calling beginRemoveRows all structures announced to be removed
     // must still be valid, and this includes our hashes as well, which limits what we can optimize
 
-    int removedRows = 0, offset = 0;
+    int removedRows = 0;
+    int offset      = 0;
     typedef QPair<int, int> IntPair;
 
     foreach(const IntPair& pair, toRemove)
     {
-        const int begin = pair.first - offset;
+        const int begin = pair.first  - offset;
         const int end   = pair.second - offset;
         removedRows     = end - begin + 1;
 
@@ -844,7 +849,7 @@ void ImportImageModelIncrementalUpdater::appendInfos(const QList<CamItemInfo>& i
     for (int i = 0; i < infos.size(); ++i)
     {
         const CamItemInfo& info = infos.at(i);
-        bool found = false;
+        bool found              = false;
         QHash<qlonglong, int>::iterator it;
 
         for (it = oldIds.find(info.id); it != oldIds.end() && it.key() == info.id; ++it)
@@ -906,11 +911,12 @@ QList<QPair<int, int> > ImportImageModelIncrementalUpdater::oldIndexes()
     // while the updater was active
     foreach(const IntPairList& list, modelRemovals)
     {
-        int removedRows = 0, offset = 0;
+        int removedRows = 0;
+        int offset      = 0;
 
         foreach(const IntPair& pair, list)
         {
-            const int begin = pair.first - offset;
+            const int begin = pair.first  - offset;
             const int end   = pair.second - offset; // inclusive
             removedRows     = end - begin + 1;
 
