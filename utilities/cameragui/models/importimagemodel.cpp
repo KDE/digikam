@@ -27,10 +27,6 @@
 
 #include <QHash>
 
-// Local includes
-
-#include "importimagemodel.h"
-
 namespace Digikam
 {
 
