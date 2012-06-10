@@ -6,4 +6,5 @@ NEW FEATURES:
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 001 ==> 301494 - Misspelling: "carreful".
-002 ==> 
+002 ==> 299988 - Using MySQL but on DB test got "Database connection test was not successful. Error was: Driver not loaded Driver not loaded".
+003 ==> 
