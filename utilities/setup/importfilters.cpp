@@ -25,11 +25,11 @@
 
 // KDE includes
 
-#include <KComboBox>
-#include <KLocale>
-#include <KDebug>
-#include <KSqueezedTextLabel>
-#include <KMimeTypeChooserDialog>
+#include <kcombobox.h>
+#include <klocale.h>
+#include <kdebug.h>
+#include <ksqueezedtextlabel.h>
+#include <kmimetypechooser.h>
 
 // Qt includes
 
