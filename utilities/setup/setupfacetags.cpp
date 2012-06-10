@@ -106,8 +106,8 @@ SetupFaceTags::SetupFaceTags(QWidget* parent)
 
     d->suggestionThresholdSlider = new QSlider(Qt::Horizontal, panel);
     d->suggestionThresholdSlider->setRange(1, 10);
-    d->suggestionThresholdSlider->setTickInterval(0.1);
-    d->suggestionThresholdSlider->setPageStep(0.1);
+    d->suggestionThresholdSlider->setTickInterval(1);
+    d->suggestionThresholdSlider->setPageStep(1);
     d->suggestionThresholdSlider->setTickPosition(QSlider::TicksBelow);
 
     d->detectionCBLabel = new QLabel;

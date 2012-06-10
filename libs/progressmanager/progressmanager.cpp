@@ -254,8 +254,8 @@ unsigned int ProgressItem::completedItems() const
 
 bool ProgressItem::incCompletedItems(unsigned int v)
 {
-    int previous = d->completed.fetchAndAddOrdered(v);
-    return (previous+v) == d->total;
+    unsigned int previous = d->completed.fetchAndAddOrdered(v);
+    return (previous+v) == (unsigned int) d->total;
 }
 
 bool ProgressItem::totalCompleted() const
