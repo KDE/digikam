@@ -7,4 +7,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 001 ==> 301494 - Misspelling: "carreful".
 002 ==> 299988 - Using MySQL but on DB test got "Database connection test was not successful. Error was: Driver not loaded Driver not loaded".
-003 ==> 
+003 ==> 301482 - Xmp sidecar files not being generated for .3xf raw file type.
+004 ==> 
