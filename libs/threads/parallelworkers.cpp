@@ -149,7 +149,7 @@ int ParallelWorkers::replacementQtMetacall(QMetaObject::Call _c, int _id, void *
     if (_c == QMetaObject::InvokeMetaMethod)
     {
         // This is the common ancestor's meta object, below WorkerObject
-        const QMetaObject* mobj = asQObject()->mocMetaObject();
+        const QMetaObject* mobj = mocMetaObject();
         const int properMethods = mobj->methodCount() - mobj->methodOffset();
 
         if (_id >= properMethods)
