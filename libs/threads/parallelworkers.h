@@ -53,7 +53,6 @@ public:
     void schedule();
     void deactivate(WorkerObject::DeactivatingMode mode = WorkerObject::FlushSignals);
 
-    void add(WorkerObject* const worker);
     void setPriority(QThread::Priority priority);
 
     /// Returns true if the current number of added workers has reached the optimalWorkerCount()
@@ -71,6 +70,8 @@ public:
                  Qt::ConnectionType type = Qt::AutoConnection) const;
 
 protected:
+
+    void add(WorkerObject* const worker);
 
     // Internal implementation
 
@@ -112,6 +113,8 @@ public:
 
     ParallelAdapter() {}
     ~ParallelAdapter() {}
+
+    void add(A* const worker) { ParallelWorkers::add(worker); }
 
     // Internal Implentation
     // I know this is a hack

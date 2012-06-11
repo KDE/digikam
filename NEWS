@@ -7,4 +7,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 001 ==> 301494 - Misspelling: "carreful".
 002 ==> 299988 - Using MySQL but on DB test got "Database connection test was not successful. Error was: Driver not loaded Driver not loaded".
-003 ==> 
+003 ==> 301482 - Xmp sidecar files not being generated for .3xf raw file type.
+004 ==> 301496 - Crash tagging a picture.
+005 ==> 291877 - Change tag filters checkboxes to three-states checkboxes to allow filtering by inclusion and by exclusion.
+006 ==> 
