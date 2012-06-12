@@ -127,6 +127,7 @@ public:
         statusNavigateBar(0),
         albumLibraryFreeSpace(0),
         cameraFreeSpace(0),
+        progressValue(0),
         historyView(0),
         filterComboBox(0),
         about(0)
@@ -216,6 +217,8 @@ public:
 
     FreeSpaceWidget*              albumLibraryFreeSpace;
     FreeSpaceWidget*              cameraFreeSpace;
+
+    float                         progressValue;
 
     DHistoryView*                 historyView;
     FilterComboBox*               filterComboBox;

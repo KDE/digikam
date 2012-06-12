@@ -47,6 +47,9 @@ extern "C"
 #include <QRegExp>
 #include <QFileInfo>
 #include <QPointer>
+#include <QtConcurrentRun>
+#include <QFuture>
+#include <QFutureWatcher>
 
 // KDE includes
 
@@ -134,6 +137,11 @@ public:
     QMutex                mutex;
     QWaitCondition        condVar;
 
+    QFutureWatcher<void>* rotateFutureWatcher;
+
+    QString               tmpFolder;
+    QString               tmpFile;
+
     QList<CameraCommand*> commands;
 };
 
@@ -180,6 +188,8 @@ CameraController::CameraController(QWidget* parent,
         }
     }
 
+    d->rotateFutureWatcher = new QFutureWatcher<void>(); // to watch the autorotate thread
+
     // setup inter-thread signals
 
     qRegisterMetaType<CamItemInfo>("CamItemInfo");
@@ -208,6 +218,9 @@ CameraController::CameraController(QWidget* parent,
     connect(this, SIGNAL(signalInternalOpen(QString,QString,QString)),
             this, SLOT(slotOpen(QString,QString,QString)));
 
+    connect(d->rotateFutureWatcher, SIGNAL(finished()),
+            this, SLOT(slotAutoRotateThreadFinished()));
+
     d->running = true;
     start();
 }
@@ -225,6 +238,7 @@ CameraController::~CameraController()
     }
     wait();
 
+    delete d->rotateFutureWatcher;
     delete d->camera;
     delete d;
 }
@@ -584,7 +598,7 @@ void CameraController::executeCommand(CameraCommand* cmd)
 
             // download to a temp file
 
-            emit signalDownloaded(folder, file, CamItemInfo::DownloadStarted);
+            emit signalDownloaded(folder, file, CamItemInfo::DownloadStarted, autoRotate);
 
             KUrl tempURL(dest);
             tempURL      = tempURL.upUrl();
@@ -597,7 +611,7 @@ void CameraController::executeCommand(CameraCommand* cmd)
             if (!result)
             {
                 unlink(QFile::encodeName(tempURL.toLocalFile()));
-                emit signalDownloaded(folder, file, CamItemInfo::DownloadFailed);
+                emit signalDownloaded(folder, file, CamItemInfo::DownloadFailed, autoRotate);
                 sendLogMsg(i18n("Failed to download %1...", file), DHistoryView::ErrorEntry, folder, file);
                 break;
             }
@@ -605,13 +619,13 @@ void CameraController::executeCommand(CameraCommand* cmd)
             {
                 // Possible modification operations. Only apply it to JPEG for the moment.
 
-                if (autoRotate)
+                if(autoRotate)
                 {
-                    kDebug() << "Exif autorotate: " << file << " using (" << tempURL << ")";
-                    sendLogMsg(i18n("EXIF rotating file %1...", file), DHistoryView::StartingEntry, folder, file);
-                    JpegRotator rotator(tempURL.toLocalFile());
-                    rotator.setDocumentName(file);
-                    rotator.autoExifTransform();
+                    QFuture<void> future = QtConcurrent::run(runAutoRotateThread, this, tempURL, folder, file);
+                    d->rotateFutureWatcher->setFuture(future);
+
+                    d->tmpFolder = folder;
+                    d->tmpFile   = file;
                 }
 
                 if (!templateTitle.isNull() || fixDateTime)
@@ -786,6 +800,22 @@ void CameraController::executeCommand(CameraCommand* cmd)
     }
 }
 
+void CameraController::runAutoRotateThread(CameraController* cont, KUrl& tempURL, QString& folder, QString& file)
+{
+        kDebug() << "Exif autorotate: " << file << " using (" << tempURL << ")";
+        cont->sendLogMsg(i18n("EXIF rotating file %1...", file), DHistoryView::StartingEntry, folder, file);
+        JpegRotator rotator(tempURL.toLocalFile());
+        rotator.setDocumentName(file);
+        rotator.autoExifTransform();
+}
+
+void CameraController::slotAutoRotateThreadFinished()
+{
+    kDebug() << "Exif autorotated: " << "file";
+    sendLogMsg(i18n("EXIF rotated file %1...", d->tmpFile), DHistoryView::StartingEntry, d->tmpFolder, d->tmpFile);
+    emit signalFinished();
+}
+
 void CameraController::sendLogMsg(const QString& msg, DHistoryView::EntryType type,
                                   const QString& folder, const QString& file)
 {
@@ -905,12 +935,12 @@ void CameraController::slotCheckRename(const QString& folder, const QString& fil
     {
         // rename failed. delete the temp file
         unlink(QFile::encodeName(temp));
-        emit signalDownloaded(folder, file, CamItemInfo::DownloadFailed);
+        emit signalDownloaded(folder, file, CamItemInfo::DownloadFailed, false);
         sendLogMsg(i18n("Failed to download %1...", file), DHistoryView::ErrorEntry,  folder, file);
     }
     else
     {
-        emit signalDownloaded(folder, file, CamItemInfo::DownloadedYes);
+        emit signalDownloaded(folder, file, CamItemInfo::DownloadedYes, false);
         emit signalDownloadComplete(folder, file, info.path(), info.fileName());
         sendLogMsg(i18n("Download successfully %1...", file), DHistoryView::StartingEntry, folder, file);
     }

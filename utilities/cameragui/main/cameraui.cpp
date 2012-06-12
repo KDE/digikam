@@ -632,11 +632,14 @@ void CameraUI::setupCameraController(const QString& model, const QString& port, 
     connect(d->controller, SIGNAL(signalFileList(CamItemInfoList)),
             this, SLOT(slotFileList(CamItemInfoList)));
 
-    connect(d->controller, SIGNAL(signalDownloaded(QString,QString,int)),
-            this, SLOT(slotDownloaded(QString,QString,int)));
+    connect(d->controller, SIGNAL(signalDownloaded(QString,QString,int,bool)),
+            this, SLOT(slotDownloaded(QString,QString,int,bool)));
 
     connect(d->controller, SIGNAL(signalDownloadComplete(QString,QString,QString,QString)),
             this, SLOT(slotDownloadComplete(QString,QString,QString,QString)));
+
+    connect(d->controller, SIGNAL(signalFinished()),
+            this, SLOT(slotFinished()));
 
     connect(d->controller, SIGNAL(signalSkipped(QString,QString)),
             this, SLOT(slotSkipped(QString,QString)));
@@ -1675,7 +1678,12 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album* album)
     d->controller->download(allItems);
 }
 
-void CameraUI::slotDownloaded(const QString& folder, const QString& file, int status)
+void CameraUI::slotFinished()
+{
+    d->progressValue += 0.5;
+}
+
+void CameraUI::slotDownloaded(const QString& folder, const QString& file, int status, bool autoRotate)
 {
     CamItemInfo info = d->view->findItemInfo(folder, file);
 
@@ -1683,22 +1691,34 @@ void CameraUI::slotDownloaded(const QString& folder, const QString& file, int st
     {
         d->view->setDownloaded(info, status);
 
+        d->progressValue += 0.5;
+
         if (d->rightSideBar->url() == info.url())
         {
             slotItemsSelected(d->view->findItemInfo(folder, file), true);
         }
 
-        if (status == CamItemInfo::DownloadedYes)
+        if (autoRotate)
+        {
+            if (status == CamItemInfo::DownloadedYes && d->progressValue == 1)
+            {
+                int curr = d->statusProgressBar->progressValue();
+                d->statusProgressBar->setProgressValue(curr + 1);
+                d->progressValue = 0; // reset progress
+            }
+        }
+        else if (status == CamItemInfo::DownloadedYes)
         {
             int curr = d->statusProgressBar->progressValue();
             d->statusProgressBar->setProgressValue(curr + 1);
-            d->renameCustomizer->setStartIndex(d->renameCustomizer->startIndex() + 1);
-
-            DownloadHistory::setDownloaded(d->controller->cameraMD5ID(),
-                                           info.name,
-                                           info.size,
-                                           info.mtime);
         }
+
+        d->renameCustomizer->setStartIndex(d->renameCustomizer->startIndex() + 1);
+
+        DownloadHistory::setDownloaded(d->controller->cameraMD5ID(),
+                                       info.name,
+                                       info.size,
+                                       info.mtime);
     }
 
     // Download all items is complete ?

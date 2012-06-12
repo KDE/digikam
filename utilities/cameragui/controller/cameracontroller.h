@@ -107,9 +107,10 @@ Q_SIGNALS:
     void signalFolderList(const QStringList& folderList);
     void signalFileList(const CamItemInfoList& infoList);
     void signalUploaded(const CamItemInfo& itemInfo);
-    void signalDownloaded(const QString& folder, const QString& file, int status);
+    void signalDownloaded(const QString& folder, const QString& file, int status, bool autoRotate);
     void signalDownloadComplete(const QString& sourceFolder, const QString& sourceFile,
                                 const QString& destFolder, const QString& destFile);
+    void signalFinished();
     void signalSkipped(const QString& folder, const QString& file);
     void signalDeleted(const QString& folder, const QString& file, bool status);
     void signalLocked(const QString& folder, const QString& file, bool status);
@@ -144,11 +145,14 @@ private Q_SLOTS:
     void slotDeleteFailed(const QString& folder, const QString& file);
     void slotLockFailed(const QString& folder, const QString& file);
     void slotOpen(const QString& folder, const QString& file, const QString& dest);
+    void slotAutoRotateThreadFinished();
 
 private:
 
     void sendLogMsg(const QString& msg, DHistoryView::EntryType type=DHistoryView::StartingEntry,
                     const QString& folder=QString(), const QString& file=QString());
+
+    static void runAutoRotateThread(CameraController* cont, KUrl& tempURL, QString& folder, QString& file);
 
     void addCommand(CameraCommand* cmd);
     bool queueIsEmpty() const;

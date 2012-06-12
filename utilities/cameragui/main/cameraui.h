@@ -169,9 +169,10 @@ private Q_SLOTS:
     void slotFileView(const CamItemInfo&);
 
     void slotUploaded(const CamItemInfo&);
-    void slotDownloaded(const QString&, const QString&, int);
+    void slotDownloaded(const QString&, const QString&, int, bool autoRotate);
     void slotDownloadComplete(const QString& sourceFolder, const QString& sourceFile,
                               const QString& destFolder, const QString& destFile);
+    void slotFinished();
     void slotSkipped(const QString&, const QString&);
     void slotDeleted(const QString&, const QString&, bool);
     void slotLocked(const QString&, const QString&, bool);
