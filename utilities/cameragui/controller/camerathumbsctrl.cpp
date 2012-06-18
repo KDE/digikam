@@ -103,7 +103,8 @@ bool CameraThumbsCtrl::getThumbInfo(const CamItemInfo& info, CachedItem& item) c
     {
         d->pendingItems << info.url();
         // kDebug() << "Request thumbs from camera : " << info.url();
-        d->controller->getThumbsInfo(CamItemInfoList() << info);
+        ThumbnailSize thumbSize = ThumbnailSize(256);
+        d->controller->getThumbsInfo(CamItemInfoList() << info, thumbSize);
     }
 
     item = CachedItem(info, d->controller->mimeTypeThumbnail(info.name));

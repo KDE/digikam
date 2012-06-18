@@ -536,7 +536,8 @@ void CameraController::executeCommand(CameraCommand* cmd)
 
         case (CameraCommand::cam_thumbsinfo):
         {
-            QList<QVariant> list = cmd->map["list"].toList();
+            QList<QVariant> list    = cmd->map["list"].toList();
+            int thumbSize = cmd->map["thumbSize"].toInt();
 
             for (QList<QVariant>::const_iterator it = list.constBegin(); it != list.constEnd(); ++it)
             {
@@ -557,7 +558,7 @@ void CameraController::executeCommand(CameraCommand* cmd)
 
                 if (d->camera->getThumbnail(folder, file, thumbnail))
                 {
-                    thumbnail = thumbnail.scaled(ThumbnailSize::Huge, ThumbnailSize::Huge, Qt::KeepAspectRatio);
+                    thumbnail = thumbnail.scaled(thumbSize, thumbSize, Qt::KeepAspectRatio);
                     emit signalThumbInfo(folder, file, info, thumbnail);
                 }
                 else
@@ -1117,7 +1118,7 @@ void CameraController::listFiles(const QString& folder, bool useMetadata)
     addCommand(cmd);
 }
 
-void CameraController::getThumbsInfo(const CamItemInfoList& list)
+void CameraController::getThumbsInfo(const CamItemInfoList& list, ThumbnailSize thumbSize)
 {
     d->canceled        = false;
     CameraCommand* cmd = new CameraCommand;
@@ -1131,6 +1132,7 @@ void CameraController::getThumbsInfo(const CamItemInfoList& list)
     }
 
     cmd->map.insert("list", QVariant(itemsList));
+    cmd->map.insert("thumbSize", QVariant(thumbSize.size()));
     addCommand(cmd);
 }
 

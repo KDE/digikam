@@ -41,6 +41,7 @@
 #include "dmetadata.h"
 #include "dkcamera.h"
 #include "dhistoryview.h"
+#include "thumbnailsize.h"
 
 namespace Digikam
 {
@@ -82,7 +83,7 @@ public:
 
     /** Get thumbnails for a list of camera items plus advanced information from metadata.
      */
-    void getThumbsInfo(const CamItemInfoList& infoList);
+    void getThumbsInfo(const CamItemInfoList& infoList, ThumbnailSize thumbSize);
 
     void downloadPrep();
     void download(const DownloadSettings& downloadSettings);
