@@ -6,7 +6,7 @@
  * Date        : 2012-05-22
  * Description : Qt item model for camera entries
  *
- * Copyright (C) 2009-2012 by Islam Wazery <wazery at ubuntu dot com>
+ * Copyright (C) 2012 by Islam Wazery <wazery at ubuntu dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -35,7 +35,7 @@
 // Local includes
 
 #include "dragdropimplementations.h"
-#include "cameracontroller.h"
+//#include "cameracontroller.h"
 #include "camiteminfo.h"
 
 namespace Digikam
@@ -61,8 +61,16 @@ public:
 
 public:
 
-    ImportImageModel(Digikam::CameraController* const controller, QObject* const parent = 0);
+    ImportImageModel(QObject* const parent = 0);
     ~ImportImageModel();
+
+    //TODO: make a method to set the camera controller, and connect with it.
+    //virtual void setCameraController(CameraController* const controller);
+
+    /** If a cache is kept, lookup by file path is fast,
+     *  without a cache it is O(n). Default is false. */
+    void setKeepsFileUrlCache(bool keepCache);
+    bool keepsFileUrlCache() const;
 
     /**
      *  Returns the CamItemInfo object, reference from the underlying data pointed to by the index.

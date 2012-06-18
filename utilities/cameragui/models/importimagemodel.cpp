@@ -95,16 +95,25 @@ public:
 
 // ----------------------------------------------------------------------------------------------------
 
-ImportImageModel::ImportImageModel(CameraController* const /*controller*/, QObject* const parent)
+ImportImageModel::ImportImageModel(QObject* const parent)
     : QAbstractListModel(parent),
       d(new ImportImageModelPriv)
 {
-    //TODO: Connections with the controller if needed, I may remove the controller reference from being here..
 }
 
 ImportImageModel::~ImportImageModel()
 {
     delete d;
+}
+
+void ImportImageModel::setKeepsFileUrlCache(bool keepCache)
+{
+    d->keepFileUrlCache = keepCache;
+}
+
+bool ImportImageModel::keepsFileUrlCache() const
+{
+    return d->keepFileUrlCache;
 }
 
 bool ImportImageModel::isEmpty() const
