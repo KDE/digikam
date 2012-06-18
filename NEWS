@@ -11,4 +11,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 004 ==> 301496 - Crash tagging a picture.
 005 ==> 291877 - Change tag filters checkboxes to three-states checkboxes to allow filtering by inclusion and by exclusion.
 006 ==> 232360 - Zoom reset in Image view for each downloaded image.
-007 ==> 
+007 ==> 298606 - resize controls in editor are missing.
+008 ==> 
