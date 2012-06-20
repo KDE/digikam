@@ -83,6 +83,8 @@ protected Q_SLOTS:
 
 private:
 
+    void applyViewMode();
+
     class VersionsWidgetPriv;
     VersionsWidgetPriv* const d;
 };

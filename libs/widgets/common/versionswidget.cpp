@@ -208,6 +208,7 @@ void VersionsWidget::writeSettings(KConfigGroup& group)
 void VersionsWidget::setCurrentItem(const ImageInfo& info)
 {
     d->model->setHistory(info);
+    applyViewMode();
 }
 
 void VersionsWidget::slotViewCurrentChanged(const QModelIndex& current, const QModelIndex& previous)
@@ -240,8 +241,12 @@ void VersionsWidget::slotViewCurrentChanged(const QModelIndex& current, const QM
 void VersionsWidget::slotViewModeChanged(int mode)
 {
     d->model->setMode((ImageHistoryGraphModel::Mode)mode);
+    applyViewMode();
+}
 
-    switch (mode)
+void VersionsWidget::applyViewMode()
+{
+    switch (d->model->mode())
     {
         case ImageHistoryGraphModel::ImagesListMode:
             break;

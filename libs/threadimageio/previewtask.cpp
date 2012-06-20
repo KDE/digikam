@@ -200,24 +200,27 @@ void PreviewLoadingTask::execute()
 
     // -- Get the image preview --------------------------------
 
+    DImg::FORMAT format = DImg::fileFormat(m_loadingDescription.filePath);
+    KExiv2Iface::KExiv2Previews previews(m_loadingDescription.filePath);
+    QSize originalSize = previews.originalSize();
+    if (!originalSize.isValid() && format == DImg::RAW)
+    {
+        DcrawInfoContainer container;
+        if (KDcrawIface::KDcraw::rawFileIdentify(container, m_loadingDescription.filePath))
+        {
+            originalSize = container.imageSize;
+        }
+    }
+
     if (size)
     {
-        DImg::FORMAT format = DImg::fileFormat(m_loadingDescription.filePath);
-        // First the QImage-dependent loading methods
-
-        // check embedded previews
-        KExiv2Iface::KExiv2Previews previews(m_loadingDescription.filePath);
-
         int sizeLimit      = -1;
-        QSize originalSize = previews.originalSize();
         int bestSize       = qMax(originalSize.width(), originalSize.height());
-
         // for RAWs, the alternative is the half preview, so best size is already originalSize / 2
         if (format == DImg::RAW)
         {
             bestSize /= 2;
         }
-
         if (m_loadingDescription.previewParameters.fastButLarge())
         {
             if (format == DImg::RAW)
@@ -231,6 +234,7 @@ void PreviewLoadingTask::execute()
             sizeLimit               = qMin(aBitSmallerThanSize, bestSize);
         }
 
+        // Check embedded previews
         // Only check the first and largest preview
         if (sizeLimit != -1 && !previews.isEmpty() && continueQuery())
         {
@@ -246,10 +250,22 @@ void PreviewLoadingTask::execute()
             }
         }
 
-        if (qimage.isNull() && continueQuery())
+        if (format == DImg::RAW && qimage.isNull() && continueQuery())
         {
-            //TODO: Use DImg based loader instead?
-            KDcrawIface::KDcraw::loadHalfPreview(qimage, m_loadingDescription.filePath);
+            // Try libraw preview loading, it may support some more raws
+            QImage kdcrawPreview;
+            KDcrawIface::KDcraw::loadEmbeddedPreview(kdcrawPreview, m_loadingDescription.filePath);
+            if (!kdcrawPreview.isNull() && qMax(kdcrawPreview.width(), kdcrawPreview.height()) >= sizeLimit)
+            {
+                qimage = kdcrawPreview;
+                fromEmbeddedPreview = true;
+            }
+            else
+            {
+                // Fall back to non-demosaiced loading or the raw data
+                // Use DImg based loader instead?
+                KDcrawIface::KDcraw::loadHalfPreview(qimage, m_loadingDescription.filePath);
+            }
         }
 
         // Try to extract Exif/IPTC preview.
@@ -302,32 +318,41 @@ void PreviewLoadingTask::execute()
     }
     else
     {
+        // discard if smaller than half preview
+        int acceptableWidth  = lround(originalSize.width()  * 0.48);
+        int acceptableHeight = lround(originalSize.height() * 0.48);
+
+        // check embedded previews
+        if (qimage.isNull() && !previews.isEmpty() && continueQuery())
         {
-            // check embedded previews
-            KExiv2Iface::KExiv2Previews previews(m_loadingDescription.filePath);
-
-            QSize originalSize   = previews.originalSize();
-            // discard if smaller than half preview
-            int acceptableWidth  = lround(originalSize.width()  * 0.48);
-            int acceptableHeight = lround(originalSize.height() * 0.48);
-
-            if (qimage.isNull() && !previews.isEmpty() && continueQuery())
+            if (previews.width() >= acceptableWidth &&  previews.height() >= acceptableHeight)
             {
-                if (previews.width() >= acceptableWidth &&  previews.height() >= acceptableHeight)
-                {
-                    qimage = previews.image();
+                qimage = previews.image();
 
-                    if (!qimage.isNull())
-                    {
-                        fromEmbeddedPreview = true;
-                    }
+                if (!qimage.isNull())
+                {
+                    fromEmbeddedPreview = true;
                 }
             }
         }
 
-        if (qimage.isNull() && continueQuery())
+        if (format == DImg::RAW && qimage.isNull() && continueQuery())
         {
-            KDcrawIface::KDcraw::loadHalfPreview(qimage, m_loadingDescription.filePath);
+            // Try libraw preview loading, it may support some more raws
+            QImage kdcrawPreview;
+            KDcrawIface::KDcraw::loadEmbeddedPreview(kdcrawPreview, m_loadingDescription.filePath);
+            if (!kdcrawPreview.isNull()
+                && kdcrawPreview.width() >= acceptableWidth &&  kdcrawPreview.height() >= acceptableHeight)
+            {
+                qimage = kdcrawPreview;
+                fromEmbeddedPreview = true;
+            }
+            else
+            {
+                // Fall back to non-demosaiced loading or the raw data
+                // Use DImg based loader instead?
+                KDcrawIface::KDcraw::loadHalfPreview(qimage, m_loadingDescription.filePath);
+            }
         }
 
         if (!qimage.isNull() && continueQuery())
