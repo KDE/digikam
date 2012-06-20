@@ -85,6 +85,8 @@ void ImportThumbnailModel::setCameraController(CameraController* const controlle
 
     connect(d->controller, SIGNAL(signalThumbInfoFailed(QString,QString,CamItemInfo)),
             this, SLOT(slotThumbInfoFailed(QString,QString,CamItemInfo)));
+
+    ImportImageModel::setCameraController(controller);
 }
 
 void ImportThumbnailModel::setThumbnailSize(const ThumbnailSize& thumbSize)

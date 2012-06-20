@@ -6,7 +6,7 @@
  * Date        : 2012-05-22
  * Description : Qt item model for camera entries
  *
- * Copyright (C) 2009-2012 by Islam Wazery <wazery at ubuntu dot com>
+ * Copyright (C) 2012 by Islam Wazery <wazery at ubuntu dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -27,6 +27,8 @@
 
 #include <QHash>
 
+#include "importimagemodel.h"
+
 namespace Digikam
 {
 
@@ -45,6 +47,7 @@ public:
         incrementalUpdater          = 0;
     }
 
+    CameraController*                         controller;
     CamItemInfoList                           infos;
     QHash<qlonglong, int>                     idHash;
     QHash<QString, qlonglong>                 fileUrlHash;
@@ -104,6 +107,20 @@ ImportImageModel::ImportImageModel(QObject* const parent)
 ImportImageModel::~ImportImageModel()
 {
     delete d;
+}
+
+void ImportImageModel::setCameraController(CameraController* const controller)
+{
+    d->controller = controller;
+
+    connect(d->controller, SIGNAL(signalFileList(CamItemInfoList)),
+            SLOT(reAddCamInfos(CamItemInfoList)));
+
+    connect(d->controller, SIGNAL(signalDeleted(QString,QString,bool)),
+            SLOT(slotFileDeleted(QString,QString,bool)));
+
+    connect(d->controller, SIGNAL(signalUploaded(CamItemInfo)),
+            SLOT(slotFileUploaded(CamItemInfo)));
 }
 
 void ImportImageModel::setKeepsFileUrlCache(bool keepCache)
@@ -546,7 +563,7 @@ void ImportImageModel::appendInfos(const QList<CamItemInfo>& infos)
     }
 }
 
-void ImportImageModel::reAddCamInfos(const QList<CamItemInfo>& infos)
+void ImportImageModel::reAddCamInfos(const CamItemInfoList& infos)
 {
     publiciseInfos(infos);
 }
@@ -555,6 +572,19 @@ void ImportImageModel::reAddingFinished()
 {
     d->reAdding = false;
     cleanSituationChecks();
+}
+
+void ImportImageModel::slotFileDeleted(QString folder, QString file, bool status)
+{
+    Q_UNUSED(status)
+
+    CamItemInfo info = camItemInfo(KUrl::fromLocalFile(folder + file));
+    removeCamItemInfo(info);
+}
+
+void ImportImageModel::slotFileUploaded(CamItemInfo info)
+{
+    addCamItemInfo(info);
 }
 
 void ImportImageModel::startRefresh()

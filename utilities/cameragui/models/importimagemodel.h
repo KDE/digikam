@@ -35,7 +35,7 @@
 // Local includes
 
 #include "dragdropimplementations.h"
-//#include "cameracontroller.h"
+#include "cameracontroller.h"
 #include "camiteminfo.h"
 
 namespace Digikam
@@ -65,7 +65,7 @@ public:
     ~ImportImageModel();
 
     //TODO: make a method to set the camera controller, and connect with it.
-    //virtual void setCameraController(CameraController* const controller);
+    virtual void setCameraController(CameraController* const controller);
 
     /** If a cache is kept, lookup by file path is fast,
      *  without a cache it is O(n). Default is false. */
@@ -248,8 +248,10 @@ Q_SIGNALS:
 
 public Q_SLOTS:
 
-    void reAddCamInfos(const QList<CamItemInfo>& infos);
+    void reAddCamInfos(const CamItemInfoList& infos);
     void reAddingFinished();
+    void slotFileDeleted(QString folder, QString file, bool status);
+    void slotFileUploaded(CamItemInfo info);
 
 protected:
 
