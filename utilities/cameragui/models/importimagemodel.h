@@ -250,8 +250,8 @@ public Q_SLOTS:
 
     void reAddCamInfos(const CamItemInfoList& infos);
     void reAddingFinished();
-    void slotFileDeleted(QString folder, QString file, bool status);
-    void slotFileUploaded(CamItemInfo info);
+    void slotFileDeleted(const QString& folder, const QString& file, bool status);
+    void slotFileUploaded(const CamItemInfo& info);
 
 protected:
 

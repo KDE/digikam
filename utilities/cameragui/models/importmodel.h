@@ -37,7 +37,7 @@ class ImportModel : public ImportThumbnailModel
 
 public:
 
-    ImportModel(QObject* parent = 0);
+    ImportModel(QObject* const parent = 0);
     ~ImportModel();
 };
 

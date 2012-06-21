@@ -60,10 +60,9 @@ public:
     ThumbnailSize            thumbSize;
     ThumbnailSize            lastGlobalThumbSize;
     bool                     emitDataChanged;
-
 };
 
-ImportThumbnailModel::ImportThumbnailModel(QObject* parent)
+ImportThumbnailModel::ImportThumbnailModel(QObject* const parent)
     : ImportImageModel(parent), d(new ImportThumbnailModelPriv)
 {
     setKeepsFileUrlCache(true);

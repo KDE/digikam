@@ -55,7 +55,7 @@ class CameraController : public QThread
 
 public:
 
-    CameraController(QWidget* parent, const QString& title, const QString& model,
+    CameraController(QWidget* const parent, const QString& title, const QString& model,
                      const QString& port, const QString& path);
     ~CameraController();
 
@@ -135,7 +135,7 @@ public Q_SLOTS:
 protected:
 
     void run();
-    void executeCommand(CameraCommand* cmd);
+    void executeCommand(CameraCommand* const cmd);
 
 private Q_SLOTS:
 
@@ -155,7 +155,7 @@ private:
 
     static void runAutoRotateThread(CameraController* cont, KUrl& tempURL, QString& folder, QString& file);
 
-    void addCommand(CameraCommand* cmd);
+    void addCommand(CameraCommand* const cmd);
     bool queueIsEmpty() const;
 
 private:

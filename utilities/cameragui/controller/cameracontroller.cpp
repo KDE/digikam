@@ -145,7 +145,7 @@ public:
     QList<CameraCommand*> commands;
 };
 
-CameraController::CameraController(QWidget* parent,
+CameraController::CameraController(QWidget* const parent,
                                    const QString& title, const QString& model,
                                    const QString& port, const QString& path)
     : QThread(parent), d(new CameraControllerPriv)
@@ -418,7 +418,7 @@ void CameraController::run()
     emit signalBusy(false);
 }
 
-void CameraController::executeCommand(CameraCommand* cmd)
+void CameraController::executeCommand(CameraCommand* const cmd)
 {
     static int numberOfItems; // to give the appropriate id for each CamItemInfo.
     if (!cmd)
@@ -1079,7 +1079,7 @@ void CameraController::slotOpen(const QString& folder, const QString& file, cons
 */
 }
 
-void CameraController::addCommand(CameraCommand* cmd)
+void CameraController::addCommand(CameraCommand* const cmd)
 {
     QMutexLocker lock(&d->mutex);
     d->commands << cmd;

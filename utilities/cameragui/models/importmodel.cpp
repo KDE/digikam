@@ -26,7 +26,7 @@
 namespace Digikam
 {
 
-ImportModel::ImportModel(QObject* parent)
+ImportModel::ImportModel(QObject* const parent)
     : ImportThumbnailModel(parent)
 {
 }
@@ -35,4 +35,4 @@ ImportModel::~ImportModel()
 {
 }
 
-}
+} // namespace Digikam

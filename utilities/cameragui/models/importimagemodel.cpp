@@ -116,8 +116,8 @@ void ImportImageModel::setCameraController(CameraController* const controller)
     connect(d->controller, SIGNAL(signalFileList(CamItemInfoList)),
             SLOT(reAddCamInfos(CamItemInfoList)));
 
-    connect(d->controller, SIGNAL(signalDeleted(QString,QString,bool)),
-            SLOT(slotFileDeleted(QString,QString,bool)));
+    connect(d->controller, SIGNAL(signalDeleted(QString, QString, bool)),
+            SLOT(slotFileDeleted(QString, QString, bool)));
 
     connect(d->controller, SIGNAL(signalUploaded(CamItemInfo)),
             SLOT(slotFileUploaded(CamItemInfo)));
@@ -574,7 +574,7 @@ void ImportImageModel::reAddingFinished()
     cleanSituationChecks();
 }
 
-void ImportImageModel::slotFileDeleted(QString folder, QString file, bool status)
+void ImportImageModel::slotFileDeleted(const QString& folder, const QString& file, bool status)
 {
     Q_UNUSED(status)
 
@@ -582,7 +582,7 @@ void ImportImageModel::slotFileDeleted(QString folder, QString file, bool status
     removeCamItemInfo(info);
 }
 
-void ImportImageModel::slotFileUploaded(CamItemInfo info)
+void ImportImageModel::slotFileUploaded(const CamItemInfo& info)
 {
     addCamItemInfo(info);
 }

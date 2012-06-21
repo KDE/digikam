@@ -50,7 +50,7 @@ public:
      *  to retrieve thumbnails for CamItemInfos. It also provides preloading of thumbnails,
      *  and caching facility. Thumbnails size can be adjusted.
      */
-    ImportThumbnailModel(QObject* parent);
+    ImportThumbnailModel(QObject* const parent);
     ~ImportThumbnailModel();
 
     /// Sets the camera controller which is used to get the thumbnails for item infos.
