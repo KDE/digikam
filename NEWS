@@ -13,4 +13,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 006 ==> 232360 - Zoom reset in Image view for each downloaded image.
 007 ==> 298606 - Resize controls in editor are missing.
 008 ==> 301072 - Application crash when using curves correction.
-009 ==> 
+009 ==> 301051 - digiKam crashes when changing picture in image editor.
+010 ==> 
