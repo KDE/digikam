@@ -15,4 +15,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 008 ==> 301072 - Application crash when using curves correction.
 009 ==> 301051 - digiKam crashes when changing picture in image editor.
 010 ==> 274555 - digikam crashes while histogram computation.
-011 ==> 
+011 ==> 301483 - Sigma raw files and preview (.x3f).
+012 ==> 
