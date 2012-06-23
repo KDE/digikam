@@ -25,10 +25,13 @@
 
 #include <QRectF>
 
+// Local includes
+
 #include "camitemsortsettings.h"
 
 namespace Digikam
 {
+
 CamItemSortSettings::CamItemSortSettings()
 {
     categorizationMode            = NoCategories;
@@ -39,13 +42,18 @@ CamItemSortSettings::CamItemSortSettings()
     sortCaseSensitivity           = Qt::CaseSensitive;
 }
 
+CamItemSortSettings::~CamItemSortSettings()
+{
+}
+
 bool CamItemSortSettings::operator ==(const CamItemSortSettings& other) const
 {
-    return categorizationMode == other.categorizationMode && categorizationSortOrder == other.categorizationSortOrder
-            && categorizationCaseSensitivity == other.categorizationCaseSensitivity
-            && sortRole == other.sortRole
-            && sortOrder == other.sortOrder
-            && sortCaseSensitivity == other.sortCaseSensitivity;
+    return (categorizationMode            == other.categorizationMode            &&
+            categorizationSortOrder       == other.categorizationSortOrder       &&
+            categorizationCaseSensitivity == other.categorizationCaseSensitivity &&
+            sortRole                      == other.sortRole                      &&
+            sortOrder                     == other.sortOrder                     &&
+            sortCaseSensitivity           == other.sortCaseSensitivity);
 }
 
 void CamItemSortSettings::setCategorizationMode(CategorizationMode mode)

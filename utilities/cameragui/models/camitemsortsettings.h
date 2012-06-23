@@ -40,6 +40,8 @@ class CamItemSortSettings
 public:
 
     CamItemSortSettings();
+    ~CamItemSortSettings();
+
     bool operator==(const CamItemSortSettings& other) const;
 
     /** Compares the categories of left and right camItemInfos.
@@ -51,7 +53,8 @@ public:
 
 
     /** Returns true if left is less than right.
-     *  Adheres to current sort role and sort order. */
+     *  Adheres to current sort role and sort order.
+     */
     bool lessThan(const CamItemInfo& left, const CamItemInfo& right) const;
 
     /** Returns true if left QVariant is less than right.
@@ -116,7 +119,8 @@ public:
     static Qt::SortOrder defaultSortOrderForCategorizationMode(CategorizationMode mode);
     static Qt::SortOrder defaultSortOrderForSortRole(SortRole role);
 
-    /** Returns a < b if sortOrder is Ascending, or b < a if order is descending */
+    /** Returns a < b if sortOrder is Ascending, or b < a if order is descending
+     */
     template <typename T>
     static inline bool lessThanByOrder(const T& a, const T& b, Qt::SortOrder sortOrder)
     {
@@ -126,7 +130,8 @@ public:
             return b < a;
     }
 
-    /** Returns the usual compare result of -1, 0, or 1 for lessThan, equals and greaterThan. */
+    /** Returns the usual compare result of -1, 0, or 1 for lessThan, equals and greaterThan.
+     */
     template <typename T>
     static inline int compareValue(const T& a, const T &b)
     {
@@ -140,7 +145,8 @@ public:
     }
 
     /** Takes a typical result from a compare method (0 is equal, -1 is less than, 1 is greater than)
-     *  and applies the given sort order to it. */
+     *  and applies the given sort order to it.
+     */
     static inline int compareByOrder(int compareResult,  Qt::SortOrder sortOrder)
     {
         if (sortOrder == Qt::AscendingOrder)
@@ -155,7 +161,8 @@ public:
         return compareByOrder(compareValue(a, b), sortOrder);
     }
 
-    /** Compares the two string by natural comparison and adheres to given sort order */
+    /** Compares the two string by natural comparison and adheres to given sort order
+     */
     static inline int naturalCompare(const QString& a, const QString& b, Qt::SortOrder sortOrder,
                                      Qt::CaseSensitivity caseSensitive = Qt::CaseSensitive)
     {

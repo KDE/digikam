@@ -12,8 +12,6 @@ SET(libcameragui_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/cameramessagebox.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/items/camerafolderitem.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/items/cameraiconitem.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/models/importimagemodel.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/models/importthumbnailmodel.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/views/camerafolderview.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/views/cameraiconview.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/views/cameraiconviewtooltip.cpp
@@ -26,6 +24,11 @@ SET(libcameragui_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/advancedsettings.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/filtercombo.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/main/cameraui.cpp
+
+    ${CMAKE_CURRENT_SOURCE_DIR}/models/importimagemodel.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/models/importthumbnailmodel.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/models/importmodel.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/models/camitemsortsettings.cpp
 
     ${CMAKE_CURRENT_SOURCE_DIR}/q3support/icongroupitem.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/q3support/iconitem.cpp
