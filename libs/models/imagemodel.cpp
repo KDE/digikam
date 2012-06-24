@@ -79,7 +79,26 @@ public:
 
     inline bool isValid(const QModelIndex& index)
     {
-        return index.isValid() && index.row() >= 0 && index.row() < infos.size();
+        if (!index.isValid())
+        {
+            return false;
+        }
+        if (index.row() < 0 || index.row() >= infos.size())
+        {
+            kDebug() << "Invalid index" << index;
+            return false;
+        }
+        return true;
+    }
+    inline bool extraValueValid(const QModelIndex& index)
+    {
+        // we assume isValid() being called before, no duplicate checks
+        if (index.row() >= extraValues.size())
+        {
+            kDebug() << "Invalid index for extraData" << index;
+            return false;
+        }
+        return true;
     }
 };
 
@@ -1096,7 +1115,7 @@ QVariant ImageModel::data(const QModelIndex& index, int role) const
 
         case ExtraDataRole:
 
-            if (!d->extraValues.isEmpty())
+            if (d->extraValueValid(index))
             {
                 return d->extraValues.at(index.row());
             }
