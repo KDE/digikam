@@ -39,6 +39,8 @@ class QAction;
 
 class KActionCollection;
 
+using namespace KIPI;
+
 namespace Digikam
 {
 
@@ -56,9 +58,9 @@ public:
     KipiPluginLoader(QObject* const parent, SplashScreen* const splash);
 
     /** Return a list of all plugin actions accordingly of plugin category.
-     *  See KIPI::Category enum for details.
+     *  See Category enum for details.
      */
-    QList<QAction*> kipiActionsByCategory(KIPI::Category cat) const;
+    QList<QAction*> kipiActionsByCategory(Category cat) const;
 
     /** Return the instance of action collection for all KIPI plugins.
      */
@@ -74,7 +76,7 @@ public:
 
 private Q_SLOTS:
 
-    /** Called by KIPI::PluginLoader when plugins list must be re-loaded in application.
+    /** Called by PluginLoader when plugins list must be re-loaded in application.
      */
     void slotKipiPluginPlug();
 
@@ -90,11 +92,11 @@ private:
 
     /** Check if a category exist, else fill it with an single action displaying an "Empty" message.
      */
-    void checkEmptyCategory(KIPI::Category cat);
+    void checkEmptyCategory(Category cat);
 
     /** Wrapper to return plugin category name for KDE Shortcuts Editor.
      */
-    QString categoryName(KIPI::Category cat) const;
+    QString categoryName(Category cat) const;
 
 private:
 
