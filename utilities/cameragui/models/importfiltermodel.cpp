@@ -21,15 +21,17 @@
  *
  * ============================================================ */
 
-//#include "importfiltermodel.moc"
-
-#include "importfiltermodel.h" // remove this line
+#include "importfiltermodel.h"
 
 namespace Digikam
 {
 
 ImportSortFilterModel::ImportSortFilterModel(QObject* const parent)
     : KCategorizedSortFilterProxyModel(parent), m_chainedModel(0)
+{
+}
+
+ImportSortFilterModel::~ImportSortFilterModel()
 {
 }
 
@@ -201,12 +203,12 @@ ImportFilterModel* ImportSortFilterModel::importFilterModel() const
     return 0;
 }
 
-void ImportSortFilterModel::setSourceModel(QAbstractItemModel* sourceModel)
+void ImportSortFilterModel::setSourceModel(QAbstractItemModel* const sourceModel)
 {
     KCategorizedSortFilterProxyModel::setSourceModel(sourceModel);
 }
 
-void ImportSortFilterModel::setDirectSourceImportModel(ImportImageModel* sourceModel)
+void ImportSortFilterModel::setDirectSourceImportModel(ImportImageModel* const sourceModel)
 {
     setSourceModel(sourceModel);
 }
@@ -219,10 +221,15 @@ class ImportFilterModel::ImportFilterModelPrivate: public QObject
 
 public:
 
-    ImportFilterModel*      q;
+    ImportFilterModelPrivate()
+    {
+        q                = 0;
+        importImageModel = 0;
+    }
 
-    ImportImageModel*       importImageModel;
-    CamItemSortSettings     sorter;
+    ImportFilterModel*  q;
+    ImportImageModel*   importImageModel;
+    CamItemSortSettings sorter;
 };
 
 ImportFilterModel::ImportFilterModel(QObject* const parent)
@@ -253,10 +260,13 @@ QVariant ImportFilterModel::data(const QModelIndex& index, int role) const
 
         case CategorizationModeRole:
             return d->sorter.categorizationMode;
+
         case SortOrderRole:
             return d->sorter.sortRole;
+
         case CategoryFormatRole:
             return d->importImageModel->camItemInfoRef(mapToSource(index)).mime;
+
         case ImportFilterModelPointerRole:
             return QVariant::fromValue(const_cast<ImportFilterModel*>(this));
     }
@@ -270,6 +280,7 @@ ImportFilterModel* ImportFilterModel::importFilterModel() const
 }
 
 // ------------- Sorting and Categorization -------------------
+
 void ImportFilterModel::setCamItemSortSettings(const CamItemSortSettings& sorter)
 {
     Q_D(ImportFilterModel);
@@ -303,19 +314,19 @@ void ImportFilterModel::setSendCamItemInfoSignals(bool sendSignals)
 {
     if (sendSignals)
     {
-        connect(this, SIGNAL(rowsInserted(QModelIndex,int,int)),
-                this, SLOT(slotRowsInserted(QModelIndex,int,int)));
+        connect(this, SIGNAL(rowsInserted(QModelIndex, int, int)),
+                this, SLOT(slotRowsInserted(QModelIndex, int, int)));
 
-        connect(this, SIGNAL(rowsAboutToBeRemoved(QModelIndex,int,int)),
-                this, SLOT(slotRowsAboutToBeRemoved(QModelIndex,int,int)));
+        connect(this, SIGNAL(rowsAboutToBeRemoved(QModelIndex, int, int)),
+                this, SLOT(slotRowsAboutToBeRemoved(QModelIndex, int, int)));
     }
     else
     {
-        disconnect(this, SIGNAL(rowsInserted(QModelIndex,int,int)),
-                   this, SLOT(slotRowsInserted(QModelIndex,int,int)));
+        disconnect(this, SIGNAL(rowsInserted(QModelIndex, int, int)),
+                   this, SLOT(slotRowsInserted(QModelIndex, int, int)));
 
-        disconnect(this, SIGNAL(rowsAboutToBeRemoved(QModelIndex,int,int)),
-                   this, SLOT(slotRowsAboutToBeRemoved(QModelIndex,int,int)));
+        disconnect(this, SIGNAL(rowsAboutToBeRemoved(QModelIndex, int, int)),
+                   this, SLOT(slotRowsAboutToBeRemoved(QModelIndex, int, int)));
     }
 }
 
@@ -323,7 +334,7 @@ void ImportFilterModel::slotRowsInserted(const QModelIndex& /*parent*/, int star
 {
     QList<CamItemInfo> infos;
 
-    for (int i=start; i>end; ++i)
+    for (int i = start; i > end; ++i)
     {
         infos << camItemInfo(index(i, 0));
     }
@@ -335,7 +346,7 @@ void ImportFilterModel::slotRowsAboutToBeRemoved(const QModelIndex& /*parent*/, 
 {
     QList<CamItemInfo> infos;
 
-    for (int i=start; i>end; ++i)
+    for (int i = start; i > end; ++i)
     {
         infos << camItemInfo(index(i, 0));
     }
@@ -343,7 +354,7 @@ void ImportFilterModel::slotRowsAboutToBeRemoved(const QModelIndex& /*parent*/, 
     emit imageInfosAboutToBeRemoved(infos);
 }
 
-void ImportFilterModel::setDirectSourceImportModel(ImportImageModel* sourceModel)
+void ImportFilterModel::setDirectSourceImportModel(ImportImageModel* const sourceModel)
 {
     Q_D(ImportFilterModel);
 
@@ -406,7 +417,7 @@ bool ImportFilterModel::subSortLessThan(const QModelIndex& left, const QModelInd
         return false;
     }
 
-    const CamItemInfo& leftInfo = d->importImageModel->camItemInfoRef(left);
+    const CamItemInfo& leftInfo  = d->importImageModel->camItemInfoRef(left);
     const CamItemInfo& rightInfo = d->importImageModel->camItemInfoRef(right);
 
     if (leftInfo == rightInfo)
@@ -429,7 +440,7 @@ bool ImportFilterModel::infosLessThan(const CamItemInfo& left, const CamItemInfo
     return d->sorter.lessThan(left, right);
 }
 
-QString ImportFilterModel::categoryIdentifier(const CamItemInfo &info) const
+QString ImportFilterModel::categoryIdentifier(const CamItemInfo& info) const
 {
     Q_D(const ImportFilterModel);
 

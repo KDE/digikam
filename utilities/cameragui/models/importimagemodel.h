@@ -56,7 +56,11 @@ public:
 
         /// Returns a thumbnail pixmap. May be implemented by subclasses.
         /// Returns either a valid pixmap or a null QVariant.
-        ThumbnailRole               = Qt::UserRole + 2
+        ThumbnailRole               = Qt::UserRole + 2,
+
+        // FIXME (cgilles) : dummy values added to compile importfiltermodel.cpp
+        FilterModelRoles            = Qt::UserRole + 3,
+        ExtraDataRole               = Qt::UserRole + 4
     };
 
 public:

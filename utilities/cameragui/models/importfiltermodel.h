@@ -24,6 +24,10 @@
 #ifndef IMPORTFILTERMODEL_H
 #define IMPORTFILTERMODEL_H
 
+// Qt includes
+
+#include <QObject>
+
 // KDE includes
 
 #include <kcategorizedsortfilterproxymodel.h>
@@ -45,6 +49,7 @@ class ImportSortFilterModel : public KCategorizedSortFilterProxyModel
 public:
 
     ImportSortFilterModel(QObject* const parent = 0);
+    ~ImportSortFilterModel();
 
     void setSourceImportModel(ImportImageModel* const sourceModel);
     ImportImageModel* sourceImportModel() const;
@@ -54,21 +59,21 @@ public:
 
     /// Convenience methods mapped to ImportImageModel.
     /// Mentioned indexes returned come from the source import image model.
-    QModelIndex mapToSourceImportModel(const QModelIndex& proxyIndex) const;
-    QModelIndex mapFromSourceImportModel(const QModelIndex& importModelIndex) const;
+    QModelIndex mapToSourceImportModel(const QModelIndex& proxyIndex)                       const;
+    QModelIndex mapFromSourceImportModel(const QModelIndex& importModelIndex)               const;
     QModelIndex mapFromDirectSourceToSourceImportModel(const QModelIndex& sourceModelIndex) const;
 
-    QList<QModelIndex> mapListToSource(const QList<QModelIndex>& indexes) const;
+    QList<QModelIndex> mapListToSource(const QList<QModelIndex>& indexes)         const;
     QList<QModelIndex> mapListFromSource(const QList<QModelIndex>& sourceIndexes) const;
 
-    CamItemInfo        camItemInfo(const QModelIndex& index) const;
-    qlonglong          camItemId(const QModelIndex& index) const;
+    CamItemInfo        camItemInfo(const QModelIndex& index)           const;
+    qlonglong          camItemId(const QModelIndex& index)             const;
     QList<CamItemInfo> camItemInfos(const QList<QModelIndex>& indexes) const;
-    QList<qlonglong>   camItemIds(const QList<QModelIndex>& indexes) const;
+    QList<qlonglong>   camItemIds(const QList<QModelIndex>& indexes)   const;
 
-    QModelIndex indexForPath(const QString& filePath) const;
+    QModelIndex indexForPath(const QString& filePath)        const;
     QModelIndex indexForCamItemInfo(const CamItemInfo& info) const;
-    QModelIndex indexForCamItemId(qlonglong id) const;
+    QModelIndex indexForCamItemId(qlonglong id)              const;
 
     /** Returns a list of all camera infos, sorted according to this model.
      *  If you do not need a sorted list, use ImportImageModel's camItemInfo() method.
@@ -80,13 +85,17 @@ public:
 
 protected:
 
-    virtual void setSourceModel(QAbstractItemModel* sourceModel);
+    virtual void setSourceModel(QAbstractItemModel* const sourceModel);
 
     /// Reimplement if needed. Called only when model shall be set as (direct) sourceModel.
-    virtual void setDirectSourceImportModel(ImportImageModel* sourceModel);
+    virtual void setDirectSourceImportModel(ImportImageModel* const sourceModel);
+
+protected:
 
     ImportSortFilterModel* m_chainedModel;
 };
+
+// ------------------------------------------------------------------------------------------
 
 class ImportFilterModel : public ImportSortFilterModel
 {
@@ -96,39 +105,41 @@ public:
 
     enum ImportFilterModelRoles
     {
-        /// Returns the current categorization mode
+        /// Returns the current categorization mode.
         CategorizationModeRole       = ImportImageModel::FilterModelRoles + 1,
 
-        /// Returns the current sort order
+        /// Returns the current sort order.
         SortOrderRole                = ImportImageModel::FilterModelRoles + 2,
 
-        /// Returns the format of the index which is used for category
+        /// Returns the format of the index which is used for category.
         CategoryFormatRole           = ImportImageModel::FilterModelRoles + 3,
 
-        /// Returns true if the given camera item is a group leader, and the group is opened
+        /// Returns true if the given camera item is a group leader, and the group is opened.
         //TODO: GroupIsOpenRole            = ImportImageModel::FilterModelRoles + 4
         ImportFilterModelPointerRole = ImportImageModel::FilterModelRoles + 50
     };
 
+public:
+
     ImportFilterModel(QObject* const parent = 0);
     ~ImportFilterModel();
 
-    CamItemSortSettings     camItemSortSettings() const;
-
-    virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
-    virtual ImportFilterModel* importFilterModel() const;
+    CamItemSortSettings camItemSortSettings() const;
 
     void setCamItemSortSettings(const CamItemSortSettings& sorter);
     void setCategorizationMode(CamItemSortSettings::CategorizationMode mode);
     void setSortRole(CamItemSortSettings::SortRole role);
     void setSortOrder(CamItemSortSettings::SortOrder order);
 
-    /// Enables sending imageInfosAdded and imageInfosAboutToBeRemoved
+    /// Enables sending imageInfosAdded and imageInfosAboutToBeRemoved.
     void setSendCamItemInfoSignals(bool sendSignals);
+
+    virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
+    virtual ImportFilterModel* importFilterModel()                              const;
 
 Q_SIGNALS:
 
-    /** These signals need to be explicitly enabled with setSendImageInfoSignals()
+    /** These signals need to be explicitly enabled with setSendImageInfoSignals().
      */
     void imageInfosAdded(const QList<CamItemInfo>& infos);
     void imageInfosAboutToBeRemoved(const QList<CamItemInfo>& infos);
@@ -149,7 +160,7 @@ protected:
 
 protected:
 
-    virtual void setDirectSourceImportModel(ImportImageModel* sourceModel);
+    virtual void setDirectSourceImportModel(ImportImageModel* const sourceModel);
 
     //TODO: virtual bool filterAcceptsRow(int source_row, const QModelIndex& source_parent) const;
 
@@ -173,7 +184,6 @@ protected:
 private:
 
     Q_DECLARE_PRIVATE(ImportFilterModel)
-
 };
 
 } // namespace Digikam
