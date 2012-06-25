@@ -72,7 +72,7 @@ public:
     static const QString        batchActionName;
     static const QString        albumsActionName;
 
-    PluginLoader*         kipiPluginLoader;
+    PluginLoader*               kipiPluginLoader;
     KipiInterface*              kipiInterface;
     SplashScreen*               splashScreen;
     DigikamApp*                 app;
