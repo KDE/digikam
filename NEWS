@@ -18,4 +18,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 011 ==> 301483 - Sigma raw files and preview (.x3f).
 012 ==> 197378 - Fading between photo's in diashow.
 013 ==> 302443 - "Open in File Manager" opens Rythmbox in Ubuntu.
-014 ==> 
+014 ==> 288762 - digiKam crash when closing digikam after mass-tagging.
+015 ==> 
