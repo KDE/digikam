@@ -19,4 +19,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 012 ==> 197378 - Fading between photo's in diashow.
 013 ==> 302443 - "Open in File Manager" opens Rythmbox in Ubuntu.
 014 ==> 288762 - digiKam crash when closing digikam after mass-tagging.
-015 ==> 
+015 ==> 286719 - digiKam hang during startup (deadlock?).
+016 ==> 
