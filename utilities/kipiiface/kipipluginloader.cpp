@@ -166,7 +166,7 @@ void KipiPluginLoader::loadPlugins()
     d->kipiPluginLoader->setIgnoreList(ignores);
     d->kipiPluginLoader->init();
 #else
-    d->kipiPluginLoader = new PluginLoader(ignores, d->app, d->kipiInterface);
+    d->kipiPluginLoader = new PluginLoader(ignores, d->kipiInterface);
 #endif
 
     connect( d->kipiPluginLoader, SIGNAL(replug()),
