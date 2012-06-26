@@ -25,7 +25,7 @@
 #define CONFIG_LENSFUN_H
 
 #define CONF_PACKAGE "lensfun"
-#define CONF_LENSFUN_STATIC 1
+#define CONF_SYMBOL_VISIBILITY 1
 
 char* _lf_get_database_dir();
 
