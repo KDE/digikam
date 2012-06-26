@@ -171,8 +171,10 @@
        && (pos == 0 || next_c == L'\0'					      \
 	   || IS_WORD_CHAR(prev_c) != IS_WORD_CHAR(next_c))))
 
+
+
 /* Returns 1 if `t1' wins `t2', 0 otherwise. */
-static int
+inline static int
 tre_tag_order(int num_tags, tre_tag_direction_t *tag_directions,
 	      int *t1, int *t2)
 {
@@ -198,7 +200,7 @@ tre_tag_order(int num_tags, tre_tag_direction_t *tag_directions,
   return 0;
 }
 
-static int
+inline static int
 tre_neg_char_classes_match(tre_ctype_t *classes, tre_cint_t wc, int icase)
 {
   DPRINT(("neg_char_classes_test: %p, %d, %d\n", classes, wc, icase));

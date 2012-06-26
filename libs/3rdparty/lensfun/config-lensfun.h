@@ -6,7 +6,7 @@
  * Date        : 2010-09-27
  * Description : lensfun config header
  *
- * Copyright (C) 2010-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -27,6 +27,6 @@
 #define CONF_PACKAGE "lensfun"
 #define CONF_LENSFUN_STATIC 1
 
-char* _lf_get_database_dir ();
-    
+char* _lf_get_database_dir();
+
 #endif // CONFIG_LENSFUN_H
