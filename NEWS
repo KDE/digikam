@@ -11,5 +11,13 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 004 ==> 301496 - Crash tagging a picture.
 005 ==> 291877 - Change tag filters checkboxes to three-states checkboxes to allow filtering by inclusion and by exclusion.
 006 ==> 232360 - Zoom reset in Image view for each downloaded image.
-007 ==> 298606 - resize controls in editor are missing.
-008 ==> 
+007 ==> 298606 - Resize controls in editor are missing.
+008 ==> 301072 - Application crash when using curves correction.
+009 ==> 301051 - digiKam crashes when changing picture in image editor.
+010 ==> 274555 - digikam crashes while histogram computation.
+011 ==> 301483 - Sigma raw files and preview (.x3f).
+012 ==> 197378 - Fading between photo's in diashow.
+013 ==> 302443 - "Open in File Manager" opens Rythmbox in Ubuntu.
+014 ==> 288762 - digiKam crash when closing digikam after mass-tagging.
+015 ==> 286719 - digiKam hang during startup (deadlock?).
+016 ==> 

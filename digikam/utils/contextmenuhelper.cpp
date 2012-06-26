@@ -574,9 +574,10 @@ void ContextMenuHelper::addCreateTagFromAddressbookMenu()
 
     d->ABCmenu = new QMenu(d->parent);
 
+/*
     connect(d->ABCmenu, SIGNAL(aboutToShow()),
             this, SLOT(slotABCContextMenu()));
-
+*/
     QAction* abcAction = d->ABCmenu->menuAction();
     abcAction->setIcon(SmallIcon("tag-addressbook"));
     abcAction->setText(i18n("Create Tag From Address Book"));
