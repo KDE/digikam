@@ -840,7 +840,7 @@ void DigikamApp::setupActions()
     connect(d->imageIconViewAction, SIGNAL(triggered()), d->view, SLOT(slotIconView()));
     d->imageViewSelectionAction->addAction(d->imageIconViewAction);
 
-    d->imagePreviewAction = new KToggleAction(KIcon("viewimage"), i18nc("View the selected image", "View Image"), this);
+    d->imagePreviewAction = new KToggleAction(KIcon("viewimage"), i18nc("View the selected image", "Preview Image"), this);
     d->imagePreviewAction->setShortcut(KShortcut(Qt::Key_F3));
     actionCollection()->addAction("image_view", d->imagePreviewAction);
     connect(d->imagePreviewAction, SIGNAL(triggered()), d->view, SLOT(slotImagePreview()));

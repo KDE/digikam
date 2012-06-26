@@ -23,4 +23,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 014 ==> 288762 - digiKam crash when closing digikam after mass-tagging.
 015 ==> 286719 - digiKam hang during startup (deadlock?).
 016 ==> 225443 - Fileview preview panning shortcut back to old.
-017 ==> 
+017 ==> 302562 - Rename "View Image" to "Preview".
+018 ==> 280142 - Crash in libtiff when files are edited.
+019 ==> 
