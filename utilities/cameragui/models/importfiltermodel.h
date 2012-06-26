@@ -85,7 +85,7 @@ public:
 
 protected:
 
-    virtual void setSourceModel(QAbstractItemModel* const sourceModel);
+    virtual void setSourceModel(QAbstractItemModel* sourceModel);
 
     /// Reimplement if needed. Called only when model shall be set as (direct) sourceModel.
     virtual void setDirectSourceImportModel(ImportImageModel* const sourceModel);

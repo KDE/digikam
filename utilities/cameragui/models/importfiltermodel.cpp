@@ -203,7 +203,7 @@ ImportFilterModel* ImportSortFilterModel::importFilterModel() const
     return 0;
 }
 
-void ImportSortFilterModel::setSourceModel(QAbstractItemModel* const sourceModel)
+void ImportSortFilterModel::setSourceModel(QAbstractItemModel* sourceModel)
 {
     KCategorizedSortFilterProxyModel::setSourceModel(sourceModel);
 }
