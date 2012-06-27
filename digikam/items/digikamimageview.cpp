@@ -324,7 +324,7 @@ void DigikamImageView::showContextMenuOnInfo(QContextMenuEvent* event, const Ima
 
     // Temporary actions --------------------------------------
 
-    QAction* viewAction = new QAction(SmallIcon("viewimage"), i18nc("View the selected image", "View"), this);
+    QAction* viewAction = new QAction(SmallIcon("viewimage"), i18nc("View the selected image", "Preview"), this);
     viewAction->setEnabled(selectedImageIDs.count() == 1);
 
     // --------------------------------------------------------
