@@ -23,6 +23,8 @@
 
 #include <stddef.h>
 
+#include "config-lensfun.h"
+
 #ifdef __cplusplus
 extern "C" {
 /** Helper macro to make C/C++ work similarly */

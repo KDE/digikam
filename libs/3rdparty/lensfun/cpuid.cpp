@@ -3,7 +3,6 @@
     Copyright (C) 2010 by Andrew Zabolotny
 */
 
-#include "config-lensfun.h"
 #include "lensfun.h"
 #include "lensfunprv.h"
 
