@@ -6,7 +6,6 @@
     Thanks to the PanoTools team for their pioneering work.
 */
 
-#include "config-lensfun.h"
 #include "lensfun.h"
 #include "lensfunprv.h"
 

@@ -23,6 +23,8 @@
 
 #include <stddef.h>
 
+#include "config-lensfun.h"
+
 #ifdef __cplusplus
 extern "C" {
 /** Helper macro to make C/C++ work similarly */
@@ -60,9 +62,9 @@ extern "C" {
 #   define LF_EXPORT
 #else
 #   ifdef CONF_SYMBOL_VISIBILITY
-#       if defined PLATFORM_WINDOWS || defined _MSC_VER
+#       if defined PLATFORM_WINDOWS
 #           define LF_EXPORT    __declspec(dllexport)
-#       elif defined __GNUC__
+#       elif defined CONF_COMPILER_GCC
 #           define LF_EXPORT    __attribute__((visibility("default")))
 #       else
 #           error "I don't know how to change symbol visibility for your compiler"
