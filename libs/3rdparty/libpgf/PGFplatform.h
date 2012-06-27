@@ -105,7 +105,7 @@
 #define ImageModeMultichannel		7
 #define ImageModeDuotone			8
 #define ImageModeLabColor			9
-#define ImageModeGray16				10
+#define ImageModeGray16				10		// 565
 #define ImageModeRGB48				11
 #define ImageModeLab48				12
 #define ImageModeCMYK64				13
@@ -113,7 +113,7 @@
 #define ImageModeDuotone16			15
 // pgf extension
 #define ImageModeRGBA				17
-#define ImageModeGray32				18
+#define ImageModeGray32				18		// MSB is 0 (can be interpreted as signed 15.16 fixed point format)
 #define ImageModeRGB12				19
 #define ImageModeRGB16				20
 #define ImageModeUnknown			255
@@ -424,10 +424,6 @@ typedef union _LARGE_INTEGER {
   struct {
     DWORD LowPart;
     LONG HighPart;
-  };
-  struct {
-    DWORD LowPart;
-    LONG HighPart;
   } u;
   LONGLONG QuadPart;
 } LARGE_INTEGER, *PLARGE_INTEGER;
@@ -497,7 +493,7 @@ __inline int MulDiv(int nNumber, int nNumerator, int nDenominator) {
 //-------------------------------------------------------------------------------
 // IO Error constants
 //-------------------------------------------------------------------------------
-#define NoError					0x0000
+#define NoError					0x0000			///< no error
 #define AppError				0x2000			///< all application error messages must be larger than this value
 #define InsufficientMemory		0x2001			///< memory allocation wasn't successfull
 #define InvalidStreamPos		0x2002			///< invalid memory stream position

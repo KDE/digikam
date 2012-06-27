@@ -41,45 +41,37 @@
 //////////////////////////////////////////////////////////////////////
 /// PGF ROI and tile support. This is a helper class for CWaveletTransform.
 /// @author C. Stamm
-/// @brief ROI and tile support
-class CROIs {
+/// @brief ROI indices
+class CRoiIndices {
 	friend class CWaveletTransform;
 
 	//////////////////////////////////////////////////////////////////////
 	/// Constructor: Creates a ROI helper object
-	/// @param levels The number of levels (>= 0)
-	CROIs(int levels) : m_nLevels(levels), m_ROIs(0), m_indices(0) { ASSERT(levels > 0); }
+	CRoiIndices() 
+	: m_nLevels(0)
+	, m_indices(0) 
+	{}
 
 	//////////////////////////////////////////////////////////////////////
 	/// Destructor
-	~CROIs() { Destroy(); }
+	~CRoiIndices() { Destroy(); }
 
-	void Destroy()								{ delete[] m_ROIs; m_ROIs = 0; delete[] m_indices; m_indices = 0; }
-	void CreateROIs();
+	void Destroy()								{ delete[] m_indices; m_indices = 0; }
 	void CreateIndices();
 	void ComputeIndices(UINT32 width, UINT32 height, const PGFRect& rect);
-	void SetROI(int level, const PGFRect& rect)	{ ASSERT(m_ROIs); ASSERT(level >= 0 && level < m_nLevels); m_ROIs[level] = rect; }
 	const PGFRect& GetIndices(int level) const	{ ASSERT(m_indices); ASSERT(level >= 0 && level < m_nLevels); return m_indices[level]; }
-	UINT32 Left(int level) const				{ ASSERT(m_ROIs); ASSERT(level >= 0 && level < m_nLevels); return m_ROIs[level].left; }
-	UINT32 Top(int level) const					{ ASSERT(m_ROIs); ASSERT(level >= 0 && level < m_nLevels); return m_ROIs[level].top; }
-	bool ROIisSupported() const					{ return m_ROIs != 0; }
+	void SetLevels(int levels)					{ ASSERT(levels > 0); m_nLevels = levels; }
 	void ComputeTileIndex(UINT32 width, UINT32 height, UINT32 pos, bool horizontal, bool isMin);
 
 public:
 	//////////////////////////////////////////////////////////////////////
-	/// Returns the number of tiles at a given level.
+	/// Returns the number of tiles in one dimension at given level.
 	/// @param level A wavelet transform pyramid level (>= 0 && < Levels())
 	UINT32 GetNofTiles(int level) const			{ ASSERT(level >= 0 && level < m_nLevels); return 1 << (m_nLevels - level - 1); }
 
-	//////////////////////////////////////////////////////////////////////
-	/// Return region of interest at a given level.
-	/// @param level A wavelet transform pyramid level (>= 0 && < Levels())
-	const PGFRect& GetROI(int level) const		{ ASSERT(m_ROIs); ASSERT(level >= 0 && level < m_nLevels); return m_ROIs[level]; }
-
 private:
 	int      m_nLevels;			///< number of levels of the image
-	PGFRect	*m_ROIs;			///< array of region of interests (ROI)
-	PGFRect *m_indices;			///< array of tile indices
+	PGFRect *m_indices;			///< array of tile indices (index is level)
 
 };
 #endif //__PGFROISUPPORT__
@@ -139,31 +131,28 @@ public:
 	void SetROI(const PGFRect& rect);
 
 	//////////////////////////////////////////////////////////////////////
-	/// For each subband set a referenct to ROI information
-	void SetROI();
-
-	//////////////////////////////////////////////////////////////////////
 	/// Get tile indices of a ROI at given level.
 	/// @param level A valid subband level.
-	const PGFRect& GetTileIndices(int level) const	{ return m_ROIs.GetIndices(level); }
+	const PGFRect& GetTileIndices(int level) const		{ return m_ROIindices.GetIndices(level); }
 
 	//////////////////////////////////////////////////////////////////////
 	/// Get number of tiles in x- or y-direction at given level.
 	/// @param level A valid subband level.
-	UINT32 GetNofTiles(int level) const				{ return m_ROIs.GetNofTiles(level); }
+	UINT32 GetNofTiles(int level) const					{ return m_ROIindices.GetNofTiles(level); }
 
 	//////////////////////////////////////////////////////////////////////
 	/// Return ROI at given level.
 	/// @param level A valid subband level.
-	const PGFRect& GetROI(int level) const			{ return m_ROIs.GetROI(level); }
+	const PGFRect& GetROI(int level) const				{ return m_subband[level][LL].GetROI(); }
 
 #endif // __PGFROISUPPORT__
 
 private:
-	void Destroy() { delete[] m_subband; m_subband = 0; 
-		#ifdef __PGFROISUPPORT__
-		m_ROIs.Destroy(); 
-		#endif
+	void Destroy() { 
+		delete[] m_subband; m_subband = 0; 
+	#ifdef __PGFROISUPPORT__
+		m_ROIindices.Destroy(); 
+	#endif
 	}
 	void InitSubbands(UINT32 width, UINT32 height, DataT* data);
 	void ForwardRow(DataT* buff, UINT32 width);
@@ -172,7 +161,7 @@ private:
 	void MallatToLinear(int srcLevel, DataT* loRow, DataT* hiRow, UINT32 width);
 
 #ifdef __PGFROISUPPORT__
-	CROIs		m_ROIs;							///< ROI information
+	CRoiIndices		m_ROIindices;				///< ROI indices 
 #endif //__PGFROISUPPORT__
 
 	int			m_nLevels;						///< number of transform levels: one more than the number of level in PGFimage

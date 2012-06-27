@@ -55,17 +55,21 @@
 //  
 
 // Constants
-#define CodeBufferBitLen		(BufferSize*WordWidth)		// max number of bits in m_codeBuffer
-#define MaxCodeLen				((1 << RLblockSizeLen) - 1)	// max length of RL encoded block
+#define CodeBufferBitLen		(CodeBufferLen*WordWidth)	///< max number of bits in m_codeBuffer
+#define MaxCodeLen				((1 << RLblockSizeLen) - 1)	///< max length of RL encoded block
 
 //////////////////////////////////////////////////////
-// Constructor
-// Write pre-header, header, postHeader, and levelLength.
-// It might throw an IOException.
-// preHeader and header must not be references, because on BigEndian platforms they are modified
-CEncoder::CEncoder(CPGFStream* stream, PGFPreHeader preHeader, PGFHeader header, const PGFPostHeader& postHeader, UINT32*& levelLength, bool useOMP /*= true*/) THROW_
+/// Write pre-header, header, postHeader, and levelLength.
+/// It might throw an IOException.
+/// @param stream A PGF stream
+/// @param preHeader A already filled in PGF pre-header
+/// @param header An already filled in PGF header
+/// @param postHeader [in] An already filled in PGF post-header (containing color table, user data, ...)
+/// @param userDataPos [out] File position of user data
+/// @param useOMP If true, then the encoder will use multi-threading based on openMP
+CEncoder::CEncoder(CPGFStream* stream, PGFPreHeader preHeader, PGFHeader header, const PGFPostHeader& postHeader, UINT64& userDataPos, bool useOMP) THROW_
 : m_stream(stream)
-, m_startPosition(0)
+, m_bufferStartPos(0)
 , m_currLevelIndex(0)
 , m_nLevels(header.nLevels)
 , m_favorSpeed(false)
@@ -90,7 +94,8 @@ CEncoder::CEncoder(CPGFStream* stream, PGFPreHeader preHeader, PGFHeader header,
 		omp_set_num_threads(m_macroBlockLen);
 #endif
 		// create macro block array
-		m_macroBlocks = new CMacroBlock*[m_macroBlockLen];
+		m_macroBlocks = new(std::nothrow) CMacroBlock*[m_macroBlockLen];
+		if (!m_macroBlocks) ReturnWithError(InsufficientMemory);
 		for (int i=0; i < m_macroBlockLen; i++) m_macroBlocks[i] = new CMacroBlock(this);
 		m_lastMacroBlock = 0;
 		m_currentBlock = m_macroBlocks[m_lastMacroBlock++];
@@ -120,25 +125,20 @@ CEncoder::CEncoder(CPGFStream* stream, PGFPreHeader preHeader, PGFHeader header,
 		count = ColorTableSize;
 		m_stream->Write(&count, (void *)postHeader.clut);
 	}
-	if (postHeader.userData && postHeader.userDataLen) {
-		// write user data
-		count = postHeader.userDataLen;
-		m_stream->Write(&count, postHeader.userData);
+	// save user data file position
+	userDataPos = m_stream->GetPos();
+	if (postHeader.userDataLen) {
+		if (postHeader.userData) {
+			// write user data
+			count = postHeader.userDataLen;
+			m_stream->Write(&count, postHeader.userData);
+		} else {
+			m_stream->SetPos(FSFromCurrent, count);
+		}
 	}
 
-	// renew levelLength
-	delete[] levelLength;
-	levelLength = new UINT32[m_nLevels];
-	for (UINT8 l = 0; l < m_nLevels; l++) levelLength[l] = 0;
-	m_levelLength = levelLength;
-
-	// write dummy levelLength
+	// save level length file position
 	m_levelLengthPos = m_stream->GetPos();
-	count = m_nLevels*WordBytes;
-	m_stream->Write(&count, m_levelLength);
-
-	// save current file position
-	SetBufferStartPos();
 }
 
 //////////////////////////////////////////////////////
@@ -149,14 +149,94 @@ CEncoder::~CEncoder() {
 }
 
 /////////////////////////////////////////////////////////////////////
+/// Increase post-header size and write new size into stream.
+/// @param preHeader An already filled in PGF pre-header
+/// It might throw an IOException.
+void CEncoder::UpdatePostHeaderSize(PGFPreHeader preHeader) THROW_ {
+	UINT64 curPos = m_stream->GetPos(); // end of user data
+	int count = PreHeaderSize;
+
+	// write preHeader
+	m_stream->SetPos(FSFromStart, m_startPosition);
+	preHeader.hSize = __VAL(preHeader.hSize);
+	m_stream->Write(&count, &preHeader);
+
+	m_stream->SetPos(FSFromStart, curPos);
+}
+
+/////////////////////////////////////////////////////////////////////
+/// Create level length data structure and write a place holder into stream.
+/// It might throw an IOException.
+/// @param levelLength A reference to an integer array, large enough to save the relative file positions of all PGF levels
+/// @return number of bytes written into stream
+UINT32 CEncoder::WriteLevelLength(UINT32*& levelLength) THROW_ {
+	// renew levelLength
+	delete[] levelLength;
+	levelLength = new(std::nothrow) UINT32[m_nLevels];
+	if (!levelLength) ReturnWithError(InsufficientMemory);
+	for (UINT8 l = 0; l < m_nLevels; l++) levelLength[l] = 0;
+	m_levelLength = levelLength;
+
+	// save level length file position
+	m_levelLengthPos = m_stream->GetPos();
+
+	// write dummy levelLength
+	int count = m_nLevels*WordBytes;
+	m_stream->Write(&count, m_levelLength);
+
+	// save current file position
+	SetBufferStartPos();
+
+	return count;
+}
+
+//////////////////////////////////////////////////////
+/// Write new levelLength into stream.
+/// It might throw an IOException.
+/// @return Written image bytes.
+UINT32 CEncoder::UpdateLevelLength() THROW_ {
+	UINT64 curPos = m_stream->GetPos(); // end of image
+
+	// set file pos to levelLength
+	m_stream->SetPos(FSFromStart, m_levelLengthPos);
+
+	if (m_levelLength) {
+	#ifdef PGF_USE_BIG_ENDIAN 
+		UINT32 levelLength;
+		int count = WordBytes;
+		
+		for (int i=0; i < m_currLevelIndex; i++) {
+			levelLength = __VAL(UINT32(m_levelLength[i]));
+			m_stream->Write(&count, &levelLength);
+		}
+	#else
+		int count = m_currLevelIndex*WordBytes;
+		
+		m_stream->Write(&count, m_levelLength);
+	#endif //PGF_USE_BIG_ENDIAN 
+	} else {
+		int count = m_currLevelIndex*WordBytes;
+		m_stream->SetPos(FSFromCurrent, count);
+	}
+
+	// begin of image
+	UINT32 retValue = UINT32(curPos - m_stream->GetPos());
+		
+	// restore file position
+	m_stream->SetPos(FSFromStart, curPos);
+
+	return retValue;
+}
+
+/////////////////////////////////////////////////////////////////////
 /// Partitions a rectangular region of a given subband.
 /// Partitioning scheme: The plane is partitioned in squares of side length LinBlockSize.
-/// Write wavelet coefficients into buffer.
+/// Write wavelet coefficients from subband into the input buffer of a macro block.
 /// It might throw an IOException.
 /// @param band A subband
 /// @param width The width of the rectangle
 /// @param height The height of the rectangle
-/// @param startPos The buffer position of the top left corner of the rectangular region
+/// @param startPos The absolute subband position of the top left corner of the rectangular region
 /// @param pitch The number of bytes in row of the subband
 void CEncoder::Partition(CSubband* band, int width, int height, int startPos, int pitch) THROW_ {
 	ASSERT(band);
@@ -223,46 +303,15 @@ void CEncoder::Partition(CSubband* band, int width, int height, int startPos, in
 /// Pad buffer with zeros and encode buffer.
 /// It might throw an IOException.
 void CEncoder::Flush() THROW_ {
-	// pad buffer with zeros
-	memset(&(m_currentBlock->m_value[m_currentBlock->m_valuePos]), 0, (BufferSize - m_currentBlock->m_valuePos)*DataTSize);
-	m_currentBlock->m_valuePos = BufferSize;
+	if (m_currentBlock->m_valuePos > 0) {
+		// pad buffer with zeros
+		memset(&(m_currentBlock->m_value[m_currentBlock->m_valuePos]), 0, (BufferSize - m_currentBlock->m_valuePos)*DataTSize);
+		m_currentBlock->m_valuePos = BufferSize;
 
-	// encode buffer
-	m_forceWriting = true;	// makes sure that the following EncodeBuffer is really written into the stream
-	EncodeBuffer(ROIBlockHeader(m_currentBlock->m_valuePos, true));
-}
-
-//////////////////////////////////////////////////////
-/// Write levelLength into header.
-/// @return number of bytes written into stream
-/// It might throw an IOException.
-UINT32 CEncoder::WriteLevelLength() THROW_ {
-	UINT64 curPos = m_stream->GetPos();
-	UINT32 retValue = UINT32(curPos - m_startPosition);
-
-	if (m_levelLength) {
-		// append levelLength to file, directly after post-header
-		// set file pos to levelLength
-		m_stream->SetPos(FSFromStart, m_levelLengthPos);
-	#ifdef PGF_USE_BIG_ENDIAN 
-		UINT32 levelLength;
-		int count = WordBytes;
-		
-		for (int i=0; i < m_currLevelIndex; i++) {
-			levelLength = __VAL(UINT32(m_levelLength[i]));
-			m_stream->Write(&count, &levelLength);
-		}
-	#else
-		int count = m_currLevelIndex*WordBytes;
-		
-		m_stream->Write(&count, m_levelLength);
-	#endif //PGF_USE_BIG_ENDIAN 
-
-		// restore file position
-		m_stream->SetPos(FSFromStart, curPos);
+		// encode buffer
+		m_forceWriting = true;	// makes sure that the following EncodeBuffer is really written into the stream
+		EncodeBuffer(ROIBlockHeader(m_currentBlock->m_valuePos, true));
 	}
-
-	return retValue;
 }
 
 /////////////////////////////////////////////////////////////////////
@@ -347,7 +396,7 @@ void CEncoder::WriteMacroBlock(CMacroBlock* block) THROW_ {
 	ASSERT(block);
 
 	ROIBlockHeader h = block->m_header;
-	UINT16 wordLen = UINT16(NumberOfWords(block->m_codePos)); ASSERT(wordLen <= BufferSize);
+	UINT16 wordLen = UINT16(NumberOfWords(block->m_codePos)); ASSERT(wordLen <= CodeBufferLen);
 	int count = sizeof(UINT16);
 	
 #ifdef TRACE
@@ -392,7 +441,8 @@ void CEncoder::WriteMacroBlock(CMacroBlock* block) THROW_ {
 	if (m_levelLength) {
 		// store level length
 		// EncodeBuffer has been called after m_lastLevelIndex has been updated
-		m_levelLength[m_currLevelIndex] += ComputeBufferLength();
+		ASSERT(m_currLevelIndex < m_nLevels);
+		m_levelLength[m_currLevelIndex] += (UINT32)ComputeBufferLength();
 		m_currLevelIndex = block->m_lastLevelIndex + 1;
 
 	}
@@ -510,7 +560,7 @@ void CEncoder::CMacroBlock::BitplaneEncode() {
 
 				// compute position of sigBits
 				wordPos = NumberOfWords(m_codePos + RLblockSizeLen + codeLen);
-				ASSERT(0 <= wordPos && wordPos < bufferSize);
+				ASSERT(0 <= wordPos && wordPos < CodeBufferLen);
 			} else {
 				// RL encoding of signBits wasn't efficient
 				// <0><signLen>_<signBits>_
@@ -523,7 +573,7 @@ void CEncoder::CMacroBlock::BitplaneEncode() {
 
 				// write signBits to m_codeBuffer
 				wordPos = NumberOfWords(m_codePos + RLblockSizeLen);
-				ASSERT(0 <= wordPos && wordPos < bufferSize);
+				ASSERT(0 <= wordPos && wordPos < CodeBufferLen);
 				codeLen = NumberOfWords(signLen);
 
 				for (UINT32 k=0; k < codeLen; k++) {
@@ -533,7 +583,7 @@ void CEncoder::CMacroBlock::BitplaneEncode() {
 
 			// write sigBits
 			// <sigBits>_
-			ASSERT(0 <= wordPos && wordPos < bufferSize);
+			ASSERT(0 <= wordPos && wordPos < CodeBufferLen);
 			refLen = NumberOfWords(sigLen);
 
 			for (UINT32 k=0; k < refLen; k++) {
@@ -545,7 +595,7 @@ void CEncoder::CMacroBlock::BitplaneEncode() {
 		// append refinement bitset (aligned to word boundary)
 		// _<refBits>
 		wordPos = NumberOfWords(m_codePos);
-		ASSERT(0 <= wordPos && wordPos < bufferSize);
+		ASSERT(0 <= wordPos && wordPos < CodeBufferLen);
 		refLen = NumberOfWords(bufferSize - sigLen);
 
 		for (UINT32 k=0; k < refLen; k++) {

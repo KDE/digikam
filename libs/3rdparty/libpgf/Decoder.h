@@ -37,6 +37,7 @@
 /////////////////////////////////////////////////////////////////////
 // Constants
 #define BufferLen			(BufferSize/WordWidth)	///< number of words per buffer
+#define CodeBufferLen		BufferSize				///< number of words in code buffer (CodeBufferLen > BufferLen)
 
 /////////////////////////////////////////////////////////////////////
 /// PGF decoder class.
@@ -73,7 +74,7 @@ class CDecoder {
 
 		ROIBlockHeader m_header;					///< block header
 		DataT  m_value[BufferSize];					///< output buffer of values with index m_valuePos
-		UINT32 m_codeBuffer[BufferSize];			///< input buffer for encoded bitstream
+		UINT32 m_codeBuffer[CodeBufferLen];			///< input buffer for encoded bitstream
 		UINT32 m_valuePos;							///< current position in m_value
 
 	private:
@@ -96,8 +97,12 @@ public:
 	/// @param header [out] A PGF header
 	/// @param postHeader [out] A PGF post-header
 	/// @param levelLength The location of the levelLength array. The array is allocated in this method. The caller has to delete this array.
+	/// @param userDataPos The stream position of the user data (metadata)
 	/// @param useOMP If true, then the decoder will use multi-threading based on openMP
-	CDecoder(CPGFStream* stream, PGFPreHeader& preHeader, PGFHeader& header, PGFPostHeader& postHeader, UINT32*& levelLength, bool useOMP = true) THROW_; // throws IOException
+	/// @param skipUserData If true, then user data is not read. In case of available user data, the file position is still returned in userDataPos.
+	CDecoder(CPGFStream* stream, PGFPreHeader& preHeader, PGFHeader& header, 
+		     PGFPostHeader& postHeader, UINT32*& levelLength, UINT64& userDataPos, 
+			 bool useOMP, bool skipUserData) THROW_; // throws IOException
 
 	/////////////////////////////////////////////////////////////////////
 	/// Destructor
@@ -106,13 +111,13 @@ public:
 	/////////////////////////////////////////////////////////////////////
 	/// Unpartitions a rectangular region of a given subband.
 	/// Partitioning scheme: The plane is partitioned in squares of side length LinBlockSize.
-	/// Write wavelet coefficients into buffer.
+	/// Read wavelet coefficients from the output buffer of a macro block.
 	/// It might throw an IOException.
 	/// @param band A subband
 	/// @param quantParam Dequantization value
 	/// @param width The width of the rectangle
 	/// @param height The height of the rectangle
-	/// @param startPos The buffer position of the top left corner of the rectangular region
+	/// @param startPos The relative subband position of the top left corner of the rectangular region
 	/// @param pitch The number of bytes in row of the subband
 	void Partition(CSubband* band, int quantParam, int width, int height, int startPos, int pitch) THROW_;
 
@@ -131,7 +136,7 @@ public:
 	UINT32 GetEncodedHeaderLength() const			{ return m_encodedHeaderLength; }
 
 	////////////////////////////////////////////////////////////////////
-	/// Reset stream position to beginning of PGF pre header
+	/// Reset stream position to beginning of PGF pre-header
 	void SetStreamPosToStart() THROW_				{ ASSERT(m_stream); m_stream->SetPos(FSFromStart, m_startPos); }
 
 	////////////////////////////////////////////////////////////////////
@@ -164,6 +169,14 @@ public:
 	/// It might throw an IOException.
 	void DecodeBuffer() THROW_;
 
+	/////////////////////////////////////////////////////////////////////
+	/// @return Stream
+	CPGFStream* GetStream()							{ return m_stream; }
+
+	/////////////////////////////////////////////////////////////////////
+	/// @return True if decoded macro blocks are available for processing
+	bool MacroBlocksAvailable() const				{ return m_macroBlocksAvailable > 1; }
+
 #ifdef __PGFROISUPPORT__
 	/////////////////////////////////////////////////////////////////////
 	/// Reads stream and decodes tile buffer
@@ -187,8 +200,8 @@ public:
 private:
 	void ReadMacroBlock(CMacroBlock* block) THROW_; ///< throws IOException
 
-	CPGFStream *m_stream;						///< input pgf stream
-	UINT64 m_startPos;							///< stream position at the beginning of the PGF pre header
+	CPGFStream *m_stream;						///< input PGF stream
+	UINT64 m_startPos;							///< stream position at the beginning of the PGF pre-header
 	UINT64 m_streamSizeEstimation;				///< estimation of stream size
 	UINT32 m_encodedHeaderLength;				///< stream offset from startPos to the beginning of the data part (highest level)
 

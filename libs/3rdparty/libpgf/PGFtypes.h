@@ -40,14 +40,14 @@
 //	Codec versions
 //
 // Version 2:	modified data structure PGFHeader (backward compatibility assured)
-// Version 3:	DataT: INT32 instead of INT16, allows 31 bit per pixel and channel (backward compatibility assured)
+// Version 4:	DataT: INT32 instead of INT16, allows 31 bit per pixel and channel (backward compatibility assured)
 // Version 5:	ROI, new block-reordering scheme (backward compatibility assured)
 // Version 6:	modified data structure PGFPreHeader: hSize (header size) is now a UINT32 instead of a UINT16 (backward compatibility assured)
 //
 //-------------------------------------------------------------------------------
-#define PGFCodecVersion		"6.11.42"			///< Major number
+#define PGFCodecVersion		"6.12.24"			///< Major number
 												///< Minor number: Year (2) Week (2)
-#define PGFCodecVersionID   0x061142            ///< Codec version ID to use for API check in client implementation
+#define PGFCodecVersionID   0x061224            ///< Codec version ID to use for API check in client implementation
 
 //-------------------------------------------------------------------------------
 //	Image constants
@@ -57,7 +57,6 @@
 #define NSubbands			4					///< number of subbands per level
 #define MaxChannels			8					///< maximum number of (color) channels
 #define DownsampleThreshold 3					///< if quality is larger than this threshold than downsampling is used
-#define DefaultBGColor		255					///< default background color is white
 #define ColorTableLen		256					///< size of color lookup table (clut)
 // version flags
 #define Version2			2					///< data structure PGFHeader of major version 2
@@ -92,7 +91,7 @@
 //-------------------------------------------------------------------------------
 enum Orientation { LL=0, HL=1, LH=2, HH=3 };
 
-/// general file structure
+/// general PGF file structure
 /// PGFPreHeaderV6 PGFHeader PGFPostHeader LevelLengths Level_n-1 Level_n-2 ... Level_0
 /// PGFPostHeader ::= [ColorTable] [UserData]
 /// LevelLengths  ::= UINT32[nLevels]

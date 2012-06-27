@@ -33,7 +33,7 @@
 
 class CEncoder;
 class CDecoder;
-class CROIs;
+class CRoiIndices;
 
 //////////////////////////////////////////////////////////////////////
 /// PGF wavelet channel subband class.
@@ -65,7 +65,6 @@ public:
 	/// Write wavelet coefficients into buffer.
 	/// It might throw an IOException.
 	/// @param encoder An encoder instance
-	/// @param quant A quantization value (linear scalar quantization)
 	/// @param tile True if just a rectangular region is extracted, false if the entire subband is extracted.
 	/// @param tileX Tile index in x-direction
 	/// @param tileY Tile index in y-direction
@@ -136,13 +135,9 @@ public:
 
 #ifdef __PGFROISUPPORT__
 	/////////////////////////////////////////////////////////////////////
-	/// Return data buffer line width.
-	UINT32 BufferWidth() const	{ return m_dataWidth; }
-
-	/////////////////////////////////////////////////////////////////////
 	/// Set data buffer position to given position + one row.
 	/// @param pos Given position
-	void IncBuffRow(UINT32 pos)	{ m_dataPos = pos + m_dataWidth; }
+	void IncBuffRow(UINT32 pos)	{ m_dataPos = pos + BufferWidth(); }
 
 #endif
 
@@ -155,64 +150,29 @@ private:
 	UINT32 GetBuffPos() const			{ return m_dataPos; }
 
 #ifdef __PGFROISUPPORT__
-//	void IncBuffPos(UINT32 x, UINT32 y)	{ ASSERT(x < m_width); ASSERT(y < m_height); m_dataPos += y*m_width + x; }
+	UINT32 BufferWidth() const			{ return m_ROI.Width(); }
 	void TilePosition(UINT32 tileX, UINT32 tileY, UINT32& left, UINT32& top, UINT32& w, UINT32& h) const;
-	void SetROI(CROIs* roi)				{ ASSERT(roi); m_ROIs = roi; }
-	void InitBuffPos(UINT32 left = 0, UINT32 top = 0)	{ m_dataPos = top*m_dataWidth + left; ASSERT(m_dataPos < m_size); }
+	const PGFRect& GetROI() const		{ return m_ROI; }
+	void SetNTiles(UINT32 nTiles)		{ m_nTiles = nTiles; }
+	void SetROI(const PGFRect& roi)		{ ASSERT(roi.right <= m_width); ASSERT(roi.bottom <= m_height); m_ROI = roi; }
+	void InitBuffPos(UINT32 left = 0, UINT32 top = 0)	{ m_dataPos = top*BufferWidth() + left; ASSERT(m_dataPos < m_size); }
 #else
 	void InitBuffPos()					{ m_dataPos = 0; }
 #endif
-
-//	void PutData(INT16* buff, UINT32 width, bool low);
-//	void GetData(INT16* buff, UINT32 width, bool low);
-//	UINT32 GetSize() const				{ return m_size; }
-//	void SetWidth(UINT32 w)				{ m_width = w; }
-//	void SetHeight(UINT32 h)			{ m_height = h; }
-//	void SetSize(UINT32 s)				{ m_size = s; }
-//	void SetLevel(int l)				{ m_level = l; }
-//	void SetOrientation(Orientation o)	{ m_orientation = o; }
 
 private:
 	UINT32 m_width;					///< width in pixels
 	UINT32 m_height;				///< height in pixels
 	UINT32 m_size;					///< size of data buffer m_data
 	int m_level;					///< recursion level
-	Orientation m_orientation;		///< 0=LL, 1=HL, 2=LH, 3=HH L=lowpass filtered , H=highpass filterd
+	Orientation m_orientation;		///< 0=LL, 1=HL, 2=LH, 3=HH L=lowpass filtered, H=highpass filterd
 	UINT32 m_dataPos;				///< current position in m_data
 	DataT* m_data;					///< buffer
 
 #ifdef __PGFROISUPPORT__
-	CROIs*	 m_ROIs;				///< ROI information
-	UINT32   m_dataWidth;			///< row width of the data buffer
+	PGFRect m_ROI;					///< region of interest
+	UINT32	m_nTiles;				///< number of tiles in one dimension in this subband
 #endif
 };
-/*
-///////////////////////////////////////////////////////////
-// store line of wavelet coefficients
-// because the wavelet coefficients in buff are interleaved
-// low determines whether the lowpass or highpass data is stored
-inline void CSubband::PutData(INT16* buff, int width, bool low) {
-	ASSERT(m_dataPos + width/2 <= (UINT32)m_size);
-	int start = (low) ? 0 : 1;
-
-	for (int i=start; i < width; i += 2) {
-		m_data[m_dataPos] = buff[i];
-		m_dataPos++;
-	}
-}
-
-//////////////////////////////////////////////////////////////
-// get line of wavelet coefficients
-// if low is true get the even coefficients in buff
-inline void CSubband::GetData(INT16* buff, int width, bool low) {
-	ASSERT(m_dataPos + width/2 <= (UINT32)m_size);
-	int start = (low) ? 0 : 1;
-	//if (low) start = 0; else start = 1;
-	for (int i=start; i < width; i += 2) {
-		buff[i] = m_data[m_dataPos];
-		m_dataPos++;
-	}
-}
-*/
 
 #endif //PGF_SUBBAND_H
