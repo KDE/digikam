@@ -55,14 +55,24 @@
 //  
 
 // Constants
-#define CodeBufferBitLen		(BufferSize*WordWidth)	// max number of bits in m_codeBuffer
-#define MaxCodeLen				((1 << RLblockSizeLen) - 1)	// max length of RL encoded block
+#define CodeBufferBitLen		(CodeBufferLen*WordWidth)	///< max number of bits in m_codeBuffer
+#define MaxCodeLen				((1 << RLblockSizeLen) - 1)	///< max length of RL encoded block
 
 /////////////////////////////////////////////////////////////////////
-// Constructor
-// Read pre-header, header, and levelLength
-// It might throw an IOException.
-CDecoder::CDecoder(CPGFStream* stream, PGFPreHeader& preHeader, PGFHeader& header, PGFPostHeader& postHeader, UINT32*& levelLength, bool useOMP /*= true*/) THROW_
+/// Constructor
+/// Read pre-header, header, and levelLength
+/// It might throw an IOException.
+/// @param stream A PGF stream
+/// @param preHeader [out] A PGF pre-header
+/// @param header [out] A PGF header
+/// @param postHeader [out] A PGF post-header
+/// @param levelLength The location of the levelLength array. The array is allocated in this method. The caller has to delete this array.
+/// @param userDataPos The stream position of the user data (metadata)
+/// @param useOMP If true, then the decoder will use multi-threading based on openMP
+/// @param skipUserData If true, then user data is not read. In case of available user data, the file position is still returned in userDataPos.
+CDecoder::CDecoder(CPGFStream* stream, PGFPreHeader& preHeader, PGFHeader& header, 
+				   PGFPostHeader& postHeader, UINT32*& levelLength, UINT64& userDataPos,
+				   bool useOMP, bool skipUserData) THROW_
 : m_stream(stream)
 , m_startPos(0)
 , m_streamSizeEstimation(0)
@@ -90,7 +100,8 @@ CDecoder::CDecoder(CPGFStream* stream, PGFPreHeader& preHeader, PGFHeader& heade
 #endif
 
 		// create macro block array
-		m_macroBlocks = new CMacroBlock*[m_macroBlockLen];
+		m_macroBlocks = new(std::nothrow) CMacroBlock*[m_macroBlockLen];
+		if (!m_macroBlocks) ReturnWithError(InsufficientMemory);
 		for (int i=0; i < m_macroBlockLen; i++) m_macroBlocks[i] = new CMacroBlock(this);
 		m_currentBlock = m_macroBlocks[m_currentBlockIndex];
 	} else {
@@ -145,7 +156,7 @@ CDecoder::CDecoder(CPGFStream* stream, PGFPreHeader& preHeader, PGFHeader& heade
 		int size = preHeader.hSize - HeaderSize;
 
 		if (size > 0) {
-			// read post header
+			// read post-header
 			if (header.mode == ImageModeIndexedColor) {
 				ASSERT((size_t)size >= ColorTableSize);
 				// read color table
@@ -156,20 +167,26 @@ CDecoder::CDecoder(CPGFStream* stream, PGFPreHeader& preHeader, PGFHeader& heade
 			}
 
 			if (size > 0) {
-				// create user data memory block
+				userDataPos = m_stream->GetPos();
 				postHeader.userDataLen = size;
-				postHeader.userData = new(std::nothrow) UINT8[postHeader.userDataLen];
-				if (!postHeader.userData) ReturnWithError(InsufficientMemory);
+				if (skipUserData) {
+					Skip(size);
+				} else {
+					// create user data memory block
+					postHeader.userData = new(std::nothrow) UINT8[postHeader.userDataLen];
+					if (!postHeader.userData) ReturnWithError(InsufficientMemory);
 
-				// read user data
-				count = expected = postHeader.userDataLen;
-				m_stream->Read(&count, postHeader.userData);
-				if (count != expected) ReturnWithError(MissingData);
+					// read user data
+					count = expected = postHeader.userDataLen;
+					m_stream->Read(&count, postHeader.userData);
+					if (count != expected) ReturnWithError(MissingData);
+				}
 			}
 		}
 
 		// create levelLength
-		levelLength = new UINT32[header.nLevels];
+		levelLength = new(std::nothrow) UINT32[header.nLevels];
+		if (!levelLength) ReturnWithError(InsufficientMemory);
 
 		// read levelLength
 		count = expected = header.nLevels*WordBytes;
@@ -223,13 +240,13 @@ UINT32 CDecoder::ReadEncodedData(UINT8* target, UINT32 len) const THROW_ {
 /////////////////////////////////////////////////////////////////////
 /// Unpartitions a rectangular region of a given subband.
 /// Partitioning scheme: The plane is partitioned in squares of side length LinBlockSize.
-/// Write wavelet coefficients into buffer.
+/// Read wavelet coefficients from the output buffer of a macro block.
 /// It might throw an IOException.
 /// @param band A subband
 /// @param quantParam Dequantization value
 /// @param width The width of the rectangle
 /// @param height The height of the rectangle
-/// @param startPos The buffer position of the top left corner of the rectangular region
+/// @param startPos The relative subband position of the top left corner of the rectangular region
 /// @param pitch The number of bytes in row of the subband
 void CDecoder::Partition(CSubband* band, int quantParam, int width, int height, int startPos, int pitch) THROW_ {
 	ASSERT(band);

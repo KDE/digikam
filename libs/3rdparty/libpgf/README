@@ -1,0 +1,54 @@
+/*
+ * The Progressive Graphics File; http://www.libpgf.org
+ * 
+ * $Date: 2006-05-18 16:03:32 +0200 (Thu, 18 May 2006) $
+ * $Revision: 194 $
+ * 
+ * This file Copyright (C) 2006 xeraina GmbH, Switzerland
+ * 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU LESSER GENERAL PUBLIC LICENSE
+ * as published by the Free Software Foundation; either version 2.1
+ * of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ */
+ 
+ The Progressive Graphics File
+ =============================
+ 
+ For more information see http://www.libpgf.org. There you can find some
+ documents concerning this progressive graphic file codec.
+ 
+ This project is hosted on the Sourceforge.net platform. For support and
+ questions, please use the installed mailing list and forums there. 
+ The Sourceforge URL of our project is: http://sourceforge.net/projects/libpgf
+ 
+ =============================
+ 
+Version 6.12.24, (Thu, 14 June 2012) 
+ 
+Release Notes
+-------------
+ 
+1. The new version is a replacement of version 6.11.42. 
+   In case you use the ROI encoding scheme, we strongly encourage using version 6.12.24 instead of version 6.11.42.
+ 
+2. This version fixes some decoder bugs, sometimes seen in ROI decoding.
+ 
+3. This version allows a simpler user-data handling, especially for uncached metadata. The following two methods
+   in the class PGFimage are designed for this purpose:
+
+	GetUserDataPos() returns in an opened PGF image the stream position of the user data area.								
+
+	WriteImage() encodes and writes the image at the current stream position. This method is called after
+	WriteHeader(). In case you want to write uncached metadata into the stream, then do that after WriteHeader() 
+	and just before WriteImage(). If you are not interested in writing uncached metadata, then you usually use
+	Write() instead of WriteImage(). WriteHeader() and WriteImage() are called inside of Write(). 
