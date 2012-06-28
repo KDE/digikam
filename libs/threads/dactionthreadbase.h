@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef KPACTIONTHREADBASE_H
-#define KPACTIONTHREADBASE_H
+#ifndef DACTIONTHREADBASE_H
+#define DACTIONTHREADBASE_H
 
 // Qt includes
 
@@ -31,8 +31,8 @@
 
 //Local includes
 
-#include "kpweaverobserver.h"
-#include "kipiplugins_export.h"
+#include "dweaverobserver.h"
+#include "digikam_export.h"
 
 namespace ThreadWeaver
 {
@@ -41,17 +41,17 @@ namespace ThreadWeaver
 
 using namespace ThreadWeaver;
 
-namespace KIPIPlugins
+namespace Digikam
 {
 
-class KIPIPLUGINS_EXPORT KPActionThreadBase : public QThread
+class DIGIKAM_EXPORT DActionThreadBase : public QThread
 {
     Q_OBJECT
 
 public:
 
-    KPActionThreadBase(QObject* const parent=0);
-    ~KPActionThreadBase();
+    DActionThreadBase(QObject* const parent=0);
+    ~DActionThreadBase();
 
     void cancel();
     void finish();
@@ -67,10 +67,10 @@ protected Q_SLOTS:
 
 private:
 
-    class KPActionThreadBasePriv;
-    KPActionThreadBasePriv* const d;
+    class DActionThreadBasePriv;
+    DActionThreadBasePriv* const d;
 };
 
-}  // namespace KIPIPlugins
+}  // namespace Digikam
 
-#endif // KPACTIONTHREADBASE_H
+#endif // DACTIONTHREADBASE_H

@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef KPWEAVEROBSERVER_H
-#define KPWEAVEROBSERVER_H
+#ifndef DWEAVEROBSERVER_H
+#define DWEAVEROBSERVER_H
 
 // KDE includes
 
@@ -32,24 +32,24 @@
 
 // Local includes
 
-#include "kipiplugins_export.h"
+#include "digikam_export.h"
 
 using namespace ThreadWeaver;
 
-namespace KIPIPlugins
+namespace Digikam
 {
 
-/** KPWeaverObserver is a simple wrapper to plug on the ActionThread class to
+/** DWeaverObserver is a simple wrapper to plug on the ActionThread class to
     prints debug messages when signals are received.
 */
-class KIPIPLUGINS_EXPORT KPWeaverObserver : public WeaverObserver
+class DIGIKAM_EXPORT DWeaverObserver : public WeaverObserver
 {
     Q_OBJECT
 
 public:
 
-    KPWeaverObserver(QObject* const parent=0);
-    ~KPWeaverObserver();
+    DWeaverObserver(QObject* const parent=0);
+    ~DWeaverObserver();
 
 protected Q_SLOTS:
 
@@ -60,6 +60,6 @@ protected Q_SLOTS:
     void slotThreadExited(ThreadWeaver::Thread*);
 };
 
-}  // namespace KIPIPlugins
+}  // namespace Digikam
 
-#endif // KPWEAVEROBSERVER_H
+#endif // DWEAVEROBSERVER_H

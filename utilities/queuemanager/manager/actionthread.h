@@ -38,14 +38,12 @@
 #include "batchtool.h"
 #include "actions.h"
 #include "drawdecoding.h"
-#include "kpactionthreadbase.h"
-
-using namespace KIPIPlugins;
+#include "dactionthreadbase.h"
 
 namespace Digikam
 {
 
-class ActionThread : public KPActionThreadBase
+class ActionThread : public DActionThreadBase
 {
     Q_OBJECT
 
@@ -96,10 +94,11 @@ protected:
 
 private:
 
-    AssignedBatchTools m_item;
+    AssignedBatchTools              m_item;
     ActionThread::ActionThreadPriv* m_d;
 };
 
 }  // namespace Digikam
 
 #endif /* ACTIONTHREAD_H */
+

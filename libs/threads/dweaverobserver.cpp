@@ -20,16 +20,16 @@
  *
  * ============================================================ */
 
-#include "kpweaverobserver.moc"
+#include "dweaverobserver.moc"
 
 // KDE includes
 
 #include <kdebug.h>
 
-namespace KIPIPlugins
+namespace Digikam
 {
 
-KPWeaverObserver::KPWeaverObserver(QObject* const parent)
+DWeaverObserver::DWeaverObserver(QObject* const parent)
     : WeaverObserver(parent)
 {
     connect(this, SIGNAL(weaverStateChanged(ThreadWeaver::State*)),
@@ -48,33 +48,33 @@ KPWeaverObserver::KPWeaverObserver(QObject* const parent)
             this, SLOT(slotThreadExited(ThreadWeaver::Thread*)));
 }
 
-KPWeaverObserver::~KPWeaverObserver()
+DWeaverObserver::~DWeaverObserver()
 {
 }
 
-void KPWeaverObserver::slotWeaverStateChanged(State* state)
+void DWeaverObserver::slotWeaverStateChanged(State* state)
 {
-    kDebug() << "KPWeaverObserver: thread state changed to " << state->stateName();
+    kDebug() << "DWeaverObserver: thread state changed to " << state->stateName();
 }
 
-void KPWeaverObserver::slotThreadStarted(Thread* th)
+void DWeaverObserver::slotThreadStarted(Thread* th)
 {
-    kDebug() << "KPWeaverObserver: thread " << th->id()  <<" started";
+    kDebug() << "DWeaverObserver: thread " << th->id()  <<" started";
 }
 
-void KPWeaverObserver::slotThreadBusy(Thread* th, Job*)
+void DWeaverObserver::slotThreadBusy(Thread* th, Job*)
 {
-    kDebug() << "KPWeaverObserver: thread " << th->id()  << " busy";
+    kDebug() << "DWeaverObserver: thread " << th->id()  << " busy";
 }
 
-void KPWeaverObserver::slotThreadSuspended(Thread* th )
+void DWeaverObserver::slotThreadSuspended(Thread* th )
 {
-    kDebug() << "KPWeaverObserver: thread " << th->id()  << " suspended";
+    kDebug() << "DWeaverObserver: thread " << th->id()  << " suspended";
 }
 
-void KPWeaverObserver::slotThreadExited(Thread* th)
+void DWeaverObserver::slotThreadExited(Thread* th)
 {
-    kDebug() << "KPWeaverObserver: thread " << th->id()  << " exited";
+    kDebug() << "DWeaverObserver: thread " << th->id()  << " exited";
 }
 
-}  // namespace KIPIPlugins
+}  // namespace Digikam

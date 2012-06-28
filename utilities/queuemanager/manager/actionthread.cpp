@@ -51,8 +51,6 @@ extern "C"
 #include "config-digikam.h"
 #include "dimg.h"
 
-using namespace KIPIPlugins;
-
 namespace Digikam
 {
 
@@ -68,21 +66,24 @@ public:
     {
     }
 
-    bool           cancel;
-    bool           exifSetOrientation;
-    bool           createNewVersion;
+    bool         cancel;
+    bool         exifSetOrientation;
+    bool         createNewVersion;
 
-    KUrl           workingUrl;
+    KUrl         workingUrl;
 
-    BatchTool*     tool;
+    BatchTool*   tool;
 
-    DRawDecoding   rawDecodingSettings;
+    DRawDecoding rawDecodingSettings;
+
+    ActionData   ad;
 };
 
-Task::Task(QObject* const parent, const AssignedBatchTools& item, ActionThread::ActionThreadPriv* const d): Job(parent)
+Task::Task(QObject* const parent, const AssignedBatchTools& item, ActionThread::ActionThreadPriv* const d)
+    : Job(parent)
 {
     m_item = item;
-    m_d = d;
+    m_d    = d;
 }
 
 Task::~Task()
@@ -100,10 +101,9 @@ void Task::run()
     ad1.status  = ActionData::BatchStarted;
     emit signalStarting(ad1);
 
-
     // Loop with all batch tools operations to apply on item.
 
-    m_d->cancel        = false;
+    m_d->cancel          = false;
     int        index   = 0;
     bool       success = false;
     KUrl       outUrl  = m_item.m_itemUrl;
@@ -113,11 +113,11 @@ void Task::run()
     QString    errMsg;
 
     for (BatchToolMap::const_iterator it = m_item.m_toolsMap.constBegin();
-            !m_d->cancel && (it != m_item.m_toolsMap.constEnd()) ; ++it)
+         !m_d->cancel && (it != m_item.m_toolsMap.constEnd()) ; ++it)
     {
         index                      = it.key();
         BatchToolSet set           = it.value();
-        m_d->tool                    = set.tool;
+        m_d->tool                  = set.tool;
         BatchToolSettings settings = set.settings;
         inUrl                      = outUrl;
 
@@ -128,7 +128,6 @@ void Task::run()
         ad2.status  = ActionData::TaskStarted;
         ad2.index   = index;
         emit signalFinished(ad2);
-
 
         m_d->tool->setImageData(tmpImage);
         m_d->tool->setWorkingUrl(m_d->workingUrl);
@@ -213,11 +212,12 @@ void Task::run()
     {
         unlink(QFile::encodeName((*it).toLocalFile()));
     }
-
 }
 
+// -------------------------------------------------------------------------------------------------
+
 ActionThread::ActionThread(QObject* const parent)
-    : KPActionThreadBase(parent), d(new ActionThreadPriv)
+    : DActionThreadBase(parent), d(new ActionThreadPriv)
 {
     qRegisterMetaType<ActionData>();
 }
@@ -246,24 +246,25 @@ void ActionThread::setRawDecodingSettings(const DRawDecoding& settings)
     d->rawDecodingSettings = settings;
 }
 
-
 void ActionThread::processFile(const AssignedBatchTools& item)
 {
-    JobCollection* collection =  new JobCollection();
-    Task* t = new Task(this, item, d);
+    JobCollection* collection = new JobCollection();
+    Task* t                   = new Task(this, item, d);
+
     connect(t, SIGNAL(signalStarting(Digikam::ActionData)),
             this, SIGNAL(starting(Digikam::ActionData)));
 
     connect(t, SIGNAL(signalFinished(Digikam::ActionData)),
             this, SIGNAL(finished(Digikam::ActionData)));
+
     collection->addJob(t);
     appendJob(collection);
 }
 
 void ActionThread::cancel()
 {
-    d->cancel  = true;
-    KPActionThreadBase::cancel();
+    d->cancel = true;
+    DActionThreadBase::cancel();
 }
 
 }  // namespace Digikam

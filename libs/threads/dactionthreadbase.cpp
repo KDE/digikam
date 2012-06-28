@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "kpactionthreadbase.moc"
+#include "dactionthreadbase.moc"
 
 // Qt includes
 
@@ -44,14 +44,14 @@
 
 using namespace Solid;
 
-namespace KIPIPlugins
+namespace Digikam
 {
 
-class KPActionThreadBase::KPActionThreadBasePriv
+class DActionThreadBase::DActionThreadBasePriv
 {
 public:
 
-    KPActionThreadBasePriv()
+    DActionThreadBasePriv()
     {
         running       = false;
         weaverRunning = false;
@@ -67,21 +67,21 @@ public:
     QList<JobCollection*> todo;
 
     Weaver*               weaver;
-    KPWeaverObserver*     log;
+    DWeaverObserver*      log;
 };
 
-KPActionThreadBase::KPActionThreadBase(QObject* const parent)
-    : QThread(parent), d(new KPActionThreadBasePriv)
+DActionThreadBase::DActionThreadBase(QObject* const parent)
+    : QThread(parent), d(new DActionThreadBasePriv)
 {
     const int maximumNumberOfThreads = qMax(Device::listFromType(DeviceInterface::Processor).count(), 1);
-    d->log                           = new KPWeaverObserver(this);
+    d->log                           = new DWeaverObserver(this);
     d->weaver                        = new Weaver(this);
     d->weaver->registerObserver(d->log);
     d->weaver->setMaximumNumberOfThreads(maximumNumberOfThreads);
     kDebug() << "Starting Main Thread";
 }
 
-KPActionThreadBase::~KPActionThreadBase()
+DActionThreadBase::~DActionThreadBase()
 {
     kDebug() << "calling action thread destructor";
     // cancel the thread
@@ -94,7 +94,7 @@ KPActionThreadBase::~KPActionThreadBase()
     delete d;
 }
 
-void KPActionThreadBase::slotFinished()
+void DActionThreadBase::slotFinished()
 {
     kDebug() << "Finish Main Thread";
     emit QThread::finished();
@@ -102,7 +102,7 @@ void KPActionThreadBase::slotFinished()
     d->condVarJobs.wakeAll();
 }
 
-void KPActionThreadBase::cancel()
+void DActionThreadBase::cancel()
 {
     kDebug() << "Cancel Main Thread";
     QMutexLocker lock(&d->mutex);
@@ -114,19 +114,19 @@ void KPActionThreadBase::cancel()
     d->condVarJobs.wakeAll();
 }
 
-void KPActionThreadBase::finish()
+void DActionThreadBase::finish()
 {
     d->weaver->finish();
 }
 
-void KPActionThreadBase::appendJob(JobCollection* const job)
+void DActionThreadBase::appendJob(JobCollection* const job)
 {
     QMutexLocker lock(&d->mutex);
     d->todo << job;
     d->condVarJobs.wakeAll();
 }
 
-void KPActionThreadBase::run()
+void DActionThreadBase::run()
 {
     d->running       = true;
     d->weaverRunning = false;
@@ -164,4 +164,4 @@ void KPActionThreadBase::run()
     kDebug() << "Exiting Action Thread";
 }
 
-}  // namespace KIPIPlugins
+}  // namespace Digikam
