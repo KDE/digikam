@@ -1335,7 +1335,8 @@ void DigikamView::slotAlbumWriteMetadata()
     {
         return;
     }
-    new MetadataSynchronizer(album, MetadataSynchronizer::WriteFromDatabaseToFile);
+    MetadataSynchronizer* tool = new MetadataSynchronizer(album, MetadataSynchronizer::WriteFromDatabaseToFile);
+    tool->start();
 }
 
 void DigikamView::slotAlbumReadMetadata()
@@ -1346,19 +1347,22 @@ void DigikamView::slotAlbumReadMetadata()
     {
         return;
     }
-    new MetadataSynchronizer(album, MetadataSynchronizer::ReadFromFileToDatabase);
+    MetadataSynchronizer* tool = new MetadataSynchronizer(album, MetadataSynchronizer::ReadFromFileToDatabase);
+    tool->start();
 }
 
 void DigikamView::slotImageWriteMetadata()
 {
     ImageInfoList selected = d->iconView->selectedImageInfos();
-    new MetadataSynchronizer(selected, MetadataSynchronizer::WriteFromDatabaseToFile);
+    MetadataSynchronizer* tool = new MetadataSynchronizer(selected, MetadataSynchronizer::WriteFromDatabaseToFile);
+    tool->start();
 }
 
 void DigikamView::slotImageReadMetadata()
 {
     ImageInfoList selected = d->iconView->selectedImageInfos();
-    new MetadataSynchronizer(selected, MetadataSynchronizer::ReadFromFileToDatabase);
+    MetadataSynchronizer* tool = new MetadataSynchronizer(selected, MetadataSynchronizer::ReadFromFileToDatabase);
+    tool->start();
 }
 
 // ----------------------------------------------------------------
