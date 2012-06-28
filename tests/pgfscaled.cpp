@@ -45,6 +45,7 @@ int main(int argc, char** argv)
         return -1;
     }
 
+    kDebug() << "Using LibPGF version: " << libPGFVersion();
     QImage img;
 
     // Write PGF file.
