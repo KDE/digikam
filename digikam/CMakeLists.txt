@@ -84,6 +84,7 @@ TARGET_LINK_LIBRARIES(digikamcore
         ${KDE4_KDEUI_LIBS}
         ${KDE4_KUTILS_LIBS}
         ${KDE4_SOLID_LIBS}
+	${KDE4_THREADWEAVER_LIBRARIES}
 
         ${JPEG_LIBRARIES}
         ${TIFF_LIBRARIES}
@@ -295,6 +296,8 @@ TARGET_LINK_LIBRARIES(digikam
         digikamdatabase
         advancedrename
         queuemanager
+	${KDE4_THREADWEAVER_LIBRARIES}
+
         cameragui
 
         # See B.K.O #258931: libgphoto2 library must be the last arg for linker.
