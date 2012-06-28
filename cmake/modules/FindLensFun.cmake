@@ -34,6 +34,7 @@ else (LENSFUN_LIBRARIES AND LENSFUN_INCLUDE_DIRS)
       ${_lensfunIncDir}
       /opt/local/include
       /sw/include
+    PATH_SUFFIXES lensfun
   )
 
   find_library(LENSFUN_LIBRARY
