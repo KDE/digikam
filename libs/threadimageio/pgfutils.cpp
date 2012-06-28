@@ -118,7 +118,7 @@ bool writePGFImageData(const QImage& image, QByteArray& data, int quality)
 
         QImage img;
 
-        // No need Alpha to optimize space on DB.
+        // Convert image with Alpha channel.
         if (image.format() != QImage::Format_ARGB32)
         {
             img = image.convertToFormat(QImage::Format_ARGB32);
@@ -126,13 +126,13 @@ bool writePGFImageData(const QImage& image, QByteArray& data, int quality)
         else
         {
             img = image;
-        }        
+        }
 
         CPGFImage pgfImg;
         PGFHeader header;
         header.width                = img.width();
         header.height               = img.height();
-        header.nLevels              = 0;           // Auto.
+        header.nLevels              = 0;            // Auto.
         header.quality              = quality;
         header.bpp                  = img.depth();
         header.channels             = 4;
