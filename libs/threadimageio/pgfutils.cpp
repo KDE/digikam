@@ -66,7 +66,7 @@ bool readPGFImageData(const QByteArray& data, QImage& img)
 
         CPGFImage        pgfImg;
         // NOTE: see B.K.O #273765 : Loading PGF thumbs with OpenMP support through a separated thread do not work properlly with libppgf 6.11.24
-        // pgfImg.ConfigureDecoder(false);
+        pgfImg.ConfigureDecoder(false, false);
 
         pgfImg.Open(&stream);
 
@@ -132,11 +132,12 @@ bool writePGFImageData(const QImage& image, QByteArray& data, int quality)
         PGFHeader header;
         header.width                = img.width();
         header.height               = img.height();
-        header.nLevels              = 0;            // Auto.
+        header.nLevels              = 0;             // Auto.
         header.quality              = quality;
         header.bpp                  = img.depth();
         header.channels             = 4;
         header.mode                 = ImageModeRGBA;
+        header.usedBitsPerChannel   = 0;             // Auto
 
 #ifdef PGFCodecVersionID
 #   if PGFCodecVersionID < 0x061142
@@ -147,7 +148,7 @@ bool writePGFImageData(const QImage& image, QByteArray& data, int quality)
 #endif
         pgfImg.SetHeader(header);
         // NOTE: see B.K.O #273765 : Loading PGF thumbs with OpenMP support through a separated thread do not work properlly with libppgf 6.11.24
-        // pgfImg.ConfigureEncoder(false);
+        pgfImg.ConfigureEncoder(false, false);
 
         if (QSysInfo::ByteOrder == QSysInfo::BigEndian)
         {
