@@ -39,7 +39,9 @@
 #include "actions.h"
 #include "drawdecoding.h"
 #include "kpactionthreadbase.h"
+
 using namespace KIPIPlugins;
+
 namespace Digikam
 {
 
@@ -96,10 +98,8 @@ private:
 
     AssignedBatchTools m_item;
     ActionThread::ActionThreadPriv* m_d;
-
 };
 
 }  // namespace Digikam
 
 #endif /* ACTIONTHREAD_H */
-

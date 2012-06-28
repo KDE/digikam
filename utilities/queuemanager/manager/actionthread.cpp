@@ -45,11 +45,14 @@ extern "C"
 #include <kdebug.h>
 #include <threadweaver/ThreadWeaver.h>
 #include <threadweaver/JobCollection.h>
+
 // Local includes
 
 #include "config-digikam.h"
 #include "dimg.h"
+
 using namespace KIPIPlugins;
+
 namespace Digikam
 {
 
@@ -74,8 +77,6 @@ public:
     BatchTool*     tool;
 
     DRawDecoding   rawDecodingSettings;
-
-    ActionData	    ad;
 };
 
 Task::Task(QObject* const parent, const AssignedBatchTools& item, ActionThread::ActionThreadPriv* const d): Job(parent)
@@ -102,7 +103,7 @@ void Task::run()
 
     // Loop with all batch tools operations to apply on item.
 
-    m_d->cancel          = false;
+    m_d->cancel        = false;
     int        index   = 0;
     bool       success = false;
     KUrl       outUrl  = m_item.m_itemUrl;
@@ -266,4 +267,3 @@ void ActionThread::cancel()
 }
 
 }  // namespace Digikam
-
