@@ -275,3 +275,19 @@ TARGET_LINK_LIBRARIES(loadpgfdata ${OPENMP_LDFLAGS} ${KDE4_KIO_LIBS} ${QT_QTCORE
 IF(PGF_FOUND)
     TARGET_LINK_LIBRARIES(loadpgfdata ${PGF_LIBRARIES})
 ENDIF(PGF_FOUND)
+
+#------------------------------------------------------------------------
+
+IF(GLIB2_FOUND)
+    SET(testlensfuniface_SRCS testlensfuniface.cpp)
+    KDE4_ADD_EXECUTABLE(testlensfuniface NOGUI ${testlensfuniface_SRCS})
+    TARGET_LINK_LIBRARIES(testlensfuniface
+                          digikamcore
+                          ${QT_QTCORE_LIBRARY}
+                          ${KDE4_KDECORE_LIBS}
+                          ${KEXIV2_LIBRARIES}
+
+                          # To link under Solaris (see B.K.O #274484)
+                          ${MATH_LIBRARY}
+                     )
+ENDIF(GLIB2_FOUND)

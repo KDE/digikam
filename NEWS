@@ -3,6 +3,10 @@ digiKam 2.7.0 - Release date: 2012-07-08
 
 NEW FEATURES:
 
+General : Update internal Libraw library to last 0.14.7.
+          New cameras supported: Canon 5D Mark III, G1 X, 1D X and Powershot SX200; Nikon D4,D800/D800E and D3200;
+          Fuji X-S1 and HS30EXR; Casio EX-Z8; Olympus E-M5; Panasonic GF5; Sony NEX-F3, SLT-A37 and SLT-A57; Samsung NX20 and NX210;
+          Support for updated Samsung NX200 firmware.
 General : Update internal LensFun library to last 0.2.6 release.
 General : Update internal LibPGF library to last 6.12.24 release.
 
@@ -26,4 +30,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 016 ==> 225443 - Fileview preview panning shortcut back to old.
 017 ==> 302562 - Rename "View Image" to "Preview".
 018 ==> 280142 - Crash in libtiff when files are edited.
-019 ==> 
+019 ==> 300848 - "Reread Metadata From Image" is broken.
+020 ==> 302592 - digiKam crashes when I open the Tab "Search Geomap".
+021 ==> 
