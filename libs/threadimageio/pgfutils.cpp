@@ -43,6 +43,12 @@ extern "C"
 
 #include <kdebug.h>
 
+// Windows includes
+
+#ifdef WIN32
+#include <windows.h>
+#endif
+
 // LibPGF includes
 
 #include "PGFimage.h"
@@ -51,7 +57,10 @@ extern "C"
 namespace Digikam
 {
 
-bool readPGFImageData(const QByteArray& data, QImage& img)
+// Private method
+bool writePGFImageDataToStream(const QImage& image, CPGFStream& stream, int quality, UINT32& nWrittenBytes, bool verbose);
+
+bool readPGFImageData(const QByteArray& data, QImage& img, bool verbose)
 {
     try
     {
@@ -62,13 +71,14 @@ bool readPGFImageData(const QByteArray& data, QImage& img)
         }
 
         CPGFMemoryStream stream((UINT8*)data.data(), (size_t)data.size());
-//        kDebug() << "image data stream size is : " << stream.GetSize();
+        if (verbose) kDebug() << "image data stream size is : " << stream.GetSize();
 
         CPGFImage        pgfImg;
         // NOTE: see B.K.O #273765 : Loading PGF thumbs with OpenMP support through a separated thread do not work properlly with libppgf 6.11.24
-        // pgfImg.ConfigureDecoder(false);
+        pgfImg.ConfigureDecoder(false, false);
 
         pgfImg.Open(&stream);
+        if (verbose) kDebug() << "PGF image is open";
 
         if (pgfImg.Channels() != 4)
         {
@@ -78,6 +88,7 @@ bool readPGFImageData(const QByteArray& data, QImage& img)
 
         img = QImage(pgfImg.Width(), pgfImg.Height(), QImage::Format_ARGB32);
         pgfImg.Read();
+        if (verbose) kDebug() << "PGF image is read";
 
         if (QSysInfo::ByteOrder == QSysInfo::BigEndian)
         {
@@ -89,6 +100,8 @@ bool readPGFImageData(const QByteArray& data, QImage& img)
             int map[] = {0, 1, 2, 3};
             pgfImg.GetBitmap(img.bytesPerLine(), (UINT8*)img.bits(), img.depth(), map);
         }
+
+        if (verbose) kDebug() << "PGF image is decoded";
     }
     catch (IOException& e)
     {
@@ -106,7 +119,85 @@ bool readPGFImageData(const QByteArray& data, QImage& img)
     return true;
 }
 
-bool writePGFImageData(const QImage& image, QByteArray& data, int quality)
+bool writePGFImageFile(const QImage& image, const QString& filePath, int quality, bool verbose)
+{
+#ifdef WIN32
+#ifdef UNICODE
+    HANDLE fd = CreateFile((LPCWSTR)(QFile::encodeName(filePath).constData()), GENERIC_READ, 0, 0, OPEN_EXISTING, 0, 0);
+#else
+    HANDLE fd = CreateFile(QFile::encodeName(filePath), GENERIC_READ, 0, 0, OPEN_EXISTING, 0, 0);
+#endif
+
+    if (fd == INVALID_HANDLE_VALUE)
+    {
+        kDebug() << "Error: Could not open destination file.";
+        return false;
+    }
+
+#elif defined(__POSIX__)
+    int fd = open(QFile::encodeName(filePath), O_RDWR | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+
+    if (fd == -1)
+    {
+        kDebug() << "Error: Could not open destination file.";
+        return false;
+    }
+#endif
+
+    CPGFFileStream stream(fd);
+    UINT32 nWrittenBytes = 0;
+    bool ret             = writePGFImageDataToStream(image, stream, quality, nWrittenBytes, verbose);
+
+    if (!nWrittenBytes)
+    {
+        kDebug() << "Written PGF file : data size is null";
+        ret = false;
+    }
+    else
+    {
+        if (verbose) kDebug() << "file size written : " << nWrittenBytes;
+    }
+
+#ifdef WIN32
+    CloseHandle(fd);
+#else
+    close(fd);
+#endif
+
+    return ret;
+}
+
+bool writePGFImageData(const QImage& image, QByteArray& data, int quality, bool verbose)
+{
+    // TODO : optimize memory allocation...
+    CPGFMemoryStream stream(256000);
+    UINT32 nWrittenBytes = 0;
+    bool ret             = writePGFImageDataToStream(image, stream, quality, nWrittenBytes, verbose);
+    data                 = QByteArray((const char*)stream.GetBuffer(),
+#ifdef PGFCodecVersionID
+#   if PGFCodecVersionID == 0x061224
+                                      // Wrap around libpgf 6.12.24 about CPGFMemoryStream bytes size generated to make PGF file data.
+                                      // It miss 16 bytes at end. This solution fix the problem for digiKam until a right fix in libpgf is found.
+                                      nWrittenBytes + 16);
+#   else
+                                      nWrittenBytes);
+#   endif
+#endif
+
+    if (!nWrittenBytes)
+    {
+        kDebug() << "Encoded PGF image : data size is null";
+        ret = false;
+    }
+    else
+    {
+        if (verbose) kDebug() << "data size written : " << nWrittenBytes;
+    }
+
+    return ret;
+}
+
+bool writePGFImageDataToStream(const QImage& image, CPGFStream& stream, int quality, UINT32& nWrittenBytes, bool verbose)
 {
     try
     {
@@ -122,6 +213,7 @@ bool writePGFImageData(const QImage& image, QByteArray& data, int quality)
         if (image.format() != QImage::Format_ARGB32)
         {
             img = image.convertToFormat(QImage::Format_ARGB32);
+            if (verbose) kDebug() << "RGB => ARGB";
         }
         else
         {
@@ -132,11 +224,12 @@ bool writePGFImageData(const QImage& image, QByteArray& data, int quality)
         PGFHeader header;
         header.width                = img.width();
         header.height               = img.height();
-        header.nLevels              = 0;            // Auto.
+        header.nLevels              = 0;             // Auto.
         header.quality              = quality;
         header.bpp                  = img.depth();
         header.channels             = 4;
         header.mode                 = ImageModeRGBA;
+        header.usedBitsPerChannel   = 0;             // Auto
 
 #ifdef PGFCodecVersionID
 #   if PGFCodecVersionID < 0x061142
@@ -147,7 +240,20 @@ bool writePGFImageData(const QImage& image, QByteArray& data, int quality)
 #endif
         pgfImg.SetHeader(header);
         // NOTE: see B.K.O #273765 : Loading PGF thumbs with OpenMP support through a separated thread do not work properlly with libppgf 6.11.24
-        // pgfImg.ConfigureEncoder(false);
+        pgfImg.ConfigureEncoder(false, false);
+
+        if (verbose)
+        {
+            kDebug() << "PGF image settings:";
+            kDebug() << "   width: "              << header.width;
+            kDebug() << "   height: "             << header.height;
+            kDebug() << "   nLevels: "            << header.nLevels;
+            kDebug() << "   quality: "            << header.quality;
+            kDebug() << "   bpp: "                << header.bpp;
+            kDebug() << "   channels: "           << header.channels;
+            kDebug() << "   mode: "               << header.mode;
+            kDebug() << "   usedBitsPerChannel: " << header.usedBitsPerChannel;
+        }
 
         if (QSysInfo::ByteOrder == QSysInfo::BigEndian)
         {
@@ -160,9 +266,7 @@ bool writePGFImageData(const QImage& image, QByteArray& data, int quality)
             pgfImg.ImportBitmap(img.bytesPerLine(), (UINT8*)img.bits(), img.depth(), map);
         }
 
-        // TODO : optimize memory allocation...
-        CPGFMemoryStream stream(256000);
-        UINT32 nWrittenBytes = 0;
+        nWrittenBytes = 0;
 
 #ifdef PGFCodecVersionID
 #   if PGFCodecVersionID >= 0x061124
@@ -171,14 +275,6 @@ bool writePGFImageData(const QImage& image, QByteArray& data, int quality)
 #else
         pgfImg.Write(&stream, 0, 0, &nWrittenBytes);
 #endif
-
-        data = QByteArray((const char*)stream.GetBuffer(), nWrittenBytes);
-
-        if (!nWrittenBytes)
-        {
-            kDebug() << "Encoded PGF image : data size is null";
-            return false;
-        }
     }
     catch (IOException& e)
     {
