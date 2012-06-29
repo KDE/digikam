@@ -37,14 +37,13 @@
 namespace Digikam
 {
 
-/** PGF image data to QImage.
+/** PGF image data to QImage using memory stream.
     NOTE: Only use this method to manage PGF thumbnails stored in database (256x256 pixels image)
  */
 bool readPGFImageData(const QByteArray& data, QImage& img, bool verbose=false);
 
-bool writePGFImageFile(const QImage& image, const QString& filePath, int quality, bool verbose=false);
 
-/** QImage to PGF image data. 'quality' argument set compression ratio:
+/** QImage to PGF image data using memory stream. 'quality' argument set compression ratio:
     0 => lossless compression, as PNG.
     1 => Not loss less compression, wavelets based...
     2 =>
@@ -54,6 +53,11 @@ bool writePGFImageFile(const QImage& image, const QString& filePath, int quality
     NOTE: Only use this method to manage PGF thumbnails stored in database (256x256 pixels image)
  */
 bool writePGFImageData(const QImage& image, QByteArray& data, int quality, bool verbose=false);
+
+/** QImage to PGF image data using file stream. Smae arguments than writePGFImageData() excepted 'filePath'
+     which is PGF target file path.
+ */
+bool writePGFImageFile(const QImage& image, const QString& filePath, int quality, bool verbose=false);
 
 /** Load a reduced version of PGF file
  */

@@ -213,7 +213,7 @@ MACRO_BOOL_TO_01(PGF_FOUND USE_EXT_LIBPGF)
 
 # NOTE: currently libpgf 6.11.24 do not support very well OpenMP. We disable it temporally.
 # See B.K.O #273765 for details.
-ADD_DEFINITIONS(-DLIBPGF_DISABLE_OPENMP)
+#ADD_DEFINITIONS(-DLIBPGF_DISABLE_OPENMP)
 
 # LibPGF need to be linked to OpenMP if necessary.
 # OpenMP detection (requires CMake >= 2.6.3)
