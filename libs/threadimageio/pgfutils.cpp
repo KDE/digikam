@@ -43,6 +43,12 @@ extern "C"
 
 #include <kdebug.h>
 
+// Windows includes
+
+#ifdef WIN32
+#include <windows.h>
+#endif
+
 // LibPGF includes
 
 #include "PGFimage.h"
@@ -50,6 +56,9 @@ extern "C"
 
 namespace Digikam
 {
+
+// Private method
+bool writePGFImageDataToStream(const QImage& image, CPGFStream& stream, int quality, UINT32& nWrittenBytes, bool verbose);
 
 bool readPGFImageData(const QByteArray& data, QImage& img, bool verbose)
 {
@@ -110,7 +119,76 @@ bool readPGFImageData(const QByteArray& data, QImage& img, bool verbose)
     return true;
 }
 
+bool writePGFImageFile(const QImage& image, const QString& filePath, int quality, bool verbose)
+{
+#ifdef WIN32
+#ifdef UNICODE
+    HANDLE fd = CreateFile((LPCWSTR)(QFile::encodeName(filePath).constData()), GENERIC_READ, 0, 0, OPEN_EXISTING, 0, 0);
+#else
+    HANDLE fd = CreateFile(QFile::encodeName(filePath), GENERIC_READ, 0, 0, OPEN_EXISTING, 0, 0);
+#endif
+
+    if (fd == INVALID_HANDLE_VALUE)
+    {
+        kDebug() << "Error: Could not open destination file.";
+        return false;
+    }
+
+#elif defined(__POSIX__)
+    int fd = open(QFile::encodeName(filePath), O_RDWR | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+
+    if (fd == -1)
+    {
+        kDebug() << "Error: Could not open destination file.";
+        return false;
+    }
+#endif
+
+    CPGFFileStream stream(fd);
+    UINT32 nWrittenBytes = 0;
+    bool ret             = writePGFImageDataToStream(image, stream, quality, nWrittenBytes, verbose);
+
+    if (!nWrittenBytes)
+    {
+        kDebug() << "Written PGF file : data size is null";
+        ret = false;
+    }
+    else
+    {
+        if (verbose) kDebug() << "file size written : " << nWrittenBytes;
+    }
+
+#ifdef WIN32
+    CloseHandle(fd);
+#else
+    close(fd);
+#endif
+
+    return ret;
+}
+
 bool writePGFImageData(const QImage& image, QByteArray& data, int quality, bool verbose)
+{
+    // TODO : optimize memory allocation...
+    CPGFMemoryStream stream(256000);
+    UINT32 nWrittenBytes = 0;
+    bool ret             = writePGFImageDataToStream(image, stream, quality, nWrittenBytes, verbose);
+    data                 = QByteArray((const char*)stream.GetBuffer(), nWrittenBytes);
+
+    if (!nWrittenBytes)
+    {
+        kDebug() << "Encoded PGF image : data size is null";
+        ret = false;
+    }
+    else
+    {
+        if (verbose) kDebug() << "data size written : " << nWrittenBytes;
+    }
+
+    return ret;
+}
+
+bool writePGFImageDataToStream(const QImage& image, CPGFStream& stream, int quality, UINT32& nWrittenBytes, bool verbose)
 {
     try
     {
@@ -179,9 +257,7 @@ bool writePGFImageData(const QImage& image, QByteArray& data, int quality, bool 
             pgfImg.ImportBitmap(img.bytesPerLine(), (UINT8*)img.bits(), img.depth(), map);
         }
 
-        // TODO : optimize memory allocation...
-        CPGFMemoryStream stream(256000);
-        UINT32 nWrittenBytes = 0;
+        nWrittenBytes = 0;
 
 #ifdef PGFCodecVersionID
 #   if PGFCodecVersionID >= 0x061124
@@ -190,18 +266,6 @@ bool writePGFImageData(const QImage& image, QByteArray& data, int quality, bool 
 #else
         pgfImg.Write(&stream, 0, 0, &nWrittenBytes);
 #endif
-
-        data = QByteArray((const char*)stream.GetBuffer(), nWrittenBytes);
-
-        if (!nWrittenBytes)
-        {
-            kDebug() << "Encoded PGF image : data size is null";
-            return false;
-        }
-        else
-        {
-            if (verbose) kDebug() << "data size written : " << nWrittenBytes;
-        }
     }
     catch (IOException& e)
     {

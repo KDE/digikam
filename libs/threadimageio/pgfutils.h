@@ -42,6 +42,8 @@ namespace Digikam
  */
 bool readPGFImageData(const QByteArray& data, QImage& img, bool verbose=false);
 
+bool writePGFImageFile(const QImage& image, const QString& filePath, int quality, bool verbose=false);
+
 /** QImage to PGF image data. 'quality' argument set compression ratio:
     0 => lossless compression, as PNG.
     1 => Not loss less compression, wavelets based...
