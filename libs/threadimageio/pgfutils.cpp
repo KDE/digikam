@@ -51,7 +51,7 @@ extern "C"
 namespace Digikam
 {
 
-bool readPGFImageData(const QByteArray& data, QImage& img)
+bool readPGFImageData(const QByteArray& data, QImage& img, bool verbose)
 {
     try
     {
@@ -62,13 +62,14 @@ bool readPGFImageData(const QByteArray& data, QImage& img)
         }
 
         CPGFMemoryStream stream((UINT8*)data.data(), (size_t)data.size());
-//        kDebug() << "image data stream size is : " << stream.GetSize();
+        if (verbose) kDebug() << "image data stream size is : " << stream.GetSize();
 
         CPGFImage        pgfImg;
         // NOTE: see B.K.O #273765 : Loading PGF thumbs with OpenMP support through a separated thread do not work properlly with libppgf 6.11.24
         pgfImg.ConfigureDecoder(false, false);
 
         pgfImg.Open(&stream);
+        if (verbose) kDebug() << "PGF image is open";
 
         if (pgfImg.Channels() != 4)
         {
@@ -78,6 +79,7 @@ bool readPGFImageData(const QByteArray& data, QImage& img)
 
         img = QImage(pgfImg.Width(), pgfImg.Height(), QImage::Format_ARGB32);
         pgfImg.Read();
+        if (verbose) kDebug() << "PGF image is read";
 
         if (QSysInfo::ByteOrder == QSysInfo::BigEndian)
         {
@@ -89,6 +91,8 @@ bool readPGFImageData(const QByteArray& data, QImage& img)
             int map[] = {0, 1, 2, 3};
             pgfImg.GetBitmap(img.bytesPerLine(), (UINT8*)img.bits(), img.depth(), map);
         }
+
+        if (verbose) kDebug() << "PGF image is decoded";
     }
     catch (IOException& e)
     {
