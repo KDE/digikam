@@ -122,6 +122,7 @@ bool writePGFImageData(const QImage& image, QByteArray& data, int quality, bool 
         if (image.format() != QImage::Format_ARGB32)
         {
             img = image.convertToFormat(QImage::Format_ARGB32);
+            if (verbose) kDebug() << "RGB => ARGB";
         }
         else
         {
@@ -192,6 +193,10 @@ bool writePGFImageData(const QImage& image, QByteArray& data, int quality, bool 
         {
             kDebug() << "Encoded PGF image : data size is null";
             return false;
+        }
+        else
+        {
+            if (verbose) kDebug() << "data size written : " << nWrittenBytes;
         }
     }
     catch (IOException& e)
