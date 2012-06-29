@@ -5,12 +5,14 @@
 import os
 import re
 
+def sourceFile(path, f):
+    pass
 
 def isMocFileUser(path, f):
     if not f.endswith(".h"):
         return False
 
-    with open(os.path.join(root,f), "r") as fp:
+    with open(os.path.join(path ,f), "r") as fp:
         for line in fp:
             if "Q_OBJECT" in line:
                 return True
@@ -19,7 +21,7 @@ def isMocFileUser(path, f):
 
 def checkForMocFileInclude(path, f):
     inFileName, inFileExt = os.path.splitext(f)
-    cppFile = os.path.join(root,inFileName + ".cpp")
+    cppFile = os.path.join(path,inFileName + ".cpp")
 
     r = re.compile("""#include\\s+["<]%s.moc[">]""" % inFileName)
 
