@@ -32,4 +32,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 018 ==> 280142 - Crash in libtiff when files are edited.
 019 ==> 300848 - "Reread Metadata From Image" is broken.
 020 ==> 302592 - digiKam crashes when I open the Tab "Search Geomap".
-021 ==> 
+021 ==> 302740 - Duplicate rotation/flip entries in image menu, shortcuts not working.
+022 ==> 275400 - "Reduced Size Preview" images are blurry and not rotated after upgrade from 1.2.0.
+023 ==> 
+

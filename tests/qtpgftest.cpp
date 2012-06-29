@@ -49,6 +49,7 @@ int main(int /*argc*/, char** /*argv*/)
     // QImage => PGF conversion
 
     qDebug() << "Using LibPGF version: " << libPGFVersion() << endl;
+    qDebug() << "Using OpenMP with LibPGF : " << (libPGFUseOpenMP() ? "yes" : "no") << endl;
 
     img.load("test.png");
 
