@@ -288,6 +288,9 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver* observer)
                     kDebug() << "PNG in PNG_COLOR_TYPE_RGB";
 #endif
 
+                    // FIXME: this check is useless? We always end up with
+                    // png_set_add_alpha(png_ptr, 0xFFFF, PNG_FILLER_AFTER);
+                    // anyway??
                     if (QSysInfo::ByteOrder == QSysInfo::LittleEndian)           // Intel
                     {
                         png_set_add_alpha(png_ptr, 0xFFFF, PNG_FILLER_AFTER);
@@ -311,6 +314,9 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver* observer)
 #endif
                     png_set_gray_to_rgb(png_ptr);
 
+                    // FIXME: this check is useless? We always end up with
+                    // png_set_add_alpha(png_ptr, 0xFFFF, PNG_FILLER_AFTER);
+                    // anyway??
                     if (QSysInfo::ByteOrder == QSysInfo::LittleEndian)           // Intel
                     {
                         png_set_add_alpha(png_ptr, 0xFFFF, PNG_FILLER_AFTER);
@@ -336,6 +342,9 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver* observer)
 #endif
                     png_set_palette_to_rgb(png_ptr);
 
+                    // FIXME: this check is useless? We always end up with
+                    // png_set_add_alpha(png_ptr, 0xFFFF, PNG_FILLER_AFTER);
+                    // anyway??
                     if (QSysInfo::ByteOrder == QSysInfo::LittleEndian)           // Intel
                     {
                         png_set_add_alpha(png_ptr, 0xFFFF, PNG_FILLER_AFTER);
@@ -370,6 +379,9 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver* observer)
                     kDebug() << "PNG in PNG_COLOR_TYPE_RGB";
 #endif
 
+                    // FIXME: this check is useless? We always end up with
+                    // png_set_add_alpha(png_ptr, 0xFFFF, PNG_FILLER_AFTER);
+                    // anyway??
                     if (QSysInfo::ByteOrder == QSysInfo::LittleEndian)           // Intel
                     {
                         png_set_add_alpha(png_ptr, 0xFF, PNG_FILLER_AFTER);
@@ -398,6 +410,9 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver* observer)
 #endif
                     png_set_gray_to_rgb(png_ptr);
 
+                    // FIXME: this check is useless? We always end up with
+                    // png_set_add_alpha(png_ptr, 0xFFFF, PNG_FILLER_AFTER);
+                    // anyway??
                     if (QSysInfo::ByteOrder == QSysInfo::LittleEndian)           // Intel
                     {
                         png_set_add_alpha(png_ptr, 0xFF, PNG_FILLER_AFTER);
@@ -423,6 +438,9 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver* observer)
                     png_set_packing(png_ptr);
                     png_set_palette_to_rgb(png_ptr);
 
+                    // FIXME: this check is useless? We always end up with
+                    // png_set_add_alpha(png_ptr, 0xFFFF, PNG_FILLER_AFTER);
+                    // anyway??
                     if (QSysInfo::ByteOrder == QSysInfo::LittleEndian)           // Intel
                     {
                         png_set_add_alpha(png_ptr, 0xFF, PNG_FILLER_AFTER);
@@ -449,6 +467,9 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver* observer)
             png_set_tRNS_to_alpha(png_ptr);
         }
 
+        // FIXME: this check is useless? We always end up with
+        // png_set_bgr(png_ptr);
+        // anyway??
         if (QSysInfo::ByteOrder == QSysInfo::LittleEndian)      // Intel
         {
             png_set_bgr(png_ptr);
@@ -770,6 +791,9 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver* observer)
 
     png_init_io(png_ptr, f);
 
+    // FIXME: this check is useless? We always end up with
+    // png_set_bgr(png_ptr);
+    // anyway??
     if (QSysInfo::ByteOrder == QSysInfo::LittleEndian)      // Intel
     {
         png_set_bgr(png_ptr);
