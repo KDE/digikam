@@ -106,7 +106,7 @@ bool readPGFImageData(const QByteArray& data, QImage& img)
     return true;
 }
 
-bool writePGFImageData(const QImage& image, QByteArray& data, int quality)
+bool writePGFImageData(const QImage& image, QByteArray& data, int quality, bool verbose)
 {
     try
     {
@@ -149,6 +149,19 @@ bool writePGFImageData(const QImage& image, QByteArray& data, int quality)
         pgfImg.SetHeader(header);
         // NOTE: see B.K.O #273765 : Loading PGF thumbs with OpenMP support through a separated thread do not work properlly with libppgf 6.11.24
         pgfImg.ConfigureEncoder(false, false);
+
+        if (verbose)
+        {
+            kDebug() << "PGF image settings:";
+            kDebug() << "   width: "              << header.width;
+            kDebug() << "   height: "             << header.height;
+            kDebug() << "   nLevels: "            << header.nLevels;
+            kDebug() << "   quality: "            << header.quality;
+            kDebug() << "   bpp: "                << header.bpp;
+            kDebug() << "   channels: "           << header.channels;
+            kDebug() << "   mode: "               << header.mode;
+            kDebug() << "   usedBitsPerChannel: " << header.usedBitsPerChannel;
+        }
 
         if (QSysInfo::ByteOrder == QSysInfo::BigEndian)
         {

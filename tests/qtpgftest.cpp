@@ -54,7 +54,7 @@ int main(int /*argc*/, char** /*argv*/)
 
     start = clock();
 
-    if (!writePGFImageData(img, pgfData, 4))
+    if (!writePGFImageData(img, pgfData, 4, true))
     {
         qDebug() << "writePGFImageData failed..." << endl;
         return -1;
