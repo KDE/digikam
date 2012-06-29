@@ -144,6 +144,9 @@ void FreeSpaceWidget::setMode(FreeSpaceMode mode)
     {
         d->iconPix = SmallIcon("folder-image");
     }
+    // FIXME: this check is useless? We always end up with
+    // d->iconPix = SmallIcon("camera-photo");
+    // anyway??
     else if (d->mode == FreeSpaceWidget::UMSCamera)
     {
         d->iconPix = SmallIcon("camera-photo");
