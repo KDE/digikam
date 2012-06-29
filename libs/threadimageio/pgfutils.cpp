@@ -173,7 +173,14 @@ bool writePGFImageData(const QImage& image, QByteArray& data, int quality, bool 
     CPGFMemoryStream stream(256000);
     UINT32 nWrittenBytes = 0;
     bool ret             = writePGFImageDataToStream(image, stream, quality, nWrittenBytes, verbose);
-    data                 = QByteArray((const char*)stream.GetBuffer(), nWrittenBytes);
+    data                 = QByteArray((const char*)stream.GetBuffer(),
+#ifdef PGFCodecVersionID
+#   if PGFCodecVersionID == 0x061224
+                                      nWrittenBytes + 16);
+#   else
+                                      nWrittenBytes);
+#   endif
+#endif
 
     if (!nWrittenBytes)
     {
