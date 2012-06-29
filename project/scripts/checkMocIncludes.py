@@ -6,7 +6,12 @@ import os
 import re
 
 def sourceFile(path, f):
-    pass
+    if not f.endswith(".h"):
+        return None
+    inFileName, inFileExt = os.path.splitext(f)
+    cppFile = os.path.join(path, inFileName + ".cpp")
+    return cppFile
+
 
 def isMocFileUser(path, f):
     if not f.endswith(".h"):
@@ -20,8 +25,11 @@ def isMocFileUser(path, f):
 
 
 def checkForMocFileInclude(path, f):
+    cppFile = sourceFile(path, f)
+    if cppFile is None:
+        return False
+
     inFileName, inFileExt = os.path.splitext(f)
-    cppFile = os.path.join(path,inFileName + ".cpp")
 
     r = re.compile("""#include\\s+["<]%s.moc[">]""" % inFileName)
 
@@ -41,5 +49,9 @@ if __name__ == "__main__":
         for f in files:
             if isMocFileUser(root,f):
                 if not checkForMocFileInclude(root,f):
-                    print("no moc include: '%s'" % os.path.join(root,f))
+                    cppFile = sourceFile(root, f)
+                    if cppFile is None:
+                        print("unable to find the source file: '%s'" % cppFile)
+                    else:
+                        print("no moc include: '%s'" % cppFile)
 
