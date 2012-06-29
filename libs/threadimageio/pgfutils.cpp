@@ -176,6 +176,8 @@ bool writePGFImageData(const QImage& image, QByteArray& data, int quality, bool 
     data                 = QByteArray((const char*)stream.GetBuffer(),
 #ifdef PGFCodecVersionID
 #   if PGFCodecVersionID == 0x061224
+                                      // Wrap around libpgf 6.12.24 about CPGFMemoryStream bytes size generated to make PGF file data.
+                                      // It miss 16 bytes at end. This solution fix the problem for digiKam until a right fix in libpgf is found.
                                       nWrittenBytes + 16);
 #   else
                                       nWrittenBytes);
