@@ -175,6 +175,14 @@ void ParallelPipes::deactivate(WorkerObject::DeactivatingMode mode)
     }
 }
 
+void ParallelPipes::wait()
+{
+    foreach(WorkerObject* object, m_workers)
+    {
+        object->wait();
+    }
+}
+
 void ParallelPipes::setPriority(QThread::Priority priority)
 {
     foreach(WorkerObject* object, m_workers)
@@ -1097,6 +1105,41 @@ void FacePipeline::FacePipelinePriv::stop()
     started = false;
 }
 
+void FacePipeline::FacePipelinePriv::wait()
+{
+    if (!started)
+    {
+        return;
+    }
+
+    if (previewThread)
+    {
+        previewThread->wait();
+    }
+
+    WorkerObject* workerObject = 0;
+    ParallelPipes* pipes       = 0;
+    DynamicThread* thread      = 0;
+
+    foreach(QObject* element, pipeline)
+    {
+        if ((workerObject = qobject_cast<WorkerObject*>(element)))
+        {
+            workerObject->wait();
+        }
+        else if ((pipes = qobject_cast<ParallelPipes*>(element)))
+        {
+            pipes->wait();
+        }
+        else if ((thread = qobject_cast<DynamicThread*>(element)))
+        {
+            thread->wait();
+        }
+    }
+
+    started = false;
+}
+
 void FacePipeline::FacePipelinePriv::applyPriority()
 {
     WorkerObject*  workerObject = 0;
@@ -1145,6 +1188,7 @@ FacePipeline::FacePipeline()
 FacePipeline::~FacePipeline()
 {
     cancel();
+    wait();
     delete d->databaseFilter;
     delete d->previewThread;
     delete d->detectionWorker;
