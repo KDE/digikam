@@ -1032,12 +1032,25 @@ int ImageFilterModel::compareCategories(const QModelIndex& left, const QModelInd
     // source indexes
     Q_D(const ImageFilterModel);
 
+    if (!d->sorter.isCategorized())
+    {
+        return 0;
+    }
+
     if (!left.isValid() || !right.isValid())
     {
         return -1;
     }
 
-    return compareInfosCategories(d->imageModel->imageInfoRef(left), d->imageModel->imageInfoRef(right));
+    const ImageInfo& leftInfo  = d->imageModel->imageInfoRef(left);
+    const ImageInfo& rightInfo = d->imageModel->imageInfoRef(right);
+
+    // Check grouping
+    qlonglong leftGroupImageId = leftInfo.groupImageId();
+    qlonglong rightGroupImageId = rightInfo.groupImageId();
+
+    return compareInfosCategories(leftGroupImageId == -1 ? leftInfo : ImageInfo(leftGroupImageId),
+                                  rightGroupImageId == -1 ? rightInfo : ImageInfo(rightGroupImageId));
 }
 
 bool ImageFilterModel::subSortLessThan(const QModelIndex& left, const QModelIndex& right) const
@@ -1063,20 +1076,36 @@ bool ImageFilterModel::subSortLessThan(const QModelIndex& left, const QModelInde
         return d->sorter.lessThan(left.data(ImageModel::ExtraDataRole), right.data(ImageModel::ExtraDataRole));
     }
 
-    if ((leftInfo.isGrouped() || rightInfo.isGrouped()) &&
-        leftInfo.groupImage() != rightInfo.groupImage())
+    // Check grouping
+    qlonglong leftGroupImageId = leftInfo.groupImageId();
+    qlonglong rightGroupImageId = rightInfo.groupImageId();
+
+    // Either no grouping (-1), or same group image, or same image
+    if (leftGroupImageId == rightGroupImageId)
     {
-        // only one of the two is grouped, or both are grouped, but on different images.
-        return infosLessThan(leftInfo.isGrouped()  ? leftInfo.groupImage()  : leftInfo,
-                             rightInfo.isGrouped() ? rightInfo.groupImage() : rightInfo);
+        return infosLessThan(leftInfo, rightInfo);
     }
 
-    return infosLessThan(leftInfo, rightInfo);
+   // We have grouping to handle
+
+    // Is one grouped on the other? Sort behind leader.
+    if (leftGroupImageId == rightInfo.id())
+    {
+        return false;
+    }
+    if (rightGroupImageId == leftInfo.id())
+    {
+        return true;
+    }
+
+    // Use the group leader for sorting
+    return infosLessThan(leftGroupImageId == -1 ? leftInfo : ImageInfo(leftGroupImageId),
+                         rightGroupImageId == -1 ? rightInfo : ImageInfo(rightGroupImageId));
 }
 
 int ImageFilterModel::compareInfosCategories(const ImageInfo& left, const ImageInfo& right) const
 {
-    // Note: reimplemented in ImageImageSortFilterModel
+    // Note: reimplemented in ImageAlbumFilterModel
     Q_D(const ImageFilterModel);
     return d->sorter.compareCategories(left, right);
 }
@@ -1100,9 +1129,17 @@ static inline QString fastNumberToString(int id)
     return QString::fromLatin1(c);
 }
 
-QString ImageFilterModel::categoryIdentifier(const ImageInfo& info) const
+QString ImageFilterModel::categoryIdentifier(const ImageInfo& i) const
 {
     Q_D(const ImageFilterModel);
+
+    if (!d->sorter.isCategorized())
+    {
+        return QString();
+    }
+
+    qlonglong groupedImageId = i.groupImageId();
+    ImageInfo info = groupedImageId == -1 ? i : ImageInfo(groupedImageId);
 
     switch (d->sorter.categorizationMode)
     {
