@@ -163,10 +163,25 @@ public:
      * This method first adds the info, synchronously.
      * Only afterwards, the preprocessor will have the opportunity to process it.
      * This method also bypasses any incremental updates.
+     * Please note that these methods do not prevent addition of duplicate entries.
      */
     void addImageInfoSynchronously(const ImageInfo& info);
     void addImageInfosSynchronously(const QList<ImageInfo>& infos);
     void addImageInfosSynchronously(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues);
+
+    /**
+     * Add the given entries. Method returns immediately, the
+     * addition may happen later asynchronously.
+     * These methods prevent the addition of duplicate entries.
+     */
+    void ensureHasImageInfo(const ImageInfo& info);
+    void ensureHasImageInfos(const QList<ImageInfo>& infos);
+    void ensureHasImageInfos(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues);
+
+    /**
+     * Ensure that all images grouped on the given leader are contained in the model.
+     */
+    void ensureHasGroupedImages(const ImageInfo& groupLeader);
 
     QList<ImageInfo> imageInfos() const;
     QList<qlonglong> imageIds()    const;
@@ -174,6 +189,8 @@ public:
 
     bool hasImage(qlonglong id) const;
     bool hasImage(const ImageInfo& info) const;
+    bool hasImage(const ImageInfo& info, const QVariant& extraValue) const;
+    bool hasImage(qlonglong id, const QVariant& extraValue) const;
 
     bool isEmpty() const;
 
@@ -309,6 +326,7 @@ protected Q_SLOTS:
 private:
 
     void appendInfos(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues);
+    void appendInfosChecked(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues);
     void publiciseInfos(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues);
     void cleanSituationChecks();
     void removeRowPairsWithCheck(const QList<QPair<int, int> >& toRemove);

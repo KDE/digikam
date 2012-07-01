@@ -77,6 +77,9 @@ public:
 
     class ImageModelIncrementalUpdater* incrementalUpdater;
 
+    ImageInfoList                       pendingInfos;
+    QList<QVariant>                     pendingExtraValues;
+
     inline bool isValid(const QModelIndex& index)
     {
         if (!index.isValid())
@@ -503,6 +506,39 @@ void ImageModel::addImageInfosSynchronously(const QList<ImageInfo>& infos, const
     emit processAdded(infos, extraValues);
 }
 
+void ImageModel::ensureHasImageInfo(const ImageInfo& info)
+{
+    ensureHasImageInfos(QList<ImageInfo>() << info, QList<QVariant>());
+}
+
+void ImageModel::ensureHasImageInfos(const QList<ImageInfo>& infos)
+{
+    ensureHasImageInfos(infos, QList<QVariant>());
+}
+
+void ImageModel::ensureHasImageInfos(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues)
+{
+    if (extraValues.isEmpty())
+    {
+        if (!d->pendingExtraValues.isEmpty())
+        {
+            kDebug() << "ExtraValue / No Extra Value mismatch. Ignoring added infos.";
+            return;
+        }
+    }
+    else
+    {
+        if (d->pendingInfos.size() != d->pendingExtraValues.size())
+        {
+            kDebug() << "ExtraValue / No Extra Value mismatch. Ignoring added infos.";
+            return;
+        }
+    }
+    d->pendingInfos << infos;
+    d->pendingExtraValues << extraValues;
+    cleanSituationChecks();
+}
+
 void ImageModel::clearImageInfos()
 {
     d->infos.clear();
@@ -511,6 +547,8 @@ void ImageModel::clearImageInfos()
     d->filePathHash.clear();
     delete d->incrementalUpdater;
     d->incrementalUpdater          = 0;
+    d->pendingInfos.clear();
+    d->pendingExtraValues.clear();
     d->refreshing                  = false;
     d->reAdding                    = false;
     d->incrementalRefreshRequested = false;
@@ -542,6 +580,26 @@ bool ImageModel::hasImage(qlonglong id) const
 bool ImageModel::hasImage(const ImageInfo& info) const
 {
     return d->idHash.contains(info.id());
+}
+
+bool ImageModel::hasImage(const ImageInfo& info, const QVariant& extraValue) const
+{
+    return hasImage(info.id(), extraValue);
+}
+
+bool ImageModel::hasImage(qlonglong id, const QVariant& extraValue) const
+{
+    if (d->extraValues.isEmpty())
+        return hasImage(id);
+
+    QHash<qlonglong, int>::const_iterator it;
+    for (it = d->idHash.constFind(id); it != d->idHash.constEnd() && it.key() == id; ++it)
+    {
+        if (d->extraValues.at(it.value()) == extraValue)
+            return true;
+    }
+
+    return false;;
 }
 
 QList<ImageInfo> ImageModel::uniqueImageInfos() const
@@ -588,6 +646,11 @@ void ImageModel::emitDataChangedForSelection(const QItemSelection& selection)
     }
 }
 
+void ImageModel::ensureHasGroupedImages(const ImageInfo& groupLeader)
+{
+    ensureHasImageInfos(groupLeader.groupedImages());
+}
+
 // ------------ Preprocessing -------------
 
 void ImageModel::setPreprocessor(QObject* preprocessor)
@@ -621,6 +684,39 @@ void ImageModel::appendInfos(const QList<ImageInfo>& infos, const QList<QVariant
     else
     {
         publiciseInfos(infos, extraValues);
+    }
+}
+
+void ImageModel::appendInfosChecked(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues)
+{
+    // This method does deduplication. It is private because in context of readding or refreshing it is of no use.
+
+    if (extraValues.isEmpty())
+    {
+        QList<ImageInfo> checkedInfos;
+        foreach (const ImageInfo& info, infos)
+        {
+            if (!hasImage(info))
+            {
+                checkedInfos << info;
+            }
+        }
+        appendInfos(checkedInfos, QList<QVariant>());
+    }
+    else
+    {
+        QList<ImageInfo> checkedInfos;
+        QList<QVariant>  checkedExtraValues;
+        const int size = infos.size();
+        for (int i=0; i<size; i++)
+        {
+            if (!hasImage(infos[i], extraValues[i]))
+            {
+                checkedInfos << infos[i];
+                checkedExtraValues << extraValues[i];
+            }
+        }
+        appendInfos(checkedInfos, checkedExtraValues);
     }
 }
 
@@ -659,6 +755,15 @@ void ImageModel::cleanSituationChecks()
     // any batches sent to preprocessor for re-adding have been re-added.
     if (d->refreshing || d->reAdding)
     {
+        return;
+    }
+
+    if (!d->pendingInfos.isEmpty())
+    {
+        appendInfosChecked(d->pendingInfos, d->pendingExtraValues);
+        d->pendingInfos.clear();
+        d->pendingExtraValues.clear();
+        cleanSituationChecks();
         return;
     }
 

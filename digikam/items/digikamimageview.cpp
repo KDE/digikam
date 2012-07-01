@@ -683,6 +683,7 @@ void DigikamImageView::groupIndicatorClicked(const QModelIndex& index)
 
     setCurrentIndex(index);
     imageFilterModel()->toggleGroupOpen(info.id());
+    imageAlbumModel()->ensureHasGroupedImages(info);
 }
 
 void DigikamImageView::createGroupFromSelection()
