@@ -96,6 +96,40 @@ void SidecarFinder::process(const KUrl::List& files)
 
 // ------------------------------------------------------------------------------------------------
 
+GroupedImagesFinder::GroupedImagesFinder(const QList<ImageInfo> source)
+{
+    process(source);
+}
+
+void GroupedImagesFinder::process(const QList<ImageInfo> source)
+{
+    QSet<qlonglong> ids;
+    foreach (const ImageInfo& info, source)
+    {
+        ids << info.id();
+    }
+
+    infos.reserve(source.size());
+    foreach (const ImageInfo& info, source)
+    {
+        infos << info;
+        if (info.hasGroupedImages())
+        {
+            foreach (const ImageInfo& groupedImage, info.groupedImages())
+            {
+                if (ids.contains(groupedImage.id()))
+                {
+                    continue;
+                }
+                infos << groupedImage;
+                ids << groupedImage.id();
+            }
+        }
+    }
+}
+
+// ------------------------------------------------------------------------------------------------
+
 DIO::DIOPriv::DIOPriv(DIO* const q)
     : q(q)
 {
@@ -142,11 +176,14 @@ void DIO::DIOPriv::albumToAlbum(int operation, const PAlbum* src, const PAlbum* 
 
 void DIO::DIOPriv::imagesToAlbum(int operation, const QList<ImageInfo> infos, const PAlbum* dest)
 {
+    // this is a fast db operation, do here
+    GroupedImagesFinder finder(infos);
+
     QStringList      filenames;
     QList<qlonglong> ids;
     KUrl::List       urls;
 
-    foreach(const ImageInfo& info, infos)
+    foreach(const ImageInfo& info, finder.infos)
     {
         filenames << info.name();
         ids << info.id();

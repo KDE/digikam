@@ -84,6 +84,14 @@ void ParallelWorkers::deactivate(WorkerObject::DeactivatingMode mode)
     }
 }
 
+void ParallelWorkers::wait()
+{
+    foreach(WorkerObject* const object, m_workers)
+    {
+        object->wait();
+    }
+}
+
 void ParallelWorkers::setPriority(QThread::Priority priority)
 {
     foreach(WorkerObject* const object, m_workers)

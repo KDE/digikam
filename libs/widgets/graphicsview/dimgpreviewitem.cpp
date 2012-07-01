@@ -68,6 +68,7 @@ void DImgPreviewItem::DImgPreviewItemPrivate::init(DImgPreviewItem* q)
 {
     previewThread = new PreviewLoadThread;
     preloadThread = new PreviewLoadThread;
+    preloadThread->setPriority(QThread::LowPriority);
 
     QObject::connect(previewThread, SIGNAL(signalImageLoaded(LoadingDescription,DImg)),
                      q, SLOT(slotGotImagePreview(LoadingDescription,DImg)));
@@ -155,6 +156,8 @@ void DImgPreviewItem::setPath(const QString& path)
 
         emit stateChanged(d->state);
     }
+
+    d->preloadThread->stopLoading();
 }
 
 void DImgPreviewItem::setPreloadPaths(const QStringList& pathsToPreload)
@@ -219,7 +222,8 @@ QString DImgPreviewItem::userLoadingHint() const
             {
                 if (approximates(d->image.originalSize(),d->image.size()))
                 {
-                    return i18n("Full Size Preview");
+                    //return i18n("Full Size Preview");
+                    return QString();
                 }
                 else
                 {
@@ -279,6 +283,8 @@ void DImgPreviewItem::slotGotImagePreview(const LoadingDescription& description,
         emit stateChanged(d->state);
         emit loaded();
     }
+
+    preloadNext();
 }
 
 void DImgPreviewItem::preloadNext()

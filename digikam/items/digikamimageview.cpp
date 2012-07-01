@@ -204,11 +204,14 @@ void DigikamImageView::setFaceMode(bool on)
         // See ImageLister, which creates a search the implements listing tag in the ioslave
         imageAlbumModel()->setSpecialTagListing("faces");
         setItemDelegate(d->faceDelegate);
+        // grouping is not very much compatible with faces
+        imageFilterModel()->setAllGroupsOpen(true);
     }
     else
     {
         imageAlbumModel()->setSpecialTagListing(QString());
         setItemDelegate(d->normalDelegate);
+        imageFilterModel()->setAllGroupsOpen(false);
     }
 }
 
@@ -363,7 +366,10 @@ void DigikamImageView::showContextMenuOnInfo(QContextMenuEvent* event, const Ima
     cmhelper.addSeparator();
     // --------------------------------------------------------
     cmhelper.addLabelsAction();
-    cmhelper.addGroupMenu(selectedImageIDs);
+    if (!d->faceMode)
+    {
+        cmhelper.addGroupMenu(selectedImageIDs);
+    }
 
     // special action handling --------------------------------
 
@@ -677,6 +683,7 @@ void DigikamImageView::groupIndicatorClicked(const QModelIndex& index)
 
     setCurrentIndex(index);
     imageFilterModel()->toggleGroupOpen(info.id());
+    imageAlbumModel()->ensureHasGroupedImages(info);
 }
 
 void DigikamImageView::createGroupFromSelection()

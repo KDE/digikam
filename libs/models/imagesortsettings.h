@@ -107,6 +107,8 @@ public:
     Qt::SortOrder           currentCategorizationSortOrder;
     Qt::CaseSensitivity     categorizationCaseSensitivity;
 
+    bool isCategorized() const { return categorizationMode >= CategoryByAlbum; }
+
     /// --- Image Sorting ---
 
     enum SortRole

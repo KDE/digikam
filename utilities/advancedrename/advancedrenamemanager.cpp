@@ -49,7 +49,7 @@ namespace Digikam
 
 struct SortByNameCaseInsensitive
 {
-    bool operator()(const QString& s1, const QString& s2)
+    bool operator() (const QString& s1, const QString& s2) const
     {
         return s1.toLower() < s2.toLower();
     }
@@ -57,7 +57,7 @@ struct SortByNameCaseInsensitive
 
 struct SortByDate
 {
-    bool operator()(const QString& s1, const QString& s2)
+    bool operator() (const QString& s1, const QString& s2) const
     {
         ImageInfo i1 = ImageInfo(KUrl(s1));
         ImageInfo i2 = ImageInfo(KUrl(s2));
@@ -67,7 +67,7 @@ struct SortByDate
 
 struct SortBySize
 {
-    bool operator()(const QString& s1, const QString& s2)
+    bool operator() (const QString& s1, const QString& s2) const
     {
         ImageInfo i1 = ImageInfo(KUrl(s1));
         ImageInfo i2 = ImageInfo(KUrl(s2));

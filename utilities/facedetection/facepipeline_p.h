@@ -87,6 +87,7 @@ public:
 
     void schedule();
     void deactivate(WorkerObject::DeactivatingMode mode = WorkerObject::FlushSignals);
+    void wait();
 
     void add(WorkerObject* worker);
     void setPriority(QThread::Priority priority);
@@ -359,6 +360,7 @@ public:
     void checkFinished();
     void start();
     void stop();
+    void wait();
     void applyPriority();
 
     void createThumbnailLoadThread();

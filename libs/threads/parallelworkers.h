@@ -52,6 +52,7 @@ public:
 
     void schedule();
     void deactivate(WorkerObject::DeactivatingMode mode = WorkerObject::FlushSignals);
+    void wait();
 
     void setPriority(QThread::Priority priority);
 
@@ -134,6 +135,7 @@ public:
     void schedule() { ParallelWorkers::schedule(); }
     void deactivate(WorkerObject::DeactivatingMode mode = WorkerObject::FlushSignals)
         { ParallelWorkers::deactivate(mode); }
+    void wait() { ParallelWorkers::wait(); }
 
     bool connect(const char* signal, const QObject* receiver, const char* method,
                  Qt::ConnectionType type = Qt::AutoConnection) const
