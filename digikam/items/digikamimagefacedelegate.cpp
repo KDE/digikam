@@ -111,7 +111,9 @@ DatabaseFace DigikamImageFaceDelegate::face(const QModelIndex& index) const
 
 void DigikamImageFaceDelegate::updateRects()
 {
+    Q_D(DigikamImageFaceDelegate);
     DigikamImageDelegate::updateRects();
+    d->groupRect = QRect();
 }
 
 void DigikamImageFaceDelegate::clearModelDataCaches()
