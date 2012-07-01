@@ -90,6 +90,19 @@ private:
     void process(const KUrl::List&);
 };
 
+class GroupedImagesFinder
+{
+public:
+
+    GroupedImagesFinder(const QList<ImageInfo> source);
+
+    QList<ImageInfo> infos;
+
+private:
+
+    void process(const QList<ImageInfo> source);
+};
+
 enum Operation
 {
     Copy                = 1 << 0,
