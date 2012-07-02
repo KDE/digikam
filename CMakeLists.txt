@@ -43,7 +43,7 @@ SET(DIGIKAM_VERSION_STRING
     "${DIGIKAM_VERSION_SHORT}${DIGIKAM_SUFFIX_VERSION}"
    )
 
-# Path to find FindPGF.cmake script.
+# Path to find Extra CMake scripts
 SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
 
 # ==================================================================================================
