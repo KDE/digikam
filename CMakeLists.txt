@@ -4,13 +4,17 @@ PROJECT(digikam)
 MESSAGE(STATUS "----------------------------------------------------------------------------------")
 MESSAGE(STATUS "Starting CMake configuration for: digiKam")
 
-OPTION(ENABLE_SCRIPTIFACE      "Build digiKam with experimental scripting support (default=OFF)"  OFF)
-OPTION(ENABLE_PRESENTATIONMODE "Build digiKam with presentation mode support (default=OFF)"       OFF)
-OPTION(ENABLE_THUMBS_DB        "Build digiKam with thumbnails database support (default=ON)"      ON)
-OPTION(ENABLE_INTERNALMYSQL    "Look for MySQL server executable at build time (default=ON)"      ON)
-OPTION(ENABLE_ADVANCEDDEBUGMSG "Build digiKam with more internal debug message (default=OFF)"     OFF)
-OPTION(ENABLE_NEPOMUKSUPPORT   "Build digiKam with Nepomuk support (default=ON)"                  ON)
-OPTION(ENABLE_LCMS2            "Link digiKam to LCMS2 instead LCMS1 (experimental) (default=OFF)" OFF)
+OPTION(ENABLE_SCRIPTIFACE      "Build digiKam with experimental scripting support (default=OFF)"       OFF)
+OPTION(ENABLE_PRESENTATIONMODE "Build digiKam with presentation mode support (default=OFF)"            OFF)
+OPTION(ENABLE_THUMBS_DB        "Build digiKam with thumbnails database support (default=ON)"           ON)
+OPTION(ENABLE_INTERNALMYSQL    "Look for MySQL server executable at build time (default=ON)"           ON)
+OPTION(ENABLE_ADVANCEDDEBUGMSG "Build digiKam with more internal debug message (default=OFF)"          OFF)
+OPTION(ENABLE_NEPOMUKSUPPORT   "Build digiKam with Nepomuk support (default=ON)"                       ON)
+OPTION(ENABLE_LCMS2            "Link digiKam to LCMS2 instead LCMS1 (experimental) (default=OFF)"      OFF)
+
+# NOTE: since 6.11.24, libpgf do not support very well OpenMP. We disable it temporally.
+# See B.K.O #273765 for details.
+OPTION(ENABLE_PGF_OPENMP       "Build digiKam with paralelized PGF codec (experimental) (default=OFF)" OFF)
 
 # ==================================================================================================
 # Information to update before to release this package.
@@ -43,7 +47,7 @@ SET(DIGIKAM_VERSION_STRING
     "${DIGIKAM_VERSION_SHORT}${DIGIKAM_SUFFIX_VERSION}"
    )
 
-# Path to find FindPGF.cmake script.
+# Path to find Extra CMake scripts
 SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
 
 # ==================================================================================================
@@ -213,7 +217,12 @@ MACRO_BOOL_TO_01(PGF_FOUND USE_EXT_LIBPGF)
 
 # NOTE: currently libpgf 6.11.24 do not support very well OpenMP. We disable it temporally.
 # See B.K.O #273765 for details.
-ADD_DEFINITIONS(-DLIBPGF_DISABLE_OPENMP)
+IF(NOT ENABLE_PGF_OPENMP)
+    ADD_DEFINITIONS(-DLIBPGF_DISABLE_OPENMP)
+    MESSAGE(STATUS "Paralelized PGF codec disabled...")
+ELSE(NOT ENABLE_PGF_OPENMP)
+    MESSAGE(STATUS "Paralelized PGF codec enabled...")
+ENDIF(NOT ENABLE_PGF_OPENMP)
 
 # LibPGF need to be linked to OpenMP if necessary.
 # OpenMP detection (requires CMake >= 2.6.3)
@@ -223,6 +232,8 @@ IF(NOT APPLE AND NOT USE_EXT_LIBPGF)
     MACRO_OPTIONAL_FIND_PACKAGE(OpenMP)
 
     IF(OPENMP_FOUND)
+        ADD_DEFINITIONS(${OpenMP_CXX_FLAGS})
+
         # OpenMP defintions ${OpenMP_CXX_FLAGS} is set on right digiKam components through sub-cmake scripts.
         IF("${OpenMP_CXX_FLAGS}" STREQUAL "-fopenmp" )
             SET(OPENMP_LDFLAGS "-lgomp")

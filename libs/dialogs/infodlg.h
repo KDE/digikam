@@ -6,8 +6,8 @@
  * Date        : 2008-07-11
  * Description : general info list dialog
  *
- * Copyright (C) 2008-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2009 by Andi Clemens <andi dot clemens at googlemail dot com>
+ * Copyright (C) 2008-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009      by Andi Clemens <andi dot clemens at googlemail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -48,7 +48,7 @@ class DIGIKAM_EXPORT InfoDlg : public KDialog
 
 public:
 
-    InfoDlg(QWidget* parent);
+    InfoDlg(QWidget* const parent);
     virtual ~InfoDlg();
 
     virtual void setInfoMap(const QMap<QString, QString>& list);

@@ -6,7 +6,7 @@
  * Date        : 2009-06-03
  * Description : A PGF IO file for DImg framework
  *
- * Copyright (C) 2009-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This implementation use LibPGF API <http://www.libpgf.org>
  *
@@ -23,6 +23,7 @@
  *
  * ============================================================ */
 
+#include "config-digikam.h"
 #include "pgfloader.h"
 
 // C Ansi includes
@@ -64,12 +65,15 @@ extern "C"
 #include <windows.h>
 #endif
 
+// Libpgf includes
+
+#include <PGFimage.h>
+
 // Local includes
 
-#include "config-digikam.h"
-#include "PGFimage.h"
 #include "dimg.h"
 #include "dimgloaderobserver.h"
+#include "pgfutils.h"
 
 namespace Digikam
 {
@@ -89,7 +93,7 @@ static bool CallbackForLibPGF(double percent, bool escapeAllowed, void* data)
     return false;
 }
 
-PGFLoader::PGFLoader(DImg* image)
+PGFLoader::PGFLoader(DImg* const image)
     : DImgLoader(image)
 {
     m_hasAlpha   = false;
@@ -97,7 +101,7 @@ PGFLoader::PGFLoader(DImg* image)
     m_observer   = 0;
 }
 
-bool PGFLoader::load(const QString& filePath, DImgLoaderObserver* observer)
+bool PGFLoader::load(const QString& filePath, DImgLoaderObserver* const observer)
 {
     m_observer = observer;
     readMetadata(filePath, DImg::PGF);
@@ -149,6 +153,7 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver* observer)
     }
 
 #else
+
     int fd = open(QFile::encodeName(filePath), O_RDONLY);
 
     if (fd == -1)
@@ -233,6 +238,9 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver* observer)
         kDebug() << "Has Alpha    = " << m_hasAlpha;
         kDebug() << "Is 16 bits   = " << m_sixteenBit;
 #endif
+
+        // NOTE: see B.K.O #273765 : Loading PGF thumbs with OpenMP support through a separated thread do not work properlly with libppgf 6.11.24
+        pgf.ConfigureDecoder(libPGFUseOpenMP());
 
         int width   = pgf.Width();
         int height  = pgf.Height();
@@ -352,7 +360,7 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver* observer)
     return true;
 }
 
-bool PGFLoader::save(const QString& filePath, DImgLoaderObserver* observer)
+bool PGFLoader::save(const QString& filePath, DImgLoaderObserver* const observer)
 {
     m_observer = observer;
 
@@ -428,11 +436,16 @@ bool PGFLoader::save(const QString& filePath, DImgLoaderObserver* observer)
 
 #ifdef PGFCodecVersionID
 #   if PGFCodecVersionID < 0x061142
-        header.background.rgbtBlue = header.background.rgbtGreen = header.background.rgbtRed = 0;
+        header.background.rgbtBlue  = 0;
+        header.background.rgbtGreen = 0;
+        header.background.rgbtRed   = 0;
 #   endif
 #endif
 
         pgf.SetHeader(header);
+
+        // NOTE: see B.K.O #273765 : Loading PGF thumbs with OpenMP support through a separated thread do not work properlly with libppgf 6.11.24
+        pgf.ConfigureEncoder(libPGFUseOpenMP());
 
         pgf.ImportBitmap(4 * imageWidth() * (imageSixteenBit() ? 2 : 1),
                          (UINT8*)imageData(),
@@ -441,6 +454,7 @@ bool PGFLoader::save(const QString& filePath, DImgLoaderObserver* observer)
                          CallbackForLibPGF, this);
 
         UINT32 nWrittenBytes = 0;
+
 #ifdef PGFCodecVersionID
 #   if PGFCodecVersionID >= 0x061124
         pgf.Write(&stream, &nWrittenBytes, CallbackForLibPGF, this);
@@ -448,7 +462,6 @@ bool PGFLoader::save(const QString& filePath, DImgLoaderObserver* observer)
 #else
         pgf.Write(&stream, 0, CallbackForLibPGF, &nWrittenBytes, this);
 #endif
-
 
 #ifdef USE_ADVANCEDDEBUGMSG
         kDebug() << "PGF width     = " << header.width;
