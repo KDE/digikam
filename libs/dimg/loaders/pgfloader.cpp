@@ -73,6 +73,7 @@ extern "C"
 
 #include "dimg.h"
 #include "dimgloaderobserver.h"
+#include "pgfutils.h"
 
 namespace Digikam
 {
@@ -239,8 +240,8 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver* const observer
 #endif
 
         // NOTE: see B.K.O #273765 : Loading PGF thumbs with OpenMP support through a separated thread do not work properlly with libppgf 6.11.24
-        pgf.ConfigureDecoder(false);
-        
+        pgf.ConfigureDecoder(libPGFUseOpenMP());
+
         int width   = pgf.Width();
         int height  = pgf.Height();
         uchar* data = 0;
@@ -444,7 +445,7 @@ bool PGFLoader::save(const QString& filePath, DImgLoaderObserver* const observer
         pgf.SetHeader(header);
 
         // NOTE: see B.K.O #273765 : Loading PGF thumbs with OpenMP support through a separated thread do not work properlly with libppgf 6.11.24
-        pgf.ConfigureEncoder(false);
+        pgf.ConfigureEncoder(libPGFUseOpenMP());
 
         pgf.ImportBitmap(4 * imageWidth() * (imageSixteenBit() ? 2 : 1),
                          (UINT8*)imageData(),
