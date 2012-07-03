@@ -36,5 +36,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 022 ==> 275400 - "Reduced Size Preview" images are blurry and not rotated after upgrade from 1.2.0.
 023 ==> 294578 - Problem when moving grouped pictures from one album to another.
 024 ==> 295274 - Crash when specific pictures are opened in Image Editor.
-025 ==> 
+025 ==> 287331 - digiKam crashes when reading a large pic collection.
+026 ==> 
+
 
