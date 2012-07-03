@@ -75,7 +75,7 @@ bool readPGFImageData(const QByteArray& data, QImage& img, bool verbose)
 
         CPGFImage        pgfImg;
         // NOTE: see B.K.O #273765 : Loading PGF thumbs with OpenMP support through a separated thread do not work properlly with libppgf 6.11.24
-        pgfImg.ConfigureDecoder(false);
+        pgfImg.ConfigureDecoder(libPGFUseOpenMP());
 
         pgfImg.Open(&stream);
         if (verbose) kDebug() << "PGF image is open";
@@ -241,7 +241,7 @@ bool writePGFImageDataToStream(const QImage& image, CPGFStream& stream, int qual
         pgfImg.SetHeader(header);
 
         // NOTE: see B.K.O #273765 : Loading PGF thumbs with OpenMP support through a separated thread do not work properlly with libppgf 6.11.24
-        pgfImg.ConfigureEncoder(false);
+        pgfImg.ConfigureEncoder(libPGFUseOpenMP());
 
         if (verbose)
         {

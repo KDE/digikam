@@ -6,7 +6,7 @@
  * Date        : 2008-07-11
  * Description : shared libraries list dialog
  *
- * Copyright (C) 2008-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -82,7 +82,7 @@ extern "C"
 namespace Digikam
 {
 
-LibsInfoDlg::LibsInfoDlg(QWidget* parent)
+LibsInfoDlg::LibsInfoDlg(QWidget* const parent)
     : InfoDlg(parent)
 {
     setCaption(i18n("Shared Libraries and Components Information"));
@@ -148,6 +148,8 @@ LibsInfoDlg::LibsInfoDlg(QWidget* parent)
 #else
     list.insert(i18n("LibPGF"),                      QString("%1 - %2").arg(libPGFVersion()).arg(i18n("internal library")));
 #endif // USE_EXT_LIBPGF
+
+    list.insert(i18n("Parallelized PGF codec"),      libPGFUseOpenMP() ? i18n("Yes") : i18n("No"));
 
 #ifdef USE_EXT_LIBCLAPACK
     list.insert(i18n("LibClapack"),                  i18n("external shared library"));
