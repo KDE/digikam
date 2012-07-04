@@ -37,6 +37,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 023 ==> 294578 - Problem when moving grouped pictures from one album to another.
 024 ==> 295274 - Crash when specific pictures are opened in Image Editor.
 025 ==> 287331 - digiKam crashes when reading a large pic collection.
-026 ==> 
+026 ==> 302802 - In albumview, turningkeys have disappeared, whereas these are switched on in setting.
+027 ==> 
 
 
