@@ -37,6 +37,9 @@
 namespace Digikam
 {
 
+namespace PGFUtils
+{
+
 /** PGF image data to QImage using memory stream.
     NOTE: Only use this method to manage PGF thumbnails stored in database (256x256 pixels image)
  */
@@ -70,6 +73,8 @@ QString libPGFVersion();
 /** Return true if libpgf is compiled with OpenMP support
  */
 bool libPGFUseOpenMP();
+
+} // namespace PGFUtils
 
 }  // namespace Digikam
 

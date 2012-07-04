@@ -45,7 +45,7 @@ int main(int argc, char** argv)
         return -1;
     }
 
-    kDebug() << "Using LibPGF version: " << libPGFVersion();
+    kDebug() << "Using LibPGF version: " << PGFUtils::libPGFVersion();
     QImage img;
 
     // Write PGF file.
@@ -61,7 +61,7 @@ int main(int argc, char** argv)
 
     // PGF => QImage conversion
 
-    if (!loadPGFScaled(img, file.fileName(), 1280))
+    if (!PGFUtils::loadPGFScaled(img, file.fileName(), 1280))
     {
         kDebug() << "loadPGFScaled failed...";
         return -1;

@@ -7,7 +7,7 @@
  * Description : Loader for thumbnails
  *
  * Copyright (C) 2003-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2003-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2003-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -25,7 +25,6 @@
 
 #ifndef DIGIKAMTHUMBNAILCREATORPRIV_H
 #define DIGIKAMTHUMBNAILCREATORPRIV_H
-
 
 // KDE includes
 
@@ -52,17 +51,19 @@ public:
         return qimage.isNull();
     }
 
+public:
+
     QImage qimage;
     int    exifOrientation;
 };
 
 // -------------------------------------------------------------------
 
-class ThumbnailCreator::ThumbnailCreatorPriv
+class ThumbnailCreator::Private
 {
 public:
 
-    ThumbnailCreatorPriv()
+    Private()
     {
         thumbnailSize                             = 0;
         observer                                  = 0;
@@ -102,6 +103,8 @@ public:
     DImgLoaderObserver*             observer;
     DRawDecoding                    rawSettings;
     DRawDecoding                    fastRawSettings;
+
+public:
 
     int                             storageSize() const;
 };
