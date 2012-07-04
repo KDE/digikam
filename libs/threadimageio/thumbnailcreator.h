@@ -7,7 +7,7 @@
  * Description : Loader for thumbnails
  *
  * Copyright (C) 2003-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2003-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2003-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -153,7 +153,7 @@ public:
      * is created by loading with DImg.
      * Note that DImg is not used in most cases (Raw files, JPEG)
      */
-    void setLoadingProperties(DImgLoaderObserver* observer, const DRawDecoding& settings);
+    void setLoadingProperties(DImgLoaderObserver* const observer, const DRawDecoding& settings);
 
     /**
      * Set the Exif rotation property.
@@ -180,7 +180,7 @@ public:
     /**
      * Set a ThumbnailInfoProvider to provide custom ThumbnailInfos
      */
-    void setThumbnailInfoProvider(ThumbnailInfoProvider* provider);
+    void setThumbnailInfoProvider(ThumbnailInfoProvider* const provider);
 
     /**
      * Return the thumbnail size, the maximum size of the QImage
@@ -224,15 +224,17 @@ private:
 
     void initialize();
 
+    ThumbnailImage createThumbnail(const ThumbnailInfo& info, const QRect& detailRect = QRect(), bool isFace = false) const;
+
     QImage load(const QString& path, const QRect& rect, bool pregenerate) const;
-    ThumbnailImage createThumbnail(const Digikam::ThumbnailInfo& info, const QRect& detailRect = QRect(), bool isFace = false) const;
-    QImage loadWithDImg(const QString& path, IccProfile* profile) const;
-    QImage loadImageDetail(const ThumbnailInfo& info, const DMetadata& metadata, const QRect& detailRect, IccProfile* profile) const;
+    QImage loadWithDImg(const QString& path, IccProfile* const profile) const;
+    QImage loadImageDetail(const ThumbnailInfo& info, const DMetadata& metadata, const QRect& detailRect, IccProfile* const profile) const;
     QImage loadImagePreview(const DMetadata& metadata) const;
-    QImage handleAlphaChannel(const QImage& thumb) const;
-    int exifOrientation(const ThumbnailInfo& info, const DMetadata& metadata, bool fromEmbeddedPreview, bool fromDetail) const;
-    QImage exifRotate(const QImage& thumb, int orientation) const;
     QImage loadPNG(const QString& path) const;
+
+    QImage handleAlphaChannel(const QImage& thumb) const;
+    int    exifOrientation(const ThumbnailInfo& info, const DMetadata& metadata, bool fromEmbeddedPreview, bool fromDetail) const;
+    QImage exifRotate(const QImage& thumb, int orientation) const;
 
     void store(const QString& path, const QImage& i, const QRect& rect, bool isFace = false) const;
 
@@ -262,8 +264,8 @@ private:
 
 private:
 
-    class ThumbnailCreatorPriv;
-    ThumbnailCreatorPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

@@ -805,7 +805,7 @@ void CameraController::runAutoRotateThread(CameraController* cont, KUrl& tempURL
 {
         kDebug() << "Exif autorotate: " << file << " using (" << tempURL << ")";
         cont->sendLogMsg(i18n("EXIF rotating file %1...", file), DHistoryView::StartingEntry, folder, file);
-        JpegRotator rotator(tempURL.toLocalFile());
+        JPEGUtils::JpegRotator rotator(tempURL.toLocalFile());
         rotator.setDocumentName(file);
         rotator.autoExifTransform();
 }

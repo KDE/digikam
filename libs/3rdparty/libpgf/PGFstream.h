@@ -114,11 +114,13 @@ public:
 	/// Constructor
 	/// @param size Size of new allocated memory buffer
 	CPGFMemoryStream(size_t size) THROW_;
+	
 	/// Constructor. Use already allocated memory of given size
 	/// @param pBuffer Memory location
 	/// @param size Memory size
 	CPGFMemoryStream(UINT8 *pBuffer, size_t size) THROW_;
-	/// Constructor. Use already allocated memory of given size
+	
+	/// Use already allocated memory of given size
 	/// @param pBuffer Memory location
 	/// @param size Memory size
 	void Reinitialize(UINT8 *pBuffer, size_t size) THROW_;

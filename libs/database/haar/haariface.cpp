@@ -668,10 +668,10 @@ QImage HaarIface::loadQImage(const QString& filename)
 
     QImage image;
 
-    if (isJpegImage(filename))
+    if (JPEGUtils::isJpegImage(filename))
     {
         // use fast jpeg loading
-        if (!loadJPEGScaled(image, filename, Haar::NumberOfPixels))
+        if (!JPEGUtils::loadJPEGScaled(image, filename, Haar::NumberOfPixels))
         {
             // try QT now.
             if (!image.load(filename))

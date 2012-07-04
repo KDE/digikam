@@ -47,6 +47,9 @@ using namespace KExiv2Iface;
 namespace Digikam
 {
 
+namespace JPEGUtils
+{
+
 typedef RotationMatrix::TransformationAction TransformAction;
 
 class DIGIKAM_EXPORT JpegRotator
@@ -75,7 +78,7 @@ public:
      * Set the destination file. By default, the source file will be overwritten
      * by atomic operation if the operation had succeeded.
      */
-    void setDestinationFile(const QString dest);
+    void setDestinationFile(const QString& dest);
 
     /**
      * Rotate the JPEG file's content according to the current orientation,
@@ -117,6 +120,8 @@ DIGIKAM_EXPORT bool loadJPEGScaled(QImage& image, const QString& path, int maxim
 DIGIKAM_EXPORT bool jpegConvert(const QString& src, const QString& dest, const QString& documentName, const QString& format=QString("PNG"));
 DIGIKAM_EXPORT bool isJpegImage(const QString& file);
 DIGIKAM_EXPORT bool copyFile(const QString& src, const QString& dst);
+
+} // namespace JPEGUtils
 
 } // namespace Digikam
 

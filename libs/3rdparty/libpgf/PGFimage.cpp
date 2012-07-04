@@ -56,8 +56,8 @@ CPGFImage::CPGFImage()
 : m_decoder(0)
 , m_encoder(0)
 , m_levelLength(0)
-, m_userDataPos(0)
 , m_quant(0)
+, m_userDataPos(0)
 , m_downsample(false)
 , m_favorSpeedOverSize(false)
 , m_useOMPinEncoder(true)
@@ -68,8 +68,8 @@ CPGFImage::CPGFImage()
 #endif
 , m_cb(0)
 , m_cbArg(0)
-, m_percent(0)
 , m_progressMode(PM_Relative)
+, m_percent(0)
 {
 
 	// init preHeader
@@ -1114,7 +1114,7 @@ UINT32 CPGFImage::WriteImage(CPGFStream* stream, CallbackPtr cb /*= NULL*/, void
 	}
 
 	// update level lengths
-	nWrittenBytes = m_encoder->UpdateLevelLength(); // return written image bytes 
+	nWrittenBytes += m_encoder->UpdateLevelLength(); // return written image bytes 
 
 	// delete encoder
 	delete m_encoder; m_encoder = NULL;

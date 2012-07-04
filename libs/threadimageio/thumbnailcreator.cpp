@@ -7,7 +7,7 @@
  * Description : Loader for thumbnails
  *
  * Copyright (C) 2003-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2003-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2003-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -78,6 +78,8 @@
 #include "thumbnaildatabaseaccess.h"
 #include "thumbnaildb.h"
 
+using namespace KDcrawIface;
+
 namespace Digikam
 {
 
@@ -89,14 +91,14 @@ ThumbnailInfo::ThumbnailInfo()
 }
 
 ThumbnailCreator::ThumbnailCreator(StorageMethod method)
-    : d(new ThumbnailCreatorPriv)
+    : d(new Private)
 {
     d->thumbnailStorage = method;
     initialize();
 }
 
 ThumbnailCreator::ThumbnailCreator(int thumbnailSize, StorageMethod method)
-    : d(new ThumbnailCreatorPriv)
+    : d(new Private)
 {
     setThumbnailSize(thumbnailSize);
     d->thumbnailStorage = method;
@@ -116,7 +118,7 @@ void ThumbnailCreator::initialize()
     }
 }
 
-int ThumbnailCreator::ThumbnailCreatorPriv::storageSize() const
+int ThumbnailCreator::Private::storageSize() const
 {
     // on-disk thumbnail sizes according to freedesktop spec
     // always 256 for thumbnail db
@@ -150,13 +152,13 @@ void ThumbnailCreator::setRemoveAlphaChannel(bool removeAlpha)
     d->removeAlphaChannel = removeAlpha;
 }
 
-void ThumbnailCreator::setLoadingProperties(DImgLoaderObserver* observer, const DRawDecoding& settings)
+void ThumbnailCreator::setLoadingProperties(DImgLoaderObserver* const observer, const DRawDecoding& settings)
 {
     d->observer    = observer;
     d->rawSettings = settings;
 }
 
-void ThumbnailCreator::setThumbnailInfoProvider(ThumbnailInfoProvider* provider)
+void ThumbnailCreator::setThumbnailInfoProvider(ThumbnailInfoProvider* const provider)
 {
     d->infoProvider = provider;
 }
@@ -375,10 +377,10 @@ void ThumbnailCreator::store(const QString& path, const QImage& i, const QRect& 
         return;
     }
 
-    QImage qimage      = scaleForStorage(i, isFace);
-    ThumbnailInfo info = makeThumbnailInfo(path, rect);
+    QImage         qimage = scaleForStorage(i, isFace);
+    ThumbnailInfo  info   = makeThumbnailInfo(path, rect);
     ThumbnailImage image;
-    image.qimage       = qimage;
+    image.qimage          = qimage;
 
     switch (d->thumbnailStorage)
     {
@@ -476,7 +478,7 @@ ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo& info, cons
             else
                 // use jpegutils
             {
-                loadJPEGScaled(qimage, path, d->storageSize());
+                JPEGUtils::loadJPEGScaled(qimage, path, d->storageSize());
             }
 
             failedAtJPEGScaled = qimage.isNull();
@@ -491,7 +493,7 @@ ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo& info, cons
         else if (ext == QString("PGF"))
         {
             // use pgf library to extract reduced version
-            loadPGFScaled(qimage, path, d->storageSize());
+            PGFUtils::loadPGFScaled(qimage, path, d->storageSize());
             failedAtPGFScaled = qimage.isNull();
         }
     }
@@ -499,7 +501,7 @@ ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo& info, cons
     // Trying to load with dcraw: RAW files.
     if (qimage.isNull())
     {
-        if (KDcrawIface::KDcraw::loadEmbeddedPreview(qimage, path))
+        if (KDcraw::loadEmbeddedPreview(qimage, path))
         {
             fromEmbeddedPreview = true;
             profile             = metadata.getIccProfile();
@@ -509,7 +511,7 @@ ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo& info, cons
     if (qimage.isNull())
     {
         //TODO: Use DImg based loader instead?
-        KDcrawIface::KDcraw::loadHalfPreview(qimage, path);
+        KDcraw::loadHalfPreview(qimage, path);
     }
 
     // DImg-dependent loading methods: TIFF, PNG, everything supported by QImage
@@ -522,14 +524,14 @@ ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo& info, cons
     if (qimage.isNull() && !failedAtJPEGScaled)
     {
         // use jpegutils
-        loadJPEGScaled(qimage, path, d->storageSize());
+        JPEGUtils::loadJPEGScaled(qimage, path, d->storageSize());
     }
 
     // Try PGF anyway
     if (qimage.isNull() && !failedAtPGFScaled)
     {
         // use jpegutils
-        loadPGFScaled(qimage, path, d->storageSize());
+        PGFUtils::loadPGFScaled(qimage, path, d->storageSize());
     }
 
     if (qimage.isNull())
@@ -552,7 +554,7 @@ ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo& info, cons
     return image;
 }
 
-QImage ThumbnailCreator::loadWithDImg(const QString& path, IccProfile* profile) const
+QImage ThumbnailCreator::loadWithDImg(const QString& path, IccProfile* const profile) const
 {
     DImg img;
     img.setAttribute("scaledLoadingSize", d->storageSize());
@@ -562,7 +564,7 @@ QImage ThumbnailCreator::loadWithDImg(const QString& path, IccProfile* profile) 
 }
 
 QImage ThumbnailCreator::loadImageDetail(const ThumbnailInfo& info, const DMetadata& metadata,
-                                         const QRect& detailRect, IccProfile* profile) const
+                                         const QRect& detailRect, IccProfile* const profile) const
 {
     const QString& path = info.filePath;
     // Check the first and largest preview (Raw files)
@@ -571,7 +573,7 @@ QImage ThumbnailCreator::loadImageDetail(const ThumbnailInfo& info, const DMetad
     if (!previews.isEmpty())
     {
         // discard if smaller than half preview
-        int acceptableWidth  = lround(previews.originalSize().width() * 0.5);
+        int acceptableWidth  = lround(previews.originalSize().width()  * 0.5);
         int acceptableHeight = lround(previews.originalSize().height() * 0.5);
 
         if (previews.width() >= acceptableWidth &&  previews.height() >= acceptableHeight)
@@ -689,7 +691,7 @@ void ThumbnailCreator::storeInDatabase(const ThumbnailInfo& info, const Thumbnai
     {
         // NOTE: see B.K.O #233094: using PGF compression level 4 there. Do not use a value > 4,
         // else image is blurred due to down-sampling.
-        if (!writePGFImageData(image.qimage, dbInfo.data, 4))
+        if (!PGFUtils::writePGFImageData(image.qimage, dbInfo.data, 4))
         {
             kWarning() << "Cannot save PGF thumb in DB";
             return;
@@ -880,7 +882,7 @@ ThumbnailImage ThumbnailCreator::loadFromDatabase(const ThumbnailInfo& info) con
     // Read QImage from data blob
     if (dbInfo.type == DatabaseThumbnail::PGF)
     {
-        if (!readPGFImageData(dbInfo.data, image.qimage))
+        if (!PGFUtils::readPGFImageData(dbInfo.data, image.qimage))
         {
             kWarning() << "Cannot load PGF thumb from DB";
             return ThumbnailImage();

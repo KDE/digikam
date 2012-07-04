@@ -177,9 +177,9 @@ bool Rotate::toolOperations()
 
     // JPEG image : lossless method if non-custom rotation angle.
 
-    if (isJpegImage(inputUrl().toLocalFile()) && image().isNull())
+    if (JPEGUtils::isJpegImage(inputUrl().toLocalFile()) && image().isNull())
     {
-        JpegRotator rotator(inputUrl().toLocalFile());
+        JPEGUtils::JpegRotator rotator(inputUrl().toLocalFile());
         rotator.setDestinationFile(outputUrl().toLocalFile());
 
         if (useExif)
@@ -203,7 +203,7 @@ bool Rotate::toolOperations()
                     break;
 
                 default:
-                    // there is no lossless methode to turn JPEG image with a custom angle.
+                    // there is no lossless method to turn JPEG image with a custom angle.
                     // fall through
                     break;
             }

@@ -79,6 +79,10 @@ extern "C"
 #   endif // HAVE_GLIB2
 #endif // USE_EXT_LIBLENSFUN
 
+using namespace KExiv2Iface;
+using namespace KDcrawIface;
+using namespace KGeoMap;
+
 namespace Digikam
 {
 
@@ -92,26 +96,26 @@ LibsInfoDlg::LibsInfoDlg(QWidget* const parent)
     QMap<QString, QString> list;
     list.insert(i18n("LibQt"),                       qVersion());
     list.insert(i18n("LibKDE"),                      KDE::versionString());
-    list.insert(i18n("LibKdcraw"),                   KDcrawIface::KDcraw::version());
-    list.insert(i18n("LibRaw"),                      KDcrawIface::KDcraw::librawVersion());
+    list.insert(i18n("LibKdcraw"),                   KDcraw::version());
+    list.insert(i18n("LibRaw"),                      KDcraw::librawVersion());
 
 #if KDCRAW_VERSION >= 0x000500
-    list.insert(i18n("Parallelized demosaicing"),    KDcrawIface::KDcraw::librawUseGomp() ?
+    list.insert(i18n("Parallelized demosaicing"),    KDcraw::librawUseGomp() ?
                 i18n("Yes") : i18n("No"));
 #endif
-    list.insert(i18n("LibKExiv2"),                   KExiv2Iface::KExiv2::version());
-    list.insert(i18n("LibExiv2"),                    KExiv2Iface::KExiv2::Exiv2Version());
-    list.insert(i18n("Exiv2 supports XMP metadata"), KExiv2Iface::KExiv2::supportXmp() ?
+    list.insert(i18n("LibKExiv2"),                   KExiv2::version());
+    list.insert(i18n("LibExiv2"),                    KExiv2::Exiv2Version());
+    list.insert(i18n("Exiv2 supports XMP metadata"), KExiv2::supportXmp() ?
                 i18n("Yes") : i18n("No"));
-    list.insert(i18n("Exiv2 can write to Jpeg"),     KExiv2Iface::KExiv2::supportMetadataWritting("image/jpeg") ?
+    list.insert(i18n("Exiv2 can write to Jpeg"),     KExiv2::supportMetadataWritting("image/jpeg") ?
                 i18n("Yes") : i18n("No"));
-    list.insert(i18n("Exiv2 can write to Tiff"),     KExiv2Iface::KExiv2::supportMetadataWritting("image/tiff") ?
+    list.insert(i18n("Exiv2 can write to Tiff"),     KExiv2::supportMetadataWritting("image/tiff") ?
                 i18n("Yes") : i18n("No"));
-    list.insert(i18n("Exiv2 can write to Png"),      KExiv2Iface::KExiv2::supportMetadataWritting("image/png") ?
+    list.insert(i18n("Exiv2 can write to Png"),      KExiv2::supportMetadataWritting("image/png") ?
                 i18n("Yes") : i18n("No"));
-    list.insert(i18n("Exiv2 can write to Jp2"),      KExiv2Iface::KExiv2::supportMetadataWritting("image/jp2") ?
+    list.insert(i18n("Exiv2 can write to Jp2"),      KExiv2::supportMetadataWritting("image/jp2") ?
                 i18n("Yes") : i18n("No"));
-    list.insert(i18n("Exiv2 can write to Pgf"),      KExiv2Iface::KExiv2::supportMetadataWritting("image/pgf") ?
+    list.insert(i18n("Exiv2 can write to Pgf"),      KExiv2::supportMetadataWritting("image/pgf") ?
                 i18n("Yes") : i18n("No"));
 
 #ifndef USE_EXT_LIBLENSFUN
@@ -140,16 +144,16 @@ LibsInfoDlg::LibsInfoDlg(QWidget* const parent)
     list.insert(i18n("LibJasper"),                   QString(jas_getversion()));
     list.insert(i18n("LibCImg"),                     GreycstorationFilter::cimgVersionString());
     list.insert(i18n("LibLCMS"),                     QString::number(LCMS_VERSION));
-    list.insert(i18n("LibKGeoMap"),                     KGeoMap::KGeoMapWidget::version());
-    list.insert(i18n("Marble Widget"),               KGeoMap::KGeoMapWidget::MarbleWidgetVersion());
+    list.insert(i18n("LibKGeoMap"),                  KGeoMapWidget::version());
+    list.insert(i18n("Marble Widget"),               KGeoMapWidget::MarbleWidgetVersion());
 
 #ifdef USE_EXT_LIBPGF
-    list.insert(i18n("LibPGF"),                      QString("%1 - %2").arg(libPGFVersion()).arg(i18n("external shared library")));
+    list.insert(i18n("LibPGF"),                      QString("%1 - %2").arg(PGFUtils::libPGFVersion()).arg(i18n("external shared library")));
 #else
-    list.insert(i18n("LibPGF"),                      QString("%1 - %2").arg(libPGFVersion()).arg(i18n("internal library")));
+    list.insert(i18n("LibPGF"),                      QString("%1 - %2").arg(PGFUtils::libPGFVersion()).arg(i18n("internal library")));
 #endif // USE_EXT_LIBPGF
 
-    list.insert(i18n("Parallelized PGF codec"),      libPGFUseOpenMP() ? i18n("Yes") : i18n("No"));
+    list.insert(i18n("Parallelized PGF codec"),      PGFUtils::libPGFUseOpenMP() ? i18n("Yes") : i18n("No"));
 
 #ifdef USE_EXT_LIBCLAPACK
     list.insert(i18n("LibClapack"),                  i18n("external shared library"));

@@ -57,6 +57,9 @@ extern "C"
 namespace Digikam
 {
 
+namespace PGFUtils
+{
+
 // Private method
 bool writePGFImageDataToStream(const QImage& image, CPGFStream& stream, int quality, UINT32& nWrittenBytes, bool verbose);
 
@@ -177,7 +180,7 @@ bool writePGFImageData(const QImage& image, QByteArray& data, int quality, bool 
 #ifdef PGFCodecVersionID
 #   if PGFCodecVersionID == 0x061224
                                       // Wrap around libpgf 6.12.24 about CPGFMemoryStream bytes size generated to make PGF file data.
-                                      // It miss 16 bytes at end. This solution fix the problem for digiKam until a right fix in libpgf is found.
+                                      // It miss 16 bytes at end. This solution fix the problem. Problem have been fixed in 6.12.27.
                                       nWrittenBytes + 16);
 #   else
                                       nWrittenBytes);
@@ -431,4 +434,6 @@ bool libPGFUseOpenMP()
 #endif
 }
 
-}  // namespace Digikam
+} // namespace PGFUtils
+
+} // namespace Digikam
