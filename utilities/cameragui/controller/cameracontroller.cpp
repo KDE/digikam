@@ -594,7 +594,7 @@ void CameraController::executeCommand(CameraCommand* cmd)
                 sendLogMsg(i18n("Failed to download %1...", file), DHistoryView::ErrorEntry, folder, file);
                 break;
             }
-            else if (isJpegImage(tempURL.toLocalFile()))
+            else if (JPEGUtils::isJpegImage(tempURL.toLocalFile()))
             {
                 // Possible modification operations. Only apply it to JPEG for the moment.
 
@@ -602,7 +602,7 @@ void CameraController::executeCommand(CameraCommand* cmd)
                 {
                     kDebug() << "Exif autorotate: " << file << " using (" << tempURL << ")";
                     sendLogMsg(i18n("EXIF rotating file %1...", file), DHistoryView::StartingEntry, folder, file);
-                    JpegRotator rotator(tempURL.toLocalFile());
+                    JPEGUtils::JpegRotator rotator(tempURL.toLocalFile());
                     rotator.setDocumentName(file);
                     rotator.autoExifTransform();
                 }
@@ -656,7 +656,7 @@ void CameraController::executeCommand(CameraCommand* cmd)
                     tempURL2.addPath(QString(".digikam-camera-tmp2-%1").arg(getpid()).append(file));
                     temp     = tempURL2.toLocalFile();
 
-                    if (!jpegConvert(tempURL.toLocalFile(), tempURL2.toLocalFile(), file, losslessFormat))
+                    if (!JPEGUtils::jpegConvert(tempURL.toLocalFile(), tempURL2.toLocalFile(), file, losslessFormat))
                     {
                         // convert failed. delete the temp file
                         unlink(QFile::encodeName(tempURL.toLocalFile()));

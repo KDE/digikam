@@ -96,9 +96,9 @@ bool Flip::toolOperations()
 {
     DImg::FLIP flip = (DImg::FLIP)(settings()["Flip"].toInt());
 
-    if (isJpegImage(inputUrl().toLocalFile()) && image().isNull())
+    if (JPEGUtils::isJpegImage(inputUrl().toLocalFile()) && image().isNull())
     {
-        JpegRotator rotator(inputUrl().toLocalFile());
+        JPEGUtils::JpegRotator rotator(inputUrl().toLocalFile());
         rotator.setDestinationFile(outputUrl().toLocalFile());
 
         switch (flip)

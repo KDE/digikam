@@ -80,6 +80,9 @@ extern "C"
 namespace Digikam
 {
 
+namespace JPEGUtils
+{
+
 // To manage Errors/Warnings handling provide by libjpeg
 
 struct jpegutils_jpeg_error_mgr : public jpeg_error_mgr
@@ -330,7 +333,7 @@ void JpegRotator::setDocumentName(const QString& documentName)
     m_documentName = documentName;
 }
 
-void JpegRotator::setDestinationFile(const QString dest)
+void JpegRotator::setDestinationFile(const QString& dest)
 {
     m_destFile = dest;
 }
@@ -422,7 +425,6 @@ bool JpegRotator::exifTransform(const RotationMatrix& matrix)
 
     return true;
 }
-
 
 void JpegRotator::updateMetadata(const QString& fileName, const RotationMatrix &matrix)
 {
@@ -712,5 +714,7 @@ bool copyFile(const QString& src, const QString& dst)
 
     return true;
 }
+
+} // namespace JPEGUtils
 
 } // namespace Digikam

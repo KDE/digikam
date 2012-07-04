@@ -150,7 +150,7 @@ void FileActionMngrFileWorker::transform(FileActionImageInfoList infos, int acti
         // We'll later check again if it was successful
         if (behavior & MetadataSettingsContainer::RotatingPixels)
         {
-            if (format == "JPG" && isJpegImage(path))
+            if (format == "JPG" && JPEGUtils::isJpegImage(path))
             {
                 rotateAsJpeg = true;
             }
@@ -180,7 +180,7 @@ void FileActionMngrFileWorker::transform(FileActionImageInfoList infos, int acti
         bool rotatedPixels = false;
         if (rotateAsJpeg)
         {
-            JpegRotator rotator(path);
+            JPEGUtils::JpegRotator rotator(path);
             rotator.setCurrentOrientation(currentOrientation);
             if (action == KExiv2Iface::RotationMatrix::NoTransformation)
             {

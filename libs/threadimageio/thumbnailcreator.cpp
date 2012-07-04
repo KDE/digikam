@@ -478,7 +478,7 @@ ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo& info, cons
             else
                 // use jpegutils
             {
-                loadJPEGScaled(qimage, path, d->storageSize());
+                JPEGUtils::loadJPEGScaled(qimage, path, d->storageSize());
             }
 
             failedAtJPEGScaled = qimage.isNull();
@@ -524,7 +524,7 @@ ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo& info, cons
     if (qimage.isNull() && !failedAtJPEGScaled)
     {
         // use jpegutils
-        loadJPEGScaled(qimage, path, d->storageSize());
+        JPEGUtils::loadJPEGScaled(qimage, path, d->storageSize());
     }
 
     // Try PGF anyway
