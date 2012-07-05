@@ -38,6 +38,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 024 ==> 295274 - Crash when specific pictures are opened in Image Editor.
 025 ==> 287331 - digiKam crashes when reading a large pic collection.
 026 ==> 302802 - In albumview, turningkeys have disappeared, whereas these are switched on in setting.
-027 ==> 
+027 ==> 295335 - Pasting a name in the "Who is this?" input field does not activate "Confirm" Button.
+028 ==> 
 
 

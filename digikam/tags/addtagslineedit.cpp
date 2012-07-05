@@ -375,6 +375,11 @@ void AddTagsLineEdit::slotTextChanged(const QString& text)
     {
         setCurrentTaggingAction(TaggingAction());
     }
+    // for cases like copy+paste where autocompletion does not activate
+    else if (!d->currentTaggingAction.isValid())
+    {
+        setCurrentTaggingAction(d->makeTaggingAction(text));
+    }
 }
 
 TaggingAction AddTagsLineEdit::AddTagsLineEditPriv::makeTaggingAction(const QString& text)
