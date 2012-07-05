@@ -47,7 +47,7 @@
 namespace Digikam
 {
 
-ImportKCategorizedView::ImportKCategorizedViewPriv::ImportKCategorizedViewPriv(ImportKCategorizedView* listView)
+ImportKCategorizedView::ImportKCategorizedViewPriv::ImportKCategorizedViewPriv(ImportKCategorizedView* const listView)
     : listView(listView),
       categoryDrawer(0),
       biggestItemSize(QSize(0, 0)),

@@ -1,4 +1,5 @@
 SET(libcameragui_SRCS
+    ${CMAKE_CURRENT_SOURCE_DIR}/main/cameraui.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/controller/cameracontroller.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/controller/camerathumbsctrl.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/controller/camerahistoryupdater.cpp
@@ -10,6 +11,12 @@ SET(libcameragui_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/camerainfodialog.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/capturedlg.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/cameramessagebox.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/capturewidget.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/freespacewidget.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/renamecustomizer.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/albumcustomizer.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/advancedsettings.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/filtercombo.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/items/camerafolderitem.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/items/cameraiconitem.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/views/camerafolderview.cpp
@@ -17,13 +24,7 @@ SET(libcameragui_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/views/cameraiconviewtooltip.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/views/cameranamehelper.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/views/freespacetooltip.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/capturewidget.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/freespacewidget.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/renamecustomizer.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/albumcustomizer.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/advancedsettings.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/filtercombo.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/main/cameraui.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/views/importkcategorizedview.cpp
 
     ${CMAKE_CURRENT_SOURCE_DIR}/models/importimagemodel.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/models/importthumbnailmodel.cpp

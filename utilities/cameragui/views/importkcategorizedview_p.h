@@ -1,3 +1,26 @@
+/* ============================================================
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2012-05-07
+ * Description : Item view to list import interface items.
+ *
+ * Copyright (C) 2012 by Islam Wazery <wazery at ubuntu dot com>
+ *
+ * This program is free software; you can redistribute it
+ * and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation;
+ * either version 2, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * ============================================================ */
+
 #ifndef ImportKCategorizedView_P_H
 #define ImportKCategorizedView_P_H
 
@@ -9,8 +32,10 @@ namespace Digikam
 
 class SparseModelIndexVector : public QVector<QModelIndex>
 {
+
 public:
-    SparseModelIndexVector(int rowCount, QAbstractItemModel* model, int column)
+
+    SparseModelIndexVector(int rowCount, QAbstractItemModel* const model, int column)
         : QVector<QModelIndex>(rowCount), model(model), column(column)
     {
     }
@@ -28,21 +53,26 @@ public:
     }
 
 private:
+
     // not to be used
     const QModelIndex& operator[](int i) const
     {
         return QVector<QModelIndex>::operator[](i);
     }
 
+private:
+
     QAbstractItemModel* model;
     int                 column;
 };
+
+// ------------------------------------------------------------------------------
 
 class ImportKCategorizedView::ImportKCategorizedViewPriv
 {
 public:
 
-    ImportKCategorizedViewPriv(ImportKCategorizedView* listView);
+    ImportKCategorizedViewPriv(ImportKCategorizedView* const listView);
     ~ImportKCategorizedViewPriv();
 
     /**
@@ -146,6 +176,8 @@ public:
         QString category;
         int     relativeOffsetToCategory;
     };
+
+public:
 
     // Basic data
     ImportKCategorizedView*           listView;
