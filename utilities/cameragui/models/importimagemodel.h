@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2012-05-22
- * Description : Qt item model for camera entries
+ * Description : Qt model for camera entries
  *
  * Copyright (C) 2012 by Islam Wazery <wazery at ubuntu dot com>
  *
@@ -57,10 +57,10 @@ public:
         /// Returns a thumbnail pixmap. May be implemented by subclasses.
         /// Returns either a valid pixmap or a null QVariant.
         ThumbnailRole               = Qt::UserRole + 2,
+        /// Return (optional) extraData field
+        ExtraDataRole               = Qt::UserRole + 3,
 
-        // FIXME (cgilles) : dummy values added to compile importfiltermodel.cpp
-        FilterModelRoles            = Qt::UserRole + 3,
-        ExtraDataRole               = Qt::UserRole + 4
+        FilterModelRoles            = Qt::UserRole + 100
     };
 
 public:
@@ -68,7 +68,7 @@ public:
     ImportImageModel(QObject* const parent = 0);
     ~ImportImageModel();
 
-    //TODO: make a method to set the camera controller, and connect with it.
+    // Used to set the camera controller, and connect with it.
     virtual void setCameraController(CameraController* const controller);
 
     /** If a cache is kept, lookup by file path is fast,
