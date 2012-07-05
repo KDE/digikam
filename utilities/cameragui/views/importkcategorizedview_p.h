@@ -137,7 +137,7 @@ public:
     void drawNewCategory(const QModelIndex& index,
                          int sortRole,
                          const QStyleOption& option,
-                         QPainter* painter);
+                         QPainter* const painter);
 
     /**
       * This method will update scrollbars ranges. Called when our model changes
@@ -148,7 +148,7 @@ public:
     /**
       * This method will draw dragged items in the painting operation
       */
-    void drawDraggedItems(QPainter* painter);
+    void drawDraggedItems(QPainter* const painter);
 
     /**
       * This method will determine which rect needs to be updated because of a

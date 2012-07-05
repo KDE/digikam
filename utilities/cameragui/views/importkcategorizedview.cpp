@@ -448,7 +448,7 @@ QSize ImportKCategorizedView::ImportKCategorizedViewPriv::contentsSize()
 }
 
 void ImportKCategorizedView::ImportKCategorizedViewPriv::drawNewCategory(const QModelIndex& index, int sortRole,
-                                                       const QStyleOption& option, QPainter* painter)
+                                                                         const QStyleOption& option, QPainter* const painter)
 {
     if (!index.isValid())
     {
@@ -481,7 +481,6 @@ void ImportKCategorizedView::ImportKCategorizedViewPriv::drawNewCategory(const Q
     categoryDrawer->drawCategory(index, sortRole, optionCopy, painter);
 }
 
-
 void ImportKCategorizedView::ImportKCategorizedViewPriv::updateScrollbars()
 {
     listView->horizontalScrollBar()->setRange(0, 0);
@@ -501,10 +500,11 @@ void ImportKCategorizedView::ImportKCategorizedViewPriv::updateScrollbars()
     listView->verticalScrollBar()->setRange(0, contentsSize().height());
 }
 
-void ImportKCategorizedView::ImportKCategorizedViewPriv::drawDraggedItems(QPainter* painter)
+void ImportKCategorizedView::ImportKCategorizedViewPriv::drawDraggedItems(QPainter* const painter)
 {
     QStyleOptionViewItemV4 option = listView->viewOptions();
     option.state                  &= ~QStyle::State_MouseOver;
+
     foreach(const QModelIndex& index, listView->selectionModel()->selectedIndexes())
     {
         const int dx = mousePosition.x() - initialPressPosition.x() + listView->horizontalOffset();
@@ -544,7 +544,7 @@ void ImportKCategorizedView::ImportKCategorizedViewPriv::drawDraggedItems()
 
 // ---- ImportKCategorizedView ------------------------------
 
-ImportKCategorizedView::ImportKCategorizedView(QWidget* parent)
+ImportKCategorizedView::ImportKCategorizedView(QWidget* const parent)
     : QListView(parent), d(new ImportKCategorizedViewPriv(this))
 {
 }
@@ -638,8 +638,10 @@ QModelIndex ImportKCategorizedView::categoryAt(const QPoint& point) const
     }
 
     // We traverse the categories and find the first where point.y() is below the visualRect
-    int     y = 0, lastY = 0;
+    int y     = 0;
+    int lastY = 0;
     QString lastCategory;
+
     foreach(const QString& category, d->categories)
     {
         y = d->categoryVisualRect(category).top();
@@ -951,8 +953,8 @@ QItemSelection ImportKCategorizedView::ImportKCategorizedViewPriv::selectionForR
 {
     QItemSelection selection;
     QModelIndex    tl, br;
-    QModelIndexList intersectedIndexes = intersectionSet(rect);
-    QList<QModelIndex>::const_iterator it    = intersectedIndexes.constBegin();
+    QModelIndexList intersectedIndexes    = intersectionSet(rect);
+    QList<QModelIndex>::const_iterator it = intersectedIndexes.constBegin();
 
     for (; it != intersectedIndexes.constEnd(); ++it)
     {
@@ -991,8 +993,7 @@ QItemSelection ImportKCategorizedView::ImportKCategorizedViewPriv::selectionForR
     return selection;
 }
 
-void ImportKCategorizedView::setSelection(const QRect& rect,
-                                           QItemSelectionModel::SelectionFlags command)
+void ImportKCategorizedView::setSelection(const QRect& rect, QItemSelectionModel::SelectionFlags command)
 {
     if (!d->proxyModel || !d->categoryDrawer || !d->proxyModel->isCategorizedModel())
     {
@@ -1677,7 +1678,7 @@ void ImportKCategorizedView::rowsInserted(const QModelIndex& parent, int start, 
 }
 
 int ImportKCategorizedView::ImportKCategorizedViewPriv::categoryUpperBound(SparseModelIndexVector& modelIndexList,
-                                                         int begin, int averageSize)
+                                                                           int begin, int averageSize)
 {
     int end            = modelIndexList.size();
     QString category   = proxyModel->data(modelIndexList[begin],

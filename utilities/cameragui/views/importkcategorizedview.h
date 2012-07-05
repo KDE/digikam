@@ -39,7 +39,7 @@ class ImportKCategorizedView : public QListView
 
 public:
 
-    ImportKCategorizedView(QWidget* parent = 0);
+    ImportKCategorizedView(QWidget* const parent = 0);
     ~ImportKCategorizedView();
 
     void setGridSize(const QSize& size);
@@ -90,6 +90,15 @@ public Q_SLOTS:
 
     virtual void reset();
 
+protected Q_SLOTS:
+
+    virtual void rowsInserted(const QModelIndex& parent, int start, int end);
+    virtual void rowsInsertedArtifficial(const QModelIndex& parent, int start, int end);
+    virtual void rowsRemoved(const QModelIndex& parent, int start, int end);
+    virtual void updateGeometries();
+    virtual void slotLayoutChanged();
+    virtual void currentChanged(const QModelIndex& current, const QModelIndex& previous);
+
 protected:
 
     virtual void paintEvent(QPaintEvent* event);
@@ -104,15 +113,6 @@ protected:
     virtual void dragLeaveEvent(QDragLeaveEvent* event);
     virtual void dropEvent(QDropEvent* event);
     virtual QModelIndex moveCursor(CursorAction cursorAction, Qt::KeyboardModifiers modifiers);
-
-protected Q_SLOTS:
-
-    virtual void rowsInserted(const QModelIndex& parent, int start, int end);
-    virtual void rowsInsertedArtifficial(const QModelIndex& parent, int start, int end);
-    virtual void rowsRemoved(const QModelIndex& parent, int start, int end);
-    virtual void updateGeometries();
-    virtual void slotLayoutChanged();
-    virtual void currentChanged(const QModelIndex& current, const QModelIndex& previous);
 
 private:
 
