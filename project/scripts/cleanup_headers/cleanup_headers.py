@@ -1,5 +1,29 @@
 #!/usr/bin/env python
 
+# ============================================================
+# 
+# This file is a part of digiKam project
+# http://www.digikam.org
+# 
+# Date        : 2009-10-12
+# Description : a helper script for formatting the digiKam source code
+# 
+# Copyright (C) 2009-2012 by Andi Clemens <andi dot clemens at googlemail dot com>
+# 
+# This program is free software; you can redistribute it
+# and/or modify it under the terms of the GNU General
+# Public License as published by the Free Software Foundation;
+# either version 2, or (at your option)
+# any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# ============================================================ */
+
+
 import os
 import sys
 import re
