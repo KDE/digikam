@@ -55,14 +55,8 @@ pknown      = dict()                                      # will hold known patt
 
 # --------------------------------------------------
 def intro(dir, pattern):
-    print 
-    print("*" * 80)
-    print("*")
-    print("* digiKam code cleaner")
-    print("*")
-    print("* Copyright 2008-2011, Andi Clemens <andi dot clemens at googlemail dot com>")
-    print("*")
-    print("*" * 80)
+    print()
+    print("digiKam code cleaner")
     print()
     print("SOURCEDIR:\t%s" % os.path.realpath(dir))
     print("PATTERNS FILE:\t%s" % pattern)
