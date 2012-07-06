@@ -31,7 +31,7 @@ import re
 # --------------------------------------------------
 # VARIABLES
 sourcedir    = ""
-patternsdir  = os.path.dirname(sys.argv[0])
+patternsdir  = os.path.dirname(os.path.realpath(__file__))
 patternsurl  = os.path.join(patternsdir, "known_patterns.txt")
 filelist     = list()
 
