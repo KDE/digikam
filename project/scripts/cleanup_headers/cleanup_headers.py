@@ -161,7 +161,7 @@ def parse_files(filelist):
                     print("PARSE ERROR: %s (%s)" % (line.strip(), file))
                     continue
 
-                if pow.match(include):          owninc.append(include)
+                if pow.match(include):                   owninc.append(include)
                 elif (include.strip() in pknown['kde']): kdeinc.append(include)
                 elif (include.strip() in pknown['cpp']): cppinc.append(include)
                 elif (include.strip() in pknown['c']):   cinc.append(include)
