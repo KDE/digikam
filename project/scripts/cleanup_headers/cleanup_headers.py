@@ -87,13 +87,14 @@ def generate_known_patterns(file):
         f = open(file, 'r')
         for line in f:
             k, v = line.strip().split()
-            if not patterns.has_key(k):
+            if not k in patterns:
                 patterns[k] = list()
             patterns[k].append(v)
     except:
         patterns = dict()
     finally:
         f.close()
+
     return patterns
 
 # --------------------------------------------------
