@@ -21,6 +21,7 @@
  *
  * ============================================================ */
 
+
 #include "facepipeline.moc"
 #include "facepipeline_p.moc"
 
@@ -1188,7 +1189,7 @@ FacePipeline::FacePipeline()
 FacePipeline::~FacePipeline()
 {
     cancel();
-    wait();
+//    wait();
     delete d->databaseFilter;
     delete d->previewThread;
     delete d->detectionWorker;
