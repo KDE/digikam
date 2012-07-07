@@ -271,9 +271,14 @@ void FileActionMngrDatabaseWorker::applyMetadata(FileActionImageInfoList infos, 
     }
     //ScanController::instance()->resumeCollectionScan();
 
-    infos.schedulingForWrite(infos.size(), i18n("Writing metadata to files"), d->fileProgressCreator());
-    for (ImageInfoTaskSplitter splitter(infos); splitter.hasNext(); )
-        emit writeMetadata(splitter.next(), hub->clone());
+    if (hub->willWriteMetadata(MetadataHub::FullWriteIfChanged))
+    {
+        // dont filter by shallSendForWriting here; we write from the hub, not from freshly loaded data
+        infos.schedulingForWrite(infos.size(), i18n("Writing metadata to files"), d->fileProgressCreator());
+        for (ImageInfoTaskSplitter splitter(infos); splitter.hasNext(); )
+            emit writeMetadata(splitter.next(), hub->clone());
+    }
+
     delete hub;
     infos.dbFinished();
 }
