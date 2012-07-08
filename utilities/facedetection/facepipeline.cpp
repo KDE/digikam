@@ -1189,7 +1189,7 @@ FacePipeline::FacePipeline()
 FacePipeline::~FacePipeline()
 {
     cancel();
-//    wait();
+    d->wait();
     delete d->databaseFilter;
     delete d->previewThread;
     delete d->detectionWorker;
