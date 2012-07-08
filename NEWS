@@ -5,5 +5,6 @@ NEW FEATURES:
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
-001 ==> 
+001 ==> 296786 - Zoom to 100% pans to the top-left corner.
+002 ==>
 
