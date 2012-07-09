@@ -83,11 +83,7 @@ SetupCollections::SetupCollections(KPageDialog* dialog, QWidget* parent)
     : QScrollArea(parent), d(new SetupCollectionsPriv)
 {
     d->mainDialog  = dialog;
-    QWidget* panel = new QWidget(viewport());
-    panel->setAutoFillBackground(false);
-    setWidget(panel);
-    setWidgetResizable(true);
-    viewport()->setAutoFillBackground(false);
+    QWidget* panel = new QWidget;
 
     QVBoxLayout* layout = new QVBoxLayout(panel);
 
@@ -124,10 +120,10 @@ SetupCollections::SetupCollections(KPageDialog* dialog, QWidget* parent)
 
     // --------------------------------------------------------
 
-    layout->setMargin(0);
-    layout->setSpacing(KDialog::spacingHint());
     layout->addWidget(albumPathBox);
-    layout->addStretch();
+
+    setWidget(panel);
+    setWidgetResizable(true);
 
     // --------------------------------------------------------
 

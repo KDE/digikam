@@ -464,12 +464,13 @@ bool StackedView::minZoom()
 
 void StackedView::setZoomFactor(double z)
 {
-    d->imagePreviewView->layout()->setZoomFactor(z);
+    // Giving a null anchor means to use the current view center
+    d->imagePreviewView->layout()->setZoomFactor(z, QPoint());
 }
 
 void StackedView::setZoomFactorSnapped(double z)
 {
-    d->imagePreviewView->layout()->setZoomFactor(z);
+    d->imagePreviewView->layout()->setZoomFactor(z, QPoint(), SinglePhotoPreviewLayout::SnapZoomFactor);
 }
 
 double StackedView::zoomFactor()

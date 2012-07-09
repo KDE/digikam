@@ -1099,6 +1099,7 @@ void ImageWindow::saveIsComplete()
         m_canvas->preload(d->imageInfo(next).filePath());
     }
 
+    slotUpdateItemInfo();
     setViewToURL(d->currentImageInfo.fileUrl());
 }
 
