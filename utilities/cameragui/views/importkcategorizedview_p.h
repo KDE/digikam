@@ -68,12 +68,12 @@ private:
 
 // ------------------------------------------------------------------------------
 
-class ImportKCategorizedView::ImportKCategorizedViewPriv
+class ImportKCategorizedView::Private
 {
 public:
 
-    ImportKCategorizedViewPriv(ImportKCategorizedView* const listView);
-    ~ImportKCategorizedViewPriv();
+    Private(ImportKCategorizedView* const listView);
+    ~Private();
 
     /**
       * Returns the list of items that intersects with @p rect

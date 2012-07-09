@@ -116,8 +116,8 @@ protected:
 
 private:
 
-    class ImportKCategorizedViewPriv;
-    ImportKCategorizedViewPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } //namespace Digikam

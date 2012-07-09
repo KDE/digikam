@@ -46,7 +46,7 @@ public:
     ItemViewImportDelegatePrivate();
     virtual ~ItemViewImportDelegatePrivate() {}
 
-    void init(ItemViewImportDelegate* _q);
+    void init(ItemViewImportDelegate* const _q);
 
     void makeStarPolygon();
 
@@ -102,7 +102,7 @@ ItemViewImportDelegatePrivate::ItemViewImportDelegatePrivate()
     ratingPixmaps = QVector<QPixmap>(10);
 }
 
-void ItemViewImportDelegatePrivate::init(ItemViewImportDelegate* _q)
+void ItemViewImportDelegatePrivate::init(ItemViewImportDelegate* const _q)
 {
     q = _q;
 
@@ -136,11 +136,12 @@ void ItemViewImportDelegatePrivate::makeStarPolygon()
 
 // ---- ItemViewImportDelegate -----------------------------------------------
 
-ItemViewImportDelegate::ItemViewImportDelegate(QObject* parent)
+ItemViewImportDelegate::ItemViewImportDelegate(QObject* const parent)
     : DItemDelegate(parent), d(new ItemViewImportDelegatePrivate)
 {
     d->init(this);
 }
+
 ItemViewImportDelegate::~ItemViewImportDelegate()
 {
     Q_D(ItemViewImportDelegate);
@@ -281,7 +282,7 @@ void ItemViewImportDelegate::invalidatePaintingCache()
 }
 
 QRect ItemViewImportDelegate::drawThumbnail(QPainter* p, const QRect& thumbRect, const QPixmap& background,
-                                           const QPixmap& thumbnail) const
+                                            const QPixmap& thumbnail) const
 {
     p->drawPixmap(0, 0, background);
 
@@ -324,12 +325,14 @@ void ItemViewImportDelegate::drawPanelSideIcon(QPainter* p, bool left, bool righ
 {
     Q_D(const ItemViewImportDelegate);
     int iconSize = KIconLoader::SizeSmall;
+
     if (left)
     {
         QRect r(3, d->rect.height()/2 - iconSize/2, iconSize, iconSize);
         QIcon icon = KIconLoader::global()->loadIcon("arrow-left", KIconLoader::NoGroup, iconSize);
         icon.paint(p, r);
     }
+
     if (right)
     {
         QRect r(d->rect.width() - 3 - iconSize, d->rect.height()/2 - iconSize/2, iconSize, iconSize);
@@ -339,7 +342,7 @@ void ItemViewImportDelegate::drawPanelSideIcon(QPainter* p, bool left, bool righ
 }
 
 void ItemViewImportDelegate::drawGroupIndicator(QPainter* p, const QRect& r,
-                                               int numberOfGroupedImages, bool open) const
+                                                int numberOfGroupedImages, bool open) const
 {
     if (numberOfGroupedImages)
     {

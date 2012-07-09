@@ -41,11 +41,11 @@
 namespace Digikam
 {
 
-class ICategorizedView::ICategorizedViewPriv
+class ICategorizedView::Private
 {
 public:
 
-    ICategorizedViewPriv(ICategorizedView* q) :
+    Private(ICategorizedView* const q) :
         delegate(0),
         currentMouseEvent(0),
         usePointingHand(true),
@@ -81,7 +81,7 @@ public:
     ICategorizedView* const     q;
 };
 
-QModelIndex ICategorizedView::ICategorizedViewPriv::scrollPositionHint() const
+QModelIndex ICategorizedView::Private::scrollPositionHint() const
 {
     if (q->verticalScrollBar()->value() == q->verticalScrollBar()->minimum())
     {
@@ -103,8 +103,8 @@ QModelIndex ICategorizedView::ICategorizedViewPriv::scrollPositionHint() const
     return hint;
 }
 
-ICategorizedView::ICategorizedView(QWidget* parent)
-    : ImportKCategorizedView(parent), d(new ICategorizedViewPriv(this))
+ICategorizedView::ICategorizedView(QWidget* const parent)
+    : ImportKCategorizedView(parent), d(new Private(this))
 {
     setViewMode(QListView::IconMode);
     setLayoutDirection(Qt::LeftToRight);
@@ -225,7 +225,6 @@ void ICategorizedView::awayFromSelection()
         toNextIndex();
     }
 }
-
 
 void ICategorizedView::scrollToRelaxed(const QModelIndex& index, ScrollHint hint)
 {
@@ -653,7 +652,7 @@ void ICategorizedView::reset()
     emit selectionCleared();
 
     d->ensureInitialSelectedItem = true;
-    d->hintAtScrollPosition   = QModelIndex();
+    d->hintAtScrollPosition      = QModelIndex();
     d->hintAtSelectionIndex      = QModelIndex();
     d->hintAtSelectionRow        = -1;
     verticalScrollBar()->setValue(verticalScrollBar()->minimum());
@@ -829,6 +828,7 @@ QPixmap ICategorizedView::pixmapForDrag(const QList<QModelIndex>& indexes) const
 QModelIndex ICategorizedView::nextIndexHint(const QModelIndex& indexToAnchor, const QItemSelectionRange& removed) const
 {
     Q_UNUSED(indexToAnchor);
+
     if (removed.bottomRight().row() == model()->rowCount() - 1)
     {
         if (removed.topLeft().row() == 0)

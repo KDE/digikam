@@ -42,7 +42,7 @@ class ICategorizedView : public ImportKCategorizedView, DragDropViewImplementati
 
 public:
 
-    ICategorizedView(QWidget* parent = 0);
+    ICategorizedView(QWidget* const parent = 0);
     ~ICategorizedView();
 
     DItemDelegate* delegate() const;
@@ -80,8 +80,8 @@ public:
 
 public Q_SLOTS:
 
-    virtual void copy() { DragDropViewImplementation::copy(); }
-    virtual void cut() { DragDropViewImplementation::cut(); }
+    virtual void copy()  { DragDropViewImplementation::copy();  }
+    virtual void cut()   { DragDropViewImplementation::cut();   }
     virtual void paste() { DragDropViewImplementation::paste(); }
 
     void showIndexNotification(const QModelIndex& index, const QString& message);
@@ -94,21 +94,26 @@ Q_SIGNALS:
      */
     void clicked(const QMouseEvent* e, const QModelIndex& index);
     void entered(const QMouseEvent* e, const QModelIndex& index);
-    /// While clicked() is emitted with a valid index, this corresponds to clicking on empty space
+
+    /** While clicked() is emitted with a valid index, this corresponds to clicking on empty space.
+     */
     void viewportClicked(const QMouseEvent* e);
 
     /**  Remember you may want to check if the event is accepted or ignored.
      *   This signal is emitted after being handled by this widget.
-     *   You can accept it if ignored. */
+     *   You can accept it if ignored.
+     */
     void keyPressed(QKeyEvent* e);
 
     void zoomInStep();
     void zoomOutStep();
 
-    /** Emitted when any selection change occurs. Any of the signals below will be emitted before. */
+    /** Emitted when any selection change occurs. Any of the signals below will be emitted before.
+     */
     void selectionChanged();
 
-    /** Emitted when the selection is completely cleared. */
+    /** Emitted when the selection is completely cleared.
+     */
     void selectionCleared();
 
 protected Q_SLOTS:
@@ -145,14 +150,16 @@ protected:
     bool viewportEvent(QEvent* event);
     QModelIndex moveCursor(CursorAction cursorAction, Qt::KeyboardModifiers modifiers);
 
-    /** Reimplement thses in a subclass. */
+    /** Reimplement thses in a subclass.
+     */
     virtual void showContextMenuOnIndex(QContextMenuEvent* event, const QModelIndex& index);
     virtual void showContextMenu(QContextMenuEvent* event);
     virtual void indexActivated(const QModelIndex& index);
 
     DECLARE_VIEW_DRAG_DROP_METHODS(ImportKCategorizedView)
 
-    /// Note: pure virtual dragDropHandler() still open from DragDropViewImplementation
+    /** Note: pure virtual dragDropHandler() still open from DragDropViewImplementation.
+     */
     virtual QModelIndex mapIndexForDragDrop(const QModelIndex& index) const;
     virtual QPixmap     pixmapForDrag(const QList<QModelIndex>& indexes) const;
 
@@ -169,7 +176,8 @@ protected:
     void updateDelegateSizes();
     void userInteraction();
 
-    /** Returns an index that is representative for the category at position pos */
+    /** Returns an index that is representative for the category at position pos.
+     */
     QModelIndex indexForCategoryAt(const QPoint& pos) const;
 
 private Q_SLOTS:
@@ -182,8 +190,8 @@ private:
 
 private:
 
-    class ICategorizedViewPriv;
-    ICategorizedViewPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

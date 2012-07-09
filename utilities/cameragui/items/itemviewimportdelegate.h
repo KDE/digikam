@@ -33,15 +33,13 @@
 namespace Digikam
 {
 
-class ItemViewImportDelegatePrivate;
-
 class ItemViewImportDelegate : public DItemDelegate, ImageDelegateOverlayContainer // Some reuse of the existing model-view classes.
 {
     Q_OBJECT
 
 public:
 
-    ItemViewImportDelegate(QObject* parent = 0);
+    ItemViewImportDelegate(QObject* const parent = 0);
     ~ItemViewImportDelegate();
 
     ThumbnailSize thumbnailSize() const;
@@ -109,7 +107,7 @@ protected:
 
 protected:
 
-    ItemViewImportDelegatePrivate* const d;
+    class ItemViewImportDelegatePrivate* const d;
     ItemViewImportDelegate(ItemViewImportDelegatePrivate& dd, QObject* parent);
 
 private:
