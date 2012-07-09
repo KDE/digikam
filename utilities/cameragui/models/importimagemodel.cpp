@@ -27,16 +27,14 @@
 
 #include <QHash>
 
-#include "importimagemodel.h"
-
 namespace Digikam
 {
 
-class ImportImageModel::ImportImageModelPriv
+class ImportImageModel::Private
 {
 public:
 
-    ImportImageModelPriv()
+    Private()
     {
         keepFileUrlCache            = false;
         preprocessor                = 0;
@@ -81,7 +79,7 @@ class ImportImageModelIncrementalUpdater
 {
 public:
 
-    ImportImageModelIncrementalUpdater(ImportImageModel::ImportImageModelPriv* const d);
+    ImportImageModelIncrementalUpdater(ImportImageModel::Private* const d);
 
     void            appendInfos(const QList<CamItemInfo>& infos);
     void            aboutToBeRemovedInModel(const IntPairList& aboutToBeRemoved);
@@ -100,7 +98,7 @@ public:
 
 ImportImageModel::ImportImageModel(QObject* const parent)
     : QAbstractListModel(parent),
-      d(new ImportImageModelPriv)
+      d(new Private)
 {
 }
 
@@ -873,7 +871,7 @@ void ImportImageModel::removeRowPairs(const QList<QPair<int, int> >& toRemove)
 
 // ------------ ImportImageModelIncrementalUpdater ------------
 
-ImportImageModelIncrementalUpdater::ImportImageModelIncrementalUpdater(ImportImageModel::ImportImageModelPriv* const d)
+ImportImageModelIncrementalUpdater::ImportImageModelIncrementalUpdater(ImportImageModel::Private* const d)
 {
     oldIds = d->idHash;
 }
