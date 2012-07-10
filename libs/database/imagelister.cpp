@@ -81,26 +81,48 @@ static inline int toInt32BitSafe(const QList<QVariant>::const_iterator& it)
     return (int)v;
 }
 
-ImageLister::ImageLister()
+// ---------------------------------------------------------------------------------
+
+class ImageLister::Private
 {
-    m_recursive               = true;
-    m_listOnlyAvailableImages = true;
-    m_allowExtraValues        = false;
+
+public:
+
+    Private()
+    {
+        recursive               = true;
+        listOnlyAvailableImages = true;
+        allowExtraValues        = false;
+    }
+
+    bool recursive;
+    bool listOnlyAvailableImages;
+    bool allowExtraValues;
+};
+
+ImageLister::ImageLister()
+    : d(new Private)
+{
+}
+
+ImageLister::~ImageLister()
+{
+    delete d;
 }
 
 void ImageLister::setRecursive(bool recursive)
 {
-    m_recursive = recursive;
+    d->recursive = recursive;
 }
 
 void ImageLister::setListOnlyAvailable(bool listOnlyAvailable)
 {
-    m_listOnlyAvailableImages = listOnlyAvailable;
+    d->listOnlyAvailableImages = listOnlyAvailable;
 }
 
 void ImageLister::setAllowExtraValues(bool useExtraValue)
 {
-    m_allowExtraValues = useExtraValue;
+    d->allowExtraValues = useExtraValue;
 }
 
 KIO::TransferJob* ImageLister::startListJob(const DatabaseUrl& url, int extraValue)
@@ -141,10 +163,9 @@ void ImageLister::list(ImageListerReceiver* const receiver, const DatabaseUrl& u
     }
 }
 
-void ImageLister::listAlbum(ImageListerReceiver* const receiver,
-                            int albumRootId, const QString& album)
+void ImageLister::listAlbum(ImageListerReceiver* const receiver, int albumRootId, const QString& album)
 {
-    if (m_listOnlyAvailableImages)
+    if (d->listOnlyAvailableImages)
     {
         if (!CollectionManager::instance()->locationForAlbumRootId(albumRootId).isAvailable())
         {
@@ -154,7 +175,7 @@ void ImageLister::listAlbum(ImageListerReceiver* const receiver,
 
     QList<QVariant> albumIds;
 
-    if (m_recursive)
+    if (d->recursive)
     {
         QList<int> intAlbumIds = DatabaseAccess().db()->getAlbumAndSubalbumsForPath(albumRootId, album);
 
@@ -191,7 +212,7 @@ void ImageLister::listAlbum(ImageListerReceiver* const receiver,
                     "       INNER JOIN ImageInformation ON Images.id=ImageInformation.imageid "
                     " WHERE Images.status=1 AND ";
 
-    if (m_recursive)
+    if (d->recursive)
     {
         // SQLite allows no more than 999 parameters
         const int maxParams = DatabaseAccess().backend()->maximumBoundValues();
@@ -258,14 +279,14 @@ void ImageLister::listAlbum(ImageListerReceiver* const receiver,
 
 void ImageLister::listTag(ImageListerReceiver* const receiver, int tagId)
 {
-    QList<QVariant> values;
+    QList<QVariant>         values;
     QMap<QString, QVariant> parameters;
     parameters.insert(":tagPID", tagId);
     parameters.insert(":tagID",  tagId);
 
     DatabaseAccess access;
 
-    if (m_recursive)
+    if (d->recursive)
     {
         access.backend()->execDBAction(access.backend()->getDBAction(QString("listTagRecursive")), parameters, &values);
     }
@@ -309,7 +330,7 @@ void ImageLister::listTag(ImageListerReceiver* const receiver, int tagId)
         height                   = (*it).toInt();
         ++it;
 
-        if (m_listOnlyAvailableImages && !albumRoots.contains(record.albumRootID))
+        if (d->listOnlyAvailableImages && !albumRoots.contains(record.albumRootID))
         {
             continue;
         }
@@ -357,7 +378,6 @@ void ImageLister::listFaces(ImageListerReceiver* const receiver, int personId)
     listFromIdList(receiver, list);
 }
 
-
 void ImageLister::listDateRange(ImageListerReceiver* const receiver, const QDate& startDate, const QDate& endDate)
 {
     QList<QVariant> values;
@@ -383,8 +403,7 @@ void ImageLister::listDateRange(ImageListerReceiver* const receiver, const QDate
     }
 
     QSet<int> albumRoots = albumRootsToList();
-
-    int width, height;
+    int       width, height;
 
     for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd();)
     {
@@ -417,7 +436,7 @@ void ImageLister::listDateRange(ImageListerReceiver* const receiver, const QDate
         height                   = (*it).toInt();
         ++it;
 
-        if (m_listOnlyAvailableImages && !albumRoots.contains(record.albumRootID))
+        if (d->listOnlyAvailableImages && !albumRoots.contains(record.albumRootID))
         {
             continue;
         }
@@ -428,8 +447,7 @@ void ImageLister::listDateRange(ImageListerReceiver* const receiver, const QDate
     }
 }
 
-void ImageLister::listAreaRange(ImageListerReceiver* const receiver,
-                                double lat1, double lat2, double lon1, double lon2)
+void ImageLister::listAreaRange(ImageListerReceiver* const receiver, double lat1, double lat2, double lon1, double lon2)
 {
     QList<QVariant> values;
     QList<QVariant> boundValues;
@@ -454,13 +472,13 @@ void ImageLister::listAreaRange(ImageListerReceiver* const receiver,
 
 
     kDebug() << "Results:" << values.size() / 14;
-    QSet<int> albumRoots = albumRootsToList();
 
-    double lat, lon;
+    QSet<int> albumRoots = albumRootsToList();
+    double    lat, lon;
 
     for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd();)
     {
-        ImageListerRecord record(m_allowExtraValues ? ImageListerRecord::ExtraValueFormat : ImageListerRecord::TraditionalFormat);
+        ImageListerRecord record(d->allowExtraValues ? ImageListerRecord::ExtraValueFormat : ImageListerRecord::TraditionalFormat);
 
         record.imageID           = (*it).toLongLong();
         ++it;
@@ -476,7 +494,7 @@ void ImageLister::listAreaRange(ImageListerReceiver* const receiver,
         lon                      = (*it).toDouble();
         ++it;
 
-        if (m_listOnlyAvailableImages && !albumRoots.contains(record.albumRootID))
+        if (d->listOnlyAvailableImages && !albumRoots.contains(record.albumRootID))
         {
             continue;
         }
@@ -487,9 +505,7 @@ void ImageLister::listAreaRange(ImageListerReceiver* const receiver,
     }
 }
 
-void ImageLister::listSearch(ImageListerReceiver* const receiver,
-                             const QString& xml,
-                             int limit)
+void ImageLister::listSearch(ImageListerReceiver* const receiver, const QString& xml, int limit)
 {
     if (xml.isEmpty())
     {
@@ -592,7 +608,7 @@ void ImageLister::listSearch(ImageListerReceiver* const receiver,
         lon                      = (*it).toDouble();
         ++it;
 
-        if (m_listOnlyAvailableImages && !albumRoots.contains(record.albumRootID))
+        if (d->listOnlyAvailableImages && !albumRoots.contains(record.albumRootID))
         {
             continue;
         }
@@ -671,7 +687,7 @@ void ImageLister::listImageTagPropertySearch(ImageListerReceiver* const receiver
 
     for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd();)
     {
-        ImageListerRecord record(m_allowExtraValues ? ImageListerRecord::ExtraValueFormat : ImageListerRecord::TraditionalFormat);
+        ImageListerRecord record(d->allowExtraValues ? ImageListerRecord::ExtraValueFormat : ImageListerRecord::TraditionalFormat);
 
         record.imageID           = (*it).toLongLong();
         ++it;
@@ -707,7 +723,7 @@ void ImageLister::listImageTagPropertySearch(ImageListerReceiver* const receiver
         record.extraValues      << (*it); // tag id
         ++it;
 
-        if (m_listOnlyAvailableImages && !albumRoots.contains(record.albumRootID))
+        if (d->listOnlyAvailableImages && !albumRoots.contains(record.albumRootID))
         {
             continue;
         }
@@ -764,7 +780,7 @@ void ImageLister::listHaarSearch(ImageListerReceiver* const receiver, const QStr
         QString sig = reader.value();
         HaarIface iface;
 
-        if (m_listOnlyAvailableImages)
+        if (d->listOnlyAvailableImages)
         {
             iface.setAlbumRootsToSearch(albumRootsToList());
         }
@@ -776,7 +792,7 @@ void ImageLister::listHaarSearch(ImageListerReceiver* const receiver, const QStr
         qlonglong id = reader.valueToLongLong();
         HaarIface iface;
 
-        if (m_listOnlyAvailableImages)
+        if (d->listOnlyAvailableImages)
         {
             iface.setAlbumRootsToSearch(albumRootsToList());
         }
@@ -892,9 +908,9 @@ void ImageLister::listFromIdList(ImageListerReceiver* const receiver, const QLis
     }
 }
 
-QSet<int> ImageLister::albumRootsToList()
+QSet<int> ImageLister::albumRootsToList() const
 {
-    if (!m_listOnlyAvailableImages)
+    if (!d->listOnlyAvailableImages)
     {
         return QSet<int>();    // invalid value, all album roots shall be listed
     }
@@ -910,7 +926,7 @@ QSet<int> ImageLister::albumRootsToList()
     return ids;
 }
 
-QString ImageLister::tagSearchXml(const DatabaseUrl& url, const QString& type, bool includeChildTags)
+QString ImageLister::tagSearchXml(const DatabaseUrl& url, const QString& type, bool includeChildTags) const
 {
     int tagId = url.tagId();
 

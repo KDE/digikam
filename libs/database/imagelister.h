@@ -60,7 +60,10 @@ public:
      */
     static KIO::TransferJob* startListJob(const DatabaseUrl& url, int extraValue = -1);
 
+public:
+
     ImageLister();
+    ~ImageLister();
 
     /**
      * Adjust the setting if album or tags will be listed recursively (i.e. including subalbums / subtags)
@@ -82,15 +85,13 @@ public:
     /**
      * Convenience method for Album, Tag and Date URLs, _not_ for Search URLs.
      */
-    void list(ImageListerReceiver* receiver,
-              const DatabaseUrl& url);
+    void list(ImageListerReceiver* const receiver, const DatabaseUrl& url);
 
     /**
       * List images in the Album (physical album) specified by albumRoot, album.
       * The results will be fed to the specified receiver.
       */
-    void listAlbum(ImageListerReceiver* const receiver,
-                   int albumRootId, const QString& album);
+    void listAlbum(ImageListerReceiver* const receiver, int albumRootId, const QString& album);
 
     /**
      * List the images which have assigned the tag specified by tagId
@@ -120,9 +121,7 @@ public:
      * @param xml SearchXml describing the query
      * @param limit limit the count of the result set. If limit = 0, then no limit is set.
      */
-    void listSearch(ImageListerReceiver* const receiver,
-                    const QString& xml,
-                    int limit = 0);
+    void listSearch(ImageListerReceiver* const receiver, const QString& xml, int limit = 0);
 
     /**
      * Execute the search specified by search XML describing a Tag Properties search.
@@ -138,21 +137,19 @@ public:
      * @param receiver receiver for the searches
      * @param xml SearchXml describing the query
      */
-    void listHaarSearch(ImageListerReceiver* const receiver,
-                        const QString& xml);
+    void listHaarSearch(ImageListerReceiver* const receiver, const QString& xml);
 
-    QString tagSearchXml(const DatabaseUrl&, const QString& type, bool includeChildTags);
+    QString tagSearchXml(const DatabaseUrl&, const QString& type, bool includeChildTags) const;
 
 private:
 
     void listFromIdList(ImageListerReceiver* const receiver, const QList<qlonglong>& imageIds);
-    QSet<int> albumRootsToList();
+    QSet<int> albumRootsToList() const;
 
 private:
 
-    bool m_recursive;
-    bool m_listOnlyAvailableImages;
-    bool m_allowExtraValues;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam
