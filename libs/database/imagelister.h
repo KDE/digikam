@@ -6,8 +6,9 @@
  * Date        : 2007-03-20
  * Description : Listing information from database.
  *
- * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2007-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005      by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Copyright (C) 2007-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2007-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -88,7 +89,7 @@ public:
       * List images in the Album (physical album) specified by albumRoot, album.
       * The results will be fed to the specified receiver.
       */
-    void listAlbum(ImageListerReceiver* receiver,
+    void listAlbum(ImageListerReceiver* const receiver,
                    int albumRootId, const QString& album);
 
     /**
@@ -100,18 +101,18 @@ public:
      * List the images which have faces. An image with n faces will be listed n times.
      * FIXME: Obviously an ugly way. Should be trashed later in favor of a better method.
      */
-    void listFaces(ImageListerReceiver* receiver, int personId);
+    void listFaces(ImageListerReceiver* const receiver, int personId);
 
     /**
       * List those images whose date lies in the range beginning with startDate (inclusive)
       * and ending before endDate (exclusive).
       */
-    void listDateRange(ImageListerReceiver* receiver, const QDate& startDate, const QDate& endDate);
+    void listDateRange(ImageListerReceiver* const receiver, const QDate& startDate, const QDate& endDate);
 
     /**
      * List the images whose coordinates are between coordinates contained in areaCoordinates(lat1, lat2, lng1, lng2)
      */
-    void listAreaRange(ImageListerReceiver* receiver, double lat1, double lat2, double lon1, double lon2);
+    void listAreaRange(ImageListerReceiver* const receiver, double lat1, double lat2, double lon1, double lon2);
 
     /**
      * Execute the search specified by search XML
@@ -119,7 +120,7 @@ public:
      * @param xml SearchXml describing the query
      * @param limit limit the count of the result set. If limit = 0, then no limit is set.
      */
-    void listSearch(ImageListerReceiver* receiver,
+    void listSearch(ImageListerReceiver* const receiver,
                     const QString& xml,
                     int limit = 0);
 
@@ -130,21 +131,21 @@ public:
      * @param receiver receiver for the searches
      * @param xml SearchXml describing the query
      */
-    void listImageTagPropertySearch(ImageListerReceiver* receiver, const QString& xml);
+    void listImageTagPropertySearch(ImageListerReceiver* const receiver, const QString& xml);
 
     /**
      * Execute the search specified by search XML describing a Haar search
      * @param receiver receiver for the searches
      * @param xml SearchXml describing the query
      */
-    void listHaarSearch(ImageListerReceiver* receiver,
+    void listHaarSearch(ImageListerReceiver* const receiver,
                         const QString& xml);
 
     QString tagSearchXml(const DatabaseUrl&, const QString& type, bool includeChildTags);
 
 private:
 
-    void listFromIdList(ImageListerReceiver* receiver, QList<qlonglong> imageIds);
+    void listFromIdList(ImageListerReceiver* const receiver, const QList<qlonglong>& imageIds);
     QSet<int> albumRootsToList();
 
 private:

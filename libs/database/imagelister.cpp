@@ -6,8 +6,9 @@
  * Date        : 2007-03-20
  * Description : Listing information from database.
  *
- * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2007-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005      by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Copyright (C) 2007-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2007-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -82,9 +83,9 @@ static inline int toInt32BitSafe(const QList<QVariant>::const_iterator& it)
 
 ImageLister::ImageLister()
 {
-    m_recursive = true;
+    m_recursive               = true;
     m_listOnlyAvailableImages = true;
-    m_allowExtraValues = false;
+    m_allowExtraValues        = false;
 }
 
 void ImageLister::setRecursive(bool recursive)
@@ -116,7 +117,7 @@ KIO::TransferJob* ImageLister::startListJob(const DatabaseUrl& url, int extraVal
     return new KIO::SpecialJob(url, ba);
 }
 
-void ImageLister::list(ImageListerReceiver* receiver, const DatabaseUrl& url)
+void ImageLister::list(ImageListerReceiver* const receiver, const DatabaseUrl& url)
 {
     if (url.isAlbumUrl())
     {
@@ -140,7 +141,7 @@ void ImageLister::list(ImageListerReceiver* receiver, const DatabaseUrl& url)
     }
 }
 
-void ImageLister::listAlbum(ImageListerReceiver* receiver,
+void ImageLister::listAlbum(ImageListerReceiver* const receiver,
                             int albumRootId, const QString& album)
 {
     if (m_listOnlyAvailableImages)
@@ -196,12 +197,12 @@ void ImageLister::listAlbum(ImageListerReceiver* receiver,
         const int maxParams = DatabaseAccess().backend()->maximumBoundValues();
         for (int i=0; i<albumIds.size(); i++)
         {
-            QString q = query;
-            QList<QVariant> ids = (albumIds.size() <= maxParams) ? albumIds : albumIds.mid(i, maxParams);
-            i += ids.count();
-            QList<QVariant> v;
+            QString q           = query;
+            QList<QVariant> ids =  (albumIds.size() <= maxParams) ? albumIds : albumIds.mid(i, maxParams);
+            i                   += ids.count();
 
-            DatabaseAccess access;
+            QList<QVariant> v;
+            DatabaseAccess  access;
             q += "Images.album IN (";
             access.db()->addBoundValuePlaceholders(q, ids.size());
             q += ");";
@@ -255,7 +256,7 @@ void ImageLister::listAlbum(ImageListerReceiver* receiver,
     }
 }
 
-void ImageLister::listTag(ImageListerReceiver* receiver, int tagId)
+void ImageLister::listTag(ImageListerReceiver* const receiver, int tagId)
 {
     QList<QVariant> values;
     QMap<QString, QVariant> parameters;
@@ -319,14 +320,12 @@ void ImageLister::listTag(ImageListerReceiver* receiver, int tagId)
     }
 }
 
-void ImageLister::listFaces(ImageListerReceiver* receiver, int personId)
+void ImageLister::listFaces(ImageListerReceiver* const receiver, int personId)
 {
-
     QList<qlonglong> list;
+    QList<QVariant>  values;
+    DatabaseAccess   access;
 
-    QList<QVariant> values;
-
-    DatabaseAccess access;
     access.backend()->execSql(QString("SELECT Images.id "
                                       " FROM Images "
                                       "       INNER JOIN ImageInformation ON Images.id=ImageInformation.imageid "
@@ -359,7 +358,7 @@ void ImageLister::listFaces(ImageListerReceiver* receiver, int personId)
 }
 
 
-void ImageLister::listDateRange(ImageListerReceiver* receiver, const QDate& startDate, const QDate& endDate)
+void ImageLister::listDateRange(ImageListerReceiver* const receiver, const QDate& startDate, const QDate& endDate)
 {
     QList<QVariant> values;
 
@@ -429,7 +428,7 @@ void ImageLister::listDateRange(ImageListerReceiver* receiver, const QDate& star
     }
 }
 
-void ImageLister::listAreaRange(ImageListerReceiver* receiver,
+void ImageLister::listAreaRange(ImageListerReceiver* const receiver,
                                 double lat1, double lat2, double lon1, double lon2)
 {
     QList<QVariant> values;
@@ -486,12 +485,9 @@ void ImageLister::listAreaRange(ImageListerReceiver* receiver,
 
         receiver->receive(record);
     }
-
-
 }
 
-
-void ImageLister::listSearch(ImageListerReceiver* receiver,
+void ImageLister::listSearch(ImageListerReceiver* const receiver,
                              const QString& xml,
                              int limit)
 {
@@ -522,8 +518,9 @@ void ImageLister::listSearch(ImageListerReceiver* receiver,
                "WHERE Images.status=1 AND ( ";
 
     // query body
-    ImageQueryBuilder builder;
+    ImageQueryBuilder   builder;
     ImageQueryPostHooks hooks;
+
     sqlQuery += builder.buildQuery(xml, &boundValues, &hooks);
 
     if (limit > 0)
@@ -557,9 +554,8 @@ void ImageLister::listSearch(ImageListerReceiver* receiver,
     kDebug() << "Search result:" << values.size();
 
     QSet<int> albumRoots = albumRootsToList();
-
-    int width, height;
-    double lat,lon;
+    int       width, height;
+    double    lat,lon;
 
     for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd();)
     {
@@ -612,7 +608,7 @@ void ImageLister::listSearch(ImageListerReceiver* receiver,
     }
 }
 
-void ImageLister::listImageTagPropertySearch(ImageListerReceiver* receiver, const QString& xml)
+void ImageLister::listImageTagPropertySearch(ImageListerReceiver* const receiver, const QString& xml)
 {
     if (xml.isEmpty())
     {
@@ -722,7 +718,7 @@ void ImageLister::listImageTagPropertySearch(ImageListerReceiver* receiver, cons
     }
 }
 
-void ImageLister::listHaarSearch(ImageListerReceiver* receiver, const QString& xml)
+void ImageLister::listHaarSearch(ImageListerReceiver* const receiver, const QString& xml)
 {
     SearchXmlReader reader(xml);
     reader.readToFirstField();
@@ -738,8 +734,8 @@ void ImageLister::listHaarSearch(ImageListerReceiver* receiver, const QString& x
     QStringRef thresholdString  = reader.attributes().value("threshold");
     QStringRef sketchTypeString = reader.attributes().value("sketchtype");
 
-    double threshold            = 0.9;
-    int numberOfResults         = 20;
+    double threshold                 = 0.9;
+    int numberOfResults              = 20;
     HaarIface::SketchType sketchType = HaarIface::ScannedSketch;
 
     if (!numResultsString.isNull())
@@ -791,11 +787,11 @@ void ImageLister::listHaarSearch(ImageListerReceiver* receiver, const QString& x
     listFromIdList(receiver, list);
 }
 
-void ImageLister::listFromIdList(ImageListerReceiver* receiver, QList<qlonglong> imageIds)
+void ImageLister::listFromIdList(ImageListerReceiver* const receiver, const QList<qlonglong>& imageIds)
 {
     QList<QVariant> values;
-    QString errMsg;
-    bool executionSuccess = true;
+    QString         errMsg;
+    bool            executionSuccess = true;
 
     {
         /*
@@ -904,11 +900,13 @@ QSet<int> ImageLister::albumRootsToList()
     }
 
     QList<CollectionLocation> locations = CollectionManager::instance()->allAvailableLocations();
-    QSet<int> ids;
+    QSet<int>                 ids;
+
     foreach(const CollectionLocation& location, locations)
     {
         ids << location.id();
     }
+
     return ids;
 }
 
