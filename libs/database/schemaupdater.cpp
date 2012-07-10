@@ -1273,11 +1273,6 @@ void SchemaUpdater::preAlpha010Update2()
         return;
     }
 
-    if (!d->backend->execSql(QString("ALTER TABLE VideoMetadata RENAME TO VideoMetadataTemp;")))
-    {
-        return;
-    }
-
     d->backend->execSql(
         QString("CREATE TABLE ImagePositions\n"
                 " (imageid INTEGER PRIMARY KEY,\n"
@@ -1329,28 +1324,8 @@ void SchemaUpdater::preAlpha010Update2()
                                 "  whiteBalanceColorTemperature, meteringMode, subjectDistance, subjectDistanceCategory "
                                 "FROM ImageMetadataTemp;"));
 
-    d->backend->execSql(
-        QString("CREATE TABLE VideoMetadata\n"
-                " (imageid INTEGER PRIMARY KEY,\n"
-                "  aspectRatio TEXT,\n"
-                "  audioBitRate INTEGER,\n"
-                "  audioChannelType TEXT,\n"
-                "  audioCompressor TEXT,\n"
-                "  duration INTEGER,\n"
-                "  frameRate REAL,\n"
-                "  resolution TEXT,\n"
-                "  videoCodec TEXT);") );
-
-    d->backend->execSql( QString("INSERT INTO VideoMetadata "
-                                " (imageid, aspectRatio, audioBitRate, audioChannelType, audioCompressor, duration, frameRate, "
-                                "  resolution, videoCodec) "
-                                "SELECT imageid, aspectRatio, audioBitRate, audioChannelType, audioCompressor, duration, frameRate, "
-                                "  resolution, videoCodec "
-                                "FROM VideoMetadataTemp;"));
-
     d->backend->execSql(QString("DROP TABLE ImagePositionsTemp;"));
     d->backend->execSql(QString("DROP TABLE ImageMetadataTemp;"));
-    d->backend->execSql(QString("DROP TABLE VideoMetadataTemp;"));
 
     d->albumDB->setSetting("preAlpha010Update2", "true");
 }
@@ -1406,8 +1381,6 @@ void SchemaUpdater::beta010Update1()
         "  DELETE From ImageCopyright\n "
         "    WHERE imageid=OLD.id;\n"
         "  DELETE From ImageProperties\n "
-        "    WHERE imageid=OLD.id;\n"
-        "  DELETE From VideoMetadata\n "
         "    WHERE imageid=OLD.id;\n"
         "  UPDATE Albums SET icon=null \n "
         "    WHERE icon=OLD.id;\n"
