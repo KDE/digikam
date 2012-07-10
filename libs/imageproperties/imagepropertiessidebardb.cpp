@@ -415,6 +415,7 @@ void ImagePropertiesSideBarDB::slotImageChangeDatabase(const ImageChangeset& cha
                 if ( (set & DatabaseFields::ImagesAll) ||
                      (set & DatabaseFields::ImageInformationAll) ||
                      (set & DatabaseFields::ImageMetadataAll) ||
+                     (set & DatabaseFields::VideoMetadataAll) ||
                      (set & DatabaseFields::ImageCommentsAll) )
                 {
                     m_dirtyPropertiesTab = false;
@@ -513,6 +514,7 @@ void ImagePropertiesSideBarDB::setImagePropertiesInformation(const KUrl& url)
 
             ImageCommonContainer commonInfo  = info.imageCommonContainer();
             ImageMetadataContainer photoInfo = info.imageMetadataContainer();
+            VideoMetadataContainer videoInfo = info.videoMetadataContainer(); // TODO videoInfo displaying
 
             str = KGlobal::locale()->formatDateTime(commonInfo.fileModificationDate, KLocale::ShortDate, true);
             m_propertiesTab->setFileModifiedDate(str);

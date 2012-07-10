@@ -1078,11 +1078,66 @@ void ImageScanner::sortByProximity(QList<ImageInfo>& list, const ImageInfo& subj
     }
 }
 
+static MetadataFields allVideoMetadataFields()
+{
+    // This list must reflect the order required by AlbumDB::addVideoMetadata
+    MetadataFields fields;
+    fields << MetadataInfo::AspectRatio
+           << MetadataInfo::AudioBitRate
+           << MetadataInfo::AudioChannelType
+           << MetadataInfo::AudioCompressor
+           << MetadataInfo::Duration
+           << MetadataInfo::FrameRate
+           << MetadataInfo::Resolution
+           << MetadataInfo::VideoCodec;
+
+    return fields;
+}
+
+
 void ImageScanner::scanVideoFile()
 {
-    /**
-    * @todo
+//    DatabaseFields::VideoMetadata dbFields = DatabaseFields::VideoMetadataAll;
+
+    QVariantList videoMetadataInfos;
+    MetadataFields videoFields;
+
+    videoFields << MetadataInfo::AspectRatio
+                << MetadataInfo::AudioBitRate
+                << MetadataInfo::AudioChannelType
+                << MetadataInfo::AudioCompressor
+                << MetadataInfo::Duration
+                << MetadataInfo::FrameRate
+                << MetadataInfo::Resolution
+                << MetadataInfo::VideoCodec;
+
+    videoMetadataInfos = m_metadata.getMetadataFields(videoFields);
+
+    QSize size;
+
+    QVariantList videoInfos;
+
+    videoInfos << videoMetadataInfos;
+    //Not sure whether implementing this would be necessary or not, so commenting for the moment
+    /*
+    if (m_scanMode == NewScan)
+    {
+        DatabaseAccess().db()->addVideoMetadata(m_scanInfo.id, videoMetadataInfos, dbFields);
+    }
+    else if (m_scanMode == Rescan)
+    {
+        DatabaseAccess().db()->changeVideoMetadata(m_scanInfo.id, videoMetadataInfos, dbFields);
+    }
     */
+    DatabaseAccess().db()->addVideoMetadata(m_scanInfo.id, videoInfos,
+            DatabaseFields::AspectRatio     |
+            DatabaseFields::AudioBitRate    |
+            DatabaseFields::AudioChannelType|
+            DatabaseFields::AudioCompressor |
+            DatabaseFields::Duration        |
+            DatabaseFields::FrameRate       |
+            DatabaseFields::Resolution      |
+            DatabaseFields::VideoCodec );
 
     QVariantList metadataInfos;
 
@@ -1111,7 +1166,7 @@ void ImageScanner::scanVideoFile()
                       << creationDateFromFilesystem(m_fileInfo);
     }
 
-    QSize size;
+//    QSize size;
 
     QVariantList infos;
     infos << metadataInfos
@@ -1528,6 +1583,33 @@ void ImageScanner::fillMetadataContainer(qlonglong imageid, ImageMetadataContain
     container->meteringMode                 = strings.at(13);
     container->subjectDistance              = strings.at(14);
     container->subjectDistanceCategory      = strings.at(15);
+}
+
+void ImageScanner::fillVideoMetadataContainer(qlonglong imageid, VideoMetadataContainer* container)
+{
+    // read from database
+    QVariantList fields = DatabaseAccess().db()->getVideoMetadata(imageid);
+
+    // check we have at least one valid field
+    container->allFieldsNull = !hasValidField(fields);
+
+    if (container->allFieldsNull)
+    {
+        return;
+    }
+
+    // DMetadata does all translation work
+    QStringList strings = DMetadata::valuesToString(fields, allVideoMetadataFields());
+
+    // associate with hard-coded variables
+    container->aspectRatio                  = strings.at(0);
+//    container->audioBitRate                 = strings.at(1);
+    container->audioChannelType             = strings.at(2);
+    container->audioCompressor              = strings.at(3);
+//    container->duration                     = strings.at(4);
+//    container->frameRate                    = strings.at(5);
+    container->resolution                   = strings.at(6);
+    container->videoCodec                   = strings.at(7);
 }
 
 } // namespace Digikam

@@ -1567,6 +1567,25 @@ QVariantList AlbumDB::getImageMetadata(qlonglong imageID, DatabaseFields::ImageM
 
         d->db->execSql(query, imageID, &values);
 
+        // For some reason, if REAL values may be required from variables stored as QString QVariants. Convert code will come here.
+    }
+
+    return values;
+}
+
+QVariantList AlbumDB::getVideoMetadata(qlonglong imageID, DatabaseFields::VideoMetadata fields)
+{
+    QVariantList values;
+
+    if (fields != DatabaseFields::VideoMetadataNone)
+    {
+        QString query("SELECT ");
+        QStringList fieldNames = videoMetadataFieldList(fields);
+        query += fieldNames.join(", ");
+        query += (" FROM VideoMetadata WHERE imageid=?;");
+
+        d->db->execSql(query, imageID, &values);
+
         // For some reason REAL values may come as QString QVariants. Convert here.
         if (values.size() == fieldNames.size() &&
             ((fields & DatabaseFields::Aperture) ||
@@ -1800,6 +1819,53 @@ void AlbumDB::changeImageMetadata(qlonglong imageId, const QVariantList& infos,
     QString query("UPDATE ImageMetadata SET ");
 
     QStringList fieldNames = imageMetadataFieldList(fields);
+    Q_ASSERT(fieldNames.size() == infos.size());
+    query += fieldNames.join("=?,");
+
+    query += "=? WHERE imageid=?;";
+
+    QVariantList boundValues;
+    boundValues << infos << imageId;
+
+    d->db->execSql(query, boundValues);
+    d->db->recordChangeset(ImageChangeset(imageId, fields));
+}
+
+void AlbumDB::addVideoMetadata(qlonglong imageID, const QVariantList& infos, DatabaseFields::VideoMetadata fields)
+{
+    if (fields == DatabaseFields::VideoMetadataNone)
+    {
+        return;
+    }
+
+    QString query("REPLACE INTO VideoMetadata ( imageid, "); //need to create this database
+
+    QStringList fieldNames = videoMetadataFieldList(fields);
+    Q_ASSERT(fieldNames.size() == infos.size());
+    query += fieldNames.join(", ");
+
+    query += " ) VALUES (";
+    addBoundValuePlaceholders(query, infos.size() + 1);
+    query += ");";
+
+    QVariantList boundValues;
+    boundValues << imageID << infos;
+
+    d->db->execSql(query, boundValues);
+    d->db->recordChangeset(ImageChangeset(imageID, fields));
+}
+
+void AlbumDB::changeVideoMetadata(qlonglong imageId, const QVariantList& infos,
+                                  DatabaseFields::VideoMetadata fields)
+{
+    if (fields == DatabaseFields::VideoMetadataNone)
+    {
+        return;
+    }
+
+    QString query("UPDATE VideoMetadata SET ");
+
+    QStringList fieldNames = videoMetadataFieldList(fields);
     Q_ASSERT(fieldNames.size() == infos.size());
     query += fieldNames.join("=?,");
 
@@ -2791,6 +2857,54 @@ QStringList AlbumDB::imageInformationFieldList(DatabaseFields::ImageInformation 
     if (fields & DatabaseFields::ColorModel)
     {
         list << "colorModel";
+    }
+
+    return list;
+}
+
+QStringList AlbumDB::videoMetadataFieldList(DatabaseFields::VideoMetadata fields)
+{
+    // adds no spaces at beginning or end
+    QStringList list;
+
+    if (fields & DatabaseFields::AspectRatio)
+    {
+        list << "aspectRatio";
+    }
+
+    if (fields & DatabaseFields::AudioBitRate)
+    {
+        list << "audioBitRate";
+    }
+
+    if (fields & DatabaseFields::AudioChannelType)
+    {
+        list << "audioChannelType";
+    }
+
+    if (fields & DatabaseFields::AudioCompressor)
+    {
+        list << "audioCompressor";
+    }
+
+    if (fields & DatabaseFields::Duration)
+    {
+        list << "duration";
+    }
+
+    if (fields & DatabaseFields::FrameRate)
+    {
+        list << "frameRate";
+    }
+
+    if (fields & DatabaseFields::Resolution)
+    {
+        list << "resolution";
+    }
+
+    if (fields & DatabaseFields::VideoCodec)
+    {
+        list << "videoCodec";
     }
 
     return list;
@@ -4464,6 +4578,15 @@ void AlbumDB::copyImageAttributes(qlonglong srcId, qlonglong dstId)
                            "FROM ImageMetadata WHERE imageid=?;"),
                    dstId, srcId);
     fields |= DatabaseFields::ImageMetadataAll;
+
+    d->db->execSql(QString("INSERT INTO VideoMetadata "
+                           " (imageid, aspectRatio, audioBitRate, audioChannelType, audioCompressor, duration, frameRate, "
+                           "  resolution, videoCodec) "
+                           "SELECT ?, aspectRatio, audioBitRate, audioChannelType, audioCompressor, duration, frameRate, "
+                           "  resolution, videoCodec "
+                           "FROM VideoMetadata WHERE imageid=?;"),
+                   dstId, srcId);
+    fields |= DatabaseFields::VideoMetadataAll;
 
     d->db->execSql(QString("INSERT INTO ImagePositions "
                            " (imageid, latitude, latitudeNumber, longitude, longitudeNumber, "

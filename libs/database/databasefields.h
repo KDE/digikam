@@ -145,12 +145,30 @@ enum ImageHistoryInfoField
     ImageHistoryInfoLast  = ImageRelations
 };
 
+enum VideoMetadataField
+{
+    VideoMetadataNone            = 0,
+    AspectRatio                  = 1 << 0,
+    AudioBitRate                 = 1 << 1,
+    AudioChannelType             = 1 << 2,
+    AudioCompressor              = 1 << 3,
+    Duration                     = 1 << 4,
+    FrameRate                    = 1 << 5,
+    Resolution                   = 1 << 6,
+    VideoCodec                   = 1 << 7,
+    VideoMetadataAll             = AspectRatio | AudioBitRate | AudioChannelType | AudioCompressor | Duration | FrameRate |
+                                   Resolution | VideoCodec,
+    VideoMetadataFirst           = AspectRatio,
+    VideoMetadataLast            = VideoCodec
+};
+
 Q_DECLARE_FLAGS(Images, ImagesField)
 Q_DECLARE_FLAGS(ImageInformation, ImageInformationField)
 Q_DECLARE_FLAGS(ImageMetadata, ImageMetadataField)
 Q_DECLARE_FLAGS(ImageComments, ImageCommentsField)
 Q_DECLARE_FLAGS(ImagePositions, ImagePositionsField)
 Q_DECLARE_FLAGS(ImageHistoryInfo, ImageHistoryInfoField)
+Q_DECLARE_FLAGS(VideoMetadata, VideoMetadataField)
 
 /**
  * You can iterate over each of the Enumerations defined above:
@@ -172,6 +190,7 @@ public: \
 DATABASEFIELDS_ENUM_ITERATOR(Images)
 DATABASEFIELDS_ENUM_ITERATOR(ImageInformation)
 DATABASEFIELDS_ENUM_ITERATOR(ImageMetadata)
+DATABASEFIELDS_ENUM_ITERATOR(VideoMetadata)
 DATABASEFIELDS_ENUM_ITERATOR(ImagePositions)
 DATABASEFIELDS_ENUM_ITERATOR(ImageComments)
 DATABASEFIELDS_ENUM_ITERATOR(ImageHistoryInfo)
@@ -219,11 +238,13 @@ public:
         imageComments    = ImageCommentsNone;
         imagePositions   = ImagePositionsNone;
         imageHistory     = ImageHistoryInfoNone;
+        videoMetadata    = VideoMetadataNone;
         customEnum       = (CustomEnum)0;
     }
 
     DATABASEFIELDS_SET_DECLARE_METHODS(Images, images)
     DATABASEFIELDS_SET_DECLARE_METHODS(ImageInformation, imageInformation)
+    DATABASEFIELDS_SET_DECLARE_METHODS(VideoMetadata, videoMetadata)
     DATABASEFIELDS_SET_DECLARE_METHODS(ImageMetadata, imageMetadata)
     DATABASEFIELDS_SET_DECLARE_METHODS(ImageComments, imageComments)
     DATABASEFIELDS_SET_DECLARE_METHODS(ImagePositions, imagePositions)
@@ -231,10 +252,10 @@ public:
 
     inline bool operator&(const Set& other)
     {
-        return (images & other.images) || (imageInformation & other.imageInformation)  ||
+        return (images & other.images) || (imageInformation & other.imageInformation) ||
                (imageMetadata & other.imageMetadata) || (imageComments & other.imageComments) ||
                (imagePositions & other.imagePositions) || (imageHistory & other.imageHistory) ||
-               (customEnum & other.customEnum);
+               (customEnum & other.customEnum) || (videoMetadata & other.videoMetadata);
     }
 
     inline CustomEnum& operator=(const CustomEnum& f)
@@ -271,6 +292,7 @@ private:
     Images           images;
     ImageInformation imageInformation;
     ImageMetadata    imageMetadata;
+    VideoMetadata    videoMetadata;
     ImageComments    imageComments;
     ImagePositions   imagePositions;
     ImageHistoryInfo imageHistory;
@@ -332,6 +354,10 @@ public:
     {
         return (int)f | (5 << 26);
     }
+    static inline unsigned int uniqueKey(VideoMetadata f)
+    {
+        return (int)f | (6 << 26);
+    }
     static inline unsigned int uniqueKey(CustomEnum f)
     {
         return      f | (63 << 26);
@@ -341,6 +367,7 @@ public:
     DATABASEFIELDS_HASH_DECLARE_METHODS(Images, uniqueKey);
     DATABASEFIELDS_HASH_DECLARE_METHODS(ImageInformation, uniqueKey);
     DATABASEFIELDS_HASH_DECLARE_METHODS(ImageMetadata, uniqueKey);
+    DATABASEFIELDS_HASH_DECLARE_METHODS(VideoMetadata, uniqueKey);
     DATABASEFIELDS_HASH_DECLARE_METHODS(ImageComments, uniqueKey);
     DATABASEFIELDS_HASH_DECLARE_METHODS(ImagePositions, uniqueKey);
     DATABASEFIELDS_HASH_DECLARE_METHODS(ImageHistoryInfo, uniqueKey);
@@ -355,6 +382,7 @@ public:
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::DatabaseFields::Images)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::DatabaseFields::ImageInformation)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::DatabaseFields::ImageMetadata)
+Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::DatabaseFields::VideoMetadata)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::DatabaseFields::ImageComments)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::DatabaseFields::ImagePositions)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::DatabaseFields::ImageHistoryInfo)

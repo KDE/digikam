@@ -1145,6 +1145,18 @@ ImageMetadataContainer ImageInfo::imageMetadataContainer() const
     return container;
 }
 
+VideoMetadataContainer ImageInfo::videoMetadataContainer() const
+{
+    if (!m_data)
+    {
+        return VideoMetadataContainer();
+    }
+
+    VideoMetadataContainer container;
+    ImageScanner::fillVideoMetadataContainer(m_data->id, &container);
+    return container;
+}
+
 PhotoInfoContainer ImageInfo::photoInfoContainer() const
 {
     if (!m_data)

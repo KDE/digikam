@@ -57,6 +57,7 @@ class ImageExtendedProperties;
 class ImageInfoData;
 class ImageListerRecord;
 class ImageMetadataContainer;
+class VideoMetadataContainer;
 class ImagePosition;
 class ImageTagPair;
 class PhotoInfoContainer;
@@ -369,6 +370,7 @@ public:
      */
     ImageCommonContainer   imageCommonContainer() const;
     ImageMetadataContainer imageMetadataContainer() const;
+    VideoMetadataContainer videoMetadataContainer() const;
     PhotoInfoContainer     photoInfoContainer() const;
 
     /**

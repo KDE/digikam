@@ -2210,6 +2210,22 @@ QVariant DMetadata::getMetadataField(MetadataInfo::Field field) const
             return getXmpTagVariant("Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiTelWork");
         case MetadataInfo::IptcCoreContactInfoWebUrl:
             return getXmpTagVariant("Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiUrlWork");
+        case MetadataInfo::AspectRatio:
+            return fromXmpLangAlt("Xmp.video.aspectRatio");
+        case MetadataInfo::AudioBitRate:
+            return fromXmpLangAlt("Xmp.audio.bitsPerSample");
+        case MetadataInfo::AudioChannelType:
+            return fromXmpLangAlt("Xmp.audio.channelType");
+        case MetadataInfo::AudioCompressor:
+            return fromXmpLangAlt("Xmp.audio.compressor");
+        case MetadataInfo::Duration:
+            return fromXmpLangAlt("Xmp.video.duration");
+        case MetadataInfo::FrameRate:
+            return fromXmpLangAlt("Xmp.video.frameRate");
+        case MetadataInfo::Resolution:
+            return fromXmpLangAlt("Xmp.video.resolution");
+        case MetadataInfo::VideoCodec:
+            return fromXmpLangAlt("Xmp.video.codec");
 
         default:
             return QVariant();

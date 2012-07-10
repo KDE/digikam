@@ -160,7 +160,7 @@ enum Field
     IptcCoreContactInfoPhone,         /// String
     IptcCoreContactInfoWebUrl,        /// String
 
-    Faces                             /// QMap<QString, QVariant>
+    Faces,                            /// QMap<QString, QVariant>
 
     // Description, DescriptionWriter, Headline, Title: see above
     // DateCreated: see above, CreationDate
@@ -168,6 +168,14 @@ enum Field
     // not supported: CreatorContactInfo
 
     // Dublin Core: Description, Title, Subject (keywords) see above
+    AspectRatio,                      /// String
+    AudioBitRate,                     /// Int
+    AudioChannelType,                 /// String
+    AudioCompressor,                  /// String
+    Duration,                         /// Int
+    FrameRate,                        /// double
+    Resolution,                       /// String
+    VideoCodec                        /// String
 };
 
 } // namespace MetadataInfo

@@ -400,14 +400,15 @@ DatabaseFields::Set& DatabaseFields::Set::operator<<(const QDBusArgument& argume
 {
     argument.beginStructure();
 
-    int imagesInt, imageInformationInt, imageMetadataInt, imageCommentsInt, imagePositionsInt, customEnumInt;
+    int imagesInt, imageInformationInt, imageMetadataInt, imageCommentsInt, imagePositionsInt, customEnumInt, videoMetadataInt;
 
     argument >> imagesInt
              >> imageInformationInt
              >> imageMetadataInt
              >> imageCommentsInt
              >> imagePositionsInt
-             >> customEnumInt;
+             >> customEnumInt
+             >> videoMetadataInt;
 
     images = (DatabaseFields::Images)imagesInt;
     imageInformation = (DatabaseFields::ImageInformation)imageInformationInt;
@@ -415,6 +416,7 @@ DatabaseFields::Set& DatabaseFields::Set::operator<<(const QDBusArgument& argume
     imageComments = (DatabaseFields::ImageComments)imageCommentsInt;
     imagePositions = (DatabaseFields::ImagePositions)imagePositionsInt;
     customEnum = (DatabaseFields::CustomEnum)customEnumInt;
+    videoMetadata = (DatabaseFields::VideoMetadata)videoMetadataInt;
 
     argument.endStructure();
     return *this;
@@ -428,7 +430,8 @@ const DatabaseFields::Set& DatabaseFields::Set::operator>>(QDBusArgument& argume
              << (int) imageMetadata
              << (int) imageComments
              << (int) imagePositions
-             << (int) customEnum;
+             << (int) customEnum
+             << (int) videoMetadata;
     argument.endStructure();
     return *this;
 }

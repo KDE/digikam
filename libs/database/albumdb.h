@@ -791,6 +791,38 @@ public:
                                   DatabaseFields::ImageMetadata metadataFields = DatabaseFields::ImageMetadataAll);
 
     /**
+     * Add (or replace) the VideoMetadata of the specified item.
+     * If there is already an entry, it will be discarded.
+     * The QVariantList shall have 8 entries, of types in this order:
+     * 0) String    AspectRatio
+     * 1) Int       AudioBitRate
+     * 2) String    AudioChannelType
+     * 3) String    AudioCompressor
+     * 4) Int       Duration
+     * 5) Double    FrameRate
+     * 6) String    Resolution
+     * 7) String    VideoCodec
+     * You can leave out entries from this list, which will then be filled with null values.
+     * Indicate the values that you have passed in the VideoMetadata flag in the third parameters.
+     */
+    void addVideoMetadata(qlonglong imageID, const QVariantList& infos,
+                             DatabaseFields::VideoMetadata fields = DatabaseFields::VideoMetadataAll);
+
+    /**
+     * Change the indicated fields of the video information for the specified item.
+     * This method does nothing if the item does not yet have an entry in the ImageInformation table.
+     * The parameters are as for the method above.
+     */
+    void changeVideoMetadata(qlonglong imageID, const QVariantList& infos,
+                             DatabaseFields::VideoMetadata fields = DatabaseFields::VideoMetadataAll);
+
+    /**
+     * Read video metadata. Parameters as above.
+     */
+    QVariantList getVideoMetadata(qlonglong imageID,
+                                  DatabaseFields::VideoMetadata metadataFields = DatabaseFields::VideoMetadataAll);
+
+    /**
      * Add (or replace) the ImagePosition of the specified item.
      * If there is already an entry, it will be discarded.
      * The QVariantList shall have at most 10 entries, of types in this order:
@@ -1214,6 +1246,7 @@ public:
 
     static QStringList imagesFieldList(DatabaseFields::Images fields);
     static QStringList imageInformationFieldList(DatabaseFields::ImageInformation fields);
+    static QStringList videoMetadataFieldList(DatabaseFields::VideoMetadata fields);
     static QStringList imageMetadataFieldList(DatabaseFields::ImageMetadata fields);
     static QStringList imagePositionsFieldList(DatabaseFields::ImagePositions fields);
     static QStringList imageCommentsFieldList(DatabaseFields::ImageComments fields);

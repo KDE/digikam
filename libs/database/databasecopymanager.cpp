@@ -98,6 +98,7 @@ void DatabaseCopyManager::copyDatabases(DatabaseParameters fromDBParameters, Dat
         QString("ImageRelations"), \
         QString("Searches"), \
         QString("DownloadHistory"), \
+        QString("VideoMetadata"), \
         /* QString("Settings"), \ */
     };
     const int tablesSize = sizeof(tables) / sizeof(QString);

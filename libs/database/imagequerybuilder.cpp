@@ -1023,6 +1023,39 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
         fieldQuery.addIntField("ImageInformation.colorModel");
     }
 
+    else if (name == "aspectratio")
+    {
+        fieldQuery.addStringField("VideoMetadata.aspectRatio");
+    }
+    else if (name == "audiobitrate")
+    {
+        fieldQuery.addIntField("VideoMetadata.audioBitRate");
+    }
+    else if (name == "audiochanneltype")
+    {
+        fieldQuery.addStringField("VideoMetadata.audioChannelType");
+    }
+    else if (name == "audiocompressor")
+    {
+        fieldQuery.addStringField("VideoMetadata.audioCompressor");
+    }
+    else if (name == "duration")
+    {
+        fieldQuery.addIntField("VideoMetadata.duration");
+    }
+    else if (name == "framerate")
+    {
+        fieldQuery.addDoubleField("VideoMetadata.frameRate");
+    }
+    else if (name == "resolution")
+    {
+        fieldQuery.addStringField("VideoMetadata.resolution");
+    }
+    else if (name == "videocodec")
+    {
+        fieldQuery.addStringField("VideoMetadata.videoCodec");
+    }
+
     else if (name == "make")
     {
         fieldQuery.addStringField("ImageMetadata.make");

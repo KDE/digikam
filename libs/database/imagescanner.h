@@ -190,6 +190,7 @@ public:
      */
     static void fillCommonContainer(qlonglong imageid, ImageCommonContainer* container);
     static void fillMetadataContainer(qlonglong imageid, ImageMetadataContainer* container);
+    static void fillVideoMetadataContainer(qlonglong imageid, VideoMetadataContainer* container);
 
     /**
      * Helper method to translate enum values to user presentable strings

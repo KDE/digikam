@@ -89,6 +89,27 @@ public:
     QString subjectDistanceCategory;
 };
 
+class VideoMetadataContainer
+{
+public:
+
+    VideoMetadataContainer()
+    {
+        allFieldsNull = true;
+    }
+
+    bool allFieldsNull;
+
+    QString aspectRatio;
+    int     audioBitRate;
+    QString audioChannelType;
+    QString audioCompressor;
+    int     duration;
+    double  frameRate;
+    QString resolution;
+    QString videoCodec;
+};
+
 } // namespace Digikam
 
 #endif // DATABASEINFOCONTAINERS_H
