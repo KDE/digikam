@@ -7,9 +7,9 @@
  * Description :database album interface.
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2012 by Andi Clemens <andi dot clemens at googlemail dot com>
+ * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2012      by Andi Clemens <andi dot clemens at googlemail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -473,7 +473,6 @@ public:
      */
     QList<int> getTagsWithProperty(const QString& property);
 
-
     // ----------- Operations on SAlbums -----------
 
     /**
@@ -899,7 +898,6 @@ public:
     void changeImageComment(int commentId, qlonglong imageID, const QVariantList& infos,
                             DatabaseFields::ImageComments fields = DatabaseFields::ImageCommentsAll);
 
-
     /**
      * Remove the specified entry in ImageComments
      */
@@ -922,15 +920,16 @@ public:
      */
     QList<CopyrightInfo> getImageCopyright(qlonglong imageID, const QString& property = QString());
 
-    /**
-     * Sets the property with the given name for the given image to the specified value and extraValue
-     */
     enum CopyrightPropertyUnique
     {
         PropertyUnique,
         PropertyExtraValueUnique,
         PropertyNoConstraint
     };
+
+    /**
+     * Sets the property with the given name for the given image to the specified value and extraValue
+     */
     void setImageCopyrightProperty(qlonglong imageID, const QString& property,
                                    const QString& value, const QString& extraValue = QString(),
                                    CopyrightPropertyUnique uniqueness = PropertyUnique);
@@ -1259,7 +1258,7 @@ public:
     /**
      * Constructor
      */
-    AlbumDB(DatabaseBackend* backend);
+    AlbumDB(DatabaseBackend* const backend);
 
     /**
      * Destructor
@@ -1278,8 +1277,8 @@ private:
 
 private:
 
-    class AlbumDBPriv;
-    AlbumDBPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam
