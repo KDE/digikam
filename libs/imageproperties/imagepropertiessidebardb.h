@@ -63,18 +63,19 @@ public:
 
     ~ImagePropertiesSideBarDB();
 
-    virtual void itemChanged(const KUrl& url, const QRect& rect = QRect(), DImg* const img = 0);
-
-    virtual void itemChanged(const ImageInfo& info, const QRect& rect = QRect(),
-                             DImg* const img = 0, const DImageHistory& history = DImageHistory());
-    virtual void itemChanged(const ImageInfoList& infos);
-
-    void populateTags(void);
+    void populateTags();
     void refreshTagsView();
 
     ///This is for image editor to be able to update the filter list in sidebar
     ImagePropertiesVersionsTab* getFiltersHistoryTab() const;
-    ImageDescEditTab*           imageDescEditTab() const;
+    ImageDescEditTab*           imageDescEditTab()     const;
+
+    virtual void itemChanged(const KUrl& url, const QRect& rect = QRect(), DImg* img = 0);
+
+    virtual void itemChanged(const ImageInfo& info, const QRect& rect = QRect(),
+                             DImg* img = 0, const DImageHistory& history = DImageHistory());
+
+    virtual void itemChanged(const ImageInfoList& infos);
 
 Q_SIGNALS:
 
@@ -107,10 +108,11 @@ private Q_SLOTS:
 private:
 
     void itemChanged(const KUrl& url, const ImageInfo& info, const QRect& rect, DImg* const img, const DImageHistory& history);
-    void itemChanged(const ImageInfoList infos, const QRect& rect, DImg* img, const DImageHistory& history);
+    void itemChanged(const ImageInfoList& infos, const QRect& rect, DImg* const img, const DImageHistory& history);
     void setImagePropertiesInformation(const KUrl& url);
 
 protected:
+
     /**
      * load the last view state from disk - called by StateSavingObject#loadState()
      */
