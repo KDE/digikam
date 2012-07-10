@@ -6,9 +6,9 @@
  * Date        : 2006-02-23
  * Description : image metadata interface
  *
- * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2011 by Leif Huhn <leif@dkstat.com>
+ * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2011      by Leif Huhn <leif at dkstat dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -348,8 +348,10 @@ CaptionsMap DMetadata::getImageComments() const
 bool DMetadata::setImageComments(const CaptionsMap& comments) const
 {
     //See B.K.O #139313: An empty string is also a valid value
-    /*if (comments.isEmpty())
-          return false;*/
+    /*
+    if (comments.isEmpty())
+          return false;
+    */
 
     kDebug() << getFilePath() << " ==> Comment: " << comments;
 
@@ -428,7 +430,6 @@ bool DMetadata::setImageComments(const CaptionsMap& comments) const
 
     return true;
 }
-
 
 int DMetadata::getImagePickLabel() const
 {
@@ -1390,6 +1391,7 @@ bool DMetadata::setMetadataTemplate(const Template& t) const
     // Synchronize Iptc subjects tags with Xmp subjects tags.
     QStringList list = t.IptcSubjects();
     QStringList newList;
+
     foreach(QString str, list) // krazy:exclude=foreach
     {
         if (str.startsWith(QLatin1String("XMP")))
@@ -2321,9 +2323,9 @@ QString DMetadata::valueToString (const QVariant& value, MetadataInfo::Field fie
 
         case MetadataInfo::Longitude:
         {
-            int degrees, minutes;
+            int    degrees, minutes;
             double seconds;
-            char directionRef;
+            char   directionRef;
 
             if (!convertToUserPresentableNumbers(value.toString(), &degrees, &minutes, &seconds, &directionRef))
             {
@@ -2338,9 +2340,10 @@ QString DMetadata::valueToString (const QVariant& value, MetadataInfo::Field fie
         }
         case MetadataInfo::LongitudeNumber:
         {
-            int degrees, minutes;
+            int    degrees, minutes;
             double seconds;
-            char directionRef;
+            char   directionRef;
+
             convertToUserPresentableNumbers(false, value.toDouble(), &degrees, &minutes, &seconds, &directionRef);
             QString direction = (directionRef == 'W') ?
                                 i18nc("For use in longitude coordinate", "West") : i18nc("For use in longitude coordinate", "East");
@@ -2350,9 +2353,9 @@ QString DMetadata::valueToString (const QVariant& value, MetadataInfo::Field fie
         }
         case MetadataInfo::Latitude:
         {
-            int degrees, minutes;
+            int    degrees, minutes;
             double seconds;
-            char directionRef;
+            char   directionRef;
 
             if (!convertToUserPresentableNumbers(value.toString(), &degrees, &minutes, &seconds, &directionRef))
             {
@@ -2367,9 +2370,10 @@ QString DMetadata::valueToString (const QVariant& value, MetadataInfo::Field fie
         }
         case MetadataInfo::LatitudeNumber:
         {
-            int degrees, minutes;
+            int    degrees, minutes;
             double seconds;
-            char directionRef;
+            char   directionRef;
+
             convertToUserPresentableNumbers(false, value.toDouble(), &degrees, &minutes, &seconds, &directionRef);
             QString direction = (directionRef == 'N') ?
                                 i18nc("For use in latitude coordinate", "North") : i18nc("For use in latitude coordinate", "North");
@@ -2877,15 +2881,17 @@ void DMetadata::setData(const KExiv2Data& data)
 // NOTE: this method can be moved to libkexiv2 later...
 bool DMetadata::removeExifColorSpace() const
 {
-    bool ret = true;
+    bool ret =  true;
     ret      &= removeExifTag("Exif.Photo.ColorSpace", true);
     ret      &= removeXmpTag("Xmp.exif.ColorSpace", true);
+
     return ret;
 }
 
 QString DMetadata::getExifTagStringFromTagsList(const QStringList& tagsList) const
 {
     QString val;
+
     foreach(QString tag, tagsList)
     {
         val = getExifTagString(tag.toAscii());

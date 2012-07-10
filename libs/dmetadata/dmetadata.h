@@ -6,8 +6,8 @@
  * Date        : 2006-02-23
  * Description : image metadata interface
  *
- * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -69,12 +69,14 @@ public:
     void registerMetadataSettings();
     void setSettings(const MetadataSettingsContainer& settings);
 
-    /** Re-implemented from libKexiv2 to use dcraw identify method if Exiv2 failed. */
+    /** Re-implemented from libKexiv2 to use dcraw identify method if Exiv2 failed.
+     */
     bool load(const QString& filePath) const;
     bool save(const QString& filePath) const;
     bool applyChanges() const;
 
-    /** Try to extract metadata using dcraw identify method */
+    /** Try to extract metadata using dcraw identify method
+     */
     bool loadUsingDcraw(const QString& filePath) const;
 
     /** Metadata manipulation methods */
@@ -137,7 +139,8 @@ public:
      */
     IccProfile getIccProfile() const;
 
-    /** Remove the Exif color space identification from the image */
+    /** Remove the Exif color space identification from the image
+     */
     bool removeExifColorSpace() const;
 
     PhotoInfoContainer getPhotographInformation() const;
