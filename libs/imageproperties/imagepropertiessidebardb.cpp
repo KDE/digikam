@@ -8,7 +8,7 @@
  *               digiKam database.
  *
  * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2007-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2007-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2010-2011 by Martin Klapetek <martin dot klapetek at gmail dot com>
  * Copyright (C)      2011 by Michael G. Hansen <mike at mghansen dot de>
  *
@@ -64,11 +64,11 @@
 namespace Digikam
 {
 
-class ImagePropertiesSideBarDB::ImagePropertiesSideBarDBPriv
+class ImagePropertiesSideBarDB::Private
 {
 public:
 
-    ImagePropertiesSideBarDBPriv() :
+    Private() :
         dirtyDesceditTab(false),
         hasPrevious(false),
         hasNext(false),
@@ -91,10 +91,10 @@ public:
     ImagePropertiesVersionsTab* versionsHistoryTab;
 };
 
-ImagePropertiesSideBarDB::ImagePropertiesSideBarDB(QWidget* parent, SidebarSplitter* splitter,
-        KMultiTabBarPosition side, bool mimimizedDefault)
+ImagePropertiesSideBarDB::ImagePropertiesSideBarDB(QWidget* const parent, SidebarSplitter* const splitter,
+                                                   KMultiTabBarPosition side, bool mimimizedDefault)
     : ImagePropertiesSideBar(parent, splitter, side, mimimizedDefault),
-      d(new ImagePropertiesSideBarDBPriv)
+      d(new Private)
 {
     d->desceditTab        = new ImageDescEditTab(parent);
     d->versionsHistoryTab = new ImagePropertiesVersionsTab(parent);
@@ -129,18 +129,18 @@ ImagePropertiesSideBarDB::~ImagePropertiesSideBarDB()
 }
 
 void ImagePropertiesSideBarDB::itemChanged(const ImageInfo& info, const QRect& rect,
-        DImg* img, const DImageHistory& history)
+                                           DImg* const img, const DImageHistory& history)
 {
     itemChanged(info.fileUrl(), info, rect, img, history);
 }
 
-void ImagePropertiesSideBarDB::itemChanged(const KUrl& url, const QRect& rect, DImg* img)
+void ImagePropertiesSideBarDB::itemChanged(const KUrl& url, const QRect& rect, DImg* const img)
 {
     itemChanged(url, ImageInfo(), rect, img, DImageHistory());
 }
 
 void ImagePropertiesSideBarDB::itemChanged(const KUrl& url, const ImageInfo& info,
-        const QRect& rect, DImg* img, const DImageHistory& history)
+                                           const QRect& rect, DImg* const img, const DImageHistory& history)
 {
     if ( !url.isValid() )
     {
@@ -171,7 +171,7 @@ void ImagePropertiesSideBarDB::itemChanged(const ImageInfoList& infos)
     itemChanged(infos, QRect(), 0, DImageHistory());
 }
 
-void ImagePropertiesSideBarDB::itemChanged(ImageInfoList infos, const QRect& rect, DImg* img, const DImageHistory& history)
+void ImagePropertiesSideBarDB::itemChanged(ImageInfoList infos, const QRect& rect, DImg* const img, const DImageHistory& history)
 {
     m_currentRect        = rect;
     m_image              = img;
@@ -616,7 +616,7 @@ void ImagePropertiesSideBarDB::setImagePropertiesInformation(const KUrl& url)
     }
 }
 
-ImagePropertiesVersionsTab* ImagePropertiesSideBarDB::getFiltersHistoryTab()
+ImagePropertiesVersionsTab* ImagePropertiesSideBarDB::getFiltersHistoryTab() const
 {
     return d->versionsHistoryTab;
 }

@@ -8,7 +8,7 @@
  *               digiKam database.
  *
  * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2007-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2007-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -57,23 +57,23 @@ class ImagePropertiesSideBarDB : public ImagePropertiesSideBar
 
 public:
 
-    ImagePropertiesSideBarDB(QWidget* parent, SidebarSplitter* splitter,
+    ImagePropertiesSideBarDB(QWidget* const parent, SidebarSplitter* const splitter,
                              KMultiTabBarPosition side=KMultiTabBar::Left,
                              bool mimimizedDefault=false);
 
     ~ImagePropertiesSideBarDB();
 
-    virtual void itemChanged(const KUrl& url, const QRect& rect = QRect(), DImg* img = 0);
+    virtual void itemChanged(const KUrl& url, const QRect& rect = QRect(), DImg* const img = 0);
 
     virtual void itemChanged(const ImageInfo& info, const QRect& rect = QRect(),
-                             DImg* img = 0, const DImageHistory& history = DImageHistory());
+                             DImg* const img = 0, const DImageHistory& history = DImageHistory());
     virtual void itemChanged(const ImageInfoList& infos);
 
     void populateTags(void);
     void refreshTagsView();
 
     ///This is for image editor to be able to update the filter list in sidebar
-    ImagePropertiesVersionsTab* getFiltersHistoryTab();
+    ImagePropertiesVersionsTab* getFiltersHistoryTab() const;
     ImageDescEditTab*           imageDescEditTab() const;
 
 Q_SIGNALS:
@@ -106,7 +106,7 @@ private Q_SLOTS:
 
 private:
 
-    void itemChanged(const KUrl& url, const ImageInfo& info, const QRect& rect, DImg* img, const DImageHistory& history);
+    void itemChanged(const KUrl& url, const ImageInfo& info, const QRect& rect, DImg* const img, const DImageHistory& history);
     void itemChanged(const ImageInfoList infos, const QRect& rect, DImg* img, const DImageHistory& history);
     void setImagePropertiesInformation(const KUrl& url);
 
@@ -123,8 +123,8 @@ protected:
 
 private:
 
-    class ImagePropertiesSideBarDBPriv;
-    ImagePropertiesSideBarDBPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam
