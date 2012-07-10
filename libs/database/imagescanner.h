@@ -235,7 +235,8 @@ protected:
     void scanFaces();
     void scanImageHistory();
     void scanImageHistoryIfModified();
-    void scanVideoFile();
+    void scanVideoInformation();
+    void scanVideoMetadata();
     void scanAudioFile();
 
     void prepareImage();
@@ -244,6 +245,9 @@ protected:
     QString detectFormat();
     QString detectVideoFormat();
     QString detectAudioFormat();
+
+    void checkCreationDateFromMetadata(QVariant& dateFromMetadata) const;
+    bool checkRatingFromMetadata(const QVariant& ratingFromMetadata) const;
 
 protected:
 

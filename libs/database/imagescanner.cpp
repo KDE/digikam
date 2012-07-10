@@ -275,6 +275,18 @@ void ImageScanner::scanFile(ScanMode mode)
             scanFaces();
             scanImageHistoryIfModified();
         }
+        else if (m_scanInfo.category == DatabaseItem::Video)
+        {
+            scanVideoInformation();
+            // TODO: Here, we only scan fields which can be expected to have changed, when we detect a change of file data.
+            // It seems to me that at the moment video metadata contains such files (which may change after editing).
+            // In contrast, with photos, ImageMetadata contains fields which describe the moment of taking the photo,
+            //  which means they dont change.
+            if (m_hasMetadata)
+            {
+                scanVideoMetadata();
+            }
+        }
     }
     else
     {
@@ -296,7 +308,11 @@ void ImageScanner::scanFile(ScanMode mode)
         }
         else if (m_scanInfo.category == DatabaseItem::Video)
         {
-            scanVideoFile();
+            scanVideoInformation();
+            if (m_hasMetadata)
+            {
+                scanVideoMetadata();
+            }
         }
         else if (m_scanInfo.category == DatabaseItem::Audio)
         {
@@ -307,6 +323,28 @@ void ImageScanner::scanFile(ScanMode mode)
             // unsupported
         }
     }
+}
+
+void ImageScanner::checkCreationDateFromMetadata(QVariant& dateFromMetadata) const
+{
+    // creation date: fall back to file system property
+    if (dateFromMetadata.isNull() || !dateFromMetadata.toDateTime().isValid())
+    {
+        dateFromMetadata = creationDateFromFilesystem(m_fileInfo);
+    }
+}
+
+bool ImageScanner::checkRatingFromMetadata(const QVariant& ratingFromMetadata) const
+{
+    // should only be overwritten if set in metadata
+    if (m_scanMode == Rescan)
+    {
+        if (ratingFromMetadata.isNull() || ratingFromMetadata.toInt() == -1)
+        {
+            return false;
+        }
+    }
+    return true;
 }
 
 void ImageScanner::scanImageInformation()
@@ -323,20 +361,12 @@ void ImageScanner::scanImageInformation()
                << MetadataInfo::Orientation;
         QVariantList metadataInfos = m_metadata.getMetadataFields(fields);
 
-        // creation date: fall back to file system property
-        if (metadataInfos.at(1).isNull() || !metadataInfos.at(1).toDateTime().isValid())
-        {
-            metadataInfos[1] = creationDateFromFilesystem(m_fileInfo);
-        }
+        checkCreationDateFromMetadata(metadataInfos[1]);
 
-        // Some fields should only be overwritten if set in metadata
-        if (m_scanMode == Rescan)
+        if (!checkRatingFromMetadata(metadataInfos.at(0)))
         {
-            if (metadataInfos.at(0).isNull() || metadataInfos.at(0).toInt() == -1)
-            {
-                dbFields &= ~DatabaseFields::Rating;
-                metadataInfos.removeAt(0);
-            }
+            dbFields &= ~DatabaseFields::Rating;
+            metadataInfos.removeAt(0);
         }
 
         infos << metadataInfos;
@@ -1092,8 +1122,6 @@ public:
     ImageInfo subject;
 };
 
-// ---------------------------------------------------------------------------------------
-
 void ImageScanner::sortByProximity(QList<ImageInfo>& list, const ImageInfo& subject)
 {
     if (!list.isEmpty() && !subject.isNull())
@@ -1101,6 +1129,8 @@ void ImageScanner::sortByProximity(QList<ImageInfo>& list, const ImageInfo& subj
         qStableSort(list.begin(), list.end(), lessThanByProximityToSubject(subject));
     }
 }
+
+// ---------------------------------------------------------------------------------------
 
 static MetadataFields allVideoMetadataFields()
 {
@@ -1119,105 +1149,82 @@ static MetadataFields allVideoMetadataFields()
 }
 
 
-void ImageScanner::scanVideoFile()
+void ImageScanner::scanVideoInformation()
 {
-//    DatabaseFields::VideoMetadata dbFields = DatabaseFields::VideoMetadataAll;
+    DatabaseFields::ImageInformation dbFields;
+    QVariantList                     infos;
 
-    QVariantList videoMetadataInfos;
-    MetadataFields videoFields;
-
-    videoFields << MetadataInfo::AspectRatio
-                << MetadataInfo::AudioBitRate
-                << MetadataInfo::AudioChannelType
-                << MetadataInfo::AudioCompressor
-                << MetadataInfo::Duration
-                << MetadataInfo::FrameRate
-                << MetadataInfo::Resolution
-                << MetadataInfo::VideoCodec;
-
-    videoMetadataInfos = m_metadata.getMetadataFields(videoFields);
-
-    QSize size;
-
-    QVariantList videoInfos;
-
-    videoInfos << videoMetadataInfos;
-    //Not sure whether implementing this would be necessary or not, so commenting for the moment
-    /*
-    if (m_scanMode == NewScan)
-    {
-        DatabaseAccess().db()->addVideoMetadata(m_scanInfo.id, videoMetadataInfos, dbFields);
-    }
-    else if (m_scanMode == Rescan)
-    {
-        DatabaseAccess().db()->changeVideoMetadata(m_scanInfo.id, videoMetadataInfos, dbFields);
-    }
-    */
-    DatabaseAccess().db()->addVideoMetadata(m_scanInfo.id, videoInfos,
-                                            DatabaseFields::AspectRatio     |
-                                            DatabaseFields::AudioBitRate    |
-                                            DatabaseFields::AudioChannelType|
-                                            DatabaseFields::AudioCompressor |
-                                            DatabaseFields::Duration        |
-                                            DatabaseFields::FrameRate       |
-                                            DatabaseFields::Resolution      |
-                                            DatabaseFields::VideoCodec );
-
-    QVariantList metadataInfos;
-
-    if (m_hasMetadata)
+    if (m_scanMode == NewScan || m_scanMode == Rescan)
     {
         MetadataFields fields;
         fields << MetadataInfo::Rating
-               << MetadataInfo::CreationDate;
-        metadataInfos = m_metadata.getMetadataFields(fields);
+               << MetadataInfo::CreationDate
+               << MetadataInfo::DigitizationDate;
+        QVariantList metadataInfos = m_metadata.getMetadataFields(fields);
+        dbFields |= DatabaseFields::Rating | DatabaseFields::CreationDate | DatabaseFields::DigitizationDate;
 
-        // if invalid, start with -1 rating
-        if (metadataInfos.at(0).isNull())
+        checkCreationDateFromMetadata(metadataInfos[1]);
+
+        if (!checkRatingFromMetadata(metadataInfos.at(0)))
         {
-            metadataInfos[0] = -1;
+            dbFields &= ~DatabaseFields::Rating;
+            metadataInfos.removeAt(0);
         }
 
-        // creation date: fall back to file system property
-        if (metadataInfos.at(1).isNull() || !metadataInfos.at(1).toDateTime().isValid())
-        {
-            metadataInfos[1] = creationDateFromFilesystem(m_fileInfo);
-        }
-    }
-    else
-    {
-        metadataInfos << -1
-                      << creationDateFromFilesystem(m_fileInfo);
+        infos << metadataInfos;
     }
 
-//    QSize size;
+    // TODO: Have we got the video resolution as width x height?
+    QSize size;// = ...;
+    infos << size.width()
+          << size.height();
+    dbFields |= DatabaseFields::Width | DatabaseFields::Height;
 
-    QVariantList infos;
-    infos << metadataInfos
-          << detectVideoFormat();
+    // TODO: Please check / improve / rewrite detectVideoFormat().
+    // The format strings shall be uppercase, and a clearly defined set
+    // (all format strings used in the database should be defined in advance)
+    infos << detectVideoFormat();
+    dbFields |= DatabaseFields::Format;
 
-    DatabaseAccess().db()->addImageInformation(m_scanInfo.id, infos,
-                                               DatabaseFields::Rating       |
-                                               DatabaseFields::CreationDate |
-                                               DatabaseFields::Format);
-
-    // KFileMetaInfo does not give us any useful information for relevant video files
+    // TODO: Is there any use for bit depth - 8bit, 16bit - or color model - RBG, CMYK - with videos?
     /*
-    const KFileMetaInfo::WhatFlags flags = KFileMetaInfo::Fastest |
-            KFileMetaInfo::TechnicalInfo |
-            KFileMetaInfo::ContentInfo;
-    KFileMetaInfo metaInfo(m_fileInfo.filePath(), QString(), flags);
-    if (metaInfo.isValid())
-    {
-        QStringList keys = metaInfo.keys();
-        foreach(const QString& key, keys)
-        {
-            KFileMetaInfoItem item = metaInfo.item(key);
-            kDebug() << item.name() << item.value();
-        }
-    }
+    infos << bitDepth
+          << colorModel;
+    dbFields |= DatabaseFields::ColorDepth | DatabaseFields::ColorModel;
     */
+
+    if (m_scanMode == NewScan)
+    {
+        DatabaseAccess().db()->addImageInformation(m_scanInfo.id, infos, dbFields);
+    }
+    else if (m_scanMode == Rescan)
+    {
+        DatabaseAccess().db()->changeImageInformation(m_scanInfo.id, infos, dbFields);
+    }
+    else // ModifiedScan
+    {
+        // TODO: which flags are passed here depends on the three TODOs above
+        // We dont overwrite Rating and date here.
+        DatabaseAccess().db()->changeImageInformation(m_scanInfo.id, infos,
+                                                      DatabaseFields::Width      |
+                                                      DatabaseFields::Height     |
+                                                      DatabaseFields::Format     |
+                                                      DatabaseFields::ColorDepth |
+                                                      DatabaseFields::ColorModel);
+    }
 }
+
+void ImageScanner::scanVideoMetadata()
+{
+    QVariantList metadataInfos = m_metadata.getMetadataFields(allVideoMetadataFields());
+
+    if (hasValidField(metadataInfos))
+    {
+        DatabaseAccess().db()->addVideoMetadata(m_scanInfo.id, metadataInfos);
+    }
+}
+
+// ---------------------------------------------------------------------------------------
 
 void ImageScanner::scanAudioFile()
 {
