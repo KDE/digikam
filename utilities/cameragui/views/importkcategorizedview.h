@@ -3,8 +3,8 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2012-05-07
- * Description : Item view to list import interface items.
+ * Date        : 2012-07-05
+ * Description : Base item view to list import interface items.
  *
  * Copyright (C) 2012 by Islam Wazery <wazery at ubuntu dot com>
  *
@@ -116,8 +116,8 @@ protected:
 
 private:
 
-    class ImportKCategorizedViewPriv;
-    ImportKCategorizedViewPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } //namespace Digikam

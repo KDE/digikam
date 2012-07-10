@@ -92,27 +92,27 @@ public:
      * the given row (parent is the invalid QModelIndex, column is 0).
      * Note that camItemInfoRef must not be called with an invalid index as it will crash.
      */
-    CamItemInfo  camItemInfo(int row) const;
+    CamItemInfo  camItemInfo(int row)    const;
     CamItemInfo& camItemInfoRef(int row) const;
-    qlonglong    camItemId(int row) const;
+    qlonglong    camItemId(int row)      const;
 
     /**
      * Return the index of a given CamItemInfo, it it exists in the model.
      */
-    QModelIndex        indexForCamItemInfo(const CamItemInfo& info) const;
+    QModelIndex        indexForCamItemInfo(const CamItemInfo& info)   const;
     QList<QModelIndex> indexesForCamItemInfo(const CamItemInfo& info) const;
-    QModelIndex        indexForCamItemId(qlonglong id) const;
-    QList<QModelIndex> indexesForCamItemId(qlonglong id) const;
+    QModelIndex        indexForCamItemId(qlonglong id)                const;
+    QList<QModelIndex> indexesForCamItemId(qlonglong id)              const;
 
     /**
      * Returns the index or CamItemInfo object from the underlying data for
      * the given file url. In case of multiple occurrences of the same file, the simpler
      * overrides returns any one found first, use the QList methods to retrieve all occurrences.
      */
-    QModelIndex        indexForUrl(const KUrl& fileUrl) const;
+    QModelIndex        indexForUrl(const KUrl& fileUrl)   const;
     QList<QModelIndex> indexesForUrl(const KUrl& fileUrl) const;
-    CamItemInfo        camItemInfo(const KUrl& fileUrl) const;
-    QList<CamItemInfo> camItemInfos(const KUrl& fileUrl) const;
+    CamItemInfo        camItemInfo(const KUrl& fileUrl)   const;
+    QList<CamItemInfo> camItemInfos(const KUrl& fileUrl)  const;
 
     void addCamItemInfo(const CamItemInfo& info);
     void addCamItemInfos(const QList<CamItemInfo>& infos);
@@ -304,11 +304,11 @@ private:
 public:
 
     //FIXME: Declared public because it's used in ImageModelIncrementalUpdater class
-    class ImportImageModelPriv;
+    class Private;
 
 private:
 
-    ImportImageModelPriv* const d;
+    Private* const d;
 };
 
 } // namespace Digikam

@@ -1,45 +1,12 @@
 *****************************************************************************************************
-digiKam 2.7.0 - Release date: 2012-07-08
+digiKam 2.8.0 - Release date: 2012-08-05
 
 NEW FEATURES:
 
-General : Update internal Libraw library to last 0.14.7.
-          New cameras supported: Canon 5D Mark III, G1 X, 1D X and Powershot SX200; Nikon D4,D800/D800E and D3200;
-          Fuji X-S1 and HS30EXR; Casio EX-Z8; Olympus E-M5; Panasonic GF5; Sony NEX-F3, SLT-A37 and SLT-A57; Samsung NX20 and NX210;
-          Support for updated Samsung NX200 firmware.
-General : Update internal LensFun library to last 0.2.6 release.
-General : Update internal LibPGF library to last 6.12.24 release.
-
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
-001 ==> 301494 - Misspelling: "carreful".
-002 ==> 299988 - Using MySQL but on DB test got "Database connection test was not successful. Error was: Driver not loaded Driver not loaded".
-003 ==> 301482 - Xmp sidecar files not being generated for .3xf raw file type.
-004 ==> 301496 - Crash tagging a picture.
-005 ==> 291877 - Change tag filters checkboxes to three-states checkboxes to allow filtering by inclusion and by exclusion.
-006 ==> 232360 - Zoom reset in Image view for each downloaded image.
-007 ==> 298606 - Resize controls in editor are missing.
-008 ==> 301072 - Application crash when using curves correction.
-009 ==> 301051 - digiKam crashes when changing picture in image editor.
-010 ==> 274555 - digikam crashes while histogram computation.
-011 ==> 301483 - Sigma raw files and preview (.x3f).
-012 ==> 197378 - Fading between photo's in diashow.
-013 ==> 302443 - "Open in File Manager" opens Rythmbox in Ubuntu.
-014 ==> 288762 - digiKam crash when closing digikam after mass-tagging.
-015 ==> 286719 - digiKam hang during startup (deadlock?).
-016 ==> 225443 - Fileview preview panning shortcut back to old.
-017 ==> 302562 - Rename "View Image" to "Preview".
-018 ==> 280142 - Crash in libtiff when files are edited.
-019 ==> 300848 - "Reread Metadata From Image" is broken.
-020 ==> 302592 - digiKam crashes when I open the Tab "Search Geomap".
-021 ==> 302740 - Duplicate rotation/flip entries in image menu, shortcuts not working.
-022 ==> 275400 - "Reduced Size Preview" images are blurry and not rotated after upgrade from 1.2.0.
-023 ==> 294578 - Problem when moving grouped pictures from one album to another.
-024 ==> 295274 - Crash when specific pictures are opened in Image Editor.
-025 ==> 287331 - digiKam crashes when reading a large pic collection.
-026 ==> 302802 - In albumview, turningkeys have disappeared, whereas these are switched on in setting.
-027 ==> 295335 - Pasting a name in the "Who is this?" input field does not activate "Confirm" Button.
-028 ==> 295923 - File always changed even if no metadata should be written to it.
-029 ==> 278345 - Context menu > Assign Tags > Recently assigned tags not preserved between session and fixed size.
-030 ==> 
-
+001 ==> 296786 - Zoom to 100% pans to the top-left corner.
+002 ==> 299942 - Root Album Folders selection list does not expand to fill available space.
+003 ==> 296799 - Shown number of images in album increases in status line after image.
+004 ==> 301371 - Exiv2 mix library strangeness 
+005 ==> 

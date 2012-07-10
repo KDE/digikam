@@ -3,7 +3,7 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2012-05-07
+ * Date        : 2012-07-08
  * Description : Item view to list import interface items.
  *
  * Copyright (C) 2012 by Islam Wazery <wazery at ubuntu dot com>
@@ -68,12 +68,12 @@ private:
 
 // ------------------------------------------------------------------------------
 
-class ImportKCategorizedView::ImportKCategorizedViewPriv
+class ImportKCategorizedView::Private
 {
 public:
 
-    ImportKCategorizedViewPriv(ImportKCategorizedView* const listView);
-    ~ImportKCategorizedViewPriv();
+    Private(ImportKCategorizedView* const listView);
+    ~Private();
 
     /**
       * Returns the list of items that intersects with @p rect

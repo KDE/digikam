@@ -36,11 +36,11 @@
 namespace Digikam
 {
 
-class ImportThumbnailModel::ImportThumbnailModelPriv
+class ImportThumbnailModel::Private
 {
 public:
 
-    ImportThumbnailModelPriv() :
+    Private() :
         controller(0),
         thumbSize(0),
         lastGlobalThumbSize(0),
@@ -63,7 +63,7 @@ public:
 };
 
 ImportThumbnailModel::ImportThumbnailModel(QObject* const parent)
-    : ImportImageModel(parent), d(new ImportThumbnailModelPriv)
+    : ImportImageModel(parent), d(new Private)
 {
     setKeepsFileUrlCache(true);
     setCacheSize(200);

@@ -3,8 +3,8 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2012-05-07
- * Description : Item view to list import interface items.
+ * Date        : 2012-07-05
+ * Description : Base item view to list import interface items.
  *
  * Copyright (C) 2012 by Islam Wazery <wazery at ubuntu dot com>
  *
@@ -22,9 +22,6 @@
  * ============================================================ */
 
 #include "importkcategorizedview.moc"
-#include "importkcategorizedview_p.h"
-
-#include "importkcategorizedview.h" //TODO: Remove this line
 
 // C++ includes
 
@@ -44,10 +41,14 @@
 #include "kcategorizedsortfilterproxymodel.h"
 #include "kcategorydrawer.h"
 
+// Local includes
+
+#include "importkcategorizedview_p.h"
+
 namespace Digikam
 {
 
-ImportKCategorizedView::ImportKCategorizedViewPriv::ImportKCategorizedViewPriv(ImportKCategorizedView* const listView)
+ImportKCategorizedView::Private::Private(ImportKCategorizedView* const listView)
     : listView(listView),
       categoryDrawer(0),
       biggestItemSize(QSize(0, 0)),
@@ -59,11 +60,11 @@ ImportKCategorizedView::ImportKCategorizedViewPriv::ImportKCategorizedViewPriv(I
 {
 }
 
-ImportKCategorizedView::ImportKCategorizedViewPriv::~ImportKCategorizedViewPriv()
+ImportKCategorizedView::Private::~Private()
 {
 }
 
-const QModelIndexList& ImportKCategorizedView::ImportKCategorizedViewPriv::intersectionSet(const QRect& rect)
+const QModelIndexList& ImportKCategorizedView::Private::intersectionSet(const QRect& rect)
 {
     QModelIndex index;
     QRect       indexVisualRect;
@@ -127,7 +128,7 @@ const QModelIndexList& ImportKCategorizedView::ImportKCategorizedViewPriv::inter
     return intersectedIndexes;
 }
 
-QRect ImportKCategorizedView::ImportKCategorizedViewPriv::visualRectInViewport(const QModelIndex& index) const
+QRect ImportKCategorizedView::Private::visualRectInViewport(const QModelIndex& index) const
 {
     if (!index.isValid())
     {
@@ -288,7 +289,7 @@ QRect ImportKCategorizedView::ImportKCategorizedViewPriv::visualRectInViewport(c
     return retRect;
 }
 
-QRect ImportKCategorizedView::ImportKCategorizedViewPriv::visualCategoryRectInViewport(const QString& category) const
+QRect ImportKCategorizedView::Private::visualCategoryRectInViewport(const QString& category) const
 {
     QRect retRect(listView->spacing(),
                   listView->spacing(),
@@ -364,7 +365,7 @@ QRect ImportKCategorizedView::ImportKCategorizedViewPriv::visualCategoryRectInVi
 }
 
 // We're sure elementsPosition doesn't contain index
-const QRect& ImportKCategorizedView::ImportKCategorizedViewPriv::cacheIndex(const QModelIndex& index)
+const QRect& ImportKCategorizedView::Private::cacheIndex(const QModelIndex& index)
 {
     QRect rect                     = visualRectInViewport(index);
     QHash<int, QRect>::iterator it = elementsPosition.insert(index.row(), rect);
@@ -373,7 +374,7 @@ const QRect& ImportKCategorizedView::ImportKCategorizedViewPriv::cacheIndex(cons
 }
 
 // We're sure categoriesPosition doesn't contain category
-const QRect& ImportKCategorizedView::ImportKCategorizedViewPriv::cacheCategory(const QString& category)
+const QRect& ImportKCategorizedView::Private::cacheCategory(const QString& category)
 {
     QRect rect                         = visualCategoryRectInViewport(category);
     QHash<QString, QRect>::iterator it = categoriesPosition.insert(category, rect);
@@ -381,7 +382,7 @@ const QRect& ImportKCategorizedView::ImportKCategorizedViewPriv::cacheCategory(c
     return *it;
 }
 
-const QRect& ImportKCategorizedView::ImportKCategorizedViewPriv::cachedRectIndex(const QModelIndex& index)
+const QRect& ImportKCategorizedView::Private::cachedRectIndex(const QModelIndex& index)
 {
     QHash<int, QRect>::const_iterator it = elementsPosition.constFind(index.row());
 
@@ -397,7 +398,7 @@ const QRect& ImportKCategorizedView::ImportKCategorizedViewPriv::cachedRectIndex
     }
 }
 
-const QRect& ImportKCategorizedView::ImportKCategorizedViewPriv::cachedRectCategory(const QString& category)
+const QRect& ImportKCategorizedView::Private::cachedRectCategory(const QString& category)
 {
     QHash<QString, QRect>::const_iterator it = categoriesPosition.constFind(category);
 
@@ -413,7 +414,7 @@ const QRect& ImportKCategorizedView::ImportKCategorizedViewPriv::cachedRectCateg
     }
 }
 
-QRect ImportKCategorizedView::ImportKCategorizedViewPriv::visualRect(const QModelIndex& index)
+QRect ImportKCategorizedView::Private::visualRect(const QModelIndex& index)
 {
     QRect retRect = cachedRectIndex(index);
     int dx        = -listView->horizontalOffset();
@@ -423,7 +424,7 @@ QRect ImportKCategorizedView::ImportKCategorizedViewPriv::visualRect(const QMode
     return retRect;
 }
 
-QRect ImportKCategorizedView::ImportKCategorizedViewPriv::categoryVisualRect(const QString& category)
+QRect ImportKCategorizedView::Private::categoryVisualRect(const QString& category)
 {
     QRect retRect = cachedRectCategory(category);
     int dx        = -listView->horizontalOffset();
@@ -433,7 +434,7 @@ QRect ImportKCategorizedView::ImportKCategorizedViewPriv::categoryVisualRect(con
     return retRect;
 }
 
-QSize ImportKCategorizedView::ImportKCategorizedViewPriv::contentsSize()
+QSize ImportKCategorizedView::Private::contentsSize()
 {
     // find the last index in the last category
     QModelIndex lastIndex = categoriesIndexes.isEmpty() ? QModelIndex() :
@@ -447,7 +448,7 @@ QSize ImportKCategorizedView::ImportKCategorizedViewPriv::contentsSize()
     return QSize(listView->viewport()->width(), lastItemBottom);
 }
 
-void ImportKCategorizedView::ImportKCategorizedViewPriv::drawNewCategory(const QModelIndex& index, int sortRole,
+void ImportKCategorizedView::Private::drawNewCategory(const QModelIndex& index, int sortRole,
                                                                          const QStyleOption& option, QPainter* const painter)
 {
     if (!index.isValid())
@@ -481,7 +482,7 @@ void ImportKCategorizedView::ImportKCategorizedViewPriv::drawNewCategory(const Q
     categoryDrawer->drawCategory(index, sortRole, optionCopy, painter);
 }
 
-void ImportKCategorizedView::ImportKCategorizedViewPriv::updateScrollbars()
+void ImportKCategorizedView::Private::updateScrollbars()
 {
     listView->horizontalScrollBar()->setRange(0, 0);
 
@@ -500,7 +501,7 @@ void ImportKCategorizedView::ImportKCategorizedViewPriv::updateScrollbars()
     listView->verticalScrollBar()->setRange(0, contentsSize().height());
 }
 
-void ImportKCategorizedView::ImportKCategorizedViewPriv::drawDraggedItems(QPainter* const painter)
+void ImportKCategorizedView::Private::drawDraggedItems(QPainter* const painter)
 {
     QStyleOptionViewItemV4 option = listView->viewOptions();
     option.state                  &= ~QStyle::State_MouseOver;
@@ -519,7 +520,7 @@ void ImportKCategorizedView::ImportKCategorizedViewPriv::drawDraggedItems(QPaint
     }
 }
 
-void ImportKCategorizedView::ImportKCategorizedViewPriv::drawDraggedItems()
+void ImportKCategorizedView::Private::drawDraggedItems()
 {
     QRect rectToUpdate;
     QRect currentRect;
@@ -545,7 +546,7 @@ void ImportKCategorizedView::ImportKCategorizedViewPriv::drawDraggedItems()
 // ---- ImportKCategorizedView ------------------------------
 
 ImportKCategorizedView::ImportKCategorizedView(QWidget* const parent)
-    : QListView(parent), d(new ImportKCategorizedViewPriv(this))
+    : QListView(parent), d(new Private(this))
 {
 }
 
@@ -949,7 +950,7 @@ void ImportKCategorizedView::resizeEvent(QResizeEvent* event)
     d->updateScrollbars();
 }
 
-QItemSelection ImportKCategorizedView::ImportKCategorizedViewPriv::selectionForRect(const QRect& rect)
+QItemSelection ImportKCategorizedView::Private::selectionForRect(const QRect& rect)
 {
     QItemSelection selection;
     QModelIndex    tl, br;
@@ -1677,7 +1678,7 @@ void ImportKCategorizedView::rowsInserted(const QModelIndex& parent, int start, 
     rowsInsertedArtifficial(parent, start, end);
 }
 
-int ImportKCategorizedView::ImportKCategorizedViewPriv::categoryUpperBound(SparseModelIndexVector& modelIndexList,
+int ImportKCategorizedView::Private::categoryUpperBound(SparseModelIndexVector& modelIndexList,
                                                                            int begin, int averageSize)
 {
     int end            = modelIndexList.size();
@@ -1781,7 +1782,7 @@ void ImportKCategorizedView::rowsInsertedArtifficial(const QModelIndex& parent, 
 
     SparseModelIndexVector modelIndexList(rowCount, d->proxyModel, sortColumn);
 
-    d->elementsInfo      = QVector<struct ImportKCategorizedViewPriv::ElementInfo>(rowCount);
+    d->elementsInfo      = QVector<struct Private::ElementInfo>(rowCount);
     int categorySizes    = 0;
     int categoryCounts   = 0;
 
@@ -1816,7 +1817,7 @@ void ImportKCategorizedView::rowsInsertedArtifficial(const QModelIndex& parent, 
         for (int i=k; i<upperBound; ++i, ++offset)
         {
             rows[offset]                             = i;
-            struct ImportKCategorizedViewPriv::ElementInfo& elementInfo = d->elementsInfo[i];
+            struct Private::ElementInfo& elementInfo = d->elementsInfo[i];
             elementInfo.category                     = lastCategory;
             elementInfo.relativeOffsetToCategory     = offset;
         }
