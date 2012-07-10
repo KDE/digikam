@@ -6,7 +6,7 @@
  * Date        : 2007-04-16
  * Description : Schema update
  *
- * Copyright (C) 2007-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2007-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -83,18 +83,18 @@ const QString SchemaUpdater::getLastErrorMessage()
     return m_LastErrorMessage;
 }
 
-void SchemaUpdater::setDatabaseAccess(DatabaseAccess* access)
+SchemaUpdater::SchemaUpdater(AlbumDB* const albumDB, DatabaseBackend* const backend, DatabaseParameters parameters)
 {
-    m_access=access;
+    m_Backend    = backend;
+    m_AlbumDB    = albumDB;
+    m_Parameters = parameters;
+    m_observer   = 0;
+    m_setError   = false;
 }
 
-SchemaUpdater::SchemaUpdater(AlbumDB* albumDB, DatabaseBackend* backend, DatabaseParameters parameters)
+void SchemaUpdater::setDatabaseAccess(DatabaseAccess* const access)
 {
-    m_Backend         = backend;
-    m_AlbumDB         = albumDB;
-    m_Parameters      = parameters;
-    m_observer        = 0;
-    m_setError        = false;
+    m_access = access;
 }
 
 bool SchemaUpdater::update()
@@ -157,7 +157,7 @@ void SchemaUpdater::readVersionSettings()
     m_currentRequiredVersion = safeToVariant(m_AlbumDB->getSetting("DBVersionRequired"));
 }
 
-void SchemaUpdater::setObserver(InitializationObserver* observer)
+void SchemaUpdater::setObserver(InitializationObserver* const observer)
 {
     m_observer = observer;
 }
@@ -308,9 +308,8 @@ bool SchemaUpdater::startUpdates()
         // No legacy handling: start with a fresh db
         if (!createDatabase() || !createFilterSettings())
         {
-            QString errorMsg = i18n("Failed to create tables in database.\n ")
-                               + m_Backend->lastError();
-            m_LastErrorMessage=errorMsg;
+            QString errorMsg   = i18n("Failed to create tables in database.\n ") + m_Backend->lastError();
+            m_LastErrorMessage = errorMsg;
 
             if (m_observer)
             {
@@ -433,9 +432,8 @@ bool SchemaUpdater::makeUpdates()
     return true;
 }
 
-void SchemaUpdater::defaultFilterSettings(QStringList& defaultImageFilter,
-        QStringList& defaultVideoFilter,
-        QStringList& defaultAudioFilter)
+void SchemaUpdater::defaultFilterSettings(QStringList& defaultImageFilter, QStringList& defaultVideoFilter,
+                                          QStringList& defaultAudioFilter)
 {
     //NOTE for updating:
     //When changing anything here, just increment filterSettingsVersion() so that the changes take effect
@@ -1052,8 +1050,7 @@ bool SchemaUpdater::updateV4toV6()
     if (!m_Backend->execSql(QString(
                                 "UPDATE ImageInformation SET "
                                 " creationDate=(SELECT datetime FROM ImagesV3 WHERE ImagesV3.id=ImageInformation.imageid) "
-                                "WHERE imageid IN (SELECT id FROM ImagesV3);"
-                            )
+                                "WHERE imageid IN (SELECT id FROM ImagesV3);")
                            )
        )
     {
@@ -1153,7 +1150,6 @@ void SchemaUpdater::setLegacySettingEntries()
 }
 
 // ---------- Legacy code ------------
-
 
 void SchemaUpdater::preAlpha010Update1()
 {

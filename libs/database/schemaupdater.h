@@ -6,7 +6,7 @@
  * Date        : 2007-04-16
  * Description : Schema update
  *
- * Copyright (C) 2007-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2007-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -30,6 +30,7 @@
 #include <QVariant>
 
 // Local includes
+
 #include "albumdb.h"
 #include "databaseaccess.h"
 #include "databasebackend.h"
@@ -45,17 +46,18 @@ class DIGIKAM_DATABASE_EXPORT SchemaUpdater
 {
 public:
 
-    SchemaUpdater(AlbumDB* albumDB, DatabaseBackend* backend, DatabaseParameters parameters);
+    SchemaUpdater(AlbumDB* const albumDB, DatabaseBackend* const backend, DatabaseParameters parameters);
 
     static int schemaVersion();
     static int filterSettingsVersion();
     static int uniqueHashVersion();
     static bool isUniqueHashUpToDate();
-    bool update();
-    bool updateUniqueHash();
-    void setObserver(InitializationObserver* observer);
+
+    bool  update();
+    bool  updateUniqueHash();
+    void  setObserver(InitializationObserver* const observer);
     const QString getLastErrorMessage();
-    void setDatabaseAccess(DatabaseAccess* access);
+    void  setDatabaseAccess(DatabaseAccess* const access);
 
 private:
 
