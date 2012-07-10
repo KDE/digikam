@@ -6,7 +6,7 @@
  * Date        : 2008-01-04
  * Description : Container classes holding user presentable information
  *
- * Copyright (C) 2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2008-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -60,6 +60,8 @@ public:
     QString   colorModel;
 };
 
+// ------------------------------------------------------------
+
 class ImageMetadataContainer
 {
 public:
@@ -89,6 +91,8 @@ public:
     QString subjectDistanceCategory;
 };
 
+// ------------------------------------------------------------
+
 class VideoMetadataContainer
 {
 public:
@@ -98,7 +102,7 @@ public:
         allFieldsNull = true;
     }
 
-    bool allFieldsNull;
+    bool    allFieldsNull;
 
     QString aspectRatio;
     int     audioBitRate;
