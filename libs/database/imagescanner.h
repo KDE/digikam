@@ -190,9 +190,9 @@ public:
      * Returns containers with user-presentable information.
      * These methods provide the reverse service: Not writing into the db, but reading from the db.
      */
-    static void fillCommonContainer(qlonglong imageid, ImageCommonContainer* container);
-    static void fillMetadataContainer(qlonglong imageid, ImageMetadataContainer* container);
-    static void fillVideoMetadataContainer(qlonglong imageid, VideoMetadataContainer* container);
+    static void fillCommonContainer(qlonglong imageid, ImageCommonContainer* const container);
+    static void fillMetadataContainer(qlonglong imageid, ImageMetadataContainer* const container);
+    static void fillVideoMetadataContainer(qlonglong imageid, VideoMetadataContainer* const container);
 
     /**
      * Helper method to translate enum values to user presentable strings

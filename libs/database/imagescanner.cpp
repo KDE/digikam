@@ -312,7 +312,7 @@ void ImageScanner::scanFile(ScanMode mode)
 void ImageScanner::scanImageInformation()
 {
     DatabaseFields::ImageInformation dbFields = DatabaseFields::ImageInformationAll;
-    QVariantList infos;
+    QVariantList                     infos;
 
     if (m_scanMode == NewScan || m_scanMode == Rescan)
     {
@@ -371,11 +371,11 @@ void ImageScanner::scanImageInformation()
             // But there is a special case: if the dims were
         }*/
         DatabaseAccess().db()->changeImageInformation(m_scanInfo.id, infos,
-                DatabaseFields::Width      |
-                DatabaseFields::Height     |
-                DatabaseFields::Format     |
-                DatabaseFields::ColorDepth |
-                DatabaseFields::ColorModel);
+                                                      DatabaseFields::Width      |
+                                                      DatabaseFields::Height     |
+                                                      DatabaseFields::Format     |
+                                                      DatabaseFields::ColorDepth |
+                                                      DatabaseFields::ColorModel);
     }
 }
 
@@ -587,6 +587,7 @@ void ImageScanner::scanTags()
     // Check Color Label tag.
 
     int colorId = m_metadata.getImageColorLabel();
+
     if (colorId != -1)
     {
         kDebug() << "Color Label found : " << colorId;
@@ -747,7 +748,7 @@ void ImageScanner::tagImageHistoryGraph(qlonglong id)
     //kDebug() << "tagImageHistoryGraph" << id;
 
     // Load relation cloud, history of info and of all leaves of the tree into the graph, fully resolved
-    ImageHistoryGraph graph = ImageHistoryGraph::fromInfo(info, ImageHistoryGraph::LoadAll, ImageHistoryGraph::NoProcessing);
+    ImageHistoryGraph graph    = ImageHistoryGraph::fromInfo(info, ImageHistoryGraph::LoadAll, ImageHistoryGraph::NoProcessing);
     kDebug() << graph;
 
     int originalVersionTag     = TagsCache::instance()->getOrCreateInternalTag(InternalTagName::originalVersion());
@@ -766,8 +767,8 @@ void ImageScanner::tagImageHistoryGraph(qlonglong id)
     }
 
     // get category info
-    QList<qlonglong> originals, intermediates, currents;
-    QHash<ImageInfo, HistoryImageId::Types> types = graph.categorize();
+    QList<qlonglong>                                        originals, intermediates, currents;
+    QHash<ImageInfo, HistoryImageId::Types>                 types = graph.categorize();
     QHash<ImageInfo, HistoryImageId::Types>::const_iterator it;
 
     for (it = types.constBegin(); it != types.constEnd(); ++it)
@@ -808,6 +809,7 @@ void ImageScanner::tagImageHistoryGraph(qlonglong id)
 DImageHistory ImageScanner::resolvedImageHistory(const DImageHistory& history, bool mustBeAvailable)
 {
     DImageHistory h;
+
     foreach(const DImageHistory::Entry& e, history.entries())
     {
         // Copy entry, without referredImages
@@ -937,6 +939,7 @@ QList<qlonglong> ImageScanner::resolveHistoryImageId(const HistoryImageId& histo
 {
     // first and foremost: UUID
     QList<qlonglong> uuidList;
+
     if (historyId.hasUuid())
     {
         uuidList = DatabaseAccess().db()->getItemsForUuid(historyId.m_uuid);
@@ -1009,11 +1012,16 @@ QList<qlonglong> ImageScanner::resolveHistoryImageId(const HistoryImageId& histo
     return uuidList;
 }
 
+// ---------------------------------------------------------------------------------------
+
 class lessThanByProximityToSubject
 {
 public:
 
-    lessThanByProximityToSubject(const ImageInfo& subject) : subject(subject) {}
+    lessThanByProximityToSubject(const ImageInfo& subject) 
+        : subject(subject)
+    {
+    }
 
     bool operator()(const ImageInfo& a, const ImageInfo& b)
     {
@@ -1084,6 +1092,8 @@ public:
     ImageInfo subject;
 };
 
+// ---------------------------------------------------------------------------------------
+
 void ImageScanner::sortByProximity(QList<ImageInfo>& list, const ImageInfo& subject)
 {
     if (!list.isEmpty() && !subject.isNull())
@@ -1144,14 +1154,14 @@ void ImageScanner::scanVideoFile()
     }
     */
     DatabaseAccess().db()->addVideoMetadata(m_scanInfo.id, videoInfos,
-            DatabaseFields::AspectRatio     |
-            DatabaseFields::AudioBitRate    |
-            DatabaseFields::AudioChannelType|
-            DatabaseFields::AudioCompressor |
-            DatabaseFields::Duration        |
-            DatabaseFields::FrameRate       |
-            DatabaseFields::Resolution      |
-            DatabaseFields::VideoCodec );
+                                            DatabaseFields::AspectRatio     |
+                                            DatabaseFields::AudioBitRate    |
+                                            DatabaseFields::AudioChannelType|
+                                            DatabaseFields::AudioCompressor |
+                                            DatabaseFields::Duration        |
+                                            DatabaseFields::FrameRate       |
+                                            DatabaseFields::Resolution      |
+                                            DatabaseFields::VideoCodec );
 
     QVariantList metadataInfos;
 
@@ -1187,9 +1197,9 @@ void ImageScanner::scanVideoFile()
           << detectVideoFormat();
 
     DatabaseAccess().db()->addImageInformation(m_scanInfo.id, infos,
-            DatabaseFields::Rating       |
-            DatabaseFields::CreationDate |
-            DatabaseFields::Format);
+                                               DatabaseFields::Rating       |
+                                               DatabaseFields::CreationDate |
+                                               DatabaseFields::Format);
 
     // KFileMetaInfo does not give us any useful information for relevant video files
     /*
@@ -1221,9 +1231,9 @@ void ImageScanner::scanAudioFile()
           << detectAudioFormat();
 
     DatabaseAccess().db()->addImageInformation(m_scanInfo.id, infos,
-            DatabaseFields::Rating       |
-            DatabaseFields::CreationDate |
-            DatabaseFields::Format);
+                                               DatabaseFields::Rating       |
+                                               DatabaseFields::CreationDate |
+                                               DatabaseFields::Format);
 }
 
 void ImageScanner::loadFromDisk()
@@ -1235,7 +1245,7 @@ void ImageScanner::loadFromDisk()
     m_loadedFromDisk = true;
 
     m_metadata.registerMetadataSettings();
-    m_hasMetadata = m_metadata.load(m_fileInfo.filePath());
+    m_hasMetadata    = m_metadata.load(m_fileInfo.filePath());
 
     if (m_scanInfo.category == DatabaseItem::Image)
     {
@@ -1380,6 +1390,7 @@ QDateTime ImageScanner::creationDateFromFilesystem(const QFileInfo& info)
 
 QString ImageScanner::formatToString(const QString& format)
 {
+    // image -------------------------------------------------------------------
     if (format == "JPG")
     {
         return "JPEG";
@@ -1406,7 +1417,7 @@ QString ImageScanner::formatToString(const QString& format)
                      "RAW image file (%1)",
                      format.mid(4));
     }
-    // video
+    // video -------------------------------------------------------------------
     else if (format == "MPEG")
     {
         return format;
@@ -1435,7 +1446,7 @@ QString ImageScanner::formatToString(const QString& format)
     {
         return "3GPP";
     }
-    // audio
+    // audio -------------------------------------------------------------------
     else if (format == "OGG")
     {
         return "Ogg";
@@ -1519,7 +1530,7 @@ QString ImageScanner::iptcCorePropertyName(MetadataInfo::Field field)
     }
 }
 
-void ImageScanner::fillCommonContainer(qlonglong imageid, ImageCommonContainer* container)
+void ImageScanner::fillCommonContainer(qlonglong imageid, ImageCommonContainer* const container)
 {
     QVariantList imagesFields;
     QVariantList imageInformationFields;
@@ -1527,20 +1538,20 @@ void ImageScanner::fillCommonContainer(qlonglong imageid, ImageCommonContainer* 
     {
         DatabaseAccess access;
         imagesFields = access.db()->getImagesFields(imageid,
-                       DatabaseFields::Name             |
-                       DatabaseFields::ModificationDate |
-                       DatabaseFields::FileSize);
+                                                    DatabaseFields::Name             |
+                                                    DatabaseFields::ModificationDate |
+                                                    DatabaseFields::FileSize);
 
         imageInformationFields = access.db()->getImageInformation(imageid,
-                                 DatabaseFields::Rating           |
-                                 DatabaseFields::CreationDate     |
-                                 DatabaseFields::DigitizationDate |
-                                 DatabaseFields::Orientation      |
-                                 DatabaseFields::Width            |
-                                 DatabaseFields::Height           |
-                                 DatabaseFields::Format           |
-                                 DatabaseFields::ColorDepth       |
-                                 DatabaseFields::ColorModel);
+                                                                  DatabaseFields::Rating           |
+                                                                  DatabaseFields::CreationDate     |
+                                                                  DatabaseFields::DigitizationDate |
+                                                                  DatabaseFields::Orientation      |
+                                                                  DatabaseFields::Width            |
+                                                                  DatabaseFields::Height           |
+                                                                  DatabaseFields::Format           |
+                                                                  DatabaseFields::ColorDepth       |
+                                                                  DatabaseFields::ColorModel);
     }
 
     if (!imagesFields.isEmpty())
@@ -1564,7 +1575,7 @@ void ImageScanner::fillCommonContainer(qlonglong imageid, ImageCommonContainer* 
     }
 }
 
-void ImageScanner::fillMetadataContainer(qlonglong imageid, ImageMetadataContainer* container)
+void ImageScanner::fillMetadataContainer(qlonglong imageid, ImageMetadataContainer* const container)
 {
     // read from database
     QVariantList fields = DatabaseAccess().db()->getImageMetadata(imageid);
@@ -1599,7 +1610,7 @@ void ImageScanner::fillMetadataContainer(qlonglong imageid, ImageMetadataContain
     container->subjectDistanceCategory      = strings.at(15);
 }
 
-void ImageScanner::fillVideoMetadataContainer(qlonglong imageid, VideoMetadataContainer* container)
+void ImageScanner::fillVideoMetadataContainer(qlonglong imageid, VideoMetadataContainer* const container)
 {
     // read from database
     QVariantList fields = DatabaseAccess().db()->getVideoMetadata(imageid);
