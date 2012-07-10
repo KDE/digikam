@@ -46,12 +46,15 @@ class DIGIKAM_DATABASE_EXPORT SchemaUpdater
 {
 public:
 
-    SchemaUpdater(AlbumDB* const albumDB, DatabaseBackend* const backend, DatabaseParameters parameters);
-
-    static int schemaVersion();
-    static int filterSettingsVersion();
-    static int uniqueHashVersion();
+    static int  schemaVersion();
+    static int  filterSettingsVersion();
+    static int  uniqueHashVersion();
     static bool isUniqueHashUpToDate();
+
+public:
+
+    SchemaUpdater(AlbumDB* const albumDB, DatabaseBackend* const backend, DatabaseParameters parameters);
+    ~SchemaUpdater();
 
     bool  update();
     bool  updateUniqueHash();
@@ -93,20 +96,8 @@ private:
 
 private:
 
-    bool                    m_setError;
-
-    QVariant                m_currentVersion;
-    QVariant                m_currentRequiredVersion;
-
-    DatabaseBackend*        m_Backend;
-    AlbumDB*                m_AlbumDB;
-    DatabaseParameters      m_Parameters;
-
-    // legacy
-    DatabaseAccess*         m_access;
-
-    QString                 m_LastErrorMessage;
-    InitializationObserver* m_observer;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam
