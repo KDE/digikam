@@ -6,8 +6,8 @@
  * Date        : 2007-09-19
  * Description : Scanning of a single image
  *
- * Copyright (C) 2007-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C)      2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C)      2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -55,19 +55,32 @@ namespace Digikam
 {
 
 ImageScanner::ImageScanner(const QFileInfo& info, const ItemScanInfo& scanInfo)
-    : m_hasImage(false), m_hasMetadata(false), m_loadedFromDisk(false),
-      m_fileInfo(info), m_scanInfo(scanInfo), m_scanMode(ModifiedScan), m_hasHistoryToResolve(false)
+    : m_hasImage(false),
+      m_hasMetadata(false),
+      m_loadedFromDisk(false),
+      m_fileInfo(info),
+      m_scanInfo(scanInfo),
+      m_scanMode(ModifiedScan),
+      m_hasHistoryToResolve(false)
 {
 }
 
 ImageScanner::ImageScanner(const QFileInfo& info)
-    : m_hasImage(false), m_hasMetadata(false), m_loadedFromDisk(false),
-      m_fileInfo(info), m_scanMode(ModifiedScan), m_hasHistoryToResolve(false)
+    : m_hasImage(false),
+      m_hasMetadata(false),
+      m_loadedFromDisk(false),
+      m_fileInfo(info),
+      m_scanMode(ModifiedScan),
+      m_hasHistoryToResolve(false)
 {
 }
 
 ImageScanner::ImageScanner(qlonglong imageid)
-    : m_hasImage(false), m_hasMetadata(false), m_loadedFromDisk(false), m_scanMode(ModifiedScan), m_hasHistoryToResolve(false)
+    : m_hasImage(false),
+      m_hasMetadata(false),
+      m_loadedFromDisk(false),
+      m_scanMode(ModifiedScan),
+      m_hasHistoryToResolve(false)
 {
     ItemShortInfo shortInfo;
     {
@@ -131,13 +144,14 @@ void ImageScanner::copiedFrom(int albumId, qlonglong srcId)
 
     // first use source, if it exists
     if (!copyFromSource(srcId))
-
+    {
         // check if we can establish identity
         if (!scanFromIdenticalFile())
-            // scan newly
         {
+            // scan newly
             scanFile(NewScan);
         }
+    }
 }
 
 const ItemScanInfo& ImageScanner::itemScanInfo() const
