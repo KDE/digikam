@@ -485,7 +485,10 @@ void SchemaUpdater::defaultFilterSettings(QStringList& defaultImageFilter, QStri
     defaultImageFilter << KDcrawIface::KDcraw::rawFilesList();
 
     defaultVideoFilter << "mpeg" << "mpg" << "mpo" << "mpe"     // MPEG
-                       << "avi"  << "mov" << "wmf" << "asf" << "mp4" << "3gp" << "wmv";
+                       << "avi"  << "divx"                      // RIFF
+                       << "wmv" << "wmf" << "asf"               // ASF
+                       << "mp4" << "3gp" << "mov"               // QuickTime
+                       << "mkv" << "webm";                      // Matroska
 
     defaultAudioFilter << "ogg" << "mp3" << "wma" << "wav";
 }
