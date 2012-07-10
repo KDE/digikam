@@ -6,8 +6,8 @@
  * Date        : 2007-03-22
  * Description : Building complex database SQL queries from search descriptions
  *
- * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2007-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005      by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Copyright (C) 2007-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -130,8 +130,8 @@ QString ImageQueryBuilder::buildQuery(const QString& q, QList<QVariant> *boundVa
 QString ImageQueryBuilder::buildQueryFromXml(const QString& xml, QList<QVariant> *boundValues, ImageQueryPostHooks* hooks) const
 {
     SearchXmlCachingReader reader(xml);
-    QString sql;
-    bool firstGroup = true;
+    QString                sql;
+    bool                   firstGroup = true;
 
     while (!reader.atEnd())
     {
@@ -219,6 +219,7 @@ void ImageQueryBuilder::buildGroup(QString& sql, SearchXmlCachingReader& reader,
 }
 
 // ---------------------------------------------------------------------------------------
+
 class FieldQueryBuilder
 {
 public:
@@ -429,6 +430,7 @@ public:
             {
                 *boundValues << v;
             }
+
             sql += " ) ";
         }
         else
@@ -445,10 +447,12 @@ public:
             sql += " (" + name + " IN (";
             AlbumDB::addBoundValuePlaceholders(sql, values.size());
             sql += ") ";
+
             foreach(const qlonglong& v, values)
             {
                 *boundValues << v;
             }
+
             sql += " ) ";
         }
         else
@@ -486,6 +490,7 @@ public:
             {
                 *boundValues << v;
             }
+
             sql += " ) ";
         }
         else
@@ -516,6 +521,7 @@ public:
             }
 
             QStringList simpleValues, wildcards;
+
             foreach(const QString& value, values)
             {
                 if (value.contains("*"))
@@ -527,18 +533,21 @@ public:
                     simpleValues << value;
                 }
             }
-            bool firstCondition = true;
-            sql += " (";
+
+            bool firstCondition =  true;
+            sql                 += " (";
 
             if (!simpleValues.isEmpty())
             {
-                firstCondition = false;
-                sql += name + " IN (";
+                firstCondition =  false;
+                sql            += name + " IN (";
                 AlbumDB::addBoundValuePlaceholders(sql, simpleValues.size());
+
                 foreach(const QString& value, simpleValues)
                 {
                     *boundValues << value;
                 }
+
                 sql += " ) ";
             }
 
@@ -794,6 +803,7 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
                    "   (SELECT DISTINCT id "
                    "    FROM Albums WHERE ";
             bool firstCondition = true;
+
             foreach(int albumID, ids)
             {
                 addSqlOperator(sql, SearchXml::Or, firstCondition);
@@ -817,6 +827,7 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
                 sql += " ( albumRoot=? AND (relativePath=? OR relativePath LIKE ?) ) ";
                 *boundValues << rootId << relativePath << childrenWildcard;
             }
+
             sql += " ))";
         }
     }
@@ -871,6 +882,7 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
                    "    WHERE ";
 
             bool firstCondition = true;
+
             foreach(int tagID, ids)
             {
                 addSqlOperator(sql, SearchXml::Or, firstCondition);
@@ -941,7 +953,6 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
     {
         fieldQuery.addIntField("Images.fileSize");
     }
-
     else if (name == "rating")
     {
         fieldQuery.addIntField("ImageInformation.rating");
@@ -1022,7 +1033,6 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
     {
         fieldQuery.addIntField("ImageInformation.colorModel");
     }
-
     else if (name == "aspectratio")
     {
         fieldQuery.addStringField("VideoMetadata.aspectRatio");
@@ -1055,7 +1065,6 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
     {
         fieldQuery.addStringField("VideoMetadata.videoCodec");
     }
-
     else if (name == "make")
     {
         fieldQuery.addStringField("ImageMetadata.make");
@@ -1116,7 +1125,6 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
     {
         fieldQuery.addChoiceIntField("ImageMetadata.subjectDistanceCategory");
     }
-
     else if (name == "position")
     {
         fieldQuery.addPosition();
@@ -1153,7 +1161,6 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
     {
         sql += " (ImagePositions.latitudeNumber IS NULL AND ImagePositions.longitudeNumber IS NULL) ";
     }
-
     else if (name == "comment")
     {
         sql += " (Images.id IN "
@@ -1387,7 +1394,9 @@ class RuleTypeForConversion
 public:
 
     RuleTypeForConversion()
-        : op(SearchXml::Equal) {}
+        : op(SearchXml::Equal)
+    {
+    }
 
     QString             key;
     SearchXml::Relation op;
@@ -1598,7 +1607,7 @@ public:
 
 QString ImageQueryBuilder::buildQueryFromUrl(const KUrl& url, QList<QVariant> *boundValues) const
 {
-    int  count = url.queryItem("count").toInt();
+    int count = url.queryItem("count").toInt();
 
     if (count <= 0)
     {
@@ -1977,10 +1986,9 @@ QString ImageQueryBuilder::possibleDate(const QString& str, bool& exact) const
         return date.toString(Qt::ISODate);
     }
 
-    exact = false;
-
+    exact    = false;
     bool ok;
-    int num = str.toInt(&ok);
+    int  num = str.toInt(&ok);
 
     if (ok)
     {
