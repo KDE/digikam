@@ -31,8 +31,8 @@ end
 
 # get all source files with missing MOC includes
 missingMocIncludes = candidates.select do |file_name|
-  source_file = file_name.gsub(/\.h$/, ".cpp")
-  moc_file = file_name.gsub(/\.h$/, ".moc").split("/").last
+  source_file = file_name.sub(/\.h$/, ".cpp")
+  moc_file = File.basename(file_name, '.h') + '.moc'
   pattern = /#include\s+[<"]#{moc_file}[>"]/
 
   begin
