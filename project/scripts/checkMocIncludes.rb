@@ -30,10 +30,11 @@ candidates = Dir.glob("**/*.h").select do |file_name|
 end
 
 # get all source files with missing MOC includes
-missingMocIncludes = candidates.select do |f|
-  sourceFile = f.gsub(/\.h$/, ".cpp")
-  mocFile = f.gsub(/\.h$/, ".moc").split("/").last
-  pattern = /#include\s+[<"]#{mocFile}[>"]/ 
+missingMocIncludes = candidates.select do |file_name|
+  sourceFile = file_name.gsub(/\.h$/, ".cpp")
+  mocFile = file_name.gsub(/\.h$/, ".moc").split("/").last
+  pattern = /#include\s+[<"]#{mocFile}[>"]/
+
   begin
     File.open(sourceFile, "r") do |fp|
       fp.none? { |line| line =~ pattern }
