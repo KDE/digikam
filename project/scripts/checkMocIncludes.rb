@@ -25,15 +25,8 @@
 
 
 # get all header files containing the line "Q_OBJECT"
-pattern = /^\s*Q_OBJECT\s*$/
-candidates = Dir.glob("**/*.h").select do |f|
-  begin
-    File.open(f, "r") do |fp|
-      fp.any? { |line| line =~ pattern }
-    end
-  rescue 
-    false    
-  end
+candidates = Dir.glob("**/*.h").select do |file_name|
+  File.read(file_name) =~ /^\s*Q_OBJECT\s*$/ rescue false
 end
 
 # get all source files with missing MOC includes
