@@ -40,8 +40,8 @@ end
 
 # display missing MOC includes
 puts "missing MOC include:"
-widthStr = "#{missingMocIncludes.length}"
+width = missingMocIncludes.length.to_s.length
 
 missingMocIncludes.each_with_index do |file_name, idx|
-  puts "%#{widthStr.length}s: #{file_name}" % (idx + 1)
+  puts "%#{width}s: #{file_name}" % (idx + 1)
 end
