@@ -31,7 +31,7 @@ candidates = Dir.glob("**/*.h").select do |f|
     File.open(f, "r") do |fp|
       fp.any? { |line| line =~ pattern }
     end
-  rescue Exception => e
+  rescue 
     false    
   end
 end
@@ -45,7 +45,7 @@ missingMocIncludes = candidates.select do |f|
     File.open(sourceFile, "r") do |fp|
       fp.none? { |line| line =~ pattern }
     end
-  rescue Exception => e
+  rescue
     false
   end
 end
