@@ -31,12 +31,12 @@ end
 
 # get all source files with missing MOC includes
 missingMocIncludes = candidates.select do |file_name|
-  sourceFile = file_name.gsub(/\.h$/, ".cpp")
-  mocFile = file_name.gsub(/\.h$/, ".moc").split("/").last
-  pattern = /#include\s+[<"]#{mocFile}[>"]/
+  source_file = file_name.gsub(/\.h$/, ".cpp")
+  moc_file = file_name.gsub(/\.h$/, ".moc").split("/").last
+  pattern = /#include\s+[<"]#{moc_file}[>"]/
 
   begin
-    File.open(sourceFile, "r") do |fp|
+    File.open(source_file, "r") do |fp|
       fp.none? { |line| line =~ pattern }
     end
   rescue
