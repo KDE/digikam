@@ -51,7 +51,7 @@ missingMocIncludes = candidates.select do |f|
 end
 
 # display missing MOC includes
-puts "missing MOC includes:"
+puts "missing MOC include:"
 widthStr = "#{missingMocIncludes.length}"
 
 missingMocIncludes.each_with_index do |f, idx|
