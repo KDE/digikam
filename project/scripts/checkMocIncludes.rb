@@ -35,13 +35,7 @@ missingMocIncludes = candidates.select do |file_name|
   moc_file = File.basename(file_name, '.h') + '.moc'
   pattern = /#include\s+[<"]#{moc_file}[>"]/
 
-  begin
-    File.open(source_file, "r") do |fp|
-      fp.none? { |line| line =~ pattern }
-    end
-  rescue
-    false
-  end
+  (File.read(source_file) =~ pattern) == nil rescue false
 end
 
 # display missing MOC includes
