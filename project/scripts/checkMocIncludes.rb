@@ -42,6 +42,6 @@ end
 puts "missing MOC include:"
 widthStr = "#{missingMocIncludes.length}"
 
-missingMocIncludes.each_with_index do |f, idx|
-  puts "%#{widthStr.length}s: #{f}" % (idx + 1)
+missingMocIncludes.each_with_index do |file_name, idx|
+  puts "%#{widthStr.length}s: #{file_name}" % (idx + 1)
 end
