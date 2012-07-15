@@ -475,7 +475,7 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
             }
             else if (choice == assignToAllAction)    // All Items
             {
-                emit assignTags(model()->imageInfos(), QList<int>() << tagID);
+                emit assignTags(view->imageInfos(), QList<int>() << tagID);
             }
             else if (choice == assignToThisAction)  // Dropped Item only.
             {
@@ -523,7 +523,7 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
             }
             else if (choice == assignToAllAction)    // All Items
             {
-                emit assignTags(model()->imageInfos(), tagIDs);
+                emit assignTags(view->imageInfos(), tagIDs);
             }
             else if (choice == assignToThisAction)    // Dropped item only.
             {
