@@ -228,7 +228,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* observer)
         inFile.close();
     }
 
-    jpeg_memory_src(&cinfo, (JOCTET*)buffer.data(), buffer.size());
+    JPEGUtils::jpeg_memory_src(&cinfo, (JOCTET*)buffer.data(), buffer.size());
 #else
     jpeg_stdio_src(&cinfo, file);
 #endif
