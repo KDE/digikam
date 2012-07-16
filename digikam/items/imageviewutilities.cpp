@@ -235,10 +235,12 @@ void ImageViewUtilities::insertToQueueManager(const QList<ImageInfo>& list, cons
 
     if (newQueue)
     {
-        bqmview->addNewQueue();
+        bqmview->loadImageInfosToNewQueue(list);
     }
-
-    bqmview->loadImageInfos(list, bqmview->currentQueueId());
+    else
+    {
+        bqmview->loadImageInfosToCurrentQueue(list);
+    }
 }
 
 void ImageViewUtilities::insertSilentToQueueManager(const QList<ImageInfo>& list, const ImageInfo& /*current*/, int queueid)

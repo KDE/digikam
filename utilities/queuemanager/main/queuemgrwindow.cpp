@@ -795,6 +795,25 @@ void QueueMgrWindow::loadImageInfos(const ImageInfoList& list, int queueId)
     }
 }
 
+void QueueMgrWindow::loadImageInfosToCurrentQueue(const ImageInfoList& list)
+{
+    if (!d->queuePool->currentQueue())
+    {
+        addNewQueue();
+    }
+    d->queuePool->currentQueue()->slotAddItems(list);
+}
+
+void QueueMgrWindow::loadImageInfosToNewQueue(const ImageInfoList& list)
+{
+    QueueListView* queue = d->queuePool->currentQueue();
+    if (!queue || queue->itemsCount())
+    {
+        addNewQueue();
+    }
+    d->queuePool->currentQueue()->slotAddItems(list);
+}
+
 void QueueMgrWindow::slotQueueContentsChanged()
 {
     refreshStatusBar();

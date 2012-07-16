@@ -11,4 +11,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 004 ==> 301371 - Exiv2 mix library strangeness 
 005 ==> 303385 - Crash on startup.
 006 ==> 303396 - Assign tags to filtered images - not all images.
-007 ==>
+007 ==> 301486 - additional empty queue when batch processing images using toolbar button.
+008 ==> 
