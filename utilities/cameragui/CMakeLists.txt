@@ -33,8 +33,11 @@ SET(libcameragui_SRCS
 
     ${CMAKE_CURRENT_SOURCE_DIR}/views/importkcategorizedview.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/views/icategorizedview.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/views/importcategorizedview.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/views/importsettings.cpp
 
     ${CMAKE_CURRENT_SOURCE_DIR}/items/itemviewimportdelegate.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/items/importdelegate.cpp
 
     ${CMAKE_CURRENT_SOURCE_DIR}/q3support/icongroupitem.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/q3support/iconitem.cpp
