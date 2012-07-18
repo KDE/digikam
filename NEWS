@@ -13,4 +13,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 006 ==> 303396 - Assign tags to filtered images - not all images.
 007 ==> 301486 - additional empty queue when batch processing images using toolbar button.
 008 ==> 301530 - Group images by time puts multiple images in a progress queue, which never complete.
-009 ==> 
+009 ==> 303693 - Inability to remove orphaned thumbnails in album through GUI.
+010 ==> 
+
