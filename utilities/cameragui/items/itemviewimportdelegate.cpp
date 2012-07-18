@@ -30,6 +30,7 @@
 // KDE includes
 
 #include <kio/global.h>
+#include <klocale.h>
 #include <kapplication.h>
 
 // Local includes
@@ -313,6 +314,23 @@ void ItemViewImportDelegate::drawName(QPainter* p,const QRect& nameRect, const Q
     p->drawText(nameRect, Qt::AlignCenter, name);//squeezedTextCached(p, nameRect.width(), name));
 }
 
+void ItemViewImportDelegate::drawCreationDate(QPainter* p, const QRect& dateRect, const QDateTime& date) const
+{
+    Q_D(const ItemViewImportDelegate);
+    p->setFont(d->fontXtra);
+    QString str = dateToString(date);
+    //str         = i18nc("date of image creation", "created: %1", str);
+    p->drawText(dateRect, Qt::AlignCenter, str);//squeezedTextCached(p, dateRect.width(), str));
+}
+
+void ItemViewImportDelegate::drawModificationDate(QPainter* p, const QRect& dateRect, const QDateTime& date) const
+{
+    Q_D(const ItemViewImportDelegate);
+    p->setFont(d->fontXtra);
+    QString str = dateToString(date);
+    str         = i18nc("date of last image modification", "modified: %1",str);
+    p->drawText(dateRect, Qt::AlignCenter, str);//squeezedTextCached(p, dateRect.width(), str));
+}
 
 void ItemViewImportDelegate::drawFileSize(QPainter* p, const QRect& r, qlonglong bytes) const
 {
