@@ -1,5 +1,29 @@
 #!/usr/bin/env python
 
+# ============================================================
+# 
+# This file is a part of digiKam project
+# http://www.digikam.org
+# 
+# Date        : 2009-10-12
+# Description : a helper script for formatting the digiKam source code
+# 
+# Copyright (C) 2009-2012 by Andi Clemens <andi dot clemens at googlemail dot com>
+# 
+# This program is free software; you can redistribute it
+# and/or modify it under the terms of the GNU General
+# Public License as published by the Free Software Foundation;
+# either version 2, or (at your option)
+# any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# ============================================================ */
+
+
 import os
 import sys
 import re
@@ -7,7 +31,7 @@ import re
 # --------------------------------------------------
 # VARIABLES
 sourcedir    = ""
-patternsdir  = os.path.dirname(sys.argv[0])
+patternsdir  = os.path.dirname(os.path.realpath(__file__))
 patternsurl  = os.path.join(patternsdir, "known_patterns.txt")
 filelist     = list()
 
@@ -31,35 +55,29 @@ pknown      = dict()                                      # will hold known patt
 
 # --------------------------------------------------
 def intro(dir, pattern):
-    print 
-    print "*"*80
-    print "*"
-    print "* digiKam code cleaner"
-    print "*"
-    print "* Copyright 2008-2011, Andi Clemens <andi dot clemens at googlemail dot com>"
-    print "*"
-    print "*"*80
-    print
-    print "SOURCEDIR:\t%s" % os.path.realpath(dir)
-    print "PATTERNS FILE:\t%s" % pattern
-    print
+    print()
+    print("digiKam code cleaner")
+    print()
+    print("SOURCEDIR:\t%s" % os.path.realpath(dir))
+    print("PATTERNS FILE:\t%s" % pattern)
+    print()
 
 # --------------------------------------------------
 def legend():
-    print
-    print "-"*50
-    print
-    print "Legend:"
-    print
-    print "PARSE ERROR"
-    print "\tThe sourcecode is malformed, the shown lines need to be checked manually"
-    print
-    print "MISSING / WRONG REGEX"
-    print "\tThe pattern for an include statement was not recognized."
-    print "\tAdd it to the patterns file or create an regex for it."
-    print "\tFor now, the patterns can be found under '// OTHERS includes.'"
-    print "\tin the sourceode."
-    print
+    print()
+    print("-" * 50)
+    print()
+    print("Legend:")
+    print()
+    print("PARSE ERROR")
+    print("\tThe sourcecode is malformed, the shown lines need to be checked manually")
+    print()
+    print("MISSING / WRONG REGEX")
+    print("\tThe pattern for an include statement was not recognized.")
+    print("\tAdd it to the patterns file or create an regex for it.")
+    print("\tFor now, the patterns can be found under '// OTHERS includes.'")
+    print("\tin the sourceode.")
+    print()
 
 # --------------------------------------------------
 # generate known patterns map
@@ -69,13 +87,14 @@ def generate_known_patterns(file):
         f = open(file, 'r')
         for line in f:
             k, v = line.strip().split()
-            if not patterns.has_key(k):
+            if not k in patterns:
                 patterns[k] = list()
             patterns[k].append(v)
     except:
         patterns = dict()
     finally:
         f.close()
+
     return patterns
 
 # --------------------------------------------------
@@ -102,8 +121,8 @@ def strip_content(content):
 def parse_files(filelist):
     errors = False
 
-    print "parsing %s files... " % len(filelist)
-    print
+    print("parsing %s files... " % len(filelist))
+    print()
 
     for file in filelist:
         inheader    = False
@@ -134,10 +153,10 @@ def parse_files(filelist):
                     command, include = line.split(" ", 1)
                 except:
                     errors = True
-                    print "PARSE ERROR: %s (%s)" % (line.strip(), file)
+                    print("PARSE ERROR: %s (%s)" % (line.strip(), file))
                     continue
 
-                if pow.match(include):          owninc.append(include)
+                if pow.match(include):                   owninc.append(include)
                 elif (include.strip() in pknown['kde']): kdeinc.append(include)
                 elif (include.strip() in pknown['cpp']): cppinc.append(include)
                 elif (include.strip() in pknown['c']):   cinc.append(include)
@@ -153,7 +172,7 @@ def parse_files(filelist):
                 else:
                     includes.append(include)
                     errors = True
-                    print "MISSING / WRONG REGEX: %s (%s)" % (line.strip(), file)
+                    print("MISSING / WRONG REGEX: %s (%s)" % (line.strip(), file))
 
             elif pic.match(line): continue
 
@@ -199,7 +218,7 @@ if __name__ == '__main__':
 
     # check for valid arguments first
     if (len(sys.argv) != 2):
-        print "usage: cleanup_headers.py <sourcedir>"
+        print("usage: cleanup_headers.py <sourcedir>")
         sys.exit(1)
 
     sourcedir = sys.argv[1]

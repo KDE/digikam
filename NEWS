@@ -9,4 +9,12 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 002 ==> 299942 - Root Album Folders selection list does not expand to fill available space.
 003 ==> 296799 - Shown number of images in album increases in status line after image.
 004 ==> 301371 - Exiv2 mix library strangeness 
-005 ==> 
+005 ==> 303385 - Crash on startup.
+006 ==> 303396 - Assign tags to filtered images - not all images.
+007 ==> 301486 - additional empty queue when batch processing images using toolbar button.
+008 ==> 301530 - Group images by time puts multiple images in a progress queue, which never complete.
+009 ==> 303693 - Inability to remove orphaned thumbnails in album through GUI.
+010 ==> 301938 - OpenStreetMap does not refresh in Geo-location.
+011 ==> 
+
+

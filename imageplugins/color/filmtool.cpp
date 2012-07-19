@@ -124,6 +124,7 @@ public:
 
     QPushButton*         resetButton;
     QToolButton*         pickWhitePoint;
+    QToolButton*         autoButton;
 
     FilmContainer        filmContainer;
 
@@ -259,11 +260,19 @@ FilmTool::FilmTool(QObject* const parent)
     d->resetButton->setWhatsThis(i18n("If you press this button, the white point is "
                                       "reset to pure white."));
 
+    d->autoButton = new QToolButton();
+    d->autoButton->setIcon(KIconLoader::global()->loadIcon("system-run", KIconLoader::Toolbar));
+    d->autoButton->setToolTip( i18n( "Adjust white point automatically." ) );
+    d->autoButton->setWhatsThis(i18n("If you press this button, the white point is calculated "
+            "from the image data automatically. This function requires to have some residual "
+            "orange mask around the exposed area of the negative."));
+
     QLabel* space = new QLabel();
     space->setFixedWidth(d->gboxSettings->spacingHint());
 
     QHBoxLayout* l3 = new QHBoxLayout();
     l3->addWidget(d->pickWhitePoint);
+    l3->addWidget(d->autoButton);
     l3->addWidget(space);
     l3->addWidget(d->resetButton);
     l3->addStretch(10);
@@ -319,6 +328,9 @@ FilmTool::FilmTool(QObject* const parent)
     init();
 
     // Button Slots -------------------------------------------------
+
+    connect(d->autoButton, SIGNAL(clicked()),
+            this, SLOT(slotAutoWhitePoint()));
 
     connect(d->pickWhitePoint, SIGNAL(toggled(bool)),
             this, SLOT(slotPickerColorButtonActived(bool)));
@@ -500,6 +512,42 @@ void FilmTool::slotPickerColorButtonActived(bool checked)
 {
     if (checked)
         d->previewWidget->setCapturePointMode(true);
+}
+
+void FilmTool::slotAutoWhitePoint()
+{
+    ImageHistogram *hist = d->levelsHistogramWidget->currentHistogram();
+    bool sixteenBit = d->originalImage->sixteenBit();
+    int high_input[4];
+
+    for (int channel = RedChannel; channel <= BlueChannel; channel++)
+    {
+        double new_count = 0.0;
+        double percentage;
+        double next_percentage;
+        double count= hist->getCount(channel, 0, sixteenBit ? 65535 : 255);
+
+        for (int i = (sixteenBit ? 65535 : 255) ; i > 0 ; --i)
+        {
+            new_count       += hist->getValue(channel, i);
+            percentage      = new_count / count;
+            next_percentage = (new_count + hist->getValue(channel, i - 1)) / count;
+
+            if (fabs(percentage - 0.006) < fabs(next_percentage - 0.006))
+            {
+                high_input[channel] = i - 1;
+                break;
+            }
+        }
+
+    }
+
+    DColor wp = DColor(high_input[RedChannel], high_input[GreenChannel],
+            high_input[BlueChannel], 0, sixteenBit);
+    d->filmContainer.setWhitePoint(wp);
+
+    setLevelsFromFilm();
+    slotEffect();
 }
 
 void FilmTool::slotResetWhitePoint()

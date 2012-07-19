@@ -63,6 +63,7 @@ private Q_SLOTS:
     void slotPickerColorButtonActived(bool checked);
     void slotResetWhitePoint();
     void slotColorBalanceStateChanged(int);
+    void slotAutoWhitePoint(void);
 
 private:
 

@@ -708,7 +708,10 @@ void DigikamImageView::createGroupByTimeFromSelection()
             group.push_back(selectedInfos.takeFirst());
         }
 
-        FileActionMngr::instance()->addToGroup(groupLeader, group);
+        if (!group.isEmpty())
+        {
+            FileActionMngr::instance()->addToGroup(groupLeader, group);
+        }
     }
 }
 

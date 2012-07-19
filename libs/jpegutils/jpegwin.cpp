@@ -43,17 +43,20 @@ extern "C"
 namespace Digikam
 {
 
+namespace JPEGUtils
+{
+
 void init_source (j_decompress_ptr /*cinfo*/)
 {
 }
 
 boolean fill_input_buffer (j_decompress_ptr cinfo)
 {
-    digikam_source_mgr* src = (digikam_source_mgr*) cinfo->src;
+    digikam_source_mgr* src  = (digikam_source_mgr*) cinfo->src;
 
     /* Create a fake EOI marker */
-    src->eoi[0] = (JOCTET) 0xFF;
-    src->eoi[1] = (JOCTET) JPEG_EOI;
+    src->eoi[0]              = (JOCTET) 0xFF;
+    src->eoi[1]              = (JOCTET) JPEG_EOI;
     src->pub.next_input_byte = src->eoi;
     src->pub.bytes_in_buffer = 2;
 
@@ -100,5 +103,7 @@ void jpeg_memory_src (j_decompress_ptr cinfo, const JOCTET* buffer, size_t bufsi
     src->pub.next_input_byte   = buffer;
     src->pub.bytes_in_buffer   = bufsize;
 }
+
+} // namespace JPEGUtils
 
 } // namespace Digikam

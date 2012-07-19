@@ -64,6 +64,8 @@ public:
     bool isBusy() const;
     void addNewQueue();
     void loadImageInfos(const ImageInfoList& list, int queueId);
+    void loadImageInfosToCurrentQueue(const ImageInfoList& list);
+    void loadImageInfosToNewQueue(const ImageInfoList& list);
     void refreshView();
     void applySettings();
 

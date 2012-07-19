@@ -5,4 +5,5 @@ c       <sys/stat.h>
 c       <utime.h>
 cpp     <iostream>
 cpp     <typeinfo>
+cpp		<algorithm>
 kde     <qtest_kde.h>
