@@ -17,5 +17,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 010 ==> 301938 - OpenStreetMap does not refresh in Geo-location.
 011 ==> 289006 - Digikam crashed in import dialog when selecting filter on videos.
 012 ==> 302311 - Try to edit title whereas tags modification writing.
-013 ==>
+013 ==> 290927 - Color management does not apply change and refresh the current preview image.
+014 ==> 
 
