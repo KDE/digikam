@@ -407,6 +407,11 @@ ImageDescEditTab::ImageDescEditTab(QWidget* parent)
     connect(d->metadataChangeTimer, SIGNAL(timeout()),
             this, SLOT(slotReloadForMetadataChange()));
 
+    connect(this, SIGNAL(askToApplyChanges(const QList<ImageInfo>&, MetadataHubOnTheRoad*)),
+            this, SLOT(slotAskToApplyChanges(const QList<ImageInfo>&, MetadataHubOnTheRoad*)),
+            Qt::QueuedConnection
+           );
+
     // Initialize ---------------------------------------------
 
     d->titleEdit->installEventFilter(this);
@@ -501,152 +506,169 @@ void ImageDescEditTab::slotChangingItems()
 
     if (!AlbumSettings::instance()->getApplySidebarChangesDirectly())
     {
-        KDialog* dialog = new KDialog(this);
+        // Open dialog via queued connection out-of-scope, see bug 302311
+        emit askToApplyChanges(d->currInfos, new MetadataHubOnTheRoad(d->hub));
+        reset();
+    }
+    else
+    {
+        slotApplyAllChanges();
+    }
+}
 
-        dialog->setCaption(i18n("Apply changes?"));
-        dialog->setButtons(KDialog::Yes | KDialog::No);
-        dialog->setDefaultButton(KDialog::Yes);
-        dialog->setEscapeButton(KDialog::No);
-        dialog->setButtonGuiItem(KDialog::Yes, KStandardGuiItem::yes());
-        dialog->setButtonGuiItem(KDialog::No,  KStandardGuiItem::discard());
-        dialog->setModal(true);
+void ImageDescEditTab::slotAskToApplyChanges(const QList<ImageInfo>& infos, MetadataHubOnTheRoad* hub)
+{
+    KDialog* dialog = new KDialog(this);
 
-        int changedFields = 0;
+    dialog->setCaption(i18n("Apply changes?"));
+    dialog->setButtons(KDialog::Yes | KDialog::No);
+    dialog->setDefaultButton(KDialog::Yes);
+    dialog->setEscapeButton(KDialog::No);
+    dialog->setButtonGuiItem(KDialog::Yes, KStandardGuiItem::yes());
+    dialog->setButtonGuiItem(KDialog::No,  KStandardGuiItem::discard());
+    dialog->setModal(true);
 
-        if (d->hub.titlesChanged())
-        {
-            ++changedFields;
-        }
+    int changedFields = 0;
 
-        if (d->hub.commentsChanged())
-        {
-            ++changedFields;
-        }
-
-        if (d->hub.dateTimeChanged())
-        {
-            ++changedFields;
-        }
-
-        if (d->hub.ratingChanged())
-        {
-            ++changedFields;
-        }
-
-        if (d->hub.pickLabelChanged())
-        {
-            ++changedFields;
-        }
-
-        if (d->hub.colorLabelChanged())
-        {
-            ++changedFields;
-        }
-
-        if (d->hub.tagsChanged())
-        {
-            ++changedFields;
-        }
-
-        QString text;
-
-        if (changedFields == 1)
-        {
-            if (d->hub.commentsChanged())
-                text = i18np("You have edited the image caption. ",
-                             "You have edited the captions of %1 images. ",
-                             d->currInfos.count());
-            else if (d->hub.titlesChanged())
-                text = i18np("You have edited the image title. ",
-                             "You have edited the titles of %1 images. ",
-                             d->currInfos.count());
-            else if (d->hub.dateTimeChanged())
-                text = i18np("You have edited the date of the image. ",
-                             "You have edited the date of %1 images. ",
-                             d->currInfos.count());
-            else if (d->hub.pickLabelChanged())
-                text = i18np("You have edited the pick label of the image. ",
-                             "You have edited the pick label of %1 images. ",
-                             d->currInfos.count());
-            else if (d->hub.colorLabelChanged())
-                text = i18np("You have edited the color label of the image. ",
-                             "You have edited the color label of %1 images. ",
-                             d->currInfos.count());
-            else if (d->hub.ratingChanged())
-                text = i18np("You have edited the rating of the image. ",
-                             "You have edited the rating of %1 images. ",
-                             d->currInfos.count());
-            else if (d->hub.tagsChanged())
-                text = i18np("You have edited the tags of the image. ",
-                             "You have edited the tags of %1 images. ",
-                             d->currInfos.count());
-
-            text += i18n("Do you want to apply your changes?");
-        }
-        else
-        {
-            text = i18np("<p>You have edited the metadata of the image: </p><p><ul>",
-                         "<p>You have edited the metadata of %1 images: </p><p><ul>",
-                         d->currInfos.count());
-
-            if (d->hub.titlesChanged())
-                text += i18n("<li>title</li>");
-            if (d->hub.commentsChanged())
-            {
-                text += i18n("<li>caption</li>");
-            }
-
-            if (d->hub.dateTimeChanged())
-            {
-                text += i18n("<li>date</li>");
-            }
-
-            if (d->hub.pickLabelChanged())
-            {
-                text += i18n("<li>pick label</li>");
-            }
-
-            if (d->hub.colorLabelChanged())
-            {
-                text += i18n("<li>color label</li>");
-            }
-
-            if (d->hub.ratingChanged())
-            {
-                text += i18n("<li>rating</li>");
-            }
-
-            if (d->hub.tagsChanged())
-            {
-                text += i18n("<li>tags</li>");
-            }
-
-            text += "</ul></p>";
-
-            text += i18n("<p>Do you want to apply your changes?</p>");
-        }
-
-        bool alwaysApply = false;
-        int returnCode   = KMessageBox::createKMessageBox(dialog,
-                           QMessageBox::Information,
-                           text, QStringList(),
-                           i18n("Always apply changes without confirmation"),
-                           &alwaysApply, KMessageBox::Notify);
-
-        if (alwaysApply)
-        {
-            AlbumSettings::instance()->setApplySidebarChangesDirectly(true);
-        }
-
-        if (returnCode == KDialog::No)
-        {
-            return;
-        }
-
-        // otherwise apply
+    if (hub->titlesChanged())
+    {
+        ++changedFields;
     }
 
-    slotApplyAllChanges();
+    if (hub->commentsChanged())
+    {
+        ++changedFields;
+    }
+
+    if (hub->dateTimeChanged())
+    {
+        ++changedFields;
+    }
+
+    if (hub->ratingChanged())
+    {
+        ++changedFields;
+    }
+
+    if (hub->pickLabelChanged())
+    {
+        ++changedFields;
+    }
+
+    if (hub->colorLabelChanged())
+    {
+        ++changedFields;
+    }
+
+    if (hub->tagsChanged())
+    {
+        ++changedFields;
+    }
+
+    QString text;
+
+    if (changedFields == 1)
+    {
+        if (hub->commentsChanged())
+            text = i18np("You have edited the image caption. ",
+                        "You have edited the captions of %1 images. ",
+                        infos.count());
+        else if (hub->titlesChanged())
+            text = i18np("You have edited the image title. ",
+                        "You have edited the titles of %1 images. ",
+                        infos.count());
+        else if (hub->dateTimeChanged())
+            text = i18np("You have edited the date of the image. ",
+                        "You have edited the date of %1 images. ",
+                        infos.count());
+        else if (hub->pickLabelChanged())
+            text = i18np("You have edited the pick label of the image. ",
+                        "You have edited the pick label of %1 images. ",
+                        infos.count());
+        else if (hub->colorLabelChanged())
+            text = i18np("You have edited the color label of the image. ",
+                        "You have edited the color label of %1 images. ",
+                        infos.count());
+        else if (hub->ratingChanged())
+            text = i18np("You have edited the rating of the image. ",
+                        "You have edited the rating of %1 images. ",
+                        infos.count());
+        else if (hub->tagsChanged())
+            text = i18np("You have edited the tags of the image. ",
+                        "You have edited the tags of %1 images. ",
+                        infos.count());
+
+        text += i18n("Do you want to apply your changes?");
+    }
+    else
+    {
+        text = i18np("<p>You have edited the metadata of the image: </p><p><ul>",
+                    "<p>You have edited the metadata of %1 images: </p><p><ul>",
+                    infos.count());
+
+        if (hub->titlesChanged())
+            text += i18n("<li>title</li>");
+        if (hub->commentsChanged())
+        {
+            text += i18n("<li>caption</li>");
+        }
+
+        if (hub->dateTimeChanged())
+        {
+            text += i18n("<li>date</li>");
+        }
+
+        if (hub->pickLabelChanged())
+        {
+            text += i18n("<li>pick label</li>");
+        }
+
+        if (hub->colorLabelChanged())
+        {
+            text += i18n("<li>color label</li>");
+        }
+
+        if (hub->ratingChanged())
+        {
+            text += i18n("<li>rating</li>");
+        }
+
+        if (hub->tagsChanged())
+        {
+            text += i18n("<li>tags</li>");
+        }
+
+        text += "</ul></p>";
+
+        text += i18n("<p>Do you want to apply your changes?</p>");
+    }
+
+    bool alwaysApply = false;
+    int returnCode   = KMessageBox::createKMessageBox(dialog, QMessageBox::Information, text, QStringList(),
+                                                      i18n("Always apply changes without confirmation"),
+                                                      &alwaysApply, KMessageBox::Notify);
+
+    if (alwaysApply)
+    {
+        AlbumSettings::instance()->setApplySidebarChangesDirectly(true);
+    }
+
+    if (returnCode == KDialog::No)
+    {
+        delete hub;
+        return;
+    }
+    // otherwise apply:
+    FileActionMngr::instance()->applyMetadata(infos, hub);
+}
+
+void ImageDescEditTab::reset()
+{
+    d->modified = false;
+    d->hub.resetChanged();
+    d->applyBtn->setEnabled(false);
+    d->revertBtn->setEnabled(false);
+    d->applyToAllVersionsButton->setEnabled(false);
 }
 
 void ImageDescEditTab::slotApplyAllChanges()
@@ -662,12 +684,7 @@ void ImageDescEditTab::slotApplyAllChanges()
     }
 
     FileActionMngr::instance()->applyMetadata(d->currInfos, d->hub);
-
-    d->modified = false;
-    d->hub.resetChanged();
-    d->applyBtn->setEnabled(false);
-    d->revertBtn->setEnabled(false);
-    d->applyToAllVersionsButton->setEnabled(false);
+    reset();
 }
 
 void ImageDescEditTab::slotRevertAllChanges()

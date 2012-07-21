@@ -255,6 +255,19 @@ void FileActionMngr::applyMetadata(const QList<ImageInfo>& infos, const Metadata
     d->applyMetadata(taskList, new MetadataHubOnTheRoad(hub));
 }
 
+void FileActionMngr::applyMetadata(const QList<ImageInfo>& infos, MetadataHubOnTheRoad* hub)
+{
+    if (hub->parent())
+    {
+        kDebug() << "MetadataHubOnTheRoad object must not have a QObject parent";
+        delete hub;
+        return;
+    }
+    FileActionImageInfoList taskList = FileActionImageInfoList::create(infos);
+    taskList.schedulingForDB(i18n("Applying metadata"), d->dbProgressCreator());
+    d->applyMetadata(taskList, hub);
+}
+
 void FileActionMngr::transform(const QList<ImageInfo>& infos, KExiv2Iface::RotationMatrix::TransformationAction action)
 {
     FileActionImageInfoList taskList = FileActionImageInfoList::create(infos);
