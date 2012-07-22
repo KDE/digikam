@@ -284,6 +284,7 @@ void PreviewLoadingTask::execute()
 
             DMetadata metadata(m_loadingDescription.filePath);
             m_img.setAttribute("originalSize", metadata.getPixelSize());
+            m_img.setMetadata(metadata.data());
 
             // mark as embedded preview (for Exif rotation)
             if (fromEmbeddedPreview)
@@ -365,6 +366,7 @@ void PreviewLoadingTask::execute()
 
             DMetadata metadata(m_loadingDescription.filePath);
             m_img.setAttribute("originalSize", metadata.getPixelSize());
+            m_img.setMetadata(metadata.data());
 
             // mark as embedded preview (for Exif rotation)
             if (fromEmbeddedPreview)
