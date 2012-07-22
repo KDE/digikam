@@ -19,5 +19,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 012 ==> 302311 - Try to edit title whereas tags modification writing.
 013 ==> 290927 - Color management does not apply change and refresh the current preview image.
 014 ==> 244713 - Ability to execute a script when importing from camera.
-015 ==> 
+015 ==> 303163 - "Undo" after "Color, Color Space Conversion" does not restore the original ICC profile.
+016 ==>
 

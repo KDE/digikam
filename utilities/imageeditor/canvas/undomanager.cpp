@@ -198,8 +198,8 @@ void UndoManager::rollbackToOrigin()
 void UndoManager::undoStep(bool saveRedo, bool execute, bool flyingRollback)
 {
     UndoAction* action                   = d->undoActions.back();
-    DImageHistory historyBeforeStep      = action->getHistory();
-    DImageHistory historyAfterStep       = d->dimgiface->getImageHistory();
+    UndoMetadataContainer dataBeforeStep = action->getMetadata();
+    UndoMetadataContainer dataAfterStep  = UndoMetadataContainer::fromImage(*d->dimgiface->getImg());
     UndoActionIrreversible* irreversible = dynamic_cast<UndoActionIrreversible*>(action);
     UndoActionReversible*   reversible   = dynamic_cast<UndoActionReversible*>(action);
     QVariant originDataAfterStep         = d->dimgiface->getImg()->fileOriginData();
@@ -254,22 +254,22 @@ void UndoManager::undoStep(bool saveRedo, bool execute, bool flyingRollback)
         if (irreversible || flyingRollback)
         {
             // undo the action
-            restoreSnapshot(d->undoActions.size() - 1, historyBeforeStep);
+            restoreSnapshot(d->undoActions.size() - 1, dataBeforeStep);
         }
         else
         {
             reversible->getReverseFilter().apply(*d->dimgiface->getImg());
-            d->dimgiface->imageUndoChanged(historyBeforeStep);
+            d->dimgiface->imageUndoChanged(dataBeforeStep);
         }
     }
     else
     {
         // if we do not copy the data (fast roll-back), we at least set the history for subsequent steps
-        d->dimgiface->imageUndoChanged(historyBeforeStep);
+        d->dimgiface->imageUndoChanged(dataBeforeStep);
     }
 
     // Record history and origin for redo
-    action->setHistory(historyAfterStep);
+    action->setMetadata(dataAfterStep);
 
     if (isAtOrigin())
     {
@@ -299,8 +299,8 @@ void UndoManager::undoStep(bool saveRedo, bool execute, bool flyingRollback)
 void UndoManager::redoStep(bool execute, bool flyingRollback)
 {
     UndoAction* action                    = d->redoActions.back();
-    DImageHistory historyBeforeStep       = d->dimgiface->getImageHistory();
-    DImageHistory historyAfterStep        = action->getHistory();
+    UndoMetadataContainer dataBeforeStep  = UndoMetadataContainer::fromImage(*d->dimgiface->getImg());
+    UndoMetadataContainer dataAfterStep   = action->getMetadata();
     QVariant originDataBeforeStep         = d->dimgiface->getImg()->fileOriginData();
     QVariant originDataAfterStep          = action->fileOriginData();
     DImageHistory originHistoryBeforeStep = d->dimgiface->getResolvedInitialHistory();
@@ -312,21 +312,21 @@ void UndoManager::redoStep(bool execute, bool flyingRollback)
     {
         if (irreversible || flyingRollback)
         {
-            restoreSnapshot(d->undoActions.size() + 1, historyAfterStep);
+            restoreSnapshot(d->undoActions.size() + 1, dataAfterStep);
         }
         else
         {
             reversible->getFilter().apply(*d->dimgiface->getImg());
-            d->dimgiface->imageUndoChanged(historyAfterStep);
+            d->dimgiface->imageUndoChanged(dataAfterStep);
         }
     }
     else
     {
         // if we do not copy the data (fast roll-back), we at least set the history for subsequent steps
-        d->dimgiface->imageUndoChanged(historyAfterStep);
+        d->dimgiface->imageUndoChanged(dataAfterStep);
     }
 
-    action->setHistory(historyBeforeStep);
+    action->setMetadata(dataBeforeStep);
 
     if (isAtOrigin())
     {
@@ -363,7 +363,7 @@ void UndoManager::makeSnapshot(int index)
     d->undoCache->putData(index, w, h, sixteenBit, hasAlpha, data);
 }
 
-void UndoManager::restoreSnapshot(int index, const DImageHistory& history)
+void UndoManager::restoreSnapshot(int index, const UndoMetadataContainer& c)
 {
     int    newW, newH;
     bool   sixteenBit, hasAlpha;
@@ -371,7 +371,7 @@ void UndoManager::restoreSnapshot(int index, const DImageHistory& history)
 
     if (!newData.isNull())
     {
-        d->dimgiface->setUndoImageData(history, newData.data(), newW, newH, sixteenBit);
+        d->dimgiface->setUndoImageData(c, newData.data(), newW, newH, sixteenBit);
     }
 }
 
@@ -455,9 +455,9 @@ bool UndoManager::putImageDataAndHistory(DImg* const img, int stepsBack)
     }
 
     // adjust history
-    UndoAction* action              = d->undoActions.at(step);
-    DImageHistory historyBeforeStep = action->getHistory();
-    img->setImageHistory(historyBeforeStep);
+    UndoAction* action                   = d->undoActions.at(step);
+    UndoMetadataContainer dataBeforeStep = action->getMetadata();
+    dataBeforeStep.toImage(*img);
 
     return true;
 }
@@ -578,7 +578,7 @@ DImageHistory UndoManager::getImageHistoryOfFullRedo() const
 {
     if (!d->redoActions.isEmpty())
     {
-        return d->redoActions.first()->getHistory();
+        return d->redoActions.first()->getMetadata().history;
     }
 
     return d->dimgiface->getImageHistory();

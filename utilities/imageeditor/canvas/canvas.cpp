@@ -331,11 +331,6 @@ void Canvas::setModified()
     d->im->setModified();
 }
 
-void Canvas::readMetadataFromFile(const QString& file)
-{
-    d->im->readMetadataFromFile(file);
-}
-
 QString Canvas::ensureHasCurrentUuid() const
 {
     return d->im->ensureHasCurrentUuid();
