@@ -786,6 +786,7 @@ bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver* observer)
 
     if (!profile_rawdata.isEmpty())
     {
+        purgeExifWorkingColorSpace();
         write_icc_profile(&cinfo, (JOCTET*)profile_rawdata.data(), profile_rawdata.size());
     }
 

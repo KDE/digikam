@@ -655,6 +655,7 @@ bool JP2KLoader::save(const QString& filePath, DImgLoaderObserver* observer)
         if (cm_profile != 0)
         {
             jas_image_setcmprof(jp2_image, cm_profile);
+            //enable when it works: purgeExifWorkingColorSpace();
         }
     }
 

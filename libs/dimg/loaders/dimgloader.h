@@ -117,6 +117,7 @@ protected:
     virtual int             granularity(DImgLoaderObserver* observer, int total, float progressSlice = 1.0);
 
     bool                    checkExifWorkingColorSpace();
+    void                    purgeExifWorkingColorSpace();
 
 protected:
 

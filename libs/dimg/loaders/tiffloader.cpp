@@ -793,6 +793,7 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver* observer)
     if (!profile_rawdata.isEmpty())
     {
 #if defined(TIFFTAG_ICCPROFILE)
+        purgeExifWorkingColorSpace();
         TIFFSetField(tif, TIFFTAG_ICCPROFILE, (uint32)profile_rawdata.size(), (uchar*)profile_rawdata.data());
 #endif
     }

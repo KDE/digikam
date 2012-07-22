@@ -885,6 +885,7 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver* observer)
 
     if (!profile_rawdata.isEmpty())
     {
+        purgeExifWorkingColorSpace();
         png_set_iCCP(png_ptr, info_ptr, (png_charp)("icc"), PNG_COMPRESSION_TYPE_BASE, (iCCP_data)profile_rawdata.data(), profile_rawdata.size());
     }
 
