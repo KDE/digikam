@@ -58,6 +58,8 @@ extern "C"
 #include <kstandarddirs.h>
 #include <kurl.h>
 #include <kdebug.h>
+#include <kprocess.h>
+#include <kmacroexpander.h>
 
 // Local includes
 
@@ -185,8 +187,8 @@ CameraController::CameraController(QWidget* parent,
     qRegisterMetaType<CamItemInfo>("CamItemInfo");
     qRegisterMetaType<CamItemInfoList>("CamItemInfoList");
 
-    connect(this, SIGNAL(signalInternalCheckRename(QString,QString,QString,QString)),
-            this, SLOT(slotCheckRename(QString,QString,QString,QString)),
+    connect(this, SIGNAL(signalInternalCheckRename(QString,QString,QString,QString,QString)),
+            this, SLOT(slotCheckRename(QString,QString,QString,QString,QString)),
             Qt::BlockingQueuedConnection);
 
     connect(this, SIGNAL(signalInternalDownloadFailed(QString,QString)),
@@ -573,6 +575,7 @@ void CameraController::executeCommand(CameraCommand* cmd)
             QString   templateTitle  = cmd->map["template"].toString();
             bool      convertJpeg    = cmd->map["convertJpeg"].toBool();
             QString   losslessFormat = cmd->map["losslessFormat"].toString();
+            QString   script         = cmd->map["script"].toString();
             sendLogMsg(i18n("Downloading file %1...", file), DHistoryView::StartingEntry, folder, file);
 
             // download to a temp file
@@ -673,7 +676,7 @@ void CameraController::executeCommand(CameraCommand* cmd)
 
             // Now we need to move from temp file to destination file.
             // This possibly involves UI operation, do it from main thread
-            emit signalInternalCheckRename(folder, file, dest, temp);
+            emit signalInternalCheckRename(folder, file, dest, temp, script);
             break;
         }
 
@@ -789,10 +792,10 @@ void CameraController::sendLogMsg(const QString& msg, DHistoryView::EntryType ty
 }
 
 void CameraController::slotCheckRename(const QString& folder, const QString& file,
-                                       const QString& destination, const QString& temp)
+                                       const QString& destination, const QString& temp,
+                                       const QString& script)
 {
     // this is the direct continuation of executeCommand, case CameraCommand::cam_download
-
     bool skip      = false;
     bool cancel    = false;
     bool overwrite = d->overwriteAll;
@@ -906,6 +909,39 @@ void CameraController::slotCheckRename(const QString& folder, const QString& fil
         emit signalDownloaded(folder, file, CamItemInfo::DownloadedYes);
         emit signalDownloadComplete(folder, file, info.path(), info.fileName());
         sendLogMsg(i18n("Download successfully %1...", file), DHistoryView::StartingEntry, folder, file);
+
+        // Run script
+        if (!script.isEmpty())
+        {
+            KProcess process;
+
+            process.setOutputChannelMode(KProcess::SeparateChannels);
+            QString s;
+            if (script.indexOf('%') > -1)
+            {
+                QHash<QString, QString> map;
+                map.insert("file", dest);
+                map.insert("filename", info.fileName());
+                map.insert("path", info.path());
+                map.insert("orgfilename", file);
+                map.insert("orgpath", folder);
+                s = KMacroExpander::expandMacros(script, map);
+            }
+            else
+            {
+                s = script + " \"" + dest + "\"";
+            }
+            process.setShellCommand(s);
+            kDebug() << "Running: " << s;
+            int ret = process.execute();
+
+            if (ret != 0)
+            {
+                kDebug() << "Script FAILED! " << ret;
+            }
+            kDebug() << "stdout" << process.readAllStandardOutput();
+            kDebug() << "stderr" << process.readAllStandardError();
+        }
     }
 }
 
@@ -1181,6 +1217,7 @@ void CameraController::download(const DownloadSettings& downloadSettings)
     cmd->map.insert("template",          QVariant(downloadSettings.templateTitle));
     cmd->map.insert("convertJpeg",       QVariant(downloadSettings.convertJpeg));
     cmd->map.insert("losslessFormat",    QVariant(downloadSettings.losslessFormat));
+    cmd->map.insert("script",            QVariant(downloadSettings.script));
     addCommand(cmd);
 }
 

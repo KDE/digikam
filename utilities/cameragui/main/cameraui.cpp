@@ -251,6 +251,12 @@ void CameraUI::setupUserArea()
     d->advancedSettings = new AdvancedSettings(d->advBox);
     d->advBox->addItem(d->advancedSettings, SmallIcon("system-run"), i18n("On the Fly Operations (JPEG only)"),
                        QString("OnFlyBox"), true);
+
+    // -- Scripting options ---------------------------------------------------
+
+    d->scriptingSettings = new ScriptingSettings(d->advBox);
+    d->advBox->addItem(d->scriptingSettings, SmallIcon("utilities-terminal"), i18n("Scripting"),
+                       QString("ScriptingBox"), true);
     d->advBox->addStretch();
 
     d->rightSideBar->appendTab(d->advBox, SmallIcon("configure"), i18n("Settings"));
@@ -673,6 +679,7 @@ void CameraUI::readSettings()
     d->lastPhotoFirstAction->setChecked(group.readEntry("LastPhotoFirst", true));
     d->albumCustomizer->readSettings(group);
     d->advancedSettings->readSettings(group);
+    d->scriptingSettings->readSettings(group);
 
 #if KDCRAW_VERSION >= 0x020000
     d->advBox->readSettings(group);
@@ -695,6 +702,7 @@ void CameraUI::saveSettings()
     group.writeEntry("LastPhotoFirst", d->lastPhotoFirstAction->isChecked());
     d->albumCustomizer->saveSettings(group);
     d->advancedSettings->saveSettings(group);
+    d->scriptingSettings->saveSettings(group);
 
 #if KDCRAW_VERSION >= 0x020000
     d->advBox->writeSettings(group);
@@ -730,7 +738,9 @@ QString CameraUI::cameraTitle() const
 
 DownloadSettings CameraUI::downloadSettings() const
 {
-    return d->advancedSettings->settings();
+    DownloadSettings settings = d->advancedSettings->settings();
+    d->scriptingSettings->settings(&settings);
+    return settings;
 }
 
 void CameraUI::slotCancelButton()
