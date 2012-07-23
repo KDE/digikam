@@ -3,12 +3,14 @@ digiKam 2.8.0 - Release date: 2012-08-05
 
 NEW FEATURES:
 
+CameraGUI : Add option to execute script during items to download from camera.
+
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 001 ==> 296786 - Zoom to 100% pans to the top-left corner.
 002 ==> 299942 - Root Album Folders selection list does not expand to fill available space.
 003 ==> 296799 - Shown number of images in album increases in status line after image.
-004 ==> 301371 - Exiv2 mix library strangeness 
+004 ==> 301371 - Exiv2 mix library strangeness.
 005 ==> 303385 - Crash on startup.
 006 ==> 303396 - Assign tags to filtered images - not all images.
 007 ==> 301486 - Additional empty queue when batch processing images using toolbar button.
