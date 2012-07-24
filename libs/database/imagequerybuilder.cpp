@@ -1039,7 +1039,7 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
     }
     else if (name == "audiobitrate")
     {
-        fieldQuery.addIntField("VideoMetadata.audioBitRate");
+        fieldQuery.addStringField("VideoMetadata.audioBitRate");
     }
     else if (name == "audiochanneltype")
     {
@@ -1051,11 +1051,11 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
     }
     else if (name == "duration")
     {
-        fieldQuery.addIntField("VideoMetadata.duration");
+        fieldQuery.addStringField("VideoMetadata.duration");
     }
     else if (name == "framerate")
     {
-        fieldQuery.addDoubleField("VideoMetadata.frameRate");
+        fieldQuery.addStringField("VideoMetadata.frameRate");
     }
     else if (name == "resolution")
     {

@@ -170,13 +170,14 @@ enum Field
     // Dublin Core: Description, Title, Subject (keywords) see above
 
     AspectRatio,                      /// String
-    AudioBitRate,                     /// Int
+    AudioBitRate,                     /// String
     AudioChannelType,                 /// String
     AudioCompressor,                  /// String
-    Duration,                         /// Int
-    FrameRate,                        /// double
+    Duration,                         /// String
+    FrameRate,                        /// String
     Resolution,                       /// String
-    VideoCodec                        /// String
+    VideoCodec,                       /// String
+    VideoBitDepth                     /// String
 };
 
 } // namespace MetadataInfo

@@ -105,11 +105,11 @@ public:
     bool    allFieldsNull;
 
     QString aspectRatio;
-    int     audioBitRate;
+    QString audioBitRate;
     QString audioChannelType;
     QString audioCompressor;
-    int     duration;
-    double  frameRate;
+    QString duration;
+    QString frameRate;
     QString resolution;
     QString videoCodec;
 };

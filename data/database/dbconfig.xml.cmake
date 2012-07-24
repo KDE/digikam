@@ -146,11 +146,11 @@
             <statement mode="plain"> CREATE TABLE VideoMetadata
                             (imageid INTEGER PRIMARY KEY,
                             aspectRatio TEXT,
-                            audioBitRate INTEGER,
+                            audioBitRate TEXT,
                             audioChannelType TEXT,
                             audioCompressor TEXT,
-                            duration INTEGER,
-                            frameRate REAL,
+                            duration TEXT,
+                            frameRate TEXT,
                             resolution TEXT,
                             exposureProgram INTEGER,
                             videoCodec TEXT)</statement>
@@ -834,11 +834,11 @@
             <statement mode="plain">CREATE TABLE IF NOT EXISTS VideoMetadata
                             (imageid INTEGER PRIMARY KEY,
                             aspectRatio TEXT,
-                            audioBitRate INTEGER,
+                            audioBitRate TEXT,
                             audioChannelType TEXT,
                             audioCompressor TEXT,
-                            duration INTEGER,
-                            frameRate REAL,
+                            duration TEXT,
+                            frameRate TEXT,
                             resolution TEXT,
                             exposureProgram INTEGER,
                             videoCodec TEXT);</statement>

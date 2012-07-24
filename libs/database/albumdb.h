@@ -794,11 +794,11 @@ public:
      * If there is already an entry, it will be discarded.
      * The QVariantList shall have 8 entries, of types in this order:
      * 0) String    AspectRatio
-     * 1) Int       AudioBitRate
+     * 1) String    AudioBitRate
      * 2) String    AudioChannelType
      * 3) String    AudioCompressor
-     * 4) Int       Duration
-     * 5) Double    FrameRate
+     * 4) String    Duration
+     * 5) String    FrameRate
      * 6) String    Resolution
      * 7) String    VideoCodec
      * You can leave out entries from this list, which will then be filled with null values.
