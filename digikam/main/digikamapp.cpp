@@ -2413,17 +2413,12 @@ void DigikamApp::slotEditKeys()
 void DigikamApp::slotConfToolbars()
 {
     saveMainWindowSettings(d->config->group("General Settings"));
-    QPointer<KEditToolBar> dlg = new KEditToolBar(actionCollection(), this);
-    dlg->setResourceFile(xmlFile());
+    KEditToolBar dlg(factory(), this);
 
-    if (dlg->exec())
-    {
-        createGUI(xmlFile());
-        applyMainWindowSettings(d->config->group("General Settings"));
-        KipiPluginLoader::instance()->kipiPlugActions();
-    }
+    connect(&dlg, SIGNAL(newToolBarConfig()),
+            this, SLOT(slotNewToolbarConfig()));
 
-    delete dlg;
+    dlg.exec();
 }
 
 void DigikamApp::slotConfNotifications()

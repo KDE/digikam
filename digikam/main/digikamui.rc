@@ -64,7 +64,7 @@
      <Action name="image_transform_exif"/>
      <Action name="image_set_exif_orientation"/>
    <Separator />
-     <ActionList name="image_kipi_actions"/>
+     <DefineGroup name="kipi_image_group" append="kipi_image_group" />
    <Separator />
   </Menu>
 
@@ -115,12 +115,13 @@
         <Action name="find_duplicates" />
       <Separator/>
         <Action name="maintenance" />
+        <Action name="empty_tools_group" />
       <Separator/>
-        <ActionList name="album_kipi_actions"/>
+        <DefineGroup name="kipi_album_group" append="kipi_album_group" />
       <Separator/>
-        <ActionList name="tool_kipi_actions"/>
+        <DefineGroup name="kipi_tool_group" append="kipi_tool_group" />
       <Separator/>
-        <ActionList name="batch_kipi_actions"/>
+        <DefineGroup name="kipi_batch_group" append="kipi_batch_group" />
   </Menu>
 
   <Menu name="Import"><text>I&amp;mport</text>
@@ -131,11 +132,13 @@
       <Action name="import_addImages" />
       <Action name="import_addFolders" />
       <Separator/>
-      <ActionList name="import_kipi_actions"/>
+      <Action name="empty_import_group" />
+      <DefineGroup name="kipi_import_group" append="kipi_import_group" />
   </Menu>
 
    <Menu name="Export"><text>&amp;Export</text>
-        <ActionList name="export_kipi_actions"/>
+      <Action name="empty_export_group" />
+      <DefineGroup name="kipi_export_group" append="kipi_export_group" />
    </Menu>
 
   <Menu name="settings" noMerge="1"><Text>&amp;Settings</Text>
