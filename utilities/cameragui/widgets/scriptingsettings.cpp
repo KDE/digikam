@@ -44,24 +44,26 @@
 namespace Digikam
 {
 
-class ScriptingSettings::ScriptingSettingsPriv
+class ScriptingSettings::Private
 {
 public:
 
-    ScriptingSettingsPriv()
+    Private()
         : scriptLabel(0),
-          script(0)
+          script(0),
+          tooltipDialog(0),
+          tooltipToggleButton(0)
     {
     }
 
-    QLabel*           scriptLabel;
-    KUrlRequester*    script;
-    TooltipDialog*    tooltipDialog;
-    QToolButton*      tooltipToggleButton;
+    QLabel*        scriptLabel;
+    KUrlRequester* script;
+    TooltipDialog* tooltipDialog;
+    QToolButton*   tooltipToggleButton;
 };
 
-ScriptingSettings::ScriptingSettings(QWidget* parent)
-    : QWidget(parent), d(new ScriptingSettingsPriv)
+ScriptingSettings::ScriptingSettings(QWidget* const parent)
+    : QWidget(parent), d(new Private)
 {
     d->tooltipDialog = new TooltipDialog(this);
     d->tooltipDialog->setTooltip(i18n("<p>These expressions may be used to customize the command line:</p>"
@@ -114,7 +116,7 @@ void ScriptingSettings::saveSettings(KConfigGroup& group)
     group.writeEntry("Script", d->script->text());
 }
 
-void ScriptingSettings::settings(DownloadSettings* settings) const
+void ScriptingSettings::settings(DownloadSettings* const settings) const
 {
     settings->script = d->script->text();
 }

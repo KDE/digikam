@@ -46,13 +46,13 @@ class ScriptingSettings : public QWidget
 
 public:
 
-    ScriptingSettings(QWidget* parent = 0);
+    ScriptingSettings(QWidget* const parent = 0);
     ~ScriptingSettings();
 
     void readSettings(KConfigGroup& group);
     void saveSettings(KConfigGroup& group);
 
-    void settings(DownloadSettings* settings) const;
+    void settings(DownloadSettings* const settings) const;
 
 private Q_SLOTS:
 
@@ -60,8 +60,8 @@ private Q_SLOTS:
 
 private:
 
-    class ScriptingSettingsPriv;
-    ScriptingSettingsPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam
