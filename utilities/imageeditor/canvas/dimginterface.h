@@ -50,6 +50,7 @@ class IOFileSettingsContainer;
 class LoadingDescription;
 class DImgBuiltinFilter;
 class UndoAction;
+class UndoMetadataContainer;
 class VersionFileOperation;
 
 class DIGIKAM_EXPORT DImgInterface : public QObject
@@ -179,8 +180,8 @@ public:
     void   putIccProfile(const IccProfile& profile);
 
     /// For internal usage by UndoManager
-    void   setUndoImageData(const DImageHistory& history, uchar* const data, int w, int h, bool sixteenBit);
-    void   imageUndoChanged(const DImageHistory& history);
+    void   setUndoImageData(const UndoMetadataContainer& c, uchar* const data, int w, int h, bool sixteenBit);
+    void   imageUndoChanged(const UndoMetadataContainer& c);
     void   setFileOriginData(const QVariant& data);
 
     /** Convert a DImg image to a pixmap for screen using color

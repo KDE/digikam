@@ -1358,7 +1358,7 @@ void ImageWindow::slotFileMetadataChanged(const KUrl& url)
 {
     if (url == d->currentUrl())
     {
-        m_canvas->readMetadataFromFile(url.toLocalFile());
+        m_canvas->interface()->readMetadataFromFile(url.toLocalFile());
     }
 }
 

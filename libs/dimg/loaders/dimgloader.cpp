@@ -286,6 +286,13 @@ bool DImgLoader::checkExifWorkingColorSpace()
     return false;
 }
 
+void DImgLoader::purgeExifWorkingColorSpace()
+{
+    DMetadata meta(m_image->getMetadata());
+    meta.removeExifColorSpace();
+    m_image->setMetadata(meta.data());
+}
+
 QByteArray DImgLoader::uniqueHashV2(const QString& filePath, const DImg* img)
 {
     QFile file(filePath);

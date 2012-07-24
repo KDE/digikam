@@ -86,6 +86,7 @@ protected:
 
 private:
 
+    void reset();
     void initializeTags(QModelIndex& parent);
     void setTagState(TAlbum* tag, MetadataHub::TagStatus status);
 
@@ -106,6 +107,10 @@ private:
     void metadataChange(qlonglong imageId);
     void resetMetadataChangeInfo();
     void initProgressIndicator();
+
+Q_SIGNALS:
+
+    void askToApplyChanges(const QList<ImageInfo>& infos, MetadataHubOnTheRoad* hub);
     
 private Q_SLOTS:
 
@@ -139,6 +144,8 @@ private Q_SLOTS:
     void slotMoreMenu();
     void slotReadFromFileMetadataToDatabase();
     void slotWriteToFileMetadataFromDatabase();
+
+    void slotAskToApplyChanges(const QList<ImageInfo>& infos, MetadataHubOnTheRoad* hub);
 
 private:
 

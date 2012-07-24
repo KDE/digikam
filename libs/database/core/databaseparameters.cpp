@@ -208,8 +208,16 @@ void DatabaseParameters::readFromConfig(KSharedConfig::Ptr config, const QString
     }
 
     databaseType             = group.readEntry(configDatabaseType, QString());
-    databaseName             = group.readEntry(configDatabaseName, QString());
-    databaseNameThumbnails   = group.readEntry(configDatabaseNameThumbnails, QString());
+    if (isSQLite()) // see bug #267131
+    {
+        databaseName             = group.readPathEntry(configDatabaseName, QString());
+        databaseNameThumbnails   = group.readPathEntry(configDatabaseNameThumbnails, QString());
+    }
+    else
+    {
+        databaseName             = group.readEntry(configDatabaseName, QString());
+        databaseNameThumbnails   = group.readEntry(configDatabaseNameThumbnails, QString());
+    }
     hostName                 = group.readEntry(configDatabaseHostName, QString());
     port                     = group.readEntry(configDatabasePort, -1);
     userName                 = group.readEntry(configDatabaseUsername, QString());

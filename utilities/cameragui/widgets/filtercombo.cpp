@@ -243,6 +243,10 @@ const QStringList& FilterComboBox::mimeWildcards(const QString& mime)
         foreach(const QString& m, list)
         {
             KMimeType::Ptr mime = KMimeType::mimeType(m);
+            if (!mime)
+            {
+                continue;
+            }
             foreach(const QString& pattern, mime->patterns())
             {
                 wc.append(pattern);

@@ -874,8 +874,17 @@ void DImgInterface::setModified()
 void DImgInterface::readMetadataFromFile(const QString& file)
 {
     DMetadata meta(file);
+    // This can overwrite metadata changes introduced by imageplugins.
+    // Currently, this is ProfileConversion and lensfun.
+    // ProfileConversion's changes is redone when saving by DImgLoader.
+    // Lensfun is not critical.
+    // For a clean solution, we'd need to record a sort of metadata changeset in UndoMetadataContainer.
     d->image.setMetadata(meta.data());
-    d->image.setImageHistory(DImageHistory::fromXml(meta.getImageHistory()));
+    // If we are editing, and someone else at the same time, there's nothing we can do.
+    if (!d->undoMan->hasChanges())
+    {
+        d->image.setImageHistory(DImageHistory::fromXml(meta.getImageHistory()));
+    }
 }
 
 void DImgInterface::clearUndoManager()
@@ -1225,19 +1234,34 @@ void DImgInterface::putImageData(uchar* const data, int w, int h, bool sixteenBi
     d->image.putImageData(w, h, sixteenBit, d->image.hasAlpha(), data);
 }
 
-void DImgInterface::setUndoImageData(const DImageHistory& history, uchar* const data, int w, int h, bool sixteenBit)
+void DImgInterface::setUndoImageData(const UndoMetadataContainer& c,
+                                     uchar* const data, int w, int h, bool sixteenBit)
 {
     // called from UndoManager
+    bool changesIcc = c.changesIccProfile(d->image);
+
     putImageData(data, w, h, sixteenBit);
-    d->image.setImageHistory(history);
+    c.toImage(d->image);
+
+    if (changesIcc)
+    {
+        updateColorManagement();
+    }
 }
 
-void DImgInterface::imageUndoChanged(const DImageHistory& history)
+void DImgInterface::imageUndoChanged(const UndoMetadataContainer& c)
 {
     // called from UndoManager
+    bool changesIcc = c.changesIccProfile(d->image);
+
     d->origWidth  = d->image.width();
     d->origHeight = d->image.height();
-    d->image.setImageHistory(history);
+    c.toImage(d->image);
+
+    if (changesIcc)
+    {
+        updateColorManagement();
+    }
 }
 
 void DImgInterface::setFileOriginData(const QVariant& data)

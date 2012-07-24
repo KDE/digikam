@@ -38,6 +38,7 @@ namespace Digikam
 {
 
 class DImg;
+class ICCSettingsContainer;
 class ImageInfo;
 class LoadingDescription;
 
@@ -86,6 +87,7 @@ private Q_SLOTS:
     void slotGotImagePreview(const LoadingDescription& loadingDescription, const DImg& image);
     void preloadNext();
     void slotFileChanged(const QString& path);
+    void iccSettingsChanged(const ICCSettingsContainer& current, const ICCSettingsContainer& previous);
 
 private:
 

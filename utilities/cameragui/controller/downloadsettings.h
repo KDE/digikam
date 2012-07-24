@@ -70,6 +70,9 @@ public:
     QString   folder;
     QString   file;
     QString   dest;
+
+    // -- Settings from ScriptingSettings widget ---------------
+    QString   script;
 };
 
 typedef QList<DownloadSettings> DownloadSettingsList;

@@ -75,7 +75,6 @@ public:
     void    abortSaving();
     void    applyTransform(const IccTransform& transform);
     void    setModified();
-    void    readMetadataFromFile(const QString& file);
     QString ensureHasCurrentUuid() const;
     DImg    currentImage() const;
     QString currentImageFileFormat() const;

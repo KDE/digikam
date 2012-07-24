@@ -42,21 +42,38 @@ public:
 
     UndoActionPriv()
     {
-        iface = 0;
     }
 
     QString        title;
     QVariant       fileOrigin;
-    DImageHistory  history;
-    DImageHistory  fileOriginResolvedHistory;
-    DImgInterface* iface;
+
+    UndoMetadataContainer container;
+    DImageHistory         fileOriginResolvedHistory;
 };
+
+UndoMetadataContainer UndoMetadataContainer::fromImage(const DImg& img)
+{
+    UndoMetadataContainer container;
+    container.history = img.getImageHistory();
+    container.profile = img.getIccProfile();
+    return container;
+}
+
+void UndoMetadataContainer::toImage(DImg& img) const
+{
+    img.setImageHistory(history);
+    img.setIccProfile(profile);
+}
+
+bool UndoMetadataContainer::changesIccProfile(const DImg& target) const
+{
+    return !(profile == target.getIccProfile());
+}
 
 UndoAction::UndoAction(DImgInterface* const iface)
     : d(new UndoActionPriv)
 {
-    d->iface   = iface;
-    d->history = iface->getImageHistory();
+    d->container = UndoMetadataContainer::fromImage(*iface->getImg());
 }
 
 UndoAction::~UndoAction()
@@ -74,14 +91,14 @@ QString UndoAction::getTitle() const
     return d->title;
 }
 
-void UndoAction::setHistory(const DImageHistory& history)
+void UndoAction::setMetadata(const UndoMetadataContainer& c)
 {
-    d->history = history;
+    d->container = c;
 }
 
-DImageHistory UndoAction::getHistory() const
+UndoMetadataContainer UndoAction::getMetadata() const
 {
-    return d->history;
+    return d->container;
 }
 
 bool UndoAction::hasFileOriginData() const

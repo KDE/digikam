@@ -57,6 +57,7 @@
 #include "renamecustomizer.h"
 #include "albumcustomizer.h"
 #include "advancedsettings.h"
+#include "scriptingsettings.h"
 #include "sidebar.h"
 #include "statusnavigatebar.h"
 #include "statusprogressbar.h"
@@ -206,6 +207,7 @@ public:
     RenameCustomizer*             renameCustomizer;
     AlbumCustomizer*              albumCustomizer;
     AdvancedSettings*             advancedSettings;
+    ScriptingSettings*            scriptingSettings;
 
     DLogoAction*                  anim;
 

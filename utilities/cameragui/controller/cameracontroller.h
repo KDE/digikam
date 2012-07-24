@@ -120,7 +120,8 @@ Q_SIGNALS:
     void signalMetadata(const QString& folder, const QString& file, const DMetadata& exifData);
 
     void signalInternalCheckRename(const QString& folder, const QString& file,
-                                   const QString& destination, const QString& temp);
+                                   const QString& destination, const QString& temp,
+                                   const QString& script);
     void signalInternalDownloadFailed(const QString& folder, const QString& file);
     void signalInternalUploadFailed(const QString& folder, const QString& file, const QString& src);
     void signalInternalDeleteFailed(const QString& folder, const QString& file);
@@ -140,7 +141,7 @@ protected:
 private Q_SLOTS:
 
     void slotCheckRename(const QString& folder, const QString& file,
-                         const QString& destination, const QString& temp);
+                         const QString& destination, const QString& temp, const QString& script);
     void slotDownloadFailed(const QString& folder, const QString& file);
     void slotUploadFailed(const QString& folder, const QString& file, const QString& src);
     void slotDeleteFailed(const QString& folder, const QString& file);

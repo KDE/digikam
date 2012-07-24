@@ -35,6 +35,7 @@
 
 // Local includes
 
+#include "iccsettings.h"
 #include "loadingcacheinterface.h"
 #include "loadingdescription.h"
 #include "previewloadthread.h"
@@ -91,6 +92,9 @@ void DImgPreviewItem::DImgPreviewItemPrivate::init(DImgPreviewItem* q)
     }
 
     LoadingCacheInterface::connectToSignalFileChanged(q, SLOT(slotFileChanged(QString)));
+
+    QObject::connect(IccSettings::instance(), SIGNAL(settingsChanged(ICCSettingsContainer,ICCSettingsContainer)),
+                     q, SLOT(iccSettingsChanged(ICCSettingsContainer,ICCSettingsContainer)));
 }
 
 DImgPreviewItem::~DImgPreviewItem()
@@ -313,6 +317,16 @@ void DImgPreviewItem::slotFileChanged(const QString& path)
     Q_D(DImgPreviewItem);
 
     if (d->path == path)
+    {
+        reload();
+    }
+}
+
+void DImgPreviewItem::iccSettingsChanged(const ICCSettingsContainer& current, const ICCSettingsContainer& previous)
+{
+    if (current.enableCM != previous.enableCM ||
+        current.useManagedPreviews != previous.useManagedPreviews ||
+        current.monitorProfile != previous.monitorProfile)
     {
         reload();
     }

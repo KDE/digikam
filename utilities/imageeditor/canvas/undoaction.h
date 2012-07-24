@@ -34,6 +34,7 @@
 
 #include "digikam_export.h"
 #include "dimagehistory.h"
+#include "dimg.h"
 #include "dimgbuiltinfilter.h"
 
 namespace Digikam
@@ -41,19 +42,34 @@ namespace Digikam
 
 class DImgInterface;
 
+class DIGIKAM_EXPORT UndoMetadataContainer
+{
+public:
+
+    // Fill a container from the DImg
+    static UndoMetadataContainer fromImage(const DImg& iface);
+    // Write this container's values to the DImg
+    void toImage(DImg& img) const;
+
+    DImageHistory  history;
+    IccProfile     profile;
+
+    bool changesIccProfile(const DImg& target) const;
+};
+
 class DIGIKAM_EXPORT UndoAction
 {
 
 public:
 
-    explicit UndoAction(DImgInterface* const iface);
+    explicit UndoAction(DImgInterface* iface);
     virtual ~UndoAction();
 
     void          setTitle(const QString& title);
     QString       getTitle() const;
 
-    void          setHistory(const DImageHistory& history);
-    DImageHistory getHistory() const;
+    void                  setMetadata(const UndoMetadataContainer&);
+    UndoMetadataContainer getMetadata() const;
 
     bool          hasFileOriginData() const;
     void          setFileOriginData(const QVariant& data, const DImageHistory& resolvedInitialHistory);

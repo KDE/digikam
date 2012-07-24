@@ -41,6 +41,7 @@ class DImageHistory;
 class DImg;
 class DImgInterface;
 class UndoAction;
+class UndoMetadataContainer;
 
 class DIGIKAM_EXPORT UndoManager
 {
@@ -80,7 +81,7 @@ private:
     void undoStep(bool saveRedo, bool execute, bool flyingRollback);
     void redoStep(bool execute, bool flyingRollback);
     void makeSnapshot(int index);
-    void restoreSnapshot(int index, const DImageHistory& history);
+    void restoreSnapshot(int index, const UndoMetadataContainer& c);
     void getSnapshot(int index, DImg* const img);
 
 private:

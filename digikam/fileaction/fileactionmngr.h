@@ -95,6 +95,8 @@ public Q_SLOTS:
     void setExifOrientation(const QList<ImageInfo>& infos, int orientation);
     void applyMetadata(const QList<ImageInfo>& infos, const MetadataHub& hub);
     void applyMetadata(const QList<ImageInfo>& infos, const MetadataHubOnTheRoad& hub);
+    // ownership of the hub is passed, hub must be created without QObject parent
+    void applyMetadata(const QList<ImageInfo>& infos, MetadataHubOnTheRoad* hub);
 
     /** Flip or rotate. Note: The NoTransformation action is interpreted as Exif auto-rotate */
     void transform(const QList<ImageInfo>& infos, KExiv2Iface::RotationMatrix::TransformationAction action);
