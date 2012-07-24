@@ -1120,6 +1120,58 @@ PhotoInfoContainer DMetadata::getPhotographInformation() const
     return photoInfo;
 }
 
+VideoInfoContainer DMetadata::getVideoInformation() const
+{
+    VideoInfoContainer videoInfo;
+
+    if (hasXmp())
+    {
+        if (videoInfo.aspectRatio.isEmpty())
+        {
+            videoInfo.aspectRatio = getXmpTagString("Xmp.video.aspectRatio");
+        }
+
+        if (videoInfo.audioBitRate.isEmpty())
+        {
+            videoInfo.audioBitRate = getXmpTagString("Xmp.audio.sampleRate");
+        }
+
+        if (videoInfo.audioChannelType.isEmpty())
+        {
+            videoInfo.audioChannelType = getXmpTagString("Xmp.audio.channelType");
+        }
+
+        if (videoInfo.audioCompressor.isEmpty())
+        {
+            videoInfo.audioCompressor = getXmpTagString("Xmp.audio.compressor");
+        }
+
+        if (videoInfo.duration.isEmpty())
+        {
+            videoInfo.duration = getXmpTagString("Xmp.video.duration");
+        }
+
+        if (videoInfo.frameRate.isEmpty())
+        {
+            videoInfo.frameRate = getXmpTagString("Xmp.video.frameRate");
+        }
+
+        if (videoInfo.resolution.isEmpty())
+        {
+            videoInfo.resolution = getXmpTagString("Xmp.video.resolution");
+        }
+
+        if (videoInfo.videoCodec.isEmpty())
+        {
+            videoInfo.videoCodec = getXmpTagString("Xmp.video.codec");
+        }
+
+//    return fromXmpLangAlt("Xmp.video.bitDepth");
+    }
+
+    return videoInfo;
+}
+
 bool DMetadata::getImageTagsPath(QStringList& tagsPath) const
 {
     // Try to get Tags Path list from XMP in first.
@@ -2215,7 +2267,7 @@ QVariant DMetadata::getMetadataField(MetadataInfo::Field field) const
         case MetadataInfo::AspectRatio:
             return fromXmpLangAlt("Xmp.video.aspectRatio");
         case MetadataInfo::AudioBitRate:
-            return fromXmpLangAlt("Xmp.audio.bitsPerSample");
+            return fromXmpLangAlt("Xmp.audio.sampleRate");
         case MetadataInfo::AudioChannelType:
             return fromXmpLangAlt("Xmp.audio.channelType");
         case MetadataInfo::AudioCompressor:
@@ -2228,6 +2280,8 @@ QVariant DMetadata::getMetadataField(MetadataInfo::Field field) const
             return fromXmpLangAlt("Xmp.video.resolution");
         case MetadataInfo::VideoCodec:
             return fromXmpLangAlt("Xmp.video.codec");
+        case MetadataInfo::VideoBitDepth:
+            return fromXmpLangAlt("Xmp.video.bitDepth");
 
         default:
             return QVariant();

@@ -145,6 +145,10 @@ public:
 
     PhotoInfoContainer getPhotographInformation() const;
 
+    /** Returns video metadata from Xmp tags.
+     */
+    VideoInfoContainer getVideoInformation() const;
+
     /** Returns millisecond time-stamp from Exif tags or 0 if not found.
      */
     int  getMSecsInfo() const;

@@ -136,4 +136,85 @@ QDataStream& operator>>(QDataStream& ds, PhotoInfoContainer& info)
     return ds;
 }
 
+VideoInfoContainer::VideoInfoContainer()
+{
+}
+
+VideoInfoContainer::~VideoInfoContainer()
+{
+}
+
+bool VideoInfoContainer::operator==(const VideoInfoContainer& t) const
+{
+    bool b1  = aspectRatio        == t.aspectRatio;
+    bool b2  = audioBitRate       == t.audioBitRate;
+    bool b3  = audioChannelType   == t.audioChannelType;
+    bool b4  = audioCompressor    == t.audioCompressor;
+    bool b5  = duration           == t.duration;
+    bool b6  = frameRate          == t.frameRate;
+    bool b7  = resolution         == t.resolution;
+    bool b8  = videoCodec         == t.videoCodec;
+
+    return b1 && b2 && b3 && b4 && b5 && b6 && b7 && b8;
+}
+
+bool VideoInfoContainer::isEmpty() const
+{
+    if (aspectRatio.isEmpty()            &&
+        audioBitRate.isEmpty()           &&
+        audioChannelType.isEmpty()       &&
+        audioCompressor.isEmpty()        &&
+        duration.isEmpty()               &&
+        frameRate.isEmpty()              &&
+        resolution.isEmpty()             &&
+        videoCodec.isEmpty() )
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+bool VideoInfoContainer::isNull() const
+{
+    return(aspectRatio.isEmpty()            &&
+           audioBitRate.isEmpty()           &&
+           audioChannelType.isEmpty()       &&
+           audioCompressor.isEmpty()        &&
+           duration.isEmpty()               &&
+           frameRate.isEmpty()              &&
+           resolution.isEmpty()             &&
+           videoCodec.isEmpty() );
+}
+
+QDataStream& operator<<(QDataStream& ds, const VideoInfoContainer& info)
+{
+    ds << info.aspectRatio;
+    ds << info.audioBitRate;
+    ds << info.audioChannelType;
+    ds << info.audioCompressor;
+    ds << info.duration;
+    ds << info.frameRate;
+    ds << info.resolution;
+    ds << info.videoCodec;
+
+    return ds;
+}
+
+QDataStream& operator>>(QDataStream& ds, VideoInfoContainer& info)
+{
+    ds >> info.aspectRatio;
+    ds >> info.audioBitRate;
+    ds >> info.audioChannelType;
+    ds >> info.audioCompressor;
+    ds >> info.duration;
+    ds >> info.frameRate;
+    ds >> info.resolution;
+    ds >> info.videoCodec;
+
+    return ds;
+}
+
 } // namespace Digikam

@@ -1186,12 +1186,12 @@ void ImageScanner::scanVideoInformation()
     infos << detectVideoFormat();
     dbFields |= DatabaseFields::Format;
 
-    // TODO: Is there any use for bit depth - 8bit, 16bit - or color model - RBG, CMYK - with videos?
-    /*
-    infos << bitDepth
-          << colorModel;
-    dbFields |= DatabaseFields::ColorDepth | DatabaseFields::ColorModel;
-    */
+
+    // There is use of bit depth, but not ColorModel
+    // For bit depth - 8bit, 16bit with videos
+    infos << MetadataInfo::VideoBitDepth;
+    dbFields |= DatabaseFields::ColorDepth;
+
 
     if (m_scanMode == NewScan)
     {
@@ -1209,8 +1209,7 @@ void ImageScanner::scanVideoInformation()
                                                       DatabaseFields::Width      |
                                                       DatabaseFields::Height     |
                                                       DatabaseFields::Format     |
-                                                      DatabaseFields::ColorDepth |
-                                                      DatabaseFields::ColorModel);
+                                                      DatabaseFields::ColorDepth);
     }
 }
 
@@ -1362,9 +1361,29 @@ QString ImageScanner::detectVideoFormat()
         return "MPEG";
     }
 
-    if (suffix =="ASF" || suffix == "WMV")
+    if (suffix == "ASF" || suffix == "WMV")
     {
         return "WMV";
+    }
+
+    if (suffix == "AVI" || suffix == "DIVX" )
+    {
+        return "AVI";
+    }
+
+    if (suffix == "MKV" || suffix == "MKS")
+    {
+        return "MKV";
+    }
+
+    if(suffix == "M4V" || suffix == "MOV" || suffix == "M2V" )
+    {
+        return "MOV";
+    }
+
+    if(suffix == "3GP" || suffix == "3G2" )
+    {
+        return "3GP";
     }
 
     return suffix;
@@ -1635,11 +1654,11 @@ void ImageScanner::fillVideoMetadataContainer(qlonglong imageid, VideoMetadataCo
 
     // associate with hard-coded variables
     container->aspectRatio                  = strings.at(0);
-//    container->audioBitRate                 = strings.at(1);
+    container->audioBitRate                 = strings.at(1);
     container->audioChannelType             = strings.at(2);
     container->audioCompressor              = strings.at(3);
-//    container->duration                     = strings.at(4);
-//    container->frameRate                    = strings.at(5);
+    container->duration                     = strings.at(4);
+    container->frameRate                    = strings.at(5);
     container->resolution                   = strings.at(6);
     container->videoCodec                   = strings.at(7);
 }

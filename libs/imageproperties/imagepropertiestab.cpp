@@ -105,7 +105,23 @@ public:
         labelTags(0),
         labelPickLabel(0),
         labelColorLabel(0),
-        labelRating(0)
+        labelRating(0),
+        aspectRatio(0),
+        audioBitRate(0),
+        audioChannelType(0),
+        audioCompressor(0),
+        duration(0),
+        frameRate(0),
+        resolution(0),
+        videoCodec(0),
+        labelVideo_AspectRatio(0),
+        labelVideo_AudioBitRate(0),
+        labelVideo_AudioChannelType(0),
+        labelVideo_AudioCompressor(0),
+        labelVideo_Duration(0),
+        labelVideo_FrameRate(0),
+        labelVideo_Resolution(0),
+        labelVideo_VideoCodec(0)
     {
     }
 
@@ -168,6 +184,25 @@ public:
     DTextLabelValue* labelPickLabel;
     DTextLabelValue* labelColorLabel;
     DTextLabelValue* labelRating;
+
+    DTextLabelName* aspectRatio;
+    DTextLabelName* audioBitRate;
+    DTextLabelName* audioChannelType;
+    DTextLabelName* audioCompressor;
+    DTextLabelName* duration;
+    DTextLabelName* frameRate;
+    DTextLabelName* resolution;
+    DTextLabelName* videoCodec;
+
+    DTextLabelValue* labelVideo_AspectRatio;
+    DTextLabelValue* labelVideo_AudioBitRate;
+    DTextLabelValue* labelVideo_AudioChannelType;
+    DTextLabelValue* labelVideo_AudioCompressor;
+    DTextLabelValue* labelVideo_Duration;
+    DTextLabelValue* labelVideo_FrameRate;
+    DTextLabelValue* labelVideo_Resolution;
+    DTextLabelValue* labelVideo_VideoCodec;
+
 };
 
 ImagePropertiesTab::ImagePropertiesTab(QWidget* parent)
@@ -337,6 +372,54 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* parent)
     addItem(w4, SmallIcon("imagecomment"),
             i18n("digiKam Properties"), QString("DigikamProperties"), true);
 
+    // -------------------------------------------------- TODO - Video Metadata Handling
+
+    QWidget* const w5         = new QWidget(this);
+    QGridLayout* const glay5  = new QGridLayout(w5);
+
+    d->aspectRatio              = new DTextLabelName(i18n("Aspect Ratio: "),        w5);
+    d->audioBitRate             = new DTextLabelName(i18n("Audio Bit Rate: "),      w5);
+    d->audioChannelType         = new DTextLabelName(i18n("Audio Channel Type: "),  w5);
+    d->audioCompressor          = new DTextLabelName(i18n("Audio Compressor: "),    w5);
+    d->duration                 = new DTextLabelName(i18n("Duration: "),            w5);
+    d->frameRate                = new DTextLabelName(i18n("Frame Rate: "),          w5);
+    d->resolution               = new DTextLabelName(i18n("Resolution: "),          w5);
+    d->videoCodec               = new DTextLabelName(i18n("Video Codec: "),         w5);
+
+    d->labelVideo_AspectRatio         = new DTextLabelValue(0, w5);
+    d->labelVideo_AudioBitRate        = new DTextLabelValue(0, w5);
+    d->labelVideo_AudioChannelType    = new DTextLabelValue(0, w5);
+    d->labelVideo_AudioCompressor     = new DTextLabelValue(0, w5);
+    d->labelVideo_Duration            = new DTextLabelValue(0, w5);
+    d->labelVideo_FrameRate           = new DTextLabelValue(0, w5);
+    d->labelVideo_Resolution          = new DTextLabelValue(0, w5);
+    d->labelVideo_VideoCodec          = new DTextLabelValue(0, w5);
+
+    glay5->addWidget(d->aspectRatio,            23, 0, 1, 1);
+    glay5->addWidget(d->labelVideo_AspectRatio,       23, 1, 1, 1);
+    glay5->addWidget(d->audioBitRate,           24, 0, 1, 1);
+    glay5->addWidget(d->labelVideo_AudioBitRate,      24, 1, 1, 1);
+    glay5->addWidget(d->audioChannelType,       25, 0, 1, 1);
+    glay5->addWidget(d->labelVideo_AudioChannelType,  25, 1, 1, 1);
+    glay5->addWidget(d->audioCompressor,        26, 0, 1, 1);
+    glay5->addWidget(d->labelVideo_AudioCompressor,   26, 1, 1, 1);
+    glay5->addWidget(d->duration,               27, 0, 1, 1);
+    glay5->addWidget(d->labelVideo_Duration,          27, 1, 1, 1);
+    glay5->addWidget(d->frameRate,              28, 0, 1, 1);
+    glay5->addWidget(d->labelVideo_FrameRate,         28, 1, 1, 1);
+    glay5->addWidget(d->resolution,             29, 0, 1, 1);
+    glay5->addWidget(d->labelVideo_Resolution,        29, 1, 1, 1);
+    glay5->addWidget(d->videoCodec,             30, 0, 1, 1);
+    glay5->addWidget(d->labelVideo_VideoCodec,        30, 1, 1, 1);
+    glay5->setMargin(KDialog::spacingHint());
+    glay5->setSpacing(0);
+    glay5->setColumnStretch(1, 10);
+
+    addItem(w5, SmallIcon("dialog-information"),
+            i18n("Video Properties"), QString("VideoProperties"), true);
+
+    // --------------------------------------------------
+
     addStretch();
 }
 
@@ -379,6 +462,15 @@ void ImagePropertiesTab::setCurrentURL(const KUrl& url)
         d->labelRating->clear();
         d->labelTags->clear();
 
+        d->labelVideo_AspectRatio->clear();
+        d->labelVideo_AudioBitRate->clear();
+        d->labelVideo_AudioChannelType->clear();
+        d->labelVideo_AudioCompressor->clear();
+        d->labelVideo_Duration->clear();
+        d->labelVideo_FrameRate->clear();
+        d->labelVideo_Resolution->clear();
+        d->labelVideo_VideoCodec->clear();
+
         setEnabled(false);
         return;
     }
@@ -398,6 +490,18 @@ void ImagePropertiesTab::setPhotoInfoDisable(const bool b)
     else
     {
         widget(2)->show();
+    }
+}
+
+void ImagePropertiesTab::setVideoInfoDisable(const bool b)
+{
+    if (b)
+    {
+        widget(3)->hide();
+    }
+    else
+    {
+        widget(3)->show();
     }
 }
 
@@ -560,6 +664,46 @@ void ImagePropertiesTab::setRating(int rating)
         }
     }
     d->labelRating->setText(str);
+}
+
+void ImagePropertiesTab::setVideo_AspectRatio(const QString& str)
+{
+    d->labelVideo_AspectRatio->setText(str);
+}
+
+void ImagePropertiesTab::setVideo_AudioBitRate(const QString& str)
+{
+    d->labelVideo_AudioBitRate->setText(str);
+}
+
+void ImagePropertiesTab::setVideo_AudioChannelType(const QString& str)
+{
+    d->labelVideo_AudioChannelType->setText(str);
+}
+
+void ImagePropertiesTab::setVideo_AudioCompressor(const QString& str)
+{
+    d->labelVideo_AudioCompressor->setText(str);
+}
+
+void ImagePropertiesTab::setVideo_Duration(const QString& str)
+{
+    d->labelVideo_Duration->setText(str);
+}
+
+void ImagePropertiesTab::setVideo_FrameRate(const QString& str)
+{
+    d->labelVideo_FrameRate->setText(str);
+}
+
+void ImagePropertiesTab::setVideo_Resolution(const QString& str)
+{
+    d->labelVideo_Resolution->setText(str);
+}
+
+void ImagePropertiesTab::setVideo_VideoCodec(const QString& str)
+{
+    d->labelVideo_VideoCodec->setText(str);
 }
 
 void ImagePropertiesTab::setTags(const QStringList& tagPaths, const QStringList& tagNames)

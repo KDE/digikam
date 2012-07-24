@@ -1188,6 +1188,28 @@ PhotoInfoContainer ImageInfo::photoInfoContainer() const
     return photoInfo;
 }
 
+VideoInfoContainer ImageInfo::videoInfoContainer() const
+{
+    if (!m_data)
+    {
+        return VideoInfoContainer();
+    }
+
+    VideoMetadataContainer meta = videoMetadataContainer();
+    VideoInfoContainer videoInfo;
+
+    videoInfo.aspectRatio               = meta.aspectRatio;
+    videoInfo.audioBitRate              = meta.audioBitRate;
+    videoInfo.audioChannelType          = meta.audioChannelType;
+    videoInfo.audioCompressor           = meta.audioCompressor;
+    videoInfo.duration                  = meta.duration;
+    videoInfo.frameRate                 = meta.frameRate;
+    videoInfo.resolution                = meta.resolution;
+    videoInfo.videoCodec                = meta.videoCodec;
+
+    return videoInfo;
+}
+
 Template ImageInfo::metadataTemplate() const
 {
     if (!m_data)

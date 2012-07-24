@@ -56,6 +56,7 @@ public:
     void setCurrentURL(const KUrl& url=KUrl());
 
     void setPhotoInfoDisable(const bool b);
+    void setVideoInfoDisable(const bool b);
     void showOrHideCaptionAndTags();
 
     void setFileModifiedDate(const QString& str);
@@ -79,6 +80,15 @@ public:
     void setPhotoExposureMode(const QString& str);
     void setPhotoFlash(const QString& str);
     void setPhotoWhiteBalance(const QString& str);
+
+    void setVideo_AspectRatio(const QString& str);
+    void setVideo_AudioBitRate(const QString& str);
+    void setVideo_AudioChannelType(const QString& str);
+    void setVideo_AudioCompressor(const QString& str);
+    void setVideo_Duration(const QString& str);
+    void setVideo_FrameRate(const QString& str);
+    void setVideo_Resolution(const QString& str);
+    void setVideo_VideoCodec(const QString& str);
 
     void setCaption(const QString& str);
     void setPickLabel(int pickId);

@@ -61,6 +61,7 @@ class VideoMetadataContainer;
 class ImagePosition;
 class ImageTagPair;
 class PhotoInfoContainer;
+class VideoInfoContainer;
 class Template;
 class TreeBuilder;
 
@@ -372,6 +373,7 @@ public:
     ImageMetadataContainer imageMetadataContainer() const;
     VideoMetadataContainer videoMetadataContainer() const;
     PhotoInfoContainer     photoInfoContainer()     const;
+    VideoInfoContainer     videoInfoContainer()     const;
 
     /**
      * Retrieve metadata template information about the image.
