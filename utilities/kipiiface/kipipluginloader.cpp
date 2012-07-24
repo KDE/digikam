@@ -37,6 +37,8 @@
 #include <kmenu.h>
 #include <kactionmenu.h>
 #include <kdebug.h>
+#include <kxmlguifactory.h>
+#include <kxmlguiwindow.h>
 
 // LibKIPI includes
 
@@ -65,13 +67,6 @@ public:
         splashScreen                = 0;
     }
 
-    static const QString        imagesActionName;
-    static const QString        toolsActionName;
-    static const QString        importActionName;
-    static const QString        exportActionName;
-    static const QString        batchActionName;
-    static const QString        albumsActionName;
-
     PluginLoader*               kipiPluginLoader;
     KipiInterface*              kipiInterface;
     SplashScreen*               splashScreen;
@@ -82,14 +77,6 @@ public:
 };
 
 // -- Static values -------------------------------
-
-// NOTE: these strings are used in digikamrc XML file as action names.
-const QString KipiPluginLoader::KipiPluginLoaderPriv::imagesActionName(QString::fromLatin1("image_kipi_actions"));
-const QString KipiPluginLoader::KipiPluginLoaderPriv::toolsActionName(QString::fromLatin1("tool_kipi_actions"));
-const QString KipiPluginLoader::KipiPluginLoaderPriv::importActionName(QString::fromLatin1("import_kipi_actions"));
-const QString KipiPluginLoader::KipiPluginLoaderPriv::exportActionName(QString::fromLatin1("export_kipi_actions"));
-const QString KipiPluginLoader::KipiPluginLoaderPriv::batchActionName(QString::fromLatin1("batch_kipi_actions"));
-const QString KipiPluginLoader::KipiPluginLoaderPriv::albumsActionName(QString::fromLatin1("album_kipi_actions"));
 
 KipiPluginLoader* KipiPluginLoader::m_instance = 0;
 
@@ -179,9 +166,6 @@ void KipiPluginLoader::loadPlugins()
 
 void KipiPluginLoader::slotKipiPluginPlug()
 {
-    // Remove plugin GUI menus in application.
-    kipiPlugActions(true);
-
     d->kipiCategoryMap.clear();
 
     // Remove Advanced slideshow kipi-plugin action from View/Slideshow menu.
@@ -220,7 +204,9 @@ void KipiPluginLoader::slotKipiPluginPlug()
         }
 
         ++cpt;
+        d->app->guiFactory()->removeClient(plugin);
         plugin->setup(d->app);
+        d->app->guiFactory()->addClient(plugin);
 
         foreach(KAction* const action, plugin->actions())
         {
@@ -258,12 +244,10 @@ void KipiPluginLoader::slotKipiPluginPlug()
     // Check if the Export/Import/tools Plugin lists are empty, if so, add an empty action which tells the user that no
     // Export/Import/tools plugins are available. It is more user-friendly to present some menu entry,
     // instead of leaving it completely empty.
-    checkEmptyCategory(ExportPlugin);
-    checkEmptyCategory(ImportPlugin);
-    checkEmptyCategory(ToolsPlugin);
-
-    // Create plugin GUI menus in application.
-    kipiPlugActions();
+    // TODO find a way to rebuild the gui after adding actions
+//    checkEmptyCategory(ExportPlugin);
+//    checkEmptyCategory(ImportPlugin);
+//    checkEmptyCategory(ToolsPlugin);
 }
 
 void KipiPluginLoader::checkEmptyCategory(Category cat)
@@ -272,32 +256,11 @@ void KipiPluginLoader::checkEmptyCategory(Category cat)
 
     if (!category)
     {
-        QAction* action = new QAction(i18n("No tool available"), d->app);
+        QString actionName = "empty_" + categoryShortName(cat) + "_group";
+        KAction* action = d->app->actionCollection()->addAction(actionName);
         action->setEnabled(false);
         category        = new KActionCategory(categoryName(cat), d->kipipluginsActionCollection);
         d->kipiCategoryMap.insert(cat, category);
-    }
-}
-
-void KipiPluginLoader::kipiPlugActions(bool unplug)
-{
-    if (unplug)
-    {
-        d->app->unplugActionList(d->exportActionName);
-        d->app->unplugActionList(d->importActionName);
-        d->app->unplugActionList(d->imagesActionName);
-        d->app->unplugActionList(d->toolsActionName);
-        d->app->unplugActionList(d->batchActionName);
-        d->app->unplugActionList(d->albumsActionName);
-    }
-    else
-    {
-        d->app->plugActionList(d->exportActionName, kipiActionsByCategory(ExportPlugin));
-        d->app->plugActionList(d->importActionName, kipiActionsByCategory(ImportPlugin));
-        d->app->plugActionList(d->imagesActionName, kipiActionsByCategory(ImagesPlugin));
-        d->app->plugActionList(d->toolsActionName,  kipiActionsByCategory(ToolsPlugin));
-        d->app->plugActionList(d->batchActionName,  kipiActionsByCategory(BatchPlugin));
-        d->app->plugActionList(d->albumsActionName, kipiActionsByCategory(CollectionsPlugin));
     }
 }
 
@@ -334,6 +297,40 @@ QString KipiPluginLoader::categoryName(Category cat) const
         default:
             res = i18n("Unknown Tools");
             break;
+    }
+
+    return res;
+}
+
+QString KipiPluginLoader::categoryShortName(Category cat) const
+{
+    QString res;
+
+    switch (cat)
+    {
+    case ExportPlugin:
+        res = i18n("export");
+        break;
+
+    case ImportPlugin:
+        res = i18n("import");
+        break;
+
+    case ToolsPlugin:
+        res = i18n("tools");
+        break;
+
+    case BatchPlugin:
+        res = i18n("batch");
+        break;
+
+    case CollectionsPlugin:
+        res = i18n("collenctions");
+        break;
+
+    default:
+        res = i18n("unknown");
+        break;
     }
 
     return res;

@@ -66,10 +66,6 @@ public:
      */
     KActionCollection* pluginsActionCollection() const;
 
-    /** Plug or unplug plugins actions list to application.
-     */
-    void kipiPlugActions(bool unplug = false);
-
     /** Return the instance of this singleton plugin loader.
      */
     static KipiPluginLoader* instance();
@@ -97,6 +93,8 @@ private:
     /** Wrapper to return plugin category name for KDE Shortcuts Editor.
      */
     QString categoryName(Category cat) const;
+
+    QString categoryShortName(Category cat) const;
 
 private:
 
