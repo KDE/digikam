@@ -528,6 +528,11 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver* observer)
                 }
             }
         }
+        else
+        {
+            // If ICC profile is null, check Exif metadata.
+            checkExifWorkingColorSpace();
+        }
     }
 
     if (observer)
@@ -658,6 +663,9 @@ bool JP2KLoader::save(const QString& filePath, DImgLoaderObserver* observer)
             //enable when it works: purgeExifWorkingColorSpace();
         }
     }
+
+    // workaround:
+    storeColorProfileInMetadata();
 
     // -------------------------------------------------------------------
     // Convert to JPEG 2000 pixels.

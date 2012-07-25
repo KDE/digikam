@@ -308,6 +308,15 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver* const observer
             }
         }
 
+        // -------------------------------------------------------------------
+        // Get ICC color profile.
+
+        if (m_loadFlags & LoadICCData)
+        {
+            // TODO: Implement proper storage in PGF for color profiles
+            checkExifWorkingColorSpace();
+        }
+
         imageWidth()  = width;
         imageHeight() = height;
         imageData()   = data;
@@ -478,6 +487,8 @@ bool PGFLoader::save(const QString& filePath, DImgLoaderObserver* const observer
 #else
         close(fd);
 #endif
+        // TODO: Store ICC profile in an appropriate place in the image
+        storeColorProfileInMetadata();
 
         if (observer)
         {

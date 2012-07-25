@@ -286,6 +286,18 @@ bool DImgLoader::checkExifWorkingColorSpace()
     return false;
 }
 
+void DImgLoader::storeColorProfileInMetadata()
+{
+    IccProfile profile = m_image->getIccProfile();
+    if (profile.isNull())
+    {
+        return;
+    }
+    DMetadata metaData(m_image->getMetadata());
+    metaData.setIccProfile(profile);
+    m_image->setMetadata(metaData.data());
+}
+
 void DImgLoader::purgeExifWorkingColorSpace()
 {
     DMetadata meta(m_image->getMetadata());

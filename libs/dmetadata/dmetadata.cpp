@@ -1796,6 +1796,24 @@ IccProfile DMetadata::getIccProfile() const
     return IccProfile();
 }
 
+bool DMetadata::setIccProfile(const IccProfile& profile)
+{
+    if (profile.isNull())
+    {
+        removeExifTag("Exif.Image.InterColorProfile");
+    }
+    else
+    {
+        QByteArray data = IccProfile(profile).data();
+        if (!setExifTagData("Exif.Image.InterColorProfile", data))
+        {
+            return false;
+        }
+    }
+    removeExifColorSpace();
+    return true;
+}
+
 bool DMetadata::setIptcTag(const QString& text, int maxLength,
                            const char* debugLabel, const char* tagKey)  const
 {

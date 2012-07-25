@@ -131,11 +131,14 @@ public:
     QString getLensDescription() const;
 
     /** Reads an IccProfile that is described or embedded in the metadata.
-        This method does retrieve profiles embedded in the image but not the metadata,
+        This method does not retrieve profiles embedded in the image but not the metadata,
         e.g. embedded profiles in JPEG images.
         Returns a null profile if no profile is found.
      */
     IccProfile getIccProfile() const;
+
+    /** Sets the IccProfile embedded in the Exif metadata. */
+    bool setIccProfile(const IccProfile& profile);
 
     /** Remove the Exif color space identification from the image */
     bool removeExifColorSpace() const;
