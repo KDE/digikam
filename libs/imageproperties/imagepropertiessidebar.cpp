@@ -294,6 +294,21 @@ void ImagePropertiesSideBar::setImagePropertiesInformation(const KUrl& url)
     m_propertiesTab->setPhotoFlash(photoInfo.flash.isEmpty() ? unavailable : photoInfo.flash);
     m_propertiesTab->setPhotoWhiteBalance(photoInfo.whiteBalance.isEmpty() ? unavailable : photoInfo.whiteBalance);
 
+    // -- Video information ------------------------------------------
+
+    VideoInfoContainer videoInfo = metaData.getVideoInformation();
+
+    m_propertiesTab->setVideoInfoDisable(videoInfo.isEmpty());
+
+    m_propertiesTab->setVideo_AspectRatio(videoInfo.aspectRatio.isEmpty() ? unavailable : videoInfo.aspectRatio);
+    m_propertiesTab->setVideo_AudioBitRate(videoInfo.audioBitRate.isEmpty() ? unavailable : videoInfo.audioBitRate);
+    m_propertiesTab->setVideo_AudioChannelType(videoInfo.audioChannelType.isEmpty() ? unavailable : videoInfo.audioChannelType);
+    m_propertiesTab->setVideo_AudioCompressor(videoInfo.audioCompressor.isEmpty() ? unavailable : videoInfo.audioCompressor);
+    m_propertiesTab->setVideo_Duration(videoInfo.duration.isEmpty() ? unavailable : videoInfo.duration);
+    m_propertiesTab->setVideo_FrameRate(videoInfo.frameRate.isEmpty() ? unavailable : videoInfo.frameRate);
+    m_propertiesTab->setVideo_Resolution(videoInfo.resolution.isEmpty() ? unavailable : videoInfo.resolution);
+    m_propertiesTab->setVideo_VideoCodec(videoInfo.videoCodec.isEmpty() ? unavailable : videoInfo.videoCodec);
+
     // -- Caption, ratings, tag information ---------------------
 
     CaptionsMap captions = metaData.getImageComments();

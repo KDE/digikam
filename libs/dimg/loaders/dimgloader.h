@@ -108,6 +108,7 @@ protected:
 
     QMap<QString, QString>& imageEmbeddedText();
     KExiv2Data              imageMetadata();
+    KExiv2Data              videoMetadata();
     QString                 imageGetEmbbededText(const QString& key);
     void                    imageSetEmbbededText(const QString& key, const QString& text);
 

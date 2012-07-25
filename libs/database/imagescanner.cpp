@@ -1189,7 +1189,7 @@ void ImageScanner::scanVideoInformation()
 
     // There is use of bit depth, but not ColorModel
     // For bit depth - 8bit, 16bit with videos
-    infos << MetadataInfo::VideoBitDepth;
+    infos << m_metadata.getMetadataField(MetadataInfo::VideoBitDepth);
     dbFields |= DatabaseFields::ColorDepth;
 
 

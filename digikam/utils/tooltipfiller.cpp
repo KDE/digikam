@@ -59,6 +59,7 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
 
     ImageCommonContainer commonInfo  = info.imageCommonContainer();
     ImageMetadataContainer photoInfo = info.imageMetadataContainer();
+    VideoMetadataContainer videoInfo = info.videoMetadataContainer();  // TODO - Implement Proper Support
     QString tip                      = cnt.tipHeader;
 
     // -- File properties ----------------------------------------------
