@@ -24,4 +24,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 015 ==> 303163 - "Undo" after "Color, Color Space Conversion" does not restore the original ICC profile.
 016 ==> 302212 - Incorrect rotation of DNG portrait images in preview.
 017 ==> 303242 - File type should not create distinct results in fuzzy duplicate search.
-018 ==> 
+018 ==> 303419 - No images show.
+019 ==> 
