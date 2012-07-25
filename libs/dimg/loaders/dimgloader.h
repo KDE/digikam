@@ -119,6 +119,7 @@ protected:
 
     bool                    checkExifWorkingColorSpace();
     void                    purgeExifWorkingColorSpace();
+    void                    storeColorProfileInMetadata();
 
 protected:
 
