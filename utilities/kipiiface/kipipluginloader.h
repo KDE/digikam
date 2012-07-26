@@ -86,15 +86,9 @@ private:
      */
     void loadPlugins();
 
-    /** Check if a category exist, else fill it with an single action displaying an "Empty" message.
-     */
-    void checkEmptyCategory(Category cat);
-
     /** Wrapper to return plugin category name for KDE Shortcuts Editor.
      */
     QString categoryName(Category cat) const;
-
-    QString categoryShortName(Category cat) const;
 
 private:
 

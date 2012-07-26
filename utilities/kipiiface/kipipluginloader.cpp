@@ -166,19 +166,19 @@ void KipiPluginLoader::loadPlugins()
 
 void KipiPluginLoader::slotKipiPluginPlug()
 {
-    d->kipiCategoryMap.clear();
-
-    // Remove Advanced slideshow kipi-plugin action from View/Slideshow menu.
-    foreach(QAction* const action, d->app->slideShowMenu()->menu()->actions())
+    // Delete all action categories
+    for (QMap<int, KActionCategory*>::iterator it = d->kipiCategoryMap.begin();
+         it != d->kipiCategoryMap.end();
+         ++it)
     {
-        if (action->objectName() == QString("advancedslideshow"))
+        if (it.value())
         {
-            d->app->slideShowMenu()->removeAction(action);
-            break;
+            delete it.value();
         }
     }
 
     d->kipipluginsActionCollection->clear();
+    d->kipiCategoryMap.clear();
 
     PluginLoader::PluginList list = d->kipiPluginLoader->pluginList();
     int cpt                             = 0;
@@ -204,6 +204,7 @@ void KipiPluginLoader::slotKipiPluginPlug()
         }
 
         ++cpt;
+        // Remove and add plugin to the factory to rebuild the gui
         d->app->guiFactory()->removeClient(plugin);
         plugin->setup(d->app);
         d->app->guiFactory()->addClient(plugin);
@@ -223,12 +224,6 @@ void KipiPluginLoader::slotKipiPluginPlug()
                     d->kipiCategoryMap.insert(cat, category);
                 }
 
-                if (cat == ToolsPlugin && actionName == QString("advancedslideshow"))
-                {
-                    // Special wrap for Advanced Slideshow plugin action which need to be pluged to View/Slideshow menu.
-                    d->app->slideShowMenu()->addAction(action);
-                }
-
                 category->addAction(actionName, qobject_cast<QAction*>(action));
             }
             else
@@ -240,28 +235,6 @@ void KipiPluginLoader::slotKipiPluginPlug()
 
     // load KIPI actions settings
     d->kipipluginsActionCollection->readSettings();
-
-    // Check if the Export/Import/tools Plugin lists are empty, if so, add an empty action which tells the user that no
-    // Export/Import/tools plugins are available. It is more user-friendly to present some menu entry,
-    // instead of leaving it completely empty.
-    // TODO find a way to rebuild the gui after adding actions
-//    checkEmptyCategory(ExportPlugin);
-//    checkEmptyCategory(ImportPlugin);
-//    checkEmptyCategory(ToolsPlugin);
-}
-
-void KipiPluginLoader::checkEmptyCategory(Category cat)
-{
-    KActionCategory* category = d->kipiCategoryMap[cat];
-
-    if (!category)
-    {
-        QString actionName = "empty_" + categoryShortName(cat) + "_group";
-        KAction* action = d->app->actionCollection()->addAction(actionName);
-        action->setEnabled(false);
-        category        = new KActionCategory(categoryName(cat), d->kipipluginsActionCollection);
-        d->kipiCategoryMap.insert(cat, category);
-    }
 }
 
 QString KipiPluginLoader::categoryName(Category cat) const
@@ -297,40 +270,6 @@ QString KipiPluginLoader::categoryName(Category cat) const
         default:
             res = i18n("Unknown Tools");
             break;
-    }
-
-    return res;
-}
-
-QString KipiPluginLoader::categoryShortName(Category cat) const
-{
-    QString res;
-
-    switch (cat)
-    {
-    case ExportPlugin:
-        res = i18n("export");
-        break;
-
-    case ImportPlugin:
-        res = i18n("import");
-        break;
-
-    case ToolsPlugin:
-        res = i18n("tools");
-        break;
-
-    case BatchPlugin:
-        res = i18n("batch");
-        break;
-
-    case CollectionsPlugin:
-        res = i18n("collenctions");
-        break;
-
-    default:
-        res = i18n("unknown");
-        break;
     }
 
     return res;
