@@ -514,7 +514,7 @@ void ImagePropertiesSideBarDB::setImagePropertiesInformation(const KUrl& url)
 
             ImageCommonContainer commonInfo  = info.imageCommonContainer();
             ImageMetadataContainer photoInfo = info.imageMetadataContainer();
-            VideoMetadataContainer videoInfo = info.videoMetadataContainer(); // TODO videoInfo displaying
+            VideoMetadataContainer videoInfo = info.videoMetadataContainer();
 
             str = KGlobal::locale()->formatDateTime(commonInfo.fileModificationDate, KLocale::ShortDate, true);
             m_propertiesTab->setFileModifiedDate(str);

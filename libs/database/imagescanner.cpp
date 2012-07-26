@@ -1174,10 +1174,8 @@ void ImageScanner::scanVideoInformation()
         infos << metadataInfos;
     }
 
-    // TODO: Have we got the video resolution as width x height?
-    QSize size;// = ...;
-    infos << size.width()
-          << size.height();
+    infos << m_metadata.getMetadataField(MetadataInfo::VideoWidth)
+          << m_metadata.getMetadataField(MetadataInfo::VideoHeight);
     dbFields |= DatabaseFields::Width | DatabaseFields::Height;
 
     // TODO: Please check / improve / rewrite detectVideoFormat().
@@ -1185,7 +1183,6 @@ void ImageScanner::scanVideoInformation()
     // (all format strings used in the database should be defined in advance)
     infos << detectVideoFormat();
     dbFields |= DatabaseFields::Format;
-
 
     // There is use of bit depth, but not ColorModel
     // For bit depth - 8bit, 16bit with videos

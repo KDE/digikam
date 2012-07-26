@@ -1166,7 +1166,6 @@ VideoInfoContainer DMetadata::getVideoInformation() const
             videoInfo.videoCodec = getXmpTagString("Xmp.video.codec");
         }
 
-//    return fromXmpLangAlt("Xmp.video.bitDepth");
     }
 
     return videoInfo;
@@ -2300,6 +2299,10 @@ QVariant DMetadata::getMetadataField(MetadataInfo::Field field) const
             return fromXmpLangAlt("Xmp.video.codec");
         case MetadataInfo::VideoBitDepth:
             return fromXmpLangAlt("Xmp.video.bitDepth");
+        case MetadataInfo::VideoHeight:
+            return fromXmpLangAlt("Xmp.video.height");
+        case MetadataInfo::VideoWidth:
+            return fromXmpLangAlt("Xmp.video.width");
 
         default:
             return QVariant();

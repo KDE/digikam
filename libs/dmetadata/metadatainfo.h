@@ -177,7 +177,9 @@ enum Field
     FrameRate,                        /// String
     Resolution,                       /// String
     VideoCodec,                       /// String
-    VideoBitDepth                     /// String
+    VideoBitDepth,                    /// String
+    VideoHeight,                      /// String
+    VideoWidth                        /// String
 };
 
 } // namespace MetadataInfo
