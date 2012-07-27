@@ -2396,6 +2396,16 @@ QString DMetadata::valueToString (const QVariant& value, MetadataInfo::Field fie
         case MetadataInfo::WhiteBalanceColorTemperature:
             return i18nc("Temperature in Kelvin", "%1 K", value.toInt());
 
+        case MetadataInfo::AspectRatio:
+        case MetadataInfo::AudioBitRate:
+        case MetadataInfo::AudioChannelType:
+        case MetadataInfo::AudioCompressor:
+        case MetadataInfo::Duration:
+        case MetadataInfo::FrameRate:
+        case MetadataInfo::Resolution:
+        case MetadataInfo::VideoCodec:
+            return value.toString();
+
         case MetadataInfo::Longitude:
         {
             int    degrees, minutes;
@@ -2557,7 +2567,6 @@ QStringList DMetadata::valuesToString(const QVariantList& values, const Metadata
     Q_ASSERT(size == values.size());
 
     QStringList list;
-
     for (int i=0; i<size; ++i)
     {
         list << valueToString(values.at(i), fields.at(i));

@@ -497,11 +497,11 @@ void ImagePropertiesTab::setVideoInfoDisable(const bool b)
 {
     if (b)
     {
-        widget(3)->hide();
+        widget(4)->hide();
     }
     else
     {
-        widget(3)->show();
+        widget(4)->show();
     }
 }
 

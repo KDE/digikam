@@ -50,7 +50,7 @@
 #include "metadatasettings.h"
 #include "tagregion.h"
 #include "tagscache.h"
-
+#include "iostream"
 namespace Digikam
 {
 
@@ -1602,7 +1602,6 @@ void ImageScanner::fillMetadataContainer(qlonglong imageid, ImageMetadataContain
 {
     // read from database
     QVariantList fields = DatabaseAccess().db()->getImageMetadata(imageid);
-
     // check we have at least one valid field
     container->allFieldsNull = !hasValidField(fields);
 
@@ -1637,10 +1636,8 @@ void ImageScanner::fillVideoMetadataContainer(qlonglong imageid, VideoMetadataCo
 {
     // read from database
     QVariantList fields = DatabaseAccess().db()->getVideoMetadata(imageid);
-
     // check we have at least one valid field
     container->allFieldsNull = !hasValidField(fields);
-
     if (container->allFieldsNull)
     {
         return;
@@ -1648,7 +1645,6 @@ void ImageScanner::fillVideoMetadataContainer(qlonglong imageid, VideoMetadataCo
 
     // DMetadata does all translation work
     QStringList strings = DMetadata::valuesToString(fields, allVideoMetadataFields());
-
     // associate with hard-coded variables
     container->aspectRatio                  = strings.at(0);
     container->audioBitRate                 = strings.at(1);
