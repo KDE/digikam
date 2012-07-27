@@ -86,7 +86,13 @@
      <Action name="map_view" />
      <!--<Action name="view_selection" />-->
      <Separator/>
-     <Action name="slideshow" />
+     <Menu name="slideshow">
+      <text>Slideshow</text>
+      <Action name="slideshow_all" />
+      <Action name="slideshow_selected" />
+      <Action name="slideshow_recursive" />
+      <Action name="slideshow_qml" />
+     </Menu>
      <Action name="full_screen" />
      <Separator/>
      <Action name="album_zoomin" />
