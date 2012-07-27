@@ -78,8 +78,6 @@ public:
 
     static DigikamApp* instance();
 
-    KActionMenu* slideShowMenu() const;
-
     void autoDetect();
     void downloadFrom(const QString& cameraGuiPath);
     void downloadFromUdi(const QString& udi);
@@ -183,6 +181,7 @@ private Q_SLOTS:
     void slotShowMenuBar();
     void slotEditKeys();
     void slotConfToolbars();
+    void slotNewToolbarConfig();
     void slotConfNotifications();
     void slotToggleFullScreen();
 

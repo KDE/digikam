@@ -228,7 +228,6 @@ DigikamApp::DigikamApp()
     IccSettings::instance()->loadAllProfilesProperties();
     MetadataSettings::instance();
     ProgressManager::instance();
-    KipiPluginLoader::instance();
     ThumbnailLoadThread::setDisplayingWidget(this);
     DIO::instance();
 
@@ -922,7 +921,7 @@ void DigikamApp::setupActions()
 
     connect(QueueMgrWindow::queueManagerWindow(), SIGNAL(signalBqmIsBusy(bool)),
             d->imageAddNewQueueAction, SLOT(setDisabled(bool)));
-    
+
     // -----------------------------------------------------------------
 
     d->quickImportMenu->setText(i18nc("@action Import photos from camera", "Import"));
@@ -2397,7 +2396,7 @@ void DigikamApp::slotEditKeys()
     KShortcutsDialog dialog(KShortcutsEditor::AllActions,
                             KShortcutsEditor::LetterShortcutsAllowed, this);
     dialog.addCollection(actionCollection(), i18nc("general keyboard shortcuts", "General"));
-    dialog.addCollection(KipiPluginLoader::instance()->pluginsActionCollection(), 
+    dialog.addCollection(KipiPluginLoader::instance()->pluginsActionCollection(),
                          i18nc("KIPI-Plugins keyboard shortcuts", "KIPI-Plugins"));
     dialog.configure();
 }
@@ -2411,6 +2410,11 @@ void DigikamApp::slotConfToolbars()
             this, SLOT(slotNewToolbarConfig()));
 
     dlg.exec();
+}
+
+void DigikamApp::slotNewToolbarConfig()
+{
+    applyMainWindowSettings(d->config->group("General Settings"));
 }
 
 void DigikamApp::slotConfNotifications()
@@ -3021,11 +3025,6 @@ void DigikamApp::slotTransformAction()
         // special value for FileActionMngr
         d->view->imageTransform(KExiv2Iface::RotationMatrix::NoTransformation);
     }
-}
-
-KActionMenu* DigikamApp::slideShowMenu() const
-{
-    return d->slideShowAction;
 }
 
 #ifdef USE_SCRIPT_IFACE
