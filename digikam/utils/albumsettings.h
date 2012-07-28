@@ -272,6 +272,30 @@ public:
     void setToolTipsShowAlbumCaption(bool val);
     bool getToolTipsShowAlbumCaption() const;
 
+    void setToolTipsShowVideo_AspectRatio(bool val);
+    bool getToolTipsShowVideo_AspectRatio() const;
+
+    void setToolTipsShowVideo_AudioBitRate(bool val);
+    bool getToolTipsShowVideo_AudioBitRate() const;
+
+    void setToolTipsShowVideo_AudioChannelType(bool val);
+    bool getToolTipsShowVideo_AudioChannelType() const;
+
+    void setToolTipsShowVideo_AudioCompressor(bool val);
+    bool getToolTipsShowVideo_AudioCompressor() const;
+
+    void setToolTipsShowVideo_Duration(bool val);
+    bool getToolTipsShowVideo_Duration() const;
+
+    void setToolTipsShowVideo_FrameRate(bool val);
+    bool getToolTipsShowVideo_FrameRate() const;
+
+    void setToolTipsShowVideo_Resolution(bool val);
+    bool getToolTipsShowVideo_Resolution() const;
+
+    void setToolTipsShowVideo_VideoCodec(bool val);
+    bool getToolTipsShowVideo_VideoCodec() const;
+
     void    setCurrentTheme(const QString& theme);
     QString getCurrentTheme() const;
 

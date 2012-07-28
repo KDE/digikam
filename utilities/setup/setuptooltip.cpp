@@ -62,6 +62,13 @@ public:
         showPhotoModeBox(0),
         showPhotoFlashBox(0),
         showPhotoWbBox(0),
+        showVideo_AspectRatio(0),
+        showVideo_AudioBitRate(0),
+        showVideo_AudioChannelType(0),
+        showVideo_AudioCompressor(0),
+        showVideo_Duration(0),
+        showVideo_FrameRate(0),
+        showVideo_VideoCodec(0),
         showAlbumNameBox(0),
         showCommentsBox(0),
         showTagsBox(0),
@@ -97,6 +104,14 @@ public:
     QCheckBox*   showPhotoFlashBox;
     QCheckBox*   showPhotoWbBox;
 
+    QCheckBox*   showVideo_AspectRatio;
+    QCheckBox*   showVideo_AudioBitRate;
+    QCheckBox*   showVideo_AudioChannelType;
+    QCheckBox*   showVideo_AudioCompressor;
+    QCheckBox*   showVideo_Duration;
+    QCheckBox*   showVideo_FrameRate;
+    QCheckBox*   showVideo_VideoCodec;
+
     QCheckBox*   showAlbumNameBox;
     QCheckBox*   showCommentsBox;
     QCheckBox*   showTagsBox;
@@ -111,6 +126,7 @@ public:
 
     QGroupBox*   fileSettingBox;
     QGroupBox*   photoSettingBox;
+    QGroupBox*   videoSettingBox;
     QGroupBox*   digikamSettingBox;
     QGroupBox*   albumSettingBox;
 
@@ -210,7 +226,6 @@ SetupToolTip::SetupToolTip(QWidget* parent)
     vlay3->setSpacing(0);
 
     // --------------------------------------------------------
-
     d->digikamSettingBox = new QGroupBox(i18n("digiKam Information"), vbox);
     QVBoxLayout* vlay4   = new QVBoxLayout(d->digikamSettingBox);
 
@@ -232,6 +247,43 @@ SetupToolTip::SetupToolTip(QWidget* parent)
     vlay4->addWidget(d->showLabelsBox);
     vlay4->setMargin(KDialog::spacingHint());
     vlay4->setSpacing(0);
+
+    // --------------------------------------------------------
+
+    d->videoSettingBox    = new QGroupBox(i18n("Video Information"), vbox);
+    QVBoxLayout* vlay5    = new QVBoxLayout(d->videoSettingBox);
+
+    d->showVideo_AspectRatio        = new QCheckBox(i18n("Show Video Aspect Ratio"), d->videoSettingBox);
+    d->showVideo_AspectRatio->setWhatsThis(i18n("Set this option to display the Aspect Ratio of the Video"));
+
+    d->showVideo_AudioBitRate       = new QCheckBox(i18n("Show Audio Bit Rate"), d->videoSettingBox);
+    d->showVideo_AudioBitRate->setWhatsThis(i18n("Set this option to display the Audio Bit Rate of the Video"));
+
+    d->showVideo_AudioChannelType   = new QCheckBox(i18n("Show Audio Channel Type"), d->videoSettingBox);
+    d->showVideo_AudioChannelType->setWhatsThis(i18n("Set this option to display the Audio Channel Type of the Video"));
+
+    d->showVideo_AudioCompressor    = new QCheckBox(i18n("Show Audio Compressor"), d->videoSettingBox);
+    d->showVideo_AudioCompressor->setWhatsThis(i18n("Set this option to display the Audio Compressor of the Video"));
+
+    d->showVideo_Duration           = new QCheckBox(i18n("Show Video Duration"), d->videoSettingBox);
+    d->showVideo_Duration->setWhatsThis(i18n("Set this option to display the Duration of the Video"));
+
+    d->showVideo_FrameRate          = new QCheckBox(i18n("Show Video Frame Rate"), d->videoSettingBox);
+    d->showVideo_FrameRate->setWhatsThis(i18n("Set this option to display the Aspect Ratio of the Video"));
+
+    d->showVideo_VideoCodec         = new QCheckBox(i18n("Show Video Codec"), d->videoSettingBox);
+    d->showVideo_VideoCodec->setWhatsThis(i18n("Set this option to display the Codec of the Video"));
+
+
+    vlay5->addWidget(d->showVideo_AspectRatio);
+    vlay5->addWidget(d->showVideo_AudioBitRate);
+    vlay5->addWidget(d->showVideo_AudioChannelType);
+    vlay5->addWidget(d->showVideo_AudioCompressor);
+    vlay5->addWidget(d->showVideo_Duration);
+    vlay5->addWidget(d->showVideo_FrameRate);
+    vlay5->addWidget(d->showVideo_VideoCodec);
+    vlay5->setMargin(KDialog::spacingHint());
+    vlay5->setSpacing(0);
 
     QWidget* space = new QWidget(vbox);
     vbox->setStretchFactor(space, 10);
@@ -295,6 +347,9 @@ SetupToolTip::SetupToolTip(QWidget* parent)
             d->photoSettingBox, SLOT(setEnabled(bool)));
 
     connect(d->showToolTipsBox, SIGNAL(toggled(bool)),
+            d->videoSettingBox, SLOT(setEnabled(bool)));
+
+    connect(d->showToolTipsBox, SIGNAL(toggled(bool)),
             d->digikamSettingBox, SLOT(setEnabled(bool)));
 
     connect(d->showAlbumToolTipsBox, SIGNAL(toggled(bool)),
@@ -343,6 +398,14 @@ void SetupToolTip::applySettings()
     settings->setToolTipsShowPhotoFlash(d->showPhotoFlashBox->isChecked());
     settings->setToolTipsShowPhotoWB(d->showPhotoWbBox->isChecked());
 
+    settings->setToolTipsShowVideo_AspectRatio(d->showVideo_AspectRatio->isChecked());
+    settings->setToolTipsShowVideo_AudioBitRate(d->showVideo_AudioBitRate->isChecked());
+    settings->setToolTipsShowVideo_AudioChannelType(d->showVideo_AudioChannelType->isChecked());
+    settings->setToolTipsShowVideo_AudioCompressor(d->showVideo_AudioCompressor->isChecked());
+    settings->setToolTipsShowVideo_Duration(d->showVideo_Duration->isChecked());
+    settings->setToolTipsShowVideo_FrameRate(d->showVideo_FrameRate->isChecked());
+    settings->setToolTipsShowVideo_VideoCodec(d->showVideo_VideoCodec->isChecked());
+
     settings->setToolTipsShowAlbumName(d->showAlbumNameBox->isChecked());
     settings->setToolTipsShowComments(d->showCommentsBox->isChecked());
     settings->setToolTipsShowTags(d->showTagsBox->isChecked());
@@ -383,6 +446,14 @@ void SetupToolTip::readSettings()
     d->showPhotoModeBox->setChecked(settings->getToolTipsShowPhotoMode());
     d->showPhotoFlashBox->setChecked(settings->getToolTipsShowPhotoFlash());
     d->showPhotoWbBox->setChecked(settings->getToolTipsShowPhotoWB());
+
+    d->showVideo_AspectRatio->setChecked(settings->getToolTipsShowVideo_AspectRatio());
+    d->showVideo_AudioBitRate->setChecked(settings->getToolTipsShowVideo_AudioBitRate());
+    d->showVideo_AudioChannelType->setChecked(settings->getToolTipsShowVideo_AudioChannelType());
+    d->showVideo_AudioCompressor->setChecked(settings->getToolTipsShowVideo_AudioCompressor());
+    d->showVideo_Duration->setChecked(settings->getToolTipsShowVideo_Duration());
+    d->showVideo_FrameRate->setChecked(settings->getToolTipsShowVideo_FrameRate());
+    d->showVideo_VideoCodec->setChecked(settings->getToolTipsShowVideo_VideoCodec());
 
     d->showAlbumNameBox->setChecked(settings->getToolTipsShowAlbumName());
     d->showCommentsBox->setChecked(settings->getToolTipsShowComments());

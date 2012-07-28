@@ -59,7 +59,7 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
 
     ImageCommonContainer commonInfo  = info.imageCommonContainer();
     ImageMetadataContainer photoInfo = info.imageMetadataContainer();
-    VideoMetadataContainer videoInfo = info.videoMetadataContainer();  // TODO - Implement Proper Support
+    VideoMetadataContainer videoInfo = info.videoMetadataContainer();
     QString tip                      = cnt.tipHeader;
 
     // -- File properties ----------------------------------------------
@@ -253,6 +253,109 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
                 }
 
                 metaStr += cnt.cellBeg + i18n("White Balance:") + cnt.cellMid + Qt::escape(str) + cnt.cellEnd;
+            }
+
+            tip += metaStr;
+        }
+    }
+
+    // -- Video Metadata Info ----------------------------------------------------
+
+    if (settings->getToolTipsShowVideo_AspectRatio()        ||
+        settings->getToolTipsShowVideo_AudioBitRate()       ||
+        settings->getToolTipsShowVideo_AudioChannelType()   ||
+        settings->getToolTipsShowVideo_AudioCompressor()    ||
+        settings->getToolTipsShowVideo_Duration()           ||
+        settings->getToolTipsShowVideo_FrameRate()          ||
+        settings->getToolTipsShowVideo_VideoCodec())
+    {
+        if (!videoInfo.allFieldsNull)
+        {
+            QString metaStr;
+            tip += cnt.headBeg + i18n("Video Properties") + cnt.headEnd;
+
+            if (settings->getToolTipsShowVideo_AspectRatio())
+            {
+                str = videoInfo.aspectRatio.isEmpty() ? cnt.unavailable : videoInfo.aspectRatio;
+
+                if (str.length() > cnt.maxStringLength)
+                {
+                    str = str.left(cnt.maxStringLength-3) + "...";
+                }
+
+                metaStr += cnt.cellBeg + i18n("Aspect Ratio:") + cnt.cellMid + Qt::escape(str) + cnt.cellEnd;
+            }
+
+            if (settings->getToolTipsShowVideo_AudioBitRate())
+            {
+                str = videoInfo.audioBitRate.isEmpty() ? cnt.unavailable : videoInfo.audioBitRate;
+
+                if (str.length() > cnt.maxStringLength)
+                {
+                    str = str.left(cnt.maxStringLength-3) + "...";
+                }
+
+                metaStr += cnt.cellBeg + i18n("Audio Bit Rate:") + cnt.cellMid + Qt::escape(str) + cnt.cellEnd;
+            }
+
+            if (settings->getToolTipsShowVideo_AudioChannelType())
+            {
+                str = videoInfo.audioChannelType.isEmpty() ? cnt.unavailable : videoInfo.audioChannelType;
+
+                if (str.length() > cnt.maxStringLength)
+                {
+                    str = str.left(cnt.maxStringLength-3) + "...";
+                }
+
+                metaStr += cnt.cellBeg + i18n("Audio Channel Type:") + cnt.cellMid + Qt::escape(str) + cnt.cellEnd;
+            }
+
+            if (settings->getToolTipsShowVideo_AudioCompressor())
+            {
+                str = videoInfo.audioCompressor.isEmpty() ? cnt.unavailable : videoInfo.audioCompressor;
+
+                if (str.length() > cnt.maxStringLength)
+                {
+                    str = str.left(cnt.maxStringLength-3) + "...";
+                }
+
+                metaStr += cnt.cellBeg + i18n("Audio Compressor:") + cnt.cellMid + Qt::escape(str) + cnt.cellEnd;
+            }
+
+            if (settings->getToolTipsShowVideo_Duration())
+            {
+                str = videoInfo.duration.isEmpty() ? cnt.unavailable : videoInfo.duration;
+
+                if (str.length() > cnt.maxStringLength)
+                {
+                    str = str.left(cnt.maxStringLength-3) + "...";
+                }
+
+                metaStr += cnt.cellBeg + i18n("Duration:") + cnt.cellMid + Qt::escape(str) + i18n("s") + cnt.cellEnd;
+            }
+
+            if (settings->getToolTipsShowVideo_FrameRate())
+            {
+                str = videoInfo.frameRate.isEmpty() ? cnt.unavailable : videoInfo.frameRate;
+
+                if (str.length() > cnt.maxStringLength)
+                {
+                    str = str.left(cnt.maxStringLength-3) + "...";
+                }
+
+                metaStr += cnt.cellBeg + i18n("Frame Rate:") + cnt.cellMid + Qt::escape(str) + i18n("fps") + cnt.cellEnd;
+            }
+
+            if (settings->getToolTipsShowVideo_VideoCodec())
+            {
+                str = videoInfo.videoCodec.isEmpty() ? cnt.unavailable : videoInfo.videoCodec;
+
+                if (str.length() > cnt.maxStringLength)
+                {
+                    str = str.left(cnt.maxStringLength-3) + "...";
+                }
+
+                metaStr += cnt.cellBeg + i18n("Video Codec:") + cnt.cellMid + Qt::escape(str) + cnt.cellEnd;
             }
 
             tip += metaStr;

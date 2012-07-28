@@ -118,7 +118,14 @@ public:
         imageSorting(0),
         imageGroupMode(0),
         syncToDigikam(false),
-        syncToNepomuk(false)
+        syncToNepomuk(false),
+        tooltipShowVideo_AspectRatio(false),
+        tooltipShowVideo_AudioBitRate(false),
+        tooltipShowVideo_AudioChannelType(false),
+        tooltipShowVideo_AudioCompressor(false),
+        tooltipShowVideo_Duration(false),
+        tooltipShowVideo_FrameRate(false),
+        tooltipShowVideo_VideoCodec(false)
     {}
 
     static const QString                configGroupDefault;
@@ -168,6 +175,13 @@ public:
     static const QString                configToolTipsShowPhotoModeEntry;
     static const QString                configToolTipsShowPhotoFlashEntry;
     static const QString                configToolTipsShowPhotoWBEntry;
+    static const QString                configToolTipsShowVideo_AspectRatioEntry;
+    static const QString                configToolTipsShowVideo_AudioBitRateEntry;
+    static const QString                configToolTipsShowVideo_AudioChannelTypeEntry;
+    static const QString                configToolTipsShowVideo_AudioCompressorEntry;
+    static const QString                configToolTipsShowVideo_DurationEntry;
+    static const QString                configToolTipsShowVideo_FrameRateEntry;
+    static const QString                configToolTipsShowVideo_VideoCodecEntry;
     static const QString                configToolTipsShowAlbumNameEntry;
     static const QString                configToolTipsShowCommentsEntry;
     static const QString                configToolTipsShowTagsEntry;
@@ -247,6 +261,13 @@ public:
     bool                                tooltipShowComments;
     bool                                tooltipShowTags;
     bool                                tooltipShowLabelRating;
+    bool                                tooltipShowVideo_AspectRatio;
+    bool                                tooltipShowVideo_AudioBitRate;
+    bool                                tooltipShowVideo_AudioChannelType;
+    bool                                tooltipShowVideo_AudioCompressor;
+    bool                                tooltipShowVideo_Duration;
+    bool                                tooltipShowVideo_FrameRate;
+    bool                                tooltipShowVideo_VideoCodec;
 
     QFont                               toolTipsFont;
 
@@ -364,6 +385,13 @@ const QString AlbumSettings::AlbumSettingsPrivate::configToolTipsShowAlbumNameEn
 const QString AlbumSettings::AlbumSettingsPrivate::configToolTipsShowCommentsEntry("ToolTips Show Comments");
 const QString AlbumSettings::AlbumSettingsPrivate::configToolTipsShowTagsEntry("ToolTips Show Tags");
 const QString AlbumSettings::AlbumSettingsPrivate::configToolTipsShowLabelRatingEntry("ToolTips Show Label Rating");
+const QString AlbumSettings::AlbumSettingsPrivate::configToolTipsShowVideo_AspectRatioEntry("ToolTips Show Video Aspect Ratio");
+const QString AlbumSettings::AlbumSettingsPrivate::configToolTipsShowVideo_AudioBitRateEntry("ToolTips Show Audio Bit Rate");
+const QString AlbumSettings::AlbumSettingsPrivate::configToolTipsShowVideo_AudioChannelTypeEntry("ToolTips Show Audio Channel Type");
+const QString AlbumSettings::AlbumSettingsPrivate::configToolTipsShowVideo_AudioCompressorEntry("ToolTips Show Audio Compressor");
+const QString AlbumSettings::AlbumSettingsPrivate::configToolTipsShowVideo_DurationEntry("ToolTips Show Video Duration");
+const QString AlbumSettings::AlbumSettingsPrivate::configToolTipsShowVideo_FrameRateEntry("ToolTips Show Video Frame Rate");
+const QString AlbumSettings::AlbumSettingsPrivate::configToolTipsShowVideo_VideoCodecEntry("ToolTips Show Video Codec");
 const QString AlbumSettings::AlbumSettingsPrivate::configShowAlbumToolTipsEntry("Show Album ToolTips");
 const QString AlbumSettings::AlbumSettingsPrivate::configToolTipsShowAlbumTitleEntry("ToolTips Show Album Title");
 const QString AlbumSettings::AlbumSettingsPrivate::configToolTipsShowAlbumDateEntry("ToolTips Show Album Date");
@@ -490,6 +518,14 @@ void AlbumSettings::init()
     d->tooltipShowTags              = true;
     d->tooltipShowLabelRating       = true;
 
+    d->tooltipShowVideo_AspectRatio         = true;
+    d->tooltipShowVideo_AudioBitRate        = true;
+    d->tooltipShowVideo_AudioChannelType    = true;
+    d->tooltipShowVideo_AudioCompressor     = true;
+    d->tooltipShowVideo_Duration            = true;
+    d->tooltipShowVideo_FrameRate           = true;
+    d->tooltipShowVideo_VideoCodec          = true;
+
     d->showAlbumToolTips            = false;
     d->tooltipShowAlbumTitle        = true;
     d->tooltipShowAlbumDate         = true;
@@ -590,6 +626,14 @@ void AlbumSettings::readSettings()
     d->tooltipShowComments          = group.readEntry(d->configToolTipsShowCommentsEntry,         true);
     d->tooltipShowTags              = group.readEntry(d->configToolTipsShowTagsEntry,             true);
     d->tooltipShowLabelRating       = group.readEntry(d->configToolTipsShowLabelRatingEntry,      true);
+
+    d->tooltipShowVideo_AspectRatio     = group.readEntry(d->configToolTipsShowVideo_AspectRatioEntry,      true);
+    d->tooltipShowVideo_AudioBitRate    = group.readEntry(d->configToolTipsShowVideo_AudioBitRateEntry,     true);
+    d->tooltipShowVideo_AudioChannelType= group.readEntry(d->configToolTipsShowVideo_AudioChannelTypeEntry, true);
+    d->tooltipShowVideo_AudioCompressor = group.readEntry(d->configToolTipsShowVideo_AudioCompressorEntry,  true);
+    d->tooltipShowVideo_Duration        = group.readEntry(d->configToolTipsShowVideo_DurationEntry,         true);
+    d->tooltipShowVideo_FrameRate       = group.readEntry(d->configToolTipsShowVideo_FrameRateEntry,        true);
+    d->tooltipShowVideo_VideoCodec      = group.readEntry(d->configToolTipsShowVideo_VideoCodecEntry,       true);
 
     d->showAlbumToolTips            = group.readEntry(d->configShowAlbumToolTipsEntry,            false);
     d->tooltipShowAlbumTitle        = group.readEntry(d->configToolTipsShowAlbumTitleEntry,       true);
@@ -701,6 +745,14 @@ void AlbumSettings::saveSettings()
     group.writeEntry(d->configToolTipsShowCommentsEntry,         d->tooltipShowComments);
     group.writeEntry(d->configToolTipsShowTagsEntry,             d->tooltipShowTags);
     group.writeEntry(d->configToolTipsShowLabelRatingEntry,      d->tooltipShowLabelRating);
+
+    group.writeEntry(d->configToolTipsShowVideo_AspectRatioEntry,       d->tooltipShowVideo_AspectRatio);
+    group.writeEntry(d->configToolTipsShowVideo_AudioBitRateEntry,      d->tooltipShowVideo_AudioBitRate);
+    group.writeEntry(d->configToolTipsShowVideo_AudioChannelTypeEntry,  d->tooltipShowVideo_AudioChannelType);
+    group.writeEntry(d->configToolTipsShowVideo_AudioCompressorEntry,   d->tooltipShowVideo_AudioCompressor);
+    group.writeEntry(d->configToolTipsShowVideo_DurationEntry,          d->tooltipShowVideo_Duration);
+    group.writeEntry(d->configToolTipsShowVideo_FrameRateEntry,         d->tooltipShowVideo_FrameRate);
+    group.writeEntry(d->configToolTipsShowVideo_VideoCodecEntry,        d->tooltipShowVideo_VideoCodec);
 
     group.writeEntry(d->configShowAlbumToolTipsEntry,            d->showAlbumToolTips);
     group.writeEntry(d->configToolTipsShowAlbumTitleEntry,       d->tooltipShowAlbumTitle);
@@ -1354,6 +1406,76 @@ void AlbumSettings::setToolTipsShowAlbumCaption(bool val)
 bool AlbumSettings::getToolTipsShowAlbumCaption() const
 {
     return d->tooltipShowAlbumCaption;
+}
+
+void AlbumSettings::setToolTipsShowVideo_AspectRatio(bool val)
+{
+    d->tooltipShowVideo_AspectRatio = val;
+}
+
+bool AlbumSettings::getToolTipsShowVideo_AspectRatio() const
+{
+    return d->tooltipShowVideo_AspectRatio;
+}
+
+void AlbumSettings::setToolTipsShowVideo_AudioBitRate(bool val)
+{
+    d->tooltipShowVideo_AudioBitRate = val;
+}
+
+bool AlbumSettings::getToolTipsShowVideo_AudioBitRate() const
+{
+    return d->tooltipShowVideo_AudioBitRate;
+}
+
+void AlbumSettings::setToolTipsShowVideo_AudioChannelType(bool val)
+{
+    d->tooltipShowVideo_AudioChannelType = val;
+}
+
+bool AlbumSettings::getToolTipsShowVideo_AudioChannelType() const
+{
+    return d->tooltipShowVideo_AudioChannelType;
+}
+
+void AlbumSettings::setToolTipsShowVideo_AudioCompressor(bool val)
+{
+    d->tooltipShowVideo_AudioCompressor = val;
+}
+
+bool AlbumSettings::getToolTipsShowVideo_AudioCompressor() const
+{
+    return d->tooltipShowVideo_AudioCompressor;
+}
+
+void AlbumSettings::setToolTipsShowVideo_Duration(bool val)
+{
+    d->tooltipShowVideo_Duration = val;
+}
+
+bool AlbumSettings::getToolTipsShowVideo_Duration() const
+{
+    return d->tooltipShowVideo_Duration;
+}
+
+void AlbumSettings::setToolTipsShowVideo_FrameRate(bool val)
+{
+    d->tooltipShowVideo_FrameRate = val;
+}
+
+bool AlbumSettings::getToolTipsShowVideo_FrameRate() const
+{
+    return d->tooltipShowVideo_FrameRate;
+}
+
+void AlbumSettings::setToolTipsShowVideo_VideoCodec(bool val)
+{
+    d->tooltipShowVideo_VideoCodec = val;
+}
+
+bool AlbumSettings::getToolTipsShowVideo_VideoCodec() const
+{
+    return d->tooltipShowVideo_VideoCodec;
 }
 
 void AlbumSettings::setCurrentTheme(const QString& theme)
