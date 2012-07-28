@@ -228,7 +228,6 @@ DigikamApp::DigikamApp()
     IccSettings::instance()->loadAllProfilesProperties();
     MetadataSettings::instance();
     ProgressManager::instance();
-    KipiPluginLoader::instance();
     ThumbnailLoadThread::setDisplayingWidget(this);
     DIO::instance();
 
@@ -922,7 +921,7 @@ void DigikamApp::setupActions()
 
     connect(QueueMgrWindow::queueManagerWindow(), SIGNAL(signalBqmIsBusy(bool)),
             d->imageAddNewQueueAction, SLOT(setDisabled(bool)));
-    
+
     // -----------------------------------------------------------------
 
     d->quickImportMenu->setText(i18nc("@action Import photos from camera", "Import"));
@@ -1168,34 +1167,26 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    d->slideShowAction = new KActionMenu(KIcon("view-presentation"), i18n("Slideshow"), this);
-    d->slideShowAction->setDelayed(false);
-    actionCollection()->addAction("slideshow", d->slideShowAction);
-
     d->slideShowAllAction = new KAction(i18n("All"), this);
     d->slideShowAllAction->setShortcut(KShortcut(Qt::Key_F9));
     connect(d->slideShowAllAction, SIGNAL(triggered()), d->view, SLOT(slotSlideShowAll()));
     actionCollection()->addAction("slideshow_all", d->slideShowAllAction);
-    d->slideShowAction->addAction(d->slideShowAllAction);
 
     d->slideShowSelectionAction = new KAction(i18n("Selection"), this);
     d->slideShowSelectionAction->setShortcut(KShortcut(Qt::ALT+Qt::Key_F9));
     connect(d->slideShowSelectionAction, SIGNAL(triggered()), d->view, SLOT(slotSlideShowSelection()));
     actionCollection()->addAction("slideshow_selected", d->slideShowSelectionAction);
-    d->slideShowAction->addAction(d->slideShowSelectionAction);
 
     d->slideShowRecursiveAction = new KAction(i18n("With All Sub-Albums"), this);
     d->slideShowRecursiveAction->setShortcut(KShortcut(Qt::SHIFT+Qt::Key_F9));
     connect(d->slideShowRecursiveAction, SIGNAL(triggered()), d->view, SLOT(slotSlideShowRecursive()));
     actionCollection()->addAction("slideshow_recursive", d->slideShowRecursiveAction);
-    d->slideShowAction->addAction(d->slideShowRecursiveAction);
 
 #ifdef USE_PRESENTATION_MODE
     d->slideShowQmlAction = new KAction(i18n("Presentation View"), this);
     d->slideShowQmlAction->setShortcut(KShortcut(Qt::Key_F10));
     connect(d->slideShowQmlAction, SIGNAL(triggered()), d->view, SLOT(slotSlideShowQml()));
     actionCollection()->addAction("slideshow_qml", d->slideShowQmlAction);
-    d->slideShowAction->addAction(d->slideShowQmlAction);
 #endif // USE_PRESENTATION_MODE
 
    // -----------------------------------------------------------
@@ -2405,7 +2396,7 @@ void DigikamApp::slotEditKeys()
     KShortcutsDialog dialog(KShortcutsEditor::AllActions,
                             KShortcutsEditor::LetterShortcutsAllowed, this);
     dialog.addCollection(actionCollection(), i18nc("general keyboard shortcuts", "General"));
-    dialog.addCollection(KipiPluginLoader::instance()->pluginsActionCollection(), 
+    dialog.addCollection(KipiPluginLoader::instance()->pluginsActionCollection(),
                          i18nc("KIPI-Plugins keyboard shortcuts", "KIPI-Plugins"));
     dialog.configure();
 }
@@ -2419,6 +2410,11 @@ void DigikamApp::slotConfToolbars()
             this, SLOT(slotNewToolbarConfig()));
 
     dlg.exec();
+}
+
+void DigikamApp::slotNewToolbarConfig()
+{
+    applyMainWindowSettings(d->config->group("General Settings"));
 }
 
 void DigikamApp::slotConfNotifications()
@@ -3029,11 +3025,6 @@ void DigikamApp::slotTransformAction()
         // special value for FileActionMngr
         d->view->imageTransform(KExiv2Iface::RotationMatrix::NoTransformation);
     }
-}
-
-KActionMenu* DigikamApp::slideShowMenu() const
-{
-    return d->slideShowAction;
 }
 
 #ifdef USE_SCRIPT_IFACE
