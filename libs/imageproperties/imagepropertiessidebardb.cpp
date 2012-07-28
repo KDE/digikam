@@ -610,7 +610,6 @@ void ImagePropertiesSideBarDB::setImagePropertiesInformation(const KUrl& url)
             m_propertiesTab->setVideo_AudioCompressor(videoInfo.audioCompressor.isEmpty() ? unavailable : videoInfo.audioCompressor);
             m_propertiesTab->setVideo_Duration(videoInfo.duration.isEmpty() ? unavailable : videoInfo.duration);
             m_propertiesTab->setVideo_FrameRate(videoInfo.frameRate.isEmpty() ? unavailable : videoInfo.frameRate);
-            m_propertiesTab->setVideo_Resolution(videoInfo.resolution.isEmpty() ? unavailable : videoInfo.resolution);
             m_propertiesTab->setVideo_VideoCodec(videoInfo.videoCodec.isEmpty() ? unavailable : videoInfo.videoCodec);
 
             // -- Caption / Tags ------------------------------------------

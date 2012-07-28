@@ -1057,10 +1057,6 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
     {
         fieldQuery.addStringField("VideoMetadata.frameRate");
     }
-    else if (name == "resolution")
-    {
-        fieldQuery.addStringField("VideoMetadata.resolution");
-    }
     else if (name == "videocodec")
     {
         fieldQuery.addStringField("VideoMetadata.videoCodec");

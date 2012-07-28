@@ -151,7 +151,6 @@
                             audioCompressor TEXT,
                             duration TEXT,
                             frameRate TEXT,
-                            resolution TEXT,
                             exposureProgram INTEGER,
                             videoCodec TEXT)</statement>
             <statement mode="plain">CREATE TABLE ImagePositions
@@ -534,10 +533,10 @@
             </statement></dbaction>
 
             <dbaction name="Migrate_Read_VideoMetadata"><statement mode="query">
-                SELECT imageid, aspectRatio, audioBitRate, audioChannelType, audioCompressor, duration, frameRate, resolution, videoCodec FROM VideoMetadata;
+                SELECT imageid, aspectRatio, audioBitRate, audioChannelType, audioCompressor, duration, frameRate, videoCodec FROM VideoMetadata;
             </statement></dbaction>
             <dbaction name="Migrate_Write_VideoMetadata"><statement mode="query">
-                INSERT INTO VideoMetadata (imageid, aspectRatio, audioBitRate, audioChannelType, audioCompressor, duration, frameRate, resolution, videoCodec) VALUES (:imageid, :aspectRatio, :audioBitRate, :audioChannelType, :audioCompressor, :duration, :frameRate, :resolution, :videoCodec);
+                INSERT INTO VideoMetadata (imageid, aspectRatio, audioBitRate, audioChannelType, audioCompressor, duration, frameRate, videoCodec) VALUES (:imageid, :aspectRatio, :audioBitRate, :audioChannelType, :audioCompressor, :duration, :frameRate, :videoCodec);
             </statement></dbaction>
 
             <dbaction name="Migrate_Read_ImageTagProperties"><statement mode="query">
@@ -839,7 +838,6 @@
                             audioCompressor TEXT,
                             duration TEXT,
                             frameRate TEXT,
-                            resolution TEXT,
                             exposureProgram INTEGER,
                             videoCodec TEXT);</statement>
             <statement mode="plain">CREATE TABLE IF NOT EXISTS ImagePositions
@@ -1345,10 +1343,10 @@ ORDER BY inf.rating DESC, img.name ASC
             </statement></dbaction>
 
             <dbaction name="Migrate_Read_VideoMetadata"><statement mode="query">
-                SELECT imageid, aspectRatio, audioBitRate, audioChannelType, audioCompressor, duration, frameRate, resolution, videoCodec FROM VideoMetadata;
+                SELECT imageid, aspectRatio, audioBitRate, audioChannelType, audioCompressor, duration, frameRate, videoCodec FROM VideoMetadata;
             </statement></dbaction>
             <dbaction name="Migrate_Write_VideoMetadata" mode="transaction"><statement mode="query">
-                INSERT INTO VideoMetadata (imageid, aspectRatio, audioBitRate, audioChannelType, audioCompressor, duration, frameRate, resolution, videoCodec) VALUES (:imageid, :aspectRatio, :audioBitRate, :audioChannelType, :audioCompressor, :duration, :frameRate, :resolution, :videoCodec);
+                INSERT INTO VideoMetadata (imageid, aspectRatio, audioBitRate, audioChannelType, audioCompressor, duration, frameRate, videoCodec) VALUES (:imageid, :aspectRatio, :audioBitRate, :audioChannelType, :audioCompressor, :duration, :frameRate, :videoCodec);
             </statement></dbaction>
 
             <dbaction name="Migrate_Read_ImageTagProperties"><statement mode="query">

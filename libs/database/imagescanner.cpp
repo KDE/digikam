@@ -1142,7 +1142,6 @@ static MetadataFields allVideoMetadataFields()
            << MetadataInfo::AudioCompressor
            << MetadataInfo::Duration
            << MetadataInfo::FrameRate
-           << MetadataInfo::Resolution
            << MetadataInfo::VideoCodec;
 
     return fields;
@@ -1652,8 +1651,7 @@ void ImageScanner::fillVideoMetadataContainer(qlonglong imageid, VideoMetadataCo
     container->audioCompressor              = strings.at(3);
     container->duration                     = strings.at(4);
     container->frameRate                    = strings.at(5);
-    container->resolution                   = strings.at(6);
-    container->videoCodec                   = strings.at(7);
+    container->videoCodec                   = strings.at(6);
 }
 
 } // namespace Digikam

@@ -57,7 +57,6 @@ static const QString KEY_AUDIOCHANNELTYPE("AudioChannelType");
 static const QString KEY_AUDIOCOMPRESSOR("AudioCompressor");
 static const QString KEY_DURATION("Duration");
 static const QString KEY_FRAMERATE("FrameRate");
-static const QString KEY_RESOLUTION("Resolution");
 static const QString KEY_VIDEOCODEC("VideoCodec");
 }
 
@@ -90,7 +89,6 @@ MetadataKeys::MetadataKeys()
     addId(KEY_AUDIOCOMPRESSOR,              i18n("Audio Compressor (Audio Codec)"));
     addId(KEY_DURATION,                     i18n("Duration of File"));
     addId(KEY_FRAMERATE,                    i18n("Frame Rate of Video"));
-    addId(KEY_RESOLUTION,                   i18n("Resolution"));
     addId(KEY_VIDEOCODEC,                   i18n("Video Codec"));
 }
 
@@ -188,10 +186,6 @@ QString MetadataKeys::getDbValue(const QString& key, ParseSettings& settings)
     else if (key == KEY_FRAMERATE)
     {
         result = videoContainer.frameRate;
-    }
-    else if (key == KEY_RESOLUTION)
-    {
-        result = videoContainer.resolution;
     }
     else if (key == KEY_VIDEOCODEC)
     {

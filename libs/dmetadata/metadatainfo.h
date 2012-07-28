@@ -175,7 +175,6 @@ enum Field
     AudioCompressor,                  /// String
     Duration,                         /// String
     FrameRate,                        /// String
-    Resolution,                       /// String
     VideoCodec,                       /// String
     VideoBitDepth,                    /// String
     VideoHeight,                      /// String

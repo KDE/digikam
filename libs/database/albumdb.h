@@ -799,8 +799,7 @@ public:
      * 3) String    AudioCompressor
      * 4) String    Duration
      * 5) String    FrameRate
-     * 6) String    Resolution
-     * 7) String    VideoCodec
+     * 6) String    VideoCodec
      * You can leave out entries from this list, which will then be filled with null values.
      * Indicate the values that you have passed in the VideoMetadata flag in the third parameters.
      */

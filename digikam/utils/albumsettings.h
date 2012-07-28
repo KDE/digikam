@@ -290,9 +290,6 @@ public:
     void setToolTipsShowVideo_FrameRate(bool val);
     bool getToolTipsShowVideo_FrameRate() const;
 
-    void setToolTipsShowVideo_Resolution(bool val);
-    bool getToolTipsShowVideo_Resolution() const;
-
     void setToolTipsShowVideo_VideoCodec(bool val);
     bool getToolTipsShowVideo_VideoCodec() const;
 

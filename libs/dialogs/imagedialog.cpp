@@ -145,7 +145,7 @@ void ImageDialogPreview::showPreview(const KUrl& url)
             DToolTipStyleSheet cnt;
             QString identify("<qt><center>");
             QString make, model, dateTime, aperture, focalLength, exposureTime, sensitivity;
-            QString aspectRatio, audioBitRate, audioChannelType, audioCompressor, duration, frameRate, resolution, videoCodec;
+            QString aspectRatio, audioBitRate, audioChannelType, audioCompressor, duration, frameRate, videoCodec;
 
             if (info.make.isEmpty())
             {
@@ -264,15 +264,6 @@ void ImageDialogPreview::showPreview(const KUrl& url)
                 frameRate = videoInfo.frameRate;
             }
 
-            if (videoInfo.resolution.isEmpty())
-            {
-                resolution = cnt.unavailable;
-            }
-            else
-            {
-                resolution = videoInfo.resolution;
-            }
-
             if (videoInfo.videoCodec.isEmpty())
             {
                 videoCodec = cnt.unavailable;
@@ -296,7 +287,6 @@ void ImageDialogPreview::showPreview(const KUrl& url)
             identify += cnt.cellBeg + i18n("<i>AudioCompressor:</i>")   + cnt.cellMid + audioCompressor     + cnt.cellEnd;
             identify += cnt.cellBeg + i18n("<i>Duration:</i>")          + cnt.cellMid + duration            + cnt.cellEnd;
             identify += cnt.cellBeg + i18n("<i>FrameRate:</i>")         + cnt.cellMid + frameRate           + cnt.cellEnd;
-            identify += cnt.cellBeg + i18n("<i>Resolution:</i>")        + cnt.cellMid + resolution          + cnt.cellEnd;
             identify += cnt.cellBeg + i18n("<i>VideoCodec:</i>")        + cnt.cellMid + videoCodec          + cnt.cellEnd;
             identify += "</table></center></qt>";
 

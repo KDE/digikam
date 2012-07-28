@@ -1204,7 +1204,6 @@ VideoInfoContainer ImageInfo::videoInfoContainer() const
     videoInfo.audioCompressor           = meta.audioCompressor;
     videoInfo.duration                  = meta.duration;
     videoInfo.frameRate                 = meta.frameRate;
-    videoInfo.resolution                = meta.resolution;
     videoInfo.videoCodec                = meta.videoCodec;
 
     return videoInfo;

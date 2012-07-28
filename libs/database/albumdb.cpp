@@ -2901,11 +2901,6 @@ QStringList AlbumDB::videoMetadataFieldList(DatabaseFields::VideoMetadata fields
         list << "frameRate";
     }
 
-    if (fields & DatabaseFields::Resolution)
-    {
-        list << "resolution";
-    }
-
     if (fields & DatabaseFields::VideoCodec)
     {
         list << "videoCodec";
@@ -4583,9 +4578,9 @@ void AlbumDB::copyImageAttributes(qlonglong srcId, qlonglong dstId)
 
     d->db->execSql(QString("INSERT INTO VideoMetadata "
                            " (imageid, aspectRatio, audioBitRate, audioChannelType, audioCompressor, duration, frameRate, "
-                           "  resolution, videoCodec) "
+                           "  videoCodec) "
                            "SELECT ?, aspectRatio, audioBitRate, audioChannelType, audioCompressor, duration, frameRate, "
-                           "  resolution, videoCodec "
+                           "  videoCodec "
                            "FROM VideoMetadata WHERE imageid=?;"),
                    dstId, srcId);
     fields |= DatabaseFields::VideoMetadataAll;

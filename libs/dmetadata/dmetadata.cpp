@@ -1156,11 +1156,6 @@ VideoInfoContainer DMetadata::getVideoInformation() const
             videoInfo.frameRate = getXmpTagString("Xmp.video.frameRate");
         }
 
-        if (videoInfo.resolution.isEmpty())
-        {
-            videoInfo.resolution = getXmpTagString("Xmp.video.resolution");
-        }
-
         if (videoInfo.videoCodec.isEmpty())
         {
             videoInfo.videoCodec = getXmpTagString("Xmp.video.codec");
@@ -2293,8 +2288,6 @@ QVariant DMetadata::getMetadataField(MetadataInfo::Field field) const
             return fromXmpLangAlt("Xmp.video.duration");
         case MetadataInfo::FrameRate:
             return fromXmpLangAlt("Xmp.video.frameRate");
-        case MetadataInfo::Resolution:
-            return fromXmpLangAlt("Xmp.video.resolution");
         case MetadataInfo::VideoCodec:
             return fromXmpLangAlt("Xmp.video.codec");
         case MetadataInfo::VideoBitDepth:
@@ -2402,7 +2395,6 @@ QString DMetadata::valueToString (const QVariant& value, MetadataInfo::Field fie
         case MetadataInfo::AudioCompressor:
         case MetadataInfo::Duration:
         case MetadataInfo::FrameRate:
-        case MetadataInfo::Resolution:
         case MetadataInfo::VideoCodec:
             return value.toString();
 

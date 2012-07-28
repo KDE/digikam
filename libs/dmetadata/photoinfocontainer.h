@@ -91,7 +91,6 @@ public:
     QString audioCompressor;
     QString duration;
     QString frameRate;
-    QString resolution;
     QString videoCodec;
 
 };

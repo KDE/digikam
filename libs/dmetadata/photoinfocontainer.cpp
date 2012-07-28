@@ -152,10 +152,9 @@ bool VideoInfoContainer::operator==(const VideoInfoContainer& t) const
     bool b4  = audioCompressor    == t.audioCompressor;
     bool b5  = duration           == t.duration;
     bool b6  = frameRate          == t.frameRate;
-    bool b7  = resolution         == t.resolution;
-    bool b8  = videoCodec         == t.videoCodec;
+    bool b7  = videoCodec         == t.videoCodec;
 
-    return b1 && b2 && b3 && b4 && b5 && b6 && b7 && b8;
+    return b1 && b2 && b3 && b4 && b5 && b6 && b7;
 }
 
 bool VideoInfoContainer::isEmpty() const
@@ -166,7 +165,6 @@ bool VideoInfoContainer::isEmpty() const
         audioCompressor.isEmpty()        &&
         duration.isEmpty()               &&
         frameRate.isEmpty()              &&
-        resolution.isEmpty()             &&
         videoCodec.isEmpty() )
     {
         return true;
@@ -185,7 +183,6 @@ bool VideoInfoContainer::isNull() const
            audioCompressor.isEmpty()        &&
            duration.isEmpty()               &&
            frameRate.isEmpty()              &&
-           resolution.isEmpty()             &&
            videoCodec.isEmpty() );
 }
 
@@ -197,7 +194,6 @@ QDataStream& operator<<(QDataStream& ds, const VideoInfoContainer& info)
     ds << info.audioCompressor;
     ds << info.duration;
     ds << info.frameRate;
-    ds << info.resolution;
     ds << info.videoCodec;
 
     return ds;
@@ -211,7 +207,6 @@ QDataStream& operator>>(QDataStream& ds, VideoInfoContainer& info)
     ds >> info.audioCompressor;
     ds >> info.duration;
     ds >> info.frameRate;
-    ds >> info.resolution;
     ds >> info.videoCodec;
 
     return ds;
