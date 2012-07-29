@@ -143,7 +143,10 @@ void AlbumFilterModel::setSourceAlbumModel(AbstractAlbumModel* source)
     }
     else
     {
-        setSourceModel(source);
+        if (source != sourceModel())
+        {
+            setSourceModel(source);
+        }
     }
 }
 
@@ -159,8 +162,11 @@ void AlbumFilterModel::setSourceFilterModel(AlbumFilterModel* source)
         }
     }
 
-    m_chainedModel = source;
-    setSourceModel(source);
+    if (m_chainedModel != source || sourceModel() != source)
+    {
+        m_chainedModel = source;
+        setSourceModel(source);
+    }
 }
 
 void AlbumFilterModel::setSourceModel(QAbstractItemModel* model)
