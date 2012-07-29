@@ -87,7 +87,6 @@ public Q_SLOTS:
 protected:
 
     virtual void addCustomContextMenuActions(ContextMenuHelper& cmh, Album* album);
-    virtual void handleCustomContextMenuAction(QAction* action, AlbumPointer<Album> album);
 
 private Q_SLOTS:
 
@@ -98,6 +97,7 @@ private Q_SLOTS:
     void slotCheckStateChange(Album* album, Qt::CheckState state);
 
     void slotCreatedNewTagByContextMenu(TAlbum* tag);
+    void toggleAutoActionSelected(QAction* action);
 
 private:
 

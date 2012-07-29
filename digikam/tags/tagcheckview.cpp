@@ -92,6 +92,14 @@ TagCheckView::TagCheckView(QWidget* parent, TagModel* tagModel)
     d->toggleParentsAction  = d->toggleAutoAction->addAction(i18nc("toggle parent tag", "Parents"));
     d->toggleBothAction     = d->toggleAutoAction->addAction(i18nc("toggle child and parent tags", "Both"));
 
+    d->toggleNoneAction->setData(NoToggleAuto);
+    d->toggleChildrenAction->setData(Children);
+    d->toggleParentsAction->setData(Parents);
+    d->toggleBothAction->setData(ChildrenAndParents);
+
+    connect(d->toggleAutoAction, SIGNAL(triggered(QAction*)),
+            this, SLOT(toggleAutoActionSelected(QAction*)));
+
     connect(albumModel(), SIGNAL(checkStateChanged(Album*,Qt::CheckState)),
             this, SLOT(slotCheckStateChange(Album*,Qt::CheckState)));
 }
@@ -242,34 +250,18 @@ void TagCheckView::addCustomContextMenuActions(ContextMenuHelper& cmh, Album* al
     // automatic toggle
 
     cmh.addAction(d->toggleAutoAction);
-
-    d->toggleNoneAction->setChecked(d->toggleAutoTags == TagCheckView::NoToggleAuto);
-    d->toggleChildrenAction->setChecked(d->toggleAutoTags == TagCheckView::Children);
-    d->toggleParentsAction->setChecked(d->toggleAutoTags == TagCheckView::Parents);
-    d->toggleBothAction->setChecked(d->toggleAutoTags == TagCheckView::ChildrenAndParents);
+    foreach(QAction* action, d->toggleAutoAction->actions())
+    {
+        if (action->data().toInt() == d->toggleAutoTags)
+        {
+            action->setChecked(true);
+        }
+    }
 }
 
-void TagCheckView::handleCustomContextMenuAction(QAction* action, AlbumPointer<Album> album)
+void TagCheckView::toggleAutoActionSelected(QAction* action)
 {
-    TagFolderView::handleCustomContextMenuAction(action, album);
-
-    ToggleAutoTags toggleRestore = d->toggleAutoTags;
-    d->toggleAutoTags = NoToggleAuto;
-
-    if (action == d->toggleChildrenAction)    // Toggle auto Children tags.
-    {
-        toggleRestore = Children;
-    }
-    else if (action == d->toggleParentsAction)     // Toggle auto Parents tags.
-    {
-        toggleRestore = Parents;
-    }
-    else if (action == d->toggleBothAction)        // Toggle auto Children and Parents tags.
-    {
-        toggleRestore = ChildrenAndParents;
-    }
-
-    d->toggleAutoTags = toggleRestore;
+    d->toggleAutoTags = static_cast<ToggleAutoTags>(action->data().toInt());
 }
 
 } // namespace Digikam
