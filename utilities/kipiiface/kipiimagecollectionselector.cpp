@@ -69,23 +69,6 @@ public:
     {
     }
 
-    KTabWidget*     tab;
-
-    AlbumModel*     albumModel;
-    AlbumTreeView*  albumTreeView;
-
-    TagModel*       tagModel;
-    TagTreeView*    tagTreeView;
-
-    SearchModel*    searchModel;
-    SearchTreeView* searchTreeView;
-
-    KipiInterface*  iface;
-
-    SearchTextBar*  albumSearchBar;
-    SearchTextBar*  tagSearchBar;
-    SearchTextBar*  searchSearchBar;
-
     void prepareTreeView(AbstractCheckableAlbumTreeView* const treeView)
     {
 
@@ -115,18 +98,35 @@ public:
             collectionList.append(col);
         }
     }
+
+public:
+
+    KTabWidget*     tab;
+
+    AlbumModel*     albumModel;
+    AlbumTreeView*  albumTreeView;
+
+    TagModel*       tagModel;
+    TagTreeView*    tagTreeView;
+
+    SearchModel*    searchModel;
+    SearchTreeView* searchTreeView;
+
+    KipiInterface*  iface;
+
+    SearchTextBar*  albumSearchBar;
+    SearchTextBar*  tagSearchBar;
+    SearchTextBar*  searchSearchBar;
 };
 
 KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface* const iface, QWidget* const parent)
     : KIPI::ImageCollectionSelector(parent),
       d(new KipiImageCollectionSelectorPriv)
 {
-
     KSharedConfigPtr config  = KGlobal::config();
     KConfigGroup configGroup = config->group("KipiImageCollectionSelector");
-
-    d->iface = iface;
-    d->tab   = new KTabWidget(this);
+    d->iface                 = iface;
+    d->tab                   = new KTabWidget(this);
 
     KVBox* albumBox  = new KVBox(d->tab);
     d->albumModel    = new AlbumModel(AbstractAlbumModel::IgnoreRootAlbum, albumBox);
@@ -144,7 +144,7 @@ KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface* const if
 
     albumBox->setMargin(0);
     albumBox->setSpacing(KDialog::spacingHint());
-    albumBox->setStretchFactor(d->albumTreeView, 10);
+    albumBox->setStretchFactor(d->albumTreeView, 100);
     albumBox->setStretchFactor(d->albumSearchBar, 1);
 
     // -------------------------------------------------------------------------------
@@ -166,7 +166,7 @@ KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface* const if
 
     tagBox->setMargin(0);
     tagBox->setSpacing(KDialog::spacingHint());
-    tagBox->setStretchFactor(d->tagTreeView, 10);
+    tagBox->setStretchFactor(d->tagTreeView, 100);
     tagBox->setStretchFactor(d->tagSearchBar, 1);
 
     // -------------------------------------------------------------------------------
@@ -188,7 +188,7 @@ KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface* const if
 
     searchBox->setMargin(0);
     searchBox->setSpacing(KDialog::spacingHint());
-    searchBox->setStretchFactor(d->searchTreeView, 10);
+    searchBox->setStretchFactor(d->searchTreeView, 100);
     searchBox->setStretchFactor(d->searchSearchBar, 1);
 
     // -------------------------------------------------------------------------------
@@ -223,12 +223,10 @@ KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface* const if
     d->tagSearchBar->loadState();
     d->searchTreeView->loadState();
     d->searchSearchBar->loadState();
-
 }
 
 KipiImageCollectionSelector::~KipiImageCollectionSelector()
 {
-
     kDebug() << "Saving view state";
 
     d->albumTreeView->saveState();
