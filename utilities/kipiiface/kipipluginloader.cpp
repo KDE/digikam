@@ -54,11 +54,11 @@
 namespace Digikam
 {
 
-class KipiPluginLoader::KipiPluginLoaderPriv
+class KipiPluginLoader::Private
 {
 public:
 
-    KipiPluginLoaderPriv()
+    Private()
     {
         app                         = DigikamApp::instance();
         kipipluginsActionCollection = 0;
@@ -83,7 +83,7 @@ KipiPluginLoader* KipiPluginLoader::m_instance = 0;
 // -----------------------------------------------------------------------------------------------------------------------
 
 KipiPluginLoader::KipiPluginLoader(QObject* const parent, SplashScreen* const splash)
-    : QObject(parent), d(new KipiPluginLoaderPriv)
+    : QObject(parent), d(new Private)
 {
     m_instance      = this;
     d->splashScreen = splash;
@@ -156,8 +156,8 @@ void KipiPluginLoader::loadPlugins()
     d->kipiPluginLoader = new PluginLoader(ignores, d->kipiInterface);
 #endif
 
-    connect( d->kipiPluginLoader, SIGNAL(replug()),
-             this, SLOT(slotKipiPluginPlug()) );
+    connect(d->kipiPluginLoader, SIGNAL(replug()),
+            this, SLOT(slotKipiPluginPlug()));
 
     d->kipiPluginLoader->loadPlugins();
 
@@ -181,7 +181,7 @@ void KipiPluginLoader::slotKipiPluginPlug()
     d->kipiCategoryMap.clear();
 
     PluginLoader::PluginList list = d->kipiPluginLoader->pluginList();
-    int cpt                             = 0;
+    int cpt                       = 0;
 
     // List of obsolete tool actions to not load
 
@@ -275,4 +275,4 @@ QString KipiPluginLoader::categoryName(Category cat) const
     return res;
 }
 
-} //namespace Digikam
+} // namespace Digikam

@@ -65,11 +65,11 @@
 namespace Digikam
 {
 
-class KipiInterface::KipiInterfacePrivate
+class KipiInterface::Private
 {
 public:
 
-    KipiInterfacePrivate()
+    Private()
     {
         tagModel        = 0;
         thumbLoadThread = 0;
@@ -82,7 +82,7 @@ public:
 };
 
 KipiInterface::KipiInterface(QObject* const parent, const char* name)
-    : KIPI::Interface(parent, name), d(new KipiInterfacePrivate())
+    : KIPI::Interface(parent, name), d(new Private())
 {
     d->thumbLoadThread = ThumbnailLoadThread::defaultThread();
     d->albumManager    = AlbumManager::instance();

@@ -94,8 +94,8 @@ private:
 
     static KipiPluginLoader* m_instance;
 
-    class KipiPluginLoaderPriv;
-    KipiPluginLoaderPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam
