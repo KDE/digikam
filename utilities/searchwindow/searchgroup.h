@@ -6,8 +6,8 @@
  * Date        : 2008-01-20
  * Description : User interface for searches
  *
- * Copyright (C) 2008-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C)      2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2011-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -41,7 +41,6 @@
 
 class QComboBox;
 class QGridLayout;
-class QLabel;
 class QRadioButton;
 class QStackedLayout;
 class QVBoxLayout;
@@ -67,7 +66,9 @@ public:
         ChainGroup
     };
 
-    SearchGroup(SearchView* parent);
+public:
+
+    SearchGroup(SearchView* const parent);
 
     void setup(Type type = FirstGroup);
 
@@ -87,6 +88,8 @@ protected:
 
     virtual SearchGroup* createSearchGroup();
     virtual void addGroupToLayout(SearchGroup* group);
+
+protected:
 
     SearchView*                   m_view;
 
@@ -108,7 +111,8 @@ class SearchGroupLabel : public QWidget
 
 public:
 
-    SearchGroupLabel(SearchViewThemedPartsCache* cache, SearchGroup::Type type, QWidget* parent = 0);
+    SearchGroupLabel(SearchViewThemedPartsCache* const cache, SearchGroup::Type type, QWidget* const parent = 0);
+    ~SearchGroupLabel();
 
     void setGroupOperator(SearchXml::Operator op);
     void setDefaultFieldOperator(SearchXml::Operator op);
@@ -128,28 +132,16 @@ protected Q_SLOTS:
 
 protected:
 
-    virtual void paintEvent(QPaintEvent*);
-
     void setExtended(bool extended);
     void adjustOperatorOptions();
     void updateGroupLabel();
 
+    virtual void paintEvent(QPaintEvent*);
+
 private:
 
-    bool                        m_extended;
-    SearchXml::Operator         m_groupOp;
-    SearchXml::Operator         m_fieldOp;
-    QGridLayout*                m_layout;
-    //QComboBox                  *m_groupOpBox;
-    RClickLabel*                m_groupOpLabel;
-    QRadioButton*               m_allBox;
-    QRadioButton*               m_anyBox;
-    QRadioButton*               m_noneBox;
-    QRadioButton*               m_oneNotBox;
-    RClickLabel*                m_optionsLabel;
-    RClickLabel*                m_removeLabel;
-    QStackedLayout*             m_stackedLayout;
-    SearchViewThemedPartsCache* m_themeCache;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam
