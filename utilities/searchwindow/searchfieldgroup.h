@@ -6,7 +6,7 @@
  * Date        : 2008-01-20
  * Description : User interface for searches
  *
- * Copyright (C) 2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2008-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -58,17 +58,17 @@ class SearchFieldGroup : public QWidget
 
 public:
 
-    SearchFieldGroup(SearchGroup* parent);
+    SearchFieldGroup(SearchGroup* const parent);
 
-    void addField(SearchField* field);
-    void setLabel(SearchFieldGroupLabel* label);
+    void addField(SearchField* const field);
+    void setLabel(SearchFieldGroupLabel* const label);
 
-    SearchField* fieldForName(const QString& fieldName);
+    SearchField* fieldForName(const QString& fieldName) const;
     void write(SearchXmlWriter& writer);
 
     void reset();
 
-    void markField(SearchField* field);
+    void markField(SearchField* const field);
     void clearMarkedFields();
     QList<QRect> areaOfMarkedFields() const;
 
@@ -90,13 +90,15 @@ protected:
     QSet<SearchField*>     m_markedFields;
 };
 
+// -----------------------------------------------------------------------
+
 class SearchFieldGroupLabel : public QWidget
 {
     Q_OBJECT
 
 public:
 
-    SearchFieldGroupLabel(QWidget* parent);
+    SearchFieldGroupLabel(QWidget* const parent);
 
     void setTitle(const QString& title);
 
