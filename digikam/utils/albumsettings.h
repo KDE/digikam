@@ -7,8 +7,8 @@
  * Description : albums settings interface
  *
  * Copyright (C) 2003-2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2003-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2007 by Arnd Baecker <arnd dot baecker at web dot de>
+ * Copyright (C) 2003-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007      by Arnd Baecker <arnd dot baecker at web dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -81,7 +81,6 @@ public:
          * Normal comparison using Qt's compare function.
          */
         Normal
-
     };
 
 Q_SIGNALS:
@@ -113,7 +112,7 @@ public:
     bool getScanAtStart() const;
 
     void setAlbumCategoryNames(const QStringList& list);
-    QStringList getAlbumCategoryNames();
+    QStringList getAlbumCategoryNames() const;
 
     bool addAlbumCategoryName(const QString& name);
     bool delAlbumCategoryName(const QString& name);
@@ -122,14 +121,14 @@ public:
     AlbumSortOrder getAlbumSortOrder() const;
 
     void setImageSortOrder(int order);
-    int getImageSortOrder() const;
+    int  getImageSortOrder() const;
 
     // means ascending or descending
     void setImageSorting(int sorting);
-    int getImageSorting() const;
+    int  getImageSorting() const;
 
     void setImageGroupMode(int mode);
-    int getImageGroupMode() const;
+    int  getImageGroupMode() const;
 
     void setItemLeftClickAction(const ItemLeftClickAction action);
     ItemLeftClickAction getItemLeftClickAction() const;
@@ -382,8 +381,8 @@ private:
 
     friend class AlbumSettingsCreator;
 
-    class AlbumSettingsPrivate;
-    AlbumSettingsPrivate* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam
