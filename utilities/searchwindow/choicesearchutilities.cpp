@@ -61,7 +61,7 @@ ChoiceSearchModel::ChoiceSearchModel(QObject* const parent)
 {
 }
 
-void ChoiceSearchModel::setChoice(QMap<int, QString> data)
+void ChoiceSearchModel::setChoice(const QMap<int, QString>& data)
 {
     if (m_entries.size())
     {
@@ -75,7 +75,7 @@ void ChoiceSearchModel::setChoice(QMap<int, QString> data)
     }
 }
 
-void ChoiceSearchModel::setChoice(QVariantList data)
+void ChoiceSearchModel::setChoice(const QVariantList& data)
 {
     if (m_entries.size())
     {

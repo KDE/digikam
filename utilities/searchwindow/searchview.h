@@ -123,6 +123,9 @@ public:
     void read(const QString& search);
     QString write() const;
 
+    QPixmap groupLabelPixmap(int w, int h);
+    QPixmap bottomBarPixmap(int w, int h);
+
 Q_SIGNALS:
 
     void searchOk();
@@ -137,11 +140,6 @@ protected Q_SLOTS:
     void startAnimation();
     void animationFrame(int);
     void timeLineFinished();
-
-public:
-
-    QPixmap groupLabelPixmap(int w, int h);
-    QPixmap bottomBarPixmap(int w, int h);
 
 protected:
 
