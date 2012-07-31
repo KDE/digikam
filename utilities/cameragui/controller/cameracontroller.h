@@ -147,14 +147,11 @@ private Q_SLOTS:
     void slotDeleteFailed(const QString& folder, const QString& file);
     void slotLockFailed(const QString& folder, const QString& file);
     void slotOpen(const QString& folder, const QString& file, const QString& dest);
-    void slotAutoRotateThreadFinished();
 
 private:
 
     void sendLogMsg(const QString& msg, DHistoryView::EntryType type=DHistoryView::StartingEntry,
                     const QString& folder=QString(), const QString& file=QString());
-
-    static void runAutoRotateThread(CameraController* cont, KUrl& tempURL, QString& folder, QString& file);
 
     void addCommand(CameraCommand* const cmd);
     bool queueIsEmpty() const;

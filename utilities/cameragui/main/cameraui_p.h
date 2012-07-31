@@ -37,6 +37,7 @@
 #include <khelpmenu.h>
 #include <kselectaction.h>
 #include <ktoggleaction.h>
+#include <KActionMenu>
 #include <kurl.h>
 
 // LibKDcraw includes
@@ -61,6 +62,7 @@
 #include "sidebar.h"
 #include "statusnavigatebar.h"
 #include "statusprogressbar.h"
+#include "importview.h"
 
 using namespace KDcrawIface;
 
@@ -164,9 +166,11 @@ public:
     KAction*                      cameraCaptureAction;
     KAction*                      cameraInfoAction;
     KAction*                      decreaseThumbsAction;
+    KActionMenu*                  deleteAction;
     KAction*                      deleteNewAction;
     KAction*                      deleteAllAction;
     KAction*                      deleteSelectedAction;
+    KActionMenu*                  downloadAction;
     KAction*                      downloadNewAction;
     KAction*                      downloadAllAction;
     KAction*                      downloadSelectedAction;
@@ -186,9 +190,15 @@ public:
     KAction*                      selectNoneAction;
     KAction*                      uploadAction;
     KAction*                      markAsDownloadedAction;
+    KAction*                      resumeAction;
+    KAction*                      pauseAction;
     KToggleAction*                lastPhotoFirstAction;
     KToggleAction*                showMenuBarAction;
     KToggleAction*                showLogAction;
+    KSelectAction*                imageViewSelectionAction;
+    KToggleAction*                iconViewAction;
+    KToggleAction*                camItemPreviewAction;
+    KToggleAction*                mapViewAction;
 
     KUrl                          lastDestURL;
 
@@ -202,7 +212,7 @@ public:
     CameraController*             controller;
     CameraHistoryUpdater*         historyUpdater;
 
-    CameraIconView*               view;
+    ImportView*                   view;
 
     RenameCustomizer*             renameCustomizer;
     AlbumCustomizer*              albumCustomizer;

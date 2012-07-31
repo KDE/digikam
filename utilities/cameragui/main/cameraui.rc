@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="205" name="cameraui" >
+<gui version="5205" name="cameraui" >
 
 <MenuBar>
 
@@ -44,6 +44,10 @@
     </Menu>
 
     <Menu name="View" ><text>&amp;View</text>
+        <Action name="cameraui_icon_view" />
+        <Action name="cameraui_item_view" />
+        <Action name="cameraui_map_view" />
+        <Separator/>
         <Action name="cameraui_fullscreen" />
         <Action name="cameraui_showlog" />
         <Separator/>
@@ -82,11 +86,15 @@
      <Action name="cameraui_cancelprocess" />
      <Separator/>
      <Action name="cameraui_imageview" />
-     <Action name="cameraui_imagedownloadnew" />
+     <Action name="cameraui_imagedownload" />
      <Action name="cameraui_imageupload" />
      <Action name="cameraui_imagelock" />
      <Separator/>
      <Action name="cameraui_capture" />
+     <Separator/>
+     <Action name="cameraui_icon_view" />
+     <Action name="cameraui_item_view" />
+     <Action name="cameraui_map_view" />
      <Separator/>
      <Action name="cameraui_fullscreen" />
      <Merge />
