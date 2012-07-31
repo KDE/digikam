@@ -22,72 +22,31 @@
  * ============================================================ */
 
 #include "itemviewimportdelegate.moc"
+#include "itemviewimportdelegatepriv.h"
+#include "itemviewimportdelegate.h" //TODO: Remove this line.
 
 // Qt includes
 
+#include <QCache>
 #include <QPainter>
+#include <QIcon>
 
 // KDE includes
 
+#include <kglobal.h>
 #include <kio/global.h>
 #include <klocale.h>
+#include <kiconloader.h>
+#include <kdebug.h>
 #include <kapplication.h>
 
 // Local includes
 
+#include "imagedelegateoverlay.h"
 #include "thememanager.h"
 
 namespace Digikam
 {
-
-class ItemViewImportDelegatePrivate
-{
-public:
-
-    ItemViewImportDelegatePrivate();
-    virtual ~ItemViewImportDelegatePrivate() {}
-
-    void init(ItemViewImportDelegate* const _q);
-
-    void makeStarPolygon();
-
-    /// Resets cached rects. Remember to reimplement in subclass for added rects.
-    virtual void clearRects();
-
-public:
-
-    int                       spacing;
-    QSize                     gridSize;
-
-    QRect                     rect;
-    QRect                     ratingRect;
-
-    QPixmap                   regPixmap;
-    QPixmap                   selPixmap;
-    QVector<QPixmap>          ratingPixmaps;
-
-    QFont                     font;
-    QFont                     fontReg;
-    QFont                     fontCom;
-    QFont                     fontXtra;
-
-    QPolygon                  starPolygon;
-    QSize                     starPolygonSize;
-
-    ThumbnailSize             thumbSize;
-
-    QPersistentModelIndex     editingRating;
-
-    ItemViewImportDelegate*    q;
-
-    QRect                     oneRowRegRect;
-    QRect                     oneRowComRect;
-    QRect                     oneRowXtraRect;
-
-    // constant values for drawing
-    int                       radius;
-    int                       margin;
-};
 
 ItemViewImportDelegatePrivate::ItemViewImportDelegatePrivate()
 {
@@ -138,9 +97,15 @@ void ItemViewImportDelegatePrivate::makeStarPolygon()
 // ---- ItemViewImportDelegate -----------------------------------------------
 
 ItemViewImportDelegate::ItemViewImportDelegate(QObject* const parent)
-    : DItemDelegate(parent), d(new ItemViewImportDelegatePrivate)
+    : DItemDelegate(parent), d_ptr(new ItemViewImportDelegatePrivate)
 {
-    d->init(this);
+    d_ptr->init(this);
+}
+
+ItemViewImportDelegate::ItemViewImportDelegate(ItemViewImportDelegatePrivate& dd, QObject* parent)
+    : DItemDelegate(parent), d_ptr(&dd)
+{
+    d_ptr->init(this);
 }
 
 ItemViewImportDelegate::~ItemViewImportDelegate()
@@ -271,6 +236,7 @@ void ItemViewImportDelegate::invalidatePaintingCache()
 {
     Q_D(ItemViewImportDelegate);
     QSize oldGridSize = d->gridSize;
+    qDebug() << "Width: " << d->gridSize.width() << "Height: " << d->gridSize.height();//TODO: Remove this line.
     updateSizeRectsAndPixmaps();
 
     if (oldGridSize != d->gridSize)
@@ -332,6 +298,56 @@ void ItemViewImportDelegate::drawModificationDate(QPainter* p, const QRect& date
     p->drawText(dateRect, Qt::AlignCenter, str);//squeezedTextCached(p, dateRect.width(), str));
 }
 
+void ItemViewImportDelegate::drawImageFormat(QPainter* p, const QRect& r, const QString& mime) const
+{
+    Q_D(const ItemViewImportDelegate);
+
+    if (!mime.isEmpty() && !r.isNull())
+    {
+        p->save();
+
+        QFont fnt(d->fontReg);
+        fnt.setWeight(QFont::Black);
+        fnt.setItalic(false);
+        p->setFont(fnt);
+        p->setPen(QPen(Qt::gray));
+        p->setOpacity(0.50);
+
+        QRect bRect = p->boundingRect(r, Qt::AlignTop | Qt::AlignHCenter, mime.toUpper());
+        bRect.adjust(-1, -1, 1, 1);
+        bRect.translate(0, 1);
+
+        p->fillRect(bRect, Qt::SolidPattern);
+        p->setPen(QPen(Qt::white));
+        p->setOpacity(1.0);
+        p->drawText(bRect, Qt::AlignTop | Qt::AlignHCenter, mime.toUpper());
+
+        p->restore();
+    }
+}
+
+void ItemViewImportDelegate::drawImageSize(QPainter* p, const QRect& dimsRect, const QSize& dims) const
+{
+    Q_D(const ItemViewImportDelegate);
+
+    if (dims.isValid())
+    {
+        p->setFont(d->fontXtra);
+        QString mpixels, resolution;
+        mpixels.setNum(dims.width()*dims.height()/1000000.0, 'f', 2);
+
+        if (dims.isValid())
+            resolution = i18nc("%1 width, %2 height, %3 mpixels", "%1x%2 (%3Mpx)",
+                               dims.width(), dims.height(), mpixels);
+        else
+        {
+            resolution = i18nc("unknown image resolution", "Unknown");
+        }
+
+        p->drawText(dimsRect, Qt::AlignCenter, resolution);
+    }
+}
+
 void ItemViewImportDelegate::drawFileSize(QPainter* p, const QRect& r, qlonglong bytes) const
 {
     Q_D(const ItemViewImportDelegate);
@@ -356,6 +372,20 @@ void ItemViewImportDelegate::drawPanelSideIcon(QPainter* p, bool left, bool righ
         QRect r(d->rect.width() - 3 - iconSize, d->rect.height()/2 - iconSize/2, iconSize, iconSize);
         QIcon icon = KIconLoader::global()->loadIcon("arrow-right", KIconLoader::NoGroup, iconSize);
         icon.paint(p, r);
+    }
+}
+
+void ItemViewImportDelegate::drawFocusRect(QPainter* p, const QStyleOptionViewItem& option,
+                                          bool isSelected) const
+{
+    Q_D(const ItemViewImportDelegate);
+
+    if (option.state & QStyle::State_HasFocus) //?? is current item
+    {
+        p->setPen(QPen(isSelected ? kapp->palette().color(QPalette::HighlightedText)
+                                  : kapp->palette().color(QPalette::Text),
+                       1, Qt::DotLine));
+        p->drawRect(1, 1, d->rect.width()-3, d->rect.height()-3);
     }
 }
 

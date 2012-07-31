@@ -24,12 +24,14 @@
 #ifndef IMPORTDELEGATE_H
 #define IMPORTDELEGATE_H
 
+#include <qglobal.h>
+
 // Local includes
 
 #include "itemviewimportdelegate.h"
 #include "importthumbnailmodel.h"
-#include "importcategorizedview.h"
 #include "importcategorydrawer.h"
+#include "importcategorizedview.h"
 
 namespace Digikam
 {
@@ -76,13 +78,14 @@ public:
     virtual void prepareThumbnails(ImportThumbnailModel* thumbModel, const QList<QModelIndex>& indexes);
 
     /**
-     * Retrieve the thumbnail pixmap in given size for the ImageModel::ThumbnailRole for
-     * the given index from the given index, which must adhere to ImageThumbnailModel semantics.
+     * Retrieve the thumbnail pixmap in given size for the ImportImageModel::ThumbnailRole for
+     * the given index from the given index, which must adhere to ImportThumbnailModel semantics.
      */
     static QPixmap retrieveThumbnailPixmap(const QModelIndex& index, int thumbnailSize);
 
 public:
 
+    // Declared as public because of use in ImportNormalDelegate class.
     class ImportDelegatePrivate;
 
 protected:

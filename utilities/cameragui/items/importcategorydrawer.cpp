@@ -22,11 +22,12 @@
  * ============================================================ */
 
 #include "importcategorydrawer.moc"
-#include "importcategorydrawer.h" //TODO: Remove this line
+#include "importcategorydrawer.h"
 
 // Qt includes
 
 #include <QPainter>
+#include <QSharedData>
 
 // KDE includes
 
@@ -48,6 +49,7 @@ public:
     {
         lowerSpacing = 0;
         view         = 0;
+        rect         = QRect(0, -1, 0, -1);//TODO: Remove this line.
     }
 
     QFont                  font;
@@ -99,7 +101,7 @@ void ImportCategoryDrawer::setDefaultViewOptions(const QStyleOptionViewItem& opt
 
 void ImportCategoryDrawer::invalidatePaintingCache()
 {
-    if (d->rect.isNull())
+    if (d->rect.isEmpty())
     {
         return;
     }
@@ -152,9 +154,10 @@ void ImportCategoryDrawer::drawCategory(const QModelIndex& index, int /*sortRole
         case CamItemSortSettings::OneCategory:
             viewHeaderText(index, &header, &subLine);
             break;
-        case CamItemSortSettings::CategoryByFormat:
-            textForFormat(index, &header, &subLine);
-            break;
+        //TODO:
+        //case CamItemSortSettings::CategoryByFormat:
+            //textForFormat(index, &header, &subLine);
+            //break;
     }
 
     p->setPen(kapp->palette().color(QPalette::HighlightedText));

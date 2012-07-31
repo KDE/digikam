@@ -8,11 +8,13 @@
 
 // Local includes
 
-#include "importdelegate.h"
+#include "importcategorizedview.h"
 #include "itemviewimportdelegatepriv.h"
 
 namespace Digikam
 {
+
+class ImportCategoryDrawer;
 
 class ImportDelegate::ImportDelegatePrivate : public ItemViewImportDelegatePrivate
 {
@@ -63,6 +65,8 @@ public:
     virtual void clearRects();
 };
 
+// --- ImportThumbnailDelegate ----------------------------------------------------
+
 class ImportThumbnailDelegatePrivate : public ImportDelegate::ImportDelegatePrivate
 {
 public:
@@ -86,6 +90,8 @@ public:
 
     void init(ImportThumbnailDelegate* q);
 };
+
+// --- ImportNormalDelegate ----------------------------------------------------
 
 class ImportNormalDelegatePrivate : public ImportDelegate::ImportDelegatePrivate
 {
