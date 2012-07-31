@@ -39,6 +39,8 @@ public:
 
     ImportModel(QObject* const parent = 0);
     ~ImportModel();
+
+    void setupCameraController(CameraController* const controller);
 };
 
 } // namespace Digikam

@@ -112,7 +112,7 @@ void ImportImageModel::setCameraController(CameraController* const controller)
     d->controller = controller;
 
     connect(d->controller, SIGNAL(signalFileList(CamItemInfoList)),
-            SLOT(reAddCamInfos(CamItemInfoList)));
+            SLOT(reAddCamItemInfos(CamItemInfoList)));
 
     connect(d->controller, SIGNAL(signalDeleted(QString, QString, bool)),
             SLOT(slotFileDeleted(QString, QString, bool)));
@@ -561,7 +561,7 @@ void ImportImageModel::appendInfos(const QList<CamItemInfo>& infos)
     }
 }
 
-void ImportImageModel::reAddCamInfos(const CamItemInfoList& infos)
+void ImportImageModel::reAddCamItemInfos(const CamItemInfoList& infos)
 {
     publiciseInfos(infos);
 }
@@ -638,6 +638,7 @@ void ImportImageModel::publiciseInfos(const QList<CamItemInfo>& infos)
     for (int i = firstNewIndex; i <= lastNewIndex; ++i)
     {
         const CamItemInfo& info = d->infos.at(i);
+        qDebug() << info.name; //TODO: Remove this line.
         qlonglong id            = info.id;
         d->idHash.insertMulti(id, i);
 

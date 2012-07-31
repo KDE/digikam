@@ -127,22 +127,41 @@ public:
     CamItemSortSettings camItemSortSettings() const;
 
     void setCamItemSortSettings(const CamItemSortSettings& sorter);
+
+    /// Enables sending camItemInfosAdded and camItemInfosAboutToBeRemoved.
+    void setSendCamItemInfoSignals(bool sendSignals);
+
+    //TODO: Implement grouping in import tool.
+    //bool isGroupOpen(qlonglong group) const;
+    //bool isAllGroupsOpen() const;
+
+    virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
+    virtual ImportFilterModel* importFilterModel()                              const;
+
+public Q_SLOTS:
+
     void setCategorizationMode(CamItemSortSettings::CategorizationMode mode);
     void setSortRole(CamItemSortSettings::SortRole role);
     void setSortOrder(CamItemSortSettings::SortOrder order);
 
-    /// Enables sending imageInfosAdded and imageInfosAboutToBeRemoved.
-    void setSendCamItemInfoSignals(bool sendSignals);
+    //TODO: Implement grouping in import tool.
+    //void setGroupOpen(qlonglong group, bool open);
+    //void toggleGroupOpen(qlonglong group);
+    //void setAllGroupsOpen(bool open);
 
-    virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
-    virtual ImportFilterModel* importFilterModel()                              const;
+    /** Changes the current image filter settings and refilters. */
+    //TODO: Implement filtering in import tool.
+    //virtual void setImageFilterSettings(const ImageFilterSettings& settings);
+
+    /** Changes the current image sort settings and resorts. */
+    //TODO: virtual void setImageSortSettings(const ImageSortSettings& settings);
 
 Q_SIGNALS:
 
     /** These signals need to be explicitly enabled with setSendImageInfoSignals().
      */
-    void imageInfosAdded(const QList<CamItemInfo>& infos);
-    void imageInfosAboutToBeRemoved(const QList<CamItemInfo>& infos);
+    void camItemInfosAdded(const QList<CamItemInfo>& infos);
+    void camItemInfosAboutToBeRemoved(const QList<CamItemInfo>& infos);
 
 protected Q_SLOTS:
 
@@ -184,6 +203,21 @@ protected:
 private:
 
     Q_DECLARE_PRIVATE(ImportFilterModel)
+};
+
+// -----------------------------------------------------------------------------------------------------
+
+class NoDuplicatesImportFilterModel : public ImportSortFilterModel
+{
+    Q_OBJECT
+
+public:
+
+    NoDuplicatesImportFilterModel(QObject* parent = 0);
+
+protected:
+
+    virtual bool filterAcceptsRow(int source_row, const QModelIndex& source_parent) const;
 };
 
 } // namespace Digikam

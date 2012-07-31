@@ -116,6 +116,7 @@ void ImportThumbnailModel::prepareThumbnails(const QList<QModelIndex>& indexesTo
     {
         infos << camItemInfoRef(index);
     }
+    qDebug() << "IMPORT THUMB MODEL: " << QString::number(thumbSize.size());
     d->controller->getThumbsInfo(infos, thumbSize);
 }
 

@@ -215,9 +215,8 @@ void ImportSortFilterModel::setDirectSourceImportModel(ImportImageModel* const s
 
 //--- ImportFilterModel methods ---------------------------------
 
-class ImportFilterModel::ImportFilterModelPrivate: public QObject
+class ImportFilterModel::ImportFilterModelPrivate : public QObject
 {
-    Q_OBJECT
 
 public:
 
@@ -227,15 +226,28 @@ public:
         importImageModel = 0;
     }
 
+    void init(ImportFilterModel* _q);
+
     ImportFilterModel*  q;
     ImportImageModel*   importImageModel;
     CamItemSortSettings sorter;
+
+Q_SIGNALS:
+
+    void reAddCamItemInfos(const QList<CamItemInfo>);
+    void reAddingFinished();
 };
+
+void ImportFilterModel::ImportFilterModelPrivate::init(ImportFilterModel* _q)
+{
+    q = _q;
+}
 
 ImportFilterModel::ImportFilterModel(QObject* const parent)
     : ImportSortFilterModel(parent),
       d_ptr(new ImportFilterModelPrivate)
 {
+    d_ptr->init(this);
 }
 
 ImportFilterModel::~ImportFilterModel()
@@ -279,7 +291,7 @@ ImportFilterModel* ImportFilterModel::importFilterModel() const
     return const_cast<ImportFilterModel*>(this);
 }
 
-// ------------- Sorting and Categorization -------------------
+// --- Sorting and Categorization ----------------------------------------------
 
 void ImportFilterModel::setCamItemSortSettings(const CamItemSortSettings& sorter)
 {
@@ -339,7 +351,7 @@ void ImportFilterModel::slotRowsInserted(const QModelIndex& /*parent*/, int star
         infos << camItemInfo(index(i, 0));
     }
 
-    emit imageInfosAdded(infos);
+    emit camItemInfosAdded(infos);
 }
 
 void ImportFilterModel::slotRowsAboutToBeRemoved(const QModelIndex& /*parent*/, int start, int end)
@@ -351,7 +363,7 @@ void ImportFilterModel::slotRowsAboutToBeRemoved(const QModelIndex& /*parent*/, 
         infos << camItemInfo(index(i, 0));
     }
 
-    emit imageInfosAboutToBeRemoved(infos);
+    emit camItemInfosAboutToBeRemoved(infos);
 }
 
 void ImportFilterModel::setDirectSourceImportModel(ImportImageModel* const sourceModel)
@@ -373,17 +385,17 @@ void ImportFilterModel::setDirectSourceImportModel(ImportImageModel* const sourc
     {
         d->importImageModel->setPreprocessor(d);
 
-        connect(d->importImageModel, SIGNAL(preprocess(QList<CamItemInfo>,QList<QVariant>)),
-                d, SLOT(preprocessInfos(QList<CamItemInfo>,QList<QVariant>)));
+        //connect(d->importImageModel, SIGNAL(preprocess(QList<CamItemInfo>,QList<QVariant>)),
+                //d, SLOT(preprocessInfos(QList<CamItemInfo>,QList<QVariant>)));
 
-        connect(d->importImageModel, SIGNAL(processAdded(QList<CamItemInfo>,QList<QVariant>)),
-                d, SLOT(processAddedInfos(QList<CamItemInfo>,QList<QVariant>)));
+        //connect(d->importImageModel, SIGNAL(processAdded(QList<CamItemInfo>,QList<QVariant>)),
+                //d, SLOT(processAddedInfos(QList<CamItemInfo>,QList<QVariant>)));
 
-        connect(d, SIGNAL(reAddCamItemInfos(QList<CamItemInfo>,QList<QVariant>)),
-                d->importImageModel, SLOT(reAddCamItemInfos(QList<CamItemInfo>,QList<QVariant>)));
+        //connect(d, SIGNAL(reAddCamItemInfos(QList<CamItemInfo>)),
+                //d->importImageModel, SLOT(reAddCamItemInfos(QList<CamItemInfo>)));
 
-        connect(d, SIGNAL(reAddingFinished()),
-                d->importImageModel, SLOT(reAddingFinished()));
+        //connect(d, SIGNAL(reAddingFinished()),
+                //d->importImageModel, SLOT(reAddingFinished()));
 
         //TODO: connect(d->importImageModel, SIGNAL(modelReset()), this, SLOT(slotModelReset()));
     }
@@ -455,6 +467,35 @@ QString ImportFilterModel::categoryIdentifier(const CamItemInfo& info) const
         default:
             return QString();
     }
+}
+
+// -------------------------------------------------------------------------------------------------------
+
+NoDuplicatesImportFilterModel::NoDuplicatesImportFilterModel(QObject* parent)
+    : ImportSortFilterModel(parent)
+{
+}
+
+bool NoDuplicatesImportFilterModel::filterAcceptsRow(int source_row, const QModelIndex& source_parent) const
+{
+    QModelIndex index = sourceModel()->index(source_row, 0, source_parent);
+    if (index.data(ImportImageModel::ExtraDataDuplicateCount).toInt() <= 1)
+    {
+        return true;
+    }
+
+    QModelIndex previousIndex = sourceModel()->index(source_row - 1, 0, source_parent);
+    if (!previousIndex.isValid())
+    {
+        return true;
+    }
+
+    if (sourceImportModel()->camItemId(mapFromDirectSourceToSourceImportModel(index))
+        == sourceImportModel()->camItemId(mapFromDirectSourceToSourceImportModel(previousIndex)))
+    {
+        return false;
+    }
+    return true;
 }
 
 } // namespace Digikam
