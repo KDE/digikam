@@ -6,7 +6,7 @@
  * Date        : 2008-02-26
  * Description : Upper widget in the search sidebar
  *
- * Copyright (C) 2008-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2008-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -60,7 +60,8 @@ class KeywordLineEdit : public KLineEdit
 {
 public:
 
-    KeywordLineEdit(QWidget* parent = 0) : KLineEdit(parent)
+    KeywordLineEdit(QWidget* const parent = 0)
+        : KLineEdit(parent)
     {
         m_hasAdvanced = false;
     }
@@ -124,11 +125,11 @@ protected:
 
 // -------------------------------------------------------------------------
 
-class SearchTabHeaderPriv
+class SearchTabHeader::Private
 {
 public:
 
-    SearchTabHeaderPriv() :
+    Private() :
         newSearchWidget(0),
         saveAsWidget(0),
         editSimpleWidget(0),
@@ -178,23 +179,23 @@ public:
     QString             oldStoredKeywordContent;
 };
 
-SearchTabHeader::SearchTabHeader(QWidget* parent)
-    : QWidget(parent), d(new SearchTabHeaderPriv)
+SearchTabHeader::SearchTabHeader(QWidget* const parent)
+    : QWidget(parent), d(new Private)
 {
     QVBoxLayout* mainLayout = new QVBoxLayout(this);
     setLayout(mainLayout);
 
     // upper part
-    d->newSearchWidget = new QGroupBox(this);
+    d->newSearchWidget      = new QGroupBox(this);
     mainLayout->addWidget(d->newSearchWidget);
 
     // lower part
-    d->lowerArea = new QStackedLayout;
+    d->lowerArea            = new QStackedLayout;
     mainLayout->addLayout(d->lowerArea);
 
-    d->saveAsWidget       = new QGroupBox(this);
-    d->editSimpleWidget   = new QGroupBox(this);
-    d->editAdvancedWidget = new QGroupBox(this);
+    d->saveAsWidget         = new QGroupBox(this);
+    d->editSimpleWidget     = new QGroupBox(this);
+    d->editAdvancedWidget   = new QGroupBox(this);
     d->lowerArea->addWidget(d->saveAsWidget);
     d->lowerArea->addWidget(d->editSimpleWidget);
     d->lowerArea->addWidget(d->editAdvancedWidget);
@@ -267,9 +268,9 @@ SearchTabHeader::SearchTabHeader(QWidget* parent)
     // lower part, variant 3
     d->editAdvancedWidget->setTitle(i18n("Edit Stored Search"));
 
-    QVBoxLayout* vbox2 = new QVBoxLayout;
+    QVBoxLayout* vbox2         = new QVBoxLayout;
 
-    d->storedAdvancedEditName = new KSqueezedTextLabel(this);
+    d->storedAdvancedEditName  = new KSqueezedTextLabel(this);
     d->storedAdvancedEditName->setTextElideMode(Qt::ElideRight);
     d->storedAdvancedEditLabel = new QPushButton(i18n("Edit..."), this);
 
@@ -280,7 +281,7 @@ SearchTabHeader::SearchTabHeader(QWidget* parent)
     // ------------------- //
 
     // timers
-    d->keywordEditTimer = new QTimer(this);
+    d->keywordEditTimer       = new QTimer(this);
     d->keywordEditTimer->setSingleShot(true);
     d->keywordEditTimer->setInterval(800);
 
@@ -324,7 +325,7 @@ SearchTabHeader::~SearchTabHeader()
     delete d;
 }
 
-SearchWindow* SearchTabHeader::searchWindow()
+SearchWindow* SearchTabHeader::searchWindow() const
 {
     if (!d->searchWindow)
     {
@@ -486,7 +487,7 @@ void SearchTabHeader::saveSearch()
 
     while (oldAlbum)
     {
-        QString label = i18n("Search name already exists."
+        QString label    = i18n("Search name already exists."
                              "\nPlease enter a new name:");
         bool ok;
         QString newTitle = KInputDialog::getText(i18n("Name exists"), label,
@@ -584,7 +585,7 @@ void SearchTabHeader::setCurrentSearch(DatabaseSearch::Type type, const QString&
     }
 }
 
-QString SearchTabHeader::queryFromKeywords(const QString& keywords)
+QString SearchTabHeader::queryFromKeywords(const QString& keywords) const
 {
     QStringList keywordList = KeywordSearch::split(keywords);
     // create xml
@@ -592,7 +593,7 @@ QString SearchTabHeader::queryFromKeywords(const QString& keywords)
     return writer.xml(keywordList);
 }
 
-QString SearchTabHeader::keywordsFromQuery(const QString& query)
+QString SearchTabHeader::keywordsFromQuery(const QString& query) const
 {
     KeywordSearchReader reader(query);
     QStringList keywordList = reader.keywords();

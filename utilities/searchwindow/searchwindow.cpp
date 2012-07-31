@@ -6,7 +6,7 @@
  * Date        : 2008-01-20
  * Description : User interface for searches
  *
- * Copyright (C) 2008-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2008-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -42,11 +42,11 @@
 namespace Digikam
 {
 
-class SearchWindowPriv
+class SearchWindow::Private
 {
 public:
 
-    SearchWindowPriv() :
+    Private() :
         scrollArea(0),
         searchView(0),
         bottomBar(0),
@@ -64,18 +64,18 @@ public:
 };
 
 SearchWindow::SearchWindow()
-    : QWidget(0), d(new SearchWindowPriv)
+    : QWidget(0), d(new Private)
 {
     QVBoxLayout* layout = new QVBoxLayout;
 
-    d->scrollArea = new QScrollArea(this);
+    d->scrollArea       = new QScrollArea(this);
     d->scrollArea->setWidgetResizable(true);
     d->scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
 
-    d->searchView = new SearchView;
+    d->searchView       = new SearchView;
     d->searchView->setup();
 
-    d->bottomBar = new SearchViewBottomBar(d->searchView);
+    d->bottomBar        = new SearchViewBottomBar(d->searchView);
     d->searchView->setBottomBar(d->bottomBar);
 
     d->scrollArea->setWidget(d->searchView);
@@ -108,21 +108,21 @@ SearchWindow::~SearchWindow()
 
 void SearchWindow::readSearch(int id, const QString& xml)
 {
-    d->currentId = id;
+    d->currentId     = id;
     d->hasTouchedXml = false;
-    d->oldXml = xml;
+    d->oldXml        = xml;
     d->searchView->read(xml);
 }
 
 void SearchWindow::reset()
 {
-    d->currentId = -1;
+    d->currentId     = -1;
     d->hasTouchedXml = false;
     d->oldXml.clear();
     d->searchView->read(QString());
 }
 
-QString SearchWindow::search()
+QString SearchWindow::search() const
 {
     return d->searchView->write();
 }

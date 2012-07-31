@@ -6,7 +6,7 @@
  * Date        : 2008-03-14
  * Description : User interface for searches
  *
- * Copyright (C) 2008-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2008-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -43,9 +43,7 @@
 
 #include "comboboxutilities.h"
 
-class QVBoxLayout;
 class KTextEdit;
-class QTimeLine;
 class KPushButton;
 
 namespace Digikam
@@ -57,12 +55,12 @@ class AnimatedClearButton : public QWidget
 
 public:
 
-    AnimatedClearButton(QWidget* parent = 0);
+    AnimatedClearButton(QWidget* const parent = 0);
 
     QSize sizeHint() const;
 
     void setPixmap(const QPixmap& p);
-    QPixmap pixmap();
+    QPixmap pixmap() const;
 
     /**
      * Sets a primary condition for the button to be shown.
@@ -76,13 +74,15 @@ public:
      *  but paints nothing.
      *  If stayVisible is false, setVisible(false) is called,
      *  which removes the widget for layouting etc.
-     *  Default: false */
+     *  Default: false 
+     */
     void stayVisibleWhenAnimatedOut(bool stayVisible);
 
 public Q_SLOTS:
 
     /// Set visible, possibly with animation
     void animateVisible(bool visible);
+
     /// Set visible without animation
     void setDirectlyVisible(bool visible);
 
@@ -102,8 +102,8 @@ protected Q_SLOTS:
 
 private:
 
-    class AnimatedClearButtonPriv;
-    AnimatedClearButtonPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 // -------------------------------------------------------------------------
@@ -118,10 +118,8 @@ public:
      *  customize the stepping behavior, for cases where
      *  linear steps are not applicable
      */
-
-    CustomStepsDoubleSpinBox(QWidget* parent = 0);
-
-    virtual void stepBy(int steps);
+    CustomStepsDoubleSpinBox(QWidget* const parent = 0);
+    ~CustomStepsDoubleSpinBox();
 
     /** Set a list of values that are usually applicable for the
      *  type of data of the combo box. The user can still type in
@@ -132,30 +130,31 @@ public:
     void setSuggestedValues(const QList<double>& values);
 
     /** Sets the value that should be set as first value
-     *  when first moving away from the minimum value. */
+     *  when first moving away from the minimum value.
+     */
     void setSuggestedInitialValue(double initialValue);
 
     /** Allows to set to different default single steps,
-     *  for the range below m_values, the other for above */
+     *  for the range below m_values, the other for above.
+     */
     void setSingleSteps(double smaller, double larger);
 
     void setInvertStepping(bool invert);
 
-    /** Resets to minimum value */
+    /** Resets to minimum value.
+     */
     void reset();
+
+    virtual void stepBy(int steps);
 
 private Q_SLOTS:
 
-    void slotValueChanged(double d);
+    void slotValueChanged(double val);
 
 private:
 
-    bool          m_beforeInitialValue;
-    QList<double> m_values;
-    double        m_initialValue;
-    double        m_smallerStep;
-    double        m_largerStep;
-    bool          m_invertStepping;
+    class Private;
+    Private* const d;
 };
 
 // -------------------------------------------------------------------------
@@ -170,10 +169,7 @@ public:
      *  customize the stepping behavior, for cases where
      *  linear steps are not applicable
      */
-
-    CustomStepsIntSpinBox(QWidget* parent = 0);
-
-    virtual void stepBy(int steps);
+    CustomStepsIntSpinBox(QWidget* const parent = 0);
 
     /** Set a list of values that are usually applicable for the
      *  type of data of the combo box. The user can still type in
@@ -184,25 +180,32 @@ public:
     void setSuggestedValues(const QList<int>& values);
 
     /** Sets the value that should be set as first value
-     *  when first moving away from the minimum value. */
+     *  when first moving away from the minimum value.
+     */
     void setSuggestedInitialValue(int initialValue);
 
     /** Allows to set to different default single steps,
-     *  for the range below m_values, the other for above */
+     *  for the range below m_values, the other for above.
+     */
     void setSingleSteps(int smaller, int larger);
 
     void setInvertStepping(bool invert);
 
     /** Call this with a fraction prefix (like "1/") to enable
-     *  magic handling of the value as fraction denominator. */
+     *  magic handling of the value as fraction denominator.
+     */
     void enableFractionMagic(const QString& prefix);
 
-    /** Resets to minimum value */
+    /** Resets to minimum value 
+     */
     void reset();
 
-    /** value() and setValue() for fraction magic value. */
+    /** value() and setValue() for fraction magic value.
+     */
     double fractionMagicValue() const;
-    void setFractionMagicValue(double value);
+    void   setFractionMagicValue(double value);
+
+    virtual void stepBy(int steps);
 
 protected:
 
@@ -216,14 +219,14 @@ private Q_SLOTS:
 
 private:
 
-    bool          m_beforeInitialValue;
-    QList<int>    m_values;
-    int           m_initialValue;
-    int           m_smallerStep;
-    int           m_largerStep;
-    bool          m_invertStepping;
-    QString       m_fractionPrefix;
-    QString       m_fractionSpecialValueText;
+    bool       m_beforeInitialValue;
+    QList<int> m_values;
+    int        m_initialValue;
+    int        m_smallerStep;
+    int        m_largerStep;
+    bool       m_invertStepping;
+    QString    m_fractionPrefix;
+    QString    m_fractionSpecialValueText;
 };
 
 // -------------------------------------------------------------------------
@@ -240,9 +243,9 @@ public:
      *  If you want to develop or debug the stylesheet on your widget,
      *  add temporary code:
      *  new StyleSheetDebugger(myWidget);
-     *  That's all. Change the style sheet by editing it and pressing Ok. */
-
-    StyleSheetDebugger(QWidget* object);
+     *  That's all. Change the style sheet by editing it and pressing Ok.
+     */
+    StyleSheetDebugger(QWidget* const object);
 
 protected Q_SLOTS:
 
@@ -250,9 +253,9 @@ protected Q_SLOTS:
 
 protected:
 
-    KTextEdit*      m_edit;
-    KPushButton*    m_okButton;
-    QWidget*        m_widget;
+    KTextEdit*   m_edit;
+    KPushButton* m_okButton;
+    QWidget*     m_widget;
 };
 
 } // namespace Digikam

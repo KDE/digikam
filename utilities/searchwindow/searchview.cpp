@@ -6,7 +6,7 @@
  * Date        : 2008-01-20
  * Description : User interface for searches
  *
- * Copyright (C) 2008-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2008-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -52,7 +52,7 @@
 namespace Digikam
 {
 
-AbstractSearchGroupContainer::AbstractSearchGroupContainer(QWidget* parent)
+AbstractSearchGroupContainer::AbstractSearchGroupContainer(QWidget* const parent)
     : QWidget(parent), m_groupIndex(0)
 {
 }
@@ -62,8 +62,10 @@ SearchGroup* AbstractSearchGroupContainer::addSearchGroup()
     SearchGroup* group = createSearchGroup();
     m_groups << group;
     addGroupToLayout(group);
+
     connect(group, SIGNAL(removeRequested()),
             this, SLOT(removeSendingSearchGroup()));
+
     return group;
 }
 
@@ -118,7 +120,7 @@ void AbstractSearchGroupContainer::finishReadingGroups()
     }
 }
 
-void AbstractSearchGroupContainer::writeGroups(SearchXmlWriter& writer)
+void AbstractSearchGroupContainer::writeGroups(SearchXmlWriter& writer) const
 {
     foreach(SearchGroup* group, m_groups)
     {
@@ -143,11 +145,11 @@ QList<QRect> AbstractSearchGroupContainer::startupAnimationAreaOfGroups() const
 
 // -------------------------------------------------------------------------
 
-class SearchViewPrivate
+class SearchView::Private
 {
 public:
 
-    SearchViewPrivate() :
+    Private() :
         needAnimationForReadIn(false),
         layout(0),
         timeline(0),
@@ -161,11 +163,11 @@ public:
     QCache<QString, QPixmap> pixmapCache;
     QTimeLine*               timeline;
 
-    SearchViewBottomBar* bar;
+    SearchViewBottomBar*     bar;
 };
 
 SearchView::SearchView()
-    : d(new SearchViewPrivate)
+    : d(new Private)
 {
     d->pixmapCache.setMaxCost(4);
 }
@@ -205,7 +207,7 @@ void SearchView::setup()
             this, SLOT(animationFrame(int)));
 }
 
-void SearchView::setBottomBar(SearchViewBottomBar* bar)
+void SearchView::setBottomBar(SearchViewBottomBar* const bar)
 {
     d->bar = bar;
 
@@ -288,7 +290,7 @@ void SearchView::slotResetButton()
     }
 }
 
-QString SearchView::write()
+QString SearchView::write() const
 {
     SearchXmlWriter writer;
     writeGroups(writer);
@@ -458,14 +460,13 @@ void SearchView::setTheme()
     d->pixmapCache.clear();
 }
 
-QPixmap SearchView::cachedBannerPixmap(int w, int h)
+QPixmap SearchView::cachedBannerPixmap(int w, int h) const
 {
-    QString key = "BannerPixmap-" + QString::number(w) + '-' + QString::number(h);
+    QString key  = "BannerPixmap-" + QString::number(w) + '-' + QString::number(h);
     QPixmap* pix = d->pixmapCache.object(key);
 
     if (!pix)
     {
-
         QPixmap pixmap(w, h);
         pixmap.fill(kapp->palette().color(QPalette::Highlight));
         d->pixmapCache.insert(key, new QPixmap(pixmap));
@@ -489,22 +490,26 @@ QPixmap SearchView::bottomBarPixmap(int w, int h)
 
 // -------------------------------------------------------------------------
 
-SearchViewBottomBar::SearchViewBottomBar(SearchViewThemedPartsCache* cache, QWidget* parent)
+SearchViewBottomBar::SearchViewBottomBar(SearchViewThemedPartsCache* const cache, QWidget* const parent)
     : QWidget(parent),
       m_themeCache(cache)
 {
-    m_mainLayout = new QHBoxLayout;
+    m_mainLayout      = new QHBoxLayout;
 
     m_addGroupsButton = new KPushButton(KStandardGuiItem::add());
     m_addGroupsButton->setText(i18n("Add Search Group"));
+
     connect(m_addGroupsButton, SIGNAL(clicked()),
             this, SIGNAL(addGroupPressed()));
+
     m_mainLayout->addWidget(m_addGroupsButton);
 
     m_resetButton = new KPushButton(KStandardGuiItem::reset());
     //m_addGroupsButton->setText(i18n("Reset"));
+
     connect(m_resetButton, SIGNAL(clicked()),
             this, SIGNAL(resetPressed()));
+
     m_mainLayout->addWidget(m_resetButton);
 
     m_mainLayout->addStretch(1);

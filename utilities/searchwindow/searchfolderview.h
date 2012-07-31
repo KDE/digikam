@@ -6,10 +6,10 @@
  * Date        : 2005-05-21
  * Description : Searches folder view
  *
- * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2008 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
- * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2009 by Johannes Wienke <languitar at semipol dot de>
+ * Copyright (C) 2005      by Renchi Raju <renchi at pooh dot tam dot uiuc dot edu>
+ * Copyright (C) 2008-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009      by Johannes Wienke <languitar at semipol dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -34,15 +34,13 @@
 namespace Digikam
 {
 
-class NormalSearchTreeViewPriv;
-
 /**
  * Tree view for all saved "normal" searches. Allows editing and creating
  * searches in the context menu.
  *
  * @author jwienke
  */
-class NormalSearchTreeView: public EditableSearchTreeView
+class NormalSearchTreeView : public EditableSearchTreeView
 {
     Q_OBJECT
 public:
@@ -56,8 +54,8 @@ public:
      *                                 perform operations on the displayed
      *                                 searches
      */
-    NormalSearchTreeView(QWidget* parent, SearchModel* searchModel,
-                         SearchModificationHelper* searchModificationHelper);
+    NormalSearchTreeView(QWidget* const parent, SearchModel* const searchModel,
+                         SearchModificationHelper* const searchModificationHelper);
 
     /**
      * Destructor.
@@ -80,15 +78,15 @@ Q_SIGNALS:
 
 protected:
 
-    virtual void addCustomContextMenuActions(ContextMenuHelper& cmh,
-                                             Album* album);
+    virtual void addCustomContextMenuActions(ContextMenuHelper& cmh, Album* album);
     virtual void handleCustomContextMenuAction(QAction* action, AlbumPointer<Album> album);
 
 private:
-    NormalSearchTreeViewPriv* d;
 
+    class Private;
+    Private* d;
 };
 
-}
+} // namespace Digikam
 
 #endif /* SEARCHFOLDERVIEW_H */

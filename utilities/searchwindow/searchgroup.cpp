@@ -6,8 +6,8 @@
  * Date        : 2008-01-20
  * Description : User interface for searches
  *
- * Copyright (C) 2008-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C)      2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2011-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -51,9 +51,12 @@
 namespace Digikam
 {
 
-SearchGroup::SearchGroup(SearchView* parent)
+SearchGroup::SearchGroup(SearchView* const parent)
     : AbstractSearchGroupContainer(parent),
-      m_view(parent), m_layout(0), m_label(0), m_groupType(FirstGroup)
+      m_view(parent),
+      m_layout(0),
+      m_label(0),
+      m_groupType(FirstGroup)
 {
 }
 
@@ -65,18 +68,18 @@ void SearchGroup::setup(Type type)
     m_layout->setContentsMargins(0, 0, 0, 0);
     m_layout->setSpacing(0);
 
-    m_label = new SearchGroupLabel(m_view, m_groupType, this);
+    m_label  = new SearchGroupLabel(m_view, m_groupType, this);
     m_layout->addWidget(m_label);
 
     connect(m_label, SIGNAL(removeClicked()),
             this, SIGNAL(removeRequested()));
 
-    SearchFieldGroup* group;
-    SearchFieldGroupLabel* label;
+    SearchFieldGroup*      group = 0;
+    SearchFieldGroupLabel* label = 0;
 
     // ----- //
 
-    group = new SearchFieldGroup(this);
+    group    = new SearchFieldGroup(this);
     group->addField(SearchField::createField("keyword", group));
     m_fieldGroups << group;
     m_layout->addWidget(group);
@@ -354,7 +357,7 @@ class RadioButtonHBox : public QHBoxLayout
 {
 public:
 
-    RadioButtonHBox(QWidget* left, QWidget* right, Qt::LayoutDirection dir)
+    RadioButtonHBox(QWidget* const left, QWidget* const right, Qt::LayoutDirection dir)
         : QHBoxLayout()
     {
         if (dir == Qt::RightToLeft)
@@ -372,42 +375,81 @@ public:
     }
 };
 
-SearchGroupLabel::SearchGroupLabel(SearchViewThemedPartsCache* cache, SearchGroup::Type type, QWidget* parent)
-    : QWidget(parent),
-      m_extended(false), m_groupOp(SearchXml::And), m_fieldOp(SearchXml::And),
-      m_groupOpLabel(0), m_stackedLayout(0), m_themeCache(cache)
+class SearchGroupLabel::Private
 {
-    QGridLayout* m_layout = new QGridLayout;
+public:
+
+    Private() :
+      extended(false),
+      groupOp(SearchXml::And),
+      fieldOp(SearchXml::And),
+      layout(0),
+      groupOpLabel(0),
+      allBox(0),
+      anyBox(0),
+      noneBox(0),
+      oneNotBox(0),
+      optionsLabel(0),
+      removeLabel(0),
+      stackedLayout(0),
+      themeCache(0)
+    {
+    }
+
+    bool                        extended;
+    SearchXml::Operator         groupOp;
+    SearchXml::Operator         fieldOp;
+    QGridLayout*                layout;
+    //QComboBox*                  groupOpBox;
+    RClickLabel*                groupOpLabel;
+    QRadioButton*               allBox;
+    QRadioButton*               anyBox;
+    QRadioButton*               noneBox;
+    QRadioButton*               oneNotBox;
+    RClickLabel*                optionsLabel;
+    RClickLabel*                removeLabel;
+    QStackedLayout*             stackedLayout;
+    SearchViewThemedPartsCache* themeCache;
+};
+
+SearchGroupLabel::SearchGroupLabel(SearchViewThemedPartsCache* const cache, SearchGroup::Type type, QWidget* const parent)
+    : QWidget(parent), d(new Private)
+{
+    d->themeCache = cache;
+    d->layout     = new QGridLayout;
 
     // leave styling to style sheet (by object name)
 
-    QLabel* mainLabel = new QLabel(i18n("Find Pictures"));
+    QLabel* mainLabel     = new QLabel(i18n("Find Pictures"));
     mainLabel->setObjectName("SearchGroupLabel_MainLabel");
 
     // Use radio button with a separate label to fix styling problem, see bug 195809
-    m_allBox = new QRadioButton;
-    QLabel* allBoxLabel = new QLabel(i18n("Meet All of the following conditions"));
+    d->allBox             = new QRadioButton;
+    QLabel* allBoxLabel   = new QLabel(i18n("Meet All of the following conditions"));
     allBoxLabel->setObjectName("SearchGroupLabel_CheckBox");
 
-    m_anyBox = new QRadioButton;
-    QLabel* anyBoxLabel = new QLabel(i18n("Meet Any of the following conditions"));
+    d->anyBox = new QRadioButton;
+    QLabel* anyBoxLabel   = new QLabel(i18n("Meet Any of the following conditions"));
     anyBoxLabel->setObjectName("SearchGroupLabel_CheckBox");
 
-    m_noneBox = new QRadioButton;
-    QLabel* noneBoxLabel = new QLabel(i18n("None of these conditions are met"));
+    d->noneBox = new QRadioButton;
+    QLabel* noneBoxLabel  = new QLabel(i18n("None of these conditions are met"));
     noneBoxLabel->setObjectName("SearchGroupLabel_CheckBox");
 
-    m_oneNotBox = new QRadioButton;
+    d->oneNotBox            = new QRadioButton;
     QLabel* oneNotBoxLabel = new QLabel(i18n("At least one of these conditions is not met"));
     oneNotBoxLabel->setObjectName("SearchGroupLabel_CheckBox");
 
-    connect(m_allBox, SIGNAL(toggled(bool)),
+    connect(d->allBox, SIGNAL(toggled(bool)),
             this, SLOT(boxesToggled()));
-    connect(m_anyBox, SIGNAL(toggled(bool)),
+
+    connect(d->anyBox, SIGNAL(toggled(bool)),
             this, SLOT(boxesToggled()));
-    connect(m_noneBox, SIGNAL(toggled(bool)),
+
+    connect(d->noneBox, SIGNAL(toggled(bool)),
             this, SLOT(boxesToggled()));
-    connect(m_oneNotBox, SIGNAL(toggled(bool)),
+
+    connect(d->oneNotBox, SIGNAL(toggled(bool)),
             this, SLOT(boxesToggled()));
 
     if (type == SearchGroup::FirstGroup)
@@ -416,9 +458,10 @@ SearchGroupLabel::SearchGroupLabel(SearchViewThemedPartsCache* cache, SearchGrou
         logo->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
                         .scaled(96, 96, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
-        m_optionsLabel = new RClickLabel;
-        m_optionsLabel->setObjectName("SearchGroupLabel_OptionsLabel");
-        connect(m_optionsLabel, SIGNAL(activated()),
+        d->optionsLabel = new RClickLabel;
+        d->optionsLabel->setObjectName("SearchGroupLabel_OptionsLabel");
+
+        connect(d->optionsLabel, SIGNAL(activated()),
                 this, SLOT(toggleShowOptions()));
 
         QWidget* simpleHeader     = new QWidget;
@@ -436,106 +479,113 @@ SearchGroupLabel::SearchGroupLabel(SearchViewThemedPartsCache* cache, SearchGrou
 
         QWidget* optionsBox        = new QWidget;
         QGridLayout* optionsLayout = new QGridLayout;
-        optionsLayout->addLayout(new RadioButtonHBox(m_allBox, allBoxLabel, layoutDirection()),       0, 0);
-        optionsLayout->addLayout(new RadioButtonHBox(m_anyBox, anyBoxLabel, layoutDirection()),       1, 0);
-        optionsLayout->addLayout(new RadioButtonHBox(m_noneBox, noneBoxLabel, layoutDirection()),     0, 1);
-        optionsLayout->addLayout(new RadioButtonHBox(m_oneNotBox, oneNotBoxLabel, layoutDirection()), 1, 1);
+        optionsLayout->addLayout(new RadioButtonHBox(d->allBox, allBoxLabel, layoutDirection()),       0, 0);
+        optionsLayout->addLayout(new RadioButtonHBox(d->anyBox, anyBoxLabel, layoutDirection()),       1, 0);
+        optionsLayout->addLayout(new RadioButtonHBox(d->noneBox, noneBoxLabel, layoutDirection()),     0, 1);
+        optionsLayout->addLayout(new RadioButtonHBox(d->oneNotBox, oneNotBoxLabel, layoutDirection()), 1, 1);
         optionsLayout->setMargin(0);
         optionsBox->setLayout(optionsLayout);
 
-        m_stackedLayout = new QStackedLayout;
-        m_stackedLayout->addWidget(simpleHeader);
-        m_stackedLayout->addWidget(optionsBox);
-        m_stackedLayout->setMargin(0);
+        d->stackedLayout = new QStackedLayout;
+        d->stackedLayout->addWidget(simpleHeader);
+        d->stackedLayout->addWidget(optionsBox);
+        d->stackedLayout->setMargin(0);
 
-        m_layout->addWidget(mainLabel,       0, 0, 1, 1);
-        m_layout->addLayout(m_stackedLayout, 1, 0, 1, 1);
-        m_layout->addWidget(m_optionsLabel,  1, 1, 1, 1, Qt::AlignRight | Qt::AlignBottom);
-        m_layout->addWidget(logo,            0, 2, 2, 1, Qt::AlignTop);
-        m_layout->setColumnStretch(1, 10);
+        d->layout->addWidget(mainLabel,       0, 0, 1, 1);
+        d->layout->addLayout(d->stackedLayout, 1, 0, 1, 1);
+        d->layout->addWidget(d->optionsLabel,  1, 1, 1, 1, Qt::AlignRight | Qt::AlignBottom);
+        d->layout->addWidget(logo,            0, 2, 2, 1, Qt::AlignTop);
+        d->layout->setColumnStretch(1, 10);
 
         setExtended(false);
     }
     else
     {
-        m_groupOpLabel = new RClickLabel;
-        m_groupOpLabel->setObjectName("SearchGroupLabel_GroupOpLabel");
-        connect(m_groupOpLabel, SIGNAL(activated()),
+        d->groupOpLabel = new RClickLabel;
+        d->groupOpLabel->setObjectName("SearchGroupLabel_GroupOpLabel");
+
+        connect(d->groupOpLabel, SIGNAL(activated()),
                 this, SLOT(toggleGroupOperator()));
 
-        m_removeLabel = new RClickLabel(i18n("Remove Group"));
-        m_removeLabel->setObjectName("SearchGroupLabel_RemoveLabel");
-        connect(m_removeLabel, SIGNAL(activated()),
+        d->removeLabel = new RClickLabel(i18n("Remove Group"));
+        d->removeLabel->setObjectName("SearchGroupLabel_RemoveLabel");
+
+        connect(d->removeLabel, SIGNAL(activated()),
                 this, SIGNAL(removeClicked()));
 
-        m_layout->addWidget(m_groupOpLabel, 0, 0, 1, 1);
-        m_layout->addLayout(new RadioButtonHBox(m_allBox, allBoxLabel, layoutDirection()),       1, 0, 1, 1);
-        m_layout->addLayout(new RadioButtonHBox(m_anyBox, anyBoxLabel, layoutDirection()),       2, 0, 1, 1);
-        m_layout->addLayout(new RadioButtonHBox(m_noneBox, noneBoxLabel, layoutDirection()),     3, 0, 1, 1);
-        m_layout->addLayout(new RadioButtonHBox(m_oneNotBox, oneNotBoxLabel, layoutDirection()), 4, 0, 1, 1);
-        m_layout->addWidget(m_removeLabel,  0, 2, 1, 1);
-        m_layout->setColumnStretch(1, 10);
+        d->layout->addWidget(d->groupOpLabel, 0, 0, 1, 1);
+        d->layout->addLayout(new RadioButtonHBox(d->allBox, allBoxLabel, layoutDirection()),       1, 0, 1, 1);
+        d->layout->addLayout(new RadioButtonHBox(d->anyBox, anyBoxLabel, layoutDirection()),       2, 0, 1, 1);
+        d->layout->addLayout(new RadioButtonHBox(d->noneBox, noneBoxLabel, layoutDirection()),     3, 0, 1, 1);
+        d->layout->addLayout(new RadioButtonHBox(d->oneNotBox, oneNotBoxLabel, layoutDirection()), 4, 0, 1, 1);
+        d->layout->addWidget(d->removeLabel,  0, 2, 1, 1);
+        d->layout->setColumnStretch(1, 10);
     }
 
-    setLayout(m_layout);
+    setLayout(d->layout);
 
     // Default values
     setGroupOperator(SearchXml::standardGroupOperator());
     setDefaultFieldOperator(SearchXml::standardFieldOperator());
 }
 
+SearchGroupLabel::~SearchGroupLabel()
+{
+    delete d;
+}
+
 void SearchGroupLabel::setExtended(bool extended)
 {
-    m_extended = extended;
+    d->extended = extended;
 
-    if (!m_stackedLayout)
+    if (!d->stackedLayout)
     {
         return;
     }
 
-    if (m_extended)
+    if (d->extended)
     {
-        m_stackedLayout->setCurrentIndex(1);
-        m_allBox->setVisible(true);
-        m_anyBox->setVisible(true);
-        m_noneBox->setVisible(true);
-        m_oneNotBox->setVisible(true);
-        m_optionsLabel->setText(i18n("Hide Options <<"));
+        d->stackedLayout->setCurrentIndex(1);
+        d->allBox->setVisible(true);
+        d->anyBox->setVisible(true);
+        d->noneBox->setVisible(true);
+        d->oneNotBox->setVisible(true);
+        d->optionsLabel->setText(i18n("Hide Options <<"));
     }
     else
     {
-        m_stackedLayout->setCurrentIndex(0);
+        d->stackedLayout->setCurrentIndex(0);
         // hide to reduce reserved space in stacked layout
-        m_allBox->setVisible(false);
-        m_anyBox->setVisible(false);
-        m_noneBox->setVisible(false);
-        m_oneNotBox->setVisible(false);
-        m_optionsLabel->setText(i18n("Options >>"));
+        d->allBox->setVisible(false);
+        d->anyBox->setVisible(false);
+        d->noneBox->setVisible(false);
+        d->oneNotBox->setVisible(false);
+        d->optionsLabel->setText(i18n("Options >>"));
     }
 }
 
 void SearchGroupLabel::toggleShowOptions()
 {
-    setExtended(!m_extended);
+    setExtended(!d->extended);
 }
 
 void SearchGroupLabel::toggleGroupOperator()
 {
-    if (m_groupOp == SearchXml::And)
+    if (d->groupOp == SearchXml::And)
     {
-        m_groupOp = SearchXml::Or;
+        d->groupOp = SearchXml::Or;
     }
-    else if (m_groupOp == SearchXml::Or)
+    else if (d->groupOp == SearchXml::Or)
     {
-        m_groupOp = SearchXml::And;
+        d->groupOp = SearchXml::And;
     }
-    else if (m_groupOp == SearchXml::AndNot)
+    else if (d->groupOp == SearchXml::AndNot)
     {
-        m_groupOp = SearchXml::OrNot;
+        d->groupOp = SearchXml::OrNot;
     }
-    else if (m_groupOp == SearchXml::OrNot)
+    else if (d->groupOp == SearchXml::OrNot)
     {
-        m_groupOp = SearchXml::AndNot;
+        d->groupOp = SearchXml::AndNot;
     }
 
     updateGroupLabel();
@@ -544,65 +594,65 @@ void SearchGroupLabel::toggleGroupOperator()
 void SearchGroupLabel::boxesToggled()
 {
     // set field op
-    if (m_allBox->isChecked() || m_oneNotBox->isChecked())
+    if (d->allBox->isChecked() || d->oneNotBox->isChecked())
     {
-        m_fieldOp = SearchXml::And;
+        d->fieldOp = SearchXml::And;
     }
     else
     {
-        m_fieldOp = SearchXml::Or;
+        d->fieldOp = SearchXml::Or;
     }
 
     // negate group op
-    if (m_allBox->isChecked() || m_anyBox->isChecked())
+    if (d->allBox->isChecked() || d->anyBox->isChecked())
     {
-        if (m_groupOp == SearchXml::AndNot)
+        if (d->groupOp == SearchXml::AndNot)
         {
-            m_groupOp = SearchXml::And;
+            d->groupOp = SearchXml::And;
         }
-        else if (m_groupOp == SearchXml::OrNot)
+        else if (d->groupOp == SearchXml::OrNot)
         {
-            m_groupOp = SearchXml::Or;
+            d->groupOp = SearchXml::Or;
         }
     }
     else
     {
-        if (m_groupOp == SearchXml::And)
+        if (d->groupOp == SearchXml::And)
         {
-            m_groupOp = SearchXml::AndNot;
+            d->groupOp = SearchXml::AndNot;
         }
-        else if (m_groupOp == SearchXml::Or)
+        else if (d->groupOp == SearchXml::Or)
         {
-            m_groupOp = SearchXml::OrNot;
+            d->groupOp = SearchXml::OrNot;
         }
     }
 }
 
 void SearchGroupLabel::setGroupOperator(SearchXml::Operator op)
 {
-    m_groupOp = op;
+    d->groupOp = op;
     adjustOperatorOptions();
     updateGroupLabel();
 }
 
 void SearchGroupLabel::updateGroupLabel()
 {
-    if (m_groupOpLabel)
+    if (d->groupOpLabel)
     {
-        if (m_groupOp == SearchXml::And || m_groupOp == SearchXml::AndNot)
+        if (d->groupOp == SearchXml::And || d->groupOp == SearchXml::AndNot)
         {
-            m_groupOpLabel->setText(i18n("AND"));
+            d->groupOpLabel->setText(i18n("AND"));
         }
         else
         {
-            m_groupOpLabel->setText(i18n("OR"));
+            d->groupOpLabel->setText(i18n("OR"));
         }
     }
 }
 
 void SearchGroupLabel::setDefaultFieldOperator(SearchXml::Operator op)
 {
-    m_fieldOp = op;
+    d->fieldOp = op;
     adjustOperatorOptions();
 }
 
@@ -618,18 +668,18 @@ void SearchGroupLabel::adjustOperatorOptions()
     // 4. noneBox, None of these conditions are met: !(A || B || C) = (!A && !B && !C),
     //    Group AndNot/OrNot, Field Or
 
-    switch (m_groupOp)
+    switch (d->groupOp)
     {
         case SearchXml::And:
         case SearchXml::Or:
 
-            if (m_fieldOp == SearchXml::And)
+            if (d->fieldOp == SearchXml::And)
             {
-                m_allBox->setChecked(true);
+                d->allBox->setChecked(true);
             }
             else
             {
-                m_anyBox->setChecked(true);
+                d->anyBox->setChecked(true);
             }
 
             break;
@@ -637,19 +687,19 @@ void SearchGroupLabel::adjustOperatorOptions()
         case SearchXml::AndNot:
         case SearchXml::OrNot:
 
-            if (m_fieldOp == SearchXml::And)
+            if (d->fieldOp == SearchXml::And)
             {
-                m_oneNotBox->setChecked(true);
+                d->oneNotBox->setChecked(true);
             }
             else
             {
-                m_noneBox->setChecked(true);
+                d->noneBox->setChecked(true);
             }
 
             break;
     }
 
-    if (!m_allBox->isChecked())
+    if (!d->allBox->isChecked())
     {
         setExtended(true);
     }
@@ -657,12 +707,12 @@ void SearchGroupLabel::adjustOperatorOptions()
 
 SearchXml::Operator SearchGroupLabel::groupOperator() const
 {
-    return m_groupOp;
+    return d->groupOp;
 }
 
 SearchXml::Operator SearchGroupLabel::defaultFieldOperator() const
 {
-    if (m_anyBox->isChecked() || m_noneBox->isChecked())
+    if (d->anyBox->isChecked() || d->noneBox->isChecked())
     {
         return SearchXml::Or;
     }
@@ -676,7 +726,7 @@ void SearchGroupLabel::paintEvent(QPaintEvent*)
 {
     // paint themed background
     QPainter p(this);
-    p.drawPixmap(0, 0, m_themeCache->groupLabelPixmap(width(), height()));
+    p.drawPixmap(0, 0, d->themeCache->groupLabelPixmap(width(), height()));
 }
 
 } // namespace Digikam

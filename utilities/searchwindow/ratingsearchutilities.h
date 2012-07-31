@@ -6,7 +6,7 @@
  * Date        : 2008-03-14
  * Description : User interface for searches
  *
- * Copyright (C) 2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2008-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -44,6 +44,7 @@ namespace Digikam
 
 class RatingComboBoxModel;
 class RatingComboBoxWidget;
+
 class RatingComboBox : public ModelIndexBasedComboBox
 {
     Q_OBJECT
@@ -53,11 +54,11 @@ public:
     /** An advanced widget for entering a rating,
      *  including support for Null and NoRating values
      */
-
     enum RatingValue
     {
         /** The rating value. All values except Null correspond to
-         *  the integers used by the database. */
+         *  the integers used by the database.
+         */
         Null     = -2,
         NoRating = -1,
         Rating0  = 0,
@@ -68,7 +69,9 @@ public:
         Rating5  = 5
     };
 
-    RatingComboBox(QWidget* parent = 0);
+public:
+
+    RatingComboBox(QWidget* const parent = 0);
 
     void setRatingValue(RatingValue value);
     RatingValue ratingValue() const;
@@ -84,12 +87,12 @@ protected Q_SLOTS:
 
 protected:
 
-    RatingComboBoxModel*     m_model;
-    RatingComboBoxWidget*    m_ratingWidget;
+    RatingComboBoxModel*  m_model;
+    RatingComboBoxWidget* m_ratingWidget;
 
 private:
 
-    bool                     m_syncing;
+    bool                  m_syncing;
 };
 
 // -- Internal classes ----------------------------------------------------------------
@@ -104,8 +107,8 @@ public:
 
 protected:
 
-    QPolygon                         starPolygon;
-    QSize                            starPolygonSize;
+    QPolygon m_starPolygon;
+    QSize    m_starPolygonSize;
 };
 
 // -------------------------------------------------------------------------
@@ -120,7 +123,7 @@ public:
     // Sub-classing the classic RatingWidget,
     // this provides support for the Null and NoRating states.
 
-    RatingComboBoxWidget(QWidget* parent = 0);
+    RatingComboBoxWidget(QWidget* const parent = 0);
 
     RatingComboBox::RatingValue ratingValue() const;
     void setRatingValue(RatingComboBox::RatingValue value);
@@ -137,6 +140,8 @@ protected:
 
     virtual void paintEvent(QPaintEvent*);
 
+protected:
+
     RatingComboBox::RatingValue m_value;
 };
 
@@ -151,17 +156,21 @@ public:
         RatingRole = Qt::UserRole
     };
 
-    RatingComboBoxModel(QObject* parent = 0);
+public:
+
+    RatingComboBoxModel(QObject* const parent = 0);
+
+    QModelIndex indexForRatingValue(RatingComboBox::RatingValue value) const;
 
     virtual int rowCount(const QModelIndex& parent) const;
     virtual QVariant data(const QModelIndex& index, int role) const;
     virtual QModelIndex index(int row, int column = 0, const QModelIndex& parent = QModelIndex()) const;
 
-    QModelIndex indexForRatingValue(RatingComboBox::RatingValue value) const;
-
 protected:
 
     QVariant ratingValueToDisplay(RatingComboBox::RatingValue value) const;
+
+protected:
 
     QList<RatingComboBox::RatingValue> m_entries;
 };
@@ -172,7 +181,7 @@ class RatingComboBoxDelegate : public QItemDelegate, public RatingStarDrawer
 {
 public:
 
-    RatingComboBoxDelegate(QObject* parent = 0);
+    RatingComboBoxDelegate(QObject* const parent = 0);
 
     virtual QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const;
     virtual void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
