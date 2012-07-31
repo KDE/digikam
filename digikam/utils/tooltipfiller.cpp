@@ -6,7 +6,7 @@
  * Date        : 2008-12-10
  * Description : album icon view tool tip
  *
- * Copyright (C) 2008-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -261,20 +261,20 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
 
     // -- Video Metadata Info ----------------------------------------------------
 
-    if (settings->getToolTipsShowVideo_AspectRatio()        ||
-        settings->getToolTipsShowVideo_AudioBitRate()       ||
-        settings->getToolTipsShowVideo_AudioChannelType()   ||
-        settings->getToolTipsShowVideo_AudioCompressor()    ||
-        settings->getToolTipsShowVideo_Duration()           ||
-        settings->getToolTipsShowVideo_FrameRate()          ||
-        settings->getToolTipsShowVideo_VideoCodec())
+    if (settings->getToolTipsShowVideoAspectRatio()        ||
+        settings->getToolTipsShowVideoAudioBitRate()       ||
+        settings->getToolTipsShowVideoAudioChannelType()   ||
+        settings->getToolTipsShowVideoAudioCompressor()    ||
+        settings->getToolTipsShowVideoDuration()           ||
+        settings->getToolTipsShowVideoFrameRate()          ||
+        settings->getToolTipsShowVideoVideoCodec())
     {
         if (!videoInfo.allFieldsNull)
         {
             QString metaStr;
             tip += cnt.headBeg + i18n("Video Properties") + cnt.headEnd;
 
-            if (settings->getToolTipsShowVideo_AspectRatio())
+            if (settings->getToolTipsShowVideoAspectRatio())
             {
                 str = videoInfo.aspectRatio.isEmpty() ? cnt.unavailable : videoInfo.aspectRatio;
 
@@ -286,7 +286,7 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
                 metaStr += cnt.cellBeg + i18n("Aspect Ratio:") + cnt.cellMid + Qt::escape(str) + cnt.cellEnd;
             }
 
-            if (settings->getToolTipsShowVideo_AudioBitRate())
+            if (settings->getToolTipsShowVideoAudioBitRate())
             {
                 str = videoInfo.audioBitRate.isEmpty() ? cnt.unavailable : videoInfo.audioBitRate;
 
@@ -298,7 +298,7 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
                 metaStr += cnt.cellBeg + i18n("Audio Bit Rate:") + cnt.cellMid + Qt::escape(str) + cnt.cellEnd;
             }
 
-            if (settings->getToolTipsShowVideo_AudioChannelType())
+            if (settings->getToolTipsShowVideoAudioChannelType())
             {
                 str = videoInfo.audioChannelType.isEmpty() ? cnt.unavailable : videoInfo.audioChannelType;
 
@@ -310,7 +310,7 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
                 metaStr += cnt.cellBeg + i18n("Audio Channel Type:") + cnt.cellMid + Qt::escape(str) + cnt.cellEnd;
             }
 
-            if (settings->getToolTipsShowVideo_AudioCompressor())
+            if (settings->getToolTipsShowVideoAudioCompressor())
             {
                 str = videoInfo.audioCompressor.isEmpty() ? cnt.unavailable : videoInfo.audioCompressor;
 
@@ -322,7 +322,7 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
                 metaStr += cnt.cellBeg + i18n("Audio Compressor:") + cnt.cellMid + Qt::escape(str) + cnt.cellEnd;
             }
 
-            if (settings->getToolTipsShowVideo_Duration())
+            if (settings->getToolTipsShowVideoDuration())
             {
                 str = videoInfo.duration.isEmpty() ? cnt.unavailable : videoInfo.duration;
 
@@ -334,7 +334,7 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
                 metaStr += cnt.cellBeg + i18n("Duration:") + cnt.cellMid + Qt::escape(str) + i18n("s") + cnt.cellEnd;
             }
 
-            if (settings->getToolTipsShowVideo_FrameRate())
+            if (settings->getToolTipsShowVideoFrameRate())
             {
                 str = videoInfo.frameRate.isEmpty() ? cnt.unavailable : videoInfo.frameRate;
 
@@ -346,7 +346,7 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
                 metaStr += cnt.cellBeg + i18n("Frame Rate:") + cnt.cellMid + Qt::escape(str) + i18n("fps") + cnt.cellEnd;
             }
 
-            if (settings->getToolTipsShowVideo_VideoCodec())
+            if (settings->getToolTipsShowVideoVideoCodec())
             {
                 str = videoInfo.videoCodec.isEmpty() ? cnt.unavailable : videoInfo.videoCodec;
 
@@ -462,7 +462,7 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
     return tip;
 }
 
-QString ToolTipFiller::albumTipContents(PAlbum* album, int count)
+QString ToolTipFiller::albumTipContents(PAlbum* const album, int count)
 {
     if (!album)
     {
@@ -472,7 +472,7 @@ QString ToolTipFiller::albumTipContents(PAlbum* album, int count)
     QString            str;
     AlbumSettings*     settings = AlbumSettings::instance();
     DToolTipStyleSheet cnt(settings->getToolTipsFont());
-    QString            tip = cnt.tipHeader;
+    QString            tip      = cnt.tipHeader;
 
     if (settings->getToolTipsShowAlbumTitle()      ||
         settings->getToolTipsShowAlbumDate()       ||

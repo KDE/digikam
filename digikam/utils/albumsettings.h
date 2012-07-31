@@ -271,26 +271,26 @@ public:
     void setToolTipsShowAlbumCaption(bool val);
     bool getToolTipsShowAlbumCaption() const;
 
-    void setToolTipsShowVideo_AspectRatio(bool val);
-    bool getToolTipsShowVideo_AspectRatio() const;
+    void setToolTipsShowVideoAspectRatio(bool val);
+    bool getToolTipsShowVideoAspectRatio() const;
 
-    void setToolTipsShowVideo_AudioBitRate(bool val);
-    bool getToolTipsShowVideo_AudioBitRate() const;
+    void setToolTipsShowVideoAudioBitRate(bool val);
+    bool getToolTipsShowVideoAudioBitRate() const;
 
-    void setToolTipsShowVideo_AudioChannelType(bool val);
-    bool getToolTipsShowVideo_AudioChannelType() const;
+    void setToolTipsShowVideoAudioChannelType(bool val);
+    bool getToolTipsShowVideoAudioChannelType() const;
 
-    void setToolTipsShowVideo_AudioCompressor(bool val);
-    bool getToolTipsShowVideo_AudioCompressor() const;
+    void setToolTipsShowVideoAudioCompressor(bool val);
+    bool getToolTipsShowVideoAudioCompressor() const;
 
-    void setToolTipsShowVideo_Duration(bool val);
-    bool getToolTipsShowVideo_Duration() const;
+    void setToolTipsShowVideoDuration(bool val);
+    bool getToolTipsShowVideoDuration() const;
 
-    void setToolTipsShowVideo_FrameRate(bool val);
-    bool getToolTipsShowVideo_FrameRate() const;
+    void setToolTipsShowVideoFrameRate(bool val);
+    bool getToolTipsShowVideoFrameRate() const;
 
-    void setToolTipsShowVideo_VideoCodec(bool val);
-    bool getToolTipsShowVideo_VideoCodec() const;
+    void setToolTipsShowVideoVideoCodec(bool val);
+    bool getToolTipsShowVideoVideoCodec() const;
 
     void    setCurrentTheme(const QString& theme);
     QString getCurrentTheme() const;
