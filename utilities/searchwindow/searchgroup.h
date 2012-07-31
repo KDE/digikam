@@ -39,10 +39,6 @@
 #include "searchview.h"
 #include "searchxml.h"
 
-class QComboBox;
-class QGridLayout;
-class QRadioButton;
-class QStackedLayout;
 class QVBoxLayout;
 
 using namespace KDcrawIface;
