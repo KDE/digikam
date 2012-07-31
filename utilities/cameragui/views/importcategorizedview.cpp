@@ -116,9 +116,10 @@ ImportCategorizedView::~ImportCategorizedView()
 }
 
 //FIXME: Needs testing
-void ImportCategorizedView::installDefaultModels()
+void ImportCategorizedView::installDefaultModels(CameraController* controller)
 {
     ImportModel* model             = new ImportModel(this);
+    model->setupCameraController(controller);
     ImportFilterModel* filterModel = new ImportFilterModel(this);
 
     filterModel->setSourceImportModel(model);
@@ -148,7 +149,7 @@ void ImportCategorizedView::setModels(ImportImageModel* model, ImportSortFilterM
 
     if (d->model)
     {
-        disconnect(d->model, SIGNAL(CamItemInfosAdded(QList<CamItemInfo>)),
+        disconnect(d->model, SIGNAL(itemInfosAdded(QList<CamItemInfo>)),
                    this, SLOT(slotCamItemInfosAdded()));
     }
 
@@ -164,7 +165,7 @@ void ImportCategorizedView::setModels(ImportImageModel* model, ImportSortFilterM
             this, SLOT(layoutWasChanged()),
             Qt::QueuedConnection);
 
-    connect(d->model, SIGNAL(CamItemInfosAdded(QList<CamItemInfo>)),
+    connect(d->model, SIGNAL(itemInfosAdded(QList<CamItemInfo>)),
             this, SLOT(slotCamItemInfosAdded()));
 
     emit modelChanged();
@@ -207,7 +208,7 @@ ImportDelegate* ImportCategorizedView::delegate() const
 
 void ImportCategorizedView::setItemDelegate(ImportDelegate* delegate)
 {
-    ThumbnailSize oldSize      = thumbnailSize();
+    ThumbnailSize oldSize       = thumbnailSize();
     ImportDelegate* oldDelegate = d->delegate;
 
     if (oldDelegate)
@@ -223,7 +224,8 @@ void ImportCategorizedView::setItemDelegate(ImportDelegate* delegate)
     }
 
     d->delegate = delegate;
-    d->delegate->setThumbnailSize(oldSize);
+    qDebug() << QString::number(oldSize.size());
+    delegate->setThumbnailSize(oldSize);
 
     if (oldDelegate)
     {

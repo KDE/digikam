@@ -150,8 +150,8 @@ protected Q_SLOTS:
 
 protected:
 
-    /// install default ImageAlbumModel and filter model, ready for use
-    void installDefaultModels();
+    /// install default ImportModel and filter model, ready for use
+    void installDefaultModels(CameraController* controller);
 
     /// Reimplement these in a subclass
     virtual void activated(const CamItemInfo& info);
