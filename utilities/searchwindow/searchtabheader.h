@@ -6,7 +6,7 @@
  * Date        : 2008-02-26
  * Description : Upper widget in the search sidebar
  *
- * Copyright (C) 2008-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2008-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -38,7 +38,6 @@ namespace Digikam
 class Album;
 class SAlbum;
 class SearchWindow;
-class SearchTabHeaderPriv;
 
 class SearchTabHeader : public QWidget
 {
@@ -46,7 +45,7 @@ class SearchTabHeader : public QWidget
 
 public:
 
-    SearchTabHeader(QWidget* parent);
+    SearchTabHeader(QWidget* const parent);
     ~SearchTabHeader();
 
 public Q_SLOTS:
@@ -72,13 +71,14 @@ private Q_SLOTS:
 private:
 
     void setCurrentSearch(DatabaseSearch::Type type, const QString& query, bool selectCurrentAlbum = true);
-    QString queryFromKeywords(const QString& keywords);
-    QString keywordsFromQuery(const QString& query);
-    SearchWindow* searchWindow();
+    QString queryFromKeywords(const QString& keywords) const;
+    QString keywordsFromQuery(const QString& query) const;
+    SearchWindow* searchWindow() const;
 
 private:
 
-    SearchTabHeaderPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam
