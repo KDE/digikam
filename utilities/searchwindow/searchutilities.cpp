@@ -6,7 +6,7 @@
  * Date        : 2008-03-14
  * Description : User interface for searches
  *
- * Copyright (C) 2008-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2008-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -68,11 +68,11 @@ namespace Digikam
 // Copyright (C) 2007 Aaron Seigo <aseigo@kde.org>
 // Now substantially rewritten.
 
-class AnimatedClearButton::AnimatedClearButtonPriv : public AnimatedVisibility
+class AnimatedClearButton::Private : public AnimatedVisibility
 {
 public:
 
-    AnimatedClearButtonPriv(QObject* parent) : AnimatedVisibility(parent)
+    Private(QObject* const parent) : AnimatedVisibility(parent)
     {
         stayAlwaysVisible = false;
     }
@@ -81,8 +81,8 @@ public:
     QPixmap pixmap;
 };
 
-AnimatedClearButton::AnimatedClearButton(QWidget* parent)
-    : QWidget(parent), d(new AnimatedClearButtonPriv(this))
+AnimatedClearButton::AnimatedClearButton(QWidget* const parent)
+    : QWidget(parent), d(new Private(this))
 {
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 
@@ -136,7 +136,7 @@ void AnimatedClearButton::setPixmap(const QPixmap& p)
     d->pixmap = p;
 }
 
-QPixmap AnimatedClearButton::pixmap()
+QPixmap AnimatedClearButton::pixmap() const
 {
     return d->pixmap;
 }
@@ -158,7 +158,7 @@ void AnimatedClearButton::paintEvent(QPaintEvent* event)
 
         QPainter p(this);
         p.setOpacity(d->opacity() * 255);
-        p.drawPixmap((width() - d->pixmap.width()) / 2,
+        p.drawPixmap((width()  - d->pixmap.width())  / 2,
                      (height() - d->pixmap.height()) / 2,
                      d->pixmap);
     }
@@ -166,7 +166,7 @@ void AnimatedClearButton::paintEvent(QPaintEvent* event)
     {
         QPainter p(this);
         p.setOpacity(1); // make sure
-        p.drawPixmap((width() - d->pixmap.width()) / 2,
+        p.drawPixmap((width()  - d->pixmap.width())  / 2,
                      (height() - d->pixmap.height()) / 2,
                      d->pixmap);
     }
@@ -194,59 +194,80 @@ void AnimatedClearButton::mouseReleaseEvent(QMouseEvent* event)
 
 // ------------------------------------------------------------------------
 
-CustomStepsDoubleSpinBox::CustomStepsDoubleSpinBox(QWidget* parent)
-    : QDoubleSpinBox(parent),
-      m_beforeInitialValue(true),
-      m_initialValue(0),
-      m_smallerStep(0),
-      m_largerStep(0),
-      m_invertStepping(false)
+class CustomStepsDoubleSpinBox::Private
 {
+public:
+
+    Private() :
+      beforeInitialValue(true),
+      initialValue(0),
+      smallerStep(0),
+      largerStep(0),
+      invertStepping(false)
+    {
+    }
+
+    bool          beforeInitialValue;
+    QList<double> values;
+    double        initialValue;
+    double        smallerStep;
+    double        largerStep;
+    bool          invertStepping;
+};
+
+CustomStepsDoubleSpinBox::CustomStepsDoubleSpinBox(QWidget* const parent)
+    : QDoubleSpinBox(parent), d(new Private)
+{
+}
+
+CustomStepsDoubleSpinBox::~CustomStepsDoubleSpinBox()
+{
+    delete d;
 }
 
 void CustomStepsDoubleSpinBox::stepBy(int steps)
 {
-    if (m_invertStepping)
+    if (d->invertStepping)
     {
         steps = -steps;
     }
 
-    if (m_values.isEmpty())
+    if (d->values.isEmpty())
     {
         QDoubleSpinBox::stepBy(steps);
         return;
     }
 
-    if (m_beforeInitialValue && m_initialValue > minimum())
+    if (d->beforeInitialValue && d->initialValue > minimum())
     {
-        setValue(m_initialValue);
+        setValue(d->initialValue);
         return;
     }
 
     double v = value();
 
-    if (v >= m_values.first() && v <= m_values.last())
+    if (v >= d->values.first() && v <= d->values.last())
     {
         int nextStep = 0;
 
         if (steps > 0)
         {
-            // find the next value in m_values after current value
-            for (nextStep = 0; nextStep < m_values.count(); ++nextStep)
+            // find the next value in d->values after current value
+            for (nextStep = 0; nextStep < d->values.count(); ++nextStep)
             {
-                if (v <= m_values.at(nextStep))
+                if (v <= d->values.at(nextStep))
                 {
                     ++nextStep;
                     break;
                 }
             }
 
-            // go as many steps in m_values as we need
+            // go as many steps in d->values as we need
             int stepsToGo = steps;
 
-            for (; stepsToGo > 0 && nextStep < m_values.count(); --stepsToGo)
+            for (; stepsToGo > 0 && nextStep < d->values.count(); --stepsToGo)
             {
-                v = m_values.at(nextStep++);
+                v = d->values.at(nextStep++);
             }
 
             // set the new value
@@ -260,9 +281,9 @@ void CustomStepsDoubleSpinBox::stepBy(int steps)
         }
         else
         {
-            for (nextStep = m_values.count() - 1; nextStep >= 0; --nextStep)
+            for (nextStep = d->values.count() - 1; nextStep >= 0; --nextStep)
             {
-                if (v >= m_values.at(nextStep))
+                if (v >= d->values.at(nextStep))
                 {
                     --nextStep;
                     break;
@@ -273,7 +294,7 @@ void CustomStepsDoubleSpinBox::stepBy(int steps)
 
             for (; stepsToGo > 0 && nextStep >= 0; --stepsToGo)
             {
-                v = m_values.at(nextStep--);
+                v = d->values.at(nextStep--);
             }
 
             setValue(v);
@@ -295,55 +316,55 @@ void CustomStepsDoubleSpinBox::setSuggestedValues(const QList<double>& values)
     connect(this, SIGNAL(valueChanged(double)),
             this, SLOT(slotValueChanged(double)));
 
-    m_values = values;
-    qSort(m_values);
+    d->values = values;
+    qSort(d->values);
 }
 
 void CustomStepsDoubleSpinBox::setSuggestedInitialValue(double initialValue)
 {
-    m_initialValue = initialValue;
+    d->initialValue = initialValue;
 }
 
 void CustomStepsDoubleSpinBox::setSingleSteps(double smaller, double larger)
 {
-    m_smallerStep = smaller;
-    m_largerStep  = larger;
+    d->smallerStep = smaller;
+    d->largerStep  = larger;
 }
 
 void CustomStepsDoubleSpinBox::setInvertStepping(bool invert)
 {
-    m_invertStepping = invert;
+    d->invertStepping = invert;
 }
 
 void CustomStepsDoubleSpinBox::reset()
 {
     setValue(minimum());
-    m_beforeInitialValue = true;
+    d->beforeInitialValue = true;
 }
 
-void CustomStepsDoubleSpinBox::slotValueChanged(double d)
+void CustomStepsDoubleSpinBox::slotValueChanged(double val)
 {
-    if (d != minimum())
+    if (val != minimum())
     {
-        m_beforeInitialValue = false;
+        d->beforeInitialValue = false;
     }
 
-    if (!m_values.isEmpty())
+    if (!d->values.isEmpty())
     {
-        if (m_largerStep && d >= m_values.last())
+        if (d->largerStep && val >= d->values.last())
         {
-            setSingleStep(m_largerStep);
+            setSingleStep(d->largerStep);
         }
-        else if (m_smallerStep)
+        else if (d->smallerStep)
         {
-            setSingleStep(m_smallerStep);
+            setSingleStep(d->smallerStep);
         }
     }
 }
 
 // ------------------------------------------------------------------------
 
-CustomStepsIntSpinBox::CustomStepsIntSpinBox(QWidget* parent)
+CustomStepsIntSpinBox::CustomStepsIntSpinBox(QWidget* const parent)
     : QSpinBox(parent),
       m_beforeInitialValue(true),
       m_initialValue(0),
@@ -593,16 +614,16 @@ void CustomStepsIntSpinBox::slotValueChanged(int d)
 
 // ------------------------------------------------------------------------
 
-StyleSheetDebugger::StyleSheetDebugger(QWidget* object)
+StyleSheetDebugger::StyleSheetDebugger(QWidget* const object)
     : QWidget(0), m_widget(object)
 {
     setAttribute(Qt::WA_DeleteOnClose);
 
     QVBoxLayout* vbox = new QVBoxLayout;
 
-    m_edit = new KTextEdit;
+    m_edit            = new KTextEdit;
     vbox->addWidget(m_edit, 1);
-    m_okButton = new KPushButton(KStandardGuiItem::ok());
+    m_okButton        = new KPushButton(KStandardGuiItem::ok());
     vbox->addWidget(m_okButton, 0, Qt::AlignRight);
 
     setLayout(vbox);
