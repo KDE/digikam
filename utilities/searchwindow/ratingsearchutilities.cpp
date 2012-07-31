@@ -6,7 +6,7 @@
  * Date        : 2008-03-14
  * Description : User interface for searches
  *
- * Copyright (C) 2008-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2008-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -53,35 +53,35 @@ namespace Digikam
 RatingStarDrawer::RatingStarDrawer()
 {
     // Pre-computed star polygon for a 15x15 pixmap.
-    starPolygon << QPoint(0,  6);
-    starPolygon << QPoint(5,  5);
-    starPolygon << QPoint(7,  0);
-    starPolygon << QPoint(9,  5);
-    starPolygon << QPoint(14, 6);
-    starPolygon << QPoint(10, 9);
-    starPolygon << QPoint(11, 14);
-    starPolygon << QPoint(7,  11);
-    starPolygon << QPoint(3,  14);
-    starPolygon << QPoint(4,  9);
+    m_starPolygon << QPoint(0,  6);
+    m_starPolygon << QPoint(5,  5);
+    m_starPolygon << QPoint(7,  0);
+    m_starPolygon << QPoint(9,  5);
+    m_starPolygon << QPoint(14, 6);
+    m_starPolygon << QPoint(10, 9);
+    m_starPolygon << QPoint(11, 14);
+    m_starPolygon << QPoint(7,  11);
+    m_starPolygon << QPoint(3,  14);
+    m_starPolygon << QPoint(4,  9);
 
-    starPolygonSize = QSize(15, 15);
+    m_starPolygonSize = QSize(15, 15);
 }
 
 QRect RatingStarDrawer::drawStarPolygons(QPainter* painter, int numberOfStars) const
 {
-    QRect drawnRect(0, 0, 0, 0);
-    QPolygon polygon(starPolygon);
+    QRect    drawnRect(0, 0, 0, 0);
+    QPolygon polygon(m_starPolygon);
 
     if (numberOfStars)
     {
-        drawnRect.adjust(0, 0, 0, starPolygonSize.height());
+        drawnRect.adjust(0, 0, 0, m_starPolygonSize.height());
     }
 
     for (int i = 0; i < numberOfStars; ++i)
     {
         painter->drawPolygon(polygon, Qt::WindingFill);
-        polygon.translate(starPolygonSize.width(), 0);
-        drawnRect.adjust(0, 0, starPolygonSize.width(), 0);
+        polygon.translate(m_starPolygonSize.width(), 0);
+        drawnRect.adjust(0, 0, m_starPolygonSize.width(), 0);
     }
 
     return drawnRect;
@@ -89,7 +89,7 @@ QRect RatingStarDrawer::drawStarPolygons(QPainter* painter, int numberOfStars) c
 
 // -------------------------------------------------------------------------
 
-RatingComboBoxDelegate::RatingComboBoxDelegate(QObject* parent)
+RatingComboBoxDelegate::RatingComboBoxDelegate(QObject* const parent)
     : QItemDelegate(parent)
 {
 }
@@ -100,7 +100,7 @@ QSize RatingComboBoxDelegate::sizeHint(const QStyleOptionViewItem& option, const
 
     if (value.type() == QVariant::Int)
     {
-        return QSize(RatingMax * (starPolygonSize.width() + 1), starPolygonSize.height());
+        return QSize(RatingMax * (m_starPolygonSize.width() + 1), m_starPolygonSize.height());
     }
     else
     {
@@ -159,7 +159,7 @@ void RatingComboBoxDelegate::drawRating(QPainter* painter, const QRect& rect, in
 
 // -------------------------------------------------------------------------
 
-RatingComboBoxModel::RatingComboBoxModel(QObject* parent)
+RatingComboBoxModel::RatingComboBoxModel(QObject* const parent)
     : QAbstractListModel(parent)
 {
     for (int value = RatingComboBox::Null; value <= RatingComboBox::Rating5; ++value)
@@ -244,7 +244,7 @@ QModelIndex RatingComboBoxModel::indexForRatingValue(RatingComboBox::RatingValue
 
 // -------------------------------------------------------------------------
 
-RatingComboBoxWidget::RatingComboBoxWidget(QWidget* parent)
+RatingComboBoxWidget::RatingComboBoxWidget(QWidget* const parent)
     : RatingWidget(parent)
 {
     m_value = RatingComboBox::Null;
@@ -365,13 +365,13 @@ void RatingComboBoxWidget::paintEvent(QPaintEvent* e)
 
 // -------------------------------------------------------------------------
 
-RatingComboBox::RatingComboBox(QWidget* parent)
+RatingComboBox::RatingComboBox(QWidget* const parent)
     : ModelIndexBasedComboBox(parent)
 {
     m_syncing = false;
 
     // create a custom model that contains the rating values
-    m_model = new RatingComboBoxModel(this);
+    m_model   = new RatingComboBoxModel(this);
     setModel(m_model);
 
     // set a custom delegate which draws rating stars
@@ -380,7 +380,7 @@ RatingComboBox::RatingComboBox(QWidget* parent)
 
     // set a line edit that carries a RatingWidget
     ProxyLineEdit* lineEdit = new ProxyLineEdit;
-    m_ratingWidget = new RatingComboBoxWidget;
+    m_ratingWidget          = new RatingComboBoxWidget;
     lineEdit->setWidget(m_ratingWidget);
     setLineEdit(lineEdit);
 
