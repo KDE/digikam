@@ -162,6 +162,17 @@ FIND_PACKAGE(PGF)
 FIND_PACKAGE(CLAPACK)
 FIND_PACKAGE(Boost) # 1.36.0)
 
+SET(KIPI_MIN_VERSION "2.0.0")
+IF(KIPI_VERSION)
+    MESSAGE(STATUS "libkipi: Found version ${KIPI_VERSION} (required: ${KIPI_MIN_VERSION})")
+    IF(${KIPI_VERSION} VERSION_LESS ${KIPI_MIN_VERSION})
+        SET(KIPI_FOUND FALSE)
+    ENDIF(${KIPI_VERSION} VERSION_LESS ${KIPI_MIN_VERSION})
+ELSE(KIPI_VERSION)
+    MESSAGE(WARNING "libkipi: Version information not found, your version is probably too old.")
+ENDIF(KIPI_VERSION)
+
+
 # LCMS version 1 and 2 library handling
 # See B.K.O #294105
 # At the moment (2.6) we still DEFAULT to LCMS1 because porting to LCMS2 still experimental.
@@ -407,7 +418,7 @@ PRINT_LIBRARY_STATUS("libpng" "http://www.libpng.org/pub/png/libpng.html" " (ver
 PRINT_LIBRARY_STATUS("libjasper" "http://www.ece.uvic.ca/~mdadams/jasper" "" JASPER_FOUND)
 PRINT_LIBRARY_STATUS("liblcms" "http://www.littlecms.com" "" LCMS_FOUND)
 PRINT_LIBRARY_STATUS("Boost Graph" "http://www.boost.org/doc/libs/1_43_0/libs/graph/doc/index.html" " (headers only)" Boost_FOUND)
-PRINT_LIBRARY_STATUS("libkipi" "http://www.digikam.org/sharedlibs" " (version >= 1.2.0)" KIPI_FOUND)
+PRINT_LIBRARY_STATUS("libkipi" "http://www.digikam.org/sharedlibs" " (version >= 2.0.0)" KIPI_FOUND)
 PRINT_LIBRARY_STATUS("libkexiv2" "http://www.digikam.org/sharedlibs" " (version >= 1.2.0)" KEXIV2_FOUND)
 PRINT_LIBRARY_STATUS("libkdcraw" "http://www.digikam.org/sharedlibs" " (version >= ${KDCRAW_MIN_VERSION})" KDCRAW_FOUND)
 PRINT_LIBRARY_STATUS("libkface" "http://www.digikam.org/sharedlibs" " (version >= 0.1.0)" KFACE_FOUND)
