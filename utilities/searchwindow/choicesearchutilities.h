@@ -61,13 +61,13 @@ public:
 
     /** Sets the data from the given map, with integer keys and QString user displayable value.
      */
-    void setChoice(QMap<int, QString> data);
+    void setChoice(const QMap<int, QString>& data);
 
     /** Sets the data from the given list,
      *  taking every first entry as the key, every second as the user displayable value.
      *  Ensure that the QVariants' type is correct (identical for all even entries, QString for all odd entries).
      */
-    void setChoice(QVariantList data);
+    void setChoice(const QVariantList& data);
 
     /** Sets the data from the given list,
      *  taking every first entry as the key, every second as the user displayable value.
@@ -146,8 +146,7 @@ protected:
     QList<Entry> m_entries;
 };
 
-template <typename T>
-void ChoiceSearchModel::setChecked(const T& key, bool checked)
+template <typename T> void ChoiceSearchModel::setChecked(const T& key, bool checked)
 {
     QVariant variantKey(key);
 
@@ -160,8 +159,7 @@ void ChoiceSearchModel::setChecked(const T& key, bool checked)
     }
 }
 
-template <typename T>
-void ChoiceSearchModel::setChecked(const T& value, SearchXml::Relation relation)
+template <typename T> void ChoiceSearchModel::setChecked(const T& value, SearchXml::Relation relation)
 {
     for (int i = 0; i < m_entries.size(); ++i)
     {
@@ -169,8 +167,7 @@ void ChoiceSearchModel::setChecked(const T& value, SearchXml::Relation relation)
     }
 }
 
-template <typename T>
-void ChoiceSearchModel::setChecked(const QList<T>& keys, bool checked)
+template <typename T> void ChoiceSearchModel::setChecked(const QList<T>& keys, bool checked)
 {
     foreach(T key, keys)
     {
@@ -206,7 +203,6 @@ public:
      *  After constructing the object, call setModel
      *  with your model.
      */
-
     ChoiceSearchComboBox(QWidget* const parent = 0);
 
     /** Sets the model and initializes the widget.
@@ -218,7 +214,7 @@ public:
      */
     void setLabelText(const QString& text);
 
-    ChoiceSearchModel* model() const;
+    ChoiceSearchModel*   model() const;
     RSqueezedClickLabel* label() const;
 
 Q_SIGNALS:
