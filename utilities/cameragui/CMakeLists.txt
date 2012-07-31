@@ -37,8 +37,6 @@ SET(libcameragui_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/items/importdelegate.cpp
 
     ${CMAKE_CURRENT_SOURCE_DIR}/views/importsettings.cpp
-    #${CMAKE_CURRENT_SOURCE_DIR}/views/importkcategorizedview.cpp
-    #${CMAKE_CURRENT_SOURCE_DIR}/views/icategorizedview.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/views/importcategorizedview.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/views/importthumbnailbar.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/views/importpreviewview.cpp
