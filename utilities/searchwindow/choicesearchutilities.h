@@ -6,7 +6,7 @@
  * Date        : 2008-04-18
  * Description : User interface for searches
  *
- * Copyright (C) 2008-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2008-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -55,69 +55,93 @@ public:
         IdRole = Qt::UserRole
     };
 
-    ChoiceSearchModel(QObject* parent = 0);
+public:
 
-    /** Sets the data from the given map, with integer keys and QString user displayable value */
+    ChoiceSearchModel(QObject* const parent = 0);
+
+    /** Sets the data from the given map, with integer keys and QString user displayable value.
+     */
     void setChoice(QMap<int, QString> data);
 
     /** Sets the data from the given list,
      *  taking every first entry as the key, every second as the user displayable value.
-     *  Ensure that the QVariants' type is correct (identical for all even entries, QString for all odd entries) */
+     *  Ensure that the QVariants' type is correct (identical for all even entries, QString for all odd entries).
+     */
     void setChoice(QVariantList data);
 
     /** Sets the data from the given list,
-     *  taking every first entry as the key, every second as the user displayable value */
+     *  taking every first entry as the key, every second as the user displayable value.
+     */
     void setChoice(const QStringList& data);
 
-    /** Returns the keys of all entries that are selected (checked) */
+    /** Returns the keys of all entries that are selected (checked).
+     */
     QVariantList checkedKeys() const;
+
     /** Returns the keys of all entries that are selected (checked), converted to
-     *  a list of the template type. Supported for Int and QString types. */
+     *  a list of the template type. Supported for Int and QString types.
+     */
     template <typename T> QList<T> checkedKeys() const;
-    /** Returns the display text of all entries that are selected */
+
+    /** Returns the display text of all entries that are selected.
+     */
     QStringList checkedDisplayTexts() const;
-    /** Sets the check state of the entry with given key */
+
+    /** Sets the check state of the entry with given key.
+     */
     template <typename T> void setChecked(const T& key, bool checked = true);
-    /** Sets the check state of all the entries whose key is found in the list to checked. */
+
+    /** Sets the check state of all the entries whose key is found in the list to checked.
+     */
     template <typename T> void setChecked(const QList<T>& keys, bool checked = true);
+
     /** Sets the check state of all entries. The check state is determined by
      *  the key of an entry, the relation, and a constant value.
      *  Think of "Set to checked if key is less than 5".
-     *  Supported for Int and QString types*/
+     *  Supported for Int and QString types.
+     */
     template <typename T> void setChecked(const T& value, SearchXml::Relation relation);
 
-    /** Sets all entries to unchecked. */
+    /** Sets all entries to unchecked.
+     */
     void resetChecked();
 
-    virtual int rowCount(const QModelIndex& parent) const;
-    virtual QVariant data(const QModelIndex& index, int role) const;
-    virtual QModelIndex index(int row, int column = 0, const QModelIndex& parent = QModelIndex()) const;
+    virtual int           rowCount(const QModelIndex& parent) const;
+    virtual QVariant      data(const QModelIndex& index, int role) const;
+    virtual QModelIndex   index(int row, int column = 0, const QModelIndex& parent = QModelIndex()) const;
     virtual Qt::ItemFlags flags(const QModelIndex& index) const;
-    virtual bool setData(const QModelIndex& index, const QVariant& value, int role);
+    virtual bool          setData(const QModelIndex& index, const QVariant& value, int role);
 
 Q_SIGNALS:
 
-    void checkStateChanged(QVariant key, bool isChecked);
+    void checkStateChanged(const QVariant& key, bool isChecked);
 
 protected:
 
     void setChecked(int index, bool checked);
+
+protected:
 
     class Entry
     {
     public:
 
         Entry();
-        Entry(QVariant key, const QString userDisplay);
-
-        QVariant     key;
-        QString      display;
-        bool         checkState;
+        Entry(const QVariant& key, const QString& userDisplay);
 
         bool operator==(const Entry& other) const;
+
         /// @todo This function has no definition.
         bool operator==(const QVariant& other) const;
+
+    public:
+
+        QVariant m_key;
+        QString  m_display;
+        bool     m_checkState;
     };
+
+protected:
 
     QList<Entry> m_entries;
 };
@@ -129,7 +153,7 @@ void ChoiceSearchModel::setChecked(const T& key, bool checked)
 
     for (int i = 0; i < m_entries.size(); ++i)
     {
-        if (m_entries[i].key == variantKey)
+        if (m_entries[i].m_key == variantKey)
         {
             setChecked(i, checked);
         }
@@ -141,7 +165,7 @@ void ChoiceSearchModel::setChecked(const T& value, SearchXml::Relation relation)
 {
     for (int i = 0; i < m_entries.size(); ++i)
     {
-        setChecked(i, SearchXml::testRelation(m_entries.at(i).key.value<T>(), value, relation));
+        setChecked(i, SearchXml::testRelation(m_entries.at(i).m_key.value<T>(), value, relation));
     }
 }
 
@@ -160,9 +184,9 @@ template <typename T> QList<T> ChoiceSearchModel::checkedKeys() const
 
     for (QList<Entry>::const_iterator it = m_entries.begin(); it != m_entries.end(); ++it)
     {
-        if ((*it).checkState)
+        if ((*it).m_checkState)
         {
-            list << (*it).key.value<T>();
+            list << (*it).m_key.value<T>();
         }
     }
 
@@ -183,12 +207,15 @@ public:
      *  with your model.
      */
 
-    ChoiceSearchComboBox(QWidget* parent = 0);
+    ChoiceSearchComboBox(QWidget* const parent = 0);
 
     /** Sets the model and initializes the widget.
-     *  Can only be called once for a widget. */
+     *  Can only be called once for a widget.
+     */
     void setModel(ChoiceSearchModel* model);
-    /** Updates the text on the line edit area */
+
+    /** Updates the text on the line edit area.
+     */
     void setLabelText(const QString& text);
 
     ChoiceSearchModel* model() const;
