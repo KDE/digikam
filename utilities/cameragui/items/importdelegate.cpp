@@ -1,4 +1,27 @@
-#include "importdelegate.h"
+/* ============================================================
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2012-07-08
+ * Description : Qt item view for images - the delegate
+ *
+ * Copyright (C) 2012 by Islam Wazery <wazery at ubuntu dot com>
+ *
+ * This program is free software; you can redistribute it
+ * and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation;
+ * either version 2, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * ============================================================ */
+
+#include "importdelegate.moc"
 #include "importdelegatepriv.h"
 
 // Qt includes
@@ -9,14 +32,15 @@
 
 // KDE includes
 
-#include <KApplication>
-#include <KIconLoader>
+#include <kapplication.h>
+#include <kiconloader.h>
 
 // Local includes
 
 #include "importimagemodel.h"
 #include "importfiltermodel.h"
 #include "importsettings.h"
+#include "importcategorizedview.h"
 
 namespace Digikam
 {
@@ -38,16 +62,14 @@ void ImportDelegate::ImportDelegatePrivate::clearRects()
     groupRect            = QRect(0, 0, 0, 0);
 }
 
-ImportDelegate::ImportDelegate(QObject* parent)
+ImportDelegate::ImportDelegate(QObject* const parent)
     : ItemViewImportDelegate(*new ImportDelegatePrivate, parent)
 {
-
 }
 
-ImportDelegate::ImportDelegate(ImportDelegate::ImportDelegatePrivate& dd, QObject* parent)
+ImportDelegate::ImportDelegate(ImportDelegate::ImportDelegatePrivate& dd, QObject* const parent)
     : ItemViewImportDelegate(dd, parent)
 {
-
 }
 
 ImportDelegate::~ImportDelegate()
@@ -537,7 +559,9 @@ void ImportThumbnailDelegatePrivate::init(ImportThumbnailDelegate* q)
                      q, SLOT(slotSetupChanged()));
 }
 
-ImportThumbnailDelegate::ImportThumbnailDelegate(ImportCategorizedView* parent)
+// ------------------------------------------------------------------------------------------------
+
+ImportThumbnailDelegate::ImportThumbnailDelegate(ImportCategorizedView* const parent)
     : ImportDelegate(*new ImportThumbnailDelegatePrivate, parent)
 {
     Q_D(ImportThumbnailDelegate);
@@ -565,8 +589,11 @@ void ImportThumbnailDelegate::setDefaultViewOptions(const QStyleOptionViewItem& 
 int ImportThumbnailDelegate::maximumSize() const
 {
     Q_D(const ImportThumbnailDelegate);
+
     //FIXME: Fix thumbnails issues.
     //return ThumbnailLoadThread::maximumThumbnailPixmapSize(true) + 2*d->radius + 2*d->margin;
+    Q_UNUSED(d); // To please compiler about warnings.
+
     return 256;// dummy return
 }
 
@@ -577,7 +604,7 @@ int ImportThumbnailDelegate::minimumSize() const
 }
 
 bool ImportThumbnailDelegate::acceptsActivation(const QPoint& pos, const QRect& visualRect,
-        const QModelIndex& index, QRect* activationRect) const
+                                                const QModelIndex& index, QRect* activationRect) const
 {
     // reuse implementation from grandparent
     return ItemViewImportDelegate::acceptsActivation(pos, visualRect, index, activationRect);
@@ -599,6 +626,7 @@ void ImportThumbnailDelegate::updateContentWidth()
 
     //FIXME: Fix thumbnails issues.
     //d->thumbSize = ThumbnailLoadThread::thumbnailPixmapSize(true, maxSize - 2*d->radius - 2*d->margin);
+    Q_UNUSED(maxSize);  // To please compiler about warnings.
 
     ImportDelegate::updateContentWidth();
 }
@@ -628,11 +656,10 @@ void ImportThumbnailDelegate::updateRects()
     }
 }
 
-// --- ImportNormalDelegate -------------------------------------------------------------------------------------------------------
+// --- ImportNormalDelegate -----------------------------------------------------------------------
 
 void ImportNormalDelegatePrivate::init(ImportNormalDelegate* q, ImportCategorizedView* parent)
 {
-
     categoryDrawer = new ImportCategoryDrawer(parent);
 
     QObject::connect(ImportSettings::instance(), SIGNAL(setupChanged()),
@@ -641,15 +668,14 @@ void ImportNormalDelegatePrivate::init(ImportNormalDelegate* q, ImportCategorize
 
 // ------------------------------------------------------------------------------------------------
 
-ImportNormalDelegate::ImportNormalDelegate(ImportCategorizedView* parent)
+ImportNormalDelegate::ImportNormalDelegate(ImportCategorizedView* const parent)
     : ImportDelegate(*new ImportNormalDelegatePrivate, parent)
 {
-
     Q_D(ImportNormalDelegate);
     d->init(this, parent);
 }
 
-ImportNormalDelegate::ImportNormalDelegate(ImportNormalDelegatePrivate& dd, ImportCategorizedView* parent)
+ImportNormalDelegate::ImportNormalDelegate(ImportNormalDelegatePrivate& dd, ImportCategorizedView* const parent)
     : ImportDelegate(dd, parent)
 {
 
@@ -671,10 +697,11 @@ void ImportNormalDelegate::updateRects()
     d->imageInformationRect              = QRect(d->margin, y, d->contentWidth, 0);
     const ImportSettings* ImportSettings = ImportSettings::instance();
     d->drawImageFormat                   = ImportSettings->getIconShowImageFormat();
+    const int iconSize                   = KIconLoader::SizeSmallMedium;
 
-    const int iconSize = KIconLoader::SizeSmallMedium;
     //TODO: d->pickLabelRect   = QRect(d->margin, y, iconSize, iconSize);
     //d->groupRect       = QRect(d->contentWidth - iconSize, y, iconSize, iconSize);
+    Q_UNUSED(iconSize);  // To please compiler about warnings.
 
     //TODO: Implement rating in import tool.
     //if (ImportSettings->getIconShowRating())
