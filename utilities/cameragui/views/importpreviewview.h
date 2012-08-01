@@ -43,7 +43,9 @@ public:
         IconViewPreview
     };
 
-    explicit ImportPreviewView(QWidget* parent, Mode mode = IconViewPreview);
+public:
+
+    explicit ImportPreviewView(QWidget* const parent, Mode mode = IconViewPreview);
     ~ImportPreviewView();
 
     void setCamItemInfo(const CamItemInfo& info   = CamItemInfo(),
@@ -89,7 +91,7 @@ private Q_SLOTS:
     void camItemLoaded();
     void camItemLoadingFailed();
 
-    //TOOD: Implement Tags, Rating, and Lables in Import Tool
+    //TODO: Implement Tags, Rating, and Lables in Import Tool
     //void slotAssignTag(int tagID);
     //void slotRemoveTag(int tagID);
     //void slotAssignRating(int rating);
@@ -106,8 +108,8 @@ private Q_SLOTS:
 
 private:
 
-    class ImportPreviewViewPriv;
-    ImportPreviewViewPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

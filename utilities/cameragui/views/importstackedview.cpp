@@ -173,9 +173,11 @@ ImportStackedView::~ImportStackedView()
 
 void ImportStackedView::readSettings()
 {
+/*
     ImportSettings* settings = ImportSettings::instance();
-    //REMbool showThumbbar        = settings->getShowThumbbar();
-    //REMd->thumbBarDock->setShouldBeVisible(showThumbbar);
+    REMbool showThumbbar        = settings->getShowThumbbar();
+    REMd->thumbBarDock->setShouldBeVisible(showThumbbar);
+*/
 }
 
 void ImportStackedView::setDockArea(QMainWindow* dockArea)
@@ -237,7 +239,7 @@ bool ImportStackedView::isInMultipleFileMode() const
     return currentIndex() == PreviewCameraMode || currentIndex() == MapWidgetMode;
 }
 
-void ImportStackedView::setPreviewItem(const CamItemInfo& info, const CamItemInfo& previous, const CamItemInfo& next)
+void ImportStackedView::setPreviewItem(const CamItemInfo& info, const CamItemInfo& /*previous*/, const CamItemInfo& /*next*/)
 {
     if (info.isNull())
     {

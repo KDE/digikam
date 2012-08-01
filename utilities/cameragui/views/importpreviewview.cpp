@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "importpreviewview.h"
+#include "importpreviewview.moc"
 
 // Qt includes
 
@@ -52,7 +52,7 @@ class ImportPreviewViewItem : public DImgPreviewItem
 {
 public:
 
-    ImportPreviewViewItem(ImportPreviewView* view)
+    ImportPreviewViewItem(ImportPreviewView* const view)
         : m_view(view)/*, m_group(0)*/
     {
         setAcceptHoverEvents(true);
@@ -108,11 +108,11 @@ protected:
 
 // ---------------------------------------------------------------------
 
-class ImportPreviewView::ImportPreviewViewPriv
+class ImportPreviewView::Private
 {
 public:
 
-    ImportPreviewViewPriv()
+    Private()
     {
         //peopleTagsShown    = false;
         fullSize           = 0;
@@ -154,8 +154,8 @@ public:
     //FaceGroup*             faceGroup;
 };
 
-ImportPreviewView::ImportPreviewView(QWidget* parent, Mode mode)
-    : GraphicsDImgView(parent), d(new ImportPreviewViewPriv)
+ImportPreviewView::ImportPreviewView(QWidget* const parent, Mode mode)
+    : GraphicsDImgView(parent), d(new Private)
 {
     d->mode = mode;
     d->item = new ImportPreviewViewItem(this);
