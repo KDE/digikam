@@ -175,12 +175,6 @@ public:
         useDateFromMetadata(0),
         turnHighQualityThumbs(0),
         useDefaultTargetAlbum(0),
-        target1AlbumSelector(0),
-        listView(0),
-        importListView(0),
-        tab(0),
-        ignoreNamesEdit(0),
-        ignoreExtensionsEdit(0),
         iconShowNameBox(0),
         iconShowSizeBox(0),
         iconShowModDateBox(0),
@@ -192,7 +186,13 @@ public:
         previewLoadFullImageSize(0),
         previewShowIcons(0),
         leftClickActionComboBox(0),
-        iconViewFontSelect(0)
+        iconViewFontSelect(0),
+        target1AlbumSelector(0),
+        listView(0),
+        importListView(0),
+        tab(0),
+        ignoreNamesEdit(0),
+        ignoreExtensionsEdit(0)
     {
     }
 

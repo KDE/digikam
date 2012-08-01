@@ -198,16 +198,6 @@ void ImportCategoryDrawer::textForFormat(const QModelIndex& index, QString* head
 {
     QString format = index.data(ImportFilterModel::CategoryFormatRole).toString();
 
-    QStringList splitted = info.url().prettyUrl().split("/");
-    *header              = splitted.value(splitted.length() - 2);
-
-    *subLine             = i18np("1 Item", "%1 Items", count);
-}
-
-void ImportCategoryDrawer::textForFormat(const QModelIndex& index, QString* header, QString* subLine) const
-{
-    QString format = index.data(ImportFilterModel::CategoryFormatRole).toString();
-
     if(!format.isEmpty())
     {
         format         = format.split("/").at(1);
