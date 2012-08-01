@@ -1,7 +1,6 @@
 SET(libcameragui_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/main/cameraui.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/controller/cameracontroller.cpp
-    #${CMAKE_CURRENT_SOURCE_DIR}/controller/camerathumbsctrl.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/controller/camerahistoryupdater.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/devices/dkcamera.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/devices/gpcamera.cpp
@@ -11,11 +10,6 @@ SET(libcameragui_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/camerainfodialog.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/capturedlg.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/cameramessagebox.cpp
-    #${CMAKE_CURRENT_SOURCE_DIR}/items/camerafolderitem.cpp
-    #${CMAKE_CURRENT_SOURCE_DIR}/items/cameraiconitem.cpp
-    #${CMAKE_CURRENT_SOURCE_DIR}/views/camerafolderview.cpp
-    #${CMAKE_CURRENT_SOURCE_DIR}/views/cameraiconview.cpp
-    #${CMAKE_CURRENT_SOURCE_DIR}/views/cameraiconviewtooltip.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/views/cameranamehelper.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/views/freespacetooltip.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/capturewidget.cpp
@@ -45,6 +39,14 @@ SET(libcameragui_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/views/importstackedview.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/views/importview.cpp
 
+    #${CMAKE_CURRENT_SOURCE_DIR}/controller/camerathumbsctrl.cpp
+
+    #${CMAKE_CURRENT_SOURCE_DIR}/items/camerafolderitem.cpp
+    #${CMAKE_CURRENT_SOURCE_DIR}/items/cameraiconitem.cpp
+    #${CMAKE_CURRENT_SOURCE_DIR}/views/camerafolderview.cpp
+    #${CMAKE_CURRENT_SOURCE_DIR}/views/cameraiconview.cpp
+    #${CMAKE_CURRENT_SOURCE_DIR}/views/cameraiconviewtooltip.cpp
+
     #${CMAKE_CURRENT_SOURCE_DIR}/q3support/icongroupitem.cpp
     #${CMAKE_CURRENT_SOURCE_DIR}/q3support/iconitem.cpp
     #${CMAKE_CURRENT_SOURCE_DIR}/q3support/iconview.cpp
@@ -52,6 +54,6 @@ SET(libcameragui_SRCS
 
 KDE4_ADD_LIBRARY(cameragui STATIC ${libcameragui_SRCS})
 
-TARGET_LINK_LIBRARIES(cameragui ${QT_QT3SUPPORT_LIBRARY})
+#TARGET_LINK_LIBRARIES(cameragui ${QT_QT3SUPPORT_LIBRARY})
 
 INSTALL(FILES main/cameraui.rc DESTINATION ${DATA_INSTALL_DIR}/digikam)
