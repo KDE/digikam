@@ -513,7 +513,6 @@ void CameraController::executeCommand(CameraCommand* const cmd)
             {
                 numberOfItems++;
                 info.id += numberOfItems;
-                qDebug() << QString::number(info.id); //TODO: Remove this line.
             }
 
             if (!itemsList.isEmpty())

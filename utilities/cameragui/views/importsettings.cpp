@@ -233,7 +233,7 @@ void ImportSettings::init()
 {
     d->imageSortOrder               = CamItemSortSettings::SortByFileName;
     d->imageSorting                 = CamItemSortSettings::AscendingOrder;
-    d->imageGroupMode               = CamItemSortSettings::CategoryByFormat;
+    d->imageGroupMode               = CamItemSortSettings::OneCategory;
     d->itemLeftClickAction          = ImportSettings::ShowPreview;
 
     d->thumbnailSize                = ThumbnailSize::Medium;
@@ -278,7 +278,7 @@ void ImportSettings::readSettings()
 
     d->imageSortOrder               = group.readEntry(d->configImageSortOrderEntry, (int)CamItemSortSettings::SortByFileName);
     d->imageSorting                 = group.readEntry(d->configImageSortingEntry,   (int)CamItemSortSettings::AscendingOrder);
-    d->imageGroupMode               = group.readEntry(d->configImageGroupModeEntry, (int)CamItemSortSettings::CategoryByFormat);
+    d->imageGroupMode               = group.readEntry(d->configImageGroupModeEntry, (int)CamItemSortSettings::OneCategory);
 
     d->itemLeftClickAction          = ImportSettings::ItemLeftClickAction(group.readEntry( d->configItemLeftClickActionEntry,
                                                                          (int)ImportSettings::ShowPreview));

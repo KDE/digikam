@@ -638,7 +638,6 @@ void ImportImageModel::publiciseInfos(const QList<CamItemInfo>& infos)
     for (int i = firstNewIndex; i <= lastNewIndex; ++i)
     {
         const CamItemInfo& info = d->infos.at(i);
-        qDebug() << info.name; //TODO: Remove this line.
         qlonglong id            = info.id;
         d->idHash.insertMulti(id, i);
 

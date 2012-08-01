@@ -33,6 +33,10 @@
 #include <kdeversion.h>
 #include <kcategorydrawer.h>
 
+// Local includes
+
+#include "importcategorizedview.h"
+
 namespace Digikam
 {
 

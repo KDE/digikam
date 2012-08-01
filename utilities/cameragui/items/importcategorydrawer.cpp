@@ -32,6 +32,7 @@
 // KDE includes
 
 #include <KApplication>
+#include <KLocale>
 
 // Local includes
 
@@ -180,7 +181,21 @@ void ImportCategoryDrawer::drawCategory(const QModelIndex& index, int /*sortRole
 
 void ImportCategoryDrawer::viewHeaderText(const QModelIndex& index, QString* header, QString* subLine) const
 {
-    //TODO: Implement viewing containing folder name.
+    ImportImageModel* sourceModel = index.data(ImportImageModel::ImportImageModelPointerRole).value<ImportImageModel*>();
+
+    if (!sourceModel)
+    {
+        return;
+    }
+
+    CamItemInfo info = sourceModel->retrieveCamItemInfo(index);
+
+    int count = d->view->categoryRange(index).height();
+
+    QStringList splitted = info.url().prettyUrl().split("/");
+    *header   = splitted.at(splitted.findIndex(splitted.last()) - 1);
+
+    *subLine  = i18n("%1 Items", count);
 }
 
 void ImportCategoryDrawer::updateRectsAndPixmaps(int width)
