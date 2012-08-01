@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "importthumbnailbar.h"
+#include "importthumbnailbar.moc"
 
 // KDE includes
 
@@ -36,11 +36,11 @@
 namespace Digikam
 {
 
-class ImportThumbnailBar::ImportThumbnailBarPriv
+class ImportThumbnailBar::Private
 {
 public:
 
-    ImportThumbnailBarPriv()
+    Private()
     {
         scrollPolicy     = Qt::ScrollBarAlwaysOn;
         duplicatesFilter = 0;
@@ -50,8 +50,8 @@ public:
     NoDuplicatesImportFilterModel* duplicatesFilter;
 };
 
-ImportThumbnailBar::ImportThumbnailBar(QWidget* parent)
-    : ImportCategorizedView(parent), d(new ImportThumbnailBarPriv())
+ImportThumbnailBar::ImportThumbnailBar(QWidget* const parent)
+    : ImportCategorizedView(parent), d(new Private())
 {
     setItemDelegate(new ImportThumbnailDelegate(this));
     setSpacing(3);

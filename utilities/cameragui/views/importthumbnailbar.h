@@ -37,7 +37,7 @@ class ImportThumbnailBar : public ImportCategorizedView
 
 public:
 
-    ImportThumbnailBar(QWidget* parent = 0);
+    ImportThumbnailBar(QWidget* const parent = 0);
     ~ImportThumbnailBar();
 
     /**
@@ -71,8 +71,8 @@ protected:
 
 private:
 
-    class ImportThumbnailBarPriv;
-    ImportThumbnailBarPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam
