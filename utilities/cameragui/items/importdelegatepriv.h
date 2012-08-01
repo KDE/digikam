@@ -36,7 +36,6 @@ public:
 
     int                    contentWidth;
 
-    QRect                  dateRect;
     QRect                  modDateRect;
     QRect                  pixmapRect;
     QRect                  nameRect;

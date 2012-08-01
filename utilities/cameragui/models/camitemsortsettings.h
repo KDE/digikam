@@ -81,7 +81,7 @@ public:
     enum CategorizationMode
     {
         NoCategories,
-        OneCategory,
+        CategoryByFolder,
         CategoryByFormat
     };
 

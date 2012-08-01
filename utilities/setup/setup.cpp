@@ -61,6 +61,7 @@
 #include "setupdatabase.h"
 #include "setupfacetags.h"
 #include "setupversioning.h"
+#include "importsettings.h"
 
 #ifdef USE_SCRIPT_IFACE
 #include "setupscriptmanager.h"
@@ -487,6 +488,7 @@ void Setup::okClicked()
 #endif
 
     AlbumSettings::instance()->emitSetupChanged();
+    ImportSettings::instance()->emitSetupChanged();
 
     kapp->restoreOverrideCursor();
 

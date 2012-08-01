@@ -64,7 +64,7 @@ void ImportIconView::init(CameraController* controller)
 
     ImportSettings* settings = ImportSettings::instance();
 
-    importFilterModel()->setCategorizationMode(CamItemSortSettings::OneCategory);
+    importFilterModel()->setCategorizationMode(CamItemSortSettings::CategoryByFolder);
 
     setThumbnailSize((ThumbnailSize::Size)settings->getDefaultIconSize());
 

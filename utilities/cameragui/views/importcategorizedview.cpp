@@ -125,7 +125,7 @@ void ImportCategorizedView::installDefaultModels(CameraController* controller)
     filterModel->setSourceImportModel(model);
 
     filterModel->setSortRole(CamItemSortSettings::SortByFileName);
-    filterModel->setCategorizationMode(CamItemSortSettings::OneCategory);
+    filterModel->setCategorizationMode(CamItemSortSettings::CategoryByFolder);
     filterModel->sort(0); // an initial sorting is necessary
 
     setModels(model, filterModel);

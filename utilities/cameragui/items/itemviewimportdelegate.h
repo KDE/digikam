@@ -96,7 +96,6 @@ protected:
     /// Use the tool methods for painting in subclasses
     QRect drawThumbnail(QPainter* p, const QRect& thumbRect, const QPixmap& background, const QPixmap& thumbnail) const;
     void drawName(QPainter* p,const QRect& nameRect, const QString& name) const;
-    void drawCreationDate(QPainter* p, const QRect& dateRect, const QDateTime& date) const;
     void drawModificationDate(QPainter* p, const QRect& dateRect, const QDateTime& date) const;
     void drawImageSize(QPainter* p, const QRect& dimsRect, const QSize& dims) const;
     void drawImageFormat(QPainter* p, const QRect& dimsRect, const QString& mime) const;

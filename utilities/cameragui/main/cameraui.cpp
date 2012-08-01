@@ -51,6 +51,7 @@
 #include <QToolButton>
 #include <QVBoxLayout>
 #include <QWidget>
+#include <QSignalMapper>
 
 // KDE includes
 
@@ -104,7 +105,8 @@
 #include "dzoombar.h"
 #include "imagepropertiessidebarcamgui.h"
 #include "albummanager.h"
-#include "albumsettings.h"
+#include "albumsettings.h"//TODO: Remove it
+#include "importsettings.h"
 #include "album.h"
 #include "albumselectdialog.h"
 #include "renamecustomizer.h"
@@ -171,7 +173,6 @@ CameraUI::CameraUI(QWidget* const parent, const QString& cameraTitle,
     // -- Init. camera controller ----------------------------------------
 
     setupCameraController(model, port, path);
-    //d->controller->slotConnect();
     QTimer::singleShot(0, d->controller, SLOT(slotConnect()));
     // --------------------------------------------------------
 
@@ -335,7 +336,7 @@ void CameraUI::setupActions()
 
     // -- Image menu ---------------------------------------------
 
-    d->imageViewAction = new KAction(KIcon("editimage"), i18nc("View the selected image", "View Image"), this);
+    d->imageViewAction = new KAction(KIcon("editimage"), i18nc("View the selected image", "View Item"), this);
     connect(d->imageViewAction, SIGNAL(triggered()), this, SLOT(slotFileView()));
     actionCollection()->addAction("cameraui_imageview", d->imageViewAction);
     d->imageViewAction->setEnabled(false);
@@ -449,11 +450,76 @@ void CameraUI::setupActions()
     connect(d->mapViewAction, SIGNAL(triggered()), d->view, SLOT(slotMapWidgetView()));
     d->imageViewSelectionAction->addAction(d->mapViewAction);
 
-    // -- Last Photo First menu actions --------------------------------------------
+    // -- Item Sorting ------------------------------------------------------------
 
-    d->lastPhotoFirstAction = new KToggleAction(i18n("Show last photo first"), this);
-    connect(d->lastPhotoFirstAction, SIGNAL(triggered()), this, SLOT(slotlastPhotoFirst()));
-    actionCollection()->addAction("cameraui_lastphotofirst", d->lastPhotoFirstAction);
+    d->itemSortAction = new KSelectAction(i18n("&Sort Items"), this);
+    d->itemSortAction->setWhatsThis(i18n("The value by which the items are sorted in the thumbnail view"));
+    QSignalMapper* imageSortMapper = new QSignalMapper(this);
+    connect(imageSortMapper, SIGNAL(mapped(int)), d->view, SLOT(slotSortImages(int)));
+    actionCollection()->addAction("item_sort", d->itemSortAction);
+
+    // map to CamItemSortSettings enum
+    QAction* sortByNameAction = d->itemSortAction->addAction(i18n("By Name"));
+    QAction* sortByPathAction = d->itemSortAction->addAction(i18n("By Path"));
+    //QAction* sortByDateAction = d->itemSortAction->addAction(i18n("By Date")); //TODO: Implement sort by creation date.
+    QAction* sortByFileSizeAction = d->itemSortAction->addAction(i18n("By File Size"));
+    //QAction* sortByRatingAction = d->itemSortAction->addAction(i18n("By Rating")); //TODO: Implement rating in import tool.
+
+    connect(sortByNameAction, SIGNAL(triggered()), imageSortMapper, SLOT(map()));
+    connect(sortByPathAction, SIGNAL(triggered()), imageSortMapper, SLOT(map()));
+    //connect(sortByDateAction, SIGNAL(triggered()), imageSortMapper, SLOT(map())); //TODO: Implement sort by creation date.
+    connect(sortByFileSizeAction, SIGNAL(triggered()), imageSortMapper, SLOT(map()));
+    //connect(sortByRatingAction, SIGNAL(triggered()), imageSortMapper, SLOT(map()));
+
+    imageSortMapper->setMapping(sortByNameAction, (int)CamItemSortSettings::SortByFileName);
+    imageSortMapper->setMapping(sortByPathAction, (int)CamItemSortSettings::SortByFilePath);
+    //imageSortMapper->setMapping(sortByDateAction, (int)CamItemSortSettings::SortByCreationDate); //TODO: Implement sort by creation date.
+    imageSortMapper->setMapping(sortByFileSizeAction, (int)CamItemSortSettings::SortByFileSize);
+    //imageSortMapper->setMapping(sortByRatingAction, (int)ImageSortSettings::SortByRating);
+
+    d->itemSortAction->setCurrentItem(ImportSettings::instance()->getImageSortOrder());
+
+    // -- Item Sort Order ------------------------------------------------------------
+
+    d->itemSortOrderAction = new KSelectAction(i18n("Item Sorting &Order"), this);
+    d->itemSortOrderAction->setWhatsThis(i18n("Defines whether items are sorted in ascending or descending manner."));
+    QSignalMapper* imageSortOrderMapper = new QSignalMapper(this);
+    connect(imageSortOrderMapper, SIGNAL(mapped(int)), d->view, SLOT(slotSortImagesOrder(int)));
+    actionCollection()->addAction("item_sort_order", d->itemSortOrderAction);
+
+    QAction* sortAscendingAction = d->itemSortOrderAction->addAction(i18n("Ascending"));
+    QAction* sortDescendingAction = d->itemSortOrderAction->addAction(i18n("Descending"));
+
+    connect(sortAscendingAction, SIGNAL(triggered()), imageSortOrderMapper, SLOT(map()));
+    connect(sortDescendingAction, SIGNAL(triggered()), imageSortOrderMapper, SLOT(map()));
+
+    imageSortOrderMapper->setMapping(sortAscendingAction, (int)CamItemSortSettings::AscendingOrder);
+    imageSortOrderMapper->setMapping(sortDescendingAction, (int)CamItemSortSettings::DescendingOrder);
+
+    d->itemSortOrderAction->setCurrentItem(ImportSettings::instance()->getImageSorting());
+
+    // -- Item Grouping ------------------------------------------------------------
+
+    d->itemsGroupAction = new KSelectAction(i18n("&Group Items"), this);
+    d->itemsGroupAction->setWhatsThis(i18n("The categories in which the items in the thumbnail view are displayed"));
+    QSignalMapper* itemGroupMapper = new QSignalMapper(this);
+    connect(itemGroupMapper, SIGNAL(mapped(int)), d->view, SLOT(slotGroupImages(int)));
+    actionCollection()->addAction("item_group", d->itemsGroupAction);
+
+    // map to CamItemSortSettings enum
+    QAction* noCategoriesAction  = d->itemsGroupAction->addAction(i18n("Flat List"));
+    QAction* CategoryByFolderAction = d->itemsGroupAction->addAction(i18n("By Folder"));
+    QAction* groupByFormatAction = d->itemsGroupAction->addAction(i18n("By Format"));
+
+    connect(noCategoriesAction, SIGNAL(triggered()), itemGroupMapper, SLOT(map()));
+    connect(CategoryByFolderAction, SIGNAL(triggered()), itemGroupMapper, SLOT(map()));
+    connect(groupByFormatAction, SIGNAL(triggered()), itemGroupMapper, SLOT(map()));
+
+    itemGroupMapper->setMapping(noCategoriesAction,     (int)CamItemSortSettings::NoCategories);
+    itemGroupMapper->setMapping(CategoryByFolderAction, (int)CamItemSortSettings::CategoryByFolder);
+    itemGroupMapper->setMapping(groupByFormatAction,    (int)CamItemSortSettings::CategoryByFormat);
+
+    d->itemsGroupAction->setCurrentItem(ImportSettings::instance()->getImageGroupMode());
 
     // -- Standard 'View' menu actions ---------------------------------------------
 
@@ -478,6 +544,12 @@ void CameraUI::setupActions()
     d->showLogAction->setShortcut(KShortcut(Qt::CTRL + Qt::Key_H));
     connect(d->showLogAction, SIGNAL(triggered()), this, SLOT(slotShowLog()));
     actionCollection()->addAction("cameraui_showlog", d->showLogAction);
+
+    d->showBarAction = new KToggleAction(KIcon("view-choose"), i18n("Show Thumbbar"), this);
+    d->showBarAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_T));
+    connect(d->showBarAction, SIGNAL(triggered()), this, SLOT(slotToggleShowBar()));
+    actionCollection()->addAction("showthumbs", d->showBarAction);
+
 
     // -- Standard 'Configure' menu actions ----------------------------------------
 
@@ -541,6 +613,15 @@ void CameraUI::setupConnections()
     connect(d->view, SIGNAL(signalSelected(CamItemInfo,bool)),
             this, SLOT(slotItemsSelected(CamItemInfo,bool)));
 
+    connect(d->view, SIGNAL(signalImageSelected(CamItemInfoList,bool,bool,CamItemInfoList)),
+            this, SLOT(slotImageSelected(CamItemInfoList,bool,bool,CamItemInfoList)));
+
+    connect(d->view, SIGNAL(signalSwitchedToPreview()),
+            this, SLOT(slotSwitchedToPreview()));
+
+    connect(d->view, SIGNAL(signalSwitchedToIconView()),
+            this, SLOT(slotSwitchedToIconView()));
+
 //Emitted from the context menu to view the item
 //TODO: need to connect it with the context menu and view item action
     //connect(d->view, SIGNAL(signalFileView(CamItemInfo)),
@@ -591,8 +672,8 @@ void CameraUI::setupConnections()
 
 //    // -------------------------------------------------------------------------
 
-//    connect(d->zoomBar, SIGNAL(signalZoomSliderChanged(int)),
-//            this, SLOT(slotZoomSliderChanged(int)));
+    connect(d->zoomBar, SIGNAL(signalZoomSliderChanged(int)),
+            this, SLOT(slotZoomSliderChanged(int)));
 
 //    connect(this, SIGNAL(signalWindowHasMoved()),
 //            d->zoomBar, SLOT(slotUpdateTrackerPos()));
@@ -702,17 +783,6 @@ void CameraUI::setupCameraController(const QString& model, const QString& port, 
 
     connect(d->controller, SIGNAL(signalUploaded(CamItemInfo)),
             this, SLOT(slotUploaded(CamItemInfo)));
-
-    // --- Setup the models --------------------------------------------------------------------
-
-    //ImportModel* importModel = new ImportModel(this);
-    //importModel->setCameraController(d->controller);
-    //d->view->installDefaultModels(importModel);
-
-    // Setup Thumbnails controller -------------------------------------------------------
-
-    //d->camThumbsCtrl = new CameraThumbsCtrl(d->controller, this);
-    //d->view->setThumbControler(d->camThumbsCtrl);
 }
 
 CameraController* CameraUI::getCameraController()
@@ -730,8 +800,7 @@ void CameraUI::readSettings()
     KConfigGroup group        = config->group(d->configGroupName);
 
     d->view->setThumbSize(group.readEntry("ThumbnailSize", (int)ThumbnailSize::Large));
-//    d->showLogAction->setChecked(group.readEntry("ShowLog",               false));
-//    d->lastPhotoFirstAction->setChecked(group.readEntry("LastPhotoFirst", true));
+    d->showLogAction->setChecked(group.readEntry("ShowLog",               false));
 //    d->albumCustomizer->readSettings(group);
 //    d->advancedSettings->readSettings(group);
 //    d->scriptingSettings->readSettings(group);
@@ -753,8 +822,7 @@ void CameraUI::saveSettings()
     KConfigGroup group        = config->group(d->configGroupName);
 
     group.writeEntry("ThumbnailSize",  d->view->thumbnailSize().size());
-//    group.writeEntry("ShowLog",        d->showLogAction->isChecked());
-//    group.writeEntry("LastPhotoFirst", d->lastPhotoFirstAction->isChecked());
+    group.writeEntry("ShowLog",        d->showLogAction->isChecked());
 //    d->albumCustomizer->saveSettings(group);
 //    d->advancedSettings->saveSettings(group);
 //    d->scriptingSettings->saveSettings(group);
@@ -768,7 +836,7 @@ void CameraUI::saveSettings()
 //    d->rightSideBar->saveState();
 //    d->splitter->saveState(group);
 //    d->filterComboBox->saveSettings();
-//    config->sync();
+    config->sync();
 }
 
 void CameraUI::slotProcessUrl(const QString& url)
@@ -810,14 +878,14 @@ void CameraUI::slotCancelButton()
 
 void CameraUI::refreshFreeSpace()
 {
-//    if (d->controller->cameraDriverType() == DKCamera::GPhotoDriver)
-//    {
-//        d->controller->getFreeSpace();
-//    }
-//    else
-//    {
-//        d->cameraFreeSpace->refresh();
-//    }
+    if (d->controller->cameraDriverType() == DKCamera::GPhotoDriver)
+    {
+        d->controller->getFreeSpace();
+    }
+    else
+    {
+        d->cameraFreeSpace->refresh();
+    }
 }
 
 void CameraUI::closeEvent(QCloseEvent* e)
@@ -1128,110 +1196,6 @@ void CameraUI::slotFileList(const CamItemInfoList& fileList)
 
     d->filesToBeAdded << fileList;
     d->refreshIconViewTimer->start();
-}
-
-void CameraUI::slotRefreshIconViewTimer()
-{
-//    if (d->busy)
-//    {
-//        d->refreshIconViewTimer->start();
-//        return;
-//    }
-
-//    if (d->filesToBeAdded.isEmpty())
-//    {
-//        return;
-//    }
-
-//    AlbumSettings* settings = AlbumSettings::instance();
-
-//    if (!settings)
-//    {
-//        return;
-//    }
-
-//    // We sort the map by time stamp
-//    // and we remove internal camera files which are not image/video/sounds.
-//    KSharedConfig::Ptr config = KGlobal::config();
-//    KConfigGroup group = config->group(d->importFiltersConfigGroupName);
-//    QStringList fileNames = group.readEntry("IgnoreNames",
-//                                            FilterComboBox::defaultIgnoreNames).toLower().split(' ');
-//    QStringList fileExts = group.readEntry("IgnoreExtensions",
-//                                           FilterComboBox::defaultIgnoreExtensions).toLower().split(' ');
-//    QFileInfo   fi;
-
-//    // NOTE: see B.K.O #181726: list of accepted file extensions from Album Settings.
-//    QStringList list = settings->getAllFileFilter().toLower().split(' ');
-
-//    CHUpdateItemMap map;
-//    CamItemInfoList items = d->view->allItems();
-
-//    foreach(CamItemInfo info, items)
-//    {
-//        map.insertMulti(info.mtime, info);
-//    }
-
-//    foreach(CamItemInfo info, d->filesToBeAdded)
-//    {
-//        fi.setFile(info.name);
-
-//        if (!fileNames.contains(fi.fileName().toLower()) &&
-//            !fileExts.contains(fi.suffix().toLower())    &&
-//            list.contains(QString("*.%1").arg(fi.suffix().toLower())))
-//        {
-//            map.insertMulti(info.mtime, info);
-//        }
-//    }
-
-//    d->filesToBeAdded.clear();
-
-//    items = d->view->allItems();
-
-//    foreach(CamItemInfo info, items)
-//    {
-//        d->view->removeItem(info);
-//    }
-
-//    d->historyUpdater->addItems(d->controller->cameraMD5ID(), map);
-}
-
-void CameraUI::slotRefreshIconView(const CHUpdateItemMap& map)
-{
-    if (map.empty())
-    {
-        return;
-    }
-
-    d->map = map;
-    bool lastPhotoFirst                = d->lastPhotoFirstAction->isChecked();
-    CHUpdateItemMap::const_iterator it = lastPhotoFirst ? d->map.constEnd() : d->map.constBegin();
-
-    do
-    {
-        if (lastPhotoFirst)
-        {
-            --it;
-        }
-
-        if (d->filterComboBox->matchesCurrentFilter(*it))
-        {
-            //d->view->addItem(*it);
-        }
-
-        if (!lastPhotoFirst)
-        {
-            ++it;
-        }
-    }
-
-    while ((lastPhotoFirst ? it != d->map.constBegin() : it != d->map.constEnd()));
-}
-
-void CameraUI::slotlastPhotoFirst()
-{
-//    saveSettings();
-
-//    slotFilterChanged();
 }
 
 void CameraUI::slotFilterChanged()
@@ -2057,34 +2021,91 @@ void CameraUI::slotNewSelection(bool hasSelection)
 //    d->albumLibraryFreeSpace->setEstimatedDSizeKb(dSize);
 }
 
-void CameraUI::slotItemsSelected(const CamItemInfo& info, bool selected)
+void CameraUI::slotImageSelected(const CamItemInfoList& selection, bool hasPrev, bool hasNext,
+                                   const CamItemInfoList& listAll)
 {
-//    if (!d->controller)
-//    {
-//        return;
-//    }
+    int num_images = listAll.count();
 
-//    if (selected)
-//    {
-//        // if selected item is in the list of item which will be deleted, set no current item
-//        if (!d->currentlyDeleting.contains(info.folder + info.name))
-//        {
-//            d->rightSideBar->itemChanged(info, DMetadata());
-//            d->controller->getMetadata(info.folder, info.name);
-//        }
-//        else
-//        {
-//            d->rightSideBar->slotNoCurrentItem();
-//        }
-//    }
-//    else
-//    {
-//        d->rightSideBar->slotNoCurrentItem();
-//    }
+    switch (selection.count())
+    {
+        case 0:
+        {
+            d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode, i18np("No item selected (%1 item)",
+                                              "No item selected (%1 items)",
+                                              num_images));
 
-//    // update availability of actions
-//    slotNewSelection(d->view->countSelected() > 0);
+            d->rightSideBar->slotNoCurrentItem();
+            break;
+        }
+        case 1:
+        {
+            // if selected item is in the list of item which will be deleted, set no current item
+            if (!d->currentlyDeleting.contains(selection.first().folder + selection.first().name))
+            {
+                d->rightSideBar->itemChanged(selection.first(), DMetadata());
+                d->controller->getMetadata(selection.first().folder, selection.first().name);
+
+                // check if the selected item is really an image, if not, disable the edit action
+                if (identifyCategoryforMime(selection.first().mime) != "image")
+                {
+                    d->imageViewAction->setEnabled(false);
+                }
+
+                int index = listAll.indexOf(selection.first()) + 1;
+
+                d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode, selection.first().url().fileName()
+                                            + i18n(" (%1 of %2)", index, num_images));
+            }
+            else
+            {
+                d->rightSideBar->slotNoCurrentItem();
+                d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode, i18np("No item selected (%1 item)",
+                                                  "No item selected (%1 items)",
+                                                  num_images));
+            }
+
+            break;
+        }
+        default:
+        {
+            d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode, i18np("%2/%1 item selected",
+                                              "%2/%1 items selected",
+                                              num_images, selection.count()));
+            break;
+        }
+    }
+
+    //d->statusLabel->setText(d->statusBarSelectionText);
+    d->statusNavigateBar->setNavigateBarState(hasPrev, hasNext);
 }
+
+QString CameraUI::identifyCategoryforMime(QString mime)
+{
+    return mime.split("/").at(0);
+}
+
+void CameraUI::slotSwitchedToPreview()
+{
+    d->camItemPreviewAction->setChecked(true);
+    d->zoomBar->setBarMode(DZoomBar::PreviewZoomCtrl);
+    d->showBarAction->setEnabled(true);
+}
+
+void CameraUI::slotSwitchedToIconView()
+{
+    d->zoomBar->setBarMode(DZoomBar::ThumbsSizeCtrl);
+    d->iconViewAction->setChecked(true);
+    d->showBarAction->setEnabled(false);
+}
+
+void CameraUI::slotSwitchedToMapView()
+{
+    //TODO: Link to map view's zoom actions
+    d->zoomBar->setBarMode(DZoomBar::ThumbsSizeCtrl);
+    d->mapViewAction->setChecked(true);
+    d->showBarAction->setEnabled(false);
+}
+
 
 bool CameraUI::createAutoAlbum(const KUrl& parentURL, const QString& sub,
                                const QDate& date, QString& errMsg) const
@@ -2126,141 +2147,141 @@ bool CameraUI::createAutoAlbum(const KUrl& parentURL, const QString& sub,
 
 void CameraUI::slotEditKeys()
 {
-//    KShortcutsDialog dialog(KShortcutsEditor::AllActions,
-//                            KShortcutsEditor::LetterShortcutsAllowed, this);
-//    dialog.addCollection(actionCollection(), i18n("General"));
-//    dialog.configure();
+    KShortcutsDialog dialog(KShortcutsEditor::AllActions,
+                            KShortcutsEditor::LetterShortcutsAllowed, this);
+    dialog.addCollection(actionCollection(), i18n("General"));
+    dialog.configure();
 }
 
 void CameraUI::slotConfToolbars()
 {
-//    saveMainWindowSettings(KGlobal::config()->group("Camera Settings"));
-//    KEditToolBar dlg(factory(), this);
+    saveMainWindowSettings(KGlobal::config()->group("Camera Settings"));
+    KEditToolBar dlg(factory(), this);
 
-//    connect(&dlg, SIGNAL(newToolbarConfig()),
-//            this, SLOT(slotNewToolbarConfig()));
+    connect(&dlg, SIGNAL(newToolbarConfig()),
+            this, SLOT(slotNewToolbarConfig()));
 
-//    dlg.exec();
+    dlg.exec();
 }
 
 void CameraUI::slotConfNotifications()
 {
-//    KNotifyConfigWidget::configure(this);
+    KNotifyConfigWidget::configure(this);
 }
 
 void CameraUI::slotNewToolbarConfig()
 {
-//    applyMainWindowSettings(KGlobal::config()->group("Camera Settings"));
+    applyMainWindowSettings(KGlobal::config()->group("Camera Settings"));
 }
 
 void CameraUI::slotSetup()
 {
-//    Setup::exec(this);
+    Setup::exec(this);
 }
 
 void CameraUI::slotToggleFullScreen()
 {
-//    if (d->fullScreen) // out of fullscreen
-//    {
-//        setWindowState(windowState() & ~Qt::WindowFullScreen);   // reset
+    if (d->fullScreen) // out of fullscreen
+    {
+        setWindowState(windowState() & ~Qt::WindowFullScreen);   // reset
 
-//        slotShowMenuBar();
-//        statusBar()->show();
-//        showToolBars();
+        slotShowMenuBar();
+        statusBar()->show();
+        showToolBars();
 
-//        if (d->removeFullScreenButton)
-//        {
-//            QList<KToolBar*> toolbars = toolBars();
-//            foreach(KToolBar* toolbar, toolbars)
-//            {
-//                // name is set in ui.rc XML file
-//                if (toolbar->objectName() == "ToolBar")
-//                {
-//                    toolbar->removeAction(d->fullScreenAction);
-//                    break;
-//                }
-//            }
-//        }
+        if (d->removeFullScreenButton)
+        {
+            QList<KToolBar*> toolbars = toolBars();
+            foreach(KToolBar* toolbar, toolbars)
+            {
+                // name is set in ui.rc XML file
+                if (toolbar->objectName() == "ToolBar")
+                {
+                    toolbar->removeAction(d->fullScreenAction);
+                    break;
+                }
+            }
+        }
 
-//        d->rightSideBar->restore();
+        d->rightSideBar->restore();
 
-//        d->fullScreen = false;
-//    }
-//    else  // go to fullscreen
-//    {
-//        // hide the menubar and the statusbar
-//        menuBar()->hide();
-//        statusBar()->hide();
+        d->fullScreen = false;
+    }
+    else  // go to fullscreen
+    {
+        // hide the menubar and the statusbar
+        menuBar()->hide();
+        statusBar()->hide();
 
-//        if (d->fullScreenHideToolBar)
-//        {
-//            hideToolBars();
-//        }
-//        else
-//        {
-//            showToolBars();
+        if (d->fullScreenHideToolBar)
+        {
+            hideToolBars();
+        }
+        else
+        {
+            showToolBars();
 
-//            QList<KToolBar*> toolbars = toolBars();
-//            KToolBar* mainToolbar = 0;
-//            foreach(KToolBar * toolbar, toolbars)
-//            {
-//                if (toolbar->objectName() == "ToolBar")
-//                {
-//                    mainToolbar = toolbar;
-//                    break;
-//                }
-//            }
+            QList<KToolBar*> toolbars = toolBars();
+            KToolBar* mainToolbar = 0;
+            foreach(KToolBar * toolbar, toolbars)
+            {
+                if (toolbar->objectName() == "ToolBar")
+                {
+                    mainToolbar = toolbar;
+                    break;
+                }
+            }
 
-//            // add fullscreen action if necessary
-//            if (mainToolbar && !mainToolbar->actions().contains(d->fullScreenAction))
-//            {
-//                mainToolbar->addAction(d->fullScreenAction);
-//                d->removeFullScreenButton = true;
-//            }
-//            else
-//            {
-//                // If FullScreen button is enabled in toolbar settings,
-//                // we shall not remove it when leaving of fullscreen mode.
-//                d->removeFullScreenButton = false;
-//            }
-//        }
+            // add fullscreen action if necessary
+            if (mainToolbar && !mainToolbar->actions().contains(d->fullScreenAction))
+            {
+                mainToolbar->addAction(d->fullScreenAction);
+                d->removeFullScreenButton = true;
+            }
+            else
+            {
+                // If FullScreen button is enabled in toolbar settings,
+                // we shall not remove it when leaving of fullscreen mode.
+                d->removeFullScreenButton = false;
+            }
+        }
 
-//        d->rightSideBar->backup();
+        d->rightSideBar->backup();
 
-//        setWindowState(windowState() | Qt::WindowFullScreen);   // set
-//        d->fullScreen = true;
-//    }
+        setWindowState(windowState() | Qt::WindowFullScreen);   // set
+        d->fullScreen = true;
+    }
 }
 
 void CameraUI::slotEscapePressed()
 {
-//    if (d->fullScreen)
-//    {
-//        d->fullScreenAction->activate(QAction::Trigger);
-//    }
+    if (d->fullScreen)
+    {
+        d->fullScreenAction->activate(QAction::Trigger);
+    }
 }
 
 void CameraUI::showToolBars()
 {
-//    QList<KToolBar*> toolbars = toolBars();
-//    foreach(KToolBar* toolbar, toolbars)
-//    {
-//        toolbar->show();
-//    }
+    QList<KToolBar*> toolbars = toolBars();
+    foreach(KToolBar* toolbar, toolbars)
+    {
+        toolbar->show();
+    }
 }
 
 void CameraUI::hideToolBars()
 {
-//    QList<KToolBar*> toolbars = toolBars();
-//    foreach(KToolBar* toolbar, toolbars)
-//    {
-//        toolbar->hide();
-//    }
+    QList<KToolBar*> toolbars = toolBars();
+    foreach(KToolBar* toolbar, toolbars)
+    {
+        toolbar->hide();
+    }
 }
 
 void CameraUI::slotCameraFreeSpaceInfo(unsigned long kBSize, unsigned long kBAvail)
 {
-//    d->cameraFreeSpace->addInformation(kBSize, kBSize - kBAvail, kBAvail, QString());
+    d->cameraFreeSpace->addInformation(kBSize, kBSize - kBAvail, kBAvail, QString());
 }
 
 bool CameraUI::cameraDeleteSupport() const
@@ -2317,9 +2338,15 @@ void CameraUI::slotCollectionLocationStatusChanged(const CollectionLocation&, in
 //    refreshCollectionFreeSpace();
 }
 
+void CameraUI::slotToggleShowBar()
+{
+    d->view->toggleShowBar(d->showBarAction->isChecked());
+}
+
+
 void CameraUI::slotShowMenuBar()
 {
-//    menuBar()->setVisible(d->showMenuBarAction->isChecked());
+    menuBar()->setVisible(d->showMenuBarAction->isChecked());
 }
 
 void CameraUI::slotSidebarTabTitleStyleChanged()
@@ -2339,7 +2366,7 @@ void CameraUI::slotLogMsg(const QString& msg, DHistoryView::EntryType type,
 
 void CameraUI::slotShowLog()
 {
-//    d->showLogAction->isChecked() ? d->historyView->show() : d->historyView->hide();
+    d->showLogAction->isChecked() ? d->historyView->show() : d->historyView->hide();
 }
 
 void CameraUI::slotHistoryEntryClicked(const QVariant& metadata)
@@ -2348,12 +2375,6 @@ void CameraUI::slotHistoryEntryClicked(const QVariant& metadata)
 //    QString folder   = meta.at(0);
 //    QString file     = meta.at(1);
 //    d->view->ensureItemVisible(folder, file);
-}
-
-bool CameraUI::chronologicOrder() const
-{
-    return false; //FIXME: Remove this line.
-//    return !d->lastPhotoFirstAction->isChecked();
 }
 
 }  // namespace Digikam

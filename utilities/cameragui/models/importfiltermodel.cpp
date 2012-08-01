@@ -467,7 +467,7 @@ QString ImportFilterModel::categoryIdentifier(const CamItemInfo& info) const
     {
         case CamItemSortSettings::NoCategories:
             return QString();
-        case CamItemSortSettings::OneCategory:
+        case CamItemSortSettings::CategoryByFolder:
             return info.folder;
         case CamItemSortSettings::CategoryByFormat:
             return info.mime;

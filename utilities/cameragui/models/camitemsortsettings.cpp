@@ -109,7 +109,7 @@ Qt::SortOrder CamItemSortSettings::defaultSortOrderForCategorizationMode(Categor
     switch (mode)
     {
         case NoCategories:
-        case OneCategory:
+        case CategoryByFolder:
         case CategoryByFormat:
         default:
             return Qt::AscendingOrder;
@@ -137,7 +137,7 @@ int CamItemSortSettings::compareCategories(const CamItemInfo& left, const CamIte
     switch (categorizationMode)
     {
         case NoCategories:
-        case OneCategory:
+        case CategoryByFolder:
             return 0;
         case CategoryByFormat:
             return naturalCompare(left.mime, right.mime, currentCategorizationSortOrder, categorizationCaseSensitivity);

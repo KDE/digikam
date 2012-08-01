@@ -236,7 +236,6 @@ void ItemViewImportDelegate::invalidatePaintingCache()
 {
     Q_D(ItemViewImportDelegate);
     QSize oldGridSize = d->gridSize;
-    qDebug() << "Width: " << d->gridSize.width() << "Height: " << d->gridSize.height();//TODO: Remove this line.
     updateSizeRectsAndPixmaps();
 
     if (oldGridSize != d->gridSize)
@@ -278,15 +277,6 @@ void ItemViewImportDelegate::drawName(QPainter* p,const QRect& nameRect, const Q
     Q_D(const ItemViewImportDelegate);
     p->setFont(d->fontReg);
     p->drawText(nameRect, Qt::AlignCenter, name);//squeezedTextCached(p, nameRect.width(), name));
-}
-
-void ItemViewImportDelegate::drawCreationDate(QPainter* p, const QRect& dateRect, const QDateTime& date) const
-{
-    Q_D(const ItemViewImportDelegate);
-    p->setFont(d->fontXtra);
-    QString str = dateToString(date);
-    //str         = i18nc("date of image creation", "created: %1", str);
-    p->drawText(dateRect, Qt::AlignCenter, str);//squeezedTextCached(p, dateRect.width(), str));
 }
 
 void ItemViewImportDelegate::drawModificationDate(QPainter* p, const QRect& dateRect, const QDateTime& date) const

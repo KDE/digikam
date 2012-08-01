@@ -48,7 +48,6 @@ namespace Digikam
 void ImportDelegate::ImportDelegatePrivate::clearRects()
 {
     ItemViewImportDelegatePrivate::clearRects();
-    dateRect             = QRect(0, 0, 0, 0);
     modDateRect          = QRect(0, 0, 0, 0);
     pixmapRect           = QRect(0, 0, 0, 0);
     nameRect             = QRect(0, 0, 0, 0);
@@ -271,11 +270,6 @@ void ImportDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, cons
     if (!d->nameRect.isNull())
     {
         drawName(p, d->nameRect, info.name);
-    }
-
-    if (!d->dateRect.isNull())
-    {
-        drawCreationDate(p, d->dateRect, info.photoInfo.dateTime);
     }
 
     if (!d->modDateRect.isNull())
@@ -714,12 +708,6 @@ void ImportNormalDelegate::updateRects()
     {
         d->nameRect = QRect(d->margin, y, d->contentWidth-d->margin, d->oneRowRegRect.height());
         y           = d->nameRect.bottom();
-    }
-
-    if (ImportSettings->getIconShowDate())
-    {
-        d->dateRect = QRect(d->margin, y, d->contentWidth, d->oneRowXtraRect.height());
-        y           = d->dateRect.bottom();
     }
 
     if (ImportSettings->getIconShowModDate())

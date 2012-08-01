@@ -62,6 +62,8 @@
 #include "gpcamera.h"
 #include "filtercombo.h"
 #include "importfilters.h"
+#include "dfontselect.h"
+#include "importsettings.h"
 
 namespace Digikam
 {
@@ -178,7 +180,19 @@ public:
         importListView(0),
         tab(0),
         ignoreNamesEdit(0),
-        ignoreExtensionsEdit(0)
+        ignoreExtensionsEdit(0),
+        iconShowNameBox(0),
+        iconShowSizeBox(0),
+        iconShowModDateBox(0),
+        iconShowResolutionBox(0),
+        //TODO: iconShowTagsBox(0),
+        //TODO: iconShowOverlaysBox(0),
+        //TODO: iconShowRatingBox(0),
+        iconShowFormatBox(0),
+        previewLoadFullImageSize(0),
+        previewShowIcons(0),
+        leftClickActionComboBox(0),
+        iconViewFontSelect(0)
     {
     }
 
@@ -200,6 +214,22 @@ public:
     QCheckBox*           useDateFromMetadata;
     QCheckBox*           turnHighQualityThumbs;
     QCheckBox*           useDefaultTargetAlbum;
+
+    QCheckBox*           iconShowNameBox;
+    QCheckBox*           iconShowSizeBox;
+    QCheckBox*           iconShowModDateBox;
+    QCheckBox*           iconShowResolutionBox;
+    //TODO: QCheckBox*           iconShowTagsBox;
+    //TODO: QCheckBox*           iconShowOverlaysBox;
+    //TODO: QCheckBox*           iconShowRatingBox;
+    QCheckBox*           iconShowFormatBox;
+    QCheckBox*           previewLoadFullImageSize;
+    QCheckBox*           previewShowIcons;
+
+    KComboBox*           leftClickActionComboBox;
+
+    DFontSelect*         iconViewFontSelect;
+
 
     AlbumSelectWidget*   target1AlbumSelector;
 
@@ -374,6 +404,99 @@ SetupCamera::SetupCamera(QWidget* const parent)
 
     d->tab->insertTab(2, panel3, i18n("Import Filters"));
 
+    // -- Import Icon View ----------------------------------------------------------
+
+    QWidget* panel4 = new QWidget(d->tab);
+    panel4->setAutoFillBackground(false);
+
+    QVBoxLayout* layout2 = new QVBoxLayout(panel4);
+
+    QGroupBox* iconViewGroup = new QGroupBox(i18n("Icon-View Options"), panel4);
+    QGridLayout* grid2       = new QGridLayout(iconViewGroup);
+
+    d->iconShowNameBox       = new QCheckBox(i18n("Show file&name"), iconViewGroup);
+    d->iconShowNameBox->setWhatsThis(i18n("Set this option to show the filename below the image thumbnail."));
+
+    d->iconShowSizeBox       = new QCheckBox(i18n("Show file si&ze"), iconViewGroup);
+    d->iconShowSizeBox->setWhatsThis(i18n("Set this option to show the file size below the image thumbnail."));
+
+    d->iconShowModDateBox    = new QCheckBox(i18n("Show file &modification date"), iconViewGroup);
+    d->iconShowModDateBox->setWhatsThis(i18n("Set this option to show the file modification date "
+                                             "below the image thumbnail."));
+
+    //d->iconShowResolutionBox = new QCheckBox(i18n("Show ima&ge dimensions"), iconViewGroup);
+    //d->iconShowResolutionBox->setWhatsThis(i18n("Set this option to show the image size in pixels "
+                                                //"below the image thumbnail."));
+
+    d->iconShowFormatBox     = new QCheckBox(i18n("Show image Format"), iconViewGroup);
+    d->iconShowFormatBox->setWhatsThis(i18n("Set this option to show image format over image thumbnail."));
+
+    //TODO: d->iconShowTagsBox       = new QCheckBox(i18n("Show digiKam &tags"), iconViewGroup);
+    //TODO: d->iconShowTagsBox->setWhatsThis(i18n("Set this option to show the digiKam tags "
+                                          //"below the image thumbnail."));
+
+    //TODO: d->iconShowRatingBox     = new QCheckBox(i18n("Show digiKam &rating"), iconViewGroup);
+    //TODO: d->iconShowRatingBox->setWhatsThis(i18n("Set this option to show the digiKam rating "
+                                            //"below the image thumbnail."));
+
+    //TODO: d->iconShowOverlaysBox   = new QCheckBox(i18n("Show rotation overlay buttons"), iconViewGroup);
+    //TODO: d->iconShowOverlaysBox->setWhatsThis(i18n("Set this option to show overlay buttons on "
+                                              //"the image thumbnail for image rotation."));
+
+    QLabel* leftClickLabel     = new QLabel(i18n("Thumbnail click action:"), iconViewGroup);
+    d->leftClickActionComboBox = new KComboBox(iconViewGroup);
+    d->leftClickActionComboBox->addItem(i18n("Show embedded preview"), ImportSettings::ShowPreview);
+    d->leftClickActionComboBox->addItem(i18n("Start image editor"), ImportSettings::StartEditor);
+    d->leftClickActionComboBox->setToolTip(i18n("Choose what should happen when you click on a thumbnail."));
+
+    d->iconViewFontSelect = new DFontSelect(i18n("Icon View font:"), panel);
+    d->iconViewFontSelect->setToolTip(i18n("Select here the font used to display text in Icon Views."));
+
+    grid2->addWidget(d->iconShowNameBox,          0, 0, 1, 1);
+    grid2->addWidget(d->iconShowSizeBox,          1, 0, 1, 1);
+    grid2->addWidget(d->iconShowModDateBox,       3, 0, 1, 1);
+    //TODO: grid2->addWidget(d->iconShowResolutionBox,    4, 0, 1, 1);
+    grid2->addWidget(d->iconShowFormatBox,        4, 0, 1, 1);
+
+    //TODO: grid2->addWidget(d->iconShowTagsBox,          2, 1, 1, 1);
+    //TODO: grid2->addWidget(d->iconShowRatingBox,        3, 1, 1, 1);
+    //TODO: grid2->addWidget(d->iconShowOverlaysBox,      4, 1, 1, 1);
+
+    grid2->addWidget(leftClickLabel,              5, 0, 1, 1);
+    grid2->addWidget(d->leftClickActionComboBox,  6, 1, 1, 1);
+    grid2->addWidget(d->iconViewFontSelect,       7, 0, 1, 2);
+    grid2->setSpacing(KDialog::spacingHint());
+    grid2->setMargin(KDialog::spacingHint());
+
+    // --------------------------------------------------------
+
+    QGroupBox* interfaceOptionsGroup = new QGroupBox(i18n("Preview Options"), panel);
+    QGridLayout* grid3               = new QGridLayout(interfaceOptionsGroup);
+
+    d->previewLoadFullImageSize      = new QCheckBox(i18n("Embedded preview loads full-sized images."), interfaceOptionsGroup);
+    d->previewLoadFullImageSize->setWhatsThis(i18n("<p>Set this option to load images at their full size "
+                                                   "for preview, rather than at a reduced size. As this option "
+                                                   "will make it take longer to load images, only use it if you have "
+                                                   "a fast computer.</p>"
+                                                   "<p><b>Note:</b> for Raw images, a half size version of the Raw data "
+                                                   "is used instead of the embedded JPEG preview.</p>"));
+
+    d->previewShowIcons              = new QCheckBox(i18n("Show icons and text over preview"), interfaceOptionsGroup);
+    d->previewShowIcons->setWhatsThis(i18n("Uncheck this if you don't want to see icons and text in the image preview."));
+
+    grid3->setMargin(KDialog::spacingHint());
+    grid3->setSpacing(KDialog::spacingHint());
+    grid3->addWidget(d->previewLoadFullImageSize, 0, 0, 1, 2);
+    grid3->addWidget(d->previewShowIcons,         1, 0, 1, 2);
+
+    layout2->setMargin(0);
+    layout2->setSpacing(KDialog::spacingHint());
+    layout2->addWidget(iconViewGroup);
+    layout2->addWidget(interfaceOptionsGroup);
+    layout2->addStretch();
+
+    d->tab->insertTab(3, panel4, i18n("Icon View"));
+
     // -------------------------------------------------------------
 
     setAutoFillBackground(false);
@@ -481,6 +604,28 @@ void SetupCamera::readSettings()
     }
     d->ignoreNamesEdit->setText(importGroup.readEntry("IgnoreNames", FilterComboBox::defaultIgnoreNames));
     d->ignoreExtensionsEdit->setText(importGroup.readEntry("IgnoreExtensions", FilterComboBox::defaultIgnoreExtensions));
+
+    ImportSettings* settings = ImportSettings::instance();
+
+    if (!settings)
+    {
+        return;
+    }
+
+    d->iconShowNameBox->setChecked(settings->getIconShowName());
+    //TODO: d->iconShowTagsBox->setChecked(settings->getIconShowTags());
+    d->iconShowSizeBox->setChecked(settings->getIconShowSize());
+    d->iconShowModDateBox->setChecked(settings->getIconShowModDate());
+    //TODO: d->iconShowResolutionBox->setChecked(settings->getIconShowResolution());
+    //TODO: d->iconShowOverlaysBox->setChecked(settings->getIconShowOverlays());
+    //TODO: d->iconShowRatingBox->setChecked(settings->getIconShowRating());
+    d->iconShowFormatBox->setChecked(settings->getIconShowImageFormat());
+    d->iconViewFontSelect->setFont(settings->getIconViewFont());
+
+    d->leftClickActionComboBox->setCurrentIndex((int)settings->getItemLeftClickAction());
+
+    d->previewLoadFullImageSize->setChecked(settings->getPreviewLoadFullImageSize());
+    d->previewShowIcons->setChecked(settings->getPreviewShowIcons());
 }
 
 void SetupCamera::applySettings()
@@ -541,6 +686,30 @@ void SetupCamera::applySettings()
     importGroup.writeEntry("IgnoreNames", d->ignoreNamesEdit->text());
     importGroup.writeEntry("IgnoreExtensions", d->ignoreExtensionsEdit->text());
     importGroup.sync();
+
+    ImportSettings* settings = ImportSettings::instance();
+
+    if (!settings)
+    {
+        return;
+    }
+
+    settings->setIconShowName(d->iconShowNameBox->isChecked());
+    //TODO: settings->setIconShowTags(d->iconShowTagsBox->isChecked());
+    settings->setIconShowSize(d->iconShowSizeBox->isChecked());
+    settings->setIconShowModDate(d->iconShowModDateBox->isChecked());
+    //TODO: settings->setIconShowResolution(d->iconShowResolutionBox->isChecked());
+    //TODO: settings->setIconShowOverlays(d->iconShowOverlaysBox->isChecked());
+    //TODO: settings->setIconShowRating(d->iconShowRatingBox->isChecked());
+    settings->setIconShowImageFormat(d->iconShowFormatBox->isChecked());
+    settings->setIconViewFont(d->iconViewFontSelect->font());
+
+    settings->setItemLeftClickAction((ImportSettings::ItemLeftClickAction)
+                                     d->leftClickActionComboBox->currentIndex());
+
+    settings->setPreviewLoadFullImageSize(d->previewLoadFullImageSize->isChecked());
+    settings->setPreviewShowIcons(d->previewShowIcons->isChecked());
+    settings->saveSettings();
 }
 
 bool SetupCamera::checkSettings()

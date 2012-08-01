@@ -26,19 +26,18 @@
 // Qt includes
 
 #include <QPainter>
-#include <QSharedData>
 
 // KDE includes
 
 #include <kapplication.h>
 #include <klocale.h>
-#include <kdebug.h>
 
 // Local includes
 
 #include "importcategorizedview.h"
 #include "camitemsortsettings.h"
 #include "importfiltermodel.h"
+#include "imagescanner.h"
 
 namespace Digikam
 {
@@ -51,7 +50,6 @@ public:
     {
         lowerSpacing = 0;
         view         = 0;
-        rect         = QRect(0, -1, 0, -1); //TODO: Remove this line.
     }
 
     QFont                  font;
@@ -153,13 +151,11 @@ void ImportCategoryDrawer::drawCategory(const QModelIndex& index, int /*sortRole
     {
         case CamItemSortSettings::NoCategories:
             break;
-        case CamItemSortSettings::OneCategory:
+        case CamItemSortSettings::CategoryByFolder:
             viewHeaderText(index, &header, &subLine);
             break;
         case CamItemSortSettings::CategoryByFormat:
-            kDebug() << "CategoryByFormat not yet implemented";
-            //TODO:
-            //textForFormat(index, &header, &subLine);
+            textForFormat(index, &header, &subLine);
             break;
     }
 
@@ -193,8 +189,39 @@ void ImportCategoryDrawer::viewHeaderText(const QModelIndex& index, QString* hea
     CamItemInfo info     = sourceModel->retrieveCamItemInfo(index);
     int count            = d->view->categoryRange(index).height();
     QStringList splitted = info.url().prettyUrl().split("/");
-    *header              = splitted.at(splitted.indexOf(splitted.last()) - 1);
-    *subLine             = i18n("%1 Items", count);
+    *header              = splitted.value(splitted.length() - 2);
+
+    *subLine             = i18np("1 Item", "%1 Items", count);
+}
+
+void ImportCategoryDrawer::textForFormat(const QModelIndex& index, QString* header, QString* subLine) const
+{
+    QString format = index.data(ImportFilterModel::CategoryFormatRole).toString();
+
+    QStringList splitted = info.url().prettyUrl().split("/");
+    *header              = splitted.value(splitted.length() - 2);
+
+    *subLine             = i18np("1 Item", "%1 Items", count);
+}
+
+void ImportCategoryDrawer::textForFormat(const QModelIndex& index, QString* header, QString* subLine) const
+{
+    QString format = index.data(ImportFilterModel::CategoryFormatRole).toString();
+
+    if(!format.isEmpty())
+    {
+        format         = format.split("/").at(1);
+        format         = ImageScanner::formatToString(format);
+        *header        = format;
+    }
+    else
+    {
+        format         = "Unkown Format";
+        *header        = format;
+    }
+
+    int count      = d->view->categoryRange(index).height();
+    *subLine       = i18np("1 Item", "%1 Items", count);
 }
 
 void ImportCategoryDrawer::updateRectsAndPixmaps(int width)

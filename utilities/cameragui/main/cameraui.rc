@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="5205" name="cameraui" >
+<gui version="205" name="cameraui" >
 
 <MenuBar>
 
@@ -51,10 +51,14 @@
         <Action name="cameraui_fullscreen" />
         <Action name="cameraui_showlog" />
         <Separator/>
-        <Action name="cameraui_lastphotofirst" />
+        <Action name="showthumbs" />
         <Separator/>
         <Action name="cameraui_zoomplus" />
         <Action name="cameraui_zoomminus" />
+        <Separator/>
+        <Action name="item_sort" />
+        <Action name="item_sort_order" />
+        <Action name="item_group" />
     </Menu>
 
     <Menu name="help" ><text>&amp;Help</text>

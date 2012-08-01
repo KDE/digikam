@@ -83,8 +83,6 @@ public:
     void enableZoomPlusAction(bool val);
     void enableZoomMinusAction(bool val);
 
-    bool chronologicOrder() const;
-
     QString cameraTitle() const;
 
     DownloadSettings downloadSettings() const;
@@ -128,6 +126,8 @@ private:
     void deleteItems(bool onlySelected, bool onlyDownloaded);
     void checkItem4Deletion(const CamItemInfo& info, QStringList& folders, QStringList& files,
                             CamItemInfoList& deleteList, CamItemInfoList& lockedList);
+
+    QString identifyCategoryforMime(QString mime);
 
 private Q_SLOTS:
 
@@ -187,14 +187,19 @@ private Q_SLOTS:
     void slotLocked(const QString&, const QString&, bool);
 
     void slotNewSelection(bool);
-    void slotItemsSelected(const CamItemInfo&, bool);
+    void slotImageSelected(const CamItemInfoList& selection, bool hasPrev, bool hasNext,
+                                       const CamItemInfoList& listAll);
+
+    void slotSwitchedToPreview();
+    void slotSwitchedToIconView();
+    void slotSwitchedToMapView();
 
     void slotMetadata(const QString& folder, const QString& file, const DMetadata& meta);
 
-    void slotlastPhotoFirst();
     void slotFilterChanged();
 
     void slotEditKeys();
+    void slotToggleShowBar();
     void slotShowMenuBar();
     void slotConfToolbars();
     void slotConfNotifications();
@@ -204,9 +209,6 @@ private Q_SLOTS:
     void slotDBStat();
 
     void slotSidebarTabTitleStyleChanged();
-
-    void slotRefreshIconViewTimer();
-    void slotRefreshIconView(const CHUpdateItemMap& map);
 
 private:
 
