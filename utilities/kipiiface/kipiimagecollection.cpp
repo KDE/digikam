@@ -47,11 +47,11 @@
 namespace Digikam
 {
 
-class KipiImageCollection::KipiImageCollectionPriv
+class KipiImageCollection::Private
 {
 public:
 
-    KipiImageCollectionPriv()
+    Private()
     {
         album = 0;
     }
@@ -63,7 +63,7 @@ public:
 };
 
 KipiImageCollection::KipiImageCollection(Type type, Album* const album, const QString& filter)
-    : KIPI::ImageCollectionShared(), d(new KipiImageCollectionPriv)
+    : KIPI::ImageCollectionShared(), d(new Private)
 {
     d->type      = type;
     d->album     = album;

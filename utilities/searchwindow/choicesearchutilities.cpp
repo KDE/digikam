@@ -6,7 +6,7 @@
  * Date        : 2008-04-18
  * Description : User interface for searches
  *
- * Copyright (C) 2008-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2008-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -40,26 +40,28 @@ namespace Digikam
 {
 
 ChoiceSearchModel::Entry::Entry()
-    : checkState(false)
+    : m_checkState(false)
 {
 }
 
-ChoiceSearchModel::Entry::Entry(QVariant key, const QString userDisplay)
-    : key(key), display(userDisplay), checkState(false)
+ChoiceSearchModel::Entry::Entry(const QVariant& key, const QString& userDisplay)
+    : m_key(key),
+      m_display(userDisplay),
+      m_checkState(false)
 {
 }
 
 bool ChoiceSearchModel::Entry::operator==(const Entry& other) const
 {
-    return key == other.key;
+    return m_key == other.m_key;
 }
 
-ChoiceSearchModel::ChoiceSearchModel(QObject* parent)
+ChoiceSearchModel::ChoiceSearchModel(QObject* const parent)
     : QAbstractListModel(parent)
 {
 }
 
-void ChoiceSearchModel::setChoice(QMap<int, QString> data)
+void ChoiceSearchModel::setChoice(const QMap<int, QString>& data)
 {
     if (m_entries.size())
     {
@@ -73,7 +75,7 @@ void ChoiceSearchModel::setChoice(QMap<int, QString> data)
     }
 }
 
-void ChoiceSearchModel::setChoice(QVariantList data)
+void ChoiceSearchModel::setChoice(const QVariantList& data)
 {
     if (m_entries.size())
     {
@@ -85,7 +87,7 @@ void ChoiceSearchModel::setChoice(QVariantList data)
 
     for (QVariantList::const_iterator it = data.constBegin(); it != data.constEnd();)
     {
-        QVariant key = *it;
+        QVariant key  = *it;
         ++it;
         QString value = (*it).toString();
         ++it;
@@ -105,7 +107,7 @@ void ChoiceSearchModel::setChoice(const QStringList& data)
 
     for (QStringList::const_iterator it = data.constBegin(); it != data.constEnd();)
     {
-        QVariant key = *it;
+        QVariant key  = *it;
         ++it;
         QString value = *it;
         ++it;
@@ -119,9 +121,9 @@ QVariantList ChoiceSearchModel::checkedKeys() const
 
     for (QList<Entry>::const_iterator it = m_entries.constBegin(); it != m_entries.constEnd(); ++it)
     {
-        if ((*it).checkState)
+        if ((*it).m_checkState)
         {
-            list << (*it).key;
+            list << (*it).m_key;
         }
     }
 
@@ -134,9 +136,9 @@ QStringList ChoiceSearchModel::checkedDisplayTexts() const
 
     for (QList<Entry>::const_iterator it = m_entries.constBegin(); it != m_entries.constEnd(); ++it)
     {
-        if ((*it).checkState)
+        if ((*it).m_checkState)
         {
-            list << (*it).display;
+            list << (*it).m_display;
         }
     }
 
@@ -145,17 +147,18 @@ QStringList ChoiceSearchModel::checkedDisplayTexts() const
 
 void ChoiceSearchModel::setChecked(int i, bool checked)
 {
-    m_entries[i].checkState = checked;
+    m_entries[i].m_checkState = checked;
     QModelIndex modelIndex  = index(i);
+
     emit dataChanged(modelIndex, modelIndex);
-    emit checkStateChanged(m_entries.at(i).key, checked);
+    emit checkStateChanged(m_entries.at(i).m_key, checked);
 }
 
 void ChoiceSearchModel::resetChecked()
 {
     for (int i = 0; i < m_entries.size(); ++i)
     {
-        if (m_entries.at(i).checkState)
+        if (m_entries.at(i).m_checkState)
         {
             setChecked(i, false);
         }
@@ -178,15 +181,15 @@ QVariant ChoiceSearchModel::data(const QModelIndex& index, int role) const
     {
         if (role == Qt::DisplayRole)
         {
-            return m_entries.at(index.row()).display;
+            return m_entries.at(index.row()).m_display;
         }
         else if (role == Qt::CheckStateRole)
         {
-            return m_entries.at(index.row()).checkState ? Qt::Checked : Qt::Unchecked;
+            return m_entries.at(index.row()).m_checkState ? Qt::Checked : Qt::Unchecked;
         }
         else if (role == IdRole)
         {
-            return m_entries.at(index.row()).key;
+            return m_entries.at(index.row()).m_key;
         }
     }
 
@@ -224,7 +227,7 @@ bool ChoiceSearchModel::setData(const QModelIndex& index, const QVariant& value,
 
 // --------------------------------------------------------------------------------------
 
-ChoiceSearchComboBox::ChoiceSearchComboBox(QWidget* parent)
+ChoiceSearchComboBox::ChoiceSearchComboBox(QWidget* const parent)
     : ListViewComboBox(parent)
 {
 }

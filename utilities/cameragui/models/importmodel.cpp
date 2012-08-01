@@ -22,6 +22,7 @@
  * ============================================================ */
 
 #include "importmodel.moc"
+#include "importmodel.h"
 
 namespace Digikam
 {
@@ -33,6 +34,11 @@ ImportModel::ImportModel(QObject* const parent)
 
 ImportModel::~ImportModel()
 {
+}
+
+void ImportModel::setupCameraController(CameraController* const controller)
+{
+    ImportThumbnailModel::setCameraController(controller);
 }
 
 } // namespace Digikam

@@ -50,7 +50,7 @@
 
 namespace KIPI
 {
-class Interface;
+    class Interface;
 }
 
 namespace Digikam

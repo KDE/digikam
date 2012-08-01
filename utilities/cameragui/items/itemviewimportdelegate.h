@@ -26,12 +26,19 @@
 
 // Local includes
 
+#include "itemviewimportdelegatepriv.h"
 #include "thumbnailsize.h"
 #include "ditemdelegate.h"
 #include "imagedelegateoverlay.h"
 
 namespace Digikam
 {
+
+class ImportCategoryDrawer;
+class ImportCategorizedView;
+class ImportFilterModel;
+class ImportImageModel;
+class ItemViewImportDelegatePrivate;
 
 class ItemViewImportDelegate : public DItemDelegate, public ImageDelegateOverlayContainer // Some reuse of the existing model-view classes.
 {
@@ -92,6 +99,7 @@ protected:
     void drawCreationDate(QPainter* p, const QRect& dateRect, const QDateTime& date) const;
     void drawModificationDate(QPainter* p, const QRect& dateRect, const QDateTime& date) const;
     void drawImageSize(QPainter* p, const QRect& dimsRect, const QSize& dims) const;
+    void drawImageFormat(QPainter* p, const QRect& dimsRect, const QString& mime) const;
     void drawFileSize(QPainter* p, const QRect& r, qlonglong bytes) const;
     void drawGroupIndicator(QPainter* p, const QRect& r, int numberOfGroupedImages, bool open) const;
     void drawPanelSideIcon(QPainter* p, bool left, bool right) const;
@@ -109,7 +117,7 @@ protected:
 
 protected:
 
-    class ItemViewImportDelegatePrivate* const d;
+    ItemViewImportDelegatePrivate* const d_ptr;
     ItemViewImportDelegate(ItemViewImportDelegatePrivate& dd, QObject* parent);
 
 private:

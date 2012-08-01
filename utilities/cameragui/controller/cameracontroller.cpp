@@ -139,11 +139,6 @@ public:
     QMutex                mutex;
     QWaitCondition        condVar;
 
-    QFutureWatcher<void>* rotateFutureWatcher;
-
-    QString               tmpFolder;
-    QString               tmpFile;
-
     QList<CameraCommand*> commands;
 };
 
@@ -190,8 +185,6 @@ CameraController::CameraController(QWidget* const parent,
         }
     }
 
-    d->rotateFutureWatcher = new QFutureWatcher<void>(); // to watch the autorotate thread
-
     // setup inter-thread signals
 
     qRegisterMetaType<CamItemInfo>("CamItemInfo");
@@ -220,9 +213,6 @@ CameraController::CameraController(QWidget* const parent,
     connect(this, SIGNAL(signalInternalOpen(QString,QString,QString)),
             this, SLOT(slotOpen(QString,QString,QString)));
 
-    connect(d->rotateFutureWatcher, SIGNAL(finished()),
-            this, SLOT(slotAutoRotateThreadFinished()));
-
     d->running = true;
     start();
 }
@@ -240,7 +230,6 @@ CameraController::~CameraController()
     }
     wait();
 
-    delete d->rotateFutureWatcher;
     delete d->camera;
     delete d;
 }
@@ -625,11 +614,11 @@ void CameraController::executeCommand(CameraCommand* const cmd)
 
                 if(autoRotate)
                 {
-                    QFuture<void> future = QtConcurrent::run(runAutoRotateThread, this, tempURL, folder, file);
-                    d->rotateFutureWatcher->setFuture(future);
-
-                    d->tmpFolder = folder;
-                    d->tmpFile   = file;
+                    kDebug() << "Exif autorotate: " << file << " using (" << tempURL << ")";
+                    sendLogMsg(i18n("EXIF rotating file %1...", file), DHistoryView::StartingEntry, folder, file);
+//                    JpegRotator rotator(tempURL.toLocalFile());
+//                    rotator.setDocumentName(file);
+//                    rotator.autoExifTransform();
                 }
 
                 if (!templateTitle.isNull() || fixDateTime)
@@ -802,22 +791,6 @@ void CameraController::executeCommand(CameraCommand* const cmd)
             break;
         }
     }
-}
-
-void CameraController::runAutoRotateThread(CameraController* cont, KUrl& tempURL, QString& folder, QString& file)
-{
-        kDebug() << "Exif autorotate: " << file << " using (" << tempURL << ")";
-        cont->sendLogMsg(i18n("EXIF rotating file %1...", file), DHistoryView::StartingEntry, folder, file);
-        JPEGUtils::JpegRotator rotator(tempURL.toLocalFile());
-        rotator.setDocumentName(file);
-        rotator.autoExifTransform();
-}
-
-void CameraController::slotAutoRotateThreadFinished()
-{
-    kDebug() << "Exif autorotated: " << "file";
-    sendLogMsg(i18n("EXIF rotated file %1...", d->tmpFile), DHistoryView::StartingEntry, d->tmpFolder, d->tmpFile);
-    emit signalFinished();
 }
 
 void CameraController::sendLogMsg(const QString& msg, DHistoryView::EntryType type,

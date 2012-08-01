@@ -6,7 +6,7 @@
  * Date        : 2008-01-20
  * Description : User interface for searches
  *
- * Copyright (C) 2008-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2008-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -28,14 +28,8 @@
 
 #include <QWidget>
 
-// Local includes
-
-#include "digikam_export.h"
-
 namespace Digikam
 {
-
-class SearchWindowPriv;
 
 class SearchWindow : public QWidget
 {
@@ -65,7 +59,7 @@ public:
     /**
      * Returns the currently produced search string
      */
-    QString search();
+    QString search() const;
 
 Q_SIGNALS:
 
@@ -87,7 +81,8 @@ protected:
 
 private:
 
-    SearchWindowPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

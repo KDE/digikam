@@ -110,8 +110,8 @@ private Q_SLOTS:
 
 private:
 
-    class KipiInterfacePrivate;
-    KipiInterfacePrivate* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

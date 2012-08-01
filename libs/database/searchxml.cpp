@@ -6,7 +6,7 @@
  * Date        : 2008-01-09
  * Description : Reading search XML
  *
- * Copyright (C) 2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2008-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -345,7 +345,7 @@ QList<QString> SearchXmlReader::valueToStringOrStringList()
 }
 
 SearchXml::Operator SearchXmlReader::readOperator(const QString& attributeName,
-        SearchXml::Operator defaultOperator) const
+                                                  SearchXml::Operator defaultOperator) const
 {
     QStringRef op = attributes().value(attributeName);
 
@@ -370,7 +370,7 @@ SearchXml::Operator SearchXmlReader::readOperator(const QString& attributeName,
 }
 
 SearchXml::Relation SearchXmlReader::readRelation(const QString& attributeName,
-        SearchXml::Relation defaultRelation) const
+                                                  SearchXml::Relation defaultRelation) const
 {
     QStringRef relation = attributes().value(attributeName);
 
@@ -464,6 +464,7 @@ bool SearchXmlReader::readToStartOfElement(const QString& elementName)
     }
 
     int stack = 1;
+
     forever
     {
         switch (QXmlStreamReader::readNext())
@@ -493,6 +494,7 @@ bool SearchXmlReader::readToStartOfElement(const QString& elementName)
                 break;
         }
     }
+
     return false;
 }
 
@@ -556,7 +558,7 @@ SearchXmlWriter::SearchXmlWriter()
     writeStartElement("search");
 }
 
-QString SearchXmlWriter::xml()
+QString SearchXmlWriter::xml() const
 {
     return m_xml;
 }
@@ -635,6 +637,7 @@ void SearchXmlWriter::writeValue(const QDateTime& dateTime)
 void SearchXmlWriter::writeValue(const QList<int>& valueList)
 {
     QString listitem("listitem");
+
     foreach(int i, valueList)
     {
         writeTextElement(listitem, QString::number(i));
@@ -644,6 +647,7 @@ void SearchXmlWriter::writeValue(const QList<int>& valueList)
 void SearchXmlWriter::writeValue(const QList<qlonglong>& valueList)
 {
     QString listitem("listitem");
+
     foreach(int i, valueList)
     {
         writeTextElement(listitem, QString::number(i));
@@ -653,6 +657,7 @@ void SearchXmlWriter::writeValue(const QList<qlonglong>& valueList)
 void SearchXmlWriter::writeValue(const QList<float>& valueList, int precision)
 {
     QString listitem("listitem");
+
     foreach(double i, valueList)
     {
         writeTextElement(listitem, QString::number(i, 'g', precision));
@@ -662,6 +667,7 @@ void SearchXmlWriter::writeValue(const QList<float>& valueList, int precision)
 void SearchXmlWriter::writeValue(const QList<double>& valueList, int precision)
 {
     QString listitem("listitem");
+
     foreach(double i, valueList)
     {
         writeTextElement(listitem, QString::number(i, 'g', precision));
@@ -671,6 +677,7 @@ void SearchXmlWriter::writeValue(const QList<double>& valueList, int precision)
 void SearchXmlWriter::writeValue(const QList<QDateTime>& valueList)
 {
     QString listitem("listitem");
+
     foreach(const QDateTime& dt, valueList)
     {
         writeTextElement(listitem, dt.toString(Qt::ISODate));
@@ -680,6 +687,7 @@ void SearchXmlWriter::writeValue(const QList<QDateTime>& valueList)
 void SearchXmlWriter::writeValue(const QStringList& valueList)
 {
     QString listitem("listitem");
+
     foreach(const QString& str, valueList)
     {
         writeTextElement(listitem, str);
@@ -1002,12 +1010,14 @@ KeywordSearchWriter::KeywordSearchWriter()
 QString KeywordSearchWriter::xml(const QStringList& keywordList)
 {
     writeGroup();
+
     foreach(const QString& keyword, keywordList)
     {
         writeField("keyword", SearchXml::Like);
         writeValue(keyword);
         finishField();
     }
+
     finishGroup();
     finish();
 
@@ -1018,8 +1028,10 @@ QString KeywordSearchWriter::xml(const QStringList& keywordList)
 
 SearchXmlCachingReader::SearchXmlCachingReader(const QString& xml)
     : SearchXmlReader(xml),
-      m_groupOperator(SearchXml::And), m_fieldOperator(SearchXml::And),
-      m_fieldRelation(SearchXml::Equal), m_readValue(false)
+      m_groupOperator(SearchXml::And),
+      m_fieldOperator(SearchXml::And),
+      m_fieldRelation(SearchXml::Equal),
+      m_readValue(false)
 {
 }
 
@@ -1072,7 +1084,7 @@ QString SearchXmlCachingReader::value()
 {
     if (!m_readValue)
     {
-        m_value = SearchXmlReader::value();
+        m_value     = SearchXmlReader::value();
         m_readValue = true;
     }
 
@@ -1083,7 +1095,7 @@ int SearchXmlCachingReader::valueToInt()
 {
     if (!m_readValue)
     {
-        m_value = SearchXmlReader::valueToInt();
+        m_value     = SearchXmlReader::valueToInt();
         m_readValue = true;
     }
 
@@ -1094,7 +1106,7 @@ qlonglong SearchXmlCachingReader::valueToLongLong()
 {
     if (!m_readValue)
     {
-        m_value = SearchXmlReader::valueToLongLong();
+        m_value     = SearchXmlReader::valueToLongLong();
         m_readValue = true;
     }
 
@@ -1105,7 +1117,7 @@ double SearchXmlCachingReader::valueToDouble()
 {
     if (!m_readValue)
     {
-        m_value = SearchXmlReader::valueToDouble();
+        m_value     = SearchXmlReader::valueToDouble();
         m_readValue = true;
     }
 
@@ -1116,7 +1128,7 @@ QDateTime SearchXmlCachingReader::valueToDateTime()
 {
     if (!m_readValue)
     {
-        m_value = SearchXmlReader::valueToDateTime();
+        m_value     = SearchXmlReader::valueToDateTime();
         m_readValue = true;
     }
 
@@ -1129,10 +1141,12 @@ QList<int> SearchXmlCachingReader::valueToIntList()
     // we convert here from string list (equivalent result)
     QStringList list = valueToStringList();
     QList<int> intList;
+
     foreach(const QString& s, list)
     {
         intList << s.toInt();
     }
+
     return intList;
 }
 
@@ -1142,10 +1156,12 @@ QList<qlonglong> SearchXmlCachingReader::valueToLongLongList()
     // we convert here from string list (equivalent result)
     QStringList list = valueToStringList();
     QList<qlonglong> qlonglongList;
+
     foreach(const QString& s, list)
     {
         qlonglongList << s.toLongLong();
     }
+
     return qlonglongList;
 }
 
@@ -1155,10 +1171,12 @@ QList<double> SearchXmlCachingReader::valueToDoubleList()
     // we convert here from string list (equivalent result)
     QStringList list = valueToStringList();
     QList<double> doubleList;
+
     foreach(const QString& s, list)
     {
         doubleList << s.toDouble();
     }
+
     return doubleList;
 }
 
@@ -1168,10 +1186,12 @@ QList<QDateTime> SearchXmlCachingReader::valueToDateTimeList()
     // we convert here from string list (equivalent result)
     QStringList list = valueToStringList();
     QList<QDateTime> doubleList;
+
     foreach(const QString& s, list)
     {
         doubleList << QDateTime::fromString(s, Qt::ISODate);
     }
+
     return doubleList;
 }
 
@@ -1179,7 +1199,7 @@ QStringList SearchXmlCachingReader::valueToStringList()
 {
     if (!m_readValue)
     {
-        m_value = SearchXmlReader::valueToStringList();
+        m_value     = SearchXmlReader::valueToStringList();
         m_readValue = true;
     }
 
@@ -1192,21 +1212,26 @@ QList<int> SearchXmlCachingReader::valueToIntOrIntList()
     {
         QList<int> intList = SearchXmlReader::valueToIntOrIntList();
         QList<QVariant> varList;
+
         foreach(int v, intList)
         {
             varList << v;
         }
-        m_value = varList;
+
+        m_value     = varList;
         m_readValue = true;
+
         return intList;
     }
 
     QList<int> intList;
     QList<QVariant> varList = m_value.toList();
+
     foreach(const QVariant& var, varList)
     {
         intList << var.toInt();
     }
+
     return intList;
 }
 
@@ -1216,21 +1241,25 @@ QList<double> SearchXmlCachingReader::valueToDoubleOrDoubleList()
     {
         QList<double> doubleList = SearchXmlReader::valueToDoubleOrDoubleList();
         QList<QVariant> varList;
+
         foreach(double v, doubleList)
         {
             varList << v;
         }
-        m_value = varList;
+
+        m_value     = varList;
         m_readValue = true;
         return doubleList;
     }
 
     QList<double> doubleList;
     QList<QVariant> varList = m_value.toList();
+
     foreach(const QVariant& var, varList)
     {
         doubleList << var.toDouble();
     }
+
     return doubleList;
 }
 
@@ -1240,21 +1269,25 @@ QList<QString> SearchXmlCachingReader::valueToStringOrStringList()
     {
         QList<QString> QStringList = SearchXmlReader::valueToStringOrStringList();
         QList<QVariant> varList;
+
         foreach(const QString& v, QStringList)
         {
             varList << v;
         }
-        m_value = varList;
+
+        m_value     = varList;
         m_readValue = true;
         return QStringList;
     }
 
     QList<QString> QStringList;
     QList<QVariant> varList = m_value.toList();
+
     foreach(const QVariant& var, varList)
     {
         QStringList << var.toString();
     }
+
     return QStringList;
 }
 

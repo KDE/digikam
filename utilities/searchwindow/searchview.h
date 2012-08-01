@@ -6,7 +6,7 @@
  * Date        : 2008-01-20
  * Description : User interface for searches
  *
- * Copyright (C) 2008-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2008-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -32,8 +32,6 @@
 #include <QWidget>
 
 class QHBoxLayout;
-class QVBoxLayout;
-class QTimeLine;
 
 class KDialogButtonBox;
 class KPushButton;
@@ -50,14 +48,16 @@ class SearchViewThemedPartsCache
 {
 public:
 
-    virtual ~SearchViewThemedPartsCache() {}
+    virtual ~SearchViewThemedPartsCache()
+    {
+    }
+
     virtual QPixmap groupLabelPixmap(int w, int h) = 0;
     virtual QPixmap bottomBarPixmap(int w, int h) = 0;
 };
 
 class AbstractSearchGroupContainer : public QWidget
 {
-
     Q_OBJECT
 
 public:
@@ -66,7 +66,7 @@ public:
     // To contain common code of SearchView and SearchGroup,
     // as SearchGroups can have subgroups.
 
-    AbstractSearchGroupContainer(QWidget* parent = 0);
+    AbstractSearchGroupContainer(QWidget* const parent = 0);
 
 public Q_SLOTS:
 
@@ -77,16 +77,22 @@ protected:
 
     /// Call before reading the XML part that could contain group elements
     void startReadingGroups(SearchXmlCachingReader& reader);
+
     /// Call when a group element is the current element
     void readGroup(SearchXmlCachingReader& reader);
+
     /// Call when the XML part is finished
     void finishReadingGroups();
+
     /// Write contained groups to writer
-    void writeGroups(SearchXmlWriter& writer);
+    void writeGroups(SearchXmlWriter& writer) const;
+
     /// Collects the data from the same method of all contained groups (position relative to this widget)
     QList<QRect> startupAnimationAreaOfGroups() const;
+
     /// Re-implement: create and setup a search group
     virtual SearchGroup* createSearchGroup() = 0;
+
     /// Re-implement: Adds a newly created group to the layout structures
     virtual void addGroupToLayout(SearchGroup* group) = 0;
 
@@ -102,8 +108,6 @@ protected:
 
 // -------------------------------------------------------------------------
 
-class SearchViewPrivate;
-
 class SearchView : public AbstractSearchGroupContainer, public SearchViewThemedPartsCache
 {
     Q_OBJECT
@@ -114,10 +118,13 @@ public:
     ~SearchView();
 
     void setup();
-    void setBottomBar(SearchViewBottomBar* bar);
+    void setBottomBar(SearchViewBottomBar* const bar);
 
     void read(const QString& search);
-    QString write();
+    QString write() const;
+
+    QPixmap groupLabelPixmap(int w, int h);
+    QPixmap bottomBarPixmap(int w, int h);
 
 Q_SIGNALS:
 
@@ -134,23 +141,20 @@ protected Q_SLOTS:
     void animationFrame(int);
     void timeLineFinished();
 
-public:
-
-    QPixmap groupLabelPixmap(int w, int h);
-    QPixmap bottomBarPixmap(int w, int h);
-
 protected:
+
+    QPixmap cachedBannerPixmap(int w, int h) const;
 
     virtual void paintEvent(QPaintEvent* e);
     virtual void showEvent(QShowEvent* event);
 
     virtual SearchGroup* createSearchGroup();
     virtual void addGroupToLayout(SearchGroup* group);
-    QPixmap cachedBannerPixmap(int w, int h);
 
 private:
 
-    SearchViewPrivate* const d;
+    class Private;
+    Private* const d;
 };
 
 // -------------------------------------------------------------------------
@@ -161,7 +165,7 @@ class SearchViewBottomBar : public QWidget
 
 public:
 
-    explicit SearchViewBottomBar(SearchViewThemedPartsCache* cache, QWidget* parent = 0);
+    explicit SearchViewBottomBar(SearchViewThemedPartsCache* const cache, QWidget* const parent = 0);
 
 Q_SIGNALS:
 
@@ -174,6 +178,8 @@ Q_SIGNALS:
 protected:
 
     virtual void paintEvent(QPaintEvent*);
+
+protected:
 
     QHBoxLayout*                m_mainLayout;
 

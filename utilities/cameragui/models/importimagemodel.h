@@ -60,6 +60,9 @@ public:
         /// Return (optional) extraData field
         ExtraDataRole               = Qt::UserRole + 3,
 
+        /// Returns the number of duplicate indexes for the same image id
+        ExtraDataDuplicateCount = Qt::UserRole + 6,
+
         FilterModelRoles            = Qt::UserRole + 100
     };
 
@@ -252,7 +255,7 @@ Q_SIGNALS:
 
 public Q_SLOTS:
 
-    void reAddCamInfos(const CamItemInfoList& infos);
+    void reAddCamItemInfos(const CamItemInfoList& infos);
     void reAddingFinished();
     void slotFileDeleted(const QString& folder, const QString& file, bool status);
     void slotFileUploaded(const CamItemInfo& info);

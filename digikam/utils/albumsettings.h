@@ -7,8 +7,8 @@
  * Description : albums settings interface
  *
  * Copyright (C) 2003-2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2003-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2007 by Arnd Baecker <arnd dot baecker at web dot de>
+ * Copyright (C) 2003-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007      by Arnd Baecker <arnd dot baecker at web dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -81,7 +81,6 @@ public:
          * Normal comparison using Qt's compare function.
          */
         Normal
-
     };
 
 Q_SIGNALS:
@@ -113,7 +112,7 @@ public:
     bool getScanAtStart() const;
 
     void setAlbumCategoryNames(const QStringList& list);
-    QStringList getAlbumCategoryNames();
+    QStringList getAlbumCategoryNames() const;
 
     bool addAlbumCategoryName(const QString& name);
     bool delAlbumCategoryName(const QString& name);
@@ -122,14 +121,14 @@ public:
     AlbumSortOrder getAlbumSortOrder() const;
 
     void setImageSortOrder(int order);
-    int getImageSortOrder() const;
+    int  getImageSortOrder() const;
 
     // means ascending or descending
     void setImageSorting(int sorting);
-    int getImageSorting() const;
+    int  getImageSorting() const;
 
     void setImageGroupMode(int mode);
-    int getImageGroupMode() const;
+    int  getImageGroupMode() const;
 
     void setItemLeftClickAction(const ItemLeftClickAction action);
     ItemLeftClickAction getItemLeftClickAction() const;
@@ -272,26 +271,26 @@ public:
     void setToolTipsShowAlbumCaption(bool val);
     bool getToolTipsShowAlbumCaption() const;
 
-    void setToolTipsShowVideo_AspectRatio(bool val);
-    bool getToolTipsShowVideo_AspectRatio() const;
+    void setToolTipsShowVideoAspectRatio(bool val);
+    bool getToolTipsShowVideoAspectRatio() const;
 
-    void setToolTipsShowVideo_AudioBitRate(bool val);
-    bool getToolTipsShowVideo_AudioBitRate() const;
+    void setToolTipsShowVideoAudioBitRate(bool val);
+    bool getToolTipsShowVideoAudioBitRate() const;
 
-    void setToolTipsShowVideo_AudioChannelType(bool val);
-    bool getToolTipsShowVideo_AudioChannelType() const;
+    void setToolTipsShowVideoAudioChannelType(bool val);
+    bool getToolTipsShowVideoAudioChannelType() const;
 
-    void setToolTipsShowVideo_AudioCompressor(bool val);
-    bool getToolTipsShowVideo_AudioCompressor() const;
+    void setToolTipsShowVideoAudioCompressor(bool val);
+    bool getToolTipsShowVideoAudioCompressor() const;
 
-    void setToolTipsShowVideo_Duration(bool val);
-    bool getToolTipsShowVideo_Duration() const;
+    void setToolTipsShowVideoDuration(bool val);
+    bool getToolTipsShowVideoDuration() const;
 
-    void setToolTipsShowVideo_FrameRate(bool val);
-    bool getToolTipsShowVideo_FrameRate() const;
+    void setToolTipsShowVideoFrameRate(bool val);
+    bool getToolTipsShowVideoFrameRate() const;
 
-    void setToolTipsShowVideo_VideoCodec(bool val);
-    bool getToolTipsShowVideo_VideoCodec() const;
+    void setToolTipsShowVideoVideoCodec(bool val);
+    bool getToolTipsShowVideoVideoCodec() const;
 
     void    setCurrentTheme(const QString& theme);
     QString getCurrentTheme() const;
@@ -403,8 +402,8 @@ private:
 
     friend class AlbumSettingsCreator;
 
-    class AlbumSettingsPrivate;
-    AlbumSettingsPrivate* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

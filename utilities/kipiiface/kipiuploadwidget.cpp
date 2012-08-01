@@ -51,11 +51,11 @@
 namespace Digikam
 {
 
-class KipiUploadWidget::KipiUploadWidgetPriv
+class KipiUploadWidget::Private
 {
 public:
 
-    KipiUploadWidgetPriv() :
+    Private() :
         albumSel(0),
         iface(0)
     {
@@ -68,7 +68,7 @@ public:
 
 KipiUploadWidget::KipiUploadWidget(KipiInterface* const iface, QWidget* const parent)
     : KIPI::UploadWidget(parent),
-      d(new KipiUploadWidgetPriv)
+      d(new Private)
 {
     d->iface          = iface;
     QVBoxLayout* vlay = new QVBoxLayout(this);

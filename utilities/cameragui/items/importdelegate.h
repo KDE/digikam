@@ -24,11 +24,13 @@
 #ifndef IMPORTDELEGATE_H
 #define IMPORTDELEGATE_H
 
+#include <qglobal.h>
+#include <QListView>
+
 // Local includes
 
 #include "itemviewimportdelegate.h"
 #include "importthumbnailmodel.h"
-#include "importcategorizedview.h"
 #include "importcategorydrawer.h"
 
 namespace Digikam
@@ -44,7 +46,7 @@ class ImportDelegate : public ItemViewImportDelegate
 
 public:
 
-    ImportDelegate(QObject* parent = 0);
+    ImportDelegate(QObject* const parent = 0);
     ~ImportDelegate();
 
     void setView(ImportCategorizedView* view);
@@ -72,45 +74,52 @@ public:
     virtual QPixmap pixmapForDrag(const QStyleOptionViewItem& option, const QList<QModelIndex>& indexes) const;
 
     /** Call this from a paint event, with all indexes expected to be painted immediately,
-     *  so that thumbnails become available in order. */
+     *  so that thumbnails become available in order.
+     */
     virtual void prepareThumbnails(ImportThumbnailModel* thumbModel, const QList<QModelIndex>& indexes);
 
     /**
-     * Retrieve the thumbnail pixmap in given size for the ImageModel::ThumbnailRole for
-     * the given index from the given index, which must adhere to ImageThumbnailModel semantics.
+     * Retrieve the thumbnail pixmap in given size for the ImportImageModel::ThumbnailRole for
+     * the given index from the given index, which must adhere to ImportThumbnailModel semantics.
      */
     static QPixmap retrieveThumbnailPixmap(const QModelIndex& index, int thumbnailSize);
 
 public:
 
+    // Declared as public because of use in ImportNormalDelegate class.
     class ImportDelegatePrivate;
 
 protected:
-
-    /** Reimplement this to set contentWidth. This is the maximum width of all
-     *  content rectangles, typically excluding margins on both sides. */
-    virtual void updateContentWidth();
-    /** In a subclass, you need to implement this method to set up the rects
-     *  for drawing. The paint() method operates depending on these rects. */
-    virtual void updateRects() = 0;
-
-    virtual void clearCaches();
-    /** Reimplement to clear caches based on model indexes (hash on row number etc.)
-     *  Change signals are listened to this is called whenever such properties become invalid. */
-    virtual void clearModelDataCaches();
-
-    virtual QPixmap thumbnailPixmap(const QModelIndex& index) const;
 
     bool onActualPixmapRect(const QPoint& pos, const QRect& visualRect,
                             const QModelIndex& index, QRect* actualRect) const;
     void updateActualPixmapRect(const QModelIndex& index, const QRect& rect);
 
-    virtual void invalidatePaintingCache();
-    virtual void updateSizeRectsAndPixmaps();
-
     void setModel(QAbstractItemModel* model);
 
-    ImportDelegate(ImportDelegate::ImportDelegatePrivate& dd, QObject* parent);
+    ImportDelegate(ImportDelegate::ImportDelegatePrivate& dd, QObject* const parent);
+
+    /** Reimplement this to set contentWidth. This is the maximum width of all
+     *  content rectangles, typically excluding margins on both sides.
+     */
+    virtual void updateContentWidth();
+
+    /** In a subclass, you need to implement this method to set up the rects
+     *  for drawing. The paint() method operates depending on these rects.
+     */
+    virtual void updateRects() = 0;
+
+    virtual void clearCaches();
+
+    /** Reimplement to clear caches based on model indexes (hash on row number etc.)
+     *  Change signals are listened to this is called whenever such properties become invalid.
+     */
+    virtual void clearModelDataCaches();
+
+    virtual QPixmap thumbnailPixmap(const QModelIndex& index) const;
+
+    virtual void invalidatePaintingCache();
+    virtual void updateSizeRectsAndPixmaps();
 
 protected Q_SLOTS:
 
@@ -130,13 +139,14 @@ class ImportThumbnailDelegate : public ImportDelegate
 
 public:
 
-    ImportThumbnailDelegate(ImportCategorizedView* parent);
+    ImportThumbnailDelegate(ImportCategorizedView* const parent);
     ~ImportThumbnailDelegate();
 
     void setFlow(QListView::Flow flow);
 
     /** Returns the minimum or maximum viewport size in the limiting dimension,
-     *  width or height, depending on current flow. */
+     *  width or height, depending on current flow.
+     */
     int maximumSize() const;
     int minimumSize() const;
 
@@ -162,14 +172,14 @@ class ImportNormalDelegate : public ImportDelegate
 
 public:
 
-    ImportNormalDelegate(ImportCategorizedView* parent);
+    ImportNormalDelegate(ImportCategorizedView* const parent);
     ~ImportNormalDelegate();
 
 protected:
 
-    virtual void updateRects();
+    ImportNormalDelegate(ImportNormalDelegatePrivate& dd, ImportCategorizedView* const parent);
 
-    ImportNormalDelegate(ImportNormalDelegatePrivate& dd, ImportCategorizedView* parent);
+    virtual void updateRects();
 
 private:
 

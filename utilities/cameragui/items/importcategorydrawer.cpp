@@ -21,33 +21,37 @@
  *
  * ============================================================ */
 
-#include "importcategorydrawer.moc"
-#include "importcategorydrawer.h" //TODO: Remove this line
+#include "importcategorydrawer.h"
 
 // Qt includes
 
 #include <QPainter>
+#include <QSharedData>
 
 // KDE includes
 
-#include <KApplication>
+#include <kapplication.h>
+#include <klocale.h>
+#include <kdebug.h>
 
 // Local includes
 
+#include "importcategorizedview.h"
 #include "camitemsortsettings.h"
 #include "importfiltermodel.h"
 
 namespace Digikam
 {
 
-class ImportCategoryDrawer::ImportCategoryDrawerPriv
+class ImportCategoryDrawer::Private
 {
 public:
 
-    ImportCategoryDrawerPriv()
+    Private()
     {
         lowerSpacing = 0;
         view         = 0;
+        rect         = QRect(0, -1, 0, -1); //TODO: Remove this line.
     }
 
     QFont                  font;
@@ -57,11 +61,11 @@ public:
     ImportCategorizedView* view;
 };
 
-ImportCategoryDrawer::ImportCategoryDrawer(ImportCategorizedView* parent)
+ImportCategoryDrawer::ImportCategoryDrawer(ImportCategorizedView* const parent)
 #if KDE_IS_VERSION(4,5,0)
-    : KCategoryDrawerV3(0), d(new ImportCategoryDrawerPriv)
+    : KCategoryDrawerV3(0), d(new Private)
 #else
-    : d(new ImportCategoryDrawerPriv)
+    : d(new Private)
 #endif
 {
     d->view = parent;
@@ -99,7 +103,7 @@ void ImportCategoryDrawer::setDefaultViewOptions(const QStyleOptionViewItem& opt
 
 void ImportCategoryDrawer::invalidatePaintingCache()
 {
-    if (d->rect.isNull())
+    if (d->rect.isEmpty())
     {
         return;
     }
@@ -153,7 +157,9 @@ void ImportCategoryDrawer::drawCategory(const QModelIndex& index, int /*sortRole
             viewHeaderText(index, &header, &subLine);
             break;
         case CamItemSortSettings::CategoryByFormat:
-            textForFormat(index, &header, &subLine);
+            kDebug() << "CategoryByFormat not yet implemented";
+            //TODO:
+            //textForFormat(index, &header, &subLine);
             break;
     }
 
@@ -177,7 +183,18 @@ void ImportCategoryDrawer::drawCategory(const QModelIndex& index, int /*sortRole
 
 void ImportCategoryDrawer::viewHeaderText(const QModelIndex& index, QString* header, QString* subLine) const
 {
-    //TODO: Implement viewing containing folder name.
+    ImportImageModel* sourceModel = index.data(ImportImageModel::ImportImageModelPointerRole).value<ImportImageModel*>();
+
+    if (!sourceModel)
+    {
+        return;
+    }
+
+    CamItemInfo info     = sourceModel->retrieveCamItemInfo(index);
+    int count            = d->view->categoryRange(index).height();
+    QStringList splitted = info.url().prettyUrl().split("/");
+    *header              = splitted.at(splitted.indexOf(splitted.last()) - 1);
+    *subLine             = i18n("%1 Items", count);
 }
 
 void ImportCategoryDrawer::updateRectsAndPixmaps(int width)
@@ -187,8 +204,8 @@ void ImportCategoryDrawer::updateRectsAndPixmaps(int width)
     // Title --------------------------------------------------------
 
     QFont fn(d->font);
-    int fnSize = fn.pointSize();
-    bool usePointSize;
+    int   fnSize = fn.pointSize();
+    bool  usePointSize;
 
     if (fnSize > 0)
     {

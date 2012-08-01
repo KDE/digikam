@@ -25,4 +25,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 016 ==> 302212 - Incorrect rotation of DNG portrait images in preview.
 017 ==> 303242 - File type should not create distinct results in fuzzy duplicate search.
 018 ==> 303419 - No images show.
-019 ==> 
+019 ==> 303994 - Many face tag comboboxes and may tags, will have an impact on performance [patch].
+020 ==> 303685 - cannot set "toggle auto" back to "none" in tags filter.
+021 ==> 

@@ -22,21 +22,25 @@
  * ============================================================ */
 
 #include "importdelegate.moc"
+#include "importdelegatepriv.h"
 
 // Qt includes
 
-#include "QCache"
+#include <QCache>
+#include <QPainter>
+#include <QRect>
 
 // KDE includes
 
 #include <kapplication.h>
-#include <KIconLoader>
+#include <kiconloader.h>
 
 // Local includes
 
-#include "importdelegatepriv.h"
+#include "importimagemodel.h"
+#include "importfiltermodel.h"
 #include "importsettings.h"
-#include "imagedelegateoverlay.h"
+#include "importcategorizedview.h"
 
 namespace Digikam
 {
@@ -58,12 +62,12 @@ void ImportDelegate::ImportDelegatePrivate::clearRects()
     groupRect            = QRect(0, 0, 0, 0);
 }
 
-ImportDelegate::ImportDelegate(QObject* parent)
+ImportDelegate::ImportDelegate(QObject* const parent)
     : ItemViewImportDelegate(*new ImportDelegatePrivate, parent)
 {
 }
 
-ImportDelegate::ImportDelegate(ImportDelegate::ImportDelegatePrivate& dd, QObject* parent)
+ImportDelegate::ImportDelegate(ImportDelegate::ImportDelegatePrivate& dd, QObject* const parent)
     : ItemViewImportDelegate(dd, parent)
 {
 }
@@ -71,13 +75,13 @@ ImportDelegate::ImportDelegate(ImportDelegate::ImportDelegatePrivate& dd, QObjec
 ImportDelegate::~ImportDelegate()
 {
     Q_D(ImportDelegate);
-    Q_UNUSED(d);
+    Q_UNUSED(d); // To please compiler about warnings.
 }
 
 void ImportDelegate::setView(ImportCategorizedView* view)
 {
     Q_D(ImportDelegate);
-    Digikam::ImageDelegateOverlayContainer::setViewOnAllOverlays(view);
+    setViewOnAllOverlays(view);
 
     if (d->currentView)
     {
@@ -243,14 +247,15 @@ void ImportDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, cons
         const_cast<ImportDelegate*>(this)->updateActualPixmapRect(index, actualPixmapRect);
     }
 
-    //TODO: Implement Rating
+    //TODO: Implement rating in import tool.
     //if (!d->ratingRect.isNull())
     //{
     //    drawRating(p, index, d->ratingRect, info.rating(), isSelected);
     //}
 
+    //TODO: Implement labels in import tool.
     // Draw Color Label rectangle
-    //TODO: drawColorLabelRect(p, option, isSelected, info.colorLabel());
+    //drawColorLabelRect(p, option, isSelected, info.colorLabel());
 
     p->setPen(isSelected ? kapp->palette().color(QPalette::HighlightedText)
                          : kapp->palette().color(QPalette::Text));
@@ -268,16 +273,6 @@ void ImportDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, cons
         drawName(p, d->nameRect, info.name);
     }
 
-    //if (!d->titleRect.isNull())
-    //{
-    //    drawTitle(p, d->titleRect, info.title());
-    //}
-
-    //if (!d->commentsRect.isNull())
-    //{
-    //    drawComments(p, d->commentsRect, info.comment());
-    //}
-
     if (!d->dateRect.isNull())
     {
         drawCreationDate(p, d->dateRect, info.photoInfo.dateTime);
@@ -288,46 +283,42 @@ void ImportDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, cons
         drawModificationDate(p, d->modDateRect, info.mtime);
     }
 
-    //if (!d->resolutionRect.isNull())
-    //{
-    //    drawImageSize(p, d->resolutionRect, info.dimensions());
-    //}
-
     if (!d->sizeRect.isNull())
     {
-        drawFileSize(p, d->sizeRect, qlonglong(info.size));
+        drawFileSize(p, d->sizeRect, info.size);
     }
 
-    //TOOD: Implement the grouping in import interface
+    if (!d->resolutionRect.isNull())
+    {
+        QSize dimensions(info.width, info.height);
+        drawImageSize(p, d->resolutionRect, dimensions);
+    }
+
+    //TODO: Implement grouping in import tool.
     //if (!d->groupRect.isNull())
     //{
     //    drawGroupIndicator(p, d->groupRect, info.numberOfGroupedImages(),
     //                       index.data(ImportFilterModel::GroupIsOpenRole).toBool());
     //}
 
-    //TOOD: Implement tagging in import interface
+    //TODO: Implement tags in import tool.
     //if (!d->tagRect.isNull())
     //{
     //    QString tags = AlbumManager::instance()->tagNames(info.tagIds()).join(", ");
     //    drawTags(p, d->tagRect, tags, isSelected);
     //}
 
-    //TOOD: Implement color labels in import interface
+    //TODO: Implement labels in import tool.
     //if (!d->pickLabelRect.isNull())
     //{
     //    drawPickLabelIcon(p, d->pickLabelRect, info.pickLabel());
     //}
 
-    //bool left  = index.data(ImportImageModel::LTLeftPanelRole).toBool();
-    //bool right = index.data(ImportImageModel::LTRightPanelRole).toBool();
-    //drawPanelSideIcon(p, left, right);
-
-    //if (d->drawImageFormat)
-    //{
-    //    QString frm = info.mime;
-    //    if (frm.contains("-")) frm = frm.section('-', -1);   // For RAW format annoted as "RAW-xxx" => "xxx"
-    //    drawImageFormat(p, actualPixmapRect, frm);
-    //}
+    if (d->drawImageFormat)
+    {
+        QString frm = info.mime;
+        drawImageFormat(p, actualPixmapRect, frm);
+    }
 
     if (d->drawFocusFrame)
     {
@@ -440,11 +431,11 @@ void ImportDelegate::updateSizeRectsAndPixmaps()
 
     prepareBackground();
 
-    //TODO:
+    //TODO: Implement rating in import tool.
     //if (!d->ratingRect.isNull())
     //{
-    //    // Normally we prepare the pixmaps over the background of the rating rect.
-    //    // If the rating is drawn over the thumbnail, we can only draw over a transparent pixmap.
+        // Normally we prepare the pixmaps over the background of the rating rect.
+        // If the rating is drawn over the thumbnail, we can only draw over a transparent pixmap.
     //    prepareRatingPixmaps(!d->ratingOverThumbnail);
     //}
 
@@ -560,7 +551,7 @@ int ImportDelegate::calculatethumbSizeToFit(int ws)
     return (ts1);
 }
 
-// ------ ImportThumbnailDelegate ----------------------------------------
+// --- ImportThumbnailDelegate ---------------------------------------
 
 void ImportThumbnailDelegatePrivate::init(ImportThumbnailDelegate* q)
 {
@@ -568,7 +559,9 @@ void ImportThumbnailDelegatePrivate::init(ImportThumbnailDelegate* q)
                      q, SLOT(slotSetupChanged()));
 }
 
-ImportThumbnailDelegate::ImportThumbnailDelegate(ImportCategorizedView* parent)
+// ------------------------------------------------------------------------------------------------
+
+ImportThumbnailDelegate::ImportThumbnailDelegate(ImportCategorizedView* const parent)
     : ImportDelegate(*new ImportThumbnailDelegatePrivate, parent)
 {
     Q_D(ImportThumbnailDelegate);
@@ -596,8 +589,12 @@ void ImportThumbnailDelegate::setDefaultViewOptions(const QStyleOptionViewItem& 
 int ImportThumbnailDelegate::maximumSize() const
 {
     Q_D(const ImportThumbnailDelegate);
-    //FIXME: Need to examine this line and make sure of it return ThumbnailLoadThread::maximumThumbnailPixmapSize(true) + 2*d->radius + 2*d->margin;
-    return (2*d->radius + 2*d->margin);
+
+    //FIXME: Fix thumbnails issues.
+    //return ThumbnailLoadThread::maximumThumbnailPixmapSize(true) + 2*d->radius + 2*d->margin;
+    Q_UNUSED(d); // To please compiler about warnings.
+
+    return 256;// dummy return
 }
 
 int ImportThumbnailDelegate::minimumSize() const
@@ -607,7 +604,7 @@ int ImportThumbnailDelegate::minimumSize() const
 }
 
 bool ImportThumbnailDelegate::acceptsActivation(const QPoint& pos, const QRect& visualRect,
-        const QModelIndex& index, QRect* activationRect) const
+                                                const QModelIndex& index, QRect* activationRect) const
 {
     // reuse implementation from grandparent
     return ItemViewImportDelegate::acceptsActivation(pos, visualRect, index, activationRect);
@@ -627,8 +624,9 @@ void ImportThumbnailDelegate::updateContentWidth()
         maxSize = d->viewSize.width();
     }
 
-    //FIXME: Need to examine this line and make sure of it d->thumbSize = ThumbnailLoadThread::thumbnailPixmapSize(true, maxSize - 2*d->radius - 2*d->margin);
-    d->thumbSize = maxSize - 2*d->radius - 2*d->margin;
+    //FIXME: Fix thumbnails issues.
+    //d->thumbSize = ThumbnailLoadThread::thumbnailPixmapSize(true, maxSize - 2*d->radius - 2*d->margin);
+    Q_UNUSED(maxSize);  // To please compiler about warnings.
 
     ImportDelegate::updateContentWidth();
 }
@@ -641,12 +639,12 @@ void ImportThumbnailDelegate::updateRects()
     d->rect            = QRect(0, 0, d->contentWidth + 2*d->margin, d->contentWidth + 2*d->margin);
     d->drawImageFormat = ImportSettings::instance()->getIconShowImageFormat();
 
-//TODO: Implement rating.
-//    if (ImportSettings::instance()->getIconShowRating())
-//    {
-//        int top       = d->rect.bottom() - d->margin - d->starPolygonSize.height() - 2;
-//        d->ratingRect = QRect(d->margin, top, d->contentWidth, d->starPolygonSize.height());
-//    }
+    //TODO: Implement rating in import tool.
+    //if (ImportSettings::instance()->getIconShowRating())
+    //{
+    //    int top       = d->rect.bottom() - d->margin - d->starPolygonSize.height() - 2;
+    //    d->ratingRect = QRect(d->margin, top, d->contentWidth, d->starPolygonSize.height());
+    //}
 
     if (d->flow == QListView::LeftToRight)
     {
@@ -658,7 +656,7 @@ void ImportThumbnailDelegate::updateRects()
     }
 }
 
-// ------ ImportNormalDelegate ----------------------------------------
+// --- ImportNormalDelegate -----------------------------------------------------------------------
 
 void ImportNormalDelegatePrivate::init(ImportNormalDelegate* q, ImportCategorizedView* parent)
 {
@@ -668,17 +666,19 @@ void ImportNormalDelegatePrivate::init(ImportNormalDelegate* q, ImportCategorize
                      q, SLOT(slotSetupChanged()));
 }
 
+// ------------------------------------------------------------------------------------------------
 
-ImportNormalDelegate::ImportNormalDelegate(ImportCategorizedView* parent)
+ImportNormalDelegate::ImportNormalDelegate(ImportCategorizedView* const parent)
     : ImportDelegate(*new ImportNormalDelegatePrivate, parent)
 {
     Q_D(ImportNormalDelegate);
     d->init(this, parent);
 }
 
-ImportNormalDelegate::ImportNormalDelegate(ImportNormalDelegatePrivate& dd, ImportCategorizedView* parent)
+ImportNormalDelegate::ImportNormalDelegate(ImportNormalDelegatePrivate& dd, ImportCategorizedView* const parent)
     : ImportDelegate(dd, parent)
 {
+
     Q_D(ImportNormalDelegate);
     d->init(this, parent);
 }
@@ -691,35 +691,30 @@ void ImportNormalDelegate::updateRects()
 {
     Q_D(ImportNormalDelegate);
 
-    int y                              = d->margin;
-    d->pixmapRect                      = QRect(d->margin, y, d->contentWidth, d->contentWidth);
-    y                                  = d->pixmapRect.bottom();
-    d->imageInformationRect            = QRect(d->margin, y, d->contentWidth, 0);
+    int y                                = d->margin;
+    d->pixmapRect                        = QRect(d->margin, y, d->contentWidth, d->contentWidth);
+    y                                    = d->pixmapRect.bottom();
+    d->imageInformationRect              = QRect(d->margin, y, d->contentWidth, 0);
     const ImportSettings* ImportSettings = ImportSettings::instance();
-    d->drawImageFormat                 = ImportSettings->getIconShowImageFormat();
+    d->drawImageFormat                   = ImportSettings->getIconShowImageFormat();
+    const int iconSize                   = KIconLoader::SizeSmallMedium;
 
-    const int iconSize = KIconLoader::SizeSmallMedium;
-    //FIXME: d->pickLabelRect   = QRect(d->margin, y, iconSize, iconSize);
-    d->groupRect       = QRect(d->contentWidth - iconSize, y, iconSize, iconSize);
+    //TODO: d->pickLabelRect   = QRect(d->margin, y, iconSize, iconSize);
+    //d->groupRect       = QRect(d->contentWidth - iconSize, y, iconSize, iconSize);
+    Q_UNUSED(iconSize);  // To please compiler about warnings.
 
-//TODO: Implement rating.
-//    if (ImportSettings->getIconShowRating())
-//    {
-//        d->ratingRect = QRect(d->margin, y, d->contentWidth, d->starPolygonSize.height());
-//        y             = d->ratingRect.bottom();
-//    }
+    //TODO: Implement rating in import tool.
+    //if (ImportSettings->getIconShowRating())
+    //{
+    //    d->ratingRect = QRect(d->margin, y, d->contentWidth, d->starPolygonSize.height());
+    //    y             = d->ratingRect.bottom();
+    //}
 
     if (ImportSettings->getIconShowName())
     {
         d->nameRect = QRect(d->margin, y, d->contentWidth-d->margin, d->oneRowRegRect.height());
         y           = d->nameRect.bottom();
     }
-
-//    if (ImportSettings->getIconShowTitle())
-//    {
-//        d->titleRect = QRect(d->margin, y, d->contentWidth, d->oneRowRegRect.height());
-//        y = d->titleRect.bottom();
-//    }
 
     if (ImportSettings->getIconShowDate())
     {
@@ -733,11 +728,12 @@ void ImportNormalDelegate::updateRects()
         y              = d->modDateRect.bottom();
     }
 
-//    if (ImportSettings->getIconShowResolution())
-//    {
-//        d->resolutionRect = QRect(d->margin, y, d->contentWidth, d->oneRowXtraRect.height());
-//        y                 = d->resolutionRect.bottom() ;
-//    }
+    //TODO: Add resolution entry in ImportSettings.
+    //if (ImportSettings->getIconShowResolution())
+    //{
+    //    d->resolutionRect = QRect(d->margin, y, d->contentWidth, d->oneRowXtraRect.height());
+    //    y                 = d->resolutionRect.bottom() ;
+    //}
 
     if (ImportSettings->getIconShowSize())
     {
@@ -745,11 +741,11 @@ void ImportNormalDelegate::updateRects()
         y           = d->sizeRect.bottom();
     }
 
-//    if (ImportSettings->getIconShowTags())
-//    {
-//        d->tagRect = QRect(d->margin, y, d->contentWidth, d->oneRowComRect.height());
-//        y          = d->tagRect.bottom();
-//    }
+    //if (ImportSettings->getIconShowTags())
+    //{
+    //    d->tagRect = QRect(d->margin, y, d->contentWidth, d->oneRowComRect.height());
+    //    y          = d->tagRect.bottom();
+    //}
 
     d->imageInformationRect.setBottom(y);
 
