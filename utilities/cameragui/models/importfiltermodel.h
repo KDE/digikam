@@ -213,7 +213,7 @@ class NoDuplicatesImportFilterModel : public ImportSortFilterModel
 
 public:
 
-    NoDuplicatesImportFilterModel(QObject* parent = 0);
+    NoDuplicatesImportFilterModel(QObject* const parent = 0);
 
 protected:
 

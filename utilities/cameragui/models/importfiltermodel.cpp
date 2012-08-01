@@ -21,13 +21,14 @@
  *
  * ============================================================ */
 
-#include "importfiltermodel.h"
+#include "importfiltermodel.moc"
 
 namespace Digikam
 {
 
 ImportSortFilterModel::ImportSortFilterModel(QObject* const parent)
-    : KCategorizedSortFilterProxyModel(parent), m_chainedModel(0)
+    : KCategorizedSortFilterProxyModel(parent),
+      m_chainedModel(0)
 {
 }
 
@@ -111,6 +112,7 @@ QModelIndex ImportSortFilterModel::mapFromDirectSourceToSourceImportModel(const 
 QList<QModelIndex> ImportSortFilterModel::mapListToSource(const QList<QModelIndex>& indexes) const
 {
     QList<QModelIndex> sourceIndexes;
+
     foreach (const QModelIndex& index, indexes)
     {
         sourceIndexes << mapToSourceImportModel(index);
@@ -122,6 +124,7 @@ QList<QModelIndex> ImportSortFilterModel::mapListToSource(const QList<QModelInde
 QList<QModelIndex> ImportSortFilterModel::mapListFromSource(const QList<QModelIndex>& sourceIndexes) const
 {
     QList<QModelIndex> indexes;
+
     foreach (const QModelIndex& index, sourceIndexes)
     {
         indexes << mapFromSourceImportModel(index);
@@ -143,6 +146,7 @@ qlonglong ImportSortFilterModel::camItemId(const QModelIndex& index) const
 QList<CamItemInfo> ImportSortFilterModel::camItemInfos(const QList<QModelIndex>& indexes) const
 {
     QList<CamItemInfo> infos;
+
     foreach (const QModelIndex& index, indexes)
     {
         infos << camItemInfo(index);
@@ -154,6 +158,7 @@ QList<CamItemInfo> ImportSortFilterModel::camItemInfos(const QList<QModelIndex>&
 QList<qlonglong> ImportSortFilterModel::camItemIds(const QList<QModelIndex>& indexes) const
 {
     QList<qlonglong> ids;
+
     foreach (const QModelIndex& index, indexes)
     {
         ids << camItemId(index);
@@ -226,19 +231,21 @@ public:
         importImageModel = 0;
     }
 
-    void init(ImportFilterModel* _q);
+    void init(ImportFilterModel* const _q);
+
+Q_SIGNALS:
+
+    void reAddCamItemInfos(const QList<CamItemInfo>&);
+    void reAddingFinished();
+
+public:
 
     ImportFilterModel*  q;
     ImportImageModel*   importImageModel;
     CamItemSortSettings sorter;
-
-Q_SIGNALS:
-
-    void reAddCamItemInfos(const QList<CamItemInfo>);
-    void reAddingFinished();
 };
 
-void ImportFilterModel::ImportFilterModelPrivate::init(ImportFilterModel* _q)
+void ImportFilterModel::ImportFilterModelPrivate::init(ImportFilterModel* const _q)
 {
     q = _q;
 }
@@ -471,7 +478,7 @@ QString ImportFilterModel::categoryIdentifier(const CamItemInfo& info) const
 
 // -------------------------------------------------------------------------------------------------------
 
-NoDuplicatesImportFilterModel::NoDuplicatesImportFilterModel(QObject* parent)
+NoDuplicatesImportFilterModel::NoDuplicatesImportFilterModel(QObject* const parent)
     : ImportSortFilterModel(parent)
 {
 }
@@ -479,22 +486,25 @@ NoDuplicatesImportFilterModel::NoDuplicatesImportFilterModel(QObject* parent)
 bool NoDuplicatesImportFilterModel::filterAcceptsRow(int source_row, const QModelIndex& source_parent) const
 {
     QModelIndex index = sourceModel()->index(source_row, 0, source_parent);
+
     if (index.data(ImportImageModel::ExtraDataDuplicateCount).toInt() <= 1)
     {
         return true;
     }
 
     QModelIndex previousIndex = sourceModel()->index(source_row - 1, 0, source_parent);
+
     if (!previousIndex.isValid())
     {
         return true;
     }
 
-    if (sourceImportModel()->camItemId(mapFromDirectSourceToSourceImportModel(index))
-        == sourceImportModel()->camItemId(mapFromDirectSourceToSourceImportModel(previousIndex)))
+    if (sourceImportModel()->camItemId(mapFromDirectSourceToSourceImportModel(index)) ==
+        sourceImportModel()->camItemId(mapFromDirectSourceToSourceImportModel(previousIndex)))
     {
         return false;
     }
+
     return true;
 }
 
