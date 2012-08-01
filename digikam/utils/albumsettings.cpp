@@ -101,6 +101,13 @@ public:
         tooltipShowComments(false),
         tooltipShowTags(false),
         tooltipShowLabelRating(false),
+        tooltipShowVideoAspectRatio(false),
+        tooltipShowVideoAudioBitRate(false),
+        tooltipShowVideoAudioChannelType(false),
+        tooltipShowVideoAudioCompressor(false),
+        tooltipShowVideoDuration(false),
+        tooltipShowVideoFrameRate(false),
+        tooltipShowVideoVideoCodec(false),
         showAlbumToolTips(false),
         tooltipShowAlbumTitle(false),
         tooltipShowAlbumDate(false),
@@ -120,14 +127,7 @@ public:
         imageSorting(0),
         imageGroupMode(0),
         syncToDigikam(false),
-        syncToNepomuk(false),
-        tooltipShowVideoAspectRatio(false),
-        tooltipShowVideoAudioBitRate(false),
-        tooltipShowVideoAudioChannelType(false),
-        tooltipShowVideoAudioCompressor(false),
-        tooltipShowVideoDuration(false),
-        tooltipShowVideoFrameRate(false),
-        tooltipShowVideoVideoCodec(false)
+        syncToNepomuk(false)
     {
     }
 
