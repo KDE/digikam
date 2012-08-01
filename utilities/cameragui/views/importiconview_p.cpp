@@ -21,12 +21,12 @@
  *
  * ============================================================ */
 
-#include "importiconview_p.h"
+#include "importiconview_p.moc"
 
 namespace Digikam
 {
 
-ImportIconView::ImportIconViewPriv::ImportIconViewPriv(ImportIconView* qq)
+ImportIconView::ImportIconViewPriv::ImportIconViewPriv(ImportIconView* const qq)
     : overlaysActive(false), q_ptr(qq)
 {
     //TODO: utilities          = 0;

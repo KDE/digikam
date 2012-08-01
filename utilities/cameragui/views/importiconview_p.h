@@ -46,7 +46,7 @@ class ImportIconView::ImportIconViewPriv : public QObject
 
 public:
 
-    ImportIconViewPriv(ImportIconView* qq);
+    ImportIconViewPriv(ImportIconView* const qq);
     virtual ~ImportIconViewPriv();
 
     void updateOverlays();

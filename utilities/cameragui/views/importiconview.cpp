@@ -169,7 +169,7 @@ void ImportIconView::rename()
     }
 }
 
-void ImportIconView::deleteSelected(bool permanently)
+void ImportIconView::deleteSelected(bool /*permanently*/)
 {
     CamItemInfoList camItemInfoList = selectedCamItemInfos();
 
@@ -180,7 +180,7 @@ void ImportIconView::deleteSelected(bool permanently)
     //}
 }
 
-void ImportIconView::deleteSelectedDirectly(bool permanently)
+void ImportIconView::deleteSelectedDirectly(bool /*permanently*/)
 {
     CamItemInfoList camItemInfoList = selectedCamItemInfos();
     //FIXME: This way of deletion may not working with camera items.
@@ -246,7 +246,7 @@ void ImportIconView::activated(const CamItemInfo& info)
 }
 
 //TODO: Implement context menu
-void ImportIconView::showContextMenuOnInfo(QContextMenuEvent* event, const CamItemInfo& info)
+void ImportIconView::showContextMenuOnInfo(QContextMenuEvent* /*event*/, const CamItemInfo& /*info*/)
 {
 //    QList<CamItemInfo> selectedInfos = selectedCamItemInfosCurrentFirst();
 //    QList<qlonglong> selectedImageIDs;
@@ -358,7 +358,7 @@ void ImportIconView::showContextMenuOnInfo(QContextMenuEvent* event, const CamIt
 //    }
 }
 
-void ImportIconView::showContextMenu(QContextMenuEvent* event)
+void ImportIconView::showContextMenu(QContextMenuEvent* /*event*/)
 {
 //    Album* album = currentAlbum();
 
