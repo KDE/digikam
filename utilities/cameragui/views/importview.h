@@ -26,14 +26,14 @@
 
 // KDE includes
 
-#include <KHBox>
+#include <khbox.h>
 
 // Local includes
 
 #include "camiteminfo.h"
 #include "sidebarwidget.h"
 #include "cameraui.h"
-#include "models/importmodel.h"
+#include "importmodel.h"
 
 namespace Digikam
 {
@@ -46,7 +46,7 @@ class ImportView : public KHBox
 
 public:
 
-    ImportView(CameraUI* ui, QWidget* parent);
+    ImportView(CameraUI* const ui, QWidget* const parent);
     ~ImportView();
 
     void applySettings();
@@ -147,8 +147,8 @@ private:
 
 private:
 
-    class ImportViewPriv;
-    ImportViewPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

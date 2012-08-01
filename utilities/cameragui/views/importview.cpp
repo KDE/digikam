@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "importview.h"
+#include "importview.moc"
 
 // Qt includes
 
@@ -30,8 +30,8 @@
 
 // KDE includes
 
-#include <KMessageBox>
-#include <KDebug>
+#include <kmessagebox.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -43,16 +43,16 @@
 #include "importsettings.h"
 #include "sidebar.h"
 #include "dzoombar.h"
-#include "models/camitemsortsettings.h"
+#include "camitemsortsettings.h"
 
 namespace Digikam
 {
 
-class ImportView::ImportViewPriv
+class ImportView::Private
 {
 public:
 
-    ImportViewPriv() :
+    Private() :
         needDispatchSelection(false),
         thumbSize(ThumbnailSize::Medium),
         dockArea(0),
@@ -69,7 +69,7 @@ public:
     {
     }
 
-    void                          addPageUpDownActions(ImportView* q, QWidget* w);
+    void                          addPageUpDownActions(ImportView* const q, QWidget* const w);
 
 public:
 
@@ -103,8 +103,21 @@ public:
     QList<SidebarWidget*>         leftSideBarWidgets;
 };
 
-ImportView::ImportView(CameraUI* ui, QWidget* parent)
-    : KHBox(parent), d(new ImportViewPriv)
+void ImportView::Private::addPageUpDownActions(ImportView* const q, QWidget* const w)
+{
+    QShortcut *nextImageShortcut = new QShortcut(w);
+    nextImageShortcut->setKey(Qt::Key_PageDown);
+    nextImageShortcut->setContext(Qt::WidgetWithChildrenShortcut);
+    QObject::connect(nextImageShortcut, SIGNAL(activated()), q, SLOT(slotNextItem()));
+
+    QShortcut *prevImageShortcut = new QShortcut(w);
+    prevImageShortcut->setKey(Qt::Key_PageUp);
+    prevImageShortcut->setContext(Qt::WidgetWithChildrenShortcut);
+    QObject::connect(prevImageShortcut, SIGNAL(activated()), q, SLOT(slotPrevItem()));
+}
+
+ImportView::ImportView(CameraUI* const ui, QWidget* const parent)
+    : KHBox(parent), d(new Private)
 {
     d->parent      = /*static_cast<CameraUI*>*/(ui);
 
@@ -307,19 +320,6 @@ void ImportView::setupConnections()
 //    d->rightSideBar->setActiveTab(d->filterWidget);
 //    d->filterWidget->setFocusToTextFilter();
 //}
-
-void ImportView::ImportViewPriv::addPageUpDownActions(ImportView* q, QWidget* w)
-{
-    QShortcut *nextImageShortcut = new QShortcut(w);
-    nextImageShortcut->setKey(Qt::Key_PageDown);
-    nextImageShortcut->setContext(Qt::WidgetWithChildrenShortcut);
-    QObject::connect(nextImageShortcut, SIGNAL(activated()), q, SLOT(slotNextItem()));
-
-    QShortcut *prevImageShortcut = new QShortcut(w);
-    prevImageShortcut->setKey(Qt::Key_PageUp);
-    prevImageShortcut->setContext(Qt::WidgetWithChildrenShortcut);
-    QObject::connect(prevImageShortcut, SIGNAL(activated()), q, SLOT(slotPrevItem()));
-}
 
 void ImportView::loadViewState()
 {
@@ -838,7 +838,7 @@ void ImportView::slotSidebarTabTitleStyleChanged()
     //     d->rightSideBar->applySettings();
 }
 
-void ImportView::toggleShowBar(bool b)
+void ImportView::toggleShowBar(bool /*b*/)
 {
     //REMd->StackedView->thumbBarDock()->showThumbBar(b);
 }
