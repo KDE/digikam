@@ -162,6 +162,9 @@ void KipiPluginLoader::loadPlugins()
     d->kipiPluginLoader->loadPlugins();
 
     d->kipiInterface->slotCurrentAlbumChanged(AlbumManager::instance()->currentAlbum());
+
+    connect(AlbumManager::instance(), SIGNAL(signalAlbumCurrentChanged(Album*)),
+            d->kipiInterface, SLOT(slotCurrentAlbumChanged(Album*)));
 }
 
 void KipiPluginLoader::slotKipiPluginPlug()
