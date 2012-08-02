@@ -262,12 +262,12 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
     // -- Video Metadata Info ----------------------------------------------------
 
     if (settings->getToolTipsShowVideoAspectRatio()        ||
-        settings->getToolTipsShowVideoAudioBitRate()       ||
-        settings->getToolTipsShowVideoAudioChannelType()   ||
-        settings->getToolTipsShowVideoAudioCompressor()    ||
         settings->getToolTipsShowVideoDuration()           ||
         settings->getToolTipsShowVideoFrameRate()          ||
-        settings->getToolTipsShowVideoVideoCodec())
+        settings->getToolTipsShowVideoVideoCodec()         ||
+        settings->getToolTipsShowVideoAudioBitRate()       ||
+        settings->getToolTipsShowVideoAudioChannelType()   ||
+        settings->getToolTipsShowVideoAudioCompressor())
     {
         if (!videoInfo.allFieldsNull)
         {
@@ -284,42 +284,6 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
                 }
 
                 metaStr += cnt.cellBeg + i18n("Aspect Ratio:") + cnt.cellMid + Qt::escape(str) + cnt.cellEnd;
-            }
-
-            if (settings->getToolTipsShowVideoAudioBitRate())
-            {
-                str = videoInfo.audioBitRate.isEmpty() ? cnt.unavailable : videoInfo.audioBitRate;
-
-                if (str.length() > cnt.maxStringLength)
-                {
-                    str = str.left(cnt.maxStringLength-3) + "...";
-                }
-
-                metaStr += cnt.cellBeg + i18n("Audio Bit Rate:") + cnt.cellMid + Qt::escape(str) + cnt.cellEnd;
-            }
-
-            if (settings->getToolTipsShowVideoAudioChannelType())
-            {
-                str = videoInfo.audioChannelType.isEmpty() ? cnt.unavailable : videoInfo.audioChannelType;
-
-                if (str.length() > cnt.maxStringLength)
-                {
-                    str = str.left(cnt.maxStringLength-3) + "...";
-                }
-
-                metaStr += cnt.cellBeg + i18n("Audio Channel Type:") + cnt.cellMid + Qt::escape(str) + cnt.cellEnd;
-            }
-
-            if (settings->getToolTipsShowVideoAudioCompressor())
-            {
-                str = videoInfo.audioCompressor.isEmpty() ? cnt.unavailable : videoInfo.audioCompressor;
-
-                if (str.length() > cnt.maxStringLength)
-                {
-                    str = str.left(cnt.maxStringLength-3) + "...";
-                }
-
-                metaStr += cnt.cellBeg + i18n("Audio Compressor:") + cnt.cellMid + Qt::escape(str) + cnt.cellEnd;
             }
 
             if (settings->getToolTipsShowVideoDuration())
@@ -356,6 +320,42 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
                 }
 
                 metaStr += cnt.cellBeg + i18n("Video Codec:") + cnt.cellMid + Qt::escape(str) + cnt.cellEnd;
+            }
+
+            if (settings->getToolTipsShowVideoAudioBitRate())
+            {
+                str = videoInfo.audioBitRate.isEmpty() ? cnt.unavailable : videoInfo.audioBitRate;
+
+                if (str.length() > cnt.maxStringLength)
+                {
+                    str = str.left(cnt.maxStringLength-3) + "...";
+                }
+
+                metaStr += cnt.cellBeg + i18n("Audio Bit Rate:") + cnt.cellMid + Qt::escape(str) + cnt.cellEnd;
+            }
+
+            if (settings->getToolTipsShowVideoAudioChannelType())
+            {
+                str = videoInfo.audioChannelType.isEmpty() ? cnt.unavailable : videoInfo.audioChannelType;
+
+                if (str.length() > cnt.maxStringLength)
+                {
+                    str = str.left(cnt.maxStringLength-3) + "...";
+                }
+
+                metaStr += cnt.cellBeg + i18n("Audio Channel Type:") + cnt.cellMid + Qt::escape(str) + cnt.cellEnd;
+            }
+
+            if (settings->getToolTipsShowVideoAudioCompressor())
+            {
+                str = videoInfo.audioCompressor.isEmpty() ? cnt.unavailable : videoInfo.audioCompressor;
+
+                if (str.length() > cnt.maxStringLength)
+                {
+                    str = str.left(cnt.maxStringLength-3) + "...";
+                }
+
+                metaStr += cnt.cellBeg + i18n("Audio Compressor:") + cnt.cellMid + Qt::escape(str) + cnt.cellEnd;
             }
 
             tip += metaStr;

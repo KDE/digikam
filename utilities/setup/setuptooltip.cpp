@@ -63,12 +63,12 @@ public:
         showPhotoFlashBox(0),
         showPhotoWbBox(0),
         showVideoAspectRatio(0),
-        showVideoAudioBitRate(0),
-        showVideoAudioChannelType(0),
-        showVideoAudioCompressor(0),
         showVideoDuration(0),
         showVideoFrameRate(0),
         showVideoVideoCodec(0),
+        showVideoAudioBitRate(0),
+        showVideoAudioChannelType(0),
+        showVideoAudioCompressor(0),
         showAlbumNameBox(0),
         showCommentsBox(0),
         showTagsBox(0),
@@ -105,12 +105,12 @@ public:
     QCheckBox*   showPhotoWbBox;
 
     QCheckBox*   showVideoAspectRatio;
-    QCheckBox*   showVideoAudioBitRate;
-    QCheckBox*   showVideoAudioChannelType;
-    QCheckBox*   showVideoAudioCompressor;
     QCheckBox*   showVideoDuration;
     QCheckBox*   showVideoFrameRate;
     QCheckBox*   showVideoVideoCodec;
+    QCheckBox*   showVideoAudioBitRate;
+    QCheckBox*   showVideoAudioChannelType;
+    QCheckBox*   showVideoAudioCompressor;
 
     QCheckBox*   showAlbumNameBox;
     QCheckBox*   showCommentsBox;
@@ -226,6 +226,43 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
     vlay3->setSpacing(0);
 
     // --------------------------------------------------------
+
+    d->videoSettingBox    = new QGroupBox(i18n("Video Information"), vbox);
+    QVBoxLayout* vlay5    = new QVBoxLayout(d->videoSettingBox);
+
+    d->showVideoAspectRatio        = new QCheckBox(i18n("Show Video Aspect Ratio"), d->videoSettingBox);
+    d->showVideoAspectRatio->setWhatsThis(i18n("Set this option to display the Aspect Ratio of the Video"));
+
+    d->showVideoDuration           = new QCheckBox(i18n("Show Video Duration"), d->videoSettingBox);
+    d->showVideoDuration->setWhatsThis(i18n("Set this option to display the Duration of the Video"));
+
+    d->showVideoFrameRate          = new QCheckBox(i18n("Show Video Frame Rate"), d->videoSettingBox);
+    d->showVideoFrameRate->setWhatsThis(i18n("Set this option to display the Aspect Ratio of the Video"));
+
+    d->showVideoVideoCodec         = new QCheckBox(i18n("Show Video Codec"), d->videoSettingBox);
+    d->showVideoVideoCodec->setWhatsThis(i18n("Set this option to display the Codec of the Video"));
+
+    d->showVideoAudioBitRate       = new QCheckBox(i18n("Show Audio Bit Rate"), d->videoSettingBox);
+    d->showVideoAudioBitRate->setWhatsThis(i18n("Set this option to display the Audio Bit Rate of the Video"));
+
+    d->showVideoAudioChannelType   = new QCheckBox(i18n("Show Audio Channel Type"), d->videoSettingBox);
+    d->showVideoAudioChannelType->setWhatsThis(i18n("Set this option to display the Audio Channel Type of the Video"));
+
+    d->showVideoAudioCompressor    = new QCheckBox(i18n("Show Audio Compressor"), d->videoSettingBox);
+    d->showVideoAudioCompressor->setWhatsThis(i18n("Set this option to display the Audio Compressor of the Video"));
+
+    vlay5->addWidget(d->showVideoAspectRatio);
+    vlay5->addWidget(d->showVideoDuration);
+    vlay5->addWidget(d->showVideoFrameRate);
+    vlay5->addWidget(d->showVideoVideoCodec);
+    vlay5->addWidget(d->showVideoAudioBitRate);
+    vlay5->addWidget(d->showVideoAudioChannelType);
+    vlay5->addWidget(d->showVideoAudioCompressor);
+    vlay5->setMargin(KDialog::spacingHint());
+    vlay5->setSpacing(0);
+
+    // --------------------------------------------------------
+
     d->digikamSettingBox = new QGroupBox(i18n("digiKam Information"), vbox);
     QVBoxLayout* vlay4   = new QVBoxLayout(d->digikamSettingBox);
 
@@ -249,41 +286,6 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
     vlay4->setSpacing(0);
 
     // --------------------------------------------------------
-
-    d->videoSettingBox    = new QGroupBox(i18n("Video Information"), vbox);
-    QVBoxLayout* vlay5    = new QVBoxLayout(d->videoSettingBox);
-
-    d->showVideoAspectRatio        = new QCheckBox(i18n("Show Video Aspect Ratio"), d->videoSettingBox);
-    d->showVideoAspectRatio->setWhatsThis(i18n("Set this option to display the Aspect Ratio of the Video"));
-
-    d->showVideoAudioBitRate       = new QCheckBox(i18n("Show Audio Bit Rate"), d->videoSettingBox);
-    d->showVideoAudioBitRate->setWhatsThis(i18n("Set this option to display the Audio Bit Rate of the Video"));
-
-    d->showVideoAudioChannelType   = new QCheckBox(i18n("Show Audio Channel Type"), d->videoSettingBox);
-    d->showVideoAudioChannelType->setWhatsThis(i18n("Set this option to display the Audio Channel Type of the Video"));
-
-    d->showVideoAudioCompressor    = new QCheckBox(i18n("Show Audio Compressor"), d->videoSettingBox);
-    d->showVideoAudioCompressor->setWhatsThis(i18n("Set this option to display the Audio Compressor of the Video"));
-
-    d->showVideoDuration           = new QCheckBox(i18n("Show Video Duration"), d->videoSettingBox);
-    d->showVideoDuration->setWhatsThis(i18n("Set this option to display the Duration of the Video"));
-
-    d->showVideoFrameRate          = new QCheckBox(i18n("Show Video Frame Rate"), d->videoSettingBox);
-    d->showVideoFrameRate->setWhatsThis(i18n("Set this option to display the Aspect Ratio of the Video"));
-
-    d->showVideoVideoCodec         = new QCheckBox(i18n("Show Video Codec"), d->videoSettingBox);
-    d->showVideoVideoCodec->setWhatsThis(i18n("Set this option to display the Codec of the Video"));
-
-
-    vlay5->addWidget(d->showVideoAspectRatio);
-    vlay5->addWidget(d->showVideoAudioBitRate);
-    vlay5->addWidget(d->showVideoAudioChannelType);
-    vlay5->addWidget(d->showVideoAudioCompressor);
-    vlay5->addWidget(d->showVideoDuration);
-    vlay5->addWidget(d->showVideoFrameRate);
-    vlay5->addWidget(d->showVideoVideoCodec);
-    vlay5->setMargin(KDialog::spacingHint());
-    vlay5->setSpacing(0);
 
     QWidget* space = new QWidget(vbox);
     vbox->setStretchFactor(space, 10);
@@ -399,12 +401,12 @@ void SetupToolTip::applySettings()
     settings->setToolTipsShowPhotoWB(d->showPhotoWbBox->isChecked());
 
     settings->setToolTipsShowVideoAspectRatio(d->showVideoAspectRatio->isChecked());
-    settings->setToolTipsShowVideoAudioBitRate(d->showVideoAudioBitRate->isChecked());
-    settings->setToolTipsShowVideoAudioChannelType(d->showVideoAudioChannelType->isChecked());
-    settings->setToolTipsShowVideoAudioCompressor(d->showVideoAudioCompressor->isChecked());
     settings->setToolTipsShowVideoDuration(d->showVideoDuration->isChecked());
     settings->setToolTipsShowVideoFrameRate(d->showVideoFrameRate->isChecked());
     settings->setToolTipsShowVideoVideoCodec(d->showVideoVideoCodec->isChecked());
+    settings->setToolTipsShowVideoAudioBitRate(d->showVideoAudioBitRate->isChecked());
+    settings->setToolTipsShowVideoAudioChannelType(d->showVideoAudioChannelType->isChecked());
+    settings->setToolTipsShowVideoAudioCompressor(d->showVideoAudioCompressor->isChecked());
 
     settings->setToolTipsShowAlbumName(d->showAlbumNameBox->isChecked());
     settings->setToolTipsShowComments(d->showCommentsBox->isChecked());
@@ -448,12 +450,12 @@ void SetupToolTip::readSettings()
     d->showPhotoWbBox->setChecked(settings->getToolTipsShowPhotoWB());
 
     d->showVideoAspectRatio->setChecked(settings->getToolTipsShowVideoAspectRatio());
-    d->showVideoAudioBitRate->setChecked(settings->getToolTipsShowVideoAudioBitRate());
-    d->showVideoAudioChannelType->setChecked(settings->getToolTipsShowVideoAudioChannelType());
-    d->showVideoAudioCompressor->setChecked(settings->getToolTipsShowVideoAudioCompressor());
     d->showVideoDuration->setChecked(settings->getToolTipsShowVideoDuration());
     d->showVideoFrameRate->setChecked(settings->getToolTipsShowVideoFrameRate());
     d->showVideoVideoCodec->setChecked(settings->getToolTipsShowVideoVideoCodec());
+    d->showVideoAudioBitRate->setChecked(settings->getToolTipsShowVideoAudioBitRate());
+    d->showVideoAudioChannelType->setChecked(settings->getToolTipsShowVideoAudioChannelType());
+    d->showVideoAudioCompressor->setChecked(settings->getToolTipsShowVideoAudioCompressor());
 
     d->showAlbumNameBox->setChecked(settings->getToolTipsShowAlbumName());
     d->showCommentsBox->setChecked(settings->getToolTipsShowComments());
