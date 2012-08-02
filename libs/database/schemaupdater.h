@@ -78,7 +78,8 @@ private:
     bool createIndices();
     bool createTriggers();
     bool copyV3toV4(const QString& digikam3DBPath, const QString& currentDBPath);
-    bool updateV5toV6();
+    bool performUpdateToVersion(const QString& actionName, int newVersion, int newRequiredVersion);
+    bool updateToVersion(int targetVersion);
     bool updateV4toV6();
     bool updateV2toV4(const QString& sqlite2DBPath);
     void setLegacySettingEntries();

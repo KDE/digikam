@@ -60,6 +60,7 @@ namespace Digikam
 
 int SchemaUpdater::schemaVersion()
 {
+    // TODO: Increment to 7 to enable schema update
     return 6;
 }
 
@@ -311,6 +312,8 @@ bool SchemaUpdater::startUpdates()
         //  no schema changes.
         // Version 4 writes "4", and from now on version x writes "x".
         // Version 5 includes the schema changes from 0.9 to 0.10
+        // Version 6 brought new tables for history and ImageTagProperties, with version 2.0
+        // Version 7 brought the VideoMetadata table with 3.0
 
         if (d->parameters.isSQLite())
         {
@@ -443,24 +446,27 @@ bool SchemaUpdater::makeUpdates()
             setLegacySettingEntries();
         }
 
-        if (d->currentVersion.toInt() < 6)
+        // Incremental updates, starting from version 5
+        for (int v = d->currentVersion.toInt(); v < schemaVersion(); v++)
         {
-            //updateV5toV6();
+            int targetVersion = v + 1;
+
             if (!beginWrapSchemaUpdateStep())
             {
                 return false;
             }
 
-            QString errorMsg = i18n("Failed to update the database schema from version 5 to version 6. "
+            QString errorMsg = i18n("Failed to update the database schema from version %1 to version %2. "
                                     "Please read the error messages printed on the console and "
-                                    "report this error as a bug at bugs.kde.org. ");
+                                    "report this error as a bug at bugs.kde.org. ",
+                                    d->currentVersion.toInt(), targetVersion);
 
-            if (!endWrapSchemaUpdateStep(updateV5toV6(), errorMsg))
+            if (!endWrapSchemaUpdateStep(updateToVersion(targetVersion), errorMsg))
             {
                 return false;
             }
 
-            kDebug() << "Success updating to v6";
+            kDebug() << "Success updating to v" << d->currentVersion;
         }
 
         // add future updates here
@@ -597,7 +603,7 @@ bool SchemaUpdater::updateUniqueHash()
     return true;
 }
 
-bool SchemaUpdater::updateV5toV6()
+bool SchemaUpdater::performUpdateToVersion(const QString& actionName, int newVersion, int newRequiredVersion)
 {
     if (d->observer)
     {
@@ -609,7 +615,7 @@ bool SchemaUpdater::updateV5toV6()
         d->observer->moreSchemaUpdateSteps(1);
     }
 
-    DatabaseAction updateAction = d->backend->getDBAction("UpdateSchemaFromV5ToV6");
+    DatabaseAction updateAction = d->backend->getDBAction(actionName);
     if (updateAction.name.isNull())
     {
         QString errorMsg = i18n("The database update action cannot be found. Please ensure that "
@@ -619,7 +625,7 @@ bool SchemaUpdater::updateV5toV6()
 
     if (!d->backend->execDBAction(updateAction))
     {
-        kError() << "Schema update to V6 failed!";
+        kError() << "Schema update to V" << newVersion << "failed!";
         // resort to default error message, set above
         return false;
     }
@@ -631,14 +637,39 @@ bool SchemaUpdater::updateV5toV6()
             return false;
         }
 
-        d->observer->schemaUpdateProgress(i18n("Updated schema to version 6."));
+        d->observer->schemaUpdateProgress(i18n("Updated schema to version %1.", newVersion));
     }
 
-    d->currentVersion = 6;
+    d->currentVersion = newVersion;
     // Digikam for database version 5 can work with version 6, though not using the new features
     // Note: We do not upgrade the uniqueHash
-    d->currentRequiredVersion = 5;
+    d->currentRequiredVersion = newRequiredVersion;
     return true;
+}
+
+
+bool SchemaUpdater::updateToVersion(int targetVersion)
+{
+    if (d->currentVersion != targetVersion-1)
+    {
+        kError() << "updateToVersion performs only incremental updates. Called to update from"
+                 << d->currentVersion << "to" << targetVersion << ", aborting.";
+        return false;
+    }
+
+    switch (targetVersion)
+    {
+        case 6:
+            // Digikam for database version 5 can work with version 6, though not using the new features
+            // Note: We do not upgrade the uniqueHash
+            return performUpdateToVersion("UpdateSchemaFromV5ToV6", 6, 5);
+        case 7:
+            // Digikam for database version 5 and 6 can work with version 7, though not using the support for video files.
+            return performUpdateToVersion("UpdateSchemaFromV6ToV7", 7, 5);
+        default:
+            kError() << "Unsupported update to version" << targetVersion;
+            return false;
+    }
 }
 
 bool SchemaUpdater::copyV3toV4(const QString& digikam3DBPath, const QString& currentDBPath)
