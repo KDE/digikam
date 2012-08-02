@@ -70,9 +70,9 @@ private Q_SLOTS:
 
 private:
 
-    void setCurrentSearch(DatabaseSearch::Type type, const QString& query, bool selectCurrentAlbum = true);
-    QString queryFromKeywords(const QString& keywords) const;
-    QString keywordsFromQuery(const QString& query) const;
+    void          setCurrentSearch(DatabaseSearch::Type type, const QString& query, bool selectCurrentAlbum = true);
+    QString       queryFromKeywords(const QString& keywords) const;
+    QString       keywordsFromQuery(const QString& query) const;
     SearchWindow* searchWindow() const;
 
 private:
