@@ -333,8 +333,8 @@ SearchWindow* SearchTabHeader::searchWindow() const
         // Create the advanced search edit window, deferred from constructor
         d->searchWindow = new SearchWindow;
 
-        connect(d->searchWindow, SIGNAL(searchEdited(int,QString)),
-                this, SLOT(advancedSearchEdited(int,QString)),
+        connect(d->searchWindow, SIGNAL(searchEdited(int, QString)),
+                this, SLOT(advancedSearchEdited(int, QString)),
                 Qt::QueuedConnection);
     }
 
@@ -450,7 +450,7 @@ void SearchTabHeader::keywordChanged()
 
 void SearchTabHeader::editCurrentAdvancedSearch()
 {
-    SAlbum* album = AlbumManager::instance()->findSAlbum(SAlbum::getTemporaryTitle(DatabaseSearch::AdvancedSearch));
+    SAlbum* album        = AlbumManager::instance()->findSAlbum(SAlbum::getTemporaryTitle(DatabaseSearch::AdvancedSearch));
     SearchWindow* window = searchWindow();
 
     if (album)
@@ -487,8 +487,8 @@ void SearchTabHeader::saveSearch()
 
     while (oldAlbum)
     {
-        QString label    = i18n("Search name already exists."
-                             "\nPlease enter a new name:");
+        QString label    = i18n("Search name already exists.\n"
+                                "Please enter a new name:");
         bool ok;
         QString newTitle = KInputDialog::getText(i18n("Name exists"), label,
                                                  name, &ok, this);
@@ -545,7 +545,7 @@ void SearchTabHeader::advancedSearchEdited(int id, const QString& query)
     // We go the hard way and check this case.
     KeywordSearchReader check(query);
     DatabaseSearch::Type type = check.isSimpleKeywordSearch() ? DatabaseSearch::KeywordSearch
-                                : DatabaseSearch::AdvancedSearch;
+                                                              : DatabaseSearch::AdvancedSearch;
 
     if (id == -1)
     {
