@@ -53,6 +53,17 @@ class ImagePropertiesTab::Private
 {
 public:
 
+    enum Section
+    {
+        FileProperties = 0,
+        ImageProperties,
+        PhotoProperties,
+        VideoProperties,
+        digiKamProperties
+    };
+
+public:
+
     Private() :
         file(0),
         folder(0),
@@ -241,8 +252,9 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* const parent)
     glay1->setSpacing(0);
     glay1->setColumnStretch(1, 10);
 
-    addItem(w1, SmallIcon("dialog-information"),
-            i18n("File Properties"), QString("FileProperties"), true);
+    insertItem(ImagePropertiesTab::Private::FileProperties,
+               w1, SmallIcon("dialog-information"),
+               i18n("File Properties"), QString("FileProperties"), true);
 
     // --------------------------------------------------
 
@@ -271,8 +283,9 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* const parent)
     glay2->setSpacing(0);
     glay2->setColumnStretch(1, 10);
 
-    addItem(w2, SmallIcon("image-x-generic"),
-            i18n("Image Properties"), QString("ImageProperties"), true);
+    insertItem(ImagePropertiesTab::Private::ImageProperties,
+               w2, SmallIcon("image-x-generic"),
+               i18n("Image Properties"), QString("ImageProperties"), true);
 
     // --------------------------------------------------
 
@@ -329,8 +342,9 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* const parent)
     glay3->setMargin(KDialog::spacingHint());
     glay3->setSpacing(0);
 
-    addItem(w3, SmallIcon("camera-photo"),
-            i18n("Photograph Properties"), QString("PhotographProperties"), true);
+    insertItem(ImagePropertiesTab::Private::PhotoProperties,
+               w3, SmallIcon("camera-photo"),
+               i18n("Photograph Properties"), QString("PhotographProperties"), true);
 
     // --------------------------------------------------
 
@@ -355,24 +369,25 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* const parent)
 
     glay4->addWidget(d->aspectRatio,                0, 0, 1, 1);
     glay4->addWidget(d->labelVideoAspectRatio,      0, 1, 1, 1);
-    glay4->addWidget(d->audioBitRate,               1, 0, 1, 1);
-    glay4->addWidget(d->labelVideoAudioBitRate,     1, 1, 1, 1);
-    glay4->addWidget(d->audioChannelType,           2, 0, 1, 1);
-    glay4->addWidget(d->labelVideoAudioChannelType, 2, 1, 1, 1);
-    glay4->addWidget(d->audioCompressor,            3, 0, 1, 1);
-    glay4->addWidget(d->labelVideoAudioCompressor,  3, 1, 1, 1);
-    glay4->addWidget(d->duration,                   4, 0, 1, 1);
-    glay4->addWidget(d->labelVideoDuration,         4, 1, 1, 1);
-    glay4->addWidget(d->frameRate,                  5, 0, 1, 1);
-    glay4->addWidget(d->labelVideoFrameRate,        5, 1, 1, 1);
-    glay4->addWidget(d->videoCodec,                 6, 0, 1, 1);
-    glay4->addWidget(d->labelVideoVideoCodec,       6, 1, 1, 1);
+    glay4->addWidget(d->duration,                   1, 0, 1, 1);
+    glay4->addWidget(d->labelVideoDuration,         1, 1, 1, 1);
+    glay4->addWidget(d->frameRate,                  2, 0, 1, 1);
+    glay4->addWidget(d->labelVideoFrameRate,        2, 1, 1, 1);
+    glay4->addWidget(d->videoCodec,                 3, 0, 1, 1);
+    glay4->addWidget(d->labelVideoVideoCodec,       3, 1, 1, 1);
+    glay4->addWidget(d->audioBitRate,               4, 0, 1, 1);
+    glay4->addWidget(d->labelVideoAudioBitRate,     4, 1, 1, 1);
+    glay4->addWidget(d->audioChannelType,           5, 0, 1, 1);
+    glay4->addWidget(d->labelVideoAudioChannelType, 5, 1, 1, 1);
+    glay4->addWidget(d->audioCompressor,            6, 0, 1, 1);
+    glay4->addWidget(d->labelVideoAudioCompressor,  6, 1, 1, 1);
     glay4->setMargin(KDialog::spacingHint());
     glay4->setSpacing(0);
     glay4->setColumnStretch(1, 10);
 
-    addItem(w4, SmallIcon("video-x-generic"),
-            i18n("Video Properties"), QString("VideoProperties"), true);
+    insertItem(ImagePropertiesTab::Private::VideoProperties,
+               w4, SmallIcon("video-x-generic"),
+               i18n("Video Properties"), QString("VideoProperties"), true);
 
     // --------------------------------------------------
 
@@ -406,8 +421,9 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* const parent)
     glay5->setSpacing(0);
     glay5->setColumnStretch(1, 10);
 
-    addItem(w5, SmallIcon("imagecomment"),
-            i18n("digiKam Properties"), QString("DigikamProperties"), true);
+    insertItem(ImagePropertiesTab::Private::digiKamProperties,
+               w5, SmallIcon("imagecomment"),
+               i18n("digiKam Properties"), QString("DigikamProperties"), true);
 
     // --------------------------------------------------
 
@@ -475,11 +491,11 @@ void ImagePropertiesTab::setPhotoInfoDisable(const bool b)
 {
     if (b)
     {
-        widget(2)->hide();
+        widget(ImagePropertiesTab::Private::PhotoProperties)->hide();
     }
     else
     {
-        widget(2)->show();
+        widget(ImagePropertiesTab::Private::PhotoProperties)->show();
     }
 }
 
@@ -487,11 +503,11 @@ void ImagePropertiesTab::setVideoInfoDisable(const bool b)
 {
     if (b)
     {
-        widget(4)->hide();
+        widget(ImagePropertiesTab::Private::VideoProperties)->hide();
     }
     else
     {
-        widget(4)->show();
+        widget(ImagePropertiesTab::Private::VideoProperties)->show();
     }
 }
 
@@ -609,7 +625,7 @@ void ImagePropertiesTab::showOrHideCaptionAndTags()
     d->tags->setVisible(hasTags);
     d->labelTags->setVisible(hasTags);
 
-    widget(3)->setVisible(hasCaption || hasRating || hasTags || hasPickLabel || hasColorLabel);
+    widget(ImagePropertiesTab::Private::digiKamProperties)->setVisible(hasCaption || hasRating || hasTags || hasPickLabel || hasColorLabel);
 }
 
 void ImagePropertiesTab::setCaption(const QString& str)
@@ -644,15 +660,18 @@ void ImagePropertiesTab::setPickLabel(int pickId)
 void ImagePropertiesTab::setRating(int rating)
 {
     QString str;
+
     if (rating > RatingMin && rating <= RatingMax)
     {
         str = ' ';
+
         for (int i=0; i<rating; ++i)
         {
             str += QChar(0x2730);
             str += ' ';
         }
     }
+
     d->labelRating->setText(str);
 }
 
@@ -710,14 +729,14 @@ QStringList ImagePropertiesTab::shortenedTagPaths(const QStringList& tagPaths, Q
 
     if (identifiers)
     {
-        for (int i=0; i<tagPaths.size(); ++i)
+        for (int i = 0; i < tagPaths.size(); ++i)
         {
             tagsSorted << PathValuePair(tagPaths.at(i), (*identifiers).at(i));
         }
     }
     else
     {
-        for (int i=0; i<tagPaths.size(); ++i)
+        for (int i = 0; i < tagPaths.size(); ++i)
         {
             tagsSorted << PathValuePair(tagPaths.at(i), QVariant());
         }
