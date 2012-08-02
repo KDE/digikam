@@ -38,6 +38,7 @@
 #include "camitemsortsettings.h"
 #include "itemviewtooltip.h"
 #include "importdelegate.h"
+#include "importtooltipfiller.h"
 
 namespace Digikam
 {
@@ -61,7 +62,7 @@ protected:
     virtual QString tipContents()
     {
         CamItemInfo info = ImportImageModel::retrieveCamItemInfo(currentIndex());
-        return QString(); //FIXME: needs to be replaced with this line (return ToolTipFiller::CamItemInfoTipContents(info);)
+        return ImportToolTipFiller::CamItemInfoTipContents(info);
     }
 };
 

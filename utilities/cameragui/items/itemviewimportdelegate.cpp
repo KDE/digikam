@@ -44,6 +44,7 @@
 
 #include "imagedelegateoverlay.h"
 #include "thememanager.h"
+#include "imagescanner.h"
 
 namespace Digikam
 {
@@ -294,6 +295,9 @@ void ItemViewImportDelegate::drawImageFormat(QPainter* p, const QRect& r, const 
 
     if (!mime.isEmpty() && !r.isNull())
     {
+        QString type = mime.split("/").at(1);
+        type = ImageScanner::formatToString(type);
+
         p->save();
 
         QFont fnt(d->fontReg);
@@ -303,14 +307,14 @@ void ItemViewImportDelegate::drawImageFormat(QPainter* p, const QRect& r, const 
         p->setPen(QPen(Qt::gray));
         p->setOpacity(0.50);
 
-        QRect bRect = p->boundingRect(r, Qt::AlignTop | Qt::AlignHCenter, mime.toUpper());
+        QRect bRect = p->boundingRect(r, Qt::AlignTop | Qt::AlignHCenter, type.toUpper());
         bRect.adjust(-1, -1, 1, 1);
         bRect.translate(0, 1);
 
         p->fillRect(bRect, Qt::SolidPattern);
         p->setPen(QPen(Qt::white));
         p->setOpacity(1.0);
-        p->drawText(bRect, Qt::AlignTop | Qt::AlignHCenter, mime.toUpper());
+        p->drawText(bRect, Qt::AlignTop | Qt::AlignHCenter, type.toUpper());
 
         p->restore();
     }

@@ -61,7 +61,6 @@ public:
         tooltipShowFileSize(false),
         tooltipShowImageType(false),
         tooltipShowPhotoMake(false),
-        tooltipShowPhotoDate(false),
         tooltipShowPhotoFocal(false),
         tooltipShowPhotoExpo(false),
         tooltipShowPhotoFlash(false),
@@ -141,7 +140,6 @@ public:
     bool                                tooltipShowImageType;
     bool                                tooltipShowImageDim;
     bool                                tooltipShowPhotoMake;
-    bool                                tooltipShowPhotoDate;
     bool                                tooltipShowPhotoFocal;
     bool                                tooltipShowPhotoExpo;
     bool                                tooltipShowPhotoFlash;
@@ -257,7 +255,6 @@ void ImportSettings::init()
     d->tooltipShowImageType         = false;
     d->tooltipShowImageDim          = true;
     d->tooltipShowPhotoMake         = true;
-    d->tooltipShowPhotoDate         = true;
     d->tooltipShowPhotoFocal        = true;
     d->tooltipShowPhotoExpo         = true;
     d->tooltipShowPhotoFlash        = false;
@@ -305,7 +302,6 @@ void ImportSettings::readSettings()
     d->tooltipShowImageType         = group.readEntry(d->configToolTipsShowImageTypeEntry,        false);
     d->tooltipShowImageDim          = group.readEntry(d->configToolTipsShowImageDimEntry,         true);
     d->tooltipShowPhotoMake         = group.readEntry(d->configToolTipsShowPhotoMakeEntry,        true);
-    d->tooltipShowPhotoDate         = group.readEntry(d->configToolTipsShowPhotoDateEntry,        true);
     d->tooltipShowPhotoFocal        = group.readEntry(d->configToolTipsShowPhotoFocalEntry,       true);
     d->tooltipShowPhotoExpo         = group.readEntry(d->configToolTipsShowPhotoExpoEntry,        true);
     //d->tooltipShowPhotoMode         = group.readEntry(d->configToolTipsShowPhotoModeEntry,        true);
@@ -357,7 +353,6 @@ void ImportSettings::saveSettings()
     group.writeEntry(d->configToolTipsShowImageTypeEntry,        d->tooltipShowImageType);
     group.writeEntry(d->configToolTipsShowImageDimEntry,         d->tooltipShowImageDim);
     group.writeEntry(d->configToolTipsShowPhotoMakeEntry,        d->tooltipShowPhotoMake);
-    group.writeEntry(d->configToolTipsShowPhotoDateEntry,        d->tooltipShowPhotoDate);
     group.writeEntry(d->configToolTipsShowPhotoFocalEntry,       d->tooltipShowPhotoFocal);
     group.writeEntry(d->configToolTipsShowPhotoExpoEntry,        d->tooltipShowPhotoExpo);
     group.writeEntry(d->configToolTipsShowPhotoFlashEntry,       d->tooltipShowPhotoFlash);
@@ -598,16 +593,6 @@ bool ImportSettings::getToolTipsShowPhotoMake() const
     return d->tooltipShowPhotoMake;
 }
 
-void ImportSettings::setToolTipsShowPhotoDate(bool val)
-{
-    d->tooltipShowPhotoDate = val;
-}
-
-bool ImportSettings::getToolTipsShowPhotoDate() const
-{
-    return d->tooltipShowPhotoDate;
-}
-
 void ImportSettings::setToolTipsShowPhotoFocal(bool val)
 {
     d->tooltipShowPhotoFocal = val;
@@ -678,7 +663,6 @@ bool ImportSettings::showToolTipsIsValid() const
             d->tooltipShowImageType  ||
             d->tooltipShowImageDim   ||
             d->tooltipShowPhotoMake  ||
-            d->tooltipShowPhotoDate  ||
             d->tooltipShowPhotoFocal ||
             d->tooltipShowPhotoExpo  ||
             d->tooltipShowPhotoFlash ||

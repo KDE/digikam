@@ -118,7 +118,6 @@
 #include "capturedlg.h"
 #include "camerafolderdialog.h"
 #include "camerainfodialog.h"
-#include "cameraiconview.h"
 #include "cameracontroller.h"
 #include "cameralist.h"
 #include "cameratype.h"
@@ -658,19 +657,19 @@ void CameraUI::setupConnections()
     connect(d->view, SIGNAL(signalThumbSizeChanged(int)),
             this, SLOT(slotThumbSizeChanged(int)));
 
-//    connect(d->statusNavigateBar, SIGNAL(signalFirstItem()),
-//            d->view, SLOT(slotFirstItem()));
+    connect(d->statusNavigateBar, SIGNAL(signalFirstItem()),
+            d->view, SLOT(slotFirstItem()));
 
-//    connect(d->statusNavigateBar, SIGNAL(signalNextItem()),
-//            d->view, SLOT(slotNextItem()));
+    connect(d->statusNavigateBar, SIGNAL(signalNextItem()),
+            d->view, SLOT(slotNextItem()));
 
-//    connect(d->statusNavigateBar, SIGNAL(signalPrevItem()),
-//            d->view, SLOT(slotPrevItem()));
+    connect(d->statusNavigateBar, SIGNAL(signalPrevItem()),
+            d->view, SLOT(slotPrevItem()));
 
-//    connect(d->statusNavigateBar, SIGNAL(signalLastItem()),
-//            d->view, SLOT(slotLastItem()));
+    connect(d->statusNavigateBar, SIGNAL(signalLastItem()),
+            d->view, SLOT(slotLastItem()));
 
-//    // -------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
 
     connect(d->zoomBar, SIGNAL(signalZoomSliderChanged(int)),
             this, SLOT(slotZoomSliderChanged(int)));
@@ -678,7 +677,7 @@ void CameraUI::setupConnections()
 //    connect(this, SIGNAL(signalWindowHasMoved()),
 //            d->zoomBar, SLOT(slotUpdateTrackerPos()));
 
-//    // -------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
 
 //    connect(CollectionManager::instance(), SIGNAL(locationStatusChanged(CollectionLocation, int)),
 //            this, SLOT(slotCollectionLocationStatusChanged(CollectionLocation, int)));
@@ -2075,7 +2074,6 @@ void CameraUI::slotImageSelected(const CamItemInfoList& selection, bool hasPrev,
         }
     }
 
-    //d->statusLabel->setText(d->statusBarSelectionText);
     d->statusNavigateBar->setNavigateBarState(hasPrev, hasNext);
 }
 

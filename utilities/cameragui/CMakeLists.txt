@@ -29,6 +29,7 @@ SET(libcameragui_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/items/itemviewimportdelegate.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/items/importcategorydrawer.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/items/importdelegate.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/items/importtooltipfiller.cpp
 
     ${CMAKE_CURRENT_SOURCE_DIR}/views/importsettings.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/views/importcategorizedview.cpp

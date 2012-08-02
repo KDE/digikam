@@ -134,9 +134,6 @@ public:
     void setToolTipsShowPhotoMake(bool val);
     bool getToolTipsShowPhotoMake() const;
 
-    void setToolTipsShowPhotoDate(bool val);
-    bool getToolTipsShowPhotoDate() const;
-
     void setToolTipsShowPhotoFocal(bool val);
     bool getToolTipsShowPhotoFocal() const;
 
