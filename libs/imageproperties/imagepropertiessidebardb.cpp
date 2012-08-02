@@ -75,9 +75,9 @@ public:
         hasImageInfoOwnership(false),
         desceditTab(0)
     {
-        desceditTab           = 0;
-        versionsHistoryTab    = 0;
-        dirtyDesceditTab      = false;
+        desceditTab        = 0;
+        versionsHistoryTab = 0;
+        dirtyDesceditTab   = false;
     }
 
     bool                        dirtyDesceditTab;
@@ -600,17 +600,17 @@ void ImagePropertiesSideBarDB::setImagePropertiesInformation(const KUrl& url)
             m_propertiesTab->setPhotoFlash(photoInfo.flashMode.isEmpty() ? unavailable : photoInfo.flashMode);
             m_propertiesTab->setPhotoWhiteBalance(photoInfo.whiteBalance.isEmpty() ? unavailable : photoInfo.whiteBalance);
 
-            // -- Video_Metadata information ------------------------------------------
+            // -- VideoMetadata information ------------------------------------------
 
             m_propertiesTab->setVideoInfoDisable(videoInfo.allFieldsNull);
 
-            m_propertiesTab->setVideo_AspectRatio(videoInfo.aspectRatio.isEmpty() ? unavailable : videoInfo.aspectRatio);
-            m_propertiesTab->setVideo_AudioBitRate(videoInfo.audioBitRate.isEmpty() ? unavailable : videoInfo.audioBitRate);
-            m_propertiesTab->setVideo_AudioChannelType(videoInfo.audioChannelType.isEmpty() ? unavailable : videoInfo.audioChannelType);
-            m_propertiesTab->setVideo_AudioCompressor(videoInfo.audioCompressor.isEmpty() ? unavailable : videoInfo.audioCompressor);
-            m_propertiesTab->setVideo_Duration(videoInfo.duration.isEmpty() ? unavailable : videoInfo.duration);
-            m_propertiesTab->setVideo_FrameRate(videoInfo.frameRate.isEmpty() ? unavailable : videoInfo.frameRate);
-            m_propertiesTab->setVideo_VideoCodec(videoInfo.videoCodec.isEmpty() ? unavailable : videoInfo.videoCodec);
+            m_propertiesTab->setVideoAspectRatio(videoInfo.aspectRatio.isEmpty()           ? unavailable : videoInfo.aspectRatio);
+            m_propertiesTab->setVideoDuration(videoInfo.duration.isEmpty()                 ? unavailable : videoInfo.duration);
+            m_propertiesTab->setVideoFrameRate(videoInfo.frameRate.isEmpty()               ? unavailable : videoInfo.frameRate);
+            m_propertiesTab->setVideoVideoCodec(videoInfo.videoCodec.isEmpty()             ? unavailable : videoInfo.videoCodec);
+            m_propertiesTab->setVideoAudioBitRate(videoInfo.audioBitRate.isEmpty()         ? unavailable : videoInfo.audioBitRate);
+            m_propertiesTab->setVideoAudioChannelType(videoInfo.audioChannelType.isEmpty() ? unavailable : videoInfo.audioChannelType);
+            m_propertiesTab->setVideoAudioCompressor(videoInfo.audioCompressor.isEmpty()   ? unavailable : videoInfo.audioCompressor);
 
             // -- Caption / Tags ------------------------------------------
 

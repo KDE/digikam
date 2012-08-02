@@ -6,7 +6,7 @@
  * Date        : 2006-04-19
  * Description : A tab to display general image information
  *
- * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -49,11 +49,11 @@
 namespace Digikam
 {
 
-class ImagePropertiesTab::ImagePropertiesTabPriv
+class ImagePropertiesTab::Private
 {
 public:
 
-    ImagePropertiesTabPriv() :
+    Private() :
         file(0),
         folder(0),
         modifiedDate(0),
@@ -107,19 +107,19 @@ public:
         labelColorLabel(0),
         labelRating(0),
         aspectRatio(0),
-        audioBitRate(0),
-        audioChannelType(0),
-        audioCompressor(0),
         duration(0),
         frameRate(0),
         videoCodec(0),
-        labelVideo_AspectRatio(0),
-        labelVideo_AudioBitRate(0),
-        labelVideo_AudioChannelType(0),
-        labelVideo_AudioCompressor(0),
-        labelVideo_Duration(0),
-        labelVideo_FrameRate(0),
-        labelVideo_VideoCodec(0)
+        audioBitRate(0),
+        audioChannelType(0),
+        audioCompressor(0),
+        labelVideoAspectRatio(0),
+        labelVideoDuration(0),
+        labelVideoFrameRate(0),
+        labelVideoVideoCodec(0),
+        labelVideoAudioBitRate(0),
+        labelVideoAudioChannelType(0),
+        labelVideoAudioCompressor(0)
     {
     }
 
@@ -183,26 +183,25 @@ public:
     DTextLabelValue* labelColorLabel;
     DTextLabelValue* labelRating;
 
-    DTextLabelName* aspectRatio;
-    DTextLabelName* audioBitRate;
-    DTextLabelName* audioChannelType;
-    DTextLabelName* audioCompressor;
-    DTextLabelName* duration;
-    DTextLabelName* frameRate;
-    DTextLabelName* videoCodec;
+    DTextLabelName*  aspectRatio;
+    DTextLabelName*  duration;
+    DTextLabelName*  frameRate;
+    DTextLabelName*  videoCodec;
+    DTextLabelName*  audioBitRate;
+    DTextLabelName*  audioChannelType;
+    DTextLabelName*  audioCompressor;
 
-    DTextLabelValue* labelVideo_AspectRatio;
-    DTextLabelValue* labelVideo_AudioBitRate;
-    DTextLabelValue* labelVideo_AudioChannelType;
-    DTextLabelValue* labelVideo_AudioCompressor;
-    DTextLabelValue* labelVideo_Duration;
-    DTextLabelValue* labelVideo_FrameRate;
-    DTextLabelValue* labelVideo_VideoCodec;
-
+    DTextLabelValue* labelVideoAspectRatio;
+    DTextLabelValue* labelVideoDuration;
+    DTextLabelValue* labelVideoFrameRate;
+    DTextLabelValue* labelVideoVideoCodec;
+    DTextLabelValue* labelVideoAudioBitRate;
+    DTextLabelValue* labelVideoAudioChannelType;
+    DTextLabelValue* labelVideoAudioCompressor;
 };
 
-ImagePropertiesTab::ImagePropertiesTab(QWidget* parent)
-    : RExpanderBox(parent), d(new ImagePropertiesTabPriv)
+ImagePropertiesTab::ImagePropertiesTab(QWidget* const parent)
+    : RExpanderBox(parent), d(new Private)
 {
     setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
     setLineWidth( style()->pixelMetric(QStyle::PM_DefaultFrameWidth) );
@@ -304,28 +303,28 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* parent)
     d->labelPhotoFlash        = new DTextLabelValue(0, w3);
     d->labelPhotoWhiteBalance = new DTextLabelValue(0, w3);
 
-    glay3->addWidget(d->make,                   23, 0, 1, 1);
-    glay3->addWidget(d->labelPhotoMake,         23, 1, 1, 1);
-    glay3->addWidget(d->model,                  24, 0, 1, 1);
-    glay3->addWidget(d->labelPhotoModel,        24, 1, 1, 1);
-    glay3->addWidget(d->photoDate,              25, 0, 1, 1);
-    glay3->addWidget(d->labelPhotoDateTime,     25, 1, 1, 1);
-    glay3->addWidget(d->lens,                   26, 0, 1, 1);
-    glay3->addWidget(d->labelPhotoLens,         26, 1, 1, 1);
-    glay3->addWidget(d->aperture,               27, 0, 1, 1);
-    glay3->addWidget(d->labelPhotoAperture,     27, 1, 1, 1);
-    glay3->addWidget(d->focalLength,            28, 0, 1, 1);
-    glay3->addWidget(d->labelPhotoFocalLength,  28, 1, 1, 1);
-    glay3->addWidget(d->exposureTime,           29, 0, 1, 1);
-    glay3->addWidget(d->labelPhotoExposureTime, 29, 1, 1, 1);
-    glay3->addWidget(d->sensitivity,            30, 0, 1, 1);
-    glay3->addWidget(d->labelPhotoSensitivity,  30, 1, 1, 1);
-    glay3->addWidget(d->exposureMode,           31, 0, 1, 1);
-    glay3->addWidget(d->labelPhotoExposureMode, 31, 1, 1, 1);
-    glay3->addWidget(d->flash,                  32, 0, 1, 1);
-    glay3->addWidget(d->labelPhotoFlash,        32, 1, 1, 1);
-    glay3->addWidget(d->whiteBalance,           33, 0, 1, 1);
-    glay3->addWidget(d->labelPhotoWhiteBalance, 33, 1, 1, 1);
+    glay3->addWidget(d->make,                   0,  0, 1, 1);
+    glay3->addWidget(d->labelPhotoMake,         0,  1, 1, 1);
+    glay3->addWidget(d->model,                  1,  0, 1, 1);
+    glay3->addWidget(d->labelPhotoModel,        1,  1, 1, 1);
+    glay3->addWidget(d->photoDate,              2,  0, 1, 1);
+    glay3->addWidget(d->labelPhotoDateTime,     2,  1, 1, 1);
+    glay3->addWidget(d->lens,                   3,  0, 1, 1);
+    glay3->addWidget(d->labelPhotoLens,         3,  1, 1, 1);
+    glay3->addWidget(d->aperture,               4,  0, 1, 1);
+    glay3->addWidget(d->labelPhotoAperture,     4,  1, 1, 1);
+    glay3->addWidget(d->focalLength,            5,  0, 1, 1);
+    glay3->addWidget(d->labelPhotoFocalLength,  5,  1, 1, 1);
+    glay3->addWidget(d->exposureTime,           6,  0, 1, 1);
+    glay3->addWidget(d->labelPhotoExposureTime, 6,  1, 1, 1);
+    glay3->addWidget(d->sensitivity,            7,  0, 1, 1);
+    glay3->addWidget(d->labelPhotoSensitivity,  7,  1, 1, 1);
+    glay3->addWidget(d->exposureMode,           8,  0, 1, 1);
+    glay3->addWidget(d->labelPhotoExposureMode, 8,  1, 1, 1);
+    glay3->addWidget(d->flash,                  9,  0, 1, 1);
+    glay3->addWidget(d->labelPhotoFlash,        9,  1, 1, 1);
+    glay3->addWidget(d->whiteBalance,           10, 0, 1, 1);
+    glay3->addWidget(d->labelPhotoWhiteBalance, 10, 1, 1, 1);
     glay3->setColumnStretch(1, 10);
     glay3->setMargin(KDialog::spacingHint());
     glay3->setSpacing(0);
@@ -335,80 +334,80 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* parent)
 
     // --------------------------------------------------
 
-    QWidget* const w4         = new QWidget(this);
-    QGridLayout* const glay4  = new QGridLayout(w4);
+    QWidget* const w4             = new QWidget(this);
+    QGridLayout* const glay4      = new QGridLayout(w4);
 
-    d->caption                = new DTextLabelName(i18n("Caption: "),     w4);
-    d->pickLabel              = new DTextLabelName(i18n("Pick label: "),  w4);
-    d->colorLabel             = new DTextLabelName(i18n("Color label: "), w4);
-    d->rating                 = new DTextLabelName(i18n("Rating: "),      w4);
-    d->tags                   = new DTextLabelName(i18n("Tags: "),        w4);
+    d->aspectRatio                = new DTextLabelName(i18n("Aspect Ratio: "),       w4);
+    d->duration                   = new DTextLabelName(i18n("Duration: "),           w4);
+    d->frameRate                  = new DTextLabelName(i18n("Frame Rate: "),         w4);
+    d->videoCodec                 = new DTextLabelName(i18n("Video Codec: "),        w4);
+    d->audioBitRate               = new DTextLabelName(i18n("Audio Bit Rate: "),     w4);
+    d->audioChannelType           = new DTextLabelName(i18n("Audio Channel Type: "), w4);
+    d->audioCompressor            = new DTextLabelName(i18n("Audio Compressor: "),   w4);
 
-    d->labelCaption           = new DTextLabelValue(0, w4);
-    d->labelPickLabel         = new DTextLabelValue(0, w4);
-    d->labelColorLabel        = new DTextLabelValue(0, w4);
-    d->labelRating            = new DTextLabelValue(0, w4);
-    d->labelTags              = new DTextLabelValue(0, w4);
-    d->labelTags->setTextElideMode(Qt::ElideLeft);
+    d->labelVideoAspectRatio      = new DTextLabelValue(0, w4);
+    d->labelVideoDuration         = new DTextLabelValue(0, w4);
+    d->labelVideoFrameRate        = new DTextLabelValue(0, w4);
+    d->labelVideoVideoCodec       = new DTextLabelValue(0, w4);
+    d->labelVideoAudioBitRate     = new DTextLabelValue(0, w4);
+    d->labelVideoAudioChannelType = new DTextLabelValue(0, w4);
+    d->labelVideoAudioCompressor  = new DTextLabelValue(0, w4);
 
-    glay4->addWidget(d->caption,         0, 0, 1, 1);
-    glay4->addWidget(d->labelCaption,    0, 1, 1, 1);
-    glay4->addWidget(d->tags,            1, 0, 1, 1);
-    glay4->addWidget(d->labelTags,       1, 1, 1, 1);
-    glay4->addWidget(d->pickLabel,       2, 0, 1, 1);
-    glay4->addWidget(d->labelPickLabel,  2, 1, 1, 1);
-    glay4->addWidget(d->colorLabel,      3, 0, 1, 1);
-    glay4->addWidget(d->labelColorLabel, 3, 1, 1, 1);
-    glay4->addWidget(d->rating,          4, 0, 1, 1);
-    glay4->addWidget(d->labelRating,     4, 1, 1, 1);
+    glay4->addWidget(d->aspectRatio,                0, 0, 1, 1);
+    glay4->addWidget(d->labelVideoAspectRatio,      0, 1, 1, 1);
+    glay4->addWidget(d->audioBitRate,               1, 0, 1, 1);
+    glay4->addWidget(d->labelVideoAudioBitRate,     1, 1, 1, 1);
+    glay4->addWidget(d->audioChannelType,           2, 0, 1, 1);
+    glay4->addWidget(d->labelVideoAudioChannelType, 2, 1, 1, 1);
+    glay4->addWidget(d->audioCompressor,            3, 0, 1, 1);
+    glay4->addWidget(d->labelVideoAudioCompressor,  3, 1, 1, 1);
+    glay4->addWidget(d->duration,                   4, 0, 1, 1);
+    glay4->addWidget(d->labelVideoDuration,         4, 1, 1, 1);
+    glay4->addWidget(d->frameRate,                  5, 0, 1, 1);
+    glay4->addWidget(d->labelVideoFrameRate,        5, 1, 1, 1);
+    glay4->addWidget(d->videoCodec,                 6, 0, 1, 1);
+    glay4->addWidget(d->labelVideoVideoCodec,       6, 1, 1, 1);
     glay4->setMargin(KDialog::spacingHint());
     glay4->setSpacing(0);
     glay4->setColumnStretch(1, 10);
 
-    addItem(w4, SmallIcon("imagecomment"),
-            i18n("digiKam Properties"), QString("DigikamProperties"), true);
+    addItem(w4, SmallIcon("video-x-generic"),
+            i18n("Video Properties"), QString("VideoProperties"), true);
 
-    // -------------------------------------------------- TODO - Video Metadata Handling
+    // --------------------------------------------------
 
     QWidget* const w5         = new QWidget(this);
     QGridLayout* const glay5  = new QGridLayout(w5);
 
-    d->aspectRatio              = new DTextLabelName(i18n("Aspect Ratio: "),        w5);
-    d->audioBitRate             = new DTextLabelName(i18n("Audio Bit Rate: "),      w5);
-    d->audioChannelType         = new DTextLabelName(i18n("Audio Channel Type: "),  w5);
-    d->audioCompressor          = new DTextLabelName(i18n("Audio Compressor: "),    w5);
-    d->duration                 = new DTextLabelName(i18n("Duration: "),            w5);
-    d->frameRate                = new DTextLabelName(i18n("Frame Rate: "),          w5);
-    d->videoCodec               = new DTextLabelName(i18n("Video Codec: "),         w5);
+    d->caption                = new DTextLabelName(i18n("Caption: "),     w5);
+    d->pickLabel              = new DTextLabelName(i18n("Pick label: "),  w5);
+    d->colorLabel             = new DTextLabelName(i18n("Color label: "), w5);
+    d->rating                 = new DTextLabelName(i18n("Rating: "),      w5);
+    d->tags                   = new DTextLabelName(i18n("Tags: "),        w5);
 
-    d->labelVideo_AspectRatio         = new DTextLabelValue(0, w5);
-    d->labelVideo_AudioBitRate        = new DTextLabelValue(0, w5);
-    d->labelVideo_AudioChannelType    = new DTextLabelValue(0, w5);
-    d->labelVideo_AudioCompressor     = new DTextLabelValue(0, w5);
-    d->labelVideo_Duration            = new DTextLabelValue(0, w5);
-    d->labelVideo_FrameRate           = new DTextLabelValue(0, w5);
-    d->labelVideo_VideoCodec          = new DTextLabelValue(0, w5);
+    d->labelCaption           = new DTextLabelValue(0, w5);
+    d->labelPickLabel         = new DTextLabelValue(0, w5);
+    d->labelColorLabel        = new DTextLabelValue(0, w5);
+    d->labelRating            = new DTextLabelValue(0, w5);
+    d->labelTags              = new DTextLabelValue(0, w5);
+    d->labelTags->setTextElideMode(Qt::ElideLeft);
 
-    glay5->addWidget(d->aspectRatio,                23, 0, 1, 1);
-    glay5->addWidget(d->labelVideo_AspectRatio,     23, 1, 1, 1);
-    glay5->addWidget(d->audioBitRate,               24, 0, 1, 1);
-    glay5->addWidget(d->labelVideo_AudioBitRate,    24, 1, 1, 1);
-    glay5->addWidget(d->audioChannelType,           25, 0, 1, 1);
-    glay5->addWidget(d->labelVideo_AudioChannelType,25, 1, 1, 1);
-    glay5->addWidget(d->audioCompressor,            26, 0, 1, 1);
-    glay5->addWidget(d->labelVideo_AudioCompressor, 26, 1, 1, 1);
-    glay5->addWidget(d->duration,                   27, 0, 1, 1);
-    glay5->addWidget(d->labelVideo_Duration,        27, 1, 1, 1);
-    glay5->addWidget(d->frameRate,                  28, 0, 1, 1);
-    glay5->addWidget(d->labelVideo_FrameRate,       28, 1, 1, 1);
-    glay5->addWidget(d->videoCodec,                 29, 0, 1, 1);
-    glay5->addWidget(d->labelVideo_VideoCodec,      29, 1, 1, 1);
+    glay5->addWidget(d->caption,         0, 0, 1, 1);
+    glay5->addWidget(d->labelCaption,    0, 1, 1, 1);
+    glay5->addWidget(d->tags,            1, 0, 1, 1);
+    glay5->addWidget(d->labelTags,       1, 1, 1, 1);
+    glay5->addWidget(d->pickLabel,       2, 0, 1, 1);
+    glay5->addWidget(d->labelPickLabel,  2, 1, 1, 1);
+    glay5->addWidget(d->colorLabel,      3, 0, 1, 1);
+    glay5->addWidget(d->labelColorLabel, 3, 1, 1, 1);
+    glay5->addWidget(d->rating,          4, 0, 1, 1);
+    glay5->addWidget(d->labelRating,     4, 1, 1, 1);
     glay5->setMargin(KDialog::spacingHint());
     glay5->setSpacing(0);
     glay5->setColumnStretch(1, 10);
 
-    addItem(w5, SmallIcon("dialog-information"),
-            i18n("Video Properties"), QString("VideoProperties"), true);
+    addItem(w5, SmallIcon("imagecomment"),
+            i18n("digiKam Properties"), QString("DigikamProperties"), true);
 
     // --------------------------------------------------
 
@@ -454,13 +453,13 @@ void ImagePropertiesTab::setCurrentURL(const KUrl& url)
         d->labelRating->clear();
         d->labelTags->clear();
 
-        d->labelVideo_AspectRatio->clear();
-        d->labelVideo_AudioBitRate->clear();
-        d->labelVideo_AudioChannelType->clear();
-        d->labelVideo_AudioCompressor->clear();
-        d->labelVideo_Duration->clear();
-        d->labelVideo_FrameRate->clear();
-        d->labelVideo_VideoCodec->clear();
+        d->labelVideoAspectRatio->clear();
+        d->labelVideoDuration->clear();
+        d->labelVideoFrameRate->clear();
+        d->labelVideoVideoCodec->clear();
+        d->labelVideoAudioBitRate->clear();
+        d->labelVideoAudioChannelType->clear();
+        d->labelVideoAudioCompressor->clear();
 
         setEnabled(false);
         return;
@@ -657,39 +656,39 @@ void ImagePropertiesTab::setRating(int rating)
     d->labelRating->setText(str);
 }
 
-void ImagePropertiesTab::setVideo_AspectRatio(const QString& str)
+void ImagePropertiesTab::setVideoAspectRatio(const QString& str)
 {
-    d->labelVideo_AspectRatio->setText(str);
+    d->labelVideoAspectRatio->setText(str);
 }
 
-void ImagePropertiesTab::setVideo_AudioBitRate(const QString& str)
+void ImagePropertiesTab::setVideoAudioBitRate(const QString& str)
 {
-    d->labelVideo_AudioBitRate->setText(str);
+    d->labelVideoAudioBitRate->setText(str);
 }
 
-void ImagePropertiesTab::setVideo_AudioChannelType(const QString& str)
+void ImagePropertiesTab::setVideoAudioChannelType(const QString& str)
 {
-    d->labelVideo_AudioChannelType->setText(str);
+    d->labelVideoAudioChannelType->setText(str);
 }
 
-void ImagePropertiesTab::setVideo_AudioCompressor(const QString& str)
+void ImagePropertiesTab::setVideoAudioCompressor(const QString& str)
 {
-    d->labelVideo_AudioCompressor->setText(str);
+    d->labelVideoAudioCompressor->setText(str);
 }
 
-void ImagePropertiesTab::setVideo_Duration(const QString& str)
+void ImagePropertiesTab::setVideoDuration(const QString& str)
 {
-    d->labelVideo_Duration->setText(str);
+    d->labelVideoDuration->setText(str);
 }
 
-void ImagePropertiesTab::setVideo_FrameRate(const QString& str)
+void ImagePropertiesTab::setVideoFrameRate(const QString& str)
 {
-    d->labelVideo_FrameRate->setText(str);
+    d->labelVideoFrameRate->setText(str);
 }
 
-void ImagePropertiesTab::setVideo_VideoCodec(const QString& str)
+void ImagePropertiesTab::setVideoVideoCodec(const QString& str)
 {
-    d->labelVideo_VideoCodec->setText(str);
+    d->labelVideoVideoCodec->setText(str);
 }
 
 void ImagePropertiesTab::setTags(const QStringList& tagPaths, const QStringList& tagNames)
@@ -708,6 +707,7 @@ static bool naturalLessThan(const PathValuePair& a, const PathValuePair& b)
 QStringList ImagePropertiesTab::shortenedTagPaths(const QStringList& tagPaths, QList<QVariant>* identifiers)
 {
     QList<PathValuePair> tagsSorted;
+
     if (identifiers)
     {
         for (int i=0; i<tagPaths.size(); ++i)
@@ -722,6 +722,7 @@ QStringList ImagePropertiesTab::shortenedTagPaths(const QStringList& tagPaths, Q
             tagsSorted << PathValuePair(tagPaths.at(i), QVariant());
         }
     }
+
     qStableSort(tagsSorted.begin(), tagsSorted.end(), naturalLessThan);
 
     if (identifiers)
@@ -731,14 +732,15 @@ QStringList ImagePropertiesTab::shortenedTagPaths(const QStringList& tagPaths, Q
 
     QStringList tagsShortened;
     QString previous;
+
     foreach(const PathValuePair& pair, tagsSorted)
     {
-        const QString& tagPath = pair.first;
-        QString shortenedPath = tagPath;
-
+        const QString& tagPath   = pair.first;
+        QString shortenedPath    = tagPath;
         QStringList currentPath  = tagPath.split('/', QString::SkipEmptyParts);
         QStringList previousPath = previous.split('/', QString::SkipEmptyParts);
         int depth;
+
         for (depth = 0; depth < currentPath.size() && depth < previousPath.size(); ++depth)
         {
             if (currentPath.at(depth) != previousPath.at(depth))

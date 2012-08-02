@@ -46,11 +46,11 @@
 namespace Digikam
 {
 
-class CameraItemPropertiesTab::CameraItemPropertiesTabPriv
+class CameraItemPropertiesTab::Private
 {
 public:
 
-    CameraItemPropertiesTabPriv() :
+    Private() :
         file(0),
         folder(0),
         date(0),
@@ -94,19 +94,19 @@ public:
         labelPhotoFlash(0),
         labelPhotoWhiteBalance(0),
         aspectRatio(0),
-        audioBitRate(0),
-        audioChannelType(0),
-        audioCompressor(0),
         duration(0),
         frameRate(0),
         videoCodec(0),
-        labelVideo_AspectRatio(0),
-        labelVideo_AudioBitRate(0),
-        labelVideo_AudioChannelType(0),
-        labelVideo_AudioCompressor(0),
-        labelVideo_Duration(0),
-        labelVideo_FrameRate(0),
-        labelVideo_VideoCodec(0)
+        audioBitRate(0),
+        audioChannelType(0),
+        audioCompressor(0),
+        labelVideoAspectRatio(0),
+        labelVideoDuration(0),
+        labelVideoFrameRate(0),
+        labelVideoVideoCodec(0),
+        labelVideoAudioBitRate(0),
+        labelVideoAudioChannelType(0),
+        labelVideoAudioCompressor(0)
     {
     }
 
@@ -156,26 +156,25 @@ public:
     DTextLabelValue* labelPhotoFlash;
     DTextLabelValue* labelPhotoWhiteBalance;
 
-    DTextLabelName* aspectRatio;
-    DTextLabelName* audioBitRate;
-    DTextLabelName* audioChannelType;
-    DTextLabelName* audioCompressor;
-    DTextLabelName* duration;
-    DTextLabelName* frameRate;
-    DTextLabelName* videoCodec;
+    DTextLabelName*  aspectRatio;
+    DTextLabelName*  duration;
+    DTextLabelName*  frameRate;
+    DTextLabelName*  videoCodec;
+    DTextLabelName*  audioBitRate;
+    DTextLabelName*  audioChannelType;
+    DTextLabelName*  audioCompressor;
 
-    DTextLabelValue* labelVideo_AspectRatio;
-    DTextLabelValue* labelVideo_AudioBitRate;
-    DTextLabelValue* labelVideo_AudioChannelType;
-    DTextLabelValue* labelVideo_AudioCompressor;
-    DTextLabelValue* labelVideo_Duration;
-    DTextLabelValue* labelVideo_FrameRate;
-    DTextLabelValue* labelVideo_VideoCodec;
-
+    DTextLabelValue* labelVideoAspectRatio;
+    DTextLabelValue* labelVideoDuration;
+    DTextLabelValue* labelVideoFrameRate;
+    DTextLabelValue* labelVideoVideoCodec;
+    DTextLabelValue* labelVideoAudioBitRate;
+    DTextLabelValue* labelVideoAudioChannelType;
+    DTextLabelValue* labelVideoAudioCompressor;
 };
 
-CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* parent)
-    : RExpanderBox(parent), d(new CameraItemPropertiesTabPriv)
+CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* const parent)
+    : RExpanderBox(parent), d(new Private)
 {
     setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
     setLineWidth( style()->pixelMetric(QStyle::PM_DefaultFrameWidth) );
@@ -292,46 +291,46 @@ CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* parent)
     addItem(w2, SmallIcon("camera-photo"),
             i18n("Photograph Properties"), QString("PhotographProperties"), true);
 
-    // -------------------------------------------------- TODO - Video Metadata Handling
+    // -------------------------------------------------- 
 
-    QWidget* const w5           = new QWidget(this);
-    QGridLayout* const glay5    = new QGridLayout(w5);
+    QWidget* const w3             = new QWidget(this);
+    QGridLayout* const glay3      = new QGridLayout(w3);
 
-    d->aspectRatio              = new DTextLabelName(i18n("Aspect Ratio: "),        w5);
-    d->audioBitRate             = new DTextLabelName(i18n("Audio Bit Rate: "),      w5);
-    d->audioChannelType         = new DTextLabelName(i18n("Audio Channel Type: "),  w5);
-    d->audioCompressor          = new DTextLabelName(i18n("Audio Compressor: "),    w5);
-    d->duration                 = new DTextLabelName(i18n("Duration: "),            w5);
-    d->frameRate                = new DTextLabelName(i18n("Frame Rate: "),          w5);
-    d->videoCodec               = new DTextLabelName(i18n("Video Codec: "),         w5);
+    d->aspectRatio                = new DTextLabelName(i18n("Aspect Ratio: "),       w3);
+    d->audioBitRate               = new DTextLabelName(i18n("Audio Bit Rate: "),     w3);
+    d->audioChannelType           = new DTextLabelName(i18n("Audio Channel Type: "), w3);
+    d->audioCompressor            = new DTextLabelName(i18n("Audio Compressor: "),   w3);
+    d->duration                   = new DTextLabelName(i18n("Duration: "),           w3);
+    d->frameRate                  = new DTextLabelName(i18n("Frame Rate: "),         w3);
+    d->videoCodec                 = new DTextLabelName(i18n("Video Codec: "),        w3);
 
-    d->labelVideo_AspectRatio         = new DTextLabelValue(0, w5);
-    d->labelVideo_AudioBitRate        = new DTextLabelValue(0, w5);
-    d->labelVideo_AudioChannelType    = new DTextLabelValue(0, w5);
-    d->labelVideo_AudioCompressor     = new DTextLabelValue(0, w5);
-    d->labelVideo_Duration            = new DTextLabelValue(0, w5);
-    d->labelVideo_FrameRate           = new DTextLabelValue(0, w5);
-    d->labelVideo_VideoCodec          = new DTextLabelValue(0, w5);
+    d->labelVideoAspectRatio      = new DTextLabelValue(0, w3);
+    d->labelVideoAudioBitRate     = new DTextLabelValue(0, w3);
+    d->labelVideoAudioChannelType = new DTextLabelValue(0, w3);
+    d->labelVideoAudioCompressor  = new DTextLabelValue(0, w3);
+    d->labelVideoDuration         = new DTextLabelValue(0, w3);
+    d->labelVideoFrameRate        = new DTextLabelValue(0, w3);
+    d->labelVideoVideoCodec       = new DTextLabelValue(0, w3);
 
-    glay5->addWidget(d->aspectRatio,                23, 0, 1, 1);
-    glay5->addWidget(d->labelVideo_AspectRatio,     23, 1, 1, 1);
-    glay5->addWidget(d->audioBitRate,               24, 0, 1, 1);
-    glay5->addWidget(d->labelVideo_AudioBitRate,    24, 1, 1, 1);
-    glay5->addWidget(d->audioChannelType,           25, 0, 1, 1);
-    glay5->addWidget(d->labelVideo_AudioChannelType,25, 1, 1, 1);
-    glay5->addWidget(d->audioCompressor,            26, 0, 1, 1);
-    glay5->addWidget(d->labelVideo_AudioCompressor, 26, 1, 1, 1);
-    glay5->addWidget(d->duration,                   27, 0, 1, 1);
-    glay5->addWidget(d->labelVideo_Duration,        27, 1, 1, 1);
-    glay5->addWidget(d->frameRate,                  28, 0, 1, 1);
-    glay5->addWidget(d->labelVideo_FrameRate,       28, 1, 1, 1);
-    glay5->addWidget(d->videoCodec,                 29, 0, 1, 1);
-    glay5->addWidget(d->labelVideo_VideoCodec,      29, 1, 1, 1);
-    glay5->setMargin(KDialog::spacingHint());
-    glay5->setSpacing(0);
-    glay5->setColumnStretch(1, 10);
+    glay3->addWidget(d->aspectRatio,                0, 0, 1, 1);
+    glay3->addWidget(d->labelVideoAspectRatio,      0, 1, 1, 1);
+    glay3->addWidget(d->audioBitRate,               1, 0, 1, 1);
+    glay3->addWidget(d->labelVideoAudioBitRate,     1, 1, 1, 1);
+    glay3->addWidget(d->audioChannelType,           2, 0, 1, 1);
+    glay3->addWidget(d->labelVideoAudioChannelType, 2, 1, 1, 1);
+    glay3->addWidget(d->audioCompressor,            3, 0, 1, 1);
+    glay3->addWidget(d->labelVideoAudioCompressor,  3, 1, 1, 1);
+    glay3->addWidget(d->duration,                   4, 0, 1, 1);
+    glay3->addWidget(d->labelVideoDuration,         4, 1, 1, 1);
+    glay3->addWidget(d->frameRate,                  5, 0, 1, 1);
+    glay3->addWidget(d->labelVideoFrameRate,        5, 1, 1, 1);
+    glay3->addWidget(d->videoCodec,                 6, 0, 1, 1);
+    glay3->addWidget(d->labelVideoVideoCodec,       6, 1, 1, 1);
+    glay3->setMargin(KDialog::spacingHint());
+    glay3->setSpacing(0);
+    glay3->setColumnStretch(1, 10);
 
-    addItem(w5, SmallIcon("dialog-information"),
+    addItem(w3, SmallIcon("video-x-generic"),
             i18n("Video Properties"), QString("VideoProperties"), true);
 
     // --------------------------------------------------
@@ -371,13 +370,13 @@ void CameraItemPropertiesTab::setCurrentItem(const CamItemInfo& itemInfo, const 
         d->labelPhotoFlash->setText(QString());
         d->labelPhotoWhiteBalance->setText(QString());
 
-        d->labelVideo_AspectRatio->setText(QString());
-        d->labelVideo_AudioBitRate->setText(QString());
-        d->labelVideo_AudioChannelType->setText(QString());
-        d->labelVideo_AudioCompressor->setText(QString());
-        d->labelVideo_Duration->setText(QString());
-        d->labelVideo_FrameRate->setText(QString());
-        d->labelVideo_VideoCodec->setText(QString());
+        d->labelVideoAspectRatio->setText(QString());
+        d->labelVideoAudioBitRate->setText(QString());
+        d->labelVideoAudioChannelType->setText(QString());
+        d->labelVideoAudioCompressor->setText(QString());
+        d->labelVideoDuration->setText(QString());
+        d->labelVideoFrameRate->setText(QString());
+        d->labelVideoVideoCodec->setText(QString());
 
         setEnabled(false);
         return;
@@ -578,14 +577,13 @@ void CameraItemPropertiesTab::setCurrentItem(const CamItemInfo& itemInfo, const 
         widget(2)->show();
     }
 
-    d->labelVideo_AspectRatio->setText(videoInfo.aspectRatio.isEmpty() ? unavailable : videoInfo.aspectRatio);
-    d->labelVideo_AudioBitRate->setText(videoInfo.audioBitRate.isEmpty() ? unavailable : videoInfo.audioBitRate);
-    d->labelVideo_AudioChannelType->setText(videoInfo.audioChannelType.isEmpty() ? unavailable : videoInfo.audioChannelType);
-    d->labelVideo_AudioCompressor->setText(videoInfo.audioCompressor.isEmpty() ? unavailable : videoInfo.audioCompressor);
-    d->labelVideo_Duration->setText(videoInfo.duration.isEmpty() ? unavailable : videoInfo.duration);
-    d->labelVideo_FrameRate->setText(videoInfo.frameRate.isEmpty() ? unavailable : videoInfo.frameRate);
-    d->labelVideo_VideoCodec->setText(videoInfo.videoCodec.isEmpty() ? unavailable : videoInfo.videoCodec);
-
+    d->labelVideoAspectRatio->setText(videoInfo.aspectRatio.isEmpty()           ? unavailable : videoInfo.aspectRatio);
+    d->labelVideoAudioBitRate->setText(videoInfo.audioBitRate.isEmpty()         ? unavailable : videoInfo.audioBitRate);
+    d->labelVideoAudioChannelType->setText(videoInfo.audioChannelType.isEmpty() ? unavailable : videoInfo.audioChannelType);
+    d->labelVideoAudioCompressor->setText(videoInfo.audioCompressor.isEmpty()   ? unavailable : videoInfo.audioCompressor);
+    d->labelVideoDuration->setText(videoInfo.duration.isEmpty()                 ? unavailable : videoInfo.duration);
+    d->labelVideoFrameRate->setText(videoInfo.frameRate.isEmpty()               ? unavailable : videoInfo.frameRate);
+    d->labelVideoVideoCodec->setText(videoInfo.videoCodec.isEmpty()             ? unavailable : videoInfo.videoCodec);
 }
 
 }  // namespace Digikam
