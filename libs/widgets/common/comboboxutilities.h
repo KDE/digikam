@@ -6,7 +6,7 @@
  * Date        : 2008-03-14
  * Description : User interface for searches
  *
- * Copyright (C) 2008-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2008-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -59,12 +59,16 @@ public:
      * Use this class if you need to pass a QLineEdit but
      * want actually to use a different widget.
      */
-    ProxyLineEdit(QWidget* parent = 0);
+    ProxyLineEdit(QWidget* const parent = 0);
 
     /// After constructing, set the actual widget here
     virtual void setWidget(QWidget* widget);
 
 protected:
+
+
+    QSize minimumSizeHint() const;
+    QSize sizeHint()        const;
 
     virtual void mousePressEvent(QMouseEvent* event);
     virtual void mouseMoveEvent(QMouseEvent* event);
@@ -81,9 +85,6 @@ protected:
     virtual void changeEvent(QEvent* event);
     virtual void contextMenuEvent(QContextMenuEvent* event);
     virtual void inputMethodEvent(QInputMethodEvent* event);
-
-    QSize minimumSizeHint() const;
-    QSize sizeHint()        const;
 
 protected:
 
@@ -105,8 +106,7 @@ public:
      * Press on the held widget will result in the signal
      * if the widget does not accept() them.
      */
-
-    ProxyClickLineEdit(QWidget* parent = 0);
+    ProxyClickLineEdit(QWidget* const parent = 0);
 
 Q_SIGNALS:
 
@@ -129,14 +129,13 @@ public:
      * This class is a combo box that stores a current index
      * based on QModelIndex.
      */
-
-    ModelIndexBasedComboBox(QWidget* parent = 0);
-
-    virtual void hidePopup();
-    virtual void showPopup();
+    ModelIndexBasedComboBox(QWidget* const  parent = 0);
 
     QModelIndex currentIndex() const;
     void setCurrentIndex(const QModelIndex& index);
+
+    virtual void hidePopup();
+    virtual void showPopup();
 
 protected:
 
@@ -161,9 +160,15 @@ public:
      *  QAbstractItemModel, then call installView() to replace
      *  the standard combo box view with a view.
      */
-    StayPoppedUpComboBox(QWidget* parent = 0);
+    StayPoppedUpComboBox(QWidget* const parent = 0);
 
 protected:
+
+    /** Replace the standard combo box list view with the given view.
+     *  The view will be set as the view of the combo box
+     *  (including re-parenting) and be stored in the m_view variable.
+     */
+    void installView(QAbstractItemView* view);
 
     /** Implement in subclass:
      *  Send the given event to the viewportEvent() method of m_view.
@@ -173,11 +178,6 @@ protected:
      *  reimplement sendViewportEventToView.
      */
     virtual void sendViewportEventToView(QEvent* e) = 0;
-
-    /** Replace the standard combo box list view with the given view.
-     *  The view will be set as the view of the combo box
-     *  (including re-parenting) and be stored in the m_view variable */
-    void installView(QAbstractItemView* view);
 
     virtual bool eventFilter(QObject* watched, QEvent* event);
 
@@ -232,12 +232,14 @@ public:
      */
     ListViewComboBox(QWidget* parent = 0);
 
-    /** Replace the standard combo box list view with a QTreeView.
-     *  Call this after installing an appropriate model. */
-    virtual void installView(QAbstractItemView* view = 0);
-
-    /** Returns the QTreeView of this class. Valid after installView() has been called */
+    /** Returns the QTreeView of this class. Valid after installView() has been called.
+     */
     QListView* view() const;
+
+    /** Replace the standard combo box list view with a QTreeView.
+     *  Call this after installing an appropriate model.
+     */
+    virtual void installView(QAbstractItemView* view = 0);
 
 protected:
 
@@ -259,11 +261,8 @@ public:
      *  QAbstractItemModel, then call installView() to replace
      *  the standard combo box view with a QTreeView.
      */
-    TreeViewLineEditComboBox(QWidget* parent = 0);
+    TreeViewLineEditComboBox(QWidget* const parent = 0);
 
-    /** Replace the standard combo box list view with a QTreeView.
-     *  Call this after installing an appropriate model. */
-    virtual void installView(QAbstractItemView* view = 0);
 
     /** Set the text of the line edit (the text that is visible
      *  if the popup is not opened).
@@ -272,6 +271,11 @@ public:
     void setLineEditText(const QString& text);
 
     void setLineEdit(QLineEdit* edit);
+
+    /** Replace the standard combo box list view with a QTreeView.
+     *  Call this after installing an appropriate model.
+     */
+    virtual void installView(QAbstractItemView* view = 0);
 
 protected:
 

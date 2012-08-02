@@ -6,7 +6,7 @@
  * Date        : 2008-03-14
  * Description : User interface for searches
  *
- * Copyright (C) 2008-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2008-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -43,7 +43,7 @@
 namespace Digikam
 {
 
-ProxyLineEdit::ProxyLineEdit(QWidget* parent)
+ProxyLineEdit::ProxyLineEdit(QWidget* const parent)
     : KLineEdit(parent),
       m_widget(0)
 {
@@ -162,7 +162,7 @@ QSize ProxyLineEdit::sizeHint() const
 
 // -------------------------------------------------------------------------
 
-ProxyClickLineEdit::ProxyClickLineEdit(QWidget* parent)
+ProxyClickLineEdit::ProxyClickLineEdit(QWidget* const parent)
     : ProxyLineEdit(parent)
 {
 }
@@ -180,7 +180,7 @@ void ProxyClickLineEdit::mouseReleaseEvent(QMouseEvent* event)
 
 // -------------------------------------------------------------------------
 
-ModelIndexBasedComboBox::ModelIndexBasedComboBox(QWidget* parent)
+ModelIndexBasedComboBox::ModelIndexBasedComboBox(QWidget* const parent)
     : KComboBox(parent)
 {
 }
@@ -214,7 +214,7 @@ void ModelIndexBasedComboBox::setCurrentIndex(const QModelIndex& index)
 
 // -------------------------------------------------------------------------
 
-StayPoppedUpComboBox::StayPoppedUpComboBox(QWidget* parent)
+StayPoppedUpComboBox::StayPoppedUpComboBox(QWidget* const parent)
     : ModelIndexBasedComboBox(parent)
 {
     m_view = 0;
@@ -281,7 +281,7 @@ bool StayPoppedUpComboBox::eventFilter(QObject* o, QEvent* e)
                 {
                     // for whatever reason, the position of the event is slightly wrong
                     QContextMenuEvent* m = static_cast<QContextMenuEvent*>(e);
-                    QPoint correctPos = m_view->viewport()->mapFromGlobal(m->globalPos());
+                    QPoint correctPos    = m_view->viewport()->mapFromGlobal(m->globalPos());
                     QContextMenuEvent corrected(m->reason(), correctPos, m->globalPos(), m->modifiers());
                     sendViewportEventToView(&corrected);
                     return true;
@@ -304,7 +304,10 @@ public:
 
     // Needed to make viewportEvent() public
 
-    TreeViewComboBoxTreeView() : QTreeView() {}
+    TreeViewComboBoxTreeView()
+        : QTreeView()
+    {
+    }
 
     virtual bool viewportEvent(QEvent* event)
     {
@@ -312,7 +315,7 @@ public:
     }
 };
 
-TreeViewComboBox::TreeViewComboBox(QWidget* parent)
+TreeViewComboBox::TreeViewComboBox(QWidget* const parent)
     : StayPoppedUpComboBox(parent)
 {
 }
@@ -341,7 +344,10 @@ public:
 
     // Needed to make viewportEvent() public
 
-    ListViewComboBoxListView() : QListView() {}
+    ListViewComboBoxListView()
+        : QListView()
+    {
+    }
 
     virtual bool viewportEvent(QEvent* event)
     {
@@ -349,7 +355,7 @@ public:
     }
 };
 
-ListViewComboBox::ListViewComboBox(QWidget* parent)
+ListViewComboBox::ListViewComboBox(QWidget* const parent)
     : StayPoppedUpComboBox(parent)
 {
 }
@@ -357,7 +363,8 @@ ListViewComboBox::ListViewComboBox(QWidget* parent)
 void ListViewComboBox::installView(QAbstractItemView* view)
 {
     // parent does the heavy work
-    StayPoppedUpComboBox::installView(view ? view : new ListViewComboBoxListView);
+    StayPoppedUpComboBox::installView(view ? view
+                                           : new ListViewComboBoxListView);
 }
 
 void ListViewComboBox::sendViewportEventToView(QEvent* e)
@@ -379,7 +386,8 @@ public:
     // This line edit works like a weblink:
     // Readonly; A mouse press shows the popup; Cursor is the pointing hand.
 
-    TreeViewComboBoxLineEdit(KComboBox* box) : KLineEdit(box)
+    TreeViewComboBoxLineEdit(KComboBox* const box)
+        : KLineEdit(box)
     {
         m_box = box;
         setReadOnly(true);
@@ -397,10 +405,12 @@ public:
         m_box->showPopup();
     }
 
+public:
+
     KComboBox* m_box;
 };
 
-TreeViewLineEditComboBox::TreeViewLineEditComboBox(QWidget* parent)
+TreeViewLineEditComboBox::TreeViewLineEditComboBox(QWidget* const parent)
     : TreeViewComboBox(parent),
       m_comboLineEdit(0)
 {
