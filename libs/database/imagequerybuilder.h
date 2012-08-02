@@ -56,7 +56,7 @@ public:
 
     /** Called by ImageQueryBuilder. Ownership of the object is passed.
      */
-    void addHook(ImageQueryPostHook* hook);
+    void addHook(ImageQueryPostHook* const hook);
 
 protected:
 
@@ -71,9 +71,9 @@ public:
 
     ImageQueryBuilder();
 
-    QString buildQuery(const QString& q, QList<QVariant>* boundValues, ImageQueryPostHooks* hooks) const;
+    QString buildQuery(const QString& q, QList<QVariant>* boundValues, ImageQueryPostHooks* const hooks) const;
     QString buildQueryFromUrl(const KUrl& url, QList<QVariant>* boundValues) const;
-    QString buildQueryFromXml(const QString& xml, QList<QVariant>* boundValues, ImageQueryPostHooks* hooks) const;
+    QString buildQueryFromXml(const QString& xml, QList<QVariant>* boundValues, ImageQueryPostHooks* const hooks) const;
     QString convertFromUrlToXml(const KUrl& url) const;
 
     /**
@@ -82,20 +82,20 @@ public:
      */
     void setImageTagPropertiesJoined(bool isJoined);
 
-protected:
-
-    void buildGroup(QString& sql, SearchXmlCachingReader& reader,
-                    QList<QVariant>* boundValues, ImageQueryPostHooks* hooks) const;
-    bool buildField(QString& sql, SearchXmlCachingReader& reader, const QString& name,
-                    QList<QVariant>* boundValues, ImageQueryPostHooks* hooks) const;
-
-    QString possibleDate(const QString& str, bool& exact) const;
-
 public:
 
     static void addSqlOperator(QString& sql, SearchXml::Operator op, bool isFirst);
     static void addSqlRelation(QString& sql, SearchXml::Relation rel);
     static void addNoEffectContent(QString& sql, SearchXml::Operator op);
+
+protected:
+
+    void buildGroup(QString& sql, SearchXmlCachingReader& reader,
+                    QList<QVariant>* boundValues, ImageQueryPostHooks* const hooks) const;
+    bool buildField(QString& sql, SearchXmlCachingReader& reader, const QString& name,
+                    QList<QVariant>* boundValues, ImageQueryPostHooks* const hooks) const;
+
+    QString possibleDate(const QString& str, bool& exact) const;
 
 protected:
 

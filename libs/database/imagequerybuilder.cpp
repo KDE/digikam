@@ -61,7 +61,10 @@ class ImageQueryPostHook
 public:
 
     // This is the single hook, ImageQueryPostHookS is the container
-    virtual ~ImageQueryPostHook() {};
+    virtual ~ImageQueryPostHook()
+    {
+    };
+
     virtual bool checkPosition(double /*latitudeNumber*/, double /*longitudeNumber*/)
     {
         return true;
@@ -76,7 +79,7 @@ ImageQueryPostHooks::~ImageQueryPostHooks()
     }
 }
 
-void ImageQueryPostHooks::addHook(ImageQueryPostHook* hook)
+void ImageQueryPostHooks::addHook(ImageQueryPostHook* const hook)
 {
     m_postHooks << hook;
 }
@@ -114,7 +117,7 @@ void ImageQueryBuilder::setImageTagPropertiesJoined(bool isJoined)
     m_imageTagPropertiesJoined = isJoined;
 }
 
-QString ImageQueryBuilder::buildQuery(const QString& q, QList<QVariant> *boundValues, ImageQueryPostHooks* hooks) const
+QString ImageQueryBuilder::buildQuery(const QString& q, QList<QVariant> *boundValues, ImageQueryPostHooks* const hooks) const
 {
     // Handle legacy query descriptions
     if (q.startsWith(QLatin1String("digikamsearch:")))
@@ -127,7 +130,7 @@ QString ImageQueryBuilder::buildQuery(const QString& q, QList<QVariant> *boundVa
     }
 }
 
-QString ImageQueryBuilder::buildQueryFromXml(const QString& xml, QList<QVariant> *boundValues, ImageQueryPostHooks* hooks) const
+QString ImageQueryBuilder::buildQueryFromXml(const QString& xml, QList<QVariant> *boundValues, ImageQueryPostHooks* const hooks) const
 {
     SearchXmlCachingReader reader(xml);
     QString                sql;
@@ -156,11 +159,12 @@ QString ImageQueryBuilder::buildQueryFromXml(const QString& xml, QList<QVariant>
     }
 
     kDebug() << sql;
+
     return sql;
 }
 
 void ImageQueryBuilder::buildGroup(QString& sql, SearchXmlCachingReader& reader,
-                                   QList<QVariant> *boundValues, ImageQueryPostHooks* hooks) const
+                                   QList<QVariant> *boundValues, ImageQueryPostHooks* const hooks) const
 {
     sql += " (";
 
@@ -194,7 +198,7 @@ void ImageQueryBuilder::buildGroup(QString& sql, SearchXmlCachingReader& reader,
 
         if (reader.isFieldElement())
         {
-            hasContent = true;
+            hasContent                        = true;
             SearchXml::Operator fieldOperator = reader.fieldOperator();
             addSqlOperator(sql, fieldOperator, firstField);
 
@@ -225,8 +229,12 @@ class FieldQueryBuilder
 public:
 
     FieldQueryBuilder(QString& sql, SearchXmlCachingReader& reader,
-                      QList<QVariant>* boundValues, ImageQueryPostHooks* hooks, SearchXml::Relation relation)
-        : sql(sql), reader(reader), boundValues(boundValues), hooks(hooks), relation(relation)
+                      QList<QVariant>* boundValues, ImageQueryPostHooks* const hooks, SearchXml::Relation relation)
+        : sql(sql),
+          reader(reader),
+          boundValues(boundValues),
+          hooks(hooks),
+          relation(relation)
     {
     }
 
@@ -337,7 +345,7 @@ public:
 
             QDateTime startDate, endDate;
 
-            if (date.time() == QTime(0,0,0,0))
+            if (date.time() == QTime(0, 0, 0, 0))
             {
                 // day precision
                 QDate startDate, endDate;
@@ -594,10 +602,10 @@ public:
         if (relation == SearchXml::Near)
         {
             // First read attributes
-            QStringRef type = reader.attributes().value("type");
+            QStringRef type           = reader.attributes().value("type");
             QStringRef distanceString = reader.attributes().value("distance");
             // Distance in meters
-            double distance = 100;
+            double distance           = 100;
 
             if (!distanceString.isEmpty())
             {
@@ -700,6 +708,7 @@ public:
                         double dlat = lat2 - lat1;
                         double a    = pow(sin(dlat/2), 2) + cosLat1 * cos(lat2) * pow(sin(dlon/2),2);
                         double c    = 2 * asin(qMin(1.0, sqrt(a)));
+
                         return (c < distanceInRadians);
                     }
 
@@ -777,7 +786,7 @@ public:
 // ----------------------------------------------------------------------------------------------------
 
 bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader, const QString& name,
-                                   QList<QVariant>* boundValues, ImageQueryPostHooks* hooks) const
+                                   QList<QVariant>* boundValues, ImageQueryPostHooks* const hooks) const
 {
     SearchXml::Relation relation = reader.fieldRelation();
     FieldQueryBuilder fieldQuery(sql, reader, boundValues, hooks, relation);
@@ -1596,12 +1605,12 @@ class SubQueryBuilder
 public:
 
     QString build(enum SKey key, enum SOperator op,
-                  const QString& passedVal, QList<QVariant> *boundValues) const;
+                  const QString& passedVal, QList<QVariant>* boundValues) const;
 };
 
 // -------------------------------------------------------------------------
 
-QString ImageQueryBuilder::buildQueryFromUrl(const KUrl& url, QList<QVariant> *boundValues) const
+QString ImageQueryBuilder::buildQueryFromUrl(const KUrl& url, QList<QVariant>* boundValues) const
 {
     int count = url.queryItem("count").toInt();
 
@@ -1712,10 +1721,9 @@ QString ImageQueryBuilder::buildQueryFromUrl(const KUrl& url, QList<QVariant> *b
         rulesMap.insert(i, rule);
     }
 
-    QString sqlQuery;
+    QString         sqlQuery;
     SubQueryBuilder subQuery;
-
-    QStringList strList = url.path().split(' ', QString::SkipEmptyParts);
+    QStringList     strList = url.path().split(' ', QString::SkipEmptyParts);
 
     for ( QStringList::const_iterator it = strList.constBegin(); it != strList.constEnd(); ++it )
     {
@@ -1790,7 +1798,7 @@ QString ImageQueryBuilder::buildQueryFromUrl(const KUrl& url, QList<QVariant> *b
 }
 
 QString SubQueryBuilder::build(enum SKey key, enum SOperator op,
-                               const QString& passedVal, QList<QVariant> *boundValues) const
+                               const QString& passedVal, QList<QVariant>* boundValues) const
 {
     QString query;
     QString val = passedVal;
