@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="207" name="digikam" >
+<gui version="208" name="digikam" >
 
  <MenuBar>
 
@@ -192,7 +192,8 @@
   <Separator/>
   <Action name="slideshow" />
   <Action name="full_screen" />
-  <WeakSeparator/>
+  <Merge />
+  <WeakSeparator />
   <Action name="logo_action" />
  </ToolBar>
 
