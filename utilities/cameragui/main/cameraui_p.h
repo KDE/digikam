@@ -110,6 +110,11 @@ public:
         selectNoneAction(0),
         uploadAction(0),
         markAsDownloadedAction(0),
+        resumeAction(0),
+        pauseAction(0),
+        itemSortAction(0),
+        itemSortOrderAction(0),
+        itemsGroupAction(0),
         showMenuBarAction(0),
         showLogAction(0),
         helpMenu(0),
@@ -132,10 +137,7 @@ public:
         progressValue(0),
         historyView(0),
         filterComboBox(0),
-        about(0),
-        itemSortAction(0),
-        itemSortOrderAction(0),
-        itemsGroupAction(0)
+        about(0)
     {
     }
 
