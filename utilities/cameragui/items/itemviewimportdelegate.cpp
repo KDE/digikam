@@ -23,7 +23,6 @@
 
 #include "itemviewimportdelegate.moc"
 #include "itemviewimportdelegatepriv.h"
-#include "itemviewimportdelegate.h" //TODO: Remove this line.
 
 // Qt includes
 
@@ -51,6 +50,7 @@ namespace Digikam
 
 ItemViewImportDelegatePrivate::ItemViewImportDelegatePrivate()
 {
+    q             = 0;
     spacing       = 0;
     thumbSize     = 0;
 

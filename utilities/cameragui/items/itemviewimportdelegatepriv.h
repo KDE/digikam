@@ -52,9 +52,7 @@ class ItemViewImportDelegatePrivate
 public:
 
     ItemViewImportDelegatePrivate();
-    virtual ~ItemViewImportDelegatePrivate()
-    {
-    }
+    virtual ~ItemViewImportDelegatePrivate() {}
 
     void init(ItemViewImportDelegate* const _q);
 
