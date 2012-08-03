@@ -31,8 +31,8 @@
 
 // KDE includes
 
-#include <KLocale>
-#include <KMenu>
+#include <klocale.h>
+#include <kmenu.h>
 
 // Local includes
 
@@ -48,18 +48,20 @@
 namespace Digikam
 {
 
-ImportIconView::ImportIconView(QWidget* parent)
-    : ImportCategorizedView(parent), d(new ImportIconViewPriv(this))
+ImportIconView::ImportIconView(QWidget* const parent)
+    : ImportCategorizedView(parent), d(new Private(this))
 {
 }
 
-void ImportIconView::init(CameraController* controller)
+void ImportIconView::init(CameraController* const controller)
 {
     installDefaultModels(controller);
 
     d->normalDelegate = new ImportNormalDelegate(this);
+
     if(d->normalDelegate)
         setItemDelegate(d->normalDelegate);
+
     setSpacing(10);
 
     ImportSettings* settings = ImportSettings::instance();

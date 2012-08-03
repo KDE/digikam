@@ -39,10 +39,10 @@ class ImportIconView : public ImportCategorizedView
 
 public:
 
-    ImportIconView(QWidget* parent = 0);
+    ImportIconView(QWidget* const parent = 0);
     ~ImportIconView();
 
-    void init(CameraController* controller);
+    void init(CameraController* const controller);
 
     ImageViewUtilities* utilities() const;
 
@@ -67,19 +67,19 @@ Q_SIGNALS:
 
 protected:
 
+    void slotRotateLeft(const QList<QModelIndex>&);
+    void slotRotateRight(const QList<QModelIndex>&);
+    void slotInitProgressIndicator();
+
     virtual void activated(const CamItemInfo& info);
     virtual void showContextMenuOnInfo(QContextMenuEvent* event, const CamItemInfo& info);
     virtual void showContextMenu(QContextMenuEvent* event);
     virtual void slotSetupChanged();
 
-    void slotRotateLeft(const QList<QModelIndex>&);
-    void slotRotateRight(const QList<QModelIndex>&);
-    void slotInitProgressIndicator();
-
 private:
 
-    class ImportIconViewPriv;
-    ImportIconViewPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

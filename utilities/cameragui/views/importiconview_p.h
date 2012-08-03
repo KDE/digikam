@@ -39,15 +39,15 @@ namespace Digikam
 
 class ImportNormalDelegate;
 
-class ImportIconView::ImportIconViewPriv : public QObject
+class ImportIconView::Private : public QObject
 {
     Q_OBJECT
     Q_DECLARE_PUBLIC(ImportIconView)
 
 public:
 
-    ImportIconViewPriv(ImportIconView* const qq);
-    virtual ~ImportIconViewPriv();
+    Private(ImportIconView* const qq);
+    virtual ~Private();
 
     void updateOverlays();
     void triggerRotateAction(const char* actionName);

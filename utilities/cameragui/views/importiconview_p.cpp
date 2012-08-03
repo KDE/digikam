@@ -26,7 +26,7 @@
 namespace Digikam
 {
 
-ImportIconView::ImportIconViewPriv::ImportIconViewPriv(ImportIconView* const qq)
+ImportIconView::Private::Private(ImportIconView* const qq)
     : overlaysActive(false), q_ptr(qq)
 {
     //TODO: utilities          = 0;
@@ -35,11 +35,11 @@ ImportIconView::ImportIconViewPriv::ImportIconViewPriv(ImportIconView* const qq)
     normalDelegate     = 0;
 }
 
-ImportIconView::ImportIconViewPriv::~ImportIconViewPriv()
+ImportIconView::Private::~Private()
 {
 }
 
-void ImportIconView::ImportIconViewPriv::updateOverlays()
+void ImportIconView::Private::updateOverlays()
 {
     Q_Q(ImportIconView);
     Q_UNUSED(q); // To please compiler warnings.
