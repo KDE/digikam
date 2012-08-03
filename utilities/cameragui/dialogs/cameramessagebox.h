@@ -46,7 +46,7 @@ class CameraItem : public QTreeWidgetItem
 
 public:
 
-    CameraItem(QTreeWidget* parent, const CamItemInfo& info);
+    CameraItem(QTreeWidget* const parent, const CamItemInfo& info);
     virtual ~CameraItem();
 
     bool hasValidThumbnail() const;
@@ -56,8 +56,8 @@ public:
 
 private:
 
-    class CameraItemPriv;
-    CameraItemPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 // -----------------------------------------------------------
@@ -68,10 +68,10 @@ class CameraItemList : public QTreeWidget
 
 public:
 
-    CameraItemList(QWidget* parent = 0);
+    CameraItemList(QWidget* const parent = 0);
     virtual ~CameraItemList();
 
-    void setThumbCtrl(CameraThumbsCtrl* ctrl);
+    void setThumbCtrl(CameraThumbsCtrl* const ctrl);
     void setItems(const CamItemInfoList& items);
 
 private :
@@ -84,8 +84,8 @@ private Q_SLOTS:
 
 private:
 
-    class CameraItemListPriv;
-    CameraItemListPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 // -----------------------------------------------------------
@@ -95,15 +95,15 @@ class CameraMessageBox
 
 public:
 
-    static void informationList(CameraThumbsCtrl* ctrl,
-                                QWidget* parent,
+    static void informationList(CameraThumbsCtrl* const ctrl,
+                                QWidget* const parent,
                                 const QString& text,
                                 const CamItemInfoList& items,
                                 const QString& caption = QString(),
                                 const QString& dontShowAgainName = QString());
 
-    static int warningContinueCancelList(CameraThumbsCtrl* ctrl,
-                                         QWidget* parent,
+    static int warningContinueCancelList(CameraThumbsCtrl* const ctrl,
+                                         QWidget* const parent,
                                          const QString& text,
                                          const CamItemInfoList& items,
                                          const QString& caption = QString(),
@@ -113,8 +113,8 @@ public:
 
 private:
 
-    static int createMessageBox(CameraThumbsCtrl* ctrl,
-                                KDialog* dialog,
+    static int createMessageBox(CameraThumbsCtrl* const ctrl,
+                                KDialog* const dialog,
                                 const QIcon& icon,
                                 const QString& text,
                                 const CamItemInfoList& items,

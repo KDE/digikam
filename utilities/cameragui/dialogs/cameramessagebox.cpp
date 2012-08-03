@@ -47,12 +47,12 @@
 namespace Digikam
 {
 
-class CameraItem::CameraItemPriv
+class CameraItem::Private
 {
 
 public:
 
-    CameraItemPriv()
+    Private()
     {
         hasThumb = false;
     }
@@ -62,8 +62,8 @@ public:
     CamItemInfo info;
 };
 
-CameraItem::CameraItem(QTreeWidget* parent, const CamItemInfo& info)
-    : QTreeWidgetItem(parent), d(new CameraItemPriv)
+CameraItem::CameraItem(QTreeWidget* const parent, const CamItemInfo& info)
+    : QTreeWidgetItem(parent), d(new Private)
 {
     d->info = info;
     setThumb(SmallIcon("image-x-generic", parent->iconSize().width(), KIconLoader::DisabledState), false);
@@ -109,12 +109,12 @@ void CameraItem::setThumb(const QPixmap& pix, bool hasThumb)
 
 //----------------------------------------------------------------------------
 
-class CameraItemList::CameraItemListPriv
+class CameraItemList::Private
 {
 
 public:
 
-    CameraItemListPriv()
+    Private()
         : iconSize(64)
     {
         ctrl = 0;
@@ -125,8 +125,8 @@ public:
     CameraThumbsCtrl* ctrl;
 };
 
-CameraItemList::CameraItemList(QWidget* parent)
-    : QTreeWidget(parent), d(new CameraItemListPriv)
+CameraItemList::CameraItemList(QWidget* const parent)
+    : QTreeWidget(parent), d(new Private)
 {
     setRootIsDecorated(false);
     setSelectionMode(QAbstractItemView::SingleSelection);
@@ -152,7 +152,7 @@ void CameraItemList::setItems(const CamItemInfoList& items)
     }
 }
 
-void CameraItemList::setThumbCtrl(CameraThumbsCtrl* ctrl)
+void CameraItemList::setThumbCtrl(CameraThumbsCtrl* const ctrl)
 {
     d->ctrl = ctrl;
 
@@ -200,8 +200,8 @@ void CameraItemList::drawRow(QPainter* p, const QStyleOptionViewItem& opt, const
 /** These methods are simplified version from KMessageBox class implementation
  */
 
-void CameraMessageBox::informationList(CameraThumbsCtrl* ctrl,
-                                       QWidget* parent,
+void CameraMessageBox::informationList(CameraThumbsCtrl* const ctrl,
+                                       QWidget* const parent,
                                        const QString& text,
                                        const CamItemInfoList& items,
                                        const QString& caption,
@@ -234,8 +234,8 @@ void CameraMessageBox::informationList(CameraThumbsCtrl* ctrl,
     }
 }
 
-int CameraMessageBox::warningContinueCancelList(CameraThumbsCtrl* ctrl,
-                                                QWidget* parent,
+int CameraMessageBox::warningContinueCancelList(CameraThumbsCtrl* const ctrl,
+                                                QWidget* const parent,
                                                 const QString& text,
                                                 const CamItemInfoList& items,
                                                 const QString& caption,
@@ -278,8 +278,8 @@ int CameraMessageBox::warningContinueCancelList(CameraThumbsCtrl* ctrl,
     return KMessageBox::Continue;
 }
 
-int CameraMessageBox::createMessageBox(CameraThumbsCtrl* ctrl,
-                                       KDialog* dialog,
+int CameraMessageBox::createMessageBox(CameraThumbsCtrl* const ctrl,
+                                       KDialog* const dialog,
                                        const QIcon& icon,
                                        const QString& text,
                                        const CamItemInfoList& items,
