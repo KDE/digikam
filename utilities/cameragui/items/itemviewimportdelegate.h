@@ -50,8 +50,8 @@ public:
     ~ItemViewImportDelegate();
 
     ThumbnailSize thumbnailSize() const;
-    int spacing() const;
-    QRect rect() const;
+    int           spacing() const;
+    QRect         rect() const;
 
     virtual QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const;
     virtual QSize gridSize() const;
@@ -117,7 +117,7 @@ protected:
 protected:
 
     ItemViewImportDelegatePrivate* const d_ptr;
-    ItemViewImportDelegate(ItemViewImportDelegatePrivate& dd, QObject* parent);
+    ItemViewImportDelegate(ItemViewImportDelegatePrivate& dd, QObject* const parent);
 
 private:
 

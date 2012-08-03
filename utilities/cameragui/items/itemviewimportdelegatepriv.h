@@ -52,9 +52,11 @@ class ItemViewImportDelegatePrivate
 public:
 
     ItemViewImportDelegatePrivate();
-    virtual ~ItemViewImportDelegatePrivate() {}
+    virtual ~ItemViewImportDelegatePrivate()
+    {
+    }
 
-    void init(ItemViewImportDelegate* _q);
+    void init(ItemViewImportDelegate* const _q);
 
     void makeStarPolygon();
 
@@ -85,11 +87,12 @@ public:
 
     QPersistentModelIndex     editingRating;
 
-    ItemViewImportDelegate*    q;
+    ItemViewImportDelegate*   q;
 
     QRect                     oneRowRegRect;
     QRect                     oneRowComRect;
     QRect                     oneRowXtraRect;
+
     // constant values for drawing
     int                       radius;
     int                       margin;

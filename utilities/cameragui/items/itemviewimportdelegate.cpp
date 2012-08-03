@@ -103,7 +103,7 @@ ItemViewImportDelegate::ItemViewImportDelegate(QObject* const parent)
     d_ptr->init(this);
 }
 
-ItemViewImportDelegate::ItemViewImportDelegate(ItemViewImportDelegatePrivate& dd, QObject* parent)
+ItemViewImportDelegate::ItemViewImportDelegate(ItemViewImportDelegatePrivate& dd, QObject* const parent)
     : DItemDelegate(parent), d_ptr(&dd)
 {
     d_ptr->init(this);
@@ -389,6 +389,7 @@ void ItemViewImportDelegate::drawGroupIndicator(QPainter* p, const QRect& r,
     if (numberOfGroupedImages)
     {
         QIcon icon;
+
         if (open)
         {
             icon = KIconLoader::global()->loadIcon("document-import", KIconLoader::NoGroup, r.width());
@@ -397,6 +398,7 @@ void ItemViewImportDelegate::drawGroupIndicator(QPainter* p, const QRect& r,
         {
             icon = KIconLoader::global()->loadIcon("document-multiple", KIconLoader::NoGroup, r.width());
         }
+
         qreal op = p->opacity();
         p->setOpacity(0.5);
         icon.paint(p, r);
