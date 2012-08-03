@@ -44,13 +44,13 @@ class ImportCategorizedView : public DCategorizedView
 
 public:
 
-    ImportCategorizedView(QWidget* parent = 0);
+    ImportCategorizedView(QWidget* const parent = 0);
     ~ImportCategorizedView();
 
     void setModels(ImportImageModel* model, ImportSortFilterModel* filterModel);
 
     ImportImageModel*      importImageModel()                 const;
-    ImportSortFilterModel* importSortFilterModel()             const;
+    ImportSortFilterModel* importSortFilterModel()            const;
 
     QItemSelectionModel*   getSelectionModel()                const;
 
@@ -92,10 +92,6 @@ public:
         return nextInOrder(info, 1);
     }
 
-    ThumbnailSize thumbnailSize() const;
-
-    virtual void setThumbnailSize(const ThumbnailSize& size);
-
     /// Add and remove an overlay. It will as well be removed automatically when destroyed.
     /// Unless you pass a different delegate, the current delegate will be used.
     void addOverlay(ImageDelegateOverlay* overlay, ImportDelegate* delegate = 0);
@@ -103,6 +99,10 @@ public:
     void removeOverlay(ImageDelegateOverlay* overlay);
 
     void addSelectionOverlay(ImportDelegate* delegate = 0);
+
+    ThumbnailSize thumbnailSize() const;
+
+    virtual void setThumbnailSize(const ThumbnailSize& size);
 
 public Q_SLOTS:
 
@@ -151,12 +151,7 @@ protected Q_SLOTS:
 protected:
 
     /// install default ImportModel and filter model, ready for use
-    void installDefaultModels(CameraController* controller);
-
-    /// Reimplement these in a subclass
-    virtual void activated(const CamItemInfo& info);
-    virtual void showContextMenuOnInfo(QContextMenuEvent* event, const CamItemInfo& info);
-    virtual void showContextMenuOnIndex(QContextMenuEvent* event, const QModelIndex& index);
+    void installDefaultModels(CameraController* const controller);
 
     // reimplemented from parent class
     QSortFilterProxyModel*       filterModel()     const;
@@ -170,6 +165,11 @@ protected:
     void selectionChanged(const QItemSelection&, const QItemSelection&);
     void updateGeometries();
 
+    /// Reimplement these in a subclass
+    virtual void activated(const CamItemInfo& info);
+    virtual void showContextMenuOnInfo(QContextMenuEvent* event, const CamItemInfo& info);
+    virtual void showContextMenuOnIndex(QContextMenuEvent* event, const QModelIndex& index);
+
 private Q_SLOTS:
 
     void slotFileChanged(const QString& filePath);
@@ -181,8 +181,8 @@ private:
 
 private:
 
-    class ImportCategorizedViewPriv;
-    ImportCategorizedViewPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

@@ -47,7 +47,7 @@ class ImportItemViewToolTip : public ItemViewToolTip
 {
 public:
 
-    ImportItemViewToolTip(ImportCategorizedView* view)
+    ImportItemViewToolTip(ImportCategorizedView* const view)
         : ItemViewToolTip(view)
     {
     }
@@ -66,11 +66,11 @@ protected:
     }
 };
 
-class ImportCategorizedView::ImportCategorizedViewPriv
+class ImportCategorizedView::Private
 {
 public:
 
-    ImportCategorizedViewPriv() :
+    Private() :
         model(0),
         filterModel(0),
         delegate(0),
@@ -94,8 +94,8 @@ public:
     QMouseEvent*           currentMouseEvent;
 };
 
-ImportCategorizedView::ImportCategorizedView(QWidget* parent)
-    : DCategorizedView(parent), d(new ImportCategorizedViewPriv)
+ImportCategorizedView::ImportCategorizedView(QWidget* const parent)
+    : DCategorizedView(parent), d(new Private)
 {
     setToolTip(new ImportItemViewToolTip(this));
 
@@ -117,7 +117,7 @@ ImportCategorizedView::~ImportCategorizedView()
 }
 
 //FIXME: Needs testing
-void ImportCategorizedView::installDefaultModels(CameraController* controller)
+void ImportCategorizedView::installDefaultModels(CameraController* const controller)
 {
     ImportModel* model             = new ImportModel(this);
     model->setupCameraController(controller);
@@ -217,6 +217,7 @@ void ImportCategorizedView::setItemDelegate(ImportDelegate* delegate)
         hideIndexNotification();
         d->delegate->setAllOverlaysActive(false);
         d->delegate->setViewOnAllOverlays(0);
+
         // Note: Be precise, no wildcard disconnect!
         disconnect(d->delegate, SIGNAL(requestNotification(QModelIndex,QString)),
                    this, SLOT(showIndexNotification(QModelIndex,QString)));
