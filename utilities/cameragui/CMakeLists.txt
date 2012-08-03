@@ -43,11 +43,11 @@ SET(libcameragui_SRCS
     #${CMAKE_CURRENT_SOURCE_DIR}/controller/camerathumbsctrl.cpp
 
     #${CMAKE_CURRENT_SOURCE_DIR}/items/camerafolderitem.cpp
-    #${CMAKE_CURRENT_SOURCE_DIR}/items/cameraiconitem.cpp
     #${CMAKE_CURRENT_SOURCE_DIR}/views/camerafolderview.cpp
-    #${CMAKE_CURRENT_SOURCE_DIR}/views/cameraiconview.cpp
-    #${CMAKE_CURRENT_SOURCE_DIR}/views/cameraiconviewtooltip.cpp
 
+    #${CMAKE_CURRENT_SOURCE_DIR}/q3support/cameraiconview.cpp
+    #${CMAKE_CURRENT_SOURCE_DIR}/q3support/cameraiconviewtooltip.cpp
+    #${CMAKE_CURRENT_SOURCE_DIR}/q3support/cameraiconitem.cpp
     #${CMAKE_CURRENT_SOURCE_DIR}/q3support/icongroupitem.cpp
     #${CMAKE_CURRENT_SOURCE_DIR}/q3support/iconitem.cpp
     #${CMAKE_CURRENT_SOURCE_DIR}/q3support/iconview.cpp
