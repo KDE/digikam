@@ -54,7 +54,9 @@ public:
         MapWidgetMode
     };
 
-    ImportStackedView(CameraController* controller, QWidget* parent = 0);
+public:
+
+    ImportStackedView(CameraController* const controller, QWidget* const parent = 0);
     ~ImportStackedView();
 
     /*FIXME: Attach the thumbnail dock widget to the specified QMainWindow. */
@@ -121,15 +123,15 @@ private Q_SLOTS:
 private:
 
     void readSettings();
-    void syncSelection(ImportCategorizedView* from, ImportCategorizedView* to);
+    void syncSelection(ImportCategorizedView* const from, ImportCategorizedView* const to);
 
     /// Used to return the category for a specified camera item.
-    QString identifyCategoryforMime(QString mime);
+    QString identifyCategoryforMime(const QString& mime) const;
 
 private:
 
-    class ImportStackedViewPriv;
-    ImportStackedViewPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

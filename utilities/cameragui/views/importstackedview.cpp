@@ -23,7 +23,6 @@
  * ============================================================ */
 
 #include "importstackedview.moc"
-#include "importstackedview.h" //TOOD: Remove this line
 
 // Qt includes
 
@@ -37,12 +36,12 @@
 namespace Digikam
 {
 
-class ImportStackedView::ImportStackedViewPriv
+class ImportStackedView::Private
 {
 
 public:
 
-    ImportStackedViewPriv()
+    Private()
     {
         dockArea            = 0;
         splitter            = 0;
@@ -68,8 +67,8 @@ public:
     //FIXME: MapWidgetView*     mapWidgetView;
 };
 
-ImportStackedView::ImportStackedView(CameraController* controller, QWidget* parent)
-    : QStackedWidget(parent), d(new ImportStackedViewPriv)
+ImportStackedView::ImportStackedView(CameraController* const controller, QWidget* const parent)
+    : QStackedWidget(parent), d(new Private)
 {
     d->importIconView    = new ImportIconView(this);
     //d->importPreviewView = new ImportPreviewView(this);
@@ -289,7 +288,7 @@ void ImportStackedView::setPreviewItem(const CamItemInfo& info, const CamItemInf
     }
 }
 
-QString ImportStackedView::identifyCategoryforMime(QString mime)
+QString ImportStackedView::identifyCategoryforMime(const QString& mime) const
 {
     return mime.split("/").at(0);
 }
@@ -342,17 +341,18 @@ void ImportStackedView::setPreviewMode(const int mode)
     emit signalViewModeChanged();
 }
 
-void ImportStackedView::syncSelection(ImportCategorizedView* from, ImportCategorizedView* to)
+void ImportStackedView::syncSelection(ImportCategorizedView* const from, ImportCategorizedView* const to)
 {
     ImportSortFilterModel* fromModel = from->importSortFilterModel();
-    ImportSortFilterModel* toModel = to->importSortFilterModel();
+    ImportSortFilterModel* toModel   = to->importSortFilterModel();
     // set current info
-    QModelIndex currentIndex = toModel->indexForCamItemInfo(from->currentInfo());
+    QModelIndex currentIndex         = toModel->indexForCamItemInfo(from->currentInfo());
     to->selectionModel()->setCurrentIndex(currentIndex, QItemSelectionModel::NoUpdate);
 
     // sync selection
-    QItemSelection selection = from->selectionModel()->selection();
+    QItemSelection selection         = from->selectionModel()->selection();
     QItemSelection newSelection;
+
     foreach(const QItemSelectionRange& range, selection)
     {
         QModelIndex topLeft = toModel->indexForCamItemInfo(fromModel->camItemInfo(range.topLeft()));
