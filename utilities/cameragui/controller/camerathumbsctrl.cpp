@@ -43,14 +43,16 @@
 namespace Digikam
 {
 
-class CameraThumbsCtrl::CameraThumbsCtrlPriv
+class CameraThumbsCtrl::Private
 {
 
 public:
 
-    CameraThumbsCtrlPriv()
-        : controller(0)
-    {}
+    Private()
+        : controller(0),
+          kdeJob(0)
+    {
+    }
 
     QCache<KUrl, CachedItem> cache;  // Camera info/thumb cache based on item url keys.
 
@@ -61,13 +63,12 @@ public:
     QList<CamItemInfo>       kdeTodo;
     QHash<KUrl, CamItemInfo> kdeJobHash;
     KIO::PreviewJob*         kdeJob;
-
 };
 
 // --------------------------------------------------------
 
-CameraThumbsCtrl::CameraThumbsCtrl(CameraController* ctrl, QObject* parent)
-    : QObject(parent), d(new CameraThumbsCtrlPriv)
+CameraThumbsCtrl::CameraThumbsCtrl(CameraController* const ctrl, QObject* const parent)
+    : QObject(parent), d(new Private)
 {
     d->controller = ctrl;
 

@@ -52,7 +52,7 @@ class CameraThumbsCtrl : public QObject
 
 public:
 
-    CameraThumbsCtrl(CameraController* ctrl, QObject* parent);
+    CameraThumbsCtrl(CameraController* const ctrl, QObject* const parent);
     ~CameraThumbsCtrl();
 
     /** fill item with relevant information.
@@ -94,8 +94,8 @@ private:
 
 private:
 
-    class CameraThumbsCtrlPriv;
-    CameraThumbsCtrlPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

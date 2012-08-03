@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2006-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -105,11 +105,11 @@ public:
     QMap<QString, QVariant> map;
 };
 
-class CameraController::CameraControllerPriv
+class CameraController::Private
 {
 public:
 
-    CameraControllerPriv() :
+    Private() :
         close(false),
         overwriteAll(false),
         skipAll(false),
@@ -145,7 +145,7 @@ public:
 CameraController::CameraController(QWidget* const parent,
                                    const QString& title, const QString& model,
                                    const QString& port, const QString& path)
-    : QThread(parent), d(new CameraControllerPriv)
+    : QThread(parent), d(new Private)
 {
     d->parent = parent;
 
