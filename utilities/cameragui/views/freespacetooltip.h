@@ -6,7 +6,7 @@
  * Date        : 2009-01-19
  * Description : free space widget tool tip
  *
- * Copyright (C) 2009-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -35,7 +35,7 @@ class FreeSpaceToolTip : public DItemToolTip
 {
 public:
 
-    FreeSpaceToolTip(QWidget* parent);
+    FreeSpaceToolTip(QWidget* const parent);
     virtual ~FreeSpaceToolTip();
 
     void setToolTip(const QString& tip);
@@ -49,8 +49,8 @@ protected:
 
 private:
 
-    class FreeSpaceToolTipPriv;
-    FreeSpaceToolTipPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam
