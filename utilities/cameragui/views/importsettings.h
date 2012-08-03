@@ -57,7 +57,7 @@ public:
 
     void emitSetupChanged();
 
-    bool showToolTipsIsValid()      const;
+    bool showToolTipsIsValid() const;
 
     void setShowThumbbar(bool val);
     bool getShowThumbbar() const;
@@ -159,10 +159,12 @@ private:
 
     void init();
 
-    friend class ImportSettingsCreator;
+private:
 
-    class ImportSettingsPrivate;
-    ImportSettingsPrivate* const d;
+    class Private;
+    Private* const d;
+
+    friend class ImportSettingsCreator;
 };
 
 } // namespace Digikam

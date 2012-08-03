@@ -25,8 +25,8 @@
 
 // KDE includes
 
-#include <KGlobal>
-#include <KGlobalSettings>
+#include <kglobal.h>
+#include <kglobalsettings.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
 
@@ -37,11 +37,11 @@
 
 namespace Digikam
 {
-class ImportSettings::ImportSettingsPrivate
+class ImportSettings::Private
 {
 
 public:
-    ImportSettingsPrivate() :
+    Private() :
         iconShowName(false),
         iconShowSize(false),
         iconShowDate(false),
@@ -158,43 +158,43 @@ public:
     KSharedConfigPtr                    config;
  };
 
-    const QString ImportSettings::ImportSettingsPrivate::configGroupDefault("Import Settings");
-    const QString ImportSettings::ImportSettingsPrivate::configImageSortOrderEntry("Image Sort Order");
-    const QString ImportSettings::ImportSettingsPrivate::configImageSortingEntry("Image Sorting");
-    const QString ImportSettings::ImportSettingsPrivate::configImageGroupModeEntry("Image Group Mode");
-    const QString ImportSettings::ImportSettingsPrivate::configItemLeftClickActionEntry("Item Left Click Action");
-    const QString ImportSettings::ImportSettingsPrivate::configDefaultIconSizeEntry("Default Icon Size");
-    //const QString ImportSettings::ImportSettingsPrivate::configRatingFilterConditionEntry("Rating Filter Condition");
-    const QString ImportSettings::ImportSettingsPrivate::configIconShowNameEntry("Icon Show Name");
-    //const QString ImportSettings::ImportSettingsPrivate::configIconShowResolutionEntry("Icon Show Resolution");
-    const QString ImportSettings::ImportSettingsPrivate::configIconShowSizeEntry("Icon Show Size");
-    const QString ImportSettings::ImportSettingsPrivate::configIconShowDateEntry("Icon Show Date");
-    const QString ImportSettings::ImportSettingsPrivate::configIconShowModificationDateEntry("Icon Show Modification Date");
-    const QString ImportSettings::ImportSettingsPrivate::configIconShowTitleEntry("Icon Show Title");
-    //const QString ImportSettings::ImportSettingsPrivate::configIconShowTagsEntry("Icon Show Tags");
-    //const QString ImportSettings::ImportSettingsPrivate::configIconShowRatingEntry("Icon Show Rating");
-    const QString ImportSettings::ImportSettingsPrivate::configIconShowImageFormatEntry("Icon Show Image Format");
-    //const QString ImportSettings::ImportSettingsPrivate::configIconShowOverlaysEntry("Icon Show Overlays");
-    const QString ImportSettings::ImportSettingsPrivate::configIconViewFontEntry("IconView Font");
-    const QString ImportSettings::ImportSettingsPrivate::configToolTipsFontEntry("ToolTips Font");
-    const QString ImportSettings::ImportSettingsPrivate::configShowToolTipsEntry("Show ToolTips");
-    const QString ImportSettings::ImportSettingsPrivate::configToolTipsShowFileNameEntry("ToolTips Show File Name");
-    const QString ImportSettings::ImportSettingsPrivate::configToolTipsShowFileDateEntry("ToolTips Show File Date");
-    const QString ImportSettings::ImportSettingsPrivate::configToolTipsShowFileSizeEntry("ToolTips Show File Size");
-    const QString ImportSettings::ImportSettingsPrivate::configToolTipsShowImageTypeEntry("ToolTips Show Image Type");
-    const QString ImportSettings::ImportSettingsPrivate::configToolTipsShowImageDimEntry("ToolTips Show Image Dim");
-    const QString ImportSettings::ImportSettingsPrivate::configToolTipsShowPhotoMakeEntry("ToolTips Show Photo Make");
-    const QString ImportSettings::ImportSettingsPrivate::configToolTipsShowPhotoDateEntry("ToolTips Show Photo Date");
-    const QString ImportSettings::ImportSettingsPrivate::configToolTipsShowPhotoFocalEntry("ToolTips Show Photo Focal");
-    const QString ImportSettings::ImportSettingsPrivate::configToolTipsShowPhotoExpoEntry("ToolTips Show Photo Expo");
-    const QString ImportSettings::ImportSettingsPrivate::configToolTipsShowPhotoFlashEntry("ToolTips Show Photo Flash");
-    const QString ImportSettings::ImportSettingsPrivate::configToolTipsShowPhotoWBEntry("ToolTips Show Photo WB");
-    const QString ImportSettings::ImportSettingsPrivate::configToolTipsShowFolderNameEntry("ToolTips Show Folder Name");
-    //const QString ImportSettings::ImportSettingsPrivate::configToolTipsShowTagsEntry("ToolTips Show Tags");
-    //const QString ImportSettings::ImportSettingsPrivate::configToolTipsShowLabelRatingEntry("ToolTips Show Label Rating");
-    const QString ImportSettings::ImportSettingsPrivate::configPreviewLoadFullImageSizeEntry("Preview Load Full Image Size");
-    const QString ImportSettings::ImportSettingsPrivate::configPreviewShowIconsEntry("Preview Show Icons");
-    const QString ImportSettings::ImportSettingsPrivate::configShowThumbbarEntry("Show Thumbbar");
+const QString ImportSettings::Private::configGroupDefault("Import Settings");
+const QString ImportSettings::Private::configImageSortOrderEntry("Image Sort Order");
+const QString ImportSettings::Private::configImageSortingEntry("Image Sorting");
+const QString ImportSettings::Private::configImageGroupModeEntry("Image Group Mode");
+const QString ImportSettings::Private::configItemLeftClickActionEntry("Item Left Click Action");
+const QString ImportSettings::Private::configDefaultIconSizeEntry("Default Icon Size");
+//const QString ImportSettings::Private::configRatingFilterConditionEntry("Rating Filter Condition");
+const QString ImportSettings::Private::configIconShowNameEntry("Icon Show Name");
+//const QString ImportSettings::Private::configIconShowResolutionEntry("Icon Show Resolution");
+const QString ImportSettings::Private::configIconShowSizeEntry("Icon Show Size");
+const QString ImportSettings::Private::configIconShowDateEntry("Icon Show Date");
+const QString ImportSettings::Private::configIconShowModificationDateEntry("Icon Show Modification Date");
+const QString ImportSettings::Private::configIconShowTitleEntry("Icon Show Title");
+//const QString ImportSettings::Private::configIconShowTagsEntry("Icon Show Tags");
+//const QString ImportSettings::Private::configIconShowRatingEntry("Icon Show Rating");
+const QString ImportSettings::Private::configIconShowImageFormatEntry("Icon Show Image Format");
+//const QString ImportSettings::Private::configIconShowOverlaysEntry("Icon Show Overlays");
+const QString ImportSettings::Private::configIconViewFontEntry("IconView Font");
+const QString ImportSettings::Private::configToolTipsFontEntry("ToolTips Font");
+const QString ImportSettings::Private::configShowToolTipsEntry("Show ToolTips");
+const QString ImportSettings::Private::configToolTipsShowFileNameEntry("ToolTips Show File Name");
+const QString ImportSettings::Private::configToolTipsShowFileDateEntry("ToolTips Show File Date");
+const QString ImportSettings::Private::configToolTipsShowFileSizeEntry("ToolTips Show File Size");
+const QString ImportSettings::Private::configToolTipsShowImageTypeEntry("ToolTips Show Image Type");
+const QString ImportSettings::Private::configToolTipsShowImageDimEntry("ToolTips Show Image Dim");
+const QString ImportSettings::Private::configToolTipsShowPhotoMakeEntry("ToolTips Show Photo Make");
+const QString ImportSettings::Private::configToolTipsShowPhotoDateEntry("ToolTips Show Photo Date");
+const QString ImportSettings::Private::configToolTipsShowPhotoFocalEntry("ToolTips Show Photo Focal");
+const QString ImportSettings::Private::configToolTipsShowPhotoExpoEntry("ToolTips Show Photo Expo");
+const QString ImportSettings::Private::configToolTipsShowPhotoFlashEntry("ToolTips Show Photo Flash");
+const QString ImportSettings::Private::configToolTipsShowPhotoWBEntry("ToolTips Show Photo WB");
+const QString ImportSettings::Private::configToolTipsShowFolderNameEntry("ToolTips Show Folder Name");
+//const QString ImportSettings::Private::configToolTipsShowTagsEntry("ToolTips Show Tags");
+//const QString ImportSettings::Private::configToolTipsShowLabelRatingEntry("ToolTips Show Label Rating");
+const QString ImportSettings::Private::configPreviewLoadFullImageSizeEntry("Preview Load Full Image Size");
+const QString ImportSettings::Private::configPreviewShowIconsEntry("Preview Show Icons");
+const QString ImportSettings::Private::configShowThumbbarEntry("Show Thumbbar");
 
 // -------------------------------------------------------------------------------------------------
 
@@ -215,7 +215,7 @@ ImportSettings* ImportSettings::instance()
 }
 
 ImportSettings::ImportSettings()
-    : QObject(), d(new ImportSettingsPrivate)
+    : QObject(), d(new Private)
 {
     d->config = KGlobal::config();
     init();
