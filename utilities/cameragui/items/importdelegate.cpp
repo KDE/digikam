@@ -547,7 +547,7 @@ int ImportDelegate::calculatethumbSizeToFit(int ws)
 
 // --- ImportThumbnailDelegate ---------------------------------------
 
-void ImportThumbnailDelegatePrivate::init(ImportThumbnailDelegate* q)
+void ImportThumbnailDelegatePrivate::init(ImportThumbnailDelegate* const q)
 {
     QObject::connect(ImportSettings::instance(), SIGNAL(setupChanged()),
                      q, SLOT(slotSetupChanged()));
@@ -652,7 +652,7 @@ void ImportThumbnailDelegate::updateRects()
 
 // --- ImportNormalDelegate -----------------------------------------------------------------------
 
-void ImportNormalDelegatePrivate::init(ImportNormalDelegate* q, ImportCategorizedView* parent)
+void ImportNormalDelegatePrivate::init(ImportNormalDelegate* const q, ImportCategorizedView* const parent)
 {
     categoryDrawer = new ImportCategoryDrawer(parent);
 
