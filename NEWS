@@ -27,4 +27,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 018 ==> 303419 - No images show.
 019 ==> 303994 - Many face tag comboboxes and may tags, will have an impact on performance [patch].
 020 ==> 303685 - Cannot set "toggle auto" back to "none" in tags filter.
-021 ==> 
+021 ==> 277169 - Face tag/tag region: only the last created face tag of multiple face tags is saved / no face tag is saved if cancel is hit on the last created face tag.
+022 ==> 
