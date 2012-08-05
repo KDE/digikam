@@ -38,6 +38,7 @@
 #include <QStringList>
 #include <QtDBus>
 #include <QDesktopServices>
+#include <QDomDocument>
 
 // KDE includes
 
