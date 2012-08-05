@@ -3035,4 +3035,15 @@ void DigikamApp::slotScriptConsole()
 }
 #endif
 
+void DigikamApp::rebuild()
+{
+    QString file = xmlFile();
+    if (!file.isEmpty())
+    {
+        setXMLGUIBuildDocument(QDomDocument());
+        loadStandardsXmlFile();
+        setXMLFile(file, true);
+    }
+}
+
 }  // namespace Digikam

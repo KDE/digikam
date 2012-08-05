@@ -90,6 +90,8 @@ public:
     void startInternalDatabase();
     void stopInternalDatabase();
 
+    void rebuild();
+
     DigikamView* view() const;
 
 Q_SIGNALS:

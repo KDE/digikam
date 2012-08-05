@@ -65,7 +65,6 @@
      <Action name="image_set_exif_orientation"/>
    <Separator />
      <DefineGroup name="kipi_image_group" append="kipi_image_group" />
-   <Separator />
   </Menu>
 
   <Menu name="Edit" >
