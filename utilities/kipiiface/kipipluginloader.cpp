@@ -198,6 +198,18 @@ void KipiPluginLoader::slotKipiPluginPlug()
     pluginActionsDisabled << QString("batch_color_images");             // Obsolete since 1.2.0, replaced by BQM color tool.
     pluginActionsDisabled << QString("batch_filter_images");            // Obsolete since 1.2.0, replaced by BQM enhance tool.
 
+    // First we remove all plugins from the gui
+    for (PluginLoader::PluginList::ConstIterator it = list.constBegin() ; it != list.constEnd() ; ++it)
+    {
+        Plugin* plugin = (*it)->plugin();
+
+        if (!plugin || !(*it)->shouldLoad() || !dynamic_cast<KXMLGUIClient*>(plugin))
+        {
+            continue;
+        }
+        d->app->guiFactory()->removeClient(plugin);
+    }
+
     for (PluginLoader::PluginList::ConstIterator it = list.constBegin() ; it != list.constEnd() ; ++it)
     {
         Plugin* plugin = (*it)->plugin();
@@ -208,10 +220,8 @@ void KipiPluginLoader::slotKipiPluginPlug()
         }
 
         ++cpt;
-        // Remove and add plugin to the factory to rebuild the gui
-        d->app->guiFactory()->removeClient(plugin);
         plugin->setup(d->app);
-        d->app->guiFactory()->addClient(plugin);
+        plugin->rebuild();
 
         foreach(KAction* const action, plugin->actions())
         {
@@ -235,6 +245,20 @@ void KipiPluginLoader::slotKipiPluginPlug()
                 kDebug() << "Plugin '" << actionName << "' is disabled.";
             }
         }
+    }
+
+//    d->app->rebuild();
+
+    // We add them back
+    for (PluginLoader::PluginList::ConstIterator it = list.constBegin() ; it != list.constEnd() ; ++it)
+    {
+        Plugin* plugin = (*it)->plugin();
+
+        if (!plugin || !(*it)->shouldLoad() || !dynamic_cast<KXMLGUIClient*>(plugin))
+        {
+            continue;
+        }
+        d->app->guiFactory()->addClient(plugin);
     }
 
     // load KIPI actions settings
