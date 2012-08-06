@@ -6,7 +6,6 @@
  * Date        : 2012-10-03
  * Description : kipi Loader Implementation
  *
- * Copyright (C) 2012      by Supreet Pal Singh <supreetpal@gmail.com>
  * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2012      by Victor Dodon <dodonvictor at gmail dot com>
  *
@@ -27,6 +26,7 @@
 
 // Qt includes
 
+#include <QString>
 #include <QStringList>
 #include <QAction>
 #include <QMap>
@@ -44,7 +44,6 @@
 // LibKIPI includes
 
 #include <libkipi/pluginloader.h>
-#include <libkipi/version.h>
 
 // local includes
 
@@ -59,15 +58,27 @@ class KipiPluginLoader::Private
 {
 public:
 
-    Private()
+    Private(KipiPluginLoader* const loader)
     {
         app                         = DigikamApp::instance();
         kipipluginsActionCollection = 0;
         kipiPluginLoader            = 0;
         kipiInterface               = 0;
         splashScreen                = 0;
+        parent                      = loader;
     }
 
+    /** Load all enabled plugins in application accordingly with KIPI setup page.
+     */
+    void loadPlugins();
+
+    /** Wrapper to return plugin category name for KDE Shortcuts Editor.
+     */
+    QString categoryName(Category cat) const;
+
+public:
+
+    KipiPluginLoader*           parent;
     PluginLoader*               kipiPluginLoader;
     KipiInterface*              kipiInterface;
     SplashScreen*               splashScreen;
@@ -77,19 +88,104 @@ public:
     QMap<int, KActionCategory*> kipiCategoryMap;             // KActionCategory map shorted by Category
 };
 
-// -- Static values -------------------------------
+void KipiPluginLoader::Private::loadPlugins()
+{
+    kipipluginsActionCollection = new KActionCollection(app, KGlobal::mainComponent());
+
+    if (splashScreen)
+    {
+        splashScreen->message(i18n("Loading KIPI Plugins..."));
+    }
+
+    QStringList ignores;
+    kipiInterface = new KipiInterface(app, "Digikam_KIPI_interface");
+
+    // List of obsoletes plugins to not load
+
+    ignores.append("HelloWorld");
+    ignores.append("KameraKlient");
+
+    // These plugins have been renamed with 0.2.0-rc1
+    ignores.append("Facebook Exporter");
+    ignores.append("SmugMug Exporter");
+    ignores.append("SlideShow");
+    ignores.append("PrintWizard");
+    ignores.append("SimpleViewer");
+    ignores.append("KioExport");
+
+    // These plugins have been replaced by digiKam core solution with 2.6.0
+    ignores.append("JPEGLossless");
+
+    // Test plugin introduced with libkipi 2.0.0
+    ignores.append("KXMLHelloWorld");
+
+    kipiPluginLoader = new PluginLoader(app);
+    kipiPluginLoader->setInterface(kipiInterface);
+    kipiPluginLoader->setIgnoreList(ignores);
+    kipiPluginLoader->init();
+
+    parent->connect(kipiPluginLoader, SIGNAL(replug()),
+                    parent, SLOT(slotKipiPluginPlug()));
+
+    kipiPluginLoader->loadPlugins();
+
+    kipiInterface->slotCurrentAlbumChanged(AlbumManager::instance()->currentAlbum());
+
+    parent->connect(AlbumManager::instance(), SIGNAL(signalAlbumCurrentChanged(Album*)),
+                    kipiInterface, SLOT(slotCurrentAlbumChanged(Album*)));
+}
+
+QString KipiPluginLoader::Private::categoryName(Category cat) const
+{
+    QString res;
+
+    switch (cat)
+    {
+        case ExportPlugin:
+            res = i18n("Export Tools");
+            break;
+
+        case ImportPlugin:
+            res = i18n("Import Tools");
+            break;
+
+        case ImagesPlugin:
+            res = i18n("Images Tools");
+            break;
+
+        case ToolsPlugin:
+            res = i18n("Miscellaneous Tools");
+            break;
+
+        case BatchPlugin:
+            res = i18n("Batch Tools");
+            break;
+
+        case CollectionsPlugin:
+            res = i18n("Albums Tools");
+            break;
+
+        default:
+            res = i18n("Unknown Tools");
+            break;
+    }
+
+    return res;
+}
+
+// -- Static values ------------------------------------------------------------------------------------------------------
 
 KipiPluginLoader* KipiPluginLoader::m_instance = 0;
 
 // -----------------------------------------------------------------------------------------------------------------------
 
 KipiPluginLoader::KipiPluginLoader(QObject* const parent, SplashScreen* const splash)
-    : QObject(parent), d(new Private)
+    : QObject(parent), d(new Private(this))
 {
     m_instance      = this;
     d->splashScreen = splash;
 
-    loadPlugins();
+    d->loadPlugins();
 }
 
 KipiPluginLoader::~KipiPluginLoader()
@@ -118,54 +214,6 @@ QList<QAction*> KipiPluginLoader::kipiActionsByCategory(Category cat) const
     }
 
     return QList<QAction*>();
-}
-
-void KipiPluginLoader::loadPlugins()
-{
-    d->kipipluginsActionCollection = new KActionCollection(d->app, KGlobal::mainComponent());
-
-    if (d->splashScreen)
-    {
-        d->splashScreen->message(i18n("Loading KIPI Plugins..."));
-    }
-
-    QStringList ignores;
-    d->kipiInterface = new KipiInterface(d->app, "Digikam_KIPI_interface");
-
-    // List of obsoletes plugins to not load
-
-    ignores.append("HelloWorld");
-    ignores.append("KameraKlient");
-
-    // These plugins have been renamed with 0.2.0-rc1
-    ignores.append("Facebook Exporter");
-    ignores.append("SmugMug Exporter");
-    ignores.append("SlideShow");
-    ignores.append("PrintWizard");
-    ignores.append("SimpleViewer");
-    ignores.append("KioExport");
-
-    // These plugins have been replaced by digiKam core solution with 2.6.0
-    ignores.append("JPEGLossless");
-
-#if KIPI_VERSION >= 0x020000
-    d->kipiPluginLoader = new PluginLoader(d->app);
-    d->kipiPluginLoader->setInterface(d->kipiInterface);
-    d->kipiPluginLoader->setIgnoreList(ignores);
-    d->kipiPluginLoader->init();
-#else
-    d->kipiPluginLoader = new PluginLoader(ignores, d->kipiInterface);
-#endif
-
-    connect(d->kipiPluginLoader, SIGNAL(replug()),
-            this, SLOT(slotKipiPluginPlug()));
-
-    d->kipiPluginLoader->loadPlugins();
-
-    d->kipiInterface->slotCurrentAlbumChanged(AlbumManager::instance()->currentAlbum());
-
-    connect(AlbumManager::instance(), SIGNAL(signalAlbumCurrentChanged(Album*)),
-            d->kipiInterface, SLOT(slotCurrentAlbumChanged(Album*)));
 }
 
 void KipiPluginLoader::slotKipiPluginPlug()
@@ -234,7 +282,7 @@ void KipiPluginLoader::slotKipiPluginPlug()
 
                 if (!category)
                 {
-                    category = new KActionCategory(categoryName(cat), d->kipipluginsActionCollection);
+                    category = new KActionCategory(d->categoryName(cat), d->kipipluginsActionCollection);
                     d->kipiCategoryMap.insert(cat, category);
                 }
 
@@ -263,44 +311,6 @@ void KipiPluginLoader::slotKipiPluginPlug()
 
     // load KIPI actions settings
     d->kipipluginsActionCollection->readSettings();
-}
-
-QString KipiPluginLoader::categoryName(Category cat) const
-{
-    QString res;
-
-    switch (cat)
-    {
-        case ExportPlugin:
-            res = i18n("Export Tools");
-            break;
-
-        case ImportPlugin:
-            res = i18n("Import Tools");
-            break;
-
-        case ImagesPlugin:
-            res = i18n("Images Tools");
-            break;
-
-        case ToolsPlugin:
-            res = i18n("Miscellaneous Tools");
-            break;
-
-        case BatchPlugin:
-            res = i18n("Batch Tools");
-            break;
-
-        case CollectionsPlugin:
-            res = i18n("Albums Tools");
-            break;
-
-        default:
-            res = i18n("Unknown Tools");
-            break;
-    }
-
-    return res;
 }
 
 } // namespace Digikam
