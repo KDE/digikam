@@ -130,7 +130,6 @@
 #include "setup.h"
 #include "setupeditor.h"
 #include "setupicc.h"
-#include "setupplugins.h"
 #include "thememanager.h"
 #include "thumbnailloadthread.h"
 #include "thumbnailsize.h"
