@@ -100,9 +100,6 @@ SetupPlugins::SetupPlugins(QWidget* const parent)
 
     panel->setLayout(mainLayout);
 
-    d->checkAllBtn->setVisible(false);
-    d->clearBtn->setVisible(false);
-
     initPlugins();
 
     // --------------------------------------------------------
