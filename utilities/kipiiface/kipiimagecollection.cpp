@@ -7,8 +7,8 @@
  * Description : class to get/set image collection
  *               information/properties using digiKam album database.
  *
- * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2004-2005 by Ralf Holzer <ralf at well.com>
+ * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
+ * Copyright (C) 2004-2005 by Ralf Holzer <ralf at well dot com>
  * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -56,6 +56,11 @@ public:
         album = 0;
     }
 
+    KUrl::List imagesFromPAlbum(PAlbum* const album) const;
+    KUrl::List imagesFromTAlbum(TAlbum* const album) const;
+
+public:
+
     QString                   imgFilter;
 
     KipiImageCollection::Type type;
@@ -63,7 +68,7 @@ public:
 };
 
 KipiImageCollection::KipiImageCollection(Type type, Album* const album, const QString& filter)
-    : KIPI::ImageCollectionShared(), d(new Private)
+    : ImageCollectionShared(), d(new Private)
 {
     d->type      = type;
     d->album     = album;
@@ -144,11 +149,11 @@ KUrl::List KipiImageCollection::images()
         {
             if (d->album->type() == Album::PHYSICAL)
             {
-                return imagesFromPAlbum(dynamic_cast<PAlbum*>(d->album));
+                return d->imagesFromPAlbum(dynamic_cast<PAlbum*>(d->album));
             }
             else if (d->album->type() == Album::TAG)
             {
-                return imagesFromTAlbum(dynamic_cast<TAlbum*>(d->album));
+                return d->imagesFromTAlbum(dynamic_cast<TAlbum*>(d->album));
             }
             else if (d->album->type() == Album::DATE ||
                      d->album->type() == Album::SEARCH)
@@ -177,9 +182,9 @@ KUrl::List KipiImageCollection::images()
     return KUrl::List();
 }
 
-/** get the images from the Physical album in database and return the items found */
-
-KUrl::List KipiImageCollection::imagesFromPAlbum(PAlbum* const album) const
+/** get the images from the Physical album in database and return the items found.
+ */
+KUrl::List KipiImageCollection::Private::imagesFromPAlbum(PAlbum* const album) const
 {
     // get the images from the database and return the items found
 
@@ -207,10 +212,8 @@ KUrl::List KipiImageCollection::imagesFromPAlbum(PAlbum* const album) const
     }
 
     QStringList urls = DatabaseAccess().db()->getItemURLsInAlbum(album->id(), sortOrder);
-
-    KUrl::List urlList;
-
-    NameFilter nameFilter(d->imgFilter);
+    KUrl::List  urlList;
+    NameFilter  nameFilter(imgFilter);
 
     for (QStringList::const_iterator it = urls.constBegin(); it != urls.constEnd(); ++it)
     {
@@ -223,16 +226,13 @@ KUrl::List KipiImageCollection::imagesFromPAlbum(PAlbum* const album) const
     return urlList;
 }
 
-/** get the images from the Tags album in database and return the items found */
-
-KUrl::List KipiImageCollection::imagesFromTAlbum(TAlbum* const album) const
+/** get the images from the Tags album in database and return the items found.
+ */
+KUrl::List KipiImageCollection::Private::imagesFromTAlbum(TAlbum* const album) const
 {
-    QStringList urls;
-    urls = DatabaseAccess().db()->getItemURLsInTag(album->id());
-
-    KUrl::List urlList;
-
-    NameFilter nameFilter(d->imgFilter);
+    QStringList urls = DatabaseAccess().db()->getItemURLsInTag(album->id());
+    KUrl::List  urlList;
+    NameFilter  nameFilter(imgFilter);
 
     for (QStringList::const_iterator it = urls.constBegin(); it != urls.constEnd(); ++it)
     {
