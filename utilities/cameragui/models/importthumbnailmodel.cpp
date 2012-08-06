@@ -22,6 +22,7 @@
  * ============================================================ */
 
 #include "importthumbnailmodel.moc"
+#include "importthumbnailmodel.h"
 
 // Qt includes
 
@@ -114,10 +115,18 @@ void ImportThumbnailModel::prepareThumbnails(const QList<QModelIndex>& indexesTo
     CamItemInfoList infos;
     foreach(const QModelIndex& index, indexesToPrepare)
     {
-        infos << camItemInfoRef(index);
+        CamItemInfo info = camItemInfoRef(index);
+        if(!hasItemFromCache(info.url()))
+        {
+            infos << info;
+        }
     }
     //qDebug() << "IMPORT THUMB MODEL: " << QString::number(thumbSize.size());
-    d->controller->getThumbsInfo(infos, thumbSize);
+//    if(!infos.isEmpty())
+//    {
+//        d->controller->getThumbsInfo(infos, thumbSize);
+//    }
+
 }
 
 void ImportThumbnailModel::setEmitDataChanged(bool emitSignal)
