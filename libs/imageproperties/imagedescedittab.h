@@ -6,7 +6,7 @@
  * Date        : 2003-03-09
  * Description : Captions, Tags, and Rating properties editor
  *
- * Copyright (C) 2003-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Copyright (C) 2003-2005 by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C) 2003-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *

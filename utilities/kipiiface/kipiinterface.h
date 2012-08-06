@@ -6,7 +6,7 @@
  * Date        : 2004-08-02
  * Description : class to interface digiKam with kipi library.
  *
- * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C) 2004-2005 by Ralf Holzer <ralf at well dot com>
  * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
