@@ -6,8 +6,8 @@
  * Date        : 2004-08-02
  * Description : class to interface digiKam with kipi library.
  *
- * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2004-2005 by Ralf Holzer <ralf at well.com>
+ * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
+ * Copyright (C) 2004-2005 by Ralf Holzer <ralf at well dot com>
  * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -220,11 +220,9 @@ int KipiInterface::features() const
            | KIPI::HostAcceptNewImages
            | KIPI::HostSupportsThumbnails
            | KIPI::HostSupportsProgressBar
-#if KIPI_VERSION >= 0x010500
            | KIPI::HostSupportsReadWriteLock
            | KIPI::HostSupportsPickLabel
            | KIPI::HostSupportsColorLabel
-#endif // KIPI_VERSION >= 0x010500
           );
 }
 
@@ -384,8 +382,6 @@ QVariant KipiInterface::hostSetting(const QString& settingName)
     return QVariant();
 }
 
-#if KIPI_VERSION >= 0x010500
-
 QString KipiInterface::progressScheduled(const QString& title, bool canBeCanceled, bool hasThumb) const
 {
     ProgressItem* item = ProgressManager::createProgressItem(title, QString(), canBeCanceled, hasThumb);
@@ -447,9 +443,12 @@ public:
 
     KipiInterfaceFileReadWriteLock(const QString& filePath)
         : key(filePath)
-    {}
+    {
+    }
 
-    ~KipiInterfaceFileReadWriteLock() {}
+    ~KipiInterfaceFileReadWriteLock()
+    {
+    }
 
 public:
 
@@ -470,7 +469,5 @@ KIPI::FileReadWriteLock* KipiInterface::createReadWriteLock(const KUrl& url) con
 {
     return new KipiInterfaceFileReadWriteLock(url.toLocalFile());
 }
-
-#endif // KIPI_VERSION >= 0x010500
 
 }  // namespace Digikam

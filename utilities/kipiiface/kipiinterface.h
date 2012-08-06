@@ -39,7 +39,6 @@
 
 // LibKIPI includes
 
-#include <libkipi/version.h>
 #include <libkipi/interface.h>
 
 // Local includes
@@ -51,10 +50,10 @@
 
 namespace KIPI
 {
-class ImageInfo;
-class ImageCollection;
-class ImageCollectionSelector;
-class UploadWidget;
+    class ImageInfo;
+    class ImageCollection;
+    class ImageCollectionSelector;
+    class UploadWidget;
 }
 
 namespace Digikam
@@ -89,7 +88,6 @@ public:
 
     QVariant hostSetting(const QString& settingName);
 
-#if KIPI_VERSION >= 0x010500
     QString progressScheduled(const QString& title, bool canBeCanceled, bool hasThumb) const;
     void    progressValueChanged(const QString& id, float percent);
     void    progressStatusChanged(const QString& id, const QString& status);
@@ -97,7 +95,6 @@ public:
     void    progressCompleted(const QString& id);
 
     KIPI::FileReadWriteLock* createReadWriteLock(const KUrl& url) const;
-#endif // KIPI_VERSION >= 0x010500
 
 public Q_SLOTS:
 
