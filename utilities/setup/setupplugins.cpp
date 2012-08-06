@@ -41,6 +41,7 @@
 // Libkipi includes
 
 #include <libkipi/pluginloader.h>
+#include <libkipi/configwidget.h>
 
 using namespace KIPI;
 
