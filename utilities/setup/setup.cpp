@@ -39,6 +39,10 @@
 #include <kvbox.h>
 #include <kdebug.h>
 
+// Libkipi includes
+
+#include <libkipi/configwidget.h>
+
 // Local includes
 
 #include "albumsettings.h"
@@ -55,7 +59,6 @@
 #include "setupmetadata.h"
 #include "setupmime.h"
 #include "setupmisc.h"
-#include "setupplugins.h"
 #include "setupslideshow.h"
 #include "setuptooltip.h"
 #include "setupdatabase.h"
@@ -67,14 +70,16 @@
 #include "setupscriptmanager.h"
 #endif
 
+using namespace KIPI;
+
 namespace Digikam
 {
 
-class Setup::SetupPrivate
+class Setup::Private
 {
 public:
 
-    SetupPrivate() :
+    Private() :
         page_database(0),
         page_collections(0),
         page_albumView(0),
@@ -161,7 +166,7 @@ public:
     SetupICC*           iccPage;
     SetupCamera*        cameraPage;
     SetupMisc*          miscPage;
-    SetupPlugins*       pluginsPage;
+    ConfigWidget*       pluginsPage;
 #ifdef USE_SCRIPT_IFACE
     SetupScriptManager* scriptManagerPage;
 #endif
@@ -174,7 +179,7 @@ public:
 };
 
 Setup::Setup(QWidget* const parent)
-    : KPageDialog(parent), d(new SetupPrivate)
+    : KPageDialog(parent), d(new Private)
 {
     setCaption(i18n("Configure"));
     setButtons(Help | Ok | Cancel);
@@ -287,7 +292,7 @@ Setup::Setup(QWidget* const parent)
                                    "<i>Manage your camera devices</i></qt>"));
     d->page_camera->setIcon(KIcon("camera-photo"));
 
-    d->pluginsPage  = new SetupPlugins();
+    d->pluginsPage  = new ConfigWidget();
     d->page_plugins = addPage(d->pluginsPage, i18n("Kipi Plugins"));
     d->page_plugins->setHeader(i18n("<qt>Main Interface Plug-in Settings<br/>"
                                     "<i>Set which plugins will be accessible from the main interface</i></qt>"));
@@ -479,7 +484,7 @@ void Setup::okClicked()
     d->slideshowPage->applySettings();
     d->iccPage->applySettings();
     d->miscPage->applySettings();
-    d->pluginsPage->applyPlugins();
+    d->pluginsPage->apply();
     //d->faceTagsPage->applySettings();
     d->versioningPage->applySettings();
 
@@ -641,7 +646,7 @@ Setup::Page Setup::activePageIndex() const
     return DatabasePage;
 }
 
-KPageWidgetItem* Setup::SetupPrivate::pageItem(Setup::Page page) const
+KPageWidgetItem* Setup::Private::pageItem(Setup::Page page) const
 {
     switch (page)
     {

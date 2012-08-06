@@ -1184,7 +1184,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupmisc.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setuplighttable.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupiofiles.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupplugins.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupdcraw.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupcamera.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/cameraselection.cpp

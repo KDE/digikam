@@ -102,13 +102,13 @@ private:
     ~Setup();
 
     Setup::Page activePageIndex() const;
-    void showPage(Setup::Page page);
-    void okClicked();
+    void        showPage(Setup::Page page);
+    void        okClicked();
 
 private:
 
-    class SetupPrivate;
-    SetupPrivate* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam
