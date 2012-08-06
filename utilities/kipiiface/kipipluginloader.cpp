@@ -121,7 +121,7 @@ void KipiPluginLoader::Private::loadPlugins()
 
     kipiPluginLoader = new PluginLoader(app);
     kipiPluginLoader->setInterface(kipiInterface);
-    kipiPluginLoader->setIgnoreList(ignores);
+    kipiPluginLoader->setIgnoredPluginsList(ignores);
     kipiPluginLoader->init();
 
     parent->connect(kipiPluginLoader, SIGNAL(replug()),
