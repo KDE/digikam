@@ -1,32 +1,9 @@
 *****************************************************************************************************
-digiKam 2.8.0 - Release date: 2012-08-05
+digiKam 2.9.0 - Release date: 2012-09-02
 
 NEW FEATURES:
 
-CameraGUI : Add option to execute script during items to download from camera.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
-001 ==> 296786 - Zoom to 100% pans to the top-left corner.
-002 ==> 299942 - Root Album Folders selection list does not expand to fill available space.
-003 ==> 296799 - Shown number of images in album increases in status line after image.
-004 ==> 301371 - Exiv2 mix library strangeness.
-005 ==> 303385 - Crash on startup.
-006 ==> 303396 - Assign tags to filtered images - not all images.
-007 ==> 301486 - Additional empty queue when batch processing images using toolbar button.
-008 ==> 301530 - Group images by time puts multiple images in a progress queue, which never complete.
-009 ==> 303693 - Inability to remove orphaned thumbnails in album through GUI.
-010 ==> 301938 - OpenStreetMap does not refresh in Geo-location.
-011 ==> 289006 - Digikam crashed in import dialog when selecting filter on videos.
-012 ==> 302311 - Try to edit title whereas tags modification writing.
-013 ==> 290927 - Color management does not apply change and refresh the current preview image.
-014 ==> 244713 - Ability to execute a script when importing from camera.
-015 ==> 303163 - "Undo" after "Color, Color Space Conversion" does not restore the original ICC profile.
-016 ==> 302212 - Incorrect rotation of DNG portrait images in preview.
-017 ==> 303242 - File type should not create distinct results in fuzzy duplicate search.
-018 ==> 303419 - No images show.
-019 ==> 303994 - Many face tag comboboxes and may tags, will have an impact on performance [patch].
-020 ==> 303685 - Cannot set "toggle auto" back to "none" in tags filter.
-021 ==> 277169 - Face tag/tag region: only the last created face tag of multiple face tags is saved / no face tag is saved if cancel is hit on the last created face tag.
-022 ==> 269720 - digiKam SIGSEGV during face scannin.
-023 ==> 
+001 ==> 
