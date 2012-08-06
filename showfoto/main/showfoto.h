@@ -10,7 +10,7 @@
  * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at googlemail dot com>
  * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2005-2006 by Tom Albers <tomalbers@kde.nl>
+ * Copyright (C) 2005-2006 by Tom Albers <tomalbers at kde dot nl>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
