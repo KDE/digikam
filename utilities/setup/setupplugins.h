@@ -38,7 +38,7 @@ class SetupPlugins : public QScrollArea
 
 public:
 
-    SetupPlugins(QWidget* parent = 0);
+    SetupPlugins(QWidget* const parent = 0);
     ~SetupPlugins();
 
     void applyPlugins();
@@ -54,8 +54,8 @@ private:
 
 private:
 
-    class SetupPluginsPriv;
-    SetupPluginsPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

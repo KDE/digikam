@@ -41,16 +41,17 @@
 // Libkipi includes
 
 #include <libkipi/pluginloader.h>
-#include <libkipi/version.h>
+
+using namespace KIPI;
 
 namespace Digikam
 {
 
-class SetupPlugins::SetupPluginsPriv
+class SetupPlugins::Private
 {
 public:
 
-    SetupPluginsPriv() :
+    Private() :
         pluginsNumber(0),
         pluginsNumberActivated(0),
         checkAllBtn(0),
@@ -59,17 +60,17 @@ public:
     {
     }
 
-    QLabel*             pluginsNumber;
-    QLabel*             pluginsNumberActivated;
+    QLabel*       pluginsNumber;
+    QLabel*       pluginsNumberActivated;
 
-    QPushButton*        checkAllBtn;
-    QPushButton*        clearBtn;
+    QPushButton*  checkAllBtn;
+    QPushButton*  clearBtn;
 
-    KIPI::ConfigWidget* kipiConfig;
+    ConfigWidget* kipiConfig;
 };
 
-SetupPlugins::SetupPlugins(QWidget* parent)
-    : QScrollArea(parent), d(new SetupPluginsPriv)
+SetupPlugins::SetupPlugins(QWidget* const parent)
+    : QScrollArea(parent), d(new Private)
 {
     QWidget* panel = new QWidget(viewport());
     setWidget(panel);
@@ -78,14 +79,12 @@ SetupPlugins::SetupPlugins(QWidget* parent)
     QGridLayout* mainLayout   = new QGridLayout;
     d->pluginsNumber          = new QLabel;
     d->pluginsNumberActivated = new QLabel;
-
     d->checkAllBtn            = new QPushButton(i18n("Check all"));
     d->clearBtn               = new QPushButton(i18n("Clear"));
 
-
-    if (KIPI::PluginLoader::instance())
+    if (PluginLoader::instance())
     {
-        d->kipiConfig = KIPI::PluginLoader::instance()->configWidget(panel);
+        d->kipiConfig = PluginLoader::instance()->configWidget(panel);
         d->kipiConfig->setWhatsThis(i18n("A list of available Kipi plugins."));
     }
 
@@ -100,10 +99,8 @@ SetupPlugins::SetupPlugins(QWidget* parent)
 
     panel->setLayout(mainLayout);
 
-#if KIPI_VERSION < 0x010400
     d->checkAllBtn->setVisible(false);
     d->clearBtn->setVisible(false);
-#endif
 
     initPlugins();
 
@@ -129,15 +126,15 @@ SetupPlugins::~SetupPlugins()
 
 void SetupPlugins::initPlugins()
 {
-    if (KIPI::PluginLoader::instance())
+    if (PluginLoader::instance())
     {
-        KIPI::PluginLoader::PluginList list = KIPI::PluginLoader::instance()->pluginList();
+        PluginLoader::PluginList list = PluginLoader::instance()->pluginList();
         d->pluginsNumber->setText(i18np("1 Kipi plugin found",
                                         "%1 Kipi plugins found",
                                         list.count()));
 
         int activated = 0;
-        KIPI::PluginLoader::PluginList::const_iterator it = list.constBegin();
+        PluginLoader::PluginList::const_iterator it = list.constBegin();
 
         for (; it != list.constEnd(); ++it)
         {
@@ -154,7 +151,7 @@ void SetupPlugins::initPlugins()
 
 void SetupPlugins::applyPlugins()
 {
-    if (KIPI::PluginLoader::instance())
+    if (PluginLoader::instance())
     {
         d->kipiConfig->apply();
     }
@@ -163,18 +160,14 @@ void SetupPlugins::applyPlugins()
 void SetupPlugins::slotCheckAll()
 {
     QApplication::setOverrideCursor(Qt::WaitCursor);
-#if KIPI_VERSION >= 0x010400
     d->kipiConfig->slotCheckAll();
-#endif
     QApplication::restoreOverrideCursor();
 }
 
 void SetupPlugins::slotClear()
 {
     QApplication::setOverrideCursor(Qt::WaitCursor);
-#if KIPI_VERSION >= 0x010400
     d->kipiConfig->slotClear();
-#endif
     QApplication::restoreOverrideCursor();
 }
 
