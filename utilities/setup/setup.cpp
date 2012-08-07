@@ -123,7 +123,8 @@ public:
 #ifdef USE_SCRIPT_IFACE
         scriptManagerPage(0),
 #endif
-        versioningPage(0)
+        versioningPage(0),
+        pluginFilter(0)
     {
     }
 
@@ -172,6 +173,8 @@ public:
 #endif
     //SetupFaceTags*      faceTagsPage;
     SetupVersioning*    versioningPage;
+
+    SearchTextBar*      pluginFilter;
 
 public:
 
@@ -293,10 +296,18 @@ Setup::Setup(QWidget* const parent)
     d->page_camera->setIcon(KIcon("camera-photo"));
 
     d->pluginsPage  = new ConfigWidget();
+    d->pluginFilter = new SearchTextBar(d->pluginsPage, "PluginsSearchBar");
+    d->pluginsPage->setFilterWidget(d->pluginFilter);
     d->page_plugins = addPage(d->pluginsPage, i18n("Kipi Plugins"));
     d->page_plugins->setHeader(i18n("<qt>Main Interface Plug-in Settings<br/>"
                                     "<i>Set which plugins will be accessible from the main interface</i></qt>"));
     d->page_plugins->setIcon(KIcon("kipi"));
+
+    connect(d->pluginFilter, SIGNAL(signalSearchTextSettings(SearchTextSettings)),
+            this, SLOT(slotSearchTextChanged(SearchTextSettings)));
+
+    connect(d->pluginsPage, SIGNAL(signalSearchResult(bool)),
+            d->pluginFilter, SLOT(slotSearchResult(bool)));
 
 #ifdef USE_SCRIPT_IFACE
     d->scriptManagerPage  = new SetupScriptManager();
@@ -444,6 +455,11 @@ bool Setup::execTemplateEditor(QWidget* const parent, const Template& t)
     bool success          = setup->KPageDialog::exec() == QDialog::Accepted;
     delete setup;
     return success;
+}
+
+void Setup::slotSearchTextChanged(const SearchTextSettings& settings)
+{
+     d->pluginsPage->slotSetFilter(settings.text, settings.caseSensitive);
 }
 
 void Setup::slotButtonClicked(int button)

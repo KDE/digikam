@@ -34,6 +34,7 @@
 #include "config-digikam.h"
 #include "setuptemplate.h"
 #include "template.h"
+#include "searchtextbar.h"
 
 namespace Digikam
 {
@@ -95,6 +96,7 @@ public:
 private Q_SLOTS:
 
     void slotButtonClicked(int button);
+    void slotSearchTextChanged(const SearchTextSettings& settings);
 
 private:
 
