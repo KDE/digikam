@@ -60,10 +60,6 @@ public:
     void setThumbnailSize(const ThumbnailSize& thumbSize);
     ThumbnailSize thumbnailSize() const;
 
-    void prepareThumbnails(const QList<QModelIndex>& indexesToPrepare);
-    void prepareThumbnails(const QList<QModelIndex>& indexesToPrepare, ThumbnailSize thumbSize);
-
-
     void setExifRotate(bool rotate);
 
     /**
@@ -104,18 +100,6 @@ Q_SIGNALS:
     void thumbnailFailed(const QModelIndex& index, int requestedSize);
 
 public Q_SLOTS:
-
-    /**
-     *  Preload thumbnail for the given infos resp. indexes.
-     *  Note: Use setPreloadThumbnails to automatically preload all entries in the model.
-     *  Note: This only ensures thumbnail generation. It is not guaranteed that pixmaps
-     *  are stored in the cache. For thumbnails that are expect to be drawn immediately,
-     *  include them in prepareThumbnails().
-     *  Note: Stops preloading of previously added thumbnails.
-     */
-    //void preloadThumbnails(const QList<CamItemInfo>&);
-    //void preloadThumbnails(const QList<QModelIndex>&);
-    //void preloadAllThumbnails();
 
     void slotThumbInfoLoaded(const QString& folder, const QString& file, const CamItemInfo& info, const QImage& thumb);
     void slotThumbInfoFailed(const QString& folder, const QString& file, const CamItemInfo& info);

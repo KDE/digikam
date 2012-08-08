@@ -22,6 +22,7 @@
  * ============================================================ */
 
 #include "importpreviewview.moc"
+#include "importpreviewview.h"
 
 // Qt includes
 
@@ -72,7 +73,6 @@ public:
     {
         m_info = info;
 
-        //FIXME: is this a valid path?
         setPath(info.url().prettyUrl());
     }
 
@@ -101,7 +101,7 @@ public:
 
 protected:
 
-    ImportPreviewView* m_view;
+    ImportPreviewView*  m_view;
     //FaceGroup*        m_group;
     CamItemInfo         m_info;
 };
@@ -167,10 +167,10 @@ ImportPreviewView::ImportPreviewView(QWidget* const parent, Mode mode)
     //d->item->setFaceGroup(d->faceGroup);
 
     connect(d->item, SIGNAL(loaded()),
-            this, SLOT(imageLoaded()));
+            this, SLOT(camItemLoaded()));
 
     connect(d->item, SIGNAL(loadingFailed()),
-            this, SLOT(imageLoadingFailed()));
+            this, SLOT(camItemLoadingFailed()));
 
     // set default zoom
     layout()->fitToWindow();
@@ -289,19 +289,22 @@ void ImportPreviewView::setCamItemInfo(const CamItemInfo& info, const CamItemInf
 
     QStringList previewPaths;
 
-    if (next.mime == "FIXME ... IMAGE")
+    if (identifyCategoryforMime(next.mime) == "image")
     {
-        //FIXME: is this a valid path?
-        previewPaths << next.url().prettyUrl();
+        previewPaths << next.url().toLocalFile();
     }
 
-    if (previous.mime == "FIXME ... IMAGE")
+    if (identifyCategoryforMime(previous.mime) == "image")
     {
-        //FIXME: is this a valid path?
-        previewPaths << previous.url().prettyUrl();
+        previewPaths << previous.url().toLocalFile();
     }
 
     d->item->setPreloadPaths(previewPaths);
+}
+
+QString ImportPreviewView::identifyCategoryforMime(QString mime)
+{
+    return mime.split("/").at(0);
 }
 
 CamItemInfo ImportPreviewView::getCamItemInfo() const
@@ -334,7 +337,6 @@ void ImportPreviewView::leaveEvent(QEvent* e)
 
 void ImportPreviewView::showEvent(QShowEvent* e)
 {
-    Q_UNUSED(e) //FIXME
     GraphicsDImgView::showEvent(e);
     //FIXME: d->faceGroup->setVisible(d->peopleToggleAction->isChecked());
 }

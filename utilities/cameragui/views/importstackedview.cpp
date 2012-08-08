@@ -45,8 +45,8 @@ public:
     {
         dockArea            = 0;
         splitter            = 0;
-       //REM thumbBar            = 0;
-        //REMthumbBarDock        = 0;
+        thumbBar            = 0;
+        thumbBarDock        = 0;
         importIconView      = 0;
         importPreviewView   = 0;
         //mediaPlayerView     = 0;
@@ -60,9 +60,9 @@ public:
     QSplitter*          splitter;
 
     ImportIconView*     importIconView;
-    //REMImportThumbnailBar* thumbBar;
+    ImportThumbnailBar* thumbBar;
     ImportPreviewView*  importPreviewView;
-    //REMThumbBarDock*       thumbBarDock;
+    ThumbBarDock*       thumbBarDock;
     //FIXME: MediaPlayerView*   mediaPlayerView;
     //FIXME: MapWidgetView*     mapWidgetView;
 };
@@ -71,19 +71,19 @@ ImportStackedView::ImportStackedView(CameraController* const controller, QWidget
     : QStackedWidget(parent), d(new Private)
 {
     d->importIconView    = new ImportIconView(this);
-    //d->importPreviewView = new ImportPreviewView(this);
-    //d->thumbBarDock      = new ThumbBarDock();
-    //d->thumbBar          = new ImportThumbnailBar(d->thumbBarDock);
-    //d->thumbBar->setModelsFiltered(d->importIconView->importImageModel(), d->importIconView->importFilterModel());
-    //FIXME: d->thumbBar->installRatingOverlay();
-
-    //d->thumbBarDock->setWidget(d->thumbBar);
-    //d->thumbBarDock->setObjectName("import_thumbbar");
+    d->importPreviewView = new ImportPreviewView(this);
+    d->thumbBarDock      = new ThumbBarDock();
+    d->thumbBar          = new ImportThumbnailBar(d->thumbBarDock);
 
     if(controller)
     {
         d->importIconView->init(controller);
+        d->thumbBar->setModelsFiltered(d->importIconView->importImageModel(), d->importIconView->importFilterModel());
     }
+
+    //FIXME: d->thumbBar->installRatingOverlay();
+    d->thumbBarDock->setWidget(d->thumbBar);
+    d->thumbBarDock->setObjectName("import_thumbbar");
 
     //FIXME: d->mediaPlayerView = new MediaPlayerView(this);
     //FIXME: d->mapWidgetView   = new MapWidgetView(d->importIconView->getSelectionModel(),
@@ -91,7 +91,7 @@ ImportStackedView::ImportStackedView(CameraController* const controller, QWidget
     //FIXME: d->mapWidgetView->setObjectName("import_mapwidgetview");
 
     insertWidget(PreviewCameraMode, d->importIconView);
-    //REMinsertWidget(PreviewImageMode, d->importPreviewView);
+    insertWidget(PreviewImageMode, d->importPreviewView);
     //insertWidget(MediaPlayerMode,  d->mediaPlayerView);
     //insertWidget(MapWidgetMode,    d->mapWidgetView);
 
@@ -105,32 +105,32 @@ ImportStackedView::ImportStackedView(CameraController* const controller, QWidget
     //FIXME: connect(d->importPreviewView, SIGNAL(signalPopupTagsView()),
             //d->importIconView, SIGNAL(signalPopupTagsView()));
 
-    //REMconnect(d->importPreviewView, SIGNAL(signalGotoFolderAndItem(CamItemInfo)),
-            //REMthis, SIGNAL(signalGotoFolderAndItem(CamItemInfo)));
+    connect(d->importPreviewView, SIGNAL(signalGotoFolderAndItem(CamItemInfo)),
+            this, SIGNAL(signalGotoFolderAndItem(CamItemInfo)));
 
-    //REMconnect(d->importPreviewView, SIGNAL(signalGotoDateAndItem(CamItemInfo)),
-            //REMthis, SIGNAL(signalGotoDateAndItem(CamItemInfo)));
+    connect(d->importPreviewView, SIGNAL(signalGotoDateAndItem(CamItemInfo)),
+            this, SIGNAL(signalGotoDateAndItem(CamItemInfo)));
 
     //FIXME: connect(d->importPreviewView, SIGNAL(signalGotoTagAndItem(int)),
             //this, SIGNAL(signalGotoTagAndItem(int)));
 
-    //REMconnect(d->importPreviewView, SIGNAL(signalNextItem()),
-            //REMthis, SIGNAL(signalNextItem()));
+    connect(d->importPreviewView, SIGNAL(signalNextItem()),
+            this, SIGNAL(signalNextItem()));
 
-    //REMconnect(d->importPreviewView, SIGNAL(signalPrevItem()),
-            //REMthis, SIGNAL(signalPrevItem()));
+    connect(d->importPreviewView, SIGNAL(signalPrevItem()),
+            this, SIGNAL(signalPrevItem()));
 
-   //REM connect(d->importPreviewView, SIGNAL(signalEditItem()),
-          //REM  this, SIGNAL(signalEditItem()));
+    connect(d->importPreviewView, SIGNAL(signalEditItem()),
+            this, SIGNAL(signalEditItem()));
 
-    //REMconnect(d->importPreviewView, SIGNAL(signalDeleteItem()),
-         //REM   this, SIGNAL(signalDeleteItem()));
+    //FIXME: connect(d->importPreviewView, SIGNAL(signalDeleteItem()),
+            //this, SIGNAL(signalDeleteItem()));
 
     //FIXME: connect(d->importPreviewView, SIGNAL(signalBack2FilesList()),
             //this, SIGNAL(signalBack2Album()));
 
-    //REMconnect(d->importPreviewView->layout(), SIGNAL(zoomFactorChanged(double)),
-            //REMthis, SLOT(slotZoomFactorChanged(double)));
+    connect(d->importPreviewView->layout(), SIGNAL(zoomFactorChanged(double)),
+            this, SLOT(slotZoomFactorChanged(double)));
 
     //FIXME: connect(d->importPreviewView, SIGNAL(signalInsert2LightTable()),
             //this, SIGNAL(signalInsert2LightTable()));
@@ -144,14 +144,14 @@ ImportStackedView::ImportStackedView(CameraController* const controller, QWidget
     //FIXME: connect(d->importPreviewView, SIGNAL(signalAddToExistingQueue(int)),
             //this, SIGNAL(signalAddToExistingQueue(int)));
 
-    //REMconnect(d->thumbBar, SIGNAL(selectionChanged()),
-           //REM this, SLOT(slotThumbBarSelectionChanged()));
+    connect(d->thumbBar, SIGNAL(selectionChanged()),
+            this, SLOT(slotThumbBarSelectionChanged()));
 
     connect(d->importIconView, SIGNAL(selectionChanged()),
             this, SLOT(slotIconViewSelectionChanged()));
 
-    //REMconnect(d->thumbBarDock, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)),
-            //REMd->thumbBar, SLOT(slotDockLocationChanged(Qt::DockWidgetArea)));
+    connect(d->thumbBarDock, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)),
+            d->thumbBar, SLOT(slotDockLocationChanged(Qt::DockWidgetArea)));
 
     //FIXME: connect(d->mediaPlayerView, SIGNAL(signalNextItem()),
             //this, SIGNAL(signalNextItem()));
@@ -162,8 +162,8 @@ ImportStackedView::ImportStackedView(CameraController* const controller, QWidget
     //FIXME: connect(d->mediaPlayerView, SIGNAL(signalBack2Album()),
             //this, SIGNAL(signalBack2Album()));
 
-   //REM connect(d->importPreviewView, SIGNAL(signalPreviewLoaded(bool)),
-            //REMthis, SLOT(slotPreviewLoaded(bool)));
+    connect(d->importPreviewView, SIGNAL(signalPreviewLoaded(bool)),
+            this, SLOT(slotPreviewLoaded(bool)));
 }
 ImportStackedView::~ImportStackedView()
 {
@@ -172,39 +172,37 @@ ImportStackedView::~ImportStackedView()
 
 void ImportStackedView::readSettings()
 {
-/*
     ImportSettings* settings = ImportSettings::instance();
-    REMbool showThumbbar        = settings->getShowThumbbar();
-    REMd->thumbBarDock->setShouldBeVisible(showThumbbar);
-*/
+    bool showThumbbar        = settings->getShowThumbbar();
+    d->thumbBarDock->setShouldBeVisible(showThumbbar);
 }
 
 void ImportStackedView::setDockArea(QMainWindow* dockArea)
 {
     // Attach the thumbbar dock to the given dock area and place it initially on top.
     d->dockArea = dockArea;
-    //REMd->thumbBarDock->setParent(d->dockArea);
-    //REMd->dockArea->addDockWidget(Qt::TopDockWidgetArea, d->thumbBarDock);
-    //REMd->thumbBarDock->setFloating(false);
+    d->thumbBarDock->setParent(d->dockArea);
+    d->dockArea->addDockWidget(Qt::TopDockWidgetArea, d->thumbBarDock);
+    d->thumbBarDock->setFloating(false);
 }
 
-//REMThumbBarDock* ImportStackedView::thumbBarDock() const
-//REM{
-//REM    return d->thumbBarDock;
-//REM}
+ThumbBarDock* ImportStackedView::thumbBarDock() const
+{
+    return d->thumbBarDock;
+}
 
-//REMImportThumbnailBar* ImportStackedView::thumbBar() const
-//REM{
-//REM    return d->thumbBar;
-//REM}
+ImportThumbnailBar* ImportStackedView::thumbBar() const
+{
+    return d->thumbBar;
+}
 
 void ImportStackedView::slotEscapePreview()
 {
-//FIXME: Uncomment when MediaPlayerView is implemented
-//    if (previewMode() == MediaPlayerMode)
-//    {
-//        d->mediaPlayerView->escapePreview();
-//    }
+    if (previewMode() == MediaPlayerMode)
+    {
+        //FIXME: Uncomment when MediaPlayerView is implemented
+        //d->mediaPlayerView->escapePreview();
+    }
 }
 
 ImportIconView* ImportStackedView::importIconView() const
@@ -238,7 +236,7 @@ bool ImportStackedView::isInMultipleFileMode() const
     return currentIndex() == PreviewCameraMode || currentIndex() == MapWidgetMode;
 }
 
-void ImportStackedView::setPreviewItem(const CamItemInfo& info, const CamItemInfo& /*previous*/, const CamItemInfo& /*next*/)
+void ImportStackedView::setPreviewItem(const CamItemInfo& info, const CamItemInfo& previous, const CamItemInfo& next)
 {
     if (info.isNull())
     {
@@ -249,7 +247,7 @@ void ImportStackedView::setPreviewItem(const CamItemInfo& info, const CamItemInf
         //}
         /*else*/ if (previewMode() == PreviewImageMode)
         {
-           //REM d->importPreviewView->setCamItemInfo();
+            d->importPreviewView->setCamItemInfo();
         }
     }
     else
@@ -259,7 +257,7 @@ void ImportStackedView::setPreviewItem(const CamItemInfo& info, const CamItemInf
             // Stop image viewer
             if (previewMode() == PreviewImageMode)
             {
-                //REMd->importPreviewView->setCamItemInfo();
+                d->importPreviewView->setCamItemInfo();
             }
 
             //FIXME: Uncomment when MediaPlayerView is implemented
@@ -275,7 +273,7 @@ void ImportStackedView::setPreviewItem(const CamItemInfo& info, const CamItemInf
             //    d->mediaPlayerView->setCamItemInfo();
             //}
 
-            //REMd->importPreviewView->setCamItemInfo(info, previous, next);
+            d->importPreviewView->setCamItemInfo(info, previous, next);
 
             // NOTE: No need to toggle immediately in PreviewImageMode here,
             // because we will receive a signal for that when the image preview will be loaded.
@@ -283,8 +281,8 @@ void ImportStackedView::setPreviewItem(const CamItemInfo& info, const CamItemInf
         }
 
         // do not touch the selection, only adjust current info
-        //REMQModelIndex currentIndex = d->thumbBar->importSortFilterModel()->indexForCamItemInfo(info);
-        //REMd->thumbBar->selectionModel()->setCurrentIndex(currentIndex, QItemSelectionModel::NoUpdate);
+        QModelIndex currentIndex = d->thumbBar->importSortFilterModel()->indexForCamItemInfo(info);
+        d->thumbBar->selectionModel()->setCurrentIndex(currentIndex, QItemSelectionModel::NoUpdate);
     }
 }
 
@@ -308,31 +306,31 @@ void ImportStackedView::setPreviewMode(const int mode)
 
     if (mode == PreviewImageMode || mode == MediaPlayerMode)
     {
-        //REMd->thumbBarDock->restoreVisibility();
-        //REMsyncSelection(d->importIconView, d->thumbBar);
+        d->thumbBarDock->restoreVisibility();
+        syncSelection(d->importIconView, d->thumbBar);
     }
     else
     {
-        //REMd->thumbBarDock->hide();
+        d->thumbBarDock->hide();
     }
 
     //TODO: Implement the MapPageMode
-    //if (mode == PreviewCameraMode || mode == WelcomePageMode || mode == MapWidgetMode)
-    //{
-    //    setPreviewItem();
-    //    setCurrentIndex(mode);
-    //}
-    //else
-    //{
-    //    setCurrentIndex(mode);
-    //}
+    if (mode == PreviewCameraMode || mode == MapWidgetMode)
+    {
+        setPreviewItem();
+        setCurrentIndex(mode);
+    }
+    else
+    {
+        setCurrentIndex(mode);
+    }
 
     //d->mapWidgetView->setActive(mode == MapWidgetMode);
 
-    //if (mode == PreviewCameraMode)
-    //{
-    //    d->importIconView->setFocus();
-    //}
+    if (mode == PreviewCameraMode)
+    {
+        d->importIconView->setFocus();
+    }
     //else if (mode == MapWidgetMode)
     //{
     //    d->mapWidgetView->setFocus();
@@ -377,7 +375,7 @@ void ImportStackedView::slotThumbBarSelectionChanged()
         return;
     }
 
-    //REMsyncSelection(d->thumbBar, d->importIconView);
+    syncSelection(d->thumbBar, d->importIconView);
 }
 
 void ImportStackedView::slotIconViewSelectionChanged()
@@ -392,7 +390,7 @@ void ImportStackedView::slotIconViewSelectionChanged()
         return;
     }
 
-    //REMsyncSelection(d->importIconView, d->thumbBar);
+    syncSelection(d->importIconView, d->thumbBar);
 }
 
 void ImportStackedView::previewLoaded()

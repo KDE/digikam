@@ -57,7 +57,7 @@ public:
     void showSideBars();
     void hideSideBars();
     void setThumbSize(int size);
-    void toggleShowBar(bool);
+    void toggleShowBar(bool b);
     bool isThumbBarVisible();
 
     KUrl::List allUrls() const;
@@ -94,7 +94,7 @@ public Q_SLOTS:
     void slotFitToWindow();
 
     void slotImagePreview();
-    //TODO: void slotMapWidgetView();
+    void slotMapWidgetView();
     void slotIconView();
 
     void slotSelectAll();

@@ -19,6 +19,7 @@ SET(libcameragui_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/advancedsettings.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/scriptingsettings.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/filtercombo.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/importcontextmenu.cpp
 
     ${CMAKE_CURRENT_SOURCE_DIR}/models/importimagemodel.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/models/importthumbnailmodel.cpp

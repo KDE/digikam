@@ -60,6 +60,10 @@ public:
 
     void showContextMenu(const CamItemInfo& info, QGraphicsSceneContextMenuEvent* event);
 
+private:
+
+    QString identifyCategoryforMime(QString mime);
+
 Q_SIGNALS:
 
     void signalNextItem();

@@ -100,35 +100,6 @@ ThumbnailSize ImportThumbnailModel::thumbnailSize() const
     return d->thumbSize;
 }
 
-void ImportThumbnailModel::prepareThumbnails(const QList<QModelIndex>& indexesToPrepare)
-{
-    prepareThumbnails(indexesToPrepare, d->thumbSize);
-}
-
-void ImportThumbnailModel::prepareThumbnails(const QList<QModelIndex>& indexesToPrepare, ThumbnailSize thumbSize)
-{
-    if (!d->controller)
-    {
-        return;
-    }
-
-    CamItemInfoList infos;
-    foreach(const QModelIndex& index, indexesToPrepare)
-    {
-        CamItemInfo info = camItemInfoRef(index);
-        if(!hasItemFromCache(info.url()))
-        {
-            infos << info;
-        }
-    }
-    //qDebug() << "IMPORT THUMB MODEL: " << QString::number(thumbSize.size());
-//    if(!infos.isEmpty())
-//    {
-//        d->controller->getThumbsInfo(infos, thumbSize);
-//    }
-
-}
-
 void ImportThumbnailModel::setEmitDataChanged(bool emitSignal)
 {
     d->emitDataChanged = emitSignal;

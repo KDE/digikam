@@ -55,6 +55,8 @@
         <Separator/>
         <Action name="cameraui_zoomplus" />
         <Action name="cameraui_zoomminus" />
+        <Action name="import_zoomfit2window" />
+        <Action name="import_zoomto100percents" />
         <Separator/>
         <Action name="item_sort" />
         <Action name="item_sort_order" />

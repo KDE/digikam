@@ -43,7 +43,7 @@
 #include "advancedrenamedialog.h"
 #include "advancedrenameprocessdialog.h"
 #include "imageviewutilities.h"
-#include "contextmenuhelper.h"
+#include "importcontextmenu.h"
 
 namespace Digikam
 {
@@ -108,8 +108,8 @@ void ImportIconView::init(CameraController* const controller)
     //TODO: connect(importImageModel()->dragDropHandler(), SIGNAL(assignTags(QList<CamItemInfo>,QList<int>)),
             //FileActionMngr::instance(), SLOT(assignTags(QList<CamItemInfo>,QList<int>)));
 
-    connect(importImageModel()->dragDropHandler(), SIGNAL(addToGroup(CamItemInfo,QList<CamItemInfo>)),
-            FileActionMngr::instance(), SLOT(addToGroup(CamItemInfo,QList<CamItemInfo>)));
+    //TODO: connect(importImageModel()->dragDropHandler(), SIGNAL(addToGroup(CamItemInfo,QList<CamItemInfo>)),
+            //FileActionMngr::instance(), SLOT(addToGroup(CamItemInfo,QList<CamItemInfo>)));
 
     connect(settings, SIGNAL(setupChanged()),
             this, SLOT(slotSetupChanged()));
@@ -247,141 +247,87 @@ void ImportIconView::activated(const CamItemInfo& info)
     }
 }
 
-//TODO: Implement context menu
-void ImportIconView::showContextMenuOnInfo(QContextMenuEvent* /*event*/, const CamItemInfo& /*info*/)
+void ImportIconView::showContextMenuOnInfo(QContextMenuEvent* event, const CamItemInfo& /*info*/)
 {
-//    QList<CamItemInfo> selectedInfos = selectedCamItemInfosCurrentFirst();
-//    QList<qlonglong> selectedImageIDs;
-//    foreach(const CamItemInfo& info, selectedInfos)
-//    {
-//        selectedImageIDs << info.id;
-//    }
+    QList<CamItemInfo> selectedInfos = selectedCamItemInfosCurrentFirst();
+    QList<qlonglong> selectedImageIDs;
+    foreach(const CamItemInfo& info, selectedInfos)
+    {
+        selectedImageIDs << info.id;
+    }
 
-//    // Temporary actions --------------------------------------
+    // --------------------------------------------------------
 
-//    QAction* viewAction = new QAction(SmallIcon("viewimage"), i18nc("View the selected image", "Preview"), this);
-//    viewAction->setEnabled(selectedImageIDs.count() == 1);
+    KMenu popmenu(this);
+    ImportContextMenuHelper cmhelper(&popmenu);
 
-//    // --------------------------------------------------------
+    cmhelper.addAction("cameraui_fullscreen");
+    cmhelper.addAction("import_zoomfit2window");
+    cmhelper.addSeparator();
+    // --------------------------------------------------------
+    cmhelper.addAction("cameraui_imagedownload");
+    cmhelper.addAction("cameraui_imagemarkasdownloaded");
+    cmhelper.addAction("cameraui_imagelock");
+    cmhelper.addAction("cameraui_delete");
+    cmhelper.addSeparator();
+    cmhelper.addAction("cameraui_item_view");
+    cmhelper.addAction("cameraui_imageview");
+    cmhelper.addServicesMenu(selectedUrls());
+    //TODO: cmhelper.addRotateMenu(selectedImageIDs);
+    cmhelper.addSeparator();
+    // --------------------------------------------------------
+    cmhelper.addAction("cameraui_selectnone");
+    cmhelper.addAction("cameraui_selectinvert");
+    cmhelper.addSeparator();
+    // --------------------------------------------------------
+    //cmhelper.addAssignTagsMenu(selectedImageIDs);
+    //cmhelper.addRemoveTagsMenu(selectedImageIDs);
+    //cmhelper.addSeparator();
+    // --------------------------------------------------------
+    //cmhelper.addLabelsAction();
+    //if (!d->faceMode)
+    //{
+    //    cmhelper.addGroupMenu(selectedImageIDs);
+    //}
 
-//    KMenu popmenu(this);
-//    ContextMenuHelper cmhelper(&popmenu);
-//    cmhelper.setImageFilterModel(importFilterModel());
+    // special action handling --------------------------------
 
-//    cmhelper.addAction("full_screen");
-//    cmhelper.addSeparator();
-//    // --------------------------------------------------------
-//    cmhelper.addAction("move_selection_to_album");
-//    cmhelper.addAction(viewAction);
-//    cmhelper.addAction("image_edit");
-//    cmhelper.addServicesMenu(selectedUrls());
-//    cmhelper.addGotoMenu(selectedImageIDs);
-//    cmhelper.addRotateMenu(selectedImageIDs);
-//    cmhelper.addSeparator();
-//    // --------------------------------------------------------
-//    cmhelper.addAction("image_find_similar");
-//    cmhelper.addStandardActionLightTable();
-//    cmhelper.addQueueManagerMenu();
-//    cmhelper.addSeparator();
-//    // --------------------------------------------------------
-//    cmhelper.addAction("image_rename");
-//    cmhelper.addAction("cut_album_selection");
-//    cmhelper.addAction("copy_album_selection");
-//    cmhelper.addAction("paste_album_selection");
-//    cmhelper.addStandardActionItemDelete(this, SLOT(deleteSelected()), selectedImageIDs.count());
-//    cmhelper.addSeparator();
-//    // --------------------------------------------------------
-//    cmhelper.addStandardActionThumbnail(selectedImageIDs, currentAlbum());
-//    // --------------------------------------------------------
-//    cmhelper.addAssignTagsMenu(selectedImageIDs);
-//    cmhelper.addRemoveTagsMenu(selectedImageIDs);
-//    cmhelper.addSeparator();
-//    // --------------------------------------------------------
-//    cmhelper.addLabelsAction();
-//    if (!d->faceMode)
-//    {
-//        cmhelper.addGroupMenu(selectedImageIDs);
-//    }
+    //connect(&cmhelper, SIGNAL(signalAssignTag(int)),
+            //this, SLOT(assignTagToSelected(int)));
 
-//    // special action handling --------------------------------
+    //connect(&cmhelper, SIGNAL(signalPopupTagsView()),
+            //this, SIGNAL(signalPopupTagsView()));
 
-//    connect(&cmhelper, SIGNAL(signalAssignTag(int)),
-//            this, SLOT(assignTagToSelected(int)));
+    //connect(&cmhelper, SIGNAL(signalRemoveTag(int)),
+            //this, SLOT(removeTagFromSelected(int)));
 
-//    connect(&cmhelper, SIGNAL(signalPopupTagsView()),
-//            this, SIGNAL(signalPopupTagsView()));
+    //connect(&cmhelper, SIGNAL(signalGotoTag(int)),
+            //this, SIGNAL(gotoTagAndImageRequested(int)));
 
-//    connect(&cmhelper, SIGNAL(signalRemoveTag(int)),
-//            this, SLOT(removeTagFromSelected(int)));
+    //connect(&cmhelper, SIGNAL(signalAssignPickLabel(int)),
+            //this, SLOT(assignPickLabelToSelected(int)));
 
-//    connect(&cmhelper, SIGNAL(signalGotoTag(int)),
-//            this, SIGNAL(gotoTagAndImageRequested(int)));
+    //connect(&cmhelper, SIGNAL(signalAssignColorLabel(int)),
+            //this, SLOT(assignColorLabelToSelected(int)));
 
-//    connect(&cmhelper, SIGNAL(signalGotoAlbum(ImageInfo)),
-//            this, SIGNAL(gotoAlbumAndImageRequested(ImageInfo)));
+    //connect(&cmhelper, SIGNAL(signalAssignRating(int)),
+            //this, SLOT(assignRatingToSelected(int)));
 
-//    connect(&cmhelper, SIGNAL(signalGotoDate(ImageInfo)),
-//            this, SIGNAL(gotoDateAndImageRequested(ImageInfo)));
+    //connect(&cmhelper, SIGNAL(signalAddToExistingQueue(int)),
+            //this, SLOT(insertSelectedToExistingQueue(int)));
 
-//    connect(&cmhelper, SIGNAL(signalAssignPickLabel(int)),
-//            this, SLOT(assignPickLabelToSelected(int)));
+    //FIXME: connect(&cmhelper, SIGNAL(signalCreateGroup()),
+            //this, SLOT(createGroupFromSelection()));
 
-//    connect(&cmhelper, SIGNAL(signalAssignColorLabel(int)),
-//            this, SLOT(assignColorLabelToSelected(int)));
+    //connect(&cmhelper, SIGNAL(signalUngroup()),
+            //this, SLOT(ungroupSelected()));
 
-//    connect(&cmhelper, SIGNAL(signalAssignRating(int)),
-//            this, SLOT(assignRatingToSelected(int)));
+    //connect(&cmhelper, SIGNAL(signalRemoveFromGroup()),
+            //this, SLOT(removeSelectedFromGroup()));
 
-//    connect(&cmhelper, SIGNAL(signalSetThumbnail(ImageInfo)),
-//            this, SLOT(setAsAlbumThumbnail(ImageInfo)));
+    // --------------------------------------------------------
 
-//    connect(&cmhelper, SIGNAL(signalAddToExistingQueue(int)),
-//            this, SLOT(insertSelectedToExistingQueue(int)));
-
-//    connect(&cmhelper, SIGNAL(signalCreateGroup()),
-//            this, SLOT(createGroupFromSelection()));
-
-//    connect(&cmhelper, SIGNAL(signalCreateGroupByTime()),
-//            this, SLOT(createGroupByTimeFromSelection()));
-
-//    connect(&cmhelper, SIGNAL(signalUngroup()),
-//            this, SLOT(ungroupSelected()));
-
-//    connect(&cmhelper, SIGNAL(signalRemoveFromGroup()),
-//            this, SLOT(removeSelectedFromGroup()));
-
-//    // --------------------------------------------------------
-
-//    QAction* choice = cmhelper.exec(event->globalPos());
-
-//    if (choice && (choice == viewAction))
-//    {
-//        emit previewRequested(info);
-//    }
-}
-
-void ImportIconView::showContextMenu(QContextMenuEvent* /*event*/)
-{
-//    Album* album = currentAlbum();
-
-//    if (!album ||
-//        album->isRoot() ||
-//        (album->type() != Album::PHYSICAL && album->type() != Album::TAG) )
-//    {
-//        return;
-//    }
-
-//    KMenu popmenu(this);
-//    ContextMenuHelper cmhelper(&popmenu);
-//    cmhelper.setImageFilterModel(imageFilterModel());
-
-//    cmhelper.addAction("full_screen");
-//    cmhelper.addSeparator();
-//    // --------------------------------------------------------
-//    cmhelper.addStandardActionPaste(this, SLOT(paste()));
-//    // --------------------------------------------------------
-
-//    cmhelper.exec(event->globalPos());
+    cmhelper.exec(event->globalPos());
 }
 
 } // namespace Digikam

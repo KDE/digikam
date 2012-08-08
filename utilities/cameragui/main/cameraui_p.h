@@ -80,14 +80,16 @@ public:
         fullScreen(false),
         removeFullScreenButton(false),
         fullScreenHideToolBar(false),
-        refreshIconViewTimer(0),
         downloadMenu(0),
         deleteMenu(0),
         imageMenu(0),
         cameraCancelAction(0),
         cameraCaptureAction(0),
         cameraInfoAction(0),
+        increaseThumbsAction(0),
         decreaseThumbsAction(0),
+        zoomFitToWindowAction(0),
+        zoomTo100percents(0),
         deleteNewAction(0),
         deleteAllAction(0),
         deleteSelectedAction(0),
@@ -99,7 +101,6 @@ public:
         downloadDelSelectedAction(0),
         fullScreenAction(0),
         imageViewAction(0),
-        increaseThumbsAction(0),
         libsInfoAction(0),
         dbStatAction(0),
         lockAction(0),
@@ -160,8 +161,6 @@ public:
     QSet<QString>                 foldersToScan;
     CamItemInfoList               filesToBeAdded;
 
-    QTimer*                       refreshIconViewTimer;
-
     KMenu*                        downloadMenu;
     KMenu*                        deleteMenu;
     KMenu*                        imageMenu;
@@ -169,7 +168,10 @@ public:
     KAction*                      cameraCancelAction;
     KAction*                      cameraCaptureAction;
     KAction*                      cameraInfoAction;
+    KAction*                      increaseThumbsAction;
     KAction*                      decreaseThumbsAction;
+    KAction*                      zoomFitToWindowAction;
+    KAction*                      zoomTo100percents;
     KActionMenu*                  deleteAction;
     KAction*                      deleteNewAction;
     KAction*                      deleteAllAction;
@@ -183,7 +185,6 @@ public:
     KAction*                      downloadDelSelectedAction;
     KAction*                      fullScreenAction;
     KAction*                      imageViewAction;
-    KAction*                      increaseThumbsAction;
     KAction*                      libsInfoAction;
     KAction*                      dbStatAction;
     KAction*                      lockAction;

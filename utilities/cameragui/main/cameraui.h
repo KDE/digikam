@@ -72,6 +72,8 @@ public:
              const QString& path, int startIndex);
     ~CameraUI();
 
+    static CameraUI* instance();
+
     bool isBusy() const;
     bool isClosed() const;
 
@@ -93,6 +95,7 @@ Q_SIGNALS:
 
     void signalLastDestination(const KUrl&);
     void signalWindowHasMoved();
+    void signalEscapePressed();
 
 public Q_SLOTS:
 
@@ -152,6 +155,7 @@ private Q_SLOTS:
     void slotIncreaseThumbSize();
     void slotDecreaseThumbSize();
     void slotZoomSliderChanged(int size);
+    void slotZoomChanged(double zoom);
     void slotThumbSizeChanged(int size);
 
     void slotToggleFullScreen();
@@ -214,6 +218,8 @@ private:
 
     class CameraUIPriv;
     CameraUIPriv* const d;
+
+    static CameraUI* m_instance;
 };
 
 }  // namespace Digikam

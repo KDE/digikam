@@ -142,7 +142,7 @@ ImportView::ImportView(CameraUI* const ui, QWidget* const parent)
     //TODO: d->mapView  = d->StackedView->mapWidgetView();
 
     d->addPageUpDownActions(this, d->StackedView->importPreviewView());
-    //REMd->addPageUpDownActions(this, d->StackedView->thumbBar());
+    d->addPageUpDownActions(this, d->StackedView->thumbBar());
     //TODO: d->addPageUpDownActions(this, d->StackedView->mediaPlayerView());
 
     //TODO: d->rightSideBar = new ImagePropertiesSideBarDB(this, d->splitter, KMultiTabBar::Right, true);
@@ -292,7 +292,7 @@ void ImportView::setupConnections()
     connect(d->thumbSizeTimer, SIGNAL(timeout()),
             this, SLOT(slotThumbSizeEffect()) );
 
-    // -- Album Settings ----------------
+    // -- Import Settings ----------------
 
     connect(ImportSettings::instance(), SIGNAL(setupChanged()),
             this, SLOT(slotSidebarTabTitleStyleChanged()));
@@ -364,7 +364,7 @@ void ImportView::saveViewState()
     // needs to be closed explicitly, because when it is floating and visible
     // (when the user is in image preview mode) when the layout is saved, it
     // also reappears when restoring the view, while it should always be hidden.
-    //REMd->StackedView->thumbBarDock()->close();
+    d->StackedView->thumbBarDock()->close();
     group.writeEntry("ThumbbarState", d->dockArea->saveState().toBase64());
 
     //TODO: d->mapView->saveState();
@@ -531,7 +531,7 @@ ThumbnailSize ImportView::thumbnailSize()
 
 void ImportView::slotThumbSizeEffect()
 {
-    qDebug() << "SETTING THUMBNAIL SIZE IN <<<IMPORT VIEW>>>";
+    qDebug() << "SETTING THUMBNAIL SIZE IN <<<IMPORT VIEW>>>" << QString::number(d->thumbSize);
     d->iconView->setThumbnailSize(d->thumbSize);
     toggleZoomActions();
 
@@ -618,7 +618,7 @@ void ImportView::slotFitToWindow()
     if (d->StackedView->previewMode() == ImportStackedView::PreviewCameraMode)
     {
         int nts = d->iconView->fitToWidthIcons();
-        kDebug() << "new thumb size = " << nts;
+        kDebug() << "new thumb size = " << nts;//TODO: Remove this line.
         setThumbSize(nts);
         toggleZoomActions();
         emit signalThumbSizeChanged(d->thumbSize);
@@ -644,10 +644,10 @@ void ImportView::slotEscapePreview()
     slotTogglePreviewMode(CamItemInfo());
 }
 
-//void ImportView::slotMapWidgetView()
-//{
-//    d->StackedView->setPreviewMode(ImportStackedView::MapWidgetMode);
-//}
+void ImportView::slotMapWidgetView()
+{
+    d->StackedView->setPreviewMode(ImportStackedView::MapWidgetMode);
+}
 
 void ImportView::slotIconView()
 {
@@ -838,15 +838,14 @@ void ImportView::slotSidebarTabTitleStyleChanged()
     //     d->rightSideBar->applySettings();
 }
 
-void ImportView::toggleShowBar(bool /*b*/)
+void ImportView::toggleShowBar(bool b)
 {
-    //REMd->StackedView->thumbBarDock()->showThumbBar(b);
+    d->StackedView->thumbBarDock()->showThumbBar(b);
 }
 
 bool ImportView::isThumbBarVisible()
 {
-    //REMreturn d->StackedView->thumbBarDock()->isVisible();
-    return false;//REM
+    return d->StackedView->thumbBarDock()->isVisible();
 }
 
 void ImportView::slotImageChangeFailed(const QString& message, const QStringList& fileNames)

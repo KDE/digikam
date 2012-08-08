@@ -73,7 +73,6 @@ protected:
 
     virtual void activated(const CamItemInfo& info);
     virtual void showContextMenuOnInfo(QContextMenuEvent* event, const CamItemInfo& info);
-    virtual void showContextMenu(QContextMenuEvent* event);
     virtual void slotSetupChanged();
 
 private:

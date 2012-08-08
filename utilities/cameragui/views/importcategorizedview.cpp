@@ -39,6 +39,7 @@
 #include "itemviewtooltip.h"
 #include "importdelegate.h"
 #include "importtooltipfiller.h"
+#include "thumbnailloadthread.h"
 
 namespace Digikam
 {
@@ -398,8 +399,8 @@ void ImportCategorizedView::setThumbnailSize(const ThumbnailSize& s)
 {
     // we abuse this pair of method calls to restore scroll position
     layoutAboutToBeChanged();
-    ThumbnailSize size(s.size());
-    d->delegate->setThumbnailSize(size);
+    //ThumbnailSize size(ThumbnailLoadThread::thumbnailPixmapSize(s.size()));
+    d->delegate->setThumbnailSize(s);
     layoutWasChanged();
 }
 
@@ -624,15 +625,6 @@ void ImportCategorizedView::showContextMenuOnInfo(QContextMenuEvent*, const CamI
 
 void ImportCategorizedView::paintEvent(QPaintEvent* e)
 {
-    // We want the thumbnails to be loaded in order.
-    ImportThumbnailModel* thumbModel = importThumbnailModel();
-
-    if (thumbModel)
-    {
-        QModelIndexList indexesToThumbnail = importFilterModel()->mapListToSource(categorizedIndexesIn(viewport()->rect()));
-        d->delegate->prepareThumbnails(thumbModel, indexesToThumbnail);
-    }
-
     DCategorizedView::paintEvent(e);
 }
 

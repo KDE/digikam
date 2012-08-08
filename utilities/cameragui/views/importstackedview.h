@@ -62,8 +62,8 @@ public:
     /*FIXME: Attach the thumbnail dock widget to the specified QMainWindow. */
     void setDockArea(QMainWindow*);
 
-    //REMThumbBarDock*       thumbBarDock()      const;
-    //REMImportThumbnailBar* thumbBar()          const;
+    ThumbBarDock*       thumbBarDock()      const;
+    ImportThumbnailBar* thumbBar()          const;
     ImportIconView*     importIconView()    const;
     ImportPreviewView*  importPreviewView() const;
     //FIXME: MapWidgetView*    mapWidgetView()    const;
