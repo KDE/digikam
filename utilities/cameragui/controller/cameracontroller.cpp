@@ -509,15 +509,17 @@ void CameraController::executeCommand(CameraCommand* const cmd)
                 sendLogMsg(i18n("Failed to list files in %1.", folder), DHistoryView::ErrorEntry);
             }
 
+            CamItemInfoList list;
             foreach(CamItemInfo info, itemsList)
             {
                 numberOfItems++;
                 info.id += numberOfItems;
+                list.append(info);
             }
 
-            if (!itemsList.isEmpty())
+            if (!list.isEmpty())
             {
-                emit signalFileList(itemsList);
+                emit signalFileList(list);
             }
 
             sendLogMsg(i18n("The files in %1 have been listed.", folder));

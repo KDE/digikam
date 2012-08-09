@@ -897,6 +897,14 @@ bool ImportView::isThumbBarVisible()
     return d->StackedView->thumbBarDock()->isVisible();
 }
 
+void ImportView::scrollTo(const QString& folder, const QString& file)
+{
+    CamItemInfo info = camItemInfo(folder, file);
+    QModelIndex index = d->iconView->importFilterModel()->indexForCamItemInfo(info);
+    d->iconView->scrollToRelaxed(index);
+    d->iconView->setSelectedCamItemInfos(CamItemInfoList() << info);
+}
+
 void ImportView::slotImageChangeFailed(const QString& message, const QStringList& fileNames)
 {
     if (fileNames.isEmpty())

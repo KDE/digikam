@@ -632,8 +632,8 @@ void CameraUI::setupConnections()
     //connect(d->advancedSettings, SIGNAL(signalDownloadNameChanged()),
             //d->view, SLOT(slotDownloadNameChanged()));
 
-    //connect(d->historyView, SIGNAL(signalEntryClicked(QVariant)),
-            //this, SLOT(slotHistoryEntryClicked(QVariant)));
+    connect(d->historyView, SIGNAL(signalEntryClicked(QVariant)),
+            this, SLOT(slotHistoryEntryClicked(QVariant)));
 
     // -------------------------------------------------------------------------
 
@@ -649,39 +649,8 @@ void CameraUI::setupConnections()
     connect(d->view, SIGNAL(signalSwitchedToIconView()),
             this, SLOT(slotSwitchedToIconView()));
 
-//Emitted from the context menu to view the item
-//TODO: need to connect it with the context menu and view item action
-    //connect(d->view, SIGNAL(signalFileView(CamItemInfo)),
-            //this, SLOT(slotFileView(CamItemInfo)));
-
-    //connect(d->view, SIGNAL(signalUpload(KUrl::List)),
-            //this, SLOT(slotUploadItems(KUrl::List)));
-
-//Emitted from the context menu to download the item
-//TODO: need to connect it with the new context menu and download item action
-    //connect(d->view, SIGNAL(signalDownload()),
-            //this, SLOT(slotDownloadSelected()));
-
-//Emitted from the context menu to download and delete the item
-    //connect(d->view, SIGNAL(signalDownloadAndDelete()),
-            //this, SLOT(slotDownloadAndDeleteSelected()));
-
-    //connect(d->view, SIGNAL(signalDelete()),
-            //this, SLOT(slotDeleteSelected()));
-
-//Emitted from the context menu to toogle lock the item
-//    connect(d->view, SIGNAL(signalToggleLock()),
-//            this, SLOT(slotToggleLock()));
-
     connect(d->view, SIGNAL(signalNewSelection(bool)),
             this, SLOT(slotNewSelection(bool)));
-
-    //TODO: To be removed
-    //connect(d->view, SIGNAL(signalZoomOut()),
-            //this, SLOT(slotDecreaseThumbSize()));
-
-    //connect(d->view, SIGNAL(signalZoomIn()),
-            //this, SLOT(slotIncreaseThumbSize()));
 
     connect(d->statusNavigateBar, SIGNAL(signalFirstItem()),
             d->view, SLOT(slotFirstItem()));
@@ -717,7 +686,7 @@ void CameraUI::setupConnections()
     connect(CollectionManager::instance(), SIGNAL(locationStatusChanged(CollectionLocation, int)),
             this, SLOT(slotCollectionLocationStatusChanged(CollectionLocation, int)));
 
-    //connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
+    //connect(ImportSettings::instance(), SIGNAL(setupChanged()),
             //this, SLOT(slotSidebarTabTitleStyleChanged()));
 }
 
@@ -2151,6 +2120,7 @@ void CameraUI::slotNewSelection(bool hasSelection)
 
     d->downloadSelectedAction->setEnabled(hasSelection);
     d->downloadDelSelectedAction->setEnabled(hasSelection && d->controller->cameraDeleteSupport());
+    d->camItemPreviewAction->setEnabled(hasSelection);
     d->deleteSelectedAction->setEnabled(hasSelection && d->controller->cameraDeleteSupport());
     d->imageViewAction->setEnabled(hasSelection);
     d->lockAction->setEnabled(hasSelection);
@@ -2195,7 +2165,7 @@ void CameraUI::slotImageSelected(const CamItemInfoList& selection, bool hasPrev,
     {
         case 0:
         {
-            d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode, i18np("No item selected (%1 item)",
+        d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode, i18np("No item selected (%1 item)",
                                               "No item selected (%1 items)",
                                               num_images));
 
@@ -2240,9 +2210,11 @@ void CameraUI::slotImageSelected(const CamItemInfoList& selection, bool hasPrev,
         }
     }
 
+    slotNewSelection(d->view->selectedCamItemInfos().count() > 0);
     d->statusNavigateBar->setNavigateBarState(hasPrev, hasNext);
 }
 
+//FIXME: To be removed.
 void CameraUI::slotItemsSelected(CamItemInfo info, bool selected)
 {
     if (!d->controller)
@@ -2300,43 +2272,41 @@ void CameraUI::slotSwitchedToMapView()
     d->showBarAction->setEnabled(false);
 }
 
-
 bool CameraUI::createAutoAlbum(const KUrl& parentURL, const QString& sub,
                                const QDate& date, QString& errMsg) const
 {
-    return false; //FIXME: Remove this line.
-//    KUrl u(parentURL);
-//    u.addPath(sub);
+    KUrl u(parentURL);
+    u.addPath(sub);
 
-//    // first stat to see if the album exists
-//    QFileInfo info(u.toLocalFile());
+    // first stat to see if the album exists
+    QFileInfo info(u.toLocalFile());
 
-//    if (info.exists())
-//    {
-//        // now check if its really a directory
-//        if (info.isDir())
-//        {
-//            return true;
-//        }
-//        else
-//        {
-//            errMsg = i18n("A file with the same name (%1) already exists in folder %2.",
-//                          sub, parentURL.toLocalFile());
-//            return false;
-//        }
-//    }
+    if (info.exists())
+    {
+        // now check if its really a directory
+        if (info.isDir())
+        {
+            return true;
+        }
+        else
+        {
+            errMsg = i18n("A file with the same name (%1) already exists in folder %2.",
+                          sub, parentURL.toLocalFile());
+            return false;
+        }
+    }
 
-//    // looks like the directory does not exist, try to create it
+    // looks like the directory does not exist, try to create it
 
-//    PAlbum* parent = AlbumManager::instance()->findPAlbum(parentURL);
+    PAlbum* parent = AlbumManager::instance()->findPAlbum(parentURL);
 
-//    if (!parent)
-//    {
-//        errMsg = i18n("Failed to find Album for path '%1'.", parentURL.toLocalFile());
-//        return false;
-//    }
+    if (!parent)
+    {
+        errMsg = i18n("Failed to find Album for path '%1'.", parentURL.toLocalFile());
+        return false;
+    }
 
-//    return AlbumManager::instance()->createPAlbum(parent, sub, QString(), date, QString(), errMsg);
+    return AlbumManager::instance()->createPAlbum(parent, sub, QString(), date, QString(), errMsg);
 }
 
 void CameraUI::slotEditKeys()
@@ -2525,7 +2495,7 @@ void CameraUI::refreshCollectionFreeSpace()
 
 void CameraUI::slotCollectionLocationStatusChanged(const CollectionLocation&, int)
 {
-//    refreshCollectionFreeSpace();
+    refreshCollectionFreeSpace();
 }
 
 void CameraUI::slotToggleShowBar()
@@ -2547,10 +2517,10 @@ void CameraUI::slotSidebarTabTitleStyleChanged()
 void CameraUI::slotLogMsg(const QString& msg, DHistoryView::EntryType type,
                           const QString& folder, const QString& file)
 {
-//    d->statusProgressBar->setProgressText(msg);
-//    QStringList meta;
-//    meta << folder << file;
-//    d->historyView->addedEntry(msg, type, QVariant(meta));
+    d->statusProgressBar->setProgressText(msg);
+    QStringList meta;
+    meta << folder << file;
+    d->historyView->addedEntry(msg, type, QVariant(meta));
 }
 
 void CameraUI::slotShowLog()
@@ -2560,10 +2530,10 @@ void CameraUI::slotShowLog()
 
 void CameraUI::slotHistoryEntryClicked(const QVariant& metadata)
 {
-//    QStringList meta = metadata.toStringList();
-//    QString folder   = meta.at(0);
-//    QString file     = meta.at(1);
-//    d->view->ensureItemVisible(folder, file);
+    QStringList meta = metadata.toStringList();
+    QString folder   = meta.at(0);
+    QString file     = meta.at(1);
+    d->view->scrollTo(folder, file);
 }
 
 }  // namespace Digikam

@@ -41,7 +41,7 @@
 
 #include "dimgpreviewitem.h"
 #include "fileactionmngr.h"
-#include "contextmenuhelper.h"
+#include "importcontextmenu.h"
 #include "previewlayout.h"
 #include "thememanager.h"
 #include "importsettings.h"
@@ -358,9 +358,9 @@ void ImportPreviewView::showContextMenu(const CamItemInfo& info, QGraphicsSceneC
     // --------------------------------------------------------
 
     KMenu popmenu(this);
-    ContextMenuHelper cmhelper(&popmenu);
+    ImportContextMenuHelper cmhelper(&popmenu);
 
-    cmhelper.addAction("full_screen");
+    cmhelper.addAction("cameraui_fullscreen");
     cmhelper.addSeparator();
 
     // --------------------------------------------------------
@@ -369,8 +369,8 @@ void ImportPreviewView::showContextMenu(const CamItemInfo& info, QGraphicsSceneC
     {
         cmhelper.addAction(d->prevAction, true);
         cmhelper.addAction(d->nextAction, true);
-        //FIXME: cmhelper.addAction(d->back2FilesListAction);
-        cmhelper.addGotoMenu(idList);
+        cmhelper.addAction("cameraui_icon_view");
+        //cmhelper.addGotoMenu(idList);
         cmhelper.addSeparator();
     }
 
@@ -383,26 +383,14 @@ void ImportPreviewView::showContextMenu(const CamItemInfo& info, QGraphicsSceneC
 
     // --------------------------------------------------------
 
-    cmhelper.addAction("image_edit");
+    cmhelper.addAction("cameraui_imageview");
     cmhelper.addServicesMenu(selectedItems);
     cmhelper.addRotateMenu(idList);
     cmhelper.addSeparator();
 
     // --------------------------------------------------------
 
-    cmhelper.addAction("image_find_similar");
-
-    if (d->mode == IconViewPreview)
-    {
-        cmhelper.addStandardActionLightTable();
-    }
-
-    cmhelper.addQueueManagerMenu();
-    cmhelper.addSeparator();
-
-    // --------------------------------------------------------
-
-    cmhelper.addStandardActionItemDelete(this, SLOT(slotDeleteItem()));
+    cmhelper.addAction("cameraui_delete");
     cmhelper.addSeparator();
 
     // --------------------------------------------------------

@@ -60,6 +60,8 @@ public:
     void toggleShowBar(bool b);
     bool isThumbBarVisible();
 
+    void scrollTo(const QString& folder, const QString& file);
+
     CamItemInfo camItemInfo(const QString& folder, const QString& file) const;
 
     KUrl::List allUrls() const;

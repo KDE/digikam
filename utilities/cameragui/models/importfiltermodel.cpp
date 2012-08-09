@@ -167,7 +167,6 @@ QList<qlonglong> ImportSortFilterModel::camItemIds(const QList<QModelIndex>& ind
     return ids;
 }
 
-//FIXME: Needs testing
 QModelIndex ImportSortFilterModel::indexForPath(const QString& filePath) const
 {
     KUrl fileUrl;
