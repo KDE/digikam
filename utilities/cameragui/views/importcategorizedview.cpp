@@ -287,14 +287,14 @@ QList<CamItemInfo> ImportCategorizedView::selectedCamItemInfosCurrentFirst() con
     return infos;
 }
 
-QList<CamItemInfo> ImportCategorizedView::CamItemInfos() const
+QList<CamItemInfo> ImportCategorizedView::camItemInfos() const
 {
     return d->filterModel->camItemInfosSorted();
 }
 
 KUrl::List ImportCategorizedView::urls() const
 {
-    QList<CamItemInfo> infos = CamItemInfos();
+    QList<CamItemInfo> infos = camItemInfos();
     KUrl::List       urls;
 
     foreach(const CamItemInfo& info, infos)

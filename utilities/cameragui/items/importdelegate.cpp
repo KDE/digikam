@@ -41,6 +41,7 @@
 #include "importfiltermodel.h"
 #include "importsettings.h"
 #include "importcategorizedview.h"
+#include "thumbnailloadthread.h"
 
 namespace Digikam
 {
@@ -183,11 +184,6 @@ QRect ImportDelegate::groupIndicatorRect() const
 {
     Q_D(const ImportDelegate);
     return d->groupRect;
-}
-
-void ImportDelegate::prepareThumbnails(ImportThumbnailModel* thumbModel, const QList<QModelIndex>& indexes)
-{
-    thumbModel->prepareThumbnails(indexes, thumbnailSize());
 }
 
 QPixmap ImportDelegate::retrieveThumbnailPixmap(const QModelIndex& index, int thumbnailSize)
@@ -584,11 +580,7 @@ int ImportThumbnailDelegate::maximumSize() const
 {
     Q_D(const ImportThumbnailDelegate);
 
-    //FIXME: Fix thumbnails issues.
-    //return ThumbnailLoadThread::maximumThumbnailPixmapSize(true) + 2*d->radius + 2*d->margin;
-    Q_UNUSED(d); // To please compiler about warnings.
-
-    return 256;// dummy return
+    return ThumbnailLoadThread::maximumThumbnailPixmapSize(true) + 2*d->radius + 2*d->margin;
 }
 
 int ImportThumbnailDelegate::minimumSize() const
@@ -618,9 +610,7 @@ void ImportThumbnailDelegate::updateContentWidth()
         maxSize = d->viewSize.width();
     }
 
-    //FIXME: Fix thumbnails issues.
-    //d->thumbSize = ThumbnailLoadThread::thumbnailPixmapSize(true, maxSize - 2*d->radius - 2*d->margin);
-    Q_UNUSED(maxSize);  // To please compiler about warnings.
+    d->thumbSize = ThumbnailLoadThread::thumbnailPixmapSize(true, maxSize - 2*d->radius - 2*d->margin);
 
     ImportDelegate::updateContentWidth();
 }

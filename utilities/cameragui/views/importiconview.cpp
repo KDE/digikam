@@ -138,6 +138,12 @@ int ImportIconView::fitToWidthIcons()
     return delegate()->calculatethumbSizeToFit(viewport()->size().width());
 }
 
+CamItemInfo ImportIconView::camItemInfo(const QString& folder, const QString& file)
+{
+    QModelIndex indexForCamItemInfo = importFilterModel()->indexForPath(QString(folder + "/" + file));
+    return importFilterModel()->camItemInfo(indexForCamItemInfo);
+}
+
 void ImportIconView::slotSetupChanged()
 {
     setToolTipEnabled(ImportSettings::instance()->showToolTipsIsValid());

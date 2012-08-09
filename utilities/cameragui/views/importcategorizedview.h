@@ -69,7 +69,7 @@ public:
     QList<CamItemInfo>     selectedCamItemInfosCurrentFirst() const;
     KUrl::List             selectedUrls()                     const;
 
-    QList<CamItemInfo>     CamItemInfos()                     const;
+    QList<CamItemInfo>     camItemInfos()                     const;
     KUrl::List             urls()                             const;
 
     /** Selects the index as current and scrolls to it */

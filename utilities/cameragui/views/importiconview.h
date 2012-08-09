@@ -48,6 +48,8 @@ public:
 
     int fitToWidthIcons();
 
+    CamItemInfo camItemInfo(const QString& folder, const QString& file);
+
     virtual void setThumbnailSize(const ThumbnailSize& size);
 
 public Q_SLOTS:

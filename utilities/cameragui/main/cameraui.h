@@ -127,6 +127,8 @@ private:
     void refreshFreeSpace();
     void refreshCollectionFreeSpace();
     void deleteItems(bool onlySelected, bool onlyDownloaded);
+    void toggleLock(CamItemInfo& info);
+    void itemsSelectionSizeInfo(unsigned long& fSizeKB, unsigned long& dSizeKB);
     void checkItem4Deletion(const CamItemInfo& info, QStringList& folders, QStringList& files,
                             CamItemInfoList& deleteList, CamItemInfoList& lockedList);
 
@@ -193,6 +195,8 @@ private Q_SLOTS:
     void slotNewSelection(bool);
     void slotImageSelected(const CamItemInfoList& selection, bool hasPrev, bool hasNext,
                                        const CamItemInfoList& listAll);
+
+    void slotItemsSelected(CamItemInfo info, bool selected);
 
     void slotSwitchedToPreview();
     void slotSwitchedToIconView();

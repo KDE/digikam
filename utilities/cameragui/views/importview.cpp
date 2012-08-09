@@ -377,6 +377,11 @@ QList<SidebarWidget*> ImportView::leftSidebarWidgets()
     return d->leftSideBarWidgets;
 }
 
+CamItemInfo ImportView::camItemInfo(const QString& folder, const QString& file) const
+{
+    return d->iconView->camItemInfo(folder, file);
+}
+
 KUrl::List ImportView::allUrls() const
 {
     return d->iconView->urls();
@@ -385,6 +390,48 @@ KUrl::List ImportView::allUrls() const
 KUrl::List ImportView::selectedUrls() const
 {
     return d->iconView->selectedUrls();
+}
+
+QList<CamItemInfo> ImportView::selectedCamItemInfos() const
+{
+    return d->iconView->selectedCamItemInfos();
+}
+
+QList<CamItemInfo> ImportView::allItems() const
+{
+    return d->iconView->camItemInfos();
+}
+
+int ImportView::downloadedCamItemInfos() const
+{
+    QList<CamItemInfo> infos = d->iconView->camItemInfos();
+    int numberOfDownloaded = 0;
+
+    foreach(CamItemInfo info, infos)
+    {
+        if(info.downloaded == CamItemInfo::DownloadedYes)
+        {
+            ++numberOfDownloaded;
+        }
+    }
+
+    return numberOfDownloaded;
+}
+
+//TODO: Needs testing.
+bool ImportView::isSelected(const KUrl url)
+{
+    QList<KUrl> urlsList = selectedUrls();
+
+    foreach(KUrl selected, urlsList)
+    {
+        if(url == selected)
+        {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 void ImportView::showSideBars()
@@ -441,12 +488,13 @@ void ImportView::slotDispatchImageSelected()
         // we can still pull the data from the iconView
         const CamItemInfoList list = d->iconView->selectedCamItemInfosCurrentFirst();
 
-        const CamItemInfoList allImages = d->iconView->CamItemInfos();
+        const CamItemInfoList allImages = d->iconView->camItemInfos();
 
         if (list.isEmpty())
         {
             d->StackedView->setPreviewItem();
             emit signalImageSelected(list, false, false, allImages);
+            emit signalNewSelection(false);
             emit signalNoCurrentItem();
         }
         else
@@ -469,6 +517,7 @@ void ImportView::slotDispatchImageSelected()
             }
 
             emit signalImageSelected(list, !previousInfo.isNull(), !nextInfo.isNull(), allImages);
+            emit signalNewSelection(true);
         }
 
         d->needDispatchSelection = false;

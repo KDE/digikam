@@ -60,9 +60,16 @@ public:
     void toggleShowBar(bool b);
     bool isThumbBarVisible();
 
+    CamItemInfo camItemInfo(const QString& folder, const QString& file) const;
+
     KUrl::List allUrls() const;
     KUrl::List selectedUrls() const;
+    QList<CamItemInfo> selectedCamItemInfos() const;
+    QList<CamItemInfo> allItems() const;
+    int downloadedCamItemInfos() const;
     bool hasCurrentItem() const;
+
+    bool isSelected(const KUrl url);
 
     double zoomMin();
     double zoomMax();
@@ -75,6 +82,7 @@ Q_SIGNALS:
 
     void signalImageSelected(const CamItemInfoList& selectedImage, bool hasPrevious, bool hasNext,
                              const CamItemInfoList& allImages);
+    void signalNewSelection(bool hasSelection);
     void signalNoCurrentItem();
     void signalSelectionChanged(int numberOfSelectedItems);
     void signalThumbSizeChanged(int);
