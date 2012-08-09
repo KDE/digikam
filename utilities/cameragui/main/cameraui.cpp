@@ -1776,7 +1776,7 @@ void CameraUI::slotDownloaded(const QString& folder, const QString& file, int st
 
     if (!info.isNull())
     {
-        d->view->setDownloaded(info, status);
+        //d->view->setDownloaded(info, status);
 
         if (d->rightSideBar->url() == info.url())
         {
@@ -1838,7 +1838,7 @@ void CameraUI::slotMarkAsDownloaded()
 
     foreach(CamItemInfo info, list)
     {
-        d->view->setDownloaded(info, CamItemInfo::DownloadedYes);
+        //d->view->setDownloaded(info, CamItemInfo::DownloadedYes);
 
         DownloadHistory::setDownloaded(d->controller->cameraMD5ID(),
                                        info.name,
@@ -2131,17 +2131,17 @@ void CameraUI::slotNewSelection(bool hasSelection)
 
         CamItemInfoList list = d->view->selectedCamItemInfos();
 
-        foreach(CamItemInfo info, list)
-        {
-            haveNotDownloadedItem = !d->view->isDownloaded(info);
+//        foreach(CamItemInfo info, list)
+//        {
+//            haveNotDownloadedItem = !d->view->isDownloaded(info);
 
-            if (haveNotDownloadedItem)
-            {
-                break;
-            }
-        }
+//            if (haveNotDownloadedItem)
+//            {
+//                break;
+//            }
+//        }
 
-        d->markAsDownloadedAction->setEnabled(haveNotDownloadedItem);
+//        d->markAsDownloadedAction->setEnabled(haveNotDownloadedItem);
     }
     else
     {
