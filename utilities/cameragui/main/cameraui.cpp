@@ -199,6 +199,13 @@ CameraUI::CameraUI(QWidget* const parent, const QString& cameraTitle,
 
     // --------------------------------------------------------
 
+    d->progressTimer = new QTimer(this);
+
+    connect(d->progressTimer, SIGNAL(timeout()),
+            this, SLOT(slotProgressTimerDone()));
+
+    // --------------------------------------------------------
+
     d->renameCustomizer->setStartIndex(startIndex);
     d->view->setFocus();
 
@@ -790,17 +797,17 @@ void CameraUI::setupCameraController(const QString& model, const QString& port, 
     connect(d->controller, SIGNAL(signalFileList(CamItemInfoList)),
             this, SLOT(slotFileList(CamItemInfoList)));
 
-    //connect(d->controller, SIGNAL(signalDownloaded(QString,QString,int,bool)),
-            //this, SLOT(slotDownloaded(QString,QString,int)));
+    connect(d->controller, SIGNAL(signalDownloaded(QString,QString,int,bool)),
+            this, SLOT(slotDownloaded(QString,QString,int)));
 
-    //connect(d->controller, SIGNAL(signalDownloadComplete(QString,QString,QString,QString)),
-            //this, SLOT(slotDownloadComplete(QString,QString,QString,QString)));
+    connect(d->controller, SIGNAL(signalDownloadComplete(QString,QString,QString,QString)),
+            this, SLOT(slotDownloadComplete(QString,QString,QString,QString)));
 
     //connect(d->controller, SIGNAL(signalFinished()),
     //        this, SLOT(slotFinished()));
 
-    //connect(d->controller, SIGNAL(signalSkipped(QString,QString)),
-            //this, SLOT(slotSkipped(QString,QString)));
+    connect(d->controller, SIGNAL(signalSkipped(QString,QString)),
+            this, SLOT(slotSkipped(QString,QString)));
 
     //connect(d->controller, SIGNAL(signalDeleted(QString,QString,bool)),
             //this, SLOT(slotDeleted(QString,QString,bool)));
@@ -1459,17 +1466,17 @@ void CameraUI::slotDownloadSelected()
 
 void CameraUI::slotDownloadAndDeleteSelected()
 {
-//    slotDownload(true, true);
+    slotDownload(true, true);
 }
 
 void CameraUI::slotDownloadAll()
 {
-//    slotDownload(false, false);
+    slotDownload(false, false);
 }
 
 void CameraUI::slotDownloadAndDeleteAll()
 {
-//    slotDownload(false, true);
+    slotDownload(false, true);
 }
 
 void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album* album)
@@ -1776,7 +1783,7 @@ void CameraUI::slotDownloaded(const QString& folder, const QString& file, int st
 
     if (!info.isNull())
     {
-        //d->view->setDownloaded(info, status);
+        setDownloaded(info, status);
 
         if (d->rightSideBar->url() == info.url())
         {
@@ -1816,20 +1823,20 @@ void CameraUI::slotDownloaded(const QString& folder, const QString& file, int st
 void CameraUI::slotDownloadComplete(const QString&, const QString&,
                                     const QString& destFolder, const QString&)
 {
-//    ScanController::instance()->scheduleCollectionScanRelaxed(destFolder);
+    ScanController::instance()->scheduleCollectionScanRelaxed(destFolder);
 }
 
 void CameraUI::slotSkipped(const QString& folder, const QString& file)
 {
-//    CamItemInfo info = d->view->camItemInfo(folder, file);
+    CamItemInfo info = d->view->camItemInfo(folder, file);
 
-//    if (!info.isNull())
-//    {
-//        d->view->setDownloaded(info, CamItemInfo::DownloadedNo);
-//    }
+    if (!info.isNull())
+    {
+        setDownloaded(info, CamItemInfo::DownloadedNo);
+    }
 
-//    int curr = d->statusProgressBar->progressValue();
-//    d->statusProgressBar->setProgressValue(curr + 1);
+    int curr = d->statusProgressBar->progressValue();
+    d->statusProgressBar->setProgressValue(curr + 1);
 }
 
 void CameraUI::slotMarkAsDownloaded()
@@ -1838,7 +1845,7 @@ void CameraUI::slotMarkAsDownloaded()
 
     foreach(CamItemInfo info, list)
     {
-        //d->view->setDownloaded(info, CamItemInfo::DownloadedYes);
+        setDownloaded(info, CamItemInfo::DownloadedYes);
 
         DownloadHistory::setDownloaded(d->controller->cameraMD5ID(),
                                        info.name,
@@ -1913,6 +1920,31 @@ void CameraUI::toggleLock(CamItemInfo& info)
 
     //TODO: Uncomment when lock overlay is implemented.
     //d->view->update();
+}
+
+void CameraUI::setDownloaded(CamItemInfo& itemInfo, int status)
+{
+    itemInfo.downloaded = status;
+    d->progressValue = 0;
+
+    if(itemInfo.downloaded == CamItemInfo::DownloadStarted)
+    {
+        d->progressTimer->start(500);
+    }
+    else
+    {
+        d->progressTimer->stop();
+    }
+
+    //TODO: Uncomment
+    d->view->update();
+}
+
+void CameraUI::slotProgressTimerDone()
+{
+    //TODO: Uncomment
+    d->view->update();
+    d->progressTimer->start(300);
 }
 
 void CameraUI::itemsSelectionSizeInfo(unsigned long& fSizeKB, unsigned long& dSizeKB)
@@ -2131,17 +2163,17 @@ void CameraUI::slotNewSelection(bool hasSelection)
 
         CamItemInfoList list = d->view->selectedCamItemInfos();
 
-//        foreach(CamItemInfo info, list)
-//        {
-//            haveNotDownloadedItem = !d->view->isDownloaded(info);
+        foreach(CamItemInfo info, list)
+        {
+            haveNotDownloadedItem = !(info.downloaded == CamItemInfo::DownloadedYes);
 
-//            if (haveNotDownloadedItem)
-//            {
-//                break;
-//            }
-//        }
+            if (haveNotDownloadedItem)
+            {
+                break;
+            }
+        }
 
-//        d->markAsDownloadedAction->setEnabled(haveNotDownloadedItem);
+        d->markAsDownloadedAction->setEnabled(haveNotDownloadedItem);
     }
     else
     {

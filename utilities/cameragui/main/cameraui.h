@@ -128,6 +128,8 @@ private:
     void refreshCollectionFreeSpace();
     void deleteItems(bool onlySelected, bool onlyDownloaded);
     void toggleLock(CamItemInfo& info);
+    void setDownloaded(CamItemInfo &itemInfo, int status);
+    void slotProgressTimerDone();
     void itemsSelectionSizeInfo(unsigned long& fSizeKB, unsigned long& dSizeKB);
     void checkItem4Deletion(const CamItemInfo& info, QStringList& folders, QStringList& files,
                             CamItemInfoList& deleteList, CamItemInfoList& lockedList);

@@ -135,6 +135,7 @@ public:
         statusNavigateBar(0),
         albumLibraryFreeSpace(0),
         cameraFreeSpace(0),
+        progressTimer(0),
         progressValue(0),
         historyView(0),
         filterComboBox(0),
@@ -237,6 +238,8 @@ public:
 
     FreeSpaceWidget*              albumLibraryFreeSpace;
     FreeSpaceWidget*              cameraFreeSpace;
+
+    QTimer*                       progressTimer;
 
     float                         progressValue;
 
