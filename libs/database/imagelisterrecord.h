@@ -6,7 +6,7 @@
  * Date        : 2007-03-20
  * Description : Data set for image lister
  *
- * Copyright (C) 2005 by Renchi Raju <renchi dot raju at gmail dot com>
+ * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2007-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it

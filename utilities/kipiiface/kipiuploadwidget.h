@@ -53,8 +53,8 @@ private Q_SLOTS:
 
 private:
 
-    class Private;
-    Private* const d;
+    class KipiUploadWidgetPriv;
+    KipiUploadWidgetPriv* const d;
 };
 
 }  // namespace Digikam

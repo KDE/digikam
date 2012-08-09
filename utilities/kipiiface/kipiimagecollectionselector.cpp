@@ -50,11 +50,11 @@
 namespace Digikam
 {
 
-class KipiImageCollectionSelector::Private
+class KipiImageCollectionSelector::KipiImageCollectionSelectorPriv
 {
 public:
 
-    Private() :
+    KipiImageCollectionSelectorPriv() :
         tab(0),
         albumModel(0),
         albumTreeView(0),
@@ -121,7 +121,7 @@ public:
 
 KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface* const iface, QWidget* const parent)
     : KIPI::ImageCollectionSelector(parent),
-      d(new Private)
+      d(new KipiImageCollectionSelectorPriv)
 {
     KSharedConfigPtr config  = KGlobal::config();
     KConfigGroup configGroup = config->group("KipiImageCollectionSelector");

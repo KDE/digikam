@@ -7,8 +7,8 @@
  * Description : class to get/set image information/properties
  *               in a digiKam album.
  *
- * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2004-2005 by Ralf Holzer <ralf at well dot com>
+ * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Copyright (C) 2004-2005 by Ralf Holzer <ralf at well.com>
  * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -32,6 +32,7 @@
 #include <QVariant>
 #include <QString>
 #include <QStringList>
+#include <QDateTime>
 #include <QMap>
 
 // KDE includes
@@ -40,36 +41,72 @@
 
 // LibKipi includes
 
+#include <libkipi/version.h>
 #include <libkipi/imageinfoshared.h>
+
+// Local includes
+
+#include "imageinfo.h"
 
 namespace KIPI
 {
-    class Interface;
+class Interface;
 }
-
-using namespace KIPI;
 
 namespace Digikam
 {
 
-class KipiImageInfo : public ImageInfoShared
+class PAlbum;
+
+class KipiImageInfo : public KIPI::ImageInfoShared
 {
 public:
 
-    KipiImageInfo(Interface* const interface, const KUrl& url);
+    KipiImageInfo(KIPI::Interface* const interface, const KUrl& url);
     ~KipiImageInfo();
 
+#if KIPI_VERSION >= 0x010200
     void cloneData(ImageInfoShared* const other);
+#else
+    void cloneData(ImageInfoShared* other);
+#endif // KIPI_VERSION >= 0x010200
 
     QMap<QString, QVariant> attributes();
     void                    addAttributes(const QMap<QString, QVariant>& res);
     void                    delAttributes(const QStringList& res);
     void                    clearAttributes();
 
+    /// DEPRECATED METHODS with libkipi 1.5.0. Use attributes()/addAttributes() methods instead.
+
+#if KIPI_VERSION < 0x010500
+
+#if KIPI_VERSION >= 0x010300
+    QString   name();
+    void      setName(const QString&);
+#else
+    /// Deprecated methods: for KIPI title here want mean "filename", not comment Title property.
+    QString   title();
+    void      setTitle(const QString&);
+#endif // KIPI_VERSION >= 0x010300
+
+    QString   description();
+    void      setDescription(const QString&);
+
+    int       angle();
+    void      setAngle(int orientation);
+
+    QDateTime time(KIPI::TimeSpec);
+    void      setTime(const QDateTime& date, KIPI::TimeSpec spec = KIPI::FromInfo);
+
+#endif // KIPI_VERSION < 0x010500
+
 private:
 
-    class Private;
-    Private* const d;
+    PAlbum* parentAlbum() const;
+
+private:
+
+    ImageInfo m_info;
 };
 
 }  // namespace Digikam

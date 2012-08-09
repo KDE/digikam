@@ -6,9 +6,9 @@
  * Date        : 2004-09-17
  * Description : digital camera controller
  *
- * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
+ * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -47,9 +47,6 @@ extern "C"
 #include <QRegExp>
 #include <QFileInfo>
 #include <QPointer>
-#include <QtConcurrentRun>
-#include <QFuture>
-#include <QFutureWatcher>
 
 // KDE includes
 
@@ -105,11 +102,11 @@ public:
     QMap<QString, QVariant> map;
 };
 
-class CameraController::Private
+class CameraController::CameraControllerPriv
 {
 public:
 
-    Private() :
+    CameraControllerPriv() :
         close(false),
         overwriteAll(false),
         skipAll(false),
@@ -142,10 +139,10 @@ public:
     QList<CameraCommand*> commands;
 };
 
-CameraController::CameraController(QWidget* const parent,
+CameraController::CameraController(QWidget* parent,
                                    const QString& title, const QString& model,
                                    const QString& port, const QString& path)
-    : QThread(parent), d(new Private)
+    : QThread(parent), d(new CameraControllerPriv)
 {
     d->parent = parent;
 
@@ -409,9 +406,8 @@ void CameraController::run()
     emit signalBusy(false);
 }
 
-void CameraController::executeCommand(CameraCommand* const cmd)
+void CameraController::executeCommand(CameraCommand* cmd)
 {
-    static int numberOfItems; // to give the appropriate id for each CamItemInfo.
     if (!cmd)
     {
         return;
@@ -509,12 +505,6 @@ void CameraController::executeCommand(CameraCommand* const cmd)
                 sendLogMsg(i18n("Failed to list files in %1.", folder), DHistoryView::ErrorEntry);
             }
 
-            foreach(CamItemInfo info, itemsList)
-            {
-                numberOfItems++;
-                info.id += numberOfItems;
-            }
-
             if (!itemsList.isEmpty())
             {
                 emit signalFileList(itemsList);
@@ -527,8 +517,7 @@ void CameraController::executeCommand(CameraCommand* const cmd)
 
         case (CameraCommand::cam_thumbsinfo):
         {
-            QList<QVariant> list    = cmd->map["list"].toList();
-            int thumbSize = cmd->map["thumbSize"].toInt();
+            QList<QVariant> list = cmd->map["list"].toList();
 
             for (QList<QVariant>::const_iterator it = list.constBegin(); it != list.constEnd(); ++it)
             {
@@ -549,7 +538,7 @@ void CameraController::executeCommand(CameraCommand* const cmd)
 
                 if (d->camera->getThumbnail(folder, file, thumbnail))
                 {
-                    thumbnail = thumbnail.scaled(thumbSize, thumbSize, Qt::KeepAspectRatio);
+                    thumbnail = thumbnail.scaled(ThumbnailSize::Huge, ThumbnailSize::Huge, Qt::KeepAspectRatio);
                     emit signalThumbInfo(folder, file, info, thumbnail);
                 }
                 else
@@ -591,7 +580,7 @@ void CameraController::executeCommand(CameraCommand* const cmd)
 
             // download to a temp file
 
-            emit signalDownloaded(folder, file, CamItemInfo::DownloadStarted, autoRotate);
+            emit signalDownloaded(folder, file, CamItemInfo::DownloadStarted);
 
             KUrl tempURL(dest);
             tempURL      = tempURL.upUrl();
@@ -604,7 +593,7 @@ void CameraController::executeCommand(CameraCommand* const cmd)
             if (!result)
             {
                 unlink(QFile::encodeName(tempURL.toLocalFile()));
-                emit signalDownloaded(folder, file, CamItemInfo::DownloadFailed, autoRotate);
+                emit signalDownloaded(folder, file, CamItemInfo::DownloadFailed);
                 sendLogMsg(i18n("Failed to download %1...", file), DHistoryView::ErrorEntry, folder, file);
                 break;
             }
@@ -612,13 +601,13 @@ void CameraController::executeCommand(CameraCommand* const cmd)
             {
                 // Possible modification operations. Only apply it to JPEG for the moment.
 
-                if(autoRotate)
+                if (autoRotate)
                 {
                     kDebug() << "Exif autorotate: " << file << " using (" << tempURL << ")";
                     sendLogMsg(i18n("EXIF rotating file %1...", file), DHistoryView::StartingEntry, folder, file);
-//                    JpegRotator rotator(tempURL.toLocalFile());
-//                    rotator.setDocumentName(file);
-//                    rotator.autoExifTransform();
+                    JPEGUtils::JpegRotator rotator(tempURL.toLocalFile());
+                    rotator.setDocumentName(file);
+                    rotator.autoExifTransform();
                 }
 
                 if (!templateTitle.isNull() || fixDateTime)
@@ -912,12 +901,12 @@ void CameraController::slotCheckRename(const QString& folder, const QString& fil
     {
         // rename failed. delete the temp file
         unlink(QFile::encodeName(temp));
-        emit signalDownloaded(folder, file, CamItemInfo::DownloadFailed, false);
+        emit signalDownloaded(folder, file, CamItemInfo::DownloadFailed);
         sendLogMsg(i18n("Failed to download %1...", file), DHistoryView::ErrorEntry,  folder, file);
     }
     else
     {
-        emit signalDownloaded(folder, file, CamItemInfo::DownloadedYes, false);
+        emit signalDownloaded(folder, file, CamItemInfo::DownloadedYes);
         emit signalDownloadComplete(folder, file, info.path(), info.fileName());
         sendLogMsg(i18n("Download successfully %1...", file), DHistoryView::StartingEntry, folder, file);
 
@@ -1088,7 +1077,7 @@ void CameraController::slotOpen(const QString& folder, const QString& file, cons
 */
 }
 
-void CameraController::addCommand(CameraCommand* const cmd)
+void CameraController::addCommand(CameraCommand* cmd)
 {
     QMutexLocker lock(&d->mutex);
     d->commands << cmd;
@@ -1127,7 +1116,7 @@ void CameraController::listFiles(const QString& folder, bool useMetadata)
     addCommand(cmd);
 }
 
-void CameraController::getThumbsInfo(const CamItemInfoList& list, ThumbnailSize thumbSize)
+void CameraController::getThumbsInfo(const CamItemInfoList& list)
 {
     d->canceled        = false;
     CameraCommand* cmd = new CameraCommand;
@@ -1141,7 +1130,6 @@ void CameraController::getThumbsInfo(const CamItemInfoList& list, ThumbnailSize 
     }
 
     cmd->map.insert("list", QVariant(itemsList));
-    cmd->map.insert("thumbSize", QVariant(thumbSize.size()));
     addCommand(cmd);
 }
 

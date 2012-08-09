@@ -6,7 +6,7 @@
  * Date        : 2004-09-16
  * Description : Camera interface
  *
- * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
+ * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
@@ -37,7 +37,6 @@
 #include <khelpmenu.h>
 #include <kselectaction.h>
 #include <ktoggleaction.h>
-#include <KActionMenu>
 #include <kurl.h>
 
 // LibKDcraw includes
@@ -62,7 +61,6 @@
 #include "sidebar.h"
 #include "statusnavigatebar.h"
 #include "statusprogressbar.h"
-#include "importview.h"
 
 using namespace KDcrawIface;
 
@@ -110,11 +108,7 @@ public:
         selectNoneAction(0),
         uploadAction(0),
         markAsDownloadedAction(0),
-        resumeAction(0),
-        pauseAction(0),
-        itemSortAction(0),
-        itemSortOrderAction(0),
-        itemsGroupAction(0),
+        lastPhotoFirstAction(0),
         showMenuBarAction(0),
         showLogAction(0),
         helpMenu(0),
@@ -134,7 +128,6 @@ public:
         statusNavigateBar(0),
         albumLibraryFreeSpace(0),
         cameraFreeSpace(0),
-        progressValue(0),
         historyView(0),
         filterComboBox(0),
         about(0)
@@ -170,11 +163,9 @@ public:
     KAction*                      cameraCaptureAction;
     KAction*                      cameraInfoAction;
     KAction*                      decreaseThumbsAction;
-    KActionMenu*                  deleteAction;
     KAction*                      deleteNewAction;
     KAction*                      deleteAllAction;
     KAction*                      deleteSelectedAction;
-    KActionMenu*                  downloadAction;
     KAction*                      downloadNewAction;
     KAction*                      downloadAllAction;
     KAction*                      downloadSelectedAction;
@@ -194,18 +185,9 @@ public:
     KAction*                      selectNoneAction;
     KAction*                      uploadAction;
     KAction*                      markAsDownloadedAction;
-    KAction*                      resumeAction;
-    KAction*                      pauseAction;
-    KSelectAction*                itemSortAction;
-    KSelectAction*                itemSortOrderAction;
-    KSelectAction*                itemsGroupAction;
+    KToggleAction*                lastPhotoFirstAction;
     KToggleAction*                showMenuBarAction;
     KToggleAction*                showLogAction;
-    KToggleAction*                showBarAction;
-    KSelectAction*                imageViewSelectionAction;
-    KToggleAction*                iconViewAction;
-    KToggleAction*                camItemPreviewAction;
-    KToggleAction*                mapViewAction;
 
     KUrl                          lastDestURL;
 
@@ -219,7 +201,7 @@ public:
     CameraController*             controller;
     CameraHistoryUpdater*         historyUpdater;
 
-    ImportView*                   view;
+    CameraIconView*               view;
 
     RenameCustomizer*             renameCustomizer;
     AlbumCustomizer*              albumCustomizer;
@@ -236,8 +218,6 @@ public:
 
     FreeSpaceWidget*              albumLibraryFreeSpace;
     FreeSpaceWidget*              cameraFreeSpace;
-
-    float                         progressValue;
 
     DHistoryView*                 historyView;
     FilterComboBox*               filterComboBox;

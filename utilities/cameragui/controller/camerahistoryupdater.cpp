@@ -42,7 +42,7 @@
 namespace Digikam
 {
 
-class CameraHistoryUpdater::Private
+class CameraHistoryUpdater::CameraHistoryUpdaterPriv
 {
 
 public:
@@ -51,7 +51,7 @@ public:
 
 public:
 
-    Private() :
+    CameraHistoryUpdaterPriv() :
         close(false),
         canceled(false),
         running(false)
@@ -68,8 +68,8 @@ public:
 
 // --------------------------------------------------------
 
-CameraHistoryUpdater::CameraHistoryUpdater(QWidget* const parent)
-    : QThread(parent), d(new Private)
+CameraHistoryUpdater::CameraHistoryUpdater(QWidget* parent)
+    : QThread(parent), d(new CameraHistoryUpdaterPriv)
 {
     qRegisterMetaType<CHUpdateItemMap>("CHUpdateItemMap");
 }

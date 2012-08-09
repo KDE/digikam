@@ -6,8 +6,8 @@
  * Date        : 2003-01-23
  * Description : A widget to display a camera folder.
  *
- * Copyright (C) 2003-2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2003-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -27,11 +27,11 @@
 namespace Digikam
 {
 
-class CameraFolderItem::Private
+class CameraFolderItem::CameraFolderItemPriv
 {
 public:
 
-    Private() :
+    CameraFolderItemPriv() :
         virtualFolder(true),
         count(0)
     {
@@ -45,17 +45,17 @@ public:
     QString name;
 };
 
-CameraFolderItem::CameraFolderItem(QTreeWidget* const parent, const QString& name, const QPixmap& pixmap)
-    : QTreeWidgetItem(parent), d(new Private)
+CameraFolderItem::CameraFolderItem(QTreeWidget* parent, const QString& name, const QPixmap& pixmap)
+    : QTreeWidgetItem(parent), d(new CameraFolderItemPriv)
 {
     d->name = name;
     setIcon(0, pixmap);
     setText(0, d->name);
 }
 
-CameraFolderItem::CameraFolderItem(QTreeWidgetItem* const parent, const QString& folderName,
+CameraFolderItem::CameraFolderItem(QTreeWidgetItem* parent, const QString& folderName,
                                    const QString& folderPath, const QPixmap& pixmap)
-    : QTreeWidgetItem(parent), d(new Private)
+    : QTreeWidgetItem(parent), d(new CameraFolderItemPriv)
 {
     d->folderName    = folderName;
     d->folderPath    = folderPath;

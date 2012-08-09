@@ -6,7 +6,7 @@
  * Date        : 2005-05-17
  * Description : low level files management interface.
  *
- * Copyright (C) 2005 by Renchi Raju <renchi dot raju at gmail dot com>
+ * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it

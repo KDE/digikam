@@ -6,8 +6,8 @@
  * Date        : 2012-10-03
  * Description : kipi loader implementation
  *
+ * Copyright (C) 2012      by Supreet Pal Singh <supreetpal@gmail.com>
  * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2012      by Victor Dodon <dodonvictor at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -29,6 +29,7 @@
 
 #include <QObject>
 #include <QList>
+#include <QString>
 
 // LibKIPI includes
 
@@ -37,8 +38,6 @@
 class QAction;
 
 class KActionCollection;
-
-using namespace KIPI;
 
 namespace Digikam
 {
@@ -57,13 +56,17 @@ public:
     KipiPluginLoader(QObject* const parent, SplashScreen* const splash);
 
     /** Return a list of all plugin actions accordingly of plugin category.
-     *  See Category enum for details.
+     *  See KIPI::Category enum for details.
      */
-    QList<QAction*> kipiActionsByCategory(Category cat) const;
+    QList<QAction*> kipiActionsByCategory(KIPI::Category cat) const;
 
     /** Return the instance of action collection for all KIPI plugins.
      */
     KActionCollection* pluginsActionCollection() const;
+
+    /** Plug or unplug plugins actions list to application.
+     */
+    void kipiPlugActions(bool unplug = false);
 
     /** Return the instance of this singleton plugin loader.
      */
@@ -71,7 +74,7 @@ public:
 
 private Q_SLOTS:
 
-    /** Called by PluginLoader when plugins list must be re-loaded in application.
+    /** Called by KIPI::PluginLoader when plugins list must be re-loaded in application.
      */
     void slotKipiPluginPlug();
 
@@ -81,12 +84,24 @@ private:
      */
     ~KipiPluginLoader();
 
+    /** Load all enabled plugins in application accordingly with KIPI setup page.
+     */
+    void loadPlugins();
+
+    /** Check if a category exist, else fill it with an single action displaying an "Empty" message.
+     */
+    void checkEmptyCategory(KIPI::Category cat);
+
+    /** Wrapper to return plugin category name for KDE Shortcuts Editor.
+     */
+    QString categoryName(KIPI::Category cat) const;
+
 private:
 
     static KipiPluginLoader* m_instance;
 
-    class Private;
-    Private* const d;
+    class KipiPluginLoaderPriv;
+    KipiPluginLoaderPriv* const d;
 };
 
 }  // namespace Digikam

@@ -6,9 +6,9 @@
  * Date        : 2004-09-17
  * Description : digital camera controller
  *
- * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
+ * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -41,7 +41,6 @@
 #include "dmetadata.h"
 #include "dkcamera.h"
 #include "dhistoryview.h"
-#include "thumbnailsize.h"
 
 namespace Digikam
 {
@@ -55,7 +54,7 @@ class CameraController : public QThread
 
 public:
 
-    CameraController(QWidget* const parent, const QString& title, const QString& model,
+    CameraController(QWidget* parent, const QString& title, const QString& model,
                      const QString& port, const QString& path);
     ~CameraController();
 
@@ -83,7 +82,7 @@ public:
 
     /** Get thumbnails for a list of camera items plus advanced information from metadata.
      */
-    void getThumbsInfo(const CamItemInfoList& infoList, ThumbnailSize thumbSize);
+    void getThumbsInfo(const CamItemInfoList& infoList);
 
     void downloadPrep();
     void download(const DownloadSettings& downloadSettings);
@@ -108,10 +107,9 @@ Q_SIGNALS:
     void signalFolderList(const QStringList& folderList);
     void signalFileList(const CamItemInfoList& infoList);
     void signalUploaded(const CamItemInfo& itemInfo);
-    void signalDownloaded(const QString& folder, const QString& file, int status, bool autoRotate);
+    void signalDownloaded(const QString& folder, const QString& file, int status);
     void signalDownloadComplete(const QString& sourceFolder, const QString& sourceFile,
                                 const QString& destFolder, const QString& destFile);
-    void signalFinished();
     void signalSkipped(const QString& folder, const QString& file);
     void signalDeleted(const QString& folder, const QString& file, bool status);
     void signalLocked(const QString& folder, const QString& file, bool status);
@@ -136,7 +134,7 @@ public Q_SLOTS:
 protected:
 
     void run();
-    void executeCommand(CameraCommand* const cmd);
+    void executeCommand(CameraCommand* cmd);
 
 private Q_SLOTS:
 
@@ -153,13 +151,13 @@ private:
     void sendLogMsg(const QString& msg, DHistoryView::EntryType type=DHistoryView::StartingEntry,
                     const QString& folder=QString(), const QString& file=QString());
 
-    void addCommand(CameraCommand* const cmd);
+    void addCommand(CameraCommand* cmd);
     bool queueIsEmpty() const;
 
 private:
 
-    class Private;
-    Private* const d;
+    class CameraControllerPriv;
+    CameraControllerPriv* const d;
 };
 
 }  // namespace Digikam

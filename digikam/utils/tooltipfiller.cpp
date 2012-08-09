@@ -6,7 +6,7 @@
  * Date        : 2008-12-10
  * Description : album icon view tool tip
  *
- * Copyright (C) 2008-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -59,7 +59,6 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
 
     ImageCommonContainer commonInfo  = info.imageCommonContainer();
     ImageMetadataContainer photoInfo = info.imageMetadataContainer();
-    VideoMetadataContainer videoInfo = info.videoMetadataContainer();
     QString tip                      = cnt.tipHeader;
 
     // -- File properties ----------------------------------------------
@@ -259,109 +258,6 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
         }
     }
 
-    // -- Video Metadata Info ----------------------------------------------------
-
-    if (settings->getToolTipsShowVideoAspectRatio()        ||
-        settings->getToolTipsShowVideoDuration()           ||
-        settings->getToolTipsShowVideoFrameRate()          ||
-        settings->getToolTipsShowVideoVideoCodec()         ||
-        settings->getToolTipsShowVideoAudioBitRate()       ||
-        settings->getToolTipsShowVideoAudioChannelType()   ||
-        settings->getToolTipsShowVideoAudioCompressor())
-    {
-        if (!videoInfo.allFieldsNull)
-        {
-            QString metaStr;
-            tip += cnt.headBeg + i18n("Video Properties") + cnt.headEnd;
-
-            if (settings->getToolTipsShowVideoAspectRatio())
-            {
-                str = videoInfo.aspectRatio.isEmpty() ? cnt.unavailable : videoInfo.aspectRatio;
-
-                if (str.length() > cnt.maxStringLength)
-                {
-                    str = str.left(cnt.maxStringLength-3) + "...";
-                }
-
-                metaStr += cnt.cellBeg + i18n("Aspect Ratio:") + cnt.cellMid + Qt::escape(str) + cnt.cellEnd;
-            }
-
-            if (settings->getToolTipsShowVideoDuration())
-            {
-                str = videoInfo.duration.isEmpty() ? cnt.unavailable : videoInfo.duration;
-
-                if (str.length() > cnt.maxStringLength)
-                {
-                    str = str.left(cnt.maxStringLength-3) + "...";
-                }
-
-                metaStr += cnt.cellBeg + i18n("Duration:") + cnt.cellMid + Qt::escape(str) + i18n("s") + cnt.cellEnd;
-            }
-
-            if (settings->getToolTipsShowVideoFrameRate())
-            {
-                str = videoInfo.frameRate.isEmpty() ? cnt.unavailable : videoInfo.frameRate;
-
-                if (str.length() > cnt.maxStringLength)
-                {
-                    str = str.left(cnt.maxStringLength-3) + "...";
-                }
-
-                metaStr += cnt.cellBeg + i18n("Frame Rate:") + cnt.cellMid + Qt::escape(str) + i18n("fps") + cnt.cellEnd;
-            }
-
-            if (settings->getToolTipsShowVideoVideoCodec())
-            {
-                str = videoInfo.videoCodec.isEmpty() ? cnt.unavailable : videoInfo.videoCodec;
-
-                if (str.length() > cnt.maxStringLength)
-                {
-                    str = str.left(cnt.maxStringLength-3) + "...";
-                }
-
-                metaStr += cnt.cellBeg + i18n("Video Codec:") + cnt.cellMid + Qt::escape(str) + cnt.cellEnd;
-            }
-
-            if (settings->getToolTipsShowVideoAudioBitRate())
-            {
-                str = videoInfo.audioBitRate.isEmpty() ? cnt.unavailable : videoInfo.audioBitRate;
-
-                if (str.length() > cnt.maxStringLength)
-                {
-                    str = str.left(cnt.maxStringLength-3) + "...";
-                }
-
-                metaStr += cnt.cellBeg + i18n("Audio Bit Rate:") + cnt.cellMid + Qt::escape(str) + cnt.cellEnd;
-            }
-
-            if (settings->getToolTipsShowVideoAudioChannelType())
-            {
-                str = videoInfo.audioChannelType.isEmpty() ? cnt.unavailable : videoInfo.audioChannelType;
-
-                if (str.length() > cnt.maxStringLength)
-                {
-                    str = str.left(cnt.maxStringLength-3) + "...";
-                }
-
-                metaStr += cnt.cellBeg + i18n("Audio Channel Type:") + cnt.cellMid + Qt::escape(str) + cnt.cellEnd;
-            }
-
-            if (settings->getToolTipsShowVideoAudioCompressor())
-            {
-                str = videoInfo.audioCompressor.isEmpty() ? cnt.unavailable : videoInfo.audioCompressor;
-
-                if (str.length() > cnt.maxStringLength)
-                {
-                    str = str.left(cnt.maxStringLength-3) + "...";
-                }
-
-                metaStr += cnt.cellBeg + i18n("Audio Compressor:") + cnt.cellMid + Qt::escape(str) + cnt.cellEnd;
-            }
-
-            tip += metaStr;
-        }
-    }
-
     // -- digiKam properties  ------------------------------------------
 
     if (settings->getToolTipsShowAlbumName() ||
@@ -462,7 +358,7 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
     return tip;
 }
 
-QString ToolTipFiller::albumTipContents(PAlbum* const album, int count)
+QString ToolTipFiller::albumTipContents(PAlbum* album, int count)
 {
     if (!album)
     {
@@ -472,7 +368,7 @@ QString ToolTipFiller::albumTipContents(PAlbum* const album, int count)
     QString            str;
     AlbumSettings*     settings = AlbumSettings::instance();
     DToolTipStyleSheet cnt(settings->getToolTipsFont());
-    QString            tip      = cnt.tipHeader;
+    QString            tip = cnt.tipHeader;
 
     if (settings->getToolTipsShowAlbumTitle()      ||
         settings->getToolTipsShowAlbumDate()       ||

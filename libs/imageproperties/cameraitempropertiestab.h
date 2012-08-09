@@ -53,7 +53,7 @@ class CameraItemPropertiesTab : public RExpanderBox
 
 public:
 
-    CameraItemPropertiesTab(QWidget* const parent);
+    CameraItemPropertiesTab(QWidget* parent);
     ~CameraItemPropertiesTab();
 
     void setCurrentItem(const CamItemInfo& itemInfo=CamItemInfo(),
@@ -61,8 +61,8 @@ public:
 
 private:
 
-    class Private;
-    Private* const d;
+    class CameraItemPropertiesTabPriv;
+    CameraItemPropertiesTabPriv* const d;
 };
 
 }  // namespace Digikam

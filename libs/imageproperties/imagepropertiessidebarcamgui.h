@@ -7,7 +7,7 @@
  * Description : simple image properties side bar used by
  *               camera GUI.
  *
- * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -51,7 +51,7 @@ class ImagePropertiesSideBarCamGui : public Sidebar
 
 public:
 
-    ImagePropertiesSideBarCamGui(QWidget* const parent, SidebarSplitter* const splitter,
+    ImagePropertiesSideBarCamGui(QWidget* parent, SidebarSplitter* splitter,
                                  KMultiTabBarPosition side=KMultiTabBar::Left, bool mimimizedDefault=false);
 
     ~ImagePropertiesSideBarCamGui();
@@ -79,8 +79,8 @@ private Q_SLOTS:
 
 private:
 
-    class Private;
-    Private* const d;
+    class ImagePropertiesSideBarCamGuiPriv;
+    ImagePropertiesSideBarCamGuiPriv* const d;
 };
 
 }  // namespace Digikam

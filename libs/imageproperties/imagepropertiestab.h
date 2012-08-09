@@ -6,7 +6,7 @@
  * Date        : 2006-04-19
  * Description : A tab to display general image information
  *
- * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -50,13 +50,12 @@ class DIGIKAM_EXPORT ImagePropertiesTab : public KDcrawIface::RExpanderBox
 
 public:
 
-    ImagePropertiesTab(QWidget* const parent);
+    ImagePropertiesTab(QWidget* parent);
     ~ImagePropertiesTab();
 
     void setCurrentURL(const KUrl& url=KUrl());
 
     void setPhotoInfoDisable(const bool b);
-    void setVideoInfoDisable(const bool b);
     void showOrHideCaptionAndTags();
 
     void setFileModifiedDate(const QString& str);
@@ -81,14 +80,6 @@ public:
     void setPhotoFlash(const QString& str);
     void setPhotoWhiteBalance(const QString& str);
 
-    void setVideoAspectRatio(const QString& str);
-    void setVideoAudioBitRate(const QString& str);
-    void setVideoAudioChannelType(const QString& str);
-    void setVideoAudioCompressor(const QString& str);
-    void setVideoDuration(const QString& str);
-    void setVideoFrameRate(const QString& str);
-    void setVideoVideoCodec(const QString& str);
-
     void setCaption(const QString& str);
     void setPickLabel(int pickId);
     void setColorLabel(int colorId);
@@ -106,8 +97,8 @@ public:
 
 private:
 
-    class Private;
-    Private* const d;
+    class ImagePropertiesTabPriv;
+    ImagePropertiesTabPriv* const d;
 };
 
 }  // namespace Digikam

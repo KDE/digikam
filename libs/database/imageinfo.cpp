@@ -6,7 +6,7 @@
  * Date        : 2005-04-21
  * Description : Handling accesss to one image and associated data
  *
- * Copyright (C) 2005      by Renchi Raju <renchi dot raju at gmail dot com>
+ * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2007-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2009-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -231,14 +231,12 @@ ImageInfo::ImageInfo(const KUrl& url)
             return;
         }
 
-        m_data              = ImageInfoStatic::cache()->infoForId(info.id);
+        m_data = ImageInfoStatic::cache()->infoForId(info.id);
 
         ImageInfoWriteLocker lock;
-
         m_data->albumId     = info.albumID;
         m_data->albumRootId = info.albumRootID;
         m_data->name        = info.itemName;
-
         ImageInfoStatic::cache()->cacheByName(m_data);
     }
 }
@@ -360,23 +358,23 @@ QString ImageInfo::name() const
     return m_data->name;
 }
 
-#define RETURN_IF_CACHED(x)       \
-    if (m_data->x##Cached)        \
-    {                             \
+#define RETURN_IF_CACHED(x) \
+    if (m_data->x##Cached) \
+    { \
         ImageInfoReadLocker lock; \
-        if (m_data->x##Cached)    \
-        {                         \
-            return m_data->x;     \
-        }                         \
+        if (m_data->x##Cached) \
+        { \
+            return m_data->x; \
+        } \
     }
 
 #define STORE_IN_CACHE_AND_RETURN(x, retrieveMethod) \
-    ImageInfoWriteLocker lock;                       \
-    m_data.constCastData()->x##Cached = true;        \
-    if (!values.isEmpty())                           \
-    {                                                \
-        m_data.constCastData()->x = retrieveMethod;  \
-    }                                                \
+    ImageInfoWriteLocker lock; \
+    m_data.constCastData()->x##Cached = true; \
+    if (!values.isEmpty()) \
+    { \
+        m_data.constCastData()->x = retrieveMethod; \
+    } \
     return m_data->x;
 
 qlonglong ImageInfo::fileSize() const
@@ -781,10 +779,8 @@ qlonglong ImageInfo::groupImageId() const
 
 void ImageInfoList::loadGroupImageIds() const
 {
-    QVector<QList<qlonglong> > allGroupIds = DatabaseAccess().db()->getImagesRelatedFrom(toImageIdList(),
-                                                                                         DatabaseRelation::Grouped);
+    QVector<QList<qlonglong> > allGroupIds = DatabaseAccess().db()->getImagesRelatedFrom(toImageIdList(), DatabaseRelation::Grouped);
     ImageInfoWriteLocker lock;
-
     for (int i=0; i<size(); i++)
     {
         const ImageInfo& info            = at(i);
@@ -837,7 +833,6 @@ void ImageInfo::addToGroup(const ImageInfo& givenLeader)
     ImageInfo leader;
     QList<qlonglong> alreadySeen;
     alreadySeen << m_data->id;
-
     for (leader = givenLeader; leader.isGrouped(); )
     {
         ImageInfo nextLeader = leader.groupImage();
@@ -873,6 +868,7 @@ void ImageInfo::addToGroup(const ImageInfo& givenLeader)
         // add the new grouping
         DatabaseAccess().db()->addImageRelation(ids, leader.id(), DatabaseRelation::Grouped);
     }
+
 }
 
 void ImageInfo::removeFromGroup()
@@ -1149,18 +1145,6 @@ ImageMetadataContainer ImageInfo::imageMetadataContainer() const
     return container;
 }
 
-VideoMetadataContainer ImageInfo::videoMetadataContainer() const
-{
-    if (!m_data)
-    {
-        return VideoMetadataContainer();
-    }
-
-    VideoMetadataContainer container;
-    ImageScanner::fillVideoMetadataContainer(m_data->id, &container);
-    return container;
-}
-
 PhotoInfoContainer ImageInfo::photoInfoContainer() const
 {
     if (!m_data)
@@ -1171,42 +1155,21 @@ PhotoInfoContainer ImageInfo::photoInfoContainer() const
     ImageMetadataContainer meta = imageMetadataContainer();
     PhotoInfoContainer photoInfo;
 
-    photoInfo.make              = meta.make;
-    photoInfo.model             = meta.model;
-    photoInfo.lens              = meta.lens;
-    photoInfo.exposureTime      = meta.exposureTime;
-    photoInfo.exposureMode      = meta.exposureMode;
-    photoInfo.exposureProgram   = meta.exposureProgram;
-    photoInfo.aperture          = meta.aperture;
-    photoInfo.focalLength       = meta.focalLength;
-    photoInfo.focalLength35mm   = meta.focalLength35;
-    photoInfo.sensitivity       = meta.sensitivity;
-    photoInfo.flash             = meta.flashMode;
-    photoInfo.whiteBalance      = meta.whiteBalance;
-    photoInfo.dateTime          = dateTime();
+    photoInfo.make            = meta.make;
+    photoInfo.model           = meta.model;
+    photoInfo.lens            = meta.lens;
+    photoInfo.exposureTime    = meta.exposureTime;
+    photoInfo.exposureMode    = meta.exposureMode;
+    photoInfo.exposureProgram = meta.exposureProgram;
+    photoInfo.aperture        = meta.aperture;
+    photoInfo.focalLength     = meta.focalLength;
+    photoInfo.focalLength35mm = meta.focalLength35;
+    photoInfo.sensitivity     = meta.sensitivity;
+    photoInfo.flash           = meta.flashMode;
+    photoInfo.whiteBalance    = meta.whiteBalance;
+    photoInfo.dateTime        = dateTime();
 
     return photoInfo;
-}
-
-VideoInfoContainer ImageInfo::videoInfoContainer() const
-{
-    if (!m_data)
-    {
-        return VideoInfoContainer();
-    }
-
-    VideoMetadataContainer meta = videoMetadataContainer();
-    VideoInfoContainer videoInfo;
-
-    videoInfo.aspectRatio               = meta.aspectRatio;
-    videoInfo.audioBitRate              = meta.audioBitRate;
-    videoInfo.audioChannelType          = meta.audioChannelType;
-    videoInfo.audioCompressor           = meta.audioCompressor;
-    videoInfo.duration                  = meta.duration;
-    videoInfo.frameRate                 = meta.frameRate;
-    videoInfo.videoCodec                = meta.videoCodec;
-
-    return videoInfo;
 }
 
 Template ImageInfo::metadataTemplate() const
@@ -1233,6 +1196,7 @@ void ImageInfo::setMetadataTemplate(const Template& t)
     }
 
     removeMetadataTemplate();
+
     imageCopyright().setFromTemplate(t);
 
     ImageExtendedProperties ep = imageExtendedProperties();

@@ -62,8 +62,6 @@ static const char* StandardXmpEntryList[] =
     "xmpRights",       // Rights Management schema.
     "xmpTPg",          // Paged-Text schema.
     "lr",              // Adobe LightRoom schema.
-    "video",           // Exiv2 Video Metadata Schema
-    "audio",           // Exiv2 Audio Metadata Schema
 
     "-1"
 };

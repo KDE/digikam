@@ -6,8 +6,8 @@
  * Date        : 2007-09-22
  * Description : Enums for database fields
  *
- * Copyright (C) 2007-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2011-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C)      2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -48,13 +48,8 @@ enum ImagesField
     ModificationDate   = 1 << 4,
     FileSize           = 1 << 5,
     UniqueHash         = 1 << 6,
-    ImagesAll          = Album            |
-                         Name             |
-                         Status           |
-                         Category         |
-                         ModificationDate |
-                         FileSize         |
-                         UniqueHash,
+    ImagesAll          = Album | Name | Status | Category |
+                         ModificationDate | FileSize | UniqueHash,
     ImagesFirst        = Album,
     ImagesLast         = UniqueHash
 };
@@ -73,17 +68,9 @@ enum ImageInformationField
     ColorModel            = 1 << 8,
     ColorLabel            = 1 << 9,
     PickLabel             = 1 << 10,
-    ImageInformationAll   = Rating           |
-                            CreationDate     |
-                            DigitizationDate |
-                            Orientation      |
-                            Width            |
-                            Height           |
-                            Format           |
-                            ColorDepth       |
-                            ColorModel       |
-                            ColorLabel       |
-                            PickLabel,
+    ImageInformationAll   = Rating | CreationDate | DigitizationDate | Orientation |
+                            Width | Height | Format | ColorDepth | ColorModel | 
+                            ColorLabel | PickLabel,
     ImageInformationFirst = Rating,
     ImageInformationLast  = PickLabel
 };
@@ -107,22 +94,10 @@ enum ImageMetadataField
     MeteringMode                 = 1 << 13,
     SubjectDistance              = 1 << 14,
     SubjectDistanceCategory      = 1 << 15,
-    ImageMetadataAll             = Make                         |
-                                   Model                        |
-                                   Lens                         |
-                                   Aperture                     |
-                                   FocalLength                  |
-                                   FocalLength35                |
-                                   ExposureTime                 |
-                                   ExposureProgram              |
-                                   ExposureMode                 |
-                                   Sensitivity                  |
-                                   FlashMode                    |
-                                   WhiteBalance                 |
-                                   WhiteBalanceColorTemperature |
-                                   MeteringMode                 |
-                                   SubjectDistance              |
-                                   SubjectDistanceCategory,
+    ImageMetadataAll             = Make | Model | Lens | Aperture | FocalLength | FocalLength35 |
+                                   ExposureTime | ExposureProgram | ExposureMode | Sensitivity |
+                                   FlashMode | WhiteBalance | WhiteBalanceColorTemperature |
+                                   MeteringMode | SubjectDistance | SubjectDistanceCategory,
     ImageMetadataFirst           = Make,
     ImageMetadataLast            = SubjectDistanceCategory
 };
@@ -140,16 +115,8 @@ enum ImagePositionsField
     PositionRoll        = 1 << 7,
     PositionAccuracy    = 1 << 8,
     PositionDescription = 1 << 9,
-    ImagePositionsAll   = Latitude            |
-                          LatitudeNumber      |
-                          Longitude           |
-                          LongitudeNumber     |
-                          Altitude            |
-                          PositionOrientation |
-                          PositionRoll        |
-                          PositionTilt        |
-                          PositionAccuracy    |
-                          PositionDescription,
+    ImagePositionsAll   = Latitude | LatitudeNumber | Longitude | LongitudeNumber | Altitude |
+                          PositionOrientation | PositionRoll | PositionTilt | PositionAccuracy | PositionDescription,
     ImagePositionsFirst = Latitude,
     ImagePositionsLast  = PositionDescription
 };
@@ -162,11 +129,7 @@ enum ImageCommentsField
     CommentAuthor      = 1 << 2,
     CommentDate        = 1 << 3,
     Comment            = 1 << 4,
-    ImageCommentsAll   = CommentType     |
-                         CommentAuthor   |
-                         CommentLanguage |
-                         CommentDate     |
-                         Comment,
+    ImageCommentsAll   = CommentType | CommentAuthor | CommentLanguage | CommentDate | Comment,
     ImageCommentsFirst = CommentType,
     ImageCommentsLast  = Comment
 };
@@ -177,32 +140,9 @@ enum ImageHistoryInfoField
     ImageUUID             = 1 << 0,
     ImageHistory          = 1 << 1,
     ImageRelations        = 1 << 2,
-    ImageHistoryInfoAll   = ImageUUID    |
-                            ImageHistory |
-                            ImageRelations,
+    ImageHistoryInfoAll   = ImageUUID | ImageHistory | ImageRelations,
     ImageHistoryInfoFirst = ImageUUID,
     ImageHistoryInfoLast  = ImageRelations
-};
-
-enum VideoMetadataField
-{
-    VideoMetadataNone            = 0,
-    AspectRatio                  = 1 << 0,
-    AudioBitRate                 = 1 << 1,
-    AudioChannelType             = 1 << 2,
-    AudioCompressor              = 1 << 3,
-    Duration                     = 1 << 4,
-    FrameRate                    = 1 << 5,
-    VideoCodec                   = 1 << 6,
-    VideoMetadataAll             = AspectRatio      |
-                                   AudioBitRate     |
-                                   AudioChannelType |
-                                   AudioCompressor  |
-                                   Duration         |
-                                   FrameRate        |
-                                   VideoCodec,
-    VideoMetadataFirst           = AspectRatio,
-    VideoMetadataLast            = VideoCodec
 };
 
 Q_DECLARE_FLAGS(Images, ImagesField)
@@ -211,7 +151,6 @@ Q_DECLARE_FLAGS(ImageMetadata, ImageMetadataField)
 Q_DECLARE_FLAGS(ImageComments, ImageCommentsField)
 Q_DECLARE_FLAGS(ImagePositions, ImagePositionsField)
 Q_DECLARE_FLAGS(ImageHistoryInfo, ImageHistoryInfoField)
-Q_DECLARE_FLAGS(VideoMetadata, VideoMetadataField)
 
 /**
  * You can iterate over each of the Enumerations defined above:
@@ -219,24 +158,20 @@ Q_DECLARE_FLAGS(VideoMetadata, VideoMetadataField)
  * for (ImagesIterator it; !it.atEnd(); ++it) {}
  */
 
-#define DATABASEFIELDS_ENUM_ITERATOR(Flag)            \
-                                                      \
-class Flag##Iterator                                  \
-{                                                     \
-    int i;                                            \
-                                                      \
-public:                                               \
-                                                      \
-    Flag##Iterator()       { i = Flag##First;       } \
-    bool atEnd()           { return i > Flag##Last; } \
-    void operator++()      { i = (i << 1);          } \
-    Flag operator*() const { return (Flag)i;        } \
+#define DATABASEFIELDS_ENUM_ITERATOR(Flag) \
+class Flag##Iterator \
+{ \
+    int i; \
+public: \
+    Flag##Iterator() { i = Flag##First; } \
+    bool atEnd() { return i > Flag##Last; } \
+    void operator++() { i = (i << 1); } \
+    Flag operator*() const { return (Flag)i; } \
 };
 
 DATABASEFIELDS_ENUM_ITERATOR(Images)
 DATABASEFIELDS_ENUM_ITERATOR(ImageInformation)
 DATABASEFIELDS_ENUM_ITERATOR(ImageMetadata)
-DATABASEFIELDS_ENUM_ITERATOR(VideoMetadata)
 DATABASEFIELDS_ENUM_ITERATOR(ImagePositions)
 DATABASEFIELDS_ENUM_ITERATOR(ImageComments)
 DATABASEFIELDS_ENUM_ITERATOR(ImageHistoryInfo)
@@ -250,22 +185,23 @@ enum CustomEnumFlags
 };
 Q_DECLARE_FLAGS(CustomEnum, CustomEnumFlags)
 
-#define DATABASEFIELDS_SET_DECLARE_METHODS(Flag, variable)                     \
-    Set(const Flag& f)                      { initialize(); variable = f;    } \
-    Set(const Flag##Field& f)               { initialize(); variable = f;    } \
-    inline Flag& operator=(const Flag& f)   { return variable.operator=(f);  } \
-    inline Flag& operator|=(Flag f)         { return variable.operator|=(f); } \
-    inline Flag& operator^=(Flag f)         { return variable.operator^=(f); } \
-    inline Flag operator|(Flag f) const     { return variable.operator|(f);  } \
-    inline Flag operator^(Flag f) const     { return variable.operator^(f);  } \
-    inline Flag operator&(Flag f) const     { return variable.operator&(f);  } \
-    inline operator Flag() const            { return variable;               } \
-    inline bool hasFieldsFrom##Flag() const { return variable & Flag##All;   }
+#define DATABASEFIELDS_SET_DECLARE_METHODS(Flag, variable) \
+    Set(const Flag& f) { initialize(); variable = f; } \
+    Set(const Flag##Field& f) { initialize(); variable = f; } \
+    inline Flag& operator=(const Flag& f) { return variable.operator=(f); } \
+    inline Flag& operator|=(Flag f) { return variable.operator|=(f); } \
+    inline Flag& operator^=(Flag f) { return variable.operator^=(f); } \
+    inline Flag operator|(Flag f) const { return variable.operator|(f); } \
+    inline Flag operator^(Flag f) const { return variable.operator^(f); } \
+    inline Flag operator&(Flag f) const { return variable.operator&(f); } \
+    inline operator Flag() const { return variable; } \
+    inline bool hasFieldsFrom##Flag() const { return variable & Flag##All; }
 
 /**
  * This class provides a set of all DatabasFields enums,
  * without resorting to a QSet.
- */
+*/
+
 class Set
 {
 public:
@@ -283,15 +219,11 @@ public:
         imageComments    = ImageCommentsNone;
         imagePositions   = ImagePositionsNone;
         imageHistory     = ImageHistoryInfoNone;
-        videoMetadata    = VideoMetadataNone;
         customEnum       = (CustomEnum)0;
     }
 
-public:
-
     DATABASEFIELDS_SET_DECLARE_METHODS(Images, images)
     DATABASEFIELDS_SET_DECLARE_METHODS(ImageInformation, imageInformation)
-    DATABASEFIELDS_SET_DECLARE_METHODS(VideoMetadata, videoMetadata)
     DATABASEFIELDS_SET_DECLARE_METHODS(ImageMetadata, imageMetadata)
     DATABASEFIELDS_SET_DECLARE_METHODS(ImageComments, imageComments)
     DATABASEFIELDS_SET_DECLARE_METHODS(ImagePositions, imagePositions)
@@ -299,41 +231,32 @@ public:
 
     inline bool operator&(const Set& other)
     {
-        return (images & other.images)                     ||
-               (imageInformation & other.imageInformation) ||
-               (imageMetadata & other.imageMetadata)       ||
-               (imageComments & other.imageComments)       ||
-               (imagePositions & other.imagePositions)     ||
-               (imageHistory & other.imageHistory)         ||
-               (customEnum & other.customEnum)             ||
-               (videoMetadata & other.videoMetadata);
+        return (images & other.images) || (imageInformation & other.imageInformation)  ||
+               (imageMetadata & other.imageMetadata) || (imageComments & other.imageComments) ||
+               (imagePositions & other.imagePositions) || (imageHistory & other.imageHistory) ||
+               (customEnum & other.customEnum);
     }
 
     inline CustomEnum& operator=(const CustomEnum& f)
     {
         return customEnum.operator=(f);
     }
-
     inline CustomEnum& operator|=(CustomEnum f)
     {
         return customEnum.operator|=(f);
     }
-
     inline CustomEnum& operator^=(CustomEnum f)
     {
         return customEnum.operator^=(f);
     }
-
     inline CustomEnum operator|(CustomEnum f) const
     {
         return customEnum.operator|(f);
     }
-
     inline CustomEnum operator^(CustomEnum f) const
     {
         return customEnum.operator^(f);
     }
-
     inline CustomEnum operator&(CustomEnum f) const
     {
         return customEnum.operator&(f);
@@ -348,26 +271,24 @@ private:
     Images           images;
     ImageInformation imageInformation;
     ImageMetadata    imageMetadata;
-    VideoMetadata    videoMetadata;
     ImageComments    imageComments;
     ImagePositions   imagePositions;
     ImageHistoryInfo imageHistory;
     CustomEnum       customEnum;
 };
 
-#define DATABASEFIELDS_HASH_DECLARE_METHODS(Key, method)                                                                            \
-    int remove(const Key& key)                                 { return QHash<unsigned int, T>::remove(method(key));              } \
-    T take(const Key& key)                                     { return QHash<unsigned int, T>::take(method(key));                } \
-                                                                                                                                    \
-    bool contains(const Key& key) const                        { return QHash<unsigned int, T>::contains(method(key));            } \
-    const T value(const Key& key) const                        { return QHash<unsigned int, T>::value(method(key));               } \
+#define DATABASEFIELDS_HASH_DECLARE_METHODS(Key, method) \
+    int remove(const Key& key) { return QHash<unsigned int, T>::remove(method(key)); } \
+    T take(const Key& key) { return QHash<unsigned int, T>::take(method(key)); } \
+    \
+    bool contains(const Key& key) const { return QHash<unsigned int, T>::contains(method(key)); } \
+    const T value(const Key& key) const { return QHash<unsigned int, T>::value(method(key)); } \
     const T value(const Key& key, const T& defaultValue) const { return QHash<unsigned int, T>::value(method(key), defaultValue); } \
-                                                                                                                                    \
-    T& operator[](const Key& key)                              { return QHash<unsigned int, T>::operator[](method(key));          } \
-    const T operator[](const Key& key) const                   { return QHash<unsigned int, T>::operator[](method(key));          } \
-                                                                                                                                    \
-    QList<T> values(const Key& key) const                      { return QHash<unsigned int, T>::value(method(key));               } \
-    int count(const Key& key) const                            { return QHash<unsigned int, T>::count(method(key));               }
+    T& operator[](const Key& key) { return QHash<unsigned int, T>::operator[](method(key)); } \
+    const T operator[](const Key& key) const { return QHash<unsigned int, T>::operator[](method(key)); } \
+    \
+    QList<T> values(const Key& key) const { return QHash<unsigned int, T>::value(method(key)); } \
+    int count(const Key& key) const { return QHash<unsigned int, T>::count(method(key)); }
 
 /**
  * This class provides a hash on all DatabaseFields enums,
@@ -379,6 +300,7 @@ private:
  * which can have at most 26 flag values (1 << 0 to 1 << 26).
  * Pass this as the optional second template parameter.
  */
+
 template <class T>
 class Hash : public QHash<unsigned int, T>
 {
@@ -390,37 +312,26 @@ public:
     {
         return (int)f | (0 << 26);
     }
-
     static inline unsigned int uniqueKey(ImageInformation f)
     {
         return (int)f | (1 << 26);
     }
-
     static inline unsigned int uniqueKey(ImageMetadata f)
     {
         return (int)f | (2 << 26);
     }
-
     static inline unsigned int uniqueKey(ImageComments f)
     {
         return (int)f | (3 << 26);
     }
-
     static inline unsigned int uniqueKey(ImagePositions f)
     {
         return (int)f | (4 << 26);
     }
-
     static inline unsigned int uniqueKey(ImageHistoryInfo f)
     {
         return (int)f | (5 << 26);
     }
-
-    static inline unsigned int uniqueKey(VideoMetadata f)
-    {
-        return (int)f | (6 << 26);
-    }
-
     static inline unsigned int uniqueKey(CustomEnum f)
     {
         return      f | (63 << 26);
@@ -430,7 +341,6 @@ public:
     DATABASEFIELDS_HASH_DECLARE_METHODS(Images, uniqueKey);
     DATABASEFIELDS_HASH_DECLARE_METHODS(ImageInformation, uniqueKey);
     DATABASEFIELDS_HASH_DECLARE_METHODS(ImageMetadata, uniqueKey);
-    DATABASEFIELDS_HASH_DECLARE_METHODS(VideoMetadata, uniqueKey);
     DATABASEFIELDS_HASH_DECLARE_METHODS(ImageComments, uniqueKey);
     DATABASEFIELDS_HASH_DECLARE_METHODS(ImagePositions, uniqueKey);
     DATABASEFIELDS_HASH_DECLARE_METHODS(ImageHistoryInfo, uniqueKey);
@@ -445,7 +355,6 @@ public:
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::DatabaseFields::Images)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::DatabaseFields::ImageInformation)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::DatabaseFields::ImageMetadata)
-Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::DatabaseFields::VideoMetadata)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::DatabaseFields::ImageComments)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::DatabaseFields::ImagePositions)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::DatabaseFields::ImageHistoryInfo)

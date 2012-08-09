@@ -6,7 +6,7 @@
  * Date        : 2007-09-06
  * Description : a dialog to control camera capture.
  *
- * Copyright (C) 2007-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -49,7 +49,7 @@ class CaptureDlg : public KDialog
 
 public:
 
-    CaptureDlg(QWidget* const parent, CameraController* const controller,
+    CaptureDlg(QWidget* parent, CameraController* controller,
                const QString& cameraTitle);
     ~CaptureDlg();
 
@@ -66,8 +66,8 @@ private Q_SLOTS:
 
 private:
 
-    class Private;
-    Private* const d;
+    class CaptureDlgPriv;
+    CaptureDlgPriv* const d;
 };
 
 }  // namespace Digikam

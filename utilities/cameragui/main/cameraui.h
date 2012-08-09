@@ -6,10 +6,9 @@
  * Date        : 2004-09-16
  * Description : Camera interface
  *
- * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
+ * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2012 by Islam Wazery <wazery at ubuntu dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -48,8 +47,6 @@
 #include "dmetadata.h"
 #include "camerahistoryupdater.h"
 #include "downloadsettings.h"
-#include "importiconview.h"
-#include "importview.h"
 
 namespace Digikam
 {
@@ -57,8 +54,6 @@ namespace Digikam
 class Album;
 class CollectionLocation;
 class CameraHistoryUpdater;
-class ImportIconView;
-//class ImportDelegate;
 
 class CameraUI : public KXmlGuiWindow
 {
@@ -80,14 +75,11 @@ public:
     bool cameraMkDirSupport() const;
     bool cameraDelDirSupport() const;
 
-    void enableZoomPlusAction(bool val);
-    void enableZoomMinusAction(bool val);
+    bool chronologicOrder() const;
 
     QString cameraTitle() const;
 
     DownloadSettings downloadSettings() const;
-
-    CameraController* getCameraController();
 
 Q_SIGNALS:
 
@@ -126,8 +118,6 @@ private:
     void deleteItems(bool onlySelected, bool onlyDownloaded);
     void checkItem4Deletion(const CamItemInfo& info, QStringList& folders, QStringList& files,
                             CamItemInfoList& deleteList, CamItemInfoList& lockedList);
-
-    QString identifyCategoryforMime(QString mime);
 
 private Q_SLOTS:
 
@@ -187,19 +177,14 @@ private Q_SLOTS:
     void slotLocked(const QString&, const QString&, bool);
 
     void slotNewSelection(bool);
-    void slotImageSelected(const CamItemInfoList& selection, bool hasPrev, bool hasNext,
-                                       const CamItemInfoList& listAll);
-
-    void slotSwitchedToPreview();
-    void slotSwitchedToIconView();
-    void slotSwitchedToMapView();
+    void slotItemsSelected(const CamItemInfo&, bool selected);
 
     void slotMetadata(const QString& folder, const QString& file, const DMetadata& meta);
 
+    void slotlastPhotoFirst();
     void slotFilterChanged();
 
     void slotEditKeys();
-    void slotToggleShowBar();
     void slotShowMenuBar();
     void slotConfToolbars();
     void slotConfNotifications();
@@ -209,6 +194,9 @@ private Q_SLOTS:
     void slotDBStat();
 
     void slotSidebarTabTitleStyleChanged();
+
+    void slotRefreshIconViewTimer();
+    void slotRefreshIconView(const CHUpdateItemMap& map);
 
 private:
 

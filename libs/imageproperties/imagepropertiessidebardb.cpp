@@ -8,7 +8,7 @@
  *               digiKam database.
  *
  * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2007-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2007-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2010-2011 by Martin Klapetek <martin dot klapetek at gmail dot com>
  * Copyright (C)      2011 by Michael G. Hansen <mike at mghansen dot de>
  *
@@ -64,20 +64,20 @@
 namespace Digikam
 {
 
-class ImagePropertiesSideBarDB::Private
+class ImagePropertiesSideBarDB::ImagePropertiesSideBarDBPriv
 {
 public:
 
-    Private() :
+    ImagePropertiesSideBarDBPriv() :
         dirtyDesceditTab(false),
         hasPrevious(false),
         hasNext(false),
         hasImageInfoOwnership(false),
         desceditTab(0)
     {
-        desceditTab        = 0;
-        versionsHistoryTab = 0;
-        dirtyDesceditTab   = false;
+        desceditTab           = 0;
+        versionsHistoryTab    = 0;
+        dirtyDesceditTab      = false;
     }
 
     bool                        dirtyDesceditTab;
@@ -91,10 +91,10 @@ public:
     ImagePropertiesVersionsTab* versionsHistoryTab;
 };
 
-ImagePropertiesSideBarDB::ImagePropertiesSideBarDB(QWidget* const parent, SidebarSplitter* const splitter,
-                                                   KMultiTabBarPosition side, bool mimimizedDefault)
+ImagePropertiesSideBarDB::ImagePropertiesSideBarDB(QWidget* parent, SidebarSplitter* splitter,
+        KMultiTabBarPosition side, bool mimimizedDefault)
     : ImagePropertiesSideBar(parent, splitter, side, mimimizedDefault),
-      d(new Private)
+      d(new ImagePropertiesSideBarDBPriv)
 {
     d->desceditTab        = new ImageDescEditTab(parent);
     d->versionsHistoryTab = new ImagePropertiesVersionsTab(parent);
@@ -129,7 +129,7 @@ ImagePropertiesSideBarDB::~ImagePropertiesSideBarDB()
 }
 
 void ImagePropertiesSideBarDB::itemChanged(const ImageInfo& info, const QRect& rect,
-                                           DImg* img, const DImageHistory& history)
+        DImg* img, const DImageHistory& history)
 {
     itemChanged(info.fileUrl(), info, rect, img, history);
 }
@@ -140,7 +140,7 @@ void ImagePropertiesSideBarDB::itemChanged(const KUrl& url, const QRect& rect, D
 }
 
 void ImagePropertiesSideBarDB::itemChanged(const KUrl& url, const ImageInfo& info,
-                                           const QRect& rect, DImg* const img, const DImageHistory& history)
+        const QRect& rect, DImg* img, const DImageHistory& history)
 {
     if ( !url.isValid() )
     {
@@ -171,7 +171,7 @@ void ImagePropertiesSideBarDB::itemChanged(const ImageInfoList& infos)
     itemChanged(infos, QRect(), 0, DImageHistory());
 }
 
-void ImagePropertiesSideBarDB::itemChanged(const ImageInfoList& infos, const QRect& rect, DImg* const img, const DImageHistory& history)
+void ImagePropertiesSideBarDB::itemChanged(ImageInfoList infos, const QRect& rect, DImg* img, const DImageHistory& history)
 {
     m_currentRect        = rect;
     m_image              = img;
@@ -415,7 +415,6 @@ void ImagePropertiesSideBarDB::slotImageChangeDatabase(const ImageChangeset& cha
                 if ( (set & DatabaseFields::ImagesAll) ||
                      (set & DatabaseFields::ImageInformationAll) ||
                      (set & DatabaseFields::ImageMetadataAll) ||
-                     (set & DatabaseFields::VideoMetadataAll) ||
                      (set & DatabaseFields::ImageCommentsAll) )
                 {
                     m_dirtyPropertiesTab = false;
@@ -514,7 +513,6 @@ void ImagePropertiesSideBarDB::setImagePropertiesInformation(const KUrl& url)
 
             ImageCommonContainer commonInfo  = info.imageCommonContainer();
             ImageMetadataContainer photoInfo = info.imageMetadataContainer();
-            VideoMetadataContainer videoInfo = info.videoMetadataContainer();
 
             str = KGlobal::locale()->formatDateTime(commonInfo.fileModificationDate, KLocale::ShortDate, true);
             m_propertiesTab->setFileModifiedDate(str);
@@ -600,18 +598,6 @@ void ImagePropertiesSideBarDB::setImagePropertiesInformation(const KUrl& url)
             m_propertiesTab->setPhotoFlash(photoInfo.flashMode.isEmpty() ? unavailable : photoInfo.flashMode);
             m_propertiesTab->setPhotoWhiteBalance(photoInfo.whiteBalance.isEmpty() ? unavailable : photoInfo.whiteBalance);
 
-            // -- VideoMetadata information ------------------------------------------
-
-            m_propertiesTab->setVideoInfoDisable(videoInfo.allFieldsNull);
-
-            m_propertiesTab->setVideoAspectRatio(videoInfo.aspectRatio.isEmpty()           ? unavailable : videoInfo.aspectRatio);
-            m_propertiesTab->setVideoDuration(videoInfo.duration.isEmpty()                 ? unavailable : videoInfo.duration);
-            m_propertiesTab->setVideoFrameRate(videoInfo.frameRate.isEmpty()               ? unavailable : videoInfo.frameRate);
-            m_propertiesTab->setVideoVideoCodec(videoInfo.videoCodec.isEmpty()             ? unavailable : videoInfo.videoCodec);
-            m_propertiesTab->setVideoAudioBitRate(videoInfo.audioBitRate.isEmpty()         ? unavailable : videoInfo.audioBitRate);
-            m_propertiesTab->setVideoAudioChannelType(videoInfo.audioChannelType.isEmpty() ? unavailable : videoInfo.audioChannelType);
-            m_propertiesTab->setVideoAudioCompressor(videoInfo.audioCompressor.isEmpty()   ? unavailable : videoInfo.audioCompressor);
-
             // -- Caption / Tags ------------------------------------------
 
             m_propertiesTab->setCaption(info.comment());
@@ -628,7 +614,7 @@ void ImagePropertiesSideBarDB::setImagePropertiesInformation(const KUrl& url)
     }
 }
 
-ImagePropertiesVersionsTab* ImagePropertiesSideBarDB::getFiltersHistoryTab() const
+ImagePropertiesVersionsTab* ImagePropertiesSideBarDB::getFiltersHistoryTab()
 {
     return d->versionsHistoryTab;
 }

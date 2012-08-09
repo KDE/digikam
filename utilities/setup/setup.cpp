@@ -39,10 +39,6 @@
 #include <kvbox.h>
 #include <kdebug.h>
 
-// Libkipi includes
-
-#include <libkipi/configwidget.h>
-
 // Local includes
 
 #include "albumsettings.h"
@@ -59,27 +55,25 @@
 #include "setupmetadata.h"
 #include "setupmime.h"
 #include "setupmisc.h"
+#include "setupplugins.h"
 #include "setupslideshow.h"
 #include "setuptooltip.h"
 #include "setupdatabase.h"
 #include "setupfacetags.h"
 #include "setupversioning.h"
-#include "importsettings.h"
 
 #ifdef USE_SCRIPT_IFACE
 #include "setupscriptmanager.h"
 #endif
 
-using namespace KIPI;
-
 namespace Digikam
 {
 
-class Setup::Private
+class Setup::SetupPrivate
 {
 public:
 
-    Private() :
+    SetupPrivate() :
         page_database(0),
         page_collections(0),
         page_albumView(0),
@@ -123,8 +117,7 @@ public:
 #ifdef USE_SCRIPT_IFACE
         scriptManagerPage(0),
 #endif
-        versioningPage(0),
-        pluginFilter(0)
+        versioningPage(0)
     {
     }
 
@@ -167,14 +160,12 @@ public:
     SetupICC*           iccPage;
     SetupCamera*        cameraPage;
     SetupMisc*          miscPage;
-    ConfigWidget*       pluginsPage;
+    SetupPlugins*       pluginsPage;
 #ifdef USE_SCRIPT_IFACE
     SetupScriptManager* scriptManagerPage;
 #endif
     //SetupFaceTags*      faceTagsPage;
     SetupVersioning*    versioningPage;
-
-    SearchTextBar*      pluginFilter;
 
 public:
 
@@ -182,7 +173,7 @@ public:
 };
 
 Setup::Setup(QWidget* const parent)
-    : KPageDialog(parent), d(new Private)
+    : KPageDialog(parent), d(new SetupPrivate)
 {
     setCaption(i18n("Configure"));
     setButtons(Help | Ok | Cancel);
@@ -295,19 +286,11 @@ Setup::Setup(QWidget* const parent)
                                    "<i>Manage your camera devices</i></qt>"));
     d->page_camera->setIcon(KIcon("camera-photo"));
 
-    d->pluginsPage  = new ConfigWidget();
-    d->pluginFilter = new SearchTextBar(d->pluginsPage, "PluginsSearchBar");
-    d->pluginsPage->setFilterWidget(d->pluginFilter);
+    d->pluginsPage  = new SetupPlugins();
     d->page_plugins = addPage(d->pluginsPage, i18n("Kipi Plugins"));
     d->page_plugins->setHeader(i18n("<qt>Main Interface Plug-in Settings<br/>"
                                     "<i>Set which plugins will be accessible from the main interface</i></qt>"));
     d->page_plugins->setIcon(KIcon("kipi"));
-
-    connect(d->pluginFilter, SIGNAL(signalSearchTextSettings(SearchTextSettings)),
-            this, SLOT(slotSearchTextChanged(SearchTextSettings)));
-
-    connect(d->pluginsPage, SIGNAL(signalSearchResult(bool)),
-            d->pluginFilter, SLOT(slotSearchResult(bool)));
 
 #ifdef USE_SCRIPT_IFACE
     d->scriptManagerPage  = new SetupScriptManager();
@@ -457,11 +440,6 @@ bool Setup::execTemplateEditor(QWidget* const parent, const Template& t)
     return success;
 }
 
-void Setup::slotSearchTextChanged(const SearchTextSettings& settings)
-{
-     d->pluginsPage->slotSetFilter(settings.text, settings.caseSensitive);
-}
-
 void Setup::slotButtonClicked(int button)
 {
     if (button == KDialog::Ok)
@@ -500,7 +478,7 @@ void Setup::okClicked()
     d->slideshowPage->applySettings();
     d->iccPage->applySettings();
     d->miscPage->applySettings();
-    d->pluginsPage->apply();
+    d->pluginsPage->applyPlugins();
     //d->faceTagsPage->applySettings();
     d->versioningPage->applySettings();
 
@@ -509,7 +487,6 @@ void Setup::okClicked()
 #endif
 
     AlbumSettings::instance()->emitSetupChanged();
-    ImportSettings::instance()->emitSetupChanged();
 
     kapp->restoreOverrideCursor();
 
@@ -662,7 +639,7 @@ Setup::Page Setup::activePageIndex() const
     return DatabasePage;
 }
 
-KPageWidgetItem* Setup::Private::pageItem(Setup::Page page) const
+KPageWidgetItem* Setup::SetupPrivate::pageItem(Setup::Page page) const
 {
     switch (page)
     {

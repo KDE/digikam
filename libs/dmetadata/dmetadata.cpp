@@ -6,9 +6,9 @@
  * Date        : 2006-02-23
  * Description : image metadata interface
  *
- * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2011      by Leif Huhn <leif at dkstat dot com>
+ * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2011 by Leif Huhn <leif@dkstat.com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -348,10 +348,8 @@ CaptionsMap DMetadata::getImageComments() const
 bool DMetadata::setImageComments(const CaptionsMap& comments) const
 {
     //See B.K.O #139313: An empty string is also a valid value
-    /*
-    if (comments.isEmpty())
-          return false;
-    */
+    /*if (comments.isEmpty())
+          return false;*/
 
     kDebug() << getFilePath() << " ==> Comment: " << comments;
 
@@ -430,6 +428,7 @@ bool DMetadata::setImageComments(const CaptionsMap& comments) const
 
     return true;
 }
+
 
 int DMetadata::getImagePickLabel() const
 {
@@ -1120,52 +1119,6 @@ PhotoInfoContainer DMetadata::getPhotographInformation() const
     return photoInfo;
 }
 
-VideoInfoContainer DMetadata::getVideoInformation() const
-{
-    VideoInfoContainer videoInfo;
-
-    if (hasXmp())
-    {
-        if (videoInfo.aspectRatio.isEmpty())
-        {
-            videoInfo.aspectRatio = getXmpTagString("Xmp.video.aspectRatio");
-        }
-
-        if (videoInfo.audioBitRate.isEmpty())
-        {
-            videoInfo.audioBitRate = getXmpTagString("Xmp.audio.sampleRate");
-        }
-
-        if (videoInfo.audioChannelType.isEmpty())
-        {
-            videoInfo.audioChannelType = getXmpTagString("Xmp.audio.channelType");
-        }
-
-        if (videoInfo.audioCompressor.isEmpty())
-        {
-            videoInfo.audioCompressor = getXmpTagString("Xmp.audio.compressor");
-        }
-
-        if (videoInfo.duration.isEmpty())
-        {
-            videoInfo.duration = getXmpTagString("Xmp.video.duration");
-        }
-
-        if (videoInfo.frameRate.isEmpty())
-        {
-            videoInfo.frameRate = getXmpTagString("Xmp.video.frameRate");
-        }
-
-        if (videoInfo.videoCodec.isEmpty())
-        {
-            videoInfo.videoCodec = getXmpTagString("Xmp.video.codec");
-        }
-
-    }
-
-    return videoInfo;
-}
-
 bool DMetadata::getImageTagsPath(QStringList& tagsPath) const
 {
     // Try to get Tags Path list from XMP in first.
@@ -1437,7 +1390,6 @@ bool DMetadata::setMetadataTemplate(const Template& t) const
     // Synchronize Iptc subjects tags with Xmp subjects tags.
     QStringList list = t.IptcSubjects();
     QStringList newList;
-
     foreach(QString str, list) // krazy:exclude=foreach
     {
         if (str.startsWith(QLatin1String("XMP")))
@@ -2276,26 +2228,6 @@ QVariant DMetadata::getMetadataField(MetadataInfo::Field field) const
             return getXmpTagVariant("Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiTelWork");
         case MetadataInfo::IptcCoreContactInfoWebUrl:
             return getXmpTagVariant("Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiUrlWork");
-        case MetadataInfo::AspectRatio:
-            return fromXmpLangAlt("Xmp.video.aspectRatio");
-        case MetadataInfo::AudioBitRate:
-            return fromXmpLangAlt("Xmp.audio.sampleRate");
-        case MetadataInfo::AudioChannelType:
-            return fromXmpLangAlt("Xmp.audio.channelType");
-        case MetadataInfo::AudioCompressor:
-            return fromXmpLangAlt("Xmp.audio.compressor");
-        case MetadataInfo::Duration:
-            return fromXmpLangAlt("Xmp.video.duration");
-        case MetadataInfo::FrameRate:
-            return fromXmpLangAlt("Xmp.video.frameRate");
-        case MetadataInfo::VideoCodec:
-            return fromXmpLangAlt("Xmp.video.codec");
-        case MetadataInfo::VideoBitDepth:
-            return fromXmpLangAlt("Xmp.video.bitDepth");
-        case MetadataInfo::VideoHeight:
-            return fromXmpLangAlt("Xmp.video.height");
-        case MetadataInfo::VideoWidth:
-            return fromXmpLangAlt("Xmp.video.width");
 
         default:
             return QVariant();
@@ -2389,20 +2321,11 @@ QString DMetadata::valueToString (const QVariant& value, MetadataInfo::Field fie
         case MetadataInfo::WhiteBalanceColorTemperature:
             return i18nc("Temperature in Kelvin", "%1 K", value.toInt());
 
-        case MetadataInfo::AspectRatio:
-        case MetadataInfo::AudioBitRate:
-        case MetadataInfo::AudioChannelType:
-        case MetadataInfo::AudioCompressor:
-        case MetadataInfo::Duration:
-        case MetadataInfo::FrameRate:
-        case MetadataInfo::VideoCodec:
-            return value.toString();
-
         case MetadataInfo::Longitude:
         {
-            int    degrees, minutes;
+            int degrees, minutes;
             double seconds;
-            char   directionRef;
+            char directionRef;
 
             if (!convertToUserPresentableNumbers(value.toString(), &degrees, &minutes, &seconds, &directionRef))
             {
@@ -2417,10 +2340,9 @@ QString DMetadata::valueToString (const QVariant& value, MetadataInfo::Field fie
         }
         case MetadataInfo::LongitudeNumber:
         {
-            int    degrees, minutes;
+            int degrees, minutes;
             double seconds;
-            char   directionRef;
-
+            char directionRef;
             convertToUserPresentableNumbers(false, value.toDouble(), &degrees, &minutes, &seconds, &directionRef);
             QString direction = (directionRef == 'W') ?
                                 i18nc("For use in longitude coordinate", "West") : i18nc("For use in longitude coordinate", "East");
@@ -2430,9 +2352,9 @@ QString DMetadata::valueToString (const QVariant& value, MetadataInfo::Field fie
         }
         case MetadataInfo::Latitude:
         {
-            int    degrees, minutes;
+            int degrees, minutes;
             double seconds;
-            char   directionRef;
+            char directionRef;
 
             if (!convertToUserPresentableNumbers(value.toString(), &degrees, &minutes, &seconds, &directionRef))
             {
@@ -2447,10 +2369,9 @@ QString DMetadata::valueToString (const QVariant& value, MetadataInfo::Field fie
         }
         case MetadataInfo::LatitudeNumber:
         {
-            int    degrees, minutes;
+            int degrees, minutes;
             double seconds;
-            char   directionRef;
-
+            char directionRef;
             convertToUserPresentableNumbers(false, value.toDouble(), &degrees, &minutes, &seconds, &directionRef);
             QString direction = (directionRef == 'N') ?
                                 i18nc("For use in latitude coordinate", "North") : i18nc("For use in latitude coordinate", "North");
@@ -2559,6 +2480,7 @@ QStringList DMetadata::valuesToString(const QVariantList& values, const Metadata
     Q_ASSERT(size == values.size());
 
     QStringList list;
+
     for (int i=0; i<size; ++i)
     {
         list << valueToString(values.at(i), fields.at(i));
@@ -2957,17 +2879,15 @@ void DMetadata::setData(const KExiv2Data& data)
 // NOTE: this method can be moved to libkexiv2 later...
 bool DMetadata::removeExifColorSpace() const
 {
-    bool ret =  true;
+    bool ret = true;
     ret      &= removeExifTag("Exif.Photo.ColorSpace", true);
     ret      &= removeXmpTag("Xmp.exif.ColorSpace", true);
-
     return ret;
 }
 
 QString DMetadata::getExifTagStringFromTagsList(const QStringList& tagsList) const
 {
     QString val;
-
     foreach(QString tag, tagsList)
     {
         val = getExifTagString(tag.toAscii());

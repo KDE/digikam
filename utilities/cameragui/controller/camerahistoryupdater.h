@@ -49,7 +49,7 @@ class CameraHistoryUpdater : public QThread
 
 public:
 
-    CameraHistoryUpdater(QWidget* const parent);
+    CameraHistoryUpdater(QWidget* parent);
     ~CameraHistoryUpdater();
 
     void addItems(const QByteArray& id, CHUpdateItemMap& map);
@@ -74,8 +74,8 @@ private:
 
 private:
 
-    class Private;
-    Private* const d;
+    class CameraHistoryUpdaterPriv;
+    CameraHistoryUpdaterPriv* const d;
 };
 
 }  // namespace Digikam

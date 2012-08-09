@@ -38,11 +38,5 @@ https://bugs.kde.org/show_bug.cgi?id=121310
 https://bugs.kde.org/show_bug.cgi?id=126149
 https://bugs.kde.org/show_bug.cgi?id=158437
 https://bugs.kde.org/show_bug.cgi?id=216491
-https://bugs.kde.org/show_bug.cgi?id=161783
 
 ...and certainly more files...
-
-Project: Import Interface Revamp, GSoC 2012 TODOs
-=================================================
-
-- CameraThumbsCtrl is now deprecated and needs to be deleted.

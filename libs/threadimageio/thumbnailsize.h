@@ -6,7 +6,7 @@
  * Date        : 2004-09-07
  * Description : thumbnails size interface
  *
- * Copyright (C) 2004 by Renchi Raju <renchi dot raju at gmail dot com>
+ * Copyright (C) 2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General

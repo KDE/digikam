@@ -1,6 +1,6 @@
 /* This file is part of the KDE libraries
    Copyright (C) 2007-2010 Sebastian Trueg <trueg@kde.org>
-   Copyright 2011 Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+   Copyright 2011 Marcel Wiesweg <marcel.wiesweg@gmx.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public

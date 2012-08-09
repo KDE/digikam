@@ -34,7 +34,6 @@
 #include "config-digikam.h"
 #include "setuptemplate.h"
 #include "template.h"
-#include "searchtextbar.h"
 
 namespace Digikam
 {
@@ -96,7 +95,6 @@ public:
 private Q_SLOTS:
 
     void slotButtonClicked(int button);
-    void slotSearchTextChanged(const SearchTextSettings& settings);
 
 private:
 
@@ -104,13 +102,13 @@ private:
     ~Setup();
 
     Setup::Page activePageIndex() const;
-    void        showPage(Setup::Page page);
-    void        okClicked();
+    void showPage(Setup::Page page);
+    void okClicked();
 
 private:
 
-    class Private;
-    Private* const d;
+    class SetupPrivate;
+    SetupPrivate* const d;
 };
 
 }  // namespace Digikam

@@ -3,10 +3,11 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2012-18-06
- * Description : Camera model for the import interface
+ * Date        : 2004-01-02
+ * Description : setup Kipi plugins tab.
  *
- * Copyright (C) 2012 by Islam Wazery <wazery at ubuntu dot com>
+ * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2011-2012 by Andi Clemens <andi dot clemens at googlemail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,28 +22,42 @@
  *
  * ============================================================ */
 
-#ifndef IMPORTMODEL_H
-#define IMPORTMODEL_H
+#ifndef SETUPPLUGINS_H
+#define SETUPPLUGINS_H
 
-// Local includes
+// Qt includes
 
-#include "importthumbnailmodel.h"
+#include <QScrollArea>
 
 namespace Digikam
 {
 
-class ImportModel : public ImportThumbnailModel
+class SetupPlugins : public QScrollArea
 {
     Q_OBJECT
 
 public:
 
-    ImportModel(QObject* const parent = 0);
-    ~ImportModel();
+    SetupPlugins(QWidget* parent = 0);
+    ~SetupPlugins();
 
-    void setupCameraController(CameraController* const controller);
+    void applyPlugins();
+
+private Q_SLOTS:
+
+    void slotCheckAll();
+    void slotClear();
+
+private:
+
+    void initPlugins();
+
+private:
+
+    class SetupPluginsPriv;
+    SetupPluginsPriv* const d;
 };
 
-} // namespace Digikam
+}  // namespace Digikam
 
-#endif // IMPORTMODEL_H
+#endif // SETUPPLUGINS_H 

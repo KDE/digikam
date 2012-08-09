@@ -8,7 +8,7 @@
  *               digiKam albums.
  *
  * Copyright (C) 2007-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2005 by Renchi Raju <renchi dot raju at gmail dot com>
+ * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *
  * The forwarding code is copied from kdelibs' ForwardingSlavebase.
  * Copyright for the KDE file forwardingslavebase follows:

@@ -6,7 +6,7 @@
  * Date        : 2012-01-29
  * Description : Intra-process file i/o lock
  *
- * Copyright (C) 2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2012 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General

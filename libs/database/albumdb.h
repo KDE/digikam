@@ -6,10 +6,10 @@
  * Date        : 2004-06-18
  * Description :database album interface.
  *
- * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2012      by Andi Clemens <andi dot clemens at googlemail dot com>
+ * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2012 by Andi Clemens <andi dot clemens at googlemail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -473,6 +473,7 @@ public:
      */
     QList<int> getTagsWithProperty(const QString& property);
 
+
     // ----------- Operations on SAlbums -----------
 
     /**
@@ -790,37 +791,6 @@ public:
                                   DatabaseFields::ImageMetadata metadataFields = DatabaseFields::ImageMetadataAll);
 
     /**
-     * Add (or replace) the VideoMetadata of the specified item.
-     * If there is already an entry, it will be discarded.
-     * The QVariantList shall have 8 entries, of types in this order:
-     * 0) String    AspectRatio
-     * 1) String    AudioBitRate
-     * 2) String    AudioChannelType
-     * 3) String    AudioCompressor
-     * 4) String    Duration
-     * 5) String    FrameRate
-     * 6) String    VideoCodec
-     * You can leave out entries from this list, which will then be filled with null values.
-     * Indicate the values that you have passed in the VideoMetadata flag in the third parameters.
-     */
-    void addVideoMetadata(qlonglong imageID, const QVariantList& infos,
-                             DatabaseFields::VideoMetadata fields = DatabaseFields::VideoMetadataAll);
-
-    /**
-     * Change the indicated fields of the video information for the specified item.
-     * This method does nothing if the item does not yet have an entry in the ImageInformation table.
-     * The parameters are as for the method above.
-     */
-    void changeVideoMetadata(qlonglong imageID, const QVariantList& infos,
-                             DatabaseFields::VideoMetadata fields = DatabaseFields::VideoMetadataAll);
-
-    /**
-     * Read video metadata. Parameters as above.
-     */
-    QVariantList getVideoMetadata(qlonglong imageID,
-                                  DatabaseFields::VideoMetadata metadataFields = DatabaseFields::VideoMetadataAll);
-
-    /**
      * Add (or replace) the ImagePosition of the specified item.
      * If there is already an entry, it will be discarded.
      * The QVariantList shall have at most 10 entries, of types in this order:
@@ -897,6 +867,7 @@ public:
     void changeImageComment(int commentId, qlonglong imageID, const QVariantList& infos,
                             DatabaseFields::ImageComments fields = DatabaseFields::ImageCommentsAll);
 
+
     /**
      * Remove the specified entry in ImageComments
      */
@@ -919,16 +890,15 @@ public:
      */
     QList<CopyrightInfo> getImageCopyright(qlonglong imageID, const QString& property = QString());
 
+    /**
+     * Sets the property with the given name for the given image to the specified value and extraValue
+     */
     enum CopyrightPropertyUnique
     {
         PropertyUnique,
         PropertyExtraValueUnique,
         PropertyNoConstraint
     };
-
-    /**
-     * Sets the property with the given name for the given image to the specified value and extraValue
-     */
     void setImageCopyrightProperty(qlonglong imageID, const QString& property,
                                    const QString& value, const QString& extraValue = QString(),
                                    CopyrightPropertyUnique uniqueness = PropertyUnique);
@@ -1244,7 +1214,6 @@ public:
 
     static QStringList imagesFieldList(DatabaseFields::Images fields);
     static QStringList imageInformationFieldList(DatabaseFields::ImageInformation fields);
-    static QStringList videoMetadataFieldList(DatabaseFields::VideoMetadata fields);
     static QStringList imageMetadataFieldList(DatabaseFields::ImageMetadata fields);
     static QStringList imagePositionsFieldList(DatabaseFields::ImagePositions fields);
     static QStringList imageCommentsFieldList(DatabaseFields::ImageComments fields);
@@ -1257,7 +1226,7 @@ public:
     /**
      * Constructor
      */
-    AlbumDB(DatabaseBackend* const backend);
+    AlbumDB(DatabaseBackend* backend);
 
     /**
      * Destructor
@@ -1276,8 +1245,8 @@ private:
 
 private:
 
-    class Private;
-    Private* const d;
+    class AlbumDBPriv;
+    AlbumDBPriv* const d;
 };
 
 }  // namespace Digikam

@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="208" name="digikam" >
+<gui version="207" name="digikam" >
 
  <MenuBar>
 
@@ -64,7 +64,8 @@
      <Action name="image_transform_exif"/>
      <Action name="image_set_exif_orientation"/>
    <Separator />
-     <DefineGroup name="kipi_image_group" append="kipi_image_group" />
+     <ActionList name="image_kipi_actions"/>
+   <Separator />
   </Menu>
 
   <Menu name="Edit" >
@@ -85,13 +86,7 @@
      <Action name="map_view" />
      <!--<Action name="view_selection" />-->
      <Separator/>
-     <Menu name="slideshow">
-      <text>Slideshow</text>
-      <Action name="slideshow_all" />
-      <Action name="slideshow_selected" />
-      <Action name="slideshow_recursive" />
-      <Action name="slideshow_qml" />
-     </Menu>
+     <Action name="slideshow" />
      <Action name="full_screen" />
      <Separator/>
      <Action name="album_zoomin" />
@@ -120,13 +115,12 @@
         <Action name="find_duplicates" />
       <Separator/>
         <Action name="maintenance" />
-        <Action name="empty_tools_group" />
       <Separator/>
-        <DefineGroup name="kipi_album_group" append="kipi_album_group" />
+        <ActionList name="album_kipi_actions"/>
       <Separator/>
-        <DefineGroup name="kipi_tool_group" append="kipi_tool_group" />
+        <ActionList name="tool_kipi_actions"/>
       <Separator/>
-        <DefineGroup name="kipi_batch_group" append="kipi_batch_group" />
+        <ActionList name="batch_kipi_actions"/>
   </Menu>
 
   <Menu name="Import"><text>I&amp;mport</text>
@@ -137,13 +131,11 @@
       <Action name="import_addImages" />
       <Action name="import_addFolders" />
       <Separator/>
-      <Action name="empty_import_group" />
-      <DefineGroup name="kipi_import_group" append="kipi_import_group" />
+      <ActionList name="import_kipi_actions"/>
   </Menu>
 
    <Menu name="Export"><text>&amp;Export</text>
-      <Action name="empty_export_group" />
-      <DefineGroup name="kipi_export_group" append="kipi_export_group" />
+        <ActionList name="export_kipi_actions"/>
    </Menu>
 
   <Menu name="settings" noMerge="1"><Text>&amp;Settings</Text>
@@ -191,8 +183,7 @@
   <Separator/>
   <Action name="slideshow" />
   <Action name="full_screen" />
-  <Merge />
-  <WeakSeparator />
+  <WeakSeparator/>
   <Action name="logo_action" />
  </ToolBar>
 

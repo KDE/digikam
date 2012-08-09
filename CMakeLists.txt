@@ -20,12 +20,12 @@ OPTION(ENABLE_PGF_OPENMP       "Build digiKam with paralelized PGF codec (experi
 # Information to update before to release this package.
 
 # digiKam version
-SET(DIGIKAM_MAJOR_VERSION "3")
-SET(DIGIKAM_MINOR_VERSION "0")
+SET(DIGIKAM_MAJOR_VERSION "2")
+SET(DIGIKAM_MINOR_VERSION "9")
 SET(DIGIKAM_PATCH_VERSION "0")
 
 #digiKam release date
-SET(DIGIKAM_RELEASE_DATE "2012-09-03")
+SET(DIGIKAM_RELEASE_DATE "2012-09-02")
 
 # Suffix to add at end of version string. Usual values are:
 # "-git"   : alpha code unstable from git. Do not use in production
@@ -34,7 +34,7 @@ SET(DIGIKAM_RELEASE_DATE "2012-09-03")
 # "-beta3" : beta3 release.
 # "-rc"    : release candidate.
 # ""       : final release. Can be used in production.
-SET(DIGIKAM_SUFFIX_VERSION "-beta1")
+SET(DIGIKAM_SUFFIX_VERSION "")
 
 # ==================================================================================================
 # Set env. variables accordingly.
@@ -161,17 +161,6 @@ FIND_PACKAGE(KGeoMap)
 FIND_PACKAGE(PGF)
 FIND_PACKAGE(CLAPACK)
 FIND_PACKAGE(Boost) # 1.36.0)
-
-SET(KIPI_MIN_VERSION "2.0.0")
-IF(KIPI_VERSION)
-    MESSAGE(STATUS "libkipi: Found version ${KIPI_VERSION} (required: ${KIPI_MIN_VERSION})")
-    IF(${KIPI_VERSION} VERSION_LESS ${KIPI_MIN_VERSION})
-        SET(KIPI_FOUND FALSE)
-    ENDIF(${KIPI_VERSION} VERSION_LESS ${KIPI_MIN_VERSION})
-ELSE(KIPI_VERSION)
-    MESSAGE(WARNING "libkipi: Version information not found, your version is probably too old.")
-ENDIF(KIPI_VERSION)
-
 
 # LCMS version 1 and 2 library handling
 # See B.K.O #294105
@@ -418,7 +407,7 @@ PRINT_LIBRARY_STATUS("libpng" "http://www.libpng.org/pub/png/libpng.html" " (ver
 PRINT_LIBRARY_STATUS("libjasper" "http://www.ece.uvic.ca/~mdadams/jasper" "" JASPER_FOUND)
 PRINT_LIBRARY_STATUS("liblcms" "http://www.littlecms.com" "" LCMS_FOUND)
 PRINT_LIBRARY_STATUS("Boost Graph" "http://www.boost.org/doc/libs/1_43_0/libs/graph/doc/index.html" " (headers only)" Boost_FOUND)
-PRINT_LIBRARY_STATUS("libkipi" "http://www.digikam.org/sharedlibs" " (version >= 2.0.0)" KIPI_FOUND)
+PRINT_LIBRARY_STATUS("libkipi" "http://www.digikam.org/sharedlibs" " (version >= 1.2.0)" KIPI_FOUND)
 PRINT_LIBRARY_STATUS("libkexiv2" "http://www.digikam.org/sharedlibs" " (version >= 1.2.0)" KEXIV2_FOUND)
 PRINT_LIBRARY_STATUS("libkdcraw" "http://www.digikam.org/sharedlibs" " (version >= ${KDCRAW_MIN_VERSION})" KDCRAW_FOUND)
 PRINT_LIBRARY_STATUS("libkface" "http://www.digikam.org/sharedlibs" " (version >= 0.1.0)" KFACE_FOUND)
@@ -1125,8 +1114,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/threads/workerobject.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/threads/dynamicthread.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/threads/parallelworkers.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/threads/dactionthreadbase.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/threads/dweaverobserver.cpp
        )
 
     # ==================================================================================================
@@ -1184,6 +1171,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupmisc.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setuplighttable.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupiofiles.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupplugins.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupdcraw.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupcamera.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/cameraselection.cpp
@@ -1647,7 +1635,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/devices
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/dialogs
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/items
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/models
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/views
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/widgets
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/main

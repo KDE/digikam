@@ -6,7 +6,7 @@
  * Date        : 2006-07-09
  * Description : item tool tip configuration setup tab
  *
- * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -39,17 +39,16 @@
 // Local includes
 
 #include "albumsettings.h"
-#include "importsettings.h"
 #include "dfontselect.h"
 
 namespace Digikam
 {
 
-class SetupToolTip::Private
+class SetupToolTip::SetupToolTipPriv
 {
 public:
 
-    Private() :
+    SetupToolTipPriv() :
         showToolTipsBox(0),
         showFileNameBox(0),
         showFileDateBox(0),
@@ -63,13 +62,6 @@ public:
         showPhotoModeBox(0),
         showPhotoFlashBox(0),
         showPhotoWbBox(0),
-        showVideoAspectRatio(0),
-        showVideoAudioBitRate(0),
-        showVideoAudioChannelType(0),
-        showVideoAudioCompressor(0),
-        showVideoDuration(0),
-        showVideoFrameRate(0),
-        showVideoVideoCodec(0),
         showAlbumNameBox(0),
         showCommentsBox(0),
         showTagsBox(0),
@@ -80,16 +72,10 @@ public:
         showAlbumCollectionBox(0),
         showAlbumCategoryBox(0),
         showAlbumCaptionBox(0),
-        showItemTitleBox(0),
-        showItemDateBox(0),
-        showItemSizeBox(0),
-        showItemTypeBox(0),
-        showItemDimensionsBox(0),
         fileSettingBox(0),
         photoSettingBox(0),
         digikamSettingBox(0),
         albumSettingBox(0),
-        importSettingBox(0),
         tab(0),
         fontSelect(0)
     {
@@ -111,14 +97,6 @@ public:
     QCheckBox*   showPhotoFlashBox;
     QCheckBox*   showPhotoWbBox;
 
-    QCheckBox*   showVideoAspectRatio;
-    QCheckBox*   showVideoAudioBitRate;
-    QCheckBox*   showVideoAudioChannelType;
-    QCheckBox*   showVideoAudioCompressor;
-    QCheckBox*   showVideoDuration;
-    QCheckBox*   showVideoFrameRate;
-    QCheckBox*   showVideoVideoCodec;
-
     QCheckBox*   showAlbumNameBox;
     QCheckBox*   showCommentsBox;
     QCheckBox*   showTagsBox;
@@ -131,34 +109,20 @@ public:
     QCheckBox*   showAlbumCategoryBox;
     QCheckBox*   showAlbumCaptionBox;
 
-    QCheckBox*   showImportToolTipsBox;
-    QCheckBox*   showItemTitleBox;
-    QCheckBox*   showItemDateBox;
-    QCheckBox*   showItemSizeBox;
-    QCheckBox*   showItemTypeBox;
-    QCheckBox*   showItemDimensionsBox;
-    QCheckBox*   showItemPhotoMakeBox;
-    QCheckBox*   showItemPhotoFocalBox;
-    QCheckBox*   showItemPhotoExpoBox;
-    QCheckBox*   showItemPhotoFlashBox;
-    QCheckBox*   showItemPhotoWBBox;
-
     QGroupBox*   fileSettingBox;
     QGroupBox*   photoSettingBox;
-    QGroupBox*   videoSettingBox;
     QGroupBox*   digikamSettingBox;
     QGroupBox*   albumSettingBox;
-    QGroupBox*   importSettingBox;
 
     KTabWidget*  tab;
 
     DFontSelect* fontSelect;
 };
 
-SetupToolTip::SetupToolTip(QWidget* const parent)
-    : QScrollArea(parent), d(new Private)
+SetupToolTip::SetupToolTip(QWidget* parent)
+    : QScrollArea(parent), d(new SetupToolTipPriv)
 {
-    QWidget* panel        = new QWidget(viewport());
+    QWidget* panel = new QWidget(viewport());
     setWidget(panel);
     setWidgetResizable(true);
 
@@ -246,6 +210,7 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
     vlay3->setSpacing(0);
 
     // --------------------------------------------------------
+
     d->digikamSettingBox = new QGroupBox(i18n("digiKam Information"), vbox);
     QVBoxLayout* vlay4   = new QVBoxLayout(d->digikamSettingBox);
 
@@ -267,42 +232,6 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
     vlay4->addWidget(d->showLabelsBox);
     vlay4->setMargin(KDialog::spacingHint());
     vlay4->setSpacing(0);
-
-    // --------------------------------------------------------
-
-    d->videoSettingBox    = new QGroupBox(i18n("Video Information"), vbox);
-    QVBoxLayout* vlay5    = new QVBoxLayout(d->videoSettingBox);
-
-    d->showVideoAspectRatio        = new QCheckBox(i18n("Show Video Aspect Ratio"), d->videoSettingBox);
-    d->showVideoAspectRatio->setWhatsThis(i18n("Set this option to display the Aspect Ratio of the Video"));
-
-    d->showVideoAudioBitRate       = new QCheckBox(i18n("Show Audio Bit Rate"), d->videoSettingBox);
-    d->showVideoAudioBitRate->setWhatsThis(i18n("Set this option to display the Audio Bit Rate of the Video"));
-
-    d->showVideoAudioChannelType   = new QCheckBox(i18n("Show Audio Channel Type"), d->videoSettingBox);
-    d->showVideoAudioChannelType->setWhatsThis(i18n("Set this option to display the Audio Channel Type of the Video"));
-
-    d->showVideoAudioCompressor    = new QCheckBox(i18n("Show Audio Compressor"), d->videoSettingBox);
-    d->showVideoAudioCompressor->setWhatsThis(i18n("Set this option to display the Audio Compressor of the Video"));
-
-    d->showVideoDuration           = new QCheckBox(i18n("Show Video Duration"), d->videoSettingBox);
-    d->showVideoDuration->setWhatsThis(i18n("Set this option to display the Duration of the Video"));
-
-    d->showVideoFrameRate          = new QCheckBox(i18n("Show Video Frame Rate"), d->videoSettingBox);
-    d->showVideoFrameRate->setWhatsThis(i18n("Set this option to display the Aspect Ratio of the Video"));
-
-    d->showVideoVideoCodec         = new QCheckBox(i18n("Show Video Codec"), d->videoSettingBox);
-    d->showVideoVideoCodec->setWhatsThis(i18n("Set this option to display the Codec of the Video"));
-
-    vlay5->addWidget(d->showVideoAspectRatio);
-    vlay5->addWidget(d->showVideoAudioBitRate);
-    vlay5->addWidget(d->showVideoAudioChannelType);
-    vlay5->addWidget(d->showVideoAudioCompressor);
-    vlay5->addWidget(d->showVideoDuration);
-    vlay5->addWidget(d->showVideoFrameRate);
-    vlay5->addWidget(d->showVideoVideoCodec);
-    vlay5->setMargin(KDialog::spacingHint());
-    vlay5->setSpacing(0);
 
     QWidget* space = new QWidget(vbox);
     vbox->setStretchFactor(space, 10);
@@ -348,71 +277,8 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    KVBox* vbox3               = new KVBox(panel);
-    d->showImportToolTipsBox   = new QCheckBox(i18n("Show import items' tool-tips"), vbox3);
-    d->importSettingBox        = new QGroupBox(i18n("Import Information"), vbox3);
-
-    d->showAlbumToolTipsBox->setWhatsThis(i18n("Set this option to display album information when "
-                                               "the mouse hovers over a folder-view item."));
-
-    d->showItemTitleBox      = new QCheckBox(i18n("Show item name"));
-    d->showItemTitleBox->setWhatsThis(i18n("Set this option to display the item name."));
-
-    d->showItemDateBox       = new QCheckBox(i18n("Show item date"));
-    d->showItemDateBox->setWhatsThis(i18n("Set this option to display the item date."));
-
-    d->showItemSizeBox = new QCheckBox(i18n("Show item size"));
-    d->showItemSizeBox->setWhatsThis(i18n("Set this option to display the item size."));
-
-    d->showItemTypeBox   = new QCheckBox(i18n("Show item type"));
-    d->showItemTypeBox->setWhatsThis(i18n("Set this option to display the item type."));
-
-    d->showItemDimensionsBox    = new QCheckBox(i18n("Show item dimensions"));
-    d->showItemDimensionsBox->setWhatsThis(i18n("Set this option to display the item dimensions."));
-
-    d->showItemPhotoMakeBox   = new QCheckBox(i18n("Show camera make and model"), d->photoSettingBox);
-    d->showPhotoMakeBox->setWhatsThis(i18n("Set this option to display the make and model of the "
-                                           "camera with which the image has been taken."));
-
-    d->showItemPhotoFocalBox  = new QCheckBox(i18n("Show camera aperture and focal length"), d->photoSettingBox);
-    d->showPhotoFocalBox->setWhatsThis(i18n("Set this option to display the camera aperture and focal settings "
-                                            "used to take the image."));
-
-    d->showItemPhotoExpoBox   = new QCheckBox(i18n("Show camera exposure and sensitivity"), d->photoSettingBox);
-    d->showPhotoExpoBox->setWhatsThis(i18n("Set this option to display the camera exposure and sensitivity "
-                                           "used to take the image."));
-
-    d->showItemPhotoFlashBox  = new QCheckBox(i18n("Show camera flash settings"), d->photoSettingBox);
-    d->showPhotoFlashBox->setWhatsThis(i18n("Set this option to display the camera flash settings "
-                                            "used to take the image."));
-
-    d->showItemPhotoWBBox     = new QCheckBox(i18n("Show camera white balance settings"), d->photoSettingBox);
-    d->showItemPhotoWBBox->setWhatsThis(i18n("Set this option to display the camera white balance settings "
-                                         "used to take the image."));
-
-    QVBoxLayout* importSettingBoxLayout = new QVBoxLayout;
-    importSettingBoxLayout->addWidget(d->showItemTitleBox);
-    importSettingBoxLayout->addWidget(d->showItemDateBox);
-    importSettingBoxLayout->addWidget(d->showItemSizeBox);
-    importSettingBoxLayout->addWidget(d->showItemTypeBox);
-    importSettingBoxLayout->addWidget(d->showItemDimensionsBox);
-    importSettingBoxLayout->addWidget(d->showPhotoMakeBox);
-    importSettingBoxLayout->addWidget(d->showItemPhotoFocalBox);
-    importSettingBoxLayout->addWidget(d->showItemPhotoExpoBox);
-    importSettingBoxLayout->addWidget(d->showItemPhotoFlashBox);
-    importSettingBoxLayout->addWidget(d->showItemPhotoWBBox);
-    d->importSettingBox->setLayout(importSettingBoxLayout);
-
-    QWidget* space3 = new QWidget(vbox3);
-    vbox3->setStretchFactor(space3, 10);
-    vbox3->setMargin(KDialog::spacingHint());
-    vbox3->setSpacing(KDialog::spacingHint());
-
-    // --------------------------------------------------------
-
     d->tab->insertTab(0, vbox,  i18n("Icon Items"));
     d->tab->insertTab(1, vbox2, i18n("Album Items"));
-    d->tab->insertTab(2, vbox3, i18n("Import Items"));
 
     vlay->addWidget(d->fontSelect);
     vlay->addWidget(d->tab);
@@ -427,9 +293,6 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
 
     connect(d->showToolTipsBox, SIGNAL(toggled(bool)),
             d->photoSettingBox, SLOT(setEnabled(bool)));
-
-    connect(d->showToolTipsBox, SIGNAL(toggled(bool)),
-            d->videoSettingBox, SLOT(setEnabled(bool)));
 
     connect(d->showToolTipsBox, SIGNAL(toggled(bool)),
             d->digikamSettingBox, SLOT(setEnabled(bool)));
@@ -480,14 +343,6 @@ void SetupToolTip::applySettings()
     settings->setToolTipsShowPhotoFlash(d->showPhotoFlashBox->isChecked());
     settings->setToolTipsShowPhotoWB(d->showPhotoWbBox->isChecked());
 
-    settings->setToolTipsShowVideoAspectRatio(d->showVideoAspectRatio->isChecked());
-    settings->setToolTipsShowVideoAudioBitRate(d->showVideoAudioBitRate->isChecked());
-    settings->setToolTipsShowVideoAudioChannelType(d->showVideoAudioChannelType->isChecked());
-    settings->setToolTipsShowVideoAudioCompressor(d->showVideoAudioCompressor->isChecked());
-    settings->setToolTipsShowVideoDuration(d->showVideoDuration->isChecked());
-    settings->setToolTipsShowVideoFrameRate(d->showVideoFrameRate->isChecked());
-    settings->setToolTipsShowVideoVideoCodec(d->showVideoVideoCodec->isChecked());
-
     settings->setToolTipsShowAlbumName(d->showAlbumNameBox->isChecked());
     settings->setToolTipsShowComments(d->showCommentsBox->isChecked());
     settings->setToolTipsShowTags(d->showTagsBox->isChecked());
@@ -501,29 +356,6 @@ void SetupToolTip::applySettings()
     settings->setToolTipsShowAlbumCaption(d->showAlbumCaptionBox->isChecked());
 
     settings->saveSettings();
-
-    // -- Import Settings ------------------------------------------------------------------------
-
-    ImportSettings* importSettings = ImportSettings::instance();
-
-    if (!importSettings)
-    {
-        return;
-    }
-
-    importSettings->setShowToolTips(d->showImportToolTipsBox->isChecked());
-    importSettings->setToolTipsShowFileName(d->showItemTitleBox->isChecked());
-    importSettings->setToolTipsShowFileDate(d->showItemDateBox->isChecked());
-    importSettings->setToolTipsShowFileSize(d->showItemSizeBox->isChecked());
-    importSettings->setToolTipsShowImageType(d->showItemTypeBox->isChecked());
-    importSettings->setToolTipsShowImageDim(d->showItemDimensionsBox->isChecked());
-    importSettings->setToolTipsShowPhotoMake(d->showItemPhotoMakeBox->isChecked());
-    importSettings->setToolTipsShowPhotoFocal(d->showItemPhotoFocalBox->isChecked());
-    importSettings->setToolTipsShowPhotoExpo(d->showItemPhotoExpoBox->isChecked());
-    importSettings->setToolTipsShowPhotoFlash(d->showItemPhotoFlashBox->isChecked());
-    importSettings->setToolTipsShowPhotoWB(d->showItemPhotoWBBox->isChecked());
-
-    importSettings->saveSettings();
 }
 
 void SetupToolTip::readSettings()
@@ -552,14 +384,6 @@ void SetupToolTip::readSettings()
     d->showPhotoFlashBox->setChecked(settings->getToolTipsShowPhotoFlash());
     d->showPhotoWbBox->setChecked(settings->getToolTipsShowPhotoWB());
 
-    d->showVideoAspectRatio->setChecked(settings->getToolTipsShowVideoAspectRatio());
-    d->showVideoAudioBitRate->setChecked(settings->getToolTipsShowVideoAudioBitRate());
-    d->showVideoAudioChannelType->setChecked(settings->getToolTipsShowVideoAudioChannelType());
-    d->showVideoAudioCompressor->setChecked(settings->getToolTipsShowVideoAudioCompressor());
-    d->showVideoDuration->setChecked(settings->getToolTipsShowVideoDuration());
-    d->showVideoFrameRate->setChecked(settings->getToolTipsShowVideoFrameRate());
-    d->showVideoVideoCodec->setChecked(settings->getToolTipsShowVideoVideoCodec());
-
     d->showAlbumNameBox->setChecked(settings->getToolTipsShowAlbumName());
     d->showCommentsBox->setChecked(settings->getToolTipsShowComments());
     d->showTagsBox->setChecked(settings->getToolTipsShowTags());
@@ -576,27 +400,6 @@ void SetupToolTip::readSettings()
     d->showAlbumCollectionBox->setChecked(settings->getToolTipsShowAlbumCollection());
     d->showAlbumCategoryBox->setChecked(settings->getToolTipsShowAlbumCategory());
     d->showAlbumCaptionBox->setChecked(settings->getToolTipsShowAlbumCaption());
-
-    // -- Import Settings ------------------------------------------------------------------------
-
-    ImportSettings* importSettings = ImportSettings::instance();
-
-    if (!importSettings)
-    {
-        return;
-    }
-
-    d->showImportToolTipsBox->setChecked(importSettings->getShowToolTips());
-    d->showItemTitleBox->setChecked(importSettings->getToolTipsShowFileName());
-    d->showItemDateBox->setChecked(importSettings->getToolTipsShowFileDate());
-    d->showItemSizeBox->setChecked(importSettings->getToolTipsShowFileSize());
-    d->showItemTypeBox->setChecked(importSettings->getToolTipsShowImageType());
-    d->showItemDimensionsBox->setChecked(importSettings->getToolTipsShowImageDim());
-    d->showItemPhotoMakeBox->setChecked(importSettings->getToolTipsShowPhotoMake());
-    d->showItemPhotoFocalBox->setChecked(importSettings->getToolTipsShowPhotoFocal());
-    d->showItemPhotoExpoBox->setChecked(importSettings->getToolTipsShowPhotoExpo());
-    d->showItemPhotoFlashBox->setChecked(importSettings->getToolTipsShowPhotoFlash());
-    d->showItemPhotoWBBox->setChecked(importSettings->getToolTipsShowPhotoWB());
 }
 
 }  // namespace Digikam

@@ -6,9 +6,9 @@
  * Date        : 2003-01-21
  * Description : Gphoto2 camera interface
  *
- * Copyright (C) 2003-2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2003-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -110,12 +110,12 @@ public:
 
 bool GPStatus::cancel = false;
 
-class GPCamera::Private
+class GPCamera::GPCameraPrivate
 {
 
 public:
 
-    Private()
+    GPCameraPrivate()
 #ifdef HAVE_GPHOTO2
         : cameraInitialized(false),
           camera(0),
@@ -138,7 +138,7 @@ public:
 GPCamera::GPCamera(const QString& title, const QString& model,
                    const QString& port, const QString& path)
     : DKCamera(title, model, port, path),
-      d(new Private)
+      d(new GPCameraPrivate)
 {
 }
 

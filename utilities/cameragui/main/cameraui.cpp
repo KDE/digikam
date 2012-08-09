@@ -6,7 +6,7 @@
 * Date        : 2004-09-16
 * Description : Camera interface
 *
-* Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
+* Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
 * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
 * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
 * Copyright (C) 2012 by Andi Clemens <andi dot clemens at googlemail dot com>
@@ -25,7 +25,6 @@
 * ============================================================ */
 
 #include "cameraui.moc"
-#include "cameraui.h"
 #include "cameraui_p.h"
 
 // Qt includes
@@ -51,7 +50,6 @@
 #include <QToolButton>
 #include <QVBoxLayout>
 #include <QWidget>
-#include <QSignalMapper>
 
 // KDE includes
 
@@ -105,8 +103,7 @@
 #include "dzoombar.h"
 #include "imagepropertiessidebarcamgui.h"
 #include "albummanager.h"
-#include "albumsettings.h"//TODO: Remove it
-#include "importsettings.h"
+#include "albumsettings.h"
 #include "album.h"
 #include "albumselectdialog.h"
 #include "renamecustomizer.h"
@@ -118,6 +115,7 @@
 #include "capturedlg.h"
 #include "camerafolderdialog.h"
 #include "camerainfodialog.h"
+#include "cameraiconview.h"
 #include "cameracontroller.h"
 #include "cameralist.h"
 #include "cameratype.h"
@@ -126,9 +124,6 @@
 #include "uifilevalidator.h"
 #include "knotificationwrapper.h"
 #include "newitemsfinder.h"
-
-#include "importview.h"
-#include "models/importmodel.h"
 
 using namespace KDcrawIface;
 
@@ -167,16 +162,11 @@ CameraUI::CameraUI(QWidget* const parent, const QString& cameraTitle,
     connect(d->refreshIconViewTimer, SIGNAL(timeout()),
             this, SLOT(slotRefreshIconViewTimer()));
 
-    setupStatusBar();
-
-    // -- Init. camera controller ----------------------------------------
-
-    setupCameraController(model, port, path);
-    QTimer::singleShot(0, d->controller, SLOT(slotConnect()));
-    // --------------------------------------------------------
+    // -------------------------------------------------------------------
 
     setupUserArea();
     setupActions();
+    setupStatusBar();
     setupAccelerators();
 
     // -- Make signals/slots connections ---------------------------------
@@ -189,7 +179,11 @@ CameraUI::CameraUI(QWidget* const parent, const QString& cameraTitle,
     readSettings();
     setAutoSaveSettings("Camera Settings", true);
 
-    // -------------------------------------------------------------------
+    // -- Init. camera controller ----------------------------------------
+
+    setupCameraController(model, port, path);
+
+    // --------------------------------------------------------
 
     d->historyUpdater = new CameraHistoryUpdater(this);
 
@@ -202,8 +196,8 @@ CameraUI::CameraUI(QWidget* const parent, const QString& cameraTitle,
     // --------------------------------------------------------
 
     d->renameCustomizer->setStartIndex(startIndex);
-    //d->view->setFocus();
-    //QTimer::singleShot(0, d->controller, SLOT(slotConnect()));
+    d->view->setFocus();
+    QTimer::singleShot(0, d->controller, SLOT(slotConnect()));
 }
 
 CameraUI::~CameraUI()
@@ -220,7 +214,7 @@ void CameraUI::setupUserArea()
     KHBox* widget   = new KHBox(this);
     d->splitter     = new SidebarSplitter(widget);
     KVBox* vbox     = new KVBox(d->splitter);
-    d->view         = new ImportView(this, vbox);
+    d->view         = new CameraIconView(this, vbox);
     d->historyView  = new DHistoryView(vbox);
     d->rightSideBar = new ImagePropertiesSideBarCamGui(widget, d->splitter, KMultiTabBar::Right, true);
     d->rightSideBar->setObjectName("CameraGui Sidebar Right");
@@ -242,7 +236,7 @@ void CameraUI::setupUserArea()
 
     d->renameCustomizer = new RenameCustomizer(d->advBox, d->cameraTitle);
     d->renameCustomizer->setWhatsThis(i18n("Set how digiKam will rename files as they are downloaded."));
-    //d->view->setRenameCustomizer(d->renameCustomizer);
+    d->view->setRenameCustomizer(d->renameCustomizer);
     d->advBox->addItem(d->renameCustomizer, SmallIcon("insert-image"), i18n("File Renaming Options"),
                        QString("RenameCustomizer"), true);
 
@@ -335,33 +329,30 @@ void CameraUI::setupActions()
 
     // -- Image menu ---------------------------------------------
 
-    d->imageViewAction = new KAction(KIcon("editimage"), i18nc("View the selected image", "View Item"), this);
+    d->imageViewAction = new KAction(KIcon("editimage"), i18nc("View the selected image", "View"), this);
     connect(d->imageViewAction, SIGNAL(triggered()), this, SLOT(slotFileView()));
     actionCollection()->addAction("cameraui_imageview", d->imageViewAction);
     d->imageViewAction->setEnabled(false);
 
-    // --- Download actions ----------------------------------------------------
-
-    d->downloadAction = new KActionMenu(KIcon("get-hot-new-stuff"), i18n("Download"), this);
-    d->downloadAction->setDelayed(false);
-    actionCollection()->addAction("cameraui_imagedownload", d->downloadAction);
+    // -----------------------------------------------------------------
 
     d->downloadNewAction = new KAction(KIcon("get-hot-new-stuff"), i18n("Download New"), this);
     d->downloadNewAction->setShortcut(KShortcut(Qt::CTRL + Qt::Key_N));
     connect(d->downloadNewAction, SIGNAL(triggered()), this, SLOT(slotDownloadNew()));
     actionCollection()->addAction("cameraui_imagedownloadnew", d->downloadNewAction);
-    d->downloadAction->addAction(d->downloadNewAction);
+
+    // -----------------------------------------------------------------
 
     d->downloadSelectedAction = new KAction(i18n("Download Selected"), this);
     connect(d->downloadSelectedAction, SIGNAL(triggered()), this, SLOT(slotDownloadSelected()));
     actionCollection()->addAction("cameraui_imagedownloadselected", d->downloadSelectedAction);
     d->downloadSelectedAction->setEnabled(false);
-    d->downloadAction->addAction(d->downloadSelectedAction);
+
+    // -----------------------------------------------------------------
 
     d->downloadAllAction = new KAction(i18n("Download All"), this);
     connect(d->downloadAllAction, SIGNAL(triggered()), this, SLOT(slotDownloadAll()));
     actionCollection()->addAction("cameraui_imagedownloadall", d->downloadAllAction);
-    d->downloadAction->addAction(d->downloadAllAction);
 
     // -------------------------------------------------------------------------
 
@@ -403,122 +394,31 @@ void CameraUI::setupActions()
     connect(d->markAsDownloadedAction, SIGNAL(triggered()), this, SLOT(slotMarkAsDownloaded()));
     actionCollection()->addAction("cameraui_imagemarkasdownloaded", d->markAsDownloadedAction);
 
-    // --- Delete actions ------------------------------------------------------
-
-    d->deleteAction = new KActionMenu(KIcon("user-trash"), i18n("Delete"), this);
-    d->deleteAction->setDelayed(false);
-    actionCollection()->addAction("cameraui_delete", d->deleteAction);
+    // -------------------------------------------------------------------------
 
     d->deleteSelectedAction = new KAction(KIcon("edit-delete"), i18n("Delete Selected"), this);
     connect(d->deleteSelectedAction, SIGNAL(triggered()), this, SLOT(slotDeleteSelected()));
     actionCollection()->addAction("cameraui_imagedeleteselected", d->deleteSelectedAction);
     d->deleteSelectedAction->setShortcut(KShortcut(Qt::Key_Delete));
     d->deleteSelectedAction->setEnabled(false);
-    d->deleteAction->addAction(d->deleteSelectedAction);
 
-    d->deleteAllAction = new KAction(KIcon("edit-delete"), i18n("Delete All"), this);
+    // -------------------------------------------------------------------------
+
+    d->deleteAllAction = new KAction(i18n("Delete All"), this);
     connect(d->deleteAllAction, SIGNAL(triggered()), this, SLOT(slotDeleteAll()));
     actionCollection()->addAction("cameraui_imagedeleteall", d->deleteAllAction);
-    d->deleteAction->addAction(d->deleteAllAction);
 
-    d->deleteNewAction = new KAction(KIcon("edit-delete"), i18n("Delete New"), this);
+    // -------------------------------------------------------------------------
+
+    d->deleteNewAction = new KAction(i18n("Delete New"), this);
     connect(d->deleteNewAction, SIGNAL(triggered()), this, SLOT(slotDeleteNew()));
     actionCollection()->addAction("cameraui_imagedeletenew", d->deleteNewAction);
-    d->deleteAction->addAction(d->deleteNewAction);
 
-    // --- Icon view, items preview, and map actions ------------------------------------------------------
+    // -- Last Photo First menu actions --------------------------------------------
 
-    d->imageViewSelectionAction = new KSelectAction(KIcon("viewimage"), i18n("Views"), this);
-    actionCollection()->addAction("cameraui_view_selection", d->imageViewSelectionAction);
-
-    d->iconViewAction = new KToggleAction(KIcon("view-list-icons"),
-                                               i18nc("@action Go to thumbnails (icon) view", "Thumbnails"), this);
-    actionCollection()->addAction("cameraui_icon_view", d->iconViewAction);
-    connect(d->iconViewAction, SIGNAL(triggered()), d->view, SLOT(slotIconView()));
-    d->imageViewSelectionAction->addAction(d->iconViewAction);
-
-    d->camItemPreviewAction = new KToggleAction(KIcon("viewimage"), i18nc("View the selected image", "Preview Item"), this);
-    d->camItemPreviewAction->setShortcut(KShortcut(Qt::Key_F3));
-    actionCollection()->addAction("cameraui_item_view", d->camItemPreviewAction);
-    connect(d->camItemPreviewAction, SIGNAL(triggered()), d->view, SLOT(slotImagePreview()));
-    d->imageViewSelectionAction->addAction(d->camItemPreviewAction);
-
-    d->mapViewAction = new KToggleAction(KIcon("applications-internet"),
-                                              i18nc("@action Switch to map view", "Map"), this);
-    actionCollection()->addAction("cameraui_map_view", d->mapViewAction);
-    connect(d->mapViewAction, SIGNAL(triggered()), d->view, SLOT(slotMapWidgetView()));
-    d->imageViewSelectionAction->addAction(d->mapViewAction);
-
-    // -- Item Sorting ------------------------------------------------------------
-
-    d->itemSortAction = new KSelectAction(i18n("&Sort Items"), this);
-    d->itemSortAction->setWhatsThis(i18n("The value by which the items are sorted in the thumbnail view"));
-    QSignalMapper* imageSortMapper = new QSignalMapper(this);
-    connect(imageSortMapper, SIGNAL(mapped(int)), d->view, SLOT(slotSortImages(int)));
-    actionCollection()->addAction("item_sort", d->itemSortAction);
-
-    // map to CamItemSortSettings enum
-    QAction* sortByNameAction = d->itemSortAction->addAction(i18n("By Name"));
-    QAction* sortByPathAction = d->itemSortAction->addAction(i18n("By Path"));
-    //QAction* sortByDateAction = d->itemSortAction->addAction(i18n("By Date")); //TODO: Implement sort by creation date.
-    QAction* sortByFileSizeAction = d->itemSortAction->addAction(i18n("By File Size"));
-    //QAction* sortByRatingAction = d->itemSortAction->addAction(i18n("By Rating")); //TODO: Implement rating in import tool.
-
-    connect(sortByNameAction, SIGNAL(triggered()), imageSortMapper, SLOT(map()));
-    connect(sortByPathAction, SIGNAL(triggered()), imageSortMapper, SLOT(map()));
-    //connect(sortByDateAction, SIGNAL(triggered()), imageSortMapper, SLOT(map())); //TODO: Implement sort by creation date.
-    connect(sortByFileSizeAction, SIGNAL(triggered()), imageSortMapper, SLOT(map()));
-    //connect(sortByRatingAction, SIGNAL(triggered()), imageSortMapper, SLOT(map()));
-
-    imageSortMapper->setMapping(sortByNameAction, (int)CamItemSortSettings::SortByFileName);
-    imageSortMapper->setMapping(sortByPathAction, (int)CamItemSortSettings::SortByFilePath);
-    //imageSortMapper->setMapping(sortByDateAction, (int)CamItemSortSettings::SortByCreationDate); //TODO: Implement sort by creation date.
-    imageSortMapper->setMapping(sortByFileSizeAction, (int)CamItemSortSettings::SortByFileSize);
-    //imageSortMapper->setMapping(sortByRatingAction, (int)ImageSortSettings::SortByRating);
-
-    d->itemSortAction->setCurrentItem(ImportSettings::instance()->getImageSortOrder());
-
-    // -- Item Sort Order ------------------------------------------------------------
-
-    d->itemSortOrderAction = new KSelectAction(i18n("Item Sorting &Order"), this);
-    d->itemSortOrderAction->setWhatsThis(i18n("Defines whether items are sorted in ascending or descending manner."));
-    QSignalMapper* imageSortOrderMapper = new QSignalMapper(this);
-    connect(imageSortOrderMapper, SIGNAL(mapped(int)), d->view, SLOT(slotSortImagesOrder(int)));
-    actionCollection()->addAction("item_sort_order", d->itemSortOrderAction);
-
-    QAction* sortAscendingAction = d->itemSortOrderAction->addAction(i18n("Ascending"));
-    QAction* sortDescendingAction = d->itemSortOrderAction->addAction(i18n("Descending"));
-
-    connect(sortAscendingAction, SIGNAL(triggered()), imageSortOrderMapper, SLOT(map()));
-    connect(sortDescendingAction, SIGNAL(triggered()), imageSortOrderMapper, SLOT(map()));
-
-    imageSortOrderMapper->setMapping(sortAscendingAction, (int)CamItemSortSettings::AscendingOrder);
-    imageSortOrderMapper->setMapping(sortDescendingAction, (int)CamItemSortSettings::DescendingOrder);
-
-    d->itemSortOrderAction->setCurrentItem(ImportSettings::instance()->getImageSorting());
-
-    // -- Item Grouping ------------------------------------------------------------
-
-    d->itemsGroupAction = new KSelectAction(i18n("&Group Items"), this);
-    d->itemsGroupAction->setWhatsThis(i18n("The categories in which the items in the thumbnail view are displayed"));
-    QSignalMapper* itemGroupMapper = new QSignalMapper(this);
-    connect(itemGroupMapper, SIGNAL(mapped(int)), d->view, SLOT(slotGroupImages(int)));
-    actionCollection()->addAction("item_group", d->itemsGroupAction);
-
-    // map to CamItemSortSettings enum
-    QAction* noCategoriesAction  = d->itemsGroupAction->addAction(i18n("Flat List"));
-    QAction* CategoryByFolderAction = d->itemsGroupAction->addAction(i18n("By Folder"));
-    QAction* groupByFormatAction = d->itemsGroupAction->addAction(i18n("By Format"));
-
-    connect(noCategoriesAction, SIGNAL(triggered()), itemGroupMapper, SLOT(map()));
-    connect(CategoryByFolderAction, SIGNAL(triggered()), itemGroupMapper, SLOT(map()));
-    connect(groupByFormatAction, SIGNAL(triggered()), itemGroupMapper, SLOT(map()));
-
-    itemGroupMapper->setMapping(noCategoriesAction,     (int)CamItemSortSettings::NoCategories);
-    itemGroupMapper->setMapping(CategoryByFolderAction, (int)CamItemSortSettings::CategoryByFolder);
-    itemGroupMapper->setMapping(groupByFormatAction,    (int)CamItemSortSettings::CategoryByFormat);
-
-    d->itemsGroupAction->setCurrentItem(ImportSettings::instance()->getImageGroupMode());
+    d->lastPhotoFirstAction = new KToggleAction(i18n("Show last photo first"), this);
+    connect(d->lastPhotoFirstAction, SIGNAL(triggered()), this, SLOT(slotlastPhotoFirst()));
+    actionCollection()->addAction("cameraui_lastphotofirst", d->lastPhotoFirstAction);
 
     // -- Standard 'View' menu actions ---------------------------------------------
 
@@ -543,12 +443,6 @@ void CameraUI::setupActions()
     d->showLogAction->setShortcut(KShortcut(Qt::CTRL + Qt::Key_H));
     connect(d->showLogAction, SIGNAL(triggered()), this, SLOT(slotShowLog()));
     actionCollection()->addAction("cameraui_showlog", d->showLogAction);
-
-    d->showBarAction = new KToggleAction(KIcon("view-choose"), i18n("Show Thumbbar"), this);
-    d->showBarAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_T));
-    connect(d->showBarAction, SIGNAL(triggered()), this, SLOT(slotToggleShowBar()));
-    actionCollection()->addAction("showthumbs", d->showBarAction);
-
 
     // -- Standard 'Configure' menu actions ----------------------------------------
 
@@ -601,58 +495,43 @@ void CameraUI::setupActions()
 
 void CameraUI::setupConnections()
 {
-    //connect(d->advancedSettings, SIGNAL(signalDownloadNameChanged()),
-            //d->view, SLOT(slotDownloadNameChanged()));
+    connect(d->advancedSettings, SIGNAL(signalDownloadNameChanged()),
+            d->view, SLOT(slotDownloadNameChanged()));
 
-    //connect(d->historyView, SIGNAL(signalEntryClicked(QVariant)),
-            //this, SLOT(slotHistoryEntryClicked(QVariant)));
+    connect(d->historyView, SIGNAL(signalEntryClicked(QVariant)),
+            this, SLOT(slotHistoryEntryClicked(QVariant)));
 
     // -------------------------------------------------------------------------
 
     connect(d->view, SIGNAL(signalSelected(CamItemInfo,bool)),
             this, SLOT(slotItemsSelected(CamItemInfo,bool)));
 
-    connect(d->view, SIGNAL(signalImageSelected(CamItemInfoList,bool,bool,CamItemInfoList)),
-            this, SLOT(slotImageSelected(CamItemInfoList,bool,bool,CamItemInfoList)));
+    connect(d->view, SIGNAL(signalFileView(CamItemInfo)),
+            this, SLOT(slotFileView(CamItemInfo)));
 
-    connect(d->view, SIGNAL(signalSwitchedToPreview()),
-            this, SLOT(slotSwitchedToPreview()));
+    connect(d->view, SIGNAL(signalUpload(KUrl::List)),
+            this, SLOT(slotUploadItems(KUrl::List)));
 
-    connect(d->view, SIGNAL(signalSwitchedToIconView()),
-            this, SLOT(slotSwitchedToIconView()));
+    connect(d->view, SIGNAL(signalDownload()),
+            this, SLOT(slotDownloadSelected()));
 
-//Emitted from the context menu to view the item
-//TODO: need to connect it with the context menu and view item action
-    //connect(d->view, SIGNAL(signalFileView(CamItemInfo)),
-            //this, SLOT(slotFileView(CamItemInfo)));
+    connect(d->view, SIGNAL(signalDownloadAndDelete()),
+            this, SLOT(slotDownloadAndDeleteSelected()));
 
-    //connect(d->view, SIGNAL(signalUpload(KUrl::List)),
-            //this, SLOT(slotUploadItems(KUrl::List)));
+    connect(d->view, SIGNAL(signalDelete()),
+            this, SLOT(slotDeleteSelected()));
 
-//Emitted from the context menu to download the item
-//TODO: need to connect it with the new context menu and download item action
-    //connect(d->view, SIGNAL(signalDownload()),
-            //this, SLOT(slotDownloadSelected()));
+    connect(d->view, SIGNAL(signalToggleLock()),
+            this, SLOT(slotToggleLock()));
 
-//Emitted from the context menu to download and delete the item
-    //connect(d->view, SIGNAL(signalDownloadAndDelete()),
-            //this, SLOT(slotDownloadAndDeleteSelected()));
+    connect(d->view, SIGNAL(signalNewSelection(bool)),
+            this, SLOT(slotNewSelection(bool)));
 
-    //connect(d->view, SIGNAL(signalDelete()),
-            //this, SLOT(slotDeleteSelected()));
+    connect(d->view, SIGNAL(signalZoomOut()),
+            this, SLOT(slotDecreaseThumbSize()));
 
-//Emitted from the context menu to toogle lock the item
-//    connect(d->view, SIGNAL(signalToggleLock()),
-//            this, SLOT(slotToggleLock()));
-
-//    connect(d->view, SIGNAL(signalNewSelection(bool)),
-//            this, SLOT(slotNewSelection(bool)));
-
-//    connect(d->view, SIGNAL(signalZoomOut()),
-//            this, SLOT(slotDecreaseThumbSize()));
-
-//    connect(d->view, SIGNAL(signalZoomIn()),
-//            this, SLOT(slotIncreaseThumbSize()));
+    connect(d->view, SIGNAL(signalZoomIn()),
+            this, SLOT(slotIncreaseThumbSize()));
 
     connect(d->view, SIGNAL(signalThumbSizeChanged(int)),
             this, SLOT(slotThumbSizeChanged(int)));
@@ -674,16 +553,16 @@ void CameraUI::setupConnections()
     connect(d->zoomBar, SIGNAL(signalZoomSliderChanged(int)),
             this, SLOT(slotZoomSliderChanged(int)));
 
-//    connect(this, SIGNAL(signalWindowHasMoved()),
-//            d->zoomBar, SLOT(slotUpdateTrackerPos()));
+    connect(this, SIGNAL(signalWindowHasMoved()),
+            d->zoomBar, SLOT(slotUpdateTrackerPos()));
 
     // -------------------------------------------------------------------------
 
-//    connect(CollectionManager::instance(), SIGNAL(locationStatusChanged(CollectionLocation, int)),
-//            this, SLOT(slotCollectionLocationStatusChanged(CollectionLocation, int)));
+    connect(CollectionManager::instance(), SIGNAL(locationStatusChanged(CollectionLocation, int)),
+            this, SLOT(slotCollectionLocationStatusChanged(CollectionLocation, int)));
 
-//    connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
-//            this, SLOT(slotSidebarTabTitleStyleChanged()));
+    connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
+            this, SLOT(slotSidebarTabTitleStyleChanged()));
 }
 
 void CameraUI::setupStatusBar()
@@ -759,14 +638,11 @@ void CameraUI::setupCameraController(const QString& model, const QString& port, 
     connect(d->controller, SIGNAL(signalFileList(CamItemInfoList)),
             this, SLOT(slotFileList(CamItemInfoList)));
 
-    connect(d->controller, SIGNAL(signalDownloaded(QString,QString,int,bool)),
+    connect(d->controller, SIGNAL(signalDownloaded(QString,QString,int)),
             this, SLOT(slotDownloaded(QString,QString,int)));
 
     connect(d->controller, SIGNAL(signalDownloadComplete(QString,QString,QString,QString)),
             this, SLOT(slotDownloadComplete(QString,QString,QString,QString)));
-
-    //connect(d->controller, SIGNAL(signalFinished()),
-    //        this, SLOT(slotFinished()));
 
     connect(d->controller, SIGNAL(signalSkipped(QString,QString)),
             this, SLOT(slotSkipped(QString,QString)));
@@ -782,11 +658,11 @@ void CameraUI::setupCameraController(const QString& model, const QString& port, 
 
     connect(d->controller, SIGNAL(signalUploaded(CamItemInfo)),
             this, SLOT(slotUploaded(CamItemInfo)));
-}
 
-CameraController* CameraUI::getCameraController()
-{
-    return d->controller;
+    // Setup Thumbnails controller -------------------------------------------------------
+
+    d->camThumbsCtrl = new CameraThumbsCtrl(d->controller, this);
+    d->view->setThumbControler(d->camThumbsCtrl);
 }
 
 void CameraUI::setupAccelerators()
@@ -798,21 +674,22 @@ void CameraUI::readSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
 
-    d->view->setThumbSize(group.readEntry("ThumbnailSize", (int)ThumbnailSize::Large));
+    d->view->setThumbnailSize(group.readEntry("ThumbnailSize", (int)ThumbnailSize::Large));
     d->showLogAction->setChecked(group.readEntry("ShowLog",               false));
-//    d->albumCustomizer->readSettings(group);
-//    d->advancedSettings->readSettings(group);
-//    d->scriptingSettings->readSettings(group);
+    d->lastPhotoFirstAction->setChecked(group.readEntry("LastPhotoFirst", true));
+    d->albumCustomizer->readSettings(group);
+    d->advancedSettings->readSettings(group);
+    d->scriptingSettings->readSettings(group);
 
-//#if KDCRAW_VERSION >= 0x020000
-//    d->advBox->readSettings(group);
-//#else
-//    d->advBox->readSettings();
-//#endif
+#if KDCRAW_VERSION >= 0x020000
+    d->advBox->readSettings(group);
+#else
+    d->advBox->readSettings();
+#endif
 
-//    d->splitter->restoreState(group);
+    d->splitter->restoreState(group);
 
-//    slotShowLog();
+    slotShowLog();
 }
 
 void CameraUI::saveSettings()
@@ -820,27 +697,28 @@ void CameraUI::saveSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
 
-    group.writeEntry("ThumbnailSize",  d->view->thumbnailSize().size());
+    group.writeEntry("ThumbnailSize",  d->view->thumbnailSize());
     group.writeEntry("ShowLog",        d->showLogAction->isChecked());
-//    d->albumCustomizer->saveSettings(group);
-//    d->advancedSettings->saveSettings(group);
-//    d->scriptingSettings->saveSettings(group);
+    group.writeEntry("LastPhotoFirst", d->lastPhotoFirstAction->isChecked());
+    d->albumCustomizer->saveSettings(group);
+    d->advancedSettings->saveSettings(group);
+    d->scriptingSettings->saveSettings(group);
 
-//#if KDCRAW_VERSION >= 0x020000
-//    d->advBox->writeSettings(group);
-//#else
-//    d->advBox->writeSettings();
-//#endif
+#if KDCRAW_VERSION >= 0x020000
+    d->advBox->writeSettings(group);
+#else
+    d->advBox->writeSettings();
+#endif
 
-//    d->rightSideBar->saveState();
-//    d->splitter->saveState(group);
-//    d->filterComboBox->saveSettings();
+    d->rightSideBar->saveState();
+    d->splitter->saveState(group);
+    d->filterComboBox->saveSettings();
     config->sync();
 }
 
 void CameraUI::slotProcessUrl(const QString& url)
 {
-//    KToolInvocation::invokeBrowser(url);
+    KToolInvocation::invokeBrowser(url);
 }
 
 bool CameraUI::isBusy() const
@@ -867,12 +745,12 @@ DownloadSettings CameraUI::downloadSettings() const
 
 void CameraUI::slotCancelButton()
 {
-//    d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode,
-//                                          i18n("Canceling current operation, please wait..."));
-//    d->controller->slotCancel();
-//    d->historyUpdater->slotCancel();
-//    d->currentlyDeleting.clear();
-//    refreshFreeSpace();
+    d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode,
+                                          i18n("Canceling current operation, please wait..."));
+    d->controller->slotCancel();
+    d->historyUpdater->slotCancel();
+    d->currentlyDeleting.clear();
+    refreshFreeSpace();
 }
 
 void CameraUI::refreshFreeSpace()
@@ -889,20 +767,20 @@ void CameraUI::refreshFreeSpace()
 
 void CameraUI::closeEvent(QCloseEvent* e)
 {
-//    if (dialogClosed())
-//    {
-//        e->accept();
-//    }
-//    else
-//    {
-//        e->ignore();
-//    }
+    if (dialogClosed())
+    {
+        e->accept();
+    }
+    else
+    {
+        e->ignore();
+    }
 }
 
 void CameraUI::moveEvent(QMoveEvent* e)
 {
-//    Q_UNUSED(e)
-//    emit signalWindowHasMoved();
+    Q_UNUSED(e)
+    emit signalWindowHasMoved();
 }
 
 void CameraUI::slotClose()
@@ -915,40 +793,39 @@ void CameraUI::slotClose()
 
 bool CameraUI::dialogClosed()
 {
-    return false; //FIXME: Remove this line.
-//    if (d->closed)
-//    {
-//        return true;
-//    }
+    if (d->closed)
+    {
+        return true;
+    }
 
-//    if (isBusy())
-//    {
-//        if (KMessageBox::questionYesNo(this,
-//                                       i18n("Do you want to close the dialog "
-//                                            "and cancel the current operation?"))
-//            == KMessageBox::No)
-//        {
-//            return false;
-//        }
-//    }
+    if (isBusy())
+    {
+        if (KMessageBox::questionYesNo(this,
+                                       i18n("Do you want to close the dialog "
+                                            "and cancel the current operation?"))
+            == KMessageBox::No)
+        {
+            return false;
+        }
+    }
 
-//    d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode,
-//                                          i18n("Disconnecting from camera, please wait..."));
+    d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode,
+                                          i18n("Disconnecting from camera, please wait..."));
 
-//    if (isBusy())
-//    {
-//        d->controller->slotCancel();
-//        // will be read in slotBusy later and finishDialog
-//        // will be called only when everything is finished
-//        d->closed = true;
-//    }
-//    else
-//    {
-//        d->closed = true;
-//        finishDialog();
-//    }
+    if (isBusy())
+    {
+        d->controller->slotCancel();
+        // will be read in slotBusy later and finishDialog
+        // will be called only when everything is finished
+        d->closed = true;
+    }
+    else
+    {
+        d->closed = true;
+        finishDialog();
+    }
 
-//    return true;
+    return true;
 }
 
 void CameraUI::finishDialog()
@@ -956,162 +833,162 @@ void CameraUI::finishDialog()
     // Look if an item have been downloaded to computer during camera GUI session.
     // If yes, update the starting number value used to rename camera items from camera list.
 
-//    if (d->view->itemsDownloaded() > 0)
-//    {
-//        CameraList* clist = CameraList::defaultList();
+    if (d->view->itemsDownloaded() > 0)
+    {
+        CameraList* clist = CameraList::defaultList();
 
-//        if (clist)
-//        {
-//            clist->changeCameraStartIndex(d->cameraTitle, d->renameCustomizer->startIndex());
-//        }
-//    }
+        if (clist)
+        {
+            clist->changeCameraStartIndex(d->cameraTitle, d->renameCustomizer->startIndex());
+        }
+    }
 
-//    // When a directory is created, a watch is put on it to spot new files
-//    // but it can occur that the file is copied there before the watch is
-//    // completely setup. That is why as an extra safeguard run CollectionScanner
-//    // over the folders we used. Bug: 119201
+    // When a directory is created, a watch is put on it to spot new files
+    // but it can occur that the file is copied there before the watch is
+    // completely setup. That is why as an extra safeguard run CollectionScanner
+    // over the folders we used. Bug: 119201
 
-//    d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode,
-//                                          i18n("Scanning for new files, please wait..."));
+    d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode,
+                                          i18n("Scanning for new files, please wait..."));
 
-//    NewItemsFinder* tool = new NewItemsFinder(NewItemsFinder::ScheduleCollectionScan, d->foldersToScan.toList());
-//    tool->start();
+    NewItemsFinder* tool = new NewItemsFinder(NewItemsFinder::ScheduleCollectionScan, d->foldersToScan.toList());
+    tool->start();
 
-//    d->foldersToScan.clear();
+    d->foldersToScan.clear();
 
-//    deleteLater();
+    deleteLater();
 
-//    if (!d->lastDestURL.isEmpty())
-//    {
-//        emit signalLastDestination(d->lastDestURL);
-//    }
+    if (!d->lastDestURL.isEmpty())
+    {
+        emit signalLastDestination(d->lastDestURL);
+    }
 
-//    saveSettings();
+    saveSettings();
 }
 
 void CameraUI::slotBusy(bool val)
 {
-//    if (!val)   // Camera is available for actions.
-//    {
-//        if (!d->busy)
-//        {
-//            return;
-//        }
+    if (!val)   // Camera is available for actions.
+    {
+        if (!d->busy)
+        {
+            return;
+        }
 
-//        d->busy = false;
-//        d->cameraCancelAction->setEnabled(false);
-//        d->view->viewport()->setEnabled(true);
+        d->busy = false;
+        d->cameraCancelAction->setEnabled(false);
+        d->view->viewport()->setEnabled(true);
 
-//        d->advBox->setEnabled(true);
-//        // B.K.O #127614: The Focus need to be restored in custom prefix widget.
-//        // commenting this out again: If we do not disable, no need to restore focus
-//        // d->renameCustomizer->restoreFocus();
+        d->advBox->setEnabled(true);
+        // B.K.O #127614: The Focus need to be restored in custom prefix widget.
+        // commenting this out again: If we do not disable, no need to restore focus
+        // d->renameCustomizer->restoreFocus();
 
-//        d->uploadAction->setEnabled(d->controller->cameraUploadSupport());
+        d->uploadAction->setEnabled(d->controller->cameraUploadSupport());
 
-//        d->downloadSelectedAction->setEnabled(true);
-//        d->downloadDelSelectedAction->setEnabled(d->controller->cameraDeleteSupport());
-//        d->downloadNewAction->setEnabled(true);
-//        d->downloadAllAction->setEnabled(true);
-//        d->downloadDelAllAction->setEnabled(d->controller->cameraDeleteSupport());
-//        d->downloadDelNewAction->setEnabled(d->controller->cameraDeleteSupport());
+        d->downloadSelectedAction->setEnabled(true);
+        d->downloadDelSelectedAction->setEnabled(d->controller->cameraDeleteSupport());
+        d->downloadNewAction->setEnabled(true);
+        d->downloadAllAction->setEnabled(true);
+        d->downloadDelAllAction->setEnabled(d->controller->cameraDeleteSupport());
+        d->downloadDelNewAction->setEnabled(d->controller->cameraDeleteSupport());
 
-//        d->deleteNewAction->setEnabled(d->controller->cameraDeleteSupport());
-//        d->deleteSelectedAction->setEnabled(d->controller->cameraDeleteSupport());
-//        d->deleteAllAction->setEnabled(d->controller->cameraDeleteSupport());
+        d->deleteNewAction->setEnabled(d->controller->cameraDeleteSupport());
+        d->deleteSelectedAction->setEnabled(d->controller->cameraDeleteSupport());
+        d->deleteAllAction->setEnabled(d->controller->cameraDeleteSupport());
 
-//        d->selectNewItemsAction->setEnabled(true);
-//        d->selectAllAction->setEnabled(true);
-//        d->selectInvertAction->setEnabled(true);
-//        d->selectLockedItemsAction->setEnabled(true);
-//        d->selectNoneAction->setEnabled(true);
+        d->selectNewItemsAction->setEnabled(true);
+        d->selectAllAction->setEnabled(true);
+        d->selectInvertAction->setEnabled(true);
+        d->selectLockedItemsAction->setEnabled(true);
+        d->selectNoneAction->setEnabled(true);
 
-//        d->lockAction->setEnabled(true);
-//        d->markAsDownloadedAction->setEnabled(true);
-//        d->cameraInfoAction->setEnabled(true);
-//        d->cameraCaptureAction->setEnabled(d->controller->cameraCaptureImageSupport());
-//        d->imageViewAction->setEnabled(true);
-//        d->filterComboBox->setEnabled(true);
+        d->lockAction->setEnabled(true);
+        d->markAsDownloadedAction->setEnabled(true);
+        d->cameraInfoAction->setEnabled(true);
+        d->cameraCaptureAction->setEnabled(d->controller->cameraCaptureImageSupport());
+        d->imageViewAction->setEnabled(true);
+        d->filterComboBox->setEnabled(true);
 
-//        // selection-dependent update of lockAction, markAsDownloadedAction,
-//        // downloadSelectedAction, downloadDelSelectedAction, deleteSelectedAction
-//        slotNewSelection(d->view->countSelected() > 0);
+        // selection-dependent update of lockAction, markAsDownloadedAction,
+        // downloadSelectedAction, downloadDelSelectedAction, deleteSelectedAction
+        slotNewSelection(d->view->countSelected() > 0);
 
-//        d->anim->stop();
-//        d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode, i18n("Ready"));
-//        d->statusProgressBar->setNotify(false);
+        d->anim->stop();
+        d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode, i18n("Ready"));
+        d->statusProgressBar->setNotify(false);
 
-//        // like WDestructiveClose, but after camera controller operation has safely finished
-//        if (d->closed)
-//        {
-//            finishDialog();
-//        }
-//    }
-//    else    // Camera is busy.
-//    {
-//        if (d->busy)
-//        {
-//            return;
-//        }
+        // like WDestructiveClose, but after camera controller operation has safely finished
+        if (d->closed)
+        {
+            finishDialog();
+        }
+    }
+    else    // Camera is busy.
+    {
+        if (d->busy)
+        {
+            return;
+        }
 
-//        if (!d->anim->running())
-//        {
-//            d->anim->start();
-//        }
+        if (!d->anim->running())
+        {
+            d->anim->start();
+        }
 
-//        d->busy = true;
+        d->busy = true;
 
-//        // Has camera icon view item selection is used to control download post processing,
-//        // all selection actions are disable when camera interface is busy.
-//        d->view->viewport()->setEnabled(false);
+        // Has camera icon view item selection is used to control download post processing,
+        // all selection actions are disable when camera interface is busy.
+        d->view->viewport()->setEnabled(false);
 
-//        // Settings tab is disabled in slotDownload, selectively when downloading
-//        // Fast dis/enabling would create the impression of flicker, e.g. when retrieving EXIF from camera
-//        //d->advBox->setEnabled(false);
+        // Settings tab is disabled in slotDownload, selectively when downloading
+        // Fast dis/enabling would create the impression of flicker, e.g. when retrieving EXIF from camera
+        //d->advBox->setEnabled(false);
 
-//        d->uploadAction->setEnabled(false);
+        d->uploadAction->setEnabled(false);
 
-//        d->downloadSelectedAction->setEnabled(false);
-//        d->downloadDelSelectedAction->setEnabled(false);
-//        d->downloadNewAction->setEnabled(false);
-//        d->downloadAllAction->setEnabled(false);
-//        d->downloadDelAllAction->setEnabled(false);
-//        d->downloadDelNewAction->setEnabled(false);
+        d->downloadSelectedAction->setEnabled(false);
+        d->downloadDelSelectedAction->setEnabled(false);
+        d->downloadNewAction->setEnabled(false);
+        d->downloadAllAction->setEnabled(false);
+        d->downloadDelAllAction->setEnabled(false);
+        d->downloadDelNewAction->setEnabled(false);
 
-//        d->deleteNewAction->setEnabled(false);
-//        d->deleteSelectedAction->setEnabled(false);
-//        d->deleteAllAction->setEnabled(false);
+        d->deleteNewAction->setEnabled(false);
+        d->deleteSelectedAction->setEnabled(false);
+        d->deleteAllAction->setEnabled(false);
 
-//        d->selectNewItemsAction->setEnabled(false);
-//        d->selectAllAction->setEnabled(false);
-//        d->selectInvertAction->setEnabled(false);
-//        d->selectLockedItemsAction->setEnabled(false);
-//        d->selectNoneAction->setEnabled(false);
+        d->selectNewItemsAction->setEnabled(false);
+        d->selectAllAction->setEnabled(false);
+        d->selectInvertAction->setEnabled(false);
+        d->selectLockedItemsAction->setEnabled(false);
+        d->selectNoneAction->setEnabled(false);
 
-//        d->lockAction->setEnabled(false);
-//        d->markAsDownloadedAction->setEnabled(false);
-//        d->cameraInfoAction->setEnabled(false);
-//        d->cameraCaptureAction->setEnabled(false);
-//        d->imageViewAction->setEnabled(false);
-//        d->filterComboBox->setEnabled(false);
-//    }
+        d->lockAction->setEnabled(false);
+        d->markAsDownloadedAction->setEnabled(false);
+        d->cameraInfoAction->setEnabled(false);
+        d->cameraCaptureAction->setEnabled(false);
+        d->imageViewAction->setEnabled(false);
+        d->filterComboBox->setEnabled(false);
+    }
 }
 
 void CameraUI::slotIncreaseThumbSize()
 {
-    int thumbSize = d->view->thumbnailSize().size() + ThumbnailSize::Step;
-    d->view->setThumbSize(thumbSize);
+    int thumbSize = d->view->thumbnailSize() + ThumbnailSize::Step;
+    d->view->setThumbnailSize(thumbSize);
 }
 
 void CameraUI::slotDecreaseThumbSize()
 {
-    int thumbSize = d->view->thumbnailSize().size() - ThumbnailSize::Step;
-    d->view->setThumbSize(thumbSize);
+    int thumbSize = d->view->thumbnailSize() - ThumbnailSize::Step;
+    d->view->setThumbnailSize(thumbSize);
 }
 
 void CameraUI::slotZoomSliderChanged(int size)
 {
-    d->view->setThumbSize(size);
+    d->view->setThumbnailSize(size);
 }
 
 void CameraUI::slotThumbSizeChanged(int size)
@@ -1197,950 +1074,996 @@ void CameraUI::slotFileList(const CamItemInfoList& fileList)
     d->refreshIconViewTimer->start();
 }
 
+void CameraUI::slotRefreshIconViewTimer()
+{
+    if (d->busy)
+    {
+        d->refreshIconViewTimer->start();
+        return;
+    }
+
+    if (d->filesToBeAdded.isEmpty())
+    {
+        return;
+    }
+
+    AlbumSettings* settings = AlbumSettings::instance();
+
+    if (!settings)
+    {
+        return;
+    }
+
+    // We sort the map by time stamp
+    // and we remove internal camera files which are not image/video/sounds.
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group = config->group(d->importFiltersConfigGroupName);
+    QStringList fileNames = group.readEntry("IgnoreNames",
+                                            FilterComboBox::defaultIgnoreNames).toLower().split(' ');
+    QStringList fileExts = group.readEntry("IgnoreExtensions",
+                                           FilterComboBox::defaultIgnoreExtensions).toLower().split(' ');
+    QFileInfo   fi;
+
+    // NOTE: see B.K.O #181726: list of accepted file extensions from Album Settings.
+    QStringList list = settings->getAllFileFilter().toLower().split(' ');
+
+    CHUpdateItemMap map;
+    CamItemInfoList items = d->view->allItems();
+
+    foreach(CamItemInfo info, items)
+    {
+        map.insertMulti(info.mtime, info);
+    }
+
+    foreach(CamItemInfo info, d->filesToBeAdded)
+    {
+        fi.setFile(info.name);
+
+        if (!fileNames.contains(fi.fileName().toLower()) &&
+            !fileExts.contains(fi.suffix().toLower())    &&
+            list.contains(QString("*.%1").arg(fi.suffix().toLower())))
+        {
+            map.insertMulti(info.mtime, info);
+        }
+    }
+
+    d->filesToBeAdded.clear();
+
+    items = d->view->allItems();
+
+    foreach(CamItemInfo info, items)
+    {
+        d->view->removeItem(info);
+    }
+
+    d->historyUpdater->addItems(d->controller->cameraMD5ID(), map);
+}
+
+void CameraUI::slotRefreshIconView(const CHUpdateItemMap& map)
+{
+    if (map.empty())
+    {
+        return;
+    }
+
+    d->map = map;
+    bool lastPhotoFirst                = d->lastPhotoFirstAction->isChecked();
+    CHUpdateItemMap::const_iterator it = lastPhotoFirst ? d->map.constEnd() : d->map.constBegin();
+
+    do
+    {
+        if (lastPhotoFirst)
+        {
+            --it;
+        }
+
+        if (d->filterComboBox->matchesCurrentFilter(*it))
+        {
+            d->view->addItem(*it);
+        }
+
+        if (!lastPhotoFirst)
+        {
+            ++it;
+        }
+    }
+
+    while ((lastPhotoFirst ? it != d->map.constBegin() : it != d->map.constEnd()));
+}
+
+void CameraUI::slotlastPhotoFirst()
+{
+    saveSettings();
+
+    slotFilterChanged();
+}
+
 void CameraUI::slotFilterChanged()
 {
-//    CamItemInfoList items = d->view->allItems();
+    CamItemInfoList items = d->view->allItems();
 
-//    foreach(CamItemInfo info, items)
-//    {
-//        d->view->removeItem(info);
-//    }
-//    d->historyUpdater->addItems(d->controller->cameraMD5ID(), d->map);
+    foreach(CamItemInfo info, items)
+    {
+        d->view->removeItem(info);
+    }
+    d->historyUpdater->addItems(d->controller->cameraMD5ID(), d->map);
 }
 
 void CameraUI::slotCapture()
 {
-//    if (d->busy)
-//    {
-//        return;
-//    }
+    if (d->busy)
+    {
+        return;
+    }
 
-//    CaptureDlg* captureDlg = new CaptureDlg(this, d->controller, d->cameraTitle);
-//    captureDlg->show();
+    CaptureDlg* captureDlg = new CaptureDlg(this, d->controller, d->cameraTitle);
+    captureDlg->show();
 }
 
 void CameraUI::slotInformation()
 {
-//    if (d->busy)
-//    {
-//        return;
-//    }
+    if (d->busy)
+    {
+        return;
+    }
 
-//    d->controller->getCameraInformation();
+    d->controller->getCameraInformation();
 }
 
 void CameraUI::slotCameraInformation(const QString& summary, const QString& manual, const QString& about)
 {
-//    CameraInfoDialog* infoDlg = new CameraInfoDialog(this, summary, manual, about);
-//    infoDlg->show();
+    CameraInfoDialog* infoDlg = new CameraInfoDialog(this, summary, manual, about);
+    infoDlg->show();
 }
 
 void CameraUI::slotUpload()
 {
-//    if (d->busy)
-//    {
-//        return;
-//    }
+    if (d->busy)
+    {
+        return;
+    }
 
-//    QString fileformats;
+    QString fileformats;
 
-//    QStringList patternList = KImageIO::pattern(KImageIO::Reading).split('\n');
+    QStringList patternList = KImageIO::pattern(KImageIO::Reading).split('\n');
 
-//    // All Images from list must been always the first entry given by KDE API
-//    QString allPictures = patternList.at(0);
+    // All Images from list must been always the first entry given by KDE API
+    QString allPictures = patternList.at(0);
 
-//    // Add RAW file format to All Images" type mime and replace current.
-//    allPictures.insert(allPictures.indexOf("|"), QString(KDcrawIface::KDcraw::rawFiles()));
-//    patternList.removeAll(patternList.at(0));
-//    patternList.prepend(allPictures);
+    // Add RAW file format to All Images" type mime and replace current.
+    allPictures.insert(allPictures.indexOf("|"), QString(KDcrawIface::KDcraw::rawFiles()));
+    patternList.removeAll(patternList.at(0));
+    patternList.prepend(allPictures);
 
-//    // Added RAW file formats supported by dcraw program like a type mime.
-//    // Note: we cannot use here "image/x-raw" type mime from KDE because it incomplete
-//    // or unavailable(dcraw_0)(see file #121242 in B.K.O).
-//    patternList.append(QString("\n%1|Camera RAW files").arg(QString(KDcrawIface::KDcraw::rawFiles())));
-//    fileformats = patternList.join("\n");
+    // Added RAW file formats supported by dcraw program like a type mime.
+    // Note: we cannot use here "image/x-raw" type mime from KDE because it incomplete
+    // or unavailable(dcraw_0)(see file #121242 in B.K.O).
+    patternList.append(QString("\n%1|Camera RAW files").arg(QString(KDcrawIface::KDcraw::rawFiles())));
+    fileformats = patternList.join("\n");
 
-//    kDebug() << "fileformats=" << fileformats;
+    kDebug() << "fileformats=" << fileformats;
 
-//    KUrl::List urls = KFileDialog::getOpenUrls(CollectionManager::instance()->oneAlbumRootPath(),
-//                                               fileformats, this, i18n("Select Image to Upload"));
+    KUrl::List urls = KFileDialog::getOpenUrls(CollectionManager::instance()->oneAlbumRootPath(),
+                                               fileformats, this, i18n("Select Image to Upload"));
 
-//    if (!urls.isEmpty())
-//    {
-//        slotUploadItems(urls);
-//    }
+    if (!urls.isEmpty())
+    {
+        slotUploadItems(urls);
+    }
 }
 
 void CameraUI::slotUploadItems(const KUrl::List& urls)
 {
-//    if (d->busy)
-//    {
-//        return;
-//    }
+    if (d->busy)
+    {
+        return;
+    }
 
-//    if (urls.isEmpty())
-//    {
-//        return;
-//    }
+    if (urls.isEmpty())
+    {
+        return;
+    }
 
-//    if (d->cameraFreeSpace->isValid())
-//    {
-//        // Check if space require to upload new items in camera is enough.
-//        quint64 totalKbSize = 0;
+    if (d->cameraFreeSpace->isValid())
+    {
+        // Check if space require to upload new items in camera is enough.
+        quint64 totalKbSize = 0;
 
-//        for (KUrl::List::const_iterator it = urls.constBegin() ; it != urls.constEnd() ; ++it)
-//        {
-//            QFileInfo fi((*it).toLocalFile());
-//            totalKbSize += fi.size() / 1024;
-//        }
+        for (KUrl::List::const_iterator it = urls.constBegin() ; it != urls.constEnd() ; ++it)
+        {
+            QFileInfo fi((*it).toLocalFile());
+            totalKbSize += fi.size() / 1024;
+        }
 
-//        if (totalKbSize >= d->cameraFreeSpace->kBAvail())
-//        {
-//            KMessageBox::error(this, i18n("There is not enough free space on the Camera Medium "
-//                                          "to upload pictures.\n\n"
-//                                          "Space require: %1\n"
-//                                          "Available free space: %2",
-//                                          KIO::convertSizeFromKiB(totalKbSize),
-//                                          KIO::convertSizeFromKiB(d->cameraFreeSpace->kBAvail())));
-//            return;
-//        }
-//    }
+        if (totalKbSize >= d->cameraFreeSpace->kBAvail())
+        {
+            KMessageBox::error(this, i18n("There is not enough free space on the Camera Medium "
+                                          "to upload pictures.\n\n"
+                                          "Space require: %1\n"
+                                          "Available free space: %2",
+                                          KIO::convertSizeFromKiB(totalKbSize),
+                                          KIO::convertSizeFromKiB(d->cameraFreeSpace->kBAvail())));
+            return;
+        }
+    }
 
-//    QMap<QString, int> map           = d->view->countItemsByFolders();
-//    QPointer<CameraFolderDialog> dlg = new CameraFolderDialog(this, map, d->controller->cameraTitle(),
-//                                                              d->controller->cameraPath());
+    QMap<QString, int> map           = d->view->countItemsByFolders();
+    QPointer<CameraFolderDialog> dlg = new CameraFolderDialog(this, map, d->controller->cameraTitle(),
+                                                              d->controller->cameraPath());
 
-//    if (dlg->exec() != QDialog::Accepted)
-//    {
-//        delete dlg;
-//        return;
-//    }
+    if (dlg->exec() != QDialog::Accepted)
+    {
+        delete dlg;
+        return;
+    }
 
-//    // since we access members here, check if the pointer is still valid
-//    if (!dlg)
-//    {
-//        return;
-//    }
+    // since we access members here, check if the pointer is still valid
+    if (!dlg)
+    {
+        return;
+    }
 
-//    QString cameraFolder = dlg->selectedFolderPath();
+    QString cameraFolder = dlg->selectedFolderPath();
 
-//    for (KUrl::List::const_iterator it = urls.constBegin(); it != urls.constEnd(); ++it)
-//    {
-//        QFileInfo fi((*it).toLocalFile());
+    for (KUrl::List::const_iterator it = urls.constBegin(); it != urls.constEnd(); ++it)
+    {
+        QFileInfo fi((*it).toLocalFile());
 
-//        if (!fi.exists())
-//        {
-//            continue;
-//        }
+        if (!fi.exists())
+        {
+            continue;
+        }
 
-//        if (fi.isDir())
-//        {
-//            continue;
-//        }
+        if (fi.isDir())
+        {
+            continue;
+        }
 
-//        QString ext  = QString(".") + fi.completeSuffix();
-//        QString name = fi.fileName();
-//        name.truncate(fi.fileName().length() - ext.length());
+        QString ext  = QString(".") + fi.completeSuffix();
+        QString name = fi.fileName();
+        name.truncate(fi.fileName().length() - ext.length());
 
-//        bool ok;
+        bool ok;
 
-//        while (!d->view->findItemInfo(cameraFolder, name + ext).isNull())
-//        {
-//            QString msg(i18n("Camera Folder <b>%1</b> already contains the item <b>%2</b>.<br/>"
-//                             "Please enter a new filename (without extension):",
-//                             cameraFolder, fi.fileName()));
-//            name = KInputDialog::getText(i18n("File already exists"), msg, name, &ok, this);
+        while (!d->view->findItemInfo(cameraFolder, name + ext).isNull())
+        {
+            QString msg(i18n("Camera Folder <b>%1</b> already contains the item <b>%2</b>.<br/>"
+                             "Please enter a new filename (without extension):",
+                             cameraFolder, fi.fileName()));
+            name = KInputDialog::getText(i18n("File already exists"), msg, name, &ok, this);
 
-//            if (!ok)
-//            {
-//                return;
-//            }
-//        }
+            if (!ok)
+            {
+                return;
+            }
+        }
 
-//        d->controller->upload(fi, name + ext, cameraFolder);
-//    }
+        d->controller->upload(fi, name + ext, cameraFolder);
+    }
 
-//    delete dlg;
+    delete dlg;
 }
 
 void CameraUI::slotUploaded(const CamItemInfo& itemInfo)
 {
-//    if (d->closed)
-//    {
-//        return;
-//    }
+    if (d->closed)
+    {
+        return;
+    }
 
-//    d->view->addItem(itemInfo);
-//    refreshFreeSpace();
+    d->view->addItem(itemInfo);
+    refreshFreeSpace();
 }
 
 void CameraUI::slotDownloadNew()
 {
-//    d->view->slotSelectNew();
-//    QTimer::singleShot(0, this, SLOT(slotDownloadSelected()));
+    d->view->slotSelectNew();
+    QTimer::singleShot(0, this, SLOT(slotDownloadSelected()));
 }
 
 void CameraUI::slotDownloadAndDeleteNew()
 {
-//    d->view->slotSelectNew();
-//    QTimer::singleShot(0, this, SLOT(slotDownloadAndDeleteSelected()));
+    d->view->slotSelectNew();
+    QTimer::singleShot(0, this, SLOT(slotDownloadAndDeleteSelected()));
 }
 
 void CameraUI::slotDownloadSelected()
 {
-//    slotDownload(true, false);
+    slotDownload(true, false);
 }
 
 void CameraUI::slotDownloadAndDeleteSelected()
 {
-//    slotDownload(true, true);
+    slotDownload(true, true);
 }
 
 void CameraUI::slotDownloadAll()
 {
-//    slotDownload(false, false);
+    slotDownload(false, false);
 }
 
 void CameraUI::slotDownloadAndDeleteAll()
 {
-//    slotDownload(false, true);
+    slotDownload(false, true);
 }
 
 void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album* album)
 {
-//    if (d->albumCustomizer->folderDateFormat() == AlbumCustomizer::CustomDateFormat &&
-//        !d->albumCustomizer->customDateFormatIsValid())
-//    {
-//        KMessageBox::information(this, i18n("Your custom target album date format is not valid. Please check your settings..."));
-//        return;
-//    }
+    if (d->albumCustomizer->folderDateFormat() == AlbumCustomizer::CustomDateFormat &&
+        !d->albumCustomizer->customDateFormatIsValid())
+    {
+        KMessageBox::information(this, i18n("Your custom target album date format is not valid. Please check your settings..."));
+        return;
+    }
 
-//    // See B.K.O #143934: force to select all items to prevent problem
-//    // when !renameCustomizer->useDefault() ==> iconItem->getDownloadName()
-//    // can return an empty string in this case because it depends on selection.
-//    if (!onlySelected)
-//    {
-//        d->view->slotSelectAll();
-//    }
+    // See B.K.O #143934: force to select all items to prevent problem
+    // when !renameCustomizer->useDefault() ==> iconItem->getDownloadName()
+    // can return an empty string in this case because it depends on selection.
+    if (!onlySelected)
+    {
+        d->view->slotSelectAll();
+    }
 
-//    // -- Get the destination album from digiKam library ---------------
+    // -- Get the destination album from digiKam library ---------------
 
-//    PAlbum* pAlbum = 0;
+    PAlbum* pAlbum = 0;
 
-//    if (!album)
-//    {
-//        AlbumManager* man = AlbumManager::instance();
+    if (!album)
+    {
+        AlbumManager* man = AlbumManager::instance();
 
-//        // Check if default target album option is enabled.
+        // Check if default target album option is enabled.
 
-//        KSharedConfig::Ptr config = KGlobal::config();
-//        KConfigGroup group        = config->group(d->configGroupName);
-//        bool useDefaultTarget     = group.readEntry(d->configUseDefaultTargetAlbum, false);
+        KSharedConfig::Ptr config = KGlobal::config();
+        KConfigGroup group        = config->group(d->configGroupName);
+        bool useDefaultTarget     = group.readEntry(d->configUseDefaultTargetAlbum, false);
 
-//        if (useDefaultTarget)
-//        {
-//            PAlbum* pa = man->findPAlbum(group.readEntry(d->configDefaultTargetAlbumId, 0));
+        if (useDefaultTarget)
+        {
+            PAlbum* pa = man->findPAlbum(group.readEntry(d->configDefaultTargetAlbumId, 0));
 
-//            if (pa)
-//            {
-//                CollectionLocation cl = CollectionManager::instance()->locationForAlbumRootId(pa->albumRootId());
+            if (pa)
+            {
+                CollectionLocation cl = CollectionManager::instance()->locationForAlbumRootId(pa->albumRootId());
 
-//                if (!cl.isAvailable() || cl.isNull())
-//                {
-//                    KMessageBox::information(this, i18n("Collection which host your default target album set to process "
-//                                                        "download from camera device is not available. Please select another one from "
-//                                                        "camera configuration dialog."));
-//                    return;
-//                }
-//            }
-//            else
-//            {
-//                KMessageBox::information(this, i18n("Your default target album set to process download "
-//                                                    "from camera device is not available. Please select another one from "
-//                                                    "camera configuration dialog."));
-//                return;
-//            }
+                if (!cl.isAvailable() || cl.isNull())
+                {
+                    KMessageBox::information(this, i18n("Collection which host your default target album set to process "
+                                                        "download from camera device is not available. Please select another one from "
+                                                        "camera configuration dialog."));
+                    return;
+                }
+            }
+            else
+            {
+                KMessageBox::information(this, i18n("Your default target album set to process download "
+                                                    "from camera device is not available. Please select another one from "
+                                                    "camera configuration dialog."));
+                return;
+            }
 
-//            pAlbum = pa;
-//        }
-//        else
-//        {
-//            album = man->currentAlbum();
+            pAlbum = pa;
+        }
+        else
+        {
+            album = man->currentAlbum();
 
-//            if (album && album->type() != Album::PHYSICAL)
-//            {
-//                album = 0;
-//            }
+            if (album && album->type() != Album::PHYSICAL)
+            {
+                album = 0;
+            }
 
-//            QString header(i18n("<p>Please select the destination album from the digiKam library to "
-//                                "import the camera pictures into.</p>"));
+            QString header(i18n("<p>Please select the destination album from the digiKam library to "
+                                "import the camera pictures into.</p>"));
 
-//            album = AlbumSelectDialog::selectAlbum(this, (PAlbum*)album, header);
+            album = AlbumSelectDialog::selectAlbum(this, (PAlbum*)album, header);
 
-//            if (!album)
-//            {
-//                return;
-//            }
+            if (!album)
+            {
+                return;
+            }
 
-//            pAlbum = dynamic_cast<PAlbum*>(album);
-//        }
-//    }
-//    else
-//    {
-//        pAlbum = dynamic_cast<PAlbum*>(album);
-//    }
+            pAlbum = dynamic_cast<PAlbum*>(album);
+        }
+    }
+    else
+    {
+        pAlbum = dynamic_cast<PAlbum*>(album);
+    }
 
-//    if (!pAlbum)
-//    {
-//        kDebug() << "Destination Album is null";
-//        return;
-//    }
+    if (!pAlbum)
+    {
+        kDebug() << "Destination Album is null";
+        return;
+    }
 
-//    // -- Check disk space ------------------------
+    // -- Check disk space ------------------------
 
-//    // See B.K.O #139519: Always check free space available before to
-//    // download items selection from camera.
-//    unsigned long fSize = 0;
-//    unsigned long dSize = 0;
-//    d->view->itemsSelectionSizeInfo(fSize, dSize);
-//    QString albumRootPath = pAlbum->albumRootPath();
-//    unsigned long kBAvail = d->albumLibraryFreeSpace->kBAvail(albumRootPath);
+    // See B.K.O #139519: Always check free space available before to
+    // download items selection from camera.
+    unsigned long fSize = 0;
+    unsigned long dSize = 0;
+    d->view->itemsSelectionSizeInfo(fSize, dSize);
+    QString albumRootPath = pAlbum->albumRootPath();
+    unsigned long kBAvail = d->albumLibraryFreeSpace->kBAvail(albumRootPath);
 
-//    if (dSize >= kBAvail)
-//    {
-//        KGuiItem cont = KStandardGuiItem::cont();
-//        cont.setText(i18n("Try Anyway"));
-//        KGuiItem cancel = KStandardGuiItem::cancel();
-//        cancel.setText(i18n("Cancel Download"));
-//        int result =
-//            KMessageBox::warningYesNo(this,
-//                                      i18n("There is not enough free space on the disk of the album you selected "
-//                                           "to download and process the selected pictures from the camera.\n\n"
-//                                           "Estimated space required: %1\n"
-//                                           "Available free space: %2",
-//                                           KIO::convertSizeFromKiB(dSize),
-//                                           KIO::convertSizeFromKiB(kBAvail)),
-//                                      i18n("Insufficient Disk Space"),
-//                                      cont, cancel);
+    if (dSize >= kBAvail)
+    {
+        KGuiItem cont = KStandardGuiItem::cont();
+        cont.setText(i18n("Try Anyway"));
+        KGuiItem cancel = KStandardGuiItem::cancel();
+        cancel.setText(i18n("Cancel Download"));
+        int result =
+            KMessageBox::warningYesNo(this,
+                                      i18n("There is not enough free space on the disk of the album you selected "
+                                           "to download and process the selected pictures from the camera.\n\n"
+                                           "Estimated space required: %1\n"
+                                           "Available free space: %2",
+                                           KIO::convertSizeFromKiB(dSize),
+                                           KIO::convertSizeFromKiB(kBAvail)),
+                                      i18n("Insufficient Disk Space"),
+                                      cont, cancel);
 
-//        if (result == KMessageBox::No)
-//        {
-//            return;
-//        }
-//    }
+        if (result == KMessageBox::No)
+        {
+            return;
+        }
+    }
 
-//    // -- Prepare downloading of camera items ------------------------
+    // -- Prepare downloading of camera items ------------------------
 
-//    KUrl url = pAlbum->fileUrl();
+    KUrl url = pAlbum->fileUrl();
 
-//    d->controller->downloadPrep();
+    d->controller->downloadPrep();
 
-//    QString              downloadName;
-//    QDateTime            dateTime;
-//    DownloadSettingsList allItems;
-//    DownloadSettings     settings = downloadSettings();
-//    int                  total    = 0;
+    QString              downloadName;
+    QDateTime            dateTime;
+    DownloadSettingsList allItems;
+    DownloadSettings     settings = downloadSettings();
+    int                  total    = 0;
 
-//    // -- Download camera items -------------------------------
-//    // Since we show camera items in reverse order, downloading need to be done also in reverse order.
+    // -- Download camera items -------------------------------
+    // Since we show camera items in reverse order, downloading need to be done also in reverse order.
 
-//    QSet<QString> usedDownloadPaths;
-//    CamItemInfoList list = d->view->allItems(d->lastPhotoFirstAction->isChecked());
+    QSet<QString> usedDownloadPaths;
+    CamItemInfoList list = d->view->allItems(d->lastPhotoFirstAction->isChecked());
 
-//    foreach(CamItemInfo info, list)
-//    {
-//        if (onlySelected && !(d->view->isSelected(info)))
-//        {
-//            continue;
-//        }
+    foreach(CamItemInfo info, list)
+    {
+        if (onlySelected && !(d->view->isSelected(info)))
+        {
+            continue;
+        }
 
-//        settings.folder = info.folder;
-//        settings.file   = info.name;
-//        downloadName    = info.downloadName;
-//        dateTime        = info.mtime;
+        settings.folder = info.folder;
+        settings.file   = info.name;
+        downloadName    = info.downloadName;
+        dateTime        = info.mtime;
 
-//        KUrl downloadUrl(url);
-//        QString errMsg;
+        KUrl downloadUrl(url);
+        QString errMsg;
 
-//        // Auto sub-albums creation based on file date.
+        // Auto sub-albums creation based on file date.
 
-//        if (d->albumCustomizer->autoAlbumDateEnabled())
-//        {
-//            QString dirName;
+        if (d->albumCustomizer->autoAlbumDateEnabled())
+        {
+            QString dirName;
 
-//            switch (d->albumCustomizer->folderDateFormat())
-//            {
-//                case AlbumCustomizer::TextDateFormat:
-//                    dirName = dateTime.date().toString(Qt::TextDate);
-//                    break;
+            switch (d->albumCustomizer->folderDateFormat())
+            {
+                case AlbumCustomizer::TextDateFormat:
+                    dirName = dateTime.date().toString(Qt::TextDate);
+                    break;
 
-//                case AlbumCustomizer::LocalDateFormat:
-//                    dirName = dateTime.date().toString(Qt::LocalDate);
-//                    break;
+                case AlbumCustomizer::LocalDateFormat:
+                    dirName = dateTime.date().toString(Qt::LocalDate);
+                    break;
 
-//                case AlbumCustomizer::IsoDateFormat:
-//                    dirName = dateTime.date().toString(Qt::ISODate);
-//                    break;
+                case AlbumCustomizer::IsoDateFormat:
+                    dirName = dateTime.date().toString(Qt::ISODate);
+                    break;
 
-//                default:        // Custom
-//                    dirName = dateTime.date().toString(d->albumCustomizer->customDateFormat());
-//                    break;
-//            }
+                default:        // Custom
+                    dirName = dateTime.date().toString(d->albumCustomizer->customDateFormat());
+                    break;
+            }
 
-//            // See B.K.O #136927 : we need to support file system which do not
-//            // handle upper case properly.
-//            dirName = dirName.toLower();
+            // See B.K.O #136927 : we need to support file system which do not
+            // handle upper case properly.
+            dirName = dirName.toLower();
 
-//            if (!createAutoAlbum(downloadUrl, dirName, dateTime.date(), errMsg))
-//            {
-//                KMessageBox::error(this, errMsg);
-//                return;
-//            }
+            if (!createAutoAlbum(downloadUrl, dirName, dateTime.date(), errMsg))
+            {
+                KMessageBox::error(this, errMsg);
+                return;
+            }
 
-//            downloadUrl.addPath(dirName);
-//        }
+            downloadUrl.addPath(dirName);
+        }
 
-//        // Auto sub-albums creation based on file extensions.
+        // Auto sub-albums creation based on file extensions.
 
-//        if (d->albumCustomizer->autoAlbumExtEnabled())
-//        {
-//            // We use the target file name to compute sub-albums name to take a care about
-//            // conversion on the fly option.
-//            QFileInfo fi(downloadName);
+        if (d->albumCustomizer->autoAlbumExtEnabled())
+        {
+            // We use the target file name to compute sub-albums name to take a care about
+            // conversion on the fly option.
+            QFileInfo fi(downloadName);
 
-//            QString subAlbum = fi.suffix().toUpper();
+            QString subAlbum = fi.suffix().toUpper();
 
-//            if (fi.suffix().toUpper() == QString("JPEG") ||
-//                fi.suffix().toUpper() == QString("JPE"))
-//            {
-//                subAlbum = QString("JPG");
-//            }
+            if (fi.suffix().toUpper() == QString("JPEG") ||
+                fi.suffix().toUpper() == QString("JPE"))
+            {
+                subAlbum = QString("JPG");
+            }
 
-//            if (fi.suffix().toUpper() == QString("TIFF"))
-//            {
-//                subAlbum = QString("TIF");
-//            }
+            if (fi.suffix().toUpper() == QString("TIFF"))
+            {
+                subAlbum = QString("TIF");
+            }
 
-//            if (fi.suffix().toUpper() == QString("MPEG") ||
-//                fi.suffix().toUpper() == QString("MPE") ||
-//                fi.suffix().toUpper() == QString("MPO"))
-//            {
-//                subAlbum = QString("MPG");
-//            }
+            if (fi.suffix().toUpper() == QString("MPEG") ||
+                fi.suffix().toUpper() == QString("MPE") ||
+                fi.suffix().toUpper() == QString("MPO"))
+            {
+                subAlbum = QString("MPG");
+            }
 
-//            // See B.K.O #136927 : we need to support file system which do not
-//            // handle upper case properly.
-//            subAlbum = subAlbum.toLower();
+            // See B.K.O #136927 : we need to support file system which do not
+            // handle upper case properly.
+            subAlbum = subAlbum.toLower();
 
-//            if (!createAutoAlbum(downloadUrl, subAlbum, dateTime.date(), errMsg))
-//            {
-//                KMessageBox::error(this, errMsg);
-//                return;
-//            }
+            if (!createAutoAlbum(downloadUrl, subAlbum, dateTime.date(), errMsg))
+            {
+                KMessageBox::error(this, errMsg);
+                return;
+            }
 
-//            downloadUrl.addPath(subAlbum);
-//        }
+            downloadUrl.addPath(subAlbum);
+        }
 
-//        d->foldersToScan << downloadUrl.toLocalFile();
+        d->foldersToScan << downloadUrl.toLocalFile();
 
-//        if (downloadName.isEmpty())
-//        {
-//            downloadUrl.addPath(settings.file);
-//        }
-//        else
-//        {
-//            // when using custom renaming (e.g. by date, see bug 179902)
-//            // make sure that we create unique names
-//            downloadUrl.addPath(downloadName);
-//            QString suggestedPath = downloadUrl.toLocalFile();
+        if (downloadName.isEmpty())
+        {
+            downloadUrl.addPath(settings.file);
+        }
+        else
+        {
+            // when using custom renaming (e.g. by date, see bug 179902)
+            // make sure that we create unique names
+            downloadUrl.addPath(downloadName);
+            QString suggestedPath = downloadUrl.toLocalFile();
 
-//            if (usedDownloadPaths.contains(suggestedPath))
-//            {
-//                QFileInfo fi(downloadName);
-//                QString suffix = '.' + fi.suffix();
-//                QString pathWithoutSuffix(suggestedPath);
-//                pathWithoutSuffix.chop(suffix.length());
-//                QString currentVariant;
-//                int counter = 1;
+            if (usedDownloadPaths.contains(suggestedPath))
+            {
+                QFileInfo fi(downloadName);
+                QString suffix = '.' + fi.suffix();
+                QString pathWithoutSuffix(suggestedPath);
+                pathWithoutSuffix.chop(suffix.length());
+                QString currentVariant;
+                int counter = 1;
 
-//                do
-//                {
-//                    currentVariant = pathWithoutSuffix + '-' + QString::number(counter++) + suffix;
-//                }
-//                while (usedDownloadPaths.contains(currentVariant));
+                do
+                {
+                    currentVariant = pathWithoutSuffix + '-' + QString::number(counter++) + suffix;
+                }
+                while (usedDownloadPaths.contains(currentVariant));
 
-//                usedDownloadPaths << currentVariant;
-//                downloadUrl = KUrl(currentVariant);
-//            }
-//            else
-//            {
-//                usedDownloadPaths << suggestedPath;
-//            }
-//        }
+                usedDownloadPaths << currentVariant;
+                downloadUrl = KUrl(currentVariant);
+            }
+            else
+            {
+                usedDownloadPaths << suggestedPath;
+            }
+        }
 
-//        settings.dest = downloadUrl.toLocalFile();
-//        allItems.append(settings);
+        settings.dest = downloadUrl.toLocalFile();
+        allItems.append(settings);
 
-//        ++total;
-//    }
+        ++total;
+    }
 
-//    if (total <= 0)
-//    {
-//        return;
-//    }
+    if (total <= 0)
+    {
+        return;
+    }
 
-//    d->lastDestURL = url;
-//    d->statusProgressBar->setNotify(true);
-//    d->statusProgressBar->setProgressValue(0);
-//    d->statusProgressBar->setProgressTotalSteps(total);
-//    d->statusProgressBar->progressBarMode(StatusProgressBar::ProgressBarMode);
+    d->lastDestURL = url;
+    d->statusProgressBar->setNotify(true);
+    d->statusProgressBar->setProgressValue(0);
+    d->statusProgressBar->setProgressTotalSteps(total);
+    d->statusProgressBar->progressBarMode(StatusProgressBar::ProgressBarMode);
 
-//    // disable settings tab here instead of slotBusy:
-//    // Only needs to be disabled while downloading
-//    d->advBox->setEnabled(false);
+    // disable settings tab here instead of slotBusy:
+    // Only needs to be disabled while downloading
+    d->advBox->setEnabled(false);
 
-//    d->deleteAfter = deleteAfter;
+    d->deleteAfter = deleteAfter;
 
-//    d->controller->download(allItems);
+    d->controller->download(allItems);
 }
 
 void CameraUI::slotDownloaded(const QString& folder, const QString& file, int status)
 {
-//    CamItemInfo info = d->view->findItemInfo(folder, file);
+    CamItemInfo info = d->view->findItemInfo(folder, file);
 
-//    if (!info.isNull())
-//    {
-//        d->view->setDownloaded(info, status);
+    if (!info.isNull())
+    {
+        d->view->setDownloaded(info, status);
 
-//        if (d->rightSideBar->url() == info.url())
-//        {
-//            slotItemsSelected(d->view->findItemInfo(folder, file), true);
-//        }
+        if (d->rightSideBar->url() == info.url())
+        {
+            slotItemsSelected(d->view->findItemInfo(folder, file), true);
+        }
 
-//        if (status == CamItemInfo::DownloadedYes)
-//        {
-//            int curr = d->statusProgressBar->progressValue();
-//            d->statusProgressBar->setProgressValue(curr + 1);
+        if (status == CamItemInfo::DownloadedYes)
+        {
+            int curr = d->statusProgressBar->progressValue();
+            d->statusProgressBar->setProgressValue(curr + 1);
+            d->renameCustomizer->setStartIndex(d->renameCustomizer->startIndex() + 1);
 
-//        d->renameCustomizer->setStartIndex(d->renameCustomizer->startIndex() + 1);
+            DownloadHistory::setDownloaded(d->controller->cameraMD5ID(),
+                                           info.name,
+                                           info.size,
+                                           info.mtime);
+        }
+    }
 
-//        DownloadHistory::setDownloaded(d->controller->cameraMD5ID(),
-//                                       info.name,
-//                                       info.size,
-//                                       info.mtime);
-//        }
-//    }
-
-//    // Download all items is complete ?
-//    if (d->statusProgressBar->progressValue() == d->statusProgressBar->progressTotalSteps())
-//    {
-//        if (d->deleteAfter)
-//        {
-//            // No need passive pop-up here, because wil ask to confirm items deletion with dialog.
-//            deleteItems(true, true);
-//        }
-//        else
-//        {
-//            // Pop-up a message to bring user when all is done.
-//            KNotificationWrapper("cameradownloaded", i18n("Download is completed..."), this, windowTitle());
-//        }
-//    }
+    // Download all items is complete ?
+    if (d->statusProgressBar->progressValue() == d->statusProgressBar->progressTotalSteps())
+    {
+        if (d->deleteAfter)
+        {
+            // No need passive pop-up here, because wil ask to confirm items deletion with dialog.
+            deleteItems(true, true);
+        }
+        else
+        {
+            // Pop-up a message to bring user when all is done.
+            KNotificationWrapper("cameradownloaded", i18n("Download is completed..."), this, windowTitle());
+        }
+    }
 }
 
 void CameraUI::slotDownloadComplete(const QString&, const QString&,
                                     const QString& destFolder, const QString&)
 {
-//    ScanController::instance()->scheduleCollectionScanRelaxed(destFolder);
+    ScanController::instance()->scheduleCollectionScanRelaxed(destFolder);
 }
 
 void CameraUI::slotSkipped(const QString& folder, const QString& file)
 {
-//    CamItemInfo info = d->view->findItemInfo(folder, file);
+    CamItemInfo info = d->view->findItemInfo(folder, file);
 
-//    if (!info.isNull())
-//    {
-//        d->view->setDownloaded(info, CamItemInfo::DownloadedNo);
-//    }
+    if (!info.isNull())
+    {
+        d->view->setDownloaded(info, CamItemInfo::DownloadedNo);
+    }
 
-//    int curr = d->statusProgressBar->progressValue();
-//    d->statusProgressBar->setProgressValue(curr + 1);
+    int curr = d->statusProgressBar->progressValue();
+    d->statusProgressBar->setProgressValue(curr + 1);
 }
 
 void CameraUI::slotMarkAsDownloaded()
 {
-//    CamItemInfoList list = d->view->selectedItems();
+    CamItemInfoList list = d->view->selectedItems();
 
-//    foreach(CamItemInfo info, list)
-//    {
-//        d->view->setDownloaded(info, CamItemInfo::DownloadedYes);
+    foreach(CamItemInfo info, list)
+    {
+        d->view->setDownloaded(info, CamItemInfo::DownloadedYes);
 
-//        DownloadHistory::setDownloaded(d->controller->cameraMD5ID(),
-//                                       info.name,
-//                                       info.size,
-//                                       info.mtime);
-//    }
+        DownloadHistory::setDownloaded(d->controller->cameraMD5ID(),
+                                       info.name,
+                                       info.size,
+                                       info.mtime);
+    }
 }
 
 void CameraUI::slotToggleLock()
 {
-//    CamItemInfoList list = d->view->selectedItems();
-//    int count            = list.count();
+    CamItemInfoList list = d->view->selectedItems();
+    int count            = list.count();
 
-//    if (count > 0)
-//    {
-//        d->statusProgressBar->setProgressValue(0);
-//        d->statusProgressBar->setProgressTotalSteps(count);
-//        d->statusProgressBar->progressBarMode(StatusProgressBar::ProgressBarMode);
-//    }
+    if (count > 0)
+    {
+        d->statusProgressBar->setProgressValue(0);
+        d->statusProgressBar->setProgressTotalSteps(count);
+        d->statusProgressBar->progressBarMode(StatusProgressBar::ProgressBarMode);
+    }
 
-//    foreach(CamItemInfo info, list)
-//    {
-//        QString folder = info.folder;
-//        QString file   = info.name;
-//        int writePerm  = info.writePermissions;
-//        bool lock      = true;
+    foreach(CamItemInfo info, list)
+    {
+        QString folder = info.folder;
+        QString file   = info.name;
+        int writePerm  = info.writePermissions;
+        bool lock      = true;
 
-//        // If item is currently locked, unlock it.
-//        if (writePerm == 0)
-//        {
-//            lock = false;
-//        }
+        // If item is currently locked, unlock it.
+        if (writePerm == 0)
+        {
+            lock = false;
+        }
 
-//        d->controller->lockFile(folder, file, lock);
-//    }
+        d->controller->lockFile(folder, file, lock);
+    }
 }
 
 void CameraUI::slotLocked(const QString& folder, const QString& file, bool status)
 {
-//    if (status)
-//    {
-//        CamItemInfo info = d->view->findItemInfo(folder, file);
+    if (status)
+    {
+        CamItemInfo info = d->view->findItemInfo(folder, file);
 
-//        if (!info.isNull())
-//        {
-//            d->view->toggleLock(info);
+        if (!info.isNull())
+        {
+            d->view->toggleLock(info);
 
-//            if (d->rightSideBar->url() == info.url())
-//            {
-//                slotItemsSelected(d->view->findItemInfo(folder, file), true);
-//            }
-//        }
-//    }
+            if (d->rightSideBar->url() == info.url())
+            {
+                slotItemsSelected(d->view->findItemInfo(folder, file), true);
+            }
+        }
+    }
 
-//    int curr = d->statusProgressBar->progressValue();
-//    d->statusProgressBar->setProgressValue(curr + 1);
+    int curr = d->statusProgressBar->progressValue();
+    d->statusProgressBar->setProgressValue(curr + 1);
 }
 
 
 void CameraUI::checkItem4Deletion(const CamItemInfo& info, QStringList& folders, QStringList& files,
                                   CamItemInfoList& deleteList, CamItemInfoList& lockedList)
 {
-//    if (info.writePermissions != 0)  // Item not locked ?
-//    {
-//        QString folder = info.folder;
-//        QString file   = info.name;
-//        folders.append(folder);
-//        files.append(file);
-//        deleteList.append(info);
-//    }
-//    else
-//    {
-//        lockedList.append(info);
-//    }
+    if (info.writePermissions != 0)  // Item not locked ?
+    {
+        QString folder = info.folder;
+        QString file   = info.name;
+        folders.append(folder);
+        files.append(file);
+        deleteList.append(info);
+    }
+    else
+    {
+        lockedList.append(info);
+    }
 }
 
 void CameraUI::deleteItems(bool onlySelected, bool onlyDownloaded)
 {
-//    QStringList     folders;
-//    QStringList     files;
-//    CamItemInfoList deleteList;
-//    CamItemInfoList lockedList;
-//    CamItemInfoList list = onlySelected ? d->view->selectedItems() : d->view->allItems();
+    QStringList     folders;
+    QStringList     files;
+    CamItemInfoList deleteList;
+    CamItemInfoList lockedList;
+    CamItemInfoList list = onlySelected ? d->view->selectedItems() : d->view->allItems();
 
-//    foreach(CamItemInfo info, list)
-//    {
-//        if (onlyDownloaded)
-//        {
-//            if (d->view->isDownloaded(info))
-//            {
-//                checkItem4Deletion(info, folders, files, deleteList, lockedList);
-//            }
-//        }
-//        else
-//        {
-//            checkItem4Deletion(info, folders, files, deleteList, lockedList);
-//        }
-//    }
+    foreach(CamItemInfo info, list)
+    {
+        if (onlyDownloaded)
+        {
+            if (d->view->isDownloaded(info))
+            {
+                checkItem4Deletion(info, folders, files, deleteList, lockedList);
+            }
+        }
+        else
+        {
+            checkItem4Deletion(info, folders, files, deleteList, lockedList);
+        }
+    }
 
-//    // If we want to delete some locked files, just give a feedback to user.
-//    if (!lockedList.isEmpty())
-//    {
-//        QString infoMsg(i18n("The items listed below are locked by camera (read-only). "
-//                             "These items will not be deleted. If you really want to delete these items, "
-//                             "please unlock them and try again."));
-//        CameraMessageBox::informationList(d->camThumbsCtrl, this, infoMsg, lockedList, i18n("Information"));
-//    }
+    // If we want to delete some locked files, just give a feedback to user.
+    if (!lockedList.isEmpty())
+    {
+        QString infoMsg(i18n("The items listed below are locked by camera (read-only). "
+                             "These items will not be deleted. If you really want to delete these items, "
+                             "please unlock them and try again."));
+        CameraMessageBox::informationList(d->camThumbsCtrl, this, infoMsg, lockedList, i18n("Information"));
+    }
 
-//    if (folders.isEmpty())
-//    {
-//        return;
-//    }
+    if (folders.isEmpty())
+    {
+        return;
+    }
 
-//    QString warnMsg(i18np("About to delete this image. "
-//                          "Deleted file is unrecoverable. "
-//                          "Are you sure?",
-//                          "About to delete these %1 images. "
-//                          "Deleted files are unrecoverable. "
-//                          "Are you sure?",
-//                          deleteList.count()));
+    QString warnMsg(i18np("About to delete this image. "
+                          "Deleted file is unrecoverable. "
+                          "Are you sure?",
+                          "About to delete these %1 images. "
+                          "Deleted files are unrecoverable. "
+                          "Are you sure?",
+                          deleteList.count()));
 
-//    if (CameraMessageBox::warningContinueCancelList(d->camThumbsCtrl,
-//                                                    this,
-//                                                    warnMsg,
-//                                                    deleteList,
-//                                                    i18n("Warning"),
-//                                                    KGuiItem(i18n("Delete")),
-//                                                    KStandardGuiItem::cancel(),
-//                                                    QString("DontAskAgainToDeleteItemsFromCamera"))
-//        ==  KMessageBox::Continue)
-//    {
-//        QStringList::const_iterator itFolder = folders.constBegin();
-//        QStringList::const_iterator itFile   = files.constBegin();
+    if (CameraMessageBox::warningContinueCancelList(d->camThumbsCtrl,
+                                                    this,
+                                                    warnMsg,
+                                                    deleteList,
+                                                    i18n("Warning"),
+                                                    KGuiItem(i18n("Delete")),
+                                                    KStandardGuiItem::cancel(),
+                                                    QString("DontAskAgainToDeleteItemsFromCamera"))
+        ==  KMessageBox::Continue)
+    {
+        QStringList::const_iterator itFolder = folders.constBegin();
+        QStringList::const_iterator itFile   = files.constBegin();
 
-//        d->statusProgressBar->setProgressValue(0);
-//        d->statusProgressBar->setProgressTotalSteps(deleteList.count());
-//        d->statusProgressBar->progressBarMode(StatusProgressBar::ProgressBarMode);
+        d->statusProgressBar->setProgressValue(0);
+        d->statusProgressBar->setProgressTotalSteps(deleteList.count());
+        d->statusProgressBar->progressBarMode(StatusProgressBar::ProgressBarMode);
 
-//        for (; itFolder != folders.constEnd(); ++itFolder, ++itFile)
-//        {
-//            d->controller->deleteFile(*itFolder, *itFile);
-//            // the currentlyDeleting list is used to prevent loading items which
-//            // will immanently be deleted into the sidebar and wasting time
-//            d->currentlyDeleting.append(*itFolder + *itFile);
-//        }
-//    }
+        for (; itFolder != folders.constEnd(); ++itFolder, ++itFile)
+        {
+            d->controller->deleteFile(*itFolder, *itFile);
+            // the currentlyDeleting list is used to prevent loading items which
+            // will immanently be deleted into the sidebar and wasting time
+            d->currentlyDeleting.append(*itFolder + *itFile);
+        }
+    }
 }
 
 void CameraUI::slotDeleteNew()
 {
-//    d->view->slotSelectNew();
-//    QTimer::singleShot(0, this, SLOT(slotDeleteSelected()));
+    d->view->slotSelectNew();
+    QTimer::singleShot(0, this, SLOT(slotDeleteSelected()));
 }
 
 void CameraUI::slotDeleteSelected()
 {
-//    deleteItems(true, false);
+    deleteItems(true, false);
 }
 
 void CameraUI::slotDeleteAll()
 {
-//    deleteItems(false, false);
+    deleteItems(false, false);
 }
 
 void CameraUI::slotDeleted(const QString& folder, const QString& file, bool status)
 {
-//    if (status)
-//    {
-//        d->view->removeItem(d->view->findItemInfo(folder, file));
-//        // do this after removeItem, which will signal to slotItemsSelected, which checks for the list
-//        d->currentlyDeleting.removeAll(folder + file);
-//    }
+    if (status)
+    {
+        d->view->removeItem(d->view->findItemInfo(folder, file));
+        // do this after removeItem, which will signal to slotItemsSelected, which checks for the list
+        d->currentlyDeleting.removeAll(folder + file);
+    }
 
-//    int curr = d->statusProgressBar->progressValue();
-//    d->statusProgressBar->setProgressTotalSteps(curr + 1);
-//    refreshFreeSpace();
+    int curr = d->statusProgressBar->progressValue();
+    d->statusProgressBar->setProgressTotalSteps(curr + 1);
+    refreshFreeSpace();
 }
 
 void CameraUI::slotFileView()
 {
-//    CamItemInfo info = d->view->firstItemSelected();
+    CamItemInfo info = d->view->firstItemSelected();
 
-//    if (!info.isNull())
-//    {
-//        slotFileView(info);
-//    }
+    if (!info.isNull())
+    {
+        slotFileView(info);
+    }
 }
 
 void CameraUI::slotFileView(const CamItemInfo& info)
 {
-//    d->controller->openFile(info.folder, info.name);
+    d->controller->openFile(info.folder, info.name);
 }
 
 void CameraUI::slotMetadata(const QString& folder, const QString& file, const DMetadata& meta)
 {
-//    CamItemInfo info = d->view->findItemInfo(folder, file);
+    CamItemInfo info = d->view->findItemInfo(folder, file);
 
-//    if (!info.isNull())
-//    {
-//        d->rightSideBar->itemChanged(info, meta);
-//    }
+    if (!info.isNull())
+    {
+        d->rightSideBar->itemChanged(info, meta);
+    }
 }
 
 void CameraUI::slotNewSelection(bool hasSelection)
 {
-//    if (!d->controller)
-//    {
-//        return;
-//    }
-
-//    d->downloadSelectedAction->setEnabled(hasSelection);
-//    d->downloadDelSelectedAction->setEnabled(hasSelection && d->controller->cameraDeleteSupport());
-//    d->deleteSelectedAction->setEnabled(hasSelection && d->controller->cameraDeleteSupport());
-//    d->imageViewAction->setEnabled(hasSelection);
-//    d->lockAction->setEnabled(hasSelection);
-
-//    if (hasSelection)
-//    {
-//        // only enable "Mark as downloaded" if at least one
-//        // selected image has not been downloaded
-//        bool haveNotDownloadedItem = false;
-
-//        CamItemInfoList list = d->view->selectedItems();
-
-//        foreach(CamItemInfo info, list)
-//        {
-//            haveNotDownloadedItem = !d->view->isDownloaded(info);
-
-//            if (haveNotDownloadedItem)
-//            {
-//                break;
-//            }
-//        }
-
-//        d->markAsDownloadedAction->setEnabled(haveNotDownloadedItem);
-//    }
-//    else
-//    {
-//        d->markAsDownloadedAction->setEnabled(false);
-//    }
-
-//    unsigned long fSize = 0;
-//    unsigned long dSize = 0;
-//    d->view->itemsSelectionSizeInfo(fSize, dSize);
-//    d->albumLibraryFreeSpace->setEstimatedDSizeKb(dSize);
-}
-
-void CameraUI::slotImageSelected(const CamItemInfoList& selection, bool hasPrev, bool hasNext,
-                                   const CamItemInfoList& listAll)
-{
-    int num_images = listAll.count();
-
-    switch (selection.count())
+    if (!d->controller)
     {
-        case 0:
-        {
-            d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode, i18np("No item selected (%1 item)",
-                                              "No item selected (%1 items)",
-                                              num_images));
-
-            d->rightSideBar->slotNoCurrentItem();
-            break;
-        }
-        case 1:
-        {
-            // if selected item is in the list of item which will be deleted, set no current item
-            if (!d->currentlyDeleting.contains(selection.first().folder + selection.first().name))
-            {
-                d->rightSideBar->itemChanged(selection.first(), DMetadata());
-                d->controller->getMetadata(selection.first().folder, selection.first().name);
-
-                // check if the selected item is really an image, if not, disable the edit action
-                if (identifyCategoryforMime(selection.first().mime) != "image")
-                {
-                    d->imageViewAction->setEnabled(false);
-                }
-
-                int index = listAll.indexOf(selection.first()) + 1;
-
-                d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode, selection.first().url().fileName()
-                                            + i18n(" (%1 of %2)", index, num_images));
-            }
-            else
-            {
-                d->rightSideBar->slotNoCurrentItem();
-                d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode, i18np("No item selected (%1 item)",
-                                                  "No item selected (%1 items)",
-                                                  num_images));
-            }
-
-            break;
-        }
-        default:
-        {
-            d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode, i18np("%2/%1 item selected",
-                                              "%2/%1 items selected",
-                                              num_images, selection.count()));
-            break;
-        }
+        return;
     }
 
-    d->statusNavigateBar->setNavigateBarState(hasPrev, hasNext);
+    d->downloadSelectedAction->setEnabled(hasSelection);
+    d->downloadDelSelectedAction->setEnabled(hasSelection && d->controller->cameraDeleteSupport());
+    d->deleteSelectedAction->setEnabled(hasSelection && d->controller->cameraDeleteSupport());
+    d->imageViewAction->setEnabled(hasSelection);
+    d->lockAction->setEnabled(hasSelection);
+
+    if (hasSelection)
+    {
+        // only enable "Mark as downloaded" if at least one
+        // selected image has not been downloaded
+        bool haveNotDownloadedItem = false;
+
+        CamItemInfoList list = d->view->selectedItems();
+
+        foreach(CamItemInfo info, list)
+        {
+            haveNotDownloadedItem = !d->view->isDownloaded(info);
+
+            if (haveNotDownloadedItem)
+            {
+                break;
+            }
+        }
+
+        d->markAsDownloadedAction->setEnabled(haveNotDownloadedItem);
+    }
+    else
+    {
+        d->markAsDownloadedAction->setEnabled(false);
+    }
+
+    unsigned long fSize = 0;
+    unsigned long dSize = 0;
+    d->view->itemsSelectionSizeInfo(fSize, dSize);
+    d->albumLibraryFreeSpace->setEstimatedDSizeKb(dSize);
 }
 
-QString CameraUI::identifyCategoryforMime(QString mime)
+void CameraUI::slotItemsSelected(const CamItemInfo& info, bool selected)
 {
-    return mime.split("/").at(0);
-}
+    if (!d->controller)
+    {
+        return;
+    }
 
-void CameraUI::slotSwitchedToPreview()
-{
-    d->camItemPreviewAction->setChecked(true);
-    d->zoomBar->setBarMode(DZoomBar::PreviewZoomCtrl);
-    d->showBarAction->setEnabled(true);
-}
+    if (selected)
+    {
+        // if selected item is in the list of item which will be deleted, set no current item
+        if (!d->currentlyDeleting.contains(info.folder + info.name))
+        {
+            d->rightSideBar->itemChanged(info, DMetadata());
+            d->controller->getMetadata(info.folder, info.name);
+        }
+        else
+        {
+            d->rightSideBar->slotNoCurrentItem();
+        }
+    }
+    else
+    {
+        d->rightSideBar->slotNoCurrentItem();
+    }
 
-void CameraUI::slotSwitchedToIconView()
-{
-    d->zoomBar->setBarMode(DZoomBar::ThumbsSizeCtrl);
-    d->iconViewAction->setChecked(true);
-    d->showBarAction->setEnabled(false);
+    // update availability of actions
+    slotNewSelection(d->view->countSelected() > 0);
 }
-
-void CameraUI::slotSwitchedToMapView()
-{
-    //TODO: Link to map view's zoom actions
-    d->zoomBar->setBarMode(DZoomBar::ThumbsSizeCtrl);
-    d->mapViewAction->setChecked(true);
-    d->showBarAction->setEnabled(false);
-}
-
 
 bool CameraUI::createAutoAlbum(const KUrl& parentURL, const QString& sub,
                                const QDate& date, QString& errMsg) const
 {
-    return false; //FIXME: Remove this line.
-//    KUrl u(parentURL);
-//    u.addPath(sub);
+    KUrl u(parentURL);
+    u.addPath(sub);
 
-//    // first stat to see if the album exists
-//    QFileInfo info(u.toLocalFile());
+    // first stat to see if the album exists
+    QFileInfo info(u.toLocalFile());
 
-//    if (info.exists())
-//    {
-//        // now check if its really a directory
-//        if (info.isDir())
-//        {
-//            return true;
-//        }
-//        else
-//        {
-//            errMsg = i18n("A file with the same name (%1) already exists in folder %2.",
-//                          sub, parentURL.toLocalFile());
-//            return false;
-//        }
-//    }
+    if (info.exists())
+    {
+        // now check if its really a directory
+        if (info.isDir())
+        {
+            return true;
+        }
+        else
+        {
+            errMsg = i18n("A file with the same name (%1) already exists in folder %2.",
+                          sub, parentURL.toLocalFile());
+            return false;
+        }
+    }
 
-//    // looks like the directory does not exist, try to create it
+    // looks like the directory does not exist, try to create it
 
-//    PAlbum* parent = AlbumManager::instance()->findPAlbum(parentURL);
+    PAlbum* parent = AlbumManager::instance()->findPAlbum(parentURL);
 
-//    if (!parent)
-//    {
-//        errMsg = i18n("Failed to find Album for path '%1'.", parentURL.toLocalFile());
-//        return false;
-//    }
+    if (!parent)
+    {
+        errMsg = i18n("Failed to find Album for path '%1'.", parentURL.toLocalFile());
+        return false;
+    }
 
-//    return AlbumManager::instance()->createPAlbum(parent, sub, QString(), date, QString(), errMsg);
+    return AlbumManager::instance()->createPAlbum(parent, sub, QString(), date, QString(), errMsg);
 }
 
 void CameraUI::slotEditKeys()
@@ -2284,63 +2207,43 @@ void CameraUI::slotCameraFreeSpaceInfo(unsigned long kBSize, unsigned long kBAva
 
 bool CameraUI::cameraDeleteSupport() const
 {
-    return false; //FIXME: Remove this line.
-//    return d->controller->cameraDeleteSupport();
+    return d->controller->cameraDeleteSupport();
 }
 
 bool CameraUI::cameraUploadSupport() const
 {
-    return false; //FIXME: Remove this line.
-//    return d->controller->cameraUploadSupport();
+    return d->controller->cameraUploadSupport();
 }
 
 bool CameraUI::cameraMkDirSupport() const
 {
-    return false; //FIXME: Remove this line.
-//    return d->controller->cameraMkDirSupport();
+    return d->controller->cameraMkDirSupport();
 }
 
 bool CameraUI::cameraDelDirSupport() const
 {
-    return false; //FIXME: Remove this line.
-//    return d->controller->cameraDelDirSupport();
-}
-
-void CameraUI::enableZoomPlusAction(bool val)
-{
-    d->increaseThumbsAction->setEnabled(val);
-}
-
-void CameraUI::enableZoomMinusAction(bool val)
-{
-    d->decreaseThumbsAction->setEnabled(val);
+    return d->controller->cameraDelDirSupport();
 }
 
 void CameraUI::slotComponentsInfo()
 {
-//    showDigikamComponentsInfo();
+    showDigikamComponentsInfo();
 }
 
 void CameraUI::slotDBStat()
 {
-//    showDigikamDatabaseStat();
+    showDigikamDatabaseStat();
 }
 
 void CameraUI::refreshCollectionFreeSpace()
 {
-//    d->albumLibraryFreeSpace->setPaths(CollectionManager::instance()->allAvailableAlbumRootPaths());
+    d->albumLibraryFreeSpace->setPaths(CollectionManager::instance()->allAvailableAlbumRootPaths());
 }
 
 void CameraUI::slotCollectionLocationStatusChanged(const CollectionLocation&, int)
 {
-//    refreshCollectionFreeSpace();
+    refreshCollectionFreeSpace();
 }
-
-void CameraUI::slotToggleShowBar()
-{
-    d->view->toggleShowBar(d->showBarAction->isChecked());
-}
-
 
 void CameraUI::slotShowMenuBar()
 {
@@ -2349,17 +2252,17 @@ void CameraUI::slotShowMenuBar()
 
 void CameraUI::slotSidebarTabTitleStyleChanged()
 {
-//    d->rightSideBar->setStyle(AlbumSettings::instance()->getSidebarTitleStyle());
-//    d->rightSideBar->applySettings();
+    d->rightSideBar->setStyle(AlbumSettings::instance()->getSidebarTitleStyle());
+    d->rightSideBar->applySettings();
 }
 
 void CameraUI::slotLogMsg(const QString& msg, DHistoryView::EntryType type,
                           const QString& folder, const QString& file)
 {
-//    d->statusProgressBar->setProgressText(msg);
-//    QStringList meta;
-//    meta << folder << file;
-//    d->historyView->addedEntry(msg, type, QVariant(meta));
+    d->statusProgressBar->setProgressText(msg);
+    QStringList meta;
+    meta << folder << file;
+    d->historyView->addedEntry(msg, type, QVariant(meta));
 }
 
 void CameraUI::slotShowLog()
@@ -2369,10 +2272,15 @@ void CameraUI::slotShowLog()
 
 void CameraUI::slotHistoryEntryClicked(const QVariant& metadata)
 {
-//    QStringList meta = metadata.toStringList();
-//    QString folder   = meta.at(0);
-//    QString file     = meta.at(1);
-//    d->view->ensureItemVisible(folder, file);
+    QStringList meta = metadata.toStringList();
+    QString folder   = meta.at(0);
+    QString file     = meta.at(1);
+    d->view->ensureItemVisible(folder, file);
+}
+
+bool CameraUI::chronologicOrder() const
+{
+    return !d->lastPhotoFirstAction->isChecked();
 }
 
 }  // namespace Digikam

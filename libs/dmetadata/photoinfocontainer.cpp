@@ -6,7 +6,7 @@
  * Date        : 2006-04-21
  * Description : main photograph information container
  *
- * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -132,84 +132,6 @@ QDataStream& operator>>(QDataStream& ds, PhotoInfoContainer& info)
     ds >> info.flash;
     ds >> info.whiteBalance;
     ds >> info.dateTime;
-
-    return ds;
-}
-
-// --------------------------------------------------------------------------------------------
-
-VideoInfoContainer::VideoInfoContainer()
-{
-}
-
-VideoInfoContainer::~VideoInfoContainer()
-{
-}
-
-bool VideoInfoContainer::operator==(const VideoInfoContainer& t) const
-{
-    bool b1  = aspectRatio        == t.aspectRatio;
-    bool b2  = duration           == t.duration;
-    bool b3  = frameRate          == t.frameRate;
-    bool b4  = videoCodec         == t.videoCodec;
-    bool b5  = audioBitRate       == t.audioBitRate;
-    bool b6  = audioChannelType   == t.audioChannelType;
-    bool b7  = audioCompressor    == t.audioCompressor;
-
-    return b1 && b2 && b3 && b4 && b5 && b6 && b7;
-}
-
-bool VideoInfoContainer::isEmpty() const
-{
-    if (aspectRatio.isEmpty()            &&
-        duration.isEmpty()               &&
-        frameRate.isEmpty()              &&
-        videoCodec.isEmpty()             &&
-        audioBitRate.isEmpty()           &&
-        audioChannelType.isEmpty()       &&
-        audioCompressor.isEmpty())
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-}
-
-bool VideoInfoContainer::isNull() const
-{
-    return(aspectRatio.isEmpty()            &&
-           duration.isEmpty()               &&
-           frameRate.isEmpty()              &&
-           videoCodec.isEmpty()             &&
-           audioBitRate.isEmpty()           &&
-           audioChannelType.isEmpty()       &&
-           audioCompressor.isEmpty());
-}
-
-QDataStream& operator<<(QDataStream& ds, const VideoInfoContainer& info)
-{
-    ds << info.aspectRatio;
-    ds << info.duration;
-    ds << info.frameRate;
-    ds << info.videoCodec;
-    ds << info.audioBitRate;
-    ds << info.audioChannelType;
-    ds << info.audioCompressor;
-
-    return ds;
-}
-
-QDataStream& operator>>(QDataStream& ds, VideoInfoContainer& info)
-{
-    ds >> info.aspectRatio;
-    ds >> info.duration;
-    ds >> info.frameRate;
-    ds >> info.videoCodec;
-    ds >> info.audioBitRate;
-    ds >> info.audioChannelType;
-    ds >> info.audioCompressor;
 
     return ds;
 }

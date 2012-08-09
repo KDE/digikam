@@ -44,21 +44,13 @@
     </Menu>
 
     <Menu name="View" ><text>&amp;View</text>
-        <Action name="cameraui_icon_view" />
-        <Action name="cameraui_item_view" />
-        <Action name="cameraui_map_view" />
-        <Separator/>
         <Action name="cameraui_fullscreen" />
         <Action name="cameraui_showlog" />
         <Separator/>
-        <Action name="showthumbs" />
+        <Action name="cameraui_lastphotofirst" />
         <Separator/>
         <Action name="cameraui_zoomplus" />
         <Action name="cameraui_zoomminus" />
-        <Separator/>
-        <Action name="item_sort" />
-        <Action name="item_sort_order" />
-        <Action name="item_group" />
     </Menu>
 
     <Menu name="help" ><text>&amp;Help</text>
@@ -90,15 +82,11 @@
      <Action name="cameraui_cancelprocess" />
      <Separator/>
      <Action name="cameraui_imageview" />
-     <Action name="cameraui_imagedownload" />
+     <Action name="cameraui_imagedownloadnew" />
      <Action name="cameraui_imageupload" />
      <Action name="cameraui_imagelock" />
      <Separator/>
      <Action name="cameraui_capture" />
-     <Separator/>
-     <Action name="cameraui_icon_view" />
-     <Action name="cameraui_item_view" />
-     <Action name="cameraui_map_view" />
      <Separator/>
      <Action name="cameraui_fullscreen" />
      <Merge />

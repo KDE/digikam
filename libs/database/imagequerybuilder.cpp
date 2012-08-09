@@ -6,7 +6,7 @@
  * Date        : 2007-03-22
  * Description : Building complex database SQL queries from search descriptions
  *
- * Copyright (C) 2005      by Renchi Raju <renchi dot raju at gmail dot com>
+ * Copyright (C) 2005      by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2007-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -223,7 +223,6 @@ void ImageQueryBuilder::buildGroup(QString& sql, SearchXmlCachingReader& reader,
 }
 
 // ---------------------------------------------------------------------------------------
-
 class FieldQueryBuilder
 {
 public:
@@ -542,13 +541,13 @@ public:
                 }
             }
 
-            bool firstCondition =  true;
-            sql                 += " (";
+            bool firstCondition = true;
+            sql += " (";
 
             if (!simpleValues.isEmpty())
             {
-                firstCondition =  false;
-                sql            += name + " IN (";
+                firstCondition = false;
+                sql += name + " IN (";
                 AlbumDB::addBoundValuePlaceholders(sql, simpleValues.size());
 
                 foreach(const QString& value, simpleValues)
@@ -962,6 +961,7 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
     {
         fieldQuery.addIntField("Images.fileSize");
     }
+
     else if (name == "rating")
     {
         fieldQuery.addIntField("ImageInformation.rating");
@@ -1042,34 +1042,7 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
     {
         fieldQuery.addIntField("ImageInformation.colorModel");
     }
-    else if (name == "aspectratio")
-    {
-        fieldQuery.addStringField("VideoMetadata.aspectRatio");
-    }
-    else if (name == "audiobitrate")
-    {
-        fieldQuery.addStringField("VideoMetadata.audioBitRate");
-    }
-    else if (name == "audiochanneltype")
-    {
-        fieldQuery.addStringField("VideoMetadata.audioChannelType");
-    }
-    else if (name == "audiocompressor")
-    {
-        fieldQuery.addStringField("VideoMetadata.audioCompressor");
-    }
-    else if (name == "duration")
-    {
-        fieldQuery.addStringField("VideoMetadata.duration");
-    }
-    else if (name == "framerate")
-    {
-        fieldQuery.addStringField("VideoMetadata.frameRate");
-    }
-    else if (name == "videocodec")
-    {
-        fieldQuery.addStringField("VideoMetadata.videoCodec");
-    }
+
     else if (name == "make")
     {
         fieldQuery.addStringField("ImageMetadata.make");
@@ -1130,6 +1103,7 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
     {
         fieldQuery.addChoiceIntField("ImageMetadata.subjectDistanceCategory");
     }
+
     else if (name == "position")
     {
         fieldQuery.addPosition();
@@ -1166,6 +1140,7 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
     {
         sql += " (ImagePositions.latitudeNumber IS NULL AND ImagePositions.longitudeNumber IS NULL) ";
     }
+
     else if (name == "comment")
     {
         sql += " (Images.id IN "
@@ -1612,7 +1587,7 @@ public:
 
 QString ImageQueryBuilder::buildQueryFromUrl(const KUrl& url, QList<QVariant>* boundValues) const
 {
-    int count = url.queryItem("count").toInt();
+    int  count = url.queryItem("count").toInt();
 
     if (count <= 0)
     {
@@ -1990,9 +1965,10 @@ QString ImageQueryBuilder::possibleDate(const QString& str, bool& exact) const
         return date.toString(Qt::ISODate);
     }
 
-    exact    = false;
+    exact = false;
+
     bool ok;
-    int  num = str.toInt(&ok);
+    int num = str.toInt(&ok);
 
     if (ok)
     {

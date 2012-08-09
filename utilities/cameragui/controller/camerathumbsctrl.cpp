@@ -43,16 +43,14 @@
 namespace Digikam
 {
 
-class CameraThumbsCtrl::Private
+class CameraThumbsCtrl::CameraThumbsCtrlPriv
 {
 
 public:
 
-    Private()
-        : controller(0),
-          kdeJob(0)
-    {
-    }
+    CameraThumbsCtrlPriv()
+        : controller(0)
+    {}
 
     QCache<KUrl, CachedItem> cache;  // Camera info/thumb cache based on item url keys.
 
@@ -63,12 +61,13 @@ public:
     QList<CamItemInfo>       kdeTodo;
     QHash<KUrl, CamItemInfo> kdeJobHash;
     KIO::PreviewJob*         kdeJob;
+
 };
 
 // --------------------------------------------------------
 
-CameraThumbsCtrl::CameraThumbsCtrl(CameraController* const ctrl, QObject* const parent)
-    : QObject(parent), d(new Private)
+CameraThumbsCtrl::CameraThumbsCtrl(CameraController* ctrl, QObject* parent)
+    : QObject(parent), d(new CameraThumbsCtrlPriv)
 {
     d->controller = ctrl;
 
@@ -104,8 +103,7 @@ bool CameraThumbsCtrl::getThumbInfo(const CamItemInfo& info, CachedItem& item) c
     {
         d->pendingItems << info.url();
         // kDebug() << "Request thumbs from camera : " << info.url();
-        ThumbnailSize thumbSize = ThumbnailSize(256);
-        d->controller->getThumbsInfo(CamItemInfoList() << info, thumbSize);
+        d->controller->getThumbsInfo(CamItemInfoList() << info);
     }
 
     item = CachedItem(info, d->controller->mimeTypeThumbnail(info.name));

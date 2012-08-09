@@ -58,8 +58,8 @@ public:
 
 private:
 
-    class Private;
-    Private* const d;
+    class KipiImageCollectionSelectorPriv;
+    KipiImageCollectionSelectorPriv* const d;
 };
 
 }  // namespace Digikam

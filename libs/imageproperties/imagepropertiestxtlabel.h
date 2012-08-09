@@ -7,7 +7,7 @@
  * Description : simple text labels to display image
  *               properties meta infos
  *
- * Copyright (C) 2008-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -45,7 +45,7 @@ class DTextLabelName : public QLabel
 
 public:
 
-    explicit DTextLabelName(const QString& name, QWidget* const parent=0)
+    explicit DTextLabelName(const QString& name, QWidget* parent=0)
         : QLabel(parent)
     {
         setText(name);
@@ -56,9 +56,7 @@ public:
         setWordWrap(false);
     };
 
-    ~DTextLabelName()
-    {
-    };
+    ~DTextLabelName() {};
 };
 
 // -------------------------------------------------------------------
@@ -68,7 +66,7 @@ class DTextLabelValue : public KSqueezedTextLabel
 
 public:
 
-    explicit DTextLabelValue(const QString& value, QWidget* const parent=0)
+    explicit DTextLabelValue(const QString& value, QWidget* parent=0)
         : KSqueezedTextLabel(parent)
     {
         setText(value);
@@ -78,9 +76,7 @@ public:
         setTextElideMode(Qt::ElideRight);
     };
 
-    ~DTextLabelValue()
-    {
-    };
+    ~DTextLabelValue() {};
 };
 
 // -------------------------------------------------------------------
@@ -89,7 +85,7 @@ class DTextBrowser : public KTextBrowser
 {
 public:
 
-    explicit DTextBrowser(const QString& text, QWidget* const parent=0)
+    explicit DTextBrowser(const QString& text, QWidget* parent=0)
         : KTextBrowser(parent)
     {
         setOpenExternalLinks(false);
@@ -99,9 +95,7 @@ public:
         setFocusPolicy(Qt::NoFocus);
     };
 
-    ~DTextBrowser()
-    {
-    };
+    ~DTextBrowser() {};
 
     void setLinesNumber(int l)
     {
@@ -119,7 +113,7 @@ class DTextList : public KListWidget
 {
 public:
 
-    explicit DTextList(const QStringList& list, QWidget* const parent=0)
+    explicit DTextList(const QStringList& list, QWidget* parent=0)
         : KListWidget(parent)
     {
         addItems(list);
@@ -128,9 +122,7 @@ public:
         sortItems();
     };
 
-    ~DTextList()
-    {
-    };
+    ~DTextList() {};
 
     void setLinesNumber(int l)
     {

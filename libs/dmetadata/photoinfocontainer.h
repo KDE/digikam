@@ -6,7 +6,7 @@
  * Date        : 2006-04-21
  * Description : main photograph information container
  *
- * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -69,35 +69,6 @@ public:
 
 DIGIKAM_EXPORT QDataStream& operator<<(QDataStream& ds, const PhotoInfoContainer& info);
 DIGIKAM_EXPORT QDataStream& operator>>(QDataStream& ds, PhotoInfoContainer& info);
-
-// --------------------------------------------------------------------------------------------------
-
-class DIGIKAM_EXPORT VideoInfoContainer
-{
-
-public:
-
-    VideoInfoContainer();
-    ~VideoInfoContainer();
-
-    bool isEmpty() const;
-    bool isNull() const;
-
-    bool operator==(const VideoInfoContainer& t) const;
-
-public:
-
-    QString aspectRatio;
-    QString duration;
-    QString frameRate;
-    QString videoCodec;
-    QString audioBitRate;
-    QString audioChannelType;
-    QString audioCompressor;
-};
-
-DIGIKAM_EXPORT QDataStream& operator<<(QDataStream& ds, const VideoInfoContainer& info);
-DIGIKAM_EXPORT QDataStream& operator>>(QDataStream& ds, VideoInfoContainer& info);
 
 } // namespace Digikam
 

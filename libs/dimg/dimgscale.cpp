@@ -9,7 +9,7 @@
  *               smoothScaleSection - Scaling only of a
  *               section of a image. Added 16bit image support
  *
- * Copyright (C) 2005 by Renchi Raju <renchi dot raju at gmail dot com>
+ * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * Ported to C++/QImage by Daniel M. Duley
