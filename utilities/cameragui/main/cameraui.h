@@ -9,7 +9,7 @@
  * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2012 by Islam Wazery <wazery at ubuntu dot com>
+ * Copyright (C) 2012      by Islam Wazery <wazery at ubuntu dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -77,19 +77,18 @@ public:
     bool isBusy() const;
     bool isClosed() const;
 
-    bool cameraDeleteSupport() const;
-    bool cameraUploadSupport() const;
-    bool cameraMkDirSupport() const;
-    bool cameraDelDirSupport() const;
+    bool    cameraDeleteSupport() const;
+    bool    cameraUploadSupport() const;
+    bool    cameraMkDirSupport() const;
+    bool    cameraDelDirSupport() const;
+    QString cameraTitle() const;
 
     void enableZoomPlusAction(bool val);
     void enableZoomMinusAction(bool val);
 
-    QString cameraTitle() const;
-
     DownloadSettings downloadSettings() const;
 
-    CameraController* getCameraController();
+    CameraController* getCameraController() const;
 
 Q_SIGNALS:
 
@@ -135,7 +134,7 @@ private:
     void checkItem4Deletion(const CamItemInfo& info, QStringList& folders, QStringList& files,
                             CamItemInfoList& deleteList, CamItemInfoList& lockedList);
 
-    QString identifyCategoryforMime(QString mime);
+    QString identifyCategoryforMime(const QString& mime);
 
 private Q_SLOTS:
 
@@ -202,7 +201,7 @@ private Q_SLOTS:
 
     void slotNewSelection(bool);
     void slotImageSelected(const CamItemInfoList& selection, bool hasPrev, bool hasNext,
-                                       const CamItemInfoList& listAll);
+                           const CamItemInfoList& listAll);
 
     void slotItemsSelected(CamItemInfo info, bool selected);
 
@@ -228,8 +227,8 @@ private Q_SLOTS:
 
 private:
 
-    class CameraUIPriv;
-    CameraUIPriv* const d;
+    class Private;
+    Private* const d;
 
     static CameraUI* m_instance;
 };

@@ -9,8 +9,8 @@
 * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
 * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
 * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
-* Copyright (C) 2012 by Andi Clemens <andi dot clemens at googlemail dot com>
-* Copyright (C) 2012 by Islam Wazery <wazery at ubuntu dot com>
+* Copyright (C) 2012      by Andi Clemens <andi dot clemens at googlemail dot com>
+* Copyright (C) 2012      by Islam Wazery <wazery at ubuntu dot com>
 *
 * This program is free software; you can redistribute it
 * and/or modify it under the terms of the GNU General
@@ -26,7 +26,6 @@
 * ============================================================ */
 
 #include "cameraui.moc"
-#include "cameraui.h" //TODO: Remove this line.
 #include "cameraui_p.h"
 
 // Qt includes
@@ -128,7 +127,7 @@
 #include "newitemsfinder.h"
 
 #include "importview.h"
-#include "models/importmodel.h" //TODO: remove the models/ part.
+#include "importmodel.h" //TODO: remove the models/ part.
 
 using namespace KDcrawIface;
 
@@ -140,8 +139,7 @@ CameraUI* CameraUI::m_instance = 0;
 CameraUI::CameraUI(QWidget* const parent, const QString& cameraTitle,
                    const QString& model, const QString& port,
                    const QString& path, int startIndex)
-    : KXmlGuiWindow(parent), d(new CameraUIPriv)
-
+    : KXmlGuiWindow(parent), d(new Private)
 {
     setXMLFile("cameraui.rc");
 
@@ -792,7 +790,7 @@ void CameraUI::setupCameraController(const QString& model, const QString& port, 
             this, SLOT(slotUploaded(CamItemInfo)));
 }
 
-CameraController* CameraUI::getCameraController()
+CameraController* CameraUI::getCameraController() const
 {
     return d->controller;
 }
@@ -2240,7 +2238,7 @@ void CameraUI::slotNewSelection(bool hasSelection)
 }
 
 void CameraUI::slotImageSelected(const CamItemInfoList& selection, bool hasPrev, bool hasNext,
-                                   const CamItemInfoList& listAll)
+                                 const CamItemInfoList& listAll)
 {
     int num_images = listAll.count();
 
@@ -2328,7 +2326,7 @@ void CameraUI::slotItemsSelected(CamItemInfo info, bool selected)
     slotNewSelection(d->view->selectedCamItemInfos().count() > 0);
 }
 
-QString CameraUI::identifyCategoryforMime(QString mime)
+QString CameraUI::identifyCategoryforMime(const QString& mime)
 {
     return mime.split("/").at(0);
 }
@@ -2439,7 +2437,7 @@ void CameraUI::slotToggleFullScreen()
         if (d->removeFullScreenButton)
         {
             QList<KToolBar*> toolbars = toolBars();
-            foreach(KToolBar* toolbar, toolbars)
+            foreach(KToolBar* const toolbar, toolbars)
             {
                 // name is set in ui.rc XML file
                 if (toolbar->objectName() == "ToolBar")
@@ -2469,8 +2467,8 @@ void CameraUI::slotToggleFullScreen()
             showToolBars();
 
             QList<KToolBar*> toolbars = toolBars();
-            KToolBar* mainToolbar = 0;
-            foreach(KToolBar * toolbar, toolbars)
+            KToolBar* mainToolbar     = 0;
+            foreach(KToolBar* const toolbar, toolbars)
             {
                 if (toolbar->objectName() == "ToolBar")
                 {
@@ -2511,7 +2509,7 @@ void CameraUI::slotEscapePressed()
 void CameraUI::showToolBars()
 {
     QList<KToolBar*> toolbars = toolBars();
-    foreach(KToolBar* toolbar, toolbars)
+    foreach(KToolBar* const toolbar, toolbars)
     {
         toolbar->show();
     }
@@ -2520,7 +2518,7 @@ void CameraUI::showToolBars()
 void CameraUI::hideToolBars()
 {
     QList<KToolBar*> toolbars = toolBars();
-    foreach(KToolBar* toolbar, toolbars)
+    foreach(KToolBar* const toolbar, toolbars)
     {
         toolbar->hide();
     }

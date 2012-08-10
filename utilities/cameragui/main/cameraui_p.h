@@ -69,11 +69,11 @@ using namespace KDcrawIface;
 namespace Digikam
 {
 
-class CameraUI::CameraUIPriv
+class CameraUI::Private
 {
 public:
 
-    CameraUIPriv() :
+    Private() :
         deleteAfter(false),
         busy(false),
         closed(false),
@@ -251,11 +251,11 @@ public:
     DAboutData*                   about;
 };
 
-const QString CameraUI::CameraUIPriv::configGroupName("Camera Settings");
-const QString CameraUI::CameraUIPriv::configUseMetadataDateEntry("UseThemeBackgroundColor");
-const QString CameraUI::CameraUIPriv::configUseDefaultTargetAlbum("UseDefaultTargetAlbum");
-const QString CameraUI::CameraUIPriv::configDefaultTargetAlbumId("DefaultTargetAlbumId");
-const QString CameraUI::CameraUIPriv::importFiltersConfigGroupName("Import Filters");
+const QString CameraUI::Private::configGroupName("Camera Settings");
+const QString CameraUI::Private::configUseMetadataDateEntry("UseThemeBackgroundColor");
+const QString CameraUI::Private::configUseDefaultTargetAlbum("UseDefaultTargetAlbum");
+const QString CameraUI::Private::configDefaultTargetAlbumId("DefaultTargetAlbumId");
+const QString CameraUI::Private::importFiltersConfigGroupName("Import Filters");
 
 }  // namespace Digikam
 
