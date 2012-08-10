@@ -378,7 +378,7 @@ void ImportFilterModel::setDirectSourceImportModel(ImportImageModel* const sourc
 
     if (d->importImageModel)
     {
-        d->importImageModel->unsetPreprocessor(d);
+        //d->importImageModel->unsetPreprocessor(d);
 
         disconnect(d->importImageModel, SIGNAL(modelReset()),
                            this, SLOT(slotModelReset()));
@@ -389,7 +389,7 @@ void ImportFilterModel::setDirectSourceImportModel(ImportImageModel* const sourc
 
     if (d->importImageModel)
     {
-        d->importImageModel->setPreprocessor(d);
+        //d->importImageModel->setPreprocessor(d);
 
         //connect(d->importImageModel, SIGNAL(preprocess(QList<CamItemInfo>,QList<QVariant>)),
                 //d, SLOT(preprocessInfos(QList<CamItemInfo>,QList<QVariant>)));

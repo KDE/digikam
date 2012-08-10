@@ -43,8 +43,8 @@ SET(libcameragui_SRCS
 
     #${CMAKE_CURRENT_SOURCE_DIR}/controller/camerathumbsctrl.cpp
 
-    #${CMAKE_CURRENT_SOURCE_DIR}/items/camerafolderitem.cpp
-    #${CMAKE_CURRENT_SOURCE_DIR}/views/camerafolderview.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/items/camerafolderitem.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/views/camerafolderview.cpp
 
     #${CMAKE_CURRENT_SOURCE_DIR}/q3support/cameraiconview.cpp
     #${CMAKE_CURRENT_SOURCE_DIR}/q3support/cameraiconviewtooltip.cpp

@@ -177,21 +177,6 @@ public:
     DECLARE_MODEL_DRAG_DROP_METHODS
 
     /**
-     * Install an object as a preprocessor for ImageInfos added to this model.
-     * For every QList of ImageInfos added to addImageInfo, the signal preprocess()
-     * will be emitted. The preprocessor may process the items and shall then readd
-     * them by calling reAddImageInfos(). It may take some time to process.
-     * It shall discard any held infos when the modelReset() signal is sent.
-     * It shall call readdFinished() when no reset occurred and all infos on the way have been readded.
-     * This means that only after calling this method, you shall make three connections
-     * (preprocess -> your slot, your signal -> reAddImageInfos, your signal -> reAddingFinished)
-     * and make or already hold a connection modelReset() -> your slot.
-     * There is only one preprocessor at a time, a previously set object will be disconnected.
-     */
-    void setPreprocessor(QObject* const preprocessor);
-    void unsetPreprocessor(QObject* const preprocessor);
-
-    /**
      * Enable sending of itemInfosAboutToBeRemoved and itemsInfosRemoved signals.
      * Default: false
      */

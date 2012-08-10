@@ -141,7 +141,12 @@ int ImportIconView::fitToWidthIcons()
 CamItemInfo ImportIconView::camItemInfo(const QString& folder, const QString& file)
 {
     QModelIndex indexForCamItemInfo = importFilterModel()->indexForPath(QString(folder + file));
-    return importFilterModel()->camItemInfo(indexForCamItemInfo);
+    if(indexForCamItemInfo.isValid())
+    {
+        return importFilterModel()->camItemInfo(indexForCamItemInfo);
+    }
+
+    return CamItemInfo();
 }
 
 void ImportIconView::slotSetupChanged()

@@ -96,6 +96,7 @@ Q_SIGNALS:
     void signalLastDestination(const KUrl&);
     void signalWindowHasMoved();
     void signalEscapePressed();
+    void signalNewSelection(bool);
 
 public Q_SLOTS:
 
@@ -129,8 +130,8 @@ private:
     void deleteItems(bool onlySelected, bool onlyDownloaded);
     void toggleLock(CamItemInfo& info);
     void setDownloaded(CamItemInfo &itemInfo, int status);
-    void slotProgressTimerDone();
     void itemsSelectionSizeInfo(unsigned long& fSizeKB, unsigned long& dSizeKB);
+    QMap<QString, int> countItemsByFolders() const;
     void checkItem4Deletion(const CamItemInfo& info, QStringList& folders, QStringList& files,
                             CamItemInfoList& deleteList, CamItemInfoList& lockedList);
 
@@ -193,6 +194,11 @@ private Q_SLOTS:
     void slotSkipped(const QString&, const QString&);
     void slotDeleted(const QString&, const QString&, bool);
     void slotLocked(const QString&, const QString&, bool);
+
+    void slotDownloadNameChanged();
+    void slotSelectNew();
+    void slotSelectLocked();
+    void slotProgressTimerDone();
 
     void slotNewSelection(bool);
     void slotImageSelected(const CamItemInfoList& selection, bool hasPrev, bool hasNext,

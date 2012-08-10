@@ -382,6 +382,11 @@ CamItemInfo ImportView::camItemInfo(const QString& folder, const QString& file) 
     return d->iconView->camItemInfo(folder, file);
 }
 
+bool ImportView::hasImage(const CamItemInfo& info)
+{
+    return d->iconView->importImageModel()->hasImage(info);
+}
+
 KUrl::List ImportView::allUrls() const
 {
     return d->iconView->urls();
@@ -400,6 +405,11 @@ QList<CamItemInfo> ImportView::selectedCamItemInfos() const
 QList<CamItemInfo> ImportView::allItems() const
 {
     return d->iconView->camItemInfos();
+}
+
+void ImportView::setSelectedCamItemInfos(const CamItemInfoList& infos) const
+{
+    d->iconView->setSelectedCamItemInfos(infos);
 }
 
 int ImportView::downloadedCamItemInfos() const

@@ -63,12 +63,14 @@ public:
     void scrollTo(const QString& folder, const QString& file);
 
     CamItemInfo camItemInfo(const QString& folder, const QString& file) const;
+    bool hasImage(const CamItemInfo& info);
 
     KUrl::List allUrls() const;
     KUrl::List selectedUrls() const;
     QList<CamItemInfo> selectedCamItemInfos() const;
     QList<CamItemInfo> allItems() const;
-    int downloadedCamItemInfos() const;
+    void setSelectedCamItemInfos(const CamItemInfoList& infos) const;
+    int  downloadedCamItemInfos() const;
     bool hasCurrentItem() const;
 
     bool isSelected(const KUrl url);

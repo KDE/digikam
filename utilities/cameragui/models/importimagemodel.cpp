@@ -37,7 +37,6 @@ public:
     Private()
     {
         keepFileUrlCache            = false;
-        preprocessor                = 0;
         refreshing                  = false;
         reAdding                    = false;
         incrementalRefreshRequested = false;
@@ -52,7 +51,6 @@ public:
 
     bool                                      keepFileUrlCache;
 
-    QObject*                                  preprocessor;
     bool                                      refreshing;
     bool                                      reAdding;
     bool                                      incrementalRefreshRequested;
@@ -498,7 +496,7 @@ bool ImportImageModel::hasImage(qlonglong id) const
 
 bool ImportImageModel::hasImage(const CamItemInfo& info) const
 {
-    return d->idHash.contains(info.id);
+    return d->fileUrlHash.contains(info.url().prettyUrl());
 }
 
 void ImportImageModel::emitDataChangedForAll()
@@ -524,24 +522,6 @@ void ImportImageModel::emitDataChangedForSelections(const QItemSelection& select
     }
 }
 
-// ------------ Preprocessing -------------
-
-void ImportImageModel::setPreprocessor(QObject* const preprocessor)
-{
-    unsetPreprocessor(d->preprocessor);
-    d->preprocessor = preprocessor;
-}
-
-void ImportImageModel::unsetPreprocessor(QObject* const preprocessor)
-{
-    if (preprocessor && d->preprocessor == preprocessor)
-    {
-        disconnect(this, SIGNAL(preprocess(QList<CamItemInfo>)), 0, 0);
-        disconnect(d->preprocessor, 0, this, SLOT(reAddImageInfos(QList<CamItemInfo>)));
-        disconnect(d->preprocessor, 0, this, SLOT(reAddingFinished()));
-    }
-}
-
 void ImportImageModel::appendInfos(const QList<CamItemInfo>& infos)
 {
     if (infos.isEmpty())
@@ -549,16 +529,7 @@ void ImportImageModel::appendInfos(const QList<CamItemInfo>& infos)
         return;
     }
 
-    if (d->preprocessor)
-    {
-        d->reAdding = true;
-        emit preprocess(infos);
-    }
-
-    else
-    {
-        publiciseInfos(infos);
-    }
+    publiciseInfos(infos);
 }
 
 void ImportImageModel::reAddCamItemInfos(const CamItemInfoList& infos)
