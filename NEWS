@@ -7,4 +7,6 @@ NEW FEATURES:
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 001 ==> 296024 - Undefined symbol in libdigikamcore.so [patch].
-002 ==> 
+002 ==> 291627 - Nef data loss after geotaging.
+003 ==> 
+
