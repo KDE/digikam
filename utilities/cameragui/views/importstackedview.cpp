@@ -105,11 +105,11 @@ ImportStackedView::ImportStackedView(CameraController* const controller, QWidget
     //FIXME: connect(d->importPreviewView, SIGNAL(signalPopupTagsView()),
             //d->importIconView, SIGNAL(signalPopupTagsView()));
 
-    connect(d->importPreviewView, SIGNAL(signalGotoFolderAndItem(CamItemInfo)),
-            this, SIGNAL(signalGotoFolderAndItem(CamItemInfo)));
+    //connect(d->importPreviewView, SIGNAL(signalGotoFolderAndItem(CamItemInfo)),
+            //this, SIGNAL(signalGotoFolderAndItem(CamItemInfo)));
 
-    connect(d->importPreviewView, SIGNAL(signalGotoDateAndItem(CamItemInfo)),
-            this, SIGNAL(signalGotoDateAndItem(CamItemInfo)));
+    //connect(d->importPreviewView, SIGNAL(signalGotoDateAndItem(CamItemInfo)),
+            //this, SIGNAL(signalGotoDateAndItem(CamItemInfo)));
 
     //FIXME: connect(d->importPreviewView, SIGNAL(signalGotoTagAndItem(int)),
             //this, SIGNAL(signalGotoTagAndItem(int)));

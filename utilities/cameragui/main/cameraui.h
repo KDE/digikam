@@ -128,7 +128,7 @@ private:
     void refreshCollectionFreeSpace();
     void deleteItems(bool onlySelected, bool onlyDownloaded);
     void toggleLock(CamItemInfo& info);
-    void setDownloaded(CamItemInfo &itemInfo, int status);
+    void setDownloaded(CamItemInfo& itemInfo, int status);
     void itemsSelectionSizeInfo(unsigned long& fSizeKB, unsigned long& dSizeKB);
     QMap<QString, int> countItemsByFolders() const;
     void checkItem4Deletion(const CamItemInfo& info, QStringList& folders, QStringList& files,

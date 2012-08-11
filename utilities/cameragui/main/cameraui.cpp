@@ -121,13 +121,13 @@
 #include "cameralist.h"
 #include "cameratype.h"
 #include "cameranamehelper.h"
-#include "cameramessagebox.h" //TODO: to be removed.
+#include "cameramessagebox.h"
 #include "uifilevalidator.h"
 #include "knotificationwrapper.h"
 #include "newitemsfinder.h"
 
 #include "importview.h"
-#include "importmodel.h" //TODO: remove the models/ part.
+#include "importmodel.h"
 
 using namespace KDcrawIface;
 
@@ -1747,7 +1747,7 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album* album)
 
 void CameraUI::slotDownloaded(const QString& folder, const QString& file, int status)
 {
-    CamItemInfo info = d->view->camItemInfo(folder, file);
+    CamItemInfo& info = d->view->camItemInfoRef(folder, file);
 
     if (!info.isNull())
     {
@@ -1758,7 +1758,7 @@ void CameraUI::slotDownloaded(const QString& folder, const QString& file, int st
             slotItemsSelected(d->view->camItemInfo(folder, file), true);
         }
 
-        if (status == CamItemInfo::DownloadedYes)
+        if (info.downloaded == CamItemInfo::DownloadedYes)
         {
             int curr = d->statusProgressBar->progressValue();
             d->statusProgressBar->setProgressValue(curr + 1);
@@ -1886,6 +1886,7 @@ void CameraUI::slotDownloadNameChanged()
     emit signalNewSelection(hasSelection);
 }
 
+//FIXME: the new pictures are marked by CameraHistoryUpdater which is not working yet.
 void CameraUI::slotSelectNew()
 {
     blockSignals(true);
@@ -1986,7 +1987,7 @@ void CameraUI::setDownloaded(CamItemInfo& itemInfo, int status)
         d->progressTimer->stop();
     }
 
-    //TODO: Uncomment
+    //TODO: Uncomment when download overlay is implemented.
     d->view->update();
 }
 
@@ -2094,7 +2095,7 @@ void CameraUI::deleteItems(bool onlySelected, bool onlyDownloaded)
         QString infoMsg(i18n("The items listed below are locked by camera (read-only). "
                              "These items will not be deleted. If you really want to delete these items, "
                              "please unlock them and try again."));
-        //CameraMessageBox::informationList(d->camThumbsCtrl, this, infoMsg, lockedList, i18n("Information"));
+        //CameraMessageBox::informationList(this, infoMsg, lockedList, i18n("Information"));
     }
 
     if (folders.isEmpty())
@@ -2110,8 +2111,7 @@ void CameraUI::deleteItems(bool onlySelected, bool onlyDownloaded)
                           "Are you sure?",
                           deleteList.count()));
 
-//    if (CameraMessageBox::warningContinueCancelList(d->camThumbsCtrl,
-//                                                    this,
+//    if (CameraMessageBox::warningContinueCancelList(this,
 //                                                    warnMsg,
 //                                                    deleteList,
 //                                                    i18n("Warning"),
@@ -2120,20 +2120,20 @@ void CameraUI::deleteItems(bool onlySelected, bool onlyDownloaded)
 //                                                    QString("DontAskAgainToDeleteItemsFromCamera"))
 //        ==  KMessageBox::Continue)
 //    {
-//        QStringList::const_iterator itFolder = folders.constBegin();
-//        QStringList::const_iterator itFile   = files.constBegin();
+        QStringList::const_iterator itFolder = folders.constBegin();
+        QStringList::const_iterator itFile   = files.constBegin();
 
-//        d->statusProgressBar->setProgressValue(0);
-//        d->statusProgressBar->setProgressTotalSteps(deleteList.count());
-//        d->statusProgressBar->progressBarMode(StatusProgressBar::ProgressBarMode);
+        d->statusProgressBar->setProgressValue(0);
+        d->statusProgressBar->setProgressTotalSteps(deleteList.count());
+        d->statusProgressBar->progressBarMode(StatusProgressBar::ProgressBarMode);
 
-//        for (; itFolder != folders.constEnd(); ++itFolder, ++itFile)
-//        {
-//            d->controller->deleteFile(*itFolder, *itFile);
-//            // the currentlyDeleting list is used to prevent loading items which
-//            // will immanently be deleted into the sidebar and wasting time
-//            d->currentlyDeleting.append(*itFolder + *itFile);
-//        }
+        for (; itFolder != folders.constEnd(); ++itFolder, ++itFile)
+        {
+            d->controller->deleteFile(*itFolder, *itFile);
+            // the currentlyDeleting list is used to prevent loading items which
+            // will immanently be deleted into the sidebar and wasting time
+            d->currentlyDeleting.append(*itFolder + *itFile);
+        }
 //    }
 }
 
@@ -2157,8 +2157,7 @@ void CameraUI::slotDeleted(const QString& folder, const QString& file, bool stat
 {
     if (status)
     {
-        //d->view->removeItem(d->view->camItemInfo(folder, file));
-        // do this after removeItem, which will signal to slotItemsSelected, which checks for the list
+        // do this after removeItem.
         d->currentlyDeleting.removeAll(folder + file);
     }
 

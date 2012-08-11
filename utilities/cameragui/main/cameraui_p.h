@@ -46,9 +46,7 @@
 
 // Local includes
 
-#include "camerathumbsctrl.h"
 #include "cameracontroller.h"
-#include "cameraiconview.h"
 #include "filtercombo.h"
 #include "daboutdata.h"
 #include "dlogoaction.h"
@@ -121,7 +119,6 @@ public:
         helpMenu(0),
         advBox(0),
         splitter(0),
-        camThumbsCtrl(0),
         controller(0),
         historyUpdater(0),
         view(0),
@@ -217,7 +214,6 @@ public:
 
     SidebarSplitter*              splitter;
 
-    CameraThumbsCtrl*             camThumbsCtrl;
     CameraController*             controller;
     CameraHistoryUpdater*         historyUpdater;
 

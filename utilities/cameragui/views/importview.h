@@ -62,7 +62,8 @@ public:
 
     void scrollTo(const QString& folder, const QString& file);
 
-    CamItemInfo camItemInfo(const QString& folder, const QString& file) const;
+    CamItemInfo  camItemInfo(const QString& folder, const QString& file) const;
+    CamItemInfo& camItemInfoRef(const QString& folder, const QString& file) const;
     bool hasImage(const CamItemInfo& info);
 
     KUrl::List allUrls() const;

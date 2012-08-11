@@ -52,7 +52,7 @@ public:
 
     enum DownloadStatus
     {
-        DownloadUnknown  = -1,               // Donwload state is unknow
+        DownloadUnknown  = -1,               // Donwload state is unknown
         DownloadedNo     = 0,                // Is not yet downloaded on computer
         DownloadedYes    = 1,                // Is already downloaded on computer
         DownloadFailed   = 2,                // Download is failed or have been aborted by user

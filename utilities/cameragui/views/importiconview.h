@@ -48,7 +48,8 @@ public:
 
     int fitToWidthIcons();
 
-    CamItemInfo camItemInfo(const QString& folder, const QString& file);
+    CamItemInfo  camItemInfo(const QString& folder, const QString& file);
+    CamItemInfo& camItemInfoRef(const QString& folder, const QString& file);
 
     virtual void setThumbnailSize(const ThumbnailSize& size);
 

@@ -149,6 +149,18 @@ CamItemInfo ImportIconView::camItemInfo(const QString& folder, const QString& fi
     return CamItemInfo();
 }
 
+CamItemInfo& ImportIconView::camItemInfoRef(const QString& folder, const QString& file)
+{
+    QModelIndex indexForCamItemInfo = importFilterModel()->indexForPath(QString(folder + file));
+    //if(indexForCamItemInfo.isValid())
+    //{
+        QModelIndex mappedIndex = importFilterModel()->mapToSource(indexForCamItemInfo);
+        return importImageModel()->camItemInfoRef(mappedIndex);
+    //}
+
+    //return CamItemInfo();
+}
+
 void ImportIconView::slotSetupChanged()
 {
     setToolTipEnabled(ImportSettings::instance()->showToolTipsIsValid());

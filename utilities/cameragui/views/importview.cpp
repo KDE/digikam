@@ -258,17 +258,14 @@ void ImportView::setupConnections()
 
     // -- Preview image widget Connections ------------------------
 
-    connect(d->StackedView, SIGNAL(signalNextItem()),
-            this, SLOT(slotNextItem()));
+    //connect(d->StackedView, SIGNAL(signalNextItem()),
+            //this, SLOT(slotNextItem()));
 
-    connect(d->StackedView, SIGNAL(signalPrevItem()),
-            this, SLOT(slotPrevItem()));
+    //connect(d->StackedView, SIGNAL(signalPrevItem()),
+            //this, SLOT(slotPrevItem()));
 
-    connect(d->StackedView, SIGNAL(signalEditItem()),
-            this, SLOT(slotImageEdit()));
-
-    connect(d->StackedView, SIGNAL(signalDeleteItem()),
-            this, SLOT(slotImageDelete()));
+    //connect(d->StackedView, SIGNAL(signalEditItem()),
+            //this, SLOT(slotImageEdit()));
 
     connect(d->StackedView, SIGNAL(signalViewModeChanged()),
             this, SLOT(slotViewModeChanged()));
@@ -380,6 +377,11 @@ QList<SidebarWidget*> ImportView::leftSidebarWidgets()
 CamItemInfo ImportView::camItemInfo(const QString& folder, const QString& file) const
 {
     return d->iconView->camItemInfo(folder, file);
+}
+
+CamItemInfo& ImportView::camItemInfoRef(const QString& folder, const QString& file) const
+{
+    return d->iconView->camItemInfoRef(folder, file);
 }
 
 bool ImportView::hasImage(const CamItemInfo& info)

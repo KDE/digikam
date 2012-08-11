@@ -99,7 +99,6 @@ Q_SIGNALS:
     void signalNextItem();
     void signalPrevItem();
     //FIXME: void signalEditItem();
-    void signalDeleteItem();
     void signalViewModeChanged();
     //FIXME: void signalBack2FilesList();
     //FIXME: void signalSlideShow();
