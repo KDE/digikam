@@ -335,10 +335,8 @@ bool UMSCamera::downloadItem(const QString& folder, const QString& itemName, con
     }
 
     const int MAX_IPC_SIZE = (1024 * 32);
-
-    char buffer[MAX_IPC_SIZE];
-
-    Q_LONG len;
+    char      buffer[MAX_IPC_SIZE];
+    Q_LONG    len;
 
     while ((len = sFile.read(buffer, MAX_IPC_SIZE)) != 0 && !m_cancel)
     {
@@ -604,7 +602,7 @@ void UMSCamera::getUUIDFromSolid()
             continue;
         }
 
-        const Solid::StorageAccess* access = accessDevice.as<Solid::StorageAccess>();
+        const Solid::StorageAccess* const access = accessDevice.as<Solid::StorageAccess>();
 
         if (!access->isAccessible())
         {
@@ -646,7 +644,7 @@ void UMSCamera::getUUIDFromSolid()
             continue;
         }
 
-        Solid::StorageVolume* volume = volumeDevice.as<Solid::StorageVolume>();
+        Solid::StorageVolume* const volume = volumeDevice.as<Solid::StorageVolume>();
 
         if (m_path.startsWith(access->filePath()))
         {
