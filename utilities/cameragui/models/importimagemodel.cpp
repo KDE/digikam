@@ -44,6 +44,16 @@ public:
         incrementalUpdater          = 0;
     }
 
+    inline bool isValid(const QModelIndex& index)
+    {
+        return (index.isValid()              &&
+                (index.row() >= 0)           &&
+                (index.row() < infos.size())
+               );
+    }
+
+public:
+
     CameraController*                         controller;
     CamItemInfoList                           infos;
     QHash<qlonglong, int>                     idHash;
@@ -58,14 +68,6 @@ public:
     bool                                      sendRemovalSignals;
 
     class ImportImageModelIncrementalUpdater* incrementalUpdater;
-
-    inline bool isValid(const QModelIndex& index)
-    {
-        return (index.isValid()    &&
-                (index.row() >= 0) &&
-                (index.row() < infos.size())
-               );
-    }
 };
 
 // ----------------------------------------------------------------------------------------------------
@@ -285,8 +287,8 @@ qlonglong ImportImageModel::retrieveCamItemId(const QModelIndex& index)
         return -1;
     }
 
-    ImportImageModel* model = index.data(ImportImageModelPointerRole).value<ImportImageModel*>();
-    int               row   = index.data(ImportImageModelInternalId).toInt();
+    ImportImageModel* const model = index.data(ImportImageModelPointerRole).value<ImportImageModel*>();
+    int                     row   = index.data(ImportImageModelInternalId).toInt();
 
     if (!model)
     {
@@ -327,7 +329,7 @@ QList<QModelIndex> ImportImageModel::indexesForUrl(const KUrl& fileUrl) const
     else
     {
         QList<QModelIndex> indexes;
-        const int size = d->infos.size();
+        const int          size = d->infos.size();
 
         for (int i = 0; i < size; ++i)
         {
@@ -475,11 +477,12 @@ QList<qlonglong> ImportImageModel::camItemIds() const
 QList<CamItemInfo> ImportImageModel::uniqueCamItemInfos() const
 {
     QList<CamItemInfo> uniqueInfos;
-    const int size = d->infos.size();
+    const int          size = d->infos.size();
 
     for (int i = 0; i < size; ++i)
     {
         const CamItemInfo& info = d->infos.at(i);
+
         if (d->idHash.value(info.id) == i)
         {
             uniqueInfos << info;
@@ -601,6 +604,7 @@ void ImportImageModel::publiciseInfos(const QList<CamItemInfo>& infos)
     }
 
     emit itemInfosAboutToBeAdded(infos);
+
     const int firstNewIndex = d->infos.size();
     const int lastNewIndex  = d->infos.size() + infos.size() -1;
     beginInsertRows(QModelIndex(), firstNewIndex, lastNewIndex);
@@ -704,6 +708,7 @@ void ImportImageModel::removeIndex(const QModelIndex& index)
 void ImportImageModel::removeIndexs(const QList<QModelIndex>& indexes)
 {
     QList<int> indexesList;
+
     foreach(const QModelIndex& index, indexes)
     {
         if (d->isValid(index))
@@ -728,6 +733,7 @@ void ImportImageModel::removeCamItemInfo(const CamItemInfo& info)
 void ImportImageModel::removeCamItemInfos(const QList<CamItemInfo>& infos)
 {
     QList<int> indexesList;
+
     foreach(const CamItemInfo& info, infos)
     {
         QModelIndex index = indexForCamItemId(info.id);
@@ -766,8 +772,8 @@ void ImportImageModel::removeRowPairs(const QList<QPair<int, int> >& toRemove)
     // Keep in mind that when calling beginRemoveRows all structures announced to be removed
     // must still be valid, and this includes our hashes as well, which limits what we can optimize
 
-    int removedRows = 0;
-    int offset      = 0;
+    int                     removedRows = 0;
+    int                     offset      = 0;
     typedef QPair<int, int> IntPair;
 
     foreach(const IntPair& pair, toRemove)
@@ -780,11 +786,13 @@ void ImportImageModel::removeRowPairs(const QList<QPair<int, int> >& toRemove)
         offset += removedRows;
 
         QList<CamItemInfo> removedInfos;
+
         if (d->sendRemovalSignals)
         {
             qCopy(d->infos.begin() + begin, d->infos.begin() + end, removedInfos.begin());
             emit itemInfosAboutToBeRemoved(removedInfos);
         }
+
         itemInfosAboutToBeRemoved(begin, end);
         beginRemoveRows(QModelIndex(), begin, end);
 
@@ -815,6 +823,7 @@ void ImportImageModel::removeRowPairs(const QList<QPair<int, int> >& toRemove)
         d->infos.erase(d->infos.begin() + begin, d->infos.begin() + (end + 1));
 
         endRemoveRows();
+
         if (d->sendRemovalSignals)
         {
             emit itemInfosRemoved(removedInfos);
@@ -955,6 +964,7 @@ QList<QPair<int, int> > ImportImageModelIncrementalUpdater::oldIndexes()
             }
         }
     }
+
     modelRemovals.clear();
 
     return toContiguousPairs(oldIds.values());
@@ -974,12 +984,15 @@ QVariant ImportImageModel::data(const QModelIndex& index, int role) const
         case Qt::DisplayRole:
         case Qt::ToolTipRole:
             return d->infos.at(index.row()).name;
+            break;
 
         case ImportImageModelPointerRole:
             return QVariant::fromValue(const_cast<ImportImageModel*>(this));
+            break;
 
         case ImportImageModelInternalId:
             return index.row();
+            break;
     }
 
     return QVariant();
@@ -990,6 +1003,7 @@ QVariant ImportImageModel::headerData(int section, Qt::Orientation orientation, 
     Q_UNUSED(section)
     Q_UNUSED(orientation)
     Q_UNUSED(role)
+
     return QVariant();
 }
 

@@ -61,7 +61,7 @@ public:
         ExtraDataRole               = Qt::UserRole + 3,
 
         /// Returns the number of duplicate indexes for the same image id
-        ExtraDataDuplicateCount = Qt::UserRole + 6,
+        ExtraDataDuplicateCount     = Qt::UserRole + 6,
 
         FilterModelRoles            = Qt::UserRole + 100
     };
