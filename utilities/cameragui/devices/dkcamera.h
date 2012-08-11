@@ -7,7 +7,7 @@
  * Description : abstract camera interface class
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -69,11 +69,11 @@ public:
     /// if the values are not immediately available
     virtual bool getItemsInfoList(const QString& folder, bool useMetadata, CamItemInfoList& infoList) = 0;
     virtual void getItemInfo(const QString& folder, const QString& itemName, CamItemInfo& info, bool useMetadata) = 0;
-
     virtual bool getThumbnail(const QString& folder, const QString& itemName, QImage& thumbnail) = 0;
     virtual bool getMetadata(const QString& folder, const QString& itemName, DMetadata& meta) = 0;
-
+    virtual bool getFreeSpace(unsigned long& kBSize, unsigned long& kBAvail) = 0;
     virtual bool getPreview(QImage& preview) = 0;
+
     virtual bool capture(CamItemInfo& itemInfo) = 0;
 
     virtual bool downloadItem(const QString& folder, const QString& itemName, const QString& saveFile) = 0;
@@ -86,10 +86,7 @@ public:
     virtual bool setLockItem(const QString& folder, const QString& itemName, bool lock) = 0;
 
     virtual DKCamera::CameraDriverType cameraDriverType() = 0;
-
-    virtual bool getFreeSpace(unsigned long& kBSize, unsigned long& kBAvail) = 0;
-
-    virtual QByteArray cameraMD5ID() = 0;
+    virtual QByteArray                 cameraMD5ID() = 0;
 
 public:
 
