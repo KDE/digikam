@@ -8,7 +8,7 @@ The goal of model-view port is to be able to:
 - Create more powerful icon-view for camera interface, with advanced filtering option, group of items (RAW+JPEG), pre-tags options, etc...
 - To be able to use preview mode in camera interface (image + video), as in albumgui.
 
-Note: Most of these goals are fullfiled from GSoC 2012 project, the remaining parts are listed below.
+Note: Most of these goals are full-filed from GSoC 2012 project, the remaining parts are listed below.
 
 Relevant files from KDE bugzilla:
 =================================
@@ -24,6 +24,6 @@ B.K.O: #216491
 Import tool final TODOs
 =================================================
 
-- Implement Rating, tags, color lables (partially implemented).
+- Implement Rating, tags, color labels (partially implemented).
 - Implement Media player and Map widget (easy and partially implemented).
 - Preload import item thumbs (make settings option for it, as it will be irrelevent in slow cameras).
