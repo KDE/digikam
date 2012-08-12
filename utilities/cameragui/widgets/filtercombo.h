@@ -67,7 +67,7 @@ public:
     bool matchesCurrentFilter(const CamItemInfo& item);
     void saveSettings();
 
-    static void defaultFilters(FilterList* filters);
+    static void  defaultFilters(FilterList* const filters);
     static const QString defaultIgnoreNames;
     static const QString defaultIgnoreExtensions;
 
@@ -88,8 +88,8 @@ protected Q_SLOTS:
 
 private:
 
-    class FilterComboBoxPriv;
-    FilterComboBoxPriv* const   d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

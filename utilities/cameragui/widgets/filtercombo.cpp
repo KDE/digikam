@@ -38,7 +38,6 @@
 // Local includes
 
 #include "importfilters.h"
-#include "cameraiconitem.h"
 #include "camiteminfo.h"
 
 namespace Digikam
@@ -89,11 +88,11 @@ void Filter::fromString(const QString& filter)
 
 // ---------------------------------------------------------------------------------
 
-class FilterComboBox::FilterComboBoxPriv
+class FilterComboBox::Private
 {
 public:
 
-    FilterComboBoxPriv()
+    Private()
     {
         KSharedConfig::Ptr config = KGlobal::config();
         KConfigGroup group        = config->group("Import Filters");
@@ -107,7 +106,7 @@ public:
                 break;
             }
 
-            Filter* f = new Filter;
+            Filter* const f = new Filter;
             f->fromString(filter);
             filters.append(f);
         }
@@ -116,21 +115,23 @@ public:
         currentFilter = group.readEntry("CurrentFilter", 0);
     }
 
-    ~FilterComboBoxPriv()
+    ~Private()
     {
         qDeleteAll(filters);
     }
 
-    int            currentFilter;
-    QList<Filter*> filters;
+    int                         currentFilter;
+    QList<Filter*>              filters;
     QHash<QString, QRegExp>     filterHash;
     QHash<QString, QStringList> mimeHash;
 };
 
 FilterComboBox::FilterComboBox(QWidget* const parent)
-    : KComboBox(parent), d(new FilterComboBoxPriv)
+    : KComboBox(parent), d(new Private)
 {
-    connect(this, SIGNAL(activated(int)), this, SLOT(indexChanged(int)));
+    connect(this, SIGNAL(activated(int)),
+            this, SLOT(indexChanged(int)));
+
     fillCombo();
 }
 
@@ -138,37 +139,37 @@ FilterComboBox::~FilterComboBox()
 {
 }
 
-void FilterComboBox::defaultFilters(FilterList* filters)
+void FilterComboBox::defaultFilters(FilterList* const filters)
 {
     if (filters->count() == 0)
     {
-        Filter* f     = new Filter;
-        f->name       = i18n("All Files");
+        Filter*       f = new Filter;
+        f->name         = i18n("All Files");
         filters->append(f);
 
-        f             = new Filter;
-        f->name       = i18n("Only New Files");
-        f->onlyNew    = true;
+        f               = new Filter;
+        f->name         = i18n("Only New Files");
+        f->onlyNew      = true;
         filters->append(f);
 
-        f             = new Filter;
-        f->name       = i18n("Raw Files");
-        f->mimeFilter = "image/x-nikon-nef;image/x-fuji-raf;image/x-adobe-dng;"
-                        "image/x-panasonic-raw;image/x-olympus-orf;image/x-kodak-dcr;"
-                        "image/x-kodak-k25;image/x-sony-arw;image/x-minolta-mrw;"
-                        "image/x-kodak-kdc;image/x-sigma-x3f;image/x-sony-srf;"
-                        "image/x-pentax-pef;image/x-panasonic-raw2;image/x-canon-crw;"
-                        "image/x-sony-sr2;image/x-canon-cr2";
+        f               = new Filter;
+        f->name         = i18n("Raw Files");
+        f->mimeFilter   = "image/x-nikon-nef;image/x-fuji-raf;image/x-adobe-dng;"
+                          "image/x-panasonic-raw;image/x-olympus-orf;image/x-kodak-dcr;"
+                          "image/x-kodak-k25;image/x-sony-arw;image/x-minolta-mrw;"
+                          "image/x-kodak-kdc;image/x-sigma-x3f;image/x-sony-srf;"
+                          "image/x-pentax-pef;image/x-panasonic-raw2;image/x-canon-crw;"
+                          "image/x-sony-sr2;image/x-canon-cr2";
         filters->append(f);
 
-        f             = new Filter;
-        f->name       = i18n("JPG/TIFF Files");
-        f->mimeFilter = "image/jpeg;image/tiff";
+        f               = new Filter;
+        f->name         = i18n("JPG/TIFF Files");
+        f->mimeFilter   = "image/jpeg;image/tiff";
         filters->append(f);
 
-        f             = new Filter;
-        f->name       = i18n("Video Files");
-        f->mimeFilter = "video/quicktime;video/mp4;video/x-msvideo;video/mpeg";
+        f               = new Filter;
+        f->name         = i18n("Video Files");
+        f->mimeFilter   = "video/quicktime;video/mp4;video/x-msvideo;video/mpeg";
         filters->append(f);
     }
 }
@@ -180,7 +181,7 @@ void FilterComboBox::fillCombo()
         removeItem(0);
     }
 
-    foreach(Filter* f, d->filters)
+    foreach(Filter* const f, d->filters)
     {
         addItem(f->name);
     }
@@ -240,13 +241,16 @@ const QStringList& FilterComboBox::mimeWildcards(const QString& mime)
     {
         QStringList& wc  = d->mimeHash[mime];
         QStringList list = mime.split(';');
+
         foreach(const QString& m, list)
         {
             KMimeType::Ptr mime = KMimeType::mimeType(m);
+
             if (!mime)
             {
                 continue;
             }
+
             foreach(const QString& pattern, mime->patterns())
             {
                 wc.append(pattern);
@@ -261,7 +265,7 @@ bool FilterComboBox::matchesCurrentFilter(const CamItemInfo& item)
 {
     //kDebug() << item.downloaded << item.folder << item.name;
 
-    Filter* currentFilter = d->filters.value(d->currentFilter);
+    Filter* const currentFilter = d->filters.value(d->currentFilter);
 
     if (!currentFilter)
     {

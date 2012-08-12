@@ -6,7 +6,7 @@
  * Date        : 2011-08-12
  * Description : advanced settings for camera interface.
  *
- * Copyright (C) 2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2011-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -47,11 +47,11 @@
 namespace Digikam
 {
 
-class AdvancedSettings::AdvancedSettingsPriv
+class AdvancedSettings::Private
 {
 public:
 
-    AdvancedSettingsPriv()
+    Private()
         : formatLabel(0),
           autoRotateCheck(0),
           convertJpegCheck(0),
@@ -75,8 +75,8 @@ public:
     TemplateSelector* templateSelector;
 };
 
-AdvancedSettings::AdvancedSettings(QWidget* parent)
-    : QWidget(parent), d(new AdvancedSettingsPriv)
+AdvancedSettings::AdvancedSettings(QWidget* const parent)
+    : QWidget(parent), d(new Private)
 {
     QVBoxLayout* onFlyVlay = new QVBoxLayout(this);
     d->templateSelector    = new TemplateSelector(this);
@@ -147,7 +147,7 @@ void AdvancedSettings::readSettings(KConfigGroup& group)
     d->fixDateTimeCheck->setChecked(group.readEntry("FixDateTime",       false));
     d->templateSelector->setTemplateIndex(group.readEntry("Template",    0));
     d->convertJpegCheck->setChecked(group.readEntry("ConvertJpeg",       false));
-    d->losslessFormat->setCurrentIndex(group.readEntry("LossLessFormat", 0));   // PNG by default
+    d->losslessFormat->setCurrentIndex(group.readEntry("LossLessFormat", 0));      // PNG by default
 
     d->dateTimeEdit->setEnabled(d->fixDateTimeCheck->isChecked());
     d->losslessFormat->setEnabled(d->convertJpegCheck->isChecked());

@@ -6,7 +6,7 @@
  * Date        : 2006-07-24
  * Description : a dialog to select a camera folders.
  *
- * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -43,7 +43,7 @@ class CameraFolderDialog : public KDialog
 
 public:
 
-    CameraFolderDialog(QWidget* parent, const QMap<QString, int>& map,
+    CameraFolderDialog(QWidget* const parent, const QMap<QString, int>& map,
                        const QString& cameraName, const QString& rootPath);
     ~CameraFolderDialog();
 
@@ -55,8 +55,8 @@ private Q_SLOTS:
 
 private:
 
-    class CameraFolderDialogPriv;
-    CameraFolderDialogPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

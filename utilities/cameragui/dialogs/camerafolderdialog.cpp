@@ -6,7 +6,7 @@
  * Date        : 2006-07-24
  * Description : a dialog to select a camera folders.
  *
- * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -39,18 +39,17 @@
 
 // Local includes
 
-#include "cameraiconview.h"
 #include "camerafolderitem.h"
 #include "camerafolderview.h"
 
 namespace Digikam
 {
 
-class CameraFolderDialog::CameraFolderDialogPriv
+class CameraFolderDialog::Private
 {
 public:
 
-    CameraFolderDialogPriv() :
+    Private() :
         folderView(0)
     {
     }
@@ -60,9 +59,9 @@ public:
     CameraFolderView* folderView;
 };
 
-CameraFolderDialog::CameraFolderDialog(QWidget* parent, const QMap<QString, int>& map,
+CameraFolderDialog::CameraFolderDialog(QWidget* const parent, const QMap<QString, int>& map,
                                        const QString& cameraName, const QString& rootPath)
-    : KDialog(parent), d(new CameraFolderDialogPriv)
+    : KDialog(parent), d(new Private)
 {
     setHelp("camerainterface.anchor", "digikam");
     setCaption(i18n("%1 - Select Camera Folder", cameraName));
@@ -140,14 +139,14 @@ CameraFolderDialog::~CameraFolderDialog()
 
 QString CameraFolderDialog::selectedFolderPath() const
 {
-    QTreeWidgetItem* item = d->folderView->currentItem();
+    QTreeWidgetItem* const item = d->folderView->currentItem();
 
     if (!item)
     {
         return QString();
     }
 
-    CameraFolderItem* folderItem = dynamic_cast<CameraFolderItem*>(item);
+    CameraFolderItem* const folderItem = dynamic_cast<CameraFolderItem*>(item);
 
     if (folderItem->isVirtualFolder())
     {

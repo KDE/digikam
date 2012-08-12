@@ -7,7 +7,7 @@
  * Description : a widget to customize album name created by
  *               camera interface.
  *
- * Copyright (C) 2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2011-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -48,11 +48,11 @@
 namespace Digikam
 {
 
-class AlbumCustomizer::AlbumCustomizerPriv
+class AlbumCustomizer::Private
 {
 public:
 
-    AlbumCustomizerPriv()
+    Private()
         : autoAlbumDateCheck(0),
           autoAlbumExtCheck(0),
           folderDateLabel(0),
@@ -80,8 +80,8 @@ public:
     TooltipDialog*      tooltipDialog;
 };
 
-AlbumCustomizer::AlbumCustomizer(QWidget* parent)
-    : QWidget(parent), d(new AlbumCustomizerPriv)
+AlbumCustomizer::AlbumCustomizer(QWidget* const parent)
+    : QWidget(parent), d(new Private)
 {
     d->tooltipDialog = new TooltipDialog(this);
     d->tooltipDialog->setTooltip(i18n("<p>These expressions may be used to customize date format:</p>"
