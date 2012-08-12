@@ -153,6 +153,7 @@ protected:
 
     virtual void updateContentWidth();
     virtual void updateRects();
+    int thumbnailPixmapSize(bool withHighlight, int size);
 
 private:
 

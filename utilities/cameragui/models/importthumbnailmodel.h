@@ -56,8 +56,7 @@ public:
     /// Sets the camera controller which is used to get the thumbnails for item infos.
     virtual void setCameraController(CameraController* const controller);
 
-    /// Methods to set and get the thumbnail size
-    void setThumbnailSize(const ThumbnailSize& thumbSize);
+    /// Get the thumbnail size
     ThumbnailSize thumbnailSize() const;
 
     void setExifRotate(bool rotate);
@@ -84,7 +83,7 @@ public:
      */
     virtual bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::DisplayRole);
 
-    bool getThumbInfo(const CamItemInfo& info, CachedItem& item, ThumbnailSize thumbSize) const;
+    bool getThumbInfo(const CamItemInfo& info, CachedItem& item, ThumbnailSize thumbSize, bool thumbChanged) const;
 
     // -- Cache management methods ------------------------------------------------------------
     const CachedItem* retrieveItemFromCache(const KUrl& url) const;

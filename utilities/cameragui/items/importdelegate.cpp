@@ -23,6 +23,7 @@
 
 #include "importdelegate.moc"
 #include "importdelegatepriv.h"
+#include "importdelegate.h"
 
 // Qt includes
 
@@ -41,7 +42,6 @@
 #include "importfiltermodel.h"
 #include "importsettings.h"
 #include "importcategorizedview.h"
-#include "thumbnailloadthread.h"
 
 namespace Digikam
 {
@@ -194,8 +194,6 @@ QPixmap ImportDelegate::retrieveThumbnailPixmap(const QModelIndex& index, int th
     model->setData(index, thumbnailSize, ImportImageModel::ThumbnailRole);
     // get data from model
     QVariant thumbData = index.data(ImportImageModel::ThumbnailRole);
-    // reset to default thumbnail size
-    model->setData(index, QVariant(), ImportImageModel::ThumbnailRole);
 
     return thumbData.value<QPixmap>();
 }
@@ -580,7 +578,7 @@ int ImportThumbnailDelegate::maximumSize() const
 {
     Q_D(const ImportThumbnailDelegate);
 
-    return ThumbnailLoadThread::maximumThumbnailPixmapSize(true) + 2*d->radius + 2*d->margin;
+    return ThumbnailSize::Huge; + (2*d->radius + 2*d->margin);
 }
 
 int ImportThumbnailDelegate::minimumSize() const
@@ -610,9 +608,19 @@ void ImportThumbnailDelegate::updateContentWidth()
         maxSize = d->viewSize.width();
     }
 
-    d->thumbSize = ThumbnailLoadThread::thumbnailPixmapSize(true, maxSize - 2*d->radius - 2*d->margin);
+    d->thumbSize = thumbnailPixmapSize(true, maxSize - 2*d->radius - 2*d->margin);
 
     ImportDelegate::updateContentWidth();
+}
+
+int ImportThumbnailDelegate::thumbnailPixmapSize(bool withHighlight, int size)
+{
+    if (withHighlight && size >= 10)
+    {
+        return size + 2;
+    }
+
+    return size;
 }
 
 void ImportThumbnailDelegate::updateRects()
@@ -681,11 +689,10 @@ void ImportNormalDelegate::updateRects()
     d->imageInformationRect              = QRect(d->margin, y, d->contentWidth, 0);
     const ImportSettings* ImportSettings = ImportSettings::instance();
     d->drawImageFormat                   = ImportSettings->getIconShowImageFormat();
-    const int iconSize                   = KIconLoader::SizeSmallMedium;
+    //const int iconSize                   = KIconLoader::SizeSmallMedium;
 
     //TODO: d->pickLabelRect   = QRect(d->margin, y, iconSize, iconSize);
     //d->groupRect       = QRect(d->contentWidth - iconSize, y, iconSize, iconSize);
-    Q_UNUSED(iconSize);  // To please compiler about warnings.
 
     //TODO: Implement rating in import tool.
     //if (ImportSettings->getIconShowRating())

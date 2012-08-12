@@ -129,7 +129,7 @@ ImageViewUtilities* ImportIconView::utilities() const
 
 void ImportIconView::setThumbnailSize(const ThumbnailSize& size)
 {
-    importThumbnailModel()->setThumbnailSize(size);
+    //importThumbnailModel()->setThumbnailSize(size);
     ImportCategorizedView::setThumbnailSize(size);
 }
 

@@ -115,7 +115,7 @@
 #include "collectionlocation.h"
 #include "scancontroller.h"
 #include "capturedlg.h"
-#include "camerafolderdialog.h" //TODO: Determine if it is based on Q3 classes?
+#include "camerafolderdialog.h"
 #include "camerainfodialog.h"
 #include "cameracontroller.h"
 #include "cameralist.h"
@@ -1938,7 +1938,7 @@ void CameraUI::toggleLock(CamItemInfo& info)
     }
 
     //TODO: Uncomment when lock overlay is implemented.
-    //d->view->update();
+    //d->view->refreshView();();
 }
 
 QMap<QString, int> CameraUI::countItemsByFolders() const
@@ -1988,13 +1988,13 @@ void CameraUI::setDownloaded(CamItemInfo& itemInfo, int status)
     }
 
     //TODO: Uncomment when download overlay is implemented.
-    d->view->update();
+    d->view->refreshView();
 }
 
 void CameraUI::slotProgressTimerDone()
 {
     //TODO: Uncomment
-    d->view->update();
+    d->view->refreshView();
     d->progressTimer->start(300);
 }
 

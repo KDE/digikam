@@ -120,8 +120,8 @@ ImportStackedView::ImportStackedView(CameraController* const controller, QWidget
     connect(d->importPreviewView, SIGNAL(signalPrevItem()),
             this, SIGNAL(signalPrevItem()));
 
-    connect(d->importPreviewView, SIGNAL(signalEditItem()),
-            this, SIGNAL(signalEditItem()));
+    //connect(d->importPreviewView, SIGNAL(signalEditItem()),
+            //this, SIGNAL(signalEditItem()));
 
     //FIXME: connect(d->importPreviewView, SIGNAL(signalDeleteItem()),
             //this, SIGNAL(signalDeleteItem()));

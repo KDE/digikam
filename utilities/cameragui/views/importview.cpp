@@ -201,17 +201,17 @@ void ImportView::setupConnections()
     connect(d->parent, SIGNAL(signalEscapePressed()),
             d->StackedView, SLOT(slotEscapePreview()));
 
-    connect(d->parent, SIGNAL(signalNextItem()),
-            this, SLOT(slotNextItem()));
+    //connect(d->parent, SIGNAL(signalNextItem()),
+            //this, SLOT(slotNextItem()));
 
-    connect(d->parent, SIGNAL(signalPrevItem()),
-            this, SLOT(slotPrevItem()));
+    //connect(d->parent, SIGNAL(signalPrevItem()),
+            //this, SLOT(slotPrevItem()));
 
-    connect(d->parent, SIGNAL(signalFirstItem()),
-            this, SLOT(slotFirstItem()));
+    //connect(d->parent, SIGNAL(signalFirstItem()),
+            //this, SLOT(slotFirstItem()));
 
-    connect(d->parent, SIGNAL(signalLastItem()),
-            this, SLOT(slotLastItem()));
+    //connect(d->parent, SIGNAL(signalLastItem()),
+            //this, SLOT(slotLastItem()));
 
     // -- IconView Connections -------------------------------------
 
@@ -592,7 +592,6 @@ ThumbnailSize ImportView::thumbnailSize()
 
 void ImportView::slotThumbSizeEffect()
 {
-    qDebug() << "SETTING THUMBNAIL SIZE IN <<<IMPORT VIEW>>>" << QString::number(d->thumbSize);
     d->iconView->setThumbnailSize(d->thumbSize);
     toggleZoomActions();
 

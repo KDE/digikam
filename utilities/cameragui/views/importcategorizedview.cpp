@@ -227,7 +227,6 @@ void ImportCategorizedView::setItemDelegate(ImportDelegate* delegate)
     }
 
     d->delegate = delegate;
-    qDebug() << QString::number(oldSize.size());
     delegate->setThumbnailSize(oldSize);
 
     if (oldDelegate)

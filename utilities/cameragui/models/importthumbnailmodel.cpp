@@ -89,12 +89,6 @@ void ImportThumbnailModel::setCameraController(CameraController* const controlle
     ImportImageModel::setCameraController(controller);
 }
 
-void ImportThumbnailModel::setThumbnailSize(const ThumbnailSize& thumbSize)
-{
-    d->lastGlobalThumbSize = thumbSize;
-    d->thumbSize           = thumbSize;
-}
-
 ThumbnailSize ImportThumbnailModel::thumbnailSize() const
 {
     return d->thumbSize;
@@ -118,7 +112,13 @@ QVariant ImportThumbnailModel::data(const QModelIndex& index, int role) const
             return QVariant(d->controller->mimeTypeThumbnail(path));
         }
 
-        if (getThumbInfo(info, item, d->thumbSize))
+        bool thumbChanged = false;
+        if(d->thumbSize != d->lastGlobalThumbSize)
+        {
+            thumbChanged = true;
+        }
+
+        if (getThumbInfo(info, item, d->thumbSize, thumbChanged))
         {
             return QVariant(item.second);
         }
@@ -147,6 +147,7 @@ bool ImportThumbnailModel::setData(const QModelIndex& index, const QVariant& val
                 }
                 else
                 {
+                    d->lastGlobalThumbSize = d->thumbSize;
                     d->thumbSize = value.toInt();
                 }
                 break;
@@ -159,8 +160,15 @@ bool ImportThumbnailModel::setData(const QModelIndex& index, const QVariant& val
     return ImportImageModel::setData(index, value, role);
 }
 
-bool ImportThumbnailModel::getThumbInfo(const CamItemInfo& info, CachedItem& item, ThumbnailSize thumbSize) const
+bool ImportThumbnailModel::getThumbInfo(const CamItemInfo& info, CachedItem& item, ThumbnailSize thumbSize, bool thumbChanged) const
 {
+    // If thumbSize changed clear cache and reload thumbs for items.
+    if(thumbChanged)
+    {
+        d->cache.clear();
+        d->pendingItems.clear();
+    }
+
     // We look if items are not in cache.
 
     if (hasItemFromCache(info.url()))
