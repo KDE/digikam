@@ -73,7 +73,7 @@ public:
     {
         m_info = info;
 
-        setPath(info.url().prettyUrl());
+        setPath(info.url().toLocalFile());
     }
 
     void hoverEnterEvent(QGraphicsSceneHoverEvent* e)
@@ -115,19 +115,19 @@ public:
     Private()
     {
         //peopleTagsShown    = false;
-        fullSize           = 0;
-        scale              = 1.0;
-        item               = 0;
-        isValid            = false;
-        toolBar            = 0;
-        //back2FilesListAction   = 0;
-        prevAction         = 0;
-        nextAction         = 0;
-        //rotLeftAction      = 0;
-        //rotRightAction     = 0;
-        //peopleToggleAction = 0;
-        //addPersonAction    = 0;
-        //faceGroup          = 0;
+        fullSize                = 0;
+        scale                   = 1.0;
+        item                    = 0;
+        isValid                 = false;
+        toolBar                 = 0;
+        back2FilesListAction    = 0;
+        prevAction              = 0;
+        nextAction              = 0;
+        //rotLeftAction         = 0;
+        //rotRightAction        = 0;
+        //peopleToggleAction    = 0;
+        //addPersonAction       = 0;
+        //faceGroup             = 0;
         mode               = ImportPreviewView::IconViewPreview;
     }
 
@@ -140,7 +140,7 @@ public:
 
     ImportPreviewViewItem*  item;
 
-    //QAction*               back2FilesListAction;
+    QAction*               back2FilesListAction;
     QAction*               prevAction;
     QAction*               nextAction;
     //QAction*               rotLeftAction;
@@ -183,7 +183,7 @@ ImportPreviewView::ImportPreviewView(QWidget* const parent, Mode mode)
 
     // ------------------------------------------------------------
 
-    //FIXME: d->back2FilesListAction   = new QAction(SmallIcon("folder-image"),        i18n("Back to Camera Files"),       this);
+    d->back2FilesListAction   = new QAction(SmallIcon("folder-image"),        i18n("Back to Camera Files"),       this);
     d->prevAction         = new QAction(SmallIcon("go-previous"),         i18nc("go to previous image", "Back"),  this);
     d->nextAction         = new QAction(SmallIcon("go-next"),             i18nc("go to next image", "Forward"),   this);
     //FIXME: d->rotLeftAction      = new QAction(SmallIcon("object-rotate-left"),  i18nc("@info:tooltip", "Rotate Left"),  this);
@@ -199,7 +199,7 @@ ImportPreviewView::ImportPreviewView(QWidget* const parent, Mode mode)
     {
         d->toolBar->addAction(d->prevAction);
         d->toolBar->addAction(d->nextAction);
-        //FIXME: d->toolBar->addAction(d->back2FilesListAction);
+        d->toolBar->addAction(d->back2FilesListAction);
     }
 
     //FIXME: d->toolBar->addAction(d->rotLeftAction);
@@ -213,8 +213,8 @@ ImportPreviewView::ImportPreviewView(QWidget* const parent, Mode mode)
     connect(d->nextAction, SIGNAL(triggered()),
             this, SIGNAL(toNextImage()));
 
-    //FIXME: connect(d->back2FilesListAction, SIGNAL(triggered()),
-            //this, SIGNAL(signalBack2Album()));
+    connect(d->back2FilesListAction, SIGNAL(triggered()),
+            this, SIGNAL(signalBack2FilesList()));
 
     //FIXME: connect(d->rotLeftAction, SIGNAL(triggered()),
             //this, SLOT(slotRotateLeft()));

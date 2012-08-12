@@ -23,6 +23,7 @@
  * ============================================================ */
 
 #include "importstackedview.moc"
+#include "importstackedview.h" //TODO: Delete this line.
 
 // Qt includes
 
@@ -126,8 +127,8 @@ ImportStackedView::ImportStackedView(CameraController* const controller, QWidget
     //FIXME: connect(d->importPreviewView, SIGNAL(signalDeleteItem()),
             //this, SIGNAL(signalDeleteItem()));
 
-    //FIXME: connect(d->importPreviewView, SIGNAL(signalBack2FilesList()),
-            //this, SIGNAL(signalBack2Album()));
+    connect(d->importPreviewView, SIGNAL(signalBack2FilesList()),
+            this, SIGNAL(signalBack2FilesList()));
 
     connect(d->importPreviewView->layout(), SIGNAL(zoomFactorChanged(double)),
             this, SLOT(slotZoomFactorChanged(double)));
@@ -159,8 +160,8 @@ ImportStackedView::ImportStackedView(CameraController* const controller, QWidget
     //FIXME: connect(d->mediaPlayerView, SIGNAL(signalPrevItem()),
             //this, SIGNAL(signalPrevItem()));
 
-    //FIXME: connect(d->mediaPlayerView, SIGNAL(signalBack2Album()),
-            //this, SIGNAL(signalBack2Album()));
+    //FIXME: connect(d->mediaPlayerView, SIGNAL(signalBack2FilesList()),
+            //this, SIGNAL(signalBack2FilesList()));
 
     connect(d->importPreviewView, SIGNAL(signalPreviewLoaded(bool)),
             this, SLOT(slotPreviewLoaded(bool)));
@@ -315,7 +316,7 @@ void ImportStackedView::setPreviewMode(const int mode)
     }
 
     //TODO: Implement the MapPageMode
-    if (mode == PreviewCameraMode || mode == MapWidgetMode)
+    if (mode == PreviewCameraMode /*|| mode == MapWidgetMode*/)
     {
         setPreviewItem();
         setCurrentIndex(mode);
@@ -365,7 +366,7 @@ void ImportStackedView::syncSelection(ImportCategorizedView* const from, ImportC
 
 void ImportStackedView::slotThumbBarSelectionChanged()
 {
-    if (currentIndex() != PreviewImageMode && currentIndex() != MediaPlayerMode)
+    if (currentIndex() != PreviewImageMode /*&& currentIndex() != MediaPlayerMode*/)
     {
         return;
     }

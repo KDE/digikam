@@ -10,6 +10,8 @@ SET(libcameragui_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/camerainfodialog.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/capturedlg.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/cameramessagebox.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/items/camerafolderitem.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/views/camerafolderview.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/views/cameranamehelper.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/views/freespacetooltip.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/capturewidget.cpp
@@ -40,18 +42,6 @@ SET(libcameragui_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/views/importiconview_p.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/views/importstackedview.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/views/importview.cpp
-
-    #${CMAKE_CURRENT_SOURCE_DIR}/controller/camerathumbsctrl.cpp
-
-    ${CMAKE_CURRENT_SOURCE_DIR}/items/camerafolderitem.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/views/camerafolderview.cpp
-
-    #${CMAKE_CURRENT_SOURCE_DIR}/q3support/cameraiconview.cpp
-    #${CMAKE_CURRENT_SOURCE_DIR}/q3support/cameraiconviewtooltip.cpp
-    #${CMAKE_CURRENT_SOURCE_DIR}/q3support/cameraiconitem.cpp
-    #${CMAKE_CURRENT_SOURCE_DIR}/q3support/icongroupitem.cpp
-    #${CMAKE_CURRENT_SOURCE_DIR}/q3support/iconitem.cpp
-    #${CMAKE_CURRENT_SOURCE_DIR}/q3support/iconview.cpp
 )
 
 KDE4_ADD_LIBRARY(cameragui STATIC ${libcameragui_SRCS})

@@ -270,8 +270,8 @@ void ImportView::setupConnections()
     connect(d->StackedView, SIGNAL(signalViewModeChanged()),
             this, SLOT(slotViewModeChanged()));
 
-    //FIXME: connect(d->StackedView, SIGNAL(signalBack2Album()),
-            //this, SLOT(slotEscapePreview()));
+    connect(d->StackedView, SIGNAL(signalBack2FilesList()),
+            this, SLOT(slotEscapePreview()));
 
     connect(d->StackedView, SIGNAL(signalZoomFactorChanged(double)),
             this, SLOT(slotZoomFactorChanged(double)));
@@ -742,7 +742,7 @@ void ImportView::slotImagePreview()
 }
 
 /**
- * @brief This method toggles between IconView/MapWidgetView and ImagePreview modes, depending on the context.
+ * @brief This method toggles between IconView/MapWidgetView and ImportPreview modes, depending on the context.
  */
 void ImportView::slotTogglePreviewMode(const CamItemInfo& info)
 {
@@ -750,6 +750,7 @@ void ImportView::slotTogglePreviewMode(const CamItemInfo& info)
            || d->StackedView->previewMode() == ImportStackedView::MapWidgetMode)
           && !info.isNull() )
     {
+        qDebug() << "Last preview mode " << d->StackedView->previewMode();
         d->lastPreviewMode = d->StackedView->previewMode();
 
         if (d->StackedView->previewMode() == ImportStackedView::PreviewCameraMode)
@@ -763,8 +764,9 @@ void ImportView::slotTogglePreviewMode(const CamItemInfo& info)
     }
     else
     {
+        qDebug() << "Last preview mode " << d->lastPreviewMode;
         // go back to either CameraViewMode or MapWidgetMode
-        d->StackedView->setPreviewMode( d->lastPreviewMode );
+        d->StackedView->setPreviewMode(d->lastPreviewMode);
     }
 
     // make sure the next/previous buttons are updated
@@ -798,31 +800,11 @@ void ImportView::slotViewModeChanged()
     }
 }
 
+//TODO: Delete or implement this.
 void ImportView::slotImageRename()
 {
     d->iconView->rename();
 }
-
-//FIXME: Remove these functions
-//void ImportView::slotImageDelete()
-//{
-//    d->iconView->deleteSelected(false);
-//}
-
-//void ImportView::slotImageDeletePermanently()
-//{
-//    d->iconView->deleteSelected(true);
-//}
-
-//void ImportView::slotImageDeletePermanentlyDirectly()
-//{
-//    d->iconView->deleteSelectedDirectly(false);
-//}
-
-//void ImportView::slotImageTrashDirectly()
-//{
-//    d->iconView->deleteSelectedDirectly(true);
-//}
 
 void ImportView::slotSelectAll()
 {

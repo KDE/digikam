@@ -115,10 +115,6 @@ public Q_SLOTS:
     void slotSelectInvert();
 
     void slotImageRename();
-    //void slotImageDelete();
-    //void slotImageDeletePermanently();
-    //void slotImageDeletePermanentlyDirectly();
-    //void slotImageTrashDirectly();
 
     void slotSortImages(int order);
     void slotSortImagesOrder(int order);
