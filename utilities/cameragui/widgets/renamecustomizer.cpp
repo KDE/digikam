@@ -8,8 +8,8 @@
  *               operations during camera downloading
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C)      2011 by Andi Clemens <andi dot clemens at googlemail dot com>
+ * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2011      by Andi Clemens <andi dot clemens at googlemail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -53,11 +53,11 @@
 namespace Digikam
 {
 
-class RenameCustomizer::RenameCustomizerPriv
+class RenameCustomizer::Private
 {
 public:
 
-    RenameCustomizerPriv() :
+    Private() :
         startIndex(1),
         buttonGroup(0),
         renameDefaultCase(0),
@@ -94,8 +94,8 @@ public:
     AdvancedRenameManager* advancedRenameManager;
 };
 
-RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
-    : QWidget(parent), d(new RenameCustomizerPriv)
+RenameCustomizer::RenameCustomizer(QWidget* const parent, const QString& cameraTitle)
+    : QWidget(parent), d(new Private)
 {
     d->changedTimer = new QTimer(this);
     d->cameraTitle  = cameraTitle;
@@ -104,19 +104,19 @@ RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
 
     setAttribute(Qt::WA_DeleteOnClose);
 
-    QGridLayout* mainLayout = new QGridLayout(this);
+    QGridLayout* mainLayout  = new QGridLayout(this);
 
     // ----------------------------------------------------------------
 
-    d->renameDefault = new QRadioButton(i18n("Camera filenames"), this);
+    d->renameDefault         = new QRadioButton(i18n("Camera filenames"), this);
     d->buttonGroup->addButton(d->renameDefault, 0);
     d->renameDefault->setWhatsThis(i18n("Turn on this option to use the camera "
                                         "provided image filenames without modifications."));
 
-    d->renameDefaultBox     = new QWidget(this);
-    QHBoxLayout* boxLayout1 = new QHBoxLayout(d->renameDefaultBox);
+    d->renameDefaultBox      = new QWidget(this);
+    QHBoxLayout* boxLayout1  = new QHBoxLayout(d->renameDefaultBox);
 
-    d->renameDefaultCase = new QLabel(i18n("Change case to:"), d->renameDefaultBox);
+    d->renameDefaultCase     = new QLabel(i18n("Change case to:"), d->renameDefaultBox);
     d->renameDefaultCase->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
 
     d->renameDefaultCaseType = new KComboBox(d->renameDefaultBox);
@@ -262,7 +262,7 @@ void RenameCustomizer::readSettings()
 
     KConfigGroup group   = config->group("Camera Settings");
     int def              = group.readEntry("Rename Method",        0);
-    int chcaseT          = group.readEntry("Case Type", (int)NONE);
+    int chcaseT          = group.readEntry("Case Type",            (int)NONE);
     QString manualRename = group.readEntry("Manual Rename String", QString());
 
     slotRadioButtonClicked(def);

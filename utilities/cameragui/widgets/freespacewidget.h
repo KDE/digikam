@@ -6,7 +6,7 @@
  * Date        : 2007-08-31
  * Description : a widget to display free space for a mount-point.
  *
- * Copyright (C) 2007-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -59,17 +59,17 @@ public:
 
 public:
 
-    FreeSpaceWidget(QWidget* parent, int width);
+    FreeSpaceWidget(QWidget* const parent, int width);
     ~FreeSpaceWidget();
 
     void          setEstimatedDSizeKb(unsigned long dSize);
     unsigned long estimatedDSizeKb() const;
 
-    bool          isValid() const;
-    int           percentUsed() const;
-    unsigned long kBSize() const;
-    unsigned long kBUsed() const;
-    unsigned long kBAvail() const;
+    bool          isValid()                    const;
+    int           percentUsed()                const;
+    unsigned long kBSize()                     const;
+    unsigned long kBUsed()                     const;
+    unsigned long kBAvail()                    const;
     unsigned long kBAvail(const QString& path) const;
 
     void          refresh();
@@ -91,13 +91,12 @@ protected:
 private Q_SLOTS:
 
     void slotTimeout();
-
     void slotAvailableFreeSpace(const QString& mountPoint, quint64 kBSize, quint64 kBUsed, quint64 kBAvail);
 
 private:
 
-    class FreeSpaceWidgetPriv;
-    FreeSpaceWidgetPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

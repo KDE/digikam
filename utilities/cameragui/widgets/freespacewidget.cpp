@@ -6,7 +6,7 @@
  * Date        : 2007-08-31
  * Description : a widget to display free space for a mount-point.
  *
- * Copyright (C) 2007-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -77,11 +77,11 @@ public:
 
 // ---------------------------------------------------------------------------------
 
-class FreeSpaceWidget::FreeSpaceWidgetPriv
+class FreeSpaceWidget::Private
 {
 public:
 
-    FreeSpaceWidgetPriv() :
+    Private() :
         isValid(false),
         percentUsed(0),
         dSizeKb(0),
@@ -115,8 +115,8 @@ public:
     FreeSpaceWidget::FreeSpaceMode  mode;
 };
 
-FreeSpaceWidget::FreeSpaceWidget(QWidget* parent, int width)
-    : QWidget(parent), d(new FreeSpaceWidgetPriv)
+FreeSpaceWidget::FreeSpaceWidget(QWidget* const parent, int width)
+    : QWidget(parent), d(new Private)
 {
     setAttribute(Qt::WA_DeleteOnClose);
     setFixedWidth(width);
@@ -199,6 +199,7 @@ void FreeSpaceWidget::addInformation(unsigned long kBSize,
     d->kBUsed      = 0;
     d->kBAvail     = 0;
     d->isValid     = false;
+
     foreach(const MountPointInfo& info, d->infos)
     {
         if (info.isValid)
@@ -209,6 +210,7 @@ void FreeSpaceWidget::addInformation(unsigned long kBSize,
             d->isValid  = true;
         }
     }
+
     d->percentUsed = lround(100.0 - (100.0 * kBAvail / kBSize));
 
     updateToolTip();
@@ -392,8 +394,8 @@ void FreeSpaceWidget::slotTimeout()
 
         if (info.isValid())
         {
-            addInformation((unsigned long)(info.size() / 1024.0),
-                           (unsigned long)(info.used() / 1024.0),
+            addInformation((unsigned long)(info.size()      / 1024.0),
+                           (unsigned long)(info.used()      / 1024.0),
                            (unsigned long)(info.available() / 1024.0),
                            info.mountPoint());
         }

@@ -21,8 +21,7 @@
  *
  * ============================================================ */
 
-//#include "importcontextmenu.moc"
-#include "importcontextmenu.h"
+#include "importcontextmenu.moc"
 
 // Qt includes
 
@@ -54,11 +53,11 @@
 namespace Digikam
 {
 
-class ImportContextMenuHelper::ImportContextMenuHelperPriv
+class ImportContextMenuHelper::Private
 {
 public:
 
-    ImportContextMenuHelperPriv(ImportContextMenuHelper* const q) :
+    Private(ImportContextMenuHelper* const q) :
         importFilterModel(0),
         parent(0),
         ABCmenu(0),
@@ -79,7 +78,7 @@ public:
 
     KActionCollection*           stdActionCollection;
 
-    ImportContextMenuHelper*           q;
+    ImportContextMenuHelper*     q;
 
 public:
 
@@ -98,8 +97,8 @@ public:
     }
 };
 
-ImportContextMenuHelper::ImportContextMenuHelper(QMenu* parent, KActionCollection* actionCollection)
-    : QObject(parent), d(new ImportContextMenuHelperPriv(this))
+ImportContextMenuHelper::ImportContextMenuHelper(QMenu* const parent, KActionCollection* const actionCollection)
+    : QObject(parent), d(new Private(this))
 {
     d->parent = parent;
 
@@ -148,14 +147,16 @@ void ImportContextMenuHelper::addSeparator()
 }
 
 void ImportContextMenuHelper::addAction(QAction* action, QObject* recv, const char* slot,
-                                  bool addDisabled)
+                                        bool addDisabled)
 {
     if (!action)
     {
         return;
     }
 
-    connect(action, SIGNAL(triggered()), recv, slot);
+    connect(action, SIGNAL(triggered()),
+            recv, slot);
+
     addAction(action, addDisabled);
 }
 
@@ -182,9 +183,10 @@ void ImportContextMenuHelper::addServicesMenu(const KUrl::List& selectedItems)
     if (!mimeTypes.isEmpty())
     {
         // Query trader
-        const QString firstMimeType = mimeTypes.takeFirst();
+        const QString firstMimeType      = mimeTypes.takeFirst();
         const QString constraintTemplate = "'%1' in ServiceTypes";
-        QStringList constraints;
+        QStringList   constraints;
+
         foreach(const QString& mimeType, mimeTypes)
         {
             constraints << constraintTemplate.arg(mimeType);
@@ -213,7 +215,7 @@ void ImportContextMenuHelper::addServicesMenu(const KUrl::List& selectedItems)
 
     if (!offers.isEmpty())
     {
-        KMenu* servicesMenu = new KMenu(d->parent);
+        KMenu* servicesMenu    = new KMenu(d->parent);
         qDeleteAll(servicesMenu->actions());
 
         QAction* serviceAction = servicesMenu->menuAction();
@@ -221,8 +223,8 @@ void ImportContextMenuHelper::addServicesMenu(const KUrl::List& selectedItems)
 
         foreach(KService::Ptr service, offers)
         {
-            QString name = service->name().replace('&', "&&");
-            QAction* action = servicesMenu->addAction(name);
+            QString name         = service->name().replace('&', "&&");
+            QAction* action      = servicesMenu->addAction(name);
             action->setIcon(KIcon(service->icon()));
             action->setData(service->name());
             d->servicesMap[name] = service;

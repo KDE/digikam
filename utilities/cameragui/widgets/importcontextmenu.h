@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef IMPORTImportContextMenu_H
-#define IMPORTImportContextMenu_H
+#ifndef ImportContextMenu_H
+#define ImportContextMenu_H
 
 // KDE includes
 
@@ -68,7 +68,7 @@ public:
      * @param actionCollection the actionCollection that should be used. If not set, the standard
      * action from DigikamApp is used
      */
-    explicit ImportContextMenuHelper(QMenu* parent, KActionCollection* actionCollection = 0);
+    explicit ImportContextMenuHelper(QMenu* const parent, KActionCollection* const actionCollection = 0);
     virtual ~ImportContextMenuHelper();
 
     /**
@@ -225,8 +225,8 @@ private:
 
 private:
 
-    class ImportContextMenuHelperPriv;
-    ImportContextMenuHelperPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam
