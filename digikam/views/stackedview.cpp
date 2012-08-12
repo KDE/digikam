@@ -439,7 +439,7 @@ void StackedView::decreaseZoom()
 
 void StackedView::zoomTo100Percents()
 {
-    d->imagePreviewView->layout()->setZoomFactor(1.0);
+    d->imagePreviewView->layout()->setZoomFactor(1.0, QPoint());
 }
 
 void StackedView::fitToWindow()
