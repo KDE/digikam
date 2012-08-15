@@ -63,11 +63,13 @@ public:
      * @return  the value of the given database key
      */
     QString getValue(const QString& key, ParseSettings& settings);
+
     /**
      * Get all IDs associated with this key collection.
      * @return a map of all associated ids and their description
      */
     DbKeyIdsMap ids() const;
+
     /**
      * Get the name of the %DbKeysCollection
      * @return the name of the collection
@@ -90,6 +92,7 @@ protected:
      * @see DbKeysCollection::getValue()
      */
     virtual QString getDbValue(const QString& key, ParseSettings& settings) = 0;
+
     /**
      * Add an ID to the key collection.
      *
