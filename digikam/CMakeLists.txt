@@ -237,7 +237,7 @@ SET(digikam_SRCS ${libdimgimagewindow_SRCS}
                  ${libimagepropertiesdigikam_SRCS}
                  ${libimageversionssidebar_SRCS}
                  ${libsetup_SRCS}
-                 ${libcameragui_SRCS}
+                 ${libimportui_SRCS}
                  ${liblighttable_SRCS}
                  ${libmaintenance_SRCS}
                  ${libkipiiface_SRCS}
@@ -295,7 +295,7 @@ TARGET_LINK_LIBRARIES(digikam
         queuemanager
 	${KDE4_THREADWEAVER_LIBRARIES}
 
-        cameragui
+        importui
 
         # See B.K.O #258931: libgphoto2 library must be the last arg for linker.
         ${GPHOTO2_LIBRARIES}
