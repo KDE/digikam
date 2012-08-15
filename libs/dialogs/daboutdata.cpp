@@ -125,7 +125,7 @@ void DAboutData::authorsRegistration(KAboutData& aboutData)
 
     aboutData.addAuthor ( ki18n("Andi Clemens"),
                           ki18n("Developer"),
-                          "andi dot clemens at googlemail dot com",
+                          "andi dot clemens at gmail dot com",
                           "http://www.digikam.org/?q=blog/135");
 
     aboutData.addAuthor ( ki18n("Matthias Welwarsky"),
