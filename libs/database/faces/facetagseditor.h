@@ -87,7 +87,7 @@ public:
      * If trainFace is true, the face will also be listed in the db as needing training.
      * The tag of the face will, if necessary, be converted to a person tag.
      */
-    void add(const DatabaseFace& face, bool trainFace = true);
+    void         add(const DatabaseFace& face, bool trainFace = true);
     DatabaseFace add(qlonglong imageid, int tagId, const TagRegion& region, bool trainFace = true);
     DatabaseFace addManually(const DatabaseFace& face);
 
@@ -152,7 +152,6 @@ protected:
     virtual void addNormalTag(qlonglong imageid, int tagId);
     virtual void removeNormalTag(qlonglong imageid, int tagId);
     virtual void removeNormalTags(qlonglong imageid, QList<int> tagId);
-
 };
 
 }  // Namespace Digikam
