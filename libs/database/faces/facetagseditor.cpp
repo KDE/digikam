@@ -85,7 +85,8 @@ QList<DatabaseFace> FaceTagsEditor::confirmedDatabaseFaces(qlonglong imageId) co
 QList<DatabaseFace> FaceTagsEditor::databaseFaces(qlonglong imageid, DatabaseFace::TypeFlags flags) const
 {
     QList<DatabaseFace> faces;
-    QStringList attributes = DatabaseFace::attributesForFlags(flags);
+    QStringList         attributes = DatabaseFace::attributesForFlags(flags);
+
     foreach(const ImageTagPair& pair, faceImageTagPairs(imageid, flags))
     {
         foreach(const QString& attribute, attributes)
@@ -111,8 +112,8 @@ QList<DatabaseFace> FaceTagsEditor::databaseFaces(qlonglong imageid, DatabaseFac
 QList<ImageTagPair> FaceTagsEditor::faceImageTagPairs(qlonglong imageid, DatabaseFace::TypeFlags flags) const
 {
     QList<ImageTagPair> pairs;
+    QStringList         attributes = DatabaseFace::attributesForFlags(flags);
 
-    QStringList attributes = DatabaseFace::attributesForFlags(flags);
     foreach(const ImageTagPair& pair, ImageTagPair::availablePairs(imageid))
     {
         //kDebug() << pair.tagId() << pair.properties();
@@ -140,12 +141,13 @@ QList<ImageTagPair> FaceTagsEditor::faceImageTagPairs(qlonglong imageid, Databas
 
 QList< QRect > FaceTagsEditor::getTagRects(qlonglong imageid) const
 {
-    QList< QRect > rectList;
-
+    QList<QRect>        rectList;
     QList<ImageTagPair> pairs = ImageTagPair::availablePairs(imageid);
+
     foreach(const ImageTagPair& pair, pairs)
     {
         QStringList regions = pair.values(ImageTagPropertyName::tagRegion());
+
         foreach(const QString& region, regions)
         {
             QRect rect = TagRegion(region).toRect();
@@ -163,9 +165,9 @@ QList< QRect > FaceTagsEditor::getTagRects(qlonglong imageid) const
 int FaceTagsEditor::numberOfFaces(qlonglong imageid) const
 {
     // Use case for this? Depending on a use case, we can think of an optimization
-    int count = 0;
-
+    int                 count = 0;
     QList<ImageTagPair> pairs = ImageTagPair::availablePairs(imageid);
+
     foreach(const ImageTagPair& pair, pairs)
     {
         QStringList regions = pair.values(ImageTagPropertyName::tagRegion());
@@ -257,8 +259,8 @@ void FaceTagsEditor::addFaceAndTag(ImageTagPair& pair, const DatabaseFace& face,
                     const QStringList& properties, bool addTag)
 {
     FaceTags::ensureIsPerson(face.tagId());
-
     QString region = face.region().toXml();
+
     foreach(const QString& property, properties)
     {
         pair.addProperty(property, region);
@@ -274,8 +276,9 @@ void FaceTagsEditor::addFaceAndTag(ImageTagPair& pair, const DatabaseFace& face,
 
 void FaceTagsEditor::removeAllFaces(qlonglong imageid)
 {
-    QList<int> tagsToRemove;
+    QList<int>  tagsToRemove;
     QStringList attributes = DatabaseFace::attributesForFlags(DatabaseFace::AllTypes);
+
     foreach(ImageTagPair pair, faceImageTagPairs(imageid, DatabaseFace::AllTypes))
     {
         foreach(const QString& attribute, attributes)
@@ -294,13 +297,14 @@ void FaceTagsEditor::removeAllFaces(qlonglong imageid)
 
 void FaceTagsEditor::removeFace(qlonglong imageid, const QRect& rect)
 {
-    QList<int> tagsToRemove;
-    QStringList attributes    = DatabaseFace::attributesForFlags(DatabaseFace::AllTypes);
-    QList<ImageTagPair> pairs = faceImageTagPairs(imageid, DatabaseFace::AllTypes);
+    QList<int>          tagsToRemove;
+    QStringList         attributes    = DatabaseFace::attributesForFlags(DatabaseFace::AllTypes);
+    QList<ImageTagPair> pairs         = faceImageTagPairs(imageid, DatabaseFace::AllTypes);
 
     for (int i=0; i<pairs.size(); ++i)
     {
         ImageTagPair& pair = pairs[i];
+
         foreach(const QString& attribute, attributes)
         {
             foreach(const QString& regionString, pair.values(attribute))
@@ -357,9 +361,9 @@ void FaceTagsEditor::removeFaceAndTag(ImageTagPair& pair, const DatabaseFace& fa
     }
 
     // Tag assigned and no other entry left?
-    if (touchTags
-        && pair.isAssigned()
-        && !pair.hasProperty(DatabaseFace::attributeForType(DatabaseFace::ConfirmedName)))
+    if (touchTags            &&
+        pair.isAssigned()    &&
+        !pair.hasProperty(DatabaseFace::attributeForType(DatabaseFace::ConfirmedName)))
     {
         removeNormalTag(face.imageId(), pair.tagId());
     }
@@ -400,12 +404,12 @@ void FaceTagsEditor::removeNormalTags(qlonglong imageId, QList<int> tagIds)
     DatabaseOperationGroup group;
     group.setMaximumTime(200);
     ImageInfo info(imageId);
+
     foreach(int tagId, tagIds)
     {
         info.removeTag(tagId);
         group.allowLift();
     }
 }
-
 
 } // Namespace Digikam

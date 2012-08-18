@@ -77,18 +77,22 @@ public:
     {
         return type() == UnknownName;
     }
+
     bool      isUnconfirmedName() const
     {
         return type() == UnconfirmedName;
     }
+
     bool      isUnconfirmedType() const
     {
         return type() & UnconfirmedTypes;
     }
+
     bool      isConfirmedName() const
     {
         return type() == ConfirmedName;
     }
+
     bool      isForTraining() const
     {
         return type() == FaceForTraining;
