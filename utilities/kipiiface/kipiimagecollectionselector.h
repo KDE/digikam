@@ -55,6 +55,7 @@ public:
     ~KipiImageCollectionSelector();
 
     QList<KIPI::ImageCollection> selectedImageCollections() const;
+    void enableTags(bool flag=true);
 
 private:
 
