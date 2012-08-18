@@ -337,7 +337,7 @@ void AdvancedRenameWidget::setupWidgets()
 
     d->renameInput = new AdvancedRenameInput;
     d->renameInput->setToolTip(i18n("<p>Enter your renaming pattern here. Use the access buttons to quickly add renaming "
-                                    "options and modifiers. For further explanations, use the information toolbutton.</p>"));
+                                    "options and modifiers. For further explanation, use the information button.</p>"));
 
     // --------------------------------------------------------
 
