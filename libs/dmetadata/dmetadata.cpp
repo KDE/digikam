@@ -1128,37 +1128,37 @@ VideoInfoContainer DMetadata::getVideoInformation() const
     {
         if (videoInfo.aspectRatio.isEmpty())
         {
-            videoInfo.aspectRatio = getXmpTagString("Xmp.video.aspectRatio");
+            videoInfo.aspectRatio = getXmpTagString("Xmp.video.AspectRatio");
         }
 
         if (videoInfo.audioBitRate.isEmpty())
         {
-            videoInfo.audioBitRate = getXmpTagString("Xmp.audio.sampleRate");
+            videoInfo.audioBitRate = getXmpTagString("Xmp.audio.SampleRate");
         }
 
         if (videoInfo.audioChannelType.isEmpty())
         {
-            videoInfo.audioChannelType = getXmpTagString("Xmp.audio.channelType");
+            videoInfo.audioChannelType = getXmpTagString("Xmp.audio.ChannelType");
         }
 
         if (videoInfo.audioCompressor.isEmpty())
         {
-            videoInfo.audioCompressor = getXmpTagString("Xmp.audio.compressor");
+            videoInfo.audioCompressor = getXmpTagString("Xmp.audio.Compressor");
         }
 
         if (videoInfo.duration.isEmpty())
         {
-            videoInfo.duration = getXmpTagString("Xmp.video.duration");
+            videoInfo.duration = getXmpTagString("Xmp.video.Duration");
         }
 
         if (videoInfo.frameRate.isEmpty())
         {
-            videoInfo.frameRate = getXmpTagString("Xmp.video.frameRate");
+            videoInfo.frameRate = getXmpTagString("Xmp.video.FrameRate");
         }
 
         if (videoInfo.videoCodec.isEmpty())
         {
-            videoInfo.videoCodec = getXmpTagString("Xmp.video.codec");
+            videoInfo.videoCodec = getXmpTagString("Xmp.video.Codec");
         }
 
     }
@@ -2277,25 +2277,25 @@ QVariant DMetadata::getMetadataField(MetadataInfo::Field field) const
         case MetadataInfo::IptcCoreContactInfoWebUrl:
             return getXmpTagVariant("Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiUrlWork");
         case MetadataInfo::AspectRatio:
-            return fromXmpLangAlt("Xmp.video.aspectRatio");
+            return fromXmpLangAlt("Xmp.video.AspectRatio");
         case MetadataInfo::AudioBitRate:
-            return fromXmpLangAlt("Xmp.audio.sampleRate");
+            return fromXmpLangAlt("Xmp.audio.SampleRate");
         case MetadataInfo::AudioChannelType:
-            return fromXmpLangAlt("Xmp.audio.channelType");
+            return fromXmpLangAlt("Xmp.audio.ChannelType");
         case MetadataInfo::AudioCompressor:
-            return fromXmpLangAlt("Xmp.audio.compressor");
+            return fromXmpLangAlt("Xmp.audio.Compressor");
         case MetadataInfo::Duration:
-            return fromXmpLangAlt("Xmp.video.duration");
+            return fromXmpLangAlt("Xmp.video.Duration");
         case MetadataInfo::FrameRate:
-            return fromXmpLangAlt("Xmp.video.frameRate");
+            return fromXmpLangAlt("Xmp.video.FrameRate");
         case MetadataInfo::VideoCodec:
-            return fromXmpLangAlt("Xmp.video.codec");
+            return fromXmpLangAlt("Xmp.video.Codec");
         case MetadataInfo::VideoBitDepth:
-            return fromXmpLangAlt("Xmp.video.bitDepth");
+            return fromXmpLangAlt("Xmp.video.BitDepth");
         case MetadataInfo::VideoHeight:
-            return fromXmpLangAlt("Xmp.video.height");
+            return fromXmpLangAlt("Xmp.video.Height");
         case MetadataInfo::VideoWidth:
-            return fromXmpLangAlt("Xmp.video.width");
+            return fromXmpLangAlt("Xmp.video.Width");
 
         default:
             return QVariant();
