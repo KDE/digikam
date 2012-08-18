@@ -7,7 +7,7 @@
  * Description : filters view for the right sidebar
  *
  * Copyright (C) 2009-2010 by Johannes Wienke <languitar at semipol dot de>
- * Copyright (C) 2010-2011 by Andi Clemens <andi dot clemens at googlemail dot com>
+ * Copyright (C) 2010-2011 by Andi Clemens <andi dot clemens at gmail dot com>
  * Copyright (C)      2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2011 by Michael G. Hansen <mike at mghansen dot de>
  *

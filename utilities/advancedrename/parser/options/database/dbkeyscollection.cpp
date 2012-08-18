@@ -6,7 +6,7 @@
  * Date        : 2010-05-19
  * Description : a base class for a database keys collection
  *
- * Copyright (C) 2009-2012 by Andi Clemens <andi dot clemens at googlemail dot com>
+ * Copyright (C) 2009-2012 by Andi Clemens <andi dot clemens at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General

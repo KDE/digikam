@@ -6,7 +6,7 @@
  * Date        : 2009-02-15
  * Description : contextmenu helper class
  *
- * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at googlemail dot com>
+ * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at gmail dot com>
  * Copyright (C) 2010-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
