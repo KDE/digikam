@@ -253,7 +253,7 @@ QList<KIPI::ImageCollection> KipiImageCollectionSelector::selectedImageCollectio
     return list;
 }
 
-void KipiImageCollectionSelector::enableTags(bool flag)
+void KipiImageCollectionSelector::enableVirtualCollections(bool flag)
 {
     if (flag == false)
     {
