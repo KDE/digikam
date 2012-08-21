@@ -45,6 +45,9 @@
 /* Define to 1 if GPhoto2 shared library is installed */
 #cmakedefine HAVE_GPHOTO2 1
 
+/* Define to 1 if libgphoto2 2.5 shared library is installed */
+#cmakedefine HAVE_GPHOTO25 1
+
 /* Define to 1 if thumbnails database is used */
 #cmakedefine USE_THUMBS_DB 1
 

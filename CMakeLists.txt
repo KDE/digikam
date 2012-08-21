@@ -329,6 +329,24 @@ IF (NOT WIN32 AND HAVE_GPHOTO2)
     MACRO_OPTIONAL_FIND_PACKAGE(USB)
 ENDIF (NOT WIN32 AND HAVE_GPHOTO2)
 
+IF(GPHOTO2_FOUND)
+    EXEC_PROGRAM(gphoto2-config ARGS --version RETURN_VALUE _return_VALUE OUTPUT_VARIABLE GPHOTO2_VERSION)
+    STRING(REPLACE "libgphoto2" "" GPHOTO2_VERSION "${GPHOTO2_VERSION}")
+    MACRO_ENSURE_VERSION("2.4.0" "${GPHOTO2_VERSION}" VERSION_GPHOTO2)
+    IF(VERSION_GPHOTO2 AND LIBUSB_FOUND)
+        SET(GPHOTO2_FOUND true)
+    ELSE(VERSION_GPHOTO2 AND LIBUSB_FOUND)
+        SET(GPHOTO2_FOUND false)
+    ENDIF(VERSION_GPHOTO2 AND LIBUSB_FOUND)
+    MACRO_ENSURE_VERSION("2.5.0" "${GPHOTO2_VERSION}" VERSION_GPHOTO25)
+    IF(VERSION_GPHOTO25)
+        SET(HAVE_GPHOTO25 1)
+    ELSE(VERSION_GPHOTO25)
+        SET(HAVE_GPHOTO25 0)
+    ENDIF(VERSION_GPHOTO25)
+ENDIF(GPHOTO2_FOUND)
+
+
 MACRO_OPTIONAL_FIND_PACKAGE(KdepimLibs)
 MACRO_BOOL_TO_01(KDEPIMLIBS_FOUND HAVE_KDEPIMLIBS)
 
@@ -377,6 +395,8 @@ MACRO_OPTIONAL_FIND_PACKAGE(Doxygen)
 # Set config files accordingly with optional dependencies
 
 CONFIGURE_FILE(digikam/utils/config-digikam.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/digikam/utils/config-digikam.h)
+
+
 
 # ==================================================================================================
 # Log messages
@@ -428,18 +448,10 @@ ENDIF(CLAPACK_FOUND)
 # ================================================================
 
 IF(GPHOTO2_FOUND)
-    EXEC_PROGRAM(gphoto2-config ARGS --version RETURN_VALUE _return_VALUE OUTPUT_VARIABLE GPHOTO2_VERSION)
-    STRING(REPLACE "libgphoto2" "" GPHOTO2_VERSION "${GPHOTO2_VERSION}")
-    MACRO_ENSURE_VERSION("2.4.0" "${GPHOTO2_VERSION}" VERSION_GPHOTO2)
-    IF(VERSION_GPHOTO2 AND LIBUSB_FOUND)
-        SET(GPHOTO2_FOUND true)
-    ELSE(VERSION_GPHOTO2 AND LIBUSB_FOUND)
-        SET(GPHOTO2_FOUND false)
-    ENDIF(VERSION_GPHOTO2 AND LIBUSB_FOUND)
-ENDIF(GPHOTO2_FOUND)
-
-IF(GPHOTO2_FOUND)
     MESSAGE(STATUS " libgphoto2 and libusb libraries found.... YES (optional)")
+    IF(HAVE_GPHOTO25)
+    MESSAGE(STATUS " libgphoto2 2.5 library found............. YES (optional)")
+    endIF(HAVE_GPHOTO25)
 ELSE(GPHOTO2_FOUND)
     MESSAGE(STATUS " libgphoto2 and libusb libraries found.... NO  (optional)")
     MESSAGE(STATUS "")

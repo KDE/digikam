@@ -1329,10 +1329,19 @@ bool GPCamera::uploadItem(const QString& folder, const QString& itemName, const 
     d->status = 0;
     d->status = new GPStatus;
 
+#ifdef HAVE_GPHOTO25
+    errorCode = gp_camera_folder_put_file(d->camera,
+                                          QFile::encodeName(folder).constData(),
+                                          QFile::encodeName(itemName),
+                                          GP_FILE_TYPE_NORMAL,
+                                          cfile,
+                                          d->status->context);
+#else
     errorCode = gp_camera_folder_put_file(d->camera,
                                           QFile::encodeName(folder).constData(),
                                           cfile,
                                           d->status->context);
+#endif
 
     if (errorCode != GP_OK)
     {
@@ -1651,7 +1660,13 @@ void GPCamera::getSupportedPorts(QStringList& plist)
         for (int i = 0 ; i < numPorts ; ++i)
         {
             gp_port_info_list_get_info(list, i, &info);
+#ifdef HAVE_GPHOTO25
+	    char *xpath;
+            gp_port_info_get_name (info, &xpath);
+            plist.append(xpath);
+#else
             plist.append(info.path);
+#endif
         }
     }
 
@@ -1770,9 +1785,11 @@ bool GPCamera::findConnectedUsbCamera(int vendorId, int productId, QString& mode
 #ifdef HAVE_GPHOTO2
     CameraAbilitiesList* abilList = 0;
     GPPortInfoList*      list     = 0;
-    GPPortInfo           info;
     GPContext*           context  = 0;
+    CameraList		 *camList;
     bool                 success;
+    // get name and port of detected camera
+    const char* model_str = 0, *port_str = 0;
 
     success = false;
 
@@ -1782,76 +1799,57 @@ bool GPCamera::findConnectedUsbCamera(int vendorId, int productId, QString& mode
     gp_port_info_list_new(&list);
     gp_port_info_list_load(list);
 
-    int numPorts = gp_port_info_list_count(list);
+    gp_abilities_list_new(&abilList);
+    // get list of all supported cameras
+    gp_abilities_list_load(abilList, context);
 
-    for (int i = 0 ; i < numPorts ; ++i)
+    // autodetect all cameras, then match the list to the passed in USB ids
+    gp_list_new (&camList);
+    gp_abilities_list_detect(abilList, list, camList, context);
+    gp_context_unref(context);
+    gp_port_info_list_free(list);
+
+    int count = gp_list_count(camList);
+    int cnt = 0;
+
+    for (int i = 0 ; i < count ; ++i)
     {
-        // create a port object from info
-        gp_port_info_list_get_info(list, i, &info);
-        GPPort* gpport = 0;
-        gp_port_new(&gpport);
-        gp_port_set_info(gpport, info);
+	const char *xmodel;
+        gp_list_get_name(camList, i, &xmodel);
+        int model = gp_abilities_list_lookup_model (abilList, xmodel);
+	CameraAbilities ab;
+        gp_abilities_list_get_abilities (abilList, model, &ab);
 
-        // check if device is connected to port
-        if (gp_port_usb_find_device(gpport, vendorId, productId) == GP_OK)
-        {
-            CameraList*          camList  = 0;
-            GPPortInfoList*      portinfo = 0;
+        if (ab.port != GP_PORT_USB)	continue;
+        if (ab.usb_vendor != vendorId)	continue;
+        if (ab.usb_product != productId)continue;
 
-            // create three lists
-            gp_list_new(&camList);
-            gp_port_info_list_new(&portinfo);
-            gp_abilities_list_new(&abilList);
+	/* keep it, and continue iterating, in case we find anohter one */
+        gp_list_get_name (camList, i, &model_str);
+        gp_list_get_value(camList, i, &port_str);
 
-            // append one port info to
-            gp_port_info_list_append(portinfo, info);
-            // get list of all supported cameras
-            gp_abilities_list_load(abilList, context);
-            // search for all supported cameras on one port
-            gp_abilities_list_detect(abilList, portinfo, camList, context);
-            int count = gp_list_count(camList);
-            // get name and port of detected camera
-            const char* model_str = 0, *port_str = 0;
+	cnt++;
+    }
+    gp_abilities_list_free(abilList);
+    if (cnt > 0)
+    {
+       if (cnt > 1)
+       {
+          kWarning() << "More than one camera detected on port " << port
+                     << ". Due to restrictions in the GPhoto2 API, "
+                     << "only the first camera is used.";
+       }
+       model   = QString::fromLatin1(model_str);
+       port    = QString::fromLatin1(port_str);
 
-            if (count > 0)
-            {
-                if (count > 1)
-                {
-                    kWarning() << "More than one camera detected on port " << port
-                               << ". Due to restrictions in the GPhoto2 API, "
-                               << "only the first camera is used.";
-                }
-
-                if (gp_list_get_name(camList, 0, &model_str) == GP_OK &&
-                    gp_list_get_value(camList, 0, &port_str) == GP_OK)
-                {
-                    model   = QString::fromLatin1(model_str);
-                    port    = QString::fromLatin1(port_str);
-
-                    success = true;
-                }
-                else
-                {
-                    kError() << "Failed to get information for the listed camera";
-                }
-            }
-
-            gp_abilities_list_free(abilList);
-            gp_port_info_list_free(portinfo);
-            gp_list_free(camList);
-        }
-
-        gp_port_free(gpport);
-
-        if (success)
-        {
-            break;
-        }
+       success = true;
+    }
+    else
+    {
+       kError() << "Failed to get information for the listed camera";
     }
 
-    gp_port_info_list_free(list);
-    gp_context_unref(context);
-
+    gp_list_free(camList);
     return success;
 #else
     Q_UNUSED(vendorId);
