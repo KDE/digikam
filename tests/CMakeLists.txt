@@ -23,10 +23,10 @@ TARGET_LINK_LIBRARIES(advancedrenametest
 
 SET(cameranamehelper_SRCS
     cameranamehelpertest.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/cameragui/views/cameranamehelper.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/cameragui/devices/gpcamera.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/cameragui/devices/camiteminfo.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/cameragui/devices/dkcamera.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/importui/views/cameranamehelper.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/importui/backend/gpcamera.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/importui/backend/camiteminfo.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/importui/backend/dkcamera.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/utils/albumsettings.cpp
    )
 
@@ -132,8 +132,8 @@ TARGET_LINK_LIBRARIES(filesaveoptionsboxtest
 #    ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/database/databaseguierrorhandler.cpp
 #    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/widgets/common/databasewidget.cpp
 #    ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/database/scancontroller.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/cameragui/dkcamera.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/cameragui/gpcamera.cpp
+#    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/importui/dkcamera.cpp
+#    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/importui/gpcamera.cpp
 #    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/cameralist.cpp
 #    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/cameraselection.cpp
 #    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/cameratype.cpp
