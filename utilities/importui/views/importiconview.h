@@ -68,14 +68,17 @@ Q_SIGNALS:
 
     void previewRequested(const CamItemInfo& info);
 
-protected:
+private Q_SLOTS:
 
     void slotRotateLeft(const QList<QModelIndex>&);
     void slotRotateRight(const QList<QModelIndex>&);
-    void slotInitProgressIndicator();
+    //void slotInitProgressIndicator();
+
+protected:
 
     virtual void activated(const CamItemInfo& info);
     virtual void showContextMenuOnInfo(QContextMenuEvent* event, const CamItemInfo& info);
+    virtual void showContextMenu(QContextMenuEvent* event);
     virtual void slotSetupChanged();
 
 private:

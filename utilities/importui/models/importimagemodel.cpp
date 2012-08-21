@@ -114,8 +114,8 @@ void ImportImageModel::setCameraController(CameraController* const controller)
     connect(d->controller, SIGNAL(signalFileList(CamItemInfoList)),
             SLOT(reAddCamItemInfos(CamItemInfoList)));
 
-    //connect(d->controller, SIGNAL(signalDeleted(QString, QString, bool)),
-            //SLOT(slotFileDeleted(QString, QString, bool)));
+    connect(d->controller, SIGNAL(signalDeleted(QString, QString, bool)),
+            SLOT(slotFileDeleted(QString, QString, bool)));
 
     connect(d->controller, SIGNAL(signalUploaded(CamItemInfo)),
             SLOT(slotFileUploaded(CamItemInfo)));

@@ -22,6 +22,8 @@
  * ============================================================ */
 
 #include "importfiltermodel.moc"
+#include "importfiltermodel.h" //TODO: Remove this line.
+#include "../backend/camiteminfo.h"
 
 namespace Digikam
 {
@@ -378,10 +380,8 @@ void ImportFilterModel::setDirectSourceImportModel(ImportImageModel* const sourc
 
     if (d->importImageModel)
     {
-        //d->importImageModel->unsetPreprocessor(d);
-
-        disconnect(d->importImageModel, SIGNAL(modelReset()),
-                           this, SLOT(slotModelReset()));
+        //disconnect(d->importImageModel, SIGNAL(modelReset()),
+                           //this, SLOT(slotModelReset()));
         //TODO: slotModelReset(); will be added when implementing filtering options
     }
 
@@ -389,14 +389,6 @@ void ImportFilterModel::setDirectSourceImportModel(ImportImageModel* const sourc
 
     if (d->importImageModel)
     {
-        //d->importImageModel->setPreprocessor(d);
-
-        //connect(d->importImageModel, SIGNAL(preprocess(QList<CamItemInfo>,QList<QVariant>)),
-                //d, SLOT(preprocessInfos(QList<CamItemInfo>,QList<QVariant>)));
-
-        //connect(d->importImageModel, SIGNAL(processAdded(QList<CamItemInfo>,QList<QVariant>)),
-                //d, SLOT(processAddedInfos(QList<CamItemInfo>,QList<QVariant>)));
-
         //connect(d, SIGNAL(reAddCamItemInfos(QList<CamItemInfo>)),
                 //d->importImageModel, SLOT(reAddCamItemInfos(QList<CamItemInfo>)));
 
@@ -412,6 +404,11 @@ void ImportFilterModel::setDirectSourceImportModel(ImportImageModel* const sourc
 int ImportFilterModel::compareCategories(const QModelIndex& left, const QModelIndex& right) const
 {
     Q_D(const ImportFilterModel);
+
+    if (!d->sorter.isCategorized())
+    {
+        return 0;
+    }
 
     if (!left.isValid() || !right.isValid())
     {

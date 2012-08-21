@@ -221,11 +221,11 @@ void ImportView::setupConnections()
 
     // -- Preview image widget Connections ------------------------
 
-    //connect(d->StackedView, SIGNAL(signalNextItem()),
-            //this, SLOT(slotNextItem()));
+    connect(d->StackedView, SIGNAL(signalNextItem()),
+            this, SLOT(slotNextItem()));
 
-    //connect(d->StackedView, SIGNAL(signalPrevItem()),
-            //this, SLOT(slotPrevItem()));
+    connect(d->StackedView, SIGNAL(signalPrevItem()),
+            this, SLOT(slotPrevItem()));
 
     //connect(d->StackedView, SIGNAL(signalEditItem()),
             //this, SLOT(slotImageEdit()));
@@ -633,7 +633,6 @@ void ImportView::slotFitToWindow()
     if (d->StackedView->previewMode() == ImportStackedView::PreviewCameraMode)
     {
         int nts = d->iconView->fitToWidthIcons();
-        kDebug() << "new thumb size = " << nts;//TODO: Remove this line.
         setThumbSize(nts);
         toggleZoomActions();
         emit signalThumbSizeChanged(d->thumbSize);

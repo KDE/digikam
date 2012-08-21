@@ -187,11 +187,14 @@ void ImportCategoryDrawer::viewHeaderText(const QModelIndex& index, QString* hea
     }
 
     CamItemInfo info     = sourceModel->retrieveCamItemInfo(index);
-    int count            = d->view->categoryRange(index).height();
-    QStringList splitted = info.url().prettyUrl().split("/");
-    *header              = splitted.value(splitted.length() - 2);
+    if(!info.isNull())
+    {
+        int count            = d->view->categoryRange(index).height();
+        QStringList splitted = info.url().prettyUrl().split("/");
+        *header              = splitted.value(splitted.length() - 2);
 
-    *subLine             = i18np("1 Item", "%1 Items", count);
+        *subLine             = i18np("1 Item", "%1 Items", count);
+    }
 }
 
 void ImportCategoryDrawer::textForFormat(const QModelIndex& index, QString* header, QString* subLine) const

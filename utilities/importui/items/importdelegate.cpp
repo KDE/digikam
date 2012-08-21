@@ -23,7 +23,7 @@
 
 #include "importdelegate.moc"
 #include "importdelegatepriv.h"
-#include "importdelegate.h"
+#include "importdelegate.h" //TODO: Remove this line.
 
 // Qt includes
 
@@ -578,7 +578,7 @@ int ImportThumbnailDelegate::maximumSize() const
 {
     Q_D(const ImportThumbnailDelegate);
 
-    return ThumbnailSize::Huge; + (2*d->radius + 2*d->margin);
+    return ThumbnailSize::Huge + (2*d->radius + 2*d->margin);
 }
 
 int ImportThumbnailDelegate::minimumSize() const

@@ -60,10 +60,10 @@ void CamItemSortSettings::setCategorizationMode(CategorizationMode mode)
 {
     categorizationMode = mode;
 
-    if (categorizationSortOrder == DefaultOrder)
-    {
-        currentCategorizationSortOrder = defaultSortOrderForCategorizationMode(categorizationMode);
-    }
+//    if (categorizationSortOrder == DefaultOrder)
+//    {
+//        currentCategorizationSortOrder = defaultSortOrderForCategorizationMode(categorizationMode);
+//    }
 }
 
 void CamItemSortSettings::setCategorizationSortOrder(SortOrder order)
@@ -125,6 +125,8 @@ Qt::SortOrder CamItemSortSettings::defaultSortOrderForSortRole(SortRole role)
             return Qt::AscendingOrder;
         case SortByFileSize:
             return Qt::DescendingOrder;
+    case SortByCreationDate:
+        return Qt::AscendingOrder;
         case SortByDownloadState:
             return Qt::Ascending;
         default:
@@ -165,6 +167,11 @@ bool CamItemSortSettings::lessThan(const CamItemInfo& left, const CamItemInfo& r
         return result < 0;
     }
 
+    if ((result = compare(left, right, SortByCreationDate)) != 0)
+    {
+        return result < 0;
+    }
+
     if ( (result = compare(left, right, SortByFilePath)) != 0)
     {
         return result < 0;
@@ -182,7 +189,7 @@ int CamItemSortSettings::compare(const CamItemInfo& left, const CamItemInfo& rig
 {
     return compare(left, right, sortRole);
 }
-
+#include "../backend/camiteminfo.h"
 int CamItemSortSettings::compare(const CamItemInfo& left, const CamItemInfo& right, SortRole role) const
 {
     switch (role)
@@ -190,9 +197,11 @@ int CamItemSortSettings::compare(const CamItemInfo& left, const CamItemInfo& rig
         case SortByFileName:
             return naturalCompare(left.name, right.name, currentSortOrder, sortCaseSensitivity);
         case SortByFilePath:
-            return naturalCompare(left.url().prettyUrl(), right.url().prettyUrl(), currentSortOrder, sortCaseSensitivity);
+            return naturalCompare(left.url().toLocalFile(), right.url().toLocalFile(), currentSortOrder, sortCaseSensitivity);
         case SortByFileSize:
             return compareByOrder(left.size, right.size, currentSortOrder);
+        case SortByCreationDate:
+            return compareByOrder(left.photoInfo.dateTime, right.photoInfo.dateTime, currentSortOrder);
         default:
             return 1;
     }

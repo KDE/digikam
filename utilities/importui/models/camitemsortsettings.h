@@ -95,12 +95,15 @@ public:
     Qt::SortOrder        currentCategorizationSortOrder;
     Qt::CaseSensitivity  categorizationCaseSensitivity;
 
+    bool isCategorized() const { return categorizationMode >= CategoryByFolder; }
+
     /// --- Camera Items Sorting ---------------
 
     enum SortRole
     {
         SortByFileName,
         SortByFilePath,
+        SortByCreationDate,
         SortByFileSize,
         SortByDownloadState
     };

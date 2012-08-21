@@ -127,6 +127,7 @@ void ImportCategorizedView::installDefaultModels(CameraController* const control
     filterModel->setSourceImportModel(model);
 
     filterModel->setSortRole(CamItemSortSettings::SortByFileName);
+    filterModel->setSortOrder(CamItemSortSettings::AscendingOrder);
     filterModel->setCategorizationMode(CamItemSortSettings::CategoryByFolder);
     filterModel->sort(0); // an initial sorting is necessary
 
@@ -393,12 +394,10 @@ void ImportCategorizedView::setThumbnailSize(int size)
     setThumbnailSize(ThumbnailSize(size));
 }
 
-//TODO: Needs testing to know if it is necessary to take the highlight size into considration.
 void ImportCategorizedView::setThumbnailSize(const ThumbnailSize& s)
 {
     // we abuse this pair of method calls to restore scroll position
     layoutAboutToBeChanged();
-    //ThumbnailSize size(ThumbnailLoadThread::thumbnailPixmapSize(s.size()));
     d->delegate->setThumbnailSize(s);
     layoutWasChanged();
 }

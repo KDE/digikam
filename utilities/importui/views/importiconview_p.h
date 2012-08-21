@@ -33,6 +33,7 @@
 #include "importiconview.h"
 #include "importdelegate.h"
 #include "importsettings.h"
+#include "imagerotationoverlay.h"
 
 namespace Digikam
 {
@@ -50,7 +51,6 @@ public:
     virtual ~Private();
 
     void updateOverlays();
-    void triggerRotateAction(const char* actionName);
 
 public:
 
@@ -59,8 +59,8 @@ public:
 
     bool                      overlaysActive;
 
-    //ImageRotateOverlay*       rotateLeftOverlay;
-    //ImageRotateOverlay*       rotateRightOverlay;
+    ImageRotateOverlay*       rotateLeftOverlay;
+    ImageRotateOverlay*       rotateRightOverlay;
 
 private:
 

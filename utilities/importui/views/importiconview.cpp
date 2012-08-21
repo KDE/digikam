@@ -59,13 +59,12 @@ void ImportIconView::init(CameraController* const controller)
 
     d->normalDelegate = new ImportNormalDelegate(this);
 
-    if(d->normalDelegate)
-        setItemDelegate(d->normalDelegate);
-
+    setItemDelegate(d->normalDelegate);
     setSpacing(10);
 
     ImportSettings* settings = ImportSettings::instance();
 
+    //FIXME: What is the purpose of this line.
     importFilterModel()->setCategorizationMode(CamItemSortSettings::CategoryByFolder);
 
     setThumbnailSize((ThumbnailSize::Size)settings->getDefaultIconSize());
@@ -84,10 +83,10 @@ void ImportIconView::init(CameraController* const controller)
     addSelectionOverlay(d->normalDelegate);
     //TODO: addSelectionOverlay(d->faceDelegate);
 
-    // rotation overlays
-    //TODO: d->rotateLeftOverlay = ImageRotateOverlay::left(this);
-    //TODO: d->rotateRightOverlay = ImageRotateOverlay::right(this);
-    //TODO: d->updateOverlays();
+    // FIXME: rotation overlays
+    d->rotateLeftOverlay  = ImageRotateOverlay::left(this);
+    d->rotateRightOverlay = ImageRotateOverlay::right(this);
+    d->updateOverlays();
 
     // rating overlay
     //TODO: ImageRatingOverlay* ratingOverlay = new ImageRatingOverlay(this);
@@ -253,6 +252,30 @@ void ImportIconView::removeSelectedFromGroup()
     //FileActionMngr::instance()->removeFromGroup(selectedCamItemInfos());
 }
 
+void ImportIconView::slotRotateLeft(const QList<QModelIndex>& indexes)
+{
+    QList<ImageInfo> imageInfos;
+    foreach(QModelIndex index, indexes)
+    {
+        ImageInfo imageInfo(importFilterModel()->camItemInfo(index).url());
+        imageInfos << imageInfo;
+    }
+
+    FileActionMngr::instance()->transform(imageInfos, KExiv2Iface::RotationMatrix::Rotate270);
+}
+
+void ImportIconView::slotRotateRight(const QList<QModelIndex>& indexes)
+{
+    QList<ImageInfo> imageInfos;
+    foreach(QModelIndex index, indexes)
+    {
+        ImageInfo imageInfo(importFilterModel()->camItemInfo(index).url());
+        imageInfos << imageInfo;
+    }
+
+    FileActionMngr::instance()->transform(imageInfos, KExiv2Iface::RotationMatrix::Rotate90);
+}
+
 void ImportIconView::activated(const CamItemInfo& info)
 {
     if (info.isNull())
@@ -348,6 +371,19 @@ void ImportIconView::showContextMenuOnInfo(QContextMenuEvent* event, const CamIt
     //connect(&cmhelper, SIGNAL(signalRemoveFromGroup()),
             //this, SLOT(removeSelectedFromGroup()));
 
+    // --------------------------------------------------------
+
+    cmhelper.exec(event->globalPos());
+}
+
+void ImportIconView::showContextMenu(QContextMenuEvent* event)
+{
+    KMenu popmenu(this);
+    ImportContextMenuHelper cmhelper(&popmenu);
+
+    cmhelper.addAction("cameraui_fullscreen");
+    cmhelper.addSeparator();
+    cmhelper.addAction("cameraui_close");
     // --------------------------------------------------------
 
     cmhelper.exec(event->globalPos());

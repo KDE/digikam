@@ -474,19 +474,19 @@ void CameraUI::setupActions()
     // map to CamItemSortSettings enum
     QAction* sortByNameAction = d->itemSortAction->addAction(i18n("By Name"));
     QAction* sortByPathAction = d->itemSortAction->addAction(i18n("By Path"));
-    //QAction* sortByDateAction = d->itemSortAction->addAction(i18n("By Date")); //TODO: Implement sort by creation date.
-    QAction* sortByFileSizeAction = d->itemSortAction->addAction(i18n("By File Size"));
+    QAction* sortByDateAction = d->itemSortAction->addAction(i18n("By Date")); //TODO: Implement sort by creation date.
+    QAction* sortByFileSizeAction = d->itemSortAction->addAction(i18n("By Size"));
     //QAction* sortByRatingAction = d->itemSortAction->addAction(i18n("By Rating")); //TODO: Implement rating in import tool.
 
     connect(sortByNameAction, SIGNAL(triggered()), imageSortMapper, SLOT(map()));
     connect(sortByPathAction, SIGNAL(triggered()), imageSortMapper, SLOT(map()));
-    //connect(sortByDateAction, SIGNAL(triggered()), imageSortMapper, SLOT(map())); //TODO: Implement sort by creation date.
+    connect(sortByDateAction, SIGNAL(triggered()), imageSortMapper, SLOT(map())); //TODO: Implement sort by creation date.
     connect(sortByFileSizeAction, SIGNAL(triggered()), imageSortMapper, SLOT(map()));
     //connect(sortByRatingAction, SIGNAL(triggered()), imageSortMapper, SLOT(map()));
 
     imageSortMapper->setMapping(sortByNameAction, (int)CamItemSortSettings::SortByFileName);
     imageSortMapper->setMapping(sortByPathAction, (int)CamItemSortSettings::SortByFilePath);
-    //imageSortMapper->setMapping(sortByDateAction, (int)CamItemSortSettings::SortByCreationDate); //TODO: Implement sort by creation date.
+    imageSortMapper->setMapping(sortByDateAction, (int)CamItemSortSettings::SortByCreationDate); //TODO: Implement sort by creation date.
     imageSortMapper->setMapping(sortByFileSizeAction, (int)CamItemSortSettings::SortByFileSize);
     //imageSortMapper->setMapping(sortByRatingAction, (int)ImageSortSettings::SortByRating);
 
@@ -574,7 +574,7 @@ void CameraUI::setupActions()
     d->showBarAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_T));
     connect(d->showBarAction, SIGNAL(triggered()), this, SLOT(slotToggleShowBar()));
     actionCollection()->addAction("showthumbs", d->showBarAction);
-
+    d->showBarAction->setEnabled(false);
 
     // -- Standard 'Configure' menu actions ----------------------------------------
 
@@ -835,6 +835,7 @@ void CameraUI::readSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
 
+    d->showBarAction->setChecked(ImportSettings::instance()->getShowThumbbar());
     d->showLogAction->setChecked(group.readEntry("ShowLog",               false));
     d->albumCustomizer->readSettings(group);
     d->advancedSettings->readSettings(group);
@@ -850,12 +851,13 @@ void CameraUI::readSettings()
 
     slotShowLog();
 }
-
+#include "cameraui.h"
 void CameraUI::saveSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
 
+    ImportSettings::instance()->setShowThumbbar(d->showBarAction->isChecked());
     ImportSettings::instance()->saveSettings();
     group.writeEntry("ShowLog",        d->showLogAction->isChecked());
     d->albumCustomizer->saveSettings(group);
@@ -1073,7 +1075,6 @@ void CameraUI::slotBusy(bool val)
         slotNewSelection(d->view->selectedUrls().count() > 0);
 
         d->anim->stop();
-        d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode, i18n("Ready"));
         d->statusProgressBar->setNotify(false);
 
         // like WDestructiveClose, but after camera controller operation has safely finished
@@ -1102,7 +1103,7 @@ void CameraUI::slotBusy(bool val)
 
         // Settings tab is disabled in slotDownload, selectively when downloading
         // Fast dis/enabling would create the impression of flicker, e.g. when retrieving EXIF from camera
-        //d->advBox->setEnabled(false);
+        d->advBox->setEnabled(false);
 
         d->uploadAction->setEnabled(false);
 
