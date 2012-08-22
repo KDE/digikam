@@ -57,6 +57,7 @@ public:
     //QRect tagsRect() const;
     QRect actualPixmapRect(const QModelIndex& index) const;
     QRect groupIndicatorRect() const;
+    QRect downloadIndicatorRect() const;
 
     int calculatethumbSizeToFit(int ws);
 

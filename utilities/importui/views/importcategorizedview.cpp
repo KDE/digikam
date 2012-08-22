@@ -40,6 +40,7 @@
 #include "importdelegate.h"
 #include "importtooltipfiller.h"
 #include "thumbnailloadthread.h"
+#include "importsettings.h"
 
 namespace Digikam
 {
@@ -126,9 +127,11 @@ void ImportCategorizedView::installDefaultModels(CameraController* const control
 
     filterModel->setSourceImportModel(model);
 
+    ImportSettings* settings = ImportSettings::instance();
+
     filterModel->setSortRole(CamItemSortSettings::SortByFileName);
     filterModel->setSortOrder(CamItemSortSettings::AscendingOrder);
-    filterModel->setCategorizationMode(CamItemSortSettings::CategoryByFolder);
+    filterModel->setCategorizationMode(CamItemSortSettings::CategoryByFormat);
     filterModel->sort(0); // an initial sorting is necessary
 
     setModels(model, filterModel);

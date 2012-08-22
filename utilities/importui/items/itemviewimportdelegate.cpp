@@ -44,6 +44,7 @@
 #include "imagedelegateoverlay.h"
 #include "thememanager.h"
 #include "imagescanner.h"
+#include "camiteminfo.h"
 
 namespace Digikam
 {
@@ -367,6 +368,30 @@ void ItemViewImportDelegate::drawPanelSideIcon(QPainter* p, bool left, bool righ
         QIcon icon = KIconLoader::global()->loadIcon("arrow-right", KIconLoader::NoGroup, iconSize);
         icon.paint(p, r);
     }
+}
+
+void ItemViewImportDelegate::drawDownloadIndicator(QPainter* p, const QRect& r, int itemType) const
+{
+    QIcon icon;
+    if (itemType == CamItemInfo::DownloadUnknown)
+    {
+        icon = KIconLoader::global()->loadIcon("dialog-information", KIconLoader::NoGroup, KIconLoader::SizeSmall);
+    }
+
+    if (itemType == CamItemInfo::NewPicture)
+    {
+        icon = KIconLoader::global()->loadIcon("get-hot-new-stuff", KIconLoader::NoGroup, KIconLoader::SizeSmall);
+    }
+
+    if (itemType == CamItemInfo::DownloadedYes)
+    {
+        icon = KIconLoader::global()->loadIcon("dialog-ok", KIconLoader::NoGroup, KIconLoader::SizeSmall);
+    }
+
+    qreal op = p->opacity();
+    p->setOpacity(0.5);
+    icon.paint(p, r);
+    p->setOpacity(op);
 }
 
 void ItemViewImportDelegate::drawFocusRect(QPainter* p, const QStyleOptionViewItem& option,

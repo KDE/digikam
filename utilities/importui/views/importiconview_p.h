@@ -33,7 +33,7 @@
 #include "importiconview.h"
 #include "importdelegate.h"
 #include "importsettings.h"
-#include "imagerotationoverlay.h"
+#include "../items/importoverlays.h"
 
 namespace Digikam
 {
@@ -59,8 +59,12 @@ public:
 
     bool                      overlaysActive;
 
-    ImageRotateOverlay*       rotateLeftOverlay;
-    ImageRotateOverlay*       rotateRightOverlay;
+    ImportRotateOverlay*      rotateLeftOverlay;
+    ImportRotateOverlay*      rotateRightOverlay;
+
+    ImportDownloadOverlay*    unknownItemOverlay;
+    //ImportDownloadOverlay*    newItemOverlay;
+    //ImportDownloadOverlay*    downloadedItemOverlay;
 
 private:
 

@@ -22,6 +22,7 @@
  * ============================================================ */
 
 #include "importiconview.moc"
+#include "importiconview.h"
 #include "importiconview_p.h"
 
 // Qt includes
@@ -35,6 +36,9 @@
 #include <kmenu.h>
 
 // Local includes
+
+#include "importcategorizedview.h"
+#include "../items/importoverlays.h"
 
 #include "importsettings.h"
 #include "camitemsortsettings.h"
@@ -65,7 +69,7 @@ void ImportIconView::init(CameraController* const controller)
     ImportSettings* settings = ImportSettings::instance();
 
     //FIXME: What is the purpose of this line.
-    importFilterModel()->setCategorizationMode(CamItemSortSettings::CategoryByFolder);
+    //importFilterModel()->setCategorizationMode(CamItemSortSettings::CategoryByFolder);
 
     setThumbnailSize((ThumbnailSize::Size)settings->getDefaultIconSize());
 
@@ -83,9 +87,19 @@ void ImportIconView::init(CameraController* const controller)
     addSelectionOverlay(d->normalDelegate);
     //TODO: addSelectionOverlay(d->faceDelegate);
 
-    // FIXME: rotation overlays
-    d->rotateLeftOverlay  = ImageRotateOverlay::left(this);
-    d->rotateRightOverlay = ImageRotateOverlay::right(this);
+    // rotation overlays
+    d->rotateLeftOverlay  = ImportRotateOverlay::left(this);
+    d->rotateRightOverlay = ImportRotateOverlay::right(this);
+
+    // download overlays
+    d->unknownItemOverlay = new ImportDownloadOverlay(this);
+    //d->newItemOverlay        = ImportDownloadOverlay(this);
+    //d->downloadedItemOverlay = ImportDownloadOverlay::downloadedItem(this);
+
+    addOverlay(d->unknownItemOverlay);
+    //addOverlay(downloadedItemOverlay);
+    //addOverlay(unknownItemOverlay);
+
     d->updateOverlays();
 
     // rating overlay

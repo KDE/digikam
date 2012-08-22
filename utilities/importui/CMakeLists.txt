@@ -33,6 +33,7 @@ SET(libimportui_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/items/importcategorydrawer.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/items/importdelegate.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/items/importtooltipfiller.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/items/importoverlays.cpp
 
     ${CMAKE_CURRENT_SOURCE_DIR}/views/camerafolderview.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/views/cameranamehelper.cpp

@@ -102,6 +102,7 @@ protected:
     void drawFileSize(QPainter* p, const QRect& r, qlonglong bytes) const;
     void drawGroupIndicator(QPainter* p, const QRect& r, int numberOfGroupedImages, bool open) const;
     void drawPanelSideIcon(QPainter* p, bool left, bool right) const;
+    void drawDownloadIndicator(QPainter* p, const QRect& r, int itemType) const;
     void drawFocusRect(QPainter* p, const QStyleOptionViewItem& option, bool isSelected) const;
     void drawMouseOverRect(QPainter* p, const QStyleOptionViewItem& option) const;
     void prepareFonts();

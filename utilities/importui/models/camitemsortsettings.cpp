@@ -60,10 +60,10 @@ void CamItemSortSettings::setCategorizationMode(CategorizationMode mode)
 {
     categorizationMode = mode;
 
-//    if (categorizationSortOrder == DefaultOrder)
-//    {
-//        currentCategorizationSortOrder = defaultSortOrderForCategorizationMode(categorizationMode);
-//    }
+    if (categorizationSortOrder == DefaultOrder)
+    {
+        currentCategorizationSortOrder = defaultSortOrderForCategorizationMode(categorizationMode);
+    }
 }
 
 void CamItemSortSettings::setCategorizationSortOrder(SortOrder order)
@@ -140,7 +140,7 @@ int CamItemSortSettings::compareCategories(const CamItemInfo& left, const CamIte
     {
         case NoCategories:
         case CategoryByFolder:
-            return 0;
+            return naturalCompare(left.folder, right.folder, currentCategorizationSortOrder, categorizationCaseSensitivity);
         case CategoryByFormat:
             return naturalCompare(left.mime, right.mime, currentCategorizationSortOrder, categorizationCaseSensitivity);
         default:
@@ -189,7 +189,7 @@ int CamItemSortSettings::compare(const CamItemInfo& left, const CamItemInfo& rig
 {
     return compare(left, right, sortRole);
 }
-#include "../backend/camiteminfo.h"
+
 int CamItemSortSettings::compare(const CamItemInfo& left, const CamItemInfo& right, SortRole role) const
 {
     switch (role)
@@ -200,8 +200,9 @@ int CamItemSortSettings::compare(const CamItemInfo& left, const CamItemInfo& rig
             return naturalCompare(left.url().toLocalFile(), right.url().toLocalFile(), currentSortOrder, sortCaseSensitivity);
         case SortByFileSize:
             return compareByOrder(left.size, right.size, currentSortOrder);
+            //FIXME: Change it to creation date instead of modification date.
         case SortByCreationDate:
-            return compareByOrder(left.photoInfo.dateTime, right.photoInfo.dateTime, currentSortOrder);
+            return compareByOrder(left.mtime, right.mtime, currentSortOrder);
         default:
             return 1;
     }

@@ -56,6 +56,7 @@ void ImportDelegate::ImportDelegatePrivate::clearRects()
     //commentsRect         = QRect(0, 0, 0, 0);
     resolutionRect       = QRect(0, 0, 0, 0);
     sizeRect             = QRect(0, 0, 0, 0);
+    downloadRect         = QRect(0, 0, 0, 0);
     //tagRect              = QRect(0, 0, 0, 0);
     imageInformationRect = QRect(0, 0, 0, 0);
     //pickLabelRect        = QRect(0, 0, 0, 0);
@@ -186,6 +187,12 @@ QRect ImportDelegate::groupIndicatorRect() const
     return d->groupRect;
 }
 
+QRect ImportDelegate::downloadIndicatorRect() const
+{
+    Q_D(const ImportDelegate);
+    return d->downloadRect;
+}
+
 QPixmap ImportDelegate::retrieveThumbnailPixmap(const QModelIndex& index, int thumbnailSize)
 {
     // work around constness
@@ -274,6 +281,11 @@ void ImportDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, cons
     if (!d->sizeRect.isNull())
     {
         drawFileSize(p, d->sizeRect, info.size);
+    }
+
+    if (!d->downloadRect.isNull())
+    {
+        drawDownloadIndicator(p, d->downloadRect, info.downloaded);
     }
 
     if (!d->resolutionRect.isNull())
@@ -687,50 +699,51 @@ void ImportNormalDelegate::updateRects()
     d->pixmapRect                        = QRect(d->margin, y, d->contentWidth, d->contentWidth);
     y                                    = d->pixmapRect.bottom();
     d->imageInformationRect              = QRect(d->margin, y, d->contentWidth, 0);
-    const ImportSettings* ImportSettings = ImportSettings::instance();
-    d->drawImageFormat                   = ImportSettings->getIconShowImageFormat();
-    //const int iconSize                   = KIconLoader::SizeSmallMedium;
+    const ImportSettings* importSettings = ImportSettings::instance();
+    d->drawImageFormat                   = importSettings->getIconShowImageFormat();
+    const int iconSize                   = KIconLoader::SizeSmall;
 
     //TODO: d->pickLabelRect   = QRect(d->margin, y, iconSize, iconSize);
-    //d->groupRect       = QRect(d->contentWidth - iconSize, y, iconSize, iconSize);
+    //TODO: d->groupRect       = QRect(d->contentWidth - iconSize, y, iconSize, iconSize);
+    d->downloadRect     =  QRect(d->contentWidth - iconSize+2, d->pixmapRect.top(), iconSize, iconSize);
 
     //TODO: Implement rating in import tool.
-    //if (ImportSettings->getIconShowRating())
-    //{
-    //    d->ratingRect = QRect(d->margin, y, d->contentWidth, d->starPolygonSize.height());
-    //    y             = d->ratingRect.bottom();
-    //}
+    /*if (importSettings->getIconShowRating())
+    {
+        d->ratingRect = QRect(d->margin, y, d->contentWidth, d->starPolygonSize.height());
+        y             = d->ratingRect.bottom();
+    }*/
 
-    if (ImportSettings->getIconShowName())
+    if (importSettings->getIconShowName())
     {
         d->nameRect = QRect(d->margin, y, d->contentWidth-d->margin, d->oneRowRegRect.height());
         y           = d->nameRect.bottom();
     }
 
-    if (ImportSettings->getIconShowModDate())
+    if (importSettings->getIconShowModDate())
     {
         d->modDateRect = QRect(d->margin, y, d->contentWidth, d->oneRowXtraRect.height());
         y              = d->modDateRect.bottom();
     }
 
-    //TODO: Add resolution entry in ImportSettings.
-    //if (ImportSettings->getIconShowResolution())
-    //{
-    //    d->resolutionRect = QRect(d->margin, y, d->contentWidth, d->oneRowXtraRect.height());
-    //    y                 = d->resolutionRect.bottom() ;
-    //}
+    //TODO: Add resolution entry in importSettings.
+    /*if (importSettings->getIconShowResolution())
+    {
+        d->resolutionRect = QRect(d->margin, y, d->contentWidth, d->oneRowXtraRect.height());
+        y                 = d->resolutionRect.bottom() ;
+    }*/
 
-    if (ImportSettings->getIconShowSize())
+    if (importSettings->getIconShowSize())
     {
         d->sizeRect = QRect(d->margin, y, d->contentWidth, d->oneRowXtraRect.height());
         y           = d->sizeRect.bottom();
     }
 
-    //if (ImportSettings->getIconShowTags())
-    //{
-    //    d->tagRect = QRect(d->margin, y, d->contentWidth, d->oneRowComRect.height());
-    //    y          = d->tagRect.bottom();
-    //}
+    /*if (importSettings->getIconShowTags())
+    {
+        d->tagRect = QRect(d->margin, y, d->contentWidth, d->oneRowComRect.height());
+        y          = d->tagRect.bottom();
+    }*/
 
     d->imageInformationRect.setBottom(y);
 

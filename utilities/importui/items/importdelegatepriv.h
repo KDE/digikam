@@ -66,6 +66,7 @@ public:
     //QRect                  commentsRect;
     QRect                  resolutionRect;
     QRect                  sizeRect;
+    QRect                  downloadRect;
     //QRect                  tagRect;
     QRect                  imageInformationRect;
     //QRect                  pickLabelRect;
