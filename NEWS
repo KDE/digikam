@@ -11,6 +11,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 001 ==> 296024 - Undefined symbol in libdigikamcore.so [patch].
 002 ==> 291627 - Nef data loss after geotaging.
 003 ==> 303427 - Failed build against libgphoto2-2.5.0 [patch].
-004 ==> 
+004 ==> 235601 - Local contrast plugin preview is wrong.
+005 ==> 204466 - Local contrast plugin issues.
+006 ==> 
 
 
