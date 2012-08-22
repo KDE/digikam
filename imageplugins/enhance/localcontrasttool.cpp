@@ -6,8 +6,8 @@
  * Date        : 2009-08-09
  * Description : a plugin to enhance image with local contrasts (as human eye does).
  *
- * Copyright (C) 2009 by Julien Pontabry <julien dot pontabry at gmail dot com>
- * Copyright (C) 2009-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009      by Julien Pontabry <julien dot pontabry at gmail dot com>
+ * Copyright (C) 2009-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -61,11 +61,11 @@
 namespace DigikamEnhanceImagePlugin
 {
 
-class LocalContrastTool::LocalContrastToolPriv
+class LocalContrastTool::Private
 {
 public:
 
-    LocalContrastToolPriv() :
+    Private() :
         destinationPreviewData(0),
         settingsView(0),
         previewWidget(0),
@@ -82,15 +82,15 @@ public:
     ImageRegionWidget*     previewWidget;
     EditorToolSettings*    gboxSettings;
 };
-const QString LocalContrastTool::LocalContrastToolPriv::configGroupName("localcontrast Tool");
-const QString LocalContrastTool::LocalContrastToolPriv::configHistogramChannelEntry("Histogram Channel");
-const QString LocalContrastTool::LocalContrastToolPriv::configHistogramScaleEntry("Histogram Scale");
+const QString LocalContrastTool::Private::configGroupName("localcontrast Tool");
+const QString LocalContrastTool::Private::configHistogramChannelEntry("Histogram Channel");
+const QString LocalContrastTool::Private::configHistogramScaleEntry("Histogram Scale");
 
 // --------------------------------------------------------
 
-LocalContrastTool::LocalContrastTool(QObject* parent)
+LocalContrastTool::LocalContrastTool(QObject* const parent)
     : EditorToolThreaded(parent),
-      d(new LocalContrastToolPriv)
+      d(new Private)
 {
     setObjectName("localcontrast");
     setToolName(i18n("Local Contrast"));
@@ -162,7 +162,8 @@ void LocalContrastTool::slotResetSettings()
 
 void LocalContrastTool::prepareEffect()
 {
-    DImg image = d->previewWidget->getOriginalRegionImage(true);
+    // See B.K.O #235601 : we cannot use downscaled image to render preview. It will differs than final rendering.
+    DImg image = d->previewWidget->getOriginalRegionImage(false);
     setFilter(new LocalContrastFilter(&image, this, d->settingsView->settings()));
 }
 
