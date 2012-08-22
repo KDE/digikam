@@ -6,8 +6,8 @@
  * Date        : 2009-08-09
  * Description : a plugin to enhance image with local contrasts (as human eye does).
  *
- * Copyright (C) 2009 by Julien Pontabry <julien dot pontabry at gmail dot com>
- * Copyright (C) 2009-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009      by Julien Pontabry <julien dot pontabry at gmail dot com>
+ * Copyright (C) 2009-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -162,7 +162,8 @@ void LocalContrastTool::slotResetSettings()
 
 void LocalContrastTool::prepareEffect()
 {
-    DImg image = d->previewWidget->getOriginalRegionImage(true);
+    // See B.K.O #235601 : we cannot use downscaled image to render preview. It will differs than final rendering.
+    DImg image = d->previewWidget->getOriginalRegionImage(false);
     setFilter(new LocalContrastFilter(&image, this, d->settingsView->settings()));
 }
 
