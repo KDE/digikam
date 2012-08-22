@@ -43,12 +43,8 @@ void ImportIconView::Private::updateOverlays()
 {
     Q_Q(ImportIconView);
 
-<<<<<<< Updated upstream
 /*
     ImportSettings* settings = ImportSettings::instance();
-=======
-    //ImportSettings* settings = ImportSettings::instance();
->>>>>>> Stashed changes
 
     if (overlaysActive)
     {

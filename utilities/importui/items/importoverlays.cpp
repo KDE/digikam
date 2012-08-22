@@ -22,7 +22,6 @@
  * ============================================================ */
 
 #include "importoverlays.moc"
-#include "importoverlays.h"//TODO: Remove this line.
 
 // KDE includes
 
@@ -35,7 +34,6 @@
 #include "importcategorizedview.h"
 #include "importdelegate.h"
 #include "camiteminfo.h"
-#include "itemviewhoverbutton.h"
 
 namespace Digikam
 {
@@ -48,24 +46,6 @@ ImportDownloadOverlayWidget::ImportDownloadOverlayWidget(QWidget* parent)
 void ImportDownloadOverlayWidget::paintEvent(QPaintEvent*)
 {
 }
-
-//void ImportDownloadOverlayButton::updateToolTip()
-//{
-//    if (m_type == UnknownItem)
-//    {
-//        setToolTip(i18nc("@info:tooltip", "This item download status is unkown"));
-//    }
-
-//    if (m_type == NewItem)
-//    {
-//        setToolTip(i18nc("@info:tooltip", "This item download status is new"));
-//    }
-
-//    if (m_type == DownloadedItem)
-//    {
-//        setToolTip(i18nc("@info:tooltip", "This item download status is downloaded"));
-//    }
-//}
 
 // -- Download Overlays ------------------------------------------------------------------
 
@@ -120,20 +100,23 @@ bool ImportDownloadOverlay::checkIndex(const QModelIndex& index) const
 
     if (info.downloaded == CamItemInfo::DownloadUnknown)
     {
+        m_widget->setToolTip(i18nc("@info:tooltip", "This item download status is unkown"));
         return true;
     }
 
     if (info.downloaded == CamItemInfo::NewPicture)
     {
+        m_widget->setToolTip(i18nc("@info:tooltip", "This item download status is new"));
         return true;
     }
 
     if (info.downloaded == CamItemInfo::DownloadedYes)
     {
+        m_widget->setToolTip(i18nc("@info:tooltip", "This item download status is downloaded"));
         return true;
     }
 
-    return true;//TODO: Convert this to false.
+    return false;
 }
 
 void ImportDownloadOverlay::slotEntered(const QModelIndex& index)
@@ -142,16 +125,6 @@ void ImportDownloadOverlay::slotEntered(const QModelIndex& index)
     m_index = index;
     updatePosition();
 }
-
-//void ImportDownloadOverlay::widgetEnterEvent()
-//{
-//    //widgetEnterNotifyMultiple(buttonWidget()->index());
-//}
-
-//void ImportDownloadOverlay::widgetLeaveEvent()
-//{
-//    //widgetLeaveNotifyMultiple();
-//}
 
 // -- Rotate Overlays ----------------------------------------------------------------
 
