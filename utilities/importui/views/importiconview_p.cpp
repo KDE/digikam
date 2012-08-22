@@ -43,28 +43,30 @@ void ImportIconView::Private::updateOverlays()
 {
     Q_Q(ImportIconView);
 
+/*
     ImportSettings* settings = ImportSettings::instance();
 
-    //if (overlaysActive)
-    //{
-//        if (!settings->getIconShowOverlays())
-//        {
-//            disconnect(rotateLeftOverlay, SIGNAL(signalRotate(QList<QModelIndex>)),
-//                       q, SLOT(slotRotateLeft(QList<QModelIndex>)));
+    if (overlaysActive)
+    {
+        if (!settings->getIconShowOverlays())
+        {
+            disconnect(rotateLeftOverlay, SIGNAL(signalRotate(QList<QModelIndex>)),
+                       q, SLOT(slotRotateLeft(QList<QModelIndex>)));
 
-//            disconnect(rotateRightOverlay, SIGNAL(signalRotate(QList<QModelIndex>)),
-//                       q, SLOT(slotRotateRight(QList<QModelIndex>)));
+            disconnect(rotateRightOverlay, SIGNAL(signalRotate(QList<QModelIndex>)),
+                       q, SLOT(slotRotateRight(QList<QModelIndex>)));
 
-//            q->removeOverlay(rotateRightOverlay);
-//            q->removeOverlay(rotateLeftOverlay);
+            q->removeOverlay(rotateRightOverlay);
+            q->removeOverlay(rotateLeftOverlay);
 
-//            overlaysActive = false;
-//        }
-    //}
-    //else
-    //{
-//        if (settings->getIconShowOverlays())
-//        {
+            overlaysActive = false;
+        }
+    }
+    else
+    {
+        if (settings->getIconShowOverlays())
+        {
+*/
             q->addOverlay(rotateLeftOverlay, normalDelegate);
             q->addOverlay(rotateRightOverlay, normalDelegate);
 
@@ -75,9 +77,9 @@ void ImportIconView::Private::updateOverlays()
                     q, SLOT(slotRotateRight(QList<QModelIndex>)));
 
             overlaysActive = true;
-//        }
-    //}
-
+/*        }
+    }
+*/
 }
 
 } // namespace Digikam
