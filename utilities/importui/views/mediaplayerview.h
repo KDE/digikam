@@ -33,10 +33,6 @@
 #include <kurl.h>
 #include <phonon/mediaobject.h>
 
-// Local includes
-
-#include "camiteminfo.h"
-
 namespace Digikam
 {
 
@@ -70,9 +66,9 @@ public:
     ImportMediaPlayerView(ImportStackedView* const parent);
     ~ImportMediaPlayerView();
 
-    void setCamItemInfo(const CamItemInfo& info     = CamItemInfo(),
-                        const CamItemInfo& previous = CamItemInfo(),
-                        const CamItemInfo& next     = CamItemInfo());
+    void setCurrentItem(const KUrl& info = KUrl(),
+                        bool  asPrevious = false,
+                        bool  asNext     = false);
     void escapePreview();
 
 Q_SIGNALS:

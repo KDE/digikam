@@ -277,12 +277,10 @@ void MediaPlayerView::setPreviewMode(int mode)
     d->toolBar->raise();
 }
 
-void MediaPlayerView::setImageInfo(const ImageInfo& info, const ImageInfo& previous, const ImageInfo& next)
+void MediaPlayerView::setCurrentItem(const KUrl& url, bool asPrevious, bool asNext)
 {
-    d->prevAction->setEnabled(!previous.isNull());
-    d->nextAction->setEnabled(!next.isNull());
-
-    KUrl url = info.fileUrl();
+    d->prevAction->setEnabled(asPrevious);
+    d->nextAction->setEnabled(asNext);
 
     if (url.isEmpty())
     {
@@ -299,7 +297,7 @@ void MediaPlayerView::setImageInfo(const ImageInfo& info, const ImageInfo& previ
 
     d->currentItem = url;
 
-    d->player->play(url);
+    d->player->play(d->currentItem);
     setPreviewMode(Private::PlayerView);
 }
 

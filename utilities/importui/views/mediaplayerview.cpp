@@ -277,12 +277,10 @@ void ImportMediaPlayerView::setPreviewMode(int mode)
     d->toolBar->raise();
 }
 
-void ImportMediaPlayerView::setCamItemInfo(const CamItemInfo& info, const CamItemInfo& previous, const CamItemInfo& next)
+void ImportMediaPlayerView::setCurrentItem(const KUrl& url, bool asPrevious, bool asNext)
 {
-    d->prevAction->setEnabled(!previous.isNull());
-    d->nextAction->setEnabled(!next.isNull());
-
-    KUrl url = info.url();
+    d->prevAction->setEnabled(asPrevious);
+    d->nextAction->setEnabled(asNext);
 
     if (url.isEmpty())
     {
@@ -299,7 +297,7 @@ void ImportMediaPlayerView::setCamItemInfo(const CamItemInfo& info, const CamIte
 
     d->currentItem = url;
 
-    d->player->play(url);
+    d->player->play(d->currentItem);
     setPreviewMode(Private::PlayerView);
 }
 

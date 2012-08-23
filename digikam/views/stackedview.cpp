@@ -273,7 +273,7 @@ void StackedView::setPreviewItem(const ImageInfo& info, const ImageInfo& previou
     {
         if (previewMode() == MediaPlayerMode)
         {
-            d->mediaPlayerView->setImageInfo();
+            d->mediaPlayerView->setCurrentItem();
         }
         else if (previewMode() == PreviewImageMode)
         {
@@ -291,14 +291,14 @@ void StackedView::setPreviewItem(const ImageInfo& info, const ImageInfo& previou
             }
 
             setPreviewMode(MediaPlayerMode);
-            d->mediaPlayerView->setImageInfo(info, previous, next);
+            d->mediaPlayerView->setCurrentItem(info.fileUrl(), !previous.isNull(), !next.isNull());
         }
         else
         {
             // Stop media player if running...
             if (previewMode() == MediaPlayerMode)
             {
-                d->mediaPlayerView->setImageInfo();
+                d->mediaPlayerView->setCurrentItem();
             }
 
             d->imagePreviewView->setImageInfo(info, previous, next);

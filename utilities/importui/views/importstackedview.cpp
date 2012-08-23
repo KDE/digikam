@@ -240,7 +240,7 @@ void ImportStackedView::setPreviewItem(const CamItemInfo& info, const CamItemInf
     {
         if (previewMode() == MediaPlayerMode)
         {
-            d->mediaPlayerView->setCamItemInfo();
+            d->mediaPlayerView->setCurrentItem();
         }
         else if (previewMode() == PreviewImageMode)
         {
@@ -258,14 +258,14 @@ void ImportStackedView::setPreviewItem(const CamItemInfo& info, const CamItemInf
             }
 
             setPreviewMode(MediaPlayerMode);
-            d->mediaPlayerView->setCamItemInfo(info, previous, next);
+            d->mediaPlayerView->setCurrentItem(info.url(), !previous.isNull(), !next.isNull());
         }
         else
         {
             // Stop media player if running...
             if (previewMode() == MediaPlayerMode)
             {
-                d->mediaPlayerView->setCamItemInfo();
+                d->mediaPlayerView->setCurrentItem();
             }
 
             d->importPreviewView->setCamItemInfo(info, previous, next);

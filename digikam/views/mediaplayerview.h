@@ -33,11 +33,6 @@
 #include <kurl.h>
 #include <phonon/mediaobject.h>
 
-// Local includes
-
-#include "digikam_export.h"
-#include "imageinfo.h"
-
 class QEvent;
 
 namespace Digikam
@@ -73,9 +68,9 @@ public:
     MediaPlayerView(StackedView* const parent);
     ~MediaPlayerView();
 
-    void setImageInfo(const ImageInfo& info     = ImageInfo(),
-                      const ImageInfo& previous = ImageInfo(),
-                      const ImageInfo& next     = ImageInfo());
+    void setCurrentItem(const KUrl& url  = KUrl(),
+                        bool  asPrevious = false,
+                        bool  asNext     = false);
     void escapePreview();
 
 Q_SIGNALS:
