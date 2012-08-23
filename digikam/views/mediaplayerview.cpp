@@ -133,7 +133,7 @@ public:
     KUrl                 currentItem;
 };
 
-MediaPlayerView::MediaPlayerView(StackedView* const parent)
+MediaPlayerView::MediaPlayerView(QWidget* const parent)
     : QStackedWidget(parent), d(new Private)
 {
     setAttribute(Qt::WA_DeleteOnClose);
@@ -213,7 +213,7 @@ MediaPlayerView::MediaPlayerView(StackedView* const parent)
             this, SIGNAL(signalNextItem()));
 
     connect(d->escapePreviewAction, SIGNAL(triggered()),
-            parent, SIGNAL(signalEscapePreview()));
+            this, SIGNAL(signalEscapePreview()));
 }
 
 MediaPlayerView::~MediaPlayerView()
@@ -277,10 +277,10 @@ void MediaPlayerView::setPreviewMode(int mode)
     d->toolBar->raise();
 }
 
-void MediaPlayerView::setCurrentItem(const KUrl& url, bool asPrevious, bool asNext)
+void MediaPlayerView::setCurrentItem(const KUrl& url, bool hasPrevious, bool hasNext)
 {
-    d->prevAction->setEnabled(asPrevious);
-    d->nextAction->setEnabled(asNext);
+    d->prevAction->setEnabled(hasPrevious);
+    d->nextAction->setEnabled(hasNext);
 
     if (url.isEmpty())
     {

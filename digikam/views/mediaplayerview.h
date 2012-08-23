@@ -38,8 +38,6 @@ class QEvent;
 namespace Digikam
 {
 
-class StackedView;
-
 class MediaPlayerMouseClickFilter : public QObject
 {
     Q_OBJECT
@@ -65,12 +63,12 @@ class MediaPlayerView : public QStackedWidget
 
 public:
 
-    MediaPlayerView(StackedView* const parent);
+    MediaPlayerView(QWidget* const parent);
     ~MediaPlayerView();
 
-    void setCurrentItem(const KUrl& url  = KUrl(),
-                        bool  asPrevious = false,
-                        bool  asNext     = false);
+    void setCurrentItem(const KUrl& url   = KUrl(),
+                        bool  hasPrevious = false,
+                        bool  hasNext     = false);
     void escapePreview();
 
 Q_SIGNALS:
