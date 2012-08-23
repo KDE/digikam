@@ -49,11 +49,11 @@
 namespace Digikam
 {
 
-class SetupAlbumView::SetupAlbumViewPriv
+class SetupAlbumView::Private
 {
 public:
 
-    SetupAlbumViewPriv() :
+    Private() :
         iconTreeThumbLabel(0),
         iconShowNameBox(0),
         iconShowSizeBox(0),
@@ -101,7 +101,7 @@ public:
 };
 
 SetupAlbumView::SetupAlbumView(QWidget* const parent)
-    : QScrollArea(parent), d(new SetupAlbumViewPriv)
+    : QScrollArea(parent), d(new Private)
 {
     QWidget* panel      = new QWidget(viewport());
     setWidget(panel);
