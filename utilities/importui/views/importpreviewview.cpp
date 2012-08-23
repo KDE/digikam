@@ -117,43 +117,43 @@ public:
     Private()
     {
         //peopleTagsShown    = false;
-        fullSize                = 0;
-        scale                   = 1.0;
-        item                    = 0;
-        isValid                 = false;
-        toolBar                 = 0;
-        back2FilesListAction    = 0;
-        prevAction              = 0;
-        nextAction              = 0;
-        rotLeftAction         = 0;
-        rotRightAction        = 0;
-        //peopleToggleAction    = 0;
-        //addPersonAction       = 0;
-        //faceGroup             = 0;
-        mode               = ImportPreviewView::IconViewPreview;
+        fullSize             = 0;
+        scale                = 1.0;
+        item                 = 0;
+        isValid              = false;
+        toolBar              = 0;
+        escapePreviewAction  = 0;
+        prevAction           = 0;
+        nextAction           = 0;
+        rotLeftAction        = 0;
+        rotRightAction       = 0;
+        //peopleToggleAction = 0;
+        //addPersonAction    = 0;
+        //faceGroup          = 0;
+        mode                 = ImportPreviewView::IconViewPreview;
     }
 
-    //bool                   peopleTagsShown;
-    bool                   fullSize;
-    double                 scale;
-    bool                   isValid;
+    //bool                  peopleTagsShown;
+    bool                    fullSize;
+    double                  scale;
+    bool                    isValid;
 
     ImportPreviewView::Mode mode;
 
     ImportPreviewViewItem*  item;
 
-    QAction*               back2FilesListAction;
-    QAction*               prevAction;
-    QAction*               nextAction;
-    QAction*               rotLeftAction;
-    QAction*               rotRightAction;
-    //KToggleAction*         peopleToggleAction;
-    //QAction*               addPersonAction;
-    //QAction*               forgetFacesAction;
+    QAction*                escapePreviewAction;
+    QAction*                prevAction;
+    QAction*                nextAction;
+    QAction*                rotLeftAction;
+    QAction*                rotRightAction;
+    //KToggleAction*        peopleToggleAction;
+    //QAction*              addPersonAction;
+    //QAction*              forgetFacesAction;
 
-    QToolBar*              toolBar;
+    QToolBar*               toolBar;
 
-    //FaceGroup*             faceGroup;
+    //FaceGroup*            faceGroup;
 };
 
 ImportPreviewView::ImportPreviewView(QWidget* const parent, Mode mode)
@@ -185,11 +185,11 @@ ImportPreviewView::ImportPreviewView(QWidget* const parent, Mode mode)
 
     // ------------------------------------------------------------
 
-    d->back2FilesListAction   = new QAction(SmallIcon("folder-image"),        i18n("Back to Camera Files"),       this);
-    d->prevAction         = new QAction(SmallIcon("go-previous"),         i18nc("go to previous image", "Back"),  this);
-    d->nextAction         = new QAction(SmallIcon("go-next"),             i18nc("go to next image", "Forward"),   this);
-    d->rotLeftAction      = new QAction(SmallIcon("object-rotate-left"),  i18nc("@info:tooltip", "Rotate Left"),  this);
-    d->rotRightAction     = new QAction(SmallIcon("object-rotate-right"), i18nc("@info:tooltip", "Rotate Right"), this);
+    d->escapePreviewAction = new QAction(SmallIcon("folder-image"),        i18n("Escape preview"),                 this);
+    d->prevAction          = new QAction(SmallIcon("go-previous"),         i18nc("go to previous image", "Back"),  this);
+    d->nextAction          = new QAction(SmallIcon("go-next"),             i18nc("go to next image", "Forward"),   this);
+    d->rotLeftAction       = new QAction(SmallIcon("object-rotate-left"),  i18nc("@info:tooltip", "Rotate Left"),  this);
+    d->rotRightAction      = new QAction(SmallIcon("object-rotate-right"), i18nc("@info:tooltip", "Rotate Right"), this);
     //FIXME: d->addPersonAction    = new QAction(SmallIcon("list-add-user"),       i18n("Add a Face Tag"),                 this);
     //FIXME: d->forgetFacesAction  = new QAction(SmallIcon("list-remove-user"),    i18n("Clear all faces on this image"),  this);
     //FIXME: d->peopleToggleAction = new KToggleAction(i18n("Show Face Tags"),                                             this);
@@ -201,7 +201,7 @@ ImportPreviewView::ImportPreviewView(QWidget* const parent, Mode mode)
     {
         d->toolBar->addAction(d->prevAction);
         d->toolBar->addAction(d->nextAction);
-        d->toolBar->addAction(d->back2FilesListAction);
+        d->toolBar->addAction(d->escapePreviewAction);
     }
 
     d->toolBar->addAction(d->rotLeftAction);
@@ -215,7 +215,7 @@ ImportPreviewView::ImportPreviewView(QWidget* const parent, Mode mode)
     connect(d->nextAction, SIGNAL(triggered()),
             this, SIGNAL(toNextImage()));
 
-    connect(d->back2FilesListAction, SIGNAL(triggered()),
+    connect(d->escapePreviewAction, SIGNAL(triggered()),
             this, SIGNAL(signalEscapePreview()));
 
     connect(d->rotLeftAction, SIGNAL(triggered()),

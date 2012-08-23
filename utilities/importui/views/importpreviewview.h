@@ -49,8 +49,8 @@ public:
     ~ImportPreviewView();
 
     void setCamItemInfo(const CamItemInfo& info   = CamItemInfo(),
-                      const CamItemInfo& previous = CamItemInfo(),
-                      const CamItemInfo& next     = CamItemInfo());
+                        const CamItemInfo& previous = CamItemInfo(),
+                        const CamItemInfo& next     = CamItemInfo());
 
     CamItemInfo getCamItemInfo() const;
 
@@ -95,7 +95,7 @@ private Q_SLOTS:
     void camItemLoaded();
     void camItemLoadingFailed();
 
-    //TODO: Implement Tags, Rating, and Lables in Import Tool
+    //TODO: Implement Tags, Rating, and Labels in Import Tool
     //void slotAssignTag(int tagID);
     //void slotRemoveTag(int tagID);
     //void slotAssignRating(int rating);
