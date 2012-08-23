@@ -474,7 +474,7 @@ void DigikamView::setupConnections()
     connect(d->stackedview, SIGNAL(signalViewModeChanged()),
             this, SLOT(slotViewModeChanged()));
 
-    connect(d->stackedview, SIGNAL(signalBack2Album()),
+    connect(d->stackedview, SIGNAL(signalEscapePreview()),
             this, SLOT(slotEscapePreview()));
 
     connect(d->stackedview, SIGNAL(signalSlideShow()),

@@ -284,7 +284,7 @@ void ImportMediaPlayerView::slotThemeChanged()
 void ImportMediaPlayerView::slotEscapePressed()
 {
     escapePreview();
-    emit signalBack2FileList();
+    emit signalEscapePreview();
 }
 
 int ImportMediaPlayerView::previewMode()

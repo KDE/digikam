@@ -82,7 +82,7 @@ Q_SIGNALS:
 
     void signalNextItem();
     void signalPrevItem();
-    void signalBack2Album();
+    void signalEscapePreview();
 
 public Q_SLOTS:
 

@@ -119,7 +119,7 @@ Q_SIGNALS:
     void signalEditItem();
     void signalDeleteItem();
     void signalViewModeChanged();
-    void signalBack2Album();
+    void signalEscapePreview();
     void signalSlideShow();
     void signalZoomFactorChanged(double);
     void signalInsert2LightTable();

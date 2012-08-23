@@ -150,8 +150,8 @@ StackedView::StackedView(QWidget* parent)
     connect(d->imagePreviewView, SIGNAL(signalDeleteItem()),
             this, SIGNAL(signalDeleteItem()));
 
-    connect(d->imagePreviewView, SIGNAL(signalBack2Album()),
-            this, SIGNAL(signalBack2Album()));
+    connect(d->imagePreviewView, SIGNAL(signalEscapePreview()),
+            this, SIGNAL(signalEscapePreview()));
 
     connect(d->imagePreviewView, SIGNAL(signalSlideShow()),
             this, SIGNAL(signalSlideShow()));
@@ -186,8 +186,8 @@ StackedView::StackedView(QWidget* parent)
     connect(d->mediaPlayerView, SIGNAL(signalPrevItem()),
             this, SIGNAL(signalPrevItem()));
 
-    connect(d->mediaPlayerView, SIGNAL(signalBack2Album()),
-            this, SIGNAL(signalBack2Album()));
+    connect(d->mediaPlayerView, SIGNAL(signalEscapePreview()),
+            this, SIGNAL(signalEscapePreview()));
 
     connect(d->imagePreviewView, SIGNAL(signalPreviewLoaded(bool)),
             this, SLOT(slotPreviewLoaded(bool)));

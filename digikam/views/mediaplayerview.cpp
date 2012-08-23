@@ -213,7 +213,7 @@ MediaPlayerView::MediaPlayerView(StackedView* const parent)
             this, SIGNAL(signalNextItem()));
 
     connect(d->back2AlbumAction, SIGNAL(triggered()),
-            parent, SIGNAL(signalBack2Album()));
+            parent, SIGNAL(signalEscapePreview()));
 }
 
 MediaPlayerView::~MediaPlayerView()
@@ -284,7 +284,7 @@ void MediaPlayerView::slotThemeChanged()
 void MediaPlayerView::slotEscapePressed()
 {
     escapePreview();
-    emit signalBack2Album();
+    emit signalEscapePreview();
 }
 
 int MediaPlayerView::previewMode()
