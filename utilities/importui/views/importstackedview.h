@@ -100,7 +100,7 @@ Q_SIGNALS:
     void signalPrevItem();
     //FIXME: void signalEditItem();
     void signalViewModeChanged();
-    void signalBack2FilesList();
+    void signalEscapePreview();
     //FIXME: void signalSlideShow();
     void signalZoomFactorChanged(double);
 

@@ -213,7 +213,7 @@ ImportMediaPlayerView::ImportMediaPlayerView(ImportStackedView* const parent)
             this, SIGNAL(signalNextItem()));
 
     connect(d->escapePreviewAction, SIGNAL(triggered()),
-            parent, SIGNAL(signalBack2FilesList()));
+            parent, SIGNAL(signalEscapePreview()));
 }
 
 ImportMediaPlayerView::~ImportMediaPlayerView()

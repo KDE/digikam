@@ -233,7 +233,7 @@ void ImportView::setupConnections()
     connect(d->StackedView, SIGNAL(signalViewModeChanged()),
             this, SLOT(slotViewModeChanged()));
 
-    connect(d->StackedView, SIGNAL(signalBack2FilesList()),
+    connect(d->StackedView, SIGNAL(signalEscapePreview()),
             this, SLOT(slotEscapePreview()));
 
     connect(d->StackedView, SIGNAL(signalZoomFactorChanged(double)),

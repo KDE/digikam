@@ -138,7 +138,7 @@ MediaPlayerView::MediaPlayerView(StackedView* const parent)
 {
     setAttribute(Qt::WA_DeleteOnClose);
 
-    d->escapePreviewAction = new QAction(SmallIcon("folder-image"), i18n("Escape preview"),                 this);
+    d->escapePreviewAction = new QAction(SmallIcon("folder-image"), i18n("Escape preview"),                this);
     d->prevAction          = new QAction(SmallIcon("go-previous"),  i18nc("go to previous image", "Back"), this);
     d->nextAction          = new QAction(SmallIcon("go-next"),      i18nc("go to next image", "Forward"),  this);
 

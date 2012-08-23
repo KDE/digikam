@@ -126,8 +126,8 @@ ImportStackedView::ImportStackedView(CameraController* const controller, QWidget
     //FIXME: connect(d->importPreviewView, SIGNAL(signalDeleteItem()),
             //this, SIGNAL(signalDeleteItem()));
 
-    connect(d->importPreviewView, SIGNAL(signalBack2FilesList()),
-            this, SIGNAL(signalBack2FilesList()));
+    connect(d->importPreviewView, SIGNAL(signalEscapePreview()),
+            this, SIGNAL(signalEscapePreview()));
 
     connect(d->importPreviewView->layout(), SIGNAL(zoomFactorChanged(double)),
             this, SLOT(slotZoomFactorChanged(double)));
@@ -159,8 +159,8 @@ ImportStackedView::ImportStackedView(CameraController* const controller, QWidget
     connect(d->mediaPlayerView, SIGNAL(signalPrevItem()),
             this, SIGNAL(signalPrevItem()));
 
-    connect(d->mediaPlayerView, SIGNAL(signalBack2FilesList()),
-            this, SIGNAL(signalBack2FilesList()));
+    connect(d->mediaPlayerView, SIGNAL(signalEscapePreview()),
+            this, SIGNAL(signalEscapePreview()));
 
     connect(d->importPreviewView, SIGNAL(signalPreviewLoaded(bool)),
             this, SLOT(slotPreviewLoaded(bool)));

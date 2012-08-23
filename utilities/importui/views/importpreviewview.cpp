@@ -216,7 +216,7 @@ ImportPreviewView::ImportPreviewView(QWidget* const parent, Mode mode)
             this, SIGNAL(toNextImage()));
 
     connect(d->back2FilesListAction, SIGNAL(triggered()),
-            this, SIGNAL(signalBack2FilesList()));
+            this, SIGNAL(signalEscapePreview()));
 
     connect(d->rotLeftAction, SIGNAL(triggered()),
             this, SLOT(slotRotateLeft()));
@@ -242,7 +242,7 @@ ImportPreviewView::ImportPreviewView(QWidget* const parent, Mode mode)
             this, SIGNAL(signalPrevItem()));
 
     connect(this, SIGNAL(activated()),
-            this, SIGNAL(signalBack2FilesList()));
+            this, SIGNAL(signalEscapePreview()));
 
     connect(ThemeManager::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
