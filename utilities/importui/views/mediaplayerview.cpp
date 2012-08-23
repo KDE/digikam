@@ -105,8 +105,8 @@ public:
 
     Private() :
         errorView(0),
-        ImportMediaPlayerView(0),
-        back2FilesListAction(0),
+        playerView(0),
+        escapePreviewAction(0),
         prevAction(0),
         nextAction(0),
         toolBar(0),
@@ -117,9 +117,9 @@ public:
     }
 
     QFrame*              errorView;
-    QFrame*              ImportMediaPlayerView;
+    QFrame*              playerView;
 
-    QAction*             back2FilesListAction;
+    QAction*             escapePreviewAction;
     QAction*             prevAction;
     QAction*             nextAction;
 
@@ -138,7 +138,7 @@ ImportMediaPlayerView::ImportMediaPlayerView(ImportStackedView* const parent)
 {
     setAttribute(Qt::WA_DeleteOnClose);
 
-    d->back2FilesListAction = new QAction(SmallIcon("folder-image"), i18n("Back to Album"),                 this);
+    d->escapePreviewAction = new QAction(SmallIcon("folder-image"), i18n("Back to Album"),                 this);
     d->prevAction           = new QAction(SmallIcon("go-previous"),  i18nc("go to previous image", "Back"), this);
     d->nextAction           = new QAction(SmallIcon("go-next"),      i18nc("go to next image", "Forward"),  this);
 
@@ -163,15 +163,15 @@ ImportMediaPlayerView::ImportMediaPlayerView(ImportStackedView* const parent)
 
     // --------------------------------------------------------------------------
 
-    d->ImportMediaPlayerView = new QFrame(this);
-    d->player                = new Phonon::VideoPlayer(Phonon::VideoCategory, this);
-    d->slider                = new Phonon::SeekSlider(this);
+    d->playerView = new QFrame(this);
+    d->player     = new Phonon::VideoPlayer(Phonon::VideoCategory, this);
+    d->slider     = new Phonon::SeekSlider(this);
     d->slider->setMediaObject(d->player->mediaObject());
     d->player->mediaObject()->setTickInterval(100);
     d->player->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-    d->ImportMediaPlayerView->setFrameStyle(QFrame::GroupBoxPanel|QFrame::Plain);
-    d->ImportMediaPlayerView->setLineWidth(1);
+    d->playerView->setFrameStyle(QFrame::GroupBoxPanel|QFrame::Plain);
+    d->playerView->setLineWidth(1);
 
     d->grid = new QGridLayout;
     d->grid->addWidget(d->player->videoWidget(), 0, 0, 1, 3);
@@ -181,14 +181,14 @@ ImportMediaPlayerView::ImportMediaPlayerView(ImportStackedView* const parent)
     d->grid->setRowStretch(0, 10);
     d->grid->setMargin(KDialog::spacingHint());
     d->grid->setSpacing(KDialog::spacingHint());
-    d->ImportMediaPlayerView->setLayout(d->grid);
+    d->playerView->setLayout(d->grid);
 
-    insertWidget(Private::PlayerView, d->ImportMediaPlayerView);
+    insertWidget(Private::PlayerView, d->playerView);
 
     d->toolBar = new QToolBar(this);
     d->toolBar->addAction(d->prevAction);
     d->toolBar->addAction(d->nextAction);
-    d->toolBar->addAction(d->back2FilesListAction);
+    d->toolBar->addAction(d->escapePreviewAction);
 
     setPreviewMode(Private::PlayerView);
 
@@ -212,7 +212,7 @@ ImportMediaPlayerView::ImportMediaPlayerView(ImportStackedView* const parent)
     connect(d->nextAction, SIGNAL(triggered()),
             this, SIGNAL(signalNextItem()));
 
-    connect(d->back2FilesListAction, SIGNAL(triggered()),
+    connect(d->escapePreviewAction, SIGNAL(triggered()),
             parent, SIGNAL(signalBack2FilesList()));
 }
 
@@ -277,8 +277,8 @@ void ImportMediaPlayerView::slotThemeChanged()
     d->errorView->setPalette(palette);
 
     QPalette palette2;
-    palette2.setColor(d->ImportMediaPlayerView->backgroundRole(), kapp->palette().color(QPalette::Base));
-    d->ImportMediaPlayerView->setPalette(palette2);
+    palette2.setColor(d->playerView->backgroundRole(), kapp->palette().color(QPalette::Base));
+    d->playerView->setPalette(palette2);
 }
 
 void ImportMediaPlayerView::slotEscapePressed()
