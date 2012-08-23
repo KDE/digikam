@@ -127,10 +127,10 @@ public:
 
     QGridLayout*         grid;
 
-    CamItemInfo          currentInfo;
-
     Phonon::VideoPlayer* player;
     Phonon::SeekSlider*  slider;
+
+    CamItemInfo          currentInfo;
 };
 
 ImportMediaPlayerView::ImportMediaPlayerView(ImportStackedView* const parent)
@@ -139,11 +139,11 @@ ImportMediaPlayerView::ImportMediaPlayerView(ImportStackedView* const parent)
     setAttribute(Qt::WA_DeleteOnClose);
 
     d->escapePreviewAction = new QAction(SmallIcon("folder-image"), i18n("Back to Album"),                 this);
-    d->prevAction           = new QAction(SmallIcon("go-previous"),  i18nc("go to previous image", "Back"), this);
-    d->nextAction           = new QAction(SmallIcon("go-next"),      i18nc("go to next image", "Forward"),  this);
+    d->prevAction          = new QAction(SmallIcon("go-previous"),  i18nc("go to previous image", "Back"), this);
+    d->nextAction          = new QAction(SmallIcon("go-next"),      i18nc("go to next image", "Forward"),  this);
 
-    d->errorView            = new QFrame(this);
-    QLabel* errorMsg        = new QLabel(i18n("An error has occurred with the media player...."), this);
+    d->errorView           = new QFrame(this);
+    QLabel* errorMsg       = new QLabel(i18n("An error has occurred with the media player...."), this);
 
     errorMsg->setAlignment(Qt::AlignCenter);
     d->errorView->setFrameStyle(QFrame::GroupBoxPanel|QFrame::Plain);
@@ -223,32 +223,6 @@ ImportMediaPlayerView::~ImportMediaPlayerView()
     delete d;
 }
 
-void ImportMediaPlayerView::setCamItemInfo(const CamItemInfo& info, const CamItemInfo& previous, const CamItemInfo& next)
-{
-    d->prevAction->setEnabled(!previous.isNull());
-    d->nextAction->setEnabled(!next.isNull());
-
-    KUrl url = info.url();
-
-    if (info.isNull() || url.isEmpty())
-    {
-        d->currentInfo = info;
-        d->player->stop();
-        return;
-    }
-
-    if (d->currentInfo == info &&
-        (d->player->isPlaying() || d->player->isPaused()))
-    {
-        return;
-    }
-
-    d->currentInfo = info;
-
-    d->player->play(url);
-    setPreviewMode(Private::PlayerView);
-}
-
 void ImportMediaPlayerView::slotPlayerFinished()
 {
     if (d->player->mediaObject()->errorType() == Phonon::FatalError)
@@ -301,6 +275,32 @@ void ImportMediaPlayerView::setPreviewMode(int mode)
 
     setCurrentIndex(mode);
     d->toolBar->raise();
+}
+
+void ImportMediaPlayerView::setCamItemInfo(const CamItemInfo& info, const CamItemInfo& previous, const CamItemInfo& next)
+{
+    d->prevAction->setEnabled(!previous.isNull());
+    d->nextAction->setEnabled(!next.isNull());
+
+    KUrl url = info.url();
+
+    if (info.isNull() || url.isEmpty())
+    {
+        d->currentInfo = info;
+        d->player->stop();
+        return;
+    }
+
+    if (d->currentInfo == info &&
+        (d->player->isPlaying() || d->player->isPaused()))
+    {
+        return;
+    }
+
+    d->currentInfo = info;
+
+    d->player->play(url);
+    setPreviewMode(Private::PlayerView);
 }
 
 }  // namespace Digikam

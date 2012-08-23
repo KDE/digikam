@@ -127,10 +127,10 @@ public:
 
     QGridLayout*         grid;
 
-    ImageInfo            currentInfo;
-
     Phonon::VideoPlayer* player;
     Phonon::SeekSlider*  slider;
+
+    ImageInfo            currentInfo;
 };
 
 MediaPlayerView::MediaPlayerView(StackedView* const parent)
@@ -223,32 +223,6 @@ MediaPlayerView::~MediaPlayerView()
     delete d;
 }
 
-void MediaPlayerView::setImageInfo(const ImageInfo& info, const ImageInfo& previous, const ImageInfo& next)
-{
-    d->prevAction->setEnabled(!previous.isNull());
-    d->nextAction->setEnabled(!next.isNull());
-
-    KUrl url = info.fileUrl();
-
-    if (info.isNull() || url.isEmpty())
-    {
-        d->currentInfo = info;
-        d->player->stop();
-        return;
-    }
-
-    if (d->currentInfo == info &&
-        (d->player->isPlaying() || d->player->isPaused()))
-    {
-        return;
-    }
-
-    d->currentInfo = info;
-
-    d->player->play(url);
-    setPreviewMode(Private::PlayerView);
-}
-
 void MediaPlayerView::slotPlayerFinished()
 {
     if (d->player->mediaObject()->errorType() == Phonon::FatalError)
@@ -301,6 +275,32 @@ void MediaPlayerView::setPreviewMode(int mode)
 
     setCurrentIndex(mode);
     d->toolBar->raise();
+}
+
+void MediaPlayerView::setImageInfo(const ImageInfo& info, const ImageInfo& previous, const ImageInfo& next)
+{
+    d->prevAction->setEnabled(!previous.isNull());
+    d->nextAction->setEnabled(!next.isNull());
+
+    KUrl url = info.fileUrl();
+
+    if (info.isNull() || url.isEmpty())
+    {
+        d->currentInfo = info;
+        d->player->stop();
+        return;
+    }
+
+    if (d->currentInfo == info &&
+        (d->player->isPlaying() || d->player->isPaused()))
+    {
+        return;
+    }
+
+    d->currentInfo = info;
+
+    d->player->play(url);
+    setPreviewMode(Private::PlayerView);
 }
 
 }  // namespace Digikam
