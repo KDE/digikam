@@ -23,6 +23,7 @@
  * ============================================================ */
 
 #include "importstackedview.moc"
+#include "importstackedview.h"
 
 // Qt includes
 
@@ -35,6 +36,8 @@
 
 namespace Digikam
 {
+
+class MediaPlayerView;
 
 class ImportStackedView::Private
 {
@@ -63,7 +66,7 @@ public:
     ImportThumbnailBar* thumbBar;
     ImportPreviewView*  importPreviewView;
     ThumbBarDock*       thumbBarDock;
-    ImportMediaPlayerView*    mediaPlayerView;
+    MediaPlayerView*    mediaPlayerView; // Reuse of albumgui mediaplayer view.
     //FIXME: MapWidgetView*     mapWidgetView;
 };
 
@@ -85,14 +88,14 @@ ImportStackedView::ImportStackedView(CameraController* const controller, QWidget
     d->thumbBarDock->setWidget(d->thumbBar);
     d->thumbBarDock->setObjectName("import_thumbbar");
 
-    d->mediaPlayerView = new ImportMediaPlayerView(this);
+    d->mediaPlayerView = new MediaPlayerView(this);
     //FIXME: d->mapWidgetView   = new MapWidgetView(d->importIconView->getSelectionModel(),
                                            //d->importIconView->imageFilterModel(), this);
     //FIXME: d->mapWidgetView->setObjectName("import_mapwidgetview");
 
     insertWidget(PreviewCameraMode, d->importIconView);
-    insertWidget(PreviewImageMode, d->importPreviewView);
-    insertWidget(MediaPlayerMode,  d->mediaPlayerView);
+    insertWidget(PreviewImageMode,  d->importPreviewView);
+    insertWidget(MediaPlayerMode,   d->mediaPlayerView);
     //insertWidget(MapWidgetMode,    d->mapWidgetView);
 
     setPreviewMode(PreviewCameraMode);
@@ -219,7 +222,7 @@ ImportPreviewView* ImportStackedView::importPreviewView() const
 //    return d->mapWidgetView;
 //}
 
-ImportMediaPlayerView* ImportStackedView::mediaPlayerView() const
+MediaPlayerView* ImportStackedView::mediaPlayerView() const
 {
     return d->mediaPlayerView;
 }

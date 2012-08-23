@@ -500,8 +500,8 @@ void CameraUI::setupActions()
     connect(imageSortOrderMapper, SIGNAL(mapped(int)), d->view, SLOT(slotSortImagesOrder(int)));
     actionCollection()->addAction("item_sort_order", d->itemSortOrderAction);
 
-    QAction* sortAscendingAction = d->itemSortOrderAction->addAction(i18n("Ascending"));
-    QAction* sortDescendingAction = d->itemSortOrderAction->addAction(i18n("Descending"));
+    QAction* sortAscendingAction = d->itemSortOrderAction->addAction(KIcon("view-sort-ascending"), i18n("Ascending"));
+    QAction* sortDescendingAction = d->itemSortOrderAction->addAction(KIcon("view-sort-descending"), i18n("Descending"));
 
     connect(sortAscendingAction, SIGNAL(triggered()), imageSortOrderMapper, SLOT(map()));
     connect(sortDescendingAction, SIGNAL(triggered()), imageSortOrderMapper, SLOT(map()));
