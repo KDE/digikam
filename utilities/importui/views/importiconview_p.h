@@ -62,9 +62,7 @@ public:
     ImportRotateOverlay*      rotateLeftOverlay;
     ImportRotateOverlay*      rotateRightOverlay;
 
-    ImportDownloadOverlay*    unknownItemOverlay;
-    //ImportDownloadOverlay*    newItemOverlay;
-    //ImportDownloadOverlay*    downloadedItemOverlay;
+    ImportDownloadOverlay*    downloadverlay;
 
 private:
 

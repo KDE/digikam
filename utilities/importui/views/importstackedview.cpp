@@ -23,7 +23,6 @@
  * ============================================================ */
 
 #include "importstackedview.moc"
-#include "importstackedview.h" //TODO: Delete this line.
 
 // Qt includes
 
@@ -50,7 +49,7 @@ public:
         thumbBarDock        = 0;
         importIconView      = 0;
         importPreviewView   = 0;
-        //mediaPlayerView     = 0;
+        mediaPlayerView     = 0;
         //mapWidgetView       = 0;
         syncingSelection    = false;
     }
@@ -64,7 +63,7 @@ public:
     ImportThumbnailBar* thumbBar;
     ImportPreviewView*  importPreviewView;
     ThumbBarDock*       thumbBarDock;
-    //FIXME: MediaPlayerView*   mediaPlayerView;
+    ImportMediaPlayerView*    mediaPlayerView;
     //FIXME: MapWidgetView*     mapWidgetView;
 };
 
@@ -86,14 +85,14 @@ ImportStackedView::ImportStackedView(CameraController* const controller, QWidget
     d->thumbBarDock->setWidget(d->thumbBar);
     d->thumbBarDock->setObjectName("import_thumbbar");
 
-    //FIXME: d->mediaPlayerView = new MediaPlayerView(this);
+    d->mediaPlayerView = new ImportMediaPlayerView(this);
     //FIXME: d->mapWidgetView   = new MapWidgetView(d->importIconView->getSelectionModel(),
                                            //d->importIconView->imageFilterModel(), this);
     //FIXME: d->mapWidgetView->setObjectName("import_mapwidgetview");
 
     insertWidget(PreviewCameraMode, d->importIconView);
     insertWidget(PreviewImageMode, d->importPreviewView);
-    //insertWidget(MediaPlayerMode,  d->mediaPlayerView);
+    insertWidget(MediaPlayerMode,  d->mediaPlayerView);
     //insertWidget(MapWidgetMode,    d->mapWidgetView);
 
     setPreviewMode(PreviewCameraMode);
@@ -154,14 +153,14 @@ ImportStackedView::ImportStackedView(CameraController* const controller, QWidget
     connect(d->thumbBarDock, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)),
             d->thumbBar, SLOT(slotDockLocationChanged(Qt::DockWidgetArea)));
 
-    //FIXME: connect(d->mediaPlayerView, SIGNAL(signalNextItem()),
-            //this, SIGNAL(signalNextItem()));
+    connect(d->mediaPlayerView, SIGNAL(signalNextItem()),
+            this, SIGNAL(signalNextItem()));
 
-    //FIXME: connect(d->mediaPlayerView, SIGNAL(signalPrevItem()),
-            //this, SIGNAL(signalPrevItem()));
+    connect(d->mediaPlayerView, SIGNAL(signalPrevItem()),
+            this, SIGNAL(signalPrevItem()));
 
-    //FIXME: connect(d->mediaPlayerView, SIGNAL(signalBack2FilesList()),
-            //this, SIGNAL(signalBack2FilesList()));
+    connect(d->mediaPlayerView, SIGNAL(signalBack2FilesList()),
+            this, SIGNAL(signalBack2FilesList()));
 
     connect(d->importPreviewView, SIGNAL(signalPreviewLoaded(bool)),
             this, SLOT(slotPreviewLoaded(bool)));
@@ -201,8 +200,7 @@ void ImportStackedView::slotEscapePreview()
 {
     if (previewMode() == MediaPlayerMode)
     {
-        //FIXME: Uncomment when MediaPlayerView is implemented
-        //d->mediaPlayerView->escapePreview();
+        d->mediaPlayerView->escapePreview();
     }
 }
 
@@ -221,11 +219,10 @@ ImportPreviewView* ImportStackedView::importPreviewView() const
 //    return d->mapWidgetView;
 //}
 
-//FIXME: Uncomment when MediaPlayerView is implemented
-//MediaPlayerView* ImportStackedView::mediaPlayerView() const
-//{
-//    return d->mediaPlayerView;
-//}
+ImportMediaPlayerView* ImportStackedView::mediaPlayerView() const
+{
+    return d->mediaPlayerView;
+}
 
 bool ImportStackedView::isInSingleFileMode() const
 {
@@ -241,12 +238,11 @@ void ImportStackedView::setPreviewItem(const CamItemInfo& info, const CamItemInf
 {
     if (info.isNull())
     {
-        //FIXME: Uncomment when MediaPlayerView is implemented
-        //if (previewMode() == MediaPlayerMode)
-        //{
-        //    d->mediaPlayerView->setCamItemInfo();
-        //}
-        /*else*/ if (previewMode() == PreviewImageMode)
+        if (previewMode() == MediaPlayerMode)
+        {
+            d->mediaPlayerView->setCamItemInfo();
+        }
+        else if (previewMode() == PreviewImageMode)
         {
             d->importPreviewView->setCamItemInfo();
         }
@@ -261,18 +257,16 @@ void ImportStackedView::setPreviewItem(const CamItemInfo& info, const CamItemInf
                 d->importPreviewView->setCamItemInfo();
             }
 
-            //FIXME: Uncomment when MediaPlayerView is implemented
-            //setPreviewMode(MediaPlayerMode);
-            //d->mediaPlayerView->setCamItemInfo(info, previous, next);
+            setPreviewMode(MediaPlayerMode);
+            d->mediaPlayerView->setCamItemInfo(info, previous, next);
         }
         else
         {
             // Stop media player if running...
-            //FIXME: Uncomment when MediaPlayerView is implemented
-            //if (previewMode() == MediaPlayerMode)
-            //{
-            //    d->mediaPlayerView->setCamItemInfo();
-            //}
+            if (previewMode() == MediaPlayerMode)
+            {
+                d->mediaPlayerView->setCamItemInfo();
+            }
 
             d->importPreviewView->setCamItemInfo(info, previous, next);
 
@@ -305,7 +299,7 @@ void ImportStackedView::setPreviewMode(const int mode)
         return;
     }
 
-    if (mode == PreviewImageMode /*|| mode == MediaPlayerMode*/)
+    if (mode == PreviewImageMode || mode == MediaPlayerMode)
     {
         d->thumbBarDock->restoreVisibility();
         syncSelection(d->importIconView, d->thumbBar);
@@ -366,7 +360,7 @@ void ImportStackedView::syncSelection(ImportCategorizedView* const from, ImportC
 
 void ImportStackedView::slotThumbBarSelectionChanged()
 {
-    if (currentIndex() != PreviewImageMode /*&& currentIndex() != MediaPlayerMode*/)
+    if (currentIndex() != PreviewImageMode && currentIndex() != MediaPlayerMode)
     {
         return;
     }

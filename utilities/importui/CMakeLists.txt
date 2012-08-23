@@ -44,6 +44,7 @@ SET(libimportui_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/views/importpreviewview.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/views/importiconview.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/views/importiconview_p.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/views/mediaplayerview.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/views/importstackedview.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/views/importview.cpp
 )

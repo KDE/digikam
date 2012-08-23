@@ -22,7 +22,6 @@
  * ============================================================ */
 
 #include "importiconview.moc"
-#include "importiconview.h"
 #include "importiconview_p.h"
 
 // Qt includes
@@ -38,7 +37,7 @@
 // Local includes
 
 #include "importcategorizedview.h"
-#include "../items/importoverlays.h"
+#include "importoverlays.h"
 
 #include "importsettings.h"
 #include "camitemsortsettings.h"
@@ -69,7 +68,7 @@ void ImportIconView::init(CameraController* const controller)
     ImportSettings* settings = ImportSettings::instance();
 
     //FIXME: What is the purpose of this line.
-    //importFilterModel()->setCategorizationMode(CamItemSortSettings::CategoryByFolder);
+    importFilterModel()->setCategorizationMode(CamItemSortSettings::CategoryByFolder);
 
     setThumbnailSize((ThumbnailSize::Size)settings->getDefaultIconSize());
 
@@ -92,13 +91,8 @@ void ImportIconView::init(CameraController* const controller)
     d->rotateRightOverlay = ImportRotateOverlay::right(this);
 
     // download overlays
-    d->unknownItemOverlay = new ImportDownloadOverlay(this);
-    //d->newItemOverlay        = ImportDownloadOverlay(this);
-    //d->downloadedItemOverlay = ImportDownloadOverlay::downloadedItem(this);
-
-    addOverlay(d->unknownItemOverlay);
-    //addOverlay(downloadedItemOverlay);
-    //addOverlay(unknownItemOverlay);
+    d->downloadverlay     = new ImportDownloadOverlay(this);
+    addOverlay(d->downloadverlay);
 
     d->updateOverlays();
 
@@ -142,7 +136,6 @@ ImageViewUtilities* ImportIconView::utilities() const
 
 void ImportIconView::setThumbnailSize(const ThumbnailSize& size)
 {
-    //importThumbnailModel()->setThumbnailSize(size);
     ImportCategorizedView::setThumbnailSize(size);
 }
 

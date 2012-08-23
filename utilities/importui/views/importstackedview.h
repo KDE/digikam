@@ -36,6 +36,7 @@
 #include "thumbbardock.h"
 #include "camiteminfo.h"
 #include "importiconview.h"
+#include "mediaplayerview.h"
 
 namespace Digikam
 {
@@ -59,7 +60,6 @@ public:
     ImportStackedView(CameraController* const controller, QWidget* const parent = 0);
     ~ImportStackedView();
 
-    /*FIXME: Attach the thumbnail dock widget to the specified QMainWindow. */
     void setDockArea(QMainWindow*);
 
     ThumbBarDock*       thumbBarDock()      const;
@@ -67,7 +67,7 @@ public:
     ImportIconView*     importIconView()    const;
     ImportPreviewView*  importPreviewView() const;
     //FIXME: MapWidgetView*    mapWidgetView()    const;
-    //FIXME: MediaPlayerView*  mediaPlayerView()  const;
+    ImportMediaPlayerView*  mediaPlayerView()  const;
 
     bool isInSingleFileMode() const;
     bool isInMultipleFileMode() const;

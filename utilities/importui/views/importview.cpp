@@ -140,7 +140,7 @@ ImportView::ImportView(CameraUI* const ui, QWidget* const parent)
 
     d->addPageUpDownActions(this, d->StackedView->importPreviewView());
     d->addPageUpDownActions(this, d->StackedView->thumbBar());
-    //TODO: d->addPageUpDownActions(this, d->StackedView->mediaPlayerView());
+    d->addPageUpDownActions(this, d->StackedView->mediaPlayerView());
 
     foreach(SidebarWidget* leftWidget, d->leftSideBarWidgets)
     {
