@@ -130,7 +130,7 @@ public:
     Phonon::VideoPlayer* player;
     Phonon::SeekSlider*  slider;
 
-    ImageInfo            currentInfo;
+    KUrl                 currentItem;
 };
 
 MediaPlayerView::MediaPlayerView(StackedView* const parent)
@@ -138,7 +138,7 @@ MediaPlayerView::MediaPlayerView(StackedView* const parent)
 {
     setAttribute(Qt::WA_DeleteOnClose);
 
-    d->escapePreviewAction = new QAction(SmallIcon("folder-image"), i18n("Back to Album"),                 this);
+    d->escapePreviewAction = new QAction(SmallIcon("folder-image"), i18n("Escape preview"),                 this);
     d->prevAction          = new QAction(SmallIcon("go-previous"),  i18nc("go to previous image", "Back"), this);
     d->nextAction          = new QAction(SmallIcon("go-next"),      i18nc("go to next image", "Forward"),  this);
 
@@ -284,20 +284,20 @@ void MediaPlayerView::setImageInfo(const ImageInfo& info, const ImageInfo& previ
 
     KUrl url = info.fileUrl();
 
-    if (info.isNull() || url.isEmpty())
+    if (url.isEmpty())
     {
-        d->currentInfo = info;
+        d->currentItem = url;
         d->player->stop();
         return;
     }
 
-    if (d->currentInfo == info &&
+    if (d->currentItem == url &&
         (d->player->isPlaying() || d->player->isPaused()))
     {
         return;
     }
 
-    d->currentInfo = info;
+    d->currentItem = url;
 
     d->player->play(url);
     setPreviewMode(Private::PlayerView);
