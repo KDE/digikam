@@ -52,7 +52,7 @@
 namespace Digikam
 {
 
-ImportMediaPlayerMouseClickFilter::ImportMediaPlayerMouseClickFilter(QObject* parent)
+ImportMediaPlayerMouseClickFilter::ImportMediaPlayerMouseClickFilter(QObject* const parent)
     : QObject(parent), m_parent(parent)
 {
 }
@@ -90,7 +90,7 @@ bool ImportMediaPlayerMouseClickFilter::eventFilter(QObject* obj, QEvent* event)
 
 // --------------------------------------------------------
 
-class ImportMediaPlayerView::ImportMediaPlayerViewPriv
+class ImportMediaPlayerView::Private
 {
 
 public:
@@ -103,7 +103,7 @@ public:
 
 public:
 
-    ImportMediaPlayerViewPriv() :
+    Private() :
         errorView(0),
         ImportMediaPlayerView(0),
         back2FilesListAction(0),
@@ -133,8 +133,8 @@ public:
     Phonon::SeekSlider*  slider;
 };
 
-ImportMediaPlayerView::ImportMediaPlayerView(ImportStackedView* parent)
-    : QStackedWidget(parent), d(new ImportMediaPlayerViewPriv)
+ImportMediaPlayerView::ImportMediaPlayerView(ImportStackedView* const parent)
+    : QStackedWidget(parent), d(new Private)
 {
     setAttribute(Qt::WA_DeleteOnClose);
 
@@ -151,21 +151,21 @@ ImportMediaPlayerView::ImportMediaPlayerView(ImportStackedView* parent)
 
     QGridLayout* grid = new QGridLayout;
     grid->addWidget(errorMsg, 1, 0, 1, 3 );
-    grid->setColumnStretch(0, 10),
-         grid->setColumnStretch(2, 10),
-         grid->setRowStretch(0, 10),
-         grid->setRowStretch(2, 10),
-         grid->setMargin(KDialog::spacingHint());
+    grid->setColumnStretch(0, 10);
+    grid->setColumnStretch(2, 10);
+    grid->setRowStretch(0, 10);
+    grid->setRowStretch(2, 10);
+    grid->setMargin(KDialog::spacingHint());
     grid->setSpacing(KDialog::spacingHint());
     d->errorView->setLayout(grid);
 
-    insertWidget(ImportMediaPlayerViewPriv::ErrorView, d->errorView);
+    insertWidget(Private::ErrorView, d->errorView);
 
     // --------------------------------------------------------------------------
 
     d->ImportMediaPlayerView = new QFrame(this);
-    d->player          = new Phonon::VideoPlayer(Phonon::VideoCategory, this);
-    d->slider          = new Phonon::SeekSlider(this);
+    d->player                = new Phonon::VideoPlayer(Phonon::VideoCategory, this);
+    d->slider                = new Phonon::SeekSlider(this);
     d->slider->setMediaObject(d->player->mediaObject());
     d->player->mediaObject()->setTickInterval(100);
     d->player->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -176,21 +176,21 @@ ImportMediaPlayerView::ImportMediaPlayerView(ImportStackedView* parent)
     d->grid = new QGridLayout;
     d->grid->addWidget(d->player->videoWidget(), 0, 0, 1, 3);
     d->grid->addWidget(d->slider,                1, 0, 1, 3);
-    d->grid->setColumnStretch(0, 10),
-      d->grid->setColumnStretch(2, 10),
-      d->grid->setRowStretch(0, 10),
-      d->grid->setMargin(KDialog::spacingHint());
+    d->grid->setColumnStretch(0, 10);
+    d->grid->setColumnStretch(2, 10);
+    d->grid->setRowStretch(0, 10);
+    d->grid->setMargin(KDialog::spacingHint());
     d->grid->setSpacing(KDialog::spacingHint());
     d->ImportMediaPlayerView->setLayout(d->grid);
 
-    insertWidget(ImportMediaPlayerViewPriv::PlayerView, d->ImportMediaPlayerView);
+    insertWidget(Private::PlayerView, d->ImportMediaPlayerView);
 
     d->toolBar = new QToolBar(this);
     d->toolBar->addAction(d->prevAction);
     d->toolBar->addAction(d->nextAction);
     d->toolBar->addAction(d->back2FilesListAction);
 
-    setPreviewMode(ImportMediaPlayerViewPriv::PlayerView);
+    setPreviewMode(Private::PlayerView);
 
     d->errorView->installEventFilter(new ImportMediaPlayerMouseClickFilter(this));
     d->player->videoWidget()->installEventFilter(new ImportMediaPlayerMouseClickFilter(this));
@@ -246,14 +246,14 @@ void ImportMediaPlayerView::setCamItemInfo(const CamItemInfo& info, const CamIte
     d->currentInfo = info;
 
     d->player->play(url);
-    setPreviewMode(ImportMediaPlayerViewPriv::PlayerView);
+    setPreviewMode(Private::PlayerView);
 }
 
 void ImportMediaPlayerView::slotPlayerFinished()
 {
     if (d->player->mediaObject()->errorType() == Phonon::FatalError)
     {
-        setPreviewMode(ImportMediaPlayerViewPriv::ErrorView);
+        setPreviewMode(Private::ErrorView);
     }
 }
 
@@ -261,7 +261,7 @@ void ImportMediaPlayerView::slotPlayerstateChanged(Phonon::State newState, Phono
 {
     if (newState == Phonon::ErrorState)
     {
-        setPreviewMode(ImportMediaPlayerViewPriv::ErrorView);
+        setPreviewMode(Private::ErrorView);
     }
 }
 
@@ -294,7 +294,7 @@ int ImportMediaPlayerView::previewMode()
 
 void ImportMediaPlayerView::setPreviewMode(int mode)
 {
-    if (mode != ImportMediaPlayerViewPriv::ErrorView && mode != ImportMediaPlayerViewPriv::PlayerView)
+    if (mode != Private::ErrorView && mode != Private::PlayerView)
     {
         return;
     }

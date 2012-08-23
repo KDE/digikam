@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef ImportMediaPlayerView_H
-#define ImportMediaPlayerView_H
+#ifndef IMPORTMEDIAPLAYERVIEW_H
+#define IMPORTMEDIAPLAYERVIEW_H
 
 // Qt includes
 
@@ -35,7 +35,7 @@
 
 // Local includes
 
-#include "../backend/camiteminfo.h"
+#include "camiteminfo.h"
 
 namespace Digikam
 {
@@ -48,7 +48,7 @@ class ImportMediaPlayerMouseClickFilter : public QObject
 
 public:
 
-    ImportMediaPlayerMouseClickFilter(QObject* parent);
+    ImportMediaPlayerMouseClickFilter(QObject* const parent);
 
 protected:
 
@@ -67,12 +67,12 @@ class ImportMediaPlayerView : public QStackedWidget
 
 public:
 
-    ImportMediaPlayerView(ImportStackedView* parent);
+    ImportMediaPlayerView(ImportStackedView* const parent);
     ~ImportMediaPlayerView();
 
-    void setCamItemInfo(const CamItemInfo& info = CamItemInfo(),
-                      const CamItemInfo& previous = CamItemInfo(),
-                      const CamItemInfo& next = CamItemInfo());
+    void setCamItemInfo(const CamItemInfo& info     = CamItemInfo(),
+                        const CamItemInfo& previous = CamItemInfo(),
+                        const CamItemInfo& next     = CamItemInfo());
     void escapePreview();
 
 Q_SIGNALS:
@@ -98,10 +98,10 @@ private:
 
 private:
 
-    class ImportMediaPlayerViewPriv;
-    ImportMediaPlayerViewPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam
 
-#endif // ImportMediaPlayerView_H
+#endif // IMPORTMEDIAPLAYERVIEW_H

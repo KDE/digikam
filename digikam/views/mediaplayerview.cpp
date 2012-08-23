@@ -52,7 +52,7 @@
 namespace Digikam
 {
 
-MediaPlayerMouseClickFilter::MediaPlayerMouseClickFilter(QObject* parent)
+MediaPlayerMouseClickFilter::MediaPlayerMouseClickFilter(QObject* const parent)
     : QObject(parent), m_parent(parent)
 {
 }
@@ -90,7 +90,7 @@ bool MediaPlayerMouseClickFilter::eventFilter(QObject* obj, QEvent* event)
 
 // --------------------------------------------------------
 
-class MediaPlayerView::MediaPlayerViewPriv
+class MediaPlayerView::Private
 {
 
 public:
@@ -103,7 +103,7 @@ public:
 
 public:
 
-    MediaPlayerViewPriv() :
+    Private() :
         errorView(0),
         mediaPlayerView(0),
         back2AlbumAction(0),
@@ -133,8 +133,8 @@ public:
     Phonon::SeekSlider*  slider;
 };
 
-MediaPlayerView::MediaPlayerView(StackedView* parent)
-    : QStackedWidget(parent), d(new MediaPlayerViewPriv)
+MediaPlayerView::MediaPlayerView(StackedView* const parent)
+    : QStackedWidget(parent), d(new Private)
 {
     setAttribute(Qt::WA_DeleteOnClose);
 
@@ -151,15 +151,15 @@ MediaPlayerView::MediaPlayerView(StackedView* parent)
 
     QGridLayout* grid = new QGridLayout;
     grid->addWidget(errorMsg, 1, 0, 1, 3 );
-    grid->setColumnStretch(0, 10),
-         grid->setColumnStretch(2, 10),
-         grid->setRowStretch(0, 10),
-         grid->setRowStretch(2, 10),
-         grid->setMargin(KDialog::spacingHint());
+    grid->setColumnStretch(0, 10);
+    grid->setColumnStretch(2, 10);
+    grid->setRowStretch(0, 10);
+    grid->setRowStretch(2, 10);
+    grid->setMargin(KDialog::spacingHint());
     grid->setSpacing(KDialog::spacingHint());
     d->errorView->setLayout(grid);
 
-    insertWidget(MediaPlayerViewPriv::ErrorView, d->errorView);
+    insertWidget(Private::ErrorView, d->errorView);
 
     // --------------------------------------------------------------------------
 
@@ -176,21 +176,21 @@ MediaPlayerView::MediaPlayerView(StackedView* parent)
     d->grid = new QGridLayout;
     d->grid->addWidget(d->player->videoWidget(), 0, 0, 1, 3);
     d->grid->addWidget(d->slider,                1, 0, 1, 3);
-    d->grid->setColumnStretch(0, 10),
-      d->grid->setColumnStretch(2, 10),
-      d->grid->setRowStretch(0, 10),
-      d->grid->setMargin(KDialog::spacingHint());
+    d->grid->setColumnStretch(0, 10);
+    d->grid->setColumnStretch(2, 10);
+    d->grid->setRowStretch(0, 10);
+    d->grid->setMargin(KDialog::spacingHint());
     d->grid->setSpacing(KDialog::spacingHint());
     d->mediaPlayerView->setLayout(d->grid);
 
-    insertWidget(MediaPlayerViewPriv::PlayerView, d->mediaPlayerView);
+    insertWidget(Private::PlayerView, d->mediaPlayerView);
 
     d->toolBar = new QToolBar(this);
     d->toolBar->addAction(d->prevAction);
     d->toolBar->addAction(d->nextAction);
     d->toolBar->addAction(d->back2AlbumAction);
 
-    setPreviewMode(MediaPlayerViewPriv::PlayerView);
+    setPreviewMode(Private::PlayerView);
 
     d->errorView->installEventFilter(new MediaPlayerMouseClickFilter(this));
     d->player->videoWidget()->installEventFilter(new MediaPlayerMouseClickFilter(this));
@@ -246,14 +246,14 @@ void MediaPlayerView::setImageInfo(const ImageInfo& info, const ImageInfo& previ
     d->currentInfo = info;
 
     d->player->play(url);
-    setPreviewMode(MediaPlayerViewPriv::PlayerView);
+    setPreviewMode(Private::PlayerView);
 }
 
 void MediaPlayerView::slotPlayerFinished()
 {
     if (d->player->mediaObject()->errorType() == Phonon::FatalError)
     {
-        setPreviewMode(MediaPlayerViewPriv::ErrorView);
+        setPreviewMode(Private::ErrorView);
     }
 }
 
@@ -261,7 +261,7 @@ void MediaPlayerView::slotPlayerstateChanged(Phonon::State newState, Phonon::Sta
 {
     if (newState == Phonon::ErrorState)
     {
-        setPreviewMode(MediaPlayerViewPriv::ErrorView);
+        setPreviewMode(Private::ErrorView);
     }
 }
 
@@ -294,7 +294,7 @@ int MediaPlayerView::previewMode()
 
 void MediaPlayerView::setPreviewMode(int mode)
 {
-    if (mode != MediaPlayerViewPriv::ErrorView && mode != MediaPlayerViewPriv::PlayerView)
+    if (mode != Private::ErrorView && mode != Private::PlayerView)
     {
         return;
     }
