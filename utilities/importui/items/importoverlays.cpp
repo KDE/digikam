@@ -38,7 +38,7 @@
 namespace Digikam
 {
 
-ImportDownloadOverlayWidget::ImportDownloadOverlayWidget(QWidget* parent)
+ImportDownloadOverlayWidget::ImportDownloadOverlayWidget(QWidget* const parent)
     : QAbstractButton(parent)
 {
 }
@@ -49,7 +49,7 @@ void ImportDownloadOverlayWidget::paintEvent(QPaintEvent*)
 
 // -- Download Overlays ------------------------------------------------------------------
 
-ImportDownloadOverlay::ImportDownloadOverlay(QObject* parent)
+ImportDownloadOverlay::ImportDownloadOverlay(QObject* const parent)
     : AbstractWidgetDelegateOverlay(parent)
 {
 }
@@ -128,7 +128,7 @@ void ImportDownloadOverlay::slotEntered(const QModelIndex& index)
 
 // -- Rotate Overlays ----------------------------------------------------------------
 
-ImportRotateOverlayButton::ImportRotateOverlayButton(ImportRotateOverlayDirection dir, QAbstractItemView* parentView)
+ImportRotateOverlayButton::ImportRotateOverlayButton(ImportRotateOverlayDirection dir, QAbstractItemView* const parentView)
     : ItemViewHoverButton(parentView),
       m_direction(dir)
 {
@@ -165,7 +165,7 @@ void ImportRotateOverlayButton::updateToolTip()
 
 // --------------------------------------------------------------------
 
-ImportRotateOverlay::ImportRotateOverlay(ImportRotateOverlayDirection dir, QObject* parent)
+ImportRotateOverlay::ImportRotateOverlay(ImportRotateOverlayDirection dir, QObject* const parent)
     : HoverButtonDelegateOverlay(parent),
       m_direction(dir)
 {

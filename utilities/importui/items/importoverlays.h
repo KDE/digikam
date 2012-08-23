@@ -44,7 +44,7 @@ class ImportDownloadOverlayWidget : public QAbstractButton
 
 public:
 
-    ImportDownloadOverlayWidget(QWidget* parent = 0);
+    ImportDownloadOverlayWidget(QWidget* const parent = 0);
 
 protected:
 
@@ -60,7 +60,7 @@ class ImportDownloadOverlay : public AbstractWidgetDelegateOverlay
 
 public:
 
-    ImportDownloadOverlay(QObject* parent);
+    ImportDownloadOverlay(QObject* const parent);
     ImportDownloadOverlayWidget* buttonWidget() const;
 
 protected:
@@ -90,7 +90,7 @@ class ImportRotateOverlayButton : public ItemViewHoverButton
 {
 public:
 
-    ImportRotateOverlayButton(ImportRotateOverlayDirection dir, QAbstractItemView* parentView);
+    ImportRotateOverlayButton(ImportRotateOverlayDirection dir, QAbstractItemView* const parentView);
     virtual QSize sizeHint() const;
 
 protected:
@@ -111,14 +111,14 @@ class ImportRotateOverlay : public HoverButtonDelegateOverlay
 
 public:
 
-    ImportRotateOverlay(ImportRotateOverlayDirection dir, QObject* parent);
+    ImportRotateOverlay(ImportRotateOverlayDirection dir, QObject* const parent);
     virtual void setActive(bool active);
 
-    ImportRotateOverlayDirection direction() const { return m_direction; }
-    bool isLeft() const { return m_direction  == ImportRotateOverlayLeft; }
-    bool isRight() const { return m_direction == ImportRotateOverlayRight; }
+    ImportRotateOverlayDirection direction() const     { return m_direction;                                               }
+    bool isLeft() const                                { return m_direction  == ImportRotateOverlayLeft;                   }
+    bool isRight() const                               { return m_direction == ImportRotateOverlayRight;                   }
 
-    static ImportRotateOverlay* left(QObject* parent) { return new ImportRotateOverlay(ImportRotateOverlayLeft, parent); }
+    static ImportRotateOverlay* left(QObject* parent)  { return new ImportRotateOverlay(ImportRotateOverlayLeft, parent);  }
     static ImportRotateOverlay* right(QObject* parent) { return new ImportRotateOverlay(ImportRotateOverlayRight, parent); }
 
 Q_SIGNALS:
