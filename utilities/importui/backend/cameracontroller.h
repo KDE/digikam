@@ -93,7 +93,7 @@ public:
     void lockFile(const QString& folder, const QString& file, bool lock);
     void openFile(const QString& folder, const QString& file);
 
-    QPixmap mimeTypeThumbnail(const QString& itemName) const;
+    QPixmap mimeTypeThumbnail(const QString& itemName, int thumbSize) const;
 
 Q_SIGNALS:
 
@@ -126,7 +126,6 @@ Q_SIGNALS:
     void signalInternalUploadFailed(const QString& folder, const QString& file, const QString& src);
     void signalInternalDeleteFailed(const QString& folder, const QString& file);
     void signalInternalLockFailed(const QString& folder, const QString& file);
-    void signalInternalOpen(const QString& folder, const QString& file, const QString& dest);
 
 public Q_SLOTS:
 
@@ -146,7 +145,6 @@ private Q_SLOTS:
     void slotUploadFailed(const QString& folder, const QString& file, const QString& src);
     void slotDeleteFailed(const QString& folder, const QString& file);
     void slotLockFailed(const QString& folder, const QString& file);
-    void slotOpen(const QString& folder, const QString& file, const QString& dest);
 
 private:
 

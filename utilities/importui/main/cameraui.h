@@ -183,9 +183,6 @@ private Q_SLOTS:
     void slotToggleLock();
     void slotMarkAsDownloaded();
 
-    void slotFileView();
-    void slotFileView(const CamItemInfo&);
-
     void slotUploaded(const CamItemInfo&);
     void slotDownloaded(const QString&, const QString&, int);
     void slotDownloadComplete(const QString& sourceFolder, const QString& sourceFile,

@@ -324,7 +324,6 @@ void ImportIconView::showContextMenuOnInfo(QContextMenuEvent* event, const CamIt
     cmhelper.addAction("cameraui_delete");
     cmhelper.addSeparator();
     cmhelper.addAction("cameraui_item_view");
-    cmhelper.addAction("cameraui_imageview");
     cmhelper.addServicesMenu(selectedUrls());
     //TODO: cmhelper.addRotateMenu(selectedImageIDs);
     cmhelper.addSeparator();

@@ -91,7 +91,6 @@
 <ToolBar name="mainToolBar" ><text>Main Toolbar</text>
      <Action name="cameraui_cancelprocess" />
      <Separator/>
-     <Action name="cameraui_imageview" />
      <Action name="cameraui_imagedownload" />
      <Action name="cameraui_imageupload" />
      <Action name="cameraui_imagelock" />

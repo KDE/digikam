@@ -23,7 +23,6 @@
  * ============================================================ */
 
 #include "importstackedview.moc"
-#include "importstackedview.h"
 
 // Qt includes
 
@@ -168,6 +167,7 @@ ImportStackedView::ImportStackedView(CameraController* const controller, QWidget
     connect(d->importPreviewView, SIGNAL(signalPreviewLoaded(bool)),
             this, SLOT(slotPreviewLoaded(bool)));
 }
+
 ImportStackedView::~ImportStackedView()
 {
     delete d;

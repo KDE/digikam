@@ -210,9 +210,6 @@ CameraController::CameraController(QWidget* const parent,
             this, SLOT(slotLockFailed(QString,QString)),
             Qt::BlockingQueuedConnection);
 
-    connect(this, SIGNAL(signalInternalOpen(QString,QString,QString)),
-            this, SLOT(slotOpen(QString,QString,QString)));
-
     d->running = true;
     start();
 }
@@ -334,7 +331,7 @@ QByteArray CameraController::cameraMD5ID() const
     return d->camera->cameraMD5ID();
 }
 
-QPixmap CameraController::mimeTypeThumbnail(const QString& itemName) const
+QPixmap CameraController::mimeTypeThumbnail(const QString& itemName, int thumbSize) const
 {
     if (!d->camera)
     {
@@ -346,22 +343,22 @@ QPixmap CameraController::mimeTypeThumbnail(const QString& itemName) const
 
     if (mime.startsWith(QLatin1String("image/x-raw")))
     {
-        return DesktopIcon("kdcraw");
+        return DesktopIcon("kdcraw", thumbSize);
     }
     else if (mime.startsWith(QLatin1String("image/")))
     {
-        return DesktopIcon("image-x-generic");
+        return DesktopIcon("image-x-generic", thumbSize);
     }
     else if (mime.startsWith(QLatin1String("video/")))
     {
-        return DesktopIcon("video-x-generic");
+        return DesktopIcon("video-x-generic", thumbSize);
     }
     else if (mime.startsWith(QLatin1String("audio/")))
     {
-        return DesktopIcon("audio-x-generic");
+        return DesktopIcon("audio-x-generic", thumbSize);
     }
 
-    return DesktopIcon("unknown");
+    return DesktopIcon("unknown", thumbSize);
 }
 
 void CameraController::slotCancel()
@@ -690,28 +687,6 @@ void CameraController::executeCommand(CameraCommand* const cmd)
             // Now we need to move from temp file to destination file.
             // This possibly involves UI operation, do it from main thread
             emit signalInternalCheckRename(folder, file, dest, temp, script);
-            break;
-        }
-
-        case (CameraCommand::cam_open):
-        {
-            QString folder = cmd->map["folder"].toString();
-            QString file   = cmd->map["file"].toString();
-            QString dest   = cmd->map["dest"].toString();
-
-            sendLogMsg(i18n("Retrieving file %1 from camera...", file), DHistoryView::StartingEntry, folder, file);
-
-            bool result = d->camera->downloadItem(folder, file, dest);
-
-            if (result)
-            {
-                emit signalInternalOpen(folder, file, dest);
-            }
-            else
-            {
-                sendLogMsg(i18n("Failed to retrieve file %1 from camera.", file), DHistoryView::ErrorEntry, folder, file);
-            }
-
             break;
         }
 
@@ -1059,35 +1034,6 @@ void CameraController::slotLockFailed(const QString& folder, const QString& file
             }
         }
     }
-}
-
-void CameraController::slotOpen(const QString& folder, const QString& file, const QString& dest)
-{
-    Q_UNUSED(folder);
-    Q_UNUSED(file);
-    Q_UNUSED(dest);
-
-    //TODO: Provide a preview window
-
-/*
-    KUrl url = KUrl::fromPath(dest);
-    KUrl::List urlList;
-    urlList << url;
-
-    ImageWindow* im = ImageWindow::imageWindow();
-    im->loadURL(urlList, url, i18n("Camera \"%1\"",d->camera->model()), false);
-
-    if (im->isHidden())
-    {
-        im->show();
-    }
-    else
-    {
-        im->raise();
-    }
-
-    im->setFocus();
-*/
 }
 
 void CameraController::addCommand(CameraCommand* const cmd)

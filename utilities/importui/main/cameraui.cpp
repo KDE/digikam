@@ -347,13 +347,6 @@ void CameraUI::setupActions()
     connect(d->selectLockedItemsAction, SIGNAL(triggered()), this, SLOT(slotSelectLocked()));
     actionCollection()->addAction("cameraui_selectlockeditems", d->selectLockedItemsAction);
 
-    // -- Image menu ---------------------------------------------
-
-    d->imageViewAction = new KAction(KIcon("editimage"), i18nc("View the selected image", "View Item"), this);
-    connect(d->imageViewAction, SIGNAL(triggered()), this, SLOT(slotFileView()));
-    actionCollection()->addAction("cameraui_imageview", d->imageViewAction);
-    d->imageViewAction->setEnabled(false);
-
     // --- Download actions ----------------------------------------------------
 
     d->downloadAction = new KActionMenu(KIcon("get-hot-new-stuff"), i18n("Download"), this);
@@ -851,7 +844,7 @@ void CameraUI::readSettings()
 
     slotShowLog();
 }
-#include "cameraui.h"
+
 void CameraUI::saveSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
@@ -1067,7 +1060,6 @@ void CameraUI::slotBusy(bool val)
         d->markAsDownloadedAction->setEnabled(true);
         d->cameraInfoAction->setEnabled(true);
         d->cameraCaptureAction->setEnabled(d->controller->cameraCaptureImageSupport());
-        d->imageViewAction->setEnabled(true);
         //d->filterComboBox->setEnabled(true);
 
         // selection-dependent update of lockAction, markAsDownloadedAction,
@@ -1128,7 +1120,6 @@ void CameraUI::slotBusy(bool val)
         d->markAsDownloadedAction->setEnabled(false);
         d->cameraInfoAction->setEnabled(false);
         d->cameraCaptureAction->setEnabled(false);
-        d->imageViewAction->setEnabled(false);
         //d->filterComboBox->setEnabled(false);
     }
 }
@@ -2167,21 +2158,6 @@ void CameraUI::slotDeleted(const QString& folder, const QString& file, bool stat
     refreshFreeSpace();
 }
 
-void CameraUI::slotFileView()
-{
-    CamItemInfo info = d->view->selectedCamItemInfos().first();
-
-    if (!info.isNull())
-    {
-        slotFileView(info);
-    }
-}
-
-void CameraUI::slotFileView(const CamItemInfo& info)
-{
-    d->controller->openFile(info.folder, info.name);
-}
-
 void CameraUI::slotMetadata(const QString& folder, const QString& file, const DMetadata& meta)
 {
     CamItemInfo info = d->view->camItemInfo(folder, file);
@@ -2203,7 +2179,6 @@ void CameraUI::slotNewSelection(bool hasSelection)
     d->downloadDelSelectedAction->setEnabled(hasSelection && d->controller->cameraDeleteSupport());
     d->camItemPreviewAction->setEnabled(hasSelection);
     d->deleteSelectedAction->setEnabled(hasSelection && d->controller->cameraDeleteSupport());
-    d->imageViewAction->setEnabled(hasSelection);
     d->lockAction->setEnabled(hasSelection);
 
     if (hasSelection)
@@ -2260,12 +2235,6 @@ void CameraUI::slotImageSelected(const CamItemInfoList& selection, bool hasPrev,
             {
                 d->rightSideBar->itemChanged(selection.first(), DMetadata());
                 d->controller->getMetadata(selection.first().folder, selection.first().name);
-
-                // check if the selected item is really an image, if not, disable the edit action
-                if (identifyCategoryforMime(selection.first().mime) != "image")
-                {
-                    d->imageViewAction->setEnabled(false);
-                }
 
                 int index = listAll.indexOf(selection.first()) + 1;
 

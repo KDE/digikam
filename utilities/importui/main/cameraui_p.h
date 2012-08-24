@@ -98,7 +98,6 @@ public:
         downloadDelAllAction(0),
         downloadDelSelectedAction(0),
         fullScreenAction(0),
-        imageViewAction(0),
         libsInfoAction(0),
         dbStatAction(0),
         lockAction(0),
@@ -182,7 +181,6 @@ public:
     KAction*                      downloadDelAllAction;
     KAction*                      downloadDelSelectedAction;
     KAction*                      fullScreenAction;
-    KAction*                      imageViewAction;
     KAction*                      libsInfoAction;
     KAction*                      dbStatAction;
     KAction*                      lockAction;

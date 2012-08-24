@@ -248,10 +248,10 @@ void ImportDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, cons
     }
 
     //TODO: Implement rating in import tool.
-    //if (!d->ratingRect.isNull())
-    //{
-    //    drawRating(p, index, d->ratingRect, info.rating(), isSelected);
-    //}
+    /*if (!d->ratingRect.isNull())
+    {
+        drawRating(p, index, d->ratingRect, info.rating(), isSelected);
+    }*/
 
     //TODO: Implement labels in import tool.
     // Draw Color Label rectangle
@@ -295,24 +295,24 @@ void ImportDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, cons
     }
 
     //TODO: Implement grouping in import tool.
-    //if (!d->groupRect.isNull())
-    //{
-    //    drawGroupIndicator(p, d->groupRect, info.numberOfGroupedImages(),
-    //                       index.data(ImportFilterModel::GroupIsOpenRole).toBool());
-    //}
+    /*if (!d->groupRect.isNull())
+    {
+        drawGroupIndicator(p, d->groupRect, info.numberOfGroupedImages(),
+                           index.data(ImportFilterModel::GroupIsOpenRole).toBool());
+    }*/
 
     //TODO: Implement tags in import tool.
-    //if (!d->tagRect.isNull())
-    //{
-    //    QString tags = AlbumManager::instance()->tagNames(info.tagIds()).join(", ");
-    //    drawTags(p, d->tagRect, tags, isSelected);
-    //}
+    /*if (!d->tagRect.isNull())
+    {
+        QString tags = AlbumManager::instance()->tagNames(info.tagIds()).join(", ");
+        drawTags(p, d->tagRect, tags, isSelected);
+    }*/
 
     //TODO: Implement labels in import tool.
-    //if (!d->pickLabelRect.isNull())
-    //{
-    //    drawPickLabelIcon(p, d->pickLabelRect, info.pickLabel());
-    //}
+    /*if (!d->pickLabelRect.isNull())
+    {
+        drawPickLabelIcon(p, d->pickLabelRect, info.pickLabel());
+    }*/
 
     if (d->drawImageFormat)
     {
@@ -432,12 +432,12 @@ void ImportDelegate::updateSizeRectsAndPixmaps()
     prepareBackground();
 
     //TODO: Implement rating in import tool.
-    //if (!d->ratingRect.isNull())
-    //{
-        // Normally we prepare the pixmaps over the background of the rating rect.
-        // If the rating is drawn over the thumbnail, we can only draw over a transparent pixmap.
-    //    prepareRatingPixmaps(!d->ratingOverThumbnail);
-    //}
+    /*if (!d->ratingRect.isNull())
+    {
+        //Normally we prepare the pixmaps over the background of the rating rect.
+        //If the rating is drawn over the thumbnail, we can only draw over a transparent pixmap.
+        prepareRatingPixmaps(!d->ratingOverThumbnail);
+    }*/
 
     // ---- Drawing related caches ----
 
@@ -644,11 +644,11 @@ void ImportThumbnailDelegate::updateRects()
     d->drawImageFormat = ImportSettings::instance()->getIconShowImageFormat();
 
     //TODO: Implement rating in import tool.
-    //if (ImportSettings::instance()->getIconShowRating())
-    //{
-    //    int top       = d->rect.bottom() - d->margin - d->starPolygonSize.height() - 2;
-    //    d->ratingRect = QRect(d->margin, top, d->contentWidth, d->starPolygonSize.height());
-    //}
+    /*if (ImportSettings::instance()->getIconShowRating())
+    {
+        int top       = d->rect.bottom() - d->margin - d->starPolygonSize.height() - 2;
+        d->ratingRect = QRect(d->margin, top, d->contentWidth, d->starPolygonSize.height());
+    }*/
 
     if (d->flow == QListView::LeftToRight)
     {

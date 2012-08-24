@@ -385,7 +385,6 @@ void ImportPreviewView::showContextMenu(const CamItemInfo& info, QGraphicsSceneC
 
     // --------------------------------------------------------
 
-    cmhelper.addAction("cameraui_imageview");
     cmhelper.addServicesMenu(selectedItems);
     cmhelper.addRotateMenu(idList);
     cmhelper.addSeparator();
