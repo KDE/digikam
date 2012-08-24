@@ -109,7 +109,7 @@ QVariant ImportThumbnailModel::data(const QModelIndex& index, int role) const
 
         if (info.isNull() || path.isEmpty())
         {
-            return QVariant(d->controller->mimeTypeThumbnail(path));
+            return QVariant(d->controller->mimeTypeThumbnail(path, d->thumbSize.size()));
         }
 
         bool thumbChanged = false;
@@ -123,7 +123,7 @@ QVariant ImportThumbnailModel::data(const QModelIndex& index, int role) const
             return QVariant(item.second);
         }
 
-        return QVariant(d->controller->mimeTypeThumbnail(path));
+        return QVariant(d->controller->mimeTypeThumbnail(path, d->thumbSize.size()));
     }
 
     return ImportImageModel::data(index, role);
@@ -187,7 +187,7 @@ bool ImportThumbnailModel::getThumbInfo(const CamItemInfo& info, CachedItem& ite
         d->controller->getThumbsInfo(CamItemInfoList() << info, thumbSize);
     }
 
-    item = CachedItem(info, d->controller->mimeTypeThumbnail(info.name));
+    item = CachedItem(info, d->controller->mimeTypeThumbnail(info.name, d->thumbSize.size()));
     return false;
 }
 
@@ -199,7 +199,7 @@ void ImportThumbnailModel::slotThumbInfoLoaded(const QString& folder, const QStr
 
     if (thumb.isNull())
     {
-        thumbnail = d->controller->mimeTypeThumbnail(file).toImage();
+        thumbnail = d->controller->mimeTypeThumbnail(file, d->thumbSize.size()).toImage();
     }
 
     putItemToCache(info.url(), info, QPixmap::fromImage(thumbnail));
@@ -230,12 +230,13 @@ void ImportThumbnailModel::slotThumbInfoFailed(const QString& folder, const QStr
 
     if (d->controller->cameraDriverType() == DKCamera::UMSDriver)
     {
-        putItemToCache(info.url(), info, QPixmap());
+        QPixmap pix = d->controller->mimeTypeThumbnail(file, d->thumbSize.size());
+        putItemToCache(info.url(), info, pix);
         loadWithKDE(info);
     }
     else
     {
-        QPixmap pix = d->controller->mimeTypeThumbnail(file);
+        QPixmap pix = d->controller->mimeTypeThumbnail(file, d->thumbSize.size());
         putItemToCache(info.url(), info, pix);
         d->pendingItems.removeAll(info.url());
 
@@ -325,13 +326,13 @@ void ImportThumbnailModel::procressKDEPreview(const KFileItem& item, const QPixm
     }
 
     QString file   = item.url().fileName();
-    QString folder = item.url().toLocalFile().remove(QString("/") + file);
+    //QString folder = item.url().toLocalFile().remove(QString("/") + file);
     QPixmap thumb;
 
     if (pix.isNull())
     {
         // This call must be run outside Camera Controller thread.
-        thumb = d->controller->mimeTypeThumbnail(file);
+        thumb = d->controller->mimeTypeThumbnail(file, d->thumbSize.size());
         kDebug() << "Failed thumb from KDE Preview : " << item.url();
     }
     else

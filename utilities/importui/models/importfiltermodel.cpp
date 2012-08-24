@@ -22,8 +22,7 @@
  * ============================================================ */
 
 #include "importfiltermodel.moc"
-#include "importfiltermodel.h" //TODO: Remove this line.
-#include "../backend/camiteminfo.h"
+#include "camiteminfo.h"
 
 namespace Digikam
 {
