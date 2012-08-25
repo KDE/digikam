@@ -22,6 +22,7 @@
  * ============================================================ */
 
 #include "importoverlays.moc"
+#include "importoverlays.h"
 
 // KDE includes
 
@@ -38,30 +39,103 @@
 namespace Digikam
 {
 
-ImportDownloadOverlayWidget::ImportDownloadOverlayWidget(QWidget* const parent)
+ImportOverlayWidget::ImportOverlayWidget(QWidget* const parent)
     : QAbstractButton(parent)
 {
 }
 
-void ImportDownloadOverlayWidget::paintEvent(QPaintEvent*)
+void ImportOverlayWidget::paintEvent(QPaintEvent*)
 {
 }
 
-// -- Download Overlays ------------------------------------------------------------------
+// -- Lock Overlay ------------------------------------------------------------------
+
+ImportLockOverlay::ImportLockOverlay(QObject* const parent)
+    : AbstractWidgetDelegateOverlay(parent)
+{
+}
+
+ImportOverlayWidget* ImportLockOverlay::buttonWidget() const
+{
+    return static_cast<ImportOverlayWidget*>(m_widget);
+}
+
+QWidget* ImportLockOverlay::createWidget()
+{
+    QAbstractButton* button = new ImportOverlayWidget(parentWidget());
+    //button->setCursor(Qt::PointingHandCursor);
+    return button;
+}
+
+void ImportLockOverlay::setActive(bool active)
+{
+    AbstractWidgetDelegateOverlay::setActive(active);
+}
+
+void ImportLockOverlay::visualChange()
+{
+    if (m_widget && m_widget->isVisible())
+    {
+        updatePosition();
+    }
+}
+
+void ImportLockOverlay::updatePosition()
+{
+    if (!m_index.isValid())
+    {
+        return;
+    }
+
+    QRect rect       = static_cast<ImportDelegate*>(delegate())->lockIndicatorRect();
+    QRect visualRect = m_view->visualRect(m_index);
+    rect.translate(visualRect.topLeft());
+
+    m_widget->setFixedSize(rect.width() + 1, rect.height() + 1);
+    m_widget->move(rect.topLeft());
+}
+
+bool ImportLockOverlay::checkIndex(const QModelIndex& index) const
+{
+    CamItemInfo info = ImportImageModel::retrieveCamItemInfo(index);
+
+    if (info.writePermissions == 0)
+    {
+        m_widget->setToolTip(i18nc("@info:tooltip", "This item is locked!"));
+        return true;
+    }
+
+    if (info.writePermissions == 1)
+    {
+        m_widget->setToolTip(i18nc("@info:tooltip", "This item is not locked!"));
+        return true;
+    }
+
+    return false;
+}
+
+void ImportLockOverlay::slotEntered(const QModelIndex& index)
+{
+    AbstractWidgetDelegateOverlay::slotEntered(index);
+    m_index = index;
+    updatePosition();
+}
+
+// -- Download Overlay ------------------------------------------------------------------
 
 ImportDownloadOverlay::ImportDownloadOverlay(QObject* const parent)
     : AbstractWidgetDelegateOverlay(parent)
 {
 }
 
-ImportDownloadOverlayWidget* ImportDownloadOverlay::buttonWidget() const
+ImportOverlayWidget* ImportDownloadOverlay::buttonWidget() const
 {
-    return static_cast<ImportDownloadOverlayWidget*>(m_widget);
+    return static_cast<ImportOverlayWidget*>(m_widget);
 }
 
 QWidget* ImportDownloadOverlay::createWidget()
 {
-    QAbstractButton* button = new ImportDownloadOverlayWidget(parentWidget());
+    QAbstractButton* button = new ImportOverlayWidget(parentWidget());
     //button->setCursor(Qt::PointingHandCursor);
     return button;
 }
@@ -126,7 +200,7 @@ void ImportDownloadOverlay::slotEntered(const QModelIndex& index)
     updatePosition();
 }
 
-// -- Rotate Overlays ----------------------------------------------------------------
+// -- Rotate Overlay ----------------------------------------------------------------
 
 ImportRotateOverlayButton::ImportRotateOverlayButton(ImportRotateOverlayDirection dir, QAbstractItemView* const parentView)
     : ItemViewHoverButton(parentView),
@@ -191,7 +265,7 @@ void ImportRotateOverlay::updateButton(const QModelIndex& index)
 {
     const QRect rect = m_view->visualRect(index);
     const int gap    = 5;
-    const int x      = rect.right() - (isLeft() ? (2*gap + 48) : (gap + 35));
+    const int x      = rect.right() - (isLeft() ? (2*gap + 64) : (gap + 51));
     const int y      = rect.top() + gap;
     button()->move(QPoint(x, y));
 }

@@ -4,11 +4,11 @@
 <MenuBar>
 
     <Menu name="Device" ><text>&amp;Device</text>
-        <Action name="cameraui_cancelprocess" />
+        <Action name="cameraui_capture" />
         <Action name="cameraui_info" />
         <Separator />
-        <Action name="cameraui_capture" />
         <Separator />
+        <Action name="cameraui_cancelprocess" />
         <Action name="cameraui_close" />
     </Menu>
 
@@ -23,8 +23,6 @@
     </Menu>
 
     <Menu name="Image" ><text>&amp;Image</text>
-        <Action name="cameraui_imageview" />
-        <Separator />
         <Action name="cameraui_imagedownloadnew" />
         <Action name="cameraui_imagedownloadselected" />
         <Action name="cameraui_imagedownloadall" />
@@ -89,13 +87,13 @@
 </MenuBar>
 
 <ToolBar name="mainToolBar" ><text>Main Toolbar</text>
+     <Action name="cameraui_capture" />
+     <Action name="cameraui_imagedownload" />
      <Action name="cameraui_cancelprocess" />
      <Separator/>
-     <Action name="cameraui_imagedownload" />
      <Action name="cameraui_imageupload" />
      <Action name="cameraui_imagelock" />
      <Separator/>
-     <Action name="cameraui_capture" />
      <Separator/>
      <Action name="cameraui_icon_view" />
      <Action name="cameraui_item_view" />

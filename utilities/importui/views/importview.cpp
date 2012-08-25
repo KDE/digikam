@@ -62,8 +62,7 @@ public:
         parent(0),
         iconView(0),
         StackedView(0),
-        lastPreviewMode(ImportStackedView::PreviewCameraMode),
-        leftSideBar(0)
+        lastPreviewMode(ImportStackedView::PreviewCameraMode)
         //FIXME: filterWidget(0)
     {
     }
@@ -83,7 +82,6 @@ public:
     QTimer*                       selectionTimer;
     QTimer*                       thumbSizeTimer;
 
-    // left side bar
     CameraUI*                     parent;
 
     ImportIconView*               iconView;
@@ -91,13 +89,9 @@ public:
     ImportStackedView*            StackedView;
     int                           lastPreviewMode;
 
-    Sidebar*                      leftSideBar;
-
     //FIXME: FilterSideBarWidget*          filterWidget;
 
     QString                       optionAlbumViewPrefix;
-
-    QList<SidebarWidget*>         leftSideBarWidgets;
 };
 
 void ImportView::Private::addPageUpDownActions(ImportView* const q, QWidget* const w)
@@ -116,16 +110,13 @@ void ImportView::Private::addPageUpDownActions(ImportView* const q, QWidget* con
 ImportView::ImportView(CameraUI* const ui, QWidget* const parent)
     : KHBox(parent), d(new Private)
 {
-    d->parent      = /*static_cast<CameraUI*>*/(ui);
+    d->parent   = static_cast<CameraUI*>(ui);
 
-    d->splitter    = new SidebarSplitter;
+    d->splitter = new SidebarSplitter;
     d->splitter->setFrameStyle(QFrame::NoFrame);
     d->splitter->setFrameShadow(QFrame::Plain);
     d->splitter->setFrameShape(QFrame::NoFrame);
     d->splitter->setOpaqueResize(false);
-
-    d->leftSideBar = new Sidebar(this, d->splitter, KMultiTabBar::Left);
-    d->leftSideBar->setObjectName("Import Left Sidebar");
     d->splitter->setParent(this);
 
     // The dock area where the thumbnail bar is allowed to go.
@@ -142,14 +133,6 @@ ImportView::ImportView(CameraUI* const ui, QWidget* const parent)
     d->addPageUpDownActions(this, d->StackedView->thumbBar());
     d->addPageUpDownActions(this, d->StackedView->mediaPlayerView());
 
-    foreach(SidebarWidget* leftWidget, d->leftSideBarWidgets)
-    {
-        d->leftSideBar->appendTab(leftWidget, leftWidget->getIcon(),
-                                  leftWidget->getCaption());
-        connect(leftWidget, SIGNAL(requestActiveTab(SidebarWidget*)),
-                this, SLOT(slotLeftSideBarActivate(SidebarWidget*)));
-    }
-
     d->selectionTimer = new QTimer(this);
     d->selectionTimer->setSingleShot(true);
     d->selectionTimer->setInterval(75);
@@ -157,22 +140,19 @@ ImportView::ImportView(CameraUI* const ui, QWidget* const parent)
     d->thumbSizeTimer->setSingleShot(true);
     d->thumbSizeTimer->setInterval(300);
 
-    slotSidebarTabTitleStyleChanged();
     setupConnections();
+
+    loadViewState();
 }
 
 ImportView::~ImportView()
 {
+    saveViewState();
     delete d;
 }
 
 void ImportView::applySettings()
 {
-    foreach(SidebarWidget* sidebarWidget, d->leftSideBarWidgets)
-    {
-        sidebarWidget->applySettings();
-    }
-
     //refreshView();
 }
 
@@ -214,11 +194,6 @@ void ImportView::setupConnections()
     connect(d->iconView, SIGNAL(zoomInStep()),
             this, SLOT(slotZoomIn()));
 
-    // -- Sidebar Connections -------------------------------------
-
-    connect(d->leftSideBar, SIGNAL(signalChangedTab(QWidget*)),
-            this, SLOT(slotLeftSidebarChangedTab(QWidget*)));
-
     // -- Preview image widget Connections ------------------------
 
     connect(d->StackedView, SIGNAL(signalNextItem()),
@@ -258,40 +233,35 @@ void ImportView::setupConnections()
             this, SLOT(slotSidebarTabTitleStyleChanged()));
 }
 
-//void ImportView::connectIconViewFilter(FilterStatusBar* filterbar)
-//{
-//    ImageAlbumFilterModel* model = d->iconView->imageAlbumFilterModel();
+/*void ImportView::connectIconViewFilter(FilterStatusBar* filterbar)
+{
+    ImageAlbumFilterModel* model = d->iconView->imageAlbumFilterModel();
 
-//    connect(model, SIGNAL(filterMatches(bool)),
-//            filterbar, SLOT(slotFilterMatches(bool)));
+    connect(model, SIGNAL(filterMatches(bool)),
+            filterbar, SLOT(slotFilterMatches(bool)));
 
-//    connect(model, SIGNAL(filterSettingsChanged(ImageFilterSettings)),
-//            filterbar, SLOT(slotFilterSettingsChanged(ImageFilterSettings)));
+    connect(model, SIGNAL(filterSettingsChanged(ImageFilterSettings)),
+            filterbar, SLOT(slotFilterSettingsChanged(ImageFilterSettings)));
 
-//    connect(filterbar, SIGNAL(signalResetFilters()),
-//            d->filterWidget, SLOT(slotResetFilters()));
+    connect(filterbar, SIGNAL(signalResetFilters()),
+            d->filterWidget, SLOT(slotResetFilters()));
 
-//    connect(filterbar, SIGNAL(signalPopupFiltersView()),
-//            this, SLOT(slotPopupFiltersView()));
-//}
+    connect(filterbar, SIGNAL(signalPopupFiltersView()),
+            this, SLOT(slotPopupFiltersView()));
+}
 
-//void ImportView::slotPopupFiltersView()
-//{
-//    d->rightSideBar->setActiveTab(d->filterWidget);
-//    d->filterWidget->setFocusToTextFilter();
-//}
+void ImportView::slotPopupFiltersView()
+{
+    d->rightSideBar->setActiveTab(d->filterWidget);
+    d->filterWidget->setFocusToTextFilter();
+}*/
 
 void ImportView::loadViewState()
 {
-    foreach(SidebarWidget* widget, d->leftSideBarWidgets)
-    {
-        widget->loadState();
-    }
-
     //TODO: d->filterWidget->loadState();
 
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("MainWindow");
+    KConfigGroup group        = config->group("Import MainWindow");
 
     // Restore the splitter
     d->splitter->restoreState(group);
@@ -307,12 +277,7 @@ void ImportView::loadViewState()
 void ImportView::saveViewState()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("MainWindow");
-
-    foreach(SidebarWidget* widget, d->leftSideBarWidgets)
-    {
-        widget->saveState();
-    }
+    KConfigGroup group        = config->group("Import MainWindow");
 
     //TODO: d->filterWidget->saveState();
 
@@ -327,11 +292,6 @@ void ImportView::saveViewState()
     group.writeEntry("ThumbbarState", d->dockArea->saveState().toBase64());
 
     //TODO: d->mapView->saveState();
-}
-
-QList<SidebarWidget*> ImportView::leftSidebarWidgets()
-{
-    return d->leftSideBarWidgets;
 }
 
 CamItemInfo ImportView::camItemInfo(const QString& folder, const QString& file) const
@@ -403,16 +363,6 @@ bool ImportView::isSelected(const KUrl url)
     }
 
     return false;
-}
-
-void ImportView::showSideBars()
-{
-    d->leftSideBar->restore();
-}
-
-void ImportView::hideSideBars()
-{
-    d->leftSideBar->backup();
 }
 
 void ImportView::slotFirstItem()
@@ -643,8 +593,6 @@ void ImportView::slotFitToWindow()
     }
 }
 
-// ----------------------------------------------------------------
-
 void ImportView::slotEscapePreview()
 {
     if (d->StackedView->previewMode() == ImportStackedView::PreviewCameraMode)
@@ -687,10 +635,10 @@ void ImportView::slotImagePreview()
         currentInfo = d->iconView->currentInfo();
     }
     //TODO: Implement MapWidget
-    //else if (currentPreviewMode == ImportStackedView::MapWidgetMode)
-    //{
-    //    currentInfo = d->mapView->currentInfo();
-    //}
+    /*else if (currentPreviewMode == ImportStackedView::MapWidgetMode)
+    {
+        currentInfo = d->mapView->currentInfo();
+    }*/
 
     slotTogglePreviewMode(currentInfo);
 }
@@ -812,22 +760,6 @@ void ImportView::slotGroupImages(int categoryMode)
     d->iconView->importFilterModel()->setCategorizationMode((CamItemSortSettings::CategorizationMode) categoryMode);
 }
 
-void ImportView::slotLeftSidebarChangedTab(QWidget* w)
-{
-    // TODO update, temporary cast
-    SidebarWidget* widget = dynamic_cast<SidebarWidget*> (w);
-    foreach(SidebarWidget* sideBarWidget, d->leftSideBarWidgets)
-    {
-        bool active = (widget && (widget == sideBarWidget));
-        sideBarWidget->setActive(active);
-    }
-}
-
-void ImportView::slotSidebarTabTitleStyleChanged()
-{
-    //d->leftSideBar->setStyle(ImportSettings::instance()->getSidebarTitleStyle());
-}
-
 void ImportView::toggleShowBar(bool b)
 {
     d->StackedView->thumbBarDock()->showThumbBar(b);
@@ -856,16 +788,6 @@ void ImportView::slotImageChangeFailed(const QString& message, const QStringList
     KMessageBox::errorList(0, message, fileNames);
 }
 
-void ImportView::slotLeftSideBarActivate(SidebarWidget* widget)
-{
-    d->leftSideBar->setActiveTab(widget);
-}
-
-void ImportView::slotLeftSideBarActivate(QWidget* widget)
-{
-    slotLeftSideBarActivate(static_cast<SidebarWidget*>(widget));
-}
-
 bool ImportView::hasCurrentItem() const
 {
     // We should actually get this directly from the selection model,
@@ -873,9 +795,9 @@ bool ImportView::hasCurrentItem() const
     return !d->iconView->currentInfo().isNull();
 }
 
-//void ImportView::slotImageExifOrientation(int orientation)
-//{
-//    FileActionMngr::instance()->setExifOrientation(d->iconView->selectedCamItemInfos(), orientation);
-//}
+/*void ImportView::slotImageExifOrientation(int orientation)
+{
+    FileActionMngr::instance()->setExifOrientation(d->iconView->selectedCamItemInfos(), orientation);
+}*/
 
 } // namespace Digikam

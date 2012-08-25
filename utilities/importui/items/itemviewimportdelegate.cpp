@@ -394,6 +394,24 @@ void ItemViewImportDelegate::drawDownloadIndicator(QPainter* p, const QRect& r, 
     p->setOpacity(op);
 }
 
+void ItemViewImportDelegate::drawLockIndicator(QPainter* p, const QRect& r, int lockStatus) const
+{
+    QIcon icon;
+    if (lockStatus == 0)
+    {
+        icon = KIconLoader::global()->loadIcon("object-locked", KIconLoader::NoGroup, KIconLoader::SizeSmall);
+    }
+    if (lockStatus == 1)
+    {
+        icon = KIconLoader::global()->loadIcon("object-unlocked", KIconLoader::NoGroup, KIconLoader::SizeSmall);
+    }
+
+    qreal op = p->opacity();
+    p->setOpacity(0.5);
+    icon.paint(p, r);
+    p->setOpacity(op);
+}
+
 void ItemViewImportDelegate::drawFocusRect(QPainter* p, const QStyleOptionViewItem& option,
                                           bool isSelected) const
 {

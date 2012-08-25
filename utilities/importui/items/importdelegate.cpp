@@ -57,6 +57,7 @@ void ImportDelegate::ImportDelegatePrivate::clearRects()
     resolutionRect       = QRect(0, 0, 0, 0);
     sizeRect             = QRect(0, 0, 0, 0);
     downloadRect         = QRect(0, 0, 0, 0);
+    lockRect             = QRect(0, 0, 0, 0);
     //tagRect              = QRect(0, 0, 0, 0);
     imageInformationRect = QRect(0, 0, 0, 0);
     //pickLabelRect        = QRect(0, 0, 0, 0);
@@ -193,6 +194,12 @@ QRect ImportDelegate::downloadIndicatorRect() const
     return d->downloadRect;
 }
 
+QRect ImportDelegate::lockIndicatorRect() const
+{
+    Q_D(const ImportDelegate);
+    return d->lockRect;
+}
+
 QPixmap ImportDelegate::retrieveThumbnailPixmap(const QModelIndex& index, int thumbnailSize)
 {
     // work around constness
@@ -286,6 +293,11 @@ void ImportDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, cons
     if (!d->downloadRect.isNull())
     {
         drawDownloadIndicator(p, d->downloadRect, info.downloaded);
+    }
+
+    if (!d->lockRect.isNull())
+    {
+        drawLockIndicator(p, d->lockRect, info.writePermissions);
     }
 
     if (!d->resolutionRect.isNull())
@@ -705,7 +717,9 @@ void ImportNormalDelegate::updateRects()
 
     //TODO: d->pickLabelRect   = QRect(d->margin, y, iconSize, iconSize);
     //TODO: d->groupRect       = QRect(d->contentWidth - iconSize, y, iconSize, iconSize);
-    d->downloadRect     =  QRect(d->contentWidth - iconSize+2, d->pixmapRect.top(), iconSize, iconSize);
+    d->downloadRect     =  QRect(d->contentWidth - iconSize - 14, d->pixmapRect.top(), iconSize, iconSize);
+    //TODO: Change position.
+    d->lockRect         =  QRect(d->contentWidth - iconSize + 2, d->pixmapRect.top(), iconSize, iconSize);
 
     //TODO: Implement rating in import tool.
     /*if (importSettings->getIconShowRating())

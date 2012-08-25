@@ -81,8 +81,6 @@ public:
 
     ThumbnailSize thumbnailSize();
 
-    QList<SidebarWidget*> leftSidebarWidgets();
-
 Q_SIGNALS:
 
     void signalImageSelected(const CamItemInfoList& selectedImage, bool hasPrevious, bool hasNext,
@@ -120,16 +118,11 @@ public Q_SLOTS:
     void slotSortImagesOrder(int order);
     void slotGroupImages(int mode);
 
-    void slotLeftSideBarActivate(QWidget* widget);
-    void slotLeftSideBarActivate(SidebarWidget* widget);
-
 private Q_SLOTS:
 
     void slotImageSelected();
     void slotTogglePreviewMode(const CamItemInfo& info);
     void slotDispatchImageSelected();
-
-    void slotLeftSidebarChangedTab(QWidget* w);
 
     void slotFirstItem();
     void slotPrevItem();
@@ -142,8 +135,6 @@ private Q_SLOTS:
 
     void slotThumbSizeEffect();
     void slotZoomFactorChanged(double);
-
-    void slotSidebarTabTitleStyleChanged();
 
     void slotImageChangeFailed(const QString& message, const QStringList& fileNames);
 

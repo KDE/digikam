@@ -1805,7 +1805,7 @@ void CameraUI::slotMarkAsDownloaded()
 
     foreach(CamItemInfo info, list)
     {
-        setDownloaded(info, CamItemInfo::DownloadedYes);
+        setDownloaded(d->view->camItemInfoRef(info.folder, info.name), CamItemInfo::DownloadedYes);
 
         DownloadHistory::setDownloaded(d->controller->cameraMD5ID(),
                                        info.name,
@@ -1847,7 +1847,7 @@ void CameraUI::slotLocked(const QString& folder, const QString& file, bool statu
 {
     if (status)
     {
-        CamItemInfo info = d->view->camItemInfo(folder, file);
+        CamItemInfo& info = d->view->camItemInfoRef(folder, file);
 
         if (!info.isNull())
         {
@@ -1928,9 +1928,6 @@ void CameraUI::toggleLock(CamItemInfo& info)
             info.writePermissions = 0;
         }
     }
-
-    //TODO: Uncomment when lock overlay is implemented.
-    //d->view->update();
 }
 
 QMap<QString, int> CameraUI::countItemsByFolders() const
@@ -1978,15 +1975,10 @@ void CameraUI::setDownloaded(CamItemInfo& itemInfo, int status)
     {
         d->progressTimer->stop();
     }
-
-    //TODO: Uncomment when download overlay is implemented.
-    d->view->update();
 }
 
 void CameraUI::slotProgressTimerDone()
 {
-    //TODO: Uncomment
-    d->view->update();
     d->progressTimer->start(300);
 }
 

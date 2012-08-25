@@ -38,17 +38,44 @@
 namespace Digikam
 {
 
-class ImportDownloadOverlayWidget : public QAbstractButton
+class ImportOverlayWidget : public QAbstractButton
 {
     Q_OBJECT
 
 public:
 
-    ImportDownloadOverlayWidget(QWidget* const parent = 0);
+    ImportOverlayWidget(QWidget* const parent = 0);
 
 protected:
 
     virtual void paintEvent(QPaintEvent*);
+};
+
+// --------------------------------------------------------------------
+
+class ImportLockOverlay : public AbstractWidgetDelegateOverlay
+{
+    Q_OBJECT
+    REQUIRE_DELEGATE(ItemViewImportDelegate)
+
+public:
+
+    ImportLockOverlay(QObject* const parent);
+    ImportOverlayWidget* buttonWidget() const;
+
+protected:
+
+    void updatePosition();
+
+    virtual QWidget* createWidget();
+    virtual void setActive(bool active);
+    virtual void visualChange();
+    virtual bool checkIndex(const QModelIndex& index) const;
+    virtual void slotEntered(const QModelIndex& index);
+
+protected:
+
+    QPersistentModelIndex m_index;
 };
 
 // --------------------------------------------------------------------
@@ -61,7 +88,7 @@ class ImportDownloadOverlay : public AbstractWidgetDelegateOverlay
 public:
 
     ImportDownloadOverlay(QObject* const parent);
-    ImportDownloadOverlayWidget* buttonWidget() const;
+    ImportOverlayWidget* buttonWidget() const;
 
 protected:
 
