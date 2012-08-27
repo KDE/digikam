@@ -85,33 +85,34 @@ public:
     CameraUI*                     parent;
 
     ImportIconView*               iconView;
-    //TODO: MapWidgetView*                mapView;
+    //TODO: MapWidgetView*        mapView;
     ImportStackedView*            StackedView;
     int                           lastPreviewMode;
 
-    //FIXME: FilterSideBarWidget*          filterWidget;
+    //FIXME: FilterSideBarWidget* filterWidget;
 
     QString                       optionAlbumViewPrefix;
 };
 
 void ImportView::Private::addPageUpDownActions(ImportView* const q, QWidget* const w)
 {
-    QShortcut *nextImageShortcut = new QShortcut(w);
+    QShortcut* nextImageShortcut = new QShortcut(w);
     nextImageShortcut->setKey(Qt::Key_PageDown);
     nextImageShortcut->setContext(Qt::WidgetWithChildrenShortcut);
-    QObject::connect(nextImageShortcut, SIGNAL(activated()), q, SLOT(slotNextItem()));
+    connect(nextImageShortcut, SIGNAL(activated()),
+            q, SLOT(slotNextItem()));
 
-    QShortcut *prevImageShortcut = new QShortcut(w);
+    QShortcut* prevImageShortcut = new QShortcut(w);
     prevImageShortcut->setKey(Qt::Key_PageUp);
     prevImageShortcut->setContext(Qt::WidgetWithChildrenShortcut);
-    QObject::connect(prevImageShortcut, SIGNAL(activated()), q, SLOT(slotPrevItem()));
+    connect(prevImageShortcut, SIGNAL(activated()),
+            q, SLOT(slotPrevItem()));
 }
 
 ImportView::ImportView(CameraUI* const ui, QWidget* const parent)
     : KHBox(parent), d(new Private)
 {
     d->parent   = static_cast<CameraUI*>(ui);
-
     d->splitter = new SidebarSplitter;
     d->splitter->setFrameStyle(QFrame::NoFrame);
     d->splitter->setFrameShadow(QFrame::Plain);
@@ -126,7 +127,7 @@ ImportView::ImportView(CameraUI* const ui, QWidget* const parent)
     d->dockArea->setCentralWidget(d->StackedView);
     d->StackedView->setDockArea(d->dockArea);
 
-    d->iconView = d->StackedView->importIconView();
+    d->iconView    = d->StackedView->importIconView();
     //TODO: d->mapView  = d->StackedView->mapWidgetView();
 
     d->addPageUpDownActions(this, d->StackedView->importPreviewView());
@@ -339,7 +340,7 @@ int ImportView::downloadedCamItemInfos() const
     QList<CamItemInfo> infos = d->iconView->camItemInfos();
     int numberOfDownloaded = 0;
 
-    foreach(CamItemInfo info, infos)
+    foreach(const CamItemInfo& info, infos)
     {
         if(info.downloaded == CamItemInfo::DownloadedYes)
         {
@@ -354,7 +355,7 @@ bool ImportView::isSelected(const KUrl url)
 {
     QList<KUrl> urlsList = selectedUrls();
 
-    foreach(KUrl selected, urlsList)
+    foreach(const KUrl& selected, urlsList)
     {
         if(url == selected)
         {
@@ -627,7 +628,7 @@ void ImportView::slotIconView()
 
 void ImportView::slotImagePreview()
 {
-    const int currentPreviewMode = d->StackedView->previewMode();
+    const int   currentPreviewMode = d->StackedView->previewMode();
     CamItemInfo currentInfo;
 
     if (currentPreviewMode == ImportStackedView::PreviewCameraMode)
@@ -648,8 +649,8 @@ void ImportView::slotImagePreview()
  */
 void ImportView::slotTogglePreviewMode(const CamItemInfo& info)
 {
-    if (  (d->StackedView->previewMode() == ImportStackedView::PreviewCameraMode
-           || d->StackedView->previewMode() == ImportStackedView::MapWidgetMode)
+    if (  (d->StackedView->previewMode() == ImportStackedView::PreviewCameraMode ||
+           d->StackedView->previewMode() == ImportStackedView::MapWidgetMode)
           && !info.isNull() )
     {
         d->lastPreviewMode = d->StackedView->previewMode();
@@ -723,7 +724,7 @@ void ImportView::slotSelectInvert()
 
 void ImportView::slotSortImages(int sortRole)
 {
-    ImportSettings* settings = ImportSettings::instance();
+    ImportSettings* const settings = ImportSettings::instance();
 
     if (!settings)
     {
@@ -736,7 +737,7 @@ void ImportView::slotSortImages(int sortRole)
 
 void ImportView::slotSortImagesOrder(int order)
 {
-    ImportSettings* settings = ImportSettings::instance();
+    ImportSettings* const settings = ImportSettings::instance();
 
     if (!settings)
     {
@@ -749,7 +750,7 @@ void ImportView::slotSortImagesOrder(int order)
 
 void ImportView::slotGroupImages(int categoryMode)
 {
-    ImportSettings* settings = ImportSettings::instance();
+    ImportSettings* const settings = ImportSettings::instance();
 
     if (!settings)
     {
@@ -772,7 +773,7 @@ bool ImportView::isThumbBarVisible()
 
 void ImportView::scrollTo(const QString& folder, const QString& file)
 {
-    CamItemInfo info = camItemInfo(folder, file);
+    CamItemInfo info  = camItemInfo(folder, file);
     QModelIndex index = d->iconView->importFilterModel()->indexForCamItemInfo(info);
     d->iconView->scrollToRelaxed(index);
     d->iconView->setSelectedCamItemInfos(CamItemInfoList() << info);
@@ -795,9 +796,11 @@ bool ImportView::hasCurrentItem() const
     return !d->iconView->currentInfo().isNull();
 }
 
-/*void ImportView::slotImageExifOrientation(int orientation)
+/*
+void ImportView::slotImageExifOrientation(int orientation)
 {
     FileActionMngr::instance()->setExifOrientation(d->iconView->selectedCamItemInfos(), orientation);
-}*/
+}
+*/
 
 } // namespace Digikam

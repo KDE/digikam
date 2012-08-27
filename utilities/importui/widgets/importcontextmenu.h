@@ -220,7 +220,7 @@ private:
 
     void setSelectedIds(itemIds& ids);
     void setSelectedItems(const KUrl::List& urls);
-    QList<QAction*> groupMenuActions(itemIds& ids);
+    //QList<QAction*> groupMenuActions(itemIds& ids);
     void setGroupsOpen(bool open);
 
 private:

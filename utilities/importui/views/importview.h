@@ -66,13 +66,13 @@ public:
     CamItemInfo& camItemInfoRef(const QString& folder, const QString& file) const;
     bool hasImage(const CamItemInfo& info);
 
-    KUrl::List allUrls() const;
-    KUrl::List selectedUrls() const;
+    KUrl::List         allUrls() const;
+    KUrl::List         selectedUrls() const;
     QList<CamItemInfo> selectedCamItemInfos() const;
     QList<CamItemInfo> allItems() const;
-    void setSelectedCamItemInfos(const CamItemInfoList& infos) const;
-    int  downloadedCamItemInfos() const;
-    bool hasCurrentItem() const;
+    void               setSelectedCamItemInfos(const CamItemInfoList& infos) const;
+    int                downloadedCamItemInfos() const;
+    bool               hasCurrentItem() const;
 
     bool isSelected(const KUrl url);
 
