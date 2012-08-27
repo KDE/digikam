@@ -39,12 +39,9 @@ ImportRenameParser::ImportRenameParser()
 
     foreach(Option* option, oplist)
     {
-        Option* toBeRemoved = 0;
-        toBeRemoved = dynamic_cast<DatabaseOption*>(option);
-
-        if (toBeRemoved)
+        if (dynamic_cast<DatabaseOption*>(option))
         {
-            unregisterOption(toBeRemoved);
+            unregisterOption(option);
         }
     }
 }
