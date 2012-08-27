@@ -279,6 +279,12 @@ void KipiPluginLoader::slotKipiPluginPlug()
             QString actionName(action->objectName());
             Category cat = plugin->category(action);
 
+            if (cat == InvalidCategory)
+            {
+                kWarning() << "Plugin action '" << actionName << "' has invalid category!";
+                continue;
+            }
+
             if (!pluginActionsDisabled.contains(actionName))
             {
                 KActionCategory* category = d->kipiCategoryMap[cat];
@@ -297,8 +303,6 @@ void KipiPluginLoader::slotKipiPluginPlug()
             }
         }
     }
-
-//    d->app->rebuild();
 
     // We add them back
     for (PluginLoader::PluginList::ConstIterator it = list.constBegin() ; it != list.constEnd() ; ++it)
