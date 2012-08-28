@@ -37,25 +37,17 @@
 
 #include <kdebug.h>
 
+// includes for GreycStoration
+#include <QMutex>
+#include <QMutexLocker>
+#include <QWaitCondition>
+#include "dynamicthread.h"
+
 #define cimg_plugin "greycstoration.h"
-// Unix-like (Linux, Solaris, BSD, MacOSX, Irix,...).
-#if defined(unix)       || defined(__unix)      || defined(__unix__) \
- || defined(linux)      || defined(__linux)     || defined(__linux__) \
- || defined(sun)        || defined(__sun) \
- || defined(BSD)        || defined(__OpenBSD__) || defined(__NetBSD__) || defined(__FreeBSD__) || defined __DragonFly__ \
- || defined(__MACOSX__) || defined(__APPLE__) \
- || defined(sgi)        || defined(__sgi) \
- || defined(__CYGWIN__)
-#include <pthread.h>
-#endif
 
 /** Uncomment this line if you use future GreycStoration implementation with GFact parameter
  */
 #define GREYSTORATION_USING_GFACT 1
-
-// KDE includes
-
-#include <solid/device.h>
 
 // CImg includes
 
@@ -79,7 +71,8 @@ public:
     GreycstorationFilterPriv() :
         gfact(1.0),
         computationThreads(2),
-        mode(GreycstorationFilter::Restore)
+        mode(GreycstorationFilter::Restore),
+        threadManager(new CImg<>::GreycstorationThreadManager)
     {
     }
 
@@ -95,6 +88,8 @@ public:
 
     CImg<>                  img;                 // Main image.
     CImg<uchar>             mask;                // The mask used with inpaint or resize mode
+
+    CImg<>::GreycstorationThreadManager* threadManager;
 };
 
 GreycstorationFilter::GreycstorationFilter(QObject* parent)
@@ -126,6 +121,7 @@ GreycstorationFilter::GreycstorationFilter(DImg* orgImage,
 GreycstorationFilter::~GreycstorationFilter()
 {
     cancelFilter();
+    delete d->threadManager;
     delete d;
 }
 
@@ -147,9 +143,7 @@ void GreycstorationFilter::setInPaintingMask(const QImage& inPaintingMask)
 
 void GreycstorationFilter::computeChildrenThreads()
 {
-    // Check number of CPU with Solid interface.
-
-    const int numProcs    = qMax(Solid::Device::listFromType(Solid::DeviceInterface::Processor).count(), 1);
+    const int numProcs    = qMax(QThread::idealThreadCount(), 1);
     const int maxThreads  = 16;
     d->computationThreads = qMin(maxThreads, 2 + ((numProcs - 1) * 2));
     kDebug() << "GreycstorationFilter::Computation threads: " << d->computationThreads;
@@ -157,9 +151,7 @@ void GreycstorationFilter::computeChildrenThreads()
 
 void GreycstorationFilter::setup()
 {
-    // NOTE: Sound like using more than 2 threads at the same time create dysfunctions to stop Cimg children threads
-    //       calling cancelFilter(). We limit children threads to 2.
-    //computeChildrenThreads();
+    computeChildrenThreads();
 
     if (m_orgImage.sixteenBit())   // 16 bits image.
     {
@@ -205,12 +197,8 @@ void GreycstorationFilter::cancelFilter()
 {
     // Because Greycstoration algorithm run in a child thread, we need
     // to stop it before to stop this thread.
-    if (d->img.greycstoration_is_running())
-    {
-        // If the user abort, we stop the algorithm.
-        kDebug() << "Stop Greycstoration computation...";
-        d->img.greycstoration_stop();
-    }
+    kDebug() << "Stop Greycstoration computation...";
+    d->threadManager->stop();
 
     // And now when stop main loop and clean up all
     DImgThreadedFilter::cancelFilter();
@@ -260,6 +248,9 @@ void GreycstorationFilter::filterImage()
                 simpleResize();
                 break;
         }
+
+        // harvest
+        d->threadManager->finish();
     }
     catch (...)        // Everything went wrong.
     {
@@ -324,14 +315,14 @@ void GreycstorationFilter::restoration()
         // This function will start a thread running one iteration of the GREYCstoration filter.
         // It returns immediately, so you can do what you want after (update a progress bar for
         // instance).
-        d->img.greycstoration_run(d->settings.amplitude,
+        d->threadManager->start(d->img, d->settings.amplitude,
                                   d->settings.sharpness,
                                   d->settings.anisotropy,
                                   d->settings.alpha,
                                   d->settings.sigma,
-#ifdef GREYSTORATION_USING_GFACT
+                                  #ifdef GREYSTORATION_USING_GFACT
                                   d->gfact,
-#endif
+                                  #endif
                                   d->settings.dl,
                                   d->settings.da,
                                   d->settings.gaussPrec,
@@ -379,15 +370,15 @@ void GreycstorationFilter::inpainting()
         // This function will start a thread running one iteration of the GREYCstoration filter.
         // It returns immediately, so you can do what you want after (update a progress bar for
         // instance).
-        d->img.greycstoration_run(d->mask,
+        d->threadManager->start(d->img, &d->mask,
                                   d->settings.amplitude,
                                   d->settings.sharpness,
                                   d->settings.anisotropy,
                                   d->settings.alpha,
                                   d->settings.sigma,
-#ifdef GREYSTORATION_USING_GFACT
+                                  #ifdef GREYSTORATION_USING_GFACT
                                   d->gfact,
-#endif
+                                  #endif
                                   d->settings.dl,
                                   d->settings.da,
                                   d->settings.gaussPrec,
@@ -427,15 +418,15 @@ void GreycstorationFilter::resize()
         // This function will start a thread running one iteration of the GREYCstoration filter.
         // It returns immediately, so you can do what you want after (update a progress bar for
         // instance).
-        d->img.greycstoration_run(d->mask,
+        d->threadManager->start(d->img, &d->mask,
                                   d->settings.amplitude,
                                   d->settings.sharpness,
                                   d->settings.anisotropy,
                                   d->settings.alpha,
                                   d->settings.sigma,
-#ifdef GREYSTORATION_USING_GFACT
+                                  #ifdef GREYSTORATION_USING_GFACT
                                   d->gfact,
-#endif
+                                  #endif
                                   d->settings.dl,
                                   d->settings.da,
                                   d->settings.gaussPrec,
@@ -470,16 +461,20 @@ void GreycstorationFilter::iterationLoop(uint iter)
     uint mp  = 0;
     uint p   = 0;
 
-    do
+    while (d->threadManager->isRunning())
     {
-        usleep(100000);
-
-        if (runningFlag())
+        if (!runningFlag())
         {
-            // Update the progress bar in dialog. We simply computes the global
-            // progression index (including all iterations).
+            d->threadManager->stop();
+            d->threadManager->wait();
+        }
+        else
+        {
+            float progress = d->threadManager->waitABit(50);
 
-            p = (uint)((iter * 100 + d->img.greycstoration_progress()) / d->settings.nbIter);
+            // Update the progress bar in dialog. We simply compute the global
+            // progression index (including all iterations).
+            p = (uint)((iter * 100 + progress) / d->settings.nbIter);
 
             if (p > mp)
             {
@@ -488,11 +483,6 @@ void GreycstorationFilter::iterationLoop(uint iter)
             }
         }
     }
-    while (d->img.greycstoration_is_running() && runningFlag());
-
-    // A delay is require here. I suspect a sync problem between threads
-    // used by GreycStoration algorithm.
-    usleep(100000);
 }
 
 FilterAction GreycstorationFilter::filterAction()

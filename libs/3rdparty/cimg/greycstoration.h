@@ -51,13 +51,14 @@
 #ifndef cimg_plugin_greycstoration
 #define cimg_plugin_greycstoration
 
-//------------------------------------------------------------------------------
-// GREYCstoration parameter structure, storing important informations about
-// algorithm parameters and computing threads.
-// ** This structure has not to be manipulated by the API user, so please just
-// ignore it if you want to **
-//-------------------------------------------------------------------------------
-struct _greycstoration_params {
+// NOTE: You need to include
+// #include <QMutex>
+// #include <QMutexLocker>
+//
+// #include "dynamicthread.h"
+
+class GreycstorationParameters {
+public:
 
   // Tell if the patch-based algorithm is selected
   bool patch_based;
@@ -81,401 +82,414 @@ struct _greycstoration_params {
   unsigned int lookup_size;
 
   // Non-specific parameters of the algorithms.
-  CImg<T> *source;
-  const CImg<unsigned char> *mask;
-  CImg<T> *temporary;
-  unsigned long *counter;
   unsigned int tile;
   unsigned int tile_border;
-  unsigned int thread;
-  unsigned int nb_threads;
   bool fast_approx;
-  bool is_running;
-  bool *stop_request;
-#if cimg_OS==1 && defined(_PTHREAD_H)
-  pthread_mutex_t
-  *mutex;
-#elif cimg_OS==2
-  HANDLE mutex;
-#else
-  void *mutex;
-#endif
 
   // Default constructor
-  _greycstoration_params():patch_based(false),amplitude(0),sharpness(0),anisotropy(0),alpha(0),sigma(0),gfact(1),
-       dl(0),da(0),gauss_prec(0),interpolation(0),patch_size(0),
-       sigma_s(0),sigma_p(0),lookup_size(0),source(0),mask(0),temporary(0),counter(0),tile(0),
-       tile_border(0),thread(0),nb_threads(0),fast_approx(false),is_running(false), stop_request(0), mutex(0) {}
+  GreycstorationParameters()
+    : patch_based(false),
+      amplitude(0),
+      sharpness(0),
+      anisotropy(0),
+      alpha(0),
+      sigma(0),
+      gfact(1),
+      dl(0),
+      da(0),
+      gauss_prec(0),
+      interpolation(0),
+      patch_size(0),
+      sigma_s(0),
+      sigma_p(0),
+      lookup_size(0),
+      tile(0),
+      tile_border(0),
+      fast_approx(false) {}
 };
 
-_greycstoration_params greycstoration_params[16];
+class GreycstorationThreadManager;
+// class just to have a constructor to initialize the variable
+class GreycstorationThreadManagerContainer
+{
+public:
+    GreycstorationThreadManagerContainer() : threadManager(0) {}
+    GreycstorationThreadManager* threadManager;
+};
+GreycstorationThreadManagerContainer threadManagerContainer;
 
-//----------------------------------------------------------
-// Public functions of the GREYCstoration API.
-// Use the functions below for integrating GREYCstoration
-// in your own C++ code.
-//----------------------------------------------------------
-
-//! Test if GREYCstoration threads are still running.
-bool greycstoration_is_running() const {
-  return greycstoration_params->is_running;
+void setThreadManager(GreycstorationThreadManager* threadManager)
+{
+    threadManagerContainer.threadManager = threadManager;
 }
 
-//! Force the GREYCstoration threads to stop.
-CImg& greycstoration_stop() {
-  if (greycstoration_is_running()) {
-    *(greycstoration_params->stop_request) = true;
-    while (greycstoration_params->is_running) cimg::wait(50);
-  }
-  return *this;
+void resetThreadManager()
+{
+    setThreadManager(0);
 }
 
-//! Return the GREYCstoration progress bar indice (between 0 and 100).
-float greycstoration_progress() const {
-  if (!greycstoration_is_running()) return 0.0f;
-  const unsigned long counter = greycstoration_params->counter?*(greycstoration_params->counter):0;
-  const float
-    da = greycstoration_params->da,
-    factor = greycstoration_params->patch_based?1:(1+360/da);
-  float maxcounter = 0;
-  if (greycstoration_params->tile==0) maxcounter = width*height*depth*factor;
-  else {
-    const unsigned int
-      t = greycstoration_params->tile,
-      b = greycstoration_params->tile_border,
-      n = (1+(width-1)/t)*(1+(height-1)/t)*(1+(depth-1)/t);
-    maxcounter = (width*height*depth + n*4*b*(b + t))*factor;
-  }
-  return cimg::min(counter*99.9f/maxcounter,99.9f);
-}
-
-//! Run the non-patch version of the GREYCstoration algorithm on the instance image, using a mask.
-CImg& greycstoration_run(const CImg<unsigned char>& mask,
-                         const float amplitude=60, const float sharpness=0.7f, const float anisotropy=0.3f,
-                         const float alpha=0.6f, const float sigma=1.1f, const float gfact=1.0f,
-                         const float dl=0.8f, const float da=30.0f,
-                         const float gauss_prec=2.0f, const unsigned int interpolation=0, const bool fast_approx=true,
-                         const unsigned int tile=0, const unsigned int tile_border=0, const unsigned int nb_threads=1) {
-
-  if (greycstoration_is_running())
-    throw CImgInstanceException("CImg<T>::greycstoration_run() : A GREYCstoration thread is already running on"
-                                " the instance image (%u,%u,%u,%u,%p).",width,height,depth,dim,data);
-
-  else {
-    if (!mask.is_empty() && !mask.is_sameXY(*this))
-      throw CImgArgumentException("CImg<%s>::greycstoration_run() : Given mask (%u,%u,%u,%u,%p) and instance image "
-                                  "(%u,%u,%u,%u,%p) have different dimensions.",
-                                  pixel_type(),mask.width,mask.height,mask.depth,mask.dim,mask.data,width,height,depth,dim,data);
-    if (nb_threads>16) cimg::warn("CImg<%s>::greycstoration_run() : Multi-threading mode limited to 16 threads max.");
-    const unsigned int
-      ntile = (tile && (tile<width || tile<height || (depth>1 && tile<depth)))?tile:0,
-#if cimg_OS==1 && !defined(_PTHREAD_H)
-      nthreads = 0;
-#else
-    nthreads = ntile?cimg::min(nb_threads,16U):cimg::min(nb_threads,1U);
-#endif
-
-    CImg<T> *const temporary = ntile?new CImg<T>(*this):0;
-    unsigned long *const counter = new unsigned long;
-    *counter = 0;
-    bool *const stop_request = new bool;
-    *stop_request = false;
-
-    for (unsigned int k=0; k<(nthreads?nthreads:1); k++) {
-      greycstoration_params[k].patch_based = false;
-      greycstoration_params[k].amplitude = amplitude;
-      greycstoration_params[k].sharpness = sharpness;
-      greycstoration_params[k].anisotropy = anisotropy;
-      greycstoration_params[k].alpha = alpha;
-      greycstoration_params[k].sigma = sigma;
-      greycstoration_params[k].gfact = gfact;
-      greycstoration_params[k].dl = dl;
-      greycstoration_params[k].da = da;
-      greycstoration_params[k].gauss_prec = gauss_prec;
-      greycstoration_params[k].interpolation = interpolation;
-      greycstoration_params[k].fast_approx = fast_approx;
-      greycstoration_params[k].source = this;
-      greycstoration_params[k].mask = &mask;
-      greycstoration_params[k].temporary = temporary;
-      greycstoration_params[k].counter = counter;
-      greycstoration_params[k].tile = ntile;
-      greycstoration_params[k].tile_border = tile_border;
-      greycstoration_params[k].thread = k;
-      greycstoration_params[k].nb_threads = nthreads;
-      greycstoration_params[k].is_running = true;
-      greycstoration_params[k].stop_request = stop_request;
-      if (k) greycstoration_params[k].mutex = greycstoration_params[0].mutex;
-      else greycstoration_mutex_create(greycstoration_params[0]);
+class GreycstorationWorkingThread : public Digikam::DynamicThread
+{
+public:
+    GreycstorationWorkingThread(GreycstorationThreadManager* manager, int threadNumber)
+        : manager(manager), threadNumber(threadNumber)
+    {
     }
-    if (nthreads) {  // Threaded version
-#if cimg_OS==1
-#ifdef _PTHREAD_H
-      pthread_attr_t attr;
-      pthread_attr_init(&attr);
-      pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
-      for (unsigned int k=0; k<greycstoration_params->nb_threads; k++) {
-        pthread_t thread;
-        const int err = pthread_create(&thread, &attr, greycstoration_thread, (void*)(greycstoration_params+k));
-        if (err) throw CImgException("CImg<%s>::greycstoration_run() : pthread_create returned error %d",
-                                     pixel_type(), err);
-      }
-#endif
-#elif cimg_OS==2
-      for (unsigned int k=0; k<greycstoration_params->nb_threads; k++) {
-        unsigned long ThreadID = 0;
-        CreateThread(0,0,greycstoration_thread,(void*)(greycstoration_params+k),0,&ThreadID);
-      }
-#else
-      throw CImgInstanceException("CImg<T>::greycstoration_run() : Threads are not supported, please define cimg_OS first.");
-#endif
-    } else greycstoration_thread((void*)greycstoration_params); // Non-threaded version
-  }
-  return *this;
-}
 
-//! Run the non-patch version of the GREYCstoration algorithm on the instance image.
-CImg& greycstoration_run(const float amplitude=50, const float sharpness=0.7f, const float anisotropy=0.3f,
-                         const float alpha=0.6f, const float sigma=1.1f, const float gfact=1.0f,
-                         const float dl=0.8f, const float da=30.0f,
-                         const float gauss_prec=2.0f, const unsigned int interpolation=0, const bool fast_approx=true,
-                         const unsigned int tile=0, const unsigned int tile_border=0, const unsigned int nb_threads=1) {
-  static const CImg<unsigned char> empty_mask;
-  return greycstoration_run(empty_mask,amplitude,sharpness,anisotropy,alpha,sigma,gfact,dl,da,gauss_prec,
-                            interpolation,fast_approx,tile,tile_border,nb_threads);
-}
-
-//! Run the patch-based version of the GREYCstoration algorithm on the instance image.
-CImg& greycstoration_patch_run(const unsigned int patch_size=5, const float sigma_p=10, const float sigma_s=100,
-                               const unsigned int lookup_size=20, const bool fast_approx=true,
-                               const unsigned int tile=0, const unsigned int tile_border=0, const unsigned int nb_threads=1) {
-
-  static const CImg<unsigned char> empty_mask;
-  if (greycstoration_is_running())
-    throw CImgInstanceException("CImg<T>::greycstoration_run() : A GREYCstoration thread is already running on"
-                                " the instance image (%u,%u,%u,%u,%p).",width,height,depth,dim,data);
-
-  else {
-    if (nb_threads>16) cimg::warn("CImg<%s>::greycstoration_run() : Multi-threading mode limited to 16 threads max.");
-    const unsigned int
-      ntile = (tile && (tile<width || tile<height || (depth>1 && tile<depth)))?tile:0,
-#if cimg_OS==1 && !defined(_PTHREAD_H)
-      nthreads = 0;
-#else
-    nthreads = ntile?cimg::min(nb_threads,16U):cimg::min(nb_threads,1U);
-#endif
-
-    CImg<T> *const temporary = ntile?new CImg<T>(*this):0;
-    unsigned long *const counter = new unsigned long;
-    *counter = 0;
-    bool *const stop_request = new bool;
-    *stop_request = false;
-
-    for (unsigned int k=0; k<(nthreads?nthreads:1); k++) {
-      greycstoration_params[k].patch_based = true;
-      greycstoration_params[k].patch_size = patch_size;
-      greycstoration_params[k].sigma_s = sigma_s;
-      greycstoration_params[k].sigma_p = sigma_p;
-      greycstoration_params[k].lookup_size = lookup_size;
-      greycstoration_params[k].source = this;
-      greycstoration_params[k].mask = &empty_mask;
-      greycstoration_params[k].temporary = temporary;
-      greycstoration_params[k].counter = counter;
-      greycstoration_params[k].tile = ntile;
-      greycstoration_params[k].tile_border = tile_border;
-      greycstoration_params[k].thread = k;
-      greycstoration_params[k].nb_threads = nthreads;
-      greycstoration_params[k].fast_approx = fast_approx;
-      greycstoration_params[k].is_running = true;
-      greycstoration_params[k].stop_request = stop_request;
-      if (k) greycstoration_params[k].mutex = greycstoration_params[0].mutex;
-      else greycstoration_mutex_create(greycstoration_params[0]);
+    virtual void run()
+    {
+        manager->workerMethod(threadNumber);
     }
-    if (nthreads) {  // Threaded version
-#if cimg_OS==1
-#ifdef _PTHREAD_H
-      pthread_attr_t attr;
-      pthread_attr_init(&attr);
-      pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
-      for (unsigned int k=0; k<greycstoration_params->nb_threads; k++) {
-        pthread_t thread;
-        const int err = pthread_create(&thread, &attr, greycstoration_thread, (void*)(greycstoration_params+k));
-        if (err) throw CImgException("CImg<%s>::greycstoration_run() : pthread_create returned error %d",
-                                     pixel_type(), err);
-      }
-#endif
-#elif cimg_OS==2
-      for (unsigned int k=0; k<greycstoration_params->nb_threads; k++) {
-        unsigned long ThreadID = 0;
-        CreateThread(0,0,greycstoration_thread,(void*)(greycstoration_params+k),0,&ThreadID);
-      }
-#else
-      throw CImgInstanceException("CImg<T>::greycstoration_run() : Threads support have not been enabled in this version of GREYCstoration.");
-#endif
-    } else greycstoration_thread((void*)greycstoration_params); // Non-threaded version
-  }
-  return *this;
-}
 
-//------------------------------------------------------------------------------
-// GREYCstoration private functions.
-// Should not be used directly by the API user.
-//-------------------------------------------------------------------------------
+    GreycstorationThreadManager* const manager;
+    const int threadNumber;
+};
 
-static void greycstoration_mutex_create(_greycstoration_params &p) {
-  if (p.nb_threads>1) {
-#if cimg_OS==1 && defined(_PTHREAD_H)
-    p.mutex = new pthread_mutex_t;
-    pthread_mutex_init(p.mutex,0);
-#elif cimg_OS==2
-    p.mutex = CreateMutex(0,FALSE,0);
-#endif
-  }
-}
+//template <typename T>
+class GreycstorationThreadManager
+{
+public:
+    GreycstorationThreadManager()
+        : counter(0), stopRequest(false), activeThreads(0),
+          source(0), temporary(0), empty_mask(new CImg<unsigned char>())
+    {
+    }
 
-static void greycstoration_mutex_lock(_greycstoration_params &p) {
-  if (p.nb_threads>1) {
-#if cimg_OS==1 && defined(_PTHREAD_H)
-    if (p.mutex) pthread_mutex_lock(p.mutex);
-#elif cimg_OS==2
-    WaitForSingleObject(p.mutex,INFINITE);
-#endif
-  }
-}
+    ~GreycstorationThreadManager()
+    {
+        stop();
+        wait();
+        finish();
+        qDeleteAll(threads);
+        delete temporary;
+        delete empty_mask;
+    }
 
-static void greycstoration_mutex_unlock(_greycstoration_params &p) {
-  if (p.nb_threads>1) {
-#if cimg_OS==1 && defined(_PTHREAD_H)
-    if (p.mutex) pthread_mutex_unlock(p.mutex);
-#elif cimg_OS==2
-    ReleaseMutex(p.mutex);
-#endif
-  }
-}
 
-static void greycstoration_mutex_destroy(_greycstoration_params &p) {
-  if (p.nb_threads>1) {
-#if cimg_OS==1 && defined(_PTHREAD_H)
-    if (p.mutex) pthread_mutex_destroy(p.mutex);
-#elif cimg_OS==2
-    CloseHandle(p.mutex);
-#endif
-    p.mutex = 0;
-  }
-}
+    //! Run the non-patch version of the GREYCstoration algorithm on the instance image, using a mask.
+    void start(CImg& s, const CImg<unsigned char>* m,
+               const float amplitude=60, const float sharpness=0.7f,
+               const float anisotropy=0.3f, const float alpha=0.6f,
+               const float sigma=1.1f, const float gfact=1.0f,
+               const float dl=0.8f, const float da=30.0f,
+               const float gauss_prec=2.0f, const unsigned int interpolation=0,
+               const bool fast_approx=true, const unsigned int tile=0,
+               const unsigned int tile_border=0,
+               const unsigned int nb_threads=1)
+    {
 
-#if cimg_OS==1
-static void* greycstoration_thread(void *arg) {
-#elif cimg_OS==2
-  static DWORD WINAPI greycstoration_thread(void *arg) {
-#endif
-    _greycstoration_params &p = *(_greycstoration_params*)arg;
-    greycstoration_mutex_lock(p);
-    const CImg<unsigned char> &mask = *(p.mask);
-    CImg<T> &source = *(p.source);
+        GreycstorationParameters params;
+        params.patch_based = false;
 
-    if (!p.tile) {
+        params.amplitude = amplitude;
+        params.sharpness = sharpness;
+        params.anisotropy = anisotropy;
+        params.alpha = alpha;
+        params.sigma = sigma;
+        params.gfact = gfact;
+        params.dl = dl;
+        params.da = da;
+        params.gauss_prec = gauss_prec;
+        params.interpolation = interpolation;
+        params.fast_approx = fast_approx;
+        params.tile_border = tile_border;
 
-      // Non-tiled version
-      //------------------
-      if (p.patch_based) source.blur_patch(p.patch_size,p.sigma_p,p.sigma_s,p.lookup_size,p.fast_approx);
-      else source.blur_anisotropic(mask,p.amplitude,p.sharpness,p.anisotropy,p.alpha,p.sigma,p.dl,p.da,p.gauss_prec,
-                                   p.interpolation,p.fast_approx,p.gfact);
+        mask = m;
+        start(&s, params, tile, nb_threads);
+    }
 
-    } else {
+    //! Run the non-patch version of the GREYCstoration algorithm on the instance image.
+    void start(CImg& s, const float amplitude=50, const float sharpness=0.7f, const float anisotropy=0.3f,
+               const float alpha=0.6f, const float sigma=1.1f, const float gfact=1.0f,
+               const float dl=0.8f, const float da=30.0f,
+               const float gauss_prec=2.0f, const unsigned int interpolation=0, const bool fast_approx=true,
+               const unsigned int tile=0, const unsigned int tile_border=0, const unsigned int nb_threads=1)
+    {
+        return start(s, empty_mask, amplitude,sharpness,anisotropy,alpha,sigma,gfact,dl,da,gauss_prec,
+                    interpolation,fast_approx,tile,tile_border,nb_threads);
+    }
 
-      // Tiled version
-      //---------------
-      CImg<T> &temporary = *(p.temporary);
-      const bool threed = (source.depth>1);
-      const unsigned int b = p.tile_border;
-      unsigned int ctile = 0;
-      if (threed) {
-        for (unsigned int z=0; z<source.depth && !*(p.stop_request); z+=p.tile)
-          for (unsigned int y=0; y<source.height && !*(p.stop_request); y+=p.tile)
-            for (unsigned int x=0; x<source.width && !*(p.stop_request); x+=p.tile)
-              if (!p.nb_threads || ((ctile++)%p.nb_threads)==p.thread) {
-                const unsigned int
-                  x1 = x+p.tile-1,
-                  y1 = y+p.tile-1,
-                  z1 = z+p.tile-1,
-                  xe = x1<source.width?x1:source.width-1,
-                  ye = y1<source.height?y1:source.height-1,
-                  ze = z1<source.depth?z1:source.depth-1;
-                CImg<T> img = source.get_crop(x-b,y-b,z-b,xe+b,ye+b,ze+b,true);
-                CImg<unsigned char> mask_tile = mask.is_empty()?mask:mask.get_crop(x-b,y-b,z-b,xe+b,ye+b,ze+b,true);
-                img.greycstoration_params[0] = p;
-                greycstoration_mutex_unlock(p);
-                if (p.patch_based) img.blur_patch(p.patch_size,p.sigma_p,p.sigma_s,p.lookup_size,p.fast_approx);
-                else img.blur_anisotropic(mask_tile,p.amplitude,p.sharpness,p.anisotropy,
-                                          p.alpha,p.sigma,p.dl,p.da,p.gauss_prec,p.interpolation,p.fast_approx,p.gfact);
-                greycstoration_mutex_lock(p);
-                temporary.draw_image(x,y,z,img.crop(b,b,b,img.width-b,img.height-b,img.depth-b));
-              }
-      } else {
-        for (unsigned int y=0; y<source.height && !*(p.stop_request); y+=p.tile)
-          for (unsigned int x=0; x<source.width && !*(p.stop_request); x+=p.tile)
-            if (!p.nb_threads || ((ctile++)%p.nb_threads)==p.thread) {
-              const unsigned int
-                x1 = x+p.tile-1,
-                y1 = y+p.tile-1,
-                xe = x1<source.width?x1:source.width-1,
-                ye = y1<source.height?y1:source.height-1;
-              CImg<T> img = source.get_crop(x-b,y-b,xe+b,ye+b,true);
-              CImg<unsigned char> mask_tile = mask.is_empty()?mask:mask.get_crop(x-b,y-b,xe+b,ye+b,true);
-              img.greycstoration_params[0] = p;
-              greycstoration_mutex_unlock(p);
-              if (p.patch_based) img.blur_patch(p.patch_size,p.sigma_p,p.sigma_s,p.lookup_size,p.fast_approx);
-              else img.blur_anisotropic(mask_tile,p.amplitude,p.sharpness,p.anisotropy,
-                                        p.alpha,p.sigma,p.dl,p.da,p.gauss_prec,p.interpolation,p.fast_approx,p.gfact);
-              temporary.draw_image(x,y,img.crop(b,b,img.width-b,img.height-b));
-              greycstoration_mutex_lock(p);
+    //! Run the patch-based version of the GREYCstoration algorithm on the instance image.
+    void start(CImg& s, const unsigned int patch_size=5,
+               const float sigma_p=10,
+               const float sigma_s=100,
+               const unsigned int lookup_size=20,
+               const bool fast_approx=true,
+               const unsigned int tile=0,
+               const unsigned int tile_border=0,
+               const unsigned int nb_threads=1)
+    {
+        GreycstorationParameters params;
+
+        params.patch_based = true;
+        params.patch_size = patch_size;
+        params.sigma_s = sigma_s;
+        params.sigma_p = sigma_p;
+        params.lookup_size = lookup_size;
+        params.mask = empty_mask;
+        params.tile_border = tile_border;
+        params.fast_approx = fast_approx;
+
+        start(&s, params, tile, nb_threads);
+    }
+
+    bool isRunning() const
+    {
+        foreach(GreycstorationWorkingThread* thread, threads)
+        {
+            if (thread->isRunning())
+            {
+                return true;
             }
-      }
+        }
+        return false;
     }
-    greycstoration_mutex_unlock(p);
 
-    if (!p.thread) {
-      if (p.nb_threads>1) {
-        bool stopflag = true;
-        do {
-          stopflag = true;
-          for (unsigned int k=1; k<p.nb_threads; k++) if (source.greycstoration_params[k].is_running) stopflag = false;
-          if (!stopflag) cimg::wait(50);
-        } while (!stopflag);
-      }
-      if (p.counter) delete p.counter;
-      if (p.temporary) { source = *(p.temporary); delete p.temporary; }
-      if (p.stop_request) delete p.stop_request;
-      p.mask = 0;
-      p.amplitude = p.sharpness = p.anisotropy = p.alpha = p.sigma = p.gfact = p.dl = p.da = p.gauss_prec = p.sigma_s = p.sigma_p = 0;
-      p.patch_size = p.interpolation = p.lookup_size = 0;
-      p.fast_approx = false;
-      p.source = 0;
-      p.temporary = 0;
-      p.counter = 0;
-      p.tile = p.tile_border = p.thread = p.nb_threads = 0;
-      (*p.stop_request) = false;
-      greycstoration_mutex_destroy(p);
+    void wait()
+    {
+        foreach(GreycstorationWorkingThread* thread, threads)
+        {
+            thread->wait();
+        }
     }
-    p.is_running = false;
 
-    if (p.nb_threads) {
-#if cimg_OS==1 && defined(_PTHREAD_H)
-      pthread_exit(arg);
-      return arg;
-#elif cimg_OS==2
-      ExitThread(0);
-#endif
+    void finish()
+    {
+        if (temporary)
+        {
+            (*source) = (*temporary);
+        }
+        if (source)
+        {
+            source->resetThreadManager();
+        }
     }
-    return 0;
-  }
 
+    void stop()
+    {
+        foreach(GreycstorationWorkingThread* thread, threads)
+        {
+            thread->stop();
+        }
+        stopRequest = true;
+    }
+
+    float progress() const
+    {
+        const float
+        da = p.da,
+        factor = p.patch_based ? 1 : (1+360/da);
+        float maxcounter = 0;
+        if (p.tile==0)
+        {
+            maxcounter = source->width*source->height*source->depth*factor;
+        }
+        else
+        {
+            const unsigned int
+            t = p.tile,
+            b = p.tile_border,
+            n = (1+(source->width-1)/t)*(1+(source->height-1)/t)*(1+(source->depth-1)/t);
+            maxcounter = (source->width*source->height*source->depth + n*4*b*(b + t))*factor;
+        }
+        return cimg::min(counter*99.9f/maxcounter,99.9f);
+    }
+
+    // Waits at most the specified number of milliseconds, then returns current progress
+    float waitABit(unsigned int msecs)
+    {
+        QMutexLocker lock(&mutex);
+        if (activeThreads)
+        {
+            condVar.wait(&mutex, msecs);
+        }
+        return progress();
+    }
+
+protected:
+
+    friend class CImg<T>;
+
+    QMutex         mutex;
+    QWaitCondition condVar;
+    volatile int   counter;
+    volatile bool  stopRequest;
+    volatile int   activeThreads;
+
+    GreycstorationParameters p;
+
+    CImg<T>*                   source;
+    const CImg<unsigned char> *mask;
+    CImg<T>                   *temporary;
+    
+    CImg<unsigned char> *empty_mask;
+
+    QList<GreycstorationWorkingThread*> threads;
+
+    void start(CImg* s, const GreycstorationParameters& params, unsigned int tile, unsigned int numberOfThreads)
+    {
+        /*if (!mask.is_empty() && !mask.is_sameXY(*this))
+        {
+            throw CImgArgumentException("CImg<%s>::greycstoration_run() : Given mask (%u,%u,%u,%u,%p) and instance image "
+                                        "(%u,%u,%u,%u,%p) have different dimensions.",
+                                        pixel_type(),mask.width,mask.height,mask.depth,mask.dim,mask.data,width,height,depth,dim,data);
+        }*/
+
+        if (numberOfThreads>16)
+        {
+            cimg::warn("CImg<%s>::greycstoration_run() : Multi-threading mode limited to 16 threads max.");
+        }
+
+        source = s;
+        s->setThreadManager(this);
+        p = params;
+
+        p.tile = (tile && (tile<source->width || tile<source->height ||
+                        (source->depth>1 && tile<source->depth)))?tile:0,
+        numberOfThreads = p.tile ? cimg::min(numberOfThreads,16U) : cimg::min(numberOfThreads,1U);
+
+        counter = 0;
+        stopRequest = false;
+        activeThreads = 0;
+        delete temporary;
+        temporary = p.tile ? new CImg<T>(*source) : 0;
+
+        if (numberOfThreads)
+        {
+            for (unsigned int k=0; k<numberOfThreads; k++)
+            {
+                GreycstorationWorkingThread* thread = new GreycstorationWorkingThread(this, k);
+                ++activeThreads;
+                thread->start();
+                threads << thread;
+            }
+        }
+        else
+        {
+            // direct execution
+            ++activeThreads;
+            workerMethod(0);
+        }
+    }
+
+    friend class GreycstorationWorkingThread;
+    void workerMethod(unsigned int threadIndex)
+    {
+        QMutexLocker lock(&mutex);
+
+        if (!p.tile)
+        {
+            // Non-tiled version
+            //------------------
+            if (p.patch_based)
+            {
+                source->blur_patch(p.patch_size,p.sigma_p,p.sigma_s,p.lookup_size,p.fast_approx);
+            }
+            else
+            {
+                source->blur_anisotropic(*mask,p.amplitude,p.sharpness,p.anisotropy,p.alpha,p.sigma,p.dl,p.da,p.gauss_prec,
+                                        p.interpolation,p.fast_approx,p.gfact);
+            }
+        }
+        else
+        {
+            // Tiled version
+            //---------------
+            const bool threed = (source->depth>1);
+            const unsigned int b = p.tile_border;
+            unsigned int ctile = 0;
+
+            if (threed)
+            {
+                for (unsigned int z=0; z<source->depth && !stopRequest; z+=p.tile)
+                {
+                    for (unsigned int y=0; y<source->height && !stopRequest; y+=p.tile)
+                    {
+                        for (unsigned int x=0; x<source->width && !stopRequest; x+=p.tile)
+                        {
+                            if (threads.isEmpty() || ((ctile++)%threads.size())==(unsigned int)threadIndex)
+                            {
+                                const unsigned int
+                                x1 = x+p.tile-1,
+                                y1 = y+p.tile-1,
+                                z1 = z+p.tile-1,
+                                xe = x1<source->width?x1:source->width-1,
+                                ye = y1<source->height?y1:source->height-1,
+                                ze = z1<source->depth?z1:source->depth-1;
+
+                                CImg<T> img = source->get_crop(x-b,y-b,z-b,xe+b,ye+b,ze+b,true);
+                                CImg<unsigned char> mask_tile = mask->is_empty() ? *mask :
+                                                                mask->get_crop(x-b,y-b,z-b,xe+b,ye+b,ze+b,true);
+                                //??img.greycstoration_params[0] = p;
+
+                                lock.unlock();
+                                if (p.patch_based)
+                                {
+                                    img.blur_patch(p.patch_size,p.sigma_p,p.sigma_s,p.lookup_size,p.fast_approx);
+                                }
+                                else
+                                {
+                                    img.blur_anisotropic(mask_tile,p.amplitude,p.sharpness,p.anisotropy,
+                                                         p.alpha,p.sigma,p.dl,p.da,p.gauss_prec,p.interpolation,p.fast_approx,p.gfact);
+                                }
+                                lock.relock();
+
+                                temporary->draw_image(x,y,z,img.crop(b,b,b,img.width-b,img.height-b,img.depth-b));
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                for (unsigned int y=0; y<source->height && !stopRequest; y+=p.tile)
+                {
+                    for (unsigned int x=0; x<source->width && !stopRequest; x+=p.tile)
+                    {
+                        if (threads.isEmpty() || ((ctile++)%threads.size())==(unsigned int)threadIndex)
+                        {
+                            const unsigned int
+                            x1 = x+p.tile-1,
+                            y1 = y+p.tile-1,
+                            xe = x1<source->width?x1:source->width-1,
+                            ye = y1<source->height?y1:source->height-1;
+                            CImg<T> img = source->get_crop(x-b,y-b,xe+b,ye+b,true);
+                            CImg<unsigned char> mask_tile = mask->is_empty() ? *mask : mask->get_crop(x-b,y-b,xe+b,ye+b,true);
+                            //img.greycstoration_params[0] = p;
+
+                            lock.unlock();
+                            if (p.patch_based)
+                            {
+                                img.blur_patch(p.patch_size,p.sigma_p,p.sigma_s,p.lookup_size,p.fast_approx);
+                            }
+                            else
+                            {
+                                img.blur_anisotropic(mask_tile,p.amplitude,p.sharpness,p.anisotropy,
+                                                     p.alpha,p.sigma,p.dl,p.da,p.gauss_prec,p.interpolation,p.fast_approx,p.gfact);
+                            }
+                            lock.relock();
+
+                            temporary->draw_image(x,y,img.crop(b,b,img.width-b,img.height-b));
+                        }
+                    }
+                }
+            }
+        }
+        --activeThreads;
+        condVar.wakeAll();
+    }
+
+};
 
 #define cimg_plugin_greycstoration_count \
-  if (!*(greycstoration_params->stop_request)) ++(*greycstoration_params->counter); else return *this;
+  if (threadManagerContainer.threadManager)\
+  { if (threadManagerContainer.threadManager->stopRequest) \
+        return *this; \
+    ++threadManagerContainer.threadManager->counter; }
+
 #define cimg_plugin_greycstoration_lock \
-  greycstoration_mutex_lock(greycstoration_params[0]);
+  if (threadManagerContainer.threadManager) threadManagerContainer.threadManager->mutex.lock();
 #define cimg_plugin_greycstoration_unlock \
-  greycstoration_mutex_unlock(greycstoration_params[0]);
+  if (threadManagerContainer.threadManager) threadManagerContainer.threadManager->mutex.unlock();
 
 #endif
