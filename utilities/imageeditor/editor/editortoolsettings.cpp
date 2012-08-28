@@ -6,7 +6,7 @@
  * Date        : 2008-08-21
  * Description : Editor tool settings template box
  *
- * Copyright (C) 2008-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2008-2011 by Andi Clemens <andi dot clemens at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -66,12 +66,12 @@ using namespace KDcrawIface;
 namespace Digikam
 {
 
-class EditorToolSettings::EditorToolSettingsPriv
+class EditorToolSettings::Private
 {
 
 public:
 
-    EditorToolSettingsPriv() :
+    Private() :
         scaleBG(0),
         linHistoButton(0),
         logHistoButton(0),
@@ -127,8 +127,8 @@ public:
     RIntNumInput*        guideSize;
 };
 
-EditorToolSettings::EditorToolSettings(QWidget* parent)
-    : QScrollArea(parent), d(new EditorToolSettingsPriv)
+EditorToolSettings::EditorToolSettings(QWidget* const parent)
+    : QScrollArea(parent), d(new Private)
 {
     setFrameStyle(QFrame::NoFrame);
     setWidgetResizable(true);
@@ -138,19 +138,16 @@ EditorToolSettings::EditorToolSettings(QWidget* parent)
     // ---------------------------------------------------------------
 
     QGridLayout* gridSettings = new QGridLayout(d->settingsArea);
-
-    d->plainPage      = new QWidget;
-    d->guideBox       = new KHBox;
-    d->histogramBox   = new HistogramBox;
+    d->plainPage              = new QWidget;
+    d->guideBox               = new KHBox;
+    d->histogramBox           = new HistogramBox;
 
     // ---------------------------------------------------------------
 
     QFrame* toolDescriptor = new QFrame;
-
-    d->toolName = new QLabel();
-    d->toolIcon = new QLabel();
-
-    QFont font = d->toolName->font();
+    d->toolName            = new QLabel();
+    d->toolIcon            = new QLabel();
+    QFont font             = d->toolName->font();
     font.setBold(true);
     d->toolName->setFont(font);
 
