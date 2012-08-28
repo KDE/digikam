@@ -6,7 +6,7 @@
  * Date        : 2008-08-20
  * Description : A widget stack to embed editor view.
  *
- * Copyright (C) 2008-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -53,13 +53,13 @@ public:
 
 public:
 
-    EditorStackView(QWidget* parent = 0);
+    EditorStackView(QWidget* const parent = 0);
     ~EditorStackView();
 
-    void    setCanvas(Canvas* canvas);
+    void    setCanvas(Canvas* const canvas);
     Canvas* canvas() const;
 
-    void     setToolView(QWidget* view);
+    void     setToolView(QWidget* const view);
     QWidget* toolView() const;
 
     int  viewMode() const;
@@ -98,8 +98,8 @@ private:
 
 private:
 
-    class EditorStackViewPriv;
-    EditorStackViewPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam
