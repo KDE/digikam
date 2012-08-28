@@ -6,7 +6,7 @@
  * Date        : 2008-08-20
  * Description : editor tool template class.
  *
- * Copyright (C) 2008-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -524,6 +524,13 @@ void EditorToolThreaded::setToolView(QWidget* view)
 
 void EditorToolThreaded::slotOk()
 {
+    // Computation already in process.
+    if (d->currentRenderingMode != EditorToolThreaded::PreviewRendering)
+    {
+        // See B.K.O #305916 : cancel preview before.
+        slotAbort();
+    }
+
     writeSettings();
 
     d->currentRenderingMode = EditorToolThreaded::FinalRendering;
