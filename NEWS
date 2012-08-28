@@ -15,6 +15,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 005 ==> 204466 - Local contrast plugin issues.
 006 ==> 304550 - Unknown CMake command "PKG_FIND_MODULE".
 007 ==> 305916 - Busycursor sticks if applied before previews are ready.
-008 ==> 
+008 ==> 303119 - digiKam crashes when applying Restoration on a PNG picture.
+009 ==> 
 
 
