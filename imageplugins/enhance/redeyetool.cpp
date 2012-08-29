@@ -397,8 +397,11 @@ void RedEyeTool::slotEffect()
 
     // Update histogram.
 
+    d->destinationPreviewData = new uchar[selection.numBytes()];
     memcpy(d->destinationPreviewData, selection.bits(), selection.numBytes());
-    d->gboxSettings->histogramBox()->histogram()->updateData(d->destinationPreviewData, selection.width(), selection.height(), selection.sixteenBit(), 0, 0, 0, false);
+    d->gboxSettings->histogramBox()->histogram()->updateData(d->destinationPreviewData,
+                                                             selection.width(), selection.height(),
+                                                             selection.sixteenBit(), 0, 0, 0, false);
 
     kapp->restoreOverrideCursor();
 }
