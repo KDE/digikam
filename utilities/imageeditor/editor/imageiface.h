@@ -7,7 +7,7 @@
  * Description : image data interface for image plugins
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2004-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -65,13 +65,6 @@ public:
      */
     bool previewType() const;
 
-    /** Return image data for the current, scaled preview image.
-     *  The preview...() methods provide the characteristics of the data
-     *  (width, height, sixteen bit, alpha).
-     *  Ownership of the returned buffer is passed to the caller.
-     */
-    uchar* getPreviewImage() const;
-
     /** Return a DImg object representing the preview image.
      */
     DImg getPreviewImg() const;
@@ -82,12 +75,6 @@ public:
      *  Ownership of the returned buffer is passed to the caller.
      */
     uchar* getImageSelection() const;
-
-    /** Return image data for the original image.
-     *  The preview...() methods provide the characteristics of the data.
-     *  Ownership of the returned buffer is passed to the caller.
-     */
-    uchar* getOriginalImage() const;
 
     /** Return a pointer to the DImg object representing the original image.
      *  This object may not be modified or stored. Make copies if you need.
@@ -102,7 +89,7 @@ public:
      *  If w == -1 and h == -1, the size is unchanged.
      *  Caller is an i18n'ed string that will be shown as the undo/redo action name.
      */
-    void   putOriginalImage(const QString& caller, const FilterAction& action, uchar* data, int w = -1, int h = -1);
+    void   putOriginalImage(const QString& caller, const FilterAction& action, uchar* const data, int w = -1, int h = -1);
 
     /** Set the color profile of the original image.
      */
@@ -115,7 +102,7 @@ public:
      *  No ownership of the data pointer is assumed.
      *  Caller is an i18n'ed string that will be shown as the undo/redo action name.
      */
-    void   putImageSelection(const QString& caller, const FilterAction& action, uchar* data);
+    void   putImageSelection(const QString& caller, const FilterAction& action, uchar* const data);
 
     /** Replace the stored target preview data with the given data.
      *  The characteristics of the data must match the characteristics of the current
@@ -125,7 +112,7 @@ public:
      *  The data returned by getPreviewImage() is unaffected.
      *  No ownership of the data pointer is assumed.
      */
-    void   putPreviewImage(uchar* data);
+    void   putPreviewImage(uchar* const data);
 
     /** Set the color profile of the preview image.
      */
@@ -134,8 +121,8 @@ public:
     /** Get colors from original, (unchanged) preview
      *  or target preview (set by putPreviewImage) image.
      */
-    DColor getColorInfoFromOriginalImage(const QPoint& point) const;
-    DColor getColorInfoFromPreviewImage(const QPoint& point) const;
+    DColor getColorInfoFromOriginalImage(const QPoint& point)      const;
+    DColor getColorInfoFromPreviewImage(const QPoint& point)       const;
     DColor getColorInfoFromTargetPreviewImage(const QPoint& point) const;
 
     /** Standard methods to get/set preview information.
@@ -155,7 +142,7 @@ public:
     /** Original image metadata.
      */
     IccProfile getOriginalIccProfile() const;
-    KExiv2Data getOriginalMetadata() const;
+    KExiv2Data getOriginalMetadata()   const;
     void       setOriginalMetadata(const KExiv2Data& meta);
 
     /** Get photograph information from original image.
@@ -193,10 +180,27 @@ public:
      */
     void paint(QPaintDevice* device, int x, int y, int w, int h, QPainter* painter = 0);
 
+    // Deprecated methods ------------------------------------------------------------------------------------------------
+
+    /** Return image data for the current, scaled preview image.
+     *  The preview...() methods provide the characteristics of the data
+     *  (width, height, sixteen bit, alpha).
+     *  Ownership of the returned buffer is passed to the caller.
+     *  Deprecated : use getPreviewImg() instead
+     */
+    KDE_DEPRECATED uchar* getPreviewImage() const;
+
+    /** Return image data for the original image.
+     *  The preview...() methods provide the characteristics of the data.
+     *  Ownership of the returned buffer is passed to the caller.
+     *  Deprecated : use getOriginalImg() instead
+     */
+    KDE_DEPRECATED uchar* getOriginalImage() const;
+        
 private:
 
-    class ImageIfacePriv;
-    ImageIfacePriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

@@ -7,7 +7,7 @@
  * Description : image data interface for image plugins
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2004-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -48,11 +48,11 @@
 namespace Digikam
 {
 
-class ImageIface::ImageIfacePriv
+class ImageIface::Private
 {
 public:
 
-    ImageIfacePriv() :
+    Private() :
         usePreviewSelection(false),
         originalWidth(0),
         originalHeight(0),
@@ -86,7 +86,7 @@ public:
     DImg    targetPreviewImage;
 };
 
-QPixmap ImageIface::ImageIfacePriv::checkPixmap()
+QPixmap ImageIface::Private::checkPixmap()
 {
     if (qcheck.isNull())
     {
@@ -105,7 +105,7 @@ QPixmap ImageIface::ImageIfacePriv::checkPixmap()
 }
 
 ImageIface::ImageIface(int w, int h)
-    : d(new ImageIfacePriv)
+    : d(new Private)
 {
     d->constrainWidth     = w;
     d->constrainHeight    = h;
@@ -162,115 +162,15 @@ DColor ImageIface::getColorInfoFromTargetPreviewImage(const QPoint& point) const
     return d->targetPreviewImage.getPixelColor(point.x(), point.y());
 }
 
-uchar* ImageIface::setPreviewImageSize(int w, int h) const
-{
-    d->previewImage.reset();
-    d->targetPreviewImage.reset();
-
-    d->constrainWidth  = w;
-    d->constrainHeight = h;
-
-    return (getPreviewImage());
-}
-
-uchar* ImageIface::getPreviewImage() const
-{
-    if (d->previewImage.isNull())
-    {
-        DImg* im = 0;
-
-        if (!d->usePreviewSelection)
-        {
-            im = DImgInterface::defaultInterface()->getImg();
-
-            if (!im || im->isNull())
-            {
-                return 0;
-            }
-        }
-        else
-        {
-            int    x, y, w, h;
-            bool   s    = DImgInterface::defaultInterface()->sixteenBit();
-            bool   a    = DImgInterface::defaultInterface()->hasAlpha();
-
-            QScopedArrayPointer<uchar> data(DImgInterface::defaultInterface()->getImageSelection());
-
-            DImgInterface::defaultInterface()->getSelectedArea(x, y, w, h);
-            im = new DImg(w, h, s, a, data.data(), true);
-
-            if (!im)
-            {
-                return 0;
-            }
-
-            if (im->isNull())
-            {
-                delete im;
-                return 0;
-            }
-
-            im->setIccProfile(DImgInterface::defaultInterface()->getEmbeddedICC());
-        }
-
-        QSize sz(im->width(), im->height());
-        sz.scale(d->constrainWidth, d->constrainHeight, Qt::KeepAspectRatio);
-
-        d->previewImage  = im->smoothScale(sz.width(), sz.height());
-        d->previewWidth  = d->previewImage.width();
-        d->previewHeight = d->previewImage.height();
-
-        // only create another copy if needed, in putPreviewImage
-        d->targetPreviewImage = d->previewImage;
-
-        if (d->usePreviewSelection)
-        {
-            delete im;
-        }
-    }
-
-    DImg previewData = d->previewImage.copyImageData();
-    return previewData.stripImageData();
-}
-
 DImg ImageIface::getPreviewImg() const
 {
     DImg preview(previewWidth(), previewHeight(), previewSixteenBit(), previewHasAlpha(), getPreviewImage());
     return preview;
 }
 
-uchar* ImageIface::getOriginalImage() const
-{
-    DImg* im = DImgInterface::defaultInterface()->getImg();
-
-    if (!im || im->isNull())
-    {
-        return 0;
-    }
-
-    DImg origData = im->copyImageData();
-    return origData.stripImageData();
-}
-
 DImg* ImageIface::getOriginalImg() const
 {
     return DImgInterface::defaultInterface()->getImg();
-}
-
-uchar* ImageIface::getImageSelection() const
-{
-    return DImgInterface::defaultInterface()->getImageSelection();
-}
-
-void ImageIface::putPreviewImage(uchar* data)
-{
-    if (!data)
-    {
-        return;
-    }
-
-    d->targetPreviewImage.detach();
-    d->targetPreviewImage.putImageData(data);
 }
 
 void ImageIface::putPreviewIccProfile(const IccProfile& profile)
@@ -279,29 +179,9 @@ void ImageIface::putPreviewIccProfile(const IccProfile& profile)
     d->targetPreviewImage.setIccProfile(profile);
 }
 
-void ImageIface::putOriginalImage(const QString& caller, const FilterAction& action, uchar* data, int w, int h)
-{
-    if (!data)
-    {
-        return;
-    }
-
-    DImgInterface::defaultInterface()->putImage(caller, action, data, w, h);
-}
-
 void ImageIface::putOriginalIccProfile(const IccProfile& profile)
 {
     DImgInterface::defaultInterface()->putIccProfile(profile);
-}
-
-void ImageIface::putImageSelection(const QString& caller, const FilterAction& action, uchar* data)
-{
-    if (!data)
-    {
-        return;
-    }
-
-    DImgInterface::defaultInterface()->putImageSelection(caller, action, data);
 }
 
 int ImageIface::previewWidth() const
@@ -405,7 +285,7 @@ PhotoInfoContainer ImageIface::getPhotographInformation() const
 
 void ImageIface::paint(QPaintDevice* device, int x, int y, int w, int h, QPainter* painter)
 {
-    QPainter localPainter;
+    QPainter  localPainter;
     QPainter* p = 0;
 
     if (painter)
@@ -461,6 +341,128 @@ void ImageIface::paint(QPaintDevice* device, int x, int y, int w, int h, QPainte
     {
         p->end();
     }
+}
+
+// Deprecated methods ------------------------------------------------------------------------------------------------
+
+uchar* ImageIface::getPreviewImage() const
+{
+    if (d->previewImage.isNull())
+    {
+        DImg* im = 0;
+
+        if (!d->usePreviewSelection)
+        {
+            im = DImgInterface::defaultInterface()->getImg();
+
+            if (!im || im->isNull())
+            {
+                return 0;
+            }
+        }
+        else
+        {
+            int    x, y, w, h;
+            bool   s    = DImgInterface::defaultInterface()->sixteenBit();
+            bool   a    = DImgInterface::defaultInterface()->hasAlpha();
+
+            QScopedArrayPointer<uchar> data(DImgInterface::defaultInterface()->getImageSelection());
+
+            DImgInterface::defaultInterface()->getSelectedArea(x, y, w, h);
+            im = new DImg(w, h, s, a, data.data(), true);
+
+            if (!im)
+            {
+                return 0;
+            }
+
+            if (im->isNull())
+            {
+                delete im;
+                return 0;
+            }
+
+            im->setIccProfile(DImgInterface::defaultInterface()->getEmbeddedICC());
+        }
+
+        QSize sz(im->width(), im->height());
+        sz.scale(d->constrainWidth, d->constrainHeight, Qt::KeepAspectRatio);
+
+        d->previewImage  = im->smoothScale(sz.width(), sz.height());
+        d->previewWidth  = d->previewImage.width();
+        d->previewHeight = d->previewImage.height();
+
+        // only create another copy if needed, in putPreviewImage
+        d->targetPreviewImage = d->previewImage;
+
+        if (d->usePreviewSelection)
+        {
+            delete im;
+        }
+    }
+
+    DImg previewData = d->previewImage.copyImageData();
+    return previewData.stripImageData();
+}
+
+uchar* ImageIface::getOriginalImage() const
+{
+    DImg* im = DImgInterface::defaultInterface()->getImg();
+
+    if (!im || im->isNull())
+    {
+        return 0;
+    }
+
+    DImg origData = im->copyImageData();
+    return origData.stripImageData();
+}
+
+uchar* ImageIface::setPreviewImageSize(int w, int h) const
+{
+    d->previewImage.reset();
+    d->targetPreviewImage.reset();
+
+    d->constrainWidth  = w;
+    d->constrainHeight = h;
+
+    return (getPreviewImage());
+}
+
+uchar* ImageIface::getImageSelection() const
+{
+    return DImgInterface::defaultInterface()->getImageSelection();
+}
+
+void ImageIface::putPreviewImage(uchar* data)
+{
+    if (!data)
+    {
+        return;
+    }
+
+    d->targetPreviewImage.detach();
+    d->targetPreviewImage.putImageData(data);
+}
+
+void ImageIface::putOriginalImage(const QString& caller, const FilterAction& action, uchar* data, int w, int h)
+{
+    if (!data)
+    {
+        return;
+    }
+
+    DImgInterface::defaultInterface()->putImage(caller, action, data, w, h);
+}
+
+void ImageIface::putImageSelection(const QString& caller, const FilterAction& action, uchar* data)
+{
+    if (!data)
+    {
+        return;
+    }
+
+    DImgInterface::defaultInterface()->putImageSelection(caller, action, data);
 }
 
 }   // namespace Digikam
