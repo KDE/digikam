@@ -148,12 +148,11 @@ PerspectiveWidget::PerspectiveWidget(int w, int h, QWidget* parent)
 
     d->bgColor  = palette().color(QPalette::Background);
     d->iface    = new ImageIface(w, h);
-    uchar* data = d->iface->setPreviewImageSize(w, h);
+    d->preview  = d->iface->setPreviewImgSize(w, h);
     d->width    = d->iface->previewWidth();
     d->height   = d->iface->previewHeight();
     d->origW    = d->iface->originalWidth();
     d->origH    = d->iface->originalHeight();
-    d->preview  = DImg(d->width, d->height, d->iface->previewSixteenBit(), d->iface->previewHasAlpha(), data, false);
     d->preview.setIccProfile( d->iface->getOriginalImg()->getIccProfile() );
 
     d->pixmap = new QPixmap(w, h);
@@ -178,10 +177,9 @@ void PerspectiveWidget::resizeEvent(QResizeEvent* e)
     delete d->pixmap;
     int w       = e->size().width();
     int h       = e->size().height();
-    uchar* data = d->iface->setPreviewImageSize(w, h);
+    d->preview  = d->iface->setPreviewImgSize(w, h);
     d->width    = d->iface->previewWidth();
     d->height   = d->iface->previewHeight();
-    d->preview  = DImg(d->width, d->height, d->iface->previewSixteenBit(), d->iface->previewHasAlpha(), data, false);
     d->preview.setIccProfile( d->iface->getOriginalImg()->getIccProfile() );
 
     d->pixmap     = new QPixmap(w, h);

@@ -337,9 +337,7 @@ void ColorFxTool::prepareEffect()
     int e = d->effectType->currentIndex();
 
     ImageIface* iface = d->previewWidget->imageIface();
-    QScopedArrayPointer<uchar> data(iface->getPreviewImage());
-    DImg image(iface->previewWidth(), iface->previewHeight(), iface->previewSixteenBit(),
-               iface->previewHasAlpha(), data.data());
+    DImg image        = iface->getPreviewImg();
 
     setFilter(new ColorFXFilter(&image, this, e, l, f));
 }

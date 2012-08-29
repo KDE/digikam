@@ -203,20 +203,15 @@ void ImageSelectionWidget::setup(int w, int h,
     setMouseTracking(true);
     setAttribute(Qt::WA_DeleteOnClose);
 
-    d->iface        = new ImageIface(w, h);
-    QScopedArrayPointer<uchar> data(d->iface->getPreviewImage());
-    int width       = d->iface->previewWidth();
-    int height      = d->iface->previewHeight();
-    bool sixteenBit = d->iface->previewSixteenBit();
-    bool hasAlpha   = d->iface->previewHasAlpha();
-    d->preview      = DImg(width, height, sixteenBit, hasAlpha, data.data());
+    d->iface   = new ImageIface(w, h);
+    d->preview = d->iface->getPreviewImg();
     d->preview.setIccProfile( d->iface->getOriginalImg()->getIccProfile() );
     d->preview.convertToEightBit();
 
-    d->pixmap = new QPixmap(w, h);
-    d->image  = QRect(0, 0, d->iface->originalWidth(), d->iface->originalHeight());
-    d->rect   = QRect(w/2-d->preview.width()/2, h/2-d->preview.height()/2,
-                      d->preview.width(), d->preview.height());
+    d->pixmap  = new QPixmap(w, h);
+    d->image   = QRect(0, 0, d->iface->originalWidth(), d->iface->originalHeight());
+    d->rect    = QRect(w/2-d->preview.width()/2, h/2-d->preview.height()/2,
+                       d->preview.width(), d->preview.height());
 
     updatePixmap();
     setGoldenGuideTypes(true, false, false, false, false, false);
@@ -231,21 +226,15 @@ void ImageSelectionWidget::resizeEvent(QResizeEvent* e)
 {
     delete d->pixmap;
 
-    int w           = e->size().width();
-    int h           = e->size().height();
-
-    QScopedArrayPointer<uchar> data(d->iface->setPreviewImageSize(w, h));
-    int width       = d->iface->previewWidth();
-    int height      = d->iface->previewHeight();
-    bool sixteenBit = d->iface->previewSixteenBit();
-    bool hasAlpha   = d->iface->previewHasAlpha();
-    d->preview      = DImg(width, height, sixteenBit, hasAlpha, data.data());
+    int w      = e->size().width();
+    int h      = e->size().height();
+    d->preview = d->iface->setPreviewImgSize(w, h);
     d->preview.setIccProfile( d->iface->getOriginalImg()->getIccProfile() );
     d->preview.convertToEightBit();
 
-    d->pixmap = new QPixmap(w, h);
-    d->rect   = QRect(w/2-d->preview.width()/2, h/2-d->preview.height()/2,
-                      d->preview.width(), d->preview.height());
+    d->pixmap  = new QPixmap(w, h);
+    d->rect    = QRect(w/2-d->preview.width()/2, h/2-d->preview.height()/2,
+                       d->preview.width(), d->preview.height());
 
     // Drawing the gray overlay
     {

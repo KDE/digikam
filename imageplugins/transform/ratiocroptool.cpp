@@ -1058,22 +1058,16 @@ void RatioCropTool::finalRendering()
 
     QRect currentRegion    = d->imageSelectionWidget->getRegionSelection();
     ImageIface* iface      = d->imageSelectionWidget->imageIface();
-    int w                  = iface->originalWidth();
-    int h                  = iface->originalHeight();
-    bool a                 = iface->originalHasAlpha();
-    bool sb                = iface->originalSixteenBit();
     QRect normalizedRegion = getNormalizedRegion();
-
-    QScopedArrayPointer<uchar> data(iface->getOriginalImage());
-    DImg imOrg(w, h, sb, a, data.data());
+    DImg imOrg             = iface->getOriginalImg()->copy();
 
     imOrg.crop(normalizedRegion);
     FilterAction action("digikam:RatioCrop", 1);
 
     action.setDisplayableName(i18n("Aspect Ratio Crop"));
-    action.addParameter("x", currentRegion.x());
-    action.addParameter("y", currentRegion.y());
-    action.addParameter("width", currentRegion.width());
+    action.addParameter("x",      currentRegion.x());
+    action.addParameter("y",      currentRegion.y());
+    action.addParameter("width",  currentRegion.width());
     action.addParameter("height", currentRegion.height());
 
     iface->putOriginalImage(i18n("Aspect Ratio Crop"), action, imOrg.bits(), imOrg.width(), imOrg.height());
