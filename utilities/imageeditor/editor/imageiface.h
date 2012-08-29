@@ -192,7 +192,7 @@ public:
 
     /** Deprecated : use setPreviewImgSize() instead
      */
-    KDE_DEPRECATED  uchar* setPreviewImageSize(int w, int h) const;
+    KDE_DEPRECATED uchar* setPreviewImageSize(int w, int h) const;
 
 private:
 

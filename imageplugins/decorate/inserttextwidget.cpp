@@ -6,7 +6,7 @@
  * Date        : 2005-02-14
  * Description : a widget to insert a text over an image.
  *
- * Copyright (C) 2005-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -52,12 +52,11 @@
 namespace DigikamDecorateImagePlugin
 {
 
-class InsertTextWidget::InsertTextWidgetPriv
+class InsertTextWidget::Private
 {
 public:
 
-    InsertTextWidgetPriv() :
-        data(0),
+    Private() :
         currentMoving(false),
         textBorder(false),
         textTransparent(false),
@@ -72,8 +71,6 @@ public:
         iface(0)
     {
     }
-
-    uchar*      data;
 
     bool        currentMoving;
     bool        textBorder;
@@ -104,9 +101,9 @@ public:
     ImageIface* iface;
 };
 
-InsertTextWidget::InsertTextWidget(int w, int h, QWidget* parent)
+InsertTextWidget::InsertTextWidget(int w, int h, QWidget* const parent)
     : QWidget(parent),
-      d(new InsertTextWidgetPriv)
+      d(new Private)
 {
     d->currentMoving   = false;
     d->bgColor         = palette().color(QPalette::Background);
@@ -114,7 +111,6 @@ InsertTextWidget::InsertTextWidget(int w, int h, QWidget* parent)
     d->transparency    = 210;
 
     d->iface  = new ImageIface(w, h);
-    d->data   = d->iface->getPreviewImage();
     d->w      = d->iface->previewWidth();
     d->h      = d->iface->previewHeight();
     d->pixmap = new QPixmap(w, h);
@@ -130,7 +126,6 @@ InsertTextWidget::InsertTextWidget(int w, int h, QWidget* parent)
 
 InsertTextWidget::~InsertTextWidget()
 {
-    delete [] d->data;
     delete d->iface;
     delete d->pixmap;
     delete d;
@@ -330,7 +325,7 @@ void InsertTextWidget::makePixmap()
    if destPainter is not null, draw directly using the painter.
    Returns modified area of image.
 */
-QRect InsertTextWidget::composeImage(DImg* image, QPainter* destPainter,
+QRect InsertTextWidget::composeImage(DImg* const image, QPainter* const destPainter,
                                      int x, int y,
                                      QFont font, float pointSize, int textRotation, QColor textColor,
                                      int alignMode, const QString& textString,
@@ -649,9 +644,9 @@ void InsertTextWidget::resizeEvent(QResizeEvent* e)
     int textY = d->textRect.y() - d->rect.y();
     int old_w = d->w;
     int old_h = d->h;
-    d->data    = d->iface->setPreviewImageSize(w, h);
-    d->w       = d->iface->previewWidth();
-    d->h       = d->iface->previewHeight();
+    d->iface->setPreviewImgSize(w, h);
+    d->w      = d->iface->previewWidth();
+    d->h      = d->iface->previewHeight();
 
     d->pixmap = new QPixmap(w, h);
     d->rect = QRect(w/2-d->w/2, h/2-d->h/2, d->w, d->h);
@@ -661,10 +656,10 @@ void InsertTextWidget::resizeEvent(QResizeEvent* e)
         int textWidth  = d->textRect.width();
         int textHeight = d->textRect.height();
 
-        textX = lroundf( textX * (float)d->w / (float)old_w );
-        textY = lroundf( textY * (float)d->h / (float)old_h );
-        textWidth  = lroundf(textWidth  * (float)d->w / (float)old_w );
-        textHeight = lroundf(textHeight * (float)d->h / (float)old_h );
+        textX      = lroundf(textX      * (float)d->w / (float)old_w);
+        textY      = lroundf(textY      * (float)d->h / (float)old_h);
+        textWidth  = lroundf(textWidth  * (float)d->w / (float)old_w);
+        textHeight = lroundf(textHeight * (float)d->h / (float)old_h);
 
         d->textRect.setX(textX + d->rect.x());
         d->textRect.setY(textY + d->rect.y());
