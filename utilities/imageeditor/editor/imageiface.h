@@ -182,17 +182,6 @@ public:
 
     // Deprecated methods ------------------------------------------------------------------------------------------------
 
-    /** Use getPreviewImg() instead
-     */
-    KDE_DEPRECATED uchar* getPreviewImage() const;
-
-    /** Use getOriginalImg() instead
-     */
-    KDE_DEPRECATED uchar* getOriginalImage() const;
-
-    /** Use setPreviewImgSize() instead
-     */
-    KDE_DEPRECATED uchar* setPreviewImageSize(int w, int h) const;
 
 private:
 

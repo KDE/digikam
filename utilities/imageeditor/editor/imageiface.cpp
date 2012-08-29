@@ -66,6 +66,10 @@ public:
 
     QPixmap checkPixmap();
 
+    uchar*  getPreviewImage();
+
+    uchar*  setPreviewImageSize(int w, int h);
+    
 public:
 
     bool    usePreviewSelection;
@@ -103,6 +107,79 @@ QPixmap ImageIface::Private::checkPixmap()
 
     return qcheck;
 }
+
+uchar* ImageIface::Private::getPreviewImage()
+{
+    if (previewImage.isNull())
+    {
+        DImg* im = 0;
+
+        if (!usePreviewSelection)
+        {
+            im = DImgInterface::defaultInterface()->getImg();
+
+            if (!im || im->isNull())
+            {
+                return 0;
+            }
+        }
+        else
+        {
+            int    x, y, w, h;
+            bool   s    = DImgInterface::defaultInterface()->sixteenBit();
+            bool   a    = DImgInterface::defaultInterface()->hasAlpha();
+
+            QScopedArrayPointer<uchar> data(DImgInterface::defaultInterface()->getImageSelection());
+
+            DImgInterface::defaultInterface()->getSelectedArea(x, y, w, h);
+            im = new DImg(w, h, s, a, data.data(), true);
+
+            if (!im)
+            {
+                return 0;
+            }
+
+            if (im->isNull())
+            {
+                delete im;
+                return 0;
+            }
+
+            im->setIccProfile(DImgInterface::defaultInterface()->getEmbeddedICC());
+        }
+
+        QSize sz(im->width(), im->height());
+        sz.scale(constrainWidth, constrainHeight, Qt::KeepAspectRatio);
+
+        previewImage  = im->smoothScale(sz.width(), sz.height());
+        previewWidth  = previewImage.width();
+        previewHeight = previewImage.height();
+
+        // only create another copy if needed, in putPreviewImage
+        targetPreviewImage = previewImage;
+
+        if (usePreviewSelection)
+        {
+            delete im;
+        }
+    }
+
+    DImg previewData = previewImage.copyImageData();
+    return previewData.stripImageData();
+}
+
+uchar* ImageIface::Private::setPreviewImageSize(int w, int h)
+{
+    previewImage.reset();
+    targetPreviewImage.reset();
+
+    constrainWidth  = w;
+    constrainHeight = h;
+
+    return (getPreviewImage());
+}
+
+// ------------------------------------------------------------------------------------------------------
 
 ImageIface::ImageIface(int w, int h)
     : d(new Private)
@@ -164,12 +241,12 @@ DColor ImageIface::getColorInfoFromTargetPreviewImage(const QPoint& point) const
 
 DImg ImageIface::setPreviewImgSize(int w, int h) const
 {
-    return DImg(previewWidth(), previewHeight(), previewSixteenBit(), previewHasAlpha(), setPreviewImageSize(w, h));
+    return DImg(previewWidth(), previewHeight(), previewSixteenBit(), previewHasAlpha(), d->setPreviewImageSize(w, h));
 }
 
 DImg ImageIface::getPreviewImg() const
 {
-    return DImg (previewWidth(), previewHeight(), previewSixteenBit(), previewHasAlpha(), getPreviewImage());
+    return DImg (previewWidth(), previewHeight(), previewSixteenBit(), previewHasAlpha(), d->getPreviewImage());
 }
 
 DImg* ImageIface::getOriginalImg() const
@@ -348,90 +425,6 @@ void ImageIface::paint(QPaintDevice* device, int x, int y, int w, int h, QPainte
 }
 
 // Deprecated methods ------------------------------------------------------------------------------------------------
-
-uchar* ImageIface::getPreviewImage() const
-{
-    if (d->previewImage.isNull())
-    {
-        DImg* im = 0;
-
-        if (!d->usePreviewSelection)
-        {
-            im = DImgInterface::defaultInterface()->getImg();
-
-            if (!im || im->isNull())
-            {
-                return 0;
-            }
-        }
-        else
-        {
-            int    x, y, w, h;
-            bool   s    = DImgInterface::defaultInterface()->sixteenBit();
-            bool   a    = DImgInterface::defaultInterface()->hasAlpha();
-
-            QScopedArrayPointer<uchar> data(DImgInterface::defaultInterface()->getImageSelection());
-
-            DImgInterface::defaultInterface()->getSelectedArea(x, y, w, h);
-            im = new DImg(w, h, s, a, data.data(), true);
-
-            if (!im)
-            {
-                return 0;
-            }
-
-            if (im->isNull())
-            {
-                delete im;
-                return 0;
-            }
-
-            im->setIccProfile(DImgInterface::defaultInterface()->getEmbeddedICC());
-        }
-
-        QSize sz(im->width(), im->height());
-        sz.scale(d->constrainWidth, d->constrainHeight, Qt::KeepAspectRatio);
-
-        d->previewImage  = im->smoothScale(sz.width(), sz.height());
-        d->previewWidth  = d->previewImage.width();
-        d->previewHeight = d->previewImage.height();
-
-        // only create another copy if needed, in putPreviewImage
-        d->targetPreviewImage = d->previewImage;
-
-        if (d->usePreviewSelection)
-        {
-            delete im;
-        }
-    }
-
-    DImg previewData = d->previewImage.copyImageData();
-    return previewData.stripImageData();
-}
-
-uchar* ImageIface::getOriginalImage() const
-{
-    DImg* im = DImgInterface::defaultInterface()->getImg();
-
-    if (!im || im->isNull())
-    {
-        return 0;
-    }
-
-    DImg origData = im->copyImageData();
-    return origData.stripImageData();
-}
-
-uchar* ImageIface::setPreviewImageSize(int w, int h) const
-{
-    d->previewImage.reset();
-    d->targetPreviewImage.reset();
-
-    d->constrainWidth  = w;
-    d->constrainHeight = h;
-
-    return (getPreviewImage());
-}
 
 uchar* ImageIface::getImageSelection() const
 {
