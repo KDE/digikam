@@ -233,6 +233,7 @@ InPaintingTool::InPaintingTool(QObject* parent)
     GreycstorationContainer defaults;
     defaults.setInpaintingDefaultSettings();
     d->settingsWidget->setDefaultSettings(defaults);
+    init();
 }
 
 InPaintingTool::~InPaintingTool()
@@ -352,9 +353,7 @@ void InPaintingTool::processCImgUrl(const QString& url)
 void InPaintingTool::prepareEffect()
 {
     ImageIface iface(0, 0);
-    QScopedArrayPointer<uchar> data(iface.getOriginalImage());
-    d->originalImage = DImg(iface.originalWidth(), iface.originalHeight(),
-                            iface.originalSixteenBit(), iface.originalHasAlpha(), data.data());
+    d->originalImage = iface.getOriginalImg()->copy();
 
     // Selected area from the image and mask creation:
     //

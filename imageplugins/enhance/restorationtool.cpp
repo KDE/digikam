@@ -194,6 +194,7 @@ RestorationTool::RestorationTool(QObject* parent)
     GreycstorationContainer defaults;
     defaults.setRestorationDefaultSettings();
     d->settingsWidget->setDefaultSettings(defaults);
+    init();
 }
 
 RestorationTool::~RestorationTool()
@@ -327,9 +328,7 @@ void RestorationTool::prepareEffect()
 void RestorationTool::prepareFinal()
 {
     ImageIface iface(0, 0);
-    QScopedArrayPointer<uchar> data(iface.getOriginalImage());
-    DImg originalImage(iface.originalWidth(), iface.originalHeight(),
-                       iface.originalSixteenBit(), iface.originalHasAlpha(), data.data());
+    DImg originalImage = iface.getOriginalImg()->copy();
 
     setFilter(new GreycstorationFilter(&originalImage,
                                        d->settingsWidget->settings(), GreycstorationFilter::Restore,
