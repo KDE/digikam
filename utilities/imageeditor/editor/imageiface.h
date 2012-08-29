@@ -60,6 +60,8 @@ public:
      */
     void setPreviewType(bool useSelect = false);
 
+    DImg setPreviewImgSize(int w, int h) const;
+    
     /** Return 'true' if the preview is rendered using the current selection in editor.
      *  Return 'false' if the preview is rendered using the full image in editor.
      */
@@ -149,12 +151,6 @@ public:
      */
     PhotoInfoContainer getPhotographInformation() const;
 
-    /** Sets preview size and returns new preview data as with getPreviewImage.
-     *  The parameters are only hints, previewWidth() and previewHeight()
-     *  may differ from w and h.
-     */
-    uchar* setPreviewImageSize(int w, int h) const;
-
     /** Standard methods to get image selection information.
      */
     int  selectedWidth()  const;
@@ -196,7 +192,14 @@ public:
      *  Deprecated : use getOriginalImg() instead
      */
     KDE_DEPRECATED uchar* getOriginalImage() const;
-        
+
+    /** Sets preview size and returns new preview data as with getPreviewImage.
+     *  The parameters are only hints, previewWidth() and previewHeight()
+     *  may differ from w and h.
+     *  Deprecated : use setPreviewImgSize() instead
+     */
+    KDE_DEPRECATED  uchar* setPreviewImageSize(int w, int h) const;
+
 private:
 
     class Private;

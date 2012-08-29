@@ -6,7 +6,7 @@
  * Date        : 2004-11-16
  * Description : a widget to display an image with guides
  *
- * Copyright (C) 2004-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -54,11 +54,11 @@ namespace Digikam
 static const KLocalizedString beforeLabel = ki18nc("Preview image (before filter has been applied)", "Before");
 static const KLocalizedString afterLabel  = ki18nc("Preview image (after filter has been applied)", "After");
 
-class ImageGuideWidget::ImageGuideWidgetPriv
+class ImageGuideWidget::Private
 {
 public:
 
-    ImageGuideWidgetPriv() :
+    Private() :
         sixteenBit(false),
         focus(false),
         spotVisible(false),
@@ -123,11 +123,11 @@ public:
     DImg        preview;
 };
 
-ImageGuideWidget::ImageGuideWidget(QWidget* parent,
+ImageGuideWidget::ImageGuideWidget(QWidget* const parent,
                                    bool spotVisible, int guideMode,
                                    const QColor& guideColor, int guideSize,
                                    bool blink, bool useImageSelection)
-    : QWidget(parent), d(new ImageGuideWidgetPriv)
+    : QWidget(parent), d(new Private)
 {
     int w = 480, h = 320;
     d->spotVisible = spotVisible;
@@ -142,14 +142,7 @@ ImageGuideWidget::ImageGuideWidget(QWidget* parent,
 
     d->iface        = new ImageIface(w, h);
     d->iface->setPreviewType(useImageSelection);
-
-    QScopedArrayPointer<uchar> data(d->iface->getPreviewImage());
-
-    d->width        = d->iface->previewWidth();
-    d->height       = d->iface->previewHeight();
-    bool sixteenBit = d->iface->previewSixteenBit();
-    bool hasAlpha   = d->iface->previewHasAlpha();
-    d->preview      = DImg(d->width, d->height, sixteenBit, hasAlpha, data.data());
+    d->preview      = d->iface->getPreviewImg();
     d->preview.setIccProfile(d->iface->getOriginalImg()->getIccProfile());
 
     d->pixmap        = new QPixmap(w, h);
@@ -179,7 +172,6 @@ ImageGuideWidget::~ImageGuideWidget()
     delete d->pixmap;
     delete d->maskPixmap;
     delete d->previewPixmap;
-
     delete d;
 }
 
@@ -549,18 +541,11 @@ void ImageGuideWidget::resizeEvent(QResizeEvent* e)
     delete d->pixmap;
     delete d->previewPixmap;
 
-    int w     = e->size().width();
-    int h     = e->size().height();
-    int old_w = d->width;
-    int old_h = d->height;
-
-    QScopedArrayPointer<uchar> data(d->iface->setPreviewImageSize(w, h));
-
-    d->width        = d->iface->previewWidth();
-    d->height       = d->iface->previewHeight();
-    bool sixteenBit = d->iface->previewSixteenBit();
-    bool hasAlpha   = d->iface->previewHasAlpha();
-    d->preview      = DImg(d->width, d->height, sixteenBit, hasAlpha, data.data());
+    int w             = e->size().width();
+    int h             = e->size().height();
+    int old_w         = d->width;
+    int old_h         = d->height;
+    d->preview        = d->iface->setPreviewImgSize(w, h);
     d->preview.setIccProfile(d->iface->getOriginalImg()->getIccProfile());
 
     d->pixmap         = new QPixmap(w, h);
@@ -572,6 +557,7 @@ void ImageGuideWidget::resizeEvent(QResizeEvent* e)
     d->spot.setX((int)((float)d->spot.x() * ((float)d->width  / (float)old_w)));
     d->spot.setY((int)((float)d->spot.y() * ((float)d->height / (float)old_h)));
     updatePixmap();
+
     blockSignals(false);
     emit signalResized();
 }
