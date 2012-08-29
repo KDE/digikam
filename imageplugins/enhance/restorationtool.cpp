@@ -194,6 +194,7 @@ RestorationTool::RestorationTool(QObject* parent)
     GreycstorationContainer defaults;
     defaults.setRestorationDefaultSettings();
     d->settingsWidget->setDefaultSettings(defaults);
+    init();
 }
 
 RestorationTool::~RestorationTool()
