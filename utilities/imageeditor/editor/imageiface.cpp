@@ -246,12 +246,18 @@ DImg ImageIface::setPreviewImgSize(int w, int h) const
 
 DImg ImageIface::getPreviewImg() const
 {
-    return DImg (previewWidth(), previewHeight(), previewSixteenBit(), previewHasAlpha(), d->getPreviewImage());
+    return DImg(previewWidth(), previewHeight(), previewSixteenBit(), previewHasAlpha(), d->getPreviewImage());
 }
 
 DImg* ImageIface::getOriginalImg() const
 {
     return DImgInterface::defaultInterface()->getImg();
+}
+
+DImg ImageIface::getImgSelection() const
+{
+    return DImg(selectedWidth(), selectedHeight(), originalSixteenBit(), originalHasAlpha(),
+                DImgInterface::defaultInterface()->getImageSelection(), false);
 }
 
 void ImageIface::putPreviewIccProfile(const IccProfile& profile)
@@ -425,11 +431,6 @@ void ImageIface::paint(QPaintDevice* device, int x, int y, int w, int h, QPainte
 }
 
 // Deprecated methods ------------------------------------------------------------------------------------------------
-
-uchar* ImageIface::getImageSelection() const
-{
-    return DImgInterface::defaultInterface()->getImageSelection();
-}
 
 void ImageIface::putPreviewImage(uchar* data)
 {

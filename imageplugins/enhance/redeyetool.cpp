@@ -385,13 +385,8 @@ void RedEyeTool::slotEffect()
     // Here, we need to use the real selection image data because we will apply
     // a Gaussian blur filter on pixels and we cannot use directly the preview scaled image
     // else the blur radius will not give the same result between preview and final rendering.
-    ImageIface* iface          = d->previewWidget->imageIface();
-    d->destinationPreviewData  = iface->getImageSelection();
-    int w                      = iface->selectedWidth();
-    int h                      = iface->selectedHeight();
-    bool sb                    = iface->originalSixteenBit();
-    bool a                     = iface->originalHasAlpha();
-    DImg selection(w, h, sb, a, d->destinationPreviewData);
+    ImageIface* iface = d->previewWidget->imageIface();
+    DImg selection    = iface->getImgSelection();
 
     redEyeFilter(selection);
 
@@ -403,7 +398,7 @@ void RedEyeTool::slotEffect()
     // Update histogram.
 
     memcpy(d->destinationPreviewData, selection.bits(), selection.numBytes());
-    d->gboxSettings->histogramBox()->histogram()->updateData(d->destinationPreviewData, w, h, sb, 0, 0, 0, false);
+    d->gboxSettings->histogramBox()->histogram()->updateData(d->destinationPreviewData, selection.width(), selection.height(), selection.sixteenBit(), 0, 0, 0, false);
 
     kapp->restoreOverrideCursor();
 }
@@ -413,12 +408,7 @@ void RedEyeTool::finalRendering()
     kapp->setOverrideCursor( Qt::WaitCursor );
 
     ImageIface* iface = d->previewWidget->imageIface();
-    QScopedArrayPointer<uchar> data(iface->getImageSelection());
-    int w             = iface->selectedWidth();
-    int h             = iface->selectedHeight();
-    bool sixteenBit   = iface->originalSixteenBit();
-    bool hasAlpha     = iface->originalHasAlpha();
-    DImg selection(w, h, sixteenBit, hasAlpha, data.data());
+    DImg selection    = iface->getImgSelection();
 
     redEyeFilter(selection);
 

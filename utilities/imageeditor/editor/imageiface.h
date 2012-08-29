@@ -75,6 +75,10 @@ public:
      */
     DImg getPreviewImg() const;
 
+    /** Return a DImg object representing the current original image selection.
+     */
+    DImg getImgSelection() const;
+    
     /** Return a pointer to the DImg object representing the original image.
      *  This object may not be modified or stored. Make copies if you need.
      */
@@ -83,15 +87,6 @@ public:
     /** Set the color profile of the original image.
      */
     void   putOriginalIccProfile(const IccProfile& profile);
-
-    /** Replace the data of the current original image selection with the given data.
-     *  The characteristics of the data must match the characteristics of the current
-     *  selection as returned by the selectionWidth(), selectionHeight(),
-     *  originalSixteenBit() and originalHasAlpha() methods.
-     *  No ownership of the data pointer is assumed.
-     *  Caller is an i18n'ed string that will be shown as the undo/redo action name.
-     */
-    void   putImageSelection(const QString& caller, const FilterAction& action, uchar* const data);
 
     /** Set the color profile of the preview image.
      */
@@ -155,6 +150,15 @@ public:
 
     // Deprecated methods ------------------------------------------------------------------------------------------------
 
+    /** Replace the data of the current original image selection with the given data.
+     *  The characteristics of the data must match the characteristics of the current
+     *  selection as returned by the selectionWidth(), selectionHeight(),
+     *  originalSixteenBit() and originalHasAlpha() methods.
+     *  No ownership of the data pointer is assumed.
+     *  Caller is an i18n'ed string that will be shown as the undo/redo action name.
+     */
+    /*KDE_DEPRECATED*/ void putImageSelection(const QString& caller, const FilterAction& action, uchar* const data);
+    
     /** Replace the stored target preview data with the given data.
      *  The characteristics of the data must match the characteristics of the current
      *  as returned by the preview...() methods.
@@ -163,14 +167,7 @@ public:
      *  The data returned by getPreviewImage() is unaffected.
      *  No ownership of the data pointer is assumed.
      */
-    KDE_DEPRECATED void putPreviewImage(uchar* const data);
-
-    /** Return image data for the current original image selection.
-     *  The selectionWidth(), selectionHeight(), originalSixteenBit()
-     *  and originalHasAlpha() methods provide the characteristics of the data.
-     *  Ownership of the returned buffer is passed to the caller.
-     */
-    KDE_DEPRECATED uchar* getImageSelection() const;
+    /*KDE_DEPRECATED*/ void putPreviewImage(uchar* const data);
 
     /** Replace the image data of the original image with the given data.
      *  The characteristics of the data must match the characteristics of
@@ -180,7 +177,7 @@ public:
      *  If w == -1 and h == -1, the size is unchanged.
      *  Caller is an i18n'ed string that will be shown as the undo/redo action name.
      */
-    KDE_DEPRECATED void putOriginalImage(const QString& caller, const FilterAction& action, uchar* const data, int w = -1, int h = -1);
+    /*KDE_DEPRECATED*/ void putOriginalImage(const QString& caller, const FilterAction& action, uchar* const data, int w = -1, int h = -1);
 
 private:
 
