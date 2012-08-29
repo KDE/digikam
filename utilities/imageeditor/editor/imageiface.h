@@ -60,6 +60,10 @@ public:
      */
     void setPreviewType(bool useSelect = false);
 
+    /** Sets preview size and returns new preview as with getPreviewImg.
+     *  The parameters are only hints, previewWidth() and previewHeight()
+     *  may differ from w and h.
+     */
     DImg setPreviewImgSize(int w, int h) const;
     
     /** Return 'true' if the preview is rendered using the current selection in editor.
@@ -178,25 +182,15 @@ public:
 
     // Deprecated methods ------------------------------------------------------------------------------------------------
 
-    /** Return image data for the current, scaled preview image.
-     *  The preview...() methods provide the characteristics of the data
-     *  (width, height, sixteen bit, alpha).
-     *  Ownership of the returned buffer is passed to the caller.
-     *  Deprecated : use getPreviewImg() instead
+    /** Deprecated : use getPreviewImg() instead
      */
     KDE_DEPRECATED uchar* getPreviewImage() const;
 
-    /** Return image data for the original image.
-     *  The preview...() methods provide the characteristics of the data.
-     *  Ownership of the returned buffer is passed to the caller.
-     *  Deprecated : use getOriginalImg() instead
+    /** Deprecated : use getOriginalImg() instead
      */
     KDE_DEPRECATED uchar* getOriginalImage() const;
 
-    /** Sets preview size and returns new preview data as with getPreviewImage.
-     *  The parameters are only hints, previewWidth() and previewHeight()
-     *  may differ from w and h.
-     *  Deprecated : use setPreviewImgSize() instead
+    /** Deprecated : use setPreviewImgSize() instead
      */
     KDE_DEPRECATED  uchar* setPreviewImageSize(int w, int h) const;
 
