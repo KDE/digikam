@@ -241,7 +241,8 @@ DColor ImageIface::getColorInfoFromTargetPreviewImage(const QPoint& point) const
 
 DImg ImageIface::setPreviewImgSize(int w, int h) const
 {
-    return DImg(previewWidth(), previewHeight(), previewSixteenBit(), previewHasAlpha(), d->setPreviewImageSize(w, h));
+    uchar* const data = d->setPreviewImageSize(w, h);
+    return DImg(previewWidth(), previewHeight(), previewSixteenBit(), previewHasAlpha(), data);
 }
 
 DImg ImageIface::getPreviewImg() const
