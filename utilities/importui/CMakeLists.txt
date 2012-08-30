@@ -1,5 +1,5 @@
 SET(libimportui_SRCS
-    ${CMAKE_CURRENT_SOURCE_DIR}/main/cameraui.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/main/importui.cpp
 
     ${CMAKE_CURRENT_SOURCE_DIR}/backend/cameracontroller.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/backend/camerahistoryupdater.cpp
@@ -50,4 +50,4 @@ SET(libimportui_SRCS
 
 KDE4_ADD_LIBRARY(importui STATIC ${libimportui_SRCS})
 
-INSTALL(FILES main/cameraui.rc DESTINATION ${DATA_INSTALL_DIR}/digikam)
+INSTALL(FILES main/importui.rc DESTINATION ${DATA_INSTALL_DIR}/digikam)

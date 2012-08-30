@@ -579,7 +579,7 @@ void CameraController::executeCommand(CameraCommand* const cmd)
             QString   folder         = cmd->map["folder"].toString();
             QString   file           = cmd->map["file"].toString();
             QString   dest           = cmd->map["dest"].toString();
-            bool      autoRotate     = cmd->map["autoRotate"].toBool();
+            bool      autoRotate     = cmd->map["autoRotate"].toBool(); //TODO: Remove this line.
             bool      fixDateTime    = cmd->map["fixDateTime"].toBool();
             QDateTime newDateTime    = cmd->map["newDateTime"].toDateTime();
             QString   templateTitle  = cmd->map["template"].toString();
@@ -611,14 +611,14 @@ void CameraController::executeCommand(CameraCommand* const cmd)
             {
                 // Possible modification operations. Only apply it to JPEG for the moment.
 
-                if(autoRotate)
+                /*if(autoRotate)
                 {
                     kDebug() << "Exif autorotate: " << file << " using (" << tempURL << ")";
                     sendLogMsg(i18n("EXIF rotating file %1...", file), DHistoryView::StartingEntry, folder, file);
-//                    JpegRotator rotator(tempURL.toLocalFile());
-//                    rotator.setDocumentName(file);
-//                    rotator.autoExifTransform();
-                }
+                    JpegRotator rotator(tempURL.toLocalFile());
+                    rotator.setDocumentName(file);
+                    rotator.autoExifTransform();
+                }*/
 
                 if (!templateTitle.isNull() || fixDateTime)
                 {

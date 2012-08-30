@@ -314,22 +314,22 @@ void ImportIconView::showContextMenuOnInfo(QContextMenuEvent* event, const CamIt
     KMenu popmenu(this);
     ImportContextMenuHelper cmhelper(&popmenu);
 
-    cmhelper.addAction("cameraui_fullscreen");
+    cmhelper.addAction("importui_fullscreen");
     cmhelper.addAction("import_zoomfit2window");
     cmhelper.addSeparator();
     // --------------------------------------------------------
-    cmhelper.addAction("cameraui_imagedownload");
-    cmhelper.addAction("cameraui_imagemarkasdownloaded");
-    cmhelper.addAction("cameraui_imagelock");
-    cmhelper.addAction("cameraui_delete");
+    cmhelper.addAction("importui_imagedownload");
+    cmhelper.addAction("importui_imagemarkasdownloaded");
+    cmhelper.addAction("importui_imagelock");
+    cmhelper.addAction("importui_delete");
     cmhelper.addSeparator();
-    cmhelper.addAction("cameraui_item_view");
+    cmhelper.addAction("importui_item_view");
     cmhelper.addServicesMenu(selectedUrls());
     //TODO: cmhelper.addRotateMenu(selectedImageIDs);
     cmhelper.addSeparator();
     // --------------------------------------------------------
-    cmhelper.addAction("cameraui_selectnone");
-    cmhelper.addAction("cameraui_selectinvert");
+    cmhelper.addAction("importui_selectnone");
+    cmhelper.addAction("importui_selectinvert");
     cmhelper.addSeparator();
     // --------------------------------------------------------
     //cmhelper.addAssignTagsMenu(selectedImageIDs);
@@ -387,9 +387,9 @@ void ImportIconView::showContextMenu(QContextMenuEvent* event)
     KMenu popmenu(this);
     ImportContextMenuHelper cmhelper(&popmenu);
 
-    cmhelper.addAction("cameraui_fullscreen");
+    cmhelper.addAction("importui_fullscreen");
     cmhelper.addSeparator();
-    cmhelper.addAction("cameraui_close");
+    cmhelper.addAction("importui_close");
     // --------------------------------------------------------
 
     cmhelper.exec(event->globalPos());

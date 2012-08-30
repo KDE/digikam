@@ -67,7 +67,7 @@ using namespace KDcrawIface;
 namespace Digikam
 {
 
-class CameraUI::Private
+class ImportUI::Private
 {
 public:
 
@@ -157,6 +157,7 @@ public:
     QStringList                   currentlyDeleting;
     QSet<QString>                 foldersToScan;
     CamItemInfoList               filesToBeAdded;
+    CamItemInfoList               autoRotateItemsList;
 
     KMenu*                        downloadMenu;
     KMenu*                        deleteMenu;
@@ -245,11 +246,11 @@ public:
     DAboutData*                   about;
 };
 
-const QString CameraUI::Private::configGroupName("Camera Settings");
-const QString CameraUI::Private::configUseMetadataDateEntry("UseThemeBackgroundColor");
-const QString CameraUI::Private::configUseDefaultTargetAlbum("UseDefaultTargetAlbum");
-const QString CameraUI::Private::configDefaultTargetAlbumId("DefaultTargetAlbumId");
-const QString CameraUI::Private::importFiltersConfigGroupName("Import Filters");
+const QString ImportUI::Private::configGroupName("Camera Settings");
+const QString ImportUI::Private::configUseMetadataDateEntry("UseThemeBackgroundColor");
+const QString ImportUI::Private::configUseDefaultTargetAlbum("UseDefaultTargetAlbum");
+const QString ImportUI::Private::configDefaultTargetAlbumId("DefaultTargetAlbumId");
+const QString ImportUI::Private::importFiltersConfigGroupName("Import Filters");
 
 }  // namespace Digikam
 

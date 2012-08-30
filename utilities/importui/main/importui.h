@@ -60,19 +60,19 @@ class CameraHistoryUpdater;
 class ImportIconView;
 //class ImportDelegate;
 
-class CameraUI : public KXmlGuiWindow
+class ImportUI : public KXmlGuiWindow
 {
     Q_OBJECT
 
 public:
 
-    CameraUI(QWidget* const parent,
+    ImportUI(QWidget* const parent,
              const QString& cameraTitle,
              const QString& model, const QString& port,
              const QString& path, int startIndex);
-    ~CameraUI();
+    ~ImportUI();
 
-    static CameraUI* instance();
+    static ImportUI* instance();
 
     bool isBusy() const;
     bool isClosed() const;
@@ -135,6 +135,7 @@ private:
                             CamItemInfoList& deleteList, CamItemInfoList& lockedList);
 
     QString identifyCategoryforMime(const QString& mime);
+    void autoRotateItems();
 
 private Q_SLOTS:
 
@@ -227,7 +228,7 @@ private:
     class Private;
     Private* const d;
 
-    static CameraUI* m_instance;
+    static ImportUI* m_instance;
 };
 
 }  // namespace Digikam

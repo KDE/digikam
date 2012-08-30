@@ -66,7 +66,7 @@ namespace Digikam
 {
 
 class DCOPIface;
-class CameraUI;
+class ImportUI;
 class SearchTextBar;
 class FilterStatusBar;
 class TagsActionMngr;
@@ -313,7 +313,7 @@ public:
     QActionGroup*                       solidUsmActionGroup;
     QActionGroup*                       exifOrientationActionGroup;
 
-    QMap<QString, QPointer<CameraUI> >  cameraUIMap;
+    QMap<QString, QPointer<ImportUI> >  cameraUIMap;
 
     QEventLoop*                         eventLoop;
     QString                             solidErrorMessage;

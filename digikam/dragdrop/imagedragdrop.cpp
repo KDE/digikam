@@ -41,7 +41,7 @@
 // Local includes
 
 #include "albummanager.h"
-#include "cameraui.h"
+#include "importui.h"
 #include "ddragobjects.h"
 #include "dio.h"
 #include "imagecategorizedview.h"
@@ -540,7 +540,7 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
             return false;
         }
 
-        CameraUI* ui = dynamic_cast<CameraUI*>(e->source());
+        ImportUI* ui = dynamic_cast<ImportUI*>(e->source());
 
         if (!ui)
         {

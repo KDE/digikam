@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-10-16
- * Description : history updater thread for cameraui
+ * Description : history updater thread for importui
  *
  * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at gmail dot com>
  *

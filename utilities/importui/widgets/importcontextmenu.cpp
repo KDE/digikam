@@ -42,7 +42,7 @@
 
 // Local includes
 
-#include "cameraui.h"
+#include "importui.h"
 #include "picklabelwidget.h"
 #include "colorlabelwidget.h"
 #include "ratingwidget.h"
@@ -104,7 +104,7 @@ ImportContextMenuHelper::ImportContextMenuHelper(QMenu* const parent, KActionCol
 
     if (!actionCollection)
     {
-        d->stdActionCollection = CameraUI::instance()->actionCollection();
+        d->stdActionCollection = ImportUI::instance()->actionCollection();
     }
     else
     {

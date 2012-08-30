@@ -35,7 +35,7 @@
 
 // Local includes
 
-#include "cameraui.h"
+#include "importui.h"
 #include "importiconview.h"
 #include "importstackedview.h"
 #include "thumbnailsize.h"
@@ -82,7 +82,7 @@ public:
     QTimer*                       selectionTimer;
     QTimer*                       thumbSizeTimer;
 
-    CameraUI*                     parent;
+    ImportUI*                     parent;
 
     ImportIconView*               iconView;
     //TODO: MapWidgetView*        mapView;
@@ -109,10 +109,10 @@ void ImportView::Private::addPageUpDownActions(ImportView* const q, QWidget* con
             q, SLOT(slotPrevItem()));
 }
 
-ImportView::ImportView(CameraUI* const ui, QWidget* const parent)
+ImportView::ImportView(ImportUI* const ui, QWidget* const parent)
     : KHBox(parent), d(new Private)
 {
-    d->parent   = static_cast<CameraUI*>(ui);
+    d->parent   = static_cast<ImportUI*>(ui);
     d->splitter = new SidebarSplitter;
     d->splitter->setFrameStyle(QFrame::NoFrame);
     d->splitter->setFrameShadow(QFrame::Plain);
@@ -164,7 +164,7 @@ void ImportView::refreshView()
 
 void ImportView::setupConnections()
 {
-    // -- CameraUI connections ----------------------------------
+    // -- ImportUI connections ----------------------------------
 
     connect(d->parent, SIGNAL(signalEscapePressed()),
             this, SLOT(slotEscapePreview()));
@@ -230,8 +230,8 @@ void ImportView::setupConnections()
 
     // -- Import Settings ----------------
 
-    connect(ImportSettings::instance(), SIGNAL(setupChanged()),
-            this, SLOT(slotSidebarTabTitleStyleChanged()));
+    //connect(ImportSettings::instance(), SIGNAL(setupChanged()),
+            //this, SLOT(slotSidebarTabTitleStyleChanged()));
 }
 
 /*void ImportView::connectIconViewFilter(FilterStatusBar* filterbar)

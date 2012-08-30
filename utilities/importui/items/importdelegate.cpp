@@ -718,7 +718,6 @@ void ImportNormalDelegate::updateRects()
     //TODO: d->pickLabelRect   = QRect(d->margin, y, iconSize, iconSize);
     //TODO: d->groupRect       = QRect(d->contentWidth - iconSize, y, iconSize, iconSize);
     d->downloadRect     =  QRect(d->contentWidth - iconSize - 14, d->pixmapRect.top(), iconSize, iconSize);
-    //TODO: Change position.
     d->lockRect         =  QRect(d->contentWidth - iconSize + 2, d->pixmapRect.top(), iconSize, iconSize);
 
     //TODO: Implement rating in import tool.

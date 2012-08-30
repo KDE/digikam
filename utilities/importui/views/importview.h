@@ -32,13 +32,13 @@
 
 #include "camiteminfo.h"
 #include "sidebarwidget.h"
-#include "cameraui.h"
+#include "importui.h"
 #include "importmodel.h"
 
 namespace Digikam
 {
 
-class CameraUI;
+class ImportUI;
 
 class ImportView : public KHBox
 {
@@ -46,7 +46,7 @@ class ImportView : public KHBox
 
 public:
 
-    ImportView(CameraUI* const ui, QWidget* const parent);
+    ImportView(ImportUI* const ui, QWidget* const parent);
     ~ImportView();
 
     void applySettings();

@@ -22,7 +22,6 @@
  * ============================================================ */
 
 #include "importoverlays.moc"
-#include "importoverlays.h"
 
 // KDE includes
 

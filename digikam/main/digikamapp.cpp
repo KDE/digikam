@@ -106,7 +106,7 @@
 #include "albumselectdialog.h"
 #include "albumthumbnailloader.h"
 #include "cameratype.h"
-#include "cameraui.h"
+#include "importui.h"
 #include "cameranamehelper.h"
 #include "collectionscanner.h"
 #include "componentsinfo.h"
@@ -1065,8 +1065,8 @@ void DigikamApp::setupActions()
     connect(imageSortOrderMapper, SIGNAL(mapped(int)), d->view, SLOT(slotSortImagesOrder(int)));
     actionCollection()->addAction("image_sort_order", d->imageSortOrderAction);
 
-    QAction* sortAscendingAction = d->imageSortOrderAction->addAction(i18n("Ascending"));
-    QAction* sortDescendingAction = d->imageSortOrderAction->addAction(i18n("Descending"));
+    QAction* sortAscendingAction = d->imageSortOrderAction->addAction(KIcon("view-sort-ascending"), i18n("Ascending"));
+    QAction* sortDescendingAction = d->imageSortOrderAction->addAction(KIcon("view-sort-descending"), i18n("Descending"));
 
     connect(sortAscendingAction, SIGNAL(triggered()), imageSortOrderMapper, SLOT(map()));
     connect(sortDescendingAction, SIGNAL(triggered()), imageSortOrderMapper, SLOT(map()));
@@ -1686,8 +1686,8 @@ void DigikamApp::slotOpenCameraUiFromPath(const QString& path)
         return;
     }
 
-    // the CameraUI will delete itself when it has finished
-    CameraUI* cgui = new CameraUI(this, i18n("Images found in %1", path),
+    // the ImportUI will delete itself when it has finished
+    ImportUI* cgui = new ImportUI(this, i18n("Images found in %1", path),
                                   "directory browse", "Fixed", path, 1);
     cgui->show();
 
@@ -1702,23 +1702,23 @@ void DigikamApp::slotOpenManualCamera(QAction* action)
     if (ctype)
     {
         // check not to open two dialogs for the same camera
-        if (ctype->currentCameraUI() && !ctype->currentCameraUI()->isClosed())
+        if (ctype->currentImportUI() && !ctype->currentImportUI()->isClosed())
         {
             // show and raise dialog
-            if (ctype->currentCameraUI()->isMinimized())
+            if (ctype->currentImportUI()->isMinimized())
             {
-                KWindowSystem::unminimizeWindow(ctype->currentCameraUI()->winId());
+                KWindowSystem::unminimizeWindow(ctype->currentImportUI()->winId());
             }
 
-            KWindowSystem::activateWindow(ctype->currentCameraUI()->winId());
+            KWindowSystem::activateWindow(ctype->currentImportUI()->winId());
         }
         else
         {
-            // the CameraUI will delete itself when it has finished
-            CameraUI* cgui = new CameraUI(this, ctype->title(), ctype->model(),
+            // the ImportUI will delete itself when it has finished
+            ImportUI* cgui = new ImportUI(this, ctype->title(), ctype->model(),
                                           ctype->port(), ctype->path(), ctype->startingNumber());
 
-            ctype->setCurrentCameraUI(cgui);
+            ctype->setCurrentImportUI(cgui);
 
             cgui->show();
 
@@ -1764,10 +1764,10 @@ void DigikamApp::slotOpenSolidCamera(QAction* action)
 
 void DigikamApp::openSolidCamera(const QString& udi, const QString& cameraLabel)
 {
-    // if there is already an open CameraUI for the device, show and raise it, and be done
+    // if there is already an open ImportUI for the device, show and raise it, and be done
     if (d->cameraUIMap.contains(udi))
     {
-        CameraUI* ui = d->cameraUIMap.value(udi);
+        ImportUI* ui = d->cameraUIMap.value(udi);
 
         if (ui && !ui->isClosed())
         {
@@ -1817,8 +1817,8 @@ void DigikamApp::openSolidCamera(const QString& udi, const QString& cameraLabel)
             kDebug() << "Found camera from ids " << vendorId << " " << productId
                      << " camera is: " << model << " at " << port;
 
-            // the CameraUI will delete itself when it has finished
-            CameraUI* cgui      = new CameraUI(this, cameraLabel, model, port, "/", 1);
+            // the ImportUI will delete itself when it has finished
+            ImportUI* cgui      = new ImportUI(this, cameraLabel, model, port, "/", 1);
             d->cameraUIMap[udi] = cgui;
 
             cgui->show();
@@ -1843,10 +1843,10 @@ void DigikamApp::openSolidUsmDevice(const QString& udi, const QString& givenLabe
 {
     QString mediaLabel = givenLabel;
 
-    // if there is already an open CameraUI for the device, show and raise it
+    // if there is already an open ImportUI for the device, show and raise it
     if (d->cameraUIMap.contains(udi))
     {
-        CameraUI* ui = d->cameraUIMap.value(udi);
+        ImportUI* ui = d->cameraUIMap.value(udi);
 
         if (ui && !ui->isClosed())
         {
@@ -1907,8 +1907,8 @@ void DigikamApp::openSolidUsmDevice(const QString& udi, const QString& givenLabe
             mediaLabel = path;
         }
 
-        // the CameraUI will delete itself when it has finished
-        CameraUI* cgui      = new CameraUI(this, i18n("Images on %1", mediaLabel),
+        // the ImportUI will delete itself when it has finished
+        ImportUI* cgui      = new ImportUI(this, i18n("Images on %1", mediaLabel),
                                            "directory browse", "Fixed", path, 1);
         d->cameraUIMap[udi] = cgui;
 
@@ -3026,6 +3026,11 @@ void DigikamApp::slotTransformAction()
         d->view->imageTransform(KExiv2Iface::RotationMatrix::NoTransformation);
     }
 }
+//#include "../utilities/importui/backend/camiteminfo.h"
+//void DigikamApp::autoRotateItems(CamItemInfoList& infos)
+//{
+//    d->view->imageTransform(KExiv2Iface::RotationMatrix::NoTransformation);
+//}
 
 #ifdef USE_SCRIPT_IFACE
 void DigikamApp::slotScriptConsole()

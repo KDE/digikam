@@ -41,7 +41,7 @@
 // Local includes
 
 #include "albummanager.h"
-#include "cameraui.h"
+#include "importui.h"
 #include "ddragobjects.h"
 #include "dio.h"
 #include "imageinfo.h"
@@ -250,7 +250,7 @@ bool AlbumDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* 
     // -- DnD from Camera GUI ----------------------------
     else if (DCameraItemListDrag::canDecode(e->mimeData()))
     {
-        CameraUI* ui = dynamic_cast<CameraUI*>(e->source());
+        ImportUI* ui = dynamic_cast<ImportUI*>(e->source());
 
         if (ui)
         {
