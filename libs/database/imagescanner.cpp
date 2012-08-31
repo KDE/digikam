@@ -216,21 +216,8 @@ bool ImageScanner::copyFromSource(qlonglong srcId)
     return true;
 }
 
-void ImageScanner::prepareImage()
-{
-    m_scanInfo.itemName         = m_fileInfo.fileName();
-    m_scanInfo.modificationDate = m_fileInfo.lastModified();
-    m_scanInfo.fileSize         = m_fileInfo.size();
-    // category is set by setCategory
-
-    // the QByteArray is an ASCII hex string
-    m_scanInfo.uniqueHash       = uniqueHash();
-}
-
 void ImageScanner::addImage(int albumId)
 {
-    prepareImage();
-
     m_scanInfo.albumID          = albumId;
     m_scanInfo.status           = DatabaseItem::Visible;
 
@@ -243,8 +230,6 @@ void ImageScanner::addImage(int albumId)
 
 void ImageScanner::updateImage()
 {
-    prepareImage();
-
     DatabaseAccess().db()->updateItem(m_scanInfo.id, m_scanInfo.category,
                                       m_scanInfo.modificationDate, m_scanInfo.fileSize, m_scanInfo.uniqueHash);
 }
@@ -1177,7 +1162,14 @@ void ImageScanner::loadFromDisk()
         m_hasImage = false;
     }
 
-    // faster than loading twice from disk
+    m_scanInfo.itemName         = m_fileInfo.fileName();
+    m_scanInfo.modificationDate = m_fileInfo.lastModified();
+    m_scanInfo.fileSize         = m_fileInfo.size();
+    // category is set by setCategory
+    // NOTE: call uniqueHash after loading the image above, else it will fail
+    m_scanInfo.uniqueHash       = uniqueHash();
+
+   // faster than loading twice from disk
     if (m_hasMetadata)
     {
         m_img.setMetadata(m_metadata.data());

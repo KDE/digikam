@@ -235,7 +235,6 @@ protected:
     void scanVideoFile();
     void scanAudioFile();
 
-    void prepareImage();
     QString uniqueHash();
     QString detectFormat();
     QString detectVideoFormat();
