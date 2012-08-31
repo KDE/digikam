@@ -157,7 +157,7 @@ public:
      *  No ownership of the data pointer is assumed.
      *  Caller is an i18n'ed string that will be shown as the undo/redo action name.
      */
-    /*KDE_DEPRECATED*/ void putImageSelection(const QString& caller, const FilterAction& action, uchar* const data);
+    KDE_DEPRECATED void putImageSelection(const QString& caller, const FilterAction& action, uchar* const data);
 
     /** Replace the stored target preview data with the given data.
      *  The characteristics of the data must match the characteristics of the current

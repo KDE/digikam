@@ -68,8 +68,6 @@ public:
 
     uchar*  getPreviewImage();
 
-    uchar*  setPreviewImageSize(int w, int h);
-
 public:
 
     bool    usePreviewSelection;
@@ -168,17 +166,6 @@ uchar* ImageIface::Private::getPreviewImage()
     return previewData.stripImageData();
 }
 
-uchar* ImageIface::Private::setPreviewImageSize(int w, int h)
-{
-    previewImage.reset();
-    targetPreviewImage.reset();
-
-    constrainWidth  = w;
-    constrainHeight = h;
-
-    return (getPreviewImage());
-}
-
 // ------------------------------------------------------------------------------------------------------
 
 ImageIface::ImageIface(int w, int h)
@@ -241,7 +228,13 @@ DColor ImageIface::getColorInfoFromTargetPreviewImage(const QPoint& point) const
 
 DImg ImageIface::setPreviewImgSize(int w, int h) const
 {
-    uchar* const data = d->setPreviewImageSize(w, h);
+    d->previewImage.reset();
+    d->targetPreviewImage.reset();
+
+    d->constrainWidth  = w;
+    d->constrainHeight = h;
+    uchar* const data  = d->getPreviewImage();
+
     return DImg(previewWidth(), previewHeight(), previewSixteenBit(), previewHasAlpha(), data);
 }
 
