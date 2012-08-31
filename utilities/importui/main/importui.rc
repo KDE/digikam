@@ -7,7 +7,6 @@
         <Action name="importui_capture" />
         <Action name="importui_info" />
         <Separator />
-        <Separator />
         <Action name="importui_cancelprocess" />
         <Action name="importui_close" />
     </Menu>
