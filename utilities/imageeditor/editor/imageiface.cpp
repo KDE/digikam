@@ -69,7 +69,7 @@ public:
     uchar*  getPreviewImage();
 
     uchar*  setPreviewImageSize(int w, int h);
-    
+
 public:
 
     bool    usePreviewSelection;
@@ -151,9 +151,9 @@ uchar* ImageIface::Private::getPreviewImage()
         QSize sz(im->width(), im->height());
         sz.scale(constrainWidth, constrainHeight, Qt::KeepAspectRatio);
 
-        previewImage  = im->smoothScale(sz.width(), sz.height());
-        previewWidth  = previewImage.width();
-        previewHeight = previewImage.height();
+        previewImage       = im->smoothScale(sz.width(), sz.height());
+        previewWidth       = previewImage.width();
+        previewHeight      = previewImage.height();
 
         // only create another copy if needed, in putPreviewImage
         targetPreviewImage = previewImage;

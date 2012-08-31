@@ -65,7 +65,7 @@ public:
      *  may differ from w and h.
      */
     DImg setPreviewImgSize(int w, int h) const;
-    
+
     /** Return 'true' if the preview is rendered using the current selection in editor.
      *  Return 'false' if the preview is rendered using the full image in editor.
      */
@@ -78,7 +78,7 @@ public:
     /** Return a DImg object representing the current original image selection.
      */
     DImg getImgSelection() const;
-    
+
     /** Return a pointer to the DImg object representing the original image.
      *  This object may not be modified or stored. Make copies if you need.
      */
@@ -158,7 +158,7 @@ public:
      *  Caller is an i18n'ed string that will be shown as the undo/redo action name.
      */
     /*KDE_DEPRECATED*/ void putImageSelection(const QString& caller, const FilterAction& action, uchar* const data);
-    
+
     /** Replace the stored target preview data with the given data.
      *  The characteristics of the data must match the characteristics of the current
      *  as returned by the preview...() methods.
