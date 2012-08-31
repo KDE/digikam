@@ -7,7 +7,7 @@
  * Description : Red eyes correction tool for image editor
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -72,11 +72,12 @@ using namespace KDcrawIface;
 namespace DigikamEnhanceImagePlugin
 {
 
-class RedEyeTool::RedEyeToolPriv
+class RedEyeTool::Private
 {
+
 public:
 
-    RedEyeToolPriv() :
+    Private() :
         destinationPreviewData(0),
         thresholdLabel(0),
         smoothLabel(0),
@@ -116,21 +117,21 @@ public:
     ImageGuideWidget*       previewWidget;
     EditorToolSettings*     gboxSettings;
 };
-const QString RedEyeTool::RedEyeToolPriv::configGroupName("redeye Tool");
-const QString RedEyeTool::RedEyeToolPriv::configHistogramChannelEntry("Histogram Channel");
-const QString RedEyeTool::RedEyeToolPriv::configHistogramScaleEntry("Histogram Scale");
-const QString RedEyeTool::RedEyeToolPriv::configRedThresholdEntry("RedThreshold");
-const QString RedEyeTool::RedEyeToolPriv::configSmoothLevelEntry("SmoothLevel");
-const QString RedEyeTool::RedEyeToolPriv::configHueColoringTintEntry("HueColoringTint");
-const QString RedEyeTool::RedEyeToolPriv::configSatColoringTintEntry("SatColoringTint");
-const QString RedEyeTool::RedEyeToolPriv::configValColoringTintEntry("ValColoringTint");
-const QString RedEyeTool::RedEyeToolPriv::configTintLevelEntry("TintLevel");
+const QString RedEyeTool::Private::configGroupName("redeye Tool");
+const QString RedEyeTool::Private::configHistogramChannelEntry("Histogram Channel");
+const QString RedEyeTool::Private::configHistogramScaleEntry("Histogram Scale");
+const QString RedEyeTool::Private::configRedThresholdEntry("RedThreshold");
+const QString RedEyeTool::Private::configSmoothLevelEntry("SmoothLevel");
+const QString RedEyeTool::Private::configHueColoringTintEntry("HueColoringTint");
+const QString RedEyeTool::Private::configSatColoringTintEntry("SatColoringTint");
+const QString RedEyeTool::Private::configValColoringTintEntry("ValColoringTint");
+const QString RedEyeTool::Private::configTintLevelEntry("TintLevel");
 
 // --------------------------------------------------------
 
-RedEyeTool::RedEyeTool(QObject* parent)
+RedEyeTool::RedEyeTool(QObject* const parent)
     : EditorTool(parent),
-      d(new RedEyeToolPriv)
+      d(new Private)
 {
     setObjectName("redeye");
     setToolName(i18n("Red Eye"));
@@ -418,7 +419,7 @@ void RedEyeTool::finalRendering()
     FilterAction action("digikam:redEyeFilter", 1);
     action.setDisplayableName(i18n("Red Eye Filter"));
 
-    iface->putImageSelection(i18n("Red Eyes Correction"), action, selection.bits());
+    iface->putImgSelection(i18n("Red Eyes Correction"), action, selection);
 
     kapp->restoreOverrideCursor();
 }

@@ -7,7 +7,7 @@
  * Description : Red eyes correction tool for image editor
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -37,8 +37,8 @@ class QColor;
 
 namespace Digikam
 {
-class DImg;
-class DColor;
+    class DImg;
+    class DColor;
 }
 
 using namespace Digikam;
@@ -50,7 +50,7 @@ class RedEyePassivePopup : public KPassivePopup
 {
 public:
 
-    RedEyePassivePopup(QWidget* parent)
+    RedEyePassivePopup(QWidget* const parent)
         : KPassivePopup(parent), m_parent(parent)
     {
     }
@@ -73,7 +73,7 @@ class RedEyeTool : public EditorTool
 
 public:
 
-    RedEyeTool(QObject* parent);
+    RedEyeTool(QObject* const parent);
     ~RedEyeTool();
 
 private Q_SLOTS:
@@ -94,16 +94,8 @@ private:
 
 private:
 
-    enum RedThresold
-    {
-        Mild = 0,
-        Aggressive
-    };
-
-private:
-
-    class RedEyeToolPriv;
-    RedEyeToolPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace DigikamEnhanceImagePlugin

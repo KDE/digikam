@@ -424,6 +424,28 @@ void ImageIface::paint(QPaintDevice* device, int x, int y, int w, int h, QPainte
     }
 }
 
+void ImageIface::putImgSelection(const QString& caller, const FilterAction& action, const DImg& img)
+{
+    if (//img.hasAlpha()   != originalHasAlpha()     ||
+        img.sixteenBit() != originalSixteenBit()  ||
+        img.size()       != QSize(selectedWidth(), selectedHeight())
+       )
+    {
+        kDebug() << "Properties of image to overwrite selection differs of original image";
+        return;
+    }
+
+    uchar* const data = img.bits();
+
+    if (!data)
+    {
+        kDebug() << "No image data to overwrite selection of original image";
+        return;
+    }
+
+    DImgInterface::defaultInterface()->putImageSelection(caller, action, data);
+}
+
 // Deprecated methods ------------------------------------------------------------------------------------------------
 
 void ImageIface::putPreviewImage(uchar* data)
@@ -445,16 +467,6 @@ void ImageIface::putOriginalImage(const QString& caller, const FilterAction& act
     }
 
     DImgInterface::defaultInterface()->putImage(caller, action, data, w, h);
-}
-
-void ImageIface::putImageSelection(const QString& caller, const FilterAction& action, uchar* data)
-{
-    if (!data)
-    {
-        return;
-    }
-
-    DImgInterface::defaultInterface()->putImageSelection(caller, action, data);
 }
 
 }   // namespace Digikam

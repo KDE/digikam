@@ -148,16 +148,15 @@ public:
      */
     void paint(QPaintDevice* device, int x, int y, int w, int h, QPainter* painter = 0);
 
-    // Deprecated methods ------------------------------------------------------------------------------------------------
-
     /** Replace the data of the current original image selection with the given data.
      *  The characteristics of the data must match the characteristics of the current
      *  selection as returned by the selectionWidth(), selectionHeight(),
      *  originalSixteenBit() and originalHasAlpha() methods.
-     *  No ownership of the data pointer is assumed.
      *  Caller is an i18n'ed string that will be shown as the undo/redo action name.
      */
-    KDE_DEPRECATED void putImageSelection(const QString& caller, const FilterAction& action, uchar* const data);
+    void putImgSelection(const QString& caller, const FilterAction& action, const DImg& img);
+
+    // Deprecated methods ------------------------------------------------------------------------------------------------
 
     /** Replace the stored target preview data with the given data.
      *  The characteristics of the data must match the characteristics of the current
