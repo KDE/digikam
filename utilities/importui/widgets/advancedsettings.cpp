@@ -177,4 +177,9 @@ DownloadSettings AdvancedSettings::settings() const
     return settings;
 }
 
+bool AdvancedSettings::getAutoRotate()
+{
+    return d->autoRotateCheck->isChecked();
+}
+
 }  // namespace Digikam

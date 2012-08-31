@@ -26,7 +26,6 @@
 * ============================================================ */
 
 #include "importui.moc"
-#include "importui.h"//TODO: Remove this line.
 #include "importui_p.h"
 
 // Qt includes
@@ -1741,10 +1740,8 @@ void ImportUI::slotDownload(bool onlySelected, bool deleteAfter, Album* album)
 
 void ImportUI::slotDownloaded(const QString& folder, const QString& file, int status)
 {
-    //Read auto-rotate entry
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(d->configGroupName);
-    bool autoRotate           = group.readEntry("AutoRotate",         true);
+    // Is auto-rotate checked?
+    bool autoRotate = d->advancedSettings->getAutoRotate();
 
     CamItemInfo& info = d->view->camItemInfoRef(folder, file);
 
@@ -2324,7 +2321,6 @@ void ImportUI::autoRotateItems()
         foreach (CamItemInfo info, d->autoRotateItemsList)
         {
             list << ImageInfo(info.url());
-            qDebug() << info.url().toLocalFile();
         }
 
         FileActionMngr::instance()->transform(list, KExiv2Iface::RotationMatrix::NoTransformation);

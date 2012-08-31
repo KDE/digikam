@@ -3026,11 +3026,6 @@ void DigikamApp::slotTransformAction()
         d->view->imageTransform(KExiv2Iface::RotationMatrix::NoTransformation);
     }
 }
-//#include "../utilities/importui/backend/camiteminfo.h"
-//void DigikamApp::autoRotateItems(CamItemInfoList& infos)
-//{
-//    d->view->imageTransform(KExiv2Iface::RotationMatrix::NoTransformation);
-//}
 
 #ifdef USE_SCRIPT_IFACE
 void DigikamApp::slotScriptConsole()
