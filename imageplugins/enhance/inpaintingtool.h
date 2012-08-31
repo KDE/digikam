@@ -7,7 +7,7 @@
  * Description : a digiKam image editor plugin to inpaint
  *               a photograph
  *
- * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -29,10 +29,6 @@
 
 #include <QString>
 
-// KDE includes
-
-#include <kpassivepopup.h>
-
 // Local includes
 
 #include "editortool.h"
@@ -42,33 +38,13 @@ using namespace Digikam;
 namespace DigikamEnhanceImagePlugin
 {
 
-class InPaintingPassivePopup : public KPassivePopup
-{
-public:
-
-    InPaintingPassivePopup(QWidget* parent) : KPassivePopup(parent), m_parent(parent) {}
-
-protected:
-
-    virtual void positionSelf()
-    {
-        move(m_parent->x() + 30, m_parent->y() + 30);
-    }
-
-private:
-
-    QWidget* m_parent;
-};
-
-//-----------------------------------------------------------
-
 class InPaintingTool : public EditorToolThreaded
 {
     Q_OBJECT
 
 public:
 
-    InPaintingTool(QObject* parent);
+    InPaintingTool(QObject* const parent);
     ~InPaintingTool();
 
 private Q_SLOTS:
@@ -90,18 +66,8 @@ private:
 
 private:
 
-    enum InPaintingFilteringPreset
-    {
-        NoPreset = 0,
-        RemoveSmallArtefact,
-        RemoveMediumArtefact,
-        RemoveLargeArtefact
-    };
-
-private:
-
-    class InPaintingToolPriv;
-    InPaintingToolPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace DigikamEnhanceImagePlugin

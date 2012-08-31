@@ -7,7 +7,7 @@
  * Description : a digiKam image editor plugin to inpaint
  *               a photograph
  *
- * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -56,7 +56,6 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kmessagebox.h>
-#include <kpassivepopup.h>
 #include <kstandarddirs.h>
 #include <ktabwidget.h>
 #include <ktoolinvocation.h>
@@ -73,11 +72,22 @@
 namespace DigikamEnhanceImagePlugin
 {
 
-class InPaintingTool::InPaintingToolPriv
+class InPaintingTool::Private
 {
+
 public:
 
-    InPaintingToolPriv() :
+    enum InPaintingFilteringPreset
+    {
+        NoPreset = 0,
+        RemoveSmallArtefact,
+        RemoveMediumArtefact,
+        RemoveLargeArtefact
+    };
+
+public:
+
+    Private() :
         isComputed(false),
         mainTab(0),
         inpaintingTypeCB(0),
@@ -122,27 +132,27 @@ public:
 
     EditorToolSettings*     gboxSettings;
 };
-const QString InPaintingTool::InPaintingToolPriv::configGroupName("inpainting Tool");
-const QString InPaintingTool::InPaintingToolPriv::configFastApproxEntry("FastApprox");
-const QString InPaintingTool::InPaintingToolPriv::configInterpolationEntry("Interpolation");
-const QString InPaintingTool::InPaintingToolPriv::configAmplitudeEntry("Amplitude");
-const QString InPaintingTool::InPaintingToolPriv::configSharpnessEntry("Sharpness");
-const QString InPaintingTool::InPaintingToolPriv::configAnisotropyEntry("Anisotropy");
-const QString InPaintingTool::InPaintingToolPriv::configAlphaEntry("Alpha");
-const QString InPaintingTool::InPaintingToolPriv::configSigmaEntry("Sigma");
-const QString InPaintingTool::InPaintingToolPriv::configGaussPrecEntry("GaussPrec");
-const QString InPaintingTool::InPaintingToolPriv::configDlEntry("Dl");
-const QString InPaintingTool::InPaintingToolPriv::configDaEntry("Da");
-const QString InPaintingTool::InPaintingToolPriv::configIterationEntry("Iteration");
-const QString InPaintingTool::InPaintingToolPriv::configTileEntry("Tile");
-const QString InPaintingTool::InPaintingToolPriv::configBTileEntry("BTile");
-const QString InPaintingTool::InPaintingToolPriv::configPresetEntry("Preset");
+const QString InPaintingTool::Private::configGroupName("inpainting Tool");
+const QString InPaintingTool::Private::configFastApproxEntry("FastApprox");
+const QString InPaintingTool::Private::configInterpolationEntry("Interpolation");
+const QString InPaintingTool::Private::configAmplitudeEntry("Amplitude");
+const QString InPaintingTool::Private::configSharpnessEntry("Sharpness");
+const QString InPaintingTool::Private::configAnisotropyEntry("Anisotropy");
+const QString InPaintingTool::Private::configAlphaEntry("Alpha");
+const QString InPaintingTool::Private::configSigmaEntry("Sigma");
+const QString InPaintingTool::Private::configGaussPrecEntry("GaussPrec");
+const QString InPaintingTool::Private::configDlEntry("Dl");
+const QString InPaintingTool::Private::configDaEntry("Da");
+const QString InPaintingTool::Private::configIterationEntry("Iteration");
+const QString InPaintingTool::Private::configTileEntry("Tile");
+const QString InPaintingTool::Private::configBTileEntry("BTile");
+const QString InPaintingTool::Private::configPresetEntry("Preset");
 
 // --------------------------------------------------------
 
-InPaintingTool::InPaintingTool(QObject* parent)
+InPaintingTool::InPaintingTool(QObject* const parent)
     : EditorToolThreaded(parent),
-      d(new InPaintingToolPriv)
+      d(new Private)
 {
     setObjectName("inpainting");
     setToolName(i18n("In-painting"));
@@ -265,10 +275,10 @@ void InPaintingTool::readSettings()
     prm.btile      = group.readEntry(d->configBTileEntry,         defaults.btile);
     d->settingsWidget->setSettings(prm);
 
-    int p = group.readEntry(d->configPresetEntry, (int)NoPreset);
+    int p = group.readEntry(d->configPresetEntry, (int)Private::NoPreset);
     d->inpaintingTypeCB->setCurrentIndex(p);
 
-    if (p == NoPreset)
+    if (p == Private::NoPreset)
     {
         d->settingsWidget->setEnabled(true);
     }
@@ -304,7 +314,7 @@ void InPaintingTool::writeSettings()
 
 void InPaintingTool::slotResetValues(int i)
 {
-    if (i == NoPreset)
+    if (i == Private::NoPreset)
     {
         d->settingsWidget->setEnabled(true);
     }
@@ -323,18 +333,18 @@ void InPaintingTool::slotResetSettings()
 
     switch (d->inpaintingTypeCB->currentIndex())
     {
-        case RemoveSmallArtefact:
+        case Private::RemoveSmallArtefact:
             // We use default settings here.
             break;
 
-        case RemoveMediumArtefact:
+        case Private::RemoveMediumArtefact:
         {
             settings.amplitude = 50.0;
             settings.nbIter    = 50;
             break;
         }
 
-        case RemoveLargeArtefact:
+        case Private::RemoveLargeArtefact:
         {
             settings.amplitude = 100.0;
             settings.nbIter    = 100;
@@ -494,7 +504,7 @@ void InPaintingTool::slotLoadSettings()
 
     file.close();
     d->inpaintingTypeCB->blockSignals(true);
-    d->inpaintingTypeCB->setCurrentIndex(NoPreset);
+    d->inpaintingTypeCB->setCurrentIndex(Private::NoPreset);
     d->inpaintingTypeCB->blockSignals(false);
     d->settingsWidget->setEnabled(true);
 }

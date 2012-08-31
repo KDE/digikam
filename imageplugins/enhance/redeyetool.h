@@ -25,10 +25,6 @@
 #ifndef REDEYETOOL_H
 #define REDEYETOOL_H
 
-// KDE includes
-
-#include <kpassivepopup.h>
-
 // Local includes
 
 #include "editortool.h"
@@ -45,27 +41,6 @@ using namespace Digikam;
 
 namespace DigikamEnhanceImagePlugin
 {
-
-class RedEyePassivePopup : public KPassivePopup
-{
-public:
-
-    RedEyePassivePopup(QWidget* const parent)
-        : KPassivePopup(parent), m_parent(parent)
-    {
-    }
-
-protected:
-
-    virtual void positionSelf()
-    {
-        move(m_parent->x() + 30, m_parent->y() + 30);
-    }
-
-private:
-
-    QWidget* m_parent;
-};
 
 class RedEyeTool : public EditorTool
 {
