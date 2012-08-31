@@ -1,58 +1,58 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="300" name="cameraui" >
+<gui version="301" name="importui" >
 
 <MenuBar>
 
     <Menu name="Device" ><text>&amp;Device</text>
-        <Action name="cameraui_capture" />
-        <Action name="cameraui_info" />
+        <Action name="importui_capture" />
+        <Action name="importui_info" />
         <Separator />
         <Separator />
-        <Action name="cameraui_cancelprocess" />
-        <Action name="cameraui_close" />
+        <Action name="importui_cancelprocess" />
+        <Action name="importui_close" />
     </Menu>
 
     <Menu name="Edit" >
     <text>&amp;Edit</text>
-        <Action name="cameraui_selectall" />
-        <Action name="cameraui_selectnone" />
-        <Action name="cameraui_selectinvert" />
+        <Action name="importui_selectall" />
+        <Action name="importui_selectnone" />
+        <Action name="importui_selectinvert" />
         <Separator />
-        <Action name="cameraui_selectnewitems" />
-        <Action name="cameraui_selectlockeditems" />
+        <Action name="importui_selectnewitems" />
+        <Action name="importui_selectlockeditems" />
     </Menu>
 
     <Menu name="Image" ><text>&amp;Image</text>
-        <Action name="cameraui_imagedownloadnew" />
-        <Action name="cameraui_imagedownloadselected" />
-        <Action name="cameraui_imagedownloadall" />
+        <Action name="importui_imagedownloadnew" />
+        <Action name="importui_imagedownloadselected" />
+        <Action name="importui_imagedownloadall" />
         <Separator />
-        <Action name="cameraui_imagedownloaddeletenew" />
-        <Action name="cameraui_imagedownloaddeleteselected" />
-        <Action name="cameraui_imagedownloaddeleteall" />
+        <Action name="importui_imagedownloaddeletenew" />
+        <Action name="importui_imagedownloaddeleteselected" />
+        <Action name="importui_imagedownloaddeleteall" />
         <Separator />
-        <Action name="cameraui_imagedeletenew" />
-        <Action name="cameraui_imagedeleteselected" />
-        <Action name="cameraui_imagedeleteall" />
+        <Action name="importui_imagedeletenew" />
+        <Action name="importui_imagedeleteselected" />
+        <Action name="importui_imagedeleteall" />
         <Separator />
-        <Action name="cameraui_imageupload"/>
-        <Action name="cameraui_imagemarkasdownloaded" />
+        <Action name="importui_imageupload"/>
+        <Action name="importui_imagemarkasdownloaded" />
         <Separator />
-        <Action name="cameraui_imagelock" />
+        <Action name="importui_imagelock" />
     </Menu>
 
     <Menu name="View" ><text>&amp;View</text>
-        <Action name="cameraui_icon_view" />
-        <Action name="cameraui_item_view" />
-        <Action name="cameraui_map_view" />
+        <Action name="importui_icon_view" />
+        <Action name="importui_item_view" />
+        <Action name="importui_map_view" />
         <Separator/>
-        <Action name="cameraui_fullscreen" />
-        <Action name="cameraui_showlog" />
+        <Action name="importui_fullscreen" />
+        <Action name="importui_showlog" />
         <Separator/>
         <Action name="showthumbs" />
         <Separator/>
-        <Action name="cameraui_zoomplus" />
-        <Action name="cameraui_zoomminus" />
+        <Action name="importui_zoomplus" />
+        <Action name="importui_zoomminus" />
         <Action name="import_zoomfit2window" />
         <Action name="import_zoomto100percents" />
         <Separator/>
@@ -63,8 +63,8 @@
 
     <Menu name="help" ><text>&amp;Help</text>
         <Action name="help_rawcameralist"/>
-        <Action name="cameraui_librariesinfo"/>
-        <Action name="cameraui_dbstat"/>
+        <Action name="importui_librariesinfo"/>
+        <Action name="importui_dbstat"/>
         <Action name="help_donatemoney" />
         <Action name="help_contribute" />
     </Menu>
@@ -87,19 +87,19 @@
 </MenuBar>
 
 <ToolBar name="mainToolBar" ><text>Main Toolbar</text>
-     <Action name="cameraui_capture" />
-     <Action name="cameraui_imagedownload" />
-     <Action name="cameraui_cancelprocess" />
+     <Action name="importui_capture" />
+     <Action name="importui_imagedownload" />
+     <Action name="importui_cancelprocess" />
      <Separator/>
-     <Action name="cameraui_imageupload" />
-     <Action name="cameraui_imagelock" />
+     <Action name="importui_imageupload" />
+     <Action name="importui_imagelock" />
      <Separator/>
      <Separator/>
-     <Action name="cameraui_icon_view" />
-     <Action name="cameraui_item_view" />
-     <Action name="cameraui_map_view" />
+     <Action name="importui_icon_view" />
+     <Action name="importui_item_view" />
+     <Action name="importui_map_view" />
      <Separator/>
-     <Action name="cameraui_fullscreen" />
+     <Action name="importui_fullscreen" />
      <Merge />
      <WeakSeparator/>
      <Action name="logo_action" />
