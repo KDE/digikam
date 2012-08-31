@@ -233,7 +233,7 @@ InPaintingTool::InPaintingTool(QObject* parent)
     GreycstorationContainer defaults;
     defaults.setInpaintingDefaultSettings();
     d->settingsWidget->setDefaultSettings(defaults);
-    inti();
+    init();
 }
 
 InPaintingTool::~InPaintingTool()
