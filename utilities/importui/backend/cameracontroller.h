@@ -108,7 +108,7 @@ Q_SIGNALS:
     void signalFolderList(const QStringList& folderList);
     void signalFileList(const CamItemInfoList& infoList);
     void signalUploaded(const CamItemInfo& itemInfo);
-    void signalDownloaded(const QString& folder, const QString& file, int status, bool autoRotate);
+    void signalDownloaded(const QString& folder, const QString& file, int status);
     void signalDownloadComplete(const QString& sourceFolder, const QString& sourceFile,
                                 const QString& destFolder, const QString& destFile);
     void signalFinished();

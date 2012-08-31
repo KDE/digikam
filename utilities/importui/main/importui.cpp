@@ -759,7 +759,7 @@ void ImportUI::setupCameraController(const QString& model, const QString& port, 
     connect(d->controller, SIGNAL(signalFileList(CamItemInfoList)),
             this, SLOT(slotFileList(CamItemInfoList)));
 
-    connect(d->controller, SIGNAL(signalDownloaded(QString,QString,int,bool)),
+    connect(d->controller, SIGNAL(signalDownloaded(QString,QString,int)),
             this, SLOT(slotDownloaded(QString,QString,int)));
 
     connect(d->controller, SIGNAL(signalDownloadComplete(QString,QString,QString,QString)),

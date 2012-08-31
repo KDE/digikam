@@ -579,7 +579,6 @@ void CameraController::executeCommand(CameraCommand* const cmd)
             QString   folder         = cmd->map["folder"].toString();
             QString   file           = cmd->map["file"].toString();
             QString   dest           = cmd->map["dest"].toString();
-            bool      autoRotate     = cmd->map["autoRotate"].toBool(); //TODO: Remove this line.
             bool      fixDateTime    = cmd->map["fixDateTime"].toBool();
             QDateTime newDateTime    = cmd->map["newDateTime"].toDateTime();
             QString   templateTitle  = cmd->map["template"].toString();
@@ -590,7 +589,7 @@ void CameraController::executeCommand(CameraCommand* const cmd)
 
             // download to a temp file
 
-            emit signalDownloaded(folder, file, CamItemInfo::DownloadStarted, autoRotate);
+            emit signalDownloaded(folder, file, CamItemInfo::DownloadStarted);
 
             KUrl tempURL(dest);
             tempURL      = tempURL.upUrl();
@@ -603,22 +602,13 @@ void CameraController::executeCommand(CameraCommand* const cmd)
             if (!result)
             {
                 unlink(QFile::encodeName(tempURL.toLocalFile()));
-                emit signalDownloaded(folder, file, CamItemInfo::DownloadFailed, autoRotate);
+                emit signalDownloaded(folder, file, CamItemInfo::DownloadFailed);
                 sendLogMsg(i18n("Failed to download %1...", file), DHistoryView::ErrorEntry, folder, file);
                 break;
             }
             else if (JPEGUtils::isJpegImage(tempURL.toLocalFile()))
             {
                 // Possible modification operations. Only apply it to JPEG for the moment.
-
-                /*if(autoRotate)
-                {
-                    kDebug() << "Exif autorotate: " << file << " using (" << tempURL << ")";
-                    sendLogMsg(i18n("EXIF rotating file %1...", file), DHistoryView::StartingEntry, folder, file);
-                    JpegRotator rotator(tempURL.toLocalFile());
-                    rotator.setDocumentName(file);
-                    rotator.autoExifTransform();
-                }*/
 
                 if (!templateTitle.isNull() || fixDateTime)
                 {
@@ -889,12 +879,12 @@ void CameraController::slotCheckRename(const QString& folder, const QString& fil
     {
         // rename failed. delete the temp file
         unlink(QFile::encodeName(temp));
-        emit signalDownloaded(folder, file, CamItemInfo::DownloadFailed, false);
+        emit signalDownloaded(folder, file, CamItemInfo::DownloadFailed);
         sendLogMsg(i18n("Failed to download %1...", file), DHistoryView::ErrorEntry,  folder, file);
     }
     else
     {
-        emit signalDownloaded(folder, file, CamItemInfo::DownloadedYes, false);
+        emit signalDownloaded(folder, file, CamItemInfo::DownloadedYes);
         emit signalDownloadComplete(folder, file, info.path(), info.fileName());
         sendLogMsg(i18n("Download successfully %1...", file), DHistoryView::StartingEntry, folder, file);
 
@@ -1171,7 +1161,6 @@ void CameraController::download(const DownloadSettings& downloadSettings)
     cmd->map.insert("folder",            QVariant(downloadSettings.folder));
     cmd->map.insert("file",              QVariant(downloadSettings.file));
     cmd->map.insert("dest",              QVariant(downloadSettings.dest));
-    cmd->map.insert("autoRotate",        QVariant(downloadSettings.autoRotate));
     cmd->map.insert("fixDateTime",       QVariant(downloadSettings.fixDateTime));
     cmd->map.insert("newDateTime",       QVariant(downloadSettings.newDateTime));
     cmd->map.insert("template",          QVariant(downloadSettings.templateTitle));
