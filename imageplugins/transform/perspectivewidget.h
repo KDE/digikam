@@ -6,7 +6,7 @@
  * Date        : 2005-01-18
  * Description : a widget class to edit perspective.
  *
- * Copyright (C) 2005-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -59,20 +59,20 @@ public:
     PerspectiveWidget(int width, int height, QWidget* parent=0);
     ~PerspectiveWidget();
 
-    QRect  getTargetSize() const;
-    QPoint getTopLeftCorner() const;
-    QPoint getTopRightCorner() const;
-    QPoint getBottomLeftCorner() const;
+    QRect  getTargetSize()        const;
+    QPoint getTopLeftCorner()     const;
+    QPoint getTopRightCorner()    const;
+    QPoint getBottomLeftCorner()  const;
     QPoint getBottomRightCorner() const;
-    void   reset();
 
-    float getAngleTopLeft() const;
-    float getAngleTopRight() const;
-    float getAngleBottomLeft() const;
-    float getAngleBottomRight() const;
+    float getAngleTopLeft()       const;
+    float getAngleTopRight()      const;
+    float getAngleBottomLeft()    const;
+    float getAngleBottomRight()   const;
 
     void  setBackgroundColor(const QColor& bg);
     void  applyPerspectiveAdjustment();
+    void  reset();
 
     ImageIface* imageIface() const;
 
@@ -114,8 +114,8 @@ private:  // Widget methods.
 
 private:
 
-    class PerspectiveWidgetPriv;
-    PerspectiveWidgetPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace DigikamTransformImagePlugin
