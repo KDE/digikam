@@ -333,7 +333,7 @@ void BlurFXTool::prepareEffect()
         case BlurFXFilter::FocusBlur:
         {
             ImageIface iface(0, 0);
-            image = *iface.getOriginalImg();
+            image = *iface.getOriginal();
             break;
         }
 
@@ -369,7 +369,7 @@ void BlurFXTool::prepareFinal()
     int level = d->levelInput->value();
 
     ImageIface iface(0, 0);
-    setFilter(new BlurFXFilter(iface.getOriginalImg(), this, type, dist, level));
+    setFilter(new BlurFXFilter(iface.getOriginal(), this, type, dist, level));
 }
 
 void BlurFXTool::putPreviewData()

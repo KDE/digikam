@@ -131,7 +131,7 @@ void NoiseReductionTool::prepareFinal()
     NRContainer prm = d->nrSettings->settings();
 
     ImageIface iface(0, 0);
-    setFilter(new NRFilter(iface.getOriginalImg(), this, prm));
+    setFilter(new NRFilter(iface.getOriginal(), this, prm));
 }
 
 void NoiseReductionTool::putPreviewData()

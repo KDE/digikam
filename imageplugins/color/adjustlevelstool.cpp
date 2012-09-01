@@ -177,7 +177,7 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* parent)
     setToolIcon(SmallIcon("adjustlevels"));
 
     ImageIface iface(0, 0);
-    d->originalImage = iface.getOriginalImg();
+    d->originalImage = iface.getOriginal();
 
     d->histoSegments = d->originalImage->sixteenBit() ? 65535 : 255;
     d->levels        = new ImageLevels(d->originalImage->sixteenBit());
@@ -909,7 +909,7 @@ void AdjustLevelsTool::prepareFinal()
     }
 
     ImageIface iface(0, 0);
-    setFilter(new LevelsFilter(iface.getOriginalImg(), this, settings));
+    setFilter(new LevelsFilter(iface.getOriginal(), this, settings));
 }
 
 void AdjustLevelsTool::putFinalData()

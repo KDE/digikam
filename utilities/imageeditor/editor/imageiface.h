@@ -60,29 +60,29 @@ public:
      */
     void setPreviewType(bool useSelect = false);
 
-    /** Sets preview size and returns new preview as with getPreview.
-     *  The parameters are only hints, previewWidth() and previewHeight()
-     *  may differ from w and h.
-     */
-    DImg setPreviewSize(int w, int h) const;
-
     /** Return 'true' if the preview is rendered using the current selection in editor.
      *  Return 'false' if the preview is rendered using the full image in editor.
      */
     bool previewType() const;
 
+    /** Sets preview size and returns new preview as with getPreview.
+     *  The parameters are only hints, previewWidth() and previewHeight()
+     *  may differ from w and h.
+     */
+    DImg  setPreviewSize(int w, int h) const;
+
     /** Return a DImg object representing the preview image.
      */
-    DImg getPreview() const;
+    DImg  getPreview() const;
 
     /** Return a DImg object representing the current original image selection.
      */
-    DImg getSelection() const;
+    DImg  getSelection() const;
 
     /** Return a pointer to the DImg object representing the original image.
      *  This object may not be modified or stored. Make copies if you need.
      */
-    DImg*  getOriginalImg() const;
+    DImg* getOriginal() const;
 
     /** Set the color profile of the original image.
      */
@@ -101,10 +101,10 @@ public:
 
     /** Standard methods to get/set preview information.
      */
-    int  previewWidth()      const;
-    int  previewHeight()     const;
-    bool previewHasAlpha()   const;
-    bool previewSixteenBit() const;
+    int  previewWidth()       const;
+    int  previewHeight()      const;
+    bool previewHasAlpha()    const;
+    bool previewSixteenBit()  const;
 
     /** Original image information.
      */
@@ -144,9 +144,9 @@ public:
 
     /** Paint the current target preview image (or the preview image,
      *  if putPreviewImage has not been called) on the given paint device.
-     *   at x|y, with given maximum width and height.
+     *  at x|y, with given maximum width and height.
      */
-    void paint(QPaintDevice* device, int x, int y, int w, int h, QPainter* painter = 0);
+    void paint(QPaintDevice* const device, int x, int y, int w, int h, QPainter* const painter = 0);
 
     /** Replace the data of the current original image selection with the given data.
      *  The characteristics of the data must match the characteristics of the current

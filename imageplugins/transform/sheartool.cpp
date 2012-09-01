@@ -308,7 +308,7 @@ void ShearTool::prepareFinal()
     ImageIface iface(0, 0);
     int orgW       = iface.originalWidth();
     int orgH       = iface.originalHeight();
-    DImg* orgImage = iface.getOriginalImg();
+    DImg* orgImage = iface.getOriginal();
     setFilter(new ShearFilter(orgImage, this, hAngle, vAngle, antialiasing, background, orgW, orgH));
 }
 

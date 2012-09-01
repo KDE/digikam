@@ -190,7 +190,7 @@ void CBTool::prepareFinal()
     CBContainer settings = d->cbSettings->settings();
 
     ImageIface iface(0, 0);
-    setFilter(new CBFilter(iface.getOriginalImg(), this, settings));
+    setFilter(new CBFilter(iface.getOriginal(), this, settings));
 }
 
 void CBTool::putFinalData()

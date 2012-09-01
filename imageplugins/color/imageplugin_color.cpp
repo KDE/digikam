@@ -235,7 +235,7 @@ void ImagePlugin_Color::slotInvert()
     kapp->setOverrideCursor(Qt::WaitCursor);
 
     ImageIface iface(0, 0);
-    InvertFilter invert(iface.getOriginalImg(), 0L);
+    InvertFilter invert(iface.getOriginal(), 0L);
     invert.startFilterDirectly();
     iface.putOriginalImage(i18n("Invert"), invert.filterAction(), invert.getTargetImage().bits());
 

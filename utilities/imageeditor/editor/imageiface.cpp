@@ -243,7 +243,7 @@ DImg ImageIface::getPreview() const
     return DImg(previewWidth(), previewHeight(), previewSixteenBit(), previewHasAlpha(), d->getPreviewImage());
 }
 
-DImg* ImageIface::getOriginalImg() const
+DImg* ImageIface::getOriginal() const
 {
     return DImgInterface::defaultInterface()->getImg();
 }
@@ -364,7 +364,7 @@ PhotoInfoContainer ImageIface::getPhotographInformation() const
     return meta.getPhotographInformation();
 }
 
-void ImageIface::paint(QPaintDevice* device, int x, int y, int w, int h, QPainter* painter)
+void ImageIface::paint(QPaintDevice* const device, int x, int y, int w, int h, QPainter* const painter)
 {
     QPainter  localPainter;
     QPainter* p = 0;

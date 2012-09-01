@@ -217,7 +217,7 @@ void TextureTool::prepareFinal()
     QString texture = getTexturePath( d->textureType->currentIndex() );
     int b           = 255 - d->blendGain->value();
 
-    setFilter(new TextureFilter(iface.getOriginalImg(), this, b, texture));
+    setFilter(new TextureFilter(iface.getOriginal(), this, b, texture));
 }
 
 void TextureTool::putPreviewData()

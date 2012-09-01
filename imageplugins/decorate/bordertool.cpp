@@ -144,7 +144,7 @@ void BorderTool::prepareEffect()
 void BorderTool::prepareFinal()
 {
     ImageIface iface(0, 0);
-    DImg* orgImage           = iface.getOriginalImg();
+    DImg* orgImage           = iface.getOriginal();
     BorderContainer settings = d->settingsView->settings();
     settings.orgWidth        = iface.originalWidth();
     settings.orgHeight       = iface.originalHeight();

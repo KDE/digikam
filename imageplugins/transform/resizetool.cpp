@@ -475,7 +475,7 @@ void ResizeTool::prepareEffect()
     ImageIface* iface = d->previewWidget->imageIface();
     int w             = iface->previewWidth();
     int h             = iface->previewHeight();
-    DImg imTemp       = iface->getOriginalImg()->smoothScale(w, h, Qt::KeepAspectRatio);
+    DImg imTemp       = iface->getOriginal()->smoothScale(w, h, Qt::KeepAspectRatio);
     int new_w         = (int)(w*d->wpInput->value()/100.0);
     int new_h         = (int)(h*d->hpInput->value()/100.0);
 
@@ -511,7 +511,7 @@ void ResizeTool::prepareFinal()
 
     if (d->useGreycstorationBox->isChecked())
     {
-        setFilter(new GreycstorationFilter(iface.getOriginalImg(),
+        setFilter(new GreycstorationFilter(iface.getOriginal(),
                                            d->settingsWidget->settings(),
                                            GreycstorationFilter::Resize,
                                            d->wInput->value(),
@@ -524,7 +524,7 @@ void ResizeTool::prepareFinal()
         // See B.K.O #152192: CImg resize() sound like defective or unadapted
         // to resize image without good quality.
         DImgBuiltinFilter resize(DImgBuiltinFilter::Resize, QSize(d->wInput->value(), d->hInput->value()));
-        setFilter(resize.createThreadedFilter(iface.getOriginalImg(), this));
+        setFilter(resize.createThreadedFilter(iface.getOriginal(), this));
     }
 }
 

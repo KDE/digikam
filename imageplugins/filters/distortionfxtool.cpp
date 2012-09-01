@@ -365,7 +365,7 @@ void DistortionFXTool::prepareFinal()
 
     ImageIface iface(0, 0);
 
-    setFilter(new DistortionFXFilter(iface.getOriginalImg(), this, e, l, f));
+    setFilter(new DistortionFXFilter(iface.getOriginal(), this, e, l, f));
 }
 
 void DistortionFXTool::putPreviewData()

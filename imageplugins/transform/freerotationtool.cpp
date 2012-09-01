@@ -323,7 +323,7 @@ void FreeRotationTool::prepareFinal()
 {
     ImageIface iface(0, 0);
     FreeRotationContainer settings = d->settingsView->settings();
-    DImg* orgImage                 = iface.getOriginalImg();
+    DImg* orgImage                 = iface.getOriginal();
     settings.backgroundColor       = Qt::black;
     settings.orgW                  = iface.originalWidth();
     settings.orgH                  = iface.originalHeight();

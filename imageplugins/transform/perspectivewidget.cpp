@@ -153,7 +153,7 @@ PerspectiveWidget::PerspectiveWidget(int w, int h, QWidget* parent)
     d->height   = d->iface->previewHeight();
     d->origW    = d->iface->originalWidth();
     d->origH    = d->iface->originalHeight();
-    d->preview.setIccProfile( d->iface->getOriginalImg()->getIccProfile() );
+    d->preview.setIccProfile( d->iface->getOriginal()->getIccProfile() );
 
     d->pixmap = new QPixmap(w, h);
     d->rect   = QRect(w/2-d->width/2, h/2-d->height/2, d->width, d->height);
@@ -180,7 +180,7 @@ void PerspectiveWidget::resizeEvent(QResizeEvent* e)
     d->preview    = d->iface->setPreviewSize(w, h);
     d->width      = d->iface->previewWidth();
     d->height     = d->iface->previewHeight();
-    d->preview.setIccProfile( d->iface->getOriginalImg()->getIccProfile() );
+    d->preview.setIccProfile( d->iface->getOriginal()->getIccProfile() );
 
     d->pixmap     = new QPixmap(w, h);
     QRect oldRect = d->rect;
@@ -296,7 +296,7 @@ void PerspectiveWidget::reset()
 
 void PerspectiveWidget::applyPerspectiveAdjustment()
 {
-    DImg* orgImage = d->iface->getOriginalImg();
+    DImg* orgImage = d->iface->getOriginal();
     DImg destImage(orgImage->width(), orgImage->height(), orgImage->sixteenBit(), orgImage->hasAlpha());
 
     DColor background(0, 0, 0, orgImage->hasAlpha() ? 0 : 255, orgImage->sixteenBit());

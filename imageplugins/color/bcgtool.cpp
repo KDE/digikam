@@ -201,7 +201,7 @@ void BCGTool::prepareFinal()
 
     ImageIface iface(0, 0);
 
-    setFilter(new BCGFilter(iface.getOriginalImg(), this, settings));
+    setFilter(new BCGFilter(iface.getOriginal(), this, settings));
 }
 
 void BCGTool::putFinalData()

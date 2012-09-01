@@ -296,7 +296,7 @@ void LensDistortionTool::prepareEffect()
 
     ImageIface* iface = d->previewWidget->imageIface();
 
-    setFilter(new LensDistortionFilter(iface->getOriginalImg(), this, m, e, r, b, 0, 0));
+    setFilter(new LensDistortionFilter(iface->getOriginal(), this, m, e, r, b, 0, 0));
 }
 
 void LensDistortionTool::prepareFinal()
@@ -307,7 +307,7 @@ void LensDistortionTool::prepareFinal()
     double b = d->brightenInput->value();
 
     ImageIface iface(0, 0);
-    setFilter(new LensDistortionFilter(iface.getOriginalImg(), this, m, e, r, b, 0, 0));
+    setFilter(new LensDistortionFilter(iface.getOriginal(), this, m, e, r, b, 0, 0));
 }
 
 void LensDistortionTool::putPreviewData()

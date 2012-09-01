@@ -111,7 +111,7 @@ LensAutoFixTool::LensAutoFixTool(QObject* parent)
     // -------------------------------------------------------------
 
     d->cameraSelector = new LensFunCameraSelector(d->gboxSettings->plainPage());
-    DImg* img = d->previewWidget->imageIface()->getOriginalImg();
+    DImg* img = d->previewWidget->imageIface()->getOriginal();
     DMetadata meta(img->getMetadata());
     d->cameraSelector->setMetadata(meta);
     KSeparator* line  = new KSeparator(Qt::Horizontal, d->gboxSettings->plainPage());
@@ -235,7 +235,7 @@ void LensAutoFixTool::prepareFinal()
     LensFunContainer settings = d->cameraSelector->settings();
     d->settingsView->assignFilterSettings(settings);
     ImageIface iface(0, 0);
-    setFilter(new LensFunFilter(iface.getOriginalImg(), this, settings));
+    setFilter(new LensFunFilter(iface.getOriginal(), this, settings));
 }
 
 void LensAutoFixTool::putPreviewData()

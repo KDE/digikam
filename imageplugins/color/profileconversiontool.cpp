@@ -247,7 +247,7 @@ void ProfileConversionTool::putPreviewData()
 void ProfileConversionTool::prepareFinal()
 {
     ImageIface iface(0, 0);
-    setFilter(new IccTransformFilter(iface.getOriginalImg(), this, d->transform));
+    setFilter(new IccTransformFilter(iface.getOriginal(), this, d->transform));
 }
 
 void ProfileConversionTool::putFinalData()
@@ -279,7 +279,7 @@ void ProfileConversionTool::fastConversion(const IccProfile& profile)
 
     IccProfile currentProfile = iface.getOriginalIccProfile();
     IccTransform transform    = ProfileConversionToolPriv::getTransform(currentProfile, profile);
-    IccTransformFilter filter(iface.getOriginalImg(), 0, transform);
+    IccTransformFilter filter(iface.getOriginal(), 0, transform);
     filter.startFilterDirectly();
 
     DImg imDest               = filter.getTargetImage();

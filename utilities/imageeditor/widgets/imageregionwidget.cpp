@@ -89,7 +89,7 @@ ImageRegionWidget::ImageRegionWidget(QWidget* parent)
     : PreviewWidget(parent), d(new ImageRegionWidgetPriv)
 {
     d->iface = new ImageIface(0, 0);
-    d->image = d->iface->getOriginalImg()->copy();
+    d->image = d->iface->getOriginal()->copy();
 
     setAttribute(Qt::WA_DeleteOnClose);
     setFrameStyle(QFrame::NoFrame);

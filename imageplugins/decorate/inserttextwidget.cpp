@@ -249,7 +249,7 @@ DImg InsertTextWidget::makeInsertText()
     }
 
     // Get original image
-    DImg image      = d->iface->getOriginalImg()->copy();
+    DImg image      = d->iface->getOriginal()->copy();
     int borderWidth = qMax(1, (int)lroundf(ratioW));
 
     // compose and draw result on image
@@ -285,7 +285,7 @@ void InsertTextWidget::makePixmap()
 
     // get preview image data
     DImg image = d->iface->getPreview();
-    image.setIccProfile( d->iface->getOriginalImg()->getIccProfile() );
+    image.setIccProfile( d->iface->getOriginal()->getIccProfile() );
 
     // paint pixmap for drawing this widget
     // First, fill with background color
