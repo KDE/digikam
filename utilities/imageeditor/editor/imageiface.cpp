@@ -248,7 +248,7 @@ DImg* ImageIface::getOriginalImg() const
     return DImgInterface::defaultInterface()->getImg();
 }
 
-DImg ImageIface::getImgSelection() const
+DImg ImageIface::getSelection() const
 {
     return DImg(selectedWidth(), selectedHeight(), originalSixteenBit(), originalHasAlpha(),
                 DImgInterface::defaultInterface()->getImageSelection(), false);

@@ -77,7 +77,7 @@ public:
 
     /** Return a DImg object representing the current original image selection.
      */
-    DImg getImgSelection() const;
+    DImg getSelection() const;
 
     /** Return a pointer to the DImg object representing the original image.
      *  This object may not be modified or stored. Make copies if you need.

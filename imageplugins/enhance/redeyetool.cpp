@@ -387,7 +387,7 @@ void RedEyeTool::slotEffect()
     // a Gaussian blur filter on pixels and we cannot use directly the preview scaled image
     // else the blur radius will not give the same result between preview and final rendering.
     ImageIface* iface = d->previewWidget->imageIface();
-    DImg selection    = iface->getImgSelection();
+    DImg selection    = iface->getSelection();
 
     redEyeFilter(selection);
 
@@ -412,7 +412,7 @@ void RedEyeTool::finalRendering()
     kapp->setOverrideCursor( Qt::WaitCursor );
 
     ImageIface* iface = d->previewWidget->imageIface();
-    DImg selection    = iface->getImgSelection();
+    DImg selection    = iface->getSelection();
 
     redEyeFilter(selection);
 
