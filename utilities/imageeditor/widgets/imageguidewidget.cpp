@@ -221,15 +221,15 @@ DColor ImageGuideWidget::getSpotColor(int getColorFrom) const
 {
     if (getColorFrom == OriginalImage)                          // Get point color from full original image
     {
-        return (d->iface->getColorInfoFromOriginalImage(getSpotPosition()));
+        return (d->iface->getColorInfoFromOriginal(getSpotPosition()));
     }
     else if (getColorFrom == PreviewImage)                      // Get point color from full preview image
     {
-        return (d->iface->getColorInfoFromPreviewImage(d->spot));
+        return (d->iface->getColorInfoFromPreview(d->spot));
     }
 
     // In other cases, get point color from preview target image
-    return (d->iface->getColorInfoFromTargetPreviewImage(d->spot));
+    return (d->iface->getColorInfoFromTargetPreview(d->spot));
 }
 
 void ImageGuideWidget::setSpotVisible(bool spotVisible, bool blink)

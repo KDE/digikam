@@ -193,7 +193,7 @@ bool ImageIface::previewType() const
     return d->usePreviewSelection;
 }
 
-DColor ImageIface::getColorInfoFromOriginalImage(const QPoint& point) const
+DColor ImageIface::getColorInfoFromOriginal(const QPoint& point) const
 {
     if (!DImgInterface::defaultInterface()->getImage() || point.x() > originalWidth() || point.y() > originalHeight())
     {
@@ -204,7 +204,7 @@ DColor ImageIface::getColorInfoFromOriginalImage(const QPoint& point) const
     return DImgInterface::defaultInterface()->getImg()->getPixelColor(point.x(), point.y());
 }
 
-DColor ImageIface::getColorInfoFromPreviewImage(const QPoint& point) const
+DColor ImageIface::getColorInfoFromPreview(const QPoint& point) const
 {
     if (d->previewImage.isNull() || point.x() > previewWidth() || point.y() > previewHeight())
     {
@@ -215,7 +215,7 @@ DColor ImageIface::getColorInfoFromPreviewImage(const QPoint& point) const
     return d->previewImage.getPixelColor(point.x(), point.y());
 }
 
-DColor ImageIface::getColorInfoFromTargetPreviewImage(const QPoint& point) const
+DColor ImageIface::getColorInfoFromTargetPreview(const QPoint& point) const
 {
     if (d->targetPreviewImage.isNull() || point.x() > previewWidth() || point.y() > previewHeight())
     {
@@ -424,7 +424,7 @@ void ImageIface::paint(QPaintDevice* const device, int x, int y, int w, int h, Q
     }
 }
 
-void ImageIface::putImgSelection(const QString& caller, const FilterAction& action, const DImg& img)
+void ImageIface::putSelection(const QString& caller, const FilterAction& action, const DImg& img)
 {
     if (//img.hasAlpha()   != originalHasAlpha()     ||                 // TODO doesn't work with RedEyes tool
         img.sixteenBit() != originalSixteenBit()  ||

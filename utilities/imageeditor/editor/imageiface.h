@@ -95,9 +95,9 @@ public:
     /** Get colors from original, (unchanged) preview
      *  or target preview (set by putPreviewImage) image.
      */
-    DColor getColorInfoFromOriginalImage(const QPoint& point)      const;
-    DColor getColorInfoFromPreviewImage(const QPoint& point)       const;
-    DColor getColorInfoFromTargetPreviewImage(const QPoint& point) const;
+    DColor getColorInfoFromOriginal(const QPoint& point)      const;
+    DColor getColorInfoFromPreview(const QPoint& point)       const;
+    DColor getColorInfoFromTargetPreview(const QPoint& point) const;
 
     /** Standard methods to get/set preview information.
      */
@@ -154,13 +154,13 @@ public:
      *  originalSixteenBit() and originalHasAlpha() methods.
      *  Caller is an i18n'ed string that will be shown as the undo/redo action name.
      */
-    void putImgSelection(const QString& caller, const FilterAction& action, const DImg& img);
+    void putSelection(const QString& caller, const FilterAction& action, const DImg& img);
 
     /** Replace the stored target preview with the given image.
      *  The characteristics of the data must match the characteristics of the current
      *  as returned by the preview...() methods.
      *  The target preview image is used by the paint() and
-     *  getColorInfoFromTargetPreviewImage() methods.
+     *  getColorInfoFromTargetPreview() methods.
      *  The image returned by getPreview() is unaffected.
      */
     void putPreview(const DImg& img);
