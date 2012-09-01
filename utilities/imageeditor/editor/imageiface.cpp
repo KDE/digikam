@@ -226,7 +226,7 @@ DColor ImageIface::getColorInfoFromTargetPreviewImage(const QPoint& point) const
     return d->targetPreviewImage.getPixelColor(point.x(), point.y());
 }
 
-DImg ImageIface::setPreviewImgSize(int w, int h) const
+DImg ImageIface::setPreviewSize(int w, int h) const
 {
     d->previewImage.reset();
     d->targetPreviewImage.reset();

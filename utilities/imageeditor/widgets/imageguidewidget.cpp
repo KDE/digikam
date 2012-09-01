@@ -542,7 +542,7 @@ void ImageGuideWidget::resizeEvent(QResizeEvent* e)
     int h             = e->size().height();
     int old_w         = d->preview.width();
     int old_h         = d->preview.height();
-    d->preview        = d->iface->setPreviewImgSize(w, h);
+    d->preview        = d->iface->setPreviewSize(w, h);
     d->preview.setIccProfile(d->iface->getOriginalImg()->getIccProfile());
 
     d->pixmap         = new QPixmap(w, h);

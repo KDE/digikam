@@ -228,7 +228,7 @@ void ImageSelectionWidget::resizeEvent(QResizeEvent* e)
 
     int w      = e->size().width();
     int h      = e->size().height();
-    d->preview = d->iface->setPreviewImgSize(w, h);
+    d->preview = d->iface->setPreviewSize(w, h);
     d->preview.setIccProfile( d->iface->getOriginalImg()->getIccProfile() );
     d->preview.convertToEightBit();
 

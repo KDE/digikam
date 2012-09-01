@@ -635,19 +635,19 @@ void InsertTextWidget::resizeEvent(QResizeEvent* e)
     blockSignals(true);
     delete d->pixmap;
 
-    int w = e->size().width();
-    int h = e->size().height();
+    int w     = e->size().width();
+    int h     = e->size().height();
 
     int textX = d->textRect.x() - d->rect.x();
     int textY = d->textRect.y() - d->rect.y();
     int old_w = d->w;
     int old_h = d->h;
-    d->iface->setPreviewImgSize(w, h);
+    d->iface->setPreviewSize(w, h);
     d->w      = d->iface->previewWidth();
     d->h      = d->iface->previewHeight();
 
     d->pixmap = new QPixmap(w, h);
-    d->rect = QRect(w/2-d->w/2, h/2-d->h/2, d->w, d->h);
+    d->rect   = QRect(w/2-d->w/2, h/2-d->h/2, d->w, d->h);
 
     if (d->textRect.isValid())
     {

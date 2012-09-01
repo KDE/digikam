@@ -64,7 +64,7 @@ public:
      *  The parameters are only hints, previewWidth() and previewHeight()
      *  may differ from w and h.
      */
-    DImg setPreviewImgSize(int w, int h) const;
+    DImg setPreviewSize(int w, int h) const;
 
     /** Return 'true' if the preview is rendered using the current selection in editor.
      *  Return 'false' if the preview is rendered using the full image in editor.
