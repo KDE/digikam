@@ -241,7 +241,7 @@ void WhiteBalanceTool::prepareFinal()
 void WhiteBalanceTool::putFinalData()
 {
     ImageIface iface(0, 0);
-    iface.putOriginalImage(i18n("White Balance"), filter()->filterAction(), filter()->getTargetImage().bits());
+    iface.putOriginal(i18n("White Balance"), filter()->filterAction(), filter()->getTargetImage().bits());
 }
 
 void WhiteBalanceTool::slotResetSettings()

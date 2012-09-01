@@ -175,7 +175,7 @@ public:
      *  If w == -1 and h == -1, the size is unchanged.
      *  Caller is an i18n'ed string that will be shown as the undo/redo action name.
      */
-    /*KDE_DEPRECATED*/ void putOriginalImage(const QString& caller, const FilterAction& action, uchar* const data, int w = -1, int h = -1);
+    /*KDE_DEPRECATED*/ void putOriginal(const QString& caller, const FilterAction& action, uchar* const data, int w = -1, int h = -1);
 
 private:
 

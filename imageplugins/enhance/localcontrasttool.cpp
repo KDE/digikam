@@ -194,7 +194,7 @@ void LocalContrastTool::putPreviewData()
 void LocalContrastTool::putFinalData()
 {
     ImageIface iface(0, 0);
-    iface.putOriginalImage(i18n("Local Contrast"), filter()->filterAction(), filter()->getTargetImage().bits());
+    iface.putOriginal(i18n("Local Contrast"), filter()->filterAction(), filter()->getTargetImage().bits());
 }
 
 void LocalContrastTool::slotLoadSettings()

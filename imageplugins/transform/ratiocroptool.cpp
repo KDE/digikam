@@ -1070,7 +1070,7 @@ void RatioCropTool::finalRendering()
     action.addParameter("width",  currentRegion.width());
     action.addParameter("height", currentRegion.height());
 
-    iface->putOriginalImage(i18n("Aspect Ratio Crop"), action, imOrg.bits(), imOrg.width(), imOrg.height());
+    iface->putOriginal(i18n("Aspect Ratio Crop"), action, imOrg.bits(), imOrg.width(), imOrg.height());
     
     kapp->restoreOverrideCursor();
     writeSettings();

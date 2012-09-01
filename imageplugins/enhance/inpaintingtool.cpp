@@ -467,7 +467,7 @@ void InPaintingTool::putFinalData()
 
     d->originalImage.bitBltImage(&d->cropImage, d->maskRect.left(), d->maskRect.top());
 
-    iface.putOriginalImage(i18n("In-Painting"),
+    iface.putOriginal(i18n("In-Painting"),
                            filter() ? filter()->filterAction() : d->lastFilterAction,
                            d->originalImage.bits());
 }

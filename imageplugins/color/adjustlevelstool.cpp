@@ -915,7 +915,7 @@ void AdjustLevelsTool::prepareFinal()
 void AdjustLevelsTool::putFinalData()
 {
     ImageIface iface(0, 0);
-    iface.putOriginalImage(i18n("Adjust Levels"), filter()->filterAction(), filter()->getTargetImage().bits());
+    iface.putOriginal(i18n("Adjust Levels"), filter()->filterAction(), filter()->getTargetImage().bits());
 }
 
 void AdjustLevelsTool::slotLoadSettings()

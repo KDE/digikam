@@ -207,7 +207,7 @@ void BCGTool::prepareFinal()
 void BCGTool::putFinalData()
 {
     ImageIface iface(0, 0);
-    iface.putOriginalImage(i18n("Brightness / Contrast / Gamma"), filter()->filterAction(), filter()->getTargetImage().bits());
+    iface.putOriginal(i18n("Brightness / Contrast / Gamma"), filter()->filterAction(), filter()->getTargetImage().bits());
 }
 
 }  // namespace DigikamColorImagePlugin

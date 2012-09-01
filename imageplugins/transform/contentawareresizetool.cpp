@@ -789,7 +789,7 @@ void ContentAwareResizeTool::putFinalData()
 {
     ImageIface iface(0, 0);
     DImg targetImage = filter()->getTargetImage();
-    iface.putOriginalImage(i18n("Liquid Rescale"), filter()->filterAction(), targetImage.bits(), targetImage.width(), targetImage.height());
+    iface.putOriginal(i18n("Liquid Rescale"), filter()->filterAction(), targetImage.bits(), targetImage.width(), targetImage.height());
 }
 
 void ContentAwareResizeTool::blockWidgetSignals(bool b)

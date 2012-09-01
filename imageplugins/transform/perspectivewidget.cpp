@@ -330,7 +330,7 @@ void PerspectiveWidget::applyPerspectiveAdjustment()
 
     action.addParameter("antiAliasing", d->antiAliasing);
     // Update target image.
-    d->iface->putOriginalImage(i18n("Perspective Adjustment"), action,
+    d->iface->putOriginal(i18n("Perspective Adjustment"), action,
                                targetImg.bits(), targetImg.width(), targetImg.height());
 }
 

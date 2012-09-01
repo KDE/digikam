@@ -187,7 +187,7 @@ void EmbossTool::putPreviewData()
 void EmbossTool::putFinalData()
 {
     ImageIface iface(0, 0);
-    iface.putOriginalImage(i18n("Emboss"), filter()->filterAction(), filter()->getTargetImage().bits());
+    iface.putOriginal(i18n("Emboss"), filter()->filterAction(), filter()->getTargetImage().bits());
 }
 
 }  // namespace DigikamFxFiltersImagePlugin

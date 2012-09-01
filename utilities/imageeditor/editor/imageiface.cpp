@@ -470,7 +470,7 @@ void ImageIface::putPreview(const DImg& img)
 
 // Deprecated methods ------------------------------------------------------------------------------------------------
 
-void ImageIface::putOriginalImage(const QString& caller, const FilterAction& action, uchar* data, int w, int h)
+void ImageIface::putOriginal(const QString& caller, const FilterAction& action, uchar* data, int w, int h)
 {
     if (!data)
     {

@@ -196,7 +196,7 @@ void CBTool::prepareFinal()
 void CBTool::putFinalData()
 {
     ImageIface iface(0, 0);
-    iface.putOriginalImage(i18n("Color Balance"), filter()->filterAction(), filter()->getTargetImage().bits());
+    iface.putOriginal(i18n("Color Balance"), filter()->filterAction(), filter()->getTargetImage().bits());
 }
 
 }  // namespace DigikamColorImagePlugin

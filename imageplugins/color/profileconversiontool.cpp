@@ -255,7 +255,7 @@ void ProfileConversionTool::putFinalData()
     ImageIface iface(0, 0);
     DImg imDest = filter()->getTargetImage();
 
-    iface.putOriginalImage(i18n("Color Profile Conversion"), filter()->filterAction(), imDest.bits());
+    iface.putOriginal(i18n("Color Profile Conversion"), filter()->filterAction(), imDest.bits());
     iface.putOriginalIccProfile(imDest.getIccProfile());
 
     DMetadata meta(iface.getOriginalMetadata());
@@ -283,7 +283,7 @@ void ProfileConversionTool::fastConversion(const IccProfile& profile)
     filter.startFilterDirectly();
 
     DImg imDest               = filter.getTargetImage();
-    iface.putOriginalImage(i18n("Color Profile Conversion"), filter.filterAction(), imDest.bits());
+    iface.putOriginal(i18n("Color Profile Conversion"), filter.filterAction(), imDest.bits());
     iface.putOriginalIccProfile(imDest.getIccProfile());
 
     DMetadata meta(iface.getOriginalMetadata());

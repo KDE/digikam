@@ -151,11 +151,11 @@ void AbstractDImageHistoryTest::applyFilters1()
 
     BCGFilter filter1(iface.getOriginal(), this);
     filter1.startFilterDirectly();
-    iface.putOriginalImage(i18n("Brightness / Contrast / Gamma"), filter1.filterAction(), filter1.getTargetImage().bits());
+    iface.putOriginal(i18n("Brightness / Contrast / Gamma"), filter1.filterAction(), filter1.getTargetImage().bits());
 
     CurvesFilter filter2(iface.getOriginal(), this);
     filter2.startFilterDirectly();
-    iface.putOriginalImage("Curves", filter2.filterAction(), filter2.getTargetImage().bits());
+    iface.putOriginal("Curves", filter2.filterAction(), filter2.getTargetImage().bits());
 }
 
 void AbstractDImageHistoryTest::applyFilters2()
@@ -164,7 +164,7 @@ void AbstractDImageHistoryTest::applyFilters2()
 
     AutoLevelsFilter filter(iface.getOriginal(), iface.getOriginal(), this);
     filter.startFilterDirectly();
-    iface.putOriginalImage("", filter.filterAction(), filter.getTargetImage().bits());
+    iface.putOriginal("", filter.filterAction(), filter.getTargetImage().bits());
 }
 
 void AbstractDImageHistoryTest::applyFilters3()
@@ -173,7 +173,7 @@ void AbstractDImageHistoryTest::applyFilters3()
 
     InfraredFilter filter(iface.getOriginal(), this);
     filter.startFilterDirectly();
-    iface.putOriginalImage("", filter.filterAction(), filter.getTargetImage().bits());
+    iface.putOriginal("", filter.filterAction(), filter.getTargetImage().bits());
 }
 
 void AbstractDImageHistoryTest::applyFilters4()
@@ -182,7 +182,7 @@ void AbstractDImageHistoryTest::applyFilters4()
 
     BlurFilter filter(iface.getOriginal(), this);
     filter.startFilterDirectly();
-    iface.putOriginalImage("", filter.filterAction(), filter.getTargetImage().bits());
+    iface.putOriginal("", filter.filterAction(), filter.getTargetImage().bits());
 }
 
 QString AbstractDImageHistoryTest::tempFileName(const QString& purpose) const

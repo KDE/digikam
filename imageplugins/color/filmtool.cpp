@@ -690,7 +690,7 @@ void FilmTool::putPreviewData()
 void FilmTool::putFinalData()
 {
     ImageIface iface(0, 0);
-    iface.putOriginalImage(i18n("Film"), filter()->filterAction(), filter()->getTargetImage().bits());
+    iface.putOriginal(i18n("Film"), filter()->filterAction(), filter()->getTargetImage().bits());
 }
 
 bool FilmTool::eventFilter(QObject* obj, QEvent* ev)

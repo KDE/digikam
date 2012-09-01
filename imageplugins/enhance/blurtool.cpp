@@ -174,7 +174,7 @@ void BlurTool::prepareFinal()
 void BlurTool::putFinalData()
 {
     ImageIface iface(0, 0);
-    iface.putOriginalImage(i18n("Gaussian Blur"), filter()->filterAction(), filter()->getTargetImage().bits());
+    iface.putOriginal(i18n("Gaussian Blur"), filter()->filterAction(), filter()->getTargetImage().bits());
 }
 
 }  // namespace DigikamEnhanceImagePlugin
