@@ -247,7 +247,7 @@ void LensAutoFixTool::putPreviewData()
 void LensAutoFixTool::putFinalData()
 {
     ImageIface iface(0, 0);
-    iface.putOriginal(i18n("Lens Auto-Correction"), filter()->filterAction(), filter()->getTargetImage().bits());
+    iface.putOriginal(i18n("Lens Auto-Correction"), filter()->filterAction(), filter()->getTargetImage());
     Digikam::KExiv2Data data = iface.getOriginalMetadata();
     // Note: there are certain situations in the editor where these metadata changes may be undone.
     // Ignore for now, as they are not critical.

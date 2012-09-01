@@ -270,19 +270,19 @@ void SharpenTool::putFinalData()
     {
         case SharpContainer::SimpleSharp:
         {
-            iface.putOriginal(i18n("Sharpen"), filter()->filterAction(), filter()->getTargetImage().bits());
+            iface.putOriginal(i18n("Sharpen"), filter()->filterAction(), filter()->getTargetImage());
             break;
         }
 
         case SharpContainer::UnsharpMask:
         {
-            iface.putOriginal(i18n("Unsharp Mask"), filter()->filterAction(), filter()->getTargetImage().bits());
+            iface.putOriginal(i18n("Unsharp Mask"), filter()->filterAction(), filter()->getTargetImage());
             break;
         }
 
         case SharpContainer::Refocus:
         {
-            iface.putOriginal(i18n("Refocus"), filter()->filterAction(), filter()->getTargetImage().bits());
+            iface.putOriginal(i18n("Refocus"), filter()->filterAction(), filter()->getTargetImage());
             break;
         }
     }

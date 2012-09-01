@@ -165,17 +165,13 @@ public:
      */
     void putPreview(const DImg& img);
 
-    // Deprecated methods ------------------------------------------------------------------------------------------------
-
-    /** Replace the image data of the original image with the given data.
+    /** Replace the data of the original with the given image.
      *  The characteristics of the data must match the characteristics of
      *  the original image as returned by the original...() methods,
-     *  respectively the given width and height parameters.
-     *  No ownership of the data pointer is assumed.
-     *  If w == -1 and h == -1, the size is unchanged.
+     *  The size of image can be changed.
      *  Caller is an i18n'ed string that will be shown as the undo/redo action name.
      */
-    /*KDE_DEPRECATED*/ void putOriginal(const QString& caller, const FilterAction& action, uchar* const data, int w = -1, int h = -1);
+    void putOriginal(const QString& caller, const FilterAction& action, const DImg& img);
 
 private:
 

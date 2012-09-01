@@ -172,7 +172,7 @@ void AntiVignettingTool::putFinalData()
     ImageIface* iface = d->previewWidget->imageIface();
     DImg finalImage   = filter()->getTargetImage();
 
-    iface->putOriginal(i18n("Vignetting Correction"), filter()->filterAction(), finalImage.bits());
+    iface->putOriginal(i18n("Vignetting Correction"), filter()->filterAction(), finalImage);
 }
 
 }  // namespace DigikamEnhanceImagePlugin

@@ -397,7 +397,7 @@ void ColorFxTool::putFinalData()
             break;
     }
 
-    iface.putOriginal(name, filter()->filterAction(), filter()->getTargetImage().bits());
+    iface.putOriginal(name, filter()->filterAction(), filter()->getTargetImage());
 }
 
 void ColorFxTool::renderingFinished()

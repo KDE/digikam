@@ -220,7 +220,7 @@ void BWSepiaTool::prepareFinal()
 void BWSepiaTool::putFinalData()
 {
     ImageIface iface(0, 0);
-    iface.putOriginal(i18n("Convert to Black and White"), filter()->filterAction(), filter()->getTargetImage().bits());
+    iface.putOriginal(i18n("Convert to Black and White"), filter()->filterAction(), filter()->getTargetImage());
 }
 
 void BWSepiaTool::slotLoadSettings()

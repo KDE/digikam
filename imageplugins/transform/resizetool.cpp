@@ -555,8 +555,7 @@ void ResizeTool::putFinalData()
     DImg targetImage = filter()->getTargetImage();
     iface.putOriginal(i18n("Resize"),
                            filter()->filterAction(),
-                           targetImage.bits(),
-                           targetImage.width(), targetImage.height());
+                           targetImage);
 }
 
 void ResizeTool::blockWidgetSignals(bool b)

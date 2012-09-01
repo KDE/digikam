@@ -468,12 +468,25 @@ void ImageIface::putPreview(const DImg& img)
     d->targetPreviewImage.putImageData(data);
 }
 
-// Deprecated methods ------------------------------------------------------------------------------------------------
-
-void ImageIface::putOriginal(const QString& caller, const FilterAction& action, uchar* data, int w, int h)
+void ImageIface::putOriginal(const QString& caller, const FilterAction& action, const DImg& img)
 {
+    // Check is image size is modified.
+
+    // Size are unchanged by default.
+    int w = -1;
+    int h = -1;
+
+    if (img.width() != (uint)originalWidth())
+        w = img.width();
+
+    if (img.height() != (uint)originalHeight())
+        h = img.height();
+
+    uchar* const data = img.bits();
+
     if (!data)
     {
+        kDebug() << "No image data to handle";
         return;
     }
 

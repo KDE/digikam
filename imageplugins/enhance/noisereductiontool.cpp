@@ -142,7 +142,7 @@ void NoiseReductionTool::putPreviewData()
 void NoiseReductionTool::putFinalData()
 {
     ImageIface iface(0, 0);
-    iface.putOriginal(i18n("Noise Reduction"), filter()->filterAction(), filter()->getTargetImage().bits());
+    iface.putOriginal(i18n("Noise Reduction"), filter()->filterAction(), filter()->getTargetImage());
 }
 
 void NoiseReductionTool::slotLoadSettings()

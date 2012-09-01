@@ -299,7 +299,7 @@ void AutoCorrectionTool::putFinalData()
     }
 
     ImageIface iface(0, 0);
-    iface.putOriginal(name, filter()->filterAction(), filter()->getTargetImage().bits());
+    iface.putOriginal(name, filter()->filterAction(), filter()->getTargetImage());
 }
 
 void AutoCorrectionTool::autoCorrection(DImg* img, DImg* ref, int type)

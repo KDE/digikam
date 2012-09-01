@@ -151,11 +151,11 @@ void AbstractDImageHistoryTest::applyFilters1()
 
     BCGFilter filter1(iface.getOriginal(), this);
     filter1.startFilterDirectly();
-    iface.putOriginal(i18n("Brightness / Contrast / Gamma"), filter1.filterAction(), filter1.getTargetImage().bits());
+    iface.putOriginal(i18n("Brightness / Contrast / Gamma"), filter1.filterAction(), filter1.getTargetImage());
 
     CurvesFilter filter2(iface.getOriginal(), this);
     filter2.startFilterDirectly();
-    iface.putOriginal("Curves", filter2.filterAction(), filter2.getTargetImage().bits());
+    iface.putOriginal("Curves", filter2.filterAction(), filter2.getTargetImage());
 }
 
 void AbstractDImageHistoryTest::applyFilters2()
@@ -164,7 +164,7 @@ void AbstractDImageHistoryTest::applyFilters2()
 
     AutoLevelsFilter filter(iface.getOriginal(), iface.getOriginal(), this);
     filter.startFilterDirectly();
-    iface.putOriginal("", filter.filterAction(), filter.getTargetImage().bits());
+    iface.putOriginal("", filter.filterAction(), filter.getTargetImage());
 }
 
 void AbstractDImageHistoryTest::applyFilters3()
@@ -173,7 +173,7 @@ void AbstractDImageHistoryTest::applyFilters3()
 
     InfraredFilter filter(iface.getOriginal(), this);
     filter.startFilterDirectly();
-    iface.putOriginal("", filter.filterAction(), filter.getTargetImage().bits());
+    iface.putOriginal("", filter.filterAction(), filter.getTargetImage());
 }
 
 void AbstractDImageHistoryTest::applyFilters4()
@@ -182,7 +182,7 @@ void AbstractDImageHistoryTest::applyFilters4()
 
     BlurFilter filter(iface.getOriginal(), this);
     filter.startFilterDirectly();
-    iface.putOriginal("", filter.filterAction(), filter.getTargetImage().bits());
+    iface.putOriginal("", filter.filterAction(), filter.getTargetImage());
 }
 
 QString AbstractDImageHistoryTest::tempFileName(const QString& purpose) const
@@ -209,6 +209,7 @@ void AbstractDImageHistoryTest::initBaseTestCase()
 
     connect(m_im, SIGNAL(signalImageLoaded(QString,bool)),
             this, SLOT(slotImageLoaded(QString,bool)));
+
     connect(m_im, SIGNAL(signalImageSaved(QString,bool)),
             this, SLOT(slotImageSaved(QString,bool)));
 

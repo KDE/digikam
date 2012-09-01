@@ -287,7 +287,7 @@ void AdjustCurvesTool::prepareFinal()
 void AdjustCurvesTool::putFinalData()
 {
     ImageIface iface(0, 0);
-    iface.putOriginal(i18n("Adjust Curve"), filter()->filterAction(), filter()->getTargetImage().bits());
+    iface.putOriginal(i18n("Adjust Curve"), filter()->filterAction(), filter()->getTargetImage());
 }
 
 void AdjustCurvesTool::slotLoadSettings()

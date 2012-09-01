@@ -359,7 +359,7 @@ void FreeRotationTool::putFinalData()
 {
     ImageIface iface(0, 0);
     DImg targetImage = filter()->getTargetImage();
-    iface.putOriginal(i18n("Free Rotation"), filter()->filterAction(), targetImage.bits(), targetImage.width(), targetImage.height());
+    iface.putOriginal(i18n("Free Rotation"), filter()->filterAction(), targetImage);
 }
 
 QString FreeRotationTool::generateButtonLabel(const QPoint& p)

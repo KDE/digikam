@@ -166,7 +166,7 @@ void FilmGrainTool::putPreviewData()
 void FilmGrainTool::putFinalData()
 {
     ImageIface iface(0, 0);
-    iface.putOriginal(i18n("Film Grain"), filter()->filterAction(), filter()->getTargetImage().bits());
+    iface.putOriginal(i18n("Film Grain"), filter()->filterAction(), filter()->getTargetImage());
 }
 
 void FilmGrainTool::renderingFinished()

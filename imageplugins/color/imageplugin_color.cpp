@@ -237,7 +237,7 @@ void ImagePlugin_Color::slotInvert()
     ImageIface iface(0, 0);
     InvertFilter invert(iface.getOriginal(), 0L);
     invert.startFilterDirectly();
-    iface.putOriginal(i18n("Invert"), invert.filterAction(), invert.getTargetImage().bits());
+    iface.putOriginal(i18n("Invert"), invert.filterAction(), invert.getTargetImage());
 
     kapp->restoreOverrideCursor();
 }

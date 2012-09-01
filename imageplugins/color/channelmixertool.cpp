@@ -209,7 +209,7 @@ void ChannelMixerTool::prepareFinal()
 void ChannelMixerTool::putFinalData()
 {
     ImageIface iface(0, 0);
-    iface.putOriginal(i18n("Channel Mixer"), filter()->filterAction(), filter()->getTargetImage().bits());
+    iface.putOriginal(i18n("Channel Mixer"), filter()->filterAction(), filter()->getTargetImage());
 }
 
 void ChannelMixerTool::readSettings()

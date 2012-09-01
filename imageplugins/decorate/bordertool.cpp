@@ -173,7 +173,7 @@ void BorderTool::putFinalData()
 {
     ImageIface iface(0, 0);
     DImg targetImage = filter()->getTargetImage();
-    iface.putOriginal(i18n("Add Border"), filter()->filterAction(), targetImage.bits(), targetImage.width(), targetImage.height());
+    iface.putOriginal(i18n("Add Border"), filter()->filterAction(), targetImage);
 }
 
 }  // namespace DigikamDecorateImagePlugin

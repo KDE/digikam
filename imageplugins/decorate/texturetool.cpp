@@ -228,7 +228,7 @@ void TextureTool::putPreviewData()
 void TextureTool::putFinalData()
 {
     ImageIface iface(0, 0);
-    iface.putOriginal(i18n("Texture"), filter()->filterAction(), filter()->getTargetImage().bits());
+    iface.putOriginal(i18n("Texture"), filter()->filterAction(), filter()->getTargetImage());
 }
 
 QString TextureTool::getTexturePath(int texture)

@@ -248,7 +248,7 @@ void RainDropTool::putPreviewData()
 void RainDropTool::putFinalData()
 {
     ImageIface iface(0, 0);
-    iface.putOriginal(i18n("RainDrop"), filter()->filterAction(), filter()->getTargetImage().bits());
+    iface.putOriginal(i18n("RainDrop"), filter()->filterAction(), filter()->getTargetImage());
 }
 
 void RainDropTool::blockWidgetSignals(bool b)

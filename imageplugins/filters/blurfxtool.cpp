@@ -400,7 +400,7 @@ void BlurFXTool::putPreviewData()
 void BlurFXTool::putFinalData()
 {
     ImageIface iface(0, 0);
-    iface.putOriginal(i18n("Blur Effects"), filter()->filterAction(), filter()->getTargetImage().bits());
+    iface.putOriginal(i18n("Blur Effects"), filter()->filterAction(), filter()->getTargetImage());
 }
 
 void BlurFXTool::renderingFinished()

@@ -330,8 +330,7 @@ void PerspectiveWidget::applyPerspectiveAdjustment()
 
     action.addParameter("antiAliasing", d->antiAliasing);
     // Update target image.
-    d->iface->putOriginal(i18n("Perspective Adjustment"), action,
-                               targetImg.bits(), targetImg.width(), targetImg.height());
+    d->iface->putOriginal(i18n("Perspective Adjustment"), action, targetImg);
 }
 
 void PerspectiveWidget::slotInverseTransformationChanged(bool isEnabled)

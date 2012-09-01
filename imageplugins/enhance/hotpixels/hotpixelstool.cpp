@@ -280,7 +280,7 @@ void HotPixelsTool::putPreviewData()
 void HotPixelsTool::putFinalData()
 {
     ImageIface iface(0, 0);
-    iface.putOriginal(i18n("Hot Pixels Correction"), filter()->filterAction(), filter()->getTargetImage().bits());
+    iface.putOriginal(i18n("Hot Pixels Correction"), filter()->filterAction(), filter()->getTargetImage());
 }
 
 void HotPixelsTool::slotBlackFrame(const QList<HotPixel>& hpList, const KUrl& blackFrameURL)

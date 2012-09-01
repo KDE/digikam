@@ -469,7 +469,7 @@ void InPaintingTool::putFinalData()
 
     iface.putOriginal(i18n("In-Painting"),
                            filter() ? filter()->filterAction() : d->lastFilterAction,
-                           d->originalImage.bits());
+                           d->originalImage);
 }
 
 void InPaintingTool::slotLoadSettings()
