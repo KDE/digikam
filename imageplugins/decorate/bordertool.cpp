@@ -127,7 +127,7 @@ void BorderTool::slotResetSettings()
 void BorderTool::prepareEffect()
 {
     ImageIface* iface        = d->previewWidget->imageIface();
-    DImg preview             = iface->getPreviewImg();
+    DImg preview             = iface->getPreview();
     int w                    = iface->previewWidth();
     float ratio              = (float)w/(float)iface->originalWidth();
     BorderContainer settings = d->settingsView->settings();

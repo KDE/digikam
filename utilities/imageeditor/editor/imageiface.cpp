@@ -238,7 +238,7 @@ DImg ImageIface::setPreviewSize(int w, int h) const
     return DImg(previewWidth(), previewHeight(), previewSixteenBit(), previewHasAlpha(), data);
 }
 
-DImg ImageIface::getPreviewImg() const
+DImg ImageIface::getPreview() const
 {
     return DImg(previewWidth(), previewHeight(), previewSixteenBit(), previewHasAlpha(), d->getPreviewImage());
 }

@@ -284,7 +284,7 @@ void InsertTextWidget::makePixmap()
     }
 
     // get preview image data
-    DImg image = d->iface->getPreviewImg();
+    DImg image = d->iface->getPreview();
     image.setIccProfile( d->iface->getOriginalImg()->getIccProfile() );
 
     // paint pixmap for drawing this widget

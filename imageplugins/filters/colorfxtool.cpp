@@ -337,7 +337,7 @@ void ColorFxTool::prepareEffect()
     int e = d->effectType->currentIndex();
 
     ImageIface* iface = d->previewWidget->imageIface();
-    DImg image        = iface->getPreviewImg();
+    DImg image        = iface->getPreview();
 
     setFilter(new ColorFXFilter(&image, this, e, l, f));
 }

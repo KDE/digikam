@@ -294,7 +294,7 @@ void ShearTool::prepareEffect()
     ImageIface* iface = d->previewWidget->imageIface();
     int orgW          = iface->originalWidth();
     int orgH          = iface->originalHeight();
-    DImg preview      = iface->getPreviewImg();
+    DImg preview      = iface->getPreview();
     setFilter(new ShearFilter(&preview, this, hAngle, vAngle, antialiasing, background, orgW, orgH));
 }
 

@@ -199,7 +199,7 @@ void LensAutoFixTool::prepareEffect()
     LensFunContainer settings = d->cameraSelector->settings();
     d->settingsView->assignFilterSettings(settings);
     ImageIface* iface         = d->previewWidget->imageIface();
-    DImg preview              = iface->getPreviewImg();
+    DImg preview              = iface->getPreview();
 
     if (d->showGrid->isChecked())
     {

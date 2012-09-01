@@ -60,7 +60,7 @@ public:
      */
     void setPreviewType(bool useSelect = false);
 
-    /** Sets preview size and returns new preview as with getPreviewImg.
+    /** Sets preview size and returns new preview as with getPreview.
      *  The parameters are only hints, previewWidth() and previewHeight()
      *  may differ from w and h.
      */
@@ -73,7 +73,7 @@ public:
 
     /** Return a DImg object representing the preview image.
      */
-    DImg getPreviewImg() const;
+    DImg getPreview() const;
 
     /** Return a DImg object representing the current original image selection.
      */
@@ -161,7 +161,7 @@ public:
      *  as returned by the preview...() methods.
      *  The target preview image is used by the paint() and
      *  getColorInfoFromTargetPreviewImage() methods.
-     *  The image returned by getPreviewImg() is unaffected.
+     *  The image returned by getPreview() is unaffected.
      */
     void putPreview(const DImg& img);
 

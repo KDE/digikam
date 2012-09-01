@@ -204,7 +204,7 @@ void ImageSelectionWidget::setup(int w, int h,
     setAttribute(Qt::WA_DeleteOnClose);
 
     d->iface   = new ImageIface(w, h);
-    d->preview = d->iface->getPreviewImg();
+    d->preview = d->iface->getPreview();
     d->preview.setIccProfile( d->iface->getOriginalImg()->getIccProfile() );
     d->preview.convertToEightBit();
 

@@ -125,21 +125,21 @@ ImageGuideWidget::ImageGuideWidget(QWidget* const parent,
                                    bool blink, bool useImageSelection)
     : QWidget(parent), d(new Private)
 {
-    int w          = 480;
-    int h          = 320;
-    d->spotVisible = spotVisible;
-    d->guideMode   = guideMode;
-    d->guideColor  = guideColor;
-    d->guideSize   = guideSize;
-    d->bgColor     = palette().color(QPalette::Base);
+    int w            = 480;
+    int h            = 320;
+    d->spotVisible   = spotVisible;
+    d->guideMode     = guideMode;
+    d->guideColor    = guideColor;
+    d->guideSize     = guideSize;
+    d->bgColor       = palette().color(QPalette::Base);
 
     setMinimumSize(w, h);
     setMouseTracking(true);
     setAttribute(Qt::WA_DeleteOnClose);
 
-    d->iface       = new ImageIface(w, h);
+    d->iface         = new ImageIface(w, h);
     d->iface->setPreviewType(useImageSelection);
-    d->preview     = d->iface->getPreviewImg();
+    d->preview       = d->iface->getPreview();
     d->preview.setIccProfile(d->iface->getOriginalImg()->getIccProfile());
 
     d->pixmap        = new QPixmap(w, h);
