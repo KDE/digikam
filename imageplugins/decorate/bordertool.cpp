@@ -165,7 +165,7 @@ void BorderTool::putPreviewData()
 
     imDest.bitBltImage(&imTemp, (w-imTemp.width())/2, (h-imTemp.height())/2);
 
-    iface->putPreviewImage(imDest.bits());
+    iface->putPreview(imDest);
     d->previewWidget->updatePreview();
 }
 

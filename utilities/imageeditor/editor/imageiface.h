@@ -156,17 +156,16 @@ public:
      */
     void putImgSelection(const QString& caller, const FilterAction& action, const DImg& img);
 
-    // Deprecated methods ------------------------------------------------------------------------------------------------
-
-    /** Replace the stored target preview data with the given data.
+    /** Replace the stored target preview with the given image.
      *  The characteristics of the data must match the characteristics of the current
      *  as returned by the preview...() methods.
-     *  The target preview data is used by the paint() and
+     *  The target preview image is used by the paint() and
      *  getColorInfoFromTargetPreviewImage() methods.
-     *  The data returned by getPreviewImage() is unaffected.
-     *  No ownership of the data pointer is assumed.
+     *  The image returned by getPreviewImg() is unaffected.
      */
-    /*KDE_DEPRECATED*/ void putPreviewImage(uchar* const data);
+    void putPreview(const DImg& img);
+
+    // Deprecated methods ------------------------------------------------------------------------------------------------
 
     /** Replace the image data of the original image with the given data.
      *  The characteristics of the data must match the characteristics of

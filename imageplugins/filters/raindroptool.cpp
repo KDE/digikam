@@ -240,7 +240,7 @@ void RainDropTool::putPreviewData()
 {
     ImageIface* iface = d->previewWidget->imageIface();
     DImg imDest       = filter()->getTargetImage().smoothScale(iface->previewWidth(), iface->previewHeight());
-    iface->putPreviewImage(imDest.bits());
+    iface->putPreview(imDest);
 
     d->previewWidget->updatePreview();
 }

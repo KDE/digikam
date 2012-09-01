@@ -420,7 +420,7 @@ void PerspectiveWidget::updatePixmap()
                                                 d->topLeftPoint, d->topRightPoint,
                                                 d->bottomLeftPoint, d->bottomRightPoint);
 
-        d->iface->putPreviewImage(d->preview.bits());
+        d->iface->putPreview(d->preview);
         d->iface->paint(d->pixmap, d->rect.x(), d->rect.y(),
                         d->rect.width(), d->rect.height());
     }
@@ -440,7 +440,7 @@ void PerspectiveWidget::updatePixmap()
                                                 d->bottomLeftPoint, d->bottomRightPoint,
                                                 &d->preview, &destImage, background);
 
-        d->iface->putPreviewImage(destImage.bits());
+        d->iface->putPreview(destImage);
 
         // Draw image
 

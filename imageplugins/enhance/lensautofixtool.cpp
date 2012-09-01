@@ -240,7 +240,7 @@ void LensAutoFixTool::prepareFinal()
 
 void LensAutoFixTool::putPreviewData()
 {
-    d->previewWidget->imageIface()->putPreviewImage(filter()->getTargetImage().bits());
+    d->previewWidget->imageIface()->putPreview(filter()->getTargetImage());
     d->previewWidget->updatePreview();
 }
 

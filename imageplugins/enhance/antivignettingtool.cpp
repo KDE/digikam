@@ -163,7 +163,7 @@ void AntiVignettingTool::putPreviewData()
 {
     ImageIface* iface = d->previewWidget->imageIface();
     DImg preview      = filter()->getTargetImage().smoothScale(iface->previewWidth(), iface->previewHeight());
-    iface->putPreviewImage(preview.bits());
+    iface->putPreview(preview);
     d->previewWidget->updatePreview();
 }
 

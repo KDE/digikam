@@ -393,7 +393,7 @@ void RedEyeTool::slotEffect()
 
     DImg preview = selection.smoothScale(iface->previewWidth(), iface->previewHeight());
 
-    iface->putPreviewImage(preview.bits());
+    iface->putPreview(preview);
     d->previewWidget->updatePreview();
 
     // Update histogram.

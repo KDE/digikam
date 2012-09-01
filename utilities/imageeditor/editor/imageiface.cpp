@@ -426,12 +426,12 @@ void ImageIface::paint(QPaintDevice* device, int x, int y, int w, int h, QPainte
 
 void ImageIface::putImgSelection(const QString& caller, const FilterAction& action, const DImg& img)
 {
-    if (//img.hasAlpha()   != originalHasAlpha()     ||
+    if (//img.hasAlpha()   != originalHasAlpha()     ||                 // TODO doesn't work with RedEyes tool
         img.sixteenBit() != originalSixteenBit()  ||
         img.size()       != QSize(selectedWidth(), selectedHeight())
        )
     {
-        kDebug() << "Properties of image to overwrite selection differs of original image";
+        kDebug() << "Properties of image to overwrite selection differs than original image";
         return;
     }
 
@@ -439,25 +439,36 @@ void ImageIface::putImgSelection(const QString& caller, const FilterAction& acti
 
     if (!data)
     {
-        kDebug() << "No image data to overwrite selection of original image";
+        kDebug() << "No image data to handle";
         return;
     }
 
     DImgInterface::defaultInterface()->putImageSelection(caller, action, data);
 }
 
-// Deprecated methods ------------------------------------------------------------------------------------------------
-
-void ImageIface::putPreviewImage(uchar* data)
+void ImageIface::putPreview(const DImg& img)
 {
+    if (//img.hasAlpha()   != previewHasAlpha()   ||                    // TODO doesn't work with RedEyes tool
+        img.sixteenBit() != previewSixteenBit()
+       )
+    {
+        kDebug() << "Properties of image differs than preview";
+        return;
+    }
+
+    uchar* const data = img.bits();
+
     if (!data)
     {
+        kDebug() << "No preview image data to handle";
         return;
     }
 
     d->targetPreviewImage.detach();
     d->targetPreviewImage.putImageData(data);
 }
+
+// Deprecated methods ------------------------------------------------------------------------------------------------
 
 void ImageIface::putOriginalImage(const QString& caller, const FilterAction& action, uchar* data, int w, int h)
 {

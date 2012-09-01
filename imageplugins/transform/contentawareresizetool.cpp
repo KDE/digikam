@@ -770,7 +770,7 @@ void ContentAwareResizeTool::putPreviewData()
     imDest.fill(DColor(background, filter()->getTargetImage().sixteenBit()));
     imDest.bitBltImage(&imTemp, (w-imTemp.width())/2, (h-imTemp.height())/2);
 
-    iface->putPreviewImage((imDest.smoothScale(iface->previewWidth(), iface->previewHeight())).bits());
+    iface->putPreview(imDest.smoothScale(iface->previewWidth(), iface->previewHeight()));
     d->previewWidget->updatePreview();
 }
 
