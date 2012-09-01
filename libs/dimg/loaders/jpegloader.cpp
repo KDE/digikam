@@ -59,7 +59,7 @@ namespace Digikam
 
 void JPEGLoader::dimg_jpeg_error_exit(j_common_ptr cinfo)
 {
-    dimg_jpeg_error_mgr* myerr = (dimg_jpeg_error_mgr*) cinfo->err;
+    dimg_jpeg_error_mgr* myerr = static_cast<dimg_jpeg_error_mgr*>(cinfo->err);
 
     char buffer[JMSG_LENGTH_MAX];
     (*cinfo->err->format_message)(cinfo, buffer);
