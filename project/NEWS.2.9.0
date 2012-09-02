@@ -1,0 +1,21 @@
+*****************************************************************************************************
+digiKam 2.9.0 - Release date: 2012-09-02
+
+NEW FEATURES:
+
+CameraGUI : libgphoto 2.5.0 API support.
+
+
+BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
+
+001 ==> 296024 - Undefined symbol in libdigikamcore.so [patch].
+002 ==> 291627 - Nef data loss after geotaging.
+003 ==> 303427 - Failed build against libgphoto2-2.5.0 [patch].
+004 ==> 235601 - Local contrast plugin preview is wrong.
+005 ==> 204466 - Local contrast plugin issues.
+006 ==> 304550 - Unknown CMake command "PKG_FIND_MODULE".
+007 ==> 305916 - Busycursor sticks if applied before previews are ready.
+008 ==> 303119 - digiKam crashes when applying Restoration on a PNG picture.
+009 ==> 306084 - Typo: ‘inti’ was not declared in this scop.
+010 ==> 
+
