@@ -66,7 +66,7 @@ public Q_SLOTS:
 
 Q_SIGNALS:
 
-    void previewRequested(const CamItemInfo& info);
+    void previewRequested(const CamItemInfo& info, bool downloadPreview);
 
 private Q_SLOTS:
 

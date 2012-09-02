@@ -65,6 +65,9 @@ public:
     void setPreviewLoadFullImageSize(bool val);
     bool getPreviewLoadFullImageSize() const;
 
+    void setPreviewItemsWhileDownload(bool val);
+    bool getPreviewItemsWhileDownload() const;
+
     void setPreviewShowIcons(bool val);
     bool getPreviewShowIcons() const;
 

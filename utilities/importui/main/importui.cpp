@@ -1740,14 +1740,20 @@ void ImportUI::slotDownload(bool onlySelected, bool deleteAfter, Album* album)
 
 void ImportUI::slotDownloaded(const QString& folder, const QString& file, int status)
 {
-    // Is auto-rotate checked?
-    bool autoRotate = d->advancedSettings->getAutoRotate();
+    // Is auto-rotate option checked?
+    bool autoRotate = downloadSettings().autoRotate;
+    bool previewItems = ImportSettings::instance()->getPreviewItemsWhileDownload();
 
     CamItemInfo& info = d->view->camItemInfoRef(folder, file);
 
     if (!info.isNull())
     {
         setDownloaded(info, status);
+
+        if (status == CamItemInfo::DownloadStarted && previewItems)
+        {
+            emit signalPreviewRequested(info, true);
+        }
 
         if (d->rightSideBar->url() == info.url())
         {
@@ -2310,21 +2316,24 @@ QString ImportUI::identifyCategoryforMime(const QString& mime)
 
 void ImportUI::autoRotateItems()
 {
+    if (d->statusProgressBar->progressValue() != d->statusProgressBar->progressTotalSteps())
+    {
+        return;
+    }
+
     if (d->autoRotateItemsList.isEmpty())
     {
         return;
     }
 
-    if (d->statusProgressBar->progressValue() == d->statusProgressBar->progressTotalSteps())
+    ImageInfoList list;
+    foreach (CamItemInfo info, d->autoRotateItemsList)
     {
-        ImageInfoList list;
-        foreach (CamItemInfo info, d->autoRotateItemsList)
-        {
-            list << ImageInfo(info.url());
-        }
-
-        FileActionMngr::instance()->transform(list, KExiv2Iface::RotationMatrix::NoTransformation);
+        //TODO: Needs test for Gphoto items.
+        list << ImageInfo(info.url());
     }
+
+    FileActionMngr::instance()->transform(list, KExiv2Iface::RotationMatrix::NoTransformation);
 }
 
 void ImportUI::slotSwitchedToPreview()
