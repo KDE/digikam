@@ -63,13 +63,12 @@ public:
     /** Use this method to use the current selection in editor instead the full
      *  image to render the preview.
      */
-    void setPreviewType(bool useSelect = false);
+    void setPreviewType(bool useSelection = false);
 
     /** Sets preview size and returns new preview as with getPreview.
-     *  The parameters are only hints, previewWidth() and previewHeight()
-     *  may differ from w and h.
+     *  The parameters are only hints, previewSize() may differ from size.
      */
-    DImg  setPreviewSize(int w, int h) const;
+    DImg  setPreviewSize(const QSize& size) const;
 
     /** Methods to get/set preview image information.
      */

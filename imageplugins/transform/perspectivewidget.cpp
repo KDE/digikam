@@ -148,7 +148,7 @@ PerspectiveWidget::PerspectiveWidget(int w, int h, QWidget* parent)
 
     d->bgColor  = palette().color(QPalette::Background);
     d->iface    = new ImageIface(w, h);
-    d->preview  = d->iface->setPreviewSize(w, h);
+    d->preview  = d->iface->setPreviewSize(QSize(w, h));
     d->width    = d->iface->previewSize().width();
     d->height   = d->iface->previewSize().height();
     d->origW    = d->iface->originalSize().width();
@@ -177,7 +177,7 @@ void PerspectiveWidget::resizeEvent(QResizeEvent* e)
     delete d->pixmap;
     int w         = e->size().width();
     int h         = e->size().height();
-    d->preview    = d->iface->setPreviewSize(w, h);
+    d->preview    = d->iface->setPreviewSize(QSize(w, h));
     d->width      = d->iface->previewSize().width();
     d->height     = d->iface->previewSize().height();
     d->preview.setIccProfile( d->iface->original()->getIccProfile() );
@@ -1000,7 +1000,7 @@ void PerspectiveWidget::mouseMoveEvent(QMouseEvent* e)
             QPainter p(d->pixmap);
             QPainterPath pp;
             pp.addPolygon(unusablePoints);
-            p.fillPath(pp, QColor(128,128,128,128));
+            p.fillPath(pp, QColor(128, 128, 128, 128));
             p.end();
 */
             update();

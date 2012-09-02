@@ -642,7 +642,7 @@ void InsertTextWidget::resizeEvent(QResizeEvent* e)
     int textY = d->textRect.y() - d->rect.y();
     int old_w = d->w;
     int old_h = d->h;
-    d->iface->setPreviewSize(w, h);
+    d->iface->setPreviewSize(QSize(w, h));
     d->w      = d->iface->previewSize().width();
     d->h      = d->iface->previewSize().height();
 

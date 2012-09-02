@@ -183,9 +183,9 @@ ImageIface::~ImageIface()
     delete d;
 }
 
-void ImageIface::setPreviewType(bool useSelect)
+void ImageIface::setPreviewType(bool useSelection)
 {
-    d->usePreviewSelection = useSelect;
+    d->usePreviewSelection = useSelection;
 }
 
 bool ImageIface::previewType() const
@@ -226,13 +226,13 @@ DColor ImageIface::colorInfoFromTargetPreview(const QPoint& point) const
     return d->targetPreviewImage.getPixelColor(point.x(), point.y());
 }
 
-DImg ImageIface::setPreviewSize(int w, int h) const
+DImg ImageIface::setPreviewSize(const QSize& size) const
 {
     d->previewImage.reset();
     d->targetPreviewImage.reset();
 
-    d->constrainWidth  = w;
-    d->constrainHeight = h;
+    d->constrainWidth  = size.width();
+    d->constrainHeight = size.height();
     uchar* const data  = d->getPreviewImage();
 
     return DImg(d->previewWidth, d->previewHeight, previewSixteenBit(), previewHasAlpha(), data);

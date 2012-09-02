@@ -542,7 +542,7 @@ void ImageGuideWidget::resizeEvent(QResizeEvent* e)
     int h             = e->size().height();
     int old_w         = d->preview.width();
     int old_h         = d->preview.height();
-    d->preview        = d->iface->setPreviewSize(w, h);
+    d->preview        = d->iface->setPreviewSize(QSize(w, h));
     d->preview.setIccProfile(d->iface->original()->getIccProfile());
 
     d->pixmap         = new QPixmap(w, h);
@@ -571,7 +571,7 @@ void ImageGuideWidget::mousePressEvent(QMouseEvent* e)
         }
         else if (d->enableDrawMask)
         {
-            d->lastPoint = QPoint(e->x() - d->rect.x(), e->y() - d->rect.y());
+            d->lastPoint   = QPoint(e->x() - d->rect.x(), e->y() - d->rect.y());
             d->drawingMask = true;
         }
 
