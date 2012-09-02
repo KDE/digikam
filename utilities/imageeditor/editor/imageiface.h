@@ -123,15 +123,9 @@ public:
      */
     PhotoInfoContainer getPhotographInformation() const;
 
-    /** Standard methods to get image selection information.
+    /** Return current image selection position and size into original image coordinates.
      */
-    int  selectedWidth()  const;
-    int  selectedHeight() const;
-
-    /** Get selected (X, Y) position on the top/left corner of the original image.
-     */
-    int  selectedXOrg() const;
-    int  selectedYOrg() const;
+    QRect selectionRect() const;
 
     /** Convert depth of original image.
      */

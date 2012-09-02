@@ -250,7 +250,7 @@ DImg* ImageIface::getOriginal() const
 
 DImg ImageIface::getSelection() const
 {
-    return DImg(selectedWidth(), selectedHeight(), originalSixteenBit(), originalHasAlpha(),
+    return DImg(selectionRect().width(), selectionRect().height(), originalSixteenBit(), originalHasAlpha(),
                 DImgInterface::defaultInterface()->getImageSelection(), false);
 }
 
@@ -305,32 +305,11 @@ bool ImageIface::originalHasAlpha() const
     return DImgInterface::defaultInterface()->hasAlpha();
 }
 
-int ImageIface::selectedWidth() const
+QRect ImageIface::selectionRect() const
 {
     int x, y, w, h;
     DImgInterface::defaultInterface()->getSelectedArea(x, y, w, h);
-    return w;
-}
-
-int ImageIface::selectedHeight() const
-{
-    int x, y, w, h;
-    DImgInterface::defaultInterface()->getSelectedArea(x, y, w, h);
-    return h;
-}
-
-int ImageIface::selectedXOrg() const
-{
-    int x, y, w, h;
-    DImgInterface::defaultInterface()->getSelectedArea(x, y, w, h);
-    return x;
-}
-
-int ImageIface::selectedYOrg() const
-{
-    int x, y, w, h;
-    DImgInterface::defaultInterface()->getSelectedArea(x, y, w, h);
-    return y;
+    return QRect(x, y, w, h);
 }
 
 void ImageIface::convertOriginalColorDepth(int depth)
@@ -432,7 +411,7 @@ void ImageIface::putSelection(const QString& caller, const FilterAction& action,
 {
     if (//img.hasAlpha()   != originalHasAlpha()     ||                 // TODO doesn't work with RedEyes tool
         img.sixteenBit() != originalSixteenBit()  ||
-        img.size()       != QSize(selectedWidth(), selectedHeight())
+        img.size()       != selectionRect().size()
        )
     {
         kDebug() << "Properties of image to overwrite selection differs than original image";

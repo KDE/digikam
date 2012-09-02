@@ -376,8 +376,7 @@ void InPaintingTool::prepareEffect()
     // (image_size_x + 2*amplitude , image_size_y + 2*amplitude)
 
 
-    QRect selectionRect = QRect(iface.selectedXOrg(), iface.selectedYOrg(),
-                                iface.selectedWidth(), iface.selectedHeight());
+    QRect selectionRect = iface.selectionRect();
 
     QPixmap inPaintingMask(iface.originalWidth(), iface.originalHeight());
     inPaintingMask.fill(Qt::black);
@@ -387,10 +386,10 @@ void InPaintingTool::prepareEffect()
 
     GreycstorationContainer settings = d->settingsWidget->settings();
 
-    int x1 = (int)(selectionRect.left()   - 2 * settings.amplitude);
-    int y1 = (int)(selectionRect.top()    - 2 * settings.amplitude);
-    int x2 = (int)(selectionRect.right()  + 2 * settings.amplitude);
-    int y2 = (int)(selectionRect.bottom() + 2 * settings.amplitude);
+    int x1      = (int)(selectionRect.left()   - 2 * settings.amplitude);
+    int y1      = (int)(selectionRect.top()    - 2 * settings.amplitude);
+    int x2      = (int)(selectionRect.right()  + 2 * settings.amplitude);
+    int y2      = (int)(selectionRect.bottom() + 2 * settings.amplitude);
     d->maskRect = QRect(x1, y1, x2 - x1, y2 - y1);
 
     // Mask area normalization.
@@ -445,12 +444,12 @@ void InPaintingTool::putPreviewData()
 
     d->cropImage = filter()->getTargetImage();
     QRect cropSel((int)(2 * settings.amplitude), (int)(2 * settings.amplitude),
-                  iface->selectedWidth(), iface->selectedHeight());
-    DImg imDest = d->cropImage.copy(cropSel);
+                  iface->selectionRect().width(), iface->selectionRect().height());
+    DImg imDest  = d->cropImage.copy(cropSel);
 
     iface->putPreview(imDest.smoothScale(iface->previewWidth(), iface->previewHeight()));
     d->previewWidget->updatePreview();
-    d->isComputed = true;
+    d->isComputed       = true;
     d->lastFilterAction = filter()->filterAction();
 }
 

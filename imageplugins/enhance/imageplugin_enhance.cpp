@@ -260,7 +260,7 @@ void ImagePlugin_Enhance::slotRedEye()
 {
     ImageIface iface(0, 0);
 
-    if (!iface.selectedWidth() || !iface.selectedHeight())
+    if (iface.selectionRect().size().isNull())
     {
         EditorToolPassivePopup* popup = new EditorToolPassivePopup(kapp->activeWindow());
         popup->setView(i18n("Red-Eye Correction Tool"),
@@ -280,10 +280,7 @@ void ImagePlugin_Enhance::slotInPainting()
 {
     ImageIface iface(0, 0);
 
-    int w = iface.selectedWidth();
-    int h = iface.selectedHeight();
-
-    if (!w || !h)
+    if (iface.selectionRect().size().isNull())
     {
         EditorToolPassivePopup* popup = new EditorToolPassivePopup(kapp->activeWindow());
         popup->setView(i18n("In-Painting Photograph Tool"),
