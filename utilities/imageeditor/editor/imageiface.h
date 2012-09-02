@@ -101,10 +101,9 @@ public:
 
     /** Standard methods to get/set preview information.
      */
-    int  previewWidth()       const;
-    int  previewHeight()      const;
-    bool previewHasAlpha()    const;
-    bool previewSixteenBit()  const;
+    QSize previewSize()        const;
+    bool  previewHasAlpha()    const;
+    bool  previewSixteenBit()  const;
 
     /** Original image information.
      */

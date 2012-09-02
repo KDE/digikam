@@ -144,8 +144,8 @@ void AntiVignettingTool::prepareEffect()
     AntiVignettingContainer settings = d->settingsView->settings();
 
     ImageIface* iface = d->previewWidget->imageIface();
-    int previewWidth  = iface->previewWidth();
-    int previewHeight = iface->previewHeight();
+    int previewWidth  = iface->previewSize().width();
+    int previewHeight = iface->previewSize().height();
     DImg imTemp       = iface->getOriginal()->smoothScale(previewWidth, previewHeight, Qt::KeepAspectRatio);
 
     setFilter(new AntiVignettingFilter(&imTemp, this, settings));
@@ -162,7 +162,7 @@ void AntiVignettingTool::prepareFinal()
 void AntiVignettingTool::putPreviewData()
 {
     ImageIface* iface = d->previewWidget->imageIface();
-    DImg preview      = filter()->getTargetImage().smoothScale(iface->previewWidth(), iface->previewHeight());
+    DImg preview      = filter()->getTargetImage().smoothScale(iface->previewSize());
     iface->putPreview(preview);
     d->previewWidget->updatePreview();
 }

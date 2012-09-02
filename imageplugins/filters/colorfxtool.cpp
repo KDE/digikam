@@ -364,7 +364,7 @@ void ColorFxTool::putPreviewData()
 {
     ImageIface* iface = d->previewWidget->imageIface();
     DImg preview = filter()->getTargetImage();
-    DImg imDest  = preview.smoothScale(iface->previewWidth(), iface->previewHeight());
+    DImg imDest  = preview.smoothScale(iface->previewSize());
     iface->putPreview(imDest);
     d->gboxSettings->histogramBox()->histogram()->updateData(preview.bits(), preview.width(), preview.height(),
                                                              preview.sixteenBit(), 0, 0, 0, false);

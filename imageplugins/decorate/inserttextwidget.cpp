@@ -111,8 +111,8 @@ InsertTextWidget::InsertTextWidget(int w, int h, QWidget* const parent)
     d->transparency    = 210;
 
     d->iface  = new ImageIface(w, h);
-    d->w      = d->iface->previewWidth();
-    d->h      = d->iface->previewHeight();
+    d->w      = d->iface->previewSize().width();
+    d->h      = d->iface->previewSize().height();
     d->pixmap = new QPixmap(w, h);
     d->pixmap->fill(d->bgColor);
 
@@ -643,8 +643,8 @@ void InsertTextWidget::resizeEvent(QResizeEvent* e)
     int old_w = d->w;
     int old_h = d->h;
     d->iface->setPreviewSize(w, h);
-    d->w      = d->iface->previewWidth();
-    d->h      = d->iface->previewHeight();
+    d->w      = d->iface->previewSize().width();
+    d->h      = d->iface->previewSize().height();
 
     d->pixmap = new QPixmap(w, h);
     d->rect   = QRect(w/2-d->w/2, h/2-d->h/2, d->w, d->h);

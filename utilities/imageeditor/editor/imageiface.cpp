@@ -206,7 +206,7 @@ DColor ImageIface::getColorInfoFromOriginal(const QPoint& point) const
 
 DColor ImageIface::getColorInfoFromPreview(const QPoint& point) const
 {
-    if (d->previewImage.isNull() || point.x() > previewWidth() || point.y() > previewHeight())
+    if (d->previewImage.isNull() || point.x() > d->previewWidth || point.y() > d->previewHeight)
     {
         kWarning() << "Coordinate out of range or no image data available!";
         return DColor();
@@ -217,7 +217,7 @@ DColor ImageIface::getColorInfoFromPreview(const QPoint& point) const
 
 DColor ImageIface::getColorInfoFromTargetPreview(const QPoint& point) const
 {
-    if (d->targetPreviewImage.isNull() || point.x() > previewWidth() || point.y() > previewHeight())
+    if (d->targetPreviewImage.isNull() || point.x() > d->previewWidth || point.y() > d->previewHeight)
     {
         kWarning() << "Coordinate out of range or no image data available!";
         return DColor();
@@ -235,12 +235,12 @@ DImg ImageIface::setPreviewSize(int w, int h) const
     d->constrainHeight = h;
     uchar* const data  = d->getPreviewImage();
 
-    return DImg(previewWidth(), previewHeight(), previewSixteenBit(), previewHasAlpha(), data);
+    return DImg(d->previewWidth, d->previewHeight, previewSixteenBit(), previewHasAlpha(), data);
 }
 
 DImg ImageIface::getPreview() const
 {
-    return DImg(previewWidth(), previewHeight(), previewSixteenBit(), previewHasAlpha(), d->getPreviewImage());
+    return DImg(d->previewWidth, d->previewHeight, previewSixteenBit(), previewHasAlpha(), d->getPreviewImage());
 }
 
 DImg* ImageIface::getOriginal() const
@@ -265,14 +265,9 @@ void ImageIface::putOriginalIccProfile(const IccProfile& profile)
     DImgInterface::defaultInterface()->putIccProfile(profile);
 }
 
-int ImageIface::previewWidth() const
+QSize ImageIface::previewSize() const
 {
-    return d->previewWidth;
-}
-
-int ImageIface::previewHeight() const
-{
-    return d->previewHeight;
+    return QSize(d->previewWidth, d->previewHeight);
 }
 
 bool ImageIface::previewSixteenBit() const

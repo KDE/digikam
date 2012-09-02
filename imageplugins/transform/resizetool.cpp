@@ -473,8 +473,8 @@ void ResizeTool::prepareEffect()
     }
 
     ImageIface* iface = d->previewWidget->imageIface();
-    int w             = iface->previewWidth();
-    int h             = iface->previewHeight();
+    int w             = iface->previewSize().width();
+    int h             = iface->previewSize().height();
     DImg imTemp       = iface->getOriginal()->smoothScale(w, h, Qt::KeepAspectRatio);
     int new_w         = (int)(w*d->wpInput->value()/100.0);
     int new_h         = (int)(h*d->hpInput->value()/100.0);
@@ -531,8 +531,8 @@ void ResizeTool::prepareFinal()
 void ResizeTool::putPreviewData()
 {
     ImageIface* iface = d->previewWidget->imageIface();
-    int w             = iface->previewWidth();
-    int h             = iface->previewHeight();
+    int w             = iface->previewSize().width();
+    int h             = iface->previewSize().height();
     DImg imTemp       = filter()->getTargetImage().smoothScale(w, h, Qt::KeepAspectRatio);
     DImg imDest(w, h, filter()->getTargetImage().sixteenBit(), filter()->getTargetImage().hasAlpha());
 
@@ -540,7 +540,7 @@ void ResizeTool::putPreviewData()
     imDest.fill(DColor(background, filter()->getTargetImage().sixteenBit()));
     imDest.bitBltImage(&imTemp, (w-imTemp.width())/2, (h-imTemp.height())/2);
 
-    iface->putPreview(imDest.smoothScale(iface->previewWidth(), iface->previewHeight()));
+    iface->putPreview(imDest.smoothScale(iface->previewSize()));
     d->previewWidget->updatePreview();
 }
 

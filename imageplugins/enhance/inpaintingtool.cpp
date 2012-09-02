@@ -447,7 +447,7 @@ void InPaintingTool::putPreviewData()
                   iface->selectionRect().width(), iface->selectionRect().height());
     DImg imDest  = d->cropImage.copy(cropSel);
 
-    iface->putPreview(imDest.smoothScale(iface->previewWidth(), iface->previewHeight()));
+    iface->putPreview(imDest.smoothScale(iface->previewSize()));
     d->previewWidget->updatePreview();
     d->isComputed       = true;
     d->lastFilterAction = filter()->filterAction();

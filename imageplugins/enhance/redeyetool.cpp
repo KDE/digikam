@@ -391,7 +391,7 @@ void RedEyeTool::slotEffect()
 
     redEyeFilter(selection);
 
-    DImg preview = selection.smoothScale(iface->previewWidth(), iface->previewHeight());
+    DImg preview = selection.smoothScale(iface->previewSize());
 
     iface->putPreview(preview);
     d->previewWidget->updatePreview();

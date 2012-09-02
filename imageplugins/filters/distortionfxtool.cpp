@@ -371,7 +371,7 @@ void DistortionFXTool::prepareFinal()
 void DistortionFXTool::putPreviewData()
 {
     ImageIface* iface = d->previewWidget->imageIface();
-    DImg imDest       = filter()->getTargetImage().smoothScale(iface->previewWidth(), iface->previewHeight());
+    DImg imDest       = filter()->getTargetImage().smoothScale(iface->previewSize());
     iface->putPreview(imDest);
 
     d->previewWidget->updatePreview();

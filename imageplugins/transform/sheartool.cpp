@@ -315,8 +315,8 @@ void ShearTool::prepareFinal()
 void ShearTool::putPreviewData()
 {
     ImageIface* iface = d->previewWidget->imageIface();
-    int w             = iface->previewWidth();
-    int h             = iface->previewHeight();
+    int w             = iface->previewSize().width();
+    int h             = iface->previewSize().height();
 
     DImg imTemp = filter()->getTargetImage().smoothScale(w, h, Qt::KeepAspectRatio);
     DImg imDest( w, h, filter()->getTargetImage().sixteenBit(), filter()->getTargetImage().hasAlpha() );
@@ -325,12 +325,12 @@ void ShearTool::putPreviewData()
                         filter()->getTargetImage().sixteenBit()) );
     imDest.bitBltImage(&imTemp, (w-imTemp.width())/2, (h-imTemp.height())/2);
 
-    iface->putPreview(imDest.smoothScale(iface->previewWidth(), iface->previewHeight()));
+    iface->putPreview(imDest.smoothScale(iface->previewSize()));
 
     d->previewWidget->updatePreview();
     QSize newSize = dynamic_cast<ShearFilter*>(filter())->getNewSize();
     QString temp;
-    d->newWidthLabel->setText(temp.setNum( newSize.width()) + i18n(" px") );
+    d->newWidthLabel->setText(temp.setNum( newSize.width())   + i18n(" px") );
     d->newHeightLabel->setText(temp.setNum( newSize.height()) + i18n(" px") );
 }
 

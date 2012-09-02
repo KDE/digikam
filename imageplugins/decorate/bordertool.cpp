@@ -128,7 +128,7 @@ void BorderTool::prepareEffect()
 {
     ImageIface* iface        = d->previewWidget->imageIface();
     DImg preview             = iface->getPreview();
-    int w                    = iface->previewWidth();
+    int w                    = iface->previewSize().width();
     float ratio              = (float)w/(float)iface->originalWidth();
     BorderContainer settings = d->settingsView->settings();
     settings.orgWidth        = iface->originalWidth();
@@ -155,8 +155,8 @@ void BorderTool::prepareFinal()
 void BorderTool::putPreviewData()
 {
     ImageIface* iface = d->previewWidget->imageIface();
-    int w             = iface->previewWidth();
-    int h             = iface->previewHeight();
+    int w             = iface->previewSize().width();
+    int h             = iface->previewSize().height();
     DImg imTemp       = filter()->getTargetImage().smoothScale(w, h, Qt::KeepAspectRatio);
     DImg imDest(w, h, filter()->getTargetImage().sixteenBit(), filter()->getTargetImage().hasAlpha());
 
