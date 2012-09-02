@@ -96,7 +96,7 @@ static void jpegutils_jpeg_output_message(j_common_ptr cinfo);
 
 static void jpegutils_jpeg_error_exit(j_common_ptr cinfo)
 {
-    jpegutils_jpeg_error_mgr* myerr = (jpegutils_jpeg_error_mgr*) cinfo->err;
+    jpegutils_jpeg_error_mgr* myerr = static_cast<jpegutils_jpeg_error_mgr*>(cinfo->err);
 
     char buffer[JMSG_LENGTH_MAX];
     (*cinfo->err->format_message)(cinfo, buffer);
