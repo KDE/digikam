@@ -313,7 +313,10 @@ bool DatabaseCoreBackendPrivate::needToHandleWithErrorHandler(const SqlQuery& qu
 
 bool DatabaseCoreBackendPrivate::checkRetrySQLiteLockError(int retries)
 {
-    kDebug() << "Database is locked. Waited" << retries*10;
+    if (!(retries % 25))
+    {
+        kDebug() << "Database is locked. Waited" << retries*10;
+    }
     const int uiMaxRetries = 50;
     const int maxRetries = 1000;
 
