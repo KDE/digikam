@@ -420,8 +420,7 @@ void PerspectiveWidget::updatePixmap()
                                                 d->bottomLeftPoint, d->bottomRightPoint);
 
         d->iface->putPreview(d->preview);
-        d->iface->paint(d->pixmap, d->rect.x(), d->rect.y(),
-                        d->rect.width(), d->rect.height());
+        d->iface->paint(d->pixmap, d->rect);
     }
     // if we are resizing with the mouse, compute and draw only if drawWhileMoving is set
     else if ((d->currentResizing == Private::ResizingNone || d->drawWhileMoving) &&
@@ -443,8 +442,7 @@ void PerspectiveWidget::updatePixmap()
 
         // Draw image
 
-        d->iface->paint(d->pixmap, d->rect.x(), d->rect.y(),
-                        d->rect.width(), d->rect.height());
+        d->iface->paint(d->pixmap, d->rect);
     }
     else if (d->validPerspective)
     {

@@ -144,9 +144,9 @@ public:
 
     /** Paint the current target preview image (or the preview image,
      *  if putPreviewImage has not been called) on the given paint device.
-     *  at x|y, with given maximum width and height.
+     *  at x|y, with given maximum width and height taken from rectangle rect.
      */
-    void paint(QPaintDevice* const device, int x, int y, int w, int h, QPainter* const painter = 0);
+    void paint(QPaintDevice* const device, const QRect& rect, QPainter* const painter = 0);
 
     /** Replace the data of the current original image selection with the given data.
      *  The characteristics of the data must match the characteristics of the current

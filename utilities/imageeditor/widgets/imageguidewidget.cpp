@@ -291,7 +291,7 @@ void ImageGuideWidget::updatePixmap()
              d->renderingPreviewMode == PreviewToolBar::NoPreviewMode      ||
              (d->renderingPreviewMode == PreviewToolBar::PreviewToggleOnMouseOver && d->onMouseMovePreviewToggled))
     {
-        d->iface->paint(d->pixmap, d->rect.x(), d->rect.y(), d->rect.width(), d->rect.height(), &p);
+        d->iface->paint(d->pixmap, d->rect, &p);
 
         if (d->renderingPreviewMode == PreviewToolBar::PreviewTargetImage ||
             d->renderingPreviewMode == PreviewToolBar::PreviewToggleOnMouseOver)
@@ -308,12 +308,12 @@ void ImageGuideWidget::updatePixmap()
             p.drawPixmap(d->rect, *d->previewPixmap);
 
             // Drawing target image under the original.
-            d->iface->paint(d->pixmap, d->rect.x() + d->rect.width() / 2, d->rect.y(), d->rect.width() / 2, d->rect.height(), &p);
+            d->iface->paint(d->pixmap, QRect(d->rect.x() + d->rect.width() / 2, d->rect.y(), d->rect.width() / 2, d->rect.height()), &p);
         }
         else
         {
             // Drawing target image.
-            d->iface->paint(d->pixmap, d->rect.x(), d->rect.y(), d->rect.width(), d->rect.height(), &p);
+            d->iface->paint(d->pixmap, d->rect, &p);
 
             // Drawing original image under the target.
             p.drawPixmap(d->rect.x(), d->rect.y(), *d->previewPixmap, 0, 0, d->rect.width() / 2, d->rect.height());
@@ -341,12 +341,12 @@ void ImageGuideWidget::updatePixmap()
             p.drawPixmap(d->rect, *d->previewPixmap);
 
             // Drawing target image under the original.
-            d->iface->paint(d->pixmap, d->rect.x(), d->rect.y() + d->rect.height() / 2, d->rect.width(), d->rect.height() / 2, &p);
+            d->iface->paint(d->pixmap, QRect(d->rect.x(), d->rect.y() + d->rect.height() / 2, d->rect.width(), d->rect.height() / 2), &p);
         }
         else
         {
             // Drawing target image.
-            d->iface->paint(d->pixmap, d->rect.x(), d->rect.y(), d->rect.width(), d->rect.height(), &p);
+            d->iface->paint(d->pixmap, d->rect, &p);
 
             // Drawing original image under the target.
             p.drawPixmap(d->rect.x(), d->rect.y(), *d->previewPixmap,

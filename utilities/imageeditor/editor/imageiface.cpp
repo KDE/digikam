@@ -364,10 +364,14 @@ PhotoInfoContainer ImageIface::getPhotographInformation() const
     return meta.getPhotographInformation();
 }
 
-void ImageIface::paint(QPaintDevice* const device, int x, int y, int w, int h, QPainter* const painter)
+void ImageIface::paint(QPaintDevice* const device, const QRect& rect, QPainter* const painter)
 {
-    QPainter  localPainter;
+    int       x = rect.x();
+    int       y = rect.y();
+    int       w = rect.width();
+    int       h = rect.height();
     QPainter* p = 0;
+    QPainter  localPainter;
 
     if (painter)
     {
@@ -379,7 +383,7 @@ void ImageIface::paint(QPaintDevice* const device, int x, int y, int w, int h, Q
         p->begin(device);
     }
 
-    int width  = w > 0 ? qMin(d->previewWidth, w)  : d->previewWidth;
+    int width  = w > 0 ? qMin(d->previewWidth,  w) : d->previewWidth;
     int height = h > 0 ? qMin(d->previewHeight, h) : d->previewHeight;
 
     if (!d->targetPreviewImage.isNull())
@@ -396,7 +400,7 @@ void ImageIface::paint(QPaintDevice* const device, int x, int y, int w, int h, Q
         {
             IccManager manager(d->targetPreviewImage);
             IccTransform monitorICCtrans = manager.displayTransform();
-            pixImage = d->targetPreviewImage.convertToPixmap(monitorICCtrans);
+            pixImage                     = d->targetPreviewImage.convertToPixmap(monitorICCtrans);
         }
         else
         {
