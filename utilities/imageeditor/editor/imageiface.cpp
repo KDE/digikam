@@ -195,7 +195,7 @@ bool ImageIface::previewType() const
 
 DColor ImageIface::getColorInfoFromOriginal(const QPoint& point) const
 {
-    if (!DImgInterface::defaultInterface()->getImage() || point.x() > originalWidth() || point.y() > originalHeight())
+    if (!DImgInterface::defaultInterface()->getImage() || point.x() > originalSize().width() || point.y() > originalSize().height())
     {
         kWarning() << "Coordinate out of range or no image data available!";
         return DColor();
@@ -280,14 +280,10 @@ bool ImageIface::previewHasAlpha() const
     return originalHasAlpha();
 }
 
-int ImageIface::originalWidth() const
+QSize ImageIface::originalSize() const
 {
-    return DImgInterface::defaultInterface()->origWidth();
-}
-
-int ImageIface::originalHeight() const
-{
-    return DImgInterface::defaultInterface()->origHeight();
+    return QSize(DImgInterface::defaultInterface()->origWidth(),
+                 DImgInterface::defaultInterface()->origHeight());
 }
 
 bool ImageIface::originalSixteenBit() const
@@ -454,10 +450,10 @@ void ImageIface::putOriginal(const QString& caller, const FilterAction& action, 
     int w = -1;
     int h = -1;
 
-    if (img.width() != (uint)originalWidth())
+    if (img.width() != (uint)originalSize().width())
         w = img.width();
 
-    if (img.height() != (uint)originalHeight())
+    if (img.height() != (uint)originalSize().height())
         h = img.height();
 
     uchar* const data = img.bits();

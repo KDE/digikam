@@ -131,11 +131,11 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
     d->gboxSettings->setTools(EditorToolSettings::ColorGuide);
 
     QLabel* label1    = new QLabel(i18n("New width:"));
-    d->newWidthLabel  = new QLabel(temp.setNum( iface.originalWidth()) + i18n(" px"));
+    d->newWidthLabel  = new QLabel(temp.setNum( iface.originalSize().width()) + i18n(" px"));
     d->newWidthLabel->setAlignment( Qt::AlignBottom | Qt::AlignRight );
 
     QLabel* label2    = new QLabel(i18n("New height:"));
-    d->newHeightLabel = new QLabel(temp.setNum( iface.originalHeight()) + i18n(" px"));
+    d->newHeightLabel = new QLabel(temp.setNum( iface.originalSize().height()) + i18n(" px"));
     d->newHeightLabel->setAlignment( Qt::AlignBottom | Qt::AlignRight );
 
     // -------------------------------------------------------------
@@ -314,8 +314,8 @@ void FreeRotationTool::prepareEffect()
     ImageIface* iface              = d->previewWidget->imageIface();
     DImg preview                   = iface->getPreview();
     settings.backgroundColor       = toolView()->backgroundRole();
-    settings.orgW                  = iface->originalWidth();
-    settings.orgH                  = iface->originalHeight();
+    settings.orgW                  = iface->originalSize().width();
+    settings.orgH                  = iface->originalSize().height();
     setFilter(new FreeRotationFilter(&preview, this, settings));
 }
 
@@ -325,8 +325,8 @@ void FreeRotationTool::prepareFinal()
     FreeRotationContainer settings = d->settingsView->settings();
     DImg* orgImage                 = iface.getOriginal();
     settings.backgroundColor       = Qt::black;
-    settings.orgW                  = iface.originalWidth();
-    settings.orgH                  = iface.originalHeight();
+    settings.orgW                  = iface.originalSize().width();
+    settings.orgH                  = iface.originalSize().height();
 
     setFilter(new FreeRotationFilter(orgImage, this, settings));
 }
@@ -349,8 +349,8 @@ void FreeRotationTool::putPreviewData()
 
     QString temp;
     QSize newSize = dynamic_cast<FreeRotationFilter*>(filter())->getNewSize();
-    int new_w     = (newSize.width()  == -1) ? iface->originalWidth()  : newSize.width();
-    int new_h     = (newSize.height() == -1) ? iface->originalHeight() : newSize.height();
+    int new_w     = (newSize.width()  == -1) ? iface->originalSize().width()  : newSize.width();
+    int new_h     = (newSize.height() == -1) ? iface->originalSize().height() : newSize.height();
     d->newWidthLabel->setText(temp.setNum(new_w)  + i18n(" px") );
     d->newHeightLabel->setText(temp.setNum(new_h) + i18n(" px") );
 }

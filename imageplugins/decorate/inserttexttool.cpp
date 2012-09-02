@@ -289,8 +289,8 @@ void InsertTextTool::readSettings()
     QColor black(0, 0, 0);
     QFont  defaultFont;
 
-    int orgW = d->previewWidget->imageIface()->originalWidth();
-    int orgH = d->previewWidget->imageIface()->originalHeight();
+    int orgW = d->previewWidget->imageIface()->originalSize().width();
+    int orgH = d->previewWidget->imageIface()->originalSize().height();
 
     if ( orgW > orgH )
     {

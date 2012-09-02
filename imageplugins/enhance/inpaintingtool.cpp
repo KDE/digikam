@@ -378,7 +378,7 @@ void InPaintingTool::prepareEffect()
 
     QRect selectionRect = iface.selectionRect();
 
-    QPixmap inPaintingMask(iface.originalWidth(), iface.originalHeight());
+    QPixmap inPaintingMask(iface.originalSize());
     inPaintingMask.fill(Qt::black);
     QPainter p(&inPaintingMask);
     p.fillRect(selectionRect, QBrush(Qt::white));
@@ -405,14 +405,14 @@ void InPaintingTool::prepareEffect()
         d->maskRect.setTop(0);
     }
 
-    if (d->maskRect.right()  > iface.originalWidth())
+    if (d->maskRect.right()  > iface.originalSize().width())
     {
-        d->maskRect.setRight(iface.originalWidth());
+        d->maskRect.setRight(iface.originalSize().width());
     }
 
-    if (d->maskRect.bottom() > iface.originalHeight())
+    if (d->maskRect.bottom() > iface.originalSize().height())
     {
-        d->maskRect.setBottom(iface.originalHeight());
+        d->maskRect.setBottom(iface.originalSize().height());
     }
 
     d->maskImage = inPaintingMask.toImage().copy(d->maskRect);

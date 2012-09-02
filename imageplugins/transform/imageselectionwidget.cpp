@@ -209,7 +209,7 @@ void ImageSelectionWidget::setup(int w, int h,
     d->preview.convertToEightBit();
 
     d->pixmap  = new QPixmap(w, h);
-    d->image   = QRect(0, 0, d->iface->originalWidth(), d->iface->originalHeight());
+    d->image   = QRect(0, 0, d->iface->originalSize().width(), d->iface->originalSize().height());
     d->rect    = QRect(w/2-d->preview.width()/2, h/2-d->preview.height()/2,
                        d->preview.width(), d->preview.height());
 

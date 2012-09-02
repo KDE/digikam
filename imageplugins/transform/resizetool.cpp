@@ -192,8 +192,8 @@ ResizeTool::ResizeTool(QObject* parent)
                                 EditorToolSettings::Cancel);
 
     ImageIface iface(0, 0);
-    d->orgWidth  = iface.originalWidth();
-    d->orgHeight = iface.originalHeight();
+    d->orgWidth  = iface.originalSize().width();
+    d->orgHeight = iface.originalSize().height();
     d->prevW     = d->orgWidth;
     d->prevH     = d->orgHeight;
     d->prevWP    = 100.0;

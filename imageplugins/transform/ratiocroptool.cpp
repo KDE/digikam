@@ -1035,8 +1035,8 @@ QRect RatioCropTool::getNormalizedRegion() const
 {
     QRect currentRegion    = d->imageSelectionWidget->getRegionSelection();
     ImageIface* iface      = d->imageSelectionWidget->imageIface();
-    int w                  = iface->originalWidth();
-    int h                  = iface->originalHeight();
+    int w                  = iface->originalSize().width();
+    int h                  = iface->originalSize().height();
     QRect normalizedRegion = currentRegion.normalized();
 
     if (normalizedRegion.right() > w)

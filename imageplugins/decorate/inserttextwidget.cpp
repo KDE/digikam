@@ -229,8 +229,8 @@ QRect InsertTextWidget::getPositionHint() const
 
 DImg InsertTextWidget::makeInsertText()
 {
-    int orgW     = d->iface->originalWidth();
-    int orgH     = d->iface->originalHeight();
+    int orgW     = d->iface->originalSize().width();
+    int orgH     = d->iface->originalSize().height();
     float ratioW = (float)orgW/(float)d->w;
     float ratioH = (float)orgH/(float)d->h;
 
@@ -264,8 +264,8 @@ DImg InsertTextWidget::makeInsertText()
 
 void InsertTextWidget::makePixmap()
 {
-    int orgW = d->iface->originalWidth();
-    int orgH = d->iface->originalHeight();
+    int orgW = d->iface->originalSize().width();
+    int orgH = d->iface->originalSize().height();
     float ratioW = (float)d->w / (float)orgW;
     float ratioH = (float)d->h / (float)orgH;
 

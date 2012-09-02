@@ -195,8 +195,8 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject* parent)
 
     // Initialize data
     ImageIface iface(0, 0);
-    d->orgWidth  = iface.originalWidth();
-    d->orgHeight = iface.originalHeight();
+    d->orgWidth  = iface.originalSize().width();
+    d->orgHeight = iface.originalSize().height();
     d->prevW     = d->orgWidth;
     d->prevH     = d->orgHeight;
     d->prevWP    = 100.0;
@@ -732,16 +732,16 @@ void ContentAwareResizeTool::prepareFinal()
     if (d->mixedRescaleInput->value() < 100.0) // mixed rescale
     {
         double stdRescaleP = (100.0 - d->mixedRescaleInput->value()) / 100.0;
-        int diff_w         = (int)(stdRescaleP * (iface.originalWidth()  - d->wInput->value()));
-        int diff_h         = (int)(stdRescaleP * (iface.originalHeight() - d->hInput->value()));
-        DImg image         = iface.getOriginal()->smoothScale(iface.originalWidth()  - diff_w,
-                             iface.originalHeight() - diff_h,
+        int diff_w         = (int)(stdRescaleP * (iface.originalSize().width()  - d->wInput->value()));
+        int diff_h         = (int)(stdRescaleP * (iface.originalSize().height() - d->hInput->value()));
+        DImg image         = iface.getOriginal()->smoothScale(iface.originalSize().width()  - diff_w,
+                             iface.originalSize().height() - diff_h,
                              Qt::IgnoreAspectRatio);
 
         if (d->weightMaskBox->isChecked())
         {
-            mask = d->previewWidget->getMask().scaled(iface.originalWidth()  - diff_w,
-                    iface.originalHeight() - diff_h);
+            mask = d->previewWidget->getMask().scaled(iface.originalSize().width()  - diff_w,
+                    iface.originalSize().height() - diff_h);
         }
 
         contentAwareResizeCore(&image, d->wInput->value(), d->hInput->value(), mask);
@@ -750,7 +750,7 @@ void ContentAwareResizeTool::prepareFinal()
     {
         if (d->weightMaskBox->isChecked())
         {
-            mask = d->previewWidget->getMask().scaled(iface.originalWidth(), iface.originalHeight());
+            mask = d->previewWidget->getMask().scaled(iface.originalSize());
         }
 
         contentAwareResizeCore(iface.getOriginal(), d->wInput->value(), d->hInput->value(), mask);
@@ -872,12 +872,12 @@ bool ContentAwareResizeTool::eventFilter(QObject *obj, QEvent *ev)
                     d->maskPenSize->setValue(d->maskPenSize->value() + (wheel->delta()/8/15)*(wheel->delta()/8/15));
                 else
                     d->maskPenSize->setValue(d->maskPenSize->value() - (wheel->delta()/8/15)*(wheel->delta()/8/15));
-                
+
                 d->previewWidget->setMaskCursor();
             }
         }
     }
-    
+
     return false;
 }
 

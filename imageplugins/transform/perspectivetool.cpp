@@ -135,11 +135,11 @@ PerspectiveTool::PerspectiveTool(QObject* parent)
     // -------------------------------------------------------------
 
     QLabel* label1   = new QLabel(i18n("New width:"));
-    d->newWidthLabel = new QLabel(temp.setNum( iface.originalWidth()) + i18n(" px"));
+    d->newWidthLabel = new QLabel(temp.setNum( iface.originalSize().width()) + i18n(" px"));
     d->newWidthLabel->setAlignment( Qt::AlignBottom | Qt::AlignRight );
 
     QLabel* label2    = new QLabel(i18n("New height:"));
-    d->newHeightLabel = new QLabel(temp.setNum( iface.originalHeight()) + i18n(" px"));
+    d->newHeightLabel = new QLabel(temp.setNum( iface.originalSize().height()) + i18n(" px"));
     d->newHeightLabel->setAlignment( Qt::AlignBottom | Qt::AlignRight );
 
     // -------------------------------------------------------------

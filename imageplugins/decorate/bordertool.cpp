@@ -129,10 +129,10 @@ void BorderTool::prepareEffect()
     ImageIface* iface        = d->previewWidget->imageIface();
     DImg preview             = iface->getPreview();
     int w                    = iface->previewSize().width();
-    float ratio              = (float)w/(float)iface->originalWidth();
+    float ratio              = (float)w/(float)iface->originalSize().width();
     BorderContainer settings = d->settingsView->settings();
-    settings.orgWidth        = iface->originalWidth();
-    settings.orgHeight       = iface->originalHeight();
+    settings.orgWidth        = iface->originalSize().width();
+    settings.orgHeight       = iface->originalSize().height();
     settings.borderWidth1    = (int)((float)settings.borderWidth1*ratio);
     settings.borderWidth2    = (int)(20.0*ratio);
     settings.borderWidth3    = (int)(20.0*ratio);
@@ -146,8 +146,8 @@ void BorderTool::prepareFinal()
     ImageIface iface(0, 0);
     DImg* orgImage           = iface.getOriginal();
     BorderContainer settings = d->settingsView->settings();
-    settings.orgWidth        = iface.originalWidth();
-    settings.orgHeight       = iface.originalHeight();
+    settings.orgWidth        = iface.originalSize().width();
+    settings.orgHeight       = iface.originalSize().height();
 
     setFilter(new BorderFilter(orgImage, this, settings));
 }

@@ -151,8 +151,8 @@ PerspectiveWidget::PerspectiveWidget(int w, int h, QWidget* parent)
     d->preview  = d->iface->setPreviewSize(w, h);
     d->width    = d->iface->previewSize().width();
     d->height   = d->iface->previewSize().height();
-    d->origW    = d->iface->originalWidth();
-    d->origH    = d->iface->originalHeight();
+    d->origW    = d->iface->originalSize().width();
+    d->origH    = d->iface->originalSize().height();
     d->preview.setIccProfile( d->iface->getOriginal()->getIccProfile() );
 
     d->pixmap   = new QPixmap(w, h);

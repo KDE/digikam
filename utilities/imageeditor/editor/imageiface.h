@@ -99,18 +99,17 @@ public:
     DColor getColorInfoFromPreview(const QPoint& point)       const;
     DColor getColorInfoFromTargetPreview(const QPoint& point) const;
 
-    /** Standard methods to get/set preview information.
+    /** Methods to get/set preview image information.
      */
     QSize previewSize()        const;
     bool  previewHasAlpha()    const;
     bool  previewSixteenBit()  const;
 
-    /** Original image information.
+    /** Methods to get/set original image information.
      */
-    int  originalWidth()      const;
-    int  originalHeight()     const;
-    bool originalHasAlpha()   const;
-    bool originalSixteenBit() const;
+    QSize originalSize()        const;
+    bool  originalHasAlpha()   const;
+    bool  originalSixteenBit() const;
 
     /** Original image metadata.
      */

@@ -213,8 +213,8 @@ int ImageGuideWidget::previewMode() const
 
 QPoint ImageGuideWidget::getSpotPosition() const
 {
-    return (QPoint((int)((float)d->spot.x() * (float)d->iface->originalWidth()  / (float)d->preview.width()),
-                   (int)((float)d->spot.y() * (float)d->iface->originalHeight() / (float)d->preview.height())));
+    return (QPoint((int)((float)d->spot.x() * (float)d->iface->originalSize().width()  / (float)d->preview.width()),
+                   (int)((float)d->spot.y() * (float)d->iface->originalSize().height() / (float)d->preview.height())));
 }
 
 DColor ImageGuideWidget::getSpotColor(int getColorFrom) const
@@ -800,8 +800,8 @@ QImage ImageGuideWidget::getMask() const
 
 QPoint ImageGuideWidget::translatePointPosition(QPoint& point) const
 {
-    int x = (int)(point.x() * (float)(d->preview.width())  / (float) d->iface->originalWidth());
-    int y = (int)(point.y() * (float)(d->preview.height()) / (float) d->iface->originalHeight());
+    int x = (int)(point.x() * (float)(d->preview.width())  / (float) d->iface->originalSize().width());
+    int y = (int)(point.y() * (float)(d->preview.height()) / (float) d->iface->originalSize().height());
     x     += d->rect.x() + 1;
     y     += d->rect.y() + 1;
     return (QPoint(x, y));
