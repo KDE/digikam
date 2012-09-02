@@ -1019,7 +1019,7 @@ void RatioCropTool::slotCustomRatioChanged()
 void RatioCropTool::updateCropInfo()
 {
     d->histogramBox->histogram()->stopHistogramComputation();
-    DImg* img         = d->imageSelectionWidget->imageIface()->getOriginal();
+    DImg* img         = d->imageSelectionWidget->imageIface()->original();
     d->imageSelection = img->copy(getNormalizedRegion());
     d->histogramBox->histogram()->updateData(d->imageSelection.bits(), 
                                              d->imageSelection.width(), d->imageSelection.height(),
@@ -1059,7 +1059,7 @@ void RatioCropTool::finalRendering()
     QRect currentRegion    = d->imageSelectionWidget->getRegionSelection();
     ImageIface* iface      = d->imageSelectionWidget->imageIface();
     QRect normalizedRegion = getNormalizedRegion();
-    DImg imOrg             = iface->getOriginal()->copy();
+    DImg imOrg             = iface->original()->copy();
 
     imOrg.crop(normalizedRegion);
     FilterAction action("digikam:RatioCrop", 1);

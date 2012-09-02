@@ -191,7 +191,7 @@ void HSLTool::prepareFinal()
     HSLContainer settings = d->hslSettings->settings();
 
     ImageIface iface(0, 0);
-    setFilter(new HSLFilter(iface.getOriginal(), this, settings));
+    setFilter(new HSLFilter(iface.original(), this, settings));
 }
 
 void HSLTool::putFinalData()

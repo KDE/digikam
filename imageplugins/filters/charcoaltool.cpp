@@ -193,7 +193,7 @@ void CharcoalTool::prepareFinal()
     double smooth = (double)d->smoothInput->value();
 
     ImageIface iface(0, 0);
-    setFilter(new CharcoalFilter(iface.getOriginal(), this, pencil, smooth));
+    setFilter(new CharcoalFilter(iface.original(), this, pencil, smooth));
 }
 
 void CharcoalTool::putPreviewData()

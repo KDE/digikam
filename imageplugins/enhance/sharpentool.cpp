@@ -233,7 +233,7 @@ void SharpenTool::prepareFinal()
                 sigma = sqrt(radius);
             }
 
-            setFilter(new SharpenFilter(iface.getOriginal(), this, radius, sigma));
+            setFilter(new SharpenFilter(iface.original(), this, radius, sigma));
             break;
         }
 
@@ -243,7 +243,7 @@ void SharpenTool::prepareFinal()
             double a  = settings.umAmount;
             double th = settings.umThreshold;
 
-            setFilter(new UnsharpMaskFilter(iface.getOriginal(), this, r, a, th));
+            setFilter(new UnsharpMaskFilter(iface.original(), this, r, a, th));
             break;
         }
 
@@ -255,7 +255,7 @@ void SharpenTool::prepareFinal()
             double g   = settings.rfGauss;
             int    ms  = settings.rfMatrix;
 
-            setFilter(new RefocusFilter(iface.getOriginal(), this, ms, r, g, c, n));
+            setFilter(new RefocusFilter(iface.original(), this, ms, r, g, c, n));
             break;
         }
     }

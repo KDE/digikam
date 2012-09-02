@@ -168,7 +168,7 @@ FilmTool::FilmTool(QObject* const parent)
     setToolIcon(SmallIcon("colorneg"));
 
     ImageIface iface(0, 0);
-    d->originalImage = iface.getOriginal();
+    d->originalImage = iface.original();
 
     d->histoSegments = d->originalImage->sixteenBit() ? 65535 : 255;
     d->levels        = new ImageLevels(d->originalImage->sixteenBit());
@@ -668,7 +668,7 @@ void FilmTool::prepareEffect()
 void FilmTool::prepareFinal()
 {
     ImageIface iface(0, 0);
-    setFilter(new FilmFilter(iface.getOriginal(), this, d->filmContainer));
+    setFilter(new FilmFilter(iface.original(), this, d->filmContainer));
 }
 
 void FilmTool::putPreviewData()

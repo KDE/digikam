@@ -363,7 +363,7 @@ void InPaintingTool::processCImgUrl(const QString& url)
 void InPaintingTool::prepareEffect()
 {
     ImageIface iface(0, 0);
-    d->originalImage = iface.getOriginal()->copy();
+    d->originalImage = iface.original()->copy();
 
     // Selected area from the image and mask creation:
     //

@@ -113,7 +113,7 @@ BWSepiaTool::BWSepiaTool(QObject* parent)
                                 EditorToolSettings::SaveAs);
 
     ImageIface iface(0, 0);
-    d->bwsepiaSettings = new BWSepiaSettings(d->gboxSettings->plainPage(), iface.getOriginal());
+    d->bwsepiaSettings = new BWSepiaSettings(d->gboxSettings->plainPage(), iface.original());
 
     setToolSettings(d->gboxSettings);
     init();
@@ -214,7 +214,7 @@ void BWSepiaTool::prepareFinal()
     BWSepiaContainer settings = d->bwsepiaSettings->settings();
 
     ImageIface iface(0, 0);
-    setFilter(new BWSepiaFilter(iface.getOriginal(), this, settings));
+    setFilter(new BWSepiaFilter(iface.original(), this, settings));
 }
 
 void BWSepiaTool::putFinalData()

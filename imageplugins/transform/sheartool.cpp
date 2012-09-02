@@ -294,7 +294,7 @@ void ShearTool::prepareEffect()
     ImageIface* iface = d->previewWidget->imageIface();
     int orgW          = iface->originalSize().width();
     int orgH          = iface->originalSize().height();
-    DImg preview      = iface->getPreview();
+    DImg preview      = iface->preview();
     setFilter(new ShearFilter(&preview, this, hAngle, vAngle, antialiasing, background, orgW, orgH));
 }
 
@@ -308,7 +308,7 @@ void ShearTool::prepareFinal()
     ImageIface iface(0, 0);
     int orgW       = iface.originalSize().width();
     int orgH       = iface.originalSize().height();
-    DImg* orgImage = iface.getOriginal();
+    DImg* orgImage = iface.original();
     setFilter(new ShearFilter(orgImage, this, hAngle, vAngle, antialiasing, background, orgW, orgH));
 }
 

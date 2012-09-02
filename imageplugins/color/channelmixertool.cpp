@@ -203,7 +203,7 @@ void ChannelMixerTool::prepareFinal()
     MixerContainer settings = d->settingsView->settings();
 
     ImageIface iface(0, 0);
-    setFilter(new MixerFilter(iface.getOriginal(), this, settings));
+    setFilter(new MixerFilter(iface.original(), this, settings));
 }
 
 void ChannelMixerTool::putFinalData()

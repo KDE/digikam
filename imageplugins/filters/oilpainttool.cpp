@@ -195,7 +195,7 @@ void OilPaintTool::prepareFinal()
     int s = d->smoothInput->value();
 
     ImageIface iface(0, 0);
-    setFilter(new OilPaintFilter(iface.getOriginal(), this, b, s));
+    setFilter(new OilPaintFilter(iface.original(), this, b, s));
 }
 
 void OilPaintTool::putPreviewData()

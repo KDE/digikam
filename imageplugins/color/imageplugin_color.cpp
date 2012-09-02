@@ -235,7 +235,7 @@ void ImagePlugin_Color::slotInvert()
     kapp->setOverrideCursor(Qt::WaitCursor);
 
     ImageIface iface(0, 0);
-    InvertFilter invert(iface.getOriginal(), 0L);
+    InvertFilter invert(iface.original(), 0L);
     invert.startFilterDirectly();
     iface.putOriginal(i18n("Invert"), invert.filterAction(), invert.getTargetImage());
 
@@ -306,7 +306,7 @@ void ImagePlugin_Color::slotConvertToColorSpace(const IccProfile& profile)
 {
     ImageIface iface(0, 0);
 
-    if (iface.getOriginalIccProfile().isNull())
+    if (iface.originalIccProfile().isNull())
     {
         KMessageBox::error(kapp->activeWindow(), i18n("This image is not color managed."));
         return;

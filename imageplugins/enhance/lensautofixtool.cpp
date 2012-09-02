@@ -111,7 +111,7 @@ LensAutoFixTool::LensAutoFixTool(QObject* parent)
     // -------------------------------------------------------------
 
     d->cameraSelector = new LensFunCameraSelector(d->gboxSettings->plainPage());
-    DImg* img = d->previewWidget->imageIface()->getOriginal();
+    DImg* img = d->previewWidget->imageIface()->original();
     DMetadata meta(img->getMetadata());
     d->cameraSelector->setMetadata(meta);
     KSeparator* line  = new KSeparator(Qt::Horizontal, d->gboxSettings->plainPage());
@@ -199,7 +199,7 @@ void LensAutoFixTool::prepareEffect()
     LensFunContainer settings = d->cameraSelector->settings();
     d->settingsView->assignFilterSettings(settings);
     ImageIface* iface         = d->previewWidget->imageIface();
-    DImg preview              = iface->getPreview();
+    DImg preview              = iface->preview();
 
     if (d->showGrid->isChecked())
     {
@@ -235,7 +235,7 @@ void LensAutoFixTool::prepareFinal()
     LensFunContainer settings = d->cameraSelector->settings();
     d->settingsView->assignFilterSettings(settings);
     ImageIface iface(0, 0);
-    setFilter(new LensFunFilter(iface.getOriginal(), this, settings));
+    setFilter(new LensFunFilter(iface.original(), this, settings));
 }
 
 void LensAutoFixTool::putPreviewData()
@@ -248,7 +248,7 @@ void LensAutoFixTool::putFinalData()
 {
     ImageIface iface(0, 0);
     iface.putOriginal(i18n("Lens Auto-Correction"), filter()->filterAction(), filter()->getTargetImage());
-    Digikam::KExiv2Data data = iface.getOriginalMetadata();
+    Digikam::KExiv2Data data = iface.originalMetadata();
     // Note: there are certain situations in the editor where these metadata changes may be undone.
     // Ignore for now, as they are not critical.
     dynamic_cast<LensFunFilter*>(filter())->registerSettingsToXmp(data);

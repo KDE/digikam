@@ -139,8 +139,8 @@ ImageGuideWidget::ImageGuideWidget(QWidget* const parent,
 
     d->iface         = new ImageIface(w, h);
     d->iface->setPreviewType(useImageSelection);
-    d->preview       = d->iface->getPreview();
-    d->preview.setIccProfile(d->iface->getOriginal()->getIccProfile());
+    d->preview       = d->iface->preview();
+    d->preview.setIccProfile(d->iface->original()->getIccProfile());
 
     d->pixmap        = new QPixmap(w, h);
     d->rect          = QRect(w / 2 - d->preview.width() / 2, h / 2 - d->preview.height() / 2, d->preview.width(), d->preview.height());
@@ -221,15 +221,15 @@ DColor ImageGuideWidget::getSpotColor(int getColorFrom) const
 {
     if (getColorFrom == OriginalImage)                          // Get point color from full original image
     {
-        return (d->iface->getColorInfoFromOriginal(getSpotPosition()));
+        return (d->iface->colorInfoFromOriginal(getSpotPosition()));
     }
     else if (getColorFrom == PreviewImage)                      // Get point color from full preview image
     {
-        return (d->iface->getColorInfoFromPreview(d->spot));
+        return (d->iface->colorInfoFromPreview(d->spot));
     }
 
     // In other cases, get point color from preview target image
-    return (d->iface->getColorInfoFromTargetPreview(d->spot));
+    return (d->iface->colorInfoFromTargetPreview(d->spot));
 }
 
 void ImageGuideWidget::setSpotVisible(bool spotVisible, bool blink)
@@ -543,7 +543,7 @@ void ImageGuideWidget::resizeEvent(QResizeEvent* e)
     int old_w         = d->preview.width();
     int old_h         = d->preview.height();
     d->preview        = d->iface->setPreviewSize(w, h);
-    d->preview.setIccProfile(d->iface->getOriginal()->getIccProfile());
+    d->preview.setIccProfile(d->iface->original()->getIccProfile());
 
     d->pixmap         = new QPixmap(w, h);
     d->previewPixmap  = new QPixmap(w, h);

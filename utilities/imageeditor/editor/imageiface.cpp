@@ -193,7 +193,7 @@ bool ImageIface::previewType() const
     return d->usePreviewSelection;
 }
 
-DColor ImageIface::getColorInfoFromOriginal(const QPoint& point) const
+DColor ImageIface::colorInfoFromOriginal(const QPoint& point) const
 {
     if (!DImgInterface::defaultInterface()->getImage() || point.x() > originalSize().width() || point.y() > originalSize().height())
     {
@@ -204,7 +204,7 @@ DColor ImageIface::getColorInfoFromOriginal(const QPoint& point) const
     return DImgInterface::defaultInterface()->getImg()->getPixelColor(point.x(), point.y());
 }
 
-DColor ImageIface::getColorInfoFromPreview(const QPoint& point) const
+DColor ImageIface::colorInfoFromPreview(const QPoint& point) const
 {
     if (d->previewImage.isNull() || point.x() > d->previewWidth || point.y() > d->previewHeight)
     {
@@ -215,7 +215,7 @@ DColor ImageIface::getColorInfoFromPreview(const QPoint& point) const
     return d->previewImage.getPixelColor(point.x(), point.y());
 }
 
-DColor ImageIface::getColorInfoFromTargetPreview(const QPoint& point) const
+DColor ImageIface::colorInfoFromTargetPreview(const QPoint& point) const
 {
     if (d->targetPreviewImage.isNull() || point.x() > d->previewWidth || point.y() > d->previewHeight)
     {
@@ -238,17 +238,17 @@ DImg ImageIface::setPreviewSize(int w, int h) const
     return DImg(d->previewWidth, d->previewHeight, previewSixteenBit(), previewHasAlpha(), data);
 }
 
-DImg ImageIface::getPreview() const
+DImg ImageIface::preview() const
 {
     return DImg(d->previewWidth, d->previewHeight, previewSixteenBit(), previewHasAlpha(), d->getPreviewImage());
 }
 
-DImg* ImageIface::getOriginal() const
+DImg* ImageIface::original() const
 {
     return DImgInterface::defaultInterface()->getImg();
 }
 
-DImg ImageIface::getSelection() const
+DImg ImageIface::selection() const
 {
     return DImg(selectionRect().width(), selectionRect().height(), originalSixteenBit(), originalHasAlpha(),
                 DImgInterface::defaultInterface()->getImageSelection(), false);
@@ -313,12 +313,12 @@ QPixmap ImageIface::convertToPixmap(DImg& img) const
     return DImgInterface::defaultInterface()->convertToPixmap(img);
 }
 
-IccProfile ImageIface::getOriginalIccProfile() const
+IccProfile ImageIface::originalIccProfile() const
 {
     return DImgInterface::defaultInterface()->getEmbeddedICC();
 }
 
-KExiv2Data ImageIface::getOriginalMetadata() const
+KExiv2Data ImageIface::originalMetadata() const
 {
     return DImgInterface::defaultInterface()->getImg()->getMetadata();
 }
@@ -328,7 +328,7 @@ void ImageIface::setOriginalMetadata(const KExiv2Data& meta)
     DImgInterface::defaultInterface()->getImg()->setMetadata(meta);
 }
 
-PhotoInfoContainer ImageIface::getPhotographInformation() const
+PhotoInfoContainer ImageIface::originalPhotoInfo() const
 {
     DMetadata meta(DImgInterface::defaultInterface()->getImg()->getMetadata());
     return meta.getPhotographInformation();

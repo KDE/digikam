@@ -345,7 +345,7 @@ void DistortionFXTool::prepareEffect()
     int e = d->effectType->currentIndex();
 
     ImageIface* iface = d->previewWidget->imageIface();
-    DImg image        = iface->getPreview();
+    DImg image        = iface->preview();
 
     setFilter(new DistortionFXFilter(&image, this, e, l, f));
 }
@@ -365,7 +365,7 @@ void DistortionFXTool::prepareFinal()
 
     ImageIface iface(0, 0);
 
-    setFilter(new DistortionFXFilter(iface.getOriginal(), this, e, l, f));
+    setFilter(new DistortionFXFilter(iface.original(), this, e, l, f));
 }
 
 void DistortionFXTool::putPreviewData()

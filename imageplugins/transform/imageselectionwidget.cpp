@@ -204,8 +204,8 @@ void ImageSelectionWidget::setup(int w, int h,
     setAttribute(Qt::WA_DeleteOnClose);
 
     d->iface   = new ImageIface(w, h);
-    d->preview = d->iface->getPreview();
-    d->preview.setIccProfile( d->iface->getOriginal()->getIccProfile() );
+    d->preview = d->iface->preview();
+    d->preview.setIccProfile( d->iface->original()->getIccProfile() );
     d->preview.convertToEightBit();
 
     d->pixmap  = new QPixmap(w, h);
@@ -229,7 +229,7 @@ void ImageSelectionWidget::resizeEvent(QResizeEvent* e)
     int w      = e->size().width();
     int h      = e->size().height();
     d->preview = d->iface->setPreviewSize(w, h);
-    d->preview.setIccProfile( d->iface->getOriginal()->getIccProfile() );
+    d->preview.setIccProfile( d->iface->original()->getIccProfile() );
     d->preview.convertToEightBit();
 
     d->pixmap  = new QPixmap(w, h);

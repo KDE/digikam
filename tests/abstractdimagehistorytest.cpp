@@ -149,11 +149,11 @@ void AbstractDImageHistoryTest::applyFilters1()
 {
     ImageIface iface(0, 0);
 
-    BCGFilter filter1(iface.getOriginal(), this);
+    BCGFilter filter1(iface.original(), this);
     filter1.startFilterDirectly();
     iface.putOriginal(i18n("Brightness / Contrast / Gamma"), filter1.filterAction(), filter1.getTargetImage());
 
-    CurvesFilter filter2(iface.getOriginal(), this);
+    CurvesFilter filter2(iface.original(), this);
     filter2.startFilterDirectly();
     iface.putOriginal("Curves", filter2.filterAction(), filter2.getTargetImage());
 }
@@ -162,7 +162,7 @@ void AbstractDImageHistoryTest::applyFilters2()
 {
     ImageIface iface(0, 0);
 
-    AutoLevelsFilter filter(iface.getOriginal(), iface.getOriginal(), this);
+    AutoLevelsFilter filter(iface.original(), iface.original(), this);
     filter.startFilterDirectly();
     iface.putOriginal("", filter.filterAction(), filter.getTargetImage());
 }
@@ -171,7 +171,7 @@ void AbstractDImageHistoryTest::applyFilters3()
 {
     ImageIface iface(0, 0);
 
-    InfraredFilter filter(iface.getOriginal(), this);
+    InfraredFilter filter(iface.original(), this);
     filter.startFilterDirectly();
     iface.putOriginal("", filter.filterAction(), filter.getTargetImage());
 }
@@ -180,7 +180,7 @@ void AbstractDImageHistoryTest::applyFilters4()
 {
     ImageIface iface(0, 0);
 
-    BlurFilter filter(iface.getOriginal(), this);
+    BlurFilter filter(iface.original(), this);
     filter.startFilterDirectly();
     iface.putOriginal("", filter.filterAction(), filter.getTargetImage());
 }

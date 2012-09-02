@@ -693,7 +693,7 @@ void ContentAwareResizeTool::prepareEffect()
     ImageIface* iface = d->previewWidget->imageIface();
     int w             = iface->previewSize().width();
     int h             = iface->previewSize().height();
-    DImg imTemp       = iface->getOriginal()->smoothScale(w, h, Qt::KeepAspectRatio);
+    DImg imTemp       = iface->original()->smoothScale(w, h, Qt::KeepAspectRatio);
     int new_w         = (int)(w*d->wpInput->value()/100.0);
     int new_h         = (int)(h*d->hpInput->value()/100.0);
 
@@ -734,7 +734,7 @@ void ContentAwareResizeTool::prepareFinal()
         double stdRescaleP = (100.0 - d->mixedRescaleInput->value()) / 100.0;
         int diff_w         = (int)(stdRescaleP * (iface.originalSize().width()  - d->wInput->value()));
         int diff_h         = (int)(stdRescaleP * (iface.originalSize().height() - d->hInput->value()));
-        DImg image         = iface.getOriginal()->smoothScale(iface.originalSize().width()  - diff_w,
+        DImg image         = iface.original()->smoothScale(iface.originalSize().width()  - diff_w,
                              iface.originalSize().height() - diff_h,
                              Qt::IgnoreAspectRatio);
 
@@ -753,7 +753,7 @@ void ContentAwareResizeTool::prepareFinal()
             mask = d->previewWidget->getMask().scaled(iface.originalSize());
         }
 
-        contentAwareResizeCore(iface.getOriginal(), d->wInput->value(), d->hInput->value(), mask);
+        contentAwareResizeCore(iface.original(), d->wInput->value(), d->hInput->value(), mask);
     }
 }
 

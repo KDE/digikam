@@ -217,7 +217,7 @@ void RainDropTool::prepareEffect()
     // Selected data from the image
     QRect selection = iface->selectionRect();
 
-    setFilter(new RainDropFilter(iface->getOriginal(), this, drop, amount, coeff, &selection));
+    setFilter(new RainDropFilter(iface->original(), this, drop, amount, coeff, &selection));
 }
 
 void RainDropTool::prepareFinal()
@@ -231,7 +231,7 @@ void RainDropTool::prepareFinal()
     // Selected data from the image
     QRect selection = iface.selectionRect();
 
-    setFilter(new RainDropFilter(iface.getOriginal(), this, drop, amount, coeff, &selection));
+    setFilter(new RainDropFilter(iface.original(), this, drop, amount, coeff, &selection));
 }
 
 void RainDropTool::putPreviewData()

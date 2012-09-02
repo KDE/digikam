@@ -168,7 +168,7 @@ void BlurTool::putPreviewData()
 void BlurTool::prepareFinal()
 {
     ImageIface iface(0, 0);
-    setFilter(new BlurFilter(iface.getOriginal(), this, d->radiusInput->value()));
+    setFilter(new BlurFilter(iface.original(), this, d->radiusInput->value()));
 }
 
 void BlurTool::putFinalData()

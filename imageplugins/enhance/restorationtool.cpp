@@ -328,7 +328,7 @@ void RestorationTool::prepareEffect()
 void RestorationTool::prepareFinal()
 {
     ImageIface iface(0, 0);
-    DImg originalImage = iface.getOriginal()->copy();
+    DImg originalImage = iface.original()->copy();
 
     setFilter(new GreycstorationFilter(&originalImage,
                                        d->settingsWidget->settings(), GreycstorationFilter::Restore,

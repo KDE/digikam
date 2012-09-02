@@ -55,15 +55,15 @@ public:
     explicit ImageIface(int w = 0, int h = 0);
     ~ImageIface();
 
-    /** Use this method to use the current selection in editor instead the full
-     *  image to render the preview.
-     */
-    void setPreviewType(bool useSelect = false);
-
     /** Return 'true' if the preview is rendered using the current selection in editor.
      *  Return 'false' if the preview is rendered using the full image in editor.
      */
     bool previewType() const;
+
+    /** Use this method to use the current selection in editor instead the full
+     *  image to render the preview.
+     */
+    void setPreviewType(bool useSelect = false);
 
     /** Sets preview size and returns new preview as with getPreview.
      *  The parameters are only hints, previewWidth() and previewHeight()
@@ -71,39 +71,30 @@ public:
      */
     DImg  setPreviewSize(int w, int h) const;
 
-    /** Return a DImg object representing the preview image.
-     */
-    DImg  getPreview() const;
-
-    /** Return a DImg object representing the current original image selection.
-     */
-    DImg  getSelection() const;
-
-    /** Return a pointer to the DImg object representing the original image.
-     *  This object may not be modified or stored. Make copies if you need.
-     */
-    DImg* getOriginal() const;
-
-    /** Set the color profile of the original image.
-     */
-    void   putOriginalIccProfile(const IccProfile& profile);
-
-    /** Set the color profile of the preview image.
-     */
-    void   putPreviewIccProfile(const IccProfile& profile);
-
-    /** Get colors from original, (unchanged) preview
-     *  or target preview (set by putPreviewImage) image.
-     */
-    DColor getColorInfoFromOriginal(const QPoint& point)      const;
-    DColor getColorInfoFromPreview(const QPoint& point)       const;
-    DColor getColorInfoFromTargetPreview(const QPoint& point) const;
-
     /** Methods to get/set preview image information.
      */
     QSize previewSize()        const;
     bool  previewHasAlpha()    const;
     bool  previewSixteenBit()  const;
+
+    /** Return a DImg object representing the preview image.
+     */
+    DImg  preview() const;
+
+    /** Return current image selection position and size into original image coordinates.
+     */
+    QRect selectionRect() const;
+
+    /** Return a DImg object representing the current original image selection.
+     */
+    DImg  selection() const;
+
+    /** Get colors from original, (unchanged) preview
+     *  or target preview (set by putPreviewImage) image.
+     */
+    DColor colorInfoFromOriginal(const QPoint& point)      const;
+    DColor colorInfoFromPreview(const QPoint& point)       const;
+    DColor colorInfoFromTargetPreview(const QPoint& point) const;
 
     /** Methods to get/set original image information.
      */
@@ -113,17 +104,18 @@ public:
 
     /** Original image metadata.
      */
-    IccProfile getOriginalIccProfile() const;
-    KExiv2Data getOriginalMetadata()   const;
+    IccProfile originalIccProfile() const;
+    KExiv2Data originalMetadata()   const;
     void       setOriginalMetadata(const KExiv2Data& meta);
 
     /** Get photograph information from original image.
      */
-    PhotoInfoContainer getPhotographInformation() const;
+    PhotoInfoContainer originalPhotoInfo() const;
 
-    /** Return current image selection position and size into original image coordinates.
+    /** Return a pointer to the DImg object representing the original image.
+     *  This object may not be modified or stored. Make copies if you need.
      */
-    QRect selectionRect() const;
+    DImg* original() const;
 
     /** Convert depth of original image.
      */
@@ -140,6 +132,14 @@ public:
      */
     void paint(QPaintDevice* const device, const QRect& rect, QPainter* const painter = 0);
 
+    /** Set the color profile of the original image.
+     */
+    void putOriginalIccProfile(const IccProfile& profile);
+
+    /** Set the color profile of the preview image.
+     */
+    void putPreviewIccProfile(const IccProfile& profile);
+
     /** Replace the data of the current original image selection with the given data.
      *  The characteristics of the data must match the characteristics of the current
      *  selection as returned by the selectionWidth(), selectionHeight(),
@@ -152,7 +152,7 @@ public:
      *  The characteristics of the data must match the characteristics of the current
      *  as returned by the preview...() methods.
      *  The target preview image is used by the paint() and
-     *  getColorInfoFromTargetPreview() methods.
+     *  colorInfoFromTargetPreview() methods.
      *  The image returned by getPreview() is unaffected.
      */
     void putPreview(const DImg& img);

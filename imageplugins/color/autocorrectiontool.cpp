@@ -103,7 +103,7 @@ AutoCorrectionTool::AutoCorrectionTool(QObject* parent)
     // -------------------------------------------------------------
 
     ImageIface iface(0, 0);
-    DImg thumbImage       = iface.getOriginal()->smoothScale(128, 128, Qt::KeepAspectRatio);
+    DImg thumbImage       = iface.original()->smoothScale(128, 128, Qt::KeepAspectRatio);
     PreviewListItem* item = 0;
     d->gboxSettings       = new EditorToolSettings;
     d->gboxSettings->setTools(EditorToolSettings::Histogram);
@@ -117,7 +117,7 @@ AutoCorrectionTool::AutoCorrectionTool(QObject* parent)
 
     d->correctionTools = new PreviewList(this);
 
-    item = d->correctionTools->addItem(new AutoLevelsFilter(&thumbImage, iface.getOriginal()),
+    item = d->correctionTools->addItem(new AutoLevelsFilter(&thumbImage, iface.original()),
                                        i18n("Auto Levels"), AutoLevelsCorrection);
     item->setWhatsThis(i18n("<b>Auto Levels</b>:"
                             "<p>This option maximizes the tonal range in the Red, "
@@ -125,7 +125,7 @@ AutoCorrectionTool::AutoCorrectionTool(QObject* parent)
                             "limit values and adjusts the Red, Green, and Blue channels "
                             "to a full histogram range.</p>"));
 
-    item = d->correctionTools->addItem(new NormalizeFilter(&thumbImage, iface.getOriginal()),
+    item = d->correctionTools->addItem(new NormalizeFilter(&thumbImage, iface.original()),
                                        i18n("Normalize"), NormalizeCorrection);
     item->setWhatsThis(i18n("<b>Normalize</b>:"
                             "<p>This option scales brightness values across the active "
@@ -135,7 +135,7 @@ AutoCorrectionTool::AutoCorrectionTool(QObject* parent)
                             "images that are dim or washed out.</p>"));
 
 
-    item = d->correctionTools->addItem(new EqualizeFilter(&thumbImage, iface.getOriginal()),
+    item = d->correctionTools->addItem(new EqualizeFilter(&thumbImage, iface.original()),
                                        i18n("Equalize"), EqualizeCorrection);
     item->setWhatsThis(i18n("<b>Equalize</b>:"
                             "<p>This option adjusts the brightness of colors across the "
@@ -147,7 +147,7 @@ AutoCorrectionTool::AutoCorrectionTool(QObject* parent)
                             "garbage. It is a very powerful operation, which can either work "
                             "miracles on an image or destroy it.</p>"));
 
-    item = d->correctionTools->addItem(new StretchFilter(&thumbImage, iface.getOriginal()),
+    item = d->correctionTools->addItem(new StretchFilter(&thumbImage, iface.original()),
                                        i18n("Stretch Contrast"), StretchContrastCorrection);
     item->setWhatsThis(i18n("<b>Stretch Contrast</b>:"
                             "<p>This option enhances the contrast and brightness "
@@ -155,7 +155,7 @@ AutoCorrectionTool::AutoCorrectionTool(QObject* parent)
                             "and highest values to their fullest range, adjusting "
                             "everything in between.</p>"));
 
-    item = d->correctionTools->addItem(new AutoExpoFilter(&thumbImage, iface.getOriginal()),
+    item = d->correctionTools->addItem(new AutoExpoFilter(&thumbImage, iface.original()),
                                        i18n("Auto Exposure"), AutoExposureCorrection);
     item->setWhatsThis(i18n("<b>Auto Exposure</b>:"
                             "<p>This option enhances the contrast and brightness "
@@ -242,7 +242,7 @@ void AutoCorrectionTool::prepareEffect()
     ImageIface iface(0, 0);
     DImg preview = d->previewWidget->getOriginalRegionImage(true);
 
-    autoCorrection(&preview, iface.getOriginal(), d->correctionTools->currentId());
+    autoCorrection(&preview, iface.original(), d->correctionTools->currentId());
 }
 
 void AutoCorrectionTool::putPreviewData()
@@ -267,7 +267,7 @@ void AutoCorrectionTool::prepareFinal()
 {
     int type = d->correctionTools->currentId();
     ImageIface iface(0, 0);
-    autoCorrection(iface.getOriginal(), iface.getOriginal(), type);
+    autoCorrection(iface.original(), iface.original(), type);
 }
 
 void AutoCorrectionTool::putFinalData()

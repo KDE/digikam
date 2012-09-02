@@ -269,7 +269,7 @@ void HotPixelsTool::prepareFinal()
     int interpolationMethod = d->filterMethodCombo->currentIndex();
 
     ImageIface iface(0, 0);
-    setFilter(dynamic_cast<DImgThreadedFilter*>(new HotPixelFixer(iface.getOriginal(), this, d->hotPixelsList, interpolationMethod)));
+    setFilter(dynamic_cast<DImgThreadedFilter*>(new HotPixelFixer(iface.original(), this, d->hotPixelsList, interpolationMethod)));
 }
 
 void HotPixelsTool::putPreviewData()
