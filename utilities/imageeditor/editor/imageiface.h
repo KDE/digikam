@@ -97,19 +97,16 @@ public:
 
     /** Methods to get/set original image information.
      */
-    QSize originalSize()        const;
+    QSize originalSize()       const;
     bool  originalHasAlpha()   const;
     bool  originalSixteenBit() const;
 
-    /** Original image metadata.
+    /** Original image metadata.methods
      */
-    IccProfile originalIccProfile() const;
-    KExiv2Data originalMetadata()   const;
-    void       setOriginalMetadata(const KExiv2Data& meta);
-
-    /** Get photograph information from original image.
-     */
+    IccProfile originalIccProfile()        const;
     PhotoInfoContainer originalPhotoInfo() const;
+    KExiv2Data originalMetadata()          const;
+    void       setOriginalMetadata(const KExiv2Data& meta);
 
     /** Return a pointer to the DImg object representing the original image.
      *  This object may not be modified or stored. Make copies if you need.
