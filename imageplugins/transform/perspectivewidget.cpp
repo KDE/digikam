@@ -908,86 +908,86 @@ void PerspectiveWidget::mouseMoveEvent(QMouseEvent* e)
 
             if ( d->currentResizing == Private::ResizingTopLeft )
             {
-                unusablePoints.putPoints(0,                       7,
-                                         d->width-1,              d->height-1,
-                                         0,                       d->height-1,
-                                         0,                       d->bottomLeftPoint.y()-10,
-                                         d->bottomLeftPoint.x(),  d->bottomLeftPoint.y()-10,
-                                         d->topRightPoint.x()-10, d->topRightPoint.y(),
-                                         d->topRightPoint.x()-10, 0,
-                                         d->width-1,              0);
+                d->topLeftPoint = pm - d->rect.topLeft();
+                setCursor( Qt::SizeFDiagCursor );
+
+                unusablePoints.putPoints(0, 7,
+                                         d->width-1 + d->rect.x(),              d->height-1 + d->rect.y(),
+                                         0 + d->rect.x(),                       d->height-1 + d->rect.y(),
+                                         0 + d->rect.x(),                       d->bottomLeftPoint.y()-10 + d->rect.y(),
+                                         d->bottomLeftPoint.x() + d->rect.x(),  d->bottomLeftPoint.y()-10 + d->rect.y(),
+                                         d->topRightPoint.x()-10 + d->rect.x(), d->topRightPoint.y() + d->rect.y(),
+                                         d->topRightPoint.x()-10 + d->rect.x(), 0 + d->rect.y(),
+                                         d->width-1 + d->rect.x(),              0 + d->rect.y());
                 QRegion unusableArea(unusablePoints);
 
                 if ( unusableArea.contains(pm) && !d->inverseTransformation )
                 {
                     d->validPerspective = false;
                 }
-
-                d->topLeftPoint = pm - d->rect.topLeft();
-                setCursor( Qt::SizeFDiagCursor );
             }
 
             else if ( d->currentResizing == Private::ResizingTopRight )
             {
-                unusablePoints.putPoints(0,                       7,
-                                         0,                       d->height-1,
-                                         0,                       0,
-                                         d->topLeftPoint.x()+10,  0,
-                                         d->topLeftPoint.x()+10,  d->topLeftPoint.y(),
-                                         d->bottomRightPoint.x(), d->bottomRightPoint.y()-10,
-                                         d->width-1,              d->bottomRightPoint.y()-10,
-                                         d->width-1,              d->height-1);
+                d->topRightPoint = pm - d->rect.topLeft();
+                setCursor( Qt::SizeBDiagCursor );
+
+                unusablePoints.putPoints(0, 7,
+                                         0 + d->rect.x(),                       d->height-1 + d->rect.y(),
+                                         0 + d->rect.x(),                       0 + d->rect.y(),
+                                         d->topLeftPoint.x()+10 + d->rect.x(),  0 + d->rect.y(),
+                                         d->topLeftPoint.x()+10 + d->rect.x(),  d->topLeftPoint.y() + d->rect.y(),
+                                         d->bottomRightPoint.x() + d->rect.x(), d->bottomRightPoint.y()-10 + d->rect.y(),
+                                         d->width-1 + d->rect.x(),              d->bottomRightPoint.y()-10 + d->rect.y(),
+                                         d->width-1 + d->rect.x(),              d->height-1 + d->rect.y());
                 QRegion unusableArea(unusablePoints);
 
                 if ( unusableArea.contains(pm) && !d->inverseTransformation )
                 {
                     d->validPerspective = false;
                 }
-
-                d->topRightPoint = pm - d->rect.topLeft();
-                setCursor( Qt::SizeBDiagCursor );
             }
 
             else if ( d->currentResizing == Private::ResizingBottomLeft  )
             {
-                unusablePoints.putPoints(0,                          7,
-                                         d->width-1,                 0,
-                                         d->width-1,                 d->height-1,
-                                         d->bottomRightPoint.x()-10, d->height-1,
-                                         d->bottomRightPoint.x()-10, d->bottomRightPoint.y()+10,
-                                         d->topLeftPoint.x(),        d->topLeftPoint.y()+10,
-                                         0,                          d->topLeftPoint.y(),
-                                         0,                          0);
+                d->bottomLeftPoint = pm - d->rect.topLeft();
+                setCursor( Qt::SizeBDiagCursor );
+
+                unusablePoints.putPoints(0, 7,
+                                         d->width-1 + d->rect.x(),                 0 + d->rect.y(),
+                                         d->width-1 + d->rect.x(),                 d->height-1 + d->rect.y(),
+                                         d->bottomRightPoint.x()-10 + d->rect.x(), d->height-1 + d->rect.y(),
+                                         d->bottomRightPoint.x()-10 + d->rect.x(), d->bottomRightPoint.y()+10 + d->rect.y(),
+                                         d->topLeftPoint.x() + d->rect.x(),        d->topLeftPoint.y()+10 + d->rect.y(),
+                                         0 + d->rect.x(),                          d->topLeftPoint.y() + d->rect.y(),
+                                         0 + d->rect.x(),                          0 + d->rect.y());
                 QRegion unusableArea(unusablePoints);
 
                 if ( unusableArea.contains(pm) && !d->inverseTransformation )
                 {
                     d->validPerspective = false;
                 }
-
-                d->bottomLeftPoint = pm - d->rect.topLeft();
-                setCursor( Qt::SizeBDiagCursor );
             }
 
             else if ( d->currentResizing == Private::ResizingBottomRight )
             {
-                unusablePoints.putPoints(0,                         7,
-                                         0,                         0,
-                                         d->width-1,                0,
-                                         d->width-1,                d->topRightPoint.y()+10,
-                                         d->topRightPoint.x(),      d->topRightPoint.y()+10,
-                                         d->bottomLeftPoint.x()+10, d->bottomLeftPoint.y(),
-                                         d->bottomLeftPoint.x()+10, d->width-1,
-                                         0,                         d->width-1);
+                d->bottomRightPoint = pm - d->rect.topLeft();
+                setCursor( Qt::SizeFDiagCursor );
+
+                unusablePoints.putPoints(0, 7,
+                                         0 + d->rect.x(),                         0 + d->rect.y(),
+                                         d->width-1 + d->rect.x(),                0 + d->rect.y(),
+                                         d->width-1 + d->rect.x(),                d->topRightPoint.y()+10 + d->rect.y(),
+                                         d->topRightPoint.x() + d->rect.x(),      d->topRightPoint.y()+10 + d->rect.y(),
+                                         d->bottomLeftPoint.x()+10 + d->rect.x(), d->bottomLeftPoint.y() + d->rect.y(),
+                                         d->bottomLeftPoint.x()+10 + d->rect.x(), d->width-1 + d->rect.y(),
+                                         0 + d->rect.x(),                         d->width-1 + d->rect.y());
                 QRegion unusableArea(unusablePoints);
 
                 if ( unusableArea.contains(pm) && !d->inverseTransformation )
                 {
                     d->validPerspective = false;
                 }
-
-                d->bottomRightPoint = pm - d->rect.topLeft();
-                setCursor( Qt::SizeFDiagCursor );
             }
 
             else
@@ -997,6 +997,14 @@ void PerspectiveWidget::mouseMoveEvent(QMouseEvent* e)
             }
 
             updatePixmap();
+/*
+            // NOTE ; To hack unusable region
+            QPainter p(d->pixmap);
+            QPainterPath pp;
+            pp.addPolygon(unusablePoints);
+            p.fillPath(pp, QColor(128,128,128,128));
+            p.end();
+*/
             update();
         }
     }
