@@ -172,6 +172,10 @@ void ImportView::setupConnections()
     connect(d->parent, SIGNAL(signalEscapePressed()),
             d->StackedView, SLOT(slotEscapePreview()));
 
+    // Preview items while download.
+    connect(d->parent, SIGNAL(signalPreviewRequested(CamItemInfo,bool)),
+            this, SLOT(slotTogglePreviewMode(CamItemInfo,bool)));
+
     // -- IconView Connections -------------------------------------
 
     connect(d->iconView->model(), SIGNAL(rowsInserted(QModelIndex,int,int)),
@@ -186,8 +190,8 @@ void ImportView::setupConnections()
     connect(d->iconView, SIGNAL(selectionChanged()),
             this, SLOT(slotImageSelected()));
 
-    connect(d->iconView, SIGNAL(previewRequested(CamItemInfo)),
-            this, SLOT(slotTogglePreviewMode(CamItemInfo)));
+    connect(d->iconView, SIGNAL(previewRequested(CamItemInfo,bool)),
+            this, SLOT(slotTogglePreviewMode(CamItemInfo,bool)));
 
     connect(d->iconView, SIGNAL(zoomOutStep()),
             this, SLOT(slotZoomOut()));
@@ -604,7 +608,7 @@ void ImportView::slotEscapePreview()
 
     // pass a null camera item info, because we want to fall back to the old
     // view mode
-    slotTogglePreviewMode(CamItemInfo());
+    slotTogglePreviewMode(CamItemInfo(), false);
 }
 
 void ImportView::slotMapWidgetView()
@@ -641,16 +645,16 @@ void ImportView::slotImagePreview()
         currentInfo = d->mapView->currentInfo();
     }*/
 
-    slotTogglePreviewMode(currentInfo);
+    slotTogglePreviewMode(currentInfo, false);
 }
 
 /**
  * @brief This method toggles between IconView/MapWidgetView and ImportPreview modes, depending on the context.
  */
-void ImportView::slotTogglePreviewMode(const CamItemInfo& info)
+void ImportView::slotTogglePreviewMode(const CamItemInfo& info, bool downloadPreview)
 {
     if (  (d->StackedView->previewMode() == ImportStackedView::PreviewCameraMode ||
-           d->StackedView->previewMode() == ImportStackedView::MapWidgetMode)
+           d->StackedView->previewMode() == ImportStackedView::MapWidgetMode || downloadPreview)
           && !info.isNull() )
     {
         d->lastPreviewMode = d->StackedView->previewMode();
@@ -670,8 +674,11 @@ void ImportView::slotTogglePreviewMode(const CamItemInfo& info)
         d->StackedView->setPreviewMode(d->lastPreviewMode);
     }
 
-    // make sure the next/previous buttons are updated
-    slotImageSelected();
+    if(!downloadPreview)
+    {
+        // make sure the next/previous buttons are updated
+        slotImageSelected();
+    }
 }
 
 void ImportView::slotViewModeChanged()

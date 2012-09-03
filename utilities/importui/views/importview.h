@@ -121,7 +121,7 @@ public Q_SLOTS:
 private Q_SLOTS:
 
     void slotImageSelected();
-    void slotTogglePreviewMode(const CamItemInfo& info);
+    void slotTogglePreviewMode(const CamItemInfo& info, bool downloadPreview);
     void slotDispatchImageSelected();
 
     void slotFirstItem();

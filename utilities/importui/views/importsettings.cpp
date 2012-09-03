@@ -69,6 +69,7 @@ public:
         //tooltipShowTags(false),
         //tooltipShowLabelRating(false),
         previewLoadFullImageSize(false),
+        previewItemsWhileDownload(false),
         previewShowIcons(true),
         //ratingFilterCond(0),
         showThumbbar(false)
@@ -109,6 +110,7 @@ public:
     //static const QString                configToolTipsShowTagsEntry;
     //static const QString                configToolTipsShowLabelRatingEntry;
     static const QString                configPreviewLoadFullImageSizeEntry;
+    static const QString                configPreviewItemsWhileDownloadEntry;
     static const QString                configPreviewShowIconsEntry;
     static const QString                configShowThumbbarEntry;
 
@@ -152,6 +154,7 @@ public:
 
     // preview settings
     bool                                previewLoadFullImageSize;
+    bool                                previewItemsWhileDownload;
     bool                                previewShowIcons;
     bool                                showThumbbar;
 
@@ -193,6 +196,7 @@ const QString ImportSettings::Private::configToolTipsShowFolderNameEntry("ToolTi
 //const QString ImportSettings::Private::configToolTipsShowTagsEntry("ToolTips Show Tags");
 //const QString ImportSettings::Private::configToolTipsShowLabelRatingEntry("ToolTips Show Label Rating");
 const QString ImportSettings::Private::configPreviewLoadFullImageSizeEntry("Preview Load Full Image Size");
+const QString ImportSettings::Private::configPreviewItemsWhileDownloadEntry("Preview Each Item While Downloading it");
 const QString ImportSettings::Private::configPreviewShowIconsEntry("Preview Show Icons");
 const QString ImportSettings::Private::configShowThumbbarEntry("Show Thumbbar");
 
@@ -263,6 +267,7 @@ void ImportSettings::init()
     //d->tooltipShowLabelRating       = true;
 
     d->previewLoadFullImageSize     = false;
+    d->previewItemsWhileDownload    = false;
     d->previewShowIcons             = true;
     d->showThumbbar                 = true;
 }
@@ -312,6 +317,7 @@ void ImportSettings::readSettings()
     //d->tooltipShowLabelRating       = group.readEntry(d->configToolTipsShowLabelRatingEntry,      true);
 
     d->previewLoadFullImageSize     = group.readEntry(d->configPreviewLoadFullImageSizeEntry,     false);
+    d->previewItemsWhileDownload    = group.readEntry(d->configPreviewItemsWhileDownloadEntry,     false);
     d->previewShowIcons             = group.readEntry(d->configPreviewShowIconsEntry,             true);
     d->showThumbbar                 = group.readEntry(d->configShowThumbbarEntry,                 true);
 
@@ -362,6 +368,7 @@ void ImportSettings::saveSettings()
     //group.writeEntry(d->configToolTipsShowLabelRatingEntry,      d->tooltipShowLabelRating);
 
     group.writeEntry(d->configPreviewLoadFullImageSizeEntry,     d->previewLoadFullImageSize);
+    group.writeEntry(d->configPreviewItemsWhileDownloadEntry,     d->previewItemsWhileDownload);
     group.writeEntry(d->configPreviewShowIconsEntry,             d->previewShowIcons);
     group.writeEntry(d->configShowThumbbarEntry,                 d->showThumbbar);
 
@@ -696,6 +703,16 @@ void ImportSettings::setPreviewLoadFullImageSize(bool val)
 bool ImportSettings::getPreviewLoadFullImageSize() const
 {
     return d->previewLoadFullImageSize;
+}
+
+void ImportSettings::setPreviewItemsWhileDownload(bool val)
+{
+    d->previewItemsWhileDownload = val;
+}
+
+bool ImportSettings::getPreviewItemsWhileDownload() const
+{
+    return d->previewItemsWhileDownload;
 }
 
 void ImportSettings::setPreviewShowIcons(bool val)

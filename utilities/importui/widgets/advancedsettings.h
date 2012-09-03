@@ -52,8 +52,6 @@ public:
     void readSettings(KConfigGroup& group);
     void saveSettings(KConfigGroup& group);
 
-    bool getAutoRotate();
-
     DownloadSettings settings() const;
 
 Q_SIGNALS:

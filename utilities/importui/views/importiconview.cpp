@@ -292,7 +292,7 @@ void ImportIconView::activated(const CamItemInfo& info)
 
     if (ImportSettings::instance()->getItemLeftClickAction() == ImportSettings::ShowPreview)
     {
-        emit previewRequested(info);
+        emit previewRequested(info, false);
     }
     else
     {

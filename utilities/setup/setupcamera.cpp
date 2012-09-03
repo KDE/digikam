@@ -184,6 +184,7 @@ public:
         //TODO: iconShowRatingBox(0),
         iconShowFormatBox(0),
         previewLoadFullImageSize(0),
+        previewItemsWhileDownload(0),
         previewShowIcons(0),
         leftClickActionComboBox(0),
         iconViewFontSelect(0),
@@ -224,6 +225,7 @@ public:
     //TODO: QCheckBox*           iconShowRatingBox;
     QCheckBox*           iconShowFormatBox;
     QCheckBox*           previewLoadFullImageSize;
+    QCheckBox*           previewItemsWhileDownload;
     QCheckBox*           previewShowIcons;
 
     KComboBox*           leftClickActionComboBox;
@@ -481,13 +483,17 @@ SetupCamera::SetupCamera(QWidget* const parent)
                                                    "<p><b>Note:</b> for Raw images, a half size version of the Raw data "
                                                    "is used instead of the embedded JPEG preview.</p>"));
 
+    d->previewItemsWhileDownload      = new QCheckBox(i18n("Preview each item while downloading it."), interfaceOptionsGroup);
+    d->previewItemsWhileDownload->setWhatsThis(i18n("<p>Set this option to preview each item while downloading.</p>"));
+
     d->previewShowIcons              = new QCheckBox(i18n("Show icons and text over preview"), interfaceOptionsGroup);
     d->previewShowIcons->setWhatsThis(i18n("Uncheck this if you don't want to see icons and text in the image preview."));
 
     grid3->setMargin(KDialog::spacingHint());
     grid3->setSpacing(KDialog::spacingHint());
     grid3->addWidget(d->previewLoadFullImageSize, 0, 0, 1, 2);
-    grid3->addWidget(d->previewShowIcons,         1, 0, 1, 2);
+    grid3->addWidget(d->previewItemsWhileDownload, 1, 0, 1, 2);
+    grid3->addWidget(d->previewShowIcons,         2, 0, 1, 2);
 
     layout2->setMargin(0);
     layout2->setSpacing(KDialog::spacingHint());
@@ -526,6 +532,12 @@ SetupCamera::SetupCamera(QWidget* const parent)
 
     connect(d->useDefaultTargetAlbum, SIGNAL(toggled(bool)),
             d->target1AlbumSelector, SLOT(setEnabled(bool)));
+
+    connect(d->previewItemsWhileDownload, SIGNAL(clicked()),
+            this, SLOT(slotPreviewItemsClicked()));
+
+    connect(d->previewLoadFullImageSize, SIGNAL(clicked()),
+            this, SLOT(slotPreviewFullImageSizeClicked()));
 
     // -------------------------------------------------------------
 
@@ -625,6 +637,7 @@ void SetupCamera::readSettings()
     d->leftClickActionComboBox->setCurrentIndex((int)settings->getItemLeftClickAction());
 
     d->previewLoadFullImageSize->setChecked(settings->getPreviewLoadFullImageSize());
+    d->previewItemsWhileDownload->setChecked(settings->getPreviewItemsWhileDownload());
     d->previewShowIcons->setChecked(settings->getPreviewShowIcons());
 }
 
@@ -708,6 +721,7 @@ void SetupCamera::applySettings()
                                      d->leftClickActionComboBox->currentIndex());
 
     settings->setPreviewLoadFullImageSize(d->previewLoadFullImageSize->isChecked());
+    settings->setPreviewItemsWhileDownload(d->previewItemsWhileDownload->isChecked());
     settings->setPreviewShowIcons(d->previewShowIcons->isChecked());
     settings->saveSettings();
 }
@@ -894,6 +908,25 @@ void SetupCamera::slotEditFilter()
         Filter* f = d->filters.at(i);
         dlg.getData(f);
         d->importListView->currentItem()->setText(f->name);
+    }
+}
+
+void SetupCamera::slotPreviewItemsClicked()
+{
+    if (d->previewItemsWhileDownload->isChecked() && d->previewLoadFullImageSize->isChecked())
+    {
+        KMessageBox::information(this, i18n("In order to enable this feature, the full-sized preview will be disabled."));
+
+        d->previewLoadFullImageSize->setChecked(false);
+    }
+}
+
+void SetupCamera::slotPreviewFullImageSizeClicked()
+{
+    if (d->previewItemsWhileDownload->isChecked() && d->previewLoadFullImageSize)
+    {
+        KMessageBox::information(this, i18n("If the full-sized preview is enabled it will affect the speed of previewing each item while download."));
+        d->previewItemsWhileDownload->setChecked(false);
     }
 }
 
