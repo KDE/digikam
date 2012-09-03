@@ -199,15 +199,15 @@ void BCGTool::prepareFinal()
 {
     BCGContainer settings = d->settingsView->settings();
 
-    ImageIface iface(0, 0);
+    ImageIface iface;
 
-    setFilter(new BCGFilter(iface.getOriginalImg(), this, settings));
+    setFilter(new BCGFilter(iface.original(), this, settings));
 }
 
 void BCGTool::putFinalData()
 {
-    ImageIface iface(0, 0);
-    iface.putOriginalImage(i18n("Brightness / Contrast / Gamma"), filter()->filterAction(), filter()->getTargetImage().bits());
+    ImageIface iface;
+    iface.putOriginal(i18n("Brightness / Contrast / Gamma"), filter()->filterAction(), filter()->getTargetImage());
 }
 
 }  // namespace DigikamColorImagePlugin

@@ -6,7 +6,7 @@
  * Date        : 2008-08-20
  * Description : Image editor interface used by editor tools.
  *
- * Copyright (C) 2008-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -42,12 +42,12 @@
 namespace Digikam
 {
 
-class EditorToolIface::EditorToolIfacePriv
+class EditorToolIface::Private
 {
 
 public:
 
-    EditorToolIfacePriv() :
+    Private() :
         tool(0),
         editor(0)
     {
@@ -64,8 +64,8 @@ EditorToolIface* EditorToolIface::editorToolIface()
     return m_iface;
 }
 
-EditorToolIface::EditorToolIface(EditorWindow* editor)
-    : QObject(), d(new EditorToolIfacePriv)
+EditorToolIface::EditorToolIface(EditorWindow* const editor)
+    : QObject(), d(new Private)
 {
     d->editor = editor;
     m_iface   = this;
@@ -86,7 +86,7 @@ EditorTool* EditorToolIface::currentTool() const
     return d->tool;
 }
 
-void EditorToolIface::loadTool(EditorTool* tool)
+void EditorToolIface::loadTool(EditorTool* const tool)
 {
     if (d->tool)
     {
@@ -104,7 +104,7 @@ void EditorToolIface::loadTool(EditorTool* tool)
     // If editor tool has zoomable preview, switch on zoom actions.
     d->editor->toggleZoomActions(d->editor->editorStackView()->isZoomablePreview());
 
-    ImageGuideWidget* view = dynamic_cast<ImageGuideWidget*>(d->tool->toolView());
+    ImageGuideWidget* const view = dynamic_cast<ImageGuideWidget*>(d->tool->toolView());
 
     if (view)
     {
@@ -114,7 +114,7 @@ void EditorToolIface::loadTool(EditorTool* tool)
         view->slotPreviewModeChanged(d->editor->previewMode());
     }
 
-    ImageRegionWidget* view2 = dynamic_cast<ImageRegionWidget*>(d->tool->toolView());
+    ImageRegionWidget* const view2 = dynamic_cast<ImageRegionWidget*>(d->tool->toolView());
 
     if (view2)
     {
@@ -198,7 +198,7 @@ void EditorToolIface::setToolStopProgress()
 
 void EditorToolIface::slotToolAborted()
 {
-    EditorToolThreaded* tool = dynamic_cast<EditorToolThreaded*>(d->tool);
+    EditorToolThreaded* const tool = dynamic_cast<EditorToolThreaded*>(d->tool);
 
     if (tool)
     {
@@ -208,7 +208,7 @@ void EditorToolIface::slotToolAborted()
 
 void EditorToolIface::slotCloseTool()
 {
-    EditorTool* tool = dynamic_cast<EditorTool*>(d->tool);
+    EditorTool* const tool = dynamic_cast<EditorTool*>(d->tool);
 
     if (tool)
     {
@@ -218,7 +218,7 @@ void EditorToolIface::slotCloseTool()
 
 void EditorToolIface::slotApplyTool()
 {
-    EditorTool* tool = dynamic_cast<EditorTool*>(d->tool);
+    EditorTool* const tool = dynamic_cast<EditorTool*>(d->tool);
 
     if (tool)
     {
@@ -233,7 +233,7 @@ void EditorToolIface::setupICC()
 
 void EditorToolIface::themeChanged()
 {
-    EditorTool* tool = dynamic_cast<EditorTool*>(d->tool);
+    EditorTool* const tool = dynamic_cast<EditorTool*>(d->tool);
 
     if (tool)
     {
@@ -243,7 +243,7 @@ void EditorToolIface::themeChanged()
 
 void EditorToolIface::updateICCSettings()
 {
-    EditorTool* tool = dynamic_cast<EditorTool*>(d->tool);
+    EditorTool* const tool = dynamic_cast<EditorTool*>(d->tool);
 
     if (tool)
     {
@@ -253,9 +253,9 @@ void EditorToolIface::updateICCSettings()
 
 void EditorToolIface::updateExposureSettings()
 {
-    ExposureSettingsContainer* expoSettings = d->editor->exposureSettings();
+    ExposureSettingsContainer* const expoSettings = d->editor->exposureSettings();
     d->editor->editorStackView()->canvas()->setExposureSettings(expoSettings);
-    EditorTool* tool = dynamic_cast<EditorTool*>(d->tool);
+    EditorTool* const tool = dynamic_cast<EditorTool*>(d->tool);
 
     if (tool)
     {

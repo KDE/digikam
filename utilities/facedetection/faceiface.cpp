@@ -35,7 +35,6 @@
 
 // Libkface Includes
 
-#include <libkface/database.h>
 #include <libkface/face.h>
 
 // Local includes

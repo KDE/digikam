@@ -30,7 +30,7 @@
 
 // Local includes
 
-#include "cameraui.h"
+#include "importui.h"
 
 namespace Digikam
 {
@@ -57,7 +57,7 @@ public:
 
     KAction*           action;
 
-    QPointer<CameraUI> currentCameraUI;
+    QPointer<ImportUI> currentImportUI;
 };
 
 CameraType::CameraType()
@@ -147,9 +147,9 @@ void CameraType::setValid(bool valid)
     d->valid = valid;
 }
 
-void CameraType::setCurrentCameraUI(CameraUI* const cameraui)
+void CameraType::setCurrentImportUI(ImportUI* const importui)
 {
-    d->currentCameraUI = cameraui;
+    d->currentImportUI = importui;
 }
 
 QString CameraType::title() const
@@ -187,9 +187,9 @@ bool CameraType::valid() const
     return d->valid;
 }
 
-CameraUI* CameraType::currentCameraUI() const
+ImportUI* CameraType::currentImportUI() const
 {
-    return d->currentCameraUI;
+    return d->currentImportUI;
 }
 
 }  // namespace Digikam

@@ -6,8 +6,8 @@
  * Date        : 2002-16-10
  * Description : main digiKam interface implementation
  *
- * Copyright (C) 2002-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C)      2006 by Tom Albers <tomalbers@kde.nl>
+ * Copyright (C) 2002-2005 by Renchi Raju <renchi dot raju at gmail dot com>
+ * Copyright (C)      2006 by Tom Albers <tomalbers at kde dot nl>
  * Copyright (C) 2002-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at gmail dot com>
  *
@@ -78,8 +78,6 @@ public:
 
     static DigikamApp* instance();
 
-    KActionMenu* slideShowMenu() const;
-
     void autoDetect();
     void downloadFrom(const QString& cameraGuiPath);
     void downloadFromUdi(const QString& udi);
@@ -91,6 +89,8 @@ public:
 
     void startInternalDatabase();
     void stopInternalDatabase();
+
+    void rebuild();
 
     DigikamView* view() const;
 
@@ -183,6 +183,7 @@ private Q_SLOTS:
     void slotShowMenuBar();
     void slotEditKeys();
     void slotConfToolbars();
+    void slotNewToolbarConfig();
     void slotConfNotifications();
     void slotToggleFullScreen();
 

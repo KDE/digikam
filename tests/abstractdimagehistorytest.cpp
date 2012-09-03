@@ -147,42 +147,42 @@ DImageHistory AbstractDImageHistoryTest::history1() const
 
 void AbstractDImageHistoryTest::applyFilters1()
 {
-    ImageIface iface(0, 0);
+    ImageIface iface;
 
-    BCGFilter filter1(iface.getOriginalImg(), this);
+    BCGFilter filter1(iface.original(), this);
     filter1.startFilterDirectly();
-    iface.putOriginalImage(i18n("Brightness / Contrast / Gamma"), filter1.filterAction(), filter1.getTargetImage().bits());
+    iface.putOriginal(i18n("Brightness / Contrast / Gamma"), filter1.filterAction(), filter1.getTargetImage());
 
-    CurvesFilter filter2(iface.getOriginalImg(), this);
+    CurvesFilter filter2(iface.original(), this);
     filter2.startFilterDirectly();
-    iface.putOriginalImage("Curves", filter2.filterAction(), filter2.getTargetImage().bits());
+    iface.putOriginal("Curves", filter2.filterAction(), filter2.getTargetImage());
 }
 
 void AbstractDImageHistoryTest::applyFilters2()
 {
-    ImageIface iface(0, 0);
+    ImageIface iface;
 
-    AutoLevelsFilter filter(iface.getOriginalImg(), iface.getOriginalImg(), this);
+    AutoLevelsFilter filter(iface.original(), iface.original(), this);
     filter.startFilterDirectly();
-    iface.putOriginalImage("", filter.filterAction(), filter.getTargetImage().bits());
+    iface.putOriginal("", filter.filterAction(), filter.getTargetImage());
 }
 
 void AbstractDImageHistoryTest::applyFilters3()
 {
-    ImageIface iface(0, 0);
+    ImageIface iface;
 
-    InfraredFilter filter(iface.getOriginalImg(), this);
+    InfraredFilter filter(iface.original(), this);
     filter.startFilterDirectly();
-    iface.putOriginalImage("", filter.filterAction(), filter.getTargetImage().bits());
+    iface.putOriginal("", filter.filterAction(), filter.getTargetImage());
 }
 
 void AbstractDImageHistoryTest::applyFilters4()
 {
-    ImageIface iface(0, 0);
+    ImageIface iface;
 
-    BlurFilter filter(iface.getOriginalImg(), this);
+    BlurFilter filter(iface.original(), this);
     filter.startFilterDirectly();
-    iface.putOriginalImage("", filter.filterAction(), filter.getTargetImage().bits());
+    iface.putOriginal("", filter.filterAction(), filter.getTargetImage());
 }
 
 QString AbstractDImageHistoryTest::tempFileName(const QString& purpose) const
@@ -209,6 +209,7 @@ void AbstractDImageHistoryTest::initBaseTestCase()
 
     connect(m_im, SIGNAL(signalImageLoaded(QString,bool)),
             this, SLOT(slotImageLoaded(QString,bool)));
+
     connect(m_im, SIGNAL(signalImageSaved(QString,bool)),
             this, SLOT(slotImageSaved(QString,bool)));
 

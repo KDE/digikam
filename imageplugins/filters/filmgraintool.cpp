@@ -154,8 +154,8 @@ void FilmGrainTool::prepareFinal()
 {
     FilmGrainContainer prm = d->settingsView->settings();
 
-    ImageIface iface(0, 0);
-    setFilter(new FilmGrainFilter(iface.getOriginalImg(), this, prm));
+    ImageIface iface;
+    setFilter(new FilmGrainFilter(iface.original(), this, prm));
 }
 
 void FilmGrainTool::putPreviewData()
@@ -165,8 +165,8 @@ void FilmGrainTool::putPreviewData()
 
 void FilmGrainTool::putFinalData()
 {
-    ImageIface iface(0, 0);
-    iface.putOriginalImage(i18n("Film Grain"), filter()->filterAction(), filter()->getTargetImage().bits());
+    ImageIface iface;
+    iface.putOriginal(i18n("Film Grain"), filter()->filterAction(), filter()->getTargetImage());
 }
 
 void FilmGrainTool::renderingFinished()

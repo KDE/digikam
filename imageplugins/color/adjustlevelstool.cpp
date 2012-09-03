@@ -176,8 +176,8 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* parent)
     setToolName(i18n("Adjust Levels"));
     setToolIcon(SmallIcon("adjustlevels"));
 
-    ImageIface iface(0, 0);
-    d->originalImage = iface.getOriginalImg();
+    ImageIface iface;
+    d->originalImage = iface.original();
 
     d->histoSegments = d->originalImage->sixteenBit() ? 65535 : 255;
     d->levels        = new ImageLevels(d->originalImage->sixteenBit());
@@ -908,14 +908,14 @@ void AdjustLevelsTool::prepareFinal()
         settings.gamma[i]   = d->levels->getLevelGammaValue(i);
     }
 
-    ImageIface iface(0, 0);
-    setFilter(new LevelsFilter(iface.getOriginalImg(), this, settings));
+    ImageIface iface;
+    setFilter(new LevelsFilter(iface.original(), this, settings));
 }
 
 void AdjustLevelsTool::putFinalData()
 {
-    ImageIface iface(0, 0);
-    iface.putOriginalImage(i18n("Adjust Levels"), filter()->filterAction(), filter()->getTargetImage().bits());
+    ImageIface iface;
+    iface.putOriginal(i18n("Adjust Levels"), filter()->filterAction(), filter()->getTargetImage());
 }
 
 void AdjustLevelsTool::slotLoadSettings()

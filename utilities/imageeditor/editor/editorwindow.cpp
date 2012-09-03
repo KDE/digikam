@@ -734,21 +734,15 @@ void EditorWindow::setupStatusBar()
 
 void EditorWindow::printImage(const KUrl& /*url*/)
 {
-    uchar* ptr      = m_canvas->interface()->getImage();
-    int w           = m_canvas->interface()->origWidth();
-    int h           = m_canvas->interface()->origHeight();
-    bool hasAlpha   = m_canvas->interface()->hasAlpha();
-    bool sixteenBit = m_canvas->interface()->sixteenBit();
+    DImg* image = m_canvas->interface()->getImg();
 
-    if (!ptr || !w || !h)
+    if (!image || !image->isNull())
     {
         return;
     }
 
-    DImg image(w, h, sixteenBit, hasAlpha, ptr);
-
     PrintHelper printHelp(this);
-    printHelp.print(image);
+    printHelp.print(*image);
 }
 
 void EditorWindow::slotEditKeys()

@@ -6,7 +6,7 @@
  * Date        : 2008-08-20
  * Description : A widget stack to embed editor view.
  *
- * Copyright (C) 2008-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -35,12 +35,12 @@
 namespace Digikam
 {
 
-class EditorStackView::EditorStackViewPriv
+class EditorStackView::Private
 {
 
 public:
 
-    EditorStackViewPriv() :
+    Private() :
         toolView(0),
         canvas(0)
     {
@@ -50,8 +50,8 @@ public:
     Canvas*  canvas;
 };
 
-EditorStackView::EditorStackView(QWidget* parent)
-    : QStackedWidget(parent), d(new EditorStackViewPriv)
+EditorStackView::EditorStackView(QWidget* const parent)
+    : QStackedWidget(parent), d(new Private)
 {
 }
 
@@ -60,7 +60,7 @@ EditorStackView::~EditorStackView()
     delete d;
 }
 
-void EditorStackView::setCanvas(Canvas* canvas)
+void EditorStackView::setCanvas(Canvas* const canvas)
 {
     if (d->canvas)
     {
@@ -82,7 +82,7 @@ Canvas* EditorStackView::canvas() const
     return d->canvas;
 }
 
-void EditorStackView::setToolView(QWidget* view)
+void EditorStackView::setToolView(QWidget* const view)
 {
     if (d->toolView)
     {
@@ -97,7 +97,7 @@ void EditorStackView::setToolView(QWidget* view)
     }
 
     // TODO: to remove when PreviewWidget will be unused...
-    PreviewWidget* old_preview = previewWidget_old();
+    PreviewWidget* const old_preview = previewWidget_old();
 
     if (old_preview)
     {
@@ -110,7 +110,7 @@ void EditorStackView::setToolView(QWidget* view)
         return;
     }
 
-    GraphicsDImgView* preview = previewWidget();
+    GraphicsDImgView* const preview = previewWidget();
 
     if (preview)
     {
@@ -150,7 +150,7 @@ void EditorStackView::increaseZoom()
     }
     else
     {
-        PreviewWidget* old_preview = previewWidget_old();
+        PreviewWidget* const old_preview = previewWidget_old();
 
         if (old_preview)
         {
@@ -158,7 +158,7 @@ void EditorStackView::increaseZoom()
             return;
         }
 
-        GraphicsDImgView* preview = previewWidget();
+        GraphicsDImgView* const preview = previewWidget();
 
         if (preview)
         {
@@ -175,7 +175,7 @@ void EditorStackView::decreaseZoom()
     }
     else
     {
-        PreviewWidget* old_preview = previewWidget_old();
+        PreviewWidget* const old_preview = previewWidget_old();
 
         if (old_preview)
         {
@@ -183,7 +183,7 @@ void EditorStackView::decreaseZoom()
             return;
         }
 
-        GraphicsDImgView* preview = previewWidget();
+        GraphicsDImgView* const preview = previewWidget();
 
         if (preview)
         {
@@ -199,7 +199,7 @@ void EditorStackView::toggleFitToWindow()
     // Both are toggle at the same time.
     d->canvas->toggleFitToWindow();
 
-    PreviewWidget* old_preview = previewWidget_old();
+    PreviewWidget* const old_preview = previewWidget_old();
 
     if (old_preview)
     {
@@ -207,7 +207,7 @@ void EditorStackView::toggleFitToWindow()
         return;
     }
 
-    GraphicsDImgView* preview = previewWidget();
+    GraphicsDImgView* const preview = previewWidget();
 
     if (preview)
     {
@@ -231,7 +231,7 @@ void EditorStackView::zoomTo100Percent()
     }
     else
     {
-        PreviewWidget* old_preview = previewWidget_old();
+        PreviewWidget* const old_preview = previewWidget_old();
 
         if (old_preview)
         {
@@ -239,7 +239,7 @@ void EditorStackView::zoomTo100Percent()
             return;
         }
 
-        GraphicsDImgView* preview = previewWidget();
+        GraphicsDImgView* const preview = previewWidget();
 
         if (preview)
         {
@@ -256,7 +256,7 @@ void EditorStackView::setZoomFactor(double zoom)
     }
     else
     {
-        PreviewWidget* old_preview = previewWidget_old();
+        PreviewWidget* const old_preview = previewWidget_old();
 
         if (old_preview)
         {
@@ -264,7 +264,7 @@ void EditorStackView::setZoomFactor(double zoom)
             return;
         }
 
-        GraphicsDImgView* preview = previewWidget();
+        GraphicsDImgView* const preview = previewWidget();
 
         if (preview)
         {
@@ -281,8 +281,8 @@ double EditorStackView::zoomMax() const
     }
     else
     {
-        GraphicsDImgView* preview  = previewWidget();
-        PreviewWidget* old_preview = previewWidget_old();
+        GraphicsDImgView* const preview  = previewWidget();
+        PreviewWidget* const old_preview = previewWidget_old();
 
         if (old_preview)
         {
@@ -307,8 +307,8 @@ double EditorStackView::zoomMin() const
     }
     else
     {
-        GraphicsDImgView* preview  = previewWidget();
-        PreviewWidget* old_preview = previewWidget_old();
+        GraphicsDImgView* const preview  = previewWidget();
+        PreviewWidget* const old_preview = previewWidget_old();
 
         if (old_preview)
         {
@@ -340,7 +340,7 @@ void EditorStackView::slotZoomSliderChanged(int size)
     }
     else
     {
-        PreviewWidget* old_preview = previewWidget_old();
+        PreviewWidget* const old_preview = previewWidget_old();
 
         if (old_preview)
         {
@@ -348,7 +348,7 @@ void EditorStackView::slotZoomSliderChanged(int size)
             return;
         }
 
-        GraphicsDImgView* preview = previewWidget();
+        GraphicsDImgView* const preview = previewWidget();
 
         if (preview)
         {
@@ -369,7 +369,7 @@ void EditorStackView::slotZoomChanged(double zoom)
     }
     else
     {
-        PreviewWidget* old_preview = previewWidget_old();
+        PreviewWidget* const old_preview = previewWidget_old();
 
         if (old_preview)
         {
@@ -379,7 +379,7 @@ void EditorStackView::slotZoomChanged(double zoom)
             return;
         }
 
-        GraphicsDImgView* preview = previewWidget();
+        GraphicsDImgView* const preview = previewWidget();
 
         if (preview)
         {
@@ -400,7 +400,7 @@ void EditorStackView::slotToggleOffFitToWindow(bool b)
 
 GraphicsDImgView* EditorStackView::previewWidget() const
 {
-    GraphicsDImgView* preview = dynamic_cast<GraphicsDImgView*>(d->toolView);
+    GraphicsDImgView* const preview = dynamic_cast<GraphicsDImgView*>(d->toolView);
 
     if (preview)
     {
@@ -412,7 +412,7 @@ GraphicsDImgView* EditorStackView::previewWidget() const
 
 PreviewWidget* EditorStackView::previewWidget_old() const
 {
-    PreviewWidget* preview = dynamic_cast<PreviewWidget*>(d->toolView);
+    PreviewWidget* const preview = dynamic_cast<PreviewWidget*>(d->toolView);
 
     if (preview)
     {

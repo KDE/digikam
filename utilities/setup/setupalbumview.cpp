@@ -6,8 +6,8 @@
  * Date        : 2003-02-01
  * Description : album view configuration setup tab
  *
- * Copyright (C) 2003-2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2005-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2003-2004 by Renchi Raju <renchi dot raju at gmail dot com>
+ * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -49,11 +49,11 @@
 namespace Digikam
 {
 
-class SetupAlbumView::SetupAlbumViewPriv
+class SetupAlbumView::Private
 {
 public:
 
-    SetupAlbumViewPriv() :
+    Private() :
         iconTreeThumbLabel(0),
         iconShowNameBox(0),
         iconShowSizeBox(0),
@@ -100,8 +100,8 @@ public:
     DFontSelect* treeViewFontSelect;
 };
 
-SetupAlbumView::SetupAlbumView(QWidget* parent)
-    : QScrollArea(parent), d(new SetupAlbumViewPriv)
+SetupAlbumView::SetupAlbumView(QWidget* const parent)
+    : QScrollArea(parent), d(new Private)
 {
     QWidget* panel      = new QWidget(viewport());
     setWidget(panel);
@@ -214,7 +214,7 @@ SetupAlbumView::SetupAlbumView(QWidget* parent)
     QGroupBox* interfaceOptionsGroup = new QGroupBox(i18n("Preview Options"), panel);
     QGridLayout* grid3               = new QGridLayout(interfaceOptionsGroup);
 
-    d->previewLoadFullImageSize      = new QCheckBox(i18n("Embedded preview loads full-sized images."), interfaceOptionsGroup);
+    d->previewLoadFullImageSize      = new QCheckBox(i18n("Embedded preview loads full-sized images"), interfaceOptionsGroup);
     d->previewLoadFullImageSize->setWhatsThis(i18n("<p>Set this option to load images at their full size "
                                                    "for preview, rather than at a reduced size. As this option "
                                                    "will make it take longer to load images, only use it if you have "

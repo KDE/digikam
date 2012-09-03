@@ -289,8 +289,8 @@ void InsertTextTool::readSettings()
     QColor black(0, 0, 0);
     QFont  defaultFont;
 
-    int orgW = d->previewWidget->imageIface()->originalWidth();
-    int orgH = d->previewWidget->imageIface()->originalHeight();
+    int orgW = d->previewWidget->imageIface()->originalSize().width();
+    int orgH = d->previewWidget->imageIface()->originalSize().height();
 
     if ( orgW > orgH )
     {
@@ -408,7 +408,7 @@ void InsertTextTool::finalRendering()
 {
     kapp->setOverrideCursor( Qt::WaitCursor );
 
-    ImageIface iface(0, 0);
+    ImageIface iface;
     DImg dest = d->previewWidget->makeInsertText();
 
     FilterAction action("digikam:insertTextTool", 1);
@@ -424,7 +424,7 @@ void InsertTextTool::finalRendering()
     action.addParameter("borderText", d->borderText->isChecked());
     action.addParameter("transparentText", d->transparentText->isChecked());
 
-    iface.putOriginalImage(i18n("Insert Text"), action, dest.bits(), dest.width(), dest.height());
+    iface.putOriginal(i18n("Insert Text"), action, dest);
 
     kapp->restoreOverrideCursor();
 }

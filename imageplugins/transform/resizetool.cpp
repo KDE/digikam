@@ -191,9 +191,9 @@ ResizeTool::ResizeTool(QObject* parent)
                                 EditorToolSettings::SaveAs|
                                 EditorToolSettings::Cancel);
 
-    ImageIface iface(0, 0);
-    d->orgWidth  = iface.originalWidth();
-    d->orgHeight = iface.originalHeight();
+    ImageIface iface;
+    d->orgWidth  = iface.originalSize().width();
+    d->orgHeight = iface.originalSize().height();
     d->prevW     = d->orgWidth;
     d->prevH     = d->orgHeight;
     d->prevWP    = 100.0;
@@ -473,9 +473,9 @@ void ResizeTool::prepareEffect()
     }
 
     ImageIface* iface = d->previewWidget->imageIface();
-    int w             = iface->previewWidth();
-    int h             = iface->previewHeight();
-    DImg imTemp       = iface->getOriginalImg()->smoothScale(w, h, Qt::KeepAspectRatio);
+    int w             = iface->previewSize().width();
+    int h             = iface->previewSize().height();
+    DImg imTemp       = iface->original()->smoothScale(w, h, Qt::KeepAspectRatio);
     int new_w         = (int)(w*d->wpInput->value()/100.0);
     int new_h         = (int)(h*d->hpInput->value()/100.0);
 
@@ -507,11 +507,11 @@ void ResizeTool::prepareFinal()
 
     d->mainTab->setCurrentIndex(0);
 
-    ImageIface iface(0, 0);
+    ImageIface iface;
 
     if (d->useGreycstorationBox->isChecked())
     {
-        setFilter(new GreycstorationFilter(iface.getOriginalImg(),
+        setFilter(new GreycstorationFilter(iface.original(),
                                            d->settingsWidget->settings(),
                                            GreycstorationFilter::Resize,
                                            d->wInput->value(),
@@ -524,15 +524,15 @@ void ResizeTool::prepareFinal()
         // See B.K.O #152192: CImg resize() sound like defective or unadapted
         // to resize image without good quality.
         DImgBuiltinFilter resize(DImgBuiltinFilter::Resize, QSize(d->wInput->value(), d->hInput->value()));
-        setFilter(resize.createThreadedFilter(iface.getOriginalImg(), this));
+        setFilter(resize.createThreadedFilter(iface.original(), this));
     }
 }
 
 void ResizeTool::putPreviewData()
 {
     ImageIface* iface = d->previewWidget->imageIface();
-    int w             = iface->previewWidth();
-    int h             = iface->previewHeight();
+    int w             = iface->previewSize().width();
+    int h             = iface->previewSize().height();
     DImg imTemp       = filter()->getTargetImage().smoothScale(w, h, Qt::KeepAspectRatio);
     DImg imDest(w, h, filter()->getTargetImage().sixteenBit(), filter()->getTargetImage().hasAlpha());
 
@@ -540,7 +540,7 @@ void ResizeTool::putPreviewData()
     imDest.fill(DColor(background, filter()->getTargetImage().sixteenBit()));
     imDest.bitBltImage(&imTemp, (w-imTemp.width())/2, (h-imTemp.height())/2);
 
-    iface->putPreviewImage((imDest.smoothScale(iface->previewWidth(), iface->previewHeight())).bits());
+    iface->putPreview(imDest.smoothScale(iface->previewSize()));
     d->previewWidget->updatePreview();
 }
 
@@ -551,12 +551,11 @@ void ResizeTool::renderingFinished()
 
 void ResizeTool::putFinalData()
 {
-    ImageIface iface(0, 0);
+    ImageIface iface;
     DImg targetImage = filter()->getTargetImage();
-    iface.putOriginalImage(i18n("Resize"),
+    iface.putOriginal(i18n("Resize"),
                            filter()->filterAction(),
-                           targetImage.bits(),
-                           targetImage.width(), targetImage.height());
+                           targetImage);
 }
 
 void ResizeTool::blockWidgetSignals(bool b)

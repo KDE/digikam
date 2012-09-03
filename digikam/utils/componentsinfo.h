@@ -37,6 +37,7 @@
 // LibKIPI includes
 
 #include <libkipi/interface.h>
+#include <libkipi/pluginloader.h>
 
 // LibKface includes
 
@@ -73,10 +74,11 @@ static inline void showDigikamComponentsInfo()
     list.insert(i18n("LibGphoto2"), QString(gp_library_version(GP_VERSION_SHORT)[0]));
 #endif /* HAVE_GPHOTO2 */
 
-    list.insert(i18n("LibKipi"),    KIPI::Interface::version());
-    list.insert(i18n("LibOpenCV"),  KFaceIface::LibOpenCVVersion());
-    list.insert(i18n("Libface"),    KFaceIface::LibFaceVersion());
-    list.insert(i18n("LibKface"),   KFaceIface::version());
+    list.insert(i18n("LibOpenCV"),    KFaceIface::LibOpenCVVersion());
+    list.insert(i18n("Libface"),      KFaceIface::LibFaceVersion());
+    list.insert(i18n("LibKface"),     KFaceIface::version());
+    list.insert(i18n("LibKipi"),      KIPI::Interface::version());
+    list.insert(i18n("Kipi-Plugins"), KIPI::PluginLoader::instance()->kipiPluginsVersion());
 
     // Database Backend information
 

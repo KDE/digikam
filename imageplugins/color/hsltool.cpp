@@ -190,14 +190,14 @@ void HSLTool::prepareFinal()
 {
     HSLContainer settings = d->hslSettings->settings();
 
-    ImageIface iface(0, 0);
-    setFilter(new HSLFilter(iface.getOriginalImg(), this, settings));
+    ImageIface iface;
+    setFilter(new HSLFilter(iface.original(), this, settings));
 }
 
 void HSLTool::putFinalData()
 {
-    ImageIface iface(0, 0);
-    iface.putOriginalImage(i18n("HSL Adjustments"), filter()->filterAction(), filter()->getTargetImage().bits());
+    ImageIface iface;
+    iface.putOriginal(i18n("HSL Adjustments"), filter()->filterAction(), filter()->getTargetImage());
 }
 
 }  // namespace DigikamColorImagePlugin

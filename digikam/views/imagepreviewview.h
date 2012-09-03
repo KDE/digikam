@@ -6,8 +6,8 @@
  * Date        : 2006-21-12
  * Description : a embedded view to show the image preview widget.
  *
- * Copyright (C) 2006-2011 by Gilles Caulier  <caulier dot gilles at gmail dot com>
- * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at gmail dot com>
+ * Copyright (C) 2006-2012 by Gilles Caulier  <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2012 by Andi Clemens <andi dot clemens at gmail dot com>
  * Copyright (C) 2010-2011 by Aditya Bhatt <adityabhatt1991 at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -53,7 +53,7 @@ public:
 
 public:
 
-    explicit ImagePreviewView(QWidget* parent, Mode mode=IconViewPreview);
+    explicit ImagePreviewView(QWidget* const parent, Mode mode=IconViewPreview);
     ~ImagePreviewView();
 
     void setImageInfo(const ImageInfo& info     = ImageInfo(),
@@ -75,7 +75,7 @@ Q_SIGNALS:
     void signalDeleteItem();
     void signalEditItem();
     void signalPreviewLoaded(bool success);
-    void signalBack2Album();
+    void signalEscapePreview();
     void signalSlideShow();
     void signalInsert2LightTable();
     void signalInsert2QueueMgr();
@@ -114,8 +114,8 @@ private Q_SLOTS:
 
 private:
 
-    class ImagePreviewViewPriv;
-    ImagePreviewViewPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

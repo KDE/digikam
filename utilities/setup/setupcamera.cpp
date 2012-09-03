@@ -6,7 +6,7 @@
  * Date        : 2003-02-10
  * Description : camera setup tab.
  *
- * Copyright (C) 2003-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Copyright (C) 2003-2005 by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -62,6 +62,8 @@
 #include "gpcamera.h"
 #include "filtercombo.h"
 #include "importfilters.h"
+#include "dfontselect.h"
+#include "importsettings.h"
 
 namespace Digikam
 {
@@ -109,11 +111,11 @@ private:
 
 // -------------------------------------------------------------------
 
-class CameraAutoDetectThread::CameraAutoDetectThreadPriv
+class CameraAutoDetectThread::Private
 {
 public:
 
-    CameraAutoDetectThreadPriv()
+    Private()
     {
         result = 0;
     }
@@ -125,7 +127,7 @@ public:
 };
 
 CameraAutoDetectThread::CameraAutoDetectThread(QObject* const parent)
-    : DBusyThread(parent), d(new CameraAutoDetectThreadPriv)
+    : DBusyThread(parent), d(new Private)
 {
     d->result = -1;
 }
@@ -158,11 +160,11 @@ QString CameraAutoDetectThread::port() const
 
 // -------------------------------------------------------------------
 
-class SetupCamera::SetupCameraPriv
+class SetupCamera::Private
 {
 public:
 
-    SetupCameraPriv() :
+    Private() :
         addButton(0),
         removeButton(0),
         editButton(0),
@@ -173,6 +175,19 @@ public:
         useDateFromMetadata(0),
         turnHighQualityThumbs(0),
         useDefaultTargetAlbum(0),
+        iconShowNameBox(0),
+        iconShowSizeBox(0),
+        iconShowModDateBox(0),
+        iconShowResolutionBox(0),
+        //TODO: iconShowTagsBox(0),
+        //TODO: iconShowOverlaysBox(0),
+        //TODO: iconShowRatingBox(0),
+        iconShowFormatBox(0),
+        previewLoadFullImageSize(0),
+        previewItemsWhileDownload(0),
+        previewShowIcons(0),
+        leftClickActionComboBox(0),
+        iconViewFontSelect(0),
         target1AlbumSelector(0),
         listView(0),
         importListView(0),
@@ -201,6 +216,23 @@ public:
     QCheckBox*           turnHighQualityThumbs;
     QCheckBox*           useDefaultTargetAlbum;
 
+    QCheckBox*           iconShowNameBox;
+    QCheckBox*           iconShowSizeBox;
+    QCheckBox*           iconShowModDateBox;
+    QCheckBox*           iconShowResolutionBox;
+    //TODO: QCheckBox*           iconShowTagsBox;
+    //TODO: QCheckBox*           iconShowOverlaysBox;
+    //TODO: QCheckBox*           iconShowRatingBox;
+    QCheckBox*           iconShowFormatBox;
+    QCheckBox*           previewLoadFullImageSize;
+    QCheckBox*           previewItemsWhileDownload;
+    QCheckBox*           previewShowIcons;
+
+    KComboBox*           leftClickActionComboBox;
+
+    DFontSelect*         iconViewFontSelect;
+
+
     AlbumSelectWidget*   target1AlbumSelector;
 
     QTreeWidget*         listView;
@@ -214,15 +246,15 @@ public:
     FilterList           filters;
 };
 
-const QString SetupCamera::SetupCameraPriv::configGroupName("Camera Settings");
-const QString SetupCamera::SetupCameraPriv::configUseMetadataDateEntry("UseThemeBackgroundColor");
-const QString SetupCamera::SetupCameraPriv::configTrunHighQualityThumbs("TurnHighQualityThumbs");
-const QString SetupCamera::SetupCameraPriv::configUseDefaultTargetAlbum("UseDefaultTargetAlbum");
-const QString SetupCamera::SetupCameraPriv::configDefaultTargetAlbumId("DefaultTargetAlbumId");
-const QString SetupCamera::SetupCameraPriv::importFiltersConfigGroupName("Import Filters");
+const QString SetupCamera::Private::configGroupName("Camera Settings");
+const QString SetupCamera::Private::configUseMetadataDateEntry("UseThemeBackgroundColor");
+const QString SetupCamera::Private::configTrunHighQualityThumbs("TurnHighQualityThumbs");
+const QString SetupCamera::Private::configUseDefaultTargetAlbum("UseDefaultTargetAlbum");
+const QString SetupCamera::Private::configDefaultTargetAlbumId("DefaultTargetAlbumId");
+const QString SetupCamera::Private::importFiltersConfigGroupName("Import Filters");
 
 SetupCamera::SetupCamera(QWidget* const parent)
-    : QScrollArea(parent), d(new SetupCameraPriv)
+    : QScrollArea(parent), d(new Private)
 {
     d->tab            = new KTabWidget(viewport());
     setWidget(d->tab);
@@ -374,6 +406,103 @@ SetupCamera::SetupCamera(QWidget* const parent)
 
     d->tab->insertTab(2, panel3, i18n("Import Filters"));
 
+    // -- Import Icon View ----------------------------------------------------------
+
+    QWidget* panel4 = new QWidget(d->tab);
+    panel4->setAutoFillBackground(false);
+
+    QVBoxLayout* layout2 = new QVBoxLayout(panel4);
+
+    QGroupBox* iconViewGroup = new QGroupBox(i18n("Icon-View Options"), panel4);
+    QGridLayout* grid2       = new QGridLayout(iconViewGroup);
+
+    d->iconShowNameBox       = new QCheckBox(i18n("Show file&name"), iconViewGroup);
+    d->iconShowNameBox->setWhatsThis(i18n("Set this option to show the filename below the image thumbnail."));
+
+    d->iconShowSizeBox       = new QCheckBox(i18n("Show file si&ze"), iconViewGroup);
+    d->iconShowSizeBox->setWhatsThis(i18n("Set this option to show the file size below the image thumbnail."));
+
+    d->iconShowModDateBox    = new QCheckBox(i18n("Show file &modification date"), iconViewGroup);
+    d->iconShowModDateBox->setWhatsThis(i18n("Set this option to show the file modification date "
+                                             "below the image thumbnail."));
+
+    //d->iconShowResolutionBox = new QCheckBox(i18n("Show ima&ge dimensions"), iconViewGroup);
+    //d->iconShowResolutionBox->setWhatsThis(i18n("Set this option to show the image size in pixels "
+                                                //"below the image thumbnail."));
+
+    d->iconShowFormatBox     = new QCheckBox(i18n("Show image Format"), iconViewGroup);
+    d->iconShowFormatBox->setWhatsThis(i18n("Set this option to show image format over image thumbnail."));
+
+    //TODO: d->iconShowTagsBox       = new QCheckBox(i18n("Show digiKam &tags"), iconViewGroup);
+    //TODO: d->iconShowTagsBox->setWhatsThis(i18n("Set this option to show the digiKam tags "
+                                          //"below the image thumbnail."));
+
+    //TODO: d->iconShowRatingBox     = new QCheckBox(i18n("Show digiKam &rating"), iconViewGroup);
+    //TODO: d->iconShowRatingBox->setWhatsThis(i18n("Set this option to show the digiKam rating "
+                                            //"below the image thumbnail."));
+
+    //TODO: d->iconShowOverlaysBox   = new QCheckBox(i18n("Show rotation overlay buttons"), iconViewGroup);
+    //TODO: d->iconShowOverlaysBox->setWhatsThis(i18n("Set this option to show overlay buttons on "
+                                              //"the image thumbnail for image rotation."));
+
+    QLabel* leftClickLabel     = new QLabel(i18n("Thumbnail click action:"), iconViewGroup);
+    d->leftClickActionComboBox = new KComboBox(iconViewGroup);
+    d->leftClickActionComboBox->addItem(i18n("Show embedded preview"), ImportSettings::ShowPreview);
+    d->leftClickActionComboBox->addItem(i18n("Start image editor"), ImportSettings::StartEditor);
+    d->leftClickActionComboBox->setToolTip(i18n("Choose what should happen when you click on a thumbnail."));
+
+    d->iconViewFontSelect = new DFontSelect(i18n("Icon View font:"), panel);
+    d->iconViewFontSelect->setToolTip(i18n("Select here the font used to display text in Icon Views."));
+
+    grid2->addWidget(d->iconShowNameBox,          0, 0, 1, 1);
+    grid2->addWidget(d->iconShowSizeBox,          1, 0, 1, 1);
+    grid2->addWidget(d->iconShowModDateBox,       3, 0, 1, 1);
+    //TODO: grid2->addWidget(d->iconShowResolutionBox,    4, 0, 1, 1);
+    grid2->addWidget(d->iconShowFormatBox,        4, 0, 1, 1);
+
+    //TODO: grid2->addWidget(d->iconShowTagsBox,          2, 1, 1, 1);
+    //TODO: grid2->addWidget(d->iconShowRatingBox,        3, 1, 1, 1);
+    //TODO: grid2->addWidget(d->iconShowOverlaysBox,      4, 1, 1, 1);
+
+    grid2->addWidget(leftClickLabel,              5, 0, 1, 1);
+    grid2->addWidget(d->leftClickActionComboBox,  6, 1, 1, 1);
+    grid2->addWidget(d->iconViewFontSelect,       7, 0, 1, 2);
+    grid2->setSpacing(KDialog::spacingHint());
+    grid2->setMargin(KDialog::spacingHint());
+
+    // --------------------------------------------------------
+
+    QGroupBox* interfaceOptionsGroup = new QGroupBox(i18n("Preview Options"), panel);
+    QGridLayout* grid3               = new QGridLayout(interfaceOptionsGroup);
+
+    d->previewLoadFullImageSize      = new QCheckBox(i18n("Embedded preview loads full-sized images"), interfaceOptionsGroup);
+    d->previewLoadFullImageSize->setWhatsThis(i18n("<p>Set this option to load images at their full size "
+                                                   "for preview, rather than at a reduced size. As this option "
+                                                   "will make it take longer to load images, only use it if you have "
+                                                   "a fast computer.</p>"
+                                                   "<p><b>Note:</b> for Raw images, a half size version of the Raw data "
+                                                   "is used instead of the embedded JPEG preview.</p>"));
+
+    d->previewItemsWhileDownload      = new QCheckBox(i18n("Preview each item while downloading it"), interfaceOptionsGroup);
+    d->previewItemsWhileDownload->setWhatsThis(i18n("<p>Set this option to preview each item while downloading.</p>"));
+
+    d->previewShowIcons              = new QCheckBox(i18n("Show icons and text over preview"), interfaceOptionsGroup);
+    d->previewShowIcons->setWhatsThis(i18n("Uncheck this if you don't want to see icons and text in the image preview."));
+
+    grid3->setMargin(KDialog::spacingHint());
+    grid3->setSpacing(KDialog::spacingHint());
+    grid3->addWidget(d->previewLoadFullImageSize,  0, 0, 1, 2);
+    grid3->addWidget(d->previewItemsWhileDownload, 1, 0, 1, 2);
+    grid3->addWidget(d->previewShowIcons,          2, 0, 1, 2);
+
+    layout2->setMargin(0);
+    layout2->setSpacing(KDialog::spacingHint());
+    layout2->addWidget(iconViewGroup);
+    layout2->addWidget(interfaceOptionsGroup);
+    layout2->addStretch();
+
+    d->tab->insertTab(3, panel4, i18n("Icon View"));
+
     // -------------------------------------------------------------
 
     setAutoFillBackground(false);
@@ -404,6 +533,12 @@ SetupCamera::SetupCamera(QWidget* const parent)
     connect(d->useDefaultTargetAlbum, SIGNAL(toggled(bool)),
             d->target1AlbumSelector, SLOT(setEnabled(bool)));
 
+    connect(d->previewItemsWhileDownload, SIGNAL(clicked()),
+            this, SLOT(slotPreviewItemsClicked()));
+
+    connect(d->previewLoadFullImageSize, SIGNAL(clicked()),
+            this, SLOT(slotPreviewFullImageSizeClicked()));
+
     // -------------------------------------------------------------
 
     connect(d->importListView, SIGNAL(itemSelectionChanged()),
@@ -432,13 +567,13 @@ void SetupCamera::readSettings()
 {
     // Populate cameras --------------------------------------
 
-    CameraList* clist = CameraList::defaultList();
+    CameraList* const clist = CameraList::defaultList();
 
     if (clist)
     {
         QList<CameraType*>* cl = clist->cameraList();
 
-        foreach(CameraType* ctype, *cl)
+        foreach(CameraType* const ctype, *cl)
         {
             new SetupCameraItem(d->listView, ctype);
         }
@@ -475,19 +610,44 @@ void SetupCamera::readSettings()
     }
 
     FilterComboBox::defaultFilters(&d->filters);
-    foreach(Filter* f, d->filters)
+
+    foreach(Filter* const f, d->filters)
     {
         new QListWidgetItem(f->name, d->importListView);
     }
+
     d->ignoreNamesEdit->setText(importGroup.readEntry("IgnoreNames", FilterComboBox::defaultIgnoreNames));
     d->ignoreExtensionsEdit->setText(importGroup.readEntry("IgnoreExtensions", FilterComboBox::defaultIgnoreExtensions));
+
+    ImportSettings* const settings = ImportSettings::instance();
+
+    if (!settings)
+    {
+        return;
+    }
+
+    d->iconShowNameBox->setChecked(settings->getIconShowName());
+    //TODO: d->iconShowTagsBox->setChecked(settings->getIconShowTags());
+    d->iconShowSizeBox->setChecked(settings->getIconShowSize());
+    d->iconShowModDateBox->setChecked(settings->getIconShowModDate());
+    //TODO: d->iconShowResolutionBox->setChecked(settings->getIconShowResolution());
+    //TODO: d->iconShowOverlaysBox->setChecked(settings->getIconShowOverlays());
+    //TODO: d->iconShowRatingBox->setChecked(settings->getIconShowRating());
+    d->iconShowFormatBox->setChecked(settings->getIconShowImageFormat());
+    d->iconViewFontSelect->setFont(settings->getIconViewFont());
+
+    d->leftClickActionComboBox->setCurrentIndex((int)settings->getItemLeftClickAction());
+
+    d->previewLoadFullImageSize->setChecked(settings->getPreviewLoadFullImageSize());
+    d->previewItemsWhileDownload->setChecked(settings->getPreviewItemsWhileDownload());
+    d->previewShowIcons->setChecked(settings->getPreviewShowIcons());
 }
 
 void SetupCamera::applySettings()
 {
     // Save camera devices -----------------------------------
 
-    CameraList* clist = CameraList::defaultList();
+    CameraList* const clist = CameraList::defaultList();
 
     if (clist)
     {
@@ -497,11 +657,11 @@ void SetupCamera::applySettings()
 
         while (*it)
         {
-            SetupCameraItem* item = dynamic_cast<SetupCameraItem*>(*it);
+            SetupCameraItem* const item = dynamic_cast<SetupCameraItem*>(*it);
 
             if (item)
             {
-                CameraType* ctype = item->cameraType();
+                CameraType* const ctype = item->cameraType();
 
                 if (ctype)
                 {
@@ -523,7 +683,7 @@ void SetupCamera::applySettings()
     group.writeEntry(d->configUseMetadataDateEntry, d->useDateFromMetadata->isChecked());
     group.writeEntry(d->configTrunHighQualityThumbs, d->turnHighQualityThumbs->isChecked());
     group.writeEntry(d->configUseDefaultTargetAlbum, d->useDefaultTargetAlbum->isChecked());
-    PAlbum* album = d->target1AlbumSelector->currentAlbum();
+    PAlbum* const album = d->target1AlbumSelector->currentAlbum();
     group.writeEntry(d->configDefaultTargetAlbumId, album ? album->id() : 0);
     group.sync();
 
@@ -541,6 +701,31 @@ void SetupCamera::applySettings()
     importGroup.writeEntry("IgnoreNames", d->ignoreNamesEdit->text());
     importGroup.writeEntry("IgnoreExtensions", d->ignoreExtensionsEdit->text());
     importGroup.sync();
+
+    ImportSettings* settings = ImportSettings::instance();
+
+    if (!settings)
+    {
+        return;
+    }
+
+    settings->setIconShowName(d->iconShowNameBox->isChecked());
+    //TODO: settings->setIconShowTags(d->iconShowTagsBox->isChecked());
+    settings->setIconShowSize(d->iconShowSizeBox->isChecked());
+    settings->setIconShowModDate(d->iconShowModDateBox->isChecked());
+    //TODO: settings->setIconShowResolution(d->iconShowResolutionBox->isChecked());
+    //TODO: settings->setIconShowOverlays(d->iconShowOverlaysBox->isChecked());
+    //TODO: settings->setIconShowRating(d->iconShowRatingBox->isChecked());
+    settings->setIconShowImageFormat(d->iconShowFormatBox->isChecked());
+    settings->setIconViewFont(d->iconViewFontSelect->font());
+
+    settings->setItemLeftClickAction((ImportSettings::ItemLeftClickAction)
+                                     d->leftClickActionComboBox->currentIndex());
+
+    settings->setPreviewLoadFullImageSize(d->previewLoadFullImageSize->isChecked());
+    settings->setPreviewItemsWhileDownload(d->previewItemsWhileDownload->isChecked());
+    settings->setPreviewShowIcons(d->previewShowIcons->isChecked());
+    settings->saveSettings();
 }
 
 bool SetupCamera::checkSettings()
@@ -578,7 +763,7 @@ void SetupCamera::slotSelectionChanged()
 
 void SetupCamera::slotAddCamera()
 {
-    CameraSelection* select = new CameraSelection;
+    CameraSelection* const select = new CameraSelection;
 
     connect(select, SIGNAL(signalOkClicked(const QString&, const QString&,
                                            const QString&, const QString&)),
@@ -597,14 +782,14 @@ void SetupCamera::slotAddedCamera(const QString& title, const QString& model,
 
 void SetupCamera::slotRemoveCamera()
 {
-    SetupCameraItem* item = dynamic_cast<SetupCameraItem*>(d->listView->currentItem());
+    SetupCameraItem* const item = dynamic_cast<SetupCameraItem*>(d->listView->currentItem());
 
     delete item;
 }
 
 void SetupCamera::slotEditCamera()
 {
-    SetupCameraItem* item = dynamic_cast<SetupCameraItem*>(d->listView->currentItem());
+    SetupCameraItem* const item = dynamic_cast<SetupCameraItem*>(d->listView->currentItem());
 
     if (!item)
     {
@@ -618,7 +803,7 @@ void SetupCamera::slotEditCamera()
         return;
     }
 
-    CameraSelection* select = new CameraSelection;
+    CameraSelection* const select = new CameraSelection;
     select->setCamera(ctype->title(), ctype->model(), ctype->port(), ctype->path());
 
     connect(select, SIGNAL(signalOkClicked(const QString&, const QString&,
@@ -632,7 +817,7 @@ void SetupCamera::slotEditCamera()
 void SetupCamera::slotEditedCamera(const QString& title, const QString& model,
                                    const QString& port, const QString& path)
 {
-    SetupCameraItem* item = dynamic_cast<SetupCameraItem*>(d->listView->currentItem());
+    SetupCameraItem* const item = dynamic_cast<SetupCameraItem*>(d->listView->currentItem());
 
     if (!item)
     {
@@ -645,8 +830,8 @@ void SetupCamera::slotEditedCamera(const QString& title, const QString& model,
 
 void SetupCamera::slotAutoDetectCamera()
 {
-    DBusyDlg* dlg                  = new DBusyDlg(i18n("Device detection under progress, please wait..."), this);
-    CameraAutoDetectThread* thread = new CameraAutoDetectThread(this);
+    DBusyDlg* const dlg                  = new DBusyDlg(i18n("Device detection under progress, please wait..."), this);
+    CameraAutoDetectThread* const thread = new CameraAutoDetectThread(this);
     dlg->setBusyThread(thread);
     dlg->exec();
 
@@ -681,7 +866,7 @@ void SetupCamera::slotAutoDetectCamera()
 
 void SetupCamera::slotImportSelectionChanged()
 {
-    QListWidgetItem* item = d->importListView->currentItem();
+    QListWidgetItem* const item = d->importListView->currentItem();
 
     d->importRemoveButton->setEnabled(item);
     d->importEditButton->setEnabled(item);
@@ -696,7 +881,7 @@ void SetupCamera::slotAddFilter()
 
     if (dlg.exec() == QDialog::Accepted)
     {
-        Filter* f = new Filter;
+        Filter* const f = new Filter;
         dlg.getData(f);
         d->filters.append(f);
         new QListWidgetItem(f->name, d->importListView);
@@ -722,9 +907,28 @@ void SetupCamera::slotEditFilter()
 
     if (dlg.exec() == QDialog::Accepted)
     {
-        Filter* f = d->filters.at(i);
+        Filter* const f = d->filters.at(i);
         dlg.getData(f);
         d->importListView->currentItem()->setText(f->name);
+    }
+}
+
+void SetupCamera::slotPreviewItemsClicked()
+{
+    if (d->previewItemsWhileDownload->isChecked() && d->previewLoadFullImageSize->isChecked())
+    {
+        KMessageBox::information(this, i18n("In order to enable this feature, the full-sized preview will be disabled."));
+
+        d->previewLoadFullImageSize->setChecked(false);
+    }
+}
+
+void SetupCamera::slotPreviewFullImageSizeClicked()
+{
+    if (d->previewItemsWhileDownload->isChecked() && d->previewLoadFullImageSize)
+    {
+        KMessageBox::information(this, i18n("If the full-sized preview is enabled it will affect the speed of previewing each item while download."));
+        d->previewItemsWhileDownload->setChecked(false);
     }
 }
 

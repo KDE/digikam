@@ -194,8 +194,8 @@ void OilPaintTool::prepareFinal()
     int b = d->brushSizeInput->value();
     int s = d->smoothInput->value();
 
-    ImageIface iface(0, 0);
-    setFilter(new OilPaintFilter(iface.getOriginalImg(), this, b, s));
+    ImageIface iface;
+    setFilter(new OilPaintFilter(iface.original(), this, b, s));
 }
 
 void OilPaintTool::putPreviewData()
@@ -205,8 +205,8 @@ void OilPaintTool::putPreviewData()
 
 void OilPaintTool::putFinalData()
 {
-    ImageIface iface(0, 0);
-    iface.putOriginalImage(i18n("Oil Paint"), filter()->filterAction(), filter()->getTargetImage().bits());
+    ImageIface iface;
+    iface.putOriginal(i18n("Oil Paint"), filter()->filterAction(), filter()->getTargetImage());
 }
 
 }  // namespace DigikamFxFiltersImagePlugin

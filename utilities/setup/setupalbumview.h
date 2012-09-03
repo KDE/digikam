@@ -6,8 +6,8 @@
  * Date        : 2003-02-01
  * Description : album view configuration setup tab
  *
- * Copyright (C) 2003-2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2005-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2003-2004 by Renchi Raju <renchi dot raju at gmail dot com>
+ * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -29,8 +29,6 @@
 
 #include <QScrollArea>
 
-class KPageDialog;
-
 namespace Digikam
 {
 
@@ -40,7 +38,7 @@ class SetupAlbumView : public QScrollArea
 
 public:
 
-    SetupAlbumView(QWidget* parent = 0);
+    SetupAlbumView(QWidget* const parent = 0);
     ~SetupAlbumView();
 
     void applySettings();
@@ -51,8 +49,8 @@ private:
 
 private:
 
-    class SetupAlbumViewPriv;
-    SetupAlbumViewPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

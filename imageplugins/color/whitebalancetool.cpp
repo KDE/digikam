@@ -189,8 +189,8 @@ void WhiteBalanceTool::slotAutoAdjustExposure()
 {
     kapp->activeWindow()->setCursor(Qt::WaitCursor);
 
-    ImageIface iface(0, 0);
-    DImg* img            = iface.getOriginalImg();
+    ImageIface iface;
+    DImg* img            = iface.original();
     WBContainer settings = d->settingsView->settings();
     WBFilter::autoExposureAdjustement(img, settings.black, settings.exposition);
     d->settingsView->setSettings(settings);
@@ -201,8 +201,8 @@ void WhiteBalanceTool::slotAutoAdjustExposure()
 
 void WhiteBalanceTool::prepareEffect()
 {
-    ImageIface iface(0, 0);
-    DImg* img            = iface.getOriginalImg();
+    ImageIface iface;
+    DImg* img            = iface.original();
     WBContainer settings = d->settingsView->settings();
     WBFilter::findChanelsMax(img, settings.maxr, settings.maxg, settings.maxb);
 
@@ -234,14 +234,14 @@ void WhiteBalanceTool::prepareFinal()
 {
     WBContainer settings = d->settingsView->settings();
 
-    ImageIface iface(0, 0);
-    setFilter(new WBFilter(iface.getOriginalImg(), this, settings));
+    ImageIface iface;
+    setFilter(new WBFilter(iface.original(), this, settings));
 }
 
 void WhiteBalanceTool::putFinalData()
 {
-    ImageIface iface(0, 0);
-    iface.putOriginalImage(i18n("White Balance"), filter()->filterAction(), filter()->getTargetImage().bits());
+    ImageIface iface;
+    iface.putOriginal(i18n("White Balance"), filter()->filterAction(), filter()->getTargetImage());
 }
 
 void WhiteBalanceTool::slotResetSettings()

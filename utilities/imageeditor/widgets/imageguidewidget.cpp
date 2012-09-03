@@ -6,7 +6,7 @@
  * Date        : 2004-11-16
  * Description : a widget to display an image with guides
  *
- * Copyright (C) 2004-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -52,13 +52,13 @@ namespace Digikam
 {
 
 static const KLocalizedString beforeLabel = ki18nc("Preview image (before filter has been applied)", "Before");
-static const KLocalizedString afterLabel  = ki18nc("Preview image (after filter has been applied)", "After");
+static const KLocalizedString afterLabel  = ki18nc("Preview image (after filter has been applied)",  "After");
 
-class ImageGuideWidget::ImageGuideWidgetPriv
+class ImageGuideWidget::Private
 {
 public:
 
-    ImageGuideWidgetPriv() :
+    Private() :
         sixteenBit(false),
         focus(false),
         spotVisible(false),
@@ -67,8 +67,6 @@ public:
         drawingMask(false),
         enableDrawMask(false),
         eraseMask(false),
-        width(0),
-        height(0),
         timerID(0),
         guideMode(0),
         guideSize(0),
@@ -91,8 +89,6 @@ public:
     bool        enableDrawMask;
     bool        eraseMask;
 
-    int         width;
-    int         height;
     int         timerID;
     int         guideMode;
     int         guideSize;
@@ -123,37 +119,31 @@ public:
     DImg        preview;
 };
 
-ImageGuideWidget::ImageGuideWidget(QWidget* parent,
+ImageGuideWidget::ImageGuideWidget(QWidget* const parent,
                                    bool spotVisible, int guideMode,
                                    const QColor& guideColor, int guideSize,
                                    bool blink, bool useImageSelection)
-    : QWidget(parent), d(new ImageGuideWidgetPriv)
+    : QWidget(parent), d(new Private)
 {
-    int w = 480, h = 320;
-    d->spotVisible = spotVisible;
-    d->guideMode   = guideMode;
-    d->guideColor  = guideColor;
-    d->guideSize   = guideSize;
-    d->bgColor     = palette().color(QPalette::Base);
+    int w            = 480;
+    int h            = 320;
+    d->spotVisible   = spotVisible;
+    d->guideMode     = guideMode;
+    d->guideColor    = guideColor;
+    d->guideSize     = guideSize;
+    d->bgColor       = palette().color(QPalette::Base);
 
     setMinimumSize(w, h);
     setMouseTracking(true);
     setAttribute(Qt::WA_DeleteOnClose);
 
-    d->iface        = new ImageIface(w, h);
+    d->iface         = new ImageIface(QSize(w, h));
     d->iface->setPreviewType(useImageSelection);
-
-    QScopedArrayPointer<uchar> data(d->iface->getPreviewImage());
-
-    d->width        = d->iface->previewWidth();
-    d->height       = d->iface->previewHeight();
-    bool sixteenBit = d->iface->previewSixteenBit();
-    bool hasAlpha   = d->iface->previewHasAlpha();
-    d->preview      = DImg(d->width, d->height, sixteenBit, hasAlpha, data.data());
-    d->preview.setIccProfile(d->iface->getOriginalImg()->getIccProfile());
+    d->preview       = d->iface->preview();
+    d->preview.setIccProfile(d->iface->original()->getIccProfile());
 
     d->pixmap        = new QPixmap(w, h);
-    d->rect          = QRect(w / 2 - d->width / 2, h / 2 - d->height / 2, d->width, d->height);
+    d->rect          = QRect(w / 2 - d->preview.width() / 2, h / 2 - d->preview.height() / 2, d->preview.width(), d->preview.height());
     d->maskPixmap    = new QPixmap(d->rect.width(), d->rect.height());
     d->previewPixmap = new QPixmap(d->rect.width(), d->rect.height());
     d->maskPixmap->fill(QColor(0, 0, 0, 0));
@@ -179,7 +169,6 @@ ImageGuideWidget::~ImageGuideWidget()
     delete d->pixmap;
     delete d->maskPixmap;
     delete d->previewPixmap;
-
     delete d;
 }
 
@@ -206,8 +195,8 @@ void ImageGuideWidget::exposureSettingsChanged()
 
 void ImageGuideWidget::resetSpotPosition()
 {
-    d->spot.setX(d->width  / 2);
-    d->spot.setY(d->height / 2);
+    d->spot.setX(d->preview.width()  / 2);
+    d->spot.setY(d->preview.height() / 2);
     updatePreview();
 }
 
@@ -224,23 +213,23 @@ int ImageGuideWidget::previewMode() const
 
 QPoint ImageGuideWidget::getSpotPosition() const
 {
-    return (QPoint((int)((float)d->spot.x() * (float)d->iface->originalWidth()  / (float)d->width),
-                   (int)((float)d->spot.y() * (float)d->iface->originalHeight() / (float)d->height)));
+    return (QPoint((int)((float)d->spot.x() * (float)d->iface->originalSize().width()  / (float)d->preview.width()),
+                   (int)((float)d->spot.y() * (float)d->iface->originalSize().height() / (float)d->preview.height())));
 }
 
 DColor ImageGuideWidget::getSpotColor(int getColorFrom) const
 {
     if (getColorFrom == OriginalImage)                          // Get point color from full original image
     {
-        return (d->iface->getColorInfoFromOriginalImage(getSpotPosition()));
+        return (d->iface->colorInfoFromOriginal(getSpotPosition()));
     }
     else if (getColorFrom == PreviewImage)                      // Get point color from full preview image
     {
-        return (d->iface->getColorInfoFromPreviewImage(d->spot));
+        return (d->iface->colorInfoFromPreview(d->spot));
     }
 
     // In other cases, get point color from preview target image
-    return (d->iface->getColorInfoFromTargetPreviewImage(d->spot));
+    return (d->iface->colorInfoFromTargetPreview(d->spot));
 }
 
 void ImageGuideWidget::setSpotVisible(bool spotVisible, bool blink)
@@ -302,7 +291,7 @@ void ImageGuideWidget::updatePixmap()
              d->renderingPreviewMode == PreviewToolBar::NoPreviewMode      ||
              (d->renderingPreviewMode == PreviewToolBar::PreviewToggleOnMouseOver && d->onMouseMovePreviewToggled))
     {
-        d->iface->paint(d->pixmap, d->rect.x(), d->rect.y(), d->rect.width(), d->rect.height(), &p);
+        d->iface->paint(d->pixmap, d->rect, &p);
 
         if (d->renderingPreviewMode == PreviewToolBar::PreviewTargetImage ||
             d->renderingPreviewMode == PreviewToolBar::PreviewToggleOnMouseOver)
@@ -319,12 +308,12 @@ void ImageGuideWidget::updatePixmap()
             p.drawPixmap(d->rect, *d->previewPixmap);
 
             // Drawing target image under the original.
-            d->iface->paint(d->pixmap, d->rect.x() + d->rect.width() / 2, d->rect.y(), d->rect.width() / 2, d->rect.height(), &p);
+            d->iface->paint(d->pixmap, QRect(d->rect.x() + d->rect.width() / 2, d->rect.y(), d->rect.width() / 2, d->rect.height()), &p);
         }
         else
         {
             // Drawing target image.
-            d->iface->paint(d->pixmap, d->rect.x(), d->rect.y(), d->rect.width(), d->rect.height(), &p);
+            d->iface->paint(d->pixmap, d->rect, &p);
 
             // Drawing original image under the target.
             p.drawPixmap(d->rect.x(), d->rect.y(), *d->previewPixmap, 0, 0, d->rect.width() / 2, d->rect.height());
@@ -352,12 +341,12 @@ void ImageGuideWidget::updatePixmap()
             p.drawPixmap(d->rect, *d->previewPixmap);
 
             // Drawing target image under the original.
-            d->iface->paint(d->pixmap, d->rect.x(), d->rect.y() + d->rect.height() / 2, d->rect.width(), d->rect.height() / 2, &p);
+            d->iface->paint(d->pixmap, QRect(d->rect.x(), d->rect.y() + d->rect.height() / 2, d->rect.width(), d->rect.height() / 2), &p);
         }
         else
         {
             // Drawing target image.
-            d->iface->paint(d->pixmap, d->rect.x(), d->rect.y(), d->rect.width(), d->rect.height(), &p);
+            d->iface->paint(d->pixmap, d->rect, &p);
 
             // Drawing original image under the target.
             p.drawPixmap(d->rect.x(), d->rect.y(), *d->previewPixmap,
@@ -549,29 +538,23 @@ void ImageGuideWidget::resizeEvent(QResizeEvent* e)
     delete d->pixmap;
     delete d->previewPixmap;
 
-    int w     = e->size().width();
-    int h     = e->size().height();
-    int old_w = d->width;
-    int old_h = d->height;
-
-    QScopedArrayPointer<uchar> data(d->iface->setPreviewImageSize(w, h));
-
-    d->width        = d->iface->previewWidth();
-    d->height       = d->iface->previewHeight();
-    bool sixteenBit = d->iface->previewSixteenBit();
-    bool hasAlpha   = d->iface->previewHasAlpha();
-    d->preview      = DImg(d->width, d->height, sixteenBit, hasAlpha, data.data());
-    d->preview.setIccProfile(d->iface->getOriginalImg()->getIccProfile());
+    int w             = e->size().width();
+    int h             = e->size().height();
+    int old_w         = d->preview.width();
+    int old_h         = d->preview.height();
+    d->preview        = d->iface->setPreviewSize(QSize(w, h));
+    d->preview.setIccProfile(d->iface->original()->getIccProfile());
 
     d->pixmap         = new QPixmap(w, h);
     d->previewPixmap  = new QPixmap(w, h);
-    d->rect           = QRect(w / 2 - d->width / 2, h / 2 - d->height / 2, d->width, d->height);
-    *d->maskPixmap    = d->maskPixmap->scaled(d->width, d->height, Qt::IgnoreAspectRatio);
+    d->rect           = QRect(w / 2 - d->preview.width() / 2, h / 2 - d->preview.height() / 2, d->preview.width(), d->preview.height());
+    *d->maskPixmap    = d->maskPixmap->scaled(d->preview.width(), d->preview.height(), Qt::IgnoreAspectRatio);
     *d->previewPixmap = d->iface->convertToPixmap(d->preview);
 
-    d->spot.setX((int)((float)d->spot.x() * ((float)d->width  / (float)old_w)));
-    d->spot.setY((int)((float)d->spot.y() * ((float)d->height / (float)old_h)));
+    d->spot.setX((int)((float)d->spot.x() * ((float)d->preview.width()  / (float)old_w)));
+    d->spot.setY((int)((float)d->spot.y() * ((float)d->preview.height() / (float)old_h)));
     updatePixmap();
+
     blockSignals(false);
     emit signalResized();
 }
@@ -588,7 +571,7 @@ void ImageGuideWidget::mousePressEvent(QMouseEvent* e)
         }
         else if (d->enableDrawMask)
         {
-            d->lastPoint = QPoint(e->x() - d->rect.x(), e->y() - d->rect.y());
+            d->lastPoint   = QPoint(e->x() - d->rect.x(), e->y() - d->rect.y());
             d->drawingMask = true;
         }
 
@@ -817,8 +800,8 @@ QImage ImageGuideWidget::getMask() const
 
 QPoint ImageGuideWidget::translatePointPosition(QPoint& point) const
 {
-    int x = (int)(point.x() * (float)(d->width)  / (float) d->iface->originalWidth());
-    int y = (int)(point.y() * (float)(d->height) / (float) d->iface->originalHeight());
+    int x = (int)(point.x() * (float)(d->preview.width())  / (float) d->iface->originalSize().width());
+    int y = (int)(point.y() * (float)(d->preview.height()) / (float) d->iface->originalSize().height());
     x     += d->rect.x() + 1;
     y     += d->rect.y() + 1;
     return (QPoint(x, y));

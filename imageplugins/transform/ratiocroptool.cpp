@@ -1019,7 +1019,7 @@ void RatioCropTool::slotCustomRatioChanged()
 void RatioCropTool::updateCropInfo()
 {
     d->histogramBox->histogram()->stopHistogramComputation();
-    DImg* img         = d->imageSelectionWidget->imageIface()->getOriginalImg();
+    DImg* img         = d->imageSelectionWidget->imageIface()->original();
     d->imageSelection = img->copy(getNormalizedRegion());
     d->histogramBox->histogram()->updateData(d->imageSelection.bits(), 
                                              d->imageSelection.width(), d->imageSelection.height(),
@@ -1035,8 +1035,8 @@ QRect RatioCropTool::getNormalizedRegion() const
 {
     QRect currentRegion    = d->imageSelectionWidget->getRegionSelection();
     ImageIface* iface      = d->imageSelectionWidget->imageIface();
-    int w                  = iface->originalWidth();
-    int h                  = iface->originalHeight();
+    int w                  = iface->originalSize().width();
+    int h                  = iface->originalSize().height();
     QRect normalizedRegion = currentRegion.normalized();
 
     if (normalizedRegion.right() > w)
@@ -1058,26 +1058,20 @@ void RatioCropTool::finalRendering()
 
     QRect currentRegion    = d->imageSelectionWidget->getRegionSelection();
     ImageIface* iface      = d->imageSelectionWidget->imageIface();
-    int w                  = iface->originalWidth();
-    int h                  = iface->originalHeight();
-    bool a                 = iface->originalHasAlpha();
-    bool sb                = iface->originalSixteenBit();
     QRect normalizedRegion = getNormalizedRegion();
-
-    QScopedArrayPointer<uchar> data(iface->getOriginalImage());
-    DImg imOrg(w, h, sb, a, data.data());
+    DImg imOrg             = iface->original()->copy();
 
     imOrg.crop(normalizedRegion);
     FilterAction action("digikam:RatioCrop", 1);
 
     action.setDisplayableName(i18n("Aspect Ratio Crop"));
-    action.addParameter("x", currentRegion.x());
-    action.addParameter("y", currentRegion.y());
-    action.addParameter("width", currentRegion.width());
+    action.addParameter("x",      currentRegion.x());
+    action.addParameter("y",      currentRegion.y());
+    action.addParameter("width",  currentRegion.width());
     action.addParameter("height", currentRegion.height());
 
-    iface->putOriginalImage(i18n("Aspect Ratio Crop"), action, imOrg.bits(), imOrg.width(), imOrg.height());
-    
+    iface->putOriginal(i18n("Aspect Ratio Crop"), action, imOrg);
+
     kapp->restoreOverrideCursor();
     writeSettings();
 }

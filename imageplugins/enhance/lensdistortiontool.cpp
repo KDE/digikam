@@ -296,7 +296,7 @@ void LensDistortionTool::prepareEffect()
 
     ImageIface* iface = d->previewWidget->imageIface();
 
-    setFilter(new LensDistortionFilter(iface->getOriginalImg(), this, m, e, r, b, 0, 0));
+    setFilter(new LensDistortionFilter(iface->original(), this, m, e, r, b, 0, 0));
 }
 
 void LensDistortionTool::prepareFinal()
@@ -306,23 +306,23 @@ void LensDistortionTool::prepareFinal()
     double r = d->rescaleInput->value();
     double b = d->brightenInput->value();
 
-    ImageIface iface(0, 0);
-    setFilter(new LensDistortionFilter(iface.getOriginalImg(), this, m, e, r, b, 0, 0));
+    ImageIface iface;
+    setFilter(new LensDistortionFilter(iface.original(), this, m, e, r, b, 0, 0));
 }
 
 void LensDistortionTool::putPreviewData()
 {
     ImageIface* iface = d->previewWidget->imageIface();
-    DImg imDest       = filter()->getTargetImage().smoothScale(iface->previewWidth(), iface->previewHeight());
-    iface->putPreviewImage(imDest.bits());
+    DImg imDest       = filter()->getTargetImage().smoothScale(iface->previewSize());
+    iface->putPreview(imDest);
 
     d->previewWidget->updatePreview();
 }
 
 void LensDistortionTool::putFinalData()
 {
-    ImageIface iface(0, 0);
-    iface.putOriginalImage(i18n("Lens Distortion"), filter()->filterAction(), filter()->getTargetImage().bits());
+    ImageIface iface;
+    iface.putOriginal(i18n("Lens Distortion"), filter()->filterAction(), filter()->getTargetImage());
 }
 
 void LensDistortionTool::blockWidgetSignals(bool b)

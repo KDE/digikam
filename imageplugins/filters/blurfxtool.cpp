@@ -332,8 +332,8 @@ void BlurFXTool::prepareEffect()
         case BlurFXFilter::RadialBlur:
         case BlurFXFilter::FocusBlur:
         {
-            ImageIface iface(0, 0);
-            image = *iface.getOriginalImg();
+            ImageIface iface;
+            image = *iface.original();
             break;
         }
 
@@ -368,8 +368,8 @@ void BlurFXTool::prepareFinal()
     int dist  = d->distanceInput->value();
     int level = d->levelInput->value();
 
-    ImageIface iface(0, 0);
-    setFilter(new BlurFXFilter(iface.getOriginalImg(), this, type, dist, level));
+    ImageIface iface;
+    setFilter(new BlurFXFilter(iface.original(), this, type, dist, level));
 }
 
 void BlurFXTool::putPreviewData()
@@ -399,8 +399,8 @@ void BlurFXTool::putPreviewData()
 
 void BlurFXTool::putFinalData()
 {
-    ImageIface iface(0, 0);
-    iface.putOriginalImage(i18n("Blur Effects"), filter()->filterAction(), filter()->getTargetImage().bits());
+    ImageIface iface;
+    iface.putOriginal(i18n("Blur Effects"), filter()->filterAction(), filter()->getTargetImage());
 }
 
 void BlurFXTool::renderingFinished()

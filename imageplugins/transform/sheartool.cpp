@@ -127,7 +127,7 @@ ShearTool::ShearTool(QObject* parent)
     // -------------------------------------------------------------
 
     QString temp;
-    ImageIface iface(0, 0);
+    ImageIface iface;
 
     d->gboxSettings = new EditorToolSettings;
     d->gboxSettings->setTools(EditorToolSettings::ColorGuide);
@@ -135,11 +135,11 @@ ShearTool::ShearTool(QObject* parent)
     // -------------------------------------------------------------
 
     QLabel* label1   = new QLabel(i18n("New width:"));
-    d->newWidthLabel = new QLabel(temp.setNum(iface.originalWidth()) + i18n(" px"));
+    d->newWidthLabel = new QLabel(temp.setNum(iface.originalSize().width()) + i18n(" px"));
     d->newWidthLabel->setAlignment(Qt::AlignBottom | Qt::AlignRight);
 
     QLabel* label2    = new QLabel(i18n("New height:"));
-    d->newHeightLabel = new QLabel(temp.setNum(iface.originalHeight()) + i18n(" px"));
+    d->newHeightLabel = new QLabel(temp.setNum(iface.originalSize().height()) + i18n(" px"));
     d->newHeightLabel->setAlignment(Qt::AlignBottom | Qt::AlignRight);
 
     QLabel* label3     = new QLabel(i18n("Main horizontal angle:"));
@@ -292,9 +292,9 @@ void ShearTool::prepareEffect()
     QColor background = Qt::black;
 
     ImageIface* iface = d->previewWidget->imageIface();
-    int orgW          = iface->originalWidth();
-    int orgH          = iface->originalHeight();
-    DImg preview      = iface->getPreviewImg();
+    int orgW          = iface->originalSize().width();
+    int orgH          = iface->originalSize().height();
+    DImg preview      = iface->preview();
     setFilter(new ShearFilter(&preview, this, hAngle, vAngle, antialiasing, background, orgW, orgH));
 }
 
@@ -305,18 +305,18 @@ void ShearTool::prepareFinal()
     bool antialiasing = d->antialiasInput->isChecked();
     QColor background = Qt::black;
 
-    ImageIface iface(0, 0);
-    int orgW       = iface.originalWidth();
-    int orgH       = iface.originalHeight();
-    DImg* orgImage = iface.getOriginalImg();
+    ImageIface iface;
+    int orgW       = iface.originalSize().width();
+    int orgH       = iface.originalSize().height();
+    DImg* orgImage = iface.original();
     setFilter(new ShearFilter(orgImage, this, hAngle, vAngle, antialiasing, background, orgW, orgH));
 }
 
 void ShearTool::putPreviewData()
 {
     ImageIface* iface = d->previewWidget->imageIface();
-    int w             = iface->previewWidth();
-    int h             = iface->previewHeight();
+    int w             = iface->previewSize().width();
+    int h             = iface->previewSize().height();
 
     DImg imTemp = filter()->getTargetImage().smoothScale(w, h, Qt::KeepAspectRatio);
     DImg imDest( w, h, filter()->getTargetImage().sixteenBit(), filter()->getTargetImage().hasAlpha() );
@@ -325,20 +325,20 @@ void ShearTool::putPreviewData()
                         filter()->getTargetImage().sixteenBit()) );
     imDest.bitBltImage(&imTemp, (w-imTemp.width())/2, (h-imTemp.height())/2);
 
-    iface->putPreviewImage((imDest.smoothScale(iface->previewWidth(), iface->previewHeight())).bits());
+    iface->putPreview(imDest.smoothScale(iface->previewSize()));
 
     d->previewWidget->updatePreview();
     QSize newSize = dynamic_cast<ShearFilter*>(filter())->getNewSize();
     QString temp;
-    d->newWidthLabel->setText(temp.setNum( newSize.width()) + i18n(" px") );
+    d->newWidthLabel->setText(temp.setNum( newSize.width())   + i18n(" px") );
     d->newHeightLabel->setText(temp.setNum( newSize.height()) + i18n(" px") );
 }
 
 void ShearTool::putFinalData()
 {
-    ImageIface iface(0, 0);
+    ImageIface iface;
     DImg targetImage = filter()->getTargetImage();
-    iface.putOriginalImage(i18n("Shear Tool"), filter()->filterAction(), targetImage.bits(), targetImage.width(), targetImage.height());
+    iface.putOriginal(i18n("Shear Tool"), filter()->filterAction(), targetImage);
 }
 
 }  // namespace DigikamTransformImagePlugin

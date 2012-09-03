@@ -112,8 +112,8 @@ BWSepiaTool::BWSepiaTool(QObject* parent)
                                 EditorToolSettings::Load|
                                 EditorToolSettings::SaveAs);
 
-    ImageIface iface(0, 0);
-    d->bwsepiaSettings = new BWSepiaSettings(d->gboxSettings->plainPage(), iface.getOriginalImg());
+    ImageIface iface;
+    d->bwsepiaSettings = new BWSepiaSettings(d->gboxSettings->plainPage(), iface.original());
 
     setToolSettings(d->gboxSettings);
     init();
@@ -213,14 +213,14 @@ void BWSepiaTool::prepareFinal()
 {
     BWSepiaContainer settings = d->bwsepiaSettings->settings();
 
-    ImageIface iface(0, 0);
-    setFilter(new BWSepiaFilter(iface.getOriginalImg(), this, settings));
+    ImageIface iface;
+    setFilter(new BWSepiaFilter(iface.original(), this, settings));
 }
 
 void BWSepiaTool::putFinalData()
 {
-    ImageIface iface(0, 0);
-    iface.putOriginalImage(i18n("Convert to Black and White"), filter()->filterAction(), filter()->getTargetImage().bits());
+    ImageIface iface;
+    iface.putOriginal(i18n("Convert to Black and White"), filter()->filterAction(), filter()->getTargetImage());
 }
 
 void BWSepiaTool::slotLoadSettings()

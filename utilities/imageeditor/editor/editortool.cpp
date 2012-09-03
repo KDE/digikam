@@ -47,12 +47,12 @@
 namespace Digikam
 {
 
-class EditorTool::EditorToolPriv
+class EditorTool::Private
 {
 
 public:
 
-    EditorToolPriv() :
+    Private() :
         version(0),
         view(0),
         timer(0),
@@ -73,8 +73,8 @@ public:
     FilterAction::Category category;
 };
 
-EditorTool::EditorTool(QObject* parent)
-    : QObject(parent), d(new EditorToolPriv)
+EditorTool::EditorTool(QObject* const parent)
+    : QObject(parent), d(new Private)
 {
     d->timer = new QTimer(this);
 
@@ -86,7 +86,6 @@ EditorTool::~EditorTool()
 {
     delete d->settings;
     delete d->view;
-
     delete d;
 }
 
@@ -135,7 +134,6 @@ void EditorTool::setToolCategory(const FilterAction::Category category)
     d->category = category;
 }
 
-
 void EditorTool::setPreviewModeMask(int mask)
 {
     EditorToolIface::editorToolIface()->setPreviewModeMask(mask);
@@ -153,7 +151,7 @@ void EditorTool::setToolView(QWidget* view)
     // This will prevent resize event signals emit during tool init.
     d->view->blockSignals(true);
 
-    ImageGuideWidget* wgt = dynamic_cast<ImageGuideWidget*>(d->view);
+    ImageGuideWidget* const wgt = dynamic_cast<ImageGuideWidget*>(d->view);
 
     if (wgt)
     {
@@ -173,7 +171,6 @@ EditorToolSettings* EditorTool::toolSettings() const
 void EditorTool::setToolSettings(EditorToolSettings* settings)
 {
     d->settings = settings;
-
     d->settings->setToolIcon(toolIcon());
     d->settings->setToolName(toolName());
 
@@ -286,14 +283,14 @@ void EditorTool::slotPreviewModeChanged()
 
 void EditorTool::setBackgroundColor(const QColor& bg)
 {
-    ImageGuideWidget* view = dynamic_cast<ImageGuideWidget*>(d->view);
+    ImageGuideWidget* const view = dynamic_cast<ImageGuideWidget*>(d->view);
 
     if (view)
     {
         view->setBackgroundColor(bg);
     }
 
-    ImageRegionWidget* view2 = dynamic_cast<ImageRegionWidget*>(d->view);
+    ImageRegionWidget* const view2 = dynamic_cast<ImageRegionWidget*>(d->view);
 
     if (view2)
     {
@@ -303,14 +300,14 @@ void EditorTool::setBackgroundColor(const QColor& bg)
 
 void EditorTool::ICCSettingsChanged()
 {
-    ImageGuideWidget* view = dynamic_cast<ImageGuideWidget*>(d->view);
+    ImageGuideWidget* const view = dynamic_cast<ImageGuideWidget*>(d->view);
 
     if (view)
     {
         view->ICCSettingsChanged();
     }
 
-    ImageRegionWidget* view2 = dynamic_cast<ImageRegionWidget*>(d->view);
+    ImageRegionWidget* const view2 = dynamic_cast<ImageRegionWidget*>(d->view);
 
     if (view2)
     {
@@ -320,14 +317,14 @@ void EditorTool::ICCSettingsChanged()
 
 void EditorTool::exposureSettingsChanged()
 {
-    ImageGuideWidget* view = dynamic_cast<ImageGuideWidget*>(d->view);
+    ImageGuideWidget* const view = dynamic_cast<ImageGuideWidget*>(d->view);
 
     if (view)
     {
         view->exposureSettingsChanged();
     }
 
-    ImageRegionWidget* view2 = dynamic_cast<ImageRegionWidget*>(d->view);
+    ImageRegionWidget* const view2 = dynamic_cast<ImageRegionWidget*>(d->view);
 
     if (view2)
     {
@@ -351,12 +348,12 @@ void EditorTool::slotUpdateSpotInfo(const DColor& col, const QPoint& point)
 
 // ----------------------------------------------------------------
 
-class EditorToolThreaded::EditorToolThreadedPriv
+class EditorToolThreaded::Private
 {
 
 public:
 
-    EditorToolThreadedPriv() :
+    Private() :
         delFilter(true),
         currentRenderingMode(EditorToolThreaded::NoneRendering),
         threadedFilter(0)
@@ -372,8 +369,8 @@ public:
     DImgThreadedFilter*               threadedFilter;
 };
 
-EditorToolThreaded::EditorToolThreaded(QObject* parent)
-    : EditorTool(parent), d(new EditorToolThreadedPriv)
+EditorToolThreaded::EditorToolThreaded(QObject* const parent)
+    : EditorTool(parent), d(new Private)
 {
 }
 

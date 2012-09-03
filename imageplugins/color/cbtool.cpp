@@ -189,14 +189,14 @@ void CBTool::prepareFinal()
 {
     CBContainer settings = d->cbSettings->settings();
 
-    ImageIface iface(0, 0);
-    setFilter(new CBFilter(iface.getOriginalImg(), this, settings));
+    ImageIface iface;
+    setFilter(new CBFilter(iface.original(), this, settings));
 }
 
 void CBTool::putFinalData()
 {
-    ImageIface iface(0, 0);
-    iface.putOriginalImage(i18n("Color Balance"), filter()->filterAction(), filter()->getTargetImage().bits());
+    ImageIface iface;
+    iface.putOriginal(i18n("Color Balance"), filter()->filterAction(), filter()->getTargetImage());
 }
 
 }  // namespace DigikamColorImagePlugin

@@ -337,9 +337,7 @@ void ColorFxTool::prepareEffect()
     int e = d->effectType->currentIndex();
 
     ImageIface* iface = d->previewWidget->imageIface();
-    QScopedArrayPointer<uchar> data(iface->getPreviewImage());
-    DImg image(iface->previewWidth(), iface->previewHeight(), iface->previewSixteenBit(),
-               iface->previewHasAlpha(), data.data());
+    DImg image        = iface->preview();
 
     setFilter(new ColorFXFilter(&image, this, e, l, f));
 }
@@ -357,26 +355,26 @@ void ColorFxTool::prepareFinal()
     int f = d->iterationInput->value();
     int e = d->effectType->currentIndex();
 
-    ImageIface iface(0, 0);
+    ImageIface iface;
 
-    setFilter(new ColorFXFilter(iface.getOriginalImg(), this, e, l, f));
+    setFilter(new ColorFXFilter(iface.original(), this, e, l, f));
 }
 
 void ColorFxTool::putPreviewData()
 {
     ImageIface* iface = d->previewWidget->imageIface();
     DImg preview = filter()->getTargetImage();
-    DImg imDest  = preview.smoothScale(iface->previewWidth(), iface->previewHeight());
-    iface->putPreviewImage(imDest.bits());
+    DImg imDest  = preview.smoothScale(iface->previewSize());
+    iface->putPreview(imDest);
     d->gboxSettings->histogramBox()->histogram()->updateData(preview.bits(), preview.width(), preview.height(),
-            preview.sixteenBit(), 0, 0, 0, false);
+                                                             preview.sixteenBit(), 0, 0, 0, false);
 
     d->previewWidget->updatePreview();
 }
 
 void ColorFxTool::putFinalData()
 {
-    ImageIface iface(0, 0);
+    ImageIface iface;
 
     QString name;
 
@@ -399,7 +397,7 @@ void ColorFxTool::putFinalData()
             break;
     }
 
-    iface.putOriginalImage(name, filter()->filterAction(), filter()->getTargetImage().bits());
+    iface.putOriginal(name, filter()->filterAction(), filter()->getTargetImage());
 }
 
 void ColorFxTool::renderingFinished()

@@ -234,17 +234,17 @@ void ImagePlugin_Color::slotInvert()
 {
     kapp->setOverrideCursor(Qt::WaitCursor);
 
-    ImageIface iface(0, 0);
-    InvertFilter invert(iface.getOriginalImg(), 0L);
+    ImageIface iface;
+    InvertFilter invert(iface.original(), 0L);
     invert.startFilterDirectly();
-    iface.putOriginalImage(i18n("Invert"), invert.filterAction(), invert.getTargetImage().bits());
+    iface.putOriginal(i18n("Invert"), invert.filterAction(), invert.getTargetImage());
 
     kapp->restoreOverrideCursor();
 }
 
 void ImagePlugin_Color::slotConvertTo8Bits()
 {
-    ImageIface iface(0, 0);
+    ImageIface iface;
 
     if (!iface.originalSixteenBit())
     {
@@ -271,7 +271,7 @@ void ImagePlugin_Color::slotConvertTo8Bits()
 
 void ImagePlugin_Color::slotConvertTo16Bits()
 {
-    ImageIface iface(0, 0);
+    ImageIface iface;
 
     if (iface.originalSixteenBit())
     {
@@ -304,9 +304,9 @@ void ImagePlugin_Color::slotAutoCorrection()
 
 void ImagePlugin_Color::slotConvertToColorSpace(const IccProfile& profile)
 {
-    ImageIface iface(0, 0);
+    ImageIface iface;
 
-    if (iface.getOriginalIccProfile().isNull())
+    if (iface.originalIccProfile().isNull())
     {
         KMessageBox::error(kapp->activeWindow(), i18n("This image is not color managed."));
         return;

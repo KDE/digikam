@@ -1,0 +1,109 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<gui version="301" name="importui" >
+
+<MenuBar>
+
+    <Menu name="Device" ><text>&amp;Device</text>
+        <Action name="importui_capture" />
+        <Action name="importui_info" />
+        <Separator />
+        <Action name="importui_cancelprocess" />
+        <Action name="importui_close" />
+    </Menu>
+
+    <Menu name="Edit" >
+    <text>&amp;Edit</text>
+        <Action name="importui_selectall" />
+        <Action name="importui_selectnone" />
+        <Action name="importui_selectinvert" />
+        <Separator />
+        <Action name="importui_selectnewitems" />
+        <Action name="importui_selectlockeditems" />
+    </Menu>
+
+    <Menu name="Image" ><text>&amp;Image</text>
+        <Action name="importui_imagedownloadnew" />
+        <Action name="importui_imagedownloadselected" />
+        <Action name="importui_imagedownloadall" />
+        <Separator />
+        <Action name="importui_imagedownloaddeletenew" />
+        <Action name="importui_imagedownloaddeleteselected" />
+        <Action name="importui_imagedownloaddeleteall" />
+        <Separator />
+        <Action name="importui_imagedeletenew" />
+        <Action name="importui_imagedeleteselected" />
+        <Action name="importui_imagedeleteall" />
+        <Separator />
+        <Action name="importui_imageupload"/>
+        <Action name="importui_imagemarkasdownloaded" />
+        <Separator />
+        <Action name="importui_imagelock" />
+    </Menu>
+
+    <Menu name="View" ><text>&amp;View</text>
+        <Action name="importui_icon_view" />
+        <Action name="importui_item_view" />
+        <Action name="importui_map_view" />
+        <Separator/>
+        <Action name="importui_fullscreen" />
+        <Action name="importui_showlog" />
+        <Separator/>
+        <Action name="showthumbs" />
+        <Separator/>
+        <Action name="importui_zoomplus" />
+        <Action name="importui_zoomminus" />
+        <Action name="import_zoomfit2window" />
+        <Action name="import_zoomto100percents" />
+        <Separator/>
+        <Action name="item_sort" />
+        <Action name="item_sort_order" />
+        <Action name="item_group" />
+    </Menu>
+
+    <Menu name="help" ><text>&amp;Help</text>
+        <Action name="help_rawcameralist"/>
+        <Action name="importui_librariesinfo"/>
+        <Action name="importui_dbstat"/>
+        <Action name="help_donatemoney" />
+        <Action name="help_contribute" />
+    </Menu>
+
+    <Merge/>
+
+    <Menu name="settings" noMerge="1"><Text>&amp;Settings</Text>
+        <Merge name="StandardToolBarMenuHandler" />
+        <Action name="options_show_menubar"/>
+        <Action name="options_show_statusbar"/>
+        <Action name="options_show_toolbar"/>
+        <Separator/>
+        <Action name="theme_menu" />
+        <Action name="options_configure_keybinding"/>
+        <Action name="options_configure_toolbars"/>
+        <Action name="options_configure_notifications"/>
+        <Action name="options_configure" />
+    </Menu>
+
+</MenuBar>
+
+<ToolBar name="mainToolBar" ><text>Main Toolbar</text>
+     <Action name="importui_capture" />
+     <Action name="importui_imagedownload" />
+     <Action name="importui_cancelprocess" />
+     <Separator/>
+     <Action name="importui_imageupload" />
+     <Action name="importui_imagelock" />
+     <Separator/>
+     <Separator/>
+     <Action name="importui_icon_view" />
+     <Action name="importui_item_view" />
+     <Action name="importui_map_view" />
+     <Separator/>
+     <Action name="importui_fullscreen" />
+     <Merge />
+     <WeakSeparator/>
+     <Action name="logo_action" />
+</ToolBar>
+
+<ActionProperties/>
+
+</gui>

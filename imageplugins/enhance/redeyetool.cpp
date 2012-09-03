@@ -6,8 +6,8 @@
  * Date        : 2004-06-06
  * Description : Red eyes correction tool for image editor
  *
- * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
+ * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -72,11 +72,12 @@ using namespace KDcrawIface;
 namespace DigikamEnhanceImagePlugin
 {
 
-class RedEyeTool::RedEyeToolPriv
+class RedEyeTool::Private
 {
+
 public:
 
-    RedEyeToolPriv() :
+    Private() :
         destinationPreviewData(0),
         thresholdLabel(0),
         smoothLabel(0),
@@ -116,21 +117,21 @@ public:
     ImageGuideWidget*       previewWidget;
     EditorToolSettings*     gboxSettings;
 };
-const QString RedEyeTool::RedEyeToolPriv::configGroupName("redeye Tool");
-const QString RedEyeTool::RedEyeToolPriv::configHistogramChannelEntry("Histogram Channel");
-const QString RedEyeTool::RedEyeToolPriv::configHistogramScaleEntry("Histogram Scale");
-const QString RedEyeTool::RedEyeToolPriv::configRedThresholdEntry("RedThreshold");
-const QString RedEyeTool::RedEyeToolPriv::configSmoothLevelEntry("SmoothLevel");
-const QString RedEyeTool::RedEyeToolPriv::configHueColoringTintEntry("HueColoringTint");
-const QString RedEyeTool::RedEyeToolPriv::configSatColoringTintEntry("SatColoringTint");
-const QString RedEyeTool::RedEyeToolPriv::configValColoringTintEntry("ValColoringTint");
-const QString RedEyeTool::RedEyeToolPriv::configTintLevelEntry("TintLevel");
+const QString RedEyeTool::Private::configGroupName("redeye Tool");
+const QString RedEyeTool::Private::configHistogramChannelEntry("Histogram Channel");
+const QString RedEyeTool::Private::configHistogramScaleEntry("Histogram Scale");
+const QString RedEyeTool::Private::configRedThresholdEntry("RedThreshold");
+const QString RedEyeTool::Private::configSmoothLevelEntry("SmoothLevel");
+const QString RedEyeTool::Private::configHueColoringTintEntry("HueColoringTint");
+const QString RedEyeTool::Private::configSatColoringTintEntry("SatColoringTint");
+const QString RedEyeTool::Private::configValColoringTintEntry("ValColoringTint");
+const QString RedEyeTool::Private::configTintLevelEntry("TintLevel");
 
 // --------------------------------------------------------
 
-RedEyeTool::RedEyeTool(QObject* parent)
+RedEyeTool::RedEyeTool(QObject* const parent)
     : EditorTool(parent),
-      d(new RedEyeToolPriv)
+      d(new Private)
 {
     setObjectName("redeye");
     setToolName(i18n("Red Eye"));
@@ -385,25 +386,23 @@ void RedEyeTool::slotEffect()
     // Here, we need to use the real selection image data because we will apply
     // a Gaussian blur filter on pixels and we cannot use directly the preview scaled image
     // else the blur radius will not give the same result between preview and final rendering.
-    ImageIface* iface          = d->previewWidget->imageIface();
-    d->destinationPreviewData  = iface->getImageSelection();
-    int w                      = iface->selectedWidth();
-    int h                      = iface->selectedHeight();
-    bool sb                    = iface->originalSixteenBit();
-    bool a                     = iface->originalHasAlpha();
-    DImg selection(w, h, sb, a, d->destinationPreviewData);
+    ImageIface* iface = d->previewWidget->imageIface();
+    DImg selection    = iface->selection();
 
     redEyeFilter(selection);
 
-    DImg preview = selection.smoothScale(iface->previewWidth(), iface->previewHeight());
+    DImg preview = selection.smoothScale(iface->previewSize());
 
-    iface->putPreviewImage(preview.bits());
+    iface->putPreview(preview);
     d->previewWidget->updatePreview();
 
     // Update histogram.
 
+    d->destinationPreviewData = new uchar[selection.numBytes()];
     memcpy(d->destinationPreviewData, selection.bits(), selection.numBytes());
-    d->gboxSettings->histogramBox()->histogram()->updateData(d->destinationPreviewData, w, h, sb, 0, 0, 0, false);
+    d->gboxSettings->histogramBox()->histogram()->updateData(d->destinationPreviewData,
+                                                             selection.width(), selection.height(),
+                                                             selection.sixteenBit(), 0, 0, 0, false);
 
     kapp->restoreOverrideCursor();
 }
@@ -413,19 +412,14 @@ void RedEyeTool::finalRendering()
     kapp->setOverrideCursor( Qt::WaitCursor );
 
     ImageIface* iface = d->previewWidget->imageIface();
-    QScopedArrayPointer<uchar> data(iface->getImageSelection());
-    int w             = iface->selectedWidth();
-    int h             = iface->selectedHeight();
-    bool sixteenBit   = iface->originalSixteenBit();
-    bool hasAlpha     = iface->originalHasAlpha();
-    DImg selection(w, h, sixteenBit, hasAlpha, data.data());
+    DImg selection    = iface->selection();
 
     redEyeFilter(selection);
 
     FilterAction action("digikam:redEyeFilter", 1);
     action.setDisplayableName(i18n("Red Eye Filter"));
 
-    iface->putImageSelection(i18n("Red Eyes Correction"), action, selection.bits());
+    iface->putSelection(i18n("Red Eyes Correction"), action, selection);
 
     kapp->restoreOverrideCursor();
 }

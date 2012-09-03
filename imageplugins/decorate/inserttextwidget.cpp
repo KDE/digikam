@@ -6,7 +6,7 @@
  * Date        : 2005-02-14
  * Description : a widget to insert a text over an image.
  *
- * Copyright (C) 2005-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -52,12 +52,11 @@
 namespace DigikamDecorateImagePlugin
 {
 
-class InsertTextWidget::InsertTextWidgetPriv
+class InsertTextWidget::Private
 {
 public:
 
-    InsertTextWidgetPriv() :
-        data(0),
+    Private() :
         currentMoving(false),
         textBorder(false),
         textTransparent(false),
@@ -72,8 +71,6 @@ public:
         iface(0)
     {
     }
-
-    uchar*      data;
 
     bool        currentMoving;
     bool        textBorder;
@@ -104,19 +101,18 @@ public:
     ImageIface* iface;
 };
 
-InsertTextWidget::InsertTextWidget(int w, int h, QWidget* parent)
+InsertTextWidget::InsertTextWidget(int w, int h, QWidget* const parent)
     : QWidget(parent),
-      d(new InsertTextWidgetPriv)
+      d(new Private)
 {
     d->currentMoving   = false;
     d->bgColor         = palette().color(QPalette::Background);
     d->backgroundColor = QColor(0xCC, 0xCC, 0xCC);
     d->transparency    = 210;
 
-    d->iface  = new ImageIface(w, h);
-    d->data   = d->iface->getPreviewImage();
-    d->w      = d->iface->previewWidth();
-    d->h      = d->iface->previewHeight();
+    d->iface  = new ImageIface(QSize(w, h));
+    d->w      = d->iface->previewSize().width();
+    d->h      = d->iface->previewSize().height();
     d->pixmap = new QPixmap(w, h);
     d->pixmap->fill(d->bgColor);
 
@@ -130,7 +126,6 @@ InsertTextWidget::InsertTextWidget(int w, int h, QWidget* parent)
 
 InsertTextWidget::~InsertTextWidget()
 {
-    delete [] d->data;
     delete d->iface;
     delete d->pixmap;
     delete d;
@@ -234,8 +229,8 @@ QRect InsertTextWidget::getPositionHint() const
 
 DImg InsertTextWidget::makeInsertText()
 {
-    int orgW     = d->iface->originalWidth();
-    int orgH     = d->iface->originalHeight();
+    int orgW     = d->iface->originalSize().width();
+    int orgH     = d->iface->originalSize().height();
     float ratioW = (float)orgW/(float)d->w;
     float ratioH = (float)orgH/(float)d->h;
 
@@ -254,7 +249,7 @@ DImg InsertTextWidget::makeInsertText()
     }
 
     // Get original image
-    DImg image      = d->iface->getOriginalImg()->copy();
+    DImg image      = d->iface->original()->copy();
     int borderWidth = qMax(1, (int)lroundf(ratioW));
 
     // compose and draw result on image
@@ -269,8 +264,8 @@ DImg InsertTextWidget::makeInsertText()
 
 void InsertTextWidget::makePixmap()
 {
-    int orgW = d->iface->originalWidth();
-    int orgH = d->iface->originalHeight();
+    int orgW = d->iface->originalSize().width();
+    int orgH = d->iface->originalSize().height();
     float ratioW = (float)d->w / (float)orgW;
     float ratioH = (float)d->h / (float)orgH;
 
@@ -289,10 +284,8 @@ void InsertTextWidget::makePixmap()
     }
 
     // get preview image data
-    QScopedArrayPointer<uchar> data(d->iface->getPreviewImage());
-    DImg image(d->iface->previewWidth(), d->iface->previewHeight(), d->iface->previewSixteenBit(),
-               d->iface->previewHasAlpha(), data.data());
-    image.setIccProfile( d->iface->getOriginalImg()->getIccProfile() );
+    DImg image = d->iface->preview();
+    image.setIccProfile( d->iface->original()->getIccProfile() );
 
     // paint pixmap for drawing this widget
     // First, fill with background color
@@ -330,7 +323,7 @@ void InsertTextWidget::makePixmap()
    if destPainter is not null, draw directly using the painter.
    Returns modified area of image.
 */
-QRect InsertTextWidget::composeImage(DImg* image, QPainter* destPainter,
+QRect InsertTextWidget::composeImage(DImg* const image, QPainter* const destPainter,
                                      int x, int y,
                                      QFont font, float pointSize, int textRotation, QColor textColor,
                                      int alignMode, const QString& textString,
@@ -642,29 +635,29 @@ void InsertTextWidget::resizeEvent(QResizeEvent* e)
     blockSignals(true);
     delete d->pixmap;
 
-    int w = e->size().width();
-    int h = e->size().height();
+    int w     = e->size().width();
+    int h     = e->size().height();
 
     int textX = d->textRect.x() - d->rect.x();
     int textY = d->textRect.y() - d->rect.y();
     int old_w = d->w;
     int old_h = d->h;
-    d->data    = d->iface->setPreviewImageSize(w, h);
-    d->w       = d->iface->previewWidth();
-    d->h       = d->iface->previewHeight();
+    d->iface->setPreviewSize(QSize(w, h));
+    d->w      = d->iface->previewSize().width();
+    d->h      = d->iface->previewSize().height();
 
     d->pixmap = new QPixmap(w, h);
-    d->rect = QRect(w/2-d->w/2, h/2-d->h/2, d->w, d->h);
+    d->rect   = QRect(w/2-d->w/2, h/2-d->h/2, d->w, d->h);
 
     if (d->textRect.isValid())
     {
         int textWidth  = d->textRect.width();
         int textHeight = d->textRect.height();
 
-        textX = lroundf( textX * (float)d->w / (float)old_w );
-        textY = lroundf( textY * (float)d->h / (float)old_h );
-        textWidth  = lroundf(textWidth  * (float)d->w / (float)old_w );
-        textHeight = lroundf(textHeight * (float)d->h / (float)old_h );
+        textX      = lroundf(textX      * (float)d->w / (float)old_w);
+        textY      = lroundf(textY      * (float)d->h / (float)old_h);
+        textWidth  = lroundf(textWidth  * (float)d->w / (float)old_w);
+        textHeight = lroundf(textHeight * (float)d->h / (float)old_h);
 
         d->textRect.setX(textX + d->rect.x());
         d->textRect.setY(textY + d->rect.y());

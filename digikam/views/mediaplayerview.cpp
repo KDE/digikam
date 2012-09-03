@@ -6,7 +6,7 @@
  * Date        : 2006-20-12
  * Description : a view to embed Phonon media player.
  *
- * Copyright (C) 2006-2011 Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2012 Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -52,7 +52,7 @@
 namespace Digikam
 {
 
-MediaPlayerMouseClickFilter::MediaPlayerMouseClickFilter(QObject* parent)
+MediaPlayerMouseClickFilter::MediaPlayerMouseClickFilter(QObject* const parent)
     : QObject(parent), m_parent(parent)
 {
 }
@@ -90,7 +90,7 @@ bool MediaPlayerMouseClickFilter::eventFilter(QObject* obj, QEvent* event)
 
 // --------------------------------------------------------
 
-class MediaPlayerView::MediaPlayerViewPriv
+class MediaPlayerView::Private
 {
 
 public:
@@ -103,10 +103,10 @@ public:
 
 public:
 
-    MediaPlayerViewPriv() :
+    Private() :
         errorView(0),
-        mediaPlayerView(0),
-        back2AlbumAction(0),
+        playerView(0),
+        escapePreviewAction(0),
         prevAction(0),
         nextAction(0),
         toolBar(0),
@@ -117,9 +117,9 @@ public:
     }
 
     QFrame*              errorView;
-    QFrame*              mediaPlayerView;
+    QFrame*              playerView;
 
-    QAction*             back2AlbumAction;
+    QAction*             escapePreviewAction;
     QAction*             prevAction;
     QAction*             nextAction;
 
@@ -127,23 +127,23 @@ public:
 
     QGridLayout*         grid;
 
-    ImageInfo            currentInfo;
-
     Phonon::VideoPlayer* player;
     Phonon::SeekSlider*  slider;
+
+    KUrl                 currentItem;
 };
 
-MediaPlayerView::MediaPlayerView(StackedView* parent)
-    : QStackedWidget(parent), d(new MediaPlayerViewPriv)
+MediaPlayerView::MediaPlayerView(QWidget* const parent)
+    : QStackedWidget(parent), d(new Private)
 {
     setAttribute(Qt::WA_DeleteOnClose);
 
-    d->back2AlbumAction = new QAction(SmallIcon("folder-image"), i18n("Back to Album"),                 this);
-    d->prevAction       = new QAction(SmallIcon("go-previous"),  i18nc("go to previous image", "Back"), this);
-    d->nextAction       = new QAction(SmallIcon("go-next"),      i18nc("go to next image", "Forward"),  this);
+    d->escapePreviewAction = new QAction(SmallIcon("folder-image"), i18n("Escape preview"),                this);
+    d->prevAction          = new QAction(SmallIcon("go-previous"),  i18nc("go to previous image", "Back"), this);
+    d->nextAction          = new QAction(SmallIcon("go-next"),      i18nc("go to next image", "Forward"),  this);
 
-    d->errorView        = new QFrame(this);
-    QLabel* errorMsg    = new QLabel(i18n("An error has occurred with the media player...."), this);
+    d->errorView           = new QFrame(this);
+    QLabel* errorMsg       = new QLabel(i18n("An error has occurred with the media player...."), this);
 
     errorMsg->setAlignment(Qt::AlignCenter);
     d->errorView->setFrameStyle(QFrame::GroupBoxPanel|QFrame::Plain);
@@ -151,46 +151,46 @@ MediaPlayerView::MediaPlayerView(StackedView* parent)
 
     QGridLayout* grid = new QGridLayout;
     grid->addWidget(errorMsg, 1, 0, 1, 3 );
-    grid->setColumnStretch(0, 10),
-         grid->setColumnStretch(2, 10),
-         grid->setRowStretch(0, 10),
-         grid->setRowStretch(2, 10),
-         grid->setMargin(KDialog::spacingHint());
+    grid->setColumnStretch(0, 10);
+    grid->setColumnStretch(2, 10);
+    grid->setRowStretch(0, 10);
+    grid->setRowStretch(2, 10);
+    grid->setMargin(KDialog::spacingHint());
     grid->setSpacing(KDialog::spacingHint());
     d->errorView->setLayout(grid);
 
-    insertWidget(MediaPlayerViewPriv::ErrorView, d->errorView);
+    insertWidget(Private::ErrorView, d->errorView);
 
     // --------------------------------------------------------------------------
 
-    d->mediaPlayerView = new QFrame(this);
-    d->player          = new Phonon::VideoPlayer(Phonon::VideoCategory, this);
-    d->slider          = new Phonon::SeekSlider(this);
+    d->playerView = new QFrame(this);
+    d->player     = new Phonon::VideoPlayer(Phonon::VideoCategory, this);
+    d->slider     = new Phonon::SeekSlider(this);
     d->slider->setMediaObject(d->player->mediaObject());
     d->player->mediaObject()->setTickInterval(100);
     d->player->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-    d->mediaPlayerView->setFrameStyle(QFrame::GroupBoxPanel|QFrame::Plain);
-    d->mediaPlayerView->setLineWidth(1);
+    d->playerView->setFrameStyle(QFrame::GroupBoxPanel|QFrame::Plain);
+    d->playerView->setLineWidth(1);
 
     d->grid = new QGridLayout;
     d->grid->addWidget(d->player->videoWidget(), 0, 0, 1, 3);
     d->grid->addWidget(d->slider,                1, 0, 1, 3);
-    d->grid->setColumnStretch(0, 10),
-      d->grid->setColumnStretch(2, 10),
-      d->grid->setRowStretch(0, 10),
-      d->grid->setMargin(KDialog::spacingHint());
+    d->grid->setColumnStretch(0, 10);
+    d->grid->setColumnStretch(2, 10);
+    d->grid->setRowStretch(0, 10);
+    d->grid->setMargin(KDialog::spacingHint());
     d->grid->setSpacing(KDialog::spacingHint());
-    d->mediaPlayerView->setLayout(d->grid);
+    d->playerView->setLayout(d->grid);
 
-    insertWidget(MediaPlayerViewPriv::PlayerView, d->mediaPlayerView);
+    insertWidget(Private::PlayerView, d->playerView);
 
     d->toolBar = new QToolBar(this);
     d->toolBar->addAction(d->prevAction);
     d->toolBar->addAction(d->nextAction);
-    d->toolBar->addAction(d->back2AlbumAction);
+    d->toolBar->addAction(d->escapePreviewAction);
 
-    setPreviewMode(MediaPlayerViewPriv::PlayerView);
+    setPreviewMode(Private::PlayerView);
 
     d->errorView->installEventFilter(new MediaPlayerMouseClickFilter(this));
     d->player->videoWidget()->installEventFilter(new MediaPlayerMouseClickFilter(this));
@@ -212,8 +212,8 @@ MediaPlayerView::MediaPlayerView(StackedView* parent)
     connect(d->nextAction, SIGNAL(triggered()),
             this, SIGNAL(signalNextItem()));
 
-    connect(d->back2AlbumAction, SIGNAL(triggered()),
-            parent, SIGNAL(signalBack2Album()));
+    connect(d->escapePreviewAction, SIGNAL(triggered()),
+            this, SIGNAL(signalEscapePreview()));
 }
 
 MediaPlayerView::~MediaPlayerView()
@@ -223,37 +223,11 @@ MediaPlayerView::~MediaPlayerView()
     delete d;
 }
 
-void MediaPlayerView::setImageInfo(const ImageInfo& info, const ImageInfo& previous, const ImageInfo& next)
-{
-    d->prevAction->setEnabled(!previous.isNull());
-    d->nextAction->setEnabled(!next.isNull());
-
-    KUrl url = info.fileUrl();
-
-    if (info.isNull() || url.isEmpty())
-    {
-        d->currentInfo = info;
-        d->player->stop();
-        return;
-    }
-
-    if (d->currentInfo == info &&
-        (d->player->isPlaying() || d->player->isPaused()))
-    {
-        return;
-    }
-
-    d->currentInfo = info;
-
-    d->player->play(url);
-    setPreviewMode(MediaPlayerViewPriv::PlayerView);
-}
-
 void MediaPlayerView::slotPlayerFinished()
 {
     if (d->player->mediaObject()->errorType() == Phonon::FatalError)
     {
-        setPreviewMode(MediaPlayerViewPriv::ErrorView);
+        setPreviewMode(Private::ErrorView);
     }
 }
 
@@ -261,7 +235,7 @@ void MediaPlayerView::slotPlayerstateChanged(Phonon::State newState, Phonon::Sta
 {
     if (newState == Phonon::ErrorState)
     {
-        setPreviewMode(MediaPlayerViewPriv::ErrorView);
+        setPreviewMode(Private::ErrorView);
     }
 }
 
@@ -277,14 +251,14 @@ void MediaPlayerView::slotThemeChanged()
     d->errorView->setPalette(palette);
 
     QPalette palette2;
-    palette2.setColor(d->mediaPlayerView->backgroundRole(), kapp->palette().color(QPalette::Base));
-    d->mediaPlayerView->setPalette(palette2);
+    palette2.setColor(d->playerView->backgroundRole(), kapp->palette().color(QPalette::Base));
+    d->playerView->setPalette(palette2);
 }
 
 void MediaPlayerView::slotEscapePressed()
 {
     escapePreview();
-    emit signalBack2Album();
+    emit signalEscapePreview();
 }
 
 int MediaPlayerView::previewMode()
@@ -294,13 +268,37 @@ int MediaPlayerView::previewMode()
 
 void MediaPlayerView::setPreviewMode(int mode)
 {
-    if (mode != MediaPlayerViewPriv::ErrorView && mode != MediaPlayerViewPriv::PlayerView)
+    if (mode != Private::ErrorView && mode != Private::PlayerView)
     {
         return;
     }
 
     setCurrentIndex(mode);
     d->toolBar->raise();
+}
+
+void MediaPlayerView::setCurrentItem(const KUrl& url, bool hasPrevious, bool hasNext)
+{
+    d->prevAction->setEnabled(hasPrevious);
+    d->nextAction->setEnabled(hasNext);
+
+    if (url.isEmpty())
+    {
+        d->currentItem = url;
+        d->player->stop();
+        return;
+    }
+
+    if (d->currentItem == url &&
+        (d->player->isPlaying() || d->player->isPaused()))
+    {
+        return;
+    }
+
+    d->currentItem = url;
+
+    d->player->play(d->currentItem);
+    setPreviewMode(Private::PlayerView);
 }
 
 }  // namespace Digikam

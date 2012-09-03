@@ -25,6 +25,7 @@
 
 // KDE includes
 
+#include <kpassivepopup.h>
 #include <klocale.h>
 #include <kgenericfactory.h>
 #include <klibloader.h>
@@ -59,11 +60,34 @@ namespace DigikamEnhanceImagePlugin
 K_PLUGIN_FACTORY( EnhanceFactory, registerPlugin<ImagePlugin_Enhance>(); )
 K_EXPORT_PLUGIN ( EnhanceFactory("digikamimageplugin_enhance") )
 
-class ImagePlugin_Enhance::ImagePlugin_EnhancePriv
+class EditorToolPassivePopup : public KPassivePopup
 {
 public:
 
-    ImagePlugin_EnhancePriv() :
+    EditorToolPassivePopup(QWidget* const parent)
+        : KPassivePopup(parent), m_parent(parent)
+    {
+    }
+
+protected:
+
+    virtual void positionSelf()
+    {
+        move(m_parent->x() + 30, m_parent->y() + 30);
+    }
+
+private:
+
+    QWidget* m_parent;
+};
+
+// -----------------------------------------------------------------------------------------------
+
+class ImagePlugin_Enhance::Private
+{
+public:
+
+    Private() :
         hotpixelsAction(0),
         lensdistortionAction(0),
         antivignettingAction(0),
@@ -93,7 +117,7 @@ public:
 
 ImagePlugin_Enhance::ImagePlugin_Enhance(QObject* const parent, const QVariantList&)
     : ImagePlugin(parent, "ImagePlugin_Enhance"),
-      d(new ImagePlugin_EnhancePriv)
+      d(new Private)
 {
     d->restorationAction = new KAction(KIcon("restoration"), i18n("Restoration..."), this);
     actionCollection()->addAction("imageplugin_restoration", d->restorationAction);
@@ -192,53 +216,53 @@ void ImagePlugin_Enhance::setEnabledActions(bool b)
 
 void ImagePlugin_Enhance::slotHotPixels()
 {
-    HotPixelsTool* tool = new HotPixelsTool(this);
+    HotPixelsTool* const tool = new HotPixelsTool(this);
     loadTool(tool);
 }
 
 void ImagePlugin_Enhance::slotLensDistortion()
 {
-    LensDistortionTool* tool = new LensDistortionTool(this);
+    LensDistortionTool* const tool = new LensDistortionTool(this);
     loadTool(tool);
 }
 
 void ImagePlugin_Enhance::slotRestoration()
 {
-    RestorationTool* tool = new RestorationTool(this);
+    RestorationTool* const tool = new RestorationTool(this);
     loadTool(tool);
 }
 
 void ImagePlugin_Enhance::slotBlur()
 {
-    BlurTool* tool = new BlurTool(this);
+    BlurTool* const tool = new BlurTool(this);
     loadTool(tool);
 }
 
 void ImagePlugin_Enhance::slotSharpen()
 {
-    SharpenTool* tool = new SharpenTool(this);
+    SharpenTool* const tool = new SharpenTool(this);
     loadTool(tool);
 }
 
 void ImagePlugin_Enhance::slotNoiseReduction()
 {
-    NoiseReductionTool* tool = new NoiseReductionTool(this);
+    NoiseReductionTool* const tool = new NoiseReductionTool(this);
     loadTool(tool);
 }
 
 void ImagePlugin_Enhance::slotLocalContrast()
 {
-    LocalContrastTool* tool = new LocalContrastTool(this);
+    LocalContrastTool* const tool = new LocalContrastTool(this);
     loadTool(tool);
 }
 
 void ImagePlugin_Enhance::slotRedEye()
 {
-    ImageIface iface(0, 0);
+    ImageIface iface;
 
-    if (!iface.selectedWidth() || !iface.selectedHeight())
+    if (iface.selectionRect().size().isNull())
     {
-        RedEyePassivePopup* popup = new RedEyePassivePopup(kapp->activeWindow());
+        EditorToolPassivePopup* popup = new EditorToolPassivePopup(kapp->activeWindow());
         popup->setView(i18n("Red-Eye Correction Tool"),
                        i18n("You need to select a region including the eyes to use "
                             "the red-eye correction tool"));
@@ -248,20 +272,17 @@ void ImagePlugin_Enhance::slotRedEye()
         return;
     }
 
-    RedEyeTool* tool = new RedEyeTool(this);
+    RedEyeTool* const tool = new RedEyeTool(this);
     loadTool(tool);
 }
 
 void ImagePlugin_Enhance::slotInPainting()
 {
-    ImageIface iface(0, 0);
+    ImageIface iface;
 
-    int w = iface.selectedWidth();
-    int h = iface.selectedHeight();
-
-    if (!w || !h)
+    if (iface.selectionRect().size().isNull())
     {
-        InPaintingPassivePopup* popup = new InPaintingPassivePopup(kapp->activeWindow());
+        EditorToolPassivePopup* popup = new EditorToolPassivePopup(kapp->activeWindow());
         popup->setView(i18n("In-Painting Photograph Tool"),
                        i18n("To use this tool, you need to select a region "
                             "to in-paint."));
@@ -271,21 +292,21 @@ void ImagePlugin_Enhance::slotInPainting()
         return;
     }
 
-    InPaintingTool* tool = new InPaintingTool(this);
+    InPaintingTool* const tool = new InPaintingTool(this);
     loadTool(tool);
 }
 
 void ImagePlugin_Enhance::slotLensAutoFix()
 {
 #ifdef HAVE_GLIB2
-    LensAutoFixTool* tool = new LensAutoFixTool(this);
+    LensAutoFixTool* const tool = new LensAutoFixTool(this);
     loadTool(tool);
 #endif // HAVE_GLIB2
 }
 
 void ImagePlugin_Enhance::slotAntiVignetting()
 {
-    AntiVignettingTool* tool = new AntiVignettingTool(this);
+    AntiVignettingTool* const tool = new AntiVignettingTool(this);
     loadTool(tool);
 }
 

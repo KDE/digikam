@@ -125,17 +125,17 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
     // -------------------------------------------------------------
 
     QString temp;
-    ImageIface iface(0, 0);
+    ImageIface iface;
 
     d->gboxSettings   = new EditorToolSettings;
     d->gboxSettings->setTools(EditorToolSettings::ColorGuide);
 
     QLabel* label1    = new QLabel(i18n("New width:"));
-    d->newWidthLabel  = new QLabel(temp.setNum( iface.originalWidth()) + i18n(" px"));
+    d->newWidthLabel  = new QLabel(temp.setNum( iface.originalSize().width()) + i18n(" px"));
     d->newWidthLabel->setAlignment( Qt::AlignBottom | Qt::AlignRight );
 
     QLabel* label2    = new QLabel(i18n("New height:"));
-    d->newHeightLabel = new QLabel(temp.setNum( iface.originalHeight()) + i18n(" px"));
+    d->newHeightLabel = new QLabel(temp.setNum( iface.originalSize().height()) + i18n(" px"));
     d->newHeightLabel->setAlignment( Qt::AlignBottom | Qt::AlignRight );
 
     // -------------------------------------------------------------
@@ -312,21 +312,21 @@ void FreeRotationTool::prepareEffect()
 {
     FreeRotationContainer settings = d->settingsView->settings();
     ImageIface* iface              = d->previewWidget->imageIface();
-    DImg preview                   = iface->getPreviewImg();
+    DImg preview                   = iface->preview();
     settings.backgroundColor       = toolView()->backgroundRole();
-    settings.orgW                  = iface->originalWidth();
-    settings.orgH                  = iface->originalHeight();
+    settings.orgW                  = iface->originalSize().width();
+    settings.orgH                  = iface->originalSize().height();
     setFilter(new FreeRotationFilter(&preview, this, settings));
 }
 
 void FreeRotationTool::prepareFinal()
 {
-    ImageIface iface(0, 0);
+    ImageIface iface;
     FreeRotationContainer settings = d->settingsView->settings();
-    DImg* orgImage                 = iface.getOriginalImg();
+    DImg* orgImage                 = iface.original();
     settings.backgroundColor       = Qt::black;
-    settings.orgW                  = iface.originalWidth();
-    settings.orgH                  = iface.originalHeight();
+    settings.orgW                  = iface.originalSize().width();
+    settings.orgH                  = iface.originalSize().height();
 
     setFilter(new FreeRotationFilter(orgImage, this, settings));
 }
@@ -334,8 +334,8 @@ void FreeRotationTool::prepareFinal()
 void FreeRotationTool::putPreviewData()
 {
     ImageIface* iface = d->previewWidget->imageIface();
-    int w             = iface->previewWidth();
-    int h             = iface->previewHeight();
+    int w             = iface->previewSize().width();
+    int h             = iface->previewSize().height();
 
     DImg imTemp = filter()->getTargetImage().smoothScale(w, h, Qt::KeepAspectRatio);
     DImg imDest(w, h, filter()->getTargetImage().sixteenBit(), filter()->getTargetImage().hasAlpha());
@@ -344,22 +344,22 @@ void FreeRotationTool::putPreviewData()
     imDest.fill(DColor(background, filter()->getTargetImage().sixteenBit()));
     imDest.bitBltImage(&imTemp, (w-imTemp.width())/2, (h-imTemp.height())/2);
 
-    iface->putPreviewImage((imDest.smoothScale(iface->previewWidth(), iface->previewHeight())).bits());
+    iface->putPreview(imDest.smoothScale(iface->previewSize()));
     d->previewWidget->updatePreview();
 
     QString temp;
     QSize newSize = dynamic_cast<FreeRotationFilter*>(filter())->getNewSize();
-    int new_w     = (newSize.width()  == -1) ? iface->originalWidth()  : newSize.width();
-    int new_h     = (newSize.height() == -1) ? iface->originalHeight() : newSize.height();
+    int new_w     = (newSize.width()  == -1) ? iface->originalSize().width()  : newSize.width();
+    int new_h     = (newSize.height() == -1) ? iface->originalSize().height() : newSize.height();
     d->newWidthLabel->setText(temp.setNum(new_w)  + i18n(" px") );
     d->newHeightLabel->setText(temp.setNum(new_h) + i18n(" px") );
 }
 
 void FreeRotationTool::putFinalData()
 {
-    ImageIface iface(0, 0);
+    ImageIface iface;
     DImg targetImage = filter()->getTargetImage();
-    iface.putOriginalImage(i18n("Free Rotation"), filter()->filterAction(), targetImage.bits(), targetImage.width(), targetImage.height());
+    iface.putOriginal(i18n("Free Rotation"), filter()->filterAction(), targetImage);
 }
 
 QString FreeRotationTool::generateButtonLabel(const QPoint& p)

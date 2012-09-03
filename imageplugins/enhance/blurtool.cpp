@@ -167,14 +167,14 @@ void BlurTool::putPreviewData()
 
 void BlurTool::prepareFinal()
 {
-    ImageIface iface(0, 0);
-    setFilter(new BlurFilter(iface.getOriginalImg(), this, d->radiusInput->value()));
+    ImageIface iface;
+    setFilter(new BlurFilter(iface.original(), this, d->radiusInput->value()));
 }
 
 void BlurTool::putFinalData()
 {
-    ImageIface iface(0, 0);
-    iface.putOriginalImage(i18n("Gaussian Blur"), filter()->filterAction(), filter()->getTargetImage().bits());
+    ImageIface iface;
+    iface.putOriginal(i18n("Gaussian Blur"), filter()->filterAction(), filter()->getTargetImage());
 }
 
 }  // namespace DigikamEnhanceImagePlugin

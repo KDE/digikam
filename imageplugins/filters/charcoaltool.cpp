@@ -192,8 +192,8 @@ void CharcoalTool::prepareFinal()
     double pencil = (double)d->pencilInput->value()/10.0;
     double smooth = (double)d->smoothInput->value();
 
-    ImageIface iface(0, 0);
-    setFilter(new CharcoalFilter(iface.getOriginalImg(), this, pencil, smooth));
+    ImageIface iface;
+    setFilter(new CharcoalFilter(iface.original(), this, pencil, smooth));
 }
 
 void CharcoalTool::putPreviewData()
@@ -203,8 +203,8 @@ void CharcoalTool::putPreviewData()
 
 void CharcoalTool::putFinalData()
 {
-    ImageIface iface(0, 0);
-    iface.putOriginalImage(i18n("Charcoal"), filter()->filterAction(), filter()->getTargetImage().bits());
+    ImageIface iface;
+    iface.putOriginal(i18n("Charcoal"), filter()->filterAction(), filter()->getTargetImage());
 }
 
 }  // namespace DigikamFxFiltersImagePlugin

@@ -167,8 +167,8 @@ FilmTool::FilmTool(QObject* const parent)
     setToolName(i18n("Color Negative Film"));
     setToolIcon(SmallIcon("colorneg"));
 
-    ImageIface iface(0, 0);
-    d->originalImage = iface.getOriginalImg();
+    ImageIface iface;
+    d->originalImage = iface.original();
 
     d->histoSegments = d->originalImage->sixteenBit() ? 65535 : 255;
     d->levels        = new ImageLevels(d->originalImage->sixteenBit());
@@ -667,8 +667,8 @@ void FilmTool::prepareEffect()
 
 void FilmTool::prepareFinal()
 {
-    ImageIface iface(0, 0);
-    setFilter(new FilmFilter(iface.getOriginalImg(), this, d->filmContainer));
+    ImageIface iface;
+    setFilter(new FilmFilter(iface.original(), this, d->filmContainer));
 }
 
 void FilmTool::putPreviewData()
@@ -689,8 +689,8 @@ void FilmTool::putPreviewData()
 
 void FilmTool::putFinalData()
 {
-    ImageIface iface(0, 0);
-    iface.putOriginalImage(i18n("Film"), filter()->filterAction(), filter()->getTargetImage().bits());
+    ImageIface iface;
+    iface.putOriginal(i18n("Film"), filter()->filterAction(), filter()->getTargetImage());
 }
 
 bool FilmTool::eventFilter(QObject* obj, QEvent* ev)

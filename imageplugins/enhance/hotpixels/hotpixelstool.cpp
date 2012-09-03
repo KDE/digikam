@@ -268,8 +268,8 @@ void HotPixelsTool::prepareFinal()
 {
     int interpolationMethod = d->filterMethodCombo->currentIndex();
 
-    ImageIface iface(0, 0);
-    setFilter(dynamic_cast<DImgThreadedFilter*>(new HotPixelFixer(iface.getOriginalImg(), this, d->hotPixelsList, interpolationMethod)));
+    ImageIface iface;
+    setFilter(dynamic_cast<DImgThreadedFilter*>(new HotPixelFixer(iface.original(), this, d->hotPixelsList, interpolationMethod)));
 }
 
 void HotPixelsTool::putPreviewData()
@@ -279,8 +279,8 @@ void HotPixelsTool::putPreviewData()
 
 void HotPixelsTool::putFinalData()
 {
-    ImageIface iface(0, 0);
-    iface.putOriginalImage(i18n("Hot Pixels Correction"), filter()->filterAction(), filter()->getTargetImage().bits());
+    ImageIface iface;
+    iface.putOriginal(i18n("Hot Pixels Correction"), filter()->filterAction(), filter()->getTargetImage());
 }
 
 void HotPixelsTool::slotBlackFrame(const QList<HotPixel>& hpList, const KUrl& blackFrameURL)

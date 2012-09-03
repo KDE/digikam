@@ -6,8 +6,8 @@
  * Date        : 2004-06-06
  * Description : Red eyes correction tool for image editor
  *
- * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
+ * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -25,10 +25,6 @@
 #ifndef REDEYETOOL_H
 #define REDEYETOOL_H
 
-// KDE includes
-
-#include <kpassivepopup.h>
-
 // Local includes
 
 #include "editortool.h"
@@ -37,8 +33,8 @@ class QColor;
 
 namespace Digikam
 {
-class DImg;
-class DColor;
+    class DImg;
+    class DColor;
 }
 
 using namespace Digikam;
@@ -46,34 +42,13 @@ using namespace Digikam;
 namespace DigikamEnhanceImagePlugin
 {
 
-class RedEyePassivePopup : public KPassivePopup
-{
-public:
-
-    RedEyePassivePopup(QWidget* parent)
-        : KPassivePopup(parent), m_parent(parent)
-    {
-    }
-
-protected:
-
-    virtual void positionSelf()
-    {
-        move(m_parent->x() + 30, m_parent->y() + 30);
-    }
-
-private:
-
-    QWidget* m_parent;
-};
-
 class RedEyeTool : public EditorTool
 {
     Q_OBJECT
 
 public:
 
-    RedEyeTool(QObject* parent);
+    RedEyeTool(QObject* const parent);
     ~RedEyeTool();
 
 private Q_SLOTS:
@@ -94,16 +69,8 @@ private:
 
 private:
 
-    enum RedThresold
-    {
-        Mild = 0,
-        Aggressive
-    };
-
-private:
-
-    class RedEyeToolPriv;
-    RedEyeToolPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace DigikamEnhanceImagePlugin

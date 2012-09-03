@@ -6,7 +6,7 @@
  * Date        : 2008-08-21
  * Description : Editor tool settings template box
  *
- * Copyright (C) 2008-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2008-2011 by Andi Clemens <andi dot clemens at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -73,7 +73,7 @@ public:
 
 public:
 
-    EditorToolSettings(QWidget* parent = 0);
+    EditorToolSettings(QWidget* const parent = 0);
     ~EditorToolSettings();
 
     void setButtons(Buttons buttonMask);
@@ -81,11 +81,6 @@ public:
     void setHistogramType(HistogramBoxType type);
     void setToolIcon(const QPixmap& pixmap);
     void setToolName(const QString& name);
-
-    virtual void setBusy(bool)   {};
-    virtual void writeSettings() {};
-    virtual void readSettings()  {};
-    virtual void resetSettings() {};
 
     int marginHint();
     int spacingHint();
@@ -103,6 +98,10 @@ public:
     void enableButton(int buttonCode, bool state);
 
     virtual QSize minimumSizeHint() const;
+    virtual void setBusy(bool)   {};
+    virtual void writeSettings() {};
+    virtual void readSettings()  {};
+    virtual void resetSettings() {};
 
 Q_SIGNALS:
 
@@ -118,8 +117,8 @@ Q_SIGNALS:
 
 private:
 
-    class EditorToolSettingsPriv;
-    EditorToolSettingsPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

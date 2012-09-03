@@ -49,11 +49,6 @@
 #include <kstandarddirs.h>
 #include <kglobalsettings.h>
 
-// LibKIPI includes
-
-#include <libkipi/plugin.h>
-#include <libkipi/pluginloader.h>
-
 // Local includes
 
 #include "albumsettings.h"
@@ -81,7 +76,7 @@ class ImagePreviewViewItem : public DImgPreviewItem
 {
 public:
 
-    ImagePreviewViewItem(ImagePreviewView* view)
+    ImagePreviewViewItem(ImagePreviewView* const view)
         : m_view(view), m_group(0)
     {
         setAcceptHoverEvents(true);
@@ -132,27 +127,27 @@ protected:
 
 // ---------------------------------------------------------------------
 
-class ImagePreviewView::ImagePreviewViewPriv
+class ImagePreviewView::Private
 {
 public:
 
-    ImagePreviewViewPriv()
+    Private()
     {
-        peopleTagsShown    = false;
-        fullSize           = 0;
-        scale              = 1.0;
-        item               = 0;
-        isValid            = false;
-        toolBar            = 0;
-        back2AlbumAction   = 0;
-        prevAction         = 0;
-        nextAction         = 0;
-        rotLeftAction      = 0;
-        rotRightAction     = 0;
-        peopleToggleAction = 0;
-        addPersonAction    = 0;
-        faceGroup          = 0;
-        mode               = ImagePreviewView::IconViewPreview;
+        peopleTagsShown     = false;
+        fullSize            = 0;
+        scale               = 1.0;
+        item                = 0;
+        isValid             = false;
+        toolBar             = 0;
+        escapePreviewAction = 0;
+        prevAction          = 0;
+        nextAction          = 0;
+        rotLeftAction       = 0;
+        rotRightAction      = 0;
+        peopleToggleAction  = 0;
+        addPersonAction     = 0;
+        faceGroup           = 0;
+        mode                = ImagePreviewView::IconViewPreview;
     }
 
     bool                   peopleTagsShown;
@@ -164,7 +159,7 @@ public:
 
     ImagePreviewViewItem*  item;
 
-    QAction*               back2AlbumAction;
+    QAction*               escapePreviewAction;
     QAction*               prevAction;
     QAction*               nextAction;
     QAction*               rotLeftAction;
@@ -178,8 +173,8 @@ public:
     FaceGroup*             faceGroup;
 };
 
-ImagePreviewView::ImagePreviewView(QWidget* parent, Mode mode)
-    : GraphicsDImgView(parent), d(new ImagePreviewViewPriv)
+ImagePreviewView::ImagePreviewView(QWidget* const parent, Mode mode)
+    : GraphicsDImgView(parent), d(new Private)
 {
     d->mode = mode;
     d->item = new ImagePreviewViewItem(this);
@@ -207,7 +202,7 @@ ImagePreviewView::ImagePreviewView(QWidget* parent, Mode mode)
 
     // ------------------------------------------------------------
 
-    d->back2AlbumAction   = new QAction(SmallIcon("folder-image"),        i18n("Back to Album"),                  this);
+    d->escapePreviewAction   = new QAction(SmallIcon("folder-image"),        i18n("Escape preview"),                 this);
     d->prevAction         = new QAction(SmallIcon("go-previous"),         i18nc("go to previous image", "Back"),  this);
     d->nextAction         = new QAction(SmallIcon("go-next"),             i18nc("go to next image", "Forward"),   this);
     d->rotLeftAction      = new QAction(SmallIcon("object-rotate-left"),  i18nc("@info:tooltip", "Rotate Left"),  this);
@@ -223,7 +218,7 @@ ImagePreviewView::ImagePreviewView(QWidget* parent, Mode mode)
     {
         d->toolBar->addAction(d->prevAction);
         d->toolBar->addAction(d->nextAction);
-        d->toolBar->addAction(d->back2AlbumAction);
+        d->toolBar->addAction(d->escapePreviewAction);
     }
 
     d->toolBar->addAction(d->rotLeftAction);
@@ -237,8 +232,8 @@ ImagePreviewView::ImagePreviewView(QWidget* parent, Mode mode)
     connect(d->nextAction, SIGNAL(triggered()),
             this, SIGNAL(toNextImage()));
 
-    connect(d->back2AlbumAction, SIGNAL(triggered()),
-            this, SIGNAL(signalBack2Album()));
+    connect(d->escapePreviewAction, SIGNAL(triggered()),
+            this, SIGNAL(signalEscapePreview()));
 
     connect(d->rotLeftAction, SIGNAL(triggered()),
             this, SLOT(slotRotateLeft()));
@@ -264,7 +259,7 @@ ImagePreviewView::ImagePreviewView(QWidget* parent, Mode mode)
             this, SIGNAL(signalPrevItem()));
 
     connect(this, SIGNAL(activated()),
-            this, SIGNAL(signalBack2Album()));
+            this, SIGNAL(signalEscapePreview()));
 
     connect(ThemeManager::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
@@ -385,7 +380,7 @@ void ImagePreviewView::showContextMenu(const ImageInfo& info, QGraphicsSceneCont
     {
         cmhelper.addAction(d->prevAction, true);
         cmhelper.addAction(d->nextAction, true);
-        cmhelper.addAction(d->back2AlbumAction);
+        cmhelper.addAction(d->escapePreviewAction);
         cmhelper.addGotoMenu(idList);
         cmhelper.addSeparator();
     }

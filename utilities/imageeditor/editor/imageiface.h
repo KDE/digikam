@@ -6,8 +6,8 @@
  * Date        : 2004-02-14
  * Description : image data interface for image plugins
  *
- * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2004-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
+ * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -52,131 +52,68 @@ class DIGIKAM_EXPORT ImageIface
 {
 public:
 
-    explicit ImageIface(int w = 0, int h = 0);
-    ~ImageIface();
-
-    /** Use this method to use the current selection in editor instead the full
-     *  image to render the preview.
+    /** Standard constructor. Size is the constrain dimension of preview. This can be null size.
      */
-    void setPreviewType(bool useSelect = false);
+    explicit ImageIface(const QSize& size = QSize(0, 0));
+    ~ImageIface();
 
     /** Return 'true' if the preview is rendered using the current selection in editor.
      *  Return 'false' if the preview is rendered using the full image in editor.
      */
     bool previewType() const;
 
-    /** Return image data for the current, scaled preview image.
-     *  The preview...() methods provide the characteristics of the data
-     *  (width, height, sixteen bit, alpha).
-     *  Ownership of the returned buffer is passed to the caller.
+    /** Use this method to use the current selection in editor instead the full
+     *  image to render the preview.
      */
-    uchar* getPreviewImage() const;
+    void setPreviewType(bool useSelection = false);
+
+    /** Sets preview size and returns new preview as with getPreview.
+     *  The parameters are only hints, previewSize() may differ from size.
+     */
+    DImg  setPreviewSize(const QSize& size) const;
+
+    /** Methods to get/set preview image information.
+     */
+    QSize previewSize()        const;
+    bool  previewHasAlpha()    const;
+    bool  previewSixteenBit()  const;
 
     /** Return a DImg object representing the preview image.
      */
-    DImg getPreviewImg() const;
+    DImg  preview() const;
 
-    /** Return image data for the current original image selection.
-     *  The selectionWidth(), selectionHeight(), originalSixteenBit()
-     *  and originalHasAlpha() methods provide the characteristics of the data.
-     *  Ownership of the returned buffer is passed to the caller.
+    /** Return current image selection position and size into original image coordinates.
      */
-    uchar* getImageSelection() const;
+    QRect selectionRect() const;
 
-    /** Return image data for the original image.
-     *  The preview...() methods provide the characteristics of the data.
-     *  Ownership of the returned buffer is passed to the caller.
+    /** Return a DImg object representing the current original image selection.
      */
-    uchar* getOriginalImage() const;
-
-    /** Return a pointer to the DImg object representing the original image.
-     *  This object may not be modified or stored. Make copies if you need.
-     */
-    DImg*  getOriginalImg() const;
-
-    /** Replace the image data of the original image with the given data.
-     *  The characteristics of the data must match the characteristics of
-     *  the original image as returned by the original...() methods,
-     *  respectively the given width and height parameters.
-     *  No ownership of the data pointer is assumed.
-     *  If w == -1 and h == -1, the size is unchanged.
-     *  Caller is an i18n'ed string that will be shown as the undo/redo action name.
-     */
-    void   putOriginalImage(const QString& caller, const FilterAction& action, uchar* data, int w = -1, int h = -1);
-
-    /** Set the color profile of the original image.
-     */
-    void   putOriginalIccProfile(const IccProfile& profile);
-
-    /** Replace the data of the current original image selection with the given data.
-     *  The characteristics of the data must match the characteristics of the current
-     *  selection as returned by the selectionWidth(), selectionHeight(),
-     *  originalSixteenBit() and originalHasAlpha() methods.
-     *  No ownership of the data pointer is assumed.
-     *  Caller is an i18n'ed string that will be shown as the undo/redo action name.
-     */
-    void   putImageSelection(const QString& caller, const FilterAction& action, uchar* data);
-
-    /** Replace the stored target preview data with the given data.
-     *  The characteristics of the data must match the characteristics of the current
-     *  as returned by the preview...() methods.
-     *  The target preview data is used by the paint() and
-     *  getColorInfoFromTargetPreviewImage() methods.
-     *  The data returned by getPreviewImage() is unaffected.
-     *  No ownership of the data pointer is assumed.
-     */
-    void   putPreviewImage(uchar* data);
-
-    /** Set the color profile of the preview image.
-     */
-    void   putPreviewIccProfile(const IccProfile& profile);
+    DImg  selection() const;
 
     /** Get colors from original, (unchanged) preview
      *  or target preview (set by putPreviewImage) image.
      */
-    DColor getColorInfoFromOriginalImage(const QPoint& point) const;
-    DColor getColorInfoFromPreviewImage(const QPoint& point) const;
-    DColor getColorInfoFromTargetPreviewImage(const QPoint& point) const;
+    DColor colorInfoFromOriginal(const QPoint& point)      const;
+    DColor colorInfoFromPreview(const QPoint& point)       const;
+    DColor colorInfoFromTargetPreview(const QPoint& point) const;
 
-    /** Standard methods to get/set preview information.
+    /** Methods to get/set original image information.
      */
-    int  previewWidth()      const;
-    int  previewHeight()     const;
-    bool previewHasAlpha()   const;
-    bool previewSixteenBit() const;
+    QSize originalSize()       const;
+    bool  originalHasAlpha()   const;
+    bool  originalSixteenBit() const;
 
-    /** Original image information.
+    /** Original image metadata.methods
      */
-    int  originalWidth()      const;
-    int  originalHeight()     const;
-    bool originalHasAlpha()   const;
-    bool originalSixteenBit() const;
-
-    /** Original image metadata.
-     */
-    IccProfile getOriginalIccProfile() const;
-    KExiv2Data getOriginalMetadata() const;
+    IccProfile originalIccProfile()        const;
+    PhotoInfoContainer originalPhotoInfo() const;
+    KExiv2Data originalMetadata()          const;
     void       setOriginalMetadata(const KExiv2Data& meta);
 
-    /** Get photograph information from original image.
+    /** Return a pointer to the DImg object representing the original image.
+     *  This object may not be modified or stored. Make copies if you need.
      */
-    PhotoInfoContainer getPhotographInformation() const;
-
-    /** Sets preview size and returns new preview data as with getPreviewImage.
-     *  The parameters are only hints, previewWidth() and previewHeight()
-     *  may differ from w and h.
-     */
-    uchar* setPreviewImageSize(int w, int h) const;
-
-    /** Standard methods to get image selection information.
-     */
-    int  selectedWidth()  const;
-    int  selectedHeight() const;
-
-    /** Get selected (X, Y) position on the top/left corner of the original image.
-     */
-    int  selectedXOrg() const;
-    int  selectedYOrg() const;
+    DImg* original() const;
 
     /** Convert depth of original image.
      */
@@ -189,14 +126,47 @@ public:
 
     /** Paint the current target preview image (or the preview image,
      *  if putPreviewImage has not been called) on the given paint device.
-     *   at x|y, with given maximum width and height.
+     *  at x|y, with given maximum width and height taken from rectangle rect.
      */
-    void paint(QPaintDevice* device, int x, int y, int w, int h, QPainter* painter = 0);
+    void paint(QPaintDevice* const device, const QRect& rect, QPainter* const painter = 0);
+
+    /** Set the color profile of the original image.
+     */
+    void putOriginalIccProfile(const IccProfile& profile);
+
+    /** Set the color profile of the preview image.
+     */
+    void putPreviewIccProfile(const IccProfile& profile);
+
+    /** Replace the data of the current original image selection with the given data.
+     *  The characteristics of the data must match the characteristics of the current
+     *  selection as returned by the selectionWidth(), selectionHeight(),
+     *  originalSixteenBit() and originalHasAlpha() methods.
+     *  Caller is an i18n'ed string that will be shown as the undo/redo action name.
+     */
+    void putSelection(const QString& caller, const FilterAction& action, const DImg& img);
+
+    /** Replace the stored target preview with the given image.
+     *  The characteristics of the data must match the characteristics of the current
+     *  as returned by the preview...() methods.
+     *  The target preview image is used by the paint() and
+     *  colorInfoFromTargetPreview() methods.
+     *  The image returned by getPreview() is unaffected.
+     */
+    void putPreview(const DImg& img);
+
+    /** Replace the data of the original with the given image.
+     *  The characteristics of the data must match the characteristics of
+     *  the original image as returned by the original...() methods,
+     *  The size of image can be changed.
+     *  Caller is an i18n'ed string that will be shown as the undo/redo action name.
+     */
+    void putOriginal(const QString& caller, const FilterAction& action, const DImg& img);
 
 private:
 
-    class ImageIfacePriv;
-    ImageIfacePriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

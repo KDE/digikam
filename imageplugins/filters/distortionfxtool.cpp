@@ -345,9 +345,7 @@ void DistortionFXTool::prepareEffect()
     int e = d->effectType->currentIndex();
 
     ImageIface* iface = d->previewWidget->imageIface();
-    QScopedArrayPointer<uchar> data(iface->getPreviewImage());
-    DImg image(iface->previewWidth(), iface->previewHeight(), iface->previewSixteenBit(),
-               iface->previewHasAlpha(), data.data());
+    DImg image        = iface->preview();
 
     setFilter(new DistortionFXFilter(&image, this, e, l, f));
 }
@@ -365,24 +363,24 @@ void DistortionFXTool::prepareFinal()
     int f = d->iterationInput->value();
     int e = d->effectType->currentIndex();
 
-    ImageIface iface(0, 0);
+    ImageIface iface;
 
-    setFilter(new DistortionFXFilter(iface.getOriginalImg(), this, e, l, f));
+    setFilter(new DistortionFXFilter(iface.original(), this, e, l, f));
 }
 
 void DistortionFXTool::putPreviewData()
 {
     ImageIface* iface = d->previewWidget->imageIface();
-    DImg imDest       = filter()->getTargetImage().smoothScale(iface->previewWidth(), iface->previewHeight());
-    iface->putPreviewImage(imDest.bits());
+    DImg imDest       = filter()->getTargetImage().smoothScale(iface->previewSize());
+    iface->putPreview(imDest);
 
     d->previewWidget->updatePreview();
 }
 
 void DistortionFXTool::putFinalData()
 {
-    ImageIface iface(0, 0);
-    iface.putOriginalImage(i18n("Distortion Effects"), filter()->filterAction(), filter()->getTargetImage().bits());
+    ImageIface iface;
+    iface.putOriginal(i18n("Distortion Effects"), filter()->filterAction(), filter()->getTargetImage());
 }
 
 void DistortionFXTool::renderingFinished()

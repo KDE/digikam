@@ -45,11 +45,11 @@ class FaceTagsHelper
 {
 public:
 
-    static QString  tagPath(const QString& name, int parentId);
-    static void     makeFaceTag(int tagId, const QString& fullName);
-    static int      findFirstTagWithProperty(const QString& property, const QString& value = QString());
-    static int      tagForName(const QString& name, int tagId, int parentId,
-                        const QString& givenFullName, bool convert, bool create);
+    static QString tagPath(const QString& name, int parentId);
+    static void    makeFaceTag(int tagId, const QString& fullName);
+    static int     findFirstTagWithProperty(const QString& property, const QString& value = QString());
+    static int     tagForName(const QString& name, int tagId, int parentId,
+                              const QString& givenFullName, bool convert, bool create);
 };
 
 // --- Private methods ---
@@ -86,7 +86,7 @@ void FaceTagsHelper::makeFaceTag(int tagId, const QString& fullName)
 }
 
 int FaceTagsHelper::tagForName(const QString& name, int tagId, int parentId, const QString& givenFullName,
-                          bool convert, bool create)
+                               bool convert, bool create)
 {
     if (name.isEmpty() && givenFullName.isEmpty() && !tagId)
     {
@@ -119,6 +119,7 @@ int FaceTagsHelper::tagForName(const QString& name, int tagId, int parentId, con
 
     // First attempt: Find by full name in "person" attribute
     QList<int> candidates = TagsCache::instance()->tagsWithProperty(TagPropertyName::person(), fullName);
+
     foreach(int id, candidates)
     {
         kDebug() << "Candidate with set full name:" << id << fullName;
@@ -275,7 +276,8 @@ int FaceTags::personParentTag()
 {
     // check default
     QString i18nName = i18nc("People on your photos", "People");
-    int tagId = TagsCache::instance()->tagForPath(i18nName);
+    int tagId        = TagsCache::instance()->tagForPath(i18nName);
+
     if (tagId)
     {
         return tagId;
@@ -283,6 +285,7 @@ int FaceTags::personParentTag()
 
     // employ a heuristic
     QList<int> personTags = allPersonTags();
+
     if (!personTags.isEmpty())
     {
         // we find the most toplevel parent tag of a person tag
@@ -312,16 +315,15 @@ int FaceTags::unknownPersonTagId()
         return ids.first();
     }
 
-    int unknownPersonTagId = TagsCache::instance()->getOrCreateTag(FaceTagsHelper::tagPath(
-          i18nc("The list of detected faces from the collections but not recognized", "Unknown"),
-          personParentTag())
-        );
+    int unknownPersonTagId = TagsCache::instance()->getOrCreateTag(
+                                        FaceTagsHelper::tagPath(
+                                        i18nc("The list of detected faces from the collections but not recognized", "Unknown"),
+                                        personParentTag()));
     TagProperties props(unknownPersonTagId);
-    props.setProperty(TagPropertyName::person(), QString()); // no name associated
+    props.setProperty(TagPropertyName::person(), QString());        // no name associated
     props.setProperty(TagPropertyName::unknownPerson(), QString()); // special property
 
     return unknownPersonTagId;
 }
-
 
 } // Namespace Digikam

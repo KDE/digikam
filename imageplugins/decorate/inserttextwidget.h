@@ -6,7 +6,7 @@
  * Date        : 2005-02-14
  * Description : a widget to insert a text over an image.
  *
- * Copyright (C) 2005-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -92,7 +92,7 @@ public:
 
 public:
 
-    InsertTextWidget(int w, int h, QWidget* parent=0);
+    InsertTextWidget(int w, int h, QWidget* const parent=0);
     ~InsertTextWidget();
 
     ImageIface* imageIface() const;
@@ -118,7 +118,7 @@ protected:
     void mouseMoveEvent(QMouseEvent*);
 
     void makePixmap();
-    QRect composeImage(DImg* image, QPainter* destPainter,
+    QRect composeImage(DImg* const image, QPainter* const destPainter,
                        int x, int y,
                        QFont font, float pointSize, int textRotation, QColor textColor,
                        int alignMode, const QString& textString,
@@ -127,8 +127,8 @@ protected:
 
 private:
 
-    class InsertTextWidgetPriv;
-    InsertTextWidgetPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace DigikamDecorateImagePlugin

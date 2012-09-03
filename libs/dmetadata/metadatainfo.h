@@ -6,8 +6,8 @@
  * Date        : 2007-09-12
  * Description : Metadata info containers
  *
- * Copyright (C) 2007-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2009-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -160,7 +160,7 @@ enum Field
     IptcCoreContactInfoPhone,         /// String
     IptcCoreContactInfoWebUrl,        /// String
 
-    Faces                             /// QMap<QString, QVariant>
+    Faces,                            /// QMap<QString, QVariant>
 
     // Description, DescriptionWriter, Headline, Title: see above
     // DateCreated: see above, CreationDate
@@ -168,6 +168,17 @@ enum Field
     // not supported: CreatorContactInfo
 
     // Dublin Core: Description, Title, Subject (keywords) see above
+
+    AspectRatio,                      /// String
+    AudioBitRate,                     /// String
+    AudioChannelType,                 /// String
+    AudioCompressor,                  /// String
+    Duration,                         /// String
+    FrameRate,                        /// String
+    VideoCodec,                       /// String
+    VideoBitDepth,                    /// String
+    VideoHeight,                      /// String
+    VideoWidth                        /// String
 };
 
 } // namespace MetadataInfo

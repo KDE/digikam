@@ -35,7 +35,7 @@ class KAction;
 namespace Digikam
 {
 
-class CameraUI;
+class ImportUI;
 
 class CameraType
 {
@@ -57,7 +57,7 @@ public:
     void setStartingNumber(int sn);
     void setAction(KAction* const action);
     void setValid(bool valid);
-    void setCurrentCameraUI(CameraUI* const cameraui);
+    void setCurrentImportUI(ImportUI* const importui);
 
     QString   title()           const;
     QString   model()           const;
@@ -66,7 +66,7 @@ public:
     int       startingNumber()  const;
     KAction*  action()          const;
     bool      valid()           const;
-    CameraUI* currentCameraUI() const;
+    ImportUI* currentImportUI() const;
 
 private:
 

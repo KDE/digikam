@@ -327,10 +327,8 @@ void RestorationTool::prepareEffect()
 
 void RestorationTool::prepareFinal()
 {
-    ImageIface iface(0, 0);
-    QScopedArrayPointer<uchar> data(iface.getOriginalImage());
-    DImg originalImage(iface.originalWidth(), iface.originalHeight(),
-                       iface.originalSixteenBit(), iface.originalHasAlpha(), data.data());
+    ImageIface iface;
+    DImg originalImage = iface.original()->copy();
 
     setFilter(new GreycstorationFilter(&originalImage,
                                        d->settingsWidget->settings(), GreycstorationFilter::Restore,
@@ -345,8 +343,8 @@ void RestorationTool::putPreviewData()
 
 void RestorationTool::putFinalData()
 {
-    ImageIface iface(0, 0);
-    iface.putOriginalImage(i18n("Restoration"), filter()->filterAction(), filter()->getTargetImage().bits());
+    ImageIface iface;
+    iface.putOriginal(i18n("Restoration"), filter()->filterAction(), filter()->getTargetImage());
 }
 
 void RestorationTool::slotLoadSettings()

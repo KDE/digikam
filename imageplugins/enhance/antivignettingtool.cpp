@@ -144,9 +144,9 @@ void AntiVignettingTool::prepareEffect()
     AntiVignettingContainer settings = d->settingsView->settings();
 
     ImageIface* iface = d->previewWidget->imageIface();
-    int previewWidth  = iface->previewWidth();
-    int previewHeight = iface->previewHeight();
-    DImg imTemp       = iface->getOriginalImg()->smoothScale(previewWidth, previewHeight, Qt::KeepAspectRatio);
+    int previewWidth  = iface->previewSize().width();
+    int previewHeight = iface->previewSize().height();
+    DImg imTemp       = iface->original()->smoothScale(previewWidth, previewHeight, Qt::KeepAspectRatio);
 
     setFilter(new AntiVignettingFilter(&imTemp, this, settings));
 }
@@ -155,15 +155,15 @@ void AntiVignettingTool::prepareFinal()
 {
     AntiVignettingContainer settings = d->settingsView->settings();
 
-    ImageIface iface(0, 0);
-    setFilter(new AntiVignettingFilter(iface.getOriginalImg(), this, settings));
+    ImageIface iface;
+    setFilter(new AntiVignettingFilter(iface.original(), this, settings));
 }
 
 void AntiVignettingTool::putPreviewData()
 {
     ImageIface* iface = d->previewWidget->imageIface();
-    DImg preview      = filter()->getTargetImage().smoothScale(iface->previewWidth(), iface->previewHeight());
-    iface->putPreviewImage(preview.bits());
+    DImg preview      = filter()->getTargetImage().smoothScale(iface->previewSize());
+    iface->putPreview(preview);
     d->previewWidget->updatePreview();
 }
 
@@ -172,7 +172,7 @@ void AntiVignettingTool::putFinalData()
     ImageIface* iface = d->previewWidget->imageIface();
     DImg finalImage   = filter()->getTargetImage();
 
-    iface->putOriginalImage(i18n("Vignetting Correction"), filter()->filterAction(), finalImage.bits());
+    iface->putOriginal(i18n("Vignetting Correction"), filter()->filterAction(), finalImage);
 }
 
 }  // namespace DigikamEnhanceImagePlugin

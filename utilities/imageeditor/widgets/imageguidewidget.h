@@ -6,7 +6,7 @@
  * Date        : 2004-08-20
  * Description : a widget to display an image with guides
  *
- * Copyright (C) 2004-2011 Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2012 Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -68,18 +68,19 @@ public:
 
 public:
 
-    explicit ImageGuideWidget(QWidget* parent = 0,
+    explicit ImageGuideWidget(QWidget* const parent = 0,
                               bool spotVisible = true, int guideMode = PickColorMode,
                               const QColor& guideColor = Qt::red, int guideSize = 1,
                               bool blink = false, bool useImageSelection = false);
     ~ImageGuideWidget();
 
-    ImageIface* imageIface() const;
-
-    QPoint getSpotPosition() const;
-    DColor getSpotColor(int getColorFrom) const;
+    ImageIface* imageIface()                   const;
+    QImage      getMask()                      const;
+    QPoint      getSpotPosition()              const;
+    DColor      getSpotColor(int getColorFrom) const;
+    int         previewMode()                  const;
+    
     void   setSpotVisible(bool spotVisible, bool blink = false);
-    int    previewMode() const;
     void   resetSpotPosition();
     void   updatePreview();
     void   setPoints(const QPolygon& p, bool drawLine = false);
@@ -90,8 +91,6 @@ public:
     void   setMaskEnabled(bool enabled);
     void   setMaskPenSize(int size);
     void   setMaskCursor();
-
-    QImage getMask() const;
 
     void   setBackgroundColor(const QColor&);
     void   ICCSettingsChanged();
@@ -128,8 +127,8 @@ private:
 
 private:
 
-    class ImageGuideWidgetPriv;
-    ImageGuideWidgetPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

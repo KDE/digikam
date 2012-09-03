@@ -81,6 +81,7 @@ TARGET_LINK_LIBRARIES(digikamcore
         ${KDE4_KDEUI_LIBS}
         ${KDE4_KUTILS_LIBS}
         ${KDE4_SOLID_LIBS}
+	${KDE4_THREADWEAVER_LIBRARIES}
 
         ${JPEG_LIBRARIES}
         ${TIFF_LIBRARIES}
@@ -125,7 +126,7 @@ IF(GLIB2_FOUND)
     TARGET_LINK_LIBRARIES(digikamcore ${GLIB2_LIBRARIES} ${liblqr_LIBS} ${liblensfun_LIBS})
 ENDIF(GLIB2_FOUND)
 
-SET_TARGET_PROPERTIES(digikamcore PROPERTIES VERSION 2.0.0 SOVERSION 2)
+SET_TARGET_PROPERTIES(digikamcore PROPERTIES VERSION 3.0.0 SOVERSION 3)
 
 IF(WIN32)
     SET_TARGET_PROPERTIES(digikamcore PROPERTIES COMPILE_FLAGS -DJPEG_STATIC)
@@ -182,7 +183,7 @@ IF(PGF_FOUND)
     TARGET_LINK_LIBRARIES(digikamdatabase ${PGF_LIBRARIES})
 ENDIF(PGF_FOUND)
 
-SET_TARGET_PROPERTIES(digikamdatabase PROPERTIES VERSION 2.0.0 SOVERSION 2)
+SET_TARGET_PROPERTIES(digikamdatabase PROPERTIES VERSION 3.0.0 SOVERSION 3)
 
 INSTALL(TARGETS digikamdatabase ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
@@ -236,7 +237,7 @@ SET(digikam_SRCS ${libdimgimagewindow_SRCS}
                  ${libimagepropertiesdigikam_SRCS}
                  ${libimageversionssidebar_SRCS}
                  ${libsetup_SRCS}
-                 ${libcameragui_SRCS}
+                 ${libimportui_SRCS}
                  ${liblighttable_SRCS}
                  ${libmaintenance_SRCS}
                  ${libkipiiface_SRCS}
@@ -292,7 +293,9 @@ TARGET_LINK_LIBRARIES(digikam
         digikamdatabase
         advancedrename
         queuemanager
-        cameragui
+	    ${KDE4_THREADWEAVER_LIBRARIES}
+
+        importui
 
         # See B.K.O #258931: libgphoto2 library must be the last arg for linker.
         ${GPHOTO2_LIBRARIES}

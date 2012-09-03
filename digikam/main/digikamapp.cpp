@@ -6,8 +6,8 @@
  * Date        : 2002-16-10
  * Description : main digiKam interface implementation
  *
- * Copyright (C) 2002-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C)      2006 by Tom Albers <tomalbers@kde.nl>
+ * Copyright (C) 2002-2005 by Renchi Raju <renchi dot raju at gmail dot com>
+ * Copyright (C)      2006 by Tom Albers <tomalbers at kde dot nl>
  * Copyright (C) 2002-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2012 by Andi Clemens <andi dot clemens at gmail dot com>
  *
@@ -38,6 +38,7 @@
 #include <QStringList>
 #include <QtDBus>
 #include <QDesktopServices>
+#include <QDomDocument>
 
 // KDE includes
 
@@ -105,7 +106,7 @@
 #include "albumselectdialog.h"
 #include "albumthumbnailloader.h"
 #include "cameratype.h"
-#include "cameraui.h"
+#include "importui.h"
 #include "cameranamehelper.h"
 #include "collectionscanner.h"
 #include "componentsinfo.h"
@@ -129,7 +130,6 @@
 #include "setup.h"
 #include "setupeditor.h"
 #include "setupicc.h"
-#include "setupplugins.h"
 #include "thememanager.h"
 #include "thumbnailloadthread.h"
 #include "thumbnailsize.h"
@@ -228,7 +228,6 @@ DigikamApp::DigikamApp()
     IccSettings::instance()->loadAllProfilesProperties();
     MetadataSettings::instance();
     ProgressManager::instance();
-    KipiPluginLoader::instance();
     ThumbnailLoadThread::setDisplayingWidget(this);
     DIO::instance();
 
@@ -922,7 +921,7 @@ void DigikamApp::setupActions()
 
     connect(QueueMgrWindow::queueManagerWindow(), SIGNAL(signalBqmIsBusy(bool)),
             d->imageAddNewQueueAction, SLOT(setDisabled(bool)));
-    
+
     // -----------------------------------------------------------------
 
     d->quickImportMenu->setText(i18nc("@action Import photos from camera", "Import"));
@@ -1066,8 +1065,8 @@ void DigikamApp::setupActions()
     connect(imageSortOrderMapper, SIGNAL(mapped(int)), d->view, SLOT(slotSortImagesOrder(int)));
     actionCollection()->addAction("image_sort_order", d->imageSortOrderAction);
 
-    QAction* sortAscendingAction = d->imageSortOrderAction->addAction(i18n("Ascending"));
-    QAction* sortDescendingAction = d->imageSortOrderAction->addAction(i18n("Descending"));
+    QAction* sortAscendingAction = d->imageSortOrderAction->addAction(KIcon("view-sort-ascending"), i18n("Ascending"));
+    QAction* sortDescendingAction = d->imageSortOrderAction->addAction(KIcon("view-sort-descending"), i18n("Descending"));
 
     connect(sortAscendingAction, SIGNAL(triggered()), imageSortOrderMapper, SLOT(map()));
     connect(sortDescendingAction, SIGNAL(triggered()), imageSortOrderMapper, SLOT(map()));
@@ -1168,34 +1167,26 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    d->slideShowAction = new KActionMenu(KIcon("view-presentation"), i18n("Slideshow"), this);
-    d->slideShowAction->setDelayed(false);
-    actionCollection()->addAction("slideshow", d->slideShowAction);
-
     d->slideShowAllAction = new KAction(i18n("All"), this);
     d->slideShowAllAction->setShortcut(KShortcut(Qt::Key_F9));
     connect(d->slideShowAllAction, SIGNAL(triggered()), d->view, SLOT(slotSlideShowAll()));
     actionCollection()->addAction("slideshow_all", d->slideShowAllAction);
-    d->slideShowAction->addAction(d->slideShowAllAction);
 
     d->slideShowSelectionAction = new KAction(i18n("Selection"), this);
     d->slideShowSelectionAction->setShortcut(KShortcut(Qt::ALT+Qt::Key_F9));
     connect(d->slideShowSelectionAction, SIGNAL(triggered()), d->view, SLOT(slotSlideShowSelection()));
     actionCollection()->addAction("slideshow_selected", d->slideShowSelectionAction);
-    d->slideShowAction->addAction(d->slideShowSelectionAction);
 
     d->slideShowRecursiveAction = new KAction(i18n("With All Sub-Albums"), this);
     d->slideShowRecursiveAction->setShortcut(KShortcut(Qt::SHIFT+Qt::Key_F9));
     connect(d->slideShowRecursiveAction, SIGNAL(triggered()), d->view, SLOT(slotSlideShowRecursive()));
     actionCollection()->addAction("slideshow_recursive", d->slideShowRecursiveAction);
-    d->slideShowAction->addAction(d->slideShowRecursiveAction);
 
 #ifdef USE_PRESENTATION_MODE
     d->slideShowQmlAction = new KAction(i18n("Presentation View"), this);
     d->slideShowQmlAction->setShortcut(KShortcut(Qt::Key_F10));
     connect(d->slideShowQmlAction, SIGNAL(triggered()), d->view, SLOT(slotSlideShowQml()));
     actionCollection()->addAction("slideshow_qml", d->slideShowQmlAction);
-    d->slideShowAction->addAction(d->slideShowQmlAction);
 #endif // USE_PRESENTATION_MODE
 
    // -----------------------------------------------------------
@@ -1695,8 +1686,8 @@ void DigikamApp::slotOpenCameraUiFromPath(const QString& path)
         return;
     }
 
-    // the CameraUI will delete itself when it has finished
-    CameraUI* cgui = new CameraUI(this, i18n("Images found in %1", path),
+    // the ImportUI will delete itself when it has finished
+    ImportUI* cgui = new ImportUI(this, i18n("Images found in %1", path),
                                   "directory browse", "Fixed", path, 1);
     cgui->show();
 
@@ -1711,23 +1702,23 @@ void DigikamApp::slotOpenManualCamera(QAction* action)
     if (ctype)
     {
         // check not to open two dialogs for the same camera
-        if (ctype->currentCameraUI() && !ctype->currentCameraUI()->isClosed())
+        if (ctype->currentImportUI() && !ctype->currentImportUI()->isClosed())
         {
             // show and raise dialog
-            if (ctype->currentCameraUI()->isMinimized())
+            if (ctype->currentImportUI()->isMinimized())
             {
-                KWindowSystem::unminimizeWindow(ctype->currentCameraUI()->winId());
+                KWindowSystem::unminimizeWindow(ctype->currentImportUI()->winId());
             }
 
-            KWindowSystem::activateWindow(ctype->currentCameraUI()->winId());
+            KWindowSystem::activateWindow(ctype->currentImportUI()->winId());
         }
         else
         {
-            // the CameraUI will delete itself when it has finished
-            CameraUI* cgui = new CameraUI(this, ctype->title(), ctype->model(),
+            // the ImportUI will delete itself when it has finished
+            ImportUI* cgui = new ImportUI(this, ctype->title(), ctype->model(),
                                           ctype->port(), ctype->path(), ctype->startingNumber());
 
-            ctype->setCurrentCameraUI(cgui);
+            ctype->setCurrentImportUI(cgui);
 
             cgui->show();
 
@@ -1773,10 +1764,10 @@ void DigikamApp::slotOpenSolidCamera(QAction* action)
 
 void DigikamApp::openSolidCamera(const QString& udi, const QString& cameraLabel)
 {
-    // if there is already an open CameraUI for the device, show and raise it, and be done
+    // if there is already an open ImportUI for the device, show and raise it, and be done
     if (d->cameraUIMap.contains(udi))
     {
-        CameraUI* ui = d->cameraUIMap.value(udi);
+        ImportUI* ui = d->cameraUIMap.value(udi);
 
         if (ui && !ui->isClosed())
         {
@@ -1826,8 +1817,8 @@ void DigikamApp::openSolidCamera(const QString& udi, const QString& cameraLabel)
             kDebug() << "Found camera from ids " << vendorId << " " << productId
                      << " camera is: " << model << " at " << port;
 
-            // the CameraUI will delete itself when it has finished
-            CameraUI* cgui      = new CameraUI(this, cameraLabel, model, port, "/", 1);
+            // the ImportUI will delete itself when it has finished
+            ImportUI* cgui      = new ImportUI(this, cameraLabel, model, port, "/", 1);
             d->cameraUIMap[udi] = cgui;
 
             cgui->show();
@@ -1852,10 +1843,10 @@ void DigikamApp::openSolidUsmDevice(const QString& udi, const QString& givenLabe
 {
     QString mediaLabel = givenLabel;
 
-    // if there is already an open CameraUI for the device, show and raise it
+    // if there is already an open ImportUI for the device, show and raise it
     if (d->cameraUIMap.contains(udi))
     {
-        CameraUI* ui = d->cameraUIMap.value(udi);
+        ImportUI* ui = d->cameraUIMap.value(udi);
 
         if (ui && !ui->isClosed())
         {
@@ -1916,8 +1907,8 @@ void DigikamApp::openSolidUsmDevice(const QString& udi, const QString& givenLabe
             mediaLabel = path;
         }
 
-        // the CameraUI will delete itself when it has finished
-        CameraUI* cgui      = new CameraUI(this, i18n("Images on %1", mediaLabel),
+        // the ImportUI will delete itself when it has finished
+        ImportUI* cgui      = new ImportUI(this, i18n("Images on %1", mediaLabel),
                                            "directory browse", "Fixed", path, 1);
         d->cameraUIMap[udi] = cgui;
 
@@ -2405,7 +2396,7 @@ void DigikamApp::slotEditKeys()
     KShortcutsDialog dialog(KShortcutsEditor::AllActions,
                             KShortcutsEditor::LetterShortcutsAllowed, this);
     dialog.addCollection(actionCollection(), i18nc("general keyboard shortcuts", "General"));
-    dialog.addCollection(KipiPluginLoader::instance()->pluginsActionCollection(), 
+    dialog.addCollection(KipiPluginLoader::instance()->pluginsActionCollection(),
                          i18nc("KIPI-Plugins keyboard shortcuts", "KIPI-Plugins"));
     dialog.configure();
 }
@@ -2413,17 +2404,17 @@ void DigikamApp::slotEditKeys()
 void DigikamApp::slotConfToolbars()
 {
     saveMainWindowSettings(d->config->group("General Settings"));
-    QPointer<KEditToolBar> dlg = new KEditToolBar(actionCollection(), this);
-    dlg->setResourceFile(xmlFile());
+    KEditToolBar dlg(factory(), this);
 
-    if (dlg->exec())
-    {
-        createGUI(xmlFile());
-        applyMainWindowSettings(d->config->group("General Settings"));
-        KipiPluginLoader::instance()->kipiPlugActions();
-    }
+    connect(&dlg, SIGNAL(newToolBarConfig()),
+            this, SLOT(slotNewToolbarConfig()));
 
-    delete dlg;
+    dlg.exec();
+}
+
+void DigikamApp::slotNewToolbarConfig()
+{
+    applyMainWindowSettings(d->config->group("General Settings"));
 }
 
 void DigikamApp::slotConfNotifications()
@@ -3036,11 +3027,6 @@ void DigikamApp::slotTransformAction()
     }
 }
 
-KActionMenu* DigikamApp::slideShowMenu() const
-{
-    return d->slideShowAction;
-}
-
 #ifdef USE_SCRIPT_IFACE
 void DigikamApp::slotScriptConsole()
 {
@@ -3048,5 +3034,16 @@ void DigikamApp::slotScriptConsole()
     w->show();
 }
 #endif
+
+void DigikamApp::rebuild()
+{
+    QString file = xmlFile();
+    if (!file.isEmpty())
+    {
+        setXMLGUIBuildDocument(QDomDocument());
+        loadStandardsXmlFile();
+        setXMLFile(file, true);
+    }
+}
 
 }  // namespace Digikam

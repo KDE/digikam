@@ -215,10 +215,9 @@ void RainDropTool::prepareEffect()
     ImageIface* iface = d->previewWidget->imageIface();
 
     // Selected data from the image
-    QRect selection( iface->selectedXOrg(), iface->selectedYOrg(),
-                     iface->selectedWidth(), iface->selectedHeight() );
+    QRect selection = iface->selectionRect();
 
-    setFilter(new RainDropFilter(iface->getOriginalImg(), this, drop, amount, coeff, &selection));
+    setFilter(new RainDropFilter(iface->original(), this, drop, amount, coeff, &selection));
 }
 
 void RainDropTool::prepareFinal()
@@ -227,28 +226,27 @@ void RainDropTool::prepareFinal()
     int amount = d->amountInput->value();
     int coeff  = d->coeffInput->value();
 
-    ImageIface iface(0, 0);
+    ImageIface iface;
 
     // Selected data from the image
-    QRect selection( iface.selectedXOrg(), iface.selectedYOrg(),
-                     iface.selectedWidth(), iface.selectedHeight() );
+    QRect selection = iface.selectionRect();
 
-    setFilter(new RainDropFilter(iface.getOriginalImg(), this, drop, amount, coeff, &selection));
+    setFilter(new RainDropFilter(iface.original(), this, drop, amount, coeff, &selection));
 }
 
 void RainDropTool::putPreviewData()
 {
     ImageIface* iface = d->previewWidget->imageIface();
-    DImg imDest       = filter()->getTargetImage().smoothScale(iface->previewWidth(), iface->previewHeight());
-    iface->putPreviewImage(imDest.bits());
+    DImg imDest       = filter()->getTargetImage().smoothScale(iface->previewSize());
+    iface->putPreview(imDest);
 
     d->previewWidget->updatePreview();
 }
 
 void RainDropTool::putFinalData()
 {
-    ImageIface iface(0, 0);
-    iface.putOriginalImage(i18n("RainDrop"), filter()->filterAction(), filter()->getTargetImage().bits());
+    ImageIface iface;
+    iface.putOriginal(i18n("RainDrop"), filter()->filterAction(), filter()->getTargetImage());
 }
 
 void RainDropTool::blockWidgetSignals(bool b)

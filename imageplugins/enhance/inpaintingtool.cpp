@@ -7,7 +7,7 @@
  * Description : a digiKam image editor plugin to inpaint
  *               a photograph
  *
- * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -56,7 +56,6 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kmessagebox.h>
-#include <kpassivepopup.h>
 #include <kstandarddirs.h>
 #include <ktabwidget.h>
 #include <ktoolinvocation.h>
@@ -73,11 +72,22 @@
 namespace DigikamEnhanceImagePlugin
 {
 
-class InPaintingTool::InPaintingToolPriv
+class InPaintingTool::Private
 {
+
 public:
 
-    InPaintingToolPriv() :
+    enum InPaintingFilteringPreset
+    {
+        NoPreset = 0,
+        RemoveSmallArtefact,
+        RemoveMediumArtefact,
+        RemoveLargeArtefact
+    };
+
+public:
+
+    Private() :
         isComputed(false),
         mainTab(0),
         inpaintingTypeCB(0),
@@ -122,27 +132,27 @@ public:
 
     EditorToolSettings*     gboxSettings;
 };
-const QString InPaintingTool::InPaintingToolPriv::configGroupName("inpainting Tool");
-const QString InPaintingTool::InPaintingToolPriv::configFastApproxEntry("FastApprox");
-const QString InPaintingTool::InPaintingToolPriv::configInterpolationEntry("Interpolation");
-const QString InPaintingTool::InPaintingToolPriv::configAmplitudeEntry("Amplitude");
-const QString InPaintingTool::InPaintingToolPriv::configSharpnessEntry("Sharpness");
-const QString InPaintingTool::InPaintingToolPriv::configAnisotropyEntry("Anisotropy");
-const QString InPaintingTool::InPaintingToolPriv::configAlphaEntry("Alpha");
-const QString InPaintingTool::InPaintingToolPriv::configSigmaEntry("Sigma");
-const QString InPaintingTool::InPaintingToolPriv::configGaussPrecEntry("GaussPrec");
-const QString InPaintingTool::InPaintingToolPriv::configDlEntry("Dl");
-const QString InPaintingTool::InPaintingToolPriv::configDaEntry("Da");
-const QString InPaintingTool::InPaintingToolPriv::configIterationEntry("Iteration");
-const QString InPaintingTool::InPaintingToolPriv::configTileEntry("Tile");
-const QString InPaintingTool::InPaintingToolPriv::configBTileEntry("BTile");
-const QString InPaintingTool::InPaintingToolPriv::configPresetEntry("Preset");
+const QString InPaintingTool::Private::configGroupName("inpainting Tool");
+const QString InPaintingTool::Private::configFastApproxEntry("FastApprox");
+const QString InPaintingTool::Private::configInterpolationEntry("Interpolation");
+const QString InPaintingTool::Private::configAmplitudeEntry("Amplitude");
+const QString InPaintingTool::Private::configSharpnessEntry("Sharpness");
+const QString InPaintingTool::Private::configAnisotropyEntry("Anisotropy");
+const QString InPaintingTool::Private::configAlphaEntry("Alpha");
+const QString InPaintingTool::Private::configSigmaEntry("Sigma");
+const QString InPaintingTool::Private::configGaussPrecEntry("GaussPrec");
+const QString InPaintingTool::Private::configDlEntry("Dl");
+const QString InPaintingTool::Private::configDaEntry("Da");
+const QString InPaintingTool::Private::configIterationEntry("Iteration");
+const QString InPaintingTool::Private::configTileEntry("Tile");
+const QString InPaintingTool::Private::configBTileEntry("BTile");
+const QString InPaintingTool::Private::configPresetEntry("Preset");
 
 // --------------------------------------------------------
 
-InPaintingTool::InPaintingTool(QObject* parent)
+InPaintingTool::InPaintingTool(QObject* const parent)
     : EditorToolThreaded(parent),
-      d(new InPaintingToolPriv)
+      d(new Private)
 {
     setObjectName("inpainting");
     setToolName(i18n("In-painting"));
@@ -265,10 +275,10 @@ void InPaintingTool::readSettings()
     prm.btile      = group.readEntry(d->configBTileEntry,         defaults.btile);
     d->settingsWidget->setSettings(prm);
 
-    int p = group.readEntry(d->configPresetEntry, (int)NoPreset);
+    int p = group.readEntry(d->configPresetEntry, (int)Private::NoPreset);
     d->inpaintingTypeCB->setCurrentIndex(p);
 
-    if (p == NoPreset)
+    if (p == Private::NoPreset)
     {
         d->settingsWidget->setEnabled(true);
     }
@@ -304,7 +314,7 @@ void InPaintingTool::writeSettings()
 
 void InPaintingTool::slotResetValues(int i)
 {
-    if (i == NoPreset)
+    if (i == Private::NoPreset)
     {
         d->settingsWidget->setEnabled(true);
     }
@@ -323,18 +333,18 @@ void InPaintingTool::slotResetSettings()
 
     switch (d->inpaintingTypeCB->currentIndex())
     {
-        case RemoveSmallArtefact:
+        case Private::RemoveSmallArtefact:
             // We use default settings here.
             break;
 
-        case RemoveMediumArtefact:
+        case Private::RemoveMediumArtefact:
         {
             settings.amplitude = 50.0;
             settings.nbIter    = 50;
             break;
         }
 
-        case RemoveLargeArtefact:
+        case Private::RemoveLargeArtefact:
         {
             settings.amplitude = 100.0;
             settings.nbIter    = 100;
@@ -352,10 +362,8 @@ void InPaintingTool::processCImgUrl(const QString& url)
 
 void InPaintingTool::prepareEffect()
 {
-    ImageIface iface(0, 0);
-    QScopedArrayPointer<uchar> data(iface.getOriginalImage());
-    d->originalImage = DImg(iface.originalWidth(), iface.originalHeight(),
-                            iface.originalSixteenBit(), iface.originalHasAlpha(), data.data());
+    ImageIface iface;
+    d->originalImage = iface.original()->copy();
 
     // Selected area from the image and mask creation:
     //
@@ -368,10 +376,9 @@ void InPaintingTool::prepareEffect()
     // (image_size_x + 2*amplitude , image_size_y + 2*amplitude)
 
 
-    QRect selectionRect = QRect(iface.selectedXOrg(), iface.selectedYOrg(),
-                                iface.selectedWidth(), iface.selectedHeight());
+    QRect selectionRect = iface.selectionRect();
 
-    QPixmap inPaintingMask(iface.originalWidth(), iface.originalHeight());
+    QPixmap inPaintingMask(iface.originalSize());
     inPaintingMask.fill(Qt::black);
     QPainter p(&inPaintingMask);
     p.fillRect(selectionRect, QBrush(Qt::white));
@@ -379,10 +386,10 @@ void InPaintingTool::prepareEffect()
 
     GreycstorationContainer settings = d->settingsWidget->settings();
 
-    int x1 = (int)(selectionRect.left()   - 2 * settings.amplitude);
-    int y1 = (int)(selectionRect.top()    - 2 * settings.amplitude);
-    int x2 = (int)(selectionRect.right()  + 2 * settings.amplitude);
-    int y2 = (int)(selectionRect.bottom() + 2 * settings.amplitude);
+    int x1      = (int)(selectionRect.left()   - 2 * settings.amplitude);
+    int y1      = (int)(selectionRect.top()    - 2 * settings.amplitude);
+    int x2      = (int)(selectionRect.right()  + 2 * settings.amplitude);
+    int y2      = (int)(selectionRect.bottom() + 2 * settings.amplitude);
     d->maskRect = QRect(x1, y1, x2 - x1, y2 - y1);
 
     // Mask area normalization.
@@ -398,14 +405,14 @@ void InPaintingTool::prepareEffect()
         d->maskRect.setTop(0);
     }
 
-    if (d->maskRect.right()  > iface.originalWidth())
+    if (d->maskRect.right()  > iface.originalSize().width())
     {
-        d->maskRect.setRight(iface.originalWidth());
+        d->maskRect.setRight(iface.originalSize().width());
     }
 
-    if (d->maskRect.bottom() > iface.originalHeight())
+    if (d->maskRect.bottom() > iface.originalSize().height())
     {
-        d->maskRect.setBottom(iface.originalHeight());
+        d->maskRect.setBottom(iface.originalSize().height());
     }
 
     d->maskImage = inPaintingMask.toImage().copy(d->maskRect);
@@ -437,19 +444,18 @@ void InPaintingTool::putPreviewData()
 
     d->cropImage = filter()->getTargetImage();
     QRect cropSel((int)(2 * settings.amplitude), (int)(2 * settings.amplitude),
-                  iface->selectedWidth(), iface->selectedHeight());
-    DImg imDest = d->cropImage.copy(cropSel);
+                  iface->selectionRect().width(), iface->selectionRect().height());
+    DImg imDest  = d->cropImage.copy(cropSel);
 
-    iface->putPreviewImage((imDest.smoothScale(iface->previewWidth(),
-                                               iface->previewHeight())).bits());
+    iface->putPreview(imDest.smoothScale(iface->previewSize()));
     d->previewWidget->updatePreview();
-    d->isComputed = true;
+    d->isComputed       = true;
     d->lastFilterAction = filter()->filterAction();
 }
 
 void InPaintingTool::putFinalData()
 {
-    ImageIface iface(0, 0);
+    ImageIface iface;
 
     // Note: if d->isComputed, filter() will be deleted but results stored
 
@@ -460,9 +466,9 @@ void InPaintingTool::putFinalData()
 
     d->originalImage.bitBltImage(&d->cropImage, d->maskRect.left(), d->maskRect.top());
 
-    iface.putOriginalImage(i18n("In-Painting"),
+    iface.putOriginal(i18n("In-Painting"),
                            filter() ? filter()->filterAction() : d->lastFilterAction,
-                           d->originalImage.bits());
+                           d->originalImage);
 }
 
 void InPaintingTool::slotLoadSettings()
@@ -496,7 +502,7 @@ void InPaintingTool::slotLoadSettings()
 
     file.close();
     d->inpaintingTypeCB->blockSignals(true);
-    d->inpaintingTypeCB->setCurrentIndex(NoPreset);
+    d->inpaintingTypeCB->setCurrentIndex(Private::NoPreset);
     d->inpaintingTypeCB->blockSignals(false);
     d->settingsWidget->setEnabled(true);
 }

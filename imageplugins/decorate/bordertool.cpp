@@ -127,12 +127,12 @@ void BorderTool::slotResetSettings()
 void BorderTool::prepareEffect()
 {
     ImageIface* iface        = d->previewWidget->imageIface();
-    DImg preview             = iface->getPreviewImg();
-    int w                    = iface->previewWidth();
-    float ratio              = (float)w/(float)iface->originalWidth();
+    DImg preview             = iface->preview();
+    int w                    = iface->previewSize().width();
+    float ratio              = (float)w/(float)iface->originalSize().width();
     BorderContainer settings = d->settingsView->settings();
-    settings.orgWidth        = iface->originalWidth();
-    settings.orgHeight       = iface->originalHeight();
+    settings.orgWidth        = iface->originalSize().width();
+    settings.orgHeight       = iface->originalSize().height();
     settings.borderWidth1    = (int)((float)settings.borderWidth1*ratio);
     settings.borderWidth2    = (int)(20.0*ratio);
     settings.borderWidth3    = (int)(20.0*ratio);
@@ -143,11 +143,11 @@ void BorderTool::prepareEffect()
 
 void BorderTool::prepareFinal()
 {
-    ImageIface iface(0, 0);
-    DImg* orgImage           = iface.getOriginalImg();
+    ImageIface iface;
+    DImg* orgImage           = iface.original();
     BorderContainer settings = d->settingsView->settings();
-    settings.orgWidth        = iface.originalWidth();
-    settings.orgHeight       = iface.originalHeight();
+    settings.orgWidth        = iface.originalSize().width();
+    settings.orgHeight       = iface.originalSize().height();
 
     setFilter(new BorderFilter(orgImage, this, settings));
 }
@@ -155,8 +155,8 @@ void BorderTool::prepareFinal()
 void BorderTool::putPreviewData()
 {
     ImageIface* iface = d->previewWidget->imageIface();
-    int w             = iface->previewWidth();
-    int h             = iface->previewHeight();
+    int w             = iface->previewSize().width();
+    int h             = iface->previewSize().height();
     DImg imTemp       = filter()->getTargetImage().smoothScale(w, h, Qt::KeepAspectRatio);
     DImg imDest(w, h, filter()->getTargetImage().sixteenBit(), filter()->getTargetImage().hasAlpha());
 
@@ -165,15 +165,15 @@ void BorderTool::putPreviewData()
 
     imDest.bitBltImage(&imTemp, (w-imTemp.width())/2, (h-imTemp.height())/2);
 
-    iface->putPreviewImage(imDest.bits());
+    iface->putPreview(imDest);
     d->previewWidget->updatePreview();
 }
 
 void BorderTool::putFinalData()
 {
-    ImageIface iface(0, 0);
+    ImageIface iface;
     DImg targetImage = filter()->getTargetImage();
-    iface.putOriginalImage(i18n("Add Border"), filter()->filterAction(), targetImage.bits(), targetImage.width(), targetImage.height());
+    iface.putOriginal(i18n("Add Border"), filter()->filterAction(), targetImage);
 }
 
 }  // namespace DigikamDecorateImagePlugin

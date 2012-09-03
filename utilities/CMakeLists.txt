@@ -1,5 +1,5 @@
 ADD_SUBDIRECTORY(advancedrename)
-ADD_SUBDIRECTORY(cameragui)
+ADD_SUBDIRECTORY(importui)
 ADD_SUBDIRECTORY(hotplug)
 ADD_SUBDIRECTORY(imageeditor)
 ADD_SUBDIRECTORY(lighttable)

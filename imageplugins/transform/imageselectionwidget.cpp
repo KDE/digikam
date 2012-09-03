@@ -6,9 +6,9 @@
  * Date        : 2004-12-09
  * Description : image selection widget used by ratio crop tool.
  *
- * Copyright (C) 2007 by Jaromir Malenko <malenko at email.cz>
- * Copyright (C) 2008 by Roberto Castagnola <roberto dot castagnola at gmail dot com>
- * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007      by Jaromir Malenko <malenko at email.cz>
+ * Copyright (C) 2008      by Roberto Castagnola <roberto dot castagnola at gmail dot com>
+ * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -75,7 +75,7 @@
 namespace DigikamTransformImagePlugin
 {
 
-class ImageSelectionWidget::ImageSelectionWidgetPriv
+class ImageSelectionWidget::Private
 {
 public:
 
@@ -88,7 +88,7 @@ public:
         ResizingBottomRight
     };
 
-    ImageSelectionWidgetPriv() :
+    Private() :
         drawGoldenSection(false),
         drawGoldenSpiralSection(false),
         drawGoldenSpiral(false),
@@ -162,16 +162,16 @@ public:
     ImageIface* iface;
 };
 
-ImageSelectionWidget::ImageSelectionWidget(int w, int h, QWidget* parent)
-    : QWidget(parent), d(new ImageSelectionWidgetPriv)
+ImageSelectionWidget::ImageSelectionWidget(int w, int h, QWidget* const parent)
+    : QWidget(parent), d(new Private)
 {
     d->isDrawingSelection = true;
     d->bgColor            = palette().color(QPalette::Background);
     setup(w, h);
 }
 
-ImageSelectionWidget::ImageSelectionWidget(int w, int h, bool initDrawing, QWidget* parent)
-    : QWidget(parent), d(new ImageSelectionWidgetPriv)
+ImageSelectionWidget::ImageSelectionWidget(int w, int h, bool initDrawing, QWidget* const parent)
+    : QWidget(parent), d(new Private)
 {
     d->isDrawingSelection = initDrawing;
     setup(w, h);
@@ -203,20 +203,15 @@ void ImageSelectionWidget::setup(int w, int h,
     setMouseTracking(true);
     setAttribute(Qt::WA_DeleteOnClose);
 
-    d->iface        = new ImageIface(w, h);
-    QScopedArrayPointer<uchar> data(d->iface->getPreviewImage());
-    int width       = d->iface->previewWidth();
-    int height      = d->iface->previewHeight();
-    bool sixteenBit = d->iface->previewSixteenBit();
-    bool hasAlpha   = d->iface->previewHasAlpha();
-    d->preview      = DImg(width, height, sixteenBit, hasAlpha, data.data());
-    d->preview.setIccProfile( d->iface->getOriginalImg()->getIccProfile() );
+    d->iface   = new ImageIface(QSize(w, h));
+    d->preview = d->iface->preview();
+    d->preview.setIccProfile( d->iface->original()->getIccProfile() );
     d->preview.convertToEightBit();
 
-    d->pixmap = new QPixmap(w, h);
-    d->image  = QRect(0, 0, d->iface->originalWidth(), d->iface->originalHeight());
-    d->rect   = QRect(w/2-d->preview.width()/2, h/2-d->preview.height()/2,
-                      d->preview.width(), d->preview.height());
+    d->pixmap  = new QPixmap(w, h);
+    d->image   = QRect(0, 0, d->iface->originalSize().width(), d->iface->originalSize().height());
+    d->rect    = QRect(w/2-d->preview.width()/2, h/2-d->preview.height()/2,
+                       d->preview.width(), d->preview.height());
 
     updatePixmap();
     setGoldenGuideTypes(true, false, false, false, false, false);
@@ -231,21 +226,15 @@ void ImageSelectionWidget::resizeEvent(QResizeEvent* e)
 {
     delete d->pixmap;
 
-    int w           = e->size().width();
-    int h           = e->size().height();
-
-    QScopedArrayPointer<uchar> data(d->iface->setPreviewImageSize(w, h));
-    int width       = d->iface->previewWidth();
-    int height      = d->iface->previewHeight();
-    bool sixteenBit = d->iface->previewSixteenBit();
-    bool hasAlpha   = d->iface->previewHasAlpha();
-    d->preview      = DImg(width, height, sixteenBit, hasAlpha, data.data());
-    d->preview.setIccProfile( d->iface->getOriginalImg()->getIccProfile() );
+    int w      = e->size().width();
+    int h      = e->size().height();
+    d->preview = d->iface->setPreviewSize(QSize(w, h));
+    d->preview.setIccProfile( d->iface->original()->getIccProfile() );
     d->preview.convertToEightBit();
 
-    d->pixmap = new QPixmap(w, h);
-    d->rect   = QRect(w/2-d->preview.width()/2, h/2-d->preview.height()/2,
-                      d->preview.width(), d->preview.height());
+    d->pixmap  = new QPixmap(w, h);
+    d->rect    = QRect(w/2-d->preview.width()/2, h/2-d->preview.height()/2,
+                       d->preview.width(), d->preview.height());
 
     // Drawing the gray overlay
     {
@@ -745,19 +734,19 @@ void ImageSelectionWidget::applyAspectRatio(bool useHeight, bool repaintWidget)
     // If we change selection size by a corner, re-adjust the opposite corner position.
     switch (d->currentResizing)
     {
-        case ImageSelectionWidgetPriv::ResizingTopLeft:
+        case Private::ResizingTopLeft:
             d->regionSelection.moveBottomRight( oldRegionSelection.bottomRight() );
             break;
 
-        case ImageSelectionWidgetPriv::ResizingTopRight:
+        case Private::ResizingTopRight:
             d->regionSelection.moveBottomLeft( oldRegionSelection.bottomLeft() );
             break;
 
-        case ImageSelectionWidgetPriv::ResizingBottomLeft:
+        case Private::ResizingBottomLeft:
             d->regionSelection.moveTopRight( oldRegionSelection.topRight() );
             break;
 
-        case ImageSelectionWidgetPriv::ResizingBottomRight:
+        case Private::ResizingBottomRight:
             d->regionSelection.moveTopLeft( oldRegionSelection.topLeft() );
             break;
     }
@@ -1151,19 +1140,19 @@ QPoint ImageSelectionWidget::opposite() const
 
     switch (d->currentResizing)
     {
-        case ImageSelectionWidgetPriv::ResizingTopRight:
+        case Private::ResizingTopRight:
             opp = d->regionSelection.bottomLeft();
             break;
 
-        case ImageSelectionWidgetPriv::ResizingBottomLeft:
+        case Private::ResizingBottomLeft:
             opp = d->regionSelection.topRight();
             break;
 
-        case ImageSelectionWidgetPriv::ResizingBottomRight:
+        case Private::ResizingBottomRight:
             opp = d->regionSelection.topLeft();
             break;
 
-        case ImageSelectionWidgetPriv::ResizingTopLeft:
+        case Private::ResizingTopLeft:
         default:
             opp = d->regionSelection.bottomRight();
             break;
@@ -1181,19 +1170,19 @@ void ImageSelectionWidget::setCursorResizing()
 {
     switch (d->currentResizing)
     {
-        case ImageSelectionWidgetPriv::ResizingTopLeft:
+        case Private::ResizingTopLeft:
             setCursor( Qt::SizeFDiagCursor );
             break;
 
-        case ImageSelectionWidgetPriv::ResizingTopRight:
+        case Private::ResizingTopRight:
             setCursor( Qt::SizeBDiagCursor );
             break;
 
-        case ImageSelectionWidgetPriv::ResizingBottomLeft:
+        case Private::ResizingBottomLeft:
             setCursor( Qt::SizeBDiagCursor );
             break;
 
-        case ImageSelectionWidgetPriv::ResizingBottomRight:
+        case Private::ResizingBottomRight:
             setCursor( Qt::SizeFDiagCursor );
             break;
     }
@@ -1232,7 +1221,7 @@ void ImageSelectionWidget::placeSelection(const QPoint& pm, bool symmetric, cons
     // computing aspect ratio.
     switch (d->currentResizing)
     {
-        case ImageSelectionWidgetPriv::ResizingTopLeft:
+        case Private::ResizingTopLeft:
             // Place corners to the proper position
             d->regionSelection.setTopLeft(pm);
 
@@ -1243,7 +1232,7 @@ void ImageSelectionWidget::placeSelection(const QPoint& pm, bool symmetric, cons
 
             break;
 
-        case ImageSelectionWidgetPriv::ResizingTopRight:
+        case Private::ResizingTopRight:
             d->regionSelection.setTopRight(pm);
 
             if ( symmetric )
@@ -1253,7 +1242,7 @@ void ImageSelectionWidget::placeSelection(const QPoint& pm, bool symmetric, cons
 
             break;
 
-        case ImageSelectionWidgetPriv::ResizingBottomLeft:
+        case Private::ResizingBottomLeft:
             d->regionSelection.setBottomLeft(pm);
 
             if ( symmetric )
@@ -1263,7 +1252,7 @@ void ImageSelectionWidget::placeSelection(const QPoint& pm, bool symmetric, cons
 
             break;
 
-        case ImageSelectionWidgetPriv::ResizingBottomRight:
+        case Private::ResizingBottomRight:
             d->regionSelection.setBottomRight(pm);
 
             if ( symmetric )
@@ -1312,10 +1301,10 @@ void ImageSelectionWidget::mousePressEvent(QMouseEvent* e)
                                 d->regionSelection.bottomRight()
                               };
 
-            int resizings[] = { ImageSelectionWidgetPriv::ResizingTopLeft,
-                                ImageSelectionWidgetPriv::ResizingTopRight,
-                                ImageSelectionWidgetPriv::ResizingBottomLeft,
-                                ImageSelectionWidgetPriv::ResizingBottomRight
+            int resizings[] = { Private::ResizingTopLeft,
+                                Private::ResizingTopRight,
+                                Private::ResizingBottomLeft,
+                                Private::ResizingBottomRight
                               };
 
             float dist      = -1.0f;
@@ -1326,7 +1315,7 @@ void ImageSelectionWidget::mousePressEvent(QMouseEvent* e)
                 QPoint point = points[i];
                 dist2        = distance(pmVirtual, point);
 
-                if (dist2 < dist || d->currentResizing == ImageSelectionWidgetPriv::ResizingNone)
+                if (dist2 < dist || d->currentResizing == Private::ResizingNone)
                 {
                     dist               = dist2;
                     d->currentResizing = resizings[i];
@@ -1342,19 +1331,19 @@ void ImageSelectionWidget::mousePressEvent(QMouseEvent* e)
         {
             if ( d->localTopLeftCorner.contains( pm ) )
             {
-                d->currentResizing = ImageSelectionWidgetPriv::ResizingTopLeft;
+                d->currentResizing = Private::ResizingTopLeft;
             }
             else if ( d->localTopRightCorner.contains( pm ) )
             {
-                d->currentResizing = ImageSelectionWidgetPriv::ResizingTopRight;
+                d->currentResizing = Private::ResizingTopRight;
             }
             else if ( d->localBottomLeftCorner.contains( pm ) )
             {
-                d->currentResizing = ImageSelectionWidgetPriv::ResizingBottomLeft;
+                d->currentResizing = Private::ResizingBottomLeft;
             }
             else if ( d->localBottomRightCorner.contains( pm ) )
             {
-                d->currentResizing = ImageSelectionWidgetPriv::ResizingBottomRight;
+                d->currentResizing = Private::ResizingBottomRight;
             }
             else
             {
@@ -1379,11 +1368,11 @@ void ImageSelectionWidget::mousePressEvent(QMouseEvent* e)
 
 void ImageSelectionWidget::mouseReleaseEvent(QMouseEvent*)
 {
-    if ( d->currentResizing != ImageSelectionWidgetPriv::ResizingNone )
+    if ( d->currentResizing != Private::ResizingNone )
     {
         setCursor( Qt::ArrowCursor );
         regionSelectionChanged();
-        d->currentResizing = ImageSelectionWidgetPriv::ResizingNone;
+        d->currentResizing = Private::ResizingNone;
     }
     else if ( d->regionSelection.contains( d->lastPos ) )
     {
@@ -1420,11 +1409,11 @@ void ImageSelectionWidget::mouseMoveEvent(QMouseEvent* e)
         {
             QPoint pmVirtual = convertPoint(e->x(), e->y());
 
-            if ( d->currentResizing == ImageSelectionWidgetPriv::ResizingNone )
+            if ( d->currentResizing == Private::ResizingNone )
             {
                 d->regionSelection.setTopLeft( pmVirtual );
                 d->regionSelection.setBottomRight( pmVirtual );
-                d->currentResizing = ImageSelectionWidgetPriv::ResizingTopLeft; // set to anything
+                d->currentResizing = Private::ResizingTopLeft; // set to anything
             }
 
             QPoint center  = d->regionSelection.center();
@@ -1435,27 +1424,27 @@ void ImageSelectionWidget::mouseMoveEvent(QMouseEvent* e)
             QPoint opp = symmetric ? center : opposite();
             QPoint dir = pmVirtual - opp;
 
-            if ( dir.x() > 0 && dir.y() > 0 && d->currentResizing != ImageSelectionWidgetPriv::ResizingBottomRight)
+            if ( dir.x() > 0 && dir.y() > 0 && d->currentResizing != Private::ResizingBottomRight)
             {
-                d->currentResizing = ImageSelectionWidgetPriv::ResizingBottomRight;
+                d->currentResizing = Private::ResizingBottomRight;
                 d->regionSelection.setTopLeft( opp );
                 setCursor( Qt::SizeFDiagCursor );
             }
-            else if ( dir.x() > 0 && dir.y() < 0 && d->currentResizing != ImageSelectionWidgetPriv::ResizingTopRight)
+            else if ( dir.x() > 0 && dir.y() < 0 && d->currentResizing != Private::ResizingTopRight)
             {
-                d->currentResizing = ImageSelectionWidgetPriv::ResizingTopRight;
+                d->currentResizing = Private::ResizingTopRight;
                 d->regionSelection.setBottomLeft( opp );
                 setCursor( Qt::SizeBDiagCursor );
             }
-            else if ( dir.x() < 0 && dir.y() > 0 && d->currentResizing != ImageSelectionWidgetPriv::ResizingBottomLeft)
+            else if ( dir.x() < 0 && dir.y() > 0 && d->currentResizing != Private::ResizingBottomLeft)
             {
-                d->currentResizing = ImageSelectionWidgetPriv::ResizingBottomLeft;
+                d->currentResizing = Private::ResizingBottomLeft;
                 d->regionSelection.setTopRight( opp );
                 setCursor( Qt::SizeBDiagCursor );
             }
-            else if ( dir.x() < 0 && dir.y() < 0 && d->currentResizing != ImageSelectionWidgetPriv::ResizingTopLeft)
+            else if ( dir.x() < 0 && dir.y() < 0 && d->currentResizing != Private::ResizingTopLeft)
             {
-                d->currentResizing = ImageSelectionWidgetPriv::ResizingTopLeft;
+                d->currentResizing = Private::ResizingTopLeft;
                 d->regionSelection.setBottomRight( opp );
                 setCursor( Qt::SizeFDiagCursor );
             }

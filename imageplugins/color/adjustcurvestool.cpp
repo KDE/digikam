@@ -119,9 +119,9 @@ AdjustCurvesTool::AdjustCurvesTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    ImageIface iface(0, 0);
+    ImageIface iface;
     QVBoxLayout* vbox = new QVBoxLayout(d->gboxSettings->plainPage());
-    d->settingsView   = new CurvesSettings(d->gboxSettings->plainPage(), iface.getOriginalImg());
+    d->settingsView   = new CurvesSettings(d->gboxSettings->plainPage(), iface.original());
     d->gboxSettings->histogramBox()->setContentsMargins(d->settingsView->curvesLeftOffset(), 0, 0, 0);
     vbox->addWidget(d->settingsView);
     vbox->addStretch(10);
@@ -280,14 +280,14 @@ void AdjustCurvesTool::prepareFinal()
 {
     CurvesContainer settings = d->settingsView->settings();
 
-    ImageIface iface(0, 0);
-    setFilter(new CurvesFilter(iface.getOriginalImg(), this, settings));
+    ImageIface iface;
+    setFilter(new CurvesFilter(iface.original(), this, settings));
 }
 
 void AdjustCurvesTool::putFinalData()
 {
-    ImageIface iface(0, 0);
-    iface.putOriginalImage(i18n("Adjust Curve"), filter()->filterAction(), filter()->getTargetImage().bits());
+    ImageIface iface;
+    iface.putOriginal(i18n("Adjust Curve"), filter()->filterAction(), filter()->getTargetImage());
 }
 
 void AdjustCurvesTool::slotLoadSettings()

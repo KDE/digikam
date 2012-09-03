@@ -175,8 +175,8 @@ void EmbossTool::prepareFinal()
 {
     int depth = d->depthInput->value();
 
-    ImageIface iface(0, 0);
-    setFilter(new EmbossFilter(iface.getOriginalImg(), this, depth));
+    ImageIface iface;
+    setFilter(new EmbossFilter(iface.original(), this, depth));
 }
 
 void EmbossTool::putPreviewData()
@@ -186,8 +186,8 @@ void EmbossTool::putPreviewData()
 
 void EmbossTool::putFinalData()
 {
-    ImageIface iface(0, 0);
-    iface.putOriginalImage(i18n("Emboss"), filter()->filterAction(), filter()->getTargetImage().bits());
+    ImageIface iface;
+    iface.putOriginal(i18n("Emboss"), filter()->filterAction(), filter()->getTargetImage());
 }
 
 }  // namespace DigikamFxFiltersImagePlugin

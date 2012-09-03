@@ -6,7 +6,7 @@
  * Date        : 2008-08-20
  * Description : editor tool template class.
  *
- * Copyright (C) 2008-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -50,18 +50,17 @@ class DIGIKAM_EXPORT EditorTool : public QObject
 
 public:
 
-    EditorTool(QObject* parent);
+    EditorTool(QObject* const parent);
     virtual ~EditorTool();
 
     void init();
 
-    QString             toolHelp() const;
-    QString             toolName() const;
-    int                 toolVersion() const;
-    QPixmap             toolIcon() const;
-    QWidget*            toolView() const;
-    EditorToolSettings* toolSettings() const;
-
+    QString                toolHelp()     const;
+    QString                toolName()     const;
+    int                    toolVersion()  const;
+    QPixmap                toolIcon()     const;
+    QWidget*               toolView()     const;
+    EditorToolSettings*    toolSettings() const;
     FilterAction::Category toolCategory() const;
 
     virtual void        setBackgroundColor(const QColor& bg);
@@ -71,9 +70,10 @@ public:
 public Q_SLOTS:
 
     void slotUpdateSpotInfo(const Digikam::DColor& col, const QPoint& point);
+    void slotPreviewModeChanged();
+
     virtual void slotCloseTool();
     virtual void slotApplyTool();
-    void slotPreviewModeChanged();
 
 Q_SIGNALS:
 
@@ -104,17 +104,17 @@ protected Q_SLOTS:
     virtual void slotOk();
     virtual void slotCancel();
     virtual void slotInit();
-    virtual void slotLoadSettings() {};
-    virtual void slotSaveAsSettings() {};
     virtual void slotResetSettings();
-    virtual void slotEffect() {};
+    virtual void slotLoadSettings()   {};
+    virtual void slotSaveAsSettings() {};
+    virtual void slotEffect()         {};
     virtual void slotChannelChanged() {};
-    virtual void slotScaleChanged() {};
+    virtual void slotScaleChanged()   {};
 
 private:
 
-    class EditorToolPriv;
-    EditorToolPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 // -----------------------------------------------------------------
@@ -134,7 +134,7 @@ public:
 
 public:
 
-    EditorToolThreaded(QObject* parent);
+    EditorToolThreaded(QObject* const parent);
     virtual ~EditorToolThreaded();
 
     /** Set the small text to show in editor status progress bar during
@@ -161,21 +161,21 @@ protected:
     void deleteFilterInstance(bool b = true);
 
     virtual void setToolView(QWidget* view);
-    virtual void prepareEffect() {};
-    virtual void prepareFinal() {};
-    virtual void putPreviewData() {};
-    virtual void putFinalData() {};
+    virtual void prepareEffect()     {};
+    virtual void prepareFinal()      {};
+    virtual void putPreviewData()    {};
+    virtual void putFinalData()      {};
     virtual void renderingFinished() {};
 
 protected Q_SLOTS:
 
-    virtual void slotOk();
-    virtual void slotCancel();
-    virtual void slotEffect();
-
     void slotFilterStarted();
     void slotFilterFinished(bool success);
     void slotFilterProgress(int progress);
+
+    virtual void slotOk();
+    virtual void slotCancel();
+    virtual void slotEffect();
 
 private Q_SLOTS:
 
@@ -183,10 +183,10 @@ private Q_SLOTS:
 
 private:
 
-    class EditorToolThreadedPriv;
-    EditorToolThreadedPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam
 
-#endif /* IMAGEPLUGIN_H */
+#endif /* EDITORTOOL_H */

@@ -213,11 +213,11 @@ void TextureTool::prepareEffect()
 
 void TextureTool::prepareFinal()
 {
-    ImageIface iface(0, 0);
+    ImageIface iface;
     QString texture = getTexturePath( d->textureType->currentIndex() );
     int b           = 255 - d->blendGain->value();
 
-    setFilter(new TextureFilter(iface.getOriginalImg(), this, b, texture));
+    setFilter(new TextureFilter(iface.original(), this, b, texture));
 }
 
 void TextureTool::putPreviewData()
@@ -227,8 +227,8 @@ void TextureTool::putPreviewData()
 
 void TextureTool::putFinalData()
 {
-    ImageIface iface(0, 0);
-    iface.putOriginalImage(i18n("Texture"), filter()->filterAction(), filter()->getTargetImage().bits());
+    ImageIface iface;
+    iface.putOriginal(i18n("Texture"), filter()->filterAction(), filter()->getTargetImage());
 }
 
 QString TextureTool::getTexturePath(int texture)

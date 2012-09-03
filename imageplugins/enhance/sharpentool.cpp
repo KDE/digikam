@@ -214,7 +214,7 @@ void SharpenTool::putPreviewData()
 
 void SharpenTool::prepareFinal()
 {
-    ImageIface iface(0, 0);
+    ImageIface iface;
     SharpContainer settings = d->sharpSettings->settings();
 
     switch (settings.method)
@@ -233,7 +233,7 @@ void SharpenTool::prepareFinal()
                 sigma = sqrt(radius);
             }
 
-            setFilter(new SharpenFilter(iface.getOriginalImg(), this, radius, sigma));
+            setFilter(new SharpenFilter(iface.original(), this, radius, sigma));
             break;
         }
 
@@ -243,7 +243,7 @@ void SharpenTool::prepareFinal()
             double a  = settings.umAmount;
             double th = settings.umThreshold;
 
-            setFilter(new UnsharpMaskFilter(iface.getOriginalImg(), this, r, a, th));
+            setFilter(new UnsharpMaskFilter(iface.original(), this, r, a, th));
             break;
         }
 
@@ -255,7 +255,7 @@ void SharpenTool::prepareFinal()
             double g   = settings.rfGauss;
             int    ms  = settings.rfMatrix;
 
-            setFilter(new RefocusFilter(iface.getOriginalImg(), this, ms, r, g, c, n));
+            setFilter(new RefocusFilter(iface.original(), this, ms, r, g, c, n));
             break;
         }
     }
@@ -263,26 +263,26 @@ void SharpenTool::prepareFinal()
 
 void SharpenTool::putFinalData()
 {
-    ImageIface iface(0, 0);
+    ImageIface iface;
     SharpContainer settings = d->sharpSettings->settings();
 
     switch (settings.method)
     {
         case SharpContainer::SimpleSharp:
         {
-            iface.putOriginalImage(i18n("Sharpen"), filter()->filterAction(), filter()->getTargetImage().bits());
+            iface.putOriginal(i18n("Sharpen"), filter()->filterAction(), filter()->getTargetImage());
             break;
         }
 
         case SharpContainer::UnsharpMask:
         {
-            iface.putOriginalImage(i18n("Unsharp Mask"), filter()->filterAction(), filter()->getTargetImage().bits());
+            iface.putOriginal(i18n("Unsharp Mask"), filter()->filterAction(), filter()->getTargetImage());
             break;
         }
 
         case SharpContainer::Refocus:
         {
-            iface.putOriginalImage(i18n("Refocus"), filter()->filterAction(), filter()->getTargetImage().bits());
+            iface.putOriginal(i18n("Refocus"), filter()->filterAction(), filter()->getTargetImage());
             break;
         }
     }

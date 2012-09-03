@@ -55,6 +55,7 @@ public:
     ~KipiImageCollectionSelector();
 
     QList<KIPI::ImageCollection> selectedImageCollections() const;
+    void enableVirtualCollections(bool flag=true);
 
 private:
 

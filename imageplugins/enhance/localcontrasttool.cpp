@@ -61,11 +61,11 @@
 namespace DigikamEnhanceImagePlugin
 {
 
-class LocalContrastTool::LocalContrastToolPriv
+class LocalContrastTool::Private
 {
 public:
 
-    LocalContrastToolPriv() :
+    Private() :
         destinationPreviewData(0),
         settingsView(0),
         previewWidget(0),
@@ -82,15 +82,15 @@ public:
     ImageRegionWidget*     previewWidget;
     EditorToolSettings*    gboxSettings;
 };
-const QString LocalContrastTool::LocalContrastToolPriv::configGroupName("localcontrast Tool");
-const QString LocalContrastTool::LocalContrastToolPriv::configHistogramChannelEntry("Histogram Channel");
-const QString LocalContrastTool::LocalContrastToolPriv::configHistogramScaleEntry("Histogram Scale");
+const QString LocalContrastTool::Private::configGroupName("localcontrast Tool");
+const QString LocalContrastTool::Private::configHistogramChannelEntry("Histogram Channel");
+const QString LocalContrastTool::Private::configHistogramScaleEntry("Histogram Scale");
 
 // --------------------------------------------------------
 
-LocalContrastTool::LocalContrastTool(QObject* parent)
+LocalContrastTool::LocalContrastTool(QObject* const parent)
     : EditorToolThreaded(parent),
-      d(new LocalContrastToolPriv)
+      d(new Private)
 {
     setObjectName("localcontrast");
     setToolName(i18n("Local Contrast"));
@@ -169,8 +169,8 @@ void LocalContrastTool::prepareEffect()
 
 void LocalContrastTool::prepareFinal()
 {
-    ImageIface iface(0, 0);
-    setFilter(new LocalContrastFilter(iface.getOriginalImg(), this, d->settingsView->settings()));
+    ImageIface iface;
+    setFilter(new LocalContrastFilter(iface.original(), this, d->settingsView->settings()));
 }
 
 void LocalContrastTool::putPreviewData()
@@ -193,8 +193,8 @@ void LocalContrastTool::putPreviewData()
 
 void LocalContrastTool::putFinalData()
 {
-    ImageIface iface(0, 0);
-    iface.putOriginalImage(i18n("Local Contrast"), filter()->filterAction(), filter()->getTargetImage().bits());
+    ImageIface iface;
+    iface.putOriginal(i18n("Local Contrast"), filter()->filterAction(), filter()->getTargetImage());
 }
 
 void LocalContrastTool::slotLoadSettings()

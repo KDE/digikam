@@ -6,9 +6,9 @@
  * Date        : 2004-12-09
  * Description : image selection widget used by ratio crop tool.
  *
- * Copyright (C) 2007 by Jaromir Malenko <malenko at email.cz>
- * Copyright (C) 2008 by Roberto Castagnola <roberto dot castagnola at gmail dot com>
- * Copyright (C) 2004-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007      by Jaromir Malenko <malenko at email.cz>
+ * Copyright (C) 2008      by Roberto Castagnola <roberto dot castagnola at gmail dot com>
+ * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -90,8 +90,8 @@ public:
 
 public:
 
-    ImageSelectionWidget(int width, int height, QWidget* parent = 0);
-    ImageSelectionWidget(int width, int height, bool initDrawing, QWidget* parent = 0);
+    ImageSelectionWidget(int width, int height, QWidget* const parent = 0);
+    ImageSelectionWidget(int width, int height, bool initDrawing, QWidget* const parent = 0);
     ~ImageSelectionWidget();
 
     void  setBackgroundColor(const QColor& bg);
@@ -110,16 +110,16 @@ public:
                               bool drawGoldenSpiral,   bool drawGoldenTriangle,
                               bool flipHorGoldenGuide, bool flipVerGoldenGuide);
 
-    int   getOriginalImageWidth() const;
+    int   getOriginalImageWidth()  const;
     int   getOriginalImageHeight() const;
-    QRect getRegionSelection() const;
+    QRect getRegionSelection()     const;
 
-    int   getMinWidthRange() const;
+    int   getMinWidthRange()  const;
     int   getMinHeightRange() const;
-    int   getMaxWidthRange() const;
+    int   getMaxWidthRange()  const;
     int   getMaxHeightRange() const;
-    int   getWidthStep() const;
-    int   getHeightStep() const;
+    int   getWidthStep()      const;
+    int   getHeightStep()     const;
 
     bool  preciseCropAvailable() const;
 
@@ -152,19 +152,21 @@ private:
 
     // Recalculate the target selection position and emit 'signalSelectionMoved'.
     void   regionSelectionMoved();
-
     void   regionSelectionChanged();
+
     QPoint convertPoint(const QPoint& pm, bool localToReal=true) const;
     QPoint convertPoint(int x, int y, bool localToReal=true) const;
+    QPoint opposite() const;
+
     void   normalizeRegion();
     void   reverseRatioValues();
-    int    computePreciseSize(int size, int step) const;
     void   applyAspectRatio(bool useHeight, bool repaintWidget=true);
     void   updatePixmap();
-    QPoint opposite() const;
-    float  distance(const QPoint& a, const QPoint& b) const;
     void   placeSelection(const QPoint& pm, bool symmetric, const QPoint& center);
     void   setCursorResizing();
+
+    float  distance(const QPoint& a, const QPoint& b) const;
+    int    computePreciseSize(int size, int step)     const;
 
     // drawing functions for the various guide types
     void   drawRulesOfThirds(QPainter& p, const int& xThird, const int& yThird);
@@ -181,8 +183,8 @@ private:
 
 private:
 
-    class ImageSelectionWidgetPriv;
-    ImageSelectionWidgetPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace DigikamTransformImagePlugin

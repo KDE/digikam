@@ -6,8 +6,8 @@
  * Date        : 2012-10-03
  * Description : kipi Loader Implementation
  *
- * Copyright (C) 2012      by Supreet Pal Singh <supreetpal@gmail.com>
  * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2012      by Victor Dodon <dodonvictor at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -26,6 +26,7 @@
 
 // Qt includes
 
+#include <QString>
 #include <QStringList>
 #include <QAction>
 #include <QMap>
@@ -37,6 +38,8 @@
 #include <kmenu.h>
 #include <kactionmenu.h>
 #include <kdebug.h>
+#include <kxmlguifactory.h>
+#include <kxmlguiwindow.h>
 
 // LibKIPI includes
 
@@ -51,56 +54,150 @@
 namespace Digikam
 {
 
-class KipiPluginLoader::KipiPluginLoaderPriv
+class KipiPluginLoader::Private
 {
 public:
 
-    KipiPluginLoaderPriv()
+    Private(KipiPluginLoader* const loader)
     {
         app                         = DigikamApp::instance();
         kipipluginsActionCollection = 0;
         kipiPluginLoader            = 0;
         kipiInterface               = 0;
         splashScreen                = 0;
+        parent                      = loader;
     }
 
-    static const QString        imagesActionName;
-    static const QString        toolsActionName;
-    static const QString        importActionName;
-    static const QString        exportActionName;
-    static const QString        batchActionName;
-    static const QString        albumsActionName;
+    /** Load all enabled plugins in application accordingly with KIPI setup page.
+     */
+    void loadPlugins();
 
-    KIPI::PluginLoader*         kipiPluginLoader;
+    /** Wrapper to return plugin category name for KDE Shortcuts Editor.
+     */
+    QString categoryName(Category cat) const;
+
+public:
+
+    KipiPluginLoader*           parent;
+    PluginLoader*               kipiPluginLoader;
     KipiInterface*              kipiInterface;
     SplashScreen*               splashScreen;
     DigikamApp*                 app;
 
     KActionCollection*          kipipluginsActionCollection; // Collection used to host all plugin actions for KDE shortcuts editor
-    QMap<int, KActionCategory*> kipiCategoryMap;             // KActionCategory map shorted by KIPI::Category
+    QMap<int, KActionCategory*> kipiCategoryMap;             // KActionCategory map shorted by Category
 };
 
-// -- Static values -------------------------------
+void KipiPluginLoader::Private::loadPlugins()
+{
+    kipipluginsActionCollection = new KActionCollection(app, KGlobal::mainComponent());
 
-// NOTE: these strings are used in digikamrc XML file as action names.
-const QString KipiPluginLoader::KipiPluginLoaderPriv::imagesActionName(QString::fromLatin1("image_kipi_actions"));
-const QString KipiPluginLoader::KipiPluginLoaderPriv::toolsActionName(QString::fromLatin1("tool_kipi_actions"));
-const QString KipiPluginLoader::KipiPluginLoaderPriv::importActionName(QString::fromLatin1("import_kipi_actions"));
-const QString KipiPluginLoader::KipiPluginLoaderPriv::exportActionName(QString::fromLatin1("export_kipi_actions"));
-const QString KipiPluginLoader::KipiPluginLoaderPriv::batchActionName(QString::fromLatin1("batch_kipi_actions"));
-const QString KipiPluginLoader::KipiPluginLoaderPriv::albumsActionName(QString::fromLatin1("album_kipi_actions"));
+    if (splashScreen)
+    {
+        splashScreen->message(i18n("Loading KIPI Plugins..."));
+    }
+
+    QStringList ignores;
+    kipiInterface = new KipiInterface(app, "Digikam_KIPI_interface");
+
+    // List of obsoletes plugins to not load
+
+    ignores.append("HelloWorld");
+    ignores.append("KameraKlient");
+
+    // These plugins have been renamed with 0.2.0-rc1
+    ignores.append("Facebook Exporter");
+    ignores.append("SmugMug Exporter");
+    ignores.append("SlideShow");
+    ignores.append("PrintWizard");
+    ignores.append("SimpleViewer");
+    ignores.append("KioExport");
+
+    // These plugins have been replaced by digiKam core solution with 2.6.0
+    ignores.append("JPEGLossless");
+
+    // Test plugin introduced with libkipi 2.0.0
+    ignores.append("KXMLHelloWorld");
+
+    // List of obsolete tool actions to not load
+
+    QStringList pluginActionsDisabled;
+    pluginActionsDisabled << QString("gpssync2");                       // Experimental plugin renamed gpssync during GoSC2010.
+    pluginActionsDisabled << QString("raw_converter_single");           // Obsolete since 0.9.5 and new Raw Import tool.
+    pluginActionsDisabled << QString("batch_rename_images");            // Obsolete since 1.0.0, replaced by AdvancedRename.
+    pluginActionsDisabled << QString("batch_border_images");            // Obsolete since 1.2.0, replaced by BQM border tool.
+    pluginActionsDisabled << QString("batch_convert_images");           // Obsolete since 1.2.0, replaced by BQM convert tool.
+    pluginActionsDisabled << QString("batch_color_images");             // Obsolete since 1.2.0, replaced by BQM color tool.
+    pluginActionsDisabled << QString("batch_filter_images");            // Obsolete since 1.2.0, replaced by BQM enhance tool.
+
+    kipiPluginLoader = new PluginLoader(app);
+    kipiPluginLoader->setInterface(kipiInterface);
+    kipiPluginLoader->setIgnoredPluginsList(ignores);
+    kipiPluginLoader->setDisabledPluginActions(pluginActionsDisabled);
+    kipiPluginLoader->init();
+
+    parent->connect(kipiPluginLoader, SIGNAL(replug()),
+                    parent, SLOT(slotKipiPluginPlug()));
+
+    kipiPluginLoader->loadPlugins();
+
+    kipiInterface->slotCurrentAlbumChanged(AlbumManager::instance()->currentAlbum());
+
+    parent->connect(AlbumManager::instance(), SIGNAL(signalAlbumCurrentChanged(Album*)),
+                    kipiInterface, SLOT(slotCurrentAlbumChanged(Album*)));
+}
+
+QString KipiPluginLoader::Private::categoryName(Category cat) const
+{
+    QString res;
+
+    switch (cat)
+    {
+        case ExportPlugin:
+            res = i18n("Export Tools");
+            break;
+
+        case ImportPlugin:
+            res = i18n("Import Tools");
+            break;
+
+        case ImagesPlugin:
+            res = i18n("Images Tools");
+            break;
+
+        case ToolsPlugin:
+            res = i18n("Miscellaneous Tools");
+            break;
+
+        case BatchPlugin:
+            res = i18n("Batch Tools");
+            break;
+
+        case CollectionsPlugin:
+            res = i18n("Albums Tools");
+            break;
+
+        default:
+            res = i18n("Unknown Tools");
+            break;
+    }
+
+    return res;
+}
+
+// -- Static values ------------------------------------------------------------------------------------------------------
 
 KipiPluginLoader* KipiPluginLoader::m_instance = 0;
 
 // -----------------------------------------------------------------------------------------------------------------------
 
 KipiPluginLoader::KipiPluginLoader(QObject* const parent, SplashScreen* const splash)
-    : QObject(parent), d(new KipiPluginLoaderPriv)
+    : QObject(parent), d(new Private(this))
 {
     m_instance      = this;
     d->splashScreen = splash;
 
-    loadPlugins();
+    d->loadPlugins();
 }
 
 KipiPluginLoader::~KipiPluginLoader()
@@ -119,7 +216,7 @@ KActionCollection* KipiPluginLoader::pluginsActionCollection() const
     return d->kipipluginsActionCollection;
 }
 
-QList<QAction*> KipiPluginLoader::kipiActionsByCategory(KIPI::Category cat) const
+QList<QAction*> KipiPluginLoader::kipiActionsByCategory(Category cat) const
 {
     KActionCategory* category = d->kipiCategoryMap[cat];
 
@@ -131,80 +228,42 @@ QList<QAction*> KipiPluginLoader::kipiActionsByCategory(KIPI::Category cat) cons
     return QList<QAction*>();
 }
 
-void KipiPluginLoader::loadPlugins()
-{
-    d->kipipluginsActionCollection = new KActionCollection(d->app, KGlobal::mainComponent());
-
-    if (d->splashScreen)
-    {
-        d->splashScreen->message(i18n("Loading KIPI Plugins..."));
-    }
-
-    QStringList ignores;
-    d->kipiInterface = new KipiInterface(d->app, "Digikam_KIPI_interface");
-
-    // List of obsoletes plugins to not load
-
-    ignores.append("HelloWorld");
-    ignores.append("KameraKlient");
-
-    // These plugins have been renamed with 0.2.0-rc1
-    ignores.append("Facebook Exporter");
-    ignores.append("SmugMug Exporter");
-    ignores.append("SlideShow");
-    ignores.append("PrintWizard");
-    ignores.append("SimpleViewer");
-    ignores.append("KioExport");
-
-    // These plugins have been replaced by digiKam core solution with 2.6.0
-    ignores.append("JPEGLossless");
-
-    d->kipiPluginLoader = new KIPI::PluginLoader(ignores, d->kipiInterface);
-
-    connect( d->kipiPluginLoader, SIGNAL(replug()),
-             this, SLOT(slotKipiPluginPlug()) );
-
-    d->kipiPluginLoader->loadPlugins();
-
-    d->kipiInterface->slotCurrentAlbumChanged(AlbumManager::instance()->currentAlbum());
-}
-
 void KipiPluginLoader::slotKipiPluginPlug()
 {
-    // Remove plugin GUI menus in application.
-    kipiPlugActions(true);
-
-    d->kipiCategoryMap.clear();
-
-    // Remove Advanced slideshow kipi-plugin action from View/Slideshow menu.
-    foreach(QAction* const action, d->app->slideShowMenu()->menu()->actions())
+    // Delete all action categories
+    for (QMap<int, KActionCategory*>::iterator it = d->kipiCategoryMap.begin();
+         it != d->kipiCategoryMap.end();
+         ++it)
     {
-        if (action->objectName() == QString("advancedslideshow"))
+        if (it.value())
         {
-            d->app->slideShowMenu()->removeAction(action);
-            break;
+            delete it.value();
         }
     }
 
     d->kipipluginsActionCollection->clear();
+    d->kipiCategoryMap.clear();
 
-    KIPI::PluginLoader::PluginList list = d->kipiPluginLoader->pluginList();
-    int cpt                             = 0;
+    PluginLoader::PluginList list = d->kipiPluginLoader->pluginList();
+    int cpt                       = 0;
 
-    // List of obsolete tool actions to not load
-
-    QStringList pluginActionsDisabled;
-    pluginActionsDisabled << QString("gpssync2");                       // Experimental plugin renamed gpssync during GoSC2010.
-    pluginActionsDisabled << QString("raw_converter_single");           // Obsolete since 0.9.5 and new Raw Import tool.
-    pluginActionsDisabled << QString("batch_rename_images");            // Obsolete since 1.0.0, replaced by AdvancedRename.
-    pluginActionsDisabled << QString("batch_border_images");            // Obsolete since 1.2.0, replaced by BQM border tool.
-    pluginActionsDisabled << QString("batch_convert_images");           // Obsolete since 1.2.0, replaced by BQM convert tool.
-    pluginActionsDisabled << QString("batch_color_images");             // Obsolete since 1.2.0, replaced by BQM color tool.
-    pluginActionsDisabled << QString("batch_filter_images");            // Obsolete since 1.2.0, replaced by BQM enhance tool.
-
-    for (KIPI::PluginLoader::PluginList::ConstIterator it = list.constBegin() ; it != list.constEnd() ; ++it)
+    // First we remove all plugins from the gui
+    for (PluginLoader::PluginList::ConstIterator it = list.constBegin() ; it != list.constEnd() ; ++it)
     {
-        KIPI::Plugin* plugin = (*it)->plugin();
+        Plugin* plugin = (*it)->plugin();
+
+        if (!plugin || !(*it)->shouldLoad() || !dynamic_cast<KXMLGUIClient*>(plugin))
+        {
+            continue;
+        }
+        d->app->guiFactory()->removeClient(plugin);
+    }
+
+    QStringList pluginActionsDisabled = d->kipiPluginLoader->disabledPluginActions();
+
+    for (PluginLoader::PluginList::ConstIterator it = list.constBegin() ; it != list.constEnd() ; ++it)
+    {
+        Plugin* plugin = (*it)->plugin();
 
         if (!plugin || !(*it)->shouldLoad())
         {
@@ -213,11 +272,18 @@ void KipiPluginLoader::slotKipiPluginPlug()
 
         ++cpt;
         plugin->setup(d->app);
+        plugin->rebuild();
 
         foreach(KAction* const action, plugin->actions())
         {
             QString actionName(action->objectName());
-            KIPI::Category cat = plugin->category(action);
+            Category cat = plugin->category(action);
+
+            if (cat == InvalidCategory)
+            {
+                kWarning() << "Plugin action '" << actionName << "' has invalid category!";
+                continue;
+            }
 
             if (!pluginActionsDisabled.contains(actionName))
             {
@@ -225,14 +291,8 @@ void KipiPluginLoader::slotKipiPluginPlug()
 
                 if (!category)
                 {
-                    category = new KActionCategory(categoryName(cat), d->kipipluginsActionCollection);
+                    category = new KActionCategory(d->categoryName(cat), d->kipipluginsActionCollection);
                     d->kipiCategoryMap.insert(cat, category);
-                }
-
-                if (cat == KIPI::ToolsPlugin && actionName == QString("advancedslideshow"))
-                {
-                    // Special wrap for Advanced Slideshow plugin action which need to be pluged to View/Slideshow menu.
-                    d->app->slideShowMenu()->addAction(action);
                 }
 
                 category->addAction(actionName, qobject_cast<QAction*>(action));
@@ -244,91 +304,20 @@ void KipiPluginLoader::slotKipiPluginPlug()
         }
     }
 
+    // We add them back
+    for (PluginLoader::PluginList::ConstIterator it = list.constBegin() ; it != list.constEnd() ; ++it)
+    {
+        Plugin* plugin = (*it)->plugin();
+
+        if (!plugin || !(*it)->shouldLoad() || !dynamic_cast<KXMLGUIClient*>(plugin))
+        {
+            continue;
+        }
+        d->app->guiFactory()->addClient(plugin);
+    }
+
     // load KIPI actions settings
     d->kipipluginsActionCollection->readSettings();
-
-    // Check if the Export/Import/tools Plugin lists are empty, if so, add an empty action which tells the user that no
-    // Export/Import/tools plugins are available. It is more user-friendly to present some menu entry,
-    // instead of leaving it completely empty.
-    checkEmptyCategory(KIPI::ExportPlugin);
-    checkEmptyCategory(KIPI::ImportPlugin);
-    checkEmptyCategory(KIPI::ToolsPlugin);
-
-    // Create plugin GUI menus in application.
-    kipiPlugActions();
 }
 
-void KipiPluginLoader::checkEmptyCategory(KIPI::Category cat)
-{
-    KActionCategory* category = d->kipiCategoryMap[cat];
-
-    if (!category)
-    {
-        QAction* action = new QAction(i18n("No tool available"), d->app);
-        action->setEnabled(false);
-        category        = new KActionCategory(categoryName(cat), d->kipipluginsActionCollection);
-        d->kipiCategoryMap.insert(cat, category);
-    }
-}
-
-void KipiPluginLoader::kipiPlugActions(bool unplug)
-{
-    if (unplug)
-    {
-        d->app->unplugActionList(d->exportActionName);
-        d->app->unplugActionList(d->importActionName);
-        d->app->unplugActionList(d->imagesActionName);
-        d->app->unplugActionList(d->toolsActionName);
-        d->app->unplugActionList(d->batchActionName);
-        d->app->unplugActionList(d->albumsActionName);
-    }
-    else
-    {
-        d->app->plugActionList(d->exportActionName, kipiActionsByCategory(KIPI::ExportPlugin));
-        d->app->plugActionList(d->importActionName, kipiActionsByCategory(KIPI::ImportPlugin));
-        d->app->plugActionList(d->imagesActionName, kipiActionsByCategory(KIPI::ImagesPlugin));
-        d->app->plugActionList(d->toolsActionName,  kipiActionsByCategory(KIPI::ToolsPlugin));
-        d->app->plugActionList(d->batchActionName,  kipiActionsByCategory(KIPI::BatchPlugin));
-        d->app->plugActionList(d->albumsActionName, kipiActionsByCategory(KIPI::CollectionsPlugin));
-    }
-}
-
-QString KipiPluginLoader::categoryName(KIPI::Category cat) const
-{
-    QString res;
-
-    switch (cat)
-    {
-        case KIPI::ExportPlugin:
-            res = i18n("Export Tools");
-            break;
-
-        case KIPI::ImportPlugin:
-            res = i18n("Import Tools");
-            break;
-
-        case KIPI::ImagesPlugin:
-            res = i18n("Images Tools");
-            break;
-
-        case KIPI::ToolsPlugin:
-            res = i18n("Miscellaneous Tools");
-            break;
-
-        case KIPI::BatchPlugin:
-            res = i18n("Batch Tools");
-            break;
-
-        case KIPI::CollectionsPlugin:
-            res = i18n("Albums Tools");
-            break;
-
-        default:
-            res = i18n("Unknown Tools");
-            break;
-    }
-
-    return res;
-}
-
-} //namespace Digikam
+} // namespace Digikam
