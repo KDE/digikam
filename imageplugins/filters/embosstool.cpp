@@ -175,7 +175,7 @@ void EmbossTool::prepareFinal()
 {
     int depth = d->depthInput->value();
 
-    ImageIface iface(0, 0);
+    ImageIface iface;
     setFilter(new EmbossFilter(iface.original(), this, depth));
 }
 
@@ -186,7 +186,7 @@ void EmbossTool::putPreviewData()
 
 void EmbossTool::putFinalData()
 {
-    ImageIface iface(0, 0);
+    ImageIface iface;
     iface.putOriginal(i18n("Emboss"), filter()->filterAction(), filter()->getTargetImage());
 }
 

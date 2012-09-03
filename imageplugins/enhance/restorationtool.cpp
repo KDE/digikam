@@ -327,7 +327,7 @@ void RestorationTool::prepareEffect()
 
 void RestorationTool::prepareFinal()
 {
-    ImageIface iface(0, 0);
+    ImageIface iface;
     DImg originalImage = iface.original()->copy();
 
     setFilter(new GreycstorationFilter(&originalImage,
@@ -343,7 +343,7 @@ void RestorationTool::putPreviewData()
 
 void RestorationTool::putFinalData()
 {
-    ImageIface iface(0, 0);
+    ImageIface iface;
     iface.putOriginal(i18n("Restoration"), filter()->filterAction(), filter()->getTargetImage());
 }
 

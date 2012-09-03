@@ -362,7 +362,7 @@ void InPaintingTool::processCImgUrl(const QString& url)
 
 void InPaintingTool::prepareEffect()
 {
-    ImageIface iface(0, 0);
+    ImageIface iface;
     d->originalImage = iface.original()->copy();
 
     // Selected area from the image and mask creation:
@@ -455,7 +455,7 @@ void InPaintingTool::putPreviewData()
 
 void InPaintingTool::putFinalData()
 {
-    ImageIface iface(0, 0);
+    ImageIface iface;
 
     // Note: if d->isComputed, filter() will be deleted but results stored
 

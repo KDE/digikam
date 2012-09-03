@@ -168,11 +168,11 @@ uchar* ImageIface::Private::getPreviewImage()
 
 // ------------------------------------------------------------------------------------------------------
 
-ImageIface::ImageIface(int w, int h)
+ImageIface::ImageIface(const QSize& size)
     : d(new Private)
 {
-    d->constrainWidth     = w;
-    d->constrainHeight    = h;
+    d->constrainWidth     = size.width();
+    d->constrainHeight    = size.height();
     d->originalWidth      = DImgInterface::defaultInterface()->origWidth();
     d->originalHeight     = DImgInterface::defaultInterface()->origHeight();
     d->originalBytesDepth = DImgInterface::defaultInterface()->bytesDepth();

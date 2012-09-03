@@ -167,13 +167,13 @@ void BlurTool::putPreviewData()
 
 void BlurTool::prepareFinal()
 {
-    ImageIface iface(0, 0);
+    ImageIface iface;
     setFilter(new BlurFilter(iface.original(), this, d->radiusInput->value()));
 }
 
 void BlurTool::putFinalData()
 {
-    ImageIface iface(0, 0);
+    ImageIface iface;
     iface.putOriginal(i18n("Gaussian Blur"), filter()->filterAction(), filter()->getTargetImage());
 }
 

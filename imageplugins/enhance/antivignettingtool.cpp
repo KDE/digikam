@@ -155,7 +155,7 @@ void AntiVignettingTool::prepareFinal()
 {
     AntiVignettingContainer settings = d->settingsView->settings();
 
-    ImageIface iface(0, 0);
+    ImageIface iface;
     setFilter(new AntiVignettingFilter(iface.original(), this, settings));
 }
 

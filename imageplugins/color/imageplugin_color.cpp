@@ -234,7 +234,7 @@ void ImagePlugin_Color::slotInvert()
 {
     kapp->setOverrideCursor(Qt::WaitCursor);
 
-    ImageIface iface(0, 0);
+    ImageIface iface;
     InvertFilter invert(iface.original(), 0L);
     invert.startFilterDirectly();
     iface.putOriginal(i18n("Invert"), invert.filterAction(), invert.getTargetImage());
@@ -244,7 +244,7 @@ void ImagePlugin_Color::slotInvert()
 
 void ImagePlugin_Color::slotConvertTo8Bits()
 {
-    ImageIface iface(0, 0);
+    ImageIface iface;
 
     if (!iface.originalSixteenBit())
     {
@@ -271,7 +271,7 @@ void ImagePlugin_Color::slotConvertTo8Bits()
 
 void ImagePlugin_Color::slotConvertTo16Bits()
 {
-    ImageIface iface(0, 0);
+    ImageIface iface;
 
     if (iface.originalSixteenBit())
     {
@@ -304,7 +304,7 @@ void ImagePlugin_Color::slotAutoCorrection()
 
 void ImagePlugin_Color::slotConvertToColorSpace(const IccProfile& profile)
 {
-    ImageIface iface(0, 0);
+    ImageIface iface;
 
     if (iface.originalIccProfile().isNull())
     {

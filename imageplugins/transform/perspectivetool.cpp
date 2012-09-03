@@ -127,7 +127,7 @@ PerspectiveTool::PerspectiveTool(QObject* parent)
     // -------------------------------------------------------------
 
     QString temp;
-    ImageIface iface(0, 0);
+    ImageIface iface;
 
     d->gboxSettings = new EditorToolSettings;
     d->gboxSettings->setTools(EditorToolSettings::ColorGuide);

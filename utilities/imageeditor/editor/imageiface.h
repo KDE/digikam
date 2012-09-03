@@ -52,7 +52,9 @@ class DIGIKAM_EXPORT ImageIface
 {
 public:
 
-    explicit ImageIface(int w = 0, int h = 0);
+    /** Standard constructor. Size is the constrain dimension of preview. This can be null size.
+     */
+    explicit ImageIface(const QSize& size = QSize(0, 0));
     ~ImageIface();
 
     /** Return 'true' if the preview is rendered using the current selection in editor.

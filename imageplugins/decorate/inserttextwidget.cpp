@@ -110,7 +110,7 @@ InsertTextWidget::InsertTextWidget(int w, int h, QWidget* const parent)
     d->backgroundColor = QColor(0xCC, 0xCC, 0xCC);
     d->transparency    = 210;
 
-    d->iface  = new ImageIface(w, h);
+    d->iface  = new ImageIface(QSize(w, h));
     d->w      = d->iface->previewSize().width();
     d->h      = d->iface->previewSize().height();
     d->pixmap = new QPixmap(w, h);

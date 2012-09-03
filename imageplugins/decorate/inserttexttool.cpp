@@ -408,7 +408,7 @@ void InsertTextTool::finalRendering()
 {
     kapp->setOverrideCursor( Qt::WaitCursor );
 
-    ImageIface iface(0, 0);
+    ImageIface iface;
     DImg dest = d->previewWidget->makeInsertText();
 
     FilterAction action("digikam:insertTextTool", 1);

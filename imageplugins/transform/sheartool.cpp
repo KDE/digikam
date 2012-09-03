@@ -127,7 +127,7 @@ ShearTool::ShearTool(QObject* parent)
     // -------------------------------------------------------------
 
     QString temp;
-    ImageIface iface(0, 0);
+    ImageIface iface;
 
     d->gboxSettings = new EditorToolSettings;
     d->gboxSettings->setTools(EditorToolSettings::ColorGuide);
@@ -305,7 +305,7 @@ void ShearTool::prepareFinal()
     bool antialiasing = d->antialiasInput->isChecked();
     QColor background = Qt::black;
 
-    ImageIface iface(0, 0);
+    ImageIface iface;
     int orgW       = iface.originalSize().width();
     int orgH       = iface.originalSize().height();
     DImg* orgImage = iface.original();
@@ -336,7 +336,7 @@ void ShearTool::putPreviewData()
 
 void ShearTool::putFinalData()
 {
-    ImageIface iface(0, 0);
+    ImageIface iface;
     DImg targetImage = filter()->getTargetImage();
     iface.putOriginal(i18n("Shear Tool"), filter()->filterAction(), targetImage);
 }

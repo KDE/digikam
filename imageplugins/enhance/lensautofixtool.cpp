@@ -234,7 +234,7 @@ void LensAutoFixTool::prepareFinal()
     // Settings information must be handle before to disable settings view.
     LensFunContainer settings = d->cameraSelector->settings();
     d->settingsView->assignFilterSettings(settings);
-    ImageIface iface(0, 0);
+    ImageIface iface;
     setFilter(new LensFunFilter(iface.original(), this, settings));
 }
 
@@ -246,7 +246,7 @@ void LensAutoFixTool::putPreviewData()
 
 void LensAutoFixTool::putFinalData()
 {
-    ImageIface iface(0, 0);
+    ImageIface iface;
     iface.putOriginal(i18n("Lens Auto-Correction"), filter()->filterAction(), filter()->getTargetImage());
     Digikam::KExiv2Data data = iface.originalMetadata();
     // Note: there are certain situations in the editor where these metadata changes may be undone.

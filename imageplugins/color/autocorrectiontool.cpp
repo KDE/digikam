@@ -102,7 +102,7 @@ AutoCorrectionTool::AutoCorrectionTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    ImageIface iface(0, 0);
+    ImageIface iface;
     DImg thumbImage       = iface.original()->smoothScale(128, 128, Qt::KeepAspectRatio);
     PreviewListItem* item = 0;
     d->gboxSettings       = new EditorToolSettings;
@@ -239,7 +239,7 @@ void AutoCorrectionTool::prepareEffect()
 {
     d->gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
 
-    ImageIface iface(0, 0);
+    ImageIface iface;
     DImg preview = d->previewWidget->getOriginalRegionImage(true);
 
     autoCorrection(&preview, iface.original(), d->correctionTools->currentId());
@@ -266,7 +266,7 @@ void AutoCorrectionTool::putPreviewData()
 void AutoCorrectionTool::prepareFinal()
 {
     int type = d->correctionTools->currentId();
-    ImageIface iface(0, 0);
+    ImageIface iface;
     autoCorrection(iface.original(), iface.original(), type);
 }
 
@@ -298,7 +298,7 @@ void AutoCorrectionTool::putFinalData()
             break;
     }
 
-    ImageIface iface(0, 0);
+    ImageIface iface;
     iface.putOriginal(name, filter()->filterAction(), filter()->getTargetImage());
 }
 

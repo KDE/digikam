@@ -226,7 +226,7 @@ void RainDropTool::prepareFinal()
     int amount = d->amountInput->value();
     int coeff  = d->coeffInput->value();
 
-    ImageIface iface(0, 0);
+    ImageIface iface;
 
     // Selected data from the image
     QRect selection = iface.selectionRect();
@@ -245,7 +245,7 @@ void RainDropTool::putPreviewData()
 
 void RainDropTool::putFinalData()
 {
-    ImageIface iface(0, 0);
+    ImageIface iface;
     iface.putOriginal(i18n("RainDrop"), filter()->filterAction(), filter()->getTargetImage());
 }
 

@@ -355,7 +355,7 @@ void ColorFxTool::prepareFinal()
     int f = d->iterationInput->value();
     int e = d->effectType->currentIndex();
 
-    ImageIface iface(0, 0);
+    ImageIface iface;
 
     setFilter(new ColorFXFilter(iface.original(), this, e, l, f));
 }
@@ -374,7 +374,7 @@ void ColorFxTool::putPreviewData()
 
 void ColorFxTool::putFinalData()
 {
-    ImageIface iface(0, 0);
+    ImageIface iface;
 
     QString name;
 

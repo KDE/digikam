@@ -189,13 +189,13 @@ void CBTool::prepareFinal()
 {
     CBContainer settings = d->cbSettings->settings();
 
-    ImageIface iface(0, 0);
+    ImageIface iface;
     setFilter(new CBFilter(iface.original(), this, settings));
 }
 
 void CBTool::putFinalData()
 {
-    ImageIface iface(0, 0);
+    ImageIface iface;
     iface.putOriginal(i18n("Color Balance"), filter()->filterAction(), filter()->getTargetImage());
 }
 

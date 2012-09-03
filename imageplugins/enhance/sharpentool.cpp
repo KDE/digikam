@@ -214,7 +214,7 @@ void SharpenTool::putPreviewData()
 
 void SharpenTool::prepareFinal()
 {
-    ImageIface iface(0, 0);
+    ImageIface iface;
     SharpContainer settings = d->sharpSettings->settings();
 
     switch (settings.method)
@@ -263,7 +263,7 @@ void SharpenTool::prepareFinal()
 
 void SharpenTool::putFinalData()
 {
-    ImageIface iface(0, 0);
+    ImageIface iface;
     SharpContainer settings = d->sharpSettings->settings();
 
     switch (settings.method)

@@ -169,7 +169,7 @@ void LocalContrastTool::prepareEffect()
 
 void LocalContrastTool::prepareFinal()
 {
-    ImageIface iface(0, 0);
+    ImageIface iface;
     setFilter(new LocalContrastFilter(iface.original(), this, d->settingsView->settings()));
 }
 
@@ -193,7 +193,7 @@ void LocalContrastTool::putPreviewData()
 
 void LocalContrastTool::putFinalData()
 {
-    ImageIface iface(0, 0);
+    ImageIface iface;
     iface.putOriginal(i18n("Local Contrast"), filter()->filterAction(), filter()->getTargetImage());
 }
 

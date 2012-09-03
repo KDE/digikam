@@ -258,7 +258,7 @@ void ImagePlugin_Enhance::slotLocalContrast()
 
 void ImagePlugin_Enhance::slotRedEye()
 {
-    ImageIface iface(0, 0);
+    ImageIface iface;
 
     if (iface.selectionRect().size().isNull())
     {
@@ -278,7 +278,7 @@ void ImagePlugin_Enhance::slotRedEye()
 
 void ImagePlugin_Enhance::slotInPainting()
 {
-    ImageIface iface(0, 0);
+    ImageIface iface;
 
     if (iface.selectionRect().size().isNull())
     {

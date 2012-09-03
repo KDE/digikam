@@ -147,7 +147,7 @@ DImageHistory AbstractDImageHistoryTest::history1() const
 
 void AbstractDImageHistoryTest::applyFilters1()
 {
-    ImageIface iface(0, 0);
+    ImageIface iface;
 
     BCGFilter filter1(iface.original(), this);
     filter1.startFilterDirectly();
@@ -160,7 +160,7 @@ void AbstractDImageHistoryTest::applyFilters1()
 
 void AbstractDImageHistoryTest::applyFilters2()
 {
-    ImageIface iface(0, 0);
+    ImageIface iface;
 
     AutoLevelsFilter filter(iface.original(), iface.original(), this);
     filter.startFilterDirectly();
@@ -169,7 +169,7 @@ void AbstractDImageHistoryTest::applyFilters2()
 
 void AbstractDImageHistoryTest::applyFilters3()
 {
-    ImageIface iface(0, 0);
+    ImageIface iface;
 
     InfraredFilter filter(iface.original(), this);
     filter.startFilterDirectly();
@@ -178,7 +178,7 @@ void AbstractDImageHistoryTest::applyFilters3()
 
 void AbstractDImageHistoryTest::applyFilters4()
 {
-    ImageIface iface(0, 0);
+    ImageIface iface;
 
     BlurFilter filter(iface.original(), this);
     filter.startFilterDirectly();

@@ -143,7 +143,7 @@ void BorderTool::prepareEffect()
 
 void BorderTool::prepareFinal()
 {
-    ImageIface iface(0, 0);
+    ImageIface iface;
     DImg* orgImage           = iface.original();
     BorderContainer settings = d->settingsView->settings();
     settings.orgWidth        = iface.originalSize().width();
@@ -171,7 +171,7 @@ void BorderTool::putPreviewData()
 
 void BorderTool::putFinalData()
 {
-    ImageIface iface(0, 0);
+    ImageIface iface;
     DImg targetImage = filter()->getTargetImage();
     iface.putOriginal(i18n("Add Border"), filter()->filterAction(), targetImage);
 }

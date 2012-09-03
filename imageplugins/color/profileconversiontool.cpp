@@ -118,7 +118,7 @@ ProfileConversionTool::ProfileConversionTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    ImageIface iface(0, 0);
+    ImageIface iface;
     d->currentProfile = iface.originalIccProfile();
 
     d->gboxSettings = new EditorToolSettings;
@@ -246,13 +246,13 @@ void ProfileConversionTool::putPreviewData()
 
 void ProfileConversionTool::prepareFinal()
 {
-    ImageIface iface(0, 0);
+    ImageIface iface;
     setFilter(new IccTransformFilter(iface.original(), this, d->transform));
 }
 
 void ProfileConversionTool::putFinalData()
 {
-    ImageIface iface(0, 0);
+    ImageIface iface;
     DImg imDest = filter()->getTargetImage();
 
     iface.putOriginal(i18n("Color Profile Conversion"), filter()->filterAction(), imDest);
@@ -275,7 +275,7 @@ QStringList ProfileConversionTool::favoriteProfiles()
 
 void ProfileConversionTool::fastConversion(const IccProfile& profile)
 {
-    ImageIface iface(0, 0);
+    ImageIface iface;
 
     IccProfile currentProfile = iface.originalIccProfile();
     IccTransform transform    = ProfileConversionToolPriv::getTransform(currentProfile, profile);

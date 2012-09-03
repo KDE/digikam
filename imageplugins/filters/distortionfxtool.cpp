@@ -363,7 +363,7 @@ void DistortionFXTool::prepareFinal()
     int f = d->iterationInput->value();
     int e = d->effectType->currentIndex();
 
-    ImageIface iface(0, 0);
+    ImageIface iface;
 
     setFilter(new DistortionFXFilter(iface.original(), this, e, l, f));
 }
@@ -379,7 +379,7 @@ void DistortionFXTool::putPreviewData()
 
 void DistortionFXTool::putFinalData()
 {
-    ImageIface iface(0, 0);
+    ImageIface iface;
     iface.putOriginal(i18n("Distortion Effects"), filter()->filterAction(), filter()->getTargetImage());
 }
 

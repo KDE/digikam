@@ -213,7 +213,7 @@ void TextureTool::prepareEffect()
 
 void TextureTool::prepareFinal()
 {
-    ImageIface iface(0, 0);
+    ImageIface iface;
     QString texture = getTexturePath( d->textureType->currentIndex() );
     int b           = 255 - d->blendGain->value();
 
@@ -227,7 +227,7 @@ void TextureTool::putPreviewData()
 
 void TextureTool::putFinalData()
 {
-    ImageIface iface(0, 0);
+    ImageIface iface;
     iface.putOriginal(i18n("Texture"), filter()->filterAction(), filter()->getTargetImage());
 }
 

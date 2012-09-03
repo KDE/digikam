@@ -125,7 +125,7 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
     // -------------------------------------------------------------
 
     QString temp;
-    ImageIface iface(0, 0);
+    ImageIface iface;
 
     d->gboxSettings   = new EditorToolSettings;
     d->gboxSettings->setTools(EditorToolSettings::ColorGuide);
@@ -321,7 +321,7 @@ void FreeRotationTool::prepareEffect()
 
 void FreeRotationTool::prepareFinal()
 {
-    ImageIface iface(0, 0);
+    ImageIface iface;
     FreeRotationContainer settings = d->settingsView->settings();
     DImg* orgImage                 = iface.original();
     settings.backgroundColor       = Qt::black;
@@ -357,7 +357,7 @@ void FreeRotationTool::putPreviewData()
 
 void FreeRotationTool::putFinalData()
 {
-    ImageIface iface(0, 0);
+    ImageIface iface;
     DImg targetImage = filter()->getTargetImage();
     iface.putOriginal(i18n("Free Rotation"), filter()->filterAction(), targetImage);
 }

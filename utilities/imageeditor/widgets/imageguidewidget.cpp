@@ -137,7 +137,7 @@ ImageGuideWidget::ImageGuideWidget(QWidget* const parent,
     setMouseTracking(true);
     setAttribute(Qt::WA_DeleteOnClose);
 
-    d->iface         = new ImageIface(w, h);
+    d->iface         = new ImageIface(QSize(w, h));
     d->iface->setPreviewType(useImageSelection);
     d->preview       = d->iface->preview();
     d->preview.setIccProfile(d->iface->original()->getIccProfile());

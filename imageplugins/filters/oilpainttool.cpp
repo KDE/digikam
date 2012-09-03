@@ -194,7 +194,7 @@ void OilPaintTool::prepareFinal()
     int b = d->brushSizeInput->value();
     int s = d->smoothInput->value();
 
-    ImageIface iface(0, 0);
+    ImageIface iface;
     setFilter(new OilPaintFilter(iface.original(), this, b, s));
 }
 
@@ -205,7 +205,7 @@ void OilPaintTool::putPreviewData()
 
 void OilPaintTool::putFinalData()
 {
-    ImageIface iface(0, 0);
+    ImageIface iface;
     iface.putOriginal(i18n("Oil Paint"), filter()->filterAction(), filter()->getTargetImage());
 }
 

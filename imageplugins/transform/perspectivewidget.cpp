@@ -147,7 +147,7 @@ PerspectiveWidget::PerspectiveWidget(int w, int h, QWidget* parent)
     setMouseTracking(true);
 
     d->bgColor  = palette().color(QPalette::Background);
-    d->iface    = new ImageIface(w, h);
+    d->iface    = new ImageIface(QSize(w, h));
     d->preview  = d->iface->setPreviewSize(QSize(w, h));
     d->width    = d->iface->previewSize().width();
     d->height   = d->iface->previewSize().height();

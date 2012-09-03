@@ -191,7 +191,7 @@ ResizeTool::ResizeTool(QObject* parent)
                                 EditorToolSettings::SaveAs|
                                 EditorToolSettings::Cancel);
 
-    ImageIface iface(0, 0);
+    ImageIface iface;
     d->orgWidth  = iface.originalSize().width();
     d->orgHeight = iface.originalSize().height();
     d->prevW     = d->orgWidth;
@@ -507,7 +507,7 @@ void ResizeTool::prepareFinal()
 
     d->mainTab->setCurrentIndex(0);
 
-    ImageIface iface(0, 0);
+    ImageIface iface;
 
     if (d->useGreycstorationBox->isChecked())
     {
@@ -551,7 +551,7 @@ void ResizeTool::renderingFinished()
 
 void ResizeTool::putFinalData()
 {
-    ImageIface iface(0, 0);
+    ImageIface iface;
     DImg targetImage = filter()->getTargetImage();
     iface.putOriginal(i18n("Resize"),
                            filter()->filterAction(),

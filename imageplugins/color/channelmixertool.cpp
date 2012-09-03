@@ -202,13 +202,13 @@ void ChannelMixerTool::prepareFinal()
 {
     MixerContainer settings = d->settingsView->settings();
 
-    ImageIface iface(0, 0);
+    ImageIface iface;
     setFilter(new MixerFilter(iface.original(), this, settings));
 }
 
 void ChannelMixerTool::putFinalData()
 {
-    ImageIface iface(0, 0);
+    ImageIface iface;
     iface.putOriginal(i18n("Channel Mixer"), filter()->filterAction(), filter()->getTargetImage());
 }
 

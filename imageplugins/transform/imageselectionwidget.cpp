@@ -203,7 +203,7 @@ void ImageSelectionWidget::setup(int w, int h,
     setMouseTracking(true);
     setAttribute(Qt::WA_DeleteOnClose);
 
-    d->iface   = new ImageIface(w, h);
+    d->iface   = new ImageIface(QSize(w, h));
     d->preview = d->iface->preview();
     d->preview.setIccProfile( d->iface->original()->getIccProfile() );
     d->preview.convertToEightBit();

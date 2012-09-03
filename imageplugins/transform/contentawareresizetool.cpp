@@ -194,7 +194,7 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject* parent)
     QGridLayout* grid = new QGridLayout(d->gboxSettings->plainPage());
 
     // Initialize data
-    ImageIface iface(0, 0);
+    ImageIface iface;
     d->orgWidth  = iface.originalSize().width();
     d->orgHeight = iface.originalSize().height();
     d->prevW     = d->orgWidth;
@@ -726,7 +726,7 @@ void ContentAwareResizeTool::prepareFinal()
 
     disableSettings();
 
-    ImageIface iface(0, 0);
+    ImageIface iface;
     QImage mask;
 
     if (d->mixedRescaleInput->value() < 100.0) // mixed rescale
@@ -787,7 +787,7 @@ void ContentAwareResizeTool::renderingFinished()
 
 void ContentAwareResizeTool::putFinalData()
 {
-    ImageIface iface(0, 0);
+    ImageIface iface;
     DImg targetImage = filter()->getTargetImage();
     iface.putOriginal(i18n("Liquid Rescale"), filter()->filterAction(), targetImage);
 }
