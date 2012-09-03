@@ -97,12 +97,12 @@ public:
 
 // --------------------------------------------------------------
 
-class DImgInterface::DImgInterfacePrivate
+class DImgInterface::Private
 {
 
 public:
 
-    DImgInterfacePrivate() :
+    Private() :
         valid(false),
         rotatedOrFlipped(false),
         exifOrient(false),
@@ -204,7 +204,7 @@ void DImgInterface::setDefaultInterface(DImgInterface* const defaultInterface)
 }
 
 DImgInterface::DImgInterface()
-    : QObject(), d(new DImgInterfacePrivate)
+    : QObject(), d(new Private)
 {
     d->undoMan = new UndoManager(this);
     d->thread  = new SharedLoadSaveThread;
@@ -1144,19 +1144,6 @@ DImg* DImgInterface::getImg() const
     if (!d->image.isNull())
     {
         return &d->image;
-    }
-    else
-    {
-        kWarning() << "d->image is NULL";
-        return 0;
-    }
-}
-
-uchar* DImgInterface::getImage() const
-{
-    if (!d->image.isNull())
-    {
-        return d->image.bits();
     }
     else
     {

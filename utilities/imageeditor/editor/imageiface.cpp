@@ -195,7 +195,7 @@ bool ImageIface::previewType() const
 
 DColor ImageIface::colorInfoFromOriginal(const QPoint& point) const
 {
-    if (!DImgInterface::defaultInterface()->getImage() || point.x() > originalSize().width() || point.y() > originalSize().height())
+    if (!DImgInterface::defaultInterface()->getImg()->isNull() || point.x() > originalSize().width() || point.y() > originalSize().height())
     {
         kWarning() << "Coordinate out of range or no image data available!";
         return DColor();

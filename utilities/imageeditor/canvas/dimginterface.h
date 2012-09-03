@@ -169,7 +169,6 @@ public:
     int    availableRedoSteps() const;
 
     DImg*  getImg() const;
-    uchar* getImage() const;
 
     void   putImage(const QString& caller, const FilterAction& action, uchar* const data, int w, int h);
     void   putImage(const QString& caller, const FilterAction& action, uchar* const data, int w, int h, bool sixteenBit);
@@ -247,8 +246,8 @@ private:
 
     static DImgInterface* m_defaultInterface;
 
-    class DImgInterfacePrivate;
-    DImgInterfacePrivate* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

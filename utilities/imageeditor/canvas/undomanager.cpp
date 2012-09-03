@@ -358,7 +358,7 @@ void UndoManager::makeSnapshot(int index)
     int h           = d->dimgiface->origHeight();
     bool sixteenBit = d->dimgiface->sixteenBit();
     bool hasAlpha   = d->dimgiface->hasAlpha();
-    uchar* data     = d->dimgiface->getImage();
+    uchar* data     = d->dimgiface->getImg()->bits();
 
     d->undoCache->putData(index, w, h, sixteenBit, hasAlpha, data);
 }
