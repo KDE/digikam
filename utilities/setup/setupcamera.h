@@ -78,8 +78,8 @@ private:
 
 private:
 
-    class SetupCameraPriv;
-    SetupCameraPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 // -------------------------------------------------------------------------
@@ -94,8 +94,8 @@ public:
     virtual ~CameraAutoDetectThread();
 
     int     result() const;
-    QString model() const;
-    QString port() const;
+    QString model()  const;
+    QString port()   const;
 
 private:
 
@@ -103,8 +103,8 @@ private:
 
 private:
 
-    class CameraAutoDetectThreadPriv;
-    CameraAutoDetectThreadPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

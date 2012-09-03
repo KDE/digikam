@@ -111,11 +111,11 @@ private:
 
 // -------------------------------------------------------------------
 
-class CameraAutoDetectThread::CameraAutoDetectThreadPriv
+class CameraAutoDetectThread::Private
 {
 public:
 
-    CameraAutoDetectThreadPriv()
+    Private()
     {
         result = 0;
     }
@@ -127,7 +127,7 @@ public:
 };
 
 CameraAutoDetectThread::CameraAutoDetectThread(QObject* const parent)
-    : DBusyThread(parent), d(new CameraAutoDetectThreadPriv)
+    : DBusyThread(parent), d(new Private)
 {
     d->result = -1;
 }
@@ -160,11 +160,11 @@ QString CameraAutoDetectThread::port() const
 
 // -------------------------------------------------------------------
 
-class SetupCamera::SetupCameraPriv
+class SetupCamera::Private
 {
 public:
 
-    SetupCameraPriv() :
+    Private() :
         addButton(0),
         removeButton(0),
         editButton(0),
@@ -246,15 +246,15 @@ public:
     FilterList           filters;
 };
 
-const QString SetupCamera::SetupCameraPriv::configGroupName("Camera Settings");
-const QString SetupCamera::SetupCameraPriv::configUseMetadataDateEntry("UseThemeBackgroundColor");
-const QString SetupCamera::SetupCameraPriv::configTrunHighQualityThumbs("TurnHighQualityThumbs");
-const QString SetupCamera::SetupCameraPriv::configUseDefaultTargetAlbum("UseDefaultTargetAlbum");
-const QString SetupCamera::SetupCameraPriv::configDefaultTargetAlbumId("DefaultTargetAlbumId");
-const QString SetupCamera::SetupCameraPriv::importFiltersConfigGroupName("Import Filters");
+const QString SetupCamera::Private::configGroupName("Camera Settings");
+const QString SetupCamera::Private::configUseMetadataDateEntry("UseThemeBackgroundColor");
+const QString SetupCamera::Private::configTrunHighQualityThumbs("TurnHighQualityThumbs");
+const QString SetupCamera::Private::configUseDefaultTargetAlbum("UseDefaultTargetAlbum");
+const QString SetupCamera::Private::configDefaultTargetAlbumId("DefaultTargetAlbumId");
+const QString SetupCamera::Private::importFiltersConfigGroupName("Import Filters");
 
 SetupCamera::SetupCamera(QWidget* const parent)
-    : QScrollArea(parent), d(new SetupCameraPriv)
+    : QScrollArea(parent), d(new Private)
 {
     d->tab            = new KTabWidget(viewport());
     setWidget(d->tab);
@@ -475,7 +475,7 @@ SetupCamera::SetupCamera(QWidget* const parent)
     QGroupBox* interfaceOptionsGroup = new QGroupBox(i18n("Preview Options"), panel);
     QGridLayout* grid3               = new QGridLayout(interfaceOptionsGroup);
 
-    d->previewLoadFullImageSize      = new QCheckBox(i18n("Embedded preview loads full-sized images."), interfaceOptionsGroup);
+    d->previewLoadFullImageSize      = new QCheckBox(i18n("Embedded preview loads full-sized images"), interfaceOptionsGroup);
     d->previewLoadFullImageSize->setWhatsThis(i18n("<p>Set this option to load images at their full size "
                                                    "for preview, rather than at a reduced size. As this option "
                                                    "will make it take longer to load images, only use it if you have "
@@ -483,7 +483,7 @@ SetupCamera::SetupCamera(QWidget* const parent)
                                                    "<p><b>Note:</b> for Raw images, a half size version of the Raw data "
                                                    "is used instead of the embedded JPEG preview.</p>"));
 
-    d->previewItemsWhileDownload      = new QCheckBox(i18n("Preview each item while downloading it."), interfaceOptionsGroup);
+    d->previewItemsWhileDownload      = new QCheckBox(i18n("Preview each item while downloading it"), interfaceOptionsGroup);
     d->previewItemsWhileDownload->setWhatsThis(i18n("<p>Set this option to preview each item while downloading.</p>"));
 
     d->previewShowIcons              = new QCheckBox(i18n("Show icons and text over preview"), interfaceOptionsGroup);
@@ -491,9 +491,9 @@ SetupCamera::SetupCamera(QWidget* const parent)
 
     grid3->setMargin(KDialog::spacingHint());
     grid3->setSpacing(KDialog::spacingHint());
-    grid3->addWidget(d->previewLoadFullImageSize, 0, 0, 1, 2);
+    grid3->addWidget(d->previewLoadFullImageSize,  0, 0, 1, 2);
     grid3->addWidget(d->previewItemsWhileDownload, 1, 0, 1, 2);
-    grid3->addWidget(d->previewShowIcons,         2, 0, 1, 2);
+    grid3->addWidget(d->previewShowIcons,          2, 0, 1, 2);
 
     layout2->setMargin(0);
     layout2->setSpacing(KDialog::spacingHint());
@@ -567,13 +567,13 @@ void SetupCamera::readSettings()
 {
     // Populate cameras --------------------------------------
 
-    CameraList* clist = CameraList::defaultList();
+    CameraList* const clist = CameraList::defaultList();
 
     if (clist)
     {
         QList<CameraType*>* cl = clist->cameraList();
 
-        foreach(CameraType* ctype, *cl)
+        foreach(CameraType* const ctype, *cl)
         {
             new SetupCameraItem(d->listView, ctype);
         }
@@ -610,14 +610,16 @@ void SetupCamera::readSettings()
     }
 
     FilterComboBox::defaultFilters(&d->filters);
-    foreach(Filter* f, d->filters)
+
+    foreach(Filter* const f, d->filters)
     {
         new QListWidgetItem(f->name, d->importListView);
     }
+
     d->ignoreNamesEdit->setText(importGroup.readEntry("IgnoreNames", FilterComboBox::defaultIgnoreNames));
     d->ignoreExtensionsEdit->setText(importGroup.readEntry("IgnoreExtensions", FilterComboBox::defaultIgnoreExtensions));
 
-    ImportSettings* settings = ImportSettings::instance();
+    ImportSettings* const settings = ImportSettings::instance();
 
     if (!settings)
     {
@@ -645,7 +647,7 @@ void SetupCamera::applySettings()
 {
     // Save camera devices -----------------------------------
 
-    CameraList* clist = CameraList::defaultList();
+    CameraList* const clist = CameraList::defaultList();
 
     if (clist)
     {
@@ -655,11 +657,11 @@ void SetupCamera::applySettings()
 
         while (*it)
         {
-            SetupCameraItem* item = dynamic_cast<SetupCameraItem*>(*it);
+            SetupCameraItem* const item = dynamic_cast<SetupCameraItem*>(*it);
 
             if (item)
             {
-                CameraType* ctype = item->cameraType();
+                CameraType* const ctype = item->cameraType();
 
                 if (ctype)
                 {
@@ -681,7 +683,7 @@ void SetupCamera::applySettings()
     group.writeEntry(d->configUseMetadataDateEntry, d->useDateFromMetadata->isChecked());
     group.writeEntry(d->configTrunHighQualityThumbs, d->turnHighQualityThumbs->isChecked());
     group.writeEntry(d->configUseDefaultTargetAlbum, d->useDefaultTargetAlbum->isChecked());
-    PAlbum* album = d->target1AlbumSelector->currentAlbum();
+    PAlbum* const album = d->target1AlbumSelector->currentAlbum();
     group.writeEntry(d->configDefaultTargetAlbumId, album ? album->id() : 0);
     group.sync();
 
@@ -761,7 +763,7 @@ void SetupCamera::slotSelectionChanged()
 
 void SetupCamera::slotAddCamera()
 {
-    CameraSelection* select = new CameraSelection;
+    CameraSelection* const select = new CameraSelection;
 
     connect(select, SIGNAL(signalOkClicked(const QString&, const QString&,
                                            const QString&, const QString&)),
@@ -780,14 +782,14 @@ void SetupCamera::slotAddedCamera(const QString& title, const QString& model,
 
 void SetupCamera::slotRemoveCamera()
 {
-    SetupCameraItem* item = dynamic_cast<SetupCameraItem*>(d->listView->currentItem());
+    SetupCameraItem* const item = dynamic_cast<SetupCameraItem*>(d->listView->currentItem());
 
     delete item;
 }
 
 void SetupCamera::slotEditCamera()
 {
-    SetupCameraItem* item = dynamic_cast<SetupCameraItem*>(d->listView->currentItem());
+    SetupCameraItem* const item = dynamic_cast<SetupCameraItem*>(d->listView->currentItem());
 
     if (!item)
     {
@@ -801,7 +803,7 @@ void SetupCamera::slotEditCamera()
         return;
     }
 
-    CameraSelection* select = new CameraSelection;
+    CameraSelection* const select = new CameraSelection;
     select->setCamera(ctype->title(), ctype->model(), ctype->port(), ctype->path());
 
     connect(select, SIGNAL(signalOkClicked(const QString&, const QString&,
@@ -815,7 +817,7 @@ void SetupCamera::slotEditCamera()
 void SetupCamera::slotEditedCamera(const QString& title, const QString& model,
                                    const QString& port, const QString& path)
 {
-    SetupCameraItem* item = dynamic_cast<SetupCameraItem*>(d->listView->currentItem());
+    SetupCameraItem* const item = dynamic_cast<SetupCameraItem*>(d->listView->currentItem());
 
     if (!item)
     {
@@ -828,8 +830,8 @@ void SetupCamera::slotEditedCamera(const QString& title, const QString& model,
 
 void SetupCamera::slotAutoDetectCamera()
 {
-    DBusyDlg* dlg                  = new DBusyDlg(i18n("Device detection under progress, please wait..."), this);
-    CameraAutoDetectThread* thread = new CameraAutoDetectThread(this);
+    DBusyDlg* const dlg                  = new DBusyDlg(i18n("Device detection under progress, please wait..."), this);
+    CameraAutoDetectThread* const thread = new CameraAutoDetectThread(this);
     dlg->setBusyThread(thread);
     dlg->exec();
 
@@ -864,7 +866,7 @@ void SetupCamera::slotAutoDetectCamera()
 
 void SetupCamera::slotImportSelectionChanged()
 {
-    QListWidgetItem* item = d->importListView->currentItem();
+    QListWidgetItem* const item = d->importListView->currentItem();
 
     d->importRemoveButton->setEnabled(item);
     d->importEditButton->setEnabled(item);
@@ -879,7 +881,7 @@ void SetupCamera::slotAddFilter()
 
     if (dlg.exec() == QDialog::Accepted)
     {
-        Filter* f = new Filter;
+        Filter* const f = new Filter;
         dlg.getData(f);
         d->filters.append(f);
         new QListWidgetItem(f->name, d->importListView);
@@ -905,7 +907,7 @@ void SetupCamera::slotEditFilter()
 
     if (dlg.exec() == QDialog::Accepted)
     {
-        Filter* f = d->filters.at(i);
+        Filter* const f = d->filters.at(i);
         dlg.getData(f);
         d->importListView->currentItem()->setText(f->name);
     }
