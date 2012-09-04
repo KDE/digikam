@@ -100,6 +100,8 @@ public:
 
     /// Unique image id
     qlonglong          id;
+
+    int                rating;               // Pre-rating value of camera file.
 };
 
 QDataStream& operator<<(QDataStream&, const CamItemInfo&);

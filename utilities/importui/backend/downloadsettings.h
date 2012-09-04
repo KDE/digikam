@@ -73,6 +73,9 @@ public:
 
     // -- Settings from ScriptingSettings widget ---------------
     QString   script;
+
+    // -- Pre-rating of each camera file.
+    int       rating;
 };
 
 typedef QList<DownloadSettings> DownloadSettingsList;

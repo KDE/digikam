@@ -64,6 +64,9 @@ public Q_SLOTS:
     void removeSelectedFromGroup();
     void rename();
 
+    void assignRating(const QList<QModelIndex>& index, int rating);
+    void assignRatingToSelected(int rating);
+
 Q_SIGNALS:
 
     void previewRequested(const CamItemInfo& info, bool downloadPreview);

@@ -77,6 +77,14 @@ public:
      */
     virtual QRect imageInformationRect() const;
 
+    /** Can be used to temporarily disable drawing of the rating.
+     *  Call with QModelIndex() afterwards. */
+    void setRatingEdited(const QModelIndex& index);
+
+    /** Returns the rectangle where the rating is drawn,
+     *  or a null rectangle if not supported. */
+    virtual QRect ratingRect() const;
+
     virtual void mouseMoved(QMouseEvent* e, const QRect& visualRect, const QModelIndex& index);
 
 protected Q_SLOTS:
@@ -95,6 +103,7 @@ protected:
 
     /// Use the tool methods for painting in subclasses
     QRect drawThumbnail(QPainter* p, const QRect& thumbRect, const QPixmap& background, const QPixmap& thumbnail) const;
+    void drawRating(QPainter* p, const QModelIndex& index, const QRect& ratingRect, int rating, bool isSelected) const;
     void drawName(QPainter* p,const QRect& nameRect, const QString& name) const;
     void drawModificationDate(QPainter* p, const QRect& dateRect, const QDateTime& date) const;
     void drawImageSize(QPainter* p, const QRect& dimsRect, const QSize& dims) const;
@@ -109,6 +118,10 @@ protected:
     void prepareFonts();
     void prepareMetrics(int maxWidth);
     void prepareBackground();
+    void prepareRatingPixmaps(bool composeOverBackground = true);
+
+    /// Returns the relevant pixmap from the cached rating pixmaps
+    QPixmap ratingPixmap(int rating, bool selected) const;
 
     virtual QAbstractItemDelegate* asDelegate();
 

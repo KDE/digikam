@@ -54,7 +54,7 @@ public:
 
     QItemSelectionModel*   getSelectionModel()                const;
 
-    /// Returns any ImageFilterMode in chain. May not be sourceModel()
+    /// Returns any ImportFilterModel in chain. May not be sourceModel()
     ImportFilterModel*     importFilterModel()                const;
 
     /// Returns 0 if the ImportImageModel is not an ImportThumbnailModel

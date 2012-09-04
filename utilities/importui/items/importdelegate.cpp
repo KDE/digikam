@@ -59,6 +59,7 @@ void ImportDelegate::ImportDelegatePrivate::clearRects()
     downloadRect         = QRect(0, 0, 0, 0);
     lockRect             = QRect(0, 0, 0, 0);
     //tagRect              = QRect(0, 0, 0, 0);
+    ratingRect             = QRect(0, 0, 0, 0);
     imageInformationRect = QRect(0, 0, 0, 0);
     //pickLabelRect        = QRect(0, 0, 0, 0);
     groupRect            = QRect(0, 0, 0, 0);
@@ -254,11 +255,10 @@ void ImportDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, cons
         const_cast<ImportDelegate*>(this)->updateActualPixmapRect(index, actualPixmapRect);
     }
 
-    //TODO: Implement rating in import tool.
-    /*if (!d->ratingRect.isNull())
+    if (!d->ratingRect.isNull())
     {
-        drawRating(p, index, d->ratingRect, info.rating(), isSelected);
-    }*/
+        drawRating(p, index, d->ratingRect, info.rating, isSelected);
+    }
 
     //TODO: Implement labels in import tool.
     // Draw Color Label rectangle
@@ -443,13 +443,12 @@ void ImportDelegate::updateSizeRectsAndPixmaps()
 
     prepareBackground();
 
-    //TODO: Implement rating in import tool.
-    /*if (!d->ratingRect.isNull())
+    if (!d->ratingRect.isNull())
     {
         //Normally we prepare the pixmaps over the background of the rating rect.
         //If the rating is drawn over the thumbnail, we can only draw over a transparent pixmap.
         prepareRatingPixmaps(!d->ratingOverThumbnail);
-    }*/
+    }
 
     // ---- Drawing related caches ----
 
@@ -655,12 +654,11 @@ void ImportThumbnailDelegate::updateRects()
     d->rect            = QRect(0, 0, d->contentWidth + 2*d->margin, d->contentWidth + 2*d->margin);
     d->drawImageFormat = ImportSettings::instance()->getIconShowImageFormat();
 
-    //TODO: Implement rating in import tool.
-    /*if (ImportSettings::instance()->getIconShowRating())
+    if (ImportSettings::instance()->getIconShowRating())
     {
         int top       = d->rect.bottom() - d->margin - d->starPolygonSize.height() - 2;
         d->ratingRect = QRect(d->margin, top, d->contentWidth, d->starPolygonSize.height());
-    }*/
+    }
 
     if (d->flow == QListView::LeftToRight)
     {
@@ -720,12 +718,11 @@ void ImportNormalDelegate::updateRects()
     d->downloadRect     =  QRect(d->contentWidth - iconSize - 14, d->pixmapRect.top(), iconSize, iconSize);
     d->lockRect         =  QRect(d->contentWidth - iconSize + 2, d->pixmapRect.top(), iconSize, iconSize);
 
-    //TODO: Implement rating in import tool.
-    /*if (importSettings->getIconShowRating())
+    if (importSettings->getIconShowRating())
     {
         d->ratingRect = QRect(d->margin, y, d->contentWidth, d->starPolygonSize.height());
         y             = d->ratingRect.bottom();
-    }*/
+    }
 
     if (importSettings->getIconShowName())
     {

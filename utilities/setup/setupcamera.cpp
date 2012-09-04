@@ -181,7 +181,7 @@ public:
         iconShowResolutionBox(0),
         //TODO: iconShowTagsBox(0),
         //TODO: iconShowOverlaysBox(0),
-        //TODO: iconShowRatingBox(0),
+        iconShowRatingBox(0),
         iconShowFormatBox(0),
         previewLoadFullImageSize(0),
         previewItemsWhileDownload(0),
@@ -222,7 +222,7 @@ public:
     QCheckBox*           iconShowResolutionBox;
     //TODO: QCheckBox*           iconShowTagsBox;
     //TODO: QCheckBox*           iconShowOverlaysBox;
-    //TODO: QCheckBox*           iconShowRatingBox;
+    QCheckBox*           iconShowRatingBox;
     QCheckBox*           iconShowFormatBox;
     QCheckBox*           previewLoadFullImageSize;
     QCheckBox*           previewItemsWhileDownload;
@@ -437,9 +437,9 @@ SetupCamera::SetupCamera(QWidget* const parent)
     //TODO: d->iconShowTagsBox->setWhatsThis(i18n("Set this option to show the digiKam tags "
                                           //"below the image thumbnail."));
 
-    //TODO: d->iconShowRatingBox     = new QCheckBox(i18n("Show digiKam &rating"), iconViewGroup);
-    //TODO: d->iconShowRatingBox->setWhatsThis(i18n("Set this option to show the digiKam rating "
-                                            //"below the image thumbnail."));
+    d->iconShowRatingBox     = new QCheckBox(i18n("Show item &rating"), iconViewGroup);
+    d->iconShowRatingBox->setWhatsThis(i18n("Set this option to show the item rating "
+                                            "below the image thumbnail."));
 
     //TODO: d->iconShowOverlaysBox   = new QCheckBox(i18n("Show rotation overlay buttons"), iconViewGroup);
     //TODO: d->iconShowOverlaysBox->setWhatsThis(i18n("Set this option to show overlay buttons on "
@@ -461,7 +461,7 @@ SetupCamera::SetupCamera(QWidget* const parent)
     grid2->addWidget(d->iconShowFormatBox,        4, 0, 1, 1);
 
     //TODO: grid2->addWidget(d->iconShowTagsBox,          2, 1, 1, 1);
-    //TODO: grid2->addWidget(d->iconShowRatingBox,        3, 1, 1, 1);
+    grid2->addWidget(d->iconShowRatingBox,        2, 0, 1, 1);
     //TODO: grid2->addWidget(d->iconShowOverlaysBox,      4, 1, 1, 1);
 
     grid2->addWidget(leftClickLabel,              5, 0, 1, 1);
@@ -632,7 +632,7 @@ void SetupCamera::readSettings()
     d->iconShowModDateBox->setChecked(settings->getIconShowModDate());
     //TODO: d->iconShowResolutionBox->setChecked(settings->getIconShowResolution());
     //TODO: d->iconShowOverlaysBox->setChecked(settings->getIconShowOverlays());
-    //TODO: d->iconShowRatingBox->setChecked(settings->getIconShowRating());
+    d->iconShowRatingBox->setChecked(settings->getIconShowRating());
     d->iconShowFormatBox->setChecked(settings->getIconShowImageFormat());
     d->iconViewFontSelect->setFont(settings->getIconViewFont());
 
@@ -715,7 +715,7 @@ void SetupCamera::applySettings()
     settings->setIconShowModDate(d->iconShowModDateBox->isChecked());
     //TODO: settings->setIconShowResolution(d->iconShowResolutionBox->isChecked());
     //TODO: settings->setIconShowOverlays(d->iconShowOverlaysBox->isChecked());
-    //TODO: settings->setIconShowRating(d->iconShowRatingBox->isChecked());
+    settings->setIconShowRating(d->iconShowRatingBox->isChecked());
     settings->setIconShowImageFormat(d->iconShowFormatBox->isChecked());
     settings->setIconViewFont(d->iconViewFontSelect->font());
 

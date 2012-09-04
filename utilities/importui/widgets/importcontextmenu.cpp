@@ -351,14 +351,14 @@ void ImportContextMenuHelper::addAssignTagsMenu(itemIds& /*ids*/)
 
 void ImportContextMenuHelper::addLabelsAction()
 {
-//    KMenu* menuLabels           = new KMenu(i18n("Assign Labels"), d->parent);
+    KMenu* menuLabels           = new KMenu(i18n("Assign Labels"), d->parent);
 //    PickLabelMenuAction* pmenu  = new PickLabelMenuAction(d->parent);
 //    ColorLabelMenuAction* cmenu = new ColorLabelMenuAction(d->parent);
-//    RatingMenuAction* rmenu     = new RatingMenuAction(d->parent);
+    RatingMenuAction* rmenu     = new RatingMenuAction(d->parent);
 //    menuLabels->addAction(pmenu);
 //    menuLabels->addAction(cmenu);
-//    menuLabels->addAction(rmenu);
-//    addSubMenu(menuLabels);
+    menuLabels->addAction(rmenu);
+    addSubMenu(menuLabels);
 
 //    connect(pmenu, SIGNAL(signalPickLabelChanged(int)),
 //            this, SIGNAL(signalAssignPickLabel(int)));
@@ -366,8 +366,8 @@ void ImportContextMenuHelper::addLabelsAction()
 //    connect(cmenu, SIGNAL(signalColorLabelChanged(int)),
 //            this, SIGNAL(signalAssignColorLabel(int)));
 
-//    connect(rmenu, SIGNAL(signalRatingChanged(int)),
-//            this, SIGNAL(signalAssignRating(int)));
+    connect(rmenu, SIGNAL(signalRatingChanged(int)),
+            this, SIGNAL(signalAssignRating(int)));
 }
 
 void ImportContextMenuHelper::slotABCMenuTriggered(QAction* action)

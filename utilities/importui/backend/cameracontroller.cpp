@@ -585,6 +585,7 @@ void CameraController::executeCommand(CameraCommand* const cmd)
             bool      convertJpeg    = cmd->map["convertJpeg"].toBool();
             QString   losslessFormat = cmd->map["losslessFormat"].toString();
             QString   script         = cmd->map["script"].toString();
+            int       rating         = cmd->map["rating"].toInt();
             sendLogMsg(i18n("Downloading file %1...", file), DHistoryView::StartingEntry, folder, file);
 
             // download to a temp file
@@ -620,6 +621,8 @@ void CameraController::executeCommand(CameraCommand* const cmd)
                         sendLogMsg(i18n("Fix Internal date to file %1...", file), DHistoryView::StartingEntry, folder, file);
                         metadata.setImageDateTime(newDateTime, true);
                     }
+
+                    metadata.setImageRating(rating);
 
                     TemplateManager* tm = TemplateManager::defaultManager();
 
@@ -1167,6 +1170,7 @@ void CameraController::download(const DownloadSettings& downloadSettings)
     cmd->map.insert("convertJpeg",       QVariant(downloadSettings.convertJpeg));
     cmd->map.insert("losslessFormat",    QVariant(downloadSettings.losslessFormat));
     cmd->map.insert("script",            QVariant(downloadSettings.script));
+    cmd->map.insert("rating",            QVariant(downloadSettings.rating));
     addCommand(cmd);
 }
 

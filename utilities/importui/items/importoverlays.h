@@ -34,6 +34,7 @@
 #include "itemviewhoverbutton.h"
 #include "imagedelegateoverlay.h"
 #include "itemviewimportdelegate.h"
+#include "ratingwidget.h"
 
 namespace Digikam
 {
@@ -101,6 +102,43 @@ protected:
     virtual void slotEntered(const QModelIndex& index);
 
 protected:
+
+    QPersistentModelIndex m_index;
+};
+
+// ------------------------------------------------------------------------------------------------
+
+class ImportRatingOverlay : public AbstractWidgetDelegateOverlay
+{
+    Q_OBJECT
+    REQUIRE_DELEGATE(ItemViewImportDelegate)
+
+public:
+
+    ImportRatingOverlay(QObject* parent);
+    RatingWidget* ratingWidget() const;
+
+Q_SIGNALS:
+
+    void ratingEdited(const QList<QModelIndex>& indexes, int rating);
+
+protected Q_SLOTS:
+
+    void slotRatingChanged(int);
+    void slotDataChanged(const QModelIndex&, const QModelIndex&);
+
+protected:
+
+    virtual QWidget* createWidget();
+    virtual void setActive(bool);
+    virtual void visualChange();
+    virtual void hide();
+    virtual void slotEntered(const QModelIndex& index);
+    virtual void widgetEnterEvent();
+    virtual void widgetLeaveEvent();
+
+    void updatePosition();
+    void updateRating();
 
     QPersistentModelIndex m_index;
 };

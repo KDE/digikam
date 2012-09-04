@@ -53,7 +53,7 @@ Q_SIGNALS:
     //TODO: void signalRemoveTag(int);
     //TODO: void signalAssignPickLabel(int);
     //TODO: void signalAssignColorLabel(int);
-    //TODO: void signalAssignRating(int);
+    void signalAssignRating(int);
     void signalAddNewTagFromABCMenu(const QString&);
     //void signalCreateGroup();
     //TODO: void signalUngroup();

@@ -104,8 +104,8 @@ public:
     void setIconShowModDate(bool val);
     bool getIconShowModDate() const;
 
-    //TODO: void setIconShowRating(bool val);
-    //TODO: bool getIconShowRating() const;
+    void setIconShowRating(bool val);
+    bool getIconShowRating() const;
 
     void setIconShowImageFormat(bool val);
     bool getIconShowImageFormat() const;

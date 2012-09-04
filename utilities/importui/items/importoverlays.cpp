@@ -34,6 +34,7 @@
 #include "importcategorizedview.h"
 #include "importdelegate.h"
 #include "camiteminfo.h"
+#include "ratingwidget.h"
 
 namespace Digikam
 {
@@ -197,6 +198,143 @@ void ImportDownloadOverlay::slotEntered(const QModelIndex& index)
     AbstractWidgetDelegateOverlay::slotEntered(index);
     m_index = index;
     updatePosition();
+}
+
+// -- Rating Overlay ------------------------------------------------------------------
+
+ImportRatingOverlay::ImportRatingOverlay(QObject* parent)
+    : AbstractWidgetDelegateOverlay(parent)
+{
+}
+
+RatingWidget* ImportRatingOverlay::ratingWidget() const
+{
+    return static_cast<RatingWidget*>(m_widget);
+}
+
+QWidget* ImportRatingOverlay::createWidget()
+{
+    const bool animate = KGlobalSettings::graphicEffectsLevel() & KGlobalSettings::SimpleAnimationEffects;
+    RatingWidget* w    = new RatingWidget(parentWidget());
+    w->setFading(animate);
+    w->setTracking(false);
+    return w;
+}
+
+void ImportRatingOverlay::setActive(bool active)
+{
+    AbstractWidgetDelegateOverlay::setActive(active);
+
+    if (active)
+    {
+        connect(ratingWidget(), SIGNAL(signalRatingChanged(int)),
+                this, SLOT(slotRatingChanged(int)));
+
+        if (view()->model())
+            connect(view()->model(), SIGNAL(dataChanged(QModelIndex,QModelIndex)),
+                    this, SLOT(slotDataChanged(QModelIndex,QModelIndex)));
+    }
+    else
+    {
+        // widget is deleted
+
+        if (view() && view()->model())
+        {
+            disconnect(view()->model(), 0, this, 0);
+        }
+    }
+}
+
+void ImportRatingOverlay::visualChange()
+{
+    if (m_widget && m_widget->isVisible())
+    {
+        updatePosition();
+    }
+}
+
+void ImportRatingOverlay::widgetEnterEvent()
+{
+    widgetEnterNotifyMultiple(m_index);
+}
+
+void ImportRatingOverlay::widgetLeaveEvent()
+{
+    widgetLeaveNotifyMultiple();
+}
+
+void ImportRatingOverlay::hide()
+{
+    delegate()->setRatingEdited(QModelIndex());
+    AbstractWidgetDelegateOverlay::hide();
+}
+
+void ImportRatingOverlay::updatePosition()
+{
+    if (!m_index.isValid())
+    {
+        return;
+    }
+
+    QRect rect = delegate()->ratingRect();
+
+    if (rect.width() > ratingWidget()->maximumVisibleWidth())
+    {
+        int offset = (rect.width() - ratingWidget()->maximumVisibleWidth()) / 2;
+        rect.adjust(offset, 0, -offset, 0);
+    }
+
+    QRect visualRect = m_view->visualRect(m_index);
+    rect.translate(visualRect.topLeft());
+
+    m_widget->setFixedSize(rect.width() + 1, rect.height() + 1);
+    m_widget->move(rect.topLeft());
+}
+
+void ImportRatingOverlay::updateRating()
+{
+    if (!m_index.isValid())
+    {
+        return;
+    }
+
+    ImportImageModel* model = m_index.data(ImportImageModel::ImportImageModelPointerRole).value<ImportImageModel*>();
+    ratingWidget()->setRating(model->camItemInfoRef(m_index).rating);
+}
+
+void ImportRatingOverlay::slotRatingChanged(int rating)
+{
+    if (m_widget && m_widget->isVisible() && m_index.isValid())
+    {
+        emit ratingEdited(affectedIndexes(m_index), rating);
+    }
+}
+
+void ImportRatingOverlay::slotEntered(const QModelIndex& index)
+{
+    AbstractWidgetDelegateOverlay::slotEntered(index);
+
+    // see bug 228810, this is a small workaround
+    if (m_widget && m_widget->isVisible() && m_index.isValid() && index == m_index)
+    {
+        ratingWidget()->setVisibleImmediately();
+    }
+
+    m_index = index;
+
+    updatePosition();
+    updateRating();
+
+    delegate()->setRatingEdited(m_index);
+    view()->update(m_index);
+}
+
+void ImportRatingOverlay::slotDataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight)
+{
+    if (m_widget && m_widget->isVisible() && QItemSelectionRange(topLeft, bottomRight).contains(m_index))
+    {
+        updateRating();
+    }
 }
 
 // -- Rotate Overlay ----------------------------------------------------------------

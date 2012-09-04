@@ -97,14 +97,14 @@ void ImportIconView::init(CameraController* const controller)
     d->updateOverlays();
 
     // rating overlay
-    //TODO: ImageRatingOverlay* ratingOverlay = new ImageRatingOverlay(this);
-    //TODO: addOverlay(ratingOverlay);
+    ImportRatingOverlay* ratingOverlay = new ImportRatingOverlay(this);
+    addOverlay(ratingOverlay);
 
     //TODO: GroupIndicatorOverlay* groupOverlay = new GroupIndicatorOverlay(this);
     //TODO: addOverlay(groupOverlay);
 
-    //TODO: connect(ratingOverlay, SIGNAL(ratingEdited(QList<QModelIndex>,int)),
-            //this, SLOT(assignRating(QList<QModelIndex>,int)));
+    connect(ratingOverlay, SIGNAL(ratingEdited(QList<QModelIndex>,int)),
+            this, SLOT(assignRating(QList<QModelIndex>,int)));
 
     //TODO: connect(groupOverlay, SIGNAL(toggleGroupOpen(QModelIndex)),
             //this, SLOT(groupIndicatorClicked(QModelIndex)));
@@ -336,7 +336,7 @@ void ImportIconView::showContextMenuOnInfo(QContextMenuEvent* event, const CamIt
     //cmhelper.addRemoveTagsMenu(selectedImageIDs);
     //cmhelper.addSeparator();
     // --------------------------------------------------------
-    //cmhelper.addLabelsAction();
+    cmhelper.addLabelsAction();
     //if (!d->faceMode)
     //{
     //    cmhelper.addGroupMenu(selectedImageIDs);
@@ -362,8 +362,8 @@ void ImportIconView::showContextMenuOnInfo(QContextMenuEvent* event, const CamIt
     //connect(&cmhelper, SIGNAL(signalAssignColorLabel(int)),
             //this, SLOT(assignColorLabelToSelected(int)));
 
-    //connect(&cmhelper, SIGNAL(signalAssignRating(int)),
-            //this, SLOT(assignRatingToSelected(int)));
+    connect(&cmhelper, SIGNAL(signalAssignRating(int)),
+            this, SLOT(assignRatingToSelected(int)));
 
     //connect(&cmhelper, SIGNAL(signalAddToExistingQueue(int)),
             //this, SLOT(insertSelectedToExistingQueue(int)));
@@ -393,6 +393,27 @@ void ImportIconView::showContextMenu(QContextMenuEvent* event)
     // --------------------------------------------------------
 
     cmhelper.exec(event->globalPos());
+}
+
+void ImportIconView::assignRating(const QList<QModelIndex>& indexes, int rating)
+{
+    foreach(QModelIndex index, indexes)
+    {
+        if (index.isValid())
+        {
+            importImageModel()->camItemInfoRef(index).rating = rating;
+        }
+    }
+}
+
+void ImportIconView::assignRatingToSelected(int rating)
+{
+    CamItemInfoList infos = selectedCamItemInfos();
+
+    foreach(CamItemInfo info, infos)
+    {
+        importImageModel()->camItemInfoRef(importImageModel()->indexForCamItemInfo(info)).rating = rating;;
+    }
 }
 
 } // namespace Digikam

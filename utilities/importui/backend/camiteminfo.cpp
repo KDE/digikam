@@ -40,6 +40,7 @@ CamItemInfo::CamItemInfo()
     writePermissions = -1;
     downloaded       = DownloadUnknown;
     id               = -1;
+    rating           = 0;
 }
 
 CamItemInfo::~CamItemInfo()
@@ -55,6 +56,7 @@ bool CamItemInfo::isNull() const
            (writePermissions == -1)              &&
            (downloaded       == DownloadUnknown) &&
            (id               == -1)              &&
+           (rating           == 0)               &&
            name.isNull()                         &&
            folder.isNull()                       &&
            mime.isNull()                         &&
@@ -84,8 +86,9 @@ bool CamItemInfo::operator==(const CamItemInfo& info) const
     bool b9  = mtime            == info.mtime;
     bool b10 = photoInfo        == info.photoInfo;
     bool b11 = id               == info.id;
+    bool b12 = rating           == info.rating;
 
-    return b1 && b2 && b3 && b4 && b5 && b6 && b7 && b8 && b9 && b10 && b11;
+    return b1 && b2 && b3 && b4 && b5 && b6 && b7 && b8 && b9 && b10 && b11 && b12;
 }
 
 QDataStream& operator<<(QDataStream& ds, const CamItemInfo& info)
@@ -103,6 +106,7 @@ QDataStream& operator<<(QDataStream& ds, const CamItemInfo& info)
     ds << info.photoInfo;
     ds << info.downloadName;
     ds << info.id;
+    ds << info.rating;
 
     return ds;
 }
@@ -122,6 +126,7 @@ QDataStream& operator>>(QDataStream& ds, CamItemInfo& info)
     ds >> info.photoInfo;
     ds >> info.downloadName;
     ds >> info.id;
+    ds >> info.rating;
 
     return ds;
 }
@@ -152,6 +157,8 @@ QDebug operator<<(QDebug dbg, const CamItemInfo& info)
                   << info.downloadName;
     dbg.nospace() << "CamItemInfo::id: "
                   << info.id;
+    dbg.nospace() << "CamItemInfo::rating: "
+                  << info.rating;
     return dbg.space();
 }
 

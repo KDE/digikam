@@ -1449,6 +1449,9 @@ void ImportUI::slotDownload(bool onlySelected, bool deleteAfter, Album* album)
         return;
     }
 
+    // enable cancel action.
+    d->cameraCancelAction->setEnabled(true);
+
     // See B.K.O #143934: force to select all items to prevent problem
     // when !renameCustomizer->useDefault() ==> iconItem->getDownloadName()
     // can return an empty string in this case because it depends on selection.
@@ -1590,6 +1593,7 @@ void ImportUI::slotDownload(bool onlySelected, bool deleteAfter, Album* album)
 
         settings.folder = info.folder;
         settings.file   = info.name;
+        settings.rating = info.rating;
         downloadName    = info.downloadName;
         dateTime        = info.mtime;
 

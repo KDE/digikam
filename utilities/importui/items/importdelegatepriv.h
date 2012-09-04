@@ -50,7 +50,7 @@ public:
         drawImageFormat     = false;
         drawMouseOverFrame  = true;
         drawFocusFrame      = true;
-        //ratingOverThumbnail = false;
+        ratingOverThumbnail = false;
         currentModel        = 0;
         currentView         = 0;
 
@@ -76,7 +76,7 @@ public:
     bool                   drawImageFormat;
     bool                   drawFocusFrame;
     bool                   drawMouseOverFrame;
-    //bool                   ratingOverThumbnail;
+    bool                   ratingOverThumbnail;
 
     QCache<int, QRect>     actualPixmapRectCache;
     ImportCategoryDrawer*  categoryDrawer;
@@ -104,7 +104,7 @@ public:
         drawFocusFrame      = false;
 
         // switch off composing rating over background
-        //TODO: ratingOverThumbnail = true;
+        ratingOverThumbnail = true;
     }
 
     QListView::Flow flow;

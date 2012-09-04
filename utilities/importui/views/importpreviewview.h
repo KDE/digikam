@@ -82,6 +82,7 @@ Q_SIGNALS:
     //void signalGotoDateAndItem(const CamItemInfo&);
     //void signalGotoTagAndItem(int);
     //void signalPopupTagsView();
+    void signalAssignRating(int);
 
 protected:
 
@@ -95,10 +96,9 @@ private Q_SLOTS:
     void camItemLoaded();
     void camItemLoadingFailed();
 
-    //TODO: Implement Tags, Rating, and Labels in Import Tool
+    //TODO: Implement Tags and Labels in Import Tool
     //void slotAssignTag(int tagID);
     //void slotRemoveTag(int tagID);
-    //void slotAssignRating(int rating);
     //void slotAssignPickLabel(int pickId);
     //void slotAssignColorLabel(int colorId);
 

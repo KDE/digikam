@@ -55,13 +55,11 @@ public:
     void setScrollBarPolicy(Qt::ScrollBarPolicy policy);
     void setFlow(QListView::Flow newFlow);
 
-    //TODO: Implement rating in Import Tool
-    //void installRatingOverlay();
+    void installRatingOverlay();
 
 public Q_SLOTS:
 
-    //TODO: Implement rating in Import Tool
-    //void assignRating(const QList<QModelIndex>& index, int rating);
+    void assignRating(const QList<QModelIndex>& index, int rating);
     void slotDockLocationChanged(Qt::DockWidgetArea area);
 
 protected:

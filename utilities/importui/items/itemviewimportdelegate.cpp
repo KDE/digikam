@@ -169,6 +169,18 @@ QRect ItemViewImportDelegate::imageInformationRect() const
     return QRect();
 }
 
+QRect ItemViewImportDelegate::ratingRect() const
+{
+    Q_D(const ItemViewImportDelegate);
+    return d->ratingRect;
+}
+
+void ItemViewImportDelegate::setRatingEdited(const QModelIndex& index)
+{
+    Q_D(ItemViewImportDelegate);
+    d->editingRating = index;
+}
+
 QSize ItemViewImportDelegate::sizeHint(const QStyleOptionViewItem& /*option*/, const QModelIndex& /*index*/) const
 {
     Q_D(const ItemViewImportDelegate);
@@ -272,6 +284,21 @@ QRect ItemViewImportDelegate::drawThumbnail(QPainter* p, const QRect& thumbRect,
                   r.y() + (r.height()-thumbnail.height())/2,
                   thumbnail);
     return actualPixmapRect;
+}
+
+void ItemViewImportDelegate::drawRating(QPainter* p, const QModelIndex& index, const QRect& ratingRect,
+                                       int rating, bool isSelected) const
+{
+    Q_D(const ItemViewImportDelegate);
+
+    if (d->editingRating != index)
+    {
+        p->drawPixmap(ratingRect, ratingPixmap(rating, isSelected));
+    }
+/*
+    else
+        p->drawPixmap(r, ratingPixmap(-1, isSelected));
+*/
 }
 
 void ItemViewImportDelegate::drawName(QPainter* p,const QRect& nameRect, const QString& name) const
@@ -529,5 +556,103 @@ void ItemViewImportDelegate::prepareBackground()
         p2.drawRect(0, 0, d->rect.width()-1, d->rect.height()-1);
     }
 }
+
+void ItemViewImportDelegate::prepareRatingPixmaps(bool composeOverBackground)
+{
+    /// Please call this method after prepareBackground() and when d->ratingPixmap is set
+
+    Q_D(ItemViewImportDelegate);
+
+    if (!d->ratingRect.isValid())
+    {
+        return;
+    }
+
+    // We use antialiasing and want to pre-render the pixmaps.
+    // So we need the background at the time of painting,
+    // and the background may be a gradient, and will be different for selected items.
+    // This makes 5*2 (small) pixmaps.
+    for (int sel=0; sel<2; ++sel)
+    {
+        QPixmap basePix;
+
+        if (composeOverBackground)
+        {
+            // do this once for regular, once for selected backgrounds
+            if (sel)
+            {
+                basePix = d->selPixmap.copy(d->ratingRect);
+            }
+            else
+            {
+                basePix = d->regPixmap.copy(d->ratingRect);
+            }
+        }
+        else
+        {
+            basePix = QPixmap(d->ratingRect.size());
+            basePix.fill(Qt::transparent);
+        }
+
+        for (int rating=1; rating<=5; ++rating)
+        {
+            // we store first the 5 regular, then the 5 selected pixmaps, for simplicity
+            int index = (sel * 5 + rating) - 1;
+
+            // copy background
+            d->ratingPixmaps[index] = basePix;
+            // open a painter
+            QPainter painter(&d->ratingPixmaps[index]);
+
+            // use antialiasing
+            painter.setRenderHint(QPainter::Antialiasing, true);
+            painter.setBrush(kapp->palette().color(QPalette::Link));
+            QPen pen(kapp->palette().color(QPalette::Text));
+            // set a pen which joins the lines at a filled angle
+            pen.setJoinStyle(Qt::MiterJoin);
+            painter.setPen(pen);
+
+            // move painter while drawing polygons
+            painter.translate( lround((d->ratingRect.width() - d->margin - rating*(d->starPolygonSize.width()+1))/2.0) + 2, 1 );
+
+            for (int s=0; s<rating; ++s)
+            {
+                painter.drawPolygon(d->starPolygon, Qt::WindingFill);
+                painter.translate(d->starPolygonSize.width() + 1, 0);
+            }
+        }
+    }
+}
+
+QPixmap ItemViewImportDelegate::ratingPixmap(int rating, bool selected) const
+{
+    Q_D(const ItemViewImportDelegate);
+
+    if (rating < 1 || rating > 5)
+    {
+        /*
+        QPixmap pix;
+        if (selected)
+            pix = d->selPixmap.copy(d->ratingRect);
+        else
+            pix = d->regPixmap.copy(d->ratingRect);
+
+        return pix;
+        */
+        return QPixmap();
+    }
+
+    --rating;
+
+    if (selected)
+    {
+        return d->ratingPixmaps.at(5 + rating);
+    }
+    else
+    {
+        return d->ratingPixmaps.at(rating);
+    }
+}
+
 
 } // namespace Digikam

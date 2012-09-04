@@ -32,6 +32,7 @@
 #include "importsettings.h"
 #include "importdelegate.h"
 #include "importfiltermodel.h"
+#include "importoverlays.h"
 
 namespace Digikam
 {
@@ -89,15 +90,14 @@ void ImportThumbnailBar::setModelsFiltered(ImportImageModel* model, ImportSortFi
     ImportCategorizedView::setModels(model, d->duplicatesFilter);
 }
 
-//TODO: Implement rating in Import Tool
-//void ImportThumbnailBar::installRatingOverlay()
-//{
-//    ImageRatingOverlay* ratingOverlay = new ImageRatingOverlay(this);
-//    addOverlay(ratingOverlay);
+void ImportThumbnailBar::installRatingOverlay()
+{
+    ImportRatingOverlay* ratingOverlay = new ImportRatingOverlay(this);
+    addOverlay(ratingOverlay);
 
-//    connect(ratingOverlay, SIGNAL(ratingEdited(QList<QModelIndex>,int)),
-//            this, SLOT(assignRating(QList<QModelIndex>,int)));
-//}
+    connect(ratingOverlay, SIGNAL(ratingEdited(QList<QModelIndex>,int)),
+            this, SLOT(assignRating(QList<QModelIndex>,int)));
+}
 
 void ImportThumbnailBar::slotDockLocationChanged(Qt::DockWidgetArea area)
 {
@@ -173,11 +173,18 @@ void ImportThumbnailBar::slotSetupChanged()
     ImportCategorizedView::slotSetupChanged();
 }
 
-//TODO: Implement rating in Import Tool
-//void ImportThumbnailBar::assignRating(const QList<QModelIndex>& indexes, int rating)
-//{
-//    FileActionMngr::instance()->assignRating(imageSortFilterModel()->imageInfos(indexes), rating);
-//}
+void ImportThumbnailBar::assignRating(const QList<QModelIndex>& indexes, int rating)
+{
+   QList<QModelIndex> mappedIndexes = importSortFilterModel()->mapListToSource(indexes);
+
+   foreach(QModelIndex index, mappedIndexes)
+   {
+       if (index.isValid())
+       {
+            importImageModel()->camItemInfoRef(index).rating = rating;
+       }
+   }
+}
 
 bool ImportThumbnailBar::event(QEvent* e)
 {

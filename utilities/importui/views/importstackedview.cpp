@@ -83,7 +83,7 @@ ImportStackedView::ImportStackedView(CameraController* const controller, QWidget
         d->thumbBar->setModelsFiltered(d->importIconView->importImageModel(), d->importIconView->importFilterModel());
     }
 
-    //FIXME: d->thumbBar->installRatingOverlay();
+    d->thumbBar->installRatingOverlay();
     d->thumbBarDock->setWidget(d->thumbBar);
     d->thumbBarDock->setObjectName("import_thumbbar");
 
@@ -130,6 +130,10 @@ ImportStackedView::ImportStackedView(CameraController* const controller, QWidget
 
     connect(d->importPreviewView, SIGNAL(signalEscapePreview()),
             this, SIGNAL(signalEscapePreview()));
+
+    // A workaround to assign rating in the preview view.
+    connect(d->importPreviewView, SIGNAL(signalAssignRating(int)),
+            d->importIconView, SLOT(assignRatingToSelected(int)));
 
     connect(d->importPreviewView->layout(), SIGNAL(zoomFactorChanged(double)),
             this, SLOT(slotZoomFactorChanged(double)));
