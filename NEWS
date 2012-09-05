@@ -1,21 +1,29 @@
 *****************************************************************************************************
-digiKam 2.9.0 - Release date: 2012-09-02
+digiKam 3.0.0-beta1 - Release date: 2012-09-09
 
 NEW FEATURES:
 
-CameraGUI : libgphoto 2.5.0 API support.
+ImportUI : Port icon-view to Qt4 model/View.
+ImportUI : Labels and Tags pre-assignation.
+ImportUI : Pipelined post download operations.
+ImportUI : Preview items during downloading.
 
+
+KIPI     : All kipi-plugins actions can be pluged to tools bar.
+           Usability improvements in plugins configuration dialog.
+
+Metadata : Video files metadata support (through Exiv2 project).
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
-001 ==> 296024 - Undefined symbol in libdigikamcore.so [patch].
-002 ==> 291627 - Nef data loss after geotaging.
-003 ==> 303427 - Failed build against libgphoto2-2.5.0 [patch].
-004 ==> 235601 - Local contrast plugin preview is wrong.
-005 ==> 204466 - Local contrast plugin issues.
-006 ==> 304550 - Unknown CMake command "PKG_FIND_MODULE".
-007 ==> 305916 - Busycursor sticks if applied before previews are ready.
-008 ==> 303119 - digiKam crashes when applying Restoration on a PNG picture.
-009 ==> 306084 - Typo: ‘inti’ was not declared in this scop.
-010 ==> 
-
+001 ==> 126149 - Camera stores both jpeg and raw (nef), handle both as one
+002 ==> 122454 - Make kipiplugins available for toolbar.
+003 ==> 161783 - Exif autorotation on import should be backgrounded / pipe.
+004 ==> 216491 - Camera interface view does not work to preview movies.
+005 ==> 262135 - Add kipi plugins to file actions menu.
+006 ==> 291080 - In settings, arrange ALL export options at ONE place
+007 ==> 305056 - digiKam crash on startup (development branch).
+008 ==> 305224 - Configure Shortcuts does not provide the option of config.
+009 ==> 305961 - Changing EXIF auto-rotation method.
+010 ==> 306193 - Desktop-file-validate fails on kipiplugins.desktop.
+011 ==> 
