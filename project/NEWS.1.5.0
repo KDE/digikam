@@ -67,17 +67,3 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 052 ==> 223774 : digiKam crashed at liquid rescale preview generation.
 053 ==> 233997 : Crash while importing from usb device after exivdates are read.
 054 ==> 213576 : Thumbbar not updated after saveas in image editor.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
