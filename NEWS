@@ -3,16 +3,28 @@ digiKam 3.0.0-beta1 - Release date: 2012-09-09
 
 NEW FEATURES:
 
-ImportUI : Port icon-view to Qt4 model/View.
-ImportUI : Labels and Tags pre-assignation.
-ImportUI : Pipelined post download operations.
-ImportUI : Preview items during downloading.
+Libkipi    : All kipi-plugins actions can be pluged to tools bar.
+             Usability improvements in plugins configuration dialog.
 
 
-KIPI     : All kipi-plugins actions can be pluged to tools bar.
-           Usability improvements in plugins configuration dialog.
+Libkdcraw  : Update internal Libraw version 0.15.0 Alpha2 to support new RAW cameras :
+             Adobe DNG: Fast Load and lossy-compressed DNG (LightRoom 4.x)
+             Canon    : G1 X, SX220 HS, EOS 5D Mark III, EOS 650D, EOS 1D-X
+             Casio    : EX-Z8
+             Fujifilm : X-S1, HS30EXR, X1-Pro
+             Nikon    : D4, D3200, D800, D800E
+             Olympus  : E-M5
+             Panasonic: DMC-GF5
+             Samsung  : NX20, NX210, NX100, NX-1000
+             Sigma    : SD15,SD1, SD1 Merill, DP1, DP1S, DP1X, DP2, DP2S, DP2X
+             Sony     : NEX-F3, SLT-A37, SLT-A57, DSC-RX100
 
-Metadata : Video files metadata support (through Exiv2 project).
+ImportUI   : Port icon-view to Qt4 model/View.
+ImportUI   : Labels and Tags pre-assignation.
+ImportUI   : Pipelined post download operations.
+ImportUI   : Preview items during downloading.
+
+Metadata   : Video files metadata support (through Exiv2 project).
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
