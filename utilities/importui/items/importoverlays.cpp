@@ -101,13 +101,13 @@ bool ImportLockOverlay::checkIndex(const QModelIndex& index) const
 
     if (info.writePermissions == 0)
     {
-        m_widget->setToolTip(i18nc("@info:tooltip", "This item is locked!"));
+        m_widget->setToolTip(i18nc("@info:tooltip", "This item is locked."));
         return true;
     }
 
     if (info.writePermissions == 1)
     {
-        m_widget->setToolTip(i18nc("@info:tooltip", "This item is not locked!"));
+        m_widget->setToolTip(i18nc("@info:tooltip", "This item is not locked."));
         return true;
     }
 
@@ -174,7 +174,7 @@ bool ImportDownloadOverlay::checkIndex(const QModelIndex& index) const
 
     if (info.downloaded == CamItemInfo::DownloadUnknown)
     {
-        m_widget->setToolTip(i18nc("@info:tooltip", "This item download status is unkown"));
+        m_widget->setToolTip(i18nc("@info:tooltip", "This item download status is unknown"));
         return true;
     }
 
