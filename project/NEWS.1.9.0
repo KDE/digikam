@@ -26,7 +26,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 018 ==> 264631 : Deleteing last TAG on a picture does actually not remove the tag within the exif metadata.
 019 ==> 195648 : Quickfilter by tags: Exclude tags.
 020 ==> 265641 : digiKam crash at startup.
-021 ==> 
 
 
 
