@@ -585,6 +585,8 @@ void CameraController::executeCommand(CameraCommand* const cmd)
             bool      convertJpeg    = cmd->map["convertJpeg"].toBool();
             QString   losslessFormat = cmd->map["losslessFormat"].toString();
             QString   script         = cmd->map["script"].toString();
+            int       pickLabel      = cmd->map["pickLabel"].toInt();
+            int       colorLabel     = cmd->map["colorLabel"].toInt();
             int       rating         = cmd->map["rating"].toInt();
             sendLogMsg(i18n("Downloading file %1...", file), DHistoryView::StartingEntry, folder, file);
 
@@ -622,6 +624,9 @@ void CameraController::executeCommand(CameraCommand* const cmd)
                         metadata.setImageDateTime(newDateTime, true);
                     }
 
+                    //TODO: Set image tags using DMetadata.
+                    metadata.setImagePickLabel(pickLabel);
+                    metadata.setImageColorLabel(colorLabel);
                     metadata.setImageRating(rating);
 
                     TemplateManager* tm = TemplateManager::defaultManager();
@@ -1170,7 +1175,10 @@ void CameraController::download(const DownloadSettings& downloadSettings)
     cmd->map.insert("convertJpeg",       QVariant(downloadSettings.convertJpeg));
     cmd->map.insert("losslessFormat",    QVariant(downloadSettings.losslessFormat));
     cmd->map.insert("script",            QVariant(downloadSettings.script));
+    cmd->map.insert("pickLabel",         QVariant(downloadSettings.pickLabel));
+    cmd->map.insert("colorLabel",        QVariant(downloadSettings.colorLabel));
     cmd->map.insert("rating",            QVariant(downloadSettings.rating));
+    //cmd->map.insert("tagIds",            QVariant(downloadSettings.tagIds));
     addCommand(cmd);
 }
 

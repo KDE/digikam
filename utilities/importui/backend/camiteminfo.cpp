@@ -41,6 +41,8 @@ CamItemInfo::CamItemInfo()
     downloaded       = DownloadUnknown;
     id               = -1;
     rating           = 0;
+    pickLabel        = 0;
+    colorLabel       = 0;
 }
 
 CamItemInfo::~CamItemInfo()
@@ -57,12 +59,15 @@ bool CamItemInfo::isNull() const
            (downloaded       == DownloadUnknown) &&
            (id               == -1)              &&
            (rating           == 0)               &&
+           (pickLabel        == 0)               &&
+           (colorLabel       == 0)               &&
            name.isNull()                         &&
            folder.isNull()                       &&
            mime.isNull()                         &&
            mtime.isNull()                        &&
            photoInfo.isNull()                    &&
-           downloadName.isNull();
+           downloadName.isNull()                 &&
+           tagIds.isEmpty();
 }
 
 KUrl CamItemInfo::url() const
@@ -87,8 +92,11 @@ bool CamItemInfo::operator==(const CamItemInfo& info) const
     bool b10 = photoInfo        == info.photoInfo;
     bool b11 = id               == info.id;
     bool b12 = rating           == info.rating;
+    bool b13 = pickLabel        == info.pickLabel;
+    bool b14 = colorLabel       == info.colorLabel;
+    bool b15 = tagIds           == info.tagIds;
 
-    return b1 && b2 && b3 && b4 && b5 && b6 && b7 && b8 && b9 && b10 && b11 && b12;
+    return b1 && b2 && b3 && b4 && b5 && b6 && b7 && b8 && b9 && b10 && b11 && b12 && b13 && b14 && b15;
 }
 
 QDataStream& operator<<(QDataStream& ds, const CamItemInfo& info)
@@ -107,6 +115,9 @@ QDataStream& operator<<(QDataStream& ds, const CamItemInfo& info)
     ds << info.downloadName;
     ds << info.id;
     ds << info.rating;
+    ds << info.pickLabel;
+    ds << info.colorLabel;
+    ds << info.tagIds;
 
     return ds;
 }
@@ -127,6 +138,9 @@ QDataStream& operator>>(QDataStream& ds, CamItemInfo& info)
     ds >> info.downloadName;
     ds >> info.id;
     ds >> info.rating;
+    ds >> info.pickLabel;
+    ds >> info.colorLabel;
+    ds >> info.tagIds;
 
     return ds;
 }
@@ -159,6 +173,12 @@ QDebug operator<<(QDebug dbg, const CamItemInfo& info)
                   << info.id;
     dbg.nospace() << "CamItemInfo::rating: "
                   << info.rating;
+    dbg.nospace() << "CamItemInfo::pickLabel: "
+                  << info.pickLabel;
+    dbg.nospace() << "CamItemInfo::colorLabel: "
+                  << info.colorLabel;
+    dbg.nospace() << "CamItemInfo::tagIds: "
+                  << info.tagIds;
     return dbg.space();
 }
 

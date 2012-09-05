@@ -82,7 +82,10 @@ Q_SIGNALS:
     //void signalGotoDateAndItem(const CamItemInfo&);
     //void signalGotoTagAndItem(int);
     //void signalPopupTagsView();
+    void signalAssignPickLabel(int);
+    void signalAssignColorLabel(int);
     void signalAssignRating(int);
+
 
 protected:
 

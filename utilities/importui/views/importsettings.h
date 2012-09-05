@@ -98,8 +98,8 @@ public:
     void setIconShowTitle(bool val);
     bool getIconShowTitle() const;
 
-    //TODO: void setIconShowTags(bool val);
-    //TODO: bool getIconShowTags() const;
+    void setIconShowTags(bool val);
+    bool getIconShowTags() const;
 
     void setIconShowModDate(bool val);
     bool getIconShowModDate() const;

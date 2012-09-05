@@ -303,10 +303,10 @@ void ImportIconView::activated(const CamItemInfo& info)
 void ImportIconView::showContextMenuOnInfo(QContextMenuEvent* event, const CamItemInfo& /*info*/)
 {
     QList<CamItemInfo> selectedInfos = selectedCamItemInfosCurrentFirst();
-    QList<qlonglong> selectedImageIDs;
+    QList<qlonglong> selectedItemIDs;
     foreach(const CamItemInfo& info, selectedInfos)
     {
-        selectedImageIDs << info.id;
+        selectedItemIDs << info.id;
     }
 
     // --------------------------------------------------------
@@ -325,42 +325,43 @@ void ImportIconView::showContextMenuOnInfo(QContextMenuEvent* event, const CamIt
     cmhelper.addSeparator();
     cmhelper.addAction("importui_item_view");
     cmhelper.addServicesMenu(selectedUrls());
-    //TODO: cmhelper.addRotateMenu(selectedImageIDs);
+    //TODO: cmhelper.addRotateMenu(selectedItemIDs);
     cmhelper.addSeparator();
     // --------------------------------------------------------
     cmhelper.addAction("importui_selectnone");
     cmhelper.addAction("importui_selectinvert");
     cmhelper.addSeparator();
     // --------------------------------------------------------
-    //cmhelper.addAssignTagsMenu(selectedImageIDs);
-    //cmhelper.addRemoveTagsMenu(selectedImageIDs);
-    //cmhelper.addSeparator();
+    cmhelper.addAssignTagsMenu(selectedItemIDs);
+    cmhelper.addRemoveTagsMenu(selectedItemIDs);
+    cmhelper.addSeparator();
     // --------------------------------------------------------
     cmhelper.addLabelsAction();
     //if (!d->faceMode)
     //{
-    //    cmhelper.addGroupMenu(selectedImageIDs);
+    //    cmhelper.addGroupMenu(selectedItemIDs);
     //}
 
     // special action handling --------------------------------
 
-    //connect(&cmhelper, SIGNAL(signalAssignTag(int)),
-            //this, SLOT(assignTagToSelected(int)));
+    connect(&cmhelper, SIGNAL(signalAssignTag(int)),
+            this, SLOT(assignTagToSelected(int)));
 
-    //connect(&cmhelper, SIGNAL(signalPopupTagsView()),
-            //this, SIGNAL(signalPopupTagsView()));
+    //TODO: Implement tag view for import tool.
+    connect(&cmhelper, SIGNAL(signalPopupTagsView()),
+            this, SIGNAL(signalPopupTagsView()));
 
-    //connect(&cmhelper, SIGNAL(signalRemoveTag(int)),
-            //this, SLOT(removeTagFromSelected(int)));
+    connect(&cmhelper, SIGNAL(signalRemoveTag(int)),
+            this, SLOT(removeTagFromSelected(int)));
 
     //connect(&cmhelper, SIGNAL(signalGotoTag(int)),
             //this, SIGNAL(gotoTagAndImageRequested(int)));
 
-    //connect(&cmhelper, SIGNAL(signalAssignPickLabel(int)),
-            //this, SLOT(assignPickLabelToSelected(int)));
+    connect(&cmhelper, SIGNAL(signalAssignPickLabel(int)),
+            this, SLOT(assignPickLabelToSelected(int)));
 
-    //connect(&cmhelper, SIGNAL(signalAssignColorLabel(int)),
-            //this, SLOT(assignColorLabelToSelected(int)));
+    connect(&cmhelper, SIGNAL(signalAssignColorLabel(int)),
+            this, SLOT(assignColorLabelToSelected(int)));
 
     connect(&cmhelper, SIGNAL(signalAssignRating(int)),
             this, SLOT(assignRatingToSelected(int)));
@@ -393,6 +394,56 @@ void ImportIconView::showContextMenu(QContextMenuEvent* event)
     // --------------------------------------------------------
 
     cmhelper.exec(event->globalPos());
+}
+
+void ImportIconView::assignTagToSelected(int tagID)
+{
+    CamItemInfoList infos = selectedCamItemInfos();
+
+    foreach(CamItemInfo info, infos)
+    {
+        importImageModel()->camItemInfoRef(importImageModel()->indexForCamItemInfo(info)).tagIds.append(tagID);;
+    }
+}
+
+void ImportIconView::removeTagFromSelected(int tagID)
+{
+    CamItemInfoList infos = selectedCamItemInfos();
+
+    foreach(CamItemInfo info, infos)
+    {
+        importImageModel()->camItemInfoRef(importImageModel()->indexForCamItemInfo(info)).tagIds.remove(tagID);
+    }
+}
+
+void ImportIconView::assignPickLabel(const QModelIndex& index, int pickId)
+{
+    importImageModel()->camItemInfoRef(index).pickLabel = pickId;
+}
+
+void ImportIconView::assignPickLabelToSelected(int pickId)
+{
+    CamItemInfoList infos = selectedCamItemInfos();
+
+    foreach(CamItemInfo info, infos)
+    {
+        importImageModel()->camItemInfoRef(importImageModel()->indexForCamItemInfo(info)).pickLabel = pickId;;
+    }
+}
+
+void ImportIconView::assignColorLabel(const QModelIndex& index, int colorId)
+{
+    importImageModel()->camItemInfoRef(index).colorLabel = colorId;
+}
+
+void ImportIconView::assignColorLabelToSelected(int colorId)
+{
+    CamItemInfoList infos = selectedCamItemInfos();
+
+    foreach(CamItemInfo info, infos)
+    {
+        importImageModel()->camItemInfoRef(importImageModel()->indexForCamItemInfo(info)).colorLabel = colorId;;
+    }
 }
 
 void ImportIconView::assignRating(const QList<QModelIndex>& indexes, int rating)

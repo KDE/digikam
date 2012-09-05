@@ -421,6 +421,12 @@ void ImportPreviewView::showContextMenu(const CamItemInfo& info, QGraphicsSceneC
     //FIXME: connect(&cmhelper, SIGNAL(signalAssignColorLabel(int)),
             //this, SLOT(slotAssignColorLabel(int)));
 
+    connect(&cmhelper, SIGNAL(signalAssignPickLabel(int)),
+            this, SIGNAL(signalAssignPickLabel(int)));
+
+    connect(&cmhelper, SIGNAL(signalAssignColorLabel(int)),
+            this, SIGNAL(signalAssignColorLabel(int)));
+
     connect(&cmhelper, SIGNAL(signalAssignRating(int)),
             this, SIGNAL(signalAssignRating(int)));
 
@@ -441,16 +447,6 @@ void ImportPreviewView::showContextMenu(const CamItemInfo& info, QGraphicsSceneC
 //void ImportPreviewView::slotRemoveTag(int tagID)
 //{
 //    FileActionMngr::instance()->removeTag(d->item->camItemInfo(), tagID);
-//}
-
-//void ImportPreviewView::slotAssignPickLabel(int pickId)
-//{
-//    FileActionMngr::instance()->assignPickLabel(d->item->camItemInfo(), pickId);
-//}
-
-//void ImportPreviewView::slotAssignColorLabel(int colorId)
-//{
-//    FileActionMngr::instance()->assignColorLabel(d->item->camItemInfo(), colorId);
 //}
 
 void ImportPreviewView::slotThemeChanged()

@@ -23,7 +23,6 @@
 
 #include "importdelegate.moc"
 #include "importdelegatepriv.h"
-#include "importdelegate.h" //TODO: Remove this line.
 
 // Qt includes
 
@@ -42,6 +41,7 @@
 #include "importfiltermodel.h"
 #include "importsettings.h"
 #include "importcategorizedview.h"
+#include "albummanager.h"
 
 namespace Digikam
 {
@@ -58,10 +58,10 @@ void ImportDelegate::ImportDelegatePrivate::clearRects()
     sizeRect             = QRect(0, 0, 0, 0);
     downloadRect         = QRect(0, 0, 0, 0);
     lockRect             = QRect(0, 0, 0, 0);
-    //tagRect              = QRect(0, 0, 0, 0);
-    ratingRect             = QRect(0, 0, 0, 0);
+    tagRect              = QRect(0, 0, 0, 0);
+    ratingRect           = QRect(0, 0, 0, 0);
     imageInformationRect = QRect(0, 0, 0, 0);
-    //pickLabelRect        = QRect(0, 0, 0, 0);
+    pickLabelRect        = QRect(0, 0, 0, 0);
     groupRect            = QRect(0, 0, 0, 0);
 }
 
@@ -165,11 +165,11 @@ ImportCategoryDrawer* ImportDelegate::categoryDrawer() const
 //    return d->commentsRect;
 //}
 
-//QRect ImportDelegate::tagsRect() const
-//{
-//    Q_D(const ImportDelegate);
-//    return d->tagRect;
-//}
+QRect ImportDelegate::tagsRect() const
+{
+    Q_D(const ImportDelegate);
+    return d->tagRect;
+}
 
 QRect ImportDelegate::pixmapRect() const
 {
@@ -260,9 +260,8 @@ void ImportDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, cons
         drawRating(p, index, d->ratingRect, info.rating, isSelected);
     }
 
-    //TODO: Implement labels in import tool.
     // Draw Color Label rectangle
-    //drawColorLabelRect(p, option, isSelected, info.colorLabel());
+    drawColorLabelRect(p, option, isSelected, info.colorLabel);
 
     p->setPen(isSelected ? kapp->palette().color(QPalette::HighlightedText)
                          : kapp->palette().color(QPalette::Text));
@@ -313,18 +312,16 @@ void ImportDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, cons
                            index.data(ImportFilterModel::GroupIsOpenRole).toBool());
     }*/
 
-    //TODO: Implement tags in import tool.
-    /*if (!d->tagRect.isNull())
+    if (!d->tagRect.isNull())
     {
-        QString tags = AlbumManager::instance()->tagNames(info.tagIds()).join(", ");
+        QString tags = AlbumManager::instance()->tagNames(info.tagIds).join(", ");
         drawTags(p, d->tagRect, tags, isSelected);
-    }*/
+    }
 
-    //TODO: Implement labels in import tool.
-    /*if (!d->pickLabelRect.isNull())
+    if (!d->pickLabelRect.isNull())
     {
-        drawPickLabelIcon(p, d->pickLabelRect, info.pickLabel());
-    }*/
+        drawPickLabelIcon(p, d->pickLabelRect, info.pickLabel);
+    }
 
     if (d->drawImageFormat)
     {
@@ -713,7 +710,7 @@ void ImportNormalDelegate::updateRects()
     d->drawImageFormat                   = importSettings->getIconShowImageFormat();
     const int iconSize                   = KIconLoader::SizeSmall;
 
-    //TODO: d->pickLabelRect   = QRect(d->margin, y, iconSize, iconSize);
+    d->pickLabelRect   = QRect(d->margin, y, iconSize, iconSize);
     //TODO: d->groupRect       = QRect(d->contentWidth - iconSize, y, iconSize, iconSize);
     d->downloadRect     =  QRect(d->contentWidth - iconSize - 14, d->pixmapRect.top(), iconSize, iconSize);
     d->lockRect         =  QRect(d->contentWidth - iconSize + 2, d->pixmapRect.top(), iconSize, iconSize);
@@ -749,11 +746,11 @@ void ImportNormalDelegate::updateRects()
         y           = d->sizeRect.bottom();
     }
 
-    /*if (importSettings->getIconShowTags())
+    if (importSettings->getIconShowTags())
     {
         d->tagRect = QRect(d->margin, y, d->contentWidth, d->oneRowComRect.height());
         y          = d->tagRect.bottom();
-    }*/
+    }
 
     d->imageInformationRect.setBottom(y);
 

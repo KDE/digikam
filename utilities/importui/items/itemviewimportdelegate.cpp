@@ -45,6 +45,7 @@
 #include "thememanager.h"
 #include "imagescanner.h"
 #include "camiteminfo.h"
+#include "colorlabelwidget.h"
 
 namespace Digikam
 {
@@ -375,6 +376,55 @@ void ItemViewImportDelegate::drawFileSize(QPainter* p, const QRect& r, qlonglong
     Q_D(const ItemViewImportDelegate);
     p->setFont(d->fontXtra);
     p->drawText(r, Qt::AlignCenter, KIO::convertSize(bytes));//squeezedTextCached(p, r.width(), KIO::convertSize(bytes)));
+}
+
+void ItemViewImportDelegate::drawTags(QPainter* p, const QRect& r, const QString& tagsString,
+                                     bool isSelected) const
+{
+    Q_D(const ItemViewImportDelegate);
+    p->setFont(d->fontCom);
+    p->setPen(isSelected ? kapp->palette().color(QPalette::HighlightedText)
+                         : kapp->palette().color(QPalette::Link));
+
+    p->drawText(r, Qt::AlignCenter, squeezedTextCached(p, r.width(), tagsString));
+}
+
+void ItemViewImportDelegate::drawPickLabelIcon(QPainter* p, const QRect& r, int pickId) const
+{
+    // Draw Pick Label icon
+    if (pickId != NoPickLabel)
+    {
+        QIcon icon;
+
+        if (pickId == RejectedLabel)
+        {
+            icon = KIconLoader::global()->loadIcon("flag-red", KIconLoader::NoGroup, r.width());
+        }
+        else if (pickId == PendingLabel)
+        {
+            icon = KIconLoader::global()->loadIcon("flag-yellow", KIconLoader::NoGroup, r.width());
+        }
+        else if (pickId == AcceptedLabel)
+        {
+            icon = KIconLoader::global()->loadIcon("flag-green", KIconLoader::NoGroup, r.width());
+        }
+        icon.paint(p, r);
+    }
+}
+
+void ItemViewImportDelegate::drawColorLabelRect(QPainter* p, const QStyleOptionViewItem& option,
+                                               bool isSelected, int colorId) const
+{
+    Q_D(const ItemViewImportDelegate);
+    Q_UNUSED(option);
+    Q_UNUSED(isSelected);
+
+    if (colorId > NoColorLabel)
+    {
+        // This draw a simple rectangle around item.
+        p->setPen(QPen(ColorLabelWidget::labelColor((ColorLabel)colorId), 5, Qt::SolidLine));
+        p->drawRect(3, 3, d->rect.width()-7, d->rect.height()-7);
+    }
 }
 
 void ItemViewImportDelegate::drawPanelSideIcon(QPainter* p, bool left, bool right) const

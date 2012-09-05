@@ -53,29 +53,38 @@ public:
 public:
 
     // -- Settings from AdvancedSettings widget ---------------
-    bool      autoRotate;
-    bool      fixDateTime;
-    bool      convertJpeg;
+    bool       autoRotate;
+    bool       fixDateTime;
+    bool       convertJpeg;
 
-    QDateTime newDateTime;
+    QDateTime  newDateTime;
 
     // New format to convert Jpeg files.
-    QString   losslessFormat;
+    QString    losslessFormat;
 
     // Metadata template title.
-    QString   templateTitle;
+    QString    templateTitle;
 
     // -- File path to download ------------------------------
 
-    QString   folder;
-    QString   file;
-    QString   dest;
+    QString    folder;
+    QString    file;
+    QString    dest;
 
     // -- Settings from ScriptingSettings widget ---------------
-    QString   script;
+    QString    script;
 
     // -- Pre-rating of each camera file.
-    int       rating;
+    int        rating;
+
+    // -- Pre-pickLabel of each camera file.
+    int        pickLabel;
+
+    // -- Pre-colorLabel of each camera file.
+    int        colorLabel;
+
+    // -- Pre-tags of each camera file.
+    QList<int> tagIds;
 };
 
 typedef QList<DownloadSettings> DownloadSettingsList;

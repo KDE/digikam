@@ -64,12 +64,22 @@ public Q_SLOTS:
     void removeSelectedFromGroup();
     void rename();
 
+    void assignTagToSelected(int tagID);
+    void removeTagFromSelected(int tagID);
+
+    void assignPickLabel(const QModelIndex& index, int pickId);
+    void assignPickLabelToSelected(int pickId);
+
+    void assignColorLabel(const QModelIndex& index, int colorId);
+    void assignColorLabelToSelected(int colorId);
+
     void assignRating(const QList<QModelIndex>& index, int rating);
     void assignRatingToSelected(int rating);
 
 Q_SIGNALS:
 
     void previewRequested(const CamItemInfo& info, bool downloadPreview);
+    void signalPopupTagsView();
 
 private Q_SLOTS:
 

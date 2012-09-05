@@ -49,10 +49,11 @@ public:
 
 Q_SIGNALS:
 
-    //TODO: void signalAssignTag(int);
-    //TODO: void signalRemoveTag(int);
-    //TODO: void signalAssignPickLabel(int);
-    //TODO: void signalAssignColorLabel(int);
+    void signalAssignTag(int);
+    void signalRemoveTag(int);
+    void signalPopupTagsView();
+    void signalAssignPickLabel(int);
+    void signalAssignColorLabel(int);
     void signalAssignRating(int);
     void signalAddNewTagFromABCMenu(const QString&);
     //void signalCreateGroup();
@@ -141,6 +142,22 @@ public:
      * @see signalAssignTag()
      */
     void addAssignTagsMenu(itemIds& ids);
+
+    /**
+     * Add "Remove Tags" menu.
+     *
+     * This menu will provide a list of all tags assigned to the current items. Actions triggered in here
+     * will remove the selected tag from the items.
+     *
+     * To make this menu work, you need to run exec() from this class, otherwise the signals
+     * are not emitted and you will not be able to react on triggered actions from this menu.
+     * Make sure to connect the signals to the appropriate slots in the context menu handling method.
+     *
+     * @param ids the selected items
+     * @see exec()
+     * @see signalRemoveTag()
+     */
+    void addRemoveTagsMenu(itemIds& ids);
 
     /**
     * Add "Pick/Color/Rating Labels" action.

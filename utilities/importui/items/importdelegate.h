@@ -54,7 +54,7 @@ public:
     ImportCategoryDrawer* categoryDrawer() const;
 
     //QRect commentsRect() const;
-    //QRect tagsRect() const;
+    QRect tagsRect() const;
     QRect actualPixmapRect(const QModelIndex& index) const;
     QRect groupIndicatorRect() const;
     QRect downloadIndicatorRect() const;

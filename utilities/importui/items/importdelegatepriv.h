@@ -68,9 +68,9 @@ public:
     QRect                  sizeRect;
     QRect                  downloadRect;
     QRect                  lockRect;
-    //QRect                  tagRect;
+    QRect                  tagRect;
     QRect                  imageInformationRect;
-    //QRect                  pickLabelRect;
+    QRect                  pickLabelRect;
     QRect                  groupRect;
 
     bool                   drawImageFormat;

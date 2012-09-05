@@ -332,39 +332,51 @@ void ImportContextMenuHelper::slotRotate()
 //    }
 }
 
-void ImportContextMenuHelper::addAssignTagsMenu(itemIds& /*ids*/)
+void ImportContextMenuHelper::addAssignTagsMenu(itemIds& ids)
 {
-//    setSelectedIds(ids);
+    setSelectedIds(ids);
 
-//    KMenu* assignTagsPopup = new TagsPopupMenu(ids, TagsPopupMenu::RECENTLYASSIGNED, d->parent);
-//    assignTagsPopup->menuAction()->setText(i18n("Assign Tag"));
-//    assignTagsPopup->menuAction()->setIcon(SmallIcon("tag"));
-//    d->parent->addMenu(assignTagsPopup);
+    KMenu* assignTagsPopup = new TagsPopupMenu(ids, TagsPopupMenu::RECENTLYASSIGNED, d->parent);
+    assignTagsPopup->menuAction()->setText(i18n("Assign Tag"));
+    assignTagsPopup->menuAction()->setIcon(SmallIcon("tag"));
+    d->parent->addMenu(assignTagsPopup);
 
-//    connect(assignTagsPopup, SIGNAL(signalTagActivated(int)),
-//            this, SIGNAL(signalAssignTag(int)));
+    connect(assignTagsPopup, SIGNAL(signalTagActivated(int)),
+            this, SIGNAL(signalAssignTag(int)));
 
-//    connect(assignTagsPopup, SIGNAL(signalPopupTagsView()),
-//            this, SIGNAL(signalPopupTagsView()));
+    connect(assignTagsPopup, SIGNAL(signalPopupTagsView()),
+            this, SIGNAL(signalPopupTagsView()));
 }
 
+void ImportContextMenuHelper::addRemoveTagsMenu(itemIds& ids)
+{
+    setSelectedIds(ids);
+
+    KMenu* removeTagsPopup = new TagsPopupMenu(ids, TagsPopupMenu::REMOVE, d->parent);
+    removeTagsPopup->menuAction()->setText(i18n("Remove Tag"));
+    removeTagsPopup->menuAction()->setIcon(SmallIcon("tag"));
+    d->parent->addMenu(removeTagsPopup);
+
+    connect(removeTagsPopup, SIGNAL(signalTagActivated(int)),
+            this, SIGNAL(signalRemoveTag(int)));
+}
 
 void ImportContextMenuHelper::addLabelsAction()
 {
     KMenu* menuLabels           = new KMenu(i18n("Assign Labels"), d->parent);
-//    PickLabelMenuAction* pmenu  = new PickLabelMenuAction(d->parent);
-//    ColorLabelMenuAction* cmenu = new ColorLabelMenuAction(d->parent);
+    PickLabelMenuAction* pmenu  = new PickLabelMenuAction(d->parent);
+    ColorLabelMenuAction* cmenu = new ColorLabelMenuAction(d->parent);
     RatingMenuAction* rmenu     = new RatingMenuAction(d->parent);
-//    menuLabels->addAction(pmenu);
-//    menuLabels->addAction(cmenu);
+    menuLabels->addAction(pmenu);
+    menuLabels->addAction(cmenu);
     menuLabels->addAction(rmenu);
     addSubMenu(menuLabels);
 
-//    connect(pmenu, SIGNAL(signalPickLabelChanged(int)),
-//            this, SIGNAL(signalAssignPickLabel(int)));
+    connect(pmenu, SIGNAL(signalPickLabelChanged(int)),
+            this, SIGNAL(signalAssignPickLabel(int)));
 
-//    connect(cmenu, SIGNAL(signalColorLabelChanged(int)),
-//            this, SIGNAL(signalAssignColorLabel(int)));
+    connect(cmenu, SIGNAL(signalColorLabelChanged(int)),
+            this, SIGNAL(signalAssignColorLabel(int)));
 
     connect(rmenu, SIGNAL(signalRatingChanged(int)),
             this, SIGNAL(signalAssignRating(int)));

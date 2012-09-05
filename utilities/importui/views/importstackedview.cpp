@@ -131,7 +131,13 @@ ImportStackedView::ImportStackedView(CameraController* const controller, QWidget
     connect(d->importPreviewView, SIGNAL(signalEscapePreview()),
             this, SIGNAL(signalEscapePreview()));
 
-    // A workaround to assign rating in the preview view.
+    // A workaround to assign pickLabel, colorLabel, and rating in the preview view.
+    connect(d->importPreviewView, SIGNAL(signalAssignPickLabel(int)),
+            d->importIconView, SLOT(assignPickLabelToSelected(int)));
+
+    connect(d->importPreviewView, SIGNAL(signalAssignColorLabel(int)),
+            d->importIconView, SLOT(assignColorLabelToSelected(int)));
+
     connect(d->importPreviewView, SIGNAL(signalAssignRating(int)),
             d->importIconView, SLOT(assignRatingToSelected(int)));
 

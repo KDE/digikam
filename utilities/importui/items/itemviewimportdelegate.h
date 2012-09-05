@@ -109,7 +109,10 @@ protected:
     void drawImageSize(QPainter* p, const QRect& dimsRect, const QSize& dims) const;
     void drawImageFormat(QPainter* p, const QRect& dimsRect, const QString& mime) const;
     void drawFileSize(QPainter* p, const QRect& r, qlonglong bytes) const;
+    void drawTags(QPainter* p, const QRect& r, const QString& tagsString, bool isSelected) const;
     void drawGroupIndicator(QPainter* p, const QRect& r, int numberOfGroupedImages, bool open) const;
+    void drawPickLabelIcon(QPainter* p, const QRect& r, int pickLabel) const;
+    void drawColorLabelRect(QPainter* p, const QStyleOptionViewItem& option,bool isSelected, int colorId) const;
     void drawPanelSideIcon(QPainter* p, bool left, bool right) const;
     void drawDownloadIndicator(QPainter* p, const QRect& r, int itemType) const;
     void drawLockIndicator(QPainter* p, const QRect& r, int lockStatus) const;

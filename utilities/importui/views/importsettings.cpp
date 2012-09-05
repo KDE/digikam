@@ -47,7 +47,7 @@ public:
         iconShowDate(false),
         iconShowModDate(false),
         //iconShowResolution(false),
-        //iconShowTags(false),
+        iconShowTags(false),
         //iconShowOverlays(false),
         iconShowRating(false),
         iconShowImageFormat(false),
@@ -88,7 +88,7 @@ public:
     static const QString                configIconShowDateEntry;
     static const QString                configIconShowModificationDateEntry;
     static const QString                configIconShowTitleEntry;
-    //static const QString                configIconShowTagsEntry;
+    static const QString                configIconShowTagsEntry;
     //static const QString                configIconShowOverlaysEntry;
     static const QString                configIconShowRatingEntry;
     static const QString                configIconShowImageFormatEntry;
@@ -121,7 +121,7 @@ public:
     bool                                iconShowModDate;
     bool                                iconShowTitle;
     //bool                                iconShowResolution;
-    //bool                                iconShowTags;
+    bool                                iconShowTags;
     //bool                                iconShowOverlays;
     bool                                iconShowRating;
     bool                                iconShowImageFormat;
@@ -174,7 +174,7 @@ const QString ImportSettings::Private::configIconShowSizeEntry("Icon Show Size")
 const QString ImportSettings::Private::configIconShowDateEntry("Icon Show Date");
 const QString ImportSettings::Private::configIconShowModificationDateEntry("Icon Show Modification Date");
 const QString ImportSettings::Private::configIconShowTitleEntry("Icon Show Title");
-//const QString ImportSettings::Private::configIconShowTagsEntry("Icon Show Tags");
+const QString ImportSettings::Private::configIconShowTagsEntry("Icon Show Tags");
 const QString ImportSettings::Private::configIconShowRatingEntry("Icon Show Rating");
 const QString ImportSettings::Private::configIconShowImageFormatEntry("Icon Show Image Format");
 //const QString ImportSettings::Private::configIconShowOverlaysEntry("Icon Show Overlays");
@@ -248,7 +248,7 @@ void ImportSettings::init()
     d->iconShowImageFormat          = false;
     //d->iconShowOverlays             = true;
     d->iconShowRating               = true;
-    //d->iconShowTags                 = true;
+    d->iconShowTags                 = true;
     d->iconviewFont                 = KGlobalSettings::generalFont();
 
     d->toolTipsFont                 = KGlobalSettings::generalFont();
@@ -293,7 +293,7 @@ void ImportSettings::readSettings()
     d->iconShowDate                 = group.readEntry(d->configIconShowDateEntry,                 true);
     d->iconShowModDate              = group.readEntry(d->configIconShowModificationDateEntry,     true);
     d->iconShowTitle                = group.readEntry(d->configIconShowTitleEntry,                true);
-    //d->iconShowTags                 = group.readEntry(d->configIconShowTagsEntry,                 true);
+    d->iconShowTags                 = group.readEntry(d->configIconShowTagsEntry,                 true);
     //d->iconShowOverlays             = group.readEntry(d->configIconShowOverlaysEntry,             true);
     d->iconShowRating               = group.readEntry(d->configIconShowRatingEntry,               true);
     d->iconShowImageFormat          = group.readEntry(d->configIconShowImageFormatEntry,          false);
@@ -345,7 +345,7 @@ void ImportSettings::saveSettings()
     group.writeEntry(d->configIconShowDateEntry,                 d->iconShowDate);
     group.writeEntry(d->configIconShowModificationDateEntry,     d->iconShowModDate);
     group.writeEntry(d->configIconShowTitleEntry,                d->iconShowTitle);
-    //group.writeEntry(d->configIconShowTagsEntry,                 d->iconShowTags);
+    group.writeEntry(d->configIconShowTagsEntry,                 d->iconShowTags);
     //group.writeEntry(d->configIconShowOverlaysEntry,             d->iconShowOverlays);
     group.writeEntry(d->configIconShowRatingEntry,               d->iconShowRating);
     group.writeEntry(d->configIconShowImageFormatEntry,          d->iconShowImageFormat);
@@ -470,15 +470,15 @@ bool ImportSettings::getIconShowTitle() const
     return d->iconShowTitle;
 }
 
-//void ImportSettings::setIconShowTags(bool val)
-//{
-//    d->iconShowTags = val;
-//}
+void ImportSettings::setIconShowTags(bool val)
+{
+    d->iconShowTags = val;
+}
 
-//bool ImportSettings::getIconShowTags() const
-//{
-//    return d->iconShowTags;
-//}
+bool ImportSettings::getIconShowTags() const
+{
+    return d->iconShowTags;
+}
 
 void ImportSettings::setIconShowModDate(bool val)
 {

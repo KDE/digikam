@@ -102,6 +102,12 @@ public:
     qlonglong          id;
 
     int                rating;               // Pre-rating value of camera file.
+
+    int                pickLabel;            // Pre-picklabel value of camera file.
+
+    int                colorLabel;           // Pre-picklabel value of camera file.
+
+    QList<int>         tagIds;               // Pre-tags ids of camera file.
 };
 
 QDataStream& operator<<(QDataStream&, const CamItemInfo&);
