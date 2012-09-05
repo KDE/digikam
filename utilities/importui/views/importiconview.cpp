@@ -38,7 +38,6 @@
 
 #include "importcategorizedview.h"
 #include "importoverlays.h"
-
 #include "importsettings.h"
 #include "camitemsortsettings.h"
 #include "fileactionmngr.h"
@@ -147,6 +146,7 @@ int ImportIconView::fitToWidthIcons()
 CamItemInfo ImportIconView::camItemInfo(const QString& folder, const QString& file)
 {
     QModelIndex indexForCamItemInfo = importFilterModel()->indexForPath(QString(folder + file));
+
     if(indexForCamItemInfo.isValid())
     {
         return importFilterModel()->camItemInfo(indexForCamItemInfo);
@@ -179,7 +179,7 @@ void ImportIconView::slotSetupChanged()
 
 void ImportIconView::rename()
 {
-    KUrl::List urls = selectedUrls();
+    KUrl::List   urls = selectedUrls();
     NewNamesList newNamesList;
 
     QPointer<AdvancedRenameDialog> dlg = new AdvancedRenameDialog(this);
@@ -262,6 +262,7 @@ void ImportIconView::removeSelectedFromGroup()
 void ImportIconView::slotRotateLeft(const QList<QModelIndex>& indexes)
 {
     QList<ImageInfo> imageInfos;
+
     foreach(QModelIndex index, indexes)
     {
         ImageInfo imageInfo(importFilterModel()->camItemInfo(index).url());
@@ -274,6 +275,7 @@ void ImportIconView::slotRotateLeft(const QList<QModelIndex>& indexes)
 void ImportIconView::slotRotateRight(const QList<QModelIndex>& indexes)
 {
     QList<ImageInfo> imageInfos;
+
     foreach(QModelIndex index, indexes)
     {
         ImageInfo imageInfo(importFilterModel()->camItemInfo(index).url());
@@ -303,7 +305,8 @@ void ImportIconView::activated(const CamItemInfo& info)
 void ImportIconView::showContextMenuOnInfo(QContextMenuEvent* event, const CamItemInfo& /*info*/)
 {
     QList<CamItemInfo> selectedInfos = selectedCamItemInfosCurrentFirst();
-    QList<qlonglong> selectedItemIDs;
+    QList<qlonglong>   selectedItemIDs;
+
     foreach(const CamItemInfo& info, selectedInfos)
     {
         selectedItemIDs << info.id;
@@ -402,7 +405,7 @@ void ImportIconView::assignTagToSelected(int tagID)
 
     foreach(CamItemInfo info, infos)
     {
-        importImageModel()->camItemInfoRef(importImageModel()->indexForCamItemInfo(info)).tagIds.append(tagID);;
+        importImageModel()->camItemInfoRef(importImageModel()->indexForCamItemInfo(info)).tagIds.append(tagID);
     }
 }
 
@@ -412,7 +415,7 @@ void ImportIconView::removeTagFromSelected(int tagID)
 
     foreach(CamItemInfo info, infos)
     {
-        importImageModel()->camItemInfoRef(importImageModel()->indexForCamItemInfo(info)).tagIds.remove(tagID);
+        importImageModel()->camItemInfoRef(importImageModel()->indexForCamItemInfo(info)).tagIds.removeAll(tagID);
     }
 }
 
@@ -427,7 +430,7 @@ void ImportIconView::assignPickLabelToSelected(int pickId)
 
     foreach(CamItemInfo info, infos)
     {
-        importImageModel()->camItemInfoRef(importImageModel()->indexForCamItemInfo(info)).pickLabel = pickId;;
+        importImageModel()->camItemInfoRef(importImageModel()->indexForCamItemInfo(info)).pickLabel = pickId;
     }
 }
 
@@ -442,7 +445,7 @@ void ImportIconView::assignColorLabelToSelected(int colorId)
 
     foreach(CamItemInfo info, infos)
     {
-        importImageModel()->camItemInfoRef(importImageModel()->indexForCamItemInfo(info)).colorLabel = colorId;;
+        importImageModel()->camItemInfoRef(importImageModel()->indexForCamItemInfo(info)).colorLabel = colorId;
     }
 }
 
@@ -463,7 +466,7 @@ void ImportIconView::assignRatingToSelected(int rating)
 
     foreach(CamItemInfo info, infos)
     {
-        importImageModel()->camItemInfoRef(importImageModel()->indexForCamItemInfo(info)).rating = rating;;
+        importImageModel()->camItemInfoRef(importImageModel()->indexForCamItemInfo(info)).rating = rating;
     }
 }
 
