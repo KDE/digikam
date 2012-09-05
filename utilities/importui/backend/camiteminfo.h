@@ -65,12 +65,20 @@ public:
     CamItemInfo();
     ~CamItemInfo();
 
-    bool isNull() const;                     // Return true if all member in this container are null
-    KUrl url() const;                        // Return the local file system (mounted on computer) url to the camera file
-
-    /** Compare for camera inforation equality, not including variable values.
+    /** Return true if all member in this container are null.
      */
-    bool operator==(const CamItemInfo& t) const;
+    bool isNull() const;
+
+    /** Return the local file system (mounted on computer) url to the camera file.
+     */
+    KUrl url()    const;
+
+    /** Compare for camera information equality, not including variable values.
+     */
+    bool operator==(const CamItemInfo& info) const;
+
+    /** Compare for camera information un-equality, not including variable values.
+     */
     bool operator!=(const CamItemInfo& info) const
     {
         return !operator==(info);
