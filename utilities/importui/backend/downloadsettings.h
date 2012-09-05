@@ -31,7 +31,7 @@
 
 // local includes
 
-#include "template.h"
+#include "globals.h"
 
 namespace Digikam
 {
@@ -46,9 +46,14 @@ public:
         autoRotate  = true;
         fixDateTime = false;
         convertJpeg = false;
+        rating      = NoRating;
+        pickLabel   = NoPickLabel;
+        colorLabel  = NoColorLabel;
     };
 
-    ~DownloadSettings() {};
+    ~DownloadSettings()
+    {
+    };
 
 public:
 

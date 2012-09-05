@@ -79,10 +79,7 @@ public:
 
     /** Compare for camera information un-equality, not including variable values.
      */
-    bool operator!=(const CamItemInfo& info) const
-    {
-        return !operator==(info);
-    }
+    bool operator!=(const CamItemInfo& info) const;
 
 public:
 
