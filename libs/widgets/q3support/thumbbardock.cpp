@@ -27,6 +27,10 @@
 
 #include "thumbbardock.moc"
 
+// Local includes
+
+#include "thumbbar.h"
+
 namespace Digikam
 {
 

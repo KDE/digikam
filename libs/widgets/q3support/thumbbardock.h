@@ -42,9 +42,9 @@
 #include <klocale.h>
 #include <ktoggleaction.h>
 
-// local includes
+// Local includes
 
-#include "thumbbar.h"
+#include "digikam_export.h"
 
 namespace Digikam
 {

@@ -30,6 +30,7 @@
 #include <QList>
 #include <QString>
 #include <QPropertyAnimation>
+#include <QScrollBar>
 
 // KDE includes
 

@@ -1006,11 +1006,12 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/ratingwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/colorlabelwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/picklabelwidget.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/thumbbardock.cpp
 
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/q3support/previewwidget.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/q3support/drubberband.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/q3support/thumbbardock.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/q3support/thumbbar.cpp
+
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/q3support/drubberband.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/q3support/previewwidget.cpp
        )
 
     SET(libitemview_SRCS
@@ -1088,7 +1089,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
        )
 
     SET(libeditorwidgets_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/widgets/imageregionwidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/q3support/imageregionwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/widgets/imageguidewidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/widgets/imagepreviewitem.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/widgets/previewtoolbar.cpp
@@ -1105,7 +1106,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/softproofdialog.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/dimginterface.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/iccpostloadingmanager.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/canvas.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/q3support/canvas.cpp
        )
 
     SET(libdimgeditorprintiface_SRCS
@@ -1582,7 +1583,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/imageplugins
         ${CMAKE_CURRENT_SOURCE_DIR}/imageplugins/color
         ${CMAKE_CURRENT_SOURCE_DIR}/imageplugins/decorate
-        ${CMAKE_CURRENT_SOURCE_DIR}/imageplugins/decorate/superimpose
         ${CMAKE_CURRENT_SOURCE_DIR}/imageplugins/enhance
         ${CMAKE_CURRENT_SOURCE_DIR}/imageplugins/enhance/hotpixels
         ${CMAKE_CURRENT_SOURCE_DIR}/imageplugins/filters
@@ -1671,6 +1671,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/printiface
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/rawimport
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/widgets
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/q3support
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/kipiiface
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/lighttable
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/nepomuk
