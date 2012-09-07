@@ -6,8 +6,8 @@
  * Date        : 2010-04-30
  * Description : Graphics View item for DImg
  *
- * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2011 Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2011-2012 Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -68,9 +68,10 @@ void CachedPixmaps::clear()
     keys.clear();
 }
 
-bool CachedPixmaps::find(const QRect& region, QPixmap* pix, QRect* source)
+bool CachedPixmaps::find(const QRect& region, QPixmap* const pix, QRect* const source)
 {
     QQueue<CachedPixmapKey>::iterator key;
+
     for (key = keys.begin(); key != keys.end(); )
     {
         if (!key->region.contains(region))
@@ -97,6 +98,7 @@ bool CachedPixmaps::find(const QRect& region, QPixmap* pix, QRect* source)
 
         return true;
     }
+
     return false;
 }
 
@@ -116,21 +118,21 @@ void CachedPixmaps::insert(const QRect& region, const QPixmap& pixmap)
 
 // ---------------------------------------------------------------------------------------
 
-GraphicsDImgItem::GraphicsDImgItem(QGraphicsItem* parent)
+GraphicsDImgItem::GraphicsDImgItem(QGraphicsItem* const parent)
     : QGraphicsObject(parent),
       d_ptr(new GraphicsDImgItemPrivate)
 {
     d_ptr->init(this);
 }
 
-GraphicsDImgItem::GraphicsDImgItem(GraphicsDImgItemPrivate& dd, QGraphicsItem* parent)
+GraphicsDImgItem::GraphicsDImgItem(GraphicsDImgItemPrivate& dd, QGraphicsItem* const parent)
     : QGraphicsObject(parent),
       d_ptr(&dd)
 {
     d_ptr->init(this);
 }
 
-void GraphicsDImgItem::GraphicsDImgItemPrivate::init(GraphicsDImgItem* q)
+void GraphicsDImgItem::GraphicsDImgItemPrivate::init(GraphicsDImgItem* const q)
 {
     // ItemCoordinateCache is very slow, DeviceCoordinateCache makes severe render artifacts
     q->setCacheMode(QGraphicsItem::NoCache);

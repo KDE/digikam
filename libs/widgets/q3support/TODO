@@ -22,7 +22,7 @@ ImageCategorizedView    : a DCategorizedView re-implementation using digiKam DB.
 ImageThumbnailBar       : ImageCategorizedView re-implementaion as a simple line thumb bar
 
 Showfoto use KUrl to identify item, and extract data relevant (as Exif metadata for ex, through DMetadata).
-To port Showofoto thumb-bar to model-view, a new class must be derivated from DCategorizedView using KUrl as lead item info.
+To port Showfoto thumb-bar to model-view, a new class must be derivated from DCategorizedView using KUrl as lead item info.
 Some methods from ImageCategorizedView and ImageThumbnailBar must be backported to play with KUrl, instead ImageInfo.
 
 You can take a look at work done this summer about Import ported to model/view, especially on classes ImportCategorizedView 

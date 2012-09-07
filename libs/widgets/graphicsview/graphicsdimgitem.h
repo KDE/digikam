@@ -6,8 +6,8 @@
  * Date        : 2010-04-30
  * Description : Graphics View item for DImg
  *
- * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2011 Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2011-2012 Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -47,7 +47,7 @@ class DIGIKAM_EXPORT GraphicsDImgItem : public QGraphicsObject
 
 public:
 
-    GraphicsDImgItem(QGraphicsItem* parent = 0);
+    GraphicsDImgItem(QGraphicsItem* const parent = 0);
     virtual ~GraphicsDImgItem();
 
     /**
@@ -61,6 +61,7 @@ public:
     ImageZoomSettings*       zoomSettings();
 
     void            sizeHasChanged();
+
     virtual QRectF  boundingRect() const;
     virtual void    paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0);
     virtual QString userLoadingHint() const { return QString(); };
@@ -77,7 +78,7 @@ public:
 
 protected:
 
-    GraphicsDImgItem(GraphicsDImgItemPrivate& dd, QGraphicsItem* parent);
+    GraphicsDImgItem(GraphicsDImgItemPrivate& dd, QGraphicsItem* const parent);
     GraphicsDImgItemPrivate* const d_ptr;
 
 protected:

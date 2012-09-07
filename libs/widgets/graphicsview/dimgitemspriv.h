@@ -6,7 +6,7 @@
  * Date        : 2010-04-30
  * Description : Graphics View item for DImg
  *
- * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -59,7 +59,7 @@ public:
 
     void setMaxCount(int);
     void clear();
-    bool find(const QRect& region, QPixmap* pix, QRect* source);
+    bool find(const QRect& region, QPixmap* const pix, QRect* const source);
     void insert(const QRect& region, const QPixmap& pixmap);
 
 protected:
@@ -78,7 +78,7 @@ public:
     {
     }
 
-    void init(GraphicsDImgItem* q);
+    void init(GraphicsDImgItem* const q);
 
 public:
 
@@ -97,7 +97,7 @@ class DIGIKAM_EXPORT DImgPreviewItem::DImgPreviewItemPrivate : public GraphicsDI
 public:
 
     DImgPreviewItemPrivate();
-    void init(DImgPreviewItem* q);
+    void init(DImgPreviewItem* const q);
 
 public:
 

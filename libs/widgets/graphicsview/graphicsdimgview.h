@@ -6,8 +6,8 @@
  * Date        : 2010-04-30
  * Description : Graphics View for DImg preview
  *
- * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2011 Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2011-2012 Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -46,14 +46,16 @@ class DIGIKAM_EXPORT GraphicsDImgView : public QGraphicsView
 
 public:
 
-    GraphicsDImgView(QWidget* parent = 0);
+    GraphicsDImgView(QWidget* const parent = 0);
     virtual ~GraphicsDImgView();
 
-    /** Return the instance of item set by setItem().*/
+    /** Return the instance of item set by setItem().
+     */
     GraphicsDImgItem*         item()        const;
 
     /** Return a cast of item instance of item set by setItem() as DImgPreviewItem
-        Note: if you store a GraphicsDImgItem object using setItem(), this method will return 0 */
+     *  Note: if you store a GraphicsDImgItem object using setItem(), this method will return 0.
+     */
     DImgPreviewItem*          previewItem() const;
 
     SinglePhotoPreviewLayout* layout()      const;
@@ -61,7 +63,8 @@ public:
     /** Scrolls the view such that scenePos (in scene coordinates
      *  is displayed on the viewport at viewportPos (in viewport coordinates).
      *  E.g., calling scrollPointOnPoint(scenePos, viewport()->rect().center()) is
-     *  equivalent to calling centerOn(scenePos). */
+     *  equivalent to calling centerOn(scenePos).
+     */
     void scrollPointOnPoint(const QPointF& scenePos, const QPoint& viewportPos);
 
     int  contentsX() const;
@@ -89,8 +92,9 @@ protected:
     void drawText(QPainter* p, const QRectF& rect, const QString& text);
 
     /** Store internal instance of item as GraphicsDImgItem. You can store DImgPreviewItem object also by this method.
-        Use item() or previewItem() to get right version.
-        Note: if you store a GraphicsDImgItem object, previewItem() will return 0 */
+     *  Use item() or previewItem() to get right version.
+     *  Note: if you store a GraphicsDImgItem object, previewItem() will return 0.
+     */
     void setItem(GraphicsDImgItem* item);
 
     void installPanIcon();
@@ -106,23 +110,23 @@ protected:
     void continuePanning(const QPoint& pos);
     void finishPanning();
 
-    virtual bool acceptsMouseClick(QMouseEvent* e);
-
-    virtual void scrollContentsBy(int dx, int dy);
-
     void setShowText(bool value);
+    
+    virtual bool acceptsMouseClick(QMouseEvent* e);
+    virtual void scrollContentsBy(int dx, int dy);
 
 protected Q_SLOTS:
 
     void         slotContentsMoved();
     void         slotCornerButtonPressed();
     void         slotPanIconHidden();
+
     virtual void slotPanIconSelectionMoved(const QRect&, bool);
 
 private:
 
-    class GraphicsDImgViewPriv;
-    GraphicsDImgViewPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

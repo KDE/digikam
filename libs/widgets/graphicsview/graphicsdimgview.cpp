@@ -6,8 +6,8 @@
  * Date        : 2010-04-30
  * Description : Graphics View for DImg preview
  *
- * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2011 Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2011-2012 Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -48,11 +48,11 @@
 namespace Digikam
 {
 
-class GraphicsDImgView::GraphicsDImgViewPriv
+class GraphicsDImgView::Private
 {
 public:
 
-    GraphicsDImgViewPriv()
+    Private()
     {
         scene            = 0;
         item             = 0;
@@ -76,8 +76,8 @@ public:
     bool                      showText;
 };
 
-GraphicsDImgView::GraphicsDImgView(QWidget* parent)
-    : QGraphicsView(parent), d(new GraphicsDImgViewPriv)
+GraphicsDImgView::GraphicsDImgView(QWidget* const parent)
+    : QGraphicsView(parent), d(new Private)
 {
     d->scene  = new QGraphicsScene(this);
     d->scene->setItemIndexMethod(QGraphicsScene::NoIndex);

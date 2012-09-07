@@ -1,0 +1,16 @@
+Port image editor ImageRegionWidget to Qt4 model/view
+------------------------------------------------------
+
+ImageRegionWidget is a Qt3Support class based on Q3ScrollView class (PreviewWidget) which will disapear with next Qt5.
+This class is used by digiKam Image editor to render canvas of tools as ColorCorrection, CurvesAdjust, LevelAdjust, etc.
+It must be ported to Qt4 model/view implementation using already existing common classes used in digiKam core.
+
+Common classes used to define Model/View digiKam canvas are listed below :
+
+GraphicsDImgView : this class is derived from model/view core implementation based on QGraphicsView to display a zoomable view.
+
+ImagePreviewItem : it's a derivated class from GraphicsDImgItem, which define canvas painting re-implementation
+
+To port ImageRegionWidget to model-view, a new class must be derivated from GraphicsDImgView and a canvas painting implementation must be hosted to
+a new dedicated class based on ImagePreviewItem. A similar port have be done with image editor RawPreview class which is the preview 
+implmentation of editor RAW file import tool.
