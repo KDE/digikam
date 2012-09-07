@@ -7,7 +7,7 @@
  * Description : a bar widget to display image thumbnails
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2005-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -66,15 +66,16 @@
 #include "dmetadata.h"
 #include "thumbnailloadthread.h"
 #include "thumbnailsize.h"
+#include "thumbbardock.h"
 
 namespace Digikam
 {
 
-class ThumbBarView::ThumbBarViewPriv
+class ThumbBarView::Private
 {
 public:
 
-    ThumbBarViewPriv() :
+    Private() :
         margin(5), radius(3)
     {
         dragging        = false;
@@ -129,11 +130,11 @@ public:
 
 // -------------------------------------------------------------------------
 
-class ThumbBarItem::ThumbBarItemPriv
+class ThumbBarItem::Private
 {
 public:
 
-    ThumbBarItemPriv() :
+    Private() :
         pos(0),
         next(0),
         prev(0),
@@ -155,9 +156,9 @@ public:
 
 // -------------------------------------------------------------------------
 
-ThumbBarView::ThumbBarView(QWidget* parent, int orientation,
+ThumbBarView::ThumbBarView(QWidget* const parent, int orientation,
                            const ThumbBarToolTipSettings& settings)
-    : Q3ScrollView(parent), d(new ThumbBarViewPriv)
+    : Q3ScrollView(parent), d(new Private)
 {
     d->toolTipSettings = settings;
     d->timer           = new QTimer(this);
@@ -236,7 +237,7 @@ void ThumbBarView::setOrientation(int orientation)
     }
 }
 
-void ThumbBarView::setToolTip(ThumbBarToolTip* toolTip)
+void ThumbBarView::setToolTip(ThumbBarToolTip* const toolTip)
 {
     d->toolTip = toolTip;
 }
@@ -267,22 +268,22 @@ void ThumbBarView::resizeEvent(QResizeEvent* e)
     ensureItemVisible(currentItem());
 }
 
-int ThumbBarView::getOrientation()
+int ThumbBarView::getOrientation() const
 {
     return d->orientation;
 }
 
-int ThumbBarView::getTileSize()
+int ThumbBarView::getTileSize() const
 {
     return d->tileSize;
 }
 
-int ThumbBarView::getMargin()
+int ThumbBarView::getMargin() const
 {
     return d->margin;
 }
 
-int ThumbBarView::getRadius()
+int ThumbBarView::getRadius() const
 {
     return d->radius;
 }
@@ -297,12 +298,12 @@ ThumbBarToolTipSettings& ThumbBarView::getToolTipSettings() const
     return d->toolTipSettings;
 }
 
-int ThumbBarView::countItems()
+int ThumbBarView::countItems() const
 {
     return d->count;
 }
 
-KUrl::List ThumbBarView::itemsUrls()
+KUrl::List ThumbBarView::itemsUrls() const
 {
     KUrl::List urlList;
 
@@ -382,7 +383,7 @@ ThumbBarItem* ThumbBarView::findItemByUrl(const KUrl& url) const
     return 0;
 }
 
-void ThumbBarView::setSelected(ThumbBarItem* item)
+void ThumbBarView::setSelected(ThumbBarItem* const item)
 {
     if (!item)
     {
@@ -455,7 +456,7 @@ void ThumbBarView::refreshThumbs(const KUrl::List& urls)
     }
 }
 
-void ThumbBarView::invalidateThumb(ThumbBarItem* item)
+void ThumbBarView::invalidateThumb(ThumbBarItem* const item)
 {
     if (!item)
     {
@@ -480,7 +481,7 @@ void ThumbBarView::reloadThumbs(const KUrl::List& urls)
     }
 }
 
-void ThumbBarView::reloadThumb(ThumbBarItem* item)
+void ThumbBarView::reloadThumb(ThumbBarItem* const item)
 {
     if (!item)
     {
@@ -490,7 +491,7 @@ void ThumbBarView::reloadThumb(ThumbBarItem* item)
     d->thumbLoadThread->find(item->url().toLocalFile(), d->tileSize);
 }
 
-bool ThumbBarView::pixmapForItem(ThumbBarItem* item, QPixmap& pix) const
+bool ThumbBarView::pixmapForItem(ThumbBarItem* const item, QPixmap& pix) const
 {
     if (d->tileSize > d->maxTileSize)
     {
@@ -516,7 +517,7 @@ bool ThumbBarView::pixmapForItem(ThumbBarItem* item, QPixmap& pix) const
     }
 }
 
-void ThumbBarView::preloadPixmapForItem(ThumbBarItem* item) const
+void ThumbBarView::preloadPixmapForItem(ThumbBarItem* const item) const
 {
     d->thumbLoadThread->preload(item->url().toLocalFile(), qMin(d->tileSize, d->maxTileSize));
 }
@@ -578,9 +579,9 @@ void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
                     int y = (tile.height() - pix.height())/2;
                     p.drawPixmap(x, y, pix);
                     p.drawPixmap(x-d->radius, y-d->radius,
-                                 generateFuzzyRect(QSize(pix.width()+2*d->radius,
-                                                         pix.height()+2*d->radius),
-                                                   QColor(0, 0, 0, 128), d->radius));
+                                 ThumbBarDock::generateFuzzyRect(QSize(pix.width()+2*d->radius,
+                                                                 pix.height()+2*d->radius),
+                                                                 QColor(0, 0, 0, 128), d->radius));
                     item->setTooltipRect(QRect(x, y+item->position(), pix.width(), pix.height()));
                 }
 
@@ -621,9 +622,9 @@ void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
                     int x = (tile.width()  - pix.width())/2;
                     int y = (tile.height() - pix.height())/2;
                     p.drawPixmap(x, y, pix);
-                    p.drawPixmap(x-3, y-3, generateFuzzyRect(QSize(pix.width()+6,
-                                 pix.height()+6),
-                                 QColor(0, 0, 0, 128), 3));
+                    p.drawPixmap(x-3, y-3, ThumbBarDock::generateFuzzyRect(QSize(pix.width()+6,
+                                                                           pix.height()+6),
+                                                                           QColor(0, 0, 0, 128), 3));
                     item->setTooltipRect(QRect(x+item->position(), y, pix.width(), pix.height()));
                 }
 
@@ -633,74 +634,6 @@ void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
     }
 
     checkPreload();
-}
-
-QPixmap ThumbBarView::generateFuzzyRect(const QSize& size, const QColor& color, int radius)
-{
-    QPixmap pix(size);
-    pix.fill(Qt::transparent);
-
-    QPainter painter(&pix);
-    painter.setRenderHint(QPainter::Antialiasing, true);
-
-    // Draw corners ----------------------------------
-
-    QRadialGradient gradient;
-    gradient.setColorAt(1, Qt::transparent);
-    gradient.setColorAt(0, color);
-    gradient.setRadius(radius);
-    QPoint center;
-
-    // Top Left
-    center = QPoint(radius, radius);
-    gradient.setCenter(center);
-    gradient.setFocalPoint(center);
-    painter.fillRect(0, 0, radius, radius, gradient);
-
-    // Top right
-    center = QPoint(size.width() - radius, radius);
-    gradient.setCenter(center);
-    gradient.setFocalPoint(center);
-    painter.fillRect(center.x(), 0, radius, radius, gradient);
-
-    // Bottom left
-    center = QPoint(radius, size.height() - radius);
-    gradient.setCenter(center);
-    gradient.setFocalPoint(center);
-    painter.fillRect(0, center.y(), radius, radius, gradient);
-
-    // Bottom right
-    center = QPoint(size.width() - radius, size.height() - radius);
-    gradient.setCenter(center);
-    gradient.setFocalPoint(center);
-    painter.fillRect(center.x(), center.y(), radius, radius, gradient);
-
-    // Draw borders ----------------------------------
-
-    QLinearGradient linearGradient;
-    linearGradient.setColorAt(1, Qt::transparent);
-    linearGradient.setColorAt(0, color);
-
-    // Top
-    linearGradient.setStart(0, radius);
-    linearGradient.setFinalStop(0, 0);
-    painter.fillRect(radius, 0, size.width() - 2*radius, radius, linearGradient);
-
-    // Bottom
-    linearGradient.setStart(0, size.height() - radius);
-    linearGradient.setFinalStop(0, size.height());
-    painter.fillRect(radius, int(linearGradient.start().y()), size.width() - 2*radius, radius, linearGradient);
-
-    // Left
-    linearGradient.setStart(radius, 0);
-    linearGradient.setFinalStop(0, 0);
-    painter.fillRect(0, radius, radius, size.height() - 2*radius, linearGradient);
-
-    // Right
-    linearGradient.setStart(size.width() - radius, 0);
-    linearGradient.setFinalStop(size.width(), 0);
-    painter.fillRect(int(linearGradient.start().x()), radius, radius, size.height() - 2*radius, linearGradient);
-    return pix;
 }
 
 void ThumbBarView::contentsMousePressEvent(QMouseEvent* e)
@@ -789,7 +722,7 @@ void ThumbBarView::contentsMouseMoveEvent(QMouseEvent* e)
         return;
     }
 
-    d->toolTipItem  = 0;
+    d->toolTipItem = 0;
     d->toolTipTimer->stop();
     slotToolTip();
 
@@ -807,7 +740,7 @@ void ThumbBarView::contentsMouseMoveEvent(QMouseEvent* e)
 
 void ThumbBarView::contentsMouseReleaseEvent(QMouseEvent* e)
 {
-    d->dragging = false;
+    d->dragging        = false;
     ThumbBarItem* item = findItem(e->pos());
 
     if (e->button() == Qt::LeftButton && item)
@@ -957,7 +890,7 @@ void ThumbBarView::clear(bool updateView)
     emit signalItemSelected(0);
 }
 
-void ThumbBarView::insertItem(ThumbBarItem* item)
+void ThumbBarView::insertItem(ThumbBarItem* const item)
 {
     if (!item)
     {
@@ -1132,7 +1065,7 @@ void ThumbBarView::rearrangeItems()
     }
 }
 
-void ThumbBarView::repaintItem(ThumbBarItem* item)
+void ThumbBarView::repaintItem(ThumbBarItem* const item)
 {
     if (item)
     {
@@ -1250,10 +1183,23 @@ bool ThumbBarView::acceptToolTip(ThumbBarItem* item, const QPoint& p)
     return false;
 }
 
+void ThumbBarView::slotDockLocationChanged(Qt::DockWidgetArea area)
+{
+    // Change orientation of child thumbbar when location has changed.
+    if ((area == Qt::LeftDockWidgetArea) || (area == Qt::RightDockWidgetArea))
+    {
+        setOrientation(Qt::Vertical);
+    }
+    else
+    {
+        setOrientation(Qt::Horizontal);
+    }
+}
+
 // -------------------------------------------------------------------------
 
-ThumbBarItem::ThumbBarItem(ThumbBarView* view, const KUrl& url)
-    : d(new ThumbBarItemPriv)
+ThumbBarItem::ThumbBarItem(ThumbBarView* const view, const KUrl& url)
+    : d(new Private)
 {
     d->url  = url;
     d->view = view;
@@ -1319,11 +1265,11 @@ void ThumbBarItem::repaint()
 
 // -------------------------------------------------------------------------
 
-class ThumbBarToolTip::ThumbBarToolTipPriv
+class ThumbBarToolTip::Private
 {
 public:
 
-    ThumbBarToolTipPriv() :
+    Private() :
         view(0),
         item(0)
     {
@@ -1334,8 +1280,8 @@ public:
     ThumbBarItem* item;
 };
 
-ThumbBarToolTip::ThumbBarToolTip(ThumbBarView* view)
-    : DItemToolTip(), d(new ThumbBarToolTipPriv)
+ThumbBarToolTip::ThumbBarToolTip(ThumbBarView* const view)
+    : DItemToolTip(), d(new Private)
 {
     d->view = view;
 }
@@ -1350,7 +1296,7 @@ ThumbBarToolTipSettings& ThumbBarToolTip::toolTipSettings() const
     return d->view->getToolTipSettings();
 }
 
-void ThumbBarToolTip::setItem(ThumbBarItem* item)
+void ThumbBarToolTip::setItem(ThumbBarItem* const item)
 {
     d->item = item;
 

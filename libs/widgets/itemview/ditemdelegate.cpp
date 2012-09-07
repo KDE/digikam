@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2002-2005 by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C)      2009 by Andi Clemens <andi dot clemens at gmail dot com>
- * Copyright (C) 2002-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2002-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -47,16 +47,16 @@
 
 #include "dcategorizedview.h"
 #include "thememanager.h"
-#include "thumbbar.h"
+#include "thumbbardock.h"
 
 namespace Digikam
 {
 
-class DItemDelegate::DItemDelegatePriv
+class DItemDelegate::Private
 {
 public:
 
-    DItemDelegatePriv()
+    Private()
     {
     }
 
@@ -64,8 +64,8 @@ public:
     QCache<QString, QString>  squeezedTextCache;
 };
 
-DItemDelegate::DItemDelegate(QObject* parent)
-    : QAbstractItemDelegate(parent), d(new DItemDelegatePriv)
+DItemDelegate::DItemDelegate(QObject* const parent)
+    : QAbstractItemDelegate(parent), d(new Private)
 {
 }
 
@@ -90,7 +90,7 @@ QPixmap DItemDelegate::thumbnailBorderPixmap(const QSize& pixSize) const
 
     if (!cachePix)
     {
-        QPixmap pix = ThumbBarView::generateFuzzyRect(QSize(pixSize.width()  + 2*radius,
+        QPixmap pix = ThumbBarDock::generateFuzzyRect(QSize(pixSize.width()  + 2*radius,
                       pixSize.height() + 2*radius),
                       borderColor, radius);
         const_cast<DItemDelegate*>(this)->d->thumbnailBorderCache.insert(cacheKey, new QPixmap(pix));
@@ -117,9 +117,8 @@ QPixmap DItemDelegate::makeDragPixmap(const QStyleOptionViewItem& option,
                            Qt::KeepAspectRatio, Qt::SmoothTransformation);
     }
 
-    int w = icon.width();
-    int h = icon.height();
-
+    int w                 = icon.width();
+    int h                 = icon.height();
     const int borderWidth = 6;
 
     QRect   rect(0, 0, w + borderWidth*2, h + borderWidth*2);
@@ -180,7 +179,7 @@ QString DItemDelegate::dateToString(const QDateTime& datetime)
     return KGlobal::locale()->formatDateTime(datetime, KLocale::ShortDate, false);
 }
 
-QString DItemDelegate::squeezedTextCached(QPainter* p, int width, const QString& text) const
+QString DItemDelegate::squeezedTextCached(QPainter* const p, int width, const QString& text) const
 {
     QCache<QString, QString>* cache = &const_cast<DItemDelegate*>(this)->d->squeezedTextCache;
     // We do not need to include the font into cache key, the cache is cleared on font change

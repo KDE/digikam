@@ -4,8 +4,8 @@
  * http://www.digikam.org
  *
  * Date        : 2009-15-08
- * Description : A floatable/dockable widget for thumbnail bars (ThumbBarView
- *               and its descendants), providing i drag handle similar to the
+ * Description : A floatable/dockable widget for thumbnail bars,
+ *               providing i drag handle similar to the
  *               one on toolbars and a standard KToggleAction to show/hide the
  *               thumbnail bar. It inherits QDockWidget and can be used in
  *               the dock area's of a QMainWindow.
@@ -27,19 +27,15 @@
 
 #include "thumbbardock.moc"
 
-// Local includes
-
-#include "thumbbar.h"
-
 namespace Digikam
 {
 
-class DragHandle::DragHandlePriv
+class DragHandle::Private
 {
 
 public:
 
-    DragHandlePriv() :
+    Private() :
         parent(0),
         currentArea(Qt::LeftDockWidgetArea)
     {
@@ -49,8 +45,8 @@ public:
     Qt::DockWidgetArea currentArea;
 };
 
-DragHandle::DragHandle(QDockWidget* parent)
-    : QWidget(), d(new DragHandlePriv)
+DragHandle::DragHandle(QDockWidget* const parent)
+    : QWidget(), d(new Private)
 {
     d->parent = parent;
 
@@ -141,15 +137,11 @@ QSize DragHandle::minimumSizeHint() const
 
 // ----------------------------------------------------------------------------
 
-ThumbBarDock::ThumbBarDock(QWidget* parent, Qt::WindowFlags flags)
+ThumbBarDock::ThumbBarDock(QWidget* const parent, Qt::WindowFlags flags)
     : QDockWidget(parent, flags), m_visible(SHOULD_BE_SHOWN)
 {
     // Use a DragHandle as title bar widget.
     setTitleBarWidget(new DragHandle(this));
-
-    // Detect changes in dock location.
-    connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)),
-            this, SLOT(slotDockLocationChanged(Qt::DockWidgetArea)));
 }
 
 ThumbBarDock::~ThumbBarDock()
@@ -160,14 +152,13 @@ void ThumbBarDock::reInitialize()
 {
     // Measure orientation of the widget and adjust the child thumbbar to this
     // orientation and size.
-    QMainWindow* parent   = qobject_cast<QMainWindow*>(parentWidget());
+    QMainWindow* parent = qobject_cast<QMainWindow*>(parentWidget());
     emit dockLocationChanged(parent->dockWidgetArea(this));
-    //ThumbBarView *child = qobject_cast<ThumbBarView *>(widget());
     widget()->resize(size());
     update();
 }
 
-KToggleAction* ThumbBarDock::getToggleAction(QObject* parent, const QString& caption) const
+KToggleAction* ThumbBarDock::getToggleAction(QObject* const parent, const QString& caption) const
 {
     KToggleAction* action = new KToggleAction(KIcon("view-choose"), caption, parent);
 
@@ -225,26 +216,6 @@ void ThumbBarDock::setShouldBeVisible(bool status)
     }
 }
 
-void ThumbBarDock::slotDockLocationChanged(Qt::DockWidgetArea area)
-{
-    // Change orientation of child thumbbar when location has changed.
-    ThumbBarView* child = qobject_cast<ThumbBarView*>(widget());
-
-    if (!child)
-    {
-        return;
-    }
-
-    if ((area == Qt::LeftDockWidgetArea) || (area == Qt::RightDockWidgetArea))
-    {
-        child->setOrientation(Qt::Vertical);
-    }
-    else
-    {
-        child->setOrientation(Qt::Horizontal);
-    }
-}
-
 void ThumbBarDock::showThumbBar(bool status)
 {
     if (status)
@@ -257,6 +228,74 @@ void ThumbBarDock::showThumbBar(bool status)
     }
 
     setVisible(status);
+}
+
+QPixmap ThumbBarDock::generateFuzzyRect(const QSize& size, const QColor& color, int radius)
+{
+    QPixmap pix(size);
+    pix.fill(Qt::transparent);
+
+    QPainter painter(&pix);
+    painter.setRenderHint(QPainter::Antialiasing, true);
+
+    // Draw corners ----------------------------------
+
+    QRadialGradient gradient;
+    gradient.setColorAt(1, Qt::transparent);
+    gradient.setColorAt(0, color);
+    gradient.setRadius(radius);
+    QPoint center;
+
+    // Top Left
+    center = QPoint(radius, radius);
+    gradient.setCenter(center);
+    gradient.setFocalPoint(center);
+    painter.fillRect(0, 0, radius, radius, gradient);
+
+    // Top right
+    center = QPoint(size.width() - radius, radius);
+    gradient.setCenter(center);
+    gradient.setFocalPoint(center);
+    painter.fillRect(center.x(), 0, radius, radius, gradient);
+
+    // Bottom left
+    center = QPoint(radius, size.height() - radius);
+    gradient.setCenter(center);
+    gradient.setFocalPoint(center);
+    painter.fillRect(0, center.y(), radius, radius, gradient);
+
+    // Bottom right
+    center = QPoint(size.width() - radius, size.height() - radius);
+    gradient.setCenter(center);
+    gradient.setFocalPoint(center);
+    painter.fillRect(center.x(), center.y(), radius, radius, gradient);
+
+    // Draw borders ----------------------------------
+
+    QLinearGradient linearGradient;
+    linearGradient.setColorAt(1, Qt::transparent);
+    linearGradient.setColorAt(0, color);
+
+    // Top
+    linearGradient.setStart(0, radius);
+    linearGradient.setFinalStop(0, 0);
+    painter.fillRect(radius, 0, size.width() - 2*radius, radius, linearGradient);
+
+    // Bottom
+    linearGradient.setStart(0, size.height() - radius);
+    linearGradient.setFinalStop(0, size.height());
+    painter.fillRect(radius, int(linearGradient.start().y()), size.width() - 2*radius, radius, linearGradient);
+
+    // Left
+    linearGradient.setStart(radius, 0);
+    linearGradient.setFinalStop(0, 0);
+    painter.fillRect(0, radius, radius, size.height() - 2*radius, linearGradient);
+
+    // Right
+    linearGradient.setStart(size.width() - radius, 0);
+    linearGradient.setFinalStop(size.width(), 0);
+    painter.fillRect(int(linearGradient.start().x()), radius, radius, size.height() - 2*radius, linearGradient);
+    return pix;
 }
 
 } // namespace Digikam

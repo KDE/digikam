@@ -44,7 +44,7 @@ class DIGIKAM_EXPORT DItemDelegate : public QAbstractItemDelegate
 
 public:
 
-    DItemDelegate(QObject* parent = 0);
+    DItemDelegate(QObject* const parent = 0);
     ~DItemDelegate();
 
     /// Returns the gridsize to be set by the view. It's sizeHint plus spacing.
@@ -84,13 +84,13 @@ protected:
 
     virtual void clearCaches();
 
-    QString squeezedTextCached(QPainter* p, int width, const QString& text) const;
+    QString squeezedTextCached(QPainter* const p, int width, const QString& text) const;
     QPixmap thumbnailBorderPixmap(const QSize& pixSize) const;
 
 private:
 
-    class DItemDelegatePriv;
-    DItemDelegatePriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

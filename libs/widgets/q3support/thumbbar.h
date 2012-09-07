@@ -7,7 +7,7 @@
  * Description : a bar widget to display image thumbnails
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2005-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -101,10 +101,10 @@ class DIGIKAM_EXPORT ThumbBarToolTip : public DItemToolTip
 {
 public:
 
-    ThumbBarToolTip(ThumbBarView* view);
+    ThumbBarToolTip(ThumbBarView* const view);
     virtual ~ThumbBarToolTip();
 
-    void setItem(ThumbBarItem* item);
+    void setItem(ThumbBarItem* const item);
     ThumbBarItem* item() const;
 
 protected:
@@ -116,8 +116,8 @@ protected:
 
 private:
 
-    class ThumbBarToolTipPriv;
-    ThumbBarToolTipPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 // -------------------------------------------------------------------------
@@ -128,29 +128,30 @@ class DIGIKAM_EXPORT ThumbBarView : public Q3ScrollView
 
 public:
 
-    explicit ThumbBarView(QWidget* parent, int orientation=Qt::Vertical,
+    explicit ThumbBarView(QWidget* const parent, int orientation=Qt::Vertical,
                           const ThumbBarToolTipSettings& settings=ThumbBarToolTipSettings());
     virtual ~ThumbBarView();
 
     void setOrientation(int orientation);
-    int  getOrientation();
-    void setToolTip(ThumbBarToolTip* toolTip);
+    int  getOrientation() const;
 
-    int countItems();
-    KUrl::List itemsUrls();
+    void setToolTip(ThumbBarToolTip* const toolTip);
+
+    int countItems()       const;
+    KUrl::List itemsUrls() const;
 
     void triggerUpdate();
 
-    void setSelected(ThumbBarItem* item);
+    void setSelected(ThumbBarItem* const item);
 
     void setToolTipSettings(const ThumbBarToolTipSettings& settings);
     ThumbBarToolTipSettings& getToolTipSettings() const;
 
-    ThumbBarItem* currentItem() const;
-    ThumbBarItem* highlightedItem() const;
-    ThumbBarItem* firstItem() const;
-    ThumbBarItem* lastItem()  const;
-    ThumbBarItem* findItem(const QPoint& pos) const;
+    ThumbBarItem* currentItem()                  const;
+    ThumbBarItem* highlightedItem()              const;
+    ThumbBarItem* firstItem()                    const;
+    ThumbBarItem* lastItem()                     const;
+    ThumbBarItem* findItem(const QPoint& pos)    const;
     ThumbBarItem* findItemByUrl(const KUrl& url) const;
 
     void refreshThumbs(const KUrl::List& urls);
@@ -163,11 +164,10 @@ public:
     virtual void clear(bool updateView=true);
     virtual void removeItem(ThumbBarItem* item);
 
-    static QPixmap generateFuzzyRect(const QSize& size, const QColor& color, int radius);
-
 public Q_SLOTS:
-
+    
     void slotUpdate();
+    void slotDockLocationChanged(Qt::DockWidgetArea area);
 
 Q_SIGNALS:
 
@@ -177,15 +177,15 @@ Q_SIGNALS:
 
 protected:
 
-    int  getTileSize();
-    int  getMargin();
-    int  getRadius();
+    int  getTileSize() const;
+    int  getMargin()   const;
+    int  getRadius()   const;
 
-    bool pixmapForItem(ThumbBarItem* item, QPixmap& pix) const;
-    void preloadPixmapForItem(ThumbBarItem* item) const;
+    bool pixmapForItem(ThumbBarItem* const item, QPixmap& pix) const;
+    void preloadPixmapForItem(ThumbBarItem* const item) const;
 
-    void insertItem(ThumbBarItem* item);
-    void repaintItem(ThumbBarItem* item);
+    void insertItem(ThumbBarItem* const item);
+    void repaintItem(ThumbBarItem* const item);
 
     virtual void rearrangeItems();
     virtual void resizeEvent(QResizeEvent*);
@@ -202,9 +202,10 @@ protected:
 
 protected Q_SLOTS:
 
-    virtual void slotPreload();
     void slotContentsMoved();
     void checkPreload();
+
+    virtual void slotPreload();
 
 protected:
 
@@ -217,8 +218,8 @@ private Q_SLOTS:
 
 private:
 
-    class ThumbBarViewPriv;
-    ThumbBarViewPriv* const d;
+    class Private;
+    Private* const d;
 
     friend class ThumbBarItem;
 };
@@ -229,15 +230,14 @@ class DIGIKAM_EXPORT ThumbBarItem
 {
 public:
 
-    ThumbBarItem(ThumbBarView* view, const KUrl& url);
+    ThumbBarItem(ThumbBarView* const view, const KUrl& url);
     virtual ~ThumbBarItem();
 
-    KUrl          url() const;
-
-    ThumbBarItem* next() const;
-    ThumbBarItem* prev() const;
+    KUrl          url()      const;
+    ThumbBarItem* next()     const;
+    ThumbBarItem* prev()     const;
     int           position() const;
-    QRect         rect() const;
+    QRect         rect()     const;
 
     void          setTooltipRect(const QRect& rect);
     QRect         tooltipRect() const;
@@ -246,8 +246,8 @@ public:
 
 private:
 
-    class ThumbBarItemPriv;
-    ThumbBarItemPriv* const d;
+    class Private;
+    Private* const d;
 
     friend class ThumbBarView;
 };
