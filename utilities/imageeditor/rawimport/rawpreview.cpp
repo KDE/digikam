@@ -6,7 +6,7 @@
  * Date        : 2008-08-04
  * Description : RAW postProcessedImg widget.
  *
- * Copyright (C) 2008-2011 Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2012 Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -51,11 +51,11 @@
 namespace Digikam
 {
 
-class RawPreview::RawPreviewPriv
+class RawPreview::Private
 {
 public:
 
-    RawPreviewPriv() :
+    Private() :
         currentFitWindowZoom(0.0),
         thread(0),
         item(0)
@@ -74,10 +74,10 @@ public:
     ImagePreviewItem*      item;
 };
 
-RawPreview::RawPreview(const KUrl& url, QWidget* parent)
-    : GraphicsDImgView(parent), d(new RawPreviewPriv)
+RawPreview::RawPreview(const KUrl& url, QWidget* const parent)
+    : GraphicsDImgView(parent), d(new Private)
 {
-    d->item = new ImagePreviewItem();
+    d->item   = new ImagePreviewItem();
     setItem(d->item);
 
     d->url    = url;
@@ -93,7 +93,6 @@ RawPreview::RawPreview(const KUrl& url, QWidget* parent)
 
     setMinimumWidth(500);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-
 
     // ------------------------------------------------------------
 

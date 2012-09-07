@@ -6,7 +6,7 @@
  * Date        : 2008-08-20
  * Description : Raw import tool
  *
- * Copyright (C) 2008-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -51,11 +51,11 @@
 namespace Digikam
 {
 
-class RawImport::RawImportPriv
+class RawImport::Private
 {
 public:
 
-    RawImportPriv() :
+    Private() :
         settingsBox(0),
         previewWidget(0)
     {
@@ -67,8 +67,8 @@ public:
     DImg            postProcessedImage;
 };
 
-RawImport::RawImport(const KUrl& url, QObject* parent)
-    : EditorToolThreaded(parent), d(new RawImportPriv)
+RawImport::RawImport(const KUrl& url, QObject* const parent)
+    : EditorToolThreaded(parent), d(new Private)
 {
     d->previewWidget = new RawPreview(url, 0);
     d->settingsBox   = new RawSettingsBox(url, 0);

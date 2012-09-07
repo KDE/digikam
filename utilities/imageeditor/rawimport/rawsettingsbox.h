@@ -6,7 +6,7 @@
  * Date        : 2008-08-11
  * Description : Raw import settings box
  *
- * Copyright (C) 2008-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -46,13 +46,13 @@ class DIGIKAM_EXPORT RawSettingsBox : public EditorToolSettings
 
 public:
 
-    RawSettingsBox(const KUrl& url, QWidget* parent);
+    RawSettingsBox(const KUrl& url, QWidget* const parent);
     ~RawSettingsBox();
 
     void setBusy(bool b);
 
     CurvesWidget* curvesWidget() const;
-    DRawDecoding  settings() const;
+    DRawDecoding  settings()     const;
 
     void writeSettings();
     void readSettings();
@@ -79,8 +79,8 @@ private Q_SLOTS:
 
 private:
 
-    class RawSettingsBoxPriv;
-    RawSettingsBoxPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

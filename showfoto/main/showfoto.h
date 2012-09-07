@@ -6,8 +6,8 @@
  * Date        : 2004-11-22
  * Description : stand alone digiKam image editor GUI
  *
- * Copyright (C) 2004-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at gmail dot com>
  * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C) 2005-2006 by Tom Albers <tomalbers at kde dot nl>
@@ -95,7 +95,7 @@ private:
 
     void openFolder(const KUrl& url);
 
-    Digikam::ThumbBarDock* thumbBar() const;
+    Digikam::ThumbBarDock* thumbBar()     const;
     Digikam::Sidebar*      rightSideBar() const;
 
 private Q_SLOTS:
@@ -127,8 +127,8 @@ private Q_SLOTS:
 
 private:
 
-    class ShowFotoPriv;
-    ShowFotoPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }   // namespace ShowFoto

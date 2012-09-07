@@ -6,7 +6,7 @@
  * Date        : 2009-04-22
  * Description : Qt item view for images
  *
- * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -62,7 +62,7 @@ class ImageItemViewToolTip : public ItemViewToolTip
 {
 public:
 
-    ImageItemViewToolTip(ImageCategorizedView* view)
+    ImageItemViewToolTip(ImageCategorizedView* const view)
         : ItemViewToolTip(view)
     {
     }
@@ -83,11 +83,11 @@ protected:
 
 // -------------------------------------------------------------------------------
 
-class ImageCategorizedView::ImageCategorizedViewPriv
+class ImageCategorizedView::Private
 {
 public:
 
-    ImageCategorizedViewPriv() :
+    Private() :
         model(0),
         filterModel(0),
         delegate(0),
@@ -113,8 +113,8 @@ public:
 
 // -------------------------------------------------------------------------------
 
-ImageCategorizedView::ImageCategorizedView(QWidget* parent)
-    : DCategorizedView(parent), d(new ImageCategorizedViewPriv)
+ImageCategorizedView::ImageCategorizedView(QWidget* const parent)
+    : DCategorizedView(parent), d(new Private)
 {
     setToolTip(new ImageItemViewToolTip(this));
 

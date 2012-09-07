@@ -6,7 +6,7 @@
  * Date        : 2008-08-04
  * Description : RAW preview widget.
  *
- * Copyright (C) 2008-2011 Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2012 Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -53,7 +53,7 @@ class DIGIKAM_EXPORT RawPreview : public GraphicsDImgView
 
 public:
 
-    RawPreview(const KUrl& url, QWidget* parent);
+    RawPreview(const KUrl& url, QWidget* const parent);
     ~RawPreview();
 
     DImg& demosaicedImage() const;
@@ -92,8 +92,8 @@ private:
 
 private:
 
-    class RawPreviewPriv;
-    RawPreviewPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

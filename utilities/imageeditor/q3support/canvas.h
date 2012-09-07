@@ -75,10 +75,11 @@ public:
     void    abortSaving();
     void    applyTransform(const IccTransform& transform);
     void    setModified();
-    QString ensureHasCurrentUuid() const;
-    DImg    currentImage() const;
+
+    QString ensureHasCurrentUuid()   const;
+    DImg    currentImage()           const;
     QString currentImageFileFormat() const;
-    QString currentImageFilePath() const;
+    QString currentImageFilePath()   const;
 
     DImgInterface* interface() const;
     void makeDefaultEditingCanvas();
@@ -178,7 +179,7 @@ protected:
 
 private:
 
-    QRect  calcSelectedArea() const;
+    QRect  calcSelectedArea()   const;
     double calcAutoZoomFactor() const;
     void   updateAutoZoom();
     void   updateContentsSize(bool deleteRubber);
@@ -200,8 +201,8 @@ private Q_SLOTS:
 
 private:
 
-    class CanvasPrivate;
-    CanvasPrivate* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

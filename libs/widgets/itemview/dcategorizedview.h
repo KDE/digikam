@@ -6,7 +6,8 @@
  * Date        : 2010-01-16
  * Description : Qt item view for images
  *
- * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2011-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -45,7 +46,7 @@ class DIGIKAM_EXPORT DCategorizedView : public DigikamKCategorizedView, public D
 
 public:
 
-    DCategorizedView(QWidget* parent = 0);
+    DCategorizedView(QWidget* const parent = 0);
     ~DCategorizedView();
 
     DItemDelegate* delegate()                const;
@@ -105,6 +106,7 @@ Q_SIGNALS:
      */
     void clicked(const QMouseEvent* e, const QModelIndex& index);
     void entered(const QMouseEvent* e, const QModelIndex& index);
+
     /// While clicked() is emitted with a valid index, this corresponds to clicking on empty space
     void viewportClicked(const QMouseEvent* e);
 
@@ -187,8 +189,8 @@ private:
 
 private:
 
-    class DCategorizedViewPriv;
-    DCategorizedViewPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

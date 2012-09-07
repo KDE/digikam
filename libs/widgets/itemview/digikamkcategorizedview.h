@@ -50,8 +50,7 @@ class DIGIKAM_EXPORT DigikamKCategorizedView : public QListView
 
 public:
 
-    DigikamKCategorizedView(QWidget* parent = 0);
-
+    DigikamKCategorizedView(QWidget* const parent = 0);
     ~DigikamKCategorizedView();
 
     void setGridSize(const QSize& size);

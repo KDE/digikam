@@ -6,7 +6,7 @@
  * Date        : 2006-06-13
  * Description : a widget to display an image preview
  *
- * Copyright (C) 2006-2011 Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2012 Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -57,11 +57,11 @@
 namespace Digikam
 {
 
-class PreviewWidget::PreviewWidgetPriv
+class PreviewWidget::Private
 {
 public:
 
-    PreviewWidgetPriv() :
+    Private() :
         tileSize(128), zoomMultiplier(1.2)
     {
         currentFitWindowZoom = 0.0;
@@ -108,8 +108,8 @@ public:
     KPopupFrame*             panIconPopup;
 };
 
-PreviewWidget::PreviewWidget(QWidget* parent)
-    : Q3ScrollView(parent), d(new PreviewWidgetPriv)
+PreviewWidget::PreviewWidget(QWidget* const parent)
+    : Q3ScrollView(parent), d(new Private)
 {
     m_movingInProgress = false;
     setAttribute(Qt::WA_DeleteOnClose);
@@ -611,7 +611,7 @@ void PreviewWidget::viewportPaintEvent(QPaintEvent* e)
     viewportPaintExtraData();
 }
 
-void PreviewWidget::drawText(QPainter* p, const QPoint& corner, const QString& text)
+void PreviewWidget::drawText(QPainter* const p, const QPoint& corner, const QString& text)
 {
     p->save();
 

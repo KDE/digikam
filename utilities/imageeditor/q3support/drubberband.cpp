@@ -6,7 +6,7 @@
  * Date        : 2008-09-07
  * Description : Rubber band for Q3ScrollView
  *
- * Copyright (C) 2008-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2008-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -30,11 +30,11 @@
 namespace Digikam
 {
 
-class DRubberBand::DRubberBandPrivate
+class DRubberBand::Private
 {
 public:
 
-    DRubberBandPrivate()
+    Private()
     {
         scrollView = 0;
         active     = false;
@@ -47,9 +47,9 @@ public:
     QRect         restriction;
 };
 
-DRubberBand::DRubberBand(Q3ScrollView* scrollView)
+DRubberBand::DRubberBand(Q3ScrollView* const scrollView)
     : QRubberBand(QRubberBand::Rectangle, scrollView->viewport()),
-      d(new DRubberBandPrivate)
+      d(new Private)
 {
     d->scrollView = scrollView;
     hide();

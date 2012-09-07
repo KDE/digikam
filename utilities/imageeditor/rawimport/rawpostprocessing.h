@@ -6,7 +6,7 @@
  * Date        : 2008-13-08
  * Description : Raw post processing corrections.
  *
- * Copyright (C) 2008-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -37,10 +37,10 @@ class DIGIKAM_EXPORT RawPostProcessing : public DImgThreadedFilter
 
 public:
 
-    explicit RawPostProcessing(DImg* orgImage, QObject* parent = 0, const DRawDecoding& settings = DRawDecoding());
+    explicit RawPostProcessing(DImg* const orgImage, QObject* const parent = 0, const DRawDecoding& settings = DRawDecoding());
 
     // Constructor for slave mode: execute immediately in current thread with specified master filter
-    RawPostProcessing(DImgThreadedFilter* parentFilter, const DImg& orgImage, const DImg& destImage,
+    RawPostProcessing(DImgThreadedFilter* const parentFilter, const DImg& orgImage, const DImg& destImage,
                       int progressBegin = 0, int progressEnd = 100, const DRawDecoding& settings = DRawDecoding());
 
     ~RawPostProcessing();
@@ -57,7 +57,11 @@ private:
     {
         return FilterAction();
     }
-    virtual void readParameters(const FilterAction&) {}
+    
+    virtual void readParameters(const FilterAction&)
+    {
+    }
+
     virtual QString filterIdentifier() const
     {
         return QString();

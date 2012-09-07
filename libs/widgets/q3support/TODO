@@ -1,0 +1,26 @@
+Port Showfoto thumb-bar to Qt4 model/view
+-----------------------------------------
+
+ThumbBarView is a Qt3Support class based on Q3ScrollView class which will disapear with next Qt5.
+This class still only used by Showfoto editor. It must be ported to Qt4 model/view implementation 
+using already existing common classes used in digiKam core.
+
+These common classes are based internally to ImageInfo container to play with item data. Showfoto do not use digiKam Database, so
+we cannot use these common classes as well in Showfoto.
+
+Common classes used to define Model/View digiKam thumb-bar are listed below by order :
+
+DigikamKCategorizedView : initialy taken from KDELibs (KCategorizedView - used by Dolphin for ex.), 
+                          this class is a bug-fix:adpated model/view core implementation based on QListView to display an icon-view.
+                          This class do not depand of digiKam DB.
+
+DCategorizedView        : it's a derivated class from DigikamKCategorizedView, with add D&D support through DragDropViewImplementation
+                          This class do not depand of digiKam DB. It's add too tooltip support.
+
+ImageCategorizedView    : a DCategorizedView re-implementation using digiKam DB. It's lead digiKAm icon-view implementaion.
+
+ImageThumbnailBar       : ImageCategorizedView re-implementaion as a simple line thumb bar
+
+Showfoto use KUrl to identify item, and extract data relevant (as Exif metadata for ex, through DMetadata).
+To port Showofoto thumb-bar to model-view, a new class must be derivated from DCategorizedView using KUrl as lead item info.
+Some methods from ImageCategorizedView and ImageThumbnailBar must be backported to play with KUrl, instead ImageInfo.

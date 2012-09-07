@@ -6,7 +6,8 @@
  * Date        : 2010-01-16
  * Description : Qt item view for images
  *
- * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2011-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -40,7 +41,6 @@
 // Local includes
 
 #include "thememanager.h"
-#include "albumsettings.h"
 #include "ditemdelegate.h"
 #include "abstractitemdragdrophandler.h"
 #include "itemviewtooltip.h"
@@ -50,11 +50,11 @@ namespace Digikam
 
 // -------------------------------------------------------------------------------
 
-class DCategorizedView::DCategorizedViewPriv
+class DCategorizedView::Private
 {
 public:
 
-    DCategorizedViewPriv(DCategorizedView* q) :
+    Private(DCategorizedView* const q) :
         delegate(0),
         toolTip(0),
         notificationToolTip(0),
@@ -90,10 +90,32 @@ public:
     DCategorizedView* const q;
 };
 
+QModelIndex DCategorizedView::Private::scrollPositionHint() const
+{
+    if (q->verticalScrollBar()->value() == q->verticalScrollBar()->minimum())
+    {
+        return QModelIndex();
+    }
+
+    QModelIndex hint = q->currentIndex();
+
+    // If the user scrolled, do not take current item, but first visible
+    if (!hint.isValid() || !q->viewport()->rect().intersects(q->visualRect(hint)))
+    {
+        QList<QModelIndex> visibleIndexes = q->categorizedIndexesIn(q->viewport()->rect());
+        if (!visibleIndexes.isEmpty())
+        {
+            hint = visibleIndexes.first();
+        }
+    }
+
+    return hint; 
+}
+
 // -------------------------------------------------------------------------------
 
-DCategorizedView::DCategorizedView(QWidget* parent)
-    : DigikamKCategorizedView(parent), d(new DCategorizedViewPriv(this))
+DCategorizedView::DCategorizedView(QWidget* const parent)
+    : DigikamKCategorizedView(parent), d(new Private(this))
 {
     setViewMode(QListView::IconMode);
     setLayoutDirection(Qt::LeftToRight);
@@ -434,28 +456,6 @@ void DCategorizedView::rowsInserted(const QModelIndex& parent, int start, int en
     }
 }
 
-QModelIndex DCategorizedView::DCategorizedViewPriv::scrollPositionHint() const
-{
-    if (q->verticalScrollBar()->value() == q->verticalScrollBar()->minimum())
-    {
-        return QModelIndex();
-    }
-
-    QModelIndex hint = q->currentIndex();
-
-    // If the user scrolled, do not take current item, but first visible
-    if (!hint.isValid() || !q->viewport()->rect().intersects(q->visualRect(hint)))
-    {
-        QList<QModelIndex> visibleIndexes = q->categorizedIndexesIn(q->viewport()->rect());
-        if (!visibleIndexes.isEmpty())
-        {
-            hint = visibleIndexes.first();
-        }
-    }
-
-    return hint; 
-}
-
 void DCategorizedView::rowsAboutToBeRemoved(const QModelIndex& parent, int start, int end)
 {
     DigikamKCategorizedView::rowsAboutToBeRemoved(parent, start, end);
@@ -497,6 +497,7 @@ void DCategorizedView::rowsAboutToBeRemoved(const QModelIndex& parent, int start
     }
 
     QModelIndex hint = d->scrollPositionHint();
+
     if (removed.contains(hint))
     {
         d->hintAtScrollPosition = nextIndexHint(hint, removed.first() /*a range*/);
@@ -537,6 +538,7 @@ void DCategorizedView::layoutAboutToBeChanged()
 QModelIndex DCategorizedView::nextIndexHint(const QModelIndex& indexToAnchor, const QItemSelectionRange& removed) const
 {
     Q_UNUSED(indexToAnchor);
+
     if (removed.bottomRight().row() == model()->rowCount() - 1)
     {
         if (removed.topLeft().row() == 0)
@@ -781,10 +783,12 @@ void DCategorizedView::mousePressEvent(QMouseEvent* event)
     }
 
     DigikamKCategorizedView::mousePressEvent(event);
+
     if (!index.isValid())
     {
         emit viewportClicked(event);
     }
+
     d->currentMouseEvent = 0;
 }
 
@@ -980,7 +984,6 @@ void DCategorizedView::hideIndexNotification()
  * cut(), copy(), paste(), dragEnterEvent(), dragMoveEvent(), dropEvent(), startDrag()
  *  are implemented by DragDropViewImplementation
  */
-
 QModelIndex DCategorizedView::mapIndexForDragDrop(const QModelIndex& index) const
 {
     return filterModel()->mapToSource(index);

@@ -79,12 +79,12 @@
 namespace Digikam
 {
 
-class Canvas::CanvasPrivate
+class Canvas::Private
 {
 
 public:
 
-    CanvasPrivate() :
+    Private() :
         snapArea(8), tileSize(128), minZoom(0.1), maxZoom(12.0), zoomMultiplier(1.2)
     {
         pressedMoved     = false;
@@ -165,7 +165,7 @@ public:
 };
 
 Canvas::Canvas(QWidget* const parent)
-    : Q3ScrollView(parent), d(new CanvasPrivate)
+    : Q3ScrollView(parent), d(new Private)
 {
     d->im     = new DImgInterface();
     d->parent = parent;

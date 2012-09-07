@@ -52,7 +52,7 @@
 namespace Digikam
 {
 
-DigikamKCategorizedView::Private::Private(DigikamKCategorizedView* listView)
+DigikamKCategorizedView::Private::Private(DigikamKCategorizedView* const listView)
     : listView(listView),
       categoryDrawer(0),
       biggestItemSize(QSize(0, 0)),
@@ -549,7 +549,7 @@ void DigikamKCategorizedView::Private::drawDraggedItems()
 
 // ------------------------------------------------------------------------------------------------
 
-DigikamKCategorizedView::DigikamKCategorizedView(QWidget* parent)
+DigikamKCategorizedView::DigikamKCategorizedView(QWidget* const parent)
     : QListView(parent), d(new Private(this))
 {
 }
@@ -649,6 +649,7 @@ QModelIndex DigikamKCategorizedView::categoryAt(const QPoint& point) const
     // We traverse the categories and find the first where point.y() is below the visualRect
     int     y = 0, lastY = 0;
     QString lastCategory;
+
     foreach(const QString& category, d->categories)
     {
         y = d->categoryVisualRect(category).top();

@@ -6,7 +6,7 @@
  * Date        : 2008-09-07
  * Description : Rubber band for Q3ScrollView
  *
- * Copyright (C) 2008-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2008-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -42,13 +42,14 @@ class DIGIKAM_EXPORT DRubberBand : public QRubberBand
 
 public:
 
-    DRubberBand(Q3ScrollView* parent);
+    DRubberBand(Q3ScrollView* const parent);
     ~DRubberBand();
 
     QRect rubberBandAreaOnContents() const;
 
     /// Returns the active state.
     bool isActive() const;
+
     /** Sets the rubberband active.
      *  Call setActive(true) to show rubberband with last set first and second points.
      *  Call setActive(false) to hide the rubberband when it was shown
@@ -62,7 +63,9 @@ public:
      *  Coordinates are contents coordinates of the scrollview.
      */
     void setFirstPointOnContents(const QPoint& p);
-    /** Same as above, coordinates are viewport coordinates of the scrollview. */
+
+    /** Same as above, coordinates are viewport coordinates of the scrollview.
+     */
     void setFirstPointOnViewport(const QPoint& p);
 
     /** Sets the second one of the two points of the rubberband,
@@ -72,16 +75,20 @@ public:
      *  Coordinates are contents coordinates of the scrollview.
      */
     void setSecondPointOnContents(const QPoint& p);
-    /** Same as above, coordinates are viewport coordinates of the scrollview. */
+
+    /** Same as above, coordinates are viewport coordinates of the scrollview.
+     */
     void setSecondPointOnViewport(const QPoint& p);
 
     /** Installs a restriction which the rubber band cannot exceed.
      *  Any point set as first or second point outside the restriction will be cut to
      *  the restriction borders.
-     *  Call with a null rectangle to reset.*/
+     *  Call with a null rectangle to reset.
+     */
     void setRestrictionOnContents(const QRect& rect);
 
-    /** Combines setFirstPoint and setSecondPoint */
+    /** Combines setFirstPoint and setSecondPoint.
+     */
     void setRectOnViewport(const QRect& rect);
     void setRectOnContents(const QRect& rect);
 
@@ -91,8 +98,8 @@ protected:
 
 private:
 
-    class DRubberBandPrivate;
-    DRubberBandPrivate* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

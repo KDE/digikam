@@ -6,7 +6,7 @@
  * Date        : 2006-06-13
  * Description : a widget to display an image preview
  *
- * Copyright (C) 2006-2011 Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2012 Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -48,7 +48,7 @@ class DIGIKAM_EXPORT PreviewWidget : public Q3ScrollView
 
 public:
 
-    PreviewWidget(QWidget* parent=0);
+    PreviewWidget(QWidget* const parent=0);
     ~PreviewWidget();
 
     void   setZoomFactor(double z);
@@ -59,10 +59,10 @@ public:
     void   toggleFitToWindow();
     void   toggleFitToWindowOr100();
 
-    int    zoomWidth() const;
+    int    zoomWidth()  const;
     int    zoomHeight() const;
-    bool   maxZoom() const;
-    bool   minZoom() const;
+    bool   maxZoom()    const;
+    bool   minZoom()    const;
     double snapZoom(double zoom);
 
     double zoomFactor() const;
@@ -113,6 +113,8 @@ protected:
         ZoomInOnly
     };
 
+protected:
+
     double calcAutoZoomFactor(AutoZoomMode mode = ZoomInOrOut);
     int    tileSize() const;
     void   updateAutoZoom(AutoZoomMode mode = ZoomInOrOut);
@@ -120,7 +122,7 @@ protected:
     void   updateZoomAndSize(bool alwaysFitToWindow);
     void   clearCache();
     QRect  previewRect() const;
-    void   drawText(QPainter* p, const QPoint& corner, const QString& text);
+    void   drawText(QPainter* const p, const QPoint& corner, const QString& text);
     void   startPanning(const QPoint& pos);
     void   continuePanning(const QPoint& pos);
     void   finishPanning();
@@ -148,8 +150,8 @@ protected:
 
 private:
 
-    class PreviewWidgetPriv;
-    PreviewWidgetPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

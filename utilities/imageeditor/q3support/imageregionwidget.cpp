@@ -6,7 +6,7 @@
  * Date        : 2004-08-17
  * Description : a widget to draw an image clip region.
  *
- * Copyright (C) 2004-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -52,12 +52,12 @@
 namespace Digikam
 {
 
-class ImageRegionWidget::ImageRegionWidgetPriv
+class ImageRegionWidget::Private
 {
 
 public:
 
-    ImageRegionWidgetPriv() :
+    Private() :
         onMouseMovePreviewToggled(true),
         capturePtMode(false),
         renderingPreviewMode(PreviewToolBar::PreviewBothImagesVertCont),
@@ -85,8 +85,8 @@ public:
     ImageIface* iface;
 };
 
-ImageRegionWidget::ImageRegionWidget(QWidget* parent)
-    : PreviewWidget(parent), d(new ImageRegionWidgetPriv)
+ImageRegionWidget::ImageRegionWidget(QWidget* const parent)
+    : PreviewWidget(parent), d(new Private)
 {
     d->iface = new ImageIface;
     d->image = d->iface->original()->copy();
