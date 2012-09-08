@@ -61,8 +61,8 @@ protected Q_SLOTS:
 
 private:
 
-    class SoftProofDialogPriv;
-    SoftProofDialogPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

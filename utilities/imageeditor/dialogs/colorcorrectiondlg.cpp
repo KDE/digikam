@@ -7,7 +7,7 @@
  * Description : a dialog to see preview ICC color correction
  *               before to apply color profile.
  *
- * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -58,11 +58,11 @@
 namespace Digikam
 {
 
-class ColorCorrectionDlg::ColorCorrectionDlgPriv
+class ColorCorrectionDlg::Private
 {
 public:
 
-    ColorCorrectionDlgPriv() :
+    Private() :
         imageProfileTitle(0),
         imageProfileDesc(0),
         previewTarget(0),
@@ -106,8 +106,8 @@ public:
 };
 
 ColorCorrectionDlg::ColorCorrectionDlg(Mode mode, const DImg& preview,
-                                       const QString& file, QWidget* parent)
-    : KDialog(parent), d(new ColorCorrectionDlgPriv)
+                                       const QString& file, QWidget* const parent)
+    : KDialog(parent), d(new Private)
 {
     d->mode                          = mode;
     d->preview                       = preview;
@@ -268,9 +268,9 @@ QLayout* ColorCorrectionDlg::createProfilesInfo() const
                 this, SLOT(slotImageProfInfo()));
     }
 
-    QLabel* workspaceProfileTitle   = new QLabel(i18n("Working Color Space:"));
-    QLabel* workspaceProfileDesc    = new QLabel(QString("<b>%1</b>").arg(d->workspaceProfile.description()));
-    QPushButton* workspaceProfInfo  = new QPushButton(i18n("Info..."));
+    QLabel* workspaceProfileTitle  = new QLabel(i18n("Working Color Space:"));
+    QLabel* workspaceProfileDesc   = new QLabel(QString("<b>%1</b>").arg(d->workspaceProfile.description()));
+    QPushButton* workspaceProfInfo = new QPushButton(i18n("Info..."));
     //workspaceProfileTitle->setWordWrap(true);
     workspaceProfileDesc->setWordWrap(true);
 

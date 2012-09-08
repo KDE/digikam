@@ -46,11 +46,11 @@
 namespace Digikam
 {
 
-class SoftProofDialog::SoftProofDialogPriv
+class SoftProofDialog::Private
 {
 public:
 
-    SoftProofDialogPriv() :
+    Private() :
         switchOn(false),
         deviceProfileBox(0),
         infoProofProfiles(0),
@@ -74,7 +74,7 @@ public:
 };
 
 SoftProofDialog::SoftProofDialog(QWidget* const parent)
-    : KDialog(parent), d(new SoftProofDialogPriv)
+    : KDialog(parent), d(new Private)
 {
     setCaption(i18n("Soft Proofing Options"));
 
