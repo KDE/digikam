@@ -1089,11 +1089,13 @@ IF(DIGIKAM_CAN_BE_COMPILED)
        )
 
     SET(libeditorwidgets_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/q3support/imageregionwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/widgets/imageguidewidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/widgets/imagepreviewitem.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/widgets/previewtoolbar.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/widgets/previewlist.cpp
+
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/q3support/imageregionwidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/q3support/canvas.cpp
        )
 
     SET(libeditordlg_SRCS
@@ -1101,15 +1103,14 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/dialogs/softproofdialog.cpp
        )
 
-    SET(libeditorcanvas_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/imageplugin.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/imagepluginloader.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/undocache.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/undoaction.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/undomanager.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/dimginterface.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/iccpostloadingmanager.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/q3support/canvas.cpp
+    SET(libeditorcore_SRCS
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/core/imageplugin.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/core/imagepluginloader.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/core/undocache.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/core/undoaction.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/core/undomanager.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/core/dimginterface.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/core/iccpostloadingmanager.cpp
        )
 
     SET(libeditorprintiface_SRCS
@@ -1251,7 +1252,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/captionedit.cpp
        )
 
-    SET(libeditorcore_SRCS
+    SET(libeditoriface_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/imageiface.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/editortool.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/editortooliface.cpp
@@ -1671,7 +1672,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/gpssearch
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/hotplug
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/core
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/dialogs
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/printiface

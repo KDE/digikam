@@ -51,11 +51,11 @@ SET(digikamcore_LIB_SRCS
 
         # utilities
         ${libslideshow_SRCS}
-        ${libeditorcanvas_SRCS}
+        ${libeditorcore_SRCS}
         ${libeditordlg_SRCS}
         ${libeditorprintiface_SRCS}
         ${libeditorrawimport_SRCS}
-        ${libeditorcore_SRCS}
+        ${libeditoriface_SRCS}
 )
 
 KDE4_ADD_UI_FILES(digikamcore_LIB_SRCS
