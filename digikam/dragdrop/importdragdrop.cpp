@@ -22,7 +22,6 @@
  * ============================================================ */
 
 #include "importdragdrop.moc"
-#include "importdragdrop.h" //TODO: Remove this lime.
 
 // Qt includes
 
@@ -50,11 +49,6 @@
 namespace Digikam
 {
 
-ImportDragDropHandler::ImportDragDropHandler(ImportImageModel* model)
-    : AbstractItemDragDropHandler(model)
-{
-}
-
 enum DropAction
 {
     NoAction,
@@ -64,15 +58,22 @@ enum DropAction
     AssignTagAction
 };
 
+// ------------------------------------------------------------------------------------------
+
+ImportDragDropHandler::ImportDragDropHandler(ImportImageModel* const model)
+    : AbstractItemDragDropHandler(model)
+{
+}
+
 static QAction* addGroupAction(KMenu* menu)
 {
-    return menu->addAction( SmallIcon("arrow-down-double"),
-                            i18nc("@action:inmenu Group images with this image", "Group here"));
+    return menu->addAction(SmallIcon("arrow-down-double"),
+                           i18nc("@action:inmenu Group images with this image", "Group here"));
 }
 
 static QAction* addCancelAction(KMenu* menu)
 {
-    return menu->addAction( SmallIcon("dialog-cancel"), i18n("C&ancel") );
+    return menu->addAction(SmallIcon("dialog-cancel"), i18n("C&ancel"));
 }
 
 static DropAction copyOrMove(const QDropEvent* e, QWidget* view, bool allowMove = true, bool askForGrouping = false)
@@ -101,14 +102,14 @@ static DropAction copyOrMove(const QDropEvent* e, QWidget* view, bool allowMove 
 
     KMenu popMenu(view);
 
-    QAction* moveAction = 0;
+    QAction* moveAction  = 0;
 
     if (allowMove)
     {
         moveAction = popMenu.addAction( SmallIcon("go-jump"), i18n("&Move Here"));
     }
 
-    QAction* copyAction = popMenu.addAction( SmallIcon("edit-copy"), i18n("&Copy Here"));
+    QAction* copyAction  = popMenu.addAction( SmallIcon("edit-copy"), i18n("&Copy Here"));
     popMenu.addSeparator();
 
     QAction* groupAction = 0;
@@ -140,13 +141,15 @@ static DropAction copyOrMove(const QDropEvent* e, QWidget* view, bool allowMove 
     return NoAction;
 }
 
-/*static DropAction tagAction(const QDropEvent*, QWidget* view, bool askForGrouping)
+/*
+static DropAction tagAction(const QDropEvent*, QWidget* view, bool askForGrouping)
 {
 }
 
 static DropAction groupAction(const QDropEvent*, QWidget* view)
 {
-}*/
+}
+*/
 
 bool ImportDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDropEvent* e, const QModelIndex& droppedOn)
 {
@@ -208,8 +211,8 @@ Qt::DropAction ImportDragDropHandler::accepts(const QDropEvent* e, const QModelI
         return Qt::MoveAction;
     }
 
-    if (DTagDrag::canDecode(e->mimeData()) ||
-        DTagListDrag::canDecode(e->mimeData()) ||
+    if (DTagDrag::canDecode(e->mimeData())            ||
+        DTagListDrag::canDecode(e->mimeData())        ||
         DCameraItemListDrag::canDecode(e->mimeData()) ||
         DCameraDragObject::canDecode(e->mimeData()))
     {
@@ -247,7 +250,12 @@ QMimeData* ImportDragDropHandler::createMimeData(const QList<QModelIndex>& index
         return 0;
     }
 
-    return new DCameraItemListDrag(lst);
+    return (new DCameraItemListDrag(lst));
+}
+
+ImportImageModel* ImportDragDropHandler::model() const
+{
+    return static_cast<ImportImageModel*>(m_model);
 }
 
 } // namespace Digikam

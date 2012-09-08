@@ -41,12 +41,9 @@ class ImportDragDropHandler : public AbstractItemDragDropHandler
 
 public:
 
-    ImportDragDropHandler(ImportImageModel* model);
+    ImportDragDropHandler(ImportImageModel* const model);
 
-    ImportImageModel* model() const
-    {
-        return static_cast<ImportImageModel*>(m_model);
-    }
+    ImportImageModel* model() const;
 
     virtual bool dropEvent(QAbstractItemView* view, const QDropEvent* e, const QModelIndex& droppedOn);
     virtual Qt::DropAction accepts(const QDropEvent* e, const QModelIndex& dropIndex);
