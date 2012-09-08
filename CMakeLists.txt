@@ -1103,9 +1103,13 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/dialogs/softproofdialog.cpp
        )
 
+    SET(libeditorplugin_SRCS
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/plugin/imageiface.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/plugin/imageplugin.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/plugin/imagepluginloader.cpp
+       )
+
     SET(libeditorcore_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/core/imageplugin.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/core/imagepluginloader.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/core/undocache.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/core/undoaction.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/core/undomanager.cpp
@@ -1253,7 +1257,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
        )
 
     SET(libeditoriface_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/imageiface.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/editortool.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/editortooliface.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/editorstackview.cpp
@@ -1675,6 +1678,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/core
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/dialogs
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/plugin
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/printiface
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/rawimport
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/widgets

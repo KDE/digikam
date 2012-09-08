@@ -32,11 +32,11 @@
 namespace Digikam
 {
 
-class ImagePlugin::ImagePluginPriv
+class ImagePlugin::Private
 {
 public:
 
-    ImagePluginPriv()
+    Private()
     {}
 
     QString actionCategory;
@@ -45,7 +45,7 @@ public:
 // --------------------------------------------------------
 
 ImagePlugin::ImagePlugin(QObject* const parent, const char* name)
-    : QObject(parent), d(new ImagePluginPriv)
+    : QObject(parent), d(new Private)
 {
     setObjectName(name);
 }

@@ -88,12 +88,12 @@ static const char* ObsoleteImagePluginsList[] =
     "-1"
 };
 
-class ImagePluginLoader::ImagePluginLoaderPrivate
+class ImagePluginLoader::Private
 {
 
 public:
 
-    ImagePluginLoaderPrivate()
+    Private()
     {
         splash = 0;
 
@@ -102,6 +102,13 @@ public:
             obsoleteImagePluginsList << ObsoleteImagePluginsList[i];
         }
     }
+
+    ImagePlugin* pluginIsLoaded(const QString& name) const
+    {
+        return pluginMap.value(name);
+    }
+
+public:
 
     QStringList                  obsoleteImagePluginsList;
     SplashScreen*                splash;
@@ -120,7 +127,7 @@ ImagePluginLoader* ImagePluginLoader::instance()
 }
 
 ImagePluginLoader::ImagePluginLoader(QObject* const parent, SplashScreen* const splash)
-    : QObject(parent), d(new ImagePluginLoaderPrivate)
+    : QObject(parent), d(new Private)
 {
     m_instance                  = this;
     d->splash                   = splash;
@@ -176,7 +183,7 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& pluginsToLoad)
         KService::Ptr service = d->pluginServiceMap.value(name);
         ImagePlugin* plugin   = 0;
 
-        if (pluginIsLoaded(name))
+        if (d->pluginIsLoaded(name))
         {
             continue;
         }
@@ -219,18 +226,13 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& pluginsToLoad)
     d->splash = 0; // Splashcreen is only displayed at the first time.
 }
 
-ImagePlugin* ImagePluginLoader::pluginIsLoaded(const QString& name) const
-{
-    return d->pluginMap.value(name);
-}
-
 ImagePlugin* ImagePluginLoader::pluginInstance(const QString& libraryName) const
 {
     foreach(const KService::Ptr& service, d->pluginServiceMap)
     {
         if (service->library() == libraryName)
         {
-            return (pluginIsLoaded(service->name()));
+            return (d->pluginIsLoaded(service->name()));
         }
     }
 
@@ -243,7 +245,7 @@ bool ImagePluginLoader::pluginLibraryIsLoaded(const QString& libraryName) const
     {
         if (service->library() == libraryName)
         {
-            if (pluginIsLoaded(service->name()))
+            if (d->pluginIsLoaded(service->name()))
             {
                 return true;
             }

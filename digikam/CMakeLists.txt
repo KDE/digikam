@@ -56,6 +56,7 @@ SET(digikamcore_LIB_SRCS
         ${libeditorprintiface_SRCS}
         ${libeditorrawimport_SRCS}
         ${libeditoriface_SRCS}
+        ${libeditorplugin_SRCS}
 )
 
 KDE4_ADD_UI_FILES(digikamcore_LIB_SRCS

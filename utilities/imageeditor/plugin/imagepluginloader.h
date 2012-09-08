@@ -54,22 +54,19 @@ public:
     QList<ImagePlugin*> pluginList() const;
     void loadPluginsFromList(const QStringList& list);
 
-    // Return true if plugin library is loaded in memory.
-    // 'libraryName' is internal plugin library name not i18n.
+    /** Return true if plugin library is loaded in memory.
+     *  'libraryName' is internal plugin library name not internationalized with i18n().
+     */
     bool pluginLibraryIsLoaded(const QString& libraryName) const;
 
     ImagePlugin* pluginInstance(const QString& libraryName) const;
 
 private:
 
-    ImagePlugin* pluginIsLoaded(const QString& name) const;
-
-private:
-
     static ImagePluginLoader* m_instance;
 
-    class ImagePluginLoaderPrivate;
-    ImagePluginLoaderPrivate* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam
