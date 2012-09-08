@@ -110,8 +110,8 @@ public:
     void setIconShowImageFormat(bool val);
     bool getIconShowImageFormat() const;
 
-    //TODO: void setIconShowOverlays(bool val);
-    //TODO: bool getIconShowOverlays() const;
+    void setIconShowOverlays(bool val);
+    bool getIconShowOverlays() const;
 
     void setToolTipsFont(const QFont& font);
     QFont getToolTipsFont() const;
@@ -149,11 +149,11 @@ public:
     void setToolTipsShowPhotoWB(bool val);
     bool getToolTipsShowPhotoWB() const;
 
-    //TODO: void setToolTipsShowTags(bool val);
-    //TODO: bool getToolTipsShowTags() const;
+    void setToolTipsShowTags(bool val);
+    bool getToolTipsShowTags() const;
 
-    //TODO: void setToolTipsShowLabelRating(bool val);
-    //TODO: bool getToolTipsShowLabelRating() const;
+    void setToolTipsShowLabelRating(bool val);
+    bool getToolTipsShowLabelRating() const;
 
 private:
 

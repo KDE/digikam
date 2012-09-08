@@ -470,19 +470,22 @@ void ImportUI::setupActions()
     QAction* sortByPathAction = d->itemSortAction->addAction(i18n("By Path"));
     QAction* sortByDateAction = d->itemSortAction->addAction(i18n("By Date")); //TODO: Implement sort by creation date.
     QAction* sortByFileSizeAction = d->itemSortAction->addAction(i18n("By Size"));
-    //QAction* sortByRatingAction = d->itemSortAction->addAction(i18n("By Rating")); //TODO: Implement rating in import tool.
+    QAction* sortByRatingAction = d->itemSortAction->addAction(i18n("By Rating"));
+    QAction* sortByDownloadAction = d->itemSortAction->addAction(i18n("By Download State"));
 
     connect(sortByNameAction, SIGNAL(triggered()), imageSortMapper, SLOT(map()));
     connect(sortByPathAction, SIGNAL(triggered()), imageSortMapper, SLOT(map()));
     connect(sortByDateAction, SIGNAL(triggered()), imageSortMapper, SLOT(map())); //TODO: Implement sort by creation date.
     connect(sortByFileSizeAction, SIGNAL(triggered()), imageSortMapper, SLOT(map()));
-    //connect(sortByRatingAction, SIGNAL(triggered()), imageSortMapper, SLOT(map()));
+    connect(sortByRatingAction, SIGNAL(triggered()), imageSortMapper, SLOT(map()));
+    connect(sortByDownloadAction, SIGNAL(triggered()), imageSortMapper, SLOT(map()));
 
     imageSortMapper->setMapping(sortByNameAction, (int)CamItemSortSettings::SortByFileName);
     imageSortMapper->setMapping(sortByPathAction, (int)CamItemSortSettings::SortByFilePath);
     imageSortMapper->setMapping(sortByDateAction, (int)CamItemSortSettings::SortByCreationDate); //TODO: Implement sort by creation date.
     imageSortMapper->setMapping(sortByFileSizeAction, (int)CamItemSortSettings::SortByFileSize);
-    //imageSortMapper->setMapping(sortByRatingAction, (int)ImageSortSettings::SortByRating);
+    imageSortMapper->setMapping(sortByRatingAction, (int)CamItemSortSettings::SortByRating);
+    imageSortMapper->setMapping(sortByDownloadAction, (int)CamItemSortSettings::SortByDownloadState);
 
     d->itemSortAction->setCurrentItem(ImportSettings::instance()->getImageSortOrder());
 

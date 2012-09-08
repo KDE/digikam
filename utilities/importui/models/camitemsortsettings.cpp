@@ -125,10 +125,12 @@ Qt::SortOrder CamItemSortSettings::defaultSortOrderForSortRole(SortRole role)
             return Qt::AscendingOrder;
         case SortByFileSize:
             return Qt::DescendingOrder;
-    case SortByCreationDate:
-        return Qt::AscendingOrder;
+        case SortByCreationDate:
+            return Qt::AscendingOrder;
         case SortByDownloadState:
             return Qt::Ascending;
+        case SortByRating:
+            return Qt::DescendingOrder;
         default:
             return Qt::AscendingOrder;
     }
@@ -182,6 +184,16 @@ bool CamItemSortSettings::lessThan(const CamItemInfo& left, const CamItemInfo& r
         return result < 0;
     }
 
+    if ( (result = compare(left, right, SortByRating)) != 0)
+    {
+        return result < 0;
+    }
+
+    if ( (result = compare(left, right, SortByDownloadState)) != 0)
+    {
+        return result < 0;
+    }
+
     return false;
 }
 
@@ -203,6 +215,10 @@ int CamItemSortSettings::compare(const CamItemInfo& left, const CamItemInfo& rig
             //FIXME: Change it to creation date instead of modification date.
         case SortByCreationDate:
             return compareByOrder(left.mtime, right.mtime, currentSortOrder);
+        case SortByRating:
+            return compareByOrder(left.rating, right.rating, currentSortOrder);
+        case SortByDownloadState:
+            return compareByOrder(left.downloaded, right.downloaded, currentSortOrder);
         default:
             return 1;
     }

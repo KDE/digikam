@@ -48,7 +48,7 @@ public:
         iconShowModDate(false),
         //iconShowResolution(false),
         iconShowTags(false),
-        //iconShowOverlays(false),
+        iconShowOverlays(false),
         iconShowRating(false),
         iconShowImageFormat(false),
         thumbnailSize(0),
@@ -66,8 +66,8 @@ public:
         tooltipShowPhotoFlash(false),
         tooltipShowPhotoWb(false),
         tooltipShowFolderName(false),
-        //tooltipShowTags(false),
-        //tooltipShowLabelRating(false),
+        tooltipShowTags(false),
+        tooltipShowLabelRating(false),
         previewLoadFullImageSize(false),
         previewItemsWhileDownload(false),
         previewShowIcons(true),
@@ -89,7 +89,7 @@ public:
     static const QString                configIconShowModificationDateEntry;
     static const QString                configIconShowTitleEntry;
     static const QString                configIconShowTagsEntry;
-    //static const QString                configIconShowOverlaysEntry;
+    static const QString                configIconShowOverlaysEntry;
     static const QString                configIconShowRatingEntry;
     static const QString                configIconShowImageFormatEntry;
     static const QString                configIconViewFontEntry;
@@ -107,8 +107,8 @@ public:
     static const QString                configToolTipsShowPhotoFlashEntry;
     static const QString                configToolTipsShowPhotoWBEntry;
     static const QString                configToolTipsShowFolderNameEntry;
-    //static const QString                configToolTipsShowTagsEntry;
-    //static const QString                configToolTipsShowLabelRatingEntry;
+    static const QString                configToolTipsShowTagsEntry;
+    static const QString                configToolTipsShowLabelRatingEntry;
     static const QString                configPreviewLoadFullImageSizeEntry;
     static const QString                configPreviewItemsWhileDownloadEntry;
     static const QString                configPreviewShowIconsEntry;
@@ -120,9 +120,9 @@ public:
     bool                                iconShowDate;
     bool                                iconShowModDate;
     bool                                iconShowTitle;
-    //bool                                iconShowResolution;
+    bool                                iconShowResolution;
     bool                                iconShowTags;
-    //bool                                iconShowOverlays;
+    bool                                iconShowOverlays;
     bool                                iconShowRating;
     bool                                iconShowImageFormat;
 
@@ -147,8 +147,8 @@ public:
     bool                                tooltipShowPhotoFlash;
     bool                                tooltipShowPhotoWb;
     bool                                tooltipShowFolderName;
-    //bool                                tooltipShowTags;
-    //bool                                tooltipShowLabelRating;
+    bool                                tooltipShowTags;
+    bool                                tooltipShowLabelRating;
 
     QFont                               toolTipsFont;
 
@@ -177,7 +177,7 @@ const QString ImportSettings::Private::configIconShowTitleEntry("Icon Show Title
 const QString ImportSettings::Private::configIconShowTagsEntry("Icon Show Tags");
 const QString ImportSettings::Private::configIconShowRatingEntry("Icon Show Rating");
 const QString ImportSettings::Private::configIconShowImageFormatEntry("Icon Show Image Format");
-//const QString ImportSettings::Private::configIconShowOverlaysEntry("Icon Show Overlays");
+const QString ImportSettings::Private::configIconShowOverlaysEntry("Icon Show Overlays");
 const QString ImportSettings::Private::configIconViewFontEntry("IconView Font");
 const QString ImportSettings::Private::configToolTipsFontEntry("ToolTips Font");
 const QString ImportSettings::Private::configShowToolTipsEntry("Show ToolTips");
@@ -193,8 +193,8 @@ const QString ImportSettings::Private::configToolTipsShowPhotoExpoEntry("ToolTip
 const QString ImportSettings::Private::configToolTipsShowPhotoFlashEntry("ToolTips Show Photo Flash");
 const QString ImportSettings::Private::configToolTipsShowPhotoWBEntry("ToolTips Show Photo WB");
 const QString ImportSettings::Private::configToolTipsShowFolderNameEntry("ToolTips Show Folder Name");
-//const QString ImportSettings::Private::configToolTipsShowTagsEntry("ToolTips Show Tags");
-//const QString ImportSettings::Private::configToolTipsShowLabelRatingEntry("ToolTips Show Label Rating");
+const QString ImportSettings::Private::configToolTipsShowTagsEntry("ToolTips Show Tags");
+const QString ImportSettings::Private::configToolTipsShowLabelRatingEntry("ToolTips Show Label Rating");
 const QString ImportSettings::Private::configPreviewLoadFullImageSizeEntry("Preview Load Full Image Size");
 const QString ImportSettings::Private::configPreviewItemsWhileDownloadEntry("Preview Each Item While Downloading it");
 const QString ImportSettings::Private::configPreviewShowIconsEntry("Preview Show Icons");
@@ -246,7 +246,7 @@ void ImportSettings::init()
     d->iconShowModDate              = true;
     d->iconShowTitle                = true;
     d->iconShowImageFormat          = false;
-    //d->iconShowOverlays             = true;
+    d->iconShowOverlays             = true;
     d->iconShowRating               = true;
     d->iconShowTags                 = true;
     d->iconviewFont                 = KGlobalSettings::generalFont();
@@ -263,8 +263,8 @@ void ImportSettings::init()
     d->tooltipShowPhotoExpo         = true;
     d->tooltipShowPhotoFlash        = false;
     d->tooltipShowPhotoWb           = false;
-    //d->tooltipShowTags             = true;
-    //d->tooltipShowLabelRating       = true;
+    d->tooltipShowTags              = true;
+    d->tooltipShowLabelRating       = true;
 
     d->previewLoadFullImageSize     = false;
     d->previewItemsWhileDownload    = false;
@@ -294,7 +294,7 @@ void ImportSettings::readSettings()
     d->iconShowModDate              = group.readEntry(d->configIconShowModificationDateEntry,     true);
     d->iconShowTitle                = group.readEntry(d->configIconShowTitleEntry,                true);
     d->iconShowTags                 = group.readEntry(d->configIconShowTagsEntry,                 true);
-    //d->iconShowOverlays             = group.readEntry(d->configIconShowOverlaysEntry,             true);
+    d->iconShowOverlays             = group.readEntry(d->configIconShowOverlaysEntry,             true);
     d->iconShowRating               = group.readEntry(d->configIconShowRatingEntry,               true);
     d->iconShowImageFormat          = group.readEntry(d->configIconShowImageFormatEntry,          false);
     d->iconviewFont                 = group.readEntry(d->configIconViewFontEntry,                 KGlobalSettings::generalFont());
@@ -313,8 +313,8 @@ void ImportSettings::readSettings()
     d->tooltipShowPhotoFlash        = group.readEntry(d->configToolTipsShowPhotoFlashEntry,       false);
     d->tooltipShowPhotoWb           = group.readEntry(d->configToolTipsShowPhotoWBEntry,          false);
     d->tooltipShowFolderName         = group.readEntry(d->configToolTipsShowFolderNameEntry,        false);
-    //d->tooltipShowTags              = group.readEntry(d->configToolTipsShowTagsEntry,             true);
-    //d->tooltipShowLabelRating       = group.readEntry(d->configToolTipsShowLabelRatingEntry,      true);
+    d->tooltipShowTags              = group.readEntry(d->configToolTipsShowTagsEntry,             true);
+    d->tooltipShowLabelRating       = group.readEntry(d->configToolTipsShowLabelRatingEntry,      true);
 
     d->previewLoadFullImageSize     = group.readEntry(d->configPreviewLoadFullImageSizeEntry,     false);
     d->previewItemsWhileDownload    = group.readEntry(d->configPreviewItemsWhileDownloadEntry,     false);
@@ -346,7 +346,7 @@ void ImportSettings::saveSettings()
     group.writeEntry(d->configIconShowModificationDateEntry,     d->iconShowModDate);
     group.writeEntry(d->configIconShowTitleEntry,                d->iconShowTitle);
     group.writeEntry(d->configIconShowTagsEntry,                 d->iconShowTags);
-    //group.writeEntry(d->configIconShowOverlaysEntry,             d->iconShowOverlays);
+    group.writeEntry(d->configIconShowOverlaysEntry,             d->iconShowOverlays);
     group.writeEntry(d->configIconShowRatingEntry,               d->iconShowRating);
     group.writeEntry(d->configIconShowImageFormatEntry,          d->iconShowImageFormat);
     group.writeEntry(d->configIconViewFontEntry,                 d->iconviewFont);
@@ -364,8 +364,8 @@ void ImportSettings::saveSettings()
     group.writeEntry(d->configToolTipsShowPhotoFlashEntry,       d->tooltipShowPhotoFlash);
     group.writeEntry(d->configToolTipsShowPhotoWBEntry,          d->tooltipShowPhotoWb);
     group.writeEntry(d->configToolTipsShowFolderNameEntry,        d->tooltipShowFolderName);
-    //group.writeEntry(d->configToolTipsShowTagsEntry,             d->tooltipShowTags);
-    //group.writeEntry(d->configToolTipsShowLabelRatingEntry,      d->tooltipShowLabelRating);
+    group.writeEntry(d->configToolTipsShowTagsEntry,             d->tooltipShowTags);
+    group.writeEntry(d->configToolTipsShowLabelRatingEntry,      d->tooltipShowLabelRating);
 
     group.writeEntry(d->configPreviewLoadFullImageSizeEntry,     d->previewLoadFullImageSize);
     group.writeEntry(d->configPreviewItemsWhileDownloadEntry,     d->previewItemsWhileDownload);
@@ -510,15 +510,15 @@ bool ImportSettings::getIconShowImageFormat() const
     return d->iconShowImageFormat;
 }
 
-//void ImportSettings::setIconShowOverlays(bool val)
-//{
-//    d->iconShowOverlays = val;
-//}
+void ImportSettings::setIconShowOverlays(bool val)
+{
+    d->iconShowOverlays = val;
+}
 
-//bool ImportSettings::getIconShowOverlays() const
-//{
-//    return d->iconShowOverlays;
-//}
+bool ImportSettings::getIconShowOverlays() const
+{
+    return d->iconShowOverlays;
+}
 
 void ImportSettings::setToolTipsFont(const QFont& font)
 {
@@ -640,25 +640,25 @@ bool ImportSettings::getToolTipsShowPhotoWB() const
     return d->tooltipShowPhotoWb;
 }
 
-//void ImportSettings::setToolTipsShowTags(bool val)
-//{
-//    d->tooltipShowTags = val;
-//}
+void ImportSettings::setToolTipsShowTags(bool val)
+{
+    d->tooltipShowTags = val;
+}
 
-//bool ImportSettings::getToolTipsShowTags() const
-//{
-//    return d->tooltipShowTags;
-//}
+bool ImportSettings::getToolTipsShowTags() const
+{
+    return d->tooltipShowTags;
+}
 
-//void ImportSettings::setToolTipsShowLabelRating(bool val)
-//{
-//    d->tooltipShowLabelRating = val;
-//}
+void ImportSettings::setToolTipsShowLabelRating(bool val)
+{
+    d->tooltipShowLabelRating = val;
+}
 
-//bool ImportSettings::getToolTipsShowLabelRating() const
-//{
-//    return d->tooltipShowLabelRating;
-//}
+bool ImportSettings::getToolTipsShowLabelRating() const
+{
+    return d->tooltipShowLabelRating;
+}
 
 bool ImportSettings::showToolTipsIsValid() const
 {
@@ -674,9 +674,9 @@ bool ImportSettings::showToolTipsIsValid() const
             d->tooltipShowPhotoExpo  ||
             d->tooltipShowPhotoFlash ||
             d->tooltipShowPhotoWb    ||
-            d->tooltipShowFolderName)
-            //d->tooltipShowTags       ||
-            //d->tooltipShowLabelRating)
+            d->tooltipShowFolderName ||
+            d->tooltipShowLabelRating) /*||*/
+            //d->tooltipShowTags)
         {
             return true;
         }

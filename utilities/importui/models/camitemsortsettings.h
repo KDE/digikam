@@ -105,7 +105,8 @@ public:
         SortByFilePath,
         SortByCreationDate,
         SortByFileSize,
-        SortByDownloadState
+        SortByDownloadState,
+        SortByRating
     };
 
     SortOrder   sortOrder;
