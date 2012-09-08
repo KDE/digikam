@@ -101,6 +101,7 @@ Q_SIGNALS:
 public Q_SLOTS:
 
     void slotDownload(bool onlySelected, bool deleteAfter, Album* pAlbum = 0);
+    void slotUploadItems(const KUrl::List&); // public to be used in drag'n'drop
 
 protected:
 
@@ -168,7 +169,6 @@ private Q_SLOTS:
     void slotEscapePressed();
 
     void slotUpload();
-    void slotUploadItems(const KUrl::List&);
 
     void slotDownloadNew();
     void slotDownloadSelected();

@@ -1591,11 +1591,13 @@ void ImportUI::slotDownload(bool onlySelected, bool deleteAfter, Album* album)
             continue;
         }
 
-        settings.folder = info.folder;
-        settings.file   = info.name;
-        settings.rating = info.rating;
-        downloadName    = info.downloadName;
-        dateTime        = info.mtime;
+        settings.folder     = info.folder;
+        settings.file       = info.name;
+        settings.pickLabel  = info.pickLabel;
+        settings.colorLabel = info.colorLabel;
+        settings.rating     = info.rating;
+        downloadName        = info.downloadName;
+        dateTime            = info.mtime;
 
         KUrl downloadUrl(url);
         QString errMsg;

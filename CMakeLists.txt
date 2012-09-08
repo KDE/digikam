@@ -1493,6 +1493,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/date/monthwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/date/timelinewidget.cpp
 
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/dragdrop/importdragdrop.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/dragdrop/albumdragdrop.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/dragdrop/ddragobjects.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/dragdrop/imagedragdrop.cpp

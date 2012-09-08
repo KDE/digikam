@@ -42,6 +42,7 @@
 
 #include "albummanager.h"
 #include "importui.h"
+#include "importiconview.h"
 #include "ddragobjects.h"
 #include "dio.h"
 #include "imagecategorizedview.h"
@@ -225,7 +226,6 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
         {
             palbum = static_cast<PAlbum*>(currentAlbum);
         }
-
 
         if (album->type() == Album::TAG)
         {
@@ -540,18 +540,18 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
             return false;
         }
 
-        ImportUI* ui = dynamic_cast<ImportUI*>(e->source());
+        ImportIconView* iconView = dynamic_cast<ImportIconView*>(e->source());
 
-        if (!ui)
+        if (!iconView)
         {
             return false;
         }
 
         KMenu popMenu(view);
-        popMenu.addTitle(SmallIcon("digikam"), i18n("My Albums"));
-        QAction* downAction    = popMenu.addAction(SmallIcon("file-export"),
+        popMenu.addTitle(SmallIcon("digikam"), i18n("Importing"));
+        QAction* downAction    = popMenu.addAction(SmallIcon("get-hot-new-stuff"),
                                                    i18n("Download From Camera"));
-        QAction* downDelAction = popMenu.addAction(SmallIcon("file-export"),
+        QAction* downDelAction = popMenu.addAction(SmallIcon("get-hot-new-stuff"),
                                                    i18n("Download && Delete From Camera"));
         popMenu.addSeparator();
         popMenu.addAction(SmallIcon("dialog-cancel"), i18n("C&ancel"));
@@ -562,11 +562,11 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
         {
             if (choice == downAction)
             {
-                ui->slotDownload(true, false, palbum);
+                ImportUI::instance()->slotDownload(true, false, palbum);
             }
             else if (choice == downDelAction)
             {
-                ui->slotDownload(true, true, palbum);
+                ImportUI::instance()->slotDownload(true, true, palbum);
             }
         }
 

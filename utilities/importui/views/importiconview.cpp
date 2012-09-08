@@ -46,6 +46,7 @@
 #include "advancedrenameprocessdialog.h"
 #include "imageviewutilities.h"
 #include "importcontextmenu.h"
+#include "importdragdrop.h"
 
 namespace Digikam
 {
@@ -71,8 +72,8 @@ void ImportIconView::init(CameraController* const controller)
 
     setThumbnailSize((ThumbnailSize::Size)settings->getDefaultIconSize());
 
-    //importImageModel()->setDragDropHandler(new ImageDragDropHandler(importImageModel()));
-    //setDragEnabled(true);
+    importImageModel()->setDragDropHandler(new ImportDragDropHandler(importImageModel()));
+    setDragEnabled(true);
     setAcceptDrops(true);
     setDropIndicatorShown(false);
 
@@ -158,13 +159,8 @@ CamItemInfo ImportIconView::camItemInfo(const QString& folder, const QString& fi
 CamItemInfo& ImportIconView::camItemInfoRef(const QString& folder, const QString& file)
 {
     QModelIndex indexForCamItemInfo = importFilterModel()->indexForPath(QString(folder + file));
-    //if(indexForCamItemInfo.isValid())
-    //{
-        QModelIndex mappedIndex = importFilterModel()->mapToSource(indexForCamItemInfo);
-        return importImageModel()->camItemInfoRef(mappedIndex);
-    //}
-
-    //return CamItemInfo();
+    QModelIndex mappedIndex = importFilterModel()->mapToSource(indexForCamItemInfo);
+    return importImageModel()->camItemInfoRef(mappedIndex);
 }
 
 void ImportIconView::slotSetupChanged()
@@ -331,6 +327,7 @@ void ImportIconView::showContextMenuOnInfo(QContextMenuEvent* event, const CamIt
     //TODO: cmhelper.addRotateMenu(selectedItemIDs);
     cmhelper.addSeparator();
     // --------------------------------------------------------
+    cmhelper.addAction("importui_selectall");
     cmhelper.addAction("importui_selectnone");
     cmhelper.addAction("importui_selectinvert");
     cmhelper.addSeparator();
