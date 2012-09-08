@@ -6,8 +6,8 @@
  * Date        : 2006-01-20
  * Description : image editor GUI saving context container
  *
- * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2012 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -44,19 +44,7 @@ namespace Digikam
 
 class DIGIKAM_EXPORT SavingContextContainer
 {
-
 public:
-
-    SavingContextContainer()
-    {
-        savingState             = SavingStateNone;
-        synchronizingState      = NormalSaving;
-        saveTempFile            = 0;
-        destinationExisted      = false;
-        synchronousSavingResult = false;
-        abortingSaving          = false;
-        executedOperation       = SavingStateNone;
-    }
 
     enum SavingState
     {
@@ -72,22 +60,35 @@ public:
         SynchronousSaving
     };
 
-    SavingState         savingState;
-    SynchronizingState  synchronizingState;
-    bool                synchronousSavingResult;
-    bool                destinationExisted;
-    bool                abortingSaving;
-    SavingState         executedOperation;
+public:
 
-    QString             originalFormat;
-    QString             format;
+    SavingContextContainer()
+    {
+        savingState             = SavingStateNone;
+        synchronizingState      = NormalSaving;
+        saveTempFile            = 0;
+        destinationExisted      = false;
+        synchronousSavingResult = false;
+        abortingSaving          = false;
+        executedOperation       = SavingStateNone;
+    }
 
-    KUrl                srcURL;
-    KUrl                destinationURL;
-    KUrl                moveSrcURL;
+    SavingState          savingState;
+    SynchronizingState   synchronizingState;
+    bool                 synchronousSavingResult;
+    bool                 destinationExisted;
+    bool                 abortingSaving;
+    SavingState          executedOperation;
 
-    QTemporaryFile*     saveTempFile;
-    QString             saveTempFileName;
+    QString              originalFormat;
+    QString              format;
+
+    KUrl                 srcURL;
+    KUrl                 destinationURL;
+    KUrl                 moveSrcURL;
+
+    QTemporaryFile*      saveTempFile;
+    QString              saveTempFileName;
 
     VersionFileOperation versionFileOperation;
 };
