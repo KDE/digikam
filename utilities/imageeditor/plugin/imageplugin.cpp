@@ -29,30 +29,20 @@
 #include "editortool.h"
 #include "editortooliface.h"
 
+#define INVALID_CATEGORY "__INVALID__"
+#define ACTION_CATEGORY  "ActionCategory"
+
 namespace Digikam
 {
 
-class ImagePlugin::Private
-{
-public:
-
-    Private()
-    {}
-
-    QString actionCategory;
-};
-
-// --------------------------------------------------------
-
 ImagePlugin::ImagePlugin(QObject* const parent, const char* name)
-    : QObject(parent), d(new Private)
+    : QObject(parent)
 {
     setObjectName(name);
 }
 
 ImagePlugin::~ImagePlugin()
 {
-    delete d;
 }
 
 void ImagePlugin::setEnabledSelectionActions(bool)
@@ -81,26 +71,23 @@ void ImagePlugin::slotToolDone()
 
 QString ImagePlugin::actionCategory() const
 {
-    // FIXME: crash on 64bit systems?
-    // According to bug #214718 digiKam crashes when using QString::isEmpty() on the returned string.
-    // But shouldn't the string be valid when the Priv class is created?
-    // I will add an extra check here to see if the crash disappears.
-    // In general I would say this is a Qt bug?
+    QString val = property(ACTION_CATEGORY).toString();
 
-    if (!d || d->actionCategory.isNull() || d->actionCategory.isEmpty())
+    if (val.isNull() || val.isEmpty())
     {
-        return QString("__INVALID__");
+        val = QString(INVALID_CATEGORY);
     }
 
-    return d->actionCategory;
+    return val;
 }
 
-void ImagePlugin::setActionCategory(const QString& name)
+void ImagePlugin::setActionCategory(const QString& cat)
 {
-    // only set once
-    if (d && d->actionCategory.isEmpty())
+    QString val = actionCategory();
+
+    if (val == QString(INVALID_CATEGORY))
     {
-        d->actionCategory = name;
+         setProperty(ACTION_CATEGORY, cat);
     }
 }
 
