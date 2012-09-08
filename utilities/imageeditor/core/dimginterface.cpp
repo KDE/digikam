@@ -1177,11 +1177,6 @@ void DImgInterface::setResolvedInitialHistory(const DImageHistory& history)
     d->resolvedInitialHistory = history;
 }
 
-void DImgInterface::putImage(const QString& caller, const FilterAction& action, uchar* const data, int w, int h)
-{
-    putImage(caller, action, data, w, h, d->image.sixteenBit());
-}
-
 void DImgInterface::putImage(const QString& caller, const FilterAction& action,
                              uchar* const data, int w, int h, bool sixteenBit)
 {

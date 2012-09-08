@@ -118,12 +118,12 @@ public:
     void    setUndoManagerOrigin();
     void    resetImage();
 
-    UndoState undoState() const;
-
     QString ensureHasCurrentUuid() const;
     void    provideCurrentUuid(const QString& uuid);
 
     void    zoom(double val);
+
+    // TODO port to QRect/QSize ---------------------------------------------------
 
     void    paintOnDevice(QPaintDevice* const p,
                           int sx, int sy, int sw, int sh,
@@ -134,6 +134,14 @@ public:
                           int dx, int dy, int dw, int dh,
                           int mx, int my, int mw, int mh,
                           int antialias);
+
+    void    setSelectedArea(int x, int y, int w, int h);
+    void    getSelectedArea(int& x, int& y, int& w, int& h);
+
+    void    crop(int x, int y, int w, int h);
+    void    resize(int w, int h);
+
+    // -----------------------------------------------------------------------------
 
     bool    imageValid()  const;
     int     width()       const;
@@ -146,9 +154,6 @@ public:
     bool    exifRotated() const;
     bool    isReadOnly()  const;
 
-    void    setSelectedArea(int x, int y, int w, int h);
-    void    getSelectedArea(int& x, int& y, int& w, int& h);
-
     void    rotate90();
     void    rotate180();
     void    rotate270();
@@ -156,30 +161,22 @@ public:
     void    flipHoriz();
     void    flipVert();
 
-    void    crop(int x, int y, int w, int h);
-
-    void    resize(int w, int h);
-
     void    convertDepth(int depth);
 
-    QStringList getUndoHistory() const;
-    QStringList getRedoHistory() const;
-
-    int    availableUndoSteps() const;
-    int    availableRedoSteps() const;
-
-    DImg*  getImg() const;
-
-    void   putImage(const QString& caller, const FilterAction& action, uchar* const data, int w, int h);
-    void   putImage(const QString& caller, const FilterAction& action, uchar* const data, int w, int h, bool sixteenBit);
-
-    uchar* getImageSelection() const;
-    void   putImageSelection(const QString& caller, const FilterAction& action, uchar* const data);
+    DImg*   getImg() const;
 
     void   putIccProfile(const IccProfile& profile);
 
+    // TODO port to DImg ---------------------------------------------------
+
+    void   putImage(const QString& caller, const FilterAction& action, uchar* const data, int w, int h, bool sixteenBit);
+    uchar* getImageSelection() const;
+    void   putImageSelection(const QString& caller, const FilterAction& action, uchar* const data);
     /// For internal usage by UndoManager
     void   setUndoImageData(const UndoMetadataContainer& c, uchar* const data, int w, int h, bool sixteenBit);
+
+    // ---------------------------------------------------------------------
+
     void   imageUndoChanged(const UndoMetadataContainer& c);
     void   setFileOriginData(const QVariant& data);
 
@@ -188,17 +185,22 @@ public:
      */
     QPixmap               convertToPixmap(DImg& img) const;
 
-    IccProfile            getEmbeddedICC() const;
-    KExiv2Data            getMetadata() const;
-    DImageHistory         getImageHistory() const;
-    DImageHistory         getInitialImageHistory() const;
+    IccProfile            getEmbeddedICC()            const;
+    KExiv2Data            getMetadata()               const;
+    DImageHistory         getImageHistory()           const;
+    DImageHistory         getInitialImageHistory()    const;
     DImageHistory         getImageHistoryOfFullRedo() const;
     DImageHistory         getResolvedInitialHistory() const;
     void                  setResolvedInitialHistory(const DImageHistory& history);
 
-    QString               getImageFileName() const;
-    QString               getImageFilePath() const;
-    QString               getImageFormat()   const;
+    QString               getImageFileName()   const;
+    QString               getImageFilePath()   const;
+    QString               getImageFormat()     const;
+    QStringList           getUndoHistory()     const;
+    QStringList           getRedoHistory()     const;
+    UndoState             undoState()          const;
+    int                   availableUndoSteps() const;
+    int                   availableRedoSteps() const;
 
 protected Q_SLOTS:
 

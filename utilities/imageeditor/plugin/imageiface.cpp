@@ -464,7 +464,7 @@ void ImageIface::putOriginal(const QString& caller, const FilterAction& action, 
         return;
     }
 
-    DImgInterface::defaultInterface()->putImage(caller, action, data, w, h);
+    DImgInterface::defaultInterface()->putImage(caller, action, data, w, h, originalSixteenBit());
 }
 
 }   // namespace Digikam
