@@ -28,6 +28,7 @@
 
 // Local includes
 
+#include "dimg.h"
 #include "digikam_export.h"
 
 namespace Digikam
@@ -44,19 +45,19 @@ public:
     /**
      * Delete all cache files
      */
-    void   clear();
+    void clear();
     /**
      * Delete all cache files starting from the given level upwards
      */
-    void   clearFrom(int level);
+    void clearFrom(int level);
     /**
-    * Write the data into a cache file
+    * Write the image data into a cache file
     */
-    bool   putData(int level, int w, int h, bool sixteenBit, bool hasAlpha, uchar* const data) const;
+    bool putData(int level, const DImg& img) const;
     /**
-    * Get the data from a cache file
+    * Get the image data from a cache file
     */
-    uchar* getData(int level, int& w, int& h, bool& sixteenBit, bool& hasAlpha) const;
+    DImg getData(int level) const;
 
 private:
 

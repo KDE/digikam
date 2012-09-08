@@ -109,7 +109,7 @@ void UndoCache::clearFrom(int fromLevel)
     }
 }
 
-bool UndoCache::putData(int level, int w, int h, bool sixteenBit, bool hasAlpha, uchar* const data) const
+bool UndoCache::putData(int level, const DImg& img) const
 {
     QFile file(d->cacheFile(level));
 
@@ -119,12 +119,12 @@ bool UndoCache::putData(int level, int w, int h, bool sixteenBit, bool hasAlpha,
     }
 
     QDataStream ds(&file);
-    ds << w;
-    ds << h;
-    ds << sixteenBit;
-    ds << hasAlpha;
+    ds << img.width();
+    ds << img.height();
+    ds << img.sixteenBit();
+    ds << img.hasAlpha();
 
-    QByteArray ba((char*)data, w * h * (sixteenBit ? 8 : 4));
+    QByteArray ba((const char*)img.bits(), img.numBytes());
     ds << ba;
 
     file.close();
@@ -134,18 +134,18 @@ bool UndoCache::putData(int level, int w, int h, bool sixteenBit, bool hasAlpha,
     return true;
 }
 
-uchar* UndoCache::getData(int level, int& w, int& h, bool& sixteenBit, bool& hasAlpha) const
+DImg UndoCache::getData(int level) const
 {
-    w          = 0;
-    h          = 0;
-    sixteenBit = false;
-    hasAlpha   = false;
+    int  w          = 0;
+    int  h          = 0;
+    bool sixteenBit = false;
+    bool hasAlpha   = false;
 
     QFile file(d->cacheFile(level));
 
     if (!file.open(QIODevice::ReadOnly))
     {
-        return 0;
+        return DImg();
     }
 
     QDataStream ds(&file);
@@ -154,20 +154,14 @@ uchar* UndoCache::getData(int level, int& w, int& h, bool& sixteenBit, bool& has
     ds >> sixteenBit;
     ds >> hasAlpha;
 
-    uchar* data = new uchar[w * h * (sixteenBit ? 8 : 4)];
-
-    if (!data)
-    {
-        return 0;
-    }
-
     QByteArray ba;
     ds >> ba;
-    memcpy(data, ba.data(), ba.size());
+
+    DImg img(w, h, sixteenBit, hasAlpha, (uchar*)ba.data(), true);
 
     file.close();
 
-    return data;
+    return img;
 }
 
 }  // namespace Digikam

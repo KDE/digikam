@@ -354,35 +354,25 @@ void UndoManager::redoStep(bool execute, bool flyingRollback)
 
 void UndoManager::makeSnapshot(int index)
 {
-    int w           = d->dimgiface->origWidth();
-    int h           = d->dimgiface->origHeight();
-    bool sixteenBit = d->dimgiface->sixteenBit();
-    bool hasAlpha   = d->dimgiface->hasAlpha();
-    uchar* data     = d->dimgiface->getImg()->bits();
-
-    d->undoCache->putData(index, w, h, sixteenBit, hasAlpha, data);
+    d->undoCache->putData(index, *d->dimgiface->getImg());
 }
 
 void UndoManager::restoreSnapshot(int index, const UndoMetadataContainer& c)
 {
-    int    newW, newH;
-    bool   sixteenBit, hasAlpha;
-    QScopedArrayPointer<uchar> newData(d->undoCache->getData(index, newW, newH, sixteenBit, hasAlpha));
+    DImg img = d->undoCache->getData(index);
 
-    if (!newData.isNull())
+    if (!img.isNull())
     {
-        d->dimgiface->setUndoImageData(c, newData.data(), newW, newH, sixteenBit);
+        d->dimgiface->setUndoImageData(c, img.bits(), img.width(), img.height(), img.sixteenBit());
     }
 }
 
 void UndoManager::getSnapshot(int index, DImg* const img) const
 {
-    int    newW, newH;
-    bool   sixteenBit, hasAlpha;
-    uchar* newData = d->undoCache->getData(index, newW, newH, sixteenBit, hasAlpha);
+    DImg data = d->undoCache->getData(index);
 
-    // Pass ownership of buffer. If newData is null, img will be null
-    img->putImageData(newW, newH, sixteenBit, hasAlpha, newData, false);
+    // Pass ownership of buffer. If data is null, img will be null
+    img->putImageData(data.width(), data.height(), data.sixteenBit(), data.hasAlpha(), data.bits(), true);
 }
 
 void UndoManager::clearPreviousOriginData()
