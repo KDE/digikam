@@ -47,7 +47,8 @@ public:
         ScaleToCustomSize
     };
 
-    // Order should match the content of the unit combbox in the ui file
+    /** Order should match the content of the unit combbox in the ui file
+     */
     enum Unit
     {
         Millimeters,
@@ -57,22 +58,22 @@ public:
 
 public:
 
-    PrintOptionsPage(QWidget* parent, const QSize& imageSize);
+    PrintOptionsPage(QWidget* const parent, const QSize& imageSize);
     ~PrintOptionsPage();
 
     void loadConfig();
     void saveConfig();
 
     bool          enlargeSmallerImages() const;
-    bool          colorManaged() const;
-    bool          autoRotation() const;
-    Qt::Alignment alignment() const;
-    IccProfile    outputProfile() const;
+    bool          colorManaged()         const;
+    bool          autoRotation()         const;
+    Qt::Alignment alignment()            const;
+    IccProfile    outputProfile()        const;
 
-    ScaleMode     scaleMode() const;
-    Unit          scaleUnit() const;
-    double        scaleWidth() const;
-    double        scaleHeight() const;
+    ScaleMode     scaleMode()            const;
+    Unit          scaleUnit()            const;
+    double        scaleWidth()           const;
+    double        scaleHeight()          const;
 
 private Q_SLOTS:
 
@@ -83,8 +84,8 @@ private Q_SLOTS:
 
 private:
 
-    class PrintOptionsPagePrivate;
-    PrintOptionsPagePrivate* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

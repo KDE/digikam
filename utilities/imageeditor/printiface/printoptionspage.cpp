@@ -71,11 +71,11 @@ static inline double unitToInches(PrintOptionsPage::Unit unit)
 
 // --------------------------------------------------------------------------
 
-class PrintOptionsPage::PrintOptionsPagePrivate : public Ui_PrintOptionsPage
+class PrintOptionsPage::Private : public Ui_PrintOptionsPage
 {
 public:
 
-    PrintOptionsPagePrivate() :
+    Private() :
         mParent(0),
         mConfigDialogManager(0),
         colorManaged(0),
@@ -173,8 +173,8 @@ public:
     }
 };
 
-PrintOptionsPage::PrintOptionsPage(QWidget* parent, const QSize& imageSize)
-    : QWidget(), d(new PrintOptionsPagePrivate)
+PrintOptionsPage::PrintOptionsPage(QWidget* const parent, const QSize& imageSize)
+    : QWidget(), d(new Private)
 {
     d->setupUi(this);
     d->mParent              = parent;

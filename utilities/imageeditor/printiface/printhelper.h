@@ -40,15 +40,15 @@ class DIGIKAM_EXPORT PrintHelper
 
 public:
 
-    PrintHelper(QWidget* parent);
+    PrintHelper(QWidget* const parent);
     ~PrintHelper();
 
     void print(DImg&);
 
 private:
 
-    class PrintHelperPrivate;
-    PrintHelperPrivate* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

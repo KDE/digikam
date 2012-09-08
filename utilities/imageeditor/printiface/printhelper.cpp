@@ -49,23 +49,23 @@
 namespace Digikam
 {
 
-class PrintHelper::PrintHelperPrivate
+class PrintHelper::Private
 {
 
 public:
 
 public:
 
-    PrintHelperPrivate() :
-        mParent(0)
+    Private() :
+        parent(0)
     {
     }
 
-    QWidget* mParent;
+    QWidget* parent;
 
 public:
 
-    QSize adjustSize(PrintOptionsPage* optionsPage, DImg& doc, int printerResolution, const QSize& viewportSize)
+    QSize adjustSize(PrintOptionsPage* const optionsPage, DImg& doc, int printerResolution, const QSize& viewportSize)
     {
         QSize size                            = doc.size();
         PrintOptionsPage::ScaleMode scaleMode = optionsPage->scaleMode();
@@ -98,7 +98,7 @@ public:
 
             if (dpmX > 0 && dpmY > 0)
             {
-                double wImg = double(size.width()) / double(dpmX) * INCHES_PER_METER;
+                double wImg = double(size.width())  / double(dpmX) * INCHES_PER_METER;
                 double hImg = double(size.height()) / double(dpmY) * INCHES_PER_METER;
                 size.setWidth(int (wImg * printerResolution));
                 size.setHeight(int (hImg * printerResolution));
@@ -108,7 +108,7 @@ public:
         return size;
     }
 
-    QPoint adjustPosition(PrintOptionsPage* optionsPage, const QSize& imageSize, const QSize& viewportSize)
+    QPoint adjustPosition(PrintOptionsPage* const optionsPage, const QSize& imageSize, const QSize& viewportSize)
     {
         Qt::Alignment alignment = optionsPage->alignment();
         int posX, posY;
@@ -153,10 +153,10 @@ public:
 };
 
 
-PrintHelper::PrintHelper(QWidget* parent)
-    : d(new PrintHelperPrivate)
+PrintHelper::PrintHelper(QWidget* const parent)
+    : d(new Private)
 {
-    d->mParent = parent;
+    d->parent = parent;
 }
 
 PrintHelper::~PrintHelper()
@@ -170,13 +170,12 @@ void PrintHelper::print(DImg& doc)
     //doc.waitUntilLoaded();
     QPrinter printer;
 
-    PrintOptionsPage* optionsPage = new PrintOptionsPage(d->mParent, doc.size());
+    PrintOptionsPage* optionsPage = new PrintOptionsPage(d->parent, doc.size());
     optionsPage->loadConfig();
 
-    std::auto_ptr<QPrintDialog> dialog(
-        KdePrint::createPrintDialog(&printer,
-                                    QList<QWidget*>() << optionsPage,
-                                    d->mParent));
+    std::auto_ptr<QPrintDialog> dialog(KdePrint::createPrintDialog(&printer,
+                                       QList<QWidget*>() << optionsPage,
+                                       d->parent));
     dialog->setWindowTitle(i18n("Print Image"));
     bool wantToPrint = dialog->exec();
 
@@ -189,7 +188,7 @@ void PrintHelper::print(DImg& doc)
 
     if (optionsPage->autoRotation())
         printer.setOrientation(doc.size().width() <= doc.size().height() ? QPrinter::Portrait
-                               : QPrinter::Landscape);
+                                                                         : QPrinter::Landscape);
 
     QPainter painter(&printer);
     QRect rect = painter.viewport();
