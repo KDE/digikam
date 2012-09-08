@@ -1,8 +1,0 @@
-* Port all colors correction tools to imageregionwidget + multithreading (163286 - Accurate histogram preview required).
-
-* PreviewWidget pure Qt4 port :
-
-http://websvn.kde.org/?view=revision&revision=1050093
-http://websvn.kde.org/?view=revision&revision=1050458
-
-* Editor Canvas must be ported to PreviewWidget.

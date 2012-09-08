@@ -1096,25 +1096,28 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/widgets/previewlist.cpp
        )
 
-    SET(libdimgcanvas_SRCS
+    SET(libeditordlg_SRCS
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/dialogs/colorcorrectiondlg.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/dialogs/softproofdialog.cpp
+       )
+
+    SET(libeditorcanvas_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/imageplugin.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/imagepluginloader.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/undocache.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/undoaction.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/undomanager.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/colorcorrectiondlg.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/softproofdialog.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/dimginterface.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/iccpostloadingmanager.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/q3support/canvas.cpp
        )
 
-    SET(libdimgeditorprintiface_SRCS
+    SET(libeditorprintiface_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/printiface/printhelper.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/printiface/printoptionspage.cpp
        )
 
-    SET(librawimport_SRCS
+    SET(libeditorrawimport_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/rawimport/rawimport.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/rawimport/rawpreview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/rawimport/rawsettingsbox.cpp
@@ -1248,7 +1251,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/captionedit.cpp
        )
 
-    SET(libdimgeditor_SRCS
+    SET(libeditorcore_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/imageiface.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/editortool.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/editortooliface.cpp
@@ -1257,7 +1260,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/editorwindow.cpp
        )
 
-    SET(libdimgimagewindow_SRCS
+    SET(libeditorgui_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/imagewindow.cpp
        )
 
@@ -1440,6 +1443,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/fuzzysearch/findduplicatesalbumitem.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/fuzzysearch/sketchwidget.cpp
        )
+
 
     SET(libgpssearch_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/gpssearch/gpssearchview.cpp
@@ -1667,6 +1671,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/hotplug
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/dialogs
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/printiface
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/rawimport

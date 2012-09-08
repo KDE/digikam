@@ -51,10 +51,11 @@ SET(digikamcore_LIB_SRCS
 
         # utilities
         ${libslideshow_SRCS}
-        ${libdimgcanvas_SRCS}
-        ${libdimgeditorprintiface_SRCS}
-        ${libdimgeditor_SRCS}
-        ${librawimport_SRCS}
+        ${libeditorcanvas_SRCS}
+        ${libeditordlg_SRCS}
+        ${libeditorprintiface_SRCS}
+        ${libeditorrawimport_SRCS}
+        ${libeditorcore_SRCS}
 )
 
 KDE4_ADD_UI_FILES(digikamcore_LIB_SRCS
@@ -81,7 +82,7 @@ TARGET_LINK_LIBRARIES(digikamcore
         ${KDE4_KDEUI_LIBS}
         ${KDE4_KUTILS_LIBS}
         ${KDE4_SOLID_LIBS}
-	${KDE4_THREADWEAVER_LIBRARIES}
+        ${KDE4_THREADWEAVER_LIBRARIES}
 
         ${JPEG_LIBRARIES}
         ${TIFF_LIBRARIES}
@@ -232,7 +233,7 @@ ENDIF (NEPOMUK_FOUND)
 
 # digiKam binary progam #########################################################
 
-SET(digikam_SRCS ${libdimgimagewindow_SRCS}
+SET(digikam_SRCS ${libeditorgui_SRCS}
                  ${libdeletedialog_SRCS}
                  ${libimagepropertiesdigikam_SRCS}
                  ${libimageversionssidebar_SRCS}
@@ -279,6 +280,7 @@ TARGET_LINK_LIBRARIES(digikam
         ${KDE4_KUTILS_LIBS}
         ${KDE4_KNOTIFYCONFIG_LIBRARY}
         ${KDE4_SOLID_LIBS}
+        ${KDE4_THREADWEAVER_LIBRARIES}
 
         ${KFACE_LIBRARIES}
         ${KGEOMAP_LIBRARIES}
@@ -293,7 +295,6 @@ TARGET_LINK_LIBRARIES(digikam
         digikamdatabase
         advancedrename
         queuemanager
-	    ${KDE4_THREADWEAVER_LIBRARIES}
 
         importui
 
