@@ -60,8 +60,8 @@ public:
 
 private:
 
-    class UndoCachePriv;
-    UndoCachePriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

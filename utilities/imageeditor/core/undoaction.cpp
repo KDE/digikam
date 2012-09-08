@@ -36,16 +36,16 @@
 namespace Digikam
 {
 
-class UndoAction::UndoActionPriv
+class UndoAction::Private
 {
 public:
 
-    UndoActionPriv()
+    Private()
     {
     }
 
-    QString        title;
-    QVariant       fileOrigin;
+    QString               title;
+    QVariant              fileOrigin;
 
     UndoMetadataContainer container;
     DImageHistory         fileOriginResolvedHistory;
@@ -71,7 +71,7 @@ bool UndoMetadataContainer::changesIccProfile(const DImg& target) const
 }
 
 UndoAction::UndoAction(DImgInterface* const iface)
-    : d(new UndoActionPriv)
+    : d(new Private)
 {
     d->container = UndoMetadataContainer::fromImage(*iface->getImg());
 }
@@ -125,7 +125,8 @@ DImageHistory UndoAction::fileOriginResolvedHistory() const
 // ---------------------------------------------------------------------------------------------
 
 UndoActionReversible::UndoActionReversible(DImgInterface* const iface, const DImgBuiltinFilter& reversibleFilter)
-    : UndoAction(iface), m_filter(reversibleFilter)
+    : UndoAction(iface),
+      m_filter(reversibleFilter)
 {
     setTitle(m_filter.i18nDisplayableName());
 }

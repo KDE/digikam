@@ -46,23 +46,30 @@ class DIGIKAM_EXPORT UndoMetadataContainer
 {
 public:
 
-    // Fill a container from the DImg
+    /** Fill a container from the DImg
+     */
     static UndoMetadataContainer fromImage(const DImg& iface);
-    // Write this container's values to the DImg
+
+    /** Write this container's values to the DImg
+     */
     void toImage(DImg& img) const;
+
+    bool changesIccProfile(const DImg& target) const;
+
+public:
 
     DImageHistory  history;
     IccProfile     profile;
-
-    bool changesIccProfile(const DImg& target) const;
 };
+
+// -------------------------------------------------------------------
 
 class DIGIKAM_EXPORT UndoAction
 {
 
 public:
 
-    explicit UndoAction(DImgInterface* iface);
+    explicit UndoAction(DImgInterface* const iface);
     virtual ~UndoAction();
 
     void          setTitle(const QString& title);
@@ -78,8 +85,8 @@ public:
 
 private:
 
-    class UndoActionPriv;
-    UndoActionPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 // --------------------------------------------------------------------
@@ -91,7 +98,7 @@ public:
 
     UndoActionReversible(DImgInterface* const iface, const DImgBuiltinFilter& reversibleFilter);
 
-    DImgBuiltinFilter getFilter() const;
+    DImgBuiltinFilter getFilter()        const;
     DImgBuiltinFilter getReverseFilter() const;
 
 protected:

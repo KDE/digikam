@@ -46,11 +46,11 @@
 namespace Digikam
 {
 
-class UndoCache::UndoCachePriv
+class UndoCache::Private
 {
 public:
 
-    UndoCachePriv()
+    Private()
     {
     }
 
@@ -64,7 +64,7 @@ public:
 };
 
 UndoCache::UndoCache()
-    : d(new UndoCachePriv)
+    : d(new Private)
 {
     QString cacheDir = KStandardDirs::locateLocal("cache", KGlobal::mainComponent().aboutData()->programName() + '/');
 
@@ -74,6 +74,7 @@ UndoCache::UndoCache()
 
     // remove any remnants
     QDir dir(cacheDir);
+
     foreach(const QFileInfo& info, dir.entryInfoList(QStringList() << (d->cachePrefix + '*')))
     {
         QFile(info.filePath()).remove();
@@ -92,6 +93,7 @@ void UndoCache::clear()
     {
         QFile(d->cacheFile(level)).remove();
     }
+
     d->cachedLevels.clear();
 }
 

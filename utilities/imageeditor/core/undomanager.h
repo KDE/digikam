@@ -55,19 +55,19 @@ public:
     void undo();
     void redo();
     void rollbackToOrigin();
-    bool putImageDataAndHistory(DImg* const img, int stepsBack);
+    bool putImageDataAndHistory(DImg* const img, int stepsBack) const;
 
     void clear(bool clearCache = true);
 
-    bool        anyMoreUndo() const;
-    bool        anyMoreRedo() const;
+    bool        anyMoreUndo()        const;
+    bool        anyMoreRedo()        const;
     int         availableUndoSteps() const;
     int         availableRedoSteps() const;
-    QStringList getUndoHistory() const;
-    QStringList getRedoHistory() const;
-    bool        isAtOrigin() const;
-    void        setOrigin() const;
-    bool        hasChanges() const;
+    QStringList getUndoHistory()     const;
+    QStringList getRedoHistory()     const;
+    bool        isAtOrigin()         const;
+    void        setOrigin()          const;
+    bool        hasChanges()         const;
 
     void clearPreviousOriginData();
 
@@ -82,12 +82,12 @@ private:
     void redoStep(bool execute, bool flyingRollback);
     void makeSnapshot(int index);
     void restoreSnapshot(int index, const UndoMetadataContainer& c);
-    void getSnapshot(int index, DImg* const img);
+    void getSnapshot(int index, DImg* const img) const;
 
 private:
 
-    class UndoManagerPriv;
-    UndoManagerPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

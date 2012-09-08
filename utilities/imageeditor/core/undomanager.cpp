@@ -47,11 +47,11 @@
 namespace Digikam
 {
 
-class UndoManager::UndoManagerPriv
+class UndoManager::Private
 {
 public:
 
-    UndoManagerPriv() :
+    Private() :
         origin(0),
         undoCache(0),
         dimgiface(0)
@@ -68,7 +68,7 @@ public:
 };
 
 UndoManager::UndoManager(DImgInterface* const iface)
-    : d(new UndoManagerPriv)
+    : d(new Private)
 {
     d->dimgiface = iface;
     d->undoCache = new UndoCache;
@@ -375,7 +375,7 @@ void UndoManager::restoreSnapshot(int index, const UndoMetadataContainer& c)
     }
 }
 
-void UndoManager::getSnapshot(int index, DImg* const img)
+void UndoManager::getSnapshot(int index, DImg* const img) const
 {
     int    newW, newH;
     bool   sixteenBit, hasAlpha;
@@ -399,7 +399,7 @@ void UndoManager::clearPreviousOriginData()
     }
 }
 
-bool UndoManager::putImageDataAndHistory(DImg* const img, int stepsBack)
+bool UndoManager::putImageDataAndHistory(DImg* const img, int stepsBack) const
 {
     if (stepsBack <= 0 || stepsBack > d->undoActions.size())
     {
@@ -525,20 +525,24 @@ int UndoManager::availableRedoSteps() const
 QStringList UndoManager::getUndoHistory() const
 {
     QStringList titles;
-    foreach(UndoAction* action, d->undoActions)
+
+    foreach(UndoAction* const action, d->undoActions)
     {
         titles.prepend(action->getTitle());
     }
+
     return titles;
 }
 
 QStringList UndoManager::getRedoHistory() const
 {
     QStringList titles;
-    foreach(UndoAction* action, d->redoActions)
+
+    foreach(UndoAction* const action, d->redoActions)
     {
         titles.prepend(action->getTitle());
     }
+
     return titles;
 }
 
