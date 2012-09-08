@@ -6,8 +6,8 @@
  * Date        : 2007-09-19
  * Description : Scanning of a single image
  *
- * Copyright (C) 2007-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C)      2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C)      2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -50,24 +50,37 @@
 #include "metadatasettings.h"
 #include "tagregion.h"
 #include "tagscache.h"
-
+#include "iostream"
 namespace Digikam
 {
 
 ImageScanner::ImageScanner(const QFileInfo& info, const ItemScanInfo& scanInfo)
-    : m_hasImage(false), m_hasMetadata(false), m_loadedFromDisk(false),
-      m_fileInfo(info), m_scanInfo(scanInfo), m_scanMode(ModifiedScan), m_hasHistoryToResolve(false)
+    : m_hasImage(false),
+      m_hasMetadata(false),
+      m_loadedFromDisk(false),
+      m_fileInfo(info),
+      m_scanInfo(scanInfo),
+      m_scanMode(ModifiedScan),
+      m_hasHistoryToResolve(false)
 {
 }
 
 ImageScanner::ImageScanner(const QFileInfo& info)
-    : m_hasImage(false), m_hasMetadata(false), m_loadedFromDisk(false),
-      m_fileInfo(info), m_scanMode(ModifiedScan), m_hasHistoryToResolve(false)
+    : m_hasImage(false),
+      m_hasMetadata(false),
+      m_loadedFromDisk(false),
+      m_fileInfo(info),
+      m_scanMode(ModifiedScan),
+      m_hasHistoryToResolve(false)
 {
 }
 
 ImageScanner::ImageScanner(qlonglong imageid)
-    : m_hasImage(false), m_hasMetadata(false), m_loadedFromDisk(false), m_scanMode(ModifiedScan), m_hasHistoryToResolve(false)
+    : m_hasImage(false),
+      m_hasMetadata(false),
+      m_loadedFromDisk(false),
+      m_scanMode(ModifiedScan),
+      m_hasHistoryToResolve(false)
 {
     ItemShortInfo shortInfo;
     {
@@ -131,13 +144,14 @@ void ImageScanner::copiedFrom(int albumId, qlonglong srcId)
 
     // first use source, if it exists
     if (!copyFromSource(srcId))
-
+    {
         // check if we can establish identity
         if (!scanFromIdenticalFile())
-            // scan newly
         {
+            // scan newly
             scanFile(NewScan);
         }
+    }
 }
 
 const ItemScanInfo& ImageScanner::itemScanInfo() const
@@ -246,6 +260,18 @@ void ImageScanner::scanFile(ScanMode mode)
             scanFaces();
             scanImageHistoryIfModified();
         }
+        else if (m_scanInfo.category == DatabaseItem::Video)
+        {
+            scanVideoInformation();
+            // TODO: Here, we only scan fields which can be expected to have changed, when we detect a change of file data.
+            // It seems to me that at the moment video metadata contains such files (which may change after editing).
+            // In contrast, with photos, ImageMetadata contains fields which describe the moment of taking the photo,
+            //  which means they dont change.
+            if (m_hasMetadata)
+            {
+                scanVideoMetadata();
+            }
+        }
     }
     else
     {
@@ -267,7 +293,11 @@ void ImageScanner::scanFile(ScanMode mode)
         }
         else if (m_scanInfo.category == DatabaseItem::Video)
         {
-            scanVideoFile();
+            scanVideoInformation();
+            if (m_hasMetadata)
+            {
+                scanVideoMetadata();
+            }
         }
         else if (m_scanInfo.category == DatabaseItem::Audio)
         {
@@ -280,10 +310,32 @@ void ImageScanner::scanFile(ScanMode mode)
     }
 }
 
+void ImageScanner::checkCreationDateFromMetadata(QVariant& dateFromMetadata) const
+{
+    // creation date: fall back to file system property
+    if (dateFromMetadata.isNull() || !dateFromMetadata.toDateTime().isValid())
+    {
+        dateFromMetadata = creationDateFromFilesystem(m_fileInfo);
+    }
+}
+
+bool ImageScanner::checkRatingFromMetadata(const QVariant& ratingFromMetadata) const
+{
+    // should only be overwritten if set in metadata
+    if (m_scanMode == Rescan)
+    {
+        if (ratingFromMetadata.isNull() || ratingFromMetadata.toInt() == -1)
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
 void ImageScanner::scanImageInformation()
 {
     DatabaseFields::ImageInformation dbFields = DatabaseFields::ImageInformationAll;
-    QVariantList infos;
+    QVariantList                     infos;
 
     if (m_scanMode == NewScan || m_scanMode == Rescan)
     {
@@ -294,20 +346,12 @@ void ImageScanner::scanImageInformation()
                << MetadataInfo::Orientation;
         QVariantList metadataInfos = m_metadata.getMetadataFields(fields);
 
-        // creation date: fall back to file system property
-        if (metadataInfos.at(1).isNull() || !metadataInfos.at(1).toDateTime().isValid())
-        {
-            metadataInfos[1] = creationDateFromFilesystem(m_fileInfo);
-        }
+        checkCreationDateFromMetadata(metadataInfos[1]);
 
-        // Some fields should only be overwritten if set in metadata
-        if (m_scanMode == Rescan)
+        if (!checkRatingFromMetadata(metadataInfos.at(0)))
         {
-            if (metadataInfos.at(0).isNull() || metadataInfos.at(0).toInt() == -1)
-            {
-                dbFields &= ~DatabaseFields::Rating;
-                metadataInfos.removeAt(0);
-            }
+            dbFields &= ~DatabaseFields::Rating;
+            metadataInfos.removeAt(0);
         }
 
         infos << metadataInfos;
@@ -342,11 +386,11 @@ void ImageScanner::scanImageInformation()
             // But there is a special case: if the dims were
         }*/
         DatabaseAccess().db()->changeImageInformation(m_scanInfo.id, infos,
-                DatabaseFields::Width      |
-                DatabaseFields::Height     |
-                DatabaseFields::Format     |
-                DatabaseFields::ColorDepth |
-                DatabaseFields::ColorModel);
+                                                      DatabaseFields::Width      |
+                                                      DatabaseFields::Height     |
+                                                      DatabaseFields::Format     |
+                                                      DatabaseFields::ColorDepth |
+                                                      DatabaseFields::ColorModel);
     }
 }
 
@@ -558,6 +602,7 @@ void ImageScanner::scanTags()
     // Check Color Label tag.
 
     int colorId = m_metadata.getImageColorLabel();
+
     if (colorId != -1)
     {
         kDebug() << "Color Label found : " << colorId;
@@ -718,7 +763,7 @@ void ImageScanner::tagImageHistoryGraph(qlonglong id)
     //kDebug() << "tagImageHistoryGraph" << id;
 
     // Load relation cloud, history of info and of all leaves of the tree into the graph, fully resolved
-    ImageHistoryGraph graph = ImageHistoryGraph::fromInfo(info, ImageHistoryGraph::LoadAll, ImageHistoryGraph::NoProcessing);
+    ImageHistoryGraph graph    = ImageHistoryGraph::fromInfo(info, ImageHistoryGraph::LoadAll, ImageHistoryGraph::NoProcessing);
     kDebug() << graph;
 
     int originalVersionTag     = TagsCache::instance()->getOrCreateInternalTag(InternalTagName::originalVersion());
@@ -737,8 +782,8 @@ void ImageScanner::tagImageHistoryGraph(qlonglong id)
     }
 
     // get category info
-    QList<qlonglong> originals, intermediates, currents;
-    QHash<ImageInfo, HistoryImageId::Types> types = graph.categorize();
+    QList<qlonglong>                                        originals, intermediates, currents;
+    QHash<ImageInfo, HistoryImageId::Types>                 types = graph.categorize();
     QHash<ImageInfo, HistoryImageId::Types>::const_iterator it;
 
     for (it = types.constBegin(); it != types.constEnd(); ++it)
@@ -779,6 +824,7 @@ void ImageScanner::tagImageHistoryGraph(qlonglong id)
 DImageHistory ImageScanner::resolvedImageHistory(const DImageHistory& history, bool mustBeAvailable)
 {
     DImageHistory h;
+
     foreach(const DImageHistory::Entry& e, history.entries())
     {
         // Copy entry, without referredImages
@@ -908,6 +954,7 @@ QList<qlonglong> ImageScanner::resolveHistoryImageId(const HistoryImageId& histo
 {
     // first and foremost: UUID
     QList<qlonglong> uuidList;
+
     if (historyId.hasUuid())
     {
         uuidList = DatabaseAccess().db()->getItemsForUuid(historyId.m_uuid);
@@ -980,11 +1027,16 @@ QList<qlonglong> ImageScanner::resolveHistoryImageId(const HistoryImageId& histo
     return uuidList;
 }
 
+// ---------------------------------------------------------------------------------------
+
 class lessThanByProximityToSubject
 {
 public:
 
-    lessThanByProximityToSubject(const ImageInfo& subject) : subject(subject) {}
+    lessThanByProximityToSubject(const ImageInfo& subject) 
+        : subject(subject)
+    {
+    }
 
     bool operator()(const ImageInfo& a, const ImageInfo& b)
     {
@@ -1063,67 +1115,96 @@ void ImageScanner::sortByProximity(QList<ImageInfo>& list, const ImageInfo& subj
     }
 }
 
-void ImageScanner::scanVideoFile()
+// ---------------------------------------------------------------------------------------
+
+static MetadataFields allVideoMetadataFields()
 {
-    /**
-    * @todo
-    */
+    // This list must reflect the order required by AlbumDB::addVideoMetadata
+    MetadataFields fields;
+    fields << MetadataInfo::AspectRatio
+           << MetadataInfo::AudioBitRate
+           << MetadataInfo::AudioChannelType
+           << MetadataInfo::AudioCompressor
+           << MetadataInfo::Duration
+           << MetadataInfo::FrameRate
+           << MetadataInfo::VideoCodec;
 
-    QVariantList metadataInfos;
+    return fields;
+}
 
-    if (m_hasMetadata)
+
+void ImageScanner::scanVideoInformation()
+{
+    DatabaseFields::ImageInformation dbFields;
+    QVariantList                     infos;
+
+    if (m_scanMode == NewScan || m_scanMode == Rescan)
     {
         MetadataFields fields;
         fields << MetadataInfo::Rating
-               << MetadataInfo::CreationDate;
-        metadataInfos = m_metadata.getMetadataFields(fields);
+               << MetadataInfo::CreationDate
+               << MetadataInfo::DigitizationDate;
+        QVariantList metadataInfos = m_metadata.getMetadataFields(fields);
+        dbFields |= DatabaseFields::Rating | DatabaseFields::CreationDate | DatabaseFields::DigitizationDate;
 
-        // if invalid, start with -1 rating
-        if (metadataInfos.at(0).isNull())
+        checkCreationDateFromMetadata(metadataInfos[1]);
+
+        if (!checkRatingFromMetadata(metadataInfos.at(0)))
         {
-            metadataInfos[0] = -1;
+            dbFields &= ~DatabaseFields::Rating;
+            metadataInfos.removeAt(0);
         }
 
-        // creation date: fall back to file system property
-        if (metadataInfos.at(1).isNull() || !metadataInfos.at(1).toDateTime().isValid())
-        {
-            metadataInfos[1] = creationDateFromFilesystem(m_fileInfo);
-        }
+        infos << metadataInfos;
     }
-    else
+
+    infos << m_metadata.getMetadataField(MetadataInfo::VideoWidth)
+          << m_metadata.getMetadataField(MetadataInfo::VideoHeight);
+    dbFields |= DatabaseFields::Width | DatabaseFields::Height;
+
+    // TODO: Please check / improve / rewrite detectVideoFormat().
+    // The format strings shall be uppercase, and a clearly defined set
+    // (all format strings used in the database should be defined in advance)
+    infos << detectVideoFormat();
+    dbFields |= DatabaseFields::Format;
+
+    // There is use of bit depth, but not ColorModel
+    // For bit depth - 8bit, 16bit with videos
+    infos << m_metadata.getMetadataField(MetadataInfo::VideoBitDepth);
+    dbFields |= DatabaseFields::ColorDepth;
+
+
+    if (m_scanMode == NewScan)
     {
-        metadataInfos << -1
-                      << creationDateFromFilesystem(m_fileInfo);
+        DatabaseAccess().db()->addImageInformation(m_scanInfo.id, infos, dbFields);
     }
-
-    QSize size;
-
-    QVariantList infos;
-    infos << metadataInfos
-          << detectVideoFormat();
-
-    DatabaseAccess().db()->addImageInformation(m_scanInfo.id, infos,
-            DatabaseFields::Rating       |
-            DatabaseFields::CreationDate |
-            DatabaseFields::Format);
-
-    // KFileMetaInfo does not give us any useful information for relevant video files
-    /*
-    const KFileMetaInfo::WhatFlags flags = KFileMetaInfo::Fastest |
-            KFileMetaInfo::TechnicalInfo |
-            KFileMetaInfo::ContentInfo;
-    KFileMetaInfo metaInfo(m_fileInfo.filePath(), QString(), flags);
-    if (metaInfo.isValid())
+    else if (m_scanMode == Rescan)
     {
-        QStringList keys = metaInfo.keys();
-        foreach(const QString& key, keys)
-        {
-            KFileMetaInfoItem item = metaInfo.item(key);
-            kDebug() << item.name() << item.value();
-        }
+        DatabaseAccess().db()->changeImageInformation(m_scanInfo.id, infos, dbFields);
     }
-    */
+    else // ModifiedScan
+    {
+        // TODO: which flags are passed here depends on the three TODOs above
+        // We dont overwrite Rating and date here.
+        DatabaseAccess().db()->changeImageInformation(m_scanInfo.id, infos,
+                                                      DatabaseFields::Width      |
+                                                      DatabaseFields::Height     |
+                                                      DatabaseFields::Format     |
+                                                      DatabaseFields::ColorDepth);
+    }
 }
+
+void ImageScanner::scanVideoMetadata()
+{
+    QVariantList metadataInfos = m_metadata.getMetadataFields(allVideoMetadataFields());
+
+    if (hasValidField(metadataInfos))
+    {
+        DatabaseAccess().db()->addVideoMetadata(m_scanInfo.id, metadataInfos);
+    }
+}
+
+// ---------------------------------------------------------------------------------------
 
 void ImageScanner::scanAudioFile()
 {
@@ -1137,9 +1218,9 @@ void ImageScanner::scanAudioFile()
           << detectAudioFormat();
 
     DatabaseAccess().db()->addImageInformation(m_scanInfo.id, infos,
-            DatabaseFields::Rating       |
-            DatabaseFields::CreationDate |
-            DatabaseFields::Format);
+                                               DatabaseFields::Rating       |
+                                               DatabaseFields::CreationDate |
+                                               DatabaseFields::Format);
 }
 
 void ImageScanner::loadFromDisk()
@@ -1151,7 +1232,7 @@ void ImageScanner::loadFromDisk()
     m_loadedFromDisk = true;
 
     m_metadata.registerMetadataSettings();
-    m_hasMetadata = m_metadata.load(m_fileInfo.filePath());
+    m_hasMetadata    = m_metadata.load(m_fileInfo.filePath());
 
     if (m_scanInfo.category == DatabaseItem::Image)
     {
@@ -1268,9 +1349,29 @@ QString ImageScanner::detectVideoFormat()
         return "MPEG";
     }
 
-    if (suffix =="ASF" || suffix == "WMV")
+    if (suffix == "ASF" || suffix == "WMV")
     {
         return "WMV";
+    }
+
+    if (suffix == "AVI" || suffix == "DIVX" )
+    {
+        return "AVI";
+    }
+
+    if (suffix == "MKV" || suffix == "MKS")
+    {
+        return "MKV";
+    }
+
+    if(suffix == "M4V" || suffix == "MOV" || suffix == "M2V" )
+    {
+        return "MOV";
+    }
+
+    if(suffix == "3GP" || suffix == "3G2" )
+    {
+        return "3GP";
     }
 
     return suffix;
@@ -1303,6 +1404,7 @@ QDateTime ImageScanner::creationDateFromFilesystem(const QFileInfo& info)
 
 QString ImageScanner::formatToString(const QString& format)
 {
+    // image -------------------------------------------------------------------
     if (format == "JPG")
     {
         return "JPEG";
@@ -1329,7 +1431,7 @@ QString ImageScanner::formatToString(const QString& format)
                      "RAW image file (%1)",
                      format.mid(4));
     }
-    // video
+    // video -------------------------------------------------------------------
     else if (format == "MPEG")
     {
         return format;
@@ -1358,7 +1460,7 @@ QString ImageScanner::formatToString(const QString& format)
     {
         return "3GPP";
     }
-    // audio
+    // audio -------------------------------------------------------------------
     else if (format == "OGG")
     {
         return "Ogg";
@@ -1442,7 +1544,7 @@ QString ImageScanner::iptcCorePropertyName(MetadataInfo::Field field)
     }
 }
 
-void ImageScanner::fillCommonContainer(qlonglong imageid, ImageCommonContainer* container)
+void ImageScanner::fillCommonContainer(qlonglong imageid, ImageCommonContainer* const container)
 {
     QVariantList imagesFields;
     QVariantList imageInformationFields;
@@ -1450,20 +1552,20 @@ void ImageScanner::fillCommonContainer(qlonglong imageid, ImageCommonContainer* 
     {
         DatabaseAccess access;
         imagesFields = access.db()->getImagesFields(imageid,
-                       DatabaseFields::Name             |
-                       DatabaseFields::ModificationDate |
-                       DatabaseFields::FileSize);
+                                                    DatabaseFields::Name             |
+                                                    DatabaseFields::ModificationDate |
+                                                    DatabaseFields::FileSize);
 
         imageInformationFields = access.db()->getImageInformation(imageid,
-                                 DatabaseFields::Rating           |
-                                 DatabaseFields::CreationDate     |
-                                 DatabaseFields::DigitizationDate |
-                                 DatabaseFields::Orientation      |
-                                 DatabaseFields::Width            |
-                                 DatabaseFields::Height           |
-                                 DatabaseFields::Format           |
-                                 DatabaseFields::ColorDepth       |
-                                 DatabaseFields::ColorModel);
+                                                                  DatabaseFields::Rating           |
+                                                                  DatabaseFields::CreationDate     |
+                                                                  DatabaseFields::DigitizationDate |
+                                                                  DatabaseFields::Orientation      |
+                                                                  DatabaseFields::Width            |
+                                                                  DatabaseFields::Height           |
+                                                                  DatabaseFields::Format           |
+                                                                  DatabaseFields::ColorDepth       |
+                                                                  DatabaseFields::ColorModel);
     }
 
     if (!imagesFields.isEmpty())
@@ -1487,11 +1589,10 @@ void ImageScanner::fillCommonContainer(qlonglong imageid, ImageCommonContainer* 
     }
 }
 
-void ImageScanner::fillMetadataContainer(qlonglong imageid, ImageMetadataContainer* container)
+void ImageScanner::fillMetadataContainer(qlonglong imageid, ImageMetadataContainer* const container)
 {
     // read from database
     QVariantList fields = DatabaseAccess().db()->getImageMetadata(imageid);
-
     // check we have at least one valid field
     container->allFieldsNull = !hasValidField(fields);
 
@@ -1520,6 +1621,29 @@ void ImageScanner::fillMetadataContainer(qlonglong imageid, ImageMetadataContain
     container->meteringMode                 = strings.at(13);
     container->subjectDistance              = strings.at(14);
     container->subjectDistanceCategory      = strings.at(15);
+}
+
+void ImageScanner::fillVideoMetadataContainer(qlonglong imageid, VideoMetadataContainer* const container)
+{
+    // read from database
+    QVariantList fields = DatabaseAccess().db()->getVideoMetadata(imageid);
+    // check we have at least one valid field
+    container->allFieldsNull = !hasValidField(fields);
+    if (container->allFieldsNull)
+    {
+        return;
+    }
+
+    // DMetadata does all translation work
+    QStringList strings = DMetadata::valuesToString(fields, allVideoMetadataFields());
+    // associate with hard-coded variables
+    container->aspectRatio                  = strings.at(0);
+    container->audioBitRate                 = strings.at(1);
+    container->audioChannelType             = strings.at(2);
+    container->audioCompressor              = strings.at(3);
+    container->duration                     = strings.at(4);
+    container->frameRate                    = strings.at(5);
+    container->videoCodec                   = strings.at(6);
 }
 
 } // namespace Digikam

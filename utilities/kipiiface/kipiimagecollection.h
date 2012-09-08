@@ -7,8 +7,8 @@
  * Description : class to get/set image collection
  *               information/properties using digiKam album database.
  *
- * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2004-2005 by Ralf Holzer <ralf at well.com>
+ * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
+ * Copyright (C) 2004-2005 by Ralf Holzer <ralf at well dot com>
  * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -45,10 +45,12 @@
 
 #include "albummanager.h"
 
+using namespace KIPI;
+
 namespace Digikam
 {
 
-class KipiImageCollection : public KIPI::ImageCollectionShared
+class KipiImageCollection : public ImageCollectionShared
 {
 
 public:
@@ -64,27 +66,23 @@ public:
     KipiImageCollection(Type type, Album* const album, const QString& filter);
     ~KipiImageCollection();
 
-    virtual QString name();
-    virtual QString comment();
-    virtual QString category();
-    virtual QDate date();
+    virtual QString    name();
+    virtual QString    comment();
+    virtual QString    category();
+    virtual QDate      date();
     virtual KUrl::List images();
-    virtual KUrl path();
-    virtual KUrl uploadPath();
-    virtual KUrl uploadRoot();
-    virtual QString uploadRootName();
-    virtual bool isDirectory();
+    virtual KUrl       path();
+    virtual KUrl       uploadPath();
+    virtual KUrl       uploadRoot();
+    virtual QString    uploadRootName();
+    virtual bool       isDirectory();
+
     virtual bool operator==(ImageCollectionShared&);
 
 private:
 
-    KUrl::List imagesFromPAlbum(PAlbum* const album) const;
-    KUrl::List imagesFromTAlbum(TAlbum* const album) const;
-
-private:
-
-    class KipiImageCollectionPriv;
-    KipiImageCollectionPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

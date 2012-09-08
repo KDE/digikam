@@ -42,6 +42,7 @@ class ImageInfo;
 class ImageInfoList;
 class ImageCommonContainer;
 class ImageMetadataContainer;
+class VideoMetadataContainer;
 
 class QmlShow : public QMainWindow
 {

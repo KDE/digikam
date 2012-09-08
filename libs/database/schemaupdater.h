@@ -6,7 +6,7 @@
  * Date        : 2007-04-16
  * Description : Schema update
  *
- * Copyright (C) 2007-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2007-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -30,6 +30,7 @@
 #include <QVariant>
 
 // Local includes
+
 #include "albumdb.h"
 #include "databaseaccess.h"
 #include "databasebackend.h"
@@ -45,17 +46,21 @@ class DIGIKAM_DATABASE_EXPORT SchemaUpdater
 {
 public:
 
-    SchemaUpdater(AlbumDB* albumDB, DatabaseBackend* backend, DatabaseParameters parameters);
-
-    static int schemaVersion();
-    static int filterSettingsVersion();
-    static int uniqueHashVersion();
+    static int  schemaVersion();
+    static int  filterSettingsVersion();
+    static int  uniqueHashVersion();
     static bool isUniqueHashUpToDate();
-    bool update();
-    bool updateUniqueHash();
-    void setObserver(InitializationObserver* observer);
+
+public:
+
+    SchemaUpdater(AlbumDB* const albumDB, DatabaseBackend* const backend, DatabaseParameters parameters);
+    ~SchemaUpdater();
+
+    bool  update();
+    bool  updateUniqueHash();
+    void  setObserver(InitializationObserver* const observer);
     const QString getLastErrorMessage();
-    void setDatabaseAccess(DatabaseAccess* access);
+    void  setDatabaseAccess(DatabaseAccess* const access);
 
 private:
 
@@ -73,7 +78,8 @@ private:
     bool createIndices();
     bool createTriggers();
     bool copyV3toV4(const QString& digikam3DBPath, const QString& currentDBPath);
-    bool updateV5toV6();
+    bool performUpdateToVersion(const QString& actionName, int newVersion, int newRequiredVersion);
+    bool updateToVersion(int targetVersion);
     bool updateV4toV6();
     bool updateV2toV4(const QString& sqlite2DBPath);
     void setLegacySettingEntries();
@@ -91,20 +97,8 @@ private:
 
 private:
 
-    bool                    m_setError;
-
-    QVariant                m_currentVersion;
-    QVariant                m_currentRequiredVersion;
-
-    DatabaseBackend*        m_Backend;
-    AlbumDB*                m_AlbumDB;
-    DatabaseParameters      m_Parameters;
-
-    // legacy
-    DatabaseAccess*         m_access;
-
-    QString                 m_LastErrorMessage;
-    InitializationObserver* m_observer;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

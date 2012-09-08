@@ -50,6 +50,14 @@ static const QString KEY_WHITEBALANCECOLORTEMPERATURE("WhiteBalanceColorTemp");
 static const QString KEY_METERINGMODE("MeteringMode");
 static const QString KEY_SUBJECTDISTANCE("SubjectDistance");
 static const QString KEY_SUBJECTDISTANCECATEGORY("SubjectDistanceCategory");
+
+static const QString KEY_ASPECTRATIO("AspectRatio");
+static const QString KEY_AUDIOBITRATE("AudioBitRate");
+static const QString KEY_AUDIOCHANNELTYPE("AudioChannelType");
+static const QString KEY_AUDIOCOMPRESSOR("AudioCompressor");
+static const QString KEY_DURATION("Duration");
+static const QString KEY_FRAMERATE("FrameRate");
+static const QString KEY_VIDEOCODEC("VideoCodec");
 }
 
 namespace Digikam
@@ -74,12 +82,21 @@ MetadataKeys::MetadataKeys()
     addId(KEY_METERINGMODE,                 i18n("Metering mode"));
     addId(KEY_SUBJECTDISTANCE,              i18n("Subject distance"));
     addId(KEY_SUBJECTDISTANCECATEGORY,      i18n("Subject distance (category)"));
+
+    addId(KEY_ASPECTRATIO,                  i18n("Display Aspect Ratio"));
+    addId(KEY_AUDIOBITRATE,                 i18n("Audio Bit Rate"));
+    addId(KEY_AUDIOCHANNELTYPE,             i18n("Audio Channel Type"));
+    addId(KEY_AUDIOCOMPRESSOR,              i18n("Audio Compressor (Audio Codec)"));
+    addId(KEY_DURATION,                     i18n("Duration of File"));
+    addId(KEY_FRAMERATE,                    i18n("Frame Rate of Video"));
+    addId(KEY_VIDEOCODEC,                   i18n("Video Codec"));
 }
 
 QString MetadataKeys::getDbValue(const QString& key, ParseSettings& settings)
 {
     ImageInfo info(settings.fileUrl);
     ImageMetadataContainer container = info.imageMetadataContainer();
+    VideoMetadataContainer videoContainer = info.videoMetadataContainer();
     QString result;
 
     if (key == KEY_MAKE)
@@ -145,6 +162,34 @@ QString MetadataKeys::getDbValue(const QString& key, ParseSettings& settings)
     else if (key == KEY_SUBJECTDISTANCECATEGORY)
     {
         result = container.subjectDistanceCategory;
+    }
+    else if (key == KEY_ASPECTRATIO)
+    {
+        result = videoContainer.aspectRatio;
+    }
+    else if (key == KEY_AUDIOBITRATE)
+    {
+        result = videoContainer.audioBitRate;
+    }
+    else if (key == KEY_AUDIOCHANNELTYPE)
+    {
+        result = videoContainer.audioChannelType;
+    }
+    else if (key == KEY_AUDIOCOMPRESSOR)
+    {
+        result = videoContainer.audioCompressor;
+    }
+    else if (key == KEY_DURATION)
+    {
+        result = videoContainer.duration;
+    }
+    else if (key == KEY_FRAMERATE)
+    {
+        result = videoContainer.frameRate;
+    }
+    else if (key == KEY_VIDEOCODEC)
+    {
+        result = videoContainer.videoCodec;
     }
 
     return result;

@@ -6,7 +6,7 @@
  * Date        : 2005-04-21
  * Description : Handling accesses to one image and associated data
  *
- * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Copyright (C) 2005      by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C) 2007-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2009-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -57,9 +57,11 @@ class ImageExtendedProperties;
 class ImageInfoData;
 class ImageListerRecord;
 class ImageMetadataContainer;
+class VideoMetadataContainer;
 class ImagePosition;
 class ImageTagPair;
 class PhotoInfoContainer;
+class VideoInfoContainer;
 class Template;
 class TreeBuilder;
 
@@ -109,7 +111,7 @@ public:
         return !operator==(info);
     }
     bool operator<(const ImageInfo& info) const;
-    uint hash() const;
+    uint hash()                           const;
 
     /**
      * Returns if this objects contains valid data
@@ -273,7 +275,7 @@ public:
      * image/tag pairs for which properties are available
      * (not necessarily the assigned tags)
      */
-    ImageTagPair imageTagPair(int tagId) const;
+    ImageTagPair imageTagPair(int tagId)         const;
     QList<ImageTagPair> availableImageTagPairs() const;
 
     /**
@@ -303,10 +305,10 @@ public:
      * is derived (ancestorImages) and images that have been derived
      * from this images (derivedImages).
      */
-    bool hasDerivedImages() const;
+    bool hasDerivedImages()  const;
     bool hasAncestorImages() const;
 
-    QList<ImageInfo> derivedImages() const;
+    QList<ImageInfo> derivedImages()  const;
     QList<ImageInfo> ancestorImages() const;
 
     /**
@@ -329,14 +331,14 @@ public:
      * The image is the leading image of a group,
      * there are other images grouped behind this one.
      */
-    bool hasGroupedImages() const;
+    bool hasGroupedImages()      const;
     int  numberOfGroupedImages() const;
 
     /**
      * Returns the leading image of the group.
      * Returns a null image if this image is not grouped (isGrouped())
      */
-    ImageInfo groupImage() const;
+    ImageInfo groupImage()   const;
     qlonglong groupImageId() const;
 
     /**
@@ -367,9 +369,11 @@ public:
      * in form of numbers and user presentable strings,
      * for certain defined fields of information (see databaseinfocontainers.h)
      */
-    ImageCommonContainer   imageCommonContainer() const;
+    ImageCommonContainer   imageCommonContainer()   const;
     ImageMetadataContainer imageMetadataContainer() const;
-    PhotoInfoContainer     photoInfoContainer() const;
+    VideoMetadataContainer videoMetadataContainer() const;
+    PhotoInfoContainer     photoInfoContainer()     const;
+    VideoInfoContainer     videoInfoContainer()     const;
 
     /**
      * Retrieve metadata template information about the image.
@@ -461,6 +465,7 @@ inline uint qHash(const ImageInfo& info)
 {
     return info.hash();
 }
+
 DIGIKAM_DATABASE_EXPORT QDebug& operator<<(QDebug& stream, const ImageInfo& info);
 
 }  // namespace Digikam

@@ -143,6 +143,16 @@
                             meteringMode INTEGER,
                             subjectDistance REAL,
                             subjectDistanceCategory INTEGER)</statement>
+            <statement mode="plain"> CREATE TABLE VideoMetadata
+                            (imageid INTEGER PRIMARY KEY,
+                            aspectRatio TEXT,
+                            audioBitRate TEXT,
+                            audioChannelType TEXT,
+                            audioCompressor TEXT,
+                            duration TEXT,
+                            frameRate TEXT,
+                            exposureProgram INTEGER,
+                            videoCodec TEXT)</statement>
             <statement mode="plain">CREATE TABLE ImagePositions
                             (imageid INTEGER PRIMARY KEY,
                             latitude TEXT,
@@ -263,6 +273,7 @@
                         DELETE From ImageHaarMatrix    WHERE imageid=OLD.id;
                         DELETE From ImageInformation   WHERE imageid=OLD.id;
                         DELETE From ImageMetadata      WHERE imageid=OLD.id;
+                        DELETE From VideoMetadata      WHERE imageid=OLD.id;
                         DELETE From ImagePositions     WHERE imageid=OLD.id;
                         DELETE From ImageComments      WHERE imageid=OLD.id;
                         DELETE From ImageCopyright     WHERE imageid=OLD.id;
@@ -521,6 +532,13 @@
                 INSERT INTO ImageMetadata (imageid, make, model, lens, aperture, focalLength, focalLength35, exposureTime, exposureProgram, exposureMode, sensitivity, flash, whiteBalance, whiteBalanceColorTemperature, meteringMode, subjectDistance, subjectDistanceCategory) VALUES (:imageid, :make, :model, :lens, :aperture, :focalLength, :focalLength35, :exposureTime, :exposureProgram, :exposureMode, :sensitivity, :flash, :whiteBalance, :whiteBalanceColorTemperature, :meteringMode, :subjectDistance, :subjectDistanceCategory);
             </statement></dbaction>
 
+            <dbaction name="Migrate_Read_VideoMetadata"><statement mode="query">
+                SELECT imageid, aspectRatio, audioBitRate, audioChannelType, audioCompressor, duration, frameRate, videoCodec FROM VideoMetadata;
+            </statement></dbaction>
+            <dbaction name="Migrate_Write_VideoMetadata"><statement mode="query">
+                INSERT INTO VideoMetadata (imageid, aspectRatio, audioBitRate, audioChannelType, audioCompressor, duration, frameRate, videoCodec) VALUES (:imageid, :aspectRatio, :audioBitRate, :audioChannelType, :audioCompressor, :duration, :frameRate, :videoCodec);
+            </statement></dbaction>
+
             <dbaction name="Migrate_Read_ImageTagProperties"><statement mode="query">
                 SELECT imageid, tagid, property, value FROM ImageTagProperties;
             </statement></dbaction>
@@ -663,6 +681,7 @@
                         DELETE From ImageHaarMatrix    WHERE imageid=OLD.id;
                         DELETE From ImageInformation   WHERE imageid=OLD.id;
                         DELETE From ImageMetadata      WHERE imageid=OLD.id;
+                        DELETE From VideoMetadata      WHERE imageid=OLD.id;
                         DELETE From ImagePositions     WHERE imageid=OLD.id;
                         DELETE From ImageComments      WHERE imageid=OLD.id;
                         DELETE From ImageCopyright     WHERE imageid=OLD.id;
@@ -811,6 +830,16 @@
                             meteringMode INTEGER,
                             subjectDistance REAL,
                             subjectDistanceCategory INTEGER);</statement>
+            <statement mode="plain">CREATE TABLE IF NOT EXISTS VideoMetadata
+                            (imageid INTEGER PRIMARY KEY,
+                            aspectRatio TEXT,
+                            audioBitRate TEXT,
+                            audioChannelType TEXT,
+                            audioCompressor TEXT,
+                            duration TEXT,
+                            frameRate TEXT,
+                            exposureProgram INTEGER,
+                            videoCodec TEXT);</statement>
             <statement mode="plain">CREATE TABLE IF NOT EXISTS ImagePositions
                             (imageid INTEGER PRIMARY KEY,
                             latitude LONGTEXT CHARACTER SET utf8,
@@ -959,6 +988,7 @@
                         DELETE From ImageHaarMatrix    WHERE imageid=OLD.id;
                         DELETE From ImageInformation   WHERE imageid=OLD.id;
                         DELETE From ImageMetadata      WHERE imageid=OLD.id;
+                        DELETE From VideoMetadata      WHERE imageid=OLD.id;
                         DELETE From ImagePositions     WHERE imageid=OLD.id;
                         DELETE From ImageComments      WHERE imageid=OLD.id;
                         DELETE From ImageCopyright     WHERE imageid=OLD.id;
@@ -1312,6 +1342,13 @@ ORDER BY inf.rating DESC, img.name ASC
                 INSERT INTO ImageMetadata (imageid, make, model, lens, aperture, focalLength, focalLength35, exposureTime, exposureProgram, exposureMode, sensitivity, flash, whiteBalance, whiteBalanceColorTemperature, meteringMode, subjectDistance, subjectDistanceCategory) VALUES (:imageid, :make, :model, :lens, :aperture, :focalLength, :focalLength35, :exposureTime, :exposureProgram, :exposureMode, :sensitivity, :flash, :whiteBalance, :whiteBalanceColorTemperature, :meteringMode, :subjectDistance, :subjectDistanceCategory);
             </statement></dbaction>
 
+            <dbaction name="Migrate_Read_VideoMetadata"><statement mode="query">
+                SELECT imageid, aspectRatio, audioBitRate, audioChannelType, audioCompressor, duration, frameRate, videoCodec FROM VideoMetadata;
+            </statement></dbaction>
+            <dbaction name="Migrate_Write_VideoMetadata" mode="transaction"><statement mode="query">
+                INSERT INTO VideoMetadata (imageid, aspectRatio, audioBitRate, audioChannelType, audioCompressor, duration, frameRate, videoCodec) VALUES (:imageid, :aspectRatio, :audioBitRate, :audioChannelType, :audioCompressor, :duration, :frameRate, :videoCodec);
+            </statement></dbaction>
+
             <dbaction name="Migrate_Read_ImageTagProperties"><statement mode="query">
                 SELECT imageid, tagid, property, value FROM ImageTagProperties;
             </statement></dbaction>
@@ -1498,6 +1535,7 @@ ORDER BY inf.rating DESC, img.name ASC
                         DELETE From ImageHaarMatrix    WHERE imageid=OLD.id;
                         DELETE From ImageInformation   WHERE imageid=OLD.id;
                         DELETE From ImageMetadata      WHERE imageid=OLD.id;
+                        DELETE From VideoMetadata      WHERE imageid=OLD.id;
                         DELETE From ImagePositions     WHERE imageid=OLD.id;
                         DELETE From ImageComments      WHERE imageid=OLD.id;
                         DELETE From ImageCopyright     WHERE imageid=OLD.id;

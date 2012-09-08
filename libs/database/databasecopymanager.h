@@ -58,9 +58,9 @@ public:
 
 Q_SIGNALS:
 
-    void stepStarted(QString stepName);
+    void stepStarted(const QString& stepName);
     void smallStepStarted(int currValue, int maxValue);
-    void finished(int finishState, QString errorMsg);
+    void finished(int finishState, const QString& errorMsg);
 
 public Q_SLOTS:
 
@@ -68,7 +68,9 @@ public Q_SLOTS:
 
 private:
 
-    bool copyTable(DatabaseBackend& fromDBbackend, const QString& fromActionName, DatabaseBackend& toDBbackend, const QString &toActionName);
+    bool copyTable(DatabaseBackend& fromDBbackend, const QString& fromActionName, 
+                   DatabaseBackend& toDBbackend, const QString &toActionName);
+
     void handleClosing(bool isstopThread, DatabaseBackend& fromDBbackend, DatabaseBackend& toDBbackend);
 
 private:

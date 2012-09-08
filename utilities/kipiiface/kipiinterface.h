@@ -6,8 +6,8 @@
  * Date        : 2004-08-02
  * Description : class to interface digiKam with kipi library.
  *
- * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2004-2005 by Ralf Holzer <ralf at well.com>
+ * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
+ * Copyright (C) 2004-2005 by Ralf Holzer <ralf at well dot com>
  * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -39,7 +39,6 @@
 
 // LibKIPI includes
 
-#include <libkipi/version.h>
 #include <libkipi/interface.h>
 
 // Local includes
@@ -51,10 +50,10 @@
 
 namespace KIPI
 {
-class ImageInfo;
-class ImageCollection;
-class ImageCollectionSelector;
-class UploadWidget;
+    class ImageInfo;
+    class ImageCollection;
+    class ImageCollectionSelector;
+    class UploadWidget;
 }
 
 namespace Digikam
@@ -89,7 +88,6 @@ public:
 
     QVariant hostSetting(const QString& settingName);
 
-#if KIPI_VERSION >= 0x010500
     QString progressScheduled(const QString& title, bool canBeCanceled, bool hasThumb) const;
     void    progressValueChanged(const QString& id, float percent);
     void    progressStatusChanged(const QString& id, const QString& status);
@@ -97,7 +95,6 @@ public:
     void    progressCompleted(const QString& id);
 
     KIPI::FileReadWriteLock* createReadWriteLock(const KUrl& url) const;
-#endif // KIPI_VERSION >= 0x010500
 
 public Q_SLOTS:
 
@@ -110,8 +107,8 @@ private Q_SLOTS:
 
 private:
 
-    class KipiInterfacePrivate;
-    KipiInterfacePrivate* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

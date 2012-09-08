@@ -7,7 +7,7 @@
  * Description : simple image properties side bar used by
  *               camera GUI.
  *
- * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -49,11 +49,11 @@
 namespace Digikam
 {
 
-class ImagePropertiesSideBarCamGui::ImagePropertiesSideBarCamGuiPriv
+class ImagePropertiesSideBarCamGui::Private
 {
 public:
 
-    ImagePropertiesSideBarCamGuiPriv() :
+    Private() :
         dirtyMetadataTab(false),
         dirtyCameraItemTab(false),
         dirtyGpsTab(false),
@@ -77,20 +77,20 @@ public:
     CameraItemPropertiesTab*    cameraItemTab;
 };
 
-ImagePropertiesSideBarCamGui::ImagePropertiesSideBarCamGui(QWidget* parent,
-                                                           SidebarSplitter* splitter,
+ImagePropertiesSideBarCamGui::ImagePropertiesSideBarCamGui(QWidget* const parent,
+                                                           SidebarSplitter* const splitter,
                                                            KMultiTabBarPosition side,
                                                            bool mimimizedDefault)
     : Sidebar(parent, splitter, side, mimimizedDefault),
-      d(new ImagePropertiesSideBarCamGuiPriv)
+      d(new Private)
 {
     d->cameraItemTab = new CameraItemPropertiesTab(parent);
     d->metadataTab   = new ImagePropertiesMetaDataTab(parent);
     d->gpsTab        = new ImagePropertiesGPSTab(parent);
 
-    appendTab(d->cameraItemTab, SmallIcon("document-properties"), i18n("Properties"));
-    appendTab(d->metadataTab, SmallIcon("exifinfo"), i18n("Metadata"));
-    appendTab(d->gpsTab, SmallIcon("applications-internet"), i18n("Geolocation"));
+    appendTab(d->cameraItemTab, SmallIcon("document-properties"),   i18n("Properties"));
+    appendTab(d->metadataTab,   SmallIcon("exifinfo"),              i18n("Metadata"));
+    appendTab(d->gpsTab,        SmallIcon("applications-internet"), i18n("Geolocation"));
 
     // ----------------------------------------------------------
 

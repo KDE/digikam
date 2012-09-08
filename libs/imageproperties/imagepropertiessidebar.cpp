@@ -7,7 +7,7 @@
  * Description : simple image properties side bar (without support
  *               of digiKam database).
  *
- * Copyright (C) 2004-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -59,10 +59,10 @@
 namespace Digikam
 {
 
-ImagePropertiesSideBar::ImagePropertiesSideBar(QWidget* parent,
-        SidebarSplitter* splitter,
-        KMultiTabBarPosition side,
-        bool mimimizedDefault)
+ImagePropertiesSideBar::ImagePropertiesSideBar(QWidget* const parent,
+                                               SidebarSplitter* const splitter,
+                                               KMultiTabBarPosition side,
+                                               bool mimimizedDefault)
     : Sidebar(parent, splitter, side, mimimizedDefault)
 {
     m_image              = 0;
@@ -78,10 +78,10 @@ ImagePropertiesSideBar::ImagePropertiesSideBar(QWidget* parent,
     m_colorTab           = new ImagePropertiesColorsTab(parent);
     m_gpsTab             = new ImagePropertiesGPSTab(parent);
 
-    appendTab(m_propertiesTab, SmallIcon("document-properties"), i18n("Properties"));
-    appendTab(m_metadataTab, SmallIcon("exifinfo"), i18n("Metadata"));
-    appendTab(m_colorTab, SmallIcon("format-fill-color"), i18n("Colors"));
-    appendTab(m_gpsTab, SmallIcon("applications-internet"), i18n("Geolocation"));
+    appendTab(m_propertiesTab, SmallIcon("document-properties"),   i18n("Properties"));
+    appendTab(m_metadataTab,   SmallIcon("exifinfo"),              i18n("Metadata"));
+    appendTab(m_colorTab,      SmallIcon("format-fill-color"),     i18n("Colors"));
+    appendTab(m_gpsTab,        SmallIcon("applications-internet"), i18n("Geolocation"));
 
     connect(this, SIGNAL(signalChangedTab(QWidget*)),
             this, SLOT(slotChangedTab(QWidget*)));
@@ -294,14 +294,32 @@ void ImagePropertiesSideBar::setImagePropertiesInformation(const KUrl& url)
     m_propertiesTab->setPhotoFlash(photoInfo.flash.isEmpty() ? unavailable : photoInfo.flash);
     m_propertiesTab->setPhotoWhiteBalance(photoInfo.whiteBalance.isEmpty() ? unavailable : photoInfo.whiteBalance);
 
+    // -- Video information ------------------------------------------
+
+    VideoInfoContainer videoInfo = metaData.getVideoInformation();
+
+    m_propertiesTab->setVideoInfoDisable(videoInfo.isEmpty());
+
+    m_propertiesTab->setVideoAspectRatio(videoInfo.aspectRatio.isEmpty()           ? unavailable : videoInfo.aspectRatio);
+    m_propertiesTab->setVideoDuration(videoInfo.duration.isEmpty()                 ? unavailable : videoInfo.duration);
+    m_propertiesTab->setVideoFrameRate(videoInfo.frameRate.isEmpty()               ? unavailable : videoInfo.frameRate);
+    m_propertiesTab->setVideoVideoCodec(videoInfo.videoCodec.isEmpty()             ? unavailable : videoInfo.videoCodec);
+    m_propertiesTab->setVideoAudioBitRate(videoInfo.audioBitRate.isEmpty()         ? unavailable : videoInfo.audioBitRate);
+    m_propertiesTab->setVideoAudioChannelType(videoInfo.audioChannelType.isEmpty() ? unavailable : videoInfo.audioChannelType);
+    m_propertiesTab->setVideoAudioCompressor(videoInfo.audioCompressor.isEmpty()   ? unavailable : videoInfo.audioCompressor);
+
+//    qDebug() << "\n\n\nTest\n\n\n" << videoInfo.aspectRatio;
+
     // -- Caption, ratings, tag information ---------------------
 
     CaptionsMap captions = metaData.getImageComments();
     QString caption;
+
     if (captions.contains("x-default"))
         caption = captions.value("x-default").caption;
     else if (!captions.isEmpty())
         caption = captions.begin().value().caption;
+
     m_propertiesTab->setCaption(caption);
 
     m_propertiesTab->setRating(metaData.getImageRating());

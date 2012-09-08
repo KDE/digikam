@@ -138,12 +138,14 @@ void ImageDialogPreview::showPreview(const KUrl& url)
 
         d->metaIface.load(d->currentURL.toLocalFile());
         PhotoInfoContainer info = d->metaIface.getPhotographInformation();
+        VideoInfoContainer videoInfo = d->metaIface.getVideoInformation();
 
         if (!info.isEmpty())
         {
             DToolTipStyleSheet cnt;
             QString identify("<qt><center>");
             QString make, model, dateTime, aperture, focalLength, exposureTime, sensitivity;
+            QString aspectRatio, audioBitRate, audioChannelType, audioCompressor, duration, frameRate, videoCodec;
 
             if (info.make.isEmpty())
             {
@@ -208,14 +210,84 @@ void ImageDialogPreview::showPreview(const KUrl& url)
                 sensitivity = i18n("%1 ISO", info.sensitivity);
             }
 
+            if (videoInfo.aspectRatio.isEmpty())
+            {
+                aspectRatio = cnt.unavailable;
+            }
+            else
+            {
+                aspectRatio = videoInfo.aspectRatio;
+            }
+
+            if (videoInfo.audioBitRate.isEmpty())
+            {
+                audioBitRate = cnt.unavailable;
+            }
+            else
+            {
+                audioBitRate = videoInfo.audioBitRate;
+            }
+
+            if (videoInfo.audioChannelType.isEmpty())
+            {
+                audioChannelType = cnt.unavailable;
+            }
+            else
+            {
+                audioChannelType = videoInfo.audioChannelType;
+            }
+
+            if (videoInfo.audioCompressor.isEmpty())
+            {
+                audioCompressor = cnt.unavailable;
+            }
+            else
+            {
+                audioCompressor = videoInfo.audioCompressor;
+            }
+
+            if (videoInfo.duration.isEmpty())
+            {
+                duration = cnt.unavailable;
+            }
+            else
+            {
+                duration = videoInfo.duration;
+            }
+
+            if (videoInfo.frameRate.isEmpty())
+            {
+                frameRate = cnt.unavailable;
+            }
+            else
+            {
+                frameRate = videoInfo.frameRate;
+            }
+
+            if (videoInfo.videoCodec.isEmpty())
+            {
+                videoCodec = cnt.unavailable;
+            }
+            else
+            {
+                videoCodec = videoInfo.videoCodec;
+            }
+
             identify += "<table cellspacing=0 cellpadding=0>";
-            identify += cnt.cellBeg + i18n("<i>Make:</i>")        + cnt.cellMid + make         + cnt.cellEnd;
-            identify += cnt.cellBeg + i18n("<i>Model:</i>")       + cnt.cellMid + model        + cnt.cellEnd;
-            identify += cnt.cellBeg + i18n("<i>Created:</i>")     + cnt.cellMid + dateTime     + cnt.cellEnd;
-            identify += cnt.cellBeg + i18n("<i>Aperture:</i>")    + cnt.cellMid + aperture     + cnt.cellEnd;
-            identify += cnt.cellBeg + i18n("<i>Focal:</i>")       + cnt.cellMid + focalLength  + cnt.cellEnd;
-            identify += cnt.cellBeg + i18n("<i>Exposure:</i>")    + cnt.cellMid + exposureTime + cnt.cellEnd;
-            identify += cnt.cellBeg + i18n("<i>Sensitivity:</i>") + cnt.cellMid + sensitivity  + cnt.cellEnd;
+            identify += cnt.cellBeg + i18n("<i>Make:</i>")              + cnt.cellMid + make                + cnt.cellEnd;
+            identify += cnt.cellBeg + i18n("<i>Model:</i>")             + cnt.cellMid + model               + cnt.cellEnd;
+            identify += cnt.cellBeg + i18n("<i>Created:</i>")           + cnt.cellMid + dateTime            + cnt.cellEnd;
+            identify += cnt.cellBeg + i18n("<i>Aperture:</i>")          + cnt.cellMid + aperture            + cnt.cellEnd;
+            identify += cnt.cellBeg + i18n("<i>Focal:</i>")             + cnt.cellMid + focalLength         + cnt.cellEnd;
+            identify += cnt.cellBeg + i18n("<i>Exposure:</i>")          + cnt.cellMid + exposureTime        + cnt.cellEnd;
+            identify += cnt.cellBeg + i18n("<i>Sensitivity:</i>")       + cnt.cellMid + sensitivity         + cnt.cellEnd;
+            identify += cnt.cellBeg + i18n("<i>AspectRatio:</i>")       + cnt.cellMid + aspectRatio         + cnt.cellEnd;
+            identify += cnt.cellBeg + i18n("<i>AudioBitRate:</i>")      + cnt.cellMid + audioBitRate        + cnt.cellEnd;
+            identify += cnt.cellBeg + i18n("<i>AudioChannelType:</i>")  + cnt.cellMid + audioChannelType    + cnt.cellEnd;
+            identify += cnt.cellBeg + i18n("<i>AudioCompressor:</i>")   + cnt.cellMid + audioCompressor     + cnt.cellEnd;
+            identify += cnt.cellBeg + i18n("<i>Duration:</i>")          + cnt.cellMid + duration            + cnt.cellEnd;
+            identify += cnt.cellBeg + i18n("<i>FrameRate:</i>")         + cnt.cellMid + frameRate           + cnt.cellEnd;
+            identify += cnt.cellBeg + i18n("<i>VideoCodec:</i>")        + cnt.cellMid + videoCodec          + cnt.cellEnd;
             identify += "</table></center></qt>";
 
             d->infoLabel->setText(identify);
