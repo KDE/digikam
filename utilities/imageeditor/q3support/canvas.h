@@ -87,15 +87,14 @@ public:
     double snapZoom(double z) const;
     void   setZoomFactorSnapped(double zoom);
 
-    double zoomMax() const;
-    double zoomMin() const;
-
     void   setZoomFactor(double z);
     double zoomFactor() const;
 
     void   setFitToWindow(bool enable);
     bool   fitToWindow() const;
 
+    double zoomMax() const;
+    double zoomMin() const;
     bool   maxZoom() const;
     bool   minZoom() const;
 
@@ -181,11 +180,10 @@ private:
 
     QRect  calcSelectedArea()   const;
     double calcAutoZoomFactor() const;
+
     void   updateAutoZoom();
     void   updateContentsSize(bool deleteRubber);
-
     void   paintViewport(const QRect& er, bool antialias);
-
     void   reset();
 
 private Q_SLOTS:
