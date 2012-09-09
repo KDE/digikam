@@ -14,3 +14,11 @@ ImagePreviewItem : it's a derivated class from GraphicsDImgItem, which define ca
 To port ImageRegionWidget to model-view, a new class must be derivated from GraphicsDImgView and a canvas painting implementation must be hosted to
 a new dedicated class based on ImagePreviewItem. A similar port have be done with image editor RawPreview class which is the preview 
 implmentation of editor RAW file import tool.
+
+Port image editor Canvas to Qt4 model/view
+------------------------------------------------------
+
+This part is more complex to do. Also, i think that we must use GraphicsDImgView here, but we need more
+investigations. This is the core image editor canvas view implementation. The best way will be to do something 
+common between RawPreview, ImageRegionWidget, and Canvas, as an intermediary class down than GraphicsDImgView including
+shared methods used these 3 sub-classes...
