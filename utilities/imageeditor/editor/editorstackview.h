@@ -56,25 +56,24 @@ public:
     EditorStackView(QWidget* const parent = 0);
     ~EditorStackView();
 
-    void    setCanvas(Canvas* const canvas);
-    Canvas* canvas() const;
+    void     setCanvas(Canvas* const canvas);
+    Canvas*  canvas() const;
 
     void     setToolView(QWidget* const view);
     QWidget* toolView() const;
 
-    int  viewMode() const;
-    void setViewMode(int mode);
+    int      viewMode() const;
+    void     setViewMode(int mode);
 
-    void increaseZoom();
-    void decreaseZoom();
-    void toggleFitToWindow();
-    void fitToSelect();
-    void zoomTo100Percent();
+    void     increaseZoom();
+    void     decreaseZoom();
+    void     toggleFitToWindow();
+    void     fitToSelect();
+    void     zoomTo100Percent();
 
-    double zoomMax() const;
-    double zoomMin() const;
-
-    bool isZoomablePreview() const;
+    double   zoomMax()           const;
+    double   zoomMin()           const;
+    bool     isZoomablePreview() const;
 
 Q_SIGNALS:
 
