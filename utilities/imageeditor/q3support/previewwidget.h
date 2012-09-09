@@ -143,9 +143,9 @@ protected:
     virtual void viewportPaintExtraData() {};
     virtual void zoomFactorChanged(double zoom);
 
-    virtual int  previewWidth() = 0;
-    virtual int  previewHeight() = 0;
-    virtual bool previewIsNull() = 0;
+    virtual int  previewWidth() const  = 0;
+    virtual int  previewHeight() const = 0;
+    virtual bool previewIsNull() const = 0;
     virtual void resetPreview() = 0;
     virtual QImage previewToQImage() const = 0;
     virtual void paintPreview(QPixmap* pix, int sx, int sy, int sw, int sh) = 0;

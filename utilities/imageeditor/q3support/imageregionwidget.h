@@ -99,7 +99,7 @@ private:
     /** To get image region including original or/and target area depending of separate view mode.
         The region is given using not scaled image unit.
      */
-    QRect  getOriginalImageRegion() const;
+    QRect  getOriginalImageRegion()      const;
 
     QRect  getLocalImageRegionToRender() const;
 
@@ -111,9 +111,9 @@ private:
     void   contentsMousePressEvent(QMouseEvent*);
     void   contentsMouseReleaseEvent(QMouseEvent*);
 
-    int    previewWidth();
-    int    previewHeight();
-    bool   previewIsNull();
+    int    previewWidth()  const;
+    int    previewHeight() const;
+    bool   previewIsNull() const;
     void   resetPreview();
     QImage previewToQImage() const;
 

@@ -115,17 +115,17 @@ ImageRegionWidget::~ImageRegionWidget()
     delete d;
 }
 
-int ImageRegionWidget::previewWidth()
+int ImageRegionWidget::previewWidth() const
 {
     return d->image.width();
 }
 
-int ImageRegionWidget::previewHeight()
+int ImageRegionWidget::previewHeight() const
 {
     return d->image.height();
 }
 
-bool ImageRegionWidget::previewIsNull()
+bool ImageRegionWidget::previewIsNull() const
 {
     return d->image.isNull();
 }
