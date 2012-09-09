@@ -22,3 +22,5 @@ This part is more complex to do. Also, i think that we must use GraphicsDImgView
 investigations. This is the core image editor canvas view implementation. The best way will be to do something 
 common between RawPreview, ImageRegionWidget, and Canvas, as an intermediary class down than GraphicsDImgView including
 shared methods used these 3 sub-classes...
+
+Note : Canvas has never been ported to PreviewWidget, dur to lack of time, but in past i planed to do it. All API are very similar.
