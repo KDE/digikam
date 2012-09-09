@@ -51,9 +51,6 @@ public:
     PreviewWidget(QWidget* const parent=0);
     ~PreviewWidget();
 
-    void   setZoomFactor(double z);
-    void   setZoomFactor(double z, bool centerView);
-    void   setZoomFactorSnapped(double z);
     void   fitToWindow();
     bool   isFitToWindow() const;
     void   toggleFitToWindow();
@@ -63,13 +60,16 @@ public:
     int    zoomHeight() const;
     bool   maxZoom()    const;
     bool   minZoom()    const;
-    double snapZoom(double zoom);
-
     double zoomFactor() const;
-    double zoomMax() const;
-    double zoomMin() const;
+    double zoomMax()    const;
+    double zoomMin()    const;
+
+    double snapZoom(double zoom);
     void   setZoomMax(double z);
     void   setZoomMin(double z);
+    void   setZoomFactor(double z);
+    void   setZoomFactor(double z, bool centerView);
+    void   setZoomFactorSnapped(double z);
 
     void   setBackgroundColor(const QColor& color);
 
@@ -101,6 +101,7 @@ protected Q_SLOTS:
 
     void slotCornerButtonPressed();
     void slotPanIconHiden();
+
     virtual void slotPanIconSelectionMoved(const QRect&, bool);
     virtual void slotContentTakeFocus();
     virtual void slotContentLeaveFocus();
@@ -127,17 +128,7 @@ protected:
     void   continuePanning(const QPoint& pos);
     void   finishPanning();
 
-    virtual void setContentsSize();
-    virtual void viewportPaintExtraData() {};
-    virtual int  previewWidth()=0;
-    virtual int  previewHeight()=0;
-    virtual bool previewIsNull()=0;
-    virtual void resetPreview()=0;
-    virtual QImage previewToQImage() const =0;
-    virtual void paintPreview(QPixmap* pix, int sx, int sy, int sw, int sh)=0;
-    virtual void zoomFactorChanged(double zoom);
-
-    // Re-implemented from parent class.
+    // Re-implemented from parent Qt class.
     virtual void resizeEvent(QResizeEvent*);
     virtual void viewportPaintEvent(QPaintEvent*);
     virtual void contentsMouseDoubleClickEvent(QMouseEvent*);
@@ -147,6 +138,17 @@ protected:
     virtual void contentsWheelEvent(QWheelEvent*);
     virtual void keyPressEvent(QKeyEvent*);
     virtual void keyReleaseEvent(QKeyEvent*);
+
+    virtual void setContentsSize();
+    virtual void viewportPaintExtraData() {};
+    virtual void zoomFactorChanged(double zoom);
+
+    virtual int  previewWidth() = 0;
+    virtual int  previewHeight() = 0;
+    virtual bool previewIsNull() = 0;
+    virtual void resetPreview() = 0;
+    virtual QImage previewToQImage() const = 0;
+    virtual void paintPreview(QPixmap* pix, int sx, int sy, int sw, int sh) = 0;
 
 private:
 
