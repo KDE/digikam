@@ -95,57 +95,18 @@ private:
     // A color is represented in RGB value (e.g. 0xFFFFFF is white color).
     // But R, G and B values has 256 values to be used so, this function analyzes
     // the value and limits to this range.
-    inline int LimitValues8(int ColorValue)
-    {
-        if (ColorValue > 255)
-        {
-            ColorValue = 255;
-        }
+    inline int  limitValues8(int ColorValue);
 
-        if (ColorValue < 0)
-        {
-            ColorValue = 0;
-        }
+    inline int  limitValues16(int ColorValue);
 
-        return ColorValue;
-    };
+    inline bool isInside (int Width, int Height, int X, int Y);
 
-    inline int LimitValues16(int ColorValue)
-    {
-        if (ColorValue > 65535)
-        {
-            ColorValue = 65535;
-        }
-
-        if (ColorValue < 0)
-        {
-            ColorValue = 0;
-        }
-
-        return ColorValue;
-    };
-
-    inline bool IsInside (int Width, int Height, int X, int Y)
-    {
-        bool bIsWOk = ((X < 0) ? false : (X >= Width ) ? false : true);
-        bool bIsHOk = ((Y < 0) ? false : (Y >= Height) ? false : true);
-        return (bIsWOk && bIsHOk);
-    };
-
-    inline int Offset(int Width, int X, int Y, int bytesDepth)
-    {
-        return (Y * Width * bytesDepth + X * bytesDepth);
-    };
+    inline int  pixelOffset(int Width, int X, int Y, int bytesDepth);
 
 private:
 
-    int                   m_drop;
-    int                   m_amount;
-    int                   m_coeff;
-
-    QRect                 m_selection;
-
-    RandomNumberGenerator m_generator;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam
