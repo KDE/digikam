@@ -1301,11 +1301,6 @@ void Canvas::setBackgroundColor(const QColor& color)
     viewport()->update();
 }
 
-void Canvas::resizeImage(int w, int h)
-{
-    d->im->resize(w, h);
-}
-
 void Canvas::setICCSettings(const ICCSettingsContainer& cmSettings)
 {
     ICCSettingsContainer old = d->im->getICCSettings();

@@ -1127,12 +1127,6 @@ void DImgInterface::crop(int x, int y, int w, int h)
                        new UndoActionIrreversible(this, "Crop"));
 }
 
-void DImgInterface::resize(int w, int h)
-{
-    applyBuiltinFilter(DImgBuiltinFilter(DImgBuiltinFilter::Resize, QSize(w, h)),
-                       new UndoActionIrreversible(this, "Resize"));
-}
-
 void DImgInterface::convertDepth(int depth)
 {
     applyBuiltinFilter(DImgBuiltinFilter(depth == 32 ? DImgBuiltinFilter::ConvertTo8Bit : DImgBuiltinFilter::ConvertTo16Bit),

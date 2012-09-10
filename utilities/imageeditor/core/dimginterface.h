@@ -138,9 +138,9 @@ public:
     void    getSelectedArea(int& x, int& y, int& w, int& h);
 
     void    crop(int x, int y, int w, int h);
-    void    resize(int w, int h);
     // -----------------------------------------------------------------------------
 
+    DImg*   getImg()      const;
     bool    imageValid()  const;
     int     width()       const;
     int     height()      const;
@@ -160,8 +160,6 @@ public:
     void    flipVert();
 
     void    convertDepth(int depth);
-
-    DImg*   getImg() const;
 
     void   putIccProfile(const IccProfile& profile);
 
