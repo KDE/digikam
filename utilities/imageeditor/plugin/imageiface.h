@@ -57,15 +57,15 @@ public:
     explicit ImageIface(const QSize& size = QSize(0, 0));
     ~ImageIface();
 
-    /** Return 'true' if the preview is rendered using the current selection in editor.
-     *  Return 'false' if the preview is rendered using the full image in editor.
-     */
-    bool previewType() const;
-
     /** Use this method to use the current selection in editor instead the full
      *  image to render the preview.
      */
     void setPreviewType(bool useSelection = false);
+
+    /** Return 'true' if the preview is rendered using the current selection in editor.
+     *  Return 'false' if the preview is rendered using the full image in editor.
+     */
+    bool previewType()                      const;
 
     /** Sets preview size and returns new preview as with getPreview.
      *  The parameters are only hints, previewSize() may differ from size.
@@ -74,21 +74,21 @@ public:
 
     /** Methods to get/set preview image information.
      */
-    QSize previewSize()        const;
-    bool  previewHasAlpha()    const;
-    bool  previewSixteenBit()  const;
+    QSize previewSize()                     const;
+    bool  previewHasAlpha()                 const;
+    bool  previewSixteenBit()               const;
 
     /** Return a DImg object representing the preview image.
      */
-    DImg  preview() const;
+    DImg  preview()                         const;
 
     /** Return current image selection position and size into original image coordinates.
      */
-    QRect selectionRect() const;
+    QRect selectionRect()                   const;
 
     /** Return a DImg object representing the current original image selection.
      */
-    DImg  selection() const;
+    DImg  selection()                       const;
 
     /** Get colors from original, (unchanged) preview
      *  or target preview (set by putPreviewImage) image.
