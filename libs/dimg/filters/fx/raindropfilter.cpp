@@ -52,22 +52,13 @@ RainDropFilter::RainDropFilter(QObject* const parent)
 }
 
 RainDropFilter::RainDropFilter(DImg* const orgImage, QObject* const parent, int drop,
-                               int amount, int coeff, QRect* const selection)
+                               int amount, int coeff, const QRect& selection)
     : DImgThreadedFilter(orgImage, parent, "RainDrop")
 {
-    m_drop   = drop;
-    m_amount = amount;
-    m_coeff  = coeff;
-
-    m_selectedX = m_selectedY = m_selectedW = m_selectedH = 0;
-
-    if (selection)
-    {
-        m_selectedX = selection->left();
-        m_selectedY = selection->top();
-        m_selectedW = selection->width();
-        m_selectedH = selection->height();
-    }
+    m_drop      = drop;
+    m_amount    = amount;
+    m_coeff     = coeff;
+    m_selection = selection;
 
     m_generator.seedByTime();
 
@@ -89,19 +80,19 @@ void RainDropFilter::filterImage()
     // If we have a region selection in image, use it to apply the filter modification around,
     // else, applied the filter on the full image.
 
-    if (m_selectedW && m_selectedH)
+    if (!m_selection.size().isNull())
     {
         DImg zone1, zone2, zone3, zone4,
              zone1Dest, zone2Dest, zone3Dest, zone4Dest,
              selectedImg;
-        selectedImg = m_orgImage.copy(m_selectedX, m_selectedY, m_selectedW, m_selectedH);
+        selectedImg = m_orgImage.copy(m_selection);
 
         // Cut the original image in 4 areas without clipping region.
 
-        zone1 = m_orgImage.copy(0, 0, m_selectedX, w);
-        zone2 = m_orgImage.copy(m_selectedX, 0, m_selectedX + m_selectedW, m_selectedY);
-        zone3 = m_orgImage.copy(m_selectedX, m_selectedY + m_selectedH, m_selectedX + m_selectedW, h);
-        zone4 = m_orgImage.copy(m_selectedX + m_selectedW, 0, w, h);
+        zone1 = m_orgImage.copy(0, 0, m_selection.x(), w);
+        zone2 = m_orgImage.copy(m_selection.x(), 0, m_selection.x() + m_selection.width(), m_selection.y());
+        zone3 = m_orgImage.copy(m_selection.x(), m_selection.y() + m_selection.height(), m_selection.x() + m_selection.width(), h);
+        zone4 = m_orgImage.copy(m_selection.x() + m_selection.width(), 0, w, h);
 
         zone1Dest = DImg(zone1.width(), zone1.height(), zone1.sixteenBit(), zone1.hasAlpha());
         zone2Dest = DImg(zone2.width(), zone2.height(), zone2.sixteenBit(), zone2.hasAlpha());
@@ -117,11 +108,11 @@ void RainDropFilter::filterImage()
 
         // Build the target image.
 
-        m_destImage.bitBltImage(&zone1Dest,   0, 0);
-        m_destImage.bitBltImage(&zone2Dest,   m_selectedX, 0);
-        m_destImage.bitBltImage(&zone3Dest,   m_selectedX, m_selectedY + m_selectedH);
-        m_destImage.bitBltImage(&zone4Dest,   m_selectedX + m_selectedW, 0);
-        m_destImage.bitBltImage(&selectedImg, m_selectedX, m_selectedY);
+        m_destImage.bitBltImage(&zone1Dest,   0,                                     0);
+        m_destImage.bitBltImage(&zone2Dest,   m_selection.x(),                       0);
+        m_destImage.bitBltImage(&zone3Dest,   m_selection.x(),                       m_selection.y() + m_selection.height());
+        m_destImage.bitBltImage(&zone4Dest,   m_selection.x() + m_selection.width(), 0);
+        m_destImage.bitBltImage(&selectedImg, m_selection.x(),                       m_selection.y());
     }
     else
     {
@@ -147,7 +138,7 @@ void RainDropFilter::filterImage()
  *                     will be applied, after this, a shadow will be applied too.
  *                     and after this, a blur function will finish the effect.
  */
-void RainDropFilter::rainDropsImage(DImg* orgImage, DImg* destImage, int MinDropSize, int MaxDropSize,
+void RainDropFilter::rainDropsImage(DImg* const orgImage, DImg* const destImage, int MinDropSize, int MaxDropSize,
                                     int Amount, int Coeff, bool bLimitRange, int progressMin, int progressMax)
 {
     bool   bResp;
@@ -216,8 +207,8 @@ void RainDropFilter::rainDropsImage(DImg* orgImage, DImg* destImage, int MinDrop
     }
 }
 
-bool RainDropFilter::CreateRainDrop(uchar* pBits, int Width, int Height, bool sixteenBit, int bytesDepth,
-                                    uchar* pResBits, uchar* pStatusBits,
+bool RainDropFilter::CreateRainDrop(uchar* const pBits, int Width, int Height, bool sixteenBit, int bytesDepth,
+                                    uchar* const pResBits, uchar* const pStatusBits,
                                     int X, int Y, int DropSize, double Coeff, bool bLimitRange)
 {
     register int w, h, nw1, nh1, nw2, nh2;
@@ -450,7 +441,7 @@ bool RainDropFilter::CreateRainDrop(uchar* pBits, int Width, int Height, bool si
     return true;
 }
 
-bool RainDropFilter::CanBeDropped(int Width, int Height, uchar* pStatusBits, int X, int Y,
+bool RainDropFilter::CanBeDropped(int Width, int Height, uchar* const pStatusBits, int X, int Y,
                                   int DropSize, bool bLimitRange)
 {
     register int w, h, i = 0;
@@ -487,7 +478,7 @@ bool RainDropFilter::CanBeDropped(int Width, int Height, uchar* pStatusBits, int
     return true;
 }
 
-bool RainDropFilter::SetDropStatusBits(int Width, int Height, uchar* pStatusBits,
+bool RainDropFilter::SetDropStatusBits(int Width, int Height, uchar* const pStatusBits,
                                        int X, int Y, int DropSize)
 {
     register int w, h, i = 0;
@@ -518,13 +509,13 @@ FilterAction RainDropFilter::filterAction()
     FilterAction action(FilterIdentifier(), CurrentVersion());
     action.setDisplayableName(DisplayableName());
 
-    action.addParameter("amount", m_amount);
-    action.addParameter("coeff", m_coeff);
-    action.addParameter("drop", m_drop);
-    action.addParameter("selectedH", m_selectedH);
-    action.addParameter("selectedW", m_selectedW);
-    action.addParameter("selectedX", m_selectedX);
-    action.addParameter("selectedY", m_selectedY);
+    action.addParameter("amount",     m_amount);
+    action.addParameter("coeff",      m_coeff);
+    action.addParameter("drop",       m_drop);
+    action.addParameter("selectedH",  m_selection.height());
+    action.addParameter("selectedW",  m_selection.width());
+    action.addParameter("selectedX",  m_selection.x());
+    action.addParameter("selectedY",  m_selection.y());
     action.addParameter("randomSeed", m_generator.currentSeed());
 
     return action;
@@ -532,13 +523,15 @@ FilterAction RainDropFilter::filterAction()
 
 void RainDropFilter::readParameters(const FilterAction& action)
 {
+    int x=0, y=0, w=0, h=0;
     m_amount    = action.parameter("amount").toInt();
     m_coeff     = action.parameter("coeff").toInt();
     m_drop      = action.parameter("drop").toInt();
-    m_selectedH = action.parameter("selectedH").toInt();
-    m_selectedW = action.parameter("selectedW").toInt();
-    m_selectedX = action.parameter("selectedX").toInt();
-    m_selectedY = action.parameter("selectedY").toInt();
+    h           = action.parameter("selectedH").toInt();
+    w           = action.parameter("selectedW").toInt();
+    x           = action.parameter("selectedX").toInt();
+    y           = action.parameter("selectedY").toInt();
+    m_selection = QRect(x, y, w, h);
     m_generator.seed(action.parameter("randomSeed").toUInt());
 }
 

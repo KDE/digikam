@@ -45,7 +45,7 @@ public:
 
     explicit RainDropFilter(QObject* const parent = 0);
     explicit RainDropFilter(DImg* const orgImage, QObject* const parent=0, int drop=80,
-                            int amount=150, int coeff=30, QRect* const selection=0L);
+                            int amount=150, int coeff=30, const QRect& selection=QRect(0, 0, 0, 0));
     ~RainDropFilter();
 
     static QString          FilterIdentifier()
@@ -81,16 +81,16 @@ private:
 
     void filterImage();
 
-    void rainDropsImage(DImg* orgImage, DImg* destImage, int MinDropSize, int MaxDropSize,
+    void rainDropsImage(DImg* const orgImage, DImg* const destImage, int MinDropSize, int MaxDropSize,
                         int Amount, int Coeff, bool bLimitRange, int progressMin, int progressMax);
 
-    bool CreateRainDrop(uchar* pBits, int Width, int Height, bool sixteenBit, int bytesDepth,
-                        uchar* pResBits, uchar* pStatusBits,
+    bool CreateRainDrop(uchar* const pBits, int Width, int Height, bool sixteenBit, int bytesDepth,
+                        uchar* const pResBits, uchar* const pStatusBits,
                         int X, int Y, int DropSize, double Coeff, bool bLimitRange);
 
-    bool CanBeDropped(int Width, int Height, uchar* pStatusBits, int X, int Y, int DropSize, bool bLimitRange);
+    bool CanBeDropped(int Width, int Height, uchar* const pStatusBits, int X, int Y, int DropSize, bool bLimitRange);
 
-    bool SetDropStatusBits(int Width, int Height, uchar* pStatusBits, int X, int Y, int DropSize);
+    bool SetDropStatusBits(int Width, int Height, uchar* const pStatusBits, int X, int Y, int DropSize);
 
     // A color is represented in RGB value (e.g. 0xFFFFFF is white color).
     // But R, G and B values has 256 values to be used so, this function analyzes
@@ -143,10 +143,7 @@ private:
     int                   m_amount;
     int                   m_coeff;
 
-    int                   m_selectedX;
-    int                   m_selectedY;
-    int                   m_selectedW;
-    int                   m_selectedH;
+    QRect                 m_selection;
 
     RandomNumberGenerator m_generator;
 };
