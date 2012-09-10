@@ -1362,12 +1362,12 @@ void Canvas::slotCopy()
 
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
-    QScopedArrayPointer<uchar> data(d->im->getImageSelection());
-    DImg selDImg        = DImg(sel.width(), sel.height(), d->im->sixteenBit(), d->im->hasAlpha(), data.data());
+    DImg selDImg        = d->im->getImgSelection();
     QImage selImg       = selDImg.copyQImage();
     QMimeData* mimeData = new QMimeData();
     mimeData->setImageData(selImg);
     QApplication::clipboard()->setMimeData(mimeData, QClipboard::Clipboard);
+
     QApplication::restoreOverrideCursor();
 }
 

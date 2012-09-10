@@ -135,17 +135,18 @@ public:
                           int antialias);
     // -----------------------------------------------------------------------------
 
-    DImg*   getImg()      const;
-    bool    imageValid()  const;
-    int     width()       const;
-    int     height()      const;
-    int     origWidth()   const;
-    int     origHeight()  const;
-    int     bytesDepth()  const;
-    bool    hasAlpha()    const;
-    bool    sixteenBit()  const;
-    bool    exifRotated() const;
-    bool    isReadOnly()  const;
+    DImg    getImgSelection() const;
+    DImg*   getImg()          const;
+    bool    imageValid()      const;
+    int     width()           const;
+    int     height()          const;
+    int     origWidth()       const;
+    int     origHeight()      const;
+    int     bytesDepth()      const;
+    bool    hasAlpha()        const;
+    bool    sixteenBit()      const;
+    bool    exifRotated()     const;
+    bool    isReadOnly()      const;
 
     void    rotate90();
     void    rotate180();
@@ -164,7 +165,6 @@ public:
 
     // TODO port to DImg ---------------------------------------------------
     void   putImage(const QString& caller, const FilterAction& action, uchar* const data, int w, int h, bool sixteenBit);
-    uchar* getImageSelection() const;
     void   putImageSelection(const QString& caller, const FilterAction& action, uchar* const data);
     // ---------------------------------------------------------------------
 
@@ -177,7 +177,7 @@ public:
     /** Convert a DImg image to a pixmap for screen using color
      *  managed view if necessary.
      */
-    QPixmap               convertToPixmap(DImg& img) const;
+    QPixmap               convertToPixmap(DImg& img)  const;
 
     IccProfile            getEmbeddedICC()            const;
     KExiv2Data            getMetadata()               const;

@@ -1242,20 +1242,21 @@ void DImgInterface::setFileOriginData(const QVariant& data)
     emit signalFileOriginChanged(getImageFilePath());
 }
 
-uchar* DImgInterface::getImageSelection() const
+DImg DImgInterface::getImgSelection() const
 {
     if (!d->selW || !d->selH)
     {
-        return 0;
+        return DImg();
     }
 
     if (!d->image.isNull())
     {
         DImg im = d->image.copy(d->selX, d->selY, d->selW, d->selH);
-        return im.stripImageData();
+        im.detach();
+        return im;
     }
 
-    return 0;
+    return DImg();
 }
 
 void DImgInterface::putImageSelection(const QString& caller, const FilterAction& action, uchar* const data)

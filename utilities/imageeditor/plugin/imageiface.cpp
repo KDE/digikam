@@ -123,13 +123,7 @@ uchar* ImageIface::Private::getPreviewImage()
         }
         else
         {
-            QRect sel = DImgInterface::defaultInterface()->getSelectedArea();
-            bool  s   = DImgInterface::defaultInterface()->sixteenBit();
-            bool  a   = DImgInterface::defaultInterface()->hasAlpha();
-
-            QScopedArrayPointer<uchar> data(DImgInterface::defaultInterface()->getImageSelection());
-
-            im        = new DImg(sel.width(), sel.height(), s, a, data.data(), true);
+            im = new DImg(DImgInterface::defaultInterface()->getImgSelection());
 
             if (!im)
             {
@@ -249,8 +243,7 @@ DImg* ImageIface::original() const
 
 DImg ImageIface::selection() const
 {
-    return DImg(selectionRect().width(), selectionRect().height(), originalSixteenBit(), originalHasAlpha(),
-                DImgInterface::defaultInterface()->getImageSelection(), false);
+    return DImgInterface::defaultInterface()->getImgSelection();
 }
 
 void ImageIface::putPreviewIccProfile(const IccProfile& profile)
