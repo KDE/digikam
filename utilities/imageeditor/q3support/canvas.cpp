@@ -230,7 +230,6 @@ Canvas::~Canvas()
 {
     delete d->tileTmpPix;
     delete d->im;
-
     delete d->rubber;
     delete d;
 }
@@ -446,7 +445,7 @@ void Canvas::updateContentsSize(bool deleteRubber)
     if (visibleWidth() > wZ || visibleHeight() > hZ)
     {
         // Center the image
-        int centerx   = contentsRect().width() / 2;
+        int centerx   = contentsRect().width()  / 2;
         int centery   = contentsRect().height() / 2;
         int xoffset   = int(centerx - wZ / 2);
         int yoffset   = int(centery - hZ / 2);
@@ -506,8 +505,8 @@ void Canvas::resizeEvent(QResizeEvent* e)
 void Canvas::viewportPaintEvent(QPaintEvent* e)
 {
     QRect er(e->rect());
-    er = QRect(qMax(er.x() - 1, 0),
-               qMax(er.y() - 1, 0),
+    er = QRect(qMax(er.x()      - 1, 0),
+               qMax(er.y()      - 1, 0),
                qMin(er.width()  + 2, contentsRect().width()),
                qMin(er.height() + 2, contentsRect().height()));
 
@@ -530,10 +529,10 @@ void Canvas::paintViewport(const QRect& er, bool antialias)
         QRect pr = QRect(cr.x() - d->pixmapRect.x(), cr.y() - d->pixmapRect.y(),
                          cr.width(), cr.height());
 
-        int x1 = (int)floor((double)pr.x()      / (double)d->tileSize) * d->tileSize;
-        int y1 = (int)floor((double)pr.y()      / (double)d->tileSize) * d->tileSize;
-        int x2 = (int)ceilf((double)pr.right()  / (double)d->tileSize) * d->tileSize;
-        int y2 = (int)ceilf((double)pr.bottom() / (double)d->tileSize) * d->tileSize;
+        int x1   = (int)floor((double)pr.x()      / (double)d->tileSize) * d->tileSize;
+        int y1   = (int)floor((double)pr.y()      / (double)d->tileSize) * d->tileSize;
+        int x2   = (int)ceilf((double)pr.right()  / (double)d->tileSize) * d->tileSize;
+        int y2   = (int)ceilf((double)pr.bottom() / (double)d->tileSize) * d->tileSize;
 
         QPixmap pix(d->tileSize, d->tileSize);
         int sx, sy, sw, sh;
@@ -854,23 +853,23 @@ void Canvas::contentsMouseMoveEvent(QMouseEvent* e)
 
         QRect r(d->rubber->rubberBandAreaOnContents());
 
-        QRect lt(r.x() - halfSA,           r.y() - halfSA,            d->snapArea,            d->snapArea);
+        QRect lt(r.x() - halfSA,             r.y() - halfSA,              d->snapArea,              d->snapArea);
 
-        QRect rt(r.x() + r.width() - halfSA, r.y() - halfSA,            d->snapArea,            d->snapArea);
+        QRect rt(r.x() + r.width() - halfSA, r.y() - halfSA,              d->snapArea,              d->snapArea);
 
-        QRect lb(r.x() - halfSA,           r.y() + r.height() - halfSA, d->snapArea,            d->snapArea);
+        QRect lb(r.x() - halfSA,             r.y() + r.height() - halfSA, d->snapArea,              d->snapArea);
 
-        QRect rb(r.x() + r.width() - halfSA, r.y() + r.height() - halfSA, d->snapArea,            d->snapArea);
+        QRect rb(r.x() + r.width() - halfSA, r.y() + r.height() - halfSA, d->snapArea,              d->snapArea);
 
-        QRect ls(r.x() - halfSA,           r.y() + halfSA,            d->snapArea,            r.height() - d->snapArea);
+        QRect ls(r.x() - halfSA,             r.y() + halfSA,              d->snapArea,              r.height() - d->snapArea);
 
-        QRect rs(r.x() + r.width() - halfSA, r.y() + halfSA,            d->snapArea,            r.height() - d->snapArea);
+        QRect rs(r.x() + r.width() - halfSA, r.y() + halfSA,              d->snapArea,              r.height() - d->snapArea);
 
-        QRect ts(r.x() + halfSA,           r.y() - halfSA,            r.width() - d->snapArea,  d->snapArea);
+        QRect ts(r.x() + halfSA,             r.y() - halfSA,              r.width() - d->snapArea,  d->snapArea);
 
-        QRect bs(r.x() + halfSA,           r.y() + r.height() - halfSA, r.width() - d->snapArea,  d->snapArea);
+        QRect bs(r.x() + halfSA,             r.y() + r.height() - halfSA, r.width() - d->snapArea,  d->snapArea);
 
-        QRect dg(r.x() + halfSA,           r.y() + halfSA,            r.width() - d->snapArea,  r.height() - d->snapArea);
+        QRect dg(r.x() + halfSA,             r.y() + halfSA,              r.width() - d->snapArea,  r.height() - d->snapArea);
 
         d->ltActive   = false;
 
@@ -1446,8 +1445,8 @@ void Canvas::slotCornerButtonPressed()
         d->panIconPopup = 0;
     }
 
-    d->panIconPopup    = new KPopupFrame(this);
-    PanIconWidget* pan = new PanIconWidget(d->panIconPopup);
+    d->panIconPopup          = new KPopupFrame(this);
+    PanIconWidget* const pan = new PanIconWidget(d->panIconPopup);
 
     connect(pan, SIGNAL(signalSelectionMoved(QRect,bool)),
             this, SLOT(slotPanIconSelectionMoved(QRect,bool)));
