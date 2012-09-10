@@ -123,14 +123,13 @@ uchar* ImageIface::Private::getPreviewImage()
         }
         else
         {
-            int    x, y, w, h;
-            bool   s    = DImgInterface::defaultInterface()->sixteenBit();
-            bool   a    = DImgInterface::defaultInterface()->hasAlpha();
+            QRect sel = DImgInterface::defaultInterface()->getSelectedArea();
+            bool  s   = DImgInterface::defaultInterface()->sixteenBit();
+            bool  a   = DImgInterface::defaultInterface()->hasAlpha();
 
             QScopedArrayPointer<uchar> data(DImgInterface::defaultInterface()->getImageSelection());
 
-            DImgInterface::defaultInterface()->getSelectedArea(x, y, w, h);
-            im = new DImg(w, h, s, a, data.data(), true);
+            im        = new DImg(sel.width(), sel.height(), s, a, data.data(), true);
 
             if (!im)
             {
@@ -298,9 +297,7 @@ bool ImageIface::originalHasAlpha() const
 
 QRect ImageIface::selectionRect() const
 {
-    int x, y, w, h;
-    DImgInterface::defaultInterface()->getSelectedArea(x, y, w, h);
-    return QRect(x, y, w, h);
+    return (DImgInterface::defaultInterface()->getSelectedArea());
 }
 
 void ImageIface::convertOriginalColorDepth(int depth)

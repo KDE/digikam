@@ -133,8 +133,6 @@ public:
                           int dx, int dy, int dw, int dh,
                           int mx, int my, int mw, int mh,
                           int antialias);
-
-    void    getSelectedArea(int& x, int& y, int& w, int& h);
     // -----------------------------------------------------------------------------
 
     DImg*   getImg()      const;
@@ -160,6 +158,7 @@ public:
     void    crop(const QRect& rect);
 
     void    setSelectedArea(const QRect& rect);
+    QRect   getSelectedArea() const;
 
     void   putIccProfile(const IccProfile& profile);
 

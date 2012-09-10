@@ -375,9 +375,7 @@ bool Canvas::isReadOnly() const
 
 QRect Canvas::getSelectedArea() const
 {
-    int x, y, w, h;
-    d->im->getSelectedArea(x, y, w, h);
-    return (QRect(x, y, w, h));
+    return (d->im->getSelectedArea());
 }
 
 QRect Canvas::visibleArea() const
@@ -466,12 +464,11 @@ void Canvas::updateContentsSize(bool deleteRubber)
 
     if (!deleteRubber && d->rubber->isActive())
     {
-        int xSel, ySel, wSel, hSel;
-        d->im->getSelectedArea(xSel, ySel, wSel, hSel);
-        xSel = (int)((xSel * d->tileSize) / floor(d->tileSize / d->zoom));
-        ySel = (int)((ySel * d->tileSize) / floor(d->tileSize / d->zoom));
-        wSel = (int)((wSel * d->tileSize) / floor(d->tileSize / d->zoom));
-        hSel = (int)((hSel * d->tileSize) / floor(d->tileSize / d->zoom));
+        QRect sel = d->im->getSelectedArea();
+        int xSel  = (int)((sel.x()      * d->tileSize) / floor(d->tileSize / d->zoom));
+        int ySel  = (int)((sel.y()      * d->tileSize) / floor(d->tileSize / d->zoom));
+        int wSel  = (int)((sel.width()  * d->tileSize) / floor(d->tileSize / d->zoom));
+        int hSel  = (int)((sel.height() * d->tileSize) / floor(d->tileSize / d->zoom));
         QRect rubberRect(xSel, ySel, wSel, hSel);
         rubberRect.translate(d->pixmapRect.x(), d->pixmapRect.y());
         d->rubber->setRectOnViewport(rubberRect);
@@ -1192,17 +1189,16 @@ void Canvas::setZoomFactor(double zoom)
 
 void Canvas::fitToSelect()
 {
-    int xSel, ySel, wSel, hSel;
-    d->im->getSelectedArea(xSel, ySel, wSel, hSel);
+    QRect sel = d->im->getSelectedArea();
 
-    if (wSel && hSel)
+    if (!sel.size().isNull())
     {
         // If selected area, use center of selection
         // and recompute zoom factor accordingly.
-        double cpx       = xSel + wSel / 2.0;
-        double cpy       = ySel + hSel / 2.0;
-        double srcWidth  = wSel;
-        double srcHeight = hSel;
+        double cpx       = sel.x() + sel.width()  / 2.0;
+        double cpy       = sel.y() + sel.height() / 2.0;
+        double srcWidth  = sel.width();
+        double srcHeight = sel.height();
         double dstWidth  = contentsRect().width();
         double dstHeight = contentsRect().height();
         d->zoom          = qMin(dstWidth / srcWidth, dstHeight / srcHeight);
@@ -1279,15 +1275,14 @@ void Canvas::slotFlipVert()
 
 void Canvas::slotCrop()
 {
-    int x, y, w, h;
-    d->im->getSelectedArea(x, y, w, h);
+    QRect sel = d->im->getSelectedArea();
 
-    if (!w && !h)   // No current selection.
+    if (sel.size().isNull())   // No current selection.
     {
         return;
     }
 
-    d->im->crop(QRect(x, y, w, h));
+    d->im->crop(sel);
 }
 
 void Canvas::setBackgroundColor(const QColor& color)
@@ -1358,10 +1353,9 @@ void Canvas::slotRedo(int steps)
 
 void Canvas::slotCopy()
 {
-    int x, y, w, h;
-    d->im->getSelectedArea(x, y, w, h);
+    QRect sel = d->im->getSelectedArea();
 
-    if (!w && !h)   // No current selection.
+    if (sel.size().isNull())   // No current selection.
     {
         return;
     }
@@ -1369,7 +1363,7 @@ void Canvas::slotCopy()
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
     QScopedArrayPointer<uchar> data(d->im->getImageSelection());
-    DImg selDImg        = DImg(w, h, d->im->sixteenBit(), d->im->hasAlpha(), data.data());
+    DImg selDImg        = DImg(sel.width(), sel.height(), d->im->sixteenBit(), d->im->hasAlpha(), data.data());
     QImage selImg       = selDImg.copyQImage();
     QMimeData* mimeData = new QMimeData();
     mimeData->setImageData(selImg);

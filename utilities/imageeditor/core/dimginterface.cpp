@@ -961,12 +961,9 @@ void DImgInterface::setSelectedArea(const QRect& rect)
     d->selH = rect.height();
 }
 
-void DImgInterface::getSelectedArea(int& x, int& y, int& w, int& h)
+QRect DImgInterface::getSelectedArea() const
 {
-    x = d->selX;
-    y = d->selY;
-    w = d->selW;
-    h = d->selH;
+    return (QRect(d->selX, d->selY, d->selW, d->selH));
 }
 
 void DImgInterface::paintOnDevice(QPaintDevice* const p,
