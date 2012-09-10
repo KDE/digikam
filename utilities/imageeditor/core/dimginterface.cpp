@@ -1121,9 +1121,9 @@ void DImgInterface::flipVert()
     applyReversibleBuiltinFilter(DImgBuiltinFilter(DImgBuiltinFilter::FlipVertically));
 }
 
-void DImgInterface::crop(int x, int y, int w, int h)
+void DImgInterface::crop(const QRect& rect)
 {
-    applyBuiltinFilter(DImgBuiltinFilter(DImgBuiltinFilter::Crop, QRect(x, y, w, h)),
+    applyBuiltinFilter(DImgBuiltinFilter(DImgBuiltinFilter::Crop, rect),
                        new UndoActionIrreversible(this, "Crop"));
 }
 

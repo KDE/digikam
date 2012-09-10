@@ -1287,7 +1287,7 @@ void Canvas::slotCrop()
         return;
     }
 
-    d->im->crop(x, y, w, h);
+    d->im->crop(QRect(x, y, w, h));
 }
 
 void Canvas::setBackgroundColor(const QColor& color)
