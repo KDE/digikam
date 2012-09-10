@@ -124,7 +124,6 @@ public:
     void    zoom(double val);
 
     // TODO port to QRect/QSize ---------------------------------------------------
-
     void    paintOnDevice(QPaintDevice* const p,
                           int sx, int sy, int sw, int sh,
                           int dx, int dy, int dw, int dh,
@@ -140,7 +139,6 @@ public:
 
     void    crop(int x, int y, int w, int h);
     void    resize(int w, int h);
-
     // -----------------------------------------------------------------------------
 
     bool    imageValid()  const;
@@ -168,14 +166,13 @@ public:
     void   putIccProfile(const IccProfile& profile);
 
     // TODO port to DImg ---------------------------------------------------
-
     void   putImage(const QString& caller, const FilterAction& action, uchar* const data, int w, int h, bool sixteenBit);
     uchar* getImageSelection() const;
     void   putImageSelection(const QString& caller, const FilterAction& action, uchar* const data);
-    /// For internal usage by UndoManager
-    void   setUndoImageData(const UndoMetadataContainer& c, uchar* const data, int w, int h, bool sixteenBit);
-
     // ---------------------------------------------------------------------
+
+    /// For internal usage by UndoManager
+    void   setUndoImg(const UndoMetadataContainer& c, const DImg& img);
 
     void   imageUndoChanged(const UndoMetadataContainer& c);
     void   setFileOriginData(const QVariant& data);
@@ -233,7 +230,10 @@ private:
                   bool setExifOrientationTag, const QString& mimeType,
                   const VersionFileOperation& operation, const QString& intendedFilePath);
 
+    // TODO port to DImg ---------------------------------------------------
     void   putImageData(uchar* const data, int w, int h, bool sixteenBit);
+    // ---------------------------------------------------------------------
+
     void   applyBuiltinFilter(const DImgBuiltinFilter& filter, UndoAction* const action);
     void   applyReversibleBuiltinFilter(const DImgBuiltinFilter& filter);
 

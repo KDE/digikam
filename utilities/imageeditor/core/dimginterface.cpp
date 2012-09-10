@@ -180,11 +180,11 @@ DImgInterface::UndoState::UndoState()
 DImgInterface::UndoState DImgInterface::undoState() const
 {
     UndoState state;
-    state.hasUndo = d->undoMan->anyMoreUndo();
-    state.hasRedo = d->undoMan->anyMoreRedo();
+    state.hasUndo            = d->undoMan->anyMoreUndo();
+    state.hasRedo            = d->undoMan->anyMoreRedo();
     state.hasUndoableChanges = !d->undoMan->isAtOrigin();
     // Includes the edit step performed by RAW import, which is not undoable
-    state.hasChanges = d->undoMan->hasChanges();
+    state.hasChanges         = d->undoMan->hasChanges();
 
     return state;
 }
@@ -1216,13 +1216,12 @@ void DImgInterface::putImageData(uchar* const data, int w, int h, bool sixteenBi
     d->image.putImageData(w, h, sixteenBit, d->image.hasAlpha(), data);
 }
 
-void DImgInterface::setUndoImageData(const UndoMetadataContainer& c,
-                                     uchar* const data, int w, int h, bool sixteenBit)
+void DImgInterface::setUndoImg(const UndoMetadataContainer& c, const DImg& img)
 {
     // called from UndoManager
     bool changesIcc = c.changesIccProfile(d->image);
 
-    putImageData(data, w, h, sixteenBit);
+    putImageData(img.bits(), img.width(), img.height(), img.sixteenBit());
     c.toImage(d->image);
 
     if (changesIcc)

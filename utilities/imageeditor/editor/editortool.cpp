@@ -395,7 +395,7 @@ DImgThreadedFilter* EditorToolThreaded::filter() const
     return d->threadedFilter;
 }
 
-void EditorToolThreaded::setFilter(DImgThreadedFilter* filter)
+void EditorToolThreaded::setFilter(DImgThreadedFilter* const filter)
 {
     delete d->threadedFilter;
     d->threadedFilter = filter;

@@ -63,9 +63,9 @@ public:
     EditorToolSettings*    toolSettings() const;
     FilterAction::Category toolCategory() const;
 
-    virtual void        setBackgroundColor(const QColor& bg);
-    virtual void        ICCSettingsChanged();
-    virtual void        exposureSettingsChanged();
+    virtual void setBackgroundColor(const QColor& bg);
+    virtual void ICCSettingsChanged();
+    virtual void exposureSettingsChanged();
 
 public Q_SLOTS:
 
@@ -153,7 +153,7 @@ public Q_SLOTS:
 protected:
 
     DImgThreadedFilter* filter() const;
-    void setFilter(DImgThreadedFilter* filter);
+    void setFilter(DImgThreadedFilter* const filter);
 
     /** If true, delete filter instance when preview or final rendering is processed.
         If false, filter instance will be managed outside for ex. with ContentAwareResizing tool.

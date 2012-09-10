@@ -363,7 +363,7 @@ void UndoManager::restoreSnapshot(int index, const UndoMetadataContainer& c)
 
     if (!img.isNull())
     {
-        d->dimgiface->setUndoImageData(c, img.bits(), img.width(), img.height(), img.sixteenBit());
+        d->dimgiface->setUndoImg(c, img);
     }
 }
 
