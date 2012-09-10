@@ -163,10 +163,7 @@ public:
 
     void    putIccProfile(const IccProfile& profile);
     void    putImgSelection(const QString& caller, const FilterAction& action, const DImg& img);
-
-    // TODO port to DImg ---------------------------------------------------
-    void   putImage(const QString& caller, const FilterAction& action, uchar* const data, int w, int h, bool sixteenBit);
-    // ---------------------------------------------------------------------
+    void    putImg(const QString& caller, const FilterAction& action, const DImg& img);
 
     /// For internal usage by UndoManager
     void   setUndoImg(const UndoMetadataContainer& c, const DImg& img);

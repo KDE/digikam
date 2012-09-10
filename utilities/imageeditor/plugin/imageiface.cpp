@@ -432,27 +432,13 @@ void ImageIface::putPreview(const DImg& img)
 
 void ImageIface::putOriginal(const QString& caller, const FilterAction& action, const DImg& img)
 {
-    // Check is image size is modified.
-
-    // Size are unchanged by default.
-    int w = -1;
-    int h = -1;
-
-    if (img.width() != (uint)originalSize().width())
-        w = img.width();
-
-    if (img.height() != (uint)originalSize().height())
-        h = img.height();
-
-    uchar* const data = img.bits();
-
-    if (!data)
+    if (img.isNull())
     {
         kDebug() << "No image data to handle";
         return;
     }
 
-    DImgInterface::defaultInterface()->putImage(caller, action, data, w, h, originalSixteenBit());
+    DImgInterface::defaultInterface()->putImg(caller, action, img);
 }
 
 }   // namespace Digikam

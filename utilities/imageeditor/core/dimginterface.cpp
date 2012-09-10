@@ -1168,11 +1168,10 @@ void DImgInterface::setResolvedInitialHistory(const DImageHistory& history)
     d->resolvedInitialHistory = history;
 }
 
-void DImgInterface::putImage(const QString& caller, const FilterAction& action,
-                             uchar* const data, int w, int h, bool sixteenBit)
+void DImgInterface::putImg(const QString& caller, const FilterAction& action, const DImg& img)
 {
     d->undoMan->addAction(new UndoActionIrreversible(this, caller));
-    putImageData(data, w, h, sixteenBit);
+    putImageData(img.bits(), img.width(), img.height(), img.sixteenBit());
     d->image.addFilterAction(action);
     setModified();
 }
