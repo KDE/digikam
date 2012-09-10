@@ -161,11 +161,11 @@ public:
     void    setSelectedArea(const QRect& rect);
     QRect   getSelectedArea() const;
 
-    void   putIccProfile(const IccProfile& profile);
+    void    putIccProfile(const IccProfile& profile);
+    void    putImgSelection(const QString& caller, const FilterAction& action, const DImg& img);
 
     // TODO port to DImg ---------------------------------------------------
     void   putImage(const QString& caller, const FilterAction& action, uchar* const data, int w, int h, bool sixteenBit);
-    void   putImageSelection(const QString& caller, const FilterAction& action, uchar* const data);
     // ---------------------------------------------------------------------
 
     /// For internal usage by UndoManager

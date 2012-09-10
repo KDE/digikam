@@ -1259,16 +1259,16 @@ DImg DImgInterface::getImgSelection() const
     return DImg();
 }
 
-void DImgInterface::putImageSelection(const QString& caller, const FilterAction& action, uchar* const data)
+void DImgInterface::putImgSelection(const QString& caller, const FilterAction& action, const DImg& img)
 {
-    if (!data || d->image.isNull())
+    if (img.isNull() || d->image.isNull())
     {
         return;
     }
 
     d->undoMan->addAction(new UndoActionIrreversible(this, caller));
 
-    d->image.bitBltImage(data, 0, 0, d->selW, d->selH, d->selX, d->selY, d->selW, d->selH, d->image.bytesDepth());
+    d->image.bitBltImage(img.bits(), 0, 0, d->selW, d->selH, d->selX, d->selY, d->selW, d->selH, d->image.bytesDepth());
 
     d->image.addFilterAction(action);
     setModified();

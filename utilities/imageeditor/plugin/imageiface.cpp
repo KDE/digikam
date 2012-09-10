@@ -399,15 +399,13 @@ void ImageIface::putSelection(const QString& caller, const FilterAction& action,
         return;
     }
 
-    uchar* const data = img.bits();
-
-    if (!data)
+    if (img.isNull())
     {
         kDebug() << "No image data to handle";
         return;
     }
 
-    DImgInterface::defaultInterface()->putImageSelection(caller, action, data);
+    DImgInterface::defaultInterface()->putImgSelection(caller, action, img);
 }
 
 void ImageIface::putPreview(const DImg& img)
