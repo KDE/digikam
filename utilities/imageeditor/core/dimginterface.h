@@ -123,13 +123,11 @@ public:
 
     void    zoom(double val);
 
-    // TODO port to QRect/QSize ---------------------------------------------------
     void    paintOnDevice(QPaintDevice* const p,
-                          int sx, int sy, int sw, int sh,
-                          int dx, int dy, int dw, int dh,
-                          int mx, int my, int mw, int mh,
+                          const QRect& src,
+                          const QRect& dst,
+                          const QRect& mrt,
                           int antialias);
-    // -----------------------------------------------------------------------------
 
     void    paintOnDevice(QPaintDevice* const p,
                           const QRect& src,

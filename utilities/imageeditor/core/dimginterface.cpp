@@ -1036,9 +1036,9 @@ void DImgInterface::paintOnDevice(QPaintDevice* const p,
 }
 
 void DImgInterface::paintOnDevice(QPaintDevice* const p,
-                                  int sx, int sy, int sw, int sh,
-                                  int dx, int dy, int dw, int dh,
-                                  int mx, int my, int mw, int mh,
+                                  const QRect& src,
+                                  const QRect& dst,
+                                  const QRect& mrt,
                                   int /*antialias*/)
 {
     if (d->image.isNull())
@@ -1046,7 +1046,7 @@ void DImgInterface::paintOnDevice(QPaintDevice* const p,
         return;
     }
 
-    DImg img = d->image.smoothScaleSection(sx, sy, sw, sh, dw, dh);
+    DImg img = d->image.smoothScaleSection(src, dst.size());
     img.convertDepth(32);
     QPainter painter(p);
 
@@ -1057,13 +1057,13 @@ void DImgInterface::paintOnDevice(QPaintDevice* const p,
     {
         for (int i = 0; i < (int)img.width(); ++i)
         {
-            if (i < (mx - dx) || i > (mx - dx + mw - 1) ||
-                j < (my - dy) || j > (my - dy + mh - 1))
+            if (i < (mrt.x() - dst.x()) || i > (mrt.x() - dst.x() + mrt.width()  - 1) ||
+                j < (mrt.y() - dst.y()) || j > (mrt.y() - dst.y() + mrt.height() - 1))
             {
                 a = (*data >> 24) & 0xff;
                 r = (*data >> 16) & 0xff;
                 g = (*data >>  8) & 0xff;
-                b = (*data) & 0xff;
+                b = (*data)       & 0xff;
 
                 r += (uchar)((RCOL - r) * OPACITY);
                 g += (uchar)((GCOL - g) * OPACITY);
@@ -1079,12 +1079,12 @@ void DImgInterface::paintOnDevice(QPaintDevice* const p,
     if (d->cmSettings.enableCM && (d->cmSettings.useManagedView || d->doSoftProofing))
     {
         QPixmap pix(img.convertToPixmap(d->monitorICCtrans));
-        painter.drawPixmap(dx, dy, pix, 0, 0, pix.width(), pix.height());
+        painter.drawPixmap(dst.topLeft(), pix, QRect(0, 0, pix.width(), pix.height()));
     }
     else
     {
         QPixmap pix(img.convertToPixmap());
-        painter.drawPixmap(dx, dy, pix, 0, 0, pix.width(), pix.height());
+        painter.drawPixmap(dst.topLeft(), pix, QRect(0, 0, pix.width(), pix.height()));
     }
 
     // Show the Over/Under exposure pixels indicators
@@ -1093,7 +1093,7 @@ void DImgInterface::paintOnDevice(QPaintDevice* const p,
     {
         QImage pureColorMask = img.pureColorMask(d->expoSettings);
         QPixmap pixMask      = QPixmap::fromImage(pureColorMask);
-        painter.drawPixmap(dx, dy, pixMask, 0, 0, pixMask.width(), pixMask.height());
+        painter.drawPixmap(dst.topLeft(), pixMask, QRect(0, 0, pixMask.width(), pixMask.height()));
     }
 
     painter.end();

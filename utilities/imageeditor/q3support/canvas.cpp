@@ -591,9 +591,9 @@ void Canvas::paintViewport(const QRect& er, bool antialias)
                         QRect r(i, j, d->tileSize, d->tileSize);
 
                         d->im->paintOnDevice(pix,
-                                             sx, sy, sw, sh,
-                                             0, 0, d->tileSize, d->tileSize,
-                                             rr.x() - i - d->pixmapRect.x(), rr.y() - j - d->pixmapRect.y(), rr.width(), rr.height(),
+                                             QRect(sx, sy, sw, sh),
+                                             QRect(0, 0, d->tileSize, d->tileSize),
+                                             QRect(rr.x() - i - d->pixmapRect.x(), rr.y() - j - d->pixmapRect.y(), rr.width(), rr.height()),
                                              antialias);
 
                         rr.translate(-i - d->pixmapRect.x(), -j - d->pixmapRect.y());
@@ -606,10 +606,10 @@ void Canvas::paintViewport(const QRect& er, bool antialias)
 
                         if (rr.width() >= d->snapArea && rr.height() >= d->snapArea)
                         {
-                            p.drawRect(QRect(rr.x() - halfSA,            rr.y() - halfSA,             d->snapArea, d->snapArea));
-                            p.drawRect(QRect(rr.x() - halfSA,            rr.y() + rr.height() - halfSA, d->snapArea, d->snapArea));
+                            p.drawRect(QRect(rr.x() - halfSA,              rr.y() - halfSA,               d->snapArea, d->snapArea));
+                            p.drawRect(QRect(rr.x() - halfSA,              rr.y() + rr.height() - halfSA, d->snapArea, d->snapArea));
                             p.drawRect(QRect(rr.x() + rr.width() - halfSA, rr.y() + rr.height() - halfSA, d->snapArea, d->snapArea));
-                            p.drawRect(QRect(rr.x() + rr.width() - halfSA, rr.y() - halfSA,             d->snapArea, d->snapArea));
+                            p.drawRect(QRect(rr.x() + rr.width() - halfSA, rr.y() - halfSA,               d->snapArea, d->snapArea));
                         }
 
                         p.end();
