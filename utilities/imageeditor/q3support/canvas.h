@@ -76,11 +76,6 @@ public:
     void    applyTransform(const IccTransform& transform);
     void    setModified();
 
-    QString ensureHasCurrentUuid()   const;
-    DImg    currentImage()           const;
-    QString currentImageFileFormat() const;
-    QString currentImageFilePath()   const;
-
     DImgInterface* interface() const;
     void makeDefaultEditingCanvas();
 
@@ -93,20 +88,23 @@ public:
     void   setFitToWindow(bool enable);
     bool   fitToWindow() const;
 
-    double zoomMax() const;
-    double zoomMin() const;
-    bool   maxZoom() const;
-    bool   minZoom() const;
-
-    int    imageWidth()       const;
-    int    imageHeight()      const;
-    bool   exifRotated()      const;
-    QRect  getSelectedArea()  const;
-    QRect  visibleArea()      const;
+    QString ensureHasCurrentUuid()   const;
+    DImg    currentImage()           const;
+    QString currentImageFileFormat() const;
+    QString currentImageFilePath()   const;
+    double zoomMax()                 const;
+    double zoomMin()                 const;
+    bool   maxZoom()                 const;
+    bool   minZoom()                 const;
+    int    imageWidth()              const;
+    int    imageHeight()             const;
+    bool   exifRotated()             const;
+    QRect  getSelectedArea()         const;
+    QRect  visibleArea()             const;
 
     // If current image file format is only available in read only,
     // typically all RAW image file formats.
-    bool  isReadOnly()        const;
+    bool  isReadOnly()               const;
 
     void  setBackgroundColor(const QColor& color);
     void  setICCSettings(const ICCSettingsContainer& cmSettings);

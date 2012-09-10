@@ -1379,18 +1379,14 @@ void Canvas::slotCopy()
 
 void Canvas::slotSelected()
 {
-    int x = 0, y = 0, w = 0, h = 0;
+    QRect sel = QRect(0, 0, 0, 0);
 
     if (d->rubber->isActive() && d->pressedMoved)
     {
-        QRect sel = calcSelectedArea();
-        x         = sel.x();
-        y         = sel.y();
-        w         = sel.width();
-        h         = sel.height();
+        sel = calcSelectedArea();
     }
 
-    d->im->setSelectedArea(x, y, w, h);
+    d->im->setSelectedArea(sel);
 }
 
 QRect Canvas::calcSelectedArea() const

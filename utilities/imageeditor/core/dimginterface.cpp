@@ -953,12 +953,12 @@ bool DImgInterface::isReadOnly() const
     }
 }
 
-void DImgInterface::setSelectedArea(int x, int y, int w, int h)
+void DImgInterface::setSelectedArea(const QRect& rect)
 {
-    d->selX = x;
-    d->selY = y;
-    d->selW = w;
-    d->selH = h;
+    d->selX = rect.x();
+    d->selY = rect.y();
+    d->selW = rect.width();
+    d->selH = rect.height();
 }
 
 void DImgInterface::getSelectedArea(int& x, int& y, int& w, int& h)

@@ -134,7 +134,6 @@ public:
                           int mx, int my, int mw, int mh,
                           int antialias);
 
-    void    setSelectedArea(int x, int y, int w, int h);
     void    getSelectedArea(int& x, int& y, int& w, int& h);
     // -----------------------------------------------------------------------------
 
@@ -159,6 +158,8 @@ public:
 
     void    convertDepth(int depth);
     void    crop(const QRect& rect);
+
+    void    setSelectedArea(const QRect& rect);
 
     void   putIccProfile(const IccProfile& profile);
 
