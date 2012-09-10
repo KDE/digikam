@@ -224,10 +224,6 @@ private:
                   bool setExifOrientationTag, const QString& mimeType,
                   const VersionFileOperation& operation, const QString& intendedFilePath);
 
-    // TODO port to DImg ---------------------------------------------------
-    void   putImageData(uchar* const data, int w, int h, bool sixteenBit);
-    // ---------------------------------------------------------------------
-
     void   applyBuiltinFilter(const DImgBuiltinFilter& filter, UndoAction* const action);
     void   applyReversibleBuiltinFilter(const DImgBuiltinFilter& filter);
 

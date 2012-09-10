@@ -127,6 +127,38 @@ public:
     {
     }
 
+    void putImageData(uchar* const data, int w, int h, bool sixteenBit)
+    {
+        if (image.isNull())
+        {
+            kWarning() << "d->image is NULL";
+            return;
+        }
+
+        if (!data)
+        {
+            kWarning() << "New image is NULL";
+            return;
+        }
+
+        if (w == -1 && h == -1)
+        {
+            // New image size
+            w = origWidth;
+            h = origHeight;
+        }
+        else
+        {
+            // New image size == original size
+            origWidth  = w;
+            origHeight = h;
+        }
+
+        image.putImageData(w, h, sixteenBit, image.hasAlpha(), data);
+    }
+
+public:
+
     bool                       valid;
     bool                       rotatedOrFlipped;
     bool                       exifOrient;
@@ -1171,39 +1203,9 @@ void DImgInterface::setResolvedInitialHistory(const DImageHistory& history)
 void DImgInterface::putImg(const QString& caller, const FilterAction& action, const DImg& img)
 {
     d->undoMan->addAction(new UndoActionIrreversible(this, caller));
-    putImageData(img.bits(), img.width(), img.height(), img.sixteenBit());
+    d->putImageData(img.bits(), img.width(), img.height(), img.sixteenBit());
     d->image.addFilterAction(action);
     setModified();
-}
-
-void DImgInterface::putImageData(uchar* const data, int w, int h, bool sixteenBit)
-{
-    if (d->image.isNull())
-    {
-        kWarning() << "d->image is NULL";
-        return;
-    }
-
-    if (!data)
-    {
-        kWarning() << "New image is NULL";
-        return;
-    }
-
-    if (w == -1 && h == -1)
-    {
-        // New image size
-        w = d->origWidth;
-        h = d->origHeight;
-    }
-    else
-    {
-        // New image size == original size
-        d->origWidth  = w;
-        d->origHeight = h;
-    }
-
-    d->image.putImageData(w, h, sixteenBit, d->image.hasAlpha(), data);
 }
 
 void DImgInterface::setUndoImg(const UndoMetadataContainer& c, const DImg& img)
@@ -1211,7 +1213,7 @@ void DImgInterface::setUndoImg(const UndoMetadataContainer& c, const DImg& img)
     // called from UndoManager
     bool changesIcc = c.changesIccProfile(d->image);
 
-    putImageData(img.bits(), img.width(), img.height(), img.sixteenBit());
+    d->putImageData(img.bits(), img.width(), img.height(), img.sixteenBit());
     c.toImage(d->image);
 
     if (changesIcc)
