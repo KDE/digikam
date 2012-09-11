@@ -162,7 +162,7 @@ namespace Digikam
 const QString EditorWindow::CONFIG_GROUP_NAME = "ImageViewer Settings";
 
 EditorWindow::EditorWindow(const char* name)
-    : KXmlGuiWindow(0), d(new EditorWindowPriv)
+    : KXmlGuiWindow(0), d(new Private)
 {
     setObjectName(name);
     setWindowFlags(Qt::Window);
@@ -647,7 +647,7 @@ void EditorWindow::setupStandardActions()
     toggleToolActions();
 }
 
-void EditorWindow::EditorWindowPriv::plugNewVersionInFormatAction(EditorWindow* q, KActionMenu* menuAction,
+void EditorWindow::Private::plugNewVersionInFormatAction(EditorWindow* q, KActionMenu* menuAction,
                                                                   const QString& text, const QString& format)
 {
     if (!formatMenuActionMapper)
@@ -2044,9 +2044,8 @@ void EditorWindow::startingSave(const KUrl& url)
 
 bool EditorWindow::showFileSaveDialog(const KUrl& initialUrl, KUrl& newURL)
 {
-    FileSaveOptionsBox* options      = new FileSaveOptionsBox();
-    QPointer<KFileDialog> imageFileSaveDialog
-        = new KFileDialog(initialUrl, QString(), this, options);
+    FileSaveOptionsBox* options               = new FileSaveOptionsBox();
+    QPointer<KFileDialog> imageFileSaveDialog = new KFileDialog(initialUrl, QString(), this, options);
     options->setDialog(imageFileSaveDialog);
 
     ImageDialogPreview* preview = new ImageDialogPreview(imageFileSaveDialog);
@@ -2056,23 +2055,22 @@ bool EditorWindow::showFileSaveDialog(const KUrl& initialUrl, KUrl& newURL)
     imageFileSaveDialog->setCaption(i18n("New Image File Name"));
 
     // restore old settings for the dialog
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(CONFIG_GROUP_NAME);
+    KSharedConfig::Ptr config         = KGlobal::config();
+    KConfigGroup group                = config->group(CONFIG_GROUP_NAME);
     const QString optionLastExtension = "LastSavedImageExtension";
-    QString ext               = group.readEntry(optionLastExtension, "png");
+    QString ext                       = group.readEntry(optionLastExtension, "png");
 
     // adjust extension of proposed filename
-    QString fileName = initialUrl.fileName(KUrl::ObeyTrailingSlash);
+    QString fileName                  = initialUrl.fileName(KUrl::ObeyTrailingSlash);
 
     if (!fileName.isNull())
     {
-        int lastDot = fileName.lastIndexOf(QLatin1Char('.'));
+        int lastDot              = fileName.lastIndexOf(QLatin1Char('.'));
         QString completeBaseName = (lastDot == -1) ? fileName : fileName.left(lastDot);
-        fileName = completeBaseName + QLatin1Char('.') + ext;
+        fileName                 = completeBaseName + QLatin1Char('.') + ext;
     }
 
-    QString autoFilter = imageFileSaveDialog->filterWidget()->defaultFilter();
-
+    QString autoFilter          = imageFileSaveDialog->filterWidget()->defaultFilter();
     QStringList writablePattern = getWritingFilters();
 
     if (writablePattern.first().count("*.") > 10) // try to verify it's the "All image files" filter
@@ -2127,11 +2125,11 @@ bool EditorWindow::showFileSaveDialog(const KUrl& initialUrl, KUrl& newURL)
     //-- Show Settings Dialog ----------------------------------------------
 
     const QString configShowImageSettingsDialog = "ShowImageSettingsDialog";
-    bool showDialog = group.readEntry(configShowImageSettingsDialog, true);
+    bool showDialog                             = group.readEntry(configShowImageSettingsDialog, true);
 
     if (showDialog && options->discoverFormat(newURL.fileName(), DImg::NONE) != DImg::NONE)
     {
-        FileSaveOptionsDlg* fileSaveOptionsDialog   = new FileSaveOptionsDlg(this, options);
+        FileSaveOptionsDlg* fileSaveOptionsDialog = new FileSaveOptionsDlg(this, options);
         options->slotImageFileFormatChanged(newURL.fileName());
 
         if (d->currentWindowModalDialog)
@@ -2144,7 +2142,7 @@ bool EditorWindow::showFileSaveDialog(const KUrl& initialUrl, KUrl& newURL)
         {
             fileSaveOptionsDialog->setWindowModality(Qt::WindowModal);
             d->currentWindowModalDialog = fileSaveOptionsDialog;
-            result = fileSaveOptionsDialog->exec();
+            result                      = fileSaveOptionsDialog->exec();
             d->currentWindowModalDialog = 0;
         }
 
@@ -2476,7 +2474,7 @@ VersionFileOperation EditorWindow::saveVersionFileOperation(const KUrl& url, boo
 VersionFileOperation EditorWindow::saveAsVersionFileOperation(const KUrl& url, const KUrl& saveUrl, const QString& format)
 {
     DImageHistory resolvedHistory = m_canvas->interface()->getResolvedInitialHistory();
-    DImageHistory history = m_canvas->interface()->getImageHistory();
+    DImageHistory history         = m_canvas->interface()->getImageHistory();
 
     VersionFileInfo currentName(url.directory(), url.fileName(), m_canvas->currentImageFileFormat());
     VersionFileInfo saveLocation(saveUrl.directory(), saveUrl.fileName(), format);
@@ -2486,7 +2484,7 @@ VersionFileOperation EditorWindow::saveAsVersionFileOperation(const KUrl& url, c
 VersionFileOperation EditorWindow::saveInFormatVersionFileOperation(const KUrl& url, const QString& format)
 {
     DImageHistory resolvedHistory = m_canvas->interface()->getResolvedInitialHistory();
-    DImageHistory history = m_canvas->interface()->getImageHistory();
+    DImageHistory history         = m_canvas->interface()->getImageHistory();
 
     VersionFileInfo currentName(url.directory(), url.fileName(), m_canvas->currentImageFileFormat());
     return versionManager()->operationNewVersionInFormat(currentName, format, resolvedHistory, history);
@@ -2502,7 +2500,7 @@ bool EditorWindow::startingSaveVersion(const KUrl& url, bool fork, bool saveAs, 
         return false;
     }
 
-    m_savingContext = SavingContext();
+    m_savingContext                      = SavingContext();
     m_savingContext.versionFileOperation = saveVersionFileOperation(url, fork);
     m_canvas->interface()->setHistoryIsBranch(fork);
 
@@ -2588,7 +2586,6 @@ bool EditorWindow::startingSaveVersion(const KUrl& url, bool fork, bool saveAs, 
 
     return true;
 }
-
 
 bool EditorWindow::checkPermissions(const KUrl& url)
 {
@@ -2970,7 +2967,7 @@ void EditorWindow::setPreviewModeMask(int mask)
     d->previewToolBar->setPreviewModeMask(mask);
 }
 
-PreviewToolBar::PreviewMode EditorWindow::previewMode()
+PreviewToolBar::PreviewMode EditorWindow::previewMode() const
 {
     return d->previewToolBar->previewMode();
 }

@@ -150,10 +150,10 @@ protected:
     Canvas*                   m_canvas;
     ImagePluginLoader*        m_imagePluginLoader;
     StatusProgressBar*        m_nameLabel;
-    IOFileSettings*  m_IOFileSettings;
+    IOFileSettings*           m_IOFileSettings;
     QPointer<KProgressDialog> m_savingProgressDialog;
 
-    SavingContext    m_savingContext;
+    SavingContext             m_savingContext;
 
     QString                   m_formatForRAWVersioning;
     QString                   m_formatForSubversions;
@@ -193,8 +193,6 @@ protected:
     void loadImagePlugins();
 
     bool promptForOverWrite();
-    virtual bool hasOriginalToRestore();
-    virtual DImageHistory resolvedImageHistory(const DImageHistory& history);
 
     bool promptUserSave(const KUrl& url, SaveAskMode mode = AskIfNeeded, bool allowCancel = true);
     bool waitForSavingToComplete();
@@ -211,16 +209,27 @@ protected:
     void colorManage();
     void execSavingProgressDialog();
 
+    void toggleGUI2FullScreen();
+    void resetOrigin();
+    void resetOriginSwitchFile();
+
     EditorStackView*           editorStackView()  const;
     ExposureSettingsContainer* exposureSettings() const;
+    KCategorizedView*          createToolSelectionView();
+
+    VersionFileOperation saveVersionFileOperation(const KUrl& url, bool fork);
+    VersionFileOperation saveAsVersionFileOperation(const KUrl& url, const KUrl& saveLocation, const QString& format);
+    VersionFileOperation saveInFormatVersionFileOperation(const KUrl& url, const QString& format);
+
+
+    virtual bool hasOriginalToRestore();
+    virtual DImageHistory resolvedImageHistory(const DImageHistory& history);
 
     virtual void finishSaving(bool success);
 
     virtual void readSettings();
     virtual void saveSettings();
     virtual void toggleActions(bool val);
-
-    void toggleGUI2FullScreen();
 
     virtual ThumbBarDock* thumbBar() const = 0;
     virtual Sidebar* rightSideBar() const = 0;
@@ -231,12 +240,7 @@ protected:
     virtual void setupActions() = 0;
     virtual void setupUserArea() = 0;
 
-    void resetOrigin();
-    void resetOriginSwitchFile();
     virtual VersionManager* versionManager() const;
-    VersionFileOperation saveVersionFileOperation(const KUrl& url, bool fork);
-    VersionFileOperation saveAsVersionFileOperation(const KUrl& url, const KUrl& saveLocation, const QString& format);
-    VersionFileOperation saveInFormatVersionFileOperation(const KUrl& url, const QString& format);
 
     /**
      * Hook method that subclasses must implement to return the destination url
@@ -252,17 +256,7 @@ protected:
     virtual void saveAsIsComplete() = 0;
     virtual void saveVersionIsComplete() = 0;
 
-    KCategorizedView* createToolSelectionView();
-
 protected Q_SLOTS:
-
-    virtual bool saveOrSaveAs();
-    virtual bool saveAs() = 0;
-    virtual bool save() = 0;
-    virtual bool saveNewVersion() = 0;
-    virtual bool saveCurrentVersion() = 0;
-    virtual bool saveNewVersionAs() = 0;
-    virtual bool saveNewVersionInFormat(const QString&) = 0;
 
     void slotEditKeys();
 
@@ -288,9 +282,18 @@ protected Q_SLOTS:
     virtual void slotLoadingFinished(const QString& filename, bool success);
     virtual void slotSavingStarted(const QString& filename);
     virtual void slotFileOriginChanged(const QString& filePath);
-
     virtual void slotComponentsInfo();
+    virtual void slotDiscardChanges();
+    virtual void slotOpenOriginal();
 
+    virtual bool saveOrSaveAs();
+
+    virtual bool saveAs() = 0;
+    virtual bool save() = 0;
+    virtual bool saveNewVersion() = 0;
+    virtual bool saveCurrentVersion() = 0;
+    virtual bool saveNewVersionAs() = 0;
+    virtual bool saveNewVersionInFormat(const QString&) = 0;
     virtual void slotFilePrint() = 0;
     virtual void slotDeleteCurrentItem() = 0;
     virtual void slotBackward() = 0;
@@ -301,8 +304,6 @@ protected Q_SLOTS:
     virtual void slotChanged() = 0;
     virtual void slotContextMenu() = 0;
     virtual void slotRevert() = 0;
-    virtual void slotDiscardChanges();
-    virtual void slotOpenOriginal();
 
 private Q_SLOTS:
 
@@ -349,7 +350,7 @@ private:
     bool startingSaveVersion(const KUrl& url, bool subversion, bool saveAs, const QString& format);
 
     void setPreviewModeMask(int mask);
-    PreviewToolBar::PreviewMode previewMode();
+    PreviewToolBar::PreviewMode previewMode() const;
 
     bool showFileSaveDialog(const KUrl& initialUrl, KUrl& newURL);
 
@@ -408,8 +409,8 @@ private:
 
 private:
 
-    class EditorWindowPriv;
-    EditorWindowPriv* const d;
+    class Private;
+    Private* const d;
 
     friend class EditorToolIface;
 };

@@ -7,7 +7,7 @@
  * Description : main image editor GUI implementation
  *               private data.
  *
- * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -68,12 +68,12 @@ class ExposureSettingsContainer;
 class ICCSettingsContainer;
 class PreviewToolBar;
 
-class EditorWindow::EditorWindowPriv
+class EditorWindow::Private
 {
 
 public:
 
-    EditorWindowPriv() :
+    Private() :
         removeFullScreenButton(false),
         fullScreenHideToolBar(false),
         cmViewIndicator(0),
@@ -118,7 +118,7 @@ public:
     {
     }
 
-    ~EditorWindowPriv()
+    ~Private()
     {
     }
 
@@ -266,31 +266,31 @@ public:
     void plugNewVersionInFormatAction(EditorWindow* q, KActionMenu* menuAction, const QString& text, const QString& format);
 };
 
-const QString EditorWindow::EditorWindowPriv::configAutoZoomEntry("AutoZoom");
-const QString EditorWindow::EditorWindowPriv::configBackgroundColorEntry("BackgroundColor");
-const QString EditorWindow::EditorWindowPriv::configFullScreenEntry("FullScreen");
-const QString EditorWindow::EditorWindowPriv::configFullScreenHideThumbBarEntry("FullScreenHideThumbBar");
-const QString EditorWindow::EditorWindowPriv::configFullScreenHideToolBarEntry("FullScreen Hide ToolBar");
-const QString EditorWindow::EditorWindowPriv::configJpeg2000CompressionEntry("JPEG2000Compression");
-const QString EditorWindow::EditorWindowPriv::configJpeg2000LossLessEntry("JPEG2000LossLess");
-const QString EditorWindow::EditorWindowPriv::configJpegCompressionEntry("JPEGCompression");
-const QString EditorWindow::EditorWindowPriv::configJpegSubSamplingEntry("JPEGSubSampling");
-const QString EditorWindow::EditorWindowPriv::configPgfCompressionEntry("PGFCompression");
-const QString EditorWindow::EditorWindowPriv::configPgfLossLessEntry("PGFLossLess");
-const QString EditorWindow::EditorWindowPriv::configPngCompressionEntry("PNGCompression");
-const QString EditorWindow::EditorWindowPriv::configSplitterStateEntry("SplitterState");
-const QString EditorWindow::EditorWindowPriv::configTiffCompressionEntry("TIFFCompression");
-const QString EditorWindow::EditorWindowPriv::configUnderExposureColorEntry("UnderExposureColor");
-const QString EditorWindow::EditorWindowPriv::configUnderExposureIndicatorEntry("UnderExposureIndicator");
-const QString EditorWindow::EditorWindowPriv::configUnderExposurePercentsEntry("UnderExposurePercentsEntry");
-const QString EditorWindow::EditorWindowPriv::configOverExposureColorEntry("OverExposureColor");
-const QString EditorWindow::EditorWindowPriv::configOverExposureIndicatorEntry("OverExposureIndicator");
-const QString EditorWindow::EditorWindowPriv::configOverExposurePercentsEntry("OverExposurePercentsEntry");
-const QString EditorWindow::EditorWindowPriv::configExpoIndicatorModeEntry("ExpoIndicatorMode");
-const QString EditorWindow::EditorWindowPriv::configUseRawImportToolEntry("UseRawImportTool");
-const QString EditorWindow::EditorWindowPriv::configUseThemeBackgroundColorEntry("UseThemeBackgroundColor");
-const QString EditorWindow::EditorWindowPriv::configVerticalSplitterSizesEntry("Vertical Splitter Sizes");
-const QString EditorWindow::EditorWindowPriv::configVerticalSplitterStateEntry("Vertical Splitter State");
+const QString EditorWindow::Private::configAutoZoomEntry("AutoZoom");
+const QString EditorWindow::Private::configBackgroundColorEntry("BackgroundColor");
+const QString EditorWindow::Private::configFullScreenEntry("FullScreen");
+const QString EditorWindow::Private::configFullScreenHideThumbBarEntry("FullScreenHideThumbBar");
+const QString EditorWindow::Private::configFullScreenHideToolBarEntry("FullScreen Hide ToolBar");
+const QString EditorWindow::Private::configJpeg2000CompressionEntry("JPEG2000Compression");
+const QString EditorWindow::Private::configJpeg2000LossLessEntry("JPEG2000LossLess");
+const QString EditorWindow::Private::configJpegCompressionEntry("JPEGCompression");
+const QString EditorWindow::Private::configJpegSubSamplingEntry("JPEGSubSampling");
+const QString EditorWindow::Private::configPgfCompressionEntry("PGFCompression");
+const QString EditorWindow::Private::configPgfLossLessEntry("PGFLossLess");
+const QString EditorWindow::Private::configPngCompressionEntry("PNGCompression");
+const QString EditorWindow::Private::configSplitterStateEntry("SplitterState");
+const QString EditorWindow::Private::configTiffCompressionEntry("TIFFCompression");
+const QString EditorWindow::Private::configUnderExposureColorEntry("UnderExposureColor");
+const QString EditorWindow::Private::configUnderExposureIndicatorEntry("UnderExposureIndicator");
+const QString EditorWindow::Private::configUnderExposurePercentsEntry("UnderExposurePercentsEntry");
+const QString EditorWindow::Private::configOverExposureColorEntry("OverExposureColor");
+const QString EditorWindow::Private::configOverExposureIndicatorEntry("OverExposureIndicator");
+const QString EditorWindow::Private::configOverExposurePercentsEntry("OverExposurePercentsEntry");
+const QString EditorWindow::Private::configExpoIndicatorModeEntry("ExpoIndicatorMode");
+const QString EditorWindow::Private::configUseRawImportToolEntry("UseRawImportTool");
+const QString EditorWindow::Private::configUseThemeBackgroundColorEntry("UseThemeBackgroundColor");
+const QString EditorWindow::Private::configVerticalSplitterSizesEntry("Vertical Splitter Sizes");
+const QString EditorWindow::Private::configVerticalSplitterStateEntry("Vertical Splitter State");
 
 // -----------------------------------------------------------------------------------------------------------------
 
@@ -298,7 +298,7 @@ class ActionCategorizedView : public KCategorizedView
 {
 public:
 
-    ActionCategorizedView(QWidget* parent = 0)
+    ActionCategorizedView(QWidget* const parent = 0)
         : KCategorizedView(parent)
     {
         m_horizontalScrollAnimation = new QPropertyAnimation(horizontalScrollBar(), "value", this);
