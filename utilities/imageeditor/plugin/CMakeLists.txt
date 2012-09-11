@@ -1,0 +1,2 @@
+
+INSTALL( FILES digikamimageplugin.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR} )

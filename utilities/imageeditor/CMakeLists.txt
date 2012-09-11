@@ -1,1 +1,2 @@
 ADD_SUBDIRECTORY(editor)
+ADD_SUBDIRECTORY(plugin)
