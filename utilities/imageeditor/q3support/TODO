@@ -12,7 +12,7 @@ GraphicsDImgView : this class is derived from model/view core implementation bas
 ImagePreviewItem : it's a derivated class from GraphicsDImgItem, which define canvas painting re-implementation
 
 To port ImageRegionWidget to model-view, a new class must be derivated from GraphicsDImgView and a canvas painting implementation must be hosted to
-a new dedicated class based on ImagePreviewItem. A similar port have be done with image editor RawPreview class which is the preview 
+a new dedicated class based on ImagePreviewItem. A similar port has been done with image editor RawPreview class which is the preview 
 implmentation of editor RAW file import tool.
 
 Port image editor Canvas to Qt4 model/view
