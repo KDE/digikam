@@ -44,6 +44,7 @@ class QPixmap;
 namespace Digikam
 {
 
+class UndoState;
 class ICCSettingsContainer;
 class ExposureSettingsContainer;
 class IOFileSettingsContainer;
@@ -56,20 +57,6 @@ class VersionFileOperation;
 class DIGIKAM_EXPORT DImgInterface : public QObject
 {
     Q_OBJECT
-
-public:
-
-    class UndoState
-    {
-    public:
-
-        UndoState();
-
-        bool hasUndo;
-        bool hasRedo;
-        bool hasChanges;
-        bool hasUndoableChanges;
-    };
 
 public:
 

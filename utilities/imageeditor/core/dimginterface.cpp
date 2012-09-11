@@ -60,6 +60,7 @@
 #include "dimgbuiltinfilter.h"
 #include "undomanager.h"
 #include "undoaction.h"
+#include "undostate.h"
 #include "iccmanager.h"
 #include "iccsettingscontainer.h"
 #include "icctransform.h"
@@ -434,28 +435,6 @@ void DImgInterface::Private::load(const LoadingDescription& description)
         DImgInterface::defaultInterface()->emit signalLoadingStarted(currentDescription.filePath);
         DImgInterface::defaultInterface()->emit signalImageLoaded(currentDescription.filePath, true);
     }
-}
-
-// --------------------------------------------------------------
-
-DImgInterface::UndoState::UndoState()
-    : hasUndo(false),
-      hasRedo(false),
-      hasChanges(false),
-      hasUndoableChanges(false)
-{
-}
-
-DImgInterface::UndoState DImgInterface::undoState() const
-{
-    UndoState state;
-    state.hasUndo            = d->undoMan->anyMoreUndo();
-    state.hasRedo            = d->undoMan->anyMoreRedo();
-    state.hasUndoableChanges = !d->undoMan->isAtOrigin();
-    // Includes the edit step performed by RAW import, which is not undoable
-    state.hasChanges         = d->undoMan->hasChanges();
-
-    return state;
 }
 
 // --------------------------------------------------------------
@@ -1398,6 +1377,18 @@ QPixmap DImgInterface::convertToPixmap(DImg& img) const
     }
 
     return pix;
+}
+
+UndoState DImgInterface::undoState() const
+{
+    UndoState state;
+    state.hasUndo            = d->undoMan->anyMoreUndo();
+    state.hasRedo            = d->undoMan->anyMoreRedo();
+    state.hasUndoableChanges = !d->undoMan->isAtOrigin();
+    // Includes the edit step performed by RAW import, which is not undoable
+    state.hasChanges         = d->undoMan->hasChanges();
+
+    return state;
 }
 
 }  // namespace Digikam
