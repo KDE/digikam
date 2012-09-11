@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DIMGINTERFACE_H
-#define DIMGINTERFACE_H
+#ifndef EDITOR_CORE_H
+#define EDITOR_CORE_H
 
 // Qt includes
 
@@ -54,19 +54,19 @@ class UndoAction;
 class UndoMetadataContainer;
 class VersionFileOperation;
 
-class DIGIKAM_EXPORT DImgInterface : public QObject
+class DIGIKAM_EXPORT EditorCore : public QObject
 {
     Q_OBJECT
 
 public:
 
-    static DImgInterface* defaultInterface();
-    static void setDefaultInterface(DImgInterface* const defaultInterface);
+    static EditorCore* defaultInstance();
+    static void setDefaultInstance(EditorCore* const instance);
 
 public:
 
-    DImgInterface();
-    ~DImgInterface();
+    EditorCore();
+    ~EditorCore();
 
     void   load(const QString& filename, IOFileSettingsContainer* const iofileSettings);
     void   applyTransform(const IccTransform& transform);
@@ -205,7 +205,7 @@ private Q_SLOTS:
 
 private:
 
-    static DImgInterface* m_defaultInterface;
+    static EditorCore* m_defaultInstance;
 
     class Private;
     Private* const d;
@@ -213,4 +213,4 @@ private:
 
 }  // namespace Digikam
 
-#endif /* DIMGINTERFACE_H */
+#endif /* EDITOR_CORE_H */

@@ -53,7 +53,7 @@ class QColor;
 namespace Digikam
 {
 
-class DImgInterface;
+class EditorCore;
 class ExposureSettingsContainer;
 class ICCSettingsContainer;
 class IccTransform;
@@ -76,7 +76,7 @@ public:
     void    applyTransform(const IccTransform& transform);
     void    setModified();
 
-    DImgInterface* interface() const;
+    EditorCore* interface() const;
     void makeDefaultEditingCanvas();
 
     double snapZoom(double z) const;

@@ -93,7 +93,7 @@
 #include "ddragobjects.h"
 #include "deletedialog.h"
 #include "dimg.h"
-#include "dimginterface.h"
+#include "editorcore.h"
 #include "dimagehistory.h"
 #include "dio.h"
 #include "dmetadata.h"
@@ -703,8 +703,8 @@ void ImageWindow::slotLoadCurrent()
     d->setThumbBarToCurrent();
 
     // Do this _after_ the canvas->load(), so that the main view histogram does not load
-    // a smaller version if a raw image, and after that the DImgInterface loads the full version.
-    // So first let DImgInterface create its loading task, only then any external objects.
+    // a smaller version if a raw image, and after that the EditorCore loads the full version.
+    // So first let EditorCore create its loading task, only then any external objects.
     setViewToURL(d->currentUrl());
 }
 
@@ -1162,7 +1162,7 @@ void ImageWindow::saveAsIsComplete()
         d->imageInfoModel->addImageInfoSynchronously(d->currentImageInfo);
     }
 
-    // set origin of DImgInterface: "As if" the last saved image was loaded directly
+    // set origin of EditorCore: "As if" the last saved image was loaded directly
     resetOriginSwitchFile();
 
     // If the DImg is put in the cache under the new name, this means the new file will not be reloaded.

@@ -1113,7 +1113,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/core/undocache.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/core/undoaction.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/core/undomanager.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/core/dimginterface.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/core/editorcore.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/core/iccpostloadingmanager.cpp
        )
 

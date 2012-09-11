@@ -96,7 +96,7 @@ extern "C"
 // Local includes
 
 #include "canvas.h"
-#include "dimginterface.h"
+#include "editorcore.h"
 #include "dmetadata.h"
 #include "editorstackview.h"
 #include "iccsettingscontainer.h"

@@ -119,7 +119,7 @@
 #include "canvas.h"
 #include "categorizeditemmodel.h"
 #include "colorcorrectiondlg.h"
-#include "dimginterface.h"
+#include "editorcore.h"
 #include "dlogoaction.h"
 #include "dmetadata.h"
 #include "dzoombar.h"

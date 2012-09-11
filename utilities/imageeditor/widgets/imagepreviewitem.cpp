@@ -37,7 +37,7 @@
 #include "iccmanager.h"
 #include "iccsettingscontainer.h"
 #include "icctransform.h"
-#include "dimginterface.h"
+#include "editorcore.h"
 #include "dimgitemspriv.h"
 
 namespace Digikam
@@ -77,11 +77,11 @@ void ImagePreviewItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
     }
     else
     {
-        // TODO: factoring ICC settings code using ImageIface/DImgInterface methods.
+        // TODO: factoring ICC settings code using ImageIface/EditorCore methods.
 
         // Apply CM settings.
 
-        ICCSettingsContainer iccSettings = DImgInterface::defaultInterface()->getICCSettings();
+        ICCSettingsContainer iccSettings = EditorCore::defaultInstance()->getICCSettings();
 
         if (iccSettings.enableCM && iccSettings.useManagedView)
         {
@@ -101,7 +101,7 @@ void ImagePreviewItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 
     // Show the Over/Under exposure pixels indicators
 
-    ExposureSettingsContainer* expoSettings = DImgInterface::defaultInterface()->getExposureSettings();
+    ExposureSettingsContainer* expoSettings = EditorCore::defaultInstance()->getExposureSettings();
 
     if (expoSettings)
     {

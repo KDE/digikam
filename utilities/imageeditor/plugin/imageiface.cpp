@@ -42,7 +42,7 @@
 #include "iccmanager.h"
 #include "iccsettingscontainer.h"
 #include "icctransform.h"
-#include "dimginterface.h"
+#include "editorcore.h"
 #include "dmetadata.h"
 
 namespace Digikam
@@ -61,7 +61,7 @@ public:
         constrainHeight(0),
         previewWidth(0),
         previewHeight(0),
-        core(DImgInterface::defaultInterface())
+        core(EditorCore::defaultInstance())
     {
 
     }
@@ -88,7 +88,7 @@ public:
 
     DImg                 previewImage;
     DImg                 targetPreviewImage;
-    DImgInterface* const core;
+    EditorCore* const core;
 };
 
 QPixmap ImageIface::Private::checkPixmap()

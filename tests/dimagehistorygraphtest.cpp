@@ -42,7 +42,7 @@
 #include "collectionlocation.h"
 #include "collectionmanager.h"
 #include "collectionscanner.h"
-#include "dimginterface.h"
+#include "editorcore.h"
 #include "dmetadata.h"
 #include "imageinfo.h"
 #include "imagehistorygraph.h"

@@ -40,7 +40,7 @@
 
 // Local includes
 
-#include "dimginterface.h"
+#include "editorcore.h"
 #include "undoaction.h"
 #include "undocache.h"
 
@@ -64,10 +64,10 @@ public:
 
     UndoCache*         undoCache;
 
-    DImgInterface*     dimgiface;
+    EditorCore*     dimgiface;
 };
 
-UndoManager::UndoManager(DImgInterface* const iface)
+UndoManager::UndoManager(EditorCore* const iface)
     : d(new Private)
 {
     d->dimgiface = iface;
@@ -96,7 +96,7 @@ void UndoManager::addAction(UndoAction* const action)
 
     d->undoActions << action;
 
-    // action has already read the "history before step" from DImgInterface in its constructor
+    // action has already read the "history before step" from EditorCore in its constructor
     UndoActionIrreversible* irreversible = dynamic_cast<UndoActionIrreversible*>(action);
 
     // we always make an initial snapshot to be able to do a flying rollback in one step
@@ -398,7 +398,7 @@ bool UndoManager::putImageDataAndHistory(DImg* const img, int stepsBack) const
 
     /*
      * We need to find a snapshot, for the state the given number of steps back.
-     * 0 steps back is the current state of the DImgInterface.
+     * 0 steps back is the current state of the EditorCore.
      * 1 step back is the snapshot of the last undo action, at d->undoActions.size() - 1.
      * The next problem is that if the corresponding action is reversible,
      * we do not have a snapshot, but need to walk forward to the first snapshot (or current

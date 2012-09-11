@@ -31,7 +31,7 @@
 
 // Local includes
 
-#include "dimginterface.h"
+#include "editorcore.h"
 #include "abstractdimagehistorytest.h"
 
 class DImageHistoryTest : public AbstractDImageHistoryTest
