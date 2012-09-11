@@ -101,11 +101,11 @@ public:
     void   rollbackToOrigin();
 
     void   saveAs(const QString& file, IOFileSettingsContainer* const iofileSettings,
-                  bool setExifOrientationTag, const QString& mimeType,
+                  bool setExifOrientationTag, const QString& givenMimeType,
                   const QString& intendedFilePath);
 
     void   saveAs(const QString& file, IOFileSettingsContainer* const iofileSettings,
-                  bool setExifOrientationTag, const QString& mimeType,
+                  bool setExifOrientationTag, const QString& givenMimeType,
                   const VersionFileOperation& operation);
 
     void    setHistoryIsBranch(bool isBranching);
@@ -215,21 +215,6 @@ private Q_SLOTS:
 
     void slotLoadRawFromTool();
     void slotLoadRaw();
-
-private:
-
-    void   saveAs(const QString& file, IOFileSettingsContainer* const iofileSettings,
-                  bool setExifOrientationTag, const QString& mimeType,
-                  const VersionFileOperation& operation, const QString& intendedFilePath);
-
-    void   applyBuiltinFilter(const DImgBuiltinFilter& filter, UndoAction* const action);
-    void   applyReversibleBuiltinFilter(const DImgBuiltinFilter& filter);
-
-    void   load(const LoadingDescription& description);
-    void   loadCurrent();
-    void   saveNext();
-
-    QMap<QString, QVariant> ioAttributes(IOFileSettingsContainer* const iofileSettings, const QString& givenMimeType) const;
 
 private:
 

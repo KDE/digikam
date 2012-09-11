@@ -127,54 +127,18 @@ public:
     {
     }
 
-    void putImageData(uchar* const data, int w, int h, bool sixteenBit)
-    {
-        if (image.isNull())
-        {
-            kWarning() << "d->image is NULL";
-            return;
-        }
+    QMap<QString, QVariant> ioAttributes(IOFileSettingsContainer* const iofileSettings, const QString& givenMimeType) const;
 
-        if (!data)
-        {
-            kWarning() << "New image is NULL";
-            return;
-        }
-
-        if (w == -1 && h == -1)
-        {
-            // New image size
-            w = origWidth;
-            h = origHeight;
-        }
-        else
-        {
-            // New image size == original size
-            origWidth  = w;
-            origHeight = h;
-        }
-
-        image.putImageData(w, h, sixteenBit, image.hasAlpha(), data);
-    }
-
-    void resetValues()
-    {
-        valid                  = false;
-        currentDescription     = LoadingDescription();
-        width                  = 0;
-        height                 = 0;
-        origWidth              = 0;
-        origHeight             = 0;
-        selX                   = 0;
-        selY                   = 0;
-        selW                   = 0;
-        selH                   = 0;
-        gamma                  = 1.0f;
-        contrast               = 1.0f;
-        brightness             = 0.0f;
-        resolvedInitialHistory = DImageHistory();
-        undoMan->clear();
-    }
+    void applyBuiltinFilter(const DImgBuiltinFilter& filter, UndoAction* const action);
+    void applyReversibleBuiltinFilter(const DImgBuiltinFilter& filter);
+    void putImageData(uchar* const data, int w, int h, bool sixteenBit);
+    void resetValues();
+    void saveNext();
+    void loadCurrent();
+    void load(const LoadingDescription& description);
+    void saveAs(const QString& file, IOFileSettingsContainer* const iofileSettings,
+                bool setExifOrientationTag, const QString& givenMimeType,
+                const VersionFileOperation& operation, const QString& intendedFilePath);
 
 public:
 
@@ -217,6 +181,260 @@ public:
 
     IccTransform               monitorICCtrans;
 };
+
+void DImgInterface::Private::putImageData(uchar* const data, int w, int h, bool sixteenBit)
+{
+    if (image.isNull())
+    {
+        kWarning() << "d->image is NULL";
+        return;
+    }
+
+    if (!data)
+    {
+        kWarning() << "New image is NULL";
+        return;
+    }
+
+    if (w == -1 && h == -1)
+    {
+        // New image size
+        w = origWidth;
+        h = origHeight;
+    }
+    else
+    {
+        // New image size == original size
+        origWidth  = w;
+        origHeight = h;
+    }
+
+    image.putImageData(w, h, sixteenBit, image.hasAlpha(), data);
+}
+
+void DImgInterface::Private::resetValues()
+{
+    valid                  = false;
+    currentDescription     = LoadingDescription();
+    width                  = 0;
+    height                 = 0;
+    origWidth              = 0;
+    origHeight             = 0;
+    selX                   = 0;
+    selY                   = 0;
+    selW                   = 0;
+    selH                   = 0;
+    gamma                  = 1.0f;
+    contrast               = 1.0f;
+    brightness             = 0.0f;
+    resolvedInitialHistory = DImageHistory();
+    undoMan->clear();
+}
+
+void DImgInterface::Private::saveNext()
+{
+    if (filesToSave.isEmpty() || currentFileToSave >= filesToSave.size())
+    {
+        return;
+    }
+
+    FileToSave& file = filesToSave[currentFileToSave];
+    kDebug() << "Saving file" << file.filePath << "at" << file.historyStep;
+
+    if (file.historyStep != -1)
+    {
+        // intermediate. Need to get data from undo manager
+        int currentStep = DImgInterface::defaultInterface()->getImageHistory().size() - 1;
+        //kDebug() << "Requesting from undo manager data" << currentStep - file.historyStep << "steps back";
+        undoMan->putImageDataAndHistory(&file.image, currentStep - file.historyStep);
+    }
+
+    QMap<QString, QVariant>::const_iterator it;
+
+    for (it = file.ioAttributes.constBegin(); it != file.ioAttributes.constEnd(); ++it)
+    {
+        file.image.setAttribute(it.key(), it.value());
+    }
+
+    file.image.prepareMetadataToSave(file.intendedFilePath, file.mimeType, file.setExifOrientationTag);
+    //kDebug() << "Adjusting image" << file.mimeType << file.fileName << file.setExifOrientationTag << file.ioAttributes
+    //       << "image:" << file.image.size() << file.image.isNull();
+
+    thread->save(file.image, file.filePath, file.mimeType);
+}
+
+void DImgInterface::Private::applyReversibleBuiltinFilter(const DImgBuiltinFilter& filter)
+{
+    applyBuiltinFilter(filter, new UndoActionReversible(DImgInterface::defaultInterface(), filter));
+}
+
+void DImgInterface::Private::applyBuiltinFilter(const DImgBuiltinFilter& filter, UndoAction* const action)
+{
+    undoMan->addAction(action);
+
+    filter.apply(image);
+    image.addFilterAction(filter.filterAction());
+
+    // many operations change the image size
+    origWidth  = image.width();
+    origHeight = image.height();
+
+    DImgInterface::defaultInterface()->setModified();
+}
+
+QMap<QString, QVariant> DImgInterface::Private::ioAttributes(IOFileSettingsContainer* const iofileSettings,
+                                                             const QString& mimeType) const
+{
+    QMap<QString, QVariant> attributes;
+
+    // JPEG file format.
+    if (mimeType.toUpper() == QString("JPG") || mimeType.toUpper() == QString("JPEG") ||
+        mimeType.toUpper() == QString("JPE"))
+    {
+        attributes.insert("quality",     iofileSettings->JPEGCompression);
+        attributes.insert("subsampling", iofileSettings->JPEGSubSampling);
+    }
+
+    // PNG file format.
+    if (mimeType.toUpper() == QString("PNG"))
+    {
+        attributes.insert("quality", iofileSettings->PNGCompression);
+    }
+
+    // TIFF file format.
+    if (mimeType.toUpper() == QString("TIFF") || mimeType.toUpper() == QString("TIF"))
+    {
+        attributes.insert("compress", iofileSettings->TIFFCompression);
+    }
+
+    // JPEG 2000 file format.
+    if (mimeType.toUpper() == QString("JP2") || mimeType.toUpper() == QString("JPX") ||
+        mimeType.toUpper() == QString("JPC") || mimeType.toUpper() == QString("PGX") ||
+        mimeType.toUpper() == QString("J2K"))
+    {
+        if (iofileSettings->JPEG2000LossLess)
+        {
+            attributes.insert("quality", 100);    // LossLess compression
+        }
+        else
+        {
+            attributes.insert("quality", iofileSettings->JPEG2000Compression);
+        }
+    }
+
+    // PGF file format.
+    if (mimeType.toUpper() == QString("PGF"))
+    {
+        if (iofileSettings->PGFLossLess)
+        {
+            attributes.insert("quality", 0);    // LossLess compression
+        }
+        else
+        {
+            attributes.insert("quality", iofileSettings->PGFCompression);
+        }
+    }
+
+    return attributes;
+}
+
+void DImgInterface::Private::saveAs(const QString& filePath, IOFileSettingsContainer* const iofileSettings,
+                                    bool setExifOrientationTag, const QString& givenMimeType,
+                                    const VersionFileOperation& op, const QString& intendedFilePath)
+{
+    // No need to toggle off undo, redo or save action during saving using
+    // signalUndoStateChanged(), this is will done by GUI implementation directly.
+
+    DImgInterface::defaultInterface()->emit signalSavingStarted(filePath);
+
+    filesToSave.clear();
+    currentFileToSave = 0;
+
+    QString mimeType = givenMimeType;
+
+    // This is possibly empty
+    if (mimeType.isEmpty())
+    {
+        mimeType = DImgInterface::defaultInterface()->getImageFormat();
+    }
+
+    if (op.tasks & VersionFileOperation::MoveToIntermediate ||
+        op.tasks & VersionFileOperation::SaveAndDelete)
+    {
+        // The current file will stored away at a different name. Adjust history.
+        image.getImageHistory().moveCurrentReferredImage(op.intermediateForLoadedFile.path,
+                                                         op.intermediateForLoadedFile.fileName);
+    }
+
+    if (op.tasks & VersionFileOperation::Replace)
+    {
+        // The current file will be replaced. Remove hint at file path (file path will be a different image)
+        image.getImageHistory().purgePathFromReferredImages(op.saveFile.path, op.saveFile.fileName);
+    }
+
+    QMap<int, VersionFileInfo>::const_iterator it;
+
+    for (it = op.intermediates.begin(); it != op.intermediates.end(); ++it)
+    {
+        FileToSave file;
+        file.fileName              = it.value().fileName;
+        file.filePath              = it.value().filePath();
+        file.intendedFilePath      = file.filePath;
+        file.mimeType              = it.value().format;
+        file.ioAttributes          = ioAttributes(iofileSettings, it.value().format);
+        file.historyStep           = it.key();
+        file.setExifOrientationTag = setExifOrientationTag;
+        file.image                 = image.copyMetaData();
+        filesToSave << file;
+        kDebug() << "Saving intermediate at history step" << file.historyStep
+                 << "to" << file.filePath << "(" << file.mimeType << ")";
+    }
+
+    // This shall be the last in the list. If not, adjust slotImageSaved
+    FileToSave primary;
+    primary.fileName              = op.saveFile.fileName;
+    primary.filePath              = filePath; // can be temporary file path
+    primary.intendedFilePath      = intendedFilePath;
+    primary.mimeType              = mimeType;
+    primary.ioAttributes          = ioAttributes(iofileSettings, mimeType);
+    primary.historyStep           = -1; // special value
+    primary.setExifOrientationTag = setExifOrientationTag;
+    primary.image                 = image;
+    filesToSave << primary;
+
+    kDebug() << "Saving to :" << primary.filePath << "(" << primary.mimeType << ")";
+
+    saveNext();
+}
+
+void DImgInterface::Private::loadCurrent()
+{
+    thread->load(currentDescription,
+                 SharedLoadSaveThread::AccessModeReadWrite,
+                 SharedLoadSaveThread::LoadingPolicyFirstRemovePrevious);
+
+    DImgInterface::defaultInterface()->emit signalLoadingStarted(currentDescription.filePath);
+}
+
+void DImgInterface::Private::load(const LoadingDescription& description)
+{
+    if (EditorToolIface::editorToolIface())
+    {
+        EditorToolIface::editorToolIface()->unLoadTool();
+    }
+
+    if (description != currentDescription)
+    {
+        resetValues();
+        currentDescription = description;
+        loadCurrent();
+    }
+    else
+    {
+        DImgInterface::defaultInterface()->emit signalLoadingStarted(currentDescription.filePath);
+        DImgInterface::defaultInterface()->emit signalImageLoaded(currentDescription.filePath, true);
+    }
+}
 
 // --------------------------------------------------------------
 
@@ -322,7 +540,7 @@ void DImgInterface::load(const QString& filePath, IOFileSettingsContainer* const
         d->nextRawDescription = LoadingDescription();
     }
 
-    load(description);
+    d->load(description);
 }
 
 void DImgInterface::slotLoadRawFromTool()
@@ -358,28 +576,8 @@ void DImgInterface::slotLoadRawFromTool()
 void DImgInterface::slotLoadRaw()
 {
     //    kDebug() << d->nextRawDescription.rawDecodingSettings;
-    load(d->nextRawDescription);
+    d->load(d->nextRawDescription);
     d->nextRawDescription = LoadingDescription();
-}
-
-void DImgInterface::load(const LoadingDescription& description)
-{
-    if (EditorToolIface::editorToolIface())
-    {
-        EditorToolIface::editorToolIface()->unLoadTool();
-    }
-
-    if (description != d->currentDescription)
-    {
-        d->resetValues();
-        d->currentDescription = description;
-        loadCurrent();
-    }
-    else
-    {
-        emit signalLoadingStarted(d->currentDescription.filePath);
-        emit signalImageLoaded(d->currentDescription.filePath, true);
-    }
 }
 
 void DImgInterface::applyTransform(const IccTransform& transform)
@@ -391,7 +589,7 @@ void DImgInterface::applyTransform(const IccTransform& transform)
 
     d->currentDescription.postProcessingParameters.colorManagement = LoadingDescription::ApplyTransform;
     d->currentDescription.postProcessingParameters.setTransform(transform);
-    loadCurrent();
+    d->loadCurrent();
 
     if (EditorToolIface::editorToolIface())
     {
@@ -399,19 +597,11 @@ void DImgInterface::applyTransform(const IccTransform& transform)
     }
 }
 
-void DImgInterface::loadCurrent()
-{
-    d->thread->load(d->currentDescription,
-                    SharedLoadSaveThread::AccessModeReadWrite,
-                    SharedLoadSaveThread::LoadingPolicyFirstRemovePrevious);
-    emit signalLoadingStarted(d->currentDescription.filePath);
-}
-
 void DImgInterface::restore()
 {
     LoadingDescription description = d->currentDescription;
     d->resetValues();
-    load(description);
+    d->load(description);
 }
 
 void DImgInterface::resetImage()
@@ -588,176 +778,19 @@ void DImgInterface::rollbackToOrigin()
     emit signalUndoStateChanged();
 }
 
-QMap<QString, QVariant> DImgInterface::ioAttributes(IOFileSettingsContainer* const iofileSettings,
-                                                    const QString& mimeType) const
-{
-    QMap<QString, QVariant> attributes;
-
-    // JPEG file format.
-    if (mimeType.toUpper() == QString("JPG") || mimeType.toUpper() == QString("JPEG") ||
-        mimeType.toUpper() == QString("JPE"))
-    {
-        attributes.insert("quality",     iofileSettings->JPEGCompression);
-        attributes.insert("subsampling", iofileSettings->JPEGSubSampling);
-    }
-
-    // PNG file format.
-    if (mimeType.toUpper() == QString("PNG"))
-    {
-        attributes.insert("quality", iofileSettings->PNGCompression);
-    }
-
-    // TIFF file format.
-    if (mimeType.toUpper() == QString("TIFF") || mimeType.toUpper() == QString("TIF"))
-    {
-        attributes.insert("compress", iofileSettings->TIFFCompression);
-    }
-
-    // JPEG 2000 file format.
-    if (mimeType.toUpper() == QString("JP2") || mimeType.toUpper() == QString("JPX") ||
-        mimeType.toUpper() == QString("JPC") || mimeType.toUpper() == QString("PGX") ||
-        mimeType.toUpper() == QString("J2K"))
-    {
-        if (iofileSettings->JPEG2000LossLess)
-        {
-            attributes.insert("quality", 100);    // LossLess compression
-        }
-        else
-        {
-            attributes.insert("quality", iofileSettings->JPEG2000Compression);
-        }
-    }
-
-    // PGF file format.
-    if (mimeType.toUpper() == QString("PGF"))
-    {
-        if (iofileSettings->PGFLossLess)
-        {
-            attributes.insert("quality", 0);    // LossLess compression
-        }
-        else
-        {
-            attributes.insert("quality", iofileSettings->PGFCompression);
-        }
-    }
-
-    return attributes;
-}
-
 void DImgInterface::saveAs(const QString& filePath, IOFileSettingsContainer* const iofileSettings,
-                           bool setExifOrientationTag, const QString& givenMimeType,
-                           const QString& intendedFilePath)
+                                    bool setExifOrientationTag, const QString& givenMimeType,
+                                    const QString& intendedFilePath)
 {
-    saveAs(filePath, iofileSettings, setExifOrientationTag, givenMimeType, VersionFileOperation(), intendedFilePath);
+    d->saveAs(filePath, iofileSettings, setExifOrientationTag, givenMimeType,
+           VersionFileOperation(), intendedFilePath);
 }
 
 void DImgInterface::saveAs(const QString& filePath, IOFileSettingsContainer* const iofileSettings,
                            bool setExifOrientationTag, const QString& givenMimeType,
                            const VersionFileOperation& op)
 {
-    saveAs(filePath, iofileSettings, setExifOrientationTag, givenMimeType, op, op.saveFile.filePath());
-}
-
-void DImgInterface::saveAs(const QString& filePath, IOFileSettingsContainer* const iofileSettings,
-                           bool setExifOrientationTag, const QString& givenMimeType,
-                           const VersionFileOperation& op, const QString& intendedFilePath)
-{
-    // No need to toggle off undo, redo or save action during saving using
-    // signalUndoStateChanged(), this is will done by GUI implementation directly.
-
-    emit signalSavingStarted(filePath);
-
-    d->filesToSave.clear();
-    d->currentFileToSave = 0;
-
-    QString mimeType = givenMimeType;
-
-    // This is possibly empty
-    if (mimeType.isEmpty())
-    {
-        mimeType = getImageFormat();
-    }
-
-    if (op.tasks & VersionFileOperation::MoveToIntermediate ||
-        op.tasks & VersionFileOperation::SaveAndDelete)
-    {
-        // The current file will stored away at a different name. Adjust history.
-        d->image.getImageHistory().moveCurrentReferredImage(op.intermediateForLoadedFile.path,
-                                                            op.intermediateForLoadedFile.fileName);
-    }
-
-    if (op.tasks & VersionFileOperation::Replace)
-    {
-        // The current file will be replaced. Remove hint at file path (file path will be a different image)
-        d->image.getImageHistory().purgePathFromReferredImages(op.saveFile.path, op.saveFile.fileName);
-    }
-
-    QMap<int, VersionFileInfo>::const_iterator it;
-
-    for (it = op.intermediates.begin(); it != op.intermediates.end(); ++it)
-    {
-        FileToSave file;
-        file.fileName              = it.value().fileName;
-        file.filePath              = it.value().filePath();
-        file.intendedFilePath      = file.filePath;
-        file.mimeType              = it.value().format;
-        file.ioAttributes          = ioAttributes(iofileSettings, it.value().format);
-        file.historyStep           = it.key();
-        file.setExifOrientationTag = setExifOrientationTag;
-        file.image                 = d->image.copyMetaData();
-        d->filesToSave << file;
-        kDebug() << "Saving intermediate at history step" << file.historyStep
-                 << "to" << file.filePath << "(" << file.mimeType << ")";
-    }
-
-    // This shall be the last in the list. If not, adjust slotImageSaved
-    FileToSave primary;
-    primary.fileName              = op.saveFile.fileName;
-    primary.filePath              = filePath; // can be temporary file path
-    primary.intendedFilePath      = intendedFilePath;
-    primary.mimeType              = mimeType;
-    primary.ioAttributes          = ioAttributes(iofileSettings, mimeType);
-    primary.historyStep           = -1; // special value
-    primary.setExifOrientationTag = setExifOrientationTag;
-    primary.image                 = d->image;
-    d->filesToSave << primary;
-
-    kDebug() << "Saving to :" << primary.filePath << "(" << primary.mimeType << ")";
-
-    saveNext();
-}
-
-void DImgInterface::saveNext()
-{
-    if (d->filesToSave.isEmpty() || d->currentFileToSave >= d->filesToSave.size())
-    {
-        return;
-    }
-
-    FileToSave& file = d->filesToSave[d->currentFileToSave];
-    kDebug() << "Saving file" << file.filePath << "at" << file.historyStep;
-
-    if (file.historyStep != -1)
-    {
-        // intermediate. Need to get data from undo manager
-        int currentStep = getImageHistory().size() - 1;
-        //kDebug() << "Requesting from undo manager data" << currentStep - file.historyStep << "steps back";
-        d->undoMan->putImageDataAndHistory(&file.image, currentStep - file.historyStep);
-    }
-
-    QMap<QString, QVariant>::const_iterator it;
-
-    for (it = file.ioAttributes.constBegin(); it != file.ioAttributes.constEnd(); ++it)
-    {
-        file.image.setAttribute(it.key(), it.value());
-    }
-
-    file.image.prepareMetadataToSave(file.intendedFilePath, file.mimeType,
-                                     file.setExifOrientationTag);
-    //kDebug() << "Adjusting image" << file.mimeType << file.fileName << file.setExifOrientationTag << file.ioAttributes
-    //       << "image:" << file.image.size() << file.image.isNull();
-
-    d->thread->save(file.image, file.filePath, file.mimeType);
+    d->saveAs(filePath, iofileSettings, setExifOrientationTag, givenMimeType, op, op.saveFile.filePath());
 }
 
 void DImgInterface::slotImageSaved(const QString& filePath, bool success)
@@ -803,7 +836,7 @@ void DImgInterface::slotImageSaved(const QString& filePath, bool success)
     }
     else
     {
-        saveNext();
+        d->saveNext();
     }
 }
 
@@ -1106,60 +1139,40 @@ void DImgInterface::zoom(double val)
     d->height = (int)(d->origHeight * val);
 }
 
-void DImgInterface::applyReversibleBuiltinFilter(const DImgBuiltinFilter& filter)
-{
-    applyBuiltinFilter(filter, new UndoActionReversible(this, filter));
-}
-
-void DImgInterface::applyBuiltinFilter(const DImgBuiltinFilter& filter, UndoAction* action)
-{
-    d->undoMan->addAction(action);
-
-    filter.apply(d->image);
-    d->image.addFilterAction(filter.filterAction());
-
-    // many operations change the image size
-    d->origWidth  = d->image.width();
-    d->origHeight = d->image.height();
-
-    setModified();
-}
-
 void DImgInterface::rotate90()
 {
-    applyReversibleBuiltinFilter(DImgBuiltinFilter(DImgBuiltinFilter::Rotate90));
+    d->applyReversibleBuiltinFilter(DImgBuiltinFilter(DImgBuiltinFilter::Rotate90));
 }
 
 void DImgInterface::rotate180()
 {
-    applyReversibleBuiltinFilter(DImgBuiltinFilter(DImgBuiltinFilter::Rotate180));
+    d->applyReversibleBuiltinFilter(DImgBuiltinFilter(DImgBuiltinFilter::Rotate180));
 }
 
 void DImgInterface::rotate270()
 {
-    applyReversibleBuiltinFilter(DImgBuiltinFilter(DImgBuiltinFilter::Rotate270));
+    d->applyReversibleBuiltinFilter(DImgBuiltinFilter(DImgBuiltinFilter::Rotate270));
 }
 
 void DImgInterface::flipHoriz()
 {
-    applyReversibleBuiltinFilter(DImgBuiltinFilter(DImgBuiltinFilter::FlipHorizontally));
+    d->applyReversibleBuiltinFilter(DImgBuiltinFilter(DImgBuiltinFilter::FlipHorizontally));
 }
 
 void DImgInterface::flipVert()
 {
-    applyReversibleBuiltinFilter(DImgBuiltinFilter(DImgBuiltinFilter::FlipVertically));
+    d->applyReversibleBuiltinFilter(DImgBuiltinFilter(DImgBuiltinFilter::FlipVertically));
 }
 
 void DImgInterface::crop(const QRect& rect)
 {
-    applyBuiltinFilter(DImgBuiltinFilter(DImgBuiltinFilter::Crop, rect),
-                       new UndoActionIrreversible(this, "Crop"));
+    d->applyBuiltinFilter(DImgBuiltinFilter(DImgBuiltinFilter::Crop, rect), new UndoActionIrreversible(this, "Crop"));
 }
 
 void DImgInterface::convertDepth(int depth)
 {
-    applyBuiltinFilter(DImgBuiltinFilter(depth == 32 ? DImgBuiltinFilter::ConvertTo8Bit : DImgBuiltinFilter::ConvertTo16Bit),
-                       new UndoActionIrreversible(this, "Convert Color Depth"));
+    d->applyBuiltinFilter(DImgBuiltinFilter(depth == 32 ? DImgBuiltinFilter::ConvertTo8Bit : DImgBuiltinFilter::ConvertTo16Bit),
+                          new UndoActionIrreversible(this, "Convert Color Depth"));
 }
 
 DImg* DImgInterface::getImg() const
