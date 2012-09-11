@@ -175,6 +175,14 @@ public:
      */
     QPixmap               convertToPixmap(DImg& img)  const;
 
+    QString               getImageFileName()          const;
+    QString               getImageFilePath()          const;
+    QString               getImageFormat()            const;
+    QStringList           getUndoHistory()            const;
+    QStringList           getRedoHistory()            const;
+    UndoState             undoState()                 const;
+    int                   availableUndoSteps()        const;
+    int                   availableRedoSteps()        const;
     IccProfile            getEmbeddedICC()            const;
     KExiv2Data            getMetadata()               const;
     DImageHistory         getImageHistory()           const;
@@ -182,15 +190,6 @@ public:
     DImageHistory         getImageHistoryOfFullRedo() const;
     DImageHistory         getResolvedInitialHistory() const;
     void                  setResolvedInitialHistory(const DImageHistory& history);
-
-    QString               getImageFileName()   const;
-    QString               getImageFilePath()   const;
-    QString               getImageFormat()     const;
-    QStringList           getUndoHistory()     const;
-    QStringList           getRedoHistory()     const;
-    UndoState             undoState()          const;
-    int                   availableUndoSteps() const;
-    int                   availableRedoSteps() const;
 
 protected Q_SLOTS:
 
@@ -228,7 +227,6 @@ private:
 
     void   load(const LoadingDescription& description);
     void   loadCurrent();
-    void   resetValues();
     void   saveNext();
 
     QMap<QString, QVariant> ioAttributes(IOFileSettingsContainer* const iofileSettings, const QString& givenMimeType) const;

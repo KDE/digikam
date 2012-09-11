@@ -60,8 +60,10 @@ public:
         constrainWidth(0),
         constrainHeight(0),
         previewWidth(0),
-        previewHeight(0)
+        previewHeight(0),
+        core(DImgInterface::defaultInterface())
     {
+
     }
 
     QPixmap checkPixmap();
@@ -70,22 +72,23 @@ public:
 
 public:
 
-    bool    usePreviewSelection;
+    bool                 usePreviewSelection;
 
-    int     originalWidth;
-    int     originalHeight;
-    int     originalBytesDepth;
+    int                  originalWidth;
+    int                  originalHeight;
+    int                  originalBytesDepth;
 
-    int     constrainWidth;
-    int     constrainHeight;
+    int                  constrainWidth;
+    int                  constrainHeight;
 
-    int     previewWidth;
-    int     previewHeight;
+    int                  previewWidth;
+    int                  previewHeight;
 
-    QPixmap qcheck;
+    QPixmap              qcheck;
 
-    DImg    previewImage;
-    DImg    targetPreviewImage;
+    DImg                 previewImage;
+    DImg                 targetPreviewImage;
+    DImgInterface* const core;
 };
 
 QPixmap ImageIface::Private::checkPixmap()
@@ -114,7 +117,7 @@ uchar* ImageIface::Private::getPreviewImage()
 
         if (!usePreviewSelection)
         {
-            im = DImgInterface::defaultInterface()->getImg();
+            im = core->getImg();
 
             if (!im || im->isNull())
             {
@@ -123,7 +126,7 @@ uchar* ImageIface::Private::getPreviewImage()
         }
         else
         {
-            im = new DImg(DImgInterface::defaultInterface()->getImgSelection());
+            im = new DImg(core->getImgSelection());
 
             if (!im)
             {
@@ -136,7 +139,7 @@ uchar* ImageIface::Private::getPreviewImage()
                 return 0;
             }
 
-            im->setIccProfile(DImgInterface::defaultInterface()->getEmbeddedICC());
+            im->setIccProfile(core->getEmbeddedICC());
         }
 
         QSize sz(im->width(), im->height());
@@ -166,9 +169,9 @@ ImageIface::ImageIface(const QSize& size)
 {
     d->constrainWidth     = size.width();
     d->constrainHeight    = size.height();
-    d->originalWidth      = DImgInterface::defaultInterface()->origWidth();
-    d->originalHeight     = DImgInterface::defaultInterface()->origHeight();
-    d->originalBytesDepth = DImgInterface::defaultInterface()->bytesDepth();
+    d->originalWidth      = d->core->origWidth();
+    d->originalHeight     = d->core->origHeight();
+    d->originalBytesDepth = d->core->bytesDepth();
 }
 
 ImageIface::~ImageIface()
@@ -188,13 +191,13 @@ bool ImageIface::previewType() const
 
 DColor ImageIface::colorInfoFromOriginal(const QPoint& point) const
 {
-    if (!DImgInterface::defaultInterface()->getImg()->isNull() || point.x() > originalSize().width() || point.y() > originalSize().height())
+    if (!d->core->getImg()->isNull() || point.x() > originalSize().width() || point.y() > originalSize().height())
     {
         kWarning() << "Coordinate out of range or no image data available!";
         return DColor();
     }
 
-    return DImgInterface::defaultInterface()->getImg()->getPixelColor(point.x(), point.y());
+    return d->core->getImg()->getPixelColor(point.x(), point.y());
 }
 
 DColor ImageIface::colorInfoFromPreview(const QPoint& point) const
@@ -238,12 +241,12 @@ DImg ImageIface::preview() const
 
 DImg* ImageIface::original() const
 {
-    return DImgInterface::defaultInterface()->getImg();
+    return d->core->getImg();
 }
 
 DImg ImageIface::selection() const
 {
-    return DImgInterface::defaultInterface()->getImgSelection();
+    return d->core->getImgSelection();
 }
 
 void ImageIface::putPreviewIccProfile(const IccProfile& profile)
@@ -254,7 +257,7 @@ void ImageIface::putPreviewIccProfile(const IccProfile& profile)
 
 void ImageIface::putOriginalIccProfile(const IccProfile& profile)
 {
-    DImgInterface::defaultInterface()->putIccProfile(profile);
+    d->core->putIccProfile(profile);
 }
 
 QSize ImageIface::previewSize() const
@@ -274,53 +277,52 @@ bool ImageIface::previewHasAlpha() const
 
 QSize ImageIface::originalSize() const
 {
-    return QSize(DImgInterface::defaultInterface()->origWidth(),
-                 DImgInterface::defaultInterface()->origHeight());
+    return QSize(d->core->origWidth(), d->core->origHeight());
 }
 
 bool ImageIface::originalSixteenBit() const
 {
-    return DImgInterface::defaultInterface()->sixteenBit();
+    return d->core->sixteenBit();
 }
 
 bool ImageIface::originalHasAlpha() const
 {
-    return DImgInterface::defaultInterface()->hasAlpha();
+    return d->core->hasAlpha();
 }
 
 QRect ImageIface::selectionRect() const
 {
-    return (DImgInterface::defaultInterface()->getSelectedArea());
+    return (d->core->getSelectedArea());
 }
 
 void ImageIface::convertOriginalColorDepth(int depth)
 {
-    DImgInterface::defaultInterface()->convertDepth(depth);
+    d->core->convertDepth(depth);
 }
 
 QPixmap ImageIface::convertToPixmap(DImg& img) const
 {
-    return DImgInterface::defaultInterface()->convertToPixmap(img);
+    return d->core->convertToPixmap(img);
 }
 
 IccProfile ImageIface::originalIccProfile() const
 {
-    return DImgInterface::defaultInterface()->getEmbeddedICC();
+    return d->core->getEmbeddedICC();
 }
 
 KExiv2Data ImageIface::originalMetadata() const
 {
-    return DImgInterface::defaultInterface()->getImg()->getMetadata();
+    return d->core->getImg()->getMetadata();
 }
 
 void ImageIface::setOriginalMetadata(const KExiv2Data& meta)
 {
-    DImgInterface::defaultInterface()->getImg()->setMetadata(meta);
+    d->core->getImg()->setMetadata(meta);
 }
 
 PhotoInfoContainer ImageIface::originalPhotoInfo() const
 {
-    DMetadata meta(DImgInterface::defaultInterface()->getImg()->getMetadata());
+    DMetadata meta(d->core->getImg()->getMetadata());
     return meta.getPhotographInformation();
 }
 
@@ -354,7 +356,7 @@ void ImageIface::paint(QPaintDevice* const device, const QRect& rect, QPainter* 
         }
 
         QPixmap pixImage;
-        ICCSettingsContainer iccSettings = DImgInterface::defaultInterface()->getICCSettings();
+        ICCSettingsContainer iccSettings = d->core->getICCSettings();
 
         if (iccSettings.enableCM && iccSettings.useManagedView)
         {
@@ -371,11 +373,11 @@ void ImageIface::paint(QPaintDevice* const device, const QRect& rect, QPainter* 
 
         // Show the Over/Under exposure pixels indicators
 
-        ExposureSettingsContainer* expoSettings = DImgInterface::defaultInterface()->getExposureSettings();
+        ExposureSettingsContainer* expoSettings = d->core->getExposureSettings();
 
         if (expoSettings->underExposureIndicator || expoSettings->overExposureIndicator)
         {
-            ExposureSettingsContainer* expoSettings = DImgInterface::defaultInterface()->getExposureSettings();
+            ExposureSettingsContainer* expoSettings = d->core->getExposureSettings();
             QImage pureColorMask                    = d->targetPreviewImage.pureColorMask(expoSettings);
             QPixmap pixMask                         = QPixmap::fromImage(pureColorMask);
             p->drawPixmap(x, y, pixMask, 0, 0, width, height);
@@ -405,7 +407,7 @@ void ImageIface::putSelection(const QString& caller, const FilterAction& action,
         return;
     }
 
-    DImgInterface::defaultInterface()->putImgSelection(caller, action, img);
+    d->core->putImgSelection(caller, action, img);
 }
 
 void ImageIface::putPreview(const DImg& img)
@@ -438,7 +440,7 @@ void ImageIface::putOriginal(const QString& caller, const FilterAction& action, 
         return;
     }
 
-    DImgInterface::defaultInterface()->putImg(caller, action, img);
+    d->core->putImg(caller, action, img);
 }
 
 }   // namespace Digikam

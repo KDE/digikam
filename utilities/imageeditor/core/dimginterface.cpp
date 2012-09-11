@@ -157,6 +157,25 @@ public:
         image.putImageData(w, h, sixteenBit, image.hasAlpha(), data);
     }
 
+    void resetValues()
+    {
+        valid                  = false;
+        currentDescription     = LoadingDescription();
+        width                  = 0;
+        height                 = 0;
+        origWidth              = 0;
+        origHeight             = 0;
+        selX                   = 0;
+        selY                   = 0;
+        selW                   = 0;
+        selH                   = 0;
+        gamma                  = 1.0f;
+        contrast               = 1.0f;
+        brightness             = 0.0f;
+        resolvedInitialHistory = DImageHistory();
+        undoMan->clear();
+    }
+
 public:
 
     bool                       valid;
@@ -320,7 +339,7 @@ void DImgInterface::slotLoadRawFromTool()
 
         if (rawImport->hasPostProcessedImage())
         {
-            resetValues();
+            d->resetValues();
             d->currentDescription = d->nextRawDescription;
             d->nextRawDescription = LoadingDescription();
 
@@ -352,7 +371,7 @@ void DImgInterface::load(const LoadingDescription& description)
 
     if (description != d->currentDescription)
     {
-        resetValues();
+        d->resetValues();
         d->currentDescription = description;
         loadCurrent();
     }
@@ -391,7 +410,7 @@ void DImgInterface::loadCurrent()
 void DImgInterface::restore()
 {
     LoadingDescription description = d->currentDescription;
-    resetValues();
+    d->resetValues();
     load(description);
 }
 
@@ -402,27 +421,8 @@ void DImgInterface::resetImage()
         EditorToolIface::editorToolIface()->unLoadTool();
     }
 
-    resetValues();
+    d->resetValues();
     d->image.reset();
-}
-
-void DImgInterface::resetValues()
-{
-    d->valid                  = false;
-    d->currentDescription     = LoadingDescription();
-    d->width                  = 0;
-    d->height                 = 0;
-    d->origWidth              = 0;
-    d->origHeight             = 0;
-    d->selX                   = 0;
-    d->selY                   = 0;
-    d->selW                   = 0;
-    d->selH                   = 0;
-    d->gamma                  = 1.0f;
-    d->contrast               = 1.0f;
-    d->brightness             = 0.0f;
-    d->resolvedInitialHistory = DImageHistory();
-    d->undoMan->clear();
 }
 
 void DImgInterface::setICCSettings(const ICCSettingsContainer& cmSettings)
