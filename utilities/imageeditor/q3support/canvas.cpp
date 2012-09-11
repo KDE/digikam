@@ -68,11 +68,11 @@
 
 #include "imagehistogram.h"
 #include "paniconwidget.h"
-#include "dimginterface.h"
+#include "editorcore.h"
 #include "iccsettingscontainer.h"
 #include "icctransform.h"
 #include "exposurecontainer.h"
-#include "iofilesettingscontainer.h"
+#include "iofilesettings.h"
 #include "loadingcacheinterface.h"
 #include "drubberband.h"
 
@@ -159,7 +159,7 @@ public:
 
     KPopupFrame*             panIconPopup;
 
-    DImgInterface*           im;
+    EditorCore*           im;
 
     QString                  errorMessage;
 };
@@ -167,7 +167,7 @@ public:
 Canvas::Canvas(QWidget* const parent)
     : Q3ScrollView(parent), d(new Private)
 {
-    d->im     = new DImgInterface();
+    d->im     = new EditorCore();
     d->parent = parent;
     d->bgColor.setRgb(0, 0, 0);
 
@@ -256,7 +256,7 @@ void Canvas::reset()
     d->tileCache.clear();
 }
 
-void Canvas::load(const QString& filename, IOFileSettingsContainer* const IOFileSettings)
+void Canvas::load(const QString& filename, IOFileSettings* const IOFileSettings)
 {
     reset();
 
@@ -382,14 +382,14 @@ QRect Canvas::visibleArea() const
     return (QRect(contentsX(), contentsY(), visibleWidth(), visibleHeight()));
 }
 
-DImgInterface* Canvas::interface() const
+EditorCore* Canvas::interface() const
 {
     return d->im;
 }
 
 void Canvas::makeDefaultEditingCanvas()
 {
-    DImgInterface::setDefaultInterface(d->im);
+    EditorCore::setDefaultInstance(d->im);
 }
 
 double Canvas::calcAutoZoomFactor() const

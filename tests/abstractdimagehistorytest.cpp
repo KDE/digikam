@@ -43,12 +43,12 @@
 #include "infraredfilter.h"
 #include "blurfilter.h"
 #include "dimagehistory.h"
-#include "dimginterface.h"
+#include "editorcore.h"
 #include "editortooliface.h"
 #include "editorwindow.h"
 #include "iccsettings.h"
 #include "imageiface.h"
-#include "iofilesettingscontainer.h"
+#include "iofilesettings.h"
 
 using namespace Digikam;
 
@@ -204,8 +204,8 @@ void AbstractDImageHistoryTest::initBaseTestCase()
     c.enableCM = false;
     IccSettings::instance()->setSettings(c);
 
-    m_im = new DImgInterface();
-    DImgInterface::setDefaultInterface(m_im);
+    m_im = new EditorCore();
+    EditorCore::setDefaultInstance(m_im);
 
     connect(m_im, SIGNAL(signalImageLoaded(QString,bool)),
             this, SLOT(slotImageLoaded(QString,bool)));

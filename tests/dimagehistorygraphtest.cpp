@@ -42,13 +42,13 @@
 #include "collectionlocation.h"
 #include "collectionmanager.h"
 #include "collectionscanner.h"
-#include "dimginterface.h"
+#include "editorcore.h"
 #include "dmetadata.h"
 #include "imageinfo.h"
 #include "imagehistorygraph.h"
 #include "imagehistorygraphdata.h"
 #include "imagehistorygraphmodel.h"
-#include "iofilesettingscontainer.h"
+#include "iofilesettings.h"
 #include "modeltest.h"
 #include "tagscache.h"
 
@@ -138,7 +138,7 @@ void DImageHistoryGraphTest::testEditing()
                 4
     */
 
-    IOFileSettingsContainer container;
+    IOFileSettings container;
     m_im->load(readOnlyImages.first(), &container);
     m_loop.exec();
 

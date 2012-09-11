@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DIMGINTERFACE_H
-#define DIMGINTERFACE_H
+#ifndef EDITOR_CORE_H
+#define EDITOR_CORE_H
 
 // Qt includes
 
@@ -44,44 +44,31 @@ class QPixmap;
 namespace Digikam
 {
 
+class UndoState;
 class ICCSettingsContainer;
 class ExposureSettingsContainer;
-class IOFileSettingsContainer;
+class IOFileSettings;
 class LoadingDescription;
 class DImgBuiltinFilter;
 class UndoAction;
 class UndoMetadataContainer;
 class VersionFileOperation;
 
-class DIGIKAM_EXPORT DImgInterface : public QObject
+class DIGIKAM_EXPORT EditorCore : public QObject
 {
     Q_OBJECT
 
 public:
 
-    class UndoState
-    {
-    public:
-
-        UndoState();
-
-        bool hasUndo;
-        bool hasRedo;
-        bool hasChanges;
-        bool hasUndoableChanges;
-    };
+    static EditorCore* defaultInstance();
+    static void setDefaultInstance(EditorCore* const instance);
 
 public:
 
-    static DImgInterface* defaultInterface();
-    static void setDefaultInterface(DImgInterface* const defaultInterface);
+    EditorCore();
+    ~EditorCore();
 
-public:
-
-    DImgInterface();
-    ~DImgInterface();
-
-    void   load(const QString& filename, IOFileSettingsContainer* const iofileSettings);
+    void   load(const QString& filename, IOFileSettings* const iofileSettings);
     void   applyTransform(const IccTransform& transform);
     void   updateColorManagement();
     void   setSoftProofingEnabled(bool enabled);
@@ -100,12 +87,12 @@ public:
     void   restore();
     void   rollbackToOrigin();
 
-    void   saveAs(const QString& file, IOFileSettingsContainer* const iofileSettings,
-                  bool setExifOrientationTag, const QString& mimeType,
+    void   saveAs(const QString& file, IOFileSettings* const iofileSettings,
+                  bool setExifOrientationTag, const QString& givenMimeType,
                   const QString& intendedFilePath);
 
-    void   saveAs(const QString& file, IOFileSettingsContainer* const iofileSettings,
-                  bool setExifOrientationTag, const QString& mimeType,
+    void   saveAs(const QString& file, IOFileSettings* const iofileSettings,
+                  bool setExifOrientationTag, const QString& givenMimeType,
                   const VersionFileOperation& operation);
 
     void    setHistoryIsBranch(bool isBranching);
@@ -218,22 +205,7 @@ private Q_SLOTS:
 
 private:
 
-    void   saveAs(const QString& file, IOFileSettingsContainer* const iofileSettings,
-                  bool setExifOrientationTag, const QString& mimeType,
-                  const VersionFileOperation& operation, const QString& intendedFilePath);
-
-    void   applyBuiltinFilter(const DImgBuiltinFilter& filter, UndoAction* const action);
-    void   applyReversibleBuiltinFilter(const DImgBuiltinFilter& filter);
-
-    void   load(const LoadingDescription& description);
-    void   loadCurrent();
-    void   saveNext();
-
-    QMap<QString, QVariant> ioAttributes(IOFileSettingsContainer* const iofileSettings, const QString& givenMimeType) const;
-
-private:
-
-    static DImgInterface* m_defaultInterface;
+    static EditorCore* m_defaultInstance;
 
     class Private;
     Private* const d;
@@ -241,4 +213,4 @@ private:
 
 }  // namespace Digikam
 
-#endif /* DIMGINTERFACE_H */
+#endif /* EDITOR_CORE_H */

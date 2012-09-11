@@ -44,7 +44,7 @@
 
 #include "managedloadsavethread.h"
 #include "loadingdescription.h"
-#include "dimginterface.h"
+#include "editorcore.h"
 #include "previewlayout.h"
 #include "imagepreviewitem.h"
 

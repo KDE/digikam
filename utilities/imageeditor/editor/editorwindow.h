@@ -44,7 +44,7 @@
 #include "digikam_export.h"
 #include "thumbbardock.h"
 #include "previewtoolbar.h"
-#include "savingcontextcontainer.h"
+#include "savingcontext.h"
 
 class QSplitter;
 
@@ -66,7 +66,7 @@ class DLogoAction;
 class EditorTool;
 class EditorStackView;
 class ExposureSettingsContainer;
-class IOFileSettingsContainer;
+class IOFileSettings;
 class ImagePluginLoader;
 class ICCSettingsContainer;
 class Sidebar;
@@ -150,10 +150,10 @@ protected:
     Canvas*                   m_canvas;
     ImagePluginLoader*        m_imagePluginLoader;
     StatusProgressBar*        m_nameLabel;
-    IOFileSettingsContainer*  m_IOFileSettings;
+    IOFileSettings*  m_IOFileSettings;
     QPointer<KProgressDialog> m_savingProgressDialog;
 
-    SavingContextContainer    m_savingContext;
+    SavingContext    m_savingContext;
 
     QString                   m_formatForRAWVersioning;
     QString                   m_formatForSubversions;

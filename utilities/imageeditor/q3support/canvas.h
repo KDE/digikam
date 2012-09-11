@@ -53,11 +53,11 @@ class QColor;
 namespace Digikam
 {
 
-class DImgInterface;
+class EditorCore;
 class ExposureSettingsContainer;
 class ICCSettingsContainer;
 class IccTransform;
-class IOFileSettingsContainer;
+class IOFileSettings;
 
 class DIGIKAM_EXPORT Canvas : public Q3ScrollView
 {
@@ -68,7 +68,7 @@ public:
     Canvas(QWidget* const parent = 0);
     ~Canvas();
 
-    void    load(const QString& filename, IOFileSettingsContainer* const IOFileSettings);
+    void    load(const QString& filename, IOFileSettings* const IOFileSettings);
     void    preload(const QString& filename);
 
     void    resetImage();
@@ -76,7 +76,7 @@ public:
     void    applyTransform(const IccTransform& transform);
     void    setModified();
 
-    DImgInterface* interface() const;
+    EditorCore* interface() const;
     void makeDefaultEditingCanvas();
 
     double snapZoom(double z) const;

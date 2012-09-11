@@ -3,10 +3,10 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2010-08-01
- * Description : a test for the DImageHistory
+ * Date        : 2003-01-15
+ * Description : Undo state container
  *
- * Copyright (C) 2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,35 +21,36 @@
  *
  * ============================================================ */
 
-#ifndef DIMAGEHISTORYTEST_H
-#define DIMAGEHISTORYTEST_H
+#ifndef UNDOSTATE_H
+#define UNDOSTATE_H
 
-// Qt includes
-
-#include <QtTest/QtTest>
-#include <QEventLoop>
-
-// Local includes
-
-#include "editorcore.h"
-#include "abstractdimagehistorytest.h"
-
-class DImageHistoryTest : public AbstractDImageHistoryTest
+namespace Digikam
 {
-    Q_OBJECT
 
-public Q_SLOTS:
+class UndoState
+{
+public:
 
-    void slotImageLoaded(const QString&, bool);
-    void slotImageSaved(const QString&, bool);
+    UndoState()
+        : hasUndo(false),
+          hasRedo(false),
+          hasChanges(false),
+          hasUndoableChanges(false)
+    {
+    }
 
-private Q_SLOTS:
+    ~UndoState()
+    {
+    }
 
-    void testXml();
-    void testDImg();
+public:
 
-    void initTestCase();
-    void cleanupTestCase();
+    bool hasUndo;
+    bool hasRedo;
+    bool hasChanges;
+    bool hasUndoableChanges;
 };
 
-#endif
+}  // namespace Digikam
+
+#endif /* UNDOSTATE_H */

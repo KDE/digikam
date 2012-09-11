@@ -31,7 +31,7 @@
 
 // Local includes
 
-#include "dimginterface.h"
+#include "editorcore.h"
 
 namespace Digikam
 {
@@ -70,7 +70,7 @@ bool UndoMetadataContainer::changesIccProfile(const DImg& target) const
     return !(profile == target.getIccProfile());
 }
 
-UndoAction::UndoAction(DImgInterface* const iface)
+UndoAction::UndoAction(EditorCore* const iface)
     : d(new Private)
 {
     d->container = UndoMetadataContainer::fromImage(*iface->getImg());
@@ -124,7 +124,7 @@ DImageHistory UndoAction::fileOriginResolvedHistory() const
 
 // ---------------------------------------------------------------------------------------------
 
-UndoActionReversible::UndoActionReversible(DImgInterface* const iface, const DImgBuiltinFilter& reversibleFilter)
+UndoActionReversible::UndoActionReversible(EditorCore* const iface, const DImgBuiltinFilter& reversibleFilter)
     : UndoAction(iface),
       m_filter(reversibleFilter)
 {
@@ -143,7 +143,7 @@ DImgBuiltinFilter UndoActionReversible::getReverseFilter() const
 
 // ---------------------------------------------------------------------------------------------
 
-UndoActionIrreversible::UndoActionIrreversible(DImgInterface* const iface, const QString& title)
+UndoActionIrreversible::UndoActionIrreversible(EditorCore* const iface, const QString& title)
     : UndoAction(iface)
 {
     setTitle(title);

@@ -7,7 +7,7 @@
  * Description : digiKam image editor GUI
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2004-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -93,7 +93,7 @@
 #include "ddragobjects.h"
 #include "deletedialog.h"
 #include "dimg.h"
-#include "dimginterface.h"
+#include "editorcore.h"
 #include "dimagehistory.h"
 #include "dio.h"
 #include "dmetadata.h"
@@ -112,7 +112,7 @@
 #include "imagepropertiesversionstab.h"
 #include "imagescanner.h"
 #include "imagethumbnailbar.h"
-#include "iofilesettingscontainer.h"
+#include "iofilesettings.h"
 #include "knotificationwrapper.h"
 #include "loadingcacheinterface.h"
 #include "metadatahub.h"
@@ -120,7 +120,7 @@
 #include "colorlabelwidget.h"
 #include "picklabelwidget.h"
 #include "ratingwidget.h"
-#include "savingcontextcontainer.h"
+#include "savingcontext.h"
 #include "scancontroller.h"
 #include "setup.h"
 #include "slideshow.h"
@@ -132,6 +132,7 @@
 #include "thumbbardock.h"
 #include "thumbnailloadthread.h"
 #include "uifilevalidator.h"
+#include "undostate.h"
 #include "versionmanager.h"
 
 namespace Digikam
@@ -702,8 +703,8 @@ void ImageWindow::slotLoadCurrent()
     d->setThumbBarToCurrent();
 
     // Do this _after_ the canvas->load(), so that the main view histogram does not load
-    // a smaller version if a raw image, and after that the DImgInterface loads the full version.
-    // So first let DImgInterface create its loading task, only then any external objects.
+    // a smaller version if a raw image, and after that the EditorCore loads the full version.
+    // So first let EditorCore create its loading task, only then any external objects.
     setViewToURL(d->currentUrl());
 }
 
@@ -1128,7 +1129,7 @@ void ImageWindow::saveAsIsComplete()
 
     // copy the metadata of the original file to the new file
     kDebug() << "was versioned"
-             << (m_savingContext.executedOperation == SavingContextContainer::SavingStateVersion)
+             << (m_savingContext.executedOperation == SavingContext::SavingStateVersion)
              << "current" << d->currentImageInfo.id() << d->currentImageInfo.name()
              << "destinations" << m_savingContext.versionFileOperation.allFilePaths();
 
@@ -1144,7 +1145,7 @@ void ImageWindow::saveAsIsComplete()
     }
 
     QStringList derivedFilePaths;
-    if (m_savingContext.executedOperation == SavingContextContainer::SavingStateVersion)
+    if (m_savingContext.executedOperation == SavingContext::SavingStateVersion)
     {
         derivedFilePaths = m_savingContext.versionFileOperation.allFilePaths();
     }
@@ -1161,7 +1162,7 @@ void ImageWindow::saveAsIsComplete()
         d->imageInfoModel->addImageInfoSynchronously(d->currentImageInfo);
     }
 
-    // set origin of DImgInterface: "As if" the last saved image was loaded directly
+    // set origin of EditorCore: "As if" the last saved image was loaded directly
     resetOriginSwitchFile();
 
     // If the DImg is put in the cache under the new name, this means the new file will not be reloaded.

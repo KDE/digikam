@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef IOFILESETTINGSCONTAINER_H
-#define IOFILESETTINGSCONTAINER_H
+#ifndef IO_FILE_SETTINGS_H
+#define IO_FILE_SETTINGS_H
 
 // Local includes
 
@@ -32,12 +32,12 @@
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT IOFileSettingsContainer
+class DIGIKAM_EXPORT IOFileSettings
 {
 
 public:
 
-    IOFileSettingsContainer()
+    IOFileSettings()
     {
         JPEGCompression     = 75;
         JPEGSubSampling     = 1;    // Medium sub-sampling
@@ -50,7 +50,7 @@ public:
         useRAWImport        = true;
     };
 
-    ~IOFileSettingsContainer() {};
+    ~IOFileSettings() {};
 
 public:
 
@@ -89,4 +89,4 @@ public:
 
 }  // namespace Digikam
 
-#endif  // IOFILESETTINGSCONTAINER_H
+#endif  // IO_FILE_SETTINGS_H

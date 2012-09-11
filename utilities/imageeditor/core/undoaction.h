@@ -40,7 +40,7 @@
 namespace Digikam
 {
 
-class DImgInterface;
+class EditorCore;
 
 class DIGIKAM_EXPORT UndoMetadataContainer
 {
@@ -69,7 +69,7 @@ class DIGIKAM_EXPORT UndoAction
 
 public:
 
-    explicit UndoAction(DImgInterface* const iface);
+    explicit UndoAction(EditorCore* const iface);
     virtual ~UndoAction();
 
     void          setTitle(const QString& title);
@@ -96,7 +96,7 @@ class DIGIKAM_EXPORT UndoActionReversible : public UndoAction
 
 public:
 
-    UndoActionReversible(DImgInterface* const iface, const DImgBuiltinFilter& reversibleFilter);
+    UndoActionReversible(EditorCore* const iface, const DImgBuiltinFilter& reversibleFilter);
 
     DImgBuiltinFilter getFilter()        const;
     DImgBuiltinFilter getReverseFilter() const;
@@ -113,7 +113,7 @@ class DIGIKAM_EXPORT UndoActionIrreversible : public UndoAction
 
 public:
 
-    explicit UndoActionIrreversible(DImgInterface* const iface,
+    explicit UndoActionIrreversible(EditorCore* const iface,
                                     const QString& caller = i18n("Unknown"));
     ~UndoActionIrreversible();
 };

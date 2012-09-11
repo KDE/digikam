@@ -6,7 +6,7 @@
  * Date        : 2006-01-20
  * Description : main image editor GUI implementation
  *
- * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -119,7 +119,7 @@
 #include "canvas.h"
 #include "categorizeditemmodel.h"
 #include "colorcorrectiondlg.h"
-#include "dimginterface.h"
+#include "editorcore.h"
 #include "dlogoaction.h"
 #include "dmetadata.h"
 #include "dzoombar.h"
@@ -138,13 +138,13 @@
 #include "imagedialog.h"
 #include "imageplugin.h"
 #include "imagepluginloader.h"
-#include "iofilesettingscontainer.h"
+#include "iofilesettings.h"
 #include "libsinfodlg.h"
 #include "loadingcacheinterface.h"
 #include "printhelper.h"
 #include "jpegsettings.h"
 #include "pngsettings.h"
-#include "savingcontextcontainer.h"
+#include "savingcontext.h"
 #include "sidebar.h"
 #include "slideshowsettings.h"
 #include "softproofdialog.h"
@@ -153,6 +153,7 @@
 #include "thumbnailsize.h"
 #include "thumbnailloadthread.h"
 #include "triplechoicedialog.h"
+#include "undostate.h"
 #include "versionmanager.h"
 
 namespace Digikam
@@ -204,7 +205,7 @@ EditorWindow::EditorWindow(const char* name)
 
     d->exposureSettings        = new ExposureSettingsContainer();
     d->toolIface               = new EditorToolIface(this);
-    m_IOFileSettings           = new IOFileSettingsContainer();
+    m_IOFileSettings           = new IOFileSettings();
     d->waitingLoop             = new QEventLoop(this);
 }
 
@@ -1331,7 +1332,7 @@ bool EditorWindow::promptForOverWrite()
 
 void EditorWindow::slotUndoStateChanged()
 {
-    DImgInterface::UndoState state = m_canvas->interface()->undoState();
+    UndoState state = m_canvas->interface()->undoState();
 
     // RAW conversion qualifies as a "non-undoable" action
     // You can save as new version, but cannot undo or revert
@@ -1603,9 +1604,9 @@ bool EditorWindow::promptUserSave(const KUrl& url, SaveAskMode mode, bool allowC
             if (saving)
             {
                 // Waiting for asynchronous image file saving operation running in separate thread.
-                m_savingContext.synchronizingState = SavingContextContainer::SynchronousSaving;
+                m_savingContext.synchronizingState = SavingContext::SynchronousSaving;
                 enterWaitingLoop();
-                m_savingContext.synchronizingState = SavingContextContainer::NormalSaving;
+                m_savingContext.synchronizingState = SavingContext::NormalSaving;
                 return m_savingContext.synchronousSavingResult;
             }
             else
@@ -1631,15 +1632,15 @@ bool EditorWindow::promptUserSave(const KUrl& url, SaveAskMode mode, bool allowC
 bool EditorWindow::waitForSavingToComplete()
 {
     // avoid reentrancy - return false means we have reentered the loop already.
-    if (m_savingContext.synchronizingState == SavingContextContainer::SynchronousSaving)
+    if (m_savingContext.synchronizingState == SavingContext::SynchronousSaving)
     {
         return false;
     }
 
-    if (m_savingContext.savingState != SavingContextContainer::SavingStateNone)
+    if (m_savingContext.savingState != SavingContext::SavingStateNone)
     {
         // Waiting for asynchronous image file saving operation running in separate thread.
-        m_savingContext.synchronizingState = SavingContextContainer::SynchronousSaving;
+        m_savingContext.synchronizingState = SavingContext::SynchronousSaving;
         /*QFrame processFrame;
         StatusProgressBar *pb = m_nameLabel;
         pb->setParent(&processFrame);
@@ -1649,7 +1650,7 @@ bool EditorWindow::waitForSavingToComplete()
                                               i18n("Please wait while the image is being saved..."));
         */
         enterWaitingLoop();
-        m_savingContext.synchronizingState = SavingContextContainer::NormalSaving;
+        m_savingContext.synchronizingState = SavingContext::NormalSaving;
     }
 
     return true;
@@ -1813,7 +1814,7 @@ void EditorWindow::colorManage()
 void EditorWindow::slotNameLabelCancelButtonPressed()
 {
     // If we saving an image...
-    if (m_savingContext.savingState != SavingContextContainer::SavingStateNone)
+    if (m_savingContext.savingState != SavingContext::SavingStateNone)
     {
         m_savingContext.abortingSaving = true;
         m_canvas->abortSaving();
@@ -1857,13 +1858,13 @@ void EditorWindow::slotSavingStarted(const QString& /*filename*/)
 void EditorWindow::slotSavingFinished(const QString& filename, bool success)
 {
     Q_UNUSED(filename);
-    kDebug() << filename << success << (m_savingContext.savingState != SavingContextContainer::SavingStateNone);
+    kDebug() << filename << success << (m_savingContext.savingState != SavingContext::SavingStateNone);
 
     // only handle this if we really wanted to save a file...
-    if (m_savingContext.savingState != SavingContextContainer::SavingStateNone)
+    if (m_savingContext.savingState != SavingContext::SavingStateNone)
     {
         m_savingContext.executedOperation = m_savingContext.savingState;
-        m_savingContext.savingState = SavingContextContainer::SavingStateNone;
+        m_savingContext.savingState = SavingContext::SavingStateNone;
 
         if (!success)
         {
@@ -1915,18 +1916,18 @@ void EditorWindow::movingSaveFileFinished(bool successful)
 
     switch (m_savingContext.executedOperation)
     {
-        case SavingContextContainer::SavingStateNone:
+        case SavingContext::SavingStateNone:
             break;
 
-        case SavingContextContainer::SavingStateSave:
+        case SavingContext::SavingStateSave:
             saveIsComplete();
             break;
 
-        case SavingContextContainer::SavingStateSaveAs:
+        case SavingContext::SavingStateSaveAs:
             saveAsIsComplete();
             break;
 
-        case SavingContextContainer::SavingStateVersion:
+        case SavingContext::SavingStateVersion:
             saveVersionIsComplete();
             break;
     }
@@ -1943,7 +1944,7 @@ void EditorWindow::finishSaving(bool success)
     m_savingContext.saveTempFile = 0;
 
     // Exit of internal Qt event loop to unlock promptUserSave() method.
-    if (m_savingContext.synchronizingState == SavingContextContainer::SynchronousSaving)
+    if (m_savingContext.synchronizingState == SavingContext::SynchronousSaving)
     {
         quitWaitingLoop();
     }
@@ -2013,12 +2014,12 @@ void EditorWindow::startingSave(const KUrl& url)
     kDebug() << "startSaving url = " << url;
 
     // avoid any reentrancy. Should be impossible anyway since actions will be disabled.
-    if (m_savingContext.savingState != SavingContextContainer::SavingStateNone)
+    if (m_savingContext.savingState != SavingContext::SavingStateNone)
     {
         return;
     }
 
-    m_savingContext = SavingContextContainer();
+    m_savingContext = SavingContext();
 
     if (!checkPermissions(url))
     {
@@ -2033,8 +2034,8 @@ void EditorWindow::startingSave(const KUrl& url)
     m_savingContext.originalFormat     = m_canvas->currentImageFileFormat();
     m_savingContext.format             = m_savingContext.originalFormat;
     m_savingContext.abortingSaving     = false;
-    m_savingContext.savingState        = SavingContextContainer::SavingStateSave;
-    m_savingContext.executedOperation  = SavingContextContainer::SavingStateNone;
+    m_savingContext.savingState        = SavingContext::SavingStateSave;
+    m_savingContext.executedOperation  = SavingContext::SavingStateNone;
 
     m_canvas->interface()->saveAs(m_savingContext.saveTempFileName, m_IOFileSettings,
                                   m_setExifOrientationTag && m_canvas->exifRotated(), m_savingContext.format,
@@ -2350,12 +2351,12 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
 {
     kDebug() << "startSavingAs called";
 
-    if (m_savingContext.savingState != SavingContextContainer::SavingStateNone)
+    if (m_savingContext.savingState != SavingContext::SavingStateNone)
     {
         return false;
     }
 
-    m_savingContext = SavingContextContainer();
+    m_savingContext = SavingContext();
     m_savingContext.srcURL = url;
 
     // prepare the save dialog
@@ -2427,8 +2428,8 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
 
     m_savingContext.destinationURL = newURL;
     m_savingContext.originalFormat = m_canvas->currentImageFileFormat();
-    m_savingContext.savingState    = SavingContextContainer::SavingStateSaveAs;
-    m_savingContext.executedOperation = SavingContextContainer::SavingStateNone;
+    m_savingContext.savingState    = SavingContext::SavingStateSaveAs;
+    m_savingContext.executedOperation = SavingContext::SavingStateNone;
     m_savingContext.abortingSaving = false;
 
     // in any case, destructive (Save as) or non (Export), mark as New Version
@@ -2496,12 +2497,12 @@ bool EditorWindow::startingSaveVersion(const KUrl& url, bool fork, bool saveAs, 
     kDebug() << "Saving image" << url << "non-destructive, new version:"
              << fork << ", saveAs:" << saveAs << "format:" << format;
 
-    if (m_savingContext.savingState != SavingContextContainer::SavingStateNone)
+    if (m_savingContext.savingState != SavingContext::SavingStateNone)
     {
         return false;
     }
 
-    m_savingContext = SavingContextContainer();
+    m_savingContext = SavingContext();
     m_savingContext.versionFileOperation = saveVersionFileOperation(url, fork);
     m_canvas->interface()->setHistoryIsBranch(fork);
 
@@ -2577,8 +2578,8 @@ bool EditorWindow::startingSaveVersion(const KUrl& url, bool fork, bool saveAs, 
     m_savingContext.originalFormat     = m_canvas->currentImageFileFormat();
     m_savingContext.format             = m_savingContext.versionFileOperation.saveFile.format;
     m_savingContext.abortingSaving     = false;
-    m_savingContext.savingState        = SavingContextContainer::SavingStateVersion;
-    m_savingContext.executedOperation  = SavingContextContainer::SavingStateNone;
+    m_savingContext.savingState        = SavingContext::SavingStateVersion;
+    m_savingContext.executedOperation  = SavingContext::SavingStateNone;
 
     m_canvas->interface()->saveAs(m_savingContext.saveTempFileName, m_IOFileSettings,
                                   m_setExifOrientationTag && m_canvas->exifRotated(),
@@ -2722,7 +2723,7 @@ void EditorWindow::moveFile()
     {
         kDebug() << "moving a local file";
 
-        if (m_savingContext.executedOperation == SavingContextContainer::SavingStateVersion)
+        if (m_savingContext.executedOperation == SavingContext::SavingStateVersion)
         {
             // check if we need to move the current file to an intermediate name
             if (m_savingContext.versionFileOperation.tasks & VersionFileOperation::MoveToIntermediate)
@@ -2740,7 +2741,7 @@ void EditorWindow::moveFile()
         bool moveSuccessful = moveLocalFile(m_savingContext.saveTempFileName,
                                             m_savingContext.destinationURL.toLocalFile());
 
-        if (m_savingContext.executedOperation == SavingContextContainer::SavingStateVersion)
+        if (m_savingContext.executedOperation == SavingContext::SavingStateVersion)
         {
             if (moveSuccessful &&
                 m_savingContext.versionFileOperation.tasks & VersionFileOperation::SaveAndDelete)

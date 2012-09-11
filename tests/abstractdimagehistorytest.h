@@ -27,7 +27,7 @@
 #include <QEventLoop>
 
 #include "dimagehistory.h"
-#include "dimginterface.h"
+#include "editorcore.h"
 
 using namespace Digikam;
 
@@ -70,7 +70,7 @@ protected:
     void cleanupBaseTestCase();
 
     QEventLoop m_loop;
-    Digikam::DImgInterface* m_im;
+    Digikam::EditorCore* m_im;
     QString m_tempFile;
 };
 

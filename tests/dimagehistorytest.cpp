@@ -40,7 +40,7 @@
 #include "editortooliface.h"
 #include "editorwindow.h"
 #include "imageiface.h"
-#include "iofilesettingscontainer.h"
+#include "iofilesettings.h"
 
 using namespace Digikam;
 
@@ -77,7 +77,7 @@ void DImageHistoryTest::testDImg()
     imageDir.setNameFilters(QStringList("*.jpg"));
     QList<QFileInfo> imageFiles = imageDir.entryInfoList();
 
-    IOFileSettingsContainer container;
+    IOFileSettings container;
     m_im->load(imageFiles.first().filePath(), &container);
 
     m_loop.exec();

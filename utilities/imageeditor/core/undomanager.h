@@ -39,7 +39,7 @@ namespace Digikam
 
 class DImageHistory;
 class DImg;
-class DImgInterface;
+class EditorCore;
 class UndoAction;
 class UndoMetadataContainer;
 
@@ -48,7 +48,7 @@ class DIGIKAM_EXPORT UndoManager
 
 public:
 
-    UndoManager(DImgInterface* const iface);
+    UndoManager(EditorCore* const iface);
     ~UndoManager();
 
     void addAction(UndoAction* const action);
