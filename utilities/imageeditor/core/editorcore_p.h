@@ -1,0 +1,390 @@
+/* ============================================================
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2003-01-15
+ * Description : DImg interface for image editor
+ *
+ * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ *
+ * This program is free software; you can redistribute it
+ * and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation;
+ * either version 2, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * ============================================================ */
+
+#define OPACITY  0.7
+#define RCOL     0xAA
+#define GCOL     0xAA
+#define BCOL     0xAA
+
+namespace Digikam
+{
+
+class UndoManager;
+
+class EditorCore::Private
+{
+
+public:
+
+    class FileToSave
+    {
+    public:
+
+        bool                    setExifOrientationTag;
+        int                     historyStep;
+
+        QString                 fileName;
+        QString                 filePath;
+        QString                 intendedFilePath;
+        QString                 mimeType;
+        QMap<QString, QVariant> ioAttributes;
+        DImg                    image;
+    };
+
+public:
+
+    Private() :
+        valid(false),
+        rotatedOrFlipped(false),
+        exifOrient(false),
+        doSoftProofing(false),
+        width(0),
+        height(0),
+        origWidth(0),
+        origHeight(0),
+        selX(0),
+        selY(0),
+        selW(0),
+        selH(0),
+        gamma(0.0),
+        brightness(0.0),
+        contrast(0.0),
+        zoom(1.0),
+        displayingWidget(0),
+        currentFileToSave(0),
+        undoMan(0),
+        expoSettings(0),
+        thread(0)
+    {
+    }
+
+    QMap<QString, QVariant> ioAttributes(IOFileSettingsContainer* const iofileSettings, const QString& givenMimeType) const;
+
+    void applyBuiltinFilter(const DImgBuiltinFilter& filter, UndoAction* const action);
+    void applyReversibleBuiltinFilter(const DImgBuiltinFilter& filter);
+    void putImageData(uchar* const data, int w, int h, bool sixteenBit);
+    void resetValues();
+    void saveNext();
+    void loadCurrent();
+    void load(const LoadingDescription& description);
+    void saveAs(const QString& file, IOFileSettingsContainer* const iofileSettings,
+                bool setExifOrientationTag, const QString& givenMimeType,
+                const VersionFileOperation& operation, const QString& intendedFilePath);
+
+public:
+
+    bool                       valid;
+    bool                       rotatedOrFlipped;
+    bool                       exifOrient;
+    bool                       doSoftProofing;
+
+    int                        width;
+    int                        height;
+    int                        origWidth;
+    int                        origHeight;
+    int                        selX;
+    int                        selY;
+    int                        selW;
+    int                        selH;
+
+    float                      gamma;
+    float                      brightness;
+    float                      contrast;
+
+    double                     zoom;
+
+    QWidget*                   displayingWidget;
+
+    QList<FileToSave>          filesToSave;
+    int                        currentFileToSave;
+
+    DImg                       image;
+    DImageHistory              resolvedInitialHistory;
+    UndoManager*               undoMan;
+
+    ICCSettingsContainer       cmSettings;
+
+    ExposureSettingsContainer* expoSettings;
+
+    SharedLoadSaveThread*      thread;
+    LoadingDescription         currentDescription;
+    LoadingDescription         nextRawDescription;
+
+    IccTransform               monitorICCtrans;
+};
+
+void EditorCore::Private::putImageData(uchar* const data, int w, int h, bool sixteenBit)
+{
+    if (image.isNull())
+    {
+        kWarning() << "d->image is NULL";
+        return;
+    }
+
+    if (!data)
+    {
+        kWarning() << "New image is NULL";
+        return;
+    }
+
+    if (w == -1 && h == -1)
+    {
+        // New image size
+        w = origWidth;
+        h = origHeight;
+    }
+    else
+    {
+        // New image size == original size
+        origWidth  = w;
+        origHeight = h;
+    }
+
+    image.putImageData(w, h, sixteenBit, image.hasAlpha(), data);
+}
+
+void EditorCore::Private::resetValues()
+{
+    valid                  = false;
+    currentDescription     = LoadingDescription();
+    width                  = 0;
+    height                 = 0;
+    origWidth              = 0;
+    origHeight             = 0;
+    selX                   = 0;
+    selY                   = 0;
+    selW                   = 0;
+    selH                   = 0;
+    gamma                  = 1.0f;
+    contrast               = 1.0f;
+    brightness             = 0.0f;
+    resolvedInitialHistory = DImageHistory();
+    undoMan->clear();
+}
+
+void EditorCore::Private::saveNext()
+{
+    if (filesToSave.isEmpty() || currentFileToSave >= filesToSave.size())
+    {
+        return;
+    }
+
+    FileToSave& file = filesToSave[currentFileToSave];
+    kDebug() << "Saving file" << file.filePath << "at" << file.historyStep;
+
+    if (file.historyStep != -1)
+    {
+        // intermediate. Need to get data from undo manager
+        int currentStep = EditorCore::defaultInstance()->getImageHistory().size() - 1;
+        //kDebug() << "Requesting from undo manager data" << currentStep - file.historyStep << "steps back";
+        undoMan->putImageDataAndHistory(&file.image, currentStep - file.historyStep);
+    }
+
+    QMap<QString, QVariant>::const_iterator it;
+
+    for (it = file.ioAttributes.constBegin(); it != file.ioAttributes.constEnd(); ++it)
+    {
+        file.image.setAttribute(it.key(), it.value());
+    }
+
+    file.image.prepareMetadataToSave(file.intendedFilePath, file.mimeType, file.setExifOrientationTag);
+    //kDebug() << "Adjusting image" << file.mimeType << file.fileName << file.setExifOrientationTag << file.ioAttributes
+    //       << "image:" << file.image.size() << file.image.isNull();
+
+    thread->save(file.image, file.filePath, file.mimeType);
+}
+
+void EditorCore::Private::applyReversibleBuiltinFilter(const DImgBuiltinFilter& filter)
+{
+    applyBuiltinFilter(filter, new UndoActionReversible(EditorCore::defaultInstance(), filter));
+}
+
+void EditorCore::Private::applyBuiltinFilter(const DImgBuiltinFilter& filter, UndoAction* const action)
+{
+    undoMan->addAction(action);
+
+    filter.apply(image);
+    image.addFilterAction(filter.filterAction());
+
+    // many operations change the image size
+    origWidth  = image.width();
+    origHeight = image.height();
+
+    EditorCore::defaultInstance()->setModified();
+}
+
+QMap<QString, QVariant> EditorCore::Private::ioAttributes(IOFileSettingsContainer* const iofileSettings,
+                                                          const QString& mimeType) const
+{
+    QMap<QString, QVariant> attributes;
+
+    // JPEG file format.
+    if (mimeType.toUpper() == QString("JPG") || mimeType.toUpper() == QString("JPEG") ||
+        mimeType.toUpper() == QString("JPE"))
+    {
+        attributes.insert("quality",     iofileSettings->JPEGCompression);
+        attributes.insert("subsampling", iofileSettings->JPEGSubSampling);
+    }
+
+    // PNG file format.
+    if (mimeType.toUpper() == QString("PNG"))
+    {
+        attributes.insert("quality", iofileSettings->PNGCompression);
+    }
+
+    // TIFF file format.
+    if (mimeType.toUpper() == QString("TIFF") || mimeType.toUpper() == QString("TIF"))
+    {
+        attributes.insert("compress", iofileSettings->TIFFCompression);
+    }
+
+    // JPEG 2000 file format.
+    if (mimeType.toUpper() == QString("JP2") || mimeType.toUpper() == QString("JPX") ||
+        mimeType.toUpper() == QString("JPC") || mimeType.toUpper() == QString("PGX") ||
+        mimeType.toUpper() == QString("J2K"))
+    {
+        if (iofileSettings->JPEG2000LossLess)
+        {
+            attributes.insert("quality", 100);    // LossLess compression
+        }
+        else
+        {
+            attributes.insert("quality", iofileSettings->JPEG2000Compression);
+        }
+    }
+
+    // PGF file format.
+    if (mimeType.toUpper() == QString("PGF"))
+    {
+        if (iofileSettings->PGFLossLess)
+        {
+            attributes.insert("quality", 0);    // LossLess compression
+        }
+        else
+        {
+            attributes.insert("quality", iofileSettings->PGFCompression);
+        }
+    }
+
+    return attributes;
+}
+
+void EditorCore::Private::saveAs(const QString& filePath, IOFileSettingsContainer* const iofileSettings,
+                                 bool setExifOrientationTag, const QString& givenMimeType,
+                                 const VersionFileOperation& op, const QString& intendedFilePath)
+{
+    // No need to toggle off undo, redo or save action during saving using
+    // signalUndoStateChanged(), this is will done by GUI implementation directly.
+
+    EditorCore::defaultInstance()->emit signalSavingStarted(filePath);
+
+    filesToSave.clear();
+    currentFileToSave = 0;
+
+    QString mimeType = givenMimeType;
+
+    // This is possibly empty
+    if (mimeType.isEmpty())
+    {
+        mimeType = EditorCore::defaultInstance()->getImageFormat();
+    }
+
+    if (op.tasks & VersionFileOperation::MoveToIntermediate ||
+        op.tasks & VersionFileOperation::SaveAndDelete)
+    {
+        // The current file will stored away at a different name. Adjust history.
+        image.getImageHistory().moveCurrentReferredImage(op.intermediateForLoadedFile.path,
+                                                         op.intermediateForLoadedFile.fileName);
+    }
+
+    if (op.tasks & VersionFileOperation::Replace)
+    {
+        // The current file will be replaced. Remove hint at file path (file path will be a different image)
+        image.getImageHistory().purgePathFromReferredImages(op.saveFile.path, op.saveFile.fileName);
+    }
+
+    QMap<int, VersionFileInfo>::const_iterator it;
+
+    for (it = op.intermediates.begin(); it != op.intermediates.end(); ++it)
+    {
+        FileToSave file;
+        file.fileName              = it.value().fileName;
+        file.filePath              = it.value().filePath();
+        file.intendedFilePath      = file.filePath;
+        file.mimeType              = it.value().format;
+        file.ioAttributes          = ioAttributes(iofileSettings, it.value().format);
+        file.historyStep           = it.key();
+        file.setExifOrientationTag = setExifOrientationTag;
+        file.image                 = image.copyMetaData();
+        filesToSave << file;
+        kDebug() << "Saving intermediate at history step" << file.historyStep
+                 << "to" << file.filePath << "(" << file.mimeType << ")";
+    }
+
+    // This shall be the last in the list. If not, adjust slotImageSaved
+    FileToSave primary;
+    primary.fileName              = op.saveFile.fileName;
+    primary.filePath              = filePath; // can be temporary file path
+    primary.intendedFilePath      = intendedFilePath;
+    primary.mimeType              = mimeType;
+    primary.ioAttributes          = ioAttributes(iofileSettings, mimeType);
+    primary.historyStep           = -1; // special value
+    primary.setExifOrientationTag = setExifOrientationTag;
+    primary.image                 = image;
+    filesToSave << primary;
+
+    kDebug() << "Saving to :" << primary.filePath << "(" << primary.mimeType << ")";
+
+    saveNext();
+}
+
+void EditorCore::Private::loadCurrent()
+{
+    thread->load(currentDescription,
+                 SharedLoadSaveThread::AccessModeReadWrite,
+                 SharedLoadSaveThread::LoadingPolicyFirstRemovePrevious);
+
+    EditorCore::defaultInstance()->emit signalLoadingStarted(currentDescription.filePath);
+}
+
+void EditorCore::Private::load(const LoadingDescription& description)
+{
+    if (EditorToolIface::editorToolIface())
+    {
+        EditorToolIface::editorToolIface()->unLoadTool();
+    }
+
+    if (description != currentDescription)
+    {
+        resetValues();
+        currentDescription = description;
+        loadCurrent();
+    }
+    else
+    {
+        EditorCore::defaultInstance()->emit signalLoadingStarted(currentDescription.filePath);
+        EditorCore::defaultInstance()->emit signalImageLoaded(currentDescription.filePath, true);
+    }
+}
+
+}  // namespace Digikam
