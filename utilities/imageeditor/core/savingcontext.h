@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef SAVINGCONTEXTCONTAINER_H
-#define SAVINGCONTEXTCONTAINER_H
+#ifndef SAVING_CONTEXT_H
+#define SAVING_CONTEXT_H
 
 // Qt includes
 
@@ -42,7 +42,7 @@
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT SavingContextContainer
+class DIGIKAM_EXPORT SavingContext
 {
 public:
 
@@ -62,7 +62,7 @@ public:
 
 public:
 
-    SavingContextContainer()
+    SavingContext()
     {
         savingState             = SavingStateNone;
         synchronizingState      = NormalSaving;
@@ -72,6 +72,8 @@ public:
         abortingSaving          = false;
         executedOperation       = SavingStateNone;
     }
+
+public:
 
     SavingState          savingState;
     SynchronizingState   synchronizingState;
@@ -95,4 +97,4 @@ public:
 
 } // namespace Digikam
 
-#endif /* SAVINGCONTEXTCONTAINER_H */
+#endif /* SAVING_CONTEXT_H */

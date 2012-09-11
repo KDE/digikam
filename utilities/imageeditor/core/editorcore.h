@@ -47,7 +47,7 @@ namespace Digikam
 class UndoState;
 class ICCSettingsContainer;
 class ExposureSettingsContainer;
-class IOFileSettingsContainer;
+class IOFileSettings;
 class LoadingDescription;
 class DImgBuiltinFilter;
 class UndoAction;
@@ -68,7 +68,7 @@ public:
     EditorCore();
     ~EditorCore();
 
-    void   load(const QString& filename, IOFileSettingsContainer* const iofileSettings);
+    void   load(const QString& filename, IOFileSettings* const iofileSettings);
     void   applyTransform(const IccTransform& transform);
     void   updateColorManagement();
     void   setSoftProofingEnabled(bool enabled);
@@ -87,11 +87,11 @@ public:
     void   restore();
     void   rollbackToOrigin();
 
-    void   saveAs(const QString& file, IOFileSettingsContainer* const iofileSettings,
+    void   saveAs(const QString& file, IOFileSettings* const iofileSettings,
                   bool setExifOrientationTag, const QString& givenMimeType,
                   const QString& intendedFilePath);
 
-    void   saveAs(const QString& file, IOFileSettingsContainer* const iofileSettings,
+    void   saveAs(const QString& file, IOFileSettings* const iofileSettings,
                   bool setExifOrientationTag, const QString& givenMimeType,
                   const VersionFileOperation& operation);
 

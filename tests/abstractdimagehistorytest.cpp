@@ -48,7 +48,7 @@
 #include "editorwindow.h"
 #include "iccsettings.h"
 #include "imageiface.h"
-#include "iofilesettingscontainer.h"
+#include "iofilesettings.h"
 
 using namespace Digikam;
 

@@ -72,7 +72,7 @@
 #include "iccsettingscontainer.h"
 #include "icctransform.h"
 #include "exposurecontainer.h"
-#include "iofilesettingscontainer.h"
+#include "iofilesettings.h"
 #include "loadingcacheinterface.h"
 #include "drubberband.h"
 
@@ -256,7 +256,7 @@ void Canvas::reset()
     d->tileCache.clear();
 }
 
-void Canvas::load(const QString& filename, IOFileSettingsContainer* const IOFileSettings)
+void Canvas::load(const QString& filename, IOFileSettings* const IOFileSettings)
 {
     reset();
 

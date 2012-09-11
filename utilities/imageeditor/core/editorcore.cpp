@@ -60,7 +60,7 @@
 #include "iccsettingscontainer.h"
 #include "icctransform.h"
 #include "exposurecontainer.h"
-#include "iofilesettingscontainer.h"
+#include "iofilesettings.h"
 #include "sharedloadsavethread.h"
 #include "dmetadata.h"
 #include "rawimport.h"
@@ -124,7 +124,7 @@ void EditorCore::setDisplayingWidget(QWidget* const widget)
     d->displayingWidget = widget;
 }
 
-void EditorCore::load(const QString& filePath, IOFileSettingsContainer* const iofileSettings)
+void EditorCore::load(const QString& filePath, IOFileSettings* const iofileSettings)
 {
     LoadingDescription description(filePath, LoadingDescription::ConvertForEditor);
 
@@ -394,7 +394,7 @@ void EditorCore::rollbackToOrigin()
     emit signalUndoStateChanged();
 }
 
-void EditorCore::saveAs(const QString& filePath, IOFileSettingsContainer* const iofileSettings,
+void EditorCore::saveAs(const QString& filePath, IOFileSettings* const iofileSettings,
                            bool setExifOrientationTag, const QString& givenMimeType,
                            const QString& intendedFilePath)
 {
@@ -402,7 +402,7 @@ void EditorCore::saveAs(const QString& filePath, IOFileSettingsContainer* const 
               VersionFileOperation(), intendedFilePath);
 }
 
-void EditorCore::saveAs(const QString& filePath, IOFileSettingsContainer* const iofileSettings,
+void EditorCore::saveAs(const QString& filePath, IOFileSettings* const iofileSettings,
                            bool setExifOrientationTag, const QString& givenMimeType,
                            const VersionFileOperation& op)
 {

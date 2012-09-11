@@ -112,7 +112,7 @@
 #include "imagepropertiesversionstab.h"
 #include "imagescanner.h"
 #include "imagethumbnailbar.h"
-#include "iofilesettingscontainer.h"
+#include "iofilesettings.h"
 #include "knotificationwrapper.h"
 #include "loadingcacheinterface.h"
 #include "metadatahub.h"
@@ -120,7 +120,7 @@
 #include "colorlabelwidget.h"
 #include "picklabelwidget.h"
 #include "ratingwidget.h"
-#include "savingcontextcontainer.h"
+#include "savingcontext.h"
 #include "scancontroller.h"
 #include "setup.h"
 #include "slideshow.h"
@@ -1129,7 +1129,7 @@ void ImageWindow::saveAsIsComplete()
 
     // copy the metadata of the original file to the new file
     kDebug() << "was versioned"
-             << (m_savingContext.executedOperation == SavingContextContainer::SavingStateVersion)
+             << (m_savingContext.executedOperation == SavingContext::SavingStateVersion)
              << "current" << d->currentImageInfo.id() << d->currentImageInfo.name()
              << "destinations" << m_savingContext.versionFileOperation.allFilePaths();
 
@@ -1145,7 +1145,7 @@ void ImageWindow::saveAsIsComplete()
     }
 
     QStringList derivedFilePaths;
-    if (m_savingContext.executedOperation == SavingContextContainer::SavingStateVersion)
+    if (m_savingContext.executedOperation == SavingContext::SavingStateVersion)
     {
         derivedFilePaths = m_savingContext.versionFileOperation.allFilePaths();
     }

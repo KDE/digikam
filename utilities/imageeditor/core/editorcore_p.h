@@ -78,7 +78,7 @@ public:
     {
     }
 
-    QMap<QString, QVariant> ioAttributes(IOFileSettingsContainer* const iofileSettings, const QString& givenMimeType) const;
+    QMap<QString, QVariant> ioAttributes(IOFileSettings* const iofileSettings, const QString& givenMimeType) const;
 
     void applyBuiltinFilter(const DImgBuiltinFilter& filter, UndoAction* const action);
     void applyReversibleBuiltinFilter(const DImgBuiltinFilter& filter);
@@ -87,7 +87,7 @@ public:
     void saveNext();
     void loadCurrent();
     void load(const LoadingDescription& description);
-    void saveAs(const QString& file, IOFileSettingsContainer* const iofileSettings,
+    void saveAs(const QString& file, IOFileSettings* const iofileSettings,
                 bool setExifOrientationTag, const QString& givenMimeType,
                 const VersionFileOperation& operation, const QString& intendedFilePath);
 
@@ -233,7 +233,7 @@ void EditorCore::Private::applyBuiltinFilter(const DImgBuiltinFilter& filter, Un
     EditorCore::defaultInstance()->setModified();
 }
 
-QMap<QString, QVariant> EditorCore::Private::ioAttributes(IOFileSettingsContainer* const iofileSettings,
+QMap<QString, QVariant> EditorCore::Private::ioAttributes(IOFileSettings* const iofileSettings,
                                                           const QString& mimeType) const
 {
     QMap<QString, QVariant> attributes;
@@ -289,7 +289,7 @@ QMap<QString, QVariant> EditorCore::Private::ioAttributes(IOFileSettingsContaine
     return attributes;
 }
 
-void EditorCore::Private::saveAs(const QString& filePath, IOFileSettingsContainer* const iofileSettings,
+void EditorCore::Private::saveAs(const QString& filePath, IOFileSettings* const iofileSettings,
                                  bool setExifOrientationTag, const QString& givenMimeType,
                                  const VersionFileOperation& op, const QString& intendedFilePath)
 {
