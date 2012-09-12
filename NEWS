@@ -41,4 +41,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 011 ==> 306641 - Export module is not available for toolbar and rightclick context.
 012 ==> 163164 - Allow more conservative memory management.
 013 ==> 148649 - digiKam needs a better image scaler.
-014 ==> 
+014 ==> 261698 - Zoom to 100% does not map 1 picture pixel to 1 screen pixel.
+015 ==> 
