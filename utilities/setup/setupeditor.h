@@ -6,7 +6,7 @@
  * Date        : 2004-08-03
  * Description : setup Image Editor tab.
  *
- * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -41,7 +41,7 @@ class SetupEditor : public QScrollArea
 
 public:
 
-    SetupEditor(QWidget* parent = 0);
+    SetupEditor(QWidget* const parent = 0);
     ~SetupEditor();
 
     void applySettings();
@@ -59,8 +59,8 @@ private:
 
 private:
 
-    class SetupEditorPriv;
-    SetupEditorPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

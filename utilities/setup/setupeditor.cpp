@@ -6,7 +6,7 @@
  * Date        : 2004-08-03
  * Description : setup Image Editor tab.
  *
- * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -60,11 +60,11 @@ using namespace KDcrawIface;
 namespace Digikam
 {
 
-class SetupEditor::SetupEditorPriv
+class SetupEditor::Private
 {
 public:
 
-    SetupEditorPriv() :
+    Private() :
         themebackgroundColor(0),
         hideToolBar(0),
         hideThumbBar(0),
@@ -109,21 +109,22 @@ public:
     RDoubleNumInput* underExposurePcents;
     RDoubleNumInput* overExposurePcents;
 };
-const QString SetupEditor::SetupEditorPriv::configGroupName("ImageViewer Settings");
-const QString SetupEditor::SetupEditorPriv::configUseThemeBackgroundColorEntry("UseThemeBackgroundColor");
-const QString SetupEditor::SetupEditorPriv::configBackgroundColorEntry("BackgroundColor");
-const QString SetupEditor::SetupEditorPriv::configFullScreenHideToolBarEntry("FullScreen Hide ToolBar");
-const QString SetupEditor::SetupEditorPriv::configFullScreenHideThumbBarEntry("FullScreenHideThumbBar");
-const QString SetupEditor::SetupEditorPriv::configUnderExposureColorEntry("UnderExposureColor");
-const QString SetupEditor::SetupEditorPriv::configOverExposureColorEntry("OverExposureColor");
-const QString SetupEditor::SetupEditorPriv::configUnderExposurePercentsEntry("UnderExposurePercentsEntry");
-const QString SetupEditor::SetupEditorPriv::configOverExposurePercentsEntry("OverExposurePercentsEntry");
-const QString SetupEditor::SetupEditorPriv::configExpoIndicatorModeEntry("ExpoIndicatorMode");
+
+const QString SetupEditor::Private::configGroupName("ImageViewer Settings");
+const QString SetupEditor::Private::configUseThemeBackgroundColorEntry("UseThemeBackgroundColor");
+const QString SetupEditor::Private::configBackgroundColorEntry("BackgroundColor");
+const QString SetupEditor::Private::configFullScreenHideToolBarEntry("FullScreen Hide ToolBar");
+const QString SetupEditor::Private::configFullScreenHideThumbBarEntry("FullScreenHideThumbBar");
+const QString SetupEditor::Private::configUnderExposureColorEntry("UnderExposureColor");
+const QString SetupEditor::Private::configOverExposureColorEntry("OverExposureColor");
+const QString SetupEditor::Private::configUnderExposurePercentsEntry("UnderExposurePercentsEntry");
+const QString SetupEditor::Private::configOverExposurePercentsEntry("OverExposurePercentsEntry");
+const QString SetupEditor::Private::configExpoIndicatorModeEntry("ExpoIndicatorMode");
 
 // --------------------------------------------------------
 
-SetupEditor::SetupEditor(QWidget* parent)
-    : QScrollArea(parent), d(new SetupEditorPriv)
+SetupEditor::SetupEditor(QWidget* const parent)
+    : QScrollArea(parent), d(new Private)
 {
     QWidget* panel = new QWidget(viewport());
     setWidget(panel);
@@ -136,21 +137,20 @@ SetupEditor::SetupEditor(QWidget* parent)
     QGroupBox* interfaceOptionsGroup = new QGroupBox(i18n("Interface Options"), panel);
     QVBoxLayout* gLayout1            = new QVBoxLayout(interfaceOptionsGroup);
 
-    d->themebackgroundColor          = new QCheckBox(i18n("&Use theme background color"),
-                                                     interfaceOptionsGroup);
+    d->themebackgroundColor          = new QCheckBox(i18n("&Use theme background color"), interfaceOptionsGroup);
 
     d->themebackgroundColor->setWhatsThis(i18n("Enable this option to use the background theme "
                                                "color in the image editor area."));
 
-    d->colorBox                  = new KHBox(interfaceOptionsGroup);
-    QLabel* backgroundColorlabel = new QLabel(i18n("&Background color:"), d->colorBox);
-    d->backgroundColor           = new KColorButton(d->colorBox);
+    d->colorBox                      = new KHBox(interfaceOptionsGroup);
+    QLabel* backgroundColorlabel     = new QLabel(i18n("&Background color:"), d->colorBox);
+    d->backgroundColor               = new KColorButton(d->colorBox);
     backgroundColorlabel->setBuddy(d->backgroundColor);
     d->backgroundColor->setWhatsThis(i18n("Customize the background color to use "
                                           "in the image editor area."));
 
-    d->hideToolBar      = new QCheckBox(i18n("H&ide toolbar in fullscreen mode"), interfaceOptionsGroup);
-    d->hideThumbBar     = new QCheckBox(i18n("Hide &thumbbar in fullscreen mode"), interfaceOptionsGroup);
+    d->hideToolBar                   = new QCheckBox(i18n("H&ide toolbar in fullscreen mode"), interfaceOptionsGroup);
+    d->hideThumbBar                  = new QCheckBox(i18n("Hide &thumbbar in fullscreen mode"), interfaceOptionsGroup);
 
     gLayout1->addWidget(d->themebackgroundColor);
     gLayout1->addWidget(d->colorBox);
@@ -161,19 +161,19 @@ SetupEditor::SetupEditor(QWidget* parent)
 
     // --------------------------------------------------------
 
-    QGroupBox* exposureOptionsGroup = new QGroupBox(i18n("Exposure Indicators"), panel);
-    QVBoxLayout* gLayout2           = new QVBoxLayout(exposureOptionsGroup);
+    QGroupBox* exposureOptionsGroup  = new QGroupBox(i18n("Exposure Indicators"), panel);
+    QVBoxLayout* gLayout2            = new QVBoxLayout(exposureOptionsGroup);
 
-    KHBox* underExpoBox         = new KHBox(exposureOptionsGroup);
-    QLabel* underExpoColorlabel = new QLabel(i18n("&Under-exposure color:"), underExpoBox);
-    d->underExposureColor       = new KColorButton(underExpoBox);
+    KHBox* underExpoBox              = new KHBox(exposureOptionsGroup);
+    QLabel* underExpoColorlabel      = new QLabel(i18n("&Under-exposure color:"), underExpoBox);
+    d->underExposureColor            = new KColorButton(underExpoBox);
     underExpoColorlabel->setBuddy(d->underExposureColor);
     d->underExposureColor->setWhatsThis(i18n("Customize color used in image editor to identify "
                                              "under-exposed pixels."));
 
-    KHBox* underPcentBox        = new KHBox(exposureOptionsGroup);
-    QLabel* underExpoPcentlabel = new QLabel(i18n("Under-exposure percents:"), underPcentBox);
-    d->underExposurePcents      = new RDoubleNumInput(underPcentBox);
+    KHBox* underPcentBox             = new KHBox(exposureOptionsGroup);
+    QLabel* underExpoPcentlabel      = new QLabel(i18n("Under-exposure percents:"), underPcentBox);
+    d->underExposurePcents           = new RDoubleNumInput(underPcentBox);
     d->underExposurePcents->setDecimals(1);
     d->underExposurePcents->input()->setRange(0.1, 5.0, 0.1, true);
     d->underExposurePcents->setDefaultValue(1.0);
@@ -181,16 +181,16 @@ SetupEditor::SetupEditor(QWidget* parent)
     d->underExposurePcents->setWhatsThis(i18n("Adjust the percents of the bottom of image histogram "
                                               "which will be used to check under exposed pixels."));
 
-    KHBox* overExpoBox         = new KHBox(exposureOptionsGroup);
-    QLabel* overExpoColorlabel = new QLabel(i18n("&Over-exposure color:"), overExpoBox);
-    d->overExposureColor       = new KColorButton(overExpoBox);
+    KHBox* overExpoBox               = new KHBox(exposureOptionsGroup);
+    QLabel* overExpoColorlabel       = new QLabel(i18n("&Over-exposure color:"), overExpoBox);
+    d->overExposureColor             = new KColorButton(overExpoBox);
     overExpoColorlabel->setBuddy(d->overExposureColor);
     d->overExposureColor->setWhatsThis(i18n("Customize color used in image editor to identify "
                                             "over-exposed pixels."));
 
-    KHBox* overPcentBox        = new KHBox(exposureOptionsGroup);
-    QLabel* overExpoPcentlabel = new QLabel(i18n("Over-exposure percents:"), overPcentBox);
-    d->overExposurePcents      = new RDoubleNumInput(overPcentBox);
+    KHBox* overPcentBox              = new KHBox(exposureOptionsGroup);
+    QLabel* overExpoPcentlabel       = new QLabel(i18n("Over-exposure percents:"), overPcentBox);
+    d->overExposurePcents            = new RDoubleNumInput(overPcentBox);
     d->overExposurePcents->setDecimals(1);
     d->overExposurePcents->input()->setRange(0.1, 5.0, 0.1, true);
     d->overExposurePcents->setDefaultValue(1.0);
@@ -198,7 +198,7 @@ SetupEditor::SetupEditor(QWidget* parent)
     d->overExposurePcents->setWhatsThis(i18n("Adjust the percents of the top of image histogram "
                                              "which will be used to check over exposed pixels."));
 
-    d->expoIndicatorMode       = new QCheckBox(i18n("Indicate exposure as pure color"), exposureOptionsGroup);
+    d->expoIndicatorMode = new QCheckBox(i18n("Indicate exposure as pure color"), exposureOptionsGroup);
     d->overExposureColor->setWhatsThis(i18n("If this option is enabled, over- and under-exposure indicators will be displayed "
                                             "only when pure white and pure black color matches, as all color components match "
                                             "the condition in the same time. "
