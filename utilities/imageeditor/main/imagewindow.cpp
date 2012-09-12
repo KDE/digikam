@@ -156,12 +156,12 @@ public:
 
 // -----------------------------------------------------------------------------------------
 
-class ImageWindow::ImageWindowPriv
+class ImageWindow::Private
 {
 
 public:
 
-    ImageWindowPriv() :
+    Private() :
         viewContainer(0),
         toMainWindowAction(0),
         fileDeletePermanentlyAction(0),
@@ -176,34 +176,6 @@ public:
         rightSideBar(0)
     {
     }
-
-    static const QString      configShowThumbbarEntry;
-    static const QString      configHorizontalThumbbarEntry;
-
-    KMainWindow*              viewContainer;
-
-    KAction*                  toMainWindowAction;
-
-    // Delete actions
-    KAction*                  fileDeletePermanentlyAction;
-    KAction*                  fileDeletePermanentlyDirectlyAction;
-    KAction*                  fileTrashDirectlyAction;
-
-    KAction*                  dbStatAction;
-
-    ImageInfo                 currentImageInfo;
-    ImageListModel*           imageInfoModel;
-    ImageFilterModel*         imageFilterModel;
-    ImageDragDropHandler*     dragDropHandler;
-
-    ImageThumbnailBar*        thumbBar;
-    ThumbBarDock*             thumbBarDock;
-
-    ImagePropertiesSideBarDB* rightSideBar;
-
-    DatabaseVersionManager    versionManager;
-
-public:
 
     QModelIndex currentIndex() const
     {
@@ -263,10 +235,38 @@ public:
             thumbBar->setCurrentWhenAvailable(currentImageInfo.id());
         }
     }
+
+public:
+
+    static const QString      configShowThumbbarEntry;
+    static const QString      configHorizontalThumbbarEntry;
+
+    KMainWindow*              viewContainer;
+
+    KAction*                  toMainWindowAction;
+
+    // Delete actions
+    KAction*                  fileDeletePermanentlyAction;
+    KAction*                  fileDeletePermanentlyDirectlyAction;
+    KAction*                  fileTrashDirectlyAction;
+
+    KAction*                  dbStatAction;
+
+    ImageInfo                 currentImageInfo;
+    ImageListModel*           imageInfoModel;
+    ImageFilterModel*         imageFilterModel;
+    ImageDragDropHandler*     dragDropHandler;
+
+    ImageThumbnailBar*        thumbBar;
+    ThumbBarDock*             thumbBarDock;
+
+    ImagePropertiesSideBarDB* rightSideBar;
+
+    DatabaseVersionManager    versionManager;
 };
 
-const QString ImageWindow::ImageWindowPriv::configShowThumbbarEntry("Show Thumbbar");
-const QString ImageWindow::ImageWindowPriv::configHorizontalThumbbarEntry("HorizontalThumbbar");
+const QString ImageWindow::Private::configShowThumbbarEntry("Show Thumbbar");
+const QString ImageWindow::Private::configHorizontalThumbbarEntry("HorizontalThumbbar");
 
 ImageWindow* ImageWindow::m_instance = 0;
 
@@ -286,7 +286,7 @@ bool ImageWindow::imageWindowCreated()
 }
 
 ImageWindow::ImageWindow()
-    : EditorWindow("Image Editor"), d(new ImageWindowPriv)
+    : EditorWindow("Image Editor"), d(new Private)
 {
     setXMLFile("digikamimagewindowui.rc");
 
@@ -795,8 +795,8 @@ void ImageWindow::slotContextMenu()
 {
     if (m_contextMenu)
     {
-        TagsPopupMenu*   assignTagsMenu = 0;
-        TagsPopupMenu*   removeTagsMenu = 0;
+        TagsPopupMenu* assignTagsMenu = 0;
+        TagsPopupMenu* removeTagsMenu = 0;
 
         // Bulk assignment/removal of tags --------------------------
 
@@ -1706,6 +1706,7 @@ void ImageWindow::slotOpenOriginal()
     }
 
     QList<ImageInfo> imageInfos;
+
     foreach(const HistoryImageId& id, originals)
     {
         KUrl url;
@@ -1713,6 +1714,7 @@ void ImageWindow::slotOpenOriginal()
         url.addPath(id.m_fileName);
         imageInfos << ImageInfo(url);
     }
+
     ImageScanner::sortByProximity(imageInfos, d->currentImageInfo);
 
     if (!imageInfos.isEmpty() && !imageInfos.first().isNull())
@@ -1753,4 +1755,3 @@ void ImageWindow::slotDBStat()
 }
 
 }  // namespace Digikam
-

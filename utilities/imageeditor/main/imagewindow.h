@@ -7,7 +7,7 @@
  * Description : digiKam image editor GUI
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2004-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -63,9 +63,9 @@ public:
     bool setupICC();
 
     bool queryClose();
-    virtual VersionManager* versionManager() const;
-
     void toggleTag(int tagID);
+
+    virtual VersionManager* versionManager() const;
 
 public Q_SLOTS:
 
@@ -84,6 +84,8 @@ Q_SIGNALS:
     void signalSavingDialogProgress(float value);
 
 private:
+
+    ImageWindow();
 
     void loadIndex(const QModelIndex& index);
     void closeEvent(QCloseEvent* e);
@@ -123,10 +125,8 @@ private:
     void assignColorLabel(const ImageInfo& info, int colorId);
     void assignRating(const ImageInfo& info, int rating);
 
-    ThumbBarDock* thumbBar() const;
-    Sidebar* rightSideBar() const;
-
-    ImageWindow();
+    ThumbBarDock* thumbBar()     const;
+    Sidebar*      rightSideBar() const;
 
 Q_SIGNALS: // private signals
 
@@ -178,10 +178,10 @@ private Q_SLOTS:
 
 private:
 
-    class ImageWindowPriv;
-    ImageWindowPriv* const d;
-
     static ImageWindow* m_instance;
+
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam
