@@ -85,6 +85,7 @@ int main(int argc, char* argv[])
 
     KGlobal::locale()->setMainCatalog("digikam");
     KGlobal::locale()->insertCatalog("libkdcraw");
+    KGlobal::locale()->insertCatalog("libkexiv2");
 
     int ret = app.exec();
 
