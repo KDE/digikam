@@ -135,7 +135,7 @@ void ImageRegionWidget::resetPreview()
     d->image.reset();
 }
 
-void ImageRegionWidget::paintPreview(QPixmap* pix, int sx, int sy, int sw, int sh)
+void ImageRegionWidget::paintPreview(QPixmap* const pix, int sx, int sy, int sw, int sh)
 {
     DImg img     = d->image.smoothScaleSection(sx, sy, sw, sh, tileSize(), tileSize());
     QPixmap pix2 = d->iface->convertToPixmap(img);

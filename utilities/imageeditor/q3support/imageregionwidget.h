@@ -118,9 +118,9 @@ private:
     QImage previewToQImage() const;
 
     void   viewportPaintExtraData();
-    inline void paintPreview(QPixmap* pix, int sx, int sy, int sw, int sh);
-
     void   emitCapturedPointFromOriginal(const QPoint& pt);
+
+    inline void paintPreview(QPixmap* const pix, int sx, int sy, int sw, int sh);
 
 private:
 

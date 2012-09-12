@@ -148,7 +148,7 @@ protected:
     virtual bool previewIsNull() const = 0;
     virtual void resetPreview() = 0;
     virtual QImage previewToQImage() const = 0;
-    virtual void paintPreview(QPixmap* pix, int sx, int sy, int sw, int sh) = 0;
+    virtual void paintPreview(QPixmap* const pix, int sx, int sy, int sw, int sh) = 0;
 
 private:
 
