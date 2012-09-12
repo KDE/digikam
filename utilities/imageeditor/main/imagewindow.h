@@ -117,7 +117,6 @@ private:
     void setViewToURL(const KUrl& url);
     void deleteCurrentItem(bool ask, bool permanently);
     void removeCurrent();
-    void slotFileOriginChanged(const QString&);
 
     void slideShow(SlideShowSettings& settings);
 
@@ -154,6 +153,7 @@ private Q_SLOTS:
 
     void slotChanged();
     void slotUpdateItemInfo();
+    void slotFileOriginChanged(const QString&);
 
     void slotContextMenu();
     void slotRevert();
