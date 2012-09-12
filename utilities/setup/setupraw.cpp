@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "setupdcraw.moc"
+#include "setupraw.moc"
 
 // Qt includes
 
@@ -54,12 +54,12 @@ using namespace KDcrawIface;
 namespace Digikam
 {
 
-class SetupDcraw::SetupDcrawPriv
+class SetupRaw::Private
 {
 public:
 
 
-    SetupDcrawPriv() :
+    Private() :
         tab(0),
         behaviorPanel(0),
         settingsPanel(0),
@@ -84,11 +84,12 @@ public:
 
     DcrawSettingsWidget*  dcrawSettings;
 };
-const QString SetupDcraw::SetupDcrawPriv::configGroupName("ImageViewer Settings");
-const QString SetupDcraw::SetupDcrawPriv::configUseRawImportToolEntry("UseRawImportTool");
 
-SetupDcraw::SetupDcraw(QWidget* const parent)
-    : QScrollArea(parent), d(new SetupDcrawPriv)
+const QString SetupRaw::Private::configGroupName("ImageViewer Settings");
+const QString SetupRaw::Private::configUseRawImportToolEntry("UseRawImportTool");
+
+SetupRaw::SetupRaw(QWidget* const parent)
+    : QScrollArea(parent), d(new Private)
 {
     d->tab = new KTabWidget;
 
@@ -182,26 +183,26 @@ SetupDcraw::SetupDcraw(QWidget* const parent)
     viewport()->setAutoFillBackground(false);
 }
 
-SetupDcraw::~SetupDcraw()
+SetupRaw::~SetupRaw()
 {
     delete d;
 }
 
-void SetupDcraw::slotSixteenBitsImageToggled(bool)
+void SetupRaw::slotSixteenBitsImageToggled(bool)
 {
     // Dcraw do not provide a way to set brightness of image in 16 bits color depth.
     // We always set on this option. We drive brightness adjustment in digiKam Raw image loader.
     d->dcrawSettings->setEnabledBrightnessSettings(true);
 }
 
-void SetupDcraw::slotBehaviorChanged()
+void SetupRaw::slotBehaviorChanged()
 {
     RawDecodingSettings settings = d->dcrawSettings->settings();
     settings.sixteenBitsImage    = !d->openSimple->isChecked();
     d->dcrawSettings->setSettings(settings);
 }
 
-void SetupDcraw::applySettings()
+void SetupRaw::applySettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
@@ -212,7 +213,7 @@ void SetupDcraw::applySettings()
     config->sync();
 }
 
-void SetupDcraw::readSettings()
+void SetupRaw::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);

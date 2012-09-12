@@ -692,7 +692,7 @@ bool ShowFoto::setupICC()
 
 bool ShowFoto::setup(bool iccSetupPage)
 {
-    QPointer<Setup> setup = new Setup(this, 0, iccSetupPage ? Setup::ICCPage : Setup::LastPageUsed);
+    QPointer<Setup> setup = new Setup(this, iccSetupPage ? Setup::ICCPage : Setup::LastPageUsed);
 
     if (setup->exec() != QDialog::Accepted)
     {

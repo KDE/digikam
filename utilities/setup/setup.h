@@ -62,7 +62,7 @@ public:
         MimePage,
         EditorPage,
         VersioningPage,
-        DcrawPage,
+        RawPage,
         IOFilesPage,
         ICCPage,
         LightTablePage,

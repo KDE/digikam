@@ -6,7 +6,7 @@
  * Date        : 2005-04-02
  * Description : showFoto setup dialog.
  *
- * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -34,7 +34,7 @@
 
 // Local includes
 
-#include "setupdcraw.h"
+#include "setupraw.h"
 #include "setupeditor.h"
 #include "setupmisc.h"
 #include "setupicc.h"
@@ -46,15 +46,15 @@
 namespace ShowFoto
 {
 
-class Setup::SetupPrivate
+class Setup::Private
 {
 public:
 
-    SetupPrivate() :
+    Private() :
         page_editor(0),
         page_metadata(0),
         page_tooltip(0),
-        page_dcraw(0),
+        page_raw(0),
         page_iofiles(0),
         page_slideshow(0),
         page_icc(0),
@@ -63,7 +63,7 @@ public:
         toolTipPage(0),
         miscPage(0),
         editorPage(0),
-        dcrawPage(0),
+        rawPage(0),
         iofilesPage(0),
         slideshowPage(0),
         iccPage(0)
@@ -73,7 +73,7 @@ public:
     KPageWidgetItem*         page_editor;
     KPageWidgetItem*         page_metadata;
     KPageWidgetItem*         page_tooltip;
-    KPageWidgetItem*         page_dcraw;
+    KPageWidgetItem*         page_raw;
     KPageWidgetItem*         page_iofiles;
     KPageWidgetItem*         page_slideshow;
     KPageWidgetItem*         page_icc;
@@ -84,7 +84,7 @@ public:
     SetupMisc*               miscPage;
 
     Digikam::SetupEditor*    editorPage;
-    Digikam::SetupDcraw*     dcrawPage;
+    Digikam::SetupRaw*       rawPage;
     Digikam::SetupIOFiles*   iofilesPage;
     Digikam::SetupSlideShow* slideshowPage;
     Digikam::SetupICC*       iccPage;
@@ -94,10 +94,9 @@ public:
     KPageWidgetItem* pageItem(Setup::Page page) const;
 };
 
-Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
-    : KPageDialog(parent), d(new SetupPrivate)
+Setup::Setup(QWidget* const parent, Setup::Page page)
+    : KPageDialog(parent), d(new Private)
 {
-    setObjectName(name);
     setCaption(i18n("Configure"));
     setButtons( KDialog::Help|KDialog::Ok|KDialog::Cancel );
     setDefaultButton(KDialog::Ok);
@@ -123,11 +122,11 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
                                     "<i>Customize information in tool-tips</i></qt>"));
     d->page_tooltip->setIcon(KIcon("dialog-information"));
 
-    d->dcrawPage  = new Digikam::SetupDcraw();
-    d->page_dcraw = addPage(d->dcrawPage, i18n("RAW Decoding"));
-    d->page_dcraw->setHeader(i18n("<qt>RAW Files Decoding Settings<br/>"
+    d->rawPage  = new Digikam::SetupRaw();
+    d->page_raw = addPage(d->rawPage, i18n("RAW Decoding"));
+    d->page_raw->setHeader(i18n("<qt>RAW Files Decoding Settings<br/>"
                                   "<i>Customize default RAW decoding settings</i></qt>"));
-    d->page_dcraw->setIcon(KIcon("kdcraw"));
+    d->page_raw->setIcon(KIcon("kdcraw"));
 
     d->iccPage  = new Digikam::SetupICC(0, this);
     d->page_icc = addPage(d->iccPage, i18n("Color Management"));
@@ -155,15 +154,15 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
 
     for (int i = 0; i != SetupPageEnumLast; ++i)
     {
-        KPageWidgetItem* item = d->pageItem((Page)i);
+        KPageWidgetItem* const item = d->pageItem((Page)i);
 
         if (!item)
         {
             continue;
         }
 
-        QWidget* wgt            = item->widget();
-        QScrollArea* scrollArea = qobject_cast<QScrollArea*>(wgt);
+        QWidget* const wgt            = item->widget();
+        QScrollArea* const scrollArea = qobject_cast<QScrollArea*>(wgt);
 
         if (scrollArea)
         {
@@ -206,7 +205,7 @@ void Setup::slotOkClicked()
     d->editorPage->applySettings();
     d->metadataPage->applySettings();
     d->toolTipPage->applySettings();
-    d->dcrawPage->applySettings();
+    d->rawPage->applySettings();
     d->iofilesPage->applySettings();
     d->slideshowPage->applySettings();
     d->iccPage->applySettings();
@@ -221,8 +220,8 @@ void Setup::showPage(Setup::Page page)
         case ToolTipPage:
             setCurrentPage(d->page_tooltip);
             break;
-        case DcrawPage:
-            setCurrentPage(d->page_dcraw);
+        case RawPage:
+            setCurrentPage(d->page_raw);
             break;
         case IOFilesPage:
             setCurrentPage(d->page_iofiles);
@@ -247,16 +246,16 @@ void Setup::showPage(Setup::Page page)
 
 Setup::Page Setup::activePageIndex()
 {
-    KPageWidgetItem* cur = currentPage();
+    KPageWidgetItem* const cur = currentPage();
 
     if (cur == d->page_tooltip)
     {
         return ToolTipPage;
     }
 
-    if (cur == d->page_dcraw)
+    if (cur == d->page_raw)
     {
-        return DcrawPage;
+        return RawPage;
     }
 
     if (cur == d->page_iofiles)
@@ -287,7 +286,7 @@ Setup::Page Setup::activePageIndex()
     return EditorPage;
 }
 
-KPageWidgetItem* Setup::SetupPrivate::pageItem(Setup::Page page) const
+KPageWidgetItem* Setup::Private::pageItem(Setup::Page page) const
 {
     switch (page)
     {
@@ -297,8 +296,8 @@ KPageWidgetItem* Setup::SetupPrivate::pageItem(Setup::Page page) const
             return page_metadata;
         case Setup::ToolTipPage:
             return page_tooltip;
-        case Setup::DcrawPage:
-            return page_dcraw;
+        case Setup::RawPage:
+            return page_raw;
         case Setup::IOFilesPage:
             return page_iofiles;
         case Setup::SlideshowPage:

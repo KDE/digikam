@@ -51,7 +51,7 @@
 #include "setupcamera.h"
 #include "setupcategory.h"
 #include "setupcollections.h"
-#include "setupdcraw.h"
+#include "setupraw.h"
 #include "setupeditor.h"
 #include "setupicc.h"
 #include "setupiofiles.h"
@@ -90,7 +90,7 @@ public:
         page_mime(0),
         page_lighttable(0),
         page_editor(0),
-        page_dcraw(0),
+        page_raw(0),
         page_iofiles(0),
         page_slideshow(0),
         page_icc(0),
@@ -112,7 +112,7 @@ public:
         mimePage(0),
         lighttablePage(0),
         editorPage(0),
-        dcrawPage(0),
+        rawPage(0),
         iofilesPage(0),
         slideshowPage(0),
         iccPage(0),
@@ -138,7 +138,7 @@ public:
     KPageWidgetItem*    page_mime;
     KPageWidgetItem*    page_lighttable;
     KPageWidgetItem*    page_editor;
-    KPageWidgetItem*    page_dcraw;
+    KPageWidgetItem*    page_raw;
     KPageWidgetItem*    page_iofiles;
     KPageWidgetItem*    page_slideshow;
     KPageWidgetItem*    page_icc;
@@ -161,7 +161,7 @@ public:
     SetupMime*          mimePage;
     SetupLightTable*    lighttablePage;
     SetupEditor*        editorPage;
-    SetupDcraw*         dcrawPage;
+    SetupRaw*           rawPage;
     SetupIOFiles*       iofilesPage;
     SetupSlideShow*     slideshowPage;
     SetupICC*           iccPage;
@@ -259,11 +259,11 @@ Setup::Setup(QWidget* const parent)
                                        "<i>Configure non-destructive editing and versioning</i></qt>"));
     d->page_versioning->setIcon(KIcon("view-catalog"));
 
-    d->dcrawPage  = new SetupDcraw();
-    d->page_dcraw = addPage(d->dcrawPage, i18n("RAW Decoding"));
-    d->page_dcraw->setHeader(i18n("<qt>Image Editor: RAW File Decoding<br/>"
+    d->rawPage  = new SetupRaw();
+    d->page_raw = addPage(d->rawPage, i18n("RAW Decoding"));
+    d->page_raw->setHeader(i18n("<qt>Image Editor: RAW File Decoding<br/>"
                                   "<i>Configure RAW decoding settings of the image editor</i></qt>"));
-    d->page_dcraw->setIcon(KIcon("kdcraw"));
+    d->page_raw->setIcon(KIcon("kdcraw"));
 
     d->iofilesPage  = new SetupIOFiles();
     d->page_iofiles = addPage(d->iofilesPage, i18n("Saving Images"));
@@ -325,15 +325,15 @@ Setup::Setup(QWidget* const parent)
 
     for (int i = 0; i != SetupPageEnumLast; ++i)
     {
-        KPageWidgetItem* item = d->pageItem((Page)i);
+        KPageWidgetItem* const item = d->pageItem((Page)i);
 
         if (!item)
         {
             continue;
         }
 
-        QWidget* wgt            = item->widget();
-        QScrollArea* scrollArea = qobject_cast<QScrollArea*>(wgt);
+        QWidget* const wgt            = item->widget();
+        QScrollArea* const scrollArea = qobject_cast<QScrollArea*>(wgt);
 
         if (scrollArea)
         {
@@ -386,7 +386,7 @@ QSize Setup::sizeHint() const
             page == LightTablePage  ||
             page == EditorPage      ||
             page == IOFilesPage     ||
-            page == DcrawPage       ||
+            page == RawPage         ||
             page == MiscellaneousPage)
         {
             KPageWidgetItem* item   = d->pageItem((Page)page);
@@ -495,7 +495,7 @@ void Setup::okClicked()
     d->mimePage->applySettings();
     d->lighttablePage->applySettings();
     d->editorPage->applySettings();
-    d->dcrawPage->applySettings();
+    d->rawPage->applySettings();
     d->iofilesPage->applySettings();
     d->slideshowPage->applySettings();
     d->iccPage->applySettings();
@@ -558,7 +558,7 @@ void Setup::showPage(Setup::Page page)
 
 Setup::Page Setup::activePageIndex() const
 {
-    KPageWidgetItem* cur = currentPage();
+    KPageWidgetItem* const cur = currentPage();
 
     if (cur == d->page_collections)
     {
@@ -605,9 +605,9 @@ Setup::Page Setup::activePageIndex() const
         return EditorPage;
     }
 
-    if (cur == d->page_dcraw)
+    if (cur == d->page_raw)
     {
-        return DcrawPage;
+        return RawPage;
     }
 
     if (cur == d->page_iofiles)
@@ -696,8 +696,8 @@ KPageWidgetItem* Setup::Private::pageItem(Setup::Page page) const
         case Setup::EditorPage:
             return page_editor;
 
-        case Setup::DcrawPage:
-            return page_dcraw;
+        case Setup::RawPage:
+            return page_raw;
 
         case Setup::IOFilesPage:
             return page_iofiles;

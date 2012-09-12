@@ -35,14 +35,14 @@
 namespace Digikam
 {
 
-class SetupDcraw : public QScrollArea
+class SetupRaw : public QScrollArea
 {
     Q_OBJECT
 
 public:
 
-    SetupDcraw(QWidget* const parent = 0);
-    ~SetupDcraw();
+    SetupRaw(QWidget* const parent = 0);
+    ~SetupRaw();
 
     void applySettings();
 
@@ -57,8 +57,8 @@ private Q_SLOTS:
 
 private:
 
-    class SetupDcrawPriv;
-    SetupDcrawPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

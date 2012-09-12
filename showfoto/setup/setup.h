@@ -6,7 +6,7 @@
  * Date        : 2005-04-02
  * Description : showFoto setup dialog.
  *
- * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -44,7 +44,7 @@ public:
         EditorPage = 0,
         MetadataPage,
         ToolTipPage,
-        DcrawPage,
+        RawPage,
         IOFilesPage,
         SlideshowPage,
         ICCPage,
@@ -53,7 +53,7 @@ public:
         SetupPageEnumLast
     };
 
-    explicit Setup(QWidget* parent=0, const char* name=0, Page page=LastPageUsed);
+    explicit Setup(QWidget* parent=0, Page page=LastPageUsed);
     ~Setup();
 
 private Q_SLOTS:
@@ -67,8 +67,8 @@ private:
 
 private:
 
-    class SetupPrivate;
-    SetupPrivate* const d;
+    class Private;
+    Private* const d;
 };
 
 }   // namespace ShowFoto
