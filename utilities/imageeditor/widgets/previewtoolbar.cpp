@@ -6,7 +6,7 @@
  * Date        : 2010-01-10
  * Description : a tool bar for preview mode
  *
- * Copyright (C) 2010-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -43,12 +43,12 @@
 namespace Digikam
 {
 
-class PreviewToolBar::PreviewToolBarPriv
+class PreviewToolBar::Private
 {
 
 public:
 
-    PreviewToolBarPriv() :
+    Private() :
         previewOriginalButton(0),
         previewBothButtonVert(0),
         previewBothButtonHorz(0),
@@ -71,8 +71,8 @@ public:
     QButtonGroup* previewButtons;
 };
 
-PreviewToolBar::PreviewToolBar(QWidget* parent)
-    : QWidget(parent), d(new PreviewToolBarPriv)
+PreviewToolBar::PreviewToolBar(QWidget* const parent)
+    : QWidget(parent), d(new Private)
 {
     setAttribute(Qt::WA_DeleteOnClose);
 
@@ -189,7 +189,8 @@ void PreviewToolBar::setPreviewModeMask(int mask)
         if (!d->previewButtons->button(mode)->isEnabled())
         {
             QList<QAbstractButton*> btns = d->previewButtons->buttons();
-            foreach(QAbstractButton* btn, btns)
+
+            foreach(QAbstractButton* const btn, btns)
             {
                 if (btn && btn->isEnabled())
                 {

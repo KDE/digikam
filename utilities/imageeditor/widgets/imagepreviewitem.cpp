@@ -6,7 +6,7 @@
  * Date        : 2011-04-27
  * Description : image preview item for image editor.
  *
- * Copyright (C) 2011 Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2011-2012 Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -85,7 +85,7 @@ void ImagePreviewItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 
         if (iccSettings.enableCM && iccSettings.useManagedView)
         {
-            IccManager manager(scaledImage);
+            IccManager   manager(scaledImage);
             IccTransform monitorICCtrans = manager.displayTransform(widget);
             pix                          = scaledImage.convertToPixmap(monitorICCtrans);
         }
@@ -101,7 +101,7 @@ void ImagePreviewItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 
     // Show the Over/Under exposure pixels indicators
 
-    ExposureSettingsContainer* expoSettings = EditorCore::defaultInstance()->getExposureSettings();
+    ExposureSettingsContainer* const expoSettings = EditorCore::defaultInstance()->getExposureSettings();
 
     if (expoSettings)
     {

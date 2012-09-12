@@ -7,7 +7,7 @@
  * Description : a list of selectable options with preview
  *               effects as thumbnails.
  *
- * Copyright (C) 2010-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -49,18 +49,20 @@
 namespace Digikam
 {
 
-class PreviewThreadWrapper::PreviewThreadWrapperPriv
+class PreviewThreadWrapper::Private
 {
 
 public:
 
-    PreviewThreadWrapperPriv() {}
+    Private()
+    {
+    }
 
     QMap<int, DImgThreadedFilter*> map;
 };
 
-PreviewThreadWrapper::PreviewThreadWrapper(QObject* parent)
-    : QObject(parent), d(new PreviewThreadWrapperPriv)
+PreviewThreadWrapper::PreviewThreadWrapper(QObject* const parent)
+    : QObject(parent), d(new Private)
 {
 }
 
@@ -74,7 +76,7 @@ PreviewThreadWrapper::~PreviewThreadWrapper()
     delete d;
 }
 
-void PreviewThreadWrapper::registerFilter(int id, DImgThreadedFilter* filter)
+void PreviewThreadWrapper::registerFilter(int id, DImgThreadedFilter* const filter)
 {
     filter->setParent(this);
     d->map.insert(id, filter);
@@ -91,7 +93,7 @@ void PreviewThreadWrapper::registerFilter(int id, DImgThreadedFilter* filter)
 
 void PreviewThreadWrapper::slotFilterStarted()
 {
-    DImgThreadedFilter* filter = dynamic_cast<DImgThreadedFilter*>(sender());
+    DImgThreadedFilter* const filter = dynamic_cast<DImgThreadedFilter*>(sender());
 
     if (!filter)
     {
@@ -103,7 +105,7 @@ void PreviewThreadWrapper::slotFilterStarted()
 
 void PreviewThreadWrapper::slotFilterFinished(bool success)
 {
-    DImgThreadedFilter* filter = dynamic_cast<DImgThreadedFilter*>(sender());
+    DImgThreadedFilter* const filter = dynamic_cast<DImgThreadedFilter*>(sender());
 
     if (!filter)
     {
@@ -120,7 +122,7 @@ void PreviewThreadWrapper::slotFilterFinished(bool success)
 
 void PreviewThreadWrapper::slotFilterProgress(int /*progress*/)
 {
-    DImgThreadedFilter* filter = dynamic_cast<DImgThreadedFilter*>(sender());
+    DImgThreadedFilter* const filter = dynamic_cast<DImgThreadedFilter*>(sender());
 
     if (!filter)
     {
@@ -132,7 +134,7 @@ void PreviewThreadWrapper::slotFilterProgress(int /*progress*/)
 
 void PreviewThreadWrapper::startFilters()
 {
-    foreach(DImgThreadedFilter* filter, d->map)
+    foreach(DImgThreadedFilter* const filter, d->map)
     {
         filter->startFilter();
     }
@@ -140,7 +142,7 @@ void PreviewThreadWrapper::startFilters()
 
 void PreviewThreadWrapper::stopFilters()
 {
-    foreach(DImgThreadedFilter* filter, d->map)
+    foreach(DImgThreadedFilter* const filter, d->map)
     {
         filter->cancelFilter();
         filter->deleteLater();
@@ -149,12 +151,12 @@ void PreviewThreadWrapper::stopFilters()
 
 // ---------------------------------------------------------------------
 
-class PreviewListItem::PreviewListItemPriv
+class PreviewListItem::Private
 {
 
 public:
 
-    PreviewListItemPriv() :
+    Private() :
         busy(false),
         id(0)
     {
@@ -164,8 +166,8 @@ public:
     int  id;
 };
 
-PreviewListItem::PreviewListItem(QListWidget* parent)
-    : QListWidgetItem(parent), d(new PreviewListItemPriv)
+PreviewListItem::PreviewListItem(QListWidget* const parent)
+    : QListWidgetItem(parent), d(new Private)
 {
 }
 
@@ -209,12 +211,12 @@ bool PreviewListItem::isBusy() const
 
 // ---------------------------------------------------------------------
 
-class PreviewList::PreviewListPriv
+class PreviewList::Private
 {
 
 public:
 
-    PreviewListPriv() :
+    Private() :
         progressCount(0),
         progressTimer(0),
         progressPix(KPixmapSequence("process-working", KIconLoader::SizeSmallMedium)),
@@ -231,8 +233,8 @@ public:
     PreviewThreadWrapper* wrapper;
 };
 
-PreviewList::PreviewList(QObject* /*parent*/)
-    : QListWidget(), d(new PreviewListPriv)
+PreviewList::PreviewList(QObject* const /*parent*/)
+    : QListWidget(), d(new Private)
 {
     d->wrapper = new PreviewThreadWrapper(this);
 
@@ -284,7 +286,7 @@ void PreviewList::stopFilters()
     d->wrapper->stopFilters();
 }
 
-PreviewListItem* PreviewList::addItem(DImgThreadedFilter* filter, const QString& txt, int id)
+PreviewListItem* PreviewList::addItem(DImgThreadedFilter* const filter, const QString& txt, int id)
 {
     if (!filter)
     {
@@ -293,7 +295,7 @@ PreviewListItem* PreviewList::addItem(DImgThreadedFilter* filter, const QString&
 
     d->wrapper->registerFilter(id, filter);
 
-    PreviewListItem* item = new PreviewListItem(this);
+    PreviewListItem* const item = new PreviewListItem(this);
     item->setText(txt);
     //  in case text is mangled by textelide, it is displayed by hovering.
     item->setToolTip(txt);
@@ -307,7 +309,7 @@ PreviewListItem* PreviewList::findItem(int id) const
 
     while (it <= this->count())
     {
-        PreviewListItem* item = dynamic_cast<PreviewListItem*>(this->item(it));
+        PreviewListItem* const item = dynamic_cast<PreviewListItem*>(this->item(it));
 
         if (item && item->id() == id)
         {
@@ -327,7 +329,7 @@ void PreviewList::setCurrentId(int id)
     while (it <= this->count())
     {
 
-        PreviewListItem* item = dynamic_cast<PreviewListItem*>(this->item(it));
+        PreviewListItem* const item = dynamic_cast<PreviewListItem*>(this->item(it));
 
         if (item && item->id() == id)
         {
@@ -342,7 +344,7 @@ void PreviewList::setCurrentId(int id)
 
 int PreviewList::currentId() const
 {
-    PreviewListItem* item = dynamic_cast<PreviewListItem*>(currentItem());
+    PreviewListItem* const item = dynamic_cast<PreviewListItem*>(currentItem());
 
     if (item)
     {
@@ -366,7 +368,7 @@ void PreviewList::slotProgressTimerDone()
 
     while (it <= this->count())
     {
-        PreviewListItem* item = dynamic_cast<PreviewListItem*>(this->item(it));
+        PreviewListItem* const item = dynamic_cast<PreviewListItem*>(this->item(it));
 
         if (item && item->isSelected())
         {
@@ -405,13 +407,13 @@ void PreviewList::slotProgressTimerDone()
 
 void PreviewList::slotFilterStarted(int id)
 {
-    PreviewListItem* item = findItem(id);
+    PreviewListItem* const item = findItem(id);
     item->setBusy(true);
 }
 
 void PreviewList::slotFilterFinished(int id, const QPixmap& pix)
 {
-    PreviewListItem* item = findItem(id);
+    PreviewListItem* const item = findItem(id);
 
     if (item)
     {

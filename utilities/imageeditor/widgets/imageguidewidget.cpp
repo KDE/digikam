@@ -138,7 +138,7 @@ ImageGuideWidget::ImageGuideWidget(QWidget* const parent,
     setAttribute(Qt::WA_DeleteOnClose);
 
     d->iface         = new ImageIface(QSize(w, h));
-    d->iface->setPreviewType(useImageSelection);
+    d->iface->setPreviewUseSelection(useImageSelection);
     d->preview       = d->iface->preview();
     d->preview.setIccProfile(d->iface->original()->getIccProfile());
 
@@ -459,7 +459,7 @@ void ImageGuideWidget::updatePixmap()
     p.end();
 }
 
-void ImageGuideWidget::drawText(QPainter* p, const QPoint& corner, const QString& text)
+void ImageGuideWidget::drawText(QPainter* const p, const QPoint& corner, const QString& text)
 {
     p->save();
     QFontMetrics fontMt = p->fontMetrics();

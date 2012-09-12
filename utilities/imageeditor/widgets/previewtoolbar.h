@@ -6,7 +6,7 @@
  * Date        : 2010-01-10
  * Description : a tool bar for preview mode
  *
- * Copyright (C) 2010-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -66,7 +66,7 @@ public:
 
 public:
 
-    PreviewToolBar(QWidget* parent = 0);
+    PreviewToolBar(QWidget* const parent = 0);
     ~PreviewToolBar();
 
     void setPreviewModeMask(int mask);
@@ -83,8 +83,8 @@ Q_SIGNALS:
 
 private:
 
-    class PreviewToolBarPriv;
-    PreviewToolBarPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

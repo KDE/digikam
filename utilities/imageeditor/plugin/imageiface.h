@@ -57,15 +57,15 @@ public:
     explicit ImageIface(const QSize& size = QSize(0, 0));
     ~ImageIface();
 
-    /** Use this method to use the current selection in editor instead the full
-     *  image to render the preview.
+    /** If useSelection is true, preview will be rendered using current selection in editor instead the full
+     *  image.
      */
-    void setPreviewType(bool useSelection = false);
+    void setPreviewUseSelection(bool useSelection = false);
 
     /** Return 'true' if the preview is rendered using the current selection in editor.
      *  Return 'false' if the preview is rendered using the full image in editor.
      */
-    bool previewType()                      const;
+    bool previewUseSelection()              const;
 
     /** Sets preview size and returns new preview as with getPreview.
      *  The parameters are only hints, previewSize() may differ from size.

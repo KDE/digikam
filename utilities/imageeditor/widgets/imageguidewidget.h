@@ -79,7 +79,7 @@ public:
     QPoint      getSpotPosition()              const;
     DColor      getSpotColor(int getColorFrom) const;
     int         previewMode()                  const;
-    
+
     void   setSpotVisible(bool spotVisible, bool blink = false);
     void   resetSpotPosition();
     void   updatePreview();
@@ -122,7 +122,7 @@ private:
     void   drawLineTo(const QPoint& endPoint);
     void   drawLineTo(int width, bool erase, const QColor& color, const QPoint& start, const QPoint& end);
     QPoint translatePointPosition(QPoint& point) const;
-    void   drawText(QPainter* p, const QPoint& corner, const QString& text);
+    void   drawText(QPainter* const p, const QPoint& corner, const QString& text);
     void   updateMaskCursor();
 
 private:

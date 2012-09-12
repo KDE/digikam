@@ -7,7 +7,7 @@
  * Description : a list of selectable options with preview
  *               effects as thumbnails.
  *
- * Copyright (C) 2010-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -47,10 +47,10 @@ class DIGIKAM_EXPORT PreviewThreadWrapper : public QObject
 
 public:
 
-    PreviewThreadWrapper(QObject* parent = 0);
+    PreviewThreadWrapper(QObject* const parent = 0);
     ~PreviewThreadWrapper();
 
-    void registerFilter(int id, DImgThreadedFilter* filter);
+    void registerFilter(int id, DImgThreadedFilter* const filter);
 
     void startFilters();
     void stopFilters();
@@ -68,8 +68,8 @@ private Q_SLOTS:
 
 private:
 
-    class PreviewThreadWrapperPriv;
-    PreviewThreadWrapperPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 // -------------------------------------------------------------------
@@ -79,7 +79,7 @@ class DIGIKAM_EXPORT PreviewListItem : public QListWidgetItem
 
 public:
 
-    PreviewListItem(QListWidget* parent = 0);
+    PreviewListItem(QListWidget* const parent = 0);
     ~PreviewListItem();
 
     void setPixmap(const QPixmap& pix);
@@ -92,8 +92,8 @@ public:
 
 private:
 
-    class PreviewListItemPriv;
-    PreviewListItemPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 // -------------------------------------------------------------------
@@ -104,10 +104,10 @@ class DIGIKAM_EXPORT PreviewList : public QListWidget
 
 public:
 
-    PreviewList(QObject* parent = 0);
+    PreviewList(QObject* const parent = 0);
     ~PreviewList();
 
-    PreviewListItem* addItem(DImgThreadedFilter* filter, const QString& txt, int id);
+    PreviewListItem* addItem(DImgThreadedFilter* const filter, const QString& txt, int id);
 
     void setCurrentId(int id);
     int  currentId() const;
@@ -127,8 +127,8 @@ private:
 
 private:
 
-    class PreviewListPriv;
-    PreviewListPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

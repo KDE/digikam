@@ -179,12 +179,12 @@ ImageIface::~ImageIface()
     delete d;
 }
 
-void ImageIface::setPreviewType(bool useSelection)
+void ImageIface::setPreviewUseSelection(bool useSelection)
 {
     d->usePreviewSelection = useSelection;
 }
 
-bool ImageIface::previewType() const
+bool ImageIface::previewUseSelection() const
 {
     return d->usePreviewSelection;
 }
