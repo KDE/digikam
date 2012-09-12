@@ -38,4 +38,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 008 ==> 305224 - Configure Shortcuts does not provide the option of config.
 009 ==> 305961 - Changing EXIF auto-rotation method.
 010 ==> 306193 - Desktop-file-validate fails on kipiplugins.desktop.
-011 ==> 
+011 ==> 306641 - Export module is not available for toolbar and rightclick context.
+012 ==> 
