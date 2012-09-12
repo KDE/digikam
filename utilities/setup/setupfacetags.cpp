@@ -7,6 +7,7 @@
  * Description : setup tab for face tags
  *
  * Copyright (C) 2010 by Aditya Bhatt <adityabhatt1991 at gmail dot com>
+ * Copyright (C) 2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -42,11 +43,11 @@
 namespace Digikam
 {
 
-class SetupFaceTags::SetupFaceTagsPriv
+class SetupFaceTags::Private
 {
 public:
 
-    SetupFaceTagsPriv():
+    Private():
         configGroupName("Face Tags Settings"),
         configFaceDetectionEntry("FaceDetection"),
         configFaceSuggestionEntry("FaceSuggestion"),
@@ -76,10 +77,10 @@ public:
     QLabel*       suggestionSliderLabel;
 };
 
-SetupFaceTags::SetupFaceTags(QWidget* parent)
-    : QScrollArea(parent), d(new SetupFaceTagsPriv)
+SetupFaceTags::SetupFaceTags(QWidget* const parent)
+    : QScrollArea(parent), d(new Private)
 {
-    QWidget* panel = new QWidget(viewport());
+    QWidget* panel      = new QWidget(viewport());
     setWidget(panel);
     setWidgetResizable(true);
 
@@ -110,13 +111,13 @@ SetupFaceTags::SetupFaceTags(QWidget* parent)
     d->suggestionThresholdSlider->setPageStep(1);
     d->suggestionThresholdSlider->setTickPosition(QSlider::TicksBelow);
 
-    d->detectionCBLabel = new QLabel;
+    d->detectionCBLabel    = new QLabel;
     d->detectionCBLabel->setTextFormat(Qt::PlainText);
     d->detectionCBLabel->setText(i18n("If this option is enabled, digiKam will search for faces in your images,\n"
                                       "thus making it easier to tag people in your photographs.\n"));
     d->enableFaceDetection = new QCheckBox(i18n("Enable face detection"), panel);
 
-    d->suggestionCBLabel = new QLabel;
+    d->suggestionCBLabel   = new QLabel;
     d->suggestionCBLabel->setTextFormat(Qt::PlainText);
     d->suggestionCBLabel->setText(i18n("If this option is enabled, digiKam will try to identify detected faces,\n"
                                        "and present you with suggestions of similar faces,\n"

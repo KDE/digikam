@@ -81,8 +81,8 @@ private Q_SLOTS:
 
 private:
 
-    class CameraSelectionPriv;
-    CameraSelectionPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

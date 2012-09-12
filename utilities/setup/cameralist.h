@@ -80,8 +80,8 @@ private:
 
     static CameraList* m_defaultList;
 
-    class CameraListPrivate;
-    CameraListPrivate* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

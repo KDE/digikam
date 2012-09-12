@@ -70,11 +70,11 @@ using namespace KExiv2Iface;
 namespace Digikam
 {
 
-class SetupMetadata::SetupMetadataPriv
+class SetupMetadata::Private
 {
 public:
 
-    SetupMetadataPriv() :
+    Private() :
         exifAutoRotateAsChanged(false),
         exifAutoRotateOrg(false),
         fieldsGroup(0),
@@ -145,8 +145,8 @@ public:
     MetadataPanel* tagsCfgPanel;
 };
 
-SetupMetadata::SetupMetadata(QWidget* parent)
-    : QScrollArea(parent), d(new SetupMetadataPriv)
+SetupMetadata::SetupMetadata(QWidget* const parent)
+    : QScrollArea(parent), d(new Private)
 {
     d->tab = new KTabWidget(viewport());
     setWidget(d->tab);
@@ -701,7 +701,7 @@ void SetupMetadata::readSettings()
 #endif
 }
 
-bool SetupMetadata::exifAutoRotateAsChanged()
+bool SetupMetadata::exifAutoRotateAsChanged() const
 {
     return d->exifAutoRotateAsChanged;
 }

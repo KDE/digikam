@@ -6,9 +6,9 @@
  * Date        : 2008-11-15
  * Description : collections setup tab model/view
  *
- * Copyright (C) 2008-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2008-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2012 by Andi Clemens <andi dot clemens at gmail dot com>
+ * Copyright (C)      2012 by Andi Clemens <andi dot clemens at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -69,7 +69,7 @@ class SetupCollectionDelegate : public KWidgetItemDelegate
 
 public:
 
-    SetupCollectionDelegate(QAbstractItemView* view, QObject* parent = 0);
+    SetupCollectionDelegate(QAbstractItemView* const view, QObject* const parent = 0);
     ~SetupCollectionDelegate();
 
     virtual QWidget* createEditor(QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& index) const;
@@ -105,7 +105,7 @@ protected:
 
 // -----------------------------------------------------------------------
 
-SetupCollectionDelegate::SetupCollectionDelegate(QAbstractItemView* view, QObject* parent)
+SetupCollectionDelegate::SetupCollectionDelegate(QAbstractItemView* const view, QObject* const parent)
     : KWidgetItemDelegate(view, parent),
       m_categoryMaxStyledWidth(0)
 {
@@ -285,7 +285,7 @@ void SetupCollectionDelegate::updateEditorGeometry(QWidget* editor, const QStyle
 
 // ------------- View ----------------- //
 
-SetupCollectionTreeView::SetupCollectionTreeView(QWidget* parent)
+SetupCollectionTreeView::SetupCollectionTreeView(QWidget* const parent)
     : QTreeView(parent)
 {
     setRootIsDecorated(false);
@@ -383,7 +383,7 @@ SetupCollectionModel::Item::Item(const QString& path, const QString& label, Setu
     They are valid if edited (label) or the location was added (both valid, location null).
 */
 
-SetupCollectionModel::SetupCollectionModel(QObject* parent)
+SetupCollectionModel::SetupCollectionModel(QObject* const parent)
     : QAbstractItemModel(parent), m_dialogParentWidget(0)
 {
 }
@@ -395,8 +395,8 @@ SetupCollectionModel::~SetupCollectionModel()
 void SetupCollectionModel::loadCollections()
 {
     m_collections.clear();
-
     QList<CollectionLocation> locations = CollectionManager::instance()->allLocations();
+
     foreach(const CollectionLocation& location, locations)
     {
         m_collections << Item(location);
@@ -444,6 +444,7 @@ void SetupCollectionModel::apply()
 
     // Add added items
     QList<Item> failedItems;
+
     foreach(int i, newItems)
     {
         Item& item = m_collections[i];
@@ -482,10 +483,12 @@ void SetupCollectionModel::apply()
     if (!failedItems.isEmpty())
     {
         QStringList failedPaths;
+
         foreach(const Item& item, failedItems)
         {
             failedPaths << item.path;
         }
+
         KMessageBox::errorList(m_dialogParentWidget,
                                i18n("It was not possible to add a collection for the following paths:"),
                                failedPaths);
@@ -558,6 +561,7 @@ void SetupCollectionModel::addCollection(int category)
     // Check path: First check with manager
     QString messageFromManager, deviceIcon;
     QList<CollectionLocation> assumeDeleted;
+
     foreach(const Item& item, m_collections)
     {
         if (item.deleted && !item.location.isNull())
@@ -565,6 +569,7 @@ void SetupCollectionModel::addCollection(int category)
             assumeDeleted << item.location;
         }
     }
+
     CollectionManager::LocationCheckResult result;
 
     if (category == CategoryRemote)
@@ -664,8 +669,8 @@ void SetupCollectionModel::addCollection(int category)
     {
         // Add new item to model. Adding to CollectionManager is done in apply()!
         QModelIndex parent = indexForCategory((Category)category);
-        int row = rowCount(parent);
-        QString label = nameEdit->text();
+        int row            = rowCount(parent);
+        QString label      = nameEdit->text();
 
         if (label.isEmpty())
         {
@@ -961,6 +966,7 @@ int SetupCollectionModel::rowCount(const QModelIndex& parent) const
     // Level 1: item children count
     int parentId = parent.row();
     int rowCount = 0;
+
     foreach(const Item& item, m_collections)
     {
         if (!item.deleted && item.parentId == parentId)
@@ -968,6 +974,7 @@ int SetupCollectionModel::rowCount(const QModelIndex& parent) const
             ++rowCount;
         }
     }
+
     return rowCount;
 }
 

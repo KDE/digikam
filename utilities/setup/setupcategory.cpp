@@ -6,7 +6,7 @@
  * Date        : 2004-01-02
  * Description : album category setup tab.
  *
- * Copyright (C) 2004-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -54,11 +54,11 @@
 namespace Digikam
 {
 
-class SetupCategory::SetupCategoryPriv
+class SetupCategory::Private
 {
 public:
 
-    SetupCategoryPriv() :
+    Private() :
         addCategoryButton(0),
         delCategoryButton(0),
         repCategoryButton(0),
@@ -76,10 +76,10 @@ public:
     KLineEdit*   categoryEdit;
 };
 
-SetupCategory::SetupCategory(QWidget* parent)
-    : QScrollArea(parent), d(new SetupCategoryPriv)
+SetupCategory::SetupCategory(QWidget* const parent)
+    : QScrollArea(parent), d(new Private)
 {
-    QWidget* panel = new QWidget(viewport());
+    QWidget* panel    = new QWidget(viewport());
     setWidget(panel);
     setWidgetResizable(true);
 
@@ -151,7 +151,7 @@ SetupCategory::~SetupCategory()
 
 void SetupCategory::slotDelCategory()
 {
-    QListWidgetItem* item = d->albumCategoryBox->currentItem();
+    QListWidgetItem* const item = d->albumCategoryBox->currentItem();
 
     if (!item)
     {
@@ -206,7 +206,7 @@ void SetupCategory::slotAddCategory()
 
     for (int i = 0 ; i < d->albumCategoryBox->count(); ++i)
     {
-        QListWidgetItem* item = d->albumCategoryBox->item(i);
+        QListWidgetItem* const item = d->albumCategoryBox->item(i);
 
         if (newCategory == item->text())
         {
@@ -235,7 +235,7 @@ void SetupCategory::applySettings()
 
     for (int i = 0 ; i < d->albumCategoryBox->count(); ++i)
     {
-        QListWidgetItem* item = d->albumCategoryBox->item(i);
+        QListWidgetItem* const item = d->albumCategoryBox->item(i);
         categoryList.append(item->text());
     }
 

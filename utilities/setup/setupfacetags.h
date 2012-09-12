@@ -7,6 +7,7 @@
  * Description : setup tab for face tags
  *
  * Copyright (C) 2010 by Aditya Bhatt <adityabhatt1991 at gmail dot com>
+ * Copyright (C) 2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -37,7 +38,7 @@ class SetupFaceTags : public QScrollArea
 
 public:
 
-    SetupFaceTags(QWidget* parent = 0);
+    SetupFaceTags(QWidget* const parent = 0);
     ~SetupFaceTags();
 
     void applySettings();
@@ -53,8 +54,8 @@ private:
 
 private:
 
-    class SetupFaceTagsPriv;
-    SetupFaceTagsPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }   // namespace Digikam

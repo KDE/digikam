@@ -55,11 +55,11 @@
 namespace Digikam
 {
 
-class CameraSelection::CameraSelectionPriv
+class CameraSelection::Private
 {
 public:
 
-    CameraSelectionPriv() :
+    Private() :
         portButtonGroup(0),
         usbButton(0),
         serialButton(0),
@@ -97,7 +97,7 @@ public:
 };
 
 CameraSelection::CameraSelection(QWidget* const parent)
-    : KDialog(parent), d(new CameraSelectionPriv)
+    : KDialog(parent), d(new Private)
 {
     kapp->setOverrideCursor(Qt::WaitCursor);
     setHelp("cameraselection.anchor", "digikam");
@@ -299,7 +299,7 @@ void CameraSelection::slotUMSCameraLinkUsed()
 
     if (!list.isEmpty())
     {
-        QTreeWidgetItem* item = list.first();
+        QTreeWidgetItem* const item = list.first();
 
         if (item)
         {
@@ -315,7 +315,7 @@ void CameraSelection::slotPTPCameraLinkUsed()
 
     if (!list.isEmpty())
     {
-        QTreeWidgetItem* item = list.first();
+        QTreeWidgetItem* const item = list.first();
 
         if (item)
         {
@@ -512,7 +512,7 @@ QString CameraSelection::currentTitle() const
 
 QString CameraSelection::currentModel() const
 {
-    QTreeWidgetItem* item = d->listView->currentItem();
+    QTreeWidgetItem* const item = d->listView->currentItem();
 
     if (!item)
     {
@@ -554,7 +554,7 @@ void CameraSelection::slotSearchTextChanged(const SearchTextSettings& settings)
 
     while (*it)
     {
-        QTreeWidgetItem* item  = *it;
+        QTreeWidgetItem* const item  = *it;
 
         if (item->text(0).contains(search, settings.caseSensitive))
         {

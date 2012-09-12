@@ -6,7 +6,7 @@
  * Date        : 2008-11-15
  * Description : collections setup tab model/view
  *
- * Copyright (C) 2008-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2008-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -86,15 +86,22 @@ public:
         NumberOfCategories
     };
 
-    SetupCollectionModel(QObject* parent = 0);
+public:
+    
+    SetupCollectionModel(QObject* const parent = 0);
     ~SetupCollectionModel();
 
     /// Read collections from CollectionManager
     void loadCollections();
+
     /// Set a widget used as parent for dialogs and message boxes
-    void setParentWidgetForDialogs(QWidget* widget);
+    void setParentWidgetForDialogs(QWidget* const widget);
+
     /// Apply the changed settings to CollectionManager
     void apply();
+
+    QModelIndex indexForCategory(Category category) const;
+    QList<QModelIndex> categoryIndexes()            const;
 
     // QAbstractItemModel implementation
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
@@ -106,15 +113,12 @@ public:
     virtual QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const;
     virtual QModelIndex parent(const QModelIndex& index) const;
 
-    /*
+/*
     virtual Qt::DropActions supportedDropActions() const;
     virtual QStringList mimeTypes() const;
     virtual bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex& parent);
     virtual QMimeData * mimeData(const QModelIndexList& indexes) const;
-    */
-
-    QModelIndex indexForCategory(Category category) const;
-    QList<QModelIndex> categoryIndexes() const;
+*/
 
 Q_SIGNALS:
 
@@ -125,11 +129,14 @@ public Q_SLOTS:
 
     /** Forward category button clicked signals to this slot.
      *  mappedId is retrieved with the CategoryButtonMapId role
-     *  for the model index of the button */
+     *  for the model index of the button
+     */
     void slotCategoryButtonPressed(int mappedId);
+
     /** Forward button clicked signals to this slot.
      *  mappedId is retrieved with the ButtonMapId role
-     *  for the model index of the button */
+     *  for the model index of the button
+     */
     void slotButtonPressed(int mappedId);
 
 protected Q_SLOTS:
@@ -177,7 +184,7 @@ class SetupCollectionTreeView : public QTreeView
 
 public:
 
-    SetupCollectionTreeView(QWidget* parent = 0);
+    SetupCollectionTreeView(QWidget* const parent = 0);
 
     void setModel(SetupCollectionModel* model);
 

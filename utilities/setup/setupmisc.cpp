@@ -6,8 +6,8 @@
  * Date        : 2004-08-23
  * Description : mics configuration setup tab
  *
- * Copyright (C) 2004 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2005-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004      by Renchi Raju <renchi dot raju at gmail dot com>
+ * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -47,11 +47,11 @@
 namespace Digikam
 {
 
-class SetupMisc::SetupMiscPriv
+class SetupMisc::Private
 {
 public:
 
-    SetupMiscPriv() :
+    Private() :
         sidebarTypeLabel(0),
         stringComparisonTypeLabel(0),
         applicationStyleLabel(0),
@@ -81,8 +81,8 @@ public:
     KComboBox* applicationStyle;
 };
 
-SetupMisc::SetupMisc(QWidget* parent)
-    : QScrollArea(parent), d(new SetupMiscPriv)
+SetupMisc::SetupMisc(QWidget* const parent)
+    : QScrollArea(parent), d(new Private)
 {
     QWidget* panel = new QWidget(viewport());
     setWidget(panel);

@@ -7,6 +7,7 @@
  * Description : database setup tab
  *
  * Copyright (C) 2009-2010 by Holger Foerster <Hamsi2k at freenet dot de>
+ * Copyright (C)      2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -25,7 +26,6 @@
 
 // Qt includes
 
-#include <QApplication>
 #include <QCursor>
 #include <QGroupBox>
 #include <QLabel>
@@ -49,6 +49,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <klineedit.h>
+#include <kapplication.h>
 #include <kpagedialog.h>
 #include <kfiledialog.h>
 #include <kurl.h>
@@ -67,11 +68,11 @@
 namespace Digikam
 {
 
-class SetupDatabase::SetupDatabasePriv
+class SetupDatabase::Private
 {
 public:
 
-    SetupDatabasePriv() :
+    Private() :
         mainDialog(0),
         databaseWidget(0),
         updateBox(0),
@@ -85,22 +86,22 @@ public:
     QPushButton*    hashesButton;
 };
 
-SetupDatabase::SetupDatabase(KPageDialog* dialog, QWidget* parent)
-    : QScrollArea(parent), d(new SetupDatabasePriv)
+SetupDatabase::SetupDatabase(KPageDialog* const dialog, QWidget* const parent)
+    : QScrollArea(parent), d(new Private)
 {
     d->mainDialog           = dialog;
     QWidget* page           = new QWidget;
     QVBoxLayout* mainLayout = new QVBoxLayout;
 
-    d->databaseWidget = new DatabaseWidget;
+    d->databaseWidget       = new DatabaseWidget;
     mainLayout->addWidget(d->databaseWidget);
 
     if (!SchemaUpdater::isUniqueHashUpToDate())
     {
-        d->updateBox    = new QGroupBox(i18nc("@title:group", "Updates"));
+        d->updateBox        = new QGroupBox(i18nc("@title:group", "Updates"));
         QGridLayout* updateLayout = new QGridLayout;
 
-        d->hashesButton = new QPushButton(i18nc("@action:button", "Update File Hashes"));
+        d->hashesButton     = new QPushButton(i18nc("@action:button", "Update File Hashes"));
         d->hashesButton->setWhatsThis(i18nc("@info:tooltip",
                                             "File hashes are used to identify identical files and to display thumbnails. "
                                             "A new, improved algorithm to create the hash is now used. "
@@ -146,7 +147,7 @@ SetupDatabase::~SetupDatabase()
 
 void SetupDatabase::applySettings()
 {
-    AlbumSettings* settings = AlbumSettings::instance();
+    AlbumSettings* const settings = AlbumSettings::instance();
 
     if (!settings)
     {
@@ -203,7 +204,7 @@ void SetupDatabase::applySettings()
 
 void SetupDatabase::readSettings()
 {
-    AlbumSettings* settings = AlbumSettings::instance();
+    AlbumSettings* const settings = AlbumSettings::instance();
 
     if (!settings)
     {
@@ -230,7 +231,7 @@ void SetupDatabase::upgradeUniqueHashes()
 
 void SetupDatabase::showHashInformation()
 {
-    qApp->postEvent(d->hashesButton, new QHelpEvent(QEvent::WhatsThis, QPoint(0, 0), QCursor::pos()));
+    kapp->postEvent(d->hashesButton, new QHelpEvent(QEvent::WhatsThis, QPoint(0, 0), QCursor::pos()));
 }
 
 }  // namespace Digikam

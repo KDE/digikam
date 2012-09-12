@@ -48,11 +48,11 @@
 namespace Digikam
 {
 
-class ImportFilters::ImportFiltersPriv
+class ImportFilters::Private
 {
 public:
 
-    ImportFiltersPriv()
+    Private()
     {
         filterName       = 0;
         mimeCheckBox     = 0;
@@ -79,7 +79,7 @@ public:
 // ----------------------------------------------------------------------------------------
 
 ImportFilters::ImportFilters(QWidget* const parent)
-    : KDialog(parent), d(new ImportFiltersPriv)
+    : KDialog(parent), d(new Private)
 {
     setButtons(KDialog::Cancel | KDialog::Ok);
     setDefaultButton(KDialog::Ok);

@@ -70,8 +70,8 @@ public:
 
 private:
 
-    class CameraTypePrivate;
-    CameraTypePrivate* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

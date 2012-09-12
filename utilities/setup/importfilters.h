@@ -56,8 +56,8 @@ protected Q_SLOTS:
 
 private:
 
-    class ImportFiltersPriv;
-    ImportFiltersPriv* const   d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

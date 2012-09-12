@@ -54,11 +54,11 @@ CameraList* CameraList::defaultList()
     return m_defaultList;
 }
 
-class CameraList::CameraListPrivate
+class CameraList::Private
 {
 public:
 
-    CameraListPrivate() :
+    Private() :
         modified(false)
     {
     }
@@ -70,7 +70,7 @@ public:
 };
 
 CameraList::CameraList(QObject* const parent, const QString& file)
-    : QObject(parent), d(new CameraListPrivate)
+    : QObject(parent), d(new Private)
 {
     d->file = file;
 
@@ -156,7 +156,7 @@ bool CameraList::save()
 
     QDomElement docElem = doc.documentElement();
 
-    foreach(CameraType* ctype, d->clist)
+    foreach(CameraType* const ctype, d->clist)
     {
         QDomElement elem = doc.createElement("item");
         elem.setAttribute("title",          ctype->title());
@@ -248,7 +248,7 @@ QList<CameraType*>* CameraList::cameraList() const
 
 CameraType* CameraList::find(const QString& title) const
 {
-    foreach(CameraType* ctype, d->clist)
+    foreach(CameraType* const ctype, d->clist)
     {
         if (ctype->title() == title)
         {
@@ -275,7 +275,7 @@ CameraType* CameraList::autoDetect(bool& retry)
     }
 
     // Check if the camera is already in the list
-    foreach(CameraType* ctype, d->clist)
+    foreach(CameraType* const ctype, d->clist)
     {
         // We can get away with checking only the model, as the auto-detection
         // works only for usb cameras. so the port is always usb:

@@ -6,7 +6,7 @@
  * Date        : 2003-05-03
  * Description : mime types setup tab.
  *
- * Copyright (C) 2004-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -37,7 +37,7 @@ class SetupMime : public QScrollArea
 
 public:
 
-    SetupMime(QWidget* parent = 0);
+    SetupMime(QWidget* const parent = 0);
     ~SetupMime();
 
     void applySettings();
@@ -57,8 +57,8 @@ private Q_SLOTS:
 
 private:
 
-    class SetupMimePriv;
-    SetupMimePriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

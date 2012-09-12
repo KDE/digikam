@@ -35,11 +35,11 @@
 namespace Digikam
 {
 
-class CameraType::CameraTypePrivate
+class CameraType::Private
 {
 public:
 
-    CameraTypePrivate() :
+    Private() :
         valid(false),
         startingNumber(1),
         action(0)
@@ -61,14 +61,14 @@ public:
 };
 
 CameraType::CameraType()
-    : d(new CameraTypePrivate)
+    : d(new Private)
 {
 }
 
 CameraType::CameraType(const QString& title, const QString& model,
                        const QString& port, const QString& path,
                        int startingNumber, KAction* const action)
-    : d(new CameraTypePrivate)
+    : d(new Private)
 {
     setTitle(title);
     setModel(model);
@@ -85,7 +85,7 @@ CameraType::~CameraType()
 }
 
 CameraType::CameraType(const CameraType& ctype)
-    : d(new CameraTypePrivate)
+    : d(new Private)
 {
     d->title          = ctype.d->title;
     d->model          = ctype.d->model;

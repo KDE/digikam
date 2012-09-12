@@ -38,12 +38,12 @@ class SetupMetadata : public QScrollArea
 
 public:
 
-    SetupMetadata(QWidget* parent = 0);
+    SetupMetadata(QWidget* const parent = 0);
     ~SetupMetadata();
 
     void applySettings();
 
-    bool exifAutoRotateAsChanged();
+    bool exifAutoRotateAsChanged() const;
 
 private:
 
@@ -57,8 +57,8 @@ private Q_SLOTS:
 
 private:
 
-    class SetupMetadataPriv;
-    SetupMetadataPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam
