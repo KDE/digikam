@@ -189,7 +189,7 @@ ShowFoto::ShowFoto(const KUrl::List& urlList)
     KIconLoader::global()->addAppDir("digikam");
 
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group(EditorWindow::CONFIG_GROUP_NAME);
+    KConfigGroup group        = config->group(EditorWindow::CONFIG_GROUP_NAME);
 
     if (group.readEntry("ShowSplash", true) && !kapp->isSessionRestored())
     {
@@ -211,6 +211,7 @@ ShowFoto::ShowFoto(const KUrl::List& urlList)
     {
         d->splash->message(i18n("Checking ICC repository..."));
     }
+
     d->validIccPath = Digikam::SetupICC::iccRepositoryIsValid();
 
     // Populate Themes
@@ -219,6 +220,7 @@ ShowFoto::ShowFoto(const KUrl::List& urlList)
     {
         d->splash->message(i18n("Loading themes..."));
     }
+
     Digikam::ThemeManager::instance();
 
     // -- Build the GUI -----------------------------------
@@ -380,7 +382,7 @@ void ShowFoto::setupConnections()
 
     connect(d->thumbBarDock, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)),
             d->thumbBar, SLOT(slotDockLocationChanged(Qt::DockWidgetArea)));
-    
+
     connect(d->thumbBar, SIGNAL(signalUrlSelected(KUrl)),
             this, SLOT(slotOpenUrl(KUrl)));
 
@@ -396,12 +398,12 @@ void ShowFoto::setupConnections()
 
 void ShowFoto::setupUserArea()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(EditorWindow::CONFIG_GROUP_NAME);
+    KSharedConfig::Ptr config  = KGlobal::config();
+    KConfigGroup group         = config->group(EditorWindow::CONFIG_GROUP_NAME);
 
-    QWidget* widget   = new QWidget(this);
-    QHBoxLayout* hlay = new QHBoxLayout(widget);
-    m_splitter        = new Digikam::SidebarSplitter(widget);
+    QWidget* widget            = new QWidget(this);
+    QHBoxLayout* hlay          = new QHBoxLayout(widget);
+    m_splitter                 = new Digikam::SidebarSplitter(widget);
 
     KMainWindow* viewContainer = new KMainWindow(widget, Qt::Widget);
     m_splitter->addWidget(viewContainer);
@@ -411,7 +413,7 @@ void ShowFoto::setupUserArea()
 
     m_splitter->setStretchFactor(1, 10);      // set Canvas default size to max.
 
-    d->rightSideBar   = new Digikam::ImagePropertiesSideBar(widget, m_splitter, KMultiTabBar::Right);
+    d->rightSideBar            = new Digikam::ImagePropertiesSideBar(widget, m_splitter, KMultiTabBar::Right);
     d->rightSideBar->setObjectName("ShowFoto Sidebar Right");
 
     hlay->addWidget(m_splitter);
@@ -452,7 +454,7 @@ void ShowFoto::setupUserArea()
     d->thumbBarDock->setAllowedAreas(Qt::LeftDockWidgetArea |
                                      Qt::TopDockWidgetArea  |
                                      Qt::BottomDockWidgetArea);
-    d->thumbBar = new Digikam::ThumbBarView(d->thumbBarDock, orientation);
+    d->thumbBar     = new Digikam::ThumbBarView(d->thumbBarDock, orientation);
     d->thumbBarDock->setWidget(d->thumbBar);
     viewContainer->addDockWidget(dockArea, d->thumbBarDock);
     d->thumbBarDock->setFloating(false);
@@ -482,7 +484,10 @@ void ShowFoto::setupActions()
 
     d->openFilesInFolderAction = new KAction(KIcon("folder-image"), i18n("Open folder"), this);
     d->openFilesInFolderAction->setShortcut(KShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_O));
-    connect(d->openFilesInFolderAction, SIGNAL(triggered()), this, SLOT(slotOpenFilesInFolder()));
+
+    connect(d->openFilesInFolderAction, SIGNAL(triggered()), 
+            this, SLOT(slotOpenFilesInFolder()));
+
     actionCollection()->addAction("showfoto_open_folder", d->openFilesInFolderAction);
 
     actionCollection()->addAction(KStandardAction::Quit, "showfoto_quit", this, SLOT(close()));
@@ -545,6 +550,7 @@ void ShowFoto::applySettings()
 
     QString currentStyle = kapp->style()->objectName();
     QString newStyle     = group.readEntry("Application Style", currentStyle);
+
     if (newStyle != currentStyle)
         kapp->setStyle(newStyle);
 
@@ -562,8 +568,10 @@ void ShowFoto::applySettings()
         m_fileDeleteAction->setText(i18n("Delete File"));
     }
 
-    /*bool exifRotate = group.readEntry("EXIF Rotate", true);
-    m_setExifOrientationTag   = group.readEntry("EXIF Set Orientation", true);*/
+/*
+    bool exifRotate = group.readEntry("EXIF Rotate", true);
+    m_setExifOrientationTag   = group.readEntry("EXIF Set Orientation", true);
+*/
 
     Digikam::ThumbBarToolTipSettings settings;
     settings.showToolTips   = group.readEntry("Show ToolTips", true);
@@ -819,7 +827,7 @@ void ShowFoto::openFolder(const KUrl& url)
     KConfigGroup group        = config->group(EditorWindow::CONFIG_GROUP_NAME);
 
     QDir::SortFlags flag;
-    bool reverse = group.readEntry("ReverseSort", false);
+    bool            reverse   = group.readEntry("ReverseSort", false);
 
     switch (group.readEntry("SortOrder", (int)SetupMisc::SortByDate))
     {
@@ -1126,20 +1134,22 @@ void ShowFoto::slotDeleteCurrentItem()
         }
         else
         {
-            KIO::Job* job = KIO::del(urlCurrent);
+            KIO::Job* const job = KIO::del(urlCurrent);
+
             connect(job, SIGNAL(result(KJob*)),
                     this, SLOT(slotDeleteCurrentItemResult(KJob*)) );
         }
     }
     else
     {
-        KIO::Job* job = KIO::trash(urlCurrent);
+        KIO::Job* const job = KIO::trash(urlCurrent);
+
         connect(job, SIGNAL(result(KJob*)),
                 this, SLOT(slotDeleteCurrentItemResult(KJob*)) );
     }
 }
 
-void ShowFoto::slotDeleteCurrentItemResult( KJob* job )
+void ShowFoto::slotDeleteCurrentItemResult(KJob* job)
 {
     if (job->error() != 0)
     {
@@ -1202,13 +1212,13 @@ void ShowFoto::slideShow(Digikam::SlideShowSettings& settings)
     }
 
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group(EditorWindow::CONFIG_GROUP_NAME);
+    KConfigGroup group        = config->group(EditorWindow::CONFIG_GROUP_NAME);
 
-    settings.exifRotate = group.readEntry("EXIF Rotate", true);
-    settings.fileList   = d->thumbBar->itemsUrls();
-    int   i             = 0;
-    float cnt           = settings.fileList.count();
-    m_cancelSlideShow   = false;
+    settings.exifRotate       = group.readEntry("EXIF Rotate", true);
+    settings.fileList         = d->thumbBar->itemsUrls();
+    int   i                   = 0;
+    float cnt                 = settings.fileList.count();
+    m_cancelSlideShow         = false;
     Digikam::DMetadata meta;
 
     m_nameLabel->progressBarMode(Digikam::StatusProgressBar::CancelProgressBarMode,
@@ -1231,7 +1241,7 @@ void ShowFoto::slideShow(Digikam::SlideShowSettings& settings)
 
     if (!m_cancelSlideShow)
     {
-        Digikam::SlideShow* slide = new Digikam::SlideShow(settings);
+        Digikam::SlideShow* const slide = new Digikam::SlideShow(settings);
 
         if (settings.startWithCurrent)
         {

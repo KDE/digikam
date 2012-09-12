@@ -55,9 +55,10 @@ public:
     ShowFoto(const KUrl::List& urlList);
     ~ShowFoto();
 
-    virtual void show();
     bool setup();
     bool setupICC();
+
+    virtual void show();
 
 private:
 
