@@ -223,6 +223,8 @@ int main(int argc, char* argv[])
 
     KGlobal::locale()->insertCatalog("kipiplugins");
     KGlobal::locale()->insertCatalog("libkdcraw");
+    KGlobal::locale()->insertCatalog("libkexiv2");
+    KGlobal::locale()->insertCatalog("libkipi");
 
     if (!app.isSessionRestored())
     {
