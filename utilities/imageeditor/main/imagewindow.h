@@ -88,9 +88,9 @@ private:
     ImageWindow();
 
     void loadIndex(const QModelIndex& index);
+
     void closeEvent(QCloseEvent* e);
     void showEvent(QShowEvent*);
-
     void dragMoveEvent(QDragMoveEvent* e);
     void dropEvent(QDropEvent* e);
 
