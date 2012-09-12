@@ -6,7 +6,7 @@
  * Date        : 2006-01-23
  * Description : setup image editor output files settings.
  *
- * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -48,11 +48,11 @@
 namespace Digikam
 {
 
-class SetupIOFiles::SetupIOFilesPriv
+class SetupIOFiles::Private
 {
 public:
 
-    SetupIOFilesPriv() :
+    Private() :
         JPEGOptions(0),
         PNGOptions(0),
         TIFFOptions(0),
@@ -65,6 +65,18 @@ public:
 #endif
     {}
 
+
+    QWidget* createGroupBox(QWidget* const w) const
+    {
+        QGroupBox*   box    = new QGroupBox;
+        QVBoxLayout* layout = new QVBoxLayout;
+        layout->addWidget(w);
+        box->setLayout(layout);
+        return box;
+    }
+
+public:
+    
     static const QString configGroupName;
     static const QString configJPEGCompressionEntry;
     static const QString configJPEGSubSamplingEntry;
@@ -75,11 +87,11 @@ public:
     static const QString configPGFCompressionEntry;
     static const QString configPGFLossLessEntry;
 
-    JPEGSettings* JPEGOptions;
-    PNGSettings*  PNGOptions;
-    TIFFSettings* TIFFOptions;
-    JP2KSettings* JPEG2000Options;
-    PGFSettings*  PGFOptions;
+    JPEGSettings*        JPEGOptions;
+    PNGSettings*         PNGOptions;
+    TIFFSettings*        TIFFOptions;
+    JP2KSettings*        JPEG2000Options;
+    PGFSettings*         PGFOptions;
 
 #ifdef _WIN32
     static const QString configShowImageSettingsDialog;
@@ -87,33 +99,24 @@ public:
 #endif
 };
 
-const QString SetupIOFiles::SetupIOFilesPriv::configGroupName("ImageViewer Settings");
-const QString SetupIOFiles::SetupIOFilesPriv::configJPEGCompressionEntry("JPEGCompression");
-const QString SetupIOFiles::SetupIOFilesPriv::configJPEGSubSamplingEntry("JPEGSubSampling");
-const QString SetupIOFiles::SetupIOFilesPriv::configPNGCompressionEntry("PNGCompression");
-const QString SetupIOFiles::SetupIOFilesPriv::configTIFFCompressionEntry("TIFFCompression");
-const QString SetupIOFiles::SetupIOFilesPriv::configJPEG2000CompressionEntry("JPEG2000Compression");
-const QString SetupIOFiles::SetupIOFilesPriv::configJPEG2000LossLessEntry("JPEG2000LossLess");
-const QString SetupIOFiles::SetupIOFilesPriv::configPGFCompressionEntry("PGFCompression");
-const QString SetupIOFiles::SetupIOFilesPriv::configPGFLossLessEntry("PGFLossLess");
+const QString SetupIOFiles::Private::configGroupName("ImageViewer Settings");
+const QString SetupIOFiles::Private::configJPEGCompressionEntry("JPEGCompression");
+const QString SetupIOFiles::Private::configJPEGSubSamplingEntry("JPEGSubSampling");
+const QString SetupIOFiles::Private::configPNGCompressionEntry("PNGCompression");
+const QString SetupIOFiles::Private::configTIFFCompressionEntry("TIFFCompression");
+const QString SetupIOFiles::Private::configJPEG2000CompressionEntry("JPEG2000Compression");
+const QString SetupIOFiles::Private::configJPEG2000LossLessEntry("JPEG2000LossLess");
+const QString SetupIOFiles::Private::configPGFCompressionEntry("PGFCompression");
+const QString SetupIOFiles::Private::configPGFLossLessEntry("PGFLossLess");
 
 #ifdef _WIN32
-const QString SetupIOFiles::SetupIOFilesPriv::configShowImageSettingsDialog("ShowImageSettingsDialog");
+const QString SetupIOFiles::Private::configShowImageSettingsDialog("ShowImageSettingsDialog");
 #endif
 
 // --------------------------------------------------------
 
-static QWidget* createGroupBox(QWidget* w)
-{
-    QGroupBox*   box    = new QGroupBox;
-    QVBoxLayout* layout = new QVBoxLayout;
-    layout->addWidget(w);
-    box->setLayout(layout);
-    return box;
-}
-
-SetupIOFiles::SetupIOFiles(QWidget* parent)
-    : QScrollArea(parent), d(new SetupIOFilesPriv)
+SetupIOFiles::SetupIOFiles(QWidget* const parent)
+    : QScrollArea(parent), d(new Private)
 {
     QWidget* panel     = new QWidget;
     QVBoxLayout* vbox  = new QVBoxLayout;
@@ -132,13 +135,13 @@ SetupIOFiles::SetupIOFiles(QWidget* parent)
                                                   "<li>Unchecked: Default settings are used when saving image files</li></ul>"));
 #endif
 
-    vbox->addWidget(createGroupBox(d->JPEGOptions));
-    vbox->addWidget(createGroupBox(d->PNGOptions));
-    vbox->addWidget(createGroupBox(d->TIFFOptions));
-    vbox->addWidget(createGroupBox(d->JPEG2000Options));
-    vbox->addWidget(createGroupBox(d->PGFOptions));
+    vbox->addWidget(d->createGroupBox(d->JPEGOptions));
+    vbox->addWidget(d->createGroupBox(d->PNGOptions));
+    vbox->addWidget(d->createGroupBox(d->TIFFOptions));
+    vbox->addWidget(d->createGroupBox(d->JPEG2000Options));
+    vbox->addWidget(d->createGroupBox(d->PGFOptions));
 #ifdef _WIN32
-    vbox->addWidget(createGroupBox(d->showImageSettingsDialog));
+    vbox->addWidget(d->createGroupBox(d->showImageSettingsDialog));
 #endif
     vbox->addStretch();
 
@@ -184,10 +187,10 @@ void SetupIOFiles::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
-    d->JPEGOptions->setCompressionValue(group.readEntry(d->configJPEGCompressionEntry,          75));
-    d->JPEGOptions->setSubSamplingValue(group.readEntry(d->configJPEGSubSamplingEntry,          1));  // Medium sub-sampling
-    d->PNGOptions->setCompressionValue(group.readEntry(d->configPNGCompressionEntry,            9));
-    d->TIFFOptions->setCompression(group.readEntry(d->configTIFFCompressionEntry,               false));
+    d->JPEGOptions->setCompressionValue(group.readEntry(d->configJPEGCompressionEntry,         75));
+    d->JPEGOptions->setSubSamplingValue(group.readEntry(d->configJPEGSubSamplingEntry,         1));  // Medium sub-sampling
+    d->PNGOptions->setCompressionValue(group.readEntry(d->configPNGCompressionEntry,           9));
+    d->TIFFOptions->setCompression(group.readEntry(d->configTIFFCompressionEntry,              false));
     d->JPEG2000Options->setCompressionValue(group.readEntry(d->configJPEG2000CompressionEntry, 75));
     d->JPEG2000Options->setLossLessCompression(group.readEntry(d->configJPEG2000LossLessEntry, true));
     d->PGFOptions->setCompressionValue(group.readEntry(d->configPGFCompressionEntry,           3));

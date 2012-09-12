@@ -6,7 +6,7 @@
  * Date        : 2006-01-23
  * Description : setup image editor output files settings.
  *
- * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -41,7 +41,7 @@ class SetupIOFiles : public QScrollArea
 
 public:
 
-    SetupIOFiles(QWidget* parent = 0);
+    SetupIOFiles(QWidget* const parent = 0);
     ~SetupIOFiles();
 
     void applySettings();
@@ -52,8 +52,8 @@ private:
 
 private:
 
-    class SetupIOFilesPriv;
-    SetupIOFilesPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

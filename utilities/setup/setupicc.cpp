@@ -7,8 +7,8 @@
  * Description : Color management setup tab.
  *
  * Copyright (C) 2005-2007 by F.J. Cruz <fj.cruz@supercable.es>
- * Copyright (C) 2005-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -78,11 +78,11 @@ using namespace KDcrawIface;
 namespace Digikam
 {
 
-class SetupICC::SetupICCPriv
+class SetupICC::Private
 {
 public:
 
-    SetupICCPriv() :
+    Private() :
         iccFolderLabel(0),
         enableColorManagement(0),
         defaultSRGBConvert(0),
@@ -174,21 +174,21 @@ public:
     IccProfilesComboBox*        monitorProfilesKC;
 };
 
-SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog)
-    : QScrollArea(parent), d(new SetupICCPriv)
+SetupICC::SetupICC(QWidget* const parent, KPageDialog* const dialog)
+    : QScrollArea(parent), d(new Private)
 {
-    d->mainDialog = dialog;
-    d->tab        = new KTabWidget(viewport());
+    d->mainDialog            = dialog;
+    d->tab                   = new KTabWidget(viewport());
     setWidget(d->tab);
     setWidgetResizable(true);
 
-    d->behaviorPanel        = new QWidget;
-    QVBoxLayout* mainLayout = new QVBoxLayout(d->behaviorPanel);
+    d->behaviorPanel         = new QWidget;
+    QVBoxLayout* mainLayout  = new QVBoxLayout(d->behaviorPanel);
 
     // --------------------------------------------------------
 
-    QWidget* colorPolicy    = new QWidget;
-    QGridLayout* gridHeader = new QGridLayout(colorPolicy);
+    QWidget* colorPolicy     = new QWidget;
+    QGridLayout* gridHeader  = new QGridLayout(colorPolicy);
 
     d->enableColorManagement = new QCheckBox(colorPolicy);
     d->enableColorManagement->setText(i18n("Enable Color Management"));
@@ -376,7 +376,7 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog)
     d->infoMonitorProfiles->setWhatsThis(i18n("<p>You can use this button to get more detailed "
                                               "information about the selected monitor profile.</p>"));
 
-    d->managedView     = new QCheckBox;
+    d->managedView           = new QCheckBox;
     d->managedView->setText(i18n("Use color managed view in editor"));
     d->managedView->setWhatsThis(i18n("<p>Turn on this option if "
                                       "you want to use your <b>Monitor Color Profile</b> to show your pictures in "
@@ -384,7 +384,7 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog)
                                       "You can at any time toggle this option from the Editor window. "
                                       "<i>Warning</i>: This can slow down rendering of the image, depending on the speed of your computer.</p>"));
 
-    d->managedPreviews = new QCheckBox;
+    d->managedPreviews       = new QCheckBox;
     d->managedPreviews->setText(i18n("Use color managed view for previews and thumbnails"));
     /**
     * @todo d->managedPreview->setWhatsThis( i18n("") );
@@ -455,11 +455,11 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog)
 
     QLabel* iccFolderIcon      = new QLabel;
     iccFolderIcon->setPixmap(SmallIcon("folder-downloads", KIconLoader::SizeMedium));
-    d->iccFolderLabel = new QLabel(i18n("digiKam looks for ICC profiles in a number of <a href='default'>default locations</a>. "
-                                        "You can specify an additional folder:"));
+    d->iccFolderLabel          = new QLabel(i18n("digiKam looks for ICC profiles in a number of <a href='default'>default locations</a>. "
+                                                 "You can specify an additional folder:"));
     d->iccFolderLabel->setWordWrap(true);
 
-    d->defaultPathKU  = new KUrlRequester;
+    d->defaultPathKU           = new KUrlRequester;
     d->iccFolderLabel->setBuddy(d->defaultPathKU);
     d->defaultPathKU->lineEdit()->setReadOnly(true);
     d->defaultPathKU->setMode(KFile::Directory | KFile::LocalOnly | KFile::ExistingOnly);
@@ -485,17 +485,17 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog)
     d->advancedSettingsGB     = new QGroupBox(i18n("Advanced Settings"));
     QGridLayout* gridAdvanced = new QGridLayout(d->advancedSettingsGB);
 
-    d->bpcAlgorithm = new QCheckBox(d->advancedSettingsGB);
+    d->bpcAlgorithm           = new QCheckBox(d->advancedSettingsGB);
     d->bpcAlgorithm->setText(i18n("Use black point compensation"));
     d->bpcAlgorithm->setWhatsThis(i18n("<p><b>Black Point Compensation</b> is a way to make "
                                        "adjustments between the maximum "
                                        "black levels of digital files and the black capabilities of various "
                                        "digital devices.</p>"));
 
-    QLabel* lablel = new QLabel(d->advancedSettingsGB);
+    QLabel* lablel            = new QLabel(d->advancedSettingsGB);
     lablel->setText(i18n("Rendering Intents:"));
 
-    d->renderingIntentKC = new IccRenderingIntentComboBox(d->advancedSettingsGB);
+    d->renderingIntentKC      = new IccRenderingIntentComboBox(d->advancedSettingsGB);
 
     gridAdvanced->addWidget(d->bpcAlgorithm,      0, 0, 1, 2);
     gridAdvanced->addWidget(lablel,               1, 0, 1, 1);
@@ -627,11 +627,11 @@ void SetupICC::applySettings()
         settings.defaultUncalibratedBehavior = ICCSettingsContainer::AutomaticColors | ICCSettingsContainer::ConvertToWorkspace;
     }
 
-    settings.iccFolder          = d->defaultPathKU->url().toLocalFile();
-    settings.useBPC             = d->bpcAlgorithm->isChecked();
-    settings.renderingIntent    = d->renderingIntentKC->intent();
-    settings.useManagedView     = d->managedView->isChecked();
-    settings.useManagedPreviews = d->managedPreviews->isChecked();
+    settings.iccFolder           = d->defaultPathKU->url().toLocalFile();
+    settings.useBPC              = d->bpcAlgorithm->isChecked();
+    settings.renderingIntent     = d->renderingIntentKC->intent();
+    settings.useManagedView      = d->managedView->isChecked();
+    settings.useManagedPreviews  = d->managedPreviews->isChecked();
 
     settings.defaultInputProfile = d->inProfilesKC->currentProfile().filePath();
     settings.workspaceProfile    = d->workProfilesKC->currentProfile().filePath();
@@ -936,6 +936,7 @@ bool SetupICC::iccRepositoryIsValid()
     }
 
     QStringList paths = IccProfile::defaultSearchPaths();
+
     return !paths.isEmpty();
 }
 
