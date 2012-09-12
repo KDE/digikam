@@ -60,8 +60,7 @@ namespace Digikam
 
 int SchemaUpdater::schemaVersion()
 {
-    // TODO: Increment to 7 to enable schema update
-    return 6;
+    return 7;
 }
 
 int SchemaUpdater::filterSettingsVersion()

@@ -702,6 +702,39 @@
                             END;
                 </statement>
             </dbaction>
+
+            <dbaction name="UpdateSchemaFromV6ToV7" mode="transaction">
+                <statement mode="plain"> CREATE TABLE VideoMetadata
+                            (imageid INTEGER PRIMARY KEY,
+                            aspectRatio TEXT,
+                            audioBitRate TEXT,
+                            audioChannelType TEXT,
+                            audioCompressor TEXT,
+                            duration TEXT,
+                            frameRate TEXT,
+                            exposureProgram INTEGER,
+                            videoCodec TEXT)</statement>
+                <statement mode="plain">DROP TRIGGER delete_image;</statement>
+                <statement mode="plain">CREATE TRIGGER delete_image DELETE ON Images
+                    BEGIN
+                        DELETE FROM ImageTags          WHERE imageid=OLD.id;
+                        DELETE From ImageHaarMatrix    WHERE imageid=OLD.id;
+                        DELETE From ImageInformation   WHERE imageid=OLD.id;
+                        DELETE From ImageMetadata      WHERE imageid=OLD.id;
+                        DELETE From VideoMetadata      WHERE imageid=OLD.id;
+                        DELETE From ImagePositions     WHERE imageid=OLD.id;
+                        DELETE From ImageComments      WHERE imageid=OLD.id;
+                        DELETE From ImageCopyright     WHERE imageid=OLD.id;
+                        DELETE From ImageProperties    WHERE imageid=OLD.id;
+                        DELETE From ImageHistory       WHERE imageid=OLD.id;
+                        DELETE FROM ImageRelations     WHERE subject=OLD.id OR object=OLD.id;
+                        DELETE FROM ImageTagProperties WHERE imageid=OLD.id;
+                        UPDATE Albums SET icon=null    WHERE icon=OLD.id;
+                        UPDATE Tags SET icon=null      WHERE icon=OLD.id;
+                    END;
+                </statement>
+            </dbaction>
+
             <dbaction name="UpdateThumbnailsDBSchemaFromV1ToV2" mode="transaction">
                 <statement mode="plain">CREATE TABLE CustomIdentifiers
                         (identifier TEXT,
@@ -1555,6 +1588,37 @@ ORDER BY inf.rating DESC, img.name ASC
                     DELETE FROM ImageTagProperties WHERE tagid=OLD.id;
                 END;
             </statement>
+            </dbaction>
+            <dbaction name="UpdateSchemaFromV6ToV7" mode="transaction">
+                <statement mode="plain">CREATE TABLE IF NOT EXISTS VideoMetadata
+                                (imageid INTEGER PRIMARY KEY,
+                                aspectRatio TEXT,
+                                audioBitRate TEXT,
+                                audioChannelType TEXT,
+                                audioCompressor TEXT,
+                                duration TEXT,
+                                frameRate TEXT,
+                                exposureProgram INTEGER,
+                                videoCodec TEXT);</statement>
+                <statement mode="plain">DROP TRIGGER IF EXISTS delete_image;</statement>
+                <statement mode="plain">CREATE TRIGGER delete_image AFTER DELETE ON Images
+                        FOR EACH ROW BEGIN
+                            DELETE FROM ImageTags          WHERE imageid=OLD.id;
+                            DELETE From ImageHaarMatrix    WHERE imageid=OLD.id;
+                            DELETE From ImageInformation   WHERE imageid=OLD.id;
+                            DELETE From ImageMetadata      WHERE imageid=OLD.id;
+                            DELETE From VideoMetadata      WHERE imageid=OLD.id;
+                            DELETE From ImagePositions     WHERE imageid=OLD.id;
+                            DELETE From ImageComments      WHERE imageid=OLD.id;
+                            DELETE From ImageCopyright     WHERE imageid=OLD.id;
+                            DELETE From ImageProperties    WHERE imageid=OLD.id;
+                            DELETE From ImageHistory       WHERE imageid=OLD.id;
+                            DELETE FROM ImageRelations     WHERE subject=OLD.id OR object=OLD.id;
+                            DELETE FROM ImageTagProperties WHERE imageid=OLD.id;
+                            UPDATE Albums SET icon=null    WHERE icon=OLD.id;
+                            UPDATE Tags SET icon=null      WHERE icon=OLD.id;
+                        END;
+                </statement>
             </dbaction>
             <dbaction name="UpdateThumbnailsDBSchemaFromV1ToV2" mode="transaction">
                 <statement mode="plain">ALTER TABLE UniqueHashes CHANGE uniqueHash uniqueHash VARCHAR(128);</statement>
