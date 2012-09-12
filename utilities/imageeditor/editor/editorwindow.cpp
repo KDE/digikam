@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2006-01-20
- * Description : main image editor GUI implementation
+ * Description : core image editor GUI implementation
  *
  * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at gmail dot com>
@@ -46,7 +46,6 @@
 #include <QLayout>
 #include <QPointer>
 #include <QProgressBar>
-#include <QSignalMapper>
 #include <QSplitter>
 #include <QTimer>
 #include <QToolButton>
@@ -63,7 +62,6 @@
 #include <kactioncategory.h>
 #endif
 #include <kactioncollection.h>
-#include <kactionmenu.h>
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kcursor.h>
@@ -77,7 +75,6 @@
 #include <kiconloader.h>
 #include <kimageio.h>
 #include <klocale.h>
-#include <kmenu.h>
 #include <kmenubar.h>
 #include <kmessagebox.h>
 #include <knotifyconfigwidget.h>
@@ -115,6 +112,7 @@
 // Local includes
 
 #include "albumsettings.h"
+#include "actioncategorizedview.h"
 #include "buttonicondisabler.h"
 #include "canvas.h"
 #include "categorizeditemmodel.h"
@@ -645,22 +643,6 @@ void EditorWindow::setupStandardActions()
 
     toggleNonDestructiveActions();
     toggleToolActions();
-}
-
-void EditorWindow::Private::plugNewVersionInFormatAction(EditorWindow* q, KActionMenu* menuAction,
-                                                                  const QString& text, const QString& format)
-{
-    if (!formatMenuActionMapper)
-    {
-        formatMenuActionMapper = new QSignalMapper(q);
-        connect(formatMenuActionMapper, SIGNAL(mapped(QString)),
-                q, SLOT(saveNewVersionInFormat(QString)));
-    }
-
-    KAction* action = new KAction(text, q);
-    connect(action, SIGNAL(triggered()), formatMenuActionMapper, SLOT(map()));
-    formatMenuActionMapper->setMapping(action, format);
-    menuAction->menu()->addAction(action);
 }
 
 void EditorWindow::setupStatusBar()

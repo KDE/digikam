@@ -4,8 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2006-01-20
- * Description : main image editor GUI implementation
- *               private data.
+ * Description : core image editor GUI implementation private data.
  *
  * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -29,16 +28,14 @@
 
 #include <QList>
 #include <QString>
-#include <QPropertyAnimation>
-#include <QScrollBar>
+#include <QSignalMapper>
 
 // KDE includes
 
 #include <kconfiggroup.h>
+#include <kactionmenu.h>
+#include <kmenu.h>
 #include <kdebug.h>
-#include <kdeversion.h>
-#include <kcategorizedview.h>
-#include <kcategorydrawer.h>
 
 // Local includes
 
@@ -49,7 +46,6 @@
 class QDialog;
 class QEventLoop;
 class QLabel;
-class QSignalMapper;
 class QToolButton;
 class QWidgetAction;
 
@@ -121,6 +117,11 @@ public:
     ~Private()
     {
     }
+
+    void legacyUpdateSplitterState(KConfigGroup& group);
+    void plugNewVersionInFormatAction(EditorWindow* const q, KActionMenu* const menuAction, const QString& text, const QString& format);
+
+public:
 
     static const QString       configAutoZoomEntry;
     static const QString       configBackgroundColorEntry;
@@ -209,61 +210,6 @@ public:
     VersionManager             defaultVersionManager;
 
     DAboutData*                about;
-
-    void legacyUpdateSplitterState(KConfigGroup& group)
-    {
-
-        // Check if the thumbnail size in the config file is splitter based (the
-        // old method), and convert to dock based if needed.
-        if (group.hasKey(configSplitterStateEntry))
-        {
-            // Read splitter state from config file
-            QByteArray state;
-            state = QByteArray::fromBase64(group.readEntry(configSplitterStateEntry, state));
-
-            // Do a cheap check: a splitter state with 3 windows is always 34 bytes.
-            if (state.count() == 34)
-            {
-                // Read the state in streamwise fashion.
-                QDataStream stream(state);
-
-                // The first 8 bytes are resp. the magic number and the version
-                // (which should be 0, otherwise it's not saved with an older
-                // digiKam version). Then follows the list of window sizes.
-                qint32 marker;
-                qint32 version = -1;
-                QList<int> sizesList;
-
-                stream >> marker;
-                stream >> version;
-
-                if (version == 0)
-                {
-                    stream >> sizesList;
-
-                    if (sizesList.count() == 3)
-                    {
-                        kDebug() << "Found splitter based config, converting to dockbar";
-                        // Remove the first entry (the thumbbar) and write the rest
-                        // back. Then it should be fine.
-                        sizesList.removeFirst();
-                        QByteArray newData;
-                        QDataStream newStream(&newData, QIODevice::WriteOnly);
-                        newStream << marker;
-                        newStream << version;
-                        newStream << sizesList;
-                        char s[24];
-                        int numBytes = stream.readRawData(s, 24);
-                        newStream.writeRawData(s, numBytes);
-                        group.writeEntry(configSplitterStateEntry, newData.toBase64());
-                    }
-                }
-            }
-        }
-
-    }
-
-    void plugNewVersionInFormatAction(EditorWindow* q, KActionMenu* menuAction, const QString& text, const QString& format);
 };
 
 const QString EditorWindow::Private::configAutoZoomEntry("AutoZoom");
@@ -292,133 +238,76 @@ const QString EditorWindow::Private::configUseThemeBackgroundColorEntry("UseThem
 const QString EditorWindow::Private::configVerticalSplitterSizesEntry("Vertical Splitter Sizes");
 const QString EditorWindow::Private::configVerticalSplitterStateEntry("Vertical Splitter State");
 
-// -----------------------------------------------------------------------------------------------------------------
-
-class ActionCategorizedView : public KCategorizedView
+void EditorWindow::Private::legacyUpdateSplitterState(KConfigGroup& group)
 {
-public:
-
-    ActionCategorizedView(QWidget* const parent = 0)
-        : KCategorizedView(parent)
+    // Check if the thumbnail size in the config file is splitter based (the
+    // old method), and convert to dock based if needed.
+    if (group.hasKey(configSplitterStateEntry))
     {
-        m_horizontalScrollAnimation = new QPropertyAnimation(horizontalScrollBar(), "value", this);
-        m_verticalScrollAnimation   = new QPropertyAnimation(verticalScrollBar(),   "value", this);
-    }
+        // Read splitter state from config file
+        QByteArray state;
+        state = QByteArray::fromBase64(group.readEntry(configSplitterStateEntry, state));
 
-    void setupIconMode()
-    {
-        setViewMode(QListView::IconMode);
-        setMovement(QListView::Static);
-#if KDE_IS_VERSION(4,5,0)
-        setCategoryDrawer(new KCategoryDrawerV3(this)); // deprecated, but needed for KDE 4.4 compatibility
-#else
-        setCategoryDrawer(new KCategoryDrawerV2);       // deprecated, but needed for KDE 4.4 compatibility
-#endif
-        setSelectionMode(QAbstractItemView::SingleSelection);
-
-        setMouseTracking(true);
-        viewport()->setAttribute(Qt::WA_Hover);
-
-        setFrameShape(QFrame::NoFrame);
-    }
-
-    void adjustGridSize()
-    {
-        // Find a suitable grid size. The delegate's size hint does never word-wrap.
-        // To keep a suitable width, we want to word wrap.
-        setWordWrap(true);
-        int maxSize = viewOptions().decorationSize.width() * 4;
-        QFontMetrics fm(viewOptions().font);
-        QSize grid;
-
-        for (int i = 0; i < model()->rowCount(); ++i)
+        // Do a cheap check: a splitter state with 3 windows is always 34 bytes.
+        if (state.count() == 34)
         {
-            const QModelIndex index = model()->index(i, 0);
-            const QSize size        = sizeHintForIndex(index);
+            // Read the state in streamwise fashion.
+            QDataStream stream(state);
 
-            if (size.width() > maxSize)
+            // The first 8 bytes are resp. the magic number and the version
+            // (which should be 0, otherwise it's not saved with an older
+            // digiKam version). Then follows the list of window sizes.
+            qint32     marker;
+            qint32     version = -1;
+            QList<int> sizesList;
+
+            stream >> marker;
+            stream >> version;
+
+            if (version == 0)
             {
-                QString text        = index.data(Qt::DisplayRole).toString();
-                QRect unwrappedRect = fm.boundingRect(QRect(0, 0, size.width(), size.height()), Qt::AlignLeft, text);
-                QRect wrappedRect   = fm.boundingRect(QRect(0, 0, maxSize, maxSize), Qt::AlignLeft | Qt::TextWordWrap, text);
-                grid                = grid.expandedTo(QSize(maxSize, size.height() + wrappedRect.height() - unwrappedRect.height()));
-            }
-            else
-            {
-                grid = grid.expandedTo(size);
-            }
-        }
+                stream >> sizesList;
 
-        //grid += QSize(KDialog::spacingHint(), KDialog::spacingHint());
-        setGridSize(grid);
-    }
-
-protected:
-
-    int autoScrollDuration(float relativeDifference, QPropertyAnimation* animation)
-    {
-        const int minimumTime       = 1000;
-        const int maxPixelPerSecond = 1000;
-
-        int pixelToScroll           = qAbs(animation->startValue().toInt() - animation->endValue().toInt());
-        int factor                  = qMax(1.0f, relativeDifference * 100); // in [1;15]
-
-        int duration                = 1000 * pixelToScroll / maxPixelPerSecond;
-        duration                    *= factor;
-
-        return qMax(minimumTime, duration);
-    }
-
-    void autoScroll(float relativePos, QScrollBar* scrollBar, QPropertyAnimation* animation)
-    {
-
-        if (scrollBar->minimum() != scrollBar->maximum())
-        {
-            const float lowerPart = 0.15F;
-            const float upperPart = 0.85F;
-
-            if (relativePos > upperPart && scrollBar->value() !=  scrollBar->maximum())
-            {
-                animation->stop();
-                animation->setStartValue(scrollBar->value());
-                animation->setEndValue(scrollBar->maximum());
-                animation->setDuration(autoScrollDuration(1 - relativePos, animation));
-                animation->start();
-            }
-            else if (relativePos < lowerPart && scrollBar->value() !=  scrollBar->minimum())
-            {
-                animation->stop();
-                animation->setStartValue(scrollBar->value());
-                animation->setEndValue(scrollBar->minimum());
-                animation->setDuration(autoScrollDuration(relativePos, animation));
-                animation->start();
-            }
-            else
-            {
-                animation->stop();
+                if (sizesList.count() == 3)
+                {
+                    kDebug() << "Found splitter based config, converting to dockbar";
+                    // Remove the first entry (the thumbbar) and write the rest
+                    // back. Then it should be fine.
+                    sizesList.removeFirst();
+                    QByteArray newData;
+                    QDataStream newStream(&newData, QIODevice::WriteOnly);
+                    newStream << marker;
+                    newStream << version;
+                    newStream << sizesList;
+                    char s[24];
+                    int numBytes = stream.readRawData(s, 24);
+                    newStream.writeRawData(s, numBytes);
+                    group.writeEntry(configSplitterStateEntry, newData.toBase64());
+                }
             }
         }
     }
+}
 
-    void mouseMoveEvent(QMouseEvent* e)
+void EditorWindow::Private::plugNewVersionInFormatAction(EditorWindow* const q, KActionMenu* const menuAction,
+                                                         const QString& text, const QString& format)
+{
+    if (!formatMenuActionMapper)
     {
-        KCategorizedView::mouseMoveEvent(e);
-        autoScroll(float(e->pos().x()) / viewport()->width(),  horizontalScrollBar(), m_horizontalScrollAnimation);
-        autoScroll(float(e->pos().y()) / viewport()->height(), verticalScrollBar(),   m_verticalScrollAnimation);
+        formatMenuActionMapper = new QSignalMapper(q);
+
+        connect(formatMenuActionMapper, SIGNAL(mapped(QString)),
+                q, SLOT(saveNewVersionInFormat(QString)));
     }
 
-    void leaveEvent(QEvent* e)
-    {
-        KCategorizedView::leaveEvent(e);
-        m_horizontalScrollAnimation->stop();
-        m_verticalScrollAnimation->stop();
-    }
+    KAction* const action = new KAction(text, q);
 
-protected:
+    connect(action, SIGNAL(triggered()),
+            formatMenuActionMapper, SLOT(map()));
 
-    QPropertyAnimation* m_verticalScrollAnimation;
-    QPropertyAnimation* m_horizontalScrollAnimation;
-};
+    formatMenuActionMapper->setMapping(action, format);
+    menuAction->menu()->addAction(action);
+}
 
 }  // namespace Digikam
 

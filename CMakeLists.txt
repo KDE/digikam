@@ -1262,10 +1262,11 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/editorstackview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/editortoolsettings.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/editorwindow.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/actioncategorizedview.cpp
        )
 
     SET(libeditorgui_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/imagewindow.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/main/imagewindow.cpp
        )
 
     SET(libmaintenance_SRCS
@@ -1676,6 +1677,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/hotplug
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/core
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/main
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/dialogs
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/plugin
