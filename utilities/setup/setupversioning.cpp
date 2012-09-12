@@ -7,6 +7,7 @@
  * Description : setup tab for image versioning
  *
  * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
+ * Copyright (C) 2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -25,7 +26,6 @@
 
 // Qt includes
 
-#include <QApplication>
 #include <QCheckBox>
 #include <QComboBox>
 #include <QGridLayout>
@@ -42,6 +42,7 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <ktabwidget.h>
+#include <kapplication.h>
 
 // Local includes
 
@@ -51,11 +52,11 @@
 namespace Digikam
 {
 
-class SetupVersioning::SetupVersioningPriv
+class SetupVersioning::Private
 {
 public:
 
-    SetupVersioningPriv()
+    Private()
         : tab(0),
           nonDestructivePanel(0),
           workspaceGB(0),
@@ -68,10 +69,12 @@ public:
           snapshotComplex(0),
           viewShowOriginal(0),
           viewShowSnapshots(0),
-          /*jpgFormat(0),
+/*
+          jpgFormat(0),
           pngFormat(0),
           tiffFormat(0),
-          pgfFormat(0),*/
+          pgfFormat(0),
+*/
           formatBox(0),
           askToSave(0),
           autoSave(0),
@@ -101,10 +104,12 @@ public:
     QCheckBox*     viewShowSnapshots;
 
     QComboBox*     formatBox;
-    /*QRadioButton*  jpgFormat;
+/*
+    QRadioButton*  jpgFormat;
     QRadioButton*  pngFormat;
     QRadioButton*  tiffFormat;
-    QRadioButton*  pgfFormat;*/
+    QRadioButton*  pgfFormat;
+*/
 
     QRadioButton*  askToSave;
     QRadioButton*  autoSave;
@@ -115,8 +120,8 @@ public:
     QPushButton*   infoView;
 };
 
-SetupVersioning::SetupVersioning(QWidget* parent)
-    : QScrollArea(parent), d(new SetupVersioningPriv)
+SetupVersioning::SetupVersioning(QWidget* const parent)
+    : QScrollArea(parent), d(new Private)
 {
     d->nonDestructivePanel            = new QWidget;
     QVBoxLayout* nonDestructiveLayout = new QVBoxLayout;
@@ -135,10 +140,10 @@ SetupVersioning::SetupVersioning(QWidget* parent)
                                                 "whilst always preserving the original image.</para> "
                                                 "<para> All steps of the editing history are recorded and can be accessed later.</para>"));
 
-    QLabel* iconLabel = new QLabel;
+    QLabel* iconLabel       = new QLabel;
     iconLabel->setPixmap(SmallIcon("view-catalog", KIconLoader::SizeMedium));//"folder-image"));
 
-    d->infoNonDestructive = new QPushButton;
+    d->infoNonDestructive   = new QPushButton;
     d->infoNonDestructive->setIcon(SmallIcon("dialog-information"));
     d->infoNonDestructive->setToolTip(i18nc("@info:tooltip", "Get information on non-destructive editing and file versioning"));
 
@@ -152,12 +157,12 @@ SetupVersioning::SetupVersioning(QWidget* parent)
     d->workspaceGB         = new QGroupBox(i18nc("@title:group", "Workspace File Format"));
     QGridLayout* wsLayout  = new QGridLayout;
 
-    QLabel* workIcon     = new QLabel;
+    QLabel* workIcon       = new QLabel;
     workIcon->setPixmap(SmallIcon("document-save-as", KIconLoader::SizeMedium));
-    QLabel* formatLabel = new QLabel(i18nc("@label", "Save files as"));
+    QLabel* formatLabel    = new QLabel(i18nc("@label", "Save files as"));
 
     // keep in sync with VersionManager::workspaceFileFormats()
-    d->formatBox = new QComboBox;
+    d->formatBox           = new QComboBox;
     d->formatBox->addItem(i18nc("@label:listbox", "JPEG"), "JPG");
     d->formatBox->addItem(i18nc("@label:listbox", "TIFF"), "TIFF");
     d->formatBox->addItem(i18nc("@label:listbox", "PNG"), "PNG");
@@ -205,7 +210,8 @@ SetupVersioning::SetupVersioning(QWidget* parent)
                                      "to the tradition formats JPEG, PNG or TIFF. "
                                      "</item>"
                                      "</list></para>"));
-    /*d->jpgFormat  = new QRadioButton(i18nc("@option:radio", "JPEG"));
+/*
+    d->jpgFormat  = new QRadioButton(i18nc("@option:radio", "JPEG"));
     d->pngFormat  = new QRadioButton(i18nc("@option:radio", "PNG"));
     d->tiffFormat = new QRadioButton(i18nc("@option:radio", "TIFF"));
     d->pgfFormat  = new QRadioButton(i18nc("@option:radio", "PGF"));
@@ -214,7 +220,7 @@ SetupVersioning::SetupVersioning(QWidget* parent)
     wsLayout->addWidget(d->tiffFormat,   3, 0, 1, 2);
     wsLayout->addWidget(d->pgfFormat,    4, 0, 1, 2);
     wsLayout->addWidget(d->formatInfoLabel, 5, 0, 1, 2, Qt::AlignRight);
-    */
+*/
 
     d->infoFormat = new QPushButton;
     d->infoFormat->setIcon(SmallIcon("dialog-information"));
@@ -232,14 +238,14 @@ SetupVersioning::SetupVersioning(QWidget* parent)
 
     // ---
 
-    d->closingGB = new QGroupBox;//(i18nc("@title:group", "Automatic Saving"));
+    d->closingGB               = new QGroupBox;//(i18nc("@title:group", "Automatic Saving"));
     QGridLayout* closingLayout = new QGridLayout;
 
     QLabel* closingExplanation = new QLabel(i18nc("@label", "When closing the editor"));
-    QLabel* closingIcon  = new QLabel;
+    QLabel* closingIcon        = new QLabel;
     closingIcon->setPixmap(SmallIcon("dialog-ok-apply", KIconLoader::SizeMedium));
-    d->askToSave  = new QRadioButton(i18nc("@option:radio", "Always ask to save changes"));
-    d->autoSave   = new QRadioButton(i18nc("@option:radio", "Save changes automatically"));
+    d->askToSave               = new QRadioButton(i18nc("@option:radio", "Always ask to save changes"));
+    d->autoSave                = new QRadioButton(i18nc("@option:radio", "Save changes automatically"));
 
     closingLayout->addWidget(closingIcon,        0, 0);
     closingLayout->addWidget(closingExplanation, 0, 1);
@@ -253,7 +259,8 @@ SetupVersioning::SetupVersioning(QWidget* parent)
 
     // --------------------------------------------------------
 
-    /*QGridLayout* snapshotHeader = new QGridLayout;
+/*
+    QGridLayout* snapshotHeader = new QGridLayout;
 
     QLabel *snapshotExplanation = new QLabel;
     snapshotExplanation->setText(i18nc("@label",
@@ -264,7 +271,7 @@ SetupVersioning::SetupVersioning(QWidget* parent)
 
     snapshotHeader->addWidget(snapshotIconLabel,       0, 0);
     snapshotHeader->addWidget(snapshotExplanation,     0, 1);
-    */
+*/
 
     d->snapshotGB = new QGroupBox;//(i18nc("@title:group", "Intermediate Version Snapshots"));
     QGridLayout* snapshotLayout = new QGridLayout;
@@ -285,15 +292,15 @@ SetupVersioning::SetupVersioning(QWidget* parent)
     QLabel* snapshotIconLabel = new QLabel;
     snapshotIconLabel->setPixmap(SmallIcon("insert-image", KIconLoader::SizeMedium));
 
-    QLabel* snapshotLabel = new QLabel(i18nc("@label", "Keep a snapshot of an edited image"));
+    QLabel* snapshotLabel     = new QLabel(i18nc("@label", "Keep a snapshot of an edited image"));
 
-    d->infoSnapshot = new QPushButton;
+    d->infoSnapshot           = new QPushButton;
     d->infoSnapshot->setIcon(SmallIcon("dialog-information"));
     d->infoSnapshot->setToolTip(i18nc("@info:tooltip", "Get an explanation for these options"));
 
-    d->snapshotAfterRaw = new QCheckBox(i18nc("@option:check", "After converting from a RAW image"));
-    d->snapshotSession  = new QCheckBox(i18nc("@option:check", "After each editing session"));
-    d->snapshotComplex  = new QCheckBox(i18nc("@option:check", "After each step that is not completely reproducible"));
+    d->snapshotAfterRaw       = new QCheckBox(i18nc("@option:check", "After converting from a RAW image"));
+    d->snapshotSession        = new QCheckBox(i18nc("@option:check", "After each editing session"));
+    d->snapshotComplex        = new QCheckBox(i18nc("@option:check", "After each step that is not completely reproducible"));
 
     snapshotLayout->addWidget(snapshotIconLabel,   0, 0);
     snapshotLayout->addWidget(snapshotLabel,       0, 1);
@@ -304,17 +311,20 @@ SetupVersioning::SetupVersioning(QWidget* parent)
     snapshotLayout->setColumnStretch(2, 1);
     d->snapshotGB->setLayout(snapshotLayout);
 
-    /* / ---
+/*
+    / ---
 
     snapshotLayout->addLayout(snapshotHeader);
     snapshotLayout->addWidget(d->snapshotGB);
     snapshotLayout->addStretch();
 
-    d->snapshotPanel->setLayout(snapshotLayout);*/
+    d->snapshotPanel->setLayout(snapshotLayout);
+*/
 
     // --------------------------------------------------------
 
-    /*d->viewPanel = new QWidget;
+/*
+    d->viewPanel = new QWidget;
     QVBoxLayout* viewLayout = new QVBoxLayout;
 
     // ---
@@ -331,7 +341,8 @@ SetupVersioning::SetupVersioning(QWidget* parent)
     viewHeaderLayout->addWidget(viewIconLabel,       0, 0);
     viewHeaderLayout->addWidget(viewExplanation,     0, 1);
 
-    // ---*/
+    // ---
+*/
 
     d->viewGB = new QGroupBox;
     QGridLayout* viewGBLayout = new QGridLayout;
@@ -343,17 +354,17 @@ SetupVersioning::SetupVersioning(QWidget* parent)
                                   "<para>With the options here, you can choose to show certain files permanently.</para>");
     d->viewGB->setWhatsThis(viewWhatsThis);
 
-    QLabel* viewLabel =  new QLabel(i18nc("@label", "In main view"));
+    QLabel* viewLabel     =  new QLabel(i18nc("@label", "In main view"));
 
     QLabel* viewIconLabel = new QLabel;
     viewIconLabel->setPixmap(SmallIcon("view-list-icons", KIconLoader::SizeMedium));
 
-    d->infoView = new QPushButton;
+    d->infoView           = new QPushButton;
     d->infoView->setIcon(SmallIcon("dialog-information"));
     d->infoView->setToolTip(i18nc("@info:tooltip", "Get an explanation for these options"));
 
-    d->viewShowOriginal  = new QCheckBox(i18nc("@option:check", "Always show original images"));
-    d->viewShowSnapshots = new QCheckBox(i18nc("@option:check", "Always show intermediate snapshots"));
+    d->viewShowOriginal   = new QCheckBox(i18nc("@option:check", "Always show original images"));
+    d->viewShowSnapshots  = new QCheckBox(i18nc("@option:check", "Always show intermediate snapshots"));
 
     viewGBLayout->addWidget(viewIconLabel,        0, 0);
     viewGBLayout->addWidget(viewLabel,            0, 1);
@@ -363,13 +374,15 @@ SetupVersioning::SetupVersioning(QWidget* parent)
     viewGBLayout->setColumnStretch(2, 1);
     d->viewGB->setLayout(viewGBLayout);
 
-    /*/ ---
+/*
+    / ---
 
     viewLayout->addLayout(viewHeaderLayout);
     viewLayout->addWidget(d->viewGB);
     viewLayout->addStretch();
 
-    d->viewPanel->setLayout(viewLayout);*/
+    d->viewPanel->setLayout(viewLayout);
+*/
 
     // --------------------------------------------------------
 
@@ -409,9 +422,11 @@ SetupVersioning::SetupVersioning(QWidget* parent)
 
     // --------------------------------------------------------
 
-    /*setAutoFillBackground(false);
+/*
+    setAutoFillBackground(false);
     viewport()->setAutoFillBackground(false);
-    panel->setAutoFillBackground(false);*/
+    panel->setAutoFillBackground(false);
+*/
 }
 
 SetupVersioning::~SetupVersioning()
@@ -458,14 +473,16 @@ void SetupVersioning::applySettings()
         settings.editorClosingMode = VersionManagerSettings::AlwaysAsk;
     }
 
-    /*if (d->jpgFormat->isChecked())
+/*
+    if (d->jpgFormat->isChecked())
         settings.format = "JPG";
     else if (d->pngFormat->isChecked())
         settings.format = "PNG";
     else if (d->tiffFormat->isChecked())
         settings.format = "TIFF";
     else if (d->pgfFormat->isChecked())
-        settings.format = "PGF";*/
+        settings.format = "PGF";
+*/
     settings.format = d->formatBox->itemData(d->formatBox->currentIndex()).toString();
 
     AlbumSettings::instance()->setVersionManagerSettings(settings);
@@ -485,38 +502,40 @@ void SetupVersioning::readSettings()
     d->askToSave->setChecked(settings.editorClosingMode == VersionManagerSettings::AlwaysAsk);
     d->autoSave->setChecked(settings.editorClosingMode == VersionManagerSettings::AutoSave);
 
-    /*if (settings.format == "JPG")
+/*
+    if (settings.format == "JPG")
         d->jpgFormat->setChecked(true);
     else if (settings.format == "PNG")
         d->pngFormat->setChecked(true);
     else if (settings.format == "TIFF")
         d->tiffFormat->setChecked(true);
     else if (settings.format == "PGF")
-        d->pgfFormat->setChecked(true);*/
+        d->pgfFormat->setChecked(true);
+*/
     d->formatBox->setCurrentIndex(d->formatBox->findData(settings.format));
 }
 
 void SetupVersioning::showNonDestructiveInformation()
 {
-    qApp->postEvent(d->enableNonDestructive, new QHelpEvent(QEvent::WhatsThis, QPoint(0, 0),
+    kapp->postEvent(d->enableNonDestructive, new QHelpEvent(QEvent::WhatsThis, QPoint(0, 0),
                                                             d->enableNonDestructive->mapToGlobal(QPoint(0, 0))));
 }
 
 void SetupVersioning::showFormatInformation()
 {
-    qApp->postEvent(d->formatBox, new QHelpEvent(QEvent::WhatsThis, QPoint(0, 0), d->formatBox->mapToGlobal(QPoint(0, 0))));
+    kapp->postEvent(d->formatBox, new QHelpEvent(QEvent::WhatsThis, QPoint(0, 0), d->formatBox->mapToGlobal(QPoint(0, 0))));
 }
 
 void SetupVersioning::showSnapshotInformation()
 {
     QPoint p(0, 0);
-    qApp->postEvent(d->snapshotGB, new QHelpEvent(QEvent::WhatsThis, p, d->snapshotGB->mapToGlobal(p)));
+    kapp->postEvent(d->snapshotGB, new QHelpEvent(QEvent::WhatsThis, p, d->snapshotGB->mapToGlobal(p)));
 }
 
 void SetupVersioning::showViewInformation()
 {
     QPoint p(0, 0);
-    qApp->postEvent(d->viewGB, new QHelpEvent(QEvent::WhatsThis, p, d->viewGB->mapToGlobal(p)));
+    kapp->postEvent(d->viewGB, new QHelpEvent(QEvent::WhatsThis, p, d->viewGB->mapToGlobal(p)));
 }
 
 void SetupVersioning::enableToggled(bool on)
