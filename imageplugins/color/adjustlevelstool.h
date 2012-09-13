@@ -40,7 +40,7 @@ class AdjustLevelsTool : public EditorToolThreaded
 
 public:
 
-    AdjustLevelsTool(QObject* parent);
+    AdjustLevelsTool(QObject* const parent);
     ~AdjustLevelsTool();
 
 private Q_SLOTS:
@@ -80,8 +80,8 @@ private:
 
 private:
 
-    class AdjustLevelsToolPriv;
-    AdjustLevelsToolPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace DigikamColorImagePlugin

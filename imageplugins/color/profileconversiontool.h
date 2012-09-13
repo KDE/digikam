@@ -6,8 +6,8 @@
  * Date        : 2009-09-19
  * Description : a tool for color space conversion
  *
- * Copyright (C) 2009-2010 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
- * Copyright (C) 2009-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2012 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2009-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -41,7 +41,7 @@ class ProfileConversionTool : public EditorToolThreaded
 
 public:
 
-    ProfileConversionTool(QObject* parent);
+    ProfileConversionTool(QObject* const parent);
     ~ProfileConversionTool();
 
     static QStringList favoriteProfiles();
@@ -66,8 +66,8 @@ private:
 
 private:
 
-    class ProfileConversionToolPriv;
-    ProfileConversionToolPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace DigikamColorImagePlugin

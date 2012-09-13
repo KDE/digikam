@@ -6,7 +6,7 @@
  * Date        : 2004-07-11
  * Description : digiKam image editor Color Balance tool.
  *
- * Copyright (C) 2004-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -56,11 +56,11 @@ using namespace KDcrawIface;
 namespace DigikamColorImagePlugin
 {
 
-class CBTool::CBToolPriv
+class CBTool::Private
 {
 public:
 
-    CBToolPriv() :
+    Private() :
         destinationPreviewData(0),
         cbSettings(0),
         previewWidget(0),
@@ -77,15 +77,16 @@ public:
     ImageRegionWidget*   previewWidget;
     EditorToolSettings*  gboxSettings;
 };
-const QString CBTool::CBToolPriv::configGroupName("colorbalance Tool");
-const QString CBTool::CBToolPriv::configHistogramChannelEntry("Histogram Channel");
-const QString CBTool::CBToolPriv::configHistogramScaleEntry("Histogram Scale");
+
+const QString CBTool::Private::configGroupName("colorbalance Tool");
+const QString CBTool::Private::configHistogramChannelEntry("Histogram Channel");
+const QString CBTool::Private::configHistogramScaleEntry("Histogram Scale");
 
 // --------------------------------------------------------
 
-CBTool::CBTool(QObject* parent)
+CBTool::CBTool(QObject* const parent)
     : EditorToolThreaded(parent),
-      d(new CBToolPriv)
+      d(new Private)
 {
     setObjectName("colorbalance");
     setToolName(i18n("Color Balance"));

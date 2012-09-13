@@ -77,7 +77,7 @@ using namespace KDcrawIface;
 namespace DigikamColorImagePlugin
 {
 
-class FilmTool::FilmToolPriv
+class FilmTool::Private
 {
 
 public:
@@ -90,7 +90,7 @@ public:
 
 public:
 
-    FilmToolPriv() :
+    Private() :
         destinationPreviewData(0),
         histoSegments(0),
         resetButton(0),
@@ -106,7 +106,8 @@ public:
         levels(0),
         originalImage(0),
         gboxSettings(0)
-    {}
+    {
+    }
 
     static const QString configGroupName;
     static const QString configGammaInputEntry;
@@ -147,21 +148,22 @@ public:
 
     EditorToolSettings*  gboxSettings;
 };
-const QString FilmTool::FilmToolPriv::configGroupName("film Tool");
-const QString FilmTool::FilmToolPriv::configGammaInputEntry("GammaInput");
-const QString FilmTool::FilmToolPriv::configExposureEntry("Exposure");
-const QString FilmTool::FilmToolPriv::configFilmProfileEntry("FilmProfile");
-const QString FilmTool::FilmToolPriv::configFilmProfileName("FilmProfileName");
-const QString FilmTool::FilmToolPriv::configWhitePointEntry("WhitePoint_%1");
-const QString FilmTool::FilmToolPriv::configHistogramChannelEntry("Histogram Channel");
-const QString FilmTool::FilmToolPriv::configHistogramScaleEntry("Histogram Scale");
-const QString FilmTool::FilmToolPriv::configApplyColorBalance("Apply Color Balance");
+
+const QString FilmTool::Private::configGroupName("film Tool");
+const QString FilmTool::Private::configGammaInputEntry("GammaInput");
+const QString FilmTool::Private::configExposureEntry("Exposure");
+const QString FilmTool::Private::configFilmProfileEntry("FilmProfile");
+const QString FilmTool::Private::configFilmProfileName("FilmProfileName");
+const QString FilmTool::Private::configWhitePointEntry("WhitePoint_%1");
+const QString FilmTool::Private::configHistogramChannelEntry("Histogram Channel");
+const QString FilmTool::Private::configHistogramScaleEntry("Histogram Scale");
+const QString FilmTool::Private::configApplyColorBalance("Apply Color Balance");
 
 // --------------------------------------------------------
 
 FilmTool::FilmTool(QObject* const parent)
     : EditorToolThreaded(parent),
-      d(new FilmToolPriv)
+      d(new Private)
 {
     setObjectName("film");
     setToolName(i18n("Color Negative Film"));

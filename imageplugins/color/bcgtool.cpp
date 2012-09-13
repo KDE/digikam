@@ -7,8 +7,8 @@
  * Description : digiKam image editor to adjust Brightness,
  *               Contrast, and Gamma of picture.
  *
- * Copyright (C) 2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2005-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004      by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -60,11 +60,11 @@
 namespace DigikamColorImagePlugin
 {
 
-class BCGTool::BCGToolPriv
+class BCGTool::Private
 {
 public:
 
-    BCGToolPriv() :
+    Private() :
         destinationPreviewData(0),
         settingsView(0),
         previewWidget(0),
@@ -81,15 +81,16 @@ public:
     ImageRegionWidget*   previewWidget;
     EditorToolSettings*  gboxSettings;
 };
-const QString BCGTool::BCGToolPriv::configGroupName("bcgadjust Tool");
-const QString BCGTool::BCGToolPriv::configHistogramChannelEntry("Histogram Channel");
-const QString BCGTool::BCGToolPriv::configHistogramScaleEntry("Histogram Scale");
+
+const QString BCGTool::Private::configGroupName("bcgadjust Tool");
+const QString BCGTool::Private::configHistogramChannelEntry("Histogram Channel");
+const QString BCGTool::Private::configHistogramScaleEntry("Histogram Scale");
 
 // --------------------------------------------------------
 
-BCGTool::BCGTool(QObject* parent)
+BCGTool::BCGTool(QObject* const parent)
     : EditorToolThreaded(parent),
-      d(new BCGToolPriv)
+      d(new Private)
 {
     setObjectName("bcgadjust");
     setToolName(i18n("Brightness / Contrast / Gamma"));
@@ -110,7 +111,7 @@ BCGTool::BCGTool(QObject* parent)
     d->gboxSettings->setButtons(EditorToolSettings::Default|
                                 EditorToolSettings::Ok|
                                 EditorToolSettings::Cancel);
-    //                                EditorToolSettings::Try);
+//                              EditorToolSettings::Try);
 
     // -------------------------------------------------------------
 

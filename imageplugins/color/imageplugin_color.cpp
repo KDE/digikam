@@ -62,12 +62,12 @@ namespace DigikamColorImagePlugin
 K_PLUGIN_FACTORY( ColorPluginFactory, registerPlugin<ImagePlugin_Color>(); )
 K_EXPORT_PLUGIN ( ColorPluginFactory("digikamimageplugin_color") )
 
-class ImagePlugin_Color::ImagePlugin_ColorPriv
+class ImagePlugin_Color::Private
 {
 
 public:
 
-    ImagePlugin_ColorPriv() :
+    Private() :
         BCGAction(0),
         HSLAction(0),
         CBAction(0),
@@ -96,14 +96,14 @@ public:
     KAction*               channelMixerAction;
     KAction*               curvesAction;
     KAction*               levelsAction;
-    KAction*			   filmAction;
+    KAction*               filmAction;
 
     IccProfilesMenuAction* profileMenuAction;
 };
 
 ImagePlugin_Color::ImagePlugin_Color(QObject* const parent, const QVariantList&)
     : ImagePlugin(parent, "ImagePlugin_Color"),
-      d(new ImagePlugin_ColorPriv)
+      d(new Private)
 {
     //-------------------------------
     // Colors menu actions
@@ -286,19 +286,19 @@ void ImagePlugin_Color::slotConvertTo16Bits()
 
 void ImagePlugin_Color::slotBCG()
 {
-    BCGTool* tool = new BCGTool(this);
+    BCGTool* const tool = new BCGTool(this);
     loadTool(tool);
 }
 
 void ImagePlugin_Color::slotCB()
 {
-    CBTool* tool = new CBTool(this);
+    CBTool* const tool = new CBTool(this);
     loadTool(tool);
 }
 
 void ImagePlugin_Color::slotAutoCorrection()
 {
-    AutoCorrectionTool* tool = new AutoCorrectionTool(this);
+    AutoCorrectionTool* const tool = new AutoCorrectionTool(this);
     loadTool(tool);
 }
 
@@ -350,6 +350,7 @@ void ImagePlugin_Color::slotUpdateColorSpaceMenu()
 
     favoriteProfilePaths = QSet<QString>::fromList(ProfileConversionTool::favoriteProfiles());
     favoriteProfilePaths -= standardProfilePaths;
+
     foreach(const QString& path, favoriteProfilePaths)
     {
         favoriteProfiles << path;
@@ -360,6 +361,7 @@ void ImagePlugin_Color::slotUpdateColorSpaceMenu()
 
     KAction* moreAction = new KAction(i18n("Other..."), this);
     d->profileMenuAction->addAction(moreAction);
+
     connect(moreAction, SIGNAL(triggered()),
             this, SLOT(slotProfileConversionTool()));
 }
@@ -371,50 +373,53 @@ void ImagePlugin_Color::slotSetupICC()
 
 void ImagePlugin_Color::slotProfileConversionTool()
 {
-    ProfileConversionTool* tool = new ProfileConversionTool(this);
-    connect(tool, SIGNAL(okClicked()), this, SLOT(slotUpdateColorSpaceMenu()));
+    ProfileConversionTool* const tool = new ProfileConversionTool(this);
+
+    connect(tool, SIGNAL(okClicked()), 
+            this, SLOT(slotUpdateColorSpaceMenu()));
+
     loadTool(tool);
 }
 
 void ImagePlugin_Color::slotBW()
 {
-    BWSepiaTool* tool = new BWSepiaTool(this);
+    BWSepiaTool* const tool = new BWSepiaTool(this);
     loadTool(tool);
 }
 
 void ImagePlugin_Color::slotHSL()
 {
-    HSLTool* tool = new HSLTool(this);
+    HSLTool* const tool = new HSLTool(this);
     loadTool(tool);
 }
 
 void ImagePlugin_Color::slotWhiteBalance()
 {
-    WhiteBalanceTool* tool = new WhiteBalanceTool(this);
+    WhiteBalanceTool* const tool = new WhiteBalanceTool(this);
     loadTool(tool);
 }
 
 void ImagePlugin_Color::slotChannelMixer()
 {
-    ChannelMixerTool* tool = new ChannelMixerTool(this);
+    ChannelMixerTool* const tool = new ChannelMixerTool(this);
     loadTool(tool);
 }
 
 void ImagePlugin_Color::slotCurvesAdjust()
 {
-    AdjustCurvesTool* tool = new AdjustCurvesTool(this);
+    AdjustCurvesTool* const tool = new AdjustCurvesTool(this);
     loadTool(tool);
 }
 
 void ImagePlugin_Color::slotLevelsAdjust()
 {
-    AdjustLevelsTool* tool = new AdjustLevelsTool(this);
+    AdjustLevelsTool* const tool = new AdjustLevelsTool(this);
     loadTool(tool);
 }
 
 void ImagePlugin_Color::slotFilm()
 {
-    FilmTool* tool = new FilmTool(this);
+    FilmTool* const tool = new FilmTool(this);
     loadTool(tool);
 }
 

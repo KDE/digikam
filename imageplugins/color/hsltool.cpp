@@ -7,7 +7,7 @@
  * Description : digiKam image editor to adjust Hue, Saturation,
  *               and Lightness of picture.
  *
- * Copyright (C) 2004-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -55,11 +55,11 @@ using namespace KDcrawIface;
 namespace DigikamColorImagePlugin
 {
 
-class HSLTool::HSLToolPriv
+class HSLTool::Private
 {
 public:
 
-    HSLToolPriv() :
+    Private() :
         destinationPreviewData(0),
         hslSettings(0),
         previewWidget(0),
@@ -76,15 +76,16 @@ public:
     ImageRegionWidget*   previewWidget;
     EditorToolSettings*  gboxSettings;
 };
-const QString HSLTool::HSLToolPriv::configGroupName("hsladjust Tool");
-const QString HSLTool::HSLToolPriv::configHistogramChannelEntry("Histogram Channel");
-const QString HSLTool::HSLToolPriv::configHistogramScaleEntry("Histogram Scale");
+
+const QString HSLTool::Private::configGroupName("hsladjust Tool");
+const QString HSLTool::Private::configHistogramChannelEntry("Histogram Channel");
+const QString HSLTool::Private::configHistogramScaleEntry("Histogram Scale");
 
 // --------------------------------------------------------
 
-HSLTool::HSLTool(QObject* parent)
+HSLTool::HSLTool(QObject* const parent)
     : EditorToolThreaded(parent),
-      d(new HSLToolPriv)
+      d(new Private)
 {
     setObjectName("adjusthsl");
     setToolName(i18n("Hue / Saturation / Lightness"));

@@ -80,8 +80,8 @@ private:
 
 private:
 
-    class FilmToolPriv;
-    FilmToolPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace DigikamColorImagePlugin

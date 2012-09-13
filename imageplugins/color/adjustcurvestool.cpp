@@ -6,7 +6,7 @@
  * Date        : 2004-12-01
  * Description : image histogram adjust curves.
  *
- * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -61,16 +61,17 @@
 namespace DigikamColorImagePlugin
 {
 
-class AdjustCurvesTool::AdjustCurvesToolPriv
+class AdjustCurvesTool::Private
 {
 public:
 
-    AdjustCurvesToolPriv() :
+    Private() :
         destinationPreviewData(0),
         settingsView(0),
         previewWidget(0),
         gboxSettings(0)
-    {}
+    {
+    }
 
     static const QString configGroupName;
     static const QString configHistogramChannelEntry;
@@ -83,15 +84,16 @@ public:
 
     EditorToolSettings*  gboxSettings;
 };
-const QString AdjustCurvesTool::AdjustCurvesToolPriv::configGroupName("adjustcurves Tool");
-const QString AdjustCurvesTool::AdjustCurvesToolPriv::configHistogramChannelEntry("Histogram Channel");
-const QString AdjustCurvesTool::AdjustCurvesToolPriv::configHistogramScaleEntry("Histogram Scale");
+
+const QString AdjustCurvesTool::Private::configGroupName("adjustcurves Tool");
+const QString AdjustCurvesTool::Private::configHistogramChannelEntry("Histogram Channel");
+const QString AdjustCurvesTool::Private::configHistogramScaleEntry("Histogram Scale");
 
 // --------------------------------------------------------
 
-AdjustCurvesTool::AdjustCurvesTool(QObject* parent)
+AdjustCurvesTool::AdjustCurvesTool(QObject* const parent)
     : EditorToolThreaded(parent),
-      d(new AdjustCurvesToolPriv)
+      d(new Private)
 {
     setObjectName("adjustcurves");
     setToolName(i18n("Adjust Curves"));
@@ -156,11 +158,10 @@ AdjustCurvesTool::AdjustCurvesTool(QObject* parent)
 
     connect(d->settingsView, SIGNAL(signalPickerChanged(int)),
             this, SLOT(slotPickerColorButtonActived(int)));
-
-    /*
-        connect(d->previewWidget, SIGNAL(spotPositionChangedFromTarget(Digikam::DColor,QPoint)),
-                this, SLOT(slotColorSelectedFromTarget(Digikam::DColor)));
-    */
+/*
+    connect(d->previewWidget, SIGNAL(spotPositionChangedFromTarget(Digikam::DColor,QPoint)),
+            this, SLOT(slotColorSelectedFromTarget(Digikam::DColor)));
+*/
 }
 
 AdjustCurvesTool::~AdjustCurvesTool()

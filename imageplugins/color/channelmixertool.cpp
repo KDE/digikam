@@ -6,7 +6,7 @@
  * Date        : 2005-02-26
  * Description : image channels mixer.
  *
- * Copyright (C) 2005-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -72,11 +72,11 @@ using namespace KDcrawIface;
 namespace DigikamColorImagePlugin
 {
 
-class ChannelMixerTool::ChannelMixerToolPriv
+class ChannelMixerTool::Private
 {
 public:
 
-    ChannelMixerToolPriv() :
+    Private() :
         destinationPreviewData(0),
         settingsView(0),
         previewWidget(0),
@@ -94,15 +94,16 @@ public:
     ImageRegionWidget*   previewWidget;
     EditorToolSettings*  gboxSettings;
 };
-const QString ChannelMixerTool::ChannelMixerToolPriv::configGroupName("channelmixer Tool");
-const QString ChannelMixerTool::ChannelMixerToolPriv::configHistogramChannelEntry("Histogram Channel");
-const QString ChannelMixerTool::ChannelMixerToolPriv::configHistogramScaleEntry("Histogram Scale");
+
+const QString ChannelMixerTool::Private::configGroupName("channelmixer Tool");
+const QString ChannelMixerTool::Private::configHistogramChannelEntry("Histogram Channel");
+const QString ChannelMixerTool::Private::configHistogramScaleEntry("Histogram Scale");
 
 // --------------------------------------------------------
 
-ChannelMixerTool::ChannelMixerTool(QObject* parent)
+ChannelMixerTool::ChannelMixerTool(QObject* const parent)
     : EditorToolThreaded(parent),
-      d(new ChannelMixerToolPriv)
+      d(new Private)
 {
     setObjectName("channelmixer");
     setToolName(i18n("Channel Mixer"));
@@ -145,7 +146,7 @@ ChannelMixerTool::ChannelMixerTool(QObject* parent)
 
     connect(d->previewWidget, SIGNAL(signalResized()),
             this, SLOT(slotPreview()));
-    
+
     connect(d->settingsView, SIGNAL(signalOutChannelChanged()),
             this, SLOT(slotOutChannelChanged()));
 }

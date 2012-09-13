@@ -7,7 +7,7 @@
  * Description : Black and White conversion tool.
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -57,12 +57,12 @@ using namespace KDcrawIface;
 namespace DigikamColorImagePlugin
 {
 
-class BWSepiaTool::BWSepiaToolPriv
+class BWSepiaTool::Private
 {
 
 public:
 
-    BWSepiaToolPriv() :
+    Private() :
         destinationPreviewData(0),
         bwsepiaSettings(0),
         previewWidget(0),
@@ -81,14 +81,15 @@ public:
 
     EditorToolSettings*  gboxSettings;
 };
-const QString BWSepiaTool::BWSepiaToolPriv::configGroupName("convertbw Tool");
-const QString BWSepiaTool::BWSepiaToolPriv::configHistogramChannelEntry("Histogram Channel");
-const QString BWSepiaTool::BWSepiaToolPriv::configHistogramScaleEntry("Histogram Scale");
+
+const QString BWSepiaTool::Private::configGroupName("convertbw Tool");
+const QString BWSepiaTool::Private::configHistogramChannelEntry("Histogram Channel");
+const QString BWSepiaTool::Private::configHistogramScaleEntry("Histogram Scale");
 
 // -----------------------------------------------------------------------------------
 
-BWSepiaTool::BWSepiaTool(QObject* parent)
-    : EditorToolThreaded(parent), d(new BWSepiaToolPriv)
+BWSepiaTool::BWSepiaTool(QObject* const parent)
+    : EditorToolThreaded(parent), d(new Private)
 {
     setObjectName("convertbw");
     setToolName(i18n("Black and White"));

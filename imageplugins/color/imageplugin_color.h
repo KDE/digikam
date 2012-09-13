@@ -81,8 +81,8 @@ private Q_SLOTS:
 
 private:
 
-    class ImagePlugin_ColorPriv;
-    ImagePlugin_ColorPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace DigikamColorImagePlugin

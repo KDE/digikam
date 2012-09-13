@@ -6,8 +6,8 @@
  * Date        : 2009-09-19
  * Description : a tool for color space conversion
  *
- * Copyright (C) 2009-2010 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
- * Copyright (C) 2009-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2012 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2009-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -56,11 +56,11 @@
 namespace DigikamColorImagePlugin
 {
 
-class ProfileConversionTool::ProfileConversionToolPriv
+class ProfileConversionTool::Private
 {
 public:
 
-    ProfileConversionToolPriv() :
+    Private() :
         destinationPreviewData(0),
         profilesBox(0),
         previewWidget(0),
@@ -86,12 +86,11 @@ public:
 
     static IccTransform getTransform(const IccProfile& in, const IccProfile& out);
 };
-const QString ProfileConversionTool::ProfileConversionToolPriv::configGroupName("Profile Conversion Tool");
-const QString ProfileConversionTool::ProfileConversionToolPriv::configProfileEntry("Profile");
 
-// --------------------------------------------------------
+const QString ProfileConversionTool::Private::configGroupName("Profile Conversion Tool");
+const QString ProfileConversionTool::Private::configProfileEntry("Profile");
 
-IccTransform ProfileConversionTool::ProfileConversionToolPriv::getTransform(const IccProfile& in, const IccProfile& out)
+IccTransform ProfileConversionTool::Private::getTransform(const IccProfile& in, const IccProfile& out)
 {
     ICCSettingsContainer settings = IccSettings::instance()->settings();
 
@@ -107,9 +106,9 @@ IccTransform ProfileConversionTool::ProfileConversionToolPriv::getTransform(cons
 
 // ----------------------------------------------------------------------------
 
-ProfileConversionTool::ProfileConversionTool(QObject* parent)
+ProfileConversionTool::ProfileConversionTool(QObject* const parent)
     : EditorToolThreaded(parent),
-      d(new ProfileConversionToolPriv)
+      d(new Private)
 {
     setObjectName("profile conversion");
     setToolName(i18n("Color Profile Conversion"));
@@ -267,7 +266,7 @@ void ProfileConversionTool::setFinalImage()
 
 QStringList ProfileConversionTool::favoriteProfiles()
 {
-    ProfileConversionToolPriv d;
+    Private d;
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d.configGroupName);
     return IccProfilesSettings::favoriteProfiles(group);
@@ -278,7 +277,7 @@ void ProfileConversionTool::fastConversion(const IccProfile& profile)
     ImageIface iface;
 
     IccProfile currentProfile = iface.originalIccProfile();
-    IccTransform transform    = ProfileConversionToolPriv::getTransform(currentProfile, profile);
+    IccTransform transform    = Private::getTransform(currentProfile, profile);
     IccTransformFilter filter(iface.original(), 0, transform);
     filter.startFilterDirectly();
 

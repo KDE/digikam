@@ -8,7 +8,7 @@
  *               image white balance
  *
  * Copyright (C) 2008-2009 by Guillaume Castagnino <casta at xwing dot info>
- * Copyright (C) 2005-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -60,11 +60,11 @@ using namespace Digikam;
 namespace DigikamColorImagePlugin
 {
 
-class WhiteBalanceTool::WhiteBalanceToolPriv
+class WhiteBalanceTool::Private
 {
 public:
 
-    WhiteBalanceToolPriv() :
+    Private() :
         destinationPreviewData(0),
         previewWidget(0),
         gboxSettings(0)
@@ -82,14 +82,15 @@ public:
 
     EditorToolSettings*  gboxSettings;
 };
-const QString WhiteBalanceTool::WhiteBalanceToolPriv::configGroupName("whitebalance Tool");
-const QString WhiteBalanceTool::WhiteBalanceToolPriv::configHistogramChannelEntry("Histogram Chanel");
-const QString WhiteBalanceTool::WhiteBalanceToolPriv::configHistogramScaleEntry("Histogram Scale");
+
+const QString WhiteBalanceTool::Private::configGroupName("whitebalance Tool");
+const QString WhiteBalanceTool::Private::configHistogramChannelEntry("Histogram Chanel");
+const QString WhiteBalanceTool::Private::configHistogramScaleEntry("Histogram Scale");
 
 // --------------------------------------------------------
 
-WhiteBalanceTool::WhiteBalanceTool(QObject* parent)
-    : EditorToolThreaded(parent), d(new WhiteBalanceToolPriv)
+WhiteBalanceTool::WhiteBalanceTool(QObject* const parent)
+    : EditorToolThreaded(parent), d(new Private)
 {
     setObjectName("whitebalance");
     setToolName(i18n("White Balance"));
@@ -134,12 +135,10 @@ WhiteBalanceTool::WhiteBalanceTool(QObject* parent)
 
     connect(d->previewWidget, SIGNAL(signalCapturedPointFromOriginal(Digikam::DColor,QPoint)),
             this, SLOT(slotColorSelectedFromOriginal(Digikam::DColor)));
-
-    /*
-        connect(d->previewWidget, SIGNAL(spotPositionChangedFromTarget(Digikam::DColor,QPoint)),
-                this, SLOT(slotColorSelectedFromTarget(Digikam::DColor)));
-    */
-
+/*
+    connect(d->previewWidget, SIGNAL(spotPositionChangedFromTarget(Digikam::DColor,QPoint)),
+            this, SLOT(slotColorSelectedFromTarget(Digikam::DColor)));
+*/
     slotTimer();
 }
 

@@ -75,7 +75,7 @@ using namespace KDcrawIface;
 namespace DigikamColorImagePlugin
 {
 
-class AdjustLevelsTool::AdjustLevelsToolPriv
+class AdjustLevelsTool::Private
 {
 
 public:
@@ -90,7 +90,7 @@ public:
 
 public:
 
-    AdjustLevelsToolPriv() :
+    Private() :
         destinationPreviewData(0),
         histoSegments(0),
         pickerBox(0),
@@ -157,20 +157,21 @@ public:
 
     EditorToolSettings*  gboxSettings;
 };
-const QString AdjustLevelsTool::AdjustLevelsToolPriv::configGroupName("adjustlevels Tool");
-const QString AdjustLevelsTool::AdjustLevelsToolPriv::configGammaChannelEntry("GammaChannel%1");
-const QString AdjustLevelsTool::AdjustLevelsToolPriv::configLowInputChannelEntry("LowInputChannel%1");
-const QString AdjustLevelsTool::AdjustLevelsToolPriv::configLowOutputChannelEntry("LowOutputChannel%1");
-const QString AdjustLevelsTool::AdjustLevelsToolPriv::configHighInputChannelEntry("HighInputChannel%1");
-const QString AdjustLevelsTool::AdjustLevelsToolPriv::configHighOutputChannelEntry("HighOutputChannel%1");
-const QString AdjustLevelsTool::AdjustLevelsToolPriv::configHistogramChannelEntry("Histogram Channel");
-const QString AdjustLevelsTool::AdjustLevelsToolPriv::configHistogramScaleEntry("Histogram Scale");
+
+const QString AdjustLevelsTool::Private::configGroupName("adjustlevels Tool");
+const QString AdjustLevelsTool::Private::configGammaChannelEntry("GammaChannel%1");
+const QString AdjustLevelsTool::Private::configLowInputChannelEntry("LowInputChannel%1");
+const QString AdjustLevelsTool::Private::configLowOutputChannelEntry("LowOutputChannel%1");
+const QString AdjustLevelsTool::Private::configHighInputChannelEntry("HighInputChannel%1");
+const QString AdjustLevelsTool::Private::configHighOutputChannelEntry("HighOutputChannel%1");
+const QString AdjustLevelsTool::Private::configHistogramChannelEntry("Histogram Channel");
+const QString AdjustLevelsTool::Private::configHistogramScaleEntry("Histogram Scale");
 
 // --------------------------------------------------------
 
-AdjustLevelsTool::AdjustLevelsTool(QObject* parent)
+AdjustLevelsTool::AdjustLevelsTool(QObject* const parent)
     : EditorToolThreaded(parent),
-      d(new AdjustLevelsToolPriv)
+      d(new Private)
 {
     setObjectName("adjustlevels");
     setToolName(i18n("Adjust Levels"));
@@ -294,9 +295,9 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* parent)
                                     "input levels on the Red, Green, Blue, and Luminosity channels."));
 
     d->pickerColorButtonGroup = new QButtonGroup(d->pickerBox);
-    d->pickerColorButtonGroup->addButton(d->pickBlack, AdjustLevelsToolPriv::BlackTonal);
-    d->pickerColorButtonGroup->addButton(d->pickGray,  AdjustLevelsToolPriv::GrayTonal);
-    d->pickerColorButtonGroup->addButton(d->pickWhite, AdjustLevelsToolPriv::WhiteTonal);
+    d->pickerColorButtonGroup->addButton(d->pickBlack, Private::BlackTonal);
+    d->pickerColorButtonGroup->addButton(d->pickGray,  Private::GrayTonal);
+    d->pickerColorButtonGroup->addButton(d->pickWhite, Private::WhiteTonal);
 
     QHBoxLayout* pickerBoxLayout = new QHBoxLayout;
     pickerBoxLayout->setMargin(0);
@@ -365,11 +366,10 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* parent)
 
     connect(d->previewWidget, SIGNAL(signalCapturedPointFromOriginal(Digikam::DColor,QPoint)),
             this, SLOT(slotSpotColorChanged(Digikam::DColor)));
-    /*
-        connect(d->previewWidget, SIGNAL(spotPositionChangedFromTarget(Digikam::DColor,QPoint)),
-                this, SLOT(slotColorSelectedFromTarget(Digikam::DColor)));
-    */
-
+/*
+    connect(d->previewWidget, SIGNAL(spotPositionChangedFromTarget(Digikam::DColor,QPoint)),
+            this, SLOT(slotColorSelectedFromTarget(Digikam::DColor)));
+*/
     // -------------------------------------------------------------
     // Color sliders and spinbox slots.
 
@@ -512,7 +512,7 @@ void AdjustLevelsTool::slotShowOutputHistogramGuide(double v)
 
 void AdjustLevelsTool::slotPickerColorButtonActived(int type)
 {
-    if (type == AdjustLevelsToolPriv::NoPicker)
+    if (type == Private::NoPicker)
     {
         return;
     }
@@ -536,6 +536,7 @@ void AdjustLevelsTool::slotSpotColorChanged(const DColor& color)
             for (int i = RedChannel; i <= BlueChannel; i++)
                 d->levels->levelsBlackToneAdjustByColors(i, color);
         }
+
         d->pickBlack->setChecked(false);
     }
     else if ( d->pickGray->isChecked() )
@@ -545,6 +546,7 @@ void AdjustLevelsTool::slotSpotColorChanged(const DColor& color)
             // Gray tonal levels point.
             d->levels->levelsGrayToneAdjustByColors(channel, color);
         }
+
         d->pickGray->setChecked(false);
     }
     else if ( d->pickWhite->isChecked() )
@@ -559,6 +561,7 @@ void AdjustLevelsTool::slotSpotColorChanged(const DColor& color)
             for (int i = RedChannel; i <= BlueChannel; i++)
                 d->levels->levelsWhiteToneAdjustByColors(i, color);
         }
+
         d->pickWhite->setChecked(false);
     }
     else
@@ -770,16 +773,16 @@ void AdjustLevelsTool::readSettings()
 
         for (int i = 0 ; i < 5 ; ++i)
         {
-            gamma      = group.readEntry(d->configGammaChannelEntry.arg(i), 1.0);
-            lowInput   = group.readEntry(d->configLowInputChannelEntry.arg(i), 0);
-            lowOutput  = group.readEntry(d->configLowOutputChannelEntry.arg(i), 0);
-            highInput  = group.readEntry(d->configHighInputChannelEntry.arg(i), 65535);
+            gamma      = group.readEntry(d->configGammaChannelEntry.arg(i),      1.0);
+            lowInput   = group.readEntry(d->configLowInputChannelEntry.arg(i),   0);
+            lowOutput  = group.readEntry(d->configLowOutputChannelEntry.arg(i),  0);
+            highInput  = group.readEntry(d->configHighInputChannelEntry.arg(i),  65535);
             highOutput = group.readEntry(d->configHighOutputChannelEntry.arg(i), 65535);
 
             d->levels->setLevelGammaValue(i, gamma);
-            d->levels->setLevelLowInputValue(i, sb ? lowInput : lowInput / 256);
-            d->levels->setLevelHighInputValue(i, sb ? highInput : highInput / 256);
-            d->levels->setLevelLowOutputValue(i, sb ? lowOutput : lowOutput / 256);
+            d->levels->setLevelLowInputValue(i,   sb ? lowInput   : lowInput   / 256);
+            d->levels->setLevelHighInputValue(i,  sb ? highInput  : highInput  / 256);
+            d->levels->setLevelLowOutputValue(i,  sb ? lowOutput  : lowOutput  / 256);
             d->levels->setLevelHighOutputValue(i, sb ? highOutput : highOutput / 256);
         }
     }
@@ -834,9 +837,9 @@ void AdjustLevelsTool::writeSettings()
             highOutput = d->levels->getLevelHighOutputValue(i);
 
             group.writeEntry(d->configGammaChannelEntry.arg(i), gamma);
-            group.writeEntry(d->configLowInputChannelEntry.arg(i),   sb ? lowInput   : lowInput * 256);
-            group.writeEntry(d->configLowOutputChannelEntry.arg(i),  sb ? lowOutput  : lowOutput * 256);
-            group.writeEntry(d->configHighInputChannelEntry.arg(i),  sb ? highInput  : highInput * 256);
+            group.writeEntry(d->configLowInputChannelEntry.arg(i),   sb ? lowInput   : lowInput   * 256);
+            group.writeEntry(d->configLowOutputChannelEntry.arg(i),  sb ? lowOutput  : lowOutput  * 256);
+            group.writeEntry(d->configHighInputChannelEntry.arg(i),  sb ? highInput  : highInput  * 256);
             group.writeEntry(d->configHighOutputChannelEntry.arg(i), sb ? highOutput : highOutput * 256);
         }
     }
