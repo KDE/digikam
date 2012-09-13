@@ -253,7 +253,7 @@ void LensDistortionTool::readSettings()
     blockWidgetSignals(false);
 
     slotColorGuideChanged();
-    slotEffect();
+    slotPreview();
 }
 
 void LensDistortionTool::writeSettings()
@@ -280,10 +280,10 @@ void LensDistortionTool::slotResetSettings()
 
     blockWidgetSignals(false);
 
-    slotEffect();
+    slotPreview();
 }
 
-void LensDistortionTool::prepareEffect()
+void LensDistortionTool::preparePreview()
 {
     double m = d->mainInput->value();
     double e = d->edgeInput->value();
@@ -310,19 +310,19 @@ void LensDistortionTool::prepareFinal()
     setFilter(new LensDistortionFilter(iface.original(), this, m, e, r, b, 0, 0));
 }
 
-void LensDistortionTool::putPreviewData()
+void LensDistortionTool::setPreviewImage()
 {
     ImageIface* iface = d->previewWidget->imageIface();
     DImg imDest       = filter()->getTargetImage().smoothScale(iface->previewSize());
-    iface->putPreview(imDest);
+    iface->setPreview(imDest);
 
     d->previewWidget->updatePreview();
 }
 
-void LensDistortionTool::putFinalData()
+void LensDistortionTool::setFinalImage()
 {
     ImageIface iface;
-    iface.putOriginal(i18n("Lens Distortion"), filter()->filterAction(), filter()->getTargetImage());
+    iface.setOriginal(i18n("Lens Distortion"), filter()->filterAction(), filter()->getTargetImage());
 }
 
 void LensDistortionTool::blockWidgetSignals(bool b)

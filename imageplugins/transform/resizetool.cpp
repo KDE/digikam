@@ -177,7 +177,7 @@ ResizeTool::ResizeTool(QObject* parent)
     setToolName(i18n("Resize Image"));
     setToolIcon(SmallIcon("transform-scale"));
 
-    d->previewWidget = new ImageGuideWidget(0, false, ImageGuideWidget::HVGuideMode, Qt::red, 1, false, false);
+    d->previewWidget = new ImageGuideWidget(0, false, ImageGuideWidget::HVGuideMode, Qt::red, 1, false);
     setToolView(d->previewWidget);
     setPreviewModeMask(PreviewToolBar::UnSplitPreviewModes);
 
@@ -464,7 +464,7 @@ void ResizeTool::slotValuesChanged()
     blockWidgetSignals(false);
 }
 
-void ResizeTool::prepareEffect()
+void ResizeTool::preparePreview()
 {
     if (d->prevW  != d->wInput->value()  || d->prevH  != d->hInput->value() ||
         d->prevWP != d->wpInput->value() || d->prevHP != d->hpInput->value())
@@ -528,7 +528,7 @@ void ResizeTool::prepareFinal()
     }
 }
 
-void ResizeTool::putPreviewData()
+void ResizeTool::setPreviewImage()
 {
     ImageIface* iface = d->previewWidget->imageIface();
     int w             = iface->previewSize().width();
@@ -540,7 +540,7 @@ void ResizeTool::putPreviewData()
     imDest.fill(DColor(background, filter()->getTargetImage().sixteenBit()));
     imDest.bitBltImage(&imTemp, (w-imTemp.width())/2, (h-imTemp.height())/2);
 
-    iface->putPreview(imDest.smoothScale(iface->previewSize()));
+    iface->setPreview(imDest.smoothScale(iface->previewSize()));
     d->previewWidget->updatePreview();
 }
 
@@ -549,11 +549,11 @@ void ResizeTool::renderingFinished()
     d->settingsWidget->setEnabled(d->useGreycstorationBox->isChecked());
 }
 
-void ResizeTool::putFinalData()
+void ResizeTool::setFinalImage()
 {
     ImageIface iface;
     DImg targetImage = filter()->getTargetImage();
-    iface.putOriginal(i18n("Resize"),
+    iface.setOriginal(i18n("Resize"),
                            filter()->filterAction(),
                            targetImage);
 }

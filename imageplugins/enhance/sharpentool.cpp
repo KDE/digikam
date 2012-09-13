@@ -155,7 +155,7 @@ void SharpenTool::slotResetSettings()
     d->sharpSettings->resetToDefault();
 }
 
-void SharpenTool::prepareEffect()
+void SharpenTool::preparePreview()
 {
     SharpContainer settings = d->sharpSettings->settings();
 
@@ -206,7 +206,7 @@ void SharpenTool::prepareEffect()
     }
 }
 
-void SharpenTool::putPreviewData()
+void SharpenTool::setPreviewImage()
 {
     DImg preview = filter()->getTargetImage();
     d->previewWidget->setPreviewImage(preview);
@@ -261,7 +261,7 @@ void SharpenTool::prepareFinal()
     }
 }
 
-void SharpenTool::putFinalData()
+void SharpenTool::setFinalImage()
 {
     ImageIface iface;
     SharpContainer settings = d->sharpSettings->settings();
@@ -270,19 +270,19 @@ void SharpenTool::putFinalData()
     {
         case SharpContainer::SimpleSharp:
         {
-            iface.putOriginal(i18n("Sharpen"), filter()->filterAction(), filter()->getTargetImage());
+            iface.setOriginal(i18n("Sharpen"), filter()->filterAction(), filter()->getTargetImage());
             break;
         }
 
         case SharpContainer::UnsharpMask:
         {
-            iface.putOriginal(i18n("Unsharp Mask"), filter()->filterAction(), filter()->getTargetImage());
+            iface.setOriginal(i18n("Unsharp Mask"), filter()->filterAction(), filter()->getTargetImage());
             break;
         }
 
         case SharpContainer::Refocus:
         {
-            iface.putOriginal(i18n("Refocus"), filter()->filterAction(), filter()->getTargetImage());
+            iface.setOriginal(i18n("Refocus"), filter()->filterAction(), filter()->getTargetImage());
             break;
         }
     }

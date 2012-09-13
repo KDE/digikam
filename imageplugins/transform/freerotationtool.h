@@ -62,10 +62,10 @@ private:
 
     void readSettings();
     void writeSettings();
-    void prepareEffect();
+    void preparePreview();
     void prepareFinal();
-    void putPreviewData();
-    void putFinalData();
+    void setPreviewImage();
+    void setFinalImage();
 
     double  calculateAutoAngle();
     QPixmap generateBtnPixmap(const QString& label, const QColor& color);

@@ -113,7 +113,7 @@ HSLTool::HSLTool(QObject* parent)
     // -------------------------------------------------------------
 
     connect(d->previewWidget, SIGNAL(signalResized()),
-            this, SLOT(slotEffect()));
+            this, SLOT(slotPreview()));
 
     connect(d->hslSettings, SIGNAL(signalSettingsChanged()),
             this, SLOT(slotTimer()));
@@ -156,10 +156,10 @@ void HSLTool::writeSettings()
 void HSLTool::slotResetSettings()
 {
     d->hslSettings->resetToDefault();
-    slotEffect();
+    slotPreview();
 }
 
-void HSLTool::prepareEffect()
+void HSLTool::preparePreview()
 {
     HSLContainer settings = d->hslSettings->settings();
     d->gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
@@ -168,7 +168,7 @@ void HSLTool::prepareEffect()
     setFilter(new HSLFilter(&preview, this, settings));
 }
 
-void HSLTool::putPreviewData()
+void HSLTool::setPreviewImage()
 {
     DImg preview = filter()->getTargetImage();
     d->previewWidget->setPreviewImage(preview);
@@ -194,10 +194,10 @@ void HSLTool::prepareFinal()
     setFilter(new HSLFilter(iface.original(), this, settings));
 }
 
-void HSLTool::putFinalData()
+void HSLTool::setFinalImage()
 {
     ImageIface iface;
-    iface.putOriginal(i18n("HSL Adjustments"), filter()->filterAction(), filter()->getTargetImage());
+    iface.setOriginal(i18n("HSL Adjustments"), filter()->filterAction(), filter()->getTargetImage());
 }
 
 }  // namespace DigikamColorImagePlugin

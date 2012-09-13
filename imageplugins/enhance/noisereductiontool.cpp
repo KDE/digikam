@@ -118,7 +118,7 @@ void NoiseReductionTool::slotResetSettings()
     d->nrSettings->resetToDefault();
 }
 
-void NoiseReductionTool::prepareEffect()
+void NoiseReductionTool::preparePreview()
 {
     DImg image      = d->previewWidget->getOriginalRegionImage();
     NRContainer prm = d->nrSettings->settings();
@@ -134,15 +134,15 @@ void NoiseReductionTool::prepareFinal()
     setFilter(new NRFilter(iface.original(), this, prm));
 }
 
-void NoiseReductionTool::putPreviewData()
+void NoiseReductionTool::setPreviewImage()
 {
     d->previewWidget->setPreviewImage(filter()->getTargetImage());
 }
 
-void NoiseReductionTool::putFinalData()
+void NoiseReductionTool::setFinalImage()
 {
     ImageIface iface;
-    iface.putOriginal(i18n("Noise Reduction"), filter()->filterAction(), filter()->getTargetImage());
+    iface.setOriginal(i18n("Noise Reduction"), filter()->filterAction(), filter()->getTargetImage());
 }
 
 void NoiseReductionTool::slotLoadSettings()

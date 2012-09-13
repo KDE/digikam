@@ -680,7 +680,7 @@ void ContentAwareResizeTool::contentAwareResizeCore(DImg* image, int target_widt
     setFilter(new ContentAwareFilter(image, this, settings));
 }
 
-void ContentAwareResizeTool::prepareEffect()
+void ContentAwareResizeTool::preparePreview()
 {
     if (d->prevW  != d->wInput->value()  || d->prevH  != d->hInput->value() ||
         d->prevWP != d->wpInput->value() || d->prevHP != d->hpInput->value())
@@ -757,7 +757,7 @@ void ContentAwareResizeTool::prepareFinal()
     }
 }
 
-void ContentAwareResizeTool::putPreviewData()
+void ContentAwareResizeTool::setPreviewImage()
 {
     ImageIface* iface = d->previewWidget->imageIface();
     int w             = iface->previewSize().width();
@@ -770,7 +770,7 @@ void ContentAwareResizeTool::putPreviewData()
     imDest.fill(DColor(background, filter()->getTargetImage().sixteenBit()));
     imDest.bitBltImage(&imTemp, (w-imTemp.width())/2, (h-imTemp.height())/2);
 
-    iface->putPreview(imDest.smoothScale(iface->previewSize()));
+    iface->setPreview(imDest.smoothScale(iface->previewSize()));
     d->previewWidget->updatePreview();
 }
 
@@ -785,11 +785,11 @@ void ContentAwareResizeTool::renderingFinished()
     enableContentAwareSettings(true);
 }
 
-void ContentAwareResizeTool::putFinalData()
+void ContentAwareResizeTool::setFinalImage()
 {
     ImageIface iface;
     DImg targetImage = filter()->getTargetImage();
-    iface.putOriginal(i18n("Liquid Rescale"), filter()->filterAction(), targetImage);
+    iface.setOriginal(i18n("Liquid Rescale"), filter()->filterAction(), targetImage);
 }
 
 void ContentAwareResizeTool::blockWidgetSignals(bool b)

@@ -114,7 +114,7 @@ CBTool::CBTool(QObject* parent)
             this, SLOT(slotTimer()));
 
     connect(d->previewWidget, SIGNAL(signalResized()),
-            this, SLOT(slotEffect()));
+            this, SLOT(slotPreview()));
 
     slotTimer();
 }
@@ -155,10 +155,10 @@ void CBTool::writeSettings()
 void CBTool::slotResetSettings()
 {
     d->cbSettings->resetToDefault();
-    slotEffect();
+    slotPreview();
 }
 
-void CBTool::prepareEffect()
+void CBTool::preparePreview()
 {
     CBContainer settings = d->cbSettings->settings();
     d->gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
@@ -167,7 +167,7 @@ void CBTool::prepareEffect()
     setFilter(new CBFilter(&preview, this, settings));
 }
 
-void CBTool::putPreviewData()
+void CBTool::setPreviewImage()
 {
     DImg preview = filter()->getTargetImage();
     d->previewWidget->setPreviewImage(preview);
@@ -193,10 +193,10 @@ void CBTool::prepareFinal()
     setFilter(new CBFilter(iface.original(), this, settings));
 }
 
-void CBTool::putFinalData()
+void CBTool::setFinalImage()
 {
     ImageIface iface;
-    iface.putOriginal(i18n("Color Balance"), filter()->filterAction(), filter()->getTargetImage());
+    iface.setOriginal(i18n("Color Balance"), filter()->filterAction(), filter()->getTargetImage());
 }
 
 }  // namespace DigikamColorImagePlugin

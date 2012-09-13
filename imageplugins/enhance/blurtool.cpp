@@ -153,13 +153,13 @@ void BlurTool::slotResetSettings()
     d->radiusInput->blockSignals(false);
 }
 
-void BlurTool::prepareEffect()
+void BlurTool::preparePreview()
 {
     DImg img = d->previewWidget->getOriginalRegionImage();
     setFilter(new BlurFilter(&img, this, d->radiusInput->value()));
 }
 
-void BlurTool::putPreviewData()
+void BlurTool::setPreviewImage()
 {
     DImg preview = filter()->getTargetImage();
     d->previewWidget->setPreviewImage(preview);
@@ -171,10 +171,10 @@ void BlurTool::prepareFinal()
     setFilter(new BlurFilter(iface.original(), this, d->radiusInput->value()));
 }
 
-void BlurTool::putFinalData()
+void BlurTool::setFinalImage()
 {
     ImageIface iface;
-    iface.putOriginal(i18n("Gaussian Blur"), filter()->filterAction(), filter()->getTargetImage());
+    iface.setOriginal(i18n("Gaussian Blur"), filter()->filterAction(), filter()->getTargetImage());
 }
 
 }  // namespace DigikamEnhanceImagePlugin

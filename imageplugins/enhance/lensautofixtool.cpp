@@ -193,7 +193,7 @@ void LensAutoFixTool::slotResetSettings()
     d->gboxSettings->blockSignals(false);
 }
 
-void LensAutoFixTool::prepareEffect()
+void LensAutoFixTool::preparePreview()
 {
     // Settings information must be get before to disable settings view.
     LensFunContainer settings = d->cameraSelector->settings();
@@ -238,16 +238,16 @@ void LensAutoFixTool::prepareFinal()
     setFilter(new LensFunFilter(iface.original(), this, settings));
 }
 
-void LensAutoFixTool::putPreviewData()
+void LensAutoFixTool::setPreviewImage()
 {
-    d->previewWidget->imageIface()->putPreview(filter()->getTargetImage());
+    d->previewWidget->imageIface()->setPreview(filter()->getTargetImage());
     d->previewWidget->updatePreview();
 }
 
-void LensAutoFixTool::putFinalData()
+void LensAutoFixTool::setFinalImage()
 {
     ImageIface iface;
-    iface.putOriginal(i18n("Lens Auto-Correction"), filter()->filterAction(), filter()->getTargetImage());
+    iface.setOriginal(i18n("Lens Auto-Correction"), filter()->filterAction(), filter()->getTargetImage());
     Digikam::KExiv2Data data = iface.originalMetadata();
     // Note: there are certain situations in the editor where these metadata changes may be undone.
     // Ignore for now, as they are not critical.

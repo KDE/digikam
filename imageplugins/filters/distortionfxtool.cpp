@@ -238,7 +238,7 @@ void DistortionFXTool::readSettings()
     d->iterationInput->blockSignals(false);
     d->levelInput->blockSignals(false);
 
-    slotEffect();
+    slotPreview();
 }
 
 void DistortionFXTool::writeSettings()
@@ -328,10 +328,10 @@ void DistortionFXTool::slotEffectTypeChanged(int type)
     d->levelInput->blockSignals(false);
     d->iterationInput->blockSignals(false);
 
-    slotEffect();
+    slotPreview();
 }
 
-void DistortionFXTool::prepareEffect()
+void DistortionFXTool::preparePreview()
 {
     d->effectTypeLabel->setEnabled(false);
     d->effectType->setEnabled(false);
@@ -368,19 +368,19 @@ void DistortionFXTool::prepareFinal()
     setFilter(new DistortionFXFilter(iface.original(), this, e, l, f));
 }
 
-void DistortionFXTool::putPreviewData()
+void DistortionFXTool::setPreviewImage()
 {
     ImageIface* iface = d->previewWidget->imageIface();
     DImg imDest       = filter()->getTargetImage().smoothScale(iface->previewSize());
-    iface->putPreview(imDest);
+    iface->setPreview(imDest);
 
     d->previewWidget->updatePreview();
 }
 
-void DistortionFXTool::putFinalData()
+void DistortionFXTool::setFinalImage()
 {
     ImageIface iface;
-    iface.putOriginal(i18n("Distortion Effects"), filter()->filterAction(), filter()->getTargetImage());
+    iface.setOriginal(i18n("Distortion Effects"), filter()->filterAction(), filter()->getTargetImage());
 }
 
 void DistortionFXTool::renderingFinished()

@@ -140,7 +140,7 @@ RedEyeTool::RedEyeTool(QObject* const parent)
 
     d->destinationPreviewData = 0;
 
-    d->previewWidget = new ImageGuideWidget(0, true, ImageGuideWidget::PickColorMode, Qt::red, 1, false, true);
+    d->previewWidget = new ImageGuideWidget(0, true, ImageGuideWidget::PickColorMode, Qt::red, 1, false, ImageIface::ImageSelection);
     d->previewWidget->setToolTip(i18n("Here you can see the image selection preview with "
                                       "red eye reduction applied."));
     setToolView(d->previewWidget);
@@ -223,7 +223,7 @@ RedEyeTool::RedEyeTool(QObject* const parent)
             this, SLOT(slotColorSelectedFromTarget(Digikam::DColor)));
 
     connect(d->previewWidget, SIGNAL(signalResized()),
-            this, SLOT(slotEffect()));
+            this, SLOT(slotPreview()));
 
     connect(d->redThreshold, SIGNAL(valueChanged(int)),
             this, SLOT(slotTimer()));
@@ -369,10 +369,10 @@ void RedEyeTool::slotResetSettings()
     d->VSelector->blockSignals(false);
     d->tintLevel->blockSignals(false);
 
-    slotEffect();
+    slotPreview();
 }
 
-void RedEyeTool::slotEffect()
+void RedEyeTool::slotPreview()
 {
     kapp->setOverrideCursor( Qt::WaitCursor );
 
@@ -393,7 +393,7 @@ void RedEyeTool::slotEffect()
 
     DImg preview = selection.smoothScale(iface->previewSize());
 
-    iface->putPreview(preview);
+    iface->setPreview(preview);
     d->previewWidget->updatePreview();
 
     // Update histogram.
@@ -419,7 +419,7 @@ void RedEyeTool::finalRendering()
     FilterAction action("digikam:redEyeFilter", 1);
     action.setDisplayableName(i18n("Red Eye Filter"));
 
-    iface->putSelection(i18n("Red Eyes Correction"), action, selection);
+    iface->setSelection(i18n("Red Eyes Correction"), action, selection);
 
     kapp->restoreOverrideCursor();
 }

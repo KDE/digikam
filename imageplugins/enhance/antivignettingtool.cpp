@@ -121,7 +121,7 @@ void AntiVignettingTool::readSettings()
     KConfigGroup group        = config->group(d->configGroupName);
 
     d->settingsView->readSettings(group);
-    slotEffect();
+    slotPreview();
 }
 
 void AntiVignettingTool::writeSettings()
@@ -136,10 +136,10 @@ void AntiVignettingTool::writeSettings()
 void AntiVignettingTool::slotResetSettings()
 {
     d->settingsView->resetToDefault();
-    slotEffect();
+    slotPreview();
 }
 
-void AntiVignettingTool::prepareEffect()
+void AntiVignettingTool::preparePreview()
 {
     AntiVignettingContainer settings = d->settingsView->settings();
 
@@ -159,20 +159,20 @@ void AntiVignettingTool::prepareFinal()
     setFilter(new AntiVignettingFilter(iface.original(), this, settings));
 }
 
-void AntiVignettingTool::putPreviewData()
+void AntiVignettingTool::setPreviewImage()
 {
     ImageIface* iface = d->previewWidget->imageIface();
     DImg preview      = filter()->getTargetImage().smoothScale(iface->previewSize());
-    iface->putPreview(preview);
+    iface->setPreview(preview);
     d->previewWidget->updatePreview();
 }
 
-void AntiVignettingTool::putFinalData()
+void AntiVignettingTool::setFinalImage()
 {
     ImageIface* iface = d->previewWidget->imageIface();
     DImg finalImage   = filter()->getTargetImage();
 
-    iface->putOriginal(i18n("Vignetting Correction"), filter()->filterAction(), finalImage);
+    iface->setOriginal(i18n("Vignetting Correction"), filter()->filterAction(), finalImage);
 }
 
 }  // namespace DigikamEnhanceImagePlugin

@@ -6,7 +6,7 @@
  * Date        : 2005-05-31
  * Description : Auto-Color correction tool.
  *
- * Copyright (C) 2005-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -44,7 +44,7 @@ class AutoCorrectionTool : public EditorToolThreaded
 
 public:
 
-    AutoCorrectionTool(QObject* parent);
+    AutoCorrectionTool(QObject* const parent);
     ~AutoCorrectionTool();
 
 private Q_SLOTS:
@@ -54,30 +54,19 @@ private Q_SLOTS:
 
 private:
 
-    enum AutoCorrectionType
-    {
-        AutoLevelsCorrection = 0,
-        NormalizeCorrection,
-        EqualizeCorrection,
-        StretchContrastCorrection,
-        AutoExposureCorrection
-    };
-
-private:
-
     void writeSettings();
     void readSettings();
-    void prepareEffect();
+    void preparePreview();
     void prepareFinal();
-    void putPreviewData();
-    void putFinalData();
+    void setPreviewImage();
+    void setFinalImage();
 
-    void autoCorrection(DImg* img, DImg* ref, int type);
+    void autoCorrection(DImg* const img, DImg* const ref, int type);
 
 private:
 
-    class AutoCorrectionToolPriv;
-    AutoCorrectionToolPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace DigikamColorImagePlugin

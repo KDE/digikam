@@ -162,7 +162,7 @@ HotPixelsTool::HotPixelsTool(QObject* parent)
     // -------------------------------------------------------------
 
     connect(d->filterMethodCombo, SIGNAL(activated(int)),
-            this, SLOT(slotEffect()));
+            this, SLOT(slotPreview()));
 
     connect(d->blackFrameButton, SIGNAL(clicked()),
             this, SLOT(slotAddBlackFrame()));
@@ -242,7 +242,7 @@ void HotPixelsTool::slotAddBlackFrame()
     }
 }
 
-void HotPixelsTool::prepareEffect()
+void HotPixelsTool::preparePreview()
 {
     DImg image              = d->previewWidget->getOriginalRegionImage();
     int interpolationMethod = d->filterMethodCombo->currentIndex();
@@ -272,15 +272,15 @@ void HotPixelsTool::prepareFinal()
     setFilter(dynamic_cast<DImgThreadedFilter*>(new HotPixelFixer(iface.original(), this, d->hotPixelsList, interpolationMethod)));
 }
 
-void HotPixelsTool::putPreviewData()
+void HotPixelsTool::setPreviewImage()
 {
     d->previewWidget->setPreviewImage(filter()->getTargetImage());
 }
 
-void HotPixelsTool::putFinalData()
+void HotPixelsTool::setFinalImage()
 {
     ImageIface iface;
-    iface.putOriginal(i18n("Hot Pixels Correction"), filter()->filterAction(), filter()->getTargetImage());
+    iface.setOriginal(i18n("Hot Pixels Correction"), filter()->filterAction(), filter()->getTargetImage());
 }
 
 void HotPixelsTool::slotBlackFrame(const QList<HotPixel>& hpList, const KUrl& blackFrameURL)
@@ -299,7 +299,7 @@ void HotPixelsTool::slotBlackFrame(const QList<HotPixel>& hpList, const KUrl& bl
 
     d->previewWidget->setHighLightPoints(pointList);
 
-    slotEffect();
+    slotPreview();
 }
 
 }  // namespace DigikamEnhanceImagePlugin

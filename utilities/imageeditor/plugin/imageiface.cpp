@@ -53,7 +53,7 @@ class ImageIface::Private
 public:
 
     Private() :
-        usePreviewSelection(false),
+        previewType(FullImage),
         originalWidth(0),
         originalHeight(0),
         originalBytesDepth(0),
@@ -68,27 +68,27 @@ public:
 
     QPixmap checkPixmap();
 
-    uchar*  getPreviewImage();
+    uchar* previewImageData();
 
 public:
 
-    bool                 usePreviewSelection;
+    ImageIface::PreviewType previewType;
 
-    int                  originalWidth;
-    int                  originalHeight;
-    int                  originalBytesDepth;
+    int                     originalWidth;
+    int                     originalHeight;
+    int                     originalBytesDepth;
 
-    int                  constrainWidth;
-    int                  constrainHeight;
+    int                     constrainWidth;
+    int                     constrainHeight;
 
-    int                  previewWidth;
-    int                  previewHeight;
+    int                     previewWidth;
+    int                     previewHeight;
 
-    QPixmap              qcheck;
+    QPixmap                 qcheck;
 
-    DImg                 previewImage;
-    DImg                 targetPreviewImage;
-    EditorCore* const core;
+    DImg                    previewImage;
+    DImg                    targetPreviewImage;
+    EditorCore* const       core;
 };
 
 QPixmap ImageIface::Private::checkPixmap()
@@ -109,13 +109,13 @@ QPixmap ImageIface::Private::checkPixmap()
     return qcheck;
 }
 
-uchar* ImageIface::Private::getPreviewImage()
+uchar* ImageIface::Private::previewImageData()
 {
     if (previewImage.isNull())
     {
         DImg* im = 0;
 
-        if (!usePreviewSelection)
+        if (previewType == FullImage)
         {
             im = core->getImg();
 
@@ -124,7 +124,7 @@ uchar* ImageIface::Private::getPreviewImage()
                 return 0;
             }
         }
-        else
+        else  // ImageSelection
         {
             im = new DImg(core->getImgSelection());
 
@@ -149,10 +149,10 @@ uchar* ImageIface::Private::getPreviewImage()
         previewWidth       = previewImage.width();
         previewHeight      = previewImage.height();
 
-        // only create another copy if needed, in putPreviewImage
+        // only create another copy if needed, in setPreviewImage
         targetPreviewImage = previewImage;
 
-        if (usePreviewSelection)
+        if (previewType == ImageSelection)
         {
             delete im;
         }
@@ -179,14 +179,14 @@ ImageIface::~ImageIface()
     delete d;
 }
 
-void ImageIface::setPreviewUseSelection(bool useSelection)
+void ImageIface::setPreviewType(PreviewType type)
 {
-    d->usePreviewSelection = useSelection;
+    d->previewType = type;
 }
 
-bool ImageIface::previewUseSelection() const
+ImageIface::PreviewType ImageIface::previewType() const
 {
-    return d->usePreviewSelection;
+    return d->previewType;
 }
 
 DColor ImageIface::colorInfoFromOriginal(const QPoint& point) const
@@ -229,14 +229,13 @@ DImg ImageIface::setPreviewSize(const QSize& size) const
 
     d->constrainWidth  = size.width();
     d->constrainHeight = size.height();
-    uchar* const data  = d->getPreviewImage();
 
-    return DImg(d->previewWidth, d->previewHeight, previewSixteenBit(), previewHasAlpha(), data);
+    return preview();
 }
 
 DImg ImageIface::preview() const
 {
-    return DImg(d->previewWidth, d->previewHeight, previewSixteenBit(), previewHasAlpha(), d->getPreviewImage());
+    return DImg(d->previewWidth, d->previewHeight, previewSixteenBit(), previewHasAlpha(), d->previewImageData());
 }
 
 DImg* ImageIface::original() const
@@ -249,13 +248,13 @@ DImg ImageIface::selection() const
     return d->core->getImgSelection();
 }
 
-void ImageIface::putPreviewIccProfile(const IccProfile& profile)
+void ImageIface::setPreviewIccProfile(const IccProfile& profile)
 {
     d->targetPreviewImage.detach();
     d->targetPreviewImage.setIccProfile(profile);
 }
 
-void ImageIface::putOriginalIccProfile(const IccProfile& profile)
+void ImageIface::setOriginalIccProfile(const IccProfile& profile)
 {
     d->core->putIccProfile(profile);
 }
@@ -355,7 +354,7 @@ void ImageIface::paint(QPaintDevice* const device, const QRect& rect, QPainter* 
             p->drawTiledPixmap(x, y, width, height, d->checkPixmap());
         }
 
-        QPixmap pixImage;
+        QPixmap              pixImage;
         ICCSettingsContainer iccSettings = d->core->getICCSettings();
 
         if (iccSettings.enableCM && iccSettings.useManagedView)
@@ -377,9 +376,9 @@ void ImageIface::paint(QPaintDevice* const device, const QRect& rect, QPainter* 
 
         if (expoSettings->underExposureIndicator || expoSettings->overExposureIndicator)
         {
-            ExposureSettingsContainer* expoSettings = d->core->getExposureSettings();
-            QImage pureColorMask                    = d->targetPreviewImage.pureColorMask(expoSettings);
-            QPixmap pixMask                         = QPixmap::fromImage(pureColorMask);
+            ExposureSettingsContainer* const expoSettings = d->core->getExposureSettings();
+            QImage pureColorMask                          = d->targetPreviewImage.pureColorMask(expoSettings);
+            QPixmap pixMask                               = QPixmap::fromImage(pureColorMask);
             p->drawPixmap(x, y, pixMask, 0, 0, width, height);
         }
     }
@@ -390,7 +389,7 @@ void ImageIface::paint(QPaintDevice* const device, const QRect& rect, QPainter* 
     }
 }
 
-void ImageIface::putSelection(const QString& caller, const FilterAction& action, const DImg& img)
+void ImageIface::setSelection(const QString& caller, const FilterAction& action, const DImg& img)
 {
     if (//img.hasAlpha()   != originalHasAlpha()     ||                 // TODO doesn't work with RedEyes tool
         img.sixteenBit() != originalSixteenBit()  ||
@@ -410,7 +409,7 @@ void ImageIface::putSelection(const QString& caller, const FilterAction& action,
     d->core->putImgSelection(caller, action, img);
 }
 
-void ImageIface::putPreview(const DImg& img)
+void ImageIface::setPreview(const DImg& img)
 {
     if (//img.hasAlpha()   != previewHasAlpha()   ||                    // TODO doesn't work with RedEyes tool
         img.sixteenBit() != previewSixteenBit()
@@ -432,7 +431,7 @@ void ImageIface::putPreview(const DImg& img)
     d->targetPreviewImage.putImageData(data);
 }
 
-void ImageIface::putOriginal(const QString& caller, const FilterAction& action, const DImg& img)
+void ImageIface::setOriginal(const QString& caller, const FilterAction& action, const DImg& img)
 {
     if (img.isNull())
     {

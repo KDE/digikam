@@ -177,10 +177,10 @@ void OilPaintTool::slotResetSettings()
     d->brushSizeInput->blockSignals(false);
     d->smoothInput->blockSignals(false);
 
-    slotEffect();
+    slotPreview();
 }
 
-void OilPaintTool::prepareEffect()
+void OilPaintTool::preparePreview()
 {
     DImg image = d->previewWidget->getOriginalRegionImage();
     int b      = d->brushSizeInput->value();
@@ -198,15 +198,15 @@ void OilPaintTool::prepareFinal()
     setFilter(new OilPaintFilter(iface.original(), this, b, s));
 }
 
-void OilPaintTool::putPreviewData()
+void OilPaintTool::setPreviewImage()
 {
     d->previewWidget->setPreviewImage(filter()->getTargetImage());
 }
 
-void OilPaintTool::putFinalData()
+void OilPaintTool::setFinalImage()
 {
     ImageIface iface;
-    iface.putOriginal(i18n("Oil Paint"), filter()->filterAction(), filter()->getTargetImage());
+    iface.setOriginal(i18n("Oil Paint"), filter()->filterAction(), filter()->getTargetImage());
 }
 
 }  // namespace DigikamFxFiltersImagePlugin

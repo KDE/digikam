@@ -130,7 +130,7 @@ WhiteBalanceTool::WhiteBalanceTool(QObject* parent)
             this, SLOT(slotPickerColorButtonActived()));
 
     connect(d->previewWidget, SIGNAL(signalResized()),
-            this, SLOT(slotEffect()));
+            this, SLOT(slotPreview()));
 
     connect(d->previewWidget, SIGNAL(signalCapturedPointFromOriginal(Digikam::DColor,QPoint)),
             this, SLOT(slotColorSelectedFromOriginal(Digikam::DColor)));
@@ -199,7 +199,7 @@ void WhiteBalanceTool::slotAutoAdjustExposure()
     slotTimer();
 }
 
-void WhiteBalanceTool::prepareEffect()
+void WhiteBalanceTool::preparePreview()
 {
     ImageIface iface;
     DImg* img            = iface.original();
@@ -212,7 +212,7 @@ void WhiteBalanceTool::prepareEffect()
     setFilter(new WBFilter(&preview, this, settings));
 }
 
-void WhiteBalanceTool::putPreviewData()
+void WhiteBalanceTool::setPreviewImage()
 {
     DImg preview = filter()->getTargetImage();
     d->previewWidget->setPreviewImage(preview);
@@ -238,10 +238,10 @@ void WhiteBalanceTool::prepareFinal()
     setFilter(new WBFilter(iface.original(), this, settings));
 }
 
-void WhiteBalanceTool::putFinalData()
+void WhiteBalanceTool::setFinalImage()
 {
     ImageIface iface;
-    iface.putOriginal(i18n("White Balance"), filter()->filterAction(), filter()->getTargetImage());
+    iface.setOriginal(i18n("White Balance"), filter()->filterAction(), filter()->getTargetImage());
 }
 
 void WhiteBalanceTool::slotResetSettings()
@@ -250,7 +250,7 @@ void WhiteBalanceTool::slotResetSettings()
     d->gboxSettings->histogramBox()->setChannel(LuminosityChannel);
     d->gboxSettings->histogramBox()->histogram()->reset();
 
-    slotEffect();
+    slotPreview();
 }
 
 void WhiteBalanceTool::readSettings()
@@ -283,7 +283,7 @@ void WhiteBalanceTool::slotLoadSettings()
 {
     d->settingsView->loadSettings();
     d->gboxSettings->histogramBox()->histogram()->reset();
-    slotEffect();
+    slotPreview();
 }
 
 void WhiteBalanceTool::slotSaveAsSettings()

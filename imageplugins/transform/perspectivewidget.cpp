@@ -330,7 +330,7 @@ void PerspectiveWidget::applyPerspectiveAdjustment()
 
     action.addParameter("antiAliasing",      d->antiAliasing);
     // Update target image.
-    d->iface->putOriginal(i18n("Perspective Adjustment"), action, targetImg);
+    d->iface->setOriginal(i18n("Perspective Adjustment"), action, targetImg);
 }
 
 void PerspectiveWidget::slotInverseTransformationChanged(bool isEnabled)
@@ -419,7 +419,7 @@ void PerspectiveWidget::updatePixmap()
                                                 d->topLeftPoint, d->topRightPoint,
                                                 d->bottomLeftPoint, d->bottomRightPoint);
 
-        d->iface->putPreview(d->preview);
+        d->iface->setPreview(d->preview);
         d->iface->paint(d->pixmap, d->rect);
     }
     // if we are resizing with the mouse, compute and draw only if drawWhileMoving is set
@@ -438,7 +438,7 @@ void PerspectiveWidget::updatePixmap()
                                                 d->bottomLeftPoint, d->bottomRightPoint,
                                                 &d->preview, &destImage, background);
 
-        d->iface->putPreview(destImage);
+        d->iface->setPreview(destImage);
 
         // Draw image
 

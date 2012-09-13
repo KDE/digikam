@@ -203,10 +203,10 @@ void RainDropTool::slotResetSettings()
 
     blockWidgetSignals(false);
 
-    slotEffect();
+    slotPreview();
 }
 
-void RainDropTool::prepareEffect()
+void RainDropTool::preparePreview()
 {
     int drop   = d->dropInput->value();
     int amount = d->amountInput->value();
@@ -234,19 +234,19 @@ void RainDropTool::prepareFinal()
     setFilter(new RainDropFilter(iface.original(), this, drop, amount, coeff, selection));
 }
 
-void RainDropTool::putPreviewData()
+void RainDropTool::setPreviewImage()
 {
     ImageIface* iface = d->previewWidget->imageIface();
     DImg imDest       = filter()->getTargetImage().smoothScale(iface->previewSize());
-    iface->putPreview(imDest);
+    iface->setPreview(imDest);
 
     d->previewWidget->updatePreview();
 }
 
-void RainDropTool::putFinalData()
+void RainDropTool::setFinalImage()
 {
     ImageIface iface;
-    iface.putOriginal(i18n("RainDrop"), filter()->filterAction(), filter()->getTargetImage());
+    iface.setOriginal(i18n("RainDrop"), filter()->filterAction(), filter()->getTargetImage());
 }
 
 void RainDropTool::blockWidgetSignals(bool b)

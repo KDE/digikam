@@ -38,6 +38,7 @@
 
 // Local includes
 
+#include "imageiface.h"
 #include "dcolor.h"
 #include "digikam_export.h"
 
@@ -45,7 +46,6 @@ namespace Digikam
 {
 
 class DColor;
-class ImageIface;
 
 class DIGIKAM_EXPORT ImageGuideWidget : public QWidget
 {
@@ -71,7 +71,8 @@ public:
     explicit ImageGuideWidget(QWidget* const parent = 0,
                               bool spotVisible = true, int guideMode = PickColorMode,
                               const QColor& guideColor = Qt::red, int guideSize = 1,
-                              bool blink = false, bool useImageSelection = false);
+                              bool blink = false,
+                              ImageIface::PreviewType type= ImageIface::FullImage);
     ~ImageGuideWidget();
 
     ImageIface* imageIface()                   const;

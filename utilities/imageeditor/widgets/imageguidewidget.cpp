@@ -43,7 +43,6 @@
 // Local includes
 
 #include "dimg.h"
-#include "imageiface.h"
 #include "previewtoolbar.h"
 #include "exposurecontainer.h"
 #include "iccsettingscontainer.h"
@@ -122,7 +121,7 @@ public:
 ImageGuideWidget::ImageGuideWidget(QWidget* const parent,
                                    bool spotVisible, int guideMode,
                                    const QColor& guideColor, int guideSize,
-                                   bool blink, bool useImageSelection)
+                                   bool blink, ImageIface::PreviewType type)
     : QWidget(parent), d(new Private)
 {
     int w            = 480;
@@ -138,7 +137,7 @@ ImageGuideWidget::ImageGuideWidget(QWidget* const parent,
     setAttribute(Qt::WA_DeleteOnClose);
 
     d->iface         = new ImageIface(QSize(w, h));
-    d->iface->setPreviewUseSelection(useImageSelection);
+    d->iface->setPreviewType(type);
     d->preview       = d->iface->preview();
     d->preview.setIccProfile(d->iface->original()->getIccProfile());
 
@@ -151,7 +150,7 @@ ImageGuideWidget::ImageGuideWidget(QWidget* const parent,
 
     d->paintColor.setRgb(255, 255, 255, 255);
 
-    d->lastPoint = QPoint(d->rect.x(), d->rect.y());
+    d->lastPoint     = QPoint(d->rect.x(), d->rect.y());
 
     resetSpotPosition();
     setSpotVisible(d->spotVisible, blink);

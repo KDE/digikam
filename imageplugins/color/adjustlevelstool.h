@@ -68,11 +68,11 @@ private:
 
     void readSettings();
     void writeSettings();
-    void prepareEffect();
+    void preparePreview();
     void prepareFinal();
     void abortPreview();
-    void putPreviewData();
-    void putFinalData();
+    void setPreviewImage();
+    void setFinalImage();
 
     void adjustSliders(int minIn, double gamIn, int maxIn, int minOut, int maxOut);
     void adjustSlidersAndSpinboxes(int minIn, double gamIn, int maxIn, int minOut, int maxOut);

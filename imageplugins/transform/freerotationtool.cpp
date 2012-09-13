@@ -305,10 +305,10 @@ void FreeRotationTool::slotResetSettings()
 {
     d->settingsView->resetToDefault();
     resetPoints();
-    slotEffect();
+    slotPreview();
 }
 
-void FreeRotationTool::prepareEffect()
+void FreeRotationTool::preparePreview()
 {
     FreeRotationContainer settings = d->settingsView->settings();
     ImageIface* iface              = d->previewWidget->imageIface();
@@ -331,7 +331,7 @@ void FreeRotationTool::prepareFinal()
     setFilter(new FreeRotationFilter(orgImage, this, settings));
 }
 
-void FreeRotationTool::putPreviewData()
+void FreeRotationTool::setPreviewImage()
 {
     ImageIface* iface = d->previewWidget->imageIface();
     int w             = iface->previewSize().width();
@@ -344,7 +344,7 @@ void FreeRotationTool::putPreviewData()
     imDest.fill(DColor(background, filter()->getTargetImage().sixteenBit()));
     imDest.bitBltImage(&imTemp, (w-imTemp.width())/2, (h-imTemp.height())/2);
 
-    iface->putPreview(imDest.smoothScale(iface->previewSize()));
+    iface->setPreview(imDest.smoothScale(iface->previewSize()));
     d->previewWidget->updatePreview();
 
     QString temp;
@@ -355,11 +355,11 @@ void FreeRotationTool::putPreviewData()
     d->newHeightLabel->setText(temp.setNum(new_h) + i18n(" px") );
 }
 
-void FreeRotationTool::putFinalData()
+void FreeRotationTool::setFinalImage()
 {
     ImageIface iface;
     DImg targetImage = filter()->getTargetImage();
-    iface.putOriginal(i18n("Free Rotation"), filter()->filterAction(), targetImage);
+    iface.setOriginal(i18n("Free Rotation"), filter()->filterAction(), targetImage);
 }
 
 QString FreeRotationTool::generateButtonLabel(const QPoint& p)
@@ -533,7 +533,7 @@ void FreeRotationTool::slotAutoAdjustClicked()
         FreeRotationContainer prm = d->settingsView->settings();
         prm.angle                 = mainAngle + fineAngle;
         d->settingsView->setSettings(prm);
-        slotEffect();
+        slotPreview();
     }
 
     resetPoints();

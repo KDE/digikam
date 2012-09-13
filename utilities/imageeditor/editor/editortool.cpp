@@ -79,7 +79,7 @@ EditorTool::EditorTool(QObject* const parent)
     d->timer = new QTimer(this);
 
     connect(d->timer, SIGNAL(timeout()),
-            this, SLOT(slotEffect()));
+            this, SLOT(slotPreview()));
 }
 
 EditorTool::~EditorTool()
@@ -144,7 +144,7 @@ QWidget* EditorTool::toolView() const
     return d->view;
 }
 
-void EditorTool::setToolView(QWidget* view)
+void EditorTool::setToolView(QWidget* const view)
 {
     d->view = view;
     // Will be unblocked in slotInit()
@@ -168,7 +168,7 @@ EditorToolSettings* EditorTool::toolSettings() const
     return d->settings;
 }
 
-void EditorTool::setToolSettings(EditorToolSettings* settings)
+void EditorTool::setToolSettings(EditorToolSettings* const settings)
 {
     d->settings = settings;
     d->settings->setToolIcon(toolIcon());
@@ -190,7 +190,7 @@ void EditorTool::setToolSettings(EditorToolSettings* settings)
             this, SLOT(slotLoadSettings()));
 
     connect(d->settings, SIGNAL(signalTryClicked()),
-            this, SLOT(slotEffect()));
+            this, SLOT(slotPreview()));
 
     connect(d->settings, SIGNAL(signalChannelChanged()),
             this, SLOT(slotChannelChanged()));
@@ -278,7 +278,7 @@ void EditorTool::slotApplyTool()
 
 void EditorTool::slotPreviewModeChanged()
 {
-    slotEffect();
+    slotPreview();
 }
 
 void EditorTool::setBackgroundColor(const QColor& bg)
@@ -427,7 +427,7 @@ void EditorToolThreaded::slotResized()
         }
     }
 
-    QTimer::singleShot(0, this, SLOT(slotEffect()));
+    QTimer::singleShot(0, this, SLOT(slotPreview()));
 }
 
 void EditorToolThreaded::slotAbort()
@@ -466,7 +466,7 @@ void EditorToolThreaded::slotFilterFinished(bool success)
             case EditorToolThreaded::PreviewRendering:
             {
                 kDebug() << "Preview " << toolName() << " completed...";
-                putPreviewData();
+                setPreviewImage();
                 slotAbort();
                 break;
             }
@@ -474,7 +474,7 @@ void EditorToolThreaded::slotFilterFinished(bool success)
             case EditorToolThreaded::FinalRendering:
             {
                 kDebug() << "Final" << toolName() << " completed...";
-                putFinalData();
+                setFinalImage();
                 EditorToolIface::editorToolIface()->setToolStopProgress();
                 kapp->restoreOverrideCursor();
                 emit okClicked();
@@ -508,7 +508,7 @@ void EditorToolThreaded::slotFilterProgress(int progress)
     EditorToolIface::editorToolIface()->setToolProgress(progress);
 }
 
-void EditorToolThreaded::setToolView(QWidget* view)
+void EditorToolThreaded::setToolView(QWidget* const view)
 {
     EditorTool::setToolView(view);
 
@@ -552,7 +552,7 @@ void EditorToolThreaded::slotOk()
     prepareFinal();
 }
 
-void EditorToolThreaded::slotEffect()
+void EditorToolThreaded::slotPreview()
 {
     // Computation already in process.
     if (d->currentRenderingMode != EditorToolThreaded::NoneRendering)
@@ -579,7 +579,7 @@ void EditorToolThreaded::slotEffect()
         d->threadedFilter = 0;
     }
 
-    prepareEffect();
+    preparePreview();
 }
 
 void EditorToolThreaded::slotCancel()

@@ -120,7 +120,7 @@ EmbossTool::EmbossTool(QObject* parent)
     // -------------------------------------------------------------
 
     connect(d->previewWidget, SIGNAL(signalOriginalClipFocusChanged()),
-            this, SLOT(slotEffect()));
+            this, SLOT(slotPreview()));
 
     connect(d->depthInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotTimer()));
@@ -160,10 +160,10 @@ void EmbossTool::slotResetSettings()
     d->depthInput->slotReset();
     d->depthInput->blockSignals(false);
 
-    slotEffect();
+    slotPreview();
 }
 
-void EmbossTool::prepareEffect()
+void EmbossTool::preparePreview()
 {
     DImg image = d->previewWidget->getOriginalRegionImage();
     int depth  = d->depthInput->value();
@@ -179,15 +179,15 @@ void EmbossTool::prepareFinal()
     setFilter(new EmbossFilter(iface.original(), this, depth));
 }
 
-void EmbossTool::putPreviewData()
+void EmbossTool::setPreviewImage()
 {
     d->previewWidget->setPreviewImage(filter()->getTargetImage());
 }
 
-void EmbossTool::putFinalData()
+void EmbossTool::setFinalImage()
 {
     ImageIface iface;
-    iface.putOriginal(i18n("Emboss"), filter()->filterAction(), filter()->getTargetImage());
+    iface.setOriginal(i18n("Emboss"), filter()->filterAction(), filter()->getTargetImage());
 }
 
 }  // namespace DigikamFxFiltersImagePlugin

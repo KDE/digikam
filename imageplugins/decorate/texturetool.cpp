@@ -152,10 +152,10 @@ TextureTool::TextureTool(QObject* parent)
     // -------------------------------------------------------------
 
     connect(d->previewWidget, SIGNAL(signalOriginalClipFocusChanged()),
-            this, SLOT(slotEffect()));
+            this, SLOT(slotPreview()));
 
     connect(d->textureType, SIGNAL(activated(int)),
-            this, SLOT(slotEffect()));
+            this, SLOT(slotPreview()));
 
     connect(d->blendGain, SIGNAL(valueChanged(int)),
             this, SLOT(slotTimer()));
@@ -176,7 +176,7 @@ void TextureTool::readSettings()
     d->blendGain->setValue(group.readEntry(d->configBlendGainEntry,            d->blendGain->defaultValue()));
     d->textureType->blockSignals(false);
     d->blendGain->blockSignals(false);
-    slotEffect();
+    slotPreview();
 }
 
 void TextureTool::writeSettings()
@@ -199,10 +199,10 @@ void TextureTool::slotResetSettings()
     d->textureType->blockSignals(false);
     d->blendGain->blockSignals(false);
 
-    slotEffect();
+    slotPreview();
 }
 
-void TextureTool::prepareEffect()
+void TextureTool::preparePreview()
 {
     DImg image      = d->previewWidget->getOriginalRegionImage();
     QString texture = getTexturePath( d->textureType->currentIndex() );
@@ -220,15 +220,15 @@ void TextureTool::prepareFinal()
     setFilter(new TextureFilter(iface.original(), this, b, texture));
 }
 
-void TextureTool::putPreviewData()
+void TextureTool::setPreviewImage()
 {
     d->previewWidget->setPreviewImage(filter()->getTargetImage());
 }
 
-void TextureTool::putFinalData()
+void TextureTool::setFinalImage()
 {
     ImageIface iface;
-    iface.putOriginal(i18n("Texture"), filter()->filterAction(), filter()->getTargetImage());
+    iface.setOriginal(i18n("Texture"), filter()->filterAction(), filter()->getTargetImage());
 }
 
 QString TextureTool::getTexturePath(int texture)

@@ -188,16 +188,16 @@ void RawImport::slotLoadingStarted()
 void RawImport::slotDemosaicedImage()
 {
     d->settingsBox->setDemosaicedImage(d->previewWidget->demosaicedImage());
-    slotEffect();
+    slotPreview();
 }
 
-void RawImport::prepareEffect()
+void RawImport::preparePreview()
 {
     DImg postImg = d->previewWidget->demosaicedImage();
     setFilter(dynamic_cast<DImgThreadedFilter*>(new RawProcessingFilter(&postImg, this, rawDecodingSettings())));
 }
 
-void RawImport::putPreviewData()
+void RawImport::setPreviewImage()
 {
     // Preserve metadata from loaded image, and take post-processed image data
     d->postProcessedImage = d->previewWidget->demosaicedImage().copyMetaData();

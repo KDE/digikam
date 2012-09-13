@@ -576,7 +576,7 @@ RatioCropTool::RatioCropTool(QObject* parent)
 
     // we need to disconnect the standard connection of the Try button first
     disconnect(d->gboxSettings, SIGNAL(signalTryClicked()),
-               this, SLOT(slotEffect()));
+               this, SLOT(slotPreview()));
 
     connect(d->gboxSettings, SIGNAL(signalTryClicked()),
             this, SLOT(slotMaxAspectRatio()));
@@ -1070,7 +1070,7 @@ void RatioCropTool::finalRendering()
     action.addParameter("width",  currentRegion.width());
     action.addParameter("height", currentRegion.height());
 
-    iface->putOriginal(i18n("Aspect Ratio Crop"), action, imOrg);
+    iface->setOriginal(i18n("Aspect Ratio Crop"), action, imOrg);
 
     kapp->restoreOverrideCursor();
     writeSettings();

@@ -50,16 +50,16 @@ public:
     RawImport(const KUrl& url, QObject* const parent);
     ~RawImport();
 
-    DRawDecoding rawDecodingSettings() const;
-    DImg postProcessedImage()          const;
-    bool hasPostProcessedImage()       const;
-    bool demosaicingSettingsDirty()    const;
+    DRawDecoding rawDecodingSettings()      const;
+    DImg         postProcessedImage()       const;
+    bool         hasPostProcessedImage()    const;
+    bool         demosaicingSettingsDirty() const;
 
 private:
 
     void setBusy(bool busy);
-    void prepareEffect();
-    void putPreviewData();
+    void preparePreview();
+    void setPreviewImage();
     void setBackgroundColor(const QColor& bg);
     void ICCSettingsChanged();
     void exposureSettingsChanged();

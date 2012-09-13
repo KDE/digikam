@@ -107,7 +107,7 @@ FilmGrainTool::FilmGrainTool(QObject* parent)
             this, SLOT(slotTimer()));
 
     connect(d->previewWidget, SIGNAL(signalResized()),
-            this, SLOT(slotEffect()));
+            this, SLOT(slotPreview()));
 
     // -------------------------------------------------------------
 
@@ -139,10 +139,10 @@ void FilmGrainTool::writeSettings()
 void FilmGrainTool::slotResetSettings()
 {
     d->settingsView->resetToDefault();
-    slotEffect();
+    slotPreview();
 }
 
-void FilmGrainTool::prepareEffect()
+void FilmGrainTool::preparePreview()
 {
     FilmGrainContainer prm = d->settingsView->settings();
     DImg image             = d->previewWidget->getOriginalRegionImage();
@@ -158,15 +158,15 @@ void FilmGrainTool::prepareFinal()
     setFilter(new FilmGrainFilter(iface.original(), this, prm));
 }
 
-void FilmGrainTool::putPreviewData()
+void FilmGrainTool::setPreviewImage()
 {
     d->previewWidget->setPreviewImage(filter()->getTargetImage());
 }
 
-void FilmGrainTool::putFinalData()
+void FilmGrainTool::setFinalImage()
 {
     ImageIface iface;
-    iface.putOriginal(i18n("Film Grain"), filter()->filterAction(), filter()->getTargetImage());
+    iface.setOriginal(i18n("Film Grain"), filter()->filterAction(), filter()->getTargetImage());
 }
 
 void FilmGrainTool::renderingFinished()

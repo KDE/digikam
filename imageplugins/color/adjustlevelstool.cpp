@@ -361,7 +361,7 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* parent)
     // Channels and scale selection slots.
 
     connect(d->previewWidget, SIGNAL(signalResized()),
-            this, SLOT(slotEffect()));
+            this, SLOT(slotPreview()));
 
     connect(d->previewWidget, SIGNAL(signalCapturedPointFromOriginal(Digikam::DColor,QPoint)),
             this, SLOT(slotSpotColorChanged(Digikam::DColor)));
@@ -571,7 +571,7 @@ void AdjustLevelsTool::slotSpotColorChanged(const DColor& color)
     slotChannelChanged();
 
     d->previewWidget->setCapturePointMode(false);
-    slotEffect();
+    slotPreview();
 }
 
 void AdjustLevelsTool::slotColorSelectedFromTarget(const DColor& color)
@@ -697,7 +697,7 @@ void AdjustLevelsTool::slotResetCurrentChannel()
     slotChannelChanged();
     d->levelsHistogramWidget->reset();
 
-    slotEffect();
+    slotPreview();
 }
 
 void AdjustLevelsTool::slotAutoLevels()
@@ -708,7 +708,7 @@ void AdjustLevelsTool::slotAutoLevels()
     // Refresh the current levels config.
     slotChannelChanged();
 
-    slotEffect();
+    slotPreview();
 }
 
 void AdjustLevelsTool::slotChannelChanged()
@@ -855,10 +855,10 @@ void AdjustLevelsTool::slotResetSettings()
     slotChannelChanged();
     d->levelsHistogramWidget->reset();
 
-    slotEffect();
+    slotPreview();
 }
 
-void AdjustLevelsTool::prepareEffect()
+void AdjustLevelsTool::preparePreview()
 {
     LevelsContainer settings;
 
@@ -877,7 +877,7 @@ void AdjustLevelsTool::prepareEffect()
     setFilter(new LevelsFilter(&preview, this, settings));
 }
 
-void AdjustLevelsTool::putPreviewData()
+void AdjustLevelsTool::setPreviewImage()
 {
     DImg preview = filter()->getTargetImage();
     d->previewWidget->setPreviewImage(preview);
@@ -912,10 +912,10 @@ void AdjustLevelsTool::prepareFinal()
     setFilter(new LevelsFilter(iface.original(), this, settings));
 }
 
-void AdjustLevelsTool::putFinalData()
+void AdjustLevelsTool::setFinalImage()
 {
     ImageIface iface;
-    iface.putOriginal(i18n("Adjust Levels"), filter()->filterAction(), filter()->getTargetImage());
+    iface.setOriginal(i18n("Adjust Levels"), filter()->filterAction(), filter()->getTargetImage());
 }
 
 void AdjustLevelsTool::slotLoadSettings()
@@ -941,7 +941,7 @@ void AdjustLevelsTool::slotLoadSettings()
     // Refresh the current levels config.
     slotChannelChanged();
 
-    slotEffect();
+    slotPreview();
 }
 
 void AdjustLevelsTool::slotSaveAsSettings()

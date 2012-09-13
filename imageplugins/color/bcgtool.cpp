@@ -124,7 +124,7 @@ BCGTool::BCGTool(QObject* parent)
             this, SLOT(slotTimer()));
 
     connect(d->previewWidget, SIGNAL(signalResized()),
-            this, SLOT(slotEffect()));
+            this, SLOT(slotPreview()));
 
     slotTimer();
 }
@@ -164,10 +164,10 @@ void BCGTool::writeSettings()
 void BCGTool::slotResetSettings()
 {
     d->settingsView->resetToDefault();
-    slotEffect();
+    slotPreview();
 }
 
-void BCGTool::prepareEffect()
+void BCGTool::preparePreview()
 {
     BCGContainer settings = d->settingsView->settings();
 
@@ -177,7 +177,7 @@ void BCGTool::prepareEffect()
     setFilter(new BCGFilter(&preview, this, settings));
 }
 
-void BCGTool::putPreviewData()
+void BCGTool::setPreviewImage()
 {
     DImg preview = filter()->getTargetImage();
     d->previewWidget->setPreviewImage(preview);
@@ -204,10 +204,10 @@ void BCGTool::prepareFinal()
     setFilter(new BCGFilter(iface.original(), this, settings));
 }
 
-void BCGTool::putFinalData()
+void BCGTool::setFinalImage()
 {
     ImageIface iface;
-    iface.putOriginal(i18n("Brightness / Contrast / Gamma"), filter()->filterAction(), filter()->getTargetImage());
+    iface.setOriginal(i18n("Brightness / Contrast / Gamma"), filter()->filterAction(), filter()->getTargetImage());
 }
 
 }  // namespace DigikamColorImagePlugin

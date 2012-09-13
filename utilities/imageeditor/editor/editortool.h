@@ -90,8 +90,8 @@ protected:
     void setPreviewModeMask(int mask);
     void setToolCategory(const FilterAction::Category category);
 
-    virtual void setToolView(QWidget* view);
-    virtual void setToolSettings(EditorToolSettings* settings);
+    virtual void setToolView(QWidget* const view);
+    virtual void setToolSettings(EditorToolSettings* const settings);
     virtual void setBusy(bool);
     virtual void readSettings();
     virtual void writeSettings();
@@ -107,7 +107,7 @@ protected Q_SLOTS:
     virtual void slotResetSettings();
     virtual void slotLoadSettings()   {};
     virtual void slotSaveAsSettings() {};
-    virtual void slotEffect()         {};
+    virtual void slotPreview()         {};
     virtual void slotChannelChanged() {};
     virtual void slotScaleChanged()   {};
 
@@ -160,11 +160,11 @@ protected:
      */
     void deleteFilterInstance(bool b = true);
 
-    virtual void setToolView(QWidget* view);
-    virtual void prepareEffect()     {};
+    virtual void setToolView(QWidget* const view);
+    virtual void preparePreview()    {};
     virtual void prepareFinal()      {};
-    virtual void putPreviewData()    {};
-    virtual void putFinalData()      {};
+    virtual void setPreviewImage()   {};
+    virtual void setFinalImage()     {};
     virtual void renderingFinished() {};
 
 protected Q_SLOTS:
@@ -175,7 +175,7 @@ protected Q_SLOTS:
 
     virtual void slotOk();
     virtual void slotCancel();
-    virtual void slotEffect();
+    virtual void slotPreview();
 
 private Q_SLOTS:
 

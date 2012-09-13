@@ -316,7 +316,7 @@ void RestorationTool::processCImgUrl(const QString& url)
     KToolInvocation::invokeBrowser(url);
 }
 
-void RestorationTool::prepareEffect()
+void RestorationTool::preparePreview()
 {
     DImg previewImage = d->previewWidget->getOriginalRegionImage();
 
@@ -335,16 +335,16 @@ void RestorationTool::prepareFinal()
                                        0, 0, QImage(), this));
 }
 
-void RestorationTool::putPreviewData()
+void RestorationTool::setPreviewImage()
 {
     DImg imDest = filter()->getTargetImage();
     d->previewWidget->setPreviewImage(imDest);
 }
 
-void RestorationTool::putFinalData()
+void RestorationTool::setFinalImage()
 {
     ImageIface iface;
-    iface.putOriginal(i18n("Restoration"), filter()->filterAction(), filter()->getTargetImage());
+    iface.setOriginal(i18n("Restoration"), filter()->filterAction(), filter()->getTargetImage());
 }
 
 void RestorationTool::slotLoadSettings()
@@ -371,7 +371,7 @@ void RestorationTool::slotLoadSettings()
             return;
         }
 
-        slotEffect();
+        slotPreview();
     }
     else
     {

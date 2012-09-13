@@ -143,7 +143,7 @@ AdjustCurvesTool::AdjustCurvesTool(QObject* parent)
             this, SLOT(slotScaleChanged()));
 
     connect(d->previewWidget, SIGNAL(signalResized()),
-            this, SLOT(slotEffect()));
+            this, SLOT(slotPreview()));
 
     connect(d->previewWidget, SIGNAL(signalCapturedPointFromOriginal(Digikam::DColor,QPoint)),
             d->settingsView, SLOT(slotSpotColorChanged(Digikam::DColor)));
@@ -186,7 +186,7 @@ void AdjustCurvesTool::slotPickerColorButtonActived(int type)
 void AdjustCurvesTool::slotSpotColorChanged()
 {
     d->previewWidget->setCapturePointMode(false);
-    slotEffect();
+    slotPreview();
 }
 
 void AdjustCurvesTool::slotColorSelectedFromTarget(const DColor& color)
@@ -197,7 +197,7 @@ void AdjustCurvesTool::slotColorSelectedFromTarget(const DColor& color)
 void AdjustCurvesTool::slotResetCurrentChannel()
 {
     d->gboxSettings->histogramBox()->histogram()->reset();
-    slotEffect();
+    slotPreview();
 }
 
 void AdjustCurvesTool::slotChannelChanged()
@@ -226,7 +226,7 @@ void AdjustCurvesTool::readSettings()
     slotScaleChanged();
     slotChannelChanged();
 
-    slotEffect();
+    slotPreview();
 }
 
 void AdjustCurvesTool::writeSettings()
@@ -245,10 +245,10 @@ void AdjustCurvesTool::slotResetSettings()
 {
     d->settingsView->resetToDefault();
     d->gboxSettings->histogramBox()->histogram()->reset();
-    slotEffect();
+    slotPreview();
 }
 
-void AdjustCurvesTool::prepareEffect()
+void AdjustCurvesTool::preparePreview()
 {
     CurvesContainer settings = d->settingsView->settings();
 
@@ -258,7 +258,7 @@ void AdjustCurvesTool::prepareEffect()
     setFilter(new CurvesFilter(&preview, this, settings));
 }
 
-void AdjustCurvesTool::putPreviewData()
+void AdjustCurvesTool::setPreviewImage()
 {
     DImg preview = filter()->getTargetImage();
     d->previewWidget->setPreviewImage(preview);
@@ -284,10 +284,10 @@ void AdjustCurvesTool::prepareFinal()
     setFilter(new CurvesFilter(iface.original(), this, settings));
 }
 
-void AdjustCurvesTool::putFinalData()
+void AdjustCurvesTool::setFinalImage()
 {
     ImageIface iface;
-    iface.putOriginal(i18n("Adjust Curve"), filter()->filterAction(), filter()->getTargetImage());
+    iface.setOriginal(i18n("Adjust Curve"), filter()->filterAction(), filter()->getTargetImage());
 }
 
 void AdjustCurvesTool::slotLoadSettings()
@@ -296,7 +296,7 @@ void AdjustCurvesTool::slotLoadSettings()
 
     // Refresh the current curves config.
     slotChannelChanged();
-    slotEffect();
+    slotPreview();
 }
 
 void AdjustCurvesTool::slotSaveAsSettings()

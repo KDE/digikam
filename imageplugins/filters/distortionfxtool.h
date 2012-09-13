@@ -55,10 +55,10 @@ private:
 
     void readSettings();
     void writeSettings();
-    void prepareEffect();
+    void preparePreview();
     void prepareFinal();
-    void putPreviewData();
-    void putFinalData();
+    void setPreviewImage();
+    void setFinalImage();
     void renderingFinished();
 
 private:

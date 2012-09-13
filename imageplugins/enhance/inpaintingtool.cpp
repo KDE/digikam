@@ -222,7 +222,7 @@ InPaintingTool::InPaintingTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
-    d->previewWidget = new ImageGuideWidget(0, false, ImageGuideWidget::HVGuideMode, Qt::red, 1, false, true);
+    d->previewWidget = new ImageGuideWidget(0, false, ImageGuideWidget::HVGuideMode, Qt::red, 1, false, ImageIface::ImageSelection);
     d->previewWidget->setWhatsThis(i18n("The image selection preview with in-painting applied "
                                         "is shown here."));
 
@@ -360,7 +360,7 @@ void InPaintingTool::processCImgUrl(const QString& url)
     KToolInvocation::invokeBrowser(url);
 }
 
-void InPaintingTool::prepareEffect()
+void InPaintingTool::preparePreview()
 {
     ImageIface iface;
     d->originalImage = iface.original()->copy();
@@ -429,7 +429,7 @@ void InPaintingTool::prepareFinal()
 {
     if (!d->isComputed)
     {
-        prepareEffect();
+        preparePreview();
     }
     else
     {
@@ -437,7 +437,7 @@ void InPaintingTool::prepareFinal()
     }
 }
 
-void InPaintingTool::putPreviewData()
+void InPaintingTool::setPreviewImage()
 {
     ImageIface* iface                = d->previewWidget->imageIface();
     GreycstorationContainer settings = d->settingsWidget->settings();
@@ -447,13 +447,13 @@ void InPaintingTool::putPreviewData()
                   iface->selectionRect().width(), iface->selectionRect().height());
     DImg imDest  = d->cropImage.copy(cropSel);
 
-    iface->putPreview(imDest.smoothScale(iface->previewSize()));
+    iface->setPreview(imDest.smoothScale(iface->previewSize()));
     d->previewWidget->updatePreview();
     d->isComputed       = true;
     d->lastFilterAction = filter()->filterAction();
 }
 
-void InPaintingTool::putFinalData()
+void InPaintingTool::setFinalImage()
 {
     ImageIface iface;
 
@@ -466,7 +466,7 @@ void InPaintingTool::putFinalData()
 
     d->originalImage.bitBltImage(&d->cropImage, d->maskRect.left(), d->maskRect.top());
 
-    iface.putOriginal(i18n("In-Painting"),
+    iface.setOriginal(i18n("In-Painting"),
                            filter() ? filter()->filterAction() : d->lastFilterAction,
                            d->originalImage);
 }

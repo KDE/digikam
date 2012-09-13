@@ -121,7 +121,7 @@ LocalContrastTool::LocalContrastTool(QObject* const parent)
     // -------------------------------------------------------------
 
     connect(d->previewWidget, SIGNAL(signalResized()),
-            this, SLOT(slotEffect()));
+            this, SLOT(slotPreview()));
 }
 
 LocalContrastTool::~LocalContrastTool()
@@ -160,7 +160,7 @@ void LocalContrastTool::slotResetSettings()
     d->settingsView->resetToDefault();
 }
 
-void LocalContrastTool::prepareEffect()
+void LocalContrastTool::preparePreview()
 {
     // See B.K.O #235601 : we cannot use downscaled image to render preview. It will differs than final rendering.
     DImg image = d->previewWidget->getOriginalRegionImage(false);
@@ -173,7 +173,7 @@ void LocalContrastTool::prepareFinal()
     setFilter(new LocalContrastFilter(iface.original(), this, d->settingsView->settings()));
 }
 
-void LocalContrastTool::putPreviewData()
+void LocalContrastTool::setPreviewImage()
 {
     DImg preview = filter()->getTargetImage();
     d->previewWidget->setPreviewImage(preview);
@@ -191,17 +191,17 @@ void LocalContrastTool::putPreviewData()
             0, 0, 0, false);
 }
 
-void LocalContrastTool::putFinalData()
+void LocalContrastTool::setFinalImage()
 {
     ImageIface iface;
-    iface.putOriginal(i18n("Local Contrast"), filter()->filterAction(), filter()->getTargetImage());
+    iface.setOriginal(i18n("Local Contrast"), filter()->filterAction(), filter()->getTargetImage());
 }
 
 void LocalContrastTool::slotLoadSettings()
 {
     d->settingsView->loadSettings();
     d->gboxSettings->histogramBox()->histogram()->reset();
-    slotEffect();
+    slotPreview();
 }
 
 void LocalContrastTool::slotSaveAsSettings()

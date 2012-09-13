@@ -144,7 +144,7 @@ ChannelMixerTool::ChannelMixerTool(QObject* parent)
             this, SLOT(slotTimer()));
 
     connect(d->previewWidget, SIGNAL(signalResized()),
-            this, SLOT(slotEffect()));
+            this, SLOT(slotPreview()));
     
     connect(d->settingsView, SIGNAL(signalOutChannelChanged()),
             this, SLOT(slotOutChannelChanged()));
@@ -170,7 +170,7 @@ void ChannelMixerTool::slotOutChannelChanged()
 //    d->settingsView->setCurrentChannel(d->gboxSettings->histogramBox()->channel());
 }
 
-void ChannelMixerTool::prepareEffect()
+void ChannelMixerTool::preparePreview()
 {
     MixerContainer settings = d->settingsView->settings();
 
@@ -180,7 +180,7 @@ void ChannelMixerTool::prepareEffect()
     setFilter(new MixerFilter(&preview, this, settings));
 }
 
-void ChannelMixerTool::putPreviewData()
+void ChannelMixerTool::setPreviewImage()
 {
     DImg preview = filter()->getTargetImage();
     d->previewWidget->setPreviewImage(preview);
@@ -206,10 +206,10 @@ void ChannelMixerTool::prepareFinal()
     setFilter(new MixerFilter(iface.original(), this, settings));
 }
 
-void ChannelMixerTool::putFinalData()
+void ChannelMixerTool::setFinalImage()
 {
     ImageIface iface;
-    iface.putOriginal(i18n("Channel Mixer"), filter()->filterAction(), filter()->getTargetImage());
+    iface.setOriginal(i18n("Channel Mixer"), filter()->filterAction(), filter()->getTargetImage());
 }
 
 void ChannelMixerTool::readSettings()
@@ -225,7 +225,7 @@ void ChannelMixerTool::readSettings()
     d->gboxSettings->histogramBox()->setScale((HistogramScale)group.readEntry(d->configHistogramScaleEntry,
             (int)LogScaleHistogram));
 
-    slotEffect();
+    slotPreview();
 }
 
 void ChannelMixerTool::writeSettings()

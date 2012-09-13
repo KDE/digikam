@@ -53,7 +53,7 @@ public:
 
 private Q_SLOTS:
 
-    void slotEffect();
+    void slotPreview();
     void slotResetSettings();
     void slotColorSelectedFromTarget(const DColor& color);
     void slotHSChanged(int h, int s);

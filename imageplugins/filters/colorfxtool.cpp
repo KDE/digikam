@@ -206,7 +206,7 @@ ColorFxTool::ColorFxTool(QObject* parent)
             this, SLOT(slotTimer()));
 
     connect(d->previewWidget, SIGNAL(signalResized()),
-            this, SLOT(slotEffect()));
+            this, SLOT(slotPreview()));
 
     connect(d->effectType, SIGNAL(activated(int)),
             this, SLOT(slotEffectTypeChanged(int)));
@@ -267,7 +267,7 @@ void ColorFxTool::slotResetSettings()
     d->levelInput->blockSignals(false);
     d->iterationInput->blockSignals(false);
 
-    slotEffect();
+    slotPreview();
 }
 
 void ColorFxTool::slotColorSelectedFromTarget(const DColor& color)
@@ -320,10 +320,10 @@ void ColorFxTool::slotEffectTypeChanged(int type)
     d->levelInput->blockSignals(false);
     d->iterationInput->blockSignals(false);
 
-    slotEffect();
+    slotPreview();
 }
 
-void ColorFxTool::prepareEffect()
+void ColorFxTool::preparePreview()
 {
     d->effectTypeLabel->setEnabled(false);
     d->effectType->setEnabled(false);
@@ -360,19 +360,19 @@ void ColorFxTool::prepareFinal()
     setFilter(new ColorFXFilter(iface.original(), this, e, l, f));
 }
 
-void ColorFxTool::putPreviewData()
+void ColorFxTool::setPreviewImage()
 {
     ImageIface* iface = d->previewWidget->imageIface();
     DImg preview = filter()->getTargetImage();
     DImg imDest  = preview.smoothScale(iface->previewSize());
-    iface->putPreview(imDest);
+    iface->setPreview(imDest);
     d->gboxSettings->histogramBox()->histogram()->updateData(preview.bits(), preview.width(), preview.height(),
                                                              preview.sixteenBit(), 0, 0, 0, false);
 
     d->previewWidget->updatePreview();
 }
 
-void ColorFxTool::putFinalData()
+void ColorFxTool::setFinalImage()
 {
     ImageIface iface;
 
@@ -397,7 +397,7 @@ void ColorFxTool::putFinalData()
             break;
     }
 
-    iface.putOriginal(name, filter()->filterAction(), filter()->getTargetImage());
+    iface.setOriginal(name, filter()->filterAction(), filter()->getTargetImage());
 }
 
 void ColorFxTool::renderingFinished()

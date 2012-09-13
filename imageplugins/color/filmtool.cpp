@@ -338,7 +338,7 @@ FilmTool::FilmTool(QObject* const parent)
     // Slots --------------------------------------------------------
 
     connect(d->previewWidget, SIGNAL(signalResized()),
-            this, SLOT(slotEffect()));
+            this, SLOT(slotPreview()));
     connect(d->previewWidget, SIGNAL(signalCapturedPointFromOriginal(Digikam::DColor, QPoint)),
             this, SLOT(slotColorSelectedFromTarget(Digikam::DColor, QPoint)));
     connect(d->exposureInput, SIGNAL(valueChanged(double)),
@@ -547,7 +547,7 @@ void FilmTool::slotAutoWhitePoint()
     d->filmContainer.setWhitePoint(wp);
 
     setLevelsFromFilm();
-    slotEffect();
+    slotPreview();
 }
 
 void FilmTool::slotResetWhitePoint()
@@ -556,7 +556,7 @@ void FilmTool::slotResetWhitePoint()
     d->filmContainer.setWhitePoint(DColor(QColor("white"), d->originalImage->sixteenBit()));
 
     setLevelsFromFilm();
-    slotEffect();
+    slotPreview();
 }
 
 void FilmTool::slotColorBalanceStateChanged(int state)
@@ -564,7 +564,7 @@ void FilmTool::slotColorBalanceStateChanged(int state)
     bool apply = state == Qt::Checked;
     d->filmContainer.setApplyBalance(apply);
 
-    slotEffect();
+    slotPreview();
 }
 
 void FilmTool::readSettings()
@@ -657,7 +657,7 @@ void FilmTool::writeSettings()
     config->sync();
 }
 
-void FilmTool::prepareEffect()
+void FilmTool::preparePreview()
 {
     d->gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
 
@@ -671,7 +671,7 @@ void FilmTool::prepareFinal()
     setFilter(new FilmFilter(iface.original(), this, d->filmContainer));
 }
 
-void FilmTool::putPreviewData()
+void FilmTool::setPreviewImage()
 {
     DImg preview = filter()->getTargetImage();
     d->previewWidget->setPreviewImage(preview);
@@ -687,10 +687,10 @@ void FilmTool::putPreviewData()
             0, 0, 0, false);
 }
 
-void FilmTool::putFinalData()
+void FilmTool::setFinalImage()
 {
     ImageIface iface;
-    iface.putOriginal(i18n("Film"), filter()->filterAction(), filter()->getTargetImage());
+    iface.setOriginal(i18n("Film"), filter()->filterAction(), filter()->getTargetImage());
 }
 
 bool FilmTool::eventFilter(QObject* obj, QEvent* ev)

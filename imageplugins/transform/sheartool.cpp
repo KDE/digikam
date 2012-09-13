@@ -219,7 +219,7 @@ ShearTool::ShearTool(QObject* parent)
             this, SLOT(slotTimer()));
 
     connect(d->antialiasInput, SIGNAL(toggled(bool)),
-            this, SLOT(slotEffect()));
+            this, SLOT(slotPreview()));
 
     connect(d->gboxSettings, SIGNAL(signalColorGuideChanged()),
             this, SLOT(slotColorGuideChanged()));
@@ -245,7 +245,7 @@ void ShearTool::readSettings()
     //    d->fineHAngleInput->setValue(group.readEntry(d->configFineHAngleEntry, d->fineHAngleInput->defaultValue()));
     //    d->fineVAngleInput->setValue(group.readEntry(d->configFineVAngleEntry, d->fineVAngleInput->defaultValue()));
     d->antialiasInput->setChecked(group.readEntry(d->configAntiAliasingEntry, true));
-    slotEffect();
+    slotPreview();
 }
 
 void ShearTool::writeSettings()
@@ -281,10 +281,10 @@ void ShearTool::slotResetSettings()
     d->fineVAngleInput->blockSignals(false);
     d->antialiasInput->blockSignals(false);
 
-    slotEffect();
+    slotPreview();
 }
 
-void ShearTool::prepareEffect()
+void ShearTool::preparePreview()
 {
     float hAngle      = d->mainHAngleInput->value() + d->fineHAngleInput->value();
     float vAngle      = d->mainVAngleInput->value() + d->fineVAngleInput->value();
@@ -312,7 +312,7 @@ void ShearTool::prepareFinal()
     setFilter(new ShearFilter(orgImage, this, hAngle, vAngle, antialiasing, background, orgW, orgH));
 }
 
-void ShearTool::putPreviewData()
+void ShearTool::setPreviewImage()
 {
     ImageIface* iface = d->previewWidget->imageIface();
     int w             = iface->previewSize().width();
@@ -325,7 +325,7 @@ void ShearTool::putPreviewData()
                         filter()->getTargetImage().sixteenBit()) );
     imDest.bitBltImage(&imTemp, (w-imTemp.width())/2, (h-imTemp.height())/2);
 
-    iface->putPreview(imDest.smoothScale(iface->previewSize()));
+    iface->setPreview(imDest.smoothScale(iface->previewSize()));
 
     d->previewWidget->updatePreview();
     QSize newSize = dynamic_cast<ShearFilter*>(filter())->getNewSize();
@@ -334,11 +334,11 @@ void ShearTool::putPreviewData()
     d->newHeightLabel->setText(temp.setNum( newSize.height()) + i18n(" px") );
 }
 
-void ShearTool::putFinalData()
+void ShearTool::setFinalImage()
 {
     ImageIface iface;
     DImg targetImage = filter()->getTargetImage();
-    iface.putOriginal(i18n("Shear Tool"), filter()->filterAction(), targetImage);
+    iface.setOriginal(i18n("Shear Tool"), filter()->filterAction(), targetImage);
 }
 
 }  // namespace DigikamTransformImagePlugin

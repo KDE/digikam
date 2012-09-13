@@ -6,7 +6,7 @@
  * Date        : 2005-05-31
  * Description : Auto-Color correction tool.
  *
- * Copyright (C) 2005-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -53,11 +53,22 @@ using namespace Digikam;
 namespace DigikamColorImagePlugin
 {
 
-class AutoCorrectionTool::AutoCorrectionToolPriv
+class AutoCorrectionTool::Private
 {
 public:
 
-    AutoCorrectionToolPriv() :
+    enum AutoCorrectionType
+    {
+        AutoLevelsCorrection = 0,
+        NormalizeCorrection,
+        EqualizeCorrection,
+        StretchContrastCorrection,
+        AutoExposureCorrection
+    };
+
+public:
+
+    Private() :
         destinationPreviewData(0),
         correctionTools(0),
         previewWidget(0),
@@ -76,16 +87,17 @@ public:
     ImageRegionWidget*   previewWidget;
     EditorToolSettings*  gboxSettings;
 };
-const QString AutoCorrectionTool::AutoCorrectionToolPriv::configGroupName("autocorrection Tool");
-const QString AutoCorrectionTool::AutoCorrectionToolPriv::configHistogramChannelEntry("Histogram Channel");
-const QString AutoCorrectionTool::AutoCorrectionToolPriv::configHistogramScaleEntry("Histogram Scale");
-const QString AutoCorrectionTool::AutoCorrectionToolPriv::configAutoCorrectionFilterEntry("Auto Correction Filter");
+
+const QString AutoCorrectionTool::Private::configGroupName("autocorrection Tool");
+const QString AutoCorrectionTool::Private::configHistogramChannelEntry("Histogram Channel");
+const QString AutoCorrectionTool::Private::configHistogramScaleEntry("Histogram Scale");
+const QString AutoCorrectionTool::Private::configAutoCorrectionFilterEntry("Auto Correction Filter");
 
 // --------------------------------------------------------
 
-AutoCorrectionTool::AutoCorrectionTool(QObject* parent)
+AutoCorrectionTool::AutoCorrectionTool(QObject* const parent)
     : EditorToolThreaded(parent),
-      d(new AutoCorrectionToolPriv)
+      d(new Private)
 {
     setObjectName("autocorrection");
     setToolName(i18n("Auto Correction"));
@@ -118,7 +130,7 @@ AutoCorrectionTool::AutoCorrectionTool(QObject* parent)
     d->correctionTools = new PreviewList(this);
 
     item = d->correctionTools->addItem(new AutoLevelsFilter(&thumbImage, iface.original()),
-                                       i18n("Auto Levels"), AutoLevelsCorrection);
+                                       i18n("Auto Levels"), Private::AutoLevelsCorrection);
     item->setWhatsThis(i18n("<b>Auto Levels</b>:"
                             "<p>This option maximizes the tonal range in the Red, "
                             "Green, and Blue channels. It searches the image shadow and highlight "
@@ -126,7 +138,7 @@ AutoCorrectionTool::AutoCorrectionTool(QObject* parent)
                             "to a full histogram range.</p>"));
 
     item = d->correctionTools->addItem(new NormalizeFilter(&thumbImage, iface.original()),
-                                       i18n("Normalize"), NormalizeCorrection);
+                                       i18n("Normalize"), Private::NormalizeCorrection);
     item->setWhatsThis(i18n("<b>Normalize</b>:"
                             "<p>This option scales brightness values across the active "
                             "image so that the darkest point becomes black, and the "
@@ -136,7 +148,7 @@ AutoCorrectionTool::AutoCorrectionTool(QObject* parent)
 
 
     item = d->correctionTools->addItem(new EqualizeFilter(&thumbImage, iface.original()),
-                                       i18n("Equalize"), EqualizeCorrection);
+                                       i18n("Equalize"), Private::EqualizeCorrection);
     item->setWhatsThis(i18n("<b>Equalize</b>:"
                             "<p>This option adjusts the brightness of colors across the "
                             "active image so that the histogram for the value channel "
@@ -148,7 +160,7 @@ AutoCorrectionTool::AutoCorrectionTool(QObject* parent)
                             "miracles on an image or destroy it.</p>"));
 
     item = d->correctionTools->addItem(new StretchFilter(&thumbImage, iface.original()),
-                                       i18n("Stretch Contrast"), StretchContrastCorrection);
+                                       i18n("Stretch Contrast"), Private::StretchContrastCorrection);
     item->setWhatsThis(i18n("<b>Stretch Contrast</b>:"
                             "<p>This option enhances the contrast and brightness "
                             "of the RGB values of an image by stretching the lowest "
@@ -156,7 +168,7 @@ AutoCorrectionTool::AutoCorrectionTool(QObject* parent)
                             "everything in between.</p>"));
 
     item = d->correctionTools->addItem(new AutoExpoFilter(&thumbImage, iface.original()),
-                                       i18n("Auto Exposure"), AutoExposureCorrection);
+                                       i18n("Auto Exposure"), Private::AutoExposureCorrection);
     item->setWhatsThis(i18n("<b>Auto Exposure</b>:"
                             "<p>This option enhances the contrast and brightness "
                             "of the RGB values of an image to calculate optimal "
@@ -182,7 +194,7 @@ AutoCorrectionTool::AutoCorrectionTool(QObject* parent)
     // -------------------------------------------------------------
 
     connect(d->correctionTools, SIGNAL(itemSelectionChanged()),
-            this, SLOT(slotEffect()));
+            this, SLOT(slotPreview()));
 
     connect(d->previewWidget, SIGNAL(signalResized()),
             this, SLOT(slotTimer()));
@@ -211,8 +223,8 @@ void AutoCorrectionTool::readSettings()
     KConfigGroup group        = config->group(d->configGroupName);
 
     d->gboxSettings->histogramBox()->setChannel((ChannelType)group.readEntry(d->configHistogramChannelEntry, (int)LuminosityChannel));
-    d->gboxSettings->histogramBox()->setScale((HistogramScale)group.readEntry(d->configHistogramScaleEntry,  (int)LogScaleHistogram));
-    d->correctionTools->setCurrentId(group.readEntry(d->configAutoCorrectionFilterEntry, (int)AutoLevelsCorrection));
+    d->gboxSettings->histogramBox()->setScale((HistogramScale)group.readEntry(d->configHistogramScaleEntry, (int)LogScaleHistogram));
+    d->correctionTools->setCurrentId(group.readEntry(d->configAutoCorrectionFilterEntry, (int)Private::AutoLevelsCorrection));
 }
 
 void AutoCorrectionTool::writeSettings()
@@ -229,13 +241,13 @@ void AutoCorrectionTool::writeSettings()
 void AutoCorrectionTool::slotResetSettings()
 {
     d->correctionTools->blockSignals(true);
-    d->correctionTools->setCurrentId(AutoLevelsCorrection);
+    d->correctionTools->setCurrentId(Private::AutoLevelsCorrection);
     d->correctionTools->blockSignals(false);
 
-    slotEffect();
+    slotPreview();
 }
 
-void AutoCorrectionTool::prepareEffect()
+void AutoCorrectionTool::preparePreview()
 {
     d->gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
 
@@ -245,7 +257,7 @@ void AutoCorrectionTool::prepareEffect()
     autoCorrection(&preview, iface.original(), d->correctionTools->currentId());
 }
 
-void AutoCorrectionTool::putPreviewData()
+void AutoCorrectionTool::setPreviewImage()
 {
     DImg preview = filter()->getTargetImage();
     d->previewWidget->setPreviewImage(preview);
@@ -270,63 +282,63 @@ void AutoCorrectionTool::prepareFinal()
     autoCorrection(iface.original(), iface.original(), type);
 }
 
-void AutoCorrectionTool::putFinalData()
+void AutoCorrectionTool::setFinalImage()
 {
     int type = d->correctionTools->currentId();
     QString name;
 
     switch (type)
     {
-        case AutoLevelsCorrection:
+        case Private::AutoLevelsCorrection:
             name = i18n("Auto Levels");
             break;
 
-        case NormalizeCorrection:
+        case Private::NormalizeCorrection:
             name = i18n("Normalize");
             break;
 
-        case EqualizeCorrection:
+        case Private::EqualizeCorrection:
             name = i18n("Equalize");
             break;
 
-        case StretchContrastCorrection:
+        case Private::StretchContrastCorrection:
             name = i18n("Stretch Contrast");
             break;
 
-        case AutoExposureCorrection:
+        case Private::AutoExposureCorrection:
             name = i18n("Auto Exposure");
             break;
     }
 
     ImageIface iface;
-    iface.putOriginal(name, filter()->filterAction(), filter()->getTargetImage());
+    iface.setOriginal(name, filter()->filterAction(), filter()->getTargetImage());
 }
 
-void AutoCorrectionTool::autoCorrection(DImg* img, DImg* ref, int type)
+void AutoCorrectionTool::autoCorrection(DImg* const img, DImg* const ref, int type)
 {
     switch (type)
     {
-        case AutoLevelsCorrection:
+        case Private::AutoLevelsCorrection:
         {
             setFilter(new AutoLevelsFilter(img, ref, this));
             break;
         }
-        case NormalizeCorrection:
+        case Private::NormalizeCorrection:
         {
             setFilter(new NormalizeFilter(img, ref, this));
             break;
         }
-        case EqualizeCorrection:
+        case Private::EqualizeCorrection:
         {
             setFilter(new EqualizeFilter(img, ref, this));
             break;
         }
-        case StretchContrastCorrection:
+        case Private::StretchContrastCorrection:
         {
             setFilter(new StretchFilter(img, ref, this));
             break;
         }
-        case AutoExposureCorrection:
+        case Private::AutoExposureCorrection:
         {
             setFilter(new AutoExpoFilter(img, ref, this));
             break;

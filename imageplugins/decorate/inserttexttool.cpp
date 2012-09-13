@@ -424,7 +424,7 @@ void InsertTextTool::finalRendering()
     action.addParameter("borderText", d->borderText->isChecked());
     action.addParameter("transparentText", d->transparentText->isChecked());
 
-    iface.putOriginal(i18n("Insert Text"), action, dest);
+    iface.setOriginal(i18n("Insert Text"), action, dest);
 
     kapp->restoreOverrideCursor();
 }

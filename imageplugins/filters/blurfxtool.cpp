@@ -312,10 +312,10 @@ void BlurFXTool::slotEffectTypeChanged(int type)
 
     blockWidgetSignals(false);
 
-    slotEffect();
+    slotPreview();
 }
 
-void BlurFXTool::prepareEffect()
+void BlurFXTool::preparePreview()
 {
     d->effectTypeLabel->setEnabled(false);
     d->effectType->setEnabled(false);
@@ -372,7 +372,7 @@ void BlurFXTool::prepareFinal()
     setFilter(new BlurFXFilter(iface.original(), this, type, dist, level));
 }
 
-void BlurFXTool::putPreviewData()
+void BlurFXTool::setPreviewImage()
 {
     switch (d->effectType->currentIndex())
     {
@@ -397,10 +397,10 @@ void BlurFXTool::putPreviewData()
     }
 }
 
-void BlurFXTool::putFinalData()
+void BlurFXTool::setFinalImage()
 {
     ImageIface iface;
-    iface.putOriginal(i18n("Blur Effects"), filter()->filterAction(), filter()->getTargetImage());
+    iface.setOriginal(i18n("Blur Effects"), filter()->filterAction(), filter()->getTargetImage());
 }
 
 void BlurFXTool::renderingFinished()

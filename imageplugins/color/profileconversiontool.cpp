@@ -220,13 +220,13 @@ void ProfileConversionTool::slotResetSettings()
     d->profilesBox->resetToDefault();
 }
 
-void ProfileConversionTool::prepareEffect()
+void ProfileConversionTool::preparePreview()
 {
     DImg preview = d->previewWidget->getOriginalRegionImage(true);
     setFilter(new IccTransformFilter(&preview, this, d->transform));
 }
 
-void ProfileConversionTool::putPreviewData()
+void ProfileConversionTool::setPreviewImage()
 {
     DImg preview = filter()->getTargetImage();
     d->previewWidget->setPreviewImage(preview);
@@ -250,13 +250,13 @@ void ProfileConversionTool::prepareFinal()
     setFilter(new IccTransformFilter(iface.original(), this, d->transform));
 }
 
-void ProfileConversionTool::putFinalData()
+void ProfileConversionTool::setFinalImage()
 {
     ImageIface iface;
     DImg imDest = filter()->getTargetImage();
 
-    iface.putOriginal(i18n("Color Profile Conversion"), filter()->filterAction(), imDest);
-    iface.putOriginalIccProfile(imDest.getIccProfile());
+    iface.setOriginal(i18n("Color Profile Conversion"), filter()->filterAction(), imDest);
+    iface.setOriginalIccProfile(imDest.getIccProfile());
 
     DMetadata meta(iface.originalMetadata());
     meta.removeExifColorSpace();
@@ -283,8 +283,8 @@ void ProfileConversionTool::fastConversion(const IccProfile& profile)
     filter.startFilterDirectly();
 
     DImg imDest               = filter.getTargetImage();
-    iface.putOriginal(i18n("Color Profile Conversion"), filter.filterAction(), imDest);
-    iface.putOriginalIccProfile(imDest.getIccProfile());
+    iface.setOriginal(i18n("Color Profile Conversion"), filter.filterAction(), imDest);
+    iface.setOriginalIccProfile(imDest.getIccProfile());
 
     DMetadata meta(iface.originalMetadata());
     meta.removeExifColorSpace();

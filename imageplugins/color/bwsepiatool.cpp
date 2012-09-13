@@ -124,7 +124,7 @@ BWSepiaTool::BWSepiaTool(QObject* parent)
             this, SLOT(slotTimer()));
 
     connect(d->previewWidget, SIGNAL(signalResized()),
-            this, SLOT(slotEffect()));
+            this, SLOT(slotPreview()));
 
     slotTimer();
 }
@@ -178,10 +178,10 @@ void BWSepiaTool::slotResetSettings()
 {
     d->bwsepiaSettings->resetToDefault();
     d->gboxSettings->histogramBox()->histogram()->reset();
-    slotEffect();
+    slotPreview();
 }
 
-void BWSepiaTool::prepareEffect()
+void BWSepiaTool::preparePreview()
 {
     BWSepiaContainer settings = d->bwsepiaSettings->settings();
 
@@ -191,7 +191,7 @@ void BWSepiaTool::prepareEffect()
     setFilter(new BWSepiaFilter(&preview, this, settings));
 }
 
-void BWSepiaTool::putPreviewData()
+void BWSepiaTool::setPreviewImage()
 {
     DImg preview = filter()->getTargetImage();
     d->previewWidget->setPreviewImage(preview);
@@ -217,17 +217,17 @@ void BWSepiaTool::prepareFinal()
     setFilter(new BWSepiaFilter(iface.original(), this, settings));
 }
 
-void BWSepiaTool::putFinalData()
+void BWSepiaTool::setFinalImage()
 {
     ImageIface iface;
-    iface.putOriginal(i18n("Convert to Black and White"), filter()->filterAction(), filter()->getTargetImage());
+    iface.setOriginal(i18n("Convert to Black and White"), filter()->filterAction(), filter()->getTargetImage());
 }
 
 void BWSepiaTool::slotLoadSettings()
 {
     d->bwsepiaSettings->loadSettings();
     d->gboxSettings->histogramBox()->histogram()->reset();
-    slotEffect();
+    slotPreview();
 }
 
 void BWSepiaTool::slotSaveAsSettings()
