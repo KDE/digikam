@@ -6,8 +6,8 @@
  * Date        : 2005-03-10
  * Description : a plugin to apply texture over an image
  *
- * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -44,7 +44,7 @@ class TextureTool : public EditorToolThreaded
 
 public:
 
-    TextureTool(QObject* parent);
+    TextureTool(QObject* const parent);
     ~TextureTool();
 
 private:
@@ -66,30 +66,8 @@ private:
 
 private:
 
-    enum TextureTypes
-    {
-        PaperTexture=0,
-        Paper2Texture,
-        FabricTexture,
-        BurlapTexture,
-        BricksTexture,
-        Bricks2Texture,
-        CanvasTexture,
-        MarbleTexture,
-        Marble2Texture,
-        BlueJeanTexture,
-        CellWoodTexture,
-        MetalWireTexture,
-        ModernTexture,
-        WallTexture,
-        MossTexture,
-        StoneTexture
-    };
-
-private:
-
-    class TextureToolPriv;
-    TextureToolPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace DigikamDecorateImagePlugin

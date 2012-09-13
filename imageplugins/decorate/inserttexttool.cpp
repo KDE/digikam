@@ -6,8 +6,8 @@
  * Date        : 2005-02-14
  * Description : a plugin to insert a text over an image.
  *
- * Copyright (C) 2005-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -67,11 +67,11 @@
 namespace DigikamDecorateImagePlugin
 {
 
-class InsertTextTool::InsertTextToolPriv
+class InsertTextTool::Private
 {
 public:
 
-    InsertTextToolPriv() :
+    Private() :
         alignTextMode(0),
         defaultSizeFont(0),
         borderText(0),
@@ -113,21 +113,21 @@ public:
     EditorToolSettings*  gboxSettings;
 };
 
-const QString InsertTextTool::InsertTextToolPriv::configGroupName("inserttext Tool");
-const QString InsertTextTool::InsertTextToolPriv::configTextRotationEntry("Text Rotation");
-const QString InsertTextTool::InsertTextToolPriv::configFontColorEntry("Font Color");
-const QString InsertTextTool::InsertTextToolPriv::configTextStringEntry("Enter your text here.");
-const QString InsertTextTool::InsertTextToolPriv::configFontPropertiesEntry("Font Properties");
-const QString InsertTextTool::InsertTextToolPriv::configTextAlignmentEntry("Text Alignment");
-const QString InsertTextTool::InsertTextToolPriv::configBorderTextEntry("Border Text");
-const QString InsertTextTool::InsertTextToolPriv::configTransparentTextEntry("Transparent Text");
-const QString InsertTextTool::InsertTextToolPriv::configPositionHintEntry("Position Hint");
+const QString InsertTextTool::Private::configGroupName("inserttext Tool");
+const QString InsertTextTool::Private::configTextRotationEntry("Text Rotation");
+const QString InsertTextTool::Private::configFontColorEntry("Font Color");
+const QString InsertTextTool::Private::configTextStringEntry("Enter your text here.");
+const QString InsertTextTool::Private::configFontPropertiesEntry("Font Properties");
+const QString InsertTextTool::Private::configTextAlignmentEntry("Text Alignment");
+const QString InsertTextTool::Private::configBorderTextEntry("Border Text");
+const QString InsertTextTool::Private::configTransparentTextEntry("Transparent Text");
+const QString InsertTextTool::Private::configPositionHintEntry("Position Hint");
 
 // --------------------------------------------------------
 
-InsertTextTool::InsertTextTool(QObject* parent)
+InsertTextTool::InsertTextTool(QObject* const parent)
     : EditorTool(parent),
-      d(new InsertTextToolPriv)
+      d(new Private)
 {
     setObjectName("inserttext");
     setToolName(i18n("Insert Text"));

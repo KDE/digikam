@@ -59,11 +59,33 @@ using namespace KDcrawIface;
 namespace DigikamDecorateImagePlugin
 {
 
-class TextureTool::TextureToolPriv
+class TextureTool::Private
 {
 public:
 
-    TextureToolPriv():
+    enum TextureTypes
+    {
+        PaperTexture=0,
+        Paper2Texture,
+        FabricTexture,
+        BurlapTexture,
+        BricksTexture,
+        Bricks2Texture,
+        CanvasTexture,
+        MarbleTexture,
+        Marble2Texture,
+        BlueJeanTexture,
+        CellWoodTexture,
+        MetalWireTexture,
+        ModernTexture,
+        WallTexture,
+        MossTexture,
+        StoneTexture
+    };
+
+public:
+
+    Private():
         textureType(0),
         blendGain(0),
         previewWidget(0),
@@ -79,15 +101,16 @@ public:
     ImageRegionWidget*   previewWidget;
     EditorToolSettings*  gboxSettings;
 };
-const QString TextureTool::TextureToolPriv::configGroupName("texture Tool");
-const QString TextureTool::TextureToolPriv::configTextureTypeEntry("TextureType");
-const QString TextureTool::TextureToolPriv::configBlendGainEntry("BlendGain");
+
+const QString TextureTool::Private::configGroupName("texture Tool");
+const QString TextureTool::Private::configTextureTypeEntry("TextureType");
+const QString TextureTool::Private::configBlendGainEntry("BlendGain");
 
 // --------------------------------------------------------
 
-TextureTool::TextureTool(QObject* parent)
+TextureTool::TextureTool(QObject* const parent)
     : EditorToolThreaded(parent),
-      d(new TextureToolPriv)
+      d(new Private)
 {
     setObjectName("texture");
     setToolName(i18n("Texture"));
@@ -118,7 +141,7 @@ TextureTool::TextureTool(QObject* parent)
     d->textureType->addItem(i18n("Wall"));
     d->textureType->addItem(i18n("Moss"));
     d->textureType->addItem(i18n("Stone"));
-    d->textureType->setDefaultIndex(PaperTexture);
+    d->textureType->setDefaultIndex(Private::PaperTexture);
     d->textureType->setWhatsThis( i18n("Set here the texture type to apply to image."));
 
     // -------------------------------------------------------------
@@ -237,67 +260,67 @@ QString TextureTool::getTexturePath(int texture)
 
     switch (texture)
     {
-        case PaperTexture:
+        case Private::PaperTexture:
             pattern = "paper-texture";
             break;
 
-        case Paper2Texture:
+        case Private::Paper2Texture:
             pattern = "paper2-texture";
             break;
 
-        case FabricTexture:
+        case Private::FabricTexture:
             pattern = "fabric-texture";
             break;
 
-        case BurlapTexture:
+        case Private::BurlapTexture:
             pattern = "burlap-texture";
             break;
 
-        case BricksTexture:
+        case Private::BricksTexture:
             pattern = "bricks-texture";
             break;
 
-        case Bricks2Texture:
+        case Private::Bricks2Texture:
             pattern = "bricks2-texture";
             break;
 
-        case CanvasTexture:
+        case Private::CanvasTexture:
             pattern = "canvas-texture";
             break;
 
-        case MarbleTexture:
+        case Private::MarbleTexture:
             pattern = "marble-texture";
             break;
 
-        case Marble2Texture:
+        case Private::Marble2Texture:
             pattern = "marble2-texture";
             break;
 
-        case BlueJeanTexture:
+        case Private::BlueJeanTexture:
             pattern = "bluejean-texture";
             break;
 
-        case CellWoodTexture:
+        case Private::CellWoodTexture:
             pattern = "cellwood-texture";
             break;
 
-        case MetalWireTexture:
+        case Private::MetalWireTexture:
             pattern = "metalwire-texture";
             break;
 
-        case ModernTexture:
+        case Private::ModernTexture:
             pattern = "modern-texture";
             break;
 
-        case WallTexture:
+        case Private::WallTexture:
             pattern = "wall-texture";
             break;
 
-        case MossTexture:
+        case Private::MossTexture:
             pattern = "moss-texture";
             break;
 
-        case StoneTexture:
+        case Private::StoneTexture:
             pattern = "stone-texture";
             break;
     }

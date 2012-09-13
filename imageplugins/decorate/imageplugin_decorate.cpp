@@ -46,11 +46,11 @@ namespace DigikamDecorateImagePlugin
 K_PLUGIN_FACTORY( DecorateFactory, registerPlugin<ImagePlugin_Decorate>(); )
 K_EXPORT_PLUGIN ( DecorateFactory("digikamimageplugin_decorate") )
 
-class ImagePlugin_Decorate::ImagePlugin_DecoratePriv
+class ImagePlugin_Decorate::Private
 {
 public:
 
-    ImagePlugin_DecoratePriv() :
+    Private() :
         textureAction(0),
         borderAction(0),
         insertTextAction(0)
@@ -64,7 +64,7 @@ public:
 
 ImagePlugin_Decorate::ImagePlugin_Decorate(QObject* const parent, const QVariantList&)
     : ImagePlugin(parent, "ImagePlugin_Decorate"),
-      d(new ImagePlugin_DecoratePriv)
+      d(new Private)
 {
     d->insertTextAction = new KAction(KIcon("insert-text"), i18n("Insert Text..."), this);
     d->insertTextAction->setShortcut(KShortcut(Qt::SHIFT+Qt::CTRL+Qt::Key_T));
@@ -102,19 +102,19 @@ void ImagePlugin_Decorate::setEnabledActions(bool b)
 
 void ImagePlugin_Decorate::slotInsertText()
 {
-    InsertTextTool* tool = new InsertTextTool(this);
+    InsertTextTool* const tool = new InsertTextTool(this);
     loadTool(tool);
 }
 
 void ImagePlugin_Decorate::slotBorder()
 {
-    BorderTool* tool = new BorderTool(this);
+    BorderTool* const tool = new BorderTool(this);
     loadTool(tool);
 }
 
 void ImagePlugin_Decorate::slotTexture()
 {
-    TextureTool* tool = new TextureTool(this);
+    TextureTool* const tool = new TextureTool(this);
     loadTool(tool);
 }
 

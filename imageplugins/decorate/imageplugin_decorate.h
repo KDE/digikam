@@ -57,8 +57,8 @@ private Q_SLOTS:
 
 private:
 
-    class ImagePlugin_DecoratePriv;
-    ImagePlugin_DecoratePriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace DigikamDecorateImagePlugin

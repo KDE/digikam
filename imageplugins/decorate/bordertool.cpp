@@ -7,8 +7,8 @@
  * Description : a digiKam image plugin to add a border
  *               around an image.
  *
- * Copyright 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright 2006-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -52,11 +52,11 @@
 namespace DigikamDecorateImagePlugin
 {
 
-class BorderTool::BorderToolPriv
+class BorderTool::Private
 {
 public:
 
-    BorderToolPriv() :
+    Private() :
         configGroupName("border Tool"),
 
         gboxSettings(0),
@@ -71,9 +71,9 @@ public:
     BorderSettings*     settingsView;
 };
 
-BorderTool::BorderTool(QObject* parent)
+BorderTool::BorderTool(QObject* const parent)
     : EditorToolThreaded(parent),
-      d(new BorderToolPriv)
+      d(new Private)
 {
     setObjectName("border");
     setToolName(i18n("Add Border"));
