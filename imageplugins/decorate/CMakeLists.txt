@@ -10,12 +10,14 @@ KDE4_ADD_PLUGIN(digikamimageplugin_decorate ${digikamimageplugin_decorate_PART_S
 TARGET_LINK_LIBRARIES(
     digikamimageplugin_decorate
     digikamcore
-	${QT_QT3SUPPORT_LIBRARY}
+
     ${KDE4_KDECORE_LIBS}
     ${KDE4_KDEUI_LIBS}
     ${QT_QTCORE_LIBRARY}
     ${QT_QTGUI_LIBRARY}
     ${KDCRAW_LIBRARIES}
+
+    ${QT_QT3SUPPORT_LIBRARY}
     )
 
 INSTALL(TARGETS digikamimageplugin_decorate DESTINATION ${PLUGIN_INSTALL_DIR})

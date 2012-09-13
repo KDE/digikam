@@ -23,12 +23,14 @@ KDE4_ADD_PLUGIN(digikamimageplugin_transform ${digikamimageplugin_transform_PART
 TARGET_LINK_LIBRARIES(
     digikamimageplugin_transform
     digikamcore
+
     ${KDE4_KDECORE_LIBS}
     ${KDE4_KDEUI_LIBS}
     ${KDE4_KIO_LIBS}
     ${QT_QTCORE_LIBRARY}
     ${QT_QTGUI_LIBRARY}
     ${KDCRAW_LIBRARIES}
+
     ${QT_QT3SUPPORT_LIBRARY}
     )
 

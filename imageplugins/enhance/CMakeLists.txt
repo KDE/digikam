@@ -26,6 +26,7 @@ KDE4_ADD_PLUGIN(digikamimageplugin_enhance ${digikamimageplugin_enhance_PART_SRC
 TARGET_LINK_LIBRARIES(
     digikamimageplugin_enhance
     digikamcore
+
     ${KDE4_KDECORE_LIBS}
     ${KDE4_KDEUI_LIBS}
     ${KDE4_KIO_LIBS}
@@ -33,6 +34,7 @@ TARGET_LINK_LIBRARIES(
     ${QT_QTGUI_LIBRARY}
     ${KDCRAW_LIBRARIES}
     ${KEXIV2_LIBRARIES}
+
     ${QT_QT3SUPPORT_LIBRARY}
     )
 
