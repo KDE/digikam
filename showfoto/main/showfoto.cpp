@@ -485,7 +485,7 @@ void ShowFoto::setupActions()
     d->openFilesInFolderAction = new KAction(KIcon("folder-image"), i18n("Open folder"), this);
     d->openFilesInFolderAction->setShortcut(KShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_O));
 
-    connect(d->openFilesInFolderAction, SIGNAL(triggered()), 
+    connect(d->openFilesInFolderAction, SIGNAL(triggered()),
             this, SLOT(slotOpenFilesInFolder()));
 
     actionCollection()->addAction("showfoto_open_folder", d->openFilesInFolderAction);
@@ -1042,7 +1042,7 @@ void ShowFoto::saveIsComplete()
     d->thumbBar->invalidateThumb(d->currentItem);
 
     // Pop-up a message to bring user when save is done.
-    Digikam::KNotificationWrapper("editorsavefilecompleted", i18n("save file is completed..."),
+    Digikam::KNotificationWrapper("editorsavefilecompleted", i18n("Image saved successfully"),
                                   this, windowTitle());
 
     resetOrigin();
@@ -1070,7 +1070,7 @@ void ShowFoto::saveAsIsComplete()
     slotUpdateItemInfo();
 
     // Pop-up a message to bring user when save is done.
-    Digikam::KNotificationWrapper("editorsavefilecompleted", i18n("save file is completed..."),
+    Digikam::KNotificationWrapper("editorsavefilecompleted", i18n("Image saved successfully"),
                                   this, windowTitle());
 }
 

@@ -1801,11 +1801,11 @@ void ImportUI::slotDownloaded(const QString& folder, const QString& file, int st
             // Pop-up a notification to inform user when all is done, and inform if auto-rotation will take place.
             if (autoRotate)
             {
-                KNotificationWrapper("cameradownloaded", i18n("Download is completed, you can now detach your camera and the exif auto-rotation will take place..."), this, windowTitle());
+                KNotificationWrapper("cameradownloaded", i18n("Images download finished, you can now detach your camera while the images will be auto-rotated"), this, windowTitle());
             }
             else
             {
-                KNotificationWrapper("cameradownloaded", i18n("Download is completed..."), this, windowTitle());
+                KNotificationWrapper("cameradownloaded", i18n("Images download finished"), this, windowTitle());
             }
         }
     }

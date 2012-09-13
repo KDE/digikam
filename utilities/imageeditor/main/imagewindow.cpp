@@ -958,7 +958,7 @@ void ImageWindow::saveIsComplete()
     d->currentImageInfo.setOrientation(meta.getImageOrientation());
 
     // Pop-up a message to bring user when save is done.
-    KNotificationWrapper("editorsavefilecompleted", i18n("save file is completed..."),
+    KNotificationWrapper("editorsavefilecompleted", i18n("Image saved successfully"),
                          this, windowTitle());
 
     resetOrigin();
@@ -1059,7 +1059,7 @@ void ImageWindow::saveAsIsComplete()
     slotUpdateItemInfo();
 
     // Pop-up a message to bring user when save is done.
-    KNotificationWrapper("editorsavefilecompleted", i18n("save file is completed..."),
+    KNotificationWrapper("editorsavefilecompleted", i18n("Image saved successfully"),
                          this, windowTitle());
 }
 

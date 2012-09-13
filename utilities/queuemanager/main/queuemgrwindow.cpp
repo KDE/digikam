@@ -912,7 +912,7 @@ void QueueMgrWindow::processOne()
     if (d->itemsList.empty())
     {
         // Pop-up a message to bring user when all is done.
-        KNotificationWrapper("batchqueuecompleted", i18n("Batch queue is completed..."),
+        KNotificationWrapper("batchqueuecompleted", i18n("Batch queue finished"),
                              this, windowTitle());
         processingAborted();
         return;
