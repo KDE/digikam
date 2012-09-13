@@ -45,6 +45,7 @@
 #include "imagealbummodel.h"
 #include "thumbnailloadthread.h"
 #include "imagefiltermodel.h"
+#include "camiteminfo.h"
 
 namespace Digikam
 {
@@ -58,7 +59,7 @@ class MapViewModelHelper : public KGeoMap::ModelHelper
 
 public:
 
-    MapViewModelHelper(QItemSelectionModel* selection, ImageFilterModel* const filterModel, QObject* const parent = 0);
+    MapViewModelHelper(QItemSelectionModel* selection, KCategorizedSortFilterProxyModel* const filterModel, QObject* const parent = 0, bool mode = true);
     virtual ~MapViewModelHelper();
 
     virtual QAbstractItemModel* model() const;
@@ -77,6 +78,7 @@ Q_SIGNALS:
 private Q_SLOTS:
 
     void slotThumbnailLoaded(const LoadingDescription&, const QPixmap&);
+    void slotThumbnailLoaded(const QString& folder, const QString& file, const CamItemInfo& info, const QImage& thumb);
     void slotImageChange(const ImageChangeset& changeset);
 
 private:
@@ -94,13 +96,14 @@ class MapWidgetView : public QWidget, public StateSavingObject
 public:
 
     MapWidgetView(QItemSelectionModel* const selectionModel,
-                  ImageFilterModel* const imageFilterModel, QWidget* const parent);
+                  KCategorizedSortFilterProxyModel* const imageFilterModel, QWidget* const parent, bool mode = true);
     ~MapWidgetView();
 
     void openAlbum(Album* const album);
     void setActive(const bool state);
     bool getActiveState() const;
-    ImageInfo currentInfo();
+    ImageInfo currentImageInfo();
+    CamItemInfo currentCamItemInfo();
 
 protected:
 

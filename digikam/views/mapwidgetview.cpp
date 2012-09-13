@@ -48,9 +48,12 @@
 #include "imageposition.h"
 #include "imageinfo.h"
 #include "imagemodel.h"
+#include "importfiltermodel.h"
+#include "importimagemodel.h"
 #include "databasewatch.h"
 #include "databasefields.h"
 #include "digikam2kgeomap_database.h"
+#include "importui.h"
 
 namespace Digikam
 {
@@ -73,9 +76,12 @@ public:
          mapWidget(0),
          imageFilterModel(0),
          imageModel(0),
+         importFilterModel(0),
+         importModel(0),
          selectionModel(0),
          mapViewModelHelper(0),
-         gpsImageInfoSorter(0)
+         gpsImageInfoSorter(0),
+         mode(false)
     {
     }
 
@@ -83,9 +89,12 @@ public:
     KGeoMap::KGeoMapWidget*    mapWidget;
     ImageFilterModel*    imageFilterModel;
     ImageAlbumModel*     imageModel;
+    ImportFilterModel*   importFilterModel;
+    ImportImageModel*    importModel;
     QItemSelectionModel* selectionModel;
     MapViewModelHelper*  mapViewModelHelper;
     GPSImageInfoSorter*  gpsImageInfoSorter;
+    bool                 mode;
 };
 
 /**
@@ -95,13 +104,25 @@ public:
  * @param parent Parent object
  */
 MapWidgetView::MapWidgetView(QItemSelectionModel* const selectionModel,
-                             ImageFilterModel* const imageFilterModel, QWidget* const parent)
+                             KCategorizedSortFilterProxyModel* const imageFilterModel, QWidget* const parent, bool mode)
     : QWidget(parent), StateSavingObject(this), d(new MapWidgetViewPriv())
 {
-    d->imageFilterModel     = imageFilterModel;
-    d->imageModel           = qobject_cast<ImageAlbumModel*>(imageFilterModel->sourceModel());
+    d->mode = mode;
+
+    if (d->mode)
+    {
+        d->imageFilterModel     = dynamic_cast<ImageFilterModel*>(imageFilterModel);
+        d->imageModel           = dynamic_cast<ImageAlbumModel*>(imageFilterModel->sourceModel());
+        d->mapViewModelHelper   = new MapViewModelHelper(d->selectionModel, imageFilterModel, this);
+    }
+    else
+    {
+        d->importFilterModel    = dynamic_cast<ImportFilterModel*>(imageFilterModel);
+        d->importModel          = dynamic_cast<ImportImageModel*>(imageFilterModel->sourceModel());
+        d->mapViewModelHelper   = new MapViewModelHelper(d->selectionModel, d->importFilterModel, this, false);
+    }
+
     d->selectionModel       = selectionModel;
-    d->mapViewModelHelper   = new MapViewModelHelper(d->selectionModel, imageFilterModel, this);
     QVBoxLayout* const vBoxLayout = new QVBoxLayout(this);
 
     d->mapWidget = new KGeoMap::KGeoMapWidget(this);
@@ -181,32 +202,47 @@ class MapViewModelHelper::MapViewModelHelperPrivate
 public:
     MapViewModelHelperPrivate()
         : model(0),
+          importModel(0),
           selectionModel(0),
           thumbnailLoadThread(0)
     {
     }
 
     ImageFilterModel*    model;
+    ImportFilterModel*   importModel;
     QItemSelectionModel* selectionModel;
     ThumbnailLoadThread* thumbnailLoadThread;
+    bool                 mode;
 };
 
 MapViewModelHelper::MapViewModelHelper(QItemSelectionModel* const selection,
-                                       ImageFilterModel* const filterModel, QObject* const parent)
+                                       KCategorizedSortFilterProxyModel* const filterModel, QObject* const parent, bool mode)
     : KGeoMap::ModelHelper(parent), d(new MapViewModelHelperPrivate())
 {
-    d->model               = filterModel;
     d->selectionModel      = selection;
-    d->thumbnailLoadThread = new ThumbnailLoadThread(this);
+    d->mode = mode;
 
-    connect(d->thumbnailLoadThread, SIGNAL(signalThumbnailLoaded(LoadingDescription,QPixmap)),
-            this, SLOT(slotThumbnailLoaded(LoadingDescription,QPixmap)));
+    if (d->mode)
+    {
+        d->model               = dynamic_cast<ImageFilterModel*>(filterModel);
+        d->thumbnailLoadThread = new ThumbnailLoadThread(this);
 
-    // Note: Here we only monitor changes to the database, because changes to the model
-    //       are also sent when thumbnails are generated, and we don't want to update
-    //       the marker tiler for that!
-    connect(DatabaseAccess::databaseWatch(), SIGNAL(imageChange(ImageChangeset)),
-            this, SLOT(slotImageChange(ImageChangeset)), Qt::QueuedConnection);
+        connect(d->thumbnailLoadThread, SIGNAL(signalThumbnailLoaded(LoadingDescription,QPixmap)),
+                this, SLOT(slotThumbnailLoaded(LoadingDescription,QPixmap)));
+
+        // Note: Here we only monitor changes to the database, because changes to the model
+        //       are also sent when thumbnails are generated, and we don't want to update
+        //       the marker tiler for that!
+        connect(DatabaseAccess::databaseWatch(), SIGNAL(imageChange(ImageChangeset)),
+                this, SLOT(slotImageChange(ImageChangeset)), Qt::QueuedConnection);
+    }
+    else
+    {
+        d->importModel         = dynamic_cast<ImportFilterModel*>(filterModel);
+
+        connect(ImportUI::instance()->getCameraController(), SIGNAL(signalThumbInfo(QString,QString,CamItemInfo,QImage)),
+                this, SLOT(slotThumbnailLoaded(QString,QString,CamItemInfo,QImage)));
+    }
 }
 
 /**
@@ -222,7 +258,14 @@ MapViewModelHelper::~MapViewModelHelper()
  */
 QAbstractItemModel* MapViewModelHelper::model() const
 {
-    return d->model;
+    if (d->mode)
+    {
+        return d->model;
+    }
+    else
+    {
+        return d->importModel;
+    }
 }
 
 /**
@@ -241,14 +284,44 @@ QItemSelectionModel* MapViewModelHelper::selectionModel() const
  */
 bool MapViewModelHelper::itemCoordinates(const QModelIndex& index, KGeoMap::GeoCoordinates* const coordinates) const
 {
-    const ImageInfo info = d->model->imageInfo(index);
-
-    if (info.isNull() || !info.hasCoordinates())
+    if (d->mode)
     {
-        return false;
-    }
+        const ImageInfo info = d->model->imageInfo(index);
 
-    *coordinates = KGeoMap::GeoCoordinates(info.latitudeNumber(), info.longitudeNumber());
+        if (info.isNull() || !info.hasCoordinates())
+        {
+            return false;
+        }
+
+        *coordinates = KGeoMap::GeoCoordinates(info.latitudeNumber(), info.longitudeNumber());
+    }
+    else
+    {
+        const CamItemInfo info = d->importModel->camItemInfo(index);
+
+        if (info.isNull())
+        {
+            return false;
+        }
+
+        double lat, lng;
+        const DMetadata meta(info.url().toLocalFile());
+        const bool haveCoordinates = meta.getGPSLatitudeNumber(&lat) && meta.getGPSLongitudeNumber(&lng);
+
+        if (haveCoordinates)
+        {
+            double alt;
+            const bool haveAlt = meta.getGPSAltitude(&alt);
+            KGeoMap::GeoCoordinates tmpCoordinates(lat, lng);
+
+            if (haveAlt)
+            {
+                tmpCoordinates.setAlt(alt);
+            }
+
+            *coordinates = tmpCoordinates;
+        }
+    }
 
     return true;
 }
@@ -266,23 +339,29 @@ QPixmap MapViewModelHelper::pixmapFromRepresentativeIndex(const QPersistentModel
         return QPixmap();
     }
 
-    QPixmap thumbnail;
-    const ImageInfo info = d->model->imageInfo(index);
-
-    if (!info.isNull())
+    if (d->mode)
     {
-        const QString path   = info.filePath();
+        const ImageInfo info = d->model->imageInfo(index);
 
-        if (d->thumbnailLoadThread->find(path, thumbnail, qMax(size.width()+2, size.height()+2)))
+        if (!info.isNull())
         {
-            return thumbnail.copy(1, 1, thumbnail.size().width()-2, thumbnail.size().height()-2);
-        }
-        else
-        {
-            return QPixmap();
+            const QString path = info.filePath();
+            QPixmap thumbnail;
+
+            if (d->thumbnailLoadThread->find(path, thumbnail, qMax(size.width()+2, size.height()+2)))
+            {
+                return thumbnail.copy(1, 1, thumbnail.size().width()-2, thumbnail.size().height()-2);
+            }
+            else
+            {
+                return QPixmap();
+            }
         }
     }
-
+    else
+    {
+        return index.data(ImportImageModel::ThumbnailRole).value<QPixmap>();
+    }
     return QPixmap();
 }
 
@@ -302,6 +381,7 @@ QPersistentModelIndex MapViewModelHelper::bestRepresentativeIndexFromList(const 
 
     // first convert from QPersistentModelIndex to QModelIndex
     QList<QModelIndex> indexList;
+    QModelIndex bestIndex;
 
     for (int i=0; i<list.count(); ++i)
     {
@@ -309,42 +389,94 @@ QPersistentModelIndex MapViewModelHelper::bestRepresentativeIndexFromList(const 
         indexList.append(newIndex);
     }
 
-    // now get the ImageInfos and convert them to GPSImageInfos
-    const QList<ImageInfo> imageInfoList =  d->model->imageInfos(indexList);
-    GPSImageInfo::List gpsImageInfoList;
-    foreach(const ImageInfo& imageInfo, imageInfoList)
+    if (d->mode)
     {
-        GPSImageInfo gpsImageInfo;
-
-        if (GPSImageInfo::fromImageInfo(imageInfo, &gpsImageInfo))
+        // now get the ImageInfos and convert them to GPSImageInfos
+        const QList<ImageInfo> imageInfoList =  d->model->imageInfos(indexList);
+        GPSImageInfo::List gpsImageInfoList;
+        foreach(const ImageInfo& imageInfo, imageInfoList)
         {
+            GPSImageInfo gpsImageInfo;
+
+            if (GPSImageInfo::fromImageInfo(imageInfo, &gpsImageInfo))
+            {
+                gpsImageInfoList << gpsImageInfo;
+            }
+        }
+
+        if (gpsImageInfoList.size()!=indexList.size())
+        {
+            // this is a problem, and unexpected
+            return indexList.first();
+        }
+
+        // now determine the best available index
+        bestIndex = indexList.first();
+        GPSImageInfo bestGPSImageInfo = gpsImageInfoList.first();
+
+        for (int i=1; i<gpsImageInfoList.count(); ++i)
+        {
+            const GPSImageInfo& currentInfo = gpsImageInfoList.at(i);
+
+            if (GPSImageInfoSorter::fitsBetter(bestGPSImageInfo, KGeoMap::KGeoMapSelectedNone,
+                                               currentInfo, KGeoMap::KGeoMapSelectedNone,
+                                               KGeoMap::KGeoMapSelectedNone, GPSImageInfoSorter::SortOptions(sortKey)))
+            {
+                bestIndex = indexList.at(i);
+                bestGPSImageInfo = currentInfo;
+            }
+        }
+    }
+    else
+    {
+        // now get the CamItemInfo and convert them to GPSImageInfos
+        const QList<CamItemInfo> imageInfoList =  d->importModel->camItemInfos(indexList);
+        GPSImageInfo::List gpsImageInfoList;
+        foreach(const CamItemInfo& imageInfo, imageInfoList)
+        {
+            const DMetadata meta(imageInfo.url().toLocalFile());
+            double lat, lng;
+            meta.getGPSLatitudeNumber(&lat) && meta.getGPSLongitudeNumber(&lng);
+
+            double alt;
+            const bool haveAlt = meta.getGPSAltitude(&alt);
+            KGeoMap::GeoCoordinates coordinates(lat, lng);
+            if (haveAlt)
+            {
+                coordinates.setAlt(alt);
+            }
+
+            GPSImageInfo gpsImageInfo;
+            gpsImageInfo.coordinates = coordinates;
+            gpsImageInfo.dateTime    = meta.getImageDateTime();
+            gpsImageInfo.rating      = meta.getImageRating();
+            gpsImageInfo.url         = imageInfo.url();
             gpsImageInfoList << gpsImageInfo;
         }
-    }
 
-    if (gpsImageInfoList.size()!=indexList.size())
-    {
-        // this is a problem, and unexpected
-        return indexList.first();
-    }
-
-    // now determine the best available index
-    QModelIndex bestIndex = indexList.first();
-    GPSImageInfo bestGPSImageInfo = gpsImageInfoList.first();
-
-    for (int i=1; i<gpsImageInfoList.count(); ++i)
-    {
-        const GPSImageInfo& currentInfo = gpsImageInfoList.at(i);
-
-        if (GPSImageInfoSorter::fitsBetter(bestGPSImageInfo, KGeoMap::KGeoMapSelectedNone,
-                                           currentInfo, KGeoMap::KGeoMapSelectedNone,
-                                           KGeoMap::KGeoMapSelectedNone, GPSImageInfoSorter::SortOptions(sortKey)))
+        if (gpsImageInfoList.size()!=indexList.size())
         {
-            bestIndex = indexList.at(i);
-            bestGPSImageInfo = currentInfo;
+            // this is a problem, and unexpected
+            return indexList.first();
+        }
+
+        // now determine the best available index
+        bestIndex = indexList.first();
+        GPSImageInfo bestGPSImageInfo = gpsImageInfoList.first();
+
+        for (int i=1; i<gpsImageInfoList.count(); ++i)
+        {
+            const GPSImageInfo& currentInfo = gpsImageInfoList.at(i);
+
+            if (GPSImageInfoSorter::fitsBetter(bestGPSImageInfo, KGeoMap::KGeoMapSelectedNone,
+                                               currentInfo, KGeoMap::KGeoMapSelectedNone,
+                                               KGeoMap::KGeoMapSelectedNone, GPSImageInfoSorter::SortOptions(sortKey)))
+            {
+                bestIndex = indexList.at(i);
+                bestGPSImageInfo = currentInfo;
+            }
         }
     }
-
     // and return the index
     return QPersistentModelIndex(bestIndex);
 }
@@ -365,6 +497,26 @@ void MapViewModelHelper::slotThumbnailLoaded(const LoadingDescription& loadingDe
     {
         QPersistentModelIndex goodIndex(currentIndex);
         emit(signalThumbnailAvailableForIndex(goodIndex, thumb.copy(1, 1, thumb.size().width()-2, thumb.size().height()-2)));
+    }
+}
+
+/**
+ * @brief Because of a call to pixmapFromRepresentativeIndex, some thumbnails are not yet loaded at the time of requesting. When each thumbnail loads, this slot is called and emits a signal that announces the map that the thumbnail is available.
+ */
+void MapViewModelHelper::slotThumbnailLoaded(const QString& folder, const QString& file, const CamItemInfo& info, const QImage& thumb)
+{
+    if (thumb.isNull())
+    {
+        return;
+    }
+
+    QPixmap pix = QPixmap::fromImage(thumb);
+    const QModelIndex currentIndex = d->importModel->indexForPath(folder + file);
+
+    if (currentIndex.isValid())
+    {
+        QPersistentModelIndex goodIndex(currentIndex);
+        emit(signalThumbnailAvailableForIndex(goodIndex, pix.copy(1, 1, pix.size().width()-2, pix.size().height()-2)));
     }
 }
 
@@ -427,7 +579,7 @@ void MapViewModelHelper::slotImageChange(const ImageChangeset& changeset)
 /**
  * @brief Returns the ImageInfo for the current image
  */
-ImageInfo MapWidgetView::currentInfo()
+ImageInfo MapWidgetView::currentImageInfo()
 {
     /// @todo Have kgeomapwidget honor the 'current index'
     QModelIndex currentIndex = d->selectionModel->currentIndex();
@@ -444,6 +596,28 @@ ImageInfo MapWidgetView::currentInfo()
     }
 
     return d->imageFilterModel->imageInfo(currentIndex);
+}
+
+/**
+ * @brief Returns the CamItemInfo for the current image
+ */
+CamItemInfo MapWidgetView::currentCamItemInfo()
+{
+    /// @todo Have kgeomapwidget honor the 'current index'
+    QModelIndex currentIndex = d->selectionModel->currentIndex();
+
+    if (!currentIndex.isValid())
+    {
+        /// @todo This is temporary until kgeomapwidget marks a 'current index'
+        if (!d->selectionModel->hasSelection())
+        {
+            return CamItemInfo();
+        }
+
+        currentIndex = d->selectionModel->selectedIndexes().first();
+    }
+
+    return d->importFilterModel->camItemInfo(currentIndex);
 }
 
 } //namespace Digikam

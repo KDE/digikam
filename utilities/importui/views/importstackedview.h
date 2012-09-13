@@ -36,7 +36,8 @@
 #include "thumbbardock.h"
 #include "camiteminfo.h"
 #include "importiconview.h"
-#include "../../../digikam/views/mediaplayerview.h"
+#include "mediaplayerview.h"
+#include "mapwidgetview.h"
 
 namespace Digikam
 {
@@ -66,8 +67,8 @@ public:
     ImportThumbnailBar* thumbBar()          const;
     ImportIconView*     importIconView()    const;
     ImportPreviewView*  importPreviewView() const;
-    //FIXME: MapWidgetView*    mapWidgetView()    const;
-    MediaPlayerView*  mediaPlayerView()  const;
+    MapWidgetView*      mapWidgetView()     const;
+    MediaPlayerView*    mediaPlayerView()   const;
 
     bool isInSingleFileMode() const;
     bool isInMultipleFileMode() const;

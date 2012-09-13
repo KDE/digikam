@@ -52,7 +52,7 @@ public:
         importIconView      = 0;
         importPreviewView   = 0;
         mediaPlayerView     = 0;
-        //mapWidgetView       = 0;
+        mapWidgetView       = 0;
         syncingSelection    = false;
     }
 
@@ -66,7 +66,7 @@ public:
     ImportPreviewView*  importPreviewView;
     ThumbBarDock*       thumbBarDock;
     MediaPlayerView*    mediaPlayerView; // Reuse of albumgui mediaplayer view.
-    //FIXME: MapWidgetView*     mapWidgetView;
+    MapWidgetView*      mapWidgetView;
 };
 
 ImportStackedView::ImportStackedView(CameraController* const controller, QWidget* const parent)
@@ -88,14 +88,14 @@ ImportStackedView::ImportStackedView(CameraController* const controller, QWidget
     d->thumbBarDock->setObjectName("import_thumbbar");
 
     d->mediaPlayerView = new MediaPlayerView(this);
-    //FIXME: d->mapWidgetView   = new MapWidgetView(d->importIconView->getSelectionModel(),
-                                           //d->importIconView->imageFilterModel(), this);
-    //FIXME: d->mapWidgetView->setObjectName("import_mapwidgetview");
+    d->mapWidgetView   = new MapWidgetView(d->importIconView->getSelectionModel(),
+                                           d->importIconView->importFilterModel(), this, false);
+    d->mapWidgetView->setObjectName("import_mapwidgetview");
 
     insertWidget(PreviewCameraMode, d->importIconView);
     insertWidget(PreviewImageMode,  d->importPreviewView);
     insertWidget(MediaPlayerMode,   d->mediaPlayerView);
-    //insertWidget(MapWidgetMode,    d->mapWidgetView);
+    insertWidget(MapWidgetMode,    d->mapWidgetView);
 
     setPreviewMode(PreviewCameraMode);
     setAttribute(Qt::WA_DeleteOnClose);
@@ -227,10 +227,10 @@ ImportPreviewView* ImportStackedView::importPreviewView() const
     return d->importPreviewView;
 }
 
-//MapWidgetView* ImportStackedView::mapWidgetView() const
-//{
-//    return d->mapWidgetView;
-//}
+MapWidgetView* ImportStackedView::mapWidgetView() const
+{
+    return d->mapWidgetView;
+}
 
 MediaPlayerView* ImportStackedView::mediaPlayerView() const
 {
@@ -323,7 +323,7 @@ void ImportStackedView::setPreviewMode(const int mode)
     }
 
     //TODO: Implement the MapPageMode
-    if (mode == PreviewCameraMode /*|| mode == MapWidgetMode*/)
+    if (mode == PreviewCameraMode || mode == MapWidgetMode)
     {
         setPreviewItem();
         setCurrentIndex(mode);
@@ -333,16 +333,16 @@ void ImportStackedView::setPreviewMode(const int mode)
         setCurrentIndex(mode);
     }
 
-    //d->mapWidgetView->setActive(mode == MapWidgetMode);
+    d->mapWidgetView->setActive(mode == MapWidgetMode);
 
     if (mode == PreviewCameraMode)
     {
         d->importIconView->setFocus();
     }
-    //else if (mode == MapWidgetMode)
-    //{
-    //    d->mapWidgetView->setFocus();
-    //}
+    else if (mode == MapWidgetMode)
+    {
+        d->mapWidgetView->setFocus();
+    }
 
     emit signalViewModeChanged();
 }

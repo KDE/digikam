@@ -1410,7 +1410,7 @@ void DigikamView::slotImagePreview()
     }
     else if (currentPreviewMode == StackedView::MapWidgetMode)
     {
-        currentInfo = d->mapView->currentInfo();
+        currentInfo = d->mapView->currentImageInfo();
     }
 
     slotTogglePreviewMode(currentInfo);

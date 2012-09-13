@@ -2344,12 +2344,13 @@ void ImportUI::autoRotateItems()
 
     FileActionMngr::instance()->transform(list, KExiv2Iface::RotationMatrix::NoTransformation);
 }
-
+#include "../main/importui.h"
 void ImportUI::slotSwitchedToPreview()
 {
     d->camItemPreviewAction->setChecked(true);
     d->zoomBar->setBarMode(DZoomBar::PreviewZoomCtrl);
     d->showBarAction->setEnabled(true);
+    d->imageViewSelectionAction->setCurrentAction(d->camItemPreviewAction);
 }
 
 void ImportUI::slotSwitchedToIconView()
@@ -2357,14 +2358,15 @@ void ImportUI::slotSwitchedToIconView()
     d->zoomBar->setBarMode(DZoomBar::ThumbsSizeCtrl);
     d->iconViewAction->setChecked(true);
     d->showBarAction->setEnabled(false);
+    d->imageViewSelectionAction->setCurrentAction(d->iconViewAction);
 }
 
 void ImportUI::slotSwitchedToMapView()
 {
-    //TODO: Link to map view's zoom actions
     d->zoomBar->setBarMode(DZoomBar::ThumbsSizeCtrl);
     d->mapViewAction->setChecked(true);
     d->showBarAction->setEnabled(false);
+    d->imageViewSelectionAction->setCurrentAction(d->mapViewAction);
 }
 
 bool ImportUI::createAutoAlbum(const KUrl& parentURL, const QString& sub,

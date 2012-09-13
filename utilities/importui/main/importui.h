@@ -58,7 +58,6 @@ class Album;
 class CollectionLocation;
 class CameraHistoryUpdater;
 class ImportIconView;
-//class ImportDelegate;
 
 class ImportUI : public KXmlGuiWindow
 {

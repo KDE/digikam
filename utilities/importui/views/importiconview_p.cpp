@@ -43,7 +43,6 @@ void ImportIconView::Private::updateOverlays()
 {
     Q_Q(ImportIconView);
 
-
     ImportSettings* settings = ImportSettings::instance();
 
     if (overlaysActive)
@@ -78,7 +77,6 @@ void ImportIconView::Private::updateOverlays()
             overlaysActive = true;
         }
     }
-
 }
 
 } // namespace Digikam

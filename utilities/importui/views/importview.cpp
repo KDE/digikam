@@ -44,6 +44,7 @@
 #include "sidebar.h"
 #include "dzoombar.h"
 #include "camitemsortsettings.h"
+#include "mapwidgetview.h"
 
 namespace Digikam
 {
@@ -61,6 +62,7 @@ public:
         thumbSizeTimer(0),
         parent(0),
         iconView(0),
+        mapView(0),
         StackedView(0),
         lastPreviewMode(ImportStackedView::PreviewCameraMode)
         //FIXME: filterWidget(0)
@@ -85,7 +87,7 @@ public:
     ImportUI*                     parent;
 
     ImportIconView*               iconView;
-    //TODO: MapWidgetView*        mapView;
+    MapWidgetView*                mapView;
     ImportStackedView*            StackedView;
     int                           lastPreviewMode;
 
@@ -128,7 +130,7 @@ ImportView::ImportView(ImportUI* const ui, QWidget* const parent)
     d->StackedView->setDockArea(d->dockArea);
 
     d->iconView    = d->StackedView->importIconView();
-    //TODO: d->mapView  = d->StackedView->mapWidgetView();
+    d->mapView     = d->StackedView->mapWidgetView();
 
     d->addPageUpDownActions(this, d->StackedView->importPreviewView());
     d->addPageUpDownActions(this, d->StackedView->thumbBar());
@@ -276,7 +278,7 @@ void ImportView::loadViewState()
     thumbbarState = group.readEntry("ThumbbarState", thumbbarState);
     d->dockArea->restoreState(QByteArray::fromBase64(thumbbarState));
 
-    //TODO: d->mapView->loadState();
+    d->mapView->loadState();
 }
 
 void ImportView::saveViewState()
@@ -296,7 +298,7 @@ void ImportView::saveViewState()
     d->StackedView->thumbBarDock()->close();
     group.writeEntry("ThumbbarState", d->dockArea->saveState().toBase64());
 
-    //TODO: d->mapView->saveState();
+    d->mapView->saveState();
 }
 
 CamItemInfo ImportView::camItemInfo(const QString& folder, const QString& file) const
@@ -640,10 +642,10 @@ void ImportView::slotImagePreview()
         currentInfo = d->iconView->currentInfo();
     }
     //TODO: Implement MapWidget
-    /*else if (currentPreviewMode == ImportStackedView::MapWidgetMode)
+    else if (currentPreviewMode == ImportStackedView::MapWidgetMode)
     {
-        currentInfo = d->mapView->currentInfo();
-    }*/
+        currentInfo = d->mapView->currentCamItemInfo();
+    }
 
     slotTogglePreviewMode(currentInfo, false);
 }
