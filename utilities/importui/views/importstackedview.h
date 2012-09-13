@@ -70,7 +70,7 @@ public:
     MapWidgetView*      mapWidgetView()     const;
     MediaPlayerView*    mediaPlayerView()   const;
 
-    bool isInSingleFileMode() const;
+    bool isInSingleFileMode()   const;
     bool isInMultipleFileMode() const;
     //FIXME: bool isInAbstractMode() const;
 
@@ -78,7 +78,7 @@ public:
                         const CamItemInfo& previous = CamItemInfo(),
                         const CamItemInfo& next = CamItemInfo());
 
-    int  previewMode();
+    int  previewMode() const;
     void setPreviewMode(const int mode);
     void previewLoaded();
 
@@ -87,13 +87,14 @@ public:
     void   fitToWindow();
     void   toggleFitToWindowOr100();
     void   zoomTo100Percents();
-    bool   maxZoom();
-    bool   minZoom();
     void   setZoomFactor(double z);
     void   setZoomFactorSnapped(double z);
-    double zoomFactor();
-    double zoomMin();
-    double zoomMax();
+
+    bool   maxZoom()    const;
+    bool   minZoom()    const;
+    double zoomFactor() const;
+    double zoomMin()    const;
+    double zoomMax()    const;
 
 Q_SIGNALS:
 

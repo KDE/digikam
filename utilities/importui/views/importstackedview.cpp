@@ -95,7 +95,7 @@ ImportStackedView::ImportStackedView(CameraController* const controller, QWidget
     insertWidget(PreviewCameraMode, d->importIconView);
     insertWidget(PreviewImageMode,  d->importPreviewView);
     insertWidget(MediaPlayerMode,   d->mediaPlayerView);
-    insertWidget(MapWidgetMode,    d->mapWidgetView);
+    insertWidget(MapWidgetMode,     d->mapWidgetView);
 
     setPreviewMode(PreviewCameraMode);
     setAttribute(Qt::WA_DeleteOnClose);
@@ -185,8 +185,8 @@ ImportStackedView::~ImportStackedView()
 
 void ImportStackedView::readSettings()
 {
-    ImportSettings* settings = ImportSettings::instance();
-    bool showThumbbar        = settings->getShowThumbbar();
+    ImportSettings* const settings = ImportSettings::instance();
+    bool showThumbbar              = settings->getShowThumbbar();
     d->thumbBarDock->setShouldBeVisible(showThumbbar);
 }
 
@@ -299,7 +299,7 @@ QString ImportStackedView::identifyCategoryforMime(const QString& mime) const
     return mime.split("/").at(0);
 }
 
-int ImportStackedView::previewMode()
+int ImportStackedView::previewMode() const
 {
     return indexOf(currentWidget());
 }
@@ -307,7 +307,7 @@ int ImportStackedView::previewMode()
 void ImportStackedView::setPreviewMode(const int mode)
 {
     if (mode != PreviewCameraMode && mode != PreviewImageMode &&
-        mode != MediaPlayerMode && mode != MapWidgetMode)
+        mode != MediaPlayerMode   && mode != MapWidgetMode)
     {
         return;
     }
@@ -361,7 +361,7 @@ void ImportStackedView::syncSelection(ImportCategorizedView* const from, ImportC
 
     foreach(const QItemSelectionRange& range, selection)
     {
-        QModelIndex topLeft = toModel->indexForCamItemInfo(fromModel->camItemInfo(range.topLeft()));
+        QModelIndex topLeft     = toModel->indexForCamItemInfo(fromModel->camItemInfo(range.topLeft()));
         QModelIndex bottomRight = toModel->indexForCamItemInfo(fromModel->camItemInfo(range.bottomRight()));
         newSelection.select(topLeft, bottomRight);
     }
@@ -439,12 +439,12 @@ void ImportStackedView::toggleFitToWindowOr100()
     d->importPreviewView->layout()->toggleFitToWindowOr100();
 }
 
-bool ImportStackedView::maxZoom()
+bool ImportStackedView::maxZoom() const
 {
     return d->importPreviewView->layout()->atMaxZoom();
 }
 
-bool ImportStackedView::minZoom()
+bool ImportStackedView::minZoom() const
 {
     return d->importPreviewView->layout()->atMinZoom();
 }
@@ -460,17 +460,17 @@ void ImportStackedView::setZoomFactorSnapped(double z)
     d->importPreviewView->layout()->setZoomFactor(z, QPoint(), SinglePhotoPreviewLayout::SnapZoomFactor);
 }
 
-double ImportStackedView::zoomFactor()
+double ImportStackedView::zoomFactor() const
 {
     return d->importPreviewView->layout()->zoomFactor();
 }
 
-double ImportStackedView::zoomMin()
+double ImportStackedView::zoomMin() const
 {
     return d->importPreviewView->layout()->minZoomFactor();
 }
 
-double ImportStackedView::zoomMax()
+double ImportStackedView::zoomMax() const
 {
     return d->importPreviewView->layout()->maxZoomFactor();
 }
