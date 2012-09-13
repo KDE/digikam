@@ -6,7 +6,7 @@
  * Date        : 2004-10-04
  * Description : synchronize Input/Output jobs.
  *
- * Copyright (C) 2004      by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Copyright (C) 2004      by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C) 2006-2012 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
