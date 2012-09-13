@@ -66,12 +66,11 @@ class ImageFilterModel;
  *
  * @brief Class containing Digikam's central map view.
  */
-
-class MapWidgetView::MapWidgetViewPriv
+class MapWidgetView::Private
 {
 public:
 
-    MapWidgetViewPriv()
+    Private()
         :vbox(0),
          mapWidget(0),
          imageFilterModel(0),
@@ -85,16 +84,16 @@ public:
     {
     }
 
-    KVBox*               vbox;
-    KGeoMap::KGeoMapWidget*    mapWidget;
-    ImageFilterModel*    imageFilterModel;
-    ImageAlbumModel*     imageModel;
-    ImportFilterModel*   importFilterModel;
-    ImportImageModel*    importModel;
-    QItemSelectionModel* selectionModel;
-    MapViewModelHelper*  mapViewModelHelper;
-    GPSImageInfoSorter*  gpsImageInfoSorter;
-    bool                 mode;
+    KVBox*                  vbox;
+    KGeoMap::KGeoMapWidget* mapWidget;
+    ImageFilterModel*       imageFilterModel;
+    ImageAlbumModel*        imageModel;
+    ImportFilterModel*      importFilterModel;
+    ImportImageModel*       importModel;
+    QItemSelectionModel*    selectionModel;
+    MapViewModelHelper*     mapViewModelHelper;
+    GPSImageInfoSorter*     gpsImageInfoSorter;
+    bool                    mode;
 };
 
 /**
@@ -105,33 +104,33 @@ public:
  */
 MapWidgetView::MapWidgetView(QItemSelectionModel* const selectionModel,
                              KCategorizedSortFilterProxyModel* const imageFilterModel, QWidget* const parent, bool mode)
-    : QWidget(parent), StateSavingObject(this), d(new MapWidgetViewPriv())
+    : QWidget(parent), StateSavingObject(this), d(new Private())
 {
     d->mode = mode;
 
     if (d->mode)
     {
-        d->imageFilterModel     = dynamic_cast<ImageFilterModel*>(imageFilterModel);
-        d->imageModel           = dynamic_cast<ImageAlbumModel*>(imageFilterModel->sourceModel());
-        d->mapViewModelHelper   = new MapViewModelHelper(d->selectionModel, imageFilterModel, this);
+        d->imageFilterModel   = dynamic_cast<ImageFilterModel*>(imageFilterModel);
+        d->imageModel         = dynamic_cast<ImageAlbumModel*>(imageFilterModel->sourceModel());
+        d->mapViewModelHelper = new MapViewModelHelper(d->selectionModel, imageFilterModel, this);
     }
     else
     {
-        d->importFilterModel    = dynamic_cast<ImportFilterModel*>(imageFilterModel);
-        d->importModel          = dynamic_cast<ImportImageModel*>(imageFilterModel->sourceModel());
-        d->mapViewModelHelper   = new MapViewModelHelper(d->selectionModel, d->importFilterModel, this, false);
+        d->importFilterModel  = dynamic_cast<ImportFilterModel*>(imageFilterModel);
+        d->importModel        = dynamic_cast<ImportImageModel*>(imageFilterModel->sourceModel());
+        d->mapViewModelHelper = new MapViewModelHelper(d->selectionModel, d->importFilterModel, this, false);
     }
 
-    d->selectionModel       = selectionModel;
+    d->selectionModel             = selectionModel;
     QVBoxLayout* const vBoxLayout = new QVBoxLayout(this);
-
-    d->mapWidget = new KGeoMap::KGeoMapWidget(this);
+    d->mapWidget                  = new KGeoMap::KGeoMapWidget(this);
     d->mapWidget->setAvailableMouseModes(KGeoMap::MouseModePan|KGeoMap::MouseModeZoomIntoGroup|KGeoMap::MouseModeSelectThumbnail);
     d->mapWidget->setVisibleMouseModes(KGeoMap::MouseModePan|KGeoMap::MouseModeZoomIntoGroup|KGeoMap::MouseModeSelectThumbnail);
     KGeoMap::ItemMarkerTiler* const kgeomapMarkerModel = new KGeoMap::ItemMarkerTiler(d->mapViewModelHelper, this);
     d->mapWidget->setGroupedModel(kgeomapMarkerModel);
     d->mapWidget->setBackend("marble");
-    d->gpsImageInfoSorter = new GPSImageInfoSorter(this);
+
+    d->gpsImageInfoSorter         = new GPSImageInfoSorter(this);
     d->gpsImageInfoSorter->addToKGeoMapWidget(d->mapWidget);
     vBoxLayout->addWidget(d->mapWidget);
     vBoxLayout->addWidget(d->mapWidget->getControlWidget());
@@ -197,10 +196,10 @@ bool MapWidgetView::getActiveState() const
 
 //-------------------------------------------------------------------------------------------------------------
 
-class MapViewModelHelper::MapViewModelHelperPrivate
+class MapViewModelHelper::Private
 {
 public:
-    MapViewModelHelperPrivate()
+    Private()
         : model(0),
           importModel(0),
           selectionModel(0),
@@ -217,10 +216,10 @@ public:
 
 MapViewModelHelper::MapViewModelHelper(QItemSelectionModel* const selection,
                                        KCategorizedSortFilterProxyModel* const filterModel, QObject* const parent, bool mode)
-    : KGeoMap::ModelHelper(parent), d(new MapViewModelHelperPrivate())
+    : KGeoMap::ModelHelper(parent), d(new Private())
 {
-    d->selectionModel      = selection;
-    d->mode = mode;
+    d->selectionModel = selection;
+    d->mode           = mode;
 
     if (d->mode)
     {
@@ -238,7 +237,7 @@ MapViewModelHelper::MapViewModelHelper(QItemSelectionModel* const selection,
     }
     else
     {
-        d->importModel         = dynamic_cast<ImportFilterModel*>(filterModel);
+        d->importModel = dynamic_cast<ImportFilterModel*>(filterModel);
 
         connect(ImportUI::instance()->getCameraController(), SIGNAL(signalThumbInfo(QString,QString,CamItemInfo,QImage)),
                 this, SLOT(slotThumbnailLoaded(QString,QString,CamItemInfo,QImage)));
@@ -381,7 +380,7 @@ QPersistentModelIndex MapViewModelHelper::bestRepresentativeIndexFromList(const 
 
     // first convert from QPersistentModelIndex to QModelIndex
     QList<QModelIndex> indexList;
-    QModelIndex bestIndex;
+    QModelIndex        bestIndex;
 
     for (int i=0; i<list.count(); ++i)
     {
@@ -394,6 +393,7 @@ QPersistentModelIndex MapViewModelHelper::bestRepresentativeIndexFromList(const 
         // now get the ImageInfos and convert them to GPSImageInfos
         const QList<ImageInfo> imageInfoList =  d->model->imageInfos(indexList);
         GPSImageInfo::List gpsImageInfoList;
+
         foreach(const ImageInfo& imageInfo, imageInfoList)
         {
             GPSImageInfo gpsImageInfo;
@@ -411,7 +411,7 @@ QPersistentModelIndex MapViewModelHelper::bestRepresentativeIndexFromList(const 
         }
 
         // now determine the best available index
-        bestIndex = indexList.first();
+        bestIndex                     = indexList.first();
         GPSImageInfo bestGPSImageInfo = gpsImageInfoList.first();
 
         for (int i=1; i<gpsImageInfoList.count(); ++i)
@@ -422,7 +422,7 @@ QPersistentModelIndex MapViewModelHelper::bestRepresentativeIndexFromList(const 
                                                currentInfo, KGeoMap::KGeoMapSelectedNone,
                                                KGeoMap::KGeoMapSelectedNone, GPSImageInfoSorter::SortOptions(sortKey)))
             {
-                bestIndex = indexList.at(i);
+                bestIndex        = indexList.at(i);
                 bestGPSImageInfo = currentInfo;
             }
         }
@@ -431,7 +431,8 @@ QPersistentModelIndex MapViewModelHelper::bestRepresentativeIndexFromList(const 
     {
         // now get the CamItemInfo and convert them to GPSImageInfos
         const QList<CamItemInfo> imageInfoList =  d->importModel->camItemInfos(indexList);
-        GPSImageInfo::List gpsImageInfoList;
+        GPSImageInfo::List       gpsImageInfoList;
+
         foreach(const CamItemInfo& imageInfo, imageInfoList)
         {
             const DMetadata meta(imageInfo.url().toLocalFile());
@@ -441,6 +442,7 @@ QPersistentModelIndex MapViewModelHelper::bestRepresentativeIndexFromList(const 
             double alt;
             const bool haveAlt = meta.getGPSAltitude(&alt);
             KGeoMap::GeoCoordinates coordinates(lat, lng);
+
             if (haveAlt)
             {
                 coordinates.setAlt(alt);
@@ -461,7 +463,7 @@ QPersistentModelIndex MapViewModelHelper::bestRepresentativeIndexFromList(const 
         }
 
         // now determine the best available index
-        bestIndex = indexList.first();
+        bestIndex                     = indexList.first();
         GPSImageInfo bestGPSImageInfo = gpsImageInfoList.first();
 
         for (int i=1; i<gpsImageInfoList.count(); ++i)
@@ -472,7 +474,7 @@ QPersistentModelIndex MapViewModelHelper::bestRepresentativeIndexFromList(const 
                                                currentInfo, KGeoMap::KGeoMapSelectedNone,
                                                KGeoMap::KGeoMapSelectedNone, GPSImageInfoSorter::SortOptions(sortKey)))
             {
-                bestIndex = indexList.at(i);
+                bestIndex        = indexList.at(i);
                 bestGPSImageInfo = currentInfo;
             }
         }
@@ -482,7 +484,8 @@ QPersistentModelIndex MapViewModelHelper::bestRepresentativeIndexFromList(const 
 }
 
 /**
- * @brief Because of a call to pixmapFromRepresentativeIndex, some thumbnails are not yet loaded at the time of requesting. When each thumbnail loads, this slot is called and emits a signal that announces the map that the thumbnail is available.
+ * @brief Because of a call to pixmapFromRepresentativeIndex, some thumbnails are not yet loaded at the time of requesting. 
+ *        When each thumbnail loads, this slot is called and emits a signal that announces the map that the thumbnail is available.
  */
 void MapViewModelHelper::slotThumbnailLoaded(const LoadingDescription& loadingDescription, const QPixmap& thumb)
 {
@@ -501,16 +504,17 @@ void MapViewModelHelper::slotThumbnailLoaded(const LoadingDescription& loadingDe
 }
 
 /**
- * @brief Because of a call to pixmapFromRepresentativeIndex, some thumbnails are not yet loaded at the time of requesting. When each thumbnail loads, this slot is called and emits a signal that announces the map that the thumbnail is available.
+ * @brief Because of a call to pixmapFromRepresentativeIndex, some thumbnails are not yet loaded at the time of requesting. 
+ *        When each thumbnail loads, this slot is called and emits a signal that announces the map that the thumbnail is available.
  */
-void MapViewModelHelper::slotThumbnailLoaded(const QString& folder, const QString& file, const CamItemInfo& info, const QImage& thumb)
+void MapViewModelHelper::slotThumbnailLoaded(const QString& folder, const QString& file, const CamItemInfo& /*info*/, const QImage& thumb)
 {
     if (thumb.isNull())
     {
         return;
     }
 
-    QPixmap pix = QPixmap::fromImage(thumb);
+    QPixmap pix                    = QPixmap::fromImage(thumb);
     const QModelIndex currentIndex = d->importModel->indexForPath(folder + file);
 
     if (currentIndex.isValid())
@@ -558,11 +562,10 @@ void MapViewModelHelper::slotImageChange(const ImageChangeset& changeset)
 //    const DatabaseFields::ImagePositions imagePositionChanges = changes;
 
     /// @todo More detailed check
-    if (   ( changes & DatabaseFields::LatitudeNumber )
-           || ( changes & DatabaseFields::LongitudeNumber )
-           || ( changes & DatabaseFields::Altitude ) )
+    if (   ( changes & DatabaseFields::LatitudeNumber )  ||
+           ( changes & DatabaseFields::LongitudeNumber ) ||
+           ( changes & DatabaseFields::Altitude ) )
     {
-
         foreach(const qlonglong& id, changeset.ids())
         {
             const QModelIndex index = d->model->indexForImageId(id);
@@ -579,7 +582,7 @@ void MapViewModelHelper::slotImageChange(const ImageChangeset& changeset)
 /**
  * @brief Returns the ImageInfo for the current image
  */
-ImageInfo MapWidgetView::currentImageInfo()
+ImageInfo MapWidgetView::currentImageInfo() const
 {
     /// @todo Have kgeomapwidget honor the 'current index'
     QModelIndex currentIndex = d->selectionModel->currentIndex();
@@ -601,7 +604,7 @@ ImageInfo MapWidgetView::currentImageInfo()
 /**
  * @brief Returns the CamItemInfo for the current image
  */
-CamItemInfo MapWidgetView::currentCamItemInfo()
+CamItemInfo MapWidgetView::currentCamItemInfo() const
 {
     /// @todo Have kgeomapwidget honor the 'current index'
     QModelIndex currentIndex = d->selectionModel->currentIndex();

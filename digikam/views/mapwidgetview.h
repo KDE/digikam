@@ -59,11 +59,12 @@ class MapViewModelHelper : public KGeoMap::ModelHelper
 
 public:
 
-    MapViewModelHelper(QItemSelectionModel* selection, KCategorizedSortFilterProxyModel* const filterModel, QObject* const parent = 0, bool mode = true);
+    MapViewModelHelper(QItemSelectionModel* const selection, KCategorizedSortFilterProxyModel* const filterModel,
+                       QObject* const parent = 0, bool mode = true);
     virtual ~MapViewModelHelper();
 
-    virtual QAbstractItemModel* model() const;
-    virtual QItemSelectionModel* selectionModel() const;
+    virtual QAbstractItemModel* model()                                                                const;
+    virtual QItemSelectionModel* selectionModel()                                                      const;
     virtual bool itemCoordinates(const QModelIndex& index, KGeoMap::GeoCoordinates* const coordinates) const;
 
     virtual QPixmap pixmapFromRepresentativeIndex(const QPersistentModelIndex& index, const QSize& size);
@@ -83,8 +84,8 @@ private Q_SLOTS:
 
 private:
 
-    class MapViewModelHelperPrivate;
-    MapViewModelHelperPrivate* const d;
+    class Private;
+    Private* const d;
 };
 
 // ------------------------------------------------------------------------------------------------------------
@@ -102,8 +103,9 @@ public:
     void openAlbum(Album* const album);
     void setActive(const bool state);
     bool getActiveState() const;
-    ImageInfo currentImageInfo();
-    CamItemInfo currentCamItemInfo();
+
+    ImageInfo   currentImageInfo()   const;
+    CamItemInfo currentCamItemInfo() const;
 
 protected:
 
@@ -112,8 +114,8 @@ protected:
 
 private:
 
-    class MapWidgetViewPriv;
-    MapWidgetViewPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam
