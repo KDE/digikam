@@ -7,7 +7,7 @@
  * Description : main program from digiKam
  *
  * Copyright (C) 2002-2006 by Renchi Raju <renchi at pooh.tam.uiuc.edu>
- * Copyright (C) 2002-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2002-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -116,7 +116,7 @@ int main(int argc, char* argv[])
         return 1;
     }
 
-    KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
+    KCmdLineArgs* const args = KCmdLineArgs::parsedArgs();
 
     QString commandLineDBPath;
 
@@ -139,7 +139,7 @@ int main(int argc, char* argv[])
     QString version           = group.readEntry("Version", QString());
     KConfigGroup mainConfig   = config->group("Album Settings");
 
-    QString firstAlbumPath;
+    QString            firstAlbumPath;
     DatabaseParameters params;
 
     // Run the first run assistant if we have no or very old config
@@ -185,7 +185,7 @@ int main(int argc, char* argv[])
     AlbumManager::instance()->setDatabase(params, !commandLineDBPath.isNull(), firstAlbumPath);
 
     // create main window
-    DigikamApp* digikam = new DigikamApp();
+    DigikamApp* const digikam = new DigikamApp();
 
     // Bug #247175:
     // Add a connection to the destroyed() signal when the digiKam mainwindow has been
