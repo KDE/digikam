@@ -6,7 +6,7 @@
  * Date        : 2006-07-09
  * Description : item tool tip configuration setup tab
  *
- * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -48,11 +48,11 @@ using namespace Digikam;
 namespace ShowFoto
 {
 
-class SetupToolTip::SetupToolTipPriv
+class SetupToolTip::Private
 {
 public:
 
-    SetupToolTipPriv() :
+    Private() :
         showFileDateBox(0),
         showFileNameBox(0),
         showFileSizeBox(0),
@@ -106,26 +106,27 @@ public:
 
     DFontSelect*         fontSelect;
 };
-const QString SetupToolTip::SetupToolTipPriv::configGroupName("ImageViewer Settings");
-const QString SetupToolTip::SetupToolTipPriv::configShowToolTipsEntry("Show ToolTips");
-const QString SetupToolTip::SetupToolTipPriv::configToolTipsFontEntry("ToolTips Font");
-const QString SetupToolTip::SetupToolTipPriv::configToolTipsShowFileNameEntry("ToolTips Show File Name");
-const QString SetupToolTip::SetupToolTipPriv::configToolTipsShowFileDateEntry("ToolTips Show File Date");
-const QString SetupToolTip::SetupToolTipPriv::configToolTipsShowFileSizeEntry("ToolTips Show File Size");
-const QString SetupToolTip::SetupToolTipPriv::configToolTipsShowImageTypeEntry("ToolTips Show Image Type");
-const QString SetupToolTip::SetupToolTipPriv::configToolTipsShowImageDimEntry("ToolTips Show Image Dim");
-const QString SetupToolTip::SetupToolTipPriv::configToolTipsShowPhotoMakeEntry("ToolTips Show Photo Make");
-const QString SetupToolTip::SetupToolTipPriv::configToolTipsShowPhotoDateEntry("ToolTips Show Photo Date");
-const QString SetupToolTip::SetupToolTipPriv::configToolTipsShowPhotoFocalEntry("ToolTips Show Photo Focal");
-const QString SetupToolTip::SetupToolTipPriv::configToolTipsShowPhotoExpoEntry("ToolTips Show Photo Expo");
-const QString SetupToolTip::SetupToolTipPriv::configToolTipsShowPhotoModeEntry("ToolTips Show Photo Mode");
-const QString SetupToolTip::SetupToolTipPriv::configToolTipsShowPhotoFlashEntry("ToolTips Show Photo Flash");
-const QString SetupToolTip::SetupToolTipPriv::configToolTipsShowPhotoWBEntry("ToolTips Show Photo WB");
+
+const QString SetupToolTip::Private::configGroupName("ImageViewer Settings");
+const QString SetupToolTip::Private::configShowToolTipsEntry("Show ToolTips");
+const QString SetupToolTip::Private::configToolTipsFontEntry("ToolTips Font");
+const QString SetupToolTip::Private::configToolTipsShowFileNameEntry("ToolTips Show File Name");
+const QString SetupToolTip::Private::configToolTipsShowFileDateEntry("ToolTips Show File Date");
+const QString SetupToolTip::Private::configToolTipsShowFileSizeEntry("ToolTips Show File Size");
+const QString SetupToolTip::Private::configToolTipsShowImageTypeEntry("ToolTips Show Image Type");
+const QString SetupToolTip::Private::configToolTipsShowImageDimEntry("ToolTips Show Image Dim");
+const QString SetupToolTip::Private::configToolTipsShowPhotoMakeEntry("ToolTips Show Photo Make");
+const QString SetupToolTip::Private::configToolTipsShowPhotoDateEntry("ToolTips Show Photo Date");
+const QString SetupToolTip::Private::configToolTipsShowPhotoFocalEntry("ToolTips Show Photo Focal");
+const QString SetupToolTip::Private::configToolTipsShowPhotoExpoEntry("ToolTips Show Photo Expo");
+const QString SetupToolTip::Private::configToolTipsShowPhotoModeEntry("ToolTips Show Photo Mode");
+const QString SetupToolTip::Private::configToolTipsShowPhotoFlashEntry("ToolTips Show Photo Flash");
+const QString SetupToolTip::Private::configToolTipsShowPhotoWBEntry("ToolTips Show Photo WB");
 
 // --------------------------------------------------------
 
-SetupToolTip::SetupToolTip(QWidget* parent)
-    : QScrollArea(parent), d(new SetupToolTipPriv)
+SetupToolTip::SetupToolTip(QWidget* const parent)
+    : QScrollArea(parent), d(new Private)
 {
     QWidget* panel      = new QWidget(viewport());
     setWidget(panel);

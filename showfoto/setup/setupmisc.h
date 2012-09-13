@@ -6,7 +6,7 @@
  * Date        : 2005-04-02
  * Description : setup Misc tab.
  *
- * Copyright (C) 2005-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -45,7 +45,7 @@ public:
 
 public:
 
-    SetupMisc(QWidget* parent = 0);
+    SetupMisc(QWidget* const parent = 0);
     ~SetupMisc();
 
     void applySettings();
@@ -56,8 +56,8 @@ private:
 
 private:
 
-    class SetupMiscPriv;
-    SetupMiscPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }   // namespace ShowFoto

@@ -6,8 +6,8 @@
  * Date        : 2005-04-02
  * Description : setup Misc tab.
  *
- * Copyright (C) 2005-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2008 by Arnd Baecker <arnd dot baecker at web dot de>
+ * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C)      2008 by Arnd Baecker <arnd dot baecker at web dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -48,11 +48,11 @@
 namespace ShowFoto
 {
 
-class SetupMisc::SetupMiscPriv
+class SetupMisc::Private
 {
 public:
 
-    SetupMiscPriv() :
+    Private() :
         sidebarTypeLabel(0),
         applicationStyleLabel(0),
         showSplash(0),
@@ -83,20 +83,20 @@ public:
     KComboBox*           applicationStyle;
 };
 
-const QString SetupMisc::SetupMiscPriv::configGroupName("ImageViewer Settings");
-const QString SetupMisc::SetupMiscPriv::configDeleteItem2TrashEntry("DeleteItem2Trash");
-const QString SetupMisc::SetupMiscPriv::configShowSplashEntry("ShowSplash");
-const QString SetupMisc::SetupMiscPriv::configSidebarTitleStyleEntry("Sidebar Title Style");
-const QString SetupMisc::SetupMiscPriv::configSortOrderEntry("SortOrder");
-const QString SetupMisc::SetupMiscPriv::configReverseSortEntry("ReverseSort");
-const QString SetupMisc::SetupMiscPriv::configApplicationStyleEntry("Application Style");
+const QString SetupMisc::Private::configGroupName("ImageViewer Settings");
+const QString SetupMisc::Private::configDeleteItem2TrashEntry("DeleteItem2Trash");
+const QString SetupMisc::Private::configShowSplashEntry("ShowSplash");
+const QString SetupMisc::Private::configSidebarTitleStyleEntry("Sidebar Title Style");
+const QString SetupMisc::Private::configSortOrderEntry("SortOrder");
+const QString SetupMisc::Private::configReverseSortEntry("ReverseSort");
+const QString SetupMisc::Private::configApplicationStyleEntry("Application Style");
 
 // --------------------------------------------------------
 
-SetupMisc::SetupMisc(QWidget* parent)
-    : QScrollArea(parent), d(new SetupMiscPriv)
+SetupMisc::SetupMisc(QWidget* const parent)
+    : QScrollArea(parent), d(new Private)
 {
-    QWidget* panel = new QWidget(viewport());
+    QWidget* panel      = new QWidget(viewport());
     setWidget(panel);
     setWidgetResizable(true);
 

@@ -6,7 +6,7 @@
  * Date        : 2009-07-18
  * Description : setup Metadata tab.
  *
- * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -61,11 +61,11 @@ using namespace Digikam;
 namespace ShowFoto
 {
 
-class SetupMetadata::SetupMetadataPriv
+class SetupMetadata::Private
 {
 public:
 
-    SetupMetadataPriv() :
+    Private() :
         exifRotateBox(0),
         exifSetOrientationBox(0),
         tab(0),
@@ -83,19 +83,20 @@ public:
 
     MetadataPanel*        tagsCfgPanel;
 };
-const QString SetupMetadata::SetupMetadataPriv::configGroupName("ImageViewer Settings");
-const QString SetupMetadata::SetupMetadataPriv::configEXIFRotateEntry("EXIF Rotate");
-const QString SetupMetadata::SetupMetadataPriv::configEXIFSetOrientationEntry("EXIF Set Orientation");
 
-SetupMetadata::SetupMetadata(QWidget* parent )
-    : QScrollArea(parent), d(new SetupMetadataPriv)
+const QString SetupMetadata::Private::configGroupName("ImageViewer Settings");
+const QString SetupMetadata::Private::configEXIFRotateEntry("EXIF Rotate");
+const QString SetupMetadata::Private::configEXIFSetOrientationEntry("EXIF Set Orientation");
+
+SetupMetadata::SetupMetadata(QWidget* const parent )
+    : QScrollArea(parent), d(new Private)
 {
-    d->tab = new KTabWidget(viewport());
+    d->tab                   = new KTabWidget(viewport());
     setWidget(d->tab);
     setWidgetResizable(true);
 
-    QWidget* panel          = new QWidget(d->tab);
-    QVBoxLayout* mainLayout = new QVBoxLayout(panel);
+    QWidget* panel           = new QWidget(d->tab);
+    QVBoxLayout* mainLayout  = new QVBoxLayout(panel);
 
     // --------------------------------------------------------
 

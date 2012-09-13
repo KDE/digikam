@@ -6,7 +6,7 @@
  * Date        : 2009-07-18
  * Description : setup Metadata tab.
  *
- * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -37,7 +37,7 @@ class SetupMetadata : public QScrollArea
 
 public:
 
-    SetupMetadata(QWidget* parent = 0);
+    SetupMetadata(QWidget* const parent = 0);
     ~SetupMetadata();
 
     void applySettings();
@@ -52,8 +52,8 @@ private Q_SLOTS:
 
 private:
 
-    class SetupMetadataPriv;
-    SetupMetadataPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace ShowFoto

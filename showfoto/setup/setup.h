@@ -53,7 +53,7 @@ public:
         SetupPageEnumLast
     };
 
-    explicit Setup(QWidget* parent=0, Page page=LastPageUsed);
+    explicit Setup(QWidget* const parent=0, Page page=LastPageUsed);
     ~Setup();
 
 private Q_SLOTS:
