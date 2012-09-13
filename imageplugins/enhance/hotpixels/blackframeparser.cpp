@@ -6,7 +6,7 @@
  * Date        : 2005-03-27
  * Description : black frames parser
  *
- * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2005-2006 by Unai Garro <ugarro at users dot sourceforge dot net>
  *
  * Part of the algorithm for finding the hot pixels was based on
@@ -53,7 +53,7 @@
 namespace DigikamEnhanceImagePlugin
 {
 
-BlackFrameParser::BlackFrameParser(QObject* parent)
+BlackFrameParser::BlackFrameParser(QObject* const parent)
     : QObject(parent)
 {
     m_imageLoaderThread = 0;
@@ -229,7 +229,7 @@ void BlackFrameParser::consolidatePixels(QList<HotPixel>& list)
     }
 }
 
-void BlackFrameParser::validateAndConsolidate(HotPixel* a, HotPixel* b)
+void BlackFrameParser::validateAndConsolidate(HotPixel* const a, HotPixel* const b)
 {
     a->luminosity = qMax(a->luminosity, b->luminosity);
 }

@@ -6,7 +6,7 @@
  * Date        : 2004-12-27
  * Description : a plugin to reduce lens distortions to an image.
  *
- * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -63,11 +63,11 @@ using namespace KDcrawIface;
 namespace DigikamEnhanceImagePlugin
 {
 
-class LensDistortionTool::LensDistortionToolPriv
+class LensDistortionTool::Private
 {
 public:
 
-    LensDistortionToolPriv() :
+    Private() :
         maskPreviewLabel(0),
         mainInput(0),
         edgeInput(0),
@@ -95,17 +95,18 @@ public:
     ImageGuideWidget*    previewWidget;
     EditorToolSettings*  gboxSettings;
 };
-const QString LensDistortionTool::LensDistortionToolPriv::configGroupName("lensdistortion Tool");
-const QString LensDistortionTool::LensDistortionToolPriv::config2ndOrderDistortionEntry("2nd Order Distortion");
-const QString LensDistortionTool::LensDistortionToolPriv::config4thOrderDistortionEntry("4th Order Distortion");
-const QString LensDistortionTool::LensDistortionToolPriv::configZoomFactorEntry("Zoom Factor");
-const QString LensDistortionTool::LensDistortionToolPriv::configBrightenEntry("Brighten");
+
+const QString LensDistortionTool::Private::configGroupName("lensdistortion Tool");
+const QString LensDistortionTool::Private::config2ndOrderDistortionEntry("2nd Order Distortion");
+const QString LensDistortionTool::Private::config4thOrderDistortionEntry("4th Order Distortion");
+const QString LensDistortionTool::Private::configZoomFactorEntry("Zoom Factor");
+const QString LensDistortionTool::Private::configBrightenEntry("Brighten");
 
 // --------------------------------------------------------
 
-LensDistortionTool::LensDistortionTool(QObject* parent)
+LensDistortionTool::LensDistortionTool(QObject* const parent)
     : EditorToolThreaded(parent),
-      d(new LensDistortionToolPriv)
+      d(new Private)
 {
     setObjectName("lensdistortion");
     setToolName(i18n("Lens Distortion"));
@@ -294,7 +295,7 @@ void LensDistortionTool::preparePreview()
     transformPreview.startFilterDirectly();
     d->maskPreviewLabel->setPixmap(transformPreview.getTargetImage().convertToPixmap());
 
-    ImageIface* iface = d->previewWidget->imageIface();
+    ImageIface* const iface = d->previewWidget->imageIface();
 
     setFilter(new LensDistortionFilter(iface->original(), this, m, e, r, b, 0, 0));
 }
@@ -312,8 +313,8 @@ void LensDistortionTool::prepareFinal()
 
 void LensDistortionTool::setPreviewImage()
 {
-    ImageIface* iface = d->previewWidget->imageIface();
-    DImg imDest       = filter()->getTargetImage().smoothScale(iface->previewSize());
+    ImageIface* const iface = d->previewWidget->imageIface();
+    DImg imDest             = filter()->getTargetImage().smoothScale(iface->previewSize());
     iface->setPreview(imDest);
 
     d->previewWidget->updatePreview();

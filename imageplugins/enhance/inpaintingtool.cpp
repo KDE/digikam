@@ -132,6 +132,7 @@ public:
 
     EditorToolSettings*     gboxSettings;
 };
+
 const QString InPaintingTool::Private::configGroupName("inpainting Tool");
 const QString InPaintingTool::Private::configFastApproxEntry("FastApprox");
 const QString InPaintingTool::Private::configInterpolationEntry("Interpolation");

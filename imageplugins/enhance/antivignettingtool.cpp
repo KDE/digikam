@@ -7,7 +7,7 @@
  * Description : a digiKam image plugin to reduce
  *               vignetting on an image.
  *
- * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2010      by Julien Narboux <julien at narboux dot fr>
  *
  * This program is free software; you can redistribute it
@@ -60,11 +60,11 @@
 namespace DigikamEnhanceImagePlugin
 {
 
-class AntiVignettingTool::AntiVignettingToolPriv
+class AntiVignettingTool::Private
 {
 public:
 
-    AntiVignettingToolPriv() :
+    Private() :
         configGroupName("antivignetting Tool"),
         settingsView(0),
         previewWidget(0),
@@ -78,9 +78,9 @@ public:
     EditorToolSettings*     gboxSettings;
 };
 
-AntiVignettingTool::AntiVignettingTool(QObject* parent)
+AntiVignettingTool::AntiVignettingTool(QObject* const parent)
     : EditorToolThreaded(parent),
-      d(new AntiVignettingToolPriv)
+      d(new Private)
 {
     setObjectName("antivignetting");
     setToolName(i18n("Vignetting Correction"));
@@ -143,10 +143,10 @@ void AntiVignettingTool::preparePreview()
 {
     AntiVignettingContainer settings = d->settingsView->settings();
 
-    ImageIface* iface = d->previewWidget->imageIface();
-    int previewWidth  = iface->previewSize().width();
-    int previewHeight = iface->previewSize().height();
-    DImg imTemp       = iface->original()->smoothScale(previewWidth, previewHeight, Qt::KeepAspectRatio);
+    ImageIface* const iface = d->previewWidget->imageIface();
+    int previewWidth        = iface->previewSize().width();
+    int previewHeight       = iface->previewSize().height();
+    DImg imTemp             = iface->original()->smoothScale(previewWidth, previewHeight, Qt::KeepAspectRatio);
 
     setFilter(new AntiVignettingFilter(&imTemp, this, settings));
 }
@@ -161,16 +161,16 @@ void AntiVignettingTool::prepareFinal()
 
 void AntiVignettingTool::setPreviewImage()
 {
-    ImageIface* iface = d->previewWidget->imageIface();
-    DImg preview      = filter()->getTargetImage().smoothScale(iface->previewSize());
+    ImageIface* const iface = d->previewWidget->imageIface();
+    DImg preview            = filter()->getTargetImage().smoothScale(iface->previewSize());
     iface->setPreview(preview);
     d->previewWidget->updatePreview();
 }
 
 void AntiVignettingTool::setFinalImage()
 {
-    ImageIface* iface = d->previewWidget->imageIface();
-    DImg finalImage   = filter()->getTargetImage();
+    ImageIface* const iface = d->previewWidget->imageIface();
+    DImg finalImage         = filter()->getTargetImage();
 
     iface->setOriginal(i18n("Vignetting Correction"), filter()->filterAction(), finalImage);
 }

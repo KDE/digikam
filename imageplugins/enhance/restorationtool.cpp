@@ -7,7 +7,7 @@
  * Description : a digiKam image editor plugin to restore
  *               a photograph
  *
- * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -58,11 +58,21 @@
 namespace DigikamEnhanceImagePlugin
 {
 
-class RestorationTool::RestorationToolPriv
+class RestorationTool::Private
 {
 public:
 
-    RestorationToolPriv() :
+    enum RestorationFilteringPreset
+    {
+        NoPreset = 0,
+        ReduceUniformNoise,
+        ReduceJPEGArtefacts,
+        ReduceTexturing
+    };
+
+public:
+
+    Private() :
         mainTab(0),
         restorationTypeCB(0),
         settingsWidget(0),
@@ -94,27 +104,28 @@ public:
     ImageRegionWidget*      previewWidget;
     EditorToolSettings*     gboxSettings;
 };
-const QString RestorationTool::RestorationToolPriv::configGroupName("restoration Tool");
-const QString RestorationTool::RestorationToolPriv::configPresetEntry("Preset");
-const QString RestorationTool::RestorationToolPriv::configFastApproxEntry("FastApprox");
-const QString RestorationTool::RestorationToolPriv::configInterpolationEntry("Interpolation");
-const QString RestorationTool::RestorationToolPriv::configAmplitudeEntry("Amplitude");
-const QString RestorationTool::RestorationToolPriv::configSharpnessEntry("Sharpness");
-const QString RestorationTool::RestorationToolPriv::configAnisotropyEntry("Anisotropy");
-const QString RestorationTool::RestorationToolPriv::configAlphaEntry("Alpha");
-const QString RestorationTool::RestorationToolPriv::configSigmaEntry("Sigma");
-const QString RestorationTool::RestorationToolPriv::configGaussPrecEntry("GaussPrec");
-const QString RestorationTool::RestorationToolPriv::configDlEntry("Dl");
-const QString RestorationTool::RestorationToolPriv::configDaEntry("Da");
-const QString RestorationTool::RestorationToolPriv::configIterationEntry("Iteration");
-const QString RestorationTool::RestorationToolPriv::configTileEntry("Tile");
-const QString RestorationTool::RestorationToolPriv::configBTileEntry("BTile");
+
+const QString RestorationTool::Private::configGroupName("restoration Tool");
+const QString RestorationTool::Private::configPresetEntry("Preset");
+const QString RestorationTool::Private::configFastApproxEntry("FastApprox");
+const QString RestorationTool::Private::configInterpolationEntry("Interpolation");
+const QString RestorationTool::Private::configAmplitudeEntry("Amplitude");
+const QString RestorationTool::Private::configSharpnessEntry("Sharpness");
+const QString RestorationTool::Private::configAnisotropyEntry("Anisotropy");
+const QString RestorationTool::Private::configAlphaEntry("Alpha");
+const QString RestorationTool::Private::configSigmaEntry("Sigma");
+const QString RestorationTool::Private::configGaussPrecEntry("GaussPrec");
+const QString RestorationTool::Private::configDlEntry("Dl");
+const QString RestorationTool::Private::configDaEntry("Da");
+const QString RestorationTool::Private::configIterationEntry("Iteration");
+const QString RestorationTool::Private::configTileEntry("Tile");
+const QString RestorationTool::Private::configBTileEntry("BTile");
 
 // --------------------------------------------------------
 
-RestorationTool::RestorationTool(QObject* parent)
+RestorationTool::RestorationTool(QObject* const parent)
     : EditorToolThreaded(parent),
-      d(new RestorationToolPriv)
+      d(new Private)
 {
     setObjectName("restoration");
     setToolName(i18n("Restoration"));
@@ -226,10 +237,10 @@ void RestorationTool::readSettings()
     prm.btile      = group.readEntry(d->configBTileEntry,         defaults.btile);
     d->settingsWidget->setSettings(prm);
 
-    int p = group.readEntry(d->configPresetEntry, (int)NoPreset);
+    int p = group.readEntry(d->configPresetEntry, (int)Private::NoPreset);
     d->restorationTypeCB->setCurrentIndex(p);
 
-    if (p == NoPreset)
+    if (p == Private::NoPreset)
     {
         d->settingsWidget->setEnabled(true);
     }
@@ -264,7 +275,7 @@ void RestorationTool::writeSettings()
 
 void RestorationTool::slotResetValues(int i)
 {
-    if (i == NoPreset)
+    if (i == Private::NoPreset)
     {
         d->settingsWidget->setEnabled(true);
     }
@@ -283,13 +294,13 @@ void RestorationTool::slotResetSettings()
 
     switch (d->restorationTypeCB->currentIndex())
     {
-        case ReduceUniformNoise:
+        case Private::ReduceUniformNoise:
         {
             settings.amplitude = 40.0;
             break;
         }
 
-        case ReduceJPEGArtefacts:
+        case Private::ReduceJPEGArtefacts:
         {
             settings.sharpness = 0.3F;
             settings.sigma     = 1.0;
@@ -298,7 +309,7 @@ void RestorationTool::slotResetSettings()
             break;
         }
 
-        case ReduceTexturing:
+        case Private::ReduceTexturing:
         {
             settings.sharpness = 0.5F;
             settings.sigma     = 1.5;
@@ -380,7 +391,7 @@ void RestorationTool::slotLoadSettings()
 
     file.close();
     d->restorationTypeCB->blockSignals(true);
-    d->restorationTypeCB->setCurrentIndex((int)NoPreset);
+    d->restorationTypeCB->setCurrentIndex((int)Private::NoPreset);
     d->restorationTypeCB->blockSignals(false);
     d->settingsWidget->setEnabled(true);
 }

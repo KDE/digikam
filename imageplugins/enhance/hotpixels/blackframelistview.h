@@ -6,7 +6,7 @@
  * Date        : 2005-07-05
  * Description : a ListView to display black frames
  *
- * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2005-2006 by Unai Garro <ugarro at users dot sourceforge dot net>
  *
  * This program is free software; you can redistribute it
@@ -54,7 +54,7 @@ class BlackFrameListView : public QTreeWidget
 
 public:
 
-    BlackFrameListView(QWidget* parent=0);
+    BlackFrameListView(QWidget* const parent=0);
     ~BlackFrameListView() {};
 
 Q_SIGNALS:
@@ -77,7 +77,7 @@ class BlackFrameListViewItem : public QObject, QTreeWidgetItem
 
 public:
 
-    BlackFrameListViewItem(BlackFrameListView* parent, const KUrl& url);
+    BlackFrameListViewItem(BlackFrameListView* const parent, const KUrl& url);
     ~BlackFrameListViewItem() {};
 
 Q_SIGNALS:
@@ -101,20 +101,20 @@ private Q_SLOTS:
 private:
 
     // Data contained within each listview item
-    QImage                m_thumb;
-    QImage                m_image;
+    QImage              m_thumb;
+    QImage              m_image;
 
-    QSize                 m_imageSize;
+    QSize               m_imageSize;
 
-    QList<HotPixel>       m_hotPixels;
+    QList<HotPixel>     m_hotPixels;
 
-    QString               m_blackFrameDesc;
+    QString             m_blackFrameDesc;
 
-    KUrl                  m_blackFrameURL;
+    KUrl                m_blackFrameURL;
 
-    BlackFrameParser*     m_parser;
+    BlackFrameParser*   m_parser;
 
-    BlackFrameListView*   m_parent;
+    BlackFrameListView* m_parent;
 };
 
 }  // namespace DigikamEnhanceImagePlugin

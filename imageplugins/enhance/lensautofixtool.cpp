@@ -3,8 +3,8 @@
  * Date        : 2008-02-10
  * Description : a plugin to fix automatically camera lens aberrations
  *
- * Copyright (C) 2008 by Adrian Schroeter <adrian at suse dot de>
- * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008      by Adrian Schroeter <adrian at suse dot de>
+ * Copyright (C) 2008-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -59,11 +59,11 @@
 namespace DigikamEnhanceImagePlugin
 {
 
-class LensAutoFixTool::LensAutoFixToolPriv
+class LensAutoFixTool::Private
 {
 public:
 
-    LensAutoFixToolPriv() :
+    Private() :
         configGroupName("Lens Auto-Correction Tool"),
         configShowGrid("Show Grid"),
         maskPreviewLabel(0),
@@ -88,9 +88,9 @@ public:
     EditorToolSettings*    gboxSettings;
 };
 
-LensAutoFixTool::LensAutoFixTool(QObject* parent)
+LensAutoFixTool::LensAutoFixTool(QObject* const parent)
     : EditorToolThreaded(parent),
-      d(new LensAutoFixToolPriv)
+      d(new Private)
 {
     setObjectName("lensautocorrection");
     setToolName(i18n("Lens Auto-Correction"));
@@ -198,7 +198,7 @@ void LensAutoFixTool::preparePreview()
     // Settings information must be get before to disable settings view.
     LensFunContainer settings = d->cameraSelector->settings();
     d->settingsView->assignFilterSettings(settings);
-    ImageIface* iface         = d->previewWidget->imageIface();
+    ImageIface* const iface   = d->previewWidget->imageIface();
     DImg preview              = iface->preview();
 
     if (d->showGrid->isChecked())
@@ -219,7 +219,7 @@ void LensAutoFixTool::preparePreview()
         p2.end();
         DImg grid(pix.toImage());
 
-        DColorComposer* composer                  = DColorComposer::getComposer(DColorComposer::PorterDuffNone);
+        DColorComposer* const composer            = DColorComposer::getComposer(DColorComposer::PorterDuffNone);
         DColorComposer::MultiplicationFlags flags = DColorComposer::NoMultiplication;
 
         // Do alpha blending of template on dest image

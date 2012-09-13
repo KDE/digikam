@@ -6,7 +6,7 @@
  * Date        : 2005-03-27
  * Description : Threaded image filter to fix hot pixels
  *
- * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2005-2006 by Unai Garro <ugarro at users dot sourceforge dot net>
  *
  * This program is free software; you can redistribute it
@@ -56,14 +56,14 @@
 namespace DigikamEnhanceImagePlugin
 {
 
-HotPixelFixer::HotPixelFixer(QObject* parent)
+HotPixelFixer::HotPixelFixer(QObject* const parent)
     : DImgThreadedFilter(parent)
 {
     m_interpolationMethod = TWODIM_DIRECTION;
     initFilter();
 }
 
-HotPixelFixer::HotPixelFixer(Digikam::DImg* orgImage, QObject* parent, const QList<HotPixel>& hpList,
+HotPixelFixer::HotPixelFixer(Digikam::DImg* const orgImage, QObject* const parent, const QList<HotPixel>& hpList,
                              int interpolationMethod)
     : Digikam::DImgThreadedFilter(orgImage, parent, "HotPixels")
 {
@@ -82,6 +82,7 @@ Digikam::FilterAction HotPixelFixer::filterAction()
 {
     DefaultFilterAction<HotPixelFixer> action;
     action.addParameter("interpolationMethod", m_interpolationMethod);
+
     foreach(const HotPixel& hp, m_hpList)
     {
         QString hpString("%1-%2x%3-%4x%5");
@@ -90,6 +91,7 @@ Digikam::FilterAction HotPixelFixer::filterAction()
                    .arg(hp.rect.width()).arg(hp.rect.height());
         action.addParameter("hotPixel", hpString);
     }
+
     return action;
 }
 
@@ -97,14 +99,15 @@ void HotPixelFixer::readParameters(const Digikam::FilterAction& action)
 {
     m_interpolationMethod = action.parameter("interpolationMethod").toInt();
     QRegExp exp("(\\d+)-(\\d+)x(\\d+)-(\\d+)x(\\d+)");
+
     foreach(const QVariant& var, action.parameters().values("hotPixel"))
     {
         if (exp.exactMatch(var.toString()))
         {
             HotPixel hp;
             hp.luminosity = exp.cap(1).toInt();
-            hp.rect = QRect(exp.cap(2).toInt(), exp.cap(3).toInt(),
-                            exp.cap(4).toInt(), exp.cap(5).toInt());
+            hp.rect       = QRect(exp.cap(2).toInt(), exp.cap(3).toInt(),
+                                  exp.cap(4).toInt(), exp.cap(5).toInt());
             m_hpList << hp;
         }
     }
@@ -125,7 +128,7 @@ void HotPixelFixer::filterImage()
 }
 
 // Interpolates a pixel block
-void HotPixelFixer::interpolate (Digikam::DImg& img, HotPixel& hp, int method)
+void HotPixelFixer::interpolate(Digikam::DImg& img, HotPixel& hp, int method)
 {
     const int xPos = hp.x();
     const int yPos = hp.y();
@@ -142,7 +145,7 @@ void HotPixelFixer::interpolate (Digikam::DImg& img, HotPixel& hp, int method)
             //case twodim:
             // {
             int sum_weight = 0;
-            double vr = 0.0, vg = 0.0, vb = 0.0;
+            double vr      = 0.0, vg = 0.0, vb = 0.0;
             int x, y;
             Digikam::DColor col;
 
@@ -195,13 +198,17 @@ void HotPixelFixer::interpolate (Digikam::DImg& img, HotPixel& hp, int method)
                 vb /= (double)sum_weight;
 
                 for (x = 0; x < hp.width(); ++x)
+                {
                     for (y = 0; y < hp.height(); ++y)
+                    {
                         if (validPoint(img,QPoint(xPos+x,yPos+y)))
                         {
                             int alpha = sixtBits ? 65535 : 255;
                             int ir = (int )round(vr), ig = (int) round(vg), ib = (int) round(vb);
                             img.setPixelColor(xPos+x,yPos+y,Digikam::DColor(ir,ig,ib,alpha,sixtBits));
                         }
+                    }
+                }
             }
 
             break;
@@ -221,7 +228,7 @@ void HotPixelFixer::interpolate (Digikam::DImg& img, HotPixel& hp, int method)
     }
 }
 
-void HotPixelFixer::weightPixels (Digikam::DImg& img, HotPixel& px, int method, Direction dir, int maxComponent)
+void HotPixelFixer::weightPixels(Digikam::DImg& img, HotPixel& px, int method, Direction dir, int maxComponent)
 {
     //TODO: implement direction here too
 

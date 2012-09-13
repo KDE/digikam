@@ -6,7 +6,7 @@
  * Date        : 2004-07-09
  * Description : a tool to blur an image
  *
- * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009      by Andi Clemens <andi dot clemens at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -56,11 +56,11 @@ using namespace KDcrawIface;
 namespace DigikamEnhanceImagePlugin
 {
 
-class BlurTool::BlurToolPriv
+class BlurTool::Private
 {
 public:
 
-    BlurToolPriv() :
+    Private() :
         radiusInput(0),
         previewWidget(0),
         gboxSettings(0)
@@ -73,14 +73,15 @@ public:
     ImageRegionWidget*   previewWidget;
     EditorToolSettings*  gboxSettings;
 };
-const QString BlurTool::BlurToolPriv::configGroupName("gaussianblur Tool");
-const QString BlurTool::BlurToolPriv::configRadiusAdjustmentEntry("RadiusAdjustment");
+
+const QString BlurTool::Private::configGroupName("gaussianblur Tool");
+const QString BlurTool::Private::configRadiusAdjustmentEntry("RadiusAdjustment");
 
 // --------------------------------------------------------
 
-BlurTool::BlurTool(QObject* parent)
+BlurTool::BlurTool(QObject* const parent)
     : EditorToolThreaded(parent),
-      d(new BlurToolPriv)
+      d(new Private)
 {
     setObjectName("gaussianblur");
     setToolName(i18n("Blur"));

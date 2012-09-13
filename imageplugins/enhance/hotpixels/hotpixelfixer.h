@@ -6,7 +6,7 @@
  * Date        : 2005-03-27
  * Description : Threaded image filter to fix hot pixels
  *
- * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2005-2006 by Unai Garro <ugarro at users dot sourceforge dot net>
  *
  * This program is free software; you can redistribute it
@@ -64,8 +64,8 @@ public:
 
 public:
 
-    explicit HotPixelFixer(QObject* parent = 0);
-    explicit HotPixelFixer(Digikam::DImg* orgImage, QObject* parent,
+    explicit HotPixelFixer(QObject* const parent = 0);
+    explicit HotPixelFixer(Digikam::DImg* const orgImage, QObject* const parent,
                            const QList<HotPixel>& hpList, int interpolationMethod);
     ~HotPixelFixer();
 
@@ -73,35 +73,40 @@ public:
     {
         return "digikam:HotPixelFilter";
     }
+
     static QString          DisplayableName()
     {
         return I18N_NOOP("Hot Pixels Tool");
     }
+
     static QList<int>       SupportedVersions()
     {
         return QList<int>() << 1;
     }
+
     static int              CurrentVersion()
     {
         return 1;
     }
 
+    void readParameters(const Digikam::FilterAction& action);
+
     virtual QString         filterIdentifier() const
     {
         return FilterIdentifier();
     }
+
     virtual Digikam::FilterAction filterAction();
-    void                    readParameters(const Digikam::FilterAction& action);
 
 private:
 
     virtual void filterImage();
 
-    void interpolate (Digikam::DImg& img,HotPixel& hp, int method);
-    void weightPixels (Digikam::DImg& img, HotPixel& px, int method,
-                       Direction dir, int maxComponent);
+    void interpolate(Digikam::DImg& img,HotPixel& hp, int method);
+    void weightPixels(Digikam::DImg& img, HotPixel& px, int method,
+                      Direction dir, int maxComponent);
 
-    inline bool validPoint(Digikam::DImg& img, QPoint p)
+    inline bool validPoint(Digikam::DImg& img, const QPoint& p)
     {
         return (p.x()>=0 && p.y()>=0 && p.x()<(long) img.width() && p.y()<(long) img.height());
     };

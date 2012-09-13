@@ -7,7 +7,7 @@
  * Description : a digiKam image plugin for fixing dots produced by
  *               hot/stuck/dead pixels from a CCD.
  *
- * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2005-2006 by Unai Garro <ugarro at users dot sourceforge dot net>
  *
  * This program is free software; you can redistribute it
@@ -67,11 +67,11 @@ using namespace Digikam;
 namespace DigikamEnhanceImagePlugin
 {
 
-class HotPixelsTool::HotPixelsToolPriv
+class HotPixelsTool::Private
 {
 public:
 
-    HotPixelsToolPriv() :
+    Private() :
         blackFrameButton(0),
         progressBar(0),
         filterMethodCombo(0),
@@ -96,9 +96,10 @@ public:
     ImageRegionWidget*   previewWidget;
     EditorToolSettings*  gboxSettings;
 };
-const QString HotPixelsTool::HotPixelsToolPriv::configGroupName("hotpixels Tool");
-const QString HotPixelsTool::HotPixelsToolPriv::configLastBlackFrameFileEntry("Last Black Frame File");
-const QString HotPixelsTool::HotPixelsToolPriv::configFilterMethodEntry("Filter Method");
+
+const QString HotPixelsTool::Private::configGroupName("hotpixels Tool");
+const QString HotPixelsTool::Private::configLastBlackFrameFileEntry("Last Black Frame File");
+const QString HotPixelsTool::Private::configFilterMethodEntry("Filter Method");
 
 // --------------------------------------------------------
 
@@ -107,9 +108,9 @@ void HotPixelsTool::registerFilter()
     Digikam::DImgFilterManager::instance()->addGenerator(new Digikam::BasicDImgFilterGenerator<HotPixelFixer>());
 }
 
-HotPixelsTool::HotPixelsTool(QObject* parent)
+HotPixelsTool::HotPixelsTool(QObject* const parent)
     : EditorToolThreaded(parent),
-      d(new HotPixelsToolPriv)
+      d(new Private)
 {
     setObjectName("hotpixels");
     setToolName(i18n("Hot Pixels"));

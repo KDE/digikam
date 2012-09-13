@@ -6,7 +6,7 @@
  * Date        : 2005-03-27
  * Description : black frames parser
  *
- * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2005-2006 by Unai Garro <ugarro at users dot sourceforge dot net>
  *
  * Part of the algorithm for finding the hot pixels was based on
@@ -58,13 +58,14 @@ class BlackFrameParser: public QObject
 
 public:
 
-    BlackFrameParser(QObject* parent);
+    BlackFrameParser(QObject* const parent);
     ~BlackFrameParser();
 
     void parseHotPixels(const QString& file);
     void parseBlackFrame(const KUrl& url);
     void parseBlackFrame(QImage& img);
-    QImage image()
+
+    QImage image() const
     {
         return m_Image;
     }
@@ -84,7 +85,7 @@ private:
 
     void blackFrameParsing();
     void consolidatePixels (QList<HotPixel>& list);
-    void validateAndConsolidate(HotPixel* a, HotPixel* b);
+    void validateAndConsolidate(HotPixel* const a, HotPixel* const b);
 
 private:
 

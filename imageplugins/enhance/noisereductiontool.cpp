@@ -6,7 +6,7 @@
  * Date        : 2004-08-24
  * Description : a plugin to reduce CCD noise.
  *
- * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -46,11 +46,11 @@
 namespace DigikamEnhanceImagePlugin
 {
 
-class NoiseReductionTool::NoiseReductionToolPriv
+class NoiseReductionTool::Private
 {
 public:
 
-    NoiseReductionToolPriv() :
+    Private() :
         configGroupName("noisereduction Tool"),
         nrSettings(0),
         previewWidget(0),
@@ -64,9 +64,9 @@ public:
     EditorToolSettings* gboxSettings;
 };
 
-NoiseReductionTool::NoiseReductionTool(QObject* parent)
+NoiseReductionTool::NoiseReductionTool(QObject* const parent)
     : EditorToolThreaded(parent),
-      d(new NoiseReductionToolPriv)
+      d(new Private)
 {
     setObjectName("noisereduction");
     setToolName(i18n("Noise Reduction"));

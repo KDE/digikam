@@ -7,7 +7,7 @@
  * Description : a class to calculate filter weights
  *
  * Copyright (C) 2005-2006 by Unai Garro <ugarro at users dot sourceforge dot net>
- * Copyright (C) 2005-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -98,6 +98,7 @@ public:
     };
 
     void calculateWeights();
+
     bool operator==(const Weights& ws) const;
 
     double** operator[](int n) const
@@ -105,7 +106,7 @@ public:
         return mWeightMatrices[n];
     };
 
-    const QList <QPoint> positions() const
+    const QList<QPoint> positions() const
     {
         return mPositions;
     };
@@ -124,18 +125,18 @@ protected:
 
 private:
 
-    double polyTerm (const size_t i_coeff, const int x, const int y, const int poly_order);
-    void   matrixInv (double* const a, const size_t size);
+    double polyTerm(const size_t i_coeff, const int x, const int y, const int poly_order);
+    void   matrixInv(double* const a, const size_t size);
 
 private:
 
-    unsigned int   mHeight;
-    unsigned int   mWidth;
-    unsigned int   mCoefficientNumber;
-    bool           mTwoDim;
-    unsigned int   mPolynomeOrder;
-    double** *     mWeightMatrices;   // Stores a list of weight matrices
-    QList <QPoint> mPositions;
+    unsigned int  mHeight;
+    unsigned int  mWidth;
+    unsigned int  mCoefficientNumber;
+    bool          mTwoDim;
+    unsigned int  mPolynomeOrder;
+    double** *    mWeightMatrices;   // Stores a list of weight matrices
+    QList<QPoint> mPositions;
 };
 
 }  // namespace DigikamEnhanceImagePlugin

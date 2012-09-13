@@ -7,7 +7,7 @@
  * Description : a class to calculate filter weights
  *
  * Copyright (C) 2005-2006 by Unai Garro <ugarro at users dot sourceforge dot net>
- * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -22,17 +22,15 @@
  *
  * ============================================================ */
 
-
 #include "weights.h"
-
-// Qt includes
-
-#include <QScopedArrayPointer>
 
 // C++ includes
 
 #include <cstring>
 
+// Qt includes
+
+#include <QScopedArrayPointer>
 
 namespace DigikamEnhanceImagePlugin
 {
@@ -72,7 +70,7 @@ Weights& Weights::operator=(const Weights& w)
     {
         double** * origMatrices = w.weightMatrices();
         // Allocate mPositions.count() matrices
-        mWeightMatrices        = new double** [mPositions.count()];
+        mWeightMatrices         = new double** [mPositions.count()];
 
         for (int i=0 ; i < mPositions.count() ; ++i)
         {
@@ -97,7 +95,7 @@ Weights& Weights::operator=(const Weights& w)
 void Weights::calculateWeights()
 {
     mCoefficientNumber = (mTwoDim ? ((size_t)mPolynomeOrder + 1) * ((size_t)mPolynomeOrder + 1)
-                          : (size_t)mPolynomeOrder + 1);
+                                  : (size_t)mPolynomeOrder + 1);
     size_t  ix,iy,i,j;
     int     x, y;
 
@@ -165,8 +163,10 @@ void Weights::calculateWeights()
                                                     mPositions.at(j).y(), mPolynomeOrder);
 
             for (ix = 0; ix < mCoefficientNumber; ++ix)
+            {
                 matrix [iy* mCoefficientNumber + ix] += (vector0 [iy * mPositions.count() + j]
                                                         * polyTerm (ix, mPositions.at(j).x(), mPositions.at(j).y(), mPolynomeOrder));
+            }
         }
     }
 
@@ -216,8 +216,10 @@ void Weights::calculateWeights()
                 mWeightMatrices [j][y][x] = 0.0;
 
                 for (iy = 0; iy < mCoefficientNumber; ++iy)
+                {
                     mWeightMatrices [j][y][x] += vector1 [iy * mPositions.count() + j]
                                                  * polyTerm (iy, x, y, mPolynomeOrder);
+                }
 
                 mWeightMatrices [j][y][x] *= (double) mPositions.count();
             }
