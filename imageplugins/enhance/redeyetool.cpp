@@ -427,6 +427,9 @@ void RedEyeTool::finalRendering()
 
 void RedEyeTool::redEyeFilter(DImg& selection)
 {
+    // To restore selection alpha properties at end.
+    bool selHasAlpha = selection.hasAlpha();
+
     DImg mask(selection.width(), selection.height(), selection.sixteenBit(), true,
               selection.bits(), true);
 
@@ -486,17 +489,17 @@ void RedEyeTool::redEyeFilter(DImg& selection)
 
             if (r >= ( redThreshold * g))
             {
-                r1 = qMin(255, (int)(red_norm * (red_chan.red_gain   * r +
-                                                 red_chan.green_gain * g +
-                                                 red_chan.blue_gain  * b)));
+                r1 = qMin(255, (int)(red_norm   * (red_chan.red_gain     * r +
+                                                   red_chan.green_gain   * g +
+                                                   red_chan.blue_gain    * b)));
 
                 g1 = qMin(255, (int)(green_norm * (green_chan.red_gain   * r +
                                                    green_chan.green_gain * g +
                                                    green_chan.blue_gain  * b)));
 
-                b1 = qMin(255, (int)(blue_norm * (blue_chan.red_gain   * r +
-                                                  blue_chan.green_gain * g +
-                                                  blue_chan.blue_gain  * b)));
+                b1 = qMin(255, (int)(blue_norm  * (blue_chan.red_gain    * r +
+                                                   blue_chan.green_gain  * g +
+                                                   blue_chan.blue_gain   * b)));
 
                 mptr[0] = b1;
                 mptr[1] = g1;
@@ -523,17 +526,17 @@ void RedEyeTool::redEyeFilter(DImg& selection)
 
             if (r >= ( redThreshold * g))
             {
-                r1 = qMin(65535, (int)(red_norm * (red_chan.red_gain   * r +
-                                                   red_chan.green_gain * g +
-                                                   red_chan.blue_gain  * b)));
+                r1 = qMin(65535, (int)(red_norm   * (red_chan.red_gain     * r +
+                                                     red_chan.green_gain   * g +
+                                                     red_chan.blue_gain    * b)));
 
                 g1 = qMin(65535, (int)(green_norm * (green_chan.red_gain   * r +
                                                      green_chan.green_gain * g +
                                                      green_chan.blue_gain  * b)));
 
-                b1 = qMin(65535, (int)(blue_norm * (blue_chan.red_gain   * r +
-                                                    blue_chan.green_gain * g +
-                                                    blue_chan.blue_gain  * b)));
+                b1 = qMin(65535, (int)(blue_norm  * (blue_chan.red_gain    * r +
+                                                     blue_chan.green_gain  * g +
+                                                     blue_chan.blue_gain   * b)));
 
                 mptr[0] = b1;
                 mptr[1] = g1;
@@ -603,6 +606,9 @@ void RedEyeTool::redEyeFilter(DImg& selection)
                             0, 0);
 
     delete composer;
+
+    if (!selHasAlpha)
+        selection.removeAlphaChannel();
 }
 
 }  // namespace DigikamEnhanceImagePlugin

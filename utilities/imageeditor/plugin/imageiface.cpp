@@ -391,8 +391,8 @@ void ImageIface::paint(QPaintDevice* const device, const QRect& rect, QPainter* 
 
 void ImageIface::setSelection(const QString& caller, const FilterAction& action, const DImg& img)
 {
-    if (//img.hasAlpha()   != originalHasAlpha()     ||                 // TODO doesn't work with RedEyes tool
-        img.sixteenBit() != originalSixteenBit()  ||
+    if (img.hasAlpha()   != originalHasAlpha()     ||                 // TODO doesn't work with RedEyes tool
+        img.sixteenBit() != originalSixteenBit()   ||
         img.size()       != selectionRect().size()
        )
     {
@@ -411,7 +411,7 @@ void ImageIface::setSelection(const QString& caller, const FilterAction& action,
 
 void ImageIface::setPreview(const DImg& img)
 {
-    if (//img.hasAlpha()   != previewHasAlpha()   ||                    // TODO doesn't work with RedEyes tool
+    if (img.hasAlpha()   != previewHasAlpha()   ||                    // TODO doesn't work with RedEyes tool
         img.sixteenBit() != previewSixteenBit()
        )
     {
