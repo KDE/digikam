@@ -63,7 +63,6 @@ public:
         previewHeight(0),
         core(EditorCore::defaultInstance())
     {
-
     }
 
     QPixmap checkPixmap();
@@ -191,13 +190,19 @@ ImageIface::PreviewType ImageIface::previewType() const
 
 DColor ImageIface::colorInfoFromOriginal(const QPoint& point) const
 {
-    if (!d->core->getImg()->isNull() || point.x() > originalSize().width() || point.y() > originalSize().height())
+    if (!original() || original()->isNull())
     {
-        kWarning() << "Coordinate out of range or no image data available!";
+        kWarning() << "No image data available!";
         return DColor();
     }
 
-    return d->core->getImg()->getPixelColor(point.x(), point.y());
+    if (point.x() > originalSize().width() || point.y() > originalSize().height())
+    {
+        kWarning() << "Coordinate out of range!";
+        return DColor();
+    }
+
+    return original()->getPixelColor(point.x(), point.y());
 }
 
 DColor ImageIface::colorInfoFromPreview(const QPoint& point) const
@@ -311,18 +316,23 @@ IccProfile ImageIface::originalIccProfile() const
 
 KExiv2Data ImageIface::originalMetadata() const
 {
-    return d->core->getImg()->getMetadata();
+    DImg* const img = original();
+    if (img)
+        return (img->getMetadata());
+
+    return KExiv2Data();
 }
 
 void ImageIface::setOriginalMetadata(const KExiv2Data& meta)
 {
-    d->core->getImg()->setMetadata(meta);
+    DImg* const img = original();
+    if (img)
+        img->setMetadata(meta);
 }
 
 PhotoInfoContainer ImageIface::originalPhotoInfo() const
 {
-    DMetadata meta(d->core->getImg()->getMetadata());
-    return meta.getPhotographInformation();
+    return (DMetadata(originalMetadata()).getPhotographInformation());
 }
 
 void ImageIface::paint(QPaintDevice* const device, const QRect& rect, QPainter* const painter)
@@ -372,13 +382,12 @@ void ImageIface::paint(QPaintDevice* const device, const QRect& rect, QPainter* 
 
         // Show the Over/Under exposure pixels indicators
 
-        ExposureSettingsContainer* expoSettings = d->core->getExposureSettings();
+        ExposureSettingsContainer* const expoSettings = d->core->getExposureSettings();
 
-        if (expoSettings->underExposureIndicator || expoSettings->overExposureIndicator)
+        if (expoSettings && (expoSettings->underExposureIndicator || expoSettings->overExposureIndicator))
         {
-            ExposureSettingsContainer* const expoSettings = d->core->getExposureSettings();
-            QImage pureColorMask                          = d->targetPreviewImage.pureColorMask(expoSettings);
-            QPixmap pixMask                               = QPixmap::fromImage(pureColorMask);
+            QImage pureColorMask = d->targetPreviewImage.pureColorMask(expoSettings);
+            QPixmap pixMask      = QPixmap::fromImage(pureColorMask);
             p->drawPixmap(x, y, pixMask, 0, 0, width, height);
         }
     }
@@ -391,7 +400,7 @@ void ImageIface::paint(QPaintDevice* const device, const QRect& rect, QPainter* 
 
 void ImageIface::setSelection(const QString& caller, const FilterAction& action, const DImg& img)
 {
-    if (img.hasAlpha()   != originalHasAlpha()     ||                 // TODO doesn't work with RedEyes tool
+    if (img.hasAlpha()   != originalHasAlpha()     ||
         img.sixteenBit() != originalSixteenBit()   ||
         img.size()       != selectionRect().size()
        )
@@ -411,7 +420,7 @@ void ImageIface::setSelection(const QString& caller, const FilterAction& action,
 
 void ImageIface::setPreview(const DImg& img)
 {
-    if (img.hasAlpha()   != previewHasAlpha()   ||                    // TODO doesn't work with RedEyes tool
+    if (img.hasAlpha()   != previewHasAlpha()   ||
         img.sixteenBit() != previewSixteenBit()
        )
     {
