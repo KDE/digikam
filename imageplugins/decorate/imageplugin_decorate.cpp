@@ -102,20 +102,17 @@ void ImagePlugin_Decorate::setEnabledActions(bool b)
 
 void ImagePlugin_Decorate::slotInsertText()
 {
-    InsertTextTool* const tool = new InsertTextTool(this);
-    loadTool(tool);
+    loadTool(new InsertTextTool(this));
 }
 
 void ImagePlugin_Decorate::slotBorder()
 {
-    BorderTool* const tool = new BorderTool(this);
-    loadTool(tool);
+    loadTool(new BorderTool(this));
 }
 
 void ImagePlugin_Decorate::slotTexture()
 {
-    TextureTool* const tool = new TextureTool(this);
-    loadTool(tool);
+    loadTool(new TextureTool(this));
 }
 
 } // namespace DigikamDecorateImagePlugin

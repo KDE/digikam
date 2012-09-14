@@ -284,24 +284,6 @@ void ImagePlugin_Color::slotConvertTo16Bits()
     kapp->restoreOverrideCursor();
 }
 
-void ImagePlugin_Color::slotBCG()
-{
-    BCGTool* const tool = new BCGTool(this);
-    loadTool(tool);
-}
-
-void ImagePlugin_Color::slotCB()
-{
-    CBTool* const tool = new CBTool(this);
-    loadTool(tool);
-}
-
-void ImagePlugin_Color::slotAutoCorrection()
-{
-    AutoCorrectionTool* const tool = new AutoCorrectionTool(this);
-    loadTool(tool);
-}
-
 void ImagePlugin_Color::slotConvertToColorSpace(const IccProfile& profile)
 {
     ImageIface iface;
@@ -323,7 +305,7 @@ void ImagePlugin_Color::slotUpdateColorSpaceMenu()
 
     if (!IccSettings::instance()->isEnabled())
     {
-        KAction* action = new KAction(i18n("Color Management is disabled..."), this);
+        KAction* const action = new KAction(i18n("Color Management is disabled..."), this);
         d->profileMenuAction->addAction(action);
 
         connect(action, SIGNAL(triggered()),
@@ -359,7 +341,7 @@ void ImagePlugin_Color::slotUpdateColorSpaceMenu()
     d->profileMenuAction->addProfiles(favoriteProfiles);
     d->profileMenuAction->addSeparator();
 
-    KAction* moreAction = new KAction(i18n("Other..."), this);
+    KAction* const moreAction = new KAction(i18n("Other..."), this);
     d->profileMenuAction->addAction(moreAction);
 
     connect(moreAction, SIGNAL(triggered()),
@@ -383,44 +365,52 @@ void ImagePlugin_Color::slotProfileConversionTool()
 
 void ImagePlugin_Color::slotBW()
 {
-    BWSepiaTool* const tool = new BWSepiaTool(this);
-    loadTool(tool);
+    loadTool(new BWSepiaTool(this));
 }
 
 void ImagePlugin_Color::slotHSL()
 {
-    HSLTool* const tool = new HSLTool(this);
-    loadTool(tool);
+    loadTool(new HSLTool(this));
 }
 
 void ImagePlugin_Color::slotWhiteBalance()
 {
-    WhiteBalanceTool* const tool = new WhiteBalanceTool(this);
-    loadTool(tool);
+    loadTool(new WhiteBalanceTool(this));
 }
 
 void ImagePlugin_Color::slotChannelMixer()
 {
-    ChannelMixerTool* const tool = new ChannelMixerTool(this);
-    loadTool(tool);
+    loadTool(new ChannelMixerTool(this));
 }
 
 void ImagePlugin_Color::slotCurvesAdjust()
 {
-    AdjustCurvesTool* const tool = new AdjustCurvesTool(this);
-    loadTool(tool);
+    loadTool(new AdjustCurvesTool(this));
 }
 
 void ImagePlugin_Color::slotLevelsAdjust()
 {
-    AdjustLevelsTool* const tool = new AdjustLevelsTool(this);
-    loadTool(tool);
+    loadTool(new AdjustLevelsTool(this));
 }
 
 void ImagePlugin_Color::slotFilm()
 {
-    FilmTool* const tool = new FilmTool(this);
-    loadTool(tool);
+    loadTool(new FilmTool(this));
+}
+
+void ImagePlugin_Color::slotBCG()
+{
+    loadTool(new BCGTool(this));
+}
+
+void ImagePlugin_Color::slotCB()
+{
+    loadTool(new CBTool(this));
+}
+
+void ImagePlugin_Color::slotAutoCorrection()
+{
+    loadTool(new AutoCorrectionTool(this));
 }
 
 } // namespace DigikamColorImagePlugin

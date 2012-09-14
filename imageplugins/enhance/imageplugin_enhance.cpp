@@ -216,44 +216,37 @@ void ImagePlugin_Enhance::setEnabledActions(bool b)
 
 void ImagePlugin_Enhance::slotHotPixels()
 {
-    HotPixelsTool* const tool = new HotPixelsTool(this);
-    loadTool(tool);
+    loadTool(new HotPixelsTool(this));
 }
 
 void ImagePlugin_Enhance::slotLensDistortion()
 {
-    LensDistortionTool* const tool = new LensDistortionTool(this);
-    loadTool(tool);
+    loadTool(new LensDistortionTool(this));
 }
 
 void ImagePlugin_Enhance::slotRestoration()
 {
-    RestorationTool* const tool = new RestorationTool(this);
-    loadTool(tool);
+    loadTool(new RestorationTool(this));
 }
 
 void ImagePlugin_Enhance::slotBlur()
 {
-    BlurTool* const tool = new BlurTool(this);
-    loadTool(tool);
+    loadTool(new BlurTool(this));
 }
 
 void ImagePlugin_Enhance::slotSharpen()
 {
-    SharpenTool* const tool = new SharpenTool(this);
-    loadTool(tool);
+    loadTool(new SharpenTool(this));
 }
 
 void ImagePlugin_Enhance::slotNoiseReduction()
 {
-    NoiseReductionTool* const tool = new NoiseReductionTool(this);
-    loadTool(tool);
+    loadTool(new NoiseReductionTool(this));
 }
 
 void ImagePlugin_Enhance::slotLocalContrast()
 {
-    LocalContrastTool* const tool = new LocalContrastTool(this);
-    loadTool(tool);
+    loadTool(new LocalContrastTool(this));
 }
 
 void ImagePlugin_Enhance::slotRedEye()
@@ -272,8 +265,7 @@ void ImagePlugin_Enhance::slotRedEye()
         return;
     }
 
-    RedEyeTool* const tool = new RedEyeTool(this);
-    loadTool(tool);
+    loadTool(new RedEyeTool(this));
 }
 
 void ImagePlugin_Enhance::slotInPainting()
@@ -292,22 +284,19 @@ void ImagePlugin_Enhance::slotInPainting()
         return;
     }
 
-    InPaintingTool* const tool = new InPaintingTool(this);
-    loadTool(tool);
+    loadTool(new InPaintingTool(this));
 }
 
 void ImagePlugin_Enhance::slotLensAutoFix()
 {
 #ifdef HAVE_GLIB2
-    LensAutoFixTool* const tool = new LensAutoFixTool(this);
-    loadTool(tool);
+    loadTool(new LensAutoFixTool(this));
 #endif // HAVE_GLIB2
 }
 
 void ImagePlugin_Enhance::slotAntiVignetting()
 {
-    AntiVignettingTool* const tool = new AntiVignettingTool(this);
-    loadTool(tool);
+    loadTool(new AntiVignettingTool(this));
 }
 
 } // namespace DigikamEnhanceImagePlugin
