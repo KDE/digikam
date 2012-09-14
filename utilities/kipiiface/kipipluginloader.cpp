@@ -218,7 +218,7 @@ KActionCollection* KipiPluginLoader::pluginsActionCollection() const
 
 QList<QAction*> KipiPluginLoader::kipiActionsByCategory(Category cat) const
 {
-    KActionCategory* category = d->kipiCategoryMap[cat];
+    KActionCategory* const category = d->kipiCategoryMap[cat];
 
     if (category)
     {
@@ -250,12 +250,13 @@ void KipiPluginLoader::slotKipiPluginPlug()
     // First we remove all plugins from the gui
     for (PluginLoader::PluginList::ConstIterator it = list.constBegin() ; it != list.constEnd() ; ++it)
     {
-        Plugin* plugin = (*it)->plugin();
+        Plugin* const plugin = (*it)->plugin();
 
-        if (!plugin || !(*it)->shouldLoad() || !dynamic_cast<KXMLGUIClient*>(plugin))
+        if (!plugin || !dynamic_cast<KXMLGUIClient*>(plugin) || !(*it)->shouldLoad())
         {
             continue;
         }
+
         d->app->guiFactory()->removeClient(plugin);
     }
 
@@ -263,9 +264,9 @@ void KipiPluginLoader::slotKipiPluginPlug()
 
     for (PluginLoader::PluginList::ConstIterator it = list.constBegin() ; it != list.constEnd() ; ++it)
     {
-        Plugin* plugin = (*it)->plugin();
+        Plugin* const plugin = (*it)->plugin();
 
-        if (!plugin || !(*it)->shouldLoad())
+        if (!plugin || !dynamic_cast<KXMLGUIClient*>(plugin) || !(*it)->shouldLoad())
         {
             continue;
         }
@@ -307,12 +308,13 @@ void KipiPluginLoader::slotKipiPluginPlug()
     // We add them back
     for (PluginLoader::PluginList::ConstIterator it = list.constBegin() ; it != list.constEnd() ; ++it)
     {
-        Plugin* plugin = (*it)->plugin();
+        Plugin* const plugin = (*it)->plugin();
 
-        if (!plugin || !(*it)->shouldLoad() || !dynamic_cast<KXMLGUIClient*>(plugin))
+        if (!plugin || !dynamic_cast<KXMLGUIClient*>(plugin) || !(*it)->shouldLoad())
         {
             continue;
         }
+
         d->app->guiFactory()->addClient(plugin);
     }
 
