@@ -117,6 +117,7 @@ public:
     ImageGuideWidget*       previewWidget;
     EditorToolSettings*     gboxSettings;
 };
+
 const QString RedEyeTool::Private::configGroupName("redeye Tool");
 const QString RedEyeTool::Private::configHistogramChannelEntry("Histogram Channel");
 const QString RedEyeTool::Private::configHistogramScaleEntry("Histogram Scale");
@@ -386,8 +387,8 @@ void RedEyeTool::slotPreview()
     // Here, we need to use the real selection image data because we will apply
     // a Gaussian blur filter on pixels and we cannot use directly the preview scaled image
     // else the blur radius will not give the same result between preview and final rendering.
-    ImageIface* iface = d->previewWidget->imageIface();
-    DImg selection    = iface->selection();
+    ImageIface* const iface = d->previewWidget->imageIface();
+    DImg selection          = iface->selection();
 
     redEyeFilter(selection);
 
@@ -411,8 +412,8 @@ void RedEyeTool::finalRendering()
 {
     kapp->setOverrideCursor( Qt::WaitCursor );
 
-    ImageIface* iface = d->previewWidget->imageIface();
-    DImg selection    = iface->selection();
+    ImageIface* const iface = d->previewWidget->imageIface();
+    DImg selection          = iface->selection();
 
     redEyeFilter(selection);
 
@@ -593,7 +594,7 @@ void RedEyeTool::redEyeFilter(DImg& selection)
 
     // - Perform pixels blending using alpha channel between the mask and the selection.
 
-    DColorComposer* composer = DColorComposer::getComposer(DColorComposer::PorterDuffSrcOver);
+    DColorComposer* const composer = DColorComposer::getComposer(DColorComposer::PorterDuffSrcOver);
 
     // NOTE: 'mask' is the Source image, 'selection' is the Destination image.
 
