@@ -7,8 +7,8 @@
  * Description : a digiKam image editor plugin to emboss
  *               an image.
  *
- * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -56,11 +56,11 @@ using namespace KDcrawIface;
 namespace DigikamFxFiltersImagePlugin
 {
 
-class EmbossTool::EmbossToolPriv
+class EmbossTool::Private
 {
 public:
 
-    EmbossToolPriv() :
+    Private() :
         depthInput(0),
         previewWidget(0),
         gboxSettings(0)
@@ -73,14 +73,15 @@ public:
     ImageRegionWidget*   previewWidget;
     EditorToolSettings*  gboxSettings;
 };
-const QString EmbossTool::EmbossToolPriv::configGroupName("emboss Tool");
-const QString EmbossTool::EmbossToolPriv::configDepthAdjustmentEntry("DepthAdjustment");
+
+const QString EmbossTool::Private::configGroupName("emboss Tool");
+const QString EmbossTool::Private::configDepthAdjustmentEntry("DepthAdjustment");
 
 // --------------------------------------------------------
 
-EmbossTool::EmbossTool(QObject* parent)
+EmbossTool::EmbossTool(QObject* const parent)
     : EditorToolThreaded(parent),
-      d(new EmbossToolPriv)
+      d(new Private)
 {
     setObjectName("emboss");
     setToolName(i18n("Emboss"));

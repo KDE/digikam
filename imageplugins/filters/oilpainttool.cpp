@@ -6,8 +6,8 @@
  * Date        : 2004-08-25
  * Description : a plugin to simulate Oil Painting
  *
- * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -58,11 +58,11 @@ using namespace KDcrawIface;
 namespace DigikamFxFiltersImagePlugin
 {
 
-class OilPaintTool::OilPaintToolPriv
+class OilPaintTool::Private
 {
 public:
 
-    OilPaintToolPriv() :
+    Private() :
         brushSizeInput(0),
         smoothInput(0),
         previewWidget(0),
@@ -79,15 +79,16 @@ public:
     ImageRegionWidget*   previewWidget;
     EditorToolSettings*  gboxSettings;
 };
-const QString OilPaintTool::OilPaintToolPriv::configGroupName("oilpaint Tool");
-const QString OilPaintTool::OilPaintToolPriv::configBrushSizeEntry("BrushSize");
-const QString OilPaintTool::OilPaintToolPriv::configSmoothAdjustmentEntry("SmoothAdjustment");
+
+const QString OilPaintTool::Private::configGroupName("oilpaint Tool");
+const QString OilPaintTool::Private::configBrushSizeEntry("BrushSize");
+const QString OilPaintTool::Private::configSmoothAdjustmentEntry("SmoothAdjustment");
 
 // --------------------------------------------------------
 
-OilPaintTool::OilPaintTool(QObject* parent)
+OilPaintTool::OilPaintTool(QObject* const parent)
     : EditorToolThreaded(parent),
-      d(new OilPaintToolPriv)
+      d(new Private)
 {
     setObjectName("oilpaint");
     setToolName(i18n("Oil Paint"));

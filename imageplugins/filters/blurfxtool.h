@@ -6,8 +6,8 @@
  * Date        : 2005-02-09
  * Description : a plugin to apply Blur FX to images
  *
- * Copyright 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright 2006-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -40,7 +40,7 @@ class BlurFXTool : public EditorToolThreaded
 
 public:
 
-    BlurFXTool(QObject* parent);
+    BlurFXTool(QObject* const parent);
     ~BlurFXTool();
 
 private Q_SLOTS:
@@ -61,8 +61,8 @@ private:
 
 private:
 
-    class BlurFXToolPriv;
-    BlurFXToolPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace DigikamFxFiltersImagePlugin

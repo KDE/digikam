@@ -6,8 +6,8 @@
  * Date        : 2004-09-30
  * Description : a plugin to add rain drop over an image
  *
- * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -58,11 +58,11 @@ using namespace KDcrawIface;
 namespace DigikamFxFiltersImagePlugin
 {
 
-class RainDropTool::RainDropToolPriv
+class RainDropTool::Private
 {
 public:
 
-    RainDropToolPriv() :
+    Private() :
         dropInput(0),
         amountInput(0),
         coeffInput(0),
@@ -82,16 +82,17 @@ public:
     ImageGuideWidget*    previewWidget;
     EditorToolSettings*  gboxSettings;
 };
-const QString RainDropTool::RainDropToolPriv::configGroupName("raindrops Tool");
-const QString RainDropTool::RainDropToolPriv::configDropAdjustmentEntry("DropAdjustment");
-const QString RainDropTool::RainDropToolPriv::configAmountAdjustmentEntry("AmountAdjustment");
-const QString RainDropTool::RainDropToolPriv::configCoeffAdjustmentEntry("CoeffAdjustment");
+
+const QString RainDropTool::Private::configGroupName("raindrops Tool");
+const QString RainDropTool::Private::configDropAdjustmentEntry("DropAdjustment");
+const QString RainDropTool::Private::configAmountAdjustmentEntry("AmountAdjustment");
+const QString RainDropTool::Private::configCoeffAdjustmentEntry("CoeffAdjustment");
 
 // --------------------------------------------------------
 
-RainDropTool::RainDropTool(QObject* parent)
+RainDropTool::RainDropTool(QObject* const parent)
     : EditorToolThreaded(parent),
-      d(new RainDropToolPriv)
+      d(new Private)
 {
     setObjectName("raindrops");
     setToolName(i18n("Raindrops"));
@@ -208,23 +209,23 @@ void RainDropTool::slotResetSettings()
 
 void RainDropTool::preparePreview()
 {
-    int drop   = d->dropInput->value();
-    int amount = d->amountInput->value();
-    int coeff  = d->coeffInput->value();
+    int drop                = d->dropInput->value();
+    int amount              = d->amountInput->value();
+    int coeff               = d->coeffInput->value();
 
-    ImageIface* iface = d->previewWidget->imageIface();
+    ImageIface* const iface = d->previewWidget->imageIface();
 
     // Selected data from the image
-    QRect selection = iface->selectionRect();
+    QRect selection         = iface->selectionRect();
 
     setFilter(new RainDropFilter(iface->original(), this, drop, amount, coeff, selection));
 }
 
 void RainDropTool::prepareFinal()
 {
-    int drop   = d->dropInput->value();
-    int amount = d->amountInput->value();
-    int coeff  = d->coeffInput->value();
+    int drop        = d->dropInput->value();
+    int amount      = d->amountInput->value();
+    int coeff       = d->coeffInput->value();
 
     ImageIface iface;
 
@@ -236,8 +237,8 @@ void RainDropTool::prepareFinal()
 
 void RainDropTool::setPreviewImage()
 {
-    ImageIface* iface = d->previewWidget->imageIface();
-    DImg imDest       = filter()->getTargetImage().smoothScale(iface->previewSize());
+    ImageIface* const iface = d->previewWidget->imageIface();
+    DImg imDest             = filter()->getTargetImage().smoothScale(iface->previewSize());
     iface->setPreview(imDest);
 
     d->previewWidget->updatePreview();

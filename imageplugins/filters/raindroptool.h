@@ -6,8 +6,8 @@
  * Date        : 2004-09-30
  * Description : a plugin to add rain drop over an image
  *
- * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -40,7 +40,7 @@ class RainDropTool : public EditorToolThreaded
 
 public:
 
-    RainDropTool(QObject* parent);
+    RainDropTool(QObject* const parent);
     ~RainDropTool();
 
 private Q_SLOTS:
@@ -60,8 +60,8 @@ private:
 
 private:
 
-    class RainDropToolPriv;
-    RainDropToolPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace DigikamFxFiltersImagePlugin

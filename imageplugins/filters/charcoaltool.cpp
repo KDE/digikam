@@ -7,7 +7,7 @@
  * Description : a digikam image editor plugin to
  *               simulate charcoal drawing.
  *
- * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -57,11 +57,11 @@ using namespace KDcrawIface;
 namespace DigikamFxFiltersImagePlugin
 {
 
-class CharcoalTool::CharcoalToolPriv
+class CharcoalTool::Private
 {
 public:
 
-    CharcoalToolPriv() :
+    Private() :
         pencilInput(0),
         smoothInput(0),
         previewWidget(0),
@@ -79,15 +79,16 @@ public:
     ImageRegionWidget*   previewWidget;
     EditorToolSettings*  gboxSettings;
 };
-const QString CharcoalTool::CharcoalToolPriv::configGroupName("charcoal Tool");
-const QString CharcoalTool::CharcoalToolPriv::configPencilAdjustmentEntry("PencilAdjustment");
-const QString CharcoalTool::CharcoalToolPriv::configSmoothAdjustmentEntry("SmoothAdjustment");
+
+const QString CharcoalTool::Private::configGroupName("charcoal Tool");
+const QString CharcoalTool::Private::configPencilAdjustmentEntry("PencilAdjustment");
+const QString CharcoalTool::Private::configSmoothAdjustmentEntry("SmoothAdjustment");
 
 // --------------------------------------------------------
 
-CharcoalTool::CharcoalTool(QObject* parent)
+CharcoalTool::CharcoalTool(QObject* const parent)
     : EditorToolThreaded(parent),
-      d(new CharcoalToolPriv)
+      d(new Private)
 {
     setObjectName("charcoal");
     setToolName(i18n("Charcoal"));

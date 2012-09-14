@@ -62,8 +62,8 @@ private Q_SLOTS:
 
 private:
 
-    class ImagePlugin_FxFiltersPriv;
-    ImagePlugin_FxFiltersPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace DigikamFxFiltersImagePlugin

@@ -41,7 +41,7 @@ class FilmGrainTool : public EditorToolThreaded
 
 public:
 
-    FilmGrainTool(QObject* parent);
+    FilmGrainTool(QObject* const parent);
     ~FilmGrainTool();
 
 private Q_SLOTS:
@@ -60,8 +60,8 @@ private:
 
 private:
 
-    class FilmGrainToolPriv;
-    FilmGrainToolPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace DigikamFxFiltersImagePlugin

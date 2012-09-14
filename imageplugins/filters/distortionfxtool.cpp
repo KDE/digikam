@@ -6,8 +6,8 @@
  * Date        : 2005-02-11
  * Description : a plugin to apply Distortion FX to an image.
  *
- * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * Original Distortion algorithms copyrighted 2004-2005 by
  * Pieter Z. Voloshyn <pieter dot voloshyn at gmail dot com>.
@@ -66,11 +66,11 @@ using namespace KDcrawIface;
 namespace DigikamFxFiltersImagePlugin
 {
 
-class DistortionFXTool::DistortionFXToolPriv
+class DistortionFXTool::Private
 {
 public:
 
-    DistortionFXToolPriv() :
+    Private() :
         effectTypeLabel(0),
         levelLabel(0),
         iterationLabel(0),
@@ -98,16 +98,17 @@ public:
     ImageGuideWidget*    previewWidget;
     EditorToolSettings*  gboxSettings;
 };
-const QString DistortionFXTool::DistortionFXToolPriv::configGroupName("distortionfx Tool");
-const QString DistortionFXTool::DistortionFXToolPriv::configEffectTypeEntry("EffectType");
-const QString DistortionFXTool::DistortionFXToolPriv::configIterationAdjustmentEntry("IterationAdjustment");
-const QString DistortionFXTool::DistortionFXToolPriv::configLevelAdjustmentEntry("LevelAdjustment");
+
+const QString DistortionFXTool::Private::configGroupName("distortionfx Tool");
+const QString DistortionFXTool::Private::configEffectTypeEntry("EffectType");
+const QString DistortionFXTool::Private::configIterationAdjustmentEntry("IterationAdjustment");
+const QString DistortionFXTool::Private::configLevelAdjustmentEntry("LevelAdjustment");
 
 // --------------------------------------------------------
 
-DistortionFXTool::DistortionFXTool(QObject* parent)
+DistortionFXTool::DistortionFXTool(QObject* const parent)
     : EditorToolThreaded(parent),
-      d(new DistortionFXToolPriv)
+      d(new Private)
 {
     setObjectName("distortionfx");
     setToolName(i18n("Distortion Effects"));
@@ -340,12 +341,12 @@ void DistortionFXTool::preparePreview()
     d->iterationInput->setEnabled(false);
     d->iterationLabel->setEnabled(false);
 
-    int l = d->levelInput->value();
-    int f = d->iterationInput->value();
-    int e = d->effectType->currentIndex();
+    int l                   = d->levelInput->value();
+    int f                   = d->iterationInput->value();
+    int e                   = d->effectType->currentIndex();
 
-    ImageIface* iface = d->previewWidget->imageIface();
-    DImg image        = iface->preview();
+    ImageIface* const iface = d->previewWidget->imageIface();
+    DImg image              = iface->preview();
 
     setFilter(new DistortionFXFilter(&image, this, e, l, f));
 }
@@ -370,8 +371,8 @@ void DistortionFXTool::prepareFinal()
 
 void DistortionFXTool::setPreviewImage()
 {
-    ImageIface* iface = d->previewWidget->imageIface();
-    DImg imDest       = filter()->getTargetImage().smoothScale(iface->previewSize());
+    ImageIface* const iface = d->previewWidget->imageIface();
+    DImg imDest             = filter()->getTargetImage().smoothScale(iface->previewSize());
     iface->setPreview(imDest);
 
     d->previewWidget->updatePreview();

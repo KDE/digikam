@@ -7,7 +7,7 @@
  * Description : a digikam image editor plugin to
  *               simulate charcoal drawing.
  *
- * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -40,7 +40,7 @@ class CharcoalTool : public EditorToolThreaded
 
 public:
 
-    CharcoalTool(QObject* parent);
+    CharcoalTool(QObject* const parent);
     ~CharcoalTool();
 
 private Q_SLOTS:
@@ -58,8 +58,8 @@ private:
 
 private:
 
-    class CharcoalToolPriv;
-    CharcoalToolPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace DigikamFxFiltersImagePlugin

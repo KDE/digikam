@@ -50,11 +50,11 @@ namespace DigikamFxFiltersImagePlugin
 K_PLUGIN_FACTORY( FxFiltersFactory, registerPlugin<ImagePlugin_FxFilters>(); )
 K_EXPORT_PLUGIN ( FxFiltersFactory("digikamimageplugin_fxfilters") )
 
-class ImagePlugin_FxFilters::ImagePlugin_FxFiltersPriv
+class ImagePlugin_FxFilters::Private
 {
 public:
 
-    ImagePlugin_FxFiltersPriv() :
+    Private() :
         filmgrainAction(0),
         raindropAction(0),
         distortionfxAction(0),
@@ -76,9 +76,9 @@ public:
     KAction* colorEffectsAction;
 };
 
-ImagePlugin_FxFilters::ImagePlugin_FxFilters(QObject* parent, const QVariantList&)
+ImagePlugin_FxFilters::ImagePlugin_FxFilters(QObject* const parent, const QVariantList&)
     : ImagePlugin(parent, "ImagePlugin_FxFilters"),
-      d(new ImagePlugin_FxFiltersPriv)
+      d(new Private)
 {
     d->colorEffectsAction = new KAction(KIcon("colorfx"), i18n("Color Effects..."), this);
     actionCollection()->addAction("imageplugin_colorfx", d->colorEffectsAction);
@@ -145,50 +145,42 @@ void ImagePlugin_FxFilters::setEnabledActions(bool b)
 
 void ImagePlugin_FxFilters::slotColorEffects()
 {
-    ColorFxTool* tool = new ColorFxTool(this);
-    loadTool(tool);
+    loadTool(new ColorFxTool(this));
 }
 
 void ImagePlugin_FxFilters::slotCharcoal()
 {
-    CharcoalTool* tool = new CharcoalTool(this);
-    loadTool(tool);
+    loadTool(new CharcoalTool(this));
 }
 
 void ImagePlugin_FxFilters::slotEmboss()
 {
-    EmbossTool* tool = new EmbossTool(this);
-    loadTool(tool);
+    loadTool(new EmbossTool(this));
 }
 
 void ImagePlugin_FxFilters::slotOilPaint()
 {
-    OilPaintTool* tool = new OilPaintTool(this);
-    loadTool(tool);
+    loadTool(new OilPaintTool(this));
 }
 
 void ImagePlugin_FxFilters::slotBlurFX()
 {
-    BlurFXTool* tool = new BlurFXTool(this);
-    loadTool(tool);
+    loadTool(new BlurFXTool(this));
 }
 
 void ImagePlugin_FxFilters::slotDistortionFX()
 {
-    DistortionFXTool* tool = new DistortionFXTool(this);
-    loadTool(tool);
+    loadTool(new DistortionFXTool(this));
 }
 
 void ImagePlugin_FxFilters::slotRainDrop()
 {
-    RainDropTool* tool = new RainDropTool(this);
-    loadTool(tool);
+    loadTool(new RainDropTool(this));
 }
 
 void ImagePlugin_FxFilters::slotFilmGrain()
 {
-    FilmGrainTool* tool = new FilmGrainTool(this);
-    loadTool(tool);
+    loadTool(new FilmGrainTool(this));
 }
 
 } // namespace DigikamFxFiltersImagePlugin

@@ -8,7 +8,7 @@
  *               effect to an image.
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -46,7 +46,7 @@ class ColorFxTool : public EditorToolThreaded
 
 public:
 
-    ColorFxTool(QObject* parent);
+    ColorFxTool(QObject* const parent);
     ~ColorFxTool();
 
 private:
@@ -67,8 +67,8 @@ private Q_SLOTS:
 
 private:
 
-    class ColorFxToolPriv;
-    ColorFxToolPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace DigikamFxFiltersImagePlugin

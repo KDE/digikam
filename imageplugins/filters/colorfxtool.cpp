@@ -8,7 +8,7 @@
  *               effect to an image.
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -75,12 +75,12 @@ using namespace KDcrawIface;
 namespace DigikamFxFiltersImagePlugin
 {
 
-class ColorFxTool::ColorFxToolPriv
+class ColorFxTool::Private
 {
 
 public:
 
-    ColorFxToolPriv() :
+    Private() :
         destinationPreviewData(0),
         effectTypeLabel(0),
         levelLabel(0),
@@ -113,18 +113,19 @@ public:
     ImageGuideWidget*    previewWidget;
     EditorToolSettings*  gboxSettings;
 };
-const QString ColorFxTool::ColorFxToolPriv::configGroupName("coloreffect Tool");
-const QString ColorFxTool::ColorFxToolPriv::configHistogramChannelEntry("Histogram Channel");
-const QString ColorFxTool::ColorFxToolPriv::configHistogramScaleEntry("Histogram Scale");
-const QString ColorFxTool::ColorFxToolPriv::configEffectTypeEntry("EffectType");
-const QString ColorFxTool::ColorFxToolPriv::configLevelAdjustmentEntry("LevelAdjustment");
-const QString ColorFxTool::ColorFxToolPriv::configIterationAdjustmentEntry("IterationAdjustment");
+
+const QString ColorFxTool::Private::configGroupName("coloreffect Tool");
+const QString ColorFxTool::Private::configHistogramChannelEntry("Histogram Channel");
+const QString ColorFxTool::Private::configHistogramScaleEntry("Histogram Scale");
+const QString ColorFxTool::Private::configEffectTypeEntry("EffectType");
+const QString ColorFxTool::Private::configLevelAdjustmentEntry("LevelAdjustment");
+const QString ColorFxTool::Private::configIterationAdjustmentEntry("IterationAdjustment");
 
 // --------------------------------------------------------
 
-ColorFxTool::ColorFxTool(QObject* parent)
+ColorFxTool::ColorFxTool(QObject* const parent)
     : EditorToolThreaded(parent),
-      d(new ColorFxToolPriv)
+      d(new Private)
 {
     setObjectName("coloreffects");
     setToolName(i18n("Color Effects"));
@@ -332,12 +333,11 @@ void ColorFxTool::preparePreview()
     d->iterationInput->setEnabled(false);
     d->iterationLabel->setEnabled(false);
 
-    int l = d->levelInput->value();
-    int f = d->iterationInput->value();
-    int e = d->effectType->currentIndex();
-
-    ImageIface* iface = d->previewWidget->imageIface();
-    DImg image        = iface->preview();
+    int l                   = d->levelInput->value();
+    int f                   = d->iterationInput->value();
+    int e                   = d->effectType->currentIndex();
+    ImageIface* const iface = d->previewWidget->imageIface();
+    DImg image              = iface->preview();
 
     setFilter(new ColorFXFilter(&image, this, e, l, f));
 }
@@ -362,9 +362,9 @@ void ColorFxTool::prepareFinal()
 
 void ColorFxTool::setPreviewImage()
 {
-    ImageIface* iface = d->previewWidget->imageIface();
-    DImg preview = filter()->getTargetImage();
-    DImg imDest  = preview.smoothScale(iface->previewSize());
+    ImageIface* const iface = d->previewWidget->imageIface();
+    DImg preview            = filter()->getTargetImage();
+    DImg imDest             = preview.smoothScale(iface->previewSize());
     iface->setPreview(imDest);
     d->gboxSettings->histogramBox()->histogram()->updateData(preview.bits(), preview.width(), preview.height(),
                                                              preview.sixteenBit(), 0, 0, 0, false);
@@ -426,4 +426,3 @@ void ColorFxTool::renderingFinished()
 }
 
 }  // namespace DigikamFxFiltersImagePlugin
-
