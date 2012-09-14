@@ -7,7 +7,7 @@
  * Description : a widget class to edit perspective.
  *
  * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2006-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -139,7 +139,7 @@ public:
     DImg        preview;
 };
 
-PerspectiveWidget::PerspectiveWidget(int w, int h, QWidget* parent)
+PerspectiveWidget::PerspectiveWidget(int w, int h, QWidget* const parent)
     : QWidget(parent), d(new Private)
 {
     setAttribute(Qt::WA_DeleteOnClose);
@@ -296,7 +296,10 @@ void PerspectiveWidget::reset()
 
 void PerspectiveWidget::applyPerspectiveAdjustment()
 {
-    DImg* orgImage = d->iface->original();
+    DImg* const orgImage = d->iface->original();
+
+    if (!orgImage) return;
+
     DImg destImage(orgImage->width(), orgImage->height(), orgImage->sixteenBit(), orgImage->hasAlpha());
 
     DColor background(0, 0, 0, orgImage->hasAlpha() ? 0 : 255, orgImage->sixteenBit());
@@ -511,8 +514,8 @@ void PerspectiveWidget::updatePixmap()
 QPoint PerspectiveWidget::buildPerspective(const QPoint& orignTopLeft, const QPoint& orignBottomRight,
                                            const QPoint& transTopLeft, const QPoint& transTopRight,
                                            const QPoint& transBottomLeft, const QPoint& transBottomRight,
-                                           DImg* orgImage, DImg* destImage,
-                                           DColor background)
+                                           DImg* const orgImage, DImg* const destImage,
+                                           const DColor& background)
 {
     Matrix matrix, transform;
     double scalex;
@@ -654,8 +657,8 @@ QPoint PerspectiveWidget::buildPerspective(const QPoint& orignTopLeft, const QPo
     return QPoint(lround(newCenterX), lround(newCenterY));
 }
 
-void PerspectiveWidget::transformAffine(DImg* orgImage, DImg* destImage,
-                                        const Matrix& matrix, DColor background)
+void PerspectiveWidget::transformAffine(DImg* const orgImage, DImg* const destImage,
+                                        const Matrix& matrix, const DColor& background)
 {
     Matrix m(matrix), inv(matrix);
 
@@ -689,13 +692,14 @@ void PerspectiveWidget::transformAffine(DImg* orgImage, DImg* destImage,
     width       = orgImage->width();
     height      = orgImage->height();
     newData     = destImage->bits();
+    DColor bg   = background;
 
     if (sixteenBit)
     {
-        background.convertToSixteenBit();
+        bg.convertToSixteenBit();
     }
 
-    //destImage->fill(background);
+    //destImage->fill(bg);
 
     PixelsAliasFilter alias;
 
@@ -795,7 +799,7 @@ void PerspectiveWidget::transformAffine(DImg* orgImage, DImg* destImage,
             {
                 // set to background color
 
-                background.setPixel(d2);
+                bg.setPixel(d2);
                 d2 += bytesDepth;
             }
 

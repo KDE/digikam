@@ -66,8 +66,8 @@ private Q_SLOTS:
 
 private:
 
-    class ImagePlugin_TransformPriv;
-    ImagePlugin_TransformPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace DigikamTransformImagePlugin

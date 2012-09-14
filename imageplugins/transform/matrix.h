@@ -7,8 +7,8 @@
  * Description : a matrix implementation for image
  *               perspective adjustment.
  *
- * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -34,10 +34,10 @@ class Matrix
 public:
 
     /**
-    * Matrix:
-    *
-    * Initializes matrix to the identity matrix.
-    */
+     * Matrix:
+     *
+     * Initializes matrix to the identity matrix.
+     */
     Matrix();
 
     /**
@@ -50,54 +50,56 @@ public:
     void translate(double x, double y);
 
     /**
-    * scale:
-    * @param x X scale factor.
-    * @param y Y scale factor.
-    *
-    * Scales the matrix by x and y
-    */
+     * scale:
+     * @param x X scale factor.
+     * @param y Y scale factor.
+     *
+     * Scales the matrix by x and y
+     */
     void scale(double x, double y);
 
     /**
-    * invert:
-    *
-    * Inverts this matrix.
-    */
+     * invert:
+     *
+     * Inverts this matrix.
+     */
     void invert();
 
     /**
-    * multiply:
-    * @param matrix1 The other input matrix.
-    *
-    * Multiplies this matrix with another matrix
-    */
+     * multiply:
+     * @param matrix1 The other input matrix.
+     *
+     * Multiplies this matrix with another matrix
+     */
     void multiply(const Matrix& matrix1);
 
     /**
-    * transformPoint:
-    * @param x The source X coordinate.
-    * @param y The source Y coordinate.
-    * @param newx The transformed X coordinate.
-    * @param newy The transformed Y coordinate.
-    *
-    * Transforms a point in 2D as specified by the transformation matrix.
-    */
+     * transformPoint:
+     * @param x The source X coordinate.
+     * @param y The source Y coordinate.
+     * @param newx The transformed X coordinate.
+     * @param newy The transformed Y coordinate.
+     *
+     * Transforms a point in 2D as specified by the transformation matrix.
+     */
     void transformPoint(double x, double y, double* newx, double* newy) const;
 
     /**
-    * determinant:
-    *
-    * Calculates the determinant of this matrix.
-    *
-    * Returns: The determinant.
-    */
+     * determinant:
+     *
+     * Calculates the determinant of this matrix.
+     *
+     * Returns: The determinant.
+     */
     double determinant() const;
 
-    /**
-    * coeff:
-    *
-    * The 3x3 matrix data
-    */
+public:
+
+     /**
+     * coeff:
+     *
+     * The 3x3 matrix data
+     */
     double coeff[3][3];
 };
 

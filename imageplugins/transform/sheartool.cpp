@@ -6,7 +6,7 @@
  * Date        : 2004-12-23
  * Description : a plugin to shear an image
  *
- * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -59,11 +59,11 @@ using namespace KDcrawIface;
 namespace DigikamTransformImagePlugin
 {
 
-class ShearTool::ShearToolPriv
+class ShearTool::Private
 {
 public:
 
-    ShearToolPriv() :
+    Private() :
         newWidthLabel(0),
         newHeightLabel(0),
         antialiasInput(0),
@@ -96,18 +96,19 @@ public:
     ImageGuideWidget*    previewWidget;
     EditorToolSettings*  gboxSettings;
 };
-const QString ShearTool::ShearToolPriv::configGroupName("shear Tool");
-const QString ShearTool::ShearToolPriv::configAntiAliasingEntry("Anti Aliasing");
-const QString ShearTool::ShearToolPriv::configMainHAngleEntry("Main HAngle");
-const QString ShearTool::ShearToolPriv::configMainVAngleEntry("Main VAngle");
-const QString ShearTool::ShearToolPriv::configFineHAngleEntry("Fine HAngle");
-const QString ShearTool::ShearToolPriv::configFineVAngleEntry("Fine VAngle");
+
+const QString ShearTool::Private::configGroupName("shear Tool");
+const QString ShearTool::Private::configAntiAliasingEntry("Anti Aliasing");
+const QString ShearTool::Private::configMainHAngleEntry("Main HAngle");
+const QString ShearTool::Private::configMainVAngleEntry("Main VAngle");
+const QString ShearTool::Private::configFineHAngleEntry("Fine HAngle");
+const QString ShearTool::Private::configFineVAngleEntry("Fine VAngle");
 
 // --------------------------------------------------------
 
-ShearTool::ShearTool(QObject* parent)
+ShearTool::ShearTool(QObject* const parent)
     : EditorToolThreaded(parent),
-      d(new ShearToolPriv)
+      d(new Private)
 {
     setObjectName("sheartool");
     setToolName(i18n("Shear Tool"));
@@ -286,39 +287,38 @@ void ShearTool::slotResetSettings()
 
 void ShearTool::preparePreview()
 {
-    float hAngle      = d->mainHAngleInput->value() + d->fineHAngleInput->value();
-    float vAngle      = d->mainVAngleInput->value() + d->fineVAngleInput->value();
-    bool antialiasing = d->antialiasInput->isChecked();
-    QColor background = Qt::black;
+    float hAngle            = d->mainHAngleInput->value() + d->fineHAngleInput->value();
+    float vAngle            = d->mainVAngleInput->value() + d->fineVAngleInput->value();
+    bool antialiasing       = d->antialiasInput->isChecked();
+    QColor background       = Qt::black;
 
-    ImageIface* iface = d->previewWidget->imageIface();
-    int orgW          = iface->originalSize().width();
-    int orgH          = iface->originalSize().height();
-    DImg preview      = iface->preview();
+    ImageIface* const iface = d->previewWidget->imageIface();
+    int orgW                = iface->originalSize().width();
+    int orgH                = iface->originalSize().height();
+    DImg preview            = iface->preview();
     setFilter(new ShearFilter(&preview, this, hAngle, vAngle, antialiasing, background, orgW, orgH));
 }
 
 void ShearTool::prepareFinal()
 {
-    float hAngle      = d->mainHAngleInput->value() + d->fineHAngleInput->value();
-    float vAngle      = d->mainVAngleInput->value() + d->fineVAngleInput->value();
-    bool antialiasing = d->antialiasInput->isChecked();
-    QColor background = Qt::black;
+    float hAngle         = d->mainHAngleInput->value() + d->fineHAngleInput->value();
+    float vAngle         = d->mainVAngleInput->value() + d->fineVAngleInput->value();
+    bool antialiasing    = d->antialiasInput->isChecked();
+    QColor background    = Qt::black;
 
     ImageIface iface;
-    int orgW       = iface.originalSize().width();
-    int orgH       = iface.originalSize().height();
-    DImg* orgImage = iface.original();
+    int orgW             = iface.originalSize().width();
+    int orgH             = iface.originalSize().height();
+    DImg* const orgImage = iface.original();
     setFilter(new ShearFilter(orgImage, this, hAngle, vAngle, antialiasing, background, orgW, orgH));
 }
 
 void ShearTool::setPreviewImage()
 {
-    ImageIface* iface = d->previewWidget->imageIface();
-    int w             = iface->previewSize().width();
-    int h             = iface->previewSize().height();
-
-    DImg imTemp = filter()->getTargetImage().smoothScale(w, h, Qt::KeepAspectRatio);
+    ImageIface* const iface = d->previewWidget->imageIface();
+    int w                   = iface->previewSize().width();
+    int h                   = iface->previewSize().height();
+    DImg imTemp             = filter()->getTargetImage().smoothScale(w, h, Qt::KeepAspectRatio);
     DImg imDest( w, h, filter()->getTargetImage().sixteenBit(), filter()->getTargetImage().hasAlpha() );
 
     imDest.fill( DColor(d->previewWidget->palette().color(QPalette::Background).rgb(),

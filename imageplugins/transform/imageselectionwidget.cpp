@@ -534,8 +534,7 @@ void ImageSelectionWidget::setSelectionAspectRatioType(int aspectRatioType)
     applyAspectRatio(false);
 }
 
-void ImageSelectionWidget::setSelectionAspectRatioValue(int widthRatioValue,
-        int heightRatioValue)
+void ImageSelectionWidget::setSelectionAspectRatioValue(int widthRatioValue, int heightRatioValue)
 {
     int gdc = widthRatioValue;
 
@@ -1087,8 +1086,8 @@ void ImageSelectionWidget::updatePixmap()
                 p.scale(1, -1);
             }
 
-            int w = d->localRegionSelection.width();
-            int h = d->localRegionSelection.height();
+            int w   = d->localRegionSelection.width();
+            int h   = d->localRegionSelection.height();
 
             // lengths for the golden mean and half the sizes of the region:
             int w_g = (int)(w*INVPHI);

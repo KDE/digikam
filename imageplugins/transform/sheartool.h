@@ -6,7 +6,7 @@
  * Date        : 2004-12-23
  * Description : a plugin to shear an image
  *
- * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -39,7 +39,7 @@ class ShearTool : public EditorToolThreaded
 
 public:
 
-    explicit ShearTool(QObject* parent);
+    explicit ShearTool(QObject* const parent);
     ~ShearTool();
 
 private Q_SLOTS:
@@ -58,8 +58,8 @@ private:
 
 private:
 
-    class ShearToolPriv;
-    ShearToolPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace DigikamTransformImagePlugin

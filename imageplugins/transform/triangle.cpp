@@ -6,7 +6,7 @@
  * Date        : 2005-01-18
  * Description : triangle geometry calculation class.
  *
- * Copyright (C) 2005-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -20,6 +20,8 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
+
+#define RADIAN2DEGREE(a) (a * 57.295779513082)
 
 #include "triangle.h"
 
@@ -41,17 +43,17 @@ Triangle::Triangle(const QPoint& A, const QPoint& B, const QPoint& C)
 
 float Triangle::angleABC() const
 {
-    return( 57.295779513082 * acos( (m_b*m_b - m_a*m_a - m_c*m_c ) / (-2*m_a*m_c ) ) );
+    return( RADIAN2DEGREE( acos( (m_b*m_b - m_a*m_a - m_c*m_c ) / (-2*m_a*m_c ) ) ) );
 }
 
 float Triangle::angleACB() const
 {
-    return( 57.295779513082 * acos( (m_c*m_c - m_a*m_a - m_b*m_b ) / (-2*m_a*m_b ) ) );
+    return( RADIAN2DEGREE( acos( (m_c*m_c - m_a*m_a - m_b*m_b ) / (-2*m_a*m_b ) ) ) );
 }
 
 float Triangle::angleBAC() const
 {
-    return( 57.295779513082 * acos( (m_a*m_a - m_b*m_b - m_c*m_c ) / (-2*m_b*m_c ) ) );
+    return( RADIAN2DEGREE( acos( (m_a*m_a - m_b*m_b - m_c*m_c ) / (-2*m_b*m_c ) ) ) );
 }
 
 float Triangle::distanceP2P(const QPoint& p1, const QPoint& p2) const

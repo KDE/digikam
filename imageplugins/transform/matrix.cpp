@@ -7,8 +7,8 @@
  * Description : a matrix implementation for image
  *               perspective adjustment.
  *
- * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * Matrix3 implementation inspired from gimp 2.0
  * Copyright (C) 1995 Spencer Kimball and Peter Mattis
@@ -37,9 +37,9 @@ namespace DigikamTransformImagePlugin
 {
 
 static double identityMatrix[3][3] = { { 1.0, 0.0, 0.0 },
-    { 0.0, 1.0, 0.0 },
-    { 0.0, 0.0, 1.0 }
-};
+                                       { 0.0, 1.0, 0.0 },
+                                       { 0.0, 0.0, 1.0 }
+                                     };
 
 Matrix::Matrix()
 {
@@ -108,11 +108,11 @@ void Matrix::transformPoint(double x, double y, double* newx, double* newy) cons
         w = 1.0/w;
     }
 
-    *newx = (coeff[0][0] * x +
-             coeff[0][1] * y +
+    *newx = (coeff[0][0]  * x +
+             coeff[0][1]  * y +
              coeff[0][2]) * w;
-    *newy = (coeff[1][0] * x +
-             coeff[1][1] * y +
+    *newy = (coeff[1][0]  * x +
+             coeff[1][1]  * y +
              coeff[1][2]) * w;
 }
 
@@ -162,13 +162,13 @@ double Matrix::determinant() const
 {
     double determinant;
 
-    determinant  = (coeff[0][0] *
+    determinant  = (coeff[0][0]  *
                     (coeff[1][1] * coeff[2][2] -
                      coeff[1][2] * coeff[2][1]));
-    determinant -= (coeff[1][0] *
+    determinant -= (coeff[1][0]  *
                     (coeff[0][1] * coeff[2][2] -
                      coeff[0][2] * coeff[2][1]));
-    determinant += (coeff[2][0] *
+    determinant += (coeff[2][0]  *
                     (coeff[0][1] * coeff[1][2] -
                      coeff[0][2] * coeff[1][1]));
 

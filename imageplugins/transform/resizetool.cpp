@@ -85,11 +85,11 @@ namespace DigikamTransformImagePlugin
 
 // -------------------------------------------------------------
 
-class ResizeTool::ResizeToolPriv
+class ResizeTool::Private
 {
 public:
 
-    ResizeToolPriv() :
+    Private() :
         orgWidth(0),
         orgHeight(0),
         prevW(0),
@@ -153,25 +153,26 @@ public:
     EditorToolSettings*     gboxSettings;
     GreycstorationSettings* settingsWidget;
 };
-const QString ResizeTool::ResizeToolPriv::configGroupName("resize Tool");
-const QString ResizeTool::ResizeToolPriv::configFastApproxEntry("FastApprox");
-const QString ResizeTool::ResizeToolPriv::configInterpolationEntry("Interpolation");
-const QString ResizeTool::ResizeToolPriv::configAmplitudeEntry("Amplitude");
-const QString ResizeTool::ResizeToolPriv::configSharpnessEntry("Sharpness");
-const QString ResizeTool::ResizeToolPriv::configAnisotropyEntry("Anisotropy");
-const QString ResizeTool::ResizeToolPriv::configAlphaEntry("Alpha");
-const QString ResizeTool::ResizeToolPriv::configSigmaEntry("Sigma");
-const QString ResizeTool::ResizeToolPriv::configGaussPrecEntry("GaussPrec");
-const QString ResizeTool::ResizeToolPriv::configDlEntry("Dl");
-const QString ResizeTool::ResizeToolPriv::configDaEntry("Da");
-const QString ResizeTool::ResizeToolPriv::configIterationEntry("Iteration");
-const QString ResizeTool::ResizeToolPriv::configTileEntry("Tile");
-const QString ResizeTool::ResizeToolPriv::configBTileEntry("BTile");
+
+const QString ResizeTool::Private::configGroupName("resize Tool");
+const QString ResizeTool::Private::configFastApproxEntry("FastApprox");
+const QString ResizeTool::Private::configInterpolationEntry("Interpolation");
+const QString ResizeTool::Private::configAmplitudeEntry("Amplitude");
+const QString ResizeTool::Private::configSharpnessEntry("Sharpness");
+const QString ResizeTool::Private::configAnisotropyEntry("Anisotropy");
+const QString ResizeTool::Private::configAlphaEntry("Alpha");
+const QString ResizeTool::Private::configSigmaEntry("Sigma");
+const QString ResizeTool::Private::configGaussPrecEntry("GaussPrec");
+const QString ResizeTool::Private::configDlEntry("Dl");
+const QString ResizeTool::Private::configDaEntry("Da");
+const QString ResizeTool::Private::configIterationEntry("Iteration");
+const QString ResizeTool::Private::configTileEntry("Tile");
+const QString ResizeTool::Private::configBTileEntry("BTile");
 
 // -------------------------------------------------------------
 
-ResizeTool::ResizeTool(QObject* parent)
-    : EditorToolThreaded(parent), d(new ResizeToolPriv)
+ResizeTool::ResizeTool(QObject* const parent)
+    : EditorToolThreaded(parent), d(new Private)
 {
     setObjectName("resizeimage");
     setToolName(i18n("Resize Image"));
@@ -472,12 +473,12 @@ void ResizeTool::preparePreview()
         slotValuesChanged();
     }
 
-    ImageIface* iface = d->previewWidget->imageIface();
-    int w             = iface->previewSize().width();
-    int h             = iface->previewSize().height();
-    DImg imTemp       = iface->original()->smoothScale(w, h, Qt::KeepAspectRatio);
-    int new_w         = (int)(w*d->wpInput->value()/100.0);
-    int new_h         = (int)(h*d->hpInput->value()/100.0);
+    ImageIface* const iface = d->previewWidget->imageIface();
+    int w                   = iface->previewSize().width();
+    int h                   = iface->previewSize().height();
+    DImg imTemp             = iface->original()->smoothScale(w, h, Qt::KeepAspectRatio);
+    int new_w               = (int)(w*d->wpInput->value()/100.0);
+    int new_h               = (int)(h*d->hpInput->value()/100.0);
 
     if (d->useGreycstorationBox->isChecked())
     {
@@ -530,10 +531,10 @@ void ResizeTool::prepareFinal()
 
 void ResizeTool::setPreviewImage()
 {
-    ImageIface* iface = d->previewWidget->imageIface();
-    int w             = iface->previewSize().width();
-    int h             = iface->previewSize().height();
-    DImg imTemp       = filter()->getTargetImage().smoothScale(w, h, Qt::KeepAspectRatio);
+    ImageIface* const iface = d->previewWidget->imageIface();
+    int w                   = iface->previewSize().width();
+    int h                   = iface->previewSize().height();
+    DImg imTemp             = filter()->getTargetImage().smoothScale(w, h, Qt::KeepAspectRatio);
     DImg imDest(w, h, filter()->getTargetImage().sixteenBit(), filter()->getTargetImage().hasAlpha());
 
     QColor background = toolView()->backgroundRole();

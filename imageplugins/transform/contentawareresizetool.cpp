@@ -7,7 +7,7 @@
  * Description : Content aware resizing tool.
  *
  * Copyright (C) 2009-2010 by Julien Pontabry <julien dot pontabry at ulp dot u-strasbg dot fr>
- * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2010 by Julien Narboux <julien at narboux dot fr>
  *
  * This program is free software; you can redistribute it
@@ -68,7 +68,7 @@ using namespace KDcrawIface;
 namespace DigikamTransformImagePlugin
 {
 
-class ContentAwareResizeTool::ContentAwareResizeToolPriv
+class ContentAwareResizeTool::Private
 {
 public:
 
@@ -81,7 +81,7 @@ public:
 
 public:
 
-    ContentAwareResizeToolPriv() :
+    Private() :
         orgWidth(0),
         orgHeight(0),
         prevW(0),
@@ -159,20 +159,21 @@ public:
 
     QButtonGroup*        maskGroup;
 };
-const QString ContentAwareResizeTool::ContentAwareResizeToolPriv::configGroupName("liquidrescale Tool");
-const QString ContentAwareResizeTool::ContentAwareResizeToolPriv::configStepEntry("Step");
-const QString ContentAwareResizeTool::ContentAwareResizeToolPriv::configSideSwitchEntry("SideSwitch");
-const QString ContentAwareResizeTool::ContentAwareResizeToolPriv::configRigidityEntry("Rigidity");
-const QString ContentAwareResizeTool::ContentAwareResizeToolPriv::configFunctionEntry("Function");
-const QString ContentAwareResizeTool::ContentAwareResizeToolPriv::configOrderEntry("Order");
-const QString ContentAwareResizeTool::ContentAwareResizeToolPriv::configMixedRescaleValueEntry("MixedRescaleValue");
-const QString ContentAwareResizeTool::ContentAwareResizeToolPriv::configBrushSizeEntry("BrushSize");
-const QString ContentAwareResizeTool::ContentAwareResizeToolPriv::configPreserveTonesEntry("PreserveTones");
+
+const QString ContentAwareResizeTool::Private::configGroupName("liquidrescale Tool");
+const QString ContentAwareResizeTool::Private::configStepEntry("Step");
+const QString ContentAwareResizeTool::Private::configSideSwitchEntry("SideSwitch");
+const QString ContentAwareResizeTool::Private::configRigidityEntry("Rigidity");
+const QString ContentAwareResizeTool::Private::configFunctionEntry("Function");
+const QString ContentAwareResizeTool::Private::configOrderEntry("Order");
+const QString ContentAwareResizeTool::Private::configMixedRescaleValueEntry("MixedRescaleValue");
+const QString ContentAwareResizeTool::Private::configBrushSizeEntry("BrushSize");
+const QString ContentAwareResizeTool::Private::configPreserveTonesEntry("PreserveTones");
 
 // --------------------------------------------------------
 
-ContentAwareResizeTool::ContentAwareResizeTool(QObject* parent)
-    : EditorToolThreaded(parent), d(new ContentAwareResizeToolPriv)
+ContentAwareResizeTool::ContentAwareResizeTool(QObject* const parent)
+    : EditorToolThreaded(parent), d(new Private)
 {
     setObjectName("liquidrescale");
     setToolName(i18n("Liquid Rescale"));
@@ -291,7 +292,7 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject* parent)
                                       "image are less important.  These zones will be deleted when reducing "
                                       "the picture, or duplicated when enlarging the picture."));
     d->redMaskTool->setEnabled(false);
-    d->maskGroup->addButton(d->redMaskTool, ContentAwareResizeToolPriv::redMask);
+    d->maskGroup->addButton(d->redMaskTool, Private::redMask);
 
     QLabel* labeGreenMaskTool = new QLabel(i18n("Preservation weight mask:"), d->gboxSettings->plainPage());
     d->greenMaskTool          = new QToolButton(d->gboxSettings->plainPage());
@@ -301,7 +302,7 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject* parent)
     d->greenMaskTool->setWhatsThis(i18n("Click on this button to draw zones marking which areas of the "
                                         "image you want to preserve."));
     d->greenMaskTool->setEnabled(false);
-    d->maskGroup->addButton(d->greenMaskTool, ContentAwareResizeToolPriv::greenMask);
+    d->maskGroup->addButton(d->greenMaskTool, Private::greenMask);
 
     QLabel* labeEraseMaskTool = new QLabel(i18n("Erase mask:"), d->gboxSettings->plainPage());
     d->eraseMaskTool          = new QToolButton(d->gboxSettings->plainPage());
@@ -310,7 +311,7 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject* parent)
     d->eraseMaskTool->setToolTip(i18n("Erase mask"));
     d->eraseMaskTool->setWhatsThis(i18n("Click on this button to erase mask regions."));
     d->eraseMaskTool->setEnabled(false);
-    d->maskGroup->addButton(d->eraseMaskTool, ContentAwareResizeToolPriv::eraseMask);
+    d->maskGroup->addButton(d->eraseMaskTool, Private::eraseMask);
 
     QLabel* labelMaskPenSize = new QLabel(i18n("Brush size:"), d->gboxSettings->plainPage());
     d->maskPenSize           = new RIntNumInput(d->gboxSettings->plainPage());
@@ -665,7 +666,7 @@ void ContentAwareResizeTool::disableSettings()
     enableContentAwareSettings(false);
 }
 
-void ContentAwareResizeTool::contentAwareResizeCore(DImg* image, int target_width, int target_height, const QImage& mask)
+void ContentAwareResizeTool::contentAwareResizeCore(DImg* const image, int target_width, int target_height, const QImage& mask)
 {
     ContentAwareContainer settings;
     settings.preserve_skin_tones = d->preserveSkinTones->isChecked();
@@ -690,12 +691,12 @@ void ContentAwareResizeTool::preparePreview()
 
     disableSettings();
 
-    ImageIface* iface = d->previewWidget->imageIface();
-    int w             = iface->previewSize().width();
-    int h             = iface->previewSize().height();
-    DImg imTemp       = iface->original()->smoothScale(w, h, Qt::KeepAspectRatio);
-    int new_w         = (int)(w*d->wpInput->value()/100.0);
-    int new_h         = (int)(h*d->hpInput->value()/100.0);
+    ImageIface* const iface = d->previewWidget->imageIface();
+    int w                   = iface->previewSize().width();
+    int h                   = iface->previewSize().height();
+    DImg imTemp             = iface->original()->smoothScale(w, h, Qt::KeepAspectRatio);
+    int new_w               = (int)(w*d->wpInput->value()/100.0);
+    int new_h               = (int)(h*d->hpInput->value()/100.0);
 
     if (d->mixedRescaleInput->value()<100.0) // mixed rescale
     {
@@ -727,7 +728,7 @@ void ContentAwareResizeTool::prepareFinal()
     disableSettings();
 
     ImageIface iface;
-    QImage mask;
+    QImage     mask;
 
     if (d->mixedRescaleInput->value() < 100.0) // mixed rescale
     {
@@ -759,10 +760,10 @@ void ContentAwareResizeTool::prepareFinal()
 
 void ContentAwareResizeTool::setPreviewImage()
 {
-    ImageIface* iface = d->previewWidget->imageIface();
-    int w             = iface->previewSize().width();
-    int h             = iface->previewSize().height();
-    DImg imTemp       = filter()->getTargetImage().smoothScale(w, h, Qt::KeepAspectRatio);
+    ImageIface* const iface = d->previewWidget->imageIface();
+    int w                   = iface->previewSize().width();
+    int h                   = iface->previewSize().height();
+    DImg imTemp             = filter()->getTargetImage().smoothScale(w, h, Qt::KeepAspectRatio);
     DImg imDest(w, h, filter()->getTargetImage().sixteenBit(),
                 filter()->getTargetImage().hasAlpha());
 
@@ -808,13 +809,13 @@ void ContentAwareResizeTool::blockWidgetSignals(bool b)
 
 void ContentAwareResizeTool::slotMaskColorChanged(int type)
 {
-    d->previewWidget->setEraseMode(type == ContentAwareResizeToolPriv::eraseMask);
+    d->previewWidget->setEraseMode(type == Private::eraseMask);
 
-    if (type == ContentAwareResizeToolPriv::redMask)
+    if (type == Private::redMask)
     {
         d->previewWidget->setPaintColor(QColor(255, 0, 0));
     }
-    else if (type == ContentAwareResizeToolPriv::greenMask)
+    else if (type == Private::greenMask)
     {
         d->previewWidget->setPaintColor(QColor(0, 255, 0));
     }
@@ -858,7 +859,7 @@ void ContentAwareResizeTool::slotMaskPenSizeChanged(int size)
     d->previewWidget->setMaskPenSize(size);
 }
 
-bool ContentAwareResizeTool::eventFilter(QObject *obj, QEvent *ev)
+bool ContentAwareResizeTool::eventFilter(QObject* obj, QEvent* ev)
 {
     if (d->weightMaskBox->isChecked())
     {
@@ -866,7 +867,7 @@ bool ContentAwareResizeTool::eventFilter(QObject *obj, QEvent *ev)
         {
             if (ev->type() == QEvent::Wheel)
             {
-                QWheelEvent *wheel = static_cast<QWheelEvent *>(ev);
+                QWheelEvent* wheel = static_cast<QWheelEvent *>(ev);
 
                 if (wheel->delta() >= 0)
                     d->maskPenSize->setValue(d->maskPenSize->value() + (wheel->delta()/8/15)*(wheel->delta()/8/15));

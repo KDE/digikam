@@ -53,11 +53,11 @@ namespace DigikamTransformImagePlugin
 K_PLUGIN_FACTORY( TransformFactory, registerPlugin<ImagePlugin_Transform>(); )
 K_EXPORT_PLUGIN ( TransformFactory("digikamimageplugin_transform") )
 
-class ImagePlugin_Transform::ImagePlugin_TransformPriv
+class ImagePlugin_Transform::Private
 {
 public:
 
-    ImagePlugin_TransformPriv() :
+    Private() :
         aspectRatioCropAction(0),
         resizeAction(0),
         contentAwareResizingAction(0),
@@ -77,7 +77,7 @@ public:
 
 ImagePlugin_Transform::ImagePlugin_Transform(QObject* const parent, const QVariantList&)
     : ImagePlugin(parent, "ImagePlugin_Transform"),
-      d(new ImagePlugin_TransformPriv)
+      d(new Private)
 {
     d->perspectiveAction = new KAction(KIcon("perspective"), i18n("Perspective Adjustment..."), this);
     actionCollection()->addAction("imageplugin_perspective", d->perspectiveAction);
@@ -160,39 +160,34 @@ void ImagePlugin_Transform::setEnabledActions(bool b)
 
 void ImagePlugin_Transform::slotPerspective()
 {
-    PerspectiveTool* tool = new PerspectiveTool(this);
-    loadTool(tool);
+    loadTool(new PerspectiveTool(this));
 }
 
 void ImagePlugin_Transform::slotShearTool()
 {
-    ShearTool* tool = new ShearTool(this);
-    loadTool(tool);
+    loadTool(new ShearTool(this));
 }
 
 void ImagePlugin_Transform::slotResize()
 {
-    ResizeTool* tool = new ResizeTool(this);
-    loadTool(tool);
+    loadTool(new ResizeTool(this));
 }
 
 void ImagePlugin_Transform::slotRatioCrop()
 {
-    RatioCropTool* tool = new RatioCropTool(this);
-    loadTool(tool);
+    loadTool(new RatioCropTool(this));
 }
 
 void ImagePlugin_Transform::slotContentAwareResizing()
 {
 #ifdef HAVE_GLIB2
-    ContentAwareResizeTool* tool = new ContentAwareResizeTool(this);
-    loadTool(tool);
+    loadTool(new ContentAwareResizeTool(this));
 #endif /* HAVE_GLIB2 */
 }
 
 void ImagePlugin_Transform::slotFreeRotation()
 {
-    FreeRotationTool* tool = new FreeRotationTool(this);
+    FreeRotationTool* const tool = new FreeRotationTool(this);
 
     connect(this, SIGNAL(signalPoint1Action()),
             tool, SLOT(slotAutoAdjustP1Clicked()));

@@ -7,7 +7,7 @@
  * Description : a digiKam image editor plugin to process image
  *               free rotation.
  *
- * Copyright (C) 2004-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -67,11 +67,11 @@ using namespace KDcrawIface;
 namespace DigikamTransformImagePlugin
 {
 
-class FreeRotationTool::FreeRotationToolPriv
+class FreeRotationTool::Private
 {
 public:
 
-    FreeRotationToolPriv() :
+    Private() :
         configGroupName("freerotation Tool"),
 
         newHeightLabel(0),
@@ -103,9 +103,9 @@ public:
     ImageGuideWidget*     previewWidget;
 };
 
-FreeRotationTool::FreeRotationTool(QObject* parent)
+FreeRotationTool::FreeRotationTool(QObject* const parent)
     : EditorToolThreaded(parent),
-      d(new FreeRotationToolPriv)
+      d(new Private)
 {
     setObjectName("freerotation");
     setToolName(i18n("Free Rotation"));
@@ -311,7 +311,7 @@ void FreeRotationTool::slotResetSettings()
 void FreeRotationTool::preparePreview()
 {
     FreeRotationContainer settings = d->settingsView->settings();
-    ImageIface* iface              = d->previewWidget->imageIface();
+    ImageIface* const iface        = d->previewWidget->imageIface();
     DImg preview                   = iface->preview();
     settings.backgroundColor       = toolView()->backgroundRole();
     settings.orgW                  = iface->originalSize().width();
@@ -323,7 +323,7 @@ void FreeRotationTool::prepareFinal()
 {
     ImageIface iface;
     FreeRotationContainer settings = d->settingsView->settings();
-    DImg* orgImage                 = iface.original();
+    DImg* const orgImage           = iface.original();
     settings.backgroundColor       = Qt::black;
     settings.orgW                  = iface.originalSize().width();
     settings.orgH                  = iface.originalSize().height();
@@ -333,14 +333,13 @@ void FreeRotationTool::prepareFinal()
 
 void FreeRotationTool::setPreviewImage()
 {
-    ImageIface* iface = d->previewWidget->imageIface();
-    int w             = iface->previewSize().width();
-    int h             = iface->previewSize().height();
-
-    DImg imTemp = filter()->getTargetImage().smoothScale(w, h, Qt::KeepAspectRatio);
+    ImageIface* const iface = d->previewWidget->imageIface();
+    int w                   = iface->previewSize().width();
+    int h                   = iface->previewSize().height();
+    DImg imTemp             = filter()->getTargetImage().smoothScale(w, h, Qt::KeepAspectRatio);
     DImg imDest(w, h, filter()->getTargetImage().sixteenBit(), filter()->getTargetImage().hasAlpha());
 
-    QColor background = toolView()->backgroundRole();
+    QColor background       = toolView()->backgroundRole();
     imDest.fill(DColor(background, filter()->getTargetImage().sixteenBit()));
     imDest.bitBltImage(&imTemp, (w-imTemp.width())/2, (h-imTemp.height())/2);
 
@@ -362,7 +361,7 @@ void FreeRotationTool::setFinalImage()
     iface.setOriginal(i18n("Free Rotation"), filter()->filterAction(), targetImage);
 }
 
-QString FreeRotationTool::generateButtonLabel(const QPoint& p)
+QString FreeRotationTool::generateButtonLabel(const QPoint& p) const
 {
     QString clickToSet     = i18n("Click to set");
     QString isOk           = i18nc("point has been set and is valid", "Okay");
@@ -379,7 +378,7 @@ QString FreeRotationTool::generateButtonLabel(const QPoint& p)
     return label;
 }
 
-QString FreeRotationTool::centerString(const QString& str, int maxLength)
+QString FreeRotationTool::centerString(const QString& str, int maxLength) const
 {
     QString tmp = str;
     int max     = (maxLength == -1) ? tmp.count() : maxLength;
@@ -539,7 +538,7 @@ void FreeRotationTool::slotAutoAdjustClicked()
     resetPoints();
 }
 
-QPixmap FreeRotationTool::generateBtnPixmap(const QString& label, const QColor& color)
+QPixmap FreeRotationTool::generateBtnPixmap(const QString& label, const QColor& color) const
 {
     QPixmap pm(22, 22);
     pm.fill(Qt::transparent);
@@ -556,7 +555,7 @@ QPixmap FreeRotationTool::generateBtnPixmap(const QString& label, const QColor& 
     return pm;
 }
 
-double FreeRotationTool::calculateAutoAngle()
+double FreeRotationTool::calculateAutoAngle() const
 {
     // check if all points are valid
     if (!pointIsValid(d->autoAdjustPoint1) && !pointIsValid(d->autoAdjustPoint2))
@@ -573,7 +572,7 @@ void FreeRotationTool::setPointInvalid(QPoint& p)
     p.setY(-1);
 }
 
-bool FreeRotationTool::pointIsValid(const QPoint& p)
+bool FreeRotationTool::pointIsValid(const QPoint& p) const
 {
     bool valid = true;
 
@@ -585,7 +584,7 @@ bool FreeRotationTool::pointIsValid(const QPoint& p)
     return valid;
 }
 
-QString FreeRotationTool::repeatString(const QString& str, int times)
+QString FreeRotationTool::repeatString(const QString& str, int times) const
 {
     QString tmp;
 

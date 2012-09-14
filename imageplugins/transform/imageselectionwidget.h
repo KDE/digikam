@@ -155,8 +155,8 @@ private:
     void   regionSelectionChanged();
 
     QPoint convertPoint(const QPoint& pm, bool localToReal=true) const;
-    QPoint convertPoint(int x, int y, bool localToReal=true) const;
-    QPoint opposite() const;
+    QPoint convertPoint(int x, int y, bool localToReal=true)     const;
+    QPoint opposite()                                            const;
 
     void   normalizeRegion();
     void   reverseRatioValues();

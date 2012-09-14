@@ -43,7 +43,7 @@ class ResizeTool : public EditorToolThreaded
 
 public:
 
-    ResizeTool(QObject* parent);
+    ResizeTool(QObject* const parent);
     ~ResizeTool();
 
 private:
@@ -68,8 +68,8 @@ private Q_SLOTS:
 
 private:
 
-    class ResizeToolPriv;
-    ResizeToolPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace DigikamTransformImagePlugin

@@ -7,7 +7,7 @@
  * Description : a widget class to edit perspective.
  *
  * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2006-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -56,7 +56,7 @@ class PerspectiveWidget : public QWidget
 
 public:
 
-    PerspectiveWidget(int width, int height, QWidget* parent=0);
+    PerspectiveWidget(int width, int height, QWidget* const parent=0);
     ~PerspectiveWidget();
 
     QRect  getTargetSize()        const;
@@ -70,11 +70,11 @@ public:
     float getAngleBottomLeft()    const;
     float getAngleBottomRight()   const;
 
+    ImageIface* imageIface()      const;
+
     void  setBackgroundColor(const QColor& bg);
     void  applyPerspectiveAdjustment();
     void  reset();
-
-    ImageIface* imageIface() const;
 
 public Q_SLOTS:
 
@@ -103,14 +103,14 @@ private:  // Widget methods.
 
     void   updatePixmap();
 
-    void   transformAffine(DImg* orgImage, DImg* destImage,
-                           const Matrix& matrix, DColor background);
+    void   transformAffine(DImg* const orgImage, DImg* const destImage,
+                           const Matrix& matrix, const DColor& background);
 
     QPoint buildPerspective(const QPoint& orignTopLeft, const QPoint& orignBottomRight,
                             const QPoint& transTopLeft, const QPoint& transTopRight,
                             const QPoint& transBottomLeft, const QPoint& transBottomRight,
-                            DImg* orgImage=0, DImg* destImage=0,
-                            DColor background=DColor());
+                            DImg* const orgImage=0, DImg* const destImage=0,
+                            const DColor& background=DColor());
 
 private:
 
