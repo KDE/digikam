@@ -627,7 +627,7 @@ void EditorWindow::setupStandardActions()
     actionCollection()->addAction("editorwindow_selecttool", m_selectToolsAction);
     // setup is done after image plugins are loaded
 
-    m_applyToolAction = new KAction(KStandardGuiItem::ok().icon(), i18n("Ok"), this);
+    m_applyToolAction = new KAction(KStandardGuiItem::ok().icon(), i18n("OK"), this);
     actionCollection()->addAction("editorwindow_applytool", m_applyToolAction);
     m_applyToolAction->setShortcut(KShortcut(Qt::Key_Return));
     connect(m_applyToolAction, SIGNAL(triggered()), this, SLOT(slotApplyTool()));
