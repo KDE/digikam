@@ -285,7 +285,7 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* const parent)
 
     insertItem(ImagePropertiesTab::Private::ImageProperties,
                w2, SmallIcon("image-x-generic"),
-               i18n("Image Properties"), QString("ImageProperties"), true);
+               i18n("Item Properties"), QString("ItemProperties"), true);
 
     // --------------------------------------------------
 
