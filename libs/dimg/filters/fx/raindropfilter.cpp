@@ -545,10 +545,10 @@ void RainDropFilter::readParameters(const FilterAction& action)
     d->amount    = action.parameter("amount").toInt();
     d->coeff     = action.parameter("coeff").toInt();
     d->drop      = action.parameter("drop").toInt();
-    h           = action.parameter("selectedH").toInt();
-    w           = action.parameter("selectedW").toInt();
-    x           = action.parameter("selectedX").toInt();
-    y           = action.parameter("selectedY").toInt();
+    h            = action.parameter("selectedH").toInt();
+    w            = action.parameter("selectedW").toInt();
+    x            = action.parameter("selectedX").toInt();
+    y            = action.parameter("selectedY").toInt();
     d->selection = QRect(x, y, w, h);
     d->generator.seed(action.parameter("randomSeed").toUInt());
 }
