@@ -545,10 +545,10 @@ void RainDropFilter::readParameters(const FilterAction& action)
     d->amount    = action.parameter("amount").toInt();
     d->coeff     = action.parameter("coeff").toInt();
     d->drop      = action.parameter("drop").toInt();
-    h           = action.parameter("selectedH").toInt();
-    w           = action.parameter("selectedW").toInt();
-    x           = action.parameter("selectedX").toInt();
-    y           = action.parameter("selectedY").toInt();
+    h            = action.parameter("selectedH").toInt();
+    w            = action.parameter("selectedW").toInt();
+    x            = action.parameter("selectedX").toInt();
+    y            = action.parameter("selectedY").toInt();
     d->selection = QRect(x, y, w, h);
     d->generator.seed(action.parameter("randomSeed").toUInt());
 }
@@ -566,7 +566,7 @@ int RainDropFilter::limitValues8(int ColorValue)
     }
 
     return ColorValue;
-};
+}
 
 int RainDropFilter::limitValues16(int ColorValue)
 {
@@ -581,19 +581,19 @@ int RainDropFilter::limitValues16(int ColorValue)
     }
 
     return ColorValue;
-};
+}
 
 bool RainDropFilter::isInside (int Width, int Height, int X, int Y)
 {
     bool bIsWOk = ((X < 0) ? false : (X >= Width ) ? false : true);
     bool bIsHOk = ((Y < 0) ? false : (Y >= Height) ? false : true);
     return (bIsWOk && bIsHOk);
-};
+}
 
 int RainDropFilter::pixelOffset(int Width, int X, int Y, int bytesDepth)
 {
     return (Y * Width * bytesDepth + X * bytesDepth);
-};
+}
 
 
 }  // namespace Digikam
