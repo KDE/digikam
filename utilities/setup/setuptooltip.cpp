@@ -177,7 +177,7 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
     d->showToolTipsBox->setWhatsThis(i18n("Set this option to display image information when "
                                           "the mouse hovers over an icon-view or thumb-bar item."));
 
-    d->fileSettingBox     = new QGroupBox(i18n("File/Image Information"), vbox);
+    d->fileSettingBox     = new QGroupBox(i18n("File/Item Information"), vbox);
     QVBoxLayout* vlay2    = new QVBoxLayout(d->fileSettingBox);
 
     d->showFileNameBox    = new QCheckBox(i18n("Show file name"), d->fileSettingBox);
@@ -246,6 +246,7 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
     vlay3->setSpacing(0);
 
     // --------------------------------------------------------
+
     d->digikamSettingBox = new QGroupBox(i18n("digiKam Information"), vbox);
     QVBoxLayout* vlay4   = new QVBoxLayout(d->digikamSettingBox);
 
@@ -258,7 +259,7 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
     d->showTagsBox       = new QCheckBox(i18n("Show image tags"), d->digikamSettingBox);
     d->showTagsBox->setWhatsThis(i18n("Set this option to display the image tags."));
 
-    d->showLabelsBox      = new QCheckBox(i18n("Show image labels"), d->digikamSettingBox);
+    d->showLabelsBox     = new QCheckBox(i18n("Show image labels"), d->digikamSettingBox);
     d->showLabelsBox->setWhatsThis(i18n("Set this option to display the image pick, color, rating labels."));
 
     vlay4->addWidget(d->showAlbumNameBox);
@@ -270,8 +271,8 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    d->videoSettingBox    = new QGroupBox(i18n("Video Information"), vbox);
-    QVBoxLayout* vlay5    = new QVBoxLayout(d->videoSettingBox);
+    d->videoSettingBox             = new QGroupBox(i18n("Video Information"), vbox);
+    QVBoxLayout* vlay5             = new QVBoxLayout(d->videoSettingBox);
 
     d->showVideoAspectRatio        = new QCheckBox(i18n("Show Video Aspect Ratio"), d->videoSettingBox);
     d->showVideoAspectRatio->setWhatsThis(i18n("Set this option to display the Aspect Ratio of the Video"));
@@ -348,9 +349,9 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    KVBox* vbox3               = new KVBox(panel);
-    d->showImportToolTipsBox   = new QCheckBox(i18n("Show import items' tool-tips"), vbox3);
-    d->importSettingBox        = new QGroupBox(i18n("Import Information"), vbox3);
+    KVBox* vbox3             = new KVBox(panel);
+    d->showImportToolTipsBox = new QCheckBox(i18n("Show import items' tool-tips"), vbox3);
+    d->importSettingBox      = new QGroupBox(i18n("Import Information"), vbox3);
 
     d->showAlbumToolTipsBox->setWhatsThis(i18n("Set this option to display album information when "
                                                "the mouse hovers over a folder-view item."));
@@ -361,32 +362,32 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
     d->showItemDateBox       = new QCheckBox(i18n("Show item date"));
     d->showItemDateBox->setWhatsThis(i18n("Set this option to display the item date."));
 
-    d->showItemSizeBox = new QCheckBox(i18n("Show item size"));
+    d->showItemSizeBox       = new QCheckBox(i18n("Show item size"));
     d->showItemSizeBox->setWhatsThis(i18n("Set this option to display the item size."));
 
-    d->showItemTypeBox   = new QCheckBox(i18n("Show item type"));
+    d->showItemTypeBox       = new QCheckBox(i18n("Show item type"));
     d->showItemTypeBox->setWhatsThis(i18n("Set this option to display the item type."));
 
-    d->showItemDimensionsBox    = new QCheckBox(i18n("Show item dimensions"));
+    d->showItemDimensionsBox = new QCheckBox(i18n("Show item dimensions"));
     d->showItemDimensionsBox->setWhatsThis(i18n("Set this option to display the item dimensions."));
 
-    d->showItemPhotoMakeBox   = new QCheckBox(i18n("Show camera make and model"), d->photoSettingBox);
-    d->showPhotoMakeBox->setWhatsThis(i18n("Set this option to display the make and model of the "
-                                           "camera with which the image has been taken."));
+    d->showItemPhotoMakeBox  = new QCheckBox(i18n("Show camera make and model"), d->photoSettingBox);
+    d->showItemPhotoMakeBox->setWhatsThis(i18n("Set this option to display the make and model of the "
+                                               "camera with which the image has been taken."));
 
-    d->showItemPhotoFocalBox  = new QCheckBox(i18n("Show camera aperture and focal length"), d->photoSettingBox);
+    d->showItemPhotoFocalBox = new QCheckBox(i18n("Show camera aperture and focal length"), d->photoSettingBox);
     d->showPhotoFocalBox->setWhatsThis(i18n("Set this option to display the camera aperture and focal settings "
                                             "used to take the image."));
 
-    d->showItemPhotoExpoBox   = new QCheckBox(i18n("Show camera exposure and sensitivity"), d->photoSettingBox);
+    d->showItemPhotoExpoBox  = new QCheckBox(i18n("Show camera exposure and sensitivity"), d->photoSettingBox);
     d->showPhotoExpoBox->setWhatsThis(i18n("Set this option to display the camera exposure and sensitivity "
                                            "used to take the image."));
 
-    d->showItemPhotoFlashBox  = new QCheckBox(i18n("Show camera flash settings"), d->photoSettingBox);
+    d->showItemPhotoFlashBox = new QCheckBox(i18n("Show camera flash settings"), d->photoSettingBox);
     d->showPhotoFlashBox->setWhatsThis(i18n("Set this option to display the camera flash settings "
                                             "used to take the image."));
 
-    d->showItemPhotoWBBox     = new QCheckBox(i18n("Show camera white balance settings"), d->photoSettingBox);
+    d->showItemPhotoWBBox    = new QCheckBox(i18n("Show camera white balance settings"), d->photoSettingBox);
     d->showItemPhotoWBBox->setWhatsThis(i18n("Set this option to display the camera white balance settings "
                                          "used to take the image."));
 
@@ -396,7 +397,7 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
     importSettingBoxLayout->addWidget(d->showItemSizeBox);
     importSettingBoxLayout->addWidget(d->showItemTypeBox);
     importSettingBoxLayout->addWidget(d->showItemDimensionsBox);
-    importSettingBoxLayout->addWidget(d->showPhotoMakeBox);
+    importSettingBoxLayout->addWidget(d->showItemPhotoMakeBox);
     importSettingBoxLayout->addWidget(d->showItemPhotoFocalBox);
     importSettingBoxLayout->addWidget(d->showItemPhotoExpoBox);
     importSettingBoxLayout->addWidget(d->showItemPhotoFlashBox);
@@ -456,7 +457,7 @@ SetupToolTip::~SetupToolTip()
 
 void SetupToolTip::applySettings()
 {
-    AlbumSettings* settings = AlbumSettings::instance();
+    AlbumSettings* const settings = AlbumSettings::instance();
 
     if (!settings)
     {
@@ -504,7 +505,7 @@ void SetupToolTip::applySettings()
 
     // -- Import Settings ------------------------------------------------------------------------
 
-    ImportSettings* importSettings = ImportSettings::instance();
+    ImportSettings* const importSettings = ImportSettings::instance();
 
     if (!importSettings)
     {
@@ -528,7 +529,7 @@ void SetupToolTip::applySettings()
 
 void SetupToolTip::readSettings()
 {
-    AlbumSettings* settings = AlbumSettings::instance();
+    AlbumSettings* const settings = AlbumSettings::instance();
 
     if (!settings)
     {
@@ -568,6 +569,8 @@ void SetupToolTip::readSettings()
     d->fileSettingBox->setEnabled(d->showToolTipsBox->isChecked());
     d->photoSettingBox->setEnabled(d->showToolTipsBox->isChecked());
     d->digikamSettingBox->setEnabled(d->showToolTipsBox->isChecked());
+    d->videoSettingBox->setEnabled(d->showToolTipsBox->isChecked());
+
     d->albumSettingBox->setEnabled(d->showAlbumToolTipsBox->isChecked());
 
     d->showAlbumToolTipsBox->setChecked(settings->getShowAlbumToolTips());
@@ -579,7 +582,7 @@ void SetupToolTip::readSettings()
 
     // -- Import Settings ------------------------------------------------------------------------
 
-    ImportSettings* importSettings = ImportSettings::instance();
+    ImportSettings* const importSettings = ImportSettings::instance();
 
     if (!importSettings)
     {
