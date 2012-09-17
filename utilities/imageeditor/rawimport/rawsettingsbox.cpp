@@ -117,17 +117,17 @@ public:
         brightnessInput        = 0;
     }
 
-    const QString optionGroupName;
-    const QString optionHistogramChannelEntry;
-    const QString optionHistogramScaleEntry;
-    const QString optionBrightnessEntry;
-    const QString optionContrastEntry;
-    const QString optionGammaEntry;
-    const QString optionSaturationEntry;
-    const QString optionFineExposureEntry;
-    const QString optionCurvePrefix;
-    const QString optionSettingsPageEntry;
-    const QString optionDecodingSettingsTabEntry;
+    const QString        optionGroupName;
+    const QString        optionHistogramChannelEntry;
+    const QString        optionHistogramScaleEntry;
+    const QString        optionBrightnessEntry;
+    const QString        optionContrastEntry;
+    const QString        optionGammaEntry;
+    const QString        optionSaturationEntry;
+    const QString        optionFineExposureEntry;
+    const QString        optionCurvePrefix;
+    const QString        optionSettingsPageEntry;
+    const QString        optionDecodingSettingsTabEntry;
 
     QWidget*             advExposureBox;
     QWidget*             curveBox;
@@ -174,17 +174,17 @@ RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget* const parent)
 
     // - RAW Decoding view --------------------------------------------------------------
 
-    d->rawdecodingBox      = new QWidget(d->tabView);
-    QGridLayout* rawGrid   = new QGridLayout(d->rawdecodingBox);
-    d->decodingSettingsBox = new DcrawSettingsWidget(d->rawdecodingBox,
+    d->rawdecodingBox         = new QWidget(d->tabView);
+    QGridLayout* rawGrid      = new QGridLayout(d->rawdecodingBox);
+    d->decodingSettingsBox    = new DcrawSettingsWidget(d->rawdecodingBox,
                                                      DcrawSettingsWidget::SIXTEENBITS | DcrawSettingsWidget::COLORSPACE);
     d->decodingSettingsBox->setObjectName("RawSettingsBox Expander");
 
     // Note: do not touch the url edit's fileDialog() here.
     // This creates the file dialog, which involved an event loop, which is evil.
-    // Adjust file dialog in fileDialogAboutToOpen
+    // Adjust file dialog in slotFileDialogAboutToOpen
 
-    d->abortBtn = new QPushButton(d->rawdecodingBox);
+    d->abortBtn  = new QPushButton(d->rawdecodingBox);
     d->abortBtn->setText(i18n("Abort"));
     d->abortBtn->setIcon(SmallIcon("dialog-cancel"));
     d->abortBtn->setEnabled(false);
@@ -205,7 +205,7 @@ RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget* const parent)
 
     // - Post-processing view --------------------------------------------------------------
 
-    d->postProcessSettingsBox = new RExpanderBox(d->tabView);
+    d->postProcessSettingsBox      = new RExpanderBox(d->tabView);
     d->postProcessSettingsBox->setObjectName("PostProcessingSettingsBox Expander");
 
     d->advExposureBox              = new QWidget(d->postProcessSettingsBox);
@@ -263,16 +263,16 @@ RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget* const parent)
 
     // ---------------------------------------------------------------
 
-    d->curveBox              = new QWidget(d->postProcessSettingsBox);
-    QGridLayout* curveLayout = new QGridLayout(d->curveBox);
+    d->curveBox                    = new QWidget(d->postProcessSettingsBox);
+    QGridLayout* curveLayout       = new QGridLayout(d->curveBox);
 
     ColorGradientWidget* vGradient = new ColorGradientWidget(Qt::Vertical, 10, d->curveBox);
     vGradient->setColors(QColor("white"), QColor("black"));
 
-    QLabel* spacev = new QLabel(d->curveBox);
+    QLabel* spacev   = new QLabel(d->curveBox);
     spacev->setFixedWidth(1);
 
-    d->curveWidget = new CurvesWidget(256, 192, d->curveBox);
+    d->curveWidget   = new CurvesWidget(256, 192, d->curveBox);
     d->curveWidget->setWhatsThis(i18n("This is the curve adjustment of the image luminosity"));
 
     d->resetCurveBtn = new QToolButton(d->curveBox);
@@ -282,7 +282,7 @@ RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget* const parent)
     d->resetCurveBtn->setAutoRaise(true);
     d->resetCurveBtn->setToolTip(i18n("Reset curve to linear"));
 
-    QLabel* spaceh = new QLabel(d->curveBox);
+    QLabel* spaceh   = new QLabel(d->curveBox);
     spaceh->setFixedHeight(1);
 
     ColorGradientWidget* hGradient = new ColorGradientWidget(Qt::Horizontal, 10, d->curveBox);
@@ -377,10 +377,10 @@ RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget* const parent)
             this, SIGNAL(signalPostProcessingChanged()));
 
     connect(d->decodingSettingsBox->inputProfileUrlEdit(), SIGNAL(openFileDialog(KUrlRequester*)),
-            this, SLOT(fileDialogAboutToOpen(KUrlRequester*)));
+            this, SLOT(slotFileDialogAboutToOpen(KUrlRequester*)));
 
     connect(d->decodingSettingsBox->outputProfileUrlEdit(), SIGNAL(openFileDialog(KUrlRequester*)),
-            this, SLOT(fileDialogAboutToOpen(KUrlRequester*)));
+            this, SLOT(slotFileDialogAboutToOpen(KUrlRequester*)));
 }
 
 RawSettingsBox::~RawSettingsBox()
@@ -508,11 +508,11 @@ DRawDecoding RawSettingsBox::settings() const
 {
     DRawDecoding settings(d->decodingSettingsBox->settings());
 
-    settings.bcg.brightness   = (double)d->brightnessInput->value() / 250.0;
-    settings.bcg.contrast     = (double)(d->contrastInput->value() / 100.0) + 1.00;
-    settings.bcg.gamma        = d->gammaInput->value();
-    settings.wb.saturation    = d->saturationInput->value();
-    settings.wb.exposition    = d->fineExposureInput->value();
+    settings.bcg.brightness = (double)d->brightnessInput->value() / 250.0;
+    settings.bcg.contrast   = (double)(d->contrastInput->value() / 100.0) + 1.00;
+    settings.bcg.gamma      = d->gammaInput->value();
+    settings.wb.saturation  = d->saturationInput->value();
+    settings.wb.exposition  = d->fineExposureInput->value();
 
     if (d->curveWidget->curves()->isDirty())
     {
@@ -523,7 +523,7 @@ DRawDecoding RawSettingsBox::settings() const
     return settings;
 }
 
-void RawSettingsBox::fileDialogAboutToOpen(KUrlRequester* requester)
+void RawSettingsBox::slotFileDialogAboutToOpen(KUrlRequester* requester)
 {
     requester->fileDialog()->setPreviewWidget(new ICCPreviewWidget(requester));
 }

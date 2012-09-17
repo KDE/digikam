@@ -132,13 +132,13 @@ void RawPreview::setDecodingSettings(const DRawDecoding& settings)
     }
 
     // Save post processing settings.
-    d->settings = settings;
+    d->settings                     = settings;
 
     // All post processing settings will be used after demosaicing.
     DRawDecoding demosaisedSettings = settings;
     demosaisedSettings.resetPostProcessingSettings();
 
-    d->loadingDesc = LoadingDescription(d->url.toLocalFile(), demosaisedSettings);
+    d->loadingDesc                  = LoadingDescription(d->url.toLocalFile(), demosaisedSettings);
     d->thread->load(d->loadingDesc, ManagedLoadSaveThread::LoadingPolicyFirstRemovePrevious);
     emit signalLoadingStarted();
 }

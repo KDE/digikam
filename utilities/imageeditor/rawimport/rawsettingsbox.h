@@ -75,7 +75,7 @@ private Q_SLOTS:
 
     void slotDemosaicingChanged();
     void slotResetCurve();
-    void fileDialogAboutToOpen(KUrlRequester* requester);
+    void slotFileDialogAboutToOpen(KUrlRequester* requester);
 
 private:
 

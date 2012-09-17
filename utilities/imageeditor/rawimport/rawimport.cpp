@@ -201,7 +201,7 @@ void RawImport::setPreviewImage()
 {
     // Preserve metadata from loaded image, and take post-processed image data
     d->postProcessedImage = d->previewWidget->demosaicedImage().copyMetaData();
-    DImg data = filter()->getTargetImage();
+    DImg data             = filter()->getTargetImage();
     d->postProcessedImage.putImageData(data.width(), data.height(), data.sixteenBit(), data.hasAlpha(),
                                        data.stripImageData(), false);
     d->previewWidget->setPostProcessedImage(d->postProcessedImage);

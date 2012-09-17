@@ -56,7 +56,7 @@ public:
     RawPreview(const KUrl& url, QWidget* const parent);
     ~RawPreview();
 
-    DImg& demosaicedImage() const;
+    DImg& demosaicedImage()    const;
     DImg  postProcessedImage() const;
 
     void setDecodingSettings(const DRawDecoding& settings);
@@ -84,11 +84,11 @@ private:
 
     void   setdemosaicedImg(const DImg& image);
     void   postProcessing(const DRawDecoding& settings);
-    int    previewWidth() const;
-    int    previewHeight() const;
-    bool   previewIsNull() const;
-    void   resetPreview();
+    int    previewWidth()    const;
+    int    previewHeight()   const;
+    bool   previewIsNull()   const;
     QImage previewToQImage() const;
+    void   resetPreview();
 
 private:
 

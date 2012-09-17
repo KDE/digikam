@@ -47,8 +47,9 @@ public:
 
 private:
 
-    virtual void filterImage();
     void rawPostProcessing();
+
+    virtual void filterImage();
 
     /**
      * This filter is only for preview calculation.
@@ -57,7 +58,7 @@ private:
     {
         return FilterAction();
     }
-    
+
     virtual void readParameters(const FilterAction&)
     {
     }
