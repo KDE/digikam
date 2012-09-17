@@ -48,7 +48,7 @@ class DIGIKAM_EXPORT UndoManager
 
 public:
 
-    UndoManager(EditorCore* const iface);
+    UndoManager(EditorCore* const core);
     ~UndoManager();
 
     void addAction(UndoAction* const action);
@@ -59,20 +59,20 @@ public:
 
     void clear(bool clearCache = true);
 
-    bool        anyMoreUndo()        const;
-    bool        anyMoreRedo()        const;
-    int         availableUndoSteps() const;
-    int         availableRedoSteps() const;
-    QStringList getUndoHistory()     const;
-    QStringList getRedoHistory()     const;
-    bool        isAtOrigin()         const;
-    void        setOrigin()          const;
-    bool        hasChanges()         const;
-
-    void clearPreviousOriginData();
+    bool          anyMoreUndo()               const;
+    bool          anyMoreRedo()               const;
+    int           availableUndoSteps()        const;
+    int           availableRedoSteps()        const;
+    QStringList   getUndoHistory()            const;
+    QStringList   getRedoHistory()            const;
+    bool          isAtOrigin()                const;
+    void          setOrigin()                 const;
+    bool          hasChanges()                const;
 
     /// The history if all available redo steps are redone
     DImageHistory getImageHistoryOfFullRedo() const;
+
+    void clearPreviousOriginData();
 
 private:
 

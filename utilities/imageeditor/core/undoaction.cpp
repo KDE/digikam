@@ -70,10 +70,10 @@ bool UndoMetadataContainer::changesIccProfile(const DImg& target) const
     return !(profile == target.getIccProfile());
 }
 
-UndoAction::UndoAction(EditorCore* const iface)
+UndoAction::UndoAction(EditorCore* const core)
     : d(new Private)
 {
-    d->container = UndoMetadataContainer::fromImage(*iface->getImg());
+    d->container = UndoMetadataContainer::fromImage(*core->getImg());
 }
 
 UndoAction::~UndoAction()
@@ -124,8 +124,8 @@ DImageHistory UndoAction::fileOriginResolvedHistory() const
 
 // ---------------------------------------------------------------------------------------------
 
-UndoActionReversible::UndoActionReversible(EditorCore* const iface, const DImgBuiltinFilter& reversibleFilter)
-    : UndoAction(iface),
+UndoActionReversible::UndoActionReversible(EditorCore* const core, const DImgBuiltinFilter& reversibleFilter)
+    : UndoAction(core),
       m_filter(reversibleFilter)
 {
     setTitle(m_filter.i18nDisplayableName());
@@ -143,8 +143,8 @@ DImgBuiltinFilter UndoActionReversible::getReverseFilter() const
 
 // ---------------------------------------------------------------------------------------------
 
-UndoActionIrreversible::UndoActionIrreversible(EditorCore* const iface, const QString& title)
-    : UndoAction(iface)
+UndoActionIrreversible::UndoActionIrreversible(EditorCore* const core, const QString& title)
+    : UndoAction(core)
 {
     setTitle(title);
 }

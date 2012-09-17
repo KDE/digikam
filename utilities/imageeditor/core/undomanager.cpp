@@ -54,7 +54,7 @@ public:
     Private() :
         origin(0),
         undoCache(0),
-        dimgiface(0)
+        core(0)
     {
     }
 
@@ -64,13 +64,13 @@ public:
 
     UndoCache*         undoCache;
 
-    EditorCore*     dimgiface;
+    EditorCore*        core;
 };
 
-UndoManager::UndoManager(EditorCore* const iface)
+UndoManager::UndoManager(EditorCore* const core)
     : d(new Private)
 {
-    d->dimgiface = iface;
+    d->core      = core;
     d->undoCache = new UndoCache;
 }
 
@@ -92,12 +92,12 @@ void UndoManager::addAction(UndoAction* const action)
     clearRedoActions();
 
     // If the _last_ action was irreversible, we need to snapshot it
-    UndoAction* lastAction = d->undoActions.isEmpty() ? 0 : d->undoActions.last();
+    UndoAction* const lastAction               = d->undoActions.isEmpty() ? 0 : d->undoActions.last();
 
     d->undoActions << action;
 
     // action has already read the "history before step" from EditorCore in its constructor
-    UndoActionIrreversible* irreversible = dynamic_cast<UndoActionIrreversible*>(action);
+    UndoActionIrreversible* const irreversible = dynamic_cast<UndoActionIrreversible*>(action);
 
     // we always make an initial snapshot to be able to do a flying rollback in one step
     if (irreversible || !lastAction || isAtOrigin())
@@ -107,8 +107,8 @@ void UndoManager::addAction(UndoAction* const action)
 
     if (isAtOrigin())
     {
-        QVariant      originDataBeforeStep    = d->dimgiface->getImg()->fileOriginData();
-        DImageHistory originHistoryBeforeStep = d->dimgiface->getResolvedInitialHistory();
+        QVariant      originDataBeforeStep    = d->core->getImg()->fileOriginData();
+        DImageHistory originHistoryBeforeStep = d->core->getResolvedInitialHistory();
         action->setFileOriginData(originDataBeforeStep, originHistoryBeforeStep);
     }
 
@@ -133,7 +133,7 @@ void UndoManager::undo()
 
     undoStep(true, true, false);
 
-    d->dimgiface->setModified();
+    d->core->setModified();
 }
 
 void UndoManager::redo()
@@ -145,7 +145,7 @@ void UndoManager::redo()
 
     redoStep(true, false);
 
-    d->dimgiface->setModified();
+    d->core->setModified();
 }
 
 void UndoManager::rollbackToOrigin()
@@ -192,20 +192,20 @@ void UndoManager::rollbackToOrigin()
         }
     }
 
-    d->dimgiface->setModified();
+    d->core->setModified();
 }
 
 void UndoManager::undoStep(bool saveRedo, bool execute, bool flyingRollback)
 {
-    UndoAction* action                   = d->undoActions.back();
-    UndoMetadataContainer dataBeforeStep = action->getMetadata();
-    UndoMetadataContainer dataAfterStep  = UndoMetadataContainer::fromImage(*d->dimgiface->getImg());
-    UndoActionIrreversible* irreversible = dynamic_cast<UndoActionIrreversible*>(action);
-    UndoActionReversible*   reversible   = dynamic_cast<UndoActionReversible*>(action);
-    QVariant originDataAfterStep         = d->dimgiface->getImg()->fileOriginData();
+    UndoAction* const action                   = d->undoActions.back();
+    UndoMetadataContainer dataBeforeStep       = action->getMetadata();
+    UndoMetadataContainer dataAfterStep        = UndoMetadataContainer::fromImage(*d->core->getImg());
+    UndoActionIrreversible* const irreversible = dynamic_cast<UndoActionIrreversible*>(action);
+    UndoActionReversible* const reversible     = dynamic_cast<UndoActionReversible*>(action);
+    QVariant originDataAfterStep               = d->core->getImg()->fileOriginData();
     QVariant originDataBeforeStep; // only needed if isAtOrigin()
 
-    DImageHistory originHistoryAfterStep = d->dimgiface->getResolvedInitialHistory();
+    DImageHistory originHistoryAfterStep       = d->core->getResolvedInitialHistory();
     DImageHistory originHistoryBeforeStep;
 
     int lastOrigin = 0;
@@ -250,7 +250,7 @@ void UndoManager::undoStep(bool saveRedo, bool execute, bool flyingRollback)
 
     if (execute)
     {
-        // in case of flyingRollback, the data in dimgiface is not in sync
+        // in case of flyingRollback, the data in core is not in sync
         if (irreversible || flyingRollback)
         {
             // undo the action
@@ -258,14 +258,14 @@ void UndoManager::undoStep(bool saveRedo, bool execute, bool flyingRollback)
         }
         else
         {
-            reversible->getReverseFilter().apply(*d->dimgiface->getImg());
-            d->dimgiface->imageUndoChanged(dataBeforeStep);
+            reversible->getReverseFilter().apply(*d->core->getImg());
+            d->core->imageUndoChanged(dataBeforeStep);
         }
     }
     else
     {
         // if we do not copy the data (fast roll-back), we at least set the history for subsequent steps
-        d->dimgiface->imageUndoChanged(dataBeforeStep);
+        d->core->imageUndoChanged(dataBeforeStep);
     }
 
     // Record history and origin for redo
@@ -286,8 +286,8 @@ void UndoManager::undoStep(bool saveRedo, bool execute, bool flyingRollback)
     if (!originDataBeforeStep.isNull())
     {
         d->origin = d->undoActions.size() - lastOrigin;
-        d->dimgiface->setFileOriginData(originDataBeforeStep);
-        d->dimgiface->setResolvedInitialHistory(originHistoryBeforeStep);
+        d->core->setFileOriginData(originDataBeforeStep);
+        d->core->setResolvedInitialHistory(originHistoryBeforeStep);
     }
     else
     {
@@ -298,15 +298,15 @@ void UndoManager::undoStep(bool saveRedo, bool execute, bool flyingRollback)
 
 void UndoManager::redoStep(bool execute, bool flyingRollback)
 {
-    UndoAction* action                    = d->redoActions.back();
-    UndoMetadataContainer dataBeforeStep  = UndoMetadataContainer::fromImage(*d->dimgiface->getImg());
-    UndoMetadataContainer dataAfterStep   = action->getMetadata();
-    QVariant originDataBeforeStep         = d->dimgiface->getImg()->fileOriginData();
-    QVariant originDataAfterStep          = action->fileOriginData();
-    DImageHistory originHistoryBeforeStep = d->dimgiface->getResolvedInitialHistory();
-    DImageHistory originHistoryAfterStep  = action->fileOriginResolvedHistory();
-    UndoActionIrreversible* irreversible  = dynamic_cast<UndoActionIrreversible*>(action);
-    UndoActionReversible* reversible      = dynamic_cast<UndoActionReversible*>(action);
+    UndoAction* const action                   = d->redoActions.back();
+    UndoMetadataContainer dataBeforeStep       = UndoMetadataContainer::fromImage(*d->core->getImg());
+    UndoMetadataContainer dataAfterStep        = action->getMetadata();
+    QVariant originDataBeforeStep              = d->core->getImg()->fileOriginData();
+    QVariant originDataAfterStep               = action->fileOriginData();
+    DImageHistory originHistoryBeforeStep      = d->core->getResolvedInitialHistory();
+    DImageHistory originHistoryAfterStep       = action->fileOriginResolvedHistory();
+    UndoActionIrreversible* const irreversible = dynamic_cast<UndoActionIrreversible*>(action);
+    UndoActionReversible* const reversible     = dynamic_cast<UndoActionReversible*>(action);
 
     if (execute)
     {
@@ -316,14 +316,14 @@ void UndoManager::redoStep(bool execute, bool flyingRollback)
         }
         else
         {
-            reversible->getFilter().apply(*d->dimgiface->getImg());
-            d->dimgiface->imageUndoChanged(dataAfterStep);
+            reversible->getFilter().apply(*d->core->getImg());
+            d->core->imageUndoChanged(dataAfterStep);
         }
     }
     else
     {
         // if we do not copy the data (fast roll-back), we at least set the history for subsequent steps
-        d->dimgiface->imageUndoChanged(dataAfterStep);
+        d->core->imageUndoChanged(dataAfterStep);
     }
 
     action->setMetadata(dataBeforeStep);
@@ -343,8 +343,8 @@ void UndoManager::redoStep(bool execute, bool flyingRollback)
     if (!originDataAfterStep.isNull())
     {
         d->origin = 0;
-        d->dimgiface->setFileOriginData(originDataAfterStep);
-        d->dimgiface->setResolvedInitialHistory(originHistoryAfterStep);
+        d->core->setFileOriginData(originDataAfterStep);
+        d->core->setResolvedInitialHistory(originHistoryAfterStep);
     }
     else
     {
@@ -354,7 +354,7 @@ void UndoManager::redoStep(bool execute, bool flyingRollback)
 
 void UndoManager::makeSnapshot(int index)
 {
-    d->undoCache->putData(index, *d->dimgiface->getImg());
+    d->undoCache->putData(index, *d->core->getImg());
 }
 
 void UndoManager::restoreSnapshot(int index, const UndoMetadataContainer& c)
@@ -363,7 +363,7 @@ void UndoManager::restoreSnapshot(int index, const UndoMetadataContainer& c)
 
     if (!img.isNull())
     {
-        d->dimgiface->setUndoImg(c, img);
+        d->core->setUndoImg(c, img);
     }
 }
 
@@ -379,7 +379,7 @@ void UndoManager::clearPreviousOriginData()
 {
     for (int i = d->undoActions.size() - 1; i >= 0; i--)
     {
-        UndoAction* action = d->undoActions[i];
+        UndoAction* const action = d->undoActions[i];
 
         if (action->hasFileOriginData())
         {
@@ -430,13 +430,13 @@ bool UndoManager::putImageDataAndHistory(DImg* const img, int stepsBack) const
         }
         else
         {
-            reverting = d->dimgiface->getImg()->copyImageData();
+            reverting = d->core->getImg()->copyImageData();
         }
 
         // revert reversible actions, until reaching desired step
         for (; snapshot > step; snapshot--)
         {
-            UndoActionReversible* reversible = dynamic_cast<UndoActionReversible*>(d->undoActions.at(snapshot - 1));
+            UndoActionReversible* const reversible = dynamic_cast<UndoActionReversible*>(d->undoActions.at(snapshot - 1));
             reversible->getReverseFilter().apply(reverting);
         }
 
@@ -445,7 +445,7 @@ bool UndoManager::putImageDataAndHistory(DImg* const img, int stepsBack) const
     }
 
     // adjust history
-    UndoAction* action                   = d->undoActions.at(step);
+    UndoAction* const action             = d->undoActions.at(step);
     UndoMetadataContainer dataBeforeStep = action->getMetadata();
     dataBeforeStep.toImage(*img);
 
@@ -549,8 +549,8 @@ bool UndoManager::hasChanges() const
     }
     else
     {
-        DImageHistory currentHistory = d->dimgiface->getImageHistory();
-        DImageHistory initialHistory = d->dimgiface->getInitialImageHistory();
+        DImageHistory currentHistory = d->core->getImageHistory();
+        DImageHistory initialHistory = d->core->getInitialImageHistory();
 
         if (currentHistory == initialHistory)
         {
@@ -575,7 +575,7 @@ DImageHistory UndoManager::getImageHistoryOfFullRedo() const
         return d->redoActions.first()->getMetadata().history;
     }
 
-    return d->dimgiface->getImageHistory();
+    return d->core->getImageHistory();
 }
 
 }  // namespace Digikam

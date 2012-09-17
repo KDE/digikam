@@ -48,7 +48,7 @@ public:
 
     /** Fill a container from the DImg
      */
-    static UndoMetadataContainer fromImage(const DImg& iface);
+    static UndoMetadataContainer fromImage(const DImg& img);
 
     /** Write this container's values to the DImg
      */
@@ -69,19 +69,19 @@ class DIGIKAM_EXPORT UndoAction
 
 public:
 
-    explicit UndoAction(EditorCore* const iface);
+    explicit UndoAction(EditorCore* const core);
     virtual ~UndoAction();
 
-    void          setTitle(const QString& title);
-    QString       getTitle() const;
+    void                  setTitle(const QString& title);
+    QString               getTitle()                  const;
 
     void                  setMetadata(const UndoMetadataContainer&);
-    UndoMetadataContainer getMetadata() const;
+    UndoMetadataContainer getMetadata()               const;
 
-    bool          hasFileOriginData() const;
-    void          setFileOriginData(const QVariant& data, const DImageHistory& resolvedInitialHistory);
-    QVariant      fileOriginData() const;
-    DImageHistory fileOriginResolvedHistory() const;
+    void                  setFileOriginData(const QVariant& data, const DImageHistory& resolvedInitialHistory);
+    bool                  hasFileOriginData()         const;
+    QVariant              fileOriginData()            const;
+    DImageHistory         fileOriginResolvedHistory() const;
 
 private:
 
@@ -96,7 +96,7 @@ class DIGIKAM_EXPORT UndoActionReversible : public UndoAction
 
 public:
 
-    UndoActionReversible(EditorCore* const iface, const DImgBuiltinFilter& reversibleFilter);
+    UndoActionReversible(EditorCore* const core, const DImgBuiltinFilter& reversibleFilter);
 
     DImgBuiltinFilter getFilter()        const;
     DImgBuiltinFilter getReverseFilter() const;
@@ -113,8 +113,7 @@ class DIGIKAM_EXPORT UndoActionIrreversible : public UndoAction
 
 public:
 
-    explicit UndoActionIrreversible(EditorCore* const iface,
-                                    const QString& caller = i18n("Unknown"));
+    explicit UndoActionIrreversible(EditorCore* const core, const QString& caller = i18n("Unknown"));
     ~UndoActionIrreversible();
 };
 
