@@ -45,6 +45,15 @@
 namespace Digikam
 {
 
+
+enum FilterType {
+    TEXT = 0,
+    MIME,
+    GEOLOCATION,
+    TAGS,
+    LABELS
+};
+    
 class TagModel;
 class TAlbum;
 

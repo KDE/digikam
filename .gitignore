@@ -1,4 +1,5 @@
 *.kate-swp
 tests/databases/*/*.db
 *.kde4
-*.*~
+*.kdev4
+*~

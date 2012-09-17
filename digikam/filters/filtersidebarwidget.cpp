@@ -268,7 +268,7 @@ void FilterSideBarWidget::slotTagOptionsMenu()
 
 void FilterSideBarWidget::slotItemExpanded(int id, bool b)
 {
-    if (id == 2)
+    if (id == Digikam::TAGS)
     {
         d->expanderVlay->setStretchFactor(d->space, b ? 0 : 100);
     }
