@@ -7,9 +7,9 @@
  * Description : Wavelets Noise Reduction threaded image filter.
  *               This filter work in YCrCb color space.
  *
- * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2008 by Marco Rossini <marco dot rossini at gmx dot net>
- * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
+ * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008      by Marco Rossini <marco dot rossini at gmx dot net>
+ * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -38,11 +38,11 @@
 namespace Digikam
 {
 
-class NRFilter::NRFilterPriv
+class NRFilter::Private
 {
 public:
 
-    NRFilterPriv()
+    Private()
     {
         for (int c = 0 ; c < 3; ++c)
         {
@@ -57,16 +57,16 @@ public:
     NRContainer settings;
 };
 
-NRFilter::NRFilter(QObject* parent)
+NRFilter::NRFilter(QObject* const parent)
     : DImgThreadedFilter(parent),
-      d(new NRFilterPriv)
+      d(new Private)
 {
     initFilter();
 }
 
-NRFilter::NRFilter(DImg* orgImage, QObject* parent, const NRContainer& settings)
+NRFilter::NRFilter(DImg* const orgImage, QObject* const parent, const NRContainer& settings)
     : DImgThreadedFilter(orgImage, parent, "NRFilter"),
-      d(new NRFilterPriv)
+      d(new Private)
 {
     d->settings = settings;
 
@@ -198,7 +198,7 @@ void NRFilter::filterImage()
 
 // -- Wavelets denoise methods -----------------------------------------------------------
 
-void NRFilter::waveletDenoise(float* fimg[3], unsigned int width, unsigned int height,
+void NRFilter::waveletDenoise(float* const fimg[3], unsigned int width, unsigned int height,
                               float threshold, double softness)
 {
     float        thold;
@@ -335,7 +335,7 @@ void NRFilter::waveletDenoise(float* fimg[3], unsigned int width, unsigned int h
     }
 }
 
-void NRFilter::hatTransform(float* temp, float* base, int st, int size, int sc)
+void NRFilter::hatTransform(float* const temp, float* const base, int st, int size, int sc)
 {
     int i;
 
@@ -357,7 +357,7 @@ void NRFilter::hatTransform(float* temp, float* base, int st, int size, int sc)
 
 // -- Color Space conversion methods --------------------------------------------------
 
-void NRFilter::srgb2ycbcr(float** fimg, int size)
+void NRFilter::srgb2ycbcr(float** const fimg, int size)
 {
     float y, cb, cr;
 
@@ -372,7 +372,7 @@ void NRFilter::srgb2ycbcr(float** fimg, int size)
     }
 }
 
-void NRFilter::ycbcr2srgb(float** fimg, int size)
+void NRFilter::ycbcr2srgb(float** const fimg, int size)
 {
     float r, g, b;
 
@@ -387,28 +387,28 @@ void NRFilter::ycbcr2srgb(float** fimg, int size)
     }
 }
 
-void NRFilter::srgb2xyz(float** fimg, int size)
+void NRFilter::srgb2xyz(float** const fimg, int size)
 {
-    /* fimg in [0:1], sRGB */
+    // fimg in [0:1], sRGB
     float x, y, z;
 
     for (int i = 0; i < size; ++i)
     {
-        /* scaling and gamma correction (approximate) */
+        // scaling and gamma correction (approximate)
         fimg[0][i] = pow(fimg[0][i], (float)2.2);
         fimg[1][i] = pow(fimg[1][i], (float)2.2);
         fimg[2][i] = pow(fimg[2][i], (float)2.2);
 
-        /* matrix RGB -> XYZ, with D65 reference white (www.brucelindbloom.com) */
+        // matrix RGB -> XYZ, with D65 reference white (www.brucelindbloom.com)
         x = 0.412424  * fimg[0][i] + 0.357579 * fimg[1][i] + 0.180464  * fimg[2][i];
         y = 0.212656  * fimg[0][i] + 0.715158 * fimg[1][i] + 0.0721856 * fimg[2][i];
         z = 0.0193324 * fimg[0][i] + 0.119193 * fimg[1][i] + 0.950444  * fimg[2][i];
 
-        /*
+/*
         x = 0.412424 * fimg[0][i] + 0.212656  * fimg[1][i] + 0.0193324 * fimg[2][i];
         y = 0.357579 * fimg[0][i] + 0.715158  * fimg[1][i] + 0.119193  * fimg[2][i];
         z = 0.180464 * fimg[0][i] + 0.0721856 * fimg[1][i] + 0.950444  * fimg[2][i];
-        */
+*/
 
         fimg[0][i] = x;
         fimg[1][i] = y;
@@ -416,27 +416,27 @@ void NRFilter::srgb2xyz(float** fimg, int size)
     }
 }
 
-void NRFilter::xyz2srgb(float** fimg, int size)
+void NRFilter::xyz2srgb(float** const fimg, int size)
 {
     float r, g, b;
 
     for (int i = 0; i < size; ++i)
     {
-        /* matrix RGB -> XYZ, with D65 reference white (www.brucelindbloom.com) */
+        // matrix RGB -> XYZ, with D65 reference white (www.brucelindbloom.com)
         r = 3.24071   * fimg[0][i] - 1.53726  * fimg[1][i] - 0.498571  * fimg[2][i];
         g = -0.969258 * fimg[0][i] + 1.87599  * fimg[1][i] + 0.0415557 * fimg[2][i];
         b = 0.0556352 * fimg[0][i] - 0.203996 * fimg[1][i] + 1.05707   * fimg[2][i];
 
-        /*
+/*
         r =  3.24071  * fimg[0][i] - 0.969258  * fimg[1][i]
           + 0.0556352 * fimg[2][i];
         g = -1.53726  * fimg[0][i] + 1.87599   * fimg[1][i]
           - 0.203996  * fimg[2][i];
         b = -0.498571 * fimg[0][i] + 0.0415557 * fimg[1][i]
           + 1.05707   * fimg[2][i];
-        */
+*/
 
-        /* scaling and gamma correction (approximate) */
+        // scaling and gamma correction (approximate)
         r = r < 0 ? 0 : pow(r, (float)(1.0 / 2.2));
         g = g < 0 ? 0 : pow(g, (float)(1.0 / 2.2));
         b = b < 0 ? 0 : pow(b, (float)(1.0 / 2.2));
@@ -447,23 +447,23 @@ void NRFilter::xyz2srgb(float** fimg, int size)
     }
 }
 
-void NRFilter::lab2srgb(float** fimg, int size)
+void NRFilter::lab2srgb(float** const fimg, int size)
 {
     float x, y, z;
 
     for (int i = 0; i < size; ++i)
     {
-        /* convert back to normal LAB */
+        // convert back to normal LAB
         fimg[0][i] = (fimg[0][i] - 0 * 16 * 27 / 24389.0) * 116;
         fimg[1][i] = (fimg[1][i] - 0.5) * 500 * 2;
         fimg[2][i] = (fimg[2][i] - 0.5) * 200 * 2.2;
 
-        /* matrix */
+        // matrix
         y = (fimg[0][i] + 16) / 116;
         z = y - fimg[2][i] / 200.0;
         x = fimg[1][i] / 500.0 + y;
 
-        /* scale */
+        // scale
         if (x * x * x > 216 / 24389.0)
         {
             x = x * x * x;
@@ -478,8 +478,8 @@ void NRFilter::lab2srgb(float** fimg, int size)
             y = y * y * y;
         }
         else
-            /*y = fimg[0][i] * 27 / 24389.0;*/
         {
+             //y = fimg[0][i] * 27 / 24389.0;*/
             y = (116 * y - 16) * 27 / 24389.0;
         }
 
@@ -492,7 +492,7 @@ void NRFilter::lab2srgb(float** fimg, int size)
             z = (116 * z - 16) * 27 / 24389.0;
         }
 
-        /* white reference */
+        // white reference
         fimg[0][i] = x * 0.95047;
         fimg[1][i] = y;
         fimg[2][i] = z * 1.08883;
@@ -501,7 +501,7 @@ void NRFilter::lab2srgb(float** fimg, int size)
     xyz2srgb(fimg, size);
 }
 
-void NRFilter::srgb2lab(float** fimg, int size)
+void NRFilter::srgb2lab(float** const fimg, int size)
 {
     float l, a, b;
 
@@ -509,13 +509,14 @@ void NRFilter::srgb2lab(float** fimg, int size)
 
     for (int i = 0; i < size; ++i)
     {
-        /* reference white */
+        // reference white
         fimg[0][i] /= 0.95047F;
-        /* (just for completeness)
-        fimg[1][i] /= 1.00000; */
+/*
+        fimg[1][i] /= 1.00000;          // (just for completeness)
+*/
         fimg[2][i] /= 1.08883F;
 
-        /* scale */
+        // scale
         if (fimg[0][i] > 216.0 / 24389.0)
         {
             fimg[0][i] = pow(fimg[0][i], (float)(1.0 / 3.0));
@@ -546,7 +547,7 @@ void NRFilter::srgb2lab(float** fimg, int size)
         l          = 116 * fimg[1][i]  - 16;
         a          = 500 * (fimg[0][i] - fimg[1][i]);
         b          = 200 * (fimg[1][i] - fimg[2][i]);
-        fimg[0][i] = l / 116.0; /* + 16 * 27 / 24389.0; */
+        fimg[0][i] = l / 116.0; // + 16 * 27 / 24389.0;
         fimg[1][i] = a / 500.0 / 2.0 + 0.5;
         fimg[2][i] = b / 200.0 / 2.2 + 0.5;
 
@@ -564,20 +565,45 @@ FilterAction NRFilter::filterAction()
 
     for (int i = 0; i < 3; ++i)
     {
-        action.addParameter(QString("softness[%1]").arg(i), d->settings.softness[i]);
+        action.addParameter(QString("softness[%1]").arg(i),   d->settings.softness[i]);
         action.addParameter(QString("thresholds[%1]").arg(i), d->settings.thresholds[i]);
     }
 
     return action;
 }
 
-void NRFilter::readParameters(const Digikam::FilterAction& action)
+void NRFilter::readParameters(const FilterAction& action)
 {
     for (int i = 0; i < 3; ++i)
     {
-        d->settings.softness[i] =  action.parameter(QString("softness[%1]").arg(i)).toDouble();
-        d->settings.thresholds[i] =  action.parameter(QString("thresholds[%1]").arg(i)).toDouble();
+        d->settings.softness[i]   = action.parameter(QString("softness[%1]").arg(i)).toDouble();
+        d->settings.thresholds[i] = action.parameter(QString("thresholds[%1]").arg(i)).toDouble();
     }
+}
+
+QString NRFilter::filterIdentifier() const
+{
+    return FilterIdentifier();
+}
+
+QString NRFilter::FilterIdentifier()
+{
+    return "digikam:NoiseReductionFilter";
+}
+
+QString NRFilter::DisplayableName()
+{
+    return I18N_NOOP("Noise Reduction Filter");
+}
+
+QList<int> NRFilter::SupportedVersions()
+{
+    return QList<int>() << 1;
+}
+
+int NRFilter::CurrentVersion()
+{
+    return 1;
 }
 
 }  // namespace Digikam

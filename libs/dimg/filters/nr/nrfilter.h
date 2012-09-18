@@ -7,8 +7,8 @@
  * Description : Wavelets Noise Reduction threaded image filter.
  *               This filter work in YCrCb color space.
  *
- * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
+ * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -49,7 +49,9 @@ public:
         softness[2]   = 0.9;     // Cb
     };
 
-    ~NRContainer() {};
+    ~NRContainer()
+    {
+    };
 
 public:
 
@@ -66,55 +68,41 @@ class DIGIKAM_EXPORT NRFilter : public DImgThreadedFilter
 
 public:
 
-    explicit NRFilter(QObject* parent = 0);
-    NRFilter(DImg* orgImage, QObject* parent, const NRContainer& settings);
+    explicit NRFilter(QObject* const parent = 0);
+    NRFilter(DImg* const orgImage, QObject* const parent, const NRContainer& settings);
     ~NRFilter();
 
-    static QString          FilterIdentifier()
-    {
-        return "digikam:NoiseReductionFilter";
-    }
-    static QString          DisplayableName()
-    {
-        return I18N_NOOP("Noise Reduction Filter");
-    }
-    static QList<int>       SupportedVersions()
-    {
-        return QList<int>() << 1;
-    }
-    static int              CurrentVersion()
-    {
-        return 1;
-    }
+    void readParameters(const FilterAction& action);
 
-    virtual QString         filterIdentifier() const
-    {
-        return FilterIdentifier();
-    }
     virtual FilterAction    filterAction();
-    void                    readParameters(const FilterAction& action);
+    virtual QString         filterIdentifier() const;
+
+    static QString          FilterIdentifier();
+    static QString          DisplayableName();
+    static QList<int>       SupportedVersions();
+    static int              CurrentVersion();
 
 private:
 
     void filterImage();
 
-    void waveletDenoise(float* fimg[3], unsigned int width, unsigned int height,
+    void waveletDenoise(float* const fimg[3], unsigned int width, unsigned int height,
                         float threshold, double softness);
-    inline void hatTransform(float* temp, float* base, int st, int size, int sc);
+    inline void hatTransform(float* const temp, float* const base, int st, int size, int sc);
 
-    void srgb2ycbcr(float** fimg, int size);
-    void ycbcr2srgb(float** fimg, int size);
+    void srgb2ycbcr(float** const fimg, int size);
+    void ycbcr2srgb(float** const fimg, int size);
 
     // Methods not used.
-    void srgb2lab(float** fimg, int size);
-    void lab2srgb(float** fimg, int size);
-    void srgb2xyz(float** fimg, int size);
-    void xyz2srgb(float** fimg, int size);
+    void srgb2lab(float** const fimg, int size);
+    void lab2srgb(float** const fimg, int size);
+    void srgb2xyz(float** const fimg, int size);
+    void xyz2srgb(float** const fimg, int size);
 
 private:
 
-    class NRFilterPriv;
-    NRFilterPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

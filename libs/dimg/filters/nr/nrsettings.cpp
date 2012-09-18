@@ -6,7 +6,7 @@
  * Date        : 2009-11-22
  * Description : noise reduction settings view.
  *
- * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -55,11 +55,11 @@ using namespace KDcrawIface;
 namespace Digikam
 {
 
-class NRSettings::NRSettingsPriv
+class NRSettings::Private
 {
 public:
 
-    NRSettingsPriv() :
+    Private() :
         luminanceBox(0),
         chrominanceRedBox(0),
         chrominanceBlueBox(0),
@@ -92,18 +92,19 @@ public:
     RDoubleNumInput*     thrCbInput;
     RDoubleNumInput*     softCbInput;
 };
-const QString NRSettings::NRSettingsPriv::configThrLumInputAdjustmentEntry("ThrLumAdjustment");
-const QString NRSettings::NRSettingsPriv::configSoftLumInputAdjustmentEntry("SoftLumAdjustment");
-const QString NRSettings::NRSettingsPriv::configThrCrInputAdjustmentEntry("ThrCrAdjustment");
-const QString NRSettings::NRSettingsPriv::configSoftCrInputAdjustmentEntry("SoftCrAdjustment");
-const QString NRSettings::NRSettingsPriv::configThrCbInputAdjustmentEntry("ThrCbAdjustment");
-const QString NRSettings::NRSettingsPriv::configSoftCbInputAdjustmentEntry("SoftCbAdjustment");
+
+const QString NRSettings::Private::configThrLumInputAdjustmentEntry("ThrLumAdjustment");
+const QString NRSettings::Private::configSoftLumInputAdjustmentEntry("SoftLumAdjustment");
+const QString NRSettings::Private::configThrCrInputAdjustmentEntry("ThrCrAdjustment");
+const QString NRSettings::Private::configSoftCrInputAdjustmentEntry("SoftCrAdjustment");
+const QString NRSettings::Private::configThrCbInputAdjustmentEntry("ThrCbAdjustment");
+const QString NRSettings::Private::configSoftCbInputAdjustmentEntry("SoftCbAdjustment");
 
 // --------------------------------------------------------
 
-NRSettings::NRSettings(QWidget* parent)
+NRSettings::NRSettings(QWidget* const parent)
     : QWidget(parent),
-      d(new NRSettingsPriv)
+      d(new Private)
 {
     QGridLayout* grid = new QGridLayout(parent);
 
@@ -303,13 +304,12 @@ void NRSettings::readSettings(KConfigGroup& group)
 {
     NRContainer prm;
     NRContainer defaultPrm = defaultSettings();
-
-    prm.thresholds[0] = group.readEntry(d->configThrLumInputAdjustmentEntry,  defaultPrm.thresholds[0]);
-    prm.thresholds[2] = group.readEntry(d->configThrCrInputAdjustmentEntry,   defaultPrm.thresholds[2]);
-    prm.thresholds[1] = group.readEntry(d->configThrCbInputAdjustmentEntry,   defaultPrm.thresholds[1]);
-    prm.softness[0]   = group.readEntry(d->configSoftLumInputAdjustmentEntry, defaultPrm.softness[0]);
-    prm.softness[2]   = group.readEntry(d->configSoftCrInputAdjustmentEntry,  defaultPrm.softness[2]);
-    prm.softness[1]   = group.readEntry(d->configSoftCbInputAdjustmentEntry,  defaultPrm.softness[1]);
+    prm.thresholds[0]      = group.readEntry(d->configThrLumInputAdjustmentEntry,  defaultPrm.thresholds[0]);
+    prm.thresholds[2]      = group.readEntry(d->configThrCrInputAdjustmentEntry,   defaultPrm.thresholds[2]);
+    prm.thresholds[1]      = group.readEntry(d->configThrCbInputAdjustmentEntry,   defaultPrm.thresholds[1]);
+    prm.softness[0]        = group.readEntry(d->configSoftLumInputAdjustmentEntry, defaultPrm.softness[0]);
+    prm.softness[2]        = group.readEntry(d->configSoftCrInputAdjustmentEntry,  defaultPrm.softness[2]);
+    prm.softness[1]        = group.readEntry(d->configSoftCbInputAdjustmentEntry,  defaultPrm.softness[1]);
     setSettings(prm);
 }
 
