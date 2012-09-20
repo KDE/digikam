@@ -161,10 +161,6 @@ ImportUI::ImportUI(QWidget* const parent, const QString& cameraTitle,
     d->cameraTitle = (title.isEmpty()) ? cameraTitle : title;
     setCaption(d->cameraTitle);
 
-    // -------------------------------------------------------------------
-
-    setupStatusBar();
-
     // -- Init. backend controller ----------------------------------------
 
     setupCameraController(model, port, path);
@@ -174,6 +170,7 @@ ImportUI::ImportUI(QWidget* const parent, const QString& cameraTitle,
 
     setupUserArea();
     setupActions();
+    setupStatusBar();
     setupAccelerators();
 
     // -- Make signals/slots connections ---------------------------------
