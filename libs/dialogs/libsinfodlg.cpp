@@ -103,6 +103,12 @@ LibsInfoDlg::LibsInfoDlg(QWidget* const parent)
     list.insert(i18n("Parallelized demosaicing"),    KDcraw::librawUseGomp() ?
                 i18n("Yes") : i18n("No"));
 #endif
+
+#if KDCRAW_VERSION >= 0x020200
+    list.insert(i18n("RawSpeed codec support"),      KDcraw::librawUseRawSpeed() ?
+                i18n("Yes") : i18n("No"));
+#endif
+
     list.insert(i18n("LibKExiv2"),                   KExiv2::version());
     list.insert(i18n("LibExiv2"),                    KExiv2::Exiv2Version());
     list.insert(i18n("Exiv2 supports XMP metadata"), KExiv2::supportXmp() ?
