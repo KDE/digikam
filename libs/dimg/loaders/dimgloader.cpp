@@ -6,8 +6,8 @@
  * Date        : 2005-06-14
  * Description : DImg image loader interface
  *
- * Copyright (C) 2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2005-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005      by Renchi Raju <renchi dot raju at gmail dot com>
+ * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -52,11 +52,16 @@
 namespace Digikam
 {
 
-DImgLoader::DImgLoader(DImg* image)
+DImgLoader::DImgLoader(DImg* const image)
     : m_image(image)
 {
     m_loadFlags = LoadAll;
 }
+
+DImgLoader::~DImgLoader()
+{
+}
+
 
 void DImgLoader::setLoadFlags(LoadFlags flags)
 {
@@ -68,7 +73,7 @@ bool DImgLoader::hasLoadedData() const
     return (m_loadFlags & LoadImageData) && m_image->m_priv->data;
 }
 
-int DImgLoader::granularity(DImgLoaderObserver* observer, int total, float progressSlice)
+int DImgLoader::granularity(DImgLoaderObserver* const observer, int total, float progressSlice)
 {
     // Splits expect total value into the chunks where checks shall occur
     // and combines this with a possible correction factor from observer.
@@ -125,12 +130,12 @@ void DImgLoader::imageSetIccProfile(const IccProfile& profile)
     m_image->setIccProfile(profile);
 }
 
-QVariant DImgLoader::imageGetAttribute(const QString& key)
+QVariant DImgLoader::imageGetAttribute(const QString& key) const
 {
     return m_image->attribute(key);
 }
 
-QString DImgLoader::imageGetEmbbededText(const QString& key)
+QString DImgLoader::imageGetEmbbededText(const QString& key) const
 {
     return m_image->embeddedText(key);
 }
@@ -140,7 +145,7 @@ void DImgLoader::imageSetAttribute(const QString& key, const QVariant& value)
     m_image->setAttribute(key, value);
 }
 
-QMap<QString, QString>& DImgLoader::imageEmbeddedText()
+QMap<QString, QString>& DImgLoader::imageEmbeddedText() const
 {
     return m_image->m_priv->embeddedText;
 }
@@ -272,7 +277,7 @@ bool DImgLoader::saveMetadata(const QString& filePath)
     return metaDataToFile.applyChanges();
 }
 
-bool DImgLoader::checkExifWorkingColorSpace()
+bool DImgLoader::checkExifWorkingColorSpace() const
 {
     DMetadata metaData(m_image->getMetadata());
     IccProfile profile = metaData.getIccProfile();
@@ -305,7 +310,7 @@ void DImgLoader::purgeExifWorkingColorSpace()
     m_image->setMetadata(meta.data());
 }
 
-QByteArray DImgLoader::uniqueHashV2(const QString& filePath, const DImg* img)
+QByteArray DImgLoader::uniqueHashV2(const QString& filePath, const DImg* const img)
 {
     QFile file(filePath);
 
@@ -318,7 +323,7 @@ QByteArray DImgLoader::uniqueHashV2(const QString& filePath, const DImg* img)
 
     // Specified size: 100 kB; but limit to file size
     const qint64 specifiedSize = 100 * 1024; // 100 kB
-    qint64 size = qMin(file.size(), specifiedSize);
+    qint64 size                = qMin(file.size(), specifiedSize);
 
     if (size)
     {
@@ -384,7 +389,7 @@ QByteArray DImgLoader::uniqueHash(const QString& filePath, const DImg& img, bool
     QFile qfile(filePath);
 
     char databuf[8192];
-    int readlen = 0;
+    int readlen     = 0;
     QByteArray size = 0;
 
     QByteArray hash;
@@ -405,6 +410,16 @@ QByteArray DImgLoader::uniqueHash(const QString& filePath, const DImg& img, bool
     }
 
     return hash;
+}
+
+unsigned char* DImgLoader::new_failureTolerant(size_t unsecureSize)
+{
+    return new_failureTolerant<unsigned char>(unsecureSize);
+}
+
+unsigned short* DImgLoader::new_short_failureTolerant(size_t unsecureSize)
+{
+    return new_failureTolerant<unsigned short>(unsecureSize);
 }
 
 }  // namespace Digikam

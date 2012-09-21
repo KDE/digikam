@@ -6,7 +6,7 @@
  * Date        : 2007-08-02
  * Description : save JPEG 2000 image options.
  *
- * Copyright (C) 2007-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -35,22 +35,20 @@
 namespace Digikam
 {
 
-class JP2KSettingsPriv;
-
 class DIGIKAM_EXPORT JP2KSettings : public QWidget
 {
     Q_OBJECT
 
 public:
 
-    JP2KSettings(QWidget* parent = 0);
+    JP2KSettings(QWidget* const parent = 0);
     ~JP2KSettings();
 
     void setCompressionValue(int val);
-    int  getCompressionValue();
+    int  getCompressionValue() const;
 
     void setLossLessCompression(bool b);
-    bool getLossLessCompression();
+    bool getLossLessCompression() const;
 
 Q_SIGNALS:
 
@@ -62,7 +60,8 @@ private Q_SLOTS:
 
 private:
 
-    JP2KSettingsPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

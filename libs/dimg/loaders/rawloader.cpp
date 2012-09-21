@@ -7,8 +7,8 @@
  * Description : A digital camera RAW files loader for DImg
  *               framework using an external dcraw instance.
  *
- * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2005-2010 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2012 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -54,7 +54,7 @@
 namespace Digikam
 {
 
-RAWLoader::RAWLoader(DImg* image, DRawDecoding rawDecodingSettings)
+RAWLoader::RAWLoader(DImg* const image, const DRawDecoding& rawDecodingSettings)
     : DImgLoader(image),
       m_observer(0),
       m_filter(0)
@@ -65,7 +65,7 @@ RAWLoader::RAWLoader(DImg* image, DRawDecoding rawDecodingSettings)
     m_filter->setSettings(rawDecodingSettings);
 }
 
-bool RAWLoader::load(const QString& filePath, DImgLoaderObserver* observer)
+bool RAWLoader::load(const QString& filePath, DImgLoaderObserver* const observer)
 {
     m_observer = observer;
 
@@ -129,7 +129,7 @@ bool RAWLoader::load(const QString& filePath, DImgLoaderObserver* observer)
             return false;
         }
 
-        if (!loadedFromDcraw(data, width, height, rgbmax, observer))
+        if (!loadedFromRawData(data, width, height, rgbmax, observer))
         {
             loadingFailed();
             return false;
@@ -162,8 +162,8 @@ void RAWLoader::setWaitingDataProgress(double value)
     }
 }
 
-bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbmax,
-                                DImgLoaderObserver* observer)
+bool RAWLoader::loadedFromRawData(const QByteArray& data, int width, int height, int rgbmax,
+                                  DImgLoaderObserver* const observer)
 {
     int checkpoint = 0;
 
@@ -320,8 +320,8 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
     FilterAction action = m_filter->filterAction();
     m_image->addFilterAction(action);
 
-    imageWidth()  = width;
-    imageHeight() = height;
+    imageWidth()        = width;
+    imageHeight()       = height;
     imageSetAttribute("rawDecodingSettings", QVariant::fromValue(m_filter->settings()));
     imageSetAttribute("rawDecodingFilterAction", QVariant::fromValue(action));
     // other attributes are set above
@@ -329,7 +329,7 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
     return true;
 }
 
-void RAWLoader::postProcess(DImgLoaderObserver* observer)
+void RAWLoader::postProcess(DImgLoaderObserver* const observer)
 {
     if (m_filter->settings().postProcessingSettingsIsDirty())
     {
@@ -342,6 +342,27 @@ void RAWLoader::postProcess(DImgLoaderObserver* observer)
 FilterAction RAWLoader::filterAction() const
 {
     return m_filter->filterAction();
+}
+
+bool RAWLoader::save(const QString& /*filePath*/, DImgLoaderObserver* const /*observer=0*/)
+{
+    // NOTE: RAW files are always Read only.
+    return false;
+}
+
+bool RAWLoader::hasAlpha() const
+{
+    return false;
+}
+
+bool RAWLoader::isReadOnly() const
+{
+    return true;
+}
+
+bool RAWLoader::sixteenBit() const
+{
+    return m_rawDecodingSettings.sixteenBitsImage;
 }
 
 }  // namespace Digikam

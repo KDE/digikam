@@ -6,7 +6,7 @@
  * Date        : 2005-11-01
  * Description : a PNG image loader for DImg framework.
  *
- * Copyright (C) 2005-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -75,14 +75,14 @@ typedef png_bytep iCCP_data;
 typedef png_charp iCCP_data;
 #endif
 
-PNGLoader::PNGLoader(DImg* image)
+PNGLoader::PNGLoader(DImg* const image)
     : DImgLoader(image)
 {
     m_hasAlpha   = false;
     m_sixteenBit = false;
 }
 
-bool PNGLoader::load(const QString& filePath, DImgLoaderObserver* observer)
+bool PNGLoader::load(const QString& filePath, DImgLoaderObserver* const observer)
 {
     png_uint_32  w32, h32;
     int          width, height;
@@ -693,7 +693,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver* observer)
     return true;
 }
 
-bool PNGLoader::save(const QString& filePath, DImgLoaderObserver* observer)
+bool PNGLoader::save(const QString& filePath, DImgLoaderObserver* const observer)
 {
     FILE*          f;
     png_structp    png_ptr;
@@ -928,88 +928,6 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver* observer)
     text.compression = PNG_TEXT_COMPRESSION_zTXt;
     png_set_text(png_ptr, info_ptr, &(text), 1);
 
-    /*
-        // There is an unsolved problem in the following code block, see bug #151552.
-        // If exiv2 supports writing to PNG, which it does since 0.18, this code is not needed
-        // and should not be used therefore.
-        if (KExiv2Iface::KExiv2::supportMetadataWritting("image/png"))
-        {
-            // Write embedded Raw profiles metadata (Exif/Iptc) in text tag using ImageMagick technique.
-            // Write digiKam comment like an iTXt chunk using UTF8 encoding.
-            // NOTE: iTXt will be enable by default with libpng >= 1.3.0.
-
-            typedef QMap<int, QByteArray> MetaDataMap;
-            MetaDataMap metaDataMap = imageMetaData();
-
-            for (MetaDataMap::const_iterator it = metaDataMap.constBegin();
-                 it != metaDataMap.constEnd(); ++it)
-            {
-                QByteArray ba = it.value();
-
-                switch (it.key())
-                {
-
-    /  *
-    #ifdef PNG_iTXt_SUPPORTED
-                    // TODO : this code requires libpng 1.3.0, it is not yet tested and crashes. See bug #229340.
-
-                    case(DImg::COM):
-                    {
-                        png_text comment;
-                        comment.key         = const_cast<char*> ("Comment");
-                        comment.text        = ba.data();
-                        comment.itxt_length = ba.size();
-                        comment.compression = PNG_ITXT_COMPRESSION_zTXt;
-                        png_set_text(png_ptr, info_ptr, &(comment), 1);
-
-                        kDebug() << "Writing digiKam comment into iTXt PNG chunk : " << ba;
-                        break;
-                    }
-    #endif
-    * /
-
-                    case(DImg::EXIF):
-                    {
-                        const uchar ExifHeader[] = {0x45, 0x78, 0x69, 0x66, 0x00, 0x00};
-                        QByteArray profile;
-
-                        // If bytes array do not start with ImageMagick header, Exif metadata have been created from
-                        // scratch using Exiv2. In this case, we need to add Exif header from start.
-                        if (memcmp(ba.data(), "exif",    4) != 0 &&
-                            memcmp(ba.data(), "iptc",    4) != 0 &&
-                            memcmp(ba.data(), "xmp",     3) != 0 &&
-                            memcmp(ba.data(), "profile", 7) != 0)
-                        {
-                            profile = QByteArray();
-                            profile.resize(ba.size() + sizeof(ExifHeader));
-                            memcpy(profile.data(), ExifHeader, sizeof(ExifHeader));
-                            memcpy(profile.data() + sizeof(ExifHeader), ba.data(), ba.size());
-                        }
-                        else
-                        {
-                            profile = ba;
-                        }
-
-                        writeRawProfile(png_ptr, info_ptr, (png_charp)("exif"), profile.data(), (png_uint_32) profile.size());
-                        break;
-                    }
-                    case(DImg::IPTC):
-                    {
-                        writeRawProfile(png_ptr, info_ptr, (png_charp)("iptc"), ba.data(), (png_uint_32) ba.size());
-                        break;
-                    }
-                    case(DImg::XMP):
-                    {
-                        writeRawProfile(png_ptr, info_ptr, (png_charp)("xmp"), ba.data(), (png_uint_32) ba.size());
-                        break;
-                    }
-                    default:
-                        break;
-                }
-            }
-        }
-    */
-
     if (observer)
     {
         observer->progressInfo(m_image, 0.2F);
@@ -1132,188 +1050,9 @@ bool PNGLoader::sixteenBit() const
     return m_sixteenBit;
 }
 
-void PNGLoader::writeRawProfile(png_struct* ping, png_info* ping_info, char* profile_type,
-                                char* profile_data, png_uint_32 length)
+bool PNGLoader::isReadOnly() const
 {
-    png_textp      text;
-
-    register long  i;
-
-    uchar*         sp;
-
-    png_charp      dp;
-
-    png_uint_32    allocated_length, description_length;
-
-    const uchar hex[16] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
-
-    kDebug() << "Writing Raw profile: type=" << profile_type << ", length=" << length;
-
-    text               = (png_textp) png_malloc(ping, (png_uint_32) sizeof(png_text));
-    description_length = strlen((const char*) profile_type);
-    allocated_length   = (png_uint_32)(length * 2 + (length >> 5) + 20 + description_length);
-
-    text[0].text   = (png_charp) png_malloc(ping, allocated_length);
-    text[0].key    = (png_charp) png_malloc(ping, (png_uint_32) 80);
-    text[0].key[0] = '\0';
-
-    concatenateString(text[0].key, "Raw profile type ", 4096);
-    concatenateString(text[0].key, (const char*) profile_type, 62);
-
-    sp = (uchar*)profile_data;
-    dp = text[0].text;
-    *dp++ = '\n';
-
-    copyString(dp, (const char*) profile_type, allocated_length);
-
-    dp += description_length;
-    *dp++ = '\n';
-
-    formatString(dp, allocated_length - strlen(text[0].text), "%8lu ", length);
-
-    dp += 8;
-
-    for (i = 0; i < (long) length; ++i)
-    {
-        if (i % 36 == 0)
-        {
-            *dp++ = '\n';
-        }
-
-        *(dp++) = (char) hex[((*sp >> 4) & 0x0f)];
-        *(dp++) = (char) hex[((*sp++) & 0x0f)];
-    }
-
-    *dp++ = '\n';
-    *dp = '\0';
-    text[0].text_length = (png_size_t)(dp - text[0].text);
-    text[0].compression = -1;
-
-    if (text[0].text_length <= allocated_length)
-    {
-        png_set_text(ping, ping_info, text, 1);
-    }
-
-    png_free(ping, text[0].text);
-    png_free(ping, text[0].key);
-    png_free(ping, text);
-}
-
-size_t PNGLoader::concatenateString(char* destination, const char* source, const size_t length)
-{
-    register char*       q;
-
-    register const char* p;
-
-    register size_t      i;
-
-    size_t               count;
-
-    if (!destination || !source || length == 0)
-    {
-        return 0;
-    }
-
-    p = source;
-    q = destination;
-    i = length;
-
-    while ((i-- != 0) && (*q != '\0'))
-    {
-        ++q;
-    }
-
-    count = (size_t)(q - destination);
-    i     = length - count;
-
-    if (i == 0)
-    {
-        return(count + strlen(p));
-    }
-
-    while (*p != '\0')
-    {
-        if (i != 1)
-        {
-            *q++ = (*p);
-            --i;
-        }
-
-        ++p;
-    }
-
-    *q = '\0';
-
-    return(count + (p - source));
-}
-
-size_t PNGLoader::copyString(char* destination, const char* source, const size_t length)
-{
-    register char*       q;
-
-    register const char* p;
-
-    register size_t      i;
-
-    if (!destination || !source || length == 0)
-    {
-        return 0;
-    }
-
-    p = source;
-    q = destination;
-    i = length;
-
-    if ((i != 0) && (--i != 0))
-    {
-        do
-        {
-            if ((*q++ = (*p++)) == '\0')
-            {
-                break;
-            }
-        }
-        while (--i != 0);
-    }
-
-    if (i == 0)
-    {
-        if (length != 0)
-        {
-            *q = '\0';
-        }
-
-        do
-        {
-        }
-        while (*p++ != '\0');
-    }
-
-    return((size_t)(p - source - 1));
-}
-
-long PNGLoader::formatString(char* string, const size_t length, const char* format, ...)
-{
-    long n;
-
-    va_list operands;
-
-    va_start(operands, format);
-    n = (long) formatStringList(string, length, format, operands);
-    va_end(operands);
-    return(n);
-}
-
-long PNGLoader::formatStringList(char* string, const size_t length, const char* format, va_list operands)
-{
-    int n = vsnprintf(string, length, format, operands);
-
-    if (n < 0)
-    {
-        string[length - 1] = '\0';
-    }
-
-    return((long) n);
-}
+    return false;
+};
 
 }  // namespace Digikam

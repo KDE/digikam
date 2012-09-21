@@ -6,7 +6,7 @@
  * Date        : 2007-08-02
  * Description : save PNG image options.
  *
- * Copyright (C) 2007-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -39,12 +39,12 @@
 namespace Digikam
 {
 
-class PNGSettingsPriv
+class PNGSettings::Private
 {
 
 public:
 
-    PNGSettingsPriv()
+    Private()
     {
         PNGGrid             = 0;
         labelPNGcompression = 0;
@@ -59,7 +59,7 @@ public:
 };
 
 PNGSettings::PNGSettings(QWidget* parent)
-    : QWidget(parent), d(new PNGSettingsPriv)
+    : QWidget(parent), d(new Private)
 {
     setAttribute(Qt::WA_DeleteOnClose);
 
@@ -99,7 +99,7 @@ void PNGSettings::setCompressionValue(int val)
     d->PNGcompression->setValue(val);
 }
 
-int PNGSettings::getCompressionValue()
+int PNGSettings::getCompressionValue() const
 {
     return d->PNGcompression->value();
 }

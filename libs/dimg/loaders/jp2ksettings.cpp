@@ -6,7 +6,7 @@
  * Date        : 2007-08-02
  * Description : save JPEG 2000 image options.
  *
- * Copyright (C) 2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -20,7 +20,6 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-
 
 #include "jp2ksettings.moc"
 
@@ -41,12 +40,12 @@
 namespace Digikam
 {
 
-class JP2KSettingsPriv
+class JP2KSettings::Private
 {
 
 public:
 
-    JP2KSettingsPriv()
+    Private()
     {
         JPEG2000Grid             = 0;
         labelJPEG2000compression = 0;
@@ -63,8 +62,8 @@ public:
     KIntNumInput* JPEG2000compression;
 };
 
-JP2KSettings::JP2KSettings(QWidget* parent)
-    : QWidget(parent), d(new JP2KSettingsPriv)
+JP2KSettings::JP2KSettings(QWidget* const parent)
+    : QWidget(parent), d(new Private)
 {
     setAttribute(Qt::WA_DeleteOnClose);
 
@@ -118,7 +117,7 @@ void JP2KSettings::setCompressionValue(int val)
     d->JPEG2000compression->setValue(val);
 }
 
-int JP2KSettings::getCompressionValue()
+int JP2KSettings::getCompressionValue() const
 {
     return d->JPEG2000compression->value();
 }
@@ -129,7 +128,7 @@ void JP2KSettings::setLossLessCompression(bool b)
     slotToggleJPEG2000LossLess(d->JPEG2000LossLess->isChecked());
 }
 
-bool JP2KSettings::getLossLessCompression()
+bool JP2KSettings::getLossLessCompression() const
 {
     return d->JPEG2000LossLess->isChecked();
 }

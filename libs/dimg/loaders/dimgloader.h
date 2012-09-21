@@ -6,8 +6,8 @@
  * Date        : 2005-06-14
  * Description : DImg image loader interface
  *
- * Copyright (C) 2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005      by Renchi Raju <renchi dot raju at gmail dot com>
+ * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -63,26 +63,26 @@ public:
     };
     Q_DECLARE_FLAGS(LoadFlags, LoadFlag)
 
-    virtual ~DImgLoader() {};
+public:
 
     void setLoadFlags(LoadFlags flags);
 
-    virtual bool load(const QString& filePath, DImgLoaderObserver* observer) = 0;
-    virtual bool save(const QString& filePath, DImgLoaderObserver* observer) = 0;
+    virtual ~DImgLoader();
 
+    virtual bool load(const QString& filePath, DImgLoaderObserver* const observer) = 0;
+    virtual bool save(const QString& filePath, DImgLoaderObserver* const observer) = 0;
+
+    virtual bool hasLoadedData() const;
     virtual bool hasAlpha()      const = 0;
     virtual bool sixteenBit()    const = 0;
     virtual bool isReadOnly()    const = 0;
-    virtual bool hasLoadedData() const;
 
-    static QByteArray uniqueHashV2(const QString& filePath, const DImg* img = 0);
-    static QByteArray uniqueHash(const QString& filePath, const DImg& img, bool loadMetadata);
+    static QByteArray     uniqueHashV2(const QString& filePath, const DImg* const img = 0);
+    static QByteArray     uniqueHash(const QString& filePath, const DImg& img, bool loadMetadata);
     static HistoryImageId createHistoryImageId(const QString& filePath, const DImg& img, const DMetadata& metadata);
 
-    static unsigned char*  new_failureTolerant(size_t unsecureSize)
-        { return new_failureTolerant<unsigned char>(unsecureSize); }
-    static unsigned short*  new_short_failureTolerant(size_t unsecureSize)
-        { return new_failureTolerant<unsigned short>(unsecureSize); }
+    static unsigned char*  new_failureTolerant(size_t unsecureSize);
+    static unsigned short* new_short_failureTolerant(size_t unsecureSize);
 
     static int checkAllocation(qint64 fullSize);
 
@@ -90,48 +90,50 @@ public:
 
 protected:
 
-    DImgLoader(DImg* image);
+    DImgLoader(DImg* const image);
 
     unsigned char*&         imageData();
     unsigned int&           imageWidth();
     unsigned int&           imageHeight();
 
-    bool                    imageHasAlpha() const;
+    bool                    imageHasAlpha()   const;
     bool                    imageSixteenBit() const;
 
-    int                     imageBitsDepth() const;
+    int                     imageBitsDepth()  const;
     int                     imageBytesDepth() const;
 
     void                    imageSetIccProfile(const IccProfile& profile);
-    QVariant                imageGetAttribute(const QString& key);
+    QVariant                imageGetAttribute(const QString& key) const;
     void                    imageSetAttribute(const QString& key, const QVariant& value);
 
-    QMap<QString, QString>& imageEmbeddedText();
-    KExiv2Data              imageMetadata();
-    KExiv2Data              videoMetadata();
-    QString                 imageGetEmbbededText(const QString& key);
+    QMap<QString, QString>& imageEmbeddedText() const;
+    QString                 imageGetEmbbededText(const QString& key) const;
     void                    imageSetEmbbededText(const QString& key, const QString& text);
 
-    virtual bool            readMetadata(const QString& filePath, DImg::FORMAT ff);
-    virtual bool            saveMetadata(const QString& filePath);
     void                    loadingFailed();
-    virtual int             granularity(DImgLoaderObserver* observer, int total, float progressSlice = 1.0);
-
-    bool                    checkExifWorkingColorSpace();
+    bool                    checkExifWorkingColorSpace() const;
     void                    purgeExifWorkingColorSpace();
     void                    storeColorProfileInMetadata();
 
+    virtual bool            readMetadata(const QString& filePath, DImg::FORMAT ff);
+    virtual bool            saveMetadata(const QString& filePath);
+    virtual int             granularity(DImgLoaderObserver* observer, int total, float progressSlice = 1.0);
+
+
 protected:
 
-    DImg*                   m_image;
-    LoadFlags               m_loadFlags;
+    DImg*     m_image;
+    LoadFlags m_loadFlags;
 
 private:
 
     DImgLoader();
 };
 
+// ---------------------------------------------------------------------------------------------------
+
 template <typename Type>
+
 Q_INLINE_TEMPLATE Type* DImgLoader::new_failureTolerant(size_t size)
 {
     if (!checkAllocation(size))

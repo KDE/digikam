@@ -547,4 +547,9 @@ bool PGFLoader::progressCallback(double percent, bool escapeAllowed)
     return false;
 }
 
+bool PGFLoader::isReadOnly() const
+{
+    return false;
+};
+
 }  // namespace Digikam

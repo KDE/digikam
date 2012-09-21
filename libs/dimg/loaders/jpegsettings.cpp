@@ -6,7 +6,7 @@
  * Date        : 2007-08-02
  * Description : save JPEG image options.
  *
- * Copyright (C) 2007-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -41,12 +41,12 @@
 namespace Digikam
 {
 
-class JPEGSettingsPriv
+class JPEGSettings::Private
 {
 
 public:
 
-    JPEGSettingsPriv() :
+    Private() :
         JPEGGrid(0),
         labelJPEGcompression(0),
         labelWarning(0),
@@ -67,8 +67,8 @@ public:
     KIntNumInput* JPEGcompression;
 };
 
-JPEGSettings::JPEGSettings(QWidget* parent)
-    : QWidget(parent), d(new JPEGSettingsPriv)
+JPEGSettings::JPEGSettings(QWidget* const parent)
+    : QWidget(parent), d(new Private)
 {
     setAttribute(Qt::WA_DeleteOnClose);
 
@@ -142,7 +142,7 @@ void JPEGSettings::setCompressionValue(int val)
     d->JPEGcompression->setValue(val);
 }
 
-int JPEGSettings::getCompressionValue()
+int JPEGSettings::getCompressionValue() const
 {
     return d->JPEGcompression->value();
 }
@@ -152,7 +152,7 @@ void JPEGSettings::setSubSamplingValue(int val)
     d->subSamplingCB->setCurrentIndex(val);
 }
 
-int JPEGSettings::getSubSamplingValue()
+int JPEGSettings::getSubSamplingValue() const
 {
     return d->subSamplingCB->currentIndex();
 }

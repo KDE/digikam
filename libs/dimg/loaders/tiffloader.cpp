@@ -6,8 +6,8 @@
  * Date        : 2005-06-17
  * Description : A TIFF IO file for DImg framework
  *
- * Copyright (C) 2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005      by Renchi Raju <renchi dot raju at gmail dot com>
+ * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * Specifications & references:
  * - TIFF 6.0  : http://partners.adobe.com/public/developer/en/tiff/TIFF6.pdf
@@ -97,14 +97,14 @@ void TIFFLoader::dimg_tiff_error(const char* module, const char* format, va_list
 #endif
 }
 
-TIFFLoader::TIFFLoader(DImg* image)
+TIFFLoader::TIFFLoader(DImg* const image)
     : DImgLoader(image)
 {
     m_hasAlpha   = false;
     m_sixteenBit = false;
 }
 
-bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* observer)
+bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* const observer)
 {
     readMetadata(filePath, DImg::TIFF);
 
@@ -671,7 +671,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* observer)
     return true;
 }
 
-bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver* observer)
+bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver* const observer)
 {
     uint32 w     = imageWidth();
     uint32 h     = imageHeight();
@@ -1005,8 +1005,8 @@ bool TIFFLoader::sixteenBit() const
     return m_sixteenBit;
 }
 
-void TIFFLoader::tiffSetExifAsciiTag(TIFF* tif, ttag_t tiffTag,
-                                     const DMetadata& metaData, const char* exifTagName)
+void TIFFLoader::tiffSetExifAsciiTag(TIFF* const tif, ttag_t tiffTag,
+                                     const DMetadata& metaData, const char* const exifTagName)
 {
     QByteArray tag = metaData.getExifTagData(exifTagName);
 
@@ -1017,8 +1017,8 @@ void TIFFLoader::tiffSetExifAsciiTag(TIFF* tif, ttag_t tiffTag,
     }
 }
 
-void TIFFLoader::tiffSetExifDataTag(TIFF* tif, ttag_t tiffTag,
-                                    const DMetadata& metaData, const char* exifTagName)
+void TIFFLoader::tiffSetExifDataTag(TIFF* const tif, ttag_t tiffTag,
+                                    const DMetadata& metaData, const char* const exifTagName)
 {
     QByteArray tag = metaData.getExifTagData(exifTagName);
 
@@ -1026,6 +1026,11 @@ void TIFFLoader::tiffSetExifDataTag(TIFF* tif, ttag_t tiffTag,
     {
         TIFFSetField(tif, tiffTag, (uint32)tag.size(), (char*)tag.data());
     }
+}
+
+bool TIFFLoader::isReadOnly() const
+{
+    return false;
 }
 
 }  // namespace Digikam

@@ -6,8 +6,8 @@
  * Date        : 2005-06-14
  * Description : A QImage loader for DImg framework.
  *
- * Copyright (C) 2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2006-2007 by Caulier Gilles <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005      by Renchi Raju <renchi dot raju at gmail dot com>
+ * Copyright (C) 2006-2012 by Caulier Gilles <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -38,20 +38,14 @@ class DIGIKAM_EXPORT QImageLoader : public DImgLoader
 {
 public:
 
-    QImageLoader(DImg* image);
+    QImageLoader(DImg* const image);
 
-    virtual bool load(const QString& filePath, DImgLoaderObserver* observer);
-    virtual bool save(const QString& filePath, DImgLoaderObserver* observer);
+    virtual bool load(const QString& filePath, DImgLoaderObserver* const observer);
+    virtual bool save(const QString& filePath, DImgLoaderObserver* const observer);
 
     virtual bool hasAlpha()   const;
-    virtual bool sixteenBit() const
-    {
-        return false;
-    };
-    virtual bool isReadOnly() const
-    {
-        return false;
-    };
+    virtual bool sixteenBit() const;
+    virtual bool isReadOnly() const;
 
 private:
 

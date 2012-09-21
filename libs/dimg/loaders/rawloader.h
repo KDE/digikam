@@ -7,8 +7,8 @@
  * Description : A digital camera RAW files loader for DImg
  *               framework using an external dcraw instance.
  *
- * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2005-2010 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2012 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -51,38 +51,23 @@ class DIGIKAM_EXPORT RAWLoader : public KDcrawIface::KDcraw, public DImgLoader
 
 public:
 
-    explicit RAWLoader(DImg* image, DRawDecoding rawDecodingSettings = DRawDecoding());
+    explicit RAWLoader(DImg* const image, const DRawDecoding& rawDecodingSettings = DRawDecoding());
 
-    bool load(const QString& filePath, DImgLoaderObserver* observer = 0);
-    void postProcess(DImgLoaderObserver* observer);
+    bool load(const QString& filePath, DImgLoaderObserver* const observer = 0);
+    bool save(const QString& /*filePath*/, DImgLoaderObserver* const /*observer=0*/);
 
-    // NOTE: RAW files are always Read only.
-    bool save(const QString& /*filePath*/, DImgLoaderObserver* /*observer=0*/)
-    {
-        return false;
-    };
+    bool hasAlpha()   const;
+    bool isReadOnly() const;
+    bool sixteenBit() const;
 
-    bool hasAlpha()   const
-    {
-        return false;
-    };
-    bool isReadOnly() const
-    {
-        return true;
-    };
-    bool sixteenBit() const
-    {
-        return m_rawDecodingSettings.sixteenBitsImage;
-    };
+    void postProcess(DImgLoaderObserver* const observer);
 
     FilterAction filterAction() const;
 
 private:
 
-    // Methods to load RAW image using external dcraw instance.
-
-    bool loadedFromDcraw(QByteArray data, int width, int height, int rgbmax,
-                         DImgLoaderObserver* observer);
+    bool loadedFromRawData(const QByteArray& data, int width, int height, int rgbmax,
+                           DImgLoaderObserver* const observer);
 
     bool checkToCancelWaitingData();
     void setWaitingDataProgress(double value);

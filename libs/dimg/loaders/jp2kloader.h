@@ -6,7 +6,7 @@
  * Date        : 2006-06-14
  * Description : A JPEG2000 IO file for DImg framework
  *
- * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -49,17 +49,14 @@ class DIGIKAM_EXPORT JP2KLoader : public DImgLoader
 
 public:
 
-    JP2KLoader(DImg* image);
+    JP2KLoader(DImg* const image);
 
-    bool load(const QString& filePath, DImgLoaderObserver* observer);
-    bool save(const QString& filePath, DImgLoaderObserver* observer);
+    bool load(const QString& filePath, DImgLoaderObserver* const observer);
+    bool save(const QString& filePath, DImgLoaderObserver* const observer);
 
     virtual bool hasAlpha()   const;
     virtual bool sixteenBit() const;
-    virtual bool isReadOnly() const
-    {
-        return false;
-    };
+    virtual bool isReadOnly() const;
 
 private:
 

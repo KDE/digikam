@@ -6,7 +6,7 @@
  * Date        : 2006-06-14
  * Description : A JPEG2000 IO file for DImg framework
  *
- * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This implementation use Jasper API
  * library : http://www.ece.uvic.ca/~mdadams/jasper
@@ -53,14 +53,14 @@
 namespace Digikam
 {
 
-JP2KLoader::JP2KLoader(DImg* image)
+JP2KLoader::JP2KLoader(DImg* const image)
     : DImgLoader(image)
 {
     m_hasAlpha   = false;
     m_sixteenBit = false;
 }
 
-bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver* observer)
+bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver* const observer)
 {
     readMetadata(filePath, DImg::JPEG);
 
@@ -558,7 +558,7 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver* observer)
     return true;
 }
 
-bool JP2KLoader::save(const QString& filePath, DImgLoaderObserver* observer)
+bool JP2KLoader::save(const QString& filePath, DImgLoaderObserver* const observer)
 {
     FILE* file = fopen(QFile::encodeName(filePath), "wb");
 
@@ -850,5 +850,10 @@ bool JP2KLoader::sixteenBit() const
 {
     return m_sixteenBit;
 }
+
+bool JP2KLoader::isReadOnly() const
+{
+    return false;
+};
 
 }  // namespace Digikam

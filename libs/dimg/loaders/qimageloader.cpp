@@ -42,12 +42,12 @@
 namespace Digikam
 {
 
-QImageLoader::QImageLoader(DImg* image)
+QImageLoader::QImageLoader(DImg* const image)
     : DImgLoader(image)
 {
 }
 
-bool QImageLoader::load(const QString& filePath, DImgLoaderObserver* observer)
+bool QImageLoader::load(const QString& filePath, DImgLoaderObserver* const observer)
 {
     // Loading is opaque to us. No support for stopping from observer,
     // progress info are only pseudo values
@@ -145,7 +145,7 @@ bool QImageLoader::load(const QString& filePath, DImgLoaderObserver* observer)
     return true;
 }
 
-bool QImageLoader::save(const QString& filePath, DImgLoaderObserver* observer)
+bool QImageLoader::save(const QString& filePath, DImgLoaderObserver* const observer)
 {
     QVariant qualityAttr = imageGetAttribute("quality");
     int quality = qualityAttr.isValid() ? qualityAttr.toInt() : 90;
@@ -187,6 +187,16 @@ bool QImageLoader::save(const QString& filePath, DImgLoaderObserver* observer)
 bool QImageLoader::hasAlpha() const
 {
     return m_hasAlpha;
+}
+
+bool QImageLoader::sixteenBit() const
+{
+    return false;
+}
+
+bool QImageLoader::isReadOnly() const
+{
+    return false;
 }
 
 }  // namespace Digikam

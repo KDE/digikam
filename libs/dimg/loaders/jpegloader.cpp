@@ -6,8 +6,8 @@
  * Date        : 2005-06-14
  * Description : A JPEG IO file for DImg framework
  *
- * Copyright (C) 2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2005-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005      by Renchi Raju <renchi dot raju at gmail dot com>
+ * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -93,12 +93,12 @@ void JPEGLoader::dimg_jpeg_output_message(j_common_ptr cinfo)
 #endif
 }
 
-JPEGLoader::JPEGLoader(DImg* image)
+JPEGLoader::JPEGLoader(DImg* const image)
     : DImgLoader(image)
 {
 }
 
-bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* observer)
+bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* const observer)
 {
     readMetadata(filePath, DImg::JPEG);
 
@@ -622,7 +622,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* observer)
     return true;
 }
 
-bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver* observer)
+bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver* const observer)
 {
     FILE* file = fopen(QFile::encodeName(filePath), "wb");
 
@@ -893,5 +893,20 @@ bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver* observer)
 
     return true;
 }
+
+bool JPEGLoader::hasAlpha() const
+{
+    return false;
+};
+
+bool JPEGLoader::sixteenBit() const
+{
+    return false;
+};
+
+bool JPEGLoader::isReadOnly() const
+{
+    return false;
+};
 
 }  // namespace Digikam

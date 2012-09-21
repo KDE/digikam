@@ -6,7 +6,7 @@
  * Date        : 2009-06-06
  * Description : save PGF image options.
  *
- * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -35,22 +35,20 @@
 namespace Digikam
 {
 
-class PGFSettingsPriv;
-
 class DIGIKAM_EXPORT PGFSettings : public QWidget
 {
     Q_OBJECT
 
 public:
 
-    PGFSettings(QWidget* parent = 0);
+    PGFSettings(QWidget* const parent = 0);
     ~PGFSettings();
 
     void setCompressionValue(int val);
-    int  getCompressionValue();
+    int  getCompressionValue() const;
 
     void setLossLessCompression(bool b);
-    bool getLossLessCompression();
+    bool getLossLessCompression() const;
 
 Q_SIGNALS:
 
@@ -62,7 +60,8 @@ private Q_SLOTS:
 
 private:
 
-    PGFSettingsPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

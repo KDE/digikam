@@ -6,7 +6,7 @@
  * Date        : 2007-08-02
  * Description : save TIFF image options.
  *
- * Copyright (C) 2007-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -35,19 +35,17 @@
 namespace Digikam
 {
 
-class TIFFSettingsPriv;
-
 class DIGIKAM_EXPORT TIFFSettings : public QWidget
 {
     Q_OBJECT
 
 public:
 
-    TIFFSettings(QWidget* parent = 0);
+    TIFFSettings(QWidget* const parent = 0);
     ~TIFFSettings();
 
     void setCompression(bool b);
-    bool getCompression();
+    bool getCompression() const;
 
 Q_SIGNALS:
 
@@ -55,7 +53,8 @@ Q_SIGNALS:
 
 private:
 
-    TIFFSettingsPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

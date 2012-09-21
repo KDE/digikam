@@ -6,8 +6,8 @@
  * Date        : 2005-06-14
  * Description : A JPEG IO file for DImg framework
  *
- * Copyright (C) 2005 by Renchi Raju <renchi dot raju at gmail dot com>, Gilles Caulier
- * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005      by Renchi Raju <renchi dot raju at gmail dot com>, Gilles Caulier
+ * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -56,23 +56,14 @@ class DIGIKAM_EXPORT JPEGLoader : public DImgLoader
 
 public:
 
-    JPEGLoader(DImg* image);
+    JPEGLoader(DImg* const image);
 
-    bool load(const QString& filePath, DImgLoaderObserver* observer);
-    bool save(const QString& filePath, DImgLoaderObserver* observer);
+    bool load(const QString& filePath, DImgLoaderObserver* const observer);
+    bool save(const QString& filePath, DImgLoaderObserver* const observer);
 
-    virtual bool hasAlpha()   const
-    {
-        return false;
-    };
-    virtual bool sixteenBit() const
-    {
-        return false;
-    };
-    virtual bool isReadOnly() const
-    {
-        return false;
-    };
+    virtual bool hasAlpha()   const;
+    virtual bool sixteenBit() const;
+    virtual bool isReadOnly() const;
 
 private:
 
@@ -86,7 +77,6 @@ private:
     static void dimg_jpeg_error_exit(j_common_ptr cinfo);
     static void dimg_jpeg_emit_message(j_common_ptr cinfo, int msg_level);
     static void dimg_jpeg_output_message(j_common_ptr cinfo);
-
 };
 
 }  // namespace Digikam

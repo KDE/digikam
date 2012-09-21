@@ -7,8 +7,8 @@
  * Description : A 16 bits/color/pixel PPM IO file for
  *               DImg framework
  *
- * Copyright (C) 2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2005-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005      by Renchi Raju <renchi dot raju at gmail dot com>
+ * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -60,7 +60,7 @@ PPMLoader::PPMLoader(DImg* image)
 {
 }
 
-bool PPMLoader::load(const QString& filePath, DImgLoaderObserver* observer)
+bool PPMLoader::load(const QString& filePath, DImgLoaderObserver* const observer)
 {
     //TODO: progress information
     int  width, height, rgbmax;
@@ -199,9 +199,24 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver* observer)
     return true;
 }
 
-bool PPMLoader::save(const QString& /*filePath*/, DImgLoaderObserver* /*observer*/)
+bool PPMLoader::save(const QString& /*filePath*/, DImgLoaderObserver* const /*observer*/)
 {
     return false;
 }
+
+bool PPMLoader::hasAlpha()   const
+{
+    return false;
+}
+
+bool PPMLoader::sixteenBit() const
+{
+    return true;
+}
+
+bool PPMLoader::isReadOnly() const
+{
+    return true;
+};
 
 }  // namespace Digikam

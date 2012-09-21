@@ -6,7 +6,7 @@
  * Date        : 2009-06-06
  * Description : save PGF image options.
  *
- * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -40,12 +40,12 @@
 namespace Digikam
 {
 
-class PGFSettingsPriv
+class PGFSettings::Private
 {
 
 public:
 
-    PGFSettingsPriv()
+    Private()
     {
         PGFGrid             = 0;
         labelPGFcompression = 0;
@@ -62,8 +62,8 @@ public:
     KIntNumInput* PGFcompression;
 };
 
-PGFSettings::PGFSettings(QWidget* parent)
-    : QWidget(parent), d(new PGFSettingsPriv)
+PGFSettings::PGFSettings(QWidget* const parent)
+    : QWidget(parent), d(new Private)
 {
     setAttribute(Qt::WA_DeleteOnClose);
 
@@ -117,7 +117,7 @@ void PGFSettings::setCompressionValue(int val)
     d->PGFcompression->setValue(val);
 }
 
-int PGFSettings::getCompressionValue()
+int PGFSettings::getCompressionValue() const
 {
     return d->PGFcompression->value();
 }
@@ -128,7 +128,7 @@ void PGFSettings::setLossLessCompression(bool b)
     slotTogglePGFLossLess(d->PGFLossLess->isChecked());
 }
 
-bool PGFSettings::getLossLessCompression()
+bool PGFSettings::getLossLessCompression() const
 {
     return d->PGFLossLess->isChecked();
 }
