@@ -44,4 +44,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 014 ==> 261698 - Zoom to 100% does not map 1 picture pixel to 1 screen pixel.
 015 ==> 303690 - Hierarchical tags inconsistencies.
 016 ==> 306879 - Filter sections folding is weird
-017 ==>
+017 ==> 306053 - digiKam creashes on loading collections.
+018 ==> 
