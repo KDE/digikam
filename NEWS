@@ -46,5 +46,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 016 ==> 306879 - Filter sections folding is weird
 017 ==> 306053 - digiKam creashes on loading collections.
 018 ==> 304187 - XMP sidecar files do not write Unicode characters in the Dublin Core section.
-019 ==> 
+019 ==> 304490 - "assigning image tags" dialog stuck when using keyboard shortcuts for tagging.
+020 ==> 
 
