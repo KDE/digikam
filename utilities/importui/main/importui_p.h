@@ -58,6 +58,7 @@
 #include "advancedsettings.h"
 #include "scriptingsettings.h"
 #include "sidebar.h"
+#include "filterstatusbar.h"
 #include "statusnavigatebar.h"
 #include "statusprogressbar.h"
 #include "importview.h"
@@ -225,6 +226,7 @@ public:
 
     DLogoAction*                  anim;
 
+    FilterStatusBar*              filterStatusBar;
     ImagePropertiesSideBarCamGui* rightSideBar;
 
     DZoomBar*                     zoomBar;

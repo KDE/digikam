@@ -126,7 +126,6 @@
 #include "knotificationwrapper.h"
 #include "newitemsfinder.h"
 #include "fileactionmngr.h"
-
 #include "importview.h"
 #include "importmodel.h"
 
@@ -693,41 +692,6 @@ void ImportUI::setupStatusBar()
     //------------------------------------------------------------------------------
 
     d->cameraFreeSpace = new FreeSpaceWidget(statusBar(), 100);
-    statusBar()->addWidget(d->cameraFreeSpace, 1);
-
-    //------------------------------------------------------------------------------
-
-    d->albumLibraryFreeSpace = new FreeSpaceWidget(statusBar(), 100);
-    d->albumLibraryFreeSpace->setMode(FreeSpaceWidget::AlbumLibrary);
-    statusBar()->addWidget(d->albumLibraryFreeSpace, 1);
-    refreshCollectionFreeSpace();
-
-    //------------------------------------------------------------------------------
-
-    //TODO:
-    //d->filterComboBox = new FilterComboBox(statusBar());
-    //statusBar()->addWidget(d->filterComboBox, 1);
-    //connect(d->filterComboBox, SIGNAL(filterChanged()), this, SLOT(slotFilterChanged()));
-
-    //------------------------------------------------------------------------------
-
-    d->zoomBar = new DZoomBar(statusBar());
-    d->zoomBar->setZoomPlusAction(d->increaseThumbsAction);
-    d->zoomBar->setZoomMinusAction(d->decreaseThumbsAction);
-    d->zoomBar->setZoomTo100Action(d->zoomTo100percents);
-    d->zoomBar->setZoomToFitAction(d->zoomFitToWindowAction);
-    d->zoomBar->setBarMode(DZoomBar::ThumbsSizeCtrl);
-    statusBar()->addPermanentWidget(d->zoomBar, 1);
-
-    //------------------------------------------------------------------------------
-
-    d->statusNavigateBar = new StatusNavigateBar(statusBar());
-    statusBar()->addPermanentWidget(d->statusNavigateBar, 1);
-}
-
-void ImportUI::setupCameraController(const QString& model, const QString& port, const QString& path)
-{
-    d->controller = new CameraController(this, d->cameraTitle, model, port, path);
 
     if (d->controller->cameraDriverType() == DKCamera::GPhotoDriver)
     {
@@ -740,6 +704,42 @@ void ImportUI::setupCameraController(const QString& model, const QString& port, 
         d->cameraFreeSpace->setMode(FreeSpaceWidget::UMSCamera);
         d->cameraFreeSpace->setPath(d->controller->cameraPath());
     }
+
+    statusBar()->addWidget(d->cameraFreeSpace, 1);
+
+    //------------------------------------------------------------------------------
+
+    d->albumLibraryFreeSpace = new FreeSpaceWidget(statusBar(), 100);
+    d->albumLibraryFreeSpace->setMode(FreeSpaceWidget::AlbumLibrary);
+    statusBar()->addWidget(d->albumLibraryFreeSpace, 1);
+    refreshCollectionFreeSpace();
+
+    //------------------------------------------------------------------------------
+
+    //TODO: Replace it with FilterStatusBar after advanced filtring is implemented.
+    //d->filterComboBox = new FilterComboBox(statusBar());
+    //statusBar()->addWidget(d->filterComboBox, 1);
+    //connect(d->filterComboBox, SIGNAL(filterChanged()), this, SLOT(slotFilterChanged()));
+
+    //------------------------------------------------------------------------------
+
+    d->zoomBar = new DZoomBar(statusBar());
+    d->zoomBar->setZoomToFitAction(d->zoomFitToWindowAction);
+    d->zoomBar->setZoomTo100Action(d->zoomTo100percents);
+    d->zoomBar->setZoomPlusAction(d->increaseThumbsAction);
+    d->zoomBar->setZoomMinusAction(d->decreaseThumbsAction);
+    d->zoomBar->setBarMode(DZoomBar::ThumbsSizeCtrl);
+    statusBar()->addPermanentWidget(d->zoomBar, 1);
+
+    //------------------------------------------------------------------------------
+
+    d->statusNavigateBar = new StatusNavigateBar(statusBar());
+    statusBar()->addPermanentWidget(d->statusNavigateBar, 1);    
+}
+
+void ImportUI::setupCameraController(const QString& model, const QString& port, const QString& path)
+{
+    d->controller = new CameraController(this, d->cameraTitle, model, port, path);
 
     connect(d->controller, SIGNAL(signalConnected(bool)),
             this, SLOT(slotConnected(bool)));
@@ -1092,7 +1092,7 @@ void ImportUI::slotBusy(bool val)
 
         // Has camera icon view item selection is used to control download post processing,
         // all selection actions are disable when camera interface is busy.
-        //TODO: d->view->setEnabled(true);
+        //d->view->setEnabled(false);
 
         // Settings tab is disabled in slotDownload, selectively when downloading
         // Fast dis/enabling would create the impression of flicker, e.g. when retrieving EXIF from camera
@@ -1228,6 +1228,7 @@ void ImportUI::slotFileList(const CamItemInfoList& fileList)
     d->filesToBeAdded << fileList;
 }
 
+// FIXME: To be removed.
 void ImportUI::slotFilterChanged()
 {
 //    CamItemInfoList items = d->view->allItems();
