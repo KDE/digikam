@@ -1053,6 +1053,6 @@ bool PNGLoader::sixteenBit() const
 bool PNGLoader::isReadOnly() const
 {
     return false;
-};
+}
 
 }  // namespace Digikam

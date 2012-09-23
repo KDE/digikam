@@ -217,6 +217,6 @@ bool PPMLoader::sixteenBit() const
 bool PPMLoader::isReadOnly() const
 {
     return true;
-};
+}
 
 }  // namespace Digikam

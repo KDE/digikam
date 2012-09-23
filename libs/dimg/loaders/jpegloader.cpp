@@ -897,16 +897,16 @@ bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver* const observe
 bool JPEGLoader::hasAlpha() const
 {
     return false;
-};
+}
 
 bool JPEGLoader::sixteenBit() const
 {
     return false;
-};
+}
 
 bool JPEGLoader::isReadOnly() const
 {
     return false;
-};
+}
 
 }  // namespace Digikam

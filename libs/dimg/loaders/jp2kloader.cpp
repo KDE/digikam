@@ -854,6 +854,6 @@ bool JP2KLoader::sixteenBit() const
 bool JP2KLoader::isReadOnly() const
 {
     return false;
-};
+}
 
 }  // namespace Digikam
