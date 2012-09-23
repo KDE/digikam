@@ -48,6 +48,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 018 ==> 304187 - XMP sidecar files do not write Unicode characters in the Dublin Core section.
 019 ==> 304490 - "assigning image tags" dialog stuck when using keyboard shortcuts for tagging.
 020 ==> 307257 - Import not working at all (crash due to uninitialized components).
-021 ==> 
+021 ==> 306371 - Rename with sequence number.
+022 ==> 
 
 
