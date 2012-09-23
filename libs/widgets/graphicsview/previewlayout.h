@@ -88,8 +88,8 @@ public Q_SLOTS:
 
     void increaseZoom(const QPoint& viewportAnchor = QPoint());
     void decreaseZoom(const QPoint& viewportAnchor = QPoint());
-    void setZoomFactor(double z, SetZoomFlags flags = JustSetFactor);
-    void setZoomFactor(double z, const QPoint& viewportAnchor, SetZoomFlags flags = JustSetFactor);
+    void setZoomFactor(double z, const QPoint& viewportAnchor = QPoint(), SetZoomFlags flags = JustSetFactor);
+    void setZoomFactor(double z, SetZoomFlags flags);
     void setZoomFactorSnapped(double z);
     void fitToWindow();
     /// Toggle between fitToWindow and previous zoom factor

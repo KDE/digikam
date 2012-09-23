@@ -198,18 +198,6 @@ void SinglePhotoPreviewLayout::setZoomFactor(double z, const QPoint& givenAnchor
     QPointF sceneAnchor    = d->view->mapToScene(viewportAnchor);
     QPointF imageAnchor    = d->zoomSettings()->mapZoomToImage(sceneAnchor);
 
-    setZoomFactor(z, flags);
-
-    d->view->scrollPointOnPoint(d->zoomSettings()->mapImageToZoom(imageAnchor), viewportAnchor);
-}
-
-void SinglePhotoPreviewLayout::setZoomFactor(double z, SetZoomFlags flags)
-{
-    if (!d->item || !d->view)
-    {
-        return;
-    }
-
     if (flags & SnapZoomFactor)
     {
         z = d->zoomSettings()->snappedZoomFactor(z, d->frameSize());
@@ -231,6 +219,18 @@ void SinglePhotoPreviewLayout::setZoomFactor(double z, SetZoomFlags flags)
         d->view->centerOn(d->view->scene()->sceneRect().width() / 2.0,
                           d->view->scene()->sceneRect().height() / 2.0);
     }
+
+    d->view->scrollPointOnPoint(d->zoomSettings()->mapImageToZoom(imageAnchor), viewportAnchor);
+}
+
+void SinglePhotoPreviewLayout::setZoomFactor(double z, SetZoomFlags flags)
+{
+    if (!d->item || !d->view)
+    {
+        return;
+    }
+
+    setZoomFactor(z, QPoint(), flags);
 }
 
 void SinglePhotoPreviewLayout::fitToWindow()
