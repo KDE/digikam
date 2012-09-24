@@ -313,9 +313,6 @@ const QString AdvancedRenameInput::AdvancedRenameInputPriv::configPatternHistory
 AdvancedRenameInput::AdvancedRenameInput(QWidget* parent)
     : KComboBox(parent), d(new AdvancedRenameInputPriv)
 {
-    // important: setEditable() has to be called before adding the actual line edit widget, otherwise
-    //            our lineEdit gets removed again.
-    setEditable(true);
     setMaxVisibleItems(d->maxVisibleItems);
     setMaxCount(d->maxHistoryItems);
     setSizeAdjustPolicy(QComboBox::AdjustToMinimumContentsLength);
@@ -333,9 +330,6 @@ AdvancedRenameInput::AdvancedRenameInput(QWidget* parent)
             this, SLOT(slotClearButtonPressed()));
 
     connect(d->lineEdit, SIGNAL(signalTextChanged(QString)),
-            proxy, SLOT(setText(QString)));
-
-    connect(d->lineEdit, SIGNAL(signalTextChanged(QString)),
             this, SIGNAL(signalTextChanged(QString)));
 
     connect(d->lineEdit, SIGNAL(signalTokenMarked(bool)),
@@ -344,7 +338,7 @@ AdvancedRenameInput::AdvancedRenameInput(QWidget* parent)
     connect(d->lineEdit, SIGNAL(signalReturnPressed()),
             this, SIGNAL(signalReturnPressed()));
 
-    connect(this, SIGNAL(activated(QString)),
+    connect(this, SIGNAL(currentIndexChanged(QString)),
             d->lineEdit, SLOT(slotSetText(QString)));
 
     // --------------------------------------------------------
