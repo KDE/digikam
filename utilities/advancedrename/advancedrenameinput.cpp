@@ -48,6 +48,7 @@
 namespace
 {
 static const short INVALID = -1;
+static const QString DUMMY_TEXT("DUMMY_TEXT_y_fjqp|");
 }
 
 namespace Digikam
@@ -68,7 +69,7 @@ void AdvancedRenameLineEditProxy::setWidget(QWidget* widget)
     m_widget->setParent(this);
 
     QWidget* placeholder = new QWidget(this);
-    placeholder->setFixedHeight(1);
+    placeholder->setFixedHeight(clearButtonUsedSize().height());
     placeholder->setFixedWidth(clearButtonUsedSize().width());
 
     QGridLayout* mainLayout = new QGridLayout(this);
@@ -124,7 +125,8 @@ AdvancedRenameLineEdit::AdvancedRenameLineEdit(QWidget* parent)
     setAutoFillBackground(false);
 
     QFontMetrics fm = fontMetrics();
-    setFixedHeight(fm.height());
+    int widgetHeight = fm.boundingRect(DUMMY_TEXT).height();
+    setMinimumHeight(widgetHeight * 2);
 
     // --------------------------------------------------------
 
@@ -136,7 +138,7 @@ AdvancedRenameLineEdit::AdvancedRenameLineEdit(QWidget* parent)
 
     // layout widget correctly by setting a dummy text and calling ensureCursorVisible().
     // Save the scrollbar position now, to avoid scrolling of the text when selecting with the mouse
-    setPlainText("DUMMY TEXT");
+    setPlainText(DUMMY_TEXT);
     ensureCursorVisible();
     d->verticalSliderPosition = verticalScrollBar()->value();
     clear();
