@@ -53,6 +53,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 023 ==> 260612 - After "save changes" the status-bar shows: filename_v1.jpg (-1 of 23).
 024 ==> 296786 - Zoom to 100% pans to the top-left corner.
 025 ==> 307277 - digiKam corrupts MPO files while attempting to rotate it.
-026
+026 ==> 304077 - XMP metadata interoperability problem and inconsistency.
+027 ==> 
 
 
