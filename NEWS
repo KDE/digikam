@@ -50,6 +50,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 020 ==> 307257 - Import not working at all (crash due to uninitialized components).
 021 ==> 306371 - Rename with sequence number.
 022 ==> 307314 - digiKam uses AHD when set to AMaZE, AFD etc.
-023 ==> 
+023 ==> 260612 - After "save changes" the status-bar shows: filename_v1.jpg (-1 of 23).
+024 ==> 
 
 
