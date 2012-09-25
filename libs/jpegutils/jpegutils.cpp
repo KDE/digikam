@@ -667,16 +667,16 @@ bool jpegConvert(const QString& src, const QString& dest, const QString& documen
 
 bool isJpegImage(const QString& file)
 {
-    QFileInfo* fileInfo = new QFileInfo(file);
-    
+    QFileInfo fileInfo(file);
+
     // Check if the file is an JPEG image
     QString format = QString(QImageReader::imageFormat(file)).toUpper();
-    // Check if its not MPO format.
-    QString ext = fileInfo->suffix().toUpper();
-    
+    // Check if its not MPO format (See B.K.O #307277).
+    QString ext = fileInfo.suffix().toUpper();
+
     kDebug() << "mimetype = " << format << " ext = " << ext;
 
-    if (format !="JPEG" || ext == "MPO")
+    if (format != "JPEG" || ext == "MPO")
     {
         return false;
     }
