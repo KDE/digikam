@@ -94,11 +94,12 @@ private:
     void ycbcr2srgb(float** const fimg, int size);
 
     // Methods not used.
+/*
     void srgb2lab(float** const fimg, int size);
     void lab2srgb(float** const fimg, int size);
     void srgb2xyz(float** const fimg, int size);
     void xyz2srgb(float** const fimg, int size);
-
+*/
 private:
 
     class Private;

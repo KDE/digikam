@@ -79,6 +79,54 @@ NRFilter::~NRFilter()
     delete d;
 }
 
+FilterAction NRFilter::filterAction()
+{
+    FilterAction action(FilterIdentifier(), CurrentVersion());
+    action.setDisplayableName(DisplayableName());
+
+    for (int i = 0; i < 3; ++i)
+    {
+        action.addParameter(QString("softness[%1]").arg(i),   d->settings.softness[i]);
+        action.addParameter(QString("thresholds[%1]").arg(i), d->settings.thresholds[i]);
+    }
+
+    return action;
+}
+
+void NRFilter::readParameters(const FilterAction& action)
+{
+    for (int i = 0; i < 3; ++i)
+    {
+        d->settings.softness[i]   = action.parameter(QString("softness[%1]").arg(i)).toDouble();
+        d->settings.thresholds[i] = action.parameter(QString("thresholds[%1]").arg(i)).toDouble();
+    }
+}
+
+QString NRFilter::filterIdentifier() const
+{
+    return FilterIdentifier();
+}
+
+QString NRFilter::FilterIdentifier()
+{
+    return "digikam:NoiseReductionFilter";
+}
+
+QString NRFilter::DisplayableName()
+{
+    return I18N_NOOP("Noise Reduction Filter");
+}
+
+QList<int> NRFilter::SupportedVersions()
+{
+    return QList<int>() << 1;
+}
+
+int NRFilter::CurrentVersion()
+{
+    return 1;
+}
+
 void NRFilter::filterImage()
 {
     DColor col;
@@ -387,6 +435,8 @@ void NRFilter::ycbcr2srgb(float** const fimg, int size)
     }
 }
 
+// Methods not used.
+/*
 void NRFilter::srgb2xyz(float** const fimg, int size)
 {
     // fimg in [0:1], sRGB
@@ -404,11 +454,9 @@ void NRFilter::srgb2xyz(float** const fimg, int size)
         y = 0.212656  * fimg[0][i] + 0.715158 * fimg[1][i] + 0.0721856 * fimg[2][i];
         z = 0.0193324 * fimg[0][i] + 0.119193 * fimg[1][i] + 0.950444  * fimg[2][i];
 
-/*
-        x = 0.412424 * fimg[0][i] + 0.212656  * fimg[1][i] + 0.0193324 * fimg[2][i];
-        y = 0.357579 * fimg[0][i] + 0.715158  * fimg[1][i] + 0.119193  * fimg[2][i];
-        z = 0.180464 * fimg[0][i] + 0.0721856 * fimg[1][i] + 0.950444  * fimg[2][i];
-*/
+//      x = 0.412424 * fimg[0][i] + 0.212656  * fimg[1][i] + 0.0193324 * fimg[2][i];
+//      y = 0.357579 * fimg[0][i] + 0.715158  * fimg[1][i] + 0.119193  * fimg[2][i];
+//      z = 0.180464 * fimg[0][i] + 0.0721856 * fimg[1][i] + 0.950444  * fimg[2][i];
 
         fimg[0][i] = x;
         fimg[1][i] = y;
@@ -427,14 +475,13 @@ void NRFilter::xyz2srgb(float** const fimg, int size)
         g = -0.969258 * fimg[0][i] + 1.87599  * fimg[1][i] + 0.0415557 * fimg[2][i];
         b = 0.0556352 * fimg[0][i] - 0.203996 * fimg[1][i] + 1.05707   * fimg[2][i];
 
-/*
-        r =  3.24071  * fimg[0][i] - 0.969258  * fimg[1][i]
-          + 0.0556352 * fimg[2][i];
-        g = -1.53726  * fimg[0][i] + 1.87599   * fimg[1][i]
-          - 0.203996  * fimg[2][i];
-        b = -0.498571 * fimg[0][i] + 0.0415557 * fimg[1][i]
-          + 1.05707   * fimg[2][i];
-*/
+
+//      r =  3.24071  * fimg[0][i] - 0.969258  * fimg[1][i]
+//           + 0.0556352 * fimg[2][i];
+//      g = -1.53726  * fimg[0][i] + 1.87599   * fimg[1][i]
+//           - 0.203996  * fimg[2][i];
+//      b = -0.498571 * fimg[0][i] + 0.0415557 * fimg[1][i]
+//           + 1.05707   * fimg[2][i];
 
         // scaling and gamma correction (approximate)
         r = r < 0 ? 0 : pow(r, (float)(1.0 / 2.2));
@@ -479,7 +526,7 @@ void NRFilter::lab2srgb(float** const fimg, int size)
         }
         else
         {
-             //y = fimg[0][i] * 27 / 24389.0;*/
+             //y = fimg[0][i] * 27 / 24389.0;
             y = (116 * y - 16) * 27 / 24389.0;
         }
 
@@ -511,9 +558,9 @@ void NRFilter::srgb2lab(float** const fimg, int size)
     {
         // reference white
         fimg[0][i] /= 0.95047F;
-/*
-        fimg[1][i] /= 1.00000;          // (just for completeness)
-*/
+
+        //fimg[1][i] /= 1.00000;          // (just for completeness)
+
         fimg[2][i] /= 1.08883F;
 
         // scale
@@ -557,53 +604,6 @@ void NRFilter::srgb2lab(float** const fimg, int size)
         }
     }
 }
-
-FilterAction NRFilter::filterAction()
-{
-    FilterAction action(FilterIdentifier(), CurrentVersion());
-    action.setDisplayableName(DisplayableName());
-
-    for (int i = 0; i < 3; ++i)
-    {
-        action.addParameter(QString("softness[%1]").arg(i),   d->settings.softness[i]);
-        action.addParameter(QString("thresholds[%1]").arg(i), d->settings.thresholds[i]);
-    }
-
-    return action;
-}
-
-void NRFilter::readParameters(const FilterAction& action)
-{
-    for (int i = 0; i < 3; ++i)
-    {
-        d->settings.softness[i]   = action.parameter(QString("softness[%1]").arg(i)).toDouble();
-        d->settings.thresholds[i] = action.parameter(QString("thresholds[%1]").arg(i)).toDouble();
-    }
-}
-
-QString NRFilter::filterIdentifier() const
-{
-    return FilterIdentifier();
-}
-
-QString NRFilter::FilterIdentifier()
-{
-    return "digikam:NoiseReductionFilter";
-}
-
-QString NRFilter::DisplayableName()
-{
-    return I18N_NOOP("Noise Reduction Filter");
-}
-
-QList<int> NRFilter::SupportedVersions()
-{
-    return QList<int>() << 1;
-}
-
-int NRFilter::CurrentVersion()
-{
-    return 1;
-}
+*/
 
 }  // namespace Digikam
