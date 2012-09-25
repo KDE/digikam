@@ -34,6 +34,7 @@ Name[pt]=Detectar e Transferir com o digiKam
 Name[pt_BR]=Detectar e baixar com o digiKam
 Name[ro]=Detectare și descărcare cu digiKam
 Name[ru]=Копировать в digiKam
+Name[sk]=digiKam Detect a Download
 Name[sv]=Digikam detektering och nerladdning
 Name[th]=ตรวจสอบและดาวน์โหลดด้วย digiKam
 Name[tr]=digiKam Belirle ve İndir
