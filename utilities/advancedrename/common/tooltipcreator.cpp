@@ -118,9 +118,9 @@ QString TooltipCreator::tooltip(Parser* parser)
     return tooltip;
 }
 
-QString TooltipCreator::tableStart(int width)
+QString TooltipCreator::tableStart(int widthPercentage)
 {
-    QString w = QString::number(width) + '%';
+    QString w = QString::number(widthPercentage) + '%';
     return QString("<table width=\"%1\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\">").arg(w);
 }
 

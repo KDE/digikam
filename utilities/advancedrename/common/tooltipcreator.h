@@ -55,7 +55,7 @@ private:
     // common methods
     QString markOption(const QString& str);
     QString tableStart();
-    QString tableStart(int width);
+    QString tableStart(int widthPercentage);
     QString tableEnd();
 
     QString additionalInformation();
