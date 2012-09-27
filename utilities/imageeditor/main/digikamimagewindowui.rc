@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="202" name="digikamimagewindow" >
+<gui version="203" name="digikamimagewindow" >
 
 <MenuBar>
 
@@ -82,6 +82,7 @@
         <Action name="help_rawcameralist"/>
         <Action name="editorwindow_librariesinfo"/>
         <Action name="editorwindow_dbstat"/>
+        <Separator/>
         <Action name="help_donatemoney" />
         <Action name="help_contribute" />
     </Menu>
