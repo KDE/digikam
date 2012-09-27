@@ -63,8 +63,8 @@ public:
 
     QString       parse(ParseSettings& settings);
 
-    OptionsList   options()   const;
-    ModifierList  modifiers() const;
+    RulesList     options()   const;
+    RulesList     modifiers() const;
 
     bool          tokenAtPosition(TokenType type, ParseSettings& settings, int pos);
     bool          tokenAtPosition(TokenType type, ParseSettings& settings, int pos, int& start, int& length);
@@ -80,11 +80,11 @@ public:
 
 protected:
 
-    void registerOption(Option* option);
-    void unregisterOption(Option* option);
+    void registerOption(Rule *option);
+    void unregisterOption(Rule *option);
 
-    void registerModifier(Modifier* modifier);
-    void unregisterModifier(Modifier* modifier);
+    void registerModifier(Rule *modifier);
+    void unregisterModifier(Rule *modifier);
 
 private:
 

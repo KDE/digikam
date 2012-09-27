@@ -35,9 +35,9 @@ ImportRenameParser::ImportRenameParser()
     : Parser()
 {
     // unregister options that are not suitable during import
-    OptionsList oplist = options();
+    RulesList oplist = options();
 
-    foreach(Option* option, oplist)
+    foreach(Rule* option, oplist)
     {
         if (dynamic_cast<DatabaseOption*>(option))
         {

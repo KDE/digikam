@@ -130,7 +130,7 @@ void Highlighter::setupHighlightingGrammar()
 
     optionFormat.setForeground(Qt::red);
 
-    foreach(Option* option, parser->options())
+    foreach(Rule* option, parser->options())
     {
         QRegExp r    = option->regExp();
         rule.type    = OptionPattern;
@@ -143,7 +143,7 @@ void Highlighter::setupHighlightingGrammar()
 
     modifierFormat.setForeground(Qt::darkGreen);
 
-    foreach(Modifier* modifier, parser->modifiers())
+    foreach(Rule* modifier, parser->modifiers())
     {
         QRegExp r    = modifier->regExp();
         rule.type    = ModifierPattern;

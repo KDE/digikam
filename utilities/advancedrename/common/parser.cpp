@@ -59,8 +59,8 @@ public:
     ParserPriv()
     {}
 
-    OptionsList  options;
-    ModifierList modifiers;
+    RulesList  options;
+    RulesList modifiers;
 };
 
 // --------------------------------------------------------
@@ -103,11 +103,11 @@ Parser::~Parser()
 
 void Parser::reset()
 {
-    foreach(Option* option, d->options)
+    foreach(Rule* option, d->options)
     {
         option->reset();
     }
-    foreach(Modifier* modifier, d->modifiers)
+    foreach(Rule* modifier, d->modifiers)
     {
         modifier->reset();
     }
@@ -119,17 +119,17 @@ bool Parser::parseStringIsValid(const QString& str)
     return (!str.isEmpty() && !invalidString.exactMatch(str));
 }
 
-OptionsList Parser::options() const
+RulesList Parser::options() const
 {
     return d->options;
 }
 
-ModifierList Parser::modifiers() const
+RulesList Parser::modifiers() const
 {
     return d->modifiers;
 }
 
-void Parser::registerOption(Option* option)
+void Parser::registerOption(Rule* option)
 {
     if (!option || !option->isValid())
     {
@@ -139,14 +139,14 @@ void Parser::registerOption(Option* option)
     d->options.append(option);
 }
 
-void Parser::unregisterOption(Option* option)
+void Parser::unregisterOption(Rule* option)
 {
     if (!option)
     {
         return;
     }
 
-    for (OptionsList::iterator it = d->options.begin();
+    for (RulesList::iterator it = d->options.begin();
          it != d->options.end();)
     {
         if (*it == option)
@@ -161,7 +161,7 @@ void Parser::unregisterOption(Option* option)
     }
 }
 
-void Parser::registerModifier(Modifier* modifier)
+void Parser::registerModifier(Rule* modifier)
 {
     if (!modifier || !modifier->isValid())
     {
@@ -171,14 +171,14 @@ void Parser::registerModifier(Modifier* modifier)
     d->modifiers.append(modifier);
 }
 
-void Parser::unregisterModifier(Modifier* modifier)
+void Parser::unregisterModifier(Rule* modifier)
 {
     if (!modifier)
     {
         return;
     }
 
-    for (ModifierList::iterator it = d->modifiers.begin();
+    for (RulesList::iterator it = d->modifiers.begin();
          it != d->modifiers.end();)
     {
         if (*it == modifier)
@@ -216,7 +216,7 @@ QString Parser::parse(ParseSettings& settings)
 
     ParseResults results;
 
-    foreach(Option* option, d->options)
+    foreach(Rule* option, d->options)
     {
         ParseResults r = option->parse(settings);
         results.append(r);
@@ -233,7 +233,7 @@ QString Parser::parse(ParseSettings& settings)
     settings.results = results;
 
     // remove invalid modifiers from the new name
-    foreach(const Modifier* mod, d->modifiers)
+    foreach(const Rule* mod, d->modifiers)
     {
         newName.remove(mod->regExp());
     }
@@ -309,9 +309,9 @@ ParseResults Parser::applyModifiers(const QString& parseString, ParseResults& re
     ParseResults modifierResults;
 
     // modifierMap maps the actual modifier objects to the entries in the modifierResults structure
-    QMap<ParseResults::ResultsKey, Modifier*> modifierMap;
+    QMap<ParseResults::ResultsKey, Rule*> modifierMap;
 
-    foreach(Modifier* modifier, d->modifiers)
+    foreach(Rule* modifier, d->modifiers)
     {
         QRegExp regExp = modifier->regExp();
         int pos = 0;
@@ -348,7 +348,7 @@ ParseResults Parser::applyModifiers(const QString& parseString, ParseResults& re
             if (modifierResults.hasKeyAtPosition(pos))
             {
                 ParseResults::ResultsKey mkey = modifierResults.keyAtPosition(pos);
-                Modifier* mod                 = modifierMap[mkey];
+                Rule* mod                     = modifierMap[mkey];
                 QString modToken              = modifierResults.token(mkey);
 
                 QString token                 = results.token(key);

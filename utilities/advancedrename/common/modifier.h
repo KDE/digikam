@@ -58,8 +58,6 @@ private:
     ModifierPriv* const d;
 };
 
-typedef QList<Modifier*> ModifierList;
-
 } // namespace Digikam
 
 
