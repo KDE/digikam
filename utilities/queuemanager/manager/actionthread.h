@@ -7,7 +7,7 @@
  * Description : Thread actions manager.
  *
  * Copyright (C) 2009-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2012 by Pankaj Kumar <me at panks dot me>
+ * Copyright (C) 2012      by Pankaj Kumar <me at panks dot me>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -32,18 +32,24 @@
 // KDE includes
 
 #include <kurl.h>
+#include <threadweaver/Job.h>
+
+// Libkdcraw includes
+
+#include <libkdcraw/ractionthreadbase.h>
 
 // Local includes
 
 #include "batchtool.h"
 #include "actions.h"
 #include "drawdecoding.h"
-#include "dactionthreadbase.h"
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {
 
-class ActionThread : public DActionThreadBase
+class ActionThread : public RActionThreadBase
 {
     Q_OBJECT
 
@@ -52,7 +58,7 @@ public:
     ActionThread(QObject* const parent);
     ~ActionThread();
 
-    void setWorkingUrl(const KUrl& workingUrl);
+    void setWorkingUrl(const KUrl& url);
     void setResetExifOrientationAllowed(bool set);
     void setRawDecodingSettings(const DRawDecoding& settings);
 
@@ -67,12 +73,14 @@ Q_SIGNALS:
 
 public:
 
-    class ActionThreadPriv;
+    class Private;
 
 private:
 
-    ActionThreadPriv* const d;
+    Private* const d;
 };
+
+// ---------------------------------------------------------------------------------------------------------
 
 class Task : public Job
 {
@@ -80,7 +88,7 @@ class Task : public Job
 
 public:
 
-    Task(QObject* const parent, const AssignedBatchTools& item, ActionThread::ActionThreadPriv* const d);
+    Task(QObject* const parent, const AssignedBatchTools& item, ActionThread::Private* const d);
     ~Task();
 
 Q_SIGNALS:
@@ -94,8 +102,8 @@ protected:
 
 private:
 
-    AssignedBatchTools              m_item;
-    ActionThread::ActionThreadPriv* m_d;
+    AssignedBatchTools     m_item;
+    ActionThread::Private* m_d;
 };
 
 }  // namespace Digikam

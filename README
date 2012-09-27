@@ -89,14 +89,14 @@ Name            Version                       URL                               
 CMake           >= 2.8.x                      http://www.cmake.org
 libqt           >= 4.6.x                      http://www.qtsoftware.com                                         Including run-time SQLite3 and Mysql database plugin.
 kdelibs         >= 4.4.x                      http://www.kde.org                                                Nepomuk support introduced with KDE 4.3.x.
-liblcms         >= 1.17.x                     http://www.littlecms.com                                          liblcms >= 2.x not yet compatible.
+liblcms         >= 1.x                        http://www.littlecms.com                                          liblcms >= 2.x compatible too.
 libtiff         >= 3.8.2                      http://www.remotesensing.org/libtiff
 libpng          >= 1.2.x                      http://www.libpng.org/pub/png/libpng.html
 libjpeg         >= 6b                         http://www.ijg.org
 libjasper       >= 1.7.x                      http://www.ece.uvic.ca/~mdadams/jasper
 libkipi         >= 2.0.0                      https://projects.kde.org/projects/kde/kdegraphics/libs/libkipi
 libkexiv2       >= 2.0.0                      https://projects.kde.org/projects/kde/kdegraphics/libs/libkexiv2
-libkdcraw       >= 2.0.0                      https://projects.kde.org/projects/kde/kdegraphics/libs/libkdcraw
+libkdcraw       >= 2.2.0                      https://projects.kde.org/projects/kde/kdegraphics/libs/libkdcraw
 libkface        >= 2.0.0                      https://projects.kde.org/projects/extragear/libs/libkface
 libkgeomap      >= 2.0.0                      https://projects.kde.org/projects/extragear/libs/libkgeomap
 

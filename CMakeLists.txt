@@ -148,13 +148,14 @@ INCLUDE(FindPackageHandleStandardArgs)
 INCLUDE(FindPkgConfig)
 SET(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules ${CMAKE_MODULE_PATH} )
 
+FIND_PACKAGE(Kexiv2 REQUIRED)
+FIND_PACKAGE(Kdcraw REQUIRED)
+FIND_PACKAGE(JPEG   REQUIRED)
+FIND_PACKAGE(PNG    REQUIRED)
+FIND_PACKAGE(TIFF   REQUIRED)
+
 FIND_PACKAGE(PkgConfig)
-FIND_PACKAGE(JPEG)
-FIND_PACKAGE(PNG)
-FIND_PACKAGE(TIFF)
 FIND_PACKAGE(Jasper)
-FIND_PACKAGE(Kdcraw)
-FIND_PACKAGE(Kexiv2)
 FIND_PACKAGE(Kface)
 FIND_PACKAGE(KGeoMap)
 FIND_PACKAGE(PGF)
@@ -163,6 +164,17 @@ FIND_PACKAGE(Boost) # 1.36.0)
 
 SET(KIPI_MIN_VERSION "2.0.0")
 FIND_PACKAGE(Kipi)
+
+# check the libkdcraw version
+SET(KDCRAW_MIN_VERSION "2.2.0")
+IF (KDCRAW_VERSION)
+    MESSAGE(STATUS "libkdcraw: Found version ${KDCRAW_VERSION} (required: ${KDCRAW_MIN_VERSION})")
+    IF (${KDCRAW_VERSION} VERSION_LESS ${KDCRAW_MIN_VERSION})
+        SET(KDCRAW_FOUND FALSE)
+    ENDIF (${KDCRAW_VERSION} VERSION_LESS ${KDCRAW_MIN_VERSION})
+ELSE (KDCRAW_VERSION)
+    MESSAGE(WARNING "libkdcraw: Version information not found, your version is probably too old.")
+ENDIF (KDCRAW_VERSION)
 
 # LCMS version 1 and 2 library handling
 # See B.K.O #294105
@@ -298,19 +310,6 @@ ELSE (ENABLE_INTERNALMYSQL)
     SET(DATABASESERVERDIR "")
 ENDIF (ENABLE_INTERNALMYSQL)
 MACRO_BOOL_TO_01(ENABLE_INTERNALMYSQL HAVE_INTERNALMYSQL)
-
-# check the libkdcraw version
-# note that old versions don't specify version information, so for now
-# just inform the user if version information was found
-SET(KDCRAW_MIN_VERSION "2.0.0")
-IF (KDCRAW_VERSION)
-  MESSAGE(STATUS "libkdcraw: Found version ${KDCRAW_VERSION} (required: ${KDCRAW_MIN_VERSION})")
-  IF (${KDCRAW_VERSION} VERSION_LESS ${KDCRAW_MIN_VERSION})
-    SET(KDCRAW_FOUND FALSE)
-  ENDIF (${KDCRAW_VERSION} VERSION_LESS ${KDCRAW_MIN_VERSION})
-ELSE (KDCRAW_VERSION)
-  MESSAGE(WARNING "libkdcraw: Version information not found, your version is probably too old.")
-ENDIF (KDCRAW_VERSION)
 
 # check the libkgeomap version
 # note that old versions don't specify version information, so for now
@@ -1135,8 +1134,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/threads/workerobject.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/threads/dynamicthread.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/threads/parallelworkers.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/threads/dactionthreadbase.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/threads/dweaverobserver.cpp
        )
 
     # ==================================================================================================

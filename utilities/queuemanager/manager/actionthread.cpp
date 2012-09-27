@@ -7,7 +7,7 @@
  * Description : Thread actions manager.
  *
  * Copyright (C) 2009-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2012 by Pankaj Kumar <me at panks dot me>
+ * Copyright (C) 2012      by Pankaj Kumar <me at panks dot me>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -54,11 +54,11 @@ extern "C"
 namespace Digikam
 {
 
-class ActionThread::ActionThreadPriv
+class ActionThread::Private
 {
 public:
 
-    ActionThreadPriv() :
+    Private() :
         cancel(false),
         exifSetOrientation(true),
         createNewVersion(true),
@@ -79,7 +79,7 @@ public:
     ActionData   ad;
 };
 
-Task::Task(QObject* const parent, const AssignedBatchTools& item, ActionThread::ActionThreadPriv* const d)
+Task::Task(QObject* const parent, const AssignedBatchTools& item, ActionThread::Private* const d)
     : Job(parent)
 {
     m_item = item;
@@ -103,7 +103,7 @@ void Task::run()
 
     // Loop with all batch tools operations to apply on item.
 
-    m_d->cancel          = false;
+    m_d->cancel        = false;
     int        index   = 0;
     bool       success = false;
     KUrl       outUrl  = m_item.m_itemUrl;
@@ -217,7 +217,7 @@ void Task::run()
 // -------------------------------------------------------------------------------------------------
 
 ActionThread::ActionThread(QObject* const parent)
-    : DActionThreadBase(parent), d(new ActionThreadPriv)
+    : RActionThreadBase(parent), d(new Private)
 {
     qRegisterMetaType<ActionData>();
 }
@@ -231,9 +231,9 @@ ActionThread::~ActionThread()
     delete d;
 }
 
-void ActionThread::setWorkingUrl(const KUrl& workingUrl)
+void ActionThread::setWorkingUrl(const KUrl& url)
 {
-    d->workingUrl = workingUrl;
+    d->workingUrl = url;
 }
 
 void ActionThread::setResetExifOrientationAllowed(bool set)
@@ -248,8 +248,8 @@ void ActionThread::setRawDecodingSettings(const DRawDecoding& settings)
 
 void ActionThread::processFile(const AssignedBatchTools& item)
 {
-    JobCollection* collection = new JobCollection();
-    Task* t                   = new Task(this, item, d);
+    JobCollection* const collection = new JobCollection();
+    Task* const t                   = new Task(this, item, d);
 
     connect(t, SIGNAL(signalStarting(Digikam::ActionData)),
             this, SIGNAL(starting(Digikam::ActionData)));
@@ -264,7 +264,7 @@ void ActionThread::processFile(const AssignedBatchTools& item)
 void ActionThread::cancel()
 {
     d->cancel = true;
-    DActionThreadBase::cancel();
+    RActionThreadBase::cancel();
 }
 
 }  // namespace Digikam
