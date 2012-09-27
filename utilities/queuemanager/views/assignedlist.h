@@ -6,7 +6,7 @@
  * Date        : 2008-11-27
  * Description : batch tools list assigned to an queued item.
  *
- * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -44,19 +44,12 @@ class AssignedListViewItem : public QTreeWidgetItem
 
 public:
 
-    AssignedListViewItem(QTreeWidget* parent, const BatchToolSet& set);
-    AssignedListViewItem(QTreeWidget* parent, QTreeWidgetItem* preceding, const BatchToolSet& set);
+    AssignedListViewItem(QTreeWidget* const parent, const BatchToolSet& set);
+    AssignedListViewItem(QTreeWidget* const parent, QTreeWidgetItem* const preceding, const BatchToolSet& set);
     virtual ~AssignedListViewItem();
 
     void setToolSet(const BatchToolSet& set);
     BatchToolSet toolSet();
-
-    void setProgressIcon(const QPixmap& icon);
-
-    void setCanceled();
-    void setFailed();
-    void setDone();
-    void reset();
 
 private:
 
@@ -71,20 +64,18 @@ class AssignedListView : public QTreeWidget
 
 public:
 
-    AssignedListView(QWidget* parent);
+    AssignedListView(QWidget* const parent);
     ~AssignedListView();
 
     int assignedCount();
     AssignedBatchTools assignedList();
 
-    AssignedListViewItem* insertTool(AssignedListViewItem* preceding, const BatchToolSet& set);
-    AssignedListViewItem* moveTool(AssignedListViewItem* preceding, const BatchToolSet& set);
+    AssignedListViewItem* insertTool(AssignedListViewItem* const preceding, const BatchToolSet& set);
+    AssignedListViewItem* moveTool(AssignedListViewItem* const preceding, const BatchToolSet& set);
     AssignedListViewItem* addTool(int index, const BatchToolSet& set);
     AssignedListViewItem* findTool(int index);
     bool removeTool(const BatchToolSet& set);
 
-    void setCurrentTool(int index);
-    void reset();
     void setBusy(bool b);
 
 Q_SIGNALS:
@@ -114,11 +105,11 @@ private Q_SLOTS:
 private:
 
     AssignedListViewItem* findTool(const BatchToolSet& set);
-    void assignTools(const QMap<int, QString>& map, AssignedListViewItem* preceding);
+    void assignTools(const QMap<int, QString>& map, AssignedListViewItem* const preceding);
 
-    Qt::DropActions supportedDropActions() const;
-    QStringList mimeTypes() const;
-    QMimeData* mimeData(const QList<QTreeWidgetItem*> items) const;
+    Qt::DropActions supportedDropActions()                        const;
+    QStringList     mimeTypes()                                   const;
+    QMimeData*      mimeData(const QList<QTreeWidgetItem*> items) const;
 
     void dragEnterEvent(QDragEnterEvent*);
     void dragMoveEvent(QDragMoveEvent*);

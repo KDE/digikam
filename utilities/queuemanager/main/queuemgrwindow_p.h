@@ -101,7 +101,6 @@ public:
         showMenuBarAction      = 0;
         thread                 = 0;
         currentProcessItem     = 0;
-        currentTaskItem        = 0;
         animLogo               = 0;
         progressCount          = 0;
         progressTimer          = 0;
@@ -149,8 +148,6 @@ public:
 
     DLogoAction*           animLogo;
     QueueListViewItem*     currentProcessItem;
-
-    AssignedListViewItem*  currentTaskItem;
 
     BatchToolsManager*     batchToolsMgr;
 

@@ -887,11 +887,6 @@ void QueueMgrWindow::slotStop()
         d->currentProcessItem->setCanceled();
     }
 
-    if (d->currentTaskItem)
-    {
-        d->currentTaskItem->setCanceled();
-    }
-
     d->itemsList.clear();
     d->thread->cancel();
     processingAborted();
@@ -986,50 +981,24 @@ void QueueMgrWindow::slotAction(const ActionData& ad)
 
         case ActionData::TaskStarted:
         {
-            d->assignedList->setCurrentTool(ad.index);
-            d->currentTaskItem = d->assignedList->findTool(ad.index);
-
-            if (d->currentTaskItem)
-            {
-                d->assignedList->scrollToItem(d->currentTaskItem);
-            }
-
             break;
         }
 
         case ActionData::TaskDone:
         {
-            if (d->currentTaskItem)
-            {
-                d->currentTaskItem->setDone();
-                d->currentTaskItem = 0;
-                d->statusProgressBar->setProgressValue(d->statusProgressBar->progressValue() + 1);
-            }
-
+            d->statusProgressBar->setProgressValue(d->statusProgressBar->progressValue() + 1);
             break;
         }
 
         case ActionData::TaskFailed:
         {
-            if (d->currentTaskItem)
-            {
-                d->currentTaskItem->setCanceled();
-                d->currentTaskItem = 0;
-                d->statusProgressBar->setProgressValue(d->statusProgressBar->progressValue() + 1);
-            }
-
+            d->statusProgressBar->setProgressValue(d->statusProgressBar->progressValue() + 1);
             break;
         }
 
         case ActionData::TaskCanceled:
         {
-            if (d->currentTaskItem)
-            {
-                d->currentTaskItem->setCanceled();
-                d->currentTaskItem = 0;
-                d->statusProgressBar->setProgressValue(d->statusProgressBar->progressValue() + 1);
-            }
-
+            d->statusProgressBar->setProgressValue(d->statusProgressBar->progressValue() + 1);
             break;
         }
 
@@ -1053,11 +1022,6 @@ void QueueMgrWindow::slotProgressTimerDone()
     if (d->currentProcessItem)
     {
         d->currentProcessItem->setProgressIcon(ico);
-    }
-
-    if (d->currentTaskItem)
-    {
-        d->currentTaskItem->setProgressIcon(ico);
     }
 
     d->progressTimer->start(300);
@@ -1181,11 +1145,6 @@ void QueueMgrWindow::processingFailed(const KUrl&, const QString& errMsg)
         addHistoryMessage(errMsg, DHistoryView::ErrorEntry);
     }
 
-    if (d->currentTaskItem)
-    {
-        d->currentTaskItem->setCanceled();
-    }
-
     d->currentProcessItem = 0;
 }
 
@@ -1195,11 +1154,6 @@ void QueueMgrWindow::processingCanceled(const KUrl&)
     {
         d->currentProcessItem->setCanceled();
         addHistoryMessage(i18n("Process Cancelled..."), DHistoryView::CancelEntry);
-    }
-
-    if (d->currentTaskItem)
-    {
-        d->currentTaskItem->setCanceled();
     }
 
     d->currentProcessItem = 0;

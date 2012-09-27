@@ -6,7 +6,7 @@
  * Date        : 2008-11-21
  * Description : Batch Queue Manager items list.
  *
- * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -48,14 +48,14 @@
 namespace Digikam
 {
 
-AssignedListViewItem::AssignedListViewItem(QTreeWidget* parent, const BatchToolSet& set)
+AssignedListViewItem::AssignedListViewItem(QTreeWidget* const parent, const BatchToolSet& set)
     : QTreeWidgetItem(parent)
 {
     setFlags(Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled | flags());
     setToolSet(set);
 }
 
-AssignedListViewItem::AssignedListViewItem(QTreeWidget* parent, QTreeWidgetItem* preceding, const BatchToolSet& set)
+AssignedListViewItem::AssignedListViewItem(QTreeWidget* const parent, QTreeWidgetItem* const preceding, const BatchToolSet& set)
     : QTreeWidgetItem(parent, preceding)
 {
     setFlags(Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled | flags());
@@ -82,34 +82,9 @@ BatchToolSet AssignedListViewItem::toolSet()
     return m_set;
 }
 
-void AssignedListViewItem::setCanceled()
-{
-    setIcon(0, SmallIcon("dialog-cancel"));
-}
-
-void AssignedListViewItem::setFailed()
-{
-    setIcon(0, SmallIcon("dialog-error"));
-}
-
-void AssignedListViewItem::setDone()
-{
-    setIcon(0, SmallIcon("dialog-ok"));
-}
-
-void AssignedListViewItem::reset()
-{
-    setIcon(0, m_set.tool->toolIcon());
-}
-
-void AssignedListViewItem::setProgressIcon(const QPixmap& icon)
-{
-    setIcon(0, QIcon(icon));
-}
-
 // ---------------------------------------------------------------------------
 
-AssignedListView::AssignedListView(QWidget* parent)
+AssignedListView::AssignedListView(QWidget* const parent)
     : QTreeWidget(parent)
 {
     setSelectionMode(QAbstractItemView::SingleSelection);
@@ -155,30 +130,6 @@ void AssignedListView::keyPressEvent(QKeyEvent* e)
 void AssignedListView::setBusy(bool b)
 {
     viewport()->setEnabled(!b);
-}
-
-void AssignedListView::setCurrentTool(int index)
-{
-    int count = 1;
-
-    QTreeWidgetItemIterator it(this);
-
-    while (*it)
-    {
-        if (count == index)
-        {
-            AssignedListViewItem* item = dynamic_cast<AssignedListViewItem*>(*it);
-
-            if (item)
-            {
-                setCurrentItem(item);
-                return;
-            }
-        }
-
-        ++count;
-        ++it;
-    }
 }
 
 AssignedBatchTools AssignedListView::assignedList()
@@ -266,7 +217,7 @@ void AssignedListView::slotMoveCurrentToolDown()
     }
 }
 
-AssignedListViewItem* AssignedListView::moveTool(AssignedListViewItem* preceding, const BatchToolSet& set)
+AssignedListViewItem* AssignedListView::moveTool(AssignedListViewItem* const preceding, const BatchToolSet& set)
 {
     if (!set.tool)
     {
@@ -281,7 +232,7 @@ AssignedListViewItem* AssignedListView::moveTool(AssignedListViewItem* preceding
     return item;
 }
 
-AssignedListViewItem* AssignedListView::insertTool(AssignedListViewItem* preceding, const BatchToolSet& set)
+AssignedListViewItem* AssignedListView::insertTool(AssignedListViewItem* const preceding, const BatchToolSet& set)
 {
     if (!set.tool)
     {
@@ -386,23 +337,6 @@ AssignedListViewItem* AssignedListView::findTool(const BatchToolSet& set)
     }
 
     return 0;
-}
-
-void AssignedListView::reset()
-{
-    QTreeWidgetItemIterator it(this);
-
-    while (*it)
-    {
-        AssignedListViewItem* item = dynamic_cast<AssignedListViewItem*>(*it);
-
-        if (item)
-        {
-            item->reset();
-        }
-
-        ++it;
-    }
 }
 
 Qt::DropActions AssignedListView::supportedDropActions() const
@@ -581,7 +515,7 @@ void AssignedListView::slotAssignTools(const QMap<int, QString>& map)
     assignTools(map, 0);
 }
 
-void AssignedListView::assignTools(const QMap<int, QString>& map, AssignedListViewItem* preceding)
+void AssignedListView::assignTools(const QMap<int, QString>& map, AssignedListViewItem* const preceding)
 {
     // We pop all items in reverse order to have same order than selection from Batch Tools list.
     QMapIterator<int, QString> it(map);
