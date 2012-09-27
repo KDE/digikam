@@ -187,6 +187,8 @@ private:
     RulePriv* const d;
 };
 
+typedef QList<Rule*> RulesList;
+
 } // namespace Digikam
 
 #endif /* RULE_H */

@@ -29,6 +29,10 @@
 #include <QString>
 #include <QPixmap>
 
+// local includes
+
+#include "rule.h"
+
 namespace Digikam
 {
 
@@ -55,15 +59,15 @@ private:
     // common methods
     QString markOption(const QString& str);
     QString tableStart();
-    QString tableStart(int width);
+    QString tableStart(int widthPercentage);
     QString tableEnd();
 
     QString additionalInformation();
 
 
     // parse object related methods
-    template <class T> QString createEntries(const QList<T*> &data);
-    template <class T> QString createSection(const QString& sectionName, const QList<T*> &data, bool lastSection = false);
+    QString createEntries(const RulesList &data);
+    QString createSection(const QString& sectionName, const RulesList &data, bool lastSection = false);
     QString createHeader(const QString& str);
 };
 

@@ -118,9 +118,9 @@ QString TooltipCreator::tooltip(Parser* parser)
     return tooltip;
 }
 
-QString TooltipCreator::tableStart(int width)
+QString TooltipCreator::tableStart(int widthPercentage)
 {
-    QString w = QString::number(width) + '%';
+    QString w = QString::number(widthPercentage) + '%';
     return QString("<table width=\"%1\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\">").arg(w);
 }
 
@@ -159,12 +159,11 @@ QString TooltipCreator::createHeader(const QString& str)
     return result;
 }
 
-template <class T>
-QString TooltipCreator::createEntries(const QList<T*> &data)
+QString TooltipCreator::createEntries(const RulesList &data)
 {
     QString result;
 
-    foreach(T* t, data)
+    foreach(Rule* t, data)
     {
         foreach(Token* token, t->tokens())
         {
@@ -182,8 +181,7 @@ QString TooltipCreator::createEntries(const QList<T*> &data)
     return result;
 }
 
-template <class T>
-QString TooltipCreator::createSection(const QString& sectionName, const QList<T*> &data, bool lastSection)
+QString TooltipCreator::createSection(const QString& sectionName, const RulesList &data, bool lastSection)
 {
     if (data.isEmpty())
     {

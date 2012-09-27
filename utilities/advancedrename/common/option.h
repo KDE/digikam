@@ -58,8 +58,6 @@ private:
     OptionPriv* const d;
 };
 
-typedef QList<Option*> OptionsList;
-
 } // namespace Digikam
 
 #endif /* OPTION_H */

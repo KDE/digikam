@@ -240,8 +240,8 @@ void AdvancedRenameWidget::registerParserControls()
     {
         setupWidgets();
 
-        QList<Option*> optionsList     = d->parser->options();
-        QList<Modifier*> modifiersList = d->parser->modifiers();
+        RulesList optionsList   = d->parser->options();
+        RulesList modifiersList = d->parser->modifiers();
 
         if (d->layoutStyle == LayoutNormal)
         {
