@@ -54,45 +54,6 @@ static const QString DUMMY_TEXT("DUMMY_TEXT_y_fjqp|");
 namespace Digikam
 {
 
-AdvancedRenameLineEditProxy::AdvancedRenameLineEditProxy(QWidget* parent)
-    : ProxyLineEdit(parent)
-{
-    setClearButtonShown(true);
-}
-
-void AdvancedRenameLineEditProxy::setWidget(QWidget* widget)
-{
-    delete m_widget;
-    delete m_layout;
-
-    m_widget = widget;
-    m_widget->setParent(this);
-
-    QWidget* placeholder = new QWidget(this);
-    placeholder->setFixedHeight(clearButtonUsedSize().height());
-    placeholder->setFixedWidth(clearButtonUsedSize().width());
-
-    QGridLayout* mainLayout = new QGridLayout(this);
-    mainLayout->addWidget(m_widget,    0, 0, 1, 1);
-    mainLayout->addWidget(placeholder, 0, 1, 1, 1);
-    mainLayout->setSpacing(0);
-    mainLayout->setMargin(0);
-    setLayout(mainLayout);
-    updateGeometry();
-}
-
-void AdvancedRenameLineEditProxy::mousePressEvent(QMouseEvent* event)
-{
-    KLineEdit::mousePressEvent(event);
-}
-
-void AdvancedRenameLineEditProxy::mouseReleaseEvent(QMouseEvent* event)
-{
-    KLineEdit::mouseReleaseEvent(event);
-}
-
-// --------------------------------------------------------
-
 class AdvancedRenameLineEdit::AdvancedRenameLineEditPriv
 {
 public:
@@ -318,8 +279,8 @@ AdvancedRenameInput::AdvancedRenameInput(QWidget* parent)
     setMaxVisibleItems(d->maxVisibleItems);
     setMaxCount(d->maxHistoryItems);
 
-    AdvancedRenameLineEditProxy* proxy = new AdvancedRenameLineEditProxy(this);
-    d->lineEdit                        = new AdvancedRenameLineEdit(this);
+    ProxyLineEdit* proxy = new ProxyLineEdit(this);
+    d->lineEdit          = new AdvancedRenameLineEdit(this);
     proxy->setWidget(d->lineEdit);
 
     setLineEdit(proxy);

@@ -46,28 +46,6 @@ class QEvent;
 namespace Digikam
 {
 
-class AdvancedRenameLineEditProxy : public ProxyLineEdit
-{
-    Q_OBJECT
-
-public:
-
-    AdvancedRenameLineEditProxy(QWidget* parent);
-    virtual void setWidget(QWidget* widget);
-
-protected:
-
-    virtual void mousePressEvent(QMouseEvent* event);
-    virtual void mouseReleaseEvent(QMouseEvent* event);
-
-private:
-
-    AdvancedRenameLineEditProxy(const AdvancedRenameLineEditProxy&);
-    AdvancedRenameLineEditProxy& operator=(const AdvancedRenameLineEditProxy&);
-};
-
-// --------------------------------------------------------
-
 class AdvancedRenameLineEdit : public QTextEdit
 {
     Q_OBJECT
