@@ -64,6 +64,8 @@ public:
     /// After constructing, set the actual widget here
     virtual void setWidget(QWidget* widget);
 
+    virtual void setClearButtonShown(bool show);
+
 protected:
 
 

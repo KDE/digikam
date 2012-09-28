@@ -71,6 +71,13 @@ void ProxyLineEdit::setWidget(QWidget* widget)
     m_layout->addWidget(m_widget);
 }
 
+void ProxyLineEdit::setClearButtonShown(bool show)
+{
+    KLineEdit::setClearButtonShown(show);
+    int rightMargin = show ? clearButtonUsedSize().width() : 0;
+    m_layout->setContentsMargins(0, 0, rightMargin, 0);
+}
+
 /**
  * We just re-implement all relevant QWidget event handlers and call
  * the QWidget implementation, not the KLineEdit one.
