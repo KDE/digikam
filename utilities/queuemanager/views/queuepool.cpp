@@ -34,6 +34,7 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kmessagebox.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -99,6 +100,29 @@ void QueuePool::setBusy(bool b)
 QueueListView* QueuePool::currentQueue() const
 {
     return (dynamic_cast<QueueListView*>(currentWidget()));
+}
+
+QueueListView* QueuePool::findQueueByItemId(qlonglong id) const
+{
+    for (int i = 0; i < count(); ++i)
+    {
+        QueueListView* const queue = dynamic_cast<QueueListView*>(widget(i));
+
+        if (queue && queue->findItemById(id))
+        {
+            return queue;
+        }
+    }
+
+    return 0;
+}
+
+void QueuePool::animProgress(qlonglong id)
+{
+    QueueListView* const queue = findQueueByItemId(id);
+
+    if (queue)
+        queue->animProgress(id);
 }
 
 QueueListView* QueuePool::findQueueById(int index) const

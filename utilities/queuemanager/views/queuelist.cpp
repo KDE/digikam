@@ -34,12 +34,14 @@
 
 // KDE includes
 
+#include <kpixmapsequence.h>
 #include <kaction.h>
 #include <kactioncollection.h>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kmenu.h>
 #include <kurl.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -63,23 +65,30 @@ public:
 
     Private() :
         done(false),
-        hasThumb(false)
+        hasThumb(false),
+        progressIndex(0),
+        view(0)
     {
     }
 
-    bool      done;
-    bool      hasThumb;
+    bool           done;
+    bool           hasThumb;
 
-    QString   destFileName;
+    int            progressIndex;
 
-    QPixmap   preview;
+    QString        destFileName;
 
-    ImageInfo info;
+    QPixmap        preview;
+
+    QueueListView* view;
+
+    ImageInfo      info;
 };
 
-QueueListViewItem::QueueListViewItem(QTreeWidget* const view, const ImageInfo& info)
+QueueListViewItem::QueueListViewItem(QueueListView* const view, const ImageInfo& info)
     : QTreeWidgetItem(view), d(new Private)
 {
+    d->view = view;
     setThumb(SmallIcon("image-x-generic", KIconLoader::SizeLarge, KIconLoader::DisabledState), false);
     setInfo(info);
 }
@@ -130,8 +139,16 @@ void QueueListViewItem::setThumb(const QPixmap& pix, bool hasThumb)
     d->hasThumb = hasThumb;
 }
 
-void QueueListViewItem::setProgressIcon(const QPixmap& icon)
+void QueueListViewItem::animProgress()
 {
+    QPixmap icon(d->view->progressPixmapForIndex(d->progressIndex));
+    d->progressIndex++;
+
+    if (d->view->progressPixmapForIndex(d->progressIndex).isNull())
+    {
+        d->progressIndex = 0;
+    }
+
     QPixmap preview = d->preview;
     QPixmap mask(preview.size());
     mask.fill(QColor(128, 128, 128, 192));
@@ -145,21 +162,24 @@ void QueueListViewItem::setCanceled()
 {
     setPixmap(d->preview);
     setIcon(1, SmallIcon("dialog-cancel"));
-    d->done = false;
+    d->done          = false;
+    d->progressIndex = 0;
 }
 
 void QueueListViewItem::setFailed()
 {
     setPixmap(d->preview);
     setIcon(1, SmallIcon("dialog-error"));
-    d->done = false;
+    d->done          = false;
+    d->progressIndex = 0;
 }
 
 void QueueListViewItem::setDone()
 {
     setPixmap(d->preview);
     setIcon(1, SmallIcon("dialog-ok"));
-    d->done = true;
+    d->done          = true;
+    d->progressIndex = 0;
 }
 
 bool QueueListViewItem::isDone() const
@@ -171,7 +191,8 @@ void QueueListViewItem::reset()
 {
     setPixmap(d->preview);
     setIcon(1, QIcon());
-    d->done = false;
+    d->done          = false;
+    d->progressIndex = 0;
 }
 
 void QueueListViewItem::setDestFileName(const QString& str)
@@ -221,6 +242,7 @@ public:
         toolTip         = 0;
         toolTipItem     = 0;
         thumbLoadThread = ThumbnailLoadThread::defaultThread();
+        progressPix     = KPixmapSequence("process-working", KIconLoader::SizeSmallMedium);
     }
 
     bool                 showTips;
@@ -238,6 +260,8 @@ public:
     QueueToolTip*        toolTip;
 
     QueueListViewItem*   toolTipItem;
+
+    KPixmapSequence      progressPix;
 };
 
 QueueListView::QueueListView(QWidget* const parent)
@@ -292,6 +316,23 @@ QueueListView::~QueueListView()
 {
     delete d->toolTip;
     delete d;
+}
+
+QPixmap QueueListView::progressPixmapForIndex(int index) const
+{
+    if (index >= 0 && index < d->progressPix.frameCount())
+        return (d->progressPix.frameAt(index));
+
+    return QPixmap();
+}
+
+void QueueListView::animProgress(qlonglong id)
+{
+    QueueListViewItem* const item = findItemById(id);
+    if (item)
+    {
+        item->animProgress();
+    }
 }
 
 Qt::DropActions QueueListView::supportedDropActions() const

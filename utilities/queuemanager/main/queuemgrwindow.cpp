@@ -1011,17 +1011,9 @@ void QueueMgrWindow::slotAction(const ActionData& ad)
 
 void QueueMgrWindow::slotProgressTimerDone()
 {
-    QPixmap ico(d->progressPix.frameAt(d->progressCount));
-    d->progressCount++;
-
-    if (d->progressCount >= d->progressPix.frameCount())
-    {
-        d->progressCount = 0;
-    }
-
     if (d->currentProcessItem)
     {
-        d->currentProcessItem->setProgressIcon(ico);
+        d->queuePool->animProgress(d->currentProcessItem->info().id());
     }
 
     d->progressTimer->start(300);
@@ -1039,7 +1031,6 @@ void QueueMgrWindow::processing(const KUrl& url)
         addHistoryMessage(i18n("Processing..."), DHistoryView::StartingEntry);
     }
 
-    d->progressCount = 0;
     d->progressTimer->start(300);
 }
 

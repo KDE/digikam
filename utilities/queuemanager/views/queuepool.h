@@ -57,6 +57,7 @@ public:
 
     QueueListView*     currentQueue()                    const;
     QueueListView*     findQueueById(int index)          const;
+    QueueListView*     findQueueByItemId(qlonglong id)   const;
     QueuePoolItemsList totalPendingItemsList()           const;
     int                totalPendingItems()               const;
     int                totalPendingTasks()               const;
@@ -68,6 +69,8 @@ public:
     void setEnableToolTips(bool b);
 
     void setBusy(bool b);
+
+    void animProgress(qlonglong id);
 
 Q_SIGNALS:
 

@@ -42,12 +42,14 @@
 namespace Digikam
 {
 
+class QueueListView;
+
 class QueueListViewItem : public QTreeWidgetItem
 {
 
 public:
 
-    QueueListViewItem(QTreeWidget* const view, const ImageInfo& info);
+    QueueListViewItem(QueueListView* const view, const ImageInfo& info);
     ~QueueListViewItem();
 
     bool hasValidThumbnail() const;
@@ -60,7 +62,7 @@ public:
 
     void setThumb(const QPixmap& pix, bool hasThumb = true);
 
-    void setProgressIcon(const QPixmap& icon);
+    void animProgress();
 
     void setCanceled();
     void setFailed();
@@ -118,6 +120,9 @@ public:
     void setEnableToolTips(bool val);
 
     void reloadThumbs(const KUrl& url);
+
+    void animProgress(qlonglong id);
+    QPixmap progressPixmapForIndex(int index) const;
 
 Q_SIGNALS:
 

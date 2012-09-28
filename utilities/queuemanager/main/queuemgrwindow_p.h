@@ -33,7 +33,6 @@
 
 #include <kaction.h>
 #include <kiconloader.h>
-#include <kpixmapsequence.h>
 #include <kselectaction.h>
 #include <ktoggleaction.h>
 
@@ -102,10 +101,8 @@ public:
         thread                 = 0;
         currentProcessItem     = 0;
         animLogo               = 0;
-        progressCount          = 0;
         progressTimer          = 0;
         about                  = 0;
-        progressPix            = KPixmapSequence("process-working", KIconLoader::SizeSmallMedium);
     }
 
     bool                   fullScreenHideToolBar;
@@ -113,11 +110,7 @@ public:
     bool                   removeFullScreenButton;
     bool                   busy;
 
-    int                    progressCount;
-
     QTimer*                progressTimer;
-
-    KPixmapSequence        progressPix;
 
     QLabel*                statusLabel;
 
