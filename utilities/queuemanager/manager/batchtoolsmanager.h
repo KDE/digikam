@@ -53,8 +53,8 @@ public:
 
 private:
 
-    class BatchToolsManagerPriv;
-    BatchToolsManagerPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

@@ -62,18 +62,20 @@
 namespace Digikam
 {
 
-class BatchToolsManager::BatchToolsManagerPriv
+class BatchToolsManager::Private
 {
 
 public:
 
-    BatchToolsManagerPriv() {}
+    Private()
+    {
+    }
 
     BatchToolsList toolsList;
 };
 
 BatchToolsManager::BatchToolsManager(QObject* const parent)
-    : QObject(parent), d(new BatchToolsManagerPriv)
+    : QObject(parent), d(new Private)
 {
     // Convert
     registerTool(new Convert2JPEG(this));

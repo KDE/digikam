@@ -6,7 +6,7 @@
  * Date        : 2008-11-28
  * Description : auto colors correction batch tool.
  *
- * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -39,7 +39,7 @@ class AutoCorrection : public BatchTool
 
 public:
 
-    AutoCorrection(QObject* parent = 0);
+    AutoCorrection(QObject* const parent = 0);
     ~AutoCorrection();
 
     BatchToolSettings defaultSettings();

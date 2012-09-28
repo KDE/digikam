@@ -50,12 +50,12 @@ namespace Digikam
 
 class BatchToolObserver;
 
-class BatchTool::BatchToolPriv
+class BatchTool::Private
 {
 
 public:
 
-    BatchToolPriv() :
+    Private() :
         exifResetOrientation(false),
         exifCanEditOrientation(true),
         branchHistory(true),
@@ -100,7 +100,7 @@ class BatchToolObserver : public DImgLoaderObserver
 
 public:
 
-    BatchToolObserver(BatchTool::BatchToolPriv* const priv)
+    BatchToolObserver(BatchTool::Private* const priv)
         : DImgLoaderObserver(), d(priv)
     {
     }
@@ -114,11 +114,11 @@ public:
         return !d->cancel;
     }
 
-    BatchTool::BatchToolPriv* const d;
+    BatchTool::Private* const d;
 };
 
 BatchTool::BatchTool(const QString& name, BatchToolGroup group, QObject* const parent)
-    : QObject(parent), d(new BatchToolPriv)
+    : QObject(parent), d(new Private)
 {
     d->observer  = new BatchToolObserver(d);
     d->toolGroup = group;

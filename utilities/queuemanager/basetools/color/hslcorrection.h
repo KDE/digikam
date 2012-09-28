@@ -6,7 +6,7 @@
  * Date        : 2010-02-11
  * Description : Hue/Saturation/Lightness batch tool.
  *
- * Copyright (C) 2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -39,7 +39,7 @@ class HSLCorrection : public BatchTool
 
 public:
 
-    HSLCorrection(QObject* parent = 0);
+    HSLCorrection(QObject* const parent = 0);
     ~HSLCorrection();
 
     BatchToolSettings defaultSettings();

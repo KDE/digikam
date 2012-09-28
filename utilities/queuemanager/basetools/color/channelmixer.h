@@ -6,7 +6,7 @@
  * Date        : 2010-02-19
  * Description : Channel Mixer batch tool.
  *
- * Copyright (C) 2010-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -41,7 +41,7 @@ class ChannelMixer : public BatchTool
 
 public:
 
-    ChannelMixer(QObject* parent = 0);
+    ChannelMixer(QObject* const parent = 0);
     ~ChannelMixer();
 
     BatchToolSettings defaultSettings();

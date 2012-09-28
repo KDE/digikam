@@ -274,11 +274,11 @@ protected Q_SLOTS:
 public:
 
     // Declared as public due to BatchToolObserver class.
-    class BatchToolPriv;
+    class Private;
 
 private:
 
-    BatchToolPriv* const d;
+    Private* const d;
 };
 
 /** A list of batch tool instances.
@@ -311,11 +311,14 @@ class AssignedBatchTools
 {
 public:
 
-    AssignedBatchTools() {};
+    AssignedBatchTools()
+    {
+    };
 
     QString targetSuffix(bool* const extSet = 0) const
     {
         QString suffix;
+
         foreach(BatchToolSet set, m_toolsMap)
         {
             QString s = set.tool->outputSuffix();
