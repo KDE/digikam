@@ -6,7 +6,7 @@
  * Date        : 2008-11-21
  * Description : Batch Queue Manager items list.
  *
- * Copyright (C) 2008-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -56,12 +56,12 @@
 namespace Digikam
 {
 
-class QueueListViewItem::QueueListViewItemPriv
+class QueueListViewItem::Private
 {
 
 public:
 
-    QueueListViewItemPriv() :
+    Private() :
         done(false),
         hasThumb(false)
     {
@@ -77,8 +77,8 @@ public:
     ImageInfo info;
 };
 
-QueueListViewItem::QueueListViewItem(QTreeWidget* view, const ImageInfo& info)
-    : QTreeWidgetItem(view), d(new QueueListViewItemPriv)
+QueueListViewItem::QueueListViewItem(QTreeWidget* const view, const ImageInfo& info)
+    : QTreeWidgetItem(view), d(new Private)
 {
     setThumb(SmallIcon("image-x-generic", KIconLoader::SizeLarge, KIconLoader::DisabledState), false);
     setInfo(info);
@@ -162,7 +162,7 @@ void QueueListViewItem::setDone()
     d->done = true;
 }
 
-bool QueueListViewItem::isDone()
+bool QueueListViewItem::isDone() const
 {
     return d->done;
 }
@@ -199,7 +199,7 @@ QString QueueListViewItem::destSuffix() const
 
 // ---------------------------------------------------------------------------
 
-class QueueListView::QueueListViewPriv
+class QueueListView::Private
 {
 
 public:
@@ -213,7 +213,7 @@ public:
 
 public:
 
-    QueueListViewPriv()
+    Private()
         : iconSize(64)
     {
         showTips        = false;
@@ -240,8 +240,8 @@ public:
     QueueListViewItem*   toolTipItem;
 };
 
-QueueListView::QueueListView(QWidget* parent)
-    : QTreeWidget(parent), d(new QueueListViewPriv)
+QueueListView::QueueListView(QWidget* const parent)
+    : QTreeWidget(parent), d(new Private)
 {
     setIconSize(QSize(d->iconSize, d->iconSize));
     setSelectionMode(QAbstractItemView::ExtendedSelection);
@@ -306,9 +306,9 @@ QMimeData* QueueListView::mimeData(const QList<QTreeWidgetItem*> items) const
     QList<int> albumIDs;
     QList<qlonglong> imageIDs;
 
-    foreach(QTreeWidgetItem* itm, items)
+    foreach(QTreeWidgetItem* const itm, items)
     {
-        QueueListViewItem* vitem = dynamic_cast<QueueListViewItem*>(itm);
+        QueueListViewItem* const vitem = dynamic_cast<QueueListViewItem*>(itm);
 
         if (vitem)
         {
@@ -319,7 +319,7 @@ QMimeData* QueueListView::mimeData(const QList<QTreeWidgetItem*> items) const
         }
     }
 
-    DItemDrag* mimeData = new DItemDrag(urls, kioURLs, albumIDs, imageIDs);
+    DItemDrag* const mimeData = new DItemDrag(urls, kioURLs, albumIDs, imageIDs);
     return mimeData;
 }
 
@@ -376,7 +376,7 @@ void QueueListView::dragMoveEvent(QDragMoveEvent* e)
     KUrl::List kioURLs;
 
     if (DItemDrag::decode(e->mimeData(), urls, kioURLs, albumIDs, imageIDs) ||
-        DAlbumDrag::decode(e->mimeData(), urls, albumID) ||
+        DAlbumDrag::decode(e->mimeData(), urls, albumID)                    ||
         DTagDrag::canDecode(e->mimeData()))
     {
         if (DItemDrag::decode(e->mimeData(), urls, kioURLs, albumIDs, imageIDs))
@@ -434,7 +434,7 @@ void QueueListView::dropEvent(QDropEvent* e)
             slotAddItems(imageInfoList);
             e->acceptProposedAction();
 
-            QueueListView* vitem = dynamic_cast<QueueListView*>(e->source());
+            QueueListView* const vitem = dynamic_cast<QueueListView*>(e->source());
 
             if (vitem && vitem != this)
             {
@@ -521,7 +521,7 @@ void QueueListView::hideToolTip()
     slotToolTip();
 }
 
-bool QueueListView::acceptToolTip(const QPoint& pos)
+bool QueueListView::acceptToolTip(const QPoint& pos) const
 {
     if (columnAt(pos.x()) == 0)
     {
@@ -658,7 +658,7 @@ void QueueListView::slotThumbnailLoaded(const LoadingDescription& desc, const QP
 
     while (*it)
     {
-        QueueListViewItem* item = dynamic_cast<QueueListViewItem*>(*it);
+        QueueListViewItem* const item = dynamic_cast<QueueListViewItem*>(*it);
 
         if (item->info().fileUrl() == KUrl(desc.filePath))
         {
@@ -680,19 +680,19 @@ void QueueListView::slotThumbnailLoaded(const LoadingDescription& desc, const QP
 
 void QueueListView::slotClearList()
 {
-    removeItems(QueueListViewPriv::ItemsAll);
+    removeItems(Private::ItemsAll);
     emit signalQueueContentsChanged();
 }
 
 void QueueListView::slotRemoveSelectedItems()
 {
-    removeItems(QueueListViewPriv::ItemsSelected);
+    removeItems(Private::ItemsSelected);
     emit signalQueueContentsChanged();
 }
 
 void QueueListView::slotRemoveItemsDone()
 {
-    removeItems(QueueListViewPriv::ItemsDone);
+    removeItems(Private::ItemsDone);
     emit signalQueueContentsChanged();
 }
 
@@ -709,11 +709,11 @@ void QueueListView::removeItems(int removeType)
 
         while (*it)
         {
-            QueueListViewItem* item = dynamic_cast<QueueListViewItem*>(*it);
+            QueueListViewItem* const item = dynamic_cast<QueueListViewItem*>(*it);
 
             switch (removeType)
             {
-                case QueueListViewPriv::ItemsSelected:
+                case Private::ItemsSelected:
                 {
                     if (item->isSelected())
                     {
@@ -724,7 +724,7 @@ void QueueListView::removeItems(int removeType)
                     break;
                 }
 
-                case QueueListViewPriv::ItemsDone:
+                case Private::ItemsDone:
                 {
                     if (item->isDone())
                     {
@@ -797,7 +797,7 @@ QueueListViewItem* QueueListView::findItemById(qlonglong id)
 
     while (*it)
     {
-        QueueListViewItem* item = dynamic_cast<QueueListViewItem*>(*it);
+        QueueListViewItem* const item = dynamic_cast<QueueListViewItem*>(*it);
 
         if (item->info().id() == id)
         {
@@ -816,7 +816,7 @@ QueueListViewItem* QueueListView::findItemByUrl(const KUrl& url)
 
     while (*it)
     {
-        QueueListViewItem* item = dynamic_cast<QueueListViewItem*>(*it);
+        QueueListViewItem* const item = dynamic_cast<QueueListViewItem*>(*it);
 
         if (item->info().fileUrl() == url)
         {
@@ -836,7 +836,7 @@ int QueueListView::itemsCount()
 
     while (*it)
     {
-        QueueListViewItem* item = dynamic_cast<QueueListViewItem*>(*it);
+        QueueListViewItem* const item = dynamic_cast<QueueListViewItem*>(*it);
 
         if (item)
         {
@@ -881,7 +881,7 @@ int QueueListView::pendingTasksCount()
 
     while (*it)
     {
-        QueueListViewItem* item = dynamic_cast<QueueListViewItem*>(*it);
+        QueueListViewItem* const item = dynamic_cast<QueueListViewItem*>(*it);
 
         if (item && !item->isDone())
         {
@@ -901,7 +901,7 @@ void QueueListView::setSettings(const QueueSettings& settings)
     updateDestFileNames();
 }
 
-QueueSettings QueueListView::settings()
+QueueSettings QueueListView::settings() const
 {
     return d->settings;
 }
@@ -912,7 +912,7 @@ void QueueListView::setAssignedTools(const AssignedBatchTools& tools)
     updateDestFileNames();
 }
 
-AssignedBatchTools QueueListView::assignedTools()
+AssignedBatchTools QueueListView::assignedTools() const
 {
     return d->toolsList;
 }
@@ -930,7 +930,7 @@ void QueueListView::resetQueue()
 
     while (*it)
     {
-        QueueListViewItem* item = dynamic_cast<QueueListViewItem*>(*it);
+        QueueListViewItem* const item = dynamic_cast<QueueListViewItem*>(*it);
 
         if (item)
         {
@@ -957,7 +957,7 @@ void QueueListView::updateDestFileNames()
 
         while (*it)
         {
-            QueueListViewItem* item = dynamic_cast<QueueListViewItem*>(*it);
+            QueueListViewItem* const item = dynamic_cast<QueueListViewItem*>(*it);
 
             if (item)
             {
@@ -984,7 +984,7 @@ void QueueListView::updateDestFileNames()
 
     while (*it)
     {
-        QueueListViewItem* item = dynamic_cast<QueueListViewItem*>(*it);
+        QueueListViewItem* const item = dynamic_cast<QueueListViewItem*>(*it);
 
         if (item)
         {

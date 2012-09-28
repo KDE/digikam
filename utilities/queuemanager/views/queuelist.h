@@ -6,7 +6,7 @@
  * Date        : 2008-11-21
  * Description : Batch Queue Manager items list.
  *
- * Copyright (C) 2008-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -47,7 +47,7 @@ class QueueListViewItem : public QTreeWidgetItem
 
 public:
 
-    QueueListViewItem(QTreeWidget* view, const ImageInfo& info);
+    QueueListViewItem(QTreeWidget* const view, const ImageInfo& info);
     ~QueueListViewItem();
 
     bool hasValidThumbnail() const;
@@ -66,14 +66,14 @@ public:
     void setFailed();
 
     void setDone();
-    bool isDone();
+    bool isDone() const;
 
     void reset();
 
     void    setDestFileName(const QString& str);
     QString destFileName() const;
     QString destBaseName() const;
-    QString destSuffix() const;
+    QString destSuffix()   const;
 
 private:
 
@@ -81,8 +81,8 @@ private:
 
 private:
 
-    class QueueListViewItemPriv;
-    QueueListViewItemPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 // -------------------------------------------------------------------------
@@ -95,7 +95,7 @@ class QueueListView : public QTreeWidget
 
 public:
 
-    QueueListView(QWidget* parent);
+    QueueListView(QWidget* const parent);
     ~QueueListView();
 
     int  itemsCount();
@@ -110,10 +110,10 @@ public:
     QueueListViewItem* findItemById(qlonglong id);
 
     void setSettings(const QueueSettings& settings);
-    QueueSettings settings();
+    QueueSettings settings() const;
 
     void setAssignedTools(const AssignedBatchTools& tools);
-    AssignedBatchTools assignedTools();
+    AssignedBatchTools assignedTools() const;
 
     void setEnableToolTips(bool val);
 
@@ -145,11 +145,12 @@ private:
     void removeItems(int removeType);
     void updateDestFileNames();
     void hideToolTip();
-    bool acceptToolTip(const QPoint& pos);
+    bool acceptToolTip(const QPoint& pos) const;
 
-    QMimeData* mimeData(const QList<QTreeWidgetItem*> items) const;
-    void startDrag(Qt::DropActions supportedActions);
-    Qt::DropActions supportedDropActions() const;
+    QMimeData*      mimeData(const QList<QTreeWidgetItem*> items) const;
+    Qt::DropActions supportedDropActions()                        const;
+    void            startDrag(Qt::DropActions supportedActions);
+
     void dragMoveEvent(QDragMoveEvent*);
     void dragEnterEvent(QDragEnterEvent*);
     void dropEvent(QDropEvent*);
@@ -164,8 +165,8 @@ private:
 
 private:
 
-    class QueueListViewPriv;
-    QueueListViewPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

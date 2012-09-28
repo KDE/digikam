@@ -6,7 +6,7 @@
  * Date        : 2008-11-27
  * Description : a view to show Batch Tool Settings.
  *
- * Copyright (C) 2008-2011 Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2012 Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -46,7 +46,7 @@
 namespace Digikam
 {
 
-class ToolSettingsView::ToolSettingsViewPriv
+class ToolSettingsView::Private
 {
 
 public:
@@ -59,7 +59,7 @@ public:
 
 public:
 
-    ToolSettingsViewPriv() :
+    Private() :
         messageView(0),
         settingsViewIcon(0),
         settingsViewTitle(0),
@@ -80,8 +80,8 @@ public:
     BatchTool*   tool;
 };
 
-ToolSettingsView::ToolSettingsView(QWidget* parent)
-    : QStackedWidget(parent), d(new ToolSettingsViewPriv)
+ToolSettingsView::ToolSettingsView(QWidget* const parent)
+    : QStackedWidget(parent), d(new Private)
 {
     setAttribute(Qt::WA_DeleteOnClose);
 
@@ -90,7 +90,7 @@ ToolSettingsView::ToolSettingsView(QWidget* parent)
     d->messageView = new QLabel(this);
     d->messageView->setAlignment(Qt::AlignCenter);
 
-    insertWidget(ToolSettingsViewPriv::MessageView, d->messageView);
+    insertWidget(Private::MessageView, d->messageView);
 
     // --------------------------------------------------------------------------
 
@@ -144,9 +144,9 @@ ToolSettingsView::ToolSettingsView(QWidget* parent)
     vbox->setSpacing(0);
     vbox->setStretchFactor(d->settingsView, 10);
 
-    insertWidget(ToolSettingsViewPriv::SettingsView, vbox);
+    insertWidget(Private::SettingsView, vbox);
     setToolSettingsWidget(new QWidget(this));
-    setViewMode(ToolSettingsViewPriv::MessageView);
+    setViewMode(Private::MessageView);
 
     // --------------------------------------------------------------------------
 
@@ -165,7 +165,7 @@ void ToolSettingsView::setBusy(bool b)
     d->settingsViewReset->setEnabled(!b);
 }
 
-void ToolSettingsView::setToolSettingsWidget(QWidget* w)
+void ToolSettingsView::setToolSettingsWidget(QWidget* const w)
 {
     QWidget* wdt = 0;
 
@@ -181,7 +181,7 @@ void ToolSettingsView::setToolSettingsWidget(QWidget* w)
     d->settingsView->takeWidget();
     wdt->setParent(d->settingsView->viewport());
     d->settingsView->setWidget(wdt);
-    setViewMode(ToolSettingsViewPriv::SettingsView);
+    setViewMode(Private::SettingsView);
 }
 
 void ToolSettingsView::slotThemeChanged()
@@ -195,19 +195,19 @@ void ToolSettingsView::slotThemeChanged()
     d->settingsView->setPalette(palette2);
 }
 
-int ToolSettingsView::viewMode()
+int ToolSettingsView::viewMode() const
 {
     return indexOf(currentWidget());
 }
 
 void ToolSettingsView::setViewMode(int mode)
 {
-    if (mode != ToolSettingsViewPriv::MessageView && mode != ToolSettingsViewPriv::SettingsView)
+    if (mode != Private::MessageView && mode != Private::SettingsView)
     {
         return;
     }
 
-    if (mode == ToolSettingsViewPriv::MessageView)
+    if (mode == Private::MessageView)
     {
         d->settingsViewReset->setEnabled(false);
     }

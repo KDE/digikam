@@ -6,7 +6,7 @@
  * Date        : 2009-03-03
  * Description : queue tool tip
  *
- * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -39,10 +39,10 @@ class QueueToolTip : public DItemToolTip
 {
 public:
 
-    QueueToolTip(QueueListView* view);
+    QueueToolTip(QueueListView* const view);
     ~QueueToolTip();
 
-    void setQueueItem(QueueListViewItem* item);
+    void setQueueItem(QueueListViewItem* const item);
 
 private:
 
@@ -51,8 +51,8 @@ private:
 
 private:
 
-    class QueueToolTipPriv;
-    QueueToolTipPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

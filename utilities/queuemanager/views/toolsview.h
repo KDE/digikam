@@ -6,7 +6,7 @@
  * Date        : 2009-04-20
  * Description : a view to available tools in tab view.
  *
- * Copyright (C) 2009-2010 Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2012 Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -43,11 +43,11 @@ class ToolsView : public KTabWidget
 
 public:
 
-    ToolsView(QWidget* parent = 0);
+    ToolsView(QWidget* const parent = 0);
     ~ToolsView();
 
-    void addTool(BatchTool* tool);
-    bool removeTool(BatchTool* tool);
+    void addTool(BatchTool* const tool);
+    bool removeTool(BatchTool* const tool);
 
     void setBusy(bool b);
 
@@ -65,8 +65,8 @@ private Q_SLOTS:
 
 private:
 
-    class ToolsViewPriv;
-    ToolsViewPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

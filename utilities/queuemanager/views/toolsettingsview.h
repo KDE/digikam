@@ -6,7 +6,7 @@
  * Date        : 2008-11-27
  * Description : a view to show Batch Tool Settings.
  *
- * Copyright (C) 2008-2010 Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2012 Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -41,7 +41,7 @@ class ToolSettingsView : public QStackedWidget
 
 public:
 
-    ToolSettingsView(QWidget* parent = 0);
+    ToolSettingsView(QWidget* const parent = 0);
     ~ToolSettingsView();
 
     void setBusy(bool b);
@@ -61,14 +61,14 @@ private Q_SLOTS:
 
 private:
 
-    int  viewMode();
+    int  viewMode() const;
     void setViewMode(int mode);
-    void setToolSettingsWidget(QWidget* w);
+    void setToolSettingsWidget(QWidget* const w);
 
 private:
 
-    class ToolSettingsViewPriv;
-    ToolSettingsViewPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

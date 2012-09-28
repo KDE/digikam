@@ -6,7 +6,7 @@
  * Date        : 2008-11-24
  * Description : Available batch tools list.
  *
- * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -42,7 +42,7 @@
 namespace Digikam
 {
 
-ToolListViewGroup::ToolListViewGroup(QTreeWidget* parent, BatchTool::BatchToolGroup group)
+ToolListViewGroup::ToolListViewGroup(QTreeWidget* const parent, BatchTool::BatchToolGroup group)
     : QTreeWidgetItem(parent)
 {
     setFlags(Qt::ItemIsEnabled);
@@ -112,7 +112,7 @@ BatchTool::BatchToolGroup ToolListViewGroup::toolGroup() const
 
 // ---------------------------------------------------------------------------
 
-ToolListViewItem::ToolListViewItem(ToolListViewGroup* parent, BatchTool* tool)
+ToolListViewItem::ToolListViewItem(ToolListViewGroup* const parent, BatchTool* const tool)
     : QTreeWidgetItem(parent)
 {
     setDisabled(false);
@@ -139,7 +139,7 @@ BatchTool* ToolListViewItem::tool() const
 
 // ---------------------------------------------------------------------------
 
-ToolsListView::ToolsListView(QWidget* parent)
+ToolsListView::ToolsListView(QWidget* const parent)
     : QTreeWidget(parent)
 {
     setContextMenuPolicy(Qt::CustomContextMenu);
@@ -182,14 +182,14 @@ BatchToolsList ToolsListView::toolsList()
     return list;
 }
 
-void ToolsListView::addTool(BatchTool* tool)
+void ToolsListView::addTool(BatchTool* const tool)
 {
     if (!tool)
     {
         return;
     }
 
-    ToolListViewGroup* parent = findToolGroup(tool->toolGroup());
+    ToolListViewGroup* const parent = findToolGroup(tool->toolGroup());
 
     if (parent)
     {
@@ -197,13 +197,13 @@ void ToolsListView::addTool(BatchTool* tool)
     }
 }
 
-bool ToolsListView::removeTool(BatchTool* tool)
+bool ToolsListView::removeTool(BatchTool* const tool)
 {
     QTreeWidgetItemIterator it(this);
 
     while (*it)
     {
-        ToolListViewItem* item = dynamic_cast<ToolListViewItem*>(*it);
+        ToolListViewItem* const item = dynamic_cast<ToolListViewItem*>(*it);
 
         if (item && item->tool() == tool)
         {
@@ -223,7 +223,7 @@ ToolListViewGroup* ToolsListView::findToolGroup(BatchTool::BatchToolGroup group)
 
     while (*it)
     {
-        ToolListViewGroup* item = dynamic_cast<ToolListViewGroup*>(*it);
+        ToolListViewGroup* const item = dynamic_cast<ToolListViewGroup*>(*it);
 
         if (item && item->toolGroup() == group)
         {
@@ -242,7 +242,7 @@ bool ToolsListView::findTool(BatchTool* tool)
 
     while (*it)
     {
-        ToolListViewItem* item = dynamic_cast<ToolListViewItem*>(*it);
+        ToolListViewItem* const item = dynamic_cast<ToolListViewItem*>(*it);
 
         if (item && item->tool() == tool)
         {
@@ -323,11 +323,11 @@ void ToolsListView::slotAssignTools()
 
 QMimeData* ToolsListView::mimeData(const QList<QTreeWidgetItem*> items) const
 {
-    QMimeData* mimeData = new QMimeData();
+    QMimeData* const mimeData = new QMimeData();
     QByteArray encodedData;
 
     QDataStream stream(&encodedData, QIODevice::WriteOnly);
-    QMap<int, QString> map = itemsToMap(items);
+    QMap<int, QString> map    = itemsToMap(items);
     stream << map;
 
     mimeData->setData("digikam/batchtoolslist", encodedData);
@@ -338,9 +338,9 @@ QMap<int, QString> ToolsListView::itemsToMap(const QList<QTreeWidgetItem*> items
 {
     QMap<int, QString> map;
 
-    foreach(QTreeWidgetItem* itm, items)
+    foreach(QTreeWidgetItem* const itm, items)
     {
-        ToolListViewItem* tlwi = dynamic_cast<ToolListViewItem*>(itm);
+        ToolListViewItem* const tlwi = dynamic_cast<ToolListViewItem*>(itm);
 
         if (tlwi)
         {
@@ -353,7 +353,7 @@ QMap<int, QString> ToolsListView::itemsToMap(const QList<QTreeWidgetItem*> items
 void ToolsListView::slotContextMenu()
 {
     KMenu popmenu(this);
-    KAction* action = new KAction(KIcon("bqm-add"), i18n("Assign tools"), this);
+    KAction* const action = new KAction(KIcon("bqm-add"), i18n("Assign tools"), this);
     connect(action, SIGNAL(triggered(bool)),
             this, SLOT(slotAssignTools()));
 

@@ -6,7 +6,7 @@
  * Date        : 2009-02-13
  * Description : tabbed queue items list.
  *
- * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -52,25 +52,20 @@ class QueuePool : public KTabWidget
 
 public:
 
-    QueuePool(QWidget* parent);
+    QueuePool(QWidget* const parent);
     ~QueuePool();
 
-    QueueListView* currentQueue() const;
-    QueueListView* findQueueById(int index) const;
-
-    QueuePoolItemsList totalPendingItemsList();
-
-    int totalPendingItems();
-    int totalPendingTasks();
-
-    QMap<int, QString> queuesMap() const;
-
-    QString queueTitle(int index) const;
+    QueueListView*     currentQueue()                    const;
+    QueueListView*     findQueueById(int index)          const;
+    QueuePoolItemsList totalPendingItemsList()           const;
+    int                totalPendingItems()               const;
+    int                totalPendingTasks()               const;
+    QMap<int, QString> queuesMap()                       const;
+    QString            queueTitle(int index)             const;
+    bool               customRenamingRulesAreValid()     const;
+    bool               assignedBatchToolsListsAreValid() const;
 
     void setEnableToolTips(bool b);
-
-    bool customRenamingRulesAreValid();
-    bool assignedBatchToolsListsAreValid();
 
     void setBusy(bool b);
 

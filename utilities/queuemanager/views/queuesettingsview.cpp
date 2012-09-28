@@ -6,7 +6,7 @@
  * Date        : 2009-02-21
  * Description : a view to show Queue Settings.
  *
- * Copyright (C) 2009-2010 Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2012 Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -55,12 +55,12 @@
 namespace Digikam
 {
 
-class QueueSettingsView::QueueSettingsViewPriv
+class QueueSettingsView::Private
 {
 
 public:
 
-    QueueSettingsViewPriv() :
+    Private() :
         conflictLabel(0),
         renamingButtonGroup(0),
         conflictButtonGroup(0),
@@ -90,8 +90,8 @@ public:
     AdvancedRenameWidget*  advancedRenameWidget;
 };
 
-QueueSettingsView::QueueSettingsView(QWidget* parent)
-    : KTabWidget(parent), d(new QueueSettingsViewPriv)
+QueueSettingsView::QueueSettingsView(QWidget* const parent)
+    : KTabWidget(parent), d(new Private)
 {
     setTabBarHidden(false);
 #if KDE_IS_VERSION(4,3,0)
@@ -241,6 +241,7 @@ void QueueSettingsView::slotSettingsChanged()
     settings.renamingRule   = (QueueSettings::RenamingRule)d->renamingButtonGroup->checkedId();
     settings.renamingParser = d->advancedRenameWidget->parseString();
     d->advancedRenameWidget->setEnabled(settings.renamingRule == QueueSettings::CUSTOMIZE);
+
     emit signalSettingsChanged(settings);
 }
 

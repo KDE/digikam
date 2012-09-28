@@ -6,7 +6,7 @@
  * Date        : 2009-04-20
  * Description : a view to available tools in tab view.
  *
- * Copyright (C) 2009-2010 Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2012 Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -42,12 +42,12 @@
 namespace Digikam
 {
 
-class ToolsView::ToolsViewPriv
+class ToolsView::Private
 {
 
 public:
 
-    ToolsViewPriv() :
+    Private() :
         baseTools(0),
         //        customTools = 0;
         historyView(0)
@@ -60,8 +60,8 @@ public:
     DHistoryView*  historyView;
 };
 
-ToolsView::ToolsView(QWidget* parent)
-    : KTabWidget(parent), d(new ToolsViewPriv)
+ToolsView::ToolsView(QWidget* const parent)
+    : KTabWidget(parent), d(new Private)
 {
     setTabBarHidden(false);
 
@@ -113,7 +113,7 @@ void ToolsView::setBusy(bool b)
 {
     for (int i = 0; i < count(); ++i)
     {
-        ToolsListView* view = dynamic_cast<ToolsListView*>(widget(i));
+        ToolsListView* const view = dynamic_cast<ToolsListView*>(widget(i));
 
         if (view)
         {
@@ -122,7 +122,7 @@ void ToolsView::setBusy(bool b)
     }
 }
 
-void ToolsView::addTool(BatchTool* tool)
+void ToolsView::addTool(BatchTool* const tool)
 {
     if (!tool)
     {
@@ -151,7 +151,7 @@ void ToolsView::addTool(BatchTool* tool)
     }
 }
 
-bool ToolsView::removeTool(BatchTool* tool)
+bool ToolsView::removeTool(BatchTool* const tool)
 {
     bool ret = false;
 
@@ -209,6 +209,7 @@ void ToolsView::slotHistoryEntryClicked(const QVariant& metadata)
     {
         int queueId      = list.at(0).toInt();
         qlonglong itemId = list.at(1).toLongLong();
+
         emit signalHistoryEntryClicked(queueId, itemId);
     }
 }

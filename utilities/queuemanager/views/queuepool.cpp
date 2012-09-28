@@ -6,7 +6,7 @@
  * Date        : 2009-02-13
  * Description : tabbed queue items list.
  *
- * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -44,7 +44,7 @@
 namespace Digikam
 {
 
-QueuePool::QueuePool(QWidget* parent)
+QueuePool::QueuePool(QWidget* const parent)
     : KTabWidget(parent)
 {
     setTabBarHidden(false);
@@ -66,8 +66,7 @@ QueuePool::QueuePool(QWidget* parent)
 
     // -- FileWatch connections ------------------------------
 
-    LoadingCacheInterface::connectToSignalFileChanged(this,
-                                                      SLOT(slotFileChanged(QString)));
+    LoadingCacheInterface::connectToSignalFileChanged(this, SLOT(slotFileChanged(QString)));
 }
 
 QueuePool::~QueuePool()
@@ -141,14 +140,14 @@ void QueuePool::slotAddQueue()
     setCurrentIndex(index);
 }
 
-QueuePoolItemsList QueuePool::totalPendingItemsList()
+QueuePoolItemsList QueuePool::totalPendingItemsList() const
 {
     QueuePoolItemsList qpool;
 
     for (int i = 0; i < count(); ++i)
     {
-        QueueListView* queue = dynamic_cast<QueueListView*>(widget(i));
-        ImageInfoList list   = queue->pendingItemsList();
+        QueueListView* const queue = dynamic_cast<QueueListView*>(widget(i));
+        ImageInfoList list         = queue->pendingItemsList();
 
         for (ImageInfoList::const_iterator it = list.constBegin() ; it != list.constEnd() ; ++it)
         {
@@ -161,27 +160,27 @@ QueuePoolItemsList QueuePool::totalPendingItemsList()
     return qpool;
 }
 
-int QueuePool::totalPendingItems()
+int QueuePool::totalPendingItems() const
 {
     int items = 0;
 
     for (int i = 0; i < count(); ++i)
     {
-        QueueListView* queue = dynamic_cast<QueueListView*>(widget(i));
-        items                += queue->pendingItemsCount();
+        QueueListView* const queue = dynamic_cast<QueueListView*>(widget(i));
+        items                      += queue->pendingItemsCount();
     }
 
     return items;
 }
 
-int QueuePool::totalPendingTasks()
+int QueuePool::totalPendingTasks() const
 {
     int tasks = 0;
 
     for (int i = 0; i < count(); ++i)
     {
-        QueueListView* queue = dynamic_cast<QueueListView*>(widget(i));
-        tasks                += queue->pendingTasksCount();
+        QueueListView* const queue = dynamic_cast<QueueListView*>(widget(i));
+        tasks                      += queue->pendingTasksCount();
     }
 
     return tasks;
@@ -189,7 +188,7 @@ int QueuePool::totalPendingTasks()
 
 void QueuePool::slotRemoveCurrentQueue()
 {
-    QueueListView* queue = currentQueue();
+    QueueListView* const queue = currentQueue();
 
     if (!queue)
     {
@@ -208,7 +207,7 @@ void QueuePool::slotRemoveCurrentQueue()
 
 void QueuePool::slotClearList()
 {
-    QueueListView* queue = currentQueue();
+    QueueListView* const queue = currentQueue();
 
     if (queue)
     {
@@ -218,7 +217,7 @@ void QueuePool::slotClearList()
 
 void QueuePool::slotRemoveSelectedItems()
 {
-    QueueListView* queue = currentQueue();
+    QueueListView* const queue = currentQueue();
 
     if (queue)
     {
@@ -228,7 +227,7 @@ void QueuePool::slotRemoveSelectedItems()
 
 void QueuePool::slotRemoveItemsDone()
 {
-    QueueListView* queue = currentQueue();
+    QueueListView* const queue = currentQueue();
 
     if (queue)
     {
@@ -238,7 +237,7 @@ void QueuePool::slotRemoveItemsDone()
 
 void QueuePool::slotAddItems(const ImageInfoList& list, int queueId)
 {
-    QueueListView* queue = findQueueById(queueId);
+    QueueListView* const queue = findQueueById(queueId);
 
     if (queue)
     {
@@ -248,7 +247,7 @@ void QueuePool::slotAddItems(const ImageInfoList& list, int queueId)
 
 void QueuePool::slotAssignedToolsChanged(const AssignedBatchTools& tools4Item)
 {
-    QueueListView* queue = currentQueue();
+    QueueListView* const queue = currentQueue();
 
     if (queue)
     {
@@ -258,7 +257,7 @@ void QueuePool::slotAssignedToolsChanged(const AssignedBatchTools& tools4Item)
 
 void QueuePool::slotQueueSelected(int index)
 {
-    QueueListView* queue = dynamic_cast<QueueListView*>(widget(index));
+    QueueListView* const queue = dynamic_cast<QueueListView*>(widget(index));
 
     if (queue)
     {
@@ -281,8 +280,8 @@ void QueuePool::slotCloseQueueRequest(QWidget* w)
 
 void QueuePool::removeTab(int index)
 {
-    QueueListView* queue = dynamic_cast<QueueListView*>(widget(index));
-    int count            = queue->pendingItemsCount();
+    QueueListView* const queue = dynamic_cast<QueueListView*>(widget(index));
+    int count                  = queue->pendingItemsCount();
 
     if (count > 0)
     {
@@ -309,7 +308,7 @@ void QueuePool::slotTestCanDecode(const QDragMoveEvent* e, bool& accept)
     KUrl::List kioURLs;
 
     if (DItemDrag::decode(e->mimeData(), urls, kioURLs, albumIDs, imageIDs) ||
-        DAlbumDrag::decode(e->mimeData(), urls, albumID) ||
+        DAlbumDrag::decode(e->mimeData(), urls, albumID)                    ||
         DTagDrag::canDecode(e->mimeData()))
     {
         accept = true;
@@ -321,7 +320,7 @@ void QueuePool::slotTestCanDecode(const QDragMoveEvent* e, bool& accept)
 
 void QueuePool::slotSettingsChanged(const QueueSettings& settings)
 {
-    QueueListView* queue = currentQueue();
+    QueueListView* const queue = currentQueue();
 
     if (queue)
     {
@@ -333,7 +332,7 @@ void QueuePool::setEnableToolTips(bool b)
 {
     for (int i = 0; i < count(); ++i)
     {
-        QueueListView* queue = dynamic_cast<QueueListView*>(widget(i));
+        QueueListView* const queue = dynamic_cast<QueueListView*>(widget(i));
 
         if (queue)
         {
@@ -342,13 +341,13 @@ void QueuePool::setEnableToolTips(bool b)
     }
 }
 
-bool QueuePool::customRenamingRulesAreValid()
+bool QueuePool::customRenamingRulesAreValid() const
 {
     QStringList list;
 
     for (int i = 0; i < count(); ++i)
     {
-        QueueListView* queue = dynamic_cast<QueueListView*>(widget(i));
+        QueueListView* const queue = dynamic_cast<QueueListView*>(widget(i));
 
         if (queue)
         {
@@ -371,13 +370,13 @@ bool QueuePool::customRenamingRulesAreValid()
     return true;
 }
 
-bool QueuePool::assignedBatchToolsListsAreValid()
+bool QueuePool::assignedBatchToolsListsAreValid() const
 {
     QStringList list;
 
     for (int i = 0; i < count(); ++i)
     {
-        QueueListView* queue = dynamic_cast<QueueListView*>(widget(i));
+        QueueListView* const queue = dynamic_cast<QueueListView*>(widget(i));
 
         if (queue)
         {
@@ -403,7 +402,7 @@ void QueuePool::slotFileChanged(const QString& filePath)
 {
     for (int i = 0; i < count(); ++i)
     {
-        QueueListView* queue = dynamic_cast<QueueListView*>(widget(i));
+        QueueListView* const queue = dynamic_cast<QueueListView*>(widget(i));
 
         if (queue)
         {
