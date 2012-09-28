@@ -276,6 +276,8 @@ const QString AdvancedRenameInput::AdvancedRenameInputPriv::configPatternHistory
 AdvancedRenameInput::AdvancedRenameInput(QWidget* parent)
     : KComboBox(parent), d(new AdvancedRenameInputPriv)
 {
+    setEditable(true);
+
     setMaxVisibleItems(d->maxVisibleItems);
     setMaxCount(d->maxHistoryItems);
 
@@ -286,7 +288,6 @@ AdvancedRenameInput::AdvancedRenameInput(QWidget* parent)
     proxy->setClearButtonShown(true);
     proxy->setAutoFillBackground(false);
 
-    setEditable(true);
     setLineEdit(proxy);
 
     // --------------------------------------------------------
