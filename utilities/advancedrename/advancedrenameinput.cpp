@@ -281,10 +281,13 @@ AdvancedRenameInput::AdvancedRenameInput(QWidget* parent)
 
     ProxyLineEdit* proxy = new ProxyLineEdit(this);
     d->lineEdit          = new AdvancedRenameLineEdit(this);
-    proxy->setWidget(d->lineEdit);
 
-    setLineEdit(proxy);
+    proxy->setWidget(d->lineEdit);
+    proxy->setClearButtonShown(true);
     proxy->setAutoFillBackground(false);
+
+    setEditable(true);
+    setLineEdit(proxy);
 
     // --------------------------------------------------------
 
