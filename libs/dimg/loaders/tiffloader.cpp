@@ -355,21 +355,10 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* const observe
                         // We have to read two bytes for one pixel
                         p = dataPtr;
 
-                        // See B.K.O #148037 : take a care about byte order with Motorola computers.
-                        if (QSysInfo::ByteOrder == QSysInfo::BigEndian)     // PPC
-                        {
-                            p[3] = 0xFFFF;
-                            p[0] = *stripPtr;
-                            p[1] = *stripPtr;
-                            p[2] = *stripPtr++;
-                        }
-                        else
-                        {
-                            p[0] = *stripPtr;      // RGB have to be set to the _same_ value
-                            p[1] = *stripPtr;
-                            p[2] = *stripPtr++;
-                            p[3] = 0xFFFF;         // set alpha to 100%
-                        }
+                        p[0] = *stripPtr;      // RGB have to be set to the _same_ value
+                        p[1] = *stripPtr;
+                        p[2] = *stripPtr++;
+                        p[3] = 0xFFFF;         // set alpha to 100%
 
                         dataPtr += 4;
                     }
@@ -382,21 +371,10 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* const observe
                     {
                         p = dataPtr;
 
-                        // See B.K.O #148037 : take a care about byte order with Motorola computers.
-                        if (QSysInfo::ByteOrder == QSysInfo::BigEndian)     // PPC
-                        {
-                            p[3] = *stripPtr++;
-                            p[0] = *stripPtr++;
-                            p[1] = *stripPtr++;
-                            p[2] = 0xFFFF;
-                        }
-                        else
-                        {
-                            p[2] = *stripPtr++;
-                            p[1] = *stripPtr++;
-                            p[0] = *stripPtr++;
-                            p[3] = 0xFFFF;
-                        }
+                        p[2] = *stripPtr++;
+                        p[1] = *stripPtr++;
+                        p[0] = *stripPtr++;
+                        p[3] = 0xFFFF;
 
                         dataPtr += 4;
                     }
@@ -409,42 +387,20 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* const observe
                     {
                         p = dataPtr;
 
-                        // See B.K.O #148037 : take a care about byte order with Motorola computers.
-                        if (QSysInfo::ByteOrder == QSysInfo::BigEndian)     // PPC
+                        switch ((st / (num_of_strips / samples_per_pixel)))
                         {
-                            switch ((st / (num_of_strips / samples_per_pixel)))
-                            {
-                                case 0:
-                                    p[3] = *stripPtr++;
-                                    p[2] = 0xFFFF;
-                                    break;
+                            case 0:
+                                p[2] = *stripPtr++;
+                                p[3] = 0xFFFF;
+                                break;
 
-                                case 1:
-                                    p[0] = *stripPtr++;
-                                    break;
+                            case 1:
+                                p[1] = *stripPtr++;
+                                break;
 
-                                case 2:
-                                    p[1] = *stripPtr++;
-                                    break;
-                            }
-                        }
-                        else
-                        {
-                            switch ((st / (num_of_strips / samples_per_pixel)))
-                            {
-                                case 0:
-                                    p[2] = *stripPtr++;
-                                    p[3] = 0xFFFF;
-                                    break;
-
-                                case 1:
-                                    p[1] = *stripPtr++;
-                                    break;
-
-                                case 2:
-                                    p[0] = *stripPtr++;
-                                    break;
-                            }
+                            case 2:
+                                p[0] = *stripPtr++;
+                                break;
                         }
 
                         dataPtr += 4;
@@ -458,21 +414,10 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* const observe
                     {
                         p = dataPtr;
 
-                        // See B.K.O #148037 : take a care about byte order with Motorola computers.
-                        if (QSysInfo::ByteOrder == QSysInfo::BigEndian)     // PPC
-                        {
-                            p[3] = *stripPtr++;
-                            p[0] = *stripPtr++;
-                            p[1] = *stripPtr++;
-                            p[2] = *stripPtr++;
-                        }
-                        else
-                        {
-                            p[2] = *stripPtr++;
-                            p[1] = *stripPtr++;
-                            p[0] = *stripPtr++;
-                            p[3] = *stripPtr++;
-                        }
+                        p[2] = *stripPtr++;
+                        p[1] = *stripPtr++;
+                        p[0] = *stripPtr++;
+                        p[3] = *stripPtr++;
 
                         dataPtr += 4;
                     }
@@ -485,48 +430,23 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* const observe
                     {
                         p = dataPtr;
 
-                        // See B.K.O #148037 : take a care about byte order with Motorola computers.
-                        if (QSysInfo::ByteOrder == QSysInfo::BigEndian)     // PPC
+                        switch ((st / (num_of_strips / samples_per_pixel)))
                         {
-                            switch ((st / (num_of_strips / samples_per_pixel)))
-                            {
-                                case 0:
-                                    p[3] = *stripPtr++;
-                                    break;
+                            case 0:
+                                p[2] = *stripPtr++;
+                                break;
 
-                                case 1:
-                                    p[0] = *stripPtr++;
-                                    break;
+                            case 1:
+                                p[1] = *stripPtr++;
+                                break;
 
-                                case 2:
-                                    p[1] = *stripPtr++;
-                                    break;
+                            case 2:
+                                p[0] = *stripPtr++;
+                                break;
 
-                                case 3:
-                                    p[2] = *stripPtr++;
-                                    break;
-                            }
-                        }
-                        else
-                        {
-                            switch ((st / (num_of_strips / samples_per_pixel)))
-                            {
-                                case 0:
-                                    p[2] = *stripPtr++;
-                                    break;
-
-                                case 1:
-                                    p[1] = *stripPtr++;
-                                    break;
-
-                                case 2:
-                                    p[0] = *stripPtr++;
-                                    break;
-
-                                case 3:
-                                    p[3] = *stripPtr++;
-                                    break;
-                            }
+                            case 3:
+                                p[3] = *stripPtr++;
+                                break;
                         }
 
                         dataPtr += 4;
@@ -625,21 +545,10 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* const observe
                 {
                     p = dataPtr;
 
-                    // See B.K.O #148037 : take a care about byte order with Motorola computers.
-                    if (QSysInfo::ByteOrder == QSysInfo::BigEndian)     // PPC
-                    {
-                        p[3] = *stripPtr++;
-                        p[0] = *stripPtr++;
-                        p[1] = *stripPtr++;
-                        p[2] = *stripPtr++;
-                    }
-                    else
-                    {
-                        p[2] = *stripPtr++;
-                        p[1] = *stripPtr++;
-                        p[0] = *stripPtr++;
-                        p[3] = *stripPtr++;
-                    }
+                    p[2] = *stripPtr++;
+                    p[1] = *stripPtr++;
+                    p[0] = *stripPtr++;
+                    p[3] = *stripPtr++;
 
                     dataPtr += 4;
                 }
@@ -807,6 +716,7 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver* const observe
     }
 
     uchar*  pixel;
+    uint16* pixel16;
     double  alpha_factor;
     uint32  x, y;
     uint8   r8, g8, b8, a8 = 0;
@@ -814,6 +724,7 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver* const observe
     int     i = 0;
 
     uint8* buf = (uint8*)_TIFFmalloc(TIFFScanlineSize(tif));
+    uint16* buf16;
 
     if (!buf)
     {
@@ -849,15 +760,16 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver* const observe
 
             if (imageSixteenBit())          // 16 bits image.
             {
-                b16 = (uint16)(pixel[0] + 256 * pixel[1]);
-                g16 = (uint16)(pixel[2] + 256 * pixel[3]);
-                r16 = (uint16)(pixel[4] + 256 * pixel[5]);
+                pixel16 = (ushort*)pixel;
+                b16 = pixel16[0];
+                g16 = pixel16[1];
+                r16 = pixel16[2];
 
                 if (imageHasAlpha())
                 {
                     // TIFF makes you pre-mutiply the RGB components by alpha
 
-                    a16          = (uint16)(pixel[6] + 256 * pixel[7]);
+                    a16          = pixel16[3];
                     alpha_factor = ((double)a16 / 65535.0);
                     r16          = (uint16)(r16 * alpha_factor);
                     g16          = (uint16)(g16 * alpha_factor);
@@ -866,17 +778,16 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver* const observe
 
                 // This might be endian dependent
 
-                buf[i++] = (uint8)(r16);
-                buf[i++] = (uint8)(r16 >> 8);
-                buf[i++] = (uint8)(g16);
-                buf[i++] = (uint8)(g16 >> 8);
-                buf[i++] = (uint8)(b16);
-                buf[i++] = (uint8)(b16 >> 8);
+                buf16 = (ushort*)(buf+i);
+                *buf16++ = r16;
+                *buf16++ = g16;
+                *buf16++ = b16;
+                i+= 6;
 
                 if (imageHasAlpha())
                 {
-                    buf[i++] = (uint8)(a16) ;
-                    buf[i++] = (uint8)(a16 >> 8) ;
+                    *buf16++ = a16;
+                    i += 2;
                 }
             }
             else                            // 8 bits image.
