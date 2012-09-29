@@ -142,7 +142,7 @@ public:
         return false;
     }
 
-    void finishScanner(const ImageScanner& scanner);
+    void finishScanner(ImageScanner& scanner);
 
 public:
 
@@ -354,11 +354,12 @@ void CollectionScanner::finishCompleteScan(const QStringList& albumPaths)
 {
     emit startCompleteScan();
 
-    // lock database
-    DatabaseTransaction transaction;
+    {
+        DatabaseTransaction transaction;
 
-    mainEntryPoint(true);
-    d->resetRemovedItemsTime();
+        mainEntryPoint(true);
+        d->resetRemovedItemsTime();
+    }
 
     if (!d->checkObserver())
     {
@@ -418,6 +419,7 @@ void CollectionScanner::finishCompleteScan(const QStringList& albumPaths)
         return;
     }
 
+    DatabaseTransaction transaction;
     completeScanCleanupPart();
 }
 
@@ -1005,8 +1007,14 @@ void CollectionScanner::scanFileNormal(const QFileInfo& fi, const ItemScanInfo& 
     }
 }
 
-void CollectionScanner::CollectionScannerPriv::finishScanner(const ImageScanner& scanner)
+void CollectionScanner::CollectionScannerPriv::finishScanner(ImageScanner& scanner)
 {
+    // Perform the actual write operation to the database
+    {
+        DatabaseOperationGroup group;
+        scanner.commit();
+    }
+
     if (recordHistoryIds && scanner.hasHistoryToResolve())
     {
         needResolveHistorySet << scanner.id();
@@ -1022,15 +1030,12 @@ qlonglong CollectionScanner::scanNewFile(const QFileInfo& info, int albumId)
 
     ImageScanner scanner(info);
     scanner.setCategory(category(info));
-    // call loadFromDisk, which can take long, explicitly to perform it before opening a database transaction
-    scanner.loadFromDisk();
 
     // Check copy/move hints for single items
     qlonglong srcId = d->itemHints.value(NewlyAppearedFile(albumId, info.fileName()));
 
     if (srcId != 0)
     {
-        DatabaseOperationGroup group;
         scanner.copiedFrom(albumId, srcId);
     }
     else
@@ -1046,13 +1051,11 @@ qlonglong CollectionScanner::scanNewFile(const QFileInfo& info, int albumId)
 
         if (srcId != 0)
         {
-            DatabaseOperationGroup group;
             scanner.copiedFrom(albumId, srcId);
         }
         else
         {
             // Establishing identity with the unique hsah
-            DatabaseOperationGroup group;
             scanner.newFile(albumId);
         }
     }
@@ -1070,8 +1073,6 @@ qlonglong CollectionScanner::scanNewFileFullScan(const QFileInfo& info, int albu
 
     ImageScanner scanner(info);
     scanner.setCategory(category(info));
-    scanner.loadFromDisk();
-    DatabaseOperationGroup group;
     scanner.newFileFullScan(albumId);
     d->finishScanner(scanner);
     return scanner.id();
@@ -1086,8 +1087,6 @@ void CollectionScanner::scanModifiedFile(const QFileInfo& info, const ItemScanIn
 
     ImageScanner scanner(info, scanInfo);
     scanner.setCategory(category(info));
-    scanner.loadFromDisk();
-    DatabaseOperationGroup group;
     scanner.fileModified();
     d->finishScanner(scanner);
 }
@@ -1097,8 +1096,6 @@ QString CollectionScanner::scanFileUpdateHash(const QFileInfo& info, const ItemS
     // same code as scanModifiedFile
     ImageScanner scanner(info, scanInfo);
     scanner.setCategory(category(info));
-    scanner.loadFromDisk();
-    DatabaseOperationGroup group;
     scanner.fileModified();
     d->finishScanner(scanner);
     return scanner.itemScanInfo().uniqueHash;
@@ -1113,8 +1110,6 @@ void CollectionScanner::rescanFile(const QFileInfo& info, const ItemScanInfo& sc
 
     ImageScanner scanner(info, scanInfo);
     scanner.setCategory(category(info));
-    scanner.loadFromDisk();
-    DatabaseOperationGroup group;
     scanner.rescan();
     d->finishScanner(scanner);
 }

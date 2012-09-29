@@ -65,6 +65,15 @@ public:
      */
     ImageScanner(qlonglong imageid);
 
+    ~ImageScanner();
+
+    /**
+     * Commits the scanned information to the database.
+     * You must call this after scanning was done for any changes to take effect.
+     * Only this method will perform write operations to the database.
+     */
+    void commit();
+
     /**
      * Returns the image id of the scanned file, if (yet) available.
      */
@@ -206,8 +215,6 @@ public:
      */
     static QString iptcCorePropertyName(MetadataInfo::Field field);
 
-protected:
-
     enum ScanMode
     {
         NewScan,
@@ -219,24 +226,37 @@ protected:
 
     bool scanFromIdenticalFile();
     bool copyFromSource(qlonglong src);
+    void commitCopyImageAttributes();
 
-    void addImage(int albumId);
-    void updateImage();
+    void prepareAddImage(int albumId);
+    void commitAddImage();
+    void prepareUpdateImage();
+    void commitUpdateImage();
 
     void scanFile(ScanMode mode);
 
     void scanImageInformation();
+    void commitImageInformation();
     void scanImageMetadata();
+    void commitImageMetadata();
     void scanImagePosition();
+    void commitImagePosition();
     void scanImageComments();
+    void commitImageComments();
     void scanImageCopyright();
+    void commitImageCopyright();
     void scanIPTCCore();
+    void commitIPTCCore();
     void scanTags();
+    void commitTags();
     void scanFaces();
+    void commitFaces();
     void scanImageHistory();
+    void commitImageHistory();
     void scanImageHistoryIfModified();
     void scanVideoInformation();
     void scanVideoMetadata();
+    void commitVideoMetadata();
     void scanAudioFile();
 
     QString uniqueHash();
@@ -249,18 +269,8 @@ protected:
 
 protected:
 
-    bool         m_hasImage;
-    bool         m_hasMetadata;
-    bool         m_loadedFromDisk;
-
-    QFileInfo    m_fileInfo;
-
-    DMetadata    m_metadata;
-    DImg         m_img;
-    ItemScanInfo m_scanInfo;
-    ScanMode     m_scanMode;
-
-    bool         m_hasHistoryToResolve;
+    class ImageScannerPriv;
+    ImageScannerPriv* const d;
 };
 
 } // namespace Digikam

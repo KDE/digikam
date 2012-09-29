@@ -27,6 +27,7 @@
 // Qt includes
 
 #include <QImageReader>
+#include <QTime>
 
 // KDE includes
 
@@ -54,68 +55,210 @@
 namespace Digikam
 {
 
-ImageScanner::ImageScanner(const QFileInfo& info, const ItemScanInfo& scanInfo)
-    : m_hasImage(false),
-      m_hasMetadata(false),
-      m_loadedFromDisk(false),
-      m_fileInfo(info),
-      m_scanInfo(scanInfo),
-      m_scanMode(ModifiedScan),
-      m_hasHistoryToResolve(false)
+class ImageScannerCommit
 {
+public:
+    ImageScannerCommit()
+        : operation(NoOp),
+          copyImageAttributesId(-1),
+          commitImageInformation(false),
+          commitImageMetadata(false),
+          commitVideoMetadata(false),
+          commitImagePosition(false),
+          commitImageComments(false),
+          commitImageCopyright(false),
+          commitFaces(false),
+          commitIPTCCore(false)
+    {
+    }
+
+    enum Operation
+    {
+        NoOp,
+        AddItem,
+        UpdateItem
+    };
+
+    Operation operation;
+
+    qlonglong copyImageAttributesId;
+
+    bool commitImageInformation;
+    bool commitImageMetadata;
+    bool commitVideoMetadata;
+    bool commitImagePosition;
+    bool commitImageComments;
+    bool commitImageCopyright;
+    bool commitFaces;
+    bool commitIPTCCore;
+
+    DatabaseFields::ImageInformation imageInformationFields;
+    QVariantList imageInformationInfos;
+
+    QVariantList imageMetadataInfos;
+    QVariantList imagePositionInfos;
+
+    CaptionsMap  captions;
+    QString      headline;
+    QString      title;
+
+    Template     copyrightTemplate;
+    QMap<QString,QVariant> metadataFacesMap;
+
+    QVariantList iptcCoreMetadataInfos;
+
+    QList<int> tagIds;
+    QString    historyXml;
+    QString    uuid;
+};
+
+class ImageScanner::ImageScannerPriv
+{
+public:
+
+    ImageScannerPriv()
+        : hasImage(false), hasMetadata(false), loadedFromDisk(false),
+          scanMode(ModifiedScan), hasHistoryToResolve(false)
+    {
+        time.start();
+    }
+
+    bool         hasImage;
+    bool         hasMetadata;
+    bool         loadedFromDisk;
+
+    QFileInfo    fileInfo;
+
+    DMetadata    metadata;
+    DImg         img;
+    ItemScanInfo scanInfo;
+    ImageScanner::ScanMode scanMode;
+
+    bool         hasHistoryToResolve;
+
+    ImageScannerCommit commit;
+
+    QTime time;
+};
+
+ImageScanner::ImageScanner(const QFileInfo& info, const ItemScanInfo& scanInfo)
+    : d(new ImageScannerPriv)
+{
+    d->fileInfo = info;
+    d->scanInfo = scanInfo;
 }
 
 ImageScanner::ImageScanner(const QFileInfo& info)
-    : m_hasImage(false),
-      m_hasMetadata(false),
-      m_loadedFromDisk(false),
-      m_fileInfo(info),
-      m_scanMode(ModifiedScan),
-      m_hasHistoryToResolve(false)
+    : d(new ImageScannerPriv)
 {
+    d->fileInfo = info;
 }
 
 ImageScanner::ImageScanner(qlonglong imageid)
-    : m_hasImage(false),
-      m_hasMetadata(false),
-      m_loadedFromDisk(false),
-      m_scanMode(ModifiedScan),
-      m_hasHistoryToResolve(false)
+    : d(new ImageScannerPriv)
 {
     ItemShortInfo shortInfo;
     {
         DatabaseAccess access;
         shortInfo  = access.db()->getItemShortInfo(imageid);
-        m_scanInfo = access.db()->getItemScanInfo(imageid);
+        d->scanInfo = access.db()->getItemScanInfo(imageid);
     }
 
     QString albumRootPath = CollectionManager::instance()->albumRootPath(shortInfo.albumRootID);
-    m_fileInfo            = QFileInfo(DatabaseUrl::fromAlbumAndName(shortInfo.itemName,
+    d->fileInfo            = QFileInfo(DatabaseUrl::fromAlbumAndName(shortInfo.itemName,
                                       shortInfo.album, albumRootPath, shortInfo.albumRootID).fileUrl().toLocalFile());
+}
+
+ImageScanner::~ImageScanner()
+{
+    kDebug() << "Finishing took" << d->time.elapsed() << "ms";
+    delete d;
 }
 
 qlonglong ImageScanner::id() const
 {
-    return m_scanInfo.id;
+    return d->scanInfo.id;
 }
 
 void ImageScanner::setCategory(DatabaseItem::Category category)
 {
     // we don't have the necessary information in this class, but in CollectionScanner
-    m_scanInfo.category = category;
+    d->scanInfo.category = category;
+}
+
+void ImageScanner::commit()
+{
+    kDebug() << "Scanning took" << d->time.restart() << "ms";
+    switch (d->commit.operation)
+    {
+        case ImageScannerCommit::NoOp:
+            return;
+        case ImageScannerCommit::AddItem:
+            commitAddImage();
+            break;
+        case ImageScannerCommit::UpdateItem:
+            commitUpdateImage();
+            break;
+    }
+
+    if (d->commit.copyImageAttributesId != -1)
+    {
+        commitCopyImageAttributes();
+        return;
+    }
+
+    if (d->commit.commitImageInformation)
+    {
+        commitImageInformation();
+    }
+
+    if (d->commit.commitImageMetadata)
+    {
+        commitImageMetadata();
+    }
+    else if (d->commit.commitVideoMetadata)
+    {
+        commitVideoMetadata();
+    }
+
+    if (d->commit.commitImagePosition)
+    {
+        commitImagePosition();
+    }
+    if (d->commit.commitImageComments)
+    {
+        commitImageComments();
+    }
+    if (d->commit.commitImageCopyright)
+    {
+        commitImageCopyright();
+    }
+    if (d->commit.commitIPTCCore)
+    {
+        commitIPTCCore();
+    }
+    if (!d->commit.tagIds.isEmpty())
+    {
+        commitTags();
+    }
+    if (d->commit.commitFaces)
+    {
+        commitFaces();
+    }
+    commitImageHistory();
 }
 
 void ImageScanner::fileModified()
 {
     loadFromDisk();
-    updateImage();
+    prepareUpdateImage();
     scanFile(ModifiedScan);
 }
 
 void ImageScanner::newFile(int albumId)
 {
     loadFromDisk();
-    addImage(albumId);
+    prepareAddImage(albumId);
 
     if (!scanFromIdenticalFile())
     {
@@ -126,21 +269,21 @@ void ImageScanner::newFile(int albumId)
 void ImageScanner::newFileFullScan(int albumId)
 {
     loadFromDisk();
-    addImage(albumId);
+    prepareAddImage(albumId);
     scanFile(NewScan);
 }
 
 void ImageScanner::rescan()
 {
     loadFromDisk();
-    updateImage();
+    prepareUpdateImage();
     scanFile(Rescan);
 }
 
 void ImageScanner::copiedFrom(int albumId, qlonglong srcId)
 {
     loadFromDisk();
-    addImage(albumId);
+    prepareAddImage(albumId);
 
     // first use source, if it exists
     if (!copyFromSource(srcId))
@@ -149,6 +292,10 @@ void ImageScanner::copiedFrom(int albumId, qlonglong srcId)
         if (!scanFromIdenticalFile())
         {
             // scan newly
+    if (d->commit.commitImagePosition)
+    {
+        commitImagePosition();
+    }
             scanFile(NewScan);
         }
     }
@@ -156,12 +303,12 @@ void ImageScanner::copiedFrom(int albumId, qlonglong srcId)
 
 const ItemScanInfo& ImageScanner::itemScanInfo() const
 {
-    return m_scanInfo;
+    return d->scanInfo;
 }
 
 bool ImageScanner::hasHistoryToResolve() const
 {
-    return m_hasHistoryToResolve;
+    return d->hasHistoryToResolve;
 }
 
 bool lessThanForIdentity(const ItemScanInfo& a, const ItemScanInfo& b)
@@ -189,23 +336,29 @@ bool lessThanForIdentity(const ItemScanInfo& a, const ItemScanInfo& b)
 bool ImageScanner::scanFromIdenticalFile()
 {
     // Get a list of other images that are identical. Source image shall not be included.
-    QList<ItemScanInfo> candidates = DatabaseAccess().db()->getIdenticalFiles(m_scanInfo.uniqueHash,
-                                     m_scanInfo.fileSize, m_scanInfo.id);
+    // When using the Commit functionality, d->scanInfo.id can be null.
+    QList<ItemScanInfo> candidates = DatabaseAccess().db()->getIdenticalFiles(d->scanInfo.uniqueHash,
+                                     d->scanInfo.fileSize, d->scanInfo.id);
 
     if (!candidates.isEmpty())
     {
         // Sort by priority, as implemented by custom lessThan()
         qStableSort(candidates.begin(), candidates.end(), lessThanForIdentity);
 
-        kDebug() << "Recognized" << m_fileInfo.filePath() << "as identical to item" << candidates.first().id;
+        kDebug() << "Recognized" << d->fileInfo.filePath() << "as identical to item" << candidates.first().id;
 
         // Copy attributes.
         // Todo for the future is to worry about syncing identical files.
-        DatabaseAccess().db()->copyImageAttributes(candidates.first().id, m_scanInfo.id);
+        d->commit.copyImageAttributesId = candidates.first().id;
         return true;
     }
 
     return false;
+}
+
+void ImageScanner::commitCopyImageAttributes()
+{
+    DatabaseAccess().db()->copyImageAttributes(d->commit.copyImageAttributesId, d->scanInfo.id);
 }
 
 bool ImageScanner::copyFromSource(qlonglong srcId)
@@ -213,7 +366,7 @@ bool ImageScanner::copyFromSource(qlonglong srcId)
     DatabaseAccess access;
 
     // some basic validity checking
-    if (srcId == m_scanInfo.id)
+    if (srcId == d->scanInfo.id)
     {
         return false;
     }
@@ -225,49 +378,60 @@ bool ImageScanner::copyFromSource(qlonglong srcId)
         return false;
     }
 
-    kDebug() << "Recognized" << m_fileInfo.filePath() << "as copied from" << srcId;
-    access.db()->copyImageAttributes(srcId, m_scanInfo.id);
+    kDebug() << "Recognized" << d->fileInfo.filePath() << "as copied from" << srcId;
+    d->commit.copyImageAttributesId = srcId;
     return true;
 }
 
-void ImageScanner::addImage(int albumId)
+void ImageScanner::prepareAddImage(int albumId)
 {
-    m_scanInfo.albumID          = albumId;
-    m_scanInfo.status           = DatabaseItem::Visible;
+    d->scanInfo.albumID          = albumId;
+    d->scanInfo.status           = DatabaseItem::Visible;
 
-    kDebug() << "Adding new item" << m_fileInfo.filePath();
-    m_scanInfo.id               = DatabaseAccess().db()->addItem(m_scanInfo.albumID, m_scanInfo.itemName,
-                                  m_scanInfo.status, m_scanInfo.category,
-                                  m_scanInfo.modificationDate, m_scanInfo.fileSize,
-                                  m_scanInfo.uniqueHash);
+    kDebug() << "Adding new item" << d->fileInfo.filePath();
+    d->commit.operation = ImageScannerCommit::AddItem;
 }
 
-void ImageScanner::updateImage()
+void ImageScanner::commitAddImage()
 {
-    DatabaseAccess().db()->updateItem(m_scanInfo.id, m_scanInfo.category,
-                                      m_scanInfo.modificationDate, m_scanInfo.fileSize, m_scanInfo.uniqueHash);
+    d->scanInfo.id  = DatabaseAccess().db()->addItem(d->scanInfo.albumID, d->scanInfo.itemName,
+                                                     d->scanInfo.status, d->scanInfo.category,
+                                                     d->scanInfo.modificationDate, d->scanInfo.fileSize,
+                                                     d->scanInfo.uniqueHash);
+}
+
+void ImageScanner::prepareUpdateImage()
+{
+    d->commit.operation = ImageScannerCommit::UpdateItem;
+}
+
+void ImageScanner::commitUpdateImage()
+{
+    DatabaseAccess().db()->updateItem(d->scanInfo.id, d->scanInfo.category,
+                                      d->scanInfo.modificationDate, d->scanInfo.fileSize,
+                                      d->scanInfo.uniqueHash);
 }
 
 void ImageScanner::scanFile(ScanMode mode)
 {
-    m_scanMode = mode;
+    d->scanMode = mode;
 
-    if (m_scanMode == ModifiedScan)
+    if (d->scanMode == ModifiedScan)
     {
-        if (m_scanInfo.category == DatabaseItem::Image)
+        if (d->scanInfo.category == DatabaseItem::Image)
         {
             scanImageInformation();
             scanFaces();
             scanImageHistoryIfModified();
         }
-        else if (m_scanInfo.category == DatabaseItem::Video)
+        else if (d->scanInfo.category == DatabaseItem::Video)
         {
             scanVideoInformation();
-            // TODO: Here, we only scan fields which can be expected to have changed, when we detect a change of file data.
-            // It seems to me that at the moment video metadata contains such files (which may change after editing).
+            // NOTE: Here, we only scan fields which can be expected to have changed, when we detect a change of file data.
+            // It seems to me that at the moment video metadata contains such fields (which may change after editing).
             // In contrast, with photos, ImageMetadata contains fields which describe the moment of taking the photo,
             //  which means they dont change.
-            if (m_hasMetadata)
+            if (d->hasMetadata)
             {
                 scanVideoMetadata();
             }
@@ -275,11 +439,11 @@ void ImageScanner::scanFile(ScanMode mode)
     }
     else
     {
-        if (m_scanInfo.category == DatabaseItem::Image)
+        if (d->scanInfo.category == DatabaseItem::Image)
         {
             scanImageInformation();
 
-            if (m_hasMetadata)
+            if (d->hasMetadata)
             {
                 scanImageMetadata();
                 scanImagePosition();
@@ -291,19 +455,19 @@ void ImageScanner::scanFile(ScanMode mode)
                 scanImageHistory();
             }
         }
-        else if (m_scanInfo.category == DatabaseItem::Video)
+        else if (d->scanInfo.category == DatabaseItem::Video)
         {
             scanVideoInformation();
-            if (m_hasMetadata)
+            if (d->hasMetadata)
             {
                 scanVideoMetadata();
             }
         }
-        else if (m_scanInfo.category == DatabaseItem::Audio)
+        else if (d->scanInfo.category == DatabaseItem::Audio)
         {
             scanAudioFile();
         }
-        else if (m_scanInfo.category == DatabaseItem::Other)
+        else if (d->scanInfo.category == DatabaseItem::Other)
         {
             // unsupported
         }
@@ -315,14 +479,14 @@ void ImageScanner::checkCreationDateFromMetadata(QVariant& dateFromMetadata) con
     // creation date: fall back to file system property
     if (dateFromMetadata.isNull() || !dateFromMetadata.toDateTime().isValid())
     {
-        dateFromMetadata = creationDateFromFilesystem(m_fileInfo);
+        dateFromMetadata = creationDateFromFilesystem(d->fileInfo);
     }
 }
 
 bool ImageScanner::checkRatingFromMetadata(const QVariant& ratingFromMetadata) const
 {
     // should only be overwritten if set in metadata
-    if (m_scanMode == Rescan)
+    if (d->scanMode == Rescan)
     {
         if (ratingFromMetadata.isNull() || ratingFromMetadata.toInt() == -1)
         {
@@ -334,49 +498,33 @@ bool ImageScanner::checkRatingFromMetadata(const QVariant& ratingFromMetadata) c
 
 void ImageScanner::scanImageInformation()
 {
-    DatabaseFields::ImageInformation dbFields = DatabaseFields::ImageInformationAll;
-    QVariantList                     infos;
-
-    if (m_scanMode == NewScan || m_scanMode == Rescan)
+    d->commit.commitImageInformation = true;
+    if (d->scanMode == NewScan || d->scanMode == Rescan)
     {
+        d->commit.imageInformationFields = DatabaseFields::ImageInformationAll;
+
         MetadataFields fields;
         fields << MetadataInfo::Rating
                << MetadataInfo::CreationDate
                << MetadataInfo::DigitizationDate
                << MetadataInfo::Orientation;
-        QVariantList metadataInfos = m_metadata.getMetadataFields(fields);
+        QVariantList metadataInfos = d->metadata.getMetadataFields(fields);
 
         checkCreationDateFromMetadata(metadataInfos[1]);
 
         if (!checkRatingFromMetadata(metadataInfos.at(0)))
         {
-            dbFields &= ~DatabaseFields::Rating;
+            d->commit.imageInformationFields &= ~DatabaseFields::Rating;
             metadataInfos.removeAt(0);
         }
 
-        infos << metadataInfos;
+        d->commit.imageInformationInfos = metadataInfos;
     }
-
-    QSize size = m_img.size();
-    infos << size.width()
-          << size.height()
-          << detectFormat()
-          << m_img.originalBitDepth()
-          << m_img.originalColorModel();
-
-    if (m_scanMode == NewScan)
-    {
-        DatabaseAccess().db()->addImageInformation(m_scanInfo.id, infos, dbFields);
-    }
-    else if (m_scanMode == Rescan)
-    {
-        DatabaseAccess().db()->changeImageInformation(m_scanInfo.id, infos, dbFields);
-    }
-    else // ModifiedScan
+    else
     {
         // Does _not_ update rating and orientation (unless dims were exchanged)!
-        /*int orientation = m_metadata.getImageOrientation();
-        QVariantList data = DatabaseAccess().db()->getImageInformation(m_scanInfo.id,
+        /*int orientation = d->metadata.getImageOrientation();
+        QVariantList data = DatabaseAccess().db()->getImageInformation(d->scanInfo.id,
                                                                        DatabaseFields::Width |
                                                                        DatabaseFields::Height |
                                                                        DatabaseFields::Orientation);
@@ -385,12 +533,43 @@ void ImageScanner::scanImageInformation()
             // be careful not to overwrite our value set in the database
             // But there is a special case: if the dims were
         }*/
-        DatabaseAccess().db()->changeImageInformation(m_scanInfo.id, infos,
-                                                      DatabaseFields::Width      |
-                                                      DatabaseFields::Height     |
-                                                      DatabaseFields::Format     |
-                                                      DatabaseFields::ColorDepth |
-                                                      DatabaseFields::ColorModel);
+
+        d->commit.imageInformationFields =
+                DatabaseFields::Width      |
+                DatabaseFields::Height     |
+                DatabaseFields::Format     |
+                DatabaseFields::ColorDepth |
+                DatabaseFields::ColorModel;
+    }
+
+    QSize size = d->img.size();
+    d->commit.imageInformationInfos
+          << size.width()
+          << size.height()
+          << detectFormat()
+          << d->img.originalBitDepth()
+          << d->img.originalColorModel();
+}
+
+void ImageScanner::commitImageInformation()
+{
+    if (d->scanMode == NewScan)
+    {
+        DatabaseAccess().db()->addImageInformation(d->scanInfo.id,
+                                                   d->commit.imageInformationInfos,
+                                                   d->commit.imageInformationFields);
+    }
+    else if (d->scanMode == Rescan)
+    {
+        DatabaseAccess().db()->changeImageInformation(d->scanInfo.id,
+                                                      d->commit.imageInformationInfos,
+                                                      d->commit.imageInformationFields);
+    }
+    else // ModifiedScan
+    {
+        DatabaseAccess().db()->changeImageInformation(d->scanInfo.id,
+                                                      d->commit.imageInformationInfos,
+                                                      d->commit.imageInformationFields);
     }
 }
 
@@ -433,12 +612,18 @@ static MetadataFields allImageMetadataFields()
 
 void ImageScanner::scanImageMetadata()
 {
-    QVariantList metadataInfos = m_metadata.getMetadataFields(allImageMetadataFields());
+    QVariantList metadataInfos = d->metadata.getMetadataFields(allImageMetadataFields());
 
     if (hasValidField(metadataInfos))
     {
-        DatabaseAccess().db()->addImageMetadata(m_scanInfo.id, metadataInfos);
+        d->commit.commitImageMetadata = true;
+        d->commit.imageMetadataInfos  = metadataInfos;
     }
+}
+
+void ImageScanner::commitImageMetadata()
+{
+    DatabaseAccess().db()->addImageMetadata(d->scanInfo.id, d->commit.imageMetadataInfos);
 }
 
 void ImageScanner::scanImagePosition()
@@ -456,12 +641,18 @@ void ImageScanner::scanImagePosition()
            << MetadataInfo::PositionAccuracy
            << MetadataInfo::PositionDescription;
 
-    QVariantList metadataInfos = m_metadata.getMetadataFields(fields);
+    QVariantList metadataInfos = d->metadata.getMetadataFields(fields);
 
     if (hasValidField(metadataInfos))
     {
-        DatabaseAccess().db()->addImagePosition(m_scanInfo.id, metadataInfos);
+        d->commit.commitImagePosition = true;
+        d->commit.imagePositionInfos  = metadataInfos;
     }
+}
+
+void ImageScanner::commitImagePosition()
+{
+    DatabaseAccess().db()->addImagePosition(d->scanInfo.id, d->commit.imagePositionInfos);
 }
 
 void ImageScanner::scanImageComments()
@@ -470,35 +661,51 @@ void ImageScanner::scanImageComments()
     fields << MetadataInfo::Headline
            << MetadataInfo::Title;
 
-    QVariantList metadataInfos = m_metadata.getMetadataFields(fields);
+    QVariantList metadataInfos = d->metadata.getMetadataFields(fields);
 
     // handles all possible fields, multi-language, author, date
-    CaptionsMap captions = m_metadata.getImageComments();
+    CaptionsMap captions = d->metadata.getImageComments();
 
     if (captions.isEmpty() && !hasValidField(metadataInfos))
     {
         return;
     }
 
-    DatabaseAccess access;
-    ImageComments comments(access, m_scanInfo.id);
-
-    // Description
-    if (!captions.isEmpty())
-    {
-        comments.replaceComments(captions);
-    }
-
+    d->commit.commitImageComments  = true;
+    d->commit.captions             = captions;
     // Headline
     if (!metadataInfos.at(0).isNull())
     {
-        comments.addHeadline(metadataInfos.at(0).toString());
+        d->commit.headline = metadataInfos.at(0).toString();
     }
-
     // Title
     if (!metadataInfos.at(1).isNull())
     {
-        comments.addTitle(metadataInfos.at(1).toMap()["x-default"].toString());
+        d->commit.title = metadataInfos.at(1).toMap()["x-default"].toString();
+    }
+}
+
+void ImageScanner::commitImageComments()
+{
+    DatabaseAccess access;
+    ImageComments comments(access, d->scanInfo.id);
+
+    // Description
+    if (!d->commit.captions.isEmpty())
+    {
+        comments.replaceComments(d->commit.captions);
+    }
+
+    // Headline
+    if (!d->commit.headline.isNull())
+    {
+        comments.addHeadline(d->commit.headline);
+    }
+
+    // Title
+    if (!d->commit.title.isNull())
+    {
+        comments.addTitle(d->commit.title);
     }
 }
 
@@ -506,15 +713,21 @@ void ImageScanner::scanImageCopyright()
 {
     Template t;
 
-    if (!m_metadata.getCopyrightInformation(t))
+    if (!d->metadata.getCopyrightInformation(t))
     {
         return;
     }
 
-    ImageCopyright copyright(m_scanInfo.id);
-    // It is not clear if removeAll() should be called if m_scanMode == Rescan
+    d->commit.commitImageCopyright = true;
+    d->commit.copyrightTemplate    = t;
+}
+
+void ImageScanner::commitImageCopyright()
+{
+    ImageCopyright copyright(d->scanInfo.id);
+    // It is not clear if removeAll() should be called if d->scanMode == Rescan
     copyright.removeAll();
-    copyright.setFromTemplate(t);
+    copyright.setFromTemplate(d->commit.copyrightTemplate);
 }
 
 void ImageScanner::scanIPTCCore()
@@ -526,18 +739,24 @@ void ImageScanner::scanIPTCCore()
            << MetadataInfo::IptcCoreScene
            << MetadataInfo::IptcCoreSubjectCode;
 
-    QVariantList metadataInfos = m_metadata.getMetadataFields(fields);
+    QVariantList metadataInfos = d->metadata.getMetadataFields(fields);
 
     if (!hasValidField(metadataInfos))
     {
         return;
     }
 
-    ImageExtendedProperties props(m_scanInfo.id);
+    d->commit.commitIPTCCore = true;
+    d->commit.iptcCoreMetadataInfos = metadataInfos;
+}
 
-    if (!metadataInfos.at(0).isNull())
+void ImageScanner::commitIPTCCore()
+{
+    ImageExtendedProperties props(d->scanInfo.id);
+
+    if (!d->commit.iptcCoreMetadataInfos.at(0).isNull())
     {
-        IptcCoreLocationInfo loc = metadataInfos.at(0).value<IptcCoreLocationInfo>();
+        IptcCoreLocationInfo loc = d->commit.iptcCoreMetadataInfos.at(0).value<IptcCoreLocationInfo>();
 
         if (!loc.isNull())
         {
@@ -545,24 +764,24 @@ void ImageScanner::scanIPTCCore()
         }
     }
 
-    if (!metadataInfos.at(1).isNull())
+    if (!d->commit.iptcCoreMetadataInfos.at(1).isNull())
     {
-        props.setIntellectualGenre(metadataInfos.at(1).toString());
+        props.setIntellectualGenre(d->commit.iptcCoreMetadataInfos.at(1).toString());
     }
 
-    if (!metadataInfos.at(2).isNull())
+    if (!d->commit.iptcCoreMetadataInfos.at(2).isNull())
     {
-        props.setJobId(metadataInfos.at(2).toString());
+        props.setJobId(d->commit.iptcCoreMetadataInfos.at(2).toString());
     }
 
-    if (!metadataInfos.at(3).isNull())
+    if (!d->commit.iptcCoreMetadataInfos.at(3).isNull())
     {
-        props.setScene(metadataInfos.at(3).toStringList());
+        props.setScene(d->commit.iptcCoreMetadataInfos.at(3).toStringList());
     }
 
-    if (!metadataInfos.at(4).isNull())
+    if (!d->commit.iptcCoreMetadataInfos.at(4).isNull())
     {
-        props.setSubjectCode(metadataInfos.at(4).toStringList());
+        props.setSubjectCode(d->commit.iptcCoreMetadataInfos.at(4).toStringList());
     }
 }
 
@@ -570,19 +789,19 @@ void ImageScanner::scanTags()
 {
     // Check Keywords tag paths.
 
-    QVariant var         = m_metadata.getMetadataField(MetadataInfo::Keywords);
+    QVariant var         = d->metadata.getMetadataField(MetadataInfo::Keywords);
     QStringList keywords = var.toStringList();
 
     if (!keywords.isEmpty())
     {
         // get tag ids, create if necessary
         QList<int> tagIds = TagsCache::instance()->getOrCreateTags(keywords);
-        DatabaseAccess().db()->addTagsToItems(QList<qlonglong>() << m_scanInfo.id, tagIds);
+        d->commit.tagIds += tagIds;
     }
 
     // Check Pick Label tag.
 
-    int pickId = m_metadata.getImagePickLabel();
+    int pickId = d->metadata.getImagePickLabel();
     if (pickId != -1)
     {
         kDebug() << "Pick Label found : " << pickId;
@@ -590,7 +809,7 @@ void ImageScanner::scanTags()
         int tagId = TagsCache::instance()->tagForPickLabel((PickLabel)pickId);
         if (tagId)
         {
-            DatabaseAccess().db()->addTagsToItems(QList<qlonglong>() << m_scanInfo.id, QList<int>() << tagId);
+            d->commit.tagIds << tagId;
             kDebug() << "Assigned Pick Label Tag  : " << tagId;
         }
         else
@@ -601,8 +820,7 @@ void ImageScanner::scanTags()
 
     // Check Color Label tag.
 
-    int colorId = m_metadata.getImageColorLabel();
-
+    int colorId = d->metadata.getImageColorLabel();
     if (colorId != -1)
     {
         kDebug() << "Color Label found : " << colorId;
@@ -610,7 +828,7 @@ void ImageScanner::scanTags()
         int tagId = TagsCache::instance()->tagForColorLabel((ColorLabel)colorId);
         if (tagId)
         {
-            DatabaseAccess().db()->addTagsToItems(QList<qlonglong>() << m_scanInfo.id, QList<int>() << tagId);
+            d->commit.tagIds << tagId;
             kDebug() << "Assigned Color Label Tag  : " << tagId;
         }
         else
@@ -620,22 +838,34 @@ void ImageScanner::scanTags()
     }
 }
 
+void ImageScanner::commitTags()
+{
+    DatabaseAccess().db()->addTagsToItems(QList<qlonglong>() << d->scanInfo.id, d->commit.tagIds);
+}
+
 void ImageScanner::scanFaces()
 {
-    QSize size = m_img.size();
+    QSize size = d->img.size();
     if (!size.isValid())
     {
         return;
     }
 
     QMap<QString,QVariant> metadataFacesMap;
-    if (!m_metadata.getImageFacesMap(metadataFacesMap))
+    if (!d->metadata.getImageFacesMap(metadataFacesMap))
     {
         return;
     }
 
+    d->commit.commitFaces = true;
+    d->commit.metadataFacesMap = metadataFacesMap;
+}
+
+void ImageScanner::commitFaces()
+{
+    QSize size = d->img.size();
     QMap<QString,QVariant>::const_iterator it;
-    for (it = metadataFacesMap.constBegin(); it != metadataFacesMap.constEnd(); ++it)
+    for (it = d->commit.metadataFacesMap.constBegin(); it != d->commit.metadataFacesMap.constEnd(); ++it)
     {
         QString name = it.key();
         QRectF rect  = it.value().toRectF();
@@ -654,7 +884,7 @@ void ImageScanner::scanFaces()
         TagRegion region(TagRegion::relativeToAbsolute(rect, size));
 
         FaceTagsEditor editor;
-        editor.add(m_scanInfo.id, tagId, region, false);
+        editor.add(d->scanInfo.id, tagId, region, false);
     }
 }
 
@@ -662,31 +892,32 @@ void ImageScanner::scanImageHistory()
 {
     /** Stage 1 of history scanning */
 
-    QString historyXml = m_metadata.getImageHistory();
+    d->commit.historyXml = d->metadata.getImageHistory();
+    d->commit.uuid = d->metadata.getImageUniqueId();
+}
 
-    if (!historyXml.isEmpty())
+void ImageScanner::commitImageHistory()
+{
+    if (!d->commit.historyXml.isEmpty())
     {
-        DatabaseAccess().db()->setImageHistory(m_scanInfo.id, historyXml);
+        DatabaseAccess().db()->setImageHistory(d->scanInfo.id, d->commit.historyXml);
         // Delay history resolution by setting this tag:
         // Resolution depends on the presence of other images, possibly only when the scanning process has finished
-        DatabaseAccess().db()->addItemTag(m_scanInfo.id, TagsCache::instance()->
+        DatabaseAccess().db()->addItemTag(d->scanInfo.id, TagsCache::instance()->
                                           getOrCreateInternalTag(InternalTagName::needResolvingHistory()));
-        m_hasHistoryToResolve = true;
+        d->hasHistoryToResolve = true;
     }
-
-    QString uuid = m_metadata.getImageUniqueId();
-
-    if (!uuid.isNull())
+    if (!d->commit.uuid.isNull())
     {
-        DatabaseAccess().db()->setImageUuid(m_scanInfo.id, uuid);
+        DatabaseAccess().db()->setImageUuid(d->scanInfo.id, d->commit.uuid);
     }
 }
 
 void ImageScanner::scanImageHistoryIfModified()
 {
     // If a file has a modified history, it must have a new UUID
-    QString previousUuid = DatabaseAccess().db()->getImageUuid(m_scanInfo.id);
-    QString currentUuid  = m_metadata.getImageUniqueId();
+    QString previousUuid = DatabaseAccess().db()->getImageUuid(d->scanInfo.id);
+    QString currentUuid  = d->metadata.getImageUniqueId();
 
     if (previousUuid != currentUuid)
     {
@@ -1132,76 +1363,64 @@ static MetadataFields allVideoMetadataFields()
     return fields;
 }
 
-
 void ImageScanner::scanVideoInformation()
 {
-    DatabaseFields::ImageInformation dbFields;
-    QVariantList                     infos;
+    d->commit.commitImageInformation = true;
 
-    if (m_scanMode == NewScan || m_scanMode == Rescan)
+    if (d->scanMode == NewScan || d->scanMode == Rescan)
     {
         MetadataFields fields;
         fields << MetadataInfo::Rating
                << MetadataInfo::CreationDate
                << MetadataInfo::DigitizationDate;
-        QVariantList metadataInfos = m_metadata.getMetadataFields(fields);
-        dbFields |= DatabaseFields::Rating | DatabaseFields::CreationDate | DatabaseFields::DigitizationDate;
+        QVariantList metadataInfos = d->metadata.getMetadataFields(fields);
+
+        d->commit.imageInformationFields = DatabaseFields::Rating | DatabaseFields::CreationDate | DatabaseFields::DigitizationDate;
 
         checkCreationDateFromMetadata(metadataInfos[1]);
 
         if (!checkRatingFromMetadata(metadataInfos.at(0)))
         {
-            dbFields &= ~DatabaseFields::Rating;
+            d->commit.imageInformationFields &= ~DatabaseFields::Rating;
             metadataInfos.removeAt(0);
         }
 
-        infos << metadataInfos;
+        d->commit.imageInformationInfos = metadataInfos;
     }
 
-    infos << m_metadata.getMetadataField(MetadataInfo::VideoWidth)
-          << m_metadata.getMetadataField(MetadataInfo::VideoHeight);
-    dbFields |= DatabaseFields::Width | DatabaseFields::Height;
+    d->commit.imageInformationInfos << d->metadata.getMetadataField(MetadataInfo::VideoWidth)
+                                    << d->metadata.getMetadataField(MetadataInfo::VideoHeight);
+    d->commit.imageInformationFields |= DatabaseFields::Width | DatabaseFields::Height;
 
     // TODO: Please check / improve / rewrite detectVideoFormat().
     // The format strings shall be uppercase, and a clearly defined set
     // (all format strings used in the database should be defined in advance)
-    infos << detectVideoFormat();
-    dbFields |= DatabaseFields::Format;
+    d->commit.imageInformationInfos  << detectVideoFormat();
+    d->commit.imageInformationFields |= DatabaseFields::Format;
 
     // There is use of bit depth, but not ColorModel
     // For bit depth - 8bit, 16bit with videos
-    infos << m_metadata.getMetadataField(MetadataInfo::VideoBitDepth);
-    dbFields |= DatabaseFields::ColorDepth;
-
-
-    if (m_scanMode == NewScan)
-    {
-        DatabaseAccess().db()->addImageInformation(m_scanInfo.id, infos, dbFields);
-    }
-    else if (m_scanMode == Rescan)
-    {
-        DatabaseAccess().db()->changeImageInformation(m_scanInfo.id, infos, dbFields);
-    }
-    else // ModifiedScan
-    {
-        // TODO: which flags are passed here depends on the three TODOs above
-        // We dont overwrite Rating and date here.
-        DatabaseAccess().db()->changeImageInformation(m_scanInfo.id, infos,
-                                                      DatabaseFields::Width      |
-                                                      DatabaseFields::Height     |
-                                                      DatabaseFields::Format     |
-                                                      DatabaseFields::ColorDepth);
-    }
+    d->commit.imageInformationInfos  << d->metadata.getMetadataField(MetadataInfo::VideoBitDepth);
+    d->commit.imageInformationFields |= DatabaseFields::ColorDepth;
 }
+
+// commitImageInformation method is reused
 
 void ImageScanner::scanVideoMetadata()
 {
-    QVariantList metadataInfos = m_metadata.getMetadataFields(allVideoMetadataFields());
+    QVariantList metadataInfos = d->metadata.getMetadataFields(allVideoMetadataFields());
 
     if (hasValidField(metadataInfos))
     {
-        DatabaseAccess().db()->addVideoMetadata(m_scanInfo.id, metadataInfos);
+        d->commit.commitVideoMetadata = true;
+        // reuse imageMetadataInfos field
+        d->commit.imageMetadataInfos  = metadataInfos;
     }
+}
+
+void ImageScanner::commitVideoMetadata()
+{
+    DatabaseAccess().db()->addVideoMetadata(d->scanInfo.id, d->commit.imageMetadataInfos);
 }
 
 // ---------------------------------------------------------------------------------------
@@ -1213,72 +1432,74 @@ void ImageScanner::scanAudioFile()
     */
 
     QVariantList infos;
-    infos << -1
-          << creationDateFromFilesystem(m_fileInfo)
+
+    d->commit.imageInformationInfos
+          << -1
+          << creationDateFromFilesystem(d->fileInfo)
           << detectAudioFormat();
 
-    DatabaseAccess().db()->addImageInformation(m_scanInfo.id, infos,
-                                               DatabaseFields::Rating       |
-                                               DatabaseFields::CreationDate |
-                                               DatabaseFields::Format);
+    d->commit.imageInformationFields =
+            DatabaseFields::Rating       |
+            DatabaseFields::CreationDate |
+            DatabaseFields::Format;
 }
 
 void ImageScanner::loadFromDisk()
 {
-    if (m_loadedFromDisk)
+    if (d->loadedFromDisk)
     {
         return;
     }
-    m_loadedFromDisk = true;
+    d->loadedFromDisk = true;
 
-    m_metadata.registerMetadataSettings();
-    m_hasMetadata    = m_metadata.load(m_fileInfo.filePath());
+    d->metadata.registerMetadataSettings();
+    d->hasMetadata = d->metadata.load(d->fileInfo.filePath());
 
-    if (m_scanInfo.category == DatabaseItem::Image)
+    if (d->scanInfo.category == DatabaseItem::Image)
     {
-        m_hasImage = m_img.loadImageInfo(m_fileInfo.filePath(), false, false, false, false);
+        d->hasImage = d->img.loadImageInfo(d->fileInfo.filePath(), false, false, false, false);
     }
     else
     {
-        m_hasImage = false;
+        d->hasImage = false;
     }
 
-    m_scanInfo.itemName         = m_fileInfo.fileName();
-    m_scanInfo.modificationDate = m_fileInfo.lastModified();
-    m_scanInfo.fileSize         = m_fileInfo.size();
+    d->scanInfo.itemName         = d->fileInfo.fileName();
+    d->scanInfo.modificationDate = d->fileInfo.lastModified();
+    d->scanInfo.fileSize         = d->fileInfo.size();
     // category is set by setCategory
     // NOTE: call uniqueHash after loading the image above, else it will fail
-    m_scanInfo.uniqueHash       = uniqueHash();
+    d->scanInfo.uniqueHash       = uniqueHash();
 
    // faster than loading twice from disk
-    if (m_hasMetadata)
+    if (d->hasMetadata)
     {
-        m_img.setMetadata(m_metadata.data());
+        d->img.setMetadata(d->metadata.data());
     }
 }
 
 QString ImageScanner::uniqueHash()
 {
     // the QByteArray is an ASCII hex string
-    if (m_scanInfo.category == DatabaseItem::Image)
+    if (d->scanInfo.category == DatabaseItem::Image)
     {
         if (DatabaseAccess().db()->isUniqueHashV2())
-            return QString(m_img.getUniqueHashV2());
+            return QString(d->img.getUniqueHashV2());
         else
-            return QString(m_img.getUniqueHash());
+            return QString(d->img.getUniqueHash());
     }
     else
     {
         if (DatabaseAccess().db()->isUniqueHashV2())
-            return QString(DImg::getUniqueHashV2(m_fileInfo.filePath()));
+            return QString(DImg::getUniqueHashV2(d->fileInfo.filePath()));
         else
-            return QString(DImg::getUniqueHash(m_fileInfo.filePath()));
+            return QString(DImg::getUniqueHash(d->fileInfo.filePath()));
     }
 }
 
 QString ImageScanner::detectFormat()
 {
-    DImg::FORMAT dimgFormat = m_img.detectedFormat();
+    DImg::FORMAT dimgFormat = d->img.detectedFormat();
 
     switch (dimgFormat)
     {
@@ -1297,20 +1518,20 @@ QString ImageScanner::detectFormat()
         case DImg::RAW:
         {
             QString format = "RAW-";
-            format += m_fileInfo.suffix().toUpper();
+            format += d->fileInfo.suffix().toUpper();
             return format;
         }
         case DImg::NONE:
         case DImg::QIMAGE:
         {
-            QByteArray format = QImageReader::imageFormat(m_fileInfo.filePath());
+            QByteArray format = QImageReader::imageFormat(d->fileInfo.filePath());
 
             if (!format.isEmpty())
             {
                 return QString(format).toUpper();
             }
 
-            KMimeType::Ptr mimetype = KMimeType::findByPath(m_fileInfo.filePath());
+            KMimeType::Ptr mimetype = KMimeType::findByPath(d->fileInfo.filePath());
 
             if (mimetype)
             {
@@ -1330,7 +1551,7 @@ QString ImageScanner::detectFormat()
                 }
             }
 
-            kWarning() << "Detecting file format failed: KMimeType for" << m_fileInfo.filePath()
+            kWarning() << "Detecting file format failed: KMimeType for" << d->fileInfo.filePath()
                        << "is null";
 
             break;
@@ -1342,7 +1563,7 @@ QString ImageScanner::detectFormat()
 
 QString ImageScanner::detectVideoFormat()
 {
-    QString suffix = m_fileInfo.suffix().toUpper();
+    QString suffix = d->fileInfo.suffix().toUpper();
 
     if (suffix == "MPEG" || suffix == "MPG" || suffix == "MPO" || suffix == "MPE")
     {
@@ -1379,7 +1600,7 @@ QString ImageScanner::detectVideoFormat()
 
 QString ImageScanner::detectAudioFormat()
 {
-    QString suffix = m_fileInfo.suffix().toUpper();
+    QString suffix = d->fileInfo.suffix().toUpper();
     return suffix;
 }
 
