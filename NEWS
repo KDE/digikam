@@ -54,6 +54,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 024 ==> 296786 - Zoom to 100% pans to the top-left corner.
 025 ==> 307277 - digiKam corrupts MPO files while attempting to rotate it.
 026 ==> 304077 - XMP metadata interoperability problem and inconsistency.
-027 ==> 
+027 ==> 207005 - Raw Import Tool does not reflect the predefined Workspace when custom.
+028 ==> 
 
 
