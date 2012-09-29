@@ -6,8 +6,8 @@
  * Date        : 2009-02-28
  * Description : batch tool to add visible watermark.
  *
- * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2010 Mikkel Baekhoej Christensen <mbc at baekhoej dot dk>
+ * Copyright (C) 2009-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010      by Mikkel Baekhoej Christensen <mbc at baekhoej dot dk>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -36,15 +36,13 @@
 namespace Digikam
 {
 
-class WaterMarkPriv;
-
 class WaterMark : public BatchTool
 {
     Q_OBJECT
 
 public:
 
-    WaterMark(QObject* parent = 0);
+    WaterMark(QObject* const parent = 0);
     ~WaterMark();
 
     BatchToolSettings defaultSettings();
@@ -57,11 +55,12 @@ private Q_SLOTS:
 private:
 
     bool toolOperations();
-    int  queryFontSize(const QString& text, const QFont& font, int length);
+    int  queryFontSize(const QString& text, const QFont& font, int length) const;
 
 private:
 
-    WaterMarkPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

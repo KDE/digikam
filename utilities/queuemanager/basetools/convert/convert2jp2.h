@@ -6,7 +6,7 @@
  * Date        : 2008-11-28
  * Description : JPEG2000 image Converter batch tool.
  *
- * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -39,7 +39,7 @@ class Convert2JP2 : public BatchTool
 
 public:
 
-    Convert2JP2(QObject* parent = 0);
+    Convert2JP2(QObject* const parent = 0);
     ~Convert2JP2();
 
     QString outputSuffix() const;

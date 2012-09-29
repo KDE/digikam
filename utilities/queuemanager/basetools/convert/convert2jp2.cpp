@@ -6,7 +6,7 @@
  * Date        : 2008-11-28
  * Description : JPEG2000 image Converter batch tool.
  *
- * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -43,7 +43,7 @@
 namespace Digikam
 {
 
-Convert2JP2::Convert2JP2(QObject* parent)
+Convert2JP2::Convert2JP2(QObject* const parent)
     : BatchTool("Convert2JP2", ConvertTool, parent)
 {
     setToolTitle(i18n("Convert To JP2"));
@@ -66,7 +66,7 @@ BatchToolSettings Convert2JP2::defaultSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("ImageViewer Settings");
     int compression           = group.readEntry("JPEG2000Compression", 75);
-    bool lossLessCompression  = group.readEntry("JPEG2000LossLess", true);
+    bool lossLessCompression  = group.readEntry("JPEG2000LossLess",    true);
     BatchToolSettings settings;
     settings.insert("quality",  compression);
     settings.insert("lossless", lossLessCompression);

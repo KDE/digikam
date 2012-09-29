@@ -6,8 +6,8 @@
  * Date        : 2009-02-28
  * Description : batch tool to add visible watermark.
  *
- * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2010 Mikkel Baekhoej Christensen <mbc at baekhoej dot dk>
+ * Copyright (C) 2009-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010      by Mikkel Baekhoej Christensen <mbc at baekhoej dot dk>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -62,7 +62,7 @@
 namespace Digikam
 {
 
-class WaterMarkPriv
+class WaterMark::Private
 {
 
 public:
@@ -78,7 +78,7 @@ public:
 
 public:
 
-    WaterMarkPriv() :
+    Private() :
         textSettingsGroupBox(0),
         imageSettingsGroupBox(0),
         useImageRadioButton(0),
@@ -120,9 +120,9 @@ public:
     KIntNumInput*  waterMarkSizePercent;
 };
 
-WaterMark::WaterMark(QObject* parent)
+WaterMark::WaterMark(QObject* const parent)
     : BatchTool("WaterMark", DecorateTool, parent),
-      d(new WaterMarkPriv)
+      d(new Private)
 {
     setToolTitle(i18n("Add Watermark"));
     setToolDescription(i18n("Overlay an image or text as a visible watermark"));
@@ -238,11 +238,11 @@ WaterMark::WaterMark(QObject* parent)
 
     QLabel* label4 = new QLabel(vbox);
     d->comboBox    = new KComboBox(vbox);
-    d->comboBox->insertItem(WaterMarkPriv::TopLeft,     i18n("Top left"));
-    d->comboBox->insertItem(WaterMarkPriv::TopRight,    i18n("Top right"));
-    d->comboBox->insertItem(WaterMarkPriv::BottomLeft,  i18n("Bottom left"));
-    d->comboBox->insertItem(WaterMarkPriv::BottomRight, i18n("Bottom right"));
-    d->comboBox->insertItem(WaterMarkPriv::Center,      i18n("Center"));
+    d->comboBox->insertItem(Private::TopLeft,     i18n("Top left"));
+    d->comboBox->insertItem(Private::TopRight,    i18n("Top right"));
+    d->comboBox->insertItem(Private::BottomLeft,  i18n("Bottom left"));
+    d->comboBox->insertItem(Private::BottomRight, i18n("Bottom right"));
+    d->comboBox->insertItem(Private::Center,      i18n("Center"));
     label4->setText(i18n("Placement:"));
 
     QLabel* label5  = new QLabel(vbox);
@@ -337,7 +337,7 @@ BatchToolSettings WaterMark::defaultSettings()
     settings.insert("Use background",     true);
     settings.insert("Background color",   QColor(0xCC, 0xCC, 0xCC));
     settings.insert("Background opacity", 0xCC);
-    settings.insert("Placement",          WaterMarkPriv::BottomRight);
+    settings.insert("Placement",          Private::BottomRight);
     settings.insert("Watermark size",     25);
     settings.insert("X margin",           2);
     settings.insert("Y margin",           2);
@@ -456,19 +456,19 @@ bool WaterMark::toolOperations()
 
         switch (placement)
         {
-            case WaterMarkPriv::TopLeft:
+            case Private::TopLeft:
                 alignMode = Qt::AlignLeft;
                 break;
 
-            case WaterMarkPriv::TopRight:
+            case Private::TopRight:
                 alignMode = Qt::AlignRight;
                 break;
 
-            case WaterMarkPriv::BottomLeft:
+            case Private::BottomLeft:
                 alignMode = Qt::AlignLeft;
                 break;
 
-            case WaterMarkPriv::Center:
+            case Private::Center:
                 alignMode = Qt::AlignCenter;
                 break;
 
@@ -537,19 +537,19 @@ bool WaterMark::toolOperations()
 
     switch (placement)
     {
-        case WaterMarkPriv::TopLeft:
+        case Private::TopLeft:
             watermarkRect.moveTopLeft(QPoint(marginW, marginH));
             break;
 
-        case WaterMarkPriv::TopRight:
+        case Private::TopRight:
             watermarkRect.moveTopRight(QPoint(image().width() - marginW, marginH));
             break;
 
-        case WaterMarkPriv::BottomLeft:
+        case Private::BottomLeft:
             watermarkRect.moveBottomLeft(QPoint(marginW, image().height() - marginH));
             break;
 
-        case WaterMarkPriv::Center:
+        case Private::Center:
             watermarkRect.moveCenter(QPoint((int)(image().width() / 2), (int)(image().height() / 2)));
             break;
 
@@ -569,7 +569,7 @@ bool WaterMark::toolOperations()
 }
 
 
-int WaterMark::queryFontSize(const QString& text, const QFont& font, int length)
+int WaterMark::queryFontSize(const QString& text, const QFont& font, int length) const
 {
     // Find font size using relative length compared to image width.
     QFont fnt = font;

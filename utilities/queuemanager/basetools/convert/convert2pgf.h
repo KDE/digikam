@@ -6,7 +6,7 @@
  * Date        : 2009-06-18
  * Description : PGF image Converter batch tool.
  *
- * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -39,7 +39,7 @@ class Convert2PGF : public BatchTool
 
 public:
 
-    Convert2PGF(QObject* parent = 0);
+    Convert2PGF(QObject* const parent = 0);
     ~Convert2PGF();
 
     QString outputSuffix() const;

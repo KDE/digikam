@@ -6,7 +6,7 @@
  * Date        : 2009-11-21
  * Description : Wavelets Noise Reduction batch tool.
  *
- * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -28,7 +28,6 @@
 
 #include "batchtool.h"
 
-
 namespace Digikam
 {
 
@@ -40,7 +39,7 @@ class NoiseReduction : public BatchTool
 
 public:
 
-    NoiseReduction(QObject* parent = 0);
+    NoiseReduction(QObject* const parent = 0);
     ~NoiseReduction();
 
     BatchToolSettings defaultSettings();

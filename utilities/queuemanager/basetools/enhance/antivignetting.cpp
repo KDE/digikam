@@ -6,7 +6,7 @@
  * Date        : 2009-11-21
  * Description : Wavelets Noise Reduction batch tool.
  *
- * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -45,7 +45,7 @@
 namespace Digikam
 {
 
-AntiVignetting::AntiVignetting(QObject* parent)
+AntiVignetting::AntiVignetting(QObject* const parent)
     : BatchTool("AntiVignetting", EnhanceTool, parent),
       m_settingsView(0)
 {
