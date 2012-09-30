@@ -31,7 +31,7 @@
 // KDE includes
 
 #include <kio/previewjob.h>
-#include <KDebug>
+#include <kdebug.h>
 #include <kdeversion.h>
 
 namespace Digikam
