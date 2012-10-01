@@ -54,6 +54,7 @@
 
 // Local includes
 
+#include "dimg.h"
 #include "imagehistogram.h"
 #include "imagecurves.h"
 #include "globals.h"
@@ -448,7 +449,7 @@ void CurvesWidget::updateData(uchar* i_data, uint i_w, uint i_h, bool i_sixteenB
 
     // Remove old histogram data from memory.
     delete d->imageHistogram;
-    d->imageHistogram = new ImageHistogram(i_data, i_w, i_h, i_sixteenBits);
+    d->imageHistogram = new ImageHistogram(DImg(i_w, i_h, i_sixteenBits, true, i_data));
 
     connect(d->imageHistogram, SIGNAL(calculationStarted()),
             this, SLOT(slotCalculationStarted()));

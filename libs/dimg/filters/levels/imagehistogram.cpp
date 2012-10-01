@@ -103,12 +103,6 @@ ImageHistogram::ImageHistogram(const DImg& image, QObject* const parent)
     d->setup(image.bits(), image.width(), image.height(), image.sixteenBit());
 }
 
-ImageHistogram::ImageHistogram(const uchar* i_data, uint i_w, uint i_h, bool i_sixteenBits, QObject* const parent)
-    : DynamicThread(parent), d(new Private)
-{
-    d->setup(i_data, i_w, i_h, i_sixteenBits);
-}
-
 ImageHistogram::~ImageHistogram()
 {
     stopCalculation();

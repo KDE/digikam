@@ -116,8 +116,7 @@ void AutoLevelsFilter::autoLevelsCorrectionImage()
     // Create an histogram of the reference image.
     if (runningFlag())
     {
-        histogram.reset(new ImageHistogram(m_refImage.bits(), m_refImage.width(),
-                                           m_refImage.height(), m_refImage.sixteenBit()));
+        histogram.reset(new ImageHistogram(m_refImage));
         histogram->calculate();
         postProgress(30);
     }

@@ -50,6 +50,7 @@
 
 // Local includes
 
+#include "dimg.h"
 #include "ditemtooltip.h"
 #include "imagehistogram.h"
 #include "globals.h"
@@ -229,7 +230,7 @@ void HistogramWidget::updateData(uchar* i_data, uint i_w, uint i_h,
     // Calc new histogram data
     if (i_data && i_w && i_h)
     {
-        d->imageHistogram = new ImageHistogram(i_data, i_w, i_h, i_sixteenBits);
+        d->imageHistogram = new ImageHistogram(DImg(i_w, i_h, i_sixteenBits, true, i_data));
         connectHistogram(d->imageHistogram);
     }
 
@@ -238,7 +239,7 @@ void HistogramWidget::updateData(uchar* i_data, uint i_w, uint i_h,
 
     if (s_data && s_w && s_h)
     {
-        d->selectionHistogram = new ImageHistogram(s_data, s_w, s_h, i_sixteenBits);
+        d->selectionHistogram = new ImageHistogram(DImg(s_w, s_h, i_sixteenBits, true, s_data));
         connectHistogram(d->selectionHistogram);
     }
     else

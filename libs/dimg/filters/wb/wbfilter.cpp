@@ -239,25 +239,20 @@ void WBFilter::autoWBAdjustementFromColor(const QColor& tc, double& temperature,
 
 void WBFilter::autoExposureAdjustement(const DImg* img, double& black, double& expo)
 {
-    const uchar* data = img->bits();
-    int width         = img->width();
-    int height        = img->height();
-    bool sb           = img->sixteenBit();
-
     // Create an histogram of original image.
 
-    ImageHistogram* histogram = new ImageHistogram(data, width, height, sb);
+    ImageHistogram* histogram = new ImageHistogram(*img);
     histogram->calculate();
 
     // Calculate optimal exposition and black level
 
     int    i;
     double sum, stop;
-    uint   rgbMax = sb ? 65536 : 256;
+    uint   rgbMax = img->sixteenBit() ? 65536 : 256;
 
     // Cutoff at 0.5% of the histogram.
 
-    stop = width * height / 200;
+    stop = img->width() * img->height() / 200;
 
     for (i = rgbMax, sum = 0; (i >= 0) && (sum < stop); --i)
     {

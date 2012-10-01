@@ -87,8 +87,7 @@ void StretchFilter::stretchContrastImage()
     unsigned long        threshold_intensity;
 
     // Create an histogram of the reference image.
-    QScopedPointer<ImageHistogram> histogram(new ImageHistogram(m_refImage.bits(), m_refImage.width(),
-                                                                m_refImage.height(), m_refImage.sixteenBit()));
+    QScopedPointer<ImageHistogram> histogram(new ImageHistogram(m_refImage));
     if (histogram.isNull())
     {
         kWarning() << ("Unable to allocate memory!");
