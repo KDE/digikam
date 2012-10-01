@@ -6,7 +6,7 @@
  * Date        : 2004-07-21
  * Description : image histogram manipulation methods.
  *
- * Copyright (C) 2004-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -47,8 +47,9 @@ class DIGIKAM_EXPORT ImageHistogram : public DynamicThread
 
 public:
 
-    ImageHistogram(const uchar* i_data, uint i_w, uint i_h, bool i_sixteenBits, QObject* parent = 0);
-    explicit ImageHistogram(const DImg& image, QObject* parent = 0);
+    ImageHistogram(const uchar* i_data, uint i_w, uint i_h, bool i_sixteenBits, QObject* const parent = 0);
+
+    explicit ImageHistogram(const DImg& image, QObject* const parent = 0);
     ~ImageHistogram();
 
     /** Started computation: synchronous or threaded */
@@ -57,21 +58,22 @@ public:
 
     /** Stop threaded computation. */
     void stopCalculation();
-    bool isCalculating();
+    bool isCalculating() const;
 
     /** Methods to access the histogram data.*/
-    bool   isSixteenBit();
-    bool   isValid();
-    double getCount(int channel, int start, int end);
-    double getMean(int channel, int start, int end);
-    double getPixels();
-    double getStdDev(int channel, int start, int end);
-    double getValue(int channel, int bin);
-    double getMaximum(int channel, int start, int end);
+    bool   isSixteenBit() const;
+    bool   isValid()      const;
 
-    int    getHistogramSegments();
-    int    getMaxSegmentIndex();
-    int    getMedian(int channel, int start, int end);
+    double getCount(int channel, int start, int end)   const;
+    double getMean(int channel, int start, int end)    const;
+    double getPixels()                                 const;
+    double getStdDev(int channel, int start, int end)  const;
+    double getValue(int channel, int bin)              const;
+    double getMaximum(int channel, int start, int end) const;
+
+    int    getHistogramSegments()                      const;
+    int    getMaxSegmentIndex()                        const;
+    int    getMedian(int channel, int start, int end)  const;
 
 Q_SIGNALS:
 
@@ -92,8 +94,8 @@ private:
 
 private:
 
-    class ImageHistogramPriv;
-    ImageHistogramPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

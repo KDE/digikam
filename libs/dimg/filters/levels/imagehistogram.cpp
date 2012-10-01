@@ -6,10 +6,7 @@
  * Date        : 2004-07-21
  * Description : image histogram manipulation methods.
  *
- * Copyright (C) 2004-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
- *
- * Some code parts are inspired from gimp 2.0
- * Copyright (C) 1995 Spencer Kimball and Peter Mattis
+ * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -49,12 +46,12 @@
 namespace Digikam
 {
 
-class ImageHistogram::ImageHistogramPriv
+class ImageHistogram::Private
 {
 
 public:
 
-    // Using a structure instead a class is more fast
+    // NOTE : Using a structure instead a class is more fast
     // (access with memset() and bytes manipulation).
 
     struct double_packet
@@ -68,9 +65,11 @@ public:
 
 public:
 
-    ImageHistogramPriv()
+    Private()
     {
         imageData     = 0;
+        imageWidth    = 0;
+        imageHeight   = 0;
         histogram     = 0;
         histoSegments = 0;
         valid         = false;
@@ -89,14 +88,14 @@ public:
     int                   histoSegments;
 };
 
-ImageHistogram::ImageHistogram(const DImg& image, QObject* parent)
-    : DynamicThread(parent), d(new ImageHistogramPriv)
+ImageHistogram::ImageHistogram(const DImg& image, QObject* const parent)
+    : DynamicThread(parent), d(new Private)
 {
     setup(image.bits(), image.width(), image.height(), image.sixteenBit());
 }
 
-ImageHistogram::ImageHistogram(const uchar* i_data, uint i_w, uint i_h, bool i_sixteenBits, QObject* parent)
-    : DynamicThread(parent), d(new ImageHistogramPriv)
+ImageHistogram::ImageHistogram(const uchar* i_data, uint i_w, uint i_h, bool i_sixteenBits, QObject* const parent)
+    : DynamicThread(parent), d(new Private)
 {
     setup(i_data, i_w, i_h, i_sixteenBits);
 }
@@ -121,17 +120,17 @@ ImageHistogram::~ImageHistogram()
     delete d;
 }
 
-bool ImageHistogram::isSixteenBit()
+bool ImageHistogram::isSixteenBit() const
 {
     return d->histoSegments == NUM_SEGMENTS_16BIT;
 }
 
-int ImageHistogram::getHistogramSegments()
+int ImageHistogram::getHistogramSegments() const
 {
     return d->histoSegments;
 }
 
-int ImageHistogram::getMaxSegmentIndex()
+int ImageHistogram::getMaxSegmentIndex() const
 {
     return d->histoSegments - 1;
 }
@@ -157,12 +156,12 @@ void ImageHistogram::stopCalculation()
     wait();
 }
 
-bool ImageHistogram::isValid()
+bool ImageHistogram::isValid() const
 {
     return d->valid;
 }
 
-bool ImageHistogram::isCalculating()
+bool ImageHistogram::isCalculating() const
 {
     return isRunning();
 }
@@ -196,7 +195,7 @@ void ImageHistogram::calculate()
 
     if (!d->histogram)
     {
-        d->histogram = new ImageHistogramPriv::double_packet[d->histoSegments];
+        d->histogram = new Private::double_packet[d->histoSegments];
     }
 
     if (!d->histogram)
@@ -206,12 +205,12 @@ void ImageHistogram::calculate()
         return;
     }
 
-    memset(d->histogram, 0, d->histoSegments * sizeof(struct ImageHistogramPriv::double_packet));
+    memset(d->histogram, 0, d->histoSegments * sizeof(struct Private::double_packet));
 
     if (d->histoSegments == NUM_SEGMENTS_16BIT)         // 16 bits image.
     {
-        unsigned short  blue, green, red, alpha;
-        unsigned short* data = (unsigned short*)d->imageData;
+        unsigned short blue, green, red, alpha;
+        unsigned short* const data = (unsigned short*)d->imageData;
 
         for (i = 0 ; (i < d->imageHeight * d->imageWidth * 4) && runningFlag() ; i += 4)
         {
@@ -240,7 +239,7 @@ void ImageHistogram::calculate()
     else                                  // 8 bits images.
     {
         uchar blue, green, red, alpha;
-        const uchar* data = d->imageData;
+        const uchar* const data = d->imageData;
 
         for (i = 0 ; (i < d->imageHeight * d->imageWidth * 4) && runningFlag() ; i += 4)
         {
@@ -274,7 +273,7 @@ void ImageHistogram::calculate()
     }
 }
 
-double ImageHistogram::getCount(int channel, int start, int end)
+double ImageHistogram::getCount(int channel, int start, int end) const
 {
     int    i;
     double count = 0.0;
@@ -340,7 +339,7 @@ double ImageHistogram::getCount(int channel, int start, int end)
     return count;
 }
 
-double ImageHistogram::getPixels()
+double ImageHistogram::getPixels() const
 {
     if (!d->histogram)
     {
@@ -350,7 +349,7 @@ double ImageHistogram::getPixels()
     return(d->imageWidth * d->imageHeight);
 }
 
-double ImageHistogram::getMean(int channel, int start, int end)
+double ImageHistogram::getMean(int channel, int start, int end) const
 {
     int    i;
     double mean = 0.0;
@@ -424,7 +423,7 @@ double ImageHistogram::getMean(int channel, int start, int end)
     return mean;
 }
 
-int ImageHistogram::getMedian(int channel, int start, int end)
+int ImageHistogram::getMedian(int channel, int start, int end) const
 {
     int    i;
     double sum = 0.0;
@@ -518,7 +517,7 @@ int ImageHistogram::getMedian(int channel, int start, int end)
     return -1;
 }
 
-double ImageHistogram::getStdDev(int channel, int start, int end)
+double ImageHistogram::getStdDev(int channel, int start, int end) const
 {
     int    i;
     double dev = 0.0;
@@ -594,7 +593,7 @@ double ImageHistogram::getStdDev(int channel, int start, int end)
     return sqrt(dev / count);
 }
 
-double ImageHistogram::getValue(int channel, int bin)
+double ImageHistogram::getValue(int channel, int bin) const
 {
     double value;
 
@@ -633,7 +632,7 @@ double ImageHistogram::getValue(int channel, int bin)
     return value;
 }
 
-double ImageHistogram::getMaximum(int channel, int start, int end)
+double ImageHistogram::getMaximum(int channel, int start, int end) const
 {
     double max = 0.0;
     int    x;
