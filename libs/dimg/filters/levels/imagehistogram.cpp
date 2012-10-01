@@ -75,6 +75,15 @@ public:
         valid         = false;
     }
 
+    void setup(const uchar* i_data, uint i_w, uint i_h, bool i_sixteenBits)
+    {
+        imageData     = i_data;
+        imageWidth    = i_w;
+        imageHeight   = i_h;
+        histoSegments = i_sixteenBits ? NUM_SEGMENTS_16BIT : NUM_SEGMENTS_8BIT;
+    }
+
+public:
     /** The histogram data.*/
     struct double_packet* histogram;
     bool                  valid;
@@ -91,21 +100,13 @@ public:
 ImageHistogram::ImageHistogram(const DImg& image, QObject* const parent)
     : DynamicThread(parent), d(new Private)
 {
-    setup(image.bits(), image.width(), image.height(), image.sixteenBit());
+    d->setup(image.bits(), image.width(), image.height(), image.sixteenBit());
 }
 
 ImageHistogram::ImageHistogram(const uchar* i_data, uint i_w, uint i_h, bool i_sixteenBits, QObject* const parent)
     : DynamicThread(parent), d(new Private)
 {
-    setup(i_data, i_w, i_h, i_sixteenBits);
-}
-
-void ImageHistogram::setup(const uchar* i_data, uint i_w, uint i_h, bool i_sixteenBits)
-{
-    d->imageData     = i_data;
-    d->imageWidth    = i_w;
-    d->imageHeight   = i_h;
-    d->histoSegments = i_sixteenBits ? NUM_SEGMENTS_16BIT : NUM_SEGMENTS_8BIT;
+    d->setup(i_data, i_w, i_h, i_sixteenBits);
 }
 
 ImageHistogram::~ImageHistogram()

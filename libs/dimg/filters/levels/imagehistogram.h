@@ -89,11 +89,6 @@ protected:
 
 private:
 
-    void setup(const uchar* i_data, uint i_w, uint i_h, bool i_sixteenBits);
-    void postProgress(bool starting, bool success);
-
-private:
-
     class Private;
     Private* const d;
 };
