@@ -51,11 +51,11 @@
 namespace Digikam
 {
 
-class VersionsDelegate::VersionsDelegatePriv
+class VersionsDelegate::Private
 {
 public:
 
-    VersionsDelegatePriv()
+    Private()
         : categoryExtraSpacing(6),
           filterItemExtraSpacing(4),
           animationState(0),
@@ -98,8 +98,8 @@ public:
     }
 };
 
-VersionsDelegate::VersionsDelegate(QObject* parent)
-    : QStyledItemDelegate(parent), d(new VersionsDelegatePriv)
+VersionsDelegate::VersionsDelegate(QObject* const parent)
+    : QStyledItemDelegate(parent), d(new Private)
 {
     d->workingPixmap = KPixmapSequence("process-working", KIconLoader::SizeSmallMedium);
 

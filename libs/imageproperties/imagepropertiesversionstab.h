@@ -6,7 +6,7 @@
  * Date        : 2010-07-12
  * Description : tab for displaying image versions
  *
- * Copyright (C) 2010-2011 by Martin Klapetek <martin dot klapetek at gmail dot com>
+ * Copyright (C) 2010-2012 by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -57,7 +57,7 @@ class ImagePropertiesVersionsTab : public KTabWidget
 
 public:
 
-    ImagePropertiesVersionsTab(QWidget* parent);
+    ImagePropertiesVersionsTab(QWidget* const parent);
     ~ImagePropertiesVersionsTab();
 
     void readSettings(KConfigGroup& group);
@@ -66,7 +66,7 @@ public:
     void clear();
     void setItem(const ImageInfo& info, const DImageHistory& history);
 
-    VersionsWidget* versionsWidget() const;
+    VersionsWidget* versionsWidget()             const;
     FiltersHistoryWidget* filtersHistoryWidget() const;
 
     void addShowHideOverlay();
@@ -84,8 +84,8 @@ Q_SIGNALS:
 
 private:
 
-    class ImagePropertiesVersionsTabPriv;
-    ImagePropertiesVersionsTabPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

@@ -53,18 +53,20 @@ class VersionsTreeView::ToolTip : public ItemViewToolTip
 {
 public:
 
-    ToolTip(QAbstractItemView* view)
-        : ItemViewToolTip(view),
-          m_mode(InvalidMode)
-    {
-    }
-
     enum Mode
     {
         InvalidMode,
         ImageMode,
         FilterActionMode
     };
+
+public:
+
+    ToolTip(QAbstractItemView* const view)
+        : ItemViewToolTip(view),
+          m_mode(InvalidMode)
+    {
+    }
 
     void show(const QStyleOptionViewItem& option, const QModelIndex& index, Mode mode)
     {
@@ -100,9 +102,9 @@ protected:
     Mode m_mode;
 };
 
-// ----
+// --------------------------------------------------------------------------------------------------------------------------
 
-VersionsTreeView::VersionsTreeView(QWidget *parent)
+VersionsTreeView::VersionsTreeView(QWidget* const parent)
     : QTreeView(parent),
       m_delegate(0),
       m_dragDropHandler(0),
@@ -152,7 +154,7 @@ void VersionsTreeView::setToolTipEnabled(bool on)
     }
 }
 
-void VersionsTreeView::paintEvent(QPaintEvent *e)
+void VersionsTreeView::paintEvent(QPaintEvent* e)
 {
     static_cast<VersionsDelegate*>(itemDelegate())->beginPainting();
     QTreeView::paintEvent(e);
@@ -198,12 +200,14 @@ QModelIndex VersionsTreeView::mapIndexForDragDrop(const QModelIndex& index) cons
 QPixmap VersionsTreeView::pixmapForDrag(const QList<QModelIndex>& indexes) const
 {
     QStyleOptionViewItem option = viewOptions();
-    option.rect = viewport()->rect();
+    option.rect                 = viewport()->rect();
     QPixmap pix;
+
     if (indexes.count() == 1)
     {
         pix = indexes.first().data(Qt::DecorationRole).value<QPixmap>();
     }
+
     return DItemDelegate::makeDragPixmap(option, indexes, pix);
 }
 
@@ -218,7 +222,7 @@ bool VersionsTreeView::viewportEvent(QEvent* event)
                 break;
             }
 
-            QHelpEvent* he = static_cast<QHelpEvent*>(event);
+            QHelpEvent* he          = static_cast<QHelpEvent*>(event);
             const QModelIndex index = indexAt(he->pos());
 
             if (!index.isValid())
@@ -227,6 +231,7 @@ bool VersionsTreeView::viewportEvent(QEvent* event)
             }
 
             ToolTip::Mode mode;
+
             if (index.data(ImageHistoryGraphModel::IsImageItemRole).toBool())
             {
                 mode = ToolTip::ImageMode;
@@ -241,8 +246,8 @@ bool VersionsTreeView::viewportEvent(QEvent* event)
             }
 
             QStyleOptionViewItem option = viewOptions();
-            option.rect = visualRect(index);
-            option.state |= (index == currentIndex() ? QStyle::State_HasFocus : QStyle::State_None);
+            option.rect                 = visualRect(index);
+            option.state               |= (index == currentIndex() ? QStyle::State_HasFocus : QStyle::State_None);
 
             m_toolTip->show(option, index, mode);
 

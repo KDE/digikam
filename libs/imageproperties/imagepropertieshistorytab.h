@@ -48,7 +48,7 @@ class DIGIKAM_EXPORT RemoveFilterAction : public QAction
 
 public:
 
-    RemoveFilterAction(const QString& label, const QModelIndex& index, QObject* parent = 0);
+    RemoveFilterAction(const QString& label, const QModelIndex& index, QObject* const parent = 0);
     ~RemoveFilterAction() {}
 
     void setIndex(QModelIndex& index)
@@ -80,7 +80,7 @@ class DIGIKAM_EXPORT ImagePropertiesHistoryTab : public QWidget
 
 public:
 
-    ImagePropertiesHistoryTab(QWidget* parent);
+    ImagePropertiesHistoryTab(QWidget* const parent);
     ~ImagePropertiesHistoryTab();
 
     void setCurrentURL(const KUrl& url = KUrl());
@@ -93,8 +93,8 @@ public Q_SLOTS:
 
 private:
 
-    class ImagePropertiesHistoryTabPriv;
-    ImagePropertiesHistoryTabPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

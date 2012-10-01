@@ -6,7 +6,7 @@
  * Date        : 2004-11-17
  * Description : a tab to display colors information of images
  *
- * Copyright (C) 2004-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -70,7 +70,7 @@
 namespace Digikam
 {
 
-class ImagePropertiesColorsTab::ImagePropertiesColorsTabPriv
+class ImagePropertiesColorsTab::Private
 {
 public:
 
@@ -82,7 +82,7 @@ public:
 
 public:
 
-    ImagePropertiesColorsTabPriv() :
+    Private() :
         minInterv(0),
         maxInterv(0),
         labelMeanValue(0),
@@ -137,8 +137,8 @@ public:
     HistogramWidget*      blueHistogram;
 };
 
-ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent)
-    : KTabWidget(parent), d(new ImagePropertiesColorsTabPriv)
+ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* const parent)
+    : KTabWidget(parent), d(new Private)
 {
     // Histogram tab area -----------------------------------------------------
 
@@ -263,7 +263,7 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent)
     topLayout->setMargin(KDialog::spacingHint());
     topLayout->setSpacing(KDialog::spacingHint());
 
-    insertTab(ImagePropertiesColorsTabPriv::HISTOGRAM, sv, i18n("Histogram"));
+    insertTab(Private::HISTOGRAM, sv, i18n("Histogram"));
 
     // ICC Profiles tab area ---------------------------------------
 
@@ -273,7 +273,7 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent)
 
     d->iccProfileWidget = new ICCProfileWidget(sv2->viewport());
     sv2->setWidget(d->iccProfileWidget);
-    insertTab(ImagePropertiesColorsTabPriv::ICCPROFILE, sv2, i18n("ICC profile"));
+    insertTab(Private::ICCPROFILE, sv2, i18n("ICC profile"));
 
     // -------------------------------------------------------------
     // histogramBox connections
@@ -333,7 +333,7 @@ ImagePropertiesColorsTab::~ImagePropertiesColorsTab()
 
 void ImagePropertiesColorsTab::readSettings(const KConfigGroup& group)
 {
-    setCurrentIndex(group.readEntry("ImagePropertiesColors Tab",                  (int)ImagePropertiesColorsTabPriv::HISTOGRAM));
+    setCurrentIndex(group.readEntry("ImagePropertiesColors Tab",                  (int)Private::HISTOGRAM));
     d->iccProfileWidget->setMode(group.readEntry("ICC Level",                     (int)ICCProfileWidget::CUSTOM));
     d->iccProfileWidget->setCurrentItemByKey(group.readEntry("Current ICC Item",  QString()));
     d->histogramBox->setChannel((ChannelType)group.readEntry("Histogram Channel", (int)LuminosityChannel));
@@ -349,7 +349,7 @@ void ImagePropertiesColorsTab::writeSettings(KConfigGroup& group)
     group.writeEntry("Current ICC Item",          d->iccProfileWidget->getCurrentItemKey());
 }
 
-void ImagePropertiesColorsTab::setData(const KUrl& url, const QRect& selectionArea, DImg* img)
+void ImagePropertiesColorsTab::setData(const KUrl& url, const QRect& selectionArea, DImg* const img)
 {
     // We might be getting duplicate events from AlbumIconView,
     // which will cause all sorts of duplicate work.

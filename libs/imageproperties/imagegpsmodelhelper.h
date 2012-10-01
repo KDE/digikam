@@ -53,7 +53,7 @@ public:
     explicit ImageGPSModelHelper(QStandardItemModel* const itemModel, QObject* const parent = 0);
     virtual ~ImageGPSModelHelper();
 
-    virtual QAbstractItemModel* model() const;
+    virtual QAbstractItemModel* model()           const;
     virtual QItemSelectionModel* selectionModel() const;
 
     virtual bool itemCoordinates(const QModelIndex& index, KGeoMap::GeoCoordinates* const coordinates) const;
@@ -67,8 +67,8 @@ private Q_SLOTS:
 
 private:
 
-    class ImageGPSModelHelperPriv;
-    ImageGPSModelHelperPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

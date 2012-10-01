@@ -30,11 +30,11 @@
 namespace Digikam
 {
 
-class ImageGPSModelHelper::ImageGPSModelHelperPriv
+class ImageGPSModelHelper::Private
 {
 public:
 
-    ImageGPSModelHelperPriv()
+    Private()
     {
         itemModel           = 0;
         itemSelectionModel  = 0;
@@ -47,7 +47,7 @@ public:
 };
 
 ImageGPSModelHelper::ImageGPSModelHelper(QStandardItemModel* const itemModel, QObject* const parent)
-    : KGeoMap::ModelHelper(parent), d(new ImageGPSModelHelperPriv())
+    : KGeoMap::ModelHelper(parent), d(new Private())
 {
 
     d->itemModel           = itemModel;
@@ -149,6 +149,7 @@ void ImageGPSModelHelper::slotThumbnailLoaded(const LoadingDescription& loadingD
         if (currentGPSImageInfo.url.path() == loadingDescription.filePath)
         {
             const QPersistentModelIndex goodIndex(d->itemModel->index(i,0));
+
             emit(signalThumbnailAvailableForIndex(goodIndex, thumb));
         }
     }

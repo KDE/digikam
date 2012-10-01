@@ -57,7 +57,7 @@ public:
                            KMultiTabBarPosition side=KMultiTabBar::Left, bool mimimizedDefault=false);
     ~ImagePropertiesSideBar();
 
-    virtual void itemChanged(const KUrl& url, const QRect& rect = QRect(), DImg* img = 0);
+    virtual void itemChanged(const KUrl& url, const QRect& rect = QRect(), DImg* const img = 0);
 
 public Q_SLOTS:
 

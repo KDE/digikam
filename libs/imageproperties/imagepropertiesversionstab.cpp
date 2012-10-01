@@ -56,11 +56,11 @@
 namespace Digikam
 {
 
-class ImagePropertiesVersionsTab::ImagePropertiesVersionsTabPriv
+class ImagePropertiesVersionsTab::Private
 {
 public:
 
-    ImagePropertiesVersionsTabPriv()
+    Private()
     {
         versionsWidget       = 0;
         filtersHistoryWidget = 0;
@@ -76,10 +76,10 @@ public:
 
     static const QString           configActiveTab;
 };
-const QString ImagePropertiesVersionsTab::ImagePropertiesVersionsTabPriv::configActiveTab("Version Properties Tab");
+const QString ImagePropertiesVersionsTab::Private::configActiveTab("Version Properties Tab");
 
-ImagePropertiesVersionsTab::ImagePropertiesVersionsTab(QWidget* parent)
-    : KTabWidget(parent), d(new ImagePropertiesVersionsTabPriv)
+ImagePropertiesVersionsTab::ImagePropertiesVersionsTab(QWidget* const parent)
+    : KTabWidget(parent), d(new Private)
 {
     d->versionsWidget = new VersionsWidget(this);
     insertTab(0, d->versionsWidget, i18n("Versions"));

@@ -85,7 +85,7 @@
 namespace Digikam
 {
 
-class ImageDescEditTab::ImageDescEditTabPriv
+class ImageDescEditTab::Private
 {
 
 public:
@@ -97,7 +97,7 @@ public:
         INFOS
     };
 
-    ImageDescEditTabPriv()
+    Private()
     {
         modified                   = false;
         ignoreImageAttributesWatch = false;
@@ -175,8 +175,8 @@ public:
     QList<int>           metadataChangeIds;
 };
 
-ImageDescEditTab::ImageDescEditTab(QWidget* parent)
-    : KVBox(parent), d(new ImageDescEditTabPriv)
+ImageDescEditTab::ImageDescEditTab(QWidget* const parent)
+    : KVBox(parent), d(new Private)
 {
     setMargin(0);
     setSpacing(KDialog::spacingHint());
@@ -263,7 +263,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget* parent)
     grid1->setMargin(KDialog::spacingHint());
     grid1->setSpacing(KDialog::spacingHint());
 
-    d->tabWidget->insertTab(ImageDescEditTabPriv::DESCRIPTIONS, sv, i18n("Description"));
+    d->tabWidget->insertTab(Private::DESCRIPTIONS, sv, i18n("Description"));
 
     // Tags view ---------------------------------------------------
 
@@ -322,7 +322,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget* parent)
     grid3->addWidget(tagsSearch,      2, 0, 1, 2);
     grid3->setRowStretch(1, 10);
 
-    d->tabWidget->insertTab(ImageDescEditTabPriv::TAGS, sv3, i18n("Tags"));
+    d->tabWidget->insertTab(Private::TAGS, sv3, i18n("Tags"));
 
     // Information Managament View --------------------------------------
 
@@ -346,7 +346,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget* parent)
     grid2->setMargin(KDialog::spacingHint());
     grid2->setSpacing(KDialog::spacingHint());
 
-    d->tabWidget->insertTab(ImageDescEditTabPriv::INFOS, sv2, i18n("Information"));
+    d->tabWidget->insertTab(Private::INFOS, sv2, i18n("Information"));
 
     // --------------------------------------------------
 
@@ -451,7 +451,7 @@ ImageDescEditTab::~ImageDescEditTab()
 
 void ImageDescEditTab::readSettings(KConfigGroup& group)
 {
-    d->tabWidget->setCurrentIndex(group.readEntry("ImageDescEdit Tab", (int)ImageDescEditTabPriv::DESCRIPTIONS));
+    d->tabWidget->setCurrentIndex(group.readEntry("ImageDescEdit Tab", (int)Private::DESCRIPTIONS));
 #if KEXIV2_VERSION >= 0x020101
     d->titleEdit->setCurrentLanguageCode(group.readEntry("ImageDescEditTab TitleLang", QString()));
 #endif
@@ -765,6 +765,7 @@ void ImageDescEditTab::setInfos(const ImageInfoList& infos)
 void ImageDescEditTab::slotReadFromFileMetadataToDatabase()
 {
     initProgressIndicator();
+
     emit signalProgressMessageChanged(i18n("Reading metadata from files. Please wait..."));
 
     d->ignoreImageAttributesWatch = true;
@@ -774,6 +775,7 @@ void ImageDescEditTab::slotReadFromFileMetadataToDatabase()
     ScanController::instance()->suspendCollectionScan();
 
     CollectionScanner scanner;
+
     foreach(const ImageInfo& info, d->currInfos)
     {
         scanner.scanFile(info, CollectionScanner::Rescan);
@@ -788,6 +790,7 @@ void ImageDescEditTab::slotReadFromFileMetadataToDatabase()
         */
 
         emit signalProgressValueChanged(i++/(float)d->currInfos.count());
+
         kapp->processEvents();
     }
 
@@ -803,9 +806,11 @@ void ImageDescEditTab::slotReadFromFileMetadataToDatabase()
 void ImageDescEditTab::slotWriteToFileMetadataFromDatabase()
 {
     initProgressIndicator();
+
     emit signalProgressMessageChanged(i18n("Writing metadata to files. Please wait..."));
 
     int i = 0;
+
     foreach(const ImageInfo& info, d->currInfos)
     {
         MetadataHub fileHub;
@@ -1201,6 +1206,7 @@ void ImageDescEditTab::slotImageTagsChanged(qlonglong imageId)
     {
         return;
     }
+
     metadataChange(imageId);
 }
 
@@ -1217,6 +1223,7 @@ void ImageDescEditTab::slotImagesChanged(int albumId)
     {
         return;
     }
+
     setInfos(d->currInfos);
 }
 
@@ -1235,6 +1242,7 @@ void ImageDescEditTab::slotImageCaptionChanged(qlonglong imageId)
     {
         return;
     }
+
     metadataChange(imageId);
 }
 

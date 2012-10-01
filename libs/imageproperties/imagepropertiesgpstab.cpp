@@ -6,8 +6,8 @@
  * Date        : 2006-02-22
  * Description : a tab widget to display GPS info
  *
- * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2011 by Michael G. Hansen <mike at mghansen dot de>
+ * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2011      by Michael G. Hansen <mike at mghansen dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -64,12 +64,12 @@ http://www.gpspassion.com/forumsen/topic.asp?TOPIC_ID=16593
 namespace Digikam
 {
 
-class ImagePropertiesGPSTab::ImagePropertiesGPSTabPriv
+class ImagePropertiesGPSTab::Private
 {
 
 public:
 
-    ImagePropertiesGPSTabPriv() :
+    Private() :
         altLabel(0),
         latLabel(0),
         lonLabel(0),
@@ -112,8 +112,8 @@ public:
     bool                   boundariesShouldBeAdjusted;
 };
 
-ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* parent)
-    : QWidget(parent), d(new ImagePropertiesGPSTabPriv)
+ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* const parent)
+    : QWidget(parent), d(new Private)
 {
     QGridLayout* const layout = new QGridLayout(this);
 
@@ -227,7 +227,7 @@ void ImagePropertiesGPSTab::writeSettings(KConfigGroup& group)
     d->map->saveSettingsToGroup(&groupMapWidget);
 }
 
-int ImagePropertiesGPSTab::getWebGPSLocator()
+int ImagePropertiesGPSTab::getWebGPSLocator() const
 {
     return d->detailsCombo->currentIndex();
 }

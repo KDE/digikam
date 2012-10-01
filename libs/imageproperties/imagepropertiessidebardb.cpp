@@ -129,12 +129,12 @@ ImagePropertiesSideBarDB::~ImagePropertiesSideBarDB()
 }
 
 void ImagePropertiesSideBarDB::itemChanged(const ImageInfo& info, const QRect& rect,
-                                           DImg* img, const DImageHistory& history)
+                                           DImg* const img, const DImageHistory& history)
 {
     itemChanged(info.fileUrl(), info, rect, img, history);
 }
 
-void ImagePropertiesSideBarDB::itemChanged(const KUrl& url, const QRect& rect, DImg* img)
+void ImagePropertiesSideBarDB::itemChanged(const KUrl& url, const QRect& rect, DImg* const img)
 {
     itemChanged(url, ImageInfo(), rect, img, DImageHistory());
 }

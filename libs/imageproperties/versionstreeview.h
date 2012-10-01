@@ -48,7 +48,7 @@ class VersionsTreeView : public QTreeView, public DragDropViewImplementation
 
 public:
 
-    VersionsTreeView(QWidget *parent = 0);
+    VersionsTreeView(QWidget* const parent = 0);
     ~VersionsTreeView();
 
     void setToolTipEnabled(bool on);
@@ -60,15 +60,15 @@ public:
 
 protected:
 
-    virtual void paintEvent(QPaintEvent *e);
+    virtual void paintEvent(QPaintEvent* e);
     virtual void mouseMoveEvent(QMouseEvent* event);
     virtual bool viewportEvent(QEvent* event);
     virtual QModelIndex moveCursor(CursorAction cursorAction, Qt::KeyboardModifiers modifiers);
 
     DECLARE_VIEW_DRAG_DROP_METHODS(QTreeView)
-    virtual QModelIndex mapIndexForDragDrop(const QModelIndex& index) const;
+    virtual QModelIndex mapIndexForDragDrop(const QModelIndex& index)    const;
     virtual QPixmap     pixmapForDrag(const QList<QModelIndex>& indexes) const;
-    virtual AbstractItemDragDropHandler* dragDropHandler() const;
+    virtual AbstractItemDragDropHandler* dragDropHandler()               const;
     virtual void setDragDropHandler(AbstractItemDragDropHandler* handler);
 
 protected:
@@ -80,7 +80,6 @@ protected:
     bool                         m_showToolTip;
     ToolTip*                     m_toolTip;
 };
-
 
 } // namespace Digikam
 

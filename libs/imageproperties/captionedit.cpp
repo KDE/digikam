@@ -40,11 +40,11 @@ using namespace KExiv2Iface;
 namespace Digikam
 {
 
-class CaptionEdit::CaptionEditPriv
+class CaptionEdit::Private
 {
 public:
 
-    CaptionEditPriv()
+    Private()
     {
         altLangStrEdit = 0;
         authorEdit     = 0;
@@ -61,7 +61,7 @@ public:
 };
 
 CaptionEdit::CaptionEdit(QWidget* const parent)
-    : KVBox(parent), d(new CaptionEditPriv)
+    : KVBox(parent), d(new Private)
 {
 
     d->altLangStrEdit = new AltLangStrEdit(this);
@@ -184,7 +184,7 @@ void CaptionEdit::setValues(const CaptionsMap& values)
     slotSelectionChanged(d->altLangStrEdit->currentLanguageCode());
 }
 
-CaptionsMap& CaptionEdit::values()
+CaptionsMap& CaptionEdit::values() const
 {
     return d->captionsValues;
 }

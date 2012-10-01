@@ -83,9 +83,9 @@ void ShowHideVersionsOverlay::Button::updateToolTip()
                i18nc("@info:tooltip", "Show item permanently"));
 }
 
-// ---
+// ------------------------------------------------------------------------------------
 
-ShowHideVersionsOverlay::ShowHideVersionsOverlay(QObject* parent)
+ShowHideVersionsOverlay::ShowHideVersionsOverlay(QObject* const parent)
     : HoverButtonDelegateOverlay(parent)
 {
 }
@@ -120,12 +120,12 @@ void ShowHideVersionsOverlay::updateButton(const QModelIndex& index)
     const QRect rect = m_view->visualRect(index);
     const QSize size = button()->size();
 
-    const int gap = 5;
-    const int x   = rect.right() - gap - size.width();
-    const int y   = rect.bottom() - gap - size.height();
+    const int gap    = 5;
+    const int x      = rect.right() - gap - size.width();
+    const int y      = rect.bottom() - gap - size.height();
     button()->move(QPoint(x, y));
 
-    ImageInfo info = ImageModel::retrieveImageInfo(index);
+    ImageInfo info   = ImageModel::retrieveImageInfo(index);
     button()->setChecked(m_filter.isExemptedBySettings(info));
 }
 
@@ -155,6 +155,7 @@ bool ShowHideVersionsOverlay::checkIndex(const QModelIndex& index) const
         ImageInfo info = ImageModel::retrieveImageInfo(index);
         return m_filter.isHiddenBySettings(info);
     }
+
     return false;
 }
 
@@ -164,19 +165,20 @@ class ActionVersionsOverlay::Button : public ItemViewHoverButton
 {
 public:
 
-    Button(QAbstractItemView* parentView, const KGuiItem& gui);
+    Button(QAbstractItemView* const parentView, const KGuiItem& gui);
     virtual QSize sizeHint() const;
 
 protected:
 
-    KGuiItem gui;
-
     virtual QPixmap icon();
     virtual void updateToolTip();
 
+protected:
+
+    KGuiItem gui;
 };
 
-ActionVersionsOverlay::Button::Button(QAbstractItemView* parentView, const KGuiItem& gui)
+ActionVersionsOverlay::Button::Button(QAbstractItemView* const parentView, const KGuiItem& gui)
     : ItemViewHoverButton(parentView), gui(gui)
 {
 }
@@ -198,9 +200,9 @@ void ActionVersionsOverlay::Button::updateToolTip()
     setToolTip(gui.toolTip());
 }
 
-// ---
+// ------------------------------------------------------------------------------------------
 
-ActionVersionsOverlay::ActionVersionsOverlay(QObject* parent, const KGuiItem& gui)
+ActionVersionsOverlay::ActionVersionsOverlay(QObject* const parent, const KGuiItem& gui)
     : HoverButtonDelegateOverlay(parent),
       m_gui(gui), m_referenceModel(0)
 {
@@ -241,9 +243,9 @@ void ActionVersionsOverlay::updateButton(const QModelIndex& index)
     const QRect rect = m_view->visualRect(index);
     const QSize size = button()->size();
 
-    const int gap = 5;
-    const int x   = rect.right() - gap - size.width();
-    const int y   = rect.top() + gap;
+    const int gap    = 5;
+    const int x      = rect.right() - gap - size.width();
+    const int y      = rect.top() + gap;
     button()->move(QPoint(x, y));
 }
 
@@ -268,8 +270,10 @@ bool ActionVersionsOverlay::checkIndex(const QModelIndex& index) const
             // show overlay if image is not contained in reference model
             return !m_referenceModel->hasImage(info);
         }
+
         return true;
     }
+
     return false;
 }
 

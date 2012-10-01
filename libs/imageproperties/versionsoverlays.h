@@ -50,7 +50,7 @@ class ShowHideVersionsOverlay : public HoverButtonDelegateOverlay
 
 public:
 
-    ShowHideVersionsOverlay(QObject* parent);
+    ShowHideVersionsOverlay(QObject* const parent);
     virtual void setActive(bool active);
 
     void setSettings(const VersionManagerSettings& settings);
@@ -71,13 +71,15 @@ protected:
     class Button;
 };
 
+// -------------------------------------------------------------------
+
 class ActionVersionsOverlay : public HoverButtonDelegateOverlay
 {
     Q_OBJECT
 
 public:
 
-    ActionVersionsOverlay(QObject* parent, const KGuiItem& gui);
+    ActionVersionsOverlay(QObject* const parent, const KGuiItem& gui);
     virtual void setActive(bool active);
 
     void setReferenceModel(const ImageModel* model);
@@ -98,13 +100,14 @@ protected Q_SLOTS:
 
 protected:
 
+    class Button;
+    Button* button() const;
+
+protected:
+
     KGuiItem          m_gui;
     const ImageModel* m_referenceModel;
-
-    class Button;
-    Button *button() const;
 };
-
 
 } // namespace Digikam
 

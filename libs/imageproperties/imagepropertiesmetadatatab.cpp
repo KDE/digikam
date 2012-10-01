@@ -6,7 +6,7 @@
  * Date        : 2004-11-17
  * Description : a tab to display metadata information of images
  *
- * Copyright (C) 2004-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -52,7 +52,7 @@
 namespace Digikam
 {
 
-class ImagePropertiesMetaDataTab::ImagePropertiesMetadataTabPriv
+class ImagePropertiesMetaDataTab::Private
 {
 public:
 
@@ -64,7 +64,7 @@ public:
         XMP
     };
 
-    ImagePropertiesMetadataTabPriv() :
+    Private() :
         exifWidget(0),
         makernoteWidget(0),
         iptcWidget(0),
@@ -78,23 +78,23 @@ public:
     XmpWidget*       xmpWidget;
 };
 
-ImagePropertiesMetaDataTab::ImagePropertiesMetaDataTab(QWidget* parent)
-    : KTabWidget(parent), d(new ImagePropertiesMetadataTabPriv)
+ImagePropertiesMetaDataTab::ImagePropertiesMetaDataTab(QWidget* const parent)
+    : KTabWidget(parent), d(new Private)
 {
     // Exif tab area ---------------------------------------
 
     d->exifWidget = new ExifWidget(this);
-    insertTab(ImagePropertiesMetadataTabPriv::EXIF, d->exifWidget, i18n("EXIF"));
+    insertTab(Private::EXIF, d->exifWidget, i18n("EXIF"));
 
     // Makernote tab area ----------------------------------
 
     d->makernoteWidget = new MakerNoteWidget(this);
-    insertTab(ImagePropertiesMetadataTabPriv::MAKERNOTE, d->makernoteWidget, i18n("Makernote"));
+    insertTab(Private::MAKERNOTE, d->makernoteWidget, i18n("Makernote"));
 
     // IPTC tab area ---------------------------------------
 
     d->iptcWidget = new IptcWidget(this);
-    insertTab(ImagePropertiesMetadataTabPriv::IPTC, d->iptcWidget, i18n("IPTC"));
+    insertTab(Private::IPTC, d->iptcWidget, i18n("IPTC"));
 
     // XMP tab area ----------------------------------------
 
@@ -102,7 +102,7 @@ ImagePropertiesMetaDataTab::ImagePropertiesMetaDataTab(QWidget* parent)
 
     if (DMetadata::supportXmp())
     {
-        insertTab(ImagePropertiesMetadataTabPriv::XMP, d->xmpWidget, i18n("XMP"));
+        insertTab(Private::XMP, d->xmpWidget, i18n("XMP"));
     }
     else
     {
@@ -118,7 +118,7 @@ ImagePropertiesMetaDataTab::~ImagePropertiesMetaDataTab()
 void ImagePropertiesMetaDataTab::readSettings(const KConfigGroup& group)
 {
     setCurrentIndex(group.readEntry("ImagePropertiesMetaData Tab",
-                                    (int)ImagePropertiesMetadataTabPriv::EXIF));
+                                    (int)Private::EXIF));
     d->exifWidget->setMode(group.readEntry("EXIF Level",                              (int)ExifWidget::CUSTOM));
     d->makernoteWidget->setMode(group.readEntry("MAKERNOTE Level",                    (int)MakerNoteWidget::CUSTOM));
     d->iptcWidget->setMode(group.readEntry("IPTC Level",                              (int)IptcWidget::CUSTOM));

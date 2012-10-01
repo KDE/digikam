@@ -6,7 +6,7 @@
  * Date        : 2004-11-17
  * Description : a tab to display colors information of images
  *
- * Copyright (C) 2004-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -53,10 +53,10 @@ class DIGIKAM_EXPORT ImagePropertiesColorsTab : public KTabWidget
 
 public:
 
-    ImagePropertiesColorsTab(QWidget* parent);
+    ImagePropertiesColorsTab(QWidget* const parent);
     ~ImagePropertiesColorsTab();
 
-    void setData(const KUrl& url=KUrl(), const QRect& selectionArea = QRect(), DImg* img=0);
+    void setData(const KUrl& url=KUrl(), const QRect& selectionArea = QRect(), DImg* const img=0);
 
     void setSelection(const QRect& selectionArea);
 
@@ -90,8 +90,8 @@ private Q_SLOTS:
 
 private:
 
-    class ImagePropertiesColorsTabPriv;
-    ImagePropertiesColorsTabPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

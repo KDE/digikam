@@ -91,7 +91,7 @@ ImagePropertiesSideBar::~ImagePropertiesSideBar()
 {
 }
 
-void ImagePropertiesSideBar::itemChanged(const KUrl& url, const QRect& rect, DImg* img)
+void ImagePropertiesSideBar::itemChanged(const KUrl& url, const QRect& rect, DImg* const img)
 {
     if (!url.isValid())
     {

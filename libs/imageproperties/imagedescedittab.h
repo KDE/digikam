@@ -56,7 +56,7 @@ class ImageDescEditTab : public KVBox
 
 public:
 
-    ImageDescEditTab(QWidget* parent);
+    ImageDescEditTab(QWidget* const parent);
     ~ImageDescEditTab();
 
     void assignPickLabel(int pickId);
@@ -111,7 +111,7 @@ private:
 Q_SIGNALS:
 
     void askToApplyChanges(const QList<ImageInfo>& infos, MetadataHubOnTheRoad* hub);
-    
+
 private Q_SLOTS:
 
     void slotApplyAllChanges();
@@ -149,8 +149,8 @@ private Q_SLOTS:
 
 private:
 
-    class ImageDescEditTabPriv;
-    ImageDescEditTabPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

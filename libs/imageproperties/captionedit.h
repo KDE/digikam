@@ -51,7 +51,7 @@ public:
     ~CaptionEdit();
 
     void setValues(const CaptionsMap& values);
-    CaptionsMap& values();
+    CaptionsMap& values() const;
 
     void setCurrentLanguageCode(const QString& lang);
     QString currentLanguageCode() const;
@@ -72,8 +72,8 @@ private Q_SLOTS:
 
 private:
 
-    class CaptionEditPriv;
-    CaptionEditPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

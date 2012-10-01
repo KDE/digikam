@@ -45,7 +45,7 @@ class VersionsDelegate : public QStyledItemDelegate, public ImageDelegateOverlay
 
 public:
 
-    VersionsDelegate(QObject* parent = 0);
+    VersionsDelegate(QObject* const parent = 0);
     ~VersionsDelegate();
 
     QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const;
@@ -88,8 +88,8 @@ protected:
 
 private:
 
-    class VersionsDelegatePriv;
-    VersionsDelegatePriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam
