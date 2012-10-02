@@ -1021,9 +1021,7 @@ void RatioCropTool::updateCropInfo()
     d->histogramBox->histogram()->stopHistogramComputation();
     DImg* const img   = d->imageSelectionWidget->imageIface()->original();
     d->imageSelection = img->copy(getNormalizedRegion());
-    d->histogramBox->histogram()->updateData(d->imageSelection.bits(), 
-                                             d->imageSelection.width(), d->imageSelection.height(),
-                                             d->imageSelection.sixteenBit());
+    d->histogramBox->histogram()->updateData(d->imageSelection);
 
     QString mpixels;
     mpixels.setNum(d->widthInput->value() * d->heightInput->value() / 1000000.0, 'f', 2);

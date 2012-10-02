@@ -213,8 +213,7 @@ SetupEditor::SetupEditor(QWidget* const parent)
 
     if (!d->preview.isNull())
     {
-        d->expoPreviewHisto->updateData(d->preview.bits(), d->preview.width(),
-                                        d->preview.height(), d->preview.sixteenBit());
+        d->expoPreviewHisto->updateData(d->preview);
     }
 
     d->expoPreviewHisto->setChannelType(ColorChannels);

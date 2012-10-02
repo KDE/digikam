@@ -63,7 +63,6 @@ class BWSepiaTool::Private
 public:
 
     Private() :
-        destinationPreviewData(0),
         bwsepiaSettings(0),
         previewWidget(0),
         gboxSettings(0)
@@ -72,8 +71,6 @@ public:
     static const QString configGroupName;
     static const QString configHistogramChannelEntry;
     static const QString configHistogramScaleEntry;
-
-    uchar*               destinationPreviewData;
 
     BWSepiaSettings*     bwsepiaSettings;
 
@@ -132,11 +129,6 @@ BWSepiaTool::BWSepiaTool(QObject* const parent)
 
 BWSepiaTool::~BWSepiaTool()
 {
-    if (d->destinationPreviewData)
-    {
-        delete [] d->destinationPreviewData;
-    }
-
     delete d;
 }
 
@@ -199,15 +191,7 @@ void BWSepiaTool::setPreviewImage()
 
     // Update histogram.
 
-    if (d->destinationPreviewData)
-    {
-        delete [] d->destinationPreviewData;
-    }
-
-    d->destinationPreviewData = preview.copyBits();
-    d->gboxSettings->histogramBox()->histogram()->updateData(d->destinationPreviewData,
-            preview.width(), preview.height(), preview.sixteenBit(),
-            0, 0, 0, false);
+    d->gboxSettings->histogramBox()->histogram()->updateData(preview.copy(), DImg(), false);
 }
 
 void BWSepiaTool::prepareFinal()

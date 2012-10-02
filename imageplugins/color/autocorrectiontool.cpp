@@ -69,7 +69,6 @@ public:
 public:
 
     Private() :
-        destinationPreviewData(0),
         correctionTools(0),
         previewWidget(0),
         gboxSettings(0)
@@ -79,8 +78,6 @@ public:
     static const QString configHistogramChannelEntry;
     static const QString configHistogramScaleEntry;
     static const QString configAutoCorrectionFilterEntry;
-
-    uchar*               destinationPreviewData;
 
     PreviewList*         correctionTools;
 
@@ -202,11 +199,6 @@ AutoCorrectionTool::AutoCorrectionTool(QObject* const parent)
 
 AutoCorrectionTool::~AutoCorrectionTool()
 {
-    if (d->destinationPreviewData)
-    {
-        delete [] d->destinationPreviewData;
-    }
-
     delete d->correctionTools;
     delete d;
 }
@@ -264,15 +256,7 @@ void AutoCorrectionTool::setPreviewImage()
 
     // Update histogram.
 
-    if (d->destinationPreviewData)
-    {
-        delete [] d->destinationPreviewData;
-    }
-
-    d->destinationPreviewData = preview.copyBits();
-    d->gboxSettings->histogramBox()->histogram()->updateData(d->destinationPreviewData,
-            preview.width(), preview.height(), preview.sixteenBit(),
-            0, 0, 0, false);
+    d->gboxSettings->histogramBox()->histogram()->updateData(preview.copy(), DImg(), false);
 }
 
 void AutoCorrectionTool::prepareFinal()

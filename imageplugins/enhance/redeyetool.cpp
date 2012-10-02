@@ -78,7 +78,6 @@ class RedEyeTool::Private
 public:
 
     Private() :
-        destinationPreviewData(0),
         thresholdLabel(0),
         smoothLabel(0),
         HSSelector(0),
@@ -99,8 +98,6 @@ public:
     static const QString    configSatColoringTintEntry;
     static const QString    configValColoringTintEntry;
     static const QString    configTintLevelEntry;
-
-    uchar*                  destinationPreviewData;
 
     QColor                  selColor;
 
@@ -138,8 +135,6 @@ RedEyeTool::RedEyeTool(QObject* const parent)
     setToolName(i18n("Red Eye"));
     setToolIcon(SmallIcon("redeyes"));
     setToolHelp("redeyecorrectiontool.anchor");
-
-    d->destinationPreviewData = 0;
 
     d->previewWidget = new ImageGuideWidget(0, true, ImageGuideWidget::PickColorMode, Qt::red, 1, false, ImageIface::ImageSelection);
     d->previewWidget->setToolTip(i18n("Here you can see the image selection preview with "
@@ -244,11 +239,6 @@ RedEyeTool::RedEyeTool(QObject* const parent)
 
 RedEyeTool::~RedEyeTool()
 {
-    if (d->destinationPreviewData)
-    {
-        delete [] d->destinationPreviewData;
-    }
-
     delete d;
 }
 
@@ -379,11 +369,6 @@ void RedEyeTool::slotPreview()
 
     d->gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
 
-    if (d->destinationPreviewData)
-    {
-        delete [] d->destinationPreviewData;
-    }
-
     // Here, we need to use the real selection image data because we will apply
     // a Gaussian blur filter on pixels and we cannot use directly the preview scaled image
     // else the blur radius will not give the same result between preview and final rendering.
@@ -399,11 +384,7 @@ void RedEyeTool::slotPreview()
 
     // Update histogram.
 
-    d->destinationPreviewData = new uchar[selection.numBytes()];
-    memcpy(d->destinationPreviewData, selection.bits(), selection.numBytes());
-    d->gboxSettings->histogramBox()->histogram()->updateData(d->destinationPreviewData,
-                                                             selection.width(), selection.height(),
-                                                             selection.sixteenBit(), 0, 0, 0, false);
+    d->gboxSettings->histogramBox()->histogram()->updateData(selection.copy(), DImg(), false);
 
     kapp->restoreOverrideCursor();
 }

@@ -65,16 +65,14 @@ class WhiteBalanceTool::Private
 public:
 
     Private() :
-        destinationPreviewData(0),
         previewWidget(0),
         gboxSettings(0)
-    {}
+    {
+    }
 
     static const QString configGroupName;
     static const QString configHistogramChannelEntry;
     static const QString configHistogramScaleEntry;
-
-    uchar*               destinationPreviewData;
 
     WBSettings*          settingsView;
 
@@ -144,11 +142,6 @@ WhiteBalanceTool::WhiteBalanceTool(QObject* const parent)
 
 WhiteBalanceTool::~WhiteBalanceTool()
 {
-    if (d->destinationPreviewData)
-    {
-        delete [] d->destinationPreviewData;
-    }
-
     delete d;
 }
 
@@ -218,15 +211,7 @@ void WhiteBalanceTool::setPreviewImage()
 
     // Update histogram.
 
-    if (d->destinationPreviewData)
-    {
-        delete [] d->destinationPreviewData;
-    }
-
-    d->destinationPreviewData = preview.copyBits();
-    d->gboxSettings->histogramBox()->histogram()->updateData(d->destinationPreviewData,
-            preview.width(), preview.height(), preview.sixteenBit(),
-            0, 0, 0, false);
+    d->gboxSettings->histogramBox()->histogram()->updateData(preview.copy(), DImg(), false);
 }
 
 void WhiteBalanceTool::prepareFinal()

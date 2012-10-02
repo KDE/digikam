@@ -37,6 +37,7 @@
 
 // Local includes
 
+#include "dimg.h"
 #include "dcolor.h"
 #include "digikam_export.h"
 #include "globals.h"
@@ -68,16 +69,13 @@ public:
 
     /** Update full image histogram data methods.
      */
-    void updateData(uchar* const i_data, uint i_w, uint i_h,
-                    bool i_sixteenBits,                        // 8 or 16 bits image.
-                    uchar* const s_data=0, uint s_w=0, uint s_h=0,
+    void updateData(const DImg& img,                        // full image data.
+                    const DImg& sel=DImg(),                 // selection image data
                     bool showProgress=true);
 
     /** Update image selection histogram data methods.
      */
-    void updateSelectionData(uchar* const s_data, uint s_w, uint s_h,
-                             bool i_sixteenBits,               // 8 or 16 bits image.
-                             bool showProgress=true);
+    void updateSelectionData(const DImg& sel, bool showProgress=true);
 
     void setDataLoading();
     void setLoadingFailed();

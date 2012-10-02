@@ -411,32 +411,20 @@ void ImagePropertiesColorsTab::setData(const KUrl& url, const QRect& selectionAr
             if (d->selectionArea.isValid())
             {
                 d->imageSelection = d->image.copy(d->selectionArea);
-                d->histogramBox->histogram()->updateData(d->image.bits(), d->image.width(), d->image.height(),
-                                                         d->image.sixteenBit(), d->imageSelection.bits(),
-                                                         d->imageSelection.width(), d->imageSelection.height());
-                d->redHistogram->updateData(d->image.bits(), d->image.width(), d->image.height(),
-                                            d->image.sixteenBit(), d->imageSelection.bits(),
-                                            d->imageSelection.width(), d->imageSelection.height());
-                d->greenHistogram->updateData(d->image.bits(), d->image.width(), d->image.height(),
-                                              d->image.sixteenBit(), d->imageSelection.bits(),
-                                              d->imageSelection.width(), d->imageSelection.height());
-                d->blueHistogram->updateData(d->image.bits(), d->image.width(), d->image.height(),
-                                             d->image.sixteenBit(), d->imageSelection.bits(),
-                                             d->imageSelection.width(), d->imageSelection.height());
+                d->histogramBox->histogram()->updateData(d->image, d->imageSelection);
+                d->redHistogram->updateData(d->image, d->imageSelection);
+                d->greenHistogram->updateData(d->image, d->imageSelection);
+                d->blueHistogram->updateData(d->image, d->imageSelection);
 
                 slotRenderingChanged(ImageSelectionHistogram);
                 updateInformation();
             }
             else
             {
-                d->histogramBox->histogram()->updateData(d->image.bits(), d->image.width(),
-                                                         d->image.height(), d->image.sixteenBit());
-                d->redHistogram->updateData(d->image.bits(), d->image.width(),
-                                            d->image.height(), d->image.sixteenBit());
-                d->greenHistogram->updateData(d->image.bits(), d->image.width(),
-                                              d->image.height(), d->image.sixteenBit());
-                d->blueHistogram->updateData(d->image.bits(), d->image.width(),
-                                             d->image.height(), d->image.sixteenBit());
+                d->histogramBox->histogram()->updateData(d->image);
+                d->redHistogram->updateData(d->image);
+                d->greenHistogram->updateData(d->image);
+                d->blueHistogram->updateData(d->image);
                 slotRenderingChanged(FullImageHistogram);
                 updateInformation();
             }
@@ -507,10 +495,10 @@ void ImagePropertiesColorsTab::slotLoadImageFromUrlComplete(const LoadingDescrip
 
     if ( !img.isNull() )
     {
-        d->histogramBox->histogram()->updateData(img.bits(), img.width(), img.height(), img.sixteenBit());
-        d->redHistogram->updateData(img.bits(), img.width(), img.height(), img.sixteenBit());
-        d->greenHistogram->updateData(img.bits(), img.width(), img.height(), img.sixteenBit());
-        d->blueHistogram->updateData(img.bits(), img.width(), img.height(), img.sixteenBit());
+        d->histogramBox->histogram()->updateData(img);
+        d->redHistogram->updateData(img);
+        d->greenHistogram->updateData(img);
+        d->blueHistogram->updateData(img);
 
         // As a safety precaution, this must be changed only after updateData is called,
         // which stops computation because d->image.bits() is currently used by threaded histogram algorithm.
@@ -563,14 +551,10 @@ void ImagePropertiesColorsTab::setSelection(const QRect& selectionArea)
     if (d->selectionArea.isValid())
     {
         d->imageSelection = d->image.copy(d->selectionArea);
-        d->histogramBox->histogram()->updateSelectionData(d->imageSelection.bits(), d->imageSelection.width(),
-                                                          d->imageSelection.height(), d->imageSelection.sixteenBit());
-        d->redHistogram->updateSelectionData(d->imageSelection.bits(), d->imageSelection.width(),
-                                             d->imageSelection.height(), d->imageSelection.sixteenBit());
-        d->greenHistogram->updateSelectionData(d->imageSelection.bits(), d->imageSelection.width(),
-                                               d->imageSelection.height(), d->imageSelection.sixteenBit());
-        d->blueHistogram->updateSelectionData(d->imageSelection.bits(), d->imageSelection.width(),
-                                              d->imageSelection.height(), d->imageSelection.sixteenBit());
+        d->histogramBox->histogram()->updateSelectionData(d->imageSelection);
+        d->redHistogram->updateSelectionData(d->imageSelection);
+        d->greenHistogram->updateSelectionData(d->imageSelection);
+        d->blueHistogram->updateSelectionData(d->imageSelection);
         slotRenderingChanged(ImageSelectionHistogram);
     }
     else

@@ -91,7 +91,6 @@ public:
 public:
 
     Private() :
-        destinationPreviewData(0),
         histoSegments(0),
         pickerBox(0),
         resetButton(0),
@@ -122,8 +121,6 @@ public:
     static const QString configHighOutputChannelEntry;
     static const QString configHistogramChannelEntry;
     static const QString configHistogramScaleEntry;
-
-    uchar*               destinationPreviewData;
 
     int                  histoSegments;
 
@@ -207,10 +204,7 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* const parent)
     // -------------------------------------------------------------
 
     d->levelsHistogramWidget = new HistogramWidget(256, 140, d->gboxSettings->plainPage(), false);
-    d->levelsHistogramWidget->updateData(d->originalImage->bits(),
-                                         d->originalImage->width(),
-                                         d->originalImage->height(),
-                                         d->originalImage->sixteenBit());
+    d->levelsHistogramWidget->updateData(*d->originalImage);
     d->levelsHistogramWidget->setWhatsThis(i18n("This is the histogram drawing of the selected channel "
                                            "from the original image."));
     QHBoxLayout* inputLevelsLayout = new QHBoxLayout;
@@ -417,11 +411,6 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* const parent)
 
 AdjustLevelsTool::~AdjustLevelsTool()
 {
-    if (d->destinationPreviewData)
-    {
-        delete [] d->destinationPreviewData;
-    }
-
     delete d->levels;
     delete d;
 }
@@ -887,15 +876,7 @@ void AdjustLevelsTool::setPreviewImage()
 
     // Update histogram.
 
-    if (d->destinationPreviewData)
-    {
-        delete [] d->destinationPreviewData;
-    }
-
-    d->destinationPreviewData = preview.copyBits();
-    d->gboxSettings->histogramBox()->histogram()->updateData(d->destinationPreviewData,
-            preview.width(), preview.height(), preview.sixteenBit(),
-            0, 0, 0, false);
+    d->gboxSettings->histogramBox()->histogram()->updateData(preview.copy(), DImg(), false);
 }
 
 void AdjustLevelsTool::prepareFinal()

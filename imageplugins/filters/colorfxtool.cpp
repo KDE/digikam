@@ -81,7 +81,6 @@ class ColorFxTool::Private
 public:
 
     Private() :
-        destinationPreviewData(0),
         effectTypeLabel(0),
         levelLabel(0),
         iterationLabel(0),
@@ -98,8 +97,6 @@ public:
     static const QString configEffectTypeEntry;
     static const QString configLevelAdjustmentEntry;
     static const QString configIterationAdjustmentEntry;
-
-    uchar*               destinationPreviewData;
 
     QLabel*              effectTypeLabel;
     QLabel*              levelLabel;
@@ -143,7 +140,7 @@ ColorFxTool::ColorFxTool(QObject* const parent)
     d->gboxSettings = new EditorToolSettings;
     d->gboxSettings->setTools(EditorToolSettings::Histogram);
     d->gboxSettings->setHistogramType(LRGBC);
-    
+
     // -------------------------------------------------------------
 
     d->effectTypeLabel = new QLabel(i18n("Type:"));
@@ -215,11 +212,6 @@ ColorFxTool::ColorFxTool(QObject* const parent)
 
 ColorFxTool::~ColorFxTool()
 {
-    if (d->destinationPreviewData)
-    {
-        delete [] d->destinationPreviewData;
-    }
-
     delete d;
 }
 
@@ -366,8 +358,7 @@ void ColorFxTool::setPreviewImage()
     DImg preview            = filter()->getTargetImage();
     DImg imDest             = preview.smoothScale(iface->previewSize());
     iface->setPreview(imDest);
-    d->gboxSettings->histogramBox()->histogram()->updateData(preview.bits(), preview.width(), preview.height(),
-                                                             preview.sixteenBit(), 0, 0, 0, false);
+    d->gboxSettings->histogramBox()->histogram()->updateData(preview, DImg(), false);
 
     d->previewWidget->updatePreview();
 }

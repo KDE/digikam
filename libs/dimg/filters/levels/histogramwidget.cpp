@@ -175,13 +175,10 @@ void HistogramWidget::connectHistogram(const ImageHistogram* const histogram)
             this, SLOT(slotCalculationFinished(bool)));
 }
 
-void HistogramWidget::updateData(uchar* const i_data, uint i_w, uint i_h,
-                                 bool i_sixteenBits,
-                                 uchar* const s_data, uint s_w, uint s_h,
-                                 bool showProgress)
+void HistogramWidget::updateData(const DImg& img, const DImg& sel, bool showProgress)
 {
     d->showProgress = showProgress;
-    d->sixteenBits  = i_sixteenBits;
+    d->sixteenBits  = !img.isNull() ? img.sixteenBit() : sel.sixteenBit();
 
     // We are deleting the histogram data, so we must not use it to draw any more.
     d->state = HistogramWidget::Private::HistogramNone;
@@ -192,7 +189,7 @@ void HistogramWidget::updateData(uchar* const i_data, uint i_w, uint i_h,
 
     emit signalMaximumValueChanged(d->range);
 
-    if (i_data || (!i_data && !s_data))
+    if (!img.isNull() || (img.isNull() && sel.isNull()))
     {
         // do not delete main histogram if only the selection is reset
         delete d->imageHistogram;
@@ -200,18 +197,18 @@ void HistogramWidget::updateData(uchar* const i_data, uint i_w, uint i_h,
     }
 
     // Calc new histogram data
-    if (i_data && i_w && i_h)
+    if (!img.isNull())
     {
-        d->imageHistogram = new ImageHistogram(DImg(i_w, i_h, i_sixteenBits, true, i_data));
+        d->imageHistogram = new ImageHistogram(img);
         connectHistogram(d->imageHistogram);
     }
 
     delete d->selectionHistogram;
     d->selectionHistogram = 0;
 
-    if (s_data && s_w && s_h)
+    if (!sel.isNull())
     {
-        d->selectionHistogram = new ImageHistogram(DImg(s_w, s_h, i_sixteenBits, true, s_data));
+        d->selectionHistogram = new ImageHistogram(sel);
         connectHistogram(d->selectionHistogram);
     }
     else
@@ -222,7 +219,7 @@ void HistogramWidget::updateData(uchar* const i_data, uint i_w, uint i_h,
         }
     }
 
-    ImageHistogram* histo = currentHistogram();
+    ImageHistogram* const histo = currentHistogram();
 
     if (histo)
     {
@@ -234,10 +231,9 @@ void HistogramWidget::updateData(uchar* const i_data, uint i_w, uint i_h,
     }
 }
 
-void HistogramWidget::updateSelectionData(uchar* const s_data, uint s_w, uint s_h,
-                                          bool i_sixteenBits, bool showProgress)
+void HistogramWidget::updateSelectionData(const DImg& sel, bool showProgress)
 {
-    updateData(0, 0, 0, i_sixteenBits, s_data, s_w, s_h, showProgress);
+    updateData(DImg(), sel, showProgress);
 }
 
 void HistogramWidget::setHistogramGuideByColor(const DColor& color)

@@ -419,7 +419,7 @@ void RawSettingsBox::setDemosaicedImage(DImg& img)
 void RawSettingsBox::setPostProcessedImage(DImg& img)
 {
     histogramBox()->histogram()->stopHistogramComputation();
-    histogramBox()->histogram()->updateData(img.bits(), img.width(), img.height(), img.sixteenBit());
+    histogramBox()->histogram()->updateData(img);
 }
 
 void RawSettingsBox::resetSettings()
