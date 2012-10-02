@@ -6,7 +6,7 @@
  * Date        : 2005-11-24
  * Description : Color management setup tab.
  *
- * Copyright (C) 2005-2007 by F.J. Cruz <fj.cruz@supercable.es>
+ * Copyright (C) 2005-2007 by F.J. Cruz <fj dot cruz at supercable dot es>
  * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *

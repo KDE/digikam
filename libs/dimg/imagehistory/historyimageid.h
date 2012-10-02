@@ -6,7 +6,7 @@
  * Date        : 2010-06-02
  * Description : class holding properties of referenced files used in non-dest. editing
  *
- * Copyright (C) 2010 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it

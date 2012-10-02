@@ -6,7 +6,7 @@
  * Date        : 2009-08-11
  * Description : a combo box containing ICC profiles
  *
- * Copyright (C) 2009-2010 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2009-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General

@@ -6,7 +6,7 @@
  * Date        : 2009-08-12
  * Description : methods that implement color management tasks
  *
- * Copyright (C) 2005-2006 by F.J. Cruz <fj.cruz@supercable.es>
+ * Copyright (C) 2005-2006 by F.J. Cruz <fj dot cruz at supercable dot es>
  * Copyright (C) 2005-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *

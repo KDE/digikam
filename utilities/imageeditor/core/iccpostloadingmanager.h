@@ -6,7 +6,7 @@
  * Date        : 2010-10-29
  * Description : extension to IccManager providing UI
  *
- * Copyright (C) 2005-2006 by F.J. Cruz <fj.cruz@supercable.es>
+ * Copyright (C) 2005-2006 by F.J. Cruz <fj dot cruz at supercable dot es>
  * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
