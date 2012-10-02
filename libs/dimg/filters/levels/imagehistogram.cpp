@@ -67,20 +67,9 @@ public:
 
     Private()
     {
-        imageData     = 0;
-        imageWidth    = 0;
-        imageHeight   = 0;
         histogram     = 0;
         histoSegments = 0;
         valid         = false;
-    }
-
-    void setup(const uchar* i_data, uint i_w, uint i_h, bool i_sixteenBits)
-    {
-        imageData     = i_data;
-        imageWidth    = i_w;
-        imageHeight   = i_h;
-        histoSegments = i_sixteenBits ? NUM_SEGMENTS_16BIT : NUM_SEGMENTS_8BIT;
     }
 
 public:
@@ -89,18 +78,17 @@ public:
     bool                  valid;
 
     /** Image information.*/
-    const uchar*          imageData;
-    uint                  imageWidth;
-    uint                  imageHeight;
+    DImg                  img;
 
     /** Numbers of histogram segments depending of image bytes depth*/
     int                   histoSegments;
 };
 
-ImageHistogram::ImageHistogram(const DImg& image, QObject* const parent)
+ImageHistogram::ImageHistogram(const DImg& img, QObject* const parent)
     : DynamicThread(parent), d(new Private)
 {
-    d->setup(image.bits(), image.width(), image.height(), image.sixteenBit());
+    d->img           = img.copy();
+    d->histoSegments = d->img.sixteenBit() ? NUM_SEGMENTS_16BIT : NUM_SEGMENTS_8BIT;
 }
 
 ImageHistogram::~ImageHistogram()
@@ -117,7 +105,7 @@ ImageHistogram::~ImageHistogram()
 
 bool ImageHistogram::isSixteenBit() const
 {
-    return d->histoSegments == NUM_SEGMENTS_16BIT;
+    return d->img.sixteenBit();
 }
 
 int ImageHistogram::getHistogramSegments() const
@@ -127,14 +115,14 @@ int ImageHistogram::getHistogramSegments() const
 
 int ImageHistogram::getMaxSegmentIndex() const
 {
-    return d->histoSegments - 1;
+    return (d->histoSegments - 1);
 }
 
 void ImageHistogram::calculateInThread()
 {
     // this is done in an extra method and not in the constructor
     // to allow to connect to the signals, which is only possible after construction
-    if (d->imageData && d->imageWidth && d->imageHeight)
+    if (!d->img.isNull())
     {
         emit calculationAboutToStart();
         start();
@@ -170,7 +158,7 @@ void ImageHistogram::run()
 
 void ImageHistogram::calculate()
 {
-    if (!d->imageData || !d->imageWidth || !d->imageHeight)
+    if (d->img.isNull())
     {
         emit calculationFinished(false);
         return;
@@ -202,14 +190,14 @@ void ImageHistogram::calculate()
 
     memset(d->histogram, 0, d->histoSegments * sizeof(struct Private::double_packet));
 
-    if (d->histoSegments == NUM_SEGMENTS_16BIT)         // 16 bits image.
+    if (isSixteenBit())         // 16 bits image.
     {
         unsigned short blue, green, red, alpha;
-        unsigned short* const data = (unsigned short*)d->imageData;
+        unsigned short* const data = (unsigned short*)d->img.bits();
 
-        for (i = 0 ; (i < d->imageHeight * d->imageWidth * 4) && runningFlag() ; i += 4)
+        for (i = 0 ; (i < d->img.width() * d->img.height() * 4) && runningFlag() ; i += 4)
         {
-            blue  = data[ i ];
+            blue  = data[i    ];
             green = data[i + 1];
             red   = data[i + 2];
             alpha = data[i + 3];
@@ -234,11 +222,11 @@ void ImageHistogram::calculate()
     else                                  // 8 bits images.
     {
         uchar blue, green, red, alpha;
-        const uchar* const data = d->imageData;
+        const uchar* const data = d->img.bits();
 
-        for (i = 0 ; (i < d->imageHeight * d->imageWidth * 4) && runningFlag() ; i += 4)
+        for (i = 0 ; (i < d->img.width() * d->img.height() * 4) && runningFlag() ; i += 4)
         {
-            blue  = data[ i ];
+            blue  = data[i    ];
             green = data[i + 1];
             red   = data[i + 2];
             alpha = data[i + 3];
@@ -341,7 +329,7 @@ double ImageHistogram::getPixels() const
         return 0.0;
     }
 
-    return(d->imageWidth * d->imageHeight);
+    return (double)(d->img.numPixels());
 }
 
 double ImageHistogram::getMean(int channel, int start, int end) const
@@ -412,7 +400,7 @@ double ImageHistogram::getMean(int channel, int start, int end) const
 
     if (count > 0.0)
     {
-        return mean / count;
+        return (mean / count);
     }
 
     return mean;
@@ -643,50 +631,59 @@ double ImageHistogram::getMaximum(int channel, int start, int end) const
         case LuminosityChannel:
 
             for (x = start ; x <= end ; ++x)
+            {
                 if (d->histogram[x].value > max)
                 {
                     max = d->histogram[x].value;
                 }
-
+            }
             break;
 
         case RedChannel:
 
             for (x = start ; x <= end ; ++x)
+            {
                 if (d->histogram[x].red > max)
                 {
                     max = d->histogram[x].red;
                 }
+            }
 
             break;
 
         case GreenChannel:
 
             for (x = start ; x <= end ; ++x)
+            {
                 if (d->histogram[x].green > max)
                 {
                     max = d->histogram[x].green;
                 }
+            }
 
             break;
 
         case BlueChannel:
 
             for (x = start ; x <= end ; ++x)
+            {
                 if (d->histogram[x].blue > max)
                 {
                     max = d->histogram[x].blue;
                 }
+            }
 
             break;
 
         case AlphaChannel:
 
             for (x = start ; x <= end ; ++x)
+            {
                 if (d->histogram[x].alpha > max)
                 {
                     max = d->histogram[x].alpha;
                 }
+            }
 
             break;
 
