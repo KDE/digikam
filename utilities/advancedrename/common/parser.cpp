@@ -370,18 +370,18 @@ ParseResults Parser::applyModifiers(const QString& parseString, ParseResults& re
                 }
 
                 // update result
-                ParseResults::ResultsKey   kResult = key;
-                ParseResults::ResultsValue vResult(token, modResult);
-                results.addEntry(kResult, vResult);
+                ParseResults::ResultsKey   resultKey = key;
+                ParseResults::ResultsValue resultValue(token, modResult);
+                results.addEntry(resultKey, resultValue);
 
                 // update modifier map
-                ParseResults::ResultsKey kModifier = key;
-                kModifier.second += diff;
-                ParseResults::ResultsValue vModifier(modToken, modResult);
+                ParseResults::ResultsKey modifierKey = key;
+                modifierKey.second += diff;
+                ParseResults::ResultsValue modifierValue(modToken, modResult);
 
-                appliedModifiers.deleteEntry(kModifier);
-                kModifier.second += modToken.count();
-                appliedModifiers.addEntry(kModifier, vModifier);
+                appliedModifiers.deleteEntry(modifierKey);
+                modifierKey.second += modToken.count();
+                appliedModifiers.addEntry(modifierKey, modifierValue);
 
                 // set position to the next possible token
                 pos  += mkey.second;
