@@ -29,6 +29,9 @@
 #include <QtCore/QString>
 #include <QtGui/QWidget>
 
+// local includes
+#include "rule.h"
+
 class QMenu;
 
 namespace Digikam
@@ -151,8 +154,7 @@ private:
     void createToolTip();
 
     void   registerParserControls();
-    template<class T>
-    QMenu* createControlsMenu(QWidget* parent, QList<T*>& list);
+    QMenu* createControlsMenu(QWidget* parent, RulesList& rules);
 
     void calculateLayout();
 

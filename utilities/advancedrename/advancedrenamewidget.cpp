@@ -212,22 +212,21 @@ void AdvancedRenameWidget::setControlWidgets(ControlWidgets mask)
     }
 }
 
-template<class T>
-QMenu* AdvancedRenameWidget::createControlsMenu(QWidget* parent, QList<T*>& list)
+QMenu* AdvancedRenameWidget::createControlsMenu(QWidget* parent, RulesList& rules)
 {
     QMenu* menu     = new QMenu(parent);
     QAction* action = 0;
 
-    foreach(T* ctrl, list)
+    foreach(Rule* rule, rules)
     {
-        action = ctrl->registerMenu(menu);
+        action = rule->registerMenu(menu);
 
         if (!action)
         {
             continue;
         }
 
-        connect(ctrl, SIGNAL(signalTokenTriggered(QString)),
+        connect(rule, SIGNAL(signalTokenTriggered(QString)),
                 d->renameInput, SLOT(slotAddToken(QString)));
     }
 
