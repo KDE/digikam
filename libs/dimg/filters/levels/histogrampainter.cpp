@@ -6,8 +6,8 @@
  * Date        : 2009-10-26
  * Description : a class that manages painting histograms
  *
- * Copyright (C) 2009 by Johannes Wienke <languitar at semipol dot de>
- * Copyright (C) 2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009      by Johannes Wienke <languitar at semipol dot de>
+ * Copyright (C) 2011-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -43,12 +43,12 @@
 namespace Digikam
 {
 
-class HistogramPainter::HistogramPainterPriv
+class HistogramPainter::Private
 {
 
 public:
 
-    HistogramPainterPriv(HistogramPainter* q) :
+    Private(HistogramPainter* q) :
         q(q),
         histogram(0),
         widgetToInitFrom(0),
@@ -59,11 +59,8 @@ public:
         selectionMax(0.0),
         showColorGuide(false),
         showXGrid(true)
-    {}
-
-private:
-
-    HistogramPainter* q;
+    {
+    }
 
 public:
 
@@ -346,7 +343,7 @@ public:
             ybPrev = yb;
         }
 
-        curveRed.lineTo(wWidth - 2, wHeight - 1);
+        curveRed.lineTo(wWidth - 2, wHeight - 1);        
         curveRed.lineTo(1, wHeight - 1);
         curveRed.closeSubpath();
         curveGreen.lineTo(wWidth - 2, wHeight - 1);
@@ -512,10 +509,14 @@ public:
     bool              showColorGuide;
     bool              showXGrid;
     DColor            colorGuide;
+
+private:
+
+    HistogramPainter* q;
 };
 
-HistogramPainter::HistogramPainter(QObject* parent)
-    : QObject(parent), d(new HistogramPainterPriv(this))
+HistogramPainter::HistogramPainter(QObject* const parent)
+    : QObject(parent), d(new Private(this))
 {
 }
 
@@ -524,7 +525,7 @@ HistogramPainter::~HistogramPainter()
     delete d;
 }
 
-void HistogramPainter::setHistogram(ImageHistogram* histogram)
+void HistogramPainter::setHistogram(ImageHistogram* const histogram)
 {
     d->histogram = histogram;
 }
@@ -578,7 +579,7 @@ void HistogramPainter::disableHistogramGuide()
     d->showColorGuide = false;
 }
 
-void HistogramPainter::initFrom(QWidget* widget)
+void HistogramPainter::initFrom(QWidget* const widget)
 {
     d->widgetToInitFrom = widget;
 }

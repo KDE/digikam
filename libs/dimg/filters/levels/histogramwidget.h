@@ -6,7 +6,7 @@
  * Date        : 2004-07-21
  * Description : a widget to display an image histogram.
  *
- * Copyright (C) 2004-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -56,26 +56,26 @@ public:
     /** Constructor without image data. Needed to use updateData() method after to create instance.
      */
     HistogramWidget(int w, int h,                              // Widget size.
-                    QWidget* parent=0, bool selectMode=true,
+                    QWidget* const parent=0, bool selectMode=true,
                     bool showProgress=true,
                     bool statisticsVisible=false);
 
     /** Constructor with image data and without image selection data.
      */
     HistogramWidget(int w, int h,                              // Widget size.
-                    uchar* i_data, uint i_w, uint i_h,         // Full image info.
+                    uchar* const i_data, uint i_w, uint i_h,   // Full image info.
                     bool i_sixteenBits,                        // 8 or 16 bits image.
-                    QWidget* parent=0, bool selectMode=true,
+                    QWidget* const parent=0, bool selectMode=true,
                     bool showProgress=true,
                     bool statisticsVisible=false);
 
     /** Constructor with image data and image selection data.
      */
     HistogramWidget(int w, int h,                              // Widget size.
-                    uchar* i_data, uint i_w, uint i_h,         // Full image info.
-                    uchar* s_data, uint s_w, uint s_h,         // Image selection info.
+                    uchar* const i_data, uint i_w, uint i_h,   // Full image info.
+                    uchar* const s_data, uint s_w, uint s_h,   // Image selection info.
                     bool i_sixteenBits,                        // 8 or 16 bits image.
-                    QWidget* parent=0, bool selectMode=true,
+                    QWidget* const parent=0, bool selectMode=true,
                     bool showProgress=true,
                     bool statisticsVisible=false);
 
@@ -87,14 +87,14 @@ public:
 
     /** Update full image histogram data methods.
      */
-    void updateData(uchar* i_data, uint i_w, uint i_h,
+    void updateData(uchar* const i_data, uint i_w, uint i_h,
                     bool i_sixteenBits,                        // 8 or 16 bits image.
-                    uchar* s_data=0, uint s_w=0, uint s_h=0,
+                    uchar* const s_data=0, uint s_w=0, uint s_h=0,
                     bool showProgress=true);
 
     /** Update image selection histogram data methods.
      */
-    void updateSelectionData(uchar* s_data, uint s_w, uint s_h,
+    void updateSelectionData(uchar* const s_data, uint s_w, uint s_h,
                              bool i_sixteenBits,               // 8 or 16 bits image.
                              bool showProgress=true);
 
@@ -148,7 +148,7 @@ protected:
 private:
 
     void notifyValuesChanged();
-    void connectHistogram(const ImageHistogram* histogram);
+    void connectHistogram(const ImageHistogram* const histogram);
     void setup(int w, int h, bool selectMode, bool statisticsVisible);
     void setState(int state);
     void startWaitingAnimation();
@@ -156,8 +156,8 @@ private:
 
 private:
 
-    class HistogramWidgetPriv;
-    HistogramWidgetPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

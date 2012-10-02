@@ -6,8 +6,8 @@
  * Date        : 2009-10-26
  * Description : a class that manages painting histograms
  *
- * Copyright (C) 2009 by Johannes Wienke <languitar at semipol dot de>
- * Copyright (C) 2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009      by Johannes Wienke <languitar at semipol dot de>
+ * Copyright (C) 2011-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -55,7 +55,7 @@ public:
      *
      * @param parent parent for Qt's destruction mechanism
      */
-    HistogramPainter(QObject* parent);
+    HistogramPainter(QObject* const parent);
 
     /**
      * Destructor.
@@ -68,7 +68,7 @@ public:
      * @param histogram an existing pointer to a histogram to paint on next call
      *                  to render. The histogram must still exist at that call.
      */
-    void setHistogram(ImageHistogram* histogram);
+    void setHistogram(ImageHistogram* const histogram);
 
     /**
      * Set the scale to paint the histogram with.
@@ -133,7 +133,7 @@ public:
      *
      * @param widget widget to initialize painting from
      */
-    void initFrom(QWidget* widget);
+    void initFrom(QWidget* const widget);
 
     /**
      * Renders the given histogram on the pixmap. The whole size of the pixmap
@@ -148,8 +148,8 @@ public:
 
 private:
 
-    class HistogramPainterPriv;
-    HistogramPainterPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

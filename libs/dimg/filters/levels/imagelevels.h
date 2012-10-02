@@ -6,7 +6,7 @@
  * Date        : 2004-07-29
  * Description : image levels manipulation methods.
  *
- * Copyright (C) 2004-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -53,8 +53,8 @@ public:
     // Methods for to manipulate the levels data.
 
     void   levelsChannelReset(int channel);
-    void   levelsAuto(ImageHistogram* hist);
-    void   levelsChannelAuto(ImageHistogram* hist, int channel);
+    void   levelsAuto(ImageHistogram* const hist);
+    void   levelsChannelAuto(ImageHistogram* const hist, int channel);
     int    levelsInputFromColor(int channel, const DColor& color);
     void   levelsBlackToneAdjustByColors(int channel, const DColor& color);
     void   levelsGrayToneAdjustByColors(int channel, const DColor& color);
@@ -62,7 +62,7 @@ public:
     void   levelsCalculateTransfers();
     float  levelsLutFunc(int nchannels, int channel, float value);
     void   levelsLutSetup(int nchannels);
-    void   levelsLutProcess(uchar* srcPR, uchar* destPR, int w, int h);
+    void   levelsLutProcess(uchar* const srcPR, uchar* const destPR, int w, int h);
 
     // Methods for to set manually the levels values.
 
@@ -85,8 +85,8 @@ public:
 
 private:
 
-    class ImageLevelsPriv;
-    ImageLevelsPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

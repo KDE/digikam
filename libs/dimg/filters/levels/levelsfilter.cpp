@@ -6,8 +6,8 @@
  * Date        : 2010-25-02
  * Description : Levels image filter
  *
- * Copyright (C) 2010-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
+ * Copyright (C) 2010-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -36,21 +36,21 @@
 namespace Digikam
 {
 
-LevelsFilter::LevelsFilter(QObject* parent)
+LevelsFilter::LevelsFilter(QObject* const parent)
     : DImgThreadedFilter(parent)
 {
     initFilter();
 }
 
-LevelsFilter::LevelsFilter(DImg* orgImage, QObject* parent, const LevelsContainer& settings)
+LevelsFilter::LevelsFilter(DImg* const orgImage, QObject* const parent, const LevelsContainer& settings)
     : DImgThreadedFilter(orgImage, parent, "LevelsFilter")
 {
     m_settings = settings;
     initFilter();
 }
 
-LevelsFilter::LevelsFilter(const LevelsContainer& settings, DImgThreadedFilter* master,
-        const DImg& orgImage, DImg& destImage, int progressBegin, int progressEnd)
+LevelsFilter::LevelsFilter(const LevelsContainer& settings, DImgThreadedFilter* const master,
+                           const DImg& orgImage, DImg& destImage, int progressBegin, int progressEnd)
     : DImgThreadedFilter(master, orgImage, destImage, progressBegin, progressEnd, "LevelsFilter")
 {
     m_settings = settings;

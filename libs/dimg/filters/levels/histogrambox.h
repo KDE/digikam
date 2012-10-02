@@ -7,7 +7,7 @@
  * Description : a widget to display an image histogram and its control widgets
  *
  * Copyright (C) 2008-2009 by Andi Clemens <andi dot clemens at gmail dot com>
- * Copyright (C) 2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2011-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -51,7 +51,7 @@ class DIGIKAM_EXPORT HistogramBox : public QWidget
 
 public:
 
-    explicit HistogramBox(QWidget* parent = 0, HistogramBoxType type = Digikam::LRGB, bool selectMode = false);
+    explicit HistogramBox(QWidget* const parent = 0, HistogramBoxType type = Digikam::LRGB, bool selectMode = false);
     ~HistogramBox();
 
     void setHistogramType(HistogramBoxType type);
@@ -86,8 +86,8 @@ protected Q_SLOTS:
 
 private:
 
-    class HistogramBoxPriv;
-    HistogramBoxPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

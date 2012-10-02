@@ -6,12 +6,7 @@
  * Date        : 2004-07-29
  * Description : image levels manipulation methods.
  *
- * Copyright (C) 2004-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
- *
- * Some code parts are inspired from gimp 2.0
- * app/base/levels.c, gimplut.c, and app/base/gimpleveltool.c
- * source files.
- * Copyright (C) 1995 Spencer Kimball and Peter Mattis
+ * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -61,7 +56,7 @@
 namespace Digikam
 {
 
-class ImageLevels::ImageLevelsPriv
+class ImageLevels::Private
 {
 
 public:
@@ -93,7 +88,7 @@ public:
 
 public:
 
-    ImageLevelsPriv()
+    Private()
     {
         levels = 0;
         lut    = 0;
@@ -111,13 +106,13 @@ public:
 };
 
 ImageLevels::ImageLevels(bool sixteenBit)
-    : d(new ImageLevelsPriv)
+    : d(new Private)
 {
-    d->lut        = new ImageLevelsPriv::_Lut;
-    d->levels     = new ImageLevelsPriv::_Levels;
-    d->sixteenBit = sixteenBit;
+    d->lut            = new Private::_Lut;
+    d->levels         = new Private::_Levels;
+    d->sixteenBit     = sixteenBit;
 
-    memset(d->levels, 0, sizeof(struct ImageLevelsPriv::_Levels));
+    memset(d->levels, 0, sizeof(struct Private::_Levels));
     d->lut->luts      = NULL;
     d->lut->nchannels = 0;
 
@@ -182,7 +177,7 @@ void ImageLevels::levelsChannelReset(int channel)
     d->dirty = false;
 }
 
-void ImageLevels::levelsAuto(ImageHistogram* hist)
+void ImageLevels::levelsAuto(ImageHistogram* const hist)
 {
     if (!d->levels || !hist)
     {
@@ -201,7 +196,7 @@ void ImageLevels::levelsAuto(ImageHistogram* hist)
     d->dirty = true;
 }
 
-void ImageLevels::levelsChannelAuto(ImageHistogram* hist, int channel)
+void ImageLevels::levelsChannelAuto(ImageHistogram* const hist, int channel)
 {
     int    i;
     double count, new_count, percentage, next_percentage;
@@ -501,7 +496,7 @@ void ImageLevels::levelsLutSetup(int nchannels)
     }
 }
 
-void ImageLevels::levelsLutProcess(uchar* srcPR, uchar* destPR, int w, int h)
+void ImageLevels::levelsLutProcess(uchar* const srcPR, uchar* const destPR, int w, int h)
 {
     unsigned short* lut0 = NULL, *lut1 = NULL, *lut2 = NULL, *lut3 = NULL;
 
@@ -777,9 +772,9 @@ bool ImageLevels::loadLevelsFromGimpLevelsFile(const KUrl& fileUrl)
     for (i = 0 ; i < 5 ; ++i)
     {
         setLevelGammaValue(i, gamma[i]);
-        setLevelLowInputValue(i, d->sixteenBit ? low_input[i] * 255 : low_input[i]);
-        setLevelHighInputValue(i, d->sixteenBit ? high_input[i] * 255 : high_input[i]);
-        setLevelLowOutputValue(i, d->sixteenBit ? low_output[i] * 255 : low_output[i]);
+        setLevelLowInputValue(i,   d->sixteenBit ? low_input[i]   * 255 : low_input[i]);
+        setLevelHighInputValue(i,  d->sixteenBit ? high_input[i]  * 255 : high_input[i]);
+        setLevelLowOutputValue(i,  d->sixteenBit ? low_output[i]  * 255 : low_output[i]);
         setLevelHighOutputValue(i, d->sixteenBit ? high_output[i] * 255 : high_output[i]);
     }
 
@@ -809,7 +804,7 @@ bool ImageLevels::saveLevelsToGimpLevelsFile(const KUrl& fileUrl)
         sprintf(buf, "%f", getLevelGammaValue(i));
 
         fprintf(file, "%d %d %d %d %s\n",
-                d->sixteenBit ? getLevelLowInputValue(i) / 255  : getLevelLowInputValue(i),
+                d->sixteenBit ? getLevelLowInputValue(i)  / 255 : getLevelLowInputValue(i),
                 d->sixteenBit ? getLevelHighInputValue(i) / 255 : getLevelHighInputValue(i),
                 d->sixteenBit ? getLevelLowOutputValue(i) / 255 : getLevelLowOutputValue(i),
                 d->sixteenBit ? getLevelHighInputValue(i) / 255 : getLevelHighInputValue(i),
