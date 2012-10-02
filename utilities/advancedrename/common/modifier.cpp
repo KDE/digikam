@@ -63,7 +63,6 @@ ParseResults& Modifier::parse(ParseSettings& settings)
     }
 
     const QRegExp& reg         = regExp();
-
     const QString& parseString = settings.parseString;
 
     int pos = 0;
