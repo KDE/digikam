@@ -6,7 +6,7 @@
  * Date        : 2006-01-10
  * Description : a widget to display CIE tongue from an ICC profile.
  *
- * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * Any source code are inspired from lprof project and
  * Copyright (C) 1998-2001 Marti Maria
@@ -154,11 +154,11 @@ static const double spectral_chromaticity[81][3] =
     { 0.7347, 0.2653 }  // 780 nm
 };
 
-class CIETongueWidget::CIETongueWidgetPriv
+class CIETongueWidget::Private
 {
 public:
 
-    CIETongueWidgetPriv() :
+    Private() :
         profileDataAvailable(true),
         loadingImageMode(false),
         loadingImageSucess(false),
@@ -174,7 +174,7 @@ public:
         hMonitorProfile(0),
         hXFORM(0)
     {
-        progressPix         = KPixmapSequence("process-working", KIconLoader::SizeSmallMedium);
+        progressPix = KPixmapSequence("process-working", KIconLoader::SizeSmallMedium);
     }
 
     bool            profileDataAvailable;
@@ -204,8 +204,8 @@ public:
     cmsCIEXYZ       MediaWhite;
 };
 
-CIETongueWidget::CIETongueWidget(int w, int h, QWidget* parent, cmsHPROFILE hMonitor)
-    : QWidget(parent), d(new CIETongueWidgetPriv)
+CIETongueWidget::CIETongueWidget(int w, int h, QWidget* const parent, cmsHPROFILE hMonitor)
+    : QWidget(parent), d(new Private)
 {
     cmsHPROFILE hXYZProfile;
     d->progressTimer = new QTimer(this);

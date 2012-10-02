@@ -6,10 +6,7 @@
  * Date        : 2006-01-10
  * Description : a widget to display CIE tongue from an ICC profile.
  *
- * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
- *
- * Any source code are inspired from lprof project and
- * Copyright (C) 1998-2001 Marti Maria
+ * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -54,7 +51,7 @@ class DIGIKAM_EXPORT CIETongueWidget : public QWidget
 
 public:
 
-    CIETongueWidget(int w, int h, QWidget* parent=0, cmsHPROFILE hMonitor=0);
+    CIETongueWidget(int w, int h, QWidget* const parent=0, cmsHPROFILE hMonitor=0);
     ~CIETongueWidget();
 
     bool setProfileData(const QByteArray& profileData=QByteArray());
@@ -99,8 +96,8 @@ private Q_SLOTS:
 
 private :
 
-    class CIETongueWidgetPriv;
-    CIETongueWidgetPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

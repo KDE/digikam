@@ -42,7 +42,7 @@
 namespace Digikam
 {
 
-IccProfilesComboBox::IccProfilesComboBox(QWidget* parent)
+IccProfilesComboBox::IccProfilesComboBox(QWidget* const parent)
     : KDcrawIface::SqueezedComboBox( parent )
 {
 }
@@ -84,6 +84,7 @@ static void formatProfiles(const QList<IccProfile>& givenProfiles, QList<IccProf
 {
     QList<IccProfile> profiles;
     QSet<QString>     filePaths;
+
     foreach(IccProfile profile, givenProfiles) // krazy:exclude=foreach
     {
         QString filePath = profile.filePath();
@@ -182,7 +183,7 @@ void IccProfilesComboBox::setCurrentProfile(const IccProfile& profile)
 
 // ------------------------------------------------------------------------------------------
 
-IccProfilesMenuAction::IccProfilesMenuAction(const KIcon& icon, const QString& text, QObject* parent)
+IccProfilesMenuAction::IccProfilesMenuAction(const KIcon& icon, const QString& text, QObject* const parent)
     : KActionMenu(icon, text, parent),
       m_parent(parent)
 {
@@ -191,7 +192,7 @@ IccProfilesMenuAction::IccProfilesMenuAction(const KIcon& icon, const QString& t
             this, SLOT(slotTriggered(QObject*)));
 }
 
-IccProfilesMenuAction::IccProfilesMenuAction(const QString& text, QObject* parent)
+IccProfilesMenuAction::IccProfilesMenuAction(const QString& text, QObject* const parent)
     : KActionMenu(text, parent),
       m_parent(parent)
 {
@@ -263,7 +264,7 @@ void IccProfilesMenuAction::slotTriggered(QObject* obj)
 
 // ------------------------------------------------------------------------------------------
 
-IccRenderingIntentComboBox::IccRenderingIntentComboBox(QWidget* parent)
+IccRenderingIntentComboBox::IccRenderingIntentComboBox(QWidget* const parent)
     : KComboBox(parent)
 {
     addItem("Perceptual", IccTransform::Perceptual);

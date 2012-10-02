@@ -6,7 +6,7 @@
  * Date        : 2006-06-23
  * Description : a tab widget to display ICC profile infos
  *
- * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -43,7 +43,7 @@ class DIGIKAM_EXPORT ICCProfileWidget : public MetadataWidget
 
 public:
 
-    explicit ICCProfileWidget(QWidget* parent, int w=256, int h=256);
+    explicit ICCProfileWidget(QWidget* const parent, int w=256, int h=256);
     ~ICCProfileWidget();
 
     bool    loadFromURL(const KUrl& url);
@@ -73,8 +73,8 @@ private:
 
 private:
 
-    class ICCProfileWidgetPriv;
-    ICCProfileWidgetPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

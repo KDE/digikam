@@ -8,7 +8,7 @@
  *               in file dialog preview.
  *
  * Copyright (C) 2006-2007 by Francisco J. Cruz <fj.cruz@supercable.es>
- * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -45,7 +45,7 @@
 namespace Digikam
 {
 
-ICCPreviewWidget::ICCPreviewWidget(QWidget* parent)
+ICCPreviewWidget::ICCPreviewWidget(QWidget* const parent)
     : KPreviewWidgetBase( parent )
 {
     QVBoxLayout* mainLayout = new QVBoxLayout;

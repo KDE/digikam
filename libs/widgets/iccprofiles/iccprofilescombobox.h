@@ -49,7 +49,7 @@ class DIGIKAM_EXPORT IccProfilesComboBox : public KDcrawIface::SqueezedComboBox
 
 public:
 
-    IccProfilesComboBox(QWidget* parent = 0);
+    IccProfilesComboBox(QWidget* const parent = 0);
     ~IccProfilesComboBox();
 
     /**
@@ -86,7 +86,7 @@ class DIGIKAM_EXPORT IccRenderingIntentComboBox : public KComboBox
 {
 public:
 
-    IccRenderingIntentComboBox(QWidget* parent = 0);
+    IccRenderingIntentComboBox(QWidget* const parent = 0);
 
     void setIntent(int intent);
     int  intent() const;
@@ -100,8 +100,8 @@ class DIGIKAM_EXPORT IccProfilesMenuAction : public KActionMenu
 
 public:
 
-    IccProfilesMenuAction(const KIcon& icon, const QString& text, QObject* parent);
-    IccProfilesMenuAction(const QString& text, QObject* parent);
+    IccProfilesMenuAction(const KIcon& icon, const QString& text, QObject* const parent);
+    IccProfilesMenuAction(const QString& text, QObject* const parent);
 
     /**
      * Checks the given profiles for validity, creates a suitable description (ICC profile description, file path),

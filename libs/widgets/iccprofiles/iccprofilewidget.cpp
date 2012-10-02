@@ -6,7 +6,7 @@
  * Date        : 2006-06-23
  * Description : a tab widget to display ICC profile infos
  *
- * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -74,15 +74,20 @@ class ICCTagInfo
 
 public:
 
-    ICCTagInfo() {}
+    ICCTagInfo()
+    {
+    }
 
     ICCTagInfo(const QString& title, const QString& description)
-        : m_title(title), m_description(description) {}
+        : m_title(title), m_description(description)
+    {
+    }
 
     QString title()       const
     {
         return m_title;
     }
+
     QString description() const
     {
         return m_description;
@@ -98,12 +103,12 @@ typedef QMap<QString, ICCTagInfo> ICCTagInfoMap;
 
 // ---------------------------------------------------------------------------------------
 
-class ICCProfileWidget::ICCProfileWidgetPriv
+class ICCProfileWidget::Private
 {
 
 public:
 
-    ICCProfileWidgetPriv()
+    Private()
     {
         cieTongue = 0;
     }
@@ -117,8 +122,8 @@ public:
     ICCTagInfoMap    iccTagsDescription;
 };
 
-ICCProfileWidget::ICCProfileWidget(QWidget* parent, int w, int h)
-    : MetadataWidget(parent), d(new ICCProfileWidgetPriv)
+ICCProfileWidget::ICCProfileWidget(QWidget* const parent, int w, int h)
+    : MetadataWidget(parent), d(new Private)
 {
     dkCmsErrorAction(LCMS_ERROR_SHOW);
 
