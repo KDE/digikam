@@ -42,8 +42,6 @@ public:
     Option(const QString& name, const QString& description, const QString& icon);
     virtual ~Option();
 
-    virtual ParseResults& parse(ParseSettings& settings);
-
 protected:
 
     virtual QString parseOperation(ParseSettings& settings) = 0;

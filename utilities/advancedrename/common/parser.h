@@ -47,15 +47,6 @@ class Parser
 
 public:
 
-    enum TokenType
-    {
-        OptionToken = 0,
-        OptionModifiersToken,
-        TextToken
-    };
-
-public:
-
     Parser();
     virtual ~Parser();
 
@@ -66,8 +57,8 @@ public:
     RulesList     options()   const;
     RulesList     modifiers() const;
 
-    bool          tokenAtPosition(TokenType type, ParseSettings& settings, int pos);
-    bool          tokenAtPosition(TokenType type, ParseSettings& settings, int pos, int& start, int& length);
+    bool          tokenAtPosition(ParseSettings& settings, int pos);
+    bool          tokenAtPosition(ParseSettings& settings, int pos, int& start, int& length);
 
     ParseResults  invalidModifiers(ParseSettings& settings);
 

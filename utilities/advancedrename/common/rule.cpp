@@ -285,4 +285,30 @@ QString Rule::escapeToken(const QString& token)
     return escaped;
 }
 
+ParseResults Rule::parse(ParseSettings &settings)
+{
+    ParseResults parsedResults;
+    const QRegExp& reg         = regExp();
+    const QString& parseString = settings.parseString;
+
+    int pos = 0;
+
+    while (pos > -1)
+    {
+        pos = reg.indexIn(parseString, pos);
+
+        if (pos > -1)
+        {
+            QString result = parseOperation(settings);
+
+            ParseResults::ResultsKey   k(pos, reg.cap(0).count());
+            ParseResults::ResultsValue v(reg.cap(0), result);
+            parsedResults.addEntry(k, v);
+            pos += reg.matchedLength();
+        }
+    }
+
+    return parsedResults;
+}
+
 } // namespace Digikam

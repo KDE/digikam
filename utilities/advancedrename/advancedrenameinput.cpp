@@ -219,16 +219,8 @@ void AdvancedRenameLineEdit::slotCursorPositionChanged()
         int start            = INVALID;
         int length           = INVALID;
         int pos              = textCursor().position();
-        found                = d->parser->tokenAtPosition(Parser::OptionToken,
-                                                          settings, pos, start, length);
+        found                = d->parser->tokenAtPosition(settings, pos, start, length);
         found                = found && ((start + length) == pos);
-
-        if (!found)
-        {
-            found = d->parser->tokenAtPosition(Parser::OptionModifiersToken,
-                                               settings, pos, start, length);
-            found = found && ((start + length) == pos);
-        }
     }
 
     emit signalTokenMarked(found);

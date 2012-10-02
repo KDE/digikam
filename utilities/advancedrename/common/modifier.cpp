@@ -53,34 +53,4 @@ Modifier::~Modifier()
     delete d;
 }
 
-ParseResults& Modifier::parse(ParseSettings& settings)
-{
-    d->parsedResults.clear();
-
-    if (settings.parseString.isEmpty())
-    {
-        return d->parsedResults;
-    }
-
-    const QRegExp& reg         = regExp();
-    const QString& parseString = settings.parseString;
-
-    int pos = 0;
-
-    pos = reg.indexIn(parseString, pos);
-
-    if (pos > -1)
-    {
-        QString result = parseOperation(settings);
-        pos += reg.matchedLength();
-
-        ParseResults::ResultsKey   k(pos, reg.cap(0).count());
-        ParseResults::ResultsValue v(reg.cap(0), result);
-        d->parsedResults.addEntry(k, v);
-        pos += reg.matchedLength();
-    }
-
-    return d->parsedResults;
-}
-
 } // namespace Digikam

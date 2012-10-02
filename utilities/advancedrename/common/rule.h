@@ -128,12 +128,7 @@ public:
      */
     static QString escapeToken(const QString& token);
 
-    /**
-     * TODO: describe me
-     * @param settings
-     * @return
-     */
-    virtual ParseResults& parse(ParseSettings& settings) = 0;
+    ParseResults parse(ParseSettings& settings);
 
 Q_SIGNALS:
 
