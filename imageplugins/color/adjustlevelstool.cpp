@@ -206,11 +206,11 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
-    d->levelsHistogramWidget = new HistogramWidget(256, 140, d->originalImage->bits(),
-            d->originalImage->width(),
-            d->originalImage->height(),
-            d->originalImage->sixteenBit(),
-            d->gboxSettings->plainPage(), false);
+    d->levelsHistogramWidget = new HistogramWidget(256, 140, d->gboxSettings->plainPage(), false);
+    d->levelsHistogramWidget->updateData(d->originalImage->bits(),
+                                         d->originalImage->width(),
+                                         d->originalImage->height(),
+                                         d->originalImage->sixteenBit());
     d->levelsHistogramWidget->setWhatsThis(i18n("This is the histogram drawing of the selected channel "
                                            "from the original image."));
     QHBoxLayout* inputLevelsLayout = new QHBoxLayout;

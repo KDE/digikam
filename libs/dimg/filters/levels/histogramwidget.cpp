@@ -132,8 +132,6 @@ public:
     HistogramPainter*   histogramPainter;
 };
 
-// Constructor without image data (needed to use updateData() method after instance created).
-
 HistogramWidget::HistogramWidget(int w, int h,
                                  QWidget* const parent, bool selectMode,
                                  bool showProgress, bool statisticsVisible)
@@ -141,33 +139,6 @@ HistogramWidget::HistogramWidget(int w, int h,
 {
     setup(w, h, selectMode, statisticsVisible);
     d->showProgress = showProgress;
-}
-
-// Constructor without image selection.
-
-HistogramWidget::HistogramWidget(int w, int h,
-                                 uchar* const i_data, uint i_w, uint i_h,
-                                 bool i_sixteenBits,
-                                 QWidget* const parent, bool selectMode,
-                                 bool showProgress, bool statisticsVisible)
-    : QWidget(parent), d(new Private)
-{
-    setup(w, h, selectMode, statisticsVisible);
-    updateData(i_data, i_w, i_h, i_sixteenBits, 0, 0, 0, showProgress);
-}
-
-// Constructor with image selection.
-
-HistogramWidget::HistogramWidget(int w, int h,
-                                 uchar* const i_data, uint i_w, uint i_h,
-                                 uchar* const s_data, uint s_w, uint s_h,
-                                 bool i_sixteenBits,
-                                 QWidget* const parent, bool selectMode,
-                                 bool showProgress, bool statisticsVisible)
-    : QWidget(parent), d(new Private)
-{
-    setup(w, h, selectMode, statisticsVisible);
-    updateData(i_data, i_w, i_h, i_sixteenBits, s_data, s_w, s_h, showProgress);
 }
 
 HistogramWidget::~HistogramWidget()

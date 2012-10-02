@@ -53,28 +53,9 @@ class DIGIKAM_EXPORT HistogramWidget : public QWidget
 
 public:
 
-    /** Constructor without image data. Needed to use updateData() method after to create instance.
+    /** Standard constructor. Needed to use updateData() methods after to create valid instance.
      */
     HistogramWidget(int w, int h,                              // Widget size.
-                    QWidget* const parent=0, bool selectMode=true,
-                    bool showProgress=true,
-                    bool statisticsVisible=false);
-
-    /** Constructor with image data and without image selection data.
-     */
-    HistogramWidget(int w, int h,                              // Widget size.
-                    uchar* const i_data, uint i_w, uint i_h,   // Full image info.
-                    bool i_sixteenBits,                        // 8 or 16 bits image.
-                    QWidget* const parent=0, bool selectMode=true,
-                    bool showProgress=true,
-                    bool statisticsVisible=false);
-
-    /** Constructor with image data and image selection data.
-     */
-    HistogramWidget(int w, int h,                              // Widget size.
-                    uchar* const i_data, uint i_w, uint i_h,   // Full image info.
-                    uchar* const s_data, uint s_w, uint s_h,   // Image selection info.
-                    bool i_sixteenBits,                        // 8 or 16 bits image.
                     QWidget* const parent=0, bool selectMode=true,
                     bool showProgress=true,
                     bool statisticsVisible=false);
