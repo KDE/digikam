@@ -187,6 +187,8 @@ void AdvancedRenameWidget::setLayoutStyle(LayoutStyle style)
 
 void AdvancedRenameWidget::setControlWidgets(ControlWidgets mask)
 {
+    d->controlWidgetsMask = mask;
+
     // we need a parser and at least one renaming option to successfully use
     // this widget.
     bool enable = d->parser && !(d->parser->options().isEmpty());
@@ -200,16 +202,14 @@ void AdvancedRenameWidget::setControlWidgets(ControlWidgets mask)
     // layout specific
     if (d->layoutStyle == LayoutNormal)
     {
-        d->optionsLabel->setVisible(enable && (mask & TokenButtons) && (d->layoutStyle == LayoutNormal));
-        d->modifiersToolButton->setVisible(enableModBtn && (mask & ModifierToolButton) && (d->layoutStyle == LayoutNormal));
+        d->optionsLabel->setVisible(enable && (mask & TokenButtons));
+        d->modifiersToolButton->setVisible(enableModBtn && (mask & ModifierToolButton));
     }
     else
     {
-        d->optionsButton->setVisible(enableModBtn && (mask & TokenButtons) && (d->layoutStyle == LayoutCompact));
-        d->modifiersButton->setVisible(enableModBtn && (mask & ModifierToolButton) && (d->layoutStyle == LayoutCompact));
+        d->optionsButton->setVisible(enableModBtn && (mask & TokenButtons));
+        d->modifiersButton->setVisible(enableModBtn && (mask & ModifierToolButton));
     }
-
-    d->controlWidgetsMask = mask;
 }
 
 template<class T>
