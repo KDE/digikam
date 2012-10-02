@@ -238,29 +238,6 @@ void Rule::slotTokenTriggered(const QString& token)
     emit signalTokenTriggered(token);
 }
 
-bool Rule::tokenAtPosition(ParseResults& results, int pos)
-{
-    int start;
-    int length;
-    return tokenAtPosition(results, pos, start, length);
-}
-
-bool Rule::tokenAtPosition(ParseResults& results, int pos, int& start, int& length)
-{
-    bool found = false;
-
-    ParseResults::ResultsKey key = results.keyAtApproximatePosition(pos);
-    start  = key.first;
-    length = key.second;
-
-    if ((pos >= start) && (pos <= start + length))
-    {
-        found = true;
-    }
-
-    return found;
-}
-
 bool Rule::isValid() const
 {
     return (!d->tokens.isEmpty() && !d->regExp.isEmpty() && d->regExp.isValid());
@@ -283,6 +260,32 @@ QString Rule::escapeToken(const QString& token)
     escaped.replace('}', "\\}");
 
     return escaped;
+}
+
+ParseResults Rule::parse(ParseSettings &settings)
+{
+    ParseResults parsedResults;
+    const QRegExp& reg         = regExp();
+    const QString& parseString = settings.parseString;
+
+    int pos = 0;
+
+    while (pos > -1)
+    {
+        pos = reg.indexIn(parseString, pos);
+
+        if (pos > -1)
+        {
+            QString result = parseOperation(settings);
+
+            ParseResults::ResultsKey   k(pos, reg.cap(0).count());
+            ParseResults::ResultsValue v(reg.cap(0), result);
+            parsedResults.addEntry(k, v);
+            pos += reg.matchedLength();
+        }
+    }
+
+    return parsedResults;
 }
 
 } // namespace Digikam

@@ -137,13 +137,11 @@ QString SequenceNumberOption::parseOperation(ParseSettings& settings)
     int step         = 0;
     int number       = 0;
     int index        = 0;
-    bool extAware    = false;
-    bool folderAware = false;
 
     if (settings.manager)
     {
-        extAware    = !reg.cap(3).isEmpty() && reg.cap(3).contains(QChar('e'));
-        folderAware = !reg.cap(3).isEmpty() && reg.cap(3).contains(QChar('f'));
+        bool extAware    = !reg.cap(3).isEmpty() && reg.cap(3).contains(QChar('e'));
+        bool folderAware = !reg.cap(3).isEmpty() && reg.cap(3).contains(QChar('f'));
 
         index = settings.manager->indexOfFile(settings.fileUrl.toLocalFile());
 

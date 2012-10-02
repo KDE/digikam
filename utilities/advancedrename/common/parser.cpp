@@ -195,8 +195,21 @@ void Parser::unregisterModifier(Rule* modifier)
 
 ParseResults Parser::results(ParseSettings& settings)
 {
-    parse(settings);
-    return settings.results;
+    ParseResults results;
+
+    foreach(Rule* option, d->options)
+    {
+        ParseResults r = option->parse(settings);
+        results.append(r);
+    }
+
+    foreach(Rule* modifier, d->modifiers)
+    {
+        ParseResults r = modifier->parse(settings);
+        results.append(r);
+    }
+
+    return results;
 }
 
 ParseResults Parser::invalidModifiers(ParseSettings& settings)
@@ -251,34 +264,18 @@ QString Parser::parse(ParseSettings& settings)
     return newName;
 }
 
-bool Parser::tokenAtPosition(TokenType type, ParseSettings& settings, int pos)
+bool Parser::tokenAtPosition(ParseSettings& settings, int pos)
 {
     int start;
     int length;
-    return tokenAtPosition(type, settings, pos, start, length);
+    return tokenAtPosition(settings, pos, start, length);
 }
 
-bool Parser::tokenAtPosition(TokenType type, ParseSettings& settings, int pos, int& start, int& length)
+bool Parser::tokenAtPosition(ParseSettings& settings, int pos, int& start, int& length)
 {
     bool found = false;
 
-    ParseResults r;
-
-    switch (type)
-    {
-        case OptionToken:
-            settings.applyModifiers = false;
-            r = results(settings);
-            break;
-
-        case OptionModifiersToken:
-            settings.applyModifiers = true;
-            r = results(settings);
-            break;
-
-        default:
-            break;
-    }
+    ParseResults r = results(settings);
 
     ParseResults::ResultsKey key = r.keyAtApproximatePosition(pos);
     start  = key.first;

@@ -128,12 +128,7 @@ public:
      */
     static QString escapeToken(const QString& token);
 
-    /**
-     * TODO: describe me
-     * @param settings
-     * @return
-     */
-    virtual ParseResults& parse(ParseSettings& settings) = 0;
+    ParseResults parse(ParseSettings& settings);
 
 Q_SIGNALS:
 
@@ -179,8 +174,6 @@ private:
     Rule& operator=(const Rule&);
 
     QPushButton* createButton(const QString& name, const QIcon& icon);
-    bool         tokenAtPosition(ParseResults& results, int pos);
-    bool         tokenAtPosition(ParseResults& results, int pos, int& start, int& length);
 
 private:
 
