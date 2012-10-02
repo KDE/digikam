@@ -178,18 +178,7 @@ TagEditDlg::TagEditDlg(QWidget* parent, TAlbum* album, bool create)
     iconTextLabel->setBuddy(d->iconButton);
 
     // In create mode, by default assign the icon of the parent (if not root) to this new tag.
-
-    // FIXME: this check is useless? We always end up with
-    // d->icon = album->icon();
-    // anyway??
-    if (create && !album->isRoot())
-    {
-        d->icon = album->icon();
-    }
-    else
-    {
-        d->icon = album->icon();
-    }
+    d->icon = album->icon();
 
     d->iconButton->setIcon(SyncJob::getTagThumbnail(album));
 
