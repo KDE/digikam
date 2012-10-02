@@ -174,8 +174,6 @@ private:
     Rule& operator=(const Rule&);
 
     QPushButton* createButton(const QString& name, const QIcon& icon);
-    bool         tokenAtPosition(ParseResults& results, int pos);
-    bool         tokenAtPosition(ParseResults& results, int pos, int& start, int& length);
 
 private:
 

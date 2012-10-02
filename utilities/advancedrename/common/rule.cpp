@@ -238,29 +238,6 @@ void Rule::slotTokenTriggered(const QString& token)
     emit signalTokenTriggered(token);
 }
 
-bool Rule::tokenAtPosition(ParseResults& results, int pos)
-{
-    int start;
-    int length;
-    return tokenAtPosition(results, pos, start, length);
-}
-
-bool Rule::tokenAtPosition(ParseResults& results, int pos, int& start, int& length)
-{
-    bool found = false;
-
-    ParseResults::ResultsKey key = results.keyAtApproximatePosition(pos);
-    start  = key.first;
-    length = key.second;
-
-    if ((pos >= start) && (pos <= start + length))
-    {
-        found = true;
-    }
-
-    return found;
-}
-
 bool Rule::isValid() const
 {
     return (!d->tokens.isEmpty() && !d->regExp.isEmpty() && d->regExp.isValid());
