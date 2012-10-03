@@ -45,17 +45,16 @@ QString CameraNameHelper::createCameraName(const QString& vendor, const QString&
     QString tmp;
     QString _vendor  = vendor.simplified();
     QString _product = product.simplified();
-    QString _mode    = mode.simplified().remove('(').remove(')');
+    QString _mode    = mode.simplified().remove(QChar('(')).remove(QChar(')'));
 
-    tmp = QString("%1 %2").arg(_vendor)
-          .arg(_product)
-          .simplified();
+    tmp = QString("%1 %2").arg(_vendor).arg(_product);
 
     if (!mode.isEmpty())
     {
         tmp.append(" (");
         tmp.append(_mode);
-        tmp.append(autoDetected ? QString(", %1)").arg(autoDetectedString())
+        tmp.append(autoDetected
+                   ? QString(", %1)").arg(autoDetectedString())
                    : QString(')'));
     }
     else if (autoDetected)
@@ -82,7 +81,9 @@ QString CameraNameHelper::parseAndFormatCameraName(const QString& cameraName,
     QString tmp;
 
     QString vendorAndProduct = extractCameraNameToken(cameraName, VendorAndProduct);
-    QString mode             = parseMode ? extractCameraNameToken(cameraName, Mode) : QString();
+    QString mode             = parseMode
+                               ? extractCameraNameToken(cameraName, Mode)
+                               : QString();
 
     if (vendorAndProduct.isEmpty())
     {
@@ -102,7 +103,9 @@ QString CameraNameHelper::parseAndFormatCameraName(const QString& cameraName,
     }
 
     tmp = createCameraName(vendor, product, mode, autoDetected);
-    return (tmp.isEmpty()) ? cameraName : tmp;
+    return tmp.isEmpty()
+           ? cameraName
+           : tmp;
 }
 
 QString CameraNameHelper::autoDetectedString()
@@ -156,7 +159,9 @@ QString CameraNameHelper::extractCameraNameToken(const QString& cameraName, int 
         tmp.append(' ');
     }
 
-    return (tmp.isEmpty()) ? cameraName.simplified() : tmp.simplified();
+    return tmp.isEmpty()
+           ? cameraName.simplified()
+           : tmp.simplified();
 }
 
 bool CameraNameHelper::sameDevices(const QString& deviceA, const QString& deviceB)
@@ -207,11 +212,11 @@ bool CameraNameHelper::sameDevices(const QString& deviceA, const QString& device
 
 QString CameraNameHelper::prepareStringForDeviceComparison(const QString& string, int tokenID)
 {
-    QString tmp = string.toLower().remove('(').remove(')').remove(autoDetectedString()).simplified();
+    QString tmp = string.toLower().remove(QChar('(')).remove(QChar(')')).remove(autoDetectedString()).simplified();
 
     if (tokenID == Mode)
     {
-        tmp = tmp.remove("mode").remove(',');
+        tmp = tmp.remove("mode").remove(QChar(','));
     }
 
     return tmp.simplified();

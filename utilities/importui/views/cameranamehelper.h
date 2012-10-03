@@ -38,9 +38,6 @@ class CameraNameHelper
 
 public:
 
-    CameraNameHelper()  {};
-    ~CameraNameHelper() {};
-
     static QString formattedFullCameraName(const QString& name, bool autoDetected = false);
     static QString formattedCameraName(const QString& name, bool autoDetected = false);
 
