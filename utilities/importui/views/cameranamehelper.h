@@ -6,7 +6,7 @@
  * Date        : 2009-08-01
  * Description : camera name helper class
  *
- * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmail dot com>
+ * Copyright (C) 2009-2012 by Andi Clemens <andi dot clemens at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
