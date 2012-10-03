@@ -57,7 +57,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 027 ==> 207005 - Raw Import Tool does not reflect the predefined Workspace when custom.
 028 ==> 305823 - digiKam writes to Samsung RAW files.
 029 ==> 269846 - TIFF loader is broken on big-endian architectures [PATCH].
-030 ==> 
+030 ==> 274555 - digiKam crashes while histogram computation.
+031 ==> 
 
 
 
