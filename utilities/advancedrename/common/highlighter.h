@@ -28,6 +28,8 @@
 
 #include <QSyntaxHighlighter>
 
+class QTextDocument;
+
 namespace Digikam
 {
 
@@ -38,7 +40,7 @@ class Highlighter : public QSyntaxHighlighter
 
 public:
 
-    Highlighter(QTextEdit* parent, Parser* parser);
+    Highlighter(QTextDocument* document, Parser* parser);
     virtual ~Highlighter();
 
 protected:

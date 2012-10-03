@@ -23,6 +23,10 @@
 
 #include "highlighter.h"
 
+// Qt includes
+
+#include <QTextDocument>
+
 // Local includes
 
 #include "parser.h"
@@ -30,8 +34,8 @@
 namespace Digikam
 {
 
-Highlighter::Highlighter(QTextEdit* parent, Parser* _parser)
-    : QSyntaxHighlighter(parent), parser(_parser)
+Highlighter::Highlighter(QTextDocument *document, Parser* _parser)
+    : QSyntaxHighlighter(document), parser(_parser)
 
 {
     setupHighlightingGrammar();

@@ -26,7 +26,7 @@
 
 // Qt includes
 
-#include <QTextEdit>
+#include <QPlainTextEdit>
 #include <QWidget>
 
 // KDE includes
@@ -46,7 +46,7 @@ class QEvent;
 namespace Digikam
 {
 
-class AdvancedRenameLineEdit : public QTextEdit
+class AdvancedRenameLineEdit : public QPlainTextEdit
 {
     Q_OBJECT
 
