@@ -113,7 +113,7 @@ QString CameraNameHelper::autoDetectedString()
     return i18n("auto-detected");
 }
 
-QString CameraNameHelper::extractCameraNameToken(const QString& cameraName, int tokenID)
+QString CameraNameHelper::extractCameraNameToken(const QString& cameraName, Token tokenID)
 {
     QStringList capturedTexts;
     QString     tmp;
@@ -210,7 +210,7 @@ bool CameraNameHelper::sameDevices(const QString& deviceA, const QString& device
     return false;
 }
 
-QString CameraNameHelper::prepareStringForDeviceComparison(const QString& string, int tokenID)
+QString CameraNameHelper::prepareStringForDeviceComparison(const QString& string, Token tokenID)
 {
     QString tmp = string.toLower().remove(QChar('(')).remove(QChar(')')).remove(autoDetectedString()).simplified();
 
