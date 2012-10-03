@@ -194,6 +194,11 @@ IccProfile IccSettings::IccSettingsPriv::profileFromWindowSystem(QWidget* widget
     QString    atomName;
 
     QDesktopWidget* desktop = QApplication::desktop();
+    if (!desktop)
+    {
+        kError() << "No desktop widget available for application";
+        return IccProfile();
+    }
     int screenNumber        = desktop->screenNumber(widget);
 
     IccProfile profile;
