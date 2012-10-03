@@ -87,7 +87,10 @@ public:
 ImageHistogram::ImageHistogram(const DImg& img, QObject* const parent)
     : DynamicThread(parent), d(new Private)
 {
-    d->img           = img.copy();
+    // A simple copy of reference must be enough instead a deep copy. See this BKO comment for details:
+    // https://bugs.kde.org/show_bug.cgi?id=274555#c40
+    //d->img           = img.copy();
+    d->img           = img;
     d->histoSegments = d->img.sixteenBit() ? NUM_SEGMENTS_16BIT : NUM_SEGMENTS_8BIT;
 }
 
