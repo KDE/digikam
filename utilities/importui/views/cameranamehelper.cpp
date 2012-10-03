@@ -26,10 +26,20 @@
 // Qt includes
 
 #include <QAction>
+#include <QRegExp>
 
 // KDE includes
 
 #include <klocale.h>
+
+namespace
+{
+static const QString STR_AUTO_DETECTED("auto-detected");
+
+static QRegExp REGEXP_CAMERA_NAME("^(.*)\\s*\\((.*)\\)\\s*$", Qt::CaseInsensitive);
+static QRegExp REGEXP_MODES("^(ptp|normal|mtp)(\\s+mode)?$", Qt::CaseInsensitive);
+static QRegExp REGEXP_AUTODETECTED(QString("(%1|, %1)").arg(STR_AUTO_DETECTED));
+}
 
 namespace Digikam
 {
@@ -54,12 +64,12 @@ QString CameraNameHelper::createCameraName(const QString& vendor, const QString&
         tmp.append(" (");
         tmp.append(_mode);
         tmp.append(autoDetected
-                   ? QString(", %1)").arg(autoDetectedString())
+                   ? QString(", %1)").arg(STR_AUTO_DETECTED)
                    : QString(')'));
     }
     else if (autoDetected)
     {
-        tmp.append(QString(" (%1)").arg(autoDetectedString()));
+        tmp.append(QString(" (%1)").arg(STR_AUTO_DETECTED));
     }
 
     return tmp.simplified();
@@ -78,90 +88,67 @@ QString CameraNameHelper::formattedFullCameraName(const QString& name, bool auto
 QString CameraNameHelper::parseAndFormatCameraName(const QString& cameraName,
                                                    bool parseMode, bool autoDetected)
 {
-    QString tmp;
+    if (!parseMode && !autoDetected)
+    {
+        return cameraName.simplified();
+    }
 
     QString vendorAndProduct = extractCameraNameToken(cameraName, VendorAndProduct);
-    QString mode             = parseMode
-                               ? extractCameraNameToken(cameraName, Mode)
-                               : QString();
 
     if (vendorAndProduct.isEmpty())
     {
         return QString();
     }
 
-    // we split vendorAndProduct once, it doesn't really matter if the variables are correctly filled,
-    // it is only important that both are not empty.
-    QStringList words = vendorAndProduct.split(' ');
-    QString     vendor;
-    QString     product;
+    QString mode = parseMode
+                   ? extractCameraNameToken(cameraName, Mode)
+                   : QString();
 
-    if (words.count() > 1)
-    {
-        vendor  = words.takeFirst();
-        product = words.join(" ");
-    }
-
-    tmp = createCameraName(vendor, product, mode, autoDetected);
+    QString tmp = createCameraName(vendorAndProduct, QString(), mode, autoDetected);
     return tmp.isEmpty()
-           ? cameraName
+           ? cameraName.simplified()
            : tmp;
-}
-
-QString CameraNameHelper::autoDetectedString()
-{
-    return i18n("auto-detected");
 }
 
 QString CameraNameHelper::extractCameraNameToken(const QString& cameraName, Token tokenID)
 {
-    QStringList capturedTexts;
-    QString     tmp;
+    REGEXP_CAMERA_NAME.setMinimal(true);
+    REGEXP_MODES.setMinimal(true);
+    REGEXP_AUTODETECTED.setMinimal(true);
 
-    capturedTexts = cameraName.split(" (");
-
-    // TODO: Right now we just assume that a camera name has no parentheses in it
-    //       There is a testcase (CameraNameHelperTest::testCameraNameFromGPCamera) that
-    //       checks all camera names delivered by gphoto2. At the moment all seems to be fine.
-    if (!capturedTexts.isEmpty())
+    if (REGEXP_CAMERA_NAME.exactMatch(cameraName.simplified()))
     {
+        QString vendorProduct  = REGEXP_CAMERA_NAME.cap(1).simplified();
+        QString tmpMode        = REGEXP_CAMERA_NAME.cap(2).simplified();
+        QString clearedTmpMode = tmpMode;
         QString mode;
-        QString vendorAndProduct;
+        clearedTmpMode.remove(REGEXP_AUTODETECTED);
 
-        if (capturedTexts.count() == 1)     // camera name only
+        if (!tmpMode.isEmpty() && clearedTmpMode.isEmpty())
         {
-            vendorAndProduct = capturedTexts.takeFirst();
+            mode = tmpMode;
         }
         else
         {
-            mode             = capturedTexts.takeLast().simplified();
-            vendorAndProduct = capturedTexts.join((" ")).simplified();
+            mode = REGEXP_MODES.exactMatch(clearedTmpMode)
+                   ? clearedTmpMode
+                   : "";
         }
 
         if (tokenID == VendorAndProduct)
         {
-            tmp = vendorAndProduct;
+            return mode.isEmpty()
+                   ? cameraName.simplified()
+                   : vendorProduct;
         }
-        else if (tokenID == Mode)
+        else
         {
-            tmp = mode;
+            return mode;
         }
-
     }
-
-    // clean up the string
-    QStringList words = tmp.split((' '));
-    tmp.clear();
-
-    foreach(const QString& word, words)
-    {
-        tmp.append(word.simplified());
-        tmp.append(' ');
-    }
-
-    return tmp.isEmpty()
+    return (tokenID == VendorAndProduct)
            ? cameraName.simplified()
-           : tmp.simplified();
+           : "";
 }
 
 bool CameraNameHelper::sameDevices(const QString& deviceA, const QString& deviceB)
@@ -185,41 +172,23 @@ bool CameraNameHelper::sameDevices(const QString& deviceA, const QString& device
     // try to clean up the string, if not possible, return false
     if (cameraNameA != cameraNameB)
     {
-        QString tmpA = prepareStringForDeviceComparison(cameraNameA, VendorAndProduct);
-        QString tmpB = prepareStringForDeviceComparison(cameraNameB, VendorAndProduct);
-
-        if (tmpA != tmpB)
-        {
-            return false;
-        }
+        return false;
     }
 
-    // now check if the mode is the same
-    QString modeA             = extractCameraNameToken(deviceA, Mode);
-    QString modeB             = extractCameraNameToken(deviceB, Mode);
+    // is the extracted mode known and equal?
+    QString modeA       = extractCameraNameToken(deviceA, Mode);
+    QString modeB       = extractCameraNameToken(deviceB, Mode);
+    bool isModeAValid   = REGEXP_MODES.exactMatch(modeA);
+    modeA               = isModeAValid ? REGEXP_MODES.cap(1).simplified().toLower() : "";
+    bool isModeBValid   = REGEXP_MODES.exactMatch(modeB);
+    modeB               = isModeBValid ? REGEXP_MODES.cap(1).simplified().toLower() : "";
 
-    // remove the 'mode' token for comparison
-    QString strippedModeA     = prepareStringForDeviceComparison(modeA, Mode);
-    QString strippedModeB     = prepareStringForDeviceComparison(modeB, Mode);
-
-    if (strippedModeA == strippedModeB)
+    if ((isModeAValid != isModeBValid) || (modeA != modeB))
     {
-        return true;
+        return false;
     }
 
-    return false;
-}
-
-QString CameraNameHelper::prepareStringForDeviceComparison(const QString& string, Token tokenID)
-{
-    QString tmp = string.toLower().remove(QChar('(')).remove(QChar(')')).remove(autoDetectedString()).simplified();
-
-    if (tokenID == Mode)
-    {
-        tmp = tmp.remove("mode").remove(QChar(','));
-    }
-
-    return tmp.simplified();
+    return true;
 }
 
 } // namespace Digikam
