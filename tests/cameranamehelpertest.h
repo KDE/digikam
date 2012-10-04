@@ -34,14 +34,16 @@ class CameraNameHelperTest : public QObject
 
 private Q_SLOTS:
 
-    void testCameraNameFromGPCamera();
-
+    // core API tests
     void testCreateCameraName();
     void testCreateCameraName_data();
 
     void testForSameDevices();
     void testForSameDevices_data();
 
+
+    // additional tests
+    void testCameraNameFromGPCamera();
 };
 
 #endif /* CAMERANAMEHELPERTEST_H */
