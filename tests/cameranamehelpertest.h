@@ -38,8 +38,8 @@ private Q_SLOTS:
     void testCreateCameraName();
     void testCreateCameraName_data();
 
-    void testForSameDevices();
-    void testForSameDevices_data();
+    void testSameDevices();
+    void testSameDevices_data();
 
 
     // additional tests

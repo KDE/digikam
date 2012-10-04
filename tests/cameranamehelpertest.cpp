@@ -91,7 +91,7 @@ void CameraNameHelperTest::testCameraNameFromGPCamera()
 #endif
 }
 
-void CameraNameHelperTest::testForSameDevices_data()
+void CameraNameHelperTest::testSameDevices_data()
 {
     QTest::addColumn<QString>("deviceA");
     QTest::addColumn<QString>("deviceB");
@@ -104,7 +104,7 @@ void CameraNameHelperTest::testForSameDevices_data()
     QTest::newRow("05") << "Nikon D50 (ptp mode)" << "Nikon D50" << false;
 }
 
-void CameraNameHelperTest::testForSameDevices()
+void CameraNameHelperTest::testSameDevices()
 {
     QFETCH(QString, deviceA);
     QFETCH(QString, deviceB);
