@@ -40,7 +40,7 @@ public:
 
     static QString cameraName(const QString& name);
 
-    static QString formattedFullCameraName(const QString& name, bool autoDetected = false);
+    static QString cameraNameAutoDetected(const QString& name);
 
     static QString createCameraName(const QString& vendor,
                                     const QString& product      = QString(),

@@ -34,7 +34,6 @@ class CameraNameHelperTest : public QObject
 
 private Q_SLOTS:
 
-    // core API tests
     void testCreateCameraName();
     void testCreateCameraName_data();
 
@@ -44,10 +43,8 @@ private Q_SLOTS:
     void testCameraName_data();
     void testCameraName();
 
-    void testFormattedFullCameraName();
-
-    // additional tests
-    void testCameraNameFromGPCamera();
+    void testCameraNameAutoDetected_data();
+    void testCameraNameAutoDetected();
 };
 
 #endif /* CAMERANAMEHELPERTEST_H */

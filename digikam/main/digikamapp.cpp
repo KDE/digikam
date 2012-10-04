@@ -2073,7 +2073,7 @@ void DigikamApp::fillSolidMenus()
         // --------------------------------------------------------
 
         QString l     = labelForSolidCamera(cameraDevice);
-        QString label = CameraNameHelper::formattedFullCameraName(l.trimmed(), true);
+        QString label = CameraNameHelper::cameraNameAutoDetected(l.trimmed());
 
         // --------------------------------------------------------
 

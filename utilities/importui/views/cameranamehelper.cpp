@@ -80,9 +80,9 @@ QString CameraNameHelper::cameraName(const QString& name)
     return parseAndFormatCameraName(name, false, false);
 }
 
-QString CameraNameHelper::formattedFullCameraName(const QString& name, bool autoDetected)
+QString CameraNameHelper::cameraNameAutoDetected(const QString& name)
 {
-    return parseAndFormatCameraName(name, true, autoDetected);
+    return parseAndFormatCameraName(name, true, true);
 }
 
 QString CameraNameHelper::parseAndFormatCameraName(const QString& cameraName,

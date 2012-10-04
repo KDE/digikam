@@ -32,10 +32,6 @@
 #include "cameranamehelper.h"
 #include "config-digikam.h"
 
-#ifdef HAVE_GPHOTO2
-#include "gpcamera.h"
-#endif
-
 using namespace Digikam;
 
 QTEST_KDEMAIN(CameraNameHelperTest, GUI)
@@ -75,22 +71,6 @@ void CameraNameHelperTest::testCreateCameraName()
     QCOMPARE(CameraNameHelper::createCameraName(vendor, product, mode, autoDetect), result);
 }
 
-void CameraNameHelperTest::testCameraNameFromGPCamera()
-{
-#ifdef HAVE_GPHOTO2
-    int count = 0;
-    QStringList clist;
-
-    GPCamera::getSupportedCameras(count, clist);
-
-    // test if all camera names stay intact
-    foreach(const QString& camera, clist)
-    {
-        QCOMPARE(CameraNameHelper::formattedFullCameraName(camera), camera.simplified());
-    }
-#endif
-}
-
 void CameraNameHelperTest::testSameDevices_data()
 {
     QTest::addColumn<QString>("deviceA");
@@ -102,10 +82,6 @@ void CameraNameHelperTest::testSameDevices_data()
     QTest::newRow("03") << "Nikon D50 (auto-detected)" << "Nikon D50" << true;
     QTest::newRow("04") << "Nikon D50 (ptp mode)" << "Nikon D50 (mtp mode)" << false;
     QTest::newRow("05") << "Nikon D50 (ptp mode)" << "Nikon D50" << false;
-}
-
-void CameraNameHelperTest::testFormattedFullCameraName()
-{
 }
 
 void CameraNameHelperTest::testCameraName_data()
@@ -126,6 +102,26 @@ void CameraNameHelperTest::testCameraName()
     QFETCH(QString, result);
 
     QCOMPARE(CameraNameHelper::cameraName(device), result);
+}
+
+void CameraNameHelperTest::testCameraNameAutoDetected_data()
+{
+    QTest::addColumn<QString>("device");
+    QTest::addColumn<QString>("result");
+
+    QTest::newRow("01") << "Nikon D50 (ptp, auto-detected)" << "Nikon D50 (ptp, auto-detected)";
+    QTest::newRow("02") << "Nikon D50 (auto-detected)" << "Nikon D50 (auto-detected)";
+    QTest::newRow("03") << "Nikon D50 (ptp)" << "Nikon D50 (ptp, auto-detected)";
+    QTest::newRow("04") << "Nikon D50 (something else)" << "Nikon D50 (something else) (auto-detected)";
+    QTest::newRow("05") << "Nikon D50 (huhu) blubber" << "Nikon D50 (huhu) blubber (auto-detected)";
+}
+
+void CameraNameHelperTest::testCameraNameAutoDetected()
+{
+    QFETCH(QString, device);
+    QFETCH(QString, result);
+
+    QCOMPARE(CameraNameHelper::cameraNameAutoDetected(device), result);
 }
 
 void CameraNameHelperTest::testSameDevices()
