@@ -104,6 +104,38 @@ void CameraNameHelperTest::testSameDevices_data()
     QTest::newRow("05") << "Nikon D50 (ptp mode)" << "Nikon D50" << false;
 }
 
+void CameraNameHelperTest::testFormattedFullCameraName()
+{
+}
+
+void CameraNameHelperTest::testFormattedCameraName_data()
+{
+    QTest::addColumn<QString>("device");
+    QTest::addColumn<bool>("autoDetected");
+    QTest::addColumn<QString>("result");
+
+    QTest::newRow("01") << "Nikon D50 (ptp, auto-detected)" << false << "Nikon D50";
+    QTest::newRow("02") << "Nikon D50 (auto-detected)" << false << "Nikon D50";
+    QTest::newRow("03") << "Nikon D50 (ptp)" << false << "Nikon D50";
+    QTest::newRow("04") << "Nikon D50 (something else)" << false << "Nikon D50 (something else)";
+    QTest::newRow("05") << "Nikon D50 (huhu) blubber" << false << "Nikon D50 (huhu) blubber";
+
+    QTest::newRow("06") << "Nikon D50 (ptp, auto-detected)" << true << "Nikon D50 (auto-detected)";
+    QTest::newRow("07") << "Nikon D50 (auto-detected)" << true << "Nikon D50 (auto-detected)";
+    QTest::newRow("08") << "Nikon D50 (ptp)" << true << "Nikon D50 (auto-detected)";
+    QTest::newRow("09") << "Nikon D50 (something else)" << true << "Nikon D50 (something else) (auto-detected)";
+    QTest::newRow("10") << "Nikon D50 (huhu) blubber" << true << "Nikon D50 (huhu) blubber (auto-detected)";
+}
+
+void CameraNameHelperTest::testFormattedCameraName()
+{
+    QFETCH(QString, device);
+    QFETCH(bool,    autoDetected);
+    QFETCH(QString, result);
+
+    QCOMPARE(CameraNameHelper::formattedCameraName(device, autoDetected), result);
+}
+
 void CameraNameHelperTest::testSameDevices()
 {
     QFETCH(QString, deviceA);

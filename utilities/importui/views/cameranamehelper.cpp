@@ -88,11 +88,6 @@ QString CameraNameHelper::formattedFullCameraName(const QString& name, bool auto
 QString CameraNameHelper::parseAndFormatCameraName(const QString& cameraName,
                                                    bool parseMode, bool autoDetected)
 {
-    if (!parseMode && !autoDetected)
-    {
-        return cameraName.simplified();
-    }
-
     QString vendorAndProduct = extractCameraNameToken(cameraName, VendorAndProduct);
 
     if (vendorAndProduct.isEmpty())

@@ -41,6 +41,10 @@ private Q_SLOTS:
     void testSameDevices();
     void testSameDevices_data();
 
+    void testFormattedFullCameraName();
+
+    void testFormattedCameraName_data();
+    void testFormattedCameraName();
 
     // additional tests
     void testCameraNameFromGPCamera();
