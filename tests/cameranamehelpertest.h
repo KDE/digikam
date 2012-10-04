@@ -36,8 +36,8 @@ private Q_SLOTS:
 
     void testCameraNameFromGPCamera();
 
-    void testStaticCreateName();
-    void testStaticCreateName_data();
+    void testCreateCameraName();
+    void testCreateCameraName_data();
 
     void testForSameDevices();
     void testForSameDevices_data();

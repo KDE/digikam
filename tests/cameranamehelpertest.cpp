@@ -40,7 +40,7 @@ using namespace Digikam;
 
 QTEST_KDEMAIN(CameraNameHelperTest, GUI)
 
-void CameraNameHelperTest::testStaticCreateName_data()
+void CameraNameHelperTest::testCreateCameraName_data()
 {
     QTest::addColumn<QString>("vendor");
     QTest::addColumn<QString>("product");
@@ -64,7 +64,7 @@ void CameraNameHelperTest::testStaticCreateName_data()
                         << QString("Nikon D50 (PTP Mode, %1)").arg(autoString);
 }
 
-void CameraNameHelperTest::testStaticCreateName()
+void CameraNameHelperTest::testCreateCameraName()
 {
     QFETCH(QString, vendor);
     QFETCH(QString, product);
