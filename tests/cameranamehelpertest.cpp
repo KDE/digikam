@@ -108,7 +108,7 @@ void CameraNameHelperTest::testFormattedFullCameraName()
 {
 }
 
-void CameraNameHelperTest::testFormattedCameraName_data()
+void CameraNameHelperTest::testCameraName_data()
 {
     QTest::addColumn<QString>("device");
     QTest::addColumn<QString>("result");
@@ -120,12 +120,12 @@ void CameraNameHelperTest::testFormattedCameraName_data()
     QTest::newRow("05") << "Nikon D50 (huhu) blubber" << "Nikon D50 (huhu) blubber";
 }
 
-void CameraNameHelperTest::testFormattedCameraName()
+void CameraNameHelperTest::testCameraName()
 {
     QFETCH(QString, device);
     QFETCH(QString, result);
 
-    QCOMPARE(CameraNameHelper::formattedCameraName(device), result);
+    QCOMPARE(CameraNameHelper::cameraName(device), result);
 }
 
 void CameraNameHelperTest::testSameDevices()

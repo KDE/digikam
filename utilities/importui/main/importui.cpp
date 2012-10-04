@@ -156,7 +156,7 @@ ImportUI::ImportUI(QWidget* const parent, const QString& cameraTitle,
 
     // --------------------------------------------------------
 
-    QString title  = CameraNameHelper::formattedCameraName(cameraTitle);
+    QString title  = CameraNameHelper::cameraName(cameraTitle);
     d->cameraTitle = (title.isEmpty()) ? cameraTitle : title;
     setCaption(d->cameraTitle);
 

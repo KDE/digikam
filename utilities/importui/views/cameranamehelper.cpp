@@ -75,7 +75,7 @@ QString CameraNameHelper::createCameraName(const QString& vendor, const QString&
     return tmp.simplified();
 }
 
-QString CameraNameHelper::formattedCameraName(const QString& name)
+QString CameraNameHelper::cameraName(const QString& name)
 {
     return parseAndFormatCameraName(name, false, false);
 }
