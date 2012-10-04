@@ -59,7 +59,7 @@ QString CameraNameHelper::createCameraName(const QString& vendor, const QString&
 
     tmp = QString("%1 %2").arg(_vendor).arg(_product);
 
-    if (!mode.isEmpty())
+    if (!mode.isEmpty() && mode != STR_AUTO_DETECTED)
     {
         tmp.append(" (");
         tmp.append(_mode);
