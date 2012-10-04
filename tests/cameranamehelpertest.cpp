@@ -100,6 +100,8 @@ void CameraNameHelperTest::testForSameDevices_data()
     QTest::newRow("01") << "Nikon D50 (ptp, auto-detected)" << "Nikon D50 (PTP Mode)" << true;
     QTest::newRow("02") << "Nikon D50 (ptp mode)" << "Nikon D50 (PTP)" << true;
     QTest::newRow("03") << "Nikon D50 (auto-detected)" << "Nikon D50" << true;
+    QTest::newRow("04") << "Nikon D50 (ptp mode)" << "Nikon D50 (mtp mode)" << false;
+    QTest::newRow("05") << "Nikon D50 (ptp mode)" << "Nikon D50" << false;
 }
 
 void CameraNameHelperTest::testForSameDevices()
