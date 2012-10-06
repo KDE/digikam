@@ -287,9 +287,16 @@ void SlideShow::loadNextImage()
     if (d->fileIndex < num)
     {
         d->currentImage = d->settings.fileList[d->fileIndex];
-        d->previewThread->load(d->currentImage.toLocalFile(),
-                               qMax(d->deskWidth, d->deskHeight));
-    }
+        if (d->settings.useFullSizePreviews)
+        {
+            d->previewThread->loadHighQuality(d->currentImage.toLocalFile());
+        }
+        else
+        {
+            d->previewThread->load(d->currentImage.toLocalFile(),
+                                   qMax(d->deskWidth, d->deskHeight));
+        }
+   }
     else
     {
         d->currentImage = KUrl();

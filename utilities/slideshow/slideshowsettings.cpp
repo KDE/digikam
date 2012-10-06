@@ -66,6 +66,8 @@ SlideShowSettings::SlideShowSettings()
     printApertureFocal   = false;
     printMakeModel       = false;
     printExpoSensitivity = false;
+
+    useFullSizePreviews  = true;
 }
 
 SlideShowSettings::~SlideShowSettings()
