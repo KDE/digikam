@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="208" name="digikam" >
+<gui version="210" name="digikam" >
 
  <MenuBar>
 
@@ -85,13 +85,8 @@
      <Action name="map_view" />
      <!--<Action name="view_selection" />-->
      <Separator/>
-     <Menu name="slideshow">
-      <text>Slideshow</text>
-      <Action name="slideshow_all" />
-      <Action name="slideshow_selected" />
-      <Action name="slideshow_recursive" />
-      <Action name="slideshow_qml" />
-     </Menu>
+     <Action name="slideshow" />
+     <DefineGroup name="kipi_tool_group" append="kipi_tool_group" />
      <Action name="full_screen" />
      <Separator/>
      <Action name="album_zoomin" />

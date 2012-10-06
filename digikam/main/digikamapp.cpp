@@ -1167,26 +1167,34 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
+    d->slideShowAction = new KActionMenu(KIcon("view-presentation"), i18n("Slideshow"), this);
+    d->slideShowAction->setDelayed(false);
+    actionCollection()->addAction("slideshow", d->slideShowAction);
+
     d->slideShowAllAction = new KAction(i18n("All"), this);
     d->slideShowAllAction->setShortcut(KShortcut(Qt::Key_F9));
     connect(d->slideShowAllAction, SIGNAL(triggered()), d->view, SLOT(slotSlideShowAll()));
     actionCollection()->addAction("slideshow_all", d->slideShowAllAction);
+    d->slideShowAction->addAction(d->slideShowAllAction);
 
     d->slideShowSelectionAction = new KAction(i18n("Selection"), this);
     d->slideShowSelectionAction->setShortcut(KShortcut(Qt::ALT+Qt::Key_F9));
     connect(d->slideShowSelectionAction, SIGNAL(triggered()), d->view, SLOT(slotSlideShowSelection()));
     actionCollection()->addAction("slideshow_selected", d->slideShowSelectionAction);
+    d->slideShowAction->addAction(d->slideShowSelectionAction);
 
     d->slideShowRecursiveAction = new KAction(i18n("With All Sub-Albums"), this);
     d->slideShowRecursiveAction->setShortcut(KShortcut(Qt::SHIFT+Qt::Key_F9));
     connect(d->slideShowRecursiveAction, SIGNAL(triggered()), d->view, SLOT(slotSlideShowRecursive()));
     actionCollection()->addAction("slideshow_recursive", d->slideShowRecursiveAction);
+    d->slideShowAction->addAction(d->slideShowRecursiveAction);
 
 #ifdef USE_PRESENTATION_MODE
     d->slideShowQmlAction = new KAction(i18n("Presentation View"), this);
     d->slideShowQmlAction->setShortcut(KShortcut(Qt::Key_F10));
     connect(d->slideShowQmlAction, SIGNAL(triggered()), d->view, SLOT(slotSlideShowQml()));
     actionCollection()->addAction("slideshow_qml", d->slideShowQmlAction);
+    d->slideShowAction->addAction(d->slideShowQmlAction);
 #endif // USE_PRESENTATION_MODE
 
    // -----------------------------------------------------------
@@ -3025,6 +3033,11 @@ void DigikamApp::slotTransformAction()
         // special value for FileActionMngr
         d->view->imageTransform(KExiv2Iface::RotationMatrix::NoTransformation);
     }
+}
+
+KActionMenu* DigikamApp::slideShowMenu() const
+{
+    return d->slideShowAction;
 }
 
 #ifdef USE_SCRIPT_IFACE

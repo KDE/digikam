@@ -78,6 +78,8 @@ public:
 
     static DigikamApp* instance();
 
+    KActionMenu* slideShowMenu() const;
+
     void autoDetect();
     void downloadFrom(const QString& cameraGuiPath);
     void downloadFromUdi(const QString& udi);
