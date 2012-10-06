@@ -59,7 +59,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 029 ==> 269846 - TIFF loader is broken on big-endian architectures [PATCH].
 030 ==> 274555 - digiKam crashes while histogram computation.
 031 ==> 301045 - Crash when generating fingerprint in digikam.
-032 ==> 
+032 ==> 306815 - Navigation between images broken after saving changes.
+033 ==> 
 
 
 

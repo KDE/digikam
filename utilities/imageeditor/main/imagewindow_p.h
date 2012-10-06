@@ -128,6 +128,15 @@ public:
         }
     }
 
+    void ensureModelContains(const ImageInfo& info)
+    {
+        if (!imageInfoModel->hasImage(info))
+        {
+            imageInfoModel->addImageInfoSynchronously(info);
+            imageFilterModel->sort(imageFilterModel->sortColumn());
+        }
+    }
+
 public:
 
     static const QString      configShowThumbbarEntry;

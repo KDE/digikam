@@ -545,11 +545,7 @@ void ImageWindow::openImage(const ImageInfo& info)
     }
 
     d->currentImageInfo = info;
-
-    if (!d->imageInfoModel->hasImage(d->currentImageInfo))
-    {
-        d->imageInfoModel->addImageInfoSynchronously(d->currentImageInfo);
-    }
+    d->ensureModelContains(d->currentImageInfo);
 
     slotLoadCurrent();
 }
@@ -1027,10 +1023,7 @@ void ImageWindow::saveAsIsComplete()
     FileActionMngr::instance()->copyAttributes(sourceInfo, derivedFilePaths);
 
     // The model updates asynchronously, so we need to force addition of the main entry
-    if (!d->imageInfoModel->hasImage(d->currentImageInfo))
-    {
-        d->imageInfoModel->addImageInfoSynchronously(d->currentImageInfo);
-    }
+    d->ensureModelContains(d->currentImageInfo);
 
     // set origin of EditorCore: "As if" the last saved image was loaded directly
     resetOriginSwitchFile();
