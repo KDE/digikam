@@ -133,6 +133,9 @@ public:
     /** Delay in seconds */
     int                          delay;
 
+    /** Load images (previews) in full size, not reduced version */
+    bool                         useFullSizePreviews;
+
     /** List of pictures URL to slide */
     KUrl::List                   fileList;
 
