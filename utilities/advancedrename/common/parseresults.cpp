@@ -145,7 +145,7 @@ void ParseResults::clear()
     m_results.clear();
 }
 
-void ParseResults::append(ParseResults& results)
+void ParseResults::append(const ParseResults& results)
 {
     m_results.unite(results.m_results);
 }

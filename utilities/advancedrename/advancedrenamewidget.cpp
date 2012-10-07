@@ -212,7 +212,7 @@ void AdvancedRenameWidget::setControlWidgets(ControlWidgets mask)
     }
 }
 
-QMenu* AdvancedRenameWidget::createControlsMenu(QWidget* parent, RulesList& rules)
+QMenu* AdvancedRenameWidget::createControlsMenu(QWidget* parent, const RulesList& rules)
 {
     QMenu* menu     = new QMenu(parent);
     QAction* action = 0;

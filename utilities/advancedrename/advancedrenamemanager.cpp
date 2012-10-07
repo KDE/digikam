@@ -215,7 +215,7 @@ void AdvancedRenameManager::parseFiles()
     parseFiles(d->widget->parseString());
 }
 
-void AdvancedRenameManager::parseFiles(ParseSettings& _settings)
+void AdvancedRenameManager::parseFiles(const ParseSettings& _settings)
 {
     if (!d->widget)
     {
@@ -252,7 +252,7 @@ void AdvancedRenameManager::parseFiles(const QString& parseString)
     }
 }
 
-void AdvancedRenameManager::parseFiles(const QString& parseString, ParseSettings& _settings)
+void AdvancedRenameManager::parseFiles(const QString& parseString, const ParseSettings& _settings)
 {
     if (!d->parser)
     {

@@ -67,7 +67,7 @@ public:
 
     bool       isEmpty() const;
 
-    void       append(ParseResults& results);
+    void       append(const ParseResults &results);
     void       clear();
 
     QString    replaceTokens(const QString& markedString) const;

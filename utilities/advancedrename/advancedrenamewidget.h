@@ -154,7 +154,7 @@ private:
     void createToolTip();
 
     void   registerParserControls();
-    QMenu* createControlsMenu(QWidget* parent, RulesList& rules);
+    QMenu* createControlsMenu(QWidget* parent, const RulesList &rules);
 
     void calculateLayout();
 

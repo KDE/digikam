@@ -76,9 +76,9 @@ public:
     void reset();
 
     void parseFiles();
-    void parseFiles(ParseSettings& settings);
+    void parseFiles(const ParseSettings &settings);
     void parseFiles(const QString& parseString);
-    void parseFiles(const QString& parseString, ParseSettings& settings);
+    void parseFiles(const QString& parseString, const ParseSettings &settings);
 
     void setParserType(ParserType type);
     Parser* getParser() const;
