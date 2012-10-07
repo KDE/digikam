@@ -6,7 +6,7 @@
  * Date        : 2005-04-29
  * Description : refocus deconvolution matrix implementation.
  *
- * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -122,25 +122,33 @@ private:
     static void print_c_mat (const CMat* const mat);
     static void print_matrix (Mat* matrix);
 
-    static Mat* allocate_matrix (int nrows, int ncols);
-    static double* mat_eltptr (Mat* mat, const int r, const int c);
-    static double mat_elt (const Mat* mat, const int r, const int c);
+    static Mat*  allocate_matrix (int nrows, int ncols);
     static CMat* allocate_c_mat (const int radius);
+
+    static double* mat_eltptr (Mat* mat, const int r, const int c);
+    static double  mat_elt (const Mat* mat, const int r, const int c);
+
     static inline double* c_mat_eltptr (CMat* mat, const int col, const int row);
-    static inline double c_mat_elt (const CMat* const mat, const int col, const int row);
+    static inline double  c_mat_elt (const CMat* const mat, const int col, const int row);
+
     static void convolve_mat (CMat* result, const CMat* const mata, const CMat* const matb);
     static void convolve_mat_fun (CMat* result, const CMat* const mata, double (f) (int, int));
+
     static int as_idx (const int k, const int l, const int m);
     static int as_cidx (const int k, const int l);
+
     static Mat* make_s_matrix (CMat* mat, int m, double noise_factor);
     static Mat* make_s_cmatrix (CMat* mat, int m, double noise_factor);
+
     static double correlation (const int x, const int y, const double gamma, const double musq);
-    static Mat* copy_vec (const CMat* const mat, const int m);
-    static Mat* copy_cvec (const CMat* const mat, const int m);
+
+    static Mat*  copy_vec (const CMat* const mat, const int m);
+    static Mat*  copy_cvec (const CMat* const mat, const int m);
     static CMat* copy_cvec2mat (const Mat* const cvec, const int m);
     static CMat* copy_vec2mat (const Mat* const cvec, const int m);
     static CMat* compute_g (const CMat* const convolution, const int m, const double gamma,
                             const double noise_factor, const double musq, const bool symmetric);
+
     static double circle_integral (const double x, const double radius);
     static double circle_intensity (const int x, const int y, const double radius);
 

@@ -6,7 +6,7 @@
  * Date        : 2010-02-10
  * Description : sharp settings view.
  *
- * Copyright (C) 2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -62,12 +62,12 @@ using namespace KDcrawIface;
 namespace Digikam
 {
 
-class SharpSettingsPriv
+class SharpSettings::Private
 {
 
 public:
 
-    SharpSettingsPriv() :
+    Private() :
         stack(0),
         sharpMethod(0),
         radiusInput(0),
@@ -79,7 +79,8 @@ public:
         noise(0),
         gauss(0),
         matrixSize(0)
-    {}
+    {
+    }
 
     static const QString configSharpenMethodEntry;
     static const QString configSimpleSharpRadiusAdjustmentEntry;
@@ -111,22 +112,23 @@ public:
     RDoubleNumInput*     gauss;
     RIntNumInput*        matrixSize;
 };
-const QString SharpSettingsPriv::configSharpenMethodEntry("SharpenMethod");
-const QString SharpSettingsPriv::configSimpleSharpRadiusAdjustmentEntry("SimpleSharpRadiusAdjustment");
-const QString SharpSettingsPriv::configUnsharpMaskRadiusAdjustmentEntry("UnsharpMaskRadiusAdjustment");
-const QString SharpSettingsPriv::configUnsharpMaskAmountAdjustmentEntry("UnsharpMaskAmountAdjustment");
-const QString SharpSettingsPriv::configUnsharpMaskThresholdAdjustmentEntry("UnsharpMaskThresholdAdjustment");
-const QString SharpSettingsPriv::configRefocusRadiusAdjustmentEntry("RefocusRadiusAdjustment");
-const QString SharpSettingsPriv::configRefocusCorrelationAdjustmentEntry("RefocusCorrelationAdjustment");
-const QString SharpSettingsPriv::configRefocusNoiseAdjustmentEntry("RefocusNoiseAdjustment");
-const QString SharpSettingsPriv::configRefocusGaussAdjustmentEntry("RefocusGaussAdjustment");
-const QString SharpSettingsPriv::configRefocusMatrixSizeEntry("RefocusMatrixSize");
+
+const QString SharpSettings::Private::configSharpenMethodEntry("SharpenMethod");
+const QString SharpSettings::Private::configSimpleSharpRadiusAdjustmentEntry("SimpleSharpRadiusAdjustment");
+const QString SharpSettings::Private::configUnsharpMaskRadiusAdjustmentEntry("UnsharpMaskRadiusAdjustment");
+const QString SharpSettings::Private::configUnsharpMaskAmountAdjustmentEntry("UnsharpMaskAmountAdjustment");
+const QString SharpSettings::Private::configUnsharpMaskThresholdAdjustmentEntry("UnsharpMaskThresholdAdjustment");
+const QString SharpSettings::Private::configRefocusRadiusAdjustmentEntry("RefocusRadiusAdjustment");
+const QString SharpSettings::Private::configRefocusCorrelationAdjustmentEntry("RefocusCorrelationAdjustment");
+const QString SharpSettings::Private::configRefocusNoiseAdjustmentEntry("RefocusNoiseAdjustment");
+const QString SharpSettings::Private::configRefocusGaussAdjustmentEntry("RefocusGaussAdjustment");
+const QString SharpSettings::Private::configRefocusMatrixSizeEntry("RefocusMatrixSize");
 
 // --------------------------------------------------------
 
-SharpSettings::SharpSettings(QWidget* parent)
+SharpSettings::SharpSettings(QWidget* const parent)
     : QWidget(parent),
-      d(new SharpSettingsPriv)
+      d(new Private)
 {
     QGridLayout* grid = new QGridLayout(parent);
 

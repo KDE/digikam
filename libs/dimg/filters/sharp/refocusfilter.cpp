@@ -6,9 +6,9 @@
  * Date        : 2005-05-25
  * Description : Refocus threaded image filter.
  *
- * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2009 by Matthias Welwarsky <matze at welwarsky dot de>
- * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
+ * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009      by Matthias Welwarsky <matze at welwarsky dot de>
+ * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -44,47 +44,68 @@
 namespace Digikam
 {
 
-int RefocusFilter::maxMatrixSize()
+class RefocusFilter::Private
 {
-    return MAX_MATRIX_SIZE;
-}
+public:
 
-RefocusFilter::RefocusFilter(QObject* parent)
-    : DImgThreadedFilter(parent)
+    Private() :
+        matrixSize(5),
+        radius(0.9),
+        gauss(0.0),
+        correlation(0.5),
+        noise(0.01)
+    {
+    }
+
+    DImg   preImage;
+
+    int    matrixSize;
+
+    double radius;
+    double gauss;
+    double correlation;
+    double noise;
+};
+
+RefocusFilter::RefocusFilter(QObject* const parent)
+    : DImgThreadedFilter(parent),
+      d(new Private)
 {
     initFilter();
 }
 
-RefocusFilter::RefocusFilter(DImg* orgImage, QObject* parent, int matrixSize, double radius,
+RefocusFilter::RefocusFilter(DImg* const orgImage, QObject* const parent, int matrixSize, double radius,
                              double gauss, double correlation, double noise)
-    : DImgThreadedFilter(orgImage, parent, "Refocus")
+    : DImgThreadedFilter(orgImage, parent, "Refocus"),
+      d(new Private)
 {
-    m_matrixSize  = matrixSize;
-    m_radius      = radius;
-    m_gauss       = gauss;
-    m_correlation = correlation;
-    m_noise       = noise;
+    d->matrixSize  = matrixSize;
+    d->radius      = radius;
+    d->gauss       = gauss;
+    d->correlation = correlation;
+    d->noise       = noise;
 
     // initialize filter
     initFilter();
 
     // initialize intermediate image
-    m_preImage = DImg(orgImage->width() + 4 * MAX_MATRIX_SIZE,
-                      orgImage->height() + 4 * MAX_MATRIX_SIZE,
-                      orgImage->sixteenBit(), orgImage->hasAlpha());
+    d->preImage = DImg(orgImage->width()  + 4 * MAX_MATRIX_SIZE,
+                       orgImage->height() + 4 * MAX_MATRIX_SIZE,
+                       orgImage->sixteenBit(), orgImage->hasAlpha());
 }
 
 RefocusFilter::~RefocusFilter()
 {
     cancelFilter();
+    delete d;
 }
 
 void RefocusFilter::filterImage()
 {
     bool sb = m_orgImage.sixteenBit();
     bool a  = m_orgImage.hasAlpha();
-    int w = m_orgImage.width();
-    int h = m_orgImage.height();
+    int w   = m_orgImage.width();
+    int h   = m_orgImage.height();
 
     DImg img(w + 4 * MAX_MATRIX_SIZE, h + 4 * MAX_MATRIX_SIZE, sb, a);
     DImg tmp;
@@ -138,14 +159,14 @@ void RefocusFilter::filterImage()
 
     // run filter algorithm on the prepared copy
     refocusImage(img.bits(), img.width(), img.height(),
-                 img.sixteenBit(), m_matrixSize, m_radius, m_gauss,
-                 m_correlation, m_noise);
+                 img.sixteenBit(), d->matrixSize, d->radius, d->gauss,
+                 d->correlation, d->noise);
 
     // copy the result from intermediate image to final image
-    m_destImage.bitBltImage(&m_preImage, 2 * MAX_MATRIX_SIZE, 2 * MAX_MATRIX_SIZE, w, h, 0, 0);
+    m_destImage.bitBltImage(&d->preImage, 2 * MAX_MATRIX_SIZE, 2 * MAX_MATRIX_SIZE, w, h, 0, 0);
 }
 
-void RefocusFilter::refocusImage(uchar* data, int width, int height, bool sixteenBit,
+void RefocusFilter::refocusImage(uchar* const data, int width, int height, bool sixteenBit,
                                  int matrixSize, double radius, double gauss,
                                  double correlation, double noise)
 {
@@ -169,14 +190,14 @@ void RefocusFilter::refocusImage(uchar* data, int width, int height, bool sixtee
 
     // Apply deconvolution kernel to image.
     kDebug() << "RefocusFilter::Apply Matrix to image...";
-    convolveImage(data, m_preImage.bits(), width, height, sixteenBit,
+    convolveImage(data, d->preImage.bits(), width, height, sixteenBit,
                   matrix->data, 2 * matrixSize + 1);
 
     // Clean up memory
     delete matrix;
 }
 
-void RefocusFilter::convolveImage(uchar* orgData, uchar* destData, int width, int height,
+void RefocusFilter::convolveImage(uchar* const orgData, uchar* const destData, int width, int height,
                                   bool sixteenBit, const double* const matrix, int mat_size)
 {
     int progress;
@@ -198,7 +219,7 @@ void RefocusFilter::convolveImage(uchar* orgData, uchar* destData, int width, in
             if (!sixteenBit)        // 8 bits image.
             {
                 uchar red, green, blue;
-                uchar* ptr;
+                uchar* ptr = 0;
 
                 for (y2 = 0; runningFlag() && (y2 < mat_size); ++y2)
                 {
@@ -206,19 +227,18 @@ void RefocusFilter::convolveImage(uchar* orgData, uchar* destData, int width, in
 
                     for (x2 = 0; runningFlag() && (x2 < mat_size); ++x2)
                     {
-                        index1 = width * (y1 + y2 - mat_offset) +
-                                 x1 + x2 - mat_offset;
+                        index1 = width * (y1 + y2 - mat_offset) + x1 + x2 - mat_offset;
 
                         if (index1 >= 0 && index1 < imageSize)
                         {
-                            ptr   = &orgData[index1 * 4];
-                            blue  = ptr[0];
-                            green = ptr[1];
-                            red   = ptr[2];
-                            const double matrixValue = matrix[y2_matsize + x2];
-                            valRed   += matrixValue * red;
-                            valGreen += matrixValue * green;
-                            valBlue  += matrixValue * blue;
+                            ptr                      =  &orgData[index1 * 4];
+                            blue                     =  ptr[0];
+                            green                    =  ptr[1];
+                            red                      =  ptr[2];
+                            const double matrixValue =  matrix[y2_matsize + x2];
+                            valRed                   += matrixValue * red;
+                            valGreen                 += matrixValue * green;
+                            valBlue                  += matrixValue * blue;
                         }
                     }
                 }
@@ -240,7 +260,7 @@ void RefocusFilter::convolveImage(uchar* orgData, uchar* destData, int width, in
             else                 // 16 bits image.
             {
                 unsigned short red, green, blue;
-                unsigned short* ptr;
+                unsigned short* ptr = 0;
 
                 for (y2 = 0; runningFlag() && (y2 < mat_size); ++y2)
                 {
@@ -248,19 +268,18 @@ void RefocusFilter::convolveImage(uchar* orgData, uchar* destData, int width, in
 
                     for (x2 = 0; runningFlag() && (x2 < mat_size); ++x2)
                     {
-                        index1 = width * (y1 + y2 - mat_offset) +
-                                 x1 + x2 - mat_offset;
+                        index1 = width * (y1 + y2 - mat_offset) + x1 + x2 - mat_offset;
 
                         if (index1 >= 0 && index1 < imageSize)
                         {
-                            ptr   = &orgData16[index1 * 4];
-                            blue  = ptr[0];
-                            green = ptr[1];
-                            red   = ptr[2];
-                            const double matrixValue = matrix[y2_matsize + x2];
-                            valRed   += matrixValue * red;
-                            valGreen += matrixValue * green;
-                            valBlue  += matrixValue * blue;
+                            ptr                      =  &orgData16[index1 * 4];
+                            blue                     =  ptr[0];
+                            green                    =  ptr[1];
+                            red                      =  ptr[2];
+                            const double matrixValue =  matrix[y2_matsize + x2];
+                            valRed                   += matrixValue * red;
+                            valGreen                 += matrixValue * green;
+                            valBlue                  += matrixValue * blue;
                         }
                     }
                 }
@@ -296,23 +315,27 @@ FilterAction RefocusFilter::filterAction()
     FilterAction action(FilterIdentifier(), CurrentVersion());
     action.setDisplayableName(DisplayableName());
 
-    action.addParameter("correlation", m_correlation);
-    action.addParameter("gauss", m_gauss);
-    action.addParameter("matrixSize", m_matrixSize);
-    action.addParameter("noise", m_noise);
-    action.addParameter("radius", m_radius);
+    action.addParameter("correlation", d->correlation);
+    action.addParameter("gauss", d->gauss);
+    action.addParameter("matrixSize", d->matrixSize);
+    action.addParameter("noise", d->noise);
+    action.addParameter("radius", d->radius);
 
     return action;
 }
 
 void RefocusFilter::readParameters(const Digikam::FilterAction& action)
 {
-    m_correlation = action.parameter("correlation").toDouble();
-    m_gauss = action.parameter("gauss").toDouble();
-    m_matrixSize = action.parameter("matrixSize").toInt();
-    m_noise = action.parameter("noise").toDouble();
-    m_radius = action.parameter("radius").toDouble();
+    d->correlation = action.parameter("correlation").toDouble();
+    d->gauss       = action.parameter("gauss").toDouble();
+    d->matrixSize  = action.parameter("matrixSize").toInt();
+    d->noise       = action.parameter("noise").toDouble();
+    d->radius      = action.parameter("radius").toDouble();
 }
 
+int RefocusFilter::maxMatrixSize()
+{
+    return MAX_MATRIX_SIZE;
+}
 
 }  // namespace DigikamImagesPluginCore

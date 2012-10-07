@@ -6,9 +6,9 @@
  * Date        : 2005-17-07
  * Description : A Sharpen threaded image filter.
  *
- * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2009 by Matthias Welwarsky <matze at welwarsky dot de>
- * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
+ * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009      by Matthias Welwarsky <matze at welwarsky dot de>
+ * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * Original Sharpen algorithm copyright 2002
  * by Daniel M. Duley <mosfet@kde.org> from KImageEffect API.
@@ -46,13 +46,13 @@
 namespace Digikam
 {
 
-UnsharpMaskFilter::UnsharpMaskFilter(QObject* parent)
+UnsharpMaskFilter::UnsharpMaskFilter(QObject* const parent)
     : DImgThreadedFilter(parent)
 {
     initFilter();
 }
 
-UnsharpMaskFilter::UnsharpMaskFilter(DImg* orgImage, QObject* parent, int radius,
+UnsharpMaskFilter::UnsharpMaskFilter(DImg* const orgImage, QObject* const parent, int radius,
                                      double amount, double threshold)
     : DImgThreadedFilter(orgImage, parent, "UnsharpMask")
 {
@@ -177,8 +177,8 @@ FilterAction UnsharpMaskFilter::filterAction()
 
 void UnsharpMaskFilter::readParameters(const FilterAction& action)
 {
-    m_amount = action.parameter("amount").toDouble();
-    m_radius = action.parameter("radius").toInt();
+    m_amount    = action.parameter("amount").toDouble();
+    m_radius    = action.parameter("radius").toInt();
     m_threshold = action.parameter("threshold").toDouble();
 }
 

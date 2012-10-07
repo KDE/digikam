@@ -6,8 +6,8 @@
  * Date        : 2005-17-07
  * Description : A Sharpen threaded image filter.
  *
- * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
+ * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * Original Sharpen algorithm copyright 2002
  * by Daniel M. Duley <mosfet@kde.org> from KImageEffect API.
@@ -42,13 +42,13 @@
 namespace Digikam
 {
 
-SharpenFilter::SharpenFilter(QObject* parent)
+SharpenFilter::SharpenFilter(QObject* const parent)
     : DImgThreadedFilter(parent)
 {
     initFilter();
 }
 
-SharpenFilter::SharpenFilter(DImg* orgImage, QObject* parent, double radius, double sigma)
+SharpenFilter::SharpenFilter(DImg* const orgImage, QObject* const parent, double radius, double sigma)
     : DImgThreadedFilter(orgImage, parent, "Sharpen")
 {
     m_radius = radius;
@@ -56,7 +56,7 @@ SharpenFilter::SharpenFilter(DImg* orgImage, QObject* parent, double radius, dou
     initFilter();
 }
 
-SharpenFilter::SharpenFilter(DImgThreadedFilter* parentFilter,
+SharpenFilter::SharpenFilter(DImgThreadedFilter* const parentFilter,
                              const DImg& orgImage, const DImg& destImage,
                              int progressBegin, int progressEnd, double radius, double sigma)
     : DImgThreadedFilter(parentFilter, orgImage, destImage, progressBegin, progressEnd,
@@ -141,7 +141,7 @@ void SharpenFilter::sharpenImage(double radius, double sigma)
     convolveImage(kernelWidth, kernel.data());
 }
 
-bool SharpenFilter::convolveImage(const unsigned int order, const double* kernel)
+bool SharpenFilter::convolveImage(const unsigned int order, const double* const kernel)
 {
     uint    x, y;
     int     mx, my, sx, sy, mcx, mcy, progress;
@@ -233,6 +233,7 @@ bool SharpenFilter::convolveImage(const unsigned int order, const double* kernel
             postProgress(progress);
         }
     }
+
     return true;
 }
 
@@ -284,8 +285,7 @@ FilterAction SharpenFilter::filterAction()
 void SharpenFilter::readParameters(const Digikam::FilterAction& action)
 {
     m_radius = action.parameter("radius").toDouble();
-    m_sigma = action.parameter("sigma").toDouble();
+    m_sigma  = action.parameter("sigma").toDouble();
 }
-
 
 }  // namespace Digikam

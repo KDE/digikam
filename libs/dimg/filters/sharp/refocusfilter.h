@@ -6,9 +6,9 @@
  * Date        : 2005-05-25
  * Description : Refocus threaded image filter.
  *
- * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2009 by Matthias Welwarsky <matze at welwarsky dot de>
- * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
+ * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009      by Matthias Welwarsky <matze at welwarsky dot de>
+ * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -40,8 +40,8 @@ class DIGIKAM_EXPORT RefocusFilter : public DImgThreadedFilter
 
 public:
 
-    explicit RefocusFilter(QObject* parent = 0);
-    explicit RefocusFilter(DImg* orgImage, QObject* parent=0, int matrixSize=5, double radius=0.9,
+    explicit RefocusFilter(QObject* const parent = 0);
+    explicit RefocusFilter(DImg* const orgImage, QObject* const parent=0, int matrixSize=5, double radius=0.9,
                            double gauss=0.0, double correlation=0.5, double noise=0.01);
 
     ~RefocusFilter();
@@ -52,14 +52,17 @@ public:
     {
         return "digikam:RefocusFilter";
     }
+
     static QString          DisplayableName()
     {
         return I18N_NOOP("Refocus");
     }
+
     static QList<int>       SupportedVersions()
     {
         return QList<int>() << 1;
     }
+
     static int              CurrentVersion()
     {
         return 1;
@@ -69,6 +72,7 @@ public:
     {
         return FilterIdentifier();
     }
+
     virtual FilterAction    filterAction();
     void                    readParameters(const FilterAction& action);
 
@@ -76,23 +80,17 @@ private:
 
     void filterImage();
 
-    void refocusImage(uchar* data, int width, int height, bool sixteenBit,
+    void refocusImage(uchar* const data, int width, int height, bool sixteenBit,
                       int matrixSize, double radius, double gauss,
                       double correlation, double noise);
 
-    void convolveImage(uchar* orgData, uchar* destData, int width, int height,
+    void convolveImage(uchar* const orgData, uchar* const destData, int width, int height,
                        bool sixteenBit, const double* const matrix, int mat_size);
 
 private:
 
-    DImg   m_preImage;
-
-    int    m_matrixSize;
-
-    double m_radius;
-    double m_gauss;
-    double m_correlation;
-    double m_noise;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam
