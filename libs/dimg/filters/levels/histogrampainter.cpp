@@ -48,8 +48,7 @@ class HistogramPainter::Private
 
 public:
 
-    Private(HistogramPainter* q) :
-        q(q),
+    Private(HistogramPainter* const q) :
         histogram(0),
         widgetToInitFrom(0),
         scale(LogScaleHistogram),
@@ -58,7 +57,8 @@ public:
         selectionMin(0.0),
         selectionMax(0.0),
         showColorGuide(false),
-        showXGrid(true)
+        showXGrid(true),
+        q(q)
     {
     }
 
