@@ -339,16 +339,6 @@ CurvesWidget::CurvesWidget(int w, int h, QWidget* const parent, bool readOnly)
     setup(w, h, readOnly);
 }
 
-CurvesWidget::CurvesWidget(int w, int h,
-                           uchar* const i_data, uint i_w, uint i_h, bool i_sixteenBits,
-                           QWidget* const parent, bool readOnly)
-    : QWidget(parent), d(new Private(this))
-{
-    setAttribute(Qt::WA_DeleteOnClose);
-    setup(w, h, readOnly);
-    updateData(i_data, i_w, i_h, i_sixteenBits);
-}
-
 CurvesWidget::~CurvesWidget()
 {
     d->progressTimer->stop();

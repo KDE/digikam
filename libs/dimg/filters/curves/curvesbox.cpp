@@ -110,7 +110,8 @@ CurvesBox::CurvesBox(int w, int h, uchar* const i_data, uint i_w, uint i_h,
     : QWidget(parent), d(new Private)
 {
     d->sixteenBit   = i_sixteenBits;
-    d->curvesWidget = new CurvesWidget(w, h, i_data, i_w, i_h, i_sixteenBits, this, readOnly);
+    d->curvesWidget = new CurvesWidget(w, h, this, readOnly);
+    d->curvesWidget->updateData(i_data, i_w, i_h, i_sixteenBits);
     d->curvesWidget->setChannelType(d->channel);
     setup();
 }

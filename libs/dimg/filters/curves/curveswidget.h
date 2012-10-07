@@ -54,14 +54,6 @@ class DIGIKAM_EXPORT CurvesWidget : public QWidget
 public:
 
     CurvesWidget(int w, int h, QWidget* const parent, bool readOnly=false);
-
-    CurvesWidget(int w, int h,                               // Widget size.
-                 uchar* const i_data, uint i_w, uint i_h,    // Full image info.
-                 bool i_sixteenBits,                         // 8 or 16 bits image.
-                 QWidget* const parent=0,                    // Parent widget instance.
-                 bool readOnly=false);                       // If true : widget with full edition mode capabilities.
-    // If false : display curve data only without edition.
-
     ~CurvesWidget();
 
     void setup(int w, int h, bool readOnly);
