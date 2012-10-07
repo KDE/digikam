@@ -430,7 +430,7 @@ void CurvesWidget::restoreCurve(KConfigGroup& group, const QString& prefix)
     }
 }
 
-void CurvesWidget::updateData(uchar* const i_data, uint i_w, uint i_h, bool i_sixteenBits)
+void CurvesWidget::updateData(const DImg& img)
 {
     kDebug() << "updating data";
 
@@ -438,7 +438,7 @@ void CurvesWidget::updateData(uchar* const i_data, uint i_w, uint i_h, bool i_si
 
     // Remove old histogram data from memory.
     delete d->imageHistogram;
-    d->imageHistogram = new ImageHistogram(DImg(i_w, i_h, i_sixteenBits, true, i_data));
+    d->imageHistogram = new ImageHistogram(img);
 
     connect(d->imageHistogram, SIGNAL(calculationStarted()),
             this, SLOT(slotCalculationStarted()));
@@ -449,7 +449,7 @@ void CurvesWidget::updateData(uchar* const i_data, uint i_w, uint i_h, bool i_si
     d->imageHistogram->calculateInThread();
 
     // keep the old curve
-    ImageCurves* newCurves = new ImageCurves(i_sixteenBits);
+    ImageCurves* const newCurves = new ImageCurves(img.sixteenBit());
     newCurves->setCurveType(ImageCurves::CURVE_SMOOTH);
 
     if (d->curves)

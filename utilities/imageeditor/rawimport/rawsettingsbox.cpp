@@ -413,7 +413,7 @@ void RawSettingsBox::setBusy(bool b)
 void RawSettingsBox::setDemosaicedImage(DImg& img)
 {
     d->curveWidget->stopHistogramComputation();
-    d->curveWidget->updateData(img.bits(), img.width(), img.height(), img.sixteenBit());
+    d->curveWidget->updateData(img);
 }
 
 void RawSettingsBox::setPostProcessedImage(DImg& img)

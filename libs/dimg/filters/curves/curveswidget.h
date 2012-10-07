@@ -46,6 +46,7 @@ namespace Digikam
 
 class ImageHistogram;
 class ImageCurves;
+class DImg;
 
 class DIGIKAM_EXPORT CurvesWidget : public QWidget
 {
@@ -79,12 +80,9 @@ public:
     /**
      * Updates the image data the curve should be used for.
      *
-     * @param i_data image data
-     * @param i_w width of the image
-     * @param i_h height of the image
-     * @param i_sixteenBits if true, the image is interpreted as having 16 bits
+     * @param img image data
      */
-    void updateData(uchar* const i_data, uint i_w, uint i_h, bool i_sixteenBits);
+    void updateData(const DImg& img);
 
     // Stop current histogram computations.
     void stopHistogramComputation();

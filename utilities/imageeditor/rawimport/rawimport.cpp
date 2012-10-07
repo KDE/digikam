@@ -232,7 +232,7 @@ void RawImport::slotOk()
     // NOTE: work around B.K.O #211810
     if (d->settingsBox->curvesWidget()->isSixteenBits() != d->settingsBox->settings().rawPrm.sixteenBitsImage)
     {
-        d->settingsBox->curvesWidget()->updateData(0, 0, 0, d->settingsBox->settings().rawPrm.sixteenBitsImage);
+        d->settingsBox->curvesWidget()->updateData(DImg(0, 0, d->settingsBox->settings().rawPrm.sixteenBitsImage));
     }
 
     EditorTool::slotOk();

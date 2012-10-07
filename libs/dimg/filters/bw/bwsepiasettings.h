@@ -6,7 +6,7 @@
  * Date        : 2010-02-23
  * Description : black and white settings view.
  *
- * Copyright (C) 2010-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -47,7 +47,7 @@ class DIGIKAM_EXPORT BWSepiaSettings : public QWidget
 
 public:
 
-    BWSepiaSettings(QWidget* parent, DImg* img);
+    BWSepiaSettings(QWidget* const parent, DImg* const img);
     ~BWSepiaSettings();
 
     BWSepiaContainer defaultSettings() const;
@@ -76,8 +76,8 @@ private Q_SLOTS:
 
 private:
 
-    class BWSepiaSettingsPriv;
-    BWSepiaSettingsPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

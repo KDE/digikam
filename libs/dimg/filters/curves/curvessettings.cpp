@@ -99,12 +99,12 @@ CurvesSettings::CurvesSettings(QWidget* const parent, DImg* const img)
     // NOTE: add a method to be able to use curves widget without image data as simple curve editor.
     if (!img->isNull())
     {
-        d->curvesBox = new CurvesBox(256, 192, img->bits(), img->width(), img->height(), img->sixteenBit());
+        d->curvesBox = new CurvesBox(256, 192, *img);
         d->curvesBox->enableControlWidgets(true);
     }
     else
     {
-        d->curvesBox = new CurvesBox(256, 192, (uchar*)"\x00\x00\x00\x00\x00\x00\x00\x00", 1, 1, true);
+        d->curvesBox = new CurvesBox(256, 192, DImg(1, 1, true, false, (uchar*)"\x00\x00\x00\x00\x00\x00\x00\x00"));
         d->curvesBox->enablePickers(false);
         d->curvesBox->enableResetButton(true);
         d->curvesBox->enableCurveTypes(true);

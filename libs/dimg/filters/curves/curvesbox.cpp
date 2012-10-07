@@ -51,6 +51,7 @@
 #include "imagecurves.h"
 #include "imagehistogram.h"
 #include "globals.h"
+#include "dimg.h"
 
 namespace Digikam
 {
@@ -105,13 +106,12 @@ CurvesBox::CurvesBox(int w, int h, QWidget* const parent, bool readOnly)
     setup();
 }
 
-CurvesBox::CurvesBox(int w, int h, uchar* const i_data, uint i_w, uint i_h,
-                     bool i_sixteenBits, QWidget* const parent, bool readOnly)
+CurvesBox::CurvesBox(int w, int h, const DImg& img, QWidget* const parent, bool readOnly)
     : QWidget(parent), d(new Private)
 {
-    d->sixteenBit   = i_sixteenBits;
+    d->sixteenBit   = img.sixteenBit();
     d->curvesWidget = new CurvesWidget(w, h, this, readOnly);
-    d->curvesWidget->updateData(i_data, i_w, i_h, i_sixteenBits);
+    d->curvesWidget->updateData(img);
     d->curvesWidget->setChannelType(d->channel);
     setup();
 }

@@ -6,7 +6,7 @@
  * Date        : 2010-02-23
  * Description : black and white settings view.
  *
- * Copyright (C) 2010-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -64,7 +64,7 @@ using namespace KDcrawIface;
 namespace Digikam
 {
 
-class BWSepiaSettings::BWSepiaSettingsPriv
+class BWSepiaSettings::Private
 {
 
 public:
@@ -79,7 +79,7 @@ public:
 
 public:
 
-    BWSepiaSettingsPriv() :
+    Private() :
         bwFilters(0),
         bwFilm(0),
         bwTone(0),
@@ -87,7 +87,8 @@ public:
         cInput(0),
         strengthInput(0),
         curvesBox(0)
-    {}
+    {
+    }
 
     static const QString       configSettingsTabEntry;
     static const QString       configBWFilterEntry;
@@ -112,31 +113,32 @@ public:
 
 public:
 
-    PreviewListItem* addItem(PreviewList* list, const QString& name,
+    PreviewListItem* addItem(PreviewList* const list, const QString& name,
                              BWSepiaContainer::BlackWhiteConversionType type);
 };
-const QString BWSepiaSettings::BWSepiaSettingsPriv::configSettingsTabEntry("Settings Tab");
-const QString BWSepiaSettings::BWSepiaSettingsPriv::configBWFilterEntry("BW Filter");
-const QString BWSepiaSettings::BWSepiaSettingsPriv::configBWFilmEntry("BW Film");
-const QString BWSepiaSettings::BWSepiaSettingsPriv::configBWToneEntry("BW Tone");
-const QString BWSepiaSettings::BWSepiaSettingsPriv::configContrastAdjustmentEntry("ContrastValueAdjustment");
-const QString BWSepiaSettings::BWSepiaSettingsPriv::configStrengthAdjustmentEntry("StrengthAdjustment");
-const QString BWSepiaSettings::BWSepiaSettingsPriv::configCurveEntry("BWSepiaCurve");
 
-// --------------------------------------------------------
+const QString BWSepiaSettings::Private::configSettingsTabEntry("Settings Tab");
+const QString BWSepiaSettings::Private::configBWFilterEntry("BW Filter");
+const QString BWSepiaSettings::Private::configBWFilmEntry("BW Film");
+const QString BWSepiaSettings::Private::configBWToneEntry("BW Tone");
+const QString BWSepiaSettings::Private::configContrastAdjustmentEntry("ContrastValueAdjustment");
+const QString BWSepiaSettings::Private::configStrengthAdjustmentEntry("StrengthAdjustment");
+const QString BWSepiaSettings::Private::configCurveEntry("BWSepiaCurve");
 
-PreviewListItem* BWSepiaSettings::BWSepiaSettingsPriv::addItem(PreviewList* list,
+PreviewListItem* BWSepiaSettings::Private::addItem(PreviewList* const list,
                                                                const QString& name,
                                                                BWSepiaContainer::BlackWhiteConversionType type)
 {
-    BWSepiaFilter* filter = new BWSepiaFilter(&thumbImage, 0, BWSepiaContainer(type));
-    PreviewListItem* item = list->addItem(filter, name, type);
+    BWSepiaFilter* const filter = new BWSepiaFilter(&thumbImage, 0, BWSepiaContainer(type));
+    PreviewListItem* const item = list->addItem(filter, name, type);
     return item;
 }
 
-BWSepiaSettings::BWSepiaSettings(QWidget* parent, DImg* img)
+// --------------------------------------------------------
+
+BWSepiaSettings::BWSepiaSettings(QWidget* const parent, DImg* const img)
     : QWidget(parent),
-      d(new BWSepiaSettingsPriv)
+      d(new Private)
 {
     if (!img->isNull())
     {
@@ -337,11 +339,11 @@ BWSepiaSettings::BWSepiaSettings(QWidget* parent, DImg* img)
     // NOTE: add a method to be able to use curves widget without image data as simple curve editor.
     if (!img->isNull())
     {
-        d->curvesBox = new CurvesBox(256, 192, img->bits(), img->width(), img->height(), img->sixteenBit(), lumBox);
+        d->curvesBox = new CurvesBox(256, 192, *img, lumBox);
     }
     else
     {
-        d->curvesBox = new CurvesBox(256, 192, (uchar*)"\x00\x00\x00\x00\x00\x00\x00\x00", 1, 1, true, lumBox);
+        d->curvesBox = new CurvesBox(256, 192, DImg(1, 1, true, false, (uchar*)"\x00\x00\x00\x00\x00\x00\x00\x00"), lumBox);
     }
 
     d->curvesBox->enableCurveTypes(true);

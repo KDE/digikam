@@ -42,6 +42,7 @@ namespace Digikam
 
 class ImageCurves;
 class DColor;
+class DImg;
 
 class DIGIKAM_EXPORT CurvesBox : public QWidget
 {
@@ -67,8 +68,7 @@ public:
 
     CurvesBox(int w, int h, QWidget* const parent=0, bool readOnly=false);
     CurvesBox(int w, int h,                            // Widget size.
-              uchar* const i_data, uint i_w, uint i_h, // Full image info.
-              bool i_sixteenBits,                      // 8 or 16 bits image.
+              const DImg& img,                         // Image data.
               QWidget* const parent=0,                 // Parent widget instance.
               bool readOnly=false);                    // If true : widget with full edition mode capabilities.
                                                        // If false : display curve data only without edition.
