@@ -55,7 +55,7 @@ public:
      *
      * @param parent parent for Qt's destruction mechanism
      */
-    HistogramPainter(QObject* const parent);
+    explicit HistogramPainter(QObject* const parent);
 
     /**
      * Destructor.

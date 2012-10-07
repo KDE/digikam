@@ -45,7 +45,7 @@ class TagsLineEditOverlay : public AbstractWidgetDelegateOverlay
 
 public:
 
-    TagsLineEditOverlay(QObject* parent);
+    explicit TagsLineEditOverlay(QObject* parent);
 
     AddTagsLineEdit* addTagsLineEdit() const;
 

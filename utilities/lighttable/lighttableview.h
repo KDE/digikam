@@ -44,7 +44,7 @@ class LightTableView : public QFrame
 
 public:
 
-    LightTableView(QWidget* parent = 0);
+    explicit LightTableView(QWidget* parent = 0);
     ~LightTableView();
 
     void   setSyncPreview(bool sync);

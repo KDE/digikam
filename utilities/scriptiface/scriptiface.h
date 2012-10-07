@@ -38,7 +38,7 @@ class ScriptIface : public KDialog
 
 public:
 
-    ScriptIface(QWidget* parent = 0);
+    explicit ScriptIface(QWidget* parent = 0);
     ~ScriptIface();
 
 private Q_SLOTS:

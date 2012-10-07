@@ -43,7 +43,7 @@ class DIGIKAM_EXPORT FileReadWriteLockKey
 {
 public:
 
-    FileReadWriteLockKey(const QString& filePath);
+    explicit FileReadWriteLockKey(const QString& filePath);
     ~FileReadWriteLockKey();
 
     void lockForRead();
@@ -63,7 +63,7 @@ class DIGIKAM_EXPORT FileReadLocker
 {
 public:
 
-    FileReadLocker(const QString& filePath);
+    explicit FileReadLocker(const QString& filePath);
     ~FileReadLocker();
 
 private:
@@ -75,7 +75,7 @@ class DIGIKAM_EXPORT FileWriteLocker
 {
 public:
 
-    FileWriteLocker(const QString& filePath);
+    explicit FileWriteLocker(const QString& filePath);
     ~FileWriteLocker();
 
 private:
@@ -87,7 +87,7 @@ class DIGIKAM_EXPORT SafeTemporaryFile : public QTemporaryFile
 {
 public:
     SafeTemporaryFile();
-    SafeTemporaryFile(const QString& templ);
+    explicit SafeTemporaryFile(const QString& templ);
     bool open() { return open(QIODevice::ReadWrite); }
 protected:
     virtual bool open(QIODevice::OpenMode);

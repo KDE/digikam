@@ -56,7 +56,7 @@ public:
      * Creates an ImagePosition object for the given image.
      * The information is read from the database.
      */
-    ImagePosition(qlonglong imageId);
+    explicit ImagePosition(qlonglong imageId);
     ImagePosition(DatabaseAccess& access, qlonglong imageId);
 
     ImagePosition(const ImagePosition& other);

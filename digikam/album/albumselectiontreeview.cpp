@@ -54,7 +54,7 @@ class AlbumViewToolTip: public ItemViewToolTip
 {
 public:
 
-    AlbumViewToolTip(AlbumSelectionTreeView* view) :
+    explicit AlbumViewToolTip(AlbumSelectionTreeView* view) :
         ItemViewToolTip(view)
     {
     }
@@ -112,7 +112,7 @@ class AlbumSelectionTreeView::AlbumSelectionTreeViewPriv::AlbumSelectionTreeView
 {
 public:
 
-    AlbumSelectionTreeViewContextMenuElement(AlbumSelectionTreeView::AlbumSelectionTreeViewPriv* d)
+    explicit AlbumSelectionTreeViewContextMenuElement(AlbumSelectionTreeView::AlbumSelectionTreeViewPriv* d)
         : d(d)
     {
     }

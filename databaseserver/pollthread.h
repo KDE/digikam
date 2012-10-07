@@ -39,7 +39,7 @@ class PollThread : public QThread
 
 public:
 
-    PollThread(QObject* const application);
+    explicit PollThread(QObject* const application);
     void run();
     bool checkDigikamInstancesRunning();
     bool stop;

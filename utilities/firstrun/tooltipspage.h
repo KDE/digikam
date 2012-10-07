@@ -37,7 +37,7 @@ class TooltipsPage : public AssistantDlgPage
 
 public:
 
-    TooltipsPage(KAssistantDialog* dlg);
+    explicit TooltipsPage(KAssistantDialog* dlg);
     ~TooltipsPage();
 
     void saveSettings();

@@ -66,7 +66,7 @@ class FaceItem : public RegionFrameItem
 {
 public:
 
-    FaceItem(QGraphicsItem* parent = 0);
+    explicit FaceItem(QGraphicsItem* parent = 0);
 
     void setFace(const DatabaseFace& face);
     DatabaseFace face() const;
@@ -170,7 +170,7 @@ class FaceGroup::FaceGroupPriv
 {
 public:
 
-    FaceGroupPriv(FaceGroup* q) : q(q)
+    explicit FaceGroupPriv(FaceGroup* q) : q(q)
     {
         view                 = 0;
         autoSuggest          = false;

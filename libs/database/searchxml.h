@@ -134,7 +134,7 @@ class DIGIKAM_DATABASE_EXPORT SearchXmlReader : public QXmlStreamReader
 {
 public:
 
-    SearchXmlReader(const QString& xml);
+    explicit SearchXmlReader(const QString& xml);
 
     /** Continue parsing the document. Returns the type of the current element.
      */
@@ -333,7 +333,7 @@ class DIGIKAM_DATABASE_EXPORT KeywordSearchReader : public SearchXmlReader
 {
 public:
 
-    KeywordSearchReader(const QString& xml);
+    explicit KeywordSearchReader(const QString& xml);
 
     /// Returns the keywords from this search, merged in a list.
     QStringList keywords();
@@ -369,7 +369,7 @@ public:
      *  is read, access properties and the value of a field until the next field is read,
      *  with all calls possible multiple times.
      */
-    SearchXmlCachingReader(const QString& xml);
+    explicit SearchXmlCachingReader(const QString& xml);
 
     SearchXml::Element  readNext();
 

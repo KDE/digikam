@@ -46,7 +46,7 @@ class DIGIKAM_EXPORT AntiVignettingSettings : public QWidget
 
 public:
 
-    AntiVignettingSettings(QWidget* parent);
+    explicit AntiVignettingSettings(QWidget* parent);
     ~AntiVignettingSettings();
 
     AntiVignettingContainer defaultSettings() const;

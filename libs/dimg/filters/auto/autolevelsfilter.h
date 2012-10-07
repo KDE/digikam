@@ -41,7 +41,7 @@ class DIGIKAM_EXPORT AutoLevelsFilter : public DImgThreadedFilter
 {
 
 public:
-    AutoLevelsFilter(QObject* const parent = 0);
+    explicit AutoLevelsFilter(QObject* const parent = 0);
     AutoLevelsFilter(DImg* const orgImage, const DImg* const refImage, QObject* const parent=0);
     virtual ~AutoLevelsFilter();
 

@@ -47,7 +47,7 @@ class AddTagsComboBox : public TagTreeViewSelectComboBox
 
 public:
 
-    AddTagsComboBox(QWidget* parent = 0);
+    explicit AddTagsComboBox(QWidget* parent = 0);
     ~AddTagsComboBox();
 
     /** You must call this after construction.

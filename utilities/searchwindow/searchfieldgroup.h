@@ -58,7 +58,7 @@ class SearchFieldGroup : public QWidget
 
 public:
 
-    SearchFieldGroup(SearchGroup* const parent);
+    explicit SearchFieldGroup(SearchGroup* const parent);
 
     void addField(SearchField* const field);
     void setLabel(SearchFieldGroupLabel* const label);
@@ -98,7 +98,7 @@ class SearchFieldGroupLabel : public QWidget
 
 public:
 
-    SearchFieldGroupLabel(QWidget* const parent);
+    explicit SearchFieldGroupLabel(QWidget* const parent);
 
     void setTitle(const QString& title);
 

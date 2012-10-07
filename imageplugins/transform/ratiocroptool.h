@@ -45,7 +45,7 @@ class RatioCropTool : public EditorTool
 
 public:
 
-    RatioCropTool(QObject* const parent);
+    explicit RatioCropTool(QObject* const parent);
     ~RatioCropTool();
 
 private:

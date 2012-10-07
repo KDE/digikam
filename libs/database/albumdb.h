@@ -1257,7 +1257,7 @@ public:
     /**
      * Constructor
      */
-    AlbumDB(DatabaseBackend* const backend);
+    explicit AlbumDB(DatabaseBackend* const backend);
 
     /**
      * Destructor

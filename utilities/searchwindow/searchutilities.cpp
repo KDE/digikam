@@ -72,7 +72,7 @@ class AnimatedClearButton::Private : public AnimatedVisibility
 {
 public:
 
-    Private(QObject* const parent) : AnimatedVisibility(parent)
+    explicit Private(QObject* const parent) : AnimatedVisibility(parent)
     {
         stayAlwaysVisible = false;
     }

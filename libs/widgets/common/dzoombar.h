@@ -56,7 +56,7 @@ public:
 
 public:
 
-    DZoomBar(QWidget* parent=0);
+    explicit DZoomBar(QWidget* parent=0);
     ~DZoomBar();
 
     void setBarMode(BarMode mode);

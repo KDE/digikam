@@ -44,7 +44,7 @@ class DIGIKAM_EXPORT ToolBar : public QWidget
 
 public:
 
-    ToolBar(QWidget* parent);
+    explicit ToolBar(QWidget* parent);
     ~ToolBar();
 
     bool canHide() const;

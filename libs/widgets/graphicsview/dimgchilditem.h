@@ -50,7 +50,7 @@ public:
      * From the set relative size, the boundingRect() is calculated.
      */
 
-    DImgChildItem(QGraphicsItem* parent = 0);
+    explicit DImgChildItem(QGraphicsItem* parent = 0);
     ~DImgChildItem();
 
     /**

@@ -40,7 +40,7 @@ class HSLTool : public EditorToolThreaded
 
 public:
 
-    HSLTool(QObject* const parent);
+    explicit HSLTool(QObject* const parent);
     ~HSLTool();
 
 private Q_SLOTS:

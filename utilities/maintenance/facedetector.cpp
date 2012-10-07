@@ -64,7 +64,7 @@ class BenchmarkMessageDisplay : public QWidget
 {
 public:
 
-    BenchmarkMessageDisplay(const QString& richText)
+    explicit BenchmarkMessageDisplay(const QString& richText)
         : QWidget(0)
     {
         setAttribute(Qt::WA_DeleteOnClose);

@@ -123,7 +123,7 @@ private:
 
     friend class Digikam::ThumbnailDatabaseAccess;
 
-    ThumbnailDB(DatabaseCoreBackend* backend);
+    explicit ThumbnailDB(DatabaseCoreBackend* backend);
     ~ThumbnailDB();
 
     ThumbnailDBPriv* const d;

@@ -157,7 +157,7 @@ public:
         RemovingControl
     };
 
-    AnimationControl(ItemVisibilityController* q);
+    explicit AnimationControl(ItemVisibilityController* q);
     AnimationControl(AnimationControl* other, QObject* item);
     ~AnimationControl();
 
@@ -482,7 +482,7 @@ class ItemVisibilityController::ItemVisibilityControllerPriv
 {
 public:
 
-    ItemVisibilityControllerPriv(ItemVisibilityController* q)
+    explicit ItemVisibilityControllerPriv(ItemVisibilityController* q)
         : q(q)
     {
         visible          = false;

@@ -40,7 +40,7 @@ class BlurFXTool : public EditorToolThreaded
 
 public:
 
-    BlurFXTool(QObject* const parent);
+    explicit BlurFXTool(QObject* const parent);
     ~BlurFXTool();
 
 private Q_SLOTS:

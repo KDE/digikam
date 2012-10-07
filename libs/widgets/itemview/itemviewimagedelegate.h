@@ -47,7 +47,7 @@ class DIGIKAM_EXPORT ItemViewImageDelegate : public DItemDelegate, public ImageD
 
 public:
 
-    ItemViewImageDelegate(QObject* parent = 0);
+    explicit ItemViewImageDelegate(QObject* parent = 0);
     ~ItemViewImageDelegate();
 
     ThumbnailSize thumbnailSize() const;

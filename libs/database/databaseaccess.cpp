@@ -79,7 +79,7 @@ class DatabaseAccessMutexLocker : public QMutexLocker
 {
 public:
 
-    DatabaseAccessMutexLocker(DatabaseAccessStaticPriv* d)
+    explicit DatabaseAccessMutexLocker(DatabaseAccessStaticPriv* d)
         : QMutexLocker(&d->lock.mutex), d(d)
     {
         d->lock.lockCount++;

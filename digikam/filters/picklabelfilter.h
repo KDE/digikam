@@ -44,7 +44,7 @@ class PickLabelFilter : public PickLabelWidget
 
 public:
 
-    PickLabelFilter(QWidget* parent=0);
+    explicit PickLabelFilter(QWidget* parent=0);
     ~PickLabelFilter();
 
     QList<TAlbum*> getCheckedPickLabelTags();

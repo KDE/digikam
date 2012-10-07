@@ -48,7 +48,7 @@ class AlbumWatch : public QObject
 
 public:
 
-    AlbumWatch(AlbumManager* parent = 0);
+    explicit AlbumWatch(AlbumManager* parent = 0);
     ~AlbumWatch();
 
     void clear();

@@ -57,7 +57,7 @@ class DragHandle : public QWidget
 
 public:
 
-    DragHandle(QDockWidget* const);
+    explicit DragHandle(QDockWidget* const);
     ~DragHandle();
 
     QSize sizeHint()        const;

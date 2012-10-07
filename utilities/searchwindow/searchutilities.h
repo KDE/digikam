@@ -55,7 +55,7 @@ class AnimatedClearButton : public QWidget
 
 public:
 
-    AnimatedClearButton(QWidget* const parent = 0);
+    explicit AnimatedClearButton(QWidget* const parent = 0);
 
     QSize sizeHint() const;
 
@@ -118,7 +118,7 @@ public:
      *  customize the stepping behavior, for cases where
      *  linear steps are not applicable
      */
-    CustomStepsDoubleSpinBox(QWidget* const parent = 0);
+    explicit CustomStepsDoubleSpinBox(QWidget* const parent = 0);
     ~CustomStepsDoubleSpinBox();
 
     /** Set a list of values that are usually applicable for the
@@ -169,7 +169,7 @@ public:
      *  customize the stepping behavior, for cases where
      *  linear steps are not applicable
      */
-    CustomStepsIntSpinBox(QWidget* const parent = 0);
+    explicit CustomStepsIntSpinBox(QWidget* const parent = 0);
 
     /** Set a list of values that are usually applicable for the
      *  type of data of the combo box. The user can still type in
@@ -245,7 +245,7 @@ public:
      *  new StyleSheetDebugger(myWidget);
      *  That's all. Change the style sheet by editing it and pressing Ok.
      */
-    StyleSheetDebugger(QWidget* const object);
+    explicit StyleSheetDebugger(QWidget* const object);
 
 protected Q_SLOTS:
 

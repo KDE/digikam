@@ -53,7 +53,7 @@ class DIGIKAM_EXPORT ColorLabelWidget : public KVBox
 
 public:
 
-    ColorLabelWidget(QWidget* parent=0);
+    explicit ColorLabelWidget(QWidget* parent=0);
     virtual ~ColorLabelWidget();
 
     /**
@@ -108,7 +108,7 @@ class DIGIKAM_EXPORT ColorLabelSelector : public QPushButton
 
 public:
 
-    ColorLabelSelector(QWidget* parent=0);
+    explicit ColorLabelSelector(QWidget* parent=0);
     virtual ~ColorLabelSelector();
 
     void setColorLabel(ColorLabel label);
@@ -138,7 +138,7 @@ class DIGIKAM_EXPORT ColorLabelMenuAction : public KActionMenu
 
 public:
 
-    ColorLabelMenuAction(QMenu* parent=0);
+    explicit ColorLabelMenuAction(QMenu* parent=0);
     virtual ~ColorLabelMenuAction();
 
 Q_SIGNALS:

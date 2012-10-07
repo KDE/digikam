@@ -49,7 +49,7 @@ class LoadingCache::LoadingCachePriv
 {
 public:
 
-    LoadingCachePriv(LoadingCache* q)
+    explicit LoadingCachePriv(LoadingCache* q)
         : q(q)
     {
         // Note: Don't make the mutex recursive, we need to use a wait condition on it

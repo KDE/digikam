@@ -48,7 +48,7 @@ class DIGIKAM_EXPORT TIFFLoader : public DImgLoader
 {
 public:
 
-    TIFFLoader(DImg* const image);
+    explicit TIFFLoader(DImg* const image);
 
     bool load(const QString& filePath, DImgLoaderObserver* const observer);
     bool save(const QString& filePath, DImgLoaderObserver* const observer);

@@ -102,7 +102,7 @@ public:
 
 public:
 
-    DateOptionDialog(Rule* parent);
+    explicit DateOptionDialog(Rule* parent);
     ~DateOptionDialog();
 
     Ui::DateOptionDialogWidget* const ui;

@@ -40,7 +40,7 @@ class CharcoalTool : public EditorToolThreaded
 
 public:
 
-    CharcoalTool(QObject* const parent);
+    explicit CharcoalTool(QObject* const parent);
     ~CharcoalTool();
 
 private Q_SLOTS:

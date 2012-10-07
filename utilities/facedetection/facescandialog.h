@@ -46,7 +46,7 @@ class FaceScanDialog : public KDialog, public StateSavingObject
 
 public:
 
-    FaceScanDialog(QWidget* parent = 0);
+    explicit FaceScanDialog(QWidget* parent = 0);
     ~FaceScanDialog();
 
     FaceScanSettings settings() const;

@@ -45,7 +45,7 @@ class ImageDelegate : public ItemViewImageDelegate
 
 public:
 
-    ImageDelegate(QObject* parent = 0);
+    explicit ImageDelegate(QObject* parent = 0);
     ~ImageDelegate();
 
     void setView(ImageCategorizedView* view);

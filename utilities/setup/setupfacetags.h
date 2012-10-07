@@ -38,7 +38,7 @@ class SetupFaceTags : public QScrollArea
 
 public:
 
-    SetupFaceTags(QWidget* const parent = 0);
+    explicit SetupFaceTags(QWidget* const parent = 0);
     ~SetupFaceTags();
 
     void applySettings();

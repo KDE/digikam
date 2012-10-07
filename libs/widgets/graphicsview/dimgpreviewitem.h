@@ -58,7 +58,7 @@ public:
 
 public:
 
-    DImgPreviewItem(QGraphicsItem* parent = 0);
+    explicit DImgPreviewItem(QGraphicsItem* parent = 0);
     virtual ~DImgPreviewItem();
 
     void setDisplayingWidget(QWidget* widget);

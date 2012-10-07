@@ -40,7 +40,7 @@ class OilPaintTool : public EditorToolThreaded
 
 public:
 
-    OilPaintTool(QObject* const parent);
+    explicit OilPaintTool(QObject* const parent);
     ~OilPaintTool();
 
 private Q_SLOTS:

@@ -65,7 +65,7 @@ class DIGIKAM_EXPORT Canvas : public Q3ScrollView
 
 public:
 
-    Canvas(QWidget* const parent = 0);
+    explicit Canvas(QWidget* const parent = 0);
     ~Canvas();
 
     void    load(const QString& filename, IOFileSettings* const IOFileSettings);

@@ -60,7 +60,7 @@ public:
 
     /** Copy constructor. Creates a copy of a RawDecodingSettings object.
      */
-    DRawDecoding(const RawDecodingSettings& prm);
+    explicit DRawDecoding(const RawDecodingSettings& prm);
 
     /** Standard destructor
      */

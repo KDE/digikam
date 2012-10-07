@@ -52,7 +52,7 @@ class QueuePool : public KTabWidget
 
 public:
 
-    QueuePool(QWidget* const parent);
+    explicit QueuePool(QWidget* const parent);
     ~QueuePool();
 
     QueueListView*     currentQueue()                    const;

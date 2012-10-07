@@ -39,7 +39,7 @@ class ImportIconView : public ImportCategorizedView
 
 public:
 
-    ImportIconView(QWidget* const parent = 0);
+    explicit ImportIconView(QWidget* const parent = 0);
     ~ImportIconView();
 
     void init(CameraController* const controller);

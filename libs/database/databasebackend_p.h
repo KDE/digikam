@@ -40,7 +40,7 @@ class DatabaseBackendPrivate : public DatabaseCoreBackendPrivate
 {
 public:
 
-    DatabaseBackendPrivate(DatabaseBackend* backend)
+    explicit DatabaseBackendPrivate(DatabaseBackend* backend)
         : DatabaseCoreBackendPrivate(backend),
           imageChangesetContainer(this),
           imageTagChangesetContainer(this),
@@ -89,7 +89,7 @@ public:
     {
     public:
 
-        ChangesetContainer(DatabaseBackendPrivate* d)
+        explicit ChangesetContainer(DatabaseBackendPrivate* d)
             : d(d)
         {
         }

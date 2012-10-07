@@ -76,7 +76,7 @@ public:
         HistogramFailed           // Histogram values calculation failed.
     };
 
-    Private(CurvesWidget* const q)
+    explicit Private(CurvesWidget* const q)
         : q(q)
     {
         curves        = 0;

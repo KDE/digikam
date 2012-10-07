@@ -42,7 +42,7 @@ class RestorationTool : public EditorToolThreaded
 
 public:
 
-    RestorationTool(QObject* const parent);
+    explicit RestorationTool(QObject* const parent);
     ~RestorationTool();
 
 private Q_SLOTS:

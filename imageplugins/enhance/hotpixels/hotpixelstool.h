@@ -48,7 +48,7 @@ class HotPixelsTool : public Digikam::EditorToolThreaded
 
 public:
 
-    HotPixelsTool(QObject* const parent);
+    explicit HotPixelsTool(QObject* const parent);
     ~HotPixelsTool();
 
     static void registerFilter();

@@ -79,7 +79,7 @@ class ImportImageModelIncrementalUpdater
 {
 public:
 
-    ImportImageModelIncrementalUpdater(ImportImageModel::Private* const d);
+    explicit ImportImageModelIncrementalUpdater(ImportImageModel::Private* const d);
 
     void            appendInfos(const QList<CamItemInfo>& infos);
     void            aboutToBeRemovedInModel(const IntPairList& aboutToBeRemoved);

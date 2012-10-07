@@ -100,7 +100,7 @@ class RegionFrameItem::RegionFrameItemPriv
 {
 public:
 
-    RegionFrameItemPriv(RegionFrameItem* q);
+    explicit RegionFrameItemPriv(RegionFrameItem* q);
 
     QRectF handleRect(CropHandle handle) const;
     CropHandle handleAt(const QPointF& pos) const;

@@ -58,7 +58,7 @@ class AlbumWatch::AlbumWatchPriv
 {
 public:
 
-    AlbumWatchPriv(AlbumWatch* q)
+    explicit AlbumWatchPriv(AlbumWatch* q)
         : inotify(0),
           dirWatch(0),
           connectedToKIO(false),

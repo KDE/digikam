@@ -59,7 +59,7 @@ public:
 
 public:
 
-    RegionFrameItem(QGraphicsItem* parent);
+    explicit RegionFrameItem(QGraphicsItem* parent);
     ~RegionFrameItem();
 
     void  setFlags(Flags flags);

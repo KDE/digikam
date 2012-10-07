@@ -40,7 +40,7 @@ class DIO::DIOPriv : public WorkerObject
 
 public:
 
-    DIOPriv(DIO* const q);
+    explicit DIOPriv(DIO* const q);
 
     void albumToAlbum(int operation, const PAlbum* src, const PAlbum* dest);
     void imagesToAlbum(int operation, const QList<ImageInfo> ids, const PAlbum* dest);
@@ -78,8 +78,8 @@ class SidecarFinder
 {
 public:
 
-    SidecarFinder(const KUrl::List& files);
-    SidecarFinder(const KUrl& file);
+    explicit SidecarFinder(const KUrl::List& files);
+    explicit SidecarFinder(const KUrl& file);
 
     KUrl::List localFiles;
     KUrl::List remoteFiles;
@@ -94,7 +94,7 @@ class GroupedImagesFinder
 {
 public:
 
-    GroupedImagesFinder(const QList<ImageInfo> source);
+    explicit GroupedImagesFinder(const QList<ImageInfo> source);
 
     QList<ImageInfo> infos;
 

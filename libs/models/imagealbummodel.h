@@ -49,7 +49,7 @@ class ImageAlbumModel : public ImageThumbnailModel
 
 public:
 
-    ImageAlbumModel(QObject* parent = 0);
+    explicit ImageAlbumModel(QObject* parent = 0);
     ~ImageAlbumModel();
 
     Album* currentAlbum() const;

@@ -49,7 +49,7 @@ class DIGIKAM_EXPORT SlideShow : public QWidget
 
 public:
 
-    SlideShow(const SlideShowSettings& settings);
+    explicit SlideShow(const SlideShowSettings& settings);
     ~SlideShow();
 
     void setCurrent(const KUrl& url);

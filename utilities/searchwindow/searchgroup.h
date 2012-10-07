@@ -64,7 +64,7 @@ public:
 
 public:
 
-    SearchGroup(SearchView* const parent);
+    explicit SearchGroup(SearchView* const parent);
 
     void setup(Type type = FirstGroup);
 

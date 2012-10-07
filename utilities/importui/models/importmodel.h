@@ -37,7 +37,7 @@ class ImportModel : public ImportThumbnailModel
 
 public:
 
-    ImportModel(QObject* const parent = 0);
+    explicit ImportModel(QObject* const parent = 0);
     ~ImportModel();
 
     void setupCameraController(CameraController* const controller);

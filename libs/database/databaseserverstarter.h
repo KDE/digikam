@@ -46,7 +46,7 @@ class DIGIKAM_DATABASE_EXPORT DatabaseServerStarter : public QObject
 
 public:
 
-    DatabaseServerStarter(QObject* const parent=0);
+    explicit DatabaseServerStarter(QObject* const parent=0);
     static DatabaseServerError startServerManagerProcess(const QString& dbType = DatabaseParameters::MySQLDatabaseType());
     static void cleanUp();
 

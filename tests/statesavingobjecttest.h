@@ -55,7 +55,7 @@ class StubStateSaver: public QObject, public Digikam::StateSavingObject
 {
     Q_OBJECT
 public:
-    StubStateSaver(QObject* parent = 0);
+    explicit StubStateSaver(QObject* parent = 0);
     virtual ~StubStateSaver();
 
     KConfigGroup getGroup();

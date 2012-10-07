@@ -42,7 +42,7 @@ class WhiteBalanceTool : public EditorToolThreaded
 
 public:
 
-    WhiteBalanceTool(QObject* const parent);
+    explicit WhiteBalanceTool(QObject* const parent);
     ~WhiteBalanceTool();
 
 private Q_SLOTS:

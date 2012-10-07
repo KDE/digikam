@@ -81,7 +81,7 @@ public:
         textFields = None;
     }
 
-    SearchTextFilterSettings(const SearchTextSettings& settings)
+    explicit SearchTextFilterSettings(const SearchTextSettings& settings)
     {
         caseSensitive = settings.caseSensitive;
         text          = settings.text;

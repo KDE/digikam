@@ -44,7 +44,7 @@ class DynamicThread::DynamicThreadPriv : public QRunnable
 {
 public:
 
-    DynamicThreadPriv(DynamicThread* const q)
+    explicit DynamicThreadPriv(DynamicThread* const q)
         : q(q)
     {
         setAutoDelete(false);

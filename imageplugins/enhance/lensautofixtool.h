@@ -37,7 +37,7 @@ class LensAutoFixTool : public EditorToolThreaded
 
 public:
 
-    LensAutoFixTool(QObject* const parent);
+    explicit LensAutoFixTool(QObject* const parent);
     ~LensAutoFixTool();
 
 private Q_SLOTS:

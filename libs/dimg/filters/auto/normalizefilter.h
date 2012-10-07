@@ -41,7 +41,7 @@ class DIGIKAM_EXPORT NormalizeFilter : public DImgThreadedFilter
 {
 
 public:
-    NormalizeFilter(QObject* const parent = 0);
+    explicit NormalizeFilter(QObject* const parent = 0);
     NormalizeFilter(DImg* const orgImage, const DImg* const refImage, QObject* const parent=0);
     virtual ~NormalizeFilter();
 

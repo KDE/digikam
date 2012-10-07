@@ -44,7 +44,7 @@ class DBStatDlg : public InfoDlg
 {
 public:
 
-    DBStatDlg(QWidget* const parent);
+    explicit DBStatDlg(QWidget* const parent);
     ~DBStatDlg();
 
 private:

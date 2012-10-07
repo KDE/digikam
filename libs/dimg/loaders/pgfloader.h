@@ -38,7 +38,7 @@ class DIGIKAM_EXPORT PGFLoader : public DImgLoader
 
 public:
 
-    PGFLoader(DImg* const image);
+    explicit PGFLoader(DImg* const image);
 
     bool load(const QString& filePath, DImgLoaderObserver* const observer);
     bool save(const QString& filePath, DImgLoaderObserver* const observer);

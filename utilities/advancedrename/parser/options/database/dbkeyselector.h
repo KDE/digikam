@@ -68,7 +68,7 @@ class DbKeySelector : public QTreeWidget
 
 public:
 
-    DbKeySelector(QWidget* parent);
+    explicit DbKeySelector(QWidget* parent);
     virtual ~DbKeySelector();
 
     void setKeysMap(const DbOptionKeysMap& map);
@@ -90,7 +90,7 @@ class DbKeySelectorView : public QWidget
 
 public:
 
-    DbKeySelectorView(QWidget* parent);
+    explicit DbKeySelectorView(QWidget* parent);
     virtual ~DbKeySelectorView();
 
     void setKeysMap(const DbOptionKeysMap& map);

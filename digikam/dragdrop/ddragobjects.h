@@ -83,7 +83,7 @@ class DTagDrag : public QMimeData
 {
 public:
 
-    DTagDrag(int albumid);
+    explicit DTagDrag(int albumid);
     static QStringList mimeTypes();
     static bool canDecode(const QMimeData* e);
     static bool decode(const QMimeData* e, int& tagID);
@@ -119,7 +119,7 @@ class DTagListDrag : public QMimeData
 {
 public:
 
-    DTagListDrag(const QList<int>& tagIDs);
+    explicit DTagListDrag(const QList<int>& tagIDs);
     static QStringList mimeTypes();
     static bool canDecode(const QMimeData* e);
     static bool decode(const QMimeData* e, QList<int>& tagIDs);
@@ -137,7 +137,7 @@ class DCameraItemListDrag : public QMimeData
 {
 public:
 
-    DCameraItemListDrag(const QStringList& cameraItemPaths);
+    explicit DCameraItemListDrag(const QStringList& cameraItemPaths);
     static QStringList mimeTypes();
     static bool canDecode(const QMimeData* e);
     static bool decode(const QMimeData* e, QStringList& cameraItemPaths);
@@ -156,7 +156,7 @@ class DCameraDragObject : public QMimeData
 
 public:
 
-    DCameraDragObject(const CameraType& ctype);
+    explicit DCameraDragObject(const CameraType& ctype);
     static QStringList mimeTypes();
     static bool canDecode(const QMimeData* e);
     static bool decode(const QMimeData* e, CameraType& ctype);

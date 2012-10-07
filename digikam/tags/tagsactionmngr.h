@@ -49,7 +49,7 @@ class TagsActionMngr : public QObject
 
 public:
 
-    TagsActionMngr(QWidget* parent);
+    explicit TagsActionMngr(QWidget* parent);
     ~TagsActionMngr();
 
     /** Register all action collections managed with keyboard shorcuts.

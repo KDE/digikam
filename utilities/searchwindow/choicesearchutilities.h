@@ -57,7 +57,7 @@ public:
 
 public:
 
-    ChoiceSearchModel(QObject* const parent = 0);
+    explicit ChoiceSearchModel(QObject* const parent = 0);
 
     /** Sets the data from the given map, with integer keys and QString user displayable value.
      */
@@ -203,7 +203,7 @@ public:
      *  After constructing the object, call setModel
      *  with your model.
      */
-    ChoiceSearchComboBox(QWidget* const parent = 0);
+    explicit ChoiceSearchComboBox(QWidget* const parent = 0);
 
     /** Sets the model and initializes the widget.
      *  Can only be called once for a widget.

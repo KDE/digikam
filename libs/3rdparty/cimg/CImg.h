@@ -10318,12 +10318,12 @@ namespace cimg_library {
        More informations on this topic can be found in cimg_files_io.
        - If the filename is not found, a CImgIOException is thrown by this constructor.
     **/
-    CImg(const char *const filename):width(0),height(0),depth(0),dim(0),is_shared(false),data(0) {
+    explicit CImg(const char *const filename):width(0),height(0),depth(0),dim(0),is_shared(false),data(0) {
       assign(filename);
     }
 
     //! Construct an image from the content of a CImgDisplay instance.
-    CImg(const CImgDisplay &disp):width(0),height(0),depth(0),dim(0),is_shared(false),data(0) {
+    explicit CImg(const CImgDisplay &disp):width(0),height(0),depth(0),dim(0),is_shared(false),data(0) {
       disp.snapshot(*this);
     }
 
@@ -16863,7 +16863,7 @@ namespace cimg_library {
 
     struct _marching_squares_func {
       const CImg<T>& ref;
-      _marching_squares_func(const CImg<T>& pref):ref(pref) {}
+      explicit _marching_squares_func(const CImg<T>& pref):ref(pref) {}
       float operator()(const float x, const float y) const {
         return (float)ref((int)x,(int)y);
       }
@@ -16871,7 +16871,7 @@ namespace cimg_library {
 
     struct _marching_cubes_func {
       const CImg<T>& ref;
-      _marching_cubes_func(const CImg<T>& pref):ref(pref) {}
+      explicit _marching_cubes_func(const CImg<T>& pref):ref(pref) {}
       float operator()(const float x, const float y, const float z) const {
         return (float)ref((int)x,(int)y,(int)z);
       }
@@ -16879,7 +16879,7 @@ namespace cimg_library {
 
     struct _marching_squares_func_float {
       const CImg<T>& ref;
-      _marching_squares_func_float(const CImg<T>& pref):ref(pref) {}
+      explicit _marching_squares_func_float(const CImg<T>& pref):ref(pref) {}
       float operator()(const float x, const float y) const {
         return (float)ref._linear_atXY(x,y);
       }
@@ -16887,7 +16887,7 @@ namespace cimg_library {
 
     struct _marching_cubes_func_float {
       const CImg<T>& ref;
-      _marching_cubes_func_float(const CImg<T>& pref):ref(pref) {}
+      explicit _marching_cubes_func_float(const CImg<T>& pref):ref(pref) {}
       float operator()(const float x, const float y, const float z) const {
         return (float)ref._linear_atXYZ(x,y,z);
       }
@@ -33097,7 +33097,7 @@ namespace cimg_library {
     }
 
     //! Construct an image list from a filename.
-    CImgList(const char *const filename):
+    explicit CImgList(const char *const filename):
       size(0),allocsize(0),data(0) {
       assign(filename);
     }

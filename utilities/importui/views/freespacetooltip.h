@@ -35,7 +35,7 @@ class FreeSpaceToolTip : public DItemToolTip
 {
 public:
 
-    FreeSpaceToolTip(QWidget* const parent);
+    explicit FreeSpaceToolTip(QWidget* const parent);
     virtual ~FreeSpaceToolTip();
 
     void setToolTip(const QString& tip);

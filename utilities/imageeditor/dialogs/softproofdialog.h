@@ -42,7 +42,7 @@ class SoftProofDialog : public KDialog
 
 public:
 
-    SoftProofDialog(QWidget* const parent);
+    explicit SoftProofDialog(QWidget* const parent);
     ~SoftProofDialog();
 
     bool shallEnableSoftProofView() const;

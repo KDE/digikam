@@ -51,7 +51,7 @@ class NotificationPassivePopup : public KPassivePopup
 {
 public:
 
-    NotificationPassivePopup(QWidget* const parent)
+    explicit NotificationPassivePopup(QWidget* const parent)
         : KPassivePopup(parent), m_parent(parent)
     {
     }

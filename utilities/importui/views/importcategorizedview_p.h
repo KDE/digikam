@@ -69,7 +69,7 @@ class ImportCategorizedView::ImportCategorizedViewPriv
 {
 public:
 
-    ImportCategorizedViewPriv(ImportCategorizedView* const listView);
+    explicit ImportCategorizedViewPriv(ImportCategorizedView* const listView);
     ~ImportCategorizedViewPriv();
 
     /**

@@ -48,7 +48,7 @@ class RedEyeTool : public EditorTool
 
 public:
 
-    RedEyeTool(QObject* const parent);
+    explicit RedEyeTool(QObject* const parent);
     ~RedEyeTool();
 
 private Q_SLOTS:

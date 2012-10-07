@@ -56,7 +56,7 @@ public:
 
 public:
 
-    CategorizedItemModel(QObject* parent = 0);
+    explicit CategorizedItemModel(QObject* parent = 0);
 
     QStandardItem* addItem(const QString& text, const QVariant& category, const QVariant& categorySorting = QVariant());
     QStandardItem* addItem(const QString& text, const QIcon& decoration, const QVariant& category,
@@ -100,7 +100,7 @@ public:
      * It is possible to retrieve an action for an index, and to call the action's slots from
      * a given index.
      */
-    ActionItemModel(QObject* parent = 0);
+    explicit ActionItemModel(QObject* parent = 0);
 
     QStandardItem* addAction(QAction *action, const QString& category, const QVariant& categorySorting = QVariant());
 

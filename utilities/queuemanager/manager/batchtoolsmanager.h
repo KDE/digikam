@@ -41,7 +41,7 @@ class BatchToolsManager : public QObject
 
 public:
 
-    BatchToolsManager(QObject* const parent = 0);
+    explicit BatchToolsManager(QObject* const parent = 0);
     ~BatchToolsManager();
 
     void registerTool(BatchTool* const tool);

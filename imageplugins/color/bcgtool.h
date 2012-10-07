@@ -41,7 +41,7 @@ class BCGTool : public EditorToolThreaded
 
 public:
 
-    BCGTool(QObject* const parent);
+    explicit BCGTool(QObject* const parent);
     ~BCGTool();
 
 private Q_SLOTS:

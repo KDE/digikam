@@ -47,7 +47,7 @@ class AlbumSelectComboBox::AlbumSelectComboBoxPriv
 {
 public:
 
-    AlbumSelectComboBoxPriv(AlbumSelectComboBox* q)
+    explicit AlbumSelectComboBoxPriv(AlbumSelectComboBox* q)
         : q(q)
     {
         model                 = 0;
@@ -319,7 +319,7 @@ void AbstractAlbumTreeViewSelectComboBox::setTreeView(AbstractAlbumTreeView* tre
 class CheckUncheckContextMenuElement : public QObject, public AbstractAlbumTreeView::ContextMenuElement
 {
 public:
-    CheckUncheckContextMenuElement(QObject* parent) : QObject(parent) {}
+    explicit CheckUncheckContextMenuElement(QObject* parent) : QObject(parent) {}
 
     void addActions(AbstractAlbumTreeView* view, ContextMenuHelper& cmh, Album* album)
     {

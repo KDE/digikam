@@ -46,7 +46,7 @@ class DIGIKAM_EXPORT DCategorizedView : public DigikamKCategorizedView, public D
 
 public:
 
-    DCategorizedView(QWidget* const parent = 0);
+    explicit DCategorizedView(QWidget* const parent = 0);
     ~DCategorizedView();
 
     DItemDelegate* delegate()                const;

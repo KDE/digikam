@@ -109,7 +109,7 @@ public:
      * @param host self-reference to access the object name, simply pass "this"
      *             as argument
      */
-    StateSavingObject(QObject* const host);
+    explicit StateSavingObject(QObject* const host);
 
     /**
      * Destructor.

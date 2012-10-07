@@ -401,9 +401,9 @@ class MetadataHubOnTheRoad : public QObject, public MetadataHub
 
 public:
 
-    MetadataHubOnTheRoad(QObject* const parent = 0);
+    explicit MetadataHubOnTheRoad(QObject* const parent = 0);
     MetadataHubOnTheRoad& operator=(const MetadataHub&);
-    MetadataHubOnTheRoad(const MetadataHub&);
+    explicit MetadataHubOnTheRoad(const MetadataHub&);
     MetadataHubOnTheRoad(const MetadataHubOnTheRoad&, QObject* const parent = 0);
     ~MetadataHubOnTheRoad();
 

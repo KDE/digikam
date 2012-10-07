@@ -39,7 +39,7 @@ class Convert2TIFF : public BatchTool
 
 public:
 
-    Convert2TIFF(QObject* const parent = 0);
+    explicit Convert2TIFF(QObject* const parent = 0);
     ~Convert2TIFF();
 
     QString outputSuffix() const;

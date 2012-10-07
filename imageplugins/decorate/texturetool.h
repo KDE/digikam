@@ -44,7 +44,7 @@ class TextureTool : public EditorToolThreaded
 
 public:
 
-    TextureTool(QObject* const parent);
+    explicit TextureTool(QObject* const parent);
     ~TextureTool();
 
 private:

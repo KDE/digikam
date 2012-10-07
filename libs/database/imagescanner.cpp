@@ -1264,7 +1264,7 @@ class lessThanByProximityToSubject
 {
 public:
 
-    lessThanByProximityToSubject(const ImageInfo& subject) 
+    explicit lessThanByProximityToSubject(const ImageInfo& subject) 
         : subject(subject)
     {
     }

@@ -35,7 +35,7 @@ class WelcomePage : public AssistantDlgPage
 {
 public:
 
-    WelcomePage(KAssistantDialog* dlg);
+    explicit WelcomePage(KAssistantDialog* dlg);
     ~WelcomePage();
 };
 

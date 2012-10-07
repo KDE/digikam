@@ -45,7 +45,7 @@ class TemplateViewer : public RExpanderBox
 
 public:
 
-    TemplateViewer(QWidget* const parent=0);
+    explicit TemplateViewer(QWidget* const parent=0);
     virtual ~TemplateViewer();
 
     void setTemplate(const Template& t);

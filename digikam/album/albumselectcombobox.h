@@ -43,7 +43,7 @@ class AlbumSelectComboBox : public TreeViewLineEditComboBox
 
 public:
 
-    AlbumSelectComboBox(QWidget* parent = 0);
+    explicit AlbumSelectComboBox(QWidget* parent = 0);
     ~AlbumSelectComboBox();
 
     /** Once after creation, call one of these three methods.
@@ -120,7 +120,7 @@ public:
      * not a plain QTreeView, as view.
      */
 
-    AbstractAlbumTreeViewSelectComboBox(QWidget* parent = 0);
+    explicit AbstractAlbumTreeViewSelectComboBox(QWidget* parent = 0);
 
     /**
      * Set a tree view created by you instead of creating a default view
@@ -152,7 +152,7 @@ class AlbumTreeViewSelectComboBox : public AbstractAlbumTreeViewSelectComboBox
 
 public:
 
-    AlbumTreeViewSelectComboBox(QWidget* parent = 0);
+    explicit AlbumTreeViewSelectComboBox(QWidget* parent = 0);
 
     void setDefaultModel();
     void setModel(AlbumModel* model, CheckableAlbumFilterModel* filterModel = 0);
@@ -167,7 +167,7 @@ class TagTreeViewSelectComboBox : public AbstractAlbumTreeViewSelectComboBox
 
 public:
 
-    TagTreeViewSelectComboBox(QWidget* parent = 0);
+    explicit TagTreeViewSelectComboBox(QWidget* parent = 0);
 
     void setDefaultModel();
     void setModel(TagModel* model, TagPropertiesFilterModel* filteredModel = 0, CheckableAlbumFilterModel* filterModel = 0);

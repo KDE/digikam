@@ -52,7 +52,7 @@ class AdvancedRenameLineEdit : public QPlainTextEdit
 
 public:
 
-    AdvancedRenameLineEdit(QWidget* parent = 0);
+    explicit AdvancedRenameLineEdit(QWidget* parent = 0);
     ~AdvancedRenameLineEdit();
 
     void    setParser(Parser* parser);
@@ -101,7 +101,7 @@ class AdvancedRenameInput : public KComboBox
 
 public:
 
-    AdvancedRenameInput(QWidget* parent = 0);
+    explicit AdvancedRenameInput(QWidget* parent = 0);
     ~AdvancedRenameInput();
 
     void setParser(Parser* parser);

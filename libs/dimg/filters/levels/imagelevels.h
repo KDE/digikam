@@ -43,7 +43,7 @@ class DIGIKAM_EXPORT ImageLevels
 
 public:
 
-    ImageLevels(bool sixteenBit);
+    explicit ImageLevels(bool sixteenBit);
     ~ImageLevels();
 
     bool   isDirty();

@@ -39,7 +39,7 @@ class DIGIKAM_EXPORT PPMLoader : public DImgLoader
 {
 public:
 
-    PPMLoader(DImg* const image);
+    explicit PPMLoader(DImg* const image);
 
     bool load(const QString& filePath, DImgLoaderObserver* const observer);
     bool save(const QString& filePath, DImgLoaderObserver* const observer);

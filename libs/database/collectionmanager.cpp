@@ -68,7 +68,7 @@ public:
     {
     }
 
-    AlbumRootLocation(const AlbumRootInfo& info)
+    explicit AlbumRootLocation(const AlbumRootInfo& info)
     {
         kDebug() << "Creating new Location " << info.specificPath << " uuid " << info.identifier;
         m_id         = info.id;
@@ -177,7 +177,7 @@ class CollectionManagerPrivate
 
 public:
 
-    CollectionManagerPrivate(CollectionManager* s);
+    explicit CollectionManagerPrivate(CollectionManager* s);
 
     QMap<int, AlbumRootLocation*> locations;
     bool changingDB;
@@ -237,7 +237,7 @@ class ChangingDB
 
 public:
 
-    ChangingDB(CollectionManagerPrivate* d) : d(d)
+    explicit ChangingDB(CollectionManagerPrivate* d) : d(d)
     {
         d->changingDB = true;
     }

@@ -72,7 +72,7 @@ public:
 
 public:
 
-    TimeLineWidget(QWidget* parent = 0);
+    explicit TimeLineWidget(QWidget* parent = 0);
     ~TimeLineWidget();
 
     void      setTimeUnit(TimeUnit timeUnit);

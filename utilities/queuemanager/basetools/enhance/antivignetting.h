@@ -39,7 +39,7 @@ class AntiVignetting : public BatchTool
 
 public:
 
-    AntiVignetting(QObject* const parent = 0);
+    explicit AntiVignetting(QObject* const parent = 0);
     ~AntiVignetting();
 
     BatchToolSettings defaultSettings();

@@ -65,7 +65,7 @@ class DImgChildItem::DImgChildItemPriv
 {
 public:
 
-    DImgChildItemPriv(DImgChildItem* q)
+    explicit DImgChildItemPriv(DImgChildItem* q)
         : q(q)
     {
     }

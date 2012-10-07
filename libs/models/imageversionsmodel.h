@@ -44,7 +44,7 @@ class ImageVersionsModel : public QAbstractListModel
 
 public:
 
-    ImageVersionsModel(QObject* parent = 0);
+    explicit ImageVersionsModel(QObject* parent = 0);
     ~ImageVersionsModel();
 
     Qt::ItemFlags flags(const QModelIndex& index) const;

@@ -62,7 +62,7 @@ public:
 
 public:
 
-    ToolTip(QAbstractItemView* const view)
+    explicit ToolTip(QAbstractItemView* const view)
         : ItemViewToolTip(view),
           m_mode(InvalidMode)
     {

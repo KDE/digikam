@@ -40,7 +40,7 @@ class BWSepiaTool : public EditorToolThreaded
 
 public:
 
-    BWSepiaTool(QObject* const parent);
+    explicit BWSepiaTool(QObject* const parent);
     ~BWSepiaTool();
 
 private Q_SLOTS:

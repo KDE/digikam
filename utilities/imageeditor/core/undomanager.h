@@ -48,7 +48,7 @@ class DIGIKAM_EXPORT UndoManager
 
 public:
 
-    UndoManager(EditorCore* const core);
+    explicit UndoManager(EditorCore* const core);
     ~UndoManager();
 
     void addAction(UndoAction* const action);

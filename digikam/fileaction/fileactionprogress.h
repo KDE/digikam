@@ -42,7 +42,7 @@ class FileActionProgress : public ProgressItem
 
 public:
 
-    FileActionProgress(const char* name);
+    explicit FileActionProgress(const char* name);
     ~FileActionProgress();
 
 Q_SIGNALS:

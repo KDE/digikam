@@ -48,7 +48,7 @@ class DIGIKAM_EXPORT PNGLoader : public DImgLoader
 {
 public:
 
-    PNGLoader(DImg* const image);
+    explicit PNGLoader(DImg* const image);
 
     bool load(const QString& filePath, DImgLoaderObserver* const observer);
     bool save(const QString& filePath, DImgLoaderObserver* const observer);

@@ -42,7 +42,7 @@ class DIGIKAM_EXPORT DRubberBand : public QRubberBand
 
 public:
 
-    DRubberBand(Q3ScrollView* const parent);
+    explicit DRubberBand(Q3ScrollView* const parent);
     ~DRubberBand();
 
     QRect rubberBandAreaOnContents() const;

@@ -63,7 +63,7 @@ class ButtonExtendedLabel : public QLabel
 {
 public:
 
-    ButtonExtendedLabel(QWidget* parent = 0)
+    explicit ButtonExtendedLabel(QWidget* parent = 0)
         : QLabel(parent), m_button(0)
     {
     }
@@ -99,7 +99,7 @@ class ModelClearButton : public AnimatedClearButton
 {
 public:
 
-    ModelClearButton(AbstractCheckableAlbumModel* model)
+    explicit ModelClearButton(AbstractCheckableAlbumModel* model)
     {
         setPixmap(SmallIcon(qApp->isLeftToRight() ? "edit-clear-locationbar-rtl" : "edit-clear-locationbar-ltr",
                             0, KIconLoader::DefaultState));

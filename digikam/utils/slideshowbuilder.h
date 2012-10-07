@@ -45,9 +45,9 @@ class SlideShowBuilder : public ProgressItem
 public:
 
     /** Contructor to work on image list */
-    SlideShowBuilder(const ImageInfoList& infoList);
+    explicit SlideShowBuilder(const ImageInfoList& infoList);
     /** Contructor to work on recursive mode from album */
-    SlideShowBuilder(Album* album);
+    explicit SlideShowBuilder(Album* album);
     ~SlideShowBuilder();
 
 Q_SIGNALS:

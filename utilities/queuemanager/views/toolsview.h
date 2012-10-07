@@ -43,7 +43,7 @@ class ToolsView : public KTabWidget
 
 public:
 
-    ToolsView(QWidget* const parent = 0);
+    explicit ToolsView(QWidget* const parent = 0);
     ~ToolsView();
 
     void addTool(BatchTool* const tool);

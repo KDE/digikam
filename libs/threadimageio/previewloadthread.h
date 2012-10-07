@@ -43,7 +43,7 @@ public:
      * The default loading policy, for the typical usage in a preview widget,
      * always stops any previous tasks and loads the new task as soon as possible.
      */
-    PreviewLoadThread(QObject* parent = 0);
+    explicit PreviewLoadThread(QObject* parent = 0);
 
     /**
      * Load a preview that is optimized for fast loading.

@@ -41,7 +41,7 @@ class SetupRaw : public QScrollArea
 
 public:
 
-    SetupRaw(QWidget* const parent = 0);
+    explicit SetupRaw(QWidget* const parent = 0);
     ~SetupRaw();
 
     void applySettings();

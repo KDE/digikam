@@ -61,7 +61,7 @@ class FilterComboBox : public KComboBox
 
 public:
 
-    FilterComboBox(QWidget* const parent);
+    explicit FilterComboBox(QWidget* const parent);
     ~FilterComboBox();
 
     bool matchesCurrentFilter(const CamItemInfo& item);

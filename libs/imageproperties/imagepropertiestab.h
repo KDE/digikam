@@ -50,7 +50,7 @@ class DIGIKAM_EXPORT ImagePropertiesTab : public KDcrawIface::RExpanderBox
 
 public:
 
-    ImagePropertiesTab(QWidget* const parent);
+    explicit ImagePropertiesTab(QWidget* const parent);
     ~ImagePropertiesTab();
 
     void setCurrentURL(const KUrl& url=KUrl());

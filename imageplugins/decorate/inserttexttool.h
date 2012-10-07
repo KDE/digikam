@@ -42,7 +42,7 @@ class InsertTextTool : public EditorTool
 
 public:
 
-    InsertTextTool(QObject* const parent);
+    explicit InsertTextTool(QObject* const parent);
     ~InsertTextTool();
 
 Q_SIGNALS:

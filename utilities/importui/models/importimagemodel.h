@@ -68,7 +68,7 @@ public:
 
 public:
 
-    ImportImageModel(QObject* const parent = 0);
+    explicit ImportImageModel(QObject* const parent = 0);
     ~ImportImageModel();
 
     // Used to set the camera controller, and connect with it.

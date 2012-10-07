@@ -39,7 +39,7 @@ class RemoveMetadata : public BatchTool
 
 public:
 
-    RemoveMetadata(QObject* parent = 0);
+    explicit RemoveMetadata(QObject* parent = 0);
     ~RemoveMetadata();
 
     BatchToolSettings defaultSettings();

@@ -64,7 +64,7 @@ class AssignedListView : public QTreeWidget
 
 public:
 
-    AssignedListView(QWidget* const parent);
+    explicit AssignedListView(QWidget* const parent);
     ~AssignedListView();
 
     int assignedCount();

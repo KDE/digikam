@@ -60,7 +60,7 @@ public:
      *  Per default, it will replace the file, read the current orientation from the metadata,
      *  and use the src file name as documentName.
      */
-    JpegRotator(const QString& file);
+    explicit JpegRotator(const QString& file);
 
     /**
      * Per default, the orientation is read from the metadata of the file.

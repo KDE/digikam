@@ -52,7 +52,7 @@ public:
      * Default constructor. You need to call setSettings() and setOriginalImage()
      * before starting the filter.
      */
-    RawProcessingFilter(QObject* parent = 0);
+    explicit RawProcessingFilter(QObject* parent = 0);
 
     /**
      * Traditional constructor

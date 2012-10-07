@@ -45,7 +45,7 @@ class BorderTool : public EditorToolThreaded
 
 public:
 
-    BorderTool(QObject* const parent);
+    explicit BorderTool(QObject* const parent);
     ~BorderTool();
 
 private Q_SLOTS:

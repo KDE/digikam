@@ -49,7 +49,7 @@ class DuplicatesProgressObserver : public Digikam::HaarProgressObserver
 {
 public:
 
-    DuplicatesProgressObserver(KIO::SlaveBase* slave) : m_slave(slave) {}
+    explicit DuplicatesProgressObserver(KIO::SlaveBase* slave) : m_slave(slave) {}
 
     virtual void totalNumberToScan(int number)
     {

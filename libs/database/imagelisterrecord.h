@@ -59,7 +59,7 @@ public:
 
     BinaryFormat binaryFormat;
 
-    ImageListerRecord(BinaryFormat format = TraditionalFormat)
+    explicit ImageListerRecord(BinaryFormat format = TraditionalFormat)
         : binaryFormat(format)
     {
         imageID     = -1;

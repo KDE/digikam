@@ -49,7 +49,7 @@ class DatabaseCopyThread : public QThread
 
 public:
 
-    DatabaseCopyThread(QWidget* parent);
+    explicit DatabaseCopyThread(QWidget* parent);
     ~DatabaseCopyThread();
 
     bool stop;
@@ -72,7 +72,7 @@ class MigrationDlg : public KDialog
 
 public:
 
-    MigrationDlg(QWidget* parent);
+    explicit MigrationDlg(QWidget* parent);
     ~MigrationDlg();
 
 private Q_SLOTS:

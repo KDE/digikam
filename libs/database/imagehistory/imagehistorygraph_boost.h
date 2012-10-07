@@ -239,7 +239,7 @@ public:
     typedef boost::associative_property_map<VertexVertexMap> VertexVertexMapAdaptor;
     typedef boost::associative_property_map<VertexIntMap>    VertexIntMapAdaptor;
 
-    Graph(MeaningOfDirection direction = ParentToChild)
+    explicit Graph(MeaningOfDirection direction = ParentToChild)
         : direction(direction)
     {
     }
@@ -1347,7 +1347,7 @@ protected:
         class CommonVisitor
         {
         protected:
-            CommonVisitor(GraphSearch* q) : q(q) {}
+            explicit CommonVisitor(GraphSearch* q) : q(q) {}
             void record(const Vertex& v) const
             {
                 q->vertices << v;
@@ -1358,7 +1358,7 @@ protected:
         class DepthFirstSearchVisitor : public boost::default_dfs_visitor, public CommonVisitor
         {
         public:
-            DepthFirstSearchVisitor(GraphSearch* q) : CommonVisitor(q) {}
+            explicit DepthFirstSearchVisitor(GraphSearch* q) : CommonVisitor(q) {}
             template <typename VertexType, typename GraphType>
             void discover_vertex(VertexType u, const GraphType&) const
             {
@@ -1369,7 +1369,7 @@ protected:
         class BreadthFirstSearchVisitor : public boost::default_bfs_visitor, public CommonVisitor
         {
         public:
-            BreadthFirstSearchVisitor(GraphSearch* q) : CommonVisitor(q) {}
+            explicit BreadthFirstSearchVisitor(GraphSearch* q) : CommonVisitor(q) {}
             template <typename VertexType, typename GraphType>
             void discover_vertex(VertexType u, const GraphType&) const
             {

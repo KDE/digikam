@@ -44,7 +44,7 @@ class GroupIndicatorOverlayWidget : public QAbstractButton
 
 public:
 
-    GroupIndicatorOverlayWidget(QWidget* parent = 0);
+    explicit GroupIndicatorOverlayWidget(QWidget* parent = 0);
     virtual void contextMenuEvent(QContextMenuEvent* event);
 
 protected:
@@ -65,7 +65,7 @@ class GroupIndicatorOverlay : public AbstractWidgetDelegateOverlay
 
 public:
 
-    GroupIndicatorOverlay(QObject* parent);
+    explicit GroupIndicatorOverlay(QObject* parent);
 
     GroupIndicatorOverlayWidget* buttonWidget() const;
 

@@ -37,7 +37,7 @@ class SetupMetadata : public QScrollArea
 
 public:
 
-    SetupMetadata(QWidget* const parent = 0);
+    explicit SetupMetadata(QWidget* const parent = 0);
     ~SetupMetadata();
 
     void applySettings();

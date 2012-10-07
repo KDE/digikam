@@ -65,7 +65,7 @@ class DigikamKCategorizedView::Private
 {
 public:
 
-    Private(DigikamKCategorizedView* listView);
+    explicit Private(DigikamKCategorizedView* listView);
     ~Private();
 
     // Methods

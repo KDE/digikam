@@ -49,7 +49,7 @@ class AssignNameOverlay : public PersistentWidgetDelegateOverlay
 
 public:
 
-    AssignNameOverlay(QObject* parent);
+    explicit AssignNameOverlay(QObject* parent);
     ~AssignNameOverlay();
 
     AssignNameWidget* assignNameWidget() const;

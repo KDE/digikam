@@ -67,7 +67,7 @@ public:
      * Create a filter for the given action. If the action is not supported,
      * the filter will perform no operation.
      */
-    DImgBuiltinFilter(const FilterAction& action);
+    explicit DImgBuiltinFilter(const FilterAction& action);
 
     /**
      * Create a filter of the given type.

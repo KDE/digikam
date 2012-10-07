@@ -44,7 +44,7 @@ class InPaintingTool : public EditorToolThreaded
 
 public:
 
-    InPaintingTool(QObject* const parent);
+    explicit InPaintingTool(QObject* const parent);
     ~InPaintingTool();
 
 private Q_SLOTS:

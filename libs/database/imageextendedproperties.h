@@ -47,7 +47,7 @@ class DIGIKAM_DATABASE_EXPORT ImageExtendedProperties
 
 public:
 
-    ImageExtendedProperties(qlonglong imageid);
+    explicit ImageExtendedProperties(qlonglong imageid);
 
     /** Create a null ImageExtendedProperties object */
     ImageExtendedProperties();

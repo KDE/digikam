@@ -56,7 +56,7 @@ class DIGIKAM_EXPORT JPEGLoader : public DImgLoader
 
 public:
 
-    JPEGLoader(DImg* const image);
+    explicit JPEGLoader(DImg* const image);
 
     bool load(const QString& filePath, DImgLoaderObserver* const observer);
     bool save(const QString& filePath, DImgLoaderObserver* const observer);

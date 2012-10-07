@@ -37,7 +37,7 @@ class ImageHistoryView : QTreeView
 
 public:
 
-    ImageHistoryView(QWidget* parent);
+    explicit ImageHistoryView(QWidget* parent);
     ~ImageHistoryView();
 
 private:

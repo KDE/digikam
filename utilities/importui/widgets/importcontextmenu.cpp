@@ -57,7 +57,7 @@ class ImportContextMenuHelper::Private
 {
 public:
 
-    Private(ImportContextMenuHelper* const q) :
+    explicit Private(ImportContextMenuHelper* const q) :
         importFilterModel(0),
         parent(0),
         ABCmenu(0),

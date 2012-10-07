@@ -144,7 +144,7 @@ public:
     {
     public:
 
-        CacheLock(LoadingCache* cache);
+        explicit CacheLock(LoadingCache* cache);
         ~CacheLock();
         void wakeAll();
         void timedWait();

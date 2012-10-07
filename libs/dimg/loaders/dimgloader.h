@@ -90,7 +90,7 @@ public:
 
 protected:
 
-    DImgLoader(DImg* const image);
+    explicit DImgLoader(DImg* const image);
 
     unsigned char*&         imageData();
     unsigned int&           imageWidth();

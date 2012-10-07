@@ -50,7 +50,7 @@ class ParkingThread : public QThread
 {
 public:
 
-    ParkingThread(QObject* const parent = 0)
+    explicit ParkingThread(QObject* const parent = 0)
         : QThread(parent), running(true)
     {
         start();

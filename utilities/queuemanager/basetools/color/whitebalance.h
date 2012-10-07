@@ -39,7 +39,7 @@ class WhiteBalance : public BatchTool
 
 public:
 
-    WhiteBalance(QObject* const parent = 0);
+    explicit WhiteBalance(QObject* const parent = 0);
     ~WhiteBalance();
 
     BatchToolSettings defaultSettings();

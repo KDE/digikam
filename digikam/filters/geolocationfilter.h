@@ -42,7 +42,7 @@ class GeolocationFilter : public KComboBox
 
 public:
 
-    GeolocationFilter(QWidget* parent);
+    explicit GeolocationFilter(QWidget* parent);
     ~GeolocationFilter();
 
     void setGeolocationFilter(const ImageFilterSettings::GeolocationCondition& condition);

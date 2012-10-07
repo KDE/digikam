@@ -41,7 +41,7 @@ class DIGIKAM_DATABASE_EXPORT ImageListModel : public ImageThumbnailModel
 
 public:
 
-    ImageListModel(QObject* parent = 0);
+    explicit ImageListModel(QObject* parent = 0);
     ~ImageListModel();
 
     // NOTE: necessary methods to add and remove ImageInfos to the model are inherited from ImageModel

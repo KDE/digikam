@@ -41,7 +41,7 @@ class ToolSettingsView : public QStackedWidget
 
 public:
 
-    ToolSettingsView(QWidget* const parent = 0);
+    explicit ToolSettingsView(QWidget* const parent = 0);
     ~ToolSettingsView();
 
     void setBusy(bool b);

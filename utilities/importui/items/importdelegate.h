@@ -46,7 +46,7 @@ class ImportDelegate : public ItemViewImportDelegate
 
 public:
 
-    ImportDelegate(QObject* const parent = 0);
+    explicit ImportDelegate(QObject* const parent = 0);
     ~ImportDelegate();
 
     void setView(ImportCategorizedView* view);
@@ -136,7 +136,7 @@ class ImportThumbnailDelegate : public ImportDelegate
 
 public:
 
-    ImportThumbnailDelegate(ImportCategorizedView* const parent);
+    explicit ImportThumbnailDelegate(ImportCategorizedView* const parent);
     ~ImportThumbnailDelegate();
 
     void setFlow(QListView::Flow flow);
@@ -170,7 +170,7 @@ class ImportNormalDelegate : public ImportDelegate
 
 public:
 
-    ImportNormalDelegate(ImportCategorizedView* const parent);
+    explicit ImportNormalDelegate(ImportCategorizedView* const parent);
     ~ImportNormalDelegate();
 
 protected:

@@ -40,7 +40,7 @@ class DigikamImageView : public ImageCategorizedView
 
 public:
 
-    DigikamImageView(QWidget* parent = 0);
+    explicit DigikamImageView(QWidget* parent = 0);
     ~DigikamImageView();
 
     ImageViewUtilities* utilities() const;

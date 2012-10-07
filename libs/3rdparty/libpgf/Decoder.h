@@ -53,7 +53,7 @@ class CDecoder {
 		//////////////////////////////////////////////////////////////////////
 		/// Constructor: Initializes new macro block.
 		/// @param decoder Pointer to outer class.
-		CMacroBlock(CDecoder *decoder)
+		explicit CMacroBlock(CDecoder *decoder)
 		: m_header(0)								// makes sure that IsCompletelyRead() returns true for an empty macro block
 		, m_valuePos(0)
 		, m_decoder(decoder)

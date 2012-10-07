@@ -112,7 +112,7 @@ public:
 
 public:
 
-    GPSImageInfoSorter(QObject* const parent);
+    explicit GPSImageInfoSorter(QObject* const parent);
     ~GPSImageInfoSorter();
 
     void addToKGeoMapWidget(KGeoMap::KGeoMapWidget* const mapWidget);

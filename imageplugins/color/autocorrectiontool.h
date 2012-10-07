@@ -44,7 +44,7 @@ class AutoCorrectionTool : public EditorToolThreaded
 
 public:
 
-    AutoCorrectionTool(QObject* const parent);
+    explicit AutoCorrectionTool(QObject* const parent);
     ~AutoCorrectionTool();
 
 private Q_SLOTS:

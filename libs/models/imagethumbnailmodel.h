@@ -49,7 +49,7 @@ public:
      *  Adjust the thumbnail size to your needs.
      *  Note that setKeepsFilePathCache is enabled per default.
      */
-    ImageThumbnailModel(QObject* parent);
+    explicit ImageThumbnailModel(QObject* parent);
     ~ImageThumbnailModel();
 
     /** Enable thumbnail loading and set the thread that shall be used.

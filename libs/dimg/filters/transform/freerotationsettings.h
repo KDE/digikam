@@ -48,7 +48,7 @@ class DIGIKAM_EXPORT FreeRotationSettings : public QWidget
 
 public:
 
-    FreeRotationSettings(QWidget* parent);
+    explicit FreeRotationSettings(QWidget* parent);
     ~FreeRotationSettings();
 
     FreeRotationContainer defaultSettings() const;

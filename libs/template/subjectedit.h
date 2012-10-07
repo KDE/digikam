@@ -38,7 +38,7 @@ class SubjectEdit : public SubjectWidget
 
 public:
 
-    SubjectEdit(QWidget* const parent);
+    explicit SubjectEdit(QWidget* const parent);
     ~SubjectEdit();
 
 private Q_SLOTS:

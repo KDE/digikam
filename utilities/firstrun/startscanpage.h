@@ -35,7 +35,7 @@ class StartScanPage : public AssistantDlgPage
 {
 public:
 
-    StartScanPage(KAssistantDialog* dlg);
+    explicit StartScanPage(KAssistantDialog* dlg);
     ~StartScanPage();
 };
 

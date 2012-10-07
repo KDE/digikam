@@ -48,7 +48,7 @@ class DIGIKAM_EXPORT HSLSettings : public QWidget
 
 public:
 
-    HSLSettings(QWidget* parent);
+    explicit HSLSettings(QWidget* parent);
     ~HSLSettings();
 
     HSLContainer defaultSettings() const;

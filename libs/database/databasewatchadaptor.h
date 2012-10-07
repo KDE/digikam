@@ -39,7 +39,7 @@ class Digikam_DatabaseWatchAdaptor : public QDBusAbstractAdaptor
 
 public:
 
-    Digikam_DatabaseWatchAdaptor(Digikam::DatabaseWatch* watch);
+    explicit Digikam_DatabaseWatchAdaptor(Digikam::DatabaseWatch* watch);
 
 Q_SIGNALS:
 

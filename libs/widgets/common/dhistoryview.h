@@ -56,7 +56,7 @@ public:
 
 public:
 
-    DHistoryView(QWidget* parent);
+    explicit DHistoryView(QWidget* parent);
     virtual ~DHistoryView();
 
     void addedEntry(const QString& msg, EntryType type, const QVariant& metadata);

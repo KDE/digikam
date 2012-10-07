@@ -58,7 +58,7 @@ class BlackFrameParser: public QObject
 
 public:
 
-    BlackFrameParser(QObject* const parent);
+    explicit BlackFrameParser(QObject* const parent);
     ~BlackFrameParser();
 
     void parseHotPixels(const QString& file);

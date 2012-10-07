@@ -62,8 +62,8 @@ class DIGIKAM_EXPORT DMetadata : public KExiv2
 public:
 
     DMetadata();
-    DMetadata(const QString& filePath);
-    DMetadata(const KExiv2Data& data);
+    explicit DMetadata(const QString& filePath);
+    explicit DMetadata(const KExiv2Data& data);
     ~DMetadata();
 
     void registerMetadataSettings();

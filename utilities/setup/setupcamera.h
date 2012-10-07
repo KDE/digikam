@@ -43,7 +43,7 @@ class SetupCamera : public QScrollArea
 
 public:
 
-    SetupCamera(QWidget* const parent = 0);
+    explicit SetupCamera(QWidget* const parent = 0);
     ~SetupCamera();
 
     void applySettings();
@@ -90,7 +90,7 @@ class CameraAutoDetectThread : public DBusyThread
 
 public:
 
-    CameraAutoDetectThread(QObject* const parent);
+    explicit CameraAutoDetectThread(QObject* const parent);
     virtual ~CameraAutoDetectThread();
 
     int     result() const;

@@ -65,7 +65,7 @@ class ThumbnailDatabaseAccessMutexLocker : public QMutexLocker
 {
 public:
 
-    ThumbnailDatabaseAccessMutexLocker(ThumbnailDatabaseAccessStaticPriv* d)
+    explicit ThumbnailDatabaseAccessMutexLocker(ThumbnailDatabaseAccessStaticPriv* d)
         : QMutexLocker(&d->lock.mutex), d(d)
     {
         d->lock.lockCount++;

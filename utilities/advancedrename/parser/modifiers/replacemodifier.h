@@ -46,7 +46,7 @@ class ReplaceDialog : public RuleDialog
 
 public:
 
-    ReplaceDialog(Rule* parent);
+    explicit ReplaceDialog(Rule* parent);
     ~ReplaceDialog();
 
     Ui::ReplaceModifierDialogWidget* const ui;

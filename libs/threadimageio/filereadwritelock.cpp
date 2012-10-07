@@ -50,7 +50,7 @@ namespace Digikam
 class FileReadWriteLockPriv
 {
 public:
-    FileReadWriteLockPriv(const QString& filePath)
+    explicit FileReadWriteLockPriv(const QString& filePath)
         : filePath(filePath),
           ref(0), waitingReaders(0), waitingWriters(0), accessCount(0), writer(0)
     {

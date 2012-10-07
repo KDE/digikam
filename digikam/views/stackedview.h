@@ -70,7 +70,7 @@ public:
 
 public:
 
-    StackedView(QWidget* parent=0);
+    explicit StackedView(QWidget* parent=0);
     ~StackedView();
 
     /* Attach the thumbnail dock widget to the specified QMainWindow. */

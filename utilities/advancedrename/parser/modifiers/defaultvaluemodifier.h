@@ -40,7 +40,7 @@ class DefaultValueDialog : public RuleDialog
 
 public:
 
-    DefaultValueDialog(Rule* parent);
+    explicit DefaultValueDialog(Rule* parent);
     ~DefaultValueDialog();
 
     KLineEdit* valueInput;

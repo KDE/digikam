@@ -47,7 +47,7 @@ class MonthWidget : public QWidget
 
 public:
 
-    MonthWidget(QWidget* parent);
+    explicit MonthWidget(QWidget* parent);
     ~MonthWidget();
 
     void setImageModel(ImageFilterModel* model);

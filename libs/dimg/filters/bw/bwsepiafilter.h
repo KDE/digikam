@@ -102,7 +102,7 @@ public:
         strength    = 1.0;
     };
 
-    BWSepiaContainer(int ptype)
+    explicit BWSepiaContainer(int ptype)
     {
         previewType = ptype;
         preview     = true;

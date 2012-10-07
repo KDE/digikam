@@ -58,7 +58,7 @@ class KipiPluginLoader::Private
 {
 public:
 
-    Private(KipiPluginLoader* const loader)
+    explicit Private(KipiPluginLoader* const loader)
     {
         app                         = DigikamApp::instance();
         kipipluginsActionCollection = 0;

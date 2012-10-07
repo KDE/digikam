@@ -52,7 +52,7 @@ class ShowFoto : public Digikam::EditorWindow
 
 public:
 
-    ShowFoto(const KUrl::List& urlList);
+    explicit ShowFoto(const KUrl::List& urlList);
     ~ShowFoto();
 
     bool setup();

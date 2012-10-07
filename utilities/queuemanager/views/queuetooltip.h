@@ -39,7 +39,7 @@ class QueueToolTip : public DItemToolTip
 {
 public:
 
-    QueueToolTip(QueueListView* const view);
+    explicit QueueToolTip(QueueListView* const view);
     ~QueueToolTip();
 
     void setQueueItem(QueueListViewItem* const item);

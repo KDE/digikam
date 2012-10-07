@@ -35,7 +35,7 @@ class DIGIKAM_EXPORT SharedLoadSaveThread : public ManagedLoadSaveThread
 {
 public:
 
-    SharedLoadSaveThread(QObject* parent = 0);
+    explicit SharedLoadSaveThread(QObject* parent = 0);
 
     void load(LoadingDescription description, AccessMode mode, LoadingPolicy policy = LoadingPolicyAppend);
     DImg cacheLookup(const QString& filePath, AccessMode mode);

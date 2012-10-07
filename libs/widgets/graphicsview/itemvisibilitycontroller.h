@@ -78,7 +78,7 @@ public:
         FadingOut
     };
 
-    ItemVisibilityController(QObject* parent = 0);
+    explicit ItemVisibilityController(QObject* parent = 0);
     ~ItemVisibilityController();
 
     bool  shallBeShown() const;
@@ -220,7 +220,7 @@ public:
      *  Connect to the signals accordingly, e.g. to trigger a repaint.
      */
 
-    ItemVisibilityControllerPropertyObject(QObject* parent = 0);
+    explicit ItemVisibilityControllerPropertyObject(QObject* parent = 0);
 
     qreal opacity() const;
     void setOpacity(qreal opacity);
@@ -254,7 +254,7 @@ public:
      *  You want to call the controller's method!
      */
 
-    AnimatedVisibility(QObject* parent = 0);
+    explicit AnimatedVisibility(QObject* parent = 0);
 
     ItemVisibilityController* controller() const;
 
@@ -279,7 +279,7 @@ public:
      * Note that the targetObject is not necessarily a controlled item!
      */
 
-    HidingStateChanger(QObject* parent = 0);
+    explicit HidingStateChanger(QObject* parent = 0);
 
     /// Convenience constructor: Sets target and property name
     HidingStateChanger(QObject* target, const QByteArray property, QObject* parent = 0);

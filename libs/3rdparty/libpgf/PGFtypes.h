@@ -182,7 +182,7 @@ struct IOException {
 	IOException() : error(NoError) {}
 	/// Constructor
 	/// @param err Run-time error
-	IOException(OSError err) : error(err) {}
+	explicit IOException(OSError err) : error(err) {}
 
 	OSError error;				///< operating system error code
 };

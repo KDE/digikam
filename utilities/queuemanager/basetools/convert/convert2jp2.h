@@ -39,7 +39,7 @@ class Convert2JP2 : public BatchTool
 
 public:
 
-    Convert2JP2(QObject* const parent = 0);
+    explicit Convert2JP2(QObject* const parent = 0);
     ~Convert2JP2();
 
     QString outputSuffix() const;

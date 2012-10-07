@@ -97,7 +97,7 @@ class ActionEnumerator
 {
 public:
 
-    ActionEnumerator(const QList<QAction*>& whitelist)
+    explicit ActionEnumerator(const QList<QAction*>& whitelist)
         : whitelist(whitelist)
     {
     }

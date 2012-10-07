@@ -39,7 +39,7 @@ class BCGCorrection : public BatchTool
 
 public:
 
-    BCGCorrection(QObject* const parent = 0);
+    explicit BCGCorrection(QObject* const parent = 0);
     ~BCGCorrection();
 
     BatchToolSettings defaultSettings();

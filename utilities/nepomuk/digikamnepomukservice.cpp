@@ -142,7 +142,7 @@ class ChangingDB
 {
 public:
 
-    ChangingDB(NepomukService::NepomukServicePriv* d)
+    explicit ChangingDB(NepomukService::NepomukServicePriv* d)
         : d(d)
     {
         d->changingDB = true;
@@ -160,7 +160,7 @@ class ChangingNepomuk
 {
 public:
 
-    ChangingNepomuk(NepomukService::NepomukServicePriv* d)
+    explicit ChangingNepomuk(NepomukService::NepomukServicePriv* d)
         : d(d)
     {
         d->changingNepomuk = true;

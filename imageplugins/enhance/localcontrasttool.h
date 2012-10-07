@@ -40,7 +40,7 @@ class LocalContrastTool : public EditorToolThreaded
 
 public:
 
-    LocalContrastTool(QObject* const parent);
+    explicit LocalContrastTool(QObject* const parent);
     ~LocalContrastTool();
 
 private:

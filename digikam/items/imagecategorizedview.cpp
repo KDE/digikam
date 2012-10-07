@@ -62,7 +62,7 @@ class ImageItemViewToolTip : public ItemViewToolTip
 {
 public:
 
-    ImageItemViewToolTip(ImageCategorizedView* const view)
+    explicit ImageItemViewToolTip(ImageCategorizedView* const view)
         : ItemViewToolTip(view)
     {
     }

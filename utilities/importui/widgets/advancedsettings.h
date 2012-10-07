@@ -46,7 +46,7 @@ class AdvancedSettings : public QWidget
 
 public:
 
-    AdvancedSettings(QWidget* const parent = 0);
+    explicit AdvancedSettings(QWidget* const parent = 0);
     ~AdvancedSettings();
 
     void readSettings(KConfigGroup& group);

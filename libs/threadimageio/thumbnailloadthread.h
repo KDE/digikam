@@ -49,7 +49,7 @@ class DIGIKAM_EXPORT ThumbnailLoadThread : public ManagedLoadSaveThread
 
 public:
 
-    ThumbnailLoadThread(QObject* parent = 0);
+    explicit ThumbnailLoadThread(QObject* parent = 0);
     ~ThumbnailLoadThread();
 
     /**
@@ -286,7 +286,7 @@ public:
      *  Note: Not meant for loading QPixmap thumbnails.
      */
 
-    ThumbnailImageCatcher(QObject* parent = 0);
+    explicit ThumbnailImageCatcher(QObject* parent = 0);
     explicit ThumbnailImageCatcher(ThumbnailLoadThread* thread, QObject* parent = 0);
     ~ThumbnailImageCatcher();
 

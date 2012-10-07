@@ -45,7 +45,7 @@ class DIGIKAM_EXPORT UiFileValidator
 {
 public:
 
-    UiFileValidator(const QString& filename);
+    explicit UiFileValidator(const QString& filename);
     ~UiFileValidator();
 
     bool isValid() const;

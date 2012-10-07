@@ -53,7 +53,7 @@ class DatabaseWidget : public QWidget
 
 public:
 
-    DatabaseWidget(QWidget* parent = 0);
+    explicit DatabaseWidget(QWidget* parent = 0);
     ~DatabaseWidget();
 
 public:

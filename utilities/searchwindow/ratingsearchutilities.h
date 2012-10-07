@@ -71,7 +71,7 @@ public:
 
 public:
 
-    RatingComboBox(QWidget* const parent = 0);
+    explicit RatingComboBox(QWidget* const parent = 0);
 
     void setRatingValue(RatingValue value);
     RatingValue ratingValue() const;
@@ -123,7 +123,7 @@ public:
     // Sub-classing the classic RatingWidget,
     // this provides support for the Null and NoRating states.
 
-    RatingComboBoxWidget(QWidget* const parent = 0);
+    explicit RatingComboBoxWidget(QWidget* const parent = 0);
 
     RatingComboBox::RatingValue ratingValue() const;
     void setRatingValue(RatingComboBox::RatingValue value);
@@ -158,7 +158,7 @@ public:
 
 public:
 
-    RatingComboBoxModel(QObject* const parent = 0);
+    explicit RatingComboBoxModel(QObject* const parent = 0);
 
     QModelIndex indexForRatingValue(RatingComboBox::RatingValue value) const;
 
@@ -181,7 +181,7 @@ class RatingComboBoxDelegate : public QItemDelegate, public RatingStarDrawer
 {
 public:
 
-    RatingComboBoxDelegate(QObject* const parent = 0);
+    explicit RatingComboBoxDelegate(QObject* const parent = 0);
 
     virtual QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const;
     virtual void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;

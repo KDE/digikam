@@ -38,7 +38,7 @@ class DIGIKAM_EXPORT QImageLoader : public DImgLoader
 {
 public:
 
-    QImageLoader(DImg* const image);
+    explicit QImageLoader(DImg* const image);
 
     virtual bool load(const QString& filePath, DImgLoaderObserver* const observer);
     virtual bool save(const QString& filePath, DImgLoaderObserver* const observer);

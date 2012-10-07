@@ -44,7 +44,7 @@ class DIGIKAM_EXPORT ItemViewHoverButton : public QAbstractButton
 
 public:
 
-    ItemViewHoverButton(QAbstractItemView* parentView);
+    explicit ItemViewHoverButton(QAbstractItemView* parentView);
     void initIcon();
     void reset();
     void setIndex(const QModelIndex& index);

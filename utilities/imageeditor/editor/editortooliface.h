@@ -48,7 +48,7 @@ public:
 
     static EditorToolIface* editorToolIface();
 
-    EditorToolIface(EditorWindow* const editor);
+    explicit EditorToolIface(EditorWindow* const editor);
     ~EditorToolIface();
 
     EditorTool* currentTool() const;

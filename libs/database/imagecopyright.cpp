@@ -44,7 +44,7 @@ class ImageCopyrightCache
 {
 public:
 
-    ImageCopyrightCache(ImageCopyright* object)
+    explicit ImageCopyrightCache(ImageCopyright* object)
         : object(object)
     {
         // set this as cache

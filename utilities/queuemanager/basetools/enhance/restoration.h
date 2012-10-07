@@ -40,7 +40,7 @@ class Restoration : public BatchTool
 
 public:
 
-    Restoration(QObject* const parent = 0);
+    explicit Restoration(QObject* const parent = 0);
     ~Restoration();
 
     BatchToolSettings defaultSettings();

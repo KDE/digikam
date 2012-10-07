@@ -47,7 +47,7 @@ class DIGIKAM_EXPORT ImagePropertiesMetaDataTab : public KTabWidget
 
 public:
 
-    ImagePropertiesMetaDataTab(QWidget* const parent);
+    explicit ImagePropertiesMetaDataTab(QWidget* const parent);
     ~ImagePropertiesMetaDataTab();
 
     void setCurrentURL(const KUrl& url=KUrl());

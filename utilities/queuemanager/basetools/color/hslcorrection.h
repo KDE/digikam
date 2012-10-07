@@ -39,7 +39,7 @@ class HSLCorrection : public BatchTool
 
 public:
 
-    HSLCorrection(QObject* const parent = 0);
+    explicit HSLCorrection(QObject* const parent = 0);
     ~HSLCorrection();
 
     BatchToolSettings defaultSettings();

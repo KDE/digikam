@@ -40,7 +40,7 @@ class DIGIKAM_EXPORT ItemViewToolTip : public DItemToolTip
 {
 public:
 
-    ItemViewToolTip(QAbstractItemView* view);
+    explicit ItemViewToolTip(QAbstractItemView* view);
     ~ItemViewToolTip();
 
     QAbstractItemView* view() const;

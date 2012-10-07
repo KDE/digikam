@@ -53,7 +53,7 @@ class DIGIKAM_EXPORT ImagePropertiesColorsTab : public KTabWidget
 
 public:
 
-    ImagePropertiesColorsTab(QWidget* const parent);
+    explicit ImagePropertiesColorsTab(QWidget* const parent);
     ~ImagePropertiesColorsTab();
 
     void setData(const KUrl& url=KUrl(), const QRect& selectionArea = QRect(), DImg* const img=0);

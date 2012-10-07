@@ -51,7 +51,7 @@ class DIGIKAM_EXPORT RatingWidget : public QWidget
 
 public:
 
-    RatingWidget(QWidget* parent);
+    explicit RatingWidget(QWidget* parent);
     virtual ~RatingWidget();
 
     void setRating(int val);
@@ -114,7 +114,7 @@ class DIGIKAM_EXPORT RatingBox : public KVBox
 
 public:
 
-    RatingBox(QWidget* parent);
+    explicit RatingBox(QWidget* parent);
     virtual ~RatingBox();
 
 Q_SIGNALS:
@@ -139,7 +139,7 @@ class DIGIKAM_EXPORT RatingMenuAction : public KActionMenu
 
 public:
 
-    RatingMenuAction(QMenu* parent=0);
+    explicit RatingMenuAction(QMenu* parent=0);
     virtual ~RatingMenuAction();
 
 Q_SIGNALS:

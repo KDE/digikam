@@ -50,7 +50,7 @@ class DIGIKAM_EXPORT EditorTool : public QObject
 
 public:
 
-    EditorTool(QObject* const parent);
+    explicit EditorTool(QObject* const parent);
     virtual ~EditorTool();
 
     void init();
@@ -134,7 +134,7 @@ public:
 
 public:
 
-    EditorToolThreaded(QObject* const parent);
+    explicit EditorToolThreaded(QObject* const parent);
     virtual ~EditorToolThreaded();
 
     /** Set the small text to show in editor status progress bar during

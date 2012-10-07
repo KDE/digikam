@@ -74,7 +74,7 @@ public:
 
 public:
 
-    AlbumFilterModel(QObject* parent = 0);
+    explicit AlbumFilterModel(QObject* parent = 0);
 
     /**
      * Sets the source model.
@@ -238,7 +238,7 @@ class CheckableAlbumFilterModel : public AlbumFilterModel
 
 public:
 
-    CheckableAlbumFilterModel(QObject* parent = 0);
+    explicit CheckableAlbumFilterModel(QObject* parent = 0);
 
     void                         setSourceAlbumModel(AbstractCheckableAlbumModel* source);
     AbstractCheckableAlbumModel* sourceAlbumModel() const;
@@ -269,7 +269,7 @@ class SearchFilterModel : public CheckableAlbumFilterModel
 
 public:
 
-    SearchFilterModel(QObject* parent = 0);
+    explicit SearchFilterModel(QObject* parent = 0);
 
     void         setSourceSearchModel(SearchModel* source);
     SearchModel* sourceSearchModel() const;
@@ -314,7 +314,7 @@ class TagPropertiesFilterModel : public CheckableAlbumFilterModel
 
 public:
 
-    TagPropertiesFilterModel(QObject* parent = 0);
+    explicit TagPropertiesFilterModel(QObject* parent = 0);
 
     void      setSourceAlbumModel(TagModel* source);
     TagModel* sourceTagModel() const;

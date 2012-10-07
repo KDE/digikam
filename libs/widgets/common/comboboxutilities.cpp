@@ -393,7 +393,7 @@ public:
     // This line edit works like a weblink:
     // Readonly; A mouse press shows the popup; Cursor is the pointing hand.
 
-    TreeViewComboBoxLineEdit(KComboBox* const box)
+    explicit TreeViewComboBoxLineEdit(KComboBox* const box)
         : KLineEdit(box)
     {
         m_box = box;

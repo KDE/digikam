@@ -74,7 +74,7 @@ class LightTableImageListModel : public ImageListModel
 {
 public:
 
-    LightTableImageListModel(QObject* parent = 0)
+    explicit LightTableImageListModel(QObject* parent = 0)
         : ImageListModel(parent), m_exclusive(false)
     {
     }

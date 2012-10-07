@@ -82,7 +82,7 @@ class ToolsListView : public QTreeWidget
 
 public:
 
-    ToolsListView(QWidget* const parent);
+    explicit ToolsListView(QWidget* const parent);
     virtual ~ToolsListView();
 
     BatchToolsList toolsList();

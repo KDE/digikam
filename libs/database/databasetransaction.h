@@ -50,7 +50,7 @@ public:
     /**
      * Use an existing DatabaseAccess object, which must live as long as this object exists.
      */
-    DatabaseTransaction(DatabaseAccess* access);
+    explicit DatabaseTransaction(DatabaseAccess* access);
     ~DatabaseTransaction();
 
 private:

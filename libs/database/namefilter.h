@@ -48,7 +48,7 @@ public:
      * (file suffixes),
      * separated by ';' characters.
      */
-    NameFilter(const QString& filter);
+    explicit NameFilter(const QString& filter);
 
     /**
      * Returns if the specified name matches this filter

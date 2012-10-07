@@ -92,7 +92,7 @@ class SearchModel : public AbstractCheckableAlbumModel
 public:
 
     /// Create a model containing searches
-    SearchModel(QObject* parent = 0);
+    explicit SearchModel(QObject* parent = 0);
 
     SAlbum* albumForIndex(const QModelIndex& index) const;
 
@@ -140,7 +140,7 @@ public:
      *
      * @param parent parent for Qt's parent child mechanism
      */
-    DateAlbumModel(QObject* parent = 0);
+    explicit DateAlbumModel(QObject* parent = 0);
 
     DAlbum* albumForIndex(const QModelIndex& index) const;
 

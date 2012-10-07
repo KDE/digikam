@@ -46,7 +46,7 @@ public:
 
 public:
 
-    LensFunCameraSelector(QWidget* parent=0);
+    explicit LensFunCameraSelector(QWidget* parent=0);
     virtual ~LensFunCameraSelector();
 
     void setEnabledUseMetadata(bool b);

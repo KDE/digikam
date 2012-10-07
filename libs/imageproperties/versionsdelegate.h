@@ -45,7 +45,7 @@ class VersionsDelegate : public QStyledItemDelegate, public ImageDelegateOverlay
 
 public:
 
-    VersionsDelegate(QObject* const parent = 0);
+    explicit VersionsDelegate(QObject* const parent = 0);
     ~VersionsDelegate();
 
     QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const;

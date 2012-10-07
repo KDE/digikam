@@ -49,7 +49,7 @@ class DIGIKAM_EXPORT MetadataListView : public QTreeWidget
 
 public:
 
-    MetadataListView(QWidget* parent);
+    explicit MetadataListView(QWidget* parent);
     ~MetadataListView();
 
     QString getCurrentItemKey();

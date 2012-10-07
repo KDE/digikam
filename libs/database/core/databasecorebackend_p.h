@@ -44,7 +44,7 @@ class DIGIKAM_EXPORT DatabaseCoreBackendPrivate : public DatabaseErrorAnswer
 {
 public:
 
-    DatabaseCoreBackendPrivate(DatabaseCoreBackend* backend);
+    explicit DatabaseCoreBackendPrivate(DatabaseCoreBackend* backend);
     virtual ~DatabaseCoreBackendPrivate() {}
 
     void init(const QString& connectionName, DatabaseLocking* locking);
@@ -122,7 +122,7 @@ public :
     {
     public:
 
-        AbstractUnlocker(DatabaseCoreBackendPrivate* d);
+        explicit AbstractUnlocker(DatabaseCoreBackendPrivate* d);
         void finishAcquire();
         ~AbstractUnlocker();
 
@@ -152,14 +152,14 @@ public :
     {
     public:
 
-        ErrorLocker(DatabaseCoreBackendPrivate* d);
+        explicit ErrorLocker(DatabaseCoreBackendPrivate* d);
         void wait();
     };
 
     class BusyWaiter : public AbstractWaitingUnlocker
     {
     public:
-        BusyWaiter(DatabaseCoreBackendPrivate* d);
+        explicit BusyWaiter(DatabaseCoreBackendPrivate* d);
     };
 
 public :

@@ -53,7 +53,7 @@ public:
 
     /** Assign the existing tag with given id
      */
-    TaggingAction(int tagId);
+    explicit TaggingAction(int tagId);
 
     /** Create a new tag with the given name.
      *  The parent shall be the tag with the given id,

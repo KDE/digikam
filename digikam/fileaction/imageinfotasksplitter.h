@@ -39,7 +39,7 @@ class ImageInfoTaskSplitter : public FileActionImageInfoList
 {
 public:
 
-    ImageInfoTaskSplitter(const FileActionImageInfoList& list);
+    explicit ImageInfoTaskSplitter(const FileActionImageInfoList& list);
     ~ImageInfoTaskSplitter();
 
     FileActionImageInfoList next();

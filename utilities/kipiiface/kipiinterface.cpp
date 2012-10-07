@@ -441,7 +441,7 @@ class KipiInterfaceFileReadWriteLock : public KIPI::FileReadWriteLock
 {
 public:
 
-    KipiInterfaceFileReadWriteLock(const QString& filePath)
+    explicit KipiInterfaceFileReadWriteLock(const QString& filePath)
         : key(filePath)
     {
     }

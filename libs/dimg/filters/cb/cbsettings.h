@@ -48,7 +48,7 @@ class DIGIKAM_EXPORT CBSettings : public QWidget
 
 public:
 
-    CBSettings(QWidget* parent);
+    explicit CBSettings(QWidget* parent);
     ~CBSettings();
 
     CBContainer defaultSettings() const;

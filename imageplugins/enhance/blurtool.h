@@ -40,7 +40,7 @@ class BlurTool : public EditorToolThreaded
 
 public:
 
-    BlurTool(QObject* const parent);
+    explicit BlurTool(QObject* const parent);
     ~BlurTool();
 
 private Q_SLOTS:

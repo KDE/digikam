@@ -61,7 +61,7 @@ public:
 
 public:
 
-    AdvancedRenameListItem(QTreeWidget* view);
+    explicit AdvancedRenameListItem(QTreeWidget* view);
     AdvancedRenameListItem(QTreeWidget* view, const KUrl& info);
     virtual ~AdvancedRenameListItem();
 
@@ -99,7 +99,7 @@ class AdvancedRenameDialog : public KDialog
 
 public:
 
-    AdvancedRenameDialog(QWidget* parent = 0);
+    explicit AdvancedRenameDialog(QWidget* parent = 0);
     ~AdvancedRenameDialog();
 
     NewNamesList newNames();

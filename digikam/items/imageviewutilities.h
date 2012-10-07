@@ -53,7 +53,7 @@ class ImageViewUtilities : public QObject
 
 public:
 
-    ImageViewUtilities(QWidget* parentWidget);
+    explicit ImageViewUtilities(QWidget* parentWidget);
 
 public Q_SLOTS:
 

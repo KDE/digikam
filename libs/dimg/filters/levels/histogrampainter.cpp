@@ -48,7 +48,7 @@ class HistogramPainter::Private
 
 public:
 
-    Private(HistogramPainter* const q) :
+    explicit Private(HistogramPainter* const q) :
         histogram(0),
         widgetToInitFrom(0),
         scale(LogScaleHistogram),

@@ -46,7 +46,7 @@ class ScriptingSettings : public QWidget
 
 public:
 
-    ScriptingSettings(QWidget* const parent = 0);
+    explicit ScriptingSettings(QWidget* const parent = 0);
     ~ScriptingSettings();
 
     void readSettings(KConfigGroup& group);

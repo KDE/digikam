@@ -75,7 +75,7 @@ class SimpleCollectionScannerObserver : public CollectionScannerObserver
 {
 public:
 
-    SimpleCollectionScannerObserver(bool* var) : m_continue(var)
+    explicit SimpleCollectionScannerObserver(bool* var) : m_continue(var)
     {
         *m_continue = true;
     }

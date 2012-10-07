@@ -47,7 +47,7 @@ class DatabaseOptionDialog : public RuleDialog
 
 public:
 
-    DatabaseOptionDialog(Rule* parent);
+    explicit DatabaseOptionDialog(Rule* parent);
     ~DatabaseOptionDialog();
 
     DbKeySelectorView* dbkeySelectorView;

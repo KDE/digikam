@@ -45,7 +45,7 @@ class DIGIKAM_EXPORT LibsInfoDlg : public InfoDlg
 
 public:
 
-    LibsInfoDlg(QWidget* const parent);
+    explicit LibsInfoDlg(QWidget* const parent);
     ~LibsInfoDlg();
 };
 

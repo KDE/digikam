@@ -39,7 +39,7 @@ class NoiseReductionTool : public EditorToolThreaded
 
 public:
 
-    NoiseReductionTool(QObject* const parent);
+    explicit NoiseReductionTool(QObject* const parent);
     ~NoiseReductionTool();
 
 private:

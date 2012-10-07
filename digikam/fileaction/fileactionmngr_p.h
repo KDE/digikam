@@ -78,7 +78,7 @@ class FileActionMngr::FileActionMngrPriv : public QObject
 
 public:
 
-    FileActionMngrPriv(FileActionMngr* const q);
+    explicit FileActionMngrPriv(FileActionMngr* const q);
     ~FileActionMngrPriv();
 
 Q_SIGNALS:

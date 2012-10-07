@@ -53,7 +53,7 @@ public:
      *
      * @param parent parent for Qt's parent child mechanism
      */
-    FileSaveOptionsBox(QWidget* parent=0);
+    explicit FileSaveOptionsBox(QWidget* parent=0);
 
     /**
      * Destructor.

@@ -57,13 +57,13 @@ public:
      * Construct an ImageScanner from an existing QFileInfo object.
      * Use this constructor if you intend to call newFile().
      */
-    ImageScanner(const QFileInfo& info);
+    explicit ImageScanner(const QFileInfo& info);
 
     /**
      * Construct an ImageScanner for an image in the database.
      * File info, Scan info and the category will be retrieved from the database.
      */
-    ImageScanner(qlonglong imageid);
+    explicit ImageScanner(qlonglong imageid);
 
     ~ImageScanner();
 

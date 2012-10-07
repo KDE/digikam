@@ -66,7 +66,7 @@ public:
 
 public:
 
-    PreviewToolBar(QWidget* const parent = 0);
+    explicit PreviewToolBar(QWidget* const parent = 0);
     ~PreviewToolBar();
 
     void setPreviewModeMask(int mask);

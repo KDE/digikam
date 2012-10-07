@@ -50,7 +50,7 @@ class DatabaseConnectionChecker : public QThread
 
 public:
 
-    DatabaseConnectionChecker(const DatabaseParameters& parameters);
+    explicit DatabaseConnectionChecker(const DatabaseParameters& parameters);
     ~DatabaseConnectionChecker();
 
     bool checkSuccessful() const;
@@ -82,7 +82,7 @@ class DatabaseGUIErrorHandler : public DatabaseErrorHandler
 
 public:
 
-    DatabaseGUIErrorHandler(const DatabaseParameters& parameters);
+    explicit DatabaseGUIErrorHandler(const DatabaseParameters& parameters);
     ~DatabaseGUIErrorHandler();
 
     bool checkDatabaseConnection();

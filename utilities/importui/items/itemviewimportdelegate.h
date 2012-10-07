@@ -46,7 +46,7 @@ class ItemViewImportDelegate : public DItemDelegate, public ImageDelegateOverlay
 
 public:
 
-    ItemViewImportDelegate(QObject* const parent = 0);
+    explicit ItemViewImportDelegate(QObject* const parent = 0);
     ~ItemViewImportDelegate();
 
     ThumbnailSize thumbnailSize() const;

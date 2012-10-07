@@ -47,7 +47,7 @@ class ImportCategoryDrawer :
 {
 public:
 
-    ImportCategoryDrawer(ImportCategorizedView* const parent);
+    explicit ImportCategoryDrawer(ImportCategorizedView* const parent);
     ~ImportCategoryDrawer();
 
     void setLowerSpacing(int spacing);

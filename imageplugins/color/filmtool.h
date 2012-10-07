@@ -47,7 +47,7 @@ class FilmTool : public EditorToolThreaded
 
 public:
 
-    FilmTool(QObject* const parent);
+    explicit FilmTool(QObject* const parent);
     ~FilmTool();
 
 private Q_SLOTS:

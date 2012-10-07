@@ -77,7 +77,7 @@ class DIGIKAM_DATABASE_EXPORT Item
 {
 public:
     Item();
-    Item(qlonglong id);
+    explicit Item(qlonglong id);
 
     bool isNull() const;
     uint qHash() const;

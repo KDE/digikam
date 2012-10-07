@@ -83,7 +83,7 @@ public:
      * Constructor. Creates an ImageInfo object without any cached data initially.
      * @param    ID       unique ID for this image
      */
-    explicit ImageInfo(qlonglong ID);
+    ImageInfo(qlonglong ID);
 
     /**
      * Constructor. Creates an ImageInfo object from a file url.

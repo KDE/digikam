@@ -52,7 +52,7 @@ public:
      *
      * @param name  collection name
      */
-    DbKeysCollection(const QString& name);
+    explicit DbKeysCollection(const QString& name);
     virtual ~DbKeysCollection();
 
     /**

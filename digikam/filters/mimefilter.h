@@ -54,7 +54,7 @@ public:
 
 public:
 
-    MimeFilter(QWidget* parent);
+    explicit MimeFilter(QWidget* parent);
     ~MimeFilter();
 
     void setMimeFilter(int filter);

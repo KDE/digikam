@@ -83,7 +83,7 @@ public:
 
 public:
 
-    ImageModel(QObject* parent = 0);
+    explicit ImageModel(QObject* parent = 0);
     ~ImageModel();
 
     /** If a cache is kept, lookup by file path is fast,

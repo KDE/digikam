@@ -40,7 +40,7 @@ class LensDistortionTool : public EditorToolThreaded
 
 public:
 
-    LensDistortionTool(QObject* const parent);
+    explicit LensDistortionTool(QObject* const parent);
     ~LensDistortionTool();
 
 private Q_SLOTS:

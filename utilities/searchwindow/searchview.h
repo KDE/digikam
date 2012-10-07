@@ -66,7 +66,7 @@ public:
     // To contain common code of SearchView and SearchGroup,
     // as SearchGroups can have subgroups.
 
-    AbstractSearchGroupContainer(QWidget* const parent = 0);
+    explicit AbstractSearchGroupContainer(QWidget* const parent = 0);
 
 public Q_SLOTS:
 

@@ -55,7 +55,7 @@ public:
      * Instead, add it to the layout when you setup the dialog's main widget.
      */
 
-    TripleChoiceDialog(QWidget* parent = 0);
+    explicit TripleChoiceDialog(QWidget* parent = 0);
     ~TripleChoiceDialog();
 
     /**

@@ -38,7 +38,7 @@ class DIGIKAM_DATABASE_EXPORT DatabasePrivilegesChecker
 
 public:
 
-    DatabasePrivilegesChecker(const DatabaseParameters& parameters);
+    explicit DatabasePrivilegesChecker(const DatabaseParameters& parameters);
     ~DatabasePrivilegesChecker();
 
     bool checkPrivileges(QStringList& insufficientRights);

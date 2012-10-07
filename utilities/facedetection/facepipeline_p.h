@@ -158,7 +158,7 @@ class PreviewLoader : public PreviewLoadThread
 
 public:
 
-    PreviewLoader(FacePipeline::FacePipelinePriv* d);
+    explicit PreviewLoader(FacePipeline::FacePipelinePriv* d);
 
     void cancel();
     bool sentOutLimitReached();
@@ -188,7 +188,7 @@ class DetectionWorker : public WorkerObject
 
 public:
 
-    DetectionWorker(FacePipeline::FacePipelinePriv* d);
+    explicit DetectionWorker(FacePipeline::FacePipelinePriv* d);
     ~DetectionWorker()
     {
         wait();    // protect detector
@@ -218,7 +218,7 @@ class RecognitionWorker : public WorkerObject
 
 public:
 
-    RecognitionWorker(FacePipeline::FacePipelinePriv* d);
+    explicit RecognitionWorker(FacePipeline::FacePipelinePriv* d);
     ~RecognitionWorker()
     {
         wait();    // protect database
@@ -272,7 +272,7 @@ class Benchmarker : public WorkerObject
 
 public:
 
-    Benchmarker(FacePipeline::FacePipelinePriv* d);
+    explicit Benchmarker(FacePipeline::FacePipelinePriv* d);
     QString result() const;
 
 public Q_SLOTS:
@@ -308,7 +308,7 @@ class Trainer : public WorkerObject
 
 public:
 
-    Trainer(FacePipeline::FacePipelinePriv* d);
+    explicit Trainer(FacePipeline::FacePipelinePriv* d);
     ~Trainer()
     {
         wait();    // protect detector
@@ -341,7 +341,7 @@ class FacePipeline::FacePipelinePriv : public QObject
 
 public:
 
-    FacePipelinePriv(FacePipeline* q);
+    explicit FacePipelinePriv(FacePipeline* q);
 
     void processBatch(const QList<ImageInfo>& infos);
     void sendFromFilter(const QList<FacePipelineExtendedPackage::Ptr>& packages);

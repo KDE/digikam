@@ -74,7 +74,7 @@ class DDatePicker : public KDatePicker
 
 public:
 
-    DDatePicker(QWidget* widget)
+    explicit DDatePicker(QWidget* widget)
         : KDatePicker(widget)
     {
     }

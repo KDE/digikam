@@ -60,7 +60,7 @@ public:
 
 public:
 
-    ImagePropertiesGPSTab(QWidget* const parent);
+    explicit ImagePropertiesGPSTab(QWidget* const parent);
     ~ImagePropertiesGPSTab();
 
     void clearGPSInfo();

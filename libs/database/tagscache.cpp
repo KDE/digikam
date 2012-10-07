@@ -67,7 +67,7 @@ class TagsCache::TagsCachePriv
 {
 public:
 
-    TagsCachePriv(TagsCache* q) :
+    explicit TagsCachePriv(TagsCache* q) :
         initialized(false),
         needUpdateInfos(true),
         needUpdateHash(true),
@@ -236,7 +236,7 @@ class ChangingDB
 {
 public:
 
-    ChangingDB(TagsCache::TagsCachePriv* d)
+    explicit ChangingDB(TagsCache::TagsCachePriv* d)
         : d(d)
     {
         d->changingDB = true;

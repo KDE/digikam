@@ -50,7 +50,7 @@ class AddTagsLineEdit : public KLineEdit
 
 public:
 
-    AddTagsLineEdit(QWidget* parent = 0);
+    explicit AddTagsLineEdit(QWidget* parent = 0);
     ~AddTagsLineEdit();
 
     /** Set the tag model to use for completion.

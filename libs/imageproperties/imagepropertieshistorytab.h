@@ -80,7 +80,7 @@ class DIGIKAM_EXPORT ImagePropertiesHistoryTab : public QWidget
 
 public:
 
-    ImagePropertiesHistoryTab(QWidget* const parent);
+    explicit ImagePropertiesHistoryTab(QWidget* const parent);
     ~ImagePropertiesHistoryTab();
 
     void setCurrentURL(const KUrl& url = KUrl());

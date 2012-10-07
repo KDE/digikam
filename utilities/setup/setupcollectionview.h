@@ -88,7 +88,7 @@ public:
 
 public:
     
-    SetupCollectionModel(QObject* const parent = 0);
+    explicit SetupCollectionModel(QObject* const parent = 0);
     ~SetupCollectionModel();
 
     /// Read collections from CollectionManager
@@ -160,7 +160,7 @@ protected:
     public:
 
         Item();
-        Item(const CollectionLocation& location);
+        explicit Item(const CollectionLocation& location);
         Item(const QString& path, const QString& label, SetupCollectionModel::Category category);
 
         CollectionLocation location;
@@ -184,7 +184,7 @@ class SetupCollectionTreeView : public QTreeView
 
 public:
 
-    SetupCollectionTreeView(QWidget* const parent = 0);
+    explicit SetupCollectionTreeView(QWidget* const parent = 0);
 
     void setModel(SetupCollectionModel* model);
 

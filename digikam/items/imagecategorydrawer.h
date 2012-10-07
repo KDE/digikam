@@ -52,7 +52,7 @@ class ImageCategoryDrawer :
 {
 public:
 
-    ImageCategoryDrawer(ImageCategorizedView* parent);
+    explicit ImageCategoryDrawer(ImageCategorizedView* parent);
     ~ImageCategoryDrawer();
 
     virtual int categoryHeight(const QModelIndex& index, const QStyleOption& option) const;

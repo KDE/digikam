@@ -60,7 +60,7 @@ class AssignNameWidget::AssignNameWidgetPriv
 {
 public:
 
-    AssignNameWidgetPriv(AssignNameWidget* q)
+    explicit AssignNameWidgetPriv(AssignNameWidget* q)
         : q(q)
     {
         mode           = InvalidMode;

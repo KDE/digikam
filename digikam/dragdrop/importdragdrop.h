@@ -41,7 +41,7 @@ class ImportDragDropHandler : public AbstractItemDragDropHandler
 
 public:
 
-    ImportDragDropHandler(ImportImageModel* const model);
+    explicit ImportDragDropHandler(ImportImageModel* const model);
 
     ImportImageModel* model() const;
 

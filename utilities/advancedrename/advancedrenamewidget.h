@@ -46,7 +46,7 @@ class AdvancedRenameWidget : public QWidget
 
 public:
 
-    AdvancedRenameWidget(QWidget* parent = 0);
+    explicit AdvancedRenameWidget(QWidget* parent = 0);
     ~AdvancedRenameWidget();
 
     enum LayoutStyle

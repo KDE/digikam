@@ -58,7 +58,7 @@ public:
 
 public:
 
-    SinglePhotoPreviewLayout(QObject* parent = 0);
+    explicit SinglePhotoPreviewLayout(QObject* parent = 0);
     ~SinglePhotoPreviewLayout();
 
     /** Set the graphics view, and associated scene, to operate on. */

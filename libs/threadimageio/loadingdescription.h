@@ -156,7 +156,7 @@ public:
     /**
      * Use this for full loading of non-raw files
      */
-    explicit LoadingDescription(const QString& filePath,
+    LoadingDescription(const QString& filePath,
                                 ColorManagementSettings = NoColorConversion);
 
     /**

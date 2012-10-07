@@ -48,14 +48,14 @@ public:
     {
         init();
     };
-    ParseSettings(const QString& _parseString) :
+    explicit ParseSettings(const QString& _parseString) :
         parseString(_parseString)
     {
         init();
     };
 
     // ImageInfo ctors
-    ParseSettings(const ImageInfo& info)
+    explicit ParseSettings(const ImageInfo& info)
     {
         init(info);
     };

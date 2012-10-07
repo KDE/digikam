@@ -48,7 +48,7 @@ class WelcomePageView : public KHTMLPart
 
 public:
 
-    WelcomePageView(QWidget* parent);
+    explicit WelcomePageView(QWidget* parent);
     ~WelcomePageView();
 
 private:

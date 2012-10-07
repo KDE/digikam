@@ -40,7 +40,7 @@ class AntiVignettingTool : public EditorToolThreaded
 
 public:
 
-    AntiVignettingTool(QObject* const parent);
+    explicit AntiVignettingTool(QObject* const parent);
     ~AntiVignettingTool();
 
 private Q_SLOTS:

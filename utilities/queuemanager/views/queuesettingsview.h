@@ -86,7 +86,7 @@ class QueueSettingsView : public KTabWidget
 
 public:
 
-    QueueSettingsView(QWidget* const parent = 0);
+    explicit QueueSettingsView(QWidget* const parent = 0);
     ~QueueSettingsView();
 
     void setBusy(bool b);

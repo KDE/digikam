@@ -47,7 +47,7 @@ class DIGIKAM_EXPORT ICCPreviewWidget : public KPreviewWidgetBase
 
 public:
 
-    ICCPreviewWidget(QWidget* const parent = 0);
+    explicit ICCPreviewWidget(QWidget* const parent = 0);
     ~ICCPreviewWidget();
 
 public Q_SLOTS:

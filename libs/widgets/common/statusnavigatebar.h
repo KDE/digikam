@@ -53,7 +53,7 @@ public:
 
 public:
 
-    StatusNavigateBar(QWidget* parent=0);
+    explicit StatusNavigateBar(QWidget* parent=0);
     ~StatusNavigateBar();
 
     void setNavigateBarState(bool hasPrev, bool hasNext);

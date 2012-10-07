@@ -46,7 +46,7 @@ class MetadataOptionDialog : public RuleDialog
 
 public:
 
-    MetadataOptionDialog(Rule* parent);
+    explicit MetadataOptionDialog(Rule* parent);
     ~MetadataOptionDialog();
 
     MetadataPanel* metadataPanel;

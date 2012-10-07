@@ -92,7 +92,7 @@ public:
     /**
      * Create a ImageComments object for the image with the specified id.
      */
-    ImageComments(qlonglong imageid);
+    explicit ImageComments(qlonglong imageid);
 
     /**
      * Create a ImageComments object for the image with the specified id.

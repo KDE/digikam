@@ -44,7 +44,7 @@ class FreeRotationTool : public EditorToolThreaded
 
 public:
 
-    FreeRotationTool(QObject* const parent);
+    explicit FreeRotationTool(QObject* const parent);
     ~FreeRotationTool();
 
 public Q_SLOTS:

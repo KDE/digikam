@@ -39,7 +39,7 @@ class SharpenTool : public EditorToolThreaded
 
 public:
 
-    SharpenTool(QObject* const parent);
+    explicit SharpenTool(QObject* const parent);
     ~SharpenTool();
 
 private Q_SLOTS:

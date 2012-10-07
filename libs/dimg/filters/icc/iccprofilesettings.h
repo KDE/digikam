@@ -47,7 +47,7 @@ class DIGIKAM_EXPORT IccProfilesSettings : public KVBox
 
 public:
 
-    IccProfilesSettings(QWidget* parent=0);
+    explicit IccProfilesSettings(QWidget* parent=0);
     ~IccProfilesSettings();
 
     IccProfile defaultProfile() const;

@@ -48,7 +48,7 @@ class ShowHideVersionsOverlay::Button : public ItemViewHoverButton
 {
 public:
 
-    Button(QAbstractItemView* parentView);
+    explicit Button(QAbstractItemView* parentView);
     virtual QSize sizeHint() const;
 
 protected:

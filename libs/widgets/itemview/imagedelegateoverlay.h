@@ -43,7 +43,7 @@ class DIGIKAM_EXPORT ImageDelegateOverlay : public QObject
 
 public:
 
-    ImageDelegateOverlay(QObject* parent = 0);
+    explicit ImageDelegateOverlay(QObject* parent = 0);
     ~ImageDelegateOverlay();
 
     /** Called when the overlay was installed and shall begin working,
@@ -125,7 +125,7 @@ public:
      *  You must reimplement at least createWidget to return your widget.
      *  Per default it will be shown when the cursor enters an index and hidden when left.
      *  Reimplement slotEntered() and mouseMove() for more fine grained control. */
-    AbstractWidgetDelegateOverlay(QObject* parent);
+    explicit AbstractWidgetDelegateOverlay(QObject* parent);
 
     /** If active is true, this will call createWidget(), initialize the widget for use,
      *  and setup connections for the virtual slots.
@@ -199,7 +199,7 @@ class DIGIKAM_EXPORT HoverButtonDelegateOverlay : public AbstractWidgetDelegateO
 
 public:
 
-    HoverButtonDelegateOverlay(QObject* parent);
+    explicit HoverButtonDelegateOverlay(QObject* parent);
 
     /** Will call createButton(). */
     virtual void setActive(bool active);
@@ -239,7 +239,7 @@ class DIGIKAM_EXPORT PersistentWidgetDelegateOverlay : public AbstractWidgetDele
 
 public:
 
-    PersistentWidgetDelegateOverlay(QObject* parent);
+    explicit PersistentWidgetDelegateOverlay(QObject* parent);
     ~PersistentWidgetDelegateOverlay();
 
     virtual void setActive(bool active);

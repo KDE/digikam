@@ -46,7 +46,7 @@ class DIGIKAM_EXPORT DBusyThread : public QThread
 
 public:
 
-    DBusyThread(QObject* parent);
+    explicit DBusyThread(QObject* parent);
     virtual ~DBusyThread();
 
 Q_SIGNALS:

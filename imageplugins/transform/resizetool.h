@@ -43,7 +43,7 @@ class ResizeTool : public EditorToolThreaded
 
 public:
 
-    ResizeTool(QObject* const parent);
+    explicit ResizeTool(QObject* const parent);
     ~ResizeTool();
 
 private:

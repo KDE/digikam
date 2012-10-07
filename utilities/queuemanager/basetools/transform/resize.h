@@ -43,7 +43,7 @@ class Resize : public BatchTool
 
 public:
 
-    Resize(QObject* parent = 0);
+    explicit Resize(QObject* parent = 0);
     ~Resize();
 
     BatchToolSettings defaultSettings();

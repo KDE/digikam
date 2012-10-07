@@ -41,7 +41,7 @@ class ProfileConversionTool : public EditorToolThreaded
 
 public:
 
-    ProfileConversionTool(QObject* const parent);
+    explicit ProfileConversionTool(QObject* const parent);
     ~ProfileConversionTool();
 
     static QStringList favoriteProfiles();

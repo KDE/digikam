@@ -49,7 +49,7 @@ class ImportItemViewToolTip : public ItemViewToolTip
 {
 public:
 
-    ImportItemViewToolTip(ImportCategorizedView* const view)
+    explicit ImportItemViewToolTip(ImportCategorizedView* const view)
         : ItemViewToolTip(view)
     {
     }

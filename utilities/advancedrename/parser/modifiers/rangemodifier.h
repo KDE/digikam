@@ -43,7 +43,7 @@ class RangeDialog : public RuleDialog
 
 public:
 
-    RangeDialog(Rule* parent);
+    explicit RangeDialog(Rule* parent);
     ~RangeDialog();
 
     Ui::RangeModifierDialogWidget* const ui;

@@ -44,7 +44,7 @@ class ImportCategorizedView : public DCategorizedView
 
 public:
 
-    ImportCategorizedView(QWidget* const parent = 0);
+    explicit ImportCategorizedView(QWidget* const parent = 0);
     ~ImportCategorizedView();
 
     void setModels(ImportImageModel* model, ImportSortFilterModel* filterModel);

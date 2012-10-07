@@ -45,7 +45,7 @@ class RatingFilterWidget : public RatingWidget
 
 public:
 
-    RatingFilterWidget(QWidget* parent);
+    explicit RatingFilterWidget(QWidget* parent);
     ~RatingFilterWidget();
 
     void setRatingFilterCondition(ImageFilterSettings::RatingCondition cond);
@@ -83,7 +83,7 @@ class RatingFilter : public KHBox
 
 public:
 
-    RatingFilter(QWidget* parent);
+    explicit RatingFilter(QWidget* parent);
     ~RatingFilter();
 
     void setRating(int val);

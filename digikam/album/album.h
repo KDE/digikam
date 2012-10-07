@@ -318,7 +318,7 @@ class PAlbum : public Album
 public:
 
     /// Constructor for root album
-    PAlbum(const QString& title);
+    explicit PAlbum(const QString& title);
     /// Constructor for album root albums
     PAlbum(int albumRoot, const QString& label);
     /// Constructor for normal albums
@@ -519,7 +519,7 @@ class AlbumIterator
 {
 public:
 
-    AlbumIterator(Album* album);
+    explicit AlbumIterator(Album* album);
     ~AlbumIterator();
 
     AlbumIterator& operator++();

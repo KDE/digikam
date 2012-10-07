@@ -59,7 +59,7 @@ public:
     /** This class extends QRunnable, so you have to reimplement
      *  virtual void run(). In all aspects the class will act similar to a QThread.
      */
-    DynamicThread(QObject* const parent = 0);
+    explicit DynamicThread(QObject* const parent = 0);
 
     /** The destructor calls stop() and wait(), but if you, in your destructor,
      *  delete any data that is accessed by your run() method,

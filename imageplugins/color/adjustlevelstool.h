@@ -40,7 +40,7 @@ class AdjustLevelsTool : public EditorToolThreaded
 
 public:
 
-    AdjustLevelsTool(QObject* const parent);
+    explicit AdjustLevelsTool(QObject* const parent);
     ~AdjustLevelsTool();
 
 private Q_SLOTS:

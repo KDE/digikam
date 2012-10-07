@@ -74,8 +74,8 @@ public:
 
 public:
 
-    ImageCurves(bool sixteenBit);
-    ImageCurves(const CurvesContainer& container);
+    explicit ImageCurves(bool sixteenBit);
+    explicit ImageCurves(const CurvesContainer& container);
     ImageCurves(const ImageCurves& other);
     ~ImageCurves();
 

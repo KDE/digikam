@@ -54,7 +54,7 @@ public:
 
 public:
 
-    LoadSaveTask(LoadSaveThread* thread)
+    explicit LoadSaveTask(LoadSaveThread* thread)
         : m_thread(thread)
     {};
     virtual ~LoadSaveTask() {};

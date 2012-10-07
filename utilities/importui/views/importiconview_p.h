@@ -47,7 +47,7 @@ class ImportIconView::Private : public QObject
 
 public:
 
-    Private(ImportIconView* const qq);
+    explicit Private(ImportIconView* const qq);
     virtual ~Private();
 
     void updateOverlays();

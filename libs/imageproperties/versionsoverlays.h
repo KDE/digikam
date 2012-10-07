@@ -50,7 +50,7 @@ class ShowHideVersionsOverlay : public HoverButtonDelegateOverlay
 
 public:
 
-    ShowHideVersionsOverlay(QObject* const parent);
+    explicit ShowHideVersionsOverlay(QObject* const parent);
     virtual void setActive(bool active);
 
     void setSettings(const VersionManagerSettings& settings);

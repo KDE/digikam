@@ -95,7 +95,7 @@ class VertexItem : public HistoryTreeItem
 public:
 
     VertexItem() {}
-    VertexItem(const HistoryGraph::Vertex& v) : vertex(v), category(HistoryImageId::InvalidType) {}
+    explicit VertexItem(const HistoryGraph::Vertex& v) : vertex(v), category(HistoryImageId::InvalidType) {}
     HistoryTreeItemType type() const
     {
         return VertexItemType;
@@ -113,7 +113,7 @@ class FilterActionItem : public HistoryTreeItem
 public:
 
     FilterActionItem() {}
-    FilterActionItem(const FilterAction& action) : action(action) {}
+    explicit FilterActionItem(const FilterAction& action) : action(action) {}
     HistoryTreeItemType type() const
     {
         return FilterActionItemType;
@@ -127,7 +127,7 @@ class HeaderItem : public HistoryTreeItem
 {
 public:
 
-    HeaderItem(const QString& title) : title(title) {}
+    explicit HeaderItem(const QString& title) : title(title) {}
 
     HistoryTreeItemType type() const
     {
@@ -143,7 +143,7 @@ class CategoryItem : public HistoryTreeItem
 {
 public:
 
-    CategoryItem(const QString& title) : title(title) {}
+    explicit CategoryItem(const QString& title) : title(title) {}
 
     HistoryTreeItemType type() const
     {

@@ -46,7 +46,7 @@ class DIGIKAM_EXPORT GraphicsDImgView : public QGraphicsView
 
 public:
 
-    GraphicsDImgView(QWidget* const parent = 0);
+    explicit GraphicsDImgView(QWidget* const parent = 0);
     virtual ~GraphicsDImgView();
 
     /** Return the instance of item set by setItem().

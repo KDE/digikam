@@ -97,7 +97,7 @@ class QueueListView : public QTreeWidget
 
 public:
 
-    QueueListView(QWidget* const parent);
+    explicit QueueListView(QWidget* const parent);
     ~QueueListView();
 
     int  itemsCount();

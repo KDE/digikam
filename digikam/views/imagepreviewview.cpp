@@ -76,7 +76,7 @@ class ImagePreviewViewItem : public DImgPreviewItem
 {
 public:
 
-    ImagePreviewViewItem(ImagePreviewView* const view)
+    explicit ImagePreviewViewItem(ImagePreviewView* const view)
         : m_view(view), m_group(0)
     {
         setAcceptHoverEvents(true);

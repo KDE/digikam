@@ -45,7 +45,7 @@ class SequenceNumberDialog : public RuleDialog
 
 public:
 
-    SequenceNumberDialog(Rule* parent);
+    explicit SequenceNumberDialog(Rule* parent);
     ~SequenceNumberDialog();
 
     Ui::SequenceNumberOptionDialogWidget* const ui;

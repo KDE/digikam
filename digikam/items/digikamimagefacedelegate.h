@@ -41,7 +41,7 @@ class DigikamImageFaceDelegate : public DigikamImageDelegate
 
 public:
 
-    DigikamImageFaceDelegate(ImageCategorizedView* parent);
+    explicit DigikamImageFaceDelegate(ImageCategorizedView* parent);
     ~DigikamImageFaceDelegate();
 
     virtual void prepareThumbnails(ImageThumbnailModel* thumbModel, const QList<QModelIndex>& indexes);

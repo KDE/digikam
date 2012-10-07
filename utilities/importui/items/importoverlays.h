@@ -45,7 +45,7 @@ class ImportOverlayWidget : public QAbstractButton
 
 public:
 
-    ImportOverlayWidget(QWidget* const parent = 0);
+    explicit ImportOverlayWidget(QWidget* const parent = 0);
 
 protected:
 
@@ -61,7 +61,7 @@ class ImportLockOverlay : public AbstractWidgetDelegateOverlay
 
 public:
 
-    ImportLockOverlay(QObject* const parent);
+    explicit ImportLockOverlay(QObject* const parent);
     ImportOverlayWidget* buttonWidget() const;
 
 protected:
@@ -88,7 +88,7 @@ class ImportDownloadOverlay : public AbstractWidgetDelegateOverlay
 
 public:
 
-    ImportDownloadOverlay(QObject* const parent);
+    explicit ImportDownloadOverlay(QObject* const parent);
     ImportOverlayWidget* buttonWidget() const;
 
 protected:
@@ -115,7 +115,7 @@ class ImportRatingOverlay : public AbstractWidgetDelegateOverlay
 
 public:
 
-    ImportRatingOverlay(QObject* parent);
+    explicit ImportRatingOverlay(QObject* parent);
     RatingWidget* ratingWidget() const;
 
 Q_SIGNALS:

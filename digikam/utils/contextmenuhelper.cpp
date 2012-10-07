@@ -86,7 +86,7 @@ class ContextMenuHelper::ContextMenuHelperPriv
 {
 public:
 
-    ContextMenuHelperPriv(ContextMenuHelper* const q) :
+    explicit ContextMenuHelperPriv(ContextMenuHelper* const q) :
         gotoAlbumAction(0),
         gotoDateAction(0),
         setThumbnailAction(0),

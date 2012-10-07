@@ -41,7 +41,7 @@ class DIGIKAM_EXPORT StretchFilter : public DImgThreadedFilter
 {
 
 public:
-    StretchFilter(QObject* const parent = 0);
+    explicit StretchFilter(QObject* const parent = 0);
     StretchFilter(DImg* const orgImage, const DImg* const refImage, QObject* const parent=0);
     virtual ~StretchFilter();
 

@@ -47,7 +47,7 @@ class DatabaseServer : public QObject
 
 public:
 
-    DatabaseServer(QCoreApplication* const application = 0);
+    explicit DatabaseServer(QCoreApplication* const application = 0);
     ~DatabaseServer();
 
     DatabaseServerError createDatabase();

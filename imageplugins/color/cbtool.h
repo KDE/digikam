@@ -41,7 +41,7 @@ class CBTool : public EditorToolThreaded
 
 public:
 
-    CBTool(QObject* const parent);
+    explicit CBTool(QObject* const parent);
     ~CBTool();
 
 private Q_SLOTS:

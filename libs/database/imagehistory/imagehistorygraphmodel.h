@@ -67,7 +67,7 @@ public:
         FilterActionRole       = Qt::UserRole + 1020
     };
 
-    ImageHistoryGraphModel(QObject* parent = 0);
+    explicit ImageHistoryGraphModel(QObject* parent = 0);
     ~ImageHistoryGraphModel();
 
     void setMode(Mode mode);

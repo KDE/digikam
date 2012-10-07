@@ -39,7 +39,7 @@ class ColorBalance : public BatchTool
 
 public:
 
-    ColorBalance(QObject* const parent = 0);
+    explicit ColorBalance(QObject* const parent = 0);
     ~ColorBalance();
 
     BatchToolSettings defaultSettings();

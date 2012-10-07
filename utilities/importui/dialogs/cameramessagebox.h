@@ -68,7 +68,7 @@ class CameraItemList : public QTreeWidget
 
 public:
 
-    CameraItemList(QWidget* const parent = 0);
+    explicit CameraItemList(QWidget* const parent = 0);
     virtual ~CameraItemList();
 
     void setThumbCtrl(CameraThumbsCtrl* const ctrl);

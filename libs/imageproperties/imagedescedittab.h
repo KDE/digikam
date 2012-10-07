@@ -56,7 +56,7 @@ class ImageDescEditTab : public KVBox
 
 public:
 
-    ImageDescEditTab(QWidget* const parent);
+    explicit ImageDescEditTab(QWidget* const parent);
     ~ImageDescEditTab();
 
     void assignPickLabel(int pickId);

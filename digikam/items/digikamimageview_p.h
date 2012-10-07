@@ -51,7 +51,7 @@ class DigikamImageView::DigikamImageViewPriv : public QObject
 
 public:
 
-    DigikamImageViewPriv(DigikamImageView* qq);
+    explicit DigikamImageViewPriv(DigikamImageView* qq);
     virtual ~DigikamImageViewPriv();
 
     void updateOverlays();

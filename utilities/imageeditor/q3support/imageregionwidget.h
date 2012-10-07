@@ -49,7 +49,7 @@ class DIGIKAM_EXPORT ImageRegionWidget : public PreviewWidget
 
 public:
 
-    ImageRegionWidget(QWidget* const parent = 0);
+    explicit ImageRegionWidget(QWidget* const parent = 0);
     ~ImageRegionWidget();
 
     /** To get target image region area to render.

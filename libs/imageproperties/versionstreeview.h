@@ -48,7 +48,7 @@ class VersionsTreeView : public QTreeView, public DragDropViewImplementation
 
 public:
 
-    VersionsTreeView(QWidget* const parent = 0);
+    explicit VersionsTreeView(QWidget* const parent = 0);
     ~VersionsTreeView();
 
     void setToolTipEnabled(bool on);

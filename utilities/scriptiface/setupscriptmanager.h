@@ -42,7 +42,7 @@ class SetupScriptManager : public QScrollArea
 
 public:
 
-    SetupScriptManager(QWidget* parent = 0);
+    explicit SetupScriptManager(QWidget* parent = 0);
     ~SetupScriptManager();
 
     void applySettings();

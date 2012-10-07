@@ -49,7 +49,7 @@ class CameraHistoryUpdater : public QThread
 
 public:
 
-    CameraHistoryUpdater(QWidget* const parent);
+    explicit CameraHistoryUpdater(QWidget* const parent);
     ~CameraHistoryUpdater();
 
     void addItems(const QByteArray& id, CHUpdateItemMap& map);

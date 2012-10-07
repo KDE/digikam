@@ -117,7 +117,7 @@ public:
      * Create a thumbnail creator object.
      * You must call setThumbnailSize before load.
      */
-    ThumbnailCreator(StorageMethod method);
+    explicit ThumbnailCreator(StorageMethod method);
 
     /**
      * Create a thumbnail creator object, and set the thumbnail size.

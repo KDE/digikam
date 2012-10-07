@@ -53,7 +53,7 @@ public:
 
 public:
 
-    Rule(const QString& name);
+    explicit Rule(const QString& name);
     Rule(const QString& name, const QString& icon);
     virtual ~Rule();
 

@@ -60,7 +60,7 @@ class KeywordLineEdit : public KLineEdit
 {
 public:
 
-    KeywordLineEdit(QWidget* const parent = 0)
+    explicit KeywordLineEdit(QWidget* const parent = 0)
         : KLineEdit(parent)
     {
         m_hasAdvanced = false;

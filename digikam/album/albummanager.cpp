@@ -249,7 +249,7 @@ class ChangingDB
 {
 public:
 
-    ChangingDB(AlbumManager::AlbumManagerPriv* d)
+    explicit ChangingDB(AlbumManager::AlbumManagerPriv* d)
         : d(d)
     {
         d->changingDB = true;

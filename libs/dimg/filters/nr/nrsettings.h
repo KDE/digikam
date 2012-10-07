@@ -46,7 +46,7 @@ class DIGIKAM_EXPORT NRSettings : public QWidget
 
 public:
 
-    NRSettings(QWidget* const parent);
+    explicit NRSettings(QWidget* const parent);
     ~NRSettings();
 
     NRContainer defaultSettings() const;

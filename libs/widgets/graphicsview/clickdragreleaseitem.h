@@ -43,7 +43,7 @@ class DIGIKAM_EXPORT ClickDragReleaseItem : public QGraphicsObject
 
 public:
 
-    ClickDragReleaseItem(QGraphicsItem* parent);
+    explicit ClickDragReleaseItem(QGraphicsItem* parent);
     ~ClickDragReleaseItem();
 
     virtual QRectF boundingRect() const;

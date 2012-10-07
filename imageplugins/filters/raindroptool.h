@@ -40,7 +40,7 @@ class RainDropTool : public EditorToolThreaded
 
 public:
 
-    RainDropTool(QObject* const parent);
+    explicit RainDropTool(QObject* const parent);
     ~RainDropTool();
 
 private Q_SLOTS:

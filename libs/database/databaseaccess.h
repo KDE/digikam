@@ -136,7 +136,7 @@ public:
 
 private:
 
-    DatabaseAccess(bool);
+    explicit DatabaseAccess(bool);
 
     friend class DatabaseAccessUnlock;
     static DatabaseAccessStaticPriv* d;
@@ -156,7 +156,7 @@ public:
      *  DatabaseAccess.
      */
     DatabaseAccessUnlock();
-    DatabaseAccessUnlock(DatabaseAccess* access);
+    explicit DatabaseAccessUnlock(DatabaseAccess* access);
     ~DatabaseAccessUnlock();
 
 private:

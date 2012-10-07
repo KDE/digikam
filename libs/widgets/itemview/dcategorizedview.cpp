@@ -54,7 +54,7 @@ class DCategorizedView::Private
 {
 public:
 
-    Private(DCategorizedView* const q) :
+    explicit Private(DCategorizedView* const q) :
         delegate(0),
         toolTip(0),
         notificationToolTip(0),

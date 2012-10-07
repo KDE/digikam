@@ -57,7 +57,7 @@ class ImagePropertiesVersionsTab : public KTabWidget
 
 public:
 
-    ImagePropertiesVersionsTab(QWidget* const parent);
+    explicit ImagePropertiesVersionsTab(QWidget* const parent);
     ~ImagePropertiesVersionsTab();
 
     void readSettings(KConfigGroup& group);

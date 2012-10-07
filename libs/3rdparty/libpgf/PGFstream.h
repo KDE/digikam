@@ -87,7 +87,7 @@ public:
 	CPGFFileStream() : m_hFile(0) {}
 	/// Constructor
 	/// @param hFile File handle
-	CPGFFileStream(HANDLE hFile) : m_hFile(hFile) {}
+	explicit CPGFFileStream(HANDLE hFile) : m_hFile(hFile) {}
 	/// @return File handle
 	HANDLE GetHandle() { return m_hFile; }
 
@@ -113,7 +113,7 @@ protected:
 public:
 	/// Constructor
 	/// @param size Size of new allocated memory buffer
-	CPGFMemoryStream(size_t size) THROW_;
+	explicit CPGFMemoryStream(size_t size) THROW_;
 	
 	/// Constructor. Use already allocated memory of given size
 	/// @param pBuffer Memory location
@@ -160,7 +160,7 @@ class CPGFMemFileStream : public CPGFStream {
 protected:
 	CMemFile *m_memFile;	///< MFC memory file
 public:
-	CPGFMemFileStream(CMemFile *memFile) : m_memFile(memFile) {}
+	explicit CPGFMemFileStream(CMemFile *memFile) : m_memFile(memFile) {}
 	virtual bool	IsValid() const	{ return m_memFile != NULL; }
 	virtual ~CPGFMemFileStream() {}
 	virtual void Write(int *count, void *buffer) THROW_; // throws IOException 
@@ -179,7 +179,7 @@ class CPGFIStream : public CPGFStream {
 protected:
 	IStream *m_stream;	///< COM+ IStream
 public:
-	CPGFIStream(IStream *stream) : m_stream(stream) {}
+	explicit CPGFIStream(IStream *stream) : m_stream(stream) {}
 	virtual bool IsValid() const	{ return m_stream != 0; }
 	virtual ~CPGFIStream() {}
 	virtual void Write(int *count, void *buffer) THROW_; // throws IOException 

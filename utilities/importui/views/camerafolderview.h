@@ -46,7 +46,7 @@ class CameraFolderView : public QTreeWidget
 
 public:
 
-    CameraFolderView(QWidget* const parent);
+    explicit CameraFolderView(QWidget* const parent);
     ~CameraFolderView();
 
     void addVirtualFolder(const QString& name, const QPixmap& pixmap = SmallIcon("camera-photo"));

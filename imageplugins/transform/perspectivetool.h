@@ -41,7 +41,7 @@ class PerspectiveTool : public EditorTool
 
 public:
 
-    PerspectiveTool(QObject* const parent);
+    explicit PerspectiveTool(QObject* const parent);
     ~PerspectiveTool();
 
 private Q_SLOTS:

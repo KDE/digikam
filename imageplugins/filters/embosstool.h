@@ -41,7 +41,7 @@ class EmbossTool : public EditorToolThreaded
 
 public:
 
-    EmbossTool(QObject* const parent);
+    explicit EmbossTool(QObject* const parent);
     ~EmbossTool();
 
 private Q_SLOTS:

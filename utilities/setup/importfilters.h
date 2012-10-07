@@ -41,7 +41,7 @@ class ImportFilters : public KDialog
 
 public:
 
-    ImportFilters(QWidget* const parent = 0);
+    explicit ImportFilters(QWidget* const parent = 0);
     ~ImportFilters();
 
     void setData(const Filter& filter);

@@ -206,7 +206,7 @@ public:
         PaintedSketch = 1
     };
 
-    Weights(SketchType type = ScannedSketch)
+    explicit Weights(SketchType type = ScannedSketch)
         : m_type(type)
     {
     }

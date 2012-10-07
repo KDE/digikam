@@ -57,7 +57,7 @@ class DIGIKAM_EXPORT PixelAccess
 
 public:
 
-    PixelAccess(DImg* srcImage);
+    explicit PixelAccess(DImg* srcImage);
     ~PixelAccess();
 
     void pixelAccessGetCubic(double srcX, double srcY, double brighten, uchar* dst);

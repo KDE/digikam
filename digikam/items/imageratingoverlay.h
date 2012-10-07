@@ -47,7 +47,7 @@ class ImageRatingOverlay : public AbstractWidgetDelegateOverlay
 
 public:
 
-    ImageRatingOverlay(QObject* parent);
+    explicit ImageRatingOverlay(QObject* parent);
 
     RatingWidget* ratingWidget() const;
 

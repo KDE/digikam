@@ -45,7 +45,7 @@ class ImageThumbnailDelegate : public ImageDelegate
 
 public:
 
-    ImageThumbnailDelegate(ImageCategorizedView* parent);
+    explicit ImageThumbnailDelegate(ImageCategorizedView* parent);
     ~ImageThumbnailDelegate();
 
     void setFlow(QListView::Flow flow);

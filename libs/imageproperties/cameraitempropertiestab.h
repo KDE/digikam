@@ -53,7 +53,7 @@ class CameraItemPropertiesTab : public RExpanderBox
 
 public:
 
-    CameraItemPropertiesTab(QWidget* const parent);
+    explicit CameraItemPropertiesTab(QWidget* const parent);
     ~CameraItemPropertiesTab();
 
     void setCurrentItem(const CamItemInfo& itemInfo=CamItemInfo(),

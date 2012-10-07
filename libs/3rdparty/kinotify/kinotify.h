@@ -42,7 +42,7 @@ class DIGIKAM_EXPORT KInotify : public QObject
 
 public:
 
-    KInotify( QObject* parent = 0 );
+    explicit KInotify( QObject* parent = 0 );
     virtual ~KInotify();
 
     /**

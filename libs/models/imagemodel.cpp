@@ -112,7 +112,7 @@ class ImageModelIncrementalUpdater
 {
 public:
 
-    ImageModelIncrementalUpdater(ImageModel::ImageModelPriv* d);
+    explicit ImageModelIncrementalUpdater(ImageModel::ImageModelPriv* d);
 
     void                  appendInfos(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues);
     void                  aboutToBeRemovedInModel(const IntPairList& aboutToBeRemoved);

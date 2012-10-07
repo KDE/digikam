@@ -56,7 +56,7 @@ public:
     /**
      * Use an existing DatabaseAccess object, which must live as long as this object exists.
      */
-    DatabaseOperationGroup(DatabaseAccess* access);
+    explicit DatabaseOperationGroup(DatabaseAccess* access);
     ~DatabaseOperationGroup();
 
     /**

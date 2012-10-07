@@ -41,7 +41,7 @@ class RuleDialog : public KDialog
 
 public:
 
-    RuleDialog(Rule* parent);
+    explicit RuleDialog(Rule* parent);
     virtual ~RuleDialog();
 
     void setSettingsWidget(QWidget* settingsWidget);

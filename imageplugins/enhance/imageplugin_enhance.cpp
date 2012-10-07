@@ -64,7 +64,7 @@ class EditorToolPassivePopup : public KPassivePopup
 {
 public:
 
-    EditorToolPassivePopup(QWidget* const parent)
+    explicit EditorToolPassivePopup(QWidget* const parent)
         : KPassivePopup(parent), m_parent(parent)
     {
     }

@@ -77,7 +77,7 @@ class DIGIKAM_DATABASE_EXPORT ImageListerSlaveBaseReceiver : public ImageListerV
 
 public:
 
-    ImageListerSlaveBaseReceiver(KIO::SlaveBase* slave);
+    explicit ImageListerSlaveBaseReceiver(KIO::SlaveBase* slave);
     virtual void error(const QString& errMsg);
     void sendData();
 

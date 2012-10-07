@@ -39,7 +39,7 @@ class Border : public BatchTool
 
 public:
 
-    Border(QObject* const parent = 0);
+    explicit Border(QObject* const parent = 0);
     ~Border();
 
     BatchToolSettings defaultSettings();

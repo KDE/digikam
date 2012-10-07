@@ -39,7 +39,7 @@ class ChannelMixerTool : public EditorToolThreaded
 
 public:
 
-    ChannelMixerTool(QObject* const parent);
+    explicit ChannelMixerTool(QObject* const parent);
     ~ChannelMixerTool();
 
 private:

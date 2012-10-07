@@ -40,7 +40,7 @@ class AdjustCurvesTool : public EditorToolThreaded
 
 public:
 
-    AdjustCurvesTool(QObject* const parent);
+    explicit AdjustCurvesTool(QObject* const parent);
     ~AdjustCurvesTool();
 
 private Q_SLOTS:

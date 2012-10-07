@@ -59,7 +59,7 @@ public:
      * Use this class if you need to pass a QLineEdit but
      * want actually to use a different widget.
      */
-    ProxyLineEdit(QWidget* const parent = 0);
+    explicit ProxyLineEdit(QWidget* const parent = 0);
 
     /// After constructing, set the actual widget here
     virtual void setWidget(QWidget* widget);
@@ -108,7 +108,7 @@ public:
      * Press on the held widget will result in the signal
      * if the widget does not accept() them.
      */
-    ProxyClickLineEdit(QWidget* const parent = 0);
+    explicit ProxyClickLineEdit(QWidget* const parent = 0);
 
 Q_SIGNALS:
 
@@ -131,7 +131,7 @@ public:
      * This class is a combo box that stores a current index
      * based on QModelIndex.
      */
-    ModelIndexBasedComboBox(QWidget* const  parent = 0);
+    explicit ModelIndexBasedComboBox(QWidget* const  parent = 0);
 
     QModelIndex currentIndex() const;
     void setCurrentIndex(const QModelIndex& index);
@@ -162,7 +162,7 @@ public:
      *  QAbstractItemModel, then call installView() to replace
      *  the standard combo box view with a view.
      */
-    StayPoppedUpComboBox(QWidget* const parent = 0);
+    explicit StayPoppedUpComboBox(QWidget* const parent = 0);
 
 protected:
 
@@ -203,7 +203,7 @@ public:
      *  QAbstractItemModel, then call installView() to replace
      *  the standard combo box view with a QTreeView.
      */
-    TreeViewComboBox(QWidget* parent = 0);
+    explicit TreeViewComboBox(QWidget* parent = 0);
 
     /** Replace the standard combo box list view with a QTreeView.
      *  Call this after installing an appropriate model. */
@@ -232,7 +232,7 @@ public:
      *  Construct the object, call setModel() with an appropriate
      *  QAbstractItemModel, then call installView().
      */
-    ListViewComboBox(QWidget* parent = 0);
+    explicit ListViewComboBox(QWidget* parent = 0);
 
     /** Returns the QTreeView of this class. Valid after installView() has been called.
      */
@@ -263,7 +263,7 @@ public:
      *  QAbstractItemModel, then call installView() to replace
      *  the standard combo box view with a QTreeView.
      */
-    TreeViewLineEditComboBox(QWidget* const parent = 0);
+    explicit TreeViewLineEditComboBox(QWidget* const parent = 0);
 
 
     /** Set the text of the line edit (the text that is visible

@@ -46,7 +46,7 @@ public:
      * prefer using a RandomNumberGenerator seeded
      * with non-deterministic data.
      */
-    NonDeterministicRandomData(int size);
+    explicit NonDeterministicRandomData(int size);
 };
 
 // --------------------------------------------------------------------

@@ -54,7 +54,7 @@ public:
      * Constructs a new face group, managing RegionFrameItems for faces
      * of a particular image, displayed on a GraphicsDImgView.
      */
-    FaceGroup(GraphicsDImgView* view);
+    explicit FaceGroup(GraphicsDImgView* view);
     ~FaceGroup();
 
     bool isVisible() const;
@@ -148,7 +148,7 @@ class AssignNameWidgetHidingStateChanger : public HidingStateChanger
 
 public:
 
-    AssignNameWidgetHidingStateChanger(FaceItem* item);
+    explicit AssignNameWidgetHidingStateChanger(FaceItem* item);
 
 protected Q_SLOTS:
 

@@ -38,7 +38,7 @@ class ThumbnailSchemaUpdater
 {
 public:
 
-    ThumbnailSchemaUpdater(ThumbnailDatabaseAccess* access);
+    explicit ThumbnailSchemaUpdater(ThumbnailDatabaseAccess* access);
 
     static int schemaVersion();
     bool update();

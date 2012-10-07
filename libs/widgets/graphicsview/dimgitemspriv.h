@@ -54,7 +54,7 @@ class CachedPixmaps
 {
 public:
 
-    CachedPixmaps(int maxCount = 2);
+    explicit CachedPixmaps(int maxCount = 2);
     ~CachedPixmaps();
 
     void setMaxCount(int);

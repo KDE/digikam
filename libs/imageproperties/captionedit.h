@@ -47,7 +47,7 @@ class CaptionEdit : public KVBox
 
 public:
 
-    CaptionEdit(QWidget* const parent);
+    explicit CaptionEdit(QWidget* const parent);
     ~CaptionEdit();
 
     void setValues(const CaptionsMap& values);

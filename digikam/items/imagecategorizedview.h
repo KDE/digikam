@@ -49,7 +49,7 @@ class ImageCategorizedView : public DCategorizedView
 
 public:
 
-    ImageCategorizedView(QWidget* const parent = 0);
+    explicit ImageCategorizedView(QWidget* const parent = 0);
     ~ImageCategorizedView();
 
     void setModels(ImageModel* model, ImageSortFilterModel* filterModel);

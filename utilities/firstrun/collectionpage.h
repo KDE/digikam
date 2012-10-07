@@ -45,7 +45,7 @@ class CollectionPage : public AssistantDlgPage
 
 public:
 
-    CollectionPage(KAssistantDialog* dlg);
+    explicit CollectionPage(KAssistantDialog* dlg);
     ~CollectionPage();
 
     bool checkSettings();

@@ -49,7 +49,7 @@ class DIGIKAM_EXPORT DAboutData : public QObject
 
 public:
 
-    DAboutData(KXmlGuiWindow* parent);
+    explicit DAboutData(KXmlGuiWindow* parent);
     ~DAboutData();
 
     void registerHelpActions();

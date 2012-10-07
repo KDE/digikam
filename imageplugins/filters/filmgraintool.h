@@ -41,7 +41,7 @@ class FilmGrainTool : public EditorToolThreaded
 
 public:
 
-    FilmGrainTool(QObject* const parent);
+    explicit FilmGrainTool(QObject* const parent);
     ~FilmGrainTool();
 
 private Q_SLOTS:

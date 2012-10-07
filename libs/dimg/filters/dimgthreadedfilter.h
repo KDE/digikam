@@ -203,13 +203,13 @@ protected:
     class DefaultFilterAction : public FilterAction
     {
     public:
-        DefaultFilterAction(FilterAction::Category category = FilterAction::ReproducibleFilter)
+        explicit DefaultFilterAction(FilterAction::Category category = FilterAction::ReproducibleFilter)
             : FilterAction(Filter::FilterIdentifier(), Filter::CurrentVersion(), category)
         {
             setDisplayableName(Filter::DisplayableName());
         }
 
-        DefaultFilterAction(bool isReproducible)
+        explicit DefaultFilterAction(bool isReproducible)
             : FilterAction(Filter::FilterIdentifier(), Filter::CurrentVersion(),
                            isReproducible ? FilterAction::ReproducibleFilter : FilterAction::ComplexFilter)
         {

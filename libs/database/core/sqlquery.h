@@ -42,8 +42,8 @@ class DIGIKAM_EXPORT SqlQuery : public QSqlQuery
 
 public:
 
-    SqlQuery(const QSqlQuery& other);
-    SqlQuery(QSqlDatabase db);
+    explicit SqlQuery(const QSqlQuery& other);
+    explicit SqlQuery(QSqlDatabase db);
     virtual ~SqlQuery();
 
     virtual SqlQuery& operator=(const SqlQuery& other);

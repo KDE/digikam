@@ -817,7 +817,7 @@ class AlbumPointerList : public QList<AlbumPointer<T> >
 public:
     AlbumPointerList() {}
     AlbumPointerList(const AlbumPointerList<T>& list) : QList<AlbumPointer<T> >(list) {}
-    AlbumPointerList(const QList<T*>& list)
+    explicit AlbumPointerList(const QList<T*>& list)
     {
         operator=(list);
     }

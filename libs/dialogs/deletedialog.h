@@ -97,7 +97,7 @@ class DeleteItemList : public QTreeWidget
 
 public:
 
-    DeleteItemList(QWidget* const parent=0);
+    explicit DeleteItemList(QWidget* const parent=0);
     virtual ~DeleteItemList();
 
 private :
@@ -122,7 +122,7 @@ class DeleteWidget : public QWidget
 
 public:
 
-    DeleteWidget(QWidget* const parent = 0);
+    explicit DeleteWidget(QWidget* const parent = 0);
     virtual ~DeleteWidget();
 
     void setUrls(const KUrl::List& urls);
@@ -162,7 +162,7 @@ public:
 
 public:
 
-    DeleteDialog(QWidget* const parent);
+    explicit DeleteDialog(QWidget* const parent);
     virtual ~DeleteDialog();
 
     bool confirmDeleteList(const KUrl::List& condemnedURLs,

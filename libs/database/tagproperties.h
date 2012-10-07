@@ -50,7 +50,7 @@ public:
     TagProperties();
     /** Access the properties of the given tag 
      */
-    TagProperties(int tagId);
+    explicit TagProperties(int tagId);
 
     ~TagProperties();
     TagProperties(const TagProperties& other);

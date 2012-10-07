@@ -45,7 +45,7 @@ class DIGIKAM_EXPORT GreycstorationSettings : public QObject
 
 public:
 
-    GreycstorationSettings(KTabWidget* parent);
+    explicit GreycstorationSettings(KTabWidget* parent);
     ~GreycstorationSettings();
 
     void setSettings(const GreycstorationContainer& settings);

@@ -46,7 +46,7 @@ class DIGIKAM_EXPORT FilmGrainSettings : public QWidget
 
 public:
 
-    FilmGrainSettings(QWidget* parent);
+    explicit FilmGrainSettings(QWidget* parent);
     ~FilmGrainSettings();
 
     FilmGrainContainer defaultSettings() const;

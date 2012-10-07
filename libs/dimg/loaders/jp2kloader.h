@@ -49,7 +49,7 @@ class DIGIKAM_EXPORT JP2KLoader : public DImgLoader
 
 public:
 
-    JP2KLoader(DImg* const image);
+    explicit JP2KLoader(DImg* const image);
 
     bool load(const QString& filePath, DImgLoaderObserver* const observer);
     bool save(const QString& filePath, DImgLoaderObserver* const observer);

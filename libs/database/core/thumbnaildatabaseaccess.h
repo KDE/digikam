@@ -71,7 +71,7 @@ public:
 
 private:
 
-    ThumbnailDatabaseAccess(bool);
+    explicit ThumbnailDatabaseAccess(bool);
 
     static ThumbnailDatabaseAccessStaticPriv* d;
 };

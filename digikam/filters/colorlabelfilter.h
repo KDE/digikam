@@ -44,7 +44,7 @@ class ColorLabelFilter : public ColorLabelWidget
 
 public:
 
-    ColorLabelFilter(QWidget* parent=0);
+    explicit ColorLabelFilter(QWidget* parent=0);
     ~ColorLabelFilter();
 
     QList<TAlbum*> getCheckedColorLabelTags();

@@ -68,7 +68,7 @@ class UiFileValidatorPriv
 {
 public:
 
-    UiFileValidatorPriv(const QString& _filename) :
+    explicit UiFileValidatorPriv(const QString& _filename) :
         filename(_filename)
     {}
 

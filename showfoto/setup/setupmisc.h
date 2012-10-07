@@ -45,7 +45,7 @@ public:
 
 public:
 
-    SetupMisc(QWidget* const parent = 0);
+    explicit SetupMisc(QWidget* const parent = 0);
     ~SetupMisc();
 
     void applySettings();

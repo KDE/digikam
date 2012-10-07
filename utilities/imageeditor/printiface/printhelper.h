@@ -40,7 +40,7 @@ class DIGIKAM_EXPORT PrintHelper
 
 public:
 
-    PrintHelper(QWidget* const parent);
+    explicit PrintHelper(QWidget* const parent);
     ~PrintHelper();
 
     void print(DImg&);

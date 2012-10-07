@@ -41,7 +41,7 @@ class ContentAwareResizeTool : public EditorToolThreaded
 
 public:
 
-    ContentAwareResizeTool(QObject* const parent);
+    explicit ContentAwareResizeTool(QObject* const parent);
     ~ContentAwareResizeTool();
 
 private:

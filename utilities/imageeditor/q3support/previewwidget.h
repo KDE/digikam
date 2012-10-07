@@ -48,7 +48,7 @@ class DIGIKAM_EXPORT PreviewWidget : public Q3ScrollView
 
 public:
 
-    PreviewWidget(QWidget* const parent=0);
+    explicit PreviewWidget(QWidget* const parent=0);
     ~PreviewWidget();
 
     void   fitToWindow();

@@ -100,7 +100,7 @@ private Q_SLOTS:
 
 private:
 
-    Setup(QWidget* const parent = 0);
+    explicit Setup(QWidget* const parent = 0);
     ~Setup();
 
     Setup::Page activePageIndex() const;

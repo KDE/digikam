@@ -41,7 +41,7 @@ class ActionCategorizedView : public KCategorizedView
 {
 public:
 
-    ActionCategorizedView(QWidget* const parent = 0);
+    explicit ActionCategorizedView(QWidget* const parent = 0);
     ~ActionCategorizedView();
     
     void setupIconMode();

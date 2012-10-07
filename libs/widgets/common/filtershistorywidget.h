@@ -80,7 +80,7 @@ class FiltersHistoryWidget : public QWidget
 
 public:
 
-    FiltersHistoryWidget(QWidget* parent);
+    explicit FiltersHistoryWidget(QWidget* parent);
     ~FiltersHistoryWidget();
 
     void setCurrentURL(const KUrl& url = KUrl());

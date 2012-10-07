@@ -47,7 +47,7 @@ public:
 
 public:
 
-    TemplateSelector(QWidget* const parent=0);
+    explicit TemplateSelector(QWidget* const parent=0);
     virtual ~TemplateSelector();
 
     Template  getTemplate() const;

@@ -39,7 +39,7 @@ class LocalContrast : public BatchTool
 
 public:
 
-    LocalContrast(QObject* const parent = 0);
+    explicit LocalContrast(QObject* const parent = 0);
     ~LocalContrast();
 
     BatchToolSettings defaultSettings();

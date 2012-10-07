@@ -69,7 +69,7 @@ class DIGIKAM_EXPORT MetadataSelector : public QTreeWidget
 
 public:
 
-    MetadataSelector(QWidget* parent);
+    explicit MetadataSelector(QWidget* parent);
     virtual ~MetadataSelector();
 
 #if KEXIV2_VERSION >= 0x010000
@@ -100,7 +100,7 @@ public:
     };
     Q_DECLARE_FLAGS(ControlElements, ControlElement)
 
-    MetadataSelectorView(QWidget* parent);
+    explicit MetadataSelectorView(QWidget* parent);
     virtual ~MetadataSelectorView();
 
     int itemsCount() const;

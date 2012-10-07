@@ -46,7 +46,7 @@ class DIGIKAM_EXPORT ButtonIconDisabler : public QObject
 
 public:
 
-    ButtonIconDisabler(QAbstractButton* button);
+    explicit ButtonIconDisabler(QAbstractButton* button);
     ~ButtonIconDisabler();
 
 private Q_SLOTS:

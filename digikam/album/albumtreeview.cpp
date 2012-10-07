@@ -94,7 +94,7 @@ class AlbumTreeViewDelegate : public QStyledItemDelegate
 {
 public:
 
-    AlbumTreeViewDelegate(AbstractAlbumTreeView* treeView = 0)
+    explicit AlbumTreeViewDelegate(AbstractAlbumTreeView* treeView = 0)
         : QStyledItemDelegate(treeView),
           m_treeView(treeView), m_height(0)
     {

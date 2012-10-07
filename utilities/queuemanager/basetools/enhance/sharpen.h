@@ -38,7 +38,7 @@ class Sharpen : public BatchTool
 
 public:
 
-    Sharpen(QObject* const parent = 0);
+    explicit Sharpen(QObject* const parent = 0);
     ~Sharpen();
 
     BatchToolSettings defaultSettings();

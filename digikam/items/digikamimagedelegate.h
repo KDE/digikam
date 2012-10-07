@@ -42,7 +42,7 @@ class DigikamImageDelegate : public ImageDelegate
 
 public:
 
-    DigikamImageDelegate(ImageCategorizedView* parent);
+    explicit DigikamImageDelegate(ImageCategorizedView* parent);
     ~DigikamImageDelegate();
 
 protected:

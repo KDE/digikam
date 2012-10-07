@@ -52,7 +52,7 @@ class ImportPreviewViewItem : public DImgPreviewItem
 {
 public:
 
-    ImportPreviewViewItem(ImportPreviewView* const view)
+    explicit ImportPreviewViewItem(ImportPreviewView* const view)
         : m_view(view)/*, m_group(0)*/
     {
         setAcceptHoverEvents(true);

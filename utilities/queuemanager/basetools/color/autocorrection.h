@@ -39,7 +39,7 @@ class AutoCorrection : public BatchTool
 
 public:
 
-    AutoCorrection(QObject* const parent = 0);
+    explicit AutoCorrection(QObject* const parent = 0);
     ~AutoCorrection();
 
     BatchToolSettings defaultSettings();

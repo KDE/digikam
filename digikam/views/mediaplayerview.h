@@ -44,7 +44,7 @@ class MediaPlayerMouseClickFilter : public QObject
 
 public:
 
-    MediaPlayerMouseClickFilter(QObject* const parent);
+    explicit MediaPlayerMouseClickFilter(QObject* const parent);
 
 protected:
 
@@ -63,7 +63,7 @@ class MediaPlayerView : public QStackedWidget
 
 public:
 
-    MediaPlayerView(QWidget* const parent);
+    explicit MediaPlayerView(QWidget* const parent);
     ~MediaPlayerView();
 
     void setCurrentItem(const KUrl& url   = KUrl(),

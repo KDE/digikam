@@ -49,7 +49,7 @@ class DIGIKAM_EXPORT LocalContrastSettings : public QWidget
 
 public:
 
-    LocalContrastSettings(QWidget* parent);
+    explicit LocalContrastSettings(QWidget* parent);
     ~LocalContrastSettings();
 
     LocalContrastContainer defaultSettings() const;

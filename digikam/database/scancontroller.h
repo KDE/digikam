@@ -129,7 +129,7 @@ public:
     class FileMetadataWrite
     {
     public:
-        FileMetadataWrite(const ImageInfo& info);
+        explicit FileMetadataWrite(const ImageInfo& info);
         ~FileMetadataWrite();
         void changed(bool wasChanged);
     protected:

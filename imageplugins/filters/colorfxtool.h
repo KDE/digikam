@@ -46,7 +46,7 @@ class ColorFxTool : public EditorToolThreaded
 
 public:
 
-    ColorFxTool(QObject* const parent);
+    explicit ColorFxTool(QObject* const parent);
     ~ColorFxTool();
 
 private:

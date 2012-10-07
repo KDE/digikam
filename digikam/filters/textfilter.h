@@ -46,7 +46,7 @@ class TextFilter : public KHBox
 
 public:
 
-    TextFilter(QWidget* parent);
+    explicit TextFilter(QWidget* parent);
     ~TextFilter();
 
     SearchTextBar* searchTextBar() const;

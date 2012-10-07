@@ -46,7 +46,7 @@ class DIGIKAM_EXPORT WBSettings : public QWidget
 
 public:
 
-    WBSettings(QWidget* parent);
+    explicit WBSettings(QWidget* parent);
     ~WBSettings();
 
     WBContainer defaultSettings() const;

@@ -41,7 +41,7 @@ class SetupSlideShow : public QScrollArea
 
 public:
 
-    SetupSlideShow(QWidget* const parent = 0);
+    explicit SetupSlideShow(QWidget* const parent = 0);
     ~SetupSlideShow();
 
     void applySettings();

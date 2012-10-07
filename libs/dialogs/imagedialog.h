@@ -44,7 +44,7 @@ class DIGIKAM_EXPORT ImageDialogPreview : public KPreviewWidgetBase
 
 public:
 
-    ImageDialogPreview(QWidget* parent=0);
+    explicit ImageDialogPreview(QWidget* parent=0);
     ~ImageDialogPreview();
 
     QSize sizeHint() const;

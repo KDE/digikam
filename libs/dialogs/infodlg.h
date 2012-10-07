@@ -48,7 +48,7 @@ class DIGIKAM_EXPORT InfoDlg : public KDialog
 
 public:
 
-    InfoDlg(QWidget* const parent);
+    explicit InfoDlg(QWidget* const parent);
     virtual ~InfoDlg();
 
     virtual void setInfoMap(const QMap<QString, QString>& list);

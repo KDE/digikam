@@ -47,7 +47,7 @@ class DIGIKAM_EXPORT GraphicsDImgItem : public QGraphicsObject
 
 public:
 
-    GraphicsDImgItem(QGraphicsItem* const parent = 0);
+    explicit GraphicsDImgItem(QGraphicsItem* const parent = 0);
     virtual ~GraphicsDImgItem();
 
     /**
