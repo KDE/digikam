@@ -6,7 +6,7 @@
  * Date        : 2004-12-01
  * Description : image curves manipulation methods.
  *
- * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -87,19 +87,18 @@ public:
      *
      * @param otherCurves other curves object to adapt config from
      */
-    void fillFromOtherCurves(ImageCurves* otherCurves);
+    void fillFromOtherCurves(ImageCurves* const otherCurves);
+
 
     // Methods for to manipulate the curves data.
 
-    bool   isDirty() const;
-    bool   isSixteenBits() const;
     void   curvesReset();
     void   curvesChannelReset(int channel);
     void   curvesCalculateCurve(int channel);
     void   curvesCalculateAllCurves();
     float  curvesLutFunc(int n_channels, int channel, float value);
     void   curvesLutSetup(int nchannels);
-    void   curvesLutProcess(uchar* srcPR, uchar* destPR, int w, int h);
+    void   curvesLutProcess(uchar* const srcPR, uchar* const destPR, int w, int h);
 
     // Methods for to set manually the curves values.
 
@@ -113,15 +112,20 @@ public:
     void   setCurvePoints(int channel, const QPolygon& vals);
     void   setCurveValues(int channel, const QPolygon& vals);
 
-    int       getCurveValue(int channel, int bin) const;
-    int       getCurvePointX(int channel, int point) const;
-    int       getCurvePointY(int channel, int point) const;
-    CurveType getCurveType(int channel) const;
+    // Properties.
+
+    bool   isDirty()                                     const;
+    bool   isSixteenBits()                               const;
+
+    int       getCurveValue(int channel, int bin)        const;
+    int       getCurvePointX(int channel, int point)     const;
+    int       getCurvePointY(int channel, int point)     const;
+    CurveType getCurveType(int channel)                  const;
 
     bool     isCurvePointEnabled(int channel, int point) const;
-    QPoint   getCurvePoint(int channel, int point) const;
-    QPolygon getCurvePoints(int channel) const;
-    QPolygon getCurveValues(int channel) const;
+    QPoint   getCurvePoint(int channel, int point)       const;
+    QPolygon getCurvePoints(int channel)                 const;
+    QPolygon getCurveValues(int channel)                 const;
 
     /// Note that bits depth must match
     void   setContainer(const CurvesContainer& container);
@@ -142,7 +146,7 @@ public:
      * Returns true if the curve is linear for the given channel, or all channels.
      */
     bool isLinear(int channel) const;
-    bool isLinear() const;
+    bool isLinear()            const;
 
     /**
      * Writes the given channel to a base64 representation.
@@ -170,13 +174,12 @@ private:
 
     void curvesPlotCurve(int channel, int p1, int p2, int p3, int p4);
     void curvesCRCompose(CRMatrix a, CRMatrix b, CRMatrix ab);
-
     void freeLutData();
 
 private:
 
-    class ImageCurvesPriv;
-    QSharedDataPointer<ImageCurvesPriv> d;
+    class Private;
+    QSharedDataPointer<Private> d;
 };
 
 }  // namespace Digikam

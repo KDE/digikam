@@ -6,8 +6,8 @@
  * Date        : 2010-25-02
  * Description : Curves image filter
  *
- * Copyright (C) 2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
+ * Copyright (C) 2010-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -48,9 +48,9 @@ class DIGIKAM_EXPORT CurvesFilter : public DImgThreadedFilter
 
 public:
 
-    explicit CurvesFilter(QObject* parent = 0);
-    explicit CurvesFilter(DImg* orgImage, QObject* parent=0, const CurvesContainer& settings=CurvesContainer());
-    explicit CurvesFilter(const CurvesContainer& settings, DImgThreadedFilter* master,
+    explicit CurvesFilter(QObject* const parent = 0);
+    explicit CurvesFilter(DImg* const orgImage, QObject* const parent=0, const CurvesContainer& settings=CurvesContainer());
+    explicit CurvesFilter(const CurvesContainer& settings, DImgThreadedFilter* const master,
                           const DImg& orgImage, DImg& destImage, int progressBegin=0, int progressEnd=100);
     virtual ~CurvesFilter();
 
@@ -58,14 +58,17 @@ public:
     {
         return "digikam:CurvesFilter";
     }
+
     static QString          DisplayableName()
     {
         return I18N_NOOP("Adjust Curves");
     }
+
     static QList<int>       SupportedVersions()
     {
         return QList<int>() << 1;
     }
+
     static int              CurrentVersion()
     {
         return 1;
@@ -75,6 +78,7 @@ public:
     {
         return FilterIdentifier();
     }
+
     virtual FilterAction    filterAction();
     void                    readParameters(const FilterAction& action);
 

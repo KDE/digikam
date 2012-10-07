@@ -6,7 +6,7 @@
  * Date        : 2010-03-01
  * Description : Curves settings view.
  *
- * Copyright (C) 2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -49,7 +49,7 @@ class DIGIKAM_EXPORT CurvesSettings : public QWidget
 
 public:
 
-    CurvesSettings(QWidget* parent, DImg* img);
+    CurvesSettings(QWidget* const parent, DImg* const img);
     ~CurvesSettings();
 
     CurvesContainer defaultSettings() const;
@@ -82,8 +82,8 @@ public Q_SLOTS:
 
 private:
 
-    class CurvesSettingsPriv;
-    CurvesSettingsPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

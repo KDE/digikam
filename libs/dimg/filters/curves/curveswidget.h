@@ -6,7 +6,7 @@
  * Date        : 2004-12-01
  * Description : a widget to draw histogram curves
  *
- * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -46,7 +46,6 @@ namespace Digikam
 
 class ImageHistogram;
 class ImageCurves;
-class CurvesWidgetPriv;
 
 class DIGIKAM_EXPORT CurvesWidget : public QWidget
 {
@@ -54,13 +53,13 @@ class DIGIKAM_EXPORT CurvesWidget : public QWidget
 
 public:
 
-    CurvesWidget(int w, int h, QWidget* parent, bool readOnly=false);
+    CurvesWidget(int w, int h, QWidget* const parent, bool readOnly=false);
 
-    CurvesWidget(int w, int h,                         // Widget size.
-                 uchar* i_data, uint i_w, uint i_h,    // Full image info.
-                 bool i_sixteenBits,                   // 8 or 16 bits image.
-                 QWidget* parent=0,                    // Parent widget instance.
-                 bool readOnly=false);                 // If true : widget with full edition mode capabilities.
+    CurvesWidget(int w, int h,                               // Widget size.
+                 uchar* const i_data, uint i_w, uint i_h,    // Full image info.
+                 bool i_sixteenBits,                         // 8 or 16 bits image.
+                 QWidget* const parent=0,                    // Parent widget instance.
+                 bool readOnly=false);                       // If true : widget with full edition mode capabilities.
     // If false : display curve data only without edition.
 
     ~CurvesWidget();
@@ -93,7 +92,7 @@ public:
      * @param i_h height of the image
      * @param i_sixteenBits if true, the image is interpreted as having 16 bits
      */
-    void updateData(uchar* i_data, uint i_w, uint i_h, bool i_sixteenBits);
+    void updateData(uchar* const i_data, uint i_w, uint i_h, bool i_sixteenBits);
 
     // Stop current histogram computations.
     void stopHistogramComputation();
@@ -143,7 +142,8 @@ protected:
 
 private:
 
-    CurvesWidgetPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

@@ -7,7 +7,7 @@
  * Description : a curves widget with additional control elements
  *
  * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at gmail dot com>
- * Copyright (C) 2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -65,13 +65,13 @@ public:
 
 public:
 
-    CurvesBox(int w, int h, QWidget* parent=0, bool readOnly=false);
-    CurvesBox(int w, int h,                         // Widget size.
-              uchar* i_data, uint i_w, uint i_h,    // Full image info.
-              bool i_sixteenBits,                   // 8 or 16 bits image.
-              QWidget* parent=0,                    // Parent widget instance.
-              bool readOnly=false);                 // If true : widget with full edition mode capabilities.
-    // If false : display curve data only without edition.
+    CurvesBox(int w, int h, QWidget* const parent=0, bool readOnly=false);
+    CurvesBox(int w, int h,                            // Widget size.
+              uchar* const i_data, uint i_w, uint i_h, // Full image info.
+              bool i_sixteenBits,                      // 8 or 16 bits image.
+              QWidget* const parent=0,                 // Parent widget instance.
+              bool readOnly=false);                    // If true : widget with full edition mode capabilities.
+                                                       // If false : display curve data only without edition.
     ~CurvesBox();
 
     void enablePickers(bool enable);
@@ -84,9 +84,6 @@ public:
 
     void setCurveGuide(const DColor& color);
 
-    int  picker() const;
-    ChannelType channel() const;
-
     void resetPickers();
     void resetChannel(int channel);
     void resetChannels();
@@ -95,9 +92,10 @@ public:
     void readCurveSettings(KConfigGroup& group, const QString& prefix);
     void writeCurveSettings(KConfigGroup& group, const QString& prefix);
 
+    int  picker()          const;
+    ChannelType channel()  const;
     int curvesLeftOffset() const;
-
-    ImageCurves* curves() const;
+    ImageCurves* curves()  const;
 
 Q_SIGNALS:
 
@@ -123,8 +121,8 @@ private:
 
 private:
 
-    class CurvesBoxPriv;
-    CurvesBoxPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

@@ -6,8 +6,8 @@
  * Date        : 2010-25-02
  * Description : Curves image filter
  *
- * Copyright (C) 2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
+ * Copyright (C) 2010-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -35,20 +35,20 @@
 namespace Digikam
 {
 
-CurvesFilter::CurvesFilter(QObject* parent)
+CurvesFilter::CurvesFilter(QObject* const parent)
     : DImgThreadedFilter(parent)
 {
     initFilter();
 }
 
-CurvesFilter::CurvesFilter(DImg* orgImage, QObject* parent, const CurvesContainer& settings)
+CurvesFilter::CurvesFilter(DImg* const orgImage, QObject* const parent, const CurvesContainer& settings)
     : DImgThreadedFilter(orgImage, parent, "CurvesFilter")
 {
     m_settings = settings;
     initFilter();
 }
 
-CurvesFilter::CurvesFilter(const CurvesContainer& settings, DImgThreadedFilter* master,
+CurvesFilter::CurvesFilter(const CurvesContainer& settings, DImgThreadedFilter* const master,
                            const DImg& orgImage, DImg& destImage, int progressBegin, int progressEnd)
     : DImgThreadedFilter(master, orgImage, destImage, progressBegin, progressEnd, "CurvesFilter")
 {

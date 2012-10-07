@@ -6,12 +6,7 @@
  * Date        : 2004-12-01
  * Description : image curves manipulation methods.
  *
- * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
- *
- * Some code parts are inspired from gimp 2.0
- * app/base/curves.c, gimplut.c, and app/base/gimpcurvetool.c
- * source files.
- * Copyright (C) 1995 Spencer Kimball and Peter Mattis
+ * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -58,7 +53,7 @@ const int ImageCurves::NUM_POINTS       = 17;
 const int ImageCurves::NUM_CHANNELS     = 5;
 const int ImageCurves::MULTIPLIER_16BIT = 255;
 
-class ImageCurves::ImageCurvesPriv : public QSharedData
+class ImageCurves::Private : public QSharedData
 {
 
 public:
@@ -87,7 +82,7 @@ public:
 
 public:
 
-    ImageCurvesPriv() :
+    Private() :
         curves(0),
         lut(0),
         segmentMax(0),
@@ -95,7 +90,7 @@ public:
     {
     }
 
-    ~ImageCurvesPriv()
+    ~Private()
     {
         if (lut)
         {
@@ -111,13 +106,13 @@ public:
 
     void init(bool sixteenBit)
     {
-        lut        = new ImageCurvesPriv::_Lut;
+        lut        = new Private::_Lut;
         lut->luts  = NULL;
-        curves     = new ImageCurvesPriv::_Curves;
+        curves     = new Private::_Curves;
         segmentMax = sixteenBit ? MAX_SEGMENT_16BIT : MAX_SEGMENT_8BIT;
     }
 
-    bool isPointEnabled(const QPoint& point)
+    bool isPointEnabled(const QPoint& point) const
     {
         return (point.x() > - 1) && (point.y() > -1);
     }
@@ -155,14 +150,14 @@ ImageCurves::CRMatrix CR_basis =
 };
 
 ImageCurves::ImageCurves(bool sixteenBit)
-    : d(new ImageCurvesPriv)
+    : d(new Private)
 {
     d->init(sixteenBit);
     curvesReset();
 }
 
 ImageCurves::ImageCurves(const CurvesContainer& container)
-    : d(new ImageCurvesPriv)
+    : d(new Private)
 {
     d->init(container.sixteenBit);
     curvesReset();
@@ -184,7 +179,7 @@ ImageCurves& ImageCurves::operator=(const ImageCurves& other)
     return *this;
 }
 
-void ImageCurves::fillFromOtherCurves(ImageCurves* otherCurves)
+void ImageCurves::fillFromOtherCurves(ImageCurves* const otherCurves)
 {
     kDebug() << "Filling this curve from other curve " << otherCurves;
 
@@ -324,7 +319,7 @@ bool ImageCurves::isSixteenBits() const
 
 void ImageCurves::curvesReset()
 {
-    memset(d->curves, 0, sizeof(struct ImageCurvesPriv::_Curves));
+    memset(d->curves, 0, sizeof(struct Private::_Curves));
     d->freeLutData();
     d->lut->luts      = NULL;
     d->lut->nchannels = 0;
@@ -363,8 +358,8 @@ void ImageCurves::curvesChannelReset(int channel)
 
     // First and last points init.
 
-    d->curves->points[channel][0][0]  = 0;
-    d->curves->points[channel][0][1]  = 0;
+    d->curves->points[channel][0][0]              = 0;
+    d->curves->points[channel][0][1]              = 0;
     d->curves->points[channel][NUM_POINTS - 1][0] = d->segmentMax;
     d->curves->points[channel][NUM_POINTS - 1][1] = d->segmentMax;
 }
@@ -659,7 +654,7 @@ void ImageCurves::curvesLutSetup(int nchannels)
     }
 }
 
-void ImageCurves::curvesLutProcess(uchar* srcPR, uchar* destPR, int w, int h)
+void ImageCurves::curvesLutProcess(uchar* const srcPR, uchar* const destPR, int w, int h)
 {
     unsigned short* lut0 = NULL, *lut1 = NULL, *lut2 = NULL, *lut3 = NULL;
     int i;

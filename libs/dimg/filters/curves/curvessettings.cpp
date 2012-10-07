@@ -6,7 +6,7 @@
  * Date        : 2010-03-01
  * Description : Curves settings view.
  *
- * Copyright (C) 2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -69,12 +69,12 @@ using namespace KDcrawIface;
 namespace Digikam
 {
 
-class CurvesSettings::CurvesSettingsPriv
+class CurvesSettings::Private
 {
 
 public:
 
-    CurvesSettingsPriv() :
+    Private() :
         histoSegments(0),
         curvesBox(0)
     {}
@@ -84,13 +84,14 @@ public:
     int                  histoSegments;
     CurvesBox*           curvesBox;
 };
-const QString CurvesSettings::CurvesSettingsPriv::configCurveEntry("AdjustCurves");
+
+const QString CurvesSettings::Private::configCurveEntry("AdjustCurves");
 
 // --------------------------------------------------------
 
-CurvesSettings::CurvesSettings(QWidget* parent, DImg* img)
+CurvesSettings::CurvesSettings(QWidget* const parent, DImg* const img)
     : QWidget(parent),
-      d(new CurvesSettingsPriv)
+      d(new Private)
 {
     d->histoSegments  = img->sixteenBit() ? 65535 : 255;
     QGridLayout* grid = new QGridLayout(this);

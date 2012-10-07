@@ -6,7 +6,7 @@
  * Date        : 2004-12-01
  * Description : a widget to draw histogram curves
  *
- * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -63,7 +63,7 @@
 namespace Digikam
 {
 
-class CurvesWidgetPriv
+class CurvesWidget::Private
 {
 public:
 
@@ -76,7 +76,7 @@ public:
         HistogramFailed           // Histogram values calculation failed.
     };
 
-    CurvesWidgetPriv(CurvesWidget* q)
+    Private(CurvesWidget* const q)
         : q(q)
     {
         curves        = 0;
@@ -118,7 +118,7 @@ public:
 
     // --- misc methods ---
 
-    int getDelta()
+    int getDelta() const
     {
         // TODO magic number, what is this?
         return imageHistogram->getHistogramSegments() / 16;
@@ -180,7 +180,7 @@ public:
         p1.drawPixmap(q->width() / 2 - anim.width() / 2, anim.height(), anim);
         p1.setPen(q->palette().color(QPalette::Active, QPalette::Text));
 
-        if (clearFlag == CurvesWidgetPriv::HistogramDataLoading)
+        if (clearFlag == Private::HistogramDataLoading)
         {
             p1.drawText(0, 0, q->width(), q->height(), Qt::AlignCenter,
                         i18n("Loading image..."));
@@ -332,17 +332,17 @@ private:
     CurvesWidget* q;
 };
 
-CurvesWidget::CurvesWidget(int w, int h, QWidget* parent, bool readOnly)
-    : QWidget(parent), d(new CurvesWidgetPriv(this))
+CurvesWidget::CurvesWidget(int w, int h, QWidget* const parent, bool readOnly)
+    : QWidget(parent), d(new Private(this))
 {
     setAttribute(Qt::WA_DeleteOnClose);
     setup(w, h, readOnly);
 }
 
 CurvesWidget::CurvesWidget(int w, int h,
-                           uchar* i_data, uint i_w, uint i_h, bool i_sixteenBits,
-                           QWidget* parent, bool readOnly)
-    : QWidget(parent), d(new CurvesWidgetPriv(this))
+                           uchar* const i_data, uint i_w, uint i_h, bool i_sixteenBits,
+                           QWidget* const parent, bool readOnly)
+    : QWidget(parent), d(new Private(this))
 {
     setAttribute(Qt::WA_DeleteOnClose);
     setup(w, h, readOnly);
@@ -355,7 +355,6 @@ CurvesWidget::~CurvesWidget()
 
     delete d->imageHistogram;
     delete d->curves;
-
     delete d;
 }
 
@@ -388,7 +387,7 @@ void CurvesWidget::saveCurve(KConfigGroup& group, const QString& prefix)
     for (int channel = 0; channel < ImageCurves::NUM_CHANNELS; ++channel)
     {
 
-        group.writeEntry(CurvesWidgetPriv::getChannelTypeOption(prefix, channel),
+        group.writeEntry(Private::getChannelTypeOption(prefix, channel),
                          (int) curves()->getCurveType(channel));
 
         for (int point = 0; point <= ImageCurves::NUM_POINTS; ++point)
@@ -402,7 +401,7 @@ void CurvesWidget::saveCurve(KConfigGroup& group, const QString& prefix)
                 p.setY(p.y() * ImageCurves::MULTIPLIER_16BIT);
             }
 
-            group.writeEntry(CurvesWidgetPriv::getPointOption(prefix, channel, point), p);
+            group.writeEntry(Private::getPointOption(prefix, channel, point), p);
         }
     }
 }
@@ -419,12 +418,12 @@ void CurvesWidget::restoreCurve(KConfigGroup& group, const QString& prefix)
     {
 
         curves()->setCurveType(channel, (ImageCurves::CurveType) group.readEntry(
-                                   CurvesWidgetPriv::getChannelTypeOption(
+                                   Private::getChannelTypeOption(
                                        prefix, channel), 0));
 
         for (int point = 0; point <= ImageCurves::NUM_POINTS; ++point)
         {
-            QPoint p = group.readEntry(CurvesWidgetPriv::getPointOption(prefix,
+            QPoint p = group.readEntry(Private::getPointOption(prefix,
                                                                         channel, point), ImageCurves::getDisabledValue());
 
             // always load a 16 bit curve and stretch it to 8 bit if necessary
@@ -441,7 +440,7 @@ void CurvesWidget::restoreCurve(KConfigGroup& group, const QString& prefix)
     }
 }
 
-void CurvesWidget::updateData(uchar* i_data, uint i_w, uint i_h, bool i_sixteenBits)
+void CurvesWidget::updateData(uchar* const i_data, uint i_w, uint i_h, bool i_sixteenBits)
 {
     kDebug() << "updating data";
 
@@ -503,10 +502,10 @@ ImageCurves* CurvesWidget::curves() const
 
 void CurvesWidget::setDataLoading()
 {
-    if (d->clearFlag != CurvesWidgetPriv::HistogramDataLoading)
+    if (d->clearFlag != Private::HistogramDataLoading)
     {
         setCursor(Qt::WaitCursor);
-        d->clearFlag     = CurvesWidgetPriv::HistogramDataLoading;
+        d->clearFlag     = Private::HistogramDataLoading;
         d->progressCount = 0;
         d->progressTimer->start(100);
     }
@@ -514,7 +513,7 @@ void CurvesWidget::setDataLoading()
 
 void CurvesWidget::setLoadingFailed()
 {
-    d->clearFlag     = CurvesWidgetPriv::HistogramFailed;
+    d->clearFlag     = Private::HistogramFailed;
     d->progressCount = 0;
     d->progressTimer->stop();
     update();
@@ -557,7 +556,7 @@ void CurvesWidget::curveTypeChanged()
 void CurvesWidget::slotCalculationStarted()
 {
     setCursor(Qt::WaitCursor);
-    d->clearFlag = CurvesWidgetPriv::HistogramStarted;
+    d->clearFlag = Private::HistogramStarted;
     d->progressTimer->start(200);
     update();
 }
@@ -567,14 +566,14 @@ void CurvesWidget::slotCalculationFinished(bool success)
     if (success)
     {
         // Repaint histogram
-        d->clearFlag = CurvesWidgetPriv::HistogramCompleted;
+        d->clearFlag = Private::HistogramCompleted;
         d->progressTimer->stop();
         update();
         setCursor(Qt::ArrowCursor);
     }
     else
     {
-        d->clearFlag = CurvesWidgetPriv::HistogramFailed;
+        d->clearFlag = Private::HistogramFailed;
         d->progressTimer->stop();
         update();
         setCursor(Qt::ArrowCursor);
@@ -603,13 +602,13 @@ void CurvesWidget::paintEvent(QPaintEvent*)
 {
     // special cases
 
-    if (d->clearFlag == CurvesWidgetPriv::HistogramDataLoading ||
-        d->clearFlag == CurvesWidgetPriv::HistogramStarted)
+    if (d->clearFlag == Private::HistogramDataLoading ||
+        d->clearFlag == Private::HistogramStarted)
     {
         d->renderLoadingAnimation();
         return;
     }
-    else if (d->clearFlag == CurvesWidgetPriv::HistogramFailed)
+    else if (d->clearFlag == Private::HistogramFailed)
     {
         d->renderHistogramFailed();
         return;
@@ -658,7 +657,7 @@ void CurvesWidget::mousePressEvent(QMouseEvent* e)
         return;
     }
 
-    if (e->button() != Qt::LeftButton || d->clearFlag == CurvesWidgetPriv::HistogramStarted)
+    if (e->button() != Qt::LeftButton || d->clearFlag == Private::HistogramStarted)
     {
         return;
     }
@@ -724,7 +723,7 @@ void CurvesWidget::mouseReleaseEvent(QMouseEvent* e)
         return;
     }
 
-    if (e->button() != Qt::LeftButton || d->clearFlag == CurvesWidgetPriv::HistogramStarted)
+    if (e->button() != Qt::LeftButton || d->clearFlag == Private::HistogramStarted)
     {
         return;
     }
@@ -740,7 +739,7 @@ void CurvesWidget::mouseMoveEvent(QMouseEvent* e)
         return;
     }
 
-    if (d->clearFlag == CurvesWidgetPriv::HistogramStarted)
+    if (d->clearFlag == Private::HistogramStarted)
     {
         return;
     }

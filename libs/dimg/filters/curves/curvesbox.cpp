@@ -7,7 +7,7 @@
  * Description : a curves widget with additional control elements
  *
  * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at gmail dot com>
- * Copyright (C) 2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -55,11 +55,11 @@
 namespace Digikam
 {
 
-class CurvesBox::CurvesBoxPriv
+class CurvesBox::Private
 {
 public:
 
-    CurvesBoxPriv() :
+    Private() :
         sixteenBit(false),
         channel(LuminosityChannel),
         curveFree(0),
@@ -98,16 +98,16 @@ public:
     ColorGradientWidget* vGradient;
 };
 
-CurvesBox::CurvesBox(int w, int h, QWidget* parent, bool readOnly)
-    : QWidget(parent), d(new CurvesBoxPriv)
+CurvesBox::CurvesBox(int w, int h, QWidget* const parent, bool readOnly)
+    : QWidget(parent), d(new Private)
 {
     d->curvesWidget = new CurvesWidget(w, h, this, readOnly);
     setup();
 }
 
-CurvesBox::CurvesBox(int w, int h, uchar* i_data, uint i_w, uint i_h,
-                     bool i_sixteenBits, QWidget* parent, bool readOnly)
-    : QWidget(parent), d(new CurvesBoxPriv)
+CurvesBox::CurvesBox(int w, int h, uchar* const i_data, uint i_w, uint i_h,
+                     bool i_sixteenBits, QWidget* const parent, bool readOnly)
+    : QWidget(parent), d(new Private)
 {
     d->sixteenBit   = i_sixteenBits;
     d->curvesWidget = new CurvesWidget(w, h, i_data, i_w, i_h, i_sixteenBits, this, readOnly);
