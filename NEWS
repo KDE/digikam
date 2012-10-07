@@ -60,7 +60,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 030 ==> 274555 - digiKam crashes while histogram computation.
 031 ==> 301045 - Crash when generating fingerprint in digikam.
 032 ==> 306815 - Navigation between images broken after saving changes.
-033 ==> 
+033 ==> 307964 - Not compatible with Canon EOS 5D Mark III.
+034 ==> 
 
 
 
