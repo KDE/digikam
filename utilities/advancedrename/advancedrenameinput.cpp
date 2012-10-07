@@ -47,7 +47,7 @@
 
 namespace
 {
-static const short INVALID = -1;
+static const quint8 INVALID = -1;
 static const QString DUMMY_TEXT("DUMMY_TEXT_y_fjqp|");
 }
 

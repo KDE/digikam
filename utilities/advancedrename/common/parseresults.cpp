@@ -29,7 +29,7 @@
 
 namespace
 {
-static const short INVALID_KEY_ID = -1;
+static const quint8 INVALID_KEY_ID = -1;
 }
 
 namespace Digikam
