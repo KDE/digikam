@@ -62,7 +62,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 032 ==> 306815 - Navigation between images broken after saving changes.
 033 ==> 307964 - Not compatible with Canon EOS 5D Mark III.
 034 ==> 304609 - Crash of digiKam.
-035 ==> 
+035 ==> 307467 - Missing slide show button in digiKam 3.0.0 beta1.
+036 ==> 
 
 
 
