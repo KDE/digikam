@@ -42,6 +42,7 @@
 #include <QGroupBox>
 #include <QHBoxLayout>
 #include <QImageReader>
+#include <QKeyEvent>
 #include <QLabel>
 #include <QLayout>
 #include <QPointer>
@@ -1194,7 +1195,7 @@ void EditorWindow::slotToggleFullScreen()
             foreach(KToolBar* toolbar, toolbars)
             {
                 // name is set in ui.rc XML file
-                if (toolbar->objectName() == "ToolBar")
+                if (toolbar->objectName() == "mainToolBar")
                 {
                     toolbar->removeAction(m_fullScreenAction);
                     break;
@@ -1225,17 +1226,25 @@ void EditorWindow::slotToggleFullScreen()
             KToolBar* mainToolbar     = 0;
             foreach(KToolBar* toolbar, toolbars)
             {
-                if (toolbar->objectName() == "ToolBar")
+                if (toolbar->objectName() == "mainToolBar")
                 {
                     mainToolbar = toolbar;
                     break;
                 }
             }
+            kDebug() << mainToolbar;
 
             // add fullscreen action if necessary
             if (mainToolbar && !mainToolbar->actions().contains(m_fullScreenAction))
             {
-                mainToolbar->addAction(m_fullScreenAction);
+                if (mainToolbar->actions().isEmpty())
+                {
+                    mainToolbar->addAction(m_fullScreenAction);
+                }
+                else
+                {
+                    mainToolbar->insertAction(mainToolbar->actions().first(), m_fullScreenAction);
+                }
                 d->removeFullScreenButton = true;
             }
             else
@@ -1249,6 +1258,14 @@ void EditorWindow::slotToggleFullScreen()
         toggleGUI2FullScreen();
         setWindowState(windowState() | Qt::WindowFullScreen);   // set
         m_fullScreen = true;
+    }
+}
+
+void EditorWindow::keyPressEvent(QKeyEvent* e)
+{
+    if (e->key() == Qt::Key_Escape)
+    {
+        slotEscapePressed();
     }
 }
 

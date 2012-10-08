@@ -49,12 +49,14 @@ public:
 
     Private() :
         tool(0),
-        editor(0)
+        editor(0),
+        sidebarWasExpanded(false)
     {
     }
 
     EditorTool*   tool;
     EditorWindow* editor;
+    bool          sidebarWasExpanded;
 };
 
 EditorToolIface* EditorToolIface::m_iface = 0;
@@ -157,6 +159,10 @@ void EditorToolIface::unLoadTool()
     d->editor->editorStackView()->setViewMode(EditorStackView::CanvasMode);
     d->editor->editorStackView()->setToolView(0);
     d->editor->rightSideBar()->deleteTab(d->tool->toolSettings());
+    if (!d->editor->rightSideBar()->isVisible())
+    {
+        d->editor->rightSideBar()->shrink();
+    }
     d->editor->toggleActions(true);
     d->editor->toggleToolActions();
     d->editor->setPreviewModeMask(PreviewToolBar::NoPreviewMode);

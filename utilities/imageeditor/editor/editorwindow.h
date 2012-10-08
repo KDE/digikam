@@ -331,6 +331,10 @@ private Q_SLOTS:
     void slotSelectToolsMenuAboutToShow();
     void slotThemeChanged();
 
+protected:
+
+    void keyPressEvent(QKeyEvent* e);
+
 private:
 
     void enterWaitingLoop();
