@@ -6,9 +6,9 @@
  * Date        : 2005-06-14
  * Description : digiKam 8/16 bits image management API
  *
- * Copyright (C) 2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2005-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005      by Renchi Raju <renchi dot raju at gmail dot com>
+ * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -99,14 +99,14 @@ DImg::DImg()
 {
 }
 
-DImg::DImg(const QByteArray& filePath, DImgLoaderObserver* observer,
+DImg::DImg(const QByteArray& filePath, DImgLoaderObserver* const observer,
            DRawDecoding rawDecodingSettings)
     : m_priv(new DImgPrivate)
 {
     load(filePath, observer, rawDecodingSettings);
 }
 
-DImg::DImg(const QString& filePath, DImgLoaderObserver* observer,
+DImg::DImg(const QString& filePath, DImgLoaderObserver* const observer,
            DRawDecoding rawDecodingSettings)
     : m_priv(new DImgPrivate)
 {
@@ -118,7 +118,7 @@ DImg::DImg(const DImg& image)
     m_priv = image.m_priv;
 }
 
-DImg::DImg(uint width, uint height, bool sixteenBit, bool alpha, uchar* data, bool copyData)
+DImg::DImg(uint width, uint height, bool sixteenBit, bool alpha, uchar* const data, bool copyData)
     : m_priv(new DImgPrivate)
 {
     putImageData(width, height, sixteenBit, alpha, data, copyData);
@@ -156,8 +156,8 @@ DImg::DImg(const QImage& image)
 
         if (allocateData())
         {
-            uint*  sptr = (uint*)target.bits();
-            uchar* dptr = m_priv->data;
+            uint*  sptr       = (uint*)target.bits();
+            uchar* dptr       = m_priv->data;
             const uint pixels = numPixels();
 
             for (uint i = 0 ; i < pixels ; ++i)
@@ -179,10 +179,8 @@ DImg::~DImg()
 {
 }
 
-
 //---------------------------------------------------------------------------------------------------
 // data management
-
 
 DImg& DImg::operator=(const DImg& image)
 {
@@ -224,7 +222,7 @@ void DImg::detach()
     }
 }
 
-void DImg::putImageData(uint width, uint height, bool sixteenBit, bool alpha, uchar* data, bool copyData)
+void DImg::putImageData(uint width, uint height, bool sixteenBit, bool alpha, uchar* const data, bool copyData)
 {
     // set image data, metadata is untouched
 
@@ -263,7 +261,7 @@ void DImg::putImageData(uint width, uint height, bool sixteenBit, bool alpha, uc
     }
 }
 
-void DImg::putImageData(uchar* data, bool copyData)
+void DImg::putImageData(uchar* const data, bool copyData)
 {
     if (!data)
     {
@@ -296,7 +294,7 @@ uchar* DImg::stripImageData()
     return data;
 }
 
-void DImg::copyMetaData(const DImgPrivate* src)
+void DImg::copyMetaData(const DImgPrivate* const src)
 {
     m_priv->metaData     = src->metaData;
     m_priv->attributes   = src->attributes;
@@ -306,7 +304,7 @@ void DImg::copyMetaData(const DImgPrivate* src)
     //FIXME: what about sharing and deleting lanczos_func?
 }
 
-void DImg::copyImageData(const DImgPrivate* src)
+void DImg::copyImageData(const DImgPrivate* const src)
 {
     setImageData(src->null, src->width, src->height, src->sixteenBit, src->alpha);
 }
@@ -372,14 +370,13 @@ bool DImg::loadImageInfo(const QString& filePath, bool loadMetadata, bool loadIC
     return load(filePath, loadFlags, 0, DRawDecoding());
 }
 
-bool DImg::load(const QString& filePath, DImgLoaderObserver* observer,
-                DRawDecoding rawDecodingSettings)
+bool DImg::load(const QString& filePath, DImgLoaderObserver* const observer, const DRawDecoding& rawDecodingSettings)
 {
     return load(filePath, DImgLoader::LoadAll, observer, rawDecodingSettings);
 }
 
 bool DImg::load(const QString& filePath, bool loadMetadata, bool loadICCData, bool loadUniqueHash, bool loadImageHistory,
-                DImgLoaderObserver* observer, DRawDecoding rawDecodingSettings)
+                DImgLoaderObserver* const observer, const DRawDecoding& rawDecodingSettings)
 {
     DImgLoader::LoadFlags loadFlags = DImgLoader::LoadImageInfo | DImgLoader::LoadImageData;
 
@@ -406,8 +403,8 @@ bool DImg::load(const QString& filePath, bool loadMetadata, bool loadICCData, bo
     return load(filePath, loadFlags, observer, rawDecodingSettings);
 }
 
-bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver* observer,
-                DRawDecoding rawDecodingSettings)
+bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver* const observer,
+                const DRawDecoding& rawDecodingSettings)
 {
     FORMAT format = fileFormat(filePath);
     DImgLoader::LoadFlags loadFlags = (DImgLoader::LoadFlags)loadFlagsInt;
@@ -416,6 +413,7 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver* o
     setAttribute("originalFilePath", filePath);
 
     FileReadLocker lock(filePath);
+
     switch (format)
     {
         case (NONE):
@@ -630,7 +628,7 @@ QString DImg::formatToMimeType(FORMAT frm)
     return format;
 }
 
-bool DImg::save(const QString& filePath, FORMAT frm, DImgLoaderObserver* observer)
+bool DImg::save(const QString& filePath, FORMAT frm, DImgLoaderObserver* const observer)
 {
     if (isNull())
     {
@@ -640,7 +638,7 @@ bool DImg::save(const QString& filePath, FORMAT frm, DImgLoaderObserver* observe
     return(save(filePath, formatToMimeType(frm), observer));
 }
 
-bool DImg::save(const QString& filePath, const QString& format, DImgLoaderObserver* observer)
+bool DImg::save(const QString& filePath, const QString& format, DImgLoaderObserver* const observer)
 {
     if (isNull())
     {
@@ -656,6 +654,7 @@ bool DImg::save(const QString& filePath, const QString& format, DImgLoaderObserv
     setAttribute("savedFilePath", filePath);
 
     FileWriteLocker lock(filePath);
+
     if (frm == "JPEG" || frm == "JPG" || frm == "JPE")
     {
         // JPEG does not support transparency, so we shall provide an image without alpha channel.
@@ -1109,6 +1108,7 @@ QStringList DImgPrivate::fileOriginAttributes()
 QVariant DImg::fileOriginData() const
 {
     QVariantMap map;
+
     foreach(const QString& key, m_priv->fileOriginAttributes())
     {
         QVariant attr = attribute(key);
@@ -1118,6 +1118,7 @@ QVariant DImg::fileOriginData() const
             map.insert(key, attr);
         }
     }
+
     return map;
 }
 
@@ -1165,6 +1166,7 @@ QVariant DImg::lastSavedFileOriginData() const
 void DImg::setFileOriginData(const QVariant& data)
 {
     QVariantMap map = data.toMap();
+
     foreach(const QString& key, m_priv->fileOriginAttributes())
     {
         removeAttribute(key);
@@ -1517,7 +1519,6 @@ bool DImg::hasTransparentPixels() const
 //---------------------------------------------------------------------------------------------------
 // copying operations
 
-
 DImg DImg::copy() const
 {
     DImg img(*this);
@@ -1567,22 +1568,20 @@ DImg DImg::copy(int x, int y, int w, int h) const
     return image;
 }
 
-
 //---------------------------------------------------------------------------------------------------
 // bitwise operations
 
-
-void DImg::bitBltImage(const DImg* src, int dx, int dy)
+void DImg::bitBltImage(const DImg* const src, int dx, int dy)
 {
     bitBltImage(src, 0, 0, src->width(), src->height(), dx, dy);
 }
 
-void DImg::bitBltImage(const DImg* src, int sx, int sy, int dx, int dy)
+void DImg::bitBltImage(const DImg* const src, int sx, int sy, int dx, int dy)
 {
     bitBltImage(src, sx, sy, src->width() - sx, src->height() - sy, dx, dy);
 }
 
-void DImg::bitBltImage(const DImg* src, int sx, int sy, int w, int h, int dx, int dy)
+void DImg::bitBltImage(const DImg* const src, int sx, int sy, int w, int h, int dx, int dy)
 {
     if (isNull())
     {
@@ -1605,7 +1604,7 @@ void DImg::bitBltImage(const DImg* src, int sx, int sy, int w, int h, int dx, in
            src->width(), src->height(), width(), height(), sixteenBit(), src->bytesDepth(), bytesDepth());
 }
 
-void DImg::bitBltImage(const uchar* src, int sx, int sy, int w, int h, int dx, int dy,
+void DImg::bitBltImage(const uchar* const src, int sx, int sy, int w, int h, int dx, int dy,
                        uint swidth, uint sheight, int sdepth)
 {
     if (isNull())
@@ -1689,7 +1688,7 @@ bool DImg::normalizeRegionArguments(int& sx, int& sy, int& w, int& h, int& dx, i
     return true;
 }
 
-void DImg::bitBlt(const uchar* src, uchar* dest,
+void DImg::bitBlt(const uchar* const src, uchar* const dest,
                   int sx, int sy, int w, int h, int dx, int dy,
                   uint swidth, uint sheight, uint dwidth, uint dheight,
                   bool /*sixteenBit*/, int sdepth, int ddepth)
@@ -1734,7 +1733,7 @@ void DImg::bitBlt(const uchar* src, uchar* dest,
 }
 
 
-void DImg::bitBlendImage(DColorComposer* composer, const DImg* src,
+void DImg::bitBlendImage(DColorComposer* const composer, const DImg* const src,
                          int sx, int sy, int w, int h, int dx, int dy,
                          DColorComposer::MultiplicationFlags multiplicationFlags)
 {
@@ -1754,7 +1753,7 @@ void DImg::bitBlendImage(DColorComposer* composer, const DImg* src,
              src->bytesDepth(), bytesDepth(), multiplicationFlags);
 }
 
-void DImg::bitBlend(DColorComposer* composer, const uchar* src, uchar* dest,
+void DImg::bitBlend(DColorComposer* const composer, const uchar* const src, uchar* const dest,
                     int sx, int sy, int w, int h, int dx, int dy,
                     uint swidth, uint sheight, uint dwidth, uint dheight,
                     bool sixteenBit, int sdepth, int ddepth,
@@ -1812,7 +1811,7 @@ void DImg::bitBlendImageOnColor(const DColor& color, int x, int y, int w, int h)
     delete composer;
 }
 
-void DImg::bitBlendImageOnColor(DColorComposer* composer, const DColor& color,
+void DImg::bitBlendImageOnColor(DColorComposer* const composer, const DColor& color,
                                 int x, int y, int w, int h,
                                 DColorComposer::MultiplicationFlags multiplicationFlags)
 {
@@ -1836,8 +1835,8 @@ void DImg::bitBlendImageOnColor(DColorComposer* composer, const DColor& color,
                     width(), height(), sixteenBit(), bytesDepth(), multiplicationFlags);
 }
 
-void DImg::bitBlendOnColor(DColorComposer* composer, const DColor& color,
-                           uchar* data, int x, int y, int w, int h,
+void DImg::bitBlendOnColor(DColorComposer* const composer, const DColor& color,
+                           uchar* const data, int x, int y, int w, int h,
                            uint width, uint height, bool sixteenBit, int depth,
                            DColorComposer::MultiplicationFlags multiplicationFlags)
 {
@@ -1873,7 +1872,6 @@ void DImg::bitBlendOnColor(DColorComposer* composer, const DColor& color,
 
 //---------------------------------------------------------------------------------------------------
 // QImage / QPixmap access
-
 
 QImage DImg::copyQImage() const
 {
@@ -2028,7 +2026,7 @@ QPixmap DImg::convertToPixmap(IccTransform& monitorICCtrans) const
     return (img.convertToPixmap());
 }
 
-QImage DImg::pureColorMask(ExposureSettingsContainer* expoSettings) const
+QImage DImg::pureColorMask(ExposureSettingsContainer* const expoSettings) const
 {
     if (isNull() || (!expoSettings->underExposureIndicator && !expoSettings->overExposureIndicator))
     {
@@ -2696,7 +2694,7 @@ void DImg::convertToEightBit()
     convertDepth(32);
 }
 
-void DImg::convertToDepthOfImage(const DImg* otherImage)
+void DImg::convertToDepthOfImage(const DImg* const otherImage)
 {
     if (otherImage->sixteenBit())
     {
@@ -2888,7 +2886,7 @@ QByteArray DImg::createImageUniqueId() const
 {
     NonDeterministicRandomData randomData(16);
     QByteArray imageUUID = randomData.toHex();
-    imageUUID += getUniqueHashV2();
+    imageUUID            += getUniqueHashV2();
     return imageUUID;
 }
 
@@ -2938,7 +2936,7 @@ void DImg::prepareMetadataToSave(const QString& intendedDestPath, const QString&
         }
     }
 
-    bool createNewPreview = false;
+    bool createNewPreview    = false;
     QSize previewSize;
     bool skipPreviewCreation = false;
 

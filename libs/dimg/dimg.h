@@ -6,9 +6,9 @@
  * Date        : 2005-06-14
  * Description : digiKam 8/16 bits image management API
  *
- * Copyright (C) 2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2005-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005      by Renchi Raju <renchi dot raju at gmail dot com>
+ * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -47,7 +47,6 @@
 #include "dcolorcomposer.h"
 #include "historyimageid.h"
 #include "iccprofile.h"
-
 
 class QImage;
 class QPixmap;
@@ -126,12 +125,12 @@ public:
 
     /** Load image using QByteArray as file path
      */
-    explicit DImg(const QByteArray& filePath, DImgLoaderObserver* observer = 0,
+    explicit DImg(const QByteArray& filePath, DImgLoaderObserver* const observer = 0,
                   DRawDecoding rawDecodingSettings=DRawDecoding());
 
     /** Load image using QString as file path
      */
-    explicit DImg(const QString& filePath, DImgLoaderObserver* observer = 0,
+    explicit DImg(const QString& filePath, DImgLoaderObserver* const observer = 0,
                   DRawDecoding rawDecodingSettings=DRawDecoding());
 
     /** Copy image: Creates a shallow copy that refers to the same shared data.
@@ -150,7 +149,7 @@ public:
         If copyData is false, this DImg object will take ownership of the data pointer.
         If there is an alpha channel, the data shall be in non-premultiplied form (unassociated alpha).
      */
-    DImg(uint width, uint height, bool sixteenBit, bool alpha=false, uchar* data=0, bool copyData=true);
+    DImg(uint width, uint height, bool sixteenBit, bool alpha=false, uchar* const data=0, bool copyData=true);
 
     ~DImg();
 
@@ -179,7 +178,7 @@ public:
 
     /** Replaces image data of this object. Metadata is unchanged. Parameters like constructor above.
      */
-    void        putImageData(uint width, uint height, bool sixteenBit, bool alpha, uchar* data, bool copyData = true);
+    void        putImageData(uint width, uint height, bool sixteenBit, bool alpha, uchar* const data, bool copyData = true);
 
     /** Overloaded function, provided for convenience, behaves essentially
         like the function above if data is not 0.
@@ -187,7 +186,7 @@ public:
         If data is 0, the current data is deleted and the image is set to null
         (But metadata unchanged).
      */
-    void        putImageData(uchar* data, bool copyData = true);
+    void        putImageData(uchar* const data, bool copyData = true);
 
     /** Reset metadata and image data to null image
      */
@@ -202,16 +201,16 @@ public:
      */
     uchar*      stripImageData();
 
-    bool        load(const QString& filePath, DImgLoaderObserver* observer = 0,
-                     DRawDecoding rawDecodingSettings=DRawDecoding());
+    bool        load(const QString& filePath, DImgLoaderObserver* const observer = 0,
+                     const DRawDecoding& rawDecodingSettings=DRawDecoding());
 
     bool        load(const QString& filePath,
                      bool loadMetadata, bool loadICCData, bool loadUniqueHash, bool loadHistory,
-                     DImgLoaderObserver* observer = 0,
-                     DRawDecoding rawDecodingSettings=DRawDecoding());
+                     DImgLoaderObserver* const observer = 0,
+                     const DRawDecoding& rawDecodingSettings=DRawDecoding());
 
-    bool        save(const QString& filePath, FORMAT frm, DImgLoaderObserver* observer = 0);
-    bool        save(const QString& filePath, const QString& format, DImgLoaderObserver* observer = 0);
+    bool        save(const QString& filePath, FORMAT frm, DImgLoaderObserver* const observer = 0);
+    bool        save(const QString& filePath, const QString& format, DImgLoaderObserver* const observer = 0);
 
     /**
      * It is common that images are not directly saved to the destination path.
@@ -480,17 +479,17 @@ public:
         (Default: 0|0)
         The bit depth of source and destination must be identical.
      */
-    void       bitBltImage(const DImg* src, int dx, int dy);
-    void       bitBltImage(const DImg* src, int sx, int sy, int dx, int dy);
-    void       bitBltImage(const DImg* src, int sx, int sy, int w, int h, int dx, int dy);
-    void       bitBltImage(const uchar* src, int sx, int sy, int w, int h, int dx, int dy,
+    void       bitBltImage(const DImg* const src, int dx, int dy);
+    void       bitBltImage(const DImg* const src, int sx, int sy, int dx, int dy);
+    void       bitBltImage(const DImg* const src, int sx, int sy, int w, int h, int dx, int dy);
+    void       bitBltImage(const uchar* const src, int sx, int sy, int w, int h, int dx, int dy,
                            uint swidth, uint sheight, int sdepth);
 
     /** Blend src image on this image (this is dest) with the specified composer
         and multiplication flags. See documentation of DColorComposer for more info.
         For the other arguments, see documentation of bitBltImage above.
      */
-    void       bitBlendImage(DColorComposer* composer, const DImg* src,
+    void       bitBlendImage(DColorComposer* const composer, const DImg* const src,
                              int sx, int sy, int w, int h, int dx, int dy,
                              DColorComposer::MultiplicationFlags multiplicationFlags =
                                  DColorComposer::NoMultiplication);
@@ -499,7 +498,7 @@ public:
         composer and multiplication flags. See documentation of DColorComposer for more info.
         Note that the result pixel is again written to this image, which is, for the blending, source.
      */
-    void       bitBlendImageOnColor(DColorComposer* composer, const DColor& color,
+    void       bitBlendImageOnColor(DColorComposer* const composer, const DColor& color,
                                     int x, int y, int w, int h,
                                     DColorComposer::MultiplicationFlags multiplicationFlags =
                                         DColorComposer::NoMultiplication);
@@ -576,7 +575,7 @@ public:
     /** Return a mask image where pure white and pure black pixels are over-colored.
         This way is used to identify over and under exposed pixels.
      */
-    QImage     pureColorMask(ExposureSettingsContainer* expoSettings) const;
+    QImage     pureColorMask(ExposureSettingsContainer* const expoSettings) const;
 
     /** Convert depth of image. Depth is bytesDepth * bitsDepth.
         If depth is 32, converts to 8 bits,
@@ -588,7 +587,7 @@ public:
      */
     void       convertToSixteenBit();
     void       convertToEightBit();
-    void       convertToDepthOfImage(const DImg* otherImage);
+    void       convertToDepthOfImage(const DImg* const otherImage);
 
     /** Fill whole image with specified color.
         The bit depth of the color must be identical to the depth of this image.
@@ -647,35 +646,35 @@ public:
 
 private:
 
-    DSharedDataPointer<DImgPrivate> m_priv;
-
-private:
-
     DImg(const DImg& image, int w, int h);
 
-    bool load(const QString& filePath, int loadFlags, DImgLoaderObserver* observer,
-              DRawDecoding rawDecodingSettings=DRawDecoding());
-    void copyMetaData(const DImgPrivate* src);
-    void copyImageData(const DImgPrivate* src);
+    bool load(const QString& filePath, int loadFlags, DImgLoaderObserver* const observer,
+              const DRawDecoding& rawDecodingSettings=DRawDecoding());
+    void copyMetaData(const DImgPrivate* const src);
+    void copyImageData(const DImgPrivate* const src);
     void setImageData(bool null, uint width, uint height, bool sixteenBit, bool alpha);
     void setImageDimension(uint width, uint height);
     int  allocateData();
 
-    static void bitBlt(const uchar* src, uchar* dest,
+    static void bitBlt(const uchar* const src, uchar* const dest,
                        int sx, int sy, int w, int h, int dx, int dy,
                        uint swidth, uint sheight, uint dwidth, uint dheight,
                        bool sixteenBit, int sdepth, int ddepth);
-    static void bitBlend(DColorComposer* composer, const uchar* src, uchar* dest,
+    static void bitBlend(DColorComposer* const composer, const uchar* const src, uchar* const dest,
                          int sx, int sy, int w, int h, int dx, int dy,
                          uint swidth, uint sheight, uint dwidth, uint dheight,
                          bool sixteenBit, int sdepth, int ddepth,
                          DColorComposer::MultiplicationFlags multiplicationFlags);
-    static void bitBlendOnColor(DColorComposer* composer, const DColor& color,
+    static void bitBlendOnColor(DColorComposer* const composer, const DColor& color,
                                 uchar* data, int x, int y, int w, int h,
                                 uint width, uint height, bool sixteenBit, int depth,
                                 DColorComposer::MultiplicationFlags multiplicationFlags);
     static bool normalizeRegionArguments(int& sx, int& sy, int& w, int& h, int& dx, int& dy,
                                          uint swidth, uint sheight, uint dwidth, uint dheight);
+
+private:
+
+    DSharedDataPointer<DImgPrivate> m_priv;
 
     friend class DImgLoader;
 };

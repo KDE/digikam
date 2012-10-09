@@ -41,8 +41,6 @@ typedef QAtomic QAtomicInt;
 namespace Digikam
 {
 
-template <class T> class DSharedDataPointer;
-
 class DIGIKAM_EXPORT DSharedData
 {
     /**

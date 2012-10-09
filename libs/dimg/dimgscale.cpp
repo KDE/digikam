@@ -9,8 +9,8 @@
  *               smoothScaleSection - Scaling only of a
  *               section of a image. Added 16bit image support
  *
- * Copyright (C) 2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005      by Renchi Raju <renchi dot raju at gmail dot com>
+ * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * Ported to C++/QImage by Daniel M. Duley
  * Following modification are (C) Daniel M. Duley
@@ -64,6 +64,7 @@ namespace Digikam
 
 namespace DImgScale
 {
+
 class DImgScaleInfo
 {
 public:
@@ -95,8 +96,8 @@ public:
     int      xup_yup;
 };
 
-uint**   dimgCalcYPoints(uint* src, int sw, int sh, int dh);
-ullong** dimgCalcYPoints16(ullong* src, int sw, int sh, int dh);
+uint**   dimgCalcYPoints(uint* const src, int sw, int sh, int dh);
+ullong** dimgCalcYPoints16(ullong* const src, int sw, int sh, int dh);
 int*     dimgCalcXPoints(int sw, int dw);
 int*     dimgCalcApoints(int s, int d, int up);
 
@@ -107,47 +108,53 @@ DImgScaleInfo* dimgCalcScaleInfo(const DImg& img,
                                  bool aa);
 
 // 8 bit, not smoothed
-void dimgSampleRGBA(DImgScaleInfo* isi, uint* dest,
+void dimgSampleRGBA(DImgScaleInfo* const isi, uint* const dest,
                     int dxx, int dyy, int dw, int dh, int dow);
-void dimgSampleRGBA(DImgScaleInfo* isi, uint* dest,
+
+void dimgSampleRGBA(DImgScaleInfo* const isi, uint* const dest,
                     int dxx, int dyy, int dw, int dh, int dow,
                     int clip_dx, int clip_dy, int clip_dw, int clip_dh);
 
 // 16 bit, not smoothed
-void dimgSampleRGBA16(DImgScaleInfo* isi, ullong* dest,
+void dimgSampleRGBA16(DImgScaleInfo* const isi, ullong* const dest,
                       int dxx, int dyy, int dw, int dh, int dow);
-void dimgSampleRGBA16(DImgScaleInfo* isi, ullong* dest,
+
+void dimgSampleRGBA16(DImgScaleInfo* const isi, ullong* const dest,
                       int dxx, int dyy, int dw, int dh, int dow,
                       int clip_dx, int clip_dy, int clip_dw, int clip_dh);
 
 // 8 bit, RGBA
-void dimgScaleAARGBA(DImgScaleInfo* isi, uint* dest,
+void dimgScaleAARGBA(DImgScaleInfo* const isi, uint* const dest,
                      int dxx, int dyy, int dw, int dh, int dow, int sow);
-void dimgScaleAARGBA(DImgScaleInfo* isi, uint* dest,
+
+void dimgScaleAARGBA(DImgScaleInfo* const isi, uint* const dest,
                      int dxx, int dyy, int dw, int dh, int dow, int sow,
                      int clip_dx, int clip_dy, int clip_dw, int clip_dh);
 
 // 8 bit, RGB
-void dimgScaleAARGB(DImgScaleInfo* isi, uint* dest,
+void dimgScaleAARGB(DImgScaleInfo* const isi, uint* const dest,
                     int dxx, int dyy, int dw, int dh, int dow, int sow);
-void dimgScaleAARGB(DImgScaleInfo* isi, uint* dest,
+
+void dimgScaleAARGB(DImgScaleInfo* const isi, uint* const dest,
                     int dxx, int dyy, int dw, int dh, int dow, int sow,
                     int clip_dx, int clip_dy, int clip_dw, int clip_dh);
 
 // 16 bit, RGBA
-void dimgScaleAARGBA16(DImgScaleInfo* isi, ullong* dest,
+void dimgScaleAARGBA16(DImgScaleInfo* const isi, ullong* const dest,
                        int dxx, int dyy, int dw, int dh,
                        int dow, int sow);
-void dimgScaleAARGBA16(DImgScaleInfo* isi, ullong* dest,
+
+void dimgScaleAARGBA16(DImgScaleInfo* const isi, ullong* const dest,
                        int dxx, int dyy, int dw, int dh,
                        int dow, int sow,
                        int clip_dx, int clip_dy, int clip_dw, int clip_dh);
 
 // 16 bit, RGB
-void dimgScaleAARGB16(DImgScaleInfo* isi, ullong* dest,
+void dimgScaleAARGB16(DImgScaleInfo* const isi, ullong* const dest,
                       int dxx, int dyy, int dw, int dh,
                       int dow, int sow);
-void dimgScaleAARGB16(DImgScaleInfo* isi, ullong* dest,
+
+void dimgScaleAARGB16(DImgScaleInfo* const isi, ullong* const dest,
                       int dxx, int dyy, int dw, int dh,
                       int dow, int sow,
                       int clip_dx, int clip_dy, int clip_dw, int clip_dh);
@@ -413,9 +420,9 @@ DImg DImg::smoothScaleSection(int sx, int sy,
 #define INV_YAP  (256 - yapoints[dyy + y])
 #define YAP      (yapoints[dyy + y])
 
-uint** DImgScale::dimgCalcYPoints(uint* src, int sw, int sh, int dh)
+uint** DImgScale::dimgCalcYPoints(uint* const src, int sw, int sh, int dh)
 {
-    uint** p=0;
+    uint** p = 0;
     int i, j = 0;
     ullong val, inc;
 
@@ -433,10 +440,10 @@ uint** DImgScale::dimgCalcYPoints(uint* src, int sw, int sh, int dh)
     return(p);
 }
 
-ullong** DImgScale::dimgCalcYPoints16(ullong* src, int sw, int sh, int dh)
+ullong** DImgScale::dimgCalcYPoints16(ullong* const src, int sw, int sh, int dh)
 {
-    ullong** p=0;
-    int i, j = 0;
+    ullong** p = 0;
+    int i, j   = 0;
     ullong val, inc;
 
     p = new ullong*[(dh+1)];
@@ -573,14 +580,14 @@ DImgScaleInfo* DImgScale::dimgCalcScaleInfo(const DImg& img,
 }
 
 /** scale by pixel sampling only */
-void DImgScale::dimgSampleRGBA(DImgScaleInfo* isi, uint* dest,
+void DImgScale::dimgSampleRGBA(DImgScaleInfo* const isi, uint* const dest,
                                int dxx, int dyy, int dw, int dh, int dow)
 {
     dimgSampleRGBA(isi, dest, dxx, dyy, dw, dh, dow,
                    0, 0, dw, dh);
 }
 
-void DImgScale::dimgSampleRGBA(DImgScaleInfo* isi, uint* dest,
+void DImgScale::dimgSampleRGBA(DImgScaleInfo* const isi, uint* const dest,
                                int dxx, int dyy, int dw, int dh, int dow,
                                int clip_dx, int clip_dy, int clip_dw, int clip_dh)
 {
@@ -613,14 +620,14 @@ void DImgScale::dimgSampleRGBA(DImgScaleInfo* isi, uint* dest,
     }
 }
 
-void DImgScale::dimgSampleRGBA16(DImgScaleInfo* isi, ullong* dest,
+void DImgScale::dimgSampleRGBA16(DImgScaleInfo* const isi, ullong* const dest,
                                  int dxx, int dyy, int dw, int dh, int dow)
 {
     dimgSampleRGBA16(isi, dest, dxx, dyy, dw, dh, dow,
                      0, 0, dw, dh);
 }
 
-void DImgScale::dimgSampleRGBA16(DImgScaleInfo* isi, ullong* dest,
+void DImgScale::dimgSampleRGBA16(DImgScaleInfo* const isi, ullong* const dest,
                                  int dxx, int dyy, int dw, int dh, int dow,
                                  int clip_dx, int clip_dy, int clip_dw, int clip_dh)
 {
@@ -667,7 +674,7 @@ dimgScaleAARGBA : scale by area sampling. Arguments:
   int            sow);             // src scanline width
 */
 
-void DImgScale::dimgScaleAARGBA(DImgScaleInfo* isi, uint* dest,
+void DImgScale::dimgScaleAARGBA(DImgScaleInfo* const isi, uint* const dest,
                                 int dxx, int dyy,
                                 int dw, int dh,
                                 int dow, int sow
@@ -677,7 +684,7 @@ void DImgScale::dimgScaleAARGBA(DImgScaleInfo* isi, uint* dest,
                     0, 0, dw, dh);
 }
 
-void DImgScale::dimgScaleAARGBA(DImgScaleInfo* isi, uint* dest,
+void DImgScale::dimgScaleAARGBA(DImgScaleInfo* const isi, uint* const dest,
                                 int dxx, int dyy,
                                 int dw, int dh,
                                 int dow, int sow,
@@ -1136,7 +1143,7 @@ void DImgScale::dimgScaleAARGBA(DImgScaleInfo* isi, uint* dest,
     }
 }
 
-void DImgScale::dimgScaleAARGB(DImgScaleInfo* isi, uint* dest,
+void DImgScale::dimgScaleAARGB(DImgScaleInfo* const isi, uint* const dest,
                                int dxx, int dyy,
                                int dw, int dh,
                                int dow, int sow
@@ -1147,7 +1154,7 @@ void DImgScale::dimgScaleAARGB(DImgScaleInfo* isi, uint* dest,
 }
 
 /** scale by area sampling - IGNORE the ALPHA byte */
-void DImgScale::dimgScaleAARGB(DImgScaleInfo* isi, uint* dest,
+void DImgScale::dimgScaleAARGB(DImgScaleInfo* const isi, uint* const dest,
                                int dxx, int dyy,
                                int dw, int dh,
                                int dow, int sow,
@@ -1565,7 +1572,7 @@ void DImgScale::dimgScaleAARGB(DImgScaleInfo* isi, uint* dest,
 #define G_VAL16(p) ((ushort*)(p))[1]
 #define B_VAL16(p) ((ushort*)(p))[0]
 
-void DImgScale::dimgScaleAARGB16(DImgScaleInfo* isi, ullong* dest,
+void DImgScale::dimgScaleAARGB16(DImgScaleInfo* const isi, ullong* const dest,
                                  int dxx, int dyy,
                                  int dw, int dh,
                                  int dow, int sow)
@@ -1575,7 +1582,7 @@ void DImgScale::dimgScaleAARGB16(DImgScaleInfo* isi, ullong* dest,
 }
 
 /** scale by area sampling - IGNORE the ALPHA byte*/
-void DImgScale::dimgScaleAARGB16(DImgScaleInfo* isi, ullong* dest,
+void DImgScale::dimgScaleAARGB16(DImgScaleInfo* const isi, ullong* const dest,
                                  int dxx, int dyy, int dw, int dh,
                                  int dow, int sow,
                                  int clip_dx, int clip_dy,
@@ -1985,7 +1992,7 @@ void DImgScale::dimgScaleAARGB16(DImgScaleInfo* isi, ullong* dest,
     }
 }
 
-void DImgScale::dimgScaleAARGBA16(DImgScaleInfo* isi, ullong* dest,
+void DImgScale::dimgScaleAARGBA16(DImgScaleInfo* const isi, ullong* const dest,
                                   int dxx, int dyy,
                                   int dw, int dh,
                                   int dow, int sow
@@ -1996,7 +2003,7 @@ void DImgScale::dimgScaleAARGBA16(DImgScaleInfo* isi, ullong* dest,
 }
 
 /* scale by area sampling */
-void DImgScale::dimgScaleAARGBA16(DImgScaleInfo* isi, ullong* dest,
+void DImgScale::dimgScaleAARGBA16(DImgScaleInfo* const isi, ullong* const dest,
                                   int dxx, int dyy,
                                   int dw,  int dh,
                                   int dow, int sow,

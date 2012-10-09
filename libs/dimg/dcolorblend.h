@@ -217,4 +217,3 @@ inline void DColor::multiply(float factor)
 } // namespace Digikam
 
 #endif  // DCOLORBLEND_H
-

@@ -6,7 +6,7 @@
  * Date        : 2005-12-02
  * Description : 8-16 bits color container.
  *
- * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -46,7 +46,8 @@ public:
     /** Initialize with default value, fully transparent eight bit black */
     DColor()
         : m_red(0), m_green(0), m_blue(0), m_alpha(0), m_sixteenBit(false)
-    {};
+    {
+    };
 
     /** Read value from data. Equivalent to setColor() */
     explicit DColor(const uchar* data, bool sixteenBit = false)
@@ -57,7 +58,8 @@ public:
     /** Initialize with given RGBA values */
     DColor(int red, int green, int blue, int alpha, bool sixteenBit)
         : m_red(red), m_green(green), m_blue(blue), m_alpha(alpha), m_sixteenBit(sixteenBit)
-    {};
+    {
+    };
 
     /** Read values from QColor, convert to sixteenBit of sixteenBit is true */
     explicit DColor(const QColor& color, bool sixteenBit=false);
@@ -69,31 +71,35 @@ public:
         If sixteenBit is true, 8 bytes are read.
         Inline method.
      */
-    inline void setColor(const uchar* data, bool sixteenBit = false);
+    inline void setColor(const uchar* const data, bool sixteenBit = false);
 
     /** Write the values of this color to the given memory location.
         If sixteenBit is false, 4 bytes are written.
         If sixteenBit is true, 8 bytes are written.
         Inline method.
     */
-    inline void setPixel(uchar* data) const;
+    inline void setPixel(uchar* const data) const;
 
     int  red  () const
     {
         return m_red;
     }
+
     int  green() const
     {
         return m_green;
     }
+
     int  blue () const
     {
         return m_blue;
     }
+
     int  alpha() const
     {
         return m_alpha;
     }
+
     bool sixteenBit() const
     {
         return m_sixteenBit;
@@ -103,18 +109,22 @@ public:
     {
         m_red = red;
     }
+
     void setGreen(int green)
     {
         m_green = green;
     }
+
     void setBlue (int blue)
     {
         m_blue = blue;
     }
+
     void setAlpha(int alpha)
     {
         m_alpha = alpha;
     }
+
     void setSixteenBit(bool sixteenBit)
     {
         m_sixteenBit = sixteenBit;
@@ -126,6 +136,7 @@ public:
     {
         return (m_red == v && m_green == v && m_blue == v);
     };
+
     inline bool isPureGray()
     {
         return ( (m_red == m_green) && (m_red == m_blue) );
