@@ -106,7 +106,7 @@ protected:
     QVariant                imageGetAttribute(const QString& key) const;
     void                    imageSetAttribute(const QString& key, const QVariant& value);
 
-    QMap<QString, QString>& imageEmbeddedText() const;
+    QMap<QString, QString>& imageEmbeddedText()                      const;
     QString                 imageGetEmbbededText(const QString& key) const;
     void                    imageSetEmbbededText(const QString& key, const QString& text);
 
@@ -117,8 +117,7 @@ protected:
 
     virtual bool            readMetadata(const QString& filePath, DImg::FORMAT ff);
     virtual bool            saveMetadata(const QString& filePath);
-    virtual int             granularity(DImgLoaderObserver* observer, int total, float progressSlice = 1.0);
-
+    virtual int             granularity(DImgLoaderObserver* const observer, int total, float progressSlice = 1.0);
 
 protected:
 
@@ -155,7 +154,6 @@ Q_INLINE_TEMPLATE Type* DImgLoader::new_failureTolerant(size_t size)
 
     return reserved;
 }
-
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(DImgLoader::LoadFlags)
 

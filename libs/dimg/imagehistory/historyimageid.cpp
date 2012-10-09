@@ -165,14 +165,14 @@ QString HistoryImageId::originalUuid() const
 
 bool HistoryImageId::operator==(const HistoryImageId& other) const
 {
-    return m_uuid         == other.m_uuid
-           &&  m_type         == other.m_type
-           &&  m_fileName     == other.m_fileName
-           &&  m_filePath     == other.m_filePath
-           &&  m_creationDate == other.m_creationDate
-           &&  m_uniqueHash   == other.m_uniqueHash
-           &&  m_fileSize     == other.m_fileSize
-           &&  m_originalUUID == other.m_originalUUID;
+    return m_uuid         == other.m_uuid           &&
+           m_type         == other.m_type           &&
+           m_fileName     == other.m_fileName       &&
+           m_filePath     == other.m_filePath       &&
+           m_creationDate == other.m_creationDate   &&
+           m_uniqueHash   == other.m_uniqueHash     &&
+           m_fileSize     == other.m_fileSize       &&
+           m_originalUUID == other.m_originalUUID;
 }
 
 } // namespace Digikam

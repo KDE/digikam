@@ -44,13 +44,13 @@ public:
 
     /** Posts progress information about image IO
      */
-    virtual void progressInfo(const DImg*, float /*progress*/)
+    virtual void progressInfo(const DImg* const, float /*progress*/)
     {
     };
 
     /** Queries whether the image IO operation shall be continued
      */
-    virtual bool continueQuery(const DImg*)
+    virtual bool continueQuery(const DImg* const)
     {
         return true;
     };

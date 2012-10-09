@@ -107,10 +107,10 @@ public:
     QString displayableName() const;
     void setDisplayableName(const QString& displayableName);
 
-    Flags    flags() const;
-    void setFlags(Flags flags);
-    void addFlag(Flags flags);
-    void removeFlag(Flags flags);
+    Flags flags() const;
+    void  setFlags(Flags flags);
+    void  addFlag(Flags flags);
+    void  removeFlag(Flags flags);
 
     /**
      * Access parameters.
@@ -118,14 +118,13 @@ public:
      * Keys need not be unique, but you can decide to use unique keys.
      * There are accessors for both contexts.
      */
-
-    bool hasParameters() const;
+    bool                           hasParameters() const;
     const QHash<QString,QVariant>& parameters() const;
-    QHash<QString, QVariant>& parameters();
+    QHash<QString, QVariant>&      parameters();
 
-    bool hasParameter(const QString& key) const;
-    const QVariant parameter(const QString& key) const;
-    QVariant& parameter(const QString& key);
+    bool                           hasParameter(const QString& key) const;
+    const QVariant                 parameter(const QString& key) const;
+    QVariant&                      parameter(const QString& key);
 
     /// Returns parameter converted from QVariant to given type
     template <typename T>
@@ -149,14 +148,19 @@ public:
 
     /// Sets parameter, removing all other values for the same key
     void setParameter(const QString& key, const QVariant& value);
+
     /// Adds a parameter, possibly keeping existing parameters with the same key.
     void addParameter(const QString& key, const QVariant& value);
+
     /// Removes all parameters for key
     void removeParameters(const QString& key);
+
     /// Clear all parameters
     void clearParameters();
+
     /// Adds a set of parameters
     void addParameters(const QHash<QString, QVariant>& params);
+
     /// Replaces parameters
     void setParameters(const QHash<QString, QVariant>& params);
 
@@ -173,6 +177,7 @@ protected:
 };
 
 } // namespace Digikam
+
 Q_DECLARE_METATYPE(Digikam::FilterAction)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::FilterAction::Flags)
 

@@ -92,18 +92,22 @@ public:
     bool isValid() const;
 
     Type type() const;
+
     bool isOriginalFile() const
     {
         return type() == Original;
     }
+
     bool isSourceFile() const
     {
         return type() == Source;
     }
+
     bool isIntermediateFile() const
     {
         return type() == Intermediate;
     }
+
     bool isCurrentFile() const
     {
         return type() == Current;
@@ -120,21 +124,26 @@ public:
     void setUniqueHash(const QString& uniqueHash, qlonglong fileSize);
 
     bool hasFileOnDisk() const;
+
     ///If a file on disk is referenced: Returns the path, without filename, with a trailing slash
     QString path() const;
+
     /// If a file on disk is referenced: Returns the full file path (folder + filename)
     QString filePath() const;
+
     bool hasFileName() const;
+
     /// If a file on disk is referenced: Returns the file name (without folder)
     QString fileName() const;
-    bool hasUuid() const;
-    QString uuid() const;
-    bool hasCreationDate() const;
-    QDateTime creationDate() const;
-    bool hasUniqueHashIdentifier() const;
-    QString uniqueHash() const;
-    qlonglong fileSize() const;
-    QString originalUuid() const;
+
+    bool      hasUuid()                 const;
+    QString   uuid()                    const;
+    bool      hasCreationDate()         const;
+    QDateTime creationDate()            const;
+    bool      hasUniqueHashIdentifier() const;
+    QString   uniqueHash()              const;
+    qlonglong fileSize()                const;
+    QString   originalUuid()            const;
 
 public:
 

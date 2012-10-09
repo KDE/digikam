@@ -41,11 +41,11 @@
 namespace Digikam
 {
 
-class DImageHistory::ImageHistoryPriv : public QSharedData
+class DImageHistory::Private : public QSharedData
 {
 public:
 
-    ImageHistoryPriv()
+    Private()
     {
     }
 
@@ -54,14 +54,17 @@ public:
 
 // -----------------------------------------------------------------------------------------------
 
-class ImageHistoryPrivSharedNull : public QSharedDataPointer<DImageHistory::ImageHistoryPriv>
+class PrivateSharedNull : public QSharedDataPointer<DImageHistory::Private>
 {
 public:
 
-    ImageHistoryPrivSharedNull() : QSharedDataPointer<DImageHistory::ImageHistoryPriv>(new DImageHistory::ImageHistoryPriv) {}
+    PrivateSharedNull()
+        : QSharedDataPointer<DImageHistory::Private>(new DImageHistory::Private)
+    {
+    }
 };
 
-K_GLOBAL_STATIC(ImageHistoryPrivSharedNull, imageHistoryPrivSharedNull)
+K_GLOBAL_STATIC(PrivateSharedNull, imageHistoryPrivSharedNull)
 
 // -----------------------------------------------------------------------------------------------
 
@@ -248,6 +251,7 @@ const FilterAction& DImageHistory::action(int i) const
 QList<FilterAction> DImageHistory::allActions() const
 {
     QList<FilterAction> actions;
+
     foreach(const Entry& entry, d->entries)
     {
         if (!entry.action.isNull())
@@ -255,12 +259,14 @@ QList<FilterAction> DImageHistory::allActions() const
             actions << entry.action;
         }
     }
+
     return actions;
 }
 
 int DImageHistory::actionCount() const
 {
     int count = 0;
+
     foreach(const Entry& entry, d->entries)
     {
         if (!entry.action.isNull())
@@ -298,10 +304,12 @@ const QList<HistoryImageId> &DImageHistory::referredImages(int i) const
 QList<HistoryImageId> DImageHistory::allReferredImages() const
 {
     QList<HistoryImageId> ids;
+
     foreach(const Entry& entry, d->entries)
     {
         ids << entry.referredImages;
     }
+
     return ids;
 }
 
@@ -330,6 +338,7 @@ bool DImageHistory::hasReferredImageOfType(HistoryImageId::Type type) const
             }
         }
     }
+
     return false;
 }
 
@@ -346,6 +355,7 @@ bool DImageHistory::hasOriginalReferredImage() const
 QList<HistoryImageId> DImageHistory::referredImagesOfType(HistoryImageId::Type type) const
 {
     QList<HistoryImageId> ids;
+
     foreach(const Entry& entry, d->entries)
     {
         foreach(const HistoryImageId& id, entry.referredImages)
@@ -356,6 +366,7 @@ QList<HistoryImageId> DImageHistory::referredImagesOfType(HistoryImageId::Type t
             }
         }
     }
+
     return ids;
 }
 
@@ -371,6 +382,7 @@ HistoryImageId DImageHistory::currentReferredImage() const
             }
         }
     }
+
     return HistoryImageId();
 }
 
@@ -386,6 +398,7 @@ HistoryImageId DImageHistory::originalReferredImage() const
             }
         }
     }
+
     return HistoryImageId();
 }
 
@@ -482,7 +495,6 @@ QString DImageHistory::toXml() const
     QXmlStreamWriter stream(&xmlHistory);
     stream.setAutoFormatting(true);
     stream.writeStartDocument();
-
     stream.writeStartElement("history");
     stream.writeAttribute("version", QString::number(1));
 
@@ -523,6 +535,7 @@ QString DImageHistory::toXml() const
             {
                 QList<QString> keys = params.keys();
                 qSort(keys);
+
                 foreach(const QString& key, keys)
                 {
                     QHash<QString, QVariant>::const_iterator it;
@@ -602,7 +615,6 @@ QString DImageHistory::toXml() const
 
                 stream.writeEndElement(); //file
             }
-
         }
     }
 

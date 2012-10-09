@@ -170,8 +170,10 @@ public:
      * if in the last entry, it stays current.
      */
     void adjustReferredImages();
+
     /// Changes the UUID of the current (last added current) referred image
     void adjustCurrentUuid(const QString& uuid);
+
     /**
      * Remove file path entries pointing to the given absolute path
      * from any referred images. This is useful when said file
@@ -180,6 +182,7 @@ public:
      * path: directory path, without filename.
      */
     void purgePathFromReferredImages(const QString& path, const QString& fileName);
+
     /**
      * Change file path entries of the current referred image
      */
@@ -197,12 +200,12 @@ public:
 
 public:
 
-    // Set as public there because of ImageHistoryPrivSharedNull
-    class ImageHistoryPriv;
+    // Set as public there because of PrivateSharedNull
+    class Private;
 
 private:
 
-    QSharedDataPointer<ImageHistoryPriv> d;
+    QSharedDataPointer<Private> d;
 };
 
 } // namespace Digikam
