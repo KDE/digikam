@@ -207,7 +207,7 @@ public:
      * @param ids the selected items in the current view
      * @param album the current album the AlbumIconView is displaying
      */
-    void addStandardActionThumbnail(imageIds& ids, Album* album);
+    void addStandardActionThumbnail(const imageIds& ids, Album* album);
 
     /**
      * Add the services menu to the menu.
@@ -235,7 +235,7 @@ public:
      * @see exec()
      * @see signalGotoAlbum() signalGotoDate() signalGotoTag()
      */
-    void addGotoMenu(imageIds& ids);
+    void addGotoMenu(const imageIds& ids);
 
     /**
      * Add Queue Manager actions menu.
@@ -276,7 +276,7 @@ public:
      * @see exec()
      * @see signalAssignTag()
      */
-    void addAssignTagsMenu(imageIds& ids);
+    void addAssignTagsMenu(const imageIds& ids);
 
     /**
      * Add "Remove Tags" menu.
@@ -292,7 +292,7 @@ public:
      * @see exec()
      * @see signalRemoveTag()
      */
-    void addRemoveTagsMenu(imageIds& ids);
+    void addRemoveTagsMenu(const imageIds& ids);
 
     /**
      * Add a menu to create new tags from adressbook entries.
@@ -319,7 +319,7 @@ public:
      * Add a menu to rotate item.
      * @param ids the selected items
      */
-    void addRotateMenu(imageIds& ids);
+    void addRotateMenu(const imageIds& ids);
 
     /**
      * Add a "Group" menu.
@@ -328,8 +328,8 @@ public:
      * addGroupActions will add the actions as a flat list, not in a submenu.
      * Note: Call setImageFilterModel before to have Open/Close group actions.
      */
-    void addGroupMenu(imageIds& ids);
-    void addGroupActions(imageIds& ids);
+    void addGroupMenu(const imageIds& ids);
+    void addGroupActions(const imageIds& ids);
 
     /**
      * Set a filter model.
@@ -409,10 +409,10 @@ private Q_SLOTS:
 
 private:
 
-    void setSelectedIds(imageIds& ids);
+    void setSelectedIds(const imageIds& ids);
     void setSelectedItems(const KUrl::List& urls);
     bool imageIdsHaveSameCategory(const imageIds& ids, DatabaseItem::Category category);
-    QList<QAction*> groupMenuActions(imageIds& ids);
+    QList<QAction*> groupMenuActions(const imageIds& ids);
     void setGroupsOpen(bool open);
 
 private:

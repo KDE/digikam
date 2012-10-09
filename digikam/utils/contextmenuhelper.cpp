@@ -228,7 +228,7 @@ void ContextMenuHelper::addStandardActionLightTable()
     addAction(action);
 }
 
-void ContextMenuHelper::addStandardActionThumbnail(imageIds& ids, Album* album)
+void ContextMenuHelper::addStandardActionThumbnail(const imageIds &ids, Album* album)
 {
     if (d->setThumbnailAction)
     {
@@ -387,7 +387,7 @@ void ContextMenuHelper::slotOpenWith(QAction* action)
     KRun::run(*service, list, d->parent);
 }
 
-void ContextMenuHelper::addRotateMenu(imageIds& ids)
+void ContextMenuHelper::addRotateMenu(const imageIds &ids)
 {
     setSelectedIds(ids);
 
@@ -509,7 +509,7 @@ void ContextMenuHelper::addActionResetAlbumIcon(AlbumModificationHelper* helper,
     connect(action, SIGNAL(triggered()), helper, SLOT(slotAlbumResetIcon()));
 }
 
-void ContextMenuHelper::addAssignTagsMenu(imageIds& ids)
+void ContextMenuHelper::addAssignTagsMenu(const imageIds &ids)
 {
     setSelectedIds(ids);
 
@@ -525,7 +525,7 @@ void ContextMenuHelper::addAssignTagsMenu(imageIds& ids)
             this, SIGNAL(signalPopupTagsView()));
 }
 
-void ContextMenuHelper::addRemoveTagsMenu(imageIds& ids)
+void ContextMenuHelper::addRemoveTagsMenu(const imageIds &ids)
 {
     setSelectedIds(ids);
 
@@ -712,7 +712,7 @@ void ContextMenuHelper::addAlbumActions()
     }
 }
 
-void ContextMenuHelper::addGotoMenu(imageIds& ids)
+void ContextMenuHelper::addGotoMenu(const imageIds &ids)
 {
     if (d->gotoAlbumAction && d->gotoDateAction)
     {
@@ -906,7 +906,7 @@ void ContextMenuHelper::slotDeselectParents()
     d->albumModel->resetCheckedParentAlbums(d->indexForAlbumFromAction(sender()));
 }
 
-void ContextMenuHelper::addGroupMenu(imageIds& ids)
+void ContextMenuHelper::addGroupMenu(const imageIds &ids)
 {
     QList<QAction*> actions = groupMenuActions(ids);
 
@@ -923,7 +923,7 @@ void ContextMenuHelper::addGroupMenu(imageIds& ids)
     d->parent->addMenu(menu);
 }
 
-void ContextMenuHelper::addGroupActions(imageIds& ids)
+void ContextMenuHelper::addGroupActions(const imageIds &ids)
 {
     foreach(QAction* action, groupMenuActions(ids))
     {
@@ -936,7 +936,7 @@ void ContextMenuHelper::setImageFilterModel(ImageFilterModel* model)
     d->imageFilterModel = model;
 }
 
-QList<QAction*> ContextMenuHelper::groupMenuActions(imageIds& ids)
+QList<QAction*> ContextMenuHelper::groupMenuActions(const imageIds &ids)
 {
     setSelectedIds(ids);
 
@@ -1168,7 +1168,7 @@ QAction* ContextMenuHelper::exec(const QPoint& pos, QAction* at)
     return choice;
 }
 
-void ContextMenuHelper::setSelectedIds(imageIds& ids)
+void ContextMenuHelper::setSelectedIds(const imageIds &ids)
 {
     if (d->selectedIds.isEmpty())
     {
