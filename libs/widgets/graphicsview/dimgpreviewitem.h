@@ -65,7 +65,7 @@ public:
     void setLoadFullImageSize(bool b);
 
     QString path() const;
-    void    setPath(const QString& path);
+    void    setPath(const QString& path, bool rePreview = false);
 
     State state() const;
     bool  isLoaded() const;

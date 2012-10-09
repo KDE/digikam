@@ -322,7 +322,6 @@ void ImportStackedView::setPreviewMode(const int mode)
         d->thumbBarDock->hide();
     }
 
-    //TODO: Implement the MapPageMode
     if (mode == PreviewCameraMode || mode == MapWidgetMode)
     {
         setPreviewItem();

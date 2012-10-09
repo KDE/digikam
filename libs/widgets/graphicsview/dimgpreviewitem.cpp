@@ -129,11 +129,11 @@ QString DImgPreviewItem::path() const
     return d->path;
 }
 
-void DImgPreviewItem::setPath(const QString& path)
+void DImgPreviewItem::setPath(const QString& path, bool rePreview)
 {
     Q_D(DImgPreviewItem);
 
-    if (path == d->path)
+    if (path == d->path && !rePreview)
     {
         return;
     }

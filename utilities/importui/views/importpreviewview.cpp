@@ -74,7 +74,7 @@ public:
 
         if(!info.isNull())
         {
-            setPath(info.url().toLocalFile());
+            setPath(info.url().toLocalFile(), true);
         }
     }
 
