@@ -96,6 +96,7 @@ void Task::run()
     {
         return;
     }
+
     ActionData ad1;
     ad1.fileUrl = m_item.m_itemUrl;
     ad1.status  = ActionData::BatchStarted;
@@ -252,10 +253,10 @@ void ActionThread::processFile(const AssignedBatchTools& item)
     Task* const t                   = new Task(this, item, d);
 
     connect(t, SIGNAL(signalStarting(Digikam::ActionData)),
-            this, SIGNAL(starting(Digikam::ActionData)));
+            this, SIGNAL(signalStarting(Digikam::ActionData)));
 
     connect(t, SIGNAL(signalFinished(Digikam::ActionData)),
-            this, SIGNAL(finished(Digikam::ActionData)));
+            this, SIGNAL(signalFinished(Digikam::ActionData)));
 
     collection->addJob(t);
     appendJob(collection);

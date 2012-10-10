@@ -336,10 +336,10 @@ void QueueMgrWindow::setupConnections()
 
     // -- Multithreaded interface connections -------------------------------
 
-    connect(d->thread, SIGNAL(starting(Digikam::ActionData)),
+    connect(d->thread, SIGNAL(signalStarting(Digikam::ActionData)),
             this, SLOT(slotAction(Digikam::ActionData)));
 
-    connect(d->thread, SIGNAL(finished(Digikam::ActionData)),
+    connect(d->thread, SIGNAL(signalFinished(Digikam::ActionData)),
             this, SLOT(slotAction(Digikam::ActionData)));
 
     // -- GUI connections ---------------------------------------------------
@@ -622,7 +622,8 @@ void QueueMgrWindow::slotToggleFullScreen()
         if (d->removeFullScreenButton)
         {
             QList<KToolBar*> toolbars = toolBars();
-            foreach(KToolBar* toolbar, toolbars)
+
+            foreach(KToolBar* const toolbar, toolbars)
             {
                 // name is set in ui.rc XML file
                 if (toolbar->objectName() == "ToolBar")
@@ -649,9 +650,10 @@ void QueueMgrWindow::slotToggleFullScreen()
         {
             showToolBars();
 
-            QList<KToolBar*> toolbars = toolBars();
+            QList<KToolBar*> toolbars   = toolBars();
             KToolBar* mainToolbar = 0;
-            foreach(KToolBar* toolbar, toolbars)
+
+            foreach(KToolBar* const toolbar, toolbars)
             {
                 if (toolbar->objectName() == "ToolBar")
                 {
@@ -690,7 +692,8 @@ void QueueMgrWindow::slotEscapePressed()
 void QueueMgrWindow::showToolBars()
 {
     QList<KToolBar*> toolbars = toolBars();
-    foreach(KToolBar* toolbar, toolbars)
+
+    foreach(KToolBar* const toolbar, toolbars)
     {
         toolbar->show();
     }
@@ -699,7 +702,8 @@ void QueueMgrWindow::showToolBars()
 void QueueMgrWindow::hideToolBars()
 {
     QList<KToolBar*> toolbars = toolBars();
-    foreach(KToolBar* toolbar, toolbars)
+
+    foreach(KToolBar* const toolbar, toolbars)
     {
         toolbar->hide();
     }
@@ -787,7 +791,7 @@ int QueueMgrWindow::currentQueueId()
 
 void QueueMgrWindow::loadImageInfos(const ImageInfoList& list, int queueId)
 {
-    QueueListView* queue = d->queuePool->findQueueById(queueId);
+    QueueListView* const queue = d->queuePool->findQueueById(queueId);
 
     if (queue)
     {
@@ -801,16 +805,19 @@ void QueueMgrWindow::loadImageInfosToCurrentQueue(const ImageInfoList& list)
     {
         addNewQueue();
     }
+
     d->queuePool->currentQueue()->slotAddItems(list);
 }
 
 void QueueMgrWindow::loadImageInfosToNewQueue(const ImageInfoList& list)
 {
-    QueueListView* queue = d->queuePool->currentQueue();
+    QueueListView* const queue = d->queuePool->currentQueue();
+
     if (!queue || queue->itemsCount())
     {
         addNewQueue();
     }
+
     d->queuePool->currentQueue()->slotAddItems(list);
 }
 
@@ -831,7 +838,8 @@ void QueueMgrWindow::slotItemSelectionChanged()
 void QueueMgrWindow::populateToolsList()
 {
     BatchToolsList list = d->batchToolsMgr->toolsList();
-    foreach(BatchTool* tool, list)
+
+    foreach(BatchTool* const tool, list)
     {
         d->toolsView->addTool(tool);
     }

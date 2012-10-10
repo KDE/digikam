@@ -68,8 +68,8 @@ public:
 
 Q_SIGNALS:
 
-    void starting(const Digikam::ActionData& ad);
-    void finished(const Digikam::ActionData& ad);
+    void signalStarting(const Digikam::ActionData& ad);
+    void signalFinished(const Digikam::ActionData& ad);
 
 public:
 
