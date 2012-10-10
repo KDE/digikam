@@ -65,7 +65,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 035 ==> 307467 - Missing slide show button in digiKam 3.0.0 beta1.
 036 ==> 308065 - Read metadata from photo has no effect on the database.
 037 ==> 241637 - No intuitive way to cancel full screen view of image editor.
-038 ==> 
+038 ==> 303850 - Won't start on MS Windows if USB drive is mounted.
+039 ==> 
 
 
 
