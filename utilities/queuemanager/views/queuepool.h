@@ -70,7 +70,7 @@ public:
 
     void setBusy(bool b);
 
-    void animProgress(qlonglong id);
+    void setItemBusy(qlonglong id);
 
 Q_SIGNALS:
 

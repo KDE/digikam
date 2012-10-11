@@ -139,7 +139,7 @@ void QueueListViewItem::setThumb(const QPixmap& pix, bool hasThumb)
     d->hasThumb = hasThumb;
 }
 
-void QueueListViewItem::animProgress()
+void QueueListViewItem::setBusy()
 {
     QPixmap icon(d->view->progressPixmapForIndex(d->progressIndex));
     d->progressIndex++;
@@ -326,12 +326,13 @@ QPixmap QueueListView::progressPixmapForIndex(int index) const
     return QPixmap();
 }
 
-void QueueListView::animProgress(qlonglong id)
+void QueueListView::setItemBusy(qlonglong id)
 {
     QueueListViewItem* const item = findItemById(id);
+
     if (item)
     {
-        item->animProgress();
+        item->setBusy();
     }
 }
 
@@ -410,11 +411,11 @@ void QueueListView::dragEnterEvent(QDragEnterEvent* e)
 
 void QueueListView::dragMoveEvent(QDragMoveEvent* e)
 {
-    int        albumID;
-    QList<int> albumIDs;
+    int              albumID;
+    QList<int>       albumIDs;
     QList<qlonglong> imageIDs;
-    KUrl::List urls;
-    KUrl::List kioURLs;
+    KUrl::List       urls;
+    KUrl::List       kioURLs;
 
     if (DItemDrag::decode(e->mimeData(), urls, kioURLs, albumIDs, imageIDs) ||
         DAlbumDrag::decode(e->mimeData(), urls, albumID)                    ||
@@ -449,11 +450,11 @@ void QueueListView::dragMoveEvent(QDragMoveEvent* e)
 
 void QueueListView::dropEvent(QDropEvent* e)
 {
-    int        albumID;
-    QList<int> albumIDs;
+    int              albumID;
+    QList<int>       albumIDs;
     QList<qlonglong> imageIDs;
-    KUrl::List urls;
-    KUrl::List kioURLs;
+    KUrl::List       urls;
+    KUrl::List       kioURLs;
 
     if (DItemDrag::decode(e->mimeData(), urls, kioURLs, albumIDs, imageIDs))
     {
@@ -677,6 +678,7 @@ void QueueListView::slotAddItems(const ImageInfoList& list)
     }
 
     updateDestFileNames();
+
     emit signalQueueContentsChanged();
 }
 

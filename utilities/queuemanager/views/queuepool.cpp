@@ -117,12 +117,12 @@ QueueListView* QueuePool::findQueueByItemId(qlonglong id) const
     return 0;
 }
 
-void QueuePool::animProgress(qlonglong id)
+void QueuePool::setItemBusy(qlonglong id)
 {
     QueueListView* const queue = findQueueByItemId(id);
 
     if (queue)
-        queue->animProgress(id);
+        queue->setItemBusy(id);
 }
 
 QueueListView* QueuePool::findQueueById(int index) const

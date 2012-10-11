@@ -650,8 +650,8 @@ void QueueMgrWindow::slotToggleFullScreen()
         {
             showToolBars();
 
-            QList<KToolBar*> toolbars   = toolBars();
-            KToolBar* mainToolbar = 0;
+            QList<KToolBar*> toolbars = toolBars();
+            KToolBar* mainToolbar     = 0;
 
             foreach(KToolBar* const toolbar, toolbars)
             {
@@ -1021,7 +1021,7 @@ void QueueMgrWindow::slotProgressTimerDone()
 {
     if (d->currentProcessItem)
     {
-        d->queuePool->animProgress(d->currentProcessItem->info().id());
+        d->queuePool->setItemBusy(d->currentProcessItem->info().id());
     }
 
     d->progressTimer->start(300);

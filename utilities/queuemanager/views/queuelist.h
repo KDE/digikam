@@ -62,7 +62,7 @@ public:
 
     void setThumb(const QPixmap& pix, bool hasThumb = true);
 
-    void animProgress();
+    void setBusy();
 
     void setCanceled();
     void setFailed();
@@ -121,7 +121,7 @@ public:
 
     void reloadThumbs(const KUrl& url);
 
-    void animProgress(qlonglong id);
+    void setItemBusy(qlonglong id);
     QPixmap progressPixmapForIndex(int index) const;
 
 Q_SIGNALS:
