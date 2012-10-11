@@ -62,13 +62,16 @@ public:
 
     void setThumb(const QPixmap& pix, bool hasThumb = true);
 
-    void setBusy();
+    void animProgress();
 
     void setCanceled();
     void setFailed();
 
     void setDone();
     bool isDone() const;
+
+    void setBusy();
+    bool isBusy() const;
 
     void reset();
 
@@ -142,6 +145,7 @@ private Q_SLOTS:
     void slotThumbnailLoaded(const LoadingDescription&, const QPixmap&);
     void slotContextMenu();
     void slotToolTip();
+    void slotProgressTimerDone();
 
 private:
 

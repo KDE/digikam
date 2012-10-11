@@ -29,7 +29,6 @@
 #include <QDir>
 #include <QFile>
 #include <QFileInfo>
-#include <QTimer>
 #include <QGridLayout>
 #include <QGroupBox>
 #include <QVBoxLayout>
@@ -139,7 +138,6 @@ QueueMgrWindow::QueueMgrWindow()
     m_instance       = this;
     d->batchToolsMgr = new BatchToolsManager(this);
     d->thread        = new ActionThread(this);
-    d->progressTimer = new QTimer(this);
 
     setWindowFlags(Qt::Window);
     setCaption(i18n("Batch Queue Manager"));
@@ -343,9 +341,6 @@ void QueueMgrWindow::setupConnections()
             this, SLOT(slotAction(Digikam::ActionData)));
 
     // -- GUI connections ---------------------------------------------------
-
-    connect(d->progressTimer, SIGNAL(timeout()),
-            this, SLOT(slotProgressTimerDone()));
 
     connect(d->toolsView, SIGNAL(signalHistoryEntryClicked(int,qlonglong)),
             this, SLOT(slotHistoryEntryClicked(int,qlonglong)));
@@ -888,8 +883,6 @@ void QueueMgrWindow::slotRun()
 
 void QueueMgrWindow::slotStop()
 {
-    d->progressTimer->stop();
-
     if (d->currentProcessItem)
     {
         d->currentProcessItem->setCanceled();
@@ -1017,16 +1010,6 @@ void QueueMgrWindow::slotAction(const ActionData& ad)
     }
 }
 
-void QueueMgrWindow::slotProgressTimerDone()
-{
-    if (d->currentProcessItem)
-    {
-        d->queuePool->setItemBusy(d->currentProcessItem->info().id());
-    }
-
-    d->progressTimer->start(300);
-}
-
 void QueueMgrWindow::processing(const KUrl& url)
 {
     d->currentProcessItem = d->queuePool->currentQueue()->findItemByUrl(url);
@@ -1036,16 +1019,13 @@ void QueueMgrWindow::processing(const KUrl& url)
         d->currentProcessItem->reset();
         d->queuePool->currentQueue()->setCurrentItem(d->currentProcessItem);
         d->queuePool->currentQueue()->scrollToItem(d->currentProcessItem);
+        d->queuePool->setItemBusy(d->currentProcessItem->info().id());
         addHistoryMessage(i18n("Processing..."), DHistoryView::StartingEntry);
     }
-
-    d->progressTimer->start(300);
 }
 
 void QueueMgrWindow::processed(const KUrl& url, const KUrl& tmp)
 {
-    d->progressTimer->stop();
-
     QueueSettings settings = d->queuePool->currentQueue()->settings();
     KUrl dest              = settings.targetUrl;
     dest.setFileName(d->currentProcessItem->destFileName());

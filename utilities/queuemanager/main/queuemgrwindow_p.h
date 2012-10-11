@@ -101,7 +101,6 @@ public:
         thread                 = 0;
         currentProcessItem     = 0;
         animLogo               = 0;
-        progressTimer          = 0;
         about                  = 0;
     }
 
@@ -109,8 +108,6 @@ public:
     bool                   fullScreen;
     bool                   removeFullScreenButton;
     bool                   busy;
-
-    QTimer*                progressTimer;
 
     QLabel*                statusLabel;
 

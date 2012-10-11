@@ -64,6 +64,7 @@ class QueueListViewItem::Private
 public:
 
     Private() :
+        isBusy(false),
         done(false),
         hasThumb(false),
         progressIndex(0),
@@ -71,6 +72,7 @@ public:
     {
     }
 
+    bool           isBusy;
     bool           done;
     bool           hasThumb;
 
@@ -139,7 +141,7 @@ void QueueListViewItem::setThumb(const QPixmap& pix, bool hasThumb)
     d->hasThumb = hasThumb;
 }
 
-void QueueListViewItem::setBusy()
+void QueueListViewItem::animProgress()
 {
     QPixmap icon(d->view->progressPixmapForIndex(d->progressIndex));
     d->progressIndex++;
@@ -163,6 +165,7 @@ void QueueListViewItem::setCanceled()
     setPixmap(d->preview);
     setIcon(1, SmallIcon("dialog-cancel"));
     d->done          = false;
+    d->isBusy        = false;
     d->progressIndex = 0;
 }
 
@@ -171,6 +174,7 @@ void QueueListViewItem::setFailed()
     setPixmap(d->preview);
     setIcon(1, SmallIcon("dialog-error"));
     d->done          = false;
+    d->isBusy        = false;
     d->progressIndex = 0;
 }
 
@@ -179,6 +183,7 @@ void QueueListViewItem::setDone()
     setPixmap(d->preview);
     setIcon(1, SmallIcon("dialog-ok"));
     d->done          = true;
+    d->isBusy        = false;
     d->progressIndex = 0;
 }
 
@@ -192,7 +197,18 @@ void QueueListViewItem::reset()
     setPixmap(d->preview);
     setIcon(1, QIcon());
     d->done          = false;
+    d->isBusy        = false;
     d->progressIndex = 0;
+}
+
+void QueueListViewItem::setBusy()
+{
+    d->isBusy = true;
+}
+
+bool QueueListViewItem::isBusy() const
+{
+    return d->isBusy;
 }
 
 void QueueListViewItem::setDestFileName(const QString& str)
@@ -239,6 +255,7 @@ public:
     {
         showTips        = false;
         toolTipTimer    = 0;
+        progressTimer   = 0;
         toolTip         = 0;
         toolTipItem     = 0;
         thumbLoadThread = ThumbnailLoadThread::defaultThread();
@@ -250,6 +267,7 @@ public:
     const int            iconSize;
 
     QTimer*              toolTipTimer;
+    QTimer*              progressTimer;
 
     ThumbnailLoadThread* thumbLoadThread;
 
@@ -293,8 +311,9 @@ QueueListView::QueueListView(QWidget* const parent)
     header()->setResizeMode(1, QHeaderView::Stretch);
     header()->setResizeMode(2, QHeaderView::Stretch);
 
-    d->toolTip      = new QueueToolTip(this);
-    d->toolTipTimer = new QTimer(this);
+    d->toolTip       = new QueueToolTip(this);
+    d->toolTipTimer  = new QTimer(this);
+    d->progressTimer = new QTimer(this);
 
     // -----------------------------------------------------------
 
@@ -310,6 +329,9 @@ QueueListView::QueueListView(QWidget* const parent)
 
     connect(d->toolTipTimer, SIGNAL(timeout()),
             this, SLOT(slotToolTip()));
+
+    connect(d->progressTimer, SIGNAL(timeout()),
+            this, SLOT(slotProgressTimerDone()));
 }
 
 QueueListView::~QueueListView()
@@ -324,16 +346,6 @@ QPixmap QueueListView::progressPixmapForIndex(int index) const
         return (d->progressPix.frameAt(index));
 
     return QPixmap();
-}
-
-void QueueListView::setItemBusy(qlonglong id)
-{
-    QueueListViewItem* const item = findItemById(id);
-
-    if (item)
-    {
-        item->setBusy();
-    }
 }
 
 Qt::DropActions QueueListView::supportedDropActions() const
@@ -1070,7 +1082,7 @@ void QueueListView::slotContextMenu()
         return;
     }
 
-    KActionCollection* acol = QueueMgrWindow::queueManagerWindow()->actionCollection();
+    KActionCollection* const acol = QueueMgrWindow::queueManagerWindow()->actionCollection();
     KMenu popmenu(this);
     popmenu.addAction(acol->action("queuemgr_removeitemssel"));
     popmenu.addSeparator();
@@ -1106,6 +1118,39 @@ void QueueListView::slotCollectionImageChange(const CollectionImageChangeset& ch
 void QueueListView::reloadThumbs(const KUrl& url)
 {
     d->thumbLoadThread->find(url.toLocalFile());
+}
+
+void QueueListView::setItemBusy(qlonglong id)
+{
+    QueueListViewItem* const item = findItemById(id);
+
+    if (item)
+    {
+        item->setBusy();
+        d->progressTimer->start(300);
+    }
+}
+
+void QueueListView::slotProgressTimerDone()
+{
+    QTreeWidgetItemIterator it(this);
+    int active = 0;
+
+    while (*it)
+    {
+        QueueListViewItem* const item = dynamic_cast<QueueListViewItem*>(*it);
+
+        if (item && item->isBusy())
+        {
+            item->animProgress();
+            active++;
+        }
+
+        it++;
+    }
+
+    if (!active)
+        d->progressTimer->stop();
 }
 
 }  // namespace Digikam
