@@ -101,7 +101,7 @@ TAlbum* TagModel::albumForIndex(const QModelIndex& index) const
 
 QVariant TagModel::decorationRoleData(Album* album) const
 {
-    QPixmap pix = AlbumThumbnailLoader::instance()->getTagThumbnailDirectly(static_cast<TAlbum*>(album), true);
+    QPixmap pix = AlbumThumbnailLoader::instance()->getTagThumbnailDirectly(static_cast<TAlbum*>(album));
     prepareAddExcludeDecoration(album, pix);
     return pix;
 }

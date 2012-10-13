@@ -182,16 +182,6 @@ int AlbumThumbnailLoader::computeIconSize(RelativeSize relativeSize)
     return d->iconSize;
 }
 
-QRect AlbumThumbnailLoader::computeBlendRect(int iconSize)
-{
-    // when drawing a 20x20 thumbnail in a 32x32 icon, starting point was (6,9). Scale.
-    double largerSize = iconSize;
-    double x          = 6.0 / 32.0 * largerSize;
-    double y          = 9.0 / 32.0 * largerSize;
-    double size       = 20.0 / 32.0 * largerSize;
-    return QRect(lround(x), lround(y), lround(size), lround(size));
-}
-
 QPixmap AlbumThumbnailLoader::loadIcon(const QString& name, int size)
 {
     KIconLoader* iconLoader = KIconLoader::global();
@@ -200,16 +190,7 @@ QPixmap AlbumThumbnailLoader::loadIcon(const QString& name, int size)
 
 bool AlbumThumbnailLoader::getTagThumbnail(TAlbum* const album, QPixmap& icon)
 {
-    int size = computeIconSize(SmallerSize);
-    /*
-    if (size >= d->minBlendSize)
-    {
-        QRect rect = computeBlendRect(size);
-        size = rect.width();
-    }
-    */
-
-    if (!album->icon().isEmpty())
+    if (!album->icon().isEmpty() && d->iconSize > d->minBlendSize)
     {
         if (album->icon().startsWith('/'))
         {
@@ -221,7 +202,7 @@ bool AlbumThumbnailLoader::getTagThumbnail(TAlbum* const album, QPixmap& icon)
         }
         else
         {
-            icon = loadIcon(album->icon(), size);
+            icon = loadIcon(album->icon(), d->iconSize);
             return false;
         }
     }
@@ -232,10 +213,8 @@ bool AlbumThumbnailLoader::getTagThumbnail(TAlbum* const album, QPixmap& icon)
     }
 }
 
-QPixmap AlbumThumbnailLoader::getTagThumbnailDirectly(TAlbum* const album, bool blendIcon)
+QPixmap AlbumThumbnailLoader::getTagThumbnailDirectly(TAlbum* const album)
 {
-    int size = computeIconSize(SmallerSize);
-
     if (!album->icon().isEmpty())
     {
         // icon cached?
@@ -243,14 +222,7 @@ QPixmap AlbumThumbnailLoader::getTagThumbnailDirectly(TAlbum* const album, bool 
 
         if (it != d->thumbnailMap.constEnd())
         {
-            if (blendIcon)
-            {
-                return blendIcons(getStandardTagIcon(), *it);
-            }
-            else
-            {
-                return *it;
-            }
+            return *it;
         }
 
         if (album->icon().startsWith('/'))
@@ -261,16 +233,8 @@ QPixmap AlbumThumbnailLoader::getTagThumbnailDirectly(TAlbum* const album, bool 
         }
         else
         {
-            QPixmap pixmap = loadIcon(album->icon(), size);
-
-            if (blendIcon)
-            {
-                return blendIcons(getStandardTagIcon(), pixmap);
-            }
-            else
-            {
-                return pixmap;
-            }
+            QPixmap pixmap = loadIcon(album->icon(), d->iconSize);
+            return pixmap;
         }
     }
 
@@ -447,8 +411,6 @@ void AlbumThumbnailLoader::slotGotThumbnailFromIcon(const LoadingDescription& lo
         {
             // Loading succeeded
 
-            QPixmap tagThumbnail;
-
             for (QList<int>::const_iterator vit = (*it).constBegin(); vit != (*it).constEnd(); ++vit)
             {
                 // look up with global id
@@ -456,22 +418,8 @@ void AlbumThumbnailLoader::slotGotThumbnailFromIcon(const LoadingDescription& lo
 
                 if (album)
                 {
-                    if (album->type() == Album::TAG)
-                    {
-                        // create tag thumbnail if needed
-                        if (tagThumbnail.isNull())
-                        {
-                            tagThumbnail = createTagThumbnail(thumbnail);
-                            d->thumbnailMap.insert(album->globalID(), tagThumbnail);
-                        }
-
-                        emit signalThumbnail(album, tagThumbnail);
-                    }
-                    else
-                    {
-                        d->thumbnailMap.insert(album->globalID(), thumbnail);
-                        emit signalThumbnail(album, thumbnail);
-                    }
+                    d->thumbnailMap.insert(album->globalID(), thumbnail);
+                    emit signalThumbnail(album, thumbnail);
                 }
             }
         }
@@ -508,55 +456,6 @@ void AlbumThumbnailLoader::slotIconChanged(Album* album)
     }
 
     d->thumbnailMap.remove(album->globalID());
-}
-
-QPixmap AlbumThumbnailLoader::createTagThumbnail(const QPixmap& albumThumbnail)
-{
-    // tag thumbnails are cropped
-
-    QPixmap tagThumbnail;
-    int thumbSize = qMax(albumThumbnail.width(), albumThumbnail.height());
-
-    if (!albumThumbnail.isNull() && thumbSize >= d->minBlendSize)
-    {
-        QRect rect   = computeBlendRect(thumbSize);
-        int w1       = albumThumbnail.width();
-        int w2       = rect.width();
-        int h1       = albumThumbnail.height();
-        int h2       = rect.height();
-        tagThumbnail = QPixmap(w2, h2);
-        QPainter p(&tagThumbnail);
-        p.drawPixmap(0, 0, albumThumbnail, (w1-w2)/2, (h1-h2)/2, w2, h2);
-        p.end();
-    }
-    else
-    {
-        tagThumbnail = albumThumbnail;
-    }
-
-    return tagThumbnail;
-}
-
-QPixmap AlbumThumbnailLoader::blendIcons(QPixmap dstIcon, const QPixmap& tagIcon)
-{
-    int dstIconSize = qMax(dstIcon.width(), dstIcon.height());
-
-    if (dstIconSize >= d->minBlendSize)
-    {
-        if (!tagIcon.isNull())
-        {
-            QRect rect = computeBlendRect(dstIconSize);
-            QPainter p(&dstIcon);
-            p.drawPixmap(rect.x(), rect.y(), tagIcon, 0, 0, rect.width(), rect.height());
-            p.end();
-        }
-
-        return dstIcon;
-    }
-    else
-    {
-        return tagIcon;
-    }
 }
 
 } // namespace Digikam

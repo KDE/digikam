@@ -130,7 +130,7 @@ public:
       * by the signals (unblended), and a default icon is returned here.
       * If no icon is associated, the default icon is returned.
       */
-    QPixmap getTagThumbnailDirectly(TAlbum* const album, bool blendIcons = true);
+    QPixmap getTagThumbnailDirectly(TAlbum* const album);
 
     /**
      * Return standard tag and album icons.
@@ -145,13 +145,6 @@ public:
     QPixmap getStandardAlbumIcon(RelativeSize size = NormalSize);
     QPixmap getStandardAlbumRootIcon(RelativeSize size = NormalSize);
     QPixmap getStandardAlbumIcon(PAlbum* album, RelativeSize size = NormalSize);
-
-    /**
-     * Blend tagIcon centered on dstIcon, where dstIcon is a standard
-     * icon of variable size and tagIcon is 12 pixels smaller.
-     * If height(dstIcon) < minBlendSize we return tagIcon verbatim.
-     */
-    QPixmap blendIcons(QPixmap dstIcon, const QPixmap& tagIcon);
 
 Q_SIGNALS:
 
@@ -189,9 +182,7 @@ private:
 
     void    addUrl(Album* const album, const KUrl& url);
     QPixmap loadIcon(const QString& name, int size = 0);
-    QPixmap createTagThumbnail(const QPixmap& albumThumbnail);
     int     computeIconSize(RelativeSize size);
-    QRect   computeBlendRect(int iconSize);
 
 private:
 

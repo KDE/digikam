@@ -171,10 +171,6 @@ QPixmap SyncJob::getTagThumbnailPriv(TAlbum* const album)
         {
             return loader->getStandardTagIcon(album);
         }
-        else
-        {
-            return loader->blendIcons(loader->getStandardTagIcon(), *d->thumbnail);
-        }
     }
     else
     {

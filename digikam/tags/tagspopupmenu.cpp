@@ -770,7 +770,7 @@ void TagsPopupMenu::setAlbumIcon(QAction* action, TAlbum* album)
         }
         else
         {
-            action->setIcon(KIcon(loader->blendIcons(loader->getStandardTagIcon(), pix)));
+            action->setIcon(KIcon(pix));
         }
     }
     else
