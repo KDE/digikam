@@ -387,42 +387,6 @@ void ContextMenuHelper::slotOpenWith(QAction* action)
     KRun::run(*service, list, d->parent);
 }
 
-void ContextMenuHelper::addRotateMenu(const imageIds &ids)
-{
-    setSelectedIds(ids);
-
-    KMenu* imageRotateMenu = new KMenu(i18n("Rotate"), d->parent);
-    imageRotateMenu->setIcon(KIcon("object-rotate-right"));
-
-    KAction* left = new KAction(this);
-    left->setObjectName("rotate_ccw");
-    left->setText(i18nc("rotate image left", "Left"));
-    connect(left, SIGNAL(triggered(bool)),
-            this, SLOT(slotRotate()));
-    imageRotateMenu->addAction(left);
-
-    KAction* right = new KAction(this);
-    right->setObjectName("rotate_cw");
-    right->setText(i18nc("rotate image right", "Right"));
-    connect(right, SIGNAL(triggered(bool)),
-            this, SLOT(slotRotate()));
-    imageRotateMenu->addAction(right);
-
-    d->parent->addMenu(imageRotateMenu);
-}
-
-void ContextMenuHelper::slotRotate()
-{
-    if (sender()->objectName() == "rotate_ccw")
-    {
-        FileActionMngr::instance()->transform(ImageInfoList(d->selectedIds), KExiv2Iface::RotationMatrix::Rotate270);
-    }
-    else
-    {
-        FileActionMngr::instance()->transform(ImageInfoList(d->selectedIds), KExiv2Iface::RotationMatrix::Rotate90);
-    }
-}
-
 bool ContextMenuHelper::imageIdsHaveSameCategory(const imageIds& ids, DatabaseItem::Category category)
 {
     bool sameCategory = true;

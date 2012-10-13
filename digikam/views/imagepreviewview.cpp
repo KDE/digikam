@@ -396,7 +396,7 @@ void ImagePreviewView::showContextMenu(const ImageInfo& info, QGraphicsSceneCont
 
     cmhelper.addAction("image_edit");
     cmhelper.addServicesMenu(selectedItems);
-    cmhelper.addRotateMenu(idList);
+    cmhelper.addAction("image_rotate");
     cmhelper.addSeparator();
 
     // --------------------------------------------------------

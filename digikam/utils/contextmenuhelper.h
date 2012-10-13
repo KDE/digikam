@@ -316,12 +316,6 @@ public:
     void addLabelsAction();
 
     /**
-     * Add a menu to rotate item.
-     * @param ids the selected items
-     */
-    void addRotateMenu(const imageIds& ids);
-
-    /**
      * Add a "Group" menu.
      * This menu will provide actions open, close, add to, remove from, or split a group.
      *
@@ -405,7 +399,6 @@ private Q_SLOTS:
     void slotDeselectChildren();
     void slotSelectParents();
     void slotDeselectParents();
-    void slotRotate();
 
 private:
 
