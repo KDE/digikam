@@ -264,6 +264,10 @@ void ActionThread::processFile(const AssignedBatchTools& item)
 
 void ActionThread::cancel()
 {
+    if(d->tool)
+    {
+        d->tool->cancel();
+    }
     d->cancel = true;
     RActionThreadBase::cancel();
 }
