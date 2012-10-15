@@ -67,7 +67,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 037 ==> 241637 - No intuitive way to cancel full screen view of image editor.
 038 ==> 303850 - Won't start on MS Windows if USB drive is mounted.
 039 ==> 308066 - MySQL: How to delete data finally.
-040 ==> 
+040 ==> 308412 - Ligth Table: if opening with only 2 selected images, pre-load them on the table.
+041 ==> 
 
 
 
