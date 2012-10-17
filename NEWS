@@ -69,7 +69,10 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 039 ==> 308066 - MySQL: How to delete data finally.
 040 ==> 308412 - Ligth Table: if opening with only 2 selected images, pre-load them on the table.
 041 ==> 308344 - Display custom tags icons like in the album folder view.
-042 ==> 
-
-
-
+042 ==> 304052 - Failed to start service digikamnepomukservice.
+043 ==> 282918 - digiKam tags list is swarmed with Nepomuk resource tags if Nepomuk is not running.
+044 ==> 276457 - Incorrect synchronization back from Nepomuk.
+045 ==> 264124 - Upload empty/unnamed tags into Nepomuk.
+046 ==> 258837 - digiKam sometimes fails to add Metadata to Nepomuk.
+047 ==> 283168 - Nepomuk interface crash.
+048 ==> 
