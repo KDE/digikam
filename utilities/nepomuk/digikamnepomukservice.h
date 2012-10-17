@@ -21,6 +21,18 @@
  *
  * ============================================================ */
 
+#if 0
+// The digikam nepomuk implementation is not only buggy, but based on nepomuk
+// API which is now deprecated/unfunctional and or removed.
+// In short, it needs to be rewritten.
+
+// Code is left as an example as quite a few problems were solved with it
+// at a time when the corresponding nepomuk interface were operating.
+
+
+
+
+
 #ifndef DIGIKAMNEPOMUKSERVICE_H
 #define DIGIKAMNEPOMUKSERVICE_H
 
@@ -139,3 +151,4 @@ private:
 } // namespace Digikam
 
 #endif // DIGIKAMNEPOMUKSERVICE_H
+#endif
