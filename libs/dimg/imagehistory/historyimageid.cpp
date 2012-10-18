@@ -41,7 +41,7 @@ HistoryImageId::HistoryImageId()
 }
 
 HistoryImageId::HistoryImageId(const QString& uuid, Type type)
-    : m_type(type), m_uuid(uuid)
+    : m_type(type), m_uuid(uuid), m_fileSize(0)
 {
 }
 
