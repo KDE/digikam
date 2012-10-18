@@ -104,7 +104,7 @@ bool QImageLoader::load(const QString& filePath, DImgLoaderObserver* const obser
 
     uint w      = target.width();
     uint h      = target.height();
-    uchar* data = new_failureTolerant(w * h * 4);
+    uchar* data = new_failureTolerant(w, h, 4);
 
     if (!data)
     {

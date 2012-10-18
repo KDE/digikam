@@ -497,11 +497,11 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver* const observer
 
         if (m_sixteenBit)
         {
-            data = new_failureTolerant(width * height * 8); // 16 bits/color/pixel
+            data = new_failureTolerant(width, height, 8); // 16 bits/color/pixel
         }
         else
         {
-            data = new_failureTolerant(width * height * 4); // 8 bits/color/pixel
+            data = new_failureTolerant(width, height, 4); // 8 bits/color/pixel
         }
 
         cleanupData->setData(data);

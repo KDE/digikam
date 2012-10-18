@@ -294,7 +294,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* const observe
 
         if (bits_per_sample == 16)          // 16 bits image.
         {
-            data.reset(new_failureTolerant(w * h * 8));
+            data.reset(new_failureTolerant(w, h, 8));
             QScopedArrayPointer<uchar> strip(new_failureTolerant(strip_size));
 
             if (!data || strip.isNull())
@@ -458,8 +458,8 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* const observe
         }
         else       // Non 16 bits images ==> get it on BGRA 8 bits.
         {
-            data.reset(new_failureTolerant(w * h * 4));
-            QScopedArrayPointer<uchar> strip(new_failureTolerant(w * rows_per_strip * 4));
+            data.reset(new_failureTolerant(w, h, 4));
+            QScopedArrayPointer<uchar> strip(new_failureTolerant(w, rows_per_strip, 4));
 
             if (!data || strip.isNull())
             {

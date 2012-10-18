@@ -417,9 +417,19 @@ unsigned char* DImgLoader::new_failureTolerant(size_t unsecureSize)
     return new_failureTolerant<unsigned char>(unsecureSize);
 }
 
+unsigned char* DImgLoader::new_failureTolerant(quint64 w, quint64 h, uint typesPerPixel)
+{
+    return new_failureTolerant<unsigned char>(w, h, typesPerPixel);
+}
+
 unsigned short* DImgLoader::new_short_failureTolerant(size_t unsecureSize)
 {
     return new_failureTolerant<unsigned short>(unsecureSize);
+}
+
+unsigned short* DImgLoader::new_short_failureTolerant(quint64 w, quint64 h, uint typesPerPixel)
+{
+    return new_failureTolerant<unsigned short>(w, h, typesPerPixel);
 }
 
 }  // namespace Digikam

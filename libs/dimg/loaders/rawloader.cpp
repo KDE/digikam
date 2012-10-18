@@ -169,7 +169,7 @@ bool RAWLoader::loadedFromRawData(const QByteArray& data, int width, int height,
 
     if (m_rawDecodingSettings.sixteenBitsImage)       // 16 bits image
     {
-        uchar* image = new_failureTolerant(width * height * 8);
+        uchar* image = new_failureTolerant(width, height, 8);
 
         if (!image)
         {
@@ -224,7 +224,7 @@ bool RAWLoader::loadedFromRawData(const QByteArray& data, int width, int height,
     }
     else        // 8 bits image
     {
-        uchar* image = new_failureTolerant(width * height * 4);
+        uchar* image = new_failureTolerant(width, height, 4);
 
         if (!image)
         {

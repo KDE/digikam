@@ -25,6 +25,10 @@
 #ifndef DIMGLOADER_H
 #define DIMGLOADER_H
 
+// C++ includes
+
+#include <limits>
+
 // Qt includes
 
 #include <QMap>
@@ -82,11 +86,14 @@ public:
     static HistoryImageId createHistoryImageId(const QString& filePath, const DImg& img, const DMetadata& metadata);
 
     static unsigned char*  new_failureTolerant(size_t unsecureSize);
+    static unsigned char*  new_failureTolerant(quint64 w, quint64 h, uint typesPerPixel);
     static unsigned short* new_short_failureTolerant(size_t unsecureSize);
+    static unsigned short* new_short_failureTolerant(quint64 w, quint64 h, uint typesPerPixel);
 
     static int checkAllocation(qint64 fullSize);
 
     template <typename Type> static Type* new_failureTolerant(size_t unsecureSize);
+    template <typename Type> static Type* new_failureTolerant(quint64 w, quint64 h, uint typesPerPixel);
 
 protected:
 
@@ -131,8 +138,22 @@ private:
 
 // ---------------------------------------------------------------------------------------------------
 
+/// Allows safe multiplication of requested pixel number and bytes per pixel, avoiding particularly
+/// 32bit overflow and exceeding the size_t type
 template <typename Type>
+Q_INLINE_TEMPLATE Type* DImgLoader::new_failureTolerant(quint64 w, quint64 h, uint typesPerPixel)
+{
+    quint64 requested = w * h * quint64(typesPerPixel);
+    if (requested > std::numeric_limits<size_t>::max())
+    {
+        kError() << "Requested memory of" << requested*quint64(sizeof(Type))
+                 << "is larger than size_t supported by platform.";
+        return 0;
+    }
+    return new_failureTolerant<Type>(requested);
+}
 
+template <typename Type>
 Q_INLINE_TEMPLATE Type* DImgLoader::new_failureTolerant(size_t size)
 {
     if (!checkAllocation(size))

@@ -381,7 +381,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* const observe
             return false;
         }
 
-        dest = new_failureTolerant(w * h * 4);
+        dest = new_failureTolerant(w, h, 4);
         cleanupData->setDest(dest);
 
         if (!dest)

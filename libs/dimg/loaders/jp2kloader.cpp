@@ -322,11 +322,11 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver* const observe
     {
         if (m_sixteenBit)          // 16 bits image.
         {
-            data.reset(new_failureTolerant(imageWidth() * imageHeight() * 8));
+            data.reset(new_failureTolerant(imageWidth(), imageHeight(), 8));
         }
         else
         {
-            data.reset(new_failureTolerant(imageWidth() * imageHeight() * 4));
+            data.reset(new_failureTolerant(imageWidth(), imageHeight(), 4));
         }
 
         if (!data)
