@@ -52,11 +52,11 @@
 namespace Digikam
 {
 
-class ParserPriv
+class Parser::Private
 {
 public:
 
-    ParserPriv()
+    Private()
     {}
 
     RulesList  options;
@@ -66,7 +66,7 @@ public:
 // --------------------------------------------------------
 
 Parser::Parser()
-    : d(new ParserPriv)
+    : d(new Private)
 {
     registerOption(new FilePropertiesOption());
     registerOption(new DirectoryNameOption());

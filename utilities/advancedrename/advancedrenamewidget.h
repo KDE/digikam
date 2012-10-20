@@ -165,8 +165,8 @@ private:
 
 private:
 
-    class AdvancedRenameWidgetPriv;
-    AdvancedRenameWidgetPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

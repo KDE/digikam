@@ -151,11 +151,11 @@ QStringList DbKeySelector::checkedKeysList()
 
 // ------------------------------------------------------------------------------------
 
-class DbKeySelectorViewPriv
+class DbKeySelectorView::Private
 {
 public:
 
-    DbKeySelectorViewPriv() :
+    Private() :
         selector(0),
         searchBar(0)
     {
@@ -166,7 +166,7 @@ public:
 };
 
 DbKeySelectorView::DbKeySelectorView(QWidget* parent)
-    : QWidget(parent), d(new DbKeySelectorViewPriv)
+    : QWidget(parent), d(new Private)
 {
     QGridLayout* grid = new QGridLayout(this);
     d->selector       = new DbKeySelector(this);

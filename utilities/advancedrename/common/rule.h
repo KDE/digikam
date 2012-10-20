@@ -38,7 +38,6 @@ class QString;
 namespace Digikam
 {
 
-class RulePriv;
 class Rule : public QObject
 {
     Q_OBJECT
@@ -177,7 +176,8 @@ private:
 
 private:
 
-    RulePriv* const d;
+    class Private;
+    Private* const d;
 };
 
 typedef QList<Rule*> RulesList;

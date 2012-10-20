@@ -31,7 +31,6 @@
 namespace Digikam
 {
 
-class OptionPriv;
 class Option : public Rule
 {
     Q_OBJECT
@@ -53,7 +52,8 @@ private:
 
 private:
 
-    OptionPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

@@ -31,7 +31,6 @@
 namespace Digikam
 {
 
-class TooltipDialogPriv;
 class TooltipDialog : public KDialog
 {
     Q_OBJECT
@@ -51,7 +50,8 @@ private:
 
 private:
 
-    TooltipDialogPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

@@ -35,8 +35,6 @@ class QWidget;
 namespace Digikam
 {
 
-class DynamicLayoutPriv;
-
 class DynamicLayout : public QLayout
 {
 public:
@@ -74,7 +72,8 @@ private:
 
 private:
 
-    DynamicLayoutPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

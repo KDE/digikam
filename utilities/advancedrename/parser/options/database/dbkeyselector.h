@@ -82,7 +82,6 @@ private:
 
 // ------------------------------------------------------------------------------------
 
-class DbKeySelectorViewPriv;
 
 class DbKeySelectorView : public QWidget
 {
@@ -109,7 +108,8 @@ private:
 
 private:
 
-    DbKeySelectorViewPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

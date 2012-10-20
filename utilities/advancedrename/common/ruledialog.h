@@ -33,7 +33,6 @@ namespace Digikam
 {
 
 class Rule;
-class RuleDialogPriv;
 
 class RuleDialog : public KDialog
 {
@@ -57,7 +56,8 @@ private:
 
 private:
 
-    RuleDialogPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

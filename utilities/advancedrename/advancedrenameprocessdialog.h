@@ -44,7 +44,6 @@ namespace Digikam
 
 class LoadingDescription;
 
-class AdvancedRenameProcessDialogPriv;
 class AdvancedRenameProcessDialog : public DProgressDlg
 {
     Q_OBJECT
@@ -84,7 +83,8 @@ private Q_SLOTS:
 
 private:
 
-    AdvancedRenameProcessDialogPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

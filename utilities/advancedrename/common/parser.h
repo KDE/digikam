@@ -40,7 +40,6 @@ namespace Digikam
 
 class Modifier;
 class Option;
-class ParserPriv;
 
 class Parser
 {
@@ -94,7 +93,8 @@ private:
 
 private:
 
-    ParserPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

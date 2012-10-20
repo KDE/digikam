@@ -41,11 +41,11 @@
 namespace Digikam
 {
 
-class AdvancedRenameProcessDialogPriv
+class AdvancedRenameProcessDialog::Private
 {
 public:
 
-    AdvancedRenameProcessDialogPriv() :
+    Private() :
         cancel(false),
         thumbLoadThread(0),
         utilities(0)
@@ -59,7 +59,7 @@ public:
 };
 
 AdvancedRenameProcessDialog::AdvancedRenameProcessDialog(const NewNamesList& list)
-    : DProgressDlg(0), d(new AdvancedRenameProcessDialogPriv)
+    : DProgressDlg(0), d(new Private)
 {
     d->newNameList     = list;
     d->utilities       = new ImageViewUtilities(this);

@@ -84,8 +84,8 @@ private:
 
 private:
 
-    class AdvancedRenameListItemPriv;
-    AdvancedRenameListItemPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 // --------------------------------------------------------
@@ -132,8 +132,8 @@ private:
 
 private:
 
-    class AdvancedRenameDialogPriv;
-    AdvancedRenameDialogPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

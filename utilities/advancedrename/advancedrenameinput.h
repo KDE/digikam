@@ -89,8 +89,8 @@ private:
 
 private:
 
-    class AdvancedRenameLineEditPriv;
-    AdvancedRenameLineEditPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 // --------------------------------------------------------
@@ -145,8 +145,8 @@ private:
 
 private:
 
-    class AdvancedRenameInputPriv;
-    AdvancedRenameInputPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

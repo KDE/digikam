@@ -54,11 +54,11 @@
 namespace Digikam
 {
 
-class AdvancedRenameListItem::AdvancedRenameListItemPriv
+class AdvancedRenameListItem::Private
 {
 public:
 
-    AdvancedRenameListItemPriv()
+    Private()
     {
     }
 
@@ -69,12 +69,12 @@ public:
 // --------------------------------------------------------
 
 AdvancedRenameListItem::AdvancedRenameListItem(QTreeWidget* view)
-    : QTreeWidgetItem(view), d(new AdvancedRenameListItemPriv)
+    : QTreeWidgetItem(view), d(new Private)
 {
 }
 
 AdvancedRenameListItem::AdvancedRenameListItem(QTreeWidget* view, const KUrl& url)
-    : QTreeWidgetItem(view), d(new AdvancedRenameListItemPriv)
+    : QTreeWidgetItem(view), d(new Private)
 {
     setImageUrl(url);
 }
@@ -134,11 +134,11 @@ bool AdvancedRenameListItem::isNameEqual()
 
 // --------------------------------------------------------
 
-class AdvancedRenameDialog::AdvancedRenameDialogPriv
+class AdvancedRenameDialog::Private
 {
 public:
 
-    AdvancedRenameDialogPriv() :
+    Private() :
         singleFileMode(false),
         minSizeDialog(450),
         sortActionName(0),
@@ -177,14 +177,14 @@ public:
     AdvancedRenameWidget*  advancedRenameWidget;
     NewNamesList           newNamesList;
 };
-const QString AdvancedRenameDialog::AdvancedRenameDialogPriv::configGroupName("AdvancedRename Dialog");
-const QString AdvancedRenameDialog::AdvancedRenameDialogPriv::configLastUsedRenamePatternEntry("Last Used Rename Pattern");
-const QString AdvancedRenameDialog::AdvancedRenameDialogPriv::configDialogSizeEntry("Dialog Size");
+const QString AdvancedRenameDialog::Private::configGroupName("AdvancedRename Dialog");
+const QString AdvancedRenameDialog::Private::configLastUsedRenamePatternEntry("Last Used Rename Pattern");
+const QString AdvancedRenameDialog::Private::configDialogSizeEntry("Dialog Size");
 
 // --------------------------------------------------------
 
 AdvancedRenameDialog::AdvancedRenameDialog(QWidget* parent)
-    : KDialog(parent), d(new AdvancedRenameDialogPriv)
+    : KDialog(parent), d(new Private)
 {
     d->advancedRenameManager  = new AdvancedRenameManager();
     d->advancedRenameWidget   = new AdvancedRenameWidget(this);

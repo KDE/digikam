@@ -35,11 +35,11 @@
 namespace Digikam
 {
 
-class TooltipDialogPriv
+class TooltipDialog::Private
 {
 public:
 
-    TooltipDialogPriv() :
+    Private() :
         textBrowser(0)
     {}
 
@@ -47,7 +47,7 @@ public:
 };
 
 TooltipDialog::TooltipDialog(QWidget* parent)
-    : KDialog(parent), d(new TooltipDialogPriv)
+    : KDialog(parent), d(new Private)
 {
     d->textBrowser = new KTextBrowser(this);
     d->textBrowser->setFrameStyle(QFrame::NoFrame);

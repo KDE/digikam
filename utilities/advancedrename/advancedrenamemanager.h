@@ -122,8 +122,8 @@ private:
 
 private:
 
-    class ParseManagerPriv;
-    ParseManagerPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

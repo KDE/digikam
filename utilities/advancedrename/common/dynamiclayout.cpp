@@ -31,11 +31,11 @@
 namespace Digikam
 {
 
-class DynamicLayoutPriv
+class DynamicLayout::Private
 {
 public:
 
-    DynamicLayoutPriv(int hSpacing, int vSpacing) :
+    Private(int hSpacing, int vSpacing) :
         hSpace(hSpacing),
         vSpace(vSpacing),
         spaceX(0),
@@ -57,13 +57,13 @@ public:
 // --------------------------------------------------------
 
 DynamicLayout::DynamicLayout(QWidget* parent, int margin, int hSpacing, int vSpacing)
-    : QLayout(parent), d(new DynamicLayoutPriv(hSpacing, vSpacing))
+    : QLayout(parent), d(new Private(hSpacing, vSpacing))
 {
     setContentsMargins(margin, margin, margin, margin);
 }
 
 DynamicLayout::DynamicLayout(int margin, int hSpacing, int vSpacing)
-    : d(new DynamicLayoutPriv(hSpacing, vSpacing))
+    : d(new Private(hSpacing, vSpacing))
 {
     setContentsMargins(margin, margin, margin, margin);
 }

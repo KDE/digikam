@@ -31,7 +31,6 @@
 namespace Digikam
 {
 
-class ModifierPriv;
 class Modifier : public Rule
 {
     Q_OBJECT
@@ -53,7 +52,8 @@ private:
 
 private:
 
-    ModifierPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

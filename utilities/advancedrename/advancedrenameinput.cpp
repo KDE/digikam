@@ -54,11 +54,11 @@ static const QString DUMMY_TEXT("DUMMY_TEXT_y_fjqp|");
 namespace Digikam
 {
 
-class AdvancedRenameLineEdit::AdvancedRenameLineEditPriv
+class AdvancedRenameLineEdit::Private
 {
 public:
 
-    AdvancedRenameLineEditPriv() :
+    Private() :
         allowDirectoryCreation(false),
         verticalSliderPosition(INVALID),
         parseTimer(0),
@@ -72,7 +72,7 @@ public:
 };
 
 AdvancedRenameLineEdit::AdvancedRenameLineEdit(QWidget* parent)
-    : QPlainTextEdit(parent), d(new AdvancedRenameLineEditPriv)
+    : QPlainTextEdit(parent), d(new Private)
 {
     setLineWrapMode(QPlainTextEdit::NoWrap);
     setWordWrapMode(QTextOption::NoWrap);
@@ -238,11 +238,11 @@ void AdvancedRenameLineEdit::slotSetText(const QString& text)
 
 // --------------------------------------------------------
 
-class AdvancedRenameInput::AdvancedRenameInputPriv
+class AdvancedRenameInput::Private
 {
 public:
 
-    AdvancedRenameInputPriv() :
+    Private() :
         maxVisibleItems(10),
         maxHistoryItems(30),
         lineEdit(0),
@@ -260,13 +260,13 @@ public:
     AdvancedRenameLineEdit* lineEdit;
     Highlighter*            highlighter;
 };
-const QString AdvancedRenameInput::AdvancedRenameInputPriv::configGroupName("AdvancedRename Input");
-const QString AdvancedRenameInput::AdvancedRenameInputPriv::configPatternHistoryListEntry("Pattern History List");
+const QString AdvancedRenameInput::Private::configGroupName("AdvancedRename Input");
+const QString AdvancedRenameInput::Private::configPatternHistoryListEntry("Pattern History List");
 
 // --------------------------------------------------------
 
 AdvancedRenameInput::AdvancedRenameInput(QWidget* parent)
-    : KComboBox(parent), d(new AdvancedRenameInputPriv)
+    : KComboBox(parent), d(new Private)
 {
     setEditable(true);
 

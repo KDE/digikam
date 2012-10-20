@@ -57,14 +57,14 @@ using namespace KDcrawIface;
 namespace Digikam
 {
 
-class AdvancedRenameWidget::AdvancedRenameWidgetPriv
+class AdvancedRenameWidget::Private
 {
     typedef AdvancedRenameWidget::ControlWidgets CWMask;
     typedef AdvancedRenameWidget::LayoutStyle    LStyle;
 
 public:
 
-    AdvancedRenameWidgetPriv() :
+    Private() :
         configExpandedStateDefault(true),
         tooltipToggleButton(0),
         modifiersToolButton(0),
@@ -100,13 +100,13 @@ public:
     CWMask               controlWidgetsMask;
     LStyle               layoutStyle;
 };
-const QString AdvancedRenameWidget::AdvancedRenameWidgetPriv::configGroupName("AdvancedRename Widget");
-const QString AdvancedRenameWidget::AdvancedRenameWidgetPriv::configExpandedStateEntry("Options are expanded");
+const QString AdvancedRenameWidget::Private::configGroupName("AdvancedRename Widget");
+const QString AdvancedRenameWidget::Private::configExpandedStateEntry("Options are expanded");
 
 // --------------------------------------------------------
 
 AdvancedRenameWidget::AdvancedRenameWidget(QWidget* parent)
-    : QWidget(parent), d(new AdvancedRenameWidgetPriv)
+    : QWidget(parent), d(new Private)
 {
     setupWidgets();
 }

@@ -43,11 +43,11 @@
 namespace Digikam
 {
 
-class RuleDialogPriv
+class RuleDialog::Private
 {
 public:
 
-    RuleDialogPriv() :
+    Private() :
         dialogTitle(0),
         dialogDescription(0),
         dialogIcon(0),
@@ -62,7 +62,7 @@ public:
 };
 
 RuleDialog::RuleDialog(Rule* parent)
-    : KDialog(0), d(new RuleDialogPriv)
+    : KDialog(0), d(new Private)
 {
     d->dialogTitle       = new QLabel(this);
     d->dialogDescription = new QLabel(this);

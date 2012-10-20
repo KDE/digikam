@@ -26,24 +26,24 @@
 namespace Digikam
 {
 
-class OptionPriv
+class Option::Private
 {
 public:
 
-    OptionPriv()
+    Private()
     {}
 
     ParseResults parsedResults;
 };
 
 Option::Option(const QString& name, const QString& description)
-    : Rule(name), d(new OptionPriv)
+    : Rule(name), d(new Private)
 {
     setDescription(description);
 }
 
 Option::Option(const QString& name, const QString& description, const QString& icon)
-    : Rule(name, icon), d(new OptionPriv)
+    : Rule(name, icon), d(new Private)
 {
     setDescription(description);
 }

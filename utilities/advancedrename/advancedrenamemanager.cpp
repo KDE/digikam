@@ -75,11 +75,11 @@ struct SortBySize
     }
 };
 
-class AdvancedRenameManager::ParseManagerPriv
+class AdvancedRenameManager::Private
 {
 public:
 
-    ParseManagerPriv() :
+    Private() :
         parser(0),
         widget(0),
         parserType(AdvancedRenameManager::DefaultParser),
@@ -106,13 +106,13 @@ public:
 };
 
 AdvancedRenameManager::AdvancedRenameManager()
-    : d(new ParseManagerPriv)
+    : d(new Private)
 {
     setParserType(DefaultParser);
 }
 
 AdvancedRenameManager::AdvancedRenameManager(const QList<ParseSettings>& files)
-    : d(new ParseManagerPriv)
+    : d(new Private)
 {
     setParserType(DefaultParser);
     addFiles(files);

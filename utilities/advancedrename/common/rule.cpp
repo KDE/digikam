@@ -39,11 +39,11 @@
 namespace Digikam
 {
 
-class RulePriv
+class Rule::Private
 {
 public:
 
-    RulePriv() :
+    Private() :
         useTokenMenu(false)
     {}
 
@@ -57,13 +57,13 @@ public:
 };
 
 Rule::Rule(const QString& name)
-    : QObject(0), d(new RulePriv)
+    : QObject(0), d(new Private)
 {
     setObjectName(name);
 }
 
 Rule::Rule(const QString& name, const QString& icon)
-    : QObject(0), d(new RulePriv)
+    : QObject(0), d(new Private)
 {
     setObjectName(name);
     setIcon(icon);
