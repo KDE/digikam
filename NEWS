@@ -77,7 +77,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 047 ==> 283168 - Nepomuk interface crash.
 048 ==> 307602 - Large TIFF files crash digiKam (>1Gb).
 049 ==> 304186 - XMP sidecar files are not moved with images.
-050 ==> 
+050 ==> 299960 - Deleting image in album GUI causes thumbnail regeneration of whole album.
+051 ==> 
 
 
 
