@@ -76,7 +76,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 046 ==> 258837 - digiKam sometimes fails to add Metadata to Nepomuk.
 047 ==> 283168 - Nepomuk interface crash.
 048 ==> 307602 - Large TIFF files crash digiKam (>1Gb).
-049 ==>
+049 ==> 304186 - XMP sidecar files are not moved with images.
+050 ==> 
 
 
 
