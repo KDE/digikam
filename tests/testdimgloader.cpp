@@ -22,14 +22,12 @@
  *
  * ============================================================ */
 
-// Qt includes
-
-#include <QString>
-#include <QFileInfo>
+#include <unistd.h>
 
 // KDE includes
 
-#include "kdebug.h"
+#include <kdebug.h>
+#include <kcmdlineargs.h>
 
 // LibKExiv2 includes
 
@@ -37,40 +35,40 @@
 
 // Local includes
 
-#include "dimg.h"
-#include "drawdecoding.h"
+#include "loadsavethreadtest.h"
+#include "daboutdata.h"
+#include "version.h"
 
 using namespace Digikam;
 using namespace KExiv2Iface;
-using namespace KDcrawIface;
 
 int main(int argc, char** argv)
 {
-    if (argc != 2)
+/*    if (argc != 2)
     {
         kDebug() << "testdimgloader - test test DImg image loader";
         kDebug() << "Usage: <image>";
         return -1;
     }
-
+*/
     KExiv2::initializeExiv2();
 
-    QString filePath(argv[1]);
-    bool valRet = false;
+    KAboutData aboutData("LoadSaveThreadTest", "LoadSaveThreadTest",
+                         ki18n("LoadSaveThreadTest"),
+                         digiKamVersion().toAscii(),
+                         DAboutData::digiKamSlogan(),
+                         KAboutData::License_GPL,
+                         DAboutData::copyright(),
+                         additionalInformation(),
+                         DAboutData::webProjectUrl().url().toUtf8());
 
-    QFileInfo           input(filePath);
-    QString             outFilePath(input.baseName() + QString(".out.png"));
-    DImg                img;
-    RawDecodingSettings settings;
-    settings.halfSizeColorImage    = false;
-    settings.sixteenBitsImage      = false;
-    settings.RGBInterpolate4Colors = false;
-    settings.RAWQuality            = RawDecodingSettings::AHD;
+    KCmdLineArgs::init(argc, argv, &aboutData);
 
-    img.load(filePath, 0, DRawDecoding(settings));
-    img.save(outFilePath, "PNG");
+    QString path("./DSC0607.NEF");
+    LoadSaveThreadTest app(path);
+    int ret = app.exec();
 
     KExiv2::cleanupExiv2();
 
-    return valRet;
+    return ret;
 }
