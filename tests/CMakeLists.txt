@@ -278,6 +278,16 @@ ENDIF(PGF_FOUND)
 
 #------------------------------------------------------------------------
 
+SET(testdimgloader_SRCS testdimgloader.cpp)
+KDE4_ADD_EXECUTABLE(testdimgloader NOGUI ${testdimgloader_SRCS})
+TARGET_LINK_LIBRARIES(testdimgloader
+                      digikamcore
+                      ${QT_QTCORE_LIBRARY}
+                      ${KDE4_KDECORE_LIBS}
+                      ${KEXIV2_LIBRARIES}
+                      ${KDCRAW_LIBRARIES}
+                     )
+
 IF(GLIB2_FOUND)
     SET(testlensfuniface_SRCS testlensfuniface.cpp)
     KDE4_ADD_EXECUTABLE(testlensfuniface NOGUI ${testlensfuniface_SRCS})
