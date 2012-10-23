@@ -224,7 +224,7 @@ bool UMSCamera::getThumbnail(const QString& folder, const QString& itemName, QIm
 
     // RAW files : try to extract embedded thumbnail using libkdcraw
 
-    KDcrawIface::KDcraw::loadDcrawPreview(thumbnail, path);
+    KDcrawIface::KDcraw::loadRawPreview(thumbnail, path);
 
     if (!thumbnail.isNull())
     {
