@@ -278,6 +278,17 @@ ENDIF(PGF_FOUND)
 
 #------------------------------------------------------------------------
 
+SET(testdimgloader_SRCS testdimgloader.cpp)
+KDE4_ADD_EXECUTABLE(testdimgloader NOGUI ${testdimgloader_SRCS})
+TARGET_LINK_LIBRARIES(testdimgloader
+                      digikamcore
+                      ${QT_QTCORE_LIBRARY}
+                      ${QT_QTGUI_LIBRARY}
+                      ${KDE4_KDECORE_LIBS}
+                      ${KEXIV2_LIBRARIES}
+                      ${KDCRAW_LIBRARIES}
+                     )
+
 SET(loadsavethreadtest_SRCS loadsavethreadtest.cpp)
 KDE4_ADD_EXECUTABLE(loadsavethreadtest NOGUI ${loadsavethreadtest_SRCS})
 TARGET_LINK_LIBRARIES(loadsavethreadtest

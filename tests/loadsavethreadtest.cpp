@@ -108,7 +108,7 @@ int main(int argc, char** argv)
 {
     if (argc != 2)
     {
-        qDebug() << "testdimgloader - test test DImg image loader";
+        qDebug() << "loadsavethreadtest - test DImg image loader with multithreading";
         qDebug() << "Usage: <image>";
         return -1;
     }
