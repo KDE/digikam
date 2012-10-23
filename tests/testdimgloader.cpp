@@ -22,8 +22,6 @@
  *
  * ============================================================ */
 
-#include <unistd.h>
-
 // KDE includes
 
 #include <kdebug.h>
@@ -64,7 +62,7 @@ int main(int argc, char** argv)
 
     KCmdLineArgs::init(argc, argv, &aboutData);
 
-    QString path("./DSC0607.NEF");
+    QString path("./5D3_5199.CR2");
     LoadSaveThreadTest app(path);
     int ret = app.exec();
 

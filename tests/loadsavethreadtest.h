@@ -28,7 +28,7 @@
 // Qt includes
 
 #include <QString>
-#include <kapplication.h>
+#include <QApplication>
 
 // Local includes
 
@@ -38,13 +38,13 @@
 
 using namespace Digikam;
 
-class LoadSaveThreadTest : public KApplication
+class LoadSaveThreadTest : public QApplication
 {
     Q_OBJECT
 
 public:
 
-    LoadSaveThreadTest(const QString& filePath);
+    LoadSaveThreadTest(int& argc, char** argv);
 
 private Q_SLOTS:
 

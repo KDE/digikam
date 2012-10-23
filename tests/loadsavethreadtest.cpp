@@ -29,15 +29,20 @@
 #include <QFileInfo>
 #include <QDebug>
 
+// LibKExiv2 includes
+
+#include <libkexiv2/kexiv2.h>
+
 // Local includes
 
 #include "dimg.h"
 #include "drawdecoding.h"
 
 using namespace KDcrawIface;
+using namespace KExiv2Iface;
 
-LoadSaveThreadTest::LoadSaveThreadTest(const QString& filePath)
-    : KApplication()
+LoadSaveThreadTest::LoadSaveThreadTest(int& argc, char** argv)
+    : QApplication(argc, argv)
 {
     qRegisterMetaType<LoadingDescription>("LoadingDescription");
     qRegisterMetaType<DImg>("DImg");
@@ -60,11 +65,17 @@ LoadSaveThreadTest::LoadSaveThreadTest(const QString& filePath)
     settings.halfSizeColorImage    = false;
     settings.sixteenBitsImage      = false;
     settings.RGBInterpolate4Colors = false;
-    settings.RAWQuality            = RawDecodingSettings::AHD;
+    settings.RAWQuality            = RawDecodingSettings::BILINEAR;
 
-    LoadingDescription desc(filePath, DRawDecoding(settings));
+    LoadingDescription desc(argv[1], DRawDecoding(settings));
 
     m_thread->load(desc);
+}
+
+void LoadSaveThreadTest::slotLoadingProgress(const LoadingDescription& desc, float p)
+{
+    QFileInfo fi(desc.filePath);
+    qDebug() << "Loading " << fi.baseName() << " : " << p << " %";
 }
 
 void LoadSaveThreadTest::slotImageLoaded(const LoadingDescription& desc, const DImg& img)
@@ -77,20 +88,37 @@ void LoadSaveThreadTest::slotImageLoaded(const LoadingDescription& desc, const D
     m_thread->save(image, outFilePath, "PNG");
 }
 
-void LoadSaveThreadTest::slotImageSaved(const QString& filePath, bool b)
-{
-    QFileInfo fi(filePath);
-    qDebug() << fi.baseName() << " saved : " << (b ? "ok" : "pb");
-}
-
-void LoadSaveThreadTest::slotLoadingProgress(const LoadingDescription& desc, float p)
-{
-    QFileInfo fi(desc.filePath);
-    qDebug() << "Loading " << fi.baseName() << " : " << p << " %";
-}
-
 void LoadSaveThreadTest::slotSavingProgress(const QString& filePath, float p)
 {
     QFileInfo fi(filePath);
     qDebug() << "Saving " << fi.baseName() << " : " << p << " %";
+}
+
+void LoadSaveThreadTest::slotImageSaved(const QString& filePath, bool b)
+{
+    QFileInfo fi(filePath);
+    qDebug() << fi.baseName() << " saved : " << (b ? "ok" : "pb");
+
+    exit();
+}
+
+// ------------------------------------------------------------------------------------------
+
+int main(int argc, char** argv)
+{
+    if (argc != 2)
+    {
+        qDebug() << "testdimgloader - test test DImg image loader";
+        qDebug() << "Usage: <image>";
+        return -1;
+    }
+
+    KExiv2::initializeExiv2();
+
+    LoadSaveThreadTest app(argc, argv);
+    int ret = app.exec();
+
+    KExiv2::cleanupExiv2();
+
+    return ret;
 }
