@@ -230,6 +230,13 @@ QList<QAction*> KipiPluginLoader::kipiActionsByCategory(Category cat) const
 
 void KipiPluginLoader::slotKipiPluginPlug()
 {
+    // Ugly hack. Remove "advancedslideshow" action from Slideshow menu
+    foreach(QAction* action, d->app->slideShowMenu()->menu()->actions())
+    {
+        if (action->objectName() == "advancedslideshow")
+            d->app->slideShowMenu()->removeAction(action);
+    }
+
     // Delete all action categories
     for (QMap<int, KActionCategory*>::iterator it = d->kipiCategoryMap.begin();
          it != d->kipiCategoryMap.end();
@@ -315,6 +322,17 @@ void KipiPluginLoader::slotKipiPluginPlug()
             continue;
         }
 
+        // Ugly hack. Remove "advancedslideshow action from AdvancedSlideshow plugin
+        // actionCollection() and add it to the Slideshow menu
+        if (plugin->objectName() == QString("AdvancedSlideshow"))
+        {
+            QAction* action = plugin->actionCollection()->action("advancedslideshow");
+            if (action)
+            {
+                QAction* _action = plugin->actionCollection()->takeAction(action);
+                d->app->slideShowMenu()->addAction(_action);
+            }
+        }
         d->app->guiFactory()->addClient(plugin);
     }
 
