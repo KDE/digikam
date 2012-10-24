@@ -272,8 +272,8 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
     {
         d->titleEdit->setText(i18n("New Album"));
         d->datePicker->setDate(QDate::currentDate());
-        d->parentCombo->addItem(QString("Selected Album (Default)"));
-        d->parentCombo->addItem(QString("Root"));
+        d->parentCombo->addItem(i18n("Selected Album (Default)"));
+        d->parentCombo->addItem(i18nc("top level folder of album","Root"));
     }
     else
     {
