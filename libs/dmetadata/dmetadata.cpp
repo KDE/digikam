@@ -370,7 +370,7 @@ bool DMetadata::setImageComments(const CaptionsMap& comments) const
         }
     }
 
-    QString defaultComment = comments[QString("x-default")].caption;
+    QString defaultComment = comments.value("x-default").caption;
 
     // In first we set image comments, outside of Exif, XMP, and IPTC.
 
@@ -396,21 +396,24 @@ bool DMetadata::setImageComments(const CaptionsMap& comments) const
             return false;
         }
 
+        // setXmpTagStringLangAlt does not remove xmp tag before adding a new value, so we do it.
         removeXmpTag("Xmp.exif.UserComment");
-
         if (!defaultComment.isNull())
+        {
             if (!setXmpTagStringLangAlt("Xmp.exif.UserComment", defaultComment, QString(), false))
             {
                 return false;
             }
+        }
 
         removeXmpTag("Xmp.tiff.ImageDescription");
-
         if (!defaultComment.isNull())
+        {
             if (!setXmpTagStringLangAlt("Xmp.tiff.ImageDescription", defaultComment, QString(), false))
             {
                 return false;
             }
+        }
     }
 
     // In Four we write comments into IPTC.
