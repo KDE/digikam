@@ -80,5 +80,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 050 ==> 299960 - Deleting image in album GUI causes thumbnail regeneration of whole album.
 051 ==> 308534 - libkexiv2 fails to build when exiv2 is built without XMP support.
 052 ==> 308078 - Caption in non-default language not saved to JPEG when x-default is empty.
-053 ==> 
-
+053 ==> 271531 - Cannot edit canon crw-pics.
+054 ==> 
