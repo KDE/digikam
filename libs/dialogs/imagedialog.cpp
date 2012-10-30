@@ -6,7 +6,7 @@
  * Date        : 2008-03-13
  * Description : image files selector dialog.
  *
- * Copyright (C) 2008-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -53,11 +53,11 @@
 namespace Digikam
 {
 
-class ImageDialogPreview::ImageDialogPreviewPrivate
+class ImageDialogPreview::Private
 {
 public:
 
-    ImageDialogPreviewPrivate() :
+    Private() :
         imageLabel(0),
         infoLabel(0),
         thumbLoadThread(0)
@@ -74,9 +74,9 @@ public:
     ThumbnailLoadThread* thumbLoadThread;
 };
 
-ImageDialogPreview::ImageDialogPreview(QWidget* parent)
+ImageDialogPreview::ImageDialogPreview(QWidget* const parent)
     : KPreviewWidgetBase(parent),
-      d(new ImageDialogPreviewPrivate)
+      d(new Private)
 {
     d->thumbLoadThread = ThumbnailLoadThread::defaultThread();
 
@@ -137,7 +137,7 @@ void ImageDialogPreview::showPreview(const KUrl& url)
         d->thumbLoadThread->find(d->currentURL.toLocalFile());
 
         d->metaIface.load(d->currentURL.toLocalFile());
-        PhotoInfoContainer info = d->metaIface.getPhotographInformation();
+        PhotoInfoContainer info      = d->metaIface.getPhotographInformation();
         VideoInfoContainer videoInfo = d->metaIface.getVideoInformation();
 
         if (!info.isEmpty())
@@ -281,13 +281,18 @@ void ImageDialogPreview::showPreview(const KUrl& url)
             identify += cnt.cellBeg + i18n("<i>Focal:</i>")             + cnt.cellMid + focalLength         + cnt.cellEnd;
             identify += cnt.cellBeg + i18n("<i>Exposure:</i>")          + cnt.cellMid + exposureTime        + cnt.cellEnd;
             identify += cnt.cellBeg + i18n("<i>Sensitivity:</i>")       + cnt.cellMid + sensitivity         + cnt.cellEnd;
-            identify += cnt.cellBeg + i18n("<i>AspectRatio:</i>")       + cnt.cellMid + aspectRatio         + cnt.cellEnd;
-            identify += cnt.cellBeg + i18n("<i>AudioBitRate:</i>")      + cnt.cellMid + audioBitRate        + cnt.cellEnd;
-            identify += cnt.cellBeg + i18n("<i>AudioChannelType:</i>")  + cnt.cellMid + audioChannelType    + cnt.cellEnd;
-            identify += cnt.cellBeg + i18n("<i>AudioCompressor:</i>")   + cnt.cellMid + audioCompressor     + cnt.cellEnd;
-            identify += cnt.cellBeg + i18n("<i>Duration:</i>")          + cnt.cellMid + duration            + cnt.cellEnd;
-            identify += cnt.cellBeg + i18n("<i>FrameRate:</i>")         + cnt.cellMid + frameRate           + cnt.cellEnd;
-            identify += cnt.cellBeg + i18n("<i>VideoCodec:</i>")        + cnt.cellMid + videoCodec          + cnt.cellEnd;
+
+            if (!videoInfo.isEmpty())
+            {
+                identify += cnt.cellBeg + i18n("<i>AspectRatio:</i>")       + cnt.cellMid + aspectRatio         + cnt.cellEnd;
+                identify += cnt.cellBeg + i18n("<i>AudioBitRate:</i>")      + cnt.cellMid + audioBitRate        + cnt.cellEnd;
+                identify += cnt.cellBeg + i18n("<i>AudioChannelType:</i>")  + cnt.cellMid + audioChannelType    + cnt.cellEnd;
+                identify += cnt.cellBeg + i18n("<i>AudioCompressor:</i>")   + cnt.cellMid + audioCompressor     + cnt.cellEnd;
+                identify += cnt.cellBeg + i18n("<i>Duration:</i>")          + cnt.cellMid + duration            + cnt.cellEnd;
+                identify += cnt.cellBeg + i18n("<i>FrameRate:</i>")         + cnt.cellMid + frameRate           + cnt.cellEnd;
+                identify += cnt.cellBeg + i18n("<i>VideoCodec:</i>")        + cnt.cellMid + videoCodec          + cnt.cellEnd;
+            }
+
             identify += "</table></center></qt>";
 
             d->infoLabel->setText(identify);
@@ -328,12 +333,12 @@ void ImageDialogPreview::clearPreview()
 
 // ------------------------------------------------------------------------
 
-class ImageDialog::ImageDialogPrivate
+class ImageDialog::Private
 {
 
 public:
 
-    ImageDialogPrivate() :
+    Private() :
         singleSelect(false)
     {
     }
@@ -346,15 +351,14 @@ public:
     KUrl::List urls;
 };
 
-ImageDialog::ImageDialog(QWidget* parent, const KUrl& url, bool singleSelect, const QString& caption)
-    : d(new ImageDialogPrivate)
+ImageDialog::ImageDialog(QWidget* const parent, const KUrl& url, bool singleSelect, const QString& caption)
+    : d(new Private)
 {
-    d->singleSelect = singleSelect;
-
+    d->singleSelect         = singleSelect;
     QStringList patternList = KImageIO::pattern(KImageIO::Reading).split('\n', QString::SkipEmptyParts);
 
     // All Images from list must been always the first entry given by KDE API
-    QString allPictures = patternList[0];
+    QString allPictures     = patternList[0];
 
     allPictures.insert(allPictures.indexOf("|"), QString(KDcrawIface::KDcraw::rawFiles()) +
                                                  QString(" *.JPE *.TIF *.PGF"));
@@ -436,7 +440,7 @@ KUrl::List ImageDialog::urls() const
     return d->urls;
 }
 
-KUrl::List ImageDialog::getImageURLs(QWidget* parent, const KUrl& url, const QString& caption)
+KUrl::List ImageDialog::getImageURLs(QWidget* const parent, const KUrl& url, const QString& caption)
 {
     ImageDialog dlg(parent, url, false, caption);
 
@@ -450,7 +454,7 @@ KUrl::List ImageDialog::getImageURLs(QWidget* parent, const KUrl& url, const QSt
     }
 }
 
-KUrl ImageDialog::getImageURL(QWidget* parent, const KUrl& url, const QString& caption)
+KUrl ImageDialog::getImageURL(QWidget* const parent, const KUrl& url, const QString& caption)
 {
     ImageDialog dlg(parent, url, true, caption);
 

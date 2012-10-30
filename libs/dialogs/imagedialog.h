@@ -6,7 +6,7 @@
  * Date        : 2008-03-13
  * Description : image files selector dialog.
  *
- * Copyright (C) 2008-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -44,7 +44,7 @@ class DIGIKAM_EXPORT ImageDialogPreview : public KPreviewWidgetBase
 
 public:
 
-    explicit ImageDialogPreview(QWidget* parent=0);
+    explicit ImageDialogPreview(QWidget* const parent=0);
     ~ImageDialogPreview();
 
     QSize sizeHint() const;
@@ -65,8 +65,8 @@ private:
 
 private:
 
-    class ImageDialogPreviewPrivate;
-    ImageDialogPreviewPrivate* const d;
+    class Private;
+    Private* const d;
 };
 
 // ------------------------------------------------------------------------
@@ -76,7 +76,7 @@ class DIGIKAM_EXPORT ImageDialog
 
 public:
 
-    ImageDialog(QWidget* parent, const KUrl& url, bool singleSelect=false, const QString& caption=QString());
+    ImageDialog(QWidget* const parent, const KUrl& url, bool singleSelect=false, const QString& caption=QString());
     ~ImageDialog();
 
     KUrl       url()  const;
@@ -85,13 +85,13 @@ public:
     bool       singleSelect() const;
     QString    fileFormats()  const;
 
-    static KUrl::List getImageURLs(QWidget* parent, const KUrl& url, const QString& caption=QString());
-    static KUrl getImageURL(QWidget* parent, const KUrl& url, const QString& caption=QString());
+    static KUrl::List getImageURLs(QWidget* const parent, const KUrl& url, const QString& caption=QString());
+    static KUrl getImageURL(QWidget* const parent, const KUrl& url, const QString& caption=QString());
 
 private:
 
-    class ImageDialogPrivate;
-    ImageDialogPrivate* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam
