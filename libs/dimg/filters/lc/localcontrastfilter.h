@@ -85,22 +85,22 @@ private:
 
     void filterImage();
 
-    void  process_rgb_image(float* img, int sizex, int sizey);
-    void  process_8bit_rgb_image(unsigned char* img, int sizex, int sizey);
-    void  process_16bit_rgb_image(unsigned short int* img, int sizex, int sizey);
+    void  processRgbImage(float* const img, int sizex, int sizey);
+    void  process8bitRgbImage(unsigned char* const img, int sizex, int sizey);
+    void  process16bitRgbImage(unsigned short int* const img, int sizex, int sizey);
 
     float func(float x1, float x2);
 
-    void  inplace_blur(float* data, int sizex, int sizey, float blur);
-    void  stretch_contrast(float* data, int datasize);
+    void  inplaceBlur(float* const data, int sizex, int sizey, float blur);
+    void  stretchContrast(float* const data, int datasize);
 
     inline void rgb2hsv(const float& r, const float& g, const float& b, float& h, float& s, float& v);
     inline void hsv2rgb(const float& h, const float& s, const float& v, float& r, float& g, float& b);
 
 private:
 
-    class LocalContrastFilterPriv;
-    LocalContrastFilterPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

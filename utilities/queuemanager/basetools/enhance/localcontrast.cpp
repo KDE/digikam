@@ -72,26 +72,26 @@ BatchToolSettings LocalContrast::defaultSettings()
     BatchToolSettings prm;
     LocalContrastContainer defaultPrm = m_settingsView->defaultSettings();
 
-    prm.insert("stretch_contrast", defaultPrm.stretch_contrast);
-    prm.insert("low_saturation",   defaultPrm.low_saturation);
-    prm.insert("high_saturation",  defaultPrm.high_saturation);
-    prm.insert("function_id",      defaultPrm.function_id);
+    prm.insert("stretchContrast", defaultPrm.stretchContrast);
+    prm.insert("lowSaturation",   defaultPrm.lowSaturation);
+    prm.insert("highSaturation",  defaultPrm.highSaturation);
+    prm.insert("functionId",      defaultPrm.functionId);
 
-    prm.insert("stage1_enabled",   defaultPrm.stage[0].enabled);
-    prm.insert("stage1_power",     defaultPrm.stage[0].power);
-    prm.insert("stage1_blur",      defaultPrm.stage[0].blur);
+    prm.insert("stage1Enabled",   defaultPrm.stage[0].enabled);
+    prm.insert("stage1Power",     defaultPrm.stage[0].power);
+    prm.insert("stage1Blur",      defaultPrm.stage[0].blur);
 
-    prm.insert("stage2_enabled",   defaultPrm.stage[1].enabled);
-    prm.insert("stage2_power",     defaultPrm.stage[1].power);
-    prm.insert("stage2_blur",      defaultPrm.stage[1].blur);
+    prm.insert("stage2Enabled",   defaultPrm.stage[1].enabled);
+    prm.insert("stage2Power",     defaultPrm.stage[1].power);
+    prm.insert("stage2Blur",      defaultPrm.stage[1].blur);
 
-    prm.insert("stage3_enabled",   defaultPrm.stage[2].enabled);
-    prm.insert("stage3_power",     defaultPrm.stage[2].power);
-    prm.insert("stage3_blur",      defaultPrm.stage[2].blur);
+    prm.insert("stage3Enabled",   defaultPrm.stage[2].enabled);
+    prm.insert("stage3Power",     defaultPrm.stage[2].power);
+    prm.insert("stage3Blur",      defaultPrm.stage[2].blur);
 
-    prm.insert("stage4_enabled",   defaultPrm.stage[3].enabled);
-    prm.insert("stage4_power",     defaultPrm.stage[3].power);
-    prm.insert("stage4_blur",      defaultPrm.stage[3].blur);
+    prm.insert("stage4Enabled",   defaultPrm.stage[3].enabled);
+    prm.insert("stage4Power",     defaultPrm.stage[3].power);
+    prm.insert("stage4Blur",      defaultPrm.stage[3].blur);
 
     return prm;
 }
@@ -100,26 +100,26 @@ void LocalContrast::slotAssignSettings2Widget()
 {
     LocalContrastContainer prm;
 
-    prm.stretch_contrast = settings()["stretch_contrast"].toBool();
-    prm.low_saturation   = settings()["low_saturation"].toInt();
-    prm.high_saturation  = settings()["high_saturation"].toInt();
-    prm.function_id      = settings()["function_id"].toInt();
+    prm.stretchContrast = settings()["stretchContrast"].toBool();
+    prm.lowSaturation   = settings()["lowSaturation"].toInt();
+    prm.highSaturation  = settings()["highSaturation"].toInt();
+    prm.functionId      = settings()["functionId"].toInt();
 
-    prm.stage[0].enabled = settings()["stage1_enabled"].toBool();
-    prm.stage[0].power   = settings()["stage1_power"].toDouble();
-    prm.stage[0].blur    = settings()["stage1_blur"].toDouble();
+    prm.stage[0].enabled = settings()["stage1Enabled"].toBool();
+    prm.stage[0].power   = settings()["stage1Power"].toDouble();
+    prm.stage[0].blur    = settings()["stage1Blur"].toDouble();
 
-    prm.stage[1].enabled = settings()["stage2_enabled"].toBool();
-    prm.stage[1].power   = settings()["stage2_power"].toDouble();
-    prm.stage[1].blur    = settings()["stage2_blur"].toDouble();
+    prm.stage[1].enabled = settings()["stage2Enabled"].toBool();
+    prm.stage[1].power   = settings()["stage2Power"].toDouble();
+    prm.stage[1].blur    = settings()["stage2Blur"].toDouble();
 
-    prm.stage[2].enabled = settings()["stage3_enabled"].toBool();
-    prm.stage[2].power   = settings()["stage3_power"].toDouble();
-    prm.stage[2].blur    = settings()["stage3_blur"].toDouble();
+    prm.stage[2].enabled = settings()["stage3Enabled"].toBool();
+    prm.stage[2].power   = settings()["stage3Power"].toDouble();
+    prm.stage[2].blur    = settings()["stage3Blur"].toDouble();
 
-    prm.stage[3].enabled = settings()["stage4_enabled"].toBool();
-    prm.stage[3].power   = settings()["stage4_power"].toDouble();
-    prm.stage[3].blur    = settings()["stage4_blur"].toDouble();
+    prm.stage[3].enabled = settings()["stage4Enabled"].toBool();
+    prm.stage[3].power   = settings()["stage4Power"].toDouble();
+    prm.stage[3].blur    = settings()["stage4Blur"].toDouble();
 
     m_settingsView->setSettings(prm);
 }
@@ -129,26 +129,26 @@ void LocalContrast::slotSettingsChanged()
     BatchToolSettings prm;
     LocalContrastContainer currentPrm = m_settingsView->settings();
 
-    prm.insert("stretch_contrast", currentPrm.stretch_contrast);
-    prm.insert("low_saturation",   currentPrm.low_saturation);
-    prm.insert("high_saturation",  currentPrm.high_saturation);
-    prm.insert("function_id",      currentPrm.function_id);
+    prm.insert("stretchContrast", currentPrm.stretchContrast);
+    prm.insert("lowSaturation",   currentPrm.lowSaturation);
+    prm.insert("highSaturation",  currentPrm.highSaturation);
+    prm.insert("functionId",      currentPrm.functionId);
 
-    prm.insert("stage1_enabled",   currentPrm.stage[0].enabled);
-    prm.insert("stage1_power",     currentPrm.stage[0].power);
-    prm.insert("stage1_blur",      currentPrm.stage[0].blur);
+    prm.insert("stage1Enabled",   currentPrm.stage[0].enabled);
+    prm.insert("stage1Power",     currentPrm.stage[0].power);
+    prm.insert("stage1Blur",      currentPrm.stage[0].blur);
 
-    prm.insert("stage2_enabled",   currentPrm.stage[1].enabled);
-    prm.insert("stage2_power",     currentPrm.stage[1].power);
-    prm.insert("stage2_blur",      currentPrm.stage[1].blur);
+    prm.insert("stage2Enabled",   currentPrm.stage[1].enabled);
+    prm.insert("stage2Power",     currentPrm.stage[1].power);
+    prm.insert("stage2Blur",      currentPrm.stage[1].blur);
 
-    prm.insert("stage3_enabled",   currentPrm.stage[2].enabled);
-    prm.insert("stage3_power",     currentPrm.stage[2].power);
-    prm.insert("stage3_blur",      currentPrm.stage[2].blur);
+    prm.insert("stage3Enabled",   currentPrm.stage[2].enabled);
+    prm.insert("stage3Power",     currentPrm.stage[2].power);
+    prm.insert("stage3Blur",      currentPrm.stage[2].blur);
 
-    prm.insert("stage4_enabled",   currentPrm.stage[3].enabled);
-    prm.insert("stage4_power",     currentPrm.stage[3].power);
-    prm.insert("stage4_blur",      currentPrm.stage[3].blur);
+    prm.insert("stage4Enabled",   currentPrm.stage[3].enabled);
+    prm.insert("stage4Power",     currentPrm.stage[3].power);
+    prm.insert("stage4Blur",      currentPrm.stage[3].blur);
 
     BatchTool::slotSettingsChanged(prm);
 }
@@ -162,26 +162,26 @@ bool LocalContrast::toolOperations()
 
     LocalContrastContainer prm;
 
-    prm.stretch_contrast = settings()["stretch_contrast"].toBool();
-    prm.low_saturation   = settings()["low_saturation"].toInt();
-    prm.high_saturation  = settings()["high_saturation"].toInt();
-    prm.function_id      = settings()["function_id"].toInt();
+    prm.stretchContrast = settings()["stretchContrast"].toBool();
+    prm.lowSaturation   = settings()["lowSaturation"].toInt();
+    prm.highSaturation  = settings()["highSaturation"].toInt();
+    prm.functionId      = settings()["functionId"].toInt();
 
-    prm.stage[0].enabled = settings()["stage1_enabled"].toBool();
-    prm.stage[0].power   = settings()["stage1_power"].toDouble();
-    prm.stage[0].blur    = settings()["stage1_blur"].toDouble();
+    prm.stage[0].enabled = settings()["stage1Enabled"].toBool();
+    prm.stage[0].power   = settings()["stage1Power"].toDouble();
+    prm.stage[0].blur    = settings()["stage1Blur"].toDouble();
 
-    prm.stage[1].enabled = settings()["stage2_enabled"].toBool();
-    prm.stage[1].power   = settings()["stage2_power"].toDouble();
-    prm.stage[1].blur    = settings()["stage2_blur"].toDouble();
+    prm.stage[1].enabled = settings()["stage2Enabled"].toBool();
+    prm.stage[1].power   = settings()["stage2Power"].toDouble();
+    prm.stage[1].blur    = settings()["stage2Blur"].toDouble();
 
-    prm.stage[2].enabled = settings()["stage3_enabled"].toBool();
-    prm.stage[2].power   = settings()["stage3_power"].toDouble();
-    prm.stage[2].blur    = settings()["stage3_blur"].toDouble();
+    prm.stage[2].enabled = settings()["stage3Enabled"].toBool();
+    prm.stage[2].power   = settings()["stage3Power"].toDouble();
+    prm.stage[2].blur    = settings()["stage3Blur"].toDouble();
 
-    prm.stage[3].enabled = settings()["stage4_enabled"].toBool();
-    prm.stage[3].power   = settings()["stage4_power"].toDouble();
-    prm.stage[3].blur    = settings()["stage4_blur"].toDouble();
+    prm.stage[3].enabled = settings()["stage4Enabled"].toBool();
+    prm.stage[3].power   = settings()["stage4Power"].toDouble();
+    prm.stage[3].blur    = settings()["stage4Blur"].toDouble();
 
     LocalContrastFilter lc(&image(), 0L, prm);
     applyFilter(&lc);

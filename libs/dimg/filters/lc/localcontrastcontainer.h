@@ -43,19 +43,19 @@ public:
     LocalContrastContainer();
     ~LocalContrastContainer();
 
-    float get_power(int nstage);
-    float get_blur(int nstage);
+    float getPower(int nstage)  const;
+    float getBlur(int nstage)   const;
 
-    float get_unsharp_mask_power();
-    float get_unsharp_mask_blur();
+    float getUnsharpMaskPower() const;
+    float getUnsharpMaskBlur()  const;
 
 public:
 
-    bool stretch_contrast;
+    bool stretchContrast;
 
-    int  low_saturation;
-    int  high_saturation;
-    int  function_id;
+    int  lowSaturation;
+    int  highSaturation;
+    int  functionId;
 
     struct
     {
@@ -72,7 +72,7 @@ public:
         float power;         // Amount    : 0.0  - 5.0
         int   threshold;     // threshold : 0.00 - 1.00
     }
-    unsharp_mask;
+    unsharpMask;
 };
 
 } // namespace Digikam

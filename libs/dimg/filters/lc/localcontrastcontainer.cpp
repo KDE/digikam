@@ -43,10 +43,10 @@ namespace Digikam
 
 LocalContrastContainer::LocalContrastContainer()
 {
-    stretch_contrast = true;
-    high_saturation  = 100;
-    low_saturation   = 100;
-    function_id      = 0;
+    stretchContrast = true;
+    highSaturation  = 100;
+    lowSaturation   = 100;
+    functionId      = 0;
 
     for (int i = 0 ; i < TONEMAPPING_MAX_STAGES ; ++i)
     {
@@ -55,38 +55,38 @@ LocalContrastContainer::LocalContrastContainer()
         stage[i].blur    = 80.0;
     }
 
-    unsharp_mask.enabled   = false;
-    unsharp_mask.power     = 30.0;
-    unsharp_mask.blur      = 4.0;
-    unsharp_mask.threshold = 0;
+    unsharpMask.enabled   = false;
+    unsharpMask.power     = 30.0;
+    unsharpMask.blur      = 4.0;
+    unsharpMask.threshold = 0;
 }
 
 LocalContrastContainer::~LocalContrastContainer()
 {
 }
 
-float LocalContrastContainer::get_power(int nstage)
+float LocalContrastContainer::getPower(int nstage) const
 {
     float power = stage[nstage].power;
     power       = (float)(qPow(power / 100.0, 1.5) * 100.0);
     return power;
 }
 
-float LocalContrastContainer::get_blur(int nstage)
+float LocalContrastContainer::getBlur(int nstage) const
 {
     return stage[nstage].blur;
 }
 
-float LocalContrastContainer::get_unsharp_mask_power()
+float LocalContrastContainer::getUnsharpMaskPower() const
 {
-    float power = unsharp_mask.power;
+    float power = unsharpMask.power;
     power       = (float)(qPow(power / 100.0, 3.0) * 10.0);
     return power;
 }
 
-float LocalContrastContainer::get_unsharp_mask_blur()
+float LocalContrastContainer::getUnsharpMaskBlur() const
 {
-    return unsharp_mask.blur;
+    return unsharpMask.blur;
 }
 
 } // namespace Digikam

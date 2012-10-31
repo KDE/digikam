@@ -42,11 +42,11 @@
 namespace Digikam
 {
 
-class LocalContrastFilter::LocalContrastFilterPriv
+class LocalContrastFilter::Private
 {
 public:
 
-    LocalContrastFilterPriv()
+    Private()
     {
         current_process_power_value = 20.0;
     }
@@ -61,14 +61,14 @@ public:
 
 LocalContrastFilter::LocalContrastFilter(QObject* parent)
     : DImgThreadedFilter(parent),
-      d(new LocalContrastFilterPriv)
+      d(new Private)
 {
     initFilter();
 }
 
 LocalContrastFilter::LocalContrastFilter(DImg* image, QObject* parent, const LocalContrastContainer& par)
     : DImgThreadedFilter(image, parent, "LocalContrast"),
-      d(new LocalContrastFilterPriv)
+      d(new Private)
 {
     d->par = par;
     d->generator.seedByTime();
@@ -105,7 +105,7 @@ void LocalContrastFilter::filterImage()
 
             postProgress(10);
 
-            process_16bit_rgb_image(data.data(), m_orgImage.width(), m_orgImage.height());
+            process16bitRgbImage(data.data(), m_orgImage.width(), m_orgImage.height());
 
             for (uint x = 0; runningFlag() && (x < m_orgImage.width()); ++x)
             {
@@ -133,7 +133,7 @@ void LocalContrastFilter::filterImage()
 
             postProgress(10);
 
-            process_8bit_rgb_image(data.data(), m_orgImage.width(), m_orgImage.height());
+            process8bitRgbImage(data.data(), m_orgImage.width(), m_orgImage.height());
 
             for (uint x = 0; runningFlag() && (x < m_orgImage.width()); ++x)
             {
@@ -149,7 +149,7 @@ void LocalContrastFilter::filterImage()
     postProgress(100);
 }
 
-void LocalContrastFilter::process_8bit_rgb_image(unsigned char* img, int sizex, int sizey)
+void LocalContrastFilter::process8bitRgbImage(unsigned char* const img, int sizex, int sizey)
 {
     int size = sizex * sizey;
     QScopedArrayPointer<float> tmpimage(new float[size * 3]);
@@ -160,7 +160,7 @@ void LocalContrastFilter::process_8bit_rgb_image(unsigned char* img, int sizex, 
         tmpimage[i] = (float)(img[i] / 255.0);
     }
 
-    process_rgb_image(tmpimage.data(), sizex, sizey);
+    processRgbImage(tmpimage.data(), sizex, sizey);
 
     // convert back to 8 bits (with dithering)
     int pos = 0;
@@ -177,7 +177,7 @@ void LocalContrastFilter::process_8bit_rgb_image(unsigned char* img, int sizex, 
     postProgress(90);
 }
 
-void LocalContrastFilter::process_16bit_rgb_image(unsigned short int* img, int sizex, int sizey)
+void LocalContrastFilter::process16bitRgbImage(unsigned short int* const img, int sizex, int sizey)
 {
     int size = sizex * sizey;
     QScopedArrayPointer<float> tmpimage(new float[size * 3]);
@@ -188,7 +188,7 @@ void LocalContrastFilter::process_16bit_rgb_image(unsigned short int* img, int s
         tmpimage[i] = (float)(img[i] / 65535.0);
     }
 
-    process_rgb_image(tmpimage.data(), sizex, sizey);
+    processRgbImage(tmpimage.data(), sizex, sizey);
 
     // convert back to 16 bits (with dithering)
     int pos = 0;
@@ -210,9 +210,9 @@ float LocalContrastFilter::func(float x1, float x2)
     float result = 0.5;
     float p;
 
-    /*
+/*
     //test function
-    if (d->par.function_id==1)
+    if (d->par.functionId==1)
     {
         p=qPow(0.1,qFabs((x2*2.0-1.0))*d->current_process_power_value*0.02);
         if (x2<0.5) result=qPow(x1,p);
@@ -220,7 +220,7 @@ float LocalContrastFilter::func(float x1, float x2)
         return result;
     };
     //test function
-    if (function_id==1)
+    if (functionId==1)
     {
         p=d->current_process_power_value*0.3+1e-4;
         x2=1.0/(1.0+qExp(-(x2*2.0-1.0)*p*0.5));
@@ -230,9 +230,9 @@ float LocalContrastFilter::func(float x1, float x2)
         result=(f-m0)/(m1-m0);
         return result;
     };
-    */
+*/
 
-    switch (d->par.function_id)
+    switch (d->par.functionId)
     {
         case 0:  //power function
         {
@@ -261,7 +261,7 @@ float LocalContrastFilter::func(float x1, float x2)
     return result;
 }
 
-void LocalContrastFilter::process_rgb_image(float* img, int sizex, int sizey)
+void LocalContrastFilter::processRgbImage(float* const img, int sizex, int sizey)
 {
     int size = sizex * sizey;
     QScopedArrayPointer<float> blurimage(new float[size]);
@@ -272,9 +272,9 @@ void LocalContrastFilter::process_rgb_image(float* img, int sizex, int sizey)
         srcimg[i] = img[i];
     }
 
-    if (d->par.stretch_contrast)
+    if (d->par.stretchContrast)
     {
-        stretch_contrast(img, size * 3);
+        stretchContrast(img, size * 3);
     }
 
     int pos = 0;
@@ -293,11 +293,11 @@ void LocalContrastFilter::process_rgb_image(float* img, int sizex, int sizey)
                 pos += 3;
             }
 
-            d->current_process_power_value = d->par.get_power(nstage);
+            d->current_process_power_value = d->par.getPower(nstage);
 
             // blur
 
-            inplace_blur(blurimage.data(), sizex, sizey, d->par.get_blur(nstage));
+            inplaceBlur(blurimage.data(), sizex, sizey, d->par.getBlur(nstage));
 
             pos = 0;
 
@@ -324,17 +324,17 @@ void LocalContrastFilter::process_rgb_image(float* img, int sizex, int sizey)
         postProgress(30 + nstage * 10);
     }
 
-    int high_saturation_value = 100 - d->par.high_saturation;
-    int low_saturation_value  = 100 - d->par.low_saturation;
+    int highSaturationValue = 100 - d->par.highSaturation;
+    int lowSaturationValue  = 100 - d->par.lowSaturation;
 
-    if ((d->par.high_saturation != 100) || (d->par.low_saturation != 100))
+    if ((d->par.highSaturation != 100) || (d->par.lowSaturation != 100))
     {
-        kDebug() << "high_saturation : " << d->par.high_saturation;
-        kDebug() << "low_saturation : " << d->par.low_saturation;
+        kDebug() << "highSaturation : " << d->par.highSaturation;
+        kDebug() << "lowSaturation : " << d->par.lowSaturation;
 
         float src_h,  src_s,  src_v;
         float dest_h, dest_s, dest_v;
-        float dest_saturation, s1;
+        float destSaturation, s1;
         int   pos = 0;
 
         for (int i = 0 ; runningFlag() && (i < size) ; ++i)
@@ -342,15 +342,15 @@ void LocalContrastFilter::process_rgb_image(float* img, int sizex, int sizey)
             rgb2hsv(srcimg[pos], srcimg[pos + 1], srcimg[pos + 2], src_h, src_s, src_v);
             rgb2hsv(img[pos], img[pos + 1], img[pos + 2], dest_h, dest_s, dest_v);
 
-            dest_saturation = (float)((src_s * high_saturation_value + dest_s * (100.0 - high_saturation_value)) * 0.01);
+            destSaturation = (float)((src_s * highSaturationValue + dest_s * (100.0 - highSaturationValue)) * 0.01);
 
             if (dest_v > src_v)
             {
-                s1              = (float)(dest_saturation * src_v / (dest_v + 1.0 / 255.0));
-                dest_saturation = (float)((low_saturation_value * s1 + d->par.low_saturation * dest_saturation) * 0.01);
+                s1             = (float)(destSaturation * src_v / (dest_v + 1.0 / 255.0));
+                destSaturation = (float)((lowSaturationValue * s1 + d->par.lowSaturation * destSaturation) * 0.01);
             }
 
-            hsv2rgb(dest_h, dest_saturation, dest_v, img[pos], img[pos + 1], img[pos + 2]);
+            hsv2rgb(dest_h, destSaturation, dest_v, img[pos], img[pos + 1], img[pos + 2]);
 
             pos += 3;
         }
@@ -360,7 +360,7 @@ void LocalContrastFilter::process_rgb_image(float* img, int sizex, int sizey)
 
     // Unsharp Mask filter
 
-    if (d->par.unsharp_mask.enabled)
+    if (d->par.unsharpMask.enabled)
     {
         QScopedArrayPointer<float> val(new float[size]);
 
@@ -375,12 +375,12 @@ void LocalContrastFilter::process_rgb_image(float* img, int sizex, int sizey)
             pos += 3;
         }
 
-        float blur_value = d->par.get_unsharp_mask_blur();
-        inplace_blur(blurimage.data(), sizex, sizey, blur_value);
+        float blur_value = d->par.getUnsharpMaskBlur();
+        inplaceBlur(blurimage.data(), sizex, sizey, blur_value);
 
         pos              = 0;
-        float pw         = (float)(2.5 * d->par.get_unsharp_mask_power());
-        float threshold  = (float)(d->par.unsharp_mask.threshold * pw / 250.0);
+        float pw         = (float)(2.5 * d->par.getUnsharpMaskPower());
+        float threshold  = (float)(d->par.unsharpMask.threshold * pw / 250.0);
         float threshold2 = threshold / 2;
 
         for (int i = 0 ; runningFlag() && (i < size) ; ++i)
@@ -451,7 +451,7 @@ void LocalContrastFilter::process_rgb_image(float* img, int sizex, int sizey)
     postProgress(80);
 }
 
-void LocalContrastFilter::inplace_blur(float* data, int sizex, int sizey, float blur)
+void LocalContrastFilter::inplaceBlur(float* const data, int sizex, int sizey, float blur)
 {
     if (blur < 0.3)
     {
@@ -517,7 +517,7 @@ void LocalContrastFilter::inplace_blur(float* data, int sizex, int sizey, float 
     }
 }
 
-void LocalContrastFilter::stretch_contrast(float* data, int datasize)
+void LocalContrastFilter::stretchContrast(float* const data, int datasize)
 {
     //stretch the contrast
     const unsigned int histogram_size = 256;
@@ -705,10 +705,10 @@ FilterAction LocalContrastFilter::filterAction()
     FilterAction action(FilterIdentifier(), CurrentVersion());
     action.setDisplayableName(DisplayableName());
 
-    action.addParameter("function_id",      d->par.function_id);
-    action.addParameter("high_saturation",  d->par.high_saturation);
-    action.addParameter("low_saturation",   d->par.low_saturation);
-    action.addParameter("stretch_contrast", d->par.stretch_contrast);
+    action.addParameter("functionId",      d->par.functionId);
+    action.addParameter("highSaturation",  d->par.highSaturation);
+    action.addParameter("lowSaturation",   d->par.lowSaturation);
+    action.addParameter("stretchContrast", d->par.stretchContrast);
 
     for (int nstage = 0 ; nstage < TONEMAPPING_MAX_STAGES ; ++nstage)
     {
@@ -722,13 +722,13 @@ FilterAction LocalContrastFilter::filterAction()
         }
     }
 
-    action.addParameter("unsharp_mask:enabled", d->par.unsharp_mask.enabled);
+    action.addParameter("unsharpMask:enabled", d->par.unsharpMask.enabled);
 
-    if (d->par.unsharp_mask.enabled)
+    if (d->par.unsharpMask.enabled)
     {
-        action.addParameter("unsharp_mask:blur",      d->par.unsharp_mask.blur);
-        action.addParameter("unsharp_mask:power",     d->par.unsharp_mask.power);
-        action.addParameter("unsharp_mask:threshold", d->par.unsharp_mask.threshold);
+        action.addParameter("unsharpMask:blur",      d->par.unsharpMask.blur);
+        action.addParameter("unsharpMask:power",     d->par.unsharpMask.power);
+        action.addParameter("unsharpMask:threshold", d->par.unsharpMask.threshold);
     }
 
     action.addParameter("randomSeed", d->generator.currentSeed());
@@ -738,10 +738,10 @@ FilterAction LocalContrastFilter::filterAction()
 
 void LocalContrastFilter::readParameters(const FilterAction& action)
 {
-    d->par.function_id      = action.parameter("function_id").toInt();
-    d->par.high_saturation  = action.parameter("high_saturation").toInt();
-    d->par.low_saturation   = action.parameter("low_saturation").toInt();
-    d->par.stretch_contrast = action.parameter("stretch_contrast").toBool();
+    d->par.functionId      = action.parameter("functionId").toInt();
+    d->par.highSaturation  = action.parameter("highSaturation").toInt();
+    d->par.lowSaturation   = action.parameter("lowSaturation").toInt();
+    d->par.stretchContrast = action.parameter("stretchContrast").toBool();
 
     for (int nstage = 0 ; nstage < TONEMAPPING_MAX_STAGES ; ++nstage)
     {
@@ -755,13 +755,13 @@ void LocalContrastFilter::readParameters(const FilterAction& action)
         }
     }
 
-    d->par.unsharp_mask.enabled = action.parameter("unsharp_mask:enabled").toBool();
+    d->par.unsharpMask.enabled = action.parameter("unsharpMask:enabled").toBool();
 
-    if (d->par.unsharp_mask.enabled)
+    if (d->par.unsharpMask.enabled)
     {
-        d->par.unsharp_mask.blur      = action.parameter("unsharp_mask:blur").toFloat();
-        d->par.unsharp_mask.power     = action.parameter("unsharp_mask:power").toFloat();
-        d->par.unsharp_mask.threshold = action.parameter("unsharp_mask:threshold").toInt();
+        d->par.unsharpMask.blur      = action.parameter("unsharpMask:blur").toFloat();
+        d->par.unsharpMask.power     = action.parameter("unsharpMask:power").toFloat();
+        d->par.unsharpMask.threshold = action.parameter("unsharpMask:threshold").toInt();
     }
 
     d->generator.seed(action.parameter("randomSeed").toUInt());

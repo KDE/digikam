@@ -7,7 +7,7 @@
  * Description : Local Contrast settings view.
  *               LDR ToneMapper <http://zynaddsubfx.sourceforge.net/other/tonemapping>
  *
- * Copyright (C) 2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -67,12 +67,12 @@ using namespace KDcrawIface;
 namespace Digikam
 {
 
-class LocalContrastSettingsPriv
+class LocalContrastSettings::Private
 {
 
 public:
 
-    LocalContrastSettingsPriv() :
+    Private() :
         stretchContrastCheck(0),
         label4(0),
         label5(0),
@@ -141,28 +141,29 @@ public:
 
     RExpanderBox*         expanderBox;
 };
-const QString LocalContrastSettingsPriv::configLowSaturationEntry("LowSaturation");
-const QString LocalContrastSettingsPriv::configHighSaturationEntry("HighSaturation");
-const QString LocalContrastSettingsPriv::configPower1Entry("Power1");
-const QString LocalContrastSettingsPriv::configBlur1Entry("Blur1");
-const QString LocalContrastSettingsPriv::configPower2Entry("Power2");
-const QString LocalContrastSettingsPriv::configBlur2Entry("Blur2");
-const QString LocalContrastSettingsPriv::configPower3Entry("Power3");
-const QString LocalContrastSettingsPriv::configBlur3Entry("Blur3");
-const QString LocalContrastSettingsPriv::configPower4Entry("Power4");
-const QString LocalContrastSettingsPriv::configBlur4Entry("Blur4");
-const QString LocalContrastSettingsPriv::configStretchContrastEntry("StretchContrast");
-const QString LocalContrastSettingsPriv::configStageOneEntry("StageOne");
-const QString LocalContrastSettingsPriv::configStageTwoEntry("StageTwo");
-const QString LocalContrastSettingsPriv::configStageThreeEntry("StageThree");
-const QString LocalContrastSettingsPriv::configStageFourEntry("StageFour");
-const QString LocalContrastSettingsPriv::configFunctionInputEntry("FunctionInput");
+
+const QString LocalContrastSettings::Private::configLowSaturationEntry("LowSaturation");
+const QString LocalContrastSettings::Private::configHighSaturationEntry("HighSaturation");
+const QString LocalContrastSettings::Private::configPower1Entry("Power1");
+const QString LocalContrastSettings::Private::configBlur1Entry("Blur1");
+const QString LocalContrastSettings::Private::configPower2Entry("Power2");
+const QString LocalContrastSettings::Private::configBlur2Entry("Blur2");
+const QString LocalContrastSettings::Private::configPower3Entry("Power3");
+const QString LocalContrastSettings::Private::configBlur3Entry("Blur3");
+const QString LocalContrastSettings::Private::configPower4Entry("Power4");
+const QString LocalContrastSettings::Private::configBlur4Entry("Blur4");
+const QString LocalContrastSettings::Private::configStretchContrastEntry("StretchContrast");
+const QString LocalContrastSettings::Private::configStageOneEntry("StageOne");
+const QString LocalContrastSettings::Private::configStageTwoEntry("StageTwo");
+const QString LocalContrastSettings::Private::configStageThreeEntry("StageThree");
+const QString LocalContrastSettings::Private::configStageFourEntry("StageFour");
+const QString LocalContrastSettings::Private::configFunctionInputEntry("FunctionInput");
 
 // --------------------------------------------------------
 
-LocalContrastSettings::LocalContrastSettings(QWidget* parent)
+LocalContrastSettings::LocalContrastSettings(QWidget* const parent)
     : QWidget(parent),
-      d(new LocalContrastSettingsPriv)
+      d(new Private)
 {
     QGridLayout* grid = new QGridLayout(parent);
 
@@ -467,10 +468,10 @@ LocalContrastContainer LocalContrastSettings::settings() const
 {
     LocalContrastContainer prm;
 
-    prm.stretch_contrast = d->stretchContrastCheck->isChecked();
-    prm.low_saturation   = d->lowSaturationInput->value();
-    prm.high_saturation  = d->highSaturationInput->value();
-    prm.function_id      = d->functionInput->currentIndex();
+    prm.stretchContrast = d->stretchContrastCheck->isChecked();
+    prm.lowSaturation   = d->lowSaturationInput->value();
+    prm.highSaturation  = d->highSaturationInput->value();
+    prm.functionId      = d->functionInput->currentIndex();
 
     prm.stage[0].enabled = d->expanderBox->isChecked(1);
     prm.stage[0].power   = d->powerInput1->value();
@@ -496,10 +497,10 @@ void LocalContrastSettings::setSettings(const LocalContrastContainer& settings)
     blockSignals(true);
     d->expanderBox->setEnabled(false);
 
-    d->stretchContrastCheck->setChecked(settings.stretch_contrast);
-    d->lowSaturationInput->setValue(settings.low_saturation);
-    d->highSaturationInput->setValue(settings.high_saturation);
-    d->functionInput->setCurrentIndex(settings.function_id);
+    d->stretchContrastCheck->setChecked(settings.stretchContrast);
+    d->lowSaturationInput->setValue(settings.lowSaturation);
+    d->highSaturationInput->setValue(settings.highSaturation);
+    d->functionInput->setCurrentIndex(settings.functionId);
 
     d->expanderBox->setChecked(1, settings.stage[0].enabled);
     d->powerInput1->setValue(settings.stage[0].power);
@@ -517,12 +518,12 @@ void LocalContrastSettings::setSettings(const LocalContrastContainer& settings)
     d->powerInput4->setValue(settings.stage[3].power);
     d->blurInput4->setValue(settings.stage[3].blur);
 
-    /*
+/*
     slotStage1Enabled(d->stageOne->isChecked());
     slotStage2Enabled(d->stageTwo->isChecked());
     slotStage3Enabled(d->stageThree->isChecked());
     slotStage4Enabled(d->stageFour->isChecked());
-     */
+*/
 
     d->expanderBox->setEnabled(true);
     blockSignals(false);
@@ -560,10 +561,10 @@ LocalContrastContainer LocalContrastSettings::defaultSettings() const
 {
     LocalContrastContainer prm;
 
-    prm.stretch_contrast = true;
-    prm.low_saturation   = d->lowSaturationInput->defaultValue();
-    prm.high_saturation  = d->highSaturationInput->defaultValue();
-    prm.function_id      = d->functionInput->defaultIndex();
+    prm.stretchContrast = true;
+    prm.lowSaturation   = d->lowSaturationInput->defaultValue();
+    prm.highSaturation  = d->highSaturationInput->defaultValue();
+    prm.functionId      = d->functionInput->defaultIndex();
 
     prm.stage[0].enabled = true;
     prm.stage[0].power   = d->powerInput1->defaultValue();
@@ -589,10 +590,10 @@ void LocalContrastSettings::readSettings(KConfigGroup& group)
     LocalContrastContainer prm;
     LocalContrastContainer defaultPrm = defaultSettings();
 
-    prm.stretch_contrast = group.readEntry(d->configStretchContrastEntry, defaultPrm.stretch_contrast);
-    prm.low_saturation   = group.readEntry(d->configLowSaturationEntry,   defaultPrm.low_saturation);
-    prm.high_saturation  = group.readEntry(d->configHighSaturationEntry,  defaultPrm.high_saturation);
-    prm.function_id      = group.readEntry(d->configFunctionInputEntry,   defaultPrm.function_id);
+    prm.stretchContrast = group.readEntry(d->configStretchContrastEntry, defaultPrm.stretchContrast);
+    prm.lowSaturation   = group.readEntry(d->configLowSaturationEntry,   defaultPrm.lowSaturation);
+    prm.highSaturation  = group.readEntry(d->configHighSaturationEntry,  defaultPrm.highSaturation);
+    prm.functionId      = group.readEntry(d->configFunctionInputEntry,   defaultPrm.functionId);
 
     prm.stage[0].enabled = group.readEntry(d->configStageOneEntry,        defaultPrm.stage[0].enabled);
     prm.stage[0].power   = group.readEntry(d->configPower1Entry,          defaultPrm.stage[0].power);
@@ -625,10 +626,10 @@ void LocalContrastSettings::writeSettings(KConfigGroup& group)
 {
     LocalContrastContainer prm = settings();
 
-    group.writeEntry(d->configStretchContrastEntry, prm.stretch_contrast);
-    group.writeEntry(d->configLowSaturationEntry,   prm.low_saturation);
-    group.writeEntry(d->configHighSaturationEntry,  prm.high_saturation);
-    group.writeEntry(d->configFunctionInputEntry,   prm.function_id);
+    group.writeEntry(d->configStretchContrastEntry, prm.stretchContrast);
+    group.writeEntry(d->configLowSaturationEntry,   prm.lowSaturation);
+    group.writeEntry(d->configHighSaturationEntry,  prm.highSaturation);
+    group.writeEntry(d->configFunctionInputEntry,   prm.functionId);
 
     group.writeEntry(d->configStageOneEntry,        prm.stage[0].enabled);
     group.writeEntry(d->configPower1Entry,          prm.stage[0].power);
