@@ -235,7 +235,7 @@ void ImagePropertiesSideBar::setImagePropertiesInformation(const KUrl& url)
     str = (!dims.isValid()) ? i18n("Unknown") : i18n("%1x%2 (%3Mpx)",
             dims.width(), dims.height(), mpixels);
     m_propertiesTab->setImageDimensions(str);
-    m_propertiesTab->setImageBitDepth(bitDepth.isEmpty() ? unavailable : i18n("%1 bpp", bitDepth));
+    m_propertiesTab->setImageBitDepth(bitDepth.isEmpty()   ? unavailable : i18n("%1 bpp", bitDepth));
     m_propertiesTab->setImageColorMode(colorMode.isEmpty() ? unavailable : colorMode);
 
     // -- Photograph information ------------------------------------------
@@ -244,7 +244,7 @@ void ImagePropertiesSideBar::setImagePropertiesInformation(const KUrl& url)
 
     m_propertiesTab->setPhotoInfoDisable(photoInfo.isEmpty());
 
-    m_propertiesTab->setPhotoMake(photoInfo.make.isEmpty() ? unavailable : photoInfo.make);
+    m_propertiesTab->setPhotoMake(photoInfo.make.isEmpty()   ? unavailable : photoInfo.make);
     m_propertiesTab->setPhotoModel(photoInfo.model.isEmpty() ? unavailable : photoInfo.model);
 
     if (photoInfo.dateTime.isValid())
@@ -257,7 +257,7 @@ void ImagePropertiesSideBar::setImagePropertiesInformation(const KUrl& url)
         m_propertiesTab->setPhotoDateTime(unavailable);
     }
 
-    m_propertiesTab->setPhotoLens(photoInfo.lens.isEmpty() ? unavailable : photoInfo.lens);
+    m_propertiesTab->setPhotoLens(photoInfo.lens.isEmpty()         ? unavailable : photoInfo.lens);
     m_propertiesTab->setPhotoAperture(photoInfo.aperture.isEmpty() ? unavailable : photoInfo.aperture);
 
     if (photoInfo.focalLength35mm.isEmpty())
@@ -271,7 +271,7 @@ void ImagePropertiesSideBar::setImagePropertiesInformation(const KUrl& url)
     }
 
     m_propertiesTab->setPhotoExposureTime(photoInfo.exposureTime.isEmpty() ? unavailable : photoInfo.exposureTime);
-    m_propertiesTab->setPhotoSensitivity(photoInfo.sensitivity.isEmpty() ? unavailable : i18n("%1 ISO", photoInfo.sensitivity));
+    m_propertiesTab->setPhotoSensitivity(photoInfo.sensitivity.isEmpty()   ? unavailable : i18n("%1 ISO", photoInfo.sensitivity));
 
     if (photoInfo.exposureMode.isEmpty() && photoInfo.exposureProgram.isEmpty())
     {
@@ -291,7 +291,7 @@ void ImagePropertiesSideBar::setImagePropertiesInformation(const KUrl& url)
         m_propertiesTab->setPhotoExposureMode(str);
     }
 
-    m_propertiesTab->setPhotoFlash(photoInfo.flash.isEmpty() ? unavailable : photoInfo.flash);
+    m_propertiesTab->setPhotoFlash(photoInfo.flash.isEmpty()               ? unavailable : photoInfo.flash);
     m_propertiesTab->setPhotoWhiteBalance(photoInfo.whiteBalance.isEmpty() ? unavailable : photoInfo.whiteBalance);
 
     // -- Video information ------------------------------------------
@@ -307,8 +307,6 @@ void ImagePropertiesSideBar::setImagePropertiesInformation(const KUrl& url)
     m_propertiesTab->setVideoAudioBitRate(videoInfo.audioBitRate.isEmpty()         ? unavailable : videoInfo.audioBitRate);
     m_propertiesTab->setVideoAudioChannelType(videoInfo.audioChannelType.isEmpty() ? unavailable : videoInfo.audioChannelType);
     m_propertiesTab->setVideoAudioCompressor(videoInfo.audioCompressor.isEmpty()   ? unavailable : videoInfo.audioCompressor);
-
-//    qDebug() << "\n\n\nTest\n\n\n" << videoInfo.aspectRatio;
 
     // -- Caption, ratings, tag information ---------------------
 
@@ -345,10 +343,10 @@ void ImagePropertiesSideBar::doLoadState()
     m_propertiesTab->readSettings();
 #endif
 
-    const KConfigGroup groupGPSTab = KConfigGroup(&group, entryName("GPS Properties Tab"));
+    const KConfigGroup groupGPSTab      = KConfigGroup(&group, entryName("GPS Properties Tab"));
     m_gpsTab->readSettings(groupGPSTab);
 
-    const KConfigGroup groupColorTab = KConfigGroup(&group, entryName("Color Properties Tab"));
+    const KConfigGroup groupColorTab    = KConfigGroup(&group, entryName("Color Properties Tab"));
     m_colorTab->readSettings(groupColorTab);
 
     const KConfigGroup groupMetadataTab = KConfigGroup(&group, entryName("Metadata Properties Tab"));
@@ -367,10 +365,10 @@ void ImagePropertiesSideBar::doSaveState()
     m_propertiesTab->writeSettings();
 #endif
 
-    KConfigGroup groupGPSTab = KConfigGroup(&group, entryName("GPS Properties Tab"));
+    KConfigGroup groupGPSTab      = KConfigGroup(&group, entryName("GPS Properties Tab"));
     m_gpsTab->writeSettings(groupGPSTab);
 
-    KConfigGroup groupColorTab = KConfigGroup(&group, entryName("Color Properties Tab"));
+    KConfigGroup groupColorTab    = KConfigGroup(&group, entryName("Color Properties Tab"));
     m_colorTab->writeSettings(groupColorTab);
 
     KConfigGroup groupMetadataTab = KConfigGroup(&group, entryName("Metadata Properties Tab"));
