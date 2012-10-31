@@ -6,7 +6,7 @@
  * Date        : 2010-02-26
  * Description : White Balance settings view.
  *
- * Copyright (C) 2010-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -65,7 +65,7 @@ using namespace KDcrawIface;
 namespace Digikam
 {
 
-class WBSettings::WBSettingsPriv
+class WBSettings::Private
 {
 
 public:
@@ -90,7 +90,7 @@ public:
 
 public:
 
-    WBSettingsPriv() :
+    Private() :
         DefaultTemperature(DaylightD65),
         pickTemperature(0),
         autoAdjustExposure(0),
@@ -115,6 +115,25 @@ public:
         saturationInput(0),
         greenInput(0)
     {}
+
+    QString addTemperatureDescription(const QString& desc, TemperaturePreset preset) const
+    {
+        int index        = temperaturePresetCB->combo()->findData((int)preset);
+        QString itemText = temperaturePresetCB->combo()->itemText(index);
+        QString tempDesc = QString("<p><b>%1</b>: %2 (%3K).</p>")
+                           .arg(itemText)
+                           .arg(desc)
+                           .arg((int)preset);
+
+        if (preset == None)
+        {
+            tempDesc.remove(QRegExp("\\(.*\\)"));
+        }
+
+        return tempDesc;
+    }
+
+public:
 
     static const QString    configDarkInputEntry;
     static const QString    configBlackInputEntry;
@@ -152,43 +171,25 @@ public:
     RDoubleNumInput*        gammaInput;
     RDoubleNumInput*        saturationInput;
     RDoubleNumInput*        greenInput;
-
-public:
-
-    QString addTemperatureDescription(const QString& desc, TemperaturePreset preset)
-    {
-        int index        = temperaturePresetCB->combo()->findData((int)preset);
-        QString itemText = temperaturePresetCB->combo()->itemText(index);
-        QString tempDesc = QString("<p><b>%1</b>: %2 (%3K).</p>")
-                           .arg(itemText)
-                           .arg(desc)
-                           .arg((int)preset);
-
-        if (preset == None)
-        {
-            tempDesc.remove(QRegExp("\\(.*\\)"));
-        }
-
-        return tempDesc;
-    }
 };
-const QString WBSettings::WBSettingsPriv::configDarkInputEntry("Dark");
-const QString WBSettings::WBSettingsPriv::configBlackInputEntry("Black");
-const QString WBSettings::WBSettingsPriv::configMainExposureEntry("MainExposure");
-const QString WBSettings::WBSettingsPriv::configFineExposureEntry("FineExposure");
-const QString WBSettings::WBSettingsPriv::configGammaInputEntry("Gamma");
-const QString WBSettings::WBSettingsPriv::configSaturationInputEntry("Saturation");
-const QString WBSettings::WBSettingsPriv::configGreenInputEntry("Green");
-const QString WBSettings::WBSettingsPriv::configTemperatureInputEntry("Temperature");
+
+const QString WBSettings::Private::configDarkInputEntry("Dark");
+const QString WBSettings::Private::configBlackInputEntry("Black");
+const QString WBSettings::Private::configMainExposureEntry("MainExposure");
+const QString WBSettings::Private::configFineExposureEntry("FineExposure");
+const QString WBSettings::Private::configGammaInputEntry("Gamma");
+const QString WBSettings::Private::configSaturationInputEntry("Saturation");
+const QString WBSettings::Private::configGreenInputEntry("Green");
+const QString WBSettings::Private::configTemperatureInputEntry("Temperature");
 
 // --------------------------------------------------------
 
-WBSettings::WBSettings(QWidget* parent)
+WBSettings::WBSettings(QWidget* const parent)
     : QWidget(parent),
-      d(new WBSettingsPriv)
+      d(new Private)
 {
-    QGridLayout* grid   = new QGridLayout(parent);
-    d->temperatureLabel = new QLabel(i18n("<a href='http://en.wikipedia.org/wiki/Color_temperature'>"
+    QGridLayout* grid      = new QGridLayout(parent);
+    d->temperatureLabel    = new QLabel(i18n("<a href='http://en.wikipedia.org/wiki/Color_temperature'>"
                                           "Color Temperature</a> (K): "));
     d->temperatureLabel->setOpenExternalLinks(true);
 

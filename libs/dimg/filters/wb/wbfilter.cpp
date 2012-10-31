@@ -6,9 +6,9 @@
  * Date        : 2007-16-01
  * Description : white balance color correction.
  *
- * Copyright (C) 2007-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2008 by Guillaume Castagnino <casta at xwing dot info>
- * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
+ * Copyright (C) 2007-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008      by Guillaume Castagnino <casta at xwing dot info>
+ * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -42,69 +42,11 @@
 namespace Digikam
 {
 
-WBContainer::WBContainer()
-{
-    // Neutral color temperature settings.
-    black       = 0.0;
-    exposition  = 0.0;
-    temperature = 6500.0;
-    green       = 1.0;
-    dark        = 0.5;
-    gamma       = 1.0;
-    saturation  = 1.0;
-
-    maxr        = -1;
-    maxg        = -1;
-    maxb        = -1;
-}
-
-bool WBContainer::isDefault() const
-{
-    return *this == WBContainer();
-}
-
-bool WBContainer::operator==(const WBContainer& other) const
-{
-    return black       == other.black       &&
-           exposition  == other.exposition  &&
-           temperature == other.temperature &&
-           green       == other.green       &&
-           dark        == other.dark        &&
-           gamma       == other.gamma       &&
-           saturation  == other.saturation;
-}
-
-void WBContainer::writeToFilterAction(FilterAction& action, const QString& prefix) const
-{
-    action.addParameter(prefix + "black", black);
-    action.addParameter(prefix + "exposition", exposition);
-    action.addParameter(prefix + "temperature", temperature);
-    action.addParameter(prefix + "green", green);
-    action.addParameter(prefix + "dark", dark);
-    action.addParameter(prefix + "gamma", gamma);
-    action.addParameter(prefix + "saturation", saturation);
-}
-
-WBContainer WBContainer::fromFilterAction(const FilterAction& action, const QString& prefix)
-{
-    WBContainer settings;
-    settings.black       = action.parameter(prefix + "black", settings.black);
-    settings.exposition  = action.parameter(prefix + "exposition", settings.exposition);
-    settings.temperature = action.parameter(prefix + "temperature", settings.temperature);
-    settings.green       = action.parameter(prefix + "green", settings.green);
-    settings.dark        = action.parameter(prefix + "dark", settings.dark);
-    settings.gamma       = action.parameter(prefix + "gamma", settings.gamma);
-    settings.saturation  = action.parameter(prefix + "saturation", settings.saturation);
-    return settings;
-}
-
-// ----------------------------------------------------------------------------------------------
-
-class WBFilter::WBFilterPriv
+class WBFilter::Private
 {
 public:
 
-    WBFilterPriv()
+    Private()
     {
         // Obsolete in algorithm since over/under exposure indicators
         // are implemented directly with preview widget.
@@ -133,26 +75,26 @@ public:
     float mb;
 };
 
-WBFilter::WBFilter(QObject* parent)
+WBFilter::WBFilter(QObject* const parent)
     : DImgThreadedFilter(parent),
-      d(new WBFilterPriv)
+      d(new Private)
 {
     initFilter();
 }
 
 
-WBFilter::WBFilter(DImg* orgImage, QObject* parent, const WBContainer& settings)
+WBFilter::WBFilter(DImg* const orgImage, QObject* const parent, const WBContainer& settings)
     : DImgThreadedFilter(orgImage, parent, "WBFilter"),
-      d(new WBFilterPriv)
+      d(new Private)
 {
     m_settings = settings;
     initFilter();
 }
 
-WBFilter::WBFilter(const WBContainer& settings, DImgThreadedFilter* master,
+WBFilter::WBFilter(const WBContainer& settings, DImgThreadedFilter* const master,
                    const DImg& orgImage, const DImg& destImage, int progressBegin, int progressEnd)
     : DImgThreadedFilter(master, orgImage, destImage, progressBegin, progressEnd, "WBFilter"),
-      d(new WBFilterPriv)
+      d(new Private)
 {
     m_settings = settings;
     filterImage();
@@ -237,11 +179,11 @@ void WBFilter::autoWBAdjustementFromColor(const QColor& tc, double& temperature,
     kDebug() << "Green component:" << green;
 }
 
-void WBFilter::autoExposureAdjustement(const DImg* img, double& black, double& expo)
+void WBFilter::autoExposureAdjustement(const DImg* const img, double& black, double& expo)
 {
     // Create an histogram of original image.
 
-    ImageHistogram* histogram = new ImageHistogram(*img);
+    ImageHistogram* const histogram = new ImageHistogram(*img);
     histogram->calculate();
 
     // Calculate optimal exposition and black level
@@ -352,7 +294,7 @@ void WBFilter::setRGBmult()
     setRGBmult(m_settings.temperature, m_settings.green, d->mr, d->mg, d->mb);
 }
 
-void WBFilter::findChanelsMax(const DImg* img, int& maxr, int& maxg, int& maxb)
+void WBFilter::findChanelsMax(const DImg* const img, int& maxr, int& maxg, int& maxb)
 {
     const uchar* data = img->bits();
     int width         = img->width();
@@ -473,7 +415,7 @@ void WBFilter::setLUTv()
     }
 }
 
-void WBFilter::adjustWhiteBalance(uchar* data, int width, int height, bool sixteenBit)
+void WBFilter::adjustWhiteBalance(uchar* const data, int width, int height, bool sixteenBit)
 {
     uint size = (uint)(width * height);
     uint i, j;
