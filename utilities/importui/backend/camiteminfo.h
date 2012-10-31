@@ -38,7 +38,7 @@
 
 // Local includes
 
-#include "photoinfocontainer.h"
+#include "infocontainer.h"
 
 class QDataStream;
 

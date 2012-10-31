@@ -39,7 +39,7 @@
 #include "dimg.h"
 #include "dcolor.h"
 #include "filteraction.h"
-#include "photoinfocontainer.h"
+#include "infocontainer.h"
 #include "digikam_export.h"
 #include "globals.h"
 

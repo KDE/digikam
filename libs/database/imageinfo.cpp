@@ -58,7 +58,7 @@
 #include "imagetagpair.h"
 #include "tagscache.h"
 #include "template.h"
-#include "photoinfocontainer.h"
+#include "infocontainer.h"
 
 namespace Digikam
 {

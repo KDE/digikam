@@ -44,7 +44,7 @@
 #include "dimg.h"
 #include "captionvalues.h"
 #include "metadatasettingscontainer.h"
-#include "photoinfocontainer.h"
+#include "infocontainer.h"
 #include "metadatainfo.h"
 #include "digikam_export.h"
 

@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "photoinfocontainer.h"
+#include "infocontainer.h"
 
 // Qt includes
 
