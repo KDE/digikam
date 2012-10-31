@@ -7,7 +7,7 @@
  * Description : database migration dialog
  *
  * Copyright (C) 2009-2010 by Holger Foerster <Hamsi2k at freenet dot de>
- * Copyright (C) 2010-2011 by Gilles Caulier<caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2012 by Gilles Caulier<caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -49,19 +49,20 @@ class DatabaseCopyThread : public QThread
 
 public:
 
-    explicit DatabaseCopyThread(QWidget* parent);
+    explicit DatabaseCopyThread(QWidget* const parent);
     ~DatabaseCopyThread();
 
-    bool stop;
+    void init(DatabaseParameters fromDatabaseWidget, DatabaseParameters toDatabaseWidget);
     void run();
 
-    void init(DatabaseParameters fromDatabaseWidget, DatabaseParameters toDatabaseWidget);
-    DatabaseCopyManager copyManager;
+public:
+
+    DatabaseCopyManager m_copyManager;
 
 private:
 
-    class DatabaseCopyThreadPriv;
-    DatabaseCopyThreadPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 // --------------------------------------------------------------------
@@ -72,7 +73,7 @@ class MigrationDlg : public KDialog
 
 public:
 
-    explicit MigrationDlg(QWidget* parent);
+    explicit MigrationDlg(QWidget* const parent);
     ~MigrationDlg();
 
 private Q_SLOTS:
@@ -81,7 +82,7 @@ private Q_SLOTS:
     void unlockInputFields();
     void lockInputFields();
 
-    void handleFinish(int finishState, QString errorMsg);
+    void handleFinish(int finishState, const QString& errorMsg);
     void handleStepStarted(const QString& stepName);
     void handleSmallStepStarted(int currValue, int maxValue);
 
@@ -93,8 +94,8 @@ private:
 
 private:
 
-    class MigrationDlgPriv;
-    MigrationDlgPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

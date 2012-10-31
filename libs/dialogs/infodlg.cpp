@@ -50,11 +50,11 @@
 namespace Digikam
 {
 
-class InfoDlg::InfoDlgPriv
+class InfoDlg::Private
 {
 public:
 
-    InfoDlgPriv() :
+    Private() :
         listView(0)
     {
     }
@@ -63,7 +63,7 @@ public:
 };
 
 InfoDlg::InfoDlg(QWidget* const parent)
-    : KDialog(parent), d(new InfoDlgPriv)
+    : KDialog(parent), d(new Private)
 {
     setButtons(Help|User1|Ok);
     setDefaultButton(Ok);
@@ -82,11 +82,15 @@ InfoDlg::InfoDlg(QWidget* const parent)
     QLabel* logo      = new QLabel(page);
 
     if (KGlobal::mainComponent().aboutData()->appName() == QString("digikam"))
+    {
         logo->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
                         .scaled(92, 92, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    }
     else
+    {
         logo->setPixmap(QPixmap(KStandardDirs::locate("data", "showfoto/data/logo-showfoto.png"))
                         .scaled(92, 92, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    }
 
     // --------------------------------------------------------
 

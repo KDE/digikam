@@ -6,7 +6,7 @@
  * Date        : 2008-04-07
  * Description : Raw camera list dialog
  *
- * Copyright (C) 2008-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -49,11 +49,11 @@
 namespace Digikam
 {
 
-class RawCameraDlg::RawCameraDlgPriv
+class RawCameraDlg::Private
 {
 public:
 
-    RawCameraDlgPriv() :
+    Private() :
         header(0),
         searchBar(0)
     {
@@ -63,8 +63,8 @@ public:
     SearchTextBar* searchBar;
 };
 
-RawCameraDlg::RawCameraDlg(QWidget* parent)
-    : InfoDlg(parent), d(new RawCameraDlgPriv)
+RawCameraDlg::RawCameraDlg(QWidget* const parent)
+    : InfoDlg(parent), d(new Private)
 {
     setCaption(i18n("List of supported RAW cameras"));
 
@@ -159,7 +159,7 @@ void RawCameraDlg::updateHeader(int results)
                                  "Using LibRaw version %3<br/>"
                                  "%1 models on the list (found: %4)</p>",
                                  list.count(),
-                                 KDcrawVer, librawVer,                                
+                                 KDcrawVer, librawVer,
                                  results));
     }
 }

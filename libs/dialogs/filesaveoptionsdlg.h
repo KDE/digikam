@@ -43,7 +43,7 @@ class DIGIKAM_EXPORT FileSaveOptionsDlg : public KDialog
 
 public:
 
-    FileSaveOptionsDlg(QWidget* parent, FileSaveOptionsBox* options);
+    FileSaveOptionsDlg(QWidget* const parent, FileSaveOptionsBox* const options);
     ~FileSaveOptionsDlg();
 };
 

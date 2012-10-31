@@ -45,17 +45,17 @@ class DIGIKAM_EXPORT DProgressDlg : public KDialog
 
 public:
 
-    explicit DProgressDlg(QWidget* parent=0, const QString& caption=QString());
+    explicit DProgressDlg(QWidget* const parent=0, const QString& caption=QString());
     ~DProgressDlg();
 
     void setLabel(const QString& text);
     void setTitle(const QString& text);
     void showCancelButton(bool show);
     void setAllowCancel(bool allowCancel);
-    bool wasCancelled() const;
-    bool allowCancel() const;
 
-    int  value();
+    bool wasCancelled() const;
+    bool allowCancel()  const;
+    int  value()        const;
 
 Q_SIGNALS:
 
@@ -79,8 +79,8 @@ protected Q_SLOTS:
 
 private:
 
-    class DProgressDlgPriv;
-    DProgressDlgPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

@@ -7,7 +7,7 @@
  * Description : database migration dialog
  *
  * Copyright (C) 2009-2010 by Holger Foerster <Hamsi2k at freenet dot de>
- * Copyright (C) 2010-2011 by Gilles Caulier<caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2012 by Gilles Caulier<caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -55,11 +55,11 @@
 namespace Digikam
 {
 
-class DatabaseCopyThread::DatabaseCopyThreadPriv
+class DatabaseCopyThread::Private
 {
 public:
 
-    DatabaseCopyThreadPriv()
+    Private()
     {
     }
 
@@ -67,8 +67,8 @@ public:
     DatabaseParameters toDatabaseParameters;
 };
 
-DatabaseCopyThread::DatabaseCopyThread(QWidget* parent)
-    : QThread(parent), d(new DatabaseCopyThreadPriv)
+DatabaseCopyThread::DatabaseCopyThread(QWidget* const parent)
+    : QThread(parent), d(new Private)
 {
 }
 
@@ -79,7 +79,7 @@ DatabaseCopyThread::~DatabaseCopyThread()
 
 void DatabaseCopyThread::run()
 {
-    copyManager.copyDatabases(d->fromDatabaseParameters, d->toDatabaseParameters);
+    m_copyManager.copyDatabases(d->fromDatabaseParameters, d->toDatabaseParameters);
 }
 
 void DatabaseCopyThread::init(DatabaseParameters fromDatabaseParameters, DatabaseParameters toDatabaseParameters)
@@ -90,11 +90,11 @@ void DatabaseCopyThread::init(DatabaseParameters fromDatabaseParameters, Databas
 
 // ---------------------------------------------------------------------------
 
-class MigrationDlg::MigrationDlgPriv
+class MigrationDlg::Private
 {
 public:
 
-    MigrationDlgPriv() :
+    Private() :
         fromDatabaseWidget(0),
         toDatabaseWidget(0),
         migrateButton(0),
@@ -116,8 +116,8 @@ public:
     DatabaseCopyThread* copyThread;
 };
 
-MigrationDlg::MigrationDlg(QWidget* parent)
-    : KDialog(parent), d(new MigrationDlgPriv)
+MigrationDlg::MigrationDlg(QWidget* const parent)
+    : KDialog(parent), d(new Private)
 {
     setupMainArea();
 }
@@ -175,20 +175,20 @@ void MigrationDlg::setupMainArea()
             this, SLOT(performCopy()));
 
     // connect signal handlers for copy d->copyThread
-    connect(&(d->copyThread->copyManager), SIGNAL(finished(int,QString)),
+    connect(&(d->copyThread->m_copyManager), SIGNAL(finished(int,QString)),
             this, SLOT(handleFinish(int,QString)));
 
-    connect(&(d->copyThread->copyManager), SIGNAL(stepStarted(QString)),
+    connect(&(d->copyThread->m_copyManager), SIGNAL(stepStarted(QString)),
             this, SLOT(handleStepStarted(QString)));
 
-    connect(&(d->copyThread->copyManager), SIGNAL(smallStepStarted(int,int)),
+    connect(&(d->copyThread->m_copyManager), SIGNAL(smallStepStarted(int,int)),
             this, SLOT(handleSmallStepStarted(int,int)));
 
     connect(this, SIGNAL(closeClicked()),
-            &(d->copyThread->copyManager), SLOT(stopProcessing()));
+            &(d->copyThread->m_copyManager), SLOT(stopProcessing()));
 
     connect(d->cancelButton, SIGNAL(clicked()),
-            &(d->copyThread->copyManager), SLOT(stopProcessing()));
+            &(d->copyThread->m_copyManager), SLOT(stopProcessing()));
 }
 
 void MigrationDlg::performCopy()
@@ -226,7 +226,7 @@ void MigrationDlg::lockInputFields()
     d->cancelButton->setEnabled(true);
 }
 
-void MigrationDlg::handleFinish(int finishState, QString errorMsg)
+void MigrationDlg::handleFinish(int finishState, const QString& errorMsg)
 {
     switch (finishState)
     {

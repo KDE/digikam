@@ -6,7 +6,7 @@
  * Date        : 2011-01-03
  * Description : dialog which provides at least three choices, plus a cancel button
  *
- * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -55,7 +55,7 @@ public:
      * Instead, add it to the layout when you setup the dialog's main widget.
      */
 
-    explicit TripleChoiceDialog(QWidget* parent = 0);
+    explicit TripleChoiceDialog(QWidget* const parent = 0);
     ~TripleChoiceDialog();
 
     /**
@@ -107,8 +107,8 @@ protected:
 
 private:
 
-    class TripleChoiceDialogPriv;
-    TripleChoiceDialogPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

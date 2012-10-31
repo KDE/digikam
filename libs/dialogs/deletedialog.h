@@ -78,15 +78,15 @@ public:
     virtual ~DeleteItem();
 
     bool    hasValidThumbnail() const;
-    KUrl    url() const;
-    QString fileUrl() const;
+    KUrl    url()               const;
+    QString fileUrl()           const;
 
     void setThumb(const QPixmap& pix, bool hasThumb=true);
 
 private:
 
-    class DeleteItemPriv;
-    DeleteItemPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 // -----------------------------------------------------------
@@ -110,8 +110,8 @@ private Q_SLOTS:
 
 private:
 
-    class DeleteItemListPriv;
-    DeleteItemListPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 // -----------------------------------------------------------
@@ -139,8 +139,8 @@ private:
 
 private:
 
-    class DeleteWidgetPriv;
-    DeleteWidgetPriv* const d;
+    class Private;
+    Private* const d;
 
     friend class DeleteDialog;
 };
@@ -185,8 +185,8 @@ private:
 
 private:
 
-    class DeleteDialogPriv;
-    DeleteDialogPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

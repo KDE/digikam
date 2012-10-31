@@ -6,7 +6,7 @@
  * Date        : 2011-01-03
  * Description : dialog which provides at least three choices, plus a cancel button
  *
- * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -37,23 +37,17 @@
 namespace Digikam
 {
 
-class TripleChoiceDialog::TripleChoiceDialogPriv
+class TripleChoiceDialog::Private
 {
 public:
 
-    TripleChoiceDialogPriv()
+    Private()
         : clicked(KDialog::None),
           iconSize(KIconLoader::SizeMedium),
           toolBar(0),
           secondSeparator(0)
     {
     }
-
-    int               clicked;
-    QSignalMapper     mapper;
-    int               iconSize;
-    QToolBar*         toolBar;
-    QAction*          secondSeparator;
 
     void checkToolBar()
     {
@@ -67,11 +61,19 @@ public:
             secondSeparator = toolBar->addSeparator();
         }
     }
+
+public:
+
+    int               clicked;
+    QSignalMapper     mapper;
+    int               iconSize;
+    QToolBar*         toolBar;
+    QAction*          secondSeparator;
 };
 
-TripleChoiceDialog::TripleChoiceDialog(QWidget *parent)
+TripleChoiceDialog::TripleChoiceDialog(QWidget* const parent)
     : KDialog(parent),
-      d(new TripleChoiceDialogPriv)
+      d(new Private)
 {
     setButtons(Ok | Apply | Cancel);
     showButtonSeparator(false);
@@ -141,6 +143,7 @@ int TripleChoiceDialog::clickedButton() const
 void TripleChoiceDialog::slotButtonClicked(int button)
 {
     d->clicked = button;
+
     emit buttonClicked(static_cast<KDialog::ButtonCode>(button));
 
     if (button == Cancel)

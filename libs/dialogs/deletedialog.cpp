@@ -55,12 +55,12 @@
 namespace Digikam
 {
 
-class DeleteItem::DeleteItemPriv
+class DeleteItem::Private
 {
 
 public:
 
-    DeleteItemPriv()
+    Private()
     {
         hasThumb = false;
     }
@@ -71,7 +71,7 @@ public:
 };
 
 DeleteItem::DeleteItem(QTreeWidget* const parent, const KUrl& url)
-    : QTreeWidgetItem(parent), d(new DeleteItemPriv)
+    : QTreeWidgetItem(parent), d(new Private)
 {
     d->url = url;
 
@@ -119,6 +119,7 @@ QString DeleteItem::fileUrl() const
     {
         return (DatabaseUrl(d->url).fileUrl().toLocalFile());
     }
+
     return (d->url.prettyUrl());
 }
 
@@ -146,12 +147,12 @@ void DeleteItem::setThumb(const QPixmap& pix, bool hasThumb)
 
 //----------------------------------------------------------------------------
 
-class DeleteItemList::DeleteItemListPriv
+class DeleteItemList::Private
 {
 
 public:
 
-    DeleteItemListPriv()
+    Private()
         : iconSize(64)
     {
         thumbLoadThread = 0;
@@ -163,7 +164,7 @@ public:
 };
 
 DeleteItemList::DeleteItemList(QWidget* const parent)
-    : QTreeWidget(parent), d(new DeleteItemListPriv)
+    : QTreeWidget(parent), d(new Private)
 {
     d->thumbLoadThread = ThumbnailLoadThread::defaultThread();
 
@@ -223,11 +224,11 @@ void DeleteItemList::drawRow(QPainter* p, const QStyleOptionViewItem& opt, const
 
 //----------------------------------------------------------------------------
 
-class DeleteWidget::DeleteWidgetPriv
+class DeleteWidget::Private
 {
 public:
 
-    DeleteWidgetPriv()
+    Private()
     {
         checkBoxStack   = 0;
         warningIcon     = 0;
@@ -256,7 +257,7 @@ public:
 };
 
 DeleteWidget::DeleteWidget(QWidget* const parent)
-    : QWidget(parent), d(new DeleteWidgetPriv)
+    : QWidget(parent), d(new Private)
 {
     setObjectName("DeleteDialogBase");
 
@@ -339,7 +340,7 @@ void DeleteWidget::setUrls(const KUrl::List& urls)
 {
     d->fileList->clear();
 
-    foreach(KUrl url, urls)
+    foreach(const KUrl& url, urls)
     {
         new DeleteItem(d->fileList, url);
     }
@@ -461,11 +462,11 @@ void DeleteWidget::updateText()
 
 //----------------------------------------------------------------------------
 
-class DeleteDialog::DeleteDialogPriv
+class DeleteDialog::Private
 {
 public:
 
-    DeleteDialogPriv()
+    Private()
     {
         saveShouldDeleteUserPreference = true;
         saveDoNotShowAgainTrash        = false;
@@ -484,7 +485,7 @@ public:
 };
 
 DeleteDialog::DeleteDialog(QWidget* const parent)
-    : KDialog(parent), d(new DeleteDialogPriv)
+    : KDialog(parent), d(new Private)
 {
     setButtons(User1 | Cancel);
     setButtonFocus(User1);

@@ -45,11 +45,11 @@
 namespace Digikam
 {
 
-class DProgressDlg::DProgressDlgPriv
+class DProgressDlg::Private
 {
 public:
 
-    DProgressDlgPriv() :
+    Private() :
         allowCancel(true),
         cancelled(false),
         logo(0),
@@ -74,8 +74,8 @@ public:
     QProgressBar*       progress;
 };
 
-DProgressDlg::DProgressDlg(QWidget* parent, const QString& caption)
-    : KDialog(parent), d(new DProgressDlgPriv)
+DProgressDlg::DProgressDlg(QWidget* const parent, const QString& caption)
+    : KDialog(parent), d(new Private)
 {
     setCaption(caption);
     setButtons(Cancel);
@@ -186,7 +186,7 @@ void DProgressDlg::advance(int offset)
     d->progress->setValue(d->progress->value() + offset);
 }
 
-int DProgressDlg::value()
+int DProgressDlg::value() const
 {
     return d->progress->value();
 }

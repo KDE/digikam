@@ -6,7 +6,7 @@
  * Date        : 2009-11-03
  * Description : a busy dialog for digiKam
  *
- * Copyright (C) 2009-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -35,7 +35,7 @@
 namespace Digikam
 {
 
-DBusyThread::DBusyThread(QObject* parent)
+DBusyThread::DBusyThread(QObject* const parent)
     : QThread(parent)
 {
 }
@@ -47,11 +47,11 @@ DBusyThread::~DBusyThread()
 
 // ----------------------------------------------------------------------------------
 
-class DBusyDlg::DBusyDlgPriv
+class DBusyDlg::Private
 {
 public:
 
-    DBusyDlgPriv() :
+    Private() :
         thread(0)
     {
     }
@@ -59,9 +59,9 @@ public:
     DBusyThread* thread;
 };
 
-DBusyDlg::DBusyDlg(const QString& txt, QWidget* parent)
+DBusyDlg::DBusyDlg(const QString& txt, QWidget* const parent)
     : KProgressDialog(parent, QString(), txt, Qt::FramelessWindowHint),
-      d(new DBusyDlgPriv)
+      d(new Private)
 {
     setAllowCancel(false);
     setMinimumDuration(0);
@@ -78,7 +78,7 @@ DBusyDlg::~DBusyDlg()
     delete d;
 }
 
-void DBusyDlg::setBusyThread(DBusyThread* thread)
+void DBusyDlg::setBusyThread(DBusyThread* const thread)
 {
     d->thread = thread;
 

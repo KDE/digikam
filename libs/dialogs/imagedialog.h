@@ -79,9 +79,8 @@ public:
     ImageDialog(QWidget* const parent, const KUrl& url, bool singleSelect=false, const QString& caption=QString());
     ~ImageDialog();
 
-    KUrl       url()  const;
-    KUrl::List urls() const;
-
+    KUrl       url()          const;
+    KUrl::List urls()         const;
     bool       singleSelect() const;
     QString    fileFormats()  const;
 

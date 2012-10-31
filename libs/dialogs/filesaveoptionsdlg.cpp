@@ -32,7 +32,7 @@
 namespace Digikam
 {
 
-FileSaveOptionsDlg::FileSaveOptionsDlg(QWidget* parent, FileSaveOptionsBox* options)
+FileSaveOptionsDlg::FileSaveOptionsDlg(QWidget* const parent, FileSaveOptionsBox* const options)
     : KDialog(parent)
 {
     setCaption(i18n("Settings for Saving Image File"));
