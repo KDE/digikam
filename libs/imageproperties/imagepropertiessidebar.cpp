@@ -40,6 +40,9 @@
 #include <kglobal.h>
 #include <kiconloader.h>
 #include <kdebug.h>
+#include <kglobalsettings.h>
+#include <kaboutdata.h>
+#include <kcomponentdata.h>
 
 // LibKDcraw includes
 
@@ -77,6 +80,10 @@ ImagePropertiesSideBar::ImagePropertiesSideBar(QWidget* const parent,
     m_metadataTab        = new ImagePropertiesMetaDataTab(parent);
     m_colorTab           = new ImagePropertiesColorsTab(parent);
     m_gpsTab             = new ImagePropertiesGPSTab(parent);
+
+    // NOTE: Special case with Showfoto which willonly be able to load image, not video.
+    if (KGlobal::mainComponent().aboutData()->appName() != QString("digikam"))
+        m_propertiesTab->setVideoInfoDisable(true);
 
     appendTab(m_propertiesTab, SmallIcon("document-properties"),   i18n("Properties"));
     appendTab(m_metadataTab,   SmallIcon("exifinfo"),              i18n("Metadata"));
@@ -144,7 +151,7 @@ void ImagePropertiesSideBar::slotChangedTab(QWidget* tab)
 {
     if (!m_currentURL.isValid())
     {
-        m_gpsTab->setActive(tab==m_gpsTab);
+        m_gpsTab->setActive(tab == m_gpsTab);
 
         return;
     }
