@@ -469,6 +469,17 @@ void JpegRotator::updateMetadata(const QString& fileName, const RotationMatrix &
     ut.actime  = st.st_atime;
 
     ::utime(QFile::encodeName(fileName), &ut);
+
+    #ifndef Q_OS_WIN32
+    // restore permissions
+    if (::chmod(QFile::encodeName(fileName), st.st_mode) != 0)
+    {
+        kWarning() << "Failed to restore file permissions for file " << fileName;
+    }
+    #else
+    QFile::Permissions permissions = QFile::permissions(m_file);
+    QFile::setPermissions(fileName);
+    #endif
 }
 
 bool JpegRotator::performJpegTransform(TransformAction action, const QString& src, QFile& dest)
