@@ -38,6 +38,39 @@
 namespace Digikam
 {
 
+NRContainer::NRContainer()
+{
+    thresholds[0] = 1.2;     // Y
+    thresholds[1] = 1.2;     // Cr
+    thresholds[2] = 1.2;     // Cb
+    softness[0]   = 0.9;     // Y
+    softness[1]   = 0.9;     // Cr
+    softness[2]   = 0.9;     // Cb
+};
+
+NRContainer::~NRContainer()
+{
+}
+
+QDebug operator<<(QDebug dbg, const NRContainer& inf)
+{
+    dbg.nospace() << "Y Threshold: "
+                  << inf.thresholds[0] << ", ";
+    dbg.nospace() << "Y Softness: "
+                  << inf.softness[0] << ", ";
+    dbg.nospace() << "Cr Threshold: "
+                  << inf.thresholds[1] << ", ";
+    dbg.nospace() << "Cr Softness: "
+                  << inf.softness[1] << ", ";
+    dbg.nospace() << "Cb  Threshold: "
+                  << inf.thresholds[2] << ", ";
+    dbg.nospace() << "Cb Softness: "
+                  << inf.softness[2];
+    return dbg.space();
+}
+
+// ----------------------------------------------------------------------------------------------
+
 class NRFilter::Private
 {
 public:

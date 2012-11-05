@@ -313,3 +313,18 @@ IF(GLIB2_FOUND)
                           ${MATH_LIBRARY}
                      )
 ENDIF(GLIB2_FOUND)
+
+#------------------------------------------------------------------------
+
+SET (testnrestimate_SRCS testnrestimate.cpp)
+KDE4_ADD_EXECUTABLE (testnrestimate NOGUI ${testnrestimate_SRCS})
+TARGET_LINK_LIBRARIES (testnrestimate
+               digikamcore
+               ${QT_QTCORE_LIBRARY}
+               ${QT_QTGUI_LIBRARY}
+               ${KDE4_KDECORE_LIBS}
+               ${KEXIV2_LIBRARIES}
+               ${KDCRAW_LIBRARIES}
+               ${OpenCV_LIBRARIES}
+               )
+    

@@ -26,6 +26,11 @@
 #ifndef NRFILTER_H
 #define NRFILTER_H
 
+// Qt includes
+
+#include <QMetaType>
+#include <QDebug>
+
 // Local includes
 
 #include "digikam_export.h"
@@ -39,19 +44,8 @@ class DIGIKAM_EXPORT NRContainer
 
 public:
 
-    NRContainer()
-    {
-        thresholds[0] = 1.2;     // Y
-        thresholds[1] = 1.2;     // Cr
-        thresholds[2] = 1.2;     // Cb
-        softness[0]   = 0.9;     // Y
-        softness[1]   = 0.9;     // Cr
-        softness[2]   = 0.9;     // Cb
-    };
-
-    ~NRContainer()
-    {
-    };
+    NRContainer();
+    ~NRContainer();
 
 public:
 
@@ -60,6 +54,9 @@ public:
     double thresholds[3];    // Y, Cr, Cb thresholds.
     double softness[3];      // Y, Cr, Cb softness.
 };
+
+//! kDebug() stream operator. Writes property @a inf to the debug output in a nicely formatted way.
+DIGIKAM_EXPORT QDebug operator<<(QDebug dbg, const NRContainer& inf);
 
 // --------------------------------------------------------------------------
 
@@ -82,6 +79,8 @@ public:
     static QList<int>       SupportedVersions();
     static int              CurrentVersion();
 
+    static void srgb2ycbcr(float** const fimg, int size);
+
 private:
 
     void filterImage();
@@ -90,7 +89,6 @@ private:
                         float threshold, double softness);
     inline void hatTransform(float* const temp, float* const base, int st, int size, int sc);
 
-    void srgb2ycbcr(float** const fimg, int size);
     void ycbcr2srgb(float** const fimg, int size);
 
     // Methods not used.

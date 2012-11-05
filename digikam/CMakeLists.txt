@@ -91,6 +91,7 @@ TARGET_LINK_LIBRARIES(digikamcore
         ${LCMS_LIBRARIES}
         ${JASPER_LIBRARIES}
         ${OPENMP_LDFLAGS}
+        ${OpenCV_LIBRARIES}
 
         # Required by CImg library which is using pthread internally.
         ${CMAKE_THREAD_LIBS_INIT}

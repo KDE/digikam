@@ -163,6 +163,40 @@ FIND_PACKAGE(PGF)
 FIND_PACKAGE(CLAPACK)
 FIND_PACKAGE(Boost) # 1.36.0)
 
+# BEGIN SPECIAL OPENCV HANDLING
+
+# On some systems, OpenCV can be found using FIND_PACKAGE(OpenCV), for other systems
+# we ship our own version of FindOpenCV.cmake. But that does not work on all systems.
+# Therefore, first try finding OpenCV using FIND_PACKAGE(OpenCV), and if that fails,
+# add our FindOpenCV.cmake to the search path and search again.
+
+MESSAGE(STATUS "First try at finding OpenCV...")
+FIND_PACKAGE(OpenCV)
+
+IF (NOT OpenCV_LIBRARIES AND NOT OpenCV_LIBS)
+  MESSAGE(STATUS "Could not find OpenCV normally, trying internal FindOpenCV.cmake")
+   SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules/modules_opencv)
+  FIND_PACKAGE(OpenCV REQUIRED)
+ELSE (NOT OpenCV_LIBRARIES AND NOT OpenCV_LIBS)
+  MESSAGE(STATUS "Great, found OpenCV on the first try.")
+ENDIF (NOT OpenCV_LIBRARIES AND NOT OpenCV_LIBS)
+
+MESSAGE(STATUS "OpenCV Root directory is ${OpenCV_DIR}")
+
+# there are two versions of FindOpenCV.cmake in the wild, one defining
+# OpenCV_LIBRARIES, the other defining OpenCV_LIBS. Make sure we handle
+# both cases.
+IF (NOT OpenCV_LIBRARIES)
+  SET(OpenCV_LIBRARIES ${OpenCV_LIBS})
+ENDIF (NOT OpenCV_LIBRARIES)
+
+# same story with OpenCV_INCLUDE_DIRS and OpenCV_INCLUDE_DIR:
+IF (NOT OpenCV_INCLUDE_DIRS)
+  SET(OpenCV_INCLUDE_DIRS ${OpenCV_INCLUDE_DIR})
+ENDIF (NOT OpenCV_INCLUDE_DIRS)
+
+# END SPECIAL OPENCV HANDLING
+
 # check the libkdcraw version
 SET(KDCRAW_MIN_VERSION "2.2.0")
 IF (KDCRAW_VERSION)
@@ -857,6 +891,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lc/localcontrastsettings.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lc/localcontrastcontainer.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/nr/nrfilter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/nr/nrestimate.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/nr/nrsettings.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/sharp/sharpenfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/sharp/unsharpmaskfilter.cpp
