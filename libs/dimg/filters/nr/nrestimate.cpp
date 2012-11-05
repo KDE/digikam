@@ -53,9 +53,9 @@ public:
     Private():
        clusterCount(30)
     {
-        for (int c = 0 ; c < 3; ++c)
+        for (int c = 0 ; c < 3; c++)
         {
-            fimg[c]   = 0;
+            fimg[c] = 0;
         }
     }
 
@@ -90,16 +90,16 @@ void NREstimate::readImage() const
     d->sampleCount = d->width*d->height;
     d->clip        = d->img.sixteenBit() ? 65535.0 : 255.0;
 
-    for (int c = 0; c < 3; ++c)
+    for (int c = 0; c < 3; c++)
     {
         d->fimg[c] = new float[d->width * d->height];
     }
 
     int j = 0;
 
-    for (int y = 0; /*runningFlag() &&*/ (y < d->height); ++y)
+    for (int y = 0; y < d->height; y++)
     {
-        for (int x = 0; /*runningFlag() &&*/ (x < d->width); ++x)
+        for (int x = 0; x < d->width; x++)
         {
             col           = d->img.getPixelColor(x, y);
             d->fimg[0][j] = col.red();
@@ -115,7 +115,7 @@ NRContainer NREstimate::estimateNoise() const
     readImage();
 
     //--convert fimg to CvMat*-------------------------------------------------------------------------------
-    int i, j;
+    int i, j, z;
 
     // convert the image into YCrCb color model
     NRFilter::srgb2ycbcr(d->fimg, d->sampleCount);
@@ -128,7 +128,6 @@ NRContainer NREstimate::estimateNoise() const
 
     // pointer variable to handle the CvMat* points (the image in CvMat format)
     float* pointsPtr = (float*)points->data.ptr;
-    int z;
 
     for (int x=0 ; x < d->sampleCount ; x++)
     {
@@ -257,10 +256,10 @@ NRContainer NREstimate::estimateNoise() const
     {
         if(rowPosition[(i/points->cols)] >= 1)
         {
-            CvMat* workingArr = cvCreateMat(rowPosition[(i/points->cols)], 1, CV_32FC1);
+            CvMat* workingArr = cvCreateMat(rowPosition[(i / points->cols)], 1, CV_32FC1);
             ptr               = (float*)(workingArr->data.ptr);
 
-            for (j=0 ; j < rowPosition[(i/(points->cols))] ; j++)
+            for (j=0 ; j < rowPosition[(i / (points->cols))] ; j++)
             {
                 *ptr++ = cvGet2D(sd, j, i).val[0];
             }
@@ -349,8 +348,9 @@ NRContainer NREstimate::estimateNoise() const
             }
         }
 
-        weightedMean = weightedMean/(d->sampleCount);
-        weightedStd  = weightedStd/(d->sampleCount);
+        weightedMean = weightedMean / (d->sampleCount);
+        weightedStd  = weightedStd  / (d->sampleCount);
+
         out << "\nChannel : " << j <<"\n";
         out << "Weighted Mean : " << weightedMean <<"\n";
         out << "Weighted Std  : " << weightedStd <<"\n";
@@ -360,6 +360,7 @@ NRContainer NREstimate::estimateNoise() const
         info.append(QString::number(weightedMean));
         info.append("\nWeighted Standard Deviation: ");
         info.append(QString::number(weightedStd));
+
         datasd[j] = weightedStd;
     }
 
@@ -367,28 +368,27 @@ NRContainer NREstimate::estimateNoise() const
 
     // -- adaptation ---------------------------------------------------------------------------------------
 
-    float L, LSoft, Cr, CrSoft, Cb, CbSoft;
-    LSoft = CrSoft = CbSoft = 0.6;
+    float L, LSoft = 0.6, Cr, CrSoft = 0.6, Cb, CbSoft = 0.6;
 
     //for 16 bit images only:
     if (d->clip == 65535)
     {
         for(i=0 ; i < points->cols ; i++)
         {
-            datasd[i]=datasd[i]/256;
+            datasd[i] = datasd[i] / 256;
         }
     }
 
     if(datasd[0] < 7)
-        L = datasd[0]-0.98;
+        L = datasd[0] - 0.98;
 
     if(datasd[0] >= 7 && datasd[0] < 8)
-        L = datasd[0]-1.2;
+        L = datasd[0] - 1.2;
 
     if(datasd[0] >= 8 && datasd[0] < 9)
-        L = datasd[0]-1.5;
+        L = datasd[0] - 1.5;
     else
-        L = datasd[0]-1.7;
+        L = datasd[0] - 1.7;
 
     if(L < 0)
         L = 0;
@@ -396,8 +396,8 @@ NRContainer NREstimate::estimateNoise() const
     if(L > 9)
         L = 9;
 
-    Cr = datasd[2]/2;
-    Cb = datasd[1]/2;
+    Cr = datasd[2] / 2;
+    Cb = datasd[1] / 2;
 
     if(Cr > 7)
         Cr = 7;
@@ -418,7 +418,7 @@ NRContainer NREstimate::estimateNoise() const
     prm.softness[2]   = CrSoft;
     prm.softness[1]   = CbSoft;
 
-    kDebug() << "All completed";
+    kDebug() << "All is completed";
 
     //-- releasing matrices and closing files ----------------------------------------------------------------------
 
@@ -428,7 +428,7 @@ NRContainer NREstimate::estimateNoise() const
     cvReleaseMat(&points);
     cvReleaseMat(&clusters);
 
-    for (i = 0; i < 3; ++i)
+    for (i = 0; i < 3; i++)
     {
         delete [] d->fimg[i];
     }
