@@ -52,9 +52,10 @@ public:
      */
     NRContainer estimateNoise() const;
 
-    /** To set a text file which host computation algorithm results, for hacking purpose
+    /** To set image path where log files will be created to host computation algorithm results, for hacking purpose.
+     *  If path is not set, no log files will be created.
      */
-    void setLogFile(const QString& path);
+    void setLogFilesPath(const QString& path);
 
 private:
 

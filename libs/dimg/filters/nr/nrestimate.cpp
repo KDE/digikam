@@ -61,7 +61,7 @@ public:
 
     DImg      img;
 
-    QString   path;
+    QString   path;   // Path to host log files.
 
     float*    fimg[3];
     int       sampleCount;
@@ -82,7 +82,7 @@ NREstimate::~NREstimate()
     delete d;
 }
 
-void NREstimate::setLogFile(const QString& path)
+void NREstimate::setLogFilesPath(const QString& path)
 {
     d->path = path;
 }
@@ -178,7 +178,7 @@ NRContainer NREstimate::estimateNoise() const
 
     for(i=0 ; i < d->clusterCount ; i++)
     {
-        kDebug() << "Cluster : "<<i<<" the count is :"<<rowPosition[i];
+        kDebug() << "Cluster : "<< i << " the count is :" << rowPosition[i];
     }
 */
 
@@ -190,7 +190,7 @@ NRContainer NREstimate::estimateNoise() const
 
     for (i=1 ; i < d->clusterCount ; i++)
     {
-        if(rowPosition[i] > max)
+        if (rowPosition[i] > max)
         {
             max = rowPosition[i];
         }
@@ -259,7 +259,7 @@ NRContainer NREstimate::estimateNoise() const
 
     for (i=0 ; i < sd->cols ; i++)
     {
-        if(rowPosition[(i/points->cols)] >= 1)
+        if (rowPosition[(i/points->cols)] >= 1)
         {
             CvMat* workingArr = cvCreateMat(rowPosition[(i / points->cols)], 1, CV_32FC1);
             ptr               = (float*)(workingArr->data.ptr);
@@ -279,62 +279,78 @@ NRContainer NREstimate::estimateNoise() const
 
     kDebug() << "Make the mean and the std of the data";
 
-    // -- creating QTextStream (remember to close file) ----------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
 
-    QString logFile = d->path;
-    logFile         = logFile.section('/', -1);
-    logFile         = logFile.left(logFile.indexOf('.'));
-    logFile.append("logMeanStd.txt");
-    QFile filems (logFile);
-    filems.open(QIODevice::WriteOnly | QIODevice::Text);
-    QTextStream ott(&filems);
-    meanStorePtr    = (float*)meanStore->data.ptr;
-    stdStorePtr     = (float*)stdStore->data.ptr;
-    ott << "Mean Data\n";
+    meanStorePtr = (float*)meanStore->data.ptr;
+    stdStorePtr  = (float*)stdStore->data.ptr;
 
-    for(i=0 ; i < totalcount ; i++)
+    if (!d->path.isEmpty())
     {
-        ott << *meanStorePtr++;
-        ott << "\t";
+        QString logFile = d->path;
+        logFile         = logFile.section('/', -1);
+        logFile         = logFile.left(logFile.indexOf('.'));
+        logFile.append("logMeanStd.txt");
 
-        if((i+1)%3 == 0)
+        QFile filems(logFile);
+        filems.open(QIODevice::WriteOnly | QIODevice::Text);
+        QTextStream oms(&filems);
+        oms << "Mean Data\n";
+
+        for (i=0 ; i < totalcount ; i++)
         {
-            ott << "\n";
+            oms << *meanStorePtr++;
+            oms << "\t";
+
+            if ((i+1)%3 == 0)
+            {
+                oms << "\n";
+            }
         }
-    }
 
-    ott << "\nStd Data\n";
+        oms << "\nStd Data\n";
 
-    for (i=0 ; i < totalcount ; i++)
-    {
-        ott << *stdStorePtr++;
-        ott << "\t";
-
-        if((i+1)%3 == 0)
+        for (i=0 ; i < totalcount ; i++)
         {
-            ott << "\n";
+            oms << *stdStorePtr++;
+            oms << "\t";
+
+            if ((i+1)%3 == 0)
+            {
+                oms << "\n";
+            }
         }
+
+        filems.close();
+
+        kDebug() << "Done with the basic work of storing the mean and the std";
     }
-
-    filems.close();
-
-    QFile file ("logWeightedMeanStd.txt");
-    file.open(QIODevice::WriteOnly | QIODevice::Text);
-    QTextStream out(&file);
-
-    kDebug() << "Done with the basic work of storing the mean and the std";
 
     //-- Calculating weighted mean, and weighted std -----------------------------------------------------------
 
+    QTextStream owms;
+    QFile       filewms;
+
+    if (!d->path.isEmpty())
+    {
+        QString logFile2 = d->path;
+        logFile2         = logFile2.section('/', -1);
+        logFile2         = logFile2.left(logFile2.indexOf('.'));
+        logFile2.append("logWeightedMeanStd.txt");
+
+        filewms.setFileName(logFile2);
+        filewms.open(QIODevice::WriteOnly | QIODevice::Text);
+        owms.setDevice(&filewms);
+    }
+
     QString info;
-    float weightedMean = 0.0f;
-    float weightedStd  = 0.0f;
-    float datasd[3];
+    float   weightedMean = 0.0f;
+    float   weightedStd  = 0.0f;
+    float   datasd[3];
 
     for (j=0 ; j < points->cols ; j++)
     {
-        meanStorePtr = (float*) meanStore->data.ptr;
-        stdStorePtr  = (float*) stdStore->data.ptr;
+        meanStorePtr = (float*)meanStore->data.ptr;
+        stdStorePtr  = (float*)stdStore->data.ptr;
 
         for (int moveToChannel=0 ; moveToChannel <= j ; moveToChannel++)
         {
@@ -344,7 +360,7 @@ NRContainer NREstimate::estimateNoise() const
 
         for (i=0 ; i < d->clusterCount ; i++)
         {
-            if(rowPosition[i] >= 1)
+            if (rowPosition[i] >= 1)
             {
                 weightedMean += (*meanStorePtr) * rowPosition[i];
                 weightedStd  += (*stdStorePtr)  * rowPosition[i];
@@ -355,21 +371,29 @@ NRContainer NREstimate::estimateNoise() const
 
         weightedMean = weightedMean / (d->sampleCount);
         weightedStd  = weightedStd  / (d->sampleCount);
+        datasd[j]    = weightedStd;
 
-        out << "\nChannel : " << j <<"\n";
-        out << "Weighted Mean : " << weightedMean <<"\n";
-        out << "Weighted Std  : " << weightedStd <<"\n";
+        if (!d->path.isEmpty())
+        {
+            owms << "\nChannel : " << j <<"\n";
+            owms << "Weighted Mean : " << weightedMean <<"\n";
+            owms << "Weighted Std  : " << weightedStd <<"\n";
+        }
+            
         info.append("\n\nChannel: ");
         info.append(QString::number(j));
         info.append("\nWeighted Mean: ");
         info.append(QString::number(weightedMean));
         info.append("\nWeighted Standard Deviation: ");
         info.append(QString::number(weightedStd));
-
-        datasd[j] = weightedStd;
     }
 
-    kDebug() << "Info is ready";
+    if (!d->path.isEmpty())
+    {
+        filewms.close();
+    }
+
+    kDebug() << "Info : " << info;
 
     // -- adaptation ---------------------------------------------------------------------------------------
 
@@ -378,36 +402,36 @@ NRContainer NREstimate::estimateNoise() const
     //for 16 bit images only:
     if (d->clip == 65535)
     {
-        for(i=0 ; i < points->cols ; i++)
+        for (i=0 ; i < points->cols ; i++)
         {
             datasd[i] = datasd[i] / 256;
         }
     }
 
-    if(datasd[0] < 7)
+    if (datasd[0] < 7)
         L = datasd[0] - 0.98;
 
-    if(datasd[0] >= 7 && datasd[0] < 8)
+    if (datasd[0] >= 7 && datasd[0] < 8)
         L = datasd[0] - 1.2;
 
-    if(datasd[0] >= 8 && datasd[0] < 9)
+    if (datasd[0] >= 8 && datasd[0] < 9)
         L = datasd[0] - 1.5;
     else
         L = datasd[0] - 1.7;
 
-    if(L < 0)
+    if (L < 0)
         L = 0;
 
-    if(L > 9)
+    if (L > 9)
         L = 9;
 
     Cr = datasd[2] / 2;
     Cb = datasd[1] / 2;
 
-    if(Cr > 7)
+    if (Cr > 7)
         Cr = 7;
 
-    if(Cb > 7)
+    if (Cb > 7)
         Cb = 7;
 
     L  = floorf(L  * 100) / 100;
@@ -438,7 +462,6 @@ NRContainer NREstimate::estimateNoise() const
         delete [] d->fimg[i];
     }
 
-    file.close();
     return prm;
 }
 
