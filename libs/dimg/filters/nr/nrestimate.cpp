@@ -82,6 +82,11 @@ NREstimate::~NREstimate()
     delete d;
 }
 
+void NREstimate::setLogFile(const QString& path)
+{
+    d->path = path;
+}
+
 void NREstimate::readImage() const
 {
     DColor col;
@@ -206,7 +211,7 @@ NRContainer NREstimate::estimateNoise() const
 
     for (i=0 ; i < d->clusterCount ; i++)
     {
-        rPosition[i]=0;
+        rPosition[i] = 0;
     }
 
     float* ptr = (float*)sd->data.ptr;

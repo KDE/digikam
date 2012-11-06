@@ -43,13 +43,24 @@ class DIGIKAM_EXPORT NREstimate
 
 public:
 
+    /** Standard constructor with image container to parse
+     */
     explicit NREstimate(const DImg& img);
     ~NREstimate();
 
+    /** Return noise reduction settings, computed from image analys
+     */
     NRContainer estimateNoise() const;
+
+    /** To set a text file which host computation algorithm results, for hacking purpose
+     */
+    void setLogFile(const QString& path);
 
 private:
 
+    /** Internal method dedicated to convert DImg pixels from integer values to float values.
+     *  These ones will by used internally by estimateNoise through OpenCV API.
+     */
     void readImage() const;
 
 private:
