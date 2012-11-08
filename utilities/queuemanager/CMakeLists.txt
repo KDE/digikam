@@ -25,6 +25,7 @@ SET(libqueuemanager_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/basetools/enhance/restoration.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/basetools/enhance/sharpen.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/basetools/filters/filmgrain.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/basetools/filters/colorfx.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/basetools/metadata/assigntemplate.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/basetools/metadata/removemetadata.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/basetools/transform/flip.cpp

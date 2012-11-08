@@ -861,6 +861,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/fx/blurfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/fx/blurfxfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/fx/colorfxfilter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/fx/colorfxsettings.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/fx/distortionfxfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/fx/charcoalfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/fx/embossfilter.cpp

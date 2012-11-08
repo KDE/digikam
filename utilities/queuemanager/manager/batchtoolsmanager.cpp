@@ -50,6 +50,7 @@
 #include "whitebalance.h"
 #include "curvesadjust.h"
 #include "filmgrain.h"
+#include "colorfx.h"
 #include "localcontrast.h"
 #include "antivignetting.h"
 #include "invert.h"
@@ -124,6 +125,7 @@ BatchToolsManager::BatchToolsManager(QObject* const parent)
 
     // Filters
     registerTool(new FilmGrain(this));
+    registerTool(new ColorFX(this));
 }
 
 BatchToolsManager::~BatchToolsManager()

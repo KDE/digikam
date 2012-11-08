@@ -44,34 +44,32 @@ ColorFXFilter::ColorFXFilter(QObject* const parent)
     initFilter();
 }
 
-ColorFXFilter::ColorFXFilter(DImg* const orgImage, QObject* const parent, int type, int level, int iterations)
+ColorFXFilter::ColorFXFilter(DImg* const orgImage, QObject* const parent, const ColorFXContainer& settings)
     : DImgThreadedFilter(orgImage, parent, "ColorFX")
 {
-    m_colorFXType = type;
-    m_level = level;
-    m_iterations = iterations;
+    m_settings = settings;
 
     initFilter();
 }
 
 void ColorFXFilter::filterImage()
 {
-    switch (m_colorFXType)
+    switch (m_settings.colorFXType)
     {
         case Solarize:
-            solarize(&m_orgImage, &m_destImage, m_level);
+            solarize(&m_orgImage, &m_destImage, m_settings.level);
             break;
 
         case Vivid:
-            vivid(&m_orgImage, &m_destImage, m_level);
+            vivid(&m_orgImage, &m_destImage, m_settings.level);
             break;
 
         case Neon:
-            neon(&m_orgImage, &m_destImage, m_level, m_iterations);
+            neon(&m_orgImage, &m_destImage, m_settings.level, m_settings.iterations);
             break;
 
         case FindEdges:
-            findEdges(&m_orgImage, &m_destImage, m_level, m_iterations);
+            findEdges(&m_orgImage, &m_destImage, m_settings.level, m_settings.iterations);
             break;
     }
 }
@@ -365,18 +363,18 @@ FilterAction ColorFXFilter::filterAction()
     FilterAction action(FilterIdentifier(), CurrentVersion());
     action.setDisplayableName(DisplayableName());
 
-    action.addParameter("type", m_colorFXType);
-    action.addParameter("iteration", m_iterations);
-    action.addParameter("level", m_level);
+    action.addParameter("type", m_settings.colorFXType);
+    action.addParameter("iteration", m_settings.iterations);
+    action.addParameter("level", m_settings.level);
 
     return action;
 }
 
 void ColorFXFilter::readParameters(const FilterAction& action)
 {
-    m_colorFXType = action.parameter("type").toInt();
-    m_iterations  = action.parameter("iteration").toInt();
-    m_level       = action.parameter("level").toInt();
+    m_settings.colorFXType = action.parameter("type").toInt();
+    m_settings.iterations  = action.parameter("iteration").toInt();
+    m_settings.level       = action.parameter("level").toInt();
 }
 
 }  // namespace DigikamFxFiltersImagePlugin

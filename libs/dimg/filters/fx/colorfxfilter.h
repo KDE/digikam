@@ -40,14 +40,36 @@ namespace Digikam
 
 class RandomNumberGenerator;
 
+class DIGIKAM_EXPORT ColorFXContainer
+{
+
+public:
+
+    ColorFXContainer()
+    {
+        colorFXType = 0; // ColorFXFilter::Solarize
+        level = 0;
+        iterations = 2;
+    };
+
+    ~ColorFXContainer() {};
+
+public:
+
+    int colorFXType;
+    int level;
+    int iterations;
+};
+
+
 class DIGIKAM_EXPORT ColorFXFilter : public DImgThreadedFilter
 {
 
 public:
 
     explicit ColorFXFilter(QObject* const parent = 0);
-    explicit ColorFXFilter(DImg* const orgImage, QObject* const parent,
-                           int colorFXType = Solarize, int level = 25, int iterations = 2);
+    explicit ColorFXFilter(DImg* const orgImage, QObject* const parent, const ColorFXContainer& settings=ColorFXContainer());
+
     ~ColorFXFilter() {};
 
     static QString          FilterIdentifier()
@@ -101,9 +123,7 @@ private:
 
 private:
 
-    int m_colorFXType;
-    int m_level;
-    int m_iterations;
+    ColorFXContainer m_settings;
 };
 
 }  // namespace Digikam

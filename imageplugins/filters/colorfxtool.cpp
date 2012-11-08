@@ -54,15 +54,11 @@
 #include <kstandarddirs.h>
 #include <kvbox.h>
 
-// LibKDcraw includes
-
-#include <libkdcraw/rcombobox.h>
-#include <libkdcraw/rnuminput.h>
-
 // Local includes
 
 #include "dimg.h"
 #include "colorfxfilter.h"
+#include "colorfxsettings.h"
 #include "editortoolsettings.h"
 #include "histogrambox.h"
 #include "histogramwidget.h"
@@ -81,42 +77,23 @@ class ColorFxTool::Private
 public:
 
     Private() :
-        effectTypeLabel(0),
-        levelLabel(0),
-        iterationLabel(0),
-        effectType(0),
-        levelInput(0),
-        iterationInput(0),
         previewWidget(0),
-        gboxSettings(0)
+        gboxSettings(0),
+        settingsView(0)
     {}
 
     static const QString configGroupName;
     static const QString configHistogramChannelEntry;
     static const QString configHistogramScaleEntry;
-    static const QString configEffectTypeEntry;
-    static const QString configLevelAdjustmentEntry;
-    static const QString configIterationAdjustmentEntry;
-
-    QLabel*              effectTypeLabel;
-    QLabel*              levelLabel;
-    QLabel*              iterationLabel;
-
-    RComboBox*           effectType;
-
-    RIntNumInput*        levelInput;
-    RIntNumInput*        iterationInput;
 
     ImageGuideWidget*    previewWidget;
     EditorToolSettings*  gboxSettings;
+    ColorFXSettings*     settingsView;
 };
 
 const QString ColorFxTool::Private::configGroupName("coloreffect Tool");
 const QString ColorFxTool::Private::configHistogramChannelEntry("Histogram Channel");
 const QString ColorFxTool::Private::configHistogramScaleEntry("Histogram Scale");
-const QString ColorFxTool::Private::configEffectTypeEntry("EffectType");
-const QString ColorFxTool::Private::configLevelAdjustmentEntry("LevelAdjustment");
-const QString ColorFxTool::Private::configIterationAdjustmentEntry("IterationAdjustment");
 
 // --------------------------------------------------------
 
@@ -143,49 +120,7 @@ ColorFxTool::ColorFxTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
-    d->effectTypeLabel = new QLabel(i18n("Type:"));
-    d->effectType      = new RComboBox();
-    d->effectType->addItem(i18n("Solarize"));
-    d->effectType->addItem(i18n("Vivid"));
-    d->effectType->addItem(i18n("Neon"));
-    d->effectType->addItem(i18n("Find Edges"));
-    d->effectType->setDefaultIndex(ColorFXFilter::Solarize);
-    d->effectType->setWhatsThis(i18n("<p>Select the effect type to apply to the image here.</p>"
-                                     "<p><b>Solarize</b>: simulates solarization of photograph.</p>"
-                                     "<p><b>Vivid</b>: simulates the Velvia(tm) slide film colors.</p>"
-                                     "<p><b>Neon</b>: coloring the edges in a photograph to "
-                                     "reproduce a fluorescent light effect.</p>"
-                                     "<p><b>Find Edges</b>: detects the edges in a photograph "
-                                     "and their strength.</p>"));
-
-    d->levelLabel = new QLabel(i18nc("level of the effect", "Level:"));
-    d->levelInput = new RIntNumInput();
-    d->levelInput->setRange(0, 100, 1);
-    d->levelInput->setSliderEnabled(true);
-    d->levelInput->setDefaultValue(0);
-    d->levelInput->setWhatsThis( i18n("Set here the level of the effect."));
-
-    d->iterationLabel = new QLabel(i18n("Iteration:"));
-    d->iterationInput = new RIntNumInput();
-    d->iterationInput->setRange(0, 100, 1);
-    d->iterationInput->setSliderEnabled(true);
-    d->iterationInput->setDefaultValue(0);
-    d->iterationInput->setWhatsThis( i18n("This value controls the number of iterations "
-                                          "to use with the Neon and Find Edges effects."));
-
-    // -------------------------------------------------------------
-
-    QGridLayout* mainLayout = new QGridLayout();
-    mainLayout->addWidget(d->effectTypeLabel, 0, 0, 1, 5);
-    mainLayout->addWidget(d->effectType,      1, 0, 1, 5);
-    mainLayout->addWidget(d->levelLabel,      2, 0, 1, 5);
-    mainLayout->addWidget(d->levelInput,      3, 0, 1, 5);
-    mainLayout->addWidget(d->iterationLabel,  4, 0, 1, 5);
-    mainLayout->addWidget(d->iterationInput,  5, 0, 1, 5);
-    mainLayout->setRowStretch(6, 10);
-    mainLayout->setMargin(d->gboxSettings->spacingHint());
-    mainLayout->setSpacing(d->gboxSettings->spacingHint());
-    d->gboxSettings->plainPage()->setLayout(mainLayout);
+    d->settingsView = new ColorFXSettings(d->gboxSettings->plainPage());
 
     // -------------------------------------------------------------
 
@@ -197,17 +132,13 @@ ColorFxTool::ColorFxTool(QObject* const parent)
     connect(d->previewWidget, SIGNAL(spotPositionChangedFromTarget(Digikam::DColor,QPoint)),
             this, SLOT(slotColorSelectedFromTarget(Digikam::DColor)));
 
-    connect(d->levelInput, SIGNAL(valueChanged(int)),
-            this, SLOT(slotTimer()));
-
-    connect(d->iterationInput, SIGNAL(valueChanged(int)),
-            this, SLOT(slotTimer()));
-
     connect(d->previewWidget, SIGNAL(signalResized()),
             this, SLOT(slotPreview()));
 
-    connect(d->effectType, SIGNAL(activated(int)),
-            this, SLOT(slotEffectTypeChanged(int)));
+    connect(d->settingsView, SIGNAL(signalSettingsChanged()),
+            this, SLOT(slotPreview()));
+    connect(d->settingsView, SIGNAL(signalLevelOrIterationChanged()),
+            this, SLOT(slotTimer()));
 }
 
 ColorFxTool::~ColorFxTool()
@@ -225,10 +156,7 @@ void ColorFxTool::readSettings()
     d->gboxSettings->histogramBox()->setScale((HistogramScale)group.readEntry(d->configHistogramScaleEntry,
             (int)LogScaleHistogram));
 
-    d->effectType->setCurrentIndex(group.readEntry(d->configEffectTypeEntry,       d->effectType->defaultIndex()));
-    d->levelInput->setValue(group.readEntry(d->configLevelAdjustmentEntry,         d->levelInput->defaultValue()));
-    d->iterationInput->setValue(group.readEntry(d->configIterationAdjustmentEntry, d->iterationInput->defaultValue()));
-    slotEffectTypeChanged(d->effectType->currentIndex());  //check for enable/disable of iteration
+    d->settingsView->readSettings(group);
 }
 
 void ColorFxTool::writeSettings()
@@ -239,27 +167,14 @@ void ColorFxTool::writeSettings()
     group.writeEntry(d->configHistogramChannelEntry,    (int)d->gboxSettings->histogramBox()->channel());
     group.writeEntry(d->configHistogramScaleEntry,      (int)d->gboxSettings->histogramBox()->scale());
 
-    group.writeEntry(d->configEffectTypeEntry,          d->effectType->currentIndex());
-    group.writeEntry(d->configLevelAdjustmentEntry,     d->levelInput->value());
-    group.writeEntry(d->configIterationAdjustmentEntry, d->iterationInput->value());
+    d->settingsView->writeSettings(group);
 
     group.sync();
 }
 
 void ColorFxTool::slotResetSettings()
 {
-    d->effectType->blockSignals(true);
-    d->levelInput->blockSignals(true);
-    d->iterationInput->blockSignals(true);
-
-    d->effectType->slotReset();
-    d->levelInput->slotReset();
-    d->iterationInput->slotReset();
-
-    d->effectType->blockSignals(false);
-    d->levelInput->blockSignals(false);
-    d->iterationInput->blockSignals(false);
-
+    d->settingsView->resetToDefault();
     slotPreview();
 }
 
@@ -268,88 +183,25 @@ void ColorFxTool::slotColorSelectedFromTarget(const DColor& color)
     d->gboxSettings->histogramBox()->histogram()->setHistogramGuideByColor(color);
 }
 
-void ColorFxTool::slotEffectTypeChanged(int type)
-{
-    d->levelInput->setEnabled(true);
-    d->levelLabel->setEnabled(true);
-
-    d->levelInput->blockSignals(true);
-    d->iterationInput->blockSignals(true);
-    d->levelInput->setRange(0, 100, 1);
-    d->levelInput->setSliderEnabled(true);
-    d->levelInput->setValue(25);
-
-    switch (type)
-    {
-        case ColorFXFilter::Solarize:
-            d->levelInput->setRange(0, 100, 1);
-            d->levelInput->setSliderEnabled(true);
-            d->levelInput->setValue(0);
-            d->iterationInput->setEnabled(false);
-            d->iterationLabel->setEnabled(false);
-            break;
-
-        case ColorFXFilter::Vivid:
-            d->levelInput->setRange(0, 50, 1);
-            d->levelInput->setSliderEnabled(true);
-            d->levelInput->setValue(5);
-            d->iterationInput->setEnabled(false);
-            d->iterationLabel->setEnabled(false);
-            break;
-
-        case ColorFXFilter::Neon:
-        case ColorFXFilter::FindEdges:
-            d->levelInput->setRange(0, 5, 1);
-            d->levelInput->setSliderEnabled(true);
-            d->levelInput->setValue(3);
-            d->iterationInput->setEnabled(true);
-            d->iterationLabel->setEnabled(true);
-            d->iterationInput->setRange(0, 5, 1);
-            d->iterationInput->setSliderEnabled(true);
-            d->iterationInput->setValue(2);
-            break;
-    }
-
-    d->levelInput->blockSignals(false);
-    d->iterationInput->blockSignals(false);
-
-    slotPreview();
-}
-
 void ColorFxTool::preparePreview()
 {
-    d->effectTypeLabel->setEnabled(false);
-    d->effectType->setEnabled(false);
-    d->levelInput->setEnabled(false);
-    d->levelLabel->setEnabled(false);
-    d->iterationInput->setEnabled(false);
-    d->iterationLabel->setEnabled(false);
+    d->settingsView->disable();
+    ColorFXContainer prm = d->settingsView->settings();
 
-    int l                   = d->levelInput->value();
-    int f                   = d->iterationInput->value();
-    int e                   = d->effectType->currentIndex();
     ImageIface* const iface = d->previewWidget->imageIface();
     DImg image              = iface->preview();
 
-    setFilter(new ColorFXFilter(&image, this, e, l, f));
+    setFilter(new ColorFXFilter(&image, this, prm));
 }
 
 void ColorFxTool::prepareFinal()
 {
-    d->effectTypeLabel->setEnabled(false);
-    d->effectType->setEnabled(false);
-    d->levelInput->setEnabled(false);
-    d->levelLabel->setEnabled(false);
-    d->iterationInput->setEnabled(false);
-    d->iterationLabel->setEnabled(false);
-
-    int l = d->levelInput->value();
-    int f = d->iterationInput->value();
-    int e = d->effectType->currentIndex();
+    d->settingsView->disable();
+    ColorFXContainer prm = d->settingsView->settings();
 
     ImageIface iface;
 
-    setFilter(new ColorFXFilter(iface.original(), this, e, l, f));
+    setFilter(new ColorFXFilter(iface.original(), this, prm));
 }
 
 void ColorFxTool::setPreviewImage()
@@ -369,7 +221,7 @@ void ColorFxTool::setFinalImage()
 
     QString name;
 
-    switch (d->effectType->currentIndex())
+    switch (d->settingsView->settings().colorFXType)
     {
         case ColorFXFilter::Solarize:
             name = i18n("Solarize");
@@ -393,27 +245,7 @@ void ColorFxTool::setFinalImage()
 
 void ColorFxTool::renderingFinished()
 {
-    d->effectTypeLabel->setEnabled(true);
-    d->effectType->setEnabled(true);
-    d->levelInput->setEnabled(true);
-    d->levelLabel->setEnabled(true);
-    d->iterationInput->setEnabled(true);
-    d->iterationLabel->setEnabled(true);
-
-    switch (d->effectType->currentIndex())
-    {
-        case ColorFXFilter::Solarize:
-        case ColorFXFilter::Vivid:
-            d->iterationInput->setEnabled(false);
-            d->iterationLabel->setEnabled(false);
-            break;
-
-        case ColorFXFilter::Neon:
-        case ColorFXFilter::FindEdges:
-            d->iterationInput->setEnabled(true);
-            d->iterationLabel->setEnabled(true);
-            break;
-    }
+    d->settingsView->enable();
 }
 
 }  // namespace DigikamFxFiltersImagePlugin
