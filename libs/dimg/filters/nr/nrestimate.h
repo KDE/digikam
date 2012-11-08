@@ -34,23 +34,23 @@
 #include "digikam_export.h"
 #include "nrfilter.h"
 #include "dimg.h"
+#include "dynamicthread.h"
 
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT NREstimate
+class DIGIKAM_EXPORT NREstimate : public DynamicThread
 {
-
 public:
 
     /** Standard constructor with image container to parse
      */
-    explicit NREstimate(const DImg& img);
+    explicit NREstimate(DImg* const img, QObject* const parent=0);
     ~NREstimate();
 
-    /** Return noise reduction settings, computed from image analys
-     */
-    NRContainer estimateNoise() const;
+    void estimateNoise();
+
+    NRContainer settings() const;
 
     /** To set image path where log files will be created to host computation algorithm results, for hacking purpose.
      *  If path is not set, no log files will be created.
@@ -63,6 +63,8 @@ private:
      *  These ones will by used internally by estimateNoise through OpenCV API.
      */
     void readImage() const;
+
+    void run();
 
 private:
 

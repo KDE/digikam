@@ -123,8 +123,9 @@ bool NoiseReduction::toolOperations()
 
     if (settings()["EstimateNoise"].toBool())
     {
-        NREstimate nre(image());
-        prm = nre.estimateNoise();
+        NREstimate nre(&image());
+        nre.estimateNoise();
+        prm = nre.settings();
     }
     else
     {

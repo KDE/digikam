@@ -50,7 +50,8 @@ class NREstimate::Private
 {
 public:
 
-    Private():
+    Private() :
+       img(0),
        clusterCount(30)
     {
         for (int c = 0 ; c < 3; c++)
@@ -59,20 +60,22 @@ public:
         }
     }
 
-    DImg      img;
+    DImg*       img;
 
-    QString   path;   // Path to host log files.
+    NRContainer prm;
 
-    float*    fimg[3];
-    int       sampleCount;
-    int       width;
-    int       height;
-    const int clusterCount;
-    float     clip;
+    QString     path;   // Path to host log files.
+
+    float*      fimg[3];
+    int         sampleCount;
+    int         width;
+    int         height;
+    const int   clusterCount;
+    float       clip;
 };
 
-NREstimate::NREstimate(const DImg& img)
-    : d(new Private)
+NREstimate::NREstimate(DImg* const img, QObject* const parent)
+    : DynamicThread(parent), d(new Private)
 {
     d->img = img;
 }
@@ -90,10 +93,10 @@ void NREstimate::setLogFilesPath(const QString& path)
 void NREstimate::readImage() const
 {
     DColor col;
-    d->width       = d->img.width();
-    d->height      = d->img.height();
+    d->width       = d->img->width();
+    d->height      = d->img->height();
     d->sampleCount = d->width*d->height;
-    d->clip        = d->img.sixteenBit() ? 65535.0 : 255.0;
+    d->clip        = d->img->sixteenBit() ? 65535.0 : 255.0;
 
     for (int c = 0; c < 3; c++)
     {
@@ -106,7 +109,7 @@ void NREstimate::readImage() const
     {
         for (int x = 0; x < d->width; x++)
         {
-            col           = d->img.getPixelColor(x, y);
+            col           = d->img->getPixelColor(x, y);
             d->fimg[0][j] = col.red();
             d->fimg[1][j] = col.green();
             d->fimg[2][j] = col.blue();
@@ -115,7 +118,17 @@ void NREstimate::readImage() const
     }
 }
 
-NRContainer NREstimate::estimateNoise() const
+void NREstimate::run()
+{
+    estimateNoise();
+}
+
+NRContainer NREstimate::settings() const
+{
+    return d->prm;
+}
+
+void NREstimate::estimateNoise()
 {
     readImage();
 
@@ -438,14 +451,12 @@ NRContainer NREstimate::estimateNoise() const
     Cb = floorf(Cb * 100) / 100;
     Cr = floorf(Cr * 100) / 100;
 
-    NRContainer prm;
-
-    prm.thresholds[0] = L;
-    prm.thresholds[2] = Cr;
-    prm.thresholds[1] = Cb;
-    prm.softness[0]   = LSoft;
-    prm.softness[2]   = CrSoft;
-    prm.softness[1]   = CbSoft;
+    d->prm.thresholds[0] = L;
+    d->prm.thresholds[2] = Cr;
+    d->prm.thresholds[1] = Cb;
+    d->prm.softness[0]   = LSoft;
+    d->prm.softness[2]   = CrSoft;
+    d->prm.softness[1]   = CbSoft;
 
     kDebug() << "All is completed";
 
@@ -461,8 +472,6 @@ NRContainer NREstimate::estimateNoise() const
     {
         delete [] d->fimg[i];
     }
-
-    return prm;
 }
 
 }  // namespace Digikam

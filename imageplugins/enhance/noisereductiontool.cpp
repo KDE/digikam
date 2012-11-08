@@ -37,7 +37,6 @@
 // Local includes
 
 #include "dimg.h"
-#include "nrfilter.h"
 #include "nrestimate.h"
 #include "nrsettings.h"
 #include "editortoolsettings.h"
@@ -53,6 +52,7 @@ public:
 
     Private() :
         configGroupName("noisereduction Tool"),
+        nre(0),
         nrSettings(0),
         previewWidget(0),
         gboxSettings(0)
@@ -60,6 +60,7 @@ public:
 
     const QString       configGroupName;
 
+    NREstimate*         nre;
     NRSettings*         nrSettings;
     ImageRegionWidget*  previewWidget;
     EditorToolSettings* gboxSettings;
@@ -163,11 +164,19 @@ void NoiseReductionTool::slotEstimateNoise()
 {
     kapp->setOverrideCursor(Qt::WaitCursor);
     ImageIface iface;
-    NREstimate nre(*iface.original());
-    NRContainer prm = nre.estimateNoise();
-    d->nrSettings->setSettings(prm);
-    kapp->restoreOverrideCursor();
+    d->nre = new NREstimate(iface.original(), this);
+    d->nre->setEmitSignals(true);
+    
+    connect(d->nre, SIGNAL(finished()),
+            this, SLOT(slotEstimateNoiseFinished()));
 
+    d->nre->start();
+}
+
+void NoiseReductionTool::slotEstimateNoiseFinished()
+{
+    d->nrSettings->setSettings(d->nre->settings());
+    kapp->restoreOverrideCursor();
     slotPreview();
 }
 

@@ -27,6 +27,7 @@
 // Local includes
 
 #include "editortool.h"
+#include "nrfilter.h"
 
 using namespace Digikam;
 
@@ -57,6 +58,7 @@ private Q_SLOTS:
     void slotLoadSettings();
     void slotSaveAsSettings();
     void slotEstimateNoise();
+    void slotEstimateNoiseFinished();
     
 private:
 

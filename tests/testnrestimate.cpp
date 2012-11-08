@@ -66,9 +66,10 @@ int main(int argc, char** argv)
     settings.RAWQuality            = RawDecodingSettings::BILINEAR;
 
     DImg img(input.filePath(), 0, DRawDecoding(settings));
-    NREstimate nre(img);
+    NREstimate nre(&img);
     nre.setLogFilesPath(input.filePath());
-    NRContainer prm = nre.estimateNoise();
+    nre.estimateNoise();
+    NRContainer prm = nre.settings();
 
     qDebug() << prm;
 
