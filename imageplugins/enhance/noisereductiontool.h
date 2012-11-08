@@ -56,7 +56,8 @@ private Q_SLOTS:
     void slotResetSettings();
     void slotLoadSettings();
     void slotSaveAsSettings();
-
+    void slotEstimateNoise();
+    
 private:
 
     class Private;

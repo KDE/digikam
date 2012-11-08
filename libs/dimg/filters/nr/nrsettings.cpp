@@ -63,6 +63,7 @@ public:
         luminanceBox(0),
         chrominanceRedBox(0),
         chrominanceBlueBox(0),
+        checkAutoEst(0),
         advExpanderBox(0),
         thrLumInput(0),
         softLumInput(0),
@@ -78,10 +79,13 @@ public:
     static const QString configSoftCrInputAdjustmentEntry;
     static const QString configThrCbInputAdjustmentEntry;
     static const QString configSoftCbInputAdjustmentEntry;
+    static const QString configCheckAutoEstimationEntry;
 
     QWidget*             luminanceBox;
     QWidget*             chrominanceRedBox;
     QWidget*             chrominanceBlueBox;
+
+    QCheckBox*           checkAutoEst;
 
     RExpanderBox*        advExpanderBox;
 
@@ -99,6 +103,7 @@ const QString NRSettings::Private::configThrCrInputAdjustmentEntry("ThrCrAdjustm
 const QString NRSettings::Private::configSoftCrInputAdjustmentEntry("SoftCrAdjustment");
 const QString NRSettings::Private::configThrCbInputAdjustmentEntry("ThrCbAdjustment");
 const QString NRSettings::Private::configSoftCbInputAdjustmentEntry("SoftCbAdjustment");
+const QString NRSettings::Private::configCheckAutoEstimationEntry("AutoNRAdjustment");
 
 // --------------------------------------------------------
 
@@ -118,6 +123,8 @@ NRSettings::NRSettings(QWidget* const parent)
 
     // -------------------------------------------------------------
 
+    d->checkAutoEst     = new QCheckBox(i18n("Estimate Noise"));
+    
     d->advExpanderBox   = new RExpanderBox;
     d->advExpanderBox->setObjectName("Noise Reduction Settings Expander");
 
@@ -217,13 +224,17 @@ NRSettings::NRSettings(QWidget* const parent)
 
     // -------------------------------------------------------------
 
-    grid->addWidget(d->advExpanderBox, 0, 0, 1, 2);
-    grid->setRowStretch(0, 10);
+    grid->addWidget(d->checkAutoEst,   0, 0, 1, 2);
+    grid->addWidget(d->advExpanderBox, 1, 0, 1, 2);
+    grid->setRowStretch(1, 10);
     grid->setMargin(KDialog::spacingHint());
     grid->setSpacing(KDialog::spacingHint());
 
     // -------------------------------------------------------------
 
+    connect(d->checkAutoEst, SIGNAL(clicked(bool)),
+            this, SLOT(slotDisableParameters(bool)));
+    
     connect(d->thrLumInput, SIGNAL(valueChanged(double)),
             this, SIGNAL(signalSettingsChanged()));
 
@@ -246,6 +257,27 @@ NRSettings::NRSettings(QWidget* const parent)
 NRSettings::~NRSettings()
 {
     delete d;
+}
+
+void NRSettings::setEstimateNoise(bool b)
+{
+    d->checkAutoEst->setChecked(b);
+}
+
+bool NRSettings::estimateNoise() const
+{
+    return d->checkAutoEst->isChecked();
+}
+
+void NRSettings::slotDisableParameters(bool b)
+{
+    d->luminanceBox->setDisabled(b);
+    d->chrominanceRedBox->setDisabled(b);
+    d->chrominanceBlueBox->setDisabled(b);
+    kapp->processEvents();
+
+    if (b)
+        emit signalEstimateNoise();
 }
 
 NRContainer NRSettings::settings() const
@@ -277,6 +309,7 @@ void NRSettings::setSettings(const NRContainer& settings)
 void NRSettings::resetToDefault()
 {
     blockSignals(true);
+    d->checkAutoEst->setChecked(false);
     d->thrLumInput->slotReset();
     d->softLumInput->slotReset();
     d->thrCrInput->slotReset();
@@ -310,7 +343,13 @@ void NRSettings::readSettings(KConfigGroup& group)
     prm.softness[0]        = group.readEntry(d->configSoftLumInputAdjustmentEntry, defaultPrm.softness[0]);
     prm.softness[2]        = group.readEntry(d->configSoftCrInputAdjustmentEntry,  defaultPrm.softness[2]);
     prm.softness[1]        = group.readEntry(d->configSoftCbInputAdjustmentEntry,  defaultPrm.softness[1]);
-    setSettings(prm);
+
+    bool b                 = group.readEntry(d->configCheckAutoEstimationEntry,    false);
+    d->checkAutoEst->setChecked(b);
+    slotDisableParameters(b);
+
+    if (!b)
+        setSettings(prm);
 }
 
 void NRSettings::writeSettings(KConfigGroup& group)
@@ -323,6 +362,8 @@ void NRSettings::writeSettings(KConfigGroup& group)
     group.writeEntry(d->configSoftLumInputAdjustmentEntry, prm.softness[0]);
     group.writeEntry(d->configSoftCrInputAdjustmentEntry,  prm.softness[2]);
     group.writeEntry(d->configSoftCbInputAdjustmentEntry,  prm.softness[1]);
+
+    group.writeEntry(d->configCheckAutoEstimationEntry,    d->checkAutoEst->isChecked());    
 }
 
 void NRSettings::loadSettings()

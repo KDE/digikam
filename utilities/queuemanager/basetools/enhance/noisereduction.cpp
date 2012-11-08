@@ -36,6 +36,7 @@
 // Local includes
 
 #include "dimg.h"
+#include "nrestimate.h"
 #include "nrfilter.h"
 #include "nrsettings.h"
 
@@ -71,12 +72,13 @@ BatchToolSettings NoiseReduction::defaultSettings()
     BatchToolSettings prm;
     NRContainer defaultPrm = m_settingsView->defaultSettings();
 
-    prm.insert("YThreshold", (double)defaultPrm.thresholds[0]);
-    prm.insert("CrThreshold", (double)defaultPrm.thresholds[1]);
-    prm.insert("CbThreshold", (double)defaultPrm.thresholds[2]);
-    prm.insert("YSoftness", (double)defaultPrm.softness[0]);
-    prm.insert("CrSoftness", (double)defaultPrm.softness[1]);
-    prm.insert("CbSoftness", (double)defaultPrm.softness[2]);
+    prm.insert("YThreshold",    (double)defaultPrm.thresholds[0]);
+    prm.insert("CrThreshold",   (double)defaultPrm.thresholds[1]);
+    prm.insert("CbThreshold",   (double)defaultPrm.thresholds[2]);
+    prm.insert("YSoftness",     (double)defaultPrm.softness[0]);
+    prm.insert("CrSoftness",    (double)defaultPrm.softness[1]);
+    prm.insert("CbSoftness",    (double)defaultPrm.softness[2]);
+    prm.insert("EstimateNoise", false);
 
     return prm;
 }
@@ -91,6 +93,7 @@ void NoiseReduction::slotAssignSettings2Widget()
     prm.softness[1]   = settings()["CrSoftness"].toDouble();
     prm.softness[2]   = settings()["CbSoftness"].toDouble();
     m_settingsView->setSettings(prm);
+    m_settingsView->setEstimateNoise(settings()["EstimateNoise"].toBool());
 }
 
 void NoiseReduction::slotSettingsChanged()
@@ -98,12 +101,13 @@ void NoiseReduction::slotSettingsChanged()
     BatchToolSettings prm;
     NRContainer currentPrm = m_settingsView->settings();
 
-    prm.insert("YThreshold", (double)currentPrm.thresholds[0]);
-    prm.insert("CrThreshold", (double)currentPrm.thresholds[1]);
-    prm.insert("CbThreshold", (double)currentPrm.thresholds[2]);
-    prm.insert("YSoftness", (double)currentPrm.softness[0]);
-    prm.insert("CrSoftness", (double)currentPrm.softness[1]);
-    prm.insert("CbSoftness", (double)currentPrm.softness[2]);
+    prm.insert("YThreshold",    (double)currentPrm.thresholds[0]);
+    prm.insert("CrThreshold",   (double)currentPrm.thresholds[1]);
+    prm.insert("CbThreshold",   (double)currentPrm.thresholds[2]);
+    prm.insert("YSoftness",     (double)currentPrm.softness[0]);
+    prm.insert("CrSoftness",    (double)currentPrm.softness[1]);
+    prm.insert("CbSoftness",    (double)currentPrm.softness[2]);
+    prm.insert("EstimateNoise", m_settingsView->estimateNoise());
 
     BatchTool::slotSettingsChanged(prm);
 }
@@ -116,13 +120,22 @@ bool NoiseReduction::toolOperations()
     }
 
     NRContainer prm;
-    prm.thresholds[0] = settings()["YThreshold"].toDouble();
-    prm.thresholds[1] = settings()["CrThreshold"].toDouble();
-    prm.thresholds[2] = settings()["CbThreshold"].toDouble();
-    prm.softness[0]   = settings()["YSoftness"].toDouble();
-    prm.softness[1]   = settings()["CrSoftness"].toDouble();
-    prm.softness[2]   = settings()["CbSoftness"].toDouble();
 
+    if (settings()["EstimateNoise"].toBool())
+    {
+        NREstimate nre(image());
+        prm = nre.estimateNoise();
+    }
+    else
+    {
+        prm.thresholds[0] = settings()["YThreshold"].toDouble();
+        prm.thresholds[1] = settings()["CrThreshold"].toDouble();
+        prm.thresholds[2] = settings()["CbThreshold"].toDouble();
+        prm.softness[0]   = settings()["YSoftness"].toDouble();
+        prm.softness[1]   = settings()["CrSoftness"].toDouble();
+        prm.softness[2]   = settings()["CbSoftness"].toDouble();
+    }
+   
     NRFilter wnr(&image(), 0L, prm);
     applyFilter(&wnr);
 

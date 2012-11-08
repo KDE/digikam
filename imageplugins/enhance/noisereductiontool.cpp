@@ -38,10 +38,11 @@
 
 #include "dimg.h"
 #include "nrfilter.h"
+#include "nrestimate.h"
+#include "nrsettings.h"
 #include "editortoolsettings.h"
 #include "imageiface.h"
 #include "imageregionwidget.h"
-#include "nrsettings.h"
 
 namespace DigikamEnhanceImagePlugin
 {
@@ -88,6 +89,9 @@ NoiseReductionTool::NoiseReductionTool(QObject* const parent)
     setToolSettings(d->gboxSettings);
     setToolView(d->previewWidget);
     setPreviewModeMask(PreviewToolBar::AllPreviewModes);
+
+    connect(d->nrSettings, SIGNAL(signalEstimateNoise()),
+            this, SLOT(slotEstimateNoise()));
 
     init();
 }
@@ -153,6 +157,18 @@ void NoiseReductionTool::slotLoadSettings()
 void NoiseReductionTool::slotSaveAsSettings()
 {
     d->nrSettings->saveAsSettings();
+}
+
+void NoiseReductionTool::slotEstimateNoise()
+{
+    kapp->setOverrideCursor(Qt::WaitCursor);
+    ImageIface iface;
+    NREstimate nre(*iface.original());
+    NRContainer prm = nre.estimateNoise();
+    d->nrSettings->setSettings(prm);
+    kapp->restoreOverrideCursor();
+
+    slotPreview();
 }
 
 }  // namespace DigikamEnhanceImagePlugin

@@ -55,6 +55,9 @@ public:
     NRContainer settings() const;
     void setSettings(const NRContainer& settings);
 
+    void setEstimateNoise(bool b);
+    bool estimateNoise() const;
+    
     void readSettings(KConfigGroup& group);
     void writeSettings(KConfigGroup& group);
 
@@ -64,6 +67,11 @@ public:
 Q_SIGNALS:
 
     void signalSettingsChanged();
+    void signalEstimateNoise();
+
+private Q_SLOTS:
+
+    void slotDisableParameters(bool);
 
 private:
 
