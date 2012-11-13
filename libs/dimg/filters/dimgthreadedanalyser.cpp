@@ -23,12 +23,13 @@
 
 #include "dimgthreadedanalyser.h"
 
-// KDE includes
-
-#include <kdebug.h>
-
 namespace Digikam
 {
+
+DImgThreadedAnalyser::DImgThreadedAnalyser(QObject* const parent, const QString& name)
+    : DImgThreadedFilter(parent, name)
+{
+}
 
 DImgThreadedAnalyser::DImgThreadedAnalyser(DImg* const orgImage, QObject* const parent,
                                            const QString& name)
