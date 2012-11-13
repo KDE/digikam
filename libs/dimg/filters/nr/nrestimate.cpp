@@ -90,16 +90,16 @@ void NREstimate::readImage() const
     d->sampleCount = m_orgImage.width() * m_orgImage.height();
     d->clip        = m_orgImage.sixteenBit() ? 65535.0 : 255.0;
 
-    for (int c = 0; c < 3; c++)
+    for (int c = 0; runningFlag() && (c < 3); c++)
     {
         d->fimg[c] = new float[d->sampleCount];
     }
 
     int j = 0;
 
-    for (uint y = 0; y < m_orgImage.height(); y++)
+    for (uint y = 0; runningFlag() && (y < m_orgImage.height()); y++)
     {
-        for (uint x = 0; x < m_orgImage.width(); x++)
+        for (uint x = 0; runningFlag() && (x < m_orgImage.width()); x++)
         {
             col           = m_orgImage.getPixelColor(x, y);
             d->fimg[0][j] = col.red();
@@ -135,9 +135,9 @@ void NREstimate::analysImage()
     // pointer variable to handle the CvMat* points (the image in CvMat format)
     float* pointsPtr = (float*)points->data.ptr;
 
-    for (int x=0 ; x < d->sampleCount ; x++)
+    for (int x=0 ; runningFlag() && (x < d->sampleCount) ; x++)
     {
-        for (int y=0 ; y < 3 ; y++)
+        for (int y=0 ; runningFlag() && (y < 3) ; y++)
         {
             *pointsPtr++ = (float)d->fimg[y][x];
         }
@@ -151,7 +151,8 @@ void NREstimate::analysImage()
 
     //-- KMEANS ---------------------------------------------------------------------------------------------
 
-    cvKMeans2(points, d->clusterCount, clusters, cvTermCriteria(CV_TERMCRIT_EPS+CV_TERMCRIT_ITER, 10, 1.0), 3, 0, 0, centers, 0);
+    if (runningFlag())
+        cvKMeans2(points, d->clusterCount, clusters, cvTermCriteria(CV_TERMCRIT_EPS+CV_TERMCRIT_ITER, 10, 1.0), 3, 0, 0, centers, 0);
 
     kDebug() << "cvKmeans2 succesfully run";
     postProgress(15);
@@ -162,7 +163,7 @@ void NREstimate::analysImage()
 
     //the row position array would just make the hold the number of elements in each cluster
 
-    for (i=0 ; i < d->clusterCount ; i++)
+    for (i=0 ; runningFlag() && (i < d->clusterCount) ; i++)
     {
         //initializing the cluster count array
         rowPosition[i] = 0;
@@ -170,7 +171,7 @@ void NREstimate::analysImage()
 
     int rowIndex, columnIndex;
 
-    for (i=0 ; i < d->sampleCount ; i++)
+    for (i=0 ; runningFlag() && (i < d->sampleCount) ; i++)
     {
         columnIndex = clusters->data.i[i];
         rowPosition[columnIndex]++;
@@ -179,7 +180,7 @@ void NREstimate::analysImage()
 /*
     kDebug() << "Lets see what the rowPosition array looks like : ";
 
-    for(i=0 ; i < d->clusterCount ; i++)
+    for(i=0 ; runningFlag() && (i < d->clusterCount) ; i++)
     {
         kDebug() << "Cluster : "<< i << " the count is :" << rowPosition[i];
     }
@@ -192,7 +193,7 @@ void NREstimate::analysImage()
 
     int max = rowPosition[0];
 
-    for (i=1 ; i < d->clusterCount ; i++)
+    for (i=1 ; runningFlag() && (i < d->clusterCount) ; i++)
     {
         if (rowPosition[i] > max)
         {
@@ -208,24 +209,31 @@ void NREstimate::analysImage()
 
     //-- Divide and conquer ---------------------------------------------------------------------------------
 
-    CvMat* sd = cvCreateMat(max, (d->clusterCount * points->cols), CV_32FC1);
+    CvMat* sd = 0;
+    
+    if (runningFlag())
+        sd = cvCreateMat(max, (d->clusterCount * points->cols), CV_32FC1);
+    
     postProgress(30);
     
     //-- Initialize the rowPosition array -------------------------------------------------------------------
 
     int rPosition[d->clusterCount];
 
-    for (i=0 ; i < d->clusterCount ; i++)
+    for (i=0 ; runningFlag() && (i < d->clusterCount) ; i++)
     {
         rPosition[i] = 0;
     }
 
-    float* ptr = (float*)sd->data.ptr;
+    float* ptr = 0;
+
+    if (runningFlag())
+        ptr = (float*)sd->data.ptr;
 
     kDebug() << "The rowPosition array is ready!";
     postProgress(40);
 
-    for (i=0 ; i < d->sampleCount ; i++)
+    for (i=0 ; runningFlag() && (i < d->sampleCount) ; i++)
     {
         columnIndex = clusters->data.i[i];
         rowIndex    = rPosition[columnIndex];
@@ -234,15 +242,15 @@ void NREstimate::analysImage()
         ptr         = (float*)(sd->data.ptr + rowIndex*(sd->step));
 
         //moving to the right column
-        for (int j=0 ; j < columnIndex ; j++)
+        for (int j=0 ; runningFlag() && (j < columnIndex) ; j++)
         {
-            for(z=0 ; z < (points->cols) ; z++)
+            for(z=0 ; runningFlag() && (z < (points->cols)) ; z++)
             {
                 ptr++;
             }
         }
 
-        for (z=0 ; z < (points->cols) ; z++)
+        for (z=0 ; runningFlag() && (z < (points->cols)) ; z++)
         {
             *ptr++ = cvGet2D(points, i, z).val[0];
         }
@@ -257,22 +265,28 @@ void NREstimate::analysImage()
 
     CvScalar std;
     CvScalar mean;
-    CvMat* meanStore    = cvCreateMat(d->clusterCount, points->cols, CV_32FC1);
-    CvMat* stdStore     = cvCreateMat(d->clusterCount, points->cols, CV_32FC1);
-    float* meanStorePtr = (float*)(meanStore->data.ptr);
-    float* stdStorePtr  = (float*)(stdStore->data.ptr);
+    CvMat* meanStore    = 0;
+    CvMat* stdStore     = 0;
+    float* meanStorePtr = 0;
+    float* stdStorePtr  = 0;
+    int totalcount      = 0; // Number of non-empty clusters
 
-    // The number of non-empty clusters
-    int totalcount      = 0;
-
-    for (i=0 ; i < sd->cols ; i++)
+    if (runningFlag())
     {
-        if (rowPosition[(i/points->cols)] >= 1)
+        meanStore    = cvCreateMat(d->clusterCount, points->cols, CV_32FC1);
+        stdStore     = cvCreateMat(d->clusterCount, points->cols, CV_32FC1);
+        meanStorePtr = (float*)(meanStore->data.ptr);
+        stdStorePtr  = (float*)(stdStore->data.ptr);
+    }
+    
+    for (i=0 ; runningFlag() && (i < sd->cols) ; i++)
+    {
+        if (runningFlag() && rowPosition[(i/points->cols)] >= 1)
         {
             CvMat* workingArr = cvCreateMat(rowPosition[(i / points->cols)], 1, CV_32FC1);
             ptr               = (float*)(workingArr->data.ptr);
 
-            for (j=0 ; j < rowPosition[(i / (points->cols))] ; j++)
+            for (j=0 ; runningFlag() && (j < rowPosition[(i / (points->cols))]) ; j++)
             {
                 *ptr++ = cvGet2D(sd, j, i).val[0];
             }
@@ -290,10 +304,13 @@ void NREstimate::analysImage()
 
     // -----------------------------------------------------------------------------------------------------------------
 
-    meanStorePtr = (float*)meanStore->data.ptr;
-    stdStorePtr  = (float*)stdStore->data.ptr;
-
-    if (!d->path.isEmpty())
+    if (runningFlag())
+    {
+        meanStorePtr = (float*)meanStore->data.ptr;
+        stdStorePtr  = (float*)stdStore->data.ptr;
+    }
+        
+    if (!d->path.isEmpty() && runningFlag())
     {
         QString logFile = d->path;
         logFile         = logFile.section('/', -1);
@@ -341,7 +358,7 @@ void NREstimate::analysImage()
     QTextStream owms;
     QFile       filewms;
 
-    if (!d->path.isEmpty())
+    if (!d->path.isEmpty() && runningFlag())
     {
         QString logFile2 = d->path;
         logFile2         = logFile2.section('/', -1);
@@ -358,7 +375,7 @@ void NREstimate::analysImage()
     float   weightedStd  = 0.0f;
     float   datasd[3];
 
-    for (j=0 ; j < points->cols ; j++)
+    for (j=0 ; runningFlag() && (j < points->cols) ; j++)
     {
         meanStorePtr = (float*)meanStore->data.ptr;
         stdStorePtr  = (float*)stdStore->data.ptr;
@@ -399,7 +416,7 @@ void NREstimate::analysImage()
         info.append(QString::number(weightedStd));
     }
 
-    if (!d->path.isEmpty())
+    if (!d->path.isEmpty() && runningFlag())
     {
         filewms.close();
     }
@@ -411,45 +428,48 @@ void NREstimate::analysImage()
 
     float L, LSoft = 0.6, Cr, CrSoft = 0.6, Cb, CbSoft = 0.6;
 
-    //for 16 bit images only:
-    if (d->clip == 65535)
+    if (runningFlag())
     {
-        for (i=0 ; i < points->cols ; i++)
+        //for 16 bit images only:
+        if (d->clip == 65535)
         {
-            datasd[i] = datasd[i] / 256;
+            for (i=0 ; i < points->cols ; i++)
+            {
+                datasd[i] = datasd[i] / 256;
+            }
         }
+
+        if (datasd[0] < 7)
+            L = datasd[0] - 0.98;
+
+        if (datasd[0] >= 7 && datasd[0] < 8)
+            L = datasd[0] - 1.2;
+
+        if (datasd[0] >= 8 && datasd[0] < 9)
+            L = datasd[0] - 1.5;
+        else
+            L = datasd[0] - 1.7;
+
+        if (L < 0)
+            L = 0;
+
+        if (L > 9)
+            L = 9;
+
+        Cr = datasd[2] / 2;
+        Cb = datasd[1] / 2;
+
+        if (Cr > 7)
+            Cr = 7;
+
+        if (Cb > 7)
+            Cb = 7;
+
+        L  = floorf(L  * 100) / 100;
+        Cb = floorf(Cb * 100) / 100;
+        Cr = floorf(Cr * 100) / 100;
     }
-
-    if (datasd[0] < 7)
-        L = datasd[0] - 0.98;
-
-    if (datasd[0] >= 7 && datasd[0] < 8)
-        L = datasd[0] - 1.2;
-
-    if (datasd[0] >= 8 && datasd[0] < 9)
-        L = datasd[0] - 1.5;
-    else
-        L = datasd[0] - 1.7;
-
-    if (L < 0)
-        L = 0;
-
-    if (L > 9)
-        L = 9;
-
-    Cr = datasd[2] / 2;
-    Cb = datasd[1] / 2;
-
-    if (Cr > 7)
-        Cr = 7;
-
-    if (Cb > 7)
-        Cb = 7;
-
-    L  = floorf(L  * 100) / 100;
-    Cb = floorf(Cb * 100) / 100;
-    Cr = floorf(Cr * 100) / 100;
-
+        
     d->prm.thresholds[0] = L;
     d->prm.thresholds[2] = Cr;
     d->prm.thresholds[1] = Cb;
