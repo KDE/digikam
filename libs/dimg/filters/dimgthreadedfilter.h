@@ -212,7 +212,7 @@ protected:
     virtual int modulateProgress(int progress);
 
     void initMaster();
-    void prepareDestImage();
+    virtual void prepareDestImage();
 
     /**
      * Convenience class to spare the few repeating lines of code

@@ -68,7 +68,7 @@ int main(int argc, char** argv)
     DImg img(input.filePath(), 0, DRawDecoding(settings));
     NREstimate nre(&img);
     nre.setLogFilesPath(input.filePath());
-    nre.estimateNoise();
+    nre.startFilterDirectly();
     NRContainer prm = nre.settings();
 
     qDebug() << prm;

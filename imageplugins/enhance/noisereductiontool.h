@@ -51,6 +51,7 @@ private:
     void prepareFinal();
     void setPreviewImage();
     void setFinalImage();
+    void analyserCompleted();
 
 private Q_SLOTS:
 
@@ -58,7 +59,6 @@ private Q_SLOTS:
     void slotLoadSettings();
     void slotSaveAsSettings();
     void slotEstimateNoise();
-    void slotEstimateNoiseFinished();
     
 private:
 

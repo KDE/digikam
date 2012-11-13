@@ -37,6 +37,7 @@
 // Local includes
 
 #include "dimgthreadedfilter.h"
+#include "dimgthreadedanalyser.h"
 #include "imageguidewidget.h"
 #include "imageregionwidget.h"
 #include "histogramwidget.h"
@@ -356,7 +357,8 @@ public:
     Private() :
         delFilter(true),
         currentRenderingMode(EditorToolThreaded::NoneRendering),
-        threadedFilter(0)
+        threadedFilter(0),
+        threadedAnalyser(0)
     {
     }
 
@@ -367,6 +369,7 @@ public:
     QString                           progressMess;
 
     DImgThreadedFilter*               threadedFilter;
+    DImgThreadedAnalyser*               threadedAnalyser;
 };
 
 EditorToolThreaded::EditorToolThreaded(QObject* const parent)
@@ -412,6 +415,40 @@ void EditorToolThreaded::setFilter(DImgThreadedFilter* const filter)
     d->threadedFilter->startFilter();
 }
 
+DImgThreadedAnalyser* EditorToolThreaded::analyser() const
+{
+    return d->threadedAnalyser;
+}
+
+void EditorToolThreaded::setAnalyser(DImgThreadedAnalyser* const analyser)
+{
+    kDebug() << "Analys " << toolName() << " started...";
+
+    toolSettings()->enableButton(EditorToolSettings::Ok,      false);
+    toolSettings()->enableButton(EditorToolSettings::SaveAs,  false);
+    toolSettings()->enableButton(EditorToolSettings::Load,    false);
+    toolSettings()->enableButton(EditorToolSettings::Default, false);
+    toolSettings()->enableButton(EditorToolSettings::Try,     false);
+    toolView()->setEnabled(false);
+
+    EditorToolIface::editorToolIface()->setToolStartProgress(d->progressMess.isEmpty() ? toolName() : d->progressMess);
+    kapp->setOverrideCursor(Qt::WaitCursor);
+
+    delete d->threadedAnalyser;
+    d->threadedAnalyser = analyser;
+
+    connect(d->threadedAnalyser, SIGNAL(started()),
+            this, SLOT(slotAnalyserStarted()));
+
+    connect(d->threadedAnalyser, SIGNAL(finished(bool)),
+            this, SLOT(slotAnalyserFinished(bool)));
+
+    connect(d->threadedAnalyser, SIGNAL(progress(int)),
+            this, SLOT(slotAnalyserProgress(int)));
+
+    d->threadedAnalyser->startFilter();
+}
+
 void EditorToolThreaded::slotResized()
 {
     if (d->currentRenderingMode == EditorToolThreaded::FinalRendering)
@@ -434,6 +471,11 @@ void EditorToolThreaded::slotAbort()
 {
     d->currentRenderingMode = EditorToolThreaded::NoneRendering;
 
+    if (analyser())
+    {
+        analyser()->cancelFilter();
+    }
+    
     if (filter())
     {
         filter()->cancelFilter();
@@ -504,6 +546,30 @@ void EditorToolThreaded::slotFilterFinished(bool success)
 }
 
 void EditorToolThreaded::slotFilterProgress(int progress)
+{
+    EditorToolIface::editorToolIface()->setToolProgress(progress);
+}
+
+void EditorToolThreaded::slotAnalyserStarted()
+{
+}
+
+void EditorToolThreaded::slotAnalyserFinished(bool success)
+{
+    if (success)
+    {
+        kDebug() << "Analys " << toolName() << " completed...";
+        analyserCompleted();
+    }
+    else
+    {
+
+        kDebug() << "Analys " << toolName() << " failed...";
+        slotAbort();
+    }
+}
+
+void EditorToolThreaded::slotAnalyserProgress(int progress)
 {
     EditorToolIface::editorToolIface()->setToolProgress(progress);
 }

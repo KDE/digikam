@@ -51,7 +51,6 @@ class NREstimate::Private
 public:
 
     Private() :
-       img(0),
        clusterCount(30)
     {
         for (int c = 0 ; c < 3; c++)
@@ -60,24 +59,19 @@ public:
         }
     }
 
-    DImg*       img;
-
     NRContainer prm;
 
     QString     path;   // Path to host log files.
 
     float*      fimg[3];
     int         sampleCount;
-    int         width;
-    int         height;
     const int   clusterCount;
     float       clip;
 };
 
 NREstimate::NREstimate(DImg* const img, QObject* const parent)
-    : DynamicThread(parent), d(new Private)
+    : DImgThreadedAnalyser(img, parent, "NREstimate"), d(new Private)
 {
-    d->img = img;
 }
 
 NREstimate::~NREstimate()
@@ -93,34 +87,27 @@ void NREstimate::setLogFilesPath(const QString& path)
 void NREstimate::readImage() const
 {
     DColor col;
-    d->width       = d->img->width();
-    d->height      = d->img->height();
-    d->sampleCount = d->width*d->height;
-    d->clip        = d->img->sixteenBit() ? 65535.0 : 255.0;
+    d->sampleCount = m_orgImage.width() * m_orgImage.height();
+    d->clip        = m_orgImage.sixteenBit() ? 65535.0 : 255.0;
 
     for (int c = 0; c < 3; c++)
     {
-        d->fimg[c] = new float[d->width * d->height];
+        d->fimg[c] = new float[d->sampleCount];
     }
 
     int j = 0;
 
-    for (int y = 0; y < d->height; y++)
+    for (uint y = 0; y < m_orgImage.height(); y++)
     {
-        for (int x = 0; x < d->width; x++)
+        for (uint x = 0; x < m_orgImage.width(); x++)
         {
-            col           = d->img->getPixelColor(x, y);
+            col           = m_orgImage.getPixelColor(x, y);
             d->fimg[0][j] = col.red();
             d->fimg[1][j] = col.green();
             d->fimg[2][j] = col.blue();
-            ++j;
+            j++;
         }
     }
-}
-
-void NREstimate::run()
-{
-    estimateNoise();
 }
 
 NRContainer NREstimate::settings() const
@@ -128,9 +115,10 @@ NRContainer NREstimate::settings() const
     return d->prm;
 }
 
-void NREstimate::estimateNoise()
+void NREstimate::analysImage()
 {
     readImage();
+    postProgress(5);
 
     //--convert fimg to CvMat*-------------------------------------------------------------------------------
     int i, j, z;
@@ -159,12 +147,14 @@ void NREstimate::estimateNoise()
     CvArr* centers = 0;
 
     kDebug() << "Everything ready for the cvKmeans2 or as it seems to";
+    postProgress(10);
 
     //-- KMEANS ---------------------------------------------------------------------------------------------
 
     cvKMeans2(points, d->clusterCount, clusters, cvTermCriteria(CV_TERMCRIT_EPS+CV_TERMCRIT_ITER, 10, 1.0), 3, 0, 0, centers, 0);
 
     kDebug() << "cvKmeans2 succesfully run";
+    postProgress(15);
 
     //-- Divide into cluster->columns, sample->rows, in matrix standard deviation ---------------------------
 
@@ -196,6 +186,7 @@ void NREstimate::estimateNoise()
 */
 
     kDebug() << "array indexed, and ready to find maximum";
+    postProgress(20);
 
     //-- Finding maximum of the rowPosition array ------------------------------------------------------------
 
@@ -213,11 +204,13 @@ void NREstimate::estimateNoise()
     maxString.append(QString::number(max));
 
     kDebug() << QString("maximum declared = %1").arg(maxString);
+    postProgress(25);
 
     //-- Divide and conquer ---------------------------------------------------------------------------------
 
     CvMat* sd = cvCreateMat(max, (d->clusterCount * points->cols), CV_32FC1);
-
+    postProgress(30);
+    
     //-- Initialize the rowPosition array -------------------------------------------------------------------
 
     int rPosition[d->clusterCount];
@@ -230,6 +223,7 @@ void NREstimate::estimateNoise()
     float* ptr = (float*)sd->data.ptr;
 
     kDebug() << "The rowPosition array is ready!";
+    postProgress(40);
 
     for (i=0 ; i < d->sampleCount ; i++)
     {
@@ -257,6 +251,7 @@ void NREstimate::estimateNoise()
     }
 
     kDebug() << "sd matrix creation over!";
+    postProgress(50);
 
     //-- This part of the code would involve the sd matrix and make the mean and the std of the data -------------------
 
@@ -291,6 +286,7 @@ void NREstimate::estimateNoise()
     }
 
     kDebug() << "Make the mean and the std of the data";
+    postProgress(60);
 
     // -----------------------------------------------------------------------------------------------------------------
 
@@ -337,6 +333,8 @@ void NREstimate::estimateNoise()
 
         kDebug() << "Done with the basic work of storing the mean and the std";
     }
+
+    postProgress(70);
 
     //-- Calculating weighted mean, and weighted std -----------------------------------------------------------
 
@@ -407,7 +405,8 @@ void NREstimate::estimateNoise()
     }
 
     kDebug() << "Info : " << info;
-
+    postProgress(80);
+        
     // -- adaptation ---------------------------------------------------------------------------------------
 
     float L, LSoft = 0.6, Cr, CrSoft = 0.6, Cb, CbSoft = 0.6;
@@ -459,6 +458,7 @@ void NREstimate::estimateNoise()
     d->prm.softness[1]   = CbSoft;
 
     kDebug() << "All is completed";
+    postProgress(90);
 
     //-- releasing matrices and closing files ----------------------------------------------------------------------
 
@@ -472,6 +472,9 @@ void NREstimate::estimateNoise()
     {
         delete [] d->fimg[i];
     }
+
+    postProgress(100);
+
 }
 
 }  // namespace Digikam

@@ -34,12 +34,12 @@
 #include "digikam_export.h"
 #include "nrfilter.h"
 #include "dimg.h"
-#include "dynamicthread.h"
+#include "dimgthreadedanalyser.h"
 
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT NREstimate : public DynamicThread
+class DIGIKAM_EXPORT NREstimate : public DImgThreadedAnalyser
 {
 public:
 
@@ -48,7 +48,9 @@ public:
     explicit NREstimate(DImg* const img, QObject* const parent=0);
     ~NREstimate();
 
-    void estimateNoise();
+    /** Perform estimate noise.
+     */
+    void analysImage();
 
     NRContainer settings() const;
 
@@ -63,8 +65,6 @@ private:
      *  These ones will by used internally by estimateNoise through OpenCV API.
      */
     void readImage() const;
-
-    void run();
 
 private:
 

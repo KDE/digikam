@@ -42,6 +42,7 @@ namespace Digikam
 {
 
 class DImgThreadedFilter;
+class DImgThreadedAnalyser;
 class EditorToolSettings;
 
 class DIGIKAM_EXPORT EditorTool : public QObject
@@ -96,6 +97,7 @@ protected:
     virtual void readSettings();
     virtual void writeSettings();
     virtual void finalRendering() {};
+    virtual void analyserCompleted() {};
 
 protected Q_SLOTS:
 
@@ -155,6 +157,9 @@ protected:
     DImgThreadedFilter* filter() const;
     void setFilter(DImgThreadedFilter* const filter);
 
+    DImgThreadedAnalyser* analyser() const;
+    void setAnalyser(DImgThreadedAnalyser* const analyser);
+
     /** If true, delete filter instance when preview or final rendering is processed.
         If false, filter instance will be managed outside for ex. with ContentAwareResizing tool.
      */
@@ -172,6 +177,10 @@ protected Q_SLOTS:
     void slotFilterStarted();
     void slotFilterFinished(bool success);
     void slotFilterProgress(int progress);
+
+    void slotAnalyserStarted();
+    void slotAnalyserFinished(bool success);
+    void slotAnalyserProgress(int progress);
 
     virtual void slotOk();
     virtual void slotCancel();

@@ -52,7 +52,6 @@ public:
 
     Private() :
         configGroupName("noisereduction Tool"),
-        nre(0),
         nrSettings(0),
         previewWidget(0),
         gboxSettings(0)
@@ -60,7 +59,6 @@ public:
 
     const QString       configGroupName;
 
-    NREstimate*         nre;
     NRSettings*         nrSettings;
     ImageRegionWidget*  previewWidget;
     EditorToolSettings* gboxSettings;
@@ -162,20 +160,13 @@ void NoiseReductionTool::slotSaveAsSettings()
 
 void NoiseReductionTool::slotEstimateNoise()
 {
-    kapp->setOverrideCursor(Qt::WaitCursor);
     ImageIface iface;
-    d->nre = new NREstimate(iface.original(), this);
-    d->nre->setEmitSignals(true);
-    
-    connect(d->nre, SIGNAL(finished()),
-            this, SLOT(slotEstimateNoiseFinished()));
-
-    d->nre->start();
+    setAnalyser(new NREstimate(iface.original(), this));
 }
 
-void NoiseReductionTool::slotEstimateNoiseFinished()
+void NoiseReductionTool::analyserCompleted()
 {
-    d->nrSettings->setSettings(d->nre->settings());
+    d->nrSettings->setSettings(dynamic_cast<NREstimate*>(analyser())->settings());
     kapp->restoreOverrideCursor();
     slotPreview();
 }
