@@ -5,6 +5,8 @@
  *
  * Date        : 2012-11-13
  * Description : threaded image analys class.
+ *               this class is dedicated to run algorithm in a separated thread
+ *               over an image to process analys. No image data are changed.
  *
  * Copyright (C) 2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -49,38 +51,38 @@ public:
      *  You need to call startFilter() to start the threaded computation.
      *  To run analyser without to use multithreading, call startFilterDirectly().
      */
-    DImgThreadedAnalyser(DImg* const orgImage, QObject* const parent,
+    DImgThreadedAnalyser(DImg* const orgImage, QObject* const parent=0,
                          const QString& name = QString());
 
     ~DImgThreadedAnalyser();
 
 private:
-    
-    // NOTE: Versionning is not supported in the class
-    
+
+    // NOTE: Versionning is not supported in this class
+
     FilterAction filterAction()
     {
         // return null object
         return FilterAction();
     };
-    
+
     void readParameters(const FilterAction&)
     {
          // Do nothing.
     };
-    
+
     QString filterIdentifier() const 
     {
         // return null object
         return QString();
     };
-    
+
     QList<int> supportedVersions() const
     {
         // return null object
         return QList<int>();
     };
-    
+
     void prepareDestImage()
     {
         // No destination image is required here.
@@ -90,7 +92,7 @@ private:
     {
         analysImage();
     };
-        
+
 protected:
 
     /** Main image analys method. Override in subclass.
