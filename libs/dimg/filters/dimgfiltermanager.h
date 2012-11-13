@@ -7,7 +7,7 @@
  * Description : manager for filters (registering, creating etc)
  *
  * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
+ * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -97,8 +97,8 @@ public:
     /**
      * Registers all filter provided by this generator.
      */
-    void addGenerator(DImgFilterGenerator* generator);
-    void removeGenerator(DImgFilterGenerator* generator);
+    void addGenerator(DImgFilterGenerator* const generator);
+    void removeGenerator(DImgFilterGenerator* const generator);
 
 private:
 
@@ -109,8 +109,8 @@ private:
 
     friend class DImgFilterManagerCreator;
 
-    class DImgFilterManagerPriv;
-    DImgFilterManagerPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

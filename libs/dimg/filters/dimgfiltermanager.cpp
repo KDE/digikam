@@ -7,7 +7,7 @@
  * Description : manager for filters (registering, creating etc)
  *
  * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
+ * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -92,16 +92,16 @@ namespace Digikam
 {
 typedef QSharedPointer<DImgFilterGenerator> ImgFilterPtr;
 
-class DImgFilterManager::DImgFilterManagerPriv
+class DImgFilterManager::Private
 {
 public:
 
-    DImgFilterManagerPriv()
+    Private()
         : mutex(QMutex::Recursive)
     {
     }
 
-    ~DImgFilterManagerPriv()
+    ~Private()
     {
     }
 
@@ -121,7 +121,7 @@ public:
     QMutex                      mutex;
 };
 
-void DImgFilterManager::DImgFilterManagerPriv::setupCoreGenerators()
+void DImgFilterManager::Private::setupCoreGenerators()
 {
     //Please keep this list sorted alphabetically
     coreGenerators
@@ -173,7 +173,7 @@ void DImgFilterManager::DImgFilterManagerPriv::setupCoreGenerators()
             << ImgFilterPtr(new BasicDImgFilterGenerator<RawProcessingFilter>());
 }
 
-void DImgFilterManager::DImgFilterManagerPriv::setupFilterIcons()
+void DImgFilterManager::Private::setupFilterIcons()
 {
     //Please keep this list sorted alphabetically
     filterIcons.insert("digikam:AntiVignettingFilter", "antivignetting");
@@ -223,14 +223,15 @@ void DImgFilterManager::DImgFilterManagerPriv::setupFilterIcons()
     filterIcons.insert("digikam:RawConverter",         "kdcraw");
 }
 
-void DImgFilterManager::DImgFilterManagerPriv::setupI18nStrings()
+void DImgFilterManager::Private::setupI18nStrings()
 {
     // i18nFilterNames.insert("someIdentifier", i18n("display name"));
 }
 
-void DImgFilterManager::DImgFilterManagerPriv::addGenerator(const ImgFilterPtr& generator)
+void DImgFilterManager::Private::addGenerator(const ImgFilterPtr& generator)
 {
     QMutexLocker lock(&mutex);
+
     foreach(const QString& id, generator->supportedFilters())
     {
         if (filterMap.contains(id))
@@ -260,7 +261,7 @@ DImgFilterManager* DImgFilterManager::instance()
 }
 
 DImgFilterManager::DImgFilterManager()
-    : d(new DImgFilterManagerPriv)
+    : d(new Private)
 {
     QMutexLocker lock(&d->mutex);
     d->setupCoreGenerators();
@@ -277,28 +278,30 @@ DImgFilterManager::~DImgFilterManager()
     delete d;
 }
 
-void DImgFilterManager::addGenerator(DImgFilterGenerator* generator)
+void DImgFilterManager::addGenerator(DImgFilterGenerator* const generator)
 {
     ImgFilterPtr shared(generator);
     d->addGenerator(shared);
 }
 
-void DImgFilterManager::removeGenerator(DImgFilterGenerator* /*generator*/)
+void DImgFilterManager::removeGenerator(DImgFilterGenerator* const /*generator*/)
 {
-//    QMutexLocker lock(&d->mutex);
-//    QMap<QString, DImgFilterGenerator*>::iterator it;
-//
-//    for (it = d->filterMap.begin(); it != d->filterMap.end();)
-//    {
-//        if (it.value() == generator)
-//        {
-//            it = d->filterMap.erase(it);
-//        }
-//        else
-//        {
-//            ++it;
-//        }
-//    }
+/*
+    QMutexLocker lock(&d->mutex);
+    QMap<QString, DImgFilterGenerator*>::iterator it;
+
+    for (it = d->filterMap.begin(); it != d->filterMap.end();)
+    {
+        if (it.value() == generator)
+        {
+            it = d->filterMap.erase(it);
+        }
+        else
+        {
+            ++it;
+        }
+    }
+*/
 }
 
 QStringList DImgFilterManager::supportedFilters()
@@ -380,7 +383,7 @@ QString DImgFilterManager::i18nDisplayableName(const QString& filterIdentifier)
 
     if (!name.isEmpty())
     {
-        QByteArray latin1 = name.toLatin1();
+        QByteArray latin1  = name.toLatin1();
         QString translated = i18n(latin1.constData());
 
         if (translated != name)
@@ -409,7 +412,7 @@ QString DImgFilterManager::i18nDisplayableName(const FilterAction& action)
     }
     else
     {
-        QString i18nDispName = i18nDisplayableName(action.identifier());
+        QString i18nDispName     = i18nDisplayableName(action.identifier());
         QString metadataDispName = action.displayableName();
 
         if (!i18nDispName.isEmpty())
