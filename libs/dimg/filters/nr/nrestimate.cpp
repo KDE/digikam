@@ -5,6 +5,11 @@
  *
  * Date        : 2012-10-18
  * Description : Wavelets YCrCb Noise Reduction settings estimation.
+ *               Wavelets theory is based on "À Trous" Discrete Wavelet Transform
+ *               described into "The Handbook of Astronomical Image Processing" book
+ *               from Richard Berry and James Burnell, chapter 18.
+ *               See this wiki page for details:
+ *               http://community.kde.org/Digikam/SoK2012/AutoNR
  *
  * Copyright (C) 2012 by Sayantan Datta <sayantan dot knz at gmail dot com>
  * Copyright (C) 2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -182,7 +187,7 @@ void NREstimate::analysImage()
 /*
     kDebug() << "Lets see what the rowPosition array looks like : ";
 
-    for(i=0 ; runningFlag() && (i < d->clusterCount) ; i++)
+    for(uint i=0 ; runningFlag() && (i < d->clusterCount) ; i++)
     {
         kDebug() << "Cluster : "<< i << " the count is :" << rowPosition[i];
     }
@@ -212,12 +217,12 @@ void NREstimate::analysImage()
     //-- Divide and conquer ---------------------------------------------------------------------------------
 
     CvMat* sd = 0;
-    
+
     if (runningFlag())
         sd = cvCreateMat(max, (d->clusterCount * points->cols), CV_32FC1);
-    
+
     postProgress(30);
-    
+
     //-- Initialize the rowPosition array -------------------------------------------------------------------
 
     int rPosition[d->clusterCount];
@@ -280,7 +285,7 @@ void NREstimate::analysImage()
         meanStorePtr = (float*)(meanStore->data.ptr);
         stdStorePtr  = (float*)(stdStore->data.ptr);
     }
-    
+
     for (int i=0 ; runningFlag() && (i < sd->cols) ; i++)
     {
         if (runningFlag() && rowPosition[(i/points->cols)] >= 1)
@@ -311,7 +316,7 @@ void NREstimate::analysImage()
         meanStorePtr = (float*)meanStore->data.ptr;
         stdStorePtr  = (float*)stdStore->data.ptr;
     }
-        
+
     if (!d->path.isEmpty() && runningFlag())
     {
         QString logFile = d->path;
@@ -409,7 +414,7 @@ void NREstimate::analysImage()
             owms << "Weighted Mean : " << weightedMean <<"\n";
             owms << "Weighted Std  : " << weightedStd <<"\n";
         }
-            
+
         info.append("\n\nChannel: ");
         info.append(QString::number(j));
         info.append("\nWeighted Mean: ");
@@ -425,7 +430,7 @@ void NREstimate::analysImage()
 
     kDebug() << "Info : " << info;
     postProgress(80);
-        
+
     // -- adaptation ---------------------------------------------------------------------------------------
 
     float L, LSoft = 0.6, Cr, CrSoft = 0.6, Cb, CbSoft = 0.6;
@@ -471,7 +476,7 @@ void NREstimate::analysImage()
         Cb = floorf(Cb * 100) / 100;
         Cr = floorf(Cr * 100) / 100;
     }
-        
+
     d->prm.thresholds[0] = L;
     d->prm.thresholds[2] = Cr;
     d->prm.thresholds[1] = Cb;

@@ -52,6 +52,8 @@ public:
      */
     void analysImage();
 
+    /** Return all Wavelets noise reduction settings computed by image analys.
+     */
     NRContainer settings() const;
 
     /** To set image path where log files will be created to host computation algorithm results, for hacking purpose.
