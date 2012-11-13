@@ -64,9 +64,7 @@ public:
     QString     path;   // Path to host log files.
 
     float*      fimg[3];
-    int         sampleCount;
     const int   clusterCount;
-    float       clip;
 };
 
 NREstimate::NREstimate(DImg* const img, QObject* const parent)
@@ -87,12 +85,10 @@ void NREstimate::setLogFilesPath(const QString& path)
 void NREstimate::readImage() const
 {
     DColor col;
-    d->sampleCount = m_orgImage.width() * m_orgImage.height();
-    d->clip        = m_orgImage.sixteenBit() ? 65535.0 : 255.0;
 
     for (int c = 0; runningFlag() && (c < 3); c++)
     {
-        d->fimg[c] = new float[d->sampleCount];
+        d->fimg[c] = new float[m_orgImage.numPixels()];
     }
 
     int j = 0;
@@ -124,18 +120,18 @@ void NREstimate::analysImage()
     int i, j, z;
 
     // convert the image into YCrCb color model
-    NRFilter::srgb2ycbcr(d->fimg, d->sampleCount);
+    NRFilter::srgb2ycbcr(d->fimg, m_orgImage.numPixels());
 
     // One dimentional CvMat which stores the image
-    CvMat* points    = cvCreateMat(d->sampleCount, 3, CV_32FC1);
+    CvMat* points    = cvCreateMat(m_orgImage.numPixels(), 3, CV_32FC1);
 
     // matrix to store the index of the clusters
-    CvMat* clusters  = cvCreateMat(d->sampleCount, 1, CV_32SC1);
+    CvMat* clusters  = cvCreateMat(m_orgImage.numPixels(), 1, CV_32SC1);
 
     // pointer variable to handle the CvMat* points (the image in CvMat format)
     float* pointsPtr = (float*)points->data.ptr;
 
-    for (int x=0 ; runningFlag() && (x < d->sampleCount) ; x++)
+    for (int x=0 ; runningFlag() && (x < m_orgImage.numPixels()) ; x++)
     {
         for (int y=0 ; runningFlag() && (y < 3) ; y++)
         {
@@ -171,7 +167,7 @@ void NREstimate::analysImage()
 
     int rowIndex, columnIndex;
 
-    for (i=0 ; runningFlag() && (i < d->sampleCount) ; i++)
+    for (i=0 ; runningFlag() && (i < m_orgImage.numPixels()) ; i++)
     {
         columnIndex = clusters->data.i[i];
         rowPosition[columnIndex]++;
@@ -233,7 +229,7 @@ void NREstimate::analysImage()
     kDebug() << "The rowPosition array is ready!";
     postProgress(40);
 
-    for (i=0 ; runningFlag() && (i < d->sampleCount) ; i++)
+    for (i=0 ; runningFlag() && (i < m_orgImage.numPixels()) ; i++)
     {
         columnIndex = clusters->data.i[i];
         rowIndex    = rPosition[columnIndex];
@@ -397,8 +393,8 @@ void NREstimate::analysImage()
             }
         }
 
-        weightedMean = weightedMean / (d->sampleCount);
-        weightedStd  = weightedStd  / (d->sampleCount);
+        weightedMean = weightedMean / (m_orgImage.numPixels());
+        weightedStd  = weightedStd  / (m_orgImage.numPixels());
         datasd[j]    = weightedStd;
 
         if (!d->path.isEmpty())
@@ -431,7 +427,7 @@ void NREstimate::analysImage()
     if (runningFlag())
     {
         //for 16 bit images only:
-        if (d->clip == 65535)
+        if (m_orgImage.sixteenBit())
         {
             for (i=0 ; i < points->cols ; i++)
             {
