@@ -6,8 +6,8 @@
  * Date        : 2005-05-25
  * Description : threaded image filter class.
  *
- * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2007-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -24,8 +24,6 @@
 
 #ifndef DIMGTHREADEDFILTER_H
 #define DIMGTHREADEDFILTER_H
-
-// Qt includes
 
 // KDE includes
 
@@ -54,14 +52,14 @@ public:
         to start the threaded computation.
         To run filter without to use multithreading, call startFilterDirectly().
     */
-    explicit DImgThreadedFilter(QObject* parent=0, const QString& name = QString());
+    explicit DImgThreadedFilter(QObject* const parent=0, const QString& name = QString());
 
     /** Constructs a filter with all arguments (ready to use).
         The given original image will be copied.
         You need to call startFilter() to start the threaded computation.
         To run filter without to use multithreading, call startFilterDirectly().
     */
-    DImgThreadedFilter(DImg* orgImage, QObject* parent,
+    DImgThreadedFilter(DImg* const orgImage, QObject* const parent,
                        const QString& name = QString());
 
     ~DImgThreadedFilter();
@@ -74,7 +72,7 @@ public:
 
     /** Initializes the filter for use as a slave and directly starts computation (in-thread)
      */
-    void setupAndStartDirectly(const DImg& orgImage, DImgThreadedFilter* master,
+    void setupAndStartDirectly(const DImg& orgImage, DImgThreadedFilter* const master,
                                int progressBegin = 0, int progressEnd = 100);
 
     void setOriginalImage(const DImg& orgImage);
@@ -84,23 +82,33 @@ public:
     {
         return m_destImage;
     };
+
     const QString& filterName()
     {
         return m_name;
     };
 
-    /** Start the threaded computation */
+    /** Start the threaded computation.
+     */
     virtual void startFilter();
-    /** Cancel the threaded computation. */
+
+    /** Cancel the threaded computation.
+     */
     virtual void cancelFilter();
-    /** Start computation of this filter, directly in this thread. */
+
+    /** Start computation of this filter, directly in this thread.
+     */
     virtual void startFilterDirectly();
 
-    /** Returns the action description corresponding to currently set options */
+    /** Returns the action description corresponding to currently set options.
+     */
     virtual FilterAction filterAction() = 0;
+    
     virtual void readParameters(const FilterAction&) = 0;
-    /** Return the identifier for this filter in the image history */
+    
+    /** Return the identifier for this filter in the image history.*/
     virtual QString filterIdentifier() const = 0;
+    
     virtual QList<int> supportedVersions() const;
 
     /**
@@ -130,10 +138,14 @@ public:
 
 Q_SIGNALS:
 
-    /** This signal is emitted when image data is available and the computation has started. */
+    /** This signal is emitted when image data is available and the computation has started.
+     */
     void started();
-    /** Emitted when progress info from the calculation is available */
+
+    /** Emitted when progress info from the calculation is available.
+     */
     void progress(int progress);
+    
     /** Emitted when the computation has completed.
         @param success True if computation finished without interruption on valid data
                        False if the thread was canceled, or no data is available.
@@ -142,13 +154,16 @@ Q_SIGNALS:
 
 protected:
 
-    /** Start filter operation before threaded method. Must be called by your constructor. */
+    /** Start filter operation before threaded method. Must be called by your constructor.
+     */
     virtual void initFilter();
 
-    /** List of threaded operations by filter. */
+    /** List of threaded operations by filter.
+     */
     virtual void run();
 
-    /** Main image filter method. Override in subclass. */
+    /** Main image filter method. Override in subclass.
+     */
     virtual void filterImage() = 0;
 
     /** Clean up filter data if necessary, called by stopComputation() method.
@@ -156,7 +171,8 @@ protected:
      */
     virtual void cleanupFilter() {};
 
-    /** Emit progress info */
+    /** Emit progress info.
+     */
     void postProgress(int progress);
 
 protected:
@@ -178,19 +194,21 @@ protected:
       Any derived filter class that is publicly available to other filters
       should implement an additional constructor using this constructor.
       */
-    DImgThreadedFilter(DImgThreadedFilter* master, const DImg& orgImage, const DImg& destImage,
+    DImgThreadedFilter(DImgThreadedFilter* const master, const DImg& orgImage, const DImg& destImage,
                        int progressBegin=0, int progressEnd=100, const QString& name=QString());
 
     /** Initialize the filter for use as a slave - reroutes progress info to master.
      *  Note: Computation will be started from setupFilter().
      */
-    void initSlave(DImgThreadedFilter* master, int progressBegin = 0, int progressEnd = 100);
+    void initSlave(DImgThreadedFilter* const master, int progressBegin = 0, int progressEnd = 100);
 
-    /** Inform the master that there is currently a slave. At destruction of the slave, call with slave=0. */
-    void setSlave(DImgThreadedFilter* slave);
+    /** Inform the master that there is currently a slave. At destruction of the slave, call with slave=0.
+     */
+    void setSlave(DImgThreadedFilter* const slave);
 
     /** This method modulates the progress value from the 0..100 span to the span of this slave.
-        Called by postProgress if master is not null. */
+     *  Called by postProgress if master is not null.
+     */
     virtual int modulateProgress(int progress);
 
     void initMaster();
@@ -237,24 +255,30 @@ protected:
 
     bool                m_wasCancelled;
 
-    /** The progress span that a slave filter uses in the parent filter's progress. */
+    /** The progress span that a slave filter uses in the parent filter's progress.
+     */
     int                 m_progressBegin;
     int                 m_progressSpan;
     int                 m_progressCurrent;  // To prevent signals bombarding with progress indicator value in postProgress().
 
-    /** Filter name.*/
+    /** Filter name.
+     */
     QString             m_name;
 
-    /** Copy of original Image data. */
+    /** Copy of original Image data.
+     */
     DImg                m_orgImage;
 
-    /** Output image data. */
+    /** Output image data.
+     */
     DImg                m_destImage;
 
-    /** The current slave. Any filter might want to use another filter while processing. */
+    /** The current slave. Any filter might want to use another filter while processing.
+     */
     DImgThreadedFilter* m_slave;
 
-    /** The master of this slave filter. Progress info will be routed to this one. */
+    /** The master of this slave filter. Progress info will be routed to this one.
+     */
     DImgThreadedFilter* m_master;
 };
 

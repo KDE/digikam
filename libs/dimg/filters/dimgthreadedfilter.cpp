@@ -6,8 +6,8 @@
  * Date        : 2005-05-25
  * Description : threaded image filter class.
  *
- * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2007-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -35,16 +35,16 @@
 namespace Digikam
 {
 
-DImgThreadedFilter::DImgThreadedFilter(QObject* parent, const QString& name)
+DImgThreadedFilter::DImgThreadedFilter(QObject* const parent, const QString& name)
     : DynamicThread(parent)
 {
     setOriginalImage(DImg());
     setFilterName(name);
-    m_version         = 1;
+    m_version = 1;
     initMaster();
 }
 
-DImgThreadedFilter::DImgThreadedFilter(DImg* orgImage, QObject* parent,
+DImgThreadedFilter::DImgThreadedFilter(DImg* const orgImage, QObject* const parent,
                                        const QString& name)
     : DynamicThread(parent)
 {
@@ -55,7 +55,7 @@ DImgThreadedFilter::DImgThreadedFilter(DImg* orgImage, QObject* parent,
     initMaster();
 }
 
-DImgThreadedFilter::DImgThreadedFilter(DImgThreadedFilter* master, const DImg& orgImage,
+DImgThreadedFilter::DImgThreadedFilter(DImgThreadedFilter* const master, const DImg& orgImage,
                                        const DImg& destImage, int progressBegin, int progressEnd,
                                        const QString& name)
 {
@@ -77,7 +77,7 @@ DImgThreadedFilter::~DImgThreadedFilter()
     }
 }
 
-void DImgThreadedFilter::initSlave(DImgThreadedFilter* master, int progressBegin, int progressEnd)
+void DImgThreadedFilter::initSlave(DImgThreadedFilter* const master, int progressBegin, int progressEnd)
 {
     m_master          = master;
     m_slave           = 0;
@@ -107,7 +107,7 @@ void DImgThreadedFilter::setupFilter(const DImg& orgImage)
     initFilter();
 }
 
-void DImgThreadedFilter::setupAndStartDirectly(const DImg& orgImage, DImgThreadedFilter* master,
+void DImgThreadedFilter::setupAndStartDirectly(const DImg& orgImage, DImgThreadedFilter* const master,
                                                int progressBegin, int progressEnd)
 {
     initSlave(master, progressBegin, progressEnd);
@@ -244,7 +244,7 @@ void DImgThreadedFilter::postProgress(int progr)
     }
 }
 
-void DImgThreadedFilter::setSlave(DImgThreadedFilter* slave)
+void DImgThreadedFilter::setSlave(DImgThreadedFilter* const slave)
 {
     m_slave = slave;
 }
