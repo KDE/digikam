@@ -75,7 +75,9 @@ public:
      *  The class must provide two static methods, FilterIdentifier() and SupportedVersions().
      */
 
-    BasicDImgFilterGenerator() {}
+    BasicDImgFilterGenerator()
+    {
+    }
 
     QStringList supportedFilters()
     {

@@ -7,7 +7,7 @@
  * Description : basic filter management for DImg builtin methods
  *
  * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
+ * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -84,7 +84,7 @@ public:
      * If the current action is not revertible, returns an invalid filter.
      */
     DImgBuiltinFilter reverseFilter() const;
-    bool isReversible() const;
+    bool isReversible()               const;
 
     /**
      * Checks that the action is supported and valid arguments are set
@@ -93,7 +93,6 @@ public:
 
     /// Apply the described change to the given image reference
     void apply(DImg& image) const;
-
 
     /**
      * NOTE: The following methods are also accessed by the more general
@@ -104,15 +103,17 @@ public:
     FilterAction filterAction() const;
 
     /// Returns a displayableName for this filter
-    QString displayableName() const;
+    QString displayableName()     const;
     QString i18nDisplayableName() const;
-    QString filterIcon() const;
+    QString filterIcon()          const;
 
     /**
      * Returns a DImgThreadedFilter which executes this builtin action.
      */
-    DImgThreadedFilter* createThreadedFilter(QObject* parent = 0) const;
-    DImgThreadedFilter* createThreadedFilter(DImg* orgImage, QObject* parent = 0) const;
+    DImgThreadedFilter* createThreadedFilter(QObject* const parent = 0)                       const;
+    DImgThreadedFilter* createThreadedFilter(DImg* const orgImage, QObject* const parent = 0) const;
+
+public:
 
     static QString i18nDisplayableName(const QString& filterIdentifier);
     static QString filterIcon(const QString& filterIdentifier);

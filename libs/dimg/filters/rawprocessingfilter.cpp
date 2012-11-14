@@ -6,8 +6,8 @@
  * Date        : 2010-12-14
  * Description : Filter to manage and help with raw loading
  *
- * Copyright (C) 2005-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2005-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -45,13 +45,13 @@
 namespace Digikam
 {
 
-RawProcessingFilter::RawProcessingFilter(QObject* parent)
+RawProcessingFilter::RawProcessingFilter(QObject* const parent)
     : DImgThreadedFilter(parent),
       m_observer(0)
 {
 }
 
-RawProcessingFilter::RawProcessingFilter(DImg* orgImage, QObject* parent,
+RawProcessingFilter::RawProcessingFilter(DImg* const orgImage, QObject* const parent,
                                          const DRawDecoding& settings, const QString& name)
     : DImgThreadedFilter(orgImage, parent, name),
       m_observer(0)
@@ -61,7 +61,7 @@ RawProcessingFilter::RawProcessingFilter(DImg* orgImage, QObject* parent,
 }
 
 RawProcessingFilter::RawProcessingFilter(const DRawDecoding& settings,
-                                         DImgThreadedFilter* master, const DImg& orgImage, const DImg& destImage,
+                                         DImgThreadedFilter* const master, const DImg& orgImage, const DImg& destImage,
                                          int progressBegin, int progressEnd, const QString& name)
     : DImgThreadedFilter(master, orgImage, destImage, progressBegin, progressEnd, name),
       m_observer(0)
@@ -90,7 +90,7 @@ void RawProcessingFilter::setOutputProfile(const IccProfile& profile)
     m_customOutputProfile = profile;
 }
 
-void RawProcessingFilter::setObserver(DImgLoaderObserver* observer, int progressBegin, int progressEnd)
+void RawProcessingFilter::setObserver(DImgLoaderObserver* const observer, int progressBegin, int progressEnd)
 {
     initSlave(0, progressBegin, progressEnd);
     m_observer = observer;

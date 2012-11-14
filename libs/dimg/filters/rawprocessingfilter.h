@@ -52,19 +52,19 @@ public:
      * Default constructor. You need to call setSettings() and setOriginalImage()
      * before starting the filter.
      */
-    explicit RawProcessingFilter(QObject* parent = 0);
+    explicit RawProcessingFilter(QObject* const parent = 0);
 
     /**
      * Traditional constructor
      */
-    RawProcessingFilter(DImg* orgImage, QObject* parent, const DRawDecoding& settings,
+    RawProcessingFilter(DImg* const orgImage, QObject* const parent, const DRawDecoding& settings,
                         const QString& name = QString());
 
     /**
      * For use with a master filter. Computation is started immediately.
      */
     RawProcessingFilter(const DRawDecoding& settings,
-                        DImgThreadedFilter* master, const DImg& orgImage, const DImg& destImage,
+                        DImgThreadedFilter* const master, const DImg& orgImage, const DImg& destImage,
                         int progressBegin=0, int progressEnd=100, const QString& name=QString());
 
     ~RawProcessingFilter();
@@ -87,7 +87,7 @@ public:
      * Here, as an alternative, a DImgLoaderObserver is set. It's continueQuery is called
      * and progress is posted in the given interval.
      */
-    void setObserver(DImgLoaderObserver *observer, int progressBegin, int progressEnd);
+    void setObserver(DImgLoaderObserver* const observer, int progressBegin, int progressEnd);
 
     static QString          FilterIdentifier()
     {

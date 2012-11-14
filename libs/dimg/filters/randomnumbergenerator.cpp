@@ -108,13 +108,13 @@ NonDeterministicRandomData::NonDeterministicRandomData(int s)
 
 // --------------------------------------------------------------------------------------------------
 
-class RandomNumberGenerator::RandomNumberGeneratorPriv
+class RandomNumberGenerator::Private
 {
 public:
 
     enum { InitialSeed = 5489 }; // guaranteed constant initial seed, do not change
 
-    RandomNumberGeneratorPriv()
+    Private()
         : seed(InitialSeed),
           engine(InitialSeed)
     {
@@ -125,7 +125,7 @@ public:
 };
 
 RandomNumberGenerator::RandomNumberGenerator()
-    : d(new RandomNumberGeneratorPriv)
+    : d(new Private)
 {
 }
 

@@ -369,7 +369,7 @@ public:
     QString                           progressMess;
 
     DImgThreadedFilter*               threadedFilter;
-    DImgThreadedAnalyser*               threadedAnalyser;
+    DImgThreadedAnalyser*             threadedAnalyser;
 };
 
 EditorToolThreaded::EditorToolThreaded(QObject* const parent)
@@ -410,7 +410,7 @@ void EditorToolThreaded::setFilter(DImgThreadedFilter* const filter)
             this, SLOT(slotFilterFinished(bool)));
 
     connect(d->threadedFilter, SIGNAL(progress(int)),
-            this, SLOT(slotFilterProgress(int)));
+            this, SLOT(slotProgress(int)));
 
     d->threadedFilter->startFilter();
 }
@@ -444,7 +444,7 @@ void EditorToolThreaded::setAnalyser(DImgThreadedAnalyser* const analyser)
             this, SLOT(slotAnalyserFinished(bool)));
 
     connect(d->threadedAnalyser, SIGNAL(progress(int)),
-            this, SLOT(slotAnalyserProgress(int)));
+            this, SLOT(slotProgress(int)));
 
     d->threadedAnalyser->startFilter();
 }
@@ -545,7 +545,7 @@ void EditorToolThreaded::slotFilterFinished(bool success)
     }
 }
 
-void EditorToolThreaded::slotFilterProgress(int progress)
+void EditorToolThreaded::slotProgress(int progress)
 {
     EditorToolIface::editorToolIface()->setToolProgress(progress);
 }
@@ -567,11 +567,6 @@ void EditorToolThreaded::slotAnalyserFinished(bool success)
         kDebug() << "Analys " << toolName() << " failed...";
         slotAbort();
     }
-}
-
-void EditorToolThreaded::slotAnalyserProgress(int progress)
-{
-    EditorToolIface::editorToolIface()->setToolProgress(progress);
 }
 
 void EditorToolThreaded::setToolView(QWidget* const view)

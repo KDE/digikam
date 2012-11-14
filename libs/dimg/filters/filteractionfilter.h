@@ -7,7 +7,7 @@
  * Description : meta-filter to apply FilterActions
  *
  * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
+ * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -41,7 +41,7 @@ public:
     /**
      * A meta-filter applying other filter according to a list of FilterActions
      */
-    explicit FilterActionFilter(QObject* parent = 0);
+    explicit FilterActionFilter(QObject* const parent = 0);
     ~FilterActionFilter();
 
     /**
@@ -100,10 +100,10 @@ public:
      * an optional error message.
      * Note that finished(true) does not mean that completelyApplied() is also true.
      */
-    bool completelyApplied() const;
-    FilterAction failedAction() const;
-    int failedActionIndex() const;
-    QString failedActionMessage() const;
+    bool         completelyApplied()   const;
+    FilterAction failedAction()        const;
+    int          failedActionIndex()   const;
+    QString      failedActionMessage() const;
 
     /**
      * These methods do not make sense here. Use filterActions.
@@ -113,7 +113,9 @@ public:
         return FilterAction();
     }
 
-    virtual void readParameters(const FilterAction&) {}
+    virtual void readParameters(const FilterAction&)
+    {
+    }
 
     virtual QString filterIdentifier() const
     {
@@ -126,8 +128,8 @@ protected:
 
 private:
 
-    class FilterActionFilterPriv;
-    FilterActionFilterPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

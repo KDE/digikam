@@ -97,7 +97,6 @@ protected:
     virtual void readSettings();
     virtual void writeSettings();
     virtual void finalRendering() {};
-    virtual void analyserCompleted() {};
 
 protected Q_SLOTS:
 
@@ -140,7 +139,7 @@ public:
     virtual ~EditorToolThreaded();
 
     /** Set the small text to show in editor status progress bar during
-        tool computation. If it's not set, tool name is used instead.
+     *  tool computation. If it's not set, tool name is used instead.
      */
     void setProgressMessage(const QString& mess);
 
@@ -154,14 +153,18 @@ public Q_SLOTS:
 
 protected:
 
+    /** Manage filter instance plugged in tool interface
+     */
     DImgThreadedFilter* filter() const;
     void setFilter(DImgThreadedFilter* const filter);
 
+    /** Manage analyser instance plugged in tool interface
+     */
     DImgThreadedAnalyser* analyser() const;
     void setAnalyser(DImgThreadedAnalyser* const analyser);
 
     /** If true, delete filter instance when preview or final rendering is processed.
-        If false, filter instance will be managed outside for ex. with ContentAwareResizing tool.
+     *  If false, filter instance will be managed outside for ex. with ContentAwareResizing tool.
      */
     void deleteFilterInstance(bool b = true);
 
@@ -171,16 +174,23 @@ protected:
     virtual void setPreviewImage()   {};
     virtual void setFinalImage()     {};
     virtual void renderingFinished() {};
+    virtual void analyserCompleted() {};
 
 protected Q_SLOTS:
 
+    /** Manage start and end events from filter
+     */
     void slotFilterStarted();
     void slotFilterFinished(bool success);
-    void slotFilterProgress(int progress);
 
+    /** Manage start and end events from analyser
+     */
     void slotAnalyserStarted();
     void slotAnalyserFinished(bool success);
-    void slotAnalyserProgress(int progress);
+
+    /** Dispatch progress event from filter and analyser
+     */
+    void slotProgress(int progress);
 
     virtual void slotOk();
     virtual void slotCancel();

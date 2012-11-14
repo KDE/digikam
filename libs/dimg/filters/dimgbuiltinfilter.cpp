@@ -7,7 +7,7 @@
  * Description : basic filter management for DImg builtin methods
  *
  * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
+ * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -235,9 +235,9 @@ FilterAction DImgBuiltinFilter::filterAction() const
         {
             action  = FilterAction("transform:crop", 1);
             QRect r = m_arg.toRect();
-            action.addParameter("x", r.x());
-            action.addParameter("y", r.y());
-            action.addParameter("width", r.width());
+            action.addParameter("x",      r.x());
+            action.addParameter("y",      r.y());
+            action.addParameter("width",  r.width());
             action.addParameter("height", r.height());
             break;
         }
@@ -246,7 +246,7 @@ FilterAction DImgBuiltinFilter::filterAction() const
         {
             action  = FilterAction("transform:resize", 1);
             QSize s = m_arg.toSize();
-            action.addParameter("width", s.width());
+            action.addParameter("width",  s.width());
             action.addParameter("height", s.height());
             break;
         }
@@ -474,12 +474,12 @@ class DImgBuiltinThreadedFilter : public DImgThreadedFilter
 {
 public:
 
-    explicit DImgBuiltinThreadedFilter(const DImgBuiltinFilter& filter, DImg* orgImage, QObject* parent = 0)
+    explicit DImgBuiltinThreadedFilter(const DImgBuiltinFilter& filter, DImg* const orgImage, QObject* const parent = 0)
         : DImgThreadedFilter(orgImage, parent), m_filter(filter)
     {
     }
 
-    explicit DImgBuiltinThreadedFilter(const DImgBuiltinFilter& filter, QObject* parent = 0)
+    explicit DImgBuiltinThreadedFilter(const DImgBuiltinFilter& filter, QObject* const parent = 0)
         : DImgThreadedFilter(parent), m_filter(filter)
     {
     }
@@ -510,12 +510,12 @@ protected:
     DImgBuiltinFilter m_filter;
 };
 
-DImgThreadedFilter* DImgBuiltinFilter::createThreadedFilter(DImg* orgImage, QObject* parent) const
+DImgThreadedFilter* DImgBuiltinFilter::createThreadedFilter(DImg* const orgImage, QObject* const parent) const
 {
     return new DImgBuiltinThreadedFilter(*this, orgImage, parent);
 }
 
-DImgThreadedFilter* DImgBuiltinFilter::createThreadedFilter(QObject* parent) const
+DImgThreadedFilter* DImgBuiltinFilter::createThreadedFilter(QObject* const parent) const
 {
     return new DImgBuiltinThreadedFilter(*this, parent);
 }

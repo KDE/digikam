@@ -7,7 +7,7 @@
  * Description : meta-filter to apply FilterAction
  *
  * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
+ * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -42,11 +42,11 @@
 namespace Digikam
 {
 
-class FilterActionFilter::FilterActionFilterPriv
+class FilterActionFilter::Private
 {
 public:
 
-    FilterActionFilterPriv()
+    Private()
     {
         continueOnError = false;
     }
@@ -59,9 +59,9 @@ public:
     QString             errorMessage;
 };
 
-FilterActionFilter::FilterActionFilter(QObject* parent)
+FilterActionFilter::FilterActionFilter(QObject* const parent)
     : DImgThreadedFilter(parent),
-      d(new FilterActionFilterPriv)
+      d(new Private)
 {
     initFilter();
 }

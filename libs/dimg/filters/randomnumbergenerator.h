@@ -141,8 +141,8 @@ public:
 
 private:
 
-    class RandomNumberGeneratorPriv;
-    RandomNumberGeneratorPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam
