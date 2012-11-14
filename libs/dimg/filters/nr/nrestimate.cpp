@@ -123,7 +123,7 @@ NRContainer NREstimate::settings() const
     return d->prm;
 }
 
-void NREstimate::analysImage()
+void NREstimate::startAnalyse()
 {
     readImage();
     postProgress(5);

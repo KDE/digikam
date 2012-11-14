@@ -50,7 +50,7 @@ public:
 
     /** Perform estimate noise.
      */
-    void analysImage();
+    void startAnalyse();
 
     /** Return all Wavelets noise reduction settings computed by image analys.
      */

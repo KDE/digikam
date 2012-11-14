@@ -90,14 +90,14 @@ private:
 
     void filterImage()
     {
-        analysImage();
+        startAnalyse();
     };
 
 protected:
 
     /** Main image analys method. Override in subclass.
      */
-    virtual void analysImage() = 0;
+    virtual void startAnalyse() = 0;
 };
 
 }  // namespace Digikam
