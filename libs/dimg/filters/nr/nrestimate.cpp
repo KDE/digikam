@@ -71,7 +71,7 @@ public:
 
     float*      fimg[3];
     const uint  clusterCount;
-    const uint  size;   // Size of sqared original image.
+    const uint  size;   // Size of squared original image.
 };
 
 NREstimate::NREstimate(DImg* const img, QObject* const parent)
@@ -272,11 +272,11 @@ void NREstimate::analysImage()
 
     CvScalar std;
     CvScalar mean;
-    CvMat* meanStore    = 0;
-    CvMat* stdStore     = 0;
-    float* meanStorePtr = 0;
-    float* stdStorePtr  = 0;
-    int totalcount      = 0; // Number of non-empty clusters
+    CvMat*   meanStore    = 0;
+    CvMat*   stdStore     = 0;
+    float*   meanStorePtr = 0;
+    float*   stdStorePtr  = 0;
+    int      totalcount   = 0; // Number of non-empty clusters
 
     if (runningFlag())
     {
@@ -288,7 +288,7 @@ void NREstimate::analysImage()
 
     for (int i=0 ; runningFlag() && (i < sd->cols) ; i++)
     {
-        if (runningFlag() && rowPosition[(i/points->cols)] >= 1)
+        if (runningFlag() && (rowPosition[(i/points->cols)] >= 1))
         {
             CvMat* workingArr = cvCreateMat(rowPosition[(i / points->cols)], 1, CV_32FC1);
             ptr               = (float*)(workingArr->data.ptr);
@@ -410,9 +410,9 @@ void NREstimate::analysImage()
 
         if (!d->path.isEmpty())
         {
-            owms << "\nChannel : " << j <<"\n";
-            owms << "Weighted Mean : " << weightedMean <<"\n";
-            owms << "Weighted Std  : " << weightedStd <<"\n";
+            owms << "\nChannel : " << j << "\n";
+            owms << "Weighted Mean : " << weightedMean << "\n";
+            owms << "Weighted Std  : " << weightedStd << "\n";
         }
 
         info.append("\n\nChannel: ");
@@ -437,7 +437,7 @@ void NREstimate::analysImage()
 
     if (runningFlag())
     {
-        //for 16 bit images only:
+        // for 16 bits images only
         if (m_orgImage.sixteenBit())
         {
             for (int i=0 ; i < points->cols ; i++)
