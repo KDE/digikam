@@ -323,24 +323,31 @@ ENDIF(_jpeglib_version_compile_result)
 #-------------------------------------------------------------------------------------
 
 IF (ENABLE_INTERNALMYSQL)
-# Check MySQL executables
+
+    # Check MySQL executables
+
     FIND_PROGRAM( SERVERCMD_MYSQL mysqld
                   PATHS /usr/sbin /usr/local/sbin /usr/libexec /usr/local/libexec /opt/local/libexec
                         /opt/mysql/libexec /usr/mysql/bin /opt/mysql/sbin ${MYSQLD_PATH}
                         ENV MYSQLD_PATH )
     MESSAGE(STATUS "Found MySQL server executable at: ${SERVERCMD_MYSQL}")
 
-# NOTE: under windows, mysql_install_db PERL script is named "mysql_install_db.pl"
-#       under MACOS-X, through macports project, mysql_install_db PERL script is named "mysql_install_db5"
+    # NOTE: under windows, mysql_install_db PERL script is named "mysql_install_db.pl"
+    #       under MACOS-X, through macports project, mysql_install_db PERL script is named "mysql_install_db5"
+
     FIND_PROGRAM( INITCMD_MYSQL mysql_install_db mysql_install_db5 mysql_install_db.pl
                   PATHS /usr/sbin /usr/local/sbin /usr/libexec /usr/local/libexec
-                        /opt/mysql/libexec /usr/mysql/bin /opt/mysql/bin ${MYSQL_TOOLS_PATH}
+                        /opt/mysql/libexec /usr/mysql/bin /opt/mysql/bin /usr/share/mysql/scripts ${MYSQL_TOOLS_PATH}
                        ENV MYSQL_TOOLS_PATH )
     MESSAGE(STATUS "Found MySQL install_db executable at: ${INITCMD_MYSQL}")
     SET(DATABASESERVERDIR "${CMAKE_CURRENT_SOURCE_DIR}/databaseserver")
+
 ELSE (ENABLE_INTERNALMYSQL)
+
     SET(DATABASESERVERDIR "")
+
 ENDIF (ENABLE_INTERNALMYSQL)
+
 MACRO_BOOL_TO_01(ENABLE_INTERNALMYSQL HAVE_INTERNALMYSQL)
 
 # check the libkgeomap version
