@@ -6,8 +6,8 @@
  * Date        : 2005-07-18
  * Description : Shear tool threaded image filter.
  *
- * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
+ * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -44,28 +44,28 @@ class DIGIKAM_EXPORT ShearFilter : public DImgThreadedFilter
 
 public:
 
-    explicit ShearFilter(QObject* parent = 0);
-    explicit ShearFilter(DImg* orgImage, QObject* parent=0, float hAngle=0.0, float vAngle=0.0,
+    explicit ShearFilter(QObject* const parent = 0);
+    explicit ShearFilter(DImg* const orgImage, QObject* const parent=0, float hAngle=0.0, float vAngle=0.0,
                          bool antialiasing=true, const QColor& backgroundColor=Qt::black, int orgW=0, int orgH=0);
     ~ShearFilter();
 
-    QSize getNewSize(void)
-    {
-        return m_newSize;
-    };
+    QSize getNewSize() const;
 
     static QString          FilterIdentifier()
     {
         return "digikam:ShearFilter";
     }
+
     static QString          DisplayableName()
     {
         return I18N_NOOP("Shear Tool");
     }
+
     static QList<int>       SupportedVersions()
     {
         return QList<int>() << 1;
     }
+
     static int              CurrentVersion()
     {
         return 1;
@@ -75,6 +75,7 @@ public:
     {
         return FilterIdentifier();
     }
+
     virtual FilterAction    filterAction();
     void                    readParameters(const FilterAction& action);
 
@@ -84,29 +85,21 @@ private:
 
     inline int setPosition (int Width, int X, int Y)
     {
-        return (Y *Width*4 + 4*X);
+        return (Y*Width*4 + 4*X);
     };
 
     inline bool isInside (int Width, int Height, int X, int Y)
     {
         bool bIsWOk = ((X < 0) ? false : (X >= Width ) ? false : true);
         bool bIsHOk = ((Y < 0) ? false : (Y >= Height) ? false : true);
+
         return (bIsWOk && bIsHOk);
     };
 
 private:
 
-    bool   m_antiAlias;
-
-    int    m_orgW;
-    int    m_orgH;
-
-    float  m_hAngle;
-    float  m_vAngle;
-
-    QColor m_backgroundColor;
-
-    QSize  m_newSize;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

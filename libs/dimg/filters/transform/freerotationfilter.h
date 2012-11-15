@@ -6,9 +6,9 @@
  * Date        : 2005-07-18
  * Description : Free rotation threaded image filter.
  *
- * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at gmail dot com>
- * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
+ * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -35,12 +35,9 @@
 
 #include "digikam_export.h"
 #include "dimgthreadedfilter.h"
-#include "globals.h"
 
 namespace Digikam
 {
-
-class FreeRotationFilterPriv;
 
 class DIGIKAM_EXPORT FreeRotationContainer
 {
@@ -82,18 +79,21 @@ public:
     QColor backgroundColor;
 };
 
+// -----------------------------------------------------------------------------------------
+
 class DIGIKAM_EXPORT FreeRotationFilter : public DImgThreadedFilter
 {
 
 public:
 
-    explicit FreeRotationFilter(QObject* parent = 0);
-    explicit FreeRotationFilter(DImg* orgImage, QObject* parent=0,
+    explicit FreeRotationFilter(QObject* const parent = 0);
+    explicit FreeRotationFilter(DImg* const orgImage, QObject* const parent=0,
                                 const FreeRotationContainer& settings=FreeRotationContainer());
 
     virtual ~FreeRotationFilter();
 
     QSize getNewSize() const;
+
     static double calculateAngle(int x1, int y1, int x2, int y2);
     static double calculateAngle(const QPoint& p1, const QPoint& p2);
 
@@ -101,14 +101,17 @@ public:
     {
         return "digikam:FreeRotationFilter";
     }
+    
     static QString          DisplayableName()
     {
         return I18N_NOOP("Free Rotation");
     }
+    
     static QList<int>       SupportedVersions()
     {
         return QList<int>() << 1;
     }
+    
     static int              CurrentVersion()
     {
         return 1;
@@ -118,18 +121,20 @@ public:
     {
         return FilterIdentifier();
     }
+    
     virtual FilterAction    filterAction();
     void                    readParameters(const FilterAction& action);
 
 private:
 
-    void filterImage();
-    inline int setPosition (int Width, int X, int Y);
+    void        filterImage();
+    inline int  setPosition (int Width, int X, int Y);
     inline bool isInside (int Width, int Height, int X, int Y);
 
 private:
 
-    FreeRotationFilterPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

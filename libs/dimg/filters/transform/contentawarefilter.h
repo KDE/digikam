@@ -6,9 +6,9 @@
  * Date        : 2009-02-01
  * Description : Content aware resizer class.
  *
- * Copyright (C) 2009 by Julien Pontabry <julien dot pontabry at ulp dot u-strasbg dot fr>
+ * Copyright (C) 2009      by Julien Pontabry <julien dot pontabry at ulp dot u-strasbg dot fr>
  * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
+ * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -74,31 +74,31 @@ public:
 
 public:
 
-    bool                     preserve_skin_tones;
+    bool            preserve_skin_tones;
 
-    uint                     width;
-    uint                     height;
+    uint            width;
+    uint            height;
 
-    int                      step;
-    int                      side_switch_freq;
+    int             step;
+    int             side_switch_freq;
 
-    double                   rigidity;
+    double          rigidity;
 
-    QImage                   mask;
+    QImage          mask;
 
-    EnergyFunction           func;
-    Qt::Orientation          resize_order;
+    EnergyFunction  func;
+    Qt::Orientation resize_order;
 };
 
-class ContentAwareFilterPriv;
+// -----------------------------------------------------------------------------------------
 
 class DIGIKAM_EXPORT ContentAwareFilter : public DImgThreadedFilter
 {
 
 public:
 
-    explicit ContentAwareFilter(QObject* parent = 0);
-    explicit ContentAwareFilter(DImg* orgImage, QObject* parent = 0, const ContentAwareContainer& settings = ContentAwareContainer());
+    explicit ContentAwareFilter(QObject* const parent = 0);
+    explicit ContentAwareFilter(DImg* const orgImage, QObject* const parent = 0, const ContentAwareContainer& settings = ContentAwareContainer());
     ~ContentAwareFilter();
 
     void progressCallback(int progress);
@@ -107,14 +107,17 @@ public:
     {
         return "digikam:ContentAwareFilter";
     }
+
     static QString          DisplayableName()
     {
         return I18N_NOOP("Content-Aware Filter");
     }
+
     static QList<int>       SupportedVersions()
     {
         return QList<int>() << 1;
     }
+
     static int              CurrentVersion()
     {
         return 1;
@@ -124,6 +127,7 @@ public:
     {
         return FilterIdentifier();
     }
+
     virtual FilterAction    filterAction();
     void                    readParameters(const FilterAction& action);
 
@@ -132,14 +136,15 @@ private:
     void cancelFilter();
     void filterImage();
 
-    void buildBias(const QImage& mask);
-    void buildSkinToneBias();
+    void        buildBias(const QImage& mask);
+    void        buildSkinToneBias();
     inline bool isSkinTone(const DColor& c);
-    void getEnergyImage();
+    void        getEnergyImage();
 
 private:
 
-    ContentAwareFilterPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

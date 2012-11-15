@@ -6,9 +6,9 @@
  * Date        : 2009-02-01
  * Description : Content aware resizer class.
  *
- * Copyright (C) 2009 by Julien Pontabry <julien dot pontabry at ulp dot u-strasbg dot fr>
- * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
+ * Copyright (C) 2009      by Julien Pontabry <julien dot pontabry at ulp dot u-strasbg dot fr>
+ * Copyright (C) 2009-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -25,13 +25,13 @@
 
 #include "contentawarefilter.h"
 
-// Qt includes
-
-#include <QColor>
-
 // Liquid rescale library include
 
 #include "lqr.h"
+
+// Qt includes
+
+#include <QColor>
 
 // KDE includes
 
@@ -93,11 +93,13 @@ static LqrResizeOrder toLqrOrder(Qt::Orientation direction)
     }
 }
 
-class ContentAwareFilterPriv
+// --------------------------------------------------------------------------------------
+
+class ContentAwareFilter::Private
 {
 public:
 
-    ContentAwareFilterPriv()
+    Private()
     {
         carver   = 0;
         progress = 0;
@@ -110,16 +112,16 @@ public:
 
 };
 
-ContentAwareFilter::ContentAwareFilter(QObject* parent)
+ContentAwareFilter::ContentAwareFilter(QObject* const parent)
     : DImgThreadedFilter(parent),
-      d(new ContentAwareFilterPriv)
+      d(new Private)
 {
     initFilter();
 }
 
-ContentAwareFilter::ContentAwareFilter(DImg* orgImage, QObject* parent, const ContentAwareContainer& settings)
+ContentAwareFilter::ContentAwareFilter(DImg* const orgImage, QObject* const parent, const ContentAwareContainer& settings)
     : DImgThreadedFilter(orgImage, parent, "ContentAwareFilter"),
-      d(new ContentAwareFilterPriv)
+      d(new Private)
 {
     initFilter();
 
@@ -228,8 +230,8 @@ void ContentAwareFilter::filterImage()
     // Write pixels in the DImg structure image
     lqr_carver_scan_reset(d->carver);
 
-    void*           rgb = 0;
-    uchar*          rgbOut8 = 0;
+    void*           rgb      = 0;
+    uchar*          rgbOut8  = 0;
     unsigned short* rgbOut16 = 0;
 
     if (m_orgImage.sixteenBit())
@@ -276,10 +278,10 @@ bool ContentAwareFilter::isSkinTone(const DColor& color)
     double B = color.blue()  / 255.0;
     double S = R + G + B;
 
-    return((B / G         < 1.249) &&
-           (S / 3.0 * R     > 0.696) &&
-           (1.0 / 3.0 - B / S > 0.014) &&
-           (G / (3.0 * S)   < 0.108)
+    return(((B / G)             < 1.249) &&
+           ((S / 3.0 * R)       > 0.696) &&
+           ((1.0 / 3.0 - B / S) > 0.014) &&
+           ((G / (3.0 * S))     < 0.108)
           );
 }
 
@@ -308,7 +310,7 @@ void ContentAwareFilter::buildBias(const QImage& mask)
     {
         for (int y = 0; y < mask.height(); ++y)
         {
-            pixColor = QColor::fromRgba(mask.pixel(x, y));
+            pixColor     = QColor::fromRgba(mask.pixel(x, y));
             pixColor.getRgb(&r, &g, &b, &a);
             gdouble bias = 0.0;
 
