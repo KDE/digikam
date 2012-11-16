@@ -61,7 +61,6 @@ private:
 
 private Q_SLOTS:
 
-    void slotEffectTypeChanged(int type);
     void slotResetSettings();
     void slotColorSelectedFromTarget(const Digikam::DColor& color);
 

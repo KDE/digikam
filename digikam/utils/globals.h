@@ -32,6 +32,9 @@
 #define MAX3(a, b, c)  (qMax(qMax(a,b),c))
 #define MIN3(a, b, c)  (qMin(qMin(a,b),c))
 
+// Degrees to radian conversion coeff (PI/180). To optimize computation.
+#define DEG2RAD 0.017453292519943
+
 namespace Digikam
 {
 

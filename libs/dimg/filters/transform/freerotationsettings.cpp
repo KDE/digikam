@@ -6,7 +6,7 @@
  * Date        : 2010-03-16
  * Description : Free rotation settings view.
  *
- * Copyright (C) 2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -56,11 +56,11 @@ using namespace KDcrawIface;
 namespace Digikam
 {
 
-class FreeRotationSettingsPriv
+class FreeRotationSettings::Private
 {
 public:
 
-    FreeRotationSettingsPriv() :
+    Private() :
         antialiasInput(0),
         angleInput(0),
         fineAngleInput(0),
@@ -70,20 +70,23 @@ public:
     static const QString configAutoCropTypeEntry;
     static const QString configAntiAliasingEntry;
 
-    QCheckBox*           antialiasInput;
+public:
+    
+    QCheckBox*       antialiasInput;
 
-    RIntNumInput*        angleInput;
-    RDoubleNumInput*     fineAngleInput;
-    RComboBox*           autoCropCB;
+    RIntNumInput*    angleInput;
+    RDoubleNumInput* fineAngleInput;
+    RComboBox*       autoCropCB;
 };
-const QString FreeRotationSettingsPriv::configAutoCropTypeEntry("Auto Crop Type");
-const QString FreeRotationSettingsPriv::configAntiAliasingEntry("Anti Aliasing");
+
+const QString FreeRotationSettings::Private::configAutoCropTypeEntry("Auto Crop Type");
+const QString FreeRotationSettings::Private::configAntiAliasingEntry("Anti Aliasing");
 
 // --------------------------------------------------------
 
-FreeRotationSettings::FreeRotationSettings(QWidget* parent)
+FreeRotationSettings::FreeRotationSettings(QWidget* const parent)
     : QWidget(parent),
-      d(new FreeRotationSettingsPriv)
+      d(new Private)
 {
     QGridLayout* grid = new QGridLayout(this);
 
