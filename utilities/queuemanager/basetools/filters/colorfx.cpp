@@ -6,7 +6,7 @@
  * Date        : 2012-11-08
  * Description : a batch tool to apply color effects to images.
  *
- * Copyright (C) 2012 by Alexander Dymo <adymo@develop.org>
+ * Copyright (C) 2012 by Alexander Dymo <adymo at develop dot org>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -37,7 +37,7 @@
 namespace Digikam
 {
 
-ColorFX::ColorFX(QObject* parent)
+ColorFX::ColorFX(QObject* const parent)
     : BatchTool("ColorFX", FiltersTool, parent)
 {
     setToolTitle(i18n("Color Effects"));
@@ -51,6 +51,7 @@ ColorFX::ColorFX(QObject* parent)
 
     connect(m_settingsView, SIGNAL(signalSettingsChanged()),
             this, SLOT(slotSettingsChanged()));
+
     connect(m_settingsView, SIGNAL(signalLevelOrIterationChanged()),
             this, SLOT(slotSettingsChanged()));
 }
@@ -65,8 +66,8 @@ BatchToolSettings ColorFX::defaultSettings()
     ColorFXContainer defaultPrm = m_settingsView->defaultSettings();
 
     prm.insert("colorFXType", (int)defaultPrm.colorFXType);
-    prm.insert("level", (int)defaultPrm.level);
-    prm.insert("iterations", (int)defaultPrm.iterations);
+    prm.insert("level",       (int)defaultPrm.level);
+    prm.insert("iterations",  (int)defaultPrm.iterations);
 
     return prm;
 }
@@ -86,8 +87,8 @@ void ColorFX::slotSettingsChanged()
     ColorFXContainer currentPrm = m_settingsView->settings();
 
     prm.insert("colorFXType", (int)currentPrm.colorFXType);
-    prm.insert("level", (int)currentPrm.level);
-    prm.insert("iterations", (int)currentPrm.iterations);
+    prm.insert("level",       (int)currentPrm.level);
+    prm.insert("iterations",  (int)currentPrm.iterations);
 
     BatchTool::slotSettingsChanged(prm);
 }

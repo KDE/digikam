@@ -80,7 +80,8 @@ public:
         previewWidget(0),
         gboxSettings(0),
         settingsView(0)
-    {}
+    {
+    }
 
     static const QString configGroupName;
     static const QString configHistogramChannelEntry;

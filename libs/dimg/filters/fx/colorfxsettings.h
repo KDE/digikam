@@ -6,7 +6,7 @@
  * Date        : 2012-11-08
  * Description : Color effects settings view.
  *
- * Copyright (C) 2012 by Alexander Dymo <adymo@kdevelop.org>
+ * Copyright (C) 2012 by Alexander Dymo <adymo at kdevelop dot org>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -46,7 +46,7 @@ class DIGIKAM_EXPORT ColorFXSettings : public QWidget
 
 public:
 
-    explicit ColorFXSettings(QWidget* parent);
+    explicit ColorFXSettings(QWidget* const parent);
     ~ColorFXSettings();
 
     ColorFXContainer defaultSettings() const;
@@ -72,8 +72,8 @@ private Q_SLOTS:
 
 private:
 
-    class ColorFXSettingsPriv;
-    ColorFXSettingsPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

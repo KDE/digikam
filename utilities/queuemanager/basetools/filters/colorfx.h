@@ -6,7 +6,7 @@
  * Date        : 2012-11-08
  * Description : a batch tool to apply color effects to images.
  *
- * Copyright (C) 2012 by Alexander Dymo <adymo@develop.org>
+ * Copyright (C) 2012 by Alexander Dymo <adymo at develop dot org>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -26,7 +26,6 @@
 
 #include "batchtool.h"
 
-
 namespace Digikam
 {
 
@@ -38,7 +37,7 @@ class ColorFX : public BatchTool
 
 public:
 
-    explicit ColorFX(QObject* parent = 0);
+    explicit ColorFX(QObject* const parent = 0);
     ~ColorFX();
 
     BatchToolSettings defaultSettings();

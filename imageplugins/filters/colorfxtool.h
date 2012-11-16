@@ -34,7 +34,7 @@ using namespace Digikam;
 
 namespace Digikam
 {
-class DColor;
+    class DColor;
 }
 
 namespace DigikamFxFiltersImagePlugin

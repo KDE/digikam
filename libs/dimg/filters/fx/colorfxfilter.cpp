@@ -74,7 +74,7 @@ void ColorFXFilter::filterImage()
     }
 }
 
-void ColorFXFilter::solarize(DImg* orgImage, DImg* destImage, int factor)
+void ColorFXFilter::solarize(DImg* const orgImage, DImg* const destImage, int factor)
 {
     bool stretch = true;
 
@@ -182,7 +182,7 @@ void ColorFXFilter::solarize(DImg* orgImage, DImg* destImage, int factor)
     }
 }
 
-void ColorFXFilter::vivid(DImg* orgImage, DImg* destImage, int factor)
+void ColorFXFilter::vivid(DImg* const orgImage, DImg* const destImage, int factor)
 {
     float amount = factor / 100.0;
 
@@ -240,7 +240,7 @@ void ColorFXFilter::vivid(DImg* orgImage, DImg* destImage, int factor)
  *                     like this on PSC. Is very similar to Growing Edges (photoshop)
  *                     Some pictures will be very interesting
  */
-void ColorFXFilter::neon(DImg* orgImage, DImg* destImage, int Intensity, int BW)
+void ColorFXFilter::neon(DImg* const orgImage, DImg* const destImage, int Intensity, int BW)
 {
     neonFindEdges(orgImage, destImage, true, Intensity, BW);
 }
@@ -257,7 +257,7 @@ void ColorFXFilter::neon(DImg* orgImage, DImg* destImage, int Intensity, int BW)
  *                     Neon effect ? This is the same engine, but is inversed with
  *                     255 - color.
  */
-void ColorFXFilter::findEdges(DImg* orgImage, DImg* destImage, int Intensity, int BW)
+void ColorFXFilter::findEdges(DImg* const orgImage, DImg* const destImage, int Intensity, int BW)
 {
     neonFindEdges(orgImage, destImage, false, Intensity, BW);
 }
@@ -280,7 +280,7 @@ static inline int Lim_Max(int Now, int Up, int Max)
 }
 
 // Implementation of neon and FindEdges. They share 99% of their code.
-void ColorFXFilter::neonFindEdges(DImg* orgImage, DImg* destImage, bool neon, int Intensity, int BW)
+void ColorFXFilter::neonFindEdges(DImg* const orgImage, DImg* const destImage, bool neon, int Intensity, int BW)
 {
     int Width         = orgImage->width();
     int Height        = orgImage->height();
@@ -377,4 +377,4 @@ void ColorFXFilter::readParameters(const FilterAction& action)
     m_settings.level       = action.parameter("level").toInt();
 }
 
-}  // namespace DigikamFxFiltersImagePlugin
+}  // namespace Digikam

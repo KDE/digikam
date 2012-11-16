@@ -6,7 +6,7 @@
  * Date        : 2012-11-08
  * Description : Color effects settings view.
  *
- * Copyright (C) 2012 by Alexander Dymo <adymo@kdevelop.org>
+ * Copyright (C) 2012 by Alexander Dymo <adymo at kdevelop dot org>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -20,6 +20,7 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
+
 #include "colorfxsettings.moc"
 
 // Qt includes
@@ -38,11 +39,11 @@
 namespace Digikam
 {
 
-class ColorFXSettings::ColorFXSettingsPriv
+class ColorFXSettings::Private
 {
 public:
 
-    ColorFXSettingsPriv() :
+    Private() :
         effectTypeLabel(0),
         levelLabel(0),
         iterationLabel(0),
@@ -65,16 +66,16 @@ public:
     RIntNumInput*        iterationInput;
 };
 
-const QString ColorFXSettings::ColorFXSettingsPriv::configEffectTypeEntry("EffectType");
-const QString ColorFXSettings::ColorFXSettingsPriv::configLevelAdjustmentEntry("LevelAdjustment");
-const QString ColorFXSettings::ColorFXSettingsPriv::configIterationAdjustmentEntry("IterationAdjustment");
+const QString ColorFXSettings::Private::configEffectTypeEntry("EffectType");
+const QString ColorFXSettings::Private::configLevelAdjustmentEntry("LevelAdjustment");
+const QString ColorFXSettings::Private::configIterationAdjustmentEntry("IterationAdjustment");
 
 
 // --------------------------------------------------------
 
-ColorFXSettings::ColorFXSettings(QWidget* parent)
+ColorFXSettings::ColorFXSettings(QWidget* const parent)
     : QWidget(parent),
-      d(new ColorFXSettingsPriv)
+      d(new Private)
 {
     QGridLayout* grid = new QGridLayout(parent);
 
@@ -188,9 +189,9 @@ void ColorFXSettings::slotEffectTypeChanged(int type)
 ColorFXContainer ColorFXSettings::settings() const
 {
     ColorFXContainer prm;
-    prm.colorFXType             = d->effectType->currentIndex();
-    prm.level                   = d->levelInput->value();
-    prm.iterations              = d->iterationInput->value();
+    prm.colorFXType = d->effectType->currentIndex();
+    prm.level       = d->levelInput->value();
+    prm.iterations  = d->iterationInput->value();
     return prm;
 }
 

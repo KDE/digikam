@@ -48,11 +48,13 @@ public:
     ColorFXContainer()
     {
         colorFXType = 0; // ColorFXFilter::Solarize
-        level = 0;
-        iterations = 2;
+        level       = 0;
+        iterations  = 2;
     };
 
-    ~ColorFXContainer() {};
+    ~ColorFXContainer()
+    {
+    };
 
 public:
 
@@ -61,16 +63,29 @@ public:
     int iterations;
 };
 
+// ----------------------------------------------------------------------------------------------
 
 class DIGIKAM_EXPORT ColorFXFilter : public DImgThreadedFilter
 {
 
 public:
 
+    enum ColorFXFilterTypes
+    {
+        Solarize = 0,
+        Vivid,
+        Neon,
+        FindEdges
+    };
+
+public:
+
     explicit ColorFXFilter(QObject* const parent = 0);
     explicit ColorFXFilter(DImg* const orgImage, QObject* const parent, const ColorFXContainer& settings=ColorFXContainer());
 
-    ~ColorFXFilter() {};
+    ~ColorFXFilter()
+    {
+    };
 
     static QString          FilterIdentifier()
     {
@@ -101,25 +116,15 @@ public:
 
     void                    readParameters(const FilterAction& action);
 
-public:
-
-    enum ColorFXFilterTypes
-    {
-        Solarize = 0,
-        Vivid,
-        Neon,
-        FindEdges
-    };
-
 private:
 
     void filterImage();
 
-    void solarize(DImg* orgImage, DImg* destImage, int factor);
-    void vivid(DImg* orgImage, DImg* destImage, int factor);
-    void neon(DImg* orgImage, DImg* destImage, int Intensity, int BW);
-    void findEdges(DImg* orgImage, DImg* destImage, int Intensity, int BW);
-    void neonFindEdges(DImg* orgImage, DImg* destImage, bool neon, int Intensity, int BW);
+    void solarize(DImg* const orgImage, DImg* const destImage, int factor);
+    void vivid(DImg* const orgImage, DImg* const destImage, int factor);
+    void neon(DImg* const orgImage, DImg* const destImage, int Intensity, int BW);
+    void findEdges(DImg* const orgImage, DImg* const destImage, int Intensity, int BW);
+    void neonFindEdges(DImg* const orgImage, DImg* const destImage, bool neon, int Intensity, int BW);
 
 private:
 
