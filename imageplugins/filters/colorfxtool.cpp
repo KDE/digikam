@@ -64,7 +64,7 @@
 #include "histogramwidget.h"
 #include "imagehistogram.h"
 #include "imageiface.h"
-#include "imageguidewidget.h"
+#include "imageregionwidget.h"
 
 using namespace KDcrawIface;
 
@@ -87,7 +87,7 @@ public:
     static const QString configHistogramChannelEntry;
     static const QString configHistogramScaleEntry;
 
-    ImageGuideWidget*    previewWidget;
+    ImageRegionWidget*   previewWidget;
     EditorToolSettings*  gboxSettings;
     ColorFXSettings*     settingsView;
 };
@@ -108,7 +108,7 @@ ColorFxTool::ColorFxTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
-    d->previewWidget = new ImageGuideWidget;
+    d->previewWidget = new ImageRegionWidget;
     d->previewWidget->setWhatsThis(i18n("This is the color effects preview"));
     setToolView(d->previewWidget);
     setPreviewModeMask(PreviewToolBar::AllPreviewModes);
@@ -122,15 +122,12 @@ ColorFxTool::ColorFxTool(QObject* const parent)
     // -------------------------------------------------------------
 
     d->settingsView = new ColorFXSettings(d->gboxSettings->plainPage());
-
-    // -------------------------------------------------------------
-
     setToolSettings(d->gboxSettings);
     init();
 
     // -------------------------------------------------------------
 
-    connect(d->previewWidget, SIGNAL(spotPositionChangedFromTarget(Digikam::DColor,QPoint)),
+    connect(d->previewWidget, SIGNAL(spotPositionChangedFromTarget(Digikam::DColor, QPoint)),
             this, SLOT(slotColorSelectedFromTarget(Digikam::DColor)));
 
     connect(d->previewWidget, SIGNAL(signalResized()),
@@ -138,6 +135,7 @@ ColorFxTool::ColorFxTool(QObject* const parent)
 
     connect(d->settingsView, SIGNAL(signalSettingsChanged()),
             this, SLOT(slotPreview()));
+
     connect(d->settingsView, SIGNAL(signalLevelOrIterationChanged()),
             this, SLOT(slotTimer()));
 }
@@ -189,10 +187,19 @@ void ColorFxTool::preparePreview()
     d->settingsView->disable();
     ColorFXContainer prm = d->settingsView->settings();
 
-    ImageIface* const iface = d->previewWidget->imageIface();
-    DImg image              = iface->preview();
+    DImg preview = d->previewWidget->getOriginalRegionImage(true);
 
-    setFilter(new ColorFXFilter(&image, this, prm));
+    setFilter(new ColorFXFilter(&preview, this, prm));
+}
+
+void ColorFxTool::setPreviewImage()
+{
+    DImg preview = filter()->getTargetImage();
+    d->previewWidget->setPreviewImage(preview);
+
+    // Update histogram.
+
+    d->gboxSettings->histogramBox()->histogram()->updateData(preview, DImg(), false);
 }
 
 void ColorFxTool::prepareFinal()
@@ -203,17 +210,6 @@ void ColorFxTool::prepareFinal()
     ImageIface iface;
 
     setFilter(new ColorFXFilter(iface.original(), this, prm));
-}
-
-void ColorFxTool::setPreviewImage()
-{
-    ImageIface* const iface = d->previewWidget->imageIface();
-    DImg preview            = filter()->getTargetImage();
-    DImg imDest             = preview.smoothScale(iface->previewSize());
-    iface->setPreview(imDest);
-    d->gboxSettings->histogramBox()->histogram()->updateData(preview, DImg(), false);
-
-    d->previewWidget->updatePreview();
 }
 
 void ColorFxTool::setFinalImage()
