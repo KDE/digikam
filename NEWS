@@ -86,5 +86,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 053 ==> 271531 - Cannot edit canon crw-pics.
 054 ==> 307313 - digiKam uses wrong darkness/saturation.
 055 ==> 309856 - mysql_install_db location has changed in mariadb-5.5, configure fails [patch].
-056 ==> 
+056 ==> 307219 - Very slow work when any tag have defined user icon.
+057 ==> 
 
