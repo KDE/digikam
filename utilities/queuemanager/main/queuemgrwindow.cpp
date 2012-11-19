@@ -881,18 +881,6 @@ void QueueMgrWindow::slotRun()
     processOne();
 }
 
-void QueueMgrWindow::slotStop()
-{
-    if (d->currentProcessItem)
-    {
-        d->currentProcessItem->setCanceled();
-    }
-
-    d->itemsList.clear();
-    d->thread->cancel();
-    processingAborted();
-}
-
 void QueueMgrWindow::processingAborted()
 {
     d->statusProgressBar->setProgressValue(0);
@@ -1009,6 +997,148 @@ void QueueMgrWindow::slotAction(const ActionData& ad)
         }
     }
 }
+
+void QueueMgrWindow::busy(bool busy)
+{
+    d->busy = busy;
+    d->runAction->setEnabled(!d->busy);
+    d->newQueueAction->setEnabled(!d->busy);
+    d->removeQueueAction->setEnabled(!d->busy);
+    d->removeItemsSelAction->setEnabled(!d->busy);
+    d->removeItemsDoneAction->setEnabled(!d->busy);
+    d->clearQueueAction->setEnabled(!d->busy);
+    d->stopAction->setEnabled(d->busy);
+
+    d->queuePool->setBusy(d->busy);
+    d->queueSettingsView->setBusy(d->busy);
+    d->toolsView->setBusy(d->busy);
+    d->assignedList->setBusy(d->busy);
+    d->toolSettings->setBusy(d->busy);
+
+    // To update status of Tools actions.
+    slotAssignedToolsChanged(d->assignedList->assignedList());
+
+    // To update status of Queue items actions.
+    slotItemSelectionChanged();
+
+    d->busy ? d->queuePool->setCursor(Qt::WaitCursor) : d->queuePool->unsetCursor();
+    d->busy ? d->animLogo->start() : d->animLogo->stop();
+
+    emit signalBqmIsBusy(d->busy);
+}
+
+void QueueMgrWindow::slotAssignedToolsChanged(const AssignedBatchTools& tools)
+{
+    if (d->busy)
+    {
+        d->moveUpToolAction->setEnabled(false);
+        d->moveDownToolAction->setEnabled(false);
+        d->removeToolAction->setEnabled(false);
+        d->clearToolsAction->setEnabled(false);
+        return;
+    }
+
+    switch (tools.m_toolsMap.count())
+    {
+        case 0:
+        {
+            d->moveUpToolAction->setEnabled(false);
+            d->moveDownToolAction->setEnabled(false);
+            d->removeToolAction->setEnabled(false);
+            d->clearToolsAction->setEnabled(false);
+            break;
+        }
+
+        case 1:
+        {
+            d->moveUpToolAction->setEnabled(false);
+            d->moveDownToolAction->setEnabled(false);
+            d->removeToolAction->setEnabled(true);
+            d->clearToolsAction->setEnabled(true);
+            break;
+        }
+
+        default:
+        {
+            d->moveUpToolAction->setEnabled(true);
+            d->moveDownToolAction->setEnabled(true);
+            d->removeToolAction->setEnabled(true);
+            d->clearToolsAction->setEnabled(true);
+            break;
+        }
+    }
+
+    refreshStatusBar();
+}
+
+bool QueueMgrWindow::checkTargetAlbum(int queueId)
+{
+    QueueListView* queue = d->queuePool->findQueueById(queueId);
+
+    if (!queue)
+    {
+        return false;
+    }
+
+    QString queueName              = d->queuePool->queueTitle(queueId);
+    KUrl    processedItemsAlbumUrl = queue->settings().targetUrl;
+    kDebug() << "Target album for queue " << queueName << " is: " << processedItemsAlbumUrl.toLocalFile();
+
+    if (processedItemsAlbumUrl.isEmpty())
+    {
+        KMessageBox::error(this,
+                           i18n("Album to host processed items from queue \"%1\" is not set. "
+                                "Please select one from Queue Settings panel.", queueName),
+                           i18n("Processed items album settings"));
+        return false;
+    }
+
+    QFileInfo dir(processedItemsAlbumUrl.toLocalFile());
+
+    if (!dir.exists() || !dir.isWritable())
+    {
+        KMessageBox::error(this,
+                           i18n("Album to host processed items from queue \"%1\" "
+                                "is not available or not writable. "
+                                "Please set another one from Queue Settings panel.", queueName),
+                           i18n("Processed items album settings"));
+        return false;
+    }
+
+    return true;
+}
+
+void QueueMgrWindow::moveEvent(QMoveEvent* e)
+{
+    Q_UNUSED(e)
+    emit signalWindowHasMoved();
+}
+
+void QueueMgrWindow::slotHistoryEntryClicked(int queueId, qlonglong itemId)
+{
+    if (d->busy)
+    {
+        return;
+    }
+
+    QueueListView* view = d->queuePool->findQueueById(queueId);
+
+    if (view)
+    {
+        QueueListViewItem* item = view->findItemById(itemId);
+
+        if (item)
+        {
+            d->queuePool->setCurrentIndex(queueId);
+            view->scrollToItem(item);
+            view->setCurrentItem(item);
+            item->setSelected(true);
+        }
+    }
+}
+
+// ---------------------------------------------------------------------------------------------
+// TODO remove d->currentProcessItem in methods below
 
 void QueueMgrWindow::processing(const KUrl& url)
 {
@@ -1140,122 +1270,6 @@ void QueueMgrWindow::processingCanceled(const KUrl&)
     d->currentProcessItem = 0;
 }
 
-void QueueMgrWindow::busy(bool busy)
-{
-    d->busy = busy;
-    d->runAction->setEnabled(!d->busy);
-    d->newQueueAction->setEnabled(!d->busy);
-    d->removeQueueAction->setEnabled(!d->busy);
-    d->removeItemsSelAction->setEnabled(!d->busy);
-    d->removeItemsDoneAction->setEnabled(!d->busy);
-    d->clearQueueAction->setEnabled(!d->busy);
-    d->stopAction->setEnabled(d->busy);
-
-    d->queuePool->setBusy(d->busy);
-    d->queueSettingsView->setBusy(d->busy);
-    d->toolsView->setBusy(d->busy);
-    d->assignedList->setBusy(d->busy);
-    d->toolSettings->setBusy(d->busy);
-
-    // To update status of Tools actions.
-    slotAssignedToolsChanged(d->assignedList->assignedList());
-
-    // To update status of Queue items actions.
-    slotItemSelectionChanged();
-
-    d->busy ? d->queuePool->setCursor(Qt::WaitCursor) : d->queuePool->unsetCursor();
-    d->busy ? d->animLogo->start() : d->animLogo->stop();
-
-    emit signalBqmIsBusy(d->busy);
-}
-
-void QueueMgrWindow::slotAssignedToolsChanged(const AssignedBatchTools& tools)
-{
-    if (d->busy)
-    {
-        d->moveUpToolAction->setEnabled(false);
-        d->moveDownToolAction->setEnabled(false);
-        d->removeToolAction->setEnabled(false);
-        d->clearToolsAction->setEnabled(false);
-        return;
-    }
-
-    switch (tools.m_toolsMap.count())
-    {
-        case 0:
-        {
-            d->moveUpToolAction->setEnabled(false);
-            d->moveDownToolAction->setEnabled(false);
-            d->removeToolAction->setEnabled(false);
-            d->clearToolsAction->setEnabled(false);
-            break;
-        }
-
-        case 1:
-        {
-            d->moveUpToolAction->setEnabled(false);
-            d->moveDownToolAction->setEnabled(false);
-            d->removeToolAction->setEnabled(true);
-            d->clearToolsAction->setEnabled(true);
-            break;
-        }
-
-        default:
-        {
-            d->moveUpToolAction->setEnabled(true);
-            d->moveDownToolAction->setEnabled(true);
-            d->removeToolAction->setEnabled(true);
-            d->clearToolsAction->setEnabled(true);
-            break;
-        }
-    }
-
-    refreshStatusBar();
-}
-
-bool QueueMgrWindow::checkTargetAlbum(int queueId)
-{
-    QueueListView* queue = d->queuePool->findQueueById(queueId);
-
-    if (!queue)
-    {
-        return false;
-    }
-
-    QString queueName              = d->queuePool->queueTitle(queueId);
-    KUrl    processedItemsAlbumUrl = queue->settings().targetUrl;
-    kDebug() << "Target album for queue " << queueName << " is: " << processedItemsAlbumUrl.toLocalFile();
-
-    if (processedItemsAlbumUrl.isEmpty())
-    {
-        KMessageBox::error(this,
-                           i18n("Album to host processed items from queue \"%1\" is not set. "
-                                "Please select one from Queue Settings panel.", queueName),
-                           i18n("Processed items album settings"));
-        return false;
-    }
-
-    QFileInfo dir(processedItemsAlbumUrl.toLocalFile());
-
-    if (!dir.exists() || !dir.isWritable())
-    {
-        KMessageBox::error(this,
-                           i18n("Album to host processed items from queue \"%1\" "
-                                "is not available or not writable. "
-                                "Please set another one from Queue Settings panel.", queueName),
-                           i18n("Processed items album settings"));
-        return false;
-    }
-
-    return true;
-}
-
-void QueueMgrWindow::moveEvent(QMoveEvent* e)
-{
-    Q_UNUSED(e)
-    emit signalWindowHasMoved();
-}
-
 void QueueMgrWindow::addHistoryMessage(const QString& msg, DHistoryView::EntryType type)
 {
     if (d->currentProcessItem)
@@ -1272,27 +1286,16 @@ void QueueMgrWindow::addHistoryMessage(const QString& msg, DHistoryView::EntryTy
     }
 }
 
-void QueueMgrWindow::slotHistoryEntryClicked(int queueId, qlonglong itemId)
+void QueueMgrWindow::slotStop()
 {
-    if (d->busy)
+    if (d->currentProcessItem)
     {
-        return;
+        d->currentProcessItem->setCanceled();
     }
 
-    QueueListView* view = d->queuePool->findQueueById(queueId);
-
-    if (view)
-    {
-        QueueListViewItem* item = view->findItemById(itemId);
-
-        if (item)
-        {
-            d->queuePool->setCurrentIndex(queueId);
-            view->scrollToItem(item);
-            view->setCurrentItem(item);
-            item->setSelected(true);
-        }
-    }
+    d->itemsList.clear();
+    d->thread->cancel();
+    processingAborted();
 }
 
 }  // namespace Digikam
