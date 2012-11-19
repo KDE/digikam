@@ -77,7 +77,7 @@ void AssignedListViewItem::setToolSet(const BatchToolSet& set)
     }
 }
 
-BatchToolSet AssignedListViewItem::toolSet()
+BatchToolSet AssignedListViewItem::toolSet() const
 {
     return m_set;
 }

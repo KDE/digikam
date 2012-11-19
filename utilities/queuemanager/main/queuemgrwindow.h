@@ -61,7 +61,6 @@ public:
     static QueueMgrWindow* queueManagerWindow();
     static bool            queueManagerWindowCreated();
 
-    bool isBusy() const;
     void addNewQueue();
     void loadImageInfos(const ImageInfoList& list, int queueId);
     void loadImageInfosToCurrentQueue(const ImageInfoList& list);
@@ -69,13 +68,13 @@ public:
     void refreshView();
     void applySettings();
 
-    BatchToolsManager* batchToolsManager() const;
-
     /** Return a map of all queues available from pool (index and title).
      */
-    QMap<int, QString> queuesMap() const;
+    QMap<int, QString> queuesMap()         const;
 
-    int currentQueueId();
+    BatchToolsManager* batchToolsManager() const;
+    bool isBusy()                          const;
+    int currentQueueId()                   const;
 
     bool queryClose();
 

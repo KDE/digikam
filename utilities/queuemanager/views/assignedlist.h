@@ -49,7 +49,7 @@ public:
     virtual ~AssignedListViewItem();
 
     void setToolSet(const BatchToolSet& set);
-    BatchToolSet toolSet();
+    BatchToolSet toolSet() const;
 
 private:
 

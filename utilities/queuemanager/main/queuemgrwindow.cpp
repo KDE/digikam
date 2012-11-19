@@ -779,7 +779,7 @@ void QueueMgrWindow::addNewQueue()
     d->queuePool->slotAddQueue();
 }
 
-int QueueMgrWindow::currentQueueId()
+int QueueMgrWindow::currentQueueId() const
 {
     return (d->queuePool->currentIndex());
 }
@@ -1071,8 +1071,10 @@ void QueueMgrWindow::processed(const KUrl& url, const KUrl& tmp)
                 }
 
                 default:    // Overwrite.
+                {
                     addHistoryMessage(i18n("Item overwritten..."), DHistoryView::WarningEntry);
                     break;
+                }
             }
         }
     }
