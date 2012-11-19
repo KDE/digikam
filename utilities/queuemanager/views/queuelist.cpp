@@ -904,6 +904,23 @@ int QueueListView::itemsCount()
     return count;
 }
 
+void QueueListView::cancelItems()
+{
+    QTreeWidgetItemIterator it(this);
+
+    while (*it)
+    {
+        QueueListViewItem* const item = dynamic_cast<QueueListViewItem*>(*it);
+
+        if (item && item->isBusy())
+        {
+            item->setCanceled();
+        }
+
+        ++it;
+    }
+}
+
 ImageInfoList QueueListView::pendingItemsList()
 {
     ImageInfoList list;

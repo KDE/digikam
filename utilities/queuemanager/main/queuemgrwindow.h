@@ -49,6 +49,7 @@ namespace Digikam
 class ActionData;
 class BatchToolsManager;
 class AssignedBatchTools;
+class QueueListViewItem;
 
 class QueueMgrWindow : public KXmlGuiWindow
 {
@@ -106,7 +107,7 @@ private:
     void refreshStatusBar();
     void populateToolsList();
     void setup(Setup::Page page);
-    void addHistoryMessage(const QString& msg, DHistoryView::EntryType type);
+    void addHistoryMessage(QueueListViewItem* const cItem, const QString& msg, DHistoryView::EntryType type);
 
     bool checkTargetAlbum(int queueId);
     void busy(bool busy);

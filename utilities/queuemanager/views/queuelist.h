@@ -103,6 +103,7 @@ public:
     explicit QueueListView(QWidget* const parent);
     ~QueueListView();
 
+    void cancelItems();
     int  itemsCount();
     void removeItemByInfo(const ImageInfo& info);
     void removeItemById(qlonglong id);

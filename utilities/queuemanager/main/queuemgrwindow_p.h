@@ -99,7 +99,6 @@ public:
         toolSettings           = 0;
         showMenuBarAction      = 0;
         thread                 = 0;
-        currentProcessItem     = 0;
         animLogo               = 0;
         about                  = 0;
     }
@@ -137,7 +136,6 @@ public:
     KToggleAction*         showMenuBarAction;
 
     DLogoAction*           animLogo;
-    QueueListViewItem*     currentProcessItem;
 
     BatchToolsManager*     batchToolsMgr;
 

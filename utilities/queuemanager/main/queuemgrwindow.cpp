@@ -1138,27 +1138,15 @@ void QueueMgrWindow::slotHistoryEntryClicked(int queueId, qlonglong itemId)
 }
 
 // ---------------------------------------------------------------------------------------------
-// TODO remove d->currentProcessItem in methods below
-
-void QueueMgrWindow::processing(const KUrl& url)
-{
-    d->currentProcessItem = d->queuePool->currentQueue()->findItemByUrl(url);
-
-    if (d->currentProcessItem)
-    {
-        d->currentProcessItem->reset();
-        d->queuePool->currentQueue()->setCurrentItem(d->currentProcessItem);
-        d->queuePool->currentQueue()->scrollToItem(d->currentProcessItem);
-        d->queuePool->setItemBusy(d->currentProcessItem->info().id());
-        addHistoryMessage(i18n("Processing..."), DHistoryView::StartingEntry);
-    }
-}
 
 void QueueMgrWindow::processed(const KUrl& url, const KUrl& tmp)
 {
+    QueueListViewItem* const cItem = d->queuePool->currentQueue()->findItemByUrl(url);
+    if (!cItem) return;
+
     QueueSettings settings = d->queuePool->currentQueue()->settings();
     KUrl dest              = settings.targetUrl;
-    dest.setFileName(d->currentProcessItem->destFileName());
+    dest.setFileName(cItem->destFileName());
 
     if (settings.conflictRule != QueueSettings::OVERWRITE)
     {
@@ -1176,7 +1164,7 @@ void QueueMgrWindow::processed(const KUrl& url, const KUrl& tmp)
                 case KIO::R_CANCEL:
                 {
                     slotStop();
-                    addHistoryMessage(i18n("Process Cancelled..."), DHistoryView::CancelEntry);
+                    addHistoryMessage(cItem, i18n("Process Cancelled..."), DHistoryView::CancelEntry);
                     return;
                 }
 
@@ -1184,11 +1172,8 @@ void QueueMgrWindow::processed(const KUrl& url, const KUrl& tmp)
                 {
                     dest = KUrl();
 
-                    if (d->currentProcessItem)
-                    {
-                        d->currentProcessItem->setCanceled();
-                        addHistoryMessage(i18n("Item skipped..."), DHistoryView::WarningEntry);
-                    }
+                    cItem->setCanceled();
+                    addHistoryMessage(cItem, i18n("Item skipped..."), DHistoryView::WarningEntry);
 
                     break;
                 }
@@ -1196,13 +1181,13 @@ void QueueMgrWindow::processed(const KUrl& url, const KUrl& tmp)
                 case KIO::R_RENAME:
                 {
                     dest = dlg.newDestUrl();
-                    addHistoryMessage(i18n("Item renamed to %1...", dest.fileName()), DHistoryView::WarningEntry);
+                    addHistoryMessage(cItem, i18n("Item renamed to %1...", dest.fileName()), DHistoryView::WarningEntry);
                     break;
                 }
 
                 default:    // Overwrite.
                 {
-                    addHistoryMessage(i18n("Item overwritten..."), DHistoryView::WarningEntry);
+                    addHistoryMessage(cItem, i18n("Item overwritten..."), DHistoryView::WarningEntry);
                     break;
                 }
             }
@@ -1216,26 +1201,20 @@ void QueueMgrWindow::processed(const KUrl& url, const KUrl& tmp)
             if (KDE::rename(DMetadata::sidecarPath(tmp.toLocalFile()),
                             DMetadata::sidecarPath(dest.toLocalFile())) != 0)
             {
-                addHistoryMessage(i18n("Failed to save sidecar file..."), DHistoryView::ErrorEntry);
+                addHistoryMessage(cItem, i18n("Failed to save sidecar file..."), DHistoryView::ErrorEntry);
             }
         }
 
         if (KDE::rename(tmp.toLocalFile(), dest.toLocalFile()) != 0)
         {
-            if (d->currentProcessItem)
-            {
-                d->currentProcessItem->setFailed();
-                addHistoryMessage(i18n("Failed to save item..."), DHistoryView::ErrorEntry);
-            }
+            cItem->setFailed();
+            addHistoryMessage(cItem, i18n("Failed to save item..."), DHistoryView::ErrorEntry);
         }
         else
         {
-            if (d->currentProcessItem)
-            {
-                d->currentProcessItem->setDestFileName(dest.fileName());
-                d->currentProcessItem->setDone();
-                addHistoryMessage(i18n("Item processed successfully..."), DHistoryView::SuccessEntry);
-            }
+            cItem->setDestFileName(dest.fileName());
+            cItem->setDone();
+            addHistoryMessage(cItem, i18n("Item processed successfully..."), DHistoryView::SuccessEntry);
 
             // -- Now copy the digiKam attributes from original file to the new file ------------
 
@@ -1243,40 +1222,52 @@ void QueueMgrWindow::processed(const KUrl& url, const KUrl& tmp)
             FileActionMngr::instance()->copyAttributes(source, dest.toLocalFile());
         }
     }
-
-    d->currentProcessItem = 0;
 }
 
-void QueueMgrWindow::processingFailed(const KUrl&, const QString& errMsg)
+void QueueMgrWindow::processing(const KUrl& url)
 {
-    if (d->currentProcessItem)
+    QueueListViewItem* const cItem = d->queuePool->currentQueue()->findItemByUrl(url);
+
+    if (cItem)
     {
-        d->currentProcessItem->setCanceled();
-        addHistoryMessage(i18n("Failed to process item..."), DHistoryView::ErrorEntry);
-        addHistoryMessage(errMsg, DHistoryView::ErrorEntry);
+        cItem->reset();
+        d->queuePool->currentQueue()->setCurrentItem(cItem);
+        d->queuePool->currentQueue()->scrollToItem(cItem);
+        d->queuePool->setItemBusy(cItem->info().id());
+        addHistoryMessage(cItem, i18n("Processing..."), DHistoryView::StartingEntry);
     }
-
-    d->currentProcessItem = 0;
 }
 
-void QueueMgrWindow::processingCanceled(const KUrl&)
+void QueueMgrWindow::processingFailed(const KUrl& url, const QString& errMsg)
 {
-    if (d->currentProcessItem)
+    QueueListViewItem* const cItem = d->queuePool->currentQueue()->findItemByUrl(url);
+
+    if (cItem)
     {
-        d->currentProcessItem->setCanceled();
-        addHistoryMessage(i18n("Process Cancelled..."), DHistoryView::CancelEntry);
+        cItem->setCanceled();
+        addHistoryMessage(cItem, i18n("Failed to process item..."), DHistoryView::ErrorEntry);
+        addHistoryMessage(cItem, errMsg, DHistoryView::ErrorEntry);
     }
-
-    d->currentProcessItem = 0;
 }
 
-void QueueMgrWindow::addHistoryMessage(const QString& msg, DHistoryView::EntryType type)
+void QueueMgrWindow::processingCanceled(const KUrl& url)
 {
-    if (d->currentProcessItem)
+    QueueListViewItem* const cItem = d->queuePool->currentQueue()->findItemByUrl(url);
+
+    if (cItem)
+    {
+        cItem->setCanceled();
+        addHistoryMessage(cItem, i18n("Process Cancelled..."), DHistoryView::CancelEntry);
+    }
+}
+
+void QueueMgrWindow::addHistoryMessage(QueueListViewItem* const cItem, const QString& msg, DHistoryView::EntryType type)
+{
+    if (cItem)
     {
         int queueId  = d->queuePool->currentIndex();
-        int itemId   = d->currentProcessItem->info().id();
-        QString text = i18n("Item \"%1\" from queue \"%2\": %3", d->currentProcessItem->info().name(),
+        int itemId   = cItem->info().id();
+        QString text = i18n("Item \"%1\" from queue \"%2\": %3", cItem->info().name(),
                             d->queuePool->queueTitle(queueId), msg);
         d->toolsView->addHistoryEntry(text, type, queueId, itemId);
     }
@@ -1288,13 +1279,9 @@ void QueueMgrWindow::addHistoryMessage(const QString& msg, DHistoryView::EntryTy
 
 void QueueMgrWindow::slotStop()
 {
-    if (d->currentProcessItem)
-    {
-        d->currentProcessItem->setCanceled();
-    }
-
-    d->itemsList.clear();
     d->thread->cancel();
+    d->queuePool->currentQueue()->cancelItems();
+    d->itemsList.clear();
     processingAborted();
 }
 
