@@ -56,7 +56,7 @@ public:
     ~QueuePool();
 
     QueueListView*     currentQueue()                    const;
-    QueueListView*     findQueueById(int index)          const;
+    QueueListView*     findQueueByIndex(int index)       const;
     QueueListView*     findQueueByItemId(qlonglong id)   const;
     QueuePoolItemsList totalPendingItemsList()           const;
     int                totalPendingItems()               const;

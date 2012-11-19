@@ -125,7 +125,7 @@ void QueuePool::setItemBusy(qlonglong id)
         queue->setItemBusy(id);
 }
 
-QueueListView* QueuePool::findQueueById(int index) const
+QueueListView* QueuePool::findQueueByIndex(int index) const
 {
     return (dynamic_cast<QueueListView*>(widget(index)));
 }
@@ -261,7 +261,7 @@ void QueuePool::slotRemoveItemsDone()
 
 void QueuePool::slotAddItems(const ImageInfoList& list, int queueId)
 {
-    QueueListView* const queue = findQueueById(queueId);
+    QueueListView* const queue = findQueueByIndex(queueId);
 
     if (queue)
     {

@@ -786,7 +786,7 @@ int QueueMgrWindow::currentQueueId() const
 
 void QueueMgrWindow::loadImageInfos(const ImageInfoList& list, int queueId)
 {
-    QueueListView* const queue = d->queuePool->findQueueById(queueId);
+    QueueListView* const queue = d->queuePool->findQueueByIndex(queueId);
 
     if (queue)
     {
@@ -1073,7 +1073,7 @@ void QueueMgrWindow::slotAssignedToolsChanged(const AssignedBatchTools& tools)
 
 bool QueueMgrWindow::checkTargetAlbum(int queueId)
 {
-    QueueListView* queue = d->queuePool->findQueueById(queueId);
+    QueueListView* queue = d->queuePool->findQueueByIndex(queueId);
 
     if (!queue)
     {
@@ -1121,7 +1121,7 @@ void QueueMgrWindow::slotHistoryEntryClicked(int queueId, qlonglong itemId)
         return;
     }
 
-    QueueListView* view = d->queuePool->findQueueById(queueId);
+    QueueListView* view = d->queuePool->findQueueByIndex(queueId);
 
     if (view)
     {
