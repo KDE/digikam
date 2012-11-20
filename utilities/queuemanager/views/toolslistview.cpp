@@ -169,7 +169,7 @@ BatchToolsList ToolsListView::toolsList()
 
     while (*it)
     {
-        ToolListViewItem* item = dynamic_cast<ToolListViewItem*>(*it);
+        ToolListViewItem* const item = dynamic_cast<ToolListViewItem*>(*it);
 
         if (item)
         {

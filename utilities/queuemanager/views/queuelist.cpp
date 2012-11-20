@@ -696,7 +696,7 @@ void QueueListView::slotAddItems(const ImageInfoList& list)
 
 void QueueListView::drawRow(QPainter* p, const QStyleOptionViewItem& opt, const QModelIndex& index) const
 {
-    QueueListViewItem* item = dynamic_cast<QueueListViewItem*>(itemFromIndex(index));
+    QueueListViewItem* const item = dynamic_cast<QueueListViewItem*>(itemFromIndex(index));
 
     if (item && !item->hasValidThumbnail())
     {
@@ -824,7 +824,7 @@ void QueueListView::removeItemById(qlonglong id)
 
         while (*it)
         {
-            QueueListViewItem* item = dynamic_cast<QueueListViewItem*>(*it);
+            QueueListViewItem* const item = dynamic_cast<QueueListViewItem*>(*it);
 
             if (item->info().id() == id)
             {
@@ -928,7 +928,7 @@ ImageInfoList QueueListView::pendingItemsList()
 
     while (*it)
     {
-        QueueListViewItem* item = dynamic_cast<QueueListViewItem*>(*it);
+        QueueListViewItem* const item = dynamic_cast<QueueListViewItem*>(*it);
 
         if (item && !item->isDone())
         {
@@ -1061,7 +1061,7 @@ void QueueListView::updateDestFileNames()
         if (item)
         {
             // Update base name using queue renaming rules.
-            ImageInfo info = item->info();
+            ImageInfo info    = item->info();
             QFileInfo fi(info.filePath());
 
             // Update suffix using assigned batch tool rules.

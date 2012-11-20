@@ -141,7 +141,7 @@ AssignedBatchTools AssignedListView::assignedList()
 
     while (*it)
     {
-        AssignedListViewItem* item = dynamic_cast<AssignedListViewItem*>(*it);
+        AssignedListViewItem* const item = dynamic_cast<AssignedListViewItem*>(*it);
 
         if (item)
         {
@@ -164,7 +164,7 @@ int AssignedListView::assignedCount()
 
 void AssignedListView::slotRemoveCurrentTool()
 {
-    AssignedListViewItem* item = dynamic_cast<AssignedListViewItem*>(currentItem());
+    AssignedListViewItem* const item = dynamic_cast<AssignedListViewItem*>(currentItem());
 
     if (item)
     {
@@ -187,11 +187,11 @@ void AssignedListView::slotClearToolsList()
 
 void AssignedListView::slotMoveCurrentToolUp()
 {
-    AssignedListViewItem* item = dynamic_cast<AssignedListViewItem*>(currentItem());
+    AssignedListViewItem* const item = dynamic_cast<AssignedListViewItem*>(currentItem());
 
     if (item)
     {
-        AssignedListViewItem* iabove = dynamic_cast<AssignedListViewItem*>(itemAbove(item));
+        AssignedListViewItem* const iabove = dynamic_cast<AssignedListViewItem*>(itemAbove(item));
 
         if (iabove)
         {
@@ -203,15 +203,15 @@ void AssignedListView::slotMoveCurrentToolUp()
 
 void AssignedListView::slotMoveCurrentToolDown()
 {
-    AssignedListViewItem* item = dynamic_cast<AssignedListViewItem*>(currentItem());
+    AssignedListViewItem* const item = dynamic_cast<AssignedListViewItem*>(currentItem());
 
     if (item)
     {
-        AssignedListViewItem* ibelow = dynamic_cast<AssignedListViewItem*>(itemBelow(item));
+        AssignedListViewItem* const ibelow = dynamic_cast<AssignedListViewItem*>(itemBelow(item));
 
         if (ibelow)
         {
-            AssignedListViewItem* nitem = moveTool(ibelow, item->toolSet());
+            AssignedListViewItem* const nitem = moveTool(ibelow, item->toolSet());
             setCurrentItem(nitem);
         }
     }
@@ -225,7 +225,7 @@ AssignedListViewItem* AssignedListView::moveTool(AssignedListViewItem* const pre
     }
 
     removeTool(set);
-    AssignedListViewItem* item = insertTool(preceding, set);
+    AssignedListViewItem* const item = insertTool(preceding, set);
 
     emit signalAssignedToolsChanged(assignedList());
 
@@ -272,7 +272,7 @@ AssignedListViewItem* AssignedListView::addTool(int /*index*/, const BatchToolSe
         return 0;
     }
 
-    AssignedListViewItem* item = new AssignedListViewItem(this, set);
+    AssignedListViewItem* const item = new AssignedListViewItem(this, set);
 
     emit signalAssignedToolsChanged(assignedList());
 
@@ -285,7 +285,7 @@ bool AssignedListView::removeTool(const BatchToolSet& set)
 
     while (*it)
     {
-        AssignedListViewItem* item = dynamic_cast<AssignedListViewItem*>(*it);
+        AssignedListViewItem* const item = dynamic_cast<AssignedListViewItem*>(*it);
 
         if (item->toolSet().tool == set.tool)
         {
@@ -306,7 +306,7 @@ AssignedListViewItem* AssignedListView::findTool(int index)
 
     while (*it)
     {
-        AssignedListViewItem* item = dynamic_cast<AssignedListViewItem*>(*it);
+        AssignedListViewItem* const item = dynamic_cast<AssignedListViewItem*>(*it);
 
         if (count == index)
         {
@@ -326,7 +326,7 @@ AssignedListViewItem* AssignedListView::findTool(const BatchToolSet& set)
 
     while (*it)
     {
-        AssignedListViewItem* item = dynamic_cast<AssignedListViewItem*>(*it);
+        AssignedListViewItem* const item = dynamic_cast<AssignedListViewItem*>(*it);
 
         if (item->toolSet().tool == set.tool)
         {
@@ -358,9 +358,9 @@ QMimeData* AssignedListView::mimeData(const QList<QTreeWidgetItem*> items) const
 
     QDataStream stream(&encodedData, QIODevice::WriteOnly);
     stream << items.count();
-    foreach(QTreeWidgetItem* itm, items)
+    foreach(QTreeWidgetItem* const itm, items)
     {
-        AssignedListViewItem* alwi = dynamic_cast<AssignedListViewItem*>(itm);
+        AssignedListViewItem* const alwi = dynamic_cast<AssignedListViewItem*>(itm);
 
         if (alwi)
         {
@@ -405,7 +405,7 @@ void AssignedListView::dropEvent(QDropEvent* e)
             QMap<int, QString> map;
             ds >> map;
 
-            AssignedListViewItem* preceding = dynamic_cast<AssignedListViewItem*>(itemAt(e->pos()));
+            AssignedListViewItem* const preceding = dynamic_cast<AssignedListViewItem*>(itemAt(e->pos()));
             assignTools(map, preceding);
         }
 
@@ -431,11 +431,11 @@ void AssignedListView::dropEvent(QDropEvent* e)
                 ds >> name;
                 ds >> settings;
 
-                BatchTool* tool = QueueMgrWindow::queueManagerWindow()->batchToolsManager()
-                                  ->findTool(name, (BatchTool::BatchToolGroup)group);
+                BatchTool* const tool = QueueMgrWindow::queueManagerWindow()->batchToolsManager()
+                                            ->findTool(name, (BatchTool::BatchToolGroup)group);
                 tool->ensureIsInitialized();
 
-                AssignedListViewItem* preceding = dynamic_cast<AssignedListViewItem*>(itemAt(e->pos()));
+                AssignedListViewItem* const preceding = dynamic_cast<AssignedListViewItem*>(itemAt(e->pos()));
 
                 BatchToolSet set;
                 set.tool                   = tool;
@@ -496,7 +496,7 @@ void AssignedListView::slotQueueSelected(int, const QueueSettings&, const Assign
 
 void AssignedListView::slotSettingsChanged(const BatchToolSet& set)
 {
-    AssignedListViewItem* item = findTool(set);
+    AssignedListViewItem* const item = findTool(set);
 
     if (item)
     {
@@ -526,7 +526,7 @@ void AssignedListView::assignTools(const QMap<int, QString>& map, AssignedListVi
         it.previous();
         BatchTool::BatchToolGroup group = (BatchTool::BatchToolGroup)(it.key());
         QString name                    = it.value();
-        BatchTool* tool                 = QueueMgrWindow::queueManagerWindow()->batchToolsManager()->findTool(name, group);
+        BatchTool* const tool           = QueueMgrWindow::queueManagerWindow()->batchToolsManager()->findTool(name, group);
         tool->ensureIsInitialized();
         BatchToolSet set;
         set.tool                        = tool;
@@ -543,7 +543,7 @@ void AssignedListView::slotContextMenu()
         return;
     }
 
-    KActionCollection* acol = QueueMgrWindow::queueManagerWindow()->actionCollection();
+    KActionCollection* const acol = QueueMgrWindow::queueManagerWindow()->actionCollection();
     KMenu popmenu(this);
     popmenu.addAction(acol->action("queuemgr_toolup"));
     popmenu.addAction(acol->action("queuemgr_tooldown"));

@@ -150,8 +150,8 @@ QString QueuePool::queueTitle(int index) const
 
 void QueuePool::slotAddQueue()
 {
-    QueueListView* queue = new QueueListView(this);
-    int index            = addTab(queue, SmallIcon("bqm-diff"), QString("#%1").arg(count() + 1));
+    QueueListView* const queue = new QueueListView(this);
+    int index                  = addTab(queue, SmallIcon("bqm-diff"), QString("#%1").arg(count() + 1));
 
     connect(queue, SIGNAL(signalQueueContentsChanged()),
             this, SIGNAL(signalQueueContentsChanged()));
