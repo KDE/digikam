@@ -141,12 +141,12 @@ void Task::run()
         m_d->tool->setOutputUrlFromInputUrl();
         m_d->tool->setBranchHistory(m_d->createNewVersion);
 
-        outUrl   = m_d->tool->outputUrl();
-        success  = m_d->tool->apply();
-        tmpImage = m_d->tool->imageData();
-        errMsg   = m_d->tool->errorDescription();
+        outUrl    = m_d->tool->outputUrl();
+        success   = m_d->tool->apply();
+        tmpImage  = m_d->tool->imageData();
+        errMsg    = m_d->tool->errorDescription();
         tmp2del.append(outUrl);
-        m_d->tool  = 0;
+        m_d->tool = 0;
 
         if (success && !m_d->cancel)
         {
@@ -264,10 +264,11 @@ void ActionThread::processFile(const AssignedBatchTools& item)
 
 void ActionThread::cancel()
 {
-    if(d->tool)
+    if (d->tool)
     {
         d->tool->cancel();
     }
+
     d->cancel = true;
     RActionThreadBase::cancel();
 }

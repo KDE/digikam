@@ -456,30 +456,34 @@ bool BatchTool::apply()
     return toolOperations();
 }
 
-void BatchTool::applyFilter(DImgThreadedFilter* filter)
+void BatchTool::applyFilter(DImgThreadedFilter* const filter)
 {
     filter->startFilterDirectly();
+
     if (isCancelled())
     {
         return;
     }
+
     d->image.putImageData(filter->getTargetImage().bits());
     d->image.addFilterAction(filter->filterAction());
 }
 
-void BatchTool::applyFilterChangedProperties(DImgThreadedFilter* filter)
+void BatchTool::applyFilterChangedProperties(DImgThreadedFilter* const filter)
 {
     filter->startFilterDirectly();
+
     if (isCancelled())
     {
         return;
     }
+
     DImg trg = filter->getTargetImage();
     d->image.putImageData(trg.width(), trg.height(), trg.sixteenBit(), trg.hasAlpha(), trg.bits());
     d->image.addFilterAction(filter->filterAction());
 }
 
-void BatchTool::applyFilter(DImgBuiltinFilter* filter)
+void BatchTool::applyFilter(DImgBuiltinFilter* const filter)
 {
     filter->apply(d->image);
     d->image.addFilterAction(filter->filterAction());

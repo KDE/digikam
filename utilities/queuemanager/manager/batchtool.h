@@ -245,9 +245,9 @@ protected:
      * Use this if you have a filter ready to run.
      * Will call startFilterDirectly and apply the result to image().
      */
-    void applyFilter(DImgThreadedFilter* filter);
-    void applyFilterChangedProperties(DImgThreadedFilter* filter);
-    void applyFilter(DImgBuiltinFilter* filter);
+    void applyFilter(DImgThreadedFilter* const filter);
+    void applyFilterChangedProperties(DImgThreadedFilter* const filter);
+    void applyFilter(DImgBuiltinFilter* const filter);
 
     /** Re-implement this method to customize all batch operations done by this tool.
         This method is called by apply().
