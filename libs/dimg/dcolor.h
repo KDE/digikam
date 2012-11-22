@@ -43,25 +43,37 @@ class DIGIKAM_EXPORT DColor
 {
 public:
 
-    /** Initialize with default value, fully transparent eight bit black */
+    /** Initialize with default value, fully transparent eight bit black
+     */
     DColor()
-        : m_red(0), m_green(0), m_blue(0), m_alpha(0), m_sixteenBit(false)
+        : m_red(0),
+          m_green(0),
+          m_blue(0),
+          m_alpha(0),
+          m_sixteenBit(false)
     {
     };
 
-    /** Read value from data. Equivalent to setColor() */
+    /** Read value from data. Equivalent to setColor()
+     */
     explicit DColor(const uchar* data, bool sixteenBit = false)
     {
         setColor(data, sixteenBit);
     }
 
-    /** Initialize with given RGBA values */
+    /** Initialize with given RGBA values
+     */
     DColor(int red, int green, int blue, int alpha, bool sixteenBit)
-        : m_red(red), m_green(green), m_blue(blue), m_alpha(alpha), m_sixteenBit(sixteenBit)
+        : m_red(red),
+          m_green(green),
+          m_blue(blue),
+          m_alpha(alpha),
+          m_sixteenBit(sixteenBit)
     {
     };
 
-    /** Read values from QColor, convert to sixteenBit of sixteenBit is true */
+    /** Read values from QColor, convert to sixteenBit of sixteenBit is true 
+     */
     explicit DColor(const QColor& color, bool sixteenBit=false);
 
     // Use default copy constructor, assignment operator and destructor
@@ -159,7 +171,7 @@ public:
         in the HSL color space.
         Alpha is ignored for the conversion.
     */
-    void getHSL(int* h, int* s, int* l) const;
+    void getHSL(int* const h, int* const s, int* const l) const;
 
     /** Set the RGB color values of this color
         to the given HSL values converted to RGB.
@@ -173,7 +185,7 @@ public:
         in the YCrCb color space.
         Alpha is ignored for the conversion.
     */
-    void getYCbCr(double* y, double* cb, double* cr) const;
+    void getYCbCr(double* const y, double* const cb, double* const cr) const;
 
     /** Set the RGB color values of this color
         to the given YCrCb values converted to RGB.

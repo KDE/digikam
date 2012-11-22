@@ -1090,21 +1090,6 @@ QString DImg::lastSavedFilePath() const
     return attribute("savedFilePath").toString();
 }
 
-QStringList DImgPrivate::fileOriginAttributes()
-{
-    QStringList list;
-    list << "format"
-         << "isreadonly"
-         << "originalFilePath"
-         << "originalSize"
-         << "originalImageHistory"
-         << "rawDecodingSettings"
-         << "rawDecodingFilterAction"
-         << "uniqueHash"
-         << "uniqueHashV2";
-    return list;
-}
-
 QVariant DImg::fileOriginData() const
 {
     QVariantMap map;

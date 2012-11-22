@@ -58,7 +58,6 @@ typedef KExiv2Iface::KExiv2Data KExiv2Data;
 
 class ExposureSettingsContainer;
 class DImageHistory;
-class DImgPrivate;
 class FilterAction;
 class IccTransform;
 class DImgLoaderObserver;
@@ -116,6 +115,10 @@ public:
     static FORMAT fileFormat(const QString& filePath);
 
     static QString formatToMimeType(FORMAT frm);
+
+public:
+
+    class DImgPrivate;
 
 public:
 
@@ -330,13 +333,13 @@ public:
 
     /** Metadata manipulation methods
      */
-    KExiv2Data getMetadata() const;
+    KExiv2Data getMetadata()   const;
     IccProfile getIccProfile() const;
     void       setMetadata(const KExiv2Data& data);
     void       setIccProfile(const IccProfile& profile);
 
     void       setAttribute(const QString& key, const QVariant& value);
-    QVariant   attribute(const QString& key) const;
+    QVariant   attribute(const QString& key)    const;
     bool       hasAttribute(const QString& key) const;
     void       removeAttribute(const QString& key);
 
@@ -349,6 +352,7 @@ public:
     bool                 hasImageHistory() const;
     DImageHistory        getOriginalImageHistory() const;
     void                 addFilterAction(const FilterAction& action);
+
     /** Sets a step in the history to constitute the beginning of a branch.
      *  Use setHistoryBranch() to take getOriginalImageHistory() and set the first added step as a branch.
      *  Use setHistoryBranchForLastSteps(n) to start the branch before the last n steps in the history.
@@ -446,7 +450,7 @@ public:
         the new Current image.
         NOTE: Set the saved image path with imageSavedAs() before!
     */
-    QVariant    fileOriginData() const;
+    QVariant    fileOriginData()          const;
     void        setFileOriginData(const QVariant& data);
     QVariant    lastSavedFileOriginData() const;
     void        switchOriginToLastSaved();
@@ -468,7 +472,7 @@ public:
 
     /** Return a region of image
      */
-    DImg       copy(const QRect& rect) const;
+    DImg       copy(const QRect& rect)          const;
     DImg       copy(int x, int y, int w, int h) const;
 
     /** Copy a region of pixels from a source image to this image.
@@ -507,8 +511,8 @@ public:
 
     /** QImage wrapper methods
      */
-    QImage     copyQImage() const;
-    QImage     copyQImage(const QRect& rect) const;
+    QImage     copyQImage()                           const;
+    QImage     copyQImage(const QRect& rect)          const;
     QImage     copyQImage(int x, int y, int w, int h) const;
 
     /** Crop image to the specified region
@@ -569,7 +573,7 @@ public:
      */
     bool       transform(int transformAction);
 
-    QPixmap    convertToPixmap() const;
+    QPixmap    convertToPixmap()                              const;
     QPixmap    convertToPixmap(IccTransform& monitorICCtrans) const;
 
     /** Return a mask image where pure white and pure black pixels are over-colored.

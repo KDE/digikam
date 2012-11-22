@@ -80,9 +80,9 @@ inline void DColor::blendAlpha16(int alphaValue)
 {
     uint Sa = alphaValue + 1;
 
-    setRed  ((Sa * (uint)red()) >> 16);
+    setRed  ((Sa * (uint)red())   >> 16);
     setGreen((Sa * (uint)green()) >> 16);
-    setBlue ((Sa * (uint)blue()) >> 16);
+    setBlue ((Sa * (uint)blue())  >> 16);
     setAlpha((Sa * (uint)alpha()) >> 16);
 }
 
@@ -90,9 +90,9 @@ inline void DColor::blendAlpha8(int alphaValue)
 {
     uint Sa = alphaValue + 1;
 
-    setRed  ((Sa * red()) >> 8);
+    setRed  ((Sa * red())   >> 8);
     setGreen((Sa * green()) >> 8);
-    setBlue ((Sa * blue()) >> 8);
+    setBlue ((Sa * blue())  >> 8);
     setAlpha((Sa * alpha()) >> 8);
 }
 
@@ -100,9 +100,9 @@ inline void DColor::blendInvAlpha16(int alphaValue)
 {
     uint Sa = 65536 - alphaValue;
 
-    setRed  ((Sa * (uint)red()) >> 16);
+    setRed  ((Sa * (uint)red())   >> 16);
     setGreen((Sa * (uint)green()) >> 16);
-    setBlue ((Sa * (uint)blue()) >> 16);
+    setBlue ((Sa * (uint)blue())  >> 16);
     setAlpha((Sa * (uint)alpha()) >> 16);
 }
 
@@ -110,9 +110,9 @@ inline void DColor::blendInvAlpha8(int alphaValue)
 {
     uint Sa = 256 - alphaValue;
 
-    setRed  ((Sa * red()) >> 8);
+    setRed  ((Sa * red())   >> 8);
     setGreen((Sa * green()) >> 8);
-    setBlue ((Sa * blue()) >> 8);
+    setBlue ((Sa * blue())  >> 8);
     setAlpha((Sa * alpha()) >> 8);
 }
 
@@ -120,18 +120,18 @@ inline void DColor::premultiply16(int alphaValue)
 {
     uint Da = alphaValue + 1;
 
-    setRed  ((Da * (uint)red()) >> 16);
+    setRed  ((Da * (uint)red())   >> 16);
     setGreen((Da * (uint)green()) >> 16);
-    setBlue ((Da * (uint)blue()) >> 16);
+    setBlue ((Da * (uint)blue())  >> 16);
 }
 
 inline void DColor::premultiply8(int alphaValue)
 {
     uint Da = alphaValue + 1;
 
-    setRed  ((Da * red()) >> 8);
+    setRed  ((Da * red())   >> 8);
     setGreen((Da * green()) >> 8);
-    setBlue ((Da * blue()) >> 8);
+    setBlue ((Da * blue())  >> 8);
 }
 
 inline void DColor::demultiply16(int alphaValue)
@@ -208,9 +208,9 @@ inline void DColor::blendClamp8()
 
 inline void DColor::multiply(float factor)
 {
-    setRed(lround( red() * factor ));
+    setRed(lround( red()     * factor ));
     setGreen(lround( green() * factor ));
-    setBlue(lround( blue() * factor ));
+    setBlue(lround( blue()   * factor ));
     setAlpha(lround( alpha() * factor ));
 }
 

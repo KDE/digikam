@@ -170,24 +170,6 @@ if ((x + w) > ((xx) + (ww))) {w = (ww) - (x - xx);} \
 if ((y + h) > ((yy) + (hh))) {h = (hh) - (y - yy);}
 */
 
-bool DImgPrivate::clipped(int& x, int& y, int& w, int& h, uint width, uint height)
-{
-    QRect inner(x, y, w, h);
-    QRect outer(0, 0, width, height);
-
-    if (!outer.contains(inner))
-    {
-        QRect clipped = inner.intersected(outer);
-        x = clipped.x();
-        y = clipped.y();
-        w = clipped.width();
-        h = clipped.height();
-        return clipped.isValid();
-    }
-
-    return inner.isValid();
-}
-
 DImg DImg::smoothScale(const QSize& destSize, Qt::AspectRatioMode aspectRatioMode) const
 {
     QSize scaleSize = size();

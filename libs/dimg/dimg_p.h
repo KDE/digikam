@@ -67,7 +67,7 @@
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT DImgPrivate : public DSharedData
+class DIGIKAM_EXPORT DImg::DImgPrivate : public DSharedData
 {
 public:
 
@@ -88,15 +88,43 @@ public:
         delete [] lanczos_func;
     }
 
-    static QStringList fileOriginAttributes();
+    static QStringList fileOriginAttributes()
+    {
+        QStringList list;
+        list << "format"
+             << "isreadonly"
+             << "originalFilePath"
+             << "originalSize"
+             << "originalImageHistory"
+             << "rawDecodingSettings"
+             << "rawDecodingFilterAction"
+             << "uniqueHash"
+             << "uniqueHashV2";
+        return list;
+    }
 
     /**
      * x,y, w x h is a section of the image. The image size is width x height.
      * Clips the section to the bounds of the image.
      * Returns if the (clipped) section is a valid rectangle.
      */
-    // implementation in dimgscale.cpp
-    static bool clipped(int& x, int& y, int& w, int& h, uint width, uint height);
+    static bool clipped(int& x, int& y, int& w, int& h, uint width, uint height)
+    {
+        QRect inner(x, y, w, h);
+        QRect outer(0, 0, width, height);
+
+        if (!outer.contains(inner))
+        {
+            QRect clipped = inner.intersected(outer);
+            x             = clipped.x();
+            y             = clipped.y();
+            w             = clipped.width();
+            h             = clipped.height();
+            return clipped.isValid();
+        }
+
+        return inner.isValid();
+    }
 
 public:
 

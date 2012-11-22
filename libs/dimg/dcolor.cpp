@@ -104,7 +104,7 @@ void DColor::convertToSixteenBit()
         return;
     }
 
-    m_red        = (m_red + 1) * 256 - 1;
+    m_red        = (m_red   + 1) * 256 - 1;
     m_green      = (m_green + 1) * 256 - 1;
     m_blue       = (m_blue  + 1) * 256 - 1;
     m_alpha      = (m_alpha + 1) * 256 - 1;
@@ -118,7 +118,7 @@ void DColor::convertToEightBit()
         return;
     }
 
-    m_red        = (m_red + 1) / 256 - 1;
+    m_red        = (m_red   + 1) / 256 - 1;
     m_green      = (m_green + 1) / 256 - 1;
     m_blue       = (m_blue  + 1) / 256 - 1;
     m_alpha      = (m_alpha + 1) / 256 - 1;
@@ -126,7 +126,7 @@ void DColor::convertToEightBit()
 }
 
 
-void DColor::getHSL(int* h, int* s, int* l) const
+void DColor::getHSL(int* const h, int* const s, int* const l) const
 {
     double min;
     double max;
@@ -138,10 +138,9 @@ void DColor::getHSL(int* h, int* s, int* l) const
     double hue, sat, lig;
 
     double range = m_sixteenBit ? 65535.0 : 255.0;
-
-    red   = m_red   / range;
-    green = m_green / range;
-    blue  = m_blue  / range;
+    red          = m_red   / range;
+    green        = m_green / range;
+    blue         = m_blue  / range;
 
     if (red > green)
     {
@@ -185,7 +184,6 @@ void DColor::getHSL(int* h, int* s, int* l) const
     }
 
     sum = max + min;
-
     lig = sum / 2;
     sat = 0;
     hue = 0;
@@ -253,8 +251,8 @@ void DColor::setHSL(int h, int s, int l, bool sixteenBit)
     else
     {
         hue        = (double)(h * 360.0 / range);
-        lightness  = (double)(l / range);
-        saturation = (double)(s / range);
+        lightness  = (double)(l         / range);
+        saturation = (double)(s         / range);
 
         if (lightness <= 0.5)
         {
@@ -374,7 +372,7 @@ void DColor::setHSL(int h, int s, int l, bool sixteenBit)
     }
 }
 
-void DColor::getYCbCr(double* y, double* cb, double* cr) const
+void DColor::getYCbCr(double* const y, double* const cb, double* const cr) const
 {
     double r = m_red   / (m_sixteenBit ? 65535.0 : 255.0);
     double g = m_green / (m_sixteenBit ? 65535.0 : 255.0);
