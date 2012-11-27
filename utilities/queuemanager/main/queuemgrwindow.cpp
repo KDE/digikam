@@ -923,7 +923,7 @@ void QueueMgrWindow::processOne()
         if (!tools4Item.m_toolsMap.isEmpty())
         {
             d->thread->setWorkingUrl(settings.targetUrl);
-            d->thread->processFile(tools4Item);
+            d->thread->processFiles(QList<AssignedBatchTools>() << tools4Item);
 
             if (!d->thread->isRunning())
             {

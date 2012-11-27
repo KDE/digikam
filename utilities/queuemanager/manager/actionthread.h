@@ -62,7 +62,7 @@ public:
     void setResetExifOrientationAllowed(bool set);
     void setRawDecodingSettings(const DRawDecoding& settings);
 
-    void processFile(const AssignedBatchTools& item);
+    void processFiles(const QList<AssignedBatchTools>& items);
 
     void cancel();
 

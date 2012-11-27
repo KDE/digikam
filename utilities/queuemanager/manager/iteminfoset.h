@@ -64,8 +64,6 @@ public:
  */
 typedef QList<ItemInfoSet> QueuePoolItemsList;
 
-typedef QueuePoolItemsList::iterator QueuePoolItemsListIterator;
-
 }  // namespace Digikam
 
 Q_DECLARE_METATYPE(Digikam::ItemInfoSet)

@@ -247,18 +247,23 @@ void ActionThread::setRawDecodingSettings(const DRawDecoding& settings)
     d->rawDecodingSettings = settings;
 }
 
-void ActionThread::processFile(const AssignedBatchTools& item)
+void ActionThread::processFiles(const QList<AssignedBatchTools>& items)
 {
     JobCollection* const collection = new JobCollection();
-    Task* const t                   = new Task(this, item, d);
 
-    connect(t, SIGNAL(signalStarting(Digikam::ActionData)),
-            this, SIGNAL(signalStarting(Digikam::ActionData)));
+    for(int i=0; i < items.size(); i++)
+    {
+        Task* const t = new Task(this, items.at(i), d);
 
-    connect(t, SIGNAL(signalFinished(Digikam::ActionData)),
-            this, SIGNAL(signalFinished(Digikam::ActionData)));
+        connect(t, SIGNAL(signalStarting(Digikam::ActionData)),
+                this, SIGNAL(signalStarting(Digikam::ActionData)));
 
-    collection->addJob(t);
+        connect(t, SIGNAL(signalFinished(Digikam::ActionData)),
+                this, SIGNAL(signalFinished(Digikam::ActionData)));
+
+        collection->addJob(t);
+    }
+
     appendJob(collection);
 }
 
