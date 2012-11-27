@@ -209,9 +209,9 @@ void Task::run()
 
     // Clean up all tmp url.
 
-    for (KUrl::List::const_iterator it = tmp2del.constBegin(); it != tmp2del.constEnd() ; ++it)
+    foreach (KUrl url, tmp2del)
     {
-        unlink(QFile::encodeName((*it).toLocalFile()));
+        unlink(QFile::encodeName(url.toLocalFile()));
     }
 }
 
