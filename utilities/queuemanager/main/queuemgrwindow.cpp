@@ -1148,51 +1148,39 @@ void QueueMgrWindow::processed(const KUrl& url, const KUrl& tmp)
     KUrl dest              = settings.targetUrl;
     dest.setFileName(cItem->destFileName());
 
-    if (settings.conflictRule != QueueSettings::OVERWRITE)
+    QFileInfo fi(dest.toLocalFile());
+
+    if (fi.exists())
     {
-        struct stat statBuf;
-
-        if (::stat(QFile::encodeName(dest.toLocalFile()), &statBuf) == 0)
+        if (settings.conflictRule != QueueSettings::OVERWRITE)
         {
-            KIO::RenameDialog dlg(this, i18n("Save Queued Image from '%1' as",
-                                             url.fileName()),
-                                  tmp, dest,
-                                  KIO::RenameDialog_Mode(KIO::M_SINGLE | KIO::M_OVERWRITE | KIO::M_SKIP));
+            int i          = 0;
+            bool fileFound = false;
 
-            switch (dlg.exec())
+            do
             {
-                case KIO::R_CANCEL:
+                QFileInfo nfi(dest.toLocalFile());
+
+                if (!nfi.exists())
                 {
-                    slotStop();
-                    addHistoryMessage(cItem, i18n("Process Cancelled..."), DHistoryView::CancelEntry);
-                    return;
+                    fileFound = false;
                 }
-
-                case KIO::R_SKIP:
+                else
                 {
-                    dest = KUrl();
-
-                    cItem->setCanceled();
-                    addHistoryMessage(cItem, i18n("Item skipped..."), DHistoryView::WarningEntry);
-
-                    break;
-                }
-
-                case KIO::R_RENAME:
-                {
-                    dest = dlg.newDestUrl();
-                    addHistoryMessage(cItem, i18n("Item renamed to %1...", dest.fileName()), DHistoryView::WarningEntry);
-                    break;
-                }
-
-                default:    // Overwrite.
-                {
-                    addHistoryMessage(cItem, i18n("Item overwritten..."), DHistoryView::WarningEntry);
-                    break;
+                    i++;
+                    dest.setFileName(nfi.completeBaseName() + QString("_%1.").arg(i) + nfi.completeSuffix());
+                    fileFound = true;
                 }
             }
+            while (fileFound);
+
+            addHistoryMessage(cItem, i18n("Item renamed to %1...", dest.fileName()), DHistoryView::WarningEntry);
         }
-    }
+        else
+        {
+            addHistoryMessage(cItem, i18n("Item overwritten..."), DHistoryView::WarningEntry);
+        }
+    }   
 
     if (!dest.isEmpty())
     {

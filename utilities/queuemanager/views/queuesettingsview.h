@@ -49,7 +49,7 @@ public:
     enum ConflictRule
     {
         OVERWRITE = 0,
-        ASKTOUSER
+        DIFFNAME
     };
 
     enum RenamingRule

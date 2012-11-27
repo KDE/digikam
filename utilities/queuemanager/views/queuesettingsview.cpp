@@ -117,10 +117,10 @@ QueueSettingsView::QueueSettingsView(QWidget* const parent)
     QWidget* conflictBox   = new QWidget(panel);
     QVBoxLayout* vlay      = new QVBoxLayout(conflictBox);
     d->conflictButtonGroup = new QButtonGroup(conflictBox);
-    d->overwriteButton     = new QRadioButton(i18n("Overwrite automatically"), conflictBox);
-    d->promptButton        = new QRadioButton(i18n("Open rename-file dialog"), conflictBox);
+    d->overwriteButton     = new QRadioButton(i18n("Overwrite automatically"),   conflictBox);
+    d->promptButton        = new QRadioButton(i18n("Store as a different name"), conflictBox);
     d->conflictButtonGroup->addButton(d->overwriteButton, QueueSettings::OVERWRITE);
-    d->conflictButtonGroup->addButton(d->promptButton,    QueueSettings::ASKTOUSER);
+    d->conflictButtonGroup->addButton(d->promptButton,    QueueSettings::DIFFNAME);
     d->conflictButtonGroup->setExclusive(true);
     d->promptButton->setChecked(true);
 
@@ -216,7 +216,7 @@ void QueueSettingsView::slotResetSettings()
 {
     blockSignals(true);
     // TODO: reset d->albumSel
-    d->conflictButtonGroup->button(QueueSettings::ASKTOUSER)->setChecked(true);
+    d->conflictButtonGroup->button(QueueSettings::OVERWRITE)->setChecked(true);
     d->renamingButtonGroup->button(QueueSettings::USEORIGINAL)->setChecked(true);
     d->advancedRenameWidget->clearParseString();
     blockSignals(false);
