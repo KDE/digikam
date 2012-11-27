@@ -101,12 +101,15 @@ public:
         thread                 = 0;
         animLogo               = 0;
         about                  = 0;
+        currentQueueToProcess  = 0;
     }
 
     bool                   fullScreenHideToolBar;
     bool                   fullScreen;
     bool                   removeFullScreenButton;
     bool                   busy;
+
+    int                    currentQueueToProcess;
 
     QLabel*                statusLabel;
 
@@ -148,8 +151,6 @@ public:
     AssignedListView*      assignedList;
     QueuePool*             queuePool;
     QueueSettingsView*     queueSettingsView;
-
-    QueuePoolItemsList     itemsList;
 
     DAboutData*            about;
 

@@ -138,6 +138,9 @@ QueueMgrWindow::QueueMgrWindow()
     m_instance       = this;
     d->batchToolsMgr = new BatchToolsManager(this);
     d->thread        = new ActionThread(this);
+    
+    // FIXME : To hack : set to 1 CPU
+    d->thread->setMaximumNumberOfThreads(1);
 
     setWindowFlags(Qt::Window);
     setCaption(i18n("Batch Queue Manager"));
@@ -339,6 +342,9 @@ void QueueMgrWindow::setupConnections()
 
     connect(d->thread, SIGNAL(signalFinished(Digikam::ActionData)),
             this, SLOT(slotAction(Digikam::ActionData)));
+    
+    connect(d->thread, SIGNAL(signalQueueProcessed()),
+            this, SLOT(slotQueueProcessed()));
 
     // -- GUI connections ---------------------------------------------------
 
@@ -847,10 +853,9 @@ void QueueMgrWindow::slotShowMenuBar()
 
 void QueueMgrWindow::slotRun()
 {
-    d->itemsList.clear();
-    d->itemsList = d->queuePool->totalPendingItemsList();
-
-    if (d->itemsList.empty())
+    d->currentQueueToProcess = 0;
+ 
+    if (!d->queuePool->totalPendingItems())
     {
         KMessageBox::error(this, i18n("There are no items to process in the queues."));
         processingAborted();
@@ -878,7 +883,7 @@ void QueueMgrWindow::slotRun()
     d->toolsView->showHistory();
     busy(true);
 
-    processOne();
+    processOneQueue();
 }
 
 void QueueMgrWindow::processingAborted()
@@ -889,52 +894,34 @@ void QueueMgrWindow::processingAborted()
     refreshStatusBar();
 }
 
-void QueueMgrWindow::processOne()
+void QueueMgrWindow::processOneQueue()
 {
     d->assignedList->reset();
+    
+    d->queuePool->setCurrentIndex(d->currentQueueToProcess);
+    QueuePoolItemsList itemsList = d->queuePool->queueItemsList(d->currentQueueToProcess);
+    QueueSettings settings       = d->queuePool->currentQueue()->settings();
 
-    if (d->itemsList.empty())
-    {
-        // Pop-up a message to bring user when all is done.
-        KNotificationWrapper("batchqueuecompleted", i18n("Batch queue finished"),
-                             this, windowTitle());
-        processingAborted();
-        return;
-    }
-
-    ItemInfoSet set = d->itemsList.first();
-    d->queuePool->setCurrentIndex(set.queueId);
-
-    if (!checkTargetAlbum(set.queueId))
+    if (!checkTargetAlbum(d->currentQueueToProcess))
     {
         processingAborted();
         return;
     }
-
-    QueueSettings settings        = d->queuePool->currentQueue()->settings();
-    AssignedBatchTools tools4Item = d->queuePool->currentQueue()->assignedTools();
-    tools4Item.m_itemUrl          = set.info.fileUrl();
-    QueueListViewItem* item       = d->queuePool->currentQueue()->findItemByUrl(tools4Item.m_itemUrl);
-
-    if (item)
+    
+    QList<AssignedBatchTools> tools4Items;
+    
+    foreach(const ItemInfoSet& item, itemsList)
     {
-        d->itemsList.removeFirst();
-
-        if (!tools4Item.m_toolsMap.isEmpty())
-        {
-            d->thread->setWorkingUrl(settings.targetUrl);
-            d->thread->processQueueItems(QList<AssignedBatchTools>() << tools4Item);
-
-            if (!d->thread->isRunning())
-            {
-                d->thread->start();
-            }
-        }
-        else
-        {
-            processOne();
-        }
+        AssignedBatchTools one = d->queuePool->currentQueue()->assignedTools();
+        one.m_itemUrl          = item.info.fileUrl();
+        tools4Items.append(one);
     }
+ 
+    d->thread->setWorkingUrl(settings.targetUrl);
+    d->thread->processQueueItems(tools4Items);
+    
+    if (!d->thread->isRunning())
+        d->thread->start();
 }
 
 void QueueMgrWindow::slotAction(const ActionData& ad)
@@ -950,21 +937,18 @@ void QueueMgrWindow::slotAction(const ActionData& ad)
         case ActionData::BatchDone:
         {
             processed(ad.fileUrl, ad.destUrl);
-            processOne();
             break;
         }
 
         case ActionData::BatchFailed:
         {
             processingFailed(ad.fileUrl, ad.message);
-            processOne();
             break;
         }
 
         case ActionData::BatchCanceled:
         {
             processingCanceled(ad.fileUrl);
-            processOne();
             break;
         }
 
@@ -1269,8 +1253,28 @@ void QueueMgrWindow::slotStop()
 {
     d->thread->cancel();
     d->queuePool->currentQueue()->cancelItems();
-    d->itemsList.clear();
+    d->currentQueueToProcess = 0;
     processingAborted();
+}
+
+void QueueMgrWindow::slotQueueProcessed()
+{
+    d->currentQueueToProcess++;
+    
+    if (d->currentQueueToProcess == d->queuePool->count())
+    {
+        // Pop-up a message to bring user when all is done.
+        KNotificationWrapper("batchqueuecompleted", i18n("Batch queue finished"),
+                             this, windowTitle());
+
+        processingAborted();
+        return;
+    }
+    else
+    {
+        // We will process next queue from the pool.
+        processOneQueue();
+    }
 }
 
 }  // namespace Digikam

@@ -111,7 +111,7 @@ private:
 
     bool checkTargetAlbum(int queueId);
     void busy(bool busy);
-    void processOne();
+    void processOneQueue();
     void processing(const KUrl& url);
     void processed(const KUrl& url, const KUrl& tmp);
     void processingFailed(const KUrl& url, const QString& errMsg);
@@ -137,6 +137,7 @@ private Q_SLOTS:
     void slotAssignedToolsChanged(const AssignedBatchTools&);
     void slotQueueContentsChanged();
     void slotItemSelectionChanged();
+    void slotQueueProcessed();
 
 private:
 

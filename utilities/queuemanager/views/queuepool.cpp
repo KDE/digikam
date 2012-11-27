@@ -164,21 +164,18 @@ void QueuePool::slotAddQueue()
     setCurrentIndex(index);
 }
 
-QueuePoolItemsList QueuePool::totalPendingItemsList() const
+QueuePoolItemsList QueuePool::queueItemsList(int index) const
 {
     QueuePoolItemsList qpool;
 
-    for (int i = 0; i < count(); ++i)
-    {
-        QueueListView* const queue = dynamic_cast<QueueListView*>(widget(i));
-        ImageInfoList list         = queue->pendingItemsList();
+    QueueListView* const queue = dynamic_cast<QueueListView*>(widget(index));
+    ImageInfoList list         = queue->pendingItemsList();
 
-        for (ImageInfoList::const_iterator it = list.constBegin() ; it != list.constEnd() ; ++it)
-        {
-            ImageInfo info = *it;
-            ItemInfoSet set(i, info);
-            qpool.append(set);
-        }
+    for (ImageInfoList::const_iterator it = list.constBegin() ; it != list.constEnd() ; ++it)
+    {
+        ImageInfo info = *it;
+        ItemInfoSet set(index, info);
+        qpool.append(set);
     }
 
     return qpool;

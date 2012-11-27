@@ -58,7 +58,7 @@ public:
     QueueListView*     currentQueue()                    const;
     QueueListView*     findQueueByIndex(int index)       const;
     QueueListView*     findQueueByItemId(qlonglong id)   const;
-    QueuePoolItemsList totalPendingItemsList()           const;
+    QueuePoolItemsList queueItemsList(int index)         const;
     int                totalPendingItems()               const;
     int                totalPendingTasks()               const;
     QMap<int, QString> queuesMap()                       const;
