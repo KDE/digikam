@@ -221,6 +221,9 @@ ActionThread::ActionThread(QObject* const parent)
     : RActionThreadBase(parent), d(new Private)
 {
     qRegisterMetaType<ActionData>();
+
+    connect(this, SIGNAL(finished()),
+            this, SLOT(slotThreadFinished()));
 }
 
 ActionThread::~ActionThread()
@@ -247,7 +250,7 @@ void ActionThread::setRawDecodingSettings(const DRawDecoding& settings)
     d->rawDecodingSettings = settings;
 }
 
-void ActionThread::processFiles(const QList<AssignedBatchTools>& items)
+void ActionThread::processQueueItems(const QList<AssignedBatchTools>& items)
 {
     JobCollection* const collection = new JobCollection();
 
@@ -276,6 +279,15 @@ void ActionThread::cancel()
 
     d->cancel = true;
     RActionThreadBase::cancel();
+}
+
+void ActionThread::slotThreadFinished()
+{
+    if (isEmpty())
+    {
+        kDebug() << "List of Pending Jobs is empty";
+        emit signalQueueProcessed();
+    }
 }
 
 }  // namespace Digikam

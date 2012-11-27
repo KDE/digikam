@@ -62,15 +62,28 @@ public:
     void setResetExifOrientationAllowed(bool set);
     void setRawDecodingSettings(const DRawDecoding& settings);
 
-    void processFiles(const QList<AssignedBatchTools>& items);
+    void processQueueItems(const QList<AssignedBatchTools>& items);
 
     void cancel();
 
 Q_SIGNALS:
 
+    /** Emit when an item from a queue start to be processed.
+     */
     void signalStarting(const Digikam::ActionData& ad);
-    void signalFinished(const Digikam::ActionData& ad);
 
+    /** Emit when an item from a queue have been processed.
+     */
+    void signalFinished(const Digikam::ActionData& ad);
+    
+    /** Emit when a queue have been fully processed (all items from queue are finished).
+     */
+    void signalQueueProcessed();
+
+private Q_SLOTS:
+    
+    void slotThreadFinished();    
+    
 public:
 
     class Private;
