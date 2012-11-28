@@ -75,8 +75,6 @@ public:
     BatchTool*   tool;
 
     DRawDecoding rawDecodingSettings;
-
-    ActionData   ad;
 };
 
 Task::Task(QObject* const parent, const AssignedBatchTools& item, ActionThread::Private* const d)
