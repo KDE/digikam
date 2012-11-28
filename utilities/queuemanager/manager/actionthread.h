@@ -75,15 +75,15 @@ Q_SIGNALS:
     /** Emit when an item from a queue have been processed.
      */
     void signalFinished(const Digikam::ActionData& ad);
-    
+
     /** Emit when a queue have been fully processed (all items from queue are finished).
      */
     void signalQueueProcessed();
 
 private Q_SLOTS:
-    
-    void slotThreadFinished();    
-    
+
+    void slotThreadFinished();
+
 public:
 
     class Private;
