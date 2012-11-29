@@ -33,7 +33,6 @@
 
 #include "digikam_export.h"
 
-
 namespace Digikam
 {
 
@@ -59,6 +58,8 @@ private:
     FileReadWriteLockPriv* d;
 };
 
+// ----------------------------------------------------------------------
+
 class DIGIKAM_EXPORT FileReadLocker
 {
 public:
@@ -70,6 +71,8 @@ private:
 
     FileReadWriteLockPriv* d;
 };
+
+// ----------------------------------------------------------------------
 
 class DIGIKAM_EXPORT FileWriteLocker
 {
@@ -83,17 +86,25 @@ private:
     FileReadWriteLockPriv* d;
 };
 
+// ----------------------------------------------------------------------
+
 class DIGIKAM_EXPORT SafeTemporaryFile : public QTemporaryFile
 {
 public:
-    SafeTemporaryFile();
+
     explicit SafeTemporaryFile(const QString& templ);
-    bool open() { return open(QIODevice::ReadWrite); }
+    SafeTemporaryFile();
+
+    bool open()
+    {
+        return open(QIODevice::ReadWrite); 
+    }
+
 protected:
+
     virtual bool open(QIODevice::OpenMode);
 };
 
-}
+} // namespace Digikam
 
 #endif // FILEREADWRITELOCK_H
-

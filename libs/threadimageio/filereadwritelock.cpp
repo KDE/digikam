@@ -43,32 +43,41 @@
 
 #include "digikam_export.h"
 
-
 namespace Digikam
 {
 
 class FileReadWriteLockPriv
 {
 public:
+
     explicit FileReadWriteLockPriv(const QString& filePath)
         : filePath(filePath),
-          ref(0), waitingReaders(0), waitingWriters(0), accessCount(0), writer(0)
+          ref(0),
+          waitingReaders(0),
+          waitingWriters(0),
+          accessCount(0),
+          writer(0)
     {
     }
-
-    QString filePath;
-    int     ref;
-    int     waitingReaders;
-    int     waitingWriters;
-
-    int     accessCount;
-    Qt::HANDLE writer;
-    QHash<Qt::HANDLE, int> readers;
 
     bool isFree() const
     {
-        return readers.isEmpty() && !writer && !waitingReaders && !waitingWriters;
+        return readers.isEmpty() && 
+               !writer           && 
+               !waitingReaders   && 
+               !waitingWriters;
     }
+
+public:
+
+    QString                filePath;
+    int                    ref;
+    int                    waitingReaders;
+    int                    waitingWriters;
+
+    int                    accessCount;
+    Qt::HANDLE             writer;
+    QHash<Qt::HANDLE, int> readers;
 };
 
 typedef FileReadWriteLockPriv Entry;
@@ -77,36 +86,38 @@ class FileReadWriteLockStaticPrivate
 {
 public:
 
-    QMutex         mutex;
-    QWaitCondition readerWait;
-    QWaitCondition writerWait;
+    QMutex                 mutex;
+    QWaitCondition         readerWait;
+    QWaitCondition         writerWait;
 
-    QMutex         tempFileMutex;
+    QMutex                 tempFileMutex;
     
     QHash<QString, Entry*> entries;
 
-    Entry *entry(const QString& filePath);
-    void drop(Entry* entry);
+public:
 
-    void lockForRead(Entry* entry);
-    void lockForWrite(Entry* entry);
-    bool tryLockForRead(Entry* entry);
-    bool tryLockForRead(Entry* entry, int timeout);
-    bool tryLockForWrite(Entry* entry);
-    bool tryLockForWrite(Entry* entry, int timeout);
-    void unlock(Entry* entry);
+    Entry* entry(const QString& filePath);
+    void   drop(Entry* entry);
 
-    Entry *entryLockedForRead(const QString& filePath);
-    Entry *entryLockedForWrite(const QString& filePath);
-    void unlockAndDrop(Entry* entry);
+    void   lockForRead(Entry* entry);
+    void   lockForWrite(Entry* entry);
+    bool   tryLockForRead(Entry* entry);
+    bool   tryLockForRead(Entry* entry, int timeout);
+    bool   tryLockForWrite(Entry* entry);
+    bool   tryLockForWrite(Entry* entry, int timeout);
+    void   unlock(Entry* entry);
+
+    Entry* entryLockedForRead(const QString& filePath);
+    Entry* entryLockedForWrite(const QString& filePath);
+    void   unlockAndDrop(Entry* entry);
 
 private:
 
-    Entry *entry_locked(const QString& filePath);
-    void drop_locked(Entry* entry);
-    bool lockForRead_locked(Entry* entry, int mode, int timeout);
-    bool lockForWrite_locked(Entry* entry, int mode, int timeout);
-    void unlock_locked(Entry* entry);
+    Entry* entry_locked(const QString& filePath);
+    void   drop_locked(Entry* entry);
+    bool   lockForRead_locked(Entry* entry, int mode, int timeout);
+    bool   lockForWrite_locked(Entry* entry, int mode, int timeout);
+    void   unlock_locked(Entry* entry);
 };
 
 // --- Entry allocation ---
@@ -348,7 +359,7 @@ void FileReadWriteLockStaticPrivate::unlock_locked(Entry* entry)
 
 // --- Combination methods ---
 
-Entry *FileReadWriteLockStaticPrivate::entryLockedForRead(const QString& filePath)
+Entry* FileReadWriteLockStaticPrivate::entryLockedForRead(const QString& filePath)
 {
     QMutexLocker lock(&mutex);
     Entry* e = entry_locked(filePath);
@@ -356,7 +367,7 @@ Entry *FileReadWriteLockStaticPrivate::entryLockedForRead(const QString& filePat
     return e;
 }
 
-Entry *FileReadWriteLockStaticPrivate::entryLockedForWrite(const QString& filePath)
+Entry* FileReadWriteLockStaticPrivate::entryLockedForWrite(const QString& filePath)
 {
     QMutexLocker lock(&mutex);
     Entry* e = entry_locked(filePath);
@@ -373,9 +384,7 @@ void FileReadWriteLockStaticPrivate::unlockAndDrop(Entry* entry)
 
 K_GLOBAL_STATIC(FileReadWriteLockStaticPrivate, static_d)
 
-
-// -------------------------------------
-
+// -------------------------------------------------------------------------
 
 FileReadWriteLockKey::FileReadWriteLockKey(const QString& filePath)
     : d(static_d->entry(filePath))
@@ -422,6 +431,8 @@ void FileReadWriteLockKey::unlock()
     return static_d->unlock(d);
 }
 
+// -------------------------------------------------------------------------
+
 FileReadLocker::FileReadLocker(const QString& filePath)
     : d(static_d->entryLockedForRead(filePath))
 {
@@ -442,6 +453,8 @@ FileWriteLocker::~FileWriteLocker()
     static_d->unlockAndDrop(d);
 }
 
+// -------------------------------------------------------------------------
+
 SafeTemporaryFile::SafeTemporaryFile()
 {
 }
@@ -457,6 +470,4 @@ bool SafeTemporaryFile::open(QIODevice::OpenMode mode)
     return QTemporaryFile::open(mode);
 }
 
-
-}
-
+} // namespace Digikam
