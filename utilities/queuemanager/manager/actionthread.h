@@ -49,6 +49,8 @@ using namespace KDcrawIface;
 namespace Digikam
 {
 
+class TaskSettings;
+
 class ActionThread : public RActionThreadBase
 {
     Q_OBJECT
@@ -59,8 +61,8 @@ public:
     ~ActionThread();
 
     void setWorkingUrl(const KUrl& url);
-    void setResetExifOrientationAllowed(bool set);
-    void setRawDecodingSettings(const DRawDecoding& settings);
+    void setResetExifOrientationAllowed(bool b);
+    void setRawDecodingSettings(const DRawDecoding& prm);
 
     void processQueueItems(const QList<AssignedBatchTools>& items);
 
@@ -79,17 +81,18 @@ Q_SIGNALS:
     /** Emit when a queue have been fully processed (all items from queue are finished).
      */
     void signalQueueProcessed();
+    
+    /** Signal to emit to sub-tasks to cancel processing.
+     */
+    void signalCancelTask();
 
 private Q_SLOTS:
 
     void slotThreadFinished();
 
-public:
-
-    class Private;
-
 private:
 
+    class Private;
     Private* const d;
 };
 
@@ -101,22 +104,29 @@ class Task : public Job
 
 public:
 
-    Task(QObject* const parent, const AssignedBatchTools& item, ActionThread::Private* const d);
+    Task();
     ~Task();
-
+    
+    void setSettings(const TaskSettings& settings);
+    void setItem(const AssignedBatchTools& item);
+    
 Q_SIGNALS:
 
     void signalStarting(const Digikam::ActionData& ad);
     void signalFinished(const Digikam::ActionData& ad);
 
+public Q_SLOTS:
+    
+    void slotCancel();
+    
 protected:
 
     void run();
 
 private:
-
-    AssignedBatchTools     m_item;
-    ActionThread::Private* m_d;
+    
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

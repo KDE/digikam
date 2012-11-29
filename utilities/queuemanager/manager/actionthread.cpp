@@ -54,117 +54,147 @@ extern "C"
 namespace Digikam
 {
 
-class ActionThread::Private
+class TaskSettings
 {
 public:
-
-    Private() :
-        cancel(false),
-        exifSetOrientation(true),
-        createNewVersion(true),
-        tool(0)
+    
+    explicit TaskSettings()
     {
+        exifSetOrientation = true;
+        createNewVersion   = true;
     }
-
-    bool         cancel;
+    
     bool         exifSetOrientation;
     bool         createNewVersion;
 
     KUrl         workingUrl;
 
-    BatchTool*   tool;
-
     DRawDecoding rawDecodingSettings;
 };
 
-Task::Task(QObject* const parent, const AssignedBatchTools& item, ActionThread::Private* const d)
-    : Job(parent)
+// ---------------------------------------------------------------------------------------------------------
+
+class Task::Private
 {
-    m_item = item;
-    m_d    = d;
+public:
+
+    Private()
+    {
+        cancel = false;
+        tool   = 0;
+    }
+
+    bool               cancel;
+
+    TaskSettings       settings;
+    BatchTool*         tool;
+    AssignedBatchTools item;
+};
+    
+Task::Task()
+    : Job(0), d(new Private)
+{
 }
 
 Task::~Task()
 {
+    slotCancel();
+    delete d;
+}
+
+void Task::setSettings(const TaskSettings& settings)
+{
+    d->settings = settings;
+}
+
+void Task::setItem(const AssignedBatchTools& item)
+{
+    d->item = item;
+}
+
+void Task::slotCancel()
+{
+    d->cancel = true;
+
+    if (d->tool)
+        d->tool->cancel();
 }
 
 void Task::run()
 {
-    if(m_d->cancel)
+    if(d->cancel)
     {
         return;
     }
 
     ActionData ad1;
-    ad1.fileUrl = m_item.m_itemUrl;
+    ad1.fileUrl = d->item.m_itemUrl;
     ad1.status  = ActionData::BatchStarted;
     emit signalStarting(ad1);
 
     // Loop with all batch tools operations to apply on item.
 
-    m_d->cancel        = false;
     int        index   = 0;
     bool       success = false;
-    KUrl       outUrl  = m_item.m_itemUrl;
+    KUrl       outUrl  = d->item.m_itemUrl;
     KUrl       inUrl;
     KUrl::List tmp2del;
     DImg       tmpImage;
     QString    errMsg;
 
-    for (BatchToolMap::const_iterator it = m_item.m_toolsMap.constBegin();
-         !m_d->cancel && (it != m_item.m_toolsMap.constEnd()) ; ++it)
+    for (BatchToolMap::const_iterator it = d->item.m_toolsMap.constBegin();
+         !d->cancel && (it != d->item.m_toolsMap.constEnd()) ; ++it)
     {
         index                      = it.key();
         BatchToolSet set           = it.value();
-        m_d->tool                  = set.tool;
+        d->tool                     = set.tool;
         BatchToolSettings settings = set.settings;
         inUrl                      = outUrl;
 
         kDebug() << "Tool Index: " << index;
 
         ActionData ad2;
-        ad2.fileUrl = m_item.m_itemUrl;
+        ad2.fileUrl = d->item.m_itemUrl;
         ad2.status  = ActionData::TaskStarted;
         ad2.index   = index;
         emit signalFinished(ad2);
 
-        m_d->tool->setImageData(tmpImage);
-        m_d->tool->setWorkingUrl(m_d->workingUrl);
-        m_d->tool->setRawDecodingSettings(m_d->rawDecodingSettings);
-        m_d->tool->setResetExifOrientationAllowed(m_d->exifSetOrientation);
-        m_d->tool->setLastChainedTool(index == m_item.m_toolsMap.count());
-        m_d->tool->setInputUrl(inUrl);
-        m_d->tool->setSettings(settings);
-        m_d->tool->setInputUrl(inUrl);
-        m_d->tool->setOutputUrlFromInputUrl();
-        m_d->tool->setBranchHistory(m_d->createNewVersion);
+        d->tool->setImageData(tmpImage);
+        d->tool->setWorkingUrl(d->settings.workingUrl);
+        d->tool->setRawDecodingSettings(d->settings.rawDecodingSettings);
+        d->tool->setResetExifOrientationAllowed(d->settings.exifSetOrientation);
+        d->tool->setLastChainedTool(index == d->item.m_toolsMap.count());
+        d->tool->setInputUrl(inUrl);
+        d->tool->setSettings(settings);
+        d->tool->setInputUrl(inUrl);
+        d->tool->setOutputUrlFromInputUrl();
+        d->tool->setBranchHistory(d->settings.createNewVersion);
 
-        outUrl    = m_d->tool->outputUrl();
-        success   = m_d->tool->apply();
-        tmpImage  = m_d->tool->imageData();
-        errMsg    = m_d->tool->errorDescription();
+        outUrl    = d->tool->outputUrl();
+        success   = d->tool->apply();
+        tmpImage  = d->tool->imageData();
+        errMsg    = d->tool->errorDescription();
         tmp2del.append(outUrl);
-        m_d->tool = 0;
 
-        if (success && !m_d->cancel)
+        if (success && !d->cancel)
         {
             ActionData ad3;
-            ad3.fileUrl = m_item.m_itemUrl;
+            ad3.fileUrl = d->item.m_itemUrl;
             ad3.status  = ActionData::TaskDone;
             ad3.index   = index;
             emit signalFinished(ad3);
 
         }
-        else if (m_d->cancel)
+        else if (d->cancel)
         {
             ActionData ad4;
-            ad4.fileUrl = m_item.m_itemUrl;
+            ad4.fileUrl = d->item.m_itemUrl;
             ad4.status  = ActionData::TaskCanceled;
             ad4.index   = index;
             emit signalFinished(ad4);
 
             ActionData ad5;
-            ad5.fileUrl = m_item.m_itemUrl;
+            ad5.fileUrl = d->item.m_itemUrl;
             ad5.status  = ActionData::BatchCanceled;
             emit signalFinished(ad5);
 
@@ -173,13 +203,13 @@ void Task::run()
         else
         {
             ActionData ad4;
-            ad4.fileUrl = m_item.m_itemUrl;
+            ad4.fileUrl = d->item.m_itemUrl;
             ad4.status  = ActionData::TaskFailed;
             ad4.index   = index;
             emit signalFinished(ad4);
 
             ActionData ad5;
-            ad5.fileUrl = m_item.m_itemUrl;
+            ad5.fileUrl = d->item.m_itemUrl;
             ad5.status  = ActionData::BatchFailed;
 
             if (!errMsg.isEmpty())
@@ -193,13 +223,13 @@ void Task::run()
         }
     }
 
-    if (success && !m_d->cancel)
+    if (success && !d->cancel)
     {
         // if success, we don't remove last output tmp url.
         tmp2del.removeAll(outUrl);
 
         ActionData ad6;
-        ad6.fileUrl = m_item.m_itemUrl;
+        ad6.fileUrl = d->item.m_itemUrl;
         ad6.destUrl = outUrl;
         ad6.status  = ActionData::BatchDone;
         emit signalFinished(ad6);
@@ -214,6 +244,17 @@ void Task::run()
 }
 
 // -------------------------------------------------------------------------------------------------
+
+class ActionThread::Private
+{
+public:
+
+    Private()
+    {
+    }
+
+    TaskSettings settings;
+};
 
 ActionThread::ActionThread(QObject* const parent)
     : RActionThreadBase(parent), d(new Private)
@@ -235,17 +276,17 @@ ActionThread::~ActionThread()
 
 void ActionThread::setWorkingUrl(const KUrl& url)
 {
-    d->workingUrl = url;
+    d->settings.workingUrl = url;
 }
 
-void ActionThread::setResetExifOrientationAllowed(bool set)
+void ActionThread::setResetExifOrientationAllowed(bool b)
 {
-    d->exifSetOrientation = set;
+    d->settings.exifSetOrientation = b;
 }
 
-void ActionThread::setRawDecodingSettings(const DRawDecoding& settings)
+void ActionThread::setRawDecodingSettings(const DRawDecoding& prm)
 {
-    d->rawDecodingSettings = settings;
+    d->settings.rawDecodingSettings = prm;
 }
 
 void ActionThread::processQueueItems(const QList<AssignedBatchTools>& items)
@@ -254,13 +295,18 @@ void ActionThread::processQueueItems(const QList<AssignedBatchTools>& items)
 
     for(int i=0; i < items.size(); i++)
     {
-        Task* const t = new Task(this, items.at(i), d);
-
+        Task* const t = new Task();
+        t->setSettings(d->settings);
+        t->setItem(items.at(i));
+        
         connect(t, SIGNAL(signalStarting(Digikam::ActionData)),
                 this, SIGNAL(signalStarting(Digikam::ActionData)));
 
         connect(t, SIGNAL(signalFinished(Digikam::ActionData)),
                 this, SIGNAL(signalFinished(Digikam::ActionData)));
+        
+        connect(this, SIGNAL(signalCancelTask()),
+                t, SLOT(slotCancel()), Qt::QueuedConnection);
 
         collection->addJob(t);
     }
@@ -270,12 +316,9 @@ void ActionThread::processQueueItems(const QList<AssignedBatchTools>& items)
 
 void ActionThread::cancel()
 {
-    if (d->tool)
-    {
-        d->tool->cancel();
-    }
+    if (isRunning())
+        emit signalCancelTask();
 
-    d->cancel = true;
     RActionThreadBase::cancel();
 }
 
