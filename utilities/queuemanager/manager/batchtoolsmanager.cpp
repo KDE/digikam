@@ -98,20 +98,20 @@ BatchToolsManager::BatchToolsManager(QObject* const parent)
     : QObject(parent), d(new Private)
 {
     // Convert
-    registerTool(new Convert2JPEG(this), 0);
-    registerTool(new Convert2PNG(this),  0);
-    registerTool(new Convert2TIFF(this), 0);
-    registerTool(new Convert2JP2(this),  0);
-    registerTool(new Convert2PGF(this),  0);
+    registerTool(new Convert2JPEG(this),   0);
+    registerTool(new Convert2PNG(this),    0);
+    registerTool(new Convert2TIFF(this),   0);
+    registerTool(new Convert2JP2(this),    0);
+    registerTool(new Convert2PGF(this),    0);
 
     // Transform
-    registerTool(new Rotate(this), 0);
-    registerTool(new Flip(this),   0);
-    registerTool(new Resize(this), 0);
+    registerTool(new Rotate(this),         0);
+    registerTool(new Flip(this),           0);
+    registerTool(new Resize(this),         0);
 
     // Decorate
-    registerTool(new WaterMark(this), 0);
-    registerTool(new Border(this),    0);
+    registerTool(new WaterMark(this),      0);
+    registerTool(new Border(this),         0);
 
     // Metadata
     registerTool(new AssignTemplate(this), 0);
@@ -143,8 +143,8 @@ BatchToolsManager::BatchToolsManager(QObject* const parent)
     registerTool(new Convert16to8(this),   0);
 
     // Filters
-    registerTool(new FilmGrain(this), 0);
-    registerTool(new ColorFX(this),   0);
+    registerTool(new FilmGrain(this),      0);
+    registerTool(new ColorFX(this),        0);
 }
 
 BatchToolsManager::~BatchToolsManager()
