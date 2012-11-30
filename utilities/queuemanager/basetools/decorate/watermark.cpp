@@ -44,7 +44,6 @@
 #include <kcombobox.h>
 #include <kdialog.h>
 #include <kfontcombobox.h>
-#include <kiconloader.h>
 #include <kurlrequester.h>
 #include <klineedit.h>
 #include <klocale.h>
@@ -52,6 +51,7 @@
 #include <kvbox.h>
 #include <kfiledialog.h>
 #include <kdebug.h>
+#include <kglobal.h>
 
 // Local includes
 
@@ -126,7 +126,7 @@ WaterMark::WaterMark(QObject* const parent)
 {
     setToolTitle(i18n("Add Watermark"));
     setToolDescription(i18n("Overlay an image or text as a visible watermark"));
-    setToolIcon(KIcon(SmallIcon("insert-text")));
+    setToolIconName("insert-text");
 
     KVBox* vbox = new KVBox;
     vbox->setSpacing(KDialog::spacingHint());

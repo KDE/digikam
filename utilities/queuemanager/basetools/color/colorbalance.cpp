@@ -29,9 +29,9 @@
 
 // KDE includes
 
-#include <kiconloader.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
+#include <kglobal.h>
 
 // Local includes
 
@@ -47,7 +47,7 @@ ColorBalance::ColorBalance(QObject* const parent)
 {
     setToolTitle(i18n("Color Balance"));
     setToolDescription(i18n("Adjust color balance."));
-    setToolIcon(KIcon(SmallIcon("adjustrgb")));
+    setToolIconName("adjustrgb");
 
     QWidget* box   = new QWidget;
     m_settingsView = new CBSettings(box);

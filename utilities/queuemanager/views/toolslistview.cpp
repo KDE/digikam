@@ -122,7 +122,7 @@ ToolListViewItem::ToolListViewItem(ToolListViewGroup* const parent, BatchTool* c
 
     if (m_tool)
     {
-        setIcon(0, m_tool->toolIcon());
+        setIcon(0, SmallIcon(m_tool->toolIconName()));
         setText(0, m_tool->toolTitle());
         setText(1, m_tool->toolDescription());
     }

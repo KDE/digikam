@@ -234,7 +234,7 @@ void ToolSettingsView::slotToolSelected(const BatchToolSet& set)
 
     if (d->tool)
     {
-        d->settingsViewIcon->setPixmap(d->tool->toolIcon().pixmap(QSize(22, 22)));
+        d->settingsViewIcon->setPixmap(SmallIcon(d->tool->toolIconName()).scaled(QSize(22, 22)));
         d->settingsViewTitle->setText(d->tool->toolTitle());
         d->tool->setSettings(set.settings);
 

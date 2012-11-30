@@ -32,8 +32,8 @@
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <kiconloader.h>
 #include <klocale.h>
+#include <kglobal.h>
 
 // Local includes
 
@@ -48,7 +48,7 @@ Convert2PNG::Convert2PNG(QObject* const parent)
 {
     setToolTitle(i18n("Convert To PNG"));
     setToolDescription(i18n("Convert images to PNG format."));
-    setToolIcon(KIcon(SmallIcon("image-png")));
+    setToolIconName("image-png");
 
     m_settings = new PNGSettings();
     setSettingsWidget(m_settings);

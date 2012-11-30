@@ -31,10 +31,10 @@
 // KDE includes
 
 #include <kcombobox.h>
-#include <kiconloader.h>
 #include <klocale.h>
 #include <kvbox.h>
 #include <kdebug.h>
+#include <kglobal.h>
 
 // Local includes
 
@@ -50,7 +50,7 @@ Flip::Flip(QObject* parent)
 {
     setToolTitle(i18n("Flip"));
     setToolDescription(i18n("Flip images horizontally or vertically."));
-    setToolIcon(KIcon(SmallIcon("object-flip-vertical")));
+    setToolIconName("object-flip-vertical");
 
     KVBox* vbox   = new KVBox;
     QLabel* label = new QLabel(vbox);

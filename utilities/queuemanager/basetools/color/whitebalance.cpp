@@ -29,9 +29,9 @@
 
 // KDE includes
 
-#include <kiconloader.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
+#include <kglobal.h>
 
 // Local includes
 
@@ -47,7 +47,7 @@ WhiteBalance::WhiteBalance(QObject* const parent)
 {
     setToolTitle(i18n("White Balance"));
     setToolDescription(i18n("Adjust White Balance."));
-    setToolIcon(KIcon(SmallIcon("whitebalance")));
+    setToolIconName("whitebalance");
 
     QWidget* box   = new QWidget;
     m_settingsView = new WBSettings(box);

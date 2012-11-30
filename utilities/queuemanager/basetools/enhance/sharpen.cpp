@@ -31,9 +31,9 @@
 
 // KDE includes
 
-#include <kiconloader.h>
 #include <klocale.h>
 #include <kvbox.h>
+#include <kglobal.h>
 
 // Local includes
 
@@ -51,7 +51,7 @@ Sharpen::Sharpen(QObject* const parent)
 {
     setToolTitle(i18n("Sharpen Image"));
     setToolDescription(i18n("Sharpen images"));
-    setToolIcon(KIcon(SmallIcon("sharpenimage")));
+    setToolIconName("sharpenimage");
 }
 
 Sharpen::~Sharpen()

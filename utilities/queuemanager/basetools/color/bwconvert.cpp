@@ -29,9 +29,9 @@
 
 // KDE includes
 
-#include <kiconloader.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
+#include <kglobal.h>
 
 // Local includes
 
@@ -48,7 +48,7 @@ BWConvert::BWConvert(QObject* const parent)
 {
     setToolTitle(i18n("B&W Convert"));
     setToolDescription(i18n("Convert to black and white."));
-    setToolIcon(KIcon(SmallIcon("bwtonal")));
+    setToolIconName("bwtonal");
 }
 
 BWConvert::~BWConvert()

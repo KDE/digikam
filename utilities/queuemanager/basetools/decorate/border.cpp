@@ -29,9 +29,9 @@
 
 // KDE includes
 
-#include <kiconloader.h>
 #include <klocale.h>
 #include <kdebug.h>
+#include <kglobal.h>
 
 // Local includes
 
@@ -47,7 +47,7 @@ Border::Border(QObject* const parent)
 {
     setToolTitle(i18n("Add Border"));
     setToolDescription(i18n("Add a border around images"));
-    setToolIcon(KIcon(SmallIcon("bordertool")));
+    setToolIconName("bordertool");
 
     QWidget* box   = new QWidget;
     m_settingsView = new BorderSettings(box);

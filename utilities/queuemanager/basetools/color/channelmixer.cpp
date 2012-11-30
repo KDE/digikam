@@ -29,10 +29,10 @@
 
 // KDE includes
 
-#include <kiconloader.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kvbox.h>
+#include <kglobal.h>
 
 // Local includes
 
@@ -48,7 +48,7 @@ ChannelMixer::ChannelMixer(QObject* const parent)
 {
     setToolTitle(i18n("Channel Mixer"));
     setToolDescription(i18n("Mix color channel."));
-    setToolIcon(KIcon(SmallIcon("channelmixer")));
+    setToolIconName("channelmixer");
 
     KVBox* vbox    = new KVBox;
     m_settingsView = new MixerSettings(vbox);

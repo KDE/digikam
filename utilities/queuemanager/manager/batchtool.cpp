@@ -28,10 +28,11 @@
 #include <QDataStream>
 #include <QDateTime>
 #include <QFileInfo>
-#include <QWidget>
-#include <QLabel>
 #include <QPolygon>
 #include <QTemporaryFile>
+
+#include <QWidget>
+#include <QLabel>
 
 // KDE includes
 
@@ -75,10 +76,9 @@ public:
     QString                   errorMessage;
     QString                   toolTitle;          // User friendly tool title.
     QString                   toolDescription;    // User friendly tool description.
+    QString                   toolIconName;
 
     QWidget*                  settingsWidget;
-
-    KIcon                     toolIcon;
 
     KUrl                      inputUrl;
     KUrl                      outputUrl;
@@ -173,14 +173,14 @@ QString BatchTool::toolDescription() const
     return d->toolDescription;
 }
 
-void BatchTool::setToolIcon(const KIcon& toolIcon)
+void BatchTool::setToolIconName(const QString& iconName)
 {
-    d->toolIcon = toolIcon;
+    d->toolIconName = iconName;
 }
 
-KIcon BatchTool::toolIcon() const
+QString BatchTool::toolIconName() const
 {
-    return d->toolIcon;
+    return d->toolIconName;
 }
 
 QWidget* BatchTool::settingsWidget() const

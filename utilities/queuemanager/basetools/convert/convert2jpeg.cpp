@@ -32,8 +32,8 @@
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <kiconloader.h>
 #include <klocale.h>
+#include <kglobal.h>
 
 // Local includes
 
@@ -48,7 +48,7 @@ Convert2JPEG::Convert2JPEG(QObject* const parent)
 {
     setToolTitle(i18n("Convert To JPEG"));
     setToolDescription(i18n("Convert images to JPEG format."));
-    setToolIcon(KIcon(SmallIcon("image-jpeg")));
+    setToolIconName("image-jpeg");
 
     m_settings = new JPEGSettings;
     setSettingsWidget(m_settings);

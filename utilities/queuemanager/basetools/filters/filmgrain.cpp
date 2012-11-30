@@ -31,9 +31,9 @@
 
 // KDE includes
 
-#include <kiconloader.h>
 #include <klocale.h>
 #include <kdialog.h>
+#include <kglobal.h>
 
 // Local includes
 
@@ -49,7 +49,7 @@ FilmGrain::FilmGrain(QObject* parent)
 {
     setToolTitle(i18n("Film Grain"));
     setToolDescription(i18n("Add film grain"));
-    setToolIcon(KIcon(SmallIcon("filmgrain")));
+    setToolIconName("filmgrain");
 
     QWidget* box   = new QWidget;
     m_settingsView = new FilmGrainSettings(box);

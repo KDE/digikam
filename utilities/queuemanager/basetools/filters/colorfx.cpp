@@ -26,7 +26,7 @@
 // KDE includes
 
 #include <kdebug.h>
-#include <kiconloader.h>
+#include <kglobal.h>
 
 // Local includes
 
@@ -42,7 +42,7 @@ ColorFX::ColorFX(QObject* const parent)
 {
     setToolTitle(i18n("Color Effects"));
     setToolDescription(i18n("Apply color effects"));
-    setToolIcon(KIcon(SmallIcon("colorfx")));
+    setToolIconName("colorfx");
 
     QWidget* box   = new QWidget;
     m_settingsView = new ColorFXSettings(box);

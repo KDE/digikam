@@ -29,10 +29,10 @@
 
 // KDE includes
 
-#include <kiconloader.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kvbox.h>
+#include <kglobal.h>
 
 // Local includes
 
@@ -54,7 +54,7 @@ IccConvert::IccConvert(QObject* const parent)
 {
     setToolTitle(i18n("ICC Convert"));
     setToolDescription(i18n("Convert image to a color space."));
-    setToolIcon(KIcon(SmallIcon("colormanagement")));
+    setToolIconName("colormanagement");
 }
 
 IccConvert::~IccConvert()

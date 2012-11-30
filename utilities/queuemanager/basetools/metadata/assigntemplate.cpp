@@ -30,9 +30,9 @@
 
 // KDE includes
 
-#include <kiconloader.h>
 #include <klocale.h>
 #include <kvbox.h>
+#include <kglobal.h>
 
 // Local includes
 
@@ -51,7 +51,7 @@ AssignTemplate::AssignTemplate(QObject* parent)
 {
     setToolTitle(i18n("Apply Metadata Template"));
     setToolDescription(i18n("Apply template metadata"));
-    setToolIcon(KIcon(SmallIcon("application-xml")));
+    setToolIconName("application-xml");
 
     KVBox* vbox        = new KVBox;
     m_templateSelector = new TemplateSelector(vbox);

@@ -32,8 +32,8 @@
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <kiconloader.h>
 #include <klocale.h>
+#include <kglobal.h>
 
 // Local includes
 
@@ -48,7 +48,7 @@ Convert2JP2::Convert2JP2(QObject* const parent)
 {
     setToolTitle(i18n("Convert To JP2"));
     setToolDescription(i18n("Convert images to JPEG-2000 format."));
-    setToolIcon(KIcon(SmallIcon("image-jp2")));
+    setToolIconName("image-jp2");
 
     m_settings = new JP2KSettings();
     setSettingsWidget(m_settings);

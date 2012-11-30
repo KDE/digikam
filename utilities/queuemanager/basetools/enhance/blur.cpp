@@ -31,9 +31,9 @@
 
 // KDE includes
 
-#include <kiconloader.h>
 #include <klocale.h>
 #include <kdialog.h>
+#include <kglobal.h>
 
 // Local includes
 
@@ -49,7 +49,7 @@ Blur::Blur(QObject* const parent)
 {
     setToolTitle(i18n("Blur Image"));
     setToolDescription(i18n("Blur images"));
-    setToolIcon(KIcon(SmallIcon("blurimage")));
+    setToolIconName("blurimage");
 }
 
 Blur::~Blur()

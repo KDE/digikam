@@ -25,9 +25,9 @@
 
 // KDE includes
 
-#include <kiconloader.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
+#include <kglobal.h>
 
 // Local includes
 
@@ -42,7 +42,7 @@ Convert8to16::Convert8to16(QObject* const parent)
 {
     setToolTitle(i18n("Convert to 16 bits"));
     setToolDescription(i18n("Convert color depth from 8 to 16 bits."));
-    setToolIcon(KIcon(SmallIcon("depth8to16")));
+    setToolIconName("depth8to16");
     setNoSettingsWidget();
 }
 

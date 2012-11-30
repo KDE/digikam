@@ -32,8 +32,8 @@
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <kiconloader.h>
 #include <klocale.h>
+#include <kglobal.h>
 
 // Local includes
 
@@ -48,7 +48,7 @@ Convert2TIFF::Convert2TIFF(QObject* const parent)
 {
     setToolTitle(i18n("Convert To TIFF"));
     setToolDescription(i18n("Convert images to TIFF format."));
-    setToolIcon(KIcon(SmallIcon("image-tiff")));
+    setToolIconName("image-tiff");
 
     m_settings = new TIFFSettings();
     setSettingsWidget(m_settings);

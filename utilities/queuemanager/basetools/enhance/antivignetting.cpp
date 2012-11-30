@@ -31,10 +31,10 @@
 // KDE includes
 
 #include <kcombobox.h>
-#include <kiconloader.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kurllabel.h>
+#include <kglobal.h>
 
 // Local includes
 
@@ -51,7 +51,7 @@ AntiVignetting::AntiVignetting(QObject* const parent)
 {
     setToolTitle(i18n("Anti-Vignetting"));
     setToolDescription(i18n("Remove/add vignetting to photograph."));
-    setToolIcon(KIcon(SmallIcon("antivignetting")));
+    setToolIconName("antivignetting");
 }
 
 AntiVignetting::~AntiVignetting()

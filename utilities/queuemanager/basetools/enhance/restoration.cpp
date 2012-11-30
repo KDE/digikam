@@ -31,11 +31,11 @@
 // KDE includes
 
 #include <kcombobox.h>
-#include <kiconloader.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kurllabel.h>
 #include <kvbox.h>
+#include <kglobal.h>
 
 // Local includes
 
@@ -51,7 +51,7 @@ Restoration::Restoration(QObject* const parent)
 {
     setToolTitle(i18n("Restoration"));
     setToolDescription(i18n("Restore photographs based on Greystoration."));
-    setToolIcon(KIcon(SmallIcon("restoration")));
+    setToolIconName("restoration");
 }
 
 Restoration::~Restoration()

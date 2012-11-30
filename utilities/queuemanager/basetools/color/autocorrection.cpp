@@ -31,9 +31,9 @@
 // KDE includes
 
 #include <kcombobox.h>
-#include <kiconloader.h>
 #include <klocale.h>
 #include <kvbox.h>
+#include <kglobal.h>
 
 // Local includes
 
@@ -52,7 +52,7 @@ AutoCorrection::AutoCorrection(QObject* const parent)
 {
     setToolTitle(i18n("Color Auto-correction"));
     setToolDescription(i18n("Automatically correct image colors."));
-    setToolIcon(KIcon(SmallIcon("autocorrection")));
+    setToolIconName("autocorrection");
 
     KVBox* vbox   = new KVBox;
     QLabel* label = new QLabel(vbox);

@@ -30,12 +30,12 @@
 
 // KDE includes
 
-#include <kiconloader.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kcombobox.h>
 #include <kvbox.h>
 #include <kdebug.h>
+#include <kglobal.h>
 
 // Local includes
 
@@ -53,7 +53,7 @@ CurvesAdjust::CurvesAdjust(QObject* const parent)
 {
     setToolTitle(i18n("Curves Adjust"));
     setToolDescription(i18n("Perform curves adjustments."));
-    setToolIcon(KIcon(SmallIcon("adjustcurves")));
+    setToolIconName("adjustcurves");
 }
 
 CurvesAdjust::~CurvesAdjust()

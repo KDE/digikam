@@ -29,9 +29,9 @@
 
 // KDE includes
 
-#include <kiconloader.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
+#include <kglobal.h>
 
 // Local includes
 
@@ -47,7 +47,7 @@ HSLCorrection::HSLCorrection(QObject* const parent)
 {
     setToolTitle(i18n("HSL Correction"));
     setToolDescription(i18n("Fix Hue/Saturation/Lightness."));
-    setToolIcon(KIcon(SmallIcon("adjusthsl")));
+    setToolIconName("adjusthsl");
 
     QWidget* box   = new QWidget;
     m_settingsView = new HSLSettings(box);

@@ -29,9 +29,9 @@
 
 // KDE includes
 
-#include <kiconloader.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
+#include <kglobal.h>
 
 // Local includes
 
@@ -47,7 +47,7 @@ BCGCorrection::BCGCorrection(QObject* const parent)
 {
     setToolTitle(i18n("BCG Correction"));
     setToolDescription(i18n("Fix Brightness/Contrast/Gamma."));
-    setToolIcon(KIcon(SmallIcon("contrast")));
+    setToolIconName("contrast");
 
     QWidget* box   = new QWidget;
     m_settingsView = new BCGSettings(box);

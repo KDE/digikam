@@ -31,9 +31,9 @@
 
 // KDE includes
 
-#include <kiconloader.h>
 #include <klocale.h>
 #include <kvbox.h>
+#include <kglobal.h>
 
 // Local includes
 
@@ -48,7 +48,7 @@ RemoveMetadata::RemoveMetadata(QObject* parent)
 {
     setToolTitle(i18n("Remove Metadata"));
     setToolDescription(i18n("Remove Exif, Iptc, or Xmp metadata from images."));
-    setToolIcon(KIcon(SmallIcon("exifinfo")));
+    setToolIconName("exifinfo");
 
     KVBox* vbox  = new KVBox;
     m_removeExif = new QCheckBox(i18n("Remove Exif"), vbox);

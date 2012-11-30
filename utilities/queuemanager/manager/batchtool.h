@@ -36,7 +36,6 @@
 // KDE includes
 
 #include <kurl.h>
-#include <kicon.h>
 
 // Local includes
 
@@ -89,20 +88,20 @@ public:
      */
     BatchToolGroup toolGroup() const;
 
-    /** Manage Tool title on settings view.
+    /** Manage Tool title.
      */
     void setToolTitle(const QString& toolTitle);
     QString toolTitle() const;
 
-    /** Manage Tool description on settings view.
+    /** Manage Tool description.
      */
     void setToolDescription(const QString& toolDescription);
     QString toolDescription() const;
 
-    /** Manage Tool icon on settings view.
+    /** Manage Tool icon name.
      */
-    void setToolIcon(const KIcon& toolIcon);
-    KIcon toolIcon() const;
+    void setToolIconName(const QString& iconName);
+    QString toolIconName() const;
 
     /** Assign no settings view to tool. A label is just displayed.
      */

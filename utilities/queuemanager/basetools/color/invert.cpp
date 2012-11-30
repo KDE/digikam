@@ -29,9 +29,9 @@
 
 // KDE includes
 
-#include <kiconloader.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
+#include <kglobal.h>
 
 // Local includes
 
@@ -46,7 +46,7 @@ Invert::Invert(QObject* const parent)
 {
     setToolTitle(i18n("Invert Colors"));
     setToolDescription(i18n("Invert image colors."));
-    setToolIcon(KIcon(SmallIcon("invertimage")));
+    setToolIconName("invertimage");
     setNoSettingsWidget();
 }
 

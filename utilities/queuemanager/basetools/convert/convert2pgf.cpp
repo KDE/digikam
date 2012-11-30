@@ -32,8 +32,8 @@
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <kiconloader.h>
 #include <klocale.h>
+#include <kglobal.h>
 
 // Local includes
 
@@ -48,7 +48,7 @@ Convert2PGF::Convert2PGF(QObject* const parent)
 {
     setToolTitle(i18n("Convert To PGF"));
     setToolDescription(i18n("Convert images to PGF format."));
-    setToolIcon(KIcon(SmallIcon("image-jp2")));
+    setToolIconName("image-jp2");
 
     m_settings = new PGFSettings();
     setSettingsWidget(m_settings);

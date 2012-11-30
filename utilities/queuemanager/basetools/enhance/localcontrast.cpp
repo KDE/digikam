@@ -29,9 +29,9 @@
 
 // KDE includes
 
-#include <kiconloader.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
+#include <kglobal.h>
 
 // Local includes
 
@@ -49,7 +49,7 @@ LocalContrast::LocalContrast(QObject* const parent)
 {
     setToolTitle(i18n("Local Contrast"));
     setToolDescription(i18n("Emulate tone mapping."));
-    setToolIcon(KIcon(SmallIcon("tonemap")));
+    setToolIconName("tonemap");
 }
 
 LocalContrast::~LocalContrast()

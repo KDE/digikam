@@ -31,10 +31,10 @@
 
 // KDE includes
 
-#include <kiconloader.h>
 #include <klocale.h>
 #include <kdialog.h>
 #include <kseparator.h>
+#include <kglobal.h>
 
 // Local includes
 
@@ -65,7 +65,7 @@ LensAutoFix::LensAutoFix(QObject* const parent)
 {
     setToolTitle(i18n("Lens Auto-Correction"));
     setToolDescription(i18n("Fix automatically lens distortions"));
-    setToolIcon(KIcon(SmallIcon("lensautofix")));
+    setToolIconName("lensautofix");
 }
 
 LensAutoFix::~LensAutoFix()

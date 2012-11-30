@@ -33,10 +33,10 @@
 // KDE includes
 
 #include <kcombobox.h>
-#include <kiconloader.h>
 #include <klocale.h>
 #include <knuminput.h>
 #include <kvbox.h>
+#include <kglobal.h>
 
 // Local includes
 
@@ -51,7 +51,7 @@ Resize::Resize(QObject* parent)
 {
     setToolTitle(i18n("Resize"));
     setToolDescription(i18n("Resize images with a customized length."));
-    setToolIcon(KIcon(SmallIcon("transform-scale")));
+    setToolIconName("transform-scale");
 
     KVBox* vbox   = new KVBox;
     m_labelPreset = new QLabel(i18n("Preset Length:"), vbox);

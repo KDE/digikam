@@ -31,10 +31,10 @@
 
 // KDE includes
 
-#include <kiconloader.h>
 #include <klocale.h>
 #include <kvbox.h>
 #include <kdebug.h>
+#include <kglobal.h>
 
 // LibKDcraw includes
 
@@ -84,7 +84,7 @@ Rotate::Rotate(QObject* parent)
 {
     setToolTitle(i18n("Rotate"));
     setToolDescription(i18n("Rotate images."));
-    setToolIcon(KIcon(SmallIcon("object-rotate-right")));
+    setToolIconName("object-rotate-right");
 
     KVBox* vbox  = new KVBox;
     d->useExif   = new QCheckBox(i18n("Use Exif Orientation"), vbox);

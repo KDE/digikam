@@ -29,9 +29,9 @@
 
 // KDE includes
 
-#include <kiconloader.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
+#include <kglobal.h>
 
 // Local includes
 
@@ -49,7 +49,7 @@ NoiseReduction::NoiseReduction(QObject* const parent)
 {
     setToolTitle(i18n("Noise Reduction"));
     setToolDescription(i18n("Remove photograph noise using wavelets."));
-    setToolIcon(KIcon(SmallIcon("noisereduction")));
+    setToolIconName("noisereduction");
 }
 
 NoiseReduction::~NoiseReduction()

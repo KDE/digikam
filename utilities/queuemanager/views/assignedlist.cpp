@@ -72,7 +72,7 @@ void AssignedListViewItem::setToolSet(const BatchToolSet& set)
 
     if (m_set.tool)
     {
-        setIcon(0, m_set.tool->toolIcon());
+        setIcon(0, SmallIcon(m_set.tool->toolIconName()));
         setText(0, m_set.tool->toolTitle());
     }
 }
