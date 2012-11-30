@@ -44,10 +44,11 @@ public:
     explicit BatchToolsManager(QObject* const parent = 0);
     ~BatchToolsManager();
 
-    void registerTool(BatchTool* const tool);
+    void registerTool(BatchTool* const tool, QWidget* const w);
     void unregisterTool(BatchTool* const tool);
 
-    BatchTool* findTool(const QString& name, BatchTool::BatchToolGroup group) const;
+    BatchTool* findTool(const QString& name, BatchTool::BatchToolGroup group)           const;
+    QWidget*   findSettingsWidget(const QString& name, BatchTool::BatchToolGroup group) const;
 
     BatchToolsList toolsList() const;
 
