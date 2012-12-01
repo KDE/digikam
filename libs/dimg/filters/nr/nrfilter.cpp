@@ -46,7 +46,7 @@ NRContainer::NRContainer()
     softness[0]   = 0.9;     // Y
     softness[1]   = 0.9;     // Cr
     softness[2]   = 0.9;     // Cb
-};
+}
 
 NRContainer::~NRContainer()
 {
