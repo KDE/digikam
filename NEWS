@@ -28,6 +28,7 @@ ImportUI          : Preview items during downloading.
 Metadata          : Video files metadata support (through Exiv2 project).
 
 BatchQueueManager : Add Color Effect tool support.
+BatchQueueManager : Multicore CPU support to process items in parallel.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
