@@ -49,16 +49,21 @@ Convert2TIFF::Convert2TIFF(QObject* const parent)
     setToolTitle(i18n("Convert To TIFF"));
     setToolDescription(i18n("Convert images to TIFF format."));
     setToolIconName("image-tiff");
-
-    m_settings = new TIFFSettings();
-    setSettingsWidget(m_settings);
-
-    connect(m_settings, SIGNAL(signalSettingsChanged()),
-            this, SLOT(slotSettingsChanged()));
 }
 
 Convert2TIFF::~Convert2TIFF()
 {
+}
+
+void Convert2TIFF::registerSettingsWidget()
+{
+    m_settings       = new TIFFSettings();
+    m_settingsWidget = m_settings;
+
+    connect(m_settings, SIGNAL(signalSettingsChanged()),
+            this, SLOT(slotSettingsChanged()));
+
+    BatchTool::registerSettingsWidget();
 }
 
 BatchToolSettings Convert2TIFF::defaultSettings()

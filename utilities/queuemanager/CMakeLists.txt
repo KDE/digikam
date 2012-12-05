@@ -33,6 +33,7 @@ SET(libqueuemanager_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/basetools/transform/rotate.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/manager/actionthread.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/manager/batchtool.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/manager/batchtoolutils.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/manager/batchtoolsmanager.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/views/assignedlist.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/views/queuelist.cpp

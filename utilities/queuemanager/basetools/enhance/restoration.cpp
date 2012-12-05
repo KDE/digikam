@@ -58,7 +58,7 @@ Restoration::~Restoration()
 {
 }
 
-QWidget* Restoration::createSettingsWidget()
+void Restoration::registerSettingsWidget()
 {
     KVBox* vbox   = new KVBox;
 
@@ -83,10 +83,12 @@ QWidget* Restoration::createSettingsWidget()
     QLabel* space = new QLabel(vbox);
     vbox->setStretchFactor(space, 10);
 
+    m_settingsWidget = vbox;
+
     connect(m_comboBox, SIGNAL(activated(int)),
             this, SLOT(slotSettingsChanged()));
 
-    return vbox;
+    BatchTool::registerSettingsWidget();
 }
 
 BatchToolSettings Restoration::defaultSettings()

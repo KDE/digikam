@@ -45,6 +45,10 @@ public:
     QString outputSuffix() const;
     BatchToolSettings defaultSettings();
 
+    BatchTool* clone(QObject* const parent=0) const { return new Convert2JP2(parent); };
+
+    void registerSettingsWidget();
+
 private Q_SLOTS:
 
     void slotSettingsChanged();

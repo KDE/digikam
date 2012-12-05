@@ -47,7 +47,6 @@ Invert::Invert(QObject* const parent)
     setToolTitle(i18n("Invert Colors"));
     setToolDescription(i18n("Invert image colors."));
     setToolIconName("invertimage");
-    setNoSettingsWidget();
 }
 
 Invert::~Invert()

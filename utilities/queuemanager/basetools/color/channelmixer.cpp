@@ -49,21 +49,26 @@ ChannelMixer::ChannelMixer(QObject* const parent)
     setToolTitle(i18n("Channel Mixer"));
     setToolDescription(i18n("Mix color channel."));
     setToolIconName("channelmixer");
-
-    KVBox* vbox    = new KVBox;
-    m_settingsView = new MixerSettings(vbox);
-    m_settingsView->setMonochromeTipsVisible(false);
-    QLabel* space  = new QLabel(vbox);
-    vbox->setStretchFactor(space, 10);
-
-    setSettingsWidget(vbox);
-
-    connect(m_settingsView, SIGNAL(signalSettingsChanged()),
-            this, SLOT(slotSettingsChanged()));
 }
 
 ChannelMixer::~ChannelMixer()
 {
+}
+
+void ChannelMixer::registerSettingsWidget()
+{
+    KVBox* const vbox    = new KVBox;
+    m_settingsView       = new MixerSettings(vbox);
+    m_settingsView->setMonochromeTipsVisible(false);
+    QLabel* const space  = new QLabel(vbox);
+    vbox->setStretchFactor(space, 10);
+
+    m_settingsWidget     = vbox;
+
+    connect(m_settingsView, SIGNAL(signalSettingsChanged()),
+            this, SLOT(slotSettingsChanged()));
+
+    BatchTool::registerSettingsWidget();
 }
 
 BatchToolSettings ChannelMixer::defaultSettings()

@@ -85,6 +85,15 @@ Rotate::Rotate(QObject* parent)
     setToolTitle(i18n("Rotate"));
     setToolDescription(i18n("Rotate images."));
     setToolIconName("object-rotate-right");
+}
+
+Rotate::~Rotate()
+{
+    delete d;
+}
+
+void Rotate::registerSettingsWidget()
+{
 
     KVBox* vbox  = new KVBox;
     d->useExif   = new QCheckBox(i18n("Use Exif Orientation"), vbox);
@@ -103,7 +112,7 @@ Rotate::Rotate(QObject* parent)
     QLabel* space = new QLabel(vbox);
     vbox->setStretchFactor(space, 10);
 
-    setSettingsWidget(vbox);
+    m_settingsWidget = vbox;
 
     setNeedResetExifOrientation(true);
 
@@ -117,11 +126,8 @@ Rotate::Rotate(QObject* parent)
             this, SLOT(slotSettingsChanged()));
 
     slotSettingsChanged();
-}
 
-Rotate::~Rotate()
-{
-    delete d;
+    BatchTool::registerSettingsWidget();
 }
 
 BatchToolSettings Rotate::defaultSettings()

@@ -44,6 +44,10 @@ public:
 
     BatchToolSettings defaultSettings();
 
+    BatchTool* clone(QObject* const parent=0) const { return new BCGCorrection(parent); };
+
+    void registerSettingsWidget();
+
 private:
 
     bool toolOperations();

@@ -73,9 +73,9 @@ LensAutoFix::~LensAutoFix()
     delete d;
 }
 
-QWidget* LensAutoFix::createSettingsWidget()
+void LensAutoFix::registerSettingsWidget()
 {
-    QWidget* box      = new QWidget;
+    m_settingsWidget  = new QWidget;
     QLabel* note      = new QLabel(i18n("<b>Use Metadata</b> option will parse images' information at "
                                         "queue run-time to find relevant lens features."));
     note->setWordWrap(true);
@@ -87,7 +87,7 @@ QWidget* LensAutoFix::createSettingsWidget()
     d->cameraSelector->setPassiveMetadataUsage(true);
     d->cameraSelector->setEnabledUseMetadata(true);
 
-    QGridLayout* grid = new QGridLayout(box);
+    QGridLayout* grid = new QGridLayout(m_settingsWidget);
     grid->addWidget(note,              0, 0, 1, 2);
     grid->addWidget(d->cameraSelector, 1, 0, 1, 2);
     grid->addWidget(line,              2, 0, 1, 2);
@@ -102,7 +102,7 @@ QWidget* LensAutoFix::createSettingsWidget()
     connect(d->cameraSelector, SIGNAL(signalLensSettingsChanged()),
             this, SLOT(slotSettingsChanged()));
 
-    return box;
+    BatchTool::registerSettingsWidget();
 }
 
 BatchToolSettings LensAutoFix::defaultSettings()

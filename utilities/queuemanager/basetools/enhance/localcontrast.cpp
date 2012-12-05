@@ -56,15 +56,15 @@ LocalContrast::~LocalContrast()
 {
 }
 
-QWidget* LocalContrast::createSettingsWidget()
+void LocalContrast::registerSettingsWidget()
 {
-    QWidget* box   = new QWidget;
-    m_settingsView = new LocalContrastSettings(box);
+    m_settingsWidget = new QWidget;
+    m_settingsView   = new LocalContrastSettings(m_settingsWidget);
 
     connect(m_settingsView, SIGNAL(signalSettingsChanged()),
             this, SLOT(slotSettingsChanged()));
 
-    return box;
+    BatchTool::registerSettingsWidget();
 }
 
 BatchToolSettings LocalContrast::defaultSettings()

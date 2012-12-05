@@ -60,7 +60,7 @@ CurvesAdjust::~CurvesAdjust()
 {
 }
 
-QWidget* CurvesAdjust::createSettingsWidget()
+void CurvesAdjust::registerSettingsWidget()
 {
     KVBox* vbox          = new KVBox;
     KHBox* hbox          = new KHBox(vbox);
@@ -77,13 +77,15 @@ QWidget* CurvesAdjust::createSettingsWidget()
     QLabel* space  = new QLabel(vbox);
     vbox->setStretchFactor(space, 10);
 
+    m_settingsWidget = vbox;
+
     connect(m_settingsView, SIGNAL(signalSettingsChanged()),
             this, SLOT(slotSettingsChanged()));
 
     connect(m_channelCB, SIGNAL(activated(int)),
             this, SLOT(slotChannelChanged()));
 
-    return vbox;
+    BatchTool::registerSettingsWidget();
 }
 
 void CurvesAdjust::slotChannelChanged()

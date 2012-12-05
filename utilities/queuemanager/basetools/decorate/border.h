@@ -44,6 +44,10 @@ public:
 
     BatchToolSettings defaultSettings();
 
+    BatchTool* clone(QObject* const parent=0) const { return new Border(parent); };
+
+    void registerSettingsWidget();
+
 private Q_SLOTS:
 
     void slotSettingsChanged();

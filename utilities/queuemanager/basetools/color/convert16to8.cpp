@@ -43,7 +43,6 @@ Convert16to8::Convert16to8(QObject* const parent)
     setToolTitle(i18n("Convert to 8 bits"));
     setToolDescription(i18n("Convert color depth from 16 to 8 bits."));
     setToolIconName("depth16to8");
-    setNoSettingsWidget();
 }
 
 Convert16to8::~Convert16to8()

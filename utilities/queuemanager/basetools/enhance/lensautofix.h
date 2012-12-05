@@ -40,10 +40,13 @@ public:
 
     BatchToolSettings defaultSettings();
 
+    BatchTool* clone(QObject* const parent=0) const { return new LensAutoFix(parent); };
+
+    void registerSettingsWidget();
+
 private:
 
     bool toolOperations();
-    QWidget* createSettingsWidget();
 
 private Q_SLOTS:
 

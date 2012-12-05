@@ -55,17 +55,16 @@ BWConvert::~BWConvert()
 {
 }
 
-QWidget* BWConvert::createSettingsWidget()
+void BWConvert::registerSettingsWidget()
 {
-    QWidget* box   = new QWidget;
-    m_settingsView = new BWSepiaSettings(box, &m_preview);
-
+    m_settingsWidget = new QWidget;
+    m_settingsView   = new BWSepiaSettings(m_settingsWidget, &m_preview);
     m_settingsView->startPreviewFilters();
 
     connect(m_settingsView, SIGNAL(signalSettingsChanged()),
             this, SLOT(slotSettingsChanged()));
 
-    return box;
+    BatchTool::registerSettingsWidget();
 }
 
 void BWConvert::slotResetSettingsToDefault()

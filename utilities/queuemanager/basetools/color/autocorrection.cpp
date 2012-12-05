@@ -53,27 +53,32 @@ AutoCorrection::AutoCorrection(QObject* const parent)
     setToolTitle(i18n("Color Auto-correction"));
     setToolDescription(i18n("Automatically correct image colors."));
     setToolIconName("autocorrection");
+}
 
-    KVBox* vbox   = new KVBox;
-    QLabel* label = new QLabel(vbox);
-    m_comboBox    = new KComboBox(vbox);
+AutoCorrection::~AutoCorrection()
+{
+}
+
+void AutoCorrection::registerSettingsWidget()
+{
+    KVBox* const vbox   = new KVBox;
+    QLabel* const label = new QLabel(vbox);
+    m_comboBox          = new KComboBox(vbox);
     m_comboBox->insertItem(AutoLevelsCorrection,      i18n("Auto Levels"));
     m_comboBox->insertItem(NormalizeCorrection,       i18n("Normalize"));
     m_comboBox->insertItem(EqualizeCorrection,        i18n("Equalize"));
     m_comboBox->insertItem(StretchContrastCorrection, i18n("Stretch Contrast"));
     m_comboBox->insertItem(AutoExposureCorrection,    i18n("Auto Exposure"));
     label->setText(i18n("Filter:"));
-    QLabel* space = new QLabel(vbox);
+    QLabel* const space = new QLabel(vbox);
     vbox->setStretchFactor(space, 10);
 
-    setSettingsWidget(vbox);
+    m_settingsWidget = vbox;
 
     connect(m_comboBox, SIGNAL(activated(int)),
             this, SLOT(slotSettingsChanged()));
-}
 
-AutoCorrection::~AutoCorrection()
-{
+    BatchTool::registerSettingsWidget();
 }
 
 BatchToolSettings AutoCorrection::defaultSettings()

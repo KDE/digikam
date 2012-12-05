@@ -58,15 +58,15 @@ Sharpen::~Sharpen()
 {
 }
 
-QWidget* Sharpen::createSettingsWidget()
+void Sharpen::registerSettingsWidget()
 {
-    QWidget* box   = new QWidget;
-    m_settingsView = new SharpSettings(box);
+    m_settingsWidget = new QWidget;
+    m_settingsView   = new SharpSettings(m_settingsWidget);
 
     connect(m_settingsView, SIGNAL(signalSettingsChanged()),
             this, SLOT(slotSettingsChanged()));
 
-    return box;
+    BatchTool::registerSettingsWidget();
 }
 
 BatchToolSettings Sharpen::defaultSettings()

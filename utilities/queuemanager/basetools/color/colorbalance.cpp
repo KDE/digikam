@@ -48,17 +48,21 @@ ColorBalance::ColorBalance(QObject* const parent)
     setToolTitle(i18n("Color Balance"));
     setToolDescription(i18n("Adjust color balance."));
     setToolIconName("adjustrgb");
-
-    QWidget* box   = new QWidget;
-    m_settingsView = new CBSettings(box);
-    setSettingsWidget(box);
-
-    connect(m_settingsView, SIGNAL(signalSettingsChanged()),
-            this, SLOT(slotSettingsChanged()));
 }
 
 ColorBalance::~ColorBalance()
 {
+}
+
+void ColorBalance::registerSettingsWidget()
+{
+    m_settingsWidget = new QWidget;
+    m_settingsView   = new CBSettings(m_settingsWidget);
+
+    connect(m_settingsView, SIGNAL(signalSettingsChanged()),
+            this, SLOT(slotSettingsChanged()));
+
+    BatchTool::registerSettingsWidget();
 }
 
 BatchToolSettings ColorBalance::defaultSettings()

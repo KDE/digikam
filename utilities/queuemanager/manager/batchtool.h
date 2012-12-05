@@ -26,21 +26,13 @@
 
 // Qt includes
 
-#include <QFileInfo>
 #include <QObject>
-#include <QString>
-#include <QVariant>
-#include <QMap>
-#include <QList>
-
-// KDE includes
-
-#include <kurl.h>
 
 // Local includes
 
 #include "dimg.h"
-#include "drawdecoding.h"
+#include "batchtoolutils.h"
+#include "dimg.h"
 
 class QWidget;
 
@@ -49,10 +41,6 @@ namespace Digikam
 
 class DImgBuiltinFilter;
 class DImgThreadedFilter;
-
-/** A map of batch tool settings (setting key, setting value).
- */
-typedef QMap<QString, QVariant> BatchToolSettings;
 
 class BatchTool : public QObject
 {
@@ -74,6 +62,8 @@ public:
         ConvertTool,              // Tools to convert images format (PNG, JPEG, TIFF, etc...)
         MetadataTool              // Tools to play with metadata.
     };
+
+/// Tool data and properties management. NOTE: these methods can be used safetly in multi-threading part (ActionThread).
 
 public:
 
@@ -102,15 +92,6 @@ public:
      */
     void setToolIconName(const QString& iconName);
     QString toolIconName() const;
-
-    /** Assign no settings view to tool. A label is just displayed.
-     */
-    void setNoSettingsWidget();
-
-    /** Manage customized settings widget on settings view.
-     */
-    void setSettingsWidget(QWidget* const settingsWidget);
-    QWidget* settingsWidget() const;
 
     /** Manage settings values to tool. See BatchToolSettings container for details.
      */
@@ -212,14 +193,14 @@ public:
      */
     virtual BatchToolSettings defaultSettings() = 0;
 
-    /** For delayed creation: Ensure that createSettingsWidget() has been called.
+    /** Clone this tool without to create settings widget.
+     *  It's a safe construction of tools instance used in multithreading (ActionThread) to process items in parallel.
      */
-    void ensureIsInitialized() const;
+    virtual BatchTool* clone(QObject* const parent=0) const = 0;
 
 Q_SIGNALS:
 
     void signalSettingsChanged(const BatchToolSettings&);
-    void signalAssignSettings2Widget();
 
 public Q_SLOTS:
 
@@ -253,22 +234,44 @@ protected:
      */
     virtual bool toolOperations() = 0;
 
-    /** For delayed creation of a settings widget:
-     *  If your tool's settings widget takes long to create, you can
-     *  avoid creating it in your constructor. If you call neither
-     *  setSettingsWidget() nor setNoSettingsWidget() from your constructor,
-     *  this method will be invoked later when the settings widget is requested.
-     */
-    virtual QWidget* createSettingsWidget();
-
 protected Q_SLOTS:
 
     virtual void slotSettingsChanged() = 0;
 
+/// Settings widget management. NOTE: do not use these methods in multi-threading part (ActionThread), only in main thread (GUI)
+
+public:
+
+    /** Return dedicated settings widget registered with registerSettingsWidget().
+     */
+    QWidget* settingsWidget() const;
+
+    /** Setup dedicated settings widget. Default implementation assign no settings view (a message label is just displayed).
+     *  You need to call default implementation in your child class to init default signals and slots connections,
+     *  after to have instanced your dedicated settings widget.
+     */
+    virtual void registerSettingsWidget();
+
+Q_SIGNALS:
+
+    /** Only used internally. See registerSettingsWidget() implementation.
+     */
+    void signalAssignSettings2Widget();
+
+protected:
+
+    /** Host settings widget instance.
+     */
+    QWidget* m_settingsWidget;
+
+protected Q_SLOTS:
+
     /** Re-implement this method to customize how all settings values must be assigned to settings widget.
-        This method is called by setSettings().
+        This method is called by setSettings() through signalAssignSettings2Widget().
      */
     virtual void slotAssignSettings2Widget() = 0;
+
+/// Private section
 
 public:
 
@@ -278,78 +281,6 @@ public:
 private:
 
     Private* const d;
-};
-
-/** A list of batch tool instances.
- */
-typedef QList<BatchTool*> BatchToolsList;
-
-/** A container of associated batch tool and settings.
- */
-class BatchToolSet
-{
-public:
-
-    BatchToolSet()
-    {
-        tool = 0;
-    };
-
-    BatchTool*        tool;
-    BatchToolSettings settings;
-};
-
-/** An indexed map of batch tools with settings.
- */
-typedef QMap<int, BatchToolSet> BatchToolMap;
-
-/** Container to assign Batch tools and settings to an item by Url.
-    Url is used only with ActionThread class.
- */
-class AssignedBatchTools
-{
-public:
-
-    AssignedBatchTools()
-    {
-    };
-
-    QString targetSuffix(bool* const extSet = 0) const
-    {
-        QString suffix;
-
-        foreach(BatchToolSet set, m_toolsMap)
-        {
-            QString s = set.tool->outputSuffix();
-
-            if (!s.isEmpty())
-            {
-                suffix = s;
-
-                if (extSet != 0)
-                {
-                    *extSet = true;
-                }
-            }
-        }
-
-        if (suffix.isEmpty())
-        {
-            if (extSet != 0)
-            {
-                *extSet = false;
-            }
-
-            return (QFileInfo(m_itemUrl.fileName()).suffix());
-        }
-
-        return suffix;
-    }
-
-public:
-
-    KUrl         m_itemUrl;
-    BatchToolMap m_toolsMap;
 };
 
 }  // namespace Digikam

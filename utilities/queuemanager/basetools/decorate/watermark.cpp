@@ -127,6 +127,15 @@ WaterMark::WaterMark(QObject* const parent)
     setToolTitle(i18n("Add Watermark"));
     setToolDescription(i18n("Overlay an image or text as a visible watermark"));
     setToolIconName("insert-text");
+}
+
+WaterMark::~WaterMark()
+{
+    delete d;
+}
+
+void WaterMark::registerSettingsWidget()
+{
 
     KVBox* vbox = new KVBox;
     vbox->setSpacing(KDialog::spacingHint());
@@ -272,7 +281,7 @@ WaterMark::WaterMark(QObject* const parent)
     QLabel* space = new QLabel(vbox);
     vbox->setStretchFactor(space, 10);
 
-    setSettingsWidget(vbox);
+    m_settingsWidget = vbox;
 
     // ------------------------------------------------------------------------------------------------------
 
@@ -317,11 +326,8 @@ WaterMark::WaterMark(QObject* const parent)
 
     connect(d->xMarginInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotSettingsChanged()));
-}
 
-WaterMark::~WaterMark()
-{
-    delete d;
+    BatchTool::registerSettingsWidget();
 }
 
 BatchToolSettings WaterMark::defaultSettings()

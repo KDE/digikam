@@ -48,6 +48,10 @@ public:
 
     BatchToolSettings defaultSettings();
 
+    BatchTool* clone(QObject* const parent=0) const { return new FilmGrain(parent); };
+
+    void registerSettingsWidget();
+
 private:
 
     bool toolOperations();

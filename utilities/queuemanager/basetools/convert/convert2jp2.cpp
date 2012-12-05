@@ -49,16 +49,21 @@ Convert2JP2::Convert2JP2(QObject* const parent)
     setToolTitle(i18n("Convert To JP2"));
     setToolDescription(i18n("Convert images to JPEG-2000 format."));
     setToolIconName("image-jp2");
-
-    m_settings = new JP2KSettings();
-    setSettingsWidget(m_settings);
-
-    connect(m_settings, SIGNAL(signalSettingsChanged()),
-            this, SLOT(slotSettingsChanged()));
 }
 
 Convert2JP2::~Convert2JP2()
 {
+}
+
+void Convert2JP2::registerSettingsWidget()
+{
+    m_settings       = new JP2KSettings();
+    m_settingsWidget = m_settings;
+
+    connect(m_settings, SIGNAL(signalSettingsChanged()),
+            this, SLOT(slotSettingsChanged()));
+
+    BatchTool::registerSettingsWidget();
 }
 
 BatchToolSettings Convert2JP2::defaultSettings()

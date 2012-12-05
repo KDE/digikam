@@ -48,18 +48,22 @@ Border::Border(QObject* const parent)
     setToolTitle(i18n("Add Border"));
     setToolDescription(i18n("Add a border around images"));
     setToolIconName("bordertool");
-
-    QWidget* box   = new QWidget;
-    m_settingsView = new BorderSettings(box);
-    m_settingsView->resetToDefault();
-    setSettingsWidget(box);
-
-    connect(m_settingsView, SIGNAL(signalSettingsChanged()),
-            this, SLOT(slotSettingsChanged()));
 }
 
 Border::~Border()
 {
+}
+
+void Border::registerSettingsWidget()
+{
+    m_settingsWidget = new QWidget;
+    m_settingsView   = new BorderSettings(m_settingsWidget);
+    m_settingsView->resetToDefault();
+
+    connect(m_settingsView, SIGNAL(signalSettingsChanged()),
+            this, SLOT(slotSettingsChanged()));
+
+    BatchTool::registerSettingsWidget();
 }
 
 BatchToolSettings Border::defaultSettings()

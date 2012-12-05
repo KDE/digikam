@@ -51,22 +51,27 @@ Flip::Flip(QObject* parent)
     setToolTitle(i18n("Flip"));
     setToolDescription(i18n("Flip images horizontally or vertically."));
     setToolIconName("object-flip-vertical");
+}
 
-    KVBox* vbox   = new KVBox;
-    QLabel* label = new QLabel(vbox);
-    m_comboBox    = new KComboBox(vbox);
+void Flip::registerSettingsWidget()
+{
+    KVBox* vbox      = new KVBox;
+    QLabel* label    = new QLabel(vbox);
+    m_comboBox       = new KComboBox(vbox);
     m_comboBox->insertItem(DImg::HORIZONTAL, i18n("Horizontal"));
     m_comboBox->insertItem(DImg::VERTICAL,   i18n("Vertical"));
     label->setText(i18n("Flip:"));
-    QLabel* space = new QLabel(vbox);
+    QLabel* space    = new QLabel(vbox);
     vbox->setStretchFactor(space, 10);
 
-    setSettingsWidget(vbox);
+    m_settingsWidget = vbox;
 
     setNeedResetExifOrientation(true);
 
     connect(m_comboBox, SIGNAL(activated(int)),
             this, SLOT(slotSettingsChanged()));
+
+    BatchTool::registerSettingsWidget();
 }
 
 Flip::~Flip()

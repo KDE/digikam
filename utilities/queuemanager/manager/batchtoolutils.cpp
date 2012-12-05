@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2008-11-24
- * Description : Batch Tools Manager.
+ * Description : Batch Tool utils.
  *
  * Copyright (C) 2008-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -21,42 +21,56 @@
  *
  * ============================================================ */
 
-#ifndef BATCHTOOLSMANAGER_H
-#define BATCHTOOLSMANAGER_H
-
 // Qt includes
 
-#include <QObject>
+#include <QFileInfo>
 
 // Local includes
 
 #include "batchtool.h"
+#include "batchtoolutils.h"
 
 namespace Digikam
 {
 
-class BatchToolsManager : public QObject
+AssignedBatchTools::AssignedBatchTools()
 {
-    Q_OBJECT
+}
 
-public:
+AssignedBatchTools::~AssignedBatchTools()
+{
+}
 
-    explicit BatchToolsManager(QObject* const parent = 0);
-    ~BatchToolsManager();
+QString AssignedBatchTools::targetSuffix(bool* const extSet) const
+{
+    QString suffix;
 
-    void registerTool(BatchTool* const tool);
-    void unregisterTool(BatchTool* const tool);
+    foreach(BatchToolSet set, m_toolsMap)
+    {
+        QString s = set.tool->outputSuffix();
 
-    BatchTool* findTool(const QString& name, BatchTool::BatchToolGroup group) const;
+        if (!s.isEmpty())
+        {
+            suffix = s;
 
-    BatchToolsList toolsList() const;
+            if (extSet != 0)
+            {
+                *extSet = true;
+            }
+        }
+    }
 
-private:
+    if (suffix.isEmpty())
+    {
+        if (extSet != 0)
+        {
+            *extSet = false;
+        }
 
-    class Private;
-    Private* const d;
-};
+        return (QFileInfo(m_itemUrl.fileName()).suffix());
+    }
+
+    return suffix;
+}
 
 }  // namespace Digikam
-
-#endif /* BATCHTOOLSMANAGER_H */

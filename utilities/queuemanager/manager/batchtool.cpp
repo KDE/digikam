@@ -62,7 +62,6 @@ public:
         branchHistory(true),
         cancel(false),
         last(false),
-        settingsWidget(0),
         observer(0)
     {
     }
@@ -77,8 +76,6 @@ public:
     QString                   toolTitle;          // User friendly tool title.
     QString                   toolDescription;    // User friendly tool description.
     QString                   toolIconName;
-
-    QWidget*                  settingsWidget;
 
     KUrl                      inputUrl;
     KUrl                      outputUrl;
@@ -114,26 +111,23 @@ public:
         return !d->cancel;
     }
 
+private:
+
     BatchTool::Private* const d;
 };
 
 BatchTool::BatchTool(const QString& name, BatchToolGroup group, QObject* const parent)
     : QObject(parent), d(new Private)
 {
-    d->observer  = new BatchToolObserver(d);
-    d->toolGroup = group;
+    d->observer      = new BatchToolObserver(d);
+    d->toolGroup     = group;
+    m_settingsWidget = 0;
     setObjectName(name);
-
-    // NOTE: see B.K.O #209225 : signal/slot connection used internally to prevent crash when settings
-    // are assigned to settings widget by main thread to tool thread.
-
-    connect(this, SIGNAL(signalAssignSettings2Widget()),
-            this, SLOT(slotAssignSettings2Widget()));
 }
 
 BatchTool::~BatchTool()
 {
-    delete d->settingsWidget;
+    delete m_settingsWidget;
     delete d->observer;
     delete d;
 }
@@ -183,42 +177,6 @@ QString BatchTool::toolIconName() const
     return d->toolIconName;
 }
 
-QWidget* BatchTool::settingsWidget() const
-{
-    ensureIsInitialized();
-    return d->settingsWidget;
-}
-
-void BatchTool::setSettingsWidget(QWidget* const settingsWidget)
-{
-    d->settingsWidget = settingsWidget;
-}
-
-void BatchTool::setNoSettingsWidget()
-{
-    QLabel* label = new QLabel;
-    label->setText(i18n("No setting available"));
-    label->setAlignment(Qt::AlignCenter);
-    label->setWordWrap(true);
-    setSettingsWidget(label);
-}
-
-void BatchTool::ensureIsInitialized() const
-{
-    if (!d->settingsWidget)
-    {
-        // lazy caching: indication for const-cast
-        BatchTool* tool = const_cast<BatchTool*>(this);
-        tool->setSettingsWidget(tool->createSettingsWidget());
-    }
-}
-
-QWidget* BatchTool::createSettingsWidget()
-{
-    // default implementation: return 0.
-    return 0;
-}
-
 void BatchTool::slotResetSettingsToDefault()
 {
     slotSettingsChanged(defaultSettings());
@@ -233,7 +191,6 @@ void BatchTool::slotSettingsChanged(const BatchToolSettings& settings)
 void BatchTool::setSettings(const BatchToolSettings& settings)
 {
     d->settings = settings;
-    ensureIsInitialized();
     emit signalAssignSettings2Widget();
 }
 
@@ -487,6 +444,31 @@ void BatchTool::applyFilter(DImgBuiltinFilter* const filter)
 {
     filter->apply(d->image);
     d->image.addFilterAction(filter->filterAction());
+}
+
+// -- Settings Widgets methods ---------------------------------------------------------------------------
+
+QWidget* BatchTool::settingsWidget() const
+{
+    return m_settingsWidget;
+}
+
+void BatchTool::registerSettingsWidget()
+{
+    // NOTE: see B.K.O #209225 : signal/slot connection used internally to prevent crash when settings
+    // are assigned to settings widget by main thread to tool thread.
+
+    connect(this, SIGNAL(signalAssignSettings2Widget()),
+            this, SLOT(slotAssignSettings2Widget()));
+
+    if (!m_settingsWidget)
+    {
+        QLabel* const label = new QLabel;
+        label->setText(i18n("No setting available"));
+        label->setAlignment(Qt::AlignCenter);
+        label->setWordWrap(true);
+        m_settingsWidget = label;
+    }
 }
 
 }  // namespace Digikam

@@ -52,10 +52,18 @@ Resize::Resize(QObject* parent)
     setToolTitle(i18n("Resize"));
     setToolDescription(i18n("Resize images with a customized length."));
     setToolIconName("transform-scale");
+}
 
-    KVBox* vbox   = new KVBox;
-    m_labelPreset = new QLabel(i18n("Preset Length:"), vbox);
-    m_comboBox    = new KComboBox(vbox);
+Resize::~Resize()
+{
+}
+
+void Resize::registerSettingsWidget()
+{
+
+    KVBox* vbox      = new KVBox;
+    m_labelPreset    = new QLabel(i18n("Preset Length:"), vbox);
+    m_comboBox       = new KComboBox(vbox);
     m_comboBox->insertItem(Tiny,   i18np("Tiny (1 pixel)",   "Tiny (%1 pixels)",   presetLengthValue(Tiny)));
     m_comboBox->insertItem(Small,  i18np("Small (1 pixel)",  "Small (%1 pixels)",  presetLengthValue(Small)));
     m_comboBox->insertItem(Medium, i18np("Medium (1 pixel)", "Medium (%1 pixels)", presetLengthValue(Medium)));
@@ -63,15 +71,15 @@ Resize::Resize(QObject* parent)
     m_comboBox->insertItem(Large,  i18np("Large (1 pixel)",  "Large (%1 pixels)",  presetLengthValue(Large)));
     m_comboBox->insertItem(Huge,   i18np("Huge (1 pixel)",   "Huge (%1 pixels)",   presetLengthValue(Huge)));
 
-    m_useCustom    = new QCheckBox(i18n("Use Custom Length"), vbox);
-    m_customLength = new KIntNumInput(vbox);
+    m_useCustom      = new QCheckBox(i18n("Use Custom Length"), vbox);
+    m_customLength   = new KIntNumInput(vbox);
     m_customLength->setRange(10, 10000);
     m_customLength->setSliderEnabled(true);
 
-    QLabel* space = new QLabel(vbox);
+    QLabel* space    = new QLabel(vbox);
     vbox->setStretchFactor(space, 10);
 
-    setSettingsWidget(vbox);
+    m_settingsWidget = vbox;
 
     connect(m_comboBox, SIGNAL(activated(int)),
             this, SLOT(slotSettingsChanged()));
@@ -81,10 +89,8 @@ Resize::Resize(QObject* parent)
 
     connect(m_useCustom, SIGNAL(toggled(bool)),
             this, SLOT(slotSettingsChanged()));
-}
 
-Resize::~Resize()
-{
+    BatchTool::registerSettingsWidget();
 }
 
 BatchToolSettings Resize::defaultSettings()

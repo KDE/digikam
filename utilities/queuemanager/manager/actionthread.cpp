@@ -50,6 +50,7 @@ extern "C"
 
 #include "config-digikam.h"
 #include "dimg.h"
+#include "dimg.h"
 
 namespace Digikam
 {
@@ -57,13 +58,13 @@ namespace Digikam
 class TaskSettings
 {
 public:
-    
+
     explicit TaskSettings()
     {
         exifSetOrientation = true;
         createNewVersion   = true;
     }
-    
+
     bool         exifSetOrientation;
     bool         createNewVersion;
 
@@ -90,7 +91,7 @@ public:
     BatchTool*         tool;
     AssignedBatchTools item;
 };
-    
+
 Task::Task()
     : Job(0), d(new Private)
 {
@@ -110,6 +111,16 @@ void Task::setSettings(const TaskSettings& settings)
 void Task::setItem(const AssignedBatchTools& item)
 {
     d->item = item;
+
+    // For each tools assigned, create a dedicated instance for the thread to have a safe running between jobs.
+    // NOTE: ad BatchTool include settings widget data, it cannot be cloned in thread as well, but in main thread.
+
+    for (BatchToolMap::iterator it = d->item.m_toolsMap.begin();
+         it != d->item.m_toolsMap.end() ; ++it)
+    {
+        BatchTool* tool = it.value().tool->clone(this);
+        it.value().tool = tool;
+    }
 }
 
 void Task::slotCancel()
@@ -147,7 +158,7 @@ void Task::run()
     {
         index                      = it.key();
         BatchToolSet set           = it.value();
-        d->tool                     = set.tool;
+        d->tool                    = set.tool;
         BatchToolSettings settings = set.settings;
         inUrl                      = outUrl;
 

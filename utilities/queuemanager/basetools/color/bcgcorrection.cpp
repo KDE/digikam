@@ -48,17 +48,21 @@ BCGCorrection::BCGCorrection(QObject* const parent)
     setToolTitle(i18n("BCG Correction"));
     setToolDescription(i18n("Fix Brightness/Contrast/Gamma."));
     setToolIconName("contrast");
-
-    QWidget* box   = new QWidget;
-    m_settingsView = new BCGSettings(box);
-    setSettingsWidget(box);
-
-    connect(m_settingsView, SIGNAL(signalSettingsChanged()),
-            this, SLOT(slotSettingsChanged()));
 }
 
 BCGCorrection::~BCGCorrection()
 {
+}
+
+void BCGCorrection::registerSettingsWidget()
+{
+    m_settingsWidget = new QWidget;
+    m_settingsView   = new BCGSettings(m_settingsWidget);
+
+    connect(m_settingsView, SIGNAL(signalSettingsChanged()),
+            this, SLOT(slotSettingsChanged()));
+
+    BatchTool::registerSettingsWidget();
 }
 
 BatchToolSettings BCGCorrection::defaultSettings()
@@ -67,8 +71,8 @@ BatchToolSettings BCGCorrection::defaultSettings()
     BCGContainer defaultPrm = m_settingsView->defaultSettings();
 
     prm.insert("Brightness", (double)defaultPrm.brightness);
-    prm.insert("Contrast", (double)defaultPrm.contrast);
-    prm.insert("Gamma", (double)defaultPrm.gamma);
+    prm.insert("Contrast",   (double)defaultPrm.contrast);
+    prm.insert("Gamma",      (double)defaultPrm.gamma);
 
     return prm;
 }

@@ -43,21 +43,25 @@ ColorFX::ColorFX(QObject* const parent)
     setToolTitle(i18n("Color Effects"));
     setToolDescription(i18n("Apply color effects"));
     setToolIconName("colorfx");
+}
 
-    QWidget* box   = new QWidget;
-    m_settingsView = new ColorFXSettings(box);
+ColorFX::~ColorFX()
+{
+}
+
+void ColorFX::registerSettingsWidget()
+{
+    m_settingsWidget = new QWidget;
+    m_settingsView   = new ColorFXSettings(m_settingsWidget);
     m_settingsView->resetToDefault();
-    setSettingsWidget(box);
 
     connect(m_settingsView, SIGNAL(signalSettingsChanged()),
             this, SLOT(slotSettingsChanged()));
 
     connect(m_settingsView, SIGNAL(signalLevelOrIterationChanged()),
             this, SLOT(slotSettingsChanged()));
-}
 
-ColorFX::~ColorFX()
-{
+    BatchTool::registerSettingsWidget();
 }
 
 BatchToolSettings ColorFX::defaultSettings()

@@ -49,16 +49,22 @@ RemoveMetadata::RemoveMetadata(QObject* parent)
     setToolTitle(i18n("Remove Metadata"));
     setToolDescription(i18n("Remove Exif, Iptc, or Xmp metadata from images."));
     setToolIconName("exifinfo");
+}
 
-    KVBox* vbox  = new KVBox;
-    m_removeExif = new QCheckBox(i18n("Remove Exif"), vbox);
-    m_removeIptc = new QCheckBox(i18n("Remove Iptc"), vbox);
-    m_removeXmp  = new QCheckBox(i18n("Remove Xmp"), vbox);
+RemoveMetadata::~RemoveMetadata()
+{
+}
 
-    QLabel* space = new QLabel(vbox);
+void RemoveMetadata::registerSettingsWidget()
+{
+    KVBox* vbox      = new KVBox;
+    m_removeExif     = new QCheckBox(i18n("Remove Exif"), vbox);
+    m_removeIptc     = new QCheckBox(i18n("Remove Iptc"), vbox);
+    m_removeXmp      = new QCheckBox(i18n("Remove Xmp"), vbox);
+    QLabel* space    = new QLabel(vbox);
     vbox->setStretchFactor(space, 10);
 
-    setSettingsWidget(vbox);
+    m_settingsWidget = vbox;
 
     connect(m_removeExif, SIGNAL(toggled(bool)),
             this, SLOT(slotSettingsChanged()));
@@ -68,10 +74,8 @@ RemoveMetadata::RemoveMetadata(QObject* parent)
 
     connect(m_removeXmp, SIGNAL(toggled(bool)),
             this, SLOT(slotSettingsChanged()));
-}
 
-RemoveMetadata::~RemoveMetadata()
-{
+    BatchTool::registerSettingsWidget();
 }
 
 BatchToolSettings RemoveMetadata::defaultSettings()

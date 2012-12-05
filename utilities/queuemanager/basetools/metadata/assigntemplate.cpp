@@ -52,18 +52,23 @@ AssignTemplate::AssignTemplate(QObject* parent)
     setToolTitle(i18n("Apply Metadata Template"));
     setToolDescription(i18n("Apply template metadata"));
     setToolIconName("application-xml");
-
-    KVBox* vbox        = new KVBox;
-    m_templateSelector = new TemplateSelector(vbox);
-    m_templateViewer   = new TemplateViewer(vbox);
-    setSettingsWidget(vbox);
-
-    connect(m_templateSelector, SIGNAL(signalTemplateSelected()),
-            this, SLOT(slotSettingsChanged()));
 }
 
 AssignTemplate::~AssignTemplate()
 {
+}
+
+void AssignTemplate::registerSettingsWidget()
+{
+    KVBox* vbox        = new KVBox;
+    m_templateSelector = new TemplateSelector(vbox);
+    m_templateViewer   = new TemplateViewer(vbox);
+    m_settingsWidget   = vbox;
+
+    connect(m_templateSelector, SIGNAL(signalTemplateSelected()),
+            this, SLOT(slotSettingsChanged()));
+
+    BatchTool::registerSettingsWidget();
 }
 
 BatchToolSettings AssignTemplate::defaultSettings()

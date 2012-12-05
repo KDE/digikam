@@ -58,15 +58,15 @@ AntiVignetting::~AntiVignetting()
 {
 }
 
-QWidget* AntiVignetting::createSettingsWidget()
+void AntiVignetting::registerSettingsWidget()
 {
-    QWidget* box   = new QWidget;
-    m_settingsView = new AntiVignettingSettings(box);
+    m_settingsWidget = new QWidget;
+    m_settingsView   = new AntiVignettingSettings(m_settingsWidget);
 
     connect(m_settingsView, SIGNAL(signalSettingsChanged()),
             this, SLOT(slotSettingsChanged()));
 
-    return box;
+    BatchTool::registerSettingsWidget();
 }
 
 BatchToolSettings AntiVignetting::defaultSettings()

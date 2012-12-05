@@ -56,15 +56,18 @@ NoiseReduction::~NoiseReduction()
 {
 }
 
-QWidget* NoiseReduction::createSettingsWidget()
+void NoiseReduction::registerSettingsWidget()
 {
-    QWidget* box   = new QWidget;
-    m_settingsView = new NRSettings(box);
+    m_settingsWidget = new QWidget;
+    m_settingsView   = new NRSettings(m_settingsWidget);
+
+    connect(m_settingsView, SIGNAL(signalEstimateNoise()),
+            this, SLOT(slotSettingsChanged()));
 
     connect(m_settingsView, SIGNAL(signalSettingsChanged()),
             this, SLOT(slotSettingsChanged()));
 
-    return box;
+    BatchTool::registerSettingsWidget();
 }
 
 BatchToolSettings NoiseReduction::defaultSettings()
@@ -136,7 +139,7 @@ bool NoiseReduction::toolOperations()
         prm.softness[1]   = settings()["CrSoftness"].toDouble();
         prm.softness[2]   = settings()["CbSoftness"].toDouble();
     }
-   
+
     NRFilter wnr(&image(), 0L, prm);
     applyFilter(&wnr);
 

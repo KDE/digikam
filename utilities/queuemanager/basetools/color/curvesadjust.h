@@ -46,6 +46,10 @@ public:
 
     BatchToolSettings defaultSettings();
 
+    BatchTool* clone(QObject* const parent=0) const { return new CurvesAdjust(parent); };
+
+    void registerSettingsWidget();
+
 public Q_SLOTS:
 
     void slotResetSettingsToDefault();
@@ -53,7 +57,6 @@ public Q_SLOTS:
 private:
 
     bool toolOperations();
-    QWidget* createSettingsWidget();
 
 private Q_SLOTS:
 

@@ -65,86 +65,67 @@ namespace Digikam
 
 class BatchToolsManager::Private
 {
-public:
-
-    /** A container of associated batch tool and settings widget.
-     */
-    class BatchToolWidgetSet
-    {
-    public:
-
-        BatchToolWidgetSet()
-        {
-            tool           = 0;
-            settingsWidget = 0;
-        };
-
-        BatchTool* tool;
-        QWidget*   settingsWidget;
-    };
-
-    typedef QList<BatchToolWidgetSet> BatchToolsWidgetList;
 
 public:
 
     Private()
     {
     }
-    
-    BatchToolsWidgetList toolsList;
+
+    BatchToolsList toolsList;
 };
 
 BatchToolsManager::BatchToolsManager(QObject* const parent)
     : QObject(parent), d(new Private)
 {
     // Convert
-    registerTool(new Convert2JPEG(this),   0);
-    registerTool(new Convert2PNG(this),    0);
-    registerTool(new Convert2TIFF(this),   0);
-    registerTool(new Convert2JP2(this),    0);
-    registerTool(new Convert2PGF(this),    0);
+    registerTool(new Convert2JPEG(this));
+    registerTool(new Convert2PNG(this));
+    registerTool(new Convert2TIFF(this));
+    registerTool(new Convert2JP2(this));
+    registerTool(new Convert2PGF(this));
 
     // Transform
-    registerTool(new Rotate(this),         0);
-    registerTool(new Flip(this),           0);
-    registerTool(new Resize(this),         0);
+    registerTool(new Rotate(this));
+    registerTool(new Flip(this));
+    registerTool(new Resize(this));
 
     // Decorate
-    registerTool(new WaterMark(this),      0);
-    registerTool(new Border(this),         0);
+    registerTool(new WaterMark(this));
+    registerTool(new Border(this));
 
     // Metadata
-    registerTool(new AssignTemplate(this), 0);
-    registerTool(new RemoveMetadata(this), 0);
+    registerTool(new AssignTemplate(this));
+    registerTool(new RemoveMetadata(this));
 
     // Enhance
-    registerTool(new Blur(this),           0);
-    registerTool(new Sharpen(this),        0);
-    registerTool(new NoiseReduction(this), 0);
-    registerTool(new Restoration(this),    0);
-    registerTool(new LocalContrast(this),  0);
-    registerTool(new AntiVignetting(this), 0);
+    registerTool(new Blur(this));
+    registerTool(new Sharpen(this));
+    registerTool(new NoiseReduction(this));
+    registerTool(new Restoration(this));
+    registerTool(new LocalContrast(this));
+    registerTool(new AntiVignetting(this));
 #ifdef HAVE_GLIB2
-    registerTool(new LensAutoFix(this),    0);
+    registerTool(new LensAutoFix(this));
 #endif // HAVE_GLIB2
 
     // Color
-    registerTool(new BCGCorrection(this),  0);
-    registerTool(new HSLCorrection(this),  0);
-    registerTool(new ColorBalance(this),   0);
-    registerTool(new AutoCorrection(this), 0);
-    registerTool(new IccConvert(this),     0);
-    registerTool(new ChannelMixer(this),   0);
-    registerTool(new BWConvert(this),      0);
-    registerTool(new WhiteBalance(this),   0);
-    registerTool(new CurvesAdjust(this),   0);
-    registerTool(new Invert(this),         0);
-    registerTool(new Convert8to16(this),   0);
-    registerTool(new Convert16to8(this),   0);
+    registerTool(new BCGCorrection(this));
+    registerTool(new HSLCorrection(this));
+    registerTool(new ColorBalance(this));
+    registerTool(new AutoCorrection(this));
+    registerTool(new IccConvert(this));
+    registerTool(new ChannelMixer(this));
+    registerTool(new BWConvert(this));
+    registerTool(new WhiteBalance(this));
+    registerTool(new CurvesAdjust(this));
+    registerTool(new Invert(this));
+    registerTool(new Convert8to16(this));
+    registerTool(new Convert16to8(this));
 
     // Filters
-    registerTool(new FilmGrain(this),      0);
-    registerTool(new ColorFX(this),        0);
+    registerTool(new FilmGrain(this));
+    registerTool(new ColorFX(this));
 }
 
 BatchToolsManager::~BatchToolsManager()
@@ -154,27 +135,17 @@ BatchToolsManager::~BatchToolsManager()
 
 BatchToolsList BatchToolsManager::toolsList() const
 {
-    BatchToolsList list;
-
-    foreach(Private::BatchToolWidgetSet set, d->toolsList)
-    {
-        list.append(set.tool);
-    }
-    
-    return list;
+    return d->toolsList;
 }
 
-void BatchToolsManager::registerTool(BatchTool* const tool, QWidget* const w)
+void BatchToolsManager::registerTool(BatchTool* const tool)
 {
     if (!tool)
     {
         return;
     }
-
-    Private::BatchToolWidgetSet set;
-    set.tool           = tool;
-    set.settingsWidget = w;
-    d->toolsList.append(set);
+    tool->registerSettingsWidget();
+    d->toolsList.append(tool);
 }
 
 void BatchToolsManager::unregisterTool(BatchTool* const tool)
@@ -184,12 +155,11 @@ void BatchToolsManager::unregisterTool(BatchTool* const tool)
         return;
     }
 
-    for (Private::BatchToolsWidgetList::iterator it = d->toolsList.begin(); it != d->toolsList.end();)
+    for (BatchToolsList::iterator it = d->toolsList.begin(); it != d->toolsList.end();)
     {
-        if ((*it).tool == tool)
+        if (*it == tool)
         {
-            delete (*it).tool;
-            delete (*it).settingsWidget;
+            delete *it;
             it = d->toolsList.erase(it);
         }
         else
@@ -201,24 +171,11 @@ void BatchToolsManager::unregisterTool(BatchTool* const tool)
 
 BatchTool* BatchToolsManager::findTool(const QString& name, BatchTool::BatchToolGroup group) const
 {
-    foreach(Private::BatchToolWidgetSet set, d->toolsList)
+    foreach(BatchTool* const tool, d->toolsList)
     {
-        if (set.tool->objectName() == name && set.tool->toolGroup() == group)
+        if (tool->objectName() == name && tool->toolGroup() == group)
         {
-            return set.tool;
-        }
-    }
-
-    return 0;
-}
-
-QWidget* BatchToolsManager::findSettingsWidget(const QString& name, BatchTool::BatchToolGroup group) const
-{
-    foreach(Private::BatchToolWidgetSet set, d->toolsList)
-    {
-        if (set.tool->objectName() == name && set.tool->toolGroup() == group)
-        {
-            return set.settingsWidget;
+            return tool;
         }
     }
 

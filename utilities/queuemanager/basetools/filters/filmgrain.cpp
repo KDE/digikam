@@ -50,18 +50,22 @@ FilmGrain::FilmGrain(QObject* parent)
     setToolTitle(i18n("Film Grain"));
     setToolDescription(i18n("Add film grain"));
     setToolIconName("filmgrain");
-
-    QWidget* box   = new QWidget;
-    m_settingsView = new FilmGrainSettings(box);
-    m_settingsView->resetToDefault();
-    setSettingsWidget(box);
-
-    connect(m_settingsView, SIGNAL(signalSettingsChanged()),
-            this, SLOT(slotSettingsChanged()));
 }
 
 FilmGrain::~FilmGrain()
 {
+}
+
+void FilmGrain::registerSettingsWidget()
+{
+    m_settingsWidget = new QWidget;
+    m_settingsView   = new FilmGrainSettings(m_settingsWidget);
+    m_settingsView->resetToDefault();
+
+    connect(m_settingsView, SIGNAL(signalSettingsChanged()),
+            this, SLOT(slotSettingsChanged()));
+
+    BatchTool::registerSettingsWidget();
 }
 
 BatchToolSettings FilmGrain::defaultSettings()
@@ -69,23 +73,23 @@ BatchToolSettings FilmGrain::defaultSettings()
     BatchToolSettings prm;
     FilmGrainContainer defaultPrm = m_settingsView->defaultSettings();
 
-    prm.insert("grainSize", (int)defaultPrm.grainSize);
-    prm.insert("photoDistribution", (bool)defaultPrm.photoDistribution);
-    prm.insert("addLuminanceNoise", (bool)defaultPrm.addLuminanceNoise);
-    prm.insert("lumaIntensity", (int)defaultPrm.lumaIntensity);
-    prm.insert("lumaShadows", (int)defaultPrm.lumaShadows);
-    prm.insert("lumaMidtones", (int)defaultPrm.lumaMidtones);
-    prm.insert("lumaHighlights", (int)defaultPrm.lumaHighlights);
+    prm.insert("grainSize",               (int)defaultPrm.grainSize);
+    prm.insert("photoDistribution",       (bool)defaultPrm.photoDistribution);
+    prm.insert("addLuminanceNoise",       (bool)defaultPrm.addLuminanceNoise);
+    prm.insert("lumaIntensity",           (int)defaultPrm.lumaIntensity);
+    prm.insert("lumaShadows",             (int)defaultPrm.lumaShadows);
+    prm.insert("lumaMidtones",            (int)defaultPrm.lumaMidtones);
+    prm.insert("lumaHighlights",          (int)defaultPrm.lumaHighlights);
     prm.insert("addChrominanceBlueNoise", (bool)defaultPrm.addChrominanceBlueNoise);
-    prm.insert("chromaBlueIntensity", (int)defaultPrm.chromaBlueIntensity);
-    prm.insert("chromaBlueShadows", (int)defaultPrm.chromaBlueShadows);
-    prm.insert("chromaBlueMidtones", (int)defaultPrm.chromaBlueMidtones);
-    prm.insert("chromaBlueHighlights", (int)defaultPrm.chromaBlueHighlights);
-    prm.insert("addChrominanceRedNoise", (bool)defaultPrm.addChrominanceRedNoise);
-    prm.insert("chromaRedIntensity", (int)defaultPrm.chromaRedIntensity);
-    prm.insert("chromaRedShadows", (int)defaultPrm.chromaRedShadows);
-    prm.insert("chromaRedMidtones", (int)defaultPrm.chromaRedMidtones);
-    prm.insert("chromaRedHighlights", (int)defaultPrm.chromaRedHighlights);
+    prm.insert("chromaBlueIntensity",     (int)defaultPrm.chromaBlueIntensity);
+    prm.insert("chromaBlueShadows",       (int)defaultPrm.chromaBlueShadows);
+    prm.insert("chromaBlueMidtones",      (int)defaultPrm.chromaBlueMidtones);
+    prm.insert("chromaBlueHighlights",    (int)defaultPrm.chromaBlueHighlights);
+    prm.insert("addChrominanceRedNoise",  (bool)defaultPrm.addChrominanceRedNoise);
+    prm.insert("chromaRedIntensity",      (int)defaultPrm.chromaRedIntensity);
+    prm.insert("chromaRedShadows",        (int)defaultPrm.chromaRedShadows);
+    prm.insert("chromaRedMidtones",       (int)defaultPrm.chromaRedMidtones);
+    prm.insert("chromaRedHighlights",     (int)defaultPrm.chromaRedHighlights);
 
     return prm;
 }
@@ -118,23 +122,23 @@ void FilmGrain::slotSettingsChanged()
     BatchToolSettings prm;
     FilmGrainContainer currentPrm = m_settingsView->settings();
 
-    prm.insert("grainSize", (int)currentPrm.grainSize);
-    prm.insert("photoDistribution", (bool)currentPrm.photoDistribution);
-    prm.insert("addLuminanceNoise", (bool)currentPrm.addLuminanceNoise);
-    prm.insert("lumaIntensity", (int)currentPrm.lumaIntensity);
-    prm.insert("lumaShadows", (int)currentPrm.lumaShadows);
-    prm.insert("lumaMidtones", (int)currentPrm.lumaMidtones);
-    prm.insert("lumaHighlights", (int)currentPrm.lumaHighlights);
+    prm.insert("grainSize",               (int)currentPrm.grainSize);
+    prm.insert("photoDistribution",       (bool)currentPrm.photoDistribution);
+    prm.insert("addLuminanceNoise",       (bool)currentPrm.addLuminanceNoise);
+    prm.insert("lumaIntensity",           (int)currentPrm.lumaIntensity);
+    prm.insert("lumaShadows",             (int)currentPrm.lumaShadows);
+    prm.insert("lumaMidtones",            (int)currentPrm.lumaMidtones);
+    prm.insert("lumaHighlights",          (int)currentPrm.lumaHighlights);
     prm.insert("addChrominanceBlueNoise", (bool)currentPrm.addChrominanceBlueNoise);
-    prm.insert("chromaBlueIntensity", (int)currentPrm.chromaBlueIntensity);
-    prm.insert("chromaBlueShadows", (int)currentPrm.chromaBlueShadows);
-    prm.insert("chromaBlueMidtones", (int)currentPrm.chromaBlueMidtones);
-    prm.insert("chromaBlueHighlights", (int)currentPrm.chromaBlueHighlights);
-    prm.insert("addChrominanceRedNoise", (bool)currentPrm.addChrominanceRedNoise);
-    prm.insert("chromaRedIntensity", (int)currentPrm.chromaRedIntensity);
-    prm.insert("chromaRedShadows", (int)currentPrm.chromaRedShadows);
-    prm.insert("chromaRedMidtones", (int)currentPrm.chromaRedMidtones);
-    prm.insert("chromaRedHighlights", (int)currentPrm.chromaRedHighlights);
+    prm.insert("chromaBlueIntensity",     (int)currentPrm.chromaBlueIntensity);
+    prm.insert("chromaBlueShadows",       (int)currentPrm.chromaBlueShadows);
+    prm.insert("chromaBlueMidtones",      (int)currentPrm.chromaBlueMidtones);
+    prm.insert("chromaBlueHighlights",    (int)currentPrm.chromaBlueHighlights);
+    prm.insert("addChrominanceRedNoise",  (bool)currentPrm.addChrominanceRedNoise);
+    prm.insert("chromaRedIntensity",      (int)currentPrm.chromaRedIntensity);
+    prm.insert("chromaRedShadows",        (int)currentPrm.chromaRedShadows);
+    prm.insert("chromaRedMidtones",       (int)currentPrm.chromaRedMidtones);
+    prm.insert("chromaRedHighlights",     (int)currentPrm.chromaRedHighlights);
 
     BatchTool::slotSettingsChanged(prm);
 }

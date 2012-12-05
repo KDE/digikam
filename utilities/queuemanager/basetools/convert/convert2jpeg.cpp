@@ -49,16 +49,21 @@ Convert2JPEG::Convert2JPEG(QObject* const parent)
     setToolTitle(i18n("Convert To JPEG"));
     setToolDescription(i18n("Convert images to JPEG format."));
     setToolIconName("image-jpeg");
-
-    m_settings = new JPEGSettings;
-    setSettingsWidget(m_settings);
-
-    connect(m_settings, SIGNAL(signalSettingsChanged()),
-            this, SLOT(slotSettingsChanged()));
 }
 
 Convert2JPEG::~Convert2JPEG()
 {
+}
+
+void Convert2JPEG::registerSettingsWidget()
+{
+    m_settings       = new JPEGSettings;
+    m_settingsWidget = m_settings;
+
+    connect(m_settings, SIGNAL(signalSettingsChanged()),
+            this, SLOT(slotSettingsChanged()));
+
+    BatchTool::registerSettingsWidget();
 }
 
 BatchToolSettings Convert2JPEG::defaultSettings()

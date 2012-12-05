@@ -61,17 +61,16 @@ IccConvert::~IccConvert()
 {
 }
 
-QWidget* IccConvert::createSettingsWidget()
+void IccConvert::registerSettingsWidget()
 {
-    KVBox* vbox    = new KVBox;
-    m_settingsView = new IccProfilesSettings(vbox);
-    QLabel* space  = new QLabel(vbox);
+    KVBox* vbox      = new KVBox;
+    m_settingsView   = new IccProfilesSettings(vbox);
+    QLabel* space    = new QLabel(vbox);
     vbox->setStretchFactor(space, 10);
+    m_settingsWidget = vbox;
 
     connect(m_settingsView, SIGNAL(signalSettingsChanged()),
             this, SLOT(slotSettingsChanged()));
-
-    return vbox;
 }
 
 BatchToolSettings IccConvert::defaultSettings()

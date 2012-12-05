@@ -48,6 +48,10 @@ public:
 
     BatchToolSettings defaultSettings();
 
+    BatchTool* clone(QObject* const parent=0) const { return new Resize(parent); };
+
+    void registerSettingsWidget();
+
 private Q_SLOTS:
 
     void slotAssignSettings2Widget();

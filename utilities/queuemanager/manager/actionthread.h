@@ -81,7 +81,7 @@ Q_SIGNALS:
     /** Emit when a queue have been fully processed (all items from queue are finished).
      */
     void signalQueueProcessed();
-    
+
     /** Signal to emit to sub-tasks to cancel processing.
      */
     void signalCancelTask();
@@ -106,25 +106,25 @@ public:
 
     Task();
     ~Task();
-    
+
     void setSettings(const TaskSettings& settings);
     void setItem(const AssignedBatchTools& item);
-    
+
 Q_SIGNALS:
 
     void signalStarting(const Digikam::ActionData& ad);
     void signalFinished(const Digikam::ActionData& ad);
 
 public Q_SLOTS:
-    
+
     void slotCancel();
-    
+
 protected:
 
     void run();
 
 private:
-    
+
     class Private;
     Private* const d;
 };
@@ -132,4 +132,3 @@ private:
 }  // namespace Digikam
 
 #endif /* ACTIONTHREAD_H */
-

@@ -56,18 +56,18 @@ Blur::~Blur()
 {
 }
 
-QWidget* Blur::createSettingsWidget()
+void Blur::registerSettingsWidget()
 {
-    QWidget* box  = new QWidget;
-    QLabel* label = new QLabel(i18n("Smoothness:"));
-    m_radiusInput = new RIntNumInput();
+    m_settingsWidget = new QWidget;
+    QLabel* label    = new QLabel(i18n("Smoothness:"));
+    m_radiusInput    = new RIntNumInput();
     m_radiusInput->setRange(0, 100, 1);
     m_radiusInput->setDefaultValue(0);
     m_radiusInput->setWhatsThis(i18n("A smoothness of 0 has no effect, "
                                      "1 and above determine the Gaussian blur matrix radius "
                                      "that determines how much to blur the image."));
 
-    QGridLayout* grid = new QGridLayout(box);
+    QGridLayout* grid = new QGridLayout(m_settingsWidget);
     grid->addWidget(label,         0, 0, 1, 2);
     grid->addWidget(m_radiusInput, 1, 0, 1, 2);
     grid->setRowStretch(2, 10);
@@ -77,7 +77,7 @@ QWidget* Blur::createSettingsWidget()
     connect(m_radiusInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotSettingsChanged()));
 
-    return box;
+    BatchTool::registerSettingsWidget();
 }
 
 BatchToolSettings Blur::defaultSettings()

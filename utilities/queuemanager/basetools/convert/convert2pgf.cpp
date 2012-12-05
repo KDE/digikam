@@ -49,16 +49,21 @@ Convert2PGF::Convert2PGF(QObject* const parent)
     setToolTitle(i18n("Convert To PGF"));
     setToolDescription(i18n("Convert images to PGF format."));
     setToolIconName("image-jp2");
-
-    m_settings = new PGFSettings();
-    setSettingsWidget(m_settings);
-
-    connect(m_settings, SIGNAL(signalSettingsChanged()),
-            this, SLOT(slotSettingsChanged()));
 }
 
 Convert2PGF::~Convert2PGF()
 {
+}
+
+void Convert2PGF::registerSettingsWidget()
+{
+    m_settings       = new PGFSettings();
+    m_settingsWidget = m_settings;
+
+    connect(m_settings, SIGNAL(signalSettingsChanged()),
+            this, SLOT(slotSettingsChanged()));
+
+    BatchTool::registerSettingsWidget();
 }
 
 BatchToolSettings Convert2PGF::defaultSettings()

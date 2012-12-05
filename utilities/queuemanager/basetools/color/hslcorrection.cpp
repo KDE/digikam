@@ -48,17 +48,21 @@ HSLCorrection::HSLCorrection(QObject* const parent)
     setToolTitle(i18n("HSL Correction"));
     setToolDescription(i18n("Fix Hue/Saturation/Lightness."));
     setToolIconName("adjusthsl");
-
-    QWidget* box   = new QWidget;
-    m_settingsView = new HSLSettings(box);
-    setSettingsWidget(box);
-
-    connect(m_settingsView, SIGNAL(signalSettingsChanged()),
-            this, SLOT(slotSettingsChanged()));
 }
 
 HSLCorrection::~HSLCorrection()
 {
+}
+
+void HSLCorrection::registerSettingsWidget()
+{
+    m_settingsWidget = new QWidget;
+    m_settingsView   = new HSLSettings(m_settingsWidget);
+
+    connect(m_settingsView, SIGNAL(signalSettingsChanged()),
+            this, SLOT(slotSettingsChanged()));
+
+    BatchTool::registerSettingsWidget();
 }
 
 BatchToolSettings HSLCorrection::defaultSettings()

@@ -45,12 +45,15 @@ public:
 
     BatchToolSettings defaultSettings();
 
+    BatchTool* clone(QObject* const parent=0) const { return new Restoration(parent); };
+
+    void registerSettingsWidget();
+
     void cancel();
 
 private:
 
     bool toolOperations();
-    QWidget* createSettingsWidget();
 
 private Q_SLOTS:
 

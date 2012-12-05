@@ -49,16 +49,21 @@ Convert2PNG::Convert2PNG(QObject* const parent)
     setToolTitle(i18n("Convert To PNG"));
     setToolDescription(i18n("Convert images to PNG format."));
     setToolIconName("image-png");
-
-    m_settings = new PNGSettings();
-    setSettingsWidget(m_settings);
-
-    connect(m_settings, SIGNAL(signalSettingsChanged()),
-            this, SLOT(slotSettingsChanged()));
 }
 
 Convert2PNG::~Convert2PNG()
 {
+}
+
+void Convert2PNG::registerSettingsWidget()
+{
+    m_settings       = new PNGSettings();
+    m_settingsWidget = m_settings;
+
+    connect(m_settings, SIGNAL(signalSettingsChanged()),
+            this, SLOT(slotSettingsChanged()));
+
+    BatchTool::registerSettingsWidget();
 }
 
 BatchToolSettings Convert2PNG::defaultSettings()
