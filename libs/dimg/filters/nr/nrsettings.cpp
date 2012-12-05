@@ -124,7 +124,7 @@ NRSettings::NRSettings(QWidget* const parent)
     // -------------------------------------------------------------
 
     d->checkAutoEst     = new QCheckBox(i18n("Estimate Noise"));
-    
+
     d->advExpanderBox   = new RExpanderBox;
     d->advExpanderBox->setObjectName("Noise Reduction Settings Expander");
 
@@ -234,7 +234,7 @@ NRSettings::NRSettings(QWidget* const parent)
 
     connect(d->checkAutoEst, SIGNAL(clicked(bool)),
             this, SLOT(slotDisableParameters(bool)));
-    
+
     connect(d->thrLumInput, SIGNAL(valueChanged(double)),
             this, SIGNAL(signalSettingsChanged()));
 
@@ -277,7 +277,9 @@ void NRSettings::slotDisableParameters(bool b)
     kapp->processEvents();
 
     if (b)
+    {
         emit signalEstimateNoise();
+    }
 }
 
 NRContainer NRSettings::settings() const

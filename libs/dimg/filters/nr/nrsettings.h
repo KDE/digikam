@@ -57,7 +57,7 @@ public:
 
     void setEstimateNoise(bool b);
     bool estimateNoise() const;
-    
+
     void readSettings(KConfigGroup& group);
     void writeSettings(KConfigGroup& group);
 

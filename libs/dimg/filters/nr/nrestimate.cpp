@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2012-10-18
- * Description : Wavelets YCrCb Noise Reduction settings estimation.
+ * Description : Wavelets YCrCb Noise Reduction settings estimation by image content analys.
  *               Wavelets theory is based on "À Trous" Discrete Wavelet Transform
  *               described into "The Handbook of Astronomical Image Processing" book
  *               from Richard Berry and James Burnell, chapter 18.
@@ -31,7 +31,6 @@
 
 #include <cmath>
 #include <cfloat>
-#include <iostream>
 
 // Qt includes.
 
@@ -159,7 +158,10 @@ void NREstimate::startAnalyse()
     //-- KMEANS ---------------------------------------------------------------------------------------------
 
     if (runningFlag())
-        cvKMeans2(points, d->clusterCount, clusters, cvTermCriteria(CV_TERMCRIT_EPS+CV_TERMCRIT_ITER, 10, 1.0), 3, 0, 0, centers, 0);
+    {
+        cvKMeans2(points, d->clusterCount, clusters, 
+                  cvTermCriteria(CV_TERMCRIT_EPS + CV_TERMCRIT_ITER, 10, 1.0), 3, 0, 0, centers, 0);
+    }
 
     kDebug() << "cvKmeans2 succesfully run";
     postProgress(15);
@@ -219,7 +221,9 @@ void NREstimate::startAnalyse()
     CvMat* sd = 0;
 
     if (runningFlag())
+    {
         sd = cvCreateMat(max, (d->clusterCount * points->cols), CV_32FC1);
+    }
 
     postProgress(30);
 
@@ -235,7 +239,9 @@ void NREstimate::startAnalyse()
     float* ptr = 0;
 
     if (runningFlag())
+    {
         ptr = (float*)sd->data.ptr;
+    }
 
     kDebug() << "The rowPosition array is ready!";
     postProgress(40);
