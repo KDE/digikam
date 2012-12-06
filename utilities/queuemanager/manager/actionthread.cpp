@@ -167,7 +167,6 @@ void Task::run()
         ActionData ad2;
         ad2.fileUrl = d->item.m_itemUrl;
         ad2.status  = ActionData::TaskStarted;
-        ad2.index   = index;
         emit signalFinished(ad2);
 
         d->tool->setImageData(tmpImage);
@@ -192,7 +191,6 @@ void Task::run()
             ActionData ad3;
             ad3.fileUrl = d->item.m_itemUrl;
             ad3.status  = ActionData::TaskDone;
-            ad3.index   = index;
             emit signalFinished(ad3);
 
         }
@@ -201,7 +199,6 @@ void Task::run()
             ActionData ad4;
             ad4.fileUrl = d->item.m_itemUrl;
             ad4.status  = ActionData::TaskCanceled;
-            ad4.index   = index;
             emit signalFinished(ad4);
 
             ActionData ad5;
@@ -216,7 +213,6 @@ void Task::run()
             ActionData ad4;
             ad4.fileUrl = d->item.m_itemUrl;
             ad4.status  = ActionData::TaskFailed;
-            ad4.index   = index;
             emit signalFinished(ad4);
 
             ActionData ad5;

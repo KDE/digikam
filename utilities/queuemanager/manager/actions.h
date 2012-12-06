@@ -59,12 +59,9 @@ public:
     ActionData()
     {
         status = None;
-        index  = 0;
     }
 
     ActionStatus status;
-
-    int          index;         // Index of tool currently in progress.
 
     QString      message;
 
