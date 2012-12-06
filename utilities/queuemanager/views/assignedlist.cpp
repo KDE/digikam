@@ -21,6 +21,8 @@
  *
  * ============================================================ */
 
+#define ICONSIZE 32
+
 #include "assignedlist.moc"
 
 // Qt includes
@@ -72,7 +74,7 @@ void AssignedListViewItem::setToolSet(const BatchToolSet& set)
 
     if (m_set.tool)
     {
-        setIcon(0, SmallIcon(m_set.tool->toolIconName()));
+        setIcon(0, KIconLoader::global()->loadIcon(m_set.tool->toolIconName(), KIconLoader::NoGroup, ICONSIZE));
         setText(0, m_set.tool->toolTitle());
     }
 }
@@ -89,6 +91,7 @@ AssignedListView::AssignedListView(QWidget* const parent)
 {
     setSelectionMode(QAbstractItemView::SingleSelection);
     setWhatsThis(i18n("This is the list of batch tools assigned."));
+    setIconSize(QSize(ICONSIZE, ICONSIZE));
 
     setDragEnabled(true);
     setAcceptDrops(true);
@@ -102,7 +105,7 @@ AssignedListView::AssignedListView(QWidget* const parent)
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     setColumnCount(1);
     setHeaderHidden(true);
-    header()->setResizeMode(QHeaderView::Stretch);
+    header()->setResizeMode(QHeaderView::ResizeToContents);
 
     connect(this, SIGNAL(itemSelectionChanged()),
             this, SLOT(slotSelectionChanged()));
