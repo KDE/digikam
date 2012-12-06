@@ -113,13 +113,13 @@ void Task::setItem(const AssignedBatchTools& item)
     d->item = item;
 
     // For each tools assigned, create a dedicated instance for the thread to have a safe running between jobs.
-    // NOTE: ad BatchTool include settings widget data, it cannot be cloned in thread as well, but in main thread.
+    // NOTE: BatchTool include settings widget data, it cannot be cloned in thread as well, but in main thread.
 
     for (BatchToolMap::iterator it = d->item.m_toolsMap.begin();
          it != d->item.m_toolsMap.end() ; ++it)
     {
-        BatchTool* tool = it.value().tool->clone(this);
-        it.value().tool = tool;
+        BatchTool* const tool = it.value().tool->clone(this);
+        it.value().tool       = tool;
     }
 }
 
@@ -309,13 +309,13 @@ void ActionThread::processQueueItems(const QList<AssignedBatchTools>& items)
         Task* const t = new Task();
         t->setSettings(d->settings);
         t->setItem(items.at(i));
-        
+
         connect(t, SIGNAL(signalStarting(Digikam::ActionData)),
                 this, SIGNAL(signalStarting(Digikam::ActionData)));
 
         connect(t, SIGNAL(signalFinished(Digikam::ActionData)),
                 this, SIGNAL(signalFinished(Digikam::ActionData)));
-        
+
         connect(this, SIGNAL(signalCancelTask()),
                 t, SLOT(slotCancel()), Qt::QueuedConnection);
 
