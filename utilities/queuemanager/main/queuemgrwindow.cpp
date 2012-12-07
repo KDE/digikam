@@ -339,7 +339,7 @@ void QueueMgrWindow::setupConnections()
 
     connect(d->thread, SIGNAL(signalFinished(Digikam::ActionData)),
             this, SLOT(slotAction(Digikam::ActionData)));
-    
+
     connect(d->thread, SIGNAL(signalQueueProcessed()),
             this, SLOT(slotQueueProcessed()));
 
@@ -851,7 +851,7 @@ void QueueMgrWindow::slotShowMenuBar()
 void QueueMgrWindow::slotRun()
 {
     d->currentQueueToProcess = 0;
- 
+
     if (!d->queuePool->totalPendingItems())
     {
         KMessageBox::error(this, i18n("There are no items to process in the queues."));
@@ -894,7 +894,7 @@ void QueueMgrWindow::processingAborted()
 void QueueMgrWindow::processOneQueue()
 {
     d->assignedList->reset();
-    
+
     d->queuePool->setCurrentIndex(d->currentQueueToProcess);
     QueuePoolItemsList itemsList = d->queuePool->queueItemsList(d->currentQueueToProcess);
     QueueSettings settings       = d->queuePool->currentQueue()->settings();
@@ -904,19 +904,19 @@ void QueueMgrWindow::processOneQueue()
         processingAborted();
         return;
     }
-    
+
     QList<AssignedBatchTools> tools4Items;
-    
+
     foreach(const ItemInfoSet& item, itemsList)
     {
         AssignedBatchTools one = d->queuePool->currentQueue()->assignedTools();
         one.m_itemUrl          = item.info.fileUrl();
         tools4Items.append(one);
     }
- 
+
     d->thread->setWorkingUrl(settings.targetUrl);
     d->thread->processQueueItems(tools4Items);
-    
+
     if (!d->thread->isRunning())
         d->thread->start();
 }
@@ -1161,7 +1161,7 @@ void QueueMgrWindow::processed(const KUrl& url, const KUrl& tmp)
         {
             addHistoryMessage(cItem, i18n("Item overwritten..."), DHistoryView::WarningEntry);
         }
-    }   
+    }
 
     if (!dest.isEmpty())
     {
@@ -1257,7 +1257,7 @@ void QueueMgrWindow::slotStop()
 void QueueMgrWindow::slotQueueProcessed()
 {
     d->currentQueueToProcess++;
-    
+
     if (d->currentQueueToProcess == d->queuePool->count())
     {
         // Pop-up a message to bring user when all is done.
