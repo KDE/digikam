@@ -921,64 +921,6 @@ void QueueMgrWindow::processOneQueue()
         d->thread->start();
 }
 
-void QueueMgrWindow::slotAction(const ActionData& ad)
-{
-    switch (ad.status)
-    {
-        case ActionData::BatchStarted:
-        {
-            processing(ad.fileUrl);
-            break;
-        }
-
-        case ActionData::BatchDone:
-        {
-            processed(ad.fileUrl, ad.destUrl);
-            break;
-        }
-
-        case ActionData::BatchFailed:
-        {
-            processingFailed(ad.fileUrl, ad.message);
-            break;
-        }
-
-        case ActionData::BatchCanceled:
-        {
-            processingCanceled(ad.fileUrl);
-            break;
-        }
-
-        case ActionData::TaskStarted:
-        {
-            break;
-        }
-
-        case ActionData::TaskDone:
-        {
-            d->statusProgressBar->setProgressValue(d->statusProgressBar->progressValue() + 1);
-            break;
-        }
-
-        case ActionData::TaskFailed:
-        {
-            d->statusProgressBar->setProgressValue(d->statusProgressBar->progressValue() + 1);
-            break;
-        }
-
-        case ActionData::TaskCanceled:
-        {
-            d->statusProgressBar->setProgressValue(d->statusProgressBar->progressValue() + 1);
-            break;
-        }
-
-        default:    // NONE
-        {
-            break;
-        }
-    }
-}
-
 void QueueMgrWindow::busy(bool busy)
 {
     d->busy = busy;
@@ -1114,6 +1056,64 @@ void QueueMgrWindow::slotHistoryEntryClicked(int queueId, qlonglong itemId)
             view->scrollToItem(item);
             view->setCurrentItem(item);
             item->setSelected(true);
+        }
+    }
+}
+
+void QueueMgrWindow::slotAction(const ActionData& ad)
+{
+    switch (ad.status)
+    {
+        case ActionData::BatchStarted:
+        {
+            processing(ad.fileUrl);
+            break;
+        }
+
+        case ActionData::BatchDone:
+        {
+            processed(ad.fileUrl, ad.destUrl);
+            break;
+        }
+
+        case ActionData::BatchFailed:
+        {
+            processingFailed(ad.fileUrl, ad.message);
+            break;
+        }
+
+        case ActionData::BatchCanceled:
+        {
+            processingCanceled(ad.fileUrl);
+            break;
+        }
+
+        case ActionData::TaskStarted:
+        {
+            break;
+        }
+
+        case ActionData::TaskDone:
+        {
+            d->statusProgressBar->setProgressValue(d->statusProgressBar->progressValue() + 1);
+            break;
+        }
+
+        case ActionData::TaskFailed:
+        {
+            d->statusProgressBar->setProgressValue(d->statusProgressBar->progressValue() + 1);
+            break;
+        }
+
+        case ActionData::TaskCanceled:
+        {
+            d->statusProgressBar->setProgressValue(d->statusProgressBar->progressValue() + 1);
+            break;
+        }
+
+        default:    // NONE
+        {
+            break;
         }
     }
 }
