@@ -90,4 +90,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 056 ==> 307219 - Very slow work when any tag have defined user icon.
 057 ==> 304687 - Nothing happens when trying to toggle read lock on pictures on CompactFlash (Nikon).
 058 ==> 254033 - Batch queue manager should use all or more CPU cores.
-059 ==> 
+059 ==> 285250 - digiKam crashed after saving changed file.
+060 ==> 
+
