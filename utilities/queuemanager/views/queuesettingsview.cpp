@@ -51,6 +51,7 @@
 #include "album.h"
 #include "albumselectwidget.h"
 #include "batchtool.h"
+#include "queuesettings.h"
 
 namespace Digikam
 {

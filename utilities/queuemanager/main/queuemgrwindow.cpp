@@ -74,6 +74,7 @@
 #include "actionthread.h"
 #include "queuepool.h"
 #include "queuelist.h"
+#include "queuesettings.h"
 #include "queuesettingsview.h"
 #include "assignedlist.h"
 #include "toolsettingsview.h"

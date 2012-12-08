@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-02-21
- * Description : a view to show Queue Settings.
+ * Description : Queue settings container.
  *
  * Copyright (C) 2009-2012 Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -21,55 +21,54 @@
  *
  * ============================================================ */
 
-#ifndef QUEUE_SETTINGS_VIEW_H
-#define QUEUE_SETTINGS_VIEW_H
-
-// Qt includes
-
-#include <QScrollArea>
-#include <QList>
-#include <QMap>
+#ifndef QUEUE_SETTINGS_H
+#define QUEUE_SETTINGS_H
 
 // KDE includes
 
-#include <ktabwidget.h>
+#include <kurl.h>
+
+// Local includes
+
+#include "drawdecoding.h"
 
 namespace Digikam
 {
 
-class AssignedBatchTools;
-class QueueSettings;
-
-class QueueSettingsView : public KTabWidget
+class QueueSettings
 {
-    Q_OBJECT
+public:
+
+    enum ConflictRule
+    {
+        OVERWRITE = 0,
+        DIFFNAME
+    };
+
+    enum RenamingRule
+    {
+        USEORIGINAL = 0,
+        CUSTOMIZE
+    };
 
 public:
 
-    explicit QueueSettingsView(QWidget* const parent = 0);
-    ~QueueSettingsView();
+    QueueSettings()
+    {
+        conflictRule = OVERWRITE;
+        renamingRule = USEORIGINAL;
+    };
 
-    void setBusy(bool b);
+    QString      renamingParser;
 
-Q_SIGNALS:
+    KUrl         targetUrl;
 
-    void signalSettingsChanged(const QueueSettings&);
+    ConflictRule conflictRule;
+    RenamingRule renamingRule;
 
-public Q_SLOTS:
-
-    void slotQueueSelected(int, const QueueSettings&, const AssignedBatchTools&);
-
-private Q_SLOTS:
-
-    void slotResetSettings();
-    void slotSettingsChanged();
-
-private:
-
-    class Private;
-    Private* const d;
+    DRawDecoding rawDecodingSettings;
 };
 
 }  // namespace Digikam
 
-#endif /* QUEUE_SETTINGS_VIEW_H */
+#endif /* QUEUE_SETTINGS_H */

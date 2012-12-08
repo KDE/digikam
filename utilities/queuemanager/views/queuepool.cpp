@@ -40,6 +40,7 @@
 
 #include "ddragobjects.h"
 #include "queuelist.h"
+#include "queuesettings.h"
 #include "loadingcacheinterface.h"
 
 namespace Digikam

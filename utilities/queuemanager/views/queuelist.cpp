@@ -54,6 +54,7 @@
 #include "queuetooltip.h"
 #include "thumbnailloadthread.h"
 #include "thumbnailsize.h"
+#include "queuesettings.h"
 
 namespace Digikam
 {
