@@ -26,24 +26,19 @@ else (LENSFUN_LIBRARIES AND LENSFUN_INCLUDE_DIRS)
       set(version_string ">=${LensFun_FIND_VERSION}")
     endif()
     pkg_check_modules(PC_LENSFUN lensfun${version_string})
-  else ()
-    # assume it was found
-    set(PC_LENSFUN_FOUND TRUE)
   endif ()
 
-  if (PC_LENSFUN_FOUND)
-    find_path(LENSFUN_INCLUDE_DIRS lensfun.h
-      HINTS ${PC_LENSFUN_INCLUDE_DIRS}
-      PATH_SUFFIXES lensfun
-    )
+  find_path(LENSFUN_INCLUDE_DIRS lensfun.h
+    HINTS ${PC_LENSFUN_INCLUDE_DIRS}
+    PATH_SUFFIXES lensfun
+  )
 
-    find_library(LENSFUN_LIBRARIES NAMES lensfun
-      HINTS ${PC_LENSFUN_LIBRARY_DIRS}
-    )
+  find_library(LENSFUN_LIBRARIES NAMES lensfun
+    HINTS ${PC_LENSFUN_LIBRARY_DIRS}
+  )
 
-    set(LENSFUN_VERSION "${PC_LENSFUN_VERSION}")
-    set(LENSFUN_DEFINITIONS ${PC_LENSFUN_CFLAGS_OTHER})
-  endif ()
+  set(LENSFUN_VERSION "${PC_LENSFUN_VERSION}")
+  set(LENSFUN_DEFINITIONS ${PC_LENSFUN_CFLAGS_OTHER})
 
   include(FindPackageHandleStandardArgs)
   find_package_handle_standard_args(LensFun
