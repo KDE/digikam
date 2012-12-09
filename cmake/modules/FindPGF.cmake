@@ -6,12 +6,9 @@
 #  PGF_LIBRARIES        - Link these to use libpgf
 #  PGF_CODEC_VERSION_ID - PGF codec version ID.
 
-# PKG-CONFIG is required.
-INCLUDE(FindPkgConfig REQUIRED)
+FIND_PACKAGE(PkgConfig)
 
 IF(PKG_CONFIG_FOUND)
-
-    INCLUDE(FindPkgConfig)
 
     PKG_CHECK_MODULES(PGF libpgf)
 

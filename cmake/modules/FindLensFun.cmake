@@ -7,6 +7,7 @@
 #  LENSFUN_DEFINITIONS - Compiler switches required for using lensfun
 #
 #  Copyright (c) 2008 Adrian Schroeter <adrian@suse.de>
+#  Copyright (c) 2012 Pino Toscano <pino@kde.org>
 #
 #  Redistribution and use is allowed according to the terms of the New
 #  BSD license.
@@ -19,49 +20,31 @@ if (LENSFUN_LIBRARIES AND LENSFUN_INCLUDE_DIRS)
 else (LENSFUN_LIBRARIES AND LENSFUN_INCLUDE_DIRS)
   # use pkg-config to get the directories and then use these values
   # in the FIND_PATH() and FIND_LIBRARY() calls
-  IF (NOT WIN32)
-    include(UsePkgConfig)
+  find_package(PkgConfig)
+  if (PKG_CONFIG_FOUND)
+    if (LensFun_FIND_VERSION)
+      set(version_string ">=${LensFun_FIND_VERSION}")
+    endif()
+    pkg_check_modules(PC_LENSFUN lensfun${version_string})
+  endif ()
 
-    pkgconfig(lensfun _lensfunIncDir _lensfunLinkDir _lensfunLinkFlags _lensfunCflags)
-  
-    set(LENSFUN_DEFINITIONS ${_lensfunCflags})
-  ENDIF (NOT WIN32)
-
-  find_path(LENSFUN_INCLUDE_DIR
-    NAMES
-      lensfun.h
-    PATHS
-      ${_lensfunIncDir}
-      /opt/local/include
-      /sw/include
+  find_path(LENSFUN_INCLUDE_DIRS lensfun.h
+    HINTS ${PC_LENSFUN_INCLUDE_DIRS}
     PATH_SUFFIXES lensfun
   )
 
-  find_library(LENSFUN_LIBRARY
-    NAMES
-      lensfun
-    PATHS
-      ${_lensfunLinkDir}
-      /opt/local/lib
-      /sw/lib
+  find_library(LENSFUN_LIBRARIES NAMES lensfun
+    HINTS ${PC_LENSFUN_LIBRARY_DIRS}
   )
 
-  if (LENSFUN_LIBRARY)
-    set(LENSFUN_FOUND TRUE)
-  endif (LENSFUN_LIBRARY)
+  set(LENSFUN_VERSION "${PC_LENSFUN_VERSION}")
+  set(LENSFUN_DEFINITIONS ${PC_LENSFUN_CFLAGS_OTHER})
 
-  set(LENSFUN_INCLUDE_DIRS
-    ${LENSFUN_INCLUDE_DIR}
+  include(FindPackageHandleStandardArgs)
+  find_package_handle_standard_args(LensFun
+                                    REQUIRED_VARS LENSFUN_INCLUDE_DIRS LENSFUN_LIBRARIES
+                                    VERSION_VAR LENSFUN_VERSION
   )
-
-  if (LENSFUN_FOUND)
-    set(LENSFUN_LIBRARIES
-      ${LENSFUN_LIBRARIES}
-      ${LENSFUN_LIBRARY}
-    )
-  endif (LENSFUN_FOUND)
-
-  FIND_PACKAGE_HANDLE_STANDARD_ARGS(LensFun DEFAULT_MSG LENSFUN_INCLUDE_DIRS LENSFUN_LIBRARIES )
 
   # show the LENSFUN_INCLUDE_DIRS and LENSFUN_LIBRARIES variables only in the advanced view
   mark_as_advanced(LENSFUN_INCLUDE_DIRS LENSFUN_LIBRARIES)
