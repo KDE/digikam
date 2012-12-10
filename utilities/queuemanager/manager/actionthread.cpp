@@ -133,6 +133,16 @@ void Task::slotCancel()
         d->tool->cancel();
 }
 
+void Task::emitActionData(ActionData::ActionStatus st, const QString& mess, const KUrl& dest)
+{
+    ActionData ad;
+    ad.fileUrl = d->item.m_itemUrl;
+    ad.status  = st;
+    ad.message = mess;
+    ad.destUrl = dest;
+    emit signalFinished(ad);
+}
+
 void Task::run()
 {
     if(d->cancel)
@@ -140,10 +150,7 @@ void Task::run()
         return;
     }
 
-    ActionData ad1;
-    ad1.fileUrl = d->item.m_itemUrl;
-    ad1.status  = ActionData::BatchStarted;
-    emit signalStarting(ad1);
+    emitActionData(ActionData::BatchStarted);
 
     // Loop with all batch tools operations to apply on item.
 
@@ -166,10 +173,7 @@ void Task::run()
 
         kDebug() << "Tool Index: " << index;
 
-        ActionData ad2;
-        ad2.fileUrl = d->item.m_itemUrl;
-        ad2.status  = ActionData::TaskStarted;
-        emit signalFinished(ad2);
+        emitActionData(ActionData::TaskStarted);
 
         d->tool->setImageData(tmpImage);
         d->tool->setWorkingUrl(d->settings.queuePrm.workingUrl);
@@ -190,44 +194,18 @@ void Task::run()
 
         if (success && !d->cancel)
         {
-            ActionData ad3;
-            ad3.fileUrl = d->item.m_itemUrl;
-            ad3.status  = ActionData::TaskDone;
-            emit signalFinished(ad3);
-
+            emitActionData(ActionData::TaskDone);
         }
         else if (d->cancel)
         {
-            ActionData ad4;
-            ad4.fileUrl = d->item.m_itemUrl;
-            ad4.status  = ActionData::TaskCanceled;
-            emit signalFinished(ad4);
-
-            ActionData ad5;
-            ad5.fileUrl = d->item.m_itemUrl;
-            ad5.status  = ActionData::BatchCanceled;
-            emit signalFinished(ad5);
-
+            emitActionData(ActionData::TaskCanceled);
+            emitActionData(ActionData::BatchCanceled);
             break;
         }
         else
         {
-            ActionData ad4;
-            ad4.fileUrl = d->item.m_itemUrl;
-            ad4.status  = ActionData::TaskFailed;
-            emit signalFinished(ad4);
-
-            ActionData ad5;
-            ad5.fileUrl = d->item.m_itemUrl;
-            ad5.status  = ActionData::BatchFailed;
-
-            if (!errMsg.isEmpty())
-            {
-                ad5.message = errMsg;
-            }
-
-            emit signalFinished(ad5);
-
+            emitActionData(ActionData::TaskFailed);
+            emitActionData(ActionData::BatchFailed, errMsg);
             break;
         }
     }
@@ -291,23 +269,13 @@ void Task::run()
             if (KDE::rename(DMetadata::sidecarPath(outUrl.toLocalFile()),
                             DMetadata::sidecarPath(dest.toLocalFile())) != 0)
             {
-                ActionData ad6;
-                ad6.fileUrl = d->item.m_itemUrl;
-                ad6.destUrl = dest;
-                ad6.message = i18n("Failed to save sidecar file...");
-                ad6.status  = ActionData::BatchFailed;
-                emit signalFinished(ad6);
+                emitActionData(ActionData::BatchFailed, i18n("Failed to rename sidecar file..."), dest);
             }
         }
 
         if (KDE::rename(outUrl.toLocalFile(), dest.toLocalFile()) != 0)
         {
-                ActionData ad7;
-                ad7.fileUrl = d->item.m_itemUrl;
-                ad7.destUrl = dest;
-                ad7.message = i18n("Failed to save sidecar file...");
-                ad7.status  = ActionData::BatchFailed;
-                emit signalFinished(ad7);
+            emitActionData(ActionData::BatchFailed, i18n("Failed to save file..."), dest);
         }
         else
         {
@@ -317,12 +285,7 @@ void Task::run()
             ImageInfo source(d->item.m_itemUrl.toLocalFile());
             FileActionMngr::instance()->copyAttributes(source, dest.toLocalFile());
 
-            ActionData ad8;
-            ad8.fileUrl = d->item.m_itemUrl;
-            ad8.destUrl = dest;
-            ad8.message = i18n("Item processed successfully (%1)", renameMess);
-            ad8.status  = ActionData::BatchDone;
-            emit signalFinished(ad8);
+            emitActionData(ActionData::BatchDone, i18n("Item processed successfully (%1)", renameMess), dest);
         }
     }
 }

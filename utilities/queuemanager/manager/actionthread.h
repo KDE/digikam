@@ -124,6 +124,10 @@ protected:
 
 private:
 
+    void emitActionData(ActionData::ActionStatus st, const QString& mess=QString(), const KUrl& dest=KUrl());
+
+private:
+
     class Private;
     Private* const d;
 };
