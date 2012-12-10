@@ -50,7 +50,7 @@ extern "C"
 
 #include "config-digikam.h"
 #include "dimg.h"
-#include "dimg.h"
+#include "queuesettings.h"
 
 namespace Digikam
 {
@@ -65,12 +65,10 @@ public:
         createNewVersion   = true;
     }
 
-    bool         exifSetOrientation;
-    bool         createNewVersion;
+    bool          exifSetOrientation;
+    bool          createNewVersion;
 
-    KUrl         workingUrl;
-
-    DRawDecoding rawDecodingSettings;
+    QueueSettings queuePrm;
 };
 
 // ---------------------------------------------------------------------------------------------------------
@@ -170,8 +168,8 @@ void Task::run()
         emit signalFinished(ad2);
 
         d->tool->setImageData(tmpImage);
-        d->tool->setWorkingUrl(d->settings.workingUrl);
-        d->tool->setRawDecodingSettings(d->settings.rawDecodingSettings);
+        d->tool->setWorkingUrl(d->settings.queuePrm.workingUrl);
+        d->tool->setRawDecodingSettings(d->settings.queuePrm.rawDecodingSettings);
         d->tool->setResetExifOrientationAllowed(d->settings.exifSetOrientation);
         d->tool->setLastChainedTool(index == d->item.m_toolsMap.count());
         d->tool->setInputUrl(inUrl);
@@ -281,19 +279,14 @@ ActionThread::~ActionThread()
     delete d;
 }
 
-void ActionThread::setWorkingUrl(const KUrl& url)
+void ActionThread::setSettings(const QueueSettings& queuePrm)
 {
-    d->settings.workingUrl = url;
+    d->settings.queuePrm = queuePrm;
 }
 
 void ActionThread::setResetExifOrientationAllowed(bool b)
 {
     d->settings.exifSetOrientation = b;
-}
-
-void ActionThread::setRawDecodingSettings(const DRawDecoding& prm)
-{
-    d->settings.rawDecodingSettings = prm;
 }
 
 void ActionThread::processQueueItems(const QList<AssignedBatchTools>& items)

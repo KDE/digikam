@@ -534,7 +534,7 @@ void QueueMgrWindow::applySettings()
         rawDecodingSettings.rawPrm.outputColorSpace = RawDecodingSettings::SRGB;
     }
 
-    d->thread->setRawDecodingSettings(rawDecodingSettings);
+    d->queuePool->setRawDecodingSettings(rawDecodingSettings);
 }
 
 void QueueMgrWindow::refreshStatusBar()
@@ -915,7 +915,7 @@ void QueueMgrWindow::processOneQueue()
         tools4Items.append(one);
     }
 
-    d->thread->setWorkingUrl(settings.workingUrl);
+    d->thread->setSettings(settings);
     d->thread->processQueueItems(tools4Items);
 
     if (!d->thread->isRunning())

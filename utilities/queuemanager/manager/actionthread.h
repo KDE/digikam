@@ -42,7 +42,6 @@
 
 #include "batchtool.h"
 #include "actions.h"
-#include "drawdecoding.h"
 
 using namespace KDcrawIface;
 
@@ -50,6 +49,7 @@ namespace Digikam
 {
 
 class TaskSettings;
+class QueueSettings;
 
 class ActionThread : public RActionThreadBase
 {
@@ -60,9 +60,8 @@ public:
     explicit ActionThread(QObject* const parent);
     ~ActionThread();
 
-    void setWorkingUrl(const KUrl& url);
+    void setSettings(const QueueSettings& queuePrm);
     void setResetExifOrientationAllowed(bool b);
-    void setRawDecodingSettings(const DRawDecoding& prm);
 
     void processQueueItems(const QList<AssignedBatchTools>& items);
 

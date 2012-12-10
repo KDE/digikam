@@ -118,6 +118,21 @@ QueueListView* QueuePool::findQueueByItemId(qlonglong id) const
     return 0;
 }
 
+void QueuePool::setRawDecodingSettings(const DRawDecoding& settings)
+{
+    for (int i = 0; i < count(); ++i)
+    {
+        QueueListView* const queue = dynamic_cast<QueueListView*>(widget(i));
+
+        if (queue)
+        {
+            QueueSettings prm       = queue->settings();
+            prm.rawDecodingSettings = settings;
+            queue->setSettings(prm);
+        }
+    }
+}
+
 void QueuePool::setItemBusy(qlonglong id)
 {
     QueueListView* const queue = findQueueByItemId(id);

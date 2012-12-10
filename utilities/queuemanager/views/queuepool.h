@@ -42,6 +42,7 @@
 namespace Digikam
 {
 
+class DRawDecoding;
 class AssignedBatchTools;
 class QueueSettings;
 class QueueListView;
@@ -65,6 +66,10 @@ public:
     QString            queueTitle(int index)             const;
     bool               customRenamingRulesAreValid()     const;
     bool               assignedBatchToolsListsAreValid() const;
+
+    /** Set Raw decoding settings to all queues hosted in pool
+     */
+    void setRawDecodingSettings(const DRawDecoding& settings);
 
     void setEnableToolTips(bool b);
 
