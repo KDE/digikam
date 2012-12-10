@@ -112,7 +112,6 @@ private:
     bool checkTargetAlbum(int queueId);
     void busy(bool busy);
     void processOneQueue();
-    void processed(const KUrl& url, const KUrl& tmp);
     void processingAborted();
 
     QueueMgrWindow();

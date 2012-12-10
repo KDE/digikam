@@ -41,7 +41,6 @@
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kedittoolbar.h>
-#include <kde_file.h>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kmenubar.h>
@@ -57,7 +56,6 @@
 #include <ktoolinvocation.h>
 #include <kwindowsystem.h>
 #include <kxmlguifactory.h>
-#include <kio/renamedialog.h>
 #include <kdebug.h>
 
 // Libkdcraw includes
@@ -70,7 +68,6 @@
 #include "album.h"
 #include "drawdecoding.h"
 #include "batchtoolsmanager.h"
-#include "fileactionmngr.h"
 #include "actionthread.h"
 #include "queuepool.h"
 #include "queuelist.h"
@@ -84,7 +81,6 @@
 #include "thememanager.h"
 #include "dimg.h"
 #include "dlogoaction.h"
-#include "dmetadata.h"
 #include "albumsettings.h"
 #include "metadatasettings.h"
 #include "albummanager.h"
@@ -1084,7 +1080,8 @@ void QueueMgrWindow::slotAction(const ActionData& ad)
 
         case ActionData::BatchDone:
         {
-            processed(ad.fileUrl, ad.destUrl);
+            cItem->setDestFileName(ad.destUrl.fileName());
+            addHistoryMessage(cItem, ad.message, DHistoryView::SuccessEntry);
             break;
         }
 
@@ -1092,7 +1089,7 @@ void QueueMgrWindow::slotAction(const ActionData& ad)
         {
             if (cItem)
             {
-                cItem->setCanceled();
+                cItem->setFailed();
                 addHistoryMessage(cItem, i18n("Failed to process item..."), DHistoryView::ErrorEntry);
                 addHistoryMessage(cItem, ad.message, DHistoryView::ErrorEntry);
             }
@@ -1110,17 +1107,7 @@ void QueueMgrWindow::slotAction(const ActionData& ad)
         }
 
         case ActionData::TaskDone:
-        {
-            d->statusProgressBar->setProgressValue(d->statusProgressBar->progressValue() + 1);
-            break;
-        }
-
         case ActionData::TaskFailed:
-        {
-            d->statusProgressBar->setProgressValue(d->statusProgressBar->progressValue() + 1);
-            break;
-        }
-
         case ActionData::TaskCanceled:
         {
             d->statusProgressBar->setProgressValue(d->statusProgressBar->progressValue() + 1);
@@ -1136,79 +1123,6 @@ void QueueMgrWindow::slotAction(const ActionData& ad)
 }
 
 // ---------------------------------------------------------------------------------------------
-
-void QueueMgrWindow::processed(const KUrl& url, const KUrl& tmp)
-{
-    QueueListViewItem* const cItem = d->queuePool->currentQueue()->findItemByUrl(url);
-    if (!cItem) return;
-
-    QueueSettings settings = d->queuePool->currentQueue()->settings();
-    KUrl dest              = settings.workingUrl;
-    dest.setFileName(cItem->destFileName());
-
-    QFileInfo fi(dest.toLocalFile());
-
-    if (fi.exists())
-    {
-        if (settings.conflictRule != QueueSettings::OVERWRITE)
-        {
-            int i          = 0;
-            bool fileFound = false;
-
-            do
-            {
-                QFileInfo nfi(dest.toLocalFile());
-
-                if (!nfi.exists())
-                {
-                    fileFound = false;
-                }
-                else
-                {
-                    i++;
-                    dest.setFileName(nfi.completeBaseName() + QString("_%1.").arg(i) + nfi.completeSuffix());
-                    fileFound = true;
-                }
-            }
-            while (fileFound);
-
-            addHistoryMessage(cItem, i18n("Item renamed to %1...", dest.fileName()), DHistoryView::WarningEntry);
-        }
-        else
-        {
-            addHistoryMessage(cItem, i18n("Item overwritten..."), DHistoryView::WarningEntry);
-        }
-    }
-
-    if (!dest.isEmpty())
-    {
-        if (DMetadata::hasSidecar(tmp.toLocalFile()))
-        {
-            if (KDE::rename(DMetadata::sidecarPath(tmp.toLocalFile()),
-                            DMetadata::sidecarPath(dest.toLocalFile())) != 0)
-            {
-                addHistoryMessage(cItem, i18n("Failed to save sidecar file..."), DHistoryView::ErrorEntry);
-            }
-        }
-
-        if (KDE::rename(tmp.toLocalFile(), dest.toLocalFile()) != 0)
-        {
-            cItem->setFailed();
-            addHistoryMessage(cItem, i18n("Failed to save item..."), DHistoryView::ErrorEntry);
-        }
-        else
-        {
-            cItem->setDestFileName(dest.fileName());
-            cItem->setDone();
-            addHistoryMessage(cItem, i18n("Item processed successfully..."), DHistoryView::SuccessEntry);
-
-            // -- Now copy the digiKam attributes from original file to the new file ------------
-
-            ImageInfo source(url.toLocalFile());
-            FileActionMngr::instance()->copyAttributes(source, dest.toLocalFile());
-        }
-    }
-}
 
 void QueueMgrWindow::addHistoryMessage(QueueListViewItem* const cItem, const QString& msg, DHistoryView::EntryType type)
 {

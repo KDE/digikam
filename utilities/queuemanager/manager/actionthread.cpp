@@ -40,6 +40,7 @@ extern "C"
 
 // KDE includes
 
+#include <kde_file.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
@@ -50,7 +51,10 @@ extern "C"
 
 #include "config-digikam.h"
 #include "dimg.h"
+#include "dmetadata.h"
 #include "queuesettings.h"
+#include "imageinfo.h"
+#include "fileactionmngr.h"
 
 namespace Digikam
 {
@@ -232,12 +236,6 @@ void Task::run()
     {
         // if success, we don't remove last output tmp url.
         tmp2del.removeAll(outUrl);
-
-        ActionData ad6;
-        ad6.fileUrl = d->item.m_itemUrl;
-        ad6.destUrl = outUrl;
-        ad6.status  = ActionData::BatchDone;
-        emit signalFinished(ad6);
     }
 
     // Clean up all tmp url.
@@ -245,6 +243,87 @@ void Task::run()
     foreach (KUrl url, tmp2del)
     {
         unlink(QFile::encodeName(url.toLocalFile()));
+    }
+
+    // Move processed temp file to target
+
+    KUrl dest = d->settings.queuePrm.workingUrl;
+    dest.setFileName(d->item.m_destFileName);
+    QString renameMess;
+    QFileInfo fi(dest.toLocalFile());
+
+    if (fi.exists())
+    {
+        if (d->settings.queuePrm.conflictRule != QueueSettings::OVERWRITE)
+        {
+            int i          = 0;
+            bool fileFound = false;
+
+            do
+            {
+                QFileInfo nfi(dest.toLocalFile());
+
+                if (!nfi.exists())
+                {
+                    fileFound = false;
+                }
+                else
+                {
+                    i++;
+                    dest.setFileName(nfi.completeBaseName() + QString("_%1.").arg(i) + nfi.completeSuffix());
+                    fileFound = true;
+                }
+            }
+            while (fileFound);
+
+            renameMess = i18n("renamed to %1...", dest.fileName());
+        }
+        else
+        {
+            renameMess = i18n("overwritten...");
+        }
+    }
+
+    if (!dest.isEmpty())
+    {
+        if (DMetadata::hasSidecar(outUrl.toLocalFile()))
+        {
+            if (KDE::rename(DMetadata::sidecarPath(outUrl.toLocalFile()),
+                            DMetadata::sidecarPath(dest.toLocalFile())) != 0)
+            {
+                ActionData ad6;
+                ad6.fileUrl = d->item.m_itemUrl;
+                ad6.destUrl = dest;
+                ad6.message = i18n("Failed to save sidecar file...");
+                ad6.status  = ActionData::BatchFailed;
+                emit signalFinished(ad6);
+            }
+        }
+
+        if (KDE::rename(outUrl.toLocalFile(), dest.toLocalFile()) != 0)
+        {
+                ActionData ad7;
+                ad7.fileUrl = d->item.m_itemUrl;
+                ad7.destUrl = dest;
+                ad7.message = i18n("Failed to save sidecar file...");
+                ad7.status  = ActionData::BatchFailed;
+                emit signalFinished(ad7);
+        }
+        else
+        {
+            // -- Now copy the digiKam attributes from original file to the new file ------------
+
+            // ImageInfo must be tread-safe.
+            ImageInfo source(d->item.m_itemUrl.toLocalFile());
+            FileActionMngr::instance()->copyAttributes(source, dest.toLocalFile());
+
+            ActionData ad8;
+            ad8.fileUrl = d->item.m_itemUrl;
+            ad8.destUrl = dest;
+            ad8.message = i18n("Item processed successfully (%1)", renameMess);
+            ad8.status  = ActionData::BatchDone;
+            emit signalFinished(ad8);
+        }
     }
 }
 
