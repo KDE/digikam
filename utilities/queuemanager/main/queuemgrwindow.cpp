@@ -1063,11 +1063,20 @@ void QueueMgrWindow::slotHistoryEntryClicked(int queueId, qlonglong itemId)
 
 void QueueMgrWindow::slotAction(const ActionData& ad)
 {
+    QueueListViewItem* const cItem = d->queuePool->currentQueue()->findItemByUrl(ad.fileUrl);
+
     switch (ad.status)
     {
         case ActionData::BatchStarted:
         {
-            processing(ad.fileUrl);
+            if (cItem)
+            {
+                cItem->reset();
+                d->queuePool->currentQueue()->setCurrentItem(cItem);
+                d->queuePool->currentQueue()->scrollToItem(cItem);
+                d->queuePool->setItemBusy(cItem->info().id());
+                addHistoryMessage(cItem, i18n("Processing..."), DHistoryView::StartingEntry);
+            }
             break;
         }
 
@@ -1079,18 +1088,22 @@ void QueueMgrWindow::slotAction(const ActionData& ad)
 
         case ActionData::BatchFailed:
         {
-            processingFailed(ad.fileUrl, ad.message);
+            if (cItem)
+            {
+                cItem->setCanceled();
+                addHistoryMessage(cItem, i18n("Failed to process item..."), DHistoryView::ErrorEntry);
+                addHistoryMessage(cItem, ad.message, DHistoryView::ErrorEntry);
+            }
             break;
         }
 
         case ActionData::BatchCanceled:
         {
-            processingCanceled(ad.fileUrl);
-            break;
-        }
-
-        case ActionData::TaskStarted:
-        {
+            if (cItem)
+            {
+                cItem->setCanceled();
+                addHistoryMessage(cItem, i18n("Process Cancelled..."), DHistoryView::CancelEntry);
+            }
             break;
         }
 
@@ -1112,7 +1125,8 @@ void QueueMgrWindow::slotAction(const ActionData& ad)
             break;
         }
 
-        default:    // NONE
+        case ActionData::TaskStarted:
+        default:         // NONE
         {
             break;
         }
@@ -1191,43 +1205,6 @@ void QueueMgrWindow::processed(const KUrl& url, const KUrl& tmp)
             ImageInfo source(url.toLocalFile());
             FileActionMngr::instance()->copyAttributes(source, dest.toLocalFile());
         }
-    }
-}
-
-void QueueMgrWindow::processing(const KUrl& url)
-{
-    QueueListViewItem* const cItem = d->queuePool->currentQueue()->findItemByUrl(url);
-
-    if (cItem)
-    {
-        cItem->reset();
-        d->queuePool->currentQueue()->setCurrentItem(cItem);
-        d->queuePool->currentQueue()->scrollToItem(cItem);
-        d->queuePool->setItemBusy(cItem->info().id());
-        addHistoryMessage(cItem, i18n("Processing..."), DHistoryView::StartingEntry);
-    }
-}
-
-void QueueMgrWindow::processingFailed(const KUrl& url, const QString& errMsg)
-{
-    QueueListViewItem* const cItem = d->queuePool->currentQueue()->findItemByUrl(url);
-
-    if (cItem)
-    {
-        cItem->setCanceled();
-        addHistoryMessage(cItem, i18n("Failed to process item..."), DHistoryView::ErrorEntry);
-        addHistoryMessage(cItem, errMsg, DHistoryView::ErrorEntry);
-    }
-}
-
-void QueueMgrWindow::processingCanceled(const KUrl& url)
-{
-    QueueListViewItem* const cItem = d->queuePool->currentQueue()->findItemByUrl(url);
-
-    if (cItem)
-    {
-        cItem->setCanceled();
-        addHistoryMessage(cItem, i18n("Process Cancelled..."), DHistoryView::CancelEntry);
     }
 }
 
