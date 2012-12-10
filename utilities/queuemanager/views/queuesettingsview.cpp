@@ -226,7 +226,7 @@ void QueueSettingsView::slotResetSettings()
 
 void QueueSettingsView::slotQueueSelected(int, const QueueSettings& settings, const AssignedBatchTools&)
 {
-    d->albumSel->setCurrentAlbumUrl(settings.targetUrl);
+    d->albumSel->setCurrentAlbumUrl(settings.workingUrl);
     int btn = (int)settings.conflictRule;
     d->conflictButtonGroup->button(btn)->setChecked(true);
     btn     = (int)settings.renamingRule;
@@ -238,7 +238,7 @@ void QueueSettingsView::slotSettingsChanged()
 {
     QueueSettings settings;
     settings.conflictRule   = (QueueSettings::ConflictRule)d->conflictButtonGroup->checkedId();
-    settings.targetUrl      = d->albumSel->currentAlbumUrl();
+    settings.workingUrl     = d->albumSel->currentAlbumUrl();
     settings.renamingRule   = (QueueSettings::RenamingRule)d->renamingButtonGroup->checkedId();
     settings.renamingParser = d->advancedRenameWidget->parseString();
     d->advancedRenameWidget->setEnabled(settings.renamingRule == QueueSettings::CUSTOMIZE);

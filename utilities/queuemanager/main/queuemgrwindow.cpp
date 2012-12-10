@@ -915,7 +915,7 @@ void QueueMgrWindow::processOneQueue()
         tools4Items.append(one);
     }
 
-    d->thread->setWorkingUrl(settings.targetUrl);
+    d->thread->setWorkingUrl(settings.workingUrl);
     d->thread->processQueueItems(tools4Items);
 
     if (!d->thread->isRunning())
@@ -1005,7 +1005,7 @@ bool QueueMgrWindow::checkTargetAlbum(int queueId)
     }
 
     QString queueName              = d->queuePool->queueTitle(queueId);
-    KUrl    processedItemsAlbumUrl = queue->settings().targetUrl;
+    KUrl    processedItemsAlbumUrl = queue->settings().workingUrl;
     kDebug() << "Target album for queue " << queueName << " is: " << processedItemsAlbumUrl.toLocalFile();
 
     if (processedItemsAlbumUrl.isEmpty())
@@ -1127,7 +1127,7 @@ void QueueMgrWindow::processed(const KUrl& url, const KUrl& tmp)
     if (!cItem) return;
 
     QueueSettings settings = d->queuePool->currentQueue()->settings();
-    KUrl dest              = settings.targetUrl;
+    KUrl dest              = settings.workingUrl;
     dest.setFileName(cItem->destFileName());
 
     QFileInfo fi(dest.toLocalFile());

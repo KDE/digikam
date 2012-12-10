@@ -61,7 +61,7 @@ public:
 
     QString      renamingParser;
 
-    KUrl         targetUrl;
+    KUrl         workingUrl;
 
     ConflictRule conflictRule;
     RenamingRule renamingRule;
