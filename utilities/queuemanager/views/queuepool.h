@@ -58,7 +58,6 @@ public:
 
     QueueListView*     currentQueue()                    const;
     QueueListView*     findQueueByIndex(int index)       const;
-    QueueListView*     findQueueByItemId(qlonglong id)   const;
     QueuePoolItemsList queueItemsList(int index)         const;
     int                totalPendingItems()               const;
     int                totalPendingTasks()               const;
@@ -100,6 +99,10 @@ public Q_SLOTS:
 protected:
 
     virtual void keyPressEvent(QKeyEvent* event);
+
+private :
+
+    QueueListView* findQueueByItemId(qlonglong id) const;
 
 private Q_SLOTS:
 
