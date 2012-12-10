@@ -89,6 +89,7 @@ public:
 
 public:
 
+    QString      m_destFileName;
     KUrl         m_itemUrl;
     BatchToolMap m_toolsMap;
 };

@@ -910,8 +910,10 @@ void QueueMgrWindow::processOneQueue()
 
     foreach(const ItemInfoSet& item, itemsList)
     {
-        AssignedBatchTools one = d->queuePool->currentQueue()->assignedTools();
-        one.m_itemUrl          = item.info.fileUrl();
+        AssignedBatchTools one         = d->queuePool->currentQueue()->assignedTools();
+        one.m_itemUrl                  = item.info.fileUrl();
+        QueueListViewItem* const cItem = d->queuePool->currentQueue()->findItemByUrl(one.m_itemUrl);
+        one.m_destFileName             = cItem->destFileName();
         tools4Items.append(one);
     }
 
