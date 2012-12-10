@@ -1081,7 +1081,9 @@ void QueueMgrWindow::slotAction(const ActionData& ad)
         case ActionData::BatchDone:
         {
             cItem->setDestFileName(ad.destUrl.fileName());
+            cItem->setDone();
             addHistoryMessage(cItem, ad.message, DHistoryView::SuccessEntry);
+            d->statusProgressBar->setProgressValue(d->statusProgressBar->progressValue() + 1);
             break;
         }
 
@@ -1092,6 +1094,7 @@ void QueueMgrWindow::slotAction(const ActionData& ad)
                 cItem->setFailed();
                 addHistoryMessage(cItem, i18n("Failed to process item..."), DHistoryView::ErrorEntry);
                 addHistoryMessage(cItem, ad.message, DHistoryView::ErrorEntry);
+                d->statusProgressBar->setProgressValue(d->statusProgressBar->progressValue() + 1);
             }
             break;
         }
@@ -1102,27 +1105,17 @@ void QueueMgrWindow::slotAction(const ActionData& ad)
             {
                 cItem->setCanceled();
                 addHistoryMessage(cItem, i18n("Process Cancelled..."), DHistoryView::CancelEntry);
+                d->statusProgressBar->setProgressValue(d->statusProgressBar->progressValue() + 1);
             }
             break;
         }
 
-        case ActionData::TaskDone:
-        case ActionData::TaskFailed:
-        case ActionData::TaskCanceled:
-        {
-            d->statusProgressBar->setProgressValue(d->statusProgressBar->progressValue() + 1);
-            break;
-        }
-
-        case ActionData::TaskStarted:
         default:         // NONE
         {
             break;
         }
     }
 }
-
-// ---------------------------------------------------------------------------------------------
 
 void QueueMgrWindow::addHistoryMessage(QueueListViewItem* const cItem, const QString& msg, DHistoryView::EntryType type)
 {

@@ -173,8 +173,6 @@ void Task::run()
 
         kDebug() << "Tool Index: " << index;
 
-        emitActionData(ActionData::TaskStarted);
-
         d->tool->setImageData(tmpImage);
         d->tool->setWorkingUrl(d->settings.queuePrm.workingUrl);
         d->tool->setRawDecodingSettings(d->settings.queuePrm.rawDecodingSettings);
@@ -192,31 +190,23 @@ void Task::run()
         errMsg    = d->tool->errorDescription();
         tmp2del.append(outUrl);
 
-        if (success && !d->cancel)
+        if (d->cancel)
         {
-            emitActionData(ActionData::TaskDone);
-        }
-        else if (d->cancel)
-        {
-            emitActionData(ActionData::TaskCanceled);
             emitActionData(ActionData::BatchCanceled);
+            return;
             break;
         }
-        else
+        else if (!success)
         {
-            emitActionData(ActionData::TaskFailed);
             emitActionData(ActionData::BatchFailed, errMsg);
             break;
         }
     }
 
-    if (success && !d->cancel)
-    {
-        // if success, we don't remove last output tmp url.
-        tmp2del.removeAll(outUrl);
-    }
-
     // Clean up all tmp url.
+
+    // We don't remove last output tmp url.
+    tmp2del.removeAll(outUrl);
 
     foreach (KUrl url, tmp2del)
     {
@@ -254,11 +244,11 @@ void Task::run()
             }
             while (fileFound);
 
-            renameMess = i18n("renamed to %1...", dest.fileName());
+            renameMess = i18n("(renamed to %1)", dest.fileName());
         }
         else
         {
-            renameMess = i18n("overwritten...");
+            renameMess = i18n("(overwritten)");
         }
     }
 
@@ -269,13 +259,13 @@ void Task::run()
             if (KDE::rename(DMetadata::sidecarPath(outUrl.toLocalFile()),
                             DMetadata::sidecarPath(dest.toLocalFile())) != 0)
             {
-                emitActionData(ActionData::BatchFailed, i18n("Failed to rename sidecar file..."), dest);
+                emitActionData(ActionData::BatchFailed, i18n("Failed to create sidecar file..."), dest);
             }
         }
 
         if (KDE::rename(outUrl.toLocalFile(), dest.toLocalFile()) != 0)
         {
-            emitActionData(ActionData::BatchFailed, i18n("Failed to save file..."), dest);
+            emitActionData(ActionData::BatchFailed, i18n("Failed to create file..."), dest);
         }
         else
         {
@@ -285,8 +275,12 @@ void Task::run()
             ImageInfo source(d->item.m_itemUrl.toLocalFile());
             FileActionMngr::instance()->copyAttributes(source, dest.toLocalFile());
 
-            emitActionData(ActionData::BatchDone, i18n("Item processed successfully (%1)", renameMess), dest);
+            emitActionData(ActionData::BatchDone, i18n("Item processed successfully %1", renameMess), dest);
         }
+    }
+    else
+    {
+        emitActionData(ActionData::BatchFailed, i18n("Failed to create file..."), dest);
     }
 }
 
