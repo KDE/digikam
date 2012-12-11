@@ -254,16 +254,18 @@ void QueueSettingsView::slotQueueSelected(int, const QueueSettings& settings, co
     btn     = (int)settings.renamingRule;
     d->renamingButtonGroup->button(btn)->setChecked(true);
     d->advancedRenameWidget->setParseString(settings.renamingParser);
+    d->rawSettings->setSettings(settings.rawDecodingSettings);
 }
 
 void QueueSettingsView::slotSettingsChanged()
 {
     QueueSettings settings;
-    settings.conflictRule   = (QueueSettings::ConflictRule)d->conflictButtonGroup->checkedId();
-    settings.workingUrl     = d->albumSel->currentAlbumUrl();
-    settings.renamingRule   = (QueueSettings::RenamingRule)d->renamingButtonGroup->checkedId();
-    settings.renamingParser = d->advancedRenameWidget->parseString();
+    settings.conflictRule        = (QueueSettings::ConflictRule)d->conflictButtonGroup->checkedId();
+    settings.workingUrl          = d->albumSel->currentAlbumUrl();
+    settings.renamingRule        = (QueueSettings::RenamingRule)d->renamingButtonGroup->checkedId();
+    settings.renamingParser      = d->advancedRenameWidget->parseString();
     d->advancedRenameWidget->setEnabled(settings.renamingRule == QueueSettings::CUSTOMIZE);
+    settings.rawDecodingSettings = d->rawSettings->settings();
 
     emit signalSettingsChanged(settings);
 }
