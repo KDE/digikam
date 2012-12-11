@@ -44,6 +44,10 @@
 #include <klocale.h>
 #include <kvbox.h>
 
+// LibKDcraw includes
+
+#include <libkdcraw/dcrawsettingswidget.h>
+
 // Local includes
 
 #include "advancedrenamewidget.h"
@@ -52,6 +56,8 @@
 #include "albumselectwidget.h"
 #include "batchtool.h"
 #include "queuesettings.h"
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -71,7 +77,8 @@ public:
         promptButton(0),
         albumSel(0),
         advancedRenameManager(0),
-        advancedRenameWidget(0)
+        advancedRenameWidget(0),
+        rawSettings(0)
     {
     }
 
@@ -89,6 +96,8 @@ public:
 
     AdvancedRenameManager* advancedRenameManager;
     AdvancedRenameWidget*  advancedRenameWidget;
+
+    DcrawSettingsWidget*   rawSettings;
 };
 
 QueueSettingsView::QueueSettingsView(QWidget* const parent)
@@ -170,6 +179,15 @@ QueueSettingsView::QueueSettingsView(QWidget* const parent)
 
     // --------------------------------------------------------
 
+    d->rawSettings = new DcrawSettingsWidget(0, 0 /* no advanced settings shown */);
+    d->rawSettings->setItemIcon(0, SmallIcon("kdcraw"));
+    d->rawSettings->setItemIcon(1, SmallIcon("whitebalance"));
+    d->rawSettings->setItemIcon(2, SmallIcon("lensdistortion"));
+
+    addTab(d->rawSettings, SmallIcon("kdcraw"), i18n("Raw Decoding"));
+
+    // --------------------------------------------------------
+
     connect(d->albumSel, SIGNAL(itemSelectionChanged()),
             this, SLOT(slotSettingsChanged()));
 
@@ -220,6 +238,7 @@ void QueueSettingsView::slotResetSettings()
     d->conflictButtonGroup->button(QueueSettings::OVERWRITE)->setChecked(true);
     d->renamingButtonGroup->button(QueueSettings::USEORIGINAL)->setChecked(true);
     d->advancedRenameWidget->clearParseString();
+    d->rawSettings->resetToDefault();
     blockSignals(false);
     slotSettingsChanged();
 }

@@ -75,11 +75,6 @@ void ActionThread::setSettings(const QueueSettings& queuePrm)
     d->settings.queuePrm = queuePrm;
 }
 
-void ActionThread::setResetExifOrientationAllowed(bool b)
-{
-    d->settings.exifSetOrientation = b;
-}
-
 void ActionThread::processQueueItems(const QList<AssignedBatchTools>& items)
 {
     JobCollection* const collection = new JobCollection();

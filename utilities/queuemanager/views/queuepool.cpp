@@ -38,6 +38,9 @@
 
 // Local includes
 
+#include "albumsettings.h"
+#include "iccsettings.h"
+#include "metadatasettings.h"
 #include "ddragobjects.h"
 #include "queuelist.h"
 #include "queuesettings.h"
@@ -116,21 +119,6 @@ QueueListView* QueuePool::findQueueByItemId(qlonglong id) const
     }
 
     return 0;
-}
-
-void QueuePool::setRawDecodingSettings(const DRawDecoding& settings)
-{
-    for (int i = 0; i < count(); ++i)
-    {
-        QueueListView* const queue = dynamic_cast<QueueListView*>(widget(i));
-
-        if (queue)
-        {
-            QueueSettings prm       = queue->settings();
-            prm.rawDecodingSettings = settings;
-            queue->setSettings(prm);
-        }
-    }
 }
 
 void QueuePool::setItemBusy(qlonglong id)
@@ -365,19 +353,6 @@ void QueuePool::slotSettingsChanged(const QueueSettings& settings)
     }
 }
 
-void QueuePool::setEnableToolTips(bool b)
-{
-    for (int i = 0; i < count(); ++i)
-    {
-        QueueListView* const queue = dynamic_cast<QueueListView*>(widget(i));
-
-        if (queue)
-        {
-            queue->setEnableToolTips(b);
-        }
-    }
-}
-
 bool QueuePool::customRenamingRulesAreValid() const
 {
     QStringList list;
@@ -444,6 +419,50 @@ void QueuePool::slotFileChanged(const QString& filePath)
         if (queue)
         {
             queue->reloadThumbs(KUrl::fromPath(filePath));
+        }
+    }
+}
+
+void QueuePool::applySettings()
+{
+    for (int i = 0; i < count(); ++i)
+    {
+        QueueListView* const queue = dynamic_cast<QueueListView*>(widget(i));
+
+        if (queue)
+        {
+            // Show/hide tool-tips settings.
+            queue->setEnableToolTips(AlbumSettings::instance()->getShowToolTips());
+
+            // Reset Exif Orientation settings.
+            QueueSettings prm = queue->settings();
+            prm.exifSetOrientation = MetadataSettings::instance()->settings().exifRotate;
+
+            // Apply Color Management rules to RAW images decoding settings
+
+            // If digiKam Color Management is enable, no need to correct color of decoded RAW image,
+            // else, sRGB color workspace will be used.
+
+            ICCSettingsContainer ICCSettings = IccSettings::instance()->settings();
+
+            if (ICCSettings.enableCM)
+            {
+                if (ICCSettings.defaultUncalibratedBehavior & ICCSettingsContainer::AutomaticColors)
+                {
+                    prm.rawDecodingSettings.outputColorSpace = RawDecodingSettings::CUSTOMOUTPUTCS;
+                    prm.rawDecodingSettings.outputProfile    = ICCSettings.workspaceProfile;
+                }
+                else
+                {
+                    prm.rawDecodingSettings.outputColorSpace = RawDecodingSettings::RAWCOLOR;
+                }
+            }
+            else
+            {
+                prm.rawDecodingSettings.outputColorSpace = RawDecodingSettings::SRGB;
+            }
+
+            queue->setSettings(prm);
         }
     }
 }

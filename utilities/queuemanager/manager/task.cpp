@@ -137,7 +137,7 @@ void Task::run()
         d->tool->setImageData(tmpImage);
         d->tool->setWorkingUrl(d->settings.queuePrm.workingUrl);
         d->tool->setRawDecodingSettings(d->settings.queuePrm.rawDecodingSettings);
-        d->tool->setResetExifOrientationAllowed(d->settings.exifSetOrientation);
+        d->tool->setResetExifOrientationAllowed(d->settings.queuePrm.exifSetOrientation);
         d->tool->setLastChainedTool(index == d->item.m_toolsMap.count());
         d->tool->setInputUrl(inUrl);
         d->tool->setSettings(settings);

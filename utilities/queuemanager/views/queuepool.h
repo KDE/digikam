@@ -66,15 +66,13 @@ public:
     bool               customRenamingRulesAreValid()     const;
     bool               assignedBatchToolsListsAreValid() const;
 
-    /** Set Raw decoding settings to all queues hosted in pool
-     */
-    void setRawDecodingSettings(const DRawDecoding& settings);
-
-    void setEnableToolTips(bool b);
-
     void setBusy(bool b);
-
     void setItemBusy(qlonglong id);
+
+    /** Apply settings changes to all queues settings container when something have been changed in 
+     *  digiKam setup dialog.
+     */
+    void applySettings();
 
 Q_SIGNALS:
 

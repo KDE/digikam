@@ -51,11 +51,9 @@ public:
 
     explicit TaskSettings()
     {
-        exifSetOrientation = true;
         createNewVersion   = true;
     }
 
-    bool          exifSetOrientation;
     bool          createNewVersion;
 
     QueueSettings queuePrm;

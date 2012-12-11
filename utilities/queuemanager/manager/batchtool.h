@@ -28,6 +28,10 @@
 
 #include <QObject>
 
+// LibKDcraw includes
+
+#include <libkdcraw/rawdecodingsettings.h>
+
 // Local includes
 
 #include "dimg.h"
@@ -35,6 +39,8 @@
 #include "dimg.h"
 
 class QWidget;
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -167,11 +173,11 @@ public:
 
     /** Set-up RAW decoding settings no use during tool operations.
      */
-    void setRawDecodingSettings(const DRawDecoding& settings);
+    void setRawDecodingSettings(const RawDecodingSettings& settings);
 
     /** Return RAW decoding settings used during tool operations.
      */
-    DRawDecoding getRawDecodingSettings() const;
+    RawDecodingSettings rawDecodingSettings() const;
 
     /** Apply all change to perform by this tool. This method call customized toolOperations().
      */

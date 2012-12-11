@@ -28,9 +28,11 @@
 
 #include <kurl.h>
 
-// Local includes
+// LibKDcraw includes
 
-#include "drawdecoding.h"
+#include <libkdcraw/rawdecodingsettings.h>
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -55,18 +57,21 @@ public:
 
     QueueSettings()
     {
-        conflictRule = OVERWRITE;
-        renamingRule = USEORIGINAL;
+        exifSetOrientation = true;
+        conflictRule       = OVERWRITE;
+        renamingRule       = USEORIGINAL;
     };
 
-    QString      renamingParser;
+    bool                exifSetOrientation;
 
-    KUrl         workingUrl;
+    QString             renamingParser;
 
-    ConflictRule conflictRule;
-    RenamingRule renamingRule;
+    KUrl                workingUrl;
 
-    DRawDecoding rawDecodingSettings;
+    ConflictRule        conflictRule;
+    RenamingRule        renamingRule;
+
+    RawDecodingSettings rawDecodingSettings;
 };
 
 }  // namespace Digikam

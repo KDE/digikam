@@ -83,7 +83,7 @@ public:
 
     DImg                      image;
 
-    DRawDecoding              rawDecodingSettings;
+    RawDecodingSettings       rawDecodingSettings;
 
     BatchToolSettings         settings;
 
@@ -259,12 +259,12 @@ bool BatchTool::getBranchHistory() const
     return d->branchHistory;
 }
 
-void BatchTool::setRawDecodingSettings(const DRawDecoding& settings)
+void BatchTool::setRawDecodingSettings(const RawDecodingSettings& settings)
 {
     d->rawDecodingSettings = settings;
 }
 
-DRawDecoding BatchTool::getRawDecodingSettings() const
+RawDecodingSettings BatchTool::rawDecodingSettings() const
 {
     return d->rawDecodingSettings;
 }
@@ -333,7 +333,7 @@ bool BatchTool::loadToDImg() const
         return true;
     }
 
-    return d->image.load(inputUrl().toLocalFile(), d->observer, getRawDecodingSettings());
+    return d->image.load(inputUrl().toLocalFile(), d->observer, DRawDecoding(rawDecodingSettings()));
 }
 
 bool BatchTool::savefromDImg() const

@@ -51,7 +51,6 @@ public:
     ~ActionThread();
 
     void setSettings(const QueueSettings& queuePrm);
-    void setResetExifOrientationAllowed(bool b);
 
     void processQueueItems(const QList<AssignedBatchTools>& items);
 

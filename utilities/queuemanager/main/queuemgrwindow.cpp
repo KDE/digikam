@@ -67,7 +67,6 @@
 
 #include "actions.h"
 #include "album.h"
-#include "drawdecoding.h"
 #include "batchtoolsmanager.h"
 #include "actionthread.h"
 #include "queuepool.h"
@@ -82,13 +81,10 @@
 #include "thememanager.h"
 #include "dimg.h"
 #include "dlogoaction.h"
-#include "albumsettings.h"
-#include "metadatasettings.h"
 #include "albummanager.h"
 #include "imagewindow.h"
 #include "imagedialog.h"
 #include "thumbnailsize.h"
-#include "iccsettings.h"
 #include "sidebar.h"
 #include "uifilevalidator.h"
 #include "knotificationwrapper.h"
@@ -495,43 +491,7 @@ void QueueMgrWindow::applySettings()
         return;
     }
 
-    AlbumSettings* settings   = AlbumSettings::instance();
-    KSharedConfig::Ptr config = KGlobal::config();
-
-    d->thread->setResetExifOrientationAllowed(MetadataSettings::instance()->settings().exifRotate);
-    d->queuePool->setEnableToolTips(settings->getShowToolTips());
-
-    // -- RAW images decoding settings ------------------------------------------------------
-
-    //  Here, we will use Image Editor Raw decoding settings with BQM, to process Raw demosaicing.
-    KConfigGroup group = config->group("ImageViewer Settings");
-
-    // If digiKam Color Management is enable, no need to correct color of decoded RAW image,
-    // else, sRGB color workspace will be used.
-
-    DRawDecoding         rawDecodingSettings;
-    ICCSettingsContainer ICCSettings = IccSettings::instance()->settings();
-
-    rawDecodingSettings.rawPrm.readSettings(group);
-
-    if (ICCSettings.enableCM)
-    {
-        if (ICCSettings.defaultUncalibratedBehavior & ICCSettingsContainer::AutomaticColors)
-        {
-            rawDecodingSettings.rawPrm.outputColorSpace = RawDecodingSettings::CUSTOMOUTPUTCS;
-            rawDecodingSettings.rawPrm.outputProfile    = ICCSettings.workspaceProfile;
-        }
-        else
-        {
-            rawDecodingSettings.rawPrm.outputColorSpace = RawDecodingSettings::RAWCOLOR;
-        }
-    }
-    else
-    {
-        rawDecodingSettings.rawPrm.outputColorSpace = RawDecodingSettings::SRGB;
-    }
-
-    d->queuePool->setRawDecodingSettings(rawDecodingSettings);
+    d->queuePool->applySettings();
 }
 
 void QueueMgrWindow::refreshStatusBar()
