@@ -29,6 +29,7 @@ Metadata          : Video files metadata support (through Exiv2 project).
 
 BatchQueueManager : Add Color Effect tool support.
 BatchQueueManager : Multicore CPU support to process items in parallel.
+BatchQueueManager : Add Raw Demosaicing settings in Queue Qettings.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
@@ -91,5 +92,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 057 ==> 304687 - Nothing happens when trying to toggle read lock on pictures on CompactFlash (Nikon).
 058 ==> 254033 - Batch queue manager should use all or more CPU cores.
 059 ==> 285250 - digiKam crashed after saving changed file.
-060 ==> 
-
+060 ==> 195784 - batch queue manager lacks raw importing tool.
+061 ==> 
