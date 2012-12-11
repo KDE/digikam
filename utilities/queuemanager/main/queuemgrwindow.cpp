@@ -65,6 +65,7 @@
 
 // Local includes
 
+#include "actions.h"
 #include "album.h"
 #include "drawdecoding.h"
 #include "batchtoolsmanager.h"

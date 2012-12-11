@@ -32,6 +32,7 @@ SET(libqueuemanager_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/basetools/transform/resize.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/basetools/transform/rotate.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/manager/actionthread.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/manager/task.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/manager/batchtool.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/manager/batchtoolutils.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/manager/batchtoolsmanager.cpp

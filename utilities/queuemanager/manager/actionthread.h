@@ -25,15 +25,6 @@
 #ifndef ACTIONTHREAD_H
 #define ACTIONTHREAD_H
 
-// Qt includes
-
-#include <QThread>
-
-// KDE includes
-
-#include <kurl.h>
-#include <threadweaver/Job.h>
-
 // Libkdcraw includes
 
 #include <libkdcraw/ractionthreadbase.h>
@@ -41,14 +32,13 @@
 // Local includes
 
 #include "batchtool.h"
-#include "actions.h"
 
 using namespace KDcrawIface;
 
 namespace Digikam
 {
 
-class TaskSettings;
+class ActionData;
 class QueueSettings;
 
 class ActionThread : public RActionThreadBase
@@ -88,43 +78,6 @@ Q_SIGNALS:
 private Q_SLOTS:
 
     void slotThreadFinished();
-
-private:
-
-    class Private;
-    Private* const d;
-};
-
-// ---------------------------------------------------------------------------------------------------------
-
-class Task : public Job
-{
-    Q_OBJECT
-
-public:
-
-    Task();
-    ~Task();
-
-    void setSettings(const TaskSettings& settings);
-    void setItem(const AssignedBatchTools& item);
-
-Q_SIGNALS:
-
-    void signalStarting(const Digikam::ActionData& ad);
-    void signalFinished(const Digikam::ActionData& ad);
-
-public Q_SLOTS:
-
-    void slotCancel();
-
-protected:
-
-    void run();
-
-private:
-
-    void emitActionData(ActionData::ActionStatus st, const QString& mess=QString(), const KUrl& dest=KUrl());
 
 private:
 
