@@ -143,7 +143,7 @@ void Task::run()
         d->tool->setSettings(settings);
         d->tool->setInputUrl(inUrl);
         d->tool->setOutputUrlFromInputUrl();
-        d->tool->setBranchHistory(d->settings.createNewVersion);
+        d->tool->setBranchHistory(true);
 
         outUrl    = d->tool->outputUrl();
         success   = d->tool->apply();

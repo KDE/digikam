@@ -51,10 +51,7 @@ public:
 
     explicit TaskSettings()
     {
-        createNewVersion   = true;
     }
-
-    bool          createNewVersion;
 
     QueueSettings queuePrm;
 };
