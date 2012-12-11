@@ -45,19 +45,6 @@ using namespace ThreadWeaver;
 namespace Digikam
 {
 
-class TaskSettings
-{
-public:
-
-    explicit TaskSettings()
-    {
-    }
-
-    QueueSettings queuePrm;
-};
-
-// ---------------------------------------------------------------------------------------------------------
-
 class Task : public Job
 {
     Q_OBJECT
@@ -67,7 +54,7 @@ public:
     Task();
     ~Task();
 
-    void setSettings(const TaskSettings& settings);
+    void setSettings(const QueueSettings& settings);
     void setItem(const AssignedBatchTools& item);
 
 Q_SIGNALS:
@@ -107,7 +94,7 @@ public:
 
     bool               cancel;
 
-    TaskSettings       settings;
+    QueueSettings      settings;
     BatchTool*         tool;
     AssignedBatchTools item;
 };

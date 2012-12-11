@@ -66,7 +66,7 @@ Task::~Task()
     delete d;
 }
 
-void Task::setSettings(const TaskSettings& settings)
+void Task::setSettings(const QueueSettings& settings)
 {
     d->settings = settings;
 }
@@ -135,9 +135,9 @@ void Task::run()
         kDebug() << "Tool Index: " << index;
 
         d->tool->setImageData(tmpImage);
-        d->tool->setWorkingUrl(d->settings.queuePrm.workingUrl);
-        d->tool->setRawDecodingSettings(d->settings.queuePrm.rawDecodingSettings);
-        d->tool->setResetExifOrientationAllowed(d->settings.queuePrm.exifSetOrientation);
+        d->tool->setWorkingUrl(d->settings.workingUrl);
+        d->tool->setRawDecodingSettings(d->settings.rawDecodingSettings);
+        d->tool->setResetExifOrientationAllowed(d->settings.exifSetOrientation);
         d->tool->setLastChainedTool(index == d->item.m_toolsMap.count());
         d->tool->setInputUrl(inUrl);
         d->tool->setSettings(settings);
@@ -176,14 +176,14 @@ void Task::run()
 
     // Move processed temp file to target
 
-    KUrl dest = d->settings.queuePrm.workingUrl;
+    KUrl dest = d->settings.workingUrl;
     dest.setFileName(d->item.m_destFileName);
     QString renameMess;
     QFileInfo fi(dest.toLocalFile());
 
     if (fi.exists())
     {
-        if (d->settings.queuePrm.conflictRule != QueueSettings::OVERWRITE)
+        if (d->settings.conflictRule != QueueSettings::OVERWRITE)
         {
             int i          = 0;
             bool fileFound = false;

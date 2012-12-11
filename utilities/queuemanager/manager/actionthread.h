@@ -50,7 +50,7 @@ public:
     explicit ActionThread(QObject* const parent);
     ~ActionThread();
 
-    void setSettings(const QueueSettings& queuePrm);
+    void setSettings(const QueueSettings& settings);
 
     void processQueueItems(const QList<AssignedBatchTools>& items);
 

@@ -47,7 +47,7 @@ public:
     {
     }
 
-    TaskSettings settings;
+    QueueSettings settings;
 };
 
 // --------------------------------------------------------------------------------------
@@ -70,9 +70,9 @@ ActionThread::~ActionThread()
     delete d;
 }
 
-void ActionThread::setSettings(const QueueSettings& queuePrm)
+void ActionThread::setSettings(const QueueSettings& settings)
 {
-    d->settings.queuePrm = queuePrm;
+    d->settings = settings;
 }
 
 void ActionThread::processQueueItems(const QList<AssignedBatchTools>& items)
