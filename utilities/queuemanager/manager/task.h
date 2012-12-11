@@ -55,7 +55,7 @@ public:
     ~Task();
 
     void setSettings(const QueueSettings& settings);
-    void setItem(const AssignedBatchTools& item);
+    void setItem(const AssignedBatchTools& tools);
 
 Q_SIGNALS:
 
@@ -94,9 +94,10 @@ public:
 
     bool               cancel;
 
-    QueueSettings      settings;
     BatchTool*         tool;
-    AssignedBatchTools item;
+
+    QueueSettings      settings;
+    AssignedBatchTools tools;
 };
 
 }  // namespace Digikam

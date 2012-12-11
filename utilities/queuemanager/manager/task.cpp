@@ -71,15 +71,15 @@ void Task::setSettings(const QueueSettings& settings)
     d->settings = settings;
 }
 
-void Task::setItem(const AssignedBatchTools& item)
+void Task::setItem(const AssignedBatchTools& tools)
 {
-    d->item = item;
+    d->tools = tools;
 
     // For each tools assigned, create a dedicated instance for the thread to have a safe running between jobs.
     // NOTE: BatchTool include settings widget data, it cannot be cloned in thread as well, but in main thread.
 
-    for (BatchToolMap::iterator it = d->item.m_toolsMap.begin();
-         it != d->item.m_toolsMap.end() ; ++it)
+    for (BatchToolMap::iterator it = d->tools.m_toolsMap.begin();
+         it != d->tools.m_toolsMap.end() ; ++it)
     {
         BatchTool* const tool = it.value().tool->clone(this);
         it.value().tool       = tool;
@@ -97,7 +97,7 @@ void Task::slotCancel()
 void Task::emitActionData(ActionData::ActionStatus st, const QString& mess, const KUrl& dest)
 {
     ActionData ad;
-    ad.fileUrl = d->item.m_itemUrl;
+    ad.fileUrl = d->tools.m_itemUrl;
     ad.status  = st;
     ad.message = mess;
     ad.destUrl = dest;
@@ -117,14 +117,14 @@ void Task::run()
 
     int        index   = 0;
     bool       success = false;
-    KUrl       outUrl  = d->item.m_itemUrl;
+    KUrl       outUrl  = d->tools.m_itemUrl;
     KUrl       inUrl;
     KUrl::List tmp2del;
     DImg       tmpImage;
     QString    errMsg;
 
-    for (BatchToolMap::const_iterator it = d->item.m_toolsMap.constBegin();
-         !d->cancel && (it != d->item.m_toolsMap.constEnd()) ; ++it)
+    for (BatchToolMap::const_iterator it = d->tools.m_toolsMap.constBegin();
+         !d->cancel && (it != d->tools.m_toolsMap.constEnd()) ; ++it)
     {
         index                      = it.key();
         BatchToolSet set           = it.value();
@@ -139,7 +139,7 @@ void Task::run()
         d->tool->setRawLoadingRules(d->settings.rawLoadingRule);
         d->tool->setRawDecodingSettings(d->settings.rawDecodingSettings);
         d->tool->setResetExifOrientationAllowed(d->settings.exifSetOrientation);
-        d->tool->setLastChainedTool(index == d->item.m_toolsMap.count());
+        d->tool->setLastChainedTool(index == d->tools.m_toolsMap.count());
         d->tool->setInputUrl(inUrl);
         d->tool->setSettings(settings);
         d->tool->setInputUrl(inUrl);
@@ -178,7 +178,7 @@ void Task::run()
     // Move processed temp file to target
 
     KUrl dest = d->settings.workingUrl;
-    dest.setFileName(d->item.m_destFileName);
+    dest.setFileName(d->tools.m_destFileName);
     QString renameMess;
     QFileInfo fi(dest.toLocalFile());
 
@@ -234,7 +234,7 @@ void Task::run()
             // -- Now copy the digiKam attributes from original file to the new file ------------
 
             // ImageInfo must be tread-safe.
-            ImageInfo source(d->item.m_itemUrl.toLocalFile());
+            ImageInfo source(d->tools.m_itemUrl.toLocalFile());
             FileActionMngr::instance()->copyAttributes(source, dest.toLocalFile());
 
             emitActionData(ActionData::BatchDone, i18n("Item processed successfully %1", renameMess), dest);
