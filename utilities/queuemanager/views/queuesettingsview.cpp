@@ -76,7 +76,7 @@ public:
         renameOriginal(0),
         renameManual(0),
         overwriteButton(0),
-        promptButton(0),
+        storeDiffButton(0),
         extractJPEGButton(0),
         demosaicingButton(0),
         albumSel(0),
@@ -96,7 +96,7 @@ public:
     QRadioButton*          renameOriginal;
     QRadioButton*          renameManual;
     QRadioButton*          overwriteButton;
-    QRadioButton*          promptButton;
+    QRadioButton*          storeDiffButton;
     QRadioButton*          extractJPEGButton;
     QRadioButton*          demosaicingButton;
 
@@ -174,8 +174,8 @@ QueueSettingsView::QueueSettingsView(QWidget* const parent)
     d->rawLoadingButtonGroup->setExclusive(true);
     d->demosaicingButton->setChecked(true);
 
-    vlay2->addWidget(d->extractJPEGButton);
     vlay2->addWidget(d->demosaicingButton);
+    vlay2->addWidget(d->extractJPEGButton);
     vlay2->setMargin(0);
     vlay2->setSpacing(0);
 
@@ -185,15 +185,15 @@ QueueSettingsView::QueueSettingsView(QWidget* const parent)
     QWidget* conflictBox   = new QWidget(panel);
     QVBoxLayout* vlay      = new QVBoxLayout(conflictBox);
     d->conflictButtonGroup = new QButtonGroup(conflictBox);
+    d->storeDiffButton     = new QRadioButton(i18n("Store as a different name"), conflictBox);
     d->overwriteButton     = new QRadioButton(i18n("Overwrite automatically"),   conflictBox);
-    d->promptButton        = new QRadioButton(i18n("Store as a different name"), conflictBox);
     d->conflictButtonGroup->addButton(d->overwriteButton, QueueSettings::OVERWRITE);
-    d->conflictButtonGroup->addButton(d->promptButton,    QueueSettings::DIFFNAME);
+    d->conflictButtonGroup->addButton(d->storeDiffButton, QueueSettings::DIFFNAME);
     d->conflictButtonGroup->setExclusive(true);
-    d->promptButton->setChecked(true);
+    d->storeDiffButton->setChecked(true);
 
+    vlay->addWidget(d->storeDiffButton);
     vlay->addWidget(d->overwriteButton);
-    vlay->addWidget(d->promptButton);
     vlay->setMargin(0);
     vlay->setSpacing(0);
 
