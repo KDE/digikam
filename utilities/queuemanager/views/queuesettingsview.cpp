@@ -69,12 +69,16 @@ public:
 
     Private() :
         conflictLabel(0),
+        rawLoadingLabel(0),
         renamingButtonGroup(0),
         conflictButtonGroup(0),
+        rawLoadingButtonGroup(0),
         renameOriginal(0),
         renameManual(0),
         overwriteButton(0),
         promptButton(0),
+        extractJPEGButton(0),
+        demosaicingButton(0),
         albumSel(0),
         advancedRenameManager(0),
         advancedRenameWidget(0),
@@ -83,14 +87,18 @@ public:
     }
 
     QLabel*                conflictLabel;
+    QLabel*                rawLoadingLabel;
 
     QButtonGroup*          renamingButtonGroup;
     QButtonGroup*          conflictButtonGroup;
+    QButtonGroup*          rawLoadingButtonGroup;
 
     QRadioButton*          renameOriginal;
     QRadioButton*          renameManual;
     QRadioButton*          overwriteButton;
     QRadioButton*          promptButton;
+    QRadioButton*          extractJPEGButton;
+    QRadioButton*          demosaicingButton;
 
     AlbumSelectWidget*     albumSel;
 
@@ -169,8 +177,30 @@ QueueSettingsView::QueueSettingsView(QWidget* const parent)
     vlay->setMargin(0);
     vlay->setSpacing(0);
 
+    // -------------
+
+    d->rawLoadingLabel       = new QLabel(i18n("Raw files loading:"), panel);
+    QWidget* rawLoadingBox   = new QWidget(panel);
+    QVBoxLayout* vlay2       = new QVBoxLayout(rawLoadingBox);
+    d->rawLoadingButtonGroup = new QButtonGroup(rawLoadingBox);
+    d->extractJPEGButton     = new QRadioButton(i18n("Extract embeded JPEG"),    rawLoadingBox);
+    d->demosaicingButton     = new QRadioButton(i18n("Perform RAW demosaicing"), rawLoadingBox);
+    d->rawLoadingButtonGroup->addButton(d->extractJPEGButton, QueueSettings::USEEMBEDEDJPEG);
+    d->rawLoadingButtonGroup->addButton(d->demosaicingButton, QueueSettings::DEMOSAICING);
+    d->rawLoadingButtonGroup->setExclusive(true);
+    d->demosaicingButton->setChecked(true);
+
+    vlay2->addWidget(d->extractJPEGButton);
+    vlay2->addWidget(d->demosaicingButton);
+    vlay2->setMargin(0);
+    vlay2->setSpacing(0);
+
+    // -------------
+
     layout->addWidget(d->conflictLabel);
     layout->addWidget(conflictBox);
+    layout->addWidget(d->rawLoadingLabel);
+    layout->addWidget(rawLoadingBox);
     layout->setMargin(KDialog::spacingHint());
     layout->setSpacing(KDialog::spacingHint());
     layout->addStretch();
@@ -191,10 +221,13 @@ QueueSettingsView::QueueSettingsView(QWidget* const parent)
     connect(d->albumSel, SIGNAL(itemSelectionChanged()),
             this, SLOT(slotSettingsChanged()));
 
+    connect(d->renamingButtonGroup, SIGNAL(buttonClicked(int)),
+            this, SLOT(slotSettingsChanged()));
+
     connect(d->conflictButtonGroup, SIGNAL(buttonClicked(int)),
             this, SLOT(slotSettingsChanged()));
 
-    connect(d->renamingButtonGroup, SIGNAL(buttonClicked(int)),
+    connect(d->rawLoadingButtonGroup, SIGNAL(buttonClicked(int)),
             this, SLOT(slotSettingsChanged()));
 
     connect(d->advancedRenameWidget, SIGNAL(signalTextChanged(QString)),
@@ -238,8 +271,9 @@ void QueueSettingsView::slotResetSettings()
 {
     blockSignals(true);
     // TODO: reset d->albumSel
-    d->conflictButtonGroup->button(QueueSettings::OVERWRITE)->setChecked(true);
     d->renamingButtonGroup->button(QueueSettings::USEORIGINAL)->setChecked(true);
+    d->conflictButtonGroup->button(QueueSettings::OVERWRITE)->setChecked(true);
+    d->rawLoadingButtonGroup->button(QueueSettings::DEMOSAICING)->setChecked(true);
     d->advancedRenameWidget->clearParseString();
     d->rawSettings->resetToDefault();
     blockSignals(false);
@@ -249,22 +283,35 @@ void QueueSettingsView::slotResetSettings()
 void QueueSettingsView::slotQueueSelected(int, const QueueSettings& settings, const AssignedBatchTools&)
 {
     d->albumSel->setCurrentAlbumUrl(settings.workingUrl);
-    int btn = (int)settings.conflictRule;
-    d->conflictButtonGroup->button(btn)->setChecked(true);
-    btn     = (int)settings.renamingRule;
+
+    int btn     = (int)settings.renamingRule;
     d->renamingButtonGroup->button(btn)->setChecked(true);
+
+    btn = (int)settings.conflictRule;
+    d->conflictButtonGroup->button(btn)->setChecked(true);
+
+    btn     = (int)settings.rawLoadingRule;
+    d->rawLoadingButtonGroup->button(btn)->setChecked(true);
+
     d->advancedRenameWidget->setParseString(settings.renamingParser);
+
     d->rawSettings->setSettings(settings.rawDecodingSettings);
 }
 
 void QueueSettingsView::slotSettingsChanged()
 {
     QueueSettings settings;
-    settings.conflictRule        = (QueueSettings::ConflictRule)d->conflictButtonGroup->checkedId();
     settings.workingUrl          = d->albumSel->currentAlbumUrl();
+
     settings.renamingRule        = (QueueSettings::RenamingRule)d->renamingButtonGroup->checkedId();
     settings.renamingParser      = d->advancedRenameWidget->parseString();
     d->advancedRenameWidget->setEnabled(settings.renamingRule == QueueSettings::CUSTOMIZE);
+
+    settings.conflictRule        = (QueueSettings::ConflictRule)d->conflictButtonGroup->checkedId();
+
+    settings.rawLoadingRule      = (QueueSettings::RawLoadingRule)d->rawLoadingButtonGroup->checkedId();
+    d->rawSettings->setDisabled(settings.rawLoadingRule == QueueSettings::USEEMBEDEDJPEG);
+
     settings.rawDecodingSettings = d->rawSettings->settings();
 
     emit signalSettingsChanged(settings);

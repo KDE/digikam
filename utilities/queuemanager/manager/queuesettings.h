@@ -53,6 +53,13 @@ public:
         CUSTOMIZE
     };
 
+
+    enum RawLoadingRule
+    {
+        USEEMBEDEDJPEG = 0,
+        DEMOSAICING
+    };
+
 public:
 
     QueueSettings()
@@ -60,6 +67,7 @@ public:
         exifSetOrientation = true;
         conflictRule       = OVERWRITE;
         renamingRule       = USEORIGINAL;
+        rawLoadingRule     = DEMOSAICING;
     };
 
     bool                exifSetOrientation;
@@ -70,6 +78,7 @@ public:
 
     ConflictRule        conflictRule;
     RenamingRule        renamingRule;
+    RawLoadingRule      rawLoadingRule;
 
     RawDecodingSettings rawDecodingSettings;
 };

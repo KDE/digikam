@@ -36,6 +36,7 @@
 
 #include "dimg.h"
 #include "batchtoolutils.h"
+#include "queuesettings.h"
 #include "dimg.h"
 
 class QWidget;
@@ -163,6 +164,10 @@ public:
      */
     bool getNeedResetExifOrientation() const;
 
+    /** Set that RAW files loading rule to use (demosaicing or JPEG embeded).
+     */
+    void setRawLoadingRules(QueueSettings::RawLoadingRule rule);
+
     /**
      * Sets if the history added by tools shall be made a branch (new version).
      * Applies only when the file is actually saved on disk, and takes the history
@@ -214,6 +219,10 @@ public Q_SLOTS:
     void slotSettingsChanged(const BatchToolSettings& settings);
 
 protected:
+
+    /** Method to check if file pointed by url is a RAW image
+     */
+    bool isRawFile(const KUrl& url) const;
 
     /** Set string to describe an error which appear during apply() method.
      */

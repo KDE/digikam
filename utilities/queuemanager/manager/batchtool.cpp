@@ -39,12 +39,18 @@
 #include <kdebug.h>
 #include <klocale.h>
 
+// LibKDcraw includes
+
+#include <libkdcraw/kdcraw.h>
+
 // Local includes
 
 #include "dimgbuiltinfilter.h"
 #include "dimgloaderobserver.h"
 #include "dimgthreadedfilter.h"
 #include "filereadwritelock.h"
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -62,34 +68,37 @@ public:
         branchHistory(true),
         cancel(false),
         last(false),
-        observer(0)
+        observer(0),
+        rawLoadingRule(QueueSettings::DEMOSAICING)
     {
     }
 
-    bool                      exifResetOrientation;
-    bool                      exifCanEditOrientation;
-    bool                      branchHistory;
-    bool                      cancel;
-    bool                      last;
+    bool                          exifResetOrientation;
+    bool                          exifCanEditOrientation;
+    bool                          branchHistory;
+    bool                          cancel;
+    bool                          last;
 
-    QString                   errorMessage;
-    QString                   toolTitle;          // User friendly tool title.
-    QString                   toolDescription;    // User friendly tool description.
-    QString                   toolIconName;
+    QString                       errorMessage;
+    QString                       toolTitle;          // User friendly tool title.
+    QString                       toolDescription;    // User friendly tool description.
+    QString                       toolIconName;
 
-    KUrl                      inputUrl;
-    KUrl                      outputUrl;
-    KUrl                      workingUrl;
+    KUrl                          inputUrl;
+    KUrl                          outputUrl;
+    KUrl                          workingUrl;
 
-    DImg                      image;
+    DImg                          image;
 
-    RawDecodingSettings       rawDecodingSettings;
+    RawDecodingSettings           rawDecodingSettings;
 
-    BatchToolSettings         settings;
+    BatchToolSettings             settings;
 
-    BatchToolObserver*        observer;
+    BatchToolObserver*            observer;
 
-    BatchTool::BatchToolGroup toolGroup;
+    BatchTool::BatchToolGroup     toolGroup;
+
+    QueueSettings::RawLoadingRule rawLoadingRule;
 };
 
 class BatchToolObserver : public DImgLoaderObserver
@@ -249,6 +258,11 @@ bool BatchTool::getResetExifOrientationAllowed() const
     return d->exifCanEditOrientation;
 }
 
+void BatchTool::setRawLoadingRules(QueueSettings::RawLoadingRule rule)
+{
+    d->rawLoadingRule = rule;
+}
+
 void BatchTool::setBranchHistory(bool branch)
 {
     d->branchHistory = branch;
@@ -326,6 +340,13 @@ void BatchTool::setOutputUrlFromInputUrl()
     setOutputUrl(KUrl::fromPath(temp.fileName()));
 }
 
+bool BatchTool::isRawFile(const KUrl& url) const
+{
+    QString rawFilesExt(KDcraw::rawFiles());
+    QFileInfo fileInfo(url.toLocalFile());
+    return (rawFilesExt.toUpper().contains(fileInfo.suffix().toUpper()));
+}
+
 bool BatchTool::loadToDImg() const
 {
     if (!d->image.isNull())
@@ -333,7 +354,15 @@ bool BatchTool::loadToDImg() const
         return true;
     }
 
-    return d->image.load(inputUrl().toLocalFile(), d->observer, DRawDecoding(rawDecodingSettings()));
+    if (d->rawLoadingRule == QueueSettings::USEEMBEDEDJPEG && isRawFile(inputUrl()))
+    {
+        QImage img;
+        bool ret = KDcraw::loadRawPreview(img, inputUrl().toLocalFile());
+        d->image = DImg(img);
+        return ret;
+    }
+
+    return (d->image.load(inputUrl().toLocalFile(), d->observer, DRawDecoding(rawDecodingSettings())));
 }
 
 bool BatchTool::savefromDImg() const
