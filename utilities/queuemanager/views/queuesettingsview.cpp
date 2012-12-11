@@ -200,6 +200,9 @@ QueueSettingsView::QueueSettingsView(QWidget* const parent)
     connect(d->advancedRenameWidget, SIGNAL(signalTextChanged(QString)),
             this, SLOT(slotSettingsChanged()));
 
+    connect(d->rawSettings, SIGNAL(signalSettingsChanged()),
+            this, SLOT(slotSettingsChanged()));
+
     // --------------------------------------------------------
 
     QTimer::singleShot(0, this, SLOT(slotResetSettings()));
