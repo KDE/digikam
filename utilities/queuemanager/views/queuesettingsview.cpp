@@ -117,8 +117,38 @@ QueueSettingsView::QueueSettingsView(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    QScrollArea* sv = new QScrollArea(this);
-    QWidget* panel  = new QWidget(sv->viewport());
+    QScrollArea* const sv2   = new QScrollArea(this);
+    KVBox* const vbox2       = new KVBox(sv2->viewport());
+    sv2->setWidget(vbox2);
+    sv2->setWidgetResizable(true);
+
+    d->renamingButtonGroup   = new QButtonGroup(vbox2);
+    d->renameOriginal        = new QRadioButton(i18n("Use original filenames"), vbox2);
+    d->renameOriginal->setWhatsThis(i18n("Turn on this option to use original "
+                                         "filenames without modifications."));
+
+    d->renameManual          = new QRadioButton(i18n("Customize filenames:"), vbox2);
+
+    d->advancedRenameWidget  = new AdvancedRenameWidget(vbox2);
+    d->advancedRenameManager = new AdvancedRenameManager();
+    d->advancedRenameManager->setWidget(d->advancedRenameWidget);
+
+    QWidget* const space     = new QWidget(vbox2);
+
+    d->renamingButtonGroup->setExclusive(true);
+    d->renamingButtonGroup->addButton(d->renameOriginal, QueueSettings::USEORIGINAL);
+    d->renamingButtonGroup->addButton(d->renameManual,   QueueSettings::CUSTOMIZE);
+
+    vbox2->setStretchFactor(space, 10);
+    vbox2->setMargin(KDialog::spacingHint());
+    vbox2->setSpacing(KDialog::spacingHint());
+
+    addTab(sv2, SmallIcon("insert-image"), i18n("File Renaming"));
+
+    // --------------------------------------------------------
+
+    QScrollArea* const sv  = new QScrollArea(this);
+    QWidget* const panel   = new QWidget(sv->viewport());
     sv->setWidget(panel);
     sv->setWidgetResizable(true);
 
@@ -146,36 +176,6 @@ QueueSettingsView::QueueSettingsView(QWidget* const parent)
     layout->addStretch();
 
     addTab(sv, SmallIcon("dialog-information"), i18n("Behavior"));
-
-    // --------------------------------------------------------
-
-    QScrollArea* sv2 = new QScrollArea(this);
-    KVBox* vbox2     = new KVBox(sv2->viewport());
-    sv2->setWidget(vbox2);
-    sv2->setWidgetResizable(true);
-
-    d->renamingButtonGroup = new QButtonGroup(vbox2);
-    d->renameOriginal      = new QRadioButton(i18n("Use original filenames"), vbox2);
-    d->renameOriginal->setWhatsThis(i18n("Turn on this option to use original "
-                                         "filenames without modifications."));
-
-    d->renameManual          = new QRadioButton(i18n("Customize filenames:"), vbox2);
-
-    d->advancedRenameWidget  = new AdvancedRenameWidget(vbox2);
-    d->advancedRenameManager = new AdvancedRenameManager();
-    d->advancedRenameManager->setWidget(d->advancedRenameWidget);
-
-    QWidget* space           = new QWidget(vbox2);
-
-    d->renamingButtonGroup->setExclusive(true);
-    d->renamingButtonGroup->addButton(d->renameOriginal, QueueSettings::USEORIGINAL);
-    d->renamingButtonGroup->addButton(d->renameManual,   QueueSettings::CUSTOMIZE);
-
-    vbox2->setStretchFactor(space, 10);
-    vbox2->setMargin(KDialog::spacingHint());
-    vbox2->setSpacing(KDialog::spacingHint());
-
-    addTab(sv2, SmallIcon("insert-image"), i18n("File Renaming"));
 
     // --------------------------------------------------------
 
