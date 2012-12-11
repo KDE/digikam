@@ -157,10 +157,30 @@ QueueSettingsView::QueueSettingsView(QWidget* const parent)
 
     QScrollArea* const sv  = new QScrollArea(this);
     QWidget* const panel   = new QWidget(sv->viewport());
+    QVBoxLayout* layout    = new QVBoxLayout(panel);
     sv->setWidget(panel);
     sv->setWidgetResizable(true);
 
-    QVBoxLayout* layout    = new QVBoxLayout(panel);
+    // -------------
+
+    d->rawLoadingLabel       = new QLabel(i18n("Raw Files Loading:"), panel);
+    QWidget* rawLoadingBox   = new QWidget(panel);
+    QVBoxLayout* vlay2       = new QVBoxLayout(rawLoadingBox);
+    d->rawLoadingButtonGroup = new QButtonGroup(rawLoadingBox);
+    d->demosaicingButton     = new QRadioButton(i18n("Perform RAW demosaicing"),          rawLoadingBox);
+    d->extractJPEGButton     = new QRadioButton(i18n("Extract embeded preview (faster)"), rawLoadingBox);
+    d->rawLoadingButtonGroup->addButton(d->extractJPEGButton, QueueSettings::USEEMBEDEDJPEG);
+    d->rawLoadingButtonGroup->addButton(d->demosaicingButton, QueueSettings::DEMOSAICING);
+    d->rawLoadingButtonGroup->setExclusive(true);
+    d->demosaicingButton->setChecked(true);
+
+    vlay2->addWidget(d->extractJPEGButton);
+    vlay2->addWidget(d->demosaicingButton);
+    vlay2->setMargin(0);
+    vlay2->setSpacing(0);
+
+    // -------------
+
     d->conflictLabel       = new QLabel(i18n("If Target File Exists:"), panel);
     QWidget* conflictBox   = new QWidget(panel);
     QVBoxLayout* vlay      = new QVBoxLayout(conflictBox);
@@ -179,28 +199,10 @@ QueueSettingsView::QueueSettingsView(QWidget* const parent)
 
     // -------------
 
-    d->rawLoadingLabel       = new QLabel(i18n("Raw files loading:"), panel);
-    QWidget* rawLoadingBox   = new QWidget(panel);
-    QVBoxLayout* vlay2       = new QVBoxLayout(rawLoadingBox);
-    d->rawLoadingButtonGroup = new QButtonGroup(rawLoadingBox);
-    d->extractJPEGButton     = new QRadioButton(i18n("Extract embeded JPEG"),    rawLoadingBox);
-    d->demosaicingButton     = new QRadioButton(i18n("Perform RAW demosaicing"), rawLoadingBox);
-    d->rawLoadingButtonGroup->addButton(d->extractJPEGButton, QueueSettings::USEEMBEDEDJPEG);
-    d->rawLoadingButtonGroup->addButton(d->demosaicingButton, QueueSettings::DEMOSAICING);
-    d->rawLoadingButtonGroup->setExclusive(true);
-    d->demosaicingButton->setChecked(true);
-
-    vlay2->addWidget(d->extractJPEGButton);
-    vlay2->addWidget(d->demosaicingButton);
-    vlay2->setMargin(0);
-    vlay2->setSpacing(0);
-
-    // -------------
-
-    layout->addWidget(d->conflictLabel);
-    layout->addWidget(conflictBox);
     layout->addWidget(d->rawLoadingLabel);
     layout->addWidget(rawLoadingBox);
+    layout->addWidget(d->conflictLabel);
+    layout->addWidget(conflictBox);
     layout->setMargin(KDialog::spacingHint());
     layout->setSpacing(KDialog::spacingHint());
     layout->addStretch();
