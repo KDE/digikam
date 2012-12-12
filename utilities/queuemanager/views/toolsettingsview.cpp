@@ -42,6 +42,7 @@
 // Local includes
 
 #include "thememanager.h"
+#include "batchtoolsmanager.h"
 
 namespace Digikam
 {
@@ -230,7 +231,7 @@ void ToolSettingsView::slotToolSelected(const BatchToolSet& set)
                    d->tool, SLOT(slotResetSettingsToDefault()));
     }
 
-    d->tool = set.tool;
+    d->tool = BatchToolsManager::instance()->findTool(set.name, set.group);
 
     if (d->tool)
     {
@@ -261,7 +262,8 @@ void ToolSettingsView::slotToolSelected(const BatchToolSet& set)
 void ToolSettingsView::slotSettingsChanged(const BatchToolSettings& settings)
 {
     BatchToolSet set;
-    set.tool     = d->tool;
+    set.name     = d->tool->objectName();
+    set.group    = d->tool->toolGroup();
     set.settings = settings;
     emit signalSettingsChanged(set);
 }

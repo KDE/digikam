@@ -49,6 +49,7 @@
 #include "dimgloaderobserver.h"
 #include "dimgthreadedfilter.h"
 #include "filereadwritelock.h"
+#include "batchtoolutils.h"
 
 using namespace KDcrawIface;
 
@@ -136,7 +137,6 @@ BatchTool::BatchTool(const QString& name, BatchToolGroup group, QObject* const p
 
 BatchTool::~BatchTool()
 {
-    delete m_settingsWidget;
     delete d->observer;
     delete d;
 }

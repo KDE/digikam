@@ -35,16 +35,12 @@
 
 #include <kurl.h>
 
+// Local includes
+
+#include "batchtool.h"
+
 namespace Digikam
 {
-
-class BatchTool;
-
-/** A map of batch tool settings (setting key, setting value).
- */
-typedef QMap<QString, QVariant> BatchToolSettings;
-
-// -------------------------------------------------------------------------------------------------------------
 
 /** A list of batch tool instances.
  */
@@ -60,11 +56,11 @@ public:
 
     BatchToolSet()
     {
-        tool = 0;
     };
 
-    BatchTool*        tool;
-    BatchToolSettings settings;
+    QString                   name;
+    BatchTool::BatchToolGroup group;
+    BatchToolSettings         settings;
 };
 
 // -------------------------------------------------------------------------------------------------------------

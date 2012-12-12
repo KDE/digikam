@@ -129,9 +129,9 @@ QueueMgrWindow::QueueMgrWindow()
     qRegisterMetaType<BatchToolSettings>("BatchToolSettings");
     qRegisterMetaType<BatchToolSet>("BatchToolSet");
 
-    m_instance       = this;
-    d->batchToolsMgr = new BatchToolsManager(this);
-    d->thread        = new ActionThread(this);
+    m_instance = this;
+    BatchToolsManager::instance();        // Create first instance here
+    d->thread  = new ActionThread(this);
 
     setWindowFlags(Qt::Window);
     setCaption(i18n("Batch Queue Manager"));
@@ -163,11 +163,6 @@ QueueMgrWindow::~QueueMgrWindow()
 {
     m_instance = 0;
     delete d;
-}
-
-BatchToolsManager* QueueMgrWindow::batchToolsManager() const
-{
-    return d->batchToolsMgr;
 }
 
 QMap<int, QString> QueueMgrWindow::queuesMap() const
@@ -793,7 +788,7 @@ void QueueMgrWindow::slotItemSelectionChanged()
 
 void QueueMgrWindow::populateToolsList()
 {
-    BatchToolsList list = d->batchToolsMgr->toolsList();
+    BatchToolsList list = BatchToolsManager::instance()->toolsList();
 
     foreach(BatchTool* const tool, list)
     {

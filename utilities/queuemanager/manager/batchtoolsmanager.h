@@ -31,6 +31,7 @@
 // Local includes
 
 #include "batchtool.h"
+#include "batchtoolutils.h"
 
 namespace Digikam
 {
@@ -41,20 +42,25 @@ class BatchToolsManager : public QObject
 
 public:
 
-    explicit BatchToolsManager(QObject* const parent = 0);
-    ~BatchToolsManager();
+    static BatchToolsManager* instance();
 
-    void registerTool(BatchTool* const tool);
-    void unregisterTool(BatchTool* const tool);
+public:
 
-    BatchTool* findTool(const QString& name, BatchTool::BatchToolGroup group) const;
-
+    void           registerTool(BatchTool* const tool);
+    BatchTool*     findTool(const QString& name, BatchTool::BatchToolGroup group) const;
     BatchToolsList toolsList() const;
+
+private:
+
+    BatchToolsManager();
+    ~BatchToolsManager();
 
 private:
 
     class Private;
     Private* const d;
+
+    friend class BatchToolsManagerCreator;
 };
 
 }  // namespace Digikam

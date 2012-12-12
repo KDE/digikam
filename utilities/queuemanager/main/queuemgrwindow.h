@@ -73,9 +73,8 @@ public:
      */
     QMap<int, QString> queuesMap()         const;
 
-    BatchToolsManager* batchToolsManager() const;
     bool isBusy()                          const;
-    int currentQueueId()                   const;
+    int  currentQueueId()                  const;
 
     bool queryClose();
 

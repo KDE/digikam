@@ -51,6 +51,7 @@ extern "C"
 #include "imageinfo.h"
 #include "fileactionmngr.h"
 #include "batchtool.h"
+#include "batchtoolsmanager.h"
 
 namespace Digikam
 {
@@ -74,16 +75,6 @@ void Task::setSettings(const QueueSettings& settings)
 void Task::setItem(const AssignedBatchTools& tools)
 {
     d->tools = tools;
-
-    // For each tools assigned, create a dedicated instance for the thread to have a safe running between jobs.
-    // NOTE: BatchTool include settings widget data, it cannot be cloned in thread as well, but in main thread.
-
-    for (BatchToolMap::iterator it = d->tools.m_toolsMap.begin();
-         it != d->tools.m_toolsMap.end() ; ++it)
-    {
-        BatchTool* const tool = it.value().tool->clone(this);
-        it.value().tool       = tool;
-    }
 }
 
 void Task::slotCancel()
@@ -128,7 +119,7 @@ void Task::run()
     {
         index                      = it.key();
         BatchToolSet set           = it.value();
-        d->tool                    = set.tool;
+        d->tool                    = BatchToolsManager::instance()->findTool(set.name, set.group)->clone(this);
         BatchToolSettings settings = set.settings;
         inUrl                      = outUrl;
 

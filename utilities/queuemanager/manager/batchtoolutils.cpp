@@ -29,6 +29,7 @@
 
 #include "batchtool.h"
 #include "batchtoolutils.h"
+#include "batchtoolsmanager.h"
 
 namespace Digikam
 {
@@ -47,15 +48,19 @@ QString AssignedBatchTools::targetSuffix(bool* const extSet) const
 
     foreach(BatchToolSet set, m_toolsMap)
     {
-        QString s = set.tool->outputSuffix();
-
-        if (!s.isEmpty())
+        BatchTool* const tool = BatchToolsManager::instance()->findTool(set.name, set.group);
+        if (tool)
         {
-            suffix = s;
+            QString s = tool->outputSuffix();
 
-            if (extSet != 0)
+            if (!s.isEmpty())
             {
-                *extSet = true;
+                suffix = s;
+
+                if (extSet != 0)
+                {
+                    *extSet = true;
+                }
             }
         }
     }

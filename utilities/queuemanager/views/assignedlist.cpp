@@ -46,6 +46,7 @@
 #include "queuemgrwindow.h"
 #include "queuesettingsview.h"
 #include "toolslistview.h"
+#include "batchtoolsmanager.h"
 
 namespace Digikam
 {
@@ -70,12 +71,13 @@ AssignedListViewItem::~AssignedListViewItem()
 
 void AssignedListViewItem::setToolSet(const BatchToolSet& set)
 {
-    m_set = set;
+    m_set                 = set;
+    BatchTool* const tool = BatchToolsManager::instance()->findTool(m_set.name, m_set.group);
 
-    if (m_set.tool)
+    if (tool)
     {
-        setIcon(0, KIconLoader::global()->loadIcon(m_set.tool->toolIconName(), KIconLoader::NoGroup, ICONSIZE));
-        setText(0, m_set.tool->toolTitle());
+        setIcon(0, KIconLoader::global()->loadIcon(tool->toolIconName(), KIconLoader::NoGroup, ICONSIZE));
+        setText(0, tool->toolTitle());
     }
 }
 
@@ -222,7 +224,9 @@ void AssignedListView::slotMoveCurrentToolDown()
 
 AssignedListViewItem* AssignedListView::moveTool(AssignedListViewItem* const preceding, const BatchToolSet& set)
 {
-    if (!set.tool)
+    BatchTool* const tool = BatchToolsManager::instance()->findTool(set.name, set.group);
+
+    if (!tool)
     {
         return 0;
     }
@@ -237,7 +241,9 @@ AssignedListViewItem* AssignedListView::moveTool(AssignedListViewItem* const pre
 
 AssignedListViewItem* AssignedListView::insertTool(AssignedListViewItem* const preceding, const BatchToolSet& set)
 {
-    if (!set.tool)
+    BatchTool* const tool = BatchToolsManager::instance()->findTool(set.name, set.group);
+
+    if (!tool)
     {
         return 0;
     }
@@ -265,7 +271,9 @@ AssignedListViewItem* AssignedListView::insertTool(AssignedListViewItem* const p
 
 AssignedListViewItem* AssignedListView::addTool(int /*index*/, const BatchToolSet& set)
 {
-    if (!set.tool)
+    BatchTool* const tool = BatchToolsManager::instance()->findTool(set.name, set.group);
+
+    if (!tool)
     {
         return 0;
     }
@@ -290,7 +298,7 @@ bool AssignedListView::removeTool(const BatchToolSet& set)
     {
         AssignedListViewItem* const item = dynamic_cast<AssignedListViewItem*>(*it);
 
-        if (item->toolSet().tool == set.tool)
+        if ((item->toolSet().name == set.name) && (item->toolSet().group == set.group))
         {
             delete item;
             return true;
@@ -331,7 +339,7 @@ AssignedListViewItem* AssignedListView::findTool(const BatchToolSet& set)
     {
         AssignedListViewItem* const item = dynamic_cast<AssignedListViewItem*>(*it);
 
-        if (item->toolSet().tool == set.tool)
+        if ((item->toolSet().name == set.name) && (item->toolSet().group == set.group))
         {
             return item;
         }
@@ -356,19 +364,20 @@ QStringList AssignedListView::mimeTypes() const
 
 QMimeData* AssignedListView::mimeData(const QList<QTreeWidgetItem*> items) const
 {
-    QMimeData* mimeData = new QMimeData();
+    QMimeData* const mimeData = new QMimeData();
     QByteArray encodedData;
 
     QDataStream stream(&encodedData, QIODevice::WriteOnly);
     stream << items.count();
+
     foreach(QTreeWidgetItem* const itm, items)
     {
         AssignedListViewItem* const alwi = dynamic_cast<AssignedListViewItem*>(itm);
 
         if (alwi)
         {
-            stream << (int)(alwi->toolSet().tool->toolGroup());
-            stream << alwi->toolSet().tool->objectName();
+            stream << (int)(alwi->toolSet().group);
+            stream << alwi->toolSet().name;
             stream << alwi->toolSet().settings;
         }
     }
@@ -434,13 +443,12 @@ void AssignedListView::dropEvent(QDropEvent* e)
                 ds >> name;
                 ds >> settings;
 
-                BatchTool* const tool = QueueMgrWindow::queueManagerWindow()->batchToolsManager()
-                                            ->findTool(name, (BatchTool::BatchToolGroup)group);
-
+                BatchTool* const tool                 = BatchToolsManager::instance()->findTool(name, (BatchTool::BatchToolGroup)group);
                 AssignedListViewItem* const preceding = dynamic_cast<AssignedListViewItem*>(itemAt(e->pos()));
 
                 BatchToolSet set;
-                set.tool                   = tool;
+                set.name                   = tool->objectName();
+                set.group                  = tool->toolGroup();
                 set.settings               = settings;
                 AssignedListViewItem* item = moveTool(preceding, set);
                 setCurrentItem(item);
@@ -528,9 +536,10 @@ void AssignedListView::assignTools(const QMap<int, QString>& map, AssignedListVi
         it.previous();
         BatchTool::BatchToolGroup group = (BatchTool::BatchToolGroup)(it.key());
         QString name                    = it.value();
-        BatchTool* const tool           = QueueMgrWindow::queueManagerWindow()->batchToolsManager()->findTool(name, group);
+        BatchTool* const tool           = BatchToolsManager::instance()->findTool(name, group);
         BatchToolSet set;
-        set.tool                        = tool;
+        set.name                        = tool->objectName();
+        set.group                       = tool->toolGroup();
         set.settings                    = tool->defaultSettings();
         AssignedListViewItem* item      = insertTool(preceding, set);
         setCurrentItem(item);

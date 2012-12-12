@@ -23,6 +23,10 @@
 
 #include "batchtoolsmanager.moc"
 
+// KDE includes
+
+#include <kglobal.h>
+
 // Local includes
 
 #include "config-digikam.h"
@@ -75,8 +79,26 @@ public:
     BatchToolsList toolsList;
 };
 
-BatchToolsManager::BatchToolsManager(QObject* const parent)
-    : QObject(parent), d(new Private)
+// --------------------------------------------------------------------------------
+
+class BatchToolsManagerCreator
+{
+public:
+
+    BatchToolsManager object;
+};
+
+K_GLOBAL_STATIC(BatchToolsManagerCreator, batchToolsManagerCreator)
+
+// --------------------------------------------------------------------------------
+
+BatchToolsManager* BatchToolsManager::instance()
+{
+    return &batchToolsManagerCreator->object;
+}
+
+BatchToolsManager::BatchToolsManager()
+    : d(new Private)
 {
     // Convert
     registerTool(new Convert2JPEG(this));
@@ -130,6 +152,15 @@ BatchToolsManager::BatchToolsManager(QObject* const parent)
 
 BatchToolsManager::~BatchToolsManager()
 {
+    for (BatchToolsList::iterator it = d->toolsList.begin(); it != d->toolsList.end();)
+    {
+        if (*it)
+        {
+            delete *it;
+            it = d->toolsList.erase(it);
+        }
+    }
+
     delete d;
 }
 
@@ -146,27 +177,6 @@ void BatchToolsManager::registerTool(BatchTool* const tool)
     }
     tool->registerSettingsWidget();
     d->toolsList.append(tool);
-}
-
-void BatchToolsManager::unregisterTool(BatchTool* const tool)
-{
-    if (!tool)
-    {
-        return;
-    }
-
-    for (BatchToolsList::iterator it = d->toolsList.begin(); it != d->toolsList.end();)
-    {
-        if (*it == tool)
-        {
-            delete *it;
-            it = d->toolsList.erase(it);
-        }
-        else
-        {
-            ++it;
-        }
-    }
 }
 
 BatchTool* BatchToolsManager::findTool(const QString& name, BatchTool::BatchToolGroup group) const

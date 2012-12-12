@@ -33,6 +33,7 @@
 // Local includes
 
 #include "batchtool.h"
+#include "batchtoolutils.h"
 
 namespace Digikam
 {

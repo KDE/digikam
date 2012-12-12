@@ -35,7 +35,6 @@
 // Local includes
 
 #include "dimg.h"
-#include "batchtoolutils.h"
 #include "queuesettings.h"
 #include "dimg.h"
 
@@ -48,6 +47,10 @@ namespace Digikam
 
 class DImgBuiltinFilter;
 class DImgThreadedFilter;
+
+/** A map of batch tool settings (setting key, setting value).
+ */
+typedef QMap<QString, QVariant> BatchToolSettings;
 
 class BatchTool : public QObject
 {

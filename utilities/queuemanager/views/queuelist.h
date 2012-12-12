@@ -34,6 +34,7 @@
 // Local includes
 
 #include "batchtool.h"
+#include "batchtoolutils.h"
 #include "imageinfo.h"
 #include "imageinfolist.h"
 #include "loadingdescription.h"
