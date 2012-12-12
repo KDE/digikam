@@ -64,6 +64,15 @@ namespace Digikam
 
 class QueueSettingsView::Private
 {
+public:
+
+    enum SettingsTabs
+    {
+        TARGET = 0,
+        RENAMING,
+        BEHAVIOR,
+        RAW
+    };
 
 public:
 
@@ -121,7 +130,7 @@ QueueSettingsView::QueueSettingsView(QWidget* const parent)
     // --------------------------------------------------------
 
     d->albumSel = new AlbumSelectWidget(this);
-    addTab(d->albumSel, SmallIcon("folder-image"), i18n("Target"));
+    insertTab(Private::TARGET, d->albumSel, SmallIcon("folder-image"), i18n("Target"));
 
     // --------------------------------------------------------
 
@@ -151,7 +160,7 @@ QueueSettingsView::QueueSettingsView(QWidget* const parent)
     vbox2->setMargin(KDialog::spacingHint());
     vbox2->setSpacing(KDialog::spacingHint());
 
-    addTab(sv2, SmallIcon("insert-image"), i18n("File Renaming"));
+    insertTab(Private::RENAMING, sv2, SmallIcon("insert-image"), i18n("File Renaming"));
 
     // --------------------------------------------------------
 
@@ -207,7 +216,7 @@ QueueSettingsView::QueueSettingsView(QWidget* const parent)
     layout->setSpacing(KDialog::spacingHint());
     layout->addStretch();
 
-    addTab(sv, SmallIcon("dialog-information"), i18n("Behavior"));
+    insertTab(Private::BEHAVIOR, sv, SmallIcon("dialog-information"), i18n("Behavior"));
 
     // --------------------------------------------------------
 
@@ -216,7 +225,7 @@ QueueSettingsView::QueueSettingsView(QWidget* const parent)
     d->rawSettings->setItemIcon(1, SmallIcon("whitebalance"));
     d->rawSettings->setItemIcon(2, SmallIcon("lensdistortion"));
 
-    addTab(d->rawSettings, SmallIcon("kdcraw"), i18n("Raw Decoding"));
+    insertTab(Private::RAW, d->rawSettings, SmallIcon("kdcraw"), i18n("Raw Decoding"));
 
     // --------------------------------------------------------
 
@@ -286,10 +295,10 @@ void QueueSettingsView::slotQueueSelected(int, const QueueSettings& settings, co
 {
     d->albumSel->setCurrentAlbumUrl(settings.workingUrl);
 
-    int btn     = (int)settings.renamingRule;
+    int btn = (int)settings.renamingRule;
     d->renamingButtonGroup->button(btn)->setChecked(true);
 
-    btn = (int)settings.conflictRule;
+    btn     = (int)settings.conflictRule;
     d->conflictButtonGroup->button(btn)->setChecked(true);
 
     btn     = (int)settings.rawLoadingRule;
@@ -312,7 +321,7 @@ void QueueSettingsView::slotSettingsChanged()
     settings.conflictRule        = (QueueSettings::ConflictRule)d->conflictButtonGroup->checkedId();
 
     settings.rawLoadingRule      = (QueueSettings::RawLoadingRule)d->rawLoadingButtonGroup->checkedId();
-    d->rawSettings->setDisabled(settings.rawLoadingRule == QueueSettings::USEEMBEDEDJPEG);
+    setTabEnabled(Private::RAW, (settings.rawLoadingRule == QueueSettings::DEMOSAICING));
 
     settings.rawDecodingSettings = d->rawSettings->settings();
 
