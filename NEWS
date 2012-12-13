@@ -31,6 +31,7 @@ BatchQueueManager : Add Color Effect tool support.
 BatchQueueManager : Multicore CPU support to process items in parallel.
 BatchQueueManager : Add Raw Demosaicing settings in Queue Qettings.
 BatchQueueManager : Add new behavior options about RAW file loading (extract preview or perform demosaicing).
+BatchQueueManager : Add the capability to assign more than one time a tool to a queue.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
@@ -96,5 +97,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 060 ==> 195784 - Batch queue manager lacks raw importing tool.
 061 ==> 295316 - BQM always demosaicing and importing RAW Image. Need option to use JPEG preview from RAW file.
 062 ==> 232926 - In painting causes digikam to lock up.
-063 ==> 
-
+063 ==> 256901 - Using tools twice in batch queue manager.
+064 ==> 
