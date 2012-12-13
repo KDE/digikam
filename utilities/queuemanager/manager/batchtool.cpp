@@ -409,7 +409,7 @@ bool BatchTool::apply()
     kDebug() << "Tool:       " << toolTitle();
     kDebug() << "Input url:  " << inputUrl();
     kDebug() << "Output url: " << outputUrl();
-    kDebug() << "Settings:   ";
+    //kDebug() << "Settings:   ";
 
     BatchToolSettings prm = settings();
 
@@ -431,11 +431,11 @@ bool BatchTool::apply()
                 tmp.append(") ");
             }
 
-            kDebug() << "   " << it.key() << ": " << tmp;
+            //kDebug() << "   " << it.key() << ": " << tmp;
         }
         else
         {
-            kDebug() << "   " << it.key() << ": " << it.value();
+            //kDebug() << "   " << it.key() << ": " << it.value();
         }
     }
 

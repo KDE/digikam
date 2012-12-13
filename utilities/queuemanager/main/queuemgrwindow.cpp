@@ -916,7 +916,7 @@ void QueueMgrWindow::slotAssignedToolsChanged(const AssignedBatchTools& tools)
         return;
     }
 
-    switch (tools.m_toolsMap.count())
+    switch (tools.m_toolsList.count())
     {
         case 0:
         {

@@ -45,12 +45,14 @@ class AssignedListViewItem : public QTreeWidgetItem
 
 public:
 
-    AssignedListViewItem(QTreeWidget* const parent, const BatchToolSet& set);
-    AssignedListViewItem(QTreeWidget* const parent, QTreeWidgetItem* const preceding, const BatchToolSet& set);
+    AssignedListViewItem(QTreeWidget* const parent);
+    AssignedListViewItem(QTreeWidget* const parent, QTreeWidgetItem* const preceding);
     virtual ~AssignedListViewItem();
 
+    void setIndex(int index);
+
     void setToolSet(const BatchToolSet& set);
-    BatchToolSet toolSet() const;
+    BatchToolSet toolSet();
 
 private:
 
@@ -68,13 +70,13 @@ public:
     explicit AssignedListView(QWidget* const parent);
     ~AssignedListView();
 
-    int assignedCount();
+    int                assignedCount();
     AssignedBatchTools assignedList();
 
     AssignedListViewItem* insertTool(AssignedListViewItem* const preceding, const BatchToolSet& set);
     AssignedListViewItem* moveTool(AssignedListViewItem* const preceding, const BatchToolSet& set);
-    AssignedListViewItem* addTool(int index, const BatchToolSet& set);
-    AssignedListViewItem* findTool(int index);
+    AssignedListViewItem* addTool(const BatchToolSet& set);
+
     bool removeTool(const BatchToolSet& set);
 
     void setBusy(bool b);
@@ -107,6 +109,7 @@ private:
 
     AssignedListViewItem* findTool(const BatchToolSet& set);
     void assignTools(const QMap<int, QString>& map, AssignedListViewItem* const preceding);
+    void refreshIndex();
 
     Qt::DropActions supportedDropActions()                        const;
     QStringList     mimeTypes()                                   const;

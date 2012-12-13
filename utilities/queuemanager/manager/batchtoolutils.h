@@ -54,12 +54,20 @@ class BatchToolSet
 {
 public:
 
-    BatchToolSet()
-    {
-    };
+    BatchToolSet();
 
+    virtual ~BatchToolSet();
+
+    /** Equality operator which check index, name, and group data. Settings member is ignored.
+     */
+    bool operator==(const BatchToolSet& set) const;
+
+    /// Tool identifier data. Index is tool ID from assigned list.
+    int                       index;
     QString                   name;
     BatchTool::BatchToolGroup group;
+
+    /// Settings hosted in this container.
     BatchToolSettings         settings;
 };
 
@@ -67,7 +75,7 @@ public:
 
 /** An indexed map of batch tools with settings.
  */
-typedef QMap<int, BatchToolSet> BatchToolMap;
+typedef QList<BatchToolSet> BatchSetList;
 
 // -------------------------------------------------------------------------------------------------------------
 
@@ -87,7 +95,7 @@ public:
 
     QString      m_destFileName;
     KUrl         m_itemUrl;
-    BatchToolMap m_toolsMap;
+    BatchSetList m_toolsList;
 };
 
 }  // namespace Digikam

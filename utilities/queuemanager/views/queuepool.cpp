@@ -392,7 +392,7 @@ bool QueuePool::assignedBatchToolsListsAreValid() const
 
         if (queue)
         {
-            if (queue->assignedTools().m_toolsMap.isEmpty())
+            if (queue->assignedTools().m_toolsList.isEmpty())
             {
                 list.append(queueTitle(i));
             }

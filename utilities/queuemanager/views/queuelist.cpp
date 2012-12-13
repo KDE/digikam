@@ -958,7 +958,7 @@ int QueueListView::pendingTasksCount()
 
         if (item && !item->isDone())
         {
-            count += assignedTools().m_toolsMap.count();
+            count += assignedTools().m_toolsList.count();
         }
 
         ++it;

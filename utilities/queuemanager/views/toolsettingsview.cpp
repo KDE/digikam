@@ -78,6 +78,7 @@ public:
 
     QScrollArea* settingsView;
 
+    BatchToolSet set;
     BatchTool*   tool;
 };
 
@@ -222,6 +223,8 @@ void ToolSettingsView::setViewMode(int mode)
 
 void ToolSettingsView::slotToolSelected(const BatchToolSet& set)
 {
+    d->set = set;
+
     if (d->tool)
     {
         disconnect(d->tool, SIGNAL(signalSettingsChanged(BatchToolSettings)),
@@ -231,13 +234,13 @@ void ToolSettingsView::slotToolSelected(const BatchToolSet& set)
                    d->tool, SLOT(slotResetSettingsToDefault()));
     }
 
-    d->tool = BatchToolsManager::instance()->findTool(set.name, set.group);
+    d->tool = BatchToolsManager::instance()->findTool(d->set.name, d->set.group);
 
     if (d->tool)
     {
         d->settingsViewIcon->setPixmap(SmallIcon(d->tool->toolIconName()).scaled(QSize(22, 22)));
         d->settingsViewTitle->setText(d->tool->toolTitle());
-        d->tool->setSettings(set.settings);
+        d->tool->setSettings(d->set.settings);
 
         // Only set on Reset button if Manager is not busy (settings widget is disabled in this case).
         d->settingsViewReset->setEnabled(d->settingsView->viewport()->isEnabled());
@@ -261,11 +264,8 @@ void ToolSettingsView::slotToolSelected(const BatchToolSet& set)
 
 void ToolSettingsView::slotSettingsChanged(const BatchToolSettings& settings)
 {
-    BatchToolSet set;
-    set.name     = d->tool->objectName();
-    set.group    = d->tool->toolGroup();
-    set.settings = settings;
-    emit signalSettingsChanged(set);
+    d->set.settings = settings;
+    emit signalSettingsChanged(d->set);
 }
 
 }  // namespace Digikam

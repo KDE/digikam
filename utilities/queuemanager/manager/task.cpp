@@ -106,7 +106,6 @@ void Task::run()
 
     // Loop with all batch tools operations to apply on item.
 
-    int        index   = 0;
     bool       success = false;
     KUrl       outUrl  = d->tools.m_itemUrl;
     KUrl       inUrl;
@@ -114,23 +113,20 @@ void Task::run()
     DImg       tmpImage;
     QString    errMsg;
 
-    for (BatchToolMap::const_iterator it = d->tools.m_toolsMap.constBegin();
-         !d->cancel && (it != d->tools.m_toolsMap.constEnd()) ; ++it)
+    foreach (BatchToolSet set, d->tools.m_toolsList)
     {
-        index                      = it.key();
-        BatchToolSet set           = it.value();
-        d->tool                    = BatchToolsManager::instance()->findTool(set.name, set.group)->clone(this);
+        d->tool                    = BatchToolsManager::instance()->findTool(set.name, set.group)->clone();
         BatchToolSettings settings = set.settings;
         inUrl                      = outUrl;
 
-        kDebug() << "Tool Index: " << index;
+        kDebug() << "Tool : index= " << set.index << " :: name= " << set.name << " :: group= " << set.group;
 
         d->tool->setImageData(tmpImage);
         d->tool->setWorkingUrl(d->settings.workingUrl);
         d->tool->setRawLoadingRules(d->settings.rawLoadingRule);
         d->tool->setRawDecodingSettings(d->settings.rawDecodingSettings);
         d->tool->setResetExifOrientationAllowed(d->settings.exifSetOrientation);
-        d->tool->setLastChainedTool(index == d->tools.m_toolsMap.count());
+        d->tool->setLastChainedTool(set.index == d->tools.m_toolsList.count());
         d->tool->setInputUrl(inUrl);
         d->tool->setSettings(settings);
         d->tool->setInputUrl(inUrl);
@@ -154,6 +150,9 @@ void Task::run()
             emitActionData(ActionData::BatchFailed, errMsg);
             break;
         }
+
+        delete d->tool;
+        d->tool = 0;
     }
 
     // Clean up all tmp url.

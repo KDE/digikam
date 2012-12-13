@@ -34,6 +34,25 @@
 namespace Digikam
 {
 
+BatchToolSet::BatchToolSet()
+{
+    index = -1;
+}
+
+BatchToolSet::~BatchToolSet()
+{
+}
+
+bool BatchToolSet::operator==(const BatchToolSet& set) const
+{
+    return ( (index == set.index) &&
+             (name  == set.name ) &&
+             (group == set.group)
+           );
+}
+
+// ---------------------------------------------------------------------------------------------
+
 AssignedBatchTools::AssignedBatchTools()
 {
 }
@@ -46,7 +65,7 @@ QString AssignedBatchTools::targetSuffix(bool* const extSet) const
 {
     QString suffix;
 
-    foreach(BatchToolSet set, m_toolsMap)
+    foreach(BatchToolSet set, m_toolsList)
     {
         BatchTool* const tool = BatchToolsManager::instance()->findTool(set.name, set.group);
         if (tool)
