@@ -98,4 +98,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 061 ==> 295316 - BQM always demosaicing and importing RAW Image. Need option to use JPEG preview from RAW file.
 062 ==> 232926 - In painting causes digikam to lock up.
 063 ==> 256901 - Using tools twice in batch queue manager.
-064 ==> 
+064 ==> 289626 - Crash in BQM adding a new queue.
+065 ==> 
