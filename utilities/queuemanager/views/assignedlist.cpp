@@ -70,7 +70,7 @@ AssignedListViewItem::~AssignedListViewItem()
 
 void AssignedListViewItem::setToolSet(const BatchToolSet& set)
 {
-    m_set       = set;
+    m_set = set;
     setText(0, QString("%1").arg(m_set.index));
 
     BatchTool* const tool = BatchToolsManager::instance()->findTool(m_set.name, m_set.group);
@@ -247,18 +247,6 @@ AssignedListViewItem* AssignedListView::moveTool(AssignedListViewItem* const pre
 
 AssignedListViewItem* AssignedListView::insertTool(AssignedListViewItem* const preceding, const BatchToolSet& set)
 {
-    BatchTool* const tool = BatchToolsManager::instance()->findTool(set.name, set.group);
-
-    if (!tool)
-    {
-        return 0;
-    }
-
-    if (findTool(set))
-    {
-        return 0;
-    }
-
     AssignedListViewItem* item = 0;
 
     if (preceding)
@@ -280,25 +268,7 @@ AssignedListViewItem* AssignedListView::insertTool(AssignedListViewItem* const p
 
 AssignedListViewItem* AssignedListView::addTool(const BatchToolSet& set)
 {
-    BatchTool* const tool = BatchToolsManager::instance()->findTool(set.name, set.group);
-
-    if (!tool)
-    {
-        return 0;
-    }
-
-    if (findTool(set))
-    {
-        return 0;
-    }
-
-    AssignedListViewItem* const item = new AssignedListViewItem(this);
-    item->setToolSet(set);
-    refreshIndex();
-
-    emit signalAssignedToolsChanged(assignedList());
-
-    return item;
+    return insertTool(0, set);
 }
 
 bool AssignedListView::removeTool(const BatchToolSet& set)
