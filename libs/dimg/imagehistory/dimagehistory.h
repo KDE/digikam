@@ -81,10 +81,12 @@ public:
      * A history is null if it is constructed with the default constructor
      */
     bool isNull() const;
+
     /**
      * A history is considered empty if there are no entries.
      */
     bool isEmpty() const;
+
     /**
      * A history is a valid history (telling something about the past),
      * if the history is not empty, and there is at least one
@@ -112,21 +114,21 @@ public:
      * If you add an id of type Current, adjustReferredImages() will be called.
      */
     DImageHistory& operator<<(const HistoryImageId& imageId);
+
     void appendReferredImage(const HistoryImageId& id);
     void insertReferredImage(int entryIndex, const HistoryImageId& id);
 
     /// Removes the last entry from the history
     void removeLast();
 
-
     /**
      * Access entries.
      * There are size() entries.
      */
-    QList<DImageHistory::Entry>& entries();
+    QList<DImageHistory::Entry>&       entries();
     const QList<DImageHistory::Entry>& entries() const;
-    Entry& operator[](int i);
-    const Entry& operator[](int i) const;
+    Entry&                             operator[](int i);
+    const Entry&                       operator[](int i) const;
 
     /**
      * Access actions.
@@ -137,8 +139,10 @@ public:
     /// Returns if there is any non-null action
     bool hasActions() const;
     bool hasFilters() const { return hasActions(); }
+
     /// Returns the number of non-null actions
     int actionCount() const;
+
     /// Gets all actions which are not null
     QList<FilterAction> allActions() const;
     const FilterAction& action(int i) const;
@@ -163,6 +167,7 @@ public:
 
     /// Remove all referredImages, leaving the entries list untouched
     void clearReferredImages();
+
     /**
      * Adjusts the type of a Current HistoryImageId:
      * If it is the first entry, it becomes Original,

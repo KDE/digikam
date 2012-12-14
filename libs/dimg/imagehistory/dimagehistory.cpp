@@ -104,9 +104,9 @@ bool DImageHistory::isValid() const
     {
         return false;
     }
-    else if (d->entries.count() == 1
-             && d->entries.first().referredImages.count() == 1
-             && d->entries.first().referredImages.first().isCurrentFile())
+    else if (d->entries.count() == 1                        &&
+             d->entries.first().referredImages.count() == 1 &&
+             d->entries.first().referredImages.first().isCurrentFile())
     {
         return false;
     }
@@ -118,6 +118,7 @@ bool DImageHistory::isValid() const
             {
                 return true;
             }
+
             foreach(const HistoryImageId& id, e.referredImages)
             {
                 if (id.isValid() && !id.isCurrentFile())
@@ -137,8 +138,8 @@ int DImageHistory::size() const
 
 static bool operator==(const DImageHistory::Entry& e1, const DImageHistory::Entry& e2)
 {
-    return e1.action == e2.action
-           && e1.referredImages == e2.referredImages;
+    return e1.action         == e2.action &&
+           e1.referredImages == e2.referredImages;
 }
 
 bool DImageHistory::operator==(const DImageHistory& other) const

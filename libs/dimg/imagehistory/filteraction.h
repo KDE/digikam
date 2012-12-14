@@ -49,12 +49,14 @@ public:
         /** When given the set of stored parameters and the original data,
          *  an identical result will be produced. */
         ReproducibleFilter = 0,
+
         /**
          *  The operation is documented and a number of parameters may be known,
          *  but the identical result cannot be reproduced.
          *  It may be possible to produce a sufficiently similar result.
          */
         ComplexFilter      = 1,
+
         /** The source images are known, a textual description may be added,
          *  but there is no way to automatically replay
          */
@@ -102,10 +104,10 @@ public:
      * In the case of DocumentedHistory, this may be the most useful value.
      */
     QString  description() const;
-    void setDescription(const QString& description);
+    void     setDescription(const QString& description);
 
-    QString displayableName() const;
-    void setDisplayableName(const QString& displayableName);
+    QString  displayableName() const;
+    void     setDisplayableName(const QString& displayableName);
 
     Flags flags() const;
     void  setFlags(Flags flags);
@@ -119,11 +121,11 @@ public:
      * There are accessors for both contexts.
      */
     bool                           hasParameters() const;
-    const QHash<QString,QVariant>& parameters() const;
+    const QHash<QString,QVariant>& parameters()    const;
     QHash<QString, QVariant>&      parameters();
 
     bool                           hasParameter(const QString& key) const;
-    const QVariant                 parameter(const QString& key) const;
+    const QVariant                 parameter(const QString& key)    const;
     QVariant&                      parameter(const QString& key);
 
     /// Returns parameter converted from QVariant to given type
