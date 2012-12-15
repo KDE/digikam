@@ -100,5 +100,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 063 ==> 256901 - Using tools twice in batch queue manager.
 064 ==> 289626 - Crash in BQM adding a new queue.
 065 ==> 308373 - ACL default:mask ignored / mask changed for exif rotated images on import.
-066 ==> 
-
+066 ==> 262180 - The toggle button to show/hide faces is difficult to see.
+067 ==> 
