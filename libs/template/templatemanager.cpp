@@ -46,11 +46,11 @@
 namespace Digikam
 {
 
-class TemplateManager::TemplateManagerPrivate
+class TemplateManager::Private
 {
 public:
 
-    TemplateManagerPrivate()
+    Private()
         :mutex(QMutex::Recursive)
     {
         modified = false;
@@ -79,7 +79,7 @@ TemplateManager* TemplateManager::defaultManager()
 }
 
 TemplateManager::TemplateManager()
-    : d(new TemplateManagerPrivate)
+    : d(new Private)
 {
     d->file = KStandardDirs::locateLocal("appdata", "template.xml");
 
@@ -345,6 +345,7 @@ bool TemplateManager::save()
 
             QDomElement authors = doc.createElement(QString::fromLatin1("authors"));
             elem.appendChild(authors);
+
             foreach(const QString& name, t.authors())
             {
                 QDomElement e = doc.createElement(QString::fromLatin1("name"));
@@ -432,6 +433,7 @@ bool TemplateManager::save()
 
             QDomElement subjects = doc.createElement(QString::fromLatin1("subjects"));
             elem.appendChild(subjects);
+
             foreach(const QString& subject, t.IptcSubjects())
             {
                 QDomElement e = doc.createElement(QString::fromLatin1("subject"));
@@ -532,7 +534,7 @@ void TemplateManager::clear()
     }
 }
 
-QList<Template> TemplateManager::templateList()
+QList<Template> TemplateManager::templateList() const
 {
     return d->pList;
 }
@@ -548,6 +550,7 @@ Template TemplateManager::findByTitle(const QString& title) const
             return t;
         }
     }
+
     return Template();
 }
 
@@ -562,6 +565,7 @@ Template TemplateManager::findByContents(const Template& tref) const
             return t;
         }
     }
+
     return Template();
 }
 

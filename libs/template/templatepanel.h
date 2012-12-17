@@ -59,8 +59,8 @@ public:
 
 private:
 
-    class TemplatePanelPriv;
-    TemplatePanelPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

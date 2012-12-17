@@ -71,8 +71,8 @@ private:
 
 private:
 
-    class TemplateSelectorPriv;
-    TemplateSelectorPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

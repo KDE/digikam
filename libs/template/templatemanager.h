@@ -49,11 +49,10 @@ public:
     void insert(const Template& t);
     void remove(const Template& t);
 
-    Template fromIndex(int index) const;
-    Template findByTitle(const QString& title) const;
+    Template fromIndex(int index)                 const;
+    Template findByTitle(const QString& title)    const;
     Template findByContents(const Template& tref) const;
-
-    QList<Template> templateList();
+    QList<Template> templateList()                const;
 
     static TemplateManager* defaultManager();
 
@@ -69,12 +68,15 @@ private:
 
 private:
 
-    friend class TemplateManagerCreator;
     TemplateManager();
     ~TemplateManager();
 
-    class TemplateManagerPrivate;
-    TemplateManagerPrivate* const d;
+private:
+
+    friend class TemplateManagerCreator;
+
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

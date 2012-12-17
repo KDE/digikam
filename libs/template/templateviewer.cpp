@@ -51,11 +51,11 @@ using namespace KExiv2Iface;
 namespace Digikam
 {
 
-class TemplateViewer::TemplateViewerPriv
+class TemplateViewer::Private
 {
 public:
 
-    TemplateViewerPriv()
+    Private()
     {
         names                      = 0;
         position                   = 0;
@@ -153,7 +153,7 @@ public:
 };
 
 TemplateViewer::TemplateViewer(QWidget* const parent)
-    : RExpanderBox(parent), d(new TemplateViewerPriv)
+    : RExpanderBox(parent), d(new Private)
 {
     setFrameStyle(QFrame::NoFrame);
 

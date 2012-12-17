@@ -52,11 +52,11 @@ using namespace KDcrawIface;
 namespace Digikam
 {
 
-class TemplateSelector::TemplateSelectorPriv
+class TemplateSelector::Private
 {
 public:
 
-    TemplateSelectorPriv()
+    Private()
     {
         label         = 0;
         setupButton   = 0;
@@ -73,7 +73,7 @@ public:
 };
 
 TemplateSelector::TemplateSelector(QWidget* const parent)
-    : KHBox(parent), d(new TemplateSelectorPriv)
+    : KHBox(parent), d(new Private)
 {
     d->label         = new QLabel(i18n("Template: "), this);
     d->templateCombo = new SqueezedComboBox(this);

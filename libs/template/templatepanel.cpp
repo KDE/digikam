@@ -51,12 +51,12 @@ using namespace KExiv2Iface;
 namespace Digikam
 {
 
-class TemplatePanel::TemplatePanelPriv
+class TemplatePanel::Private
 {
 
 public:
 
-    TemplatePanelPriv()
+    Private()
     {
         authorsEdit               = 0;
         authorsPositionEdit       = 0;
@@ -114,7 +114,7 @@ public:
 };
 
 TemplatePanel::TemplatePanel(QWidget* const parent)
-    : KTabWidget(parent), d(new TemplatePanelPriv)
+    : KTabWidget(parent), d(new Private)
 {
     // -- Rights Template information panel -------------------------------------------------------------
 
