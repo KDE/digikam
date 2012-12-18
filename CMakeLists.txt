@@ -198,14 +198,21 @@ ENDIF (NOT OpenCV_INCLUDE_DIRS)
 # END SPECIAL OPENCV HANDLING
 
 # check the libkdcraw version
+
 SET(KDCRAW_MIN_VERSION "2.2.0")
+
 IF (KDCRAW_VERSION)
+
     MESSAGE(STATUS "libkdcraw: Found version ${KDCRAW_VERSION} (required: ${KDCRAW_MIN_VERSION})")
     IF (${KDCRAW_VERSION} VERSION_LESS ${KDCRAW_MIN_VERSION})
         SET(KDCRAW_FOUND FALSE)
     ENDIF (${KDCRAW_VERSION} VERSION_LESS ${KDCRAW_MIN_VERSION})
+
 ELSE (KDCRAW_VERSION)
+
     MESSAGE(WARNING "libkdcraw: Version information not found, your version is probably too old.")
+    SET(KDCRAW_FOUND FALSE)
+
 ENDIF (KDCRAW_VERSION)
 
 # LCMS version 1 and 2 library handling
