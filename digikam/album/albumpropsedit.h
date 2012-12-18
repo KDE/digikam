@@ -7,7 +7,7 @@
  * Description : Album properties dialog.
  *
  * Copyright (C) 2003-2004 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2005 by Tom Albers <tomalbers@kde.nl>
+ * Copyright (C) 2005      by Tom Albers <tomalbers@kde.nl>
  * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -47,30 +47,30 @@ class AlbumPropsEdit : public KDialog
 
 public:
 
-    explicit AlbumPropsEdit(PAlbum* album, bool create=false);
+    explicit AlbumPropsEdit(PAlbum* const album, bool create=false);
     ~AlbumPropsEdit();
 
-    QString     title() const;
-    QString     comments() const;
-    QDate       date() const;
-    int         parent() const;
-    QString     category() const;
+    QString     title()           const;
+    QString     comments()        const;
+    QDate       date()            const;
+    int         parent()          const;
+    QString     category()        const;
     QStringList albumCategories() const;
 
-    static bool editProps(PAlbum*      album,
-                          QString&     title,
-                          QString&     comments,
-                          QDate&       date,
-                          QString&     category,
-                          QStringList& albumCategories);
+    static bool editProps(PAlbum* const album,
+                          QString&      title,
+                          QString&      comments,
+                          QDate&        date,
+                          QString&      category,
+                          QStringList&  albumCategories);
 
-    static bool createNew(PAlbum*      parent,
-                          QString&     title,
-                          QString&     comments,
-                          QDate&       date,
-                          QString&     category,
-                          QStringList& albumCategories,
-                          int&         parentSelector);
+    static bool createNew(PAlbum* const parent,
+                          QString&      title,
+                          QString&      comments,
+                          QDate&        date,
+                          QString&      category,
+                          QStringList&  albumCategories,
+                          int&          parentSelector);
 
 private Q_SLOTS:
 
@@ -81,8 +81,8 @@ private Q_SLOTS:
 
 private:
 
-    class AlbumPropsEditPriv;
-    AlbumPropsEditPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

@@ -7,7 +7,7 @@
  * Description : Album properties dialog.
  *
  * Copyright (C) 2003-2004 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2005 by Tom Albers <tomalbers@kde.nl>
+ * Copyright (C) 2005      by Tom Albers <tomalbers@kde.nl>
  * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -91,12 +91,12 @@ public:
 
 // --------------------------------------------------------------------------------
 
-class AlbumPropsEdit::AlbumPropsEditPriv
+class AlbumPropsEdit::Private
 {
 
 public:
 
-    AlbumPropsEditPriv() :
+    Private() :
         categoryCombo(0),
         parentCombo(0),
         titleEdit(0),
@@ -116,8 +116,8 @@ public:
     PAlbum*      album;
 };
 
-AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
-    : KDialog(0), d(new AlbumPropsEditPriv)
+AlbumPropsEdit::AlbumPropsEdit(PAlbum* const album, bool create)
+    : KDialog(0), d(new Private)
 {
     setCaption(create ? i18n("New Album") : i18n("Edit Album"));
     setButtons(Help|Ok|Cancel);
@@ -125,10 +125,9 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
     setModal(true);
     setHelp("albumpropsedit.anchor", "digikam");
 
-    d->album = album;
-
-    QWidget* page = new QWidget(this);
-    QLabel* logo  = new QLabel(page);
+    d->album         = album;
+    QWidget* page    = new QWidget(this);
+    QLabel* logo     = new QLabel(page);
     logo->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
                     .scaled(48, 48, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
@@ -153,7 +152,7 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
     QLabel* titleLabel = new QLabel(page);
     titleLabel->setText(i18n("&Title:"));
 
-    d->titleEdit = new KLineEdit(page);
+    d->titleEdit       = new KLineEdit(page);
     d->titleEdit->setClearButtonShown(true);
     titleLabel->setBuddy(d->titleEdit);
 
@@ -161,32 +160,32 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
     QValidator* titleValidator = new QRegExpValidator(titleRx, this);
     d->titleEdit->setValidator(titleValidator);
 
-    QLabel* categoryLabel = new QLabel(page);
+    QLabel* categoryLabel      = new QLabel(page);
     categoryLabel->setText(i18n("Ca&tegory:"));
 
-    d->categoryCombo = new KComboBox(page);
+    d->categoryCombo    = new KComboBox(page);
     d->categoryCombo->setEditable(true);
     categoryLabel->setBuddy(d->categoryCombo);
 
     QLabel* parentLabel = new QLabel(page);
     parentLabel->setText(i18n("Ch&ild Of:"));
 
-    d->parentCombo = new KComboBox(page);
+    d->parentCombo      = new KComboBox(page);
     parentLabel->setBuddy(d->parentCombo);
 
 
     QLabel* commentsLabel = new QLabel(page);
     commentsLabel->setText(i18n("Ca&ption:"));
 
-    d->commentsEdit = new KTextEdit(page);
+    d->commentsEdit       = new KTextEdit(page);
     commentsLabel->setBuddy(d->commentsEdit);
     d->commentsEdit->setCheckSpellingEnabled(true);
     d->commentsEdit->setWordWrapMode(QTextOption::WordWrap);
 
-    QLabel* dateLabel = new QLabel(page);
+    QLabel* dateLabel     = new QLabel(page);
     dateLabel->setText(i18n("Album &date:"));
 
-    d->datePicker = new DDatePicker(page);
+    d->datePicker         = new DDatePicker(page);
     dateLabel->setBuddy(d->datePicker);
 
     KHBox* buttonRow            = new KHBox(page);
@@ -212,6 +211,7 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
         d->parentCombo->hide();
         parentLabel->hide();
     }
+
     d->commentsEdit->setTabChangesFocus(true);
     d->titleEdit->selectAll();
     d->titleEdit->setFocus();
@@ -252,7 +252,7 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* album, bool create)
 
     // Initialize ---------------------------------------------
 
-    AlbumSettings* settings = AlbumSettings::instance();
+    AlbumSettings* const settings = AlbumSettings::instance();
 
     if (settings)
     {
@@ -344,7 +344,7 @@ QString AlbumPropsEdit::category() const
 QStringList AlbumPropsEdit::albumCategories() const
 {
     QStringList Categories;
-    AlbumSettings* settings = AlbumSettings::instance();
+    AlbumSettings* const settings = AlbumSettings::instance();
 
     if (settings)
     {
@@ -359,10 +359,11 @@ QStringList AlbumPropsEdit::albumCategories() const
     }
 
     Categories.sort();
+
     return Categories;
 }
 
-bool AlbumPropsEdit::editProps(PAlbum* album, QString& title,
+bool AlbumPropsEdit::editProps(PAlbum* const album, QString& title,
                                QString& comments, QDate& date, QString& category,
                                QStringList& albumCategories)
 {
@@ -380,8 +381,9 @@ bool AlbumPropsEdit::editProps(PAlbum* album, QString& title,
     return ok;
 }
 
-bool AlbumPropsEdit::createNew(PAlbum* parent, QString& title, QString& comments,
-                               QDate& date, QString& category, QStringList& albumCategories, int& parentSelector)
+bool AlbumPropsEdit::createNew(PAlbum* const parent, QString& title, QString& comments,
+                               QDate& date, QString& category, QStringList& albumCategories,
+                               int& parentSelector)
 {
     QPointer<AlbumPropsEdit> dlg = new AlbumPropsEdit(parent, true);
 
