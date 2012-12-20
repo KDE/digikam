@@ -37,7 +37,7 @@ SET(libqueuemanager_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/manager/batchtoolutils.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/manager/batchtoolsmanager.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/manager/workflowmanager.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/manager/workflowdlg.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/views/workflowdlg.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/views/assignedlist.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/views/queuelist.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/views/queuepool.cpp
