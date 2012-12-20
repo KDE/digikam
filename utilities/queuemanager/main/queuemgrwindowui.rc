@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="201" name="queuemgrwindow" >
+<gui version="202" name="queuemgrwindow" >
 
 <MenuBar>
 
@@ -9,6 +9,7 @@
         <Separator/>
         <Action name="queuemgr_newqueue" />
         <Action name="queuemgr_removequeue" />
+        <Action name="queuemgr_savequeue" />
         <Separator/>
         <Action name="queuemgr_removeitemssel" />
         <Action name="queuemgr_removeitemsdone" />

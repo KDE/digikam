@@ -191,6 +191,10 @@ public:
      */
     bool apply();
 
+    /** Return version of tool. By default, ID is 1. Re-implement this method and increase this ID when tool settings change.
+     */
+    virtual int toolVersion() const { return 1; };
+
     /** Re-implement this method is you want customize cancelization of tool, for ex. to call
         a dedicated method to kill sub-threads parented to this tool instance.
         Unforget to call parent BatchTool::cancel() method in you customized implementation.

@@ -65,6 +65,7 @@ public:
     QString            queueTitle(int index)             const;
     bool               customRenamingRulesAreValid()     const;
     bool               assignedBatchToolsListsAreValid() const;
+    bool               saveWorkflow()                    const;
 
     void setBusy(bool b);
     void setItemBusy(qlonglong id);
@@ -93,6 +94,7 @@ public Q_SLOTS:
     void slotAddItems(const ImageInfoList&, int queueId);
     void slotAssignedToolsChanged(const AssignedBatchTools&);
     void slotSettingsChanged(const QueueSettings&);
+    void slotQueueSelected(int);
 
 protected:
 
@@ -105,7 +107,6 @@ private :
 private Q_SLOTS:
 
     void slotFileChanged(const QString&);
-    void slotQueueSelected(int);
     void slotCloseQueueRequest(QWidget*);
     void slotTestCanDecode(const QDragMoveEvent*, bool&);
 };

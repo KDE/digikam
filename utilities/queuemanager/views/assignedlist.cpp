@@ -340,6 +340,7 @@ QMimeData* AssignedListView::mimeData(const QList<QTreeWidgetItem*> items) const
             stream << (int)(alwi->toolSet().group);
             stream << alwi->toolSet().name;
             stream << alwi->toolSet().index;
+            stream << alwi->toolSet().version;
             stream << alwi->toolSet().settings;
         }
     }
@@ -397,13 +398,14 @@ void AssignedListView::dropEvent(QDropEvent* e)
 
             for (int i = 0 ; i < count ; ++i)
             {
-                int               group, index;
+                int               group, index, version;
                 QString           name;
                 BatchToolSettings settings;
 
                 ds >> group;
                 ds >> name;
                 ds >> index;
+                ds >> version;
                 ds >> settings;
 
                 AssignedListViewItem* const preceding = dynamic_cast<AssignedListViewItem*>(itemAt(e->pos()));
@@ -412,6 +414,7 @@ void AssignedListView::dropEvent(QDropEvent* e)
                 set.name                         = name;
                 set.group                        = (BatchTool::BatchToolGroup)group;
                 set.index                        = index;
+                set.version                      = version;
                 set.settings                     = settings;
                 AssignedListViewItem* const item = moveTool(preceding, set);
                 setCurrentItem(item);
@@ -503,6 +506,7 @@ void AssignedListView::assignTools(const QMap<int, QString>& map, AssignedListVi
         BatchToolSet set;
         set.name                         = tool->objectName();
         set.group                        = tool->toolGroup();
+        set.version                      = tool->toolVersion();
         set.settings                     = tool->defaultSettings();
         AssignedListViewItem* const item = insertTool(preceding, set);
         setCurrentItem(item);

@@ -36,8 +36,8 @@
 // Local includes
 
 #include "dimg.h"
-#include "bcgfilter.h"
 #include "bcgsettings.h"
+#include "bcgfilter.h"
 
 namespace Digikam
 {

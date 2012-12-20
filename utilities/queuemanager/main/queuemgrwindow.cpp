@@ -70,6 +70,7 @@
 #include "batchtoolsmanager.h"
 #include "actionthread.h"
 #include "queuepool.h"
+#include "workflowmanager.h"
 #include "queuelist.h"
 #include "queuesettings.h"
 #include "queuesettingsview.h"
@@ -131,6 +132,7 @@ QueueMgrWindow::QueueMgrWindow()
 
     m_instance = this;
     BatchToolsManager::instance();        // Create first instance here
+    WorkflowManager::instance();             // Create first instance here
     d->thread  = new ActionThread(this);
 
     setWindowFlags(Qt::Window);
@@ -216,7 +218,7 @@ void QueueMgrWindow::setupUserArea()
 
     // ------------------------------------------------------------------------------
 
-    QGroupBox* toolsBox = new QGroupBox(i18n("Batch Tools Available / History"), mainW);
+    QGroupBox* toolsBox = new QGroupBox(i18n("Control Panel"), mainW);
     QVBoxLayout* vlay3  = new QVBoxLayout(toolsBox);
     d->toolsView        = new ToolsView(toolsBox);
     vlay3->addWidget(d->toolsView);
@@ -334,8 +336,11 @@ void QueueMgrWindow::setupConnections()
 
     // -- GUI connections ---------------------------------------------------
 
-    connect(d->toolsView, SIGNAL(signalHistoryEntryClicked(int,qlonglong)),
-            this, SLOT(slotHistoryEntryClicked(int,qlonglong)));
+    connect(d->toolsView, SIGNAL(signalHistoryEntryClicked(int, qlonglong)),
+            this, SLOT(slotHistoryEntryClicked(int, qlonglong)));
+
+    connect(d->toolsView, SIGNAL(signalAssignQueueSettings(QString)),
+            this, SLOT(slotAssignQueueSettings(QString)));
 }
 
 void QueueMgrWindow::setupActions()
@@ -361,6 +366,10 @@ void QueueMgrWindow::setupActions()
     d->removeQueueAction = new KAction(KIcon("bqm-rmqueue"), i18n("Remove Queue"), this);
     connect(d->removeQueueAction, SIGNAL(triggered()), d->queuePool, SLOT(slotRemoveCurrentQueue()));
     actionCollection()->addAction("queuemgr_removequeue", d->removeQueueAction);
+
+    d->saveQueueAction = new KAction(KIcon("document-save"), i18n("Save Workflow"), this);
+    connect(d->saveQueueAction, SIGNAL(triggered()), this, SLOT(slotSaveWorkflow()));
+    actionCollection()->addAction("queuemgr_savequeue", d->saveQueueAction);
 
     d->removeItemsSelAction = new KAction(KIcon("list-remove"), i18n("Remove items"), this);
     d->removeItemsSelAction->setShortcut(KShortcut(Qt::CTRL + Qt::Key_K));
@@ -830,7 +839,7 @@ void QueueMgrWindow::slotRun()
     d->statusProgressBar->setProgressTotalSteps(d->queuePool->totalPendingTasks());
     d->statusProgressBar->setProgressValue(0);
     d->statusProgressBar->progressBarMode(StatusProgressBar::ProgressBarMode);
-    d->toolsView->showHistory();
+    d->toolsView->showTab(ToolsView::HISTORY);
     busy(true);
 
     processOneQueue();
@@ -881,6 +890,7 @@ void QueueMgrWindow::busy(bool busy)
     d->busy = busy;
     d->runAction->setEnabled(!d->busy);
     d->newQueueAction->setEnabled(!d->busy);
+    d->saveQueueAction->setEnabled(!d->busy);
     d->removeQueueAction->setEnabled(!d->busy);
     d->removeItemsSelAction->setEnabled(!d->busy);
     d->removeItemsDoneAction->setEnabled(!d->busy);
@@ -1114,6 +1124,31 @@ void QueueMgrWindow::slotQueueProcessed()
     {
         // We will process next queue from the pool.
         processOneQueue();
+    }
+}
+
+void QueueMgrWindow::slotAssignQueueSettings(const QString& title)
+{
+    if (!title.isEmpty())
+    {
+        Workflow q                 = WorkflowManager::instance()->findByTitle(title);
+        QueueListView* const queue = d->queuePool->currentQueue();
+        if (queue)
+        {
+            queue->setSettings(q.qSettings);
+            AssignedBatchTools tools;
+            tools.m_toolsList = q.aTools;
+            queue->setAssignedTools(tools);
+            d->queuePool->slotQueueSelected(d->queuePool->currentIndex());
+        }
+    }
+}
+
+void QueueMgrWindow::slotSaveWorkflow()
+{
+    if (d->queuePool->saveWorkflow())
+    {
+        d->toolsView->showTab(ToolsView::WORKFLOW);
     }
 }
 

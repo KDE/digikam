@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-02-21
- * Description : Queue settings container.
+ * Description : Queue common settings container.
  *
  * Copyright (C) 2009-2012 Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -36,7 +36,8 @@ using namespace KDcrawIface;
 
 namespace Digikam
 {
-
+ /** This container host all common settings used by a queue, not including assigned batch tools
+  */
 class QueueSettings
 {
 public:
@@ -70,6 +71,9 @@ public:
         rawLoadingRule     = DEMOSAICING;
     };
 
+public:
+
+    /// Setting managed through Metadata control panel.
     bool                exifSetOrientation;
 
     QString             renamingParser;

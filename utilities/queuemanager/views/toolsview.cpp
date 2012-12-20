@@ -36,8 +36,10 @@
 
 // Local includes
 
+#include "workflowmanager.h"
 #include "batchtool.h"
 #include "toolslistview.h"
+#include "workflowlist.h"
 
 namespace Digikam
 {
@@ -49,15 +51,14 @@ public:
 
     Private() :
         baseTools(0),
-        //        customTools = 0;
-        historyView(0)
+        historyView(0),
+        workflow(0)
     {
     }
 
     ToolsListView* baseTools;
-    //    ToolsListView* customTools;
-
     DHistoryView*  historyView;
+    WorkflowList*  workflow;
 };
 
 ToolsView::ToolsView(QWidget* const parent)
@@ -81,24 +82,30 @@ ToolsView::ToolsView(QWidget* const parent)
     new ToolListViewGroup(d->baseTools, BatchTool::FiltersTool);
     new ToolListViewGroup(d->baseTools, BatchTool::ConvertTool);
     new ToolListViewGroup(d->baseTools, BatchTool::MetadataTool);
-    addTab(d->baseTools, SmallIcon("digikam"), i18n("Base Tools"));
+    insertTab(TOOLS, d->baseTools, SmallIcon("digikam"), i18n("Base Tools"));
 
-    //    d->customTools = new ToolsListView(this);
-    //    d->customTools->setWhatsThis(i18n("This is the list of user customized batch tools."));
-    //    new ToolListViewGroup(d->customTools, BatchTool::CustomTool);
-    //    addTab(d->customTools, SmallIcon("user-properties"), i18n("Custom Tools"));
+    // --------------------------------------------------------
+
+    d->workflow    = new WorkflowList(this);
+    d->workflow->setWhatsThis(i18n("This is the list of your customized workflow settings."));
+    insertTab(WORKFLOW, d->workflow, SmallIcon("step"), i18n("Workflow"));
+
+    // --------------------------------------------------------
 
     d->historyView = new DHistoryView(this);
     d->historyView->setWhatsThis(i18n("You can see below the history of last batch operations processed."));
-    addTab(d->historyView, SmallIcon("view-history"), i18n("History"));
+    insertTab(HISTORY, d->historyView, SmallIcon("view-history"), i18n("History"));
 
     // --------------------------------------------------------
 
     connect(d->baseTools, SIGNAL(signalAssignTools(QMap<int,QString>)),
             this, SIGNAL(signalAssignTools(QMap<int,QString>)));
 
-    //    connect(d->customTools, SIGNAL(signalAssignTools(QMap<int,QString>)),
-    //            this, SIGNAL(signalAssignTools(QMap<int,QString>)));
+    connect(d->workflow, SIGNAL(signalAssignQueueSettings(QString)),
+            this, SIGNAL(signalAssignQueueSettings(QString)));
+
+    connect(WorkflowManager::instance(), SIGNAL(signalQueueSettingsAdded(QString)),
+            d->workflow, SLOT(slotsAddQueueSettings(QString)));
 
     connect(d->historyView, SIGNAL(signalEntryClicked(QVariant)),
             this, SLOT(slotHistoryEntryClicked(QVariant)));
@@ -145,8 +152,7 @@ void ToolsView::addTool(BatchTool* const tool)
             // TODO
             break;
 
-        default:      // User customized tools.
-            //            d->customTools->addTool(tool);
+        default:
             break;
     }
 }
@@ -173,8 +179,7 @@ bool ToolsView::removeTool(BatchTool* const tool)
                 // TODO
                 break;
 
-            default:      // User customized tools.
-                //                ret = d->customTools->removeTool(tool);
+            default:
                 break;
         }
     }
@@ -196,9 +201,9 @@ void ToolsView::addHistoryEntry(const QString& msg, DHistoryView::EntryType type
     }
 }
 
-void ToolsView::showHistory()
+void ToolsView::showTab(ViewTabs t)
 {
-    setCurrentWidget(d->historyView);
+    setCurrentIndex(t);
 }
 
 void ToolsView::slotHistoryEntryClicked(const QVariant& metadata)

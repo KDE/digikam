@@ -31,6 +31,7 @@
 #include <QList>
 #include <QMetaType>
 #include <QPolygon>
+#include <QDomElement>
 
 // LibKDcraw includes
 
@@ -87,6 +88,11 @@ public:
 public:
 
     static DRawDecoding fromFilterAction(const FilterAction& action, const QString& prefix = QString());
+
+    /** Used by BQM to read/store Queue Raw decoding settings from/to configuration file
+     */
+    static void decodingSettingsToXml(const RawDecodingSettings& prm, QDomElement& elm);
+    static void decodingSettingsFromXml(const QDomElement& elm, RawDecodingSettings& prm);
 
 public:
 

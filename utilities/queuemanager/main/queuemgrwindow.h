@@ -129,10 +129,12 @@ private Q_SLOTS:
     void slotDBStat();
     void slotAction(const Digikam::ActionData&);
     void slotHistoryEntryClicked(int, qlonglong);
+    void slotAssignQueueSettings(const QString&);
     void slotAssignedToolsChanged(const AssignedBatchTools&);
     void slotQueueContentsChanged();
     void slotItemSelectionChanged();
     void slotQueueProcessed();
+    void slotSaveWorkflow();
 
 private:
 

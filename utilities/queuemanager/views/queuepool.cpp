@@ -43,6 +43,8 @@
 #include "metadatasettings.h"
 #include "ddragobjects.h"
 #include "queuelist.h"
+#include "workflowmanager.h"
+#include "workflowdlg.h"
 #include "queuesettings.h"
 #include "loadingcacheinterface.h"
 
@@ -230,6 +232,28 @@ void QueuePool::slotRemoveCurrentQueue()
     emit signalQueuePoolChanged();
 }
 
+bool QueuePool::saveWorkflow() const
+{
+    QueueListView* const queue = currentQueue();
+
+    if (queue)
+    {
+        WorkflowManager* const mngr = WorkflowManager::instance();
+        Workflow wf;
+        wf.qSettings = queue->settings();
+        wf.aTools    = queue->assignedTools().m_toolsList;
+
+        if (WorkflowDlg::createNew(wf))
+        {
+            mngr->insert(wf);
+            mngr->save();
+            return true;
+        }
+    }
+
+    return false;
+}
+
 void QueuePool::slotClearList()
 {
     QueueListView* const queue = currentQueue();
@@ -326,11 +350,11 @@ void QueuePool::removeTab(int index)
 
 void QueuePool::slotTestCanDecode(const QDragMoveEvent* e, bool& accept)
 {
-    int        albumID;
-    QList<int> albumIDs;
+    int              albumID;
+    QList<int>       albumIDs;
     QList<qlonglong> imageIDs;
-    KUrl::List urls;
-    KUrl::List kioURLs;
+    KUrl::List       urls;
+    KUrl::List       kioURLs;
 
     if (DItemDrag::decode(e->mimeData(), urls, kioURLs, albumIDs, imageIDs) ||
         DAlbumDrag::decode(e->mimeData(), urls, albumID)                    ||

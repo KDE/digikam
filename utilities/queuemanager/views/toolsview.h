@@ -43,6 +43,15 @@ class ToolsView : public KTabWidget
 
 public:
 
+    enum ViewTabs
+    {
+        TOOLS = 0,
+        WORKFLOW,
+        HISTORY
+    };
+
+public:
+
     explicit ToolsView(QWidget* const parent = 0);
     ~ToolsView();
 
@@ -51,11 +60,12 @@ public:
 
     void setBusy(bool b);
 
-    void showHistory();
+    void showTab(ViewTabs t);
     void addHistoryEntry(const QString& msg, DHistoryView::EntryType type, int queueId = -1, qlonglong itemId = -1);
 
 Q_SIGNALS:
 
+    void signalAssignQueueSettings(QString);
     void signalAssignTools(const QMap<int, QString>&);
     void signalHistoryEntryClicked(int, qlonglong);
 

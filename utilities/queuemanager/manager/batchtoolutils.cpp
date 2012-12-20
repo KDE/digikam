@@ -36,7 +36,8 @@ namespace Digikam
 
 BatchToolSet::BatchToolSet()
 {
-    index = -1;
+    index   = -1;
+    version = 0;
 }
 
 BatchToolSet::~BatchToolSet()
@@ -45,9 +46,10 @@ BatchToolSet::~BatchToolSet()
 
 bool BatchToolSet::operator==(const BatchToolSet& set) const
 {
-    return ( (index == set.index) &&
-             (name  == set.name ) &&
-             (group == set.group)
+    return ( (index   == set.index)   &&
+             (version == set.version) &&
+             (name    == set.name )   &&
+             (group   == set.group)
            );
 }
 

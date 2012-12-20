@@ -84,6 +84,7 @@ public:
         stopAction             = 0;
         removeQueueAction      = 0;
         newQueueAction         = 0;
+        saveQueueAction        = 0;
         rawCameraListAction    = 0;
         libsInfoAction         = 0;
         dbStatAction           = 0;
@@ -126,6 +127,7 @@ public:
     KAction*               stopAction;
     KAction*               removeQueueAction;
     KAction*               newQueueAction;
+    KAction*               saveQueueAction;
     KAction*               donateMoneyAction;
     KAction*               contributeAction;
     KAction*               rawCameraListAction;

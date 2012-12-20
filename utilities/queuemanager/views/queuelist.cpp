@@ -982,6 +982,7 @@ QueueSettings QueueListView::settings() const
 void QueueListView::setAssignedTools(const AssignedBatchTools& tools)
 {
     d->toolsList = tools;
+    resetQueue();
     updateDestFileNames();
 }
 
@@ -993,7 +994,6 @@ AssignedBatchTools QueueListView::assignedTools() const
 void QueueListView::slotAssignedToolsChanged(const AssignedBatchTools& tools)
 {
     setAssignedTools(tools);
-    resetQueue();
 }
 
 void QueueListView::resetQueue()

@@ -58,12 +58,13 @@ public:
 
     virtual ~BatchToolSet();
 
-    /** Equality operator which check index, name, and group data. Settings member is ignored.
+    /** Equality operator which check index, version, name, and group data. Settings member is ignored.
      */
     bool operator==(const BatchToolSet& set) const;
 
     /// Tool identifier data. Index is tool ID from assigned list.
     int                       index;
+    int                       version;
     QString                   name;
     BatchTool::BatchToolGroup group;
 
