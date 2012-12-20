@@ -279,11 +279,12 @@ void WorkflowList::slotContextMenu()
                                                    i18n("Delete Workflow?"),
                                                    KGuiItem(i18n("Delete")),
                                                    KStandardGuiItem::cancel());
-            if (result != KMessageBox::Yes)
+            if (result == KMessageBox::Yes)
             {
                 WorkflowManager* const mngr = WorkflowManager::instance();
                 Workflow wf                 = mngr->findByTitle(item->title());
                 mngr->remove(wf);
+                removeItemWidget(item, 0);
                 delete item;
             }
         }
