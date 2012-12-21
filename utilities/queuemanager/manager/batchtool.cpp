@@ -320,7 +320,6 @@ bool BatchTool::isLastChainedTool() const
 
 void BatchTool::setOutputUrlFromInputUrl()
 {
-
     QString path(workingUrl().toLocalFile());
     QString suffix = outputSuffix();
 
