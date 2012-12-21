@@ -32,6 +32,7 @@ BatchQueueManager : Multicore CPU support to process items in parallel.
 BatchQueueManager : Add Raw Demosaicing settings in Queue Qettings.
 BatchQueueManager : Add new behavior options about RAW file loading (extract preview or perform demosaicing).
 BatchQueueManager : Add the capability to assign more than one time a tool to a queue.
+BatchQueueManager : Add the capability to put target file processed from queue to source album.
 BatchQueueManager : Add concept of Workflow dedicated to save and restore between sessions Queue Settings including Assigned Batch Tools list.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
@@ -103,4 +104,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 065 ==> 308373 - ACL default:mask ignored / mask changed for exif rotated images on import.
 066 ==> 262180 - The toggle button to show/hide faces is difficult to see.
 067 ==> 251126 - Load and Save Batch Queue Manager chaining tools workflow.
-068 ==> 
+068 ==> 282674 - Add an option to put queue target files in source folders.
+069 ==> 
