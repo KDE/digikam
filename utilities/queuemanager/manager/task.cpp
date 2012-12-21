@@ -135,28 +135,26 @@ void Task::run()
 
     foreach (BatchToolSet set, d->tools.m_toolsList)
     {
-        d->tool                    = BatchToolsManager::instance()->findTool(set.name, set.group)->clone();
-        BatchToolSettings settings = set.settings;
-        inUrl                      = outUrl;
+        d->tool = BatchToolsManager::instance()->findTool(set.name, set.group)->clone();
+        inUrl   = outUrl;
 
         kDebug() << "Tool : index= " << set.index+1 << " :: name= " << set.name << " :: group= " << set.group;
 
         d->tool->setImageData(tmpImage);
+        d->tool->setInputUrl(inUrl);
         d->tool->setWorkingUrl(d->settings.workingUrl);
+        d->tool->setSettings(set.settings);
         d->tool->setRawLoadingRules(d->settings.rawLoadingRule);
         d->tool->setRawDecodingSettings(d->settings.rawDecodingSettings);
         d->tool->setResetExifOrientationAllowed(d->settings.exifSetOrientation);
         d->tool->setLastChainedTool(set.index == d->tools.m_toolsList.count());
-        d->tool->setInputUrl(inUrl);
-        d->tool->setSettings(settings);
-        d->tool->setInputUrl(inUrl);
         d->tool->setOutputUrlFromInputUrl();
         d->tool->setBranchHistory(true);
 
-        outUrl    = d->tool->outputUrl();
-        success   = d->tool->apply();
-        tmpImage  = d->tool->imageData();
-        errMsg    = d->tool->errorDescription();
+        outUrl   = d->tool->outputUrl();
+        success  = d->tool->apply();
+        tmpImage = d->tool->imageData();
+        errMsg   = d->tool->errorDescription();
         tmp2del.append(outUrl);
 
         if (d->cancel)
