@@ -119,11 +119,14 @@ void KipiPluginLoader::Private::loadPlugins()
     // Test plugin introduced with libkipi 2.0.0
     ignores.append("KXMLHelloWorld");
 
+    // Raw converter single dialog is obsolete since 0.9.5 with new Raw Import tool for Image Editor.
+    // Raw converter batch dialog is obsolete since 3.0.0 with new Raw decoding settings include in Batch Queue Manager.
+    ignores.append("RawConverter");
+
     // List of obsolete tool actions to not load
 
     QStringList pluginActionsDisabled;
     pluginActionsDisabled << QString("gpssync2");                       // Experimental plugin renamed gpssync during GoSC2010.
-    pluginActionsDisabled << QString("raw_converter_single");           // Obsolete since 0.9.5 and new Raw Import tool.
     pluginActionsDisabled << QString("batch_rename_images");            // Obsolete since 1.0.0, replaced by AdvancedRename.
     pluginActionsDisabled << QString("batch_border_images");            // Obsolete since 1.2.0, replaced by BQM border tool.
     pluginActionsDisabled << QString("batch_convert_images");           // Obsolete since 1.2.0, replaced by BQM convert tool.
@@ -231,7 +234,7 @@ QList<QAction*> KipiPluginLoader::kipiActionsByCategory(Category cat) const
 void KipiPluginLoader::slotKipiPluginPlug()
 {
     // Ugly hack. Remove "advancedslideshow" action from Slideshow menu
-    foreach(QAction* action, d->app->slideShowMenu()->menu()->actions())
+    foreach(QAction* const action, d->app->slideShowMenu()->menu()->actions())
     {
         if (action->objectName() == "advancedslideshow")
             d->app->slideShowMenu()->removeAction(action);
@@ -326,10 +329,10 @@ void KipiPluginLoader::slotKipiPluginPlug()
         // actionCollection() and add it to the Slideshow menu
         if (plugin->objectName() == QString("AdvancedSlideshow"))
         {
-            QAction* action = plugin->actionCollection()->action("advancedslideshow");
+            QAction* const action = plugin->actionCollection()->action("advancedslideshow");
             if (action)
             {
-                QAction* _action = plugin->actionCollection()->takeAction(action);
+                QAction* const _action = plugin->actionCollection()->takeAction(action);
                 d->app->slideShowMenu()->addAction(_action);
             }
         }
