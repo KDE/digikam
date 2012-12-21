@@ -57,7 +57,7 @@ WorkflowItem::WorkflowItem(WorkflowList* const parent, const QString& title)
 
     Workflow q = WorkflowManager::instance()->findByTitle(title);
 
-    setIcon(0, SmallIcon("run-build-configure"));
+    setIcon(0, SmallIcon("step"));
     setText(0, title);
     setText(1, QString::number(q.aTools.count()));
     setText(2, q.desc);
@@ -172,7 +172,7 @@ void WorkflowList::startDrag(Qt::DropActions /*supportedActions*/)
         return;
     }
 
-    QPixmap icon(DesktopIcon("run-build-configure", 48));
+    QPixmap icon(DesktopIcon("step", 48));
     int w = icon.width();
     int h = icon.height();
 

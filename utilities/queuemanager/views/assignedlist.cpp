@@ -71,7 +71,7 @@ AssignedListViewItem::~AssignedListViewItem()
 void AssignedListViewItem::setToolSet(const BatchToolSet& set)
 {
     m_set = set;
-    setText(0, QString("%1").arg(m_set.index));
+    setIndex(m_set.index);
 
     BatchTool* const tool = BatchToolsManager::instance()->findTool(m_set.name, m_set.group);
 
@@ -90,7 +90,7 @@ BatchToolSet AssignedListViewItem::toolSet()
 void AssignedListViewItem::setIndex(int index)
 {
     m_set.index = index;
-    setText(0, QString("%1").arg(m_set.index));
+    setText(0, QString("%1").arg(m_set.index + 1));
 }
 
 // ---------------------------------------------------------------------------

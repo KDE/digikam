@@ -139,7 +139,7 @@ void Task::run()
         BatchToolSettings settings = set.settings;
         inUrl                      = outUrl;
 
-        kDebug() << "Tool : index= " << set.index << " :: name= " << set.name << " :: group= " << set.group;
+        kDebug() << "Tool : index= " << set.index+1 << " :: name= " << set.name << " :: group= " << set.group;
 
         d->tool->setImageData(tmpImage);
         d->tool->setWorkingUrl(d->settings.workingUrl);
