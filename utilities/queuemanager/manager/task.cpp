@@ -56,6 +56,26 @@ extern "C"
 namespace Digikam
 {
 
+class Task::Private
+{
+public:
+
+    Private()
+    {
+        cancel = false;
+        tool   = 0;
+    }
+
+    bool               cancel;
+
+    BatchTool*         tool;
+
+    QueueSettings      settings;
+    AssignedBatchTools tools;
+};
+
+// -------------------------------------------------------
+
 Task::Task()
     : Job(0), d(new Private)
 {

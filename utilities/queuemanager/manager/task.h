@@ -80,26 +80,6 @@ private:
     Private* const d;
 };
 
-// ---------------------------------------------------------------------------------------------------------
-
-class Task::Private
-{
-public:
-
-    Private()
-    {
-        cancel = false;
-        tool   = 0;
-    }
-
-    bool               cancel;
-
-    BatchTool*         tool;
-
-    QueueSettings      settings;
-    AssignedBatchTools tools;
-};
-
 }  // namespace Digikam
 
 #endif /* TASK_H */
