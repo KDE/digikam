@@ -116,8 +116,8 @@ WorkflowList::WorkflowList(QWidget* const parent)
 
     if (!failed.isEmpty())
     {
-        KMessageBox::informationList(0, i18n("Some Workflow cannot be loaded from your config file due to uncompatible "
-                                             "version of tools."),
+        KMessageBox::informationList(0, i18n("Some Workflows cannot be loaded from your config file due to an incompatible "
+                                             "version of a tool."),
                                      failed, i18n("Batch Queue Manager"));
     }
 }
