@@ -101,7 +101,7 @@ int sqlite_interrupt_count = 0;
 ** SQLITE_MISUSE means that the this routine was called inappropriately.
 ** Perhaps it was called on a virtual machine that had already been
 ** finalized or on one that had previously returned SQLITE_ERROR or
-** SQLITE_DONE.  Or it could be the case the the same database connection
+** SQLITE_DONE.  Or it could be the case the same database connection
 ** is being used simulataneously by two or more threads.
 */
 int sqlite_step(

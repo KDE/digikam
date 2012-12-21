@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2010-01-09
- * Description : A helper class to disable the the icon of a togglebutton, if it is not checked.
+ * Description : A helper class to disable the icon of a togglebutton, if it is not checked.
  *               This will simulate a disabled button, that is still clickable.
  *
  * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>

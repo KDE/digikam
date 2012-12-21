@@ -2387,7 +2387,7 @@ static int balance(Btree *pBt, MemPage *pPage, BtCursor *pCur){
   /*
   ** Load pointers to all cells on sibling pages and the divider cells
   ** into the local apCell[] array.  Make copies of the divider cells
-  ** into aTemp[] and remove the the divider Cells from pParent.
+  ** into aTemp[] and remove the divider Cells from pParent.
   */
   nCell = 0;
   for(i=0; i<nOld; i++){

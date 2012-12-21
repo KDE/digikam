@@ -170,7 +170,7 @@ void sqliteInsert(
   ** is coming from a SELECT statement, then this step also generates
   ** all the code to implement the SELECT statement and invoke a subroutine
   ** to process each row of the result. (Template 2.) If the SELECT
-  ** statement uses the the table that is being inserted into, then the
+  ** statement uses the table that is being inserted into, then the
   ** subroutine is also coded here.  That subroutine stores the SELECT
   ** results in a temporary table. (Template 3.)
   */

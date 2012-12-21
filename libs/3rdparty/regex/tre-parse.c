@@ -77,7 +77,7 @@ static const struct tre_macro_struct {
 
 
 /* Expands a macro delimited by `regex' and `regex_end' to `buf', which
-   must have at least `len' items.  Sets buf[0] to zero if the there
+   must have at least `len' items.  Sets buf[0] to zero if there
    is no match in `tre_macros'. */
 static void
 tre_expand_macro(const tre_char_t *regex, const tre_char_t *regex_end,

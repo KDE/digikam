@@ -1107,7 +1107,7 @@ WhereInfo *sqliteWhereBegin(
         sqliteVdbeAddOp(v, OP_Rewind, pLevel->iCur, brk);
       }
 
-      /* Generate the the top of the loop.  If there is a termination
+      /* Generate the top of the loop.  If there is a termination
       ** key we have to test for that key and abort at the top of the
       ** loop.
       */

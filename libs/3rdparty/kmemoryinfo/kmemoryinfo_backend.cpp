@@ -363,7 +363,7 @@ bool get_mem_stats(Digikam::KMemoryInfo::KMemoryInfoData* data)
         pagesize >>= 1;
     }
 
-    /* We can now ret the the raw VM stats (in pages) using the
+    /* We can now ret the raw VM stats (in pages) using the
      * sysctl interface.
      */
     mib[0] = CTL_VM;
