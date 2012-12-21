@@ -961,36 +961,39 @@ void QueueMgrWindow::slotAssignedToolsChanged(const AssignedBatchTools& tools)
 
 bool QueueMgrWindow::checkTargetAlbum(int queueId)
 {
-    QueueListView* queue = d->queuePool->findQueueByIndex(queueId);
+    QueueListView* const queue = d->queuePool->findQueueByIndex(queueId);
 
     if (!queue)
     {
         return false;
     }
 
-    QString queueName              = d->queuePool->queueTitle(queueId);
-    KUrl    processedItemsAlbumUrl = queue->settings().workingUrl;
-    kDebug() << "Target album for queue " << queueName << " is: " << processedItemsAlbumUrl.toLocalFile();
-
-    if (processedItemsAlbumUrl.isEmpty())
+    if (!queue->settings().useOrgAlbum)
     {
-        KMessageBox::error(this,
-                           i18n("Album to host processed items from queue \"%1\" is not set. "
-                                "Please select one from Queue Settings panel.", queueName),
-                           i18n("Processed items album settings"));
-        return false;
-    }
+        QString queueName              = d->queuePool->queueTitle(queueId);
+        KUrl    processedItemsAlbumUrl = queue->settings().workingUrl;
+        kDebug() << "Target album for queue " << queueName << " is: " << processedItemsAlbumUrl.toLocalFile();
 
-    QFileInfo dir(processedItemsAlbumUrl.toLocalFile());
+        if (processedItemsAlbumUrl.isEmpty())
+        {
+            KMessageBox::error(this,
+                            i18n("Album to host processed items from queue \"%1\" is not set. "
+                                    "Please select one from Queue Settings panel.", queueName),
+                            i18n("Processed items album settings"));
+            return false;
+        }
 
-    if (!dir.exists() || !dir.isWritable())
-    {
-        KMessageBox::error(this,
-                           i18n("Album to host processed items from queue \"%1\" "
-                                "is not available or not writable. "
-                                "Please set another one from Queue Settings panel.", queueName),
-                           i18n("Processed items album settings"));
-        return false;
+        QFileInfo dir(processedItemsAlbumUrl.toLocalFile());
+
+        if (!dir.exists() || !dir.isWritable())
+        {
+            KMessageBox::error(this,
+                            i18n("Album to host processed items from queue \"%1\" "
+                                    "is not available or not writable. "
+                                    "Please set another one from Queue Settings panel.", queueName),
+                            i18n("Processed items album settings"));
+            return false;
+        }
     }
 
     return true;

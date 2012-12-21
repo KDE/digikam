@@ -30,6 +30,7 @@
 #include <QLabel>
 #include <QRadioButton>
 #include <QScrollArea>
+#include <QCheckBox>
 #include <QTimer>
 #include <QTreeWidget>
 #include <QVBoxLayout>
@@ -88,6 +89,7 @@ public:
         storeDiffButton(0),
         extractJPEGButton(0),
         demosaicingButton(0),
+        useOrgAlbum(0),
         albumSel(0),
         advancedRenameManager(0),
         advancedRenameWidget(0),
@@ -109,6 +111,8 @@ public:
     QRadioButton*          extractJPEGButton;
     QRadioButton*          demosaicingButton;
 
+    QCheckBox*             useOrgAlbum;
+
     AlbumSelectWidget*     albumSel;
 
     AdvancedRenameManager* advancedRenameManager;
@@ -129,8 +133,16 @@ QueueSettingsView::QueueSettingsView(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    d->albumSel = new AlbumSelectWidget(this);
-    insertTab(Private::TARGET, d->albumSel, SmallIcon("folder-image"), i18n("Target"));
+    QScrollArea* const sv3   = new QScrollArea(this);
+    KVBox* const vbox3       = new KVBox(sv3->viewport());
+    sv3->setWidget(vbox3);
+    sv3->setWidgetResizable(true);
+    vbox3->setMargin(KDialog::spacingHint());
+    vbox3->setSpacing(KDialog::spacingHint());
+
+    d->useOrgAlbum           = new QCheckBox(i18n("Use original Album"), vbox3);
+    d->albumSel              = new AlbumSelectWidget(vbox3);
+    insertTab(Private::TARGET, sv3, SmallIcon("folder-image"), i18n("Target"));
 
     // --------------------------------------------------------
 
@@ -229,6 +241,9 @@ QueueSettingsView::QueueSettingsView(QWidget* const parent)
 
     // --------------------------------------------------------
 
+    connect(d->useOrgAlbum, SIGNAL(toggled(bool)),
+            this, SLOT(slotSettingsChanged()));
+
     connect(d->albumSel, SIGNAL(itemSelectionChanged()),
             this, SLOT(slotSettingsChanged()));
 
@@ -281,6 +296,7 @@ void QueueSettingsView::setBusy(bool b)
 void QueueSettingsView::slotResetSettings()
 {
     blockSignals(true);
+    d->useOrgAlbum->setChecked(true);
     // TODO: reset d->albumSel
     d->renamingButtonGroup->button(QueueSettings::USEORIGINAL)->setChecked(true);
     d->conflictButtonGroup->button(QueueSettings::OVERWRITE)->setChecked(true);
@@ -293,6 +309,8 @@ void QueueSettingsView::slotResetSettings()
 
 void QueueSettingsView::slotQueueSelected(int, const QueueSettings& settings, const AssignedBatchTools&)
 {
+    d->useOrgAlbum->setChecked(settings.useOrgAlbum);
+    d->albumSel->setEnabled(!settings.useOrgAlbum);
     d->albumSel->setCurrentAlbumUrl(settings.workingUrl);
 
     int btn = (int)settings.renamingRule;
@@ -312,6 +330,9 @@ void QueueSettingsView::slotQueueSelected(int, const QueueSettings& settings, co
 void QueueSettingsView::slotSettingsChanged()
 {
     QueueSettings settings;
+
+    d->albumSel->setEnabled(!d->useOrgAlbum->isChecked());
+    settings.useOrgAlbum         = d->useOrgAlbum->isChecked();
     settings.workingUrl          = d->albumSel->currentAlbumUrl();
 
     settings.renamingRule        = (QueueSettings::RenamingRule)d->renamingButtonGroup->checkedId();

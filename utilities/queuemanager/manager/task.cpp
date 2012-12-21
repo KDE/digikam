@@ -128,6 +128,7 @@ void Task::run()
 
     bool       success = false;
     KUrl       outUrl  = d->tools.m_itemUrl;
+    KUrl       workUrl = !d->settings.useOrgAlbum ? d->settings.workingUrl : KUrl(d->tools.m_itemUrl.directory(KUrl::AppendTrailingSlash));
     KUrl       inUrl;
     KUrl::List tmp2del;
     DImg       tmpImage;
@@ -138,11 +139,14 @@ void Task::run()
         d->tool = BatchToolsManager::instance()->findTool(set.name, set.group)->clone();
         inUrl   = outUrl;
 
-        kDebug() << "Tool : index= " << set.index+1 << " :: name= " << set.name << " :: group= " << set.group;
+        kDebug() << "Tool : index= " << set.index+1
+                 << " :: name= "     << set.name
+                 << " :: group= "    << set.group
+                 << " :: wurl= "     << workUrl;
 
         d->tool->setImageData(tmpImage);
         d->tool->setInputUrl(inUrl);
-        d->tool->setWorkingUrl(d->settings.workingUrl);
+        d->tool->setWorkingUrl(workUrl);
         d->tool->setSettings(set.settings);
         d->tool->setRawLoadingRules(d->settings.rawLoadingRule);
         d->tool->setRawDecodingSettings(d->settings.rawDecodingSettings);
@@ -185,7 +189,7 @@ void Task::run()
 
     // Move processed temp file to target
 
-    KUrl dest = d->settings.workingUrl;
+    KUrl dest = workUrl;
     dest.setFileName(d->tools.m_destFileName);
     QString renameMess;
     QFileInfo fi(dest.toLocalFile());

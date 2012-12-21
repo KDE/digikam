@@ -36,8 +36,9 @@ using namespace KDcrawIface;
 
 namespace Digikam
 {
- /** This container host all common settings used by a queue, not including assigned batch tools
-  */
+
+/** This container host all common settings used by a queue, not including assigned batch tools
+ */
 class QueueSettings
 {
 public:
@@ -66,6 +67,7 @@ public:
     QueueSettings()
     {
         exifSetOrientation = true;
+        useOrgAlbum        = true;
         conflictRule       = OVERWRITE;
         renamingRule       = USEORIGINAL;
         rawLoadingRule     = DEMOSAICING;
@@ -75,6 +77,9 @@ public:
 
     /// Setting managed through Metadata control panel.
     bool                exifSetOrientation;
+
+    /// If true, original file dir will be used to process queue items.
+    bool                useOrgAlbum;
 
     QString             renamingParser;
 

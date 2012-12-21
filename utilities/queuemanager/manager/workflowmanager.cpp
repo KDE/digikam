@@ -221,6 +221,10 @@ bool WorkflowManager::save()
             data.setAttribute(QString::fromLatin1("value"), q.qSettings.renamingParser);
             elm.appendChild(data);
 
+            data = doc.createElement(QString::fromLatin1("useoriginalalbum"));
+            data.setAttribute(QString::fromLatin1("value"), q.qSettings.useOrgAlbum);
+            elm.appendChild(data);
+
             data = doc.createElement(QString::fromLatin1("workingurl"));
             data.setAttribute(QString::fromLatin1("value"), q.qSettings.workingUrl.path());
             elm.appendChild(data);
@@ -361,6 +365,10 @@ bool WorkflowManager::load(QStringList& failed)
             else if (name2 == "renamingparser")
             {
                 q.qSettings.renamingParser = val2;
+            }
+            else if (name2 == "useoriginalalbum")
+            {
+                q.qSettings.useOrgAlbum = (bool)val2.toUInt(&ok);
             }
             else if (name2 == "workingurl")
             {
