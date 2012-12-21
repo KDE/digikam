@@ -60,7 +60,6 @@ Resize::~Resize()
 
 void Resize::registerSettingsWidget()
 {
-
     KVBox* vbox      = new KVBox;
     m_labelPreset    = new QLabel(i18n("Preset Length:"), vbox);
     m_comboBox       = new KComboBox(vbox);
