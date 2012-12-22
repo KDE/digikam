@@ -605,39 +605,25 @@ void ImportImageModel::publiciseInfos(const QList<CamItemInfo>& infos)
 
     emit itemInfosAboutToBeAdded(infos);
 
-    QList<CamItemInfo> newInfos;
-
-    // check if the new infos have a known file type.
-    foreach (CamItemInfo info, infos)
-    {
-        if (info.mime != "")
-        {
-            newInfos << info;
-        }
-    }
-
     const int firstNewIndex = d->infos.size();
-    const int lastNewIndex  = d->infos.size() + newInfos.size() -1;
+    const int lastNewIndex  = d->infos.size() + infos.size() -1;
     beginInsertRows(QModelIndex(), firstNewIndex, lastNewIndex);
-    d->infos << newInfos;
+    d->infos << infos;
 
     for (int i = firstNewIndex; i <= lastNewIndex; ++i)
     {
         const CamItemInfo& info = d->infos.at(i);
-        if (info.mime != "")
-        {
-            qlonglong id            = info.id;
-            d->idHash.insertMulti(id, i);
+        qlonglong id            = info.id;
+        d->idHash.insertMulti(id, i);
 
-            if (d->keepFileUrlCache)
-            {
-                d->fileUrlHash[info.url().prettyUrl()] = id;
-            }
+        if (d->keepFileUrlCache)
+        {
+            d->fileUrlHash[info.url().prettyUrl()] = id;
         }
     }
 
     endInsertRows();
-    emit itemInfosAdded(newInfos);
+    emit itemInfosAdded(infos);
 }
 
 void ImportImageModel::requestIncrementalRefresh()

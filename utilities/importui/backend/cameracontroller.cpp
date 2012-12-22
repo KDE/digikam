@@ -510,15 +510,17 @@ void CameraController::executeCommand(CameraCommand* const cmd)
             CamItemInfoList list;
             foreach(CamItemInfo info, itemsList)
             {
+                if (info.mime.isEmpty())
+                {
+                    // skip
+                    continue;
+                }
                 numberOfItems++;
                 info.id += numberOfItems;
                 list.append(info);
             }
 
-            if (!list.isEmpty())
-            {
-                emit signalFileList(list);
-            }
+            emit signalFileList(list);
 
             sendLogMsg(i18n("The files in %1 have been listed.", folder));
 
