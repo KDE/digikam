@@ -59,7 +59,7 @@ public:
     Private()
     {}
 
-    RulesList  options;
+    RulesList options;
     RulesList modifiers;
 };
 
