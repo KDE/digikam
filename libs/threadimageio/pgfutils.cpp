@@ -177,6 +177,11 @@ bool writePGFImageData(const QImage& image, QByteArray& data, int quality, bool 
     UINT32 nWrittenBytes = 0;
     bool ret             = writePGFImageDataToStream(image, stream, quality, nWrittenBytes, verbose);
     data                 = QByteArray((const char*)stream.GetBuffer(),
+
+/*
+  FIXME: This macro definition is problematic if PGFCodecVersionID is not defined, because the line above will
+         not be terminated correctly!
+*/
 #ifdef PGFCodecVersionID
 #   if PGFCodecVersionID == 0x061224
                                       // Wrap around libpgf 6.12.24 about CPGFMemoryStream bytes size generated to make PGF file data.
