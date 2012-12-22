@@ -235,13 +235,8 @@ QString Parser::parse(ParseSettings& settings)
         results.append(r);
     }
 
-    QString newName;
-
-    if (settings.applyModifiers)
-    {
-        settings.invalidModifiers = applyModifiers(settings.parseString, results);
-        newName                   = results.replaceTokens(settings.parseString);
-    }
+    settings.invalidModifiers = applyModifiers(settings.parseString, results);
+    QString newName  = results.replaceTokens(settings.parseString);
 
     settings.results = results;
 

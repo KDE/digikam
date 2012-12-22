@@ -85,7 +85,6 @@ public:
 
     int                      startIndex;
     bool                     useOriginalFileExtension;
-    bool                     applyModifiers;
     AdvancedRenameManager*   manager;
 
 private:
@@ -94,10 +93,9 @@ private:
     {
         startIndex               = 1;
         useOriginalFileExtension = true;
-        applyModifiers           = true;
-        str2Modify.clear();
         manager                  = 0;
-    };
+        str2Modify.clear();
+    }
 
     void init(const ImageInfo& info)
     {
