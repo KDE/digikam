@@ -105,4 +105,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 066 ==> 262180 - The toggle button to show/hide faces is difficult to see.
 067 ==> 251126 - Load and Save Batch Queue Manager chaining tools workflow.
 068 ==> 282674 - Add an option to put queue target files in source folders.
-069 ==> 
+069 ==> 297556 - Target directory of the queue is changed if a new directory is created.
+070 ==> 
+
