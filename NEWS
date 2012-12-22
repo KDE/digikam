@@ -107,5 +107,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 068 ==> 282674 - Add an option to put queue target files in source folders.
 069 ==> 297556 - Target directory of the queue is changed if a new directory is created.
 070 ==> 310163 - digiKam crashes on importing.
-071 ==> 
+071 ==> 307482 - Batch queue manager batch numbering issues.
+072 ==> 
 
