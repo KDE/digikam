@@ -228,6 +228,13 @@ void QueuePool::slotRemoveCurrentQueue()
     {
         slotAddQueue();
     }
+    else
+    {
+        for (int i = 0; i < count(); ++i)
+        {   
+            setTabText(i, QString("#%1").arg(i + 1));
+        }
+    }
 
     emit signalQueuePoolChanged();
 }
