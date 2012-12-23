@@ -68,7 +68,7 @@ public:
     {
         exifSetOrientation = true;
         useOrgAlbum        = true;
-        conflictRule       = OVERWRITE;
+        conflictRule       = DIFFNAME;
         renamingRule       = USEORIGINAL;
         rawLoadingRule     = DEMOSAICING;
     };
