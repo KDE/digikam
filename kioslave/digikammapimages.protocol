@@ -12,7 +12,6 @@ deleting=false
 moving=false
 maxInstances=1
 Description=digiKam mapimages kioslave
-Description[bs]=digiKam mapimages kioslave
 Description[ca]=«Kioslave» de mapes d'imatges del digiKam
 Description[ca@valencia]=«Kioslave» de mapes d'imatges del digiKam
 Description[cs]=digiKam mapimages kioslave
