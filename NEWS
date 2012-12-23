@@ -109,5 +109,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 070 ==> 310163 - digiKam crashes on importing.
 071 ==> 307482 - Batch queue manager batch numbering issues.
 072 ==> 300700 - BQM Resize tool : metadata are lost.
-073 ==> 
-
+073 ==> 306092 - Creation date as file name - doesn't work in BQM.
+074 ==> 
