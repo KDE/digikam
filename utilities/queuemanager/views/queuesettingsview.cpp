@@ -299,7 +299,7 @@ void QueueSettingsView::slotResetSettings()
     d->useOrgAlbum->setChecked(true);
     // TODO: reset d->albumSel
     d->renamingButtonGroup->button(QueueSettings::USEORIGINAL)->setChecked(true);
-    d->conflictButtonGroup->button(QueueSettings::OVERWRITE)->setChecked(true);
+    d->conflictButtonGroup->button(QueueSettings::DIFFNAME)->setChecked(true);
     d->rawLoadingButtonGroup->button(QueueSettings::DEMOSAICING)->setChecked(true);
     d->advancedRenameWidget->clearParseString();
     d->rawSettings->resetToDefault();
