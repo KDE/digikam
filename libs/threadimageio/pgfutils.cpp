@@ -178,18 +178,15 @@ bool writePGFImageData(const QImage& image, QByteArray& data, int quality, bool 
     bool ret             = writePGFImageDataToStream(image, stream, quality, nWrittenBytes, verbose);
     data                 = QByteArray((const char*)stream.GetBuffer(),
 
-/*
-  FIXME: This macro definition is problematic if PGFCodecVersionID is not defined, because the line above will
-         not be terminated correctly!
-*/
 #ifdef PGFCodecVersionID
 #   if PGFCodecVersionID == 0x061224
                                       // Wrap around libpgf 6.12.24 about CPGFMemoryStream bytes size generated to make PGF file data.
                                       // It miss 16 bytes at end. This solution fix the problem. Problem have been fixed in 6.12.27.
                                       nWrittenBytes + 16);
-#   else
-                                      nWrittenBytes);
 #   endif
+                                      nWrittenBytes);
+#else
+                                      nWrittenBytes);
 #endif
 
     if (!nWrittenBytes)
@@ -280,10 +277,13 @@ bool writePGFImageDataToStream(const QImage& image, CPGFStream& stream, int qual
 #ifdef PGFCodecVersionID
 #   if PGFCodecVersionID >= 0x061124
         pgfImg.Write(&stream, &nWrittenBytes);
+#   else
+        pgfImg.Write(&stream, 0, 0, &nWrittenBytes);
 #   endif
 #else
         pgfImg.Write(&stream, 0, 0, &nWrittenBytes);
 #endif
+
     }
     catch (IOException& e)
     {
