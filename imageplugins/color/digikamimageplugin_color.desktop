@@ -2,6 +2,7 @@
 Name=ImagePlugin_Color
 Name[ast]=ImagePlugin_Color
 Name[bg]=Приставка за снимки - Цветове
+Name[bs]=ImagePlugin_Color
 Name[ca]=ImagePlugin_Color
 Name[ca@valencia]=ImagePlugin_Color
 Name[cs]=ImagePlugin_Color
@@ -43,6 +44,7 @@ Encoding=UTF-8
 Comment=A tool to correct colors of image
 Comment[ast]=Una ferramienta pa iguar colores de la imaxe
 Comment[bg]=Инструмент за поправяне на цветове в снимките
+Comment[bs]=Alat za ispravljanje boja na slici
 Comment[ca]=Una eina per corregir els colors de les imatges
 Comment[ca@valencia]=Una eina per corregir els colors de les imatges
 Comment[cs]=Nástroj pro opravu barev obrázku

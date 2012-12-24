@@ -2,6 +2,7 @@
 Name=ImagePlugin_Decorate
 Name[ast]=ImagePlugin_Decorate
 Name[bg]=Приставка за снимки - Украсяване
+Name[bs]=ImagePlugin_Decorate
 Name[ca]=ImagePlugin_Decorate
 Name[ca@valencia]=ImagePlugin_Decorate
 Name[cs]=ImagePlugin_Decorate
@@ -45,6 +46,7 @@ Encoding=UTF-8
 Comment=A tool to decorate image
 Comment[ast]=Una ferramienta pa decorar la imaxe
 Comment[bg]=Инструмент за украсяване на снимки
+Comment[bs]=Alat za ukrašavanje slike
 Comment[ca]=Una eina per decorar imatges
 Comment[ca@valencia]=Una eina per decorar imatges
 Comment[cs]=Nástroj pro dekoraci obrázku

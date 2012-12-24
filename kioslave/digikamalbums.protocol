@@ -14,6 +14,7 @@ maxInstances=1
 Description=digiKam albums kioslave
 Description[ast]=kioslave de digiKam p'álbumes
 Description[bg]=digiKam kioslave за албуми
+Description[bs]=digiKam albumi kioslave
 Description[ca]=«Kioslave» d'àlbums del digiKam
 Description[ca@valencia]=«Kioslave» d'àlbums del digiKam
 Description[cs]=digiKam kioslave alb

@@ -10,6 +10,7 @@ Icon=digikam
 Name=Download Photos with digiKam
 Name[ast]=Descargar semeyes con digiKam
 Name[bg]=Изтегляне на снимки с digiKam
+Name[bs]=Preuzmi slike sa digiKam
 Name[ca]=Descarrega les fotos amb el digiKam
 Name[ca@valencia]=Descarrega les fotos amb el digiKam
 Name[cs]=Stáhnout fotografie pomocí digiKamu
