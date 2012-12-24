@@ -111,5 +111,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 072 ==> 300700 - BQM Resize tool : metadata are lost.
 073 ==> 306092 - Creation date as file name - doesn't work in BQM.
 074 ==> 196897 - Keep directory (album) hierarchy when processing photos from different album.
-075 ==> 
+075 ==> 285237 - Image conversion in batch manager as _exclusive_ task does _not_ work.
+076 ==> 
+
 
