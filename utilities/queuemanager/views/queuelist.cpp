@@ -55,6 +55,8 @@
 #include "thumbnailloadthread.h"
 #include "thumbnailsize.h"
 #include "queuesettings.h"
+#include "queuemgrwindow.h"
+#include "workflowmanager.h"
 
 namespace Digikam
 {
@@ -457,6 +459,12 @@ void QueueListView::dragMoveEvent(QDragMoveEvent* e)
             }
         }
     }
+    else if (e->mimeData()->formats().contains("digikam/workflow"))
+    {
+        QTreeWidget::dragMoveEvent(e);
+        e->accept();
+        return;
+    }
 
     e->ignore();
 }
@@ -548,6 +556,20 @@ void QueueListView::dropEvent(QDropEvent* e)
         if (!imageInfoList.isEmpty())
         {
             slotAddItems(imageInfoList);
+            e->acceptProposedAction();
+        }
+    }
+    else if (e->mimeData()->formats().contains("digikam/workflow"))
+    {
+        QByteArray ba = e->mimeData()->data("digikam/workflow");
+
+        if (ba.size())
+        {
+            QDataStream ds(ba);
+            QString     title;
+            ds >> title;
+            QueueMgrWindow::queueManagerWindow()->slotAssignQueueSettings(title);
+
             e->acceptProposedAction();
         }
     }
