@@ -57,12 +57,12 @@ public:
         modified = false;
     }
 
-    bool         modified;
+    bool            modified;
 
     QList<Workflow> qList;
-    QString      file;
+    QString         file;
 
-    QMutex       mutex;
+    QMutex          mutex;
 };
 
 class WorkflowManagerCreator
@@ -78,6 +78,8 @@ WorkflowManager* WorkflowManager::instance()
 {
     return &creator->object;
 }
+
+// ------------------------------------------------------------------------------------------
 
 WorkflowManager::WorkflowManager()
     : d(new Private)
