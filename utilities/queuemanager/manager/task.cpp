@@ -127,6 +127,7 @@ void Task::run()
     // Loop with all batch tools operations to apply on item.
 
     bool       success = false;
+    int        index   = 0;
     KUrl       outUrl  = d->tools.m_itemUrl;
     KUrl       workUrl = !d->settings.useOrgAlbum ? d->settings.workingUrl : KUrl(d->tools.m_itemUrl.directory(KUrl::AppendTrailingSlash));
     KUrl       inUrl;
@@ -138,8 +139,9 @@ void Task::run()
     {
         d->tool = BatchToolsManager::instance()->findTool(set.name, set.group)->clone();
         inUrl   = outUrl;
+        index   = set.index + 1;
 
-        kDebug() << "Tool : index= " << set.index+1
+        kDebug() << "Tool : index= " << index
                  << " :: name= "     << set.name
                  << " :: group= "    << set.group
                  << " :: wurl= "     << workUrl;
@@ -151,7 +153,7 @@ void Task::run()
         d->tool->setRawLoadingRules(d->settings.rawLoadingRule);
         d->tool->setRawDecodingSettings(d->settings.rawDecodingSettings);
         d->tool->setResetExifOrientationAllowed(d->settings.exifSetOrientation);
-        d->tool->setLastChainedTool(set.index == d->tools.m_toolsList.count());
+        d->tool->setLastChainedTool(index == d->tools.m_toolsList.count());
         d->tool->setOutputUrlFromInputUrl();
         d->tool->setBranchHistory(true);
 

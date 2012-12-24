@@ -385,9 +385,9 @@ bool BatchTool::savefromDImg() const
     if (frm.isEmpty())
     {
         // In case of output support is not set for ex. with all tool which do not convert to new format.
-        d->image.prepareMetadataToSave(outputUrl().toLocalFile(), DImg::formatToMimeType(detectedFormat),
-                                       resetOrientation);
-        return(d->image.save(outputUrl().toLocalFile(), detectedFormat, d->observer));
+        d->image.prepareMetadataToSave(outputUrl().toLocalFile(), DImg::formatToMimeType(detectedFormat), resetOrientation);
+        bool b = d->image.save(outputUrl().toLocalFile(), detectedFormat, d->observer);
+        return b;
     }
 
     d->image.prepareMetadataToSave(outputUrl().toLocalFile(), frm, resetOrientation);
