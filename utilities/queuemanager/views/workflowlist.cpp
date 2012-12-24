@@ -91,6 +91,7 @@ WorkflowList::WorkflowList(QWidget* const parent)
     setColumnCount(3);
     setHeaderHidden(false);
     setDragEnabled(true);
+    setRootIsDecorated(false);
 
     QStringList titles;
     titles.append(i18n("Title"));
