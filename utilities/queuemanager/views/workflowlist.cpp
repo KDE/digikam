@@ -204,9 +204,7 @@ void WorkflowList::startDrag(Qt::DropActions /*supportedActions*/)
 
 QStringList WorkflowList::mimeTypes() const
 {
-    QStringList types;
-    types << "digikam/queuesettings";
-    return types;
+    return QStringList() << "digikam/workflow";
 }
 
 void WorkflowList::mouseDoubleClickEvent(QMouseEvent*)
@@ -223,13 +221,13 @@ QMimeData* WorkflowList::mimeData(const QList<QTreeWidgetItem*> items) const
     QByteArray encodedData;
     QDataStream stream(&encodedData, QIODevice::WriteOnly);
 
-    WorkflowItem* const item = dynamic_cast<WorkflowItem*>(items.first());
+    WorkflowItem* const item  = dynamic_cast<WorkflowItem*>(items.first());
     if (item)
     {
         stream << item->title();
     }
 
-    mimeData->setData("digikam/queuesettings", encodedData);
+    mimeData->setData("digikam/workflow", encodedData);
     return mimeData;
 }
 
