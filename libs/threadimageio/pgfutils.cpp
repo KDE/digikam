@@ -183,8 +183,9 @@ bool writePGFImageData(const QImage& image, QByteArray& data, int quality, bool 
                                       // Wrap around libpgf 6.12.24 about CPGFMemoryStream bytes size generated to make PGF file data.
                                       // It miss 16 bytes at end. This solution fix the problem. Problem have been fixed in 6.12.27.
                                       nWrittenBytes + 16);
-#   endif
+#   else
                                       nWrittenBytes);
+#   endif
 #else
                                       nWrittenBytes);
 #endif
