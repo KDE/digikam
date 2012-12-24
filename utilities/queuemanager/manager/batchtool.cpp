@@ -30,7 +30,6 @@
 #include <QFileInfo>
 #include <QPolygon>
 #include <QTemporaryFile>
-
 #include <QWidget>
 #include <QLabel>
 
