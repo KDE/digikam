@@ -114,6 +114,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 075 ==> 285237 - Image conversion in batch manager as _exclusive_ task does _not_ work.
 076 ==> 312186 - Save batch profile.
 077 ==> 274046 - jpeg-turbo support : can't edit canon 400D jpg.
-078 ==> 
+078 ==> 307213 - No Kipi plugin installed - FindKipi.cmake script from KDElibs must be updated.
+079 ==> 
 
 
