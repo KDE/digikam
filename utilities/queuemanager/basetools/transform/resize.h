@@ -6,7 +6,7 @@
  * Date        : 2009-02-17
  * Description : resize image batch tool.
  *
- * Copyright (C) 2009-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -28,12 +28,6 @@
 
 #include "batchtool.h"
 
-class QLabel;
-class QCheckBox;
-
-class KIntNumInput;
-class KComboBox;
-
 namespace Digikam
 {
 
@@ -43,7 +37,7 @@ class Resize : public BatchTool
 
 public:
 
-    explicit Resize(QObject* parent = 0);
+    explicit Resize(QObject* const parent = 0);
     ~Resize();
 
     BatchToolSettings defaultSettings();
@@ -59,28 +53,12 @@ private Q_SLOTS:
 
 private:
 
-    enum WidthPreset
-    {
-        Tiny = 0,
-        Small,
-        Medium,
-        Big,
-        Large,
-        Huge
-    };
-
-    QLabel*       m_labelPreset;
-
-    QCheckBox*    m_useCustom;
-
-    KIntNumInput* m_customLength;
-
-    KComboBox*    m_comboBox;
+    bool toolOperations();
 
 private:
 
-    bool toolOperations();
-    int  presetLengthValue(WidthPreset preset);
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

@@ -6,7 +6,7 @@
  * Date        : 2009-02-17
  * Description : resize image batch tool.
  *
- * Copyright (C) 2009-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -46,8 +46,82 @@
 namespace Digikam
 {
 
-Resize::Resize(QObject* parent)
-    : BatchTool("Resize", TransformTool, parent)
+class Resize::Private
+{
+public:
+
+    enum WidthPreset
+    {
+        Tiny = 0,
+        Small,
+        Medium,
+        Big,
+        Large,
+        Huge
+    };
+
+public:
+
+    Private() :
+        labelPreset(0),
+        useCustom(0),
+        customLength(0),
+        comboBox(0)
+    {
+    }
+
+    int presetLengthValue(WidthPreset preset);
+
+public:
+
+    QLabel*       labelPreset;
+
+    QCheckBox*    useCustom;
+
+    KIntNumInput* customLength;
+
+    KComboBox*    comboBox;
+};
+
+int Resize::Private::presetLengthValue(WidthPreset preset)
+{
+    int length;
+
+    switch (preset)
+    {
+        case Private::Tiny:
+            length = 480;
+            break;
+
+        case Private::Small:
+            length = 640;
+            break;
+
+        case Private::Medium:
+            length = 800;
+            break;
+
+        case Private::Big:
+            length = 1024;
+            break;
+
+        case Private::Large:
+            length = 1280;
+            break;
+
+        default:   // Private::Huge
+            length = 1600;
+            break;
+    }
+
+    return length;
+}
+
+// ------------------------------------------------------------------------------
+
+Resize::Resize(QObject* const parent)
+    : BatchTool("Resize", TransformTool, parent),
+      d(new Private)
 {
     setToolTitle(i18n("Resize"));
     setToolDescription(i18n("Resize images with a customized length."));
@@ -56,37 +130,38 @@ Resize::Resize(QObject* parent)
 
 Resize::~Resize()
 {
+    delete d;
 }
 
 void Resize::registerSettingsWidget()
 {
-    KVBox* vbox      = new KVBox;
-    m_labelPreset    = new QLabel(i18n("Preset Length:"), vbox);
-    m_comboBox       = new KComboBox(vbox);
-    m_comboBox->insertItem(Tiny,   i18np("Tiny (1 pixel)",   "Tiny (%1 pixels)",   presetLengthValue(Tiny)));
-    m_comboBox->insertItem(Small,  i18np("Small (1 pixel)",  "Small (%1 pixels)",  presetLengthValue(Small)));
-    m_comboBox->insertItem(Medium, i18np("Medium (1 pixel)", "Medium (%1 pixels)", presetLengthValue(Medium)));
-    m_comboBox->insertItem(Big,    i18np("Big (1 pixel)",    "Big (%1 pixels)",    presetLengthValue(Big)));
-    m_comboBox->insertItem(Large,  i18np("Large (1 pixel)",  "Large (%1 pixels)",  presetLengthValue(Large)));
-    m_comboBox->insertItem(Huge,   i18np("Huge (1 pixel)",   "Huge (%1 pixels)",   presetLengthValue(Huge)));
+    KVBox* const vbox   = new KVBox;
+    d->labelPreset      = new QLabel(i18n("Preset Length:"), vbox);
+    d->comboBox         = new KComboBox(vbox);
+    d->comboBox->insertItem(Private::Tiny,   i18np("Tiny (1 pixel)",   "Tiny (%1 pixels)",   d->presetLengthValue(Private::Tiny)));
+    d->comboBox->insertItem(Private::Small,  i18np("Small (1 pixel)",  "Small (%1 pixels)",  d->presetLengthValue(Private::Small)));
+    d->comboBox->insertItem(Private::Medium, i18np("Medium (1 pixel)", "Medium (%1 pixels)", d->presetLengthValue(Private::Medium)));
+    d->comboBox->insertItem(Private::Big,    i18np("Big (1 pixel)",    "Big (%1 pixels)",    d->presetLengthValue(Private::Big)));
+    d->comboBox->insertItem(Private::Large,  i18np("Large (1 pixel)",  "Large (%1 pixels)",  d->presetLengthValue(Private::Large)));
+    d->comboBox->insertItem(Private::Huge,   i18np("Huge (1 pixel)",   "Huge (%1 pixels)",   d->presetLengthValue(Private::Huge)));
 
-    m_useCustom      = new QCheckBox(i18n("Use Custom Length"), vbox);
-    m_customLength   = new KIntNumInput(vbox);
-    m_customLength->setRange(10, 10000);
-    m_customLength->setSliderEnabled(true);
+    d->useCustom        = new QCheckBox(i18n("Use Custom Length"), vbox);
+    d->customLength     = new KIntNumInput(vbox);
+    d->customLength->setRange(10, 10000);
+    d->customLength->setSliderEnabled(true);
 
-    QLabel* space    = new QLabel(vbox);
+    QLabel* const space = new QLabel(vbox);
     vbox->setStretchFactor(space, 10);
 
-    m_settingsWidget = vbox;
+    m_settingsWidget    = vbox;
 
-    connect(m_comboBox, SIGNAL(activated(int)),
+    connect(d->comboBox, SIGNAL(activated(int)),
             this, SLOT(slotSettingsChanged()));
 
-    connect(m_customLength, SIGNAL(valueChanged(int)),
+    connect(d->customLength, SIGNAL(valueChanged(int)),
             this, SLOT(slotSettingsChanged()));
 
-    connect(m_useCustom, SIGNAL(toggled(bool)),
+    connect(d->useCustom, SIGNAL(toggled(bool)),
             this, SLOT(slotSettingsChanged()));
 
     BatchTool::registerSettingsWidget();
@@ -97,73 +172,39 @@ BatchToolSettings Resize::defaultSettings()
     BatchToolSettings settings;
     settings.insert("UseCustom",    false);
     settings.insert("LengthCustom", 1024);
-    settings.insert("LengthPreset", Medium);
+    settings.insert("LengthPreset", Private::Medium);
     return settings;
 }
 
 void Resize::slotAssignSettings2Widget()
 {
-    m_comboBox->setCurrentIndex(settings()["LengthPreset"].toInt());
-    m_useCustom->setChecked(settings()["UseCustom"].toBool());
-    m_customLength->setValue(settings()["LengthCustom"].toInt());
+    d->comboBox->setCurrentIndex(settings()["LengthPreset"].toInt());
+    d->useCustom->setChecked(settings()["UseCustom"].toBool());
+    d->customLength->setValue(settings()["LengthCustom"].toInt());
 }
 
 void Resize::slotSettingsChanged()
 {
-    m_customLength->setEnabled(m_useCustom->isChecked());
-    m_labelPreset->setEnabled(!m_useCustom->isChecked());
-    m_comboBox->setEnabled(!m_useCustom->isChecked());
+    d->customLength->setEnabled(d->useCustom->isChecked());
+    d->labelPreset->setEnabled(!d->useCustom->isChecked());
+    d->comboBox->setEnabled(!d->useCustom->isChecked());
 
     BatchToolSettings settings;
-    settings.insert("LengthPreset", m_comboBox->currentIndex());
-    settings.insert("UseCustom",    m_useCustom->isChecked());
-    settings.insert("LengthCustom", m_customLength->value());
+    settings.insert("LengthPreset", d->comboBox->currentIndex());
+    settings.insert("UseCustom",    d->useCustom->isChecked());
+    settings.insert("LengthCustom", d->customLength->value());
     BatchTool::slotSettingsChanged(settings);
-}
-
-int Resize::presetLengthValue(WidthPreset preset)
-{
-    int length;
-
-    switch (preset)
-    {
-        case Tiny:
-            length = 480;
-            break;
-
-        case Small:
-            length = 640;
-            break;
-
-        case Medium:
-            length = 800;
-            break;
-
-        case Big:
-            length = 1024;
-            break;
-
-        case Large:
-            length = 1280;
-            break;
-
-        default:   // Huge
-            length = 1600;
-            break;
-    }
-
-    return length;
 }
 
 bool Resize::toolOperations()
 {
-    bool useCustom     = settings()["UseCustom"].toBool();
-    WidthPreset preset = (WidthPreset)(settings()["LengthPreset"].toInt());
-    int length         = settings()["LengthCustom"].toInt();
+    bool useCustom              = settings()["UseCustom"].toBool();
+    Private::WidthPreset preset = (Private::WidthPreset)(settings()["LengthPreset"].toInt());
+    int length                  = settings()["LengthCustom"].toInt();
 
     if (!useCustom)
     {
-        length = presetLengthValue(preset);
+        length = d->presetLengthValue(preset);
     }
 
     if (!loadToDImg())
