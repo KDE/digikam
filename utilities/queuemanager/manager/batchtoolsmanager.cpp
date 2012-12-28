@@ -37,6 +37,7 @@
 #include "convert2pgf.h"
 #include "convert2png.h"
 #include "convert2tiff.h"
+#include "crop.h"
 #include "flip.h"
 #include "resize.h"
 #include "restoration.h"
@@ -111,6 +112,7 @@ BatchToolsManager::BatchToolsManager()
     registerTool(new Rotate(this));
     registerTool(new Flip(this));
     registerTool(new Resize(this));
+    registerTool(new Crop(this));
 
     // Decorate
     registerTool(new WaterMark(this));
