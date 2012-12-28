@@ -115,6 +115,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 076 ==> 312186 - Save batch profile.
 077 ==> 274046 - jpeg-turbo support : can't edit canon 400D jpg.
 078 ==> 307213 - No Kipi plugin installed - FindKipi.cmake script from KDElibs must be updated.
-079 ==> 
+079 ==> 266395 - Batch cropping for digikam (cropping made easy).
+080 ==> 
 
 
