@@ -119,4 +119,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 079 ==> 266395 - Batch cropping for digikam (cropping made easy).
 080 ==> 150854 - Massive common crop feature.
 081 ==> 302024 - Batch image cropping tool.
-082 ==> 
+082 ==> 147428 - Batch resizing for several folders.
+083 ==> 
