@@ -132,6 +132,7 @@ void KipiPluginLoader::Private::loadPlugins()
     pluginActionsDisabled << QString("batch_convert_images");           // Obsolete since 1.2.0, replaced by BQM convert tool.
     pluginActionsDisabled << QString("batch_color_images");             // Obsolete since 1.2.0, replaced by BQM color tool.
     pluginActionsDisabled << QString("batch_filter_images");            // Obsolete since 1.2.0, replaced by BQM enhance tool.
+    pluginActionsDisabled << QString("batch_recompress_images");        // Obsolete since 3.0.0, replaced by BQM enhance tool.
 
     kipiPluginLoader = new PluginLoader(app);
     kipiPluginLoader->setInterface(kipiInterface);
