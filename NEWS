@@ -34,6 +34,7 @@ BatchQueueManager : Add new behavior options about RAW file loading (extract pre
 BatchQueueManager : Add the capability to assign more than one time a tool to a queue.
 BatchQueueManager : Add the capability to put target file processed from queue to source album.
 BatchQueueManager : Add concept of Workflow dedicated to save and restore between sessions Queue Settings including Assigned Batch Tools list.
+BatchQueueManager : Add new tool to crop image.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
