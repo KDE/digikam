@@ -117,6 +117,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 077 ==> 274046 - jpeg-turbo support : can't edit canon 400D jpg.
 078 ==> 307213 - No Kipi plugin installed - FindKipi.cmake script from KDElibs must be updated.
 079 ==> 266395 - Batch cropping for digikam (cropping made easy).
-080 ==> 
+080 ==> 150854 - massive common crop feature.
+081 ==> 
 
 
