@@ -255,8 +255,6 @@ public:
     const int               maxVisibleItems;
     const int               maxHistoryItems;
 
-    QStringList             patternHistory;
-
     AdvancedRenameLineEdit* lineEdit;
     Highlighter*            highlighter;
 };
@@ -396,9 +394,9 @@ void AdvancedRenameInput::readSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
 
-    d->patternHistory = group.readEntry(d->configPatternHistoryListEntry, QStringList());
-    d->patternHistory.removeAll(QString(""));
-    addItems(d->patternHistory);
+    QStringList patternHistory = group.readEntry(d->configPatternHistoryListEntry, QStringList());
+    patternHistory.removeAll(QString(""));
+    addItems(patternHistory);
     d->lineEdit->clear();
 }
 
@@ -407,12 +405,14 @@ void AdvancedRenameInput::writeSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
 
+    QStringList patternHistory = group.readEntry(d->configPatternHistoryListEntry, QStringList());
+
     // remove duplicate entries and save pattern history, omit empty strings
     QString pattern = d->lineEdit->toPlainText();
-    d->patternHistory.removeAll(pattern);
-    d->patternHistory.removeAll(QString(""));
-    d->patternHistory.prepend(pattern);
-    group.writeEntry(d->configPatternHistoryListEntry, d->patternHistory);
+    patternHistory.removeAll(pattern);
+    patternHistory.removeAll(QString(""));
+    patternHistory.prepend(pattern);
+    group.writeEntry(d->configPatternHistoryListEntry, patternHistory);
 }
 
 }  // namespace Digikam
