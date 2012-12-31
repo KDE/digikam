@@ -140,6 +140,7 @@ private:
 
     bool checkDiskSpace(PAlbum* pAlbum);
     bool downloadCameraItems(PAlbum *pAlbum, bool onlySelected, bool deleteAfter);
+    bool createSubAlbums(KUrl &downloadUrl, const CamItemInfo &info);
 
 private Q_SLOTS:
 

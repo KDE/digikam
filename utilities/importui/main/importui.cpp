@@ -2024,85 +2024,11 @@ bool ImportUI::downloadCameraItems(PAlbum* pAlbum, bool onlySelected, bool delet
         dateTime            = info.mtime;
 
         KUrl downloadUrl(url);
-        QString errMsg;
 
         // Auto sub-albums creation based on file date.
-
-        if (d->albumCustomizer->autoAlbumDateEnabled())
+        if (!createSubAlbums(downloadUrl, info))
         {
-            QString dirName;
-
-            switch (d->albumCustomizer->folderDateFormat())
-            {
-            case AlbumCustomizer::TextDateFormat:
-                dirName = dateTime.date().toString(Qt::TextDate);
-                break;
-
-            case AlbumCustomizer::LocalDateFormat:
-                dirName = dateTime.date().toString(Qt::LocalDate);
-                break;
-
-            case AlbumCustomizer::IsoDateFormat:
-                dirName = dateTime.date().toString(Qt::ISODate);
-                break;
-
-            default:        // Custom
-                dirName = dateTime.date().toString(d->albumCustomizer->customDateFormat());
-                break;
-            }
-
-            // See B.K.O #136927 : we need to support file system which do not
-            // handle upper case properly.
-            dirName = dirName.toLower();
-
-            if (!createAutoAlbum(downloadUrl, dirName, dateTime.date(), errMsg))
-            {
-                KMessageBox::error(this, errMsg);
-                return false;
-            }
-
-            downloadUrl.addPath(dirName);
-        }
-
-        // Auto sub-albums creation based on file extensions.
-
-        if (d->albumCustomizer->autoAlbumExtEnabled())
-        {
-            // We use the target file name to compute sub-albums name to take a care about
-            // conversion on the fly option.
-            QFileInfo fi(downloadName.isEmpty() ? settings.file : downloadName);
-
-            QString subAlbum = fi.suffix().toUpper();
-
-            if (fi.suffix().toUpper() == QString("JPEG") ||
-                    fi.suffix().toUpper() == QString("JPE"))
-            {
-                subAlbum = QString("JPG");
-            }
-
-            if (fi.suffix().toUpper() == QString("TIFF"))
-            {
-                subAlbum = QString("TIF");
-            }
-
-            if (fi.suffix().toUpper() == QString("MPEG") ||
-                    fi.suffix().toUpper() == QString("MPE") ||
-                    fi.suffix().toUpper() == QString("MPO"))
-            {
-                subAlbum = QString("MPG");
-            }
-
-            // See B.K.O #136927 : we need to support file system which do not
-            // handle upper case properly.
-            subAlbum = subAlbum.toLower();
-
-            if (!createAutoAlbum(downloadUrl, subAlbum, dateTime.date(), errMsg))
-            {
-                KMessageBox::error(this, errMsg);
-                return false;
-            }
-
-            downloadUrl.addPath(subAlbum);
+            return false;
         }
 
         d->foldersToScan << downloadUrl.toLocalFile();
@@ -2167,6 +2093,92 @@ bool ImportUI::downloadCameraItems(PAlbum* pAlbum, bool onlySelected, bool delet
 
     d->controller->download(allItems);
 
+    return true;
+}
+
+bool ImportUI::createSubAlbums(KUrl& downloadUrl, const CamItemInfo& info)
+{
+    QString downloadName    = info.downloadName;
+    QDateTime dateTime      = info.mtime;
+
+    QString errMsg;
+
+    if (d->albumCustomizer->autoAlbumDateEnabled())
+    {
+        QString dirName;
+
+        switch (d->albumCustomizer->folderDateFormat())
+        {
+        case AlbumCustomizer::TextDateFormat:
+            dirName = dateTime.date().toString(Qt::TextDate);
+            break;
+
+        case AlbumCustomizer::LocalDateFormat:
+            dirName = dateTime.date().toString(Qt::LocalDate);
+            break;
+
+        case AlbumCustomizer::IsoDateFormat:
+            dirName = dateTime.date().toString(Qt::ISODate);
+            break;
+
+        default:        // Custom
+            dirName = dateTime.date().toString(d->albumCustomizer->customDateFormat());
+            break;
+        }
+
+        // See B.K.O #136927 : we need to support file system which do not
+        // handle upper case properly.
+        dirName = dirName.toLower();
+
+        if (!createAutoAlbum(downloadUrl, dirName, dateTime.date(), errMsg))
+        {
+            KMessageBox::error(this, errMsg);
+            return false;
+        }
+
+        downloadUrl.addPath(dirName);
+    }
+
+    // Auto sub-albums creation based on file extensions.
+
+    if (d->albumCustomizer->autoAlbumExtEnabled())
+    {
+        // We use the target file name to compute sub-albums name to take a care about
+        // conversion on the fly option.
+        QFileInfo fi(downloadName.isEmpty() ? info.name : downloadName);
+
+        QString subAlbum = fi.suffix().toUpper();
+
+        if (fi.suffix().toUpper() == QString("JPEG") ||
+                fi.suffix().toUpper() == QString("JPE"))
+        {
+            subAlbum = QString("JPG");
+        }
+
+        if (fi.suffix().toUpper() == QString("TIFF"))
+        {
+            subAlbum = QString("TIF");
+        }
+
+        if (fi.suffix().toUpper() == QString("MPEG") ||
+                fi.suffix().toUpper() == QString("MPE") ||
+                fi.suffix().toUpper() == QString("MPO"))
+        {
+            subAlbum = QString("MPG");
+        }
+
+        // See B.K.O #136927 : we need to support file system which do not
+        // handle upper case properly.
+        subAlbum = subAlbum.toLower();
+
+        if (!createAutoAlbum(downloadUrl, subAlbum, dateTime.date(), errMsg))
+        {
+            KMessageBox::error(this, errMsg);
+            return false;
+        }
+
+        downloadUrl.addPath(subAlbum);
+    }
     return true;
 }
 
