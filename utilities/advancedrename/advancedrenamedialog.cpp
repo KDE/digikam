@@ -187,11 +187,11 @@ AdvancedRenameDialog::AdvancedRenameDialog(QWidget* parent)
     : KDialog(parent), d(new Private)
 {
     setupWidgets();
+    setupConnections();
 
     initDialog();
     readSettings();
 
-    setupConnections();
 }
 
 AdvancedRenameDialog::~AdvancedRenameDialog()
