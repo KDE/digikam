@@ -191,7 +191,6 @@ AdvancedRenameDialog::AdvancedRenameDialog(QWidget* parent)
 
     initDialog();
     readSettings();
-
 }
 
 AdvancedRenameDialog::~AdvancedRenameDialog()
