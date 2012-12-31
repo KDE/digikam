@@ -123,6 +123,9 @@ private:
     AdvancedRenameDialog(const AdvancedRenameDialog&);
     AdvancedRenameDialog& operator=(const AdvancedRenameDialog&);
 
+    void setupWidgets();
+    void setupConnections();
+
     void initDialog();
     void readSettings();
     void writeSettings();

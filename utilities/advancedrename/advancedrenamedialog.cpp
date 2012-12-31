@@ -186,98 +186,12 @@ const QString AdvancedRenameDialog::Private::configDialogSizeEntry("Dialog Size"
 AdvancedRenameDialog::AdvancedRenameDialog(QWidget* parent)
     : KDialog(parent), d(new Private)
 {
-    d->advancedRenameManager  = new AdvancedRenameManager();
-    d->advancedRenameWidget   = new AdvancedRenameWidget(this);
-    d->advancedRenameManager->setWidget(d->advancedRenameWidget);
-
-    // --------------------------------------------------------
-
-    d->sortActionName  = new QAction(i18n("By Name"), this);
-    d->sortActionDate  = new QAction(i18n("By Date"), this);
-    d->sortActionSize  = new QAction(i18n("By File Size"), this);
-
-    d->sortActionName->setCheckable(true);
-    d->sortActionDate->setCheckable(true);
-    d->sortActionSize->setCheckable(true);
-
-    // --------------------------------------------------------
-
-    d->sortActionAscending  = new QAction(i18n("Ascending"), this);
-    d->sortActionDescending = new QAction(i18n("Descending"), this);
-
-    d->sortActionAscending->setCheckable(true);
-    d->sortActionDescending->setCheckable(true);
-
-    d->sortActionAscending->setChecked(true);
-
-    // --------------------------------------------------------
-
-    d->sortGroupActions     = new QActionGroup(this);
-    d->sortGroupDirections  = new QActionGroup(this);
-
-    d->sortGroupActions->addAction(d->sortActionName);
-    d->sortGroupActions->addAction(d->sortActionDate);
-    d->sortGroupActions->addAction(d->sortActionSize);
-
-    d->sortGroupDirections->addAction(d->sortActionAscending);
-    d->sortGroupDirections->addAction(d->sortActionDescending);
-
-    // --------------------------------------------------------
-
-    d->listView = new QTreeWidget(this);
-    d->listView->setRootIsDecorated(false);
-    d->listView->setSelectionMode(QAbstractItemView::NoSelection);
-    d->listView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    d->listView->setAllColumnsShowFocus(true);
-    d->listView->setSortingEnabled(false);
-    d->listView->setColumnCount(2);
-    d->listView->setHeaderLabels(QStringList() << i18n("Current Name") << i18n("New Name"));
-    d->listView->setContextMenuPolicy(Qt::CustomContextMenu);
-    d->listView->header()->setResizeMode(0, QHeaderView::Stretch);
-    d->listView->header()->setResizeMode(1, QHeaderView::Stretch);
-    d->listView->setWhatsThis(i18n("This list shows the results for your renaming pattern. Red items indicate a "
-                                   "a name collision, either because the new name is equal to the current name, "
-                                   "or because the name has already been assigned to another item."));
-
-    // --------------------------------------------------------
-
-    QWidget* mainWidget     = new QWidget(this);
-    QGridLayout* mainLayout = new QGridLayout;
-    mainLayout->addWidget(d->listView,             0, 0, 1, 1);
-    mainLayout->addWidget(d->advancedRenameWidget, 1, 0, 1, 1);
-    mainLayout->setRowStretch(0, 10);
-    mainWidget->setLayout(mainLayout);
-
-    setMainWidget(mainWidget);
-
-    setMinimumWidth(d->advancedRenameWidget->minimumWidth());
-
-    setButtons(Help | Cancel | Ok);
-    enableButton(Ok, false);
-    setHelp("advancedrename.anchor", "digikam");
+    setupWidgets();
 
     initDialog();
     readSettings();
 
-    // --------------------------------------------------------
-
-    connect(d->advancedRenameWidget, SIGNAL(signalTextChanged(QString)),
-            this, SLOT(slotParseStringChanged(QString)));
-
-    connect(d->advancedRenameWidget, SIGNAL(signalReturnPressed()),
-            this, SLOT(slotReturnPressed()));
-
-    connect(d->advancedRenameManager, SIGNAL(signalSortingChanged(KUrl::List)),
-            this, SLOT(slotAddImages(KUrl::List)));
-
-    connect(d->listView, SIGNAL(customContextMenuRequested(QPoint)),
-            this, SLOT(slotShowContextMenu(QPoint)));
-
-    connect(d->sortGroupActions, SIGNAL(triggered(QAction*)),
-            this, SLOT(slotSortActionTriggered(QAction*)));
-
-    connect(d->sortGroupDirections, SIGNAL(triggered(QAction*)),
-            this, SLOT(slotSortDirectionTriggered(QAction*)));
+    setupConnections();
 }
 
 AdvancedRenameDialog::~AdvancedRenameDialog()
@@ -538,6 +452,100 @@ NewNamesList AdvancedRenameDialog::filterNewNames()
     }
 
     return filteredNames;
+}
+
+void AdvancedRenameDialog::setupWidgets()
+{
+    d->advancedRenameManager  = new AdvancedRenameManager();
+    d->advancedRenameWidget   = new AdvancedRenameWidget(this);
+    d->advancedRenameManager->setWidget(d->advancedRenameWidget);
+
+    // --------------------------------------------------------
+
+    d->sortActionName  = new QAction(i18n("By Name"), this);
+    d->sortActionDate  = new QAction(i18n("By Date"), this);
+    d->sortActionSize  = new QAction(i18n("By File Size"), this);
+
+    d->sortActionName->setCheckable(true);
+    d->sortActionDate->setCheckable(true);
+    d->sortActionSize->setCheckable(true);
+
+    // --------------------------------------------------------
+
+    d->sortActionAscending  = new QAction(i18n("Ascending"), this);
+    d->sortActionDescending = new QAction(i18n("Descending"), this);
+
+    d->sortActionAscending->setCheckable(true);
+    d->sortActionDescending->setCheckable(true);
+
+    d->sortActionAscending->setChecked(true);
+
+    // --------------------------------------------------------
+
+    d->sortGroupActions     = new QActionGroup(this);
+    d->sortGroupDirections  = new QActionGroup(this);
+
+    d->sortGroupActions->addAction(d->sortActionName);
+    d->sortGroupActions->addAction(d->sortActionDate);
+    d->sortGroupActions->addAction(d->sortActionSize);
+
+    d->sortGroupDirections->addAction(d->sortActionAscending);
+    d->sortGroupDirections->addAction(d->sortActionDescending);
+
+    // --------------------------------------------------------
+
+    d->listView = new QTreeWidget(this);
+    d->listView->setRootIsDecorated(false);
+    d->listView->setSelectionMode(QAbstractItemView::NoSelection);
+    d->listView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    d->listView->setAllColumnsShowFocus(true);
+    d->listView->setSortingEnabled(false);
+    d->listView->setColumnCount(2);
+    d->listView->setHeaderLabels(QStringList() << i18n("Current Name") << i18n("New Name"));
+    d->listView->setContextMenuPolicy(Qt::CustomContextMenu);
+    d->listView->header()->setResizeMode(0, QHeaderView::Stretch);
+    d->listView->header()->setResizeMode(1, QHeaderView::Stretch);
+    d->listView->setWhatsThis(i18n("This list shows the results for your renaming pattern. Red items indicate a "
+                                   "a name collision, either because the new name is equal to the current name, "
+                                   "or because the name has already been assigned to another item."));
+
+    // --------------------------------------------------------
+
+    QWidget* mainWidget     = new QWidget(this);
+    QGridLayout* mainLayout = new QGridLayout;
+    mainLayout->addWidget(d->listView,             0, 0, 1, 1);
+    mainLayout->addWidget(d->advancedRenameWidget, 1, 0, 1, 1);
+    mainLayout->setRowStretch(0, 10);
+    mainWidget->setLayout(mainLayout);
+
+    setMainWidget(mainWidget);
+
+    setMinimumWidth(d->advancedRenameWidget->minimumWidth());
+
+    setButtons(Help | Cancel | Ok);
+    enableButton(Ok, false);
+    setHelp("advancedrename.anchor", "digikam");
+}
+
+void AdvancedRenameDialog::setupConnections()
+{
+    connect(d->advancedRenameWidget, SIGNAL(signalTextChanged(QString)),
+            this, SLOT(slotParseStringChanged(QString)));
+
+    connect(d->advancedRenameWidget, SIGNAL(signalReturnPressed()),
+            this, SLOT(slotReturnPressed()));
+
+    connect(d->advancedRenameManager, SIGNAL(signalSortingChanged(KUrl::List)),
+            this, SLOT(slotAddImages(KUrl::List)));
+
+    connect(d->listView, SIGNAL(customContextMenuRequested(QPoint)),
+            this, SLOT(slotShowContextMenu(QPoint)));
+
+    connect(d->sortGroupActions, SIGNAL(triggered(QAction*)),
+            this, SLOT(slotSortActionTriggered(QAction*)));
+
+    connect(d->sortGroupDirections, SIGNAL(triggered(QAction*)),
+            this, SLOT(slotSortDirectionTriggered(QAction*)));
 }
 
 }  // namespace Digikam
