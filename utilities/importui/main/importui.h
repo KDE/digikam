@@ -141,6 +141,10 @@ private:
     bool checkDiskSpace(PAlbum* pAlbum);
     bool downloadCameraItems(PAlbum *pAlbum, bool onlySelected, bool deleteAfter);
     bool createSubAlbums(KUrl &downloadUrl, const CamItemInfo &info);
+    bool createSubAlbum(KUrl &downloadUrl, const QString& subalbum,
+                        const QDate& date);
+    bool createDateBasedSubAlbum(KUrl &downloadUrl, const CamItemInfo& info);
+    bool createExtBasedSubAlbum(KUrl &downloadUrl, const CamItemInfo& info);
 
 private Q_SLOTS:
 
