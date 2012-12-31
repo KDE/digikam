@@ -1536,6 +1536,8 @@ void ImportUI::slotDownload(bool onlySelected, bool deleteAfter, Album* album)
     }
 
     // -- Check disk space ------------------------
+    // See B.K.O #139519: Always check free space available before to
+    // download items selection from camera.
 
     if (!checkDiskSpace(pAlbum))
     {
@@ -2132,8 +2134,6 @@ bool ImportUI::checkDiskSpace(PAlbum *pAlbum)
         return false;
     }
 
-    // See B.K.O #139519: Always check free space available before to
-    // download items selection from camera.
     unsigned long fSize = 0;
     unsigned long dSize = 0;
     itemsSelectionSizeInfo(fSize, dSize);
