@@ -2098,9 +2098,7 @@ bool ImportUI::downloadCameraItems(PAlbum* pAlbum, bool onlySelected, bool delet
 
 bool ImportUI::createSubAlbums(KUrl& downloadUrl, const CamItemInfo& info)
 {
-    QString downloadName    = info.downloadName;
-    QDateTime dateTime      = info.mtime;
-
+    QDateTime dateTime = info.mtime;
     QString errMsg;
 
     if (d->albumCustomizer->autoAlbumDateEnabled())
@@ -2145,7 +2143,9 @@ bool ImportUI::createSubAlbums(KUrl& downloadUrl, const CamItemInfo& info)
     {
         // We use the target file name to compute sub-albums name to take a care about
         // conversion on the fly option.
-        QFileInfo fi(downloadName.isEmpty() ? info.name : downloadName);
+        QFileInfo fi(info.downloadName.isEmpty()
+                     ? info.name
+                     : info.downloadName);
 
         QString subAlbum = fi.suffix().toUpper();
 
