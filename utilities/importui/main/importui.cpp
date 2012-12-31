@@ -2070,7 +2070,7 @@ bool ImportUI::downloadCameraItems(PAlbum* pAlbum, bool onlySelected, bool delet
         {
             // We use the target file name to compute sub-albums name to take a care about
             // conversion on the fly option.
-            QFileInfo fi(downloadName);
+            QFileInfo fi(downloadName.isEmpty() ? settings.file : downloadName);
 
             QString subAlbum = fi.suffix().toUpper();
 
