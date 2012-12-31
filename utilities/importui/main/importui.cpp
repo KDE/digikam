@@ -1441,6 +1441,7 @@ void ImportUI::slotDownloadAndDeleteAll()
     slotDownload(false, true);
 }
 
+// FIXME: This method is WAY TOO LONG!!! The code is not managable and understandable for people not familiar with it...
 void ImportUI::slotDownload(bool onlySelected, bool deleteAfter, Album* album)
 {
     if (d->albumCustomizer->folderDateFormat() == AlbumCustomizer::CustomDateFormat &&
