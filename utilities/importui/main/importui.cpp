@@ -1441,7 +1441,6 @@ void ImportUI::slotDownloadAndDeleteAll()
     slotDownload(false, true);
 }
 
-// FIXME: This method is WAY TOO LONG!!! The code is not managable and understandable for people not familiar with it...
 void ImportUI::slotDownload(bool onlySelected, bool deleteAfter, Album* album)
 {
     if (d->albumCustomizer->folderDateFormat() == AlbumCustomizer::CustomDateFormat &&
@@ -1544,182 +1543,10 @@ void ImportUI::slotDownload(bool onlySelected, bool deleteAfter, Album* album)
         return;
     }
 
-    // -- Prepare downloading of camera items ------------------------
-
-    KUrl url = pAlbum->fileUrl();
-
-    d->controller->downloadPrep();
-
-    QString              downloadName;
-    QDateTime            dateTime;
-    DownloadSettingsList allItems;
-    DownloadSettings     settings = downloadSettings();
-    int                  total    = 0;
-
-    // -- Download camera items -------------------------------
+    // -- Prepare and download camera items ------------------------
     // Since we show camera items in reverse order, downloading need to be done also in reverse order.
 
-    QSet<QString> usedDownloadPaths;
-    CamItemInfoList list = d->view->allItems();
-
-    foreach(CamItemInfo info, list)
-    {
-        if (onlySelected && !(d->view->isSelected(info.url())))
-        {
-            continue;
-        }
-
-        settings.folder     = info.folder;
-        settings.file       = info.name;
-        settings.pickLabel  = info.pickLabel;
-        settings.colorLabel = info.colorLabel;
-        settings.rating     = info.rating;
-        downloadName        = info.downloadName;
-        dateTime            = info.mtime;
-
-        KUrl downloadUrl(url);
-        QString errMsg;
-
-        // Auto sub-albums creation based on file date.
-
-        if (d->albumCustomizer->autoAlbumDateEnabled())
-        {
-            QString dirName;
-
-            switch (d->albumCustomizer->folderDateFormat())
-            {
-                case AlbumCustomizer::TextDateFormat:
-                    dirName = dateTime.date().toString(Qt::TextDate);
-                    break;
-
-                case AlbumCustomizer::LocalDateFormat:
-                    dirName = dateTime.date().toString(Qt::LocalDate);
-                    break;
-
-                case AlbumCustomizer::IsoDateFormat:
-                    dirName = dateTime.date().toString(Qt::ISODate);
-                    break;
-
-                default:        // Custom
-                    dirName = dateTime.date().toString(d->albumCustomizer->customDateFormat());
-                    break;
-            }
-
-            // See B.K.O #136927 : we need to support file system which do not
-            // handle upper case properly.
-            dirName = dirName.toLower();
-
-            if (!createAutoAlbum(downloadUrl, dirName, dateTime.date(), errMsg))
-            {
-                KMessageBox::error(this, errMsg);
-                return;
-            }
-
-            downloadUrl.addPath(dirName);
-        }
-
-        // Auto sub-albums creation based on file extensions.
-
-        if (d->albumCustomizer->autoAlbumExtEnabled())
-        {
-            // We use the target file name to compute sub-albums name to take a care about
-            // conversion on the fly option.
-            QFileInfo fi(downloadName);
-
-            QString subAlbum = fi.suffix().toUpper();
-
-            if (fi.suffix().toUpper() == QString("JPEG") ||
-                fi.suffix().toUpper() == QString("JPE"))
-            {
-                subAlbum = QString("JPG");
-            }
-
-            if (fi.suffix().toUpper() == QString("TIFF"))
-            {
-                subAlbum = QString("TIF");
-            }
-
-            if (fi.suffix().toUpper() == QString("MPEG") ||
-                fi.suffix().toUpper() == QString("MPE") ||
-                fi.suffix().toUpper() == QString("MPO"))
-            {
-                subAlbum = QString("MPG");
-            }
-
-            // See B.K.O #136927 : we need to support file system which do not
-            // handle upper case properly.
-            subAlbum = subAlbum.toLower();
-
-            if (!createAutoAlbum(downloadUrl, subAlbum, dateTime.date(), errMsg))
-            {
-                KMessageBox::error(this, errMsg);
-                return;
-            }
-
-            downloadUrl.addPath(subAlbum);
-        }
-
-        d->foldersToScan << downloadUrl.toLocalFile();
-
-        if (downloadName.isEmpty())
-        {
-            downloadUrl.addPath(settings.file);
-        }
-        else
-        {
-            // when using custom renaming (e.g. by date, see bug 179902)
-            // make sure that we create unique names
-            downloadUrl.addPath(downloadName);
-            QString suggestedPath = downloadUrl.toLocalFile();
-
-            if (usedDownloadPaths.contains(suggestedPath))
-            {
-                QFileInfo fi(downloadName);
-                QString suffix = '.' + fi.suffix();
-                QString pathWithoutSuffix(suggestedPath);
-                pathWithoutSuffix.chop(suffix.length());
-                QString currentVariant;
-                int counter = 1;
-
-                do
-                {
-                    currentVariant = pathWithoutSuffix + '-' + QString::number(counter++) + suffix;
-                }
-                while (usedDownloadPaths.contains(currentVariant));
-
-                usedDownloadPaths << currentVariant;
-                downloadUrl = KUrl(currentVariant);
-            }
-            else
-            {
-                usedDownloadPaths << suggestedPath;
-            }
-        }
-
-        settings.dest = downloadUrl.toLocalFile();
-        allItems.append(settings);
-
-        ++total;
-    }
-
-    if (total <= 0)
-    {
-        return;
-    }
-
-    d->lastDestURL = url;
-    d->statusProgressBar->setNotify(true);
-    d->statusProgressBar->setProgressValue(0);
-    d->statusProgressBar->setProgressTotalSteps(total);
-    d->statusProgressBar->progressBarMode(StatusProgressBar::ProgressBarMode);
-
-    // disable settings tab here instead of slotBusy:
-    // Only needs to be disabled while downloading
-    d->advBox->setEnabled(false);
-
-    d->deleteAfter = deleteAfter;
-
-    d->controller->download(allItems);
+    downloadCameraItems(pAlbum, onlySelected, deleteAfter);
 }
 
 void ImportUI::slotDownloaded(const QString& folder, const QString& file, int status)
@@ -2162,6 +1989,184 @@ bool ImportUI::checkDiskSpace(PAlbum *pAlbum)
             return false;
         }
     }
+    return true;
+}
+
+bool ImportUI::downloadCameraItems(PAlbum* pAlbum, bool onlySelected, bool deleteAfter)
+{
+    d->controller->downloadPrep();
+
+    QString              downloadName;
+    QDateTime            dateTime;
+    DownloadSettingsList allItems;
+    DownloadSettings     settings = downloadSettings();
+    KUrl url                      = pAlbum->fileUrl();
+    int downloadedItems           = 0;
+
+    // -- Download camera items -------------------------------
+
+    QSet<QString> usedDownloadPaths;
+    CamItemInfoList list = d->view->allItems();
+
+    foreach(CamItemInfo info, list)
+    {
+        if (onlySelected && !(d->view->isSelected(info.url())))
+        {
+            continue;
+        }
+
+        settings.folder     = info.folder;
+        settings.file       = info.name;
+        settings.pickLabel  = info.pickLabel;
+        settings.colorLabel = info.colorLabel;
+        settings.rating     = info.rating;
+        downloadName        = info.downloadName;
+        dateTime            = info.mtime;
+
+        KUrl downloadUrl(url);
+        QString errMsg;
+
+        // Auto sub-albums creation based on file date.
+
+        if (d->albumCustomizer->autoAlbumDateEnabled())
+        {
+            QString dirName;
+
+            switch (d->albumCustomizer->folderDateFormat())
+            {
+            case AlbumCustomizer::TextDateFormat:
+                dirName = dateTime.date().toString(Qt::TextDate);
+                break;
+
+            case AlbumCustomizer::LocalDateFormat:
+                dirName = dateTime.date().toString(Qt::LocalDate);
+                break;
+
+            case AlbumCustomizer::IsoDateFormat:
+                dirName = dateTime.date().toString(Qt::ISODate);
+                break;
+
+            default:        // Custom
+                dirName = dateTime.date().toString(d->albumCustomizer->customDateFormat());
+                break;
+            }
+
+            // See B.K.O #136927 : we need to support file system which do not
+            // handle upper case properly.
+            dirName = dirName.toLower();
+
+            if (!createAutoAlbum(downloadUrl, dirName, dateTime.date(), errMsg))
+            {
+                KMessageBox::error(this, errMsg);
+                return false;
+            }
+
+            downloadUrl.addPath(dirName);
+        }
+
+        // Auto sub-albums creation based on file extensions.
+
+        if (d->albumCustomizer->autoAlbumExtEnabled())
+        {
+            // We use the target file name to compute sub-albums name to take a care about
+            // conversion on the fly option.
+            QFileInfo fi(downloadName);
+
+            QString subAlbum = fi.suffix().toUpper();
+
+            if (fi.suffix().toUpper() == QString("JPEG") ||
+                    fi.suffix().toUpper() == QString("JPE"))
+            {
+                subAlbum = QString("JPG");
+            }
+
+            if (fi.suffix().toUpper() == QString("TIFF"))
+            {
+                subAlbum = QString("TIF");
+            }
+
+            if (fi.suffix().toUpper() == QString("MPEG") ||
+                    fi.suffix().toUpper() == QString("MPE") ||
+                    fi.suffix().toUpper() == QString("MPO"))
+            {
+                subAlbum = QString("MPG");
+            }
+
+            // See B.K.O #136927 : we need to support file system which do not
+            // handle upper case properly.
+            subAlbum = subAlbum.toLower();
+
+            if (!createAutoAlbum(downloadUrl, subAlbum, dateTime.date(), errMsg))
+            {
+                KMessageBox::error(this, errMsg);
+                return false;
+            }
+
+            downloadUrl.addPath(subAlbum);
+        }
+
+        d->foldersToScan << downloadUrl.toLocalFile();
+
+        if (downloadName.isEmpty())
+        {
+            downloadUrl.addPath(settings.file);
+        }
+        else
+        {
+            // when using custom renaming (e.g. by date, see bug 179902)
+            // make sure that we create unique names
+            downloadUrl.addPath(downloadName);
+            QString suggestedPath = downloadUrl.toLocalFile();
+
+            if (usedDownloadPaths.contains(suggestedPath))
+            {
+                QFileInfo fi(downloadName);
+                QString suffix = '.' + fi.suffix();
+                QString pathWithoutSuffix(suggestedPath);
+                pathWithoutSuffix.chop(suffix.length());
+                QString currentVariant;
+                int counter = 1;
+
+                do
+                {
+                    currentVariant = pathWithoutSuffix + '-' + QString::number(counter++) + suffix;
+                }
+                while (usedDownloadPaths.contains(currentVariant));
+
+                usedDownloadPaths << currentVariant;
+                downloadUrl = KUrl(currentVariant);
+            }
+            else
+            {
+                usedDownloadPaths << suggestedPath;
+            }
+        }
+
+        settings.dest = downloadUrl.toLocalFile();
+        allItems.append(settings);
+
+        ++downloadedItems;
+    }
+
+    if (downloadedItems <= 0)
+    {
+        return false;
+    }
+
+    d->lastDestURL = url;
+    d->statusProgressBar->setNotify(true);
+    d->statusProgressBar->setProgressValue(0);
+    d->statusProgressBar->setProgressTotalSteps(downloadedItems);
+    d->statusProgressBar->progressBarMode(StatusProgressBar::ProgressBarMode);
+
+    // disable settings tab here instead of slotBusy:
+    // Only needs to be disabled while downloading
+    d->advBox->setEnabled(false);
+
+    d->deleteAfter = deleteAfter;
+
+    d->controller->download(allItems);
+
     return true;
 }
 

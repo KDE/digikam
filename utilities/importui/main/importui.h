@@ -139,6 +139,7 @@ private:
     void autoRotateItems();
 
     bool checkDiskSpace(PAlbum* pAlbum);
+    bool downloadCameraItems(PAlbum *pAlbum, bool onlySelected, bool deleteAfter);
 
 private Q_SLOTS:
 
