@@ -87,6 +87,9 @@ private:
     AdvancedRenameLineEdit(const AdvancedRenameLineEdit&);
     AdvancedRenameLineEdit& operator=(const AdvancedRenameLineEdit&);
 
+    void setupWidgets();
+    void setupConnections();
+
 private:
 
     class Private;

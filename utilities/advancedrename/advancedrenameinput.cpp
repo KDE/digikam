@@ -74,6 +74,17 @@ public:
 AdvancedRenameLineEdit::AdvancedRenameLineEdit(QWidget* parent)
     : QPlainTextEdit(parent), d(new Private)
 {
+    setupWidgets();
+    setupConnections();
+}
+
+AdvancedRenameLineEdit::~AdvancedRenameLineEdit()
+{
+    delete d;
+}
+
+void AdvancedRenameLineEdit::setupWidgets()
+{
     setLineWrapMode(QPlainTextEdit::NoWrap);
     setWordWrapMode(QTextOption::NoWrap);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -103,9 +114,10 @@ AdvancedRenameLineEdit::AdvancedRenameLineEdit(QWidget* parent)
     ensureCursorVisible();
     d->verticalSliderPosition = verticalScrollBar()->value();
     clear();
+}
 
-    // --------------------------------------------------------
-
+void AdvancedRenameLineEdit::setupConnections()
+{
     connect(d->parseTimer, SIGNAL(timeout()),
             this, SLOT(slotParseTimer()));
 
@@ -114,11 +126,6 @@ AdvancedRenameLineEdit::AdvancedRenameLineEdit(QWidget* parent)
 
     connect(this, SIGNAL(cursorPositionChanged()),
             this, SLOT(slotCursorPositionChanged()));
-}
-
-AdvancedRenameLineEdit::~AdvancedRenameLineEdit()
-{
-    delete d;
 }
 
 void AdvancedRenameLineEdit::setParseTimerDuration(int milliseconds)
