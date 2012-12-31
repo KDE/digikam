@@ -246,6 +246,7 @@ public:
         maxVisibleItems(10),
         maxHistoryItems(30),
         lineEdit(0),
+        proxy(0),
         highlighter(0)
     {}
 
@@ -256,6 +257,7 @@ public:
     const int               maxHistoryItems;
 
     AdvancedRenameLineEdit* lineEdit;
+    ProxyLineEdit*          proxy;
     Highlighter*            highlighter;
 };
 const QString AdvancedRenameInput::Private::configGroupName("AdvancedRename Input");
@@ -266,38 +268,8 @@ const QString AdvancedRenameInput::Private::configPatternHistoryListEntry("Patte
 AdvancedRenameInput::AdvancedRenameInput(QWidget* parent)
     : KComboBox(parent), d(new Private)
 {
-    setEditable(true);
-
-    setMaxVisibleItems(d->maxVisibleItems);
-    setMaxCount(d->maxHistoryItems);
-
-    ProxyLineEdit* proxy = new ProxyLineEdit(this);
-    d->lineEdit          = new AdvancedRenameLineEdit(this);
-
-    proxy->setWidget(d->lineEdit);
-    proxy->setClearButtonShown(true);
-    proxy->setAutoFillBackground(false);
-
-    setLineEdit(proxy);
-
-    // --------------------------------------------------------
-
-    connect(proxy, SIGNAL(clearButtonClicked()),
-            this, SLOT(slotClearButtonPressed()));
-
-    connect(d->lineEdit, SIGNAL(signalTextChanged(QString)),
-            this, SIGNAL(signalTextChanged(QString)));
-
-    connect(d->lineEdit, SIGNAL(signalTokenMarked(bool)),
-            this, SIGNAL(signalTokenMarked(bool)));
-
-    connect(d->lineEdit, SIGNAL(signalReturnPressed()),
-            this, SIGNAL(signalReturnPressed()));
-
-    connect(this, SIGNAL(currentIndexChanged(QString)),
-            d->lineEdit, SLOT(slotSetText(QString)));
-
-    // --------------------------------------------------------
+    setupWidgets();
+    setupConnections();
 
     readSettings();
 }
@@ -360,6 +332,40 @@ void AdvancedRenameInput::enableHighlighter(bool enable)
     d->highlighter = enable
                      ? new Highlighter(d->lineEdit->document(), d->lineEdit->parser())
                      : 0;
+}
+
+void AdvancedRenameInput::setupWidgets()
+{
+    setEditable(true);
+
+    setMaxVisibleItems(d->maxVisibleItems);
+    setMaxCount(d->maxHistoryItems);
+
+    d->lineEdit = new AdvancedRenameLineEdit(this);
+    d->proxy    = new ProxyLineEdit(this);
+    d->proxy->setWidget(d->lineEdit);
+    d->proxy->setClearButtonShown(true);
+    d->proxy->setAutoFillBackground(false);
+
+    setLineEdit(d->proxy);
+}
+
+void AdvancedRenameInput::setupConnections()
+{
+    connect(d->proxy, SIGNAL(clearButtonClicked()),
+            this, SLOT(slotClearButtonPressed()));
+
+    connect(d->lineEdit, SIGNAL(signalTextChanged(QString)),
+            this, SIGNAL(signalTextChanged(QString)));
+
+    connect(d->lineEdit, SIGNAL(signalTokenMarked(bool)),
+            this, SIGNAL(signalTokenMarked(bool)));
+
+    connect(d->lineEdit, SIGNAL(signalReturnPressed()),
+            this, SIGNAL(signalReturnPressed()));
+
+    connect(this, SIGNAL(currentIndexChanged(QString)),
+            d->lineEdit, SLOT(slotSetText(QString)));
 }
 
 void AdvancedRenameInput::changeEvent(QEvent* e)

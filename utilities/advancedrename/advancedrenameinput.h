@@ -143,6 +143,9 @@ private:
     void writeSettings();
     void enableHighlighter(bool enable);
 
+    void setupWidgets();
+    void setupConnections();
+
 private:
 
     class Private;
