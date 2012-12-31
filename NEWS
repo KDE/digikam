@@ -123,5 +123,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 083 ==> 112777 - New batch plugin to change image size.
 084 ==> 115473 - Missing Feature in Batch Section: Gamma factor.
 085 ==> 312332 - digiKam don't save rename pattern when using regex.
-086 ==> 
+086 ==> 312433 - Extension Based Subalbums are not created.
+087 ==> 
 
