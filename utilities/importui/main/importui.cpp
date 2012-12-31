@@ -1536,35 +1536,9 @@ void ImportUI::slotDownload(bool onlySelected, bool deleteAfter, Album* album)
 
     // -- Check disk space ------------------------
 
-    // See B.K.O #139519: Always check free space available before to
-    // download items selection from camera.
-    unsigned long fSize = 0;
-    unsigned long dSize = 0;
-    itemsSelectionSizeInfo(fSize, dSize);
-    QString albumRootPath = pAlbum->albumRootPath();
-    unsigned long kBAvail = d->albumLibraryFreeSpace->kBAvail(albumRootPath);
-
-    if (dSize >= kBAvail)
+    if (!checkDiskSpace(pAlbum))
     {
-        KGuiItem cont = KStandardGuiItem::cont();
-        cont.setText(i18n("Try Anyway"));
-        KGuiItem cancel = KStandardGuiItem::cancel();
-        cancel.setText(i18n("Cancel Download"));
-        int result =
-            KMessageBox::warningYesNo(this,
-                                      i18n("There is not enough free space on the disk of the album you selected "
-                                           "to download and process the selected pictures from the camera.\n\n"
-                                           "Estimated space required: %1\n"
-                                           "Available free space: %2",
-                                           KIO::convertSizeFromKiB(dSize),
-                                           KIO::convertSizeFromKiB(kBAvail)),
-                                      i18n("Insufficient Disk Space"),
-                                      cont, cancel);
-
-        if (result == KMessageBox::No)
-        {
-            return;
-        }
+        return;
     }
 
     // -- Prepare downloading of camera items ------------------------
@@ -2150,6 +2124,46 @@ void ImportUI::deleteItems(bool onlySelected, bool onlyDownloaded)
 //    }
 }
 
+bool ImportUI::checkDiskSpace(PAlbum *pAlbum)
+{
+    if (!pAlbum)
+    {
+        return false;
+    }
+
+    // See B.K.O #139519: Always check free space available before to
+    // download items selection from camera.
+    unsigned long fSize = 0;
+    unsigned long dSize = 0;
+    itemsSelectionSizeInfo(fSize, dSize);
+    QString albumRootPath = pAlbum->albumRootPath();
+    unsigned long kBAvail = d->albumLibraryFreeSpace->kBAvail(albumRootPath);
+
+    if (dSize >= kBAvail)
+    {
+        KGuiItem cont = KStandardGuiItem::cont();
+        cont.setText(i18n("Try Anyway"));
+        KGuiItem cancel = KStandardGuiItem::cancel();
+        cancel.setText(i18n("Cancel Download"));
+        int result =
+            KMessageBox::warningYesNo(this,
+                                      i18n("There is not enough free space on the disk of the album you selected "
+                                           "to download and process the selected pictures from the camera.\n\n"
+                                           "Estimated space required: %1\n"
+                                           "Available free space: %2",
+                                           KIO::convertSizeFromKiB(dSize),
+                                           KIO::convertSizeFromKiB(kBAvail)),
+                                      i18n("Insufficient Disk Space"),
+                                      cont, cancel);
+
+        if (result == KMessageBox::No)
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
 void ImportUI::slotDeleteNew()
 {
     slotSelectNew();
@@ -2342,6 +2356,7 @@ void ImportUI::autoRotateItems()
 
     FileActionMngr::instance()->transform(list, KExiv2Iface::RotationMatrix::NoTransformation);
 }
+
 #include "../main/importui.h"
 void ImportUI::slotSwitchedToPreview()
 {

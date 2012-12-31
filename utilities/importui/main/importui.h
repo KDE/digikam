@@ -138,6 +138,8 @@ private:
     QString identifyCategoryforMime(const QString& mime);
     void autoRotateItems();
 
+    bool checkDiskSpace(PAlbum* pAlbum);
+
 private Q_SLOTS:
 
     void slotClose();
