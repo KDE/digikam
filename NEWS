@@ -125,5 +125,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 085 ==> 312332 - digiKam don't save rename pattern when using regex.
 086 ==> 312433 - Extension Based Subalbums are not created.
 087 ==> 312419 - Internationalization: digiKam in English only.
-088 ==> 
-
+088 ==> 221940 - Automatic subtag search while tagging.
+089 ==>
