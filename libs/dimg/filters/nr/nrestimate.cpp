@@ -469,8 +469,8 @@ void NREstimate::startAnalyse()
         if (L > 9)
             L = 9;
 
-        Cr = datasd[2] / 2;
-        Cb = datasd[1] / 2;
+        Cr = datasd[2] * 0.8;
+        Cb = datasd[1] * 0.8;
 
         if (Cr > 7)
             Cr = 7;
@@ -481,6 +481,15 @@ void NREstimate::startAnalyse()
         L  = floorf(L  * 100) / 100;
         Cb = floorf(Cb * 100) / 100;
         Cr = floorf(Cr * 100) / 100;
+
+        if ( L > 9 )
+            LSoft = CrSoft = CbSoft = 0.8;
+
+        else if ( L > 3)
+            LSoft = CrSoft = CbSoft = 0.7;
+
+        else
+            LSoft = CrSoft = CbSoft = 0.6;
     }
 
     d->prm.thresholds[0] = L;
