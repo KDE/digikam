@@ -470,16 +470,16 @@ void JpegRotator::updateMetadata(const QString& fileName, const RotationMatrix &
 
     ::utime(QFile::encodeName(fileName), &ut);
 
-    #ifndef Q_OS_WIN32
+#ifndef Q_OS_WIN32
     // restore permissions
     if (::chmod(QFile::encodeName(fileName), st.st_mode) != 0)
     {
         kWarning() << "Failed to restore file permissions for file " << fileName;
     }
-    #else
+#else
     QFile::Permissions permissions = QFile::permissions(m_file);
-    QFile::setPermissions(fileName);
-    #endif
+    QFile::setPermissions(fileName, permissions);
+#endif
 }
 
 bool JpegRotator::performJpegTransform(TransformAction action, const QString& src, QFile& dest)
@@ -493,11 +493,11 @@ bool JpegRotator::performJpegTransform(TransformAction action, const QString& sr
     transformoption.force_grayscale = false;
     transformoption.trim            = false;
     transformoption.transform       = JXFORM_NONE;
-    #if (JPEG_LIB_VERSION >= 80)
+#if (JPEG_LIB_VERSION >= 80)
     // we need to initialize a few more parameters, see bug 274947
     transformoption.perfect         = false;
     transformoption.crop            = false;
-    #endif
+#endif
 
     transformoption.transform = (JXFORM_CODE)action;
 
@@ -683,7 +683,7 @@ bool isJpegImage(const QString& file)
     // Check if the file is an JPEG image
     QString format = QString(QImageReader::imageFormat(file)).toUpper();
     // Check if its not MPO format (See B.K.O #307277).
-    QString ext = fileInfo.suffix().toUpper();
+    QString ext    = fileInfo.suffix().toUpper();
 
     kDebug() << "mimetype = " << format << " ext = " << ext;
 
@@ -711,8 +711,8 @@ bool copyFile(const QString& src, const QString& dst)
         return false;
     }
 
-    const int MAX_IPC_SIZE = (1024*32);
-    char buffer[MAX_IPC_SIZE];
+    const  int MAX_IPC_SIZE = (1024*32);
+    char   buffer[MAX_IPC_SIZE];
     qint64 len;
 
     while ((len = sFile.read(buffer, MAX_IPC_SIZE)) != 0)

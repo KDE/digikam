@@ -113,7 +113,6 @@ protected:
 
     void updateMetadata(const QString& fileName, const RotationMatrix& matrix);
     bool performJpegTransform(TransformAction action, const QString& src, QFile& dest);
-
 };
 
 DIGIKAM_EXPORT bool loadJPEGScaled(QImage& image, const QString& path, int maximumSize);
