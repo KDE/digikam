@@ -439,7 +439,7 @@ void NREstimate::startAnalyse()
 
     // -- adaptation ---------------------------------------------------------------------------------------
 
-    float L, LSoft = 0.6, Cr, CrSoft = 0.6, Cb, CbSoft = 0.6;
+    double L = 1.2, LSoft = 0.9, Cr = 1.2, CrSoft = 0.9, Cb = 1.2, CbSoft = 0.9;
 
     if (runningFlag())
     {
