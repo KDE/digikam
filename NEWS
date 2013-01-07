@@ -132,4 +132,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 092 ==> 253941 - Auto lens correction not working correctly.
 093 ==> 281783 - Auto lens correction doesn't use correct parameters.
 094 ==> 312764 - Crop factor always set to -1.0 in lens correction [patch].
-095 ==> 
+095 ==> 312765 - Crop factor is being used as scale factor [patch].
+096 ==> 312766 - digiKam uses lens crop factor, not camera's [patch].
+097 ==> 
+
