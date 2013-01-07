@@ -35,13 +35,13 @@
 namespace Digikam
 {
 
-IccTransformFilter::IccTransformFilter(QObject* parent)
+IccTransformFilter::IccTransformFilter(QObject* const parent)
     : DImgThreadedFilter(parent)
 {
     initFilter();
 }
 
-IccTransformFilter::IccTransformFilter(DImg* orgImage, QObject* parent, const IccTransform& transform)
+IccTransformFilter::IccTransformFilter(DImg* const orgImage, QObject* const parent, const IccTransform& transform)
     : DImgThreadedFilter(orgImage, parent, "ICC Transform")
 {
     m_transform = transform;
@@ -71,9 +71,9 @@ FilterAction IccTransformFilter::filterAction()
     FilterAction action(FilterIdentifier(), CurrentVersion());
     action.setDisplayableName(DisplayableName());
 
-    action.setParameter("renderingIntent", m_transform.intent());
-    action.setParameter("blackPointCompensation", m_transform.isUsingBlackPointCompensation());
-    action.setParameter("inputProfileDescription", m_transform.effectiveInputProfile().description());
+    action.setParameter("renderingIntent",          m_transform.intent());
+    action.setParameter("blackPointCompensation",   m_transform.isUsingBlackPointCompensation());
+    action.setParameter("inputProfileDescription",  m_transform.effectiveInputProfile().description());
     action.setParameter("outputProfileDescription", m_transform.outputProfile().description());
 
     return action;
