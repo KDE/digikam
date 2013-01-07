@@ -134,5 +134,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 094 ==> 312764 - Crop factor always set to -1.0 in lens correction [patch].
 095 ==> 312765 - Crop factor is being used as scale factor [patch].
 096 ==> 312766 - digiKam uses lens crop factor, not camera's [patch].
-097 ==> 
+097 ==> 261079 - Crash of Enhance->Lens->Auto-Correction.
+098 ==> 
 
