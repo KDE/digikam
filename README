@@ -103,7 +103,7 @@ libkgeomap      >= 2.0.0                      https://projects.kde.org/projects/
 Optional :
 
 libkdepimlibs   >= 4.4.x                      http://pim.kde.org                                                To support KAddressBook entries.
-liblensfun      >= 0.2.5                      http://lensfun.berlios.de                                         To support LensCorrection editor. If no external libray is found, internal version is used instead.  plugin.
+liblensfun      >= 0.2.6                      http://lensfun.berlios.de                                         To support LensCorrection editor. If no external libray is found, internal version is used instead.  plugin.
 libgphoto2      >= 2.4.0                      http://www.gphoto.org                                             To support Gphoto2 Cameras.
 libusb          >= 1.0.0                      http://www.libusb.org                                             Required by Gphoto2 as linking dependency. See details in B.K.O #268267
 liblqr-1        >= 0.4.1                      http://liblqr.wikidot.com                                         For Liquid Rescale tool. If no external libray is found, internal version is used instead.
