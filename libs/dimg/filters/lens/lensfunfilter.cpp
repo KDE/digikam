@@ -142,7 +142,7 @@ void LensFunFilter::filterImage()
                                            d->iface->settings().focalLength,
                                            d->iface->settings().aperture,
                                            d->iface->settings().subjectDistance,
-                                           d->iface->settings().cropFactor,
+                                           1.0, /* no scaling */
                                            LF_RECTILINEAR,
                                            modifyFlags,
                                            0/*no inverse*/);
