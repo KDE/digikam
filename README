@@ -120,7 +120,7 @@ Use CMake "-DENABLE_PRESENTATIONMODE=on"  flag to compile digiKam with presentat
 Use CMake "-DENABLE_THUMB_DB=off"         flag to compile digiKam without thumbnail database support                             (enabled  by default).
 Use CMake "-DENABLE_INTERNALMYSQL=off"    flag to compile digiKam without internal MySQL server                                  (enabled  by default).
 Use CMake "-DENABLE_ADVANCEDDEBUGMSG=on"  flag to compile digiKam with more internal debug messages, especially in image loaders (disabled by default).
-Use CMake "-DENABLE_NEPOMUKSUPPORT=off"   flag to compile digiKam without Nepomuk support                                        (enabled  by default).
+Use CMake "-DENABLE_NEPOMUKSUPPORT=on"    flag to compile digiKam without Nepomuk support                                        (disabled by default).
 Use CMake "-DKDE4_BUILD_TESTS=on"         flag to compile digiKam source code unit tests                                         (disabled by default).
 Use CMake "-DENABLE_LCMS2=on"             flag to compile digiKam source code against lcms2 instead lcms1                        (disabled by default).
 Use CMake "-ENABLE_PGF_OPENMP"            flag to compile digiKam with paralelized PGF codec                                     (disabled by default).
