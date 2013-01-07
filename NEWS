@@ -135,5 +135,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 095 ==> 312765 - Crop factor is being used as scale factor [patch].
 096 ==> 312766 - digiKam uses lens crop factor, not camera's [patch].
 097 ==> 261079 - Crash of Enhance->Lens->Auto-Correction.
-098 ==> 
+098 ==> 184156 - Showfoto lensfun select wrong lens.
+099 ==> 
 
