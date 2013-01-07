@@ -126,4 +126,10 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 086 ==> 312433 - Extension Based Subalbums are not created.
 087 ==> 312419 - Internationalization: digiKam in English only.
 088 ==> 221940 - Automatic subtag search while tagging.
-089 ==>
+089 ==> 266204 - Inconsistent results with distortion correction between digikam, lensfun tool (tmod) and ufraw.
+090 ==> 267613 - Lensfun doesn't work correctly with compact cameras.
+091 ==> 284708 - Lens Autocorrection overcompensates distortion.
+092 ==> 253941 - Auto lens correction not working correctly.
+093 ==> 281783 - Auto lens correction doesn't use correct parameters.
+094 ==> 312764 - Crop factor always set to -1.0 in lens correction [patch].
+095 ==> 
