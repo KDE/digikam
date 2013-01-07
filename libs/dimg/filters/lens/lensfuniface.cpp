@@ -90,6 +90,7 @@ void LensFunIface::setUsedCamera(DevicePtr cam)
     d->usedCamera           = cam;
     d->settings.cameraMake  = d->usedCamera ? d->usedCamera->Maker : QString();
     d->settings.cameraModel = d->usedCamera ? d->usedCamera->Model : QString();
+    d->settings.cropFactor  = d->usedCamera ? d->usedCamera->CropFactor : -1.0;
 }
 
 LensFunIface::LensPtr LensFunIface::usedLens() const
@@ -101,7 +102,6 @@ void LensFunIface::setUsedLens(LensPtr lens)
 {
     d->usedLens            = lens;
     d->settings.lensModel  = d->usedLens ? d->usedLens->Model : QString();
-    d->settings.cropFactor = d->usedLens ? d->usedLens->CropFactor : -1.0;
 }
 
 lfDatabase* LensFunIface::lensFunDataBase() const

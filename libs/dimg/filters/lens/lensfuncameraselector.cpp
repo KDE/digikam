@@ -636,7 +636,7 @@ void LensFunCameraSelector::populateLensCombo()
         return;
     }
 
-    kDebug() << "dev: " << dev->Maker << " :: " << dev->Model;
+    kDebug() << "dev: " << dev->Maker << " :: " << dev->Model << " :: " << dev->CropFactor;
 
     d->lens->blockSignals(true);
     const lfLens** lenses     = d->iface->lensFunDataBase()->FindLenses(dev, 0, 0);
@@ -685,6 +685,7 @@ void LensFunCameraSelector::slotLensSelected()
     if (d->iface->usedLens() &&
         settings.cropFactor <= 0.0) // this should not happen
     {
+        kDebug() << "No crop factor is set for camera, using lens calibration data: " << d->iface->usedLens()->CropFactor;
         settings.cropFactor = d->iface->usedLens()->CropFactor;
     }
 
