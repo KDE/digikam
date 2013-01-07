@@ -687,10 +687,6 @@ void LensFunCameraSelector::slotLensSelected()
     {
         settings.cropFactor = d->iface->usedLens()->CropFactor;
     }
-    else
-    {
-        settings.cropFactor = -1.0;
-    }
 
     d->iface->setSettings(settings);
     emit signalLensSettingsChanged();
