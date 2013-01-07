@@ -214,12 +214,12 @@ NRSettings::NRSettings(QWidget* const parent)
     d->advExpanderBox->addItem(d->luminanceBox, KStandardDirs::locate("data", "digikam/data/colors-luma.png"),
                                i18n("Luminance"),
                                QString("Luminance"), true);
-    d->advExpanderBox->addItem(d->chrominanceRedBox, KStandardDirs::locate("data", "digikam/data/colors-chromared.png"),
-                               i18n("Chrominance Red"),
-                               QString("ChrominanceRed"), true);
     d->advExpanderBox->addItem(d->chrominanceBlueBox, KStandardDirs::locate("data", "digikam/data/colors-chromablue.png"),
                                i18n("Chrominance Blue"),
                                QString("ChrominanceBlue"), true);
+    d->advExpanderBox->addItem(d->chrominanceRedBox, KStandardDirs::locate("data", "digikam/data/colors-chromared.png"),
+                               i18n("Chrominance Red"),
+                               QString("ChrominanceRed"), true);
     d->advExpanderBox->addStretch();
 
     // -------------------------------------------------------------
@@ -287,11 +287,11 @@ NRContainer NRSettings::settings() const
     NRContainer prm;
 
     prm.thresholds[0] = d->thrLumInput->value();
-    prm.thresholds[2] = d->thrCrInput->value();
     prm.thresholds[1] = d->thrCbInput->value();
+    prm.thresholds[2] = d->thrCrInput->value();
     prm.softness[0]   = 1.0 - d->softLumInput->value();
-    prm.softness[2]   = 1.0 - d->softCrInput->value();
     prm.softness[1]   = 1.0 - d->softCbInput->value();
+    prm.softness[2]   = 1.0 - d->softCrInput->value();
 
     return prm;
 }
@@ -300,11 +300,11 @@ void NRSettings::setSettings(const NRContainer& settings)
 {
     blockSignals(true);
     d->thrLumInput->setValue(settings.thresholds[0]);
-    d->thrCrInput->setValue(settings.thresholds[2]);
     d->thrCbInput->setValue(settings.thresholds[1]);
+    d->thrCrInput->setValue(settings.thresholds[2]);
     d->softLumInput->setValue(1.0 - settings.softness[0]);
-    d->softCrInput->setValue(1.0 - settings.softness[2]);
     d->softCbInput->setValue(1.0 - settings.softness[1]);
+    d->softCrInput->setValue(1.0 - settings.softness[2]);
     blockSignals(false);
 }
 
@@ -314,10 +314,10 @@ void NRSettings::resetToDefault()
     d->checkAutoEst->setChecked(false);
     d->thrLumInput->slotReset();
     d->softLumInput->slotReset();
-    d->thrCrInput->slotReset();
-    d->softCrInput->slotReset();
     d->thrCbInput->slotReset();
     d->softCbInput->slotReset();
+    d->thrCrInput->slotReset();
+    d->softCrInput->slotReset();
     blockSignals(false);
 }
 
@@ -326,11 +326,11 @@ NRContainer NRSettings::defaultSettings() const
     NRContainer prm;
 
     prm.thresholds[0] = d->thrLumInput->defaultValue();
-    prm.thresholds[2] = d->thrCrInput->defaultValue();
     prm.thresholds[1] = d->thrCbInput->defaultValue();
+    prm.thresholds[2] = d->thrCrInput->defaultValue();
     prm.softness[0]   = 1.0 - d->softLumInput->defaultValue();
-    prm.softness[2]   = 1.0 - d->softCrInput->defaultValue();
     prm.softness[1]   = 1.0 - d->softCbInput->defaultValue();
+    prm.softness[2]   = 1.0 - d->softCrInput->defaultValue();
 
     return prm;
 }
@@ -340,11 +340,11 @@ void NRSettings::readSettings(KConfigGroup& group)
     NRContainer prm;
     NRContainer defaultPrm = defaultSettings();
     prm.thresholds[0]      = group.readEntry(d->configThrLumInputAdjustmentEntry,  defaultPrm.thresholds[0]);
-    prm.thresholds[2]      = group.readEntry(d->configThrCrInputAdjustmentEntry,   defaultPrm.thresholds[2]);
     prm.thresholds[1]      = group.readEntry(d->configThrCbInputAdjustmentEntry,   defaultPrm.thresholds[1]);
+    prm.thresholds[2]      = group.readEntry(d->configThrCrInputAdjustmentEntry,   defaultPrm.thresholds[2]);
     prm.softness[0]        = group.readEntry(d->configSoftLumInputAdjustmentEntry, defaultPrm.softness[0]);
-    prm.softness[2]        = group.readEntry(d->configSoftCrInputAdjustmentEntry,  defaultPrm.softness[2]);
     prm.softness[1]        = group.readEntry(d->configSoftCbInputAdjustmentEntry,  defaultPrm.softness[1]);
+    prm.softness[2]        = group.readEntry(d->configSoftCrInputAdjustmentEntry,  defaultPrm.softness[2]);
 
     bool b                 = group.readEntry(d->configCheckAutoEstimationEntry,    false);
     d->checkAutoEst->setChecked(b);
@@ -359,13 +359,13 @@ void NRSettings::writeSettings(KConfigGroup& group)
     NRContainer prm = settings();
 
     group.writeEntry(d->configThrLumInputAdjustmentEntry,  prm.thresholds[0]);
-    group.writeEntry(d->configThrCrInputAdjustmentEntry,   prm.thresholds[2]);
     group.writeEntry(d->configThrCbInputAdjustmentEntry,   prm.thresholds[1]);
+    group.writeEntry(d->configThrCrInputAdjustmentEntry,   prm.thresholds[2]);
     group.writeEntry(d->configSoftLumInputAdjustmentEntry, prm.softness[0]);
-    group.writeEntry(d->configSoftCrInputAdjustmentEntry,  prm.softness[2]);
     group.writeEntry(d->configSoftCbInputAdjustmentEntry,  prm.softness[1]);
+    group.writeEntry(d->configSoftCrInputAdjustmentEntry,  prm.softness[2]);
 
-    group.writeEntry(d->configCheckAutoEstimationEntry,    d->checkAutoEst->isChecked());    
+    group.writeEntry(d->configCheckAutoEstimationEntry,    d->checkAutoEst->isChecked());
 }
 
 void NRSettings::loadSettings()

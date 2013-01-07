@@ -58,13 +58,13 @@ QDebug operator<<(QDebug dbg, const NRContainer& inf)
                   << inf.thresholds[0] << ", ";
     dbg.nospace() << "Y Softness: "
                   << inf.softness[0] << ", ";
-    dbg.nospace() << "Cr Threshold: "
+    dbg.nospace() << "Cb Threshold: "
                   << inf.thresholds[1] << ", ";
-    dbg.nospace() << "Cr Softness: "
-                  << inf.softness[1] << ", ";
-    dbg.nospace() << "Cb  Threshold: "
-                  << inf.thresholds[2] << ", ";
     dbg.nospace() << "Cb Softness: "
+                  << inf.softness[1] << ", ";
+    dbg.nospace() << "Cr  Threshold: "
+                  << inf.thresholds[2] << ", ";
+    dbg.nospace() << "Cr Softness: "
                   << inf.softness[2];
     return dbg.space();
 }

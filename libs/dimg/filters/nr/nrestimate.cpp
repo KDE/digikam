@@ -493,11 +493,11 @@ void NREstimate::startAnalyse()
     }
 
     d->prm.thresholds[0] = L;
-    d->prm.thresholds[2] = Cr;
     d->prm.thresholds[1] = Cb;
+    d->prm.thresholds[2] = Cr;
     d->prm.softness[0]   = LSoft;
-    d->prm.softness[2]   = CrSoft;
     d->prm.softness[1]   = CbSoft;
+    d->prm.softness[2]   = CrSoft;
 
     kDebug() << "All is completed";
     postProgress(90);

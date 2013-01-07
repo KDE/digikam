@@ -51,8 +51,8 @@ public:
 
     /** Separated values per chanel
      */
-    double thresholds[3];    // Y, Cr, Cb thresholds.
-    double softness[3];      // Y, Cr, Cb softness.
+    double thresholds[3];    // Y, Cb, Cr thresholds.
+    double softness[3];      // Y, Cb, Cr softness.
 };
 
 //! kDebug() stream operator. Writes property @a inf to the debug output in a nicely formatted way.
