@@ -119,12 +119,20 @@ public:
 
     virtual void addActions(AbstractAlbumTreeView*, ContextMenuHelper& cmh, Album* a)
     {
-        PAlbum* album = dynamic_cast<PAlbum*>(a);
-
-        if (!album)
+        if (!a || a->isRoot())
         {
             return;
         }
+        
+        PAlbum* album = dynamic_cast<PAlbum*>(a);
+
+        if (album->isAlbumRoot())
+        {
+            cmh.addActionNewAlbum(d->albumModificationHelper, album);
+            cmh.addAction("album_openinfilemanager");
+            cmh.addAction("album_openinterminal");
+            return;
+        } 
 
         // --------------------------------------------------------
         cmh.addActionNewAlbum(d->albumModificationHelper, album);
