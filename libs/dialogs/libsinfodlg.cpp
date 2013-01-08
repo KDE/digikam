@@ -74,9 +74,7 @@ extern "C"
 #include "digikam-lcms.h"
 
 #ifdef HAVE_LENSFUN
-#   ifdef HAVE_GLIB2
-#       include <lensfun.h>
-#   endif // HAVE_GLIB2
+#       include "lensfuniface.h"
 #endif // HAVE_LENSFUN
 
 using namespace KExiv2Iface;
@@ -125,13 +123,7 @@ LibsInfoDlg::LibsInfoDlg(QWidget* const parent)
                 i18n("Yes") : i18n("No"));
 
 #ifdef HAVE_LENSFUN
-#   ifdef HAVE_GLIB2
-    list.insert(i18n("LibLensFun"),                  i18n("%1.%2.%3-%4 - internal library",
-                LF_VERSION_MAJOR,
-                LF_VERSION_MINOR,
-                LF_VERSION_MICRO,
-                LF_VERSION_BUGFIX));
-#   endif // HAVE_GLIB2
+    list.insert(i18n("LibLensFun"),                  LensFunIface::lensFunVersion());
 #endif // HAVE_LENSFUN
 
 #ifndef USE_EXT_LIBLQR
