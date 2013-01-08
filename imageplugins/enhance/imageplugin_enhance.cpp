@@ -289,9 +289,9 @@ void ImagePlugin_Enhance::slotInPainting()
 
 void ImagePlugin_Enhance::slotLensAutoFix()
 {
-#ifdef HAVE_GLIB2
+#ifdef HAVE_LENSFUN
     loadTool(new LensAutoFixTool(this));
-#endif // HAVE_GLIB2
+#endif // HAVE_LENSFUN
 }
 
 void ImagePlugin_Enhance::slotAntiVignetting()

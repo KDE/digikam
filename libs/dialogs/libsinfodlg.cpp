@@ -73,11 +73,11 @@ extern "C"
 #include "pgfutils.h"
 #include "digikam-lcms.h"
 
-#ifndef USE_EXT_LIBLENSFUN
+#ifdef HAVE_LENSFUN
 #   ifdef HAVE_GLIB2
-#       include "lensfun.h"
+#       include <lensfun.h>
 #   endif // HAVE_GLIB2
-#endif // USE_EXT_LIBLENSFUN
+#endif // HAVE_LENSFUN
 
 using namespace KExiv2Iface;
 using namespace KDcrawIface;
@@ -124,7 +124,7 @@ LibsInfoDlg::LibsInfoDlg(QWidget* const parent)
     list.insert(i18n("Exiv2 can write to Pgf"),      KExiv2::supportMetadataWritting("image/pgf") ?
                 i18n("Yes") : i18n("No"));
 
-#ifndef USE_EXT_LIBLENSFUN
+#ifdef HAVE_LENSFUN
 #   ifdef HAVE_GLIB2
     list.insert(i18n("LibLensFun"),                  i18n("%1.%2.%3-%4 - internal library",
                 LF_VERSION_MAJOR,
@@ -132,9 +132,7 @@ LibsInfoDlg::LibsInfoDlg(QWidget* const parent)
                 LF_VERSION_MICRO,
                 LF_VERSION_BUGFIX));
 #   endif // HAVE_GLIB2
-#else
-    list.insert(i18n("LibLensFun"),                  i18n("external shared library"));
-#endif // USE_EXT_LIBLENSFUN
+#endif // HAVE_LENSFUN
 
 #ifndef USE_EXT_LIBLQR
 #   ifdef HAVE_GLIB2

@@ -19,6 +19,7 @@ Libkdcraw         : Update internal Libraw version 0.15.0 to support new RAW cam
                     Sony     : NEX-F3, SLT-A37, SLT-A57, DSC-RX100
 
 General           : Add new Noise Estimation feature to Wavelets Noise Reduction tools.
+General           : Remove internal LensFun library code and xml lens database. Set only an optional and external dependency to last 0.2.6 release.
 
 ImportUI          : Port icon-view to Qt4 model/View.
 ImportUI          : Labels and Tags pre-assignation.

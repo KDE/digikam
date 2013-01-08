@@ -399,13 +399,30 @@ MACRO_BOOL_TO_01(KDEPIMLIBS_FOUND HAVE_KDEPIMLIBS)
 
 SET(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules ${CMAKE_MODULE_PATH} )
 
-# Check GLib2 library for lrqr-1 and lensfun libraries.
+# Check GLib2 library for lrqr-1 libraries.
 MACRO_OPTIONAL_FIND_PACKAGE(GLIB2)
 MACRO_BOOL_TO_01(GLIB2_FOUND HAVE_GLIB2)
 
 # Check LensFun library for Lens auto-correction tool.
-MACRO_OPTIONAL_FIND_PACKAGE(LensFun 2.6.0)
-MACRO_BOOL_TO_01(LENSFUN_FOUND USE_EXT_LIBLENSFUN)
+MACRO_OPTIONAL_FIND_PACKAGE(LensFun)
+
+SET(LENSFUN_MIN_VERSION "0.2.6")
+
+IF(LENSFUN_VERSION)
+
+    MESSAGE(STATUS "liblensfun: Found version ${LENSFUN_VERSION} (required: ${LENSFUN_MIN_VERSION})")
+    IF (${LENSFUN_VERSION} VERSION_LESS ${LENSFUN_MIN_VERSION})
+        SET(LENSFUN_FOUND FALSE)
+    ENDIF()
+
+ELSE()
+
+    MESSAGE(WARNING "liblensfun: Version information not found, your version is probably too old.")
+    SET(LENSFUN_FOUND FALSE)
+
+ENDIF()
+
+MACRO_BOOL_TO_01(LENSFUN_FOUND HAVE_LENSFUN)
 
 # Check Lqr-1 library for Contents Aware Resizer tool.
 MACRO_OPTIONAL_FIND_PACKAGE(Lqr-1)
@@ -537,10 +554,10 @@ IF(GLIB2_FOUND)
         MESSAGE(STATUS " liblqr-1 library found................... NO  (optional - internal version used instead)")
     ENDIF(LQR-1_FOUND)
 
-    IF(LENSFUN_FOUND)
+    IF (LENSFUN_FOUND)
         MESSAGE(STATUS " liblensfun library found................. YES (optional)")
     ELSE(LENSFUN_FOUND)
-        MESSAGE(STATUS " liblensfun library found................. NO  (optional - internal version used instead)")
+        MESSAGE(STATUS " liblensfun library found................. NO  (optional)")
     ENDIF(LENSFUN_FOUND)
 
 ELSE(GLIB2_FOUND)
@@ -569,11 +586,11 @@ ELSE(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND Boost_FOUND AND 
     SET(DIGIKAM_CAN_BE_COMPILED false)
 ENDIF(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND Boost_FOUND AND JASPER_FOUND AND KDCRAW_FOUND AND KEXIV2_FOUND AND KIPI_FOUND AND KFACE_FOUND AND KGEOMAP_FOUND)
 
-IF(DIGIKAM_CAN_BE_COMPILED AND FORCED_UNBUNDLE AND ((NOT PGF_FOUND) OR (NOT CLAPACK_FOUND) OR (NOT LENSFUN_FOUND)))
+IF(DIGIKAM_CAN_BE_COMPILED AND FORCED_UNBUNDLE AND ((NOT PGF_FOUND) OR (NOT CLAPACK_FOUND)))
     MESSAGE(STATUS "")
     MESSAGE(FATAL_ERROR " BUNDLED LIBRARIES HAVE BEEN FORCE-DISABLED IN THIS BUILD. Aborting.")
     SET(DIGIKAM_CAN_BE_COMPILED false)
-ENDIF(DIGIKAM_CAN_BE_COMPILED AND FORCED_UNBUNDLE AND ((NOT PGF_FOUND) OR (NOT CLAPACK_FOUND) OR (NOT LENSFUN_FOUND)))
+ENDIF(DIGIKAM_CAN_BE_COMPILED AND FORCED_UNBUNDLE AND ((NOT PGF_FOUND) OR (NOT CLAPACK_FOUND)))
 
 MESSAGE(STATUS "----------------------------------------------------------------------------------")
 MESSAGE(STATUS "")
@@ -730,7 +747,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
 
     # ==================================================================================================
     # Lensfun and LibLqr-1 library rules
-    # NOTE: both libraries needs GLIB2.
+    # NOTE: LibLqr-1 library needs GLIB2 to link.
 
     IF(GLIB2_FOUND)
 
@@ -766,57 +783,14 @@ IF(DIGIKAM_CAN_BE_COMPILED)
 
         ENDIF(LQR-1_FOUND)
 
-        IF(LENSFUN_FOUND)
-
-            INCLUDE_DIRECTORIES(${LENSFUN_INCLUDE_DIRS})
-            SET(liblensfun_LIBS ${LENSFUN_LIBRARIES})
-
-        ELSE(LENSFUN_FOUND)
-
-            ADD_DEFINITIONS(-DTRE_REGEX_T_FIELD=value -DTRE_VERSION="0")
-
-            INCLUDE_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR}/libs/3rdparty/lensfun)
-            INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun)
-
-            IF(WIN32)
-                INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex)
-            ENDIF(WIN32)
-
-            SET(liblensfun_SRCS
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/config-lensfun.cpp
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/auxfun.cpp
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/camera.cpp
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/cpuid.cpp
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/database.cpp
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/lens.cpp
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/mod-color.cpp
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/mod-coord.cpp
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/mod-subpix.cpp
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/modifier.cpp
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lensfun/mount.cpp
-               )
-
-            # We only need regex with lensfun code under windows where this library do not exist.
-            IF(WIN32)
-                SET(liblensfun_SRCS ${liblensfun_SRCS}
-                    ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/regcomp.c
-                    ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/regerror.c
-                    ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/regexec.c
-                    ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/tre-ast.c
-                    ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/tre-compile.c
-                    ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/tre-match-approx.c
-                    ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/tre-match-backtrack.c
-                    ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/tre-match-parallel.c
-                    ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/tre-mem.c
-                    ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/tre-parse.c
-                    ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/tre-stack.c
-                    ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/regex/xmalloc.c
-                   )
-            ENDIF(WIN32)
-
-        ENDIF(LENSFUN_FOUND)
-
     ENDIF(GLIB2_FOUND)
+
+    IF(LENSFUN_FOUND)
+
+        INCLUDE_DIRECTORIES(${LENSFUN_INCLUDE_DIRS})
+        SET(liblensfun_LIBS ${LENSFUN_LIBRARIES})
+
+    ENDIF(LENSFUN_FOUND)
 
     # ==================================================================================================
     # Common targets parts
@@ -947,15 +921,19 @@ IF(DIGIKAM_CAN_BE_COMPILED)
             ${liblqr_SRCS}
            )
 
+    ENDIF(GLIB2_FOUND)
+
+    IF(LENSFUN_FOUND)
+
         SET(libdimgfilters_SRCS ${libdimgfilters_SRCS}
             ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lens/lensfunfilter.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lens/lensfuncameraselector.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lens/lensfuniface.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lens/lensfunsettings.cpp
             ${liblensfun_SRCS}
-           )
+        )
 
-    ENDIF(GLIB2_FOUND)
+    ENDIF(LENSFUN_FOUND)
 
     SET(libdmetadata_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dmetadata/metadatasettings.cpp

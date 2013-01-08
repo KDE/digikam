@@ -152,7 +152,7 @@ void DImgFilterManager::Private::setupCoreGenerators()
             << ImgFilterPtr(new BasicDImgFilterGenerator<InfraredFilter>())
             << ImgFilterPtr(new BasicDImgFilterGenerator<InvertFilter>())
             << ImgFilterPtr(new BasicDImgFilterGenerator<LensDistortionFilter>())
-#ifdef HAVE_GLIB2
+#ifdef HAVE_LENSFUN
             << ImgFilterPtr(new BasicDImgFilterGenerator<LensFunFilter>())
 #endif
             << ImgFilterPtr(new BasicDImgFilterGenerator<LevelsFilter>())

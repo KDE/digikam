@@ -300,7 +300,7 @@ TARGET_LINK_LIBRARIES(loadsavethreadtest
                       ${KDCRAW_LIBRARIES}
                      )
 
-IF(GLIB2_FOUND)
+IF(LENSFUN_FOUND)
     SET(testlensfuniface_SRCS testlensfuniface.cpp)
     KDE4_ADD_EXECUTABLE(testlensfuniface NOGUI ${testlensfuniface_SRCS})
     TARGET_LINK_LIBRARIES(testlensfuniface
@@ -312,7 +312,7 @@ IF(GLIB2_FOUND)
                           # To link under Solaris (see B.K.O #274484)
                           ${MATH_LIBRARY}
                      )
-ENDIF(GLIB2_FOUND)
+ENDIF()
 
 #------------------------------------------------------------------------
 

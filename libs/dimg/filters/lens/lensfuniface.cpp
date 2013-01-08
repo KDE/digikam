@@ -3,8 +3,8 @@
  * Date        : 2008-02-10
  * Description : a tool to fix automatically camera lens aberrations
  *
- * Copyright (C) 2008 by Adrian Schroeter <adrian at suse dot de>
- * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008      by Adrian Schroeter <adrian at suse dot de>
+ * Copyright (C) 2008-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -27,11 +27,11 @@
 namespace Digikam
 {
 
-class LensFunIface::LensFunIfacePriv
+class LensFunIface::Private
 {
 public:
 
-    LensFunIfacePriv()
+    Private()
     {
         usedLens   = 0;
         usedCamera = 0;
@@ -55,7 +55,7 @@ public:
 };
 
 LensFunIface::LensFunIface()
-    : d(new LensFunIfacePriv)
+    : d(new Private)
 {
     d->lfDb      = lf_db_new();
     d->lfDb->Load();
@@ -88,8 +88,8 @@ LensFunIface::DevicePtr LensFunIface::usedCamera() const
 void LensFunIface::setUsedCamera(DevicePtr cam)
 {
     d->usedCamera           = cam;
-    d->settings.cameraMake  = d->usedCamera ? d->usedCamera->Maker : QString();
-    d->settings.cameraModel = d->usedCamera ? d->usedCamera->Model : QString();
+    d->settings.cameraMake  = d->usedCamera ? d->usedCamera->Maker      : QString();
+    d->settings.cameraModel = d->usedCamera ? d->usedCamera->Model      : QString();
     d->settings.cropFactor  = d->usedCamera ? d->usedCamera->CropFactor : -1.0;
 }
 

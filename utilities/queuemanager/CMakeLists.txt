@@ -51,11 +51,11 @@ SET(libqueuemanager_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/main/queuemgrwindow.cpp
 )
 
-IF(GLIB2_FOUND)
+IF(LENSFUN_FOUND)
     SET(libqueuemanager_SRCS ${libqueuemanager_SRCS}
             ${CMAKE_CURRENT_SOURCE_DIR}/basetools/enhance/lensautofix.cpp
     )
-ENDIF(GLIB2_FOUND)
+ENDIF()
 
 KDE4_ADD_LIBRARY(queuemanager STATIC ${libqueuemanager_SRCS})
 

@@ -129,9 +129,9 @@ BatchToolsManager::BatchToolsManager()
     registerTool(new Restoration(this));
     registerTool(new LocalContrast(this));
     registerTool(new AntiVignetting(this));
-#ifdef HAVE_GLIB2
+#ifdef HAVE_LENSFUN
     registerTool(new LensAutoFix(this));
-#endif // HAVE_GLIB2
+#endif // HAVE_LENSFUN
 
     // Color
     registerTool(new BCGCorrection(this));

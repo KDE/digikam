@@ -40,7 +40,7 @@
 #cmakedefine USE_EXT_LIBCLAPACK 1
 
 /* Define to 1 if an external lensfun shared library have been found */
-#cmakedefine USE_EXT_LIBLENSFUN 1
+#cmakedefine HAVE_LENSFUN 1
 
 /* Define to 1 if GPhoto2 shared library is installed */
 #cmakedefine HAVE_GPHOTO2 1
