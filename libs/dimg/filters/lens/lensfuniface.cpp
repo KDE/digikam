@@ -495,7 +495,7 @@ bool LensFunIface::supportsCCI() const
     return supportsVig();
 }
 
-static QString LensFunIface::lensFunVersion()
+QString LensFunIface::lensFunVersion()
 {
     return QString("%1.%2.%3-%4").arg(LF_VERSION_MAJOR).arg(LF_VERSION_MINOR).arg(LF_VERSION_MICRO).arg(LF_VERSION_BUGFIX);
 }
