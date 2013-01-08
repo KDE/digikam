@@ -137,5 +137,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 096 ==> 312766 - digiKam uses lens crop factor, not camera's [patch].
 097 ==> 261079 - Crash of Enhance->Lens->Auto-Correction.
 098 ==> 184156 - Showfoto lensfun select wrong lens.
-099 ==> 
+099 ==> 312627 - Cannot create a new album in root "My Albums".
+100 ==> 
 
