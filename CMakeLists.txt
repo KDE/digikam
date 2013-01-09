@@ -481,7 +481,7 @@ IF (ENABLE_INTERNALMYSQL)
         PRINT_EXECUTABLE_STATUS("MySQL install_db tool" mysql_install_db MYSQL_TOOLS_PATH INITCMD_MYSQL)
     ENDIF (NOT WIN32)
 ELSE (ENABLE_INTERNALMYSQL)
-    MESSAGE(STATUS " mysql server found..................... NO  (optional - disabled by user)")
+    MESSAGE(STATUS " mysql server found....................... NO  (optional - disabled by user)")
 ENDIF (ENABLE_INTERNALMYSQL)
 
 PRINT_LIBRARY_STATUS("libtiff"     "http://www.remotesensing.org/libtiff"                           ""                                    TIFF_FOUND)
