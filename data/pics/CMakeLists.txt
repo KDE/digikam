@@ -31,6 +31,7 @@ INSTALL(FILES splash-digikam.png
               logo-lcms.png
               logo-exiv2.png
               logo-cimg.png
+              logo-beta.png
               image-full.png
               image-selection.png
               histogram-lin.png

@@ -6,7 +6,7 @@
  * Date        : 2004-09-09
  * Description : digiKam release ID header.
  *
- * Copyright (C) 2004-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -40,8 +40,9 @@
 namespace Digikam
 {
 
-static const char digikam_version_short[] = "@DIGIKAM_VERSION_SHORT@";
-static const char digikam_version[]       = "@DIGIKAM_VERSION_STRING@";
+static const char digikam_version_short[]  = "@DIGIKAM_VERSION_SHORT@";
+static const char digikam_version[]        = "@DIGIKAM_VERSION_STRING@";
+static const char digikam_version_suffix[] = "@DIGIKAM_SUFFIX_VERSION@";
 
 static inline const QString digiKamVersion()
 {
@@ -52,12 +53,12 @@ static inline KLocalizedString additionalInformation()
 {
     QString gitVer       = QString(GITVERSION);
     KLocalizedString ret = ki18n("IRC:\n"
-                     "irc.freenode.net - #digikam\n\n"
-                     "Feedback:\n"
-                     "digikam-devel@kde.org\n\n"
-                     "Build date: %1 (target: %2)")
-                     .subs(__DATE__)
-                     .subs("@CMAKE_BUILD_TYPE@");
+                                 "irc.freenode.net - #digikam\n\n"
+                                 "Feedback:\n"
+                                 "digikam-devel@kde.org\n\n"
+                                 "Build date: %1 (target: %2)")
+                                 .subs(__DATE__)
+                                 .subs("@CMAKE_BUILD_TYPE@");
 
     if (!gitVer.isEmpty() && !gitVer.startsWith("unknow") && !gitVer.startsWith("export"))
     {

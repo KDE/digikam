@@ -82,16 +82,36 @@ public:
 SplashScreen::SplashScreen()
     : KSplashScreen(QPixmap()), d(new Private)
 {
+    QPixmap splash;
+
     if (KGlobal::mainComponent().aboutData()->appName() == QString("digikam"))
     {
-        setPixmap(KStandardDirs::locate("data","digikam/data/splash-digikam.png"));
+        splash = KStandardDirs::locate("data","digikam/data/splash-digikam.png");
     }
     else
     {
-        setPixmap(KStandardDirs::locate("data","showfoto/data/splash-showfoto.png"));
+        splash = KStandardDirs::locate("data","showfoto/data/splash-showfoto.png");
     }
 
-    QTimer* timer = new QTimer( this );
+    // Under Linux, only test versions has Beta stage.
+    bool isBeta = QString(digikam_version_suffix).isEmpty();
+
+#if defined Q_OS_WIN32
+    isBeta = true;   // Windows version is always beta for the moment.
+#elif defined Q_OS_MACX
+    isBeta = true;   // MAC version is always beta for the moment.
+#endif
+
+    if (isBeta)
+    {
+        QPainter p(&splash);
+        p.drawPixmap(412, 27, KStandardDirs::locate("data","digikam/data/logo-beta.png"));
+        p.end();
+    }
+
+    setPixmap(splash);
+
+    QTimer* const timer = new QTimer(this);
 
     connect(timer, SIGNAL(timeout()),
             this, SLOT(animate()));
@@ -120,7 +140,7 @@ void SplashScreen::animate()
 
     if (d->lastStateUpdateTime.msecsTo(currentTime) > 100)
     {
-        d->state = ((d->state + 1) % (2*d->progressBarSize-1));
+        d->state               = ((d->state + 1) % (2*d->progressBarSize-1));
         d->lastStateUpdateTime = currentTime;
     }
 
@@ -137,7 +157,7 @@ void SplashScreen::message(const QString& message)
 
 void SplashScreen::drawContents(QPainter* p)
 {
-    int position;
+    int    position = 0;
     QColor basecolor(155, 192, 231);
 
     // -- Draw background circles ------------------------------------
@@ -160,11 +180,11 @@ void SplashScreen::drawContents(QPainter* p)
 
         if (position < 3)
         {
-            p->setBrush(QColor(basecolor.red()  -18*i,
-                               basecolor.green()-28*i,
-                               basecolor.blue() -10*i));
+            p->setBrush(QColor(basecolor.red()   - 18*i,
+                               basecolor.green() - 28*i,
+                               basecolor.blue()  - 10*i));
 
-            p->drawEllipse(21+position*11, 6, 9, 9);
+            p->drawEllipse(21 + position*11, 6, 9, 9);
         }
     }
 
