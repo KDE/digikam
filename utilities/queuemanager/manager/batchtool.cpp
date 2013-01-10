@@ -115,9 +115,9 @@ public:
     {
     }
 
-    bool continueQuery(const DImg*)
+    bool continueQuery(const DImg* const)
     {
-        return !d->cancel;
+        return (!d->cancel);
     }
 
 private:
@@ -340,7 +340,7 @@ void BatchTool::setOutputUrlFromInputUrl()
 
 bool BatchTool::isRawFile(const KUrl& url) const
 {
-    QString rawFilesExt(KDcraw::rawFiles());
+    QString   rawFilesExt(KDcraw::rawFiles());
     QFileInfo fileInfo(url.toLocalFile());
     return (rawFilesExt.toUpper().contains(fileInfo.suffix().toUpper()));
 }
@@ -355,8 +355,8 @@ bool BatchTool::loadToDImg() const
     if (d->rawLoadingRule == QueueSettings::USEEMBEDEDJPEG && isRawFile(inputUrl()))
     {
         QImage img;
-        bool ret = KDcraw::loadRawPreview(img, inputUrl().toLocalFile());
-        d->image = DImg(img);
+        bool   ret = KDcraw::loadRawPreview(img, inputUrl().toLocalFile());
+        d->image   = DImg(img);
         return ret;
     }
 
@@ -416,7 +416,7 @@ bool BatchTool::apply()
         if (it.value().canConvert<QPolygon>())
         {
             QPolygon pol = it.value().value<QPolygon>();
-            int size     = pol.size() > 20 ? 20 : pol.size();
+            int     size = (pol.size() > 20) ? 20 : pol.size();
             QString tmp;
             tmp.append(QString("[%1 items] : ").arg(pol.size()));
 
