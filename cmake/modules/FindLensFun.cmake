@@ -24,29 +24,44 @@ ELSE (LENSFUN_LIBRARIES AND LENSFUN_INCLUDE_DIRS)
 
     # use pkg-config to get the directories and then use these values
     # in the FIND_PATH() and FIND_LIBRARY() calls
-    FIND_PACKAGE(PkgConfig)
+    IF (NOT WIN32)
 
-    IF (PKG_CONFIG_FOUND)
+        FIND_PACKAGE(PkgConfig)
 
-        IF (LensFun_FIND_VERSION)
-            SET(version_string ">=${LensFun_FIND_VERSION}")
-        ENDIF()
+        IF (PKG_CONFIG_FOUND)
 
-       PKG_CHECK_MODULES(PC_LENSFUN lensfun${version_string})
+            IF (LensFun_FIND_VERSION)
+                SET(version_string ">=${LensFun_FIND_VERSION}")
+            ENDIF()
 
-    ENDIF ()
+           PKG_CHECK_MODULES(PC_LENSFUN lensfun${version_string})
+
+        ENDIF ()
+
+    ENDIF (NOT WIN32)
 
     FIND_PATH(LENSFUN_INCLUDE_DIRS lensfun.h
         HINTS ${PC_LENSFUN_INCLUDE_DIRS}
         PATH_SUFFIXES lensfun
     )
 
-    FIND_LIBRARY(LENSFUN_LIBRARIES NAMES lensfun
+    FIND_LIBRARY(LENSFUN_LIBRARIES NAMES lensfun liblensfun
         HINTS ${PC_LENSFUN_LIBRARY_DIRS}
     )
 
     SET(LENSFUN_VERSION "${PC_LENSFUN_VERSION}")
     SET(LENSFUN_DEFINITIONS ${PC_LENSFUN_CFLAGS_OTHER})
+
+    IF (LENSFUN_INCLUDE_DIRS)
+
+        FILE(READ ${LENSFUN_INCLUDE_DIRS}/lensfun.h LENSFUN_VERSION_CONTENT)
+        STRING(REGEX MATCH "#define[ \t]+LF_VERSION_MAJOR[ \t]+[0-9]*[\r\n]*.*#define[ \t]+LF_VERSION_MINOR[ \t]+[0-9]*[\r\n]*.*#define[ \t]+LF_VERSION_MICRO[ \t]+[0-9]*[\r\n]*.*#define[ \t]+LF_VERSION_BUGFIX[ \t]+[0-9]*" LENSFUN_VERSION_MATCH ${LENSFUN_VERSION_CONTENT})
+
+        IF (LENSFUN_VERSION_MATCH)
+            STRING(REGEX REPLACE "#define[ \t]+LF_VERSION_MAJOR[ \t]+([0-9]*)[\r\n]*.*#define[ \t]+LF_VERSION_MINOR[ \t]+([0-9]*)[\r\n]*.*#define[ \t]+LF_VERSION_MICRO[ \t]+([0-9]*)[\r\n]*.*#define[ \t]+LF_VERSION_BUGFIX[ \t]+([0-9]*)" "\\1.\\2.\\3" LENSFUN_VERSION ${LENSFUN_VERSION_MATCH})
+        ENDIF (LENSFUN_VERSION_MATCH)
+
+    ENDIF (LENSFUN_INCLUDE_DIRS)
 
     INCLUDE(FindPackageHandleStandardArgs)
     FIND_PACKAGE_HANDLE_STANDARD_ARGS(LensFun
