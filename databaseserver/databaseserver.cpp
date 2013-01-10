@@ -157,7 +157,7 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
     const QString mysqldPath(DatabaseConfigElement::element(dbType).dbServerCmd);
     //const QString mysqldPath("/usr/sbin/mysqld");
 
-    if ( mysqldPath.isEmpty() || mysqldPath.compare( QLatin1String( "SERVERCMD_MYSQL-NOTFOUND" ) ))
+    if ( mysqldPath.isEmpty() || (mysqldPath.compare( QLatin1String( "SERVERCMD_MYSQL-NOTFOUND" )) == 0))
     {
         kDebug() << "No path to mysqld set in server configuration!";
         return DatabaseServerError(DatabaseServerError::StartError, i18n("No path to mysqld set in server configuration."));
