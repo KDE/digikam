@@ -56,7 +56,7 @@ StartScanPage::StartScanPage(KAssistantDialog* dlg)
                        "If you cancel the scanning operation, it will start again at next digiKam session.</p>"
                        "<p>When scanning has completed, at next start-up, digiKam will only check your collection "
                        "to identify new items - which is much faster. Scanning for images can also be started "
-                       "manually using the <b>Tool/Scan for New Images</b> menu entry.</p>"
+                       "manually using the <b>Tools->Maintenance->Scan for new items</b> menu entry.</p>"
                        "</qt>"));
 
     setPageWidget(vbox);
