@@ -6,8 +6,8 @@
  * Date        : 2005-12-17
  * Description : image file IO threaded interface.
  *
- * Copyright (C) 2005-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2005-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -61,7 +61,7 @@ LoadingTask::TaskType LoadingTask::type()
     return TaskTypeLoading;
 }
 
-void LoadingTask::progressInfo(const DImg*, float progress)
+void LoadingTask::progressInfo(const DImg* const, float progress)
 {
     if (m_loadingTaskStatus == LoadingTaskStatusLoading)
     {
@@ -72,7 +72,7 @@ void LoadingTask::progressInfo(const DImg*, float progress)
     }
 }
 
-bool LoadingTask::continueQuery(const DImg*)
+bool LoadingTask::continueQuery(const DImg* const)
 {
     return m_loadingTaskStatus != LoadingTaskStatusStopping;
 }
@@ -87,7 +87,10 @@ void LoadingTask::setStatus(LoadingTaskStatus status)
 SharedLoadingTask::SharedLoadingTask(LoadSaveThread* thread, LoadingDescription description,
                                      LoadSaveThread::AccessMode mode, LoadingTaskStatus loadingTaskStatus)
     : LoadingTask(thread, description, loadingTaskStatus),
-      m_completed(false), m_accessMode(mode), m_usedProcess(0), m_resultLoadingDescription(description)
+      m_completed(false),
+      m_accessMode(mode),
+      m_usedProcess(0),
+      m_resultLoadingDescription(description)
 {
     if (m_accessMode == LoadSaveThread::AccessModeRead && needsPostProcessing())
     {
@@ -461,7 +464,7 @@ LoadingTask::TaskType SavingTask::type()
     return TaskTypeSaving;
 }
 
-void SavingTask::progressInfo(const DImg*, float progress)
+void SavingTask::progressInfo(const DImg* const, float progress)
 {
     if (m_thread->querySendNotifyEvent())
     {
@@ -469,9 +472,9 @@ void SavingTask::progressInfo(const DImg*, float progress)
     }
 }
 
-bool SavingTask::continueQuery(const DImg*)
+bool SavingTask::continueQuery(const DImg* const)
 {
-    return m_savingTaskStatus != SavingTaskStatusStopping;
+    return (m_savingTaskStatus != SavingTaskStatusStopping);
 }
 
 void SavingTask::setStatus(SavingTaskStatus status)

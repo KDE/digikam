@@ -6,8 +6,8 @@
  * Date        : 2006-01-20
  * Description : image file IO threaded interface.
  *
- * Copyright (C) 2005-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2005-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -56,8 +56,12 @@ public:
 
     explicit LoadSaveTask(LoadSaveThread* thread)
         : m_thread(thread)
-    {};
-    virtual ~LoadSaveTask() {};
+    {
+    };
+
+    virtual ~LoadSaveTask()
+    {
+    };
 
     virtual void execute() = 0;
     virtual TaskType type() = 0;
@@ -69,7 +73,8 @@ protected:
 
 //---------------------------------------------------------------------------------------------------
 
-class LoadingTask : public LoadSaveTask, public DImgLoaderObserver
+class LoadingTask : public LoadSaveTask,
+                    public DImgLoaderObserver
 {
 public:
 
@@ -84,8 +89,11 @@ public:
 
     LoadingTask(LoadSaveThread* thread, LoadingDescription description,
                 LoadingTaskStatus loadingTaskStatus = LoadingTaskStatusLoading)
-        : LoadSaveTask(thread), m_loadingDescription(description), m_loadingTaskStatus(loadingTaskStatus)
-    {}
+        : LoadSaveTask(thread),
+          m_loadingDescription(description),
+          m_loadingTaskStatus(loadingTaskStatus)
+    {
+    }
 
     LoadingTaskStatus status() const
     {
@@ -109,8 +117,8 @@ public:
 
     // DImgLoaderObserver
 
-    virtual void progressInfo(const DImg*, float progress);
-    virtual bool continueQuery(const DImg*);
+    virtual void progressInfo(const DImg* const, float progress);
+    virtual bool continueQuery(const DImg* const);
 
     virtual void setStatus(LoadingTaskStatus status);
 
@@ -122,7 +130,9 @@ protected:
 
 //---------------------------------------------------------------------------------------------------
 
-class SharedLoadingTask : public LoadingTask, public LoadingProcess, public LoadingProcessListener
+class SharedLoadingTask : public LoadingTask,
+                          public LoadingProcess,
+                          public LoadingProcessListener
 {
 public:
 
@@ -166,7 +176,8 @@ protected:
 
 //---------------------------------------------------------------------------------------------------
 
-class SavingTask : public LoadSaveTask, public DImgLoaderObserver
+class SavingTask : public LoadSaveTask,
+                   public DImgLoaderObserver
 {
 public:
 
@@ -180,8 +191,12 @@ public:
 
     SavingTask(LoadSaveThread* thread, DImg& img, const QString& filePath, const QString& format)
         : LoadSaveTask(thread),
-          m_filePath(filePath), m_format(format), m_img(img), m_savingTaskStatus(SavingTaskStatusSaving)
-    {};
+          m_filePath(filePath),
+          m_format(format),
+          m_img(img),
+          m_savingTaskStatus(SavingTaskStatusSaving)
+    {
+    };
 
     SavingTaskStatus status() const
     {
@@ -198,8 +213,8 @@ public:
     virtual void     execute();
     virtual TaskType type();
 
-    virtual void     progressInfo(const DImg*, float progress);
-    virtual bool     continueQuery(const DImg*);
+    virtual void     progressInfo(const DImg* const, float progress);
+    virtual bool     continueQuery(const DImg* const);
 
     virtual void     setStatus(SavingTaskStatus status);
 
