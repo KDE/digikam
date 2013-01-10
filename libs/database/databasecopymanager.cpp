@@ -79,32 +79,31 @@ void DatabaseCopyManager::copyDatabases(DatabaseParameters fromDBParameters, Dat
     }
 
     // order may be important, array class must _not_ be sorted
-    const QString tables[] =
-    {
-        QString("AlbumRoots"),
-        QString("Albums"),
-        QString("Images"),
-        QString("ImageHaarMatrix"),
-        QString("ImageInformation"),
-        QString("ImageMetadata"),
-        QString("ImageTagProperties"),
-        QString("TagProperties"),
-        QString("ImagePositions"),
-        QString("ImageComments"),
-        QString("ImageCopyright"),
-        QString("Tags"),
-        QString("ImageTags"),
-        QString("ImageProperties"),
-        QString("ImageHistory"),
-        QString("ImageRelations"),
-        QString("Searches"),
-        QString("DownloadHistory"),
-        QString("VideoMetadata")
+    const QStringList tables = QStringList()
+        << "AlbumRoots"
+        << "Albums"
+        << "Images"
+        << "ImageHaarMatrix"
+        << "ImageInformation"
+        << "ImageMetadata"
+        << "ImageTagProperties"
+        << "TagProperties"
+        << "ImagePositions"
+        << "ImageComments"
+        << "ImageCopyright"
+        << "Tags"
+        << "ImageTags"
+        << "ImageProperties"
+        << "ImageHistory"
+        << "ImageRelations"
+        << "Searches"
+        << "DownloadHistory"
+        << "VideoMetadata"
         /*
-        QString("Settings")
+        << "Settings"
         */
-    };
-    const int tablesSize = sizeof(tables) / sizeof(QString);
+    ;
+    const int tablesSize = tables.size();
 
     QMap<QString, QVariant> bindingMap;
 
