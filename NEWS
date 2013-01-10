@@ -139,5 +139,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 098 ==> 184156 - Showfoto lensfun select wrong lens.
 099 ==> 312627 - Cannot create a new album in root "My Albums".
 100 ==> 312848 - digiKam 3.0.0-rc win32 installer.
-101 ==> 
+101 ==> 307750 - No path to mysqld set in server configuration [patch].
+102 ==> 
 
