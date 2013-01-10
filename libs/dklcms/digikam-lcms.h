@@ -6,7 +6,7 @@
  * Date        : 2012-02-03
  * Description : wrapper to help on lcms2 porting
  *
- * Copyright (C) 2012 by Francesco Riosa <francesco+kde dot pnpitalia dot it>
+ * Copyright (C) 2012 by Francesco Riosa <francesco+kde at pnpitalia dot it>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
