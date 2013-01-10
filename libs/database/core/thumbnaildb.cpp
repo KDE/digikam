@@ -186,9 +186,9 @@ DatabaseThumbnailInfo ThumbnailDB::findByCustomIdentifier(const QString& id)
     return info;
 }
 
-QHash<QString, int> ThumbnailDB::getFilePathsWithThumbnail()
+QSet<QString> ThumbnailDB::getFilePathsWithThumbnail()
 {
-    SqlQuery query = d->db->prepareQuery(QString("SELECT path, id "
+    SqlQuery query = d->db->prepareQuery(QString("SELECT path"
                                          "FROM FilePaths "
                                          "   INNER JOIN Thumbnails ON FilePaths.thumbId=Thumbnails.id "
                                          "WHERE type BETWEEN %1 AND %2;")
@@ -197,14 +197,14 @@ QHash<QString, int> ThumbnailDB::getFilePathsWithThumbnail()
 
     if (!d->db->exec(query))
     {
-        return QHash<QString, int>();
+        return QSet<QString>();
     }
 
-    QHash <QString, int> filePaths;
+    QSet<QString> filePaths;
 
     while (query.next())
     {
-        filePaths[query.value(0).toString()] = query.value(1).toInt();
+        filePaths << query.value(0).toString();
     }
 
     return filePaths;
