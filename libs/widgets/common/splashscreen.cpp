@@ -94,7 +94,7 @@ SplashScreen::SplashScreen()
     }
 
     // Under Linux, only test versions has Beta stage.
-    bool isBeta = QString(digikam_version_suffix).isEmpty();
+    bool isBeta = !QString(digikam_version_suffix).isEmpty();
 
 #if defined Q_OS_WIN32
     isBeta = true;   // Windows version is always beta for the moment.
