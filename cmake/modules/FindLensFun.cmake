@@ -58,7 +58,7 @@ ELSE (LENSFUN_LIBRARIES AND LENSFUN_INCLUDE_DIRS)
         STRING(REGEX MATCH "#define[ \t]+LF_VERSION_MAJOR[ \t]+[0-9]*[\r\n]*.*#define[ \t]+LF_VERSION_MINOR[ \t]+[0-9]*[\r\n]*.*#define[ \t]+LF_VERSION_MICRO[ \t]+[0-9]*[\r\n]*.*#define[ \t]+LF_VERSION_BUGFIX[ \t]+[0-9]*" LENSFUN_VERSION_MATCH ${LENSFUN_VERSION_CONTENT})
 
         IF (LENSFUN_VERSION_MATCH)
-            STRING(REGEX REPLACE "#define[ \t]+LF_VERSION_MAJOR[ \t]+([0-9]*)[\r\n]*.*#define[ \t]+LF_VERSION_MINOR[ \t]+([0-9]*)[\r\n]*.*#define[ \t]+LF_VERSION_MICRO[ \t]+([0-9]*)[\r\n]*.*#define[ \t]+LF_VERSION_BUGFIX[ \t]+([0-9]*)" "\\1.\\2.\\3" LENSFUN_VERSION ${LENSFUN_VERSION_MATCH})
+            STRING(REGEX REPLACE "#define[ \t]+LF_VERSION_MAJOR[ \t]+([0-9]*)[\r\n]*.*#define[ \t]+LF_VERSION_MINOR[ \t]+([0-9]*)[\r\n]*.*#define[ \t]+LF_VERSION_MICRO[ \t]+([0-9]*)[\r\n]*.*#define[ \t]+LF_VERSION_BUGFIX[ \t]+([0-9]*)" "\\1.\\2.\\3.\\4" LENSFUN_VERSION ${LENSFUN_VERSION_MATCH})
         ENDIF (LENSFUN_VERSION_MATCH)
 
     ENDIF (LENSFUN_INCLUDE_DIRS)
