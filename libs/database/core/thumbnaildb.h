@@ -28,9 +28,12 @@
 // Qt includes
 
 #include <QtCore/QString>
+#include <QtCore/QList>
 #include <QtCore/QStringList>
 #include <QtCore/QDateTime>
-#include <QtCore/QSet>
+#include <QtCore/QPair>
+#include <QtCore/QMap>
+#include <QtCore/QHash>
 
 // Local includes
 
@@ -110,9 +113,11 @@ public:
     DatabaseCoreBackend::QueryState insertThumbnail(const DatabaseThumbnailInfo& info, QVariant* lastInsertId = 0);
     DatabaseCoreBackend::QueryState replaceThumbnail(const DatabaseThumbnailInfo& info);
 
-    QSet<QString> getFilePathsWithThumbnail();
+    QHash<QString, int> getFilePathsWithThumbnail();
 
     void replaceUniqueHash(const QString& oldUniqueHash, int oldFileSize, const QString& newUniqueHash, int newFileSize);
+
+    //QStringList getAllThumbnailPaths();
 
 private:
 

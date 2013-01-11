@@ -127,9 +127,21 @@ void ThumbsGenerator::slotStart()
 
     if (!d->rebuildAll)
     {
-        QSet<QString> filePaths  = ThumbnailDatabaseAccess().db()->getFilePathsWithThumbnail();
-        d->allPicturesPath       = d->allPicturesPath.toSet().subtract(filePaths).toList();
-        d->allPicturesPath.sort();
+        QHash<QString, int> filePaths = ThumbnailDatabaseAccess().db()->getFilePathsWithThumbnail();
+
+        QStringList::iterator it = d->allPicturesPath.begin();
+
+        while (it != d->allPicturesPath.end())
+        {
+            if (filePaths.contains(*it))
+            {
+                it = d->allPicturesPath.erase(it);
+            }
+            else
+            {
+                ++it;
+            }
+        }
     }
 
 #endif
