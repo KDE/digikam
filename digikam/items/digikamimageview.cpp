@@ -693,24 +693,43 @@ void DigikamImageView::createGroupFromSelection()
     FileActionMngr::instance()->addToGroup(groupLeader, selectedInfos);
 }
 
+namespace
+{
+bool lessThanByTimeForImageInfo(const ImageInfo& a, const ImageInfo& b)
+{
+    return a.dateTime() < b.dateTime();
+}
+}
+
 void DigikamImageView::createGroupByTimeFromSelection()
 {
-    QList<ImageInfo> selectedInfos = selectedImageInfosCurrentFirst();
+    QList<ImageInfo> selectedInfos = selectedImageInfos();
+    // sort by time
+    qStableSort(selectedInfos.begin(), selectedInfos.end(), lessThanByTimeForImageInfo);
 
-    while (selectedInfos.size() > 0)
+    QList<ImageInfo>::iterator it, it2;
+    for (it = selectedInfos.begin(); it != selectedInfos.end(); )
     {
+        const ImageInfo& leader = *it;
         QList<ImageInfo> group;
-        ImageInfo groupLeader = selectedInfos.takeFirst();
-        QDateTime dateTime    = groupLeader.dateTime();
-
-        while (selectedInfos.size() > 0 && abs(dateTime.secsTo(selectedInfos.first().dateTime())) < 2)
+        QDateTime time = it->dateTime();
+        for (it2 = it + 1; it2 != selectedInfos.end(); ++it2)
         {
-            group.push_back(selectedInfos.takeFirst());
+            if (abs(time.secsTo(it2->dateTime())) < 2)
+            {
+                group << *it2;
+            }
+            else
+            {
+                break;
+            }
         }
+        // increment to next item not put in the group
+        it = it2;
 
         if (!group.isEmpty())
         {
-            FileActionMngr::instance()->addToGroup(groupLeader, group);
+            FileActionMngr::instance()->addToGroup(leader, group);
         }
     }
 }
