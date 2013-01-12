@@ -2827,6 +2827,7 @@ QByteArray DImg::getUniqueHash() const
         return QByteArray();
     }
 
+    FileReadLocker lock(filePath);
     QByteArray hash = DImgLoader::uniqueHash(filePath, *this, false);
 
     // attribute is written by DImgLoader
@@ -2859,6 +2860,7 @@ QByteArray DImg::getUniqueHashV2() const
         return QByteArray();
     }
 
+    FileReadLocker lock(filePath);
     return DImgLoader::uniqueHashV2(filePath, this);
 }
 
