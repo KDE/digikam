@@ -143,6 +143,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 102 ==> 312892 - digiKam crashed while scanning big collection on external UAB HDD.
 103 ==> 308948 - Pictures belonging to a group can't be displayed in the light table window.
 104 ==> 307223 - Group selected by time not grouping one pair per album.
-105 ==> 
-
+105 ==> 309254 - Contact informations from template aren't written to xmp-tags of jpg-files.
+106 ==> 
 
