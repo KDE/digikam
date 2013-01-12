@@ -196,8 +196,9 @@ TagEditDlg::TagEditDlg(QWidget* parent, TAlbum* album, bool create)
 
     d->keySeqWidget      = new KKeySequenceWidget(page);
     kscTextLabel->setBuddy(d->keySeqWidget);
-    KShortcut ksc(album->property(TagPropertyName::tagKeyboardShortcut()));
-    d->keySeqWidget->setKeySequence(ksc.primary(), KKeySequenceWidget::NoValidate);
+    // Do not inherit tag shortcut, only creates a conflict shortcut, see bug 309558.
+    //KShortcut ksc(album->property(TagPropertyName::tagKeyboardShortcut()));
+    //d->keySeqWidget->setKeySequence(ksc.primary(), KKeySequenceWidget::NoValidate);
     d->keySeqWidget->setCheckActionCollections(TagsActionMngr::defaultManager()->actionCollections());
 
     QLabel* tipLabel2 = new QLabel(page);
