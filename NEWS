@@ -141,5 +141,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 100 ==> 312848 - digiKam 3.0.0-rc win32 installer.
 101 ==> 307750 - No path to mysqld set in server configuration [patch].
 102 ==> 312892 - digiKam crashed while scanning big collection on external UAB HDD.
-103 ==> 
+103 ==> 308948 - Pictures belonging to a group can't be displayed in the light table window.
+104 ==> 307053 - Images sorted incorrectly.
+105 ==> 
+
 
