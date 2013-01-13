@@ -7,20 +7,22 @@
 #  LENSFUN_DEFINITIONS  - Compiler switches required for using lensfun
 #  LENSFUN_VERSION      - library version
 #
-#  Copyright (c) 2008 Adrian Schroeter <adrian@suse.de>
-#  Copyright (c) 2012 Pino Toscano <pino@kde.org>
+#  Copyright (c) 2008 Adrian Schroeter <adrian at suse dot de>
+#  Copyright (c) 2012 Pino Toscano <pino at kde dot org>
+#  Copyright (c) 2012 Ananta Palani <anantapalani at gmail dot com>
+#  Copyright (c) 2012 Caulier Gilles <caulier dot gilles at gmail dot com>
 #
 #  Redistribution and use is allowed according to the terms of the New
 #  BSD license.
 #  For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 #
 
-IF (LENSFUN_LIBRARIES AND LENSFUN_INCLUDE_DIRS)
+IF(LENSFUN_LIBRARIES AND LENSFUN_INCLUDE_DIRS AND LENSFUN_DEFINITIONS AND LENSFUN_VERSION)
 
     # in cache already
     SET(LENSFUN_FOUND TRUE)
 
-ELSE (LENSFUN_LIBRARIES AND LENSFUN_INCLUDE_DIRS)
+ELSE()
 
     # use pkg-config to get the directories and then use these values
     # in the FIND_PATH() and FIND_LIBRARY() calls
@@ -69,8 +71,8 @@ ELSE (LENSFUN_LIBRARIES AND LENSFUN_INCLUDE_DIRS)
                                       VERSION_VAR LENSFUN_VERSION
     )
 
-    # show the LENSFUN_INCLUDE_DIRS and LENSFUN_LIBRARIES variables only in the advanced view
-    MARK_AS_ADVANCED(LENSFUN_INCLUDE_DIRS LENSFUN_LIBRARIES)
+    # show the variables only in the advanced view
+    MARK_AS_ADVANCED(LENSFUN_INCLUDE_DIRS LENSFUN_LIBRARIES LENSFUN_DEFINITIONS LENSFUN_VERSION)
 
-ENDIF (LENSFUN_LIBRARIES AND LENSFUN_INCLUDE_DIRS)
+ENDIF()
 
