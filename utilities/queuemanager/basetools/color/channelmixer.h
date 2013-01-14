@@ -61,7 +61,6 @@ private Q_SLOTS:
 
 private:
 
-    KComboBox*     m_channelCB;
     MixerSettings* m_settingsView;
 };
 

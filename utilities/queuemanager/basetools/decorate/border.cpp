@@ -45,6 +45,8 @@ namespace Digikam
 Border::Border(QObject* const parent)
     : BatchTool("Border", DecorateTool, parent)
 {
+    m_settingsView = 0;
+
     setToolTitle(i18n("Add Border"));
     setToolDescription(i18n("Add a border around images"));
     setToolIconName("bordertool");

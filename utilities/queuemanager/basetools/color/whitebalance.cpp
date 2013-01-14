@@ -45,6 +45,8 @@ namespace Digikam
 WhiteBalance::WhiteBalance(QObject* const parent)
     : BatchTool("WhiteBalance", ColorTool, parent)
 {
+    m_settingsView = 0;
+
     setToolTitle(i18n("White Balance"));
     setToolDescription(i18n("Adjust White Balance."));
     setToolIconName("whitebalance");

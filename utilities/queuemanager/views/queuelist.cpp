@@ -698,7 +698,7 @@ void QueueListView::slotAddItems(const ImageInfoList& list)
         {
             item = dynamic_cast<QueueListViewItem*>(*iter);
 
-            if (item->info() == info)
+            if (item && item->info() == info)
             {
                 find = true;
             }
@@ -738,7 +738,7 @@ void QueueListView::slotThumbnailLoaded(const LoadingDescription& desc, const QP
     {
         QueueListViewItem* const item = dynamic_cast<QueueListViewItem*>(*it);
 
-        if (item->info().fileUrl() == KUrl(desc.filePath))
+        if (item && item->info().fileUrl() == KUrl(desc.filePath))
         {
             if (pix.isNull())
             {
@@ -789,35 +789,36 @@ void QueueListView::removeItems(int removeType)
         {
             QueueListViewItem* const item = dynamic_cast<QueueListViewItem*>(*it);
 
-            switch (removeType)
+            if (item)
             {
-                case Private::ItemsSelected:
+                switch (removeType)
                 {
-                    if (item->isSelected())
+                    case Private::ItemsSelected:
+                    {
+                        if (item->isSelected())
+                        {
+                            delete item;
+                            find = true;
+                        }
+                        break;
+                    }
+
+                    case Private::ItemsDone:
+                    {
+                        if (item->isDone())
+                        {
+                            delete item;
+                            find = true;
+                        }
+                        break;
+                    }
+
+                    default:  // ItemsAll
                     {
                         delete item;
                         find = true;
+                        break;
                     }
-
-                    break;
-                }
-
-                case Private::ItemsDone:
-                {
-                    if (item->isDone())
-                    {
-                        delete item;
-                        find = true;
-                    }
-
-                    break;
-                }
-
-                default:  // ItemsAll
-                {
-                    delete item;
-                    find = true;
-                    break;
                 }
             }
 
@@ -849,7 +850,7 @@ void QueueListView::removeItemById(qlonglong id)
         {
             QueueListViewItem* const item = dynamic_cast<QueueListViewItem*>(*it);
 
-            if (item->info().id() == id)
+            if (item && item->info().id() == id)
             {
                 delete item;
                 find = true;
@@ -877,7 +878,7 @@ QueueListViewItem* QueueListView::findItemById(qlonglong id)
     {
         QueueListViewItem* const item = dynamic_cast<QueueListViewItem*>(*it);
 
-        if (item->info().id() == id)
+        if (item && item->info().id() == id)
         {
             return item;
         }
@@ -896,7 +897,7 @@ QueueListViewItem* QueueListView::findItemByUrl(const KUrl& url)
     {
         QueueListViewItem* const item = dynamic_cast<QueueListViewItem*>(*it);
 
-        if (item->info().fileUrl() == url)
+        if (item && item->info().fileUrl() == url)
         {
             return item;
         }

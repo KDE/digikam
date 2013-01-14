@@ -300,7 +300,7 @@ AssignedListViewItem* AssignedListView::findTool(const BatchToolSet& set)
     {
         AssignedListViewItem* const item = dynamic_cast<AssignedListViewItem*>(*it);
 
-        if (item->toolSet() == set)
+        if (item && item->toolSet() == set)
         {
             return item;
         }

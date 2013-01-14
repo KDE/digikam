@@ -46,6 +46,8 @@ namespace Digikam
 Convert2JPEG::Convert2JPEG(QObject* const parent)
     : BatchTool("Convert2JPEG", ConvertTool, parent)
 {
+    m_settings = 0;
+
     setToolTitle(i18n("Convert To JPEG"));
     setToolDescription(i18n("Convert images to JPEG format."));
     setToolIconName("image-jpeg");

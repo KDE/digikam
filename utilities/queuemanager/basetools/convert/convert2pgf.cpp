@@ -46,6 +46,8 @@ namespace Digikam
 Convert2PGF::Convert2PGF(QObject* const parent)
     : BatchTool("Convert2PGF", ConvertTool, parent)
 {
+    m_settings = 0;
+
     setToolTitle(i18n("Convert To PGF"));
     setToolDescription(i18n("Convert images to PGF format."));
     setToolIconName("image-jp2");

@@ -40,6 +40,8 @@ namespace Digikam
 ColorFX::ColorFX(QObject* const parent)
     : BatchTool("ColorFX", FiltersTool, parent)
 {
+    m_settingsView = 0;
+
     setToolTitle(i18n("Color Effects"));
     setToolDescription(i18n("Apply color effects"));
     setToolIconName("colorfx");

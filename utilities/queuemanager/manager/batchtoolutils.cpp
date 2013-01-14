@@ -38,6 +38,7 @@ BatchToolSet::BatchToolSet()
 {
     index   = -1;
     version = 0;
+    group   = BatchTool::BaseTool;
 }
 
 BatchToolSet::~BatchToolSet()

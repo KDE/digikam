@@ -45,6 +45,7 @@ namespace Digikam
 BCGCorrection::BCGCorrection(QObject* const parent)
     : BatchTool("BCGCorrection", ColorTool, parent)
 {
+    m_settingsView = 0;
     setToolTitle(i18n("BCG Correction"));
     setToolDescription(i18n("Fix Brightness/Contrast/Gamma."));
     setToolIconName("contrast");

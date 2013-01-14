@@ -50,6 +50,8 @@ namespace Digikam
 AutoCorrection::AutoCorrection(QObject* const parent)
     : BatchTool("AutoCorrection", ColorTool, parent)
 {
+    m_comboBox = 0;
+
     setToolTitle(i18n("Color Auto-correction"));
     setToolDescription(i18n("Automatically correct image colors."));
     setToolIconName("autocorrection");

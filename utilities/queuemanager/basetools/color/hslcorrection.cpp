@@ -45,6 +45,7 @@ namespace Digikam
 HSLCorrection::HSLCorrection(QObject* const parent)
     : BatchTool("HSLCorrection", ColorTool, parent)
 {
+    m_settingsView = 0;
     setToolTitle(i18n("HSL Correction"));
     setToolDescription(i18n("Fix Hue/Saturation/Lightness."));
     setToolIconName("adjusthsl");

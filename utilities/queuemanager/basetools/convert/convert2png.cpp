@@ -46,6 +46,7 @@ namespace Digikam
 Convert2PNG::Convert2PNG(QObject* const parent)
     : BatchTool("Convert2PNG", ConvertTool, parent)
 {
+    m_settings = 0;
     setToolTitle(i18n("Convert To PNG"));
     setToolDescription(i18n("Convert images to PNG format."));
     setToolIconName("image-png");

@@ -46,6 +46,8 @@ namespace Digikam
 Convert2TIFF::Convert2TIFF(QObject* const parent)
     : BatchTool("Convert2TIFF", ConvertTool, parent)
 {
+    m_settings = 0;
+
     setToolTitle(i18n("Convert To TIFF"));
     setToolDescription(i18n("Convert images to TIFF format."));
     setToolIconName("image-tiff");

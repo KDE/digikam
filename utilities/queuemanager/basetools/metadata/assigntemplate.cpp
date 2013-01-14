@@ -49,6 +49,9 @@ namespace Digikam
 AssignTemplate::AssignTemplate(QObject* parent)
     : BatchTool("AssignTemplate", MetadataTool, parent)
 {
+    m_templateSelector = 0;
+    m_templateViewer   = 0;
+
     setToolTitle(i18n("Apply Metadata Template"));
     setToolDescription(i18n("Apply template metadata"));
     setToolIconName("application-xml");
@@ -60,7 +63,7 @@ AssignTemplate::~AssignTemplate()
 
 void AssignTemplate::registerSettingsWidget()
 {
-    KVBox* vbox        = new KVBox;
+    KVBox* const vbox  = new KVBox;
     m_templateSelector = new TemplateSelector(vbox);
     m_templateViewer   = new TemplateViewer(vbox);
     m_settingsWidget   = vbox;

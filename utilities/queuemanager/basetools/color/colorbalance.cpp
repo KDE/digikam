@@ -45,6 +45,8 @@ namespace Digikam
 ColorBalance::ColorBalance(QObject* const parent)
     : BatchTool("ColorBalance", ColorTool, parent)
 {
+    m_settingsView = 0;
+
     setToolTitle(i18n("Color Balance"));
     setToolDescription(i18n("Adjust color balance."));
     setToolIconName("adjustrgb");

@@ -46,6 +46,10 @@ namespace Digikam
 RemoveMetadata::RemoveMetadata(QObject* parent)
     : BatchTool("RemoveMetadata", MetadataTool, parent)
 {
+    m_removeExif = 0;
+    m_removeIptc = 0;
+    m_removeXmp  = 0;
+
     setToolTitle(i18n("Remove Metadata"));
     setToolDescription(i18n("Remove Exif, Iptc, or Xmp metadata from images."));
     setToolIconName("exifinfo");
@@ -57,11 +61,11 @@ RemoveMetadata::~RemoveMetadata()
 
 void RemoveMetadata::registerSettingsWidget()
 {
-    KVBox* vbox      = new KVBox;
-    m_removeExif     = new QCheckBox(i18n("Remove Exif"), vbox);
-    m_removeIptc     = new QCheckBox(i18n("Remove Iptc"), vbox);
-    m_removeXmp      = new QCheckBox(i18n("Remove Xmp"), vbox);
-    QLabel* space    = new QLabel(vbox);
+    KVBox* const vbox = new KVBox;
+    m_removeExif      = new QCheckBox(i18n("Remove Exif"), vbox);
+    m_removeIptc      = new QCheckBox(i18n("Remove Iptc"), vbox);
+    m_removeXmp       = new QCheckBox(i18n("Remove Xmp"), vbox);
+    QLabel* space     = new QLabel(vbox);
     vbox->setStretchFactor(space, 10);
 
     m_settingsWidget = vbox;

@@ -46,6 +46,8 @@ namespace Digikam
 Convert2JP2::Convert2JP2(QObject* const parent)
     : BatchTool("Convert2JP2", ConvertTool, parent)
 {
+    m_settings = 0;
+
     setToolTitle(i18n("Convert To JP2"));
     setToolDescription(i18n("Convert images to JPEG-2000 format."));
     setToolIconName("image-jp2");
