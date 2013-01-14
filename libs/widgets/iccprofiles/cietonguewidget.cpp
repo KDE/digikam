@@ -331,7 +331,7 @@ void CIETongueWidget::setProfile(cmsHPROFILE hProfile)
 
     // Get the colorant matrix.
 
-    ZeroMemory(&(d->Primaries), sizeof(cmsCIExyYTRIPLE));
+    memset(&(d->Primaries),0,sizeof(cmsCIExyYTRIPLE));
 
     if (dkCmsIsTag(hProfile, icSigRedColorantTag)   &&
         dkCmsIsTag(hProfile, icSigGreenColorantTag) &&

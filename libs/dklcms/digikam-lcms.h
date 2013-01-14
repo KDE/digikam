@@ -75,21 +75,15 @@
 
 #define LCMS_DESC_MAX     512
 
-#define ZeroMemory(p,l)     memset((p),0,(l))
-#define CopyMemory(d,s,l)   memcpy((d),(s),(l))
 #define FAR
 
 #define LCMS_ERROR_SHOW     1
 #define cmsFLAGS_NOTPRECALC               0x0100
 #define cmsFLAGS_WHITEBLACKCOMPENSATION   0x2000
 
-#define NON_WINDOWS // TODO:
-#ifdef NON_WINDOWS
-#  define LCMSEXPORT
-#  define LCMSAPI
-#else
+#ifdef Q_WS_WIN
 #  ifdef LCMS_DLL
-#    define LCMSEXPORT  _stdcall
+#    define LCMSEXPORT  __stdcall
 #    ifdef LCMS_DLL_BUILD
 #        define LCMSAPI     __declspec(dllexport)
 #    else
@@ -99,6 +93,9 @@
 #    define LCMSEXPORT cdecl
 #    define LCMSAPI
 #  endif
+#else
+#  define LCMSEXPORT
+#  define LCMSAPI
 #endif
 
 typedef int            LCMSBOOL;
@@ -222,7 +219,7 @@ LCMSAPI int    LCMSEXPORT                  dkCmsErrorAction(int nAction);
 
 LCMSAPI DWORD  LCMSEXPORT                  dkCmsGetProfileICCversion(cmsHPROFILE hProfile);
 
-LCMSEXPORT void                            dkCmsSetAlarmCodes(int r, int g, int b);
+void LCMSEXPORT                            dkCmsSetAlarmCodes(int r, int g, int b);
 
 LCMSAPI QString       LCMSEXPORT           dkCmsTakeProductName(cmsHPROFILE hProfile);
 

@@ -308,7 +308,7 @@ LCMSAPI DWORD LCMSEXPORT dkCmsGetProfileICCversion(cmsHPROFILE hProfile)
     return (DWORD) cmsGetEncodedICCversion(hProfile);
 }
 
-LCMSEXPORT void dkCmsSetAlarmCodes(int r, int g, int b)
+void LCMSEXPORT dkCmsSetAlarmCodes(int r, int g, int b)
 {
     cmsUInt16Number NewAlarm[cmsMAXCHANNELS];
     NewAlarm[0] = (cmsUInt16Number)r;
