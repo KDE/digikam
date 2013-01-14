@@ -7,7 +7,7 @@
  * Description : global macros, variables and flags
  *
  * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at gmail dot com>
- * Copyright (C) 2009-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -40,9 +40,9 @@ namespace Digikam
 
 // Field value limits for all Digikam-specific fields (not EXIF/IPTC fields)
 
-static const int RatingMin = 0;
-static const int RatingMax = 5;
-static const int NoRating  = -1;
+static const int RatingMin          = 0;
+static const int RatingMax          = 5;
+static const int NoRating           = -1;
 
 // --------------------------------------------------------
 
@@ -56,7 +56,7 @@ static const int MAX_SEGMENT_8BIT   = NUM_SEGMENTS_8BIT - 1;
 
 enum ColorLabel
 {
-    NoColorLabel = 0,
+    NoColorLabel        = 0,
     RedLabel,
     OrangeLabel,
     YellowLabel,
@@ -75,7 +75,7 @@ enum ColorLabel
 
 enum PickLabel
 {
-    NoPickLabel = 0,
+    NoPickLabel        = 0,
     RejectedLabel,
     PendingLabel,
     AcceptedLabel,
