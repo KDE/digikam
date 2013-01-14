@@ -60,6 +60,7 @@ DigikamKCategorizedView::Private::Private(DigikamKCategorizedView* const listVie
       rightMouseButtonPressed(false),
       dragLeftViewport(false),
       drawItemsWhileDragging(true),
+      forcedSelectionPosition(0),
       proxyModel(0)
 {
 }

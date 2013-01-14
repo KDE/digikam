@@ -6,7 +6,7 @@
  * Date        : 2006-07-09
  * Description : item tool tip configuration setup tab
  *
- * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -80,13 +80,20 @@ public:
         showAlbumCollectionBox(0),
         showAlbumCategoryBox(0),
         showAlbumCaptionBox(0),
+        showImportToolTipsBox(0),
         showItemTitleBox(0),
         showItemDateBox(0),
         showItemSizeBox(0),
         showItemTypeBox(0),
         showItemDimensionsBox(0),
+        showItemPhotoMakeBox(0),
+        showItemPhotoFocalBox(0),
+        showItemPhotoExpoBox(0),
+        showItemPhotoFlashBox(0),
+        showItemPhotoWBBox(0),
         fileSettingBox(0),
         photoSettingBox(0),
+        videoSettingBox(0),
         digikamSettingBox(0),
         albumSettingBox(0),
         importSettingBox(0),

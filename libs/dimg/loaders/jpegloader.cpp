@@ -7,7 +7,7 @@
  * Description : A JPEG IO file for DImg framework
  *
  * Copyright (C) 2005      by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -59,7 +59,7 @@ namespace Digikam
 
 void JPEGLoader::dimg_jpeg_error_exit(j_common_ptr cinfo)
 {
-    dimg_jpeg_error_mgr* myerr = static_cast<dimg_jpeg_error_mgr*>(cinfo->err);
+    dimg_jpeg_error_mgr* const myerr = static_cast<dimg_jpeg_error_mgr*>(cinfo->err);
 
     char buffer[JMSG_LENGTH_MAX];
     (*cinfo->err->format_message)(cinfo, buffer);
@@ -102,9 +102,8 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* const observe
 {
     readMetadata(filePath, DImg::JPEG);
 
-    int colorModel = DImg::COLORMODELUNKNOWN;
-
-    FILE* file = fopen(QFile::encodeName(filePath), "rb");
+    int colorModel   = DImg::COLORMODELUNKNOWN;
+    FILE* const file = fopen(QFile::encodeName(filePath), "rb");
 
     if (!file)
     {
@@ -148,12 +147,14 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* const observe
     class CleanupData
     {
     public:
+
         CleanupData()
         {
             data  = 0;
             dest  = 0;
             f     = 0;
         }
+
         ~CleanupData()
         {
             delete [] data;
@@ -164,32 +165,41 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* const observe
                 fclose(f);
             }
         }
-        void setData(uchar* d)
+
+        void setData(uchar* const d)
         {
             data = d;
         }
-        void setDest(uchar* d)
+
+        void setDest(uchar* const d)
         {
             dest = d;
         }
-        void setFile(FILE* file)
+
+        void setFile(FILE* const file)
         {
             f = file;
         }
+
         void deleteData()
         {
             delete [] data;
             data = 0;
         }
+
         void takeDest()
         {
             dest = 0;
         }
+
+    public:
+
         uchar* data;
         uchar* dest;
         FILE*  f;
     };
-    CleanupData* cleanupData = new CleanupData;
+
+    CleanupData* const cleanupData = new CleanupData;
     cleanupData->setFile(file);
 
     // If an error occurs during reading, libjpeg will jump here
@@ -336,7 +346,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* const observe
         // -------------------------------------------------------------------
         // Get scanlines
 
-        uchar* ptr, *line[16], *data = 0;
+        uchar* ptr  = 0, *data = 0, *line[16];
         uchar* ptr2 = 0;
         int    x, y, l, i, scans;
         //        int count;
@@ -624,7 +634,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* const observe
 
 bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver* const observer)
 {
-    FILE* file = fopen(QFile::encodeName(filePath), "wb");
+    FILE* const file = fopen(QFile::encodeName(filePath), "wb");
 
     if (!file)
     {
@@ -650,7 +660,11 @@ bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver* const observe
     class CleanupData
     {
     public:
-        CleanupData() : line(0) {}
+
+        CleanupData() : line(0), f(0)
+        {
+        }
+
         ~CleanupData()
         {
             deleteLine();
@@ -660,26 +674,30 @@ bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver* const observe
                 fclose(f);
             }
         }
-        void setLine(uchar* l)
+
+        void setLine(uchar* const l)
         {
             line = l;
         }
-        void setFile(FILE* file)
+
+        void setFile(FILE* const file)
         {
             f = file;
         }
+
         void deleteLine()
         {
             delete [] line;
             line = 0;
         }
 
+    public:
+
         uchar* line;
         FILE*  f;
     };
 
-    CleanupData* cleanupData = new CleanupData;
-
+    CleanupData* const cleanupData = new CleanupData;
     cleanupData->setFile(file);
 
     // If an error occurs during writing, libjpeg will jump here
@@ -709,8 +727,8 @@ bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver* const observe
     cinfo.input_components = 3;
     cinfo.in_color_space   = JCS_RGB;
 
-    QVariant qualityAttr = imageGetAttribute("quality");
-    int quality = qualityAttr.isValid() ? qualityAttr.toInt() : 90;
+    QVariant qualityAttr   = imageGetAttribute("quality");
+    int quality            = qualityAttr.isValid() ? qualityAttr.toInt() : 90;
 
     if (quality < 0)
     {
@@ -723,7 +741,7 @@ bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver* const observe
     }
 
     QVariant subSamplingAttr = imageGetAttribute("subsampling");
-    int subsampling = subSamplingAttr.isValid() ? subSamplingAttr.toInt() : 1;  // Medium
+    int subsampling          = subSamplingAttr.isValid() ? subSamplingAttr.toInt() : 1;  // Medium
 
     jpeg_set_defaults(&cinfo);
 

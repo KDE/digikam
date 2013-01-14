@@ -62,7 +62,9 @@ DImgPreviewItem::DImgPreviewItemPrivate::DImgPreviewItemPrivate()
     state             = DImgPreviewItem::NoImage;
     previewSize       = 1024;
     loadFullImageSize = false;
+    exifRotate        = false;
     previewThread     = 0;
+    preloadThread     = 0;
 }
 
 void DImgPreviewItem::DImgPreviewItemPrivate::init(DImgPreviewItem* q)

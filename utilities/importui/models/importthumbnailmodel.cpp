@@ -43,6 +43,7 @@ public:
 
     Private() :
         controller(0),
+        kdeJob(0),
         thumbSize(0),
         lastGlobalThumbSize(0),
         emitDataChanged(true)
