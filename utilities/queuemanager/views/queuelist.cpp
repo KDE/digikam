@@ -708,7 +708,7 @@ void QueueListView::slotAddItems(const ImageInfoList& list)
 
         if (!find)
         {
-            item = new QueueListViewItem(this, info);
+            new QueueListViewItem(this, info);
         }
     }
 
