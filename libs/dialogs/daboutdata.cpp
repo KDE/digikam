@@ -6,7 +6,7 @@
  * Date        : 2008-07-30
  * Description : digiKam about data.
  *
- * Copyright (C) 2008-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -43,7 +43,7 @@
 namespace Digikam
 {
 
-DAboutData::DAboutData(KXmlGuiWindow* parent)
+DAboutData::DAboutData(KXmlGuiWindow* const parent)
     : QObject(parent)
 {
 }
@@ -54,17 +54,17 @@ DAboutData::~DAboutData()
 
 void DAboutData::registerHelpActions()
 {
-    KXmlGuiWindow* kwin          = dynamic_cast<KXmlGuiWindow*>(parent());
+    KXmlGuiWindow* const kwin          = dynamic_cast<KXmlGuiWindow*>(parent());
 
-    KAction* rawCameraListAction = new KAction(KIcon("kdcraw"), i18n("Supported RAW Cameras"), kwin);
+    KAction* const rawCameraListAction = new KAction(KIcon("kdcraw"), i18n("Supported RAW Cameras"), kwin);
     connect(rawCameraListAction, SIGNAL(triggered()), this, SLOT(slotRawCameraList()));
     kwin->actionCollection()->addAction("help_rawcameralist", rawCameraListAction);
 
-    KAction* donateMoneyAction   = new KAction(KIcon("internet-web-browser"), i18n("Donate..."), kwin);
+    KAction* const donateMoneyAction   = new KAction(KIcon("internet-web-browser"), i18n("Donate..."), kwin);
     connect(donateMoneyAction, SIGNAL(triggered()), this, SLOT(slotDonateMoney()));
     kwin->actionCollection()->addAction("help_donatemoney", donateMoneyAction);
 
-    KAction* contributeAction    = new KAction(KIcon("internet-web-browser"), i18n("Contribute..."), kwin);
+    KAction* const contributeAction    = new KAction(KIcon("internet-web-browser"), i18n("Contribute..."), kwin);
     connect(contributeAction, SIGNAL(triggered()), this, SLOT(slotContribute()));
     kwin->actionCollection()->addAction("help_contribute", contributeAction);
 }
@@ -103,7 +103,7 @@ KLocalizedString DAboutData::digiKamSlogan()
 
 KLocalizedString DAboutData::copyright()
 {
-    return ki18n("(c) 2002-2012, digiKam developers team");
+    return ki18n("(c) 2002-2013, digiKam developers team");
 }
 
 KUrl DAboutData::webProjectUrl()
