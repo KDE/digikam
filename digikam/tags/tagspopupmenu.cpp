@@ -7,8 +7,8 @@
  * Description : a pop-up menu implementation to display a
  *               hierarchical view of digiKam tags.
  *
- * Copyright (C) 2004 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004      by Renchi Raju <renchi dot raju at gmail dot com>
+ * Copyright (C) 2006-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * Parts of the drawing code are inspired by qmenu.cpp and qitemdelegate.cpp.
@@ -66,8 +66,8 @@ class TagToggleAction : public QWidgetAction
 {
 public:
 
-    TagToggleAction(const QString& text, QObject* parent);
-    TagToggleAction(const KIcon& icon, const QString& text, QObject* parent);
+    TagToggleAction(const QString& text, QObject* const parent);
+    TagToggleAction(const KIcon& icon, const QString& text, QObject* const parent);
     virtual QWidget* createWidget(QWidget* parent);
 
     void setSpecialChecked(bool checked);
@@ -88,7 +88,7 @@ class TagToggleMenuWidget : public QWidget
 {
 public:
 
-    TagToggleMenuWidget(KMenu* parent, TagToggleAction* action);
+    TagToggleMenuWidget(KMenu* const parent, TagToggleAction* const action);
 
 protected:
 
@@ -110,7 +110,7 @@ private:
 
 // ------------------------------------------------------------------------
 
-TagToggleMenuWidget::TagToggleMenuWidget(KMenu* parent, TagToggleAction* action)
+TagToggleMenuWidget::TagToggleMenuWidget(KMenu* const parent, TagToggleAction* const action)
     : QWidget(parent)
 {
     m_menu   = parent;
@@ -317,7 +317,7 @@ QRect TagToggleMenuWidget::checkIndicatorSize(QStyleOption* option) const
 
 // ------------------------------------------------------------------------
 
-TagToggleAction::TagToggleAction(const QString& text, QObject* parent)
+TagToggleAction::TagToggleAction(const QString& text, QObject* const parent)
     : QWidgetAction(parent),
       m_checked(false),
       m_checkBoxHidden(false)
@@ -326,7 +326,7 @@ TagToggleAction::TagToggleAction(const QString& text, QObject* parent)
     setCheckable(true);
 }
 
-TagToggleAction::TagToggleAction(const KIcon& icon, const QString& text, QObject* parent)
+TagToggleAction::TagToggleAction(const KIcon& icon, const QString& text, QObject* const parent)
     : QWidgetAction(parent),
       m_checked(false),
       m_checkBoxHidden(false)
@@ -338,11 +338,11 @@ TagToggleAction::TagToggleAction(const KIcon& icon, const QString& text, QObject
 
 QWidget* TagToggleAction::createWidget(QWidget* parent)
 {
-    KMenu* menu = qobject_cast<KMenu*>(parent);
+    KMenu* const menu = qobject_cast<KMenu*>(parent);
 
     if (menu)
     {
-        return new TagToggleMenuWidget(menu, this);
+        return (new TagToggleMenuWidget(menu, this));
     }
     else
     {
@@ -376,14 +376,15 @@ bool TagToggleAction::isCheckBoxHidden() const
 
 // ------------------------------------------------------------------------
 
-class TagsPopupMenu::TagsPopupMenuPriv
+class TagsPopupMenu::Private
 {
 public:
 
-    TagsPopupMenuPriv()
+    Private()
     {
         addTagActions    = 0;
         toggleTagActions = 0;
+        mode             = ASSIGN;
     }
 
     QPixmap              addTagPix;
@@ -400,15 +401,15 @@ public:
     TagsPopupMenu::Mode  mode;
 };
 
-TagsPopupMenu::TagsPopupMenu(qlonglong selectedImageId, Mode mode, QWidget* parent)
-    : KMenu(parent), d(new TagsPopupMenuPriv)
+TagsPopupMenu::TagsPopupMenu(qlonglong selectedImageId, Mode mode, QWidget* const parent)
+    : KMenu(parent), d(new Private)
 {
     d->selectedImageIDs << selectedImageId;
     setup(mode);
 }
 
-TagsPopupMenu::TagsPopupMenu(const QList<qlonglong>& selectedImageIds, Mode mode, QWidget* parent)
-    : KMenu(parent), d(new TagsPopupMenuPriv)
+TagsPopupMenu::TagsPopupMenu(const QList<qlonglong>& selectedImageIds, Mode mode, QWidget* const parent)
+    : KMenu(parent), d(new Private)
 {
     d->selectedImageIDs = selectedImageIds;
     setup(mode);
@@ -435,7 +436,7 @@ void TagsPopupMenu::setup(Mode mode)
     connect(this, SIGNAL(aboutToShow()),
             this, SLOT(slotAboutToShow()));
 
-    AlbumThumbnailLoader* loader = AlbumThumbnailLoader::instance();
+    AlbumThumbnailLoader* const loader = AlbumThumbnailLoader::instance();
 
     connect(loader, SIGNAL(signalThumbnail(Album*,QPixmap)),
             this, SLOT(slotTagThumbnail(Album*,QPixmap)));
@@ -662,15 +663,15 @@ void TagsPopupMenu::iterateAndBuildMenu(KMenu* menu, TAlbum* album)
 
 KMenu* TagsPopupMenu::buildSubMenu(int tagid)
 {
-    AlbumManager* man = AlbumManager::instance();
-    TAlbum* album     = man->findTAlbum(tagid);
+    AlbumManager* const man = AlbumManager::instance();
+    TAlbum* const album     = man->findTAlbum(tagid);
 
     if (!album)
     {
         return 0;
     }
 
-    KMenu* popup = new KMenu(this);
+    KMenu* const popup = new KMenu(this);
     popup->setSeparatorsCollapsible(true);
 
     if (d->mode == ASSIGN && !d->assignedTags.contains(album->id()))
@@ -721,21 +722,21 @@ KMenu* TagsPopupMenu::buildSubMenu(int tagid)
 void TagsPopupMenu::buildFlatMenu(KMenu* menu)
 {
     QList<int> ids;
-    QStringList shortenedPaths =
-        TagsCache::instance()->shortenedTagPaths(d->assignedTags.toList(), &ids,
-                                                 TagsCache::NoLeadingSlash, TagsCache::NoHiddenTags);
+    QStringList shortenedPaths = TagsCache::instance()->shortenedTagPaths(d->assignedTags.toList(), &ids,
+                                                        TagsCache::NoLeadingSlash, TagsCache::NoHiddenTags);
 
     for (int i=0; i<shortenedPaths.size(); ++i)
     {
-        QString t = shortenedPaths.at(i);
+        QString t       = shortenedPaths.at(i);
         t.replace('&', "&&");
-        TAlbum* a = AlbumManager::instance()->findTAlbum(ids.at(i));
+        TAlbum* const a = AlbumManager::instance()->findTAlbum(ids.at(i));
+
         if (!a)
         {
             continue;
         }
 
-        TagToggleAction* action = new TagToggleAction(t, d->toggleTagActions);
+        TagToggleAction* const action = new TagToggleAction(t, d->toggleTagActions);
 
         if (d->mode == ASSIGN)
         {
@@ -759,7 +760,7 @@ void TagsPopupMenu::buildFlatMenu(KMenu* menu)
 
 void TagsPopupMenu::setAlbumIcon(QAction* action, TAlbum* album)
 {
-    AlbumThumbnailLoader* loader = AlbumThumbnailLoader::instance();
+    AlbumThumbnailLoader* const loader = AlbumThumbnailLoader::instance();
     QPixmap pix;
 
     if (!loader->getTagThumbnail(album, pix))
@@ -789,8 +790,8 @@ void TagsPopupMenu::slotToggleTag(QAction* action)
 
 void TagsPopupMenu::slotAddTag(QAction* action)
 {
-    int tagID         = action->data().toInt();
-    AlbumManager* man = AlbumManager::instance();
+    int tagID               = action->data().toInt();
+    AlbumManager* const man = AlbumManager::instance();
 
     if (tagID == -1)
     {
@@ -798,7 +799,7 @@ void TagsPopupMenu::slotAddTag(QAction* action)
         return;
     }
 
-    TAlbum* parent    = man->findTAlbum(tagID);
+    TAlbum* const parent    = man->findTAlbum(tagID);
 
     if (!parent)
     {
@@ -827,7 +828,8 @@ void TagsPopupMenu::slotAddTag(QAction* action)
 void TagsPopupMenu::slotTagThumbnail(Album* album, const QPixmap& pix)
 {
     QList<QAction*> actionList = actions();
-    foreach(QAction* action, actionList)
+
+    foreach(QAction* const action, actionList)
     {
         if (action->data().toInt() == album->id())
         {

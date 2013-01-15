@@ -6,7 +6,7 @@
  * Date        : 2005-05-25
  * Description : Blur FX threaded image filter.
  *
- * Copyright 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright 2005-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * Original Blur algorithms copyrighted 2004 by
@@ -51,6 +51,11 @@ namespace Digikam
 BlurFXFilter::BlurFXFilter(QObject* const parent)
     : DImgThreadedFilter(parent)
 {
+    m_blurFXType = ZoomBlur;
+    m_distance   = 100;
+    m_level      = 45;
+    m_randomSeed = 0;
+
     initFilter();
 }
 
@@ -130,7 +135,7 @@ void BlurFXFilter::filterImage()
  *                     This radius is always from the center to out of the image, we
  *                     calc a proportional radius from the center.
  */
-void BlurFXFilter::zoomBlur(DImg* orgImage, DImg* destImage, int X, int Y, int Distance, QRect pArea)
+void BlurFXFilter::zoomBlur(DImg* const orgImage, DImg* const destImage, int X, int Y, int Distance, const QRect& pArea)
 {
     if (Distance <= 1)
     {
@@ -255,7 +260,7 @@ void BlurFXFilter::zoomBlur(DImg* orgImage, DImg* destImage, int X, int Y, int D
  *                     angle. After this, we sum this pixel with others with the same
  *                     radius, but different angles. Here I'm using degrees angles.
  */
-void BlurFXFilter::radialBlur(DImg* orgImage, DImg* destImage, int X, int Y, int Distance, QRect pArea)
+void BlurFXFilter::radialBlur(DImg* const orgImage, DImg* const destImage, int X, int Y, int Distance, const QRect& pArea)
 {
     if (Distance <= 1)
     {
@@ -380,9 +385,9 @@ void BlurFXFilter::radialBlur(DImg* orgImage, DImg* destImage, int X, int Y, int
  * pArea            => Preview area.
  *
  */
-void BlurFXFilter::focusBlur(DImg* orgImage, DImg* destImage,
+void BlurFXFilter::focusBlur(DImg* const orgImage, DImg* const destImage,
                              int X, int Y, int BlurRadius, int BlendRadius,
-                             bool bInversed, QRect pArea)
+                             bool bInversed, const QRect& pArea)
 {
     int progress;
 
@@ -542,7 +547,7 @@ void BlurFXFilter::focusBlur(DImg* orgImage, DImg* destImage,
  *                     We sum all the pixels with value = 1 and apply at the pixel with*
  *                     the position "C".
  */
-void BlurFXFilter::farBlur(DImg* orgImage, DImg* destImage, int Distance)
+void BlurFXFilter::farBlur(DImg* const orgImage, DImg* const destImage, int Distance)
 {
     if (Distance < 1)
     {
@@ -597,7 +602,7 @@ void BlurFXFilter::farBlur(DImg* orgImage, DImg* destImage, int Distance)
  *                     with correction between pixels.
  */
 
-void BlurFXFilter::smartBlur(DImg* orgImage, DImg* destImage, int Radius, int Strength)
+void BlurFXFilter::smartBlur(DImg* const orgImage, DImg* const destImage, int Radius, int Strength)
 {
     if (Radius <= 0)
     {
@@ -773,7 +778,7 @@ void BlurFXFilter::smartBlur(DImg* orgImage, DImg* destImage, int Radius, int St
  *                     will taking near pixels. After this we blur (add and do a
  *                     division).
  */
-void BlurFXFilter::motionBlur(DImg* orgImage, DImg* destImage, int Distance, double Angle)
+void BlurFXFilter::motionBlur(DImg* const orgImage, DImg* const destImage, int Distance, double Angle)
 {
     if (Distance == 0)
     {
@@ -882,7 +887,7 @@ void BlurFXFilter::motionBlur(DImg* orgImage, DImg* destImage, int Distance, dou
  *                     blur with 3x3 dimentions, in light tones, we apply a blur with
  *                     5x5 dimentions. Easy, hun?
  */
-void BlurFXFilter::softenerBlur(DImg* orgImage, DImg* destImage)
+void BlurFXFilter::softenerBlur(DImg* const orgImage, DImg* const destImage)
 {
     int progress;
 
@@ -994,7 +999,7 @@ void BlurFXFilter::softenerBlur(DImg* orgImage, DImg* destImage)
  *                    different positions (top, button, left and right), with these 4
  *                    layers, we join all the pixels.
  */
-void BlurFXFilter::shakeBlur(DImg* orgImage, DImg* destImage, int Distance)
+void BlurFXFilter::shakeBlur(DImg* const orgImage, DImg* const destImage, int Distance)
 {
     int progress;
 
@@ -1093,7 +1098,7 @@ void BlurFXFilter::shakeBlur(DImg* orgImage, DImg* destImage, int Distance)
  * Theory           => Similar to Diffuse effect, but the random byte is defined
  *                     in a matrix. Diffuse uses a random diagonal byte.
  */
-void BlurFXFilter::frostGlass(DImg* orgImage, DImg* destImage, int Frost)
+void BlurFXFilter::frostGlass(DImg* const orgImage, DImg* const destImage, int Frost)
 {
     int progress;
 
@@ -1165,7 +1170,7 @@ void BlurFXFilter::frostGlass(DImg* orgImage, DImg* destImage, int Frost)
  *                     center pixel.
  *                     Now the function scan the rows from the top (like photoshop).
  */
-void BlurFXFilter::mosaic(DImg* orgImage, DImg* destImage, int SizeW, int SizeH)
+void BlurFXFilter::mosaic(DImg* const orgImage, DImg* const destImage, int SizeW, int SizeH)
 {
     int progress;
 
@@ -1244,10 +1249,10 @@ void BlurFXFilter::mosaic(DImg* orgImage, DImg* destImage, int SizeW, int SizeH)
  *
  * Theory            => This function takes from a distinct matrix a random color
  */
-DColor BlurFXFilter::RandomColor(uchar* Bits, int Width, int Height, bool sixteenBit, int bytesDepth,
+DColor BlurFXFilter::RandomColor(uchar* const Bits, int Width, int Height, bool sixteenBit, int bytesDepth,
                                  int X, int Y, int Radius,
-                                 int alpha, RandomNumberGenerator& generator, int range, uchar* IntensityCount,
-                                 uint* AverageColorR, uint* AverageColorG, uint* AverageColorB)
+                                 int alpha, RandomNumberGenerator& generator, int range, uchar* const IntensityCount,
+                                 uint* const AverageColorR, uint* const AverageColorG, uint* const AverageColorB)
 {
     DColor color;
     int offset;
@@ -1324,7 +1329,6 @@ DColor BlurFXFilter::RandomColor(uchar* Bits, int Width, int Height, bool sixtee
         return DColor(0, 0, 0, 0, sixteenBit);
     }
 
-
     color.setSixteenBit(sixteenBit);
     color.setAlpha(alpha);
 
@@ -1357,7 +1361,7 @@ DColor BlurFXFilter::RandomColor(uchar* Bits, int Width, int Height, bool sixtee
  *                     this, but the trick here its to store the sum used by the
  *                     previous pixel, so we sum with the other pixels that wasn't get
  */
-void BlurFXFilter::MakeConvolution(DImg* orgImage, DImg* destImage, int Radius, int Kernel[])
+void BlurFXFilter::MakeConvolution(DImg* const orgImage, DImg* const destImage, int Radius, int Kernel[])
 {
     if (Radius <= 0)
     {
@@ -1537,9 +1541,9 @@ FilterAction BlurFXFilter::filterAction()
     FilterAction action(FilterIdentifier(), CurrentVersion());
     action.setDisplayableName(DisplayableName());
 
-    action.addParameter("type", m_blurFXType);
+    action.addParameter("type",     m_blurFXType);
     action.addParameter("distance", m_distance);
-    action.addParameter("level", m_level);
+    action.addParameter("level",    m_level);
 
     if (m_blurFXType == FrostGlass)
     {
@@ -1552,8 +1556,8 @@ FilterAction BlurFXFilter::filterAction()
 void BlurFXFilter::readParameters(const FilterAction& action)
 {
     m_blurFXType = action.parameter("type").toInt();
-    m_distance = action.parameter("distance").toInt();
-    m_level = action.parameter("level").toInt();
+    m_distance   = action.parameter("distance").toInt();
+    m_level      = action.parameter("level").toInt();
 
     if (m_blurFXType == FrostGlass)
     {

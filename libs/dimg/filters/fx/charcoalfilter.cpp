@@ -6,7 +6,7 @@
  * Date        : 2005-05-25
  * Description : Charcoal threaded image filter.
  *
- * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -46,13 +46,15 @@
 namespace Digikam
 {
 
-CharcoalFilter::CharcoalFilter(QObject* parent)
+CharcoalFilter::CharcoalFilter(QObject* const parent)
     : DImgThreadedFilter(parent)
 {
+    m_pencil = 5.0;
+    m_smooth = 10.0;
     initFilter();
 }
 
-CharcoalFilter::CharcoalFilter(DImg* orgImage, QObject* parent, double pencil, double smooth)
+CharcoalFilter::CharcoalFilter(DImg* const orgImage, QObject* const parent, double pencil, double smooth)
     : DImgThreadedFilter(orgImage, parent, "Charcoal")
 {
     m_pencil = pencil;
@@ -224,9 +226,9 @@ bool CharcoalFilter::convolveImage(const unsigned int order, const double* kerne
 
         for (x = 0; runningFlag() && (x < width); ++x)
         {
-            k = normal_kernel.data();
+            k   = normal_kernel.data();
             red = green = blue = alpha = 0;
-            sy = y - (kernelWidth / 2);
+            sy  = y - (kernelWidth / 2);
 
             for (mcy = 0; runningFlag() && (mcy < kernelWidth); ++mcy, ++sy)
             {
@@ -262,6 +264,7 @@ bool CharcoalFilter::convolveImage(const unsigned int order, const double* kerne
             postProgress(progress);
         }
     }
+
     return true;
 }
 
@@ -315,6 +318,5 @@ void CharcoalFilter::readParameters(const Digikam::FilterAction& action)
     m_pencil = action.parameter("pencil").toDouble();
     m_smooth = action.parameter("smooth").toDouble();
 }
-
 
 }  // namespace Digikam

@@ -6,7 +6,7 @@
  * Date        : 2005-05-25
  * Description : Emboss threaded image filter.
  *
- * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
@@ -43,22 +43,25 @@ class DIGIKAM_EXPORT EmbossFilter : public DImgThreadedFilter
 
 public:
 
-    explicit EmbossFilter(QObject* parent = 0);
-    explicit EmbossFilter(DImg* orgImage, QObject* parent=0, int depth=30);
+    explicit EmbossFilter(QObject* const parent = 0);
+    explicit EmbossFilter(DImg* const orgImage, QObject* const parent=0, int depth=30);
     ~EmbossFilter();
 
     static QString          FilterIdentifier()
     {
         return "digikam:EmbossFilter";
     }
+
     static QString          DisplayableName()
     {
         return I18N_NOOP("Emboss Effect");
     }
+
     static QList<int>       SupportedVersions()
     {
         return QList<int>() << 1;
     }
+
     static int              CurrentVersion()
     {
         return 1;
@@ -68,6 +71,7 @@ public:
     {
         return FilterIdentifier();
     }
+
     virtual FilterAction    filterAction();
     void                    readParameters(const FilterAction& action);
 

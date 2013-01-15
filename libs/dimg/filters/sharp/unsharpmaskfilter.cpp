@@ -6,7 +6,7 @@
  * Date        : 2005-17-07
  * Description : A Sharpen threaded image filter.
  *
- * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009      by Matthias Welwarsky <matze at welwarsky dot de>
  * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
@@ -49,6 +49,10 @@ namespace Digikam
 UnsharpMaskFilter::UnsharpMaskFilter(QObject* const parent)
     : DImgThreadedFilter(parent)
 {
+    m_radius    = 1;
+    m_amount    = 1.0;
+    m_threshold = 0.05;
+
     initFilter();
 }
 

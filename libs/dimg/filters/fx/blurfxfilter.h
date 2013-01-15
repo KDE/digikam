@@ -6,7 +6,7 @@
  * Date        : 2005-05-25
  * Description : Blur FX threaded image filter.
  *
- * Copyright 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright 2005-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
@@ -100,31 +100,30 @@ private:
     void filterImage();
 
     // Backported from ImageProcessing version 1
-    void softenerBlur(DImg* orgImage, DImg* destImage);
-    void shakeBlur(DImg* orgImage, DImg* destImage, int Distance);
-    void frostGlass(DImg* orgImage, DImg* destImage, int Frost);
+    void softenerBlur(DImg* const orgImage, DImg* const destImage);
+    void shakeBlur(DImg* const orgImage, DImg* const destImage, int Distance);
+    void frostGlass(DImg* const orgImage, DImg* const destImage, int Frost);
 
     // Backported from ImageProcessing version 2
-    void zoomBlur(DImg* orgImage, DImg* destImage,
-                  int X, int Y, int Distance, QRect pArea=QRect());
-    void radialBlur(DImg* orgImage, DImg* destImage,
-                    int X, int Y, int Distance, QRect pArea=QRect());
-    void focusBlur(DImg* orgImage, DImg* destImage,
-                   int X, int Y, int BlurRadius, int BlendRadius,
-                   bool bInversed=false, QRect pArea=QRect());
-    void farBlur(DImg* orgImage, DImg* destImage, int Distance);
-    void motionBlur(DImg* orgImage, DImg* destImage, int Distance, double Angle=0.0);
-    void smartBlur(DImg* orgImage, DImg* destImage, int Radius, int Strength);
-    void mosaic(DImg* orgImage, DImg* destImage, int SizeW, int SizeH);
+    void zoomBlur(DImg* const orgImage, DImg* const destImage, int X, int Y, int Distance, const QRect& pArea=QRect());
+    void radialBlur(DImg* const orgImage, DImg* const destImage, int X, int Y, int Distance, const QRect& pArea=QRect());
+
+    void focusBlur(DImg* const orgImage, DImg* const destImage, int X, int Y, int BlurRadius, int BlendRadius,
+                   bool bInversed=false, const QRect& pArea=QRect());
+
+    void farBlur(DImg* const orgImage, DImg* const destImage, int Distance);
+    void motionBlur(DImg* const orgImage, DImg* const destImage, int Distance, double Angle=0.0);
+    void smartBlur(DImg* const orgImage, DImg* const destImage, int Radius, int Strength);
+    void mosaic(DImg* const orgImage, DImg* const destImage, int SizeW, int SizeH);
 
 private:
 
-    void MakeConvolution(DImg* orgImage, DImg* destImage, int Radius, int Kernel[]);
+    void MakeConvolution(DImg* const orgImage, DImg* const destImage, int Radius, int Kernel[]);
 
-    DColor RandomColor(uchar* Bits, int Width, int Height, bool sixteenBit, int bytesDepth,
+    DColor RandomColor(uchar* const Bits, int Width, int Height, bool sixteenBit, int bytesDepth,
                        int X, int Y, int Radius,
-                       int alpha, RandomNumberGenerator& generator, int range, uchar* IntensityCount,
-                       uint* AverageColorR, uint* AverageColorG, uint* AverageColorB);
+                       int alpha, RandomNumberGenerator& generator, int range, uchar* const IntensityCount,
+                       uint* const AverageColorR, uint* const AverageColorG, uint* const AverageColorB);
 
     // Return the limit defined the max and min values.
     inline int Lim_Max(int Now, int Up, int Max)
@@ -230,11 +229,15 @@ private:
                                        int Range)
     {
         if ((nR >= cR - Range) && (nR <= cR + Range))
+        {
             if ((nG >= cG - Range) && (nG <= cG + Range))
+            {
                 if ((nB >= cB - Range) && (nB <= cB + Range))
                 {
                     return true;
                 }
+            }
+        }
 
         return false;
     };

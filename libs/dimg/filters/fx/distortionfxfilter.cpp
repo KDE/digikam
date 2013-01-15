@@ -6,7 +6,7 @@
  * Date        : 2005-07-18
  * Description : Distortion FX threaded image filter.
  *
- * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
@@ -26,7 +26,7 @@
  *
  * ============================================================ */
 
-#define ANGLE_RATIO        0.017453292519943295769236907685
+#define ANGLE_RATIO 0.017453292519943295769236907685
 
 #include "distortionfxfilter.h"
 
@@ -51,6 +51,12 @@ namespace Digikam
 DistortionFXFilter::DistortionFXFilter(QObject* const parent)
     : DImgThreadedFilter(parent)
 {
+    m_antiAlias  = true;
+    m_level      = 0;
+    m_iteration  = 0;
+    m_effectType = 0;
+    m_randomSeed = 0;
+
     initFilter();
 }
 

@@ -6,7 +6,7 @@
  * Date        : 2005-17-07
  * Description : A Sharpen threaded image filter.
  *
- * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * Original Sharpen algorithm copyright 2002
@@ -45,6 +45,9 @@ namespace Digikam
 SharpenFilter::SharpenFilter(QObject* const parent)
     : DImgThreadedFilter(parent)
 {
+    m_radius = 0.0;
+    m_sigma  = 1.0;
+
     initFilter();
 }
 

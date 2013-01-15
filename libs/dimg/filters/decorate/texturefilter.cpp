@@ -6,9 +6,9 @@
  * Date        : 2005-05-25
  * Description : TextureFilter threaded image filter.
  *
- * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
+ * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -42,13 +42,14 @@
 namespace Digikam
 {
 
-TextureFilter::TextureFilter(QObject* parent)
+TextureFilter::TextureFilter(QObject* const parent)
     : DImgThreadedFilter(parent)
 {
+    m_blendGain = 200;
     initFilter();
 }
 
-TextureFilter::TextureFilter(DImg* orgImage, QObject* parent, int blendGain, const QString& texturePath)
+TextureFilter::TextureFilter(DImg* const orgImage, QObject* const parent, int blendGain, const QString& texturePath)
     : DImgThreadedFilter(orgImage, parent, "Texture")
 {
     m_blendGain   = blendGain;
@@ -114,11 +115,11 @@ void TextureFilter::filterImage()
     uchar* data     = m_orgImage.bits();
     uchar* pTeData  = textureImg.bits();
     uchar* pOutBits = m_destImage.bits();
-    uint offset;
+    uint   offset;
 
     DColor teData, transData, inData, outData;
-    uchar* ptr, *dptr, *tptr;
-    int progress;
+    uchar* ptr=0, *dptr=0, *tptr=0;
+    int    progress;
 
     int blendGain;
 
@@ -219,7 +220,7 @@ FilterAction TextureFilter::filterAction()
     FilterAction action(FilterIdentifier(), CurrentVersion());
     action.setDisplayableName(DisplayableName());
 
-    action.addParameter("blendGain", m_blendGain);
+    action.addParameter("blendGain",   m_blendGain);
     action.addParameter("texturePath", m_texturePath);
 
     return action;
@@ -227,9 +228,8 @@ FilterAction TextureFilter::filterAction()
 
 void TextureFilter::readParameters(const Digikam::FilterAction& action)
 {
-    m_blendGain = action.parameter("blendGain").toInt();
+    m_blendGain   = action.parameter("blendGain").toInt();
     m_texturePath = action.parameter("texturePath").toString();
 }
-
 
 }  // namespace Digikam

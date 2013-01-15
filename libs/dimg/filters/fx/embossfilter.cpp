@@ -6,7 +6,7 @@
  * Date        : 2005-05-25
  * Description : Emboss threaded image filter.
  *
- * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
@@ -41,13 +41,14 @@
 namespace Digikam
 {
 
-EmbossFilter::EmbossFilter(QObject* parent)
+EmbossFilter::EmbossFilter(QObject* const parent)
     : DImgThreadedFilter(parent)
 {
+    m_depth = 30;
     initFilter();
 }
 
-EmbossFilter::EmbossFilter(DImg* orgImage, QObject* parent, int depth)
+EmbossFilter::EmbossFilter(DImg* const orgImage, QObject* const parent, int depth)
     : DImgThreadedFilter(orgImage, parent, "Emboss")
 {
     m_depth = depth;
@@ -68,12 +69,12 @@ EmbossFilter::~EmbossFilter()
  */
 void EmbossFilter::filterImage()
 {
-    int Width       = m_orgImage.width();
-    int Height      = m_orgImage.height();
-    uchar* data     = m_orgImage.bits();
-    bool sixteenBit = m_orgImage.sixteenBit();
-    int bytesDepth  = m_orgImage.bytesDepth();
-    uchar* Bits     = m_destImage.bits();
+    int Width         = m_orgImage.width();
+    int Height        = m_orgImage.height();
+    uchar* data       = m_orgImage.bits();
+    bool sixteenBit   = m_orgImage.sixteenBit();
+    int bytesDepth    = m_orgImage.bytesDepth();
+    uchar* const Bits = m_destImage.bits();
 
     // Initial copy
     memcpy(Bits, data, m_destImage.numBytes());
@@ -161,6 +162,5 @@ void EmbossFilter::readParameters(const Digikam::FilterAction& action)
 {
     m_depth = action.parameter("depth").toInt();
 }
-
 
 }  // namespace DigikamEmbossImagesPlugin
