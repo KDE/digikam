@@ -228,7 +228,7 @@ bool ChoiceSearchModel::setData(const QModelIndex& index, const QVariant& value,
 // --------------------------------------------------------------------------------------
 
 ChoiceSearchComboBox::ChoiceSearchComboBox(QWidget* const parent)
-    : ListViewComboBox(parent)
+    : ListViewComboBox(parent), m_label(0)
 {
 }
 

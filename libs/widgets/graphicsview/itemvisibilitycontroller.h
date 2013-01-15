@@ -279,12 +279,12 @@ public:
      * Note that the targetObject is not necessarily a controlled item!
      */
 
-    explicit HidingStateChanger(QObject* parent = 0);
+    explicit HidingStateChanger(QObject* const parent = 0);
 
     /// Convenience constructor: Sets target and property name
-    HidingStateChanger(QObject* target, const QByteArray property, QObject* parent = 0);
+    HidingStateChanger(QObject* const target, const QByteArray& property, QObject* const parent = 0);
 
-    void setTargetObject(QObject* object);
+    void setTargetObject(QObject* const object);
     void setPropertyName(const QByteArray& propertyName);
 
 public Q_SLOTS:

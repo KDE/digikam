@@ -6,9 +6,9 @@
  * Date        : 2005-05-25
  * Description : Oil Painting threaded image filter.
  *
- * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
+ * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * Original OilPaint algorithm copyrighted 2004 by
  * Pieter Z. Voloshyn <pieter dot voloshyn at gmail dot com>.
@@ -40,17 +40,29 @@
 namespace Digikam
 {
 
-OilPaintFilter::OilPaintFilter(QObject* parent)
+OilPaintFilter::OilPaintFilter(QObject* const parent)
     : DImgThreadedFilter(parent)
 {
+    m_brushSize      = 1;
+    m_smoothness     = 30;
+    m_intensityCount = 0;
+    m_averageColorR  = 0;
+    m_averageColorG  = 0;
+    m_averageColorB  = 0;
+
     initFilter();
 }
 
-OilPaintFilter::OilPaintFilter(DImg* orgImage, QObject* parent, int brushSize, int smoothness)
+OilPaintFilter::OilPaintFilter(DImg* const orgImage, QObject* const parent, int brushSize, int smoothness)
     : DImgThreadedFilter(orgImage, parent, "OilPaintFilter")
 {
-    m_brushSize  = brushSize;
-    m_smoothness = smoothness;
+    m_brushSize      = brushSize;
+    m_smoothness     = smoothness;
+    m_intensityCount = 0;
+    m_averageColorR  = 0;
+    m_averageColorG  = 0;
+    m_averageColorB  = 0;
+
     initFilter();
 }
 
@@ -76,7 +88,7 @@ void OilPaintFilter::filterImage()
     h              = (int)m_orgImage.height();
     uchar* dest    = m_destImage.bits();
     int bytesDepth = m_orgImage.bytesDepth();
-    uchar* dptr;
+    uchar* dptr    = 0;
 
     // Allocate some arrays to be used.
     // Do this here once for all to save a few million new / delete operations
@@ -129,7 +141,7 @@ DColor OilPaintFilter::MostFrequentColor(DImg& src, int X, int Y, int Radius, in
 
     uchar* dest     = src.bits();
     int bytesDepth  = src.bytesDepth();
-    uchar* sptr;
+    uchar* sptr     = 0;
     bool sixteenBit = src.sixteenBit();
 
     DColor mostFrequentColor;
@@ -218,7 +230,7 @@ FilterAction OilPaintFilter::filterAction()
 
 void OilPaintFilter::readParameters(const Digikam::FilterAction& action)
 {
-    m_brushSize = action.parameter("brushSize").toInt();
+    m_brushSize  = action.parameter("brushSize").toInt();
     m_smoothness = action.parameter("smoothness").toInt();
 }
 

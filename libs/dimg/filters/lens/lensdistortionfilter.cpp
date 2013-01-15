@@ -6,9 +6,9 @@
  * Date        : 2005-05-25
  * Description : lens distortion algorithm.
  *
- * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2001-2003 by David Hodson <hodsond@acm.org>
- * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
+ * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -38,13 +38,20 @@
 namespace Digikam
 {
 
-LensDistortionFilter::LensDistortionFilter(QObject* parent)
+LensDistortionFilter::LensDistortionFilter(QObject* const parent)
     : DImgThreadedFilter(parent)
 {
+    m_main     = 0.0;
+    m_edge     = 0.0;
+    m_rescale  = 0.0;
+    m_brighten = 0.0;
+    m_centre_x = 0;
+    m_centre_y = 0;
+
     initFilter();
 }
 
-LensDistortionFilter::LensDistortionFilter(DImg* orgImage, QObject* parent, double main,
+LensDistortionFilter::LensDistortionFilter(DImg* const orgImage, QObject* const parent, double main,
                                            double edge, double rescale, double brighten,
                                            int center_x, int center_y)
     : DImgThreadedFilter(orgImage, parent, "LensDistortionFilter")
@@ -69,7 +76,6 @@ void LensDistortionFilter::filterImage()
     int    Width      = m_orgImage.width();
     int    Height     = m_orgImage.height();
     int    bytesDepth = m_orgImage.bytesDepth();
-
     uchar* data       = m_destImage.bits();
 
     // initial copy
@@ -85,8 +91,7 @@ void LensDistortionFilter::filterImage()
     double mult_qd              = m_edge / 200.0;
     double rescale              = pow(2.0, - m_rescale / 100.0);
     double brighten             = - m_brighten / 10.0;
-
-    PixelAccess* pa = new PixelAccess(&m_orgImage);
+    PixelAccess* pa             = new PixelAccess(&m_orgImage);
 
     /*
      * start at image (i, j), increment by (step, step)
@@ -103,7 +108,7 @@ void LensDistortionFilter::filterImage()
     int    iLimit, jLimit;
     double srcX, srcY, mag;
 
-    iLimit = dstWidth * step;
+    iLimit = dstWidth  * step;
     jLimit = dstHeight * step;
 
     for (int dstJ = 0 ; runningFlag() && (dstJ < jLimit) ; dstJ += step)
@@ -155,9 +160,9 @@ FilterAction LensDistortionFilter::filterAction()
     action.addParameter("brighten", m_brighten);
     action.addParameter("centre_x", m_centre_x);
     action.addParameter("centre_y", m_centre_y);
-    action.addParameter("edge", m_edge);
-    action.addParameter("main", m_main);
-    action.addParameter("rescale", m_rescale);
+    action.addParameter("edge",     m_edge);
+    action.addParameter("main",     m_main);
+    action.addParameter("rescale",  m_rescale);
 
     return action;
 }
@@ -167,10 +172,9 @@ void LensDistortionFilter::readParameters(const Digikam::FilterAction& action)
     m_brighten = action.parameter("brighten").toDouble();
     m_centre_x = action.parameter("centre_x").toInt();
     m_centre_y = action.parameter("centre_y").toInt();
-    m_edge = action.parameter("edge").toDouble();
-    m_main = action.parameter("main").toDouble();
-    m_rescale = action.parameter("rescale").toDouble();
+    m_edge     = action.parameter("edge").toDouble();
+    m_main     = action.parameter("main").toDouble();
+    m_rescale  = action.parameter("rescale").toDouble();
 }
-
 
 }  // namespace Digikam

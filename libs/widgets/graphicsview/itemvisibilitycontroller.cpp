@@ -80,14 +80,14 @@ ItemVisibilityController* AnimatedVisibility::controller() const
 
 // ---------------------------------------------------------------------------------
 
-HidingStateChanger::HidingStateChanger(QObject* parent)
-    : ItemVisibilityController(parent)
+HidingStateChanger::HidingStateChanger(QObject* const parent)
+    : ItemVisibilityController(parent), m_object(0)
 {
     connect(this, SIGNAL(propertiesAssigned(bool)),
             this, SLOT(slotPropertiesAssigned(bool)));
 }
 
-HidingStateChanger::HidingStateChanger(QObject* target, const QByteArray property, QObject* parent)
+HidingStateChanger::HidingStateChanger(QObject* const target, const QByteArray& property, QObject* const parent)
     : ItemVisibilityController(parent)
 {
     connect(this, SIGNAL(propertiesAssigned(bool)),
@@ -100,7 +100,7 @@ HidingStateChanger::HidingStateChanger(QObject* target, const QByteArray propert
     setVisible(true);
 }
 
-void HidingStateChanger::setTargetObject(QObject* object)
+void HidingStateChanger::setTargetObject(QObject* const object)
 {
     m_object = object;
 }
