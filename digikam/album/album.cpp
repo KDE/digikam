@@ -64,6 +64,7 @@ Album::Album(Album::Type type, const QString& name, bool root)
     m_clearing   = false;
     m_type       = type;
     m_name       = name;
+    m_id         = 0;
     m_root       = root;
 }
 
