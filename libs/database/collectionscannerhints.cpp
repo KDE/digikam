@@ -106,6 +106,8 @@ uint CollectionScannerHints::Item::qHash() const
     return ::qHash(id);
 }
 
+// -----------------------------------------------------------------------------------
+
 AlbumCopyMoveHint::AlbumCopyMoveHint()
 {
 }
@@ -170,6 +172,8 @@ const AlbumCopyMoveHint& AlbumCopyMoveHint::operator>>(QDBusArgument& argument) 
     argument.endStructure();
     return *this;
 }
+
+// -----------------------------------------------------------------------------------------
 
 ItemCopyMoveHint::ItemCopyMoveHint()
 {
@@ -243,8 +247,11 @@ const ItemCopyMoveHint& ItemCopyMoveHint::operator>>(QDBusArgument& argument) co
     return *this;
 }
 
+// ---------------------------------------------------------------------------------------
+
 ItemChangeHint::ItemChangeHint()
 {
+    m_type = ItemModified;
 }
 
 ItemChangeHint::ItemChangeHint(QList<qlonglong> ids, ChangeType type)
@@ -286,6 +293,5 @@ const ItemChangeHint& ItemChangeHint::operator>>(QDBusArgument& argument) const
     argument.endStructure();
     return *this;
 }
-
 
 } // namespace Digikam

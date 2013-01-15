@@ -44,12 +44,15 @@ namespace CollectionScannerHints
 class DIGIKAM_DATABASE_EXPORT Album
 {
 public:
+
     Album();
     Album(int albumRootId, int albumId);
 
-    bool isNull() const;
-    uint qHash() const;
+    bool isNull()                       const;
+    uint qHash()                        const;
     bool operator==(const Album& other) const;
+
+public:
 
     int albumRootId;
     int albumId;
@@ -60,14 +63,17 @@ public:
 class DIGIKAM_DATABASE_EXPORT DstPath
 {
 public:
+
     DstPath();
     DstPath(int albumRootId, const QString& relativePath);
 
-    bool isNull() const;
-    uint qHash() const;
+    bool isNull()                         const;
+    uint qHash()                          const;
     bool operator==(const DstPath& other) const;
 
-    int albumRootId;
+public:
+
+    int     albumRootId;
     QString relativePath;
 };
 
@@ -76,12 +82,15 @@ public:
 class DIGIKAM_DATABASE_EXPORT Item
 {
 public:
+
     Item();
     explicit Item(qlonglong id);
 
-    bool isNull() const;
-    uint qHash() const;
+    bool isNull()                      const;
+    uint qHash()                       const;
     bool operator==(const Item& other) const;
+
+public:
 
     qlonglong id;
 };
@@ -90,10 +99,12 @@ inline uint qHash(const Album& src)
 {
     return src.qHash();
 }
+
 inline uint qHash(const DstPath& dst)
 {
     return dst.qHash();
 }
+
 inline uint qHash(const Item& item)
 {
     return item.qHash();
@@ -116,17 +127,19 @@ public:
     AlbumCopyMoveHint(int srcAlbumRootId, int srcAlbum,
                       int dstAlbumRootId, const QString& dstRelativePath);
 
-    int albumRootIdSrc() const;
-    int albumIdSrc() const;
+    int albumRootIdSrc()                          const;
+    int albumIdSrc()                              const;
     bool isSrcAlbum(int albumRootId, int albumId) const;
+
     CollectionScannerHints::Album src() const
     {
         return m_src;
     }
 
-    int albumRootIdDst() const;
-    QString relativePathDst() const;
+    int albumRootIdDst()                                          const;
+    QString relativePathDst()                                     const;
     bool isDstAlbum(int albumRootId, const QString& relativePath) const;
+
     CollectionScannerHints::DstPath dst() const
     {
         return m_dst;
@@ -138,6 +151,7 @@ public:
     {
         return src == m_src;
     }
+
     bool operator==(const CollectionScannerHints::DstPath& dst) const
     {
         return dst == m_dst;
@@ -150,6 +164,7 @@ public:
     {
         return m_src;
     }
+
     operator const CollectionScannerHints::DstPath& () const
     {
         return m_dst;
@@ -175,17 +190,18 @@ public:
     ItemCopyMoveHint();
     ItemCopyMoveHint(const QList<qlonglong>& srcIds, int dstAlbumRootId, int albumId, const QStringList& dstNames);
 
-    QList<qlonglong> srcIds() const;
-    bool isSrcId(qlonglong id) const;
-
-    int albumRootIdDst() const;
-    int albumIdDst() const;
+    QList<qlonglong> srcIds()                     const;
+    bool isSrcId(qlonglong id)                    const;
+    int albumRootIdDst()                          const;
+    int albumIdDst()                              const;
     bool isDstAlbum(int albumRootId, int albumId) const;
+
     CollectionScannerHints::Album dst() const
     {
         return m_dst;
     }
-    QStringList dstNames() const;
+
+    QStringList dstNames()        const;
     QString dstName(qlonglong id) const;
 
     bool operator==(const CollectionScannerHints::Album& dst) const
@@ -208,7 +224,6 @@ protected:
     QStringList                   m_dstNames;
 };
 
-
 // ---------------------------------------------------------------------------
 
 class DIGIKAM_DATABASE_EXPORT ItemChangeHint
@@ -228,13 +243,15 @@ public:
     ItemChangeHint();
     explicit ItemChangeHint(QList<qlonglong> srcIds, ChangeType type = ItemModified);
 
-    QList<qlonglong> ids() const;
+    QList<qlonglong> ids()  const;
     bool isId(qlonglong id) const;
     ChangeType changeType() const;
+
     bool isModified() const
     {
         return changeType() == ItemModified;
     }
+
     bool needsRescan() const
     {
         return changeType() == ItemRescan;
@@ -248,7 +265,6 @@ protected:
     QList<qlonglong>  m_ids;
     ChangeType        m_type;
 };
-
 
 inline uint qHash(const Digikam::AlbumCopyMoveHint& hint)
 {
