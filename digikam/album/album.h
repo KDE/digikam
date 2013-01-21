@@ -225,11 +225,6 @@ protected:
     Album(Album::Type type, int id, bool root);
 
     /**
-     * Constructor
-     */
-//    Album(Album::Type type, const QString& name, bool root);
-
-    /**
      * Destructor
      *
      * this will also recursively delete all child Albums

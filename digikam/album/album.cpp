@@ -54,21 +54,6 @@ Album::Album(Album::Type type, int id, bool root)
     m_root       = root;
 }
 
-/*
-Album::Album(Album::Type type, const QString& name, bool root)
-{
-    m_parent     = 0;
-    m_next       = 0;
-    m_prev       = 0;
-    m_firstChild = 0;
-    m_lastChild  = 0;
-    m_clearing   = false;
-    m_type       = type;
-    m_name       = name;
-    m_id         = -1;
-    m_root       = root;
-}
-*/
 Album::~Album()
 {
     if (m_parent)
