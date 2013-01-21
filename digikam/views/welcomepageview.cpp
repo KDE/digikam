@@ -7,7 +7,7 @@
  * Description : a widget to display a welcome page
  *               on root album.
  *
- * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -58,7 +58,7 @@
 namespace Digikam
 {
 
-WelcomePageView::WelcomePageView(QWidget* parent)
+WelcomePageView::WelcomePageView(QWidget* const parent)
     : KHTMLPart(parent)
 {
     widget()->setFocusPolicy(Qt::WheelFocus);
@@ -76,7 +76,7 @@ WelcomePageView::WelcomePageView(QWidget* parent)
 
     // ------------------------------------------------------------
 
-    connect(browserExtension(), SIGNAL(openUrlRequest(KUrl,KParts::OpenUrlArguments,KParts::BrowserArguments)),
+    connect(browserExtension(), SIGNAL(openUrlRequest(KUrl, KParts::OpenUrlArguments, KParts::BrowserArguments)),
             this, SLOT(slotUrlOpen(KUrl)));
 
     connect(ThemeManager::instance(), SIGNAL(signalThemeChanged()),
@@ -97,27 +97,23 @@ void WelcomePageView::slotUrlOpen(const KUrl& url)
 QString WelcomePageView::infoPage() const
 {
     QStringList newFeatures;
-    newFeatures << i18n("XMP metadata sidecar support;");
-    newFeatures << i18n("Reverse geo-coding support;");
-    newFeatures << i18n("Image versioning support;");
-    newFeatures << i18n("Face detection support;");
-    newFeatures << i18n("Tag keyboard shortcuts support;");
-    newFeatures << i18n("Pick Labels support to improve photograph selection;");
-    newFeatures << i18n("Color Labels support to improve photograph workflow;");
-    newFeatures << i18n("Image title metadata support;");
-    newFeatures << i18n("Re-designed Filters view on right sidebar to perform icon-view items filtering;");
-    newFeatures << i18n("New options to group/ungroup items from icon-view;");
-    newFeatures << i18n("New option to show file format over icon-view items;");
-    newFeatures << i18n("New option to setup a collection as default download place with camera device;");
-    newFeatures << i18n("New option to filter camera icon-view;");
-    newFeatures << i18n("New option to download items from camera in just one-click;");
-    newFeatures << i18n("New progress manager to manage easily all parallelized process;");
-    newFeatures << i18n("New tool to run all maintenance process in background;");
-    newFeatures << i18n("Speed-up improvements to be connected to camera device;");
+    newFeatures << i18n("KIPI actions tool-bar support;");
+    newFeatures << i18n("Automatic Noise Reduction tool;");
+    newFeatures << i18n("Import tool rewritten using Model/View;");
+    newFeatures << i18n("Pipelined downloads from camera device;");
+    newFeatures << i18n("Items preview when downloading from camera device;");
+    newFeatures << i18n("Video Metadata support;");
+    newFeatures << i18n("Multi-core CPU support in Batch Queue Manager;");
+    newFeatures << i18n("Full RAW demosacising settings customizable in Batch Queue Manager;");
+    newFeatures << i18n("Raw preview extraction support in Batch Queue Manager;");
+    newFeatures << i18n("Add Workflow concept to Batch Queue Manager to load/save Queue Settings between sessions;");
+    newFeatures << i18n("Add Crop tool to Batch Queue Manager;");
+    newFeatures << i18n("Add Color Effect tool to Batch Queue Manager;");
     newFeatures << i18n("Support for the latest camera RAW files using <a href=\"http://www.libraw.org\">LibRaw</a>, "
-                        "including Foveon-sensor-based cameras, Nikon D7000 and D5100, Canon 600D and 1100D, Pentax K5, Olympus E5 and Sony Alpha/Nex "
+                        "including Canon EOS 5D Mark III, EOS 650D, EOS 1D-X, Fujifilm X1-Pro, "
+                        "Nikon D4, D3200, D800, D800E, Olympus E-M5, Samsung NX20, NX210, NX100, NX-1000, "
+                        "Sony NEX-F3, SLT-A37, SLT-A57, DSC-RX100 "
                         "(see the Help menu for the full list of RAW cameras supported);");
-    newFeatures << i18n("New advanced RAW decoding settings backported from RawTherapee project;");
     newFeatures << i18n("...and much more.");
 
     QString featureItems;
@@ -189,7 +185,7 @@ QString WelcomePageView::infoPage() const
             QString(digikam_version),            // %1 : current digiKam version
             "help:/digikam/index.html",          // %2 : digiKam help:// Url
             DAboutData::webProjectUrl().url(),   // %3 : digiKam homepage Url
-            "1.x",                               // %4 : prior digiKam version
+            "2.x",                               // %4 : prior digiKam version
             featureItems,                        // %5 : prior KDE version
             QString(),                           // %6 : generated list of new features
             QString());                          // %7 : previous digiKam release.
@@ -205,8 +201,8 @@ QByteArray WelcomePageView::fileToString(const QString& aFileName) const
     unsigned int len = info.size();
     QFile        file(aFileName);
 
-    if (aFileName.isEmpty() || len == 0 ||
-        !info.exists() || info.isDir() || !info.isReadable() ||
+    if (aFileName.isEmpty() || len == 0     ||
+        !info.exists()      || info.isDir() || !info.isReadable() ||
         !file.open(QIODevice::Unbuffered|QIODevice::ReadOnly))
     {
         return QByteArray();
@@ -263,7 +259,7 @@ void WelcomePageView::slotThemeChanged()
 
 void WelcomePageView::disablePredefinedActions()
 {
-    KAction* findAction = qobject_cast<KAction*>(actionCollection()->action("find"));
+    KAction* const findAction = qobject_cast<KAction*>(actionCollection()->action("find"));
 
     if (findAction)
     {
@@ -274,7 +270,7 @@ void WelcomePageView::disablePredefinedActions()
         kDebug() << "failed to remove the shortcut of khtml's find action";
     }
 
-    KAction* findNextAction = qobject_cast<KAction*>(actionCollection()->action("findNext"));
+    KAction* const findNextAction = qobject_cast<KAction*>(actionCollection()->action("findNext"));
 
     if (findNextAction)
     {
@@ -285,7 +281,7 @@ void WelcomePageView::disablePredefinedActions()
         kDebug() << "failed to remove the shortcut of khtml's findNext action";
     }
 
-    KAction* findPreviousAction = qobject_cast<KAction*>(actionCollection()->action("findPrevious"));
+    KAction* const findPreviousAction = qobject_cast<KAction*>(actionCollection()->action("findPrevious"));
 
     if (findPreviousAction)
     {
@@ -296,7 +292,7 @@ void WelcomePageView::disablePredefinedActions()
         kDebug() << "failed to remove the shortcut of khtml's findPrevious action";
     }
 
-    KAction* selectAllAction = qobject_cast<KAction*>(actionCollection()->action("selectAll"));
+    KAction* const selectAllAction = qobject_cast<KAction*>(actionCollection()->action("selectAll"));
 
     if (selectAllAction)
     {
