@@ -227,7 +227,7 @@ protected:
     /**
      * Constructor
      */
-    Album(Album::Type type, const QString& name, bool root);
+//    Album(Album::Type type, const QString& name, bool root);
 
     /**
      * Destructor

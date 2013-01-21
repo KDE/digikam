@@ -54,6 +54,7 @@ Album::Album(Album::Type type, int id, bool root)
     m_root       = root;
 }
 
+/*
 Album::Album(Album::Type type, const QString& name, bool root)
 {
     m_parent     = 0;
@@ -67,7 +68,7 @@ Album::Album(Album::Type type, const QString& name, bool root)
     m_id         = -1;
     m_root       = root;
 }
-
+*/
 Album::~Album()
 {
     if (m_parent)
