@@ -6,8 +6,8 @@
  * Date        : 2006-01-18
  * Description : color balance filter
  *
- * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
+ * Copyright (C) 2006-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -40,11 +40,21 @@
 namespace Digikam
 {
 
-class CBFilterPriv
+class CBFilter::Private
 {
 public:
 
-    CBFilterPriv() {}
+    Private()
+    {
+        memset(&redMap,     0, sizeof(redMap));
+        memset(&greenMap,   0, sizeof(greenMap));
+        memset(&blueMap,    0, sizeof(blueMap));
+        memset(&alphaMap,   0, sizeof(alphaMap));
+        memset(&redMap16,   0, sizeof(redMap16));
+        memset(&greenMap16, 0, sizeof(greenMap16));
+        memset(&blueMap16,  0, sizeof(blueMap16));
+        memset(&alphaMap16, 0, sizeof(alphaMap16));
+    }
 
     int         redMap[256];
     int         greenMap[256];
@@ -59,27 +69,27 @@ public:
     CBContainer settings;
 };
 
-CBFilter::CBFilter(QObject* parent)
+CBFilter::CBFilter(QObject* const parent)
     : DImgThreadedFilter(parent),
-      d(new CBFilterPriv)
+      d(new Private)
 {
     reset();
     initFilter();
 }
 
-CBFilter::CBFilter(DImg* orgImage, QObject* parent, const CBContainer& settings)
+CBFilter::CBFilter(DImg* const orgImage, QObject* const parent, const CBContainer& settings)
     : DImgThreadedFilter(orgImage, parent, "CBFilter"),
-      d(new CBFilterPriv)
+      d(new Private)
 {
     d->settings = settings;
     reset();
     initFilter();
 }
 
-CBFilter::CBFilter(const CBContainer& settings, DImgThreadedFilter* master,
+CBFilter::CBFilter(const CBContainer& settings, DImgThreadedFilter* const master,
             const DImg& orgImage, DImg& destImage, int progressBegin, int progressEnd)
     : DImgThreadedFilter(master, orgImage, destImage, progressBegin, progressEnd, "CBFilter"),
-      d(new CBFilterPriv)
+      d(new Private)
 {
     d->settings = settings;
     reset();
@@ -121,7 +131,7 @@ void CBFilter::reset()
     }
 }
 
-void CBFilter::setTables(int* redMap, int* greenMap, int* blueMap, int* alphaMap, bool sixteenBit)
+void CBFilter::setTables(int* const redMap, int* const greenMap, int* const blueMap, int* const alphaMap, bool sixteenBit)
 {
     if (!sixteenBit)
     {
@@ -175,7 +185,7 @@ void CBFilter::setTables(int* redMap, int* greenMap, int* blueMap, int* alphaMap
     }
 }
 
-void CBFilter::getTables(int* redMap, int* greenMap, int* blueMap, int* alphaMap, bool sixteenBit)
+void CBFilter::getTables(int* const redMap, int* const greenMap, int* const blueMap, int* const alphaMap, bool sixteenBit)
 {
     if (!sixteenBit)
     {
@@ -374,10 +384,10 @@ FilterAction CBFilter::filterAction()
     action.setDisplayableName(DisplayableName());
 
     action.addParameter("alpha", d->settings.alpha);
-    action.addParameter("blue", d->settings.blue);
+    action.addParameter("blue",  d->settings.blue);
     action.addParameter("gamma", d->settings.gamma);
     action.addParameter("green", d->settings.green);
-    action.addParameter("red", d->settings.red);
+    action.addParameter("red",   d->settings.red);
 
     return action;
 }
@@ -385,11 +395,10 @@ FilterAction CBFilter::filterAction()
 void CBFilter::readParameters(const Digikam::FilterAction& action)
 {
     d->settings.alpha = action.parameter("alpha").toDouble();
-    d->settings.blue = action.parameter("blue").toDouble();
+    d->settings.blue  = action.parameter("blue").toDouble();
     d->settings.gamma = action.parameter("gamma").toDouble();
     d->settings.green = action.parameter("green").toDouble();
-    d->settings.red = action.parameter("red").toDouble();
+    d->settings.red   = action.parameter("red").toDouble();
 }
-
 
 }  // namespace Digikam
