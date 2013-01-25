@@ -7,7 +7,7 @@
  * Description : implementation of album view interface.
  *
  * Copyright (C) 2002-2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2002-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2002-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2011 by Johannes Wienke <languitar at semipol dot de>
  * Copyright (C) 2010-2011 by Andi Clemens <andi dot clemens at gmail dot com>
  *
@@ -65,7 +65,7 @@ class DigikamView : public KHBox
 
 public:
 
-    DigikamView(QWidget* parent, DigikamModelCollection* modelCollection);
+    DigikamView(QWidget* const parent, DigikamModelCollection* const modelCollection);
     ~DigikamView();
 
     void applySettings();
@@ -82,17 +82,17 @@ public:
     void setRecurseTags(bool recursive);
     void imageTransform(KExiv2Iface::RotationMatrix::TransformationAction transform);
 
-    void connectIconViewFilter(FilterStatusBar* filter);
+    void connectIconViewFilter(FilterStatusBar* const filter);
 
-    KUrl::List allUrls() const;
+    KUrl::List allUrls()      const;
     KUrl::List selectedUrls() const;
-    bool hasCurrentItem() const;
+    bool hasCurrentItem()     const;
 
-    double zoomMin();
-    double zoomMax();
+    double zoomMin() const;
+    double zoomMax() const;
 
     void toggleTag(int tagID);
-    QList<SidebarWidget*> leftSidebarWidgets();
+    QList<SidebarWidget*> leftSidebarWidgets() const;
 
 Q_SIGNALS:
 
@@ -207,7 +207,7 @@ private:
     void setupConnections();
     void loadViewState();
     void saveViewState();
-    void changeAlbumFromHistory(Album* album, QWidget* widget);
+    void changeAlbumFromHistory(Album* const album, QWidget* const widget);
     void slideShow(const ImageInfoList& infoList);
 
 private Q_SLOTS:
@@ -248,8 +248,8 @@ private Q_SLOTS:
 
 private:
 
-    class DigikamViewPriv;
-    DigikamViewPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

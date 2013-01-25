@@ -7,7 +7,7 @@
  * Description : implementation of album view interface.
  *
  * Copyright (C) 2002-2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2002-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2002-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2011 by Johannes Wienke <languitar at semipol dot de>
  * Copyright (C) 2010-2011 by Andi Clemens <andi dot clemens at gmail dot com>
  * Copyright (C) 2011      by Michael G. Hansen <mike at mghansen dot de>
@@ -86,11 +86,11 @@
 namespace Digikam
 {
 
-class DigikamView::DigikamViewPriv
+class DigikamView::Private
 {
 public:
 
-    DigikamViewPriv() :
+    Private() :
         needDispatchSelection(false),
         useAlbumHistory(false),
         initialAlbumID(0),
@@ -106,8 +106,10 @@ public:
         searchSideBar(0),
         fuzzySearchSideBar(0),
         gpsSearchSideBar(0),
+        peopleSideBar(0),
         parent(0),
         iconView(0),
+        mapView(0),
         albumManager(0),
         albumHistory(0),
         stackedview(0),
@@ -123,8 +125,8 @@ public:
     {
     }
 
-    QString                       userPresentableAlbumTitle(const QString& album);
-    void                          addPageUpDownActions(DigikamView* q, QWidget* w);
+    QString userPresentableAlbumTitle(const QString& album) const;
+    void    addPageUpDownActions(DigikamView* const q, QWidget* const w);
 
 public:
 
@@ -178,14 +180,56 @@ public:
     DigikamModelCollection*       modelCollection;
 };
 
-DigikamView::DigikamView(QWidget* parent, DigikamModelCollection* modelCollection)
-    : KHBox(parent), d(new DigikamViewPriv)
+QString DigikamView::Private::userPresentableAlbumTitle(const QString& title) const
+{
+    if (title == SAlbum::getTemporaryHaarTitle(DatabaseSearch::HaarSketchSearch))
+    {
+        return i18n("Fuzzy Sketch Search");
+    }
+    else if (title == SAlbum::getTemporaryHaarTitle(DatabaseSearch::HaarImageSearch))
+    {
+        return i18n("Fuzzy Image Search");
+    }
+    else if (title == SAlbum::getTemporaryTitle(DatabaseSearch::MapSearch))
+    {
+        return i18n("Map Search");
+    }
+    else if (title == SAlbum::getTemporaryTitle(DatabaseSearch::AdvancedSearch) ||
+             title == SAlbum::getTemporaryTitle(DatabaseSearch::KeywordSearch))
+    {
+        return i18n("Last Search");
+    }
+    else if (title == SAlbum::getTemporaryTitle(DatabaseSearch::TimeLineSearch))
+    {
+        return i18n("Timeline");
+    }
+
+    return title;
+}
+
+void DigikamView::Private::addPageUpDownActions(DigikamView* const q, QWidget* const w)
+{
+    QShortcut *nextImageShortcut = new QShortcut(w);
+    nextImageShortcut->setKey(Qt::Key_PageDown);
+    nextImageShortcut->setContext(Qt::WidgetWithChildrenShortcut);
+    QObject::connect(nextImageShortcut, SIGNAL(activated()), q, SLOT(slotNextItem()));
+
+    QShortcut *prevImageShortcut = new QShortcut(w);
+    prevImageShortcut->setKey(Qt::Key_PageUp);
+    prevImageShortcut->setContext(Qt::WidgetWithChildrenShortcut);
+    QObject::connect(prevImageShortcut, SIGNAL(activated()), q, SLOT(slotPrevItem()));
+}
+
+// -------------------------------------------------------------------------------------------
+
+DigikamView::DigikamView(QWidget* const parent, DigikamModelCollection* const modelCollection)
+    : KHBox(parent), d(new Private)
 {
     qRegisterMetaType<SlideShowSettings>("SlideShowSettings");
 
-    d->parent          = static_cast<DigikamApp*>(parent);
-    d->modelCollection = modelCollection;
-    d->albumManager    = AlbumManager::instance();
+    d->parent                   = static_cast<DigikamApp*>(parent);
+    d->modelCollection          = modelCollection;
+    d->albumManager             = AlbumManager::instance();
 
     d->albumModificationHelper  = new AlbumModificationHelper(this, this);
     d->tagModificationHelper    = new TagModificationHelper(this, this);
@@ -223,13 +267,14 @@ DigikamView::DigikamView(QWidget* parent, DigikamModelCollection* modelCollectio
                                                              d->modelCollection->getAlbumModel(),
                                                              d->albumModificationHelper);
     d->leftSideBarWidgets << d->albumFolderSideBar;
+
     connect(d->albumFolderSideBar, SIGNAL(signalFindDuplicatesInAlbum(Album*)),
             this, SLOT(slotNewDuplicatesSearch(Album*)));
 
     // Tags sidebar tab contents.
-    d->tagViewSideBar = new TagViewSideBarWidget(d->leftSideBar,
-                                                 d->modelCollection->getTagModel());
+    d->tagViewSideBar = new TagViewSideBarWidget(d->leftSideBar, d->modelCollection->getTagModel());
     d->leftSideBarWidgets << d->tagViewSideBar;
+
     connect(d->tagViewSideBar, SIGNAL(signalFindDuplicatesInAlbum(Album*)),
             this, SLOT(slotNewDuplicatesSearch(Album*)));
 
@@ -268,15 +313,16 @@ DigikamView::DigikamView(QWidget* parent, DigikamModelCollection* modelCollectio
     d->peopleSideBar = new PeopleSideBarWidget(d->leftSideBar,
                                                d->modelCollection->getTagFacesModel(),
                                                d->searchModificationHelper);
+
     connect(d->peopleSideBar, SIGNAL(requestFaceMode(bool)),
             d->iconView, SLOT(setFaceMode(bool)));
 
     d->leftSideBarWidgets << d->peopleSideBar;
 
-    foreach(SidebarWidget* leftWidget, d->leftSideBarWidgets)
+    foreach(SidebarWidget* const leftWidget, d->leftSideBarWidgets)
     {
-        d->leftSideBar->appendTab(leftWidget, leftWidget->getIcon(),
-                                  leftWidget->getCaption());
+        d->leftSideBar->appendTab(leftWidget, leftWidget->getIcon(), leftWidget->getCaption());
+
         connect(leftWidget, SIGNAL(requestActiveTab(SidebarWidget*)),
                 this, SLOT(slotLeftSideBarActivate(SidebarWidget*)));
     }
@@ -316,7 +362,7 @@ DigikamView::~DigikamView()
 
 void DigikamView::applySettings()
 {
-    foreach(SidebarWidget* sidebarWidget, d->leftSideBarWidgets)
+    foreach(SidebarWidget* const sidebarWidget, d->leftSideBarWidgets)
     {
         sidebarWidget->applySettings();
     }
@@ -433,7 +479,7 @@ void DigikamView::setupConnections()
 
     // -- Filter Bars Connections ---------------------------------
 
-    ImageAlbumFilterModel* model = d->iconView->imageAlbumFilterModel();
+    ImageAlbumFilterModel* const model = d->iconView->imageAlbumFilterModel();
 
     connect(d->filterWidget,
             SIGNAL(signalTagFilterChanged(const QList<int>&, const QList<int>&,
@@ -563,9 +609,9 @@ void DigikamView::setupConnections()
             this, SLOT(slotGotoAlbumAndItem(ImageInfo)));
 }
 
-void DigikamView::connectIconViewFilter(FilterStatusBar* filterbar)
+void DigikamView::connectIconViewFilter(FilterStatusBar* const filterbar)
 {
-    ImageAlbumFilterModel* model = d->iconView->imageAlbumFilterModel();
+    ImageAlbumFilterModel* const model = d->iconView->imageAlbumFilterModel();
 
     connect(model, SIGNAL(filterMatches(bool)),
             filterbar, SLOT(slotFilterMatches(bool)));
@@ -580,19 +626,6 @@ void DigikamView::connectIconViewFilter(FilterStatusBar* filterbar)
             this, SLOT(slotPopupFiltersView()));
 }
 
-void DigikamView::DigikamViewPriv::addPageUpDownActions(DigikamView* q, QWidget* w)
-{
-    QShortcut *nextImageShortcut = new QShortcut(w);
-    nextImageShortcut->setKey(Qt::Key_PageDown);
-    nextImageShortcut->setContext(Qt::WidgetWithChildrenShortcut);
-    QObject::connect(nextImageShortcut, SIGNAL(activated()), q, SLOT(slotNextItem()));
-
-    QShortcut *prevImageShortcut = new QShortcut(w);
-    prevImageShortcut->setKey(Qt::Key_PageUp);
-    prevImageShortcut->setContext(Qt::WidgetWithChildrenShortcut);
-    QObject::connect(prevImageShortcut, SIGNAL(activated()), q, SLOT(slotPrevItem()));
-}
-
 void DigikamView::slotPopupFiltersView()
 {
     d->rightSideBar->setActiveTab(d->filterWidget);
@@ -601,7 +634,7 @@ void DigikamView::slotPopupFiltersView()
 
 void DigikamView::loadViewState()
 {
-    foreach(SidebarWidget* widget, d->leftSideBarWidgets)
+    foreach(SidebarWidget* const widget, d->leftSideBarWidgets)
     {
         widget->loadState();
     }
@@ -630,7 +663,7 @@ void DigikamView::saveViewState()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("MainWindow");
 
-    foreach(SidebarWidget* widget, d->leftSideBarWidgets)
+    foreach(SidebarWidget* const widget, d->leftSideBarWidgets)
     {
         widget->saveState();
     }
@@ -663,7 +696,7 @@ void DigikamView::saveViewState()
     d->rightSideBar->saveState();
 }
 
-QList<SidebarWidget*> DigikamView::leftSidebarWidgets()
+QList<SidebarWidget*> DigikamView::leftSidebarWidgets() const
 {
     return d->leftSideBarWidgets;
 }
@@ -727,7 +760,7 @@ void DigikamView::slotAllAlbumsLoaded()
 
     // now that all albums have been loaded, activate the albumHistory
     d->useAlbumHistory = true;
-    Album* album = d->albumManager->findAlbum(d->initialAlbumID);
+    Album* const album = d->albumManager->findAlbum(d->initialAlbumID);
     d->albumManager->setCurrentAlbum(album);
 }
 
@@ -815,13 +848,13 @@ void DigikamView::slotAlbumHistoryForward(int steps)
 }
 
 // TODO update, use SideBarWidget instead of QWidget
-void DigikamView::changeAlbumFromHistory(Album* album, QWidget* widget)
+void DigikamView::changeAlbumFromHistory(Album* const album, QWidget* const widget)
 {
     if (album && widget)
     {
 
         // TODO update, temporary casting until signature is changed
-        SidebarWidget* sideBarWidget = dynamic_cast<SidebarWidget*> (widget);
+        SidebarWidget* const sideBarWidget = dynamic_cast<SidebarWidget*> (widget);
 
         if (sideBarWidget)
         {
@@ -859,33 +892,6 @@ void DigikamView::getForwardHistory(QStringList& titles)
     {
         titles[i] = d->userPresentableAlbumTitle(titles.at(i));
     }
-}
-
-QString DigikamView::DigikamViewPriv::userPresentableAlbumTitle(const QString& title)
-{
-    if (title == SAlbum::getTemporaryHaarTitle(DatabaseSearch::HaarSketchSearch))
-    {
-        return i18n("Fuzzy Sketch Search");
-    }
-    else if (title == SAlbum::getTemporaryHaarTitle(DatabaseSearch::HaarImageSearch))
-    {
-        return i18n("Fuzzy Image Search");
-    }
-    else if (title == SAlbum::getTemporaryTitle(DatabaseSearch::MapSearch))
-    {
-        return i18n("Map Search");
-    }
-    else if (title == SAlbum::getTemporaryTitle(DatabaseSearch::AdvancedSearch) ||
-             title == SAlbum::getTemporaryTitle(DatabaseSearch::KeywordSearch))
-    {
-        return i18n("Last Search");
-    }
-    else if (title == SAlbum::getTemporaryTitle(DatabaseSearch::TimeLineSearch))
-    {
-        return i18n("Timeline");
-    }
-
-    return title;
 }
 
 void DigikamView::slotGotoAlbumAndItem(const ImageInfo& imageInfo)
@@ -945,7 +951,7 @@ void DigikamView::slotGotoTagAndItem(int tagID)
 
     // Set the current tag in the tag folder view.
     // TODO this slot should use a TAlbum pointer directly
-    TAlbum* tag = AlbumManager::instance()->findTAlbum(tagID);
+    TAlbum* const tag = AlbumManager::instance()->findTAlbum(tagID);
 
     if (tag)
     {
@@ -1058,7 +1064,7 @@ void DigikamView::slotAlbumSelected(Album* album)
 
 void DigikamView::slotAlbumOpenInFileManager()
 {
-    Album* album = d->albumManager->currentAlbum();
+    Album* const album = d->albumManager->currentAlbum();
 
     if (album->isRoot())
     {
@@ -1072,14 +1078,14 @@ void DigikamView::slotAlbumOpenInFileManager()
         return;
     }
 
-    PAlbum* palbum = dynamic_cast<PAlbum*>(album);
+    PAlbum* const palbum = dynamic_cast<PAlbum*>(album);
 
     new KRun(KUrl(palbum->folderPath()), this); // KRun will delete itself.
 }
 
 void DigikamView::slotAlbumOpenInTerminal()
 {
-    Album* album = d->albumManager->currentAlbum();
+    Album* const album = d->albumManager->currentAlbum();
 
     if (album->isRoot())
     {
@@ -1093,7 +1099,7 @@ void DigikamView::slotAlbumOpenInTerminal()
         return;
     }
 
-    PAlbum* palbum = dynamic_cast<PAlbum*>(album);
+    PAlbum* const palbum = dynamic_cast<PAlbum*>(album);
 
     if (!palbum)
     {
@@ -1119,7 +1125,7 @@ void DigikamView::slotAlbumRefresh()
 {
     // force reloading of thumbnails
     LoadingCacheInterface::cleanThumbnailCache();
-    Album* album = d->iconView->currentAlbum();
+    Album* const album = d->iconView->currentAlbum();
 
     // if physical album, schedule a collection scan of current album's path
     if (album && album->type() == Album::PHYSICAL)
@@ -1152,8 +1158,7 @@ void DigikamView::slotDispatchImageSelected()
         // the list of ImageInfos of currently selected items, currentItem first
         // since the iconView tracks the changes also while we are in map widget mode,
         // we can still pull the data from the iconView
-        const ImageInfoList list = d->iconView->selectedImageInfosCurrentFirst();
-
+        const ImageInfoList list      = d->iconView->selectedImageInfosCurrentFirst();
         const ImageInfoList allImages = d->iconView->imageInfos();
 
         if (list.isEmpty())
@@ -1188,12 +1193,12 @@ void DigikamView::slotDispatchImageSelected()
     }
 }
 
-double DigikamView::zoomMin()
+double DigikamView::zoomMin() const
 {
     return d->stackedview->zoomMin();
 }
 
-double DigikamView::zoomMax()
+double DigikamView::zoomMax() const
 {
     return d->stackedview->zoomMax();
 }
@@ -1343,39 +1348,39 @@ void DigikamView::slotAlbumPropsEdit()
 
 void DigikamView::slotAlbumWriteMetadata()
 {
-    Album* album = d->albumManager->currentAlbum();
+    Album* const album = d->albumManager->currentAlbum();
 
     if (!album)
     {
         return;
     }
-    MetadataSynchronizer* tool = new MetadataSynchronizer(album, MetadataSynchronizer::WriteFromDatabaseToFile);
+    MetadataSynchronizer* const tool = new MetadataSynchronizer(album, MetadataSynchronizer::WriteFromDatabaseToFile);
     tool->start();
 }
 
 void DigikamView::slotAlbumReadMetadata()
 {
-    Album* album = d->albumManager->currentAlbum();
+    Album* const album = d->albumManager->currentAlbum();
 
     if (!album)
     {
         return;
     }
-    MetadataSynchronizer* tool = new MetadataSynchronizer(album, MetadataSynchronizer::ReadFromFileToDatabase);
+    MetadataSynchronizer* const tool = new MetadataSynchronizer(album, MetadataSynchronizer::ReadFromFileToDatabase);
     tool->start();
 }
 
 void DigikamView::slotImageWriteMetadata()
 {
-    ImageInfoList selected = d->iconView->selectedImageInfos();
-    MetadataSynchronizer* tool = new MetadataSynchronizer(selected, MetadataSynchronizer::WriteFromDatabaseToFile);
+    ImageInfoList selected           = d->iconView->selectedImageInfos();
+    MetadataSynchronizer* const tool = new MetadataSynchronizer(selected, MetadataSynchronizer::WriteFromDatabaseToFile);
     tool->start();
 }
 
 void DigikamView::slotImageReadMetadata()
 {
-    ImageInfoList selected = d->iconView->selectedImageInfos();
-    MetadataSynchronizer* tool = new MetadataSynchronizer(selected, MetadataSynchronizer::ReadFromFileToDatabase);
+    ImageInfoList selected           = d->iconView->selectedImageInfos();
+    MetadataSynchronizer* const tool = new MetadataSynchronizer(selected, MetadataSynchronizer::ReadFromFileToDatabase);
     tool->start();
 }
 
@@ -1435,9 +1440,9 @@ void DigikamView::slotImagePreview()
  */
 void DigikamView::slotTogglePreviewMode(const ImageInfo& info)
 {
-    if (  (d->stackedview->previewMode() == StackedView::PreviewAlbumMode
-           || d->stackedview->previewMode() == StackedView::MapWidgetMode)
-          && !info.isNull() )
+    if ( (d->stackedview->previewMode() == StackedView::PreviewAlbumMode ||
+          d->stackedview->previewMode() == StackedView::MapWidgetMode)   &&
+         !info.isNull() )
     {
         d->lastPreviewMode = d->stackedview->previewMode();
 
@@ -1743,7 +1748,7 @@ void DigikamView::slotSlideShowSelection()
 
 void DigikamView::slotSlideShowRecursive()
 {
-    Album* album = AlbumManager::instance()->currentAlbum();
+    Album* const album = AlbumManager::instance()->currentAlbum();
 
     if (album)
     {
@@ -1755,7 +1760,7 @@ void DigikamView::slotSlideShowRecursive()
 
 void DigikamView::slideShow(const ImageInfoList& infoList)
 {
-    SlideShowBuilder* builder = new SlideShowBuilder(infoList);
+    SlideShowBuilder* const builder = new SlideShowBuilder(infoList);
 
     connect(builder, SIGNAL(signalComplete(SlideShowSettings)),
             this, SLOT(slotSlideShowBuilderComplete(SlideShowSettings)));
@@ -1763,7 +1768,7 @@ void DigikamView::slideShow(const ImageInfoList& infoList)
 
 void DigikamView::slotSlideShowBuilderComplete(const SlideShowSettings& settings)
 {
-    SlideShow* slide = new SlideShow(settings);
+    SlideShow* const slide = new SlideShow(settings);
 
     if (settings.startWithCurrent)
     {
@@ -1914,7 +1919,7 @@ void DigikamView::slotSlideShowQml()
 */
     SlideShowSettings settings;
     settings.readFromConfig();
-    QmlShow* qmlShow = new QmlShow(d->iconView->imageInfos(),settings);
+    QmlShow* const qmlShow = new QmlShow(d->iconView->imageInfos(),settings);
     qmlShow->setWindowState(Qt::WindowFullScreen);
     qmlShow->show();
 }
