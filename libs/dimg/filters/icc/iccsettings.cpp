@@ -7,7 +7,7 @@
  * Description : central place for ICC settings
  *
  * Copyright (C) 2005-2006 by F.J. Cruz <fj dot cruz at supercable dot es>
- * Copyright (C) 2005-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -60,13 +60,25 @@
 namespace Digikam
 {
 
-class IccSettings::IccSettingsPriv
+class IccSettings::Private
 {
 public:
 
-    IccSettingsPriv()
+    Private()
         : configGroup("Color Management")
-    {}
+    {
+    }
+
+    QList<IccProfile>    scanDirectories(const QStringList& dirs);
+    void                 scanDirectory(const QString& path, const QStringList& filter, QList<IccProfile>* profiles);
+
+    IccProfile           profileFromWindowSystem(QWidget* const widget);
+
+    ICCSettingsContainer readFromConfig()           const;
+    void                 writeToConfig()            const;
+    void                 writeManagedViewToConfig() const;
+
+public:
 
     ICCSettingsContainer   settings;
     QMutex                 mutex;
@@ -76,17 +88,6 @@ public:
     QHash<int, IccProfile> screenProfiles;
 
     const QString          configGroup;
-
-public:
-
-    QList<IccProfile>    scanDirectories(const QStringList& dirs);
-    void                 scanDirectory(const QString& path, const QStringList& filter, QList<IccProfile>* profiles);
-
-    IccProfile           profileFromWindowSystem(QWidget* widget);
-
-    ICCSettingsContainer readFromConfig() const;
-    void                 writeToConfig() const;
-    void                 writeManagedViewToConfig() const;
 };
 
 // -----------------------------------------------------------------------------------------------
@@ -108,7 +109,7 @@ IccSettings* IccSettings::instance()
 }
 
 IccSettings::IccSettings()
-    : d(new IccSettingsPriv)
+    : d(new Private)
 {
     IccTransform::init();
     readFromConfig();
@@ -127,7 +128,7 @@ ICCSettingsContainer IccSettings::settings()
     return s;
 }
 
-IccProfile IccSettings::monitorProfile(QWidget* widget)
+IccProfile IccSettings::monitorProfile(QWidget* const widget)
 {
     // system-wide profile set?
     IccProfile profile = d->profileFromWindowSystem(widget);
@@ -184,22 +185,22 @@ bool IccSettings::monitorProfileFromSystem()
  *                2001 John Califf
  *                2004 Boudewijn Rempt <boud@valdyas.org>
  *  Copyright (C) 2007 Thomas Zander <zander@kde.org>
- *  Copyright (C) 2007 Adrian Page <adrian@pagenet.plus.com>IccProfile IccSettingsPriv::profileForScreen(QWidget *widget)
+ *  Copyright (C) 2007 Adrian Page <adrian@pagenet.plus.com>IccProfile Private::profileForScreen(QWidget *widget)
 */
-IccProfile IccSettings::IccSettingsPriv::profileFromWindowSystem(QWidget* widget)
+IccProfile IccSettings::Private::profileFromWindowSystem(QWidget* const widget)
 {
 #ifdef Q_WS_X11
 
     Qt::HANDLE appRootWindow;
     QString    atomName;
 
-    QDesktopWidget* desktop = QApplication::desktop();
+    QDesktopWidget* const desktop = QApplication::desktop();
     if (!desktop)
     {
         kError() << "No desktop widget available for application";
         return IccProfile();
     }
-    int screenNumber        = desktop->screenNumber(widget);
+    int screenNumber = desktop->screenNumber(widget);
 
     IccProfile profile;
     {
@@ -256,12 +257,12 @@ IccProfile IccSettings::IccSettingsPriv::profileFromWindowSystem(QWidget* widget
         kDebug() << "Found X.org XICC monitor profile" << profile.description();
     }
 
-    /*
-        else
-        {
-            kDebug() << "No X.org XICC profile installed for screen" << screenNumber;
-        }
-    */
+/*
+    else
+    {
+        kDebug() << "No X.org XICC profile installed for screen" << screenNumber;
+    }
+*/
 
     // insert to cache even if null
     {
@@ -276,7 +277,6 @@ IccProfile IccSettings::IccSettingsPriv::profileFromWindowSystem(QWidget* widget
     //TODO
 #endif
 
-
     // FIXME: unreachable code
 
     return IccProfile();
@@ -287,7 +287,7 @@ bool IccSettings::isEnabled()
     return d->settings.enableCM;
 }
 
-ICCSettingsContainer IccSettings::IccSettingsPriv::readFromConfig() const
+ICCSettingsContainer IccSettings::Private::readFromConfig() const
 {
     ICCSettingsContainer s;
     KSharedConfig::Ptr config = KGlobal::config();
@@ -296,14 +296,14 @@ ICCSettingsContainer IccSettings::IccSettingsPriv::readFromConfig() const
     return s;
 }
 
-void IccSettings::IccSettingsPriv::writeToConfig() const
+void IccSettings::Private::writeToConfig() const
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(configGroup);
     settings.writeToConfig(group);
 }
 
-void IccSettings::IccSettingsPriv::writeManagedViewToConfig() const
+void IccSettings::Private::writeManagedViewToConfig() const
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(configGroup);
@@ -383,7 +383,7 @@ void IccSettings::setIccPath(const QString& path)
     emit settingsChanged(current, old);
 }
 
-QList<IccProfile> IccSettings::IccSettingsPriv::scanDirectories(const QStringList& dirs)
+QList<IccProfile> IccSettings::Private::scanDirectories(const QStringList& dirs)
 {
     QList<IccProfile> profiles;
     QStringList       filters;
@@ -405,7 +405,7 @@ QList<IccProfile> IccSettings::IccSettingsPriv::scanDirectories(const QStringLis
     return profiles;
 }
 
-void IccSettings::IccSettingsPriv::scanDirectory(const QString& path, const QStringList& filter, QList<IccProfile>* profiles)
+void IccSettings::Private::scanDirectory(const QString& path, const QStringList& filter, QList<IccProfile>* profiles)
 {
     QDir          dir(path);
     QFileInfoList infos;
