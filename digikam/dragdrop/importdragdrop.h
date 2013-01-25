@@ -7,6 +7,7 @@
  * Description : Qt Model for ImportUI - drag and drop handling
  *
  * Copyright (C) 2012 by Islam Wazery <wazery at ubuntu dot com>
+ * Copyright (C) 2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -23,6 +24,10 @@
 
 #ifndef IMPORTDRAGDROP_H
 #define IMPORTDRAGDROP_H
+
+// KDE includes
+
+#include <kmenu.h>
 
 // Local includes
 
@@ -45,14 +50,31 @@ public:
 
     ImportImageModel* model() const;
 
-    virtual bool dropEvent(QAbstractItemView* view, const QDropEvent* e, const QModelIndex& droppedOn);
+    virtual bool           dropEvent(QAbstractItemView* view, const QDropEvent* e, const QModelIndex& droppedOn);
     virtual Qt::DropAction accepts(const QDropEvent* e, const QModelIndex& dropIndex);
-    virtual QStringList mimeTypes() const;
-    virtual QMimeData* createMimeData(const QList<QModelIndex> &);
+    virtual QStringList    mimeTypes() const;
+    virtual QMimeData*     createMimeData(const QList<QModelIndex> &);
 
 Q_SIGNALS:
 
     void dioResult(KJob*);
+
+private:
+
+    enum DropAction
+    {
+        NoAction,
+        CopyAction,
+        MoveAction,
+        GroupAction,
+        AssignTagAction
+    };
+    
+private:
+
+    QAction*   addGroupAction(KMenu* const menu);
+    QAction*   addCancelAction(KMenu* const menu);
+    DropAction copyOrMove(const QDropEvent* e, QWidget* const view, bool allowMove = true, bool askForGrouping = false);
 };
 
 } // namespace Digikam

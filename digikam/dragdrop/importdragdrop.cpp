@@ -7,6 +7,7 @@
  * Description : Qt Model for ImportUI - drag and drop handling
  *
  * Copyright (C) 2012 by Islam Wazery <wazery at ubuntu dot com>
+ * Copyright (C) 2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -33,7 +34,6 @@
 #include <kiconloader.h>
 #include <kio/job.h>
 #include <klocale.h>
-#include <kmenu.h>
 
 // Local includes
 
@@ -49,34 +49,24 @@
 namespace Digikam
 {
 
-enum DropAction
-{
-    NoAction,
-    CopyAction,
-    MoveAction,
-    GroupAction,
-    AssignTagAction
-};
-
-// ------------------------------------------------------------------------------------------
-
 ImportDragDropHandler::ImportDragDropHandler(ImportImageModel* const model)
     : AbstractItemDragDropHandler(model)
 {
 }
 
-static QAction* addGroupAction(KMenu* menu)
+QAction* ImportDragDropHandler::addGroupAction(KMenu* const menu)
 {
     return menu->addAction(SmallIcon("arrow-down-double"),
                            i18nc("@action:inmenu Group images with this image", "Group here"));
 }
 
-static QAction* addCancelAction(KMenu* menu)
+QAction* ImportDragDropHandler::addCancelAction(KMenu* const menu)
 {
     return menu->addAction(SmallIcon("dialog-cancel"), i18n("C&ancel"));
 }
 
-static DropAction copyOrMove(const QDropEvent* e, QWidget* view, bool allowMove = true, bool askForGrouping = false)
+ImportDragDropHandler::DropAction ImportDragDropHandler::copyOrMove(const QDropEvent* e, QWidget* const view,
+                                                                    bool allowMove, bool askForGrouping)
 {
     if (e->keyboardModifiers() & Qt::ControlModifier)
     {
@@ -102,14 +92,14 @@ static DropAction copyOrMove(const QDropEvent* e, QWidget* view, bool allowMove 
 
     KMenu popMenu(view);
 
-    QAction* moveAction  = 0;
+    QAction* moveAction = 0;
 
     if (allowMove)
     {
         moveAction = popMenu.addAction( SmallIcon("go-jump"), i18n("&Move Here"));
     }
 
-    QAction* copyAction  = popMenu.addAction( SmallIcon("edit-copy"), i18n("&Copy Here"));
+    QAction* const copyAction = popMenu.addAction( SmallIcon("edit-copy"), i18n("&Copy Here"));
     popMenu.addSeparator();
 
     QAction* groupAction = 0;
@@ -123,7 +113,7 @@ static DropAction copyOrMove(const QDropEvent* e, QWidget* view, bool allowMove 
     addCancelAction(&popMenu);
 
     popMenu.setMouseTracking(true);
-    QAction* choice = popMenu.exec(QCursor::pos());
+    QAction* const choice = popMenu.exec(QCursor::pos());
 
     if (moveAction && choice == moveAction)
     {
@@ -153,7 +143,7 @@ static DropAction groupAction(const QDropEvent*, QWidget* view)
 
 bool ImportDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDropEvent* e, const QModelIndex& droppedOn)
 {
-    ImportCategorizedView* view = static_cast<ImportCategorizedView*>(abstractview);
+    ImportCategorizedView* const view = static_cast<ImportCategorizedView*>(abstractview);
 
     if (accepts(e, droppedOn) == Qt::IgnoreAction)
     {
@@ -166,12 +156,12 @@ bool ImportDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDr
 
         KMenu popMenu(view);
         popMenu.addTitle(SmallIcon("digikam"), i18n("Exporting"));
-        QAction* upAction    = popMenu.addAction(SmallIcon("media-flash-smart-media"),
-                                                   i18n("Upload to Camera"));
+        QAction* const upAction = popMenu.addAction(SmallIcon("media-flash-smart-media"),
+                                                    i18n("Upload to Camera"));
         popMenu.addSeparator();
         popMenu.addAction(SmallIcon("dialog-cancel"), i18n("C&ancel"));
         popMenu.setMouseTracking(true);
-        QAction* choice = popMenu.exec(view->mapToGlobal(e->pos()));
+        QAction* const choice = popMenu.exec(view->mapToGlobal(e->pos()));
 
         if (choice)
         {
@@ -231,6 +221,7 @@ QStringList ImportDragDropHandler::mimeTypes() const
               << DCameraItemListDrag::mimeTypes()
               << DCameraDragObject::mimeTypes()
               << KUrl::List::mimeDataTypes();
+
     return mimeTypes;
 }
 
