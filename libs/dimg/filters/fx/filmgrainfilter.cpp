@@ -6,7 +6,7 @@
  * Date        : 2005-05-25
  * Description : filter to add Film Grain to image.
  *
- * Copyright (C) 2005-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2005-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2010      by Julien Narboux <julien at narboux dot fr>
  *
@@ -43,11 +43,11 @@
 namespace Digikam
 {
 
-class FilmGrainFilter::FilmGrainFilterPriv
+class FilmGrainFilter::Private
 {
 public:
 
-    FilmGrainFilterPriv() :
+    Private() :
         div(0.0),
         leadLumaNoise(1.0),
         leadChromaBlueNoise(1.0),
@@ -72,28 +72,28 @@ public:
     RandomNumberGenerator generator;
 };
 
-FilmGrainFilter::FilmGrainFilter(QObject* parent)
+FilmGrainFilter::FilmGrainFilter(QObject* const parent)
     : DImgThreadedFilter(parent),
-      d(new FilmGrainFilterPriv)
+      d(new Private)
 {
     initFilter();
 }
 
-FilmGrainFilter::FilmGrainFilter(DImg* orgImage, QObject* parent, const FilmGrainContainer& settings)
+FilmGrainFilter::FilmGrainFilter(DImg* const orgImage, QObject* const parent, const FilmGrainContainer& settings)
     : DImgThreadedFilter(orgImage, parent, "FilmGrain"),
-      d(new FilmGrainFilterPriv)
+      d(new Private)
 {
     d->settings = settings;
     initFilter();
 }
 
-FilmGrainFilter::FilmGrainFilter(DImgThreadedFilter* parentFilter,
+FilmGrainFilter::FilmGrainFilter(DImgThreadedFilter* const parentFilter,
                                  const DImg& orgImage, const DImg& destImage,
                                  int progressBegin, int progressEnd,
                                  const FilmGrainContainer& settings)
     : DImgThreadedFilter(parentFilter, orgImage, destImage, progressBegin, progressEnd,
                          parentFilter->filterName() + ": FilmGrain"),
-    d(new FilmGrainFilterPriv)
+    d(new Private)
 {
     d->settings = settings;
     filterImage();
@@ -184,11 +184,11 @@ void FilmGrainFilter::filterImage()
                         {
                             if (((refLumaRange - matLumaRange) / refLumaRange) > 0.1)
                             {
-                                adjustYCbCr(matCol, matLumaRange, matLumaNoise, FilmGrainFilterPriv::Luma);
+                                adjustYCbCr(matCol, matLumaRange, matLumaNoise, Private::Luma);
                             }
                             else
                             {
-                                adjustYCbCr(matCol, refLumaRange, refLumaNoise, FilmGrainFilterPriv::Luma);
+                                adjustYCbCr(matCol, refLumaRange, refLumaNoise, Private::Luma);
                             }
                         }
 
@@ -196,11 +196,11 @@ void FilmGrainFilter::filterImage()
                         {
                             if (((refChromaBlueRange - matChromaBlueRange) / refChromaBlueRange) > 0.1)
                             {
-                                adjustYCbCr(matCol, matChromaBlueRange, matChromaBlueNoise, FilmGrainFilterPriv::ChromaBlue);
+                                adjustYCbCr(matCol, matChromaBlueRange, matChromaBlueNoise, Private::ChromaBlue);
                             }
                             else
                             {
-                                adjustYCbCr(matCol, refChromaBlueRange, refChromaBlueNoise, FilmGrainFilterPriv::ChromaBlue);
+                                adjustYCbCr(matCol, refChromaBlueRange, refChromaBlueNoise, Private::ChromaBlue);
                             }
                         }
 
@@ -208,11 +208,11 @@ void FilmGrainFilter::filterImage()
                         {
                             if (((refChromaRedRange - matChromaRedRange) / refChromaRedRange) > 0.1)
                             {
-                                adjustYCbCr(matCol, matChromaRedRange, matChromaRedNoise, FilmGrainFilterPriv::ChromaBlue);
+                                adjustYCbCr(matCol, matChromaRedRange, matChromaRedNoise, Private::ChromaBlue);
                             }
                             else
                             {
-                                adjustYCbCr(matCol, refChromaRedRange, refChromaRedNoise, FilmGrainFilterPriv::ChromaRed);
+                                adjustYCbCr(matCol, refChromaRedRange, refChromaRedNoise, Private::ChromaRed);
                             }
                         }
 
@@ -281,11 +281,11 @@ void FilmGrainFilter::adjustYCbCr(DColor& col, double range, double nRand, int c
 
     switch (channel)
     {
-        case FilmGrainFilterPriv::Luma:
+        case Private::Luma:
             y  = CLAMP(y  + (nRand + n2) / d->div, 0.0, 1.0);
             break;
 
-        case FilmGrainFilterPriv::ChromaBlue:
+        case Private::ChromaBlue:
             cb = CLAMP(cb + (nRand + n2) / d->div, 0.0, 1.0);
             break;
 

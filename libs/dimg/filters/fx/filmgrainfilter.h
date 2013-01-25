@@ -6,9 +6,9 @@
  * Date        : 2005-05-25
  * Description : filter to add Film Grain to image.
  *
- * Copyright (C) 2005-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2005-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
+ * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -65,9 +65,11 @@ public:
         chromaRedHighlights     = -100;
     };
 
-    ~FilmGrainContainer() {};
+    ~FilmGrainContainer()
+    {
+    };
 
-    bool isDirty()
+    bool isDirty() const
     {
         return (addLuminanceNoise || addChrominanceBlueNoise || addChrominanceRedNoise);
     };
@@ -103,10 +105,10 @@ class DIGIKAM_EXPORT FilmGrainFilter : public DImgThreadedFilter
 
 public:
 
-    explicit FilmGrainFilter(QObject* parent = 0);
-    explicit FilmGrainFilter(DImg* orgImage, QObject* parent=0, const FilmGrainContainer& settings=FilmGrainContainer());
+    explicit FilmGrainFilter(QObject* const parent = 0);
+    explicit FilmGrainFilter(DImg* const orgImage, QObject* const parent=0, const FilmGrainContainer& settings=FilmGrainContainer());
     // Constructor for slave mode: execute immediately in current thread with specified master filter
-    explicit FilmGrainFilter(DImgThreadedFilter* parentFilter, const DImg& orgImage, const DImg& destImage,
+    explicit FilmGrainFilter(DImgThreadedFilter* const parentFilter, const DImg& orgImage, const DImg& destImage,
                              int progressBegin=0, int progressEnd=100,
                              const FilmGrainContainer& settings=FilmGrainContainer());
     ~FilmGrainFilter();
@@ -156,8 +158,8 @@ private:
 
 private:
 
-    class FilmGrainFilterPriv;
-    FilmGrainFilterPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam
