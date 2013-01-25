@@ -6,7 +6,7 @@
  * Date        : 2012-12-18
  * Description : Customized Workflow Settings list.
  *
- * Copyright (C) 2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2012-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -166,40 +166,43 @@ WorkflowItem* WorkflowList::findByTitle(const QString& title)
 
 void WorkflowList::startDrag(Qt::DropActions /*supportedActions*/)
 {
-    WorkflowItem* const item = dynamic_cast<WorkflowItem*>(selectedItems().first());
-
-    if (!item)
+    QList<QTreeWidgetItem*> list = selectedItems();
+    if (!list.isEmpty())
     {
-        return;
+        WorkflowItem* const item = dynamic_cast<WorkflowItem*>(list.first());
+        if (!item)
+        {
+            return;
+        }
+
+        QPixmap icon(DesktopIcon("step", 48));
+        int w = icon.width();
+        int h = icon.height();
+
+        QPixmap pix(w + 4, h + 4);
+        QString text(QString::number(item->count()));
+
+        QPainter p(&pix);
+        p.fillRect(0, 0, pix.width() - 1, pix.height() - 1, QColor(Qt::white));
+        p.setPen(QPen(Qt::black, 1));
+        p.drawRect(0, 0, pix.width() - 1, pix.height() - 1);
+        p.drawPixmap(2, 2, icon);
+        QRect r = p.boundingRect(2, 2, w, h, Qt::AlignLeft | Qt::AlignTop, text);
+        r.setWidth(qMax(r.width(), r.height()));
+        r.setHeight(qMax(r.width(), r.height()));
+        p.fillRect(r, QColor(0, 80, 0));
+        p.setPen(Qt::white);
+        QFont f(font());
+        f.setBold(true);
+        p.setFont(f);
+        p.drawText(r, Qt::AlignCenter, text);
+        p.end();
+
+        QDrag* const drag = new QDrag(this);
+        drag->setMimeData(mimeData(list));
+        drag->setPixmap(pix);
+        drag->exec();
     }
-
-    QPixmap icon(DesktopIcon("step", 48));
-    int w = icon.width();
-    int h = icon.height();
-
-    QPixmap pix(w + 4, h + 4);
-    QString text(QString::number(item->count()));
-
-    QPainter p(&pix);
-    p.fillRect(0, 0, pix.width() - 1, pix.height() - 1, QColor(Qt::white));
-    p.setPen(QPen(Qt::black, 1));
-    p.drawRect(0, 0, pix.width() - 1, pix.height() - 1);
-    p.drawPixmap(2, 2, icon);
-    QRect r = p.boundingRect(2, 2, w, h, Qt::AlignLeft | Qt::AlignTop, text);
-    r.setWidth(qMax(r.width(), r.height()));
-    r.setHeight(qMax(r.width(), r.height()));
-    p.fillRect(r, QColor(0, 80, 0));
-    p.setPen(Qt::white);
-    QFont f(font());
-    f.setBold(true);
-    p.setFont(f);
-    p.drawText(r, Qt::AlignCenter, text);
-    p.end();
-
-    QDrag* const drag = new QDrag(this);
-    drag->setMimeData(mimeData(selectedItems()));
-    drag->setPixmap(pix);
-    drag->exec();
 }
 
 QStringList WorkflowList::mimeTypes() const
@@ -221,10 +224,13 @@ QMimeData* WorkflowList::mimeData(const QList<QTreeWidgetItem*> items) const
     QByteArray encodedData;
     QDataStream stream(&encodedData, QIODevice::WriteOnly);
 
-    WorkflowItem* const item  = dynamic_cast<WorkflowItem*>(items.first());
-    if (item)
+    if (!items.isEmpty())
     {
-        stream << item->title();
+        WorkflowItem* const item  = dynamic_cast<WorkflowItem*>(items.first());
+        if (item)
+        {
+            stream << item->title();
+        }
     }
 
     mimeData->setData("digikam/workflow", encodedData);
@@ -251,40 +257,48 @@ void WorkflowList::slotContextMenu()
     }
     else if (choice == propAction)
     {
-        WorkflowItem* const item = dynamic_cast<WorkflowItem*>(selectedItems().first());
-        if (item)
+        QList<QTreeWidgetItem*> list = selectedItems();
+        if (!list.isEmpty())
         {
-            WorkflowManager* const mngr = WorkflowManager::instance();
-            Workflow wfOld              = mngr->findByTitle(item->title());
-            Workflow wfNew              = wfOld;
-
-            if (WorkflowDlg::editProps(wfNew))
+            WorkflowItem* const item = dynamic_cast<WorkflowItem*>(list.first());
+            if (item)
             {
-                mngr->remove(wfOld);
-                mngr->insert(wfNew);
-                mngr->save();
+                WorkflowManager* const mngr = WorkflowManager::instance();
+                Workflow wfOld              = mngr->findByTitle(item->title());
+                Workflow wfNew              = wfOld;
+
+                if (WorkflowDlg::editProps(wfNew))
+                {
+                    mngr->remove(wfOld);
+                    mngr->insert(wfNew);
+                    mngr->save();
+                }
             }
         }
     }
     else if (choice == delAction)
     {
-        WorkflowItem* const item = dynamic_cast<WorkflowItem*>(selectedItems().first());
-        if (item)
+        QList<QTreeWidgetItem*> list = selectedItems();
+        if (!list.isEmpty())
         {
-            int result = KMessageBox::warningYesNo(0,
-                                                   i18n("Are you sure you want to "
-                                                        "delete the selected workflow "
-                                                        "\"%1\"?", item->title()),
-                                                   i18n("Delete Workflow?"),
-                                                   KGuiItem(i18n("Delete")),
-                                                   KStandardGuiItem::cancel());
-            if (result == KMessageBox::Yes)
+            WorkflowItem* const item = dynamic_cast<WorkflowItem*>(list.first());
+            if (item)
             {
-                WorkflowManager* const mngr = WorkflowManager::instance();
-                Workflow wf                 = mngr->findByTitle(item->title());
-                mngr->remove(wf);
-                removeItemWidget(item, 0);
-                delete item;
+                int result = KMessageBox::warningYesNo(0,
+                                                    i18n("Are you sure you want to "
+                                                            "delete the selected workflow "
+                                                            "\"%1\"?", item->title()),
+                                                    i18n("Delete Workflow?"),
+                                                    KGuiItem(i18n("Delete")),
+                                                    KStandardGuiItem::cancel());
+                if (result == KMessageBox::Yes)
+                {
+                    WorkflowManager* const mngr = WorkflowManager::instance();
+                    Workflow wf                 = mngr->findByTitle(item->title());
+                    mngr->remove(wf);
+                    removeItemWidget(item, 0);
+                    delete item;
+                }
             }
         }
     }
@@ -292,11 +306,14 @@ void WorkflowList::slotContextMenu()
 
 void WorkflowList::slotAssignQueueSettings()
 {
-    WorkflowItem* const item = dynamic_cast<WorkflowItem*>(selectedItems().first());
-
-    if (item)
+    QList<QTreeWidgetItem*> list = selectedItems();
+    if (!list.isEmpty())
     {
-        emit signalAssignQueueSettings(item->title());
+        WorkflowItem* const item = dynamic_cast<WorkflowItem*>(list.first());
+        if (item)
+        {
+            emit signalAssignQueueSettings(item->title());
+        }
     }
 }
 
