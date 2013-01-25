@@ -8,8 +8,8 @@
  *
  * Copyright (C) 2009-2010 by Johannes Wienke <languitar at semipol dot de>
  * Copyright (C) 2010-2011 by Andi Clemens <andi dot clemens at gmail dot com>
- * Copyright (C)      2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2011 by Michael G. Hansen <mike at mghansen dot de>
+ * Copyright (C) 2011-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C)      2011 by Michael G. Hansen <mike at mghansen dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -60,11 +60,11 @@ using namespace KDcrawIface;
 namespace Digikam
 {
 
-class FilterSideBarWidget::FilterSideBarWidgetPriv
+class FilterSideBarWidget::Private
 {
 public:
 
-    FilterSideBarWidgetPriv() :
+    Private() :
         space(0),
         expanderVlay(0),
         tagFilterView(0),
@@ -76,10 +76,12 @@ public:
         tagAndCondAction(0),
         tagMatchCond(ImageFilterSettings::OrCondition),
         colorLabelFilter(0),
+        geolocationFilter(0),
         pickLabelFilter(0),
         ratingFilter(0),
         mimeFilter(0),
         textFilter(0),
+        withoutTagCheckBox(0),
         expbox(0)
     {
     }
@@ -112,14 +114,14 @@ public:
     RExpanderBox*                          expbox;
 };
 
-const QString FilterSideBarWidget::FilterSideBarWidgetPriv::configSearchTextFilterFieldsEntry("Search Text Filter Fields");
-const QString FilterSideBarWidget::FilterSideBarWidgetPriv::configLastShowUntaggedEntry("Show Untagged");
-const QString FilterSideBarWidget::FilterSideBarWidgetPriv::configMatchingConditionEntry("Matching Condition");
+const QString FilterSideBarWidget::Private::configSearchTextFilterFieldsEntry("Search Text Filter Fields");
+const QString FilterSideBarWidget::Private::configLastShowUntaggedEntry("Show Untagged");
+const QString FilterSideBarWidget::Private::configMatchingConditionEntry("Matching Condition");
 
 // ---------------------------------------------------------------------------------------------------
 
-FilterSideBarWidget::FilterSideBarWidget(QWidget* parent, TagModel* tagFilterModel)
-    : KVBox(parent), StateSavingObject(this), d(new FilterSideBarWidgetPriv)
+FilterSideBarWidget::FilterSideBarWidget(QWidget* const parent, TagModel* const tagFilterModel)
+    : KVBox(parent), StateSavingObject(this), d(new Private)
 {
     setObjectName("TagFilter Sidebar");
 
