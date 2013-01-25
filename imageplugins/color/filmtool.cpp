@@ -94,9 +94,11 @@ public:
         histoSegments(0),
         resetButton(0),
         pickWhitePoint(0),
+        autoButton(0),
         exposureInput(0),
         gammaInput(0),
         cnType(0),
+        colorBalanceInput(0),
         levelsHistogramWidget(0),
         redInputLevels(0),
         greenInputLevels(0),
@@ -336,12 +338,16 @@ FilmTool::FilmTool(QObject* const parent)
 
     connect(d->previewWidget, SIGNAL(signalResized()),
             this, SLOT(slotPreview()));
+    
     connect(d->previewWidget, SIGNAL(signalCapturedPointFromOriginal(Digikam::DColor, QPoint)),
             this, SLOT(slotColorSelectedFromTarget(Digikam::DColor, QPoint)));
+   
     connect(d->exposureInput, SIGNAL(valueChanged(double)),
             this, SLOT(slotExposureChanged(double)));
+
     connect(d->gammaInput, SIGNAL(valueChanged(double)),
             this, SLOT(slotGammaInputChanged(double)));
+
     connect(d->resetButton, SIGNAL(clicked()),
             this, SLOT(slotResetWhitePoint()));
 
@@ -385,9 +391,9 @@ void FilmTool::slotResetSettings()
     int green = max;
     int blue  = max;
 
-    red   = sb ? red : red / 256;
-    green = sb ? green : green / 256;
-    blue  = sb ? blue : blue / 256;
+    red       = sb ? red   : red   / 256;
+    green     = sb ? green : green / 256;
+    blue      = sb ? blue  : blue  / 256;
 
     DColor whitePoint = DColor(red, green, blue, max, sb);
     d->filmContainer.setWhitePoint(whitePoint);
@@ -438,6 +444,7 @@ void FilmTool::slotAdjustSliders()
 void FilmTool::setLevelsFromFilm()
 {
     LevelsContainer l = d->filmContainer.toLevels();
+
     for (int i = RedChannel; i <= BlueChannel; i++)
     {
         d->levels->setLevelLowInputValue(i, l.lInput[i]);
@@ -446,6 +453,7 @@ void FilmTool::setLevelsFromFilm()
         d->levels->setLevelHighOutputValue(i, l.hOutput[i]);
         d->levels->setLevelGammaValue(i, l.gamma[i]);
     }
+
     slotAdjustSliders();
 }
 
@@ -461,6 +469,7 @@ void FilmTool::gammaInputChanged(double val)
     d->filmContainer.setGamma(val);
     setLevelsFromFilm();
 }
+
 void FilmTool::slotGammaInputChanged(double val)
 {
     gammaInputChanged(val);
@@ -510,8 +519,8 @@ void FilmTool::slotPickerColorButtonActived(bool checked)
 
 void FilmTool::slotAutoWhitePoint()
 {
-    ImageHistogram *hist = d->levelsHistogramWidget->currentHistogram();
-    bool sixteenBit = d->originalImage->sixteenBit();
+    ImageHistogram* const hist = d->levelsHistogramWidget->currentHistogram();
+    bool sixteenBit            = d->originalImage->sixteenBit();
     int high_input[4];
 
     for (int channel = RedChannel; channel <= BlueChannel; channel++)
@@ -519,7 +528,7 @@ void FilmTool::slotAutoWhitePoint()
         double new_count = 0.0;
         double percentage;
         double next_percentage;
-        double count= hist->getCount(channel, 0, sixteenBit ? 65535 : 255);
+        double count     = hist->getCount(channel, 0, sixteenBit ? 65535 : 255);
 
         for (int i = (sixteenBit ? 65535 : 255) ; i > 0 ; --i)
         {
@@ -590,9 +599,9 @@ void FilmTool::readSettings()
     int green = group.readEntry(d->configWhitePointEntry.arg(2), max);
     int blue  = group.readEntry(d->configWhitePointEntry.arg(3), max);
 
-    red   = sb ? red : red / 256;
-    green = sb ? green : green / 256;
-    blue  = sb ? blue : blue / 256;
+    red       = sb ? red   : red   / 256;
+    green     = sb ? green : green / 256;
+    blue      = sb ? blue  : blue  / 256;
 
     DColor whitePoint = DColor(red, green, blue, max, sb);
     d->filmContainer.setWhitePoint(whitePoint);
@@ -687,9 +696,9 @@ bool FilmTool::eventFilter(QObject* obj, QEvent* ev)
     if (obj == d->redInputLevels || obj == d->greenInputLevels || obj == d->blueInputLevels)
     {
         if (ev->type() == QEvent::MouseButtonPress ||
-                ev->type() == QEvent::MouseButtonRelease ||
-                ev->type() == QEvent::MouseMove ||
-                ev->type() == QEvent::MouseButtonDblClick)
+            ev->type() == QEvent::MouseButtonRelease ||
+            ev->type() == QEvent::MouseMove ||
+            ev->type() == QEvent::MouseButtonDblClick)
             return true;
     }
 
