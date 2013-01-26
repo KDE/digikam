@@ -45,6 +45,7 @@ namespace Digikam
 
 DatabaseCopyManager::DatabaseCopyManager()
 {
+    m_isStopProcessing = false;
 }
 
 DatabaseCopyManager::~DatabaseCopyManager()

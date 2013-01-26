@@ -6,7 +6,7 @@
  * Date        : 2007-03-20
  * Description : Data set for image lister
  *
- * Copyright (C) 2005 by Renchi Raju <renchi dot raju at gmail dot com>
+ * Copyright (C) 2005      by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C) 2007-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -67,6 +67,7 @@ public:
         albumRootID = -1;
         rating      = -1;
         fileSize    = -1;
+        category    = DatabaseItem::UndefinedCategory;
     }
 
     int                    albumID;
@@ -88,7 +89,8 @@ public:
 
     QList<QVariant>        extraValues;
 
-    /** Initializes the beginning of a data packet. For later check with checkStream(). */
+    /** Initializes the beginning of a data packet. For later check with checkStream().
+     */
     static void initializeStream(ImageListerRecord::BinaryFormat format, QDataStream& ds);
 
     /**
@@ -97,7 +99,6 @@ public:
      * Note: No check is possible for the TraditionalFormat, always returns true.
      */
     static bool checkStream(ImageListerRecord::BinaryFormat format, QDataStream& data);
-
 };
 
 DIGIKAM_DATABASE_EXPORT QDataStream& operator<<(QDataStream& os, const ImageListerRecord& record);
