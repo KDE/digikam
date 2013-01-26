@@ -6,8 +6,8 @@
  * Date        : 2009-05-29
  * Description : database album interface.
  *
- * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2009-by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C)      2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -46,7 +46,6 @@ namespace Digikam
 {
 
 class DatabaseCoreBackend;
-class ThumbnailDBPriv;
 
 namespace DatabaseThumbnail
 {
@@ -70,7 +69,9 @@ class DIGIKAM_EXPORT DatabaseThumbnailInfo
 public:
 
     DatabaseThumbnailInfo()
-        : id(-1), type(DatabaseThumbnail::UndefinedType)
+        : id(-1),
+          type(DatabaseThumbnail::UndefinedType),
+          orientationHint(0)
     {
     }
 
@@ -80,6 +81,8 @@ public:
     int                     orientationHint;
     QByteArray              data;
 };
+
+// ------------------------------------------------------------------------------------------
 
 class DIGIKAM_EXPORT ThumbnailDB
 {
@@ -110,7 +113,7 @@ public:
     DatabaseCoreBackend::QueryState removeByFilePath(const QString& path);
     DatabaseCoreBackend::QueryState removeByCustomIdentifier(const QString& id);
 
-    DatabaseCoreBackend::QueryState insertThumbnail(const DatabaseThumbnailInfo& info, QVariant* lastInsertId = 0);
+    DatabaseCoreBackend::QueryState insertThumbnail(const DatabaseThumbnailInfo& info, QVariant* const lastInsertId = 0);
     DatabaseCoreBackend::QueryState replaceThumbnail(const DatabaseThumbnailInfo& info);
 
     QHash<QString, int> getFilePathsWithThumbnail();
@@ -121,12 +124,15 @@ public:
 
 private:
 
-    friend class Digikam::ThumbnailDatabaseAccess;
-
-    explicit ThumbnailDB(DatabaseCoreBackend* backend);
+    explicit ThumbnailDB(DatabaseCoreBackend* const backend);
     ~ThumbnailDB();
 
-    ThumbnailDBPriv* const d;
+private:
+
+    class Private;
+    Private* const d;
+
+    friend class Digikam::ThumbnailDatabaseAccess;
 };
 
 }  // namespace Digikam

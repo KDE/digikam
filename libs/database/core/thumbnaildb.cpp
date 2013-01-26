@@ -6,8 +6,8 @@
  * Date        : 2009-05-29
  * Description : database thumbnail interface.
  *
- * Copyright (C) 2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C)      2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -32,7 +32,6 @@
 
 // KDE includes
 
-
 #include <klocale.h>
 
 // Local includes
@@ -44,12 +43,12 @@
 namespace Digikam
 {
 
-class ThumbnailDBPriv
+class ThumbnailDB::Private
 {
 
 public:
 
-    ThumbnailDBPriv() :
+    Private() :
         db(0)
     {
     }
@@ -57,8 +56,8 @@ public:
     DatabaseCoreBackend* db;
 };
 
-ThumbnailDB::ThumbnailDB(DatabaseCoreBackend* backend)
-    : d(new ThumbnailDBPriv)
+ThumbnailDB::ThumbnailDB(DatabaseCoreBackend* const backend)
+    : d(new Private)
 {
     d->db = backend;
 }
@@ -68,8 +67,7 @@ ThumbnailDB::~ThumbnailDB()
     delete d;
 }
 
-bool ThumbnailDB::setSetting(const QString& keyword,
-                             const QString& value )
+bool ThumbnailDB::setSetting(const QString& keyword, const QString& value )
 {
     return  d->db->execSql( "REPLACE INTO Settings VALUES (?,?);",
                             keyword, value );
@@ -253,7 +251,7 @@ DatabaseCoreBackend::QueryState ThumbnailDB::removeByCustomIdentifier(const QStr
     return d->db->execDBAction(d->db->getDBAction(QString("Delete_Thumbnail_ByCustomIdentifier")), parameters);
 }
 
-DatabaseCoreBackend::QueryState ThumbnailDB::insertThumbnail(const DatabaseThumbnailInfo& info, QVariant* lastInsertId)
+DatabaseCoreBackend::QueryState ThumbnailDB::insertThumbnail(const DatabaseThumbnailInfo& info, QVariant* const lastInsertId)
 {
     QVariant id;
     DatabaseCoreBackend::QueryState lastQueryState;
