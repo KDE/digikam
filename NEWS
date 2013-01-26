@@ -147,5 +147,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 106 ==> 309558 - Bad inheritance of keyboard shortcut when creating sub-tag.
 107 ==> 307053 - Images sorted incorrectly.
 108 ==> 313849 - Crash on clicking in BQM "Workflow" tab.
-109 ==> 
+109 ==> 313899 - Fix fetch_l10n.rb to work with ruby 1.9.
+110 ==> 
 
