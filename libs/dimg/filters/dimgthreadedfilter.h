@@ -6,7 +6,7 @@
  * Date        : 2005-05-25
  * Description : threaded image filter class.
  *
- * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2007-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -218,9 +218,11 @@ protected:
      * Convenience class to spare the few repeating lines of code
      */
     template <class Filter>
+    
     class DefaultFilterAction : public FilterAction
     {
     public:
+
         explicit DefaultFilterAction(FilterAction::Category category = FilterAction::ReproducibleFilter)
             : FilterAction(Filter::FilterIdentifier(), Filter::CurrentVersion(), category)
         {
