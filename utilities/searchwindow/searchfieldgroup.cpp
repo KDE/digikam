@@ -7,6 +7,7 @@
  * Description : User interface for searches
  *
  * Copyright (C) 2008-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2012-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -42,6 +43,7 @@ namespace Digikam
 SearchFieldGroup::SearchFieldGroup(SearchGroup* const parent)
     : QWidget(parent)
 {
+    m_label      = 0;
     m_layout     = new QGridLayout;
     setLayout(m_layout);
     m_controller = new VisibilityController(this);
@@ -81,7 +83,7 @@ void SearchFieldGroup::setLabel(SearchFieldGroupLabel* const label)
 
 SearchField* SearchFieldGroup::fieldForName(const QString& fieldName) const
 {
-    foreach(SearchField* field, m_fields)
+    foreach(SearchField* const field, m_fields)
     {
         if (field->supportsField(fieldName))
         {
@@ -93,7 +95,7 @@ SearchField* SearchFieldGroup::fieldForName(const QString& fieldName) const
 
 void SearchFieldGroup::write(SearchXmlWriter& writer)
 {
-    foreach(SearchField* field, m_fields)
+    foreach(SearchField* const field, m_fields)
     {
         field->write(writer);
     }
@@ -102,7 +104,8 @@ void SearchFieldGroup::write(SearchXmlWriter& writer)
 void SearchFieldGroup::reset()
 {
     clearMarkedFields();
-    foreach(SearchField* field, m_fields)
+
+    foreach(SearchField* const field, m_fields)
     {
         field->reset();
     }
@@ -137,7 +140,7 @@ QList<QRect> SearchFieldGroup::areaOfMarkedFields() const
         return rects;
     }
 
-    foreach(SearchField* field, m_markedFields)
+    foreach(SearchField* const field, m_markedFields)
     {
         if (field->isVisible())
         {
@@ -159,12 +162,12 @@ QList<QRect> SearchFieldGroup::areaOfMarkedFields() const
 SearchFieldGroupLabel::SearchFieldGroupLabel(QWidget* const parent)
     : QWidget(parent)
 {
-    QGridLayout* layout = new QGridLayout;
+    QGridLayout* const layout = new QGridLayout;
 
-    m_titleLabel        = new RClickLabel;
+    m_titleLabel              = new RClickLabel;
     m_titleLabel->setObjectName("SearchFieldGroupLabel_Label");
-    m_expandLabel       = new QLabel;
-    QFrame* hline       = new QFrame;
+    m_expandLabel             = new QLabel;
+    QFrame* hline             = new QFrame;
     hline->setFrameStyle(QFrame::HLine | QFrame::Raised);
 
     layout->addWidget(m_titleLabel,  0, 0);
