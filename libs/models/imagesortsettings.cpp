@@ -38,23 +38,25 @@ namespace Digikam
 
 ImageSortSettings::ImageSortSettings()
 {
-    categorizationMode = NoCategories;
-    categorizationSortOrder = DefaultOrder;
-    categorizationCaseSensitivity = Qt::CaseSensitive;
-    sortRole = SortByFileName;
-    sortOrder = DefaultOrder;
-    sortCaseSensitivity = Qt::CaseSensitive;
+    categorizationMode             = NoCategories;
+    categorizationSortOrder        = DefaultOrder;
+    categorizationCaseSensitivity  = Qt::CaseSensitive;
+    sortRole                       = SortByFileName;
+    sortOrder                      = DefaultOrder;
+    sortCaseSensitivity            = Qt::CaseSensitive;
+    currentCategorizationSortOrder = Qt::AscendingOrder;
+    currentSortOrder               = Qt::AscendingOrder;
 }
 
 bool ImageSortSettings::operator==(const ImageSortSettings& other) const
 {
     return
-        categorizationMode == other.categorizationMode &&
-        categorizationSortOrder == other.categorizationSortOrder &&
+        categorizationMode            == other.categorizationMode            &&
+        categorizationSortOrder       == other.categorizationSortOrder       &&
         categorizationCaseSensitivity == other.categorizationCaseSensitivity &&
-        sortRole == other.sortRole &&
-        sortOrder == other.sortOrder &&
-        sortCaseSensitivity == other.sortCaseSensitivity;
+        sortRole                      == other.sortRole                      &&
+        sortOrder                     == other.sortOrder                     &&
+        sortCaseSensitivity           == other.sortCaseSensitivity;
 }
 
 void ImageSortSettings::setCategorizationMode(CategorizationMode mode)
@@ -242,9 +244,9 @@ int ImageSortSettings::compare(const ImageInfo& left, const ImageInfo& right, So
             return - compareByOrder(left.rating(), right.rating(), currentSortOrder);
         case SortByImageSize:
         {
-            QSize leftSize = left.dimensions();
+            QSize leftSize  = left.dimensions();
             QSize rightSize = right.dimensions();
-            int leftPixels = leftSize.width() * leftSize.height();
+            int leftPixels  = leftSize.width() * leftSize.height();
             int rightPixels = rightSize.width() * rightSize.height();
             return compareByOrder(leftPixels, rightPixels, currentSortOrder);
         }
@@ -281,7 +283,7 @@ bool ImageSortSettings::lessThan(const QVariant& left, const QVariant& right) co
         case QVariant::Rect:
         case QVariant::RectF:
         {
-            QRectF rectLeft = left.toRectF();
+            QRectF rectLeft  = left.toRectF();
             QRectF rectRight = right.toRectF();
             int result;
 
@@ -350,6 +352,5 @@ DatabaseFields::Set ImageSortSettings::watchFlags() const
 
     return set;
 }
-
 
 } // namespace Digikam

@@ -48,8 +48,10 @@ class RemoveFilterAction : public QAction
 
 public:
 
-    RemoveFilterAction(const QString& label, const QModelIndex& index, QObject* parent = 0);
-    ~RemoveFilterAction() {}
+    RemoveFilterAction(const QString& label, const QModelIndex& index, QObject* const parent = 0);
+    ~RemoveFilterAction()
+    {
+    }
 
     void setIndex(QModelIndex& index)
     {
@@ -80,7 +82,7 @@ class FiltersHistoryWidget : public QWidget
 
 public:
 
-    explicit FiltersHistoryWidget(QWidget* parent);
+    explicit FiltersHistoryWidget(QWidget* const parent);
     ~FiltersHistoryWidget();
 
     void setCurrentURL(const KUrl& url = KUrl());
@@ -96,8 +98,8 @@ public Q_SLOTS:
 
 private:
 
-    class FiltersHistoryWidgetPriv;
-    FiltersHistoryWidgetPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

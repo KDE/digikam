@@ -43,9 +43,10 @@ namespace Digikam
 {
 
 class ImageInfo;
+
 namespace DatabaseFields
 {
-class Set;
+    class Set;
 }
 
 class DIGIKAM_DATABASE_EXPORT ImageSortSettings
@@ -82,7 +83,7 @@ public:
 
     enum SortOrder
     {
-        AscendingOrder = Qt::AscendingOrder,
+        AscendingOrder  = Qt::AscendingOrder,
         DescendingOrder = Qt::DescendingOrder,
         DefaultOrder /// sort order depends on the chosen sort role
     };
@@ -206,7 +207,6 @@ public:
         return compareByOrder(KStringHandler::naturalCompare(a, b, caseSensitive),
                               sortOrder);
     }
-
 };
 
 } // namespace Digikam

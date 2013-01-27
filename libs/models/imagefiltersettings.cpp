@@ -7,9 +7,9 @@
  * Description : Filter values for use with ImageFilterModel
  *
  * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C)      2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2011-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C)      2010 by Andi Clemens <andi dot clemens at gmail dot com>
- * Copyright (C) 2011 by Michael G. Hansen <mike at mghansen dot de>
+ * Copyright (C)      2011 by Michael G. Hansen <mike at mghansen dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -297,7 +297,7 @@ bool containsNoneOfExcept(const ContainerA& list, const ContainerB& noneOfList, 
     return true;
 }
 
-bool ImageFilterSettings::matches(const ImageInfo& info, bool* foundText) const
+bool ImageFilterSettings::matches(const ImageInfo& info, bool* const foundText) const
 {
     if (foundText)
     {
@@ -374,7 +374,7 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool* foundText) const
     if (!m_pickLabelTagFilter.isEmpty())
     {
         QList<int> tagIds = info.tagIds();
-        bool matchPL = false;
+        bool matchPL      = false;
 
         if (containsAnyOf(m_pickLabelTagFilter, tagIds))
         {
@@ -383,6 +383,7 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool* foundText) const
         else if (!matchPL)
         {
             int noPickLabelTagId = TagsCache::instance()->tagForPickLabel(NoPickLabel);
+
             if (m_pickLabelTagFilter.contains(noPickLabelTagId))
             {
                 // Searching for "has no ColorLabel" requires special handling:
@@ -684,6 +685,8 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool* foundText) const
 
 VersionImageFilterSettings::VersionImageFilterSettings()
 {
+    m_includeTagFilter   = 0;
+    m_exceptionTagFilter = 0;
 }
 
 VersionImageFilterSettings::VersionImageFilterSettings(const VersionManagerSettings& settings)

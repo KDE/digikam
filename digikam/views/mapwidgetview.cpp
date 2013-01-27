@@ -203,7 +203,8 @@ public:
         : model(0),
           importModel(0),
           selectionModel(0),
-          thumbnailLoadThread(0)
+          thumbnailLoadThread(0),
+          mode(false)
     {
     }
 
