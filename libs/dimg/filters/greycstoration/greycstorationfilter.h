@@ -6,8 +6,8 @@
  * Date        : 2007-12-03
  * Description : Greycstoration interface.
  *
- * Copyright (C) 2007-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
+ * Copyright (C) 2007-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -59,7 +59,9 @@ public:
         setRestorationDefaultSettings();
     };
 
-    ~GreycstorationContainer() {};
+    ~GreycstorationContainer()
+    {
+    };
 
     void setRestorationDefaultSettings()
     {
@@ -162,16 +164,16 @@ public:
         you need to call in order: setSettings(), setMode(), optionally setInPaintingMask(),
         setOriginalImage(), and necessary setup() at end.
      */
-    explicit GreycstorationFilter(QObject* parent=0);
+    explicit GreycstorationFilter(QObject* const parent=0);
 
     /** Contructor with all arguments. Ready to use.
      */
-    GreycstorationFilter(DImg* orgImage,
+    GreycstorationFilter(DImg* const orgImage,
                          const GreycstorationContainer& settings,
                          int mode=Restore,
                          int newWidth=0, int newHeight=0,
                          const QImage& inPaintingMask=QImage(),
-                         QObject* parent=0);
+                         QObject* const parent=0);
 
     ~GreycstorationFilter();
 
@@ -189,14 +191,17 @@ public:
     {
         return "digikam:GreycstorationFilter";
     }
+
     static QString          DisplayableName()
     {
         return I18N_NOOP("Greycstoration Filter");
     }
+
     static QList<int>       SupportedVersions()
     {
         return QList<int>() << 1;
     }
+
     static int              CurrentVersion()
     {
         return 1;
@@ -206,13 +211,11 @@ public:
     {
         return FilterIdentifier();
     }
+
     virtual FilterAction    filterAction();
     void                    readParameters(const FilterAction& action);
 
 private:
-
-    virtual void initFilter();
-    virtual void filterImage();
 
     void computeChildrenThreads();
     void restoration();
@@ -221,11 +224,14 @@ private:
     void simpleResize();
     void iterationLoop(uint iter);
 
+    virtual void initFilter();
+    virtual void filterImage();
+
 private:
 
 
-    class GreycstorationFilterPriv;
-    GreycstorationFilterPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

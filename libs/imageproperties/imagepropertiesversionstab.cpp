@@ -66,22 +66,20 @@ public:
         filtersHistoryWidget = 0;
     }
 
-    VersionsWidget*                versionsWidget;
-    FiltersHistoryWidget*          filtersHistoryWidget;
-    DImageHistory                  history;
-    ImageInfo                      info;
-    QString                        currentSelectedImagePath;
-    int                            currentSelectedImageListPosition;
-    qlonglong                      currentSelectedImageId;
+    VersionsWidget*       versionsWidget;
+    FiltersHistoryWidget* filtersHistoryWidget;
+    DImageHistory         history;
+    ImageInfo             info;
 
-    static const QString           configActiveTab;
+    static const QString  configActiveTab;
 };
+
 const QString ImagePropertiesVersionsTab::Private::configActiveTab("Version Properties Tab");
 
 ImagePropertiesVersionsTab::ImagePropertiesVersionsTab(QWidget* const parent)
     : KTabWidget(parent), d(new Private)
 {
-    d->versionsWidget = new VersionsWidget(this);
+    d->versionsWidget       = new VersionsWidget(this);
     insertTab(0, d->versionsWidget, i18n("Versions"));
 
     d->filtersHistoryWidget = new FiltersHistoryWidget(this);
@@ -99,6 +97,7 @@ ImagePropertiesVersionsTab::~ImagePropertiesVersionsTab()
 void ImagePropertiesVersionsTab::readSettings(KConfigGroup& group)
 {
     QString tab = group.readEntry(d->configActiveTab, "versions");
+
     if (tab == "versions")
         setCurrentWidget(d->versionsWidget);
     else
@@ -159,7 +158,7 @@ void ImagePropertiesVersionsTab::addShowHideOverlay()
 
 void ImagePropertiesVersionsTab::addOpenImageAction()
 {
-    ActionVersionsOverlay* overlay = d->versionsWidget->addActionOverlay(KStandardGuiItem::open());
+    ActionVersionsOverlay* const overlay = d->versionsWidget->addActionOverlay(KStandardGuiItem::open());
 
     connect(overlay, SIGNAL(activated(ImageInfo)),
             this, SIGNAL(actionTriggered(ImageInfo)));
@@ -169,7 +168,8 @@ void ImagePropertiesVersionsTab::addOpenAlbumAction(const ImageModel* referenceM
 {
     KGuiItem gui(i18n("Go To Albums"), "folder-image",
                  i18nc("@info:tooltip", "Go to the album of this image"));
-    ActionVersionsOverlay* overlay = d->versionsWidget->addActionOverlay(gui);
+
+    ActionVersionsOverlay* const overlay = d->versionsWidget->addActionOverlay(gui);
     overlay->setReferenceModel(referenceModel);
 
     connect(overlay, SIGNAL(activated(ImageInfo)),

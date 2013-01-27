@@ -7,7 +7,7 @@
  * Description : Captions, Tags, and Rating properties editor
  *
  * Copyright (C) 2003-2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2003-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2003-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -88,7 +88,7 @@ private:
 
     void reset();
     void initializeTags(QModelIndex& parent);
-    void setTagState(TAlbum* tag, MetadataHub::TagStatus status);
+    void setTagState(TAlbum* const tag, MetadataHub::TagStatus status);
 
     void setInfos(const ImageInfoList& infos);
     void setFocusToLastSelectedWidget();
@@ -103,7 +103,7 @@ private:
     void updateRecentTags();
 
     bool singleSelection() const;
-    void setMetadataWidgetStatus(int status, QWidget* widget);
+    void setMetadataWidgetStatus(int status, QWidget* const widget);
     void metadataChange(qlonglong imageId);
     void resetMetadataChangeInfo();
     void initProgressIndicator();

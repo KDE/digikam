@@ -9,7 +9,7 @@
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C) 2004-2005 by Ralf Holzer <ralf at well dot com>
- * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -54,6 +54,7 @@ public:
     Private()
     {
         album = 0;
+        type  = SelectedItems;
     }
 
     KUrl::List imagesFromPAlbum(PAlbum* const album) const;
@@ -101,12 +102,12 @@ QString KipiImageCollection::category()
 {
     if (d->album->type() == Album::PHYSICAL)
     {
-        PAlbum* p = dynamic_cast<PAlbum*>(d->album);
+        PAlbum* const p = dynamic_cast<PAlbum*>(d->album);
         return p->category();
     }
     else if (d->album->type() == Album::TAG)
     {
-        TAlbum* p = dynamic_cast<TAlbum*>(d->album);
+        TAlbum* const p = dynamic_cast<TAlbum*>(d->album);
         return i18n("Tag: %1", p->tagPath());
     }
     else
@@ -119,7 +120,7 @@ QDate KipiImageCollection::date()
 {
     if (d->album->type() == Album::PHYSICAL)
     {
-        PAlbum* p = dynamic_cast<PAlbum*>(d->album);
+        PAlbum* const p = dynamic_cast<PAlbum*>(d->album);
         return p->date();
     }
     else
@@ -132,7 +133,7 @@ QString KipiImageCollection::comment()
 {
     if (d->album->type() == Album::PHYSICAL)
     {
-        PAlbum* p = dynamic_cast<PAlbum*>(d->album);
+        PAlbum* const p = dynamic_cast<PAlbum*>(d->album);
         return p->caption();
     }
     else
@@ -249,7 +250,7 @@ KUrl KipiImageCollection::path()
 {
     if (d->album->type() == Album::PHYSICAL)
     {
-        PAlbum* p = dynamic_cast<PAlbum*>(d->album);
+        PAlbum* const p = dynamic_cast<PAlbum*>(d->album);
         KUrl url;
         url.setPath(p->folderPath());
         return url;
@@ -265,7 +266,7 @@ KUrl KipiImageCollection::uploadPath()
 {
     if (d->album->type() == Album::PHYSICAL)
     {
-        PAlbum* p = dynamic_cast<PAlbum*>(d->album);
+        PAlbum* const p = dynamic_cast<PAlbum*>(d->album);
         KUrl url;
         url.setPath(p->folderPath());
         return url;

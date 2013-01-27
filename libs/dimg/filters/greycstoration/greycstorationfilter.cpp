@@ -6,8 +6,8 @@
  * Date        : 2007-12-03
  * Description : Greycstoration interface.
  *
- * Copyright (C) 2007-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
+ * Copyright (C) 2007-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -63,12 +63,12 @@ using namespace cimg_library;
 namespace Digikam
 {
 
-class GreycstorationFilter::GreycstorationFilterPriv
+class GreycstorationFilter::Private
 {
 
 public:
 
-    GreycstorationFilterPriv() :
+    Private() :
         gfact(1.0),
         computationThreads(2),
         mode(GreycstorationFilter::Restore),
@@ -76,25 +76,25 @@ public:
     {
     }
 
-    float                   gfact;
+    float                                gfact;
 
-    int                     computationThreads;  // Number of threads used by CImg during computation.
-    int                     mode;                // The interface running mode.
+    int                                  computationThreads;  // Number of threads used by CImg during computation.
+    int                                  mode;                // The interface running mode.
 
-    QSize                   newSize;
-    QImage                  inPaintingMask;      // Mask for inpainting.
+    QSize                                newSize;
+    QImage                               inPaintingMask;      // Mask for inpainting.
 
-    GreycstorationContainer settings;            // Current Greycstoraion algorithm settings.
+    GreycstorationContainer              settings;            // Current Greycstoraion algorithm settings.
 
-    CImg<>                  img;                 // Main image.
-    CImg<uchar>             mask;                // The mask used with inpaint or resize mode
+    CImg<>                               img;                 // Main image.
+    CImg<uchar>                          mask;                // The mask used with inpaint or resize mode
 
     CImg<>::GreycstorationThreadManager* threadManager;
 };
 
-GreycstorationFilter::GreycstorationFilter(QObject* parent)
+GreycstorationFilter::GreycstorationFilter(QObject* const parent)
     : DImgThreadedFilter(parent),
-      d(new GreycstorationFilterPriv)
+      d(new Private)
 {
     setOriginalImage(DImg());
     setSettings(GreycstorationContainer());
@@ -102,14 +102,14 @@ GreycstorationFilter::GreycstorationFilter(QObject* parent)
     setInPaintingMask(QImage());
 }
 
-GreycstorationFilter::GreycstorationFilter(DImg* orgImage,
+GreycstorationFilter::GreycstorationFilter(DImg* const orgImage,
                                            const GreycstorationContainer& settings,
                                            int mode,
                                            int newWidth, int newHeight,
                                            const QImage& inPaintingMask,
-                                           QObject* parent)
+                                           QObject* const parent)
     : DImgThreadedFilter(parent),
-      d(new GreycstorationFilterPriv)
+      d(new Private)
 {
     setOriginalImage(orgImage->copyImageData());
     setSettings(settings);
@@ -210,9 +210,9 @@ void GreycstorationFilter::filterImage()
 
     kDebug() << "Initialization...";
 
-    uchar* data = m_orgImage.bits();
-    int width   = m_orgImage.width();
-    int height  = m_orgImage.height();
+    uchar* const data = m_orgImage.bits();
+    int width         = m_orgImage.width();
+    int height        = m_orgImage.height();
 
     // convert DImg (interleaved RGBA) to CImg (planar RGBA)
     if (!m_orgImage.sixteenBit())           // 8 bits image.
@@ -268,9 +268,9 @@ void GreycstorationFilter::filterImage()
 
     kDebug() << "Finalization...";
 
-    uchar* newData = m_destImage.bits();
-    int newWidth   = m_destImage.width();
-    int newHeight  = m_destImage.height();
+    uchar* const newData = m_destImage.bits();
+    int newWidth         = m_destImage.width();
+    int newHeight        = m_destImage.height();
 
     if (!m_orgImage.sixteenBit())           // 8 bits image.
     {
@@ -316,21 +316,21 @@ void GreycstorationFilter::restoration()
         // It returns immediately, so you can do what you want after (update a progress bar for
         // instance).
         d->threadManager->start(d->img, d->settings.amplitude,
-                                  d->settings.sharpness,
-                                  d->settings.anisotropy,
-                                  d->settings.alpha,
-                                  d->settings.sigma,
-                                  #ifdef GREYSTORATION_USING_GFACT
-                                  d->gfact,
-                                  #endif
-                                  d->settings.dl,
-                                  d->settings.da,
-                                  d->settings.gaussPrec,
-                                  d->settings.interp,
-                                  d->settings.fastApprox,
-                                  d->settings.tile,
-                                  d->settings.btile,
-                                  d->computationThreads);
+                                d->settings.sharpness,
+                                d->settings.anisotropy,
+                                d->settings.alpha,
+                                d->settings.sigma,
+#ifdef GREYSTORATION_USING_GFACT
+                                d->gfact,
+#endif
+                                d->settings.dl,
+                                d->settings.da,
+                                d->settings.gaussPrec,
+                                d->settings.interp,
+                                d->settings.fastApprox,
+                                d->settings.tile,
+                                d->settings.btile,
+                                d->computationThreads);
 
         iterationLoop(iter);
     }
@@ -371,22 +371,22 @@ void GreycstorationFilter::inpainting()
         // It returns immediately, so you can do what you want after (update a progress bar for
         // instance).
         d->threadManager->start(d->img, &d->mask,
-                                  d->settings.amplitude,
-                                  d->settings.sharpness,
-                                  d->settings.anisotropy,
-                                  d->settings.alpha,
-                                  d->settings.sigma,
-                                  #ifdef GREYSTORATION_USING_GFACT
-                                  d->gfact,
-                                  #endif
-                                  d->settings.dl,
-                                  d->settings.da,
-                                  d->settings.gaussPrec,
-                                  d->settings.interp,
-                                  d->settings.fastApprox,
-                                  d->settings.tile,
-                                  d->settings.btile,
-                                  d->computationThreads);
+                                d->settings.amplitude,
+                                d->settings.sharpness,
+                                d->settings.anisotropy,
+                                d->settings.alpha,
+                                d->settings.sigma,
+#ifdef GREYSTORATION_USING_GFACT
+                                d->gfact,
+#endif
+                                d->settings.dl,
+                                d->settings.da,
+                                d->settings.gaussPrec,
+                                d->settings.interp,
+                                d->settings.fastApprox,
+                                d->settings.tile,
+                                d->settings.btile,
+                                d->computationThreads);
 
         iterationLoop(iter);
     }
@@ -396,9 +396,8 @@ void GreycstorationFilter::resize()
 {
     const bool anchor       = true;   // Anchor original pixels.
     const unsigned int init = 5;      // Initial estimate (1=block, 3=linear, 5=bicubic).
-
-    int w = m_destImage.width();
-    int h = m_destImage.height();
+    int w                   = m_destImage.width();
+    int h                   = m_destImage.height();
 
     d->mask.assign(d->img.dimx(), d->img.dimy(), 1, 1, 255);
 
@@ -419,22 +418,22 @@ void GreycstorationFilter::resize()
         // It returns immediately, so you can do what you want after (update a progress bar for
         // instance).
         d->threadManager->start(d->img, &d->mask,
-                                  d->settings.amplitude,
-                                  d->settings.sharpness,
-                                  d->settings.anisotropy,
-                                  d->settings.alpha,
-                                  d->settings.sigma,
-                                  #ifdef GREYSTORATION_USING_GFACT
-                                  d->gfact,
-                                  #endif
-                                  d->settings.dl,
-                                  d->settings.da,
-                                  d->settings.gaussPrec,
-                                  d->settings.interp,
-                                  d->settings.fastApprox,
-                                  d->settings.tile,
-                                  d->settings.btile,
-                                  d->computationThreads);
+                                d->settings.amplitude,
+                                d->settings.sharpness,
+                                d->settings.anisotropy,
+                                d->settings.alpha,
+                                d->settings.sigma,
+#ifdef GREYSTORATION_USING_GFACT
+                                d->gfact,
+#endif
+                                d->settings.dl,
+                                d->settings.da,
+                                d->settings.gaussPrec,
+                                d->settings.interp,
+                                d->settings.fastApprox,
+                                d->settings.tile,
+                                d->settings.btile,
+                                d->computationThreads);
 
         iterationLoop(iter);
     }
@@ -443,12 +442,10 @@ void GreycstorationFilter::resize()
 void GreycstorationFilter::simpleResize()
 {
     const unsigned int method = 3;      // Initial estimate (0, none, 1=block, 3=linear, 4=grid, 5=bicubic).
+    int w                     = m_destImage.width();
+    int h                     = m_destImage.height();
 
-    int w = m_destImage.width();
-    int h = m_destImage.height();
-
-    while (d->img.dimx() > 2 * w &&
-           d->img.dimy() > 2 * h)
+    while (d->img.dimx() > 2 * w && d->img.dimy() > 2 * h)
     {
         d->img.resize_halfXY();
     }
@@ -490,38 +487,38 @@ FilterAction GreycstorationFilter::filterAction()
     FilterAction action(FilterIdentifier(), CurrentVersion());
     action.setDisplayableName(DisplayableName());
 
-    action.addParameter("alpha", d->settings.alpha);
-    action.addParameter("amplitude", d->settings.amplitude);
-    action.addParameter("anisotropy", d->settings.anisotropy);
-    action.addParameter("btile", d->settings.btile);
-    action.addParameter("da", d->settings.da);
-    action.addParameter("dl", d->settings.dl);
-    action.addParameter("fastApprox", d->settings.fastApprox);
-    action.addParameter("gaussPrec", d->settings.gaussPrec);
-    action.addParameter("interp", d->settings.interp);
-    action.addParameter("nbIter", d->settings.nbIter);
-    action.addParameter("sharpness", d->settings.sharpness);
-    action.addParameter("sigma", d->settings.sigma);
-    action.addParameter("tile", d->settings.tile);
+    action.addParameter("alpha",        d->settings.alpha);
+    action.addParameter("amplitude",    d->settings.amplitude);
+    action.addParameter("anisotropy",   d->settings.anisotropy);
+    action.addParameter("btile",        d->settings.btile);
+    action.addParameter("da",           d->settings.da);
+    action.addParameter("dl",           d->settings.dl);
+    action.addParameter("fastApprox",   d->settings.fastApprox);
+    action.addParameter("gaussPrec",    d->settings.gaussPrec);
+    action.addParameter("interp",       d->settings.interp);
+    action.addParameter("nbIter",       d->settings.nbIter);
+    action.addParameter("sharpness",    d->settings.sharpness);
+    action.addParameter("sigma",        d->settings.sigma);
+    action.addParameter("tile",         d->settings.tile);
 
     return action;
 }
 
-void GreycstorationFilter::readParameters(const Digikam::FilterAction& action)
+void GreycstorationFilter::readParameters(const FilterAction& action)
 {
-    d->settings.alpha = action.parameter("alpha").toFloat();
-    d->settings.amplitude = action.parameter("amplitude").toFloat();
-    d->settings.anisotropy = action.parameter("anisotropy").toFloat();
-    d->settings.btile = action.parameter("btile").toInt();
-    d->settings.da = action.parameter("da").toFloat();
-    d->settings.dl = action.parameter("dl").toFloat();
-    d->settings.fastApprox = action.parameter("fastApprox").toBool();
-    d->settings.gaussPrec = action.parameter("gaussPrec").toFloat();
-    d->settings.interp = action.parameter("interp").toFloat();
-    d->settings.nbIter = action.parameter("nbIter").toUInt();
-    d->settings.sharpness = action.parameter("sharpness").toFloat();
-    d->settings.sigma = action.parameter("sigma").toFloat();
-    d->settings.tile = action.parameter("tile").toInt();
+    d->settings.alpha       = action.parameter("alpha").toFloat();
+    d->settings.amplitude   = action.parameter("amplitude").toFloat();
+    d->settings.anisotropy  = action.parameter("anisotropy").toFloat();
+    d->settings.btile       = action.parameter("btile").toInt();
+    d->settings.da          = action.parameter("da").toFloat();
+    d->settings.dl          = action.parameter("dl").toFloat();
+    d->settings.fastApprox  = action.parameter("fastApprox").toBool();
+    d->settings.gaussPrec   = action.parameter("gaussPrec").toFloat();
+    d->settings.interp      = action.parameter("interp").toFloat();
+    d->settings.nbIter      = action.parameter("nbIter").toUInt();
+    d->settings.sharpness   = action.parameter("sharpness").toFloat();
+    d->settings.sigma       = action.parameter("sigma").toFloat();
+    d->settings.tile        = action.parameter("tile").toInt();
 }
 
 }  // namespace Digikam
