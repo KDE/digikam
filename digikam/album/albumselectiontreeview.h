@@ -7,7 +7,7 @@
  * Description : Albums folder view.
  *
  * Copyright (C) 2005-2006 by Joern Ahrens <joern dot ahrens at kdemail dot net>
- * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at gmail dot com>
  * Copyright (C) 2009-2011 by Johannes Wienke <languitar at semipol dot de>
  *
@@ -52,7 +52,7 @@ class AlbumSelectionTreeView: public AlbumTreeView
 
 public:
 
-    AlbumSelectionTreeView(QWidget* parent, AlbumModel* model, AlbumModificationHelper* albumModificationHelper);
+    AlbumSelectionTreeView(QWidget* const parent, AlbumModel* const model, AlbumModificationHelper* const albumModificationHelper);
     ~AlbumSelectionTreeView();
 
     /**
@@ -85,8 +85,8 @@ private:
 
 private:
 
-    class AlbumSelectionTreeViewPriv;
-    AlbumSelectionTreeViewPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

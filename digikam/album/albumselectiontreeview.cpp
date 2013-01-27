@@ -7,7 +7,7 @@
  * Description : Albums folder view.
  *
  * Copyright (C) 2005-2006 by Joern Ahrens <joern dot ahrens at kdemail dot net>
- * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2012 by Andi Clemens <andi dot clemens at gmail dot com>
  * Copyright (C) 2009-2011 by Johannes Wienke <languitar at semipol dot de>
  *
@@ -54,7 +54,7 @@ class AlbumViewToolTip: public ItemViewToolTip
 {
 public:
 
-    explicit AlbumViewToolTip(AlbumSelectionTreeView* view) :
+    explicit AlbumViewToolTip(AlbumSelectionTreeView* const view) :
         ItemViewToolTip(view)
     {
     }
@@ -68,26 +68,27 @@ protected:
 
     virtual QString tipContents()
     {
-        PAlbum* album = view()->albumForIndex(currentIndex());
-        return ToolTipFiller::albumTipContents(album, view()->albumModel()->albumCount(album));
+        PAlbum* const album = view()->albumForIndex(currentIndex());
+        return (ToolTipFiller::albumTipContents(album, view()->albumModel()->albumCount(album)));
     }
 };
 
 // ----------------------------------------------------------------------------------------------------
 
-class AlbumSelectionTreeView::AlbumSelectionTreeViewPriv
+class AlbumSelectionTreeView::Private
 {
 
 public:
 
-    AlbumSelectionTreeViewPriv() :
+    Private() :
         enableToolTips(false),
         albumModificationHelper(0),
         toolTip(0),
         renameAction(0),
         resetIconAction(0),
         findDuplAction(0),
-        rebuildThumbsAction(0)
+        rebuildThumbsAction(0),
+        contextMenuElement(0)
     {
     }
 
@@ -107,12 +108,12 @@ public:
 
 // ----------------------------------------------------------------------------------------------------
 
-class AlbumSelectionTreeView::AlbumSelectionTreeViewPriv::AlbumSelectionTreeViewContextMenuElement
+class AlbumSelectionTreeView::Private::AlbumSelectionTreeViewContextMenuElement
       : public AbstractAlbumTreeView::ContextMenuElement
 {
 public:
 
-    explicit AlbumSelectionTreeViewContextMenuElement(AlbumSelectionTreeView::AlbumSelectionTreeViewPriv* d)
+    explicit AlbumSelectionTreeViewContextMenuElement(AlbumSelectionTreeView::Private* const d)
         : d(d)
     {
     }
@@ -124,7 +125,7 @@ public:
             return;
         }
         
-        PAlbum* album = dynamic_cast<PAlbum*>(a);
+        PAlbum* const album = dynamic_cast<PAlbum*>(a);
 
         if (album->isAlbumRoot())
         {
@@ -160,14 +161,14 @@ public:
         cmh.addActionEditAlbum(d->albumModificationHelper, album);
     }
 
-    AlbumSelectionTreeView::AlbumSelectionTreeViewPriv* const d;
+    AlbumSelectionTreeView::Private* const d;
 };
 
 // ----------------------------------------------------------------------------------------------------
 
-AlbumSelectionTreeView::AlbumSelectionTreeView(QWidget* parent, AlbumModel* model,
-                                               AlbumModificationHelper* albumModificationHelper)
-    : AlbumTreeView(parent), d(new AlbumSelectionTreeViewPriv)
+AlbumSelectionTreeView::AlbumSelectionTreeView(QWidget* const parent, AlbumModel* const model,
+                                               AlbumModificationHelper* const albumModificationHelper)
+    : AlbumTreeView(parent), d(new Private)
 {
     setAlbumModel(model);
     d->albumModificationHelper = albumModificationHelper;
@@ -186,7 +187,7 @@ AlbumSelectionTreeView::AlbumSelectionTreeView(QWidget* parent, AlbumModel* mode
     setEnableContextMenu(true);
     setContextMenuTitle(i18n("My Albums"));
 
-    d->contextMenuElement = new AlbumSelectionTreeViewPriv::AlbumSelectionTreeViewContextMenuElement(d);
+    d->contextMenuElement = new Private::AlbumSelectionTreeViewContextMenuElement(d);
     addContextMenuElement(d->contextMenuElement);
 }
 
@@ -208,13 +209,13 @@ void AlbumSelectionTreeView::slotFindDuplicates()
 
 void AlbumSelectionTreeView::slotRebuildThumbs()
 {
-    PAlbum* album = d->albumModificationHelper->boundAlbum(sender());
+    PAlbum* const album = d->albumModificationHelper->boundAlbum(sender());
     if (!album)
     {
         return;
     }
 
-    ThumbsGenerator* tool = new ThumbsGenerator(true, album->id());
+    ThumbsGenerator* const tool = new ThumbsGenerator(true, album->id());
     tool->start();
 }
 
@@ -233,7 +234,7 @@ bool AlbumSelectionTreeView::viewportEvent(QEvent* event)
     }
 
     // check that we got a correct event
-    QHelpEvent* helpEvent = dynamic_cast<QHelpEvent*> (event);
+    QHelpEvent* const helpEvent = dynamic_cast<QHelpEvent*> (event);
 
     if (!helpEvent)
     {
@@ -250,7 +251,7 @@ bool AlbumSelectionTreeView::viewportEvent(QEvent* event)
         return true;
     }
 
-    PAlbum* album = albumForIndex(index);
+    PAlbum* const album = albumForIndex(index);
 
     if (!album || album->isRoot() || album->isAlbumRoot())
     {

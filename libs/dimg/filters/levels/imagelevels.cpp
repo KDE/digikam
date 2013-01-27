@@ -6,7 +6,7 @@
  * Date        : 2004-07-29
  * Description : image levels manipulation methods.
  *
- * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -90,9 +90,10 @@ public:
 
     Private()
     {
-        levels = 0;
-        lut    = 0;
-        dirty  = false;
+        levels     = 0;
+        lut        = 0;
+        dirty      = false;
+        sixteenBit = false;
     }
 
     // Levels data.
@@ -186,9 +187,7 @@ void ImageLevels::levelsAuto(ImageHistogram* const hist)
 
     levelsChannelReset(LuminosityChannel);
 
-    for (int channel = RedChannel ;
-         channel <= BlueChannel ;
-         ++channel)
+    for (int channel = RedChannel ; channel <= BlueChannel ; ++channel)
     {
         levelsChannelAuto(hist, channel);
     }
@@ -209,8 +208,7 @@ void ImageLevels::levelsChannelAuto(ImageHistogram* const hist, int channel)
     d->levels->gamma[channel]       = 1.0;
     d->levels->low_output[channel]  = 0;
     d->levels->high_output[channel] = d->sixteenBit ? 65535 : 255;
-
-    count = hist->getCount(channel, 0, d->sixteenBit ? 65535 : 255);
+    count                           = hist->getCount(channel, 0, d->sixteenBit ? 65535 : 255);
 
     if (count == 0.0)
     {
@@ -315,9 +313,7 @@ void ImageLevels::levelsGrayToneAdjustByColors(int channel, const DColor& color)
     // Calculate lightness value.
 
     lightness = (unsigned short)LEVELS_RGB_INTENSITY(color.red(), color.green(), color.blue());
-
     input     = levelsInputFromColor(channel, color);
-
     range     = d->levels->high_input[channel] - d->levels->low_input[channel];
 
     if (range <= 0)
@@ -334,7 +330,7 @@ void ImageLevels::levelsGrayToneAdjustByColors(int channel, const DColor& color)
 
     // Normalize input and lightness.
 
-    inten     = (double) input / (double) range;
+    inten     = (double) input     / (double) range;
     out_light = (double) lightness / (double) range;
 
     if (out_light <= 0)
@@ -417,8 +413,7 @@ float ImageLevels::levelsLutFunc(int n_channels, int channel, float value)
     {
         // Don't apply the overall curve to the alpha channel.
 
-        if (j == 0 && (n_channels == 2 || n_channels == 4)
-            && channel == n_channels - 1)
+        if (j == 0 && (n_channels == 2 || n_channels == 4) && channel == n_channels - 1)
         {
             return inten;
         }
