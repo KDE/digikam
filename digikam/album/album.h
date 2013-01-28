@@ -166,7 +166,7 @@ public:
      * @param album Album to check whether it belongs in the child
      * hierarchy
      */
-    bool    isAncestorOf(Album* album) const;
+    bool    isAncestorOf(Album* const album) const;
 
     /**
      * This allows to associate some "extra" data to a Album. As one
@@ -197,7 +197,7 @@ public:
      * @see extraData
      * @see removeExtraData
      */
-    void    setExtraData(const void* key, void* value);
+    void    setExtraData(const void* const key, void* const value);
 
     /**
      * Remove the associated extra data associated with @p key
@@ -206,7 +206,7 @@ public:
      * @see setExtraData
      * @see extraData
      */
-    void    removeExtraData(const void* key);
+    void    removeExtraData(const void* const key);
 
     /**
      * Retrieve the associated extra data associated with @p key
@@ -215,7 +215,7 @@ public:
      * @see setExtraData
      * @see extraData
      */
-    void*   extraData(const void* key) const;
+    void*   extraData(const void* const key) const;
 
 protected:
 
@@ -252,7 +252,7 @@ protected:
      *
      * @param parent set the parent album of album to @p parent
      */
-    void setParent(Album* parent);
+    void setParent(Album* const parent);
 
     /**
      * @internal use only
@@ -261,7 +261,7 @@ protected:
      *
      * @param child the Album to add as child
      */
-    void insertChild(Album* child);
+    void insertChild(Album* const child);
 
     /**
      * @internal use only
@@ -270,7 +270,7 @@ protected:
      *
      * @param child the Album to remove
      */
-    void removeChild(Album* child);
+    void removeChild(Album* const child);
 
 private:
 
@@ -385,8 +385,6 @@ public:
     QMap<QString, QString> properties() const;
 
 private:
-
-    int     m_pid;
 
     QString m_icon;
 
@@ -514,7 +512,7 @@ class AlbumIterator
 {
 public:
 
-    explicit AlbumIterator(Album* album);
+    explicit AlbumIterator(Album* const album);
     ~AlbumIterator();
 
     AlbumIterator& operator++();

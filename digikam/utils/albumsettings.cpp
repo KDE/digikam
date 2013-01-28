@@ -7,7 +7,7 @@
  * Description : albums settings interface
  *
  * Copyright (C) 2003-2004 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2003-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2003-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2007      by Arnd Baecker <arnd dot baecker at web dot de>
  *
  * This program is free software; you can redistribute it
@@ -78,6 +78,7 @@ public:
         iconShowSize(false),
         iconShowDate(false),
         iconShowModDate(false),
+        iconShowTitle(false),
         iconShowComments(false),
         iconShowResolution(false),
         iconShowTags(false),
@@ -123,11 +124,16 @@ public:
         ratingFilterCond(0),
         recursiveAlbums(false),
         recursiveTags(false),
+        sidebarTitleStyle(KMultiTabBar::VSNET),
+        albumSortOrder(AlbumSettings::ByFolder),
         imageSortOrder(0),
         imageSorting(0),
         imageGroupMode(0),
+        itemLeftClickAction(AlbumSettings::ShowPreview),
         syncToDigikam(false),
-        syncToNepomuk(false)
+        syncToNepomuk(false),
+        faceDetectionAccuracy(0.8),
+        stringComparisonType(AlbumSettings::Natural)
     {
     }
 

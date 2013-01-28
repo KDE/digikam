@@ -65,7 +65,7 @@ Album::~Album()
     AlbumManager::internalInstance->notifyAlbumDeletion(this);
 }
 
-void Album::setParent(Album* parent)
+void Album::setParent(Album* const parent)
 {
     if (parent)
     {
@@ -132,7 +132,7 @@ QList< int > Album::childAlbumIds(bool recursive)
     return ids;
 }
 
-void Album::insertChild(Album* child)
+void Album::insertChild(Album* const child)
 {
     if (!child)
     {
@@ -155,7 +155,7 @@ void Album::insertChild(Album* child)
     }
 }
 
-void Album::removeChild(Album* child)
+void Album::removeChild(Album* const child)
 {
     if (!child || m_clearing)
     {
@@ -268,17 +268,17 @@ Album::Type Album::type() const
     return m_type;
 }
 
-void Album::setExtraData(const void* key, void* value)
+void Album::setExtraData(const void* const key, void* const value)
 {
     m_extraMap.insert(key, value);
 }
 
-void Album::removeExtraData(const void* key)
+void Album::removeExtraData(const void* const key)
 {
     m_extraMap.remove(key);
 }
 
-void* Album::extraData(const void* key) const
+void* Album::extraData(const void* const key) const
 {
     typedef QMap<const void*, void*> Map;
     Map::const_iterator it = m_extraMap.constFind(key);
@@ -296,7 +296,7 @@ bool Album::isRoot() const
     return m_root;
 }
 
-bool Album::isAncestorOf(Album* album) const
+bool Album::isAncestorOf(Album* const album) const
 {
     bool val = false;
     Album* a = album;
@@ -759,7 +759,7 @@ QString SAlbum::getTemporaryHaarTitle(DatabaseSearch::HaarSearchType haarType)
 
 // --------------------------------------------------------------------------
 
-AlbumIterator::AlbumIterator(Album* album)
+AlbumIterator::AlbumIterator(Album* const album)
 {
     m_root    = album;
     m_current = album ? album->firstChild() : 0;
