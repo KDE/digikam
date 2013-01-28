@@ -148,5 +148,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 107 ==> 307053 - Images sorted incorrectly.
 108 ==> 313849 - Crash on clicking in BQM "Workflow" tab.
 109 ==> 313899 - Fix fetch_l10n.rb to work with ruby 1.9.
-110 ==> 
+110 ==> 302740 - Duplicate rotation/flip entries in image menu, shortcuts not working.
+111 ==> 
 
