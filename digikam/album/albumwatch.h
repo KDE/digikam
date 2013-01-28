@@ -48,14 +48,14 @@ class AlbumWatch : public QObject
 
 public:
 
-    explicit AlbumWatch(AlbumManager* parent = 0);
+    explicit AlbumWatch(AlbumManager* const parent = 0);
     ~AlbumWatch();
 
     void clear();
     void setDatabaseParameters(const DatabaseParameters& params);
 
 protected Q_SLOTS:
-    
+
     void slotAlbumAdded(Album* album);
     void slotAlbumAboutToBeDeleted(Album* album);
 
@@ -80,11 +80,12 @@ private:
     void connectToKIO();
     void handleKioNotification(const KUrl& url);
 
-    class AlbumWatchPriv;
-    AlbumWatchPriv* const d;
+private:
 
+    class Private;
+    Private* const d;
 };
 
-}
+} // namespace Digikam
 
-#endif
+#endif // ALBUMWATCH_H

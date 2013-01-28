@@ -7,7 +7,7 @@
  * Description : Storage container for database connection parameters.
  *
  * Copyright (C) 2007-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2010 by Holger Foerster <hamsi2k at freenet dot de>
+ * Copyright (C) 2010      by Holger Foerster <hamsi2k at freenet dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -66,7 +66,7 @@ namespace Digikam
 {
 
 DatabaseParameters::DatabaseParameters()
-    : port(-1)
+    : port(-1), internalServer(false)
 {
 }
 
@@ -89,12 +89,12 @@ DatabaseParameters::DatabaseParameters(const QString& type,
 DatabaseParameters::DatabaseParameters(const KUrl& url)
     : port(-1), internalServer(false)
 {
-    databaseType   = url.queryItem("databaseType");
-    databaseName   = url.queryItem("databaseName");
-    databaseNameThumbnails   = url.queryItem("databaseNameThumbnails");
-    connectOptions = url.queryItem("connectOptions");
-    hostName       = url.queryItem("hostName");
-    QString queryPort = url.queryItem("port");
+    databaseType           = url.queryItem("databaseType");
+    databaseName           = url.queryItem("databaseName");
+    databaseNameThumbnails = url.queryItem("databaseNameThumbnails");
+    connectOptions         = url.queryItem("connectOptions");
+    hostName               = url.queryItem("hostName");
+    QString queryPort      = url.queryItem("port");
 
     if (!queryPort.isNull())
     {
@@ -112,26 +112,26 @@ DatabaseParameters::DatabaseParameters(const KUrl& url)
     internalServer = false;
 #endif // HAVE_INTERNALMYSQL
 
-    userName       = url.queryItem("userName");
-    password       = url.queryItem("password");
+    userName = url.queryItem("userName");
+    password = url.queryItem("password");
 }
 
 bool DatabaseParameters::operator==(const DatabaseParameters& other) const
 {
-    return databaseType   == other.databaseType &&
-           databaseName   == other.databaseName &&
+    return(databaseType   == other.databaseType                   &&
+           databaseName   == other.databaseName                   &&
            databaseNameThumbnails == other.databaseNameThumbnails &&
-           connectOptions == other.connectOptions &&
-           hostName       == other.hostName &&
-           port           == other.port &&
-           internalServer == other.internalServer &&
-           userName       == other.userName &&
-           password       == other.password;
+           connectOptions == other.connectOptions                 &&
+           hostName       == other.hostName                       &&
+           port           == other.port                           &&
+           internalServer == other.internalServer                 &&
+           userName       == other.userName                       &&
+           password       == other.password);
 }
 
 bool DatabaseParameters::operator!=(const DatabaseParameters& other) const
 {
-    return !operator==(other);
+    return (!operator==(other));
 }
 
 bool DatabaseParameters::isValid() const
@@ -208,16 +208,18 @@ void DatabaseParameters::readFromConfig(KSharedConfig::Ptr config, const QString
     }
 
     databaseType             = group.readEntry(configDatabaseType, QString());
+
     if (isSQLite()) // see bug #267131
     {
-        databaseName             = group.readPathEntry(configDatabaseName, QString());
-        databaseNameThumbnails   = group.readPathEntry(configDatabaseNameThumbnails, QString());
+        databaseName           = group.readPathEntry(configDatabaseName, QString());
+        databaseNameThumbnails = group.readPathEntry(configDatabaseNameThumbnails, QString());
     }
     else
     {
-        databaseName             = group.readEntry(configDatabaseName, QString());
-        databaseNameThumbnails   = group.readEntry(configDatabaseNameThumbnails, QString());
+        databaseName           = group.readEntry(configDatabaseName, QString());
+        databaseNameThumbnails = group.readEntry(configDatabaseNameThumbnails, QString());
     }
+
     hostName                 = group.readEntry(configDatabaseHostName, QString());
     port                     = group.readEntry(configDatabasePort, -1);
     userName                 = group.readEntry(configDatabaseUsername, QString());
@@ -291,16 +293,16 @@ void DatabaseParameters::legacyAndDefaultChecks(const QString& suggestedPath, KS
     // If the internal server should be started, then the connection options must be reset
     if (databaseType == "QMYSQL" && internalServer)
     {
-        const QString miscDir = KStandardDirs::locateLocal("data", "digikam/db_misc");
-        databaseType= "QMYSQL";
-        databaseName = "digikam";
-        internalServer = true;
+        const QString miscDir  = KStandardDirs::locateLocal("data", "digikam/db_misc");
+        databaseType           = "QMYSQL";
+        databaseName           = "digikam";
+        internalServer         = true;
         databaseNameThumbnails = "digikam";
         hostName.clear();
-        port = -1;
-        userName = "root";
+        port                   = -1;
+        userName               = "root";
         password.clear();
-        connectOptions = QString::fromLatin1("UNIX_SOCKET=%1/mysql.socket").arg(miscDir);
+        connectOptions         = QString::fromLatin1("UNIX_SOCKET=%1/mysql.socket").arg(miscDir);
     }
 
     if (databaseType.isEmpty())
@@ -310,14 +312,14 @@ void DatabaseParameters::legacyAndDefaultChecks(const QString& suggestedPath, KS
 
         QString databaseFilePath;
 
-        // 1.0 - 1.2 style database file path?
         if (group.hasKey(configDatabaseFilePathEntry))
         {
+            // 1.0 - 1.2 style database file path?
             databaseFilePath = group.readEntry(configDatabaseFilePathEntry, QString());
         }
-        // <= 0.9 style album path entry?
         else if (group.hasKey(configAlbumPathEntry))
         {
+            // <= 0.9 style album path entry?
             databaseFilePath = group.readEntry(configAlbumPathEntry, QString());
         }
         else if (!suggestedPath.isNull())
@@ -363,16 +365,16 @@ void DatabaseParameters::writeToConfig(KSharedConfig::Ptr config, const QString&
         group = config->group(configGroup);
     }
 
-    QString dbName = getDatabaseNameOrDir();
+    QString dbName       = getDatabaseNameOrDir();
     QString dbNameThumbs = getThumbsDatabaseNameOrDir();
 
-    group.writeEntry(configDatabaseType, databaseType);
-    group.writeEntry(configDatabaseName, dbName);
+    group.writeEntry(configDatabaseType,           databaseType);
+    group.writeEntry(configDatabaseName,           dbName);
     group.writeEntry(configDatabaseNameThumbnails, dbNameThumbs);
-    group.writeEntry(configDatabaseHostName, hostName);
-    group.writeEntry(configDatabasePort, port);
-    group.writeEntry(configDatabaseUsername, userName);
-    group.writeEntry(configDatabasePassword, password);
+    group.writeEntry(configDatabaseHostName,       hostName);
+    group.writeEntry(configDatabasePort,           port);
+    group.writeEntry(configDatabaseUsername,       userName);
+    group.writeEntry(configDatabasePassword,       password);
     group.writeEntry(configDatabaseConnectOptions, connectOptions);
     group.writeEntry(configInternalDatabaseServer, internalServer);
 }
@@ -427,16 +429,14 @@ DatabaseParameters DatabaseParameters::defaultParameters(const QString databaseT
 
     // only the database name is needed
     DatabaseConfigElement config = DatabaseConfigElement::element(databaseType);
-
-    parameters.databaseType     = databaseType;
-    parameters.databaseName     = config.databaseName;
-    parameters.hostName         = config.hostName;
-    parameters.userName         = config.userName;
-    parameters.password         = config.password;
-    parameters.port             = config.port.toInt();
-
-    const QString miscDir     = KStandardDirs::locateLocal("data", "digikam/db_misc");
-    QString connectOptions = config.connectOptions;
+    parameters.databaseType      = databaseType;
+    parameters.databaseName      = config.databaseName;
+    parameters.hostName          = config.hostName;
+    parameters.userName          = config.userName;
+    parameters.password          = config.password;
+    parameters.port              = config.port.toInt();
+    const QString miscDir        = KStandardDirs::locateLocal("data", "digikam/db_misc");
+    QString connectOptions       = config.connectOptions;
     connectOptions.replace(QString("$$DBMISCPATH$$"), miscDir);
 
     parameters.connectOptions   = connectOptions;
@@ -448,7 +448,7 @@ DatabaseParameters DatabaseParameters::defaultParameters(const QString databaseT
 DatabaseParameters DatabaseParameters::thumbnailParameters() const
 {
     DatabaseParameters params = *this;
-    params.databaseName = databaseNameThumbnails;
+    params.databaseName       = databaseNameThumbnails;
     return params;
 }
 

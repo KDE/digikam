@@ -88,6 +88,7 @@ public:
           m_notifier( 0 ),
           q( parent)
     {
+        memset(&eventBuffer, 0, sizeof(eventBuffer));
     }
 
     ~Private()

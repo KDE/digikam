@@ -68,17 +68,6 @@ public:
     DatabaseParameters(const KUrl& url);
     DatabaseParameters();
 
-    QString databaseType;
-    QString databaseName;
-    QString connectOptions;
-    QString hostName;
-    int     port;
-    bool    internalServer;
-    QString userName;
-    QString password;
-
-    QString databaseNameThumbnails;
-
     void insertInUrl(KUrl& url) const;
     bool operator==(const DatabaseParameters& other) const;
     bool operator!=(const DatabaseParameters& other) const;
@@ -86,10 +75,10 @@ public:
     /** Performs basic checks that the parameters are not empty and have the information
      *  required for the databaseType.
      */
-    bool isValid() const;
+    bool    isValid()            const;
 
-    bool isSQLite() const;
-    bool isMySQL() const;
+    bool    isSQLite()           const;
+    bool    isMySQL()            const;
     QString SQLiteDatabaseFile() const;
 
     /**
@@ -151,6 +140,19 @@ public:
     static DatabaseParameters parametersForSQLiteDefaultFile(const QString& directory);
 
     static void removeFromUrl(KUrl& url);
+
+public:
+
+    QString databaseType;
+    QString databaseName;
+    QString connectOptions;
+    QString hostName;
+    int     port;
+    bool    internalServer;
+    QString userName;
+    QString password;
+
+    QString databaseNameThumbnails;
 };
 
 DIGIKAM_EXPORT QDebug operator<<(QDebug dbg, const DatabaseParameters& t);

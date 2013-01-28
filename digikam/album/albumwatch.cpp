@@ -54,21 +54,30 @@ enum Mode
     KDirWatchMode
 };
 
-class AlbumWatch::AlbumWatchPriv
+class AlbumWatch::Private
 {
 public:
 
-    explicit AlbumWatchPriv(AlbumWatch* q)
-        : inotify(0),
+    explicit Private(AlbumWatch* const q)
+        : mode(InotifyMode),
+          inotify(0),
           dirWatch(0),
           connectedToKIO(false),
           q(q)
-          
     {
     }
 
-    void determineMode();
-    bool isInotifyMode() const { return mode == InotifyMode; }
+    bool isInotifyMode() const
+    {
+        return (mode == InotifyMode);
+    }
+
+    void             determineMode();
+    bool             inBlackList(const QString& path) const;
+    bool             inDirWatchParametersBlackList(const QFileInfo& info, const QString& path);
+    QList<QDateTime> buildDirectoryModList(const QFileInfo& dbFile);
+
+public:
 
     Mode               mode;
 
@@ -82,13 +91,9 @@ public:
     QList<QDateTime>   dbPathModificationDateList;
 
     AlbumWatch* const  q;
-
-    bool inBlackList(const QString& path);
-    QList<QDateTime> buildDirectoryModList(const QFileInfo& dbFile);
-    bool inDirWatchParametersBlackList(const QFileInfo& info, const QString& path);
 };
 
-void AlbumWatch::AlbumWatchPriv::determineMode()
+void AlbumWatch::Private::determineMode()
 {
     if (KInotify::available())
     {
@@ -100,7 +105,7 @@ void AlbumWatch::AlbumWatchPriv::determineMode()
     }
 }
 
-bool AlbumWatch::AlbumWatchPriv::inBlackList(const QString& path)
+bool AlbumWatch::Private::inBlackList(const QString& path) const
 {
     // Filter out dirty signals triggered by changes on the database file
     foreach(const QString& bannedFile, fileNameBlackList)
@@ -110,14 +115,60 @@ bool AlbumWatch::AlbumWatchPriv::inBlackList(const QString& path)
             return true;
         }
     }
+
     return false;
 }
 
-// --------- //
+bool AlbumWatch::Private::inDirWatchParametersBlackList(const QFileInfo& info, const QString& path)
+{
+    if (params.isSQLite())
+    {
+        QDir dir;
 
-AlbumWatch::AlbumWatch(AlbumManager* parent)
+        if (info.isDir())
+        {
+            dir = QDir(path);
+        }
+        else
+        {
+            dir = info.dir();
+        }
+
+        QFileInfo dbFile(params.SQLiteDatabaseFile());
+
+        // Workaround for broken KDirWatch in KDE 4.2.4
+        if (path.startsWith(dbFile.filePath()))
+        {
+            return true;
+        }
+
+        // is the signal for the directory containing the database file?
+        if (dbFile.dir() == dir)
+        {
+            // retrieve modification dates
+            QList<QDateTime> modList = buildDirectoryModList(dbFile);
+
+            // check for equality
+            if (modList == dbPathModificationDateList)
+            {
+                //kDebug() << "Filtering out db-file-triggered dir watch signal";
+                // we can skip the signal
+                return true;
+            }
+
+            // set new list
+            dbPathModificationDateList = modList;
+        }
+    }
+
+    return false;
+}
+
+// -------------------------------------------------------------------------------------
+
+AlbumWatch::AlbumWatch(AlbumManager* const parent)
     : QObject(parent),
-      d(new AlbumWatchPriv(this))
+      d(new Private(this))
 {
     d->determineMode();
 
@@ -133,6 +184,7 @@ AlbumWatch::AlbumWatch(AlbumManager* parent)
 
     connect(parent, SIGNAL(signalAlbumAdded(Album*)),
             this, SLOT(slotAlbumAdded(Album*)));
+
     connect(parent, SIGNAL(signalAlbumAboutToBeDeleted(Album*)),
             this, SLOT(slotAlbumAboutToBeDeleted(Album*)));
 }
@@ -150,13 +202,14 @@ void AlbumWatch::clear()
         {
             d->dirWatch->removeDir(addedDirectory);
         }
+
         d->dirWatchAddedDirs.clear();
     }
 
     if (d->connectedToKIO)
     {
-        QDBusConnection::sessionBus().disconnect(QString(), QString(), "org.kde.KDirNotify", "FileMoved", 0, 0);
-        QDBusConnection::sessionBus().disconnect(QString(), QString(), "org.kde.KDirNotify", "FilesAdded", 0, 0);
+        QDBusConnection::sessionBus().disconnect(QString(), QString(), "org.kde.KDirNotify", "FileMoved",    0, 0);
+        QDBusConnection::sessionBus().disconnect(QString(), QString(), "org.kde.KDirNotify", "FilesAdded",   0, 0);
         QDBusConnection::sessionBus().disconnect(QString(), QString(), "org.kde.KDirNotify", "FilesRemoved", 0, 0);
 
         d->connectedToKIO = false;
@@ -218,11 +271,11 @@ void AlbumWatch::slotAlbumAdded(Album* a)
             // On OS X, file watch is broken in the OS and thus in Qt.
             // Fixing is beyond our scope. See bug #289330.
             // Disable file watch for OS X and hope for future improvements
-            #ifdef Q_WS_MAC
+#ifdef Q_WS_MAC
             d->dirWatch->addDir(dir, KDirWatch::WatchDirOnly);
-            #else
+#else
             d->dirWatch->addDir(dir, KDirWatch::WatchFiles | KDirWatch::WatchDirOnly);
-            #endif
+#endif
         }
     }
 }
@@ -270,16 +323,22 @@ void AlbumWatch::connectToKInotify()
 
     connect( d->inotify, SIGNAL(movedFrom(QString)),
              this, SLOT(slotFileMoved(QString)) );
+
     connect( d->inotify, SIGNAL(movedTo(QString)),
              this, SLOT(slotFileMoved(QString)) );
+
     /*connect( d->inotify, SIGNAL(moved(QString,QString)),
              this, SLOT(slotFileMoved(QString,QString)) );*/
+
     connect( d->inotify, SIGNAL(deleted(QString,bool)),
              this, SLOT(slotFileDeleted(QString,bool)) );
+
     connect( d->inotify, SIGNAL(created(QString,bool)),
              this, SLOT(slotFileCreated(QString,bool)) );
+
     connect( d->inotify, SIGNAL(closedWrite(QString)),
              this, SLOT(slotFileClosedAfterWrite(QString)) );
+
     connect( d->inotify, SIGNAL(watchUserLimitReached()),
              this, SLOT(slotInotifyWatchUserLimitReached()) );
 }
@@ -339,7 +398,7 @@ void AlbumWatch::rescanPath(const QString& path)
 
 /* ---------- KDirWatch ---------- */
 
-QList<QDateTime> AlbumWatch::AlbumWatchPriv::buildDirectoryModList(const QFileInfo& dbFile)
+QList<QDateTime> AlbumWatch::Private::buildDirectoryModList(const QFileInfo& dbFile)
 {
     // retrieve modification dates
     QList<QDateTime> modList;
@@ -355,51 +414,6 @@ QList<QDateTime> AlbumWatch::AlbumWatchPriv::buildDirectoryModList(const QFileIn
         }
     }
     return modList;
-}
-
-bool AlbumWatch::AlbumWatchPriv::inDirWatchParametersBlackList(const QFileInfo& info, const QString& path)
-{
-    if (params.isSQLite())
-    {
-        QDir dir;
-
-        if (info.isDir())
-        {
-            dir = QDir(path);
-        }
-        else
-        {
-            dir = info.dir();
-        }
-
-        QFileInfo dbFile(params.SQLiteDatabaseFile());
-
-        // Workaround for broken KDirWatch in KDE 4.2.4
-        if (path.startsWith(dbFile.filePath()))
-        {
-            return true;
-        }
-
-        // is the signal for the directory containing the database file?
-        if (dbFile.dir() == dir)
-        {
-            // retrieve modification dates
-            QList<QDateTime> modList = buildDirectoryModList(dbFile);
-
-            // check for equality
-            if (modList == dbPathModificationDateList)
-            {
-                //kDebug() << "Filtering out db-file-triggered dir watch signal";
-                // we can skip the signal
-                return true;
-            }
-
-            // set new list
-            dbPathModificationDateList = modList;
-        }
-    }
-
-    return false;
 }
 
 void AlbumWatch::slotDirWatchDirty(const QString& path)
@@ -488,6 +502,7 @@ void AlbumWatch::slotKioFileMoved(const QString& urlFrom, const QString& urlTo)
 void AlbumWatch::slotKioFilesDeleted(const QStringList& urls)
 {
     kDebug() << urls;
+
     foreach(const QString& url, urls)
     {
         handleKioNotification(KUrl(url));
@@ -530,4 +545,4 @@ void AlbumWatch::handleKioNotification(const KUrl& url)
     }
 }
 
-}
+} // namespace Digikam
