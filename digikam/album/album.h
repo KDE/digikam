@@ -386,6 +386,8 @@ public:
 
 private:
 
+    int     m_pid;
+
     QString m_icon;
 
     friend class AlbumManager;

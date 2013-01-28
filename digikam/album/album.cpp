@@ -449,7 +449,7 @@ QString PAlbum::folderPath() const
 // --------------------------------------------------------------------------
 
 TAlbum::TAlbum(const QString& title, int id, bool root)
-    : Album(Album::TAG, id, root)
+    : Album(Album::TAG, id, root), m_pid(0)
 {
     setTitle(title);
 }
