@@ -6,7 +6,7 @@
  * Date        : 2004-12-01
  * Description : a widget to draw histogram curves
  *
- * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -79,16 +79,23 @@ public:
     explicit Private(CurvesWidget* const q)
         : q(q)
     {
-        curves        = 0;
-        grabPoint     = -1;
-        last          = 0;
-        guideVisible  = false;
-        xMouseOver    = -1;
-        yMouseOver    = -1;
-        clearFlag     = HistogramNone;
-        progressCount = 0;
-        progressTimer = 0;
-        progressPix   = KPixmapSequence("process-working", KIconLoader::SizeSmallMedium);
+        readOnlyMode     = false;
+        leftMost         = 0;
+        rightMost        = 0;
+        channelType      = LuminosityChannel;
+        scaleType        = LinScaleHistogram;
+        imageHistogram   = 0;
+        histogramPainter = 0;
+        curves           = 0;
+        grabPoint        = -1;
+        last             = 0;
+        guideVisible     = false;
+        xMouseOver       = -1;
+        yMouseOver       = -1;
+        clearFlag        = HistogramNone;
+        progressCount    = 0;
+        progressTimer    = 0;
+        progressPix      = KPixmapSequence("process-working", KIconLoader::SizeSmallMedium);
     }
 
     bool              readOnlyMode;
@@ -463,7 +470,7 @@ void CurvesWidget::updateData(const DImg& img)
     resetUI();
 }
 
-bool CurvesWidget::isSixteenBits()
+bool CurvesWidget::isSixteenBits() const
 {
     return curves()->isSixteenBits();
 }

@@ -6,7 +6,7 @@
  * Date        : 2005-03-06
  * Description : Hue/Saturation/Lightness image filter.
  *
- * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -36,7 +36,6 @@ namespace Digikam
 {
 
 class DImg;
-class HSLFilterPriv;
 
 class DIGIKAM_EXPORT HSLContainer
 {
@@ -68,22 +67,25 @@ class DIGIKAM_EXPORT HSLFilter : public DImgThreadedFilter
 
 public:
 
-    explicit HSLFilter(QObject* parent = 0);
-    explicit HSLFilter(DImg* orgImage, QObject* parent=0, const HSLContainer& settings=HSLContainer());
+    explicit HSLFilter(QObject* const parent = 0);
+    explicit HSLFilter(DImg* const orgImage, QObject* const parent=0, const HSLContainer& settings=HSLContainer());
     virtual ~HSLFilter();
 
     static QString          FilterIdentifier()
     {
         return "digikam:HSLFilter";
     }
+
     static QString          DisplayableName()
     {
         return I18N_NOOP("Hue / Saturation / Lightness Filter");
     }
+
     static QList<int>       SupportedVersions()
     {
         return QList<int>() << 1;
     }
+
     static int              CurrentVersion()
     {
         return 1;
@@ -93,7 +95,9 @@ public:
     {
         return FilterIdentifier();
     }
+
     virtual FilterAction    filterAction();
+
     void                    readParameters(const FilterAction& action);
 
 private:
@@ -109,8 +113,8 @@ private:
 
 private:
 
-    HSLFilterPriv* const d;
-
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

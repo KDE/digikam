@@ -6,7 +6,7 @@
  * Date        : 2005-03-06
  * Description : Hue/Saturation/Lightness image filter.
  *
- * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2010      by Julien Narboux <julien at narboux dot fr>
  * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
@@ -41,11 +41,19 @@
 namespace Digikam
 {
 
-class HSLFilterPriv
+class HSLFilter::Private
 {
 public:
 
-    HSLFilterPriv() {}
+    Private()
+    {
+        memset(&htransfer,   0, sizeof(htransfer));
+        memset(&ltransfer,   0, sizeof(ltransfer));
+        memset(&htransfer,   0, sizeof(htransfer));
+        memset(&stransfer16, 0, sizeof(stransfer16));
+        memset(&ltransfer16, 0, sizeof(ltransfer16));
+        memset(&stransfer16, 0, sizeof(stransfer16));
+    }
 
     int          htransfer[256];
     int          ltransfer[256];
@@ -58,17 +66,17 @@ public:
     HSLContainer settings;
 };
 
-HSLFilter::HSLFilter(QObject* parent)
+HSLFilter::HSLFilter(QObject* const parent)
     : DImgThreadedFilter(parent),
-      d(new HSLFilterPriv)
+      d(new Private)
 {
     reset();
     initFilter();
 }
 
-HSLFilter::HSLFilter(DImg* orgImage, QObject* parent, const HSLContainer& settings)
+HSLFilter::HSLFilter(DImg* const orgImage, QObject* const parent, const HSLContainer& settings)
     : DImgThreadedFilter(orgImage, parent, "HSLFilter"),
-      d(new HSLFilterPriv)
+      d(new Private)
 {
     d->settings = settings;
     reset();
@@ -303,21 +311,20 @@ FilterAction HSLFilter::filterAction()
     FilterAction action(FilterIdentifier(), CurrentVersion());
     action.setDisplayableName(DisplayableName());
 
-    action.addParameter("hue", d->settings.hue);
-    action.addParameter("lightness", d->settings.lightness);
+    action.addParameter("hue",        d->settings.hue);
+    action.addParameter("lightness",  d->settings.lightness);
     action.addParameter("saturation", d->settings.saturation);
-    action.addParameter("vibrance", d->settings.vibrance);
+    action.addParameter("vibrance",   d->settings.vibrance);
 
     return action;
 }
 
 void HSLFilter::readParameters(const Digikam::FilterAction& action)
 {
-    d->settings.hue = action.parameter("hue").toDouble();
-    d->settings.lightness = action.parameter("lightness").toDouble();
+    d->settings.hue        = action.parameter("hue").toDouble();
+    d->settings.lightness  = action.parameter("lightness").toDouble();
     d->settings.saturation = action.parameter("saturation").toDouble();
-    d->settings.vibrance = action.parameter("vibrance").toDouble();
+    d->settings.vibrance   = action.parameter("vibrance").toDouble();
 }
-
 
 }  // namespace Digikam

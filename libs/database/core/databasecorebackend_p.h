@@ -44,16 +44,18 @@ class DIGIKAM_EXPORT DatabaseCoreBackendPrivate : public DatabaseErrorAnswer
 {
 public:
 
-    explicit DatabaseCoreBackendPrivate(DatabaseCoreBackend* backend);
-    virtual ~DatabaseCoreBackendPrivate() {}
+    explicit DatabaseCoreBackendPrivate(DatabaseCoreBackend* const backend);
+    virtual ~DatabaseCoreBackendPrivate()
+    {
+    }
 
-    void init(const QString& connectionName, DatabaseLocking* locking);
+    void init(const QString& connectionName, DatabaseLocking* const locking);
 
-    QString connectionName(QThread* thread);
+    QString connectionName(QThread* const thread);
 
     QSqlDatabase databaseForThread();
     QSqlError    databaseErrorForThread();
-    void         setDatabaseErrorForThread(QSqlError lastError);
+    void         setDatabaseErrorForThread(const QSqlError& lastError);
 
     void closeDatabaseForThread();
     bool open(QSqlDatabase& db);
@@ -62,26 +64,26 @@ public:
     bool isInTransactionInOtherThread() const;
 
     bool isInMainThread() const;
-    bool isInUIThread() const;
+    bool isInUIThread()   const;
 
-    bool reconnectOnError() const;
-    bool isSQLiteLockError(const SqlQuery& query) const;
+    bool reconnectOnError()                                       const;
+    bool isSQLiteLockError(const SqlQuery& query)                 const;
     bool isSQLiteLockTransactionError(const QSqlError& lastError) const;
-    bool checkRetrySQLiteLockError(int retries);
-    bool isConnectionError(const SqlQuery& query) const;
-    bool needToConsultUserForError(const SqlQuery& query) const;
-    bool needToHandleWithErrorHandler(const SqlQuery& query) const;
-    void debugOutputFailedQuery(const QSqlQuery& query) const;
-    void debugOutputFailedTransaction(const QSqlError& error) const;
+    bool isConnectionError(const SqlQuery& query)                 const;
+    bool needToConsultUserForError(const SqlQuery& query)         const;
+    bool needToHandleWithErrorHandler(const SqlQuery& query)      const;
+    void debugOutputFailedQuery(const QSqlQuery& query)           const;
+    void debugOutputFailedTransaction(const QSqlError& error)     const;
 
+    bool checkRetrySQLiteLockError(int retries);
     bool checkOperationStatus();
-    bool handleWithErrorHandler(const SqlQuery* query);
-    // called by DatabaseErrorHandler, implementing DatabaseErrorAnswer
-    virtual void connectionErrorContinueQueries();
-    virtual void connectionErrorAbortQueries();
+    bool handleWithErrorHandler(const SqlQuery* const query);
     void setQueryOperationFlag(DatabaseCoreBackend::QueryOperationStatus status);
     void queryOperationWakeAll(DatabaseCoreBackend::QueryOperationStatus status);
 
+    // called by DatabaseErrorHandler, implementing DatabaseErrorAnswer
+    virtual void connectionErrorContinueQueries();
+    virtual void connectionErrorAbortQueries();
     virtual void transactionFinished();
 
 public:
@@ -122,22 +124,26 @@ public :
     {
     public:
 
-        explicit AbstractUnlocker(DatabaseCoreBackendPrivate* d);
-        void finishAcquire();
+        explicit AbstractUnlocker(DatabaseCoreBackendPrivate* const d);
         ~AbstractUnlocker();
+
+        void finishAcquire();
 
     protected:
 
-        int count;
+        int                               count;
         DatabaseCoreBackendPrivate* const d;
     };
+
+    // ----------------------------------------------------------------------
+
     friend class AbstractUnlocker;
 
     class AbstractWaitingUnlocker : public AbstractUnlocker
     {
     public:
 
-        AbstractWaitingUnlocker(DatabaseCoreBackendPrivate* d, QMutex* mutex, QWaitCondition* condVar);
+        AbstractWaitingUnlocker(DatabaseCoreBackendPrivate* const d, QMutex* const mutex, QWaitCondition* const condVar);
         ~AbstractWaitingUnlocker();
 
         bool wait(unsigned long time = ULONG_MAX);
@@ -148,18 +154,23 @@ public :
         QWaitCondition* const condVar;
     };
 
+    // ----------------------------------------------------------------------
+
     class ErrorLocker : public AbstractWaitingUnlocker
     {
     public:
 
-        explicit ErrorLocker(DatabaseCoreBackendPrivate* d);
+        explicit ErrorLocker(DatabaseCoreBackendPrivate* const d);
         void wait();
     };
+
+    // ----------------------------------------------------------------------
 
     class BusyWaiter : public AbstractWaitingUnlocker
     {
     public:
-        explicit BusyWaiter(DatabaseCoreBackendPrivate* d);
+
+        explicit BusyWaiter(DatabaseCoreBackendPrivate* const d);
     };
 
 public :
