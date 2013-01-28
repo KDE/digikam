@@ -6,7 +6,7 @@
  * Date        : 2006-01-10
  * Description : a widget to display CIE tongue from an ICC profile.
  *
- * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * Any source code are inspired from lprof project and
  * Copyright (C) 1998-2001 Marti Maria
@@ -223,7 +223,9 @@ CIETongueWidget::CIETongueWidget(int w, int h, QWidget* const parent, cmsHPROFIL
     }
 
     hXYZProfile = dkCmsCreateXYZProfile();
-    if (hXYZProfile == NULL) return;
+
+    if (hXYZProfile == NULL)
+        return;
 
 
     d->hXFORM = dkCmsCreateTransform(hXYZProfile, TYPE_XYZ_16,
@@ -232,7 +234,8 @@ CIETongueWidget::CIETongueWidget(int w, int h, QWidget* const parent, cmsHPROFIL
 
     dkCmsCloseProfile(hXYZProfile);
 
-    if (d->hXFORM == NULL) kDebug() << "Wrong d->hXFORM" ;
+    if (d->hXFORM == NULL)
+        kDebug() << "Wrong d->hXFORM" ;
 
     connect(d->progressTimer, SIGNAL(timeout()),
             this, SLOT(slotProgressTimerDone()));
