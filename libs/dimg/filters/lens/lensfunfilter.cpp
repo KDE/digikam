@@ -3,8 +3,8 @@
  * Date        : 2008-02-10
  * Description : a tool to fix automatically camera lens aberrations
  *
- * Copyright (C) 2008 by Adrian Schroeter <adrian at suse dot de>
- * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008      by Adrian Schroeter <adrian at suse dot de>
+ * Copyright (C) 2008-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -38,11 +38,11 @@
 namespace Digikam
 {
 
-class LensFunFilter::LensFunFilterPriv
+class LensFunFilter::Private
 {
 public:
 
-    LensFunFilterPriv()
+    Private()
     {
         iface    = 0;
         modifier = 0;
@@ -53,17 +53,17 @@ public:
     lfModifier*   modifier;
 };
 
-LensFunFilter::LensFunFilter(QObject* parent)
+LensFunFilter::LensFunFilter(QObject* const parent)
     : DImgThreadedFilter(parent),
-      d(new LensFunFilterPriv)
+      d(new Private)
 {
     d->iface = new LensFunIface;
     initFilter();
 }
 
-LensFunFilter::LensFunFilter(DImg* orgImage, QObject* parent,  const LensFunContainer& settings)
+LensFunFilter::LensFunFilter(DImg* const orgImage, QObject* const parent,  const LensFunContainer& settings)
     : DImgThreadedFilter(orgImage, parent, "LensCorrection"),
-      d(new LensFunFilterPriv)
+      d(new Private)
 {
     d->iface = new LensFunIface;
     d->iface->setSettings(settings);
@@ -132,20 +132,20 @@ void LensFunFilter::filterImage()
 
     lfPixelFormat colorDepth = m_orgImage.bytesDepth() == 4 ? LF_PF_U8 : LF_PF_U16;
 
-    d->modifier = lfModifier::Create(d->iface->usedLens(),
-                                     d->iface->settings().cropFactor,
-                                     m_orgImage.width(),
-                                     m_orgImage.height());
+    d->modifier              = lfModifier::Create(d->iface->usedLens(),
+                                                  d->iface->settings().cropFactor,
+                                                  m_orgImage.width(),
+                                                  m_orgImage.height());
 
-    int modflags = d->modifier->Initialize(d->iface->usedLens(),
-                                           colorDepth,
-                                           d->iface->settings().focalLength,
-                                           d->iface->settings().aperture,
-                                           d->iface->settings().subjectDistance,
-                                           1.0, /* no scaling */
-                                           LF_RECTILINEAR,
-                                           modifyFlags,
-                                           0/*no inverse*/);
+    int modflags             = d->modifier->Initialize(d->iface->usedLens(),
+                                                       colorDepth,
+                                                       d->iface->settings().focalLength,
+                                                       d->iface->settings().aperture,
+                                                       d->iface->settings().subjectDistance,
+                                                       1.0, /* no scaling */
+                                                       LF_RECTILINEAR,
+                                                       modifyFlags,
+                                                       0 /*no inverse*/);
 
     if (!d->modifier)
     {
@@ -155,7 +155,7 @@ void LensFunFilter::filterImage()
 
     // Calc necessary steps for progress bar
 
-    int steps = ((d->iface->settings().filterCCA) ? 1 : 0)                                   +
+    int steps = ((d->iface->settings().filterCCA)                                   ? 1 : 0) +
                 ((d->iface->settings().filterVIG || d->iface->settings().filterCCI) ? 1 : 0) +
                 ((d->iface->settings().filterDST || d->iface->settings().filterGEO) ? 1 : 0);
 
@@ -191,9 +191,9 @@ void LensFunFilter::filterImage()
                 {
                     DColor destPixel(0, 0, 0, 0xFFFF, m_destImage.sixteenBit());
 
-                    destPixel.setRed(m_orgImage.getSubPixelColorFast(src[0], src[1]).red());
+                    destPixel.setRed(m_orgImage.getSubPixelColorFast(src[0],   src[1]).red());
                     destPixel.setGreen(m_orgImage.getSubPixelColorFast(src[2], src[3]).green());
-                    destPixel.setBlue(m_orgImage.getSubPixelColorFast(src[4], src[5]).blue());
+                    destPixel.setBlue(m_orgImage.getSubPixelColorFast(src[4],  src[5]).blue());
 
                     m_destImage.setPixelColor(x, y, destPixel);
                     src += 2 * 3;
@@ -314,11 +314,11 @@ bool LensFunFilter::registerSettingsToXmp(KExiv2Data& data) const
     str.append("\n");
     str.append(i18n("Crop Factor: %1",      QString::number(prm.cropFactor)));
     str.append("\n");
-    str.append(i18n("CCA Correction: %1",   prm.filterCCA  && d->iface->supportsCCA()        ? i18n("enabled") : i18n("disabled")));
+    str.append(i18n("CCA Correction: %1",   prm.filterCCA  && d->iface->supportsCCA()       ? i18n("enabled") : i18n("disabled")));
     str.append("\n");
-    str.append(i18n("VIG Correction: %1",   prm.filterVIG  && d->iface->supportsVig()        ? i18n("enabled") : i18n("disabled")));
+    str.append(i18n("VIG Correction: %1",   prm.filterVIG  && d->iface->supportsVig()       ? i18n("enabled") : i18n("disabled")));
     str.append("\n");
-    str.append(i18n("CCI Correction: %1",   prm.filterCCI  && d->iface->supportsCCI()        ? i18n("enabled") : i18n("disabled")));
+    str.append(i18n("CCI Correction: %1",   prm.filterCCI  && d->iface->supportsCCI()       ? i18n("enabled") : i18n("disabled")));
     str.append("\n");
     str.append(i18n("DST Correction: %1",   prm.filterDST && d->iface->supportsDistortion() ? i18n("enabled") : i18n("disabled")));
     str.append("\n");
@@ -327,7 +327,7 @@ bool LensFunFilter::registerSettingsToXmp(KExiv2Data& data) const
     DMetadata meta(data);
     bool ret = meta.setXmpTagString("Xmp.digiKam.LensCorrectionSettings",
                                     str.replace('\n', " ; "), false);
-    data = meta.data();
+    data     = meta.data();
 
     return ret;
 }
@@ -338,18 +338,18 @@ FilterAction LensFunFilter::filterAction()
     action.setDisplayableName(DisplayableName());
 
     LensFunContainer prm = d->iface->settings();
-    action.addParameter("ccaCorrection", prm.filterCCA);
-    action.addParameter("vigCorrection", prm.filterVIG);
-    action.addParameter("cciCorrection", prm.filterCCI);
-    action.addParameter("dstCorrection", prm.filterDST);
-    action.addParameter("geoCorrection", prm.filterGEO);
-    action.addParameter("cropFactor", prm.cropFactor);
-    action.addParameter("focalLength", prm.focalLength);
-    action.addParameter("aperture", prm.aperture);
+    action.addParameter("ccaCorrection",   prm.filterCCA);
+    action.addParameter("vigCorrection",   prm.filterVIG);
+    action.addParameter("cciCorrection",   prm.filterCCI);
+    action.addParameter("dstCorrection",   prm.filterDST);
+    action.addParameter("geoCorrection",   prm.filterGEO);
+    action.addParameter("cropFactor",      prm.cropFactor);
+    action.addParameter("focalLength",     prm.focalLength);
+    action.addParameter("aperture",        prm.aperture);
     action.addParameter("subjectDistance", prm.subjectDistance);
-    action.addParameter("cameraMake", prm.cameraMake);
-    action.addParameter("cameraModel", prm.cameraModel);
-    action.addParameter("lensModel", prm.lensModel);
+    action.addParameter("cameraMake",      prm.cameraMake);
+    action.addParameter("cameraModel",     prm.cameraModel);
+    action.addParameter("lensModel",       prm.lensModel);
 
     return action;
 }
@@ -357,18 +357,18 @@ FilterAction LensFunFilter::filterAction()
 void LensFunFilter::readParameters(const Digikam::FilterAction& action)
 {
     LensFunContainer prm = d->iface->settings();
-    prm.filterCCA   = action.parameter("ccaCorrection").toBool();
-    prm.filterVIG   = action.parameter("vigCorrection").toBool();
-    prm.filterCCI   = action.parameter("cciCorrection").toBool();
-    prm.filterDST   = action.parameter("dstCorrection").toBool();
-    prm.filterGEO   = action.parameter("geoCorrection").toBool();
-    prm.cropFactor  = action.parameter("cropFactor").toDouble();
-    prm.focalLength = action.parameter("focalLength").toDouble();
-    prm.aperture    = action.parameter("aperture").toDouble();
-    prm.subjectDistance = action.parameter("subjectDistance").toDouble();
-    prm.cameraMake  = action.parameter("cameraMake").toString();
-    prm.cameraModel = action.parameter("cameraModel").toString();
-    prm.lensModel   = action.parameter("lensModel").toString();
+    prm.filterCCA        = action.parameter("ccaCorrection").toBool();
+    prm.filterVIG        = action.parameter("vigCorrection").toBool();
+    prm.filterCCI        = action.parameter("cciCorrection").toBool();
+    prm.filterDST        = action.parameter("dstCorrection").toBool();
+    prm.filterGEO        = action.parameter("geoCorrection").toBool();
+    prm.cropFactor       = action.parameter("cropFactor").toDouble();
+    prm.focalLength      = action.parameter("focalLength").toDouble();
+    prm.aperture         = action.parameter("aperture").toDouble();
+    prm.subjectDistance  = action.parameter("subjectDistance").toDouble();
+    prm.cameraMake       = action.parameter("cameraMake").toString();
+    prm.cameraModel      = action.parameter("cameraModel").toString();
+    prm.lensModel        = action.parameter("lensModel").toString();
     d->iface->setSettings(prm);
 }
 

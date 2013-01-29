@@ -3,8 +3,8 @@
  * Date        : 2008-02-10
  * Description : a tool to fix automatically camera lens aberrations
  *
- * Copyright (C) 2008 by Adrian Schroeter <adrian at suse dot de>
- * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008      by Adrian Schroeter <adrian at suse dot de>
+ * Copyright (C) 2008-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -38,11 +38,11 @@
 namespace Digikam
 {
 
-class LensFunSettings::LensFunSettingsPriv
+class LensFunSettings::Private
 {
 public:
 
-    LensFunSettingsPriv() :
+    Private() :
         filterCCA(0),
         filterVIG(0),
         filterCCI(0),
@@ -62,22 +62,23 @@ public:
     QCheckBox*           filterDST;
     QCheckBox*           filterGEO;
 };
-const QString LensFunSettings::LensFunSettingsPriv::configCCAEntry("CCA");
-const QString LensFunSettings::LensFunSettingsPriv::configVignettingEntry("Vignetting");
-const QString LensFunSettings::LensFunSettingsPriv::configCCIEntry("CCI");
-const QString LensFunSettings::LensFunSettingsPriv::configDistortionEntry("Distortion");
-const QString LensFunSettings::LensFunSettingsPriv::configGeometryEntry("Geometry");
+
+const QString LensFunSettings::Private::configCCAEntry("CCA");
+const QString LensFunSettings::Private::configVignettingEntry("Vignetting");
+const QString LensFunSettings::Private::configCCIEntry("CCI");
+const QString LensFunSettings::Private::configDistortionEntry("Distortion");
+const QString LensFunSettings::Private::configGeometryEntry("Geometry");
 
 // --------------------------------------------------------
 
-LensFunSettings::LensFunSettings(QWidget* parent)
+LensFunSettings::LensFunSettings(QWidget* const parent)
     : QWidget(parent),
-      d(new LensFunSettingsPriv)
+      d(new Private)
 {
-    QGridLayout* grid = new QGridLayout(this);
+    QGridLayout* const grid = new QGridLayout(this);
 
-    QLabel* title = new QLabel(i18n("Lens Corrections to Apply:"));
-    d->filterCCA  = new QCheckBox(i18n("Chromatic Aberration"));
+    QLabel* const title     = new QLabel(i18n("Lens Corrections to Apply:"));
+    d->filterCCA            = new QCheckBox(i18n("Chromatic Aberration"));
     d->filterCCA->setWhatsThis(i18n("Chromatic aberration is easily recognized as color fringes "
                                     "towards the image corners. CA is due to a varying lens focus "
                                     "for different colors."));
@@ -96,9 +97,9 @@ LensFunSettings::LensFunSettings(QWidget* parent)
     d->filterGEO = new QCheckBox(i18n("Geometry"));
     d->filterGEO->setWhatsThis(i18n("Four geometries are handled here: Rectilinear (99 percent of all lenses), "
                                     "Fisheye, Cylindrical, Equirectangular."));
-    QLabel* note  = new QLabel(i18n("<b>Note: lens correction options depend of filters available in LensFun library. "
-                                    "See <a href='http://lensfun.berlios.de'>LensFun project web site</a> "
-                                    "for more information.</b>"), this);
+    QLabel* const note = new QLabel(i18n("<b>Note: lens correction options depend of filters available in LensFun library. "
+                                         "See <a href='http://lensfun.berlios.de'>LensFun project web site</a> "
+                                         "for more information.</b>"), this);
     note->setOpenExternalLinks(true);
     note->setWordWrap(true);
     note->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);

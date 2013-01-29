@@ -4,7 +4,7 @@
  * Description : a tool to fix automatically camera lens aberrations
  *
  * Copyright (C) 2008      by Adrian Schroeter <adrian at suse dot de>
- * Copyright (C) 2008-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -147,8 +147,7 @@ LensFunIface::DevicePtr LensFunIface::findCamera(const QString& make, const QStr
         DevicePtr cam = *lfCamera;
         //        kDebug() << "Query camera:" << cam->Maker << "-" << cam->Model;
 
-        if (QString(cam->Maker) == make &&
-            QString(cam->Model) == model)
+        if (QString(cam->Maker) == make && QString(cam->Model) == model)
         {
             kDebug() << "Search for camera " << make << "-" << model << " ==> true";
             return cam;
@@ -182,7 +181,7 @@ LensFunIface::LensPtr LensFunIface::findLens(const QString& model) const
     return 0;
 }
 
-LensFunIface::LensList LensFunIface::findLenses(const lfCamera* lfCamera, const QString& lensDesc,
+LensFunIface::LensList LensFunIface::findLenses(const lfCamera* const lfCamera, const QString& lensDesc,
                                                 const QString& lensMaker) const
 {
     LensList lensList;
@@ -302,7 +301,7 @@ LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta
                 lensCutted.replace(QRegExp("\\.[0-9]"), ""); //krazy:exclude=doublequote_chars
                 lensCutted.replace(" - ", "-");
                 lensCutted.replace(" mm", "mn");
-                lensList = findLenses(d->usedCamera, lensCutted);
+                lensList   = findLenses(d->usedCamera, lensCutted);
                 kDebug() << "* Check for no maker lens (" << lensCutted << " : " << lensList.count() << ")";
 
                 if (!lensList.isEmpty())
