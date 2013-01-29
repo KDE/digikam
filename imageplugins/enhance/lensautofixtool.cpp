@@ -253,7 +253,7 @@ void LensAutoFixTool::setFinalImage()
     // Note: there are certain situations in the editor where these metadata changes may be undone.
     // Ignore for now, as they are not critical.
     LensFunFilter* const fltr = dynamic_cast<LensFunFilter*>(filter());
-    if (filtr)
+    if (fltr)
         fltr->registerSettingsToXmp(data);
 
     iface.setOriginalMetadata(data);
