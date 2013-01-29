@@ -150,5 +150,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 109 ==> 313899 - Fix fetch_l10n.rb to work with ruby 1.9.
 110 ==> 302740 - Duplicate rotation/flip entries in image menu, shortcuts not working.
 111 ==> 313991 - Crash on start.
-112 ==> 
+112 ==> 294976 - Import Canon EOS 7D CR2 files from Lightroom with sidecar file.
+113 ==> 
 
