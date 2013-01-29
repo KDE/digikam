@@ -6,7 +6,7 @@
  * Date        : 2012-01-04
  * Description : a message box to manage camera items
  *
- * Copyright (C) 2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2012-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -168,7 +168,7 @@ void CameraItemList::slotThumbnailLoaded(const CamItemInfo& info)
 
     while (*it)
     {
-        CameraItem* item = dynamic_cast<CameraItem*>(*it);
+        CameraItem* const item = dynamic_cast<CameraItem*>(*it);
 
         if (item && item->info().url() == info.url())
         {
@@ -183,7 +183,7 @@ void CameraItemList::slotThumbnailLoaded(const CamItemInfo& info)
 
 void CameraItemList::drawRow(QPainter* p, const QStyleOptionViewItem& opt, const QModelIndex& index) const
 {
-    CameraItem* item = dynamic_cast<CameraItem*>(itemFromIndex(index));
+    CameraItem* const item = dynamic_cast<CameraItem*>(itemFromIndex(index));
 
     if (item && !item->hasValidThumbnail())
     {
@@ -212,7 +212,7 @@ void CameraMessageBox::informationList(CameraThumbsCtrl* const ctrl,
         return;
     }
 
-    KDialog* dialog = new KDialog(parent, Qt::Dialog);
+    KDialog* const dialog = new KDialog(parent, Qt::Dialog);
     dialog->setCaption(caption.isEmpty() ? i18n("Information") : caption);
     dialog->setButtons(KDialog::Ok);
     dialog->setObjectName("information");
@@ -248,7 +248,7 @@ int CameraMessageBox::warningContinueCancelList(CameraThumbsCtrl* const ctrl,
         return KMessageBox::Continue;
     }
 
-    KDialog* dialog = new KDialog(parent, Qt::Dialog);
+    KDialog* const dialog = new KDialog(parent, Qt::Dialog);
     dialog->setCaption(caption.isEmpty() ? i18n("Warning") : caption);
     dialog->setButtons(KDialog::Yes | KDialog::No);
     dialog->setObjectName("warningYesNo");
@@ -287,24 +287,24 @@ int CameraMessageBox::createMessageBox(CameraThumbsCtrl* const ctrl,
                                        bool* checkboxReturn
                                       )
 {
-    QWidget* mainWidget     = new QWidget(dialog);
-    QVBoxLayout* mainLayout = new QVBoxLayout(mainWidget);
+    QWidget* const mainWidget     = new QWidget(dialog);
+    QVBoxLayout* const mainLayout = new QVBoxLayout(mainWidget);
     mainLayout->setSpacing(KDialog::spacingHint() * 2); // provide extra spacing
     mainLayout->setMargin(0);
 
-    QHBoxLayout* hLayout    = new QHBoxLayout();
+    QHBoxLayout* const hLayout    = new QHBoxLayout();
     hLayout->setMargin(0);
     hLayout->setSpacing(-1); // use default spacing
     mainLayout->addLayout(hLayout, 5);
 
     //--------------------------------------------------------------------------------
 
-    QLabel* iconLabel       = new QLabel(mainWidget);
+    QLabel* const iconLabel       = new QLabel(mainWidget);
     QStyleOption option;
     option.initFrom(mainWidget);
     iconLabel->setPixmap(icon.pixmap(mainWidget->style()->pixelMetric(QStyle::PM_MessageBoxIconSize, &option, mainWidget)));
 
-    QVBoxLayout* iconLayout = new QVBoxLayout();
+    QVBoxLayout* const iconLayout = new QVBoxLayout();
     iconLayout->addStretch(1);
     iconLayout->addWidget(iconLabel);
     iconLayout->addStretch(5);
@@ -313,7 +313,7 @@ int CameraMessageBox::createMessageBox(CameraThumbsCtrl* const ctrl,
 
     //--------------------------------------------------------------------------------
 
-    QLabel* messageLabel    = new QLabel(text, mainWidget);
+    QLabel* const messageLabel    = new QLabel(text, mainWidget);
     messageLabel->setOpenExternalLinks(true);
     messageLabel->setWordWrap(true);
     messageLabel->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum);
@@ -324,7 +324,7 @@ int CameraMessageBox::createMessageBox(CameraThumbsCtrl* const ctrl,
 
     //--------------------------------------------------------------------------------
 
-    CameraItemList* listWidget = new CameraItemList(mainWidget);
+    CameraItemList* const listWidget = new CameraItemList(mainWidget);
     listWidget->setThumbCtrl(ctrl);
     listWidget->setItems(items);
     mainLayout->addWidget(listWidget, 50);

@@ -6,7 +6,7 @@
  * Date        : 2012-01-04
  * Description : a message box to manage camera items
  *
- * Copyright (C) 2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2012-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -50,7 +50,7 @@ public:
     virtual ~CameraItem();
 
     bool hasValidThumbnail() const;
-    CamItemInfo info() const;
+    CamItemInfo info()       const;
 
     void setThumb(const QPixmap& pix, bool hasThumb = true);
 

@@ -6,7 +6,7 @@
  * Date        : 2006-07-24
  * Description : a dialog to select a camera folders.
  *
- * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -70,14 +70,14 @@ CameraFolderDialog::CameraFolderDialog(QWidget* const parent, const QMap<QString
     enableButtonOk(false);
     setModal(true);
 
-    d->rootPath       = rootPath;
-    QFrame* page      = new QFrame(this);
+    d->rootPath        = rootPath;
+    QFrame* const page = new QFrame(this);
     setMainWidget(page);
 
-    QGridLayout* grid = new QGridLayout(page);
-    d->folderView     = new CameraFolderView(page);
-    QLabel* logo      = new QLabel(page);
-    QLabel* message   = new QLabel(page);
+    QGridLayout* const grid = new QGridLayout(page);
+    d->folderView           = new CameraFolderView(page);
+    QLabel* const logo      = new QLabel(page);
+    QLabel* const message   = new QLabel(page);
 
     logo->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
                     .scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation));
@@ -147,6 +147,11 @@ QString CameraFolderDialog::selectedFolderPath() const
     }
 
     CameraFolderItem* const folderItem = dynamic_cast<CameraFolderItem*>(item);
+
+    if (!folderItem)
+    {
+        return QString();
+    }
 
     if (folderItem->isVirtualFolder())
     {

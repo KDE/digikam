@@ -7,7 +7,7 @@
  * Description : a dialog to display camera information.
  *
  * Copyright (C) 2003-2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -51,31 +51,31 @@ CameraInfoDialog::CameraInfoDialog(QWidget* const parent, const QString& summary
 
     // ----------------------------------------------------------
 
-    KTextEdit* summaryView = new KTextEdit(summary);
+    KTextEdit* const summaryView = new KTextEdit(summary);
     summaryView->setWordWrapMode(QTextOption::WordWrap);
     summaryView->setReadOnly(true);
 
-    KPageWidgetItem* p1 = addPage(summaryView, i18n("Summary"));
+    KPageWidgetItem* const p1    = addPage(summaryView, i18n("Summary"));
     p1->setHeader(i18n("Device Summary"));
     p1->setIcon(KIcon("dialog-information"));
 
     // ----------------------------------------------------------
 
-    KTextEdit* manualView = new KTextEdit(manual);
+    KTextEdit* const manualView  = new KTextEdit(manual);
     manualView->setWordWrapMode(QTextOption::WordWrap);
     manualView->setReadOnly(true);
 
-    KPageWidgetItem* p2 = addPage(manualView, i18n("Manual"));
+    KPageWidgetItem* const p2    = addPage(manualView, i18n("Manual"));
     p2->setHeader(i18n("Device Manual"));
     p2->setIcon(KIcon("help-contents"));
 
     // ----------------------------------------------------------
 
-    KTextEdit* aboutView = new KTextEdit(about);
+    KTextEdit* const aboutView   = new KTextEdit(about);
     aboutView->setWordWrapMode(QTextOption::WordWrap);
     aboutView->setReadOnly(true);
 
-    KPageWidgetItem* p3 = addPage(aboutView, i18n("About"));
+    KPageWidgetItem* const p3    = addPage(aboutView, i18n("About"));
     p3->setHeader(i18n("About Driver"));
     p3->setIcon(KIcon("camera-photo"));
 }
