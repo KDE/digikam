@@ -42,6 +42,7 @@ public:
         incrementalRefreshRequested = false;
         sendRemovalSignals          = false;
         incrementalUpdater          = 0;
+        controller                  = 0;
     }
 
     inline bool isValid(const QModelIndex& index)
@@ -164,6 +165,7 @@ qlonglong ImportImageModel::camItemId(const QModelIndex& index) const
 QList<CamItemInfo> ImportImageModel::camItemInfos(const QList<QModelIndex>& indexes) const
 {
     QList<CamItemInfo> infos;
+
     foreach(const QModelIndex& index, indexes)
     {
         infos << camItemInfo(index);
@@ -175,6 +177,7 @@ QList<CamItemInfo> ImportImageModel::camItemInfos(const QList<QModelIndex>& inde
 QList<qlonglong> ImportImageModel::camItemIds(const QList<QModelIndex>& indexes) const
 {
     QList<qlonglong> ids;
+
     foreach(const QModelIndex& index, indexes)
     {
         ids << camItemId(index);
@@ -235,6 +238,7 @@ QList<QModelIndex> ImportImageModel::indexesForCamItemId(qlonglong id) const
     QList<QModelIndex> indexes;
 
     QHash<qlonglong, int>::const_iterator it;
+
     for (it = d->idHash.constFind(id); it != d->idHash.constEnd() && it.key() == id; ++it)
     {
        indexes << createIndex(it.value(), 0);
@@ -252,6 +256,7 @@ int ImportImageModel::numberOfIndexesForCamItemId(qlonglong id) const
 {
     int count = 0;
     QHash<qlonglong,int>::const_iterator it;
+
     for (it = d->idHash.constFind(id); it != d->idHash.constEnd() && it.key() == id; ++it)
     {
         ++count;
@@ -268,8 +273,8 @@ CamItemInfo ImportImageModel::retrieveCamItemInfo(const QModelIndex& index)
         return CamItemInfo();
     }
 
-    ImportImageModel* model = index.data(ImportImageModelPointerRole).value<ImportImageModel*>();
-    int row                 = index.data(ImportImageModelInternalId).toInt();
+    ImportImageModel* const model = index.data(ImportImageModelPointerRole).value<ImportImageModel*>();
+    int row                       = index.data(ImportImageModelInternalId).toInt();
 
     if (!model)
     {
@@ -308,7 +313,7 @@ QModelIndex ImportImageModel::indexForUrl(const KUrl& fileUrl) const
     {
         const int size = d->infos.size();
 
-        for (int i = 0; i < size; ++i)
+        for (int i = 0; i < size; i++)
         {
             if (d->infos.at(i).url() == fileUrl)
             {
@@ -331,7 +336,7 @@ QList<QModelIndex> ImportImageModel::indexesForUrl(const KUrl& fileUrl) const
         QList<QModelIndex> indexes;
         const int          size = d->infos.size();
 
-        for (int i = 0; i < size; ++i)
+        for (int i = 0; i < size; i++)
         {
             if (d->infos.at(i).url() == fileUrl)
             {
@@ -479,7 +484,7 @@ QList<CamItemInfo> ImportImageModel::uniqueCamItemInfos() const
     QList<CamItemInfo> uniqueInfos;
     const int          size = d->infos.size();
 
-    for (int i = 0; i < size; ++i)
+    for (int i = 0; i < size; i++)
     {
         const CamItemInfo& info = d->infos.at(i);
 
@@ -737,6 +742,7 @@ void ImportImageModel::removeCamItemInfos(const QList<CamItemInfo>& infos)
     foreach(const CamItemInfo& info, infos)
     {
         QModelIndex index = indexForCamItemId(info.id);
+
         if (index.isValid())
         {
             indexesList << index.row();
@@ -863,13 +869,13 @@ void ImportImageModelIncrementalUpdater::aboutToBeRemovedInModel(const IntPairLi
 
 void ImportImageModelIncrementalUpdater::appendInfos(const QList<CamItemInfo>& infos)
 {
-    for (int i = 0; i < infos.size(); ++i)
+    for (int i = 0; i < infos.size(); i++)
     {
         const CamItemInfo& info = infos.at(i);
         bool found              = false;
         QHash<qlonglong, int>::iterator it;
 
-        for (it = oldIds.find(info.id); it != oldIds.end() && it.key() == info.id; ++it)
+        for (it = oldIds.find(info.id) ; (it != oldIds.end()) && (it.key() == info.id) ; ++it)
         {
             found = true;
             break;
@@ -902,7 +908,7 @@ QList<QPair<int, int> > ImportImageModelIncrementalUpdater::toContiguousPairs(co
 
     QPair<int, int> pair(indices.first(), indices.first());
 
-    for (int i=1; i<indices.size(); ++i)
+    for (int i=1; i < indices.size(); i++)
     {
         const int &index = indices.at(i);
 

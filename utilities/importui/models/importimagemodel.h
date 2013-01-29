@@ -84,11 +84,11 @@ public:
      *  For camItemInfo and camItemInfoId If the index is not valid they will return a null CamItemInfo, and 0
      *  respectively, camItemInfoRef must not be called with an invalid index as it will crash.
      */
-    CamItemInfo      camItemInfo(const QModelIndex& index) const;
-    CamItemInfo&     camItemInfoRef(const QModelIndex& index) const;
-    qlonglong        camItemId(const QModelIndex& index) const;
+    CamItemInfo      camItemInfo(const QModelIndex& index)           const;
+    CamItemInfo&     camItemInfoRef(const QModelIndex& index)        const;
+    qlonglong        camItemId(const QModelIndex& index)             const;
     CamItemInfoList  camItemInfos(const QList<QModelIndex>& indexes) const;
-    QList<qlonglong> camItemIds(const QList<QModelIndex>& indexes) const;
+    QList<qlonglong> camItemIds(const QList<QModelIndex>& indexes)   const;
 
     /**
      * Returns the CamItemInfo object, reference from the underlying data of
@@ -139,12 +139,12 @@ public:
      */
     void setCamItemInfos(const QList<CamItemInfo>& infos);
 
-    QList<CamItemInfo> camItemInfos() const;
-    QList<qlonglong>   camItemIds() const;
+    QList<CamItemInfo> camItemInfos()       const;
+    QList<qlonglong>   camItemIds()         const;
     QList<CamItemInfo> uniqueCamItemInfos() const;
 
     bool hasImage(qlonglong id) const;
-    bool hasImage(const CamItemInfo& info) const;
+    bool hasImage(const CamItemInfo& info)  const;
 
     bool isEmpty() const;
 
@@ -157,7 +157,7 @@ public:
     void removeCamItemInfos(const QList<CamItemInfo>& infos);
 
     int numberOfIndexesForCamItemInfo(const CamItemInfo& info) const;
-    int numberOfIndexesForCamItemId(qlonglong id) const;
+    int numberOfIndexesForCamItemId(qlonglong id)              const;
 
     /**
      * Retrieve the CamItemInfo object from the data() function of the given index
@@ -167,11 +167,11 @@ public:
     static qlonglong   retrieveCamItemId(const QModelIndex& index);
 
     // QAbstractListModel implementation
-    virtual int           rowCount(const QModelIndex& parent) const;
-    virtual QVariant      data(const QModelIndex& index, int role) const;
+    virtual int           rowCount(const QModelIndex& parent)                            const;
+    virtual QVariant      data(const QModelIndex& index, int role)                       const;
     virtual QVariant      headerData(int section, Qt::Orientation orientation, int role) const;
-    virtual Qt::ItemFlags flags(const QModelIndex& index) const;
-    virtual QModelIndex   index(int row, int column, const QModelIndex& parent) const;
+    virtual Qt::ItemFlags flags(const QModelIndex& index)                                const;
+    virtual QModelIndex   index(int row, int column, const QModelIndex& parent)          const;
 
     // DragDrop methods
     DECLARE_MODEL_DRAG_DROP_METHODS
@@ -291,7 +291,7 @@ private:
 
 public:
 
-    //FIXME: Declared public because it's used in ImageModelIncrementalUpdater class
+    // NOTE: Declared public because it's used in ImageModelIncrementalUpdater class
     class Private;
 
 private:

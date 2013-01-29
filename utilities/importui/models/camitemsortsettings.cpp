@@ -34,12 +34,14 @@ namespace Digikam
 
 CamItemSortSettings::CamItemSortSettings()
 {
-    categorizationMode            = NoCategories;
-    categorizationSortOrder       = DefaultOrder;
-    categorizationCaseSensitivity = Qt::CaseSensitive;
-    sortRole                      = SortByFileName;
-    sortOrder                     = DefaultOrder;
-    sortCaseSensitivity           = Qt::CaseSensitive;
+    categorizationMode             = NoCategories;
+    categorizationSortOrder        = DefaultOrder;
+    categorizationCaseSensitivity  = Qt::CaseSensitive;
+    sortRole                       = SortByFileName;
+    sortOrder                      = DefaultOrder;
+    sortCaseSensitivity            = Qt::CaseSensitive;
+    currentCategorizationSortOrder = Qt::AscendingOrder;
+    currentSortOrder               = Qt::AscendingOrder;
 }
 
 CamItemSortSettings::~CamItemSortSettings()
@@ -252,7 +254,7 @@ bool CamItemSortSettings::lessThan(const QVariant& left, const QVariant& right) 
         case QVariant::Rect:
         case QVariant::RectF:
         {
-            QRectF rectLeft = left.toRectF();
+            QRectF rectLeft  = left.toRectF();
             QRectF rectRight = right.toRectF();
             int result;
 

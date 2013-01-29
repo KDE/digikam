@@ -170,8 +170,7 @@ public:
     static inline int naturalCompare(const QString& a, const QString& b, Qt::SortOrder sortOrder,
                                      Qt::CaseSensitivity caseSensitive = Qt::CaseSensitive)
     {
-        return compareByOrder(KStringHandler::naturalCompare(a, b, caseSensitive),
-                              sortOrder);
+        return compareByOrder(KStringHandler::naturalCompare(a, b, caseSensitive), sortOrder);
     }
 };
 
