@@ -4,7 +4,7 @@
  * Description : a plugin to fix automatically camera lens aberrations
  *
  * Copyright (C) 2008      by Adrian Schroeter <adrian at suse dot de>
- * Copyright (C) 2008-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -96,25 +96,25 @@ LensAutoFixTool::LensAutoFixTool(QObject* const parent)
     setToolName(i18n("Lens Auto-Correction"));
     setToolIcon(SmallIcon("lensautofix"));
 
-    d->previewWidget  = new ImageGuideWidget(0, true, ImageGuideWidget::HVGuideMode);
+    d->previewWidget = new ImageGuideWidget(0, true, ImageGuideWidget::HVGuideMode);
     setToolView(d->previewWidget);
     setPreviewModeMask(PreviewToolBar::AllPreviewModes);
 
     // -------------------------------------------------------------
 
-    d->gboxSettings   = new EditorToolSettings;
-    QGridLayout* grid = new QGridLayout(d->gboxSettings->plainPage());
+    d->gboxSettings         = new EditorToolSettings;
+    QGridLayout* const grid = new QGridLayout(d->gboxSettings->plainPage());
 
-    d->showGrid       = new QCheckBox(i18n("Show grid"), d->gboxSettings->plainPage());
+    d->showGrid             = new QCheckBox(i18n("Show grid"), d->gboxSettings->plainPage());
     d->showGrid->setWhatsThis(i18n("Set this option to visualize the correction grid to be applied."));
 
     // -------------------------------------------------------------
 
-    d->cameraSelector = new LensFunCameraSelector(d->gboxSettings->plainPage());
-    DImg* img = d->previewWidget->imageIface()->original();
+    d->cameraSelector      = new LensFunCameraSelector(d->gboxSettings->plainPage());
+    DImg* const img        = d->previewWidget->imageIface()->original();
     DMetadata meta(img->getMetadata());
     d->cameraSelector->setMetadata(meta);
-    KSeparator* line  = new KSeparator(Qt::Horizontal, d->gboxSettings->plainPage());
+    KSeparator* const line = new KSeparator(Qt::Horizontal, d->gboxSettings->plainPage());
 
     // -------------------------------------------------------------
 
@@ -248,10 +248,14 @@ void LensAutoFixTool::setFinalImage()
 {
     ImageIface iface;
     iface.setOriginal(i18n("Lens Auto-Correction"), filter()->filterAction(), filter()->getTargetImage());
-    Digikam::KExiv2Data data = iface.originalMetadata();
+    KExiv2Data data = iface.originalMetadata();
+
     // Note: there are certain situations in the editor where these metadata changes may be undone.
     // Ignore for now, as they are not critical.
-    dynamic_cast<LensFunFilter*>(filter())->registerSettingsToXmp(data);
+    LensFunFilter* const fltr = dynamic_cast<LensFunFilter*>(filter());
+    if (filtr)
+        fltr->registerSettingsToXmp(data);
+
     iface.setOriginalMetadata(data);
 }
 
