@@ -62,7 +62,7 @@ ImportOverlayWidget* ImportLockOverlay::buttonWidget() const
 
 QWidget* ImportLockOverlay::createWidget()
 {
-    QAbstractButton* button = new ImportOverlayWidget(parentWidget());
+    QAbstractButton* const button = new ImportOverlayWidget(parentWidget());
     //button->setCursor(Qt::PointingHandCursor);
     return button;
 }
@@ -135,7 +135,7 @@ ImportOverlayWidget* ImportDownloadOverlay::buttonWidget() const
 
 QWidget* ImportDownloadOverlay::createWidget()
 {
-    QAbstractButton* button = new ImportOverlayWidget(parentWidget());
+    QAbstractButton* const button = new ImportOverlayWidget(parentWidget());
     //button->setCursor(Qt::PointingHandCursor);
     return button;
 }
@@ -214,8 +214,8 @@ RatingWidget* ImportRatingOverlay::ratingWidget() const
 
 QWidget* ImportRatingOverlay::createWidget()
 {
-    const bool animate = KGlobalSettings::graphicEffectsLevel() & KGlobalSettings::SimpleAnimationEffects;
-    RatingWidget* w    = new RatingWidget(parentWidget());
+    const bool animate    = KGlobalSettings::graphicEffectsLevel() & KGlobalSettings::SimpleAnimationEffects;
+    RatingWidget* const w = new RatingWidget(parentWidget());
     w->setFading(animate);
     w->setTracking(false);
     return w;
@@ -298,7 +298,7 @@ void ImportRatingOverlay::updateRating()
         return;
     }
 
-    ImportImageModel* model = m_index.data(ImportImageModel::ImportImageModelPointerRole).value<ImportImageModel*>();
+    ImportImageModel* const model = m_index.data(ImportImageModel::ImportImageModelPointerRole).value<ImportImageModel*>();
     ratingWidget()->setRating(model->camItemInfoRef(m_index).rating);
 }
 

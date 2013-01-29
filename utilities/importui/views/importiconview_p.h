@@ -33,7 +33,7 @@
 #include "importiconview.h"
 #include "importdelegate.h"
 #include "importsettings.h"
-#include "../items/importoverlays.h"
+#include "importoverlays.h"
 
 namespace Digikam
 {
@@ -54,19 +54,19 @@ public:
 
 public:
 
-    ImageViewUtilities*       utilities;
-    ImportNormalDelegate*     normalDelegate;
+    ImageViewUtilities*    utilities;
+    ImportNormalDelegate*  normalDelegate;
 
-    bool                      overlaysActive;
+    bool                   overlaysActive;
 
-    ImportRotateOverlay*      rotateLeftOverlay;
-    ImportRotateOverlay*      rotateRightOverlay;
+    ImportRotateOverlay*   rotateLeftOverlay;
+    ImportRotateOverlay*   rotateRightOverlay;
 
-    ImportDownloadOverlay*    downloadverlay;
+    ImportDownloadOverlay* downloadverlay;
 
 private:
 
-    ImportIconView*           q_ptr;
+    ImportIconView*        q_ptr;
 };
 
 } // namespace Digikam

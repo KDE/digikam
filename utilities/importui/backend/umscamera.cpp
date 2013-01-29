@@ -7,7 +7,7 @@
  * Description : USB Mass Storage camera interface
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -338,9 +338,9 @@ bool UMSCamera::downloadItem(const QString& folder, const QString& itemName, con
     char      buffer[MAX_IPC_SIZE];
     Q_LONG    len;
 
-    while ((len = sFile.read(buffer, MAX_IPC_SIZE)) != 0 && !m_cancel)
+    while (((len = sFile.read(buffer, MAX_IPC_SIZE)) != 0) && !m_cancel)
     {
-        if (len == -1 || dFile.write(buffer, (Q_ULONG)len) != len)
+        if ((len == -1) || (dFile.write(buffer, (Q_ULONG)len) != len))
         {
             sFile.close();
             dFile.close();
@@ -443,9 +443,9 @@ bool UMSCamera::uploadItem(const QString& folder, const QString& itemName, const
 
     Q_LONG len;
 
-    while ((len = sFile.read(buffer, MAX_IPC_SIZE)) != 0 && !m_cancel)
+    while (((len = sFile.read(buffer, MAX_IPC_SIZE)) != 0) && !m_cancel)
     {
-        if (len == -1 || dFile.write(buffer, (Q_ULONG)len) == -1)
+        if ((len == -1) || (dFile.write(buffer, (Q_ULONG)len) == -1))
         {
             sFile.close();
             dFile.close();

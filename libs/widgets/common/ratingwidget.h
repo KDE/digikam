@@ -6,8 +6,8 @@
  * Date        : 2005-08-15
  * Description : a widget to draw stars rating
  *
- * Copyright (C) 2005 by Owen Hirst <n8rider@sbcglobal.net>
- * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005      by Owen Hirst <n8rider@sbcglobal.net>
+ * Copyright (C) 2006-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -51,7 +51,7 @@ class DIGIKAM_EXPORT RatingWidget : public QWidget
 
 public:
 
-    explicit RatingWidget(QWidget* parent);
+    explicit RatingWidget(QWidget* const parent);
     virtual ~RatingWidget();
 
     void setRating(int val);
@@ -77,20 +77,20 @@ Q_SIGNALS:
 
 protected:
 
-    int regPixmapWidth() const;
+    int regPixmapWidth()         const;
 
-    virtual void mousePressEvent(QMouseEvent*);
-    virtual void mouseMoveEvent(QMouseEvent*);
-    virtual void mouseReleaseEvent(QMouseEvent*);
-    virtual void paintEvent(QPaintEvent*);
-
-    QPixmap starPixmap() const;
-    QPixmap starPixmapFilled() const;
+    QPixmap starPixmap()         const;
+    QPixmap starPixmapFilled()   const;
     QPixmap starPixmapDisabled() const;
 
     void regeneratePixmaps();
     void setupTimeLine();
     void applyFading(QPixmap& pix);
+
+    virtual void mousePressEvent(QMouseEvent*);
+    virtual void mouseMoveEvent(QMouseEvent*);
+    virtual void mouseReleaseEvent(QMouseEvent*);
+    virtual void paintEvent(QPaintEvent*);
 
 protected Q_SLOTS:
 
@@ -102,8 +102,8 @@ private Q_SLOTS:
 
 private:
 
-    class RatingWidgetPriv;
-    RatingWidgetPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 // --------------------------------------------------------------------
@@ -114,7 +114,7 @@ class DIGIKAM_EXPORT RatingBox : public KVBox
 
 public:
 
-    explicit RatingBox(QWidget* parent);
+    explicit RatingBox(QWidget* const parent);
     virtual ~RatingBox();
 
 Q_SIGNALS:
@@ -127,8 +127,8 @@ private Q_SLOTS:
 
 private:
 
-    class RatingBoxPriv;
-    RatingBoxPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 // --------------------------------------------------------------------
@@ -139,7 +139,7 @@ class DIGIKAM_EXPORT RatingMenuAction : public KActionMenu
 
 public:
 
-    explicit RatingMenuAction(QMenu* parent=0);
+    explicit RatingMenuAction(QMenu* const parent=0);
     virtual ~RatingMenuAction();
 
 Q_SIGNALS:

@@ -7,7 +7,7 @@
  * Description : Gphoto2 camera interface
  *
  * Copyright (C) 2003-2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -95,10 +95,10 @@ public:
 #endif /* HAVE_GPHOTO2 */
     }
 
-    static bool  cancel;
+    static bool cancel;
 
 #ifdef HAVE_GPHOTO2
-    GPContext*   context;
+    GPContext*  context;
 
     static GPContextFeedback cancel_func(GPContext*, void*)
     {
@@ -125,13 +125,13 @@ public:
     }
 
 #ifdef HAVE_GPHOTO2
-    bool             cameraInitialized;
+    bool            cameraInitialized;
 
-    Camera*          camera;
+    Camera*         camera;
 
-    CameraAbilities  cameraAbilities;
+    CameraAbilities cameraAbilities;
 
-    GPStatus*        status;
+    GPStatus*       status;
 #endif /* HAVE_GPHOTO2 */
 };
 
@@ -1251,7 +1251,7 @@ bool GPCamera::deleteAllItems(const QString& folder)
 
     if (folderList.count() > 0)
     {
-        for (int i = 0 ; i < folderList.count() ; ++i)
+        for (int i = 0 ; i < folderList.count() ; i++)
         {
             QString subFolder(folder);
 
@@ -1619,7 +1619,7 @@ void GPCamera::getSupportedCameras(int& count, QStringList& clist)
     }
     else
     {
-        for (int i = 0 ; i < count ; ++i)
+        for (int i = 0 ; i < count ; i++)
         {
             gp_abilities_list_get_abilities(abilList, i, &abil);
             const char* cname = abil.model;
@@ -1657,7 +1657,7 @@ void GPCamera::getSupportedPorts(QStringList& plist)
     }
     else
     {
-        for (int i = 0 ; i < numPorts ; ++i)
+        for (int i = 0 ; i < numPorts ; i++)
         {
             gp_port_info_list_get_info(list, i, &info);
 #ifdef HAVE_GPHOTO25
@@ -1746,7 +1746,7 @@ int GPCamera::autoDetect(QString& model, QString& port)
     camModel_ = 0;
     camPort_  = 0;
 
-    for (int i = 0; i < count; ++i)
+    for (int i = 0; i < count; i++)
     {
         if (gp_list_get_name(camList, i, &camModel_) != GP_OK)
         {
@@ -1786,13 +1786,10 @@ bool GPCamera::findConnectedUsbCamera(int vendorId, int productId, QString& mode
     CameraAbilitiesList* abilList = 0;
     GPPortInfoList*      list     = 0;
     GPContext*           context  = 0;
-    CameraList		 *camList;
-    bool                 success;
+    CameraList*          camList  = 0;
+    bool                 success  = false;
     // get name and port of detected camera
     const char* model_str = 0, *port_str = 0;
-
-    success = false;
-
     context = gp_context_new();
 
     // get list of all ports
@@ -1812,25 +1809,27 @@ bool GPCamera::findConnectedUsbCamera(int vendorId, int productId, QString& mode
     int count = gp_list_count(camList);
     int cnt = 0;
 
-    for (int i = 0 ; i < count ; ++i)
+    for (int i = 0 ; i < count ; i++)
     {
-	const char *xmodel;
+        const char* xmodel = 0;
         gp_list_get_name(camList, i, &xmodel);
         int model = gp_abilities_list_lookup_model (abilList, xmodel);
-	CameraAbilities ab;
+        CameraAbilities ab;
         gp_abilities_list_get_abilities (abilList, model, &ab);
 
         if (ab.port != GP_PORT_USB)	continue;
         if (ab.usb_vendor != vendorId)	continue;
         if (ab.usb_product != productId)continue;
 
-	/* keep it, and continue iterating, in case we find anohter one */
+        /* keep it, and continue iterating, in case we find anohter one */
         gp_list_get_name (camList, i, &model_str);
         gp_list_get_value(camList, i, &port_str);
 
-	cnt++;
+        cnt++;
     }
+
     gp_abilities_list_free(abilList);
+
     if (cnt > 0)
     {
        if (cnt > 1)
@@ -1839,9 +1838,9 @@ bool GPCamera::findConnectedUsbCamera(int vendorId, int productId, QString& mode
                      << ". Due to restrictions in the GPhoto2 API, "
                      << "only the first camera is used.";
        }
+
        model   = QString::fromLatin1(model_str);
        port    = QString::fromLatin1(port_str);
-
        success = true;
     }
     else

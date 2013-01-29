@@ -6,7 +6,7 @@
  * Date        : 2007-08-31
  * Description : a widget to display free space for a mount-point.
  *
- * Copyright (C) 2007-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -290,12 +290,12 @@ void FreeSpaceWidget::paintEvent(QPaintEvent*)
         // We will compute the estimated % of space size used to download and process.
         unsigned long eUsedKb = d->dSizeKb + d->kBUsed;
         int peUsed            = (int)(100.0 * ((double)eUsedKb / (double)d->kBSize));
-        int pClamp            = peUsed > 100 ? 100 : peUsed;
+        int pClamp            = (peUsed > 100) ? 100 : peUsed;
         QColor barcol         = QColor(62, 255, 62);          // Smooth Green.
 
         if (peUsed > 80)
         {
-            barcol = QColor(240, 255, 62);    // Smooth Yellow.
+            barcol = QColor(240, 255, 62);   // Smooth Yellow.
         }
         else if (peUsed > 95)
         {
@@ -406,9 +406,11 @@ void FreeSpaceWidget::slotTimeout()
 
         if (mp)
         {
-            KDiskFreeSpace* job = new KDiskFreeSpace(this);
+            KDiskFreeSpace* const job = new KDiskFreeSpace(this);
+
             connect(job, SIGNAL(foundMountPoint(QString,quint64,quint64,quint64)),
                     this, SLOT(slotAvailableFreeSpace(QString,quint64,quint64,quint64)));
+
             job->readDF(mp->mountPoint());
         }
     }

@@ -115,7 +115,7 @@ class ImportRatingOverlay : public AbstractWidgetDelegateOverlay
 
 public:
 
-    explicit ImportRatingOverlay(QObject* parent);
+    explicit ImportRatingOverlay(QObject* const parent);
     RatingWidget* ratingWidget() const;
 
 Q_SIGNALS:

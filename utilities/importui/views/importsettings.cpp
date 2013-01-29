@@ -277,9 +277,9 @@ void ImportSettings::init()
 
 void ImportSettings::readSettings()
 {
-    KSharedConfigPtr config = d->config;
+    KSharedConfigPtr config         = d->config;
 
-    KConfigGroup group  = config->group(d->configGroupDefault);
+    KConfigGroup group              = config->group(d->configGroupDefault);
 
     d->imageSortOrder               = group.readEntry(d->configImageSortOrderEntry, (int)CamItemSortSettings::SortByFileName);
     d->imageSorting                 = group.readEntry(d->configImageSortingEntry,   (int)CamItemSortSettings::AscendingOrder);

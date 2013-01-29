@@ -6,8 +6,8 @@
  * Date        : 2005-08-15
  * Description : a widget to draw stars rating
  *
- * Copyright (C) 2005 by Owen Hirst <n8rider@sbcglobal.net>
- * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005      by Owen Hirst <n8rider@sbcglobal.net>
+ * Copyright (C) 2006-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -58,11 +58,11 @@
 namespace Digikam
 {
 
-class RatingWidget::RatingWidgetPriv
+class RatingWidget::Private
 {
 public:
 
-    RatingWidgetPriv()
+    Private()
     {
         tracking       = true;
         isHovered      = false;
@@ -104,8 +104,8 @@ public:
     QPixmap    disPixmap;      // Disable star.
 };
 
-RatingWidget::RatingWidget(QWidget* parent)
-    : QWidget(parent), d(new RatingWidgetPriv)
+RatingWidget::RatingWidget(QWidget* const parent)
+    : QWidget(parent), d(new Private)
 {
     slotThemeChanged();
 
@@ -137,7 +137,7 @@ int RatingWidget::regPixmapWidth() const
 
 void RatingWidget::setRating(int val)
 {
-    if ((val < RatingMin || val > RatingMax) && val != NoRating)
+    if (((val < RatingMin) || (val > RatingMax)) && (val != NoRating))
     {
         return;
     }
@@ -451,12 +451,12 @@ void RatingWidget::applyFading(QPixmap& pix)
 
 // -------------------------------------------------------------------------------
 
-class RatingBox::RatingBoxPriv
+class RatingBox::Private
 {
 
 public:
 
-    RatingBoxPriv()
+    Private()
     {
         shortcut     = 0;
         ratingWidget = 0;
@@ -468,7 +468,7 @@ public:
 };
 
 RatingBox::RatingBox(QWidget* parent)
-    : KVBox(parent), d(new RatingBoxPriv)
+    : KVBox(parent), d(new Private)
 {
     setAttribute(Qt::WA_DeleteOnClose);
     setFocusPolicy(Qt::NoFocus);
@@ -502,10 +502,11 @@ RatingBox::~RatingBox()
 
 void RatingBox::slotUpdateDescription(int rating)
 {
-    KXmlGuiWindow* app = dynamic_cast<KXmlGuiWindow*>(kapp->activeWindow());
+    KXmlGuiWindow* const app = dynamic_cast<KXmlGuiWindow*>(kapp->activeWindow());
+
     if (app)
     {
-        QAction* ac = app->actionCollection()->action(QString("rateshortcut-%1").arg(rating));
+        QAction* const ac = app->actionCollection()->action(QString("rateshortcut-%1").arg(rating));
         if (ac)
             d->shortcut->setText(ac->shortcut().toString());
     }
@@ -513,12 +514,12 @@ void RatingBox::slotUpdateDescription(int rating)
 
 // -------------------------------------------------------------------------------
 
-RatingMenuAction::RatingMenuAction(QMenu* parent)
+RatingMenuAction::RatingMenuAction(QMenu* const parent)
     : KActionMenu(parent)
 {
     setText(i18n("Rating"));
-    QWidgetAction* wa = new QWidgetAction(this);
-    RatingBox* rb     = new RatingBox(parent);
+    QWidgetAction* const wa = new QWidgetAction(this);
+    RatingBox* const rb     = new RatingBox(parent);
     wa->setDefaultWidget(rb);
     addAction(wa);
 
