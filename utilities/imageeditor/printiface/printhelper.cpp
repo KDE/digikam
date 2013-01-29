@@ -65,7 +65,7 @@ public:
 
 public:
 
-    QSize adjustSize(PrintOptionsPage* const optionsPage, DImg& doc, int printerResolution, const QSize& viewportSize)
+    QSize adjustSize(PrintOptionsPage* const optionsPage, const DImg& doc, int printerResolution, const QSize& viewportSize)
     {
         QSize size                            = doc.size();
         PrintOptionsPage::ScaleMode scaleMode = optionsPage->scaleMode();
@@ -100,7 +100,7 @@ public:
             {
                 double wImg = double(size.width())  / double(dpmX) * INCHES_PER_METER;
                 double hImg = double(size.height()) / double(dpmY) * INCHES_PER_METER;
-                size.setWidth(int (wImg * printerResolution));
+                size.setWidth(int  (wImg * printerResolution));
                 size.setHeight(int (hImg * printerResolution));
             }
         }
@@ -142,7 +142,7 @@ public:
         return QPoint(posX, posY);
     }
 
-    void adjustImage(PrintOptionsPage* optionsPage, DImg& img)
+    void adjustImage(PrintOptionsPage* const optionsPage, DImg& img)
     {
         if (optionsPage->colorManaged())
         {
@@ -152,6 +152,7 @@ public:
     }
 };
 
+// ------------------------------------------------------------------------------
 
 PrintHelper::PrintHelper(QWidget* const parent)
     : d(new Private)
@@ -170,7 +171,7 @@ void PrintHelper::print(DImg& doc)
     //doc.waitUntilLoaded();
     QPrinter printer;
 
-    PrintOptionsPage* optionsPage = new PrintOptionsPage(d->parent, doc.size());
+    PrintOptionsPage* const optionsPage = new PrintOptionsPage(d->parent, doc.size());
     optionsPage->loadConfig();
 
     std::auto_ptr<QPrintDialog> dialog(KdePrint::createPrintDialog(&printer,

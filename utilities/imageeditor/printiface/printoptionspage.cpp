@@ -98,10 +98,10 @@ public:
 
     void initColorManagement()
     {
-        colorManaged   = new QCheckBox(i18n("Use Color Management for Printing"), cmbox);
+        colorManaged         = new QCheckBox(i18n("Use Color Management for Printing"), cmbox);
         colorManaged->setChecked(false);
-        cmPreferences  = new QPushButton(i18n("Settings..."), cmbox);
-        QWidget* space = new QWidget(cmbox);
+        cmPreferences        = new QPushButton(i18n("Settings..."), cmbox);
+        QWidget* const space = new QWidget(cmbox);
         cmbox->setStretchFactor(space, 10);
         cmbox->setSpacing(KDialog::spacingHint());
     }
@@ -126,7 +126,7 @@ public:
             "}"
         );
 
-        QGridLayout* layout = new QGridLayout(mPositionFrame);
+        QGridLayout* const layout = new QGridLayout(mPositionFrame);
         layout->setMargin(0);
         layout->setSpacing(1);
 
@@ -134,7 +134,7 @@ public:
         {
             for (int col = 0; col < 3; ++col)
             {
-                QToolButton* button = new QToolButton(mPositionFrame);
+                QToolButton* const button = new QToolButton(mPositionFrame);
                 button->setFixedSize(40, 40);
                 button->setCheckable(true);
                 layout->addWidget(button, row, col);
@@ -281,7 +281,7 @@ void PrintOptionsPage::adjustHeightToRatio()
     double height = d->mImageSize.height() * d->kcfg_PrintWidth->value() / d->mImageSize.width();
 
     SignalBlocker blocker(d->kcfg_PrintHeight);
-    d->kcfg_PrintHeight->setValue(height ? height : 1.);
+    d->kcfg_PrintHeight->setValue(height ? height : 1.0);
 }
 
 void PrintOptionsPage::loadConfig()
@@ -347,8 +347,9 @@ void PrintOptionsPage::slotAlertSettings(bool t)
 
 void PrintOptionsPage::slotSetupDlg()
 {
-    EditorWindow* editor = dynamic_cast<EditorWindow*>(d->mParent);
-    editor->setupICC();
+    EditorWindow* const editor = dynamic_cast<EditorWindow*>(d->mParent);
+    if (editor)
+        editor->setupICC();
 }
 
 } // namespace DigiKam
