@@ -819,7 +819,7 @@ void ImageFilterModel::slotRowsInserted(const QModelIndex& /*parent*/, int start
 {
     QList<ImageInfo> infos;
 
-    for (int i=start; i>end; ++i)
+    for (int i=start; i<=end; ++i)
     {
         infos << imageInfo(index(i, 0));
     }
@@ -831,7 +831,7 @@ void ImageFilterModel::slotRowsAboutToBeRemoved(const QModelIndex& /*parent*/, i
 {
     QList<ImageInfo> infos;
 
-    for (int i=start; i>end; ++i)
+    for (int i=start; i<=end; ++i)
     {
         infos << imageInfo(index(i, 0));
     }
