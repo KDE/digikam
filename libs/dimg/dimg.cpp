@@ -100,14 +100,14 @@ DImg::DImg()
 }
 
 DImg::DImg(const QByteArray& filePath, DImgLoaderObserver* const observer,
-           DRawDecoding rawDecodingSettings)
+           const DRawDecoding& rawDecodingSettings)
     : m_priv(new DImgPrivate)
 {
     load(filePath, observer, rawDecodingSettings);
 }
 
 DImg::DImg(const QString& filePath, DImgLoaderObserver* const observer,
-           DRawDecoding rawDecodingSettings)
+           const DRawDecoding& rawDecodingSettings)
     : m_priv(new DImgPrivate)
 {
     load(filePath, observer, rawDecodingSettings);
@@ -817,7 +817,7 @@ DImg::FORMAT DImg::fileFormat(const QString& filePath)
         FILE* file = fopen(QFile::encodeName(filePath), "rb");
 
         // FIXME: scanf without field width limits can crash with huge input data
-        if (fscanf(file, "P6 %d %d %d%c", &width, &height, &rgbmax, &nl) == 4)
+        if (file && fscanf(file, "P6 %d %d %d%c", &width, &height, &rgbmax, &nl) == 4)
         {
             if (rgbmax > 255)
             {

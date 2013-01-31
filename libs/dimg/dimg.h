@@ -129,12 +129,12 @@ public:
     /** Load image using QByteArray as file path
      */
     explicit DImg(const QByteArray& filePath, DImgLoaderObserver* const observer = 0,
-                  DRawDecoding rawDecodingSettings=DRawDecoding());
+                  const DRawDecoding& rawDecodingSettings=DRawDecoding());
 
     /** Load image using QString as file path
      */
     explicit DImg(const QString& filePath, DImgLoaderObserver* const observer = 0,
-                  DRawDecoding rawDecodingSettings=DRawDecoding());
+                  const DRawDecoding& rawDecodingSettings=DRawDecoding());
 
     /** Copy image: Creates a shallow copy that refers to the same shared data.
         The two images will be equal. Call detach() or copy() to create deep copies.
