@@ -60,6 +60,7 @@ public:
           filterItemExtraSpacing(4),
           animationState(0),
           animation(0),
+          categoryDrawer(0),
           thumbnailSize(64),
           thumbsWaitingFor(0),
           inSizeHint(false)

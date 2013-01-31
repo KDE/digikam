@@ -48,9 +48,8 @@ class ImageFiltersHistoryModel::ImageFiltersHistoryModelPriv
 public:
 
     ImageFiltersHistoryModelPriv()
+        : rootItem(0), disabledEntries(0)
     {
-        rootItem      = 0;
-        lastUrl       = 0;
     }
 
     ImageFiltersHistoryTreeItem* rootItem;
@@ -63,8 +62,6 @@ public:
 ImageFiltersHistoryModel::ImageFiltersHistoryModel(QObject* parent, const KUrl& url)
     : QAbstractItemModel(parent), d(new ImageFiltersHistoryModelPriv)
 {
-    d->disabledEntries = 0;
-
     if (!url.isEmpty())
     {
         //kDebug() << "Creating model with url" << url.toLocalFile();
