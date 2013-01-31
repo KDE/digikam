@@ -42,7 +42,7 @@ class ThumbnailLoadingTask : public SharedLoadingTask
 {
 public:
 
-    ThumbnailLoadingTask(LoadSaveThread* thread, LoadingDescription description);
+    ThumbnailLoadingTask(LoadSaveThread* thread, const LoadingDescription& description);
 
     virtual void execute();
     virtual void setResult(const LoadingDescription& loadingDescription, const QImage& qimage);

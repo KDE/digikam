@@ -60,7 +60,7 @@ class ThumbnailResult
 
 public:
 
-    ThumbnailResult(LoadingDescription description, QImage image)
+    ThumbnailResult(const LoadingDescription& description, const QImage& image)
         : loadingDescription(description), image(image)
     {
     }

@@ -37,7 +37,7 @@ public:
 
     explicit SharedLoadSaveThread(QObject* parent = 0);
 
-    void load(LoadingDescription description, AccessMode mode, LoadingPolicy policy = LoadingPolicyAppend);
+    void load(const LoadingDescription& description, AccessMode mode, LoadingPolicy policy = LoadingPolicyAppend);
     DImg cacheLookup(const QString& filePath, AccessMode mode);
 };
 

@@ -239,7 +239,7 @@ void LoadingCache::removeLoadingProcess(LoadingProcess* process)
     d->loadingDict.remove(process->cacheKey());
 }
 
-void LoadingCache::notifyNewLoadingProcess(LoadingProcess* process, LoadingDescription description)
+void LoadingCache::notifyNewLoadingProcess(LoadingProcess* process, const LoadingDescription& description)
 {
     for (QHash<QString, LoadingProcess*>::const_iterator it = d->loadingDict.constBegin();
          it != d->loadingDict.constEnd(); ++it)

@@ -79,7 +79,7 @@ void PreviewLoadThread::loadHighQuality(const QString& filePath)
     load(filePath, 0);
 }
 
-void PreviewLoadThread::load(LoadingDescription description)
+void PreviewLoadThread::load(const LoadingDescription& description)
 {
     // creates a PreviewLoadingTask, which uses different mechanisms than a normal loading task
     ManagedLoadSaveThread::loadPreview(description, m_loadingPolicy);

@@ -65,7 +65,7 @@ public:
     virtual QString cacheKey() = 0;
     virtual void addListener(LoadingProcessListener* listener) = 0;
     virtual void removeListener(LoadingProcessListener* listener) = 0;
-    virtual void notifyNewLoadingProcess(LoadingProcess* process, LoadingDescription description) = 0;
+    virtual void notifyNewLoadingProcess(LoadingProcess* process, const LoadingDescription& description) = 0;
 };
 
 // --------------------------------------------------------------------------------------------------------------
@@ -203,7 +203,7 @@ public:
     /**
      *  Notify all currently registered loading processes
      */
-    void notifyNewLoadingProcess(LoadingProcess* process, LoadingDescription description);
+    void notifyNewLoadingProcess(LoadingProcess* process, const LoadingDescription& description);
 
     /**
      *  Sets the cache size in megabytes.

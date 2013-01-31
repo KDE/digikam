@@ -68,7 +68,7 @@ public:
     /**
      * Load a preview. Loading description will not be touched.
      */
-    void load(LoadingDescription description);
+    void load(const LoadingDescription& description);
 
     /// Optionally, set the displaying widget for color management
     void setDisplayingWidget(QWidget* widget);

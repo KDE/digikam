@@ -87,7 +87,7 @@ public:
 
 public:
 
-    LoadingTask(LoadSaveThread* thread, LoadingDescription description,
+    LoadingTask(LoadSaveThread* thread, const LoadingDescription& description,
                 LoadingTaskStatus loadingTaskStatus = LoadingTaskStatusLoading)
         : LoadSaveTask(thread),
           m_loadingDescription(description),
@@ -136,7 +136,7 @@ class SharedLoadingTask : public LoadingTask,
 {
 public:
 
-    SharedLoadingTask(LoadSaveThread* thread, LoadingDescription description,
+    SharedLoadingTask(LoadSaveThread* thread, const LoadingDescription& description,
                       LoadSaveThread::AccessMode mode = LoadSaveThread::AccessModeReadWrite,
                       LoadingTaskStatus loadingTaskStatus = LoadingTaskStatusLoading);
 
@@ -155,7 +155,7 @@ public:
     virtual QString cacheKey();
     virtual void addListener(LoadingProcessListener* listener);
     virtual void removeListener(LoadingProcessListener* listener);
-    virtual void notifyNewLoadingProcess(LoadingProcess* process, LoadingDescription description);
+    virtual void notifyNewLoadingProcess(LoadingProcess* process, const LoadingDescription& description);
 
     // LoadingProcessListener
 

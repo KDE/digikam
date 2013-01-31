@@ -84,7 +84,7 @@ void LoadingTask::setStatus(LoadingTaskStatus status)
 
 //---------------------------------------------------------------------------------------------------
 
-SharedLoadingTask::SharedLoadingTask(LoadSaveThread* thread, LoadingDescription description,
+SharedLoadingTask::SharedLoadingTask(LoadSaveThread* thread, const LoadingDescription& description,
                                      LoadSaveThread::AccessMode mode, LoadingTaskStatus loadingTaskStatus)
     : LoadingTask(thread, description, loadingTaskStatus),
       m_completed(false),
@@ -413,7 +413,7 @@ void SharedLoadingTask::removeListener(LoadingProcessListener* listener)
     m_listeners.removeAll(listener);
 }
 
-void SharedLoadingTask::notifyNewLoadingProcess(LoadingProcess* process, LoadingDescription description)
+void SharedLoadingTask::notifyNewLoadingProcess(LoadingProcess* process, const LoadingDescription& description)
 {
     // Ok, we are notified that another task has been started in another thread.
     // We are of course only interested if the task loads the same file,

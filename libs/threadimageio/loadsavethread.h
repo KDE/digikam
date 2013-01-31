@@ -117,7 +117,7 @@ public:
     ~LoadSaveThread();
 
     /** Append a task to load the given file to the task list */
-    void load(LoadingDescription description);
+    void load(const LoadingDescription& description);
     /** Append a task to save the image to the task list */
     void save(DImg& image, const QString& filePath, const QString& format);
 

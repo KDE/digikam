@@ -87,7 +87,7 @@ LoadSaveFileInfoProvider* LoadSaveThread::infoProvider()
     return LoadSaveThreadPriv::infoProvider;
 }
 
-void LoadSaveThread::load(LoadingDescription description)
+void LoadSaveThread::load(const LoadingDescription& description)
 {
     QMutexLocker lock(threadMutex());
     m_todo << new LoadingTask(this, description);

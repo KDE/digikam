@@ -40,7 +40,7 @@ class PreviewLoadingTask : public SharedLoadingTask
 {
 public:
 
-    PreviewLoadingTask(LoadSaveThread* thread, LoadingDescription description)
+    PreviewLoadingTask(LoadSaveThread* thread, const LoadingDescription& description)
         : SharedLoadingTask(thread, description, LoadSaveThread::AccessModeRead, LoadingTaskStatusLoading)
     {}
 
