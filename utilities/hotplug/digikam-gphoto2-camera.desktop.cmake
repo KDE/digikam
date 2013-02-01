@@ -26,6 +26,7 @@ Name[ja]=digiKam 検出とダウンロード
 Name[km]=រក​ឃើញ និង​ទាញយក digiKam
 Name[lt]=digiKam aptikimas ir atsiuntimas
 Name[lv]=digiKam noteicējs un ielādētājs
+Name[mr]=डिजिकॅम शोध व डाउनलोड
 Name[nb]=digiKam «oppdag og last ned»
 Name[nl]=Detecteren en downloaden
 Name[pa]=ਡਿਜਿਕੈਮ ਖੋਜ ਅਤੇ ਡਾਊਨਲੋਡ

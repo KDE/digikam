@@ -27,6 +27,7 @@ Name[ja]=digiKam で写真をダウンロード
 Name[km]=ទាញយក​រូបថត​ដោយ digiKam
 Name[lt]=Atsisiųsti nuotraukas su digiKam
 Name[lv]=Ielādēt fotogrāfijas ar digiKam
+Name[mr]=डिजिकॅमने फोटो डाउनलोड करा
 Name[nb]=Last ned fotografier med digiKam
 Name[nl]=Foto's met digiKam downloaden
 Name[nn]=Last ned foto med digiKam
