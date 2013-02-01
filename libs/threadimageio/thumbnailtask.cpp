@@ -55,7 +55,7 @@
 namespace Digikam
 {
 
-ThumbnailLoadingTask::ThumbnailLoadingTask(LoadSaveThread* thread, LoadingDescription description)
+ThumbnailLoadingTask::ThumbnailLoadingTask(LoadSaveThread* thread, const LoadingDescription& description)
     : SharedLoadingTask(thread, description, LoadSaveThread::AccessModeRead,
                         LoadingTaskStatusLoading)
 {
