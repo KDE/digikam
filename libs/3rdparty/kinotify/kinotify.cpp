@@ -201,8 +201,10 @@ public:
                     if ( entry->d_type == DT_UNKNOWN )
                     {
                         struct stat buf;
-                        lstat( subDir.data(), &buf );
-                        isDir = S_ISDIR( buf.st_mode );
+                        if (lstat( subDir.data(), &buf ) == 0)
+                        {
+                            isDir = S_ISDIR( buf.st_mode );
+                        }
                     }
 
                     if ( isDir )

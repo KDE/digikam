@@ -172,7 +172,13 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver* const observer
             for (int w = 0; w < width; ++w)
             {
 
-                fread(src, 6 * sizeof(unsigned char), 1, file);
+                if (fread(src, 6 * sizeof(unsigned char), 1, file) != 1)
+                {
+                    kError() << "Premature end of PPM file";
+                    fclose(file);
+                    loadingFailed();
+                    return false;
+                }
 
                 dst[0] = (unsigned short)((src[4] * 256 + src[5]) * fac);    // Blue
                 dst[1] = (unsigned short)((src[2] * 256 + src[3]) * fac);    // Green

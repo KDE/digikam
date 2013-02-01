@@ -462,13 +462,17 @@ void JpegRotator::updateMetadata(const QString& fileName, const RotationMatrix &
     // set the file modification time of the temp file to that
     // of the original file
     struct stat st;
-    ::stat(QFile::encodeName(m_file), &st);
+    if (::stat(QFile::encodeName(m_file), &st) == 0)
+    {
+        struct utimbuf ut;
+        ut.modtime = st.st_mtime;
+        ut.actime  = st.st_atime;
 
-    struct utimbuf ut;
-    ut.modtime = st.st_mtime;
-    ut.actime  = st.st_atime;
-
-    ::utime(QFile::encodeName(fileName), &ut);
+        if (::utime(QFile::encodeName(fileName), &ut) != 0)
+        {
+            kWarning() << "Failed to restore modification time for file " << fileName;
+        }
+    }
 
 #ifndef Q_OS_WIN32
     // restore permissions
