@@ -270,8 +270,15 @@ void AlbumWatch::slotAlbumAdded(Album* a)
             d->dirWatchAddedDirs << dir;
             // On OS X, file watch is broken in the OS and thus in Qt.
             // Fixing is beyond our scope. See bug #289330.
-            // Disable file watch for OS X and hope for future improvements
-#ifdef Q_WS_MAC
+            // On Windows, file watch is broken for large numbers of files
+            // and prevents any thumbnails from being shown (probably due to
+            // the thread manager that is used by QFileSystemWatcher that
+            // KDirWatch uses). Fixing is beyond our scope. See bugs #290962, 
+            // #297793, #308310, #310252, #310865, #312422, and #312999.
+            // Disable file watch for OS X and Windows and hope for future
+            // improvement (possibly with the improvements planned for
+            // QFileSystemWatcher in Qt 5.1)
+#if defined(Q_WS_MAC) || defined(Q_WS_WIN)
             d->dirWatch->addDir(dir, KDirWatch::WatchDirOnly);
 #else
             d->dirWatch->addDir(dir, KDirWatch::WatchFiles | KDirWatch::WatchDirOnly);
