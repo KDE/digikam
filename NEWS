@@ -152,5 +152,17 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 111 ==> 313991 - Crash on start.
 112 ==> 294976 - Import Canon EOS 7D CR2 files from Lightroom with sidecar file.
 113 ==> 290962 - Thumbnails are never visible.
-114 ==> 
+114 ==> 297793 - digiKam for Windows consumes large amounts of virtual memory leading to malloc failure.
+115 ==> 297686 - digiKam hung while importing database.
+116 ==> 295445 - Will not display contents of photo directory.
+117 ==> 312999 - Many pictures not shown in preview and slideshow, program crashes.
+118 ==> 312422 - Crash by starting.
+119 ==> 310865 - No images displayed in the album.
+120 ==> 310252 - digiKam crashes with medium to large sized collections under Microsoft Windows.
+121 ==> 308310 - No thumbnails are created in the album view, rebuilding thumbnails doesn't work.
+122 ==> 291917 - digiKam 2.5.0 Crash on start up.
+123 ==> 
+
+
+
 
