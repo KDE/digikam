@@ -1,0 +1,169 @@
+*****************************************************************************************************
+digiKam 3.0.0 - Release date: 2013-01-27
+
+NEW FEATURES:
+
+Libkipi           : All kipi-plugins actions can be pluged to tools bar.
+                    Usability improvements in plugins configuration dialog.
+
+Libkdcraw         : Update internal Libraw version 0.15.0 to support new RAW cameras :
+                    Adobe DNG: Fast Load and lossy-compressed DNG (LightRoom 4.x)
+                    Canon    : G1 X, SX220 HS, EOS 5D Mark III, EOS 650D, EOS 1D-X
+                    Casio    : EX-Z8
+                    Fujifilm : X-S1, HS30EXR, X1-Pro
+                    Nikon    : D4, D3200, D800, D800E
+                    Olympus  : E-M5
+                    Panasonic: DMC-GF5
+                    Samsung  : NX20, NX210, NX100, NX-1000
+                    Sigma    : SD15,SD1, SD1 Merill, DP1, DP1S, DP1X, DP2, DP2S, DP2X
+                    Sony     : NEX-F3, SLT-A37, SLT-A57, DSC-RX100
+
+General           : Add new Noise Estimation feature to Wavelets Noise Reduction tools.
+General           : Remove internal LensFun library code and xml lens database. Set only an optional and external dependency to last 0.2.6 release.
+
+ImportUI          : Port icon-view to Qt4 model/View.
+ImportUI          : Labels and Tags pre-assignation.
+ImportUI          : Pipelined post download operations.
+ImportUI          : Preview items during downloading.
+
+Metadata          : Video files metadata support (through Exiv2 project).
+
+BatchQueueManager : Add Color Effect tool support.
+BatchQueueManager : Multicore CPU support to process items in parallel.
+BatchQueueManager : Add Raw Demosaicing settings in Queue Qettings.
+BatchQueueManager : Add new behavior options about RAW file loading (extract preview or perform demosaicing).
+BatchQueueManager : Add the capability to assign more than one time a tool to a queue.
+BatchQueueManager : Add the capability to put target file processed from queue to source album.
+BatchQueueManager : Add concept of Workflow dedicated to save and restore between sessions Queue Settings including Assigned Batch Tools list.
+BatchQueueManager : Add new tool to crop image.
+
+BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
+
+001 ==> 126149 - Camera stores both jpeg and raw (nef), handle both as one
+002 ==> 122454 - Make kipiplugins available for toolbar.
+003 ==> 161783 - Exif autorotation on import should be backgrounded / pipe.
+004 ==> 216491 - Camera interface view does not work to preview movies.
+005 ==> 262135 - Add kipi plugins to file actions menu.
+006 ==> 291080 - In settings, arrange ALL export options at ONE place
+007 ==> 305056 - digiKam crash on startup (development branch).
+008 ==> 305224 - Configure Shortcuts does not provide the option of config.
+009 ==> 305961 - Changing EXIF auto-rotation method.
+010 ==> 306193 - Desktop-file-validate fails on kipiplugins.desktop.
+011 ==> 306641 - Export module is not available for toolbar and rightclick context.
+012 ==> 163164 - Allow more conservative memory management.
+013 ==> 148649 - digiKam needs a better image scaler.
+014 ==> 261698 - Zoom to 100% does not map 1 picture pixel to 1 screen pixel.
+015 ==> 303690 - Hierarchical tags inconsistencies.
+016 ==> 306879 - Filter sections folding is weird
+017 ==> 306053 - digiKam creashes on loading collections.
+018 ==> 304187 - XMP sidecar files do not write Unicode characters in the Dublin Core section.
+019 ==> 304490 - "assigning image tags" dialog stuck when using keyboard shortcuts for tagging.
+020 ==> 307257 - Import not working at all (crash due to uninitialized components).
+021 ==> 306371 - Rename with sequence number.
+022 ==> 307314 - digiKam uses AHD when set to AMaZE, AFD etc.
+023 ==> 260612 - After "save changes" the status-bar shows: filename_v1.jpg (-1 of 23).
+024 ==> 296786 - Zoom to 100% pans to the top-left corner.
+025 ==> 307277 - digiKam corrupts MPO files while attempting to rotate it.
+026 ==> 304077 - XMP metadata interoperability problem and inconsistency.
+027 ==> 207005 - Raw Import Tool does not reflect the predefined Workspace when custom.
+028 ==> 305823 - digiKam writes to Samsung RAW files.
+029 ==> 269846 - TIFF loader is broken on big-endian architectures [PATCH].
+030 ==> 274555 - digiKam crashes while histogram computation.
+031 ==> 301045 - Crash when generating fingerprint in digikam.
+032 ==> 306815 - Navigation between images broken after saving changes.
+033 ==> 307964 - Not compatible with Canon EOS 5D Mark III.
+034 ==> 304609 - Crash of digiKam.
+035 ==> 307467 - Missing slide show button in digiKam 3.0.0 beta1.
+036 ==> 308065 - Read metadata from photo has no effect on the database.
+037 ==> 241637 - No intuitive way to cancel full screen view of image editor.
+038 ==> 303850 - Won't start on MS Windows if USB drive is mounted.
+039 ==> 308066 - MySQL: How to delete data finally.
+040 ==> 308412 - Ligth Table: if opening with only 2 selected images, pre-load them on the table.
+041 ==> 308344 - Display custom tags icons like in the album folder view.
+042 ==> 304052 - Failed to start service digikamnepomukservice.
+043 ==> 282918 - digiKam tags list is swarmed with Nepomuk resource tags if Nepomuk is not running.
+044 ==> 276457 - Incorrect synchronization back from Nepomuk.
+045 ==> 264124 - Upload empty/unnamed tags into Nepomuk.
+046 ==> 258837 - digiKam sometimes fails to add Metadata to Nepomuk.
+047 ==> 283168 - Nepomuk interface crash.
+048 ==> 307602 - Large TIFF files crash digiKam (>1Gb).
+049 ==> 304186 - XMP sidecar files are not moved with images.
+050 ==> 299960 - Deleting image in album GUI causes thumbnail regeneration of whole album.
+051 ==> 308534 - libkexiv2 fails to build when exiv2 is built without XMP support.
+052 ==> 308078 - Caption in non-default language not saved to JPEG when x-default is empty.
+053 ==> 271531 - Cannot edit canon crw-pics.
+054 ==> 307313 - digiKam uses wrong darkness/saturation.
+055 ==> 309856 - mysql_install_db location has changed in mariadb-5.5, configure fails [patch].
+056 ==> 307219 - Very slow work when any tag have defined user icon.
+057 ==> 304687 - Nothing happens when trying to toggle read lock on pictures on CompactFlash (Nikon).
+058 ==> 254033 - Batch queue manager should use all or more CPU cores.
+059 ==> 285250 - digiKam crashed after saving changed file.
+060 ==> 195784 - Batch queue manager lacks raw importing tool.
+061 ==> 295316 - BQM always demosaicing and importing RAW Image. Need option to use JPEG preview from RAW file.
+062 ==> 232926 - In painting causes digikam to lock up.
+063 ==> 256901 - Using tools twice in batch queue manager.
+064 ==> 289626 - Crash in BQM adding a new queue.
+065 ==> 308373 - ACL default:mask ignored / mask changed for exif rotated images on import.
+066 ==> 262180 - The toggle button to show/hide faces is difficult to see.
+067 ==> 251126 - Load and Save Batch Queue Manager chaining tools workflow.
+068 ==> 282674 - Add an option to put queue target files in source folders.
+069 ==> 297556 - Target directory of the queue is changed if a new directory is created.
+070 ==> 310163 - digiKam crashes on importing.
+071 ==> 307482 - Batch queue manager batch numbering issues.
+072 ==> 300700 - BQM Resize tool : metadata are lost.
+073 ==> 306092 - Creation date as file name - doesn't work in BQM.
+074 ==> 196897 - Keep directory (album) hierarchy when processing photos from different album.
+075 ==> 285237 - Image conversion in batch manager as _exclusive_ task does _not_ work.
+076 ==> 312186 - Save batch profile.
+077 ==> 274046 - jpeg-turbo support : can't edit canon 400D jpg.
+078 ==> 307213 - No Kipi plugin installed - FindKipi.cmake script from KDElibs must be updated.
+079 ==> 266395 - Batch cropping for digikam (cropping made easy).
+080 ==> 150854 - Massive common crop feature.
+081 ==> 302024 - Batch image cropping tool.
+082 ==> 147428 - Batch resizing for several folders.
+083 ==> 112777 - New batch plugin to change image size.
+084 ==> 115473 - Missing Feature in Batch Section: Gamma factor.
+085 ==> 312332 - digiKam don't save rename pattern when using regex.
+086 ==> 312433 - Extension Based Subalbums are not created.
+087 ==> 312419 - Internationalization: digiKam in English only.
+088 ==> 221940 - Automatic subtag search while tagging.
+089 ==> 266204 - Inconsistent results with distortion correction between digiKam, lensfun tool (tmod) and ufraw.
+090 ==> 267613 - Lensfun doesn't work correctly with compact cameras.
+091 ==> 284708 - Lens Autocorrection overcompensates distortion.
+092 ==> 253941 - Auto lens correction not working correctly.
+093 ==> 281783 - Auto lens correction doesn't use correct parameters.
+094 ==> 312764 - Crop factor always set to -1.0 in lens correction [patch].
+095 ==> 312765 - Crop factor is being used as scale factor [patch].
+096 ==> 312766 - digiKam uses lens crop factor, not camera's [patch].
+097 ==> 261079 - Crash of Enhance->Lens->Auto-Correction.
+098 ==> 184156 - Showfoto lensfun select wrong lens.
+099 ==> 312627 - Cannot create a new album in root "My Albums".
+100 ==> 312848 - digiKam 3.0.0-rc win32 installer.
+101 ==> 307750 - No path to mysqld set in server configuration [patch].
+102 ==> 312892 - digiKam crashed while scanning big collection on external UAB HDD.
+103 ==> 308948 - Pictures belonging to a group can't be displayed in the light table window.
+104 ==> 307223 - Group selected by time not grouping one pair per album.
+105 ==> 309254 - Contact informations from template aren't written to xmp-tags of jpg-files.
+106 ==> 309558 - Bad inheritance of keyboard shortcut when creating sub-tag.
+107 ==> 307053 - Images sorted incorrectly.
+108 ==> 313849 - Crash on clicking in BQM "Workflow" tab.
+109 ==> 313899 - Fix fetch_l10n.rb to work with ruby 1.9.
+110 ==> 302740 - Duplicate rotation/flip entries in image menu, shortcuts not working.
+111 ==> 313991 - Crash on start.
+112 ==> 294976 - Import Canon EOS 7D CR2 files from Lightroom with sidecar file.
+113 ==> 290962 - Thumbnails are never visible.
+114 ==> 297793 - digiKam for Windows consumes large amounts of virtual memory leading to malloc failure.
+115 ==> 297686 - digiKam hung while importing database.
+116 ==> 295445 - Will not display contents of photo directory.
+117 ==> 312999 - Many pictures not shown in preview and slideshow, program crashes.
+118 ==> 312422 - Crash by starting.
+119 ==> 310865 - No images displayed in the album.
+120 ==> 310252 - digiKam crashes with medium to large sized collections under Microsoft Windows.
+121 ==> 308310 - No thumbnails are created in the album view, rebuilding thumbnails doesn't work.
+122 ==> 291917 - digiKam 2.5.0 Crash on start up.
+123 ==> 265328 - digikam-2.0.0-beta2 core does not compile against kde-4.6.0 libkdcraw.
+124 ==> 
+
+
+
+
