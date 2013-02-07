@@ -6,8 +6,7 @@ NEW FEATURES:
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
-001 ==> 
-
-
-
-
+001 ==> 313902 - OSM maps not refreshing.
+002 ==> 308696 - No thumbnails on first start of geolocation module for newly imported images.
+003 ==> 269033 - digiKam crashed after startup.
+004 ==> 
