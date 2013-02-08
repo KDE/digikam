@@ -720,7 +720,7 @@ void EditorWindow::printImage(const KUrl& /*url*/)
 {
     DImg* image = m_canvas->interface()->getImg();
 
-    if (!image || !image->isNull())
+    if (!image || image->isNull())
     {
         return;
     }
