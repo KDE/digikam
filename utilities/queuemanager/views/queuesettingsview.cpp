@@ -6,7 +6,7 @@
  * Date        : 2009-02-21
  * Description : a view to show Queue Settings.
  *
- * Copyright (C) 2009-2012 Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2013 Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -176,20 +176,20 @@ QueueSettingsView::QueueSettingsView(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    QScrollArea* const sv  = new QScrollArea(this);
-    QWidget* const panel   = new QWidget(sv->viewport());
-    QVBoxLayout* layout    = new QVBoxLayout(panel);
+    QScrollArea* const sv     = new QScrollArea(this);
+    QWidget* const panel      = new QWidget(sv->viewport());
+    QVBoxLayout* const layout = new QVBoxLayout(panel);
     sv->setWidget(panel);
     sv->setWidgetResizable(true);
 
-    // -------------
+    // --------------------------------------------------------
 
-    d->rawLoadingLabel       = new QLabel(i18n("Raw Files Loading:"), panel);
-    QWidget* rawLoadingBox   = new QWidget(panel);
-    QVBoxLayout* vlay2       = new QVBoxLayout(rawLoadingBox);
-    d->rawLoadingButtonGroup = new QButtonGroup(rawLoadingBox);
-    d->demosaicingButton     = new QRadioButton(i18n("Perform RAW demosaicing"),          rawLoadingBox);
-    d->extractJPEGButton     = new QRadioButton(i18n("Extract embeded preview (faster)"), rawLoadingBox);
+    d->rawLoadingLabel           = new QLabel(i18n("Raw Files Loading:"), panel);
+    QWidget* const rawLoadingBox = new QWidget(panel);
+    QVBoxLayout* const vlay2     = new QVBoxLayout(rawLoadingBox);
+    d->rawLoadingButtonGroup     = new QButtonGroup(rawLoadingBox);
+    d->demosaicingButton         = new QRadioButton(i18n("Perform RAW demosaicing"),          rawLoadingBox);
+    d->extractJPEGButton         = new QRadioButton(i18n("Extract embeded preview (faster)"), rawLoadingBox);
     d->rawLoadingButtonGroup->addButton(d->extractJPEGButton, QueueSettings::USEEMBEDEDJPEG);
     d->rawLoadingButtonGroup->addButton(d->demosaicingButton, QueueSettings::DEMOSAICING);
     d->rawLoadingButtonGroup->setExclusive(true);
@@ -202,12 +202,12 @@ QueueSettingsView::QueueSettingsView(QWidget* const parent)
 
     // -------------
 
-    d->conflictLabel       = new QLabel(i18n("If Target File Exists:"), panel);
-    QWidget* conflictBox   = new QWidget(panel);
-    QVBoxLayout* vlay      = new QVBoxLayout(conflictBox);
-    d->conflictButtonGroup = new QButtonGroup(conflictBox);
-    d->storeDiffButton     = new QRadioButton(i18n("Store as a different name"), conflictBox);
-    d->overwriteButton     = new QRadioButton(i18n("Overwrite automatically"),   conflictBox);
+    d->conflictLabel           = new QLabel(i18n("If Target File Exists:"), panel);
+    QWidget* const conflictBox = new QWidget(panel);
+    QVBoxLayout* const vlay    = new QVBoxLayout(conflictBox);
+    d->conflictButtonGroup     = new QButtonGroup(conflictBox);
+    d->storeDiffButton         = new QRadioButton(i18n("Store as a different name"), conflictBox);
+    d->overwriteButton         = new QRadioButton(i18n("Overwrite automatically"),   conflictBox);
     d->conflictButtonGroup->addButton(d->overwriteButton, QueueSettings::OVERWRITE);
     d->conflictButtonGroup->addButton(d->storeDiffButton, QueueSettings::DIFFNAME);
     d->conflictButtonGroup->setExclusive(true);
