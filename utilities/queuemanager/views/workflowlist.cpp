@@ -130,6 +130,7 @@ WorkflowList::~WorkflowList()
 void WorkflowList::slotsAddQueueSettings(const QString& title)
 {
     WorkflowItem* const item = findByTitle(title);
+
     if (!item)
     {
         new WorkflowItem(this, title);
@@ -139,6 +140,7 @@ void WorkflowList::slotsAddQueueSettings(const QString& title)
 void WorkflowList::slotRemoveQueueSettings(const QString& title)
 {
     WorkflowItem* const item = findByTitle(title);
+
     if (item)
     {
         delete item;

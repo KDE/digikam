@@ -6,7 +6,7 @@
  * Date        : 2012-12-19
  * Description : Workflow properties dialog.
  *
- * Copyright (C) 2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2012-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -67,12 +67,12 @@ WorkflowDlg::WorkflowDlg(const Workflow& wf, bool create)
     setModal(true);
     setHelp("workflowdlg.anchor", "digikam");
 
-    QWidget* page    = new QWidget(this);
-    QLabel* logo     = new QLabel(page);
+    QWidget* const page    = new QWidget(this);
+    QLabel* const logo     = new QLabel(page);
     logo->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
                     .scaled(48, 48, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
-    QLabel* topLabel = new QLabel(page);
+    QLabel* const topLabel = new QLabel(page);
 
     if (create)
     {
@@ -86,7 +86,7 @@ WorkflowDlg::WorkflowDlg(const Workflow& wf, bool create)
     topLabel->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     topLabel->setWordWrap(false);
 
-    KSeparator* topLine = new KSeparator(Qt::Horizontal);
+    KSeparator* const topLine = new KSeparator(Qt::Horizontal);
 
     // --------------------------------------------------------
 
