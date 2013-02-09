@@ -232,7 +232,7 @@ QueueSettingsView::QueueSettingsView(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    d->rawSettings = new DcrawSettingsWidget(0, 0 /* no advanced settings shown */);
+    d->rawSettings = new DcrawSettingsWidget(panel, DcrawSettingsWidget::SIXTEENBITS | DcrawSettingsWidget::COLORSPACE);
     d->rawSettings->setItemIcon(0, SmallIcon("kdcraw"));
     d->rawSettings->setItemIcon(1, SmallIcon("whitebalance"));
     d->rawSettings->setItemIcon(2, SmallIcon("lensdistortion"));
