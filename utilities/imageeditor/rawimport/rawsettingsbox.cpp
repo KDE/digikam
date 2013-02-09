@@ -6,7 +6,7 @@
  * Date        : 2008-08-11
  * Description : Raw import settings box
  *
- * Copyright (C) 2008-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -169,14 +169,14 @@ RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget* const parent)
     setTools(Histogram);
     setHistogramType(LRGBC);
 
-    QGridLayout* gridSettings = new QGridLayout(plainPage());
-    d->tabView                = new KTabWidget(plainPage());
+    QGridLayout* const gridSettings = new QGridLayout(plainPage());
+    d->tabView                      = new KTabWidget(plainPage());
 
     // - RAW Decoding view --------------------------------------------------------------
 
-    d->rawdecodingBox         = new QWidget(d->tabView);
-    QGridLayout* rawGrid      = new QGridLayout(d->rawdecodingBox);
-    d->decodingSettingsBox    = new DcrawSettingsWidget(d->rawdecodingBox,
+    d->rawdecodingBox               = new QWidget(d->tabView);
+    QGridLayout* const rawGrid      = new QGridLayout(d->rawdecodingBox);
+    d->decodingSettingsBox          = new DcrawSettingsWidget(d->rawdecodingBox,
                                                      DcrawSettingsWidget::SIXTEENBITS | DcrawSettingsWidget::COLORSPACE);
     d->decodingSettingsBox->setObjectName("RawSettingsBox Expander");
 
@@ -205,11 +205,11 @@ RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget* const parent)
 
     // - Post-processing view --------------------------------------------------------------
 
-    d->postProcessSettingsBox      = new RExpanderBox(d->tabView);
+    d->postProcessSettingsBox            = new RExpanderBox(d->tabView);
     d->postProcessSettingsBox->setObjectName("PostProcessingSettingsBox Expander");
 
-    d->advExposureBox              = new QWidget(d->postProcessSettingsBox);
-    QGridLayout* advExposureLayout = new QGridLayout(d->advExposureBox);
+    d->advExposureBox                    = new QWidget(d->postProcessSettingsBox);
+    QGridLayout* const advExposureLayout = new QGridLayout(d->advExposureBox);
 
     d->brightnessLabel = new QLabel(i18n("Brightness:"), d->advExposureBox);
     d->brightnessInput = new RIntNumInput(d->advExposureBox);
@@ -263,13 +263,13 @@ RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget* const parent)
 
     // ---------------------------------------------------------------
 
-    d->curveBox                    = new QWidget(d->postProcessSettingsBox);
-    QGridLayout* curveLayout       = new QGridLayout(d->curveBox);
+    d->curveBox                          = new QWidget(d->postProcessSettingsBox);
+    QGridLayout* const curveLayout       = new QGridLayout(d->curveBox);
 
-    ColorGradientWidget* vGradient = new ColorGradientWidget(Qt::Vertical, 10, d->curveBox);
+    ColorGradientWidget* const vGradient = new ColorGradientWidget(Qt::Vertical, 10, d->curveBox);
     vGradient->setColors(QColor("white"), QColor("black"));
 
-    QLabel* spacev   = new QLabel(d->curveBox);
+    QLabel* const spacev                 = new QLabel(d->curveBox);
     spacev->setFixedWidth(1);
 
     d->curveWidget   = new CurvesWidget(256, 192, d->curveBox);
@@ -282,10 +282,10 @@ RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget* const parent)
     d->resetCurveBtn->setAutoRaise(true);
     d->resetCurveBtn->setToolTip(i18n("Reset curve to linear"));
 
-    QLabel* spaceh   = new QLabel(d->curveBox);
+    QLabel* const spaceh                 = new QLabel(d->curveBox);
     spaceh->setFixedHeight(1);
 
-    ColorGradientWidget* hGradient = new ColorGradientWidget(Qt::Horizontal, 10, d->curveBox);
+    ColorGradientWidget* const hGradient = new ColorGradientWidget(Qt::Horizontal, 10, d->curveBox);
     hGradient->setColors(QColor("black"), QColor("white"));
 
     curveLayout->addWidget(vGradient,        0, 0, 1, 1);
@@ -300,7 +300,7 @@ RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget* const parent)
 
     // ---------------------------------------------------------------
 
-    d->postProcessSettingsBox->addItem(d->advExposureBox, i18n("Exposure"), QString("exposure"), true);
+    d->postProcessSettingsBox->addItem(d->advExposureBox, i18n("Exposure"),         QString("exposure"), true);
     d->postProcessSettingsBox->addItem(d->curveBox,       i18n("Luminosity Curve"), QString("luminositycurve"), false);
     d->postProcessSettingsBox->setItemIcon(0, SmallIcon("contrast"));
     d->postProcessSettingsBox->setItemIcon(1, SmallIcon("adjustcurves"));
