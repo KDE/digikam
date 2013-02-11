@@ -164,6 +164,7 @@ public Q_SLOTS:
     void slotImageAddToExistingQueue(int);
     void slotImagePreview();
     void slotMapWidgetView();
+    void slotTableView();
     void slotIconView();
     void slotImageEdit();
     void slotImageFindSimilar();

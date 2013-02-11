@@ -1072,7 +1072,7 @@ void DigikamView::slotAlbumOpenInFileManager()
                            i18n("Cannot open the root. It is not a physical location."));
         return;
     }
-    
+
     if (!album || album->type() != Album::PHYSICAL)
     {
         return;
@@ -1093,7 +1093,7 @@ void DigikamView::slotAlbumOpenInTerminal()
                            i18n("Cannot open the root. It is not a physical location."));
         return;
     }
-    
+
     if (!album || album->type() != Album::PHYSICAL)
     {
         return;
@@ -1402,6 +1402,11 @@ void DigikamView::slotEscapePreview()
 void DigikamView::slotMapWidgetView()
 {
     d->stackedview->setPreviewMode(StackedView::MapWidgetMode);
+}
+
+void DigikamView::slotTableView()
+{
+    d->stackedview->setPreviewMode(StackedView::TableViewMode);
 }
 
 void DigikamView::slotIconView()

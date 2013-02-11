@@ -65,7 +65,8 @@ public:
         PreviewImageMode,
         WelcomePageMode,
         MediaPlayerMode,
-        MapWidgetMode
+        MapWidgetMode,
+        TableViewMode
     };
 
 public:
