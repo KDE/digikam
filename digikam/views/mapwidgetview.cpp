@@ -34,6 +34,7 @@
 
 //KDE includes
 
+#include <kdebug.h>
 #include <khbox.h>
 #include <kvbox.h>
 #include <kconfig.h>
@@ -438,12 +439,17 @@ QPersistentModelIndex MapViewModelHelper::bestRepresentativeIndexFromList(const 
         {
             const DMetadata meta(imageInfo.url().toLocalFile());
             double lat, lng;
-            meta.getGPSLatitudeNumber(&lat) && meta.getGPSLongitudeNumber(&lng);
+            const bool hasCoordinates = meta.getGPSLatitudeNumber(&lat) && meta.getGPSLongitudeNumber(&lng);
+
+            if (!hasCoordinates)
+            {
+                continue;
+            }
+
+            KGeoMap::GeoCoordinates coordinates(lat, lng);
 
             double alt;
             const bool haveAlt = meta.getGPSAltitude(&alt);
-            KGeoMap::GeoCoordinates coordinates(lat, lng);
-
             if (haveAlt)
             {
                 coordinates.setAlt(alt);
