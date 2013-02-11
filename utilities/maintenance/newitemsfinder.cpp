@@ -6,8 +6,8 @@
  * Date        : 2012-01-20
  * Description : new items finder.
  *
- * Copyright (C) 2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2012 by Andi Clemens <andi dot clemens at gmail dot com>
+ * Copyright (C) 2012-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2012      by Andi Clemens <andi dot clemens at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -41,11 +41,11 @@
 namespace Digikam
 {
 
-class NewItemsFinder::NewItemsFinderPriv
+class NewItemsFinder::Private
 {
 public:
 
-    NewItemsFinderPriv() :
+    Private() :
         mode(CompleteCollectionScan)
     {
     }
@@ -54,8 +54,8 @@ public:
     QStringList foldersToScan;
 };
 
-NewItemsFinder::NewItemsFinder(FinderMode mode, const QStringList& foldersToScan, ProgressItem* parent)
-    : MaintenanceTool("NewItemsFinder", parent), d(new NewItemsFinderPriv)
+NewItemsFinder::NewItemsFinder(FinderMode mode, const QStringList& foldersToScan, ProgressItem* const parent)
+    : MaintenanceTool("NewItemsFinder", parent), d(new Private)
 {
     connect(ScanController::instance(), SIGNAL(collectionScanStarted(QString)),
             this, SLOT(slotScanStarted(QString)));
@@ -106,6 +106,7 @@ void NewItemsFinder::slotStart()
 
             foreach(const QString& folder, d->foldersToScan)
                 ScanController::instance()->scheduleCollectionScan(folder);
+
             break;
         }
     }

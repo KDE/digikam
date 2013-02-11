@@ -6,7 +6,7 @@
  * Date        : 2006-30-08
  * Description : batch thumbnails generator
  *
- * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -43,7 +43,7 @@ class ThumbsGenerator : public MaintenanceTool
 
 public:
 
-    explicit ThumbsGenerator(bool rebuildAll = true, int albumId = -1, ProgressItem* parent = 0);
+    explicit ThumbsGenerator(bool rebuildAll = true, int albumId = -1, ProgressItem* const parent = 0);
     ~ThumbsGenerator();
 
 private:
@@ -57,8 +57,8 @@ private Q_SLOTS:
 
 private:
 
-    class ThumbsGeneratorPriv;
-    ThumbsGeneratorPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

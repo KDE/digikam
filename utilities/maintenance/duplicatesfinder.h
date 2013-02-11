@@ -6,7 +6,7 @@
  * Date        : 2012-01-20
  * Description : Duplicates items finder.
  *
- * Copyright (C) 2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2012-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -45,9 +45,9 @@ class DuplicatesFinder : public MaintenanceTool
 
 public:
 
-    DuplicatesFinder(const QStringList& albumsIdList, const QStringList& tagsIdList, int similarity = 90, ProgressItem* parent = 0);
+    DuplicatesFinder(const QStringList& albumsIdList, const QStringList& tagsIdList, int similarity = 90, ProgressItem* const parent = 0);
     /// Version to find all duplicates over whole collections
-    DuplicatesFinder(int similarity = 90, ProgressItem* parent = 0);
+    DuplicatesFinder(int similarity = 90, ProgressItem* const parent = 0);
     ~DuplicatesFinder();
 
 private Q_SLOTS:
@@ -60,8 +60,8 @@ private Q_SLOTS:
 
 private:
 
-    class DuplicatesFinderPriv;
-    DuplicatesFinderPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

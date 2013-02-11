@@ -6,8 +6,8 @@
  * Date        : 2012-01-20
  * Description : Duplicates items finder.
  *
- * Copyright (C) 2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2012 by Andi Clemens <andi dot clemens at gmail dot com>
+ * Copyright (C) 2012-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2012      by Andi Clemens <andi dot clemens at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -47,11 +47,11 @@ using namespace KIO;
 namespace Digikam
 {
 
-class DuplicatesFinder::DuplicatesFinderPriv
+class DuplicatesFinder::Private
 {
 public:
 
-    DuplicatesFinderPriv() :
+    Private() :
         similarity(90),
         job(0)
     {
@@ -63,23 +63,24 @@ public:
     Job*        job;
 };
 
-DuplicatesFinder::DuplicatesFinder(const QStringList& albumsIdList, const QStringList& tagsIdList, int similarity, ProgressItem* parent)
+DuplicatesFinder::DuplicatesFinder(const QStringList& albumsIdList, const QStringList& tagsIdList, int similarity, ProgressItem* const parent)
     : MaintenanceTool("DuplicatesFinder", parent),
-      d(new DuplicatesFinderPriv)
+      d(new Private)
 {
     d->similarity   = similarity;
     d->albumsIdList = albumsIdList;
     d->tagsIdList   = tagsIdList;
 }
 
-DuplicatesFinder::DuplicatesFinder(int similarity, ProgressItem* parent)
+DuplicatesFinder::DuplicatesFinder(int similarity, ProgressItem* const parent)
     : MaintenanceTool("DuplicatesFinder", parent),
-      d(new DuplicatesFinderPriv)
+      d(new Private)
 {
     d->similarity        = similarity;
     AlbumList palbumList = AlbumManager::instance()->allPAlbums();
     QStringList albumsIdList;
-    foreach(Album* a, palbumList)
+
+    foreach(Album* const a, palbumList)
         d->albumsIdList << QString::number(a->id());
 }
 

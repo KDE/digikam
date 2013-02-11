@@ -6,8 +6,8 @@
  * Date        : 2006-30-08
  * Description : batch thumbnails generator
  *
- * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2012 by Andi Clemens <andi dot clemens at gmail dot com>
+ * Copyright (C) 2006-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2012      by Andi Clemens <andi dot clemens at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -55,11 +55,11 @@
 namespace Digikam
 {
 
-class ThumbsGenerator::ThumbsGeneratorPriv
+class ThumbsGenerator::Private
 {
 public:
 
-    ThumbsGeneratorPriv() :
+    Private() :
         rebuildAll(true),
         albumId(-1),
         thumbLoadThread(0)
@@ -75,9 +75,9 @@ public:
     ThumbnailLoadThread* thumbLoadThread;
 };
 
-ThumbsGenerator::ThumbsGenerator(bool rebuildAll, int albumId, ProgressItem* parent)
+ThumbsGenerator::ThumbsGenerator(bool rebuildAll, int albumId, ProgressItem* const parent)
     : MaintenanceTool("ThumbsGenerator", parent),
-      d(new ThumbsGeneratorPriv)
+      d(new Private)
 {
     ProgressManager::addProgressItem(this);
 

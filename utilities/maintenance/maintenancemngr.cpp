@@ -6,8 +6,8 @@
  * Date        : 2012-01-31
  * Description : maintenance manager
  *
- * Copyright (C) 2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2012 by Andi Clemens <andi dot clemens at gmail dot com>
+ * Copyright (C) 2012-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2012      by Andi Clemens <andi dot clemens at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -49,11 +49,11 @@
 namespace Digikam
 {
 
-class MaintenanceMngr::MaintenanceMngrPriv
+class MaintenanceMngr::Private
 {
 public:
 
-    MaintenanceMngrPriv()
+    Private()
     {
         running = false;
     }
@@ -65,8 +65,8 @@ public:
     MaintenanceSettings settings;
 };
 
-MaintenanceMngr::MaintenanceMngr(QObject* parent)
-    : QObject(parent), d(new MaintenanceMngrPriv)
+MaintenanceMngr::MaintenanceMngr(QObject* const parent)
+    : QObject(parent), d(new Private)
 {
 }
 
@@ -102,7 +102,7 @@ void MaintenanceMngr::slotStage1()
 {
     if (d->settings.newItems)
     {
-        NewItemsFinder* tool = new NewItemsFinder();
+        NewItemsFinder* const tool = new NewItemsFinder();
         tool->setNotificationEnabled(false);
 
         connect(tool, SIGNAL(signalComplete()),
@@ -123,8 +123,8 @@ void MaintenanceMngr::slotStage2()
 {
     if (d->settings.thumbnails)
     {
-        bool rebuildAll = d->settings.scanThumbs == false;
-        ThumbsGenerator* tool = new ThumbsGenerator(rebuildAll);
+        bool rebuildAll             = d->settings.scanThumbs == false;
+        ThumbsGenerator* const tool = new ThumbsGenerator(rebuildAll);
         tool->setNotificationEnabled(false);
 
         connect(tool, SIGNAL(signalComplete()),
@@ -145,8 +145,8 @@ void MaintenanceMngr::slotStage3()
 {
     if (d->settings.fingerPrints)
     {
-        bool rebuildAll = d->settings.scanFingerPrints == false;
-        FingerPrintsGenerator* tool = new FingerPrintsGenerator(rebuildAll);
+        bool rebuildAll                   = d->settings.scanFingerPrints == false;
+        FingerPrintsGenerator* const tool = new FingerPrintsGenerator(rebuildAll);
         tool->setNotificationEnabled(false);
 
         connect(tool, SIGNAL(signalComplete()),
@@ -167,7 +167,7 @@ void MaintenanceMngr::slotStage4()
 {
     if (d->settings.duplicates)
     {
-        DuplicatesFinder* tool = new DuplicatesFinder(d->settings.similarity);
+        DuplicatesFinder* const tool = new DuplicatesFinder(d->settings.similarity);
         tool->setNotificationEnabled(false);
 
         connect(tool, SIGNAL(signalComplete()),
@@ -188,7 +188,7 @@ void MaintenanceMngr::slotStage5()
 {
     if (d->settings.metadata)
     {
-        MetadataSynchronizer* tool = new MetadataSynchronizer(MetadataSynchronizer::WriteFromDatabaseToFile);
+        MetadataSynchronizer* const tool = new MetadataSynchronizer(MetadataSynchronizer::WriteFromDatabaseToFile);
         tool->setNotificationEnabled(false);
 
         connect(tool, SIGNAL(signalComplete()),
@@ -209,7 +209,7 @@ void MaintenanceMngr::slotStage6()
 {
     if (d->settings.faceDetection)
     {
-        FaceDetector* tool = new FaceDetector(d->settings.faceSettings);
+        FaceDetector* const tool = new FaceDetector(d->settings.faceSettings);
         tool->setNotificationEnabled(false);
 
         connect(tool, SIGNAL(signalComplete()),

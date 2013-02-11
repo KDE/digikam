@@ -6,8 +6,8 @@
  * Date        : 2012-02-02
  * Description : maintenance tool
  *
- * Copyright (C) 2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2012 by Andi Clemens <andi dot clemens at gmail dot com>
+ * Copyright (C) 2012-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2012      by Andi Clemens <andi dot clemens at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -41,11 +41,11 @@
 namespace Digikam
 {
 
-class MaintenanceTool::MaintenanceToolPriv
+class MaintenanceTool::Private
 {
 public:
 
-    MaintenanceToolPriv()
+    Private()
     {
         notification = true;
     }
@@ -54,9 +54,9 @@ public:
     QTime duration;
 };
 
-MaintenanceTool::MaintenanceTool(const QString& id, ProgressItem* parent)
+MaintenanceTool::MaintenanceTool(const QString& id, ProgressItem* const parent)
     : ProgressItem(parent, id, QString(), QString(), true, true),
-      d(new MaintenanceToolPriv)
+      d(new Private)
 {
     connect(this, SIGNAL(progressItemCanceled(QString)),
             this, SLOT(slotCancel()));

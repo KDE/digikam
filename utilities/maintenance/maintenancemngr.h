@@ -6,7 +6,7 @@
  * Date        : 2012-01-31
  * Description : maintenance manager
  *
- * Copyright (C) 2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2012-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -39,7 +39,7 @@ class MaintenanceMngr : public QObject
 
 public:
 
-    explicit MaintenanceMngr(QObject* parent);
+    explicit MaintenanceMngr(QObject* const parent);
     ~MaintenanceMngr();
 
     void setSettings(const MaintenanceSettings& settings);
@@ -65,8 +65,8 @@ private Q_SLOTS:
 
 private:
 
-    class MaintenanceMngrPriv;
-    MaintenanceMngrPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

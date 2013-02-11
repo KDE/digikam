@@ -6,7 +6,7 @@
  * Date        : 2012-01-20
  * Description : new items finder.
  *
- * Copyright (C) 2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2012-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -51,7 +51,7 @@ public:
 public:
 
     NewItemsFinder(FinderMode mode = CompleteCollectionScan, const QStringList& foldersToScan = QStringList(),
-                   ProgressItem* parent = 0);
+                   ProgressItem* const parent = 0);
     ~NewItemsFinder();
 
 private Q_SLOTS:
@@ -65,8 +65,8 @@ private Q_SLOTS:
 
 private:
 
-    class NewItemsFinderPriv;
-    NewItemsFinderPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

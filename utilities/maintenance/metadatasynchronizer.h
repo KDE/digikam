@@ -6,7 +6,7 @@
  * Date        : 2007-22-01
  * Description : batch sync pictures metadata with database
  *
- * Copyright (C) 2007-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -49,13 +49,13 @@ public:
 public:
 
     /** Constructor which sync all pictures metadata pictures from whole Albums collection */
-    MetadataSynchronizer(SyncDirection direction, ProgressItem* parent = 0);
+    MetadataSynchronizer(SyncDirection direction, ProgressItem* const parent = 0);
 
     /** Constructor which sync all pictures metadata from an Album */
-    MetadataSynchronizer(Album* album, SyncDirection direction = WriteFromDatabaseToFile, ProgressItem* parent = 0);
+    MetadataSynchronizer(Album* const album, SyncDirection direction = WriteFromDatabaseToFile, ProgressItem* const parent = 0);
 
     /** Constructor which sync all pictures metadata from an images list */
-    MetadataSynchronizer(const ImageInfoList& list, SyncDirection = WriteFromDatabaseToFile, ProgressItem* parent = 0);
+    MetadataSynchronizer(const ImageInfoList& list, SyncDirection = WriteFromDatabaseToFile, ProgressItem* const parent = 0);
 
     ~MetadataSynchronizer();
 
@@ -75,8 +75,8 @@ private:
 
 private:
 
-    class MetadataSynchronizerPriv;
-    MetadataSynchronizerPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam
