@@ -54,7 +54,7 @@ public:
      * Constructs a new face group, managing RegionFrameItems for faces
      * of a particular image, displayed on a GraphicsDImgView.
      */
-    explicit FaceGroup(GraphicsDImgView* view);
+    explicit FaceGroup(GraphicsDImgView* const view);
     ~FaceGroup();
 
     bool isVisible() const;
@@ -83,7 +83,7 @@ public:
      * p and the closest point of the returned item's bounding rectangle.
      * In particular, if p is inside the item's rectangle, manhattanLength is 0.
      */
-    RegionFrameItem* closestItem(const QPointF& p, qreal* manhattanLength = 0) const;
+    RegionFrameItem* closestItem(const QPointF& p, qreal* const manhattanLength = 0) const;
 
     bool acceptsMouseClick(const QPointF& scenePos);
     void itemHoverEnterEvent(QGraphicsSceneHoverEvent* event);
@@ -134,8 +134,8 @@ protected Q_SLOTS:
 
 private:
 
-    class FaceGroupPriv;
-    FaceGroupPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 // ---------------------------------------------------------------------------------
@@ -148,7 +148,7 @@ class AssignNameWidgetHidingStateChanger : public HidingStateChanger
 
 public:
 
-    explicit AssignNameWidgetHidingStateChanger(FaceItem* item);
+    explicit AssignNameWidgetHidingStateChanger(FaceItem* const item);
 
 protected Q_SLOTS:
 

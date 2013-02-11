@@ -298,12 +298,12 @@ Q_SIGNALS:
 
 public:
 
-    class FacePipelinePriv;
+    class Private;
 
 private:
 
-    FacePipelinePriv* const d;
-    friend class FacePipelinePriv;
+    Private* const d;
+    friend class Private;
 };
 
 } // namespace Digikam

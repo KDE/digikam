@@ -52,8 +52,8 @@ class FacePipelineExtendedPackage : public FacePipelinePackage, public QSharedDa
 {
 public:
 
-    QString filePath;
-    DImg    detectionImage; // image scaled to about 0.5 Mpx
+    QString                                                           filePath;
+    DImg                                                              detectionImage; // image scaled to about 0.5 Mpx
     typedef QExplicitlySharedDataPointer<FacePipelineExtendedPackage> Ptr;
 
 public:
@@ -70,7 +70,10 @@ class PackageLoadingDescriptionList : public QList<FacePipelineExtendedPackage::
 {
 public:
 
-    PackageLoadingDescriptionList() {}
+    PackageLoadingDescriptionList()
+    {
+    }
+
     FacePipelineExtendedPackage::Ptr take(const LoadingDescription& description);
 };
 
@@ -89,7 +92,7 @@ public:
     void deactivate(WorkerObject::DeactivatingMode mode = WorkerObject::FlushSignals);
     void wait();
 
-    void add(WorkerObject* worker);
+    void add(WorkerObject* const worker);
     void setPriority(QThread::Priority priority);
 
 public:
@@ -118,7 +121,7 @@ class ScanStateFilter : public DynamicThread
 
 public:
 
-    ScanStateFilter(FacePipeline::FilterMode mode, FacePipeline::FacePipelinePriv* d);
+    ScanStateFilter(FacePipeline::FilterMode mode, FacePipeline::Private* const d);
 
     void process(const QList<ImageInfo>& infos);
     void process(const ImageInfo& info);
@@ -127,9 +130,9 @@ public:
 
 public:
 
-    FacePipeline::FacePipelinePriv* const d;
-    FacePipeline::FilterMode              mode;
-    FacePipelineDatabaseFace::Roles       tasks;
+    FacePipeline::Private* const    d;
+    FacePipeline::FilterMode        mode;
+    FacePipelineDatabaseFace::Roles tasks;
 
 protected Q_SLOTS:
 
@@ -158,7 +161,7 @@ class PreviewLoader : public PreviewLoadThread
 
 public:
 
-    explicit PreviewLoader(FacePipeline::FacePipelinePriv* d);
+    explicit PreviewLoader(FacePipeline::Private* const d);
 
     void cancel();
     bool sentOutLimitReached();
@@ -175,9 +178,9 @@ Q_SIGNALS:
 
 protected:
 
-    PackageLoadingDescriptionList         scheduledPackages;
-    int                                   maximumSentOutPackages;
-    FacePipeline::FacePipelinePriv* const d;
+    PackageLoadingDescriptionList scheduledPackages;
+    int                           maximumSentOutPackages;
+    FacePipeline::Private* const  d;
 };
 
 // ----------------------------------------------------------------------------------------
@@ -188,11 +191,12 @@ class DetectionWorker : public WorkerObject
 
 public:
 
-    explicit DetectionWorker(FacePipeline::FacePipelinePriv* d);
+    explicit DetectionWorker(FacePipeline::Private* const d);
     ~DetectionWorker()
     {
         wait();    // protect detector
     }
+
     DImg scaleForDetection(const DImg& image) const;
 
 public Q_SLOTS:
@@ -206,8 +210,8 @@ Q_SIGNALS:
 
 protected:
 
-    KFaceIface::FaceDetector              detector;
-    FacePipeline::FacePipelinePriv* const d;
+    KFaceIface::FaceDetector     detector;
+    FacePipeline::Private* const d;
 };
 
 // ----------------------------------------------------------------------------------------
@@ -218,7 +222,7 @@ class RecognitionWorker : public WorkerObject
 
 public:
 
-    explicit RecognitionWorker(FacePipeline::FacePipelinePriv* d);
+    explicit RecognitionWorker(FacePipeline::Private* const d);
     ~RecognitionWorker()
     {
         wait();    // protect database
@@ -235,9 +239,9 @@ Q_SIGNALS:
 
 protected:
 
-    KFaceIface::RecognitionDatabase       database;
-    double                                recognitionThreshold;
-    FacePipeline::FacePipelinePriv* const d;
+    KFaceIface::RecognitionDatabase database;
+    double                          recognitionThreshold;
+    FacePipeline::Private* const    d;
 };
 
 // ----------------------------------------------------------------------------------------
@@ -248,7 +252,7 @@ class DatabaseWriter : public WorkerObject
 
 public:
 
-    DatabaseWriter(FacePipeline::WriteMode mode, FacePipeline::FacePipelinePriv* d);
+    DatabaseWriter(FacePipeline::WriteMode mode, FacePipeline::Private* const d);
 
 public Q_SLOTS:
 
@@ -260,8 +264,8 @@ Q_SIGNALS:
 
 protected:
 
-    FacePipeline::WriteMode               mode;
-    FacePipeline::FacePipelinePriv* const d;
+    FacePipeline::WriteMode      mode;
+    FacePipeline::Private* const d;
 };
 
 // ----------------------------------------------------------------------------------------
@@ -272,7 +276,7 @@ class Benchmarker : public WorkerObject
 
 public:
 
-    explicit Benchmarker(FacePipeline::FacePipelinePriv* d);
+    explicit Benchmarker(FacePipeline::Private* const d);
     QString result() const;
 
 public Q_SLOTS:
@@ -285,19 +289,19 @@ Q_SIGNALS:
 
 protected:
 
-    int totalImages;
-    int faces;
-    double totalPixels;
-    double facePixels;
+    int                          totalImages;
+    int                          faces;
+    double                       totalPixels;
+    double                       facePixels;
 
-    int trueNegativeImages;
-    int falsePositiveImages;
+    int                          trueNegativeImages;
+    int                          falsePositiveImages;
 
-    int truePositiveFaces;
-    int falseNegativeFaces;
-    int falsePositiveFaces;
+    int                          truePositiveFaces;
+    int                          falseNegativeFaces;
+    int                          falsePositiveFaces;
 
-    FacePipeline::FacePipelinePriv* const d;
+    FacePipeline::Private* const d;
 };
 
 // ----------------------------------------------------------------------------------------
@@ -308,7 +312,7 @@ class Trainer : public WorkerObject
 
 public:
 
-    explicit Trainer(FacePipeline::FacePipelinePriv* d);
+    explicit Trainer(FacePipeline::Private* const d);
     ~Trainer()
     {
         wait();    // protect detector
@@ -328,20 +332,20 @@ Q_SIGNALS:
 
 protected:
 
-    ThumbnailImageCatcher*                catcher;
-    KFaceIface::RecognitionDatabase       database;
-    FacePipeline::FacePipelinePriv* const d;
+    ThumbnailImageCatcher*          catcher;
+    KFaceIface::RecognitionDatabase database;
+    FacePipeline::Private* const    d;
 };
 
 // ----------------------------------------------------------------------------------------
 
-class FacePipeline::FacePipelinePriv : public QObject
+class FacePipeline::Private : public QObject
 {
     Q_OBJECT
 
 public:
 
-    explicit FacePipelinePriv(FacePipeline* q);
+    explicit Private(FacePipeline* q);
 
     void processBatch(const QList<ImageInfo>& infos);
     void sendFromFilter(const QList<FacePipelineExtendedPackage::Ptr>& packages);

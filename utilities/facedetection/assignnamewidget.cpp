@@ -56,26 +56,26 @@
 namespace Digikam
 {
 
-class AssignNameWidget::AssignNameWidgetPriv
+class AssignNameWidget::Private
 {
 public:
 
-    explicit AssignNameWidgetPriv(AssignNameWidget* q)
+    explicit Private(AssignNameWidget* const q)
         : q(q)
     {
-        mode           = InvalidMode;
-        layoutMode     = InvalidLayout;
-        visualStyle    = InvalidVisualStyle;
-        widgetMode     = InvalidTagEntryWidgetMode;
-        comboBox       = 0;
-        lineEdit       = 0;
-        confirmButton  = 0;
-        rejectButton   = 0;
-        clickLabel     = 0;
-        layout         = 0;
-        modelsGiven    = 0;
-        tagModel       = 0;
-        tagFilterModel = 0;
+        mode             = InvalidMode;
+        layoutMode       = InvalidLayout;
+        visualStyle      = InvalidVisualStyle;
+        widgetMode       = InvalidTagEntryWidgetMode;
+        comboBox         = 0;
+        lineEdit         = 0;
+        confirmButton    = 0;
+        rejectButton     = 0;
+        clickLabel       = 0;
+        layout           = 0;
+        modelsGiven      = 0;
+        tagModel         = 0;
+        tagFilterModel   = 0;
         tagFilteredModel = 0;
     }
 
@@ -91,7 +91,7 @@ private:
     void         updateLayout();
     void         updateVisualStyle();
 
-    QToolButton* createToolButton(const KGuiItem& item);
+    QToolButton* createToolButton(const KGuiItem& item) const;
 
     QWidget* addTagsWidget() const
     {
@@ -104,65 +104,71 @@ private:
             return lineEdit;
         }
     }
-    template <class T> void setupAddTagsWidget(T* widget);
+
+    template <class T> void setupAddTagsWidget(T* const widget);
+    template <class T> void setAddTagsWidgetContents(T* const widget);
+
     void layoutAddTagsWidget(bool exceedBounds, int minimumContentsLength);
     void setSizePolicies(QSizePolicy::Policy h, QSizePolicy::Policy v);
     void setToolButtonStyles(Qt::ToolButtonStyle style);
-    template <class T> void setAddTagsWidgetContents(T* widget);
 
 public:
 
-    ImageInfo                         info;
-    QVariant                          faceIdentifier;
-    AlbumPointer<TAlbum>              currentTag;
+    ImageInfo                  info;
+    QVariant                   faceIdentifier;
+    AlbumPointer<TAlbum>       currentTag;
 
-    Mode                              mode;
-    LayoutMode                        layoutMode;
-    VisualStyle                       visualStyle;
-    TagEntryWidgetMode                widgetMode;
+    Mode                       mode;
+    LayoutMode                 layoutMode;
+    VisualStyle                visualStyle;
+    TagEntryWidgetMode         widgetMode;
 
-    AddTagsComboBox*                  comboBox;
-    AddTagsLineEdit*                  lineEdit;
-    QToolButton*                      confirmButton;
-    QToolButton*                      rejectButton;
-    RClickLabel*                      clickLabel;
+    AddTagsComboBox*           comboBox;
+    AddTagsLineEdit*           lineEdit;
+    QToolButton*               confirmButton;
+    QToolButton*               rejectButton;
+    RClickLabel*               clickLabel;
 
-    bool                              modelsGiven;
-    TagModel*                         tagModel;
-    CheckableAlbumFilterModel*        tagFilterModel;
-    TagPropertiesFilterModel*         tagFilteredModel;
-    AlbumPointer<TAlbum>              parentTag;
+    bool                       modelsGiven;
+    TagModel*                  tagModel;
+    CheckableAlbumFilterModel* tagFilterModel;
+    TagPropertiesFilterModel*  tagFilteredModel;
+    AlbumPointer<TAlbum>       parentTag;
 
-    QGridLayout*                      layout;
+    QGridLayout*               layout;
 
-    AssignNameWidget* const           q;
+    AssignNameWidget* const    q;
 };
 
-bool AssignNameWidget::AssignNameWidgetPriv::isValid() const
+bool AssignNameWidget::Private::isValid() const
 {
-    return mode        != InvalidMode
-           && layoutMode  != InvalidLayout
-           && visualStyle != InvalidVisualStyle
-           && widgetMode  != InvalidTagEntryWidgetMode;
+    return mode        != InvalidMode        &&
+           layoutMode  != InvalidLayout      &&
+           visualStyle != InvalidVisualStyle &&
+           widgetMode  != InvalidTagEntryWidgetMode;
 }
 
-void AssignNameWidget::AssignNameWidgetPriv::clearWidgets()
+void AssignNameWidget::Private::clearWidgets()
 {
     delete comboBox;
     comboBox  = 0;
+
     delete lineEdit;
     lineEdit  = 0;
+
     delete confirmButton;
     confirmButton = 0;
+
     delete rejectButton;
     rejectButton = 0;
+
     delete clickLabel;
     clickLabel = 0;
 }
 
-QToolButton* AssignNameWidget::AssignNameWidgetPriv::createToolButton(const KGuiItem& gui)
+QToolButton* AssignNameWidget::Private::createToolButton(const KGuiItem& gui) const
 {
-    QToolButton* b = new QToolButton;
+    QToolButton* const b = new QToolButton;
     b->setIcon(gui.icon());
     b->setText(gui.text());
     b->setToolTip(gui.toolTip());
@@ -170,7 +176,7 @@ QToolButton* AssignNameWidget::AssignNameWidgetPriv::createToolButton(const KGui
     return b;
 }
 
-void AssignNameWidget::AssignNameWidgetPriv::updateModes()
+void AssignNameWidget::Private::updateModes()
 {
     if (isValid())
     {
@@ -182,7 +188,7 @@ void AssignNameWidget::AssignNameWidgetPriv::updateModes()
 }
 
 template <class T>
-void AssignNameWidget::AssignNameWidgetPriv::setupAddTagsWidget(T* widget)
+void AssignNameWidget::Private::setupAddTagsWidget(T* const widget)
 {
     if (modelsGiven)
     {
@@ -201,7 +207,7 @@ void AssignNameWidget::AssignNameWidgetPriv::setupAddTagsWidget(T* widget)
                q, SLOT(slotActionSelected(TaggingAction)));
 }
 
-void AssignNameWidget::AssignNameWidgetPriv::checkWidgets()
+void AssignNameWidget::Private::checkWidgets()
 {
     if (!isValid())
     {
@@ -260,6 +266,7 @@ void AssignNameWidget::AssignNameWidgetPriv::checkWidgets()
             if (!rejectButton)
             {
                 rejectButton  = createToolButton(KStandardGuiItem::remove());
+
                 q->connect(rejectButton, SIGNAL(clicked()),
                            q, SLOT(slotReject()));
             }
@@ -278,7 +285,7 @@ void AssignNameWidget::AssignNameWidgetPriv::checkWidgets()
     }
 }
 
-void AssignNameWidget::AssignNameWidgetPriv::layoutAddTagsWidget(bool exceedBounds, int minimumContentsLength)
+void AssignNameWidget::Private::layoutAddTagsWidget(bool exceedBounds, int minimumContentsLength)
 {
     if (comboBox)
     {
@@ -291,20 +298,20 @@ void AssignNameWidget::AssignNameWidgetPriv::layoutAddTagsWidget(bool exceedBoun
     }
 }
 
-void AssignNameWidget::AssignNameWidgetPriv::setSizePolicies(QSizePolicy::Policy h, QSizePolicy::Policy v)
+void AssignNameWidget::Private::setSizePolicies(QSizePolicy::Policy h, QSizePolicy::Policy v)
 {
     confirmButton->setSizePolicy(h, v);
     rejectButton->setSizePolicy(h, v);
     addTagsWidget()->setSizePolicy(h, v);
 }
 
-void AssignNameWidget::AssignNameWidgetPriv::setToolButtonStyles(Qt::ToolButtonStyle style)
+void AssignNameWidget::Private::setToolButtonStyles(Qt::ToolButtonStyle style)
 {
     confirmButton->setToolButtonStyle(style);
     rejectButton->setToolButtonStyle(style);
 }
 
-void AssignNameWidget::AssignNameWidgetPriv::updateLayout()
+void AssignNameWidget::Private::updateLayout()
 {
     if (!isValid())
     {
@@ -379,14 +386,13 @@ void AssignNameWidget::AssignNameWidgetPriv::updateLayout()
 static QString styleSheetFontDescriptor(const QFont& font)
 {
     QString s;
-    s += (font.pointSize() == -1)
-         ? QString("font-size: %1px; ").arg(font.pixelSize())
-         : QString("font-size: %1pt; ").arg(font.pointSize());
+    s += (font.pointSize() == -1) ? QString("font-size: %1px; ").arg(font.pixelSize())
+                                  : QString("font-size: %1pt; ").arg(font.pointSize());
     s += QString("font-family: \"%1\"; ").arg(font.family());
     return s;
 }
 
-void AssignNameWidget::AssignNameWidgetPriv::updateVisualStyle()
+void AssignNameWidget::Private::updateVisualStyle()
 {
     if (!isValid())
     {
@@ -493,7 +499,7 @@ void AssignNameWidget::AssignNameWidgetPriv::updateVisualStyle()
 }
 
 template <class T>
-void AssignNameWidget::AssignNameWidgetPriv::setAddTagsWidgetContents(T* widget)
+void AssignNameWidget::Private::setAddTagsWidgetContents(T* const widget)
 {
     if (widget)
     {
@@ -507,7 +513,7 @@ void AssignNameWidget::AssignNameWidgetPriv::setAddTagsWidgetContents(T* widget)
     }
 }
 
-void AssignNameWidget::AssignNameWidgetPriv::updateContents()
+void AssignNameWidget::Private::updateContents()
 {
     if (!isValid())
     {
@@ -531,8 +537,8 @@ void AssignNameWidget::AssignNameWidgetPriv::updateContents()
 
 // ---
 
-AssignNameWidget::AssignNameWidget(QWidget* parent)
-    : QFrame(parent), d(new AssignNameWidgetPriv(this))
+AssignNameWidget::AssignNameWidget(QWidget* const parent)
+    : QFrame(parent), d(new Private(this))
 {
     setObjectName("assignNameWidget");
     setVisualStyle(StyledFrame);
@@ -548,7 +554,7 @@ void AssignNameWidget::setDefaultModel()
     setModel(0, 0, 0);
 }
 
-void AssignNameWidget::setModel(TagModel* model, TagPropertiesFilterModel* filteredModel, CheckableAlbumFilterModel* filterModel)
+void AssignNameWidget::setModel(TagModel* const model, TagPropertiesFilterModel* const filteredModel, CheckableAlbumFilterModel* const filterModel)
 {
     if (d->comboBox)
     {
