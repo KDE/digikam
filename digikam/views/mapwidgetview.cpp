@@ -309,19 +309,20 @@ bool MapViewModelHelper::itemCoordinates(const QModelIndex& index, KGeoMap::GeoC
         const DMetadata meta(info.url().toLocalFile());
         const bool haveCoordinates = meta.getGPSLatitudeNumber(&lat) && meta.getGPSLongitudeNumber(&lng);
 
-        if (haveCoordinates)
+        if (!haveCoordinates)
         {
-            double alt;
-            const bool haveAlt = meta.getGPSAltitude(&alt);
-            KGeoMap::GeoCoordinates tmpCoordinates(lat, lng);
-
-            if (haveAlt)
-            {
-                tmpCoordinates.setAlt(alt);
-            }
-
-            *coordinates = tmpCoordinates;
+            return false;
         }
+        double alt;
+        const bool haveAlt = meta.getGPSAltitude(&alt);
+        KGeoMap::GeoCoordinates tmpCoordinates(lat, lng);
+
+        if (haveAlt)
+        {
+            tmpCoordinates.setAlt(alt);
+        }
+
+        *coordinates = tmpCoordinates;
     }
 
     return true;
