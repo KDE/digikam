@@ -6,9 +6,9 @@
  * Date        : 2012-01-13
  * Description : progress manager
  *
- * Copyright (C) 2007-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2004 Till Adam <adam at kde dot org>
- * Copyright (C) 2004 David Faure <faure at kde dot org>
+ * Copyright (C) 2007-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004      by Till Adam <adam at kde dot org>
+ * Copyright (C) 2004      by David Faure <faure at kde dot org>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -51,7 +51,7 @@
 namespace Digikam
 {
 
-class StatusbarProgressWidget::StatusbarProgressWidgetPriv
+class StatusbarProgressWidget::Private
 {
 public:
 
@@ -63,7 +63,7 @@ public:
 
 public:
 
-    StatusbarProgressWidgetPriv() :
+    Private() :
         mode(None),
         bShowButton(true),
         pProgressBar(0),
@@ -98,7 +98,7 @@ public:
 };
 
 StatusbarProgressWidget::StatusbarProgressWidget(ProgressView* const progressView, QWidget* const parent, bool button)
-    : QFrame(parent), d(new StatusbarProgressWidgetPriv)
+    : QFrame(parent), d(new Private)
 {
     d->progressView      = progressView;
     d->bShowButton       = button;
@@ -169,7 +169,6 @@ StatusbarProgressWidget::StatusbarProgressWidget(ProgressView* const progressVie
 
     connect(d->notificationTimer, SIGNAL(timeout()),
             d->pButton, SLOT(animateClick()));
-
 }
 
 StatusbarProgressWidget::~StatusbarProgressWidget()
@@ -185,6 +184,7 @@ StatusbarProgressWidget::~StatusbarProgressWidget()
 void StatusbarProgressWidget::updateBusyMode()
 {
     connectSingleItem(); // if going to 1 item
+
     if (d->currentItem)
     {
         // Exactly one item
@@ -223,7 +223,8 @@ void StatusbarProgressWidget::slotProgressItemAdded(ProgressItem* item)
 
 void StatusbarProgressWidget::slotProgressItemCompleted(ProgressItem* item)
 {
-    if (item && item->parent()) return; // we are only interested in top level items
+    if (item && item->parent())
+        return; // we are only interested in top level items
 
     connectSingleItem(); // if going back to 1 item
 
@@ -250,7 +251,9 @@ void StatusbarProgressWidget::connectSingleItem()
                    this, SLOT(slotProgressItemProgress(ProgressItem*, unsigned int)));
         d->currentItem = 0;
     }
+
     d->currentItem = ProgressManager::instance()->singleItem();
+
     if (d->currentItem)
     {
         connect(d->currentItem, SIGNAL(progressItemProgress(ProgressItem*, unsigned int)),
@@ -268,6 +271,7 @@ void StatusbarProgressWidget::activateSingleItemMode()
 void StatusbarProgressWidget::slotShowItemDelayed()
 {
     bool noItems = ProgressManager::instance()->isEmpty();
+
     if (d->currentItem)
     {
         activateSingleItemMode();
@@ -277,13 +281,14 @@ void StatusbarProgressWidget::slotShowItemDelayed()
         // N items
         d->pProgressBar->setMaximum(0);
         d->pProgressBar->setTextVisible(false);
+
         if (d->busyTimer)
             d->busyTimer->start(100);
     }
 
-    if (!noItems && d->mode == StatusbarProgressWidgetPriv::None)
+    if (!noItems && d->mode == Private::None)
     {
-        d->mode = StatusbarProgressWidgetPriv::Progress;
+        d->mode = Private::Progress;
         setMode();
     }
 }
@@ -300,6 +305,7 @@ void StatusbarProgressWidget::slotProgressItemProgress(ProgressItem* item, unsig
     {
         return;
     }
+
     d->pProgressBar->setValue(value);
 }
 
@@ -307,24 +313,28 @@ void StatusbarProgressWidget::setMode()
 {
     switch (d->mode)
     {
-        case StatusbarProgressWidgetPriv::None:
+        case Private::None:
         {
             if (d->bShowButton)
             {
                 d->pButton->hide();
             }
+
             d->stack->show();
             d->stack->setCurrentWidget(d->pLabel);
+
             break;
         }
-        case StatusbarProgressWidgetPriv::Progress:
+        case Private::Progress:
         {
             d->stack->show();
             d->stack->setCurrentWidget(d->pProgressBar);
+
             if (d->bShowButton)
             {
                 d->pButton->show();
             }
+
             break;
         }
     }
@@ -337,7 +347,7 @@ void StatusbarProgressWidget::slotClean()
     {
         d->pProgressBar->setValue(0);
         //d->pLabel->clear();
-        d->mode = StatusbarProgressWidgetPriv::None;
+        d->mode = Private::None;
         setMode();
     }
 }
@@ -346,9 +356,9 @@ bool StatusbarProgressWidget::eventFilter(QObject*, QEvent* ev)
 {
     if (ev->type() == QEvent::MouseButtonPress)
     {
-        QMouseEvent* e = (QMouseEvent*)ev;
+        QMouseEvent* const e = (QMouseEvent*)ev;
 
-        if (e->button() == Qt::LeftButton && d->mode != StatusbarProgressWidgetPriv::None)
+        if (e->button() == Qt::LeftButton && d->mode != Private::None)
         {
             // toggle view on left mouse button
             // Consensus seems to be that we should show/hide the fancy dialog when the user

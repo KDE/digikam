@@ -6,7 +6,7 @@
  * Date        : 2012-01-13
  * Description : progress manager
  *
- * Copyright (C) 2007-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2012      by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2004      by Till Adam <adam at kde dot org>
  *
@@ -45,7 +45,7 @@
 namespace Digikam
 {
 
-class ProgressItem::ProgressItemPriv
+class ProgressItem::Private
 {
 public:
 
@@ -53,7 +53,7 @@ public:
 
 public:
 
-    ProgressItemPriv() :
+    Private() :
         waitingForKids(false),
         canceled(false),
         usesBusyIndicator(false),
@@ -87,7 +87,7 @@ public:
 ProgressItem::ProgressItem(ProgressItem* const parent, const QString& id,
                            const QString& label, const QString& status,
                            bool canBeCanceled, bool hasThumb)
-    : d(new ProgressItemPriv)
+    : d(new Private)
 {
     d->canBeCanceled = canBeCanceled;
     d->hasThumb      = hasThumb;
@@ -110,6 +110,7 @@ void ProgressItem::setComplete()
         {
             setProgress( 100 );
         }
+
         emit progressItemCompleted( this );
     }
     else
@@ -150,7 +151,8 @@ void ProgressItem::cancel()
 
     for ( ; it != end; it++ )
     {
-        ProgressItem* kid = *it;
+        ProgressItem* const kid = *it;
+
         if ( kid->canBeCanceled() )
         {
             kid->cancel();
@@ -313,14 +315,15 @@ unsigned int ProgressItem::progress() const
 class ProgressManagerCreator
 {
 public:
+
     ProgressManager object;
 };
 
-class ProgressManager::ProgressManagerPriv
+class ProgressManager::Private
 {
 public:
 
-    ProgressManagerPriv()
+    Private()
         : uID(1000)
     {
     }
@@ -337,7 +340,7 @@ public:
 
 K_GLOBAL_STATIC(ProgressManagerCreator, creator)
 
-void ProgressManager::ProgressManagerPriv::addItem(ProgressItem* const t, ProgressItem* const parent)
+void ProgressManager::Private::addItem(ProgressItem* const t, ProgressItem* const parent)
 {
     if (!t)
     {
@@ -345,15 +348,15 @@ void ProgressManager::ProgressManagerPriv::addItem(ProgressItem* const t, Progre
     }
 
     QMutexLocker lock(&mutex);
-
     transactions.insert(t->id(), t);
+
     if (parent)
     {
         parent->addChild(t);
     }
 }
 
-void ProgressManager::ProgressManagerPriv::removeItem(ProgressItem* const t)
+void ProgressManager::Private::removeItem(ProgressItem* const t)
 {
     if (!t)
     {
@@ -361,8 +364,8 @@ void ProgressManager::ProgressManagerPriv::removeItem(ProgressItem* const t)
     }
 
     QMutexLocker lock(&mutex);
-
     transactions.remove(t->id());
+
     if (t->parent())
     {
         t->parent()->removeChild(t);
@@ -372,7 +375,7 @@ void ProgressManager::ProgressManagerPriv::removeItem(ProgressItem* const t)
 // --------------------------------------------------------------------------
 
 ProgressManager::ProgressManager()
-    : d(new ProgressManagerPriv)
+    : d(new Private)
 {
     if (thread() != QApplication::instance()->thread())
     {
@@ -425,6 +428,7 @@ ProgressItem* ProgressManager::createProgressItemImpl(ProgressItem* const parent
         t = new ProgressItem(parent, id, label, status, cancellable, hasThumb);
         addProgressItemImpl(t, parent);
     }
+
     return t;
 }
 
@@ -436,7 +440,7 @@ ProgressItem* ProgressManager::createProgressItemImpl(const QString& parent,
                                                       bool  hasThumb
                                                      )
 {
-    ProgressItem* p = findItembyId(parent);
+    ProgressItem* const p = findItembyId(parent);
     return createProgressItemImpl(p, id, label, status, canBeCanceled, hasThumb);
 }
 
@@ -513,6 +517,7 @@ void ProgressManager::slotTransactionCompleted(ProgressItem* item)
     {
         return;
     }
+
     d->removeItem(item);
     // move to UI thread
     emit completeTransactionDeferred(item);
@@ -539,6 +544,7 @@ ProgressItem* ProgressManager::singleItem() const
 
     ProgressItem* item = 0;
     QHash<QString, ProgressItem*>::const_iterator it = hash.constBegin();
+
     while ( it != hash.constEnd() )
     {
         // No single item for progress possible, as one of them is a busy indicator one.
@@ -556,8 +562,10 @@ ProgressItem* ProgressManager::singleItem() const
                 item = (*it);
             }
         }
+
         ++it;
     }
+
     return item;
 }
 
@@ -570,6 +578,7 @@ void ProgressManager::slotAbortAll()
     }
 
     QHashIterator<QString, ProgressItem*> it(hash);
+
     while (it.hasNext())
     {
         it.next();

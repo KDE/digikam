@@ -6,7 +6,7 @@
  * Date        : 2012-01-13
  * Description : progress manager
  *
- * Copyright (C) 2007-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2012      by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2004      by Till Adam <adam at kde dot org>
  *
@@ -233,8 +233,8 @@ Q_SIGNALS:
 
 private:
 
-    class ProgressItemPriv;
-    ProgressItemPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 // --------------------------------------------------------------------------------------------
@@ -447,8 +447,9 @@ private:
 
 private:
 
-    class ProgressManagerPriv;
-    ProgressManagerPriv* const d;
+    class Private;
+    Private* const d;
+
     friend class ProgressManagerCreator;
 };
 
