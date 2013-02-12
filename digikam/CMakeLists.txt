@@ -254,7 +254,7 @@ SET(digikam_SRCS ${libeditorgui_SRCS}
                  ${libfirstrun_SRCS}
                  ${libtemplate_SRCS}
                  ${libdatabaseui_SRCS}
-                 ${libfacedetection_SRCS}
+                 ${libfacemanagement_SRCS}
                  main/main.cpp
 )
 

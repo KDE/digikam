@@ -1243,12 +1243,12 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/nepomuk/digikamnepomukservice.cpp
        )
 
-    SET(libfacedetection_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/facedetection/faceiface.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/facedetection/facegroup.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/facedetection/facepipeline.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/facedetection/facescandialog.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/facedetection/assignnamewidget.cpp
+    SET(libfacemanagement_SRCS
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/facemanagement/faceiface.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/facemanagement/facegroup.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/facemanagement/facepipeline.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/facemanagement/facescandialog.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/facemanagement/assignnamewidget.cpp
        )
 
     SET(libfirstrun_SRCS
@@ -1686,7 +1686,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/importui/views
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/importui/widgets
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/importui/main
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/facedetection
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/facemanagement
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/firstrun
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/fuzzysearch
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/gpssearch
