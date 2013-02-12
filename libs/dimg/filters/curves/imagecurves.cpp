@@ -1506,7 +1506,7 @@ bool ImageCurves::setChannelFromBase64(int channel, const QByteArray& array)
 
         setCurvePoints(channel, p);
     }
-    else if (type == 2)
+    else // (type == 2)
     {
         if (count != (uint)d->segmentMax || s.atEnd())
         {
@@ -1536,10 +1536,6 @@ bool ImageCurves::setChannelFromBase64(int channel, const QByteArray& array)
             }
         }
 
-    }
-    else
-    {
-        return false;
     }
 
     return true;
