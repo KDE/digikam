@@ -1425,7 +1425,7 @@ protected:
                     vis.tree_edge(e, g);
                     depth_first_search_sorted(g, v, vis, color, lessThan);
                 }
-                else if (v_color == boost::white_color)
+                else if (v_color == boost::gray_color)
                 {
                     vis.back_edge(e, g);
                 }
