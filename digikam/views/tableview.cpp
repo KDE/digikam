@@ -40,6 +40,7 @@
 #include "databasefields.h"
 #include "digikam2kgeomap_database.h"
 #include "importui.h"
+#include "tableview_model.h"
 
 namespace Digikam
 {
@@ -51,7 +52,11 @@ class TableView::Private
 {
 public:
     Private()
-      : treeView(0)
+      : treeView(0),
+        imageFilterModel(0),
+        imageModel(0),
+        selectionModel(0),
+        tableViewModel(0)
     {
     }
 
@@ -59,6 +64,7 @@ public:
     ImageFilterModel*       imageFilterModel;
     ImageAlbumModel*        imageModel;
     QItemSelectionModel*    selectionModel;
+    TableViewModel*         tableViewModel;
 };
 
 TableView::TableView(
@@ -82,6 +88,9 @@ TableView::TableView(
     vbox1->addWidget(d->treeView);
 
     setLayout(vbox1);
+
+    d->tableViewModel = new TableViewModel(d->imageFilterModel, this);
+    d->treeView->setModel(d->tableViewModel);
 }
 
 TableView::~TableView()

@@ -3,8 +3,8 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2013-02-11
- * Description : Table view
+ * Date        : 2013-02-12
+ * Description : Wrapper model for table view
  *
  * Copyright (C) 2013 by Michael G. Hansen <mike at mghansen dot de>
  *
@@ -20,46 +20,39 @@
  *
  * ============================================================ */
 
-#ifndef TABLEVIEW_H
-#define TABLEVIEW_H
+#ifndef TABLEVIEW_MODEL_H
+#define TABLEVIEW_MODEL_H
 
 // Qt includes
-
-#include <QWidget>
+#include <QAbstractItemModel>
 
 // KDE includes
 
-#include "kcategorizedsortfilterproxymodel.h"
 
 // local includes
 
-/// @todo clean up includes and use forward-declarations where possible
-#include "statesavingobject.h"
-#include "digikam_export.h"
-#include "imagealbummodel.h"
-#include "thumbnailloadthread.h"
-#include "imagefiltermodel.h"
+
 
 namespace Digikam
 {
 
-class TableView : public QWidget, public StateSavingObject
+class ImageFilterModel;
+
+class TableViewModel : public QAbstractItemModel
 {
     Q_OBJECT
 
 public:
 
-    explicit TableView(
-            QItemSelectionModel* const selectionModel,
-            KCategorizedSortFilterProxyModel* const imageFilterModel,
-            QWidget* const parent
-        );
-    virtual ~TableView();
+    explicit TableViewModel(ImageFilterModel* const sourceModel, QObject* parent = 0);
+    virtual ~TableViewModel();
 
-protected:
-
-    void doLoadState();
-    void doSaveState();
+    virtual QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const;
+    virtual QModelIndex parent(const QModelIndex& parent) const;
+    virtual int rowCount(const QModelIndex& parent) const;
+    virtual int columnCount(const QModelIndex& i) const;
+    virtual QVariant data(const QModelIndex& i, int role) const;
+    virtual QVariant headerData(int section, Qt::Orientation orientation, int role) const;
 
 private:
 
@@ -67,6 +60,8 @@ private:
     const QScopedPointer<Private> d;
 };
 
+
 } /* namespace Digikam */
 
-#endif // TABLEVIEW_H
+#endif // TABLEVIEW_MODEL_H
+

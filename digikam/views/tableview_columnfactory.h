@@ -3,8 +3,8 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2013-02-11
- * Description : Table view
+ * Date        : 2013-02-12
+ * Description : Table view column helpers
  *
  * Copyright (C) 2013 by Michael G. Hansen <mike at mghansen dot de>
  *
@@ -20,46 +20,57 @@
  *
  * ============================================================ */
 
-#ifndef TABLEVIEW_H
-#define TABLEVIEW_H
+#ifndef TABLEVIEW_COLUMNFACTORY_H
+#define TABLEVIEW_COLUMNFACTORY_H
 
 // Qt includes
 
-#include <QWidget>
+#include <QObject>
+#include <QStringList>
+#include <QModelIndex>
 
 // KDE includes
 
-#include "kcategorizedsortfilterproxymodel.h"
-
 // local includes
 
-/// @todo clean up includes and use forward-declarations where possible
-#include "statesavingobject.h"
-#include "digikam_export.h"
-#include "imagealbummodel.h"
-#include "thumbnailloadthread.h"
 #include "imagefiltermodel.h"
 
 namespace Digikam
 {
 
-class TableView : public QWidget, public StateSavingObject
+class TableViewColumnDataSource
+{
+public:
+    ImageFilterModel* sourceModel;
+};
+
+class TableViewColumn
+{
+protected:
+    TableViewColumnDataSource* const dataSource;
+
+public:
+
+    explicit TableViewColumn(TableViewColumnDataSource* const pDataSource);
+    virtual ~TableViewColumn();
+
+    static QString getIdStatic();
+    virtual QString getId();
+    virtual QString getTitle();
+
+    virtual QVariant data(const QModelIndex& sourceIndex, const int role);
+};
+
+class TableViewColumnFactory : public QObject
 {
     Q_OBJECT
 
 public:
 
-    explicit TableView(
-            QItemSelectionModel* const selectionModel,
-            KCategorizedSortFilterProxyModel* const imageFilterModel,
-            QWidget* const parent
-        );
-    virtual ~TableView();
+    explicit TableViewColumnFactory(TableViewColumnDataSource* const dataSource, QObject* parent = 0);
 
-protected:
-
-    void doLoadState();
-    void doSaveState();
+    QStringList getColumnIds();
+    TableViewColumn* getColumn(const QString columnId);
 
 private:
 
@@ -69,4 +80,6 @@ private:
 
 } /* namespace Digikam */
 
-#endif // TABLEVIEW_H
+#endif // TABLEVIEW_COLUMNFACTORY_H
+
+

@@ -3,8 +3,8 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2013-02-11
- * Description : Table view
+ * Date        : 2013-02-12
+ * Description : Table view column helpers
  *
  * Copyright (C) 2013 by Michael G. Hansen <mike at mghansen dot de>
  *
@@ -20,53 +20,14 @@
  *
  * ============================================================ */
 
-#ifndef TABLEVIEW_H
-#define TABLEVIEW_H
-
 // Qt includes
-
-#include <QWidget>
 
 // KDE includes
 
-#include "kcategorizedsortfilterproxymodel.h"
-
 // local includes
-
-/// @todo clean up includes and use forward-declarations where possible
-#include "statesavingobject.h"
-#include "digikam_export.h"
-#include "imagealbummodel.h"
-#include "thumbnailloadthread.h"
-#include "imagefiltermodel.h"
 
 namespace Digikam
 {
 
-class TableView : public QWidget, public StateSavingObject
-{
-    Q_OBJECT
-
-public:
-
-    explicit TableView(
-            QItemSelectionModel* const selectionModel,
-            KCategorizedSortFilterProxyModel* const imageFilterModel,
-            QWidget* const parent
-        );
-    virtual ~TableView();
-
-protected:
-
-    void doLoadState();
-    void doSaveState();
-
-private:
-
-    class Private;
-    const QScopedPointer<Private> d;
-};
-
 } /* namespace Digikam */
 
-#endif // TABLEVIEW_H
