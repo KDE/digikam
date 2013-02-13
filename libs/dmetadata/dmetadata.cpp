@@ -1305,6 +1305,34 @@ bool DMetadata::getImageFacesMap(QMap<QString,QVariant>& faces) const
         faces[person] = rect;
     }
 
+    // Read face tags as saved by Picasa
+    // http://www.exiv2.org/tags-xmp-mwg-rs.html
+    const QString mwg_personPathTemplate  = "Xmp.mwg-rs.Regions/mwg-rs:RegionList[%1]/mwg-rs:Name";
+    const QString mwg_rect_x_PathTemplate = "Xmp.mwg-rs.Regions/mwg-rs:RegionList[%1]/mwg-rs:Area/stArea:x";
+    const QString mwg_rect_y_PathTemplate = "Xmp.mwg-rs.Regions/mwg-rs:RegionList[%1]/mwg-rs:Area/stArea:y";
+    const QString mwg_rect_w_PathTemplate = "Xmp.mwg-rs.Regions/mwg-rs:RegionList[%1]/mwg-rs:Area/stArea:w";
+    const QString mwg_rect_h_PathTemplate = "Xmp.mwg-rs.Regions/mwg-rs:RegionList[%1]/mwg-rs:Area/stArea:h";
+
+    for (int i=1; ; i++)
+    {
+        QString person = getXmpTagString(mwg_personPathTemplate.arg(i).toLatin1(), false);
+
+        if (person.isEmpty())
+            break;
+
+        // x and y is the center point
+        float x = getXmpTagString(mwg_rect_x_PathTemplate.arg(i).toLatin1(), false).toFloat();
+        float y = getXmpTagString(mwg_rect_y_PathTemplate.arg(i).toLatin1(), false).toFloat();
+        float w = getXmpTagString(mwg_rect_w_PathTemplate.arg(i).toLatin1(), false).toFloat();
+        float h = getXmpTagString(mwg_rect_h_PathTemplate.arg(i).toLatin1(), false).toFloat();
+        QRectF rect(x - w/2,
+                    y - h/2,
+                    w,
+                    h);
+
+        faces[person] = rect;
+    }
+
     return !faces.isEmpty();
 }
 
