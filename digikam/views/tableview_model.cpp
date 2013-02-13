@@ -25,6 +25,7 @@
 // local includes
 #include "imagefiltermodel.h"
 #include "tableview_columnfactory.h"
+#include <valarray>
 
 namespace Digikam
 {
@@ -35,20 +36,17 @@ public:
     ImageFilterModel* sourceModel;
     TableViewColumnFactory* columnFactory;
     QList<TableViewColumn*> columnObjects;
-    TableViewColumnDataSource* tableViewColumnDataSource;
 };
 
-TableViewModel::TableViewModel(ImageFilterModel* const sourceModel, QObject* parent)
+TableViewModel::TableViewModel(TableViewColumnFactory*const tableViewColumnFactory, Digikam::ImageFilterModel*const sourceModel, QObject* parent)
   : QAbstractItemModel(parent),
     d(new Private())
 {
     d->sourceModel = sourceModel;
-    d->tableViewColumnDataSource = new TableViewColumnDataSource();
-    d->tableViewColumnDataSource->sourceModel = d->sourceModel;
-    d->columnFactory = new TableViewColumnFactory(d->tableViewColumnDataSource, this);
+    d->columnFactory = tableViewColumnFactory;
 
-    d->columnObjects << d->columnFactory->getColumn("filename");
-    d->columnObjects << d->columnFactory->getColumn("coordinates");
+    d->columnObjects << d->columnFactory->getColumn(TableViewColumnConfiguration("filename"));
+    d->columnObjects << d->columnFactory->getColumn(TableViewColumnConfiguration("coordinates"));
 }
 
 TableViewModel::~TableViewModel()
@@ -126,6 +124,33 @@ QVariant TableViewModel::headerData(int section, Qt::Orientation orientation, in
 
     TableViewColumn* const myColumn = d->columnObjects.at(section);
     return myColumn->getTitle();
+}
+
+void TableViewModel::addColumnAt(const TableViewColumnDescription& description, const int targetColumn)
+{
+    /// @todo take additional configuration data of the column into account
+    TableViewColumnConfiguration newConfiguration(description.columnId);
+
+    TableViewColumn* const newColumn = d->columnFactory->getColumn(newConfiguration);
+
+    int newColumnIndex = targetColumn;
+    if ( (targetColumn<0) || (targetColumn >= d->columnObjects.count()) )
+    {
+        newColumnIndex = d->columnObjects.count() - 1;
+    }
+
+    beginInsertColumns(QModelIndex(), newColumnIndex, newColumnIndex);
+    d->columnObjects.insert(targetColumn, newColumn);
+    endInsertColumns();
+}
+
+void TableViewModel::removeColumnAt(const int columnIndex)
+{
+    beginRemoveColumns(QModelIndex(), columnIndex, columnIndex);
+    TableViewColumn* removedColumn = d->columnObjects.takeAt(columnIndex);
+    endRemoveColumns();
+
+    delete removedColumn;
 }
 
 } /* namespace Digikam */

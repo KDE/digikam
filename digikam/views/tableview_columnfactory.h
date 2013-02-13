@@ -38,24 +38,57 @@
 namespace Digikam
 {
 
+class TableViewColumnDescription
+{
+public:
+    explicit TableViewColumnDescription()
+      : columnId(),
+        columnTitle()
+    {
+    }
+
+    explicit TableViewColumnDescription(const QString& id, const QString title)
+      : columnId(id),
+        columnTitle(title)
+    {
+    }
+
+    QString columnId;
+    QString columnTitle;
+};
+
 class TableViewColumnDataSource
 {
 public:
     ImageFilterModel* sourceModel;
 };
 
+class TableViewColumnConfiguration
+{
+public:
+    explicit TableViewColumnConfiguration(const QString& id = QString())
+      : columnId(id)
+    {
+    }
+    QString columnId;
+
+};
+
 class TableViewColumn
 {
 protected:
     TableViewColumnDataSource* const dataSource;
+    TableViewColumnConfiguration configuration;
 
 public:
 
-    explicit TableViewColumn(TableViewColumnDataSource* const pDataSource);
+    explicit TableViewColumn(
+            TableViewColumnDataSource* const pDataSource,
+            const TableViewColumnConfiguration& pConfiguration
+        );
     virtual ~TableViewColumn();
 
-    static QString getIdStatic();
-    virtual QString getId();
+    static TableViewColumnDescription getDescription();
     virtual QString getTitle();
 
     virtual QVariant data(const QModelIndex& sourceIndex, const int role);
@@ -69,8 +102,8 @@ public:
 
     explicit TableViewColumnFactory(TableViewColumnDataSource* const dataSource, QObject* parent = 0);
 
-    QStringList getColumnIds();
-    TableViewColumn* getColumn(const QString columnId);
+    QList<TableViewColumnDescription> getColumnDescriptionList();
+    TableViewColumn* getColumn(const TableViewColumnConfiguration& columnConfiguration);
 
 private:
 
@@ -79,6 +112,8 @@ private:
 };
 
 } /* namespace Digikam */
+
+Q_DECLARE_METATYPE(Digikam::TableViewColumnDescription)
 
 #endif // TABLEVIEW_COLUMNFACTORY_H
 

@@ -25,6 +25,7 @@
 
 // Qt includes
 
+#include <QTreeView>
 #include <QWidget>
 
 // KDE includes
@@ -39,9 +40,39 @@
 #include "imagealbummodel.h"
 #include "thumbnailloadthread.h"
 #include "imagefiltermodel.h"
+#include "tableview_columnfactory.h"
 
 namespace Digikam
 {
+
+class TableViewModel;
+
+class TableViewTreeView : public QTreeView
+{
+    Q_OBJECT
+
+public:
+    explicit TableViewTreeView(TableViewModel* const tableViewModel, TableViewColumnFactory* const tableViewColumnFactory, QWidget* const parent = 0);
+    virtual ~TableViewTreeView();
+
+protected:
+
+    virtual bool eventFilter(QObject* watched, QEvent* event);
+
+private:
+
+    void showHeaderContextMenu(QEvent* const event);
+
+private Q_SLOTS:
+
+    void slotHeaderContextMenuActionTriggered(QAction* triggeredAction);
+    void slotHeaderContextMenuActionRemoveColumnTriggered();
+
+private:
+
+    class Private;
+    const QScopedPointer<Private> d;
+};
 
 class TableView : public QWidget, public StateSavingObject
 {

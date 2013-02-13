@@ -24,9 +24,16 @@
 
 // Qt includes
 
+#include <QContextMenuEvent>
+#include <QHeaderView>
 #include <QItemSelectionModel>
 #include <QTreeView>
 #include <QVBoxLayout>
+
+// KDE includes
+
+#include <kmenu.h>
+#include <kaction.h>
 
 // local includes
 
@@ -41,12 +48,29 @@
 #include "digikam2kgeomap_database.h"
 #include "importui.h"
 #include "tableview_model.h"
+#include "tableview_columnfactory.h"
 
 namespace Digikam
 {
 
 class ImageAlbumModel;
 class ImageFilterModel;
+
+class TableViewTreeView::Private
+{
+public:
+    Private()
+      : tableViewColumnFactory(0),
+        headerContextMenuActiveColumn(-1),
+        actionHeaderContextMenuRemoveColumn(0)
+    {
+    }
+
+    TableViewColumnFactory* tableViewColumnFactory;
+    int headerContextMenuActiveColumn;
+    KAction* actionHeaderContextMenuRemoveColumn;
+    TableViewModel* tableViewModel;
+};
 
 class TableView::Private
 {
@@ -60,11 +84,13 @@ public:
     {
     }
 
-    QTreeView*              treeView;
+    TableViewTreeView*      treeView;
     ImageFilterModel*       imageFilterModel;
     ImageAlbumModel*        imageModel;
     QItemSelectionModel*    selectionModel;
     TableViewModel*         tableViewModel;
+    TableViewColumnFactory* tableViewColumnFactory;
+    TableViewColumnDataSource* tableViewColumnDataSource;
 };
 
 TableView::TableView(
@@ -79,18 +105,18 @@ TableView::TableView(
     d->imageFilterModel = dynamic_cast<ImageFilterModel*>(imageFilterModel);
     d->imageModel = dynamic_cast<ImageAlbumModel*>(imageFilterModel->sourceModel());
     d->selectionModel = selectionModel;
+    d->tableViewColumnDataSource = new TableViewColumnDataSource();
+    d->tableViewColumnDataSource->sourceModel = d->imageFilterModel;
+    d->tableViewColumnFactory = new TableViewColumnFactory(d->tableViewColumnDataSource, this);
 
     QVBoxLayout* const vbox1 = new QVBoxLayout();
 
-    d->treeView = new QTreeView(this);
-    d->treeView->setModel(d->imageFilterModel);
+    d->tableViewModel = new TableViewModel(d->tableViewColumnFactory, d->imageFilterModel, this);
+    d->treeView = new TableViewTreeView(d->tableViewModel, d->tableViewColumnFactory, this);
 
     vbox1->addWidget(d->treeView);
 
     setLayout(vbox1);
-
-    d->tableViewModel = new TableViewModel(d->imageFilterModel, this);
-    d->treeView->setModel(d->tableViewModel);
 }
 
 TableView::~TableView()
@@ -106,6 +132,87 @@ void TableView::doLoadState()
 void TableView::doSaveState()
 {
 
+}
+
+TableViewTreeView::TableViewTreeView(TableViewModel* const tableViewModel, Digikam::TableViewColumnFactory*const tableViewColumnFactory, QWidget*const parent)
+  : QTreeView(parent), d(new Private())
+{
+    d->tableViewColumnFactory = tableViewColumnFactory;
+    d->tableViewModel = tableViewModel;
+
+    d->actionHeaderContextMenuRemoveColumn = new KAction("Remove this column", this);
+    connect(d->actionHeaderContextMenuRemoveColumn, SIGNAL(triggered(bool)),
+            this, SLOT(slotHeaderContextMenuActionRemoveColumnTriggered()));
+
+    header()->installEventFilter(this);
+
+    setModel(d->tableViewModel);
+}
+
+TableViewTreeView::~TableViewTreeView()
+{
+
+}
+
+bool TableViewTreeView::eventFilter(QObject* watched, QEvent* event)
+{
+    QHeaderView* const headerView = header();
+    if ( (watched==headerView) && (event->type()==QEvent::ContextMenu) )
+    {
+        showHeaderContextMenu(event);
+        return true;
+    }
+
+    return QObject::eventFilter(watched, event);
+}
+
+void TableViewTreeView::showHeaderContextMenu(QEvent* const event)
+{
+    QContextMenuEvent* const e = static_cast<QContextMenuEvent*>(event);
+    QHeaderView* const headerView = header();
+
+    d->headerContextMenuActiveColumn = headerView->logicalIndexAt(e->pos());
+    KMenu* const menu = new KMenu(this);
+
+    /// @todo disable if it is the last column
+    menu->addAction(d->actionHeaderContextMenuRemoveColumn);
+    menu->addSeparator();
+
+    // add actions for all columns
+    QList<TableViewColumnDescription> columnDescriptions = d->tableViewColumnFactory->getColumnDescriptionList();
+    for (int i = 0; i<columnDescriptions.count(); ++i)
+    {
+        const TableViewColumnDescription& desc = columnDescriptions.at(i);
+        KAction* const action = new KAction(desc.columnTitle, menu);
+
+        action->setData(QVariant::fromValue<TableViewColumnDescription>(desc));
+
+        menu->addAction(action);
+    }
+
+    connect(menu, SIGNAL(triggered(QAction*)),
+            this, SLOT(slotHeaderContextMenuActionTriggered(QAction*)));
+
+    menu->exec(e->globalPos());
+}
+
+void TableViewTreeView::slotHeaderContextMenuActionTriggered(QAction* triggeredAction)
+{
+    const QVariant actionData = triggeredAction->data();
+    if (!actionData.canConvert<TableViewColumnDescription>())
+    {
+        return;
+    }
+
+    const TableViewColumnDescription desc = actionData.value<TableViewColumnDescription>();
+    qDebug()<<"clicked: "<<desc.columnTitle;
+    d->tableViewModel->addColumnAt(desc, d->headerContextMenuActiveColumn);
+}
+
+void TableViewTreeView::slotHeaderContextMenuActionRemoveColumnTriggered()
+{
+    qDebug()<<"remove column "<<d->headerContextMenuActiveColumn;
+    d->tableViewModel->removeColumnAt(d->headerContextMenuActiveColumn);
 }
 
 

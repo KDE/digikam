@@ -45,13 +45,19 @@ class ColumnFilename : public TableViewColumn
 {
 public:
 
-    explicit ColumnFilename(TableViewColumnDataSource* const pDataSource)
-      : TableViewColumn(pDataSource)
+    explicit ColumnFilename(
+            TableViewColumnDataSource* const pDataSource,
+            const TableViewColumnConfiguration& pConfiguration
+        )
+      : TableViewColumn(pDataSource, pConfiguration)
     {
     }
     virtual ~ColumnFilename() { }
-    static QString getIdStatic() { return "filename"; }
-    virtual QString getId() { return "filename"; }
+
+    static TableViewColumnDescription getDescription()
+    {
+        return TableViewColumnDescription(QLatin1String("filename"), QLatin1String("Filename"));
+    }
     virtual QString getTitle() { return i18n("Filename"); }
 
     virtual QVariant data(const QModelIndex& sourceIndex, const int role)
@@ -65,13 +71,18 @@ class ColumnCoordinates : public TableViewColumn
 {
 public:
 
-    explicit ColumnCoordinates(TableViewColumnDataSource* const pDataSource)
-      : TableViewColumn(pDataSource)
+    explicit ColumnCoordinates(
+            TableViewColumnDataSource* const pDataSource,
+            const TableViewColumnConfiguration& pConfiguration
+        )
+      : TableViewColumn(pDataSource, pConfiguration)
     {
     }
     virtual ~ColumnCoordinates() { }
-    static QString getIdStatic() { return "coordinates"; }
-    virtual QString getId() { return "coordinates"; }
+    static TableViewColumnDescription getDescription()
+    {
+        return TableViewColumnDescription(QLatin1String("coordinates"), QLatin1String("Coordinates"));
+    }
     virtual QString getTitle() { return i18n("Coordinates"); }
 
     virtual QVariant data(const QModelIndex& sourceIndex, const int role)

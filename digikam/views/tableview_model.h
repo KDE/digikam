@@ -36,7 +36,10 @@
 namespace Digikam
 {
 
+class TableViewColumnDescription;
+
 class ImageFilterModel;
+class TableViewColumnFactory;
 
 class TableViewModel : public QAbstractItemModel
 {
@@ -44,7 +47,7 @@ class TableViewModel : public QAbstractItemModel
 
 public:
 
-    explicit TableViewModel(ImageFilterModel* const sourceModel, QObject* parent = 0);
+    explicit TableViewModel(TableViewColumnFactory* const tableViewColumnFactory, ImageFilterModel* const sourceModel, QObject* parent = 0);
     virtual ~TableViewModel();
 
     virtual QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const;
@@ -53,6 +56,9 @@ public:
     virtual int columnCount(const QModelIndex& i) const;
     virtual QVariant data(const QModelIndex& i, int role) const;
     virtual QVariant headerData(int section, Qt::Orientation orientation, int role) const;
+
+    void addColumnAt(const TableViewColumnDescription& description, const int targetColumn = -1);
+    void removeColumnAt(const int columnIndex);
 
 private:
 

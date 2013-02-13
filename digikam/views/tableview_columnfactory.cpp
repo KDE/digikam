@@ -39,8 +39,12 @@ public:
     TableViewColumnDataSource* dataSource;
 };
 
-TableViewColumn::TableViewColumn(TableViewColumnDataSource* const pDataSource)
-  : dataSource(pDataSource)
+TableViewColumn::TableViewColumn(
+        TableViewColumnDataSource* const pDataSource,
+        const TableViewColumnConfiguration& pConfiguration
+    )
+  : dataSource(pDataSource),
+    configuration(pConfiguration)
 {
 
 }
@@ -57,40 +61,22 @@ TableViewColumnFactory::TableViewColumnFactory(TableViewColumnDataSource* const 
     d->dataSource = dataSource;
 }
 
-QString TableViewColumn::getIdStatic()
-{
-    return QString("idstatic");
-}
-
-QString TableViewColumn::getId()
-{
-    return QString("id");
-}
-
 QString TableViewColumn::getTitle()
 {
     return QString("Title");
 }
 
-QStringList TableViewColumnFactory::getColumnIds()
+TableViewColumn* TableViewColumnFactory::getColumn(const Digikam::TableViewColumnConfiguration& columnConfiguration)
 {
-    QStringList columnIds;
+    const QString& columnId = columnConfiguration.columnId;
 
-    columnIds << TableViewColumns::ColumnFilename::getIdStatic();
-    columnIds << TableViewColumns::ColumnCoordinates::getIdStatic();
-
-    return columnIds;
-}
-
-TableViewColumn* TableViewColumnFactory::getColumn(const QString columnId)
-{
     if (columnId=="filename")
     {
-        return new TableViewColumns::ColumnFilename(d->dataSource);
+        return new TableViewColumns::ColumnFilename(d->dataSource, columnConfiguration);
     }
     else if (columnId=="coordinates")
     {
-        return new TableViewColumns::ColumnCoordinates(d->dataSource);
+        return new TableViewColumns::ColumnCoordinates(d->dataSource, columnConfiguration);
     }
 
     return 0;
@@ -103,6 +89,15 @@ QVariant TableViewColumn::data(const QModelIndex& sourceIndex, const int role)
     return QVariant();
 }
 
+QList<TableViewColumnDescription> TableViewColumnFactory::getColumnDescriptionList()
+{
+    QList<TableViewColumnDescription> descriptionList;
+
+    descriptionList << TableViewColumns::ColumnFilename::getDescription();
+    descriptionList << TableViewColumns::ColumnCoordinates::getDescription();
+
+    return descriptionList;
+}
 
 } /* namespace Digikam */
 
