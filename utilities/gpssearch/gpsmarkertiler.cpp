@@ -56,7 +56,7 @@ public:
     {
     }
 
-    ~MyTile()
+    virtual ~MyTile()
     {
     }
 
