@@ -7,8 +7,8 @@
  * Description : synchronize Input/Output jobs.
  *
  * Copyright (C)      2004 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2006-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2006-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * Concept copied from kdelibs/kio/kio/netaccess.h/cpp
  *   This file is part of the KDE libraries
@@ -47,7 +47,7 @@ class KJob;
 
 namespace KIO
 {
-class Job;
+    class Job;
 }
 
 namespace Digikam
@@ -105,8 +105,8 @@ private Q_SLOTS:
 
 private:
 
-    class SyncJobPriv;
-    SyncJobPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

@@ -6,7 +6,7 @@
  * Date        : 2012-03-13
  * Description : low level files management interface.
  *
- * Copyright (C) 2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2012-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -34,17 +34,17 @@ namespace Digikam
 
 class Album;
 
-class DIO::DIOPriv : public WorkerObject
+class DIO::Private : public WorkerObject
 {
     Q_OBJECT
 
 public:
 
-    explicit DIOPriv(DIO* const q);
+    explicit Private(DIO* const q);
 
-    void albumToAlbum(int operation, const PAlbum* src, const PAlbum* dest);
-    void imagesToAlbum(int operation, const QList<ImageInfo> ids, const PAlbum* dest);
-    void filesToAlbum(int operation, const KUrl::List& src, const PAlbum* dest);
+    void albumToAlbum(int operation, const PAlbum* const src, const PAlbum* const dest);
+    void imagesToAlbum(int operation, const QList<ImageInfo> ids, const PAlbum* const dest);
+    void filesToAlbum(int operation, const KUrl::List& src, const PAlbum* const dest);
 
     void renameFile(const ImageInfo& info, const QString& newName);
 
@@ -71,7 +71,7 @@ public:
 
 // -----------------------------------------------------------------------------------------
 
-namespace
+namespace // anonymous namespace
 {
 
 class SidecarFinder
@@ -89,6 +89,8 @@ private:
 
     void process(const KUrl::List&);
 };
+
+// ------------------------
 
 class GroupedImagesFinder
 {

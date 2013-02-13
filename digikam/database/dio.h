@@ -6,8 +6,8 @@
  * Date        : 2005-05-17
  * Description : low level files management interface.
  *
- * Copyright (C) 2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005      by Renchi Raju <renchi dot raju at gmail dot com>
+ * Copyright (C) 2012-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -49,32 +49,32 @@ public:
      */
 
     /// Copy an album to another album
-    static void copy(const PAlbum* src, const PAlbum* dest);
+    static void copy(const PAlbum* const src, const PAlbum* const dest);
 
     /// Copy items to another album
-    static void copy(const QList<ImageInfo> infos, const PAlbum* dest);
+    static void copy(const QList<ImageInfo> infos, const PAlbum* const dest);
 
     /// Copy an external file to another album
-    static void copy(const KUrl& src, const PAlbum* dest);
+    static void copy(const KUrl& src, const PAlbum* const dest);
 
     /// Copy external files to another album
-    static void copy(const KUrl::List& srcList, const PAlbum* dest);
+    static void copy(const KUrl::List& srcList, const PAlbum* const dest);
 
     /// Move an album into another album
-    static void move(const PAlbum* src, const PAlbum* dest);
+    static void move(const PAlbum* src, const PAlbum* const dest);
 
     /// Move items to another album
-    static void move(const QList<ImageInfo> infos, const PAlbum* dest);
+    static void move(const QList<ImageInfo> infos, const PAlbum* const dest);
 
     /// Move external files another album
-    static void move(const KUrl& src, const PAlbum* dest);
+    static void move(const KUrl& src, const PAlbum* const dest);
 
     /// Move external files into another album
-    static void move(const KUrl::List& srcList, const PAlbum* dest);
+    static void move(const KUrl::List& srcList, const PAlbum* const dest);
 
     static void del(const QList<ImageInfo>& infos, bool useTrash);
     static void del(const ImageInfo& info, bool useTrash);
-    static void del(const PAlbum* album, bool useTrash);
+    static void del(const PAlbum* const album, bool useTrash);
 
     /// Rename item to new name
     static void rename(const ImageInfo& info, const QString& newName);
@@ -100,8 +100,8 @@ private:
 
 private:
 
-    class DIOPriv;
-    DIOPriv* const d;
+    class Private;
+    Private* const d;
 
     friend class DIOCreator;
 };

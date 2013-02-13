@@ -7,8 +7,8 @@
  * Description : synchronize Input/Output jobs.
  *
  * Copyright (C) 2004      by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2006-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2006-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * Concept copied from kdelibs/kio/kio/netaccess.h/cpp
  *   This file is part of the KDE libraries
@@ -58,11 +58,11 @@
 namespace Digikam
 {
 
-class SyncJob::SyncJobPriv
+class SyncJob::Private
 {
 public:
 
-    SyncJobPriv() :
+    Private() :
         thumbnailSize(0),
         thumbnail(0),
         waitingLoop(0),
@@ -82,7 +82,7 @@ public:
 };
 
 SyncJob::SyncJob()
-    : d(new SyncJobPriv)
+    : d(new Private)
 {
     d->waitingLoop = new QEventLoop(this);
 }
@@ -118,7 +118,7 @@ QPixmap SyncJob::getTagThumbnail(TAlbum* const album)
 
 bool SyncJob::delPriv(const KUrl::List& urls)
 {
-    KIO::Job* job = KIO::del(urls);
+    KIO::Job* const job = KIO::del(urls);
 
     connect( job, SIGNAL(result(KJob*)),
              this, SLOT(slotResult(KJob*)) );
@@ -129,7 +129,7 @@ bool SyncJob::delPriv(const KUrl::List& urls)
 
 bool SyncJob::trashPriv(const KUrl::List& urls)
 {
-    KIO::Job* job = KIO::trash(urls);
+    KIO::Job* const job = KIO::trash(urls);
 
     connect( job, SIGNAL(result(KJob*)),
              this, SLOT(slotResult(KJob*)) );
@@ -154,8 +154,8 @@ QPixmap SyncJob::getTagThumbnailPriv(TAlbum* const album)
 {
     delete d->thumbnail;
 
-    d->thumbnail                 = new QPixmap();
-    AlbumThumbnailLoader* loader = AlbumThumbnailLoader::instance();
+    d->thumbnail                       = new QPixmap();
+    AlbumThumbnailLoader* const loader = AlbumThumbnailLoader::instance();
 
     connect(loader, SIGNAL(signalThumbnail(Album*, QPixmap)),
             this, SLOT(slotGotThumbnailFromIcon(Album*, QPixmap)),
