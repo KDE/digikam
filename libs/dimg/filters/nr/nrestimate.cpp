@@ -386,7 +386,7 @@ void NREstimate::startAnalyse()
     QString info;
     float   weightedMean = 0.0f;
     float   weightedStd  = 0.0f;
-    float   datasd[3];
+    float   datasd[3]    = {0.0f, 0.0f, 0.0f};
 
     for (int j=0 ; runningFlag() && (j < points->cols) ; j++)
     {
