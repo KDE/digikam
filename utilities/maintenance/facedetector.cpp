@@ -222,7 +222,6 @@ FaceDetector::FaceDetector(const FaceScanSettings& settings, ProgressItem* const
 
 FaceDetector::~FaceDetector()
 {
-    slotCancel();
     delete d;
 }
 
