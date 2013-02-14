@@ -6,7 +6,7 @@
  * Date        : 2008-05-19
  * Description : Fuzzy search sidebar tab contents.
  *
- * Copyright (C) 2008-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2008-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -55,18 +55,18 @@ class FuzzySearchView : public QScrollArea, public StateSavingObject
 
 public:
 
-    FuzzySearchView(SearchModel* searchModel,
-                    SearchModificationHelper* searchModificationHelper,
-                    QWidget* parent = 0);
+    FuzzySearchView(SearchModel* const searchModel,
+                    SearchModificationHelper* const searchModificationHelper,
+                    QWidget* const parent = 0);
     ~FuzzySearchView();
 
     SAlbum* currentAlbum() const;
-    void setCurrentAlbum(SAlbum* album);
+    void setCurrentAlbum(SAlbum* const album);
 
     void setActive(bool val);
     void setImageInfo(const ImageInfo& info);
 
-    void newDuplicatesSearch(Album*);
+    void newDuplicatesSearch(Album* const);
 
     virtual void setConfigGroup(const KConfigGroup& group);
     void doLoadState();
@@ -111,14 +111,14 @@ private:
 
     void setColor(QColor c);
 
-    QWidget* setupFindSimilarPanel();
-    QWidget* setupSketchPanel();
+    QWidget* setupFindSimilarPanel() const;
+    QWidget* setupSketchPanel() const;
     void     setupConnections();
 
 private:
 
-    class FuzzySearchViewPriv;
-    FuzzySearchViewPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

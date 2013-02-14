@@ -49,7 +49,7 @@ class FindDuplicatesView : public QWidget
 
 public:
 
-    explicit FindDuplicatesView(QWidget* parent = 0);
+    explicit FindDuplicatesView(QWidget* const parent = 0);
     ~FindDuplicatesView();
 
     SAlbum* currentFindDuplicatesAlbum() const;
@@ -90,8 +90,8 @@ private:
 
 private:
 
-    class FindDuplicatesViewPriv;
-    FindDuplicatesViewPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 // --------------------------------------------------------------------------------------------------------
@@ -102,7 +102,7 @@ class FindDuplicatesAlbum : public QTreeWidget
 
 public:
 
-    explicit FindDuplicatesAlbum(QWidget* parent = 0);
+    explicit FindDuplicatesAlbum(QWidget* const parent = 0);
     virtual ~FindDuplicatesAlbum();
 
 private :
@@ -115,8 +115,8 @@ private Q_SLOTS:
 
 private:
 
-    class FindDuplicatesAlbumPriv;
-    FindDuplicatesAlbumPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam
