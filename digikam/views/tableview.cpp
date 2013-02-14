@@ -206,7 +206,7 @@ void TableViewTreeView::slotHeaderContextMenuActionTriggered(QAction* triggeredA
 
     const TableViewColumnDescription desc = actionData.value<TableViewColumnDescription>();
     qDebug()<<"clicked: "<<desc.columnTitle;
-    d->tableViewModel->addColumnAt(desc, d->headerContextMenuActiveColumn);
+    d->tableViewModel->addColumnAt(desc, d->headerContextMenuActiveColumn+1);
 }
 
 void TableViewTreeView::slotHeaderContextMenuActionRemoveColumnTriggered()

@@ -134,13 +134,21 @@ void TableViewModel::addColumnAt(const TableViewColumnDescription& description, 
     TableViewColumn* const newColumn = d->columnFactory->getColumn(newConfiguration);
 
     int newColumnIndex = targetColumn;
-    if ( (targetColumn<0) || (targetColumn >= d->columnObjects.count()) )
+    if (targetColumn<0)
     {
-        newColumnIndex = d->columnObjects.count() - 1;
+        // a negative column index means "append after last column"
+        newColumnIndex = d->columnObjects.count();
     }
 
     beginInsertColumns(QModelIndex(), newColumnIndex, newColumnIndex);
-    d->columnObjects.insert(targetColumn, newColumn);
+    if (newColumnIndex >= d->columnObjects.count())
+    {
+        d->columnObjects.append(newColumn);
+    }
+    else
+    {
+        d->columnObjects.insert(newColumnIndex, newColumn);
+    }
     endInsertColumns();
 }
 
