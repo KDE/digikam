@@ -6,7 +6,7 @@
  * Date        : 2008-05-19
  * Description : Find Duplicates View.
  *
- * Copyright (C) 2008-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2008-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2009-2012 by Andi Clemens <andi dot clemens at gmail dot com>
  *
@@ -104,9 +104,9 @@ void FindDuplicatesAlbum::slotThumbnailLoaded(const LoadingDescription& desc, co
 
     while (*it)
     {
-        FindDuplicatesAlbumItem* item = dynamic_cast<FindDuplicatesAlbumItem*>(*it);
+        FindDuplicatesAlbumItem* const item = dynamic_cast<FindDuplicatesAlbumItem*>(*it);
 
-        if (item->refUrl().toLocalFile() == desc.filePath)
+        if (item && (item->refUrl().toLocalFile() == desc.filePath))
         {
             if (!pix.isNull())
             {
@@ -120,7 +120,7 @@ void FindDuplicatesAlbum::slotThumbnailLoaded(const LoadingDescription& desc, co
 
 void FindDuplicatesAlbum::drawRow(QPainter* p, const QStyleOptionViewItem& opt, const QModelIndex& index) const
 {
-    FindDuplicatesAlbumItem* item = dynamic_cast<FindDuplicatesAlbumItem*>(itemFromIndex(index));
+    FindDuplicatesAlbumItem* const item = dynamic_cast<FindDuplicatesAlbumItem*>(itemFromIndex(index));
 
     if (item && !item->hasValidThumbnail())
     {
