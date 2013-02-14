@@ -7,7 +7,7 @@
  * Description : A digital camera RAW files loader for DImg
  *               framework using an external dcraw instance.
  *
- * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2005-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -39,13 +39,15 @@
 #include "iccprofile.h"
 #include "rawprocessingfilter.h"
 
+using namespace KDcrawIface;
+
 namespace Digikam
 {
 
 class DImg;
 class RawProcessingFilter;
 
-class DIGIKAM_EXPORT RAWLoader : public KDcrawIface::KDcraw, public DImgLoader
+class DIGIKAM_EXPORT RAWLoader : public KDcraw, public DImgLoader
 {
     Q_OBJECT
 
