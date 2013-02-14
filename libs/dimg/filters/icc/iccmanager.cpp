@@ -7,7 +7,7 @@
  * Description : methods that implement color management tasks
  *
  * Copyright (C) 2005-2006 by F.J. Cruz <fj dot cruz at supercable dot es>
- * Copyright (C) 2005-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -41,11 +41,11 @@
 namespace Digikam
 {
 
-class IccManager::IccManagerPriv
+class IccManager::Private
 {
 public:
 
-    IccManagerPriv()
+    Private()
     {
         profileMismatch = false;
         observer        = 0;
@@ -60,7 +60,7 @@ public:
 };
 
 IccManager::IccManager(DImg& image, const ICCSettingsContainer& settings)
-    : d(new IccManagerPriv)
+    : d(new Private)
 {
     d->image    = image;
     d->settings = settings;
@@ -117,7 +117,7 @@ DImgLoaderObserver* IccManager::observer() const
     return d->observer;
 }
 
-void IccManager::setObserver(DImgLoaderObserver* observer)
+void IccManager::setObserver(DImgLoaderObserver* const observer)
 {
     d->observer = observer;
 }
@@ -375,7 +375,7 @@ void IccManager::transformForDisplay(const IccProfile& profile)
     }
 }
 
-IccProfile IccManager::displayProfile(QWidget* displayingWidget)
+IccProfile IccManager::displayProfile(QWidget* const displayingWidget)
 {
     if (!IccSettings::instance()->isEnabled())
     {
@@ -392,7 +392,7 @@ IccProfile IccManager::displayProfile(QWidget* displayingWidget)
     return IccProfile::sRGB();
 }
 
-IccTransform IccManager::displayTransform(QWidget* displayingWidget)
+IccTransform IccManager::displayTransform(QWidget* const displayingWidget)
 {
     return displayTransform(displayProfile(displayingWidget));
 }
@@ -452,7 +452,7 @@ IccTransform IccManager::displayTransform(const IccProfile& displayProfile)
     return trans;
 }
 
-IccTransform IccManager::displaySoftProofingTransform(const IccProfile& deviceProfile, QWidget* displayingWidget)
+IccTransform IccManager::displaySoftProofingTransform(const IccProfile& deviceProfile, QWidget* const displayingWidget)
 {
     return displaySoftProofingTransform(deviceProfile, displayProfile(displayingWidget));
 }
@@ -476,7 +476,7 @@ bool IccManager::isSRGB(const DImg& image)
     }
 
     IccProfile embeddedProfile = image.getIccProfile();
-    IccProfile outputProfile = IccProfile::sRGB();
+    IccProfile outputProfile   = IccProfile::sRGB();
 
     if (embeddedProfile.isNull()) // assume sRGB
     {

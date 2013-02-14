@@ -7,7 +7,7 @@
  * Description : methods that implement color management tasks
  *
  * Copyright (C) 2005-2006 by F.J. Cruz <fj dot cruz at supercable dot es>
- * Copyright (C) 2005-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -51,17 +51,16 @@ public:
     explicit IccManager(DImg& image, const ICCSettingsContainer& settings = IccSettings::instance()->settings());
     ~IccManager();
 
-    void setObserver(DImgLoaderObserver* observer);
+    void setObserver(DImgLoaderObserver* const observer);
 
-    DImg image() const;
+    DImg image()                    const;
     ICCSettingsContainer settings() const;
-    DImgLoaderObserver* observer() const;
+    DImgLoaderObserver* observer()  const;
 
-    bool hasValidWorkspace() const;
-
+    bool hasValidWorkspace()   const;
     bool isUncalibratedColor() const;
-    bool isMissingProfile() const;
-    bool isProfileMismatch() const;
+    bool isMissingProfile()    const;
+    bool isProfileMismatch()   const;
 
     /**
      * Transforms the image for full editing, using default settings.
@@ -99,17 +98,17 @@ public:
      * later (in a thread), or you can get a transform from displayTransform and apply it yourself.
      */
     void transformForDisplay();
-    void transformForDisplay(QWidget* widget);
+    void transformForDisplay(QWidget* const widget);
     void transformForDisplay(const IccProfile& displayProfile);
 
-    static IccProfile displayProfile(QWidget* displayingWidget = 0);
-    IccTransform displayTransform(QWidget* displayingWidget = 0);
+    static IccProfile displayProfile(QWidget* const displayingWidget = 0);
+    IccTransform displayTransform(QWidget* const displayingWidget = 0);
     IccTransform displayTransform(const IccProfile& displayProfile);
 
     /**
      * Returns a display transform, with soft-proofing enabled for the given device profile.
      */
-    IccTransform displaySoftProofingTransform(const IccProfile& deviceProfile, QWidget* displayingWidget = 0);
+    IccTransform displaySoftProofingTransform(const IccProfile& deviceProfile, QWidget* const displayingWidget = 0);
     IccTransform displaySoftProofingTransform(const IccProfile& deviceProfile, const IccProfile& displayProfile);
 
     /**
@@ -139,8 +138,8 @@ protected:
 
 private:
 
-    class IccManagerPriv;
-    IccManagerPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

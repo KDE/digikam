@@ -6,7 +6,7 @@
  * Date        : 2010-02-17
  * Description : Icc profile settings view.
  *
- * Copyright (C) 2010-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -57,36 +57,35 @@ using namespace KDcrawIface;
 namespace Digikam
 {
 
-class IccProfilesSettings::IccProfilesSettingsPriv
+class IccProfilesSettings::Private
 {
 public:
 
-    IccProfilesSettingsPriv() :
+    Private() :
         profilesBox(0)
     {
         favoriteProfiles.setMaxCost(10);
     }
 
     static const QString  configRecentlyUsedProfilesEntry;
-
     QCache<QString, bool> favoriteProfiles;
-
     IccProfilesComboBox*  profilesBox;
 };
-const QString IccProfilesSettings::IccProfilesSettingsPriv::configRecentlyUsedProfilesEntry("Recently Used Profiles");
+
+const QString IccProfilesSettings::Private::configRecentlyUsedProfilesEntry("Recently Used Profiles");
 
 // --------------------------------------------------------
 
-IccProfilesSettings::IccProfilesSettings(QWidget* parent)
+IccProfilesSettings::IccProfilesSettings(QWidget* const parent)
     : KVBox(parent),
-      d(new IccProfilesSettingsPriv)
+      d(new Private)
 {
-    QLabel* newProfileLabel  = new QLabel(i18n("Convert to:"), this);
-    d->profilesBox           = new IccProfilesComboBox(this);
+    QLabel* const newProfileLabel  = new QLabel(i18n("Convert to:"), this);
+    d->profilesBox                 = new IccProfilesComboBox(this);
     d->profilesBox->addProfilesSqueezed(IccSettings::instance()->workspaceProfiles());
     d->profilesBox->setWhatsThis(i18n("Select the profile of the color space to convert to."));
     newProfileLabel->setBuddy(d->profilesBox);
-    QPushButton* newProfInfo = new QPushButton(i18n("Info..."), this);
+    QPushButton* const newProfInfo = new QPushButton(i18n("Info..."), this);
 
     layout()->setAlignment(newProfInfo, Qt::AlignLeft);
     setMargin(0);
@@ -161,7 +160,7 @@ void IccProfilesSettings::writeSettings(KConfigGroup& group)
 
 QStringList IccProfilesSettings::favoriteProfiles(KConfigGroup& group)
 {
-    IccProfilesSettingsPriv d;
+    Private d;
     return group.readPathEntry(d.configRecentlyUsedProfilesEntry, QStringList());
 }
 

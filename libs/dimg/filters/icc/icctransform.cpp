@@ -7,8 +7,8 @@
  * Description : a class to apply ICC color correction to image.
  *
  * Copyright (C) 2005-2006 by F.J. Cruz <fj dot cruz at supercable dot es>
- * Copyright (C) 2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009      by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -65,15 +65,17 @@ public:
 
     bool operator==(const TransformDescription& other) const
     {
-        return inputProfile   == other.inputProfile &&
-               inputFormat    == other.inputFormat &&
-               outputProfile  == other.outputProfile &&
-               outputFormat   == other.outputFormat &&
-               intent         == other.intent &&
+        return inputProfile   == other.inputProfile   &&
+               inputFormat    == other.inputFormat    &&
+               outputProfile  == other.outputProfile  &&
+               outputFormat   == other.outputFormat   &&
+               intent         == other.intent         &&
                transformFlags == other.transformFlags &&
-               proofProfile   == other.proofProfile &&
+               proofProfile   == other.proofProfile   &&
                proofIntent    == other.proofIntent;
     }
+
+public:
 
     IccProfile inputProfile;
     int        inputFormat;
@@ -85,11 +87,11 @@ public:
     int        proofIntent;
 };
 
-class IccTransformPriv : public QSharedData
+class IccTransform::Private : public QSharedData
 {
 public:
 
-    IccTransformPriv()
+    Private()
     {
         intent          = IccTransform::Perceptual;
         proofIntent     = IccTransform::AbsoluteColorimetric;
@@ -100,14 +102,14 @@ public:
         handle          = 0;
     }
 
-    IccTransformPriv(const IccTransformPriv& other)
+    Private(const Private& other)
         : QSharedData(other)
     {
         handle = 0;
         operator=(other);
     }
 
-    IccTransformPriv& operator=(const IccTransformPriv& other)
+    Private& operator=(const Private& other)
     {
         // Attention: This is sensitive. Add any new members here.
         // We can't use the default operator= because of handle.
@@ -131,7 +133,7 @@ public:
         return *this;
     }
 
-    ~IccTransformPriv()
+    ~Private()
     {
         close();
     }
@@ -146,19 +148,6 @@ public:
             handle = 0;
         }
     }
-
-    IccTransform::RenderingIntent intent;
-    IccTransform::RenderingIntent proofIntent;
-    bool       useBPC;
-    bool       checkGamut;
-    bool       doNotEmbed;
-    QColor     checkGamutColor;
-
-    IccProfile embeddedProfile;
-    IccProfile inputProfile;
-    IccProfile outputProfile;
-    IccProfile proofProfile;
-    IccProfile builtinProfile;
 
     IccProfile& sRGB()
     {
@@ -202,12 +191,27 @@ public:
         }
     }
 
-    cmsHTRANSFORM        handle;
-    TransformDescription currentDescription;
+public:
+
+    IccTransform::RenderingIntent intent;
+    IccTransform::RenderingIntent proofIntent;
+    bool                          useBPC;
+    bool                          checkGamut;
+    bool                          doNotEmbed;
+    QColor                        checkGamutColor;
+
+    IccProfile                    embeddedProfile;
+    IccProfile                    inputProfile;
+    IccProfile                    outputProfile;
+    IccProfile                    proofProfile;
+    IccProfile                    builtinProfile;
+
+    cmsHTRANSFORM                 handle;
+    TransformDescription          currentDescription;
 };
 
 IccTransform::IccTransform()
-    : d(new IccTransformPriv)
+    : d(new Private)
 {
 }
 
@@ -224,7 +228,7 @@ IccTransform& IccTransform::operator=(const IccTransform& other)
 
 IccTransform::~IccTransform()
 {
-    // close() is done in ~IccTransformPriv
+    // close() is done in ~Private
 }
 
 void IccTransform::init()
@@ -387,9 +391,9 @@ void IccTransform::setDoNotEmbedOutputProfile(bool doNotEmbed)
 void IccTransform::readFromConfig()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group(QString("Color Management"));
+    KConfigGroup group        = config->group(QString("Color Management"));
 
-    int intent = group.readEntry("RenderingIntent", 0);
+    int intent  = group.readEntry("RenderingIntent", 0);
     bool useBPC = group.readEntry("BPCAlgorithm", false);
 
     setIntent(intent);
@@ -432,9 +436,9 @@ TransformDescription IccTransform::getDescription(const DImg& image)
 {
     TransformDescription description;
 
-    description.inputProfile = d->effectiveInputProfile();
+    description.inputProfile  = d->effectiveInputProfile();
     description.outputProfile = d->outputProfile;
-    description.intent = renderingIntentToLcmsIntent(d->intent);
+    description.intent        = renderingIntentToLcmsIntent(d->intent);
 
     if (d->useBPC)
     {
@@ -447,7 +451,8 @@ TransformDescription IccTransform::getDescription(const DImg& image)
     // our image data has 4 bytes per pixel with the fourth byte filled with 0xFF.
     if (image.sixteenBit())
     {
-        /*switch (dkCmsGetColorSpace(description.inputProfile))
+/*
+        switch (dkCmsGetColorSpace(description.inputProfile))
         {
             case icSigGrayData:
                 description.inputFormat = TYPE_GRAYA_16;
@@ -457,7 +462,8 @@ TransformDescription IccTransform::getDescription(const DImg& image)
                 break;
             default:
                 description.inputFormat = TYPE_BGRA_16;
-        }*/
+        }
+*/
 
         // A Dimg is always BGRA, converted by the loader
         description.inputFormat = TYPE_BGRA_16;
@@ -527,11 +533,11 @@ bool IccTransform::open(TransformDescription& description)
 
     LcmsLock lock;
     d->handle = dkCmsCreateTransform(description.inputProfile,
-                                   description.inputFormat,
-                                   description.outputProfile,
-                                   description.outputFormat,
-                                   description.intent,
-                                   description.transformFlags);
+                                     description.inputFormat,
+                                     description.outputProfile,
+                                     description.outputFormat,
+                                     description.intent,
+                                     description.transformFlags);
 
     if (!d->handle)
     {
@@ -560,13 +566,13 @@ bool IccTransform::openProofing(TransformDescription& description)
 
     LcmsLock lock;
     d->handle = dkCmsCreateProofingTransform(description.inputProfile,
-                                           description.inputFormat,
-                                           description.outputProfile,
-                                           description.outputFormat,
-                                           description.proofProfile,
-                                           description.intent,
-                                           description.proofIntent,
-                                           description.transformFlags);
+                                             description.inputFormat,
+                                             description.outputProfile,
+                                             description.outputFormat,
+                                             description.proofProfile,
+                                             description.intent,
+                                             description.proofIntent,
+                                             description.transformFlags);
 
     if (!d->handle)
     {
@@ -603,7 +609,7 @@ bool IccTransform::checkProfiles()
     return true;
 }
 
-bool IccTransform::apply(DImg& image, DImgLoaderObserver* observer)
+bool IccTransform::apply(DImg& image, DImgLoaderObserver* const observer)
 {
     if (!willHaveEffect())
     {
@@ -661,7 +667,7 @@ bool IccTransform::apply(DImg& image, DImgLoaderObserver* observer)
 
 bool IccTransform::apply(QImage& qimage)
 {
-    if (qimage.format() != QImage::Format_RGB32 &&
+    if (qimage.format() != QImage::Format_RGB32  &&
         qimage.format() != QImage::Format_ARGB32 &&
         qimage.format() != QImage::Format_ARGB32_Premultiplied)
     {
@@ -692,16 +698,16 @@ bool IccTransform::apply(QImage& qimage)
     return true;
 }
 
-void IccTransform::transform(DImg& image, const TransformDescription& description, DImgLoaderObserver* observer)
+void IccTransform::transform(DImg& image, const TransformDescription& description, DImgLoaderObserver* const observer)
 {
-    const int bytesDepth = image.bytesDepth();
-    const int pixels     = image.width() * image.height();
+    const int bytesDepth    = image.bytesDepth();
+    const int pixels        = image.width() * image.height();
     // convert ten scanlines in a batch
     const int pixelsPerStep = image.width() * 10;
     uchar* data             = image.bits();
 
     // see dimgloader.cpp, granularity().
-    int granularity = 1;
+    int granularity         = 1;
 
     if (observer)
     {
