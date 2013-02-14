@@ -185,19 +185,21 @@ void TableViewTreeView::showHeaderContextMenu(QEvent* const event)
         const TableViewColumnDescription& desc = columnDescriptions.at(i);
         KAction* const action = new KAction(desc.columnTitle, menu);
 
+        connect(action, SIGNAL(triggered(bool)),
+                this, SLOT(slotHeaderContextMenuAddColumn()));
+
         action->setData(QVariant::fromValue<TableViewColumnDescription>(desc));
 
         menu->addAction(action);
     }
 
-    connect(menu, SIGNAL(triggered(QAction*)),
-            this, SLOT(slotHeaderContextMenuActionTriggered(QAction*)));
-
     menu->exec(e->globalPos());
 }
 
-void TableViewTreeView::slotHeaderContextMenuActionTriggered(QAction* triggeredAction)
+void TableViewTreeView::slotHeaderContextMenuAddColumn()
 {
+    QAction* const triggeredAction = qobject_cast<QAction*>(sender());
+
     const QVariant actionData = triggeredAction->data();
     if (!actionData.canConvert<TableViewColumnDescription>())
     {

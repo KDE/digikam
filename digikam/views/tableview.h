@@ -65,7 +65,7 @@ private:
 
 private Q_SLOTS:
 
-    void slotHeaderContextMenuActionTriggered(QAction* triggeredAction);
+    void slotHeaderContextMenuAddColumn();
     void slotHeaderContextMenuActionRemoveColumnTriggered();
 
 private:
