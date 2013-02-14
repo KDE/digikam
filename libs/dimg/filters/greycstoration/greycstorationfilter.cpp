@@ -76,6 +76,13 @@ public:
     {
     }
 
+    ~Private()
+    {
+        delete threadManager;
+    }
+
+public:
+
     float                                gfact;
 
     int                                  computationThreads;  // Number of threads used by CImg during computation.
@@ -121,7 +128,6 @@ GreycstorationFilter::GreycstorationFilter(DImg* const orgImage,
 GreycstorationFilter::~GreycstorationFilter()
 {
     cancelFilter();
-    delete d->threadManager;
     delete d;
 }
 
