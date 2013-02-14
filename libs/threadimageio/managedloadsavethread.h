@@ -6,8 +6,8 @@
  * Date        : 2006-01-16
  * Description : image file IO threaded interface.
  *
- * Copyright (C) 2005-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2005-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -99,7 +99,7 @@ public:
 
     /// Termination is controlled by setting the TerminationPolicy
     /// Default is TerminationPolicyTerminateLoading
-    explicit ManagedLoadSaveThread(QObject* parent = 0);
+    explicit ManagedLoadSaveThread(QObject* const parent = 0);
     ~ManagedLoadSaveThread();
 
     /// Append a task to load the given file to the task list.
@@ -161,7 +161,7 @@ protected:
 
 private:
 
-    LoadingTask* checkLoadingTask(LoadSaveTask* task, LoadingTaskFilter filter) const;
+    LoadingTask* checkLoadingTask(LoadSaveTask* const task, LoadingTaskFilter filter) const;
     LoadingTask* findExistingTask(const LoadingDescription& description) const;
     LoadingTask* createLoadingTask(const LoadingDescription& description, bool preloading,
                                    LoadingMode loadingMode, AccessMode accessMode);
