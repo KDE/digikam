@@ -6,7 +6,7 @@
  * Date        : 2012-12-28
  * Description : crop image batch tool.
  *
- * Copyright (C) 2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2012-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -86,10 +86,10 @@ Crop::~Crop()
 void Crop::registerSettingsWidget()
 {
     m_settingsWidget = new QWidget;
- 
+
     // -------------------------------------------------------------
 
-    QLabel* positionLabel = new QLabel(i18n("Position:"), m_settingsWidget);
+    QLabel* const positionLabel = new QLabel(i18n("Position:"), m_settingsWidget);
     positionLabel->setAlignment(Qt::AlignLeft|Qt::AlignVCenter);
 
     d->xInput = new RIntNumInput(m_settingsWidget);
@@ -106,7 +106,7 @@ void Crop::registerSettingsWidget()
 
     // -------------------------------------------------------------
 
-    QLabel* sizeLabel = new QLabel(i18n("Size:"), m_settingsWidget);
+    QLabel* const sizeLabel = new QLabel(i18n("Size:"), m_settingsWidget);
     sizeLabel->setAlignment(Qt::AlignLeft|Qt::AlignVCenter);
 
     d->widthInput = new RIntNumInput(m_settingsWidget);
@@ -134,8 +134,6 @@ void Crop::registerSettingsWidget()
     mainLayout->setRowStretch(4, 10);
     mainLayout->setMargin(KDialog::spacingHint());
     mainLayout->setSpacing(KDialog::spacingHint());
-
-    m_settingsWidget = m_settingsWidget;
 
     connect(d->xInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotSettingsChanged()));
@@ -186,7 +184,7 @@ bool Crop::toolOperations()
     int yInput      = settings()["yInput"].toInt();
     int widthInput  = settings()["widthInput"].toInt();
     int heightInput = settings()["heightInput"].toInt();
-    
+
     if (!loadToDImg())
     {
         return false;
