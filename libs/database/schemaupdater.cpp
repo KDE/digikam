@@ -272,12 +272,10 @@ bool SchemaUpdater::startUpdates()
             }
             else
             {
-                QString errorMsg = i18n(
-                                       "The database has been used with a more recent version of digiKam "
-                                       "and has been updated to a database schema which cannot be used with this version. "
-                                       "(This means this digiKam version is too old, or the database format is too recent.) "
-                                       "Please use the more recent version of digiKam that you used before. "
-                                   );
+                QString errorMsg = i18n("The database has been used with a more recent version of digiKam "
+                                        "and has been updated to a database schema which cannot be used with this version. "
+                                        "(This means this digiKam version is too old, or the database format is too recent.) "
+                                        "Please use the more recent version of digiKam that you used before. ");
                 d->lastErrorMessage=errorMsg;
 
                 if (d->observer)
@@ -318,7 +316,7 @@ bool SchemaUpdater::startUpdates()
         {
             QFileInfo currentDBFile(d->parameters.databaseName);
             QFileInfo digikam3DB(currentDBFile.dir(), "digikam3.db");
-            QFileInfo digikamDB(currentDBFile.dir(), "digikam.db");
+            QFileInfo digikamDB(currentDBFile.dir(),  "digikam.db");
 
             if (digikam3DB.exists())
             {
@@ -515,10 +513,8 @@ bool SchemaUpdater::updateFilterSettings()
     QString filterVersion = d->albumDB->getSetting("FilterSettingsVersion");
     QString dcrawFilterVersion = d->albumDB->getSetting("DcrawFilterSettingsVersion");
 
-    if (
-        filterVersion.toInt() < filterSettingsVersion() ||
-        dcrawFilterVersion.toInt() < KDcrawIface::KDcraw::rawFilesVersion()
-    )
+    if (filterVersion.toInt() < filterSettingsVersion() ||
+        dcrawFilterVersion.toInt() < KDcrawIface::KDcraw::rawFilesVersion())
     {
         createFilterSettings();
     }
@@ -528,9 +524,7 @@ bool SchemaUpdater::updateFilterSettings()
 
 bool SchemaUpdater::createDatabase()
 {
-    if ( createTables()
-         && createIndices()
-         && createTriggers())
+    if ( createTables() && createIndices() && createTriggers())
     {
         setLegacySettingEntries();
 
@@ -539,10 +533,10 @@ bool SchemaUpdater::createDatabase()
         // if we start with the V2 hash, version 6 is required
         d->albumDB->setUniqueHashVersion(uniqueHashVersion());
         d->currentRequiredVersion = schemaVersion();
-        /*
+/*
         // Digikam for database version 5 can work with version 6, though not using the new features
         d->currentRequiredVersion = 5;
-        */
+*/
         return true;
     }
     else
@@ -585,11 +579,13 @@ bool SchemaUpdater::updateUniqueHash()
         CollectionScanner scanner;
         scanner.setNeedFileCount(true);
         scanner.setUpdateHashHint();
+
         if (d->observer)
         {
             d->observer->connectCollectionScanner(&scanner);
             scanner.setObserver(d->observer);
         }
+
         scanner.completeScan();
 
         // earlier digikam does not know about the hash
@@ -615,6 +611,7 @@ bool SchemaUpdater::performUpdateToVersion(const QString& actionName, int newVer
     }
 
     DatabaseAction updateAction = d->backend->getDBAction(actionName);
+
     if (updateAction.name.isNull())
     {
         QString errorMsg = i18n("The database update action cannot be found. Please ensure that "
@@ -719,8 +716,8 @@ bool SchemaUpdater::copyV3toV4(const QString& digikam3DBPath, const QString& cur
                                 "starting with an empty database. ",
                                 digikam3DBPath, currentDBPath);
 
-        d->lastErrorMessage=errorMsg;
-        d->setError = true;
+        d->lastErrorMessage = errorMsg;
+        d->setError         = true;
 
         if (d->observer)
         {
@@ -747,32 +744,33 @@ bool SchemaUpdater::updateV2toV4(const QString& sqlite2DBPath)
         d->observer->moreSchemaUpdateSteps(1);
     }
 
+    bool ret = false;
+
     if (upgradeDB_Sqlite2ToSqlite3(d->albumDB, d->backend, sqlite2DBPath))
     {
         d->currentVersion = 4;
-        return true;
+        ret = true;
     }
     else
     {
-        QString errorMsg = i18n("Could not update from the old SQLite2 file (\"%1\"). "
-                                "Please delete this file and try again, "
-                                "starting with an empty database. ", sqlite2DBPath);
-        d->lastErrorMessage=errorMsg;
+        QString errorMsg    = i18n("Could not update from the old SQLite2 file (\"%1\"). "
+                                   "Please delete this file and try again, "
+                                   "starting with an empty database. ", sqlite2DBPath);
+        d->lastErrorMessage = errorMsg;
 
         if (d->observer)
         {
             d->observer->error(errorMsg);
             d->observer->finishedSchemaUpdate(InitializationObserver::UpdateErrorMustAbort);
         }
-
-        return false;
     }
 
-    // FIXME: We are not returning anything, if we land in this section of the code!
     if (d->observer)
     {
         d->observer->schemaUpdateProgress(i18n("Updated from 0.7 database"));
     }
+
+    return ret;
 }
 
 static QStringList cleanUserFilterString(const QString& filterString)
@@ -792,6 +790,7 @@ static QStringList cleanUserFilterString(const QString& filterString)
     }
 
     QStringList sepList = filterString.split(sep, QString::SkipEmptyParts);
+
     foreach(const QString& f, sepList)
     {
         if (f.startsWith(wildcard))
@@ -803,6 +802,7 @@ static QStringList cleanUserFilterString(const QString& filterString)
             filterList << f.trimmed().toLower();
         }
     }
+
     return filterList;
 }
 
@@ -883,19 +883,18 @@ bool SchemaUpdater::updateV4toV6()
 
     // --- Populate AlbumRoots (from config) ---
 
-    KSharedConfigPtr config = KGlobal::config();
-
-    KConfigGroup group = config->group("Album Settings");
+    KSharedConfigPtr config  = KGlobal::config();
+    KConfigGroup group       = config->group("Album Settings");
     QString albumLibraryPath = group.readEntry("Album Path", QString());
 
     if (albumLibraryPath.isEmpty())
     {
         kError() << "Album library path from config file is empty. Aborting update.";
-        QString errorMsg = i18n("No album library path has been found in the configuration file. "
-                                "Giving up the schema updating process. "
-                                "Please try with an empty database, or repair your configuration.");
-        d->lastErrorMessage=errorMsg;
-        d->setError = true;
+        QString errorMsg    = i18n("No album library path has been found in the configuration file. "
+                                   "Giving up the schema updating process. "
+                                   "Please try with an empty database, or repair your configuration.");
+        d->lastErrorMessage = errorMsg;
+        d->setError         = true;
 
         if (d->observer)
         {
@@ -912,16 +911,16 @@ bool SchemaUpdater::updateV4toV6()
     if (location.isNull())
     {
         kError() << "Failure to create a collection location. Aborting update.";
-        QString errorMsg = i18n("There was an error associating your albumLibraryPath (\"%1\") "
-                                "with a storage volume of your system. "
-                                "This problem may indicate that there is a problem with your installation. "
-                                "If you are working on Linux, check that HAL is installed and running. "
-                                "In any case, you can seek advice from the digikam-devel@kde.org mailing list. "
-                                "The database updating process will now be aborted because we do not want "
-                                "to create a new database based on false assumptions from a broken installation.",
-                                albumLibraryPath);
-        d->lastErrorMessage=errorMsg;
-        d->setError = true;
+        QString errorMsg    = i18n("There was an error associating your albumLibraryPath (\"%1\") "
+                                   "with a storage volume of your system. "
+                                   "This problem may indicate that there is a problem with your installation. "
+                                   "If you are working on Linux, check that HAL is installed and running. "
+                                   "In any case, you can seek advice from the digikam-devel@kde.org mailing list. "
+                                   "The database updating process will now be aborted because we do not want "
+                                   "to create a new database based on false assumptions from a broken installation.",
+                                   albumLibraryPath);
+        d->lastErrorMessage = errorMsg;
+        d->setError         = true;
 
         if (d->observer)
         {
@@ -1027,8 +1026,7 @@ bool SchemaUpdater::updateV4toV6()
 
         ImageQueryBuilder builder;
         QString query = builder.convertFromUrlToXml(url);
-
-        QString name = (*it).name;
+        QString name  = (*it).name;
 
         if (name == i18n("Last Search"))
         {
@@ -1215,8 +1213,8 @@ void SchemaUpdater::setLegacySettingEntries()
     d->albumDB->setSetting("preAlpha010Update1", "true");
     d->albumDB->setSetting("preAlpha010Update2", "true");
     d->albumDB->setSetting("preAlpha010Update3", "true");
-    d->albumDB->setSetting("beta010Update1", "true");
-    d->albumDB->setSetting("beta010Update2", "true");
+    d->albumDB->setSetting("beta010Update1",     "true");
+    d->albumDB->setSetting("beta010Update2",     "true");
 }
 
 // ---------- Legacy code ------------
