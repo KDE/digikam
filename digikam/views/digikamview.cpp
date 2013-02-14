@@ -1066,36 +1066,37 @@ void DigikamView::slotAlbumOpenInFileManager()
 {
     Album* const album = d->albumManager->currentAlbum();
 
-    if (album->isRoot())
-    {
-        KMessageBox::error(this,
-                           i18n("Cannot open the root. It is not a physical location."));
-        return;
-    }
-    
     if (!album || album->type() != Album::PHYSICAL)
     {
         return;
     }
 
+    if (album->isRoot())
+    {
+        KMessageBox::error(this, i18n("Cannot open the root. It is not a physical location."));
+        return;
+    }
+
     PAlbum* const palbum = dynamic_cast<PAlbum*>(album);
 
-    new KRun(KUrl(palbum->folderPath()), this); // KRun will delete itself.
+    if (palbum)
+    {
+        new KRun(KUrl(palbum->folderPath()), this); // KRun will delete itself.
+    }
 }
 
 void DigikamView::slotAlbumOpenInTerminal()
 {
     Album* const album = d->albumManager->currentAlbum();
 
-    if (album->isRoot())
-    {
-        KMessageBox::error(this,
-                           i18n("Cannot open the root. It is not a physical location."));
-        return;
-    }
-    
     if (!album || album->type() != Album::PHYSICAL)
     {
+        return;
+    }
+
+    if (album->isRoot())
+    {
+        KMessageBox::error(this, i18n("Cannot open the root. It is not a physical location."));
         return;
     }
 
