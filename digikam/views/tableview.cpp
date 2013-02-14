@@ -174,7 +174,9 @@ void TableViewTreeView::showHeaderContextMenu(QEvent* const event)
     d->headerContextMenuActiveColumn = headerView->logicalIndexAt(e->pos());
     KMenu* const menu = new KMenu(this);
 
-    /// @todo disable if it is the last column
+    d->actionHeaderContextMenuRemoveColumn->setEnabled(
+            d->tableViewModel->columnCount(QModelIndex())>1
+        );
     menu->addAction(d->actionHeaderContextMenuRemoveColumn);
     menu->addSeparator();
 
