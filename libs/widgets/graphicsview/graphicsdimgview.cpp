@@ -7,7 +7,7 @@
  * Description : Graphics View for DImg preview
  *
  * Copyright (C) 2010-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2011-2012 Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2011-2013 Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -105,7 +105,7 @@ GraphicsDImgView::~GraphicsDImgView()
     delete d;
 }
 
-void GraphicsDImgView::setItem(GraphicsDImgItem* item)
+void GraphicsDImgView::setItem(GraphicsDImgItem* const item)
 {
     d->item = item;
     d->scene->addItem(d->item);
@@ -416,8 +416,8 @@ void GraphicsDImgView::slotCornerButtonPressed()
         d->panIconPopup = 0;
     }
 
-    d->panIconPopup    = new KPopupFrame(this);
-    PanIconWidget* pan = new PanIconWidget(d->panIconPopup);
+    d->panIconPopup          = new KPopupFrame(this);
+    PanIconWidget* const pan = new PanIconWidget(d->panIconPopup);
 
     //connect(pan, SIGNAL(signalSelectionTakeFocus()),
     //      this, SIGNAL(signalContentTakeFocus()));

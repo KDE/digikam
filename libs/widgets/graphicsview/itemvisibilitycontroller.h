@@ -78,13 +78,6 @@ public:
         FadingOut
     };
 
-    explicit ItemVisibilityController(QObject* parent = 0);
-    ~ItemVisibilityController();
-
-    bool  shallBeShown() const;
-    bool  isVisible() const;
-    State state() const;
-
     enum IncludeFadingOutMode
     {
         /// In addition to items visible or fading in, return those fading out
@@ -92,6 +85,15 @@ public:
         /// Do not return those items currently fading out (soon to be hidden)
         ExcludeFadingOut
     };
+
+public:
+
+    explicit ItemVisibilityController(QObject* const parent = 0);
+    ~ItemVisibilityController();
+
+    bool  shallBeShown() const;
+    bool  isVisible() const;
+    State state() const;
 
     /**
      *  This returns the "result" of isVisible and shallBeShown:
@@ -200,8 +202,8 @@ protected Q_SLOTS:
 
 private:
 
-    class ItemVisibilityControllerPriv;
-    ItemVisibilityControllerPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 // ------------------------------------------------------------------------------------------
@@ -254,7 +256,7 @@ public:
      *  You want to call the controller's method!
      */
 
-    explicit AnimatedVisibility(QObject* parent = 0);
+    explicit AnimatedVisibility(QObject* const parent = 0);
 
     ItemVisibilityController* controller() const;
 

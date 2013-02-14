@@ -58,10 +58,10 @@ public:
 
 public:
 
-    explicit DImgPreviewItem(QGraphicsItem* parent = 0);
+    explicit DImgPreviewItem(QGraphicsItem* const parent = 0);
     virtual ~DImgPreviewItem();
 
-    void setDisplayingWidget(QWidget* widget);
+    void setDisplayingWidget(QWidget* const widget);
     void setLoadFullImageSize(bool b);
 
     QString path() const;
@@ -96,7 +96,7 @@ private:
 
 protected:
 
-    DImgPreviewItem(DImgPreviewItemPrivate& dd, QGraphicsItem* parent = 0);
+    DImgPreviewItem(DImgPreviewItemPrivate& dd, QGraphicsItem* const parent = 0);
 };
 
 } // namespace Digikam

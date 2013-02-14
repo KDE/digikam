@@ -43,14 +43,14 @@
 namespace Digikam
 {
 
-DImgPreviewItem::DImgPreviewItem(QGraphicsItem* parent)
+DImgPreviewItem::DImgPreviewItem(QGraphicsItem* const parent)
     : GraphicsDImgItem(*new DImgPreviewItemPrivate, parent)
 {
     Q_D(DImgPreviewItem);
     d->init(this);
 }
 
-DImgPreviewItem::DImgPreviewItem(DImgPreviewItemPrivate& dd, QGraphicsItem* parent)
+DImgPreviewItem::DImgPreviewItem(DImgPreviewItemPrivate& dd, QGraphicsItem* const parent)
     : GraphicsDImgItem(dd, parent)
 {
     Q_D(DImgPreviewItem);
@@ -67,7 +67,7 @@ DImgPreviewItem::DImgPreviewItemPrivate::DImgPreviewItemPrivate()
     preloadThread     = 0;
 }
 
-void DImgPreviewItem::DImgPreviewItemPrivate::init(DImgPreviewItem* q)
+void DImgPreviewItem::DImgPreviewItemPrivate::init(DImgPreviewItem* const q)
 {
     previewThread = new PreviewLoadThread;
     preloadThread = new PreviewLoadThread;
@@ -106,7 +106,7 @@ DImgPreviewItem::~DImgPreviewItem()
     delete d->preloadThread;
 }
 
-void DImgPreviewItem::setDisplayingWidget(QWidget* widget)
+void DImgPreviewItem::setDisplayingWidget(QWidget* const widget)
 {
     Q_D(DImgPreviewItem);
     d->previewThread->setDisplayingWidget(widget);
@@ -328,7 +328,7 @@ void DImgPreviewItem::slotFileChanged(const QString& path)
 
 void DImgPreviewItem::iccSettingsChanged(const ICCSettingsContainer& current, const ICCSettingsContainer& previous)
 {
-    if (current.enableCM != previous.enableCM ||
+    if (current.enableCM != previous.enableCM                     ||
         current.useManagedPreviews != previous.useManagedPreviews ||
         current.monitorProfile != previous.monitorProfile)
     {

@@ -96,11 +96,11 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::CropHandle)
 namespace Digikam
 {
 
-class RegionFrameItem::RegionFrameItemPriv
+class RegionFrameItem::Private
 {
 public:
 
-    explicit RegionFrameItemPriv(RegionFrameItem* q);
+    explicit Private(RegionFrameItem* const q);
 
     QRectF handleRect(CropHandle handle) const;
     CropHandle handleAt(const QPointF& pos) const;
@@ -132,7 +132,7 @@ public:
     const int              HUD_TIMER_ANIMATION_INTERVAL;
 };
 
-RegionFrameItem::RegionFrameItemPriv::RegionFrameItemPriv(RegionFrameItem* q)
+RegionFrameItem::Private::Private(RegionFrameItem* const q)
     : q(q),
       HUD_TIMER_MAX_PIXELS_PER_UPDATE(20),
       HUD_TIMER_ANIMATION_INTERVAL(20)
@@ -151,7 +151,7 @@ RegionFrameItem::RegionFrameItemPriv::RegionFrameItemPriv(RegionFrameItem* q)
                    << CH_BottomLeft << CH_BottomRight;
 }
 
-QRectF RegionFrameItem::RegionFrameItemPriv::handleRect(CropHandle handle) const
+QRectF RegionFrameItem::Private::handleRect(CropHandle handle) const
 {
     QSizeF size = q->boundingRect().size();
     double left, top;
@@ -185,7 +185,7 @@ QRectF RegionFrameItem::RegionFrameItemPriv::handleRect(CropHandle handle) const
     return QRectF(left, top, HANDLE_SIZE, HANDLE_SIZE);
 }
 
-CropHandle RegionFrameItem::RegionFrameItemPriv::handleAt(const QPointF& pos) const
+CropHandle RegionFrameItem::Private::handleAt(const QPointF& pos) const
 {
     if (flags & ShowResizeHandles)
     {
@@ -211,7 +211,7 @@ CropHandle RegionFrameItem::RegionFrameItemPriv::handleAt(const QPointF& pos) co
     return CH_None;
 }
 
-void RegionFrameItem::RegionFrameItemPriv::updateCursor(CropHandle handle, bool buttonDown)
+void RegionFrameItem::Private::updateCursor(CropHandle handle, bool buttonDown)
 {
     Qt::CursorShape shape;
 
@@ -249,7 +249,7 @@ void RegionFrameItem::RegionFrameItemPriv::updateCursor(CropHandle handle, bool 
     q->setCursor(shape);
 }
 
-QRectF RegionFrameItem::RegionFrameItemPriv::keepRectInsideImage(const QRectF& rect) const
+QRectF RegionFrameItem::Private::keepRectInsideImage(const QRectF& rect) const
 {
     QRectF r(rect);
     const QSizeF imageSize = q->parentDImgItem()->boundingRect().size();
@@ -283,7 +283,7 @@ QRectF RegionFrameItem::RegionFrameItemPriv::keepRectInsideImage(const QRectF& r
     return r;
 }
 
-OptimalPosition RegionFrameItem::RegionFrameItemPriv::computeOptimalHudWidgetPosition() const
+OptimalPosition RegionFrameItem::Private::computeOptimalHudWidgetPosition() const
 {
     const QRectF visibleSceneRect = viewportRect.isValid() ? viewportRect : q->scene()->sceneRect();
     const QRectF rect             = q->sceneBoundingRect();
@@ -339,7 +339,7 @@ OptimalPosition RegionFrameItem::RegionFrameItemPriv::computeOptimalHudWidgetPos
     return ret;
 }
 
-void RegionFrameItem::RegionFrameItemPriv::updateHudWidgetPosition()
+void RegionFrameItem::Private::updateHudWidgetPosition()
 {
     if (!hudWidget || !q->scene())
     {
@@ -378,8 +378,8 @@ void RegionFrameItem::RegionFrameItemPriv::updateHudWidgetPosition()
 
 // ---------------------------------------------------------------------------------------
 
-RegionFrameItem::RegionFrameItem(QGraphicsItem* item)
-    : DImgChildItem(item), d(new RegionFrameItemPriv(this))
+RegionFrameItem::RegionFrameItem(QGraphicsItem* const item)
+    : DImgChildItem(item), d(new Private(this))
 {
     d->resizeHandleVisibility = new AnimatedVisibility(this);
     d->resizeHandleVisibility->controller()->setShallBeShown(false);
@@ -413,18 +413,18 @@ RegionFrameItem::~RegionFrameItem()
     delete d;
 }
 
-void RegionFrameItem::setHudWidget(QWidget* widget, Qt::WindowFlags wFlags)
+void RegionFrameItem::setHudWidget(QWidget* const widget, Qt::WindowFlags wFlags)
 {
-    QGraphicsProxyWidget* proxy = new QGraphicsProxyWidget(0, wFlags);
+    QGraphicsProxyWidget* const proxy = new QGraphicsProxyWidget(0, wFlags);
     /*
      * This is utterly undocumented magic. If you add a normal widget directly,
      * with transparent parts (round corners), you will have ugly color in the corners.
      * If you set WA_TranslucentBackground on the widget directly, a lot of the
      * painting and stylesheets is broken. Like this, with an extra container, it seems to work.
      */
-    QWidget* container  = new QWidget;
+    QWidget* const container  = new QWidget;
     container->setAttribute(Qt::WA_TranslucentBackground);
-    QHBoxLayout* layout = new QHBoxLayout;
+    QHBoxLayout* const layout = new QHBoxLayout;
     layout->setSizeConstraint(QLayout::SetFixedSize);
     layout->setContentsMargins(QMargins());
     layout->setSpacing(0);
@@ -438,7 +438,7 @@ void RegionFrameItem::setHudWidget(QWidget* widget, Qt::WindowFlags wFlags)
     setHudWidget(proxy);
 }
 
-void RegionFrameItem::setHudWidget(QGraphicsWidget* hudWidget)
+void RegionFrameItem::setHudWidget(QGraphicsWidget* const hudWidget)
 {
     if (d->hudWidget == hudWidget)
     {
@@ -541,13 +541,11 @@ QRectF RegionFrameItem::boundingRect() const
 void RegionFrameItem::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*)
 {
 /*
-    QRect rect = d->viewportCropRect();
-
-    QRect imageRect = imageView()->rect();
-
+    QRect rect                      = d->viewportCropRect();
+    QRect imageRect                 = imageView()->rect();
     static const QColor outerColor  = QColor::fromHsvF(0, 0, 0, 0.5);
+    QRegion outerRegion             = QRegion(imageRect) - QRegion(rect);
 
-    QRegion outerRegion = QRegion(imageRect) - QRegion(rect);
     foreach(const QRect& outerRect, outerRegion.rects())
     {
         painter->fillRect(outerRect, outerColor);
@@ -558,7 +556,7 @@ void RegionFrameItem::paint(QPainter* painter, const QStyleOptionGraphicsItem*, 
     const QColor fillColor   = QColor::fromHsvF(0, 0, 0.75, 0.66);
 
     // will paint to the left and bottom of logical coordinates
-    QRectF drawRect = boundingRect();
+    QRectF drawRect          = boundingRect();
 
     painter->setPen(borderColor);
     painter->drawRect(drawRect);
@@ -570,6 +568,7 @@ void RegionFrameItem::paint(QPainter* painter, const QStyleOptionGraphicsItem*, 
         {
             painter->setOpacity(d->resizeHandleVisibility->opacity());
             painter->setBrush(fillColor);
+
             foreach(const CropHandle& handle, d->cropHandleList)
             {
                 QRectF rect = d->handleRect(handle);
@@ -707,7 +706,7 @@ void RegionFrameItem::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
 
     if (d->movingHandle == CH_Content)
     {
-        QPointF delta = point - d->lastMouseMovePos;
+        QPointF delta       = point - d->lastMouseMovePos;
         r.adjust(delta.x(), delta.y(), delta.x(), delta.y());
         d->lastMouseMovePos = mapToParent(event->pos());
     }

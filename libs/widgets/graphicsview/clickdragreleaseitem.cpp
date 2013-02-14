@@ -50,17 +50,14 @@ enum ClickDragState
     ClickedMoveState
 };
 
-class ClickDragReleaseItem::ClickDragReleaseItemPriv
+class ClickDragReleaseItem::Private
 {
 public:
 
-    ClickDragReleaseItemPriv()
+    Private()
         : state(HoverState)
     {
     }
-
-    ClickDragState state;
-    QPointF        pressPos;
 
     template <class Event> bool isDrag(Event* e)
     {
@@ -71,11 +68,16 @@ public:
     {
         return QRectF(pressPos, e->scenePos()).normalized();
     }
+
+public:
+
+    ClickDragState state;
+    QPointF        pressPos;
 };
 
-ClickDragReleaseItem::ClickDragReleaseItem(QGraphicsItem* parent)
+ClickDragReleaseItem::ClickDragReleaseItem(QGraphicsItem* const parent)
     : QGraphicsObject(parent),
-      d(new ClickDragReleaseItemPriv)
+      d(new Private)
 {
     setCursor(Qt::CrossCursor);
     setFlags(ItemIsFocusable | ItemHasNoContents);
@@ -92,6 +94,7 @@ QRectF ClickDragReleaseItem::boundingRect() const
     {
         return QRectF(QPointF(0,0), parentItem()->boundingRect().size());
     }
+
     return QRectF();
 }
 
@@ -130,6 +133,7 @@ void ClickDragReleaseItem::mouseMoveEvent(QGraphicsSceneMouseEvent* e)
         d->state = PressDragState;
         setCursor(Qt::SizeFDiagCursor);
     }
+
     if (d->state == PressDragState)
     {
         emit moving(d->rect(e));
@@ -172,6 +176,7 @@ void ClickDragReleaseItem::mouseReleaseEvent(QGraphicsSceneMouseEvent* e)
         {
             emit cancelled();
         }
+
         d->state = HoverState;
         setCursor(Qt::CrossCursor);
     }
@@ -180,6 +185,7 @@ void ClickDragReleaseItem::mouseReleaseEvent(QGraphicsSceneMouseEvent* e)
 void ClickDragReleaseItem::keyPressEvent(QKeyEvent* e)
 {
     kDebug() << e;
+
     switch (e->key())
     {
         case Qt::Key_Backspace:

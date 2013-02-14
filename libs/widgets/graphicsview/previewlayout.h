@@ -58,7 +58,7 @@ public:
 
 public:
 
-    explicit SinglePhotoPreviewLayout(QObject* parent = 0);
+    explicit SinglePhotoPreviewLayout(QObject* const parent = 0);
     ~SinglePhotoPreviewLayout();
 
     /** Set the graphics view, and associated scene, to operate on. */
@@ -106,8 +106,8 @@ protected:
 
 private:
 
-    class SinglePhotoPreviewLayoutPriv;
-    SinglePhotoPreviewLayoutPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(SinglePhotoPreviewLayout::SetZoomFlags)
