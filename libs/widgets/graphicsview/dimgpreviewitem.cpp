@@ -226,7 +226,7 @@ QString DImgPreviewItem::userLoadingHint() const
             }
             else
             {
-                if (approximates(d->image.originalSize(),d->image.size()))
+                if (approximates(d->image.originalSize(), d->image.size()))
                 {
                     //return i18n("Full Size Preview");
                     return QString();
@@ -241,9 +241,11 @@ QString DImgPreviewItem::userLoadingHint() const
         }
         default: // ImageLoadingFailed:
         {
-            return i18n("Failed to load image");
+            break;
         }
     }
+
+    return i18n("Failed to load image");
 }
 
 void DImgPreviewItem::reload()
