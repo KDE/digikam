@@ -331,37 +331,40 @@ void NREstimate::startAnalyse()
         logFile.append("logMeanStd.txt");
 
         QFile filems(logFile);
-        filems.open(QIODevice::WriteOnly | QIODevice::Text);
-        QTextStream oms(&filems);
-        oms << "Mean Data\n";
 
-        for (int i=0 ; i < totalcount ; i++)
+        if (filems.open(QIODevice::WriteOnly | QIODevice::Text))
         {
-            oms << *meanStorePtr++;
-            oms << "\t";
+            QTextStream oms(&filems);
+            oms << "Mean Data\n";
 
-            if ((i+1)%3 == 0)
+            for (int i=0 ; i < totalcount ; i++)
             {
-                oms << "\n";
+                oms << *meanStorePtr++;
+                oms << "\t";
+
+                if ((i+1)%3 == 0)
+                {
+                    oms << "\n";
+                }
             }
-        }
 
-        oms << "\nStd Data\n";
+            oms << "\nStd Data\n";
 
-        for (int i=0 ; i < totalcount ; i++)
-        {
-            oms << *stdStorePtr++;
-            oms << "\t";
-
-            if ((i+1)%3 == 0)
+            for (int i=0 ; i < totalcount ; i++)
             {
-                oms << "\n";
+                oms << *stdStorePtr++;
+                oms << "\t";
+
+                if ((i+1)%3 == 0)
+                {
+                    oms << "\n";
+                }
             }
+
+            filems.close();
+
+            kDebug() << "Done with the basic work of storing the mean and the std";
         }
-
-        filems.close();
-
-        kDebug() << "Done with the basic work of storing the mean and the std";
     }
 
     postProgress(70);
@@ -379,8 +382,9 @@ void NREstimate::startAnalyse()
         logFile2.append("logWeightedMeanStd.txt");
 
         filewms.setFileName(logFile2);
-        filewms.open(QIODevice::WriteOnly | QIODevice::Text);
-        owms.setDevice(&filewms);
+
+        if (filewms.open(QIODevice::WriteOnly | QIODevice::Text))
+            owms.setDevice(&filewms);
     }
 
     QString info;
