@@ -209,12 +209,12 @@ QString DigikamView::Private::userPresentableAlbumTitle(const QString& title) co
 
 void DigikamView::Private::addPageUpDownActions(DigikamView* const q, QWidget* const w)
 {
-    QShortcut *nextImageShortcut = new QShortcut(w);
+    QShortcut* const nextImageShortcut = new QShortcut(w);
     nextImageShortcut->setKey(Qt::Key_PageDown);
     nextImageShortcut->setContext(Qt::WidgetWithChildrenShortcut);
     QObject::connect(nextImageShortcut, SIGNAL(activated()), q, SLOT(slotNextItem()));
 
-    QShortcut *prevImageShortcut = new QShortcut(w);
+    QShortcut* const prevImageShortcut = new QShortcut(w);
     prevImageShortcut->setKey(Qt::Key_PageUp);
     prevImageShortcut->setContext(Qt::WidgetWithChildrenShortcut);
     QObject::connect(prevImageShortcut, SIGNAL(activated()), q, SLOT(slotPrevItem()));
@@ -649,7 +649,7 @@ void DigikamView::loadViewState()
 
     // Restore the thumbnail bar dock.
     QByteArray thumbbarState;
-    thumbbarState = group.readEntry("ThumbbarState", thumbbarState);
+    thumbbarState     = group.readEntry("ThumbbarState", thumbbarState);
     d->dockArea->restoreState(QByteArray::fromBase64(thumbbarState));
 
     d->initialAlbumID = group.readEntry("InitialAlbumID", 0);
@@ -680,7 +680,7 @@ void DigikamView::saveViewState()
     d->stackedview->thumbBarDock()->close();
     group.writeEntry("ThumbbarState", d->dockArea->saveState().toBase64());
 
-    Album* album = AlbumManager::instance()->currentAlbum();
+    Album* const album = AlbumManager::instance()->currentAlbum();
 
     if (album)
     {
@@ -852,9 +852,8 @@ void DigikamView::changeAlbumFromHistory(Album* const album, QWidget* const widg
 {
     if (album && widget)
     {
-
         // TODO update, temporary casting until signature is changed
-        SidebarWidget* const sideBarWidget = dynamic_cast<SidebarWidget*> (widget);
+        SidebarWidget* const sideBarWidget = dynamic_cast<SidebarWidget*>(widget);
 
         if (sideBarWidget)
         {
@@ -901,7 +900,7 @@ void DigikamView::slotGotoAlbumAndItem(const ImageInfo& imageInfo)
 
     emit signalNoCurrentItem();
 
-    PAlbum* album = AlbumManager::instance()->findPAlbum(imageInfo.albumId());
+    PAlbum* const album = AlbumManager::instance()->findPAlbum(imageInfo.albumId());
 
     d->albumFolderSideBar->setCurrentAlbum(album);
     slotLeftSideBarActivate(d->albumFolderSideBar);
@@ -970,7 +969,7 @@ void DigikamView::slotGotoTagAndItem(int tagID)
 
 void DigikamView::slotSelectAlbum(const KUrl& url)
 {
-    PAlbum* album = d->albumManager->findPAlbum(url);
+    PAlbum* const album = d->albumManager->findPAlbum(url);
 
     if (!album)
     {
@@ -1004,27 +1003,27 @@ void DigikamView::slotAlbumSelected(Album* album)
     else if (album->type() == Album::TAG)
     {
         emit signalAlbumSelected(false);
-        /*
-                kDebug()<<"Album "<<album->title()<<" selected." ;
+/*
+        kDebug()<<"Album "<<album->title()<<" selected." ;
 
-                // Now loop through children of the people album and check if this album is a child.
-                Album* peopleAlbum = AlbumManager::instance()->findTAlbum(TagsCache::instance()->tagForPath("/People"));
-                int thisAlbumId = album->id();
+        // Now loop through children of the people album and check if this album is a child.
+        Album* peopleAlbum = AlbumManager::instance()->findTAlbum(TagsCache::instance()->tagForPath("/People"));
+        int thisAlbumId = album->id();
 
-                QList<int> children =  peopleAlbum->childAlbumIds(true);
+        QList<int> children =  peopleAlbum->childAlbumIds(true);
 
-                foreach(int id, children)
-                {
-                    if(id == thisAlbumId)
-                    {
-                        kDebug()<<"Is a people tag";
+        foreach(int id, children)
+        {
+            if(id == thisAlbumId)
+            {
+                kDebug()<<"Is a people tag";
 
-                        showFaceAlbum(thisAlbumId);
-                        emit signalTagSelected(true);
-                        return;
-                    }
-                }
-        */
+                showFaceAlbum(thisAlbumId);
+                emit signalTagSelected(true);
+                return;
+            }
+        }
+*/
         emit signalTagSelected(true);
     }
     else
@@ -1178,11 +1177,11 @@ void DigikamView::slotDispatchImageSelected()
             if (d->stackedview->previewMode() != StackedView::MapWidgetMode)
             {
                 previousInfo = d->iconView->previousInfo(list.first());
-                nextInfo = d->iconView->nextInfo(list.first());
+                nextInfo     = d->iconView->nextInfo(list.first());
             }
 
-            if (   (d->stackedview->previewMode() != StackedView::PreviewAlbumMode)
-                   && (d->stackedview->previewMode() != StackedView::MapWidgetMode) )
+            if ((d->stackedview->previewMode() != StackedView::PreviewAlbumMode) &&
+                (d->stackedview->previewMode() != StackedView::MapWidgetMode))
             {
                 d->stackedview->setPreviewItem(list.first(), previousInfo, nextInfo);
             }
@@ -1664,7 +1663,7 @@ void DigikamView::slotSelectInvert()
 
 void DigikamView::slotSortImages(int sortRole)
 {
-    AlbumSettings* settings = AlbumSettings::instance();
+    AlbumSettings* const settings = AlbumSettings::instance();
 
     if (!settings)
     {
@@ -1677,7 +1676,7 @@ void DigikamView::slotSortImages(int sortRole)
 
 void DigikamView::slotSortImagesOrder(int order)
 {
-    AlbumSettings* settings = AlbumSettings::instance();
+    AlbumSettings* const settings = AlbumSettings::instance();
 
     if (!settings)
     {
@@ -1690,7 +1689,7 @@ void DigikamView::slotSortImagesOrder(int order)
 
 void DigikamView::slotGroupImages(int categoryMode)
 {
-    AlbumSettings* settings = AlbumSettings::instance();
+    AlbumSettings* const settings = AlbumSettings::instance();
 
     if (!settings)
     {
@@ -1709,8 +1708,9 @@ void DigikamView::slotMoveSelectionToAlbum()
 void DigikamView::slotLeftSidebarChangedTab(QWidget* w)
 {
     // TODO update, temporary cast
-    SidebarWidget* widget = dynamic_cast<SidebarWidget*> (w);
-    foreach(SidebarWidget* sideBarWidget, d->leftSideBarWidgets)
+    SidebarWidget* const widget = dynamic_cast<SidebarWidget*>(w);
+
+    foreach(SidebarWidget* const sideBarWidget, d->leftSideBarWidgets)
     {
         bool active = (widget && (widget == sideBarWidget));
         sideBarWidget->setActive(active);
@@ -1753,7 +1753,8 @@ void DigikamView::slotSlideShowRecursive()
 
     if (album)
     {
-        SlideShowBuilder* builder = new SlideShowBuilder(album);
+        SlideShowBuilder* const builder = new SlideShowBuilder(album);
+
         connect(builder, SIGNAL(signalComplete(SlideShowSettings)),
                 this, SLOT(slotSlideShowBuilderComplete(SlideShowSettings)));
     }
@@ -1902,7 +1903,7 @@ void DigikamView::slotImageExifOrientation(int orientation)
     FileActionMngr::instance()->setExifOrientation(d->iconView->selectedImageInfos(), orientation);
 }
 
-void DigikamView::imageTransform(KExiv2Iface::RotationMatrix::TransformationAction transform)
+void DigikamView::imageTransform(RotationMatrix::TransformationAction transform)
 {
     FileActionMngr::instance()->transform(d->iconView->selectedImageInfos(), transform);
 }

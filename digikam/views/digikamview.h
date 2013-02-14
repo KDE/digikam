@@ -50,6 +50,8 @@
 #include "digikammodelcollection.h"
 #include "sidebarwidget.h"
 
+using namespace KExiv2Iface;
+
 namespace Digikam
 {
 class AlbumIconItem;
@@ -80,7 +82,7 @@ public:
     bool isThumbBarVisible();
     void setRecurseAlbums(bool recursive);
     void setRecurseTags(bool recursive);
-    void imageTransform(KExiv2Iface::RotationMatrix::TransformationAction transform);
+    void imageTransform(RotationMatrix::TransformationAction transform);
 
     void connectIconViewFilter(FilterStatusBar* const filter);
 
