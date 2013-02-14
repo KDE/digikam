@@ -34,6 +34,7 @@
 // local includes
 
 #include "imagefiltermodel.h"
+#include "tableview_shared.h"
 
 namespace Digikam
 {
@@ -77,13 +78,13 @@ public:
 class TableViewColumn
 {
 protected:
-    TableViewColumnDataSource* const dataSource;
+    TableViewShared* const s;
     TableViewColumnConfiguration configuration;
 
 public:
 
     explicit TableViewColumn(
-            TableViewColumnDataSource* const pDataSource,
+            TableViewShared* const tableViewShared,
             const TableViewColumnConfiguration& pConfiguration
         );
     virtual ~TableViewColumn();
@@ -92,6 +93,8 @@ public:
     virtual QString getTitle();
 
     virtual QVariant data(const QModelIndex& sourceIndex, const int role);
+    virtual bool paint(QPainter* const painter, const QStyleOptionViewItem& option, const QModelIndex& sourceIndex) const;
+    virtual QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& sourceIndex) const;
 };
 
 class TableViewColumnFactory : public QObject
@@ -100,7 +103,7 @@ class TableViewColumnFactory : public QObject
 
 public:
 
-    explicit TableViewColumnFactory(TableViewColumnDataSource* const dataSource, QObject* parent = 0);
+    explicit TableViewColumnFactory(TableViewShared* const tableViewShared, QObject* parent = 0);
 
     QList<TableViewColumnDescription> getColumnDescriptionList();
     TableViewColumn* getColumn(const TableViewColumnConfiguration& columnConfiguration);
@@ -109,6 +112,7 @@ private:
 
     class Private;
     const QScopedPointer<Private> d;
+    TableViewShared* const s;
 };
 
 } /* namespace Digikam */

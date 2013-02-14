@@ -26,6 +26,7 @@
 // Qt includes
 
 #include <QObject>
+#include <QPainter>
 #include <QStringList>
 
 // KDE includes
@@ -34,6 +35,7 @@
 
 #include "tableview_columnfactory.h"
 #include <libkgeomap/geocoordinates.h>
+#include "thumbnailloadthread.h"
 
 namespace Digikam
 {
@@ -46,10 +48,10 @@ class ColumnFilename : public TableViewColumn
 public:
 
     explicit ColumnFilename(
-            TableViewColumnDataSource* const pDataSource,
+            TableViewShared* const tableViewShared,
             const TableViewColumnConfiguration& pConfiguration
         )
-      : TableViewColumn(pDataSource, pConfiguration)
+      : TableViewColumn(tableViewShared, pConfiguration)
     {
     }
     virtual ~ColumnFilename() { }
@@ -62,6 +64,7 @@ public:
 
     virtual QVariant data(const QModelIndex& sourceIndex, const int role)
     {
+        /// @todo is this correct or does sourceIndex have column!=0?
         return sourceIndex.data(role);
     }
 
@@ -72,10 +75,10 @@ class ColumnCoordinates : public TableViewColumn
 public:
 
     explicit ColumnCoordinates(
-            TableViewColumnDataSource* const pDataSource,
+            TableViewShared* const tableViewShared,
             const TableViewColumnConfiguration& pConfiguration
         )
-      : TableViewColumn(pDataSource, pConfiguration)
+      : TableViewColumn(tableViewShared, pConfiguration)
     {
     }
     virtual ~ColumnCoordinates() { }
@@ -92,7 +95,7 @@ public:
             return QVariant();
         }
 
-        const ImageInfo info = dataSource->sourceModel->imageInfo(sourceIndex);
+        const ImageInfo info = s->imageFilterModel->imageInfo(sourceIndex);
 
         if (info.isNull() || !info.hasCoordinates())
         {
@@ -103,6 +106,72 @@ public:
 
         return QString("%1,%2").arg(coordinates.latString()).arg(coordinates.lonString());
     }
+
+};
+
+class ColumnThumbnail : public TableViewColumn
+{
+public:
+
+    explicit ColumnThumbnail(
+            TableViewShared* const tableViewShared,
+            const TableViewColumnConfiguration& pConfiguration
+        )
+      : TableViewColumn(tableViewShared, pConfiguration)
+    {
+    }
+    virtual ~ColumnThumbnail() { }
+
+    static TableViewColumnDescription getDescription()
+    {
+        return TableViewColumnDescription(QLatin1String("thumbnail"), QLatin1String("Thumbnail"));
+    }
+    virtual QString getTitle() { return i18n("Thumbnail"); }
+
+    virtual QVariant data(const QModelIndex& sourceIndex, const int role)
+    {
+        Q_UNUSED(sourceIndex)
+        Q_UNUSED(role)
+
+        // we do not return any data, but paint(...) something
+        return QVariant();
+    }
+
+    virtual bool paint(QPainter* const painter, const QStyleOptionViewItem& option, const QModelIndex& sourceIndex) const
+    {
+        /// @todo do we have to reset the column?
+        const ImageInfo info = s->imageFilterModel->imageInfo(sourceIndex);
+        if (!info.isNull())
+        {
+            QSize size(60, 60);
+            const QString path = info.filePath();
+            QPixmap thumbnail;
+
+            /// @todo handle unavailable thumbnails -> emit itemChanged(...) later
+            if (s->thumbnailLoadThread->find(path, thumbnail, qMax(size.width()+2, size.height()+2)))
+            {
+                /// @todo remove borders
+//                 thumbnail = thumbnail.copy(1, 1, thumbnail.size().width()-2, thumbnail.size().height()-2)
+                const QSize availableSize = option.rect.size();
+                const QSize pixmapSize    = thumbnail.size().boundedTo(availableSize);
+                QPoint startPoint((availableSize.width()-pixmapSize.width())/2,
+                                (availableSize.height()-pixmapSize.height())/2);
+                startPoint+=option.rect.topLeft();
+                painter->drawPixmap(QRect(startPoint, pixmapSize), thumbnail, QRect(QPoint(0, 0), pixmapSize));
+
+                return true;
+            }
+        }
+
+        // we did not get to paint a thumbnail...
+        return false;
+    }
+
+    virtual QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& sourceIndex) const
+    {
+        return QSize(60, 60);
+    }
+
 
 };
 

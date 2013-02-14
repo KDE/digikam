@@ -27,6 +27,7 @@
 
 #include <QTreeView>
 #include <QWidget>
+#include <QItemDelegate>
 
 // KDE includes
 
@@ -41,18 +42,34 @@
 #include "thumbnailloadthread.h"
 #include "imagefiltermodel.h"
 #include "tableview_columnfactory.h"
+#include "tableview_shared.h"
 
 namespace Digikam
 {
 
-class TableViewModel;
+class TableViewItemDelegate : public QItemDelegate
+{
+    Q_OBJECT
+
+public:
+
+    explicit TableViewItemDelegate(TableViewShared* const tableViewShared, QObject* parent = 0);
+    virtual ~TableViewItemDelegate();
+
+    virtual void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& tableViewIndex) const;
+    virtual QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& tableViewIndex) const;
+
+private:
+
+    TableViewShared* const s;
+};
 
 class TableViewTreeView : public QTreeView
 {
     Q_OBJECT
 
 public:
-    explicit TableViewTreeView(TableViewModel* const tableViewModel, TableViewColumnFactory* const tableViewColumnFactory, QWidget* const parent = 0);
+    explicit TableViewTreeView(TableViewShared* const tableViewShared, QWidget* const parent = 0);
     virtual ~TableViewTreeView();
 
 protected:
@@ -72,6 +89,7 @@ private:
 
     class Private;
     const QScopedPointer<Private> d;
+    TableViewShared* const s;
 };
 
 class TableView : public QWidget, public StateSavingObject
@@ -96,6 +114,7 @@ private:
 
     class Private;
     const QScopedPointer<Private> d;
+    const QScopedPointer<TableViewShared> s;
 };
 
 } /* namespace Digikam */

@@ -36,14 +36,13 @@ namespace Digikam
 class TableViewColumnFactory::Private
 {
 public:
-    TableViewColumnDataSource* dataSource;
 };
 
 TableViewColumn::TableViewColumn(
-        TableViewColumnDataSource* const pDataSource,
+        TableViewShared* const tableViewShared,
         const TableViewColumnConfiguration& pConfiguration
     )
-  : dataSource(pDataSource),
+  : s(tableViewShared),
     configuration(pConfiguration)
 {
 
@@ -54,11 +53,11 @@ TableViewColumn::~TableViewColumn()
 
 }
 
-TableViewColumnFactory::TableViewColumnFactory(TableViewColumnDataSource* const dataSource, QObject* parent)
+TableViewColumnFactory::TableViewColumnFactory(TableViewShared* const tableViewShared, QObject* parent)
   : QObject(parent),
-    d(new Private())
+    d(new Private()),
+    s(tableViewShared)
 {
-    d->dataSource = dataSource;
 }
 
 QString TableViewColumn::getTitle()
@@ -72,11 +71,15 @@ TableViewColumn* TableViewColumnFactory::getColumn(const Digikam::TableViewColum
 
     if (columnId=="filename")
     {
-        return new TableViewColumns::ColumnFilename(d->dataSource, columnConfiguration);
+        return new TableViewColumns::ColumnFilename(s, columnConfiguration);
     }
     else if (columnId=="coordinates")
     {
-        return new TableViewColumns::ColumnCoordinates(d->dataSource, columnConfiguration);
+        return new TableViewColumns::ColumnCoordinates(s, columnConfiguration);
+    }
+    else if (columnId=="thumbnail")
+    {
+        return new TableViewColumns::ColumnThumbnail(s, columnConfiguration);
     }
 
     return 0;
@@ -95,9 +98,28 @@ QList<TableViewColumnDescription> TableViewColumnFactory::getColumnDescriptionLi
 
     descriptionList << TableViewColumns::ColumnFilename::getDescription();
     descriptionList << TableViewColumns::ColumnCoordinates::getDescription();
+    descriptionList << TableViewColumns::ColumnThumbnail::getDescription();
 
     return descriptionList;
 }
+
+bool TableViewColumn::paint(QPainter*const painter, const QStyleOptionViewItem& option, const QModelIndex& sourceIndex) const
+{
+    Q_UNUSED(painter)
+    Q_UNUSED(option)
+    Q_UNUSED(sourceIndex)
+
+    return false;
+}
+
+QSize TableViewColumn::sizeHint(const QStyleOptionViewItem& option, const QModelIndex& sourceIndex) const
+{
+    Q_UNUSED(option)
+    Q_UNUSED(sourceIndex)
+
+    return QSize();
+}
+
 
 } /* namespace Digikam */
 

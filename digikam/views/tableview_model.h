@@ -31,10 +31,12 @@
 
 // local includes
 
-
+#include "tableview_shared.h"
 
 namespace Digikam
 {
+
+class TableViewColumn;
 
 class TableViewColumnDescription;
 
@@ -59,6 +61,8 @@ public:
 
     void addColumnAt(const TableViewColumnDescription& description, const int targetColumn = -1);
     void removeColumnAt(const int columnIndex);
+    TableViewColumn* getColumnObject(const int columnIndex);
+    QModelIndex toImageFilterModelIndex(const QModelIndex& i) const;
 
 private:
 

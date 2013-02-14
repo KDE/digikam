@@ -38,13 +38,14 @@ public:
     QList<TableViewColumn*> columnObjects;
 };
 
-TableViewModel::TableViewModel(TableViewColumnFactory*const tableViewColumnFactory, Digikam::ImageFilterModel*const sourceModel, QObject* parent)
+TableViewModel::TableViewModel(TableViewColumnFactory* const tableViewColumnFactory, Digikam::ImageFilterModel* const sourceModel, QObject* parent)
   : QAbstractItemModel(parent),
     d(new Private())
 {
     d->sourceModel = sourceModel;
     d->columnFactory = tableViewColumnFactory;
 
+    d->columnObjects << d->columnFactory->getColumn(TableViewColumnConfiguration("thumbnail"));
     d->columnObjects << d->columnFactory->getColumn(TableViewColumnConfiguration("filename"));
     d->columnObjects << d->columnFactory->getColumn(TableViewColumnConfiguration("coordinates"));
 }
@@ -59,7 +60,7 @@ int TableViewModel::columnCount(const QModelIndex& i) const
     return d->columnObjects.count();
 }
 
-QVariant TableViewModel::data(const QModelIndex& i, int role) const
+QModelIndex TableViewModel::toImageFilterModelIndex(const QModelIndex& i) const
 {
     if (i.isValid())
     {
@@ -67,14 +68,26 @@ QVariant TableViewModel::data(const QModelIndex& i, int role) const
     }
 
     const int rowNumber = i.row();
-    const int columnNumber = i.column();
 
     if ( (rowNumber<0) || (rowNumber>=d->sourceModel->rowCount()) )
     {
-        return QVariant();
+        return QModelIndex();
     }
 
     const QModelIndex sourceIndex = d->sourceModel->index(rowNumber, 0);
+    if (!sourceIndex.isValid())
+    {
+        return QModelIndex();
+    }
+
+    return sourceIndex;
+}
+
+QVariant TableViewModel::data(const QModelIndex& i, int role) const
+{
+    const int columnNumber = i.column();
+
+    QModelIndex sourceIndex = toImageFilterModelIndex(i);
     if (!sourceIndex.isValid())
     {
         return QVariant();
@@ -159,6 +172,11 @@ void TableViewModel::removeColumnAt(const int columnIndex)
     endRemoveColumns();
 
     delete removedColumn;
+}
+
+TableViewColumn* TableViewModel::getColumnObject(const int columnIndex)
+{
+    return d->columnObjects.at(columnIndex);
 }
 
 } /* namespace Digikam */

@@ -47,6 +47,7 @@
 #include "databasefields.h"
 #include "digikam2kgeomap_database.h"
 #include "importui.h"
+#include "thumbnailloadthread.h"
 #include "tableview_model.h"
 #include "tableview_columnfactory.h"
 
@@ -60,16 +61,13 @@ class TableViewTreeView::Private
 {
 public:
     Private()
-      : tableViewColumnFactory(0),
-        headerContextMenuActiveColumn(-1),
+      : headerContextMenuActiveColumn(-1),
         actionHeaderContextMenuRemoveColumn(0)
     {
     }
 
-    TableViewColumnFactory* tableViewColumnFactory;
     int headerContextMenuActiveColumn;
     KAction* actionHeaderContextMenuRemoveColumn;
-    TableViewModel* tableViewModel;
 };
 
 class TableView::Private
@@ -77,20 +75,14 @@ class TableView::Private
 public:
     Private()
       : treeView(0),
-        imageFilterModel(0),
         imageModel(0),
-        selectionModel(0),
-        tableViewModel(0)
+        selectionModel(0)
     {
     }
 
     TableViewTreeView*      treeView;
-    ImageFilterModel*       imageFilterModel;
     ImageAlbumModel*        imageModel;
     QItemSelectionModel*    selectionModel;
-    TableViewModel*         tableViewModel;
-    TableViewColumnFactory* tableViewColumnFactory;
-    TableViewColumnDataSource* tableViewColumnDataSource;
 };
 
 TableView::TableView(
@@ -100,19 +92,19 @@ TableView::TableView(
     )
   : QWidget(parent),
     StateSavingObject(this),
-    d(new Private())
+    d(new Private()),
+    s(new TableViewShared())
 {
-    d->imageFilterModel = dynamic_cast<ImageFilterModel*>(imageFilterModel);
+    s->thumbnailLoadThread = new ThumbnailLoadThread(this);
+    s->imageFilterModel = dynamic_cast<ImageFilterModel*>(imageFilterModel);
     d->imageModel = dynamic_cast<ImageAlbumModel*>(imageFilterModel->sourceModel());
     d->selectionModel = selectionModel;
-    d->tableViewColumnDataSource = new TableViewColumnDataSource();
-    d->tableViewColumnDataSource->sourceModel = d->imageFilterModel;
-    d->tableViewColumnFactory = new TableViewColumnFactory(d->tableViewColumnDataSource, this);
+    s->columnFactory = new TableViewColumnFactory(s.data(), this);
 
     QVBoxLayout* const vbox1 = new QVBoxLayout();
 
-    d->tableViewModel = new TableViewModel(d->tableViewColumnFactory, d->imageFilterModel, this);
-    d->treeView = new TableViewTreeView(d->tableViewModel, d->tableViewColumnFactory, this);
+    s->tableViewModel = new TableViewModel(s->columnFactory, s->imageFilterModel, this);
+    d->treeView = new TableViewTreeView(s.data(), this);
 
     vbox1->addWidget(d->treeView);
 
@@ -134,11 +126,13 @@ void TableView::doSaveState()
 
 }
 
-TableViewTreeView::TableViewTreeView(TableViewModel* const tableViewModel, Digikam::TableViewColumnFactory*const tableViewColumnFactory, QWidget*const parent)
-  : QTreeView(parent), d(new Private())
+TableViewTreeView::TableViewTreeView(Digikam::TableViewShared* const tableViewShared, QWidget*const parent)
+  : QTreeView(parent),
+    d(new Private()),
+    s(tableViewShared)
 {
-    d->tableViewColumnFactory = tableViewColumnFactory;
-    d->tableViewModel = tableViewModel;
+    s->itemDelegate = new TableViewItemDelegate(s, this);
+    setItemDelegate(s->itemDelegate);
 
     d->actionHeaderContextMenuRemoveColumn = new KAction("Remove this column", this);
     connect(d->actionHeaderContextMenuRemoveColumn, SIGNAL(triggered(bool)),
@@ -146,7 +140,7 @@ TableViewTreeView::TableViewTreeView(TableViewModel* const tableViewModel, Digik
 
     header()->installEventFilter(this);
 
-    setModel(d->tableViewModel);
+    setModel(s->tableViewModel);
 }
 
 TableViewTreeView::~TableViewTreeView()
@@ -175,13 +169,13 @@ void TableViewTreeView::showHeaderContextMenu(QEvent* const event)
     KMenu* const menu = new KMenu(this);
 
     d->actionHeaderContextMenuRemoveColumn->setEnabled(
-            d->tableViewModel->columnCount(QModelIndex())>1
+            s->tableViewModel->columnCount(QModelIndex())>1
         );
     menu->addAction(d->actionHeaderContextMenuRemoveColumn);
     menu->addSeparator();
 
     // add actions for all columns
-    QList<TableViewColumnDescription> columnDescriptions = d->tableViewColumnFactory->getColumnDescriptionList();
+    QList<TableViewColumnDescription> columnDescriptions = s->columnFactory->getColumnDescriptionList();
     for (int i = 0; i<columnDescriptions.count(); ++i)
     {
         const TableViewColumnDescription& desc = columnDescriptions.at(i);
@@ -210,14 +204,71 @@ void TableViewTreeView::slotHeaderContextMenuAddColumn()
 
     const TableViewColumnDescription desc = actionData.value<TableViewColumnDescription>();
     qDebug()<<"clicked: "<<desc.columnTitle;
-    d->tableViewModel->addColumnAt(desc, d->headerContextMenuActiveColumn+1);
+    s->tableViewModel->addColumnAt(desc, d->headerContextMenuActiveColumn+1);
 }
 
 void TableViewTreeView::slotHeaderContextMenuActionRemoveColumnTriggered()
 {
     qDebug()<<"remove column "<<d->headerContextMenuActiveColumn;
-    d->tableViewModel->removeColumnAt(d->headerContextMenuActiveColumn);
+    s->tableViewModel->removeColumnAt(d->headerContextMenuActiveColumn);
 }
+
+TableViewItemDelegate::TableViewItemDelegate(TableViewShared* const tableViewShared, QObject* parent)
+  : QItemDelegate(parent),
+    s(tableViewShared)
+{
+
+}
+
+TableViewItemDelegate::~TableViewItemDelegate()
+{
+
+}
+
+void TableViewItemDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& tableViewIndex) const
+{
+    const int columnIndex = tableViewIndex.column();
+    TableViewColumn* const columnObject = s->tableViewModel->getColumnObject(columnIndex);
+
+    const QModelIndex sourceIndex = s->tableViewModel->toImageFilterModelIndex(tableViewIndex);
+
+    if (!columnObject->paint(painter, option, sourceIndex))
+    {
+        QItemDelegate::paint(painter, option, tableViewIndex);
+    }
+}
+
+QSize TableViewItemDelegate::sizeHint(const QStyleOptionViewItem& option, const QModelIndex& tableViewIndex) const
+{
+    const int columnIndex = tableViewIndex.column();
+    TableViewColumn* const columnObject = s->tableViewModel->getColumnObject(columnIndex);
+    const QModelIndex sourceIndex = s->tableViewModel->toImageFilterModelIndex(tableViewIndex);
+
+    /// we have to take the maximum of all columns for the height
+    /// @todo somehow cache this calculation
+    const int columnCount = s->tableViewModel->columnCount(QModelIndex());
+    int maxHeight = 0;
+    for (int i=0; i<columnCount; ++i)
+    {
+        TableViewColumn* const iColumnObject = s->tableViewModel->getColumnObject(i);
+        const QSize iColumnSize = iColumnObject->sizeHint(option, sourceIndex);
+        if (iColumnSize.isValid())
+        {
+            maxHeight = qMax(maxHeight, iColumnSize.height());
+        }
+    }
+
+    QSize columnSize = columnObject->sizeHint(option, sourceIndex);
+    if (!columnSize.isValid())
+    {
+        columnSize = QItemDelegate::sizeHint(option, tableViewIndex);
+        /// @todo we have to incorporate the height given by QItemDelegate for the other columns, too
+        maxHeight = qMax(maxHeight, columnSize.height());
+    }
+
+    return QSize(columnSize.width(), maxHeight);
+}
+
 
 
 } /* namespace Digikam */
