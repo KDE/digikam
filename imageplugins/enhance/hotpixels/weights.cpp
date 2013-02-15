@@ -80,11 +80,11 @@ Weights& Weights::operator=(const Weights& w)
             for (uint j=0 ; j < mHeight ; ++j)
             {
                 // Allocate mWidth columns on each row
-                mWeightMatrices[i][j]=new double[mWidth];
+                mWeightMatrices[i][j] = new double[mWidth];
 
                 for (uint k=0 ; k < mWidth ; ++k)
                 {
-                    mWeightMatrices[i][j][k]=origMatrices[i][j][k];
+                    mWeightMatrices[i][j][k] = origMatrices[i][j][k];
                 }
             }
         }
@@ -113,12 +113,12 @@ void Weights::calculateWeights()
         {
             for (x = -iPolynomeOrder; x < iWidth + iPolynomeOrder; ++x)
             {
-                if ((x < 0 && y < 0 && -x - y < iPolynomeOrder + 2)
-                    || (x < 0 && y >= iHeight && -x + y - iHeight < iPolynomeOrder + 1)
-                    || (x >= iWidth && y < 0 && x - y - iWidth < iPolynomeOrder + 1)
-                    || (x >= iWidth && y >= iHeight && x + y - iWidth - iHeight < iPolynomeOrder)
-                    || (x < 0 && y >= 0 && y < iHeight) || (x >= iWidth  && y >= 0 && y < iHeight)
-                    || (y < 0 && x >= 0 && x < iWidth ) || (y >= iHeight && x >= 0 && x < iWidth))
+                if ((x < 0 && y < 0 && -x - y < iPolynomeOrder + 2)                             ||
+                    (x < 0 && y >= iHeight && -x + y - iHeight < iPolynomeOrder + 1)            ||
+                    (x >= iWidth && y < 0 && x - y - iWidth < iPolynomeOrder + 1)               ||
+                    (x >= iWidth && y >= iHeight && x + y - iWidth - iHeight < iPolynomeOrder)  ||
+                    (x < 0 && y >= 0 && y < iHeight) || (x >= iWidth  && y >= 0 && y < iHeight) ||
+                    (y < 0 && x >= 0 && x < iWidth ) || (y >= iHeight && x >= 0 && x < iWidth))
                 {
                     QPoint position(x,y);
                     mPositions.append(position);
@@ -233,8 +233,7 @@ bool Weights::operator==(const Weights& ws) const
     return (mHeight        == ws.height()        &&
             mWidth         == ws.width()         &&
             mPolynomeOrder == ws.polynomeOrder() &&
-            mTwoDim        == ws.twoDim()
-           );
+            mTwoDim        == ws.twoDim());
 }
 
 //Invert a quadratic matrix.
