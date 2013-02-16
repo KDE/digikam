@@ -59,7 +59,7 @@ public:
 
 public:
 
-    explicit RegionFrameItem(QGraphicsItem* parent);
+    explicit RegionFrameItem(QGraphicsItem* const parent);
     ~RegionFrameItem();
 
     void  setFlags(Flags flags);
@@ -72,8 +72,8 @@ public:
      * Ownership of the item is taken, and it is made a child item of this item.
      * You can also add QWidget directly. It will be wrapped in a proxy item.
      */
-    void             setHudWidget(QGraphicsWidget* hudWidget);
-    void             setHudWidget(QWidget* widget, Qt::WindowFlags wFlags = 0);
+    void             setHudWidget(QGraphicsWidget* const hudWidget);
+    void             setHudWidget(QWidget* const widget, Qt::WindowFlags wFlags = 0);
     QGraphicsWidget* hudWidget() const;
     void             setHudWidgetVisible(bool visible);
 
@@ -118,8 +118,8 @@ private Q_SLOTS:
 
 private:
 
-    class RegionFrameItemPriv;
-    RegionFrameItemPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

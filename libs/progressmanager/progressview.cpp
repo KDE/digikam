@@ -6,7 +6,7 @@
  * Date        : 2012-01-13
  * Description : progress manager
  *
- * Copyright (C) 2007-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2012      by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2004      by Till Adam <adam at kde dot org>
  *
@@ -73,9 +73,8 @@ TransactionItemView::TransactionItemView(QWidget* const parent, const char* name
 
 TransactionItem* TransactionItemView::addTransactionItem(ProgressItem* const item, bool first)
 {
-    TransactionItem* ti = new TransactionItem(m_bigBox, item, first);
+    TransactionItem* const ti = new TransactionItem(m_bigBox, item, first);
     m_bigBox->layout()->addWidget(ti);
-
     resize(m_bigBox->width(), m_bigBox->height());
 
     return ti;
@@ -94,6 +93,7 @@ void TransactionItemView::resizeEvent(QResizeEvent* event)
     {
         currentWidth = sz.width();
     }
+
     parentWidget()->resize( currentWidth, sz.height() );
 
     QScrollArea::resizeEvent( event );
@@ -114,6 +114,7 @@ QSize TransactionItemView::minimumSizeHint() const
     QSize sz( m_bigBox->minimumSizeHint() );
     sz.setWidth( qMax( sz.width(), minw ) + f + vsbExt );
     sz.setHeight( qMin( sz.height(), maxh ) + f );
+
     return sz;
 }
 
@@ -134,6 +135,7 @@ void TransactionItemView::slotLayoutFirstItem()
         hline for.
     */
     TransactionItem* ti = m_bigBox->findChild<TransactionItem*>("TransactionItem");
+
     if ( ti )
     {
         ti->hideHLine();
@@ -142,11 +144,11 @@ void TransactionItemView::slotLayoutFirstItem()
 
 // ----------------------------------------------------------------------------
 
-class TransactionItem::TransactionItemPriv
+class TransactionItem::Private
 {
 public:
 
-    TransactionItemPriv() :
+    Private() :
         maxLabelWidth(650),
         progress(0),
         cancelButton(0),
@@ -171,9 +173,9 @@ public:
 };
 
 TransactionItem::TransactionItem(QWidget* const parent, ProgressItem* const item, bool first)
-    : KVBox(parent), d(new TransactionItemPriv)
+    : KVBox(parent), d(new Private)
 {
-    d->item = item;
+    d->item  = item;
     setSpacing(2);
     setMargin(2);
     setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed));
@@ -226,6 +228,7 @@ TransactionItem::TransactionItem(QWidget* const parent, ProgressItem* const item
     d->itemStatus->setTextFormat(Qt::RichText);
     d->itemStatus->setText(fontMetrics().elidedText(item->status(), Qt::ElideRight, d->maxLabelWidth));
     h->layout()->addWidget(d->itemStatus);
+
     if (first)
     {
         hideHLine();
@@ -292,11 +295,11 @@ void TransactionItem::addSubTransaction(ProgressItem* const item)
 
 // ---------------------------------------------------------------------------
 
-class ProgressView::ProgressViewPriv
+class ProgressView::Private
 {
 public:
 
-    ProgressViewPriv() :
+    Private() :
         wasLastShown(false),
         scrollView(0),
         previousItem(0)
@@ -310,7 +313,7 @@ public:
 };
 
 ProgressView::ProgressView(QWidget* const alignWidget, QWidget* const parent, const char* name)
-    : OverlayWidget(alignWidget, parent, name), d(new ProgressViewPriv)
+    : OverlayWidget(alignWidget, parent, name), d(new Private)
 {
     setFrameStyle(QFrame::Panel | QFrame::Sunken);
     setAutoFillBackground(true);
@@ -336,7 +339,7 @@ ProgressView::ProgressView(QWidget* const alignWidget, QWidget* const parent, co
     * Get the singleton ProgressManager item which will inform us of
     * appearing and vanishing items.
     */
-    ProgressManager* pm = ProgressManager::instance();
+    ProgressManager* const pm = ProgressManager::instance();
 
     connect(pm, SIGNAL(progressItemAdded(ProgressItem*)),
             this, SLOT(slotTransactionAdded(ProgressItem*)));
@@ -378,6 +381,7 @@ void ProgressView::closeEvent(QCloseEvent* e)
 void ProgressView::slotTransactionAdded(ProgressItem* item)
 {
     TransactionItem* parent = 0;
+
     if ( item->parent() )
     {
         if ( d->transactionsToListviewItems.contains( item->parent() ) )
@@ -388,8 +392,9 @@ void ProgressView::slotTransactionAdded(ProgressItem* item)
     }
     else
     {
-        const bool first    = d->transactionsToListviewItems.empty();
-        TransactionItem* ti = d->scrollView->addTransactionItem( item, first );
+        const bool first          = d->transactionsToListviewItems.empty();
+        TransactionItem* const ti = d->scrollView->addTransactionItem( item, first );
+
         if ( ti )
         {
             d->transactionsToListviewItems.insert( item, ti );
@@ -405,7 +410,7 @@ void ProgressView::slotTransactionCompleted(ProgressItem* item)
 {
     if ( d->transactionsToListviewItems.contains( item ) )
     {
-        TransactionItem* ti = d->transactionsToListviewItems[item];
+        TransactionItem* const ti = d->transactionsToListviewItems[item];
         d->transactionsToListviewItems.remove( item );
         ti->setItemComplete();
         QTimer::singleShot( 3000, ti, SLOT( deleteLater() ) );
@@ -429,7 +434,7 @@ void ProgressView::slotTransactionProgress(ProgressItem* item, unsigned int prog
 {
     if (d->transactionsToListviewItems.contains(item))
     {
-        TransactionItem* ti = d->transactionsToListviewItems[item];
+        TransactionItem* const ti = d->transactionsToListviewItems[item];
         ti->setProgress(progress);
     }
 }
@@ -438,7 +443,7 @@ void ProgressView::slotTransactionStatus(ProgressItem* item, const QString& stat
 {
     if (d->transactionsToListviewItems.contains(item))
     {
-        TransactionItem* ti = d->transactionsToListviewItems[item];
+        TransactionItem* const ti = d->transactionsToListviewItems[item];
         ti->setStatus(status);
     }
 }
@@ -447,7 +452,7 @@ void ProgressView::slotTransactionLabel(ProgressItem* item, const QString& label
 {
     if ( d->transactionsToListviewItems.contains(item))
     {
-        TransactionItem* ti = d->transactionsToListviewItems[item];
+        TransactionItem* const ti = d->transactionsToListviewItems[item];
         ti->setLabel(label);
     }
 }
@@ -456,7 +461,7 @@ void ProgressView::slotTransactionUsesBusyIndicator(ProgressItem* item, bool val
 {
     if (d->transactionsToListviewItems.contains(item))
     {
-        TransactionItem* ti = d->transactionsToListviewItems[item];
+        TransactionItem* const ti = d->transactionsToListviewItems[item];
         if (value)
         {
             ti->setTotalSteps(0);
@@ -472,7 +477,7 @@ void ProgressView::slotTransactionThumbnail(ProgressItem* item, const QPixmap& t
 {
     if (d->transactionsToListviewItems.contains(item))
     {
-        TransactionItem* ti = d->transactionsToListviewItems[item];
+        TransactionItem* const ti = d->transactionsToListviewItems[item];
         ti->setThumbnail(thumb);
     }
 }
@@ -511,6 +516,7 @@ void ProgressView::slotToggleVisibility()
     * are no items to be shown anymore. Guard against that.
     */
     d->wasLastShown = isHidden();
+
     if ( !isHidden() || !d->transactionsToListviewItems.isEmpty() )
     {
         setVisible( isHidden() );

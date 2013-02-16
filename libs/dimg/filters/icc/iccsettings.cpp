@@ -168,7 +168,7 @@ bool IccSettings::monitorProfileFromSystem()
     // Second, check all toplevel widgets
     QList<QWidget*> topLevels = qApp->topLevelWidgets();
 
-    foreach(QWidget* widget, topLevels)
+    foreach(QWidget* const widget, topLevels)
     {
         if (!d->profileFromWindowSystem(widget).isNull())
         {
@@ -200,6 +200,7 @@ IccProfile IccSettings::Private::profileFromWindowSystem(QWidget* const widget)
         kError() << "No desktop widget available for application";
         return IccProfile();
     }
+
     int screenNumber = desktop->screenNumber(widget);
 
     IccProfile profile;
@@ -269,15 +270,12 @@ IccProfile IccSettings::Private::profileFromWindowSystem(QWidget* const widget)
         QMutexLocker lock(&mutex);
         screenProfiles.insert(screenNumber, profile);
     }
-    return profile;
 
 #elif defined Q_WS_WIN
     //TODO
 #elif defined Q_WS_MAC
     //TODO
 #endif
-
-    // FIXME: unreachable code
 
     return IccProfile();
 }

@@ -7,7 +7,7 @@
  * Description : gui database error handler
  *
  * Copyright (C) 2009-2010 by Holger Foerster <Hamsi2k at freenet dot de>
- * Copyright (C) 2010-2012 by Gilles Caulier<caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2013 by Gilles Caulier<caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -47,12 +47,12 @@
 namespace Digikam
 {
 
-class DatabaseConnectionChecker::DatabaseConnectionCheckerPriv
+class DatabaseConnectionChecker::Private
 {
 
 public:
 
-    DatabaseConnectionCheckerPriv()
+    Private()
     {
         stop    = false;
         success = false;
@@ -68,7 +68,7 @@ public:
 };
 
 DatabaseConnectionChecker::DatabaseConnectionChecker(const DatabaseParameters& parameters)
-    : d(new DatabaseConnectionCheckerPriv)
+    : d(new Private)
 {
     d->parameters = parameters;
 }
@@ -98,7 +98,7 @@ void DatabaseConnectionChecker::run()
     {
         if (databaseHandler.open())
         {
-            d->stop = true;
+            d->stop    = true;
             d->success = true;
             databaseHandler.close();
             break;
@@ -137,12 +137,12 @@ bool DatabaseConnectionChecker::checkSuccessful() const
 
 // ---------------------------------------------------------------------------------------
 
-class DatabaseGUIErrorHandler::DatabaseGUIErrorHandlerPriv
+class DatabaseGUIErrorHandler::Private
 {
 
 public:
 
-    DatabaseGUIErrorHandlerPriv()
+    Private()
     {
         checker = 0;
     }
@@ -154,7 +154,7 @@ public:
 };
 
 DatabaseGUIErrorHandler::DatabaseGUIErrorHandler(const DatabaseParameters& parameters)
-    : d(new DatabaseGUIErrorHandlerPriv)
+    : d(new Private)
 {
     d->parameters = parameters;
 }
@@ -226,7 +226,7 @@ void DatabaseGUIErrorHandler::connectionError(DatabaseErrorAnswer* answer, const
 void DatabaseGUIErrorHandler::consultUserForError(DatabaseErrorAnswer* answer, const QSqlError& error, const QString&)
 {
     //NOTE: not used at all currently.
-    QWidget* parent = QWidget::find(0);
+    QWidget* const parent = QWidget::find(0);
     // Handle all other database errors
     QString message = i18n("<p><b>A database error occurred.</b></p>"
                            "Details:\n %1", error.text());

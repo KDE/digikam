@@ -8,7 +8,7 @@
  *               DImg framework
  *
  * Copyright (C) 2005      by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -55,7 +55,7 @@ extern "C"
 namespace Digikam
 {
 
-PPMLoader::PPMLoader(DImg* image)
+PPMLoader::PPMLoader(DImg* const image)
     : DImgLoader(image)
 {
 }
@@ -66,7 +66,7 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver* const observer
     int  width, height, rgbmax;
     char nl;
 
-    FILE* file = fopen(QFile::encodeName(filePath), "rb");
+    FILE* const file = fopen(QFile::encodeName(filePath), "rb");
 
     if (!file)
     {
@@ -133,7 +133,7 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver* const observer
 
     if (m_loadFlags & LoadImageData)
     {
-        data.reset(new_short_failureTolerant(width * height * 4));
+        data.reset(new_short_failureTolerant((size_t)(width * height * 4)));
 
         if (data.isNull())
         {
@@ -197,10 +197,10 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver* const observer
     imageWidth()  = width;
     imageHeight() = height;
     imageData()   = (uchar*)data.take();
-    imageSetAttribute("format", "PPM");
+    imageSetAttribute("format",              "PPM");
     imageSetAttribute("originalColorFormat", DImg::RGB);
-    imageSetAttribute("originalBitDepth", 8);
-    imageSetAttribute("originalSize", QSize(width, height));
+    imageSetAttribute("originalBitDepth",    8);
+    imageSetAttribute("originalSize",        QSize(width, height));
 
     return true;
 }

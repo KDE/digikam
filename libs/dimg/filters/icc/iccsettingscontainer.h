@@ -7,7 +7,7 @@
  * Description : ICC Settings Container.
  *
  * Copyright (C) 2005-2007 by F.J. Cruz <fj dot cruz at supercable dot es>
- * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -45,16 +45,6 @@ class DIGIKAM_EXPORT ICCSettingsContainer
 
 public:
 
-    ICCSettingsContainer();
-
-    ~ICCSettingsContainer() {};
-
-public:
-
-    void readFromConfig(KConfigGroup& group);
-    void writeToConfig(KConfigGroup& group) const;
-    void writeManagedViewToConfig(KConfigGroup& group) const;
-
     enum BehaviorEnum
     {
         // Note: Values are stored in config - keep them constant
@@ -85,15 +75,26 @@ public:
 
         /// ready combinations for convenience
 
-        PreserveEmbeddedProfile  = UseEmbeddedProfile | KeepProfile,
-        EmbeddedToWorkspace      = UseEmbeddedProfile | ConvertToWorkspace,
-        SRGBToWorkspace          = UseSRGB | ConvertToWorkspace,
-        AutoToWorkspace          = AutomaticColors | ConvertToWorkspace,
+        PreserveEmbeddedProfile  = UseEmbeddedProfile     | KeepProfile,
+        EmbeddedToWorkspace      = UseEmbeddedProfile     | ConvertToWorkspace,
+        SRGBToWorkspace          = UseSRGB                | ConvertToWorkspace,
+        AutoToWorkspace          = AutomaticColors        | ConvertToWorkspace,
         InputToWorkspace         = UseDefaultInputProfile | ConvertToWorkspace,
-        SpecifiedToWorkspace     = UseSpecifiedProfile | ConvertToWorkspace,
-        NoColorManagement        = DoNotInterpret | LeaveFileUntagged
+        SpecifiedToWorkspace     = UseSpecifiedProfile    | ConvertToWorkspace,
+        NoColorManagement        = DoNotInterpret         | LeaveFileUntagged
     };
     Q_DECLARE_FLAGS(Behavior, BehaviorEnum)
+
+public:
+
+    ICCSettingsContainer();
+    ~ICCSettingsContainer() {};
+
+    void readFromConfig(KConfigGroup& group);
+    void writeToConfig(KConfigGroup& group) const;
+    void writeManagedViewToConfig(KConfigGroup& group) const;
+
+public:
 
     bool     enableCM;
 
@@ -125,7 +126,6 @@ public:
     int      proofingRenderingIntent;
     int      doGamutCheck;
     QColor   gamutCheckMaskColor;
-
 };
 
 }  // namespace Digikam

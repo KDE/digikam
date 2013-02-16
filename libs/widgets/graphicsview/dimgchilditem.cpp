@@ -47,13 +47,14 @@ public:
      *  a rectangle of 1% the size of the image will be drawn.
      * /
 
-    SimpleRectChildItem(QGraphicsItem *parent)
+    SimpleRectChildItem(QGraphicsItem* const parent)
         : DImgChildItem(parent)
     {
         setRelativePos(0.5, 0.5);
         setRelativeSize(0.01, 0.01);
     }
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
+
+    void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*)
     {
         painter->setPen(Qt::red);
         painter->drawRect(boundingRect());
@@ -61,11 +62,11 @@ public:
 };
 */
 
-class DImgChildItem::DImgChildItemPriv
+class DImgChildItem::Private
 {
 public:
 
-    explicit DImgChildItemPriv(DImgChildItem* q)
+    explicit Private(DImgChildItem* const q)
         : q(q)
     {
     }
@@ -80,9 +81,9 @@ public:
     DImgChildItem* const q;
 };
 
-void DImgChildItem::DImgChildItemPriv::connectParent(bool active)
+void DImgChildItem::Private::connectParent(bool active)
 {
-    GraphicsDImgItem* parent = q->parentDImgItem();
+    GraphicsDImgItem* const parent = q->parentDImgItem();
 
     if (parent)
     {
@@ -99,8 +100,8 @@ void DImgChildItem::DImgChildItemPriv::connectParent(bool active)
     }
 }
 
-DImgChildItem::DImgChildItem(QGraphicsItem* parent)
-    : QGraphicsObject(parent), d(new DImgChildItemPriv(this))
+DImgChildItem::DImgChildItem(QGraphicsItem* const parent)
+    : QGraphicsObject(parent), d(new Private(this))
 {
     d->connectParent();
 }

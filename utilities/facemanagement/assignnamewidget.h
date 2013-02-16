@@ -86,11 +86,11 @@ public:
 
     /** Please take care: you must set all four modes before usage! */
 
-    explicit AssignNameWidget(QWidget* parent = 0);
+    explicit AssignNameWidget(QWidget* const parent = 0);
     ~AssignNameWidget();
 
     /** Set the tag model to use for completion. */
-    void setModel(TagModel* model, TagPropertiesFilterModel* filteredModel, CheckableAlbumFilterModel* filterModel);
+    void setModel(TagModel* const model, TagPropertiesFilterModel* const filteredModel, CheckableAlbumFilterModel* const filterModel);
     void setDefaultModel();
 
     void setMode(Mode mode);
@@ -166,8 +166,8 @@ protected Q_SLOTS:
 
 private:
 
-    class AssignNameWidgetPriv;
-    AssignNameWidgetPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

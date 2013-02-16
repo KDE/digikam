@@ -6,7 +6,7 @@
  * Date        : 2012-01-13
  * Description : progress manager
  *
- * Copyright (C) 2007-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2012      by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2004      by Till Adam <adam at kde dot org>
  *
@@ -78,8 +78,8 @@ public Q_SLOTS:
 
 private:
 
-    class TransactionItemPriv;
-    TransactionItemPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 // --------------------------------------------------------------------------------
@@ -95,7 +95,7 @@ public:
 
     TransactionItem* addTransactionItem(ProgressItem* item, bool first);
 
-    QSize sizeHint() const;
+    QSize sizeHint()        const;
     QSize minimumSizeHint() const;
 
 public Q_SLOTS:
@@ -152,8 +152,8 @@ protected:
 
 private:
 
-    class ProgressViewPriv;
-    ProgressViewPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

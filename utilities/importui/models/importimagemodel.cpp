@@ -875,10 +875,13 @@ void ImportImageModelIncrementalUpdater::appendInfos(const QList<CamItemInfo>& i
         bool found              = false;
         QHash<qlonglong, int>::iterator it;
 
-        for (it = oldIds.find(info.id) ; (it != oldIds.end()) && (it.key() == info.id) ; ++it)
+        for (it = oldIds.find(info.id) ; it != oldIds.end() ; ++it)
         {
-            found = true;
-            break;
+            if (it.key() == info.id)
+            {
+                found = true;
+                break;
+            }
         }
 
         if (found)

@@ -7,8 +7,8 @@
  * Description : scan pictures interface.
  *
  * Copyright (C) 2005-2006 by Tom Albers <tomalbers@kde.nl>
- * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2007-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2006-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -85,8 +85,8 @@ public:
      * shortening the synchronous wait. After completeCollectionScanDeferFiles, you
      * need to call allowToScanDeferredFiles() once to enable scanning the deferred files.
      */
-    void completeCollectionScan(SplashScreen* splash=0, bool defer = false);
-    void completeCollectionScanDeferFiles(SplashScreen* splash=0);
+    void completeCollectionScan(SplashScreen* const splash=0, bool defer = false);
+    void completeCollectionScanDeferFiles(SplashScreen* const splash=0);
     void allowToScanDeferredFiles();
 
     /**
@@ -129,10 +129,14 @@ public:
     class FileMetadataWrite
     {
     public:
+
         explicit FileMetadataWrite(const ImageInfo& info);
         ~FileMetadataWrite();
+
         void changed(bool wasChanged);
+
     protected:
+
         ImageInfo m_info;
         bool      m_changed;
     };
@@ -170,8 +174,8 @@ public:
      *  dstPath is the new parent directory of the album, so
      *  do not include the album name to dstPath.
      */
-    void hintAtMoveOrCopyOfAlbum(const PAlbum* album, const PAlbum* dstAlbum, const QString& newAlbumName = QString());
-    void hintAtMoveOrCopyOfAlbum(const PAlbum* album, const QString& dstPath, const QString& newAlbumName = QString());
+    void hintAtMoveOrCopyOfAlbum(const PAlbum* const album, const PAlbum* const dstAlbum, const QString& newAlbumName = QString());
+    void hintAtMoveOrCopyOfAlbum(const PAlbum* const album, const QString& dstPath, const QString& newAlbumName = QString());
 
     /** Hint at the imminent copy, move or rename of items, so that the
      *  collection scanner is informed about this.
@@ -179,8 +183,8 @@ public:
      *  and give the names at destination in itemNames (Unless for rename, names wont usually change.
      *  Give them nevertheless.)
      */
-    void hintAtMoveOrCopyOfItems(const QList<qlonglong> ids, const PAlbum* dstAlbum, const QStringList& itemNames);
-    void hintAtMoveOrCopyOfItem(qlonglong id, const PAlbum* dstAlbum, const QString& itemName);
+    void hintAtMoveOrCopyOfItems(const QList<qlonglong> ids, const PAlbum* const dstAlbum, const QStringList& itemNames);
+    void hintAtMoveOrCopyOfItem(qlonglong id, const PAlbum* const dstAlbum, const QString& itemName);
 
     /** Hint at the fact that an item may have changed, although its modification date may not have changed.
      *  Note that a scan of the containing directory will need to be triggered nonetheless for the hints to take effect. */
@@ -234,26 +238,27 @@ private:
      */
     void scanFileDirectly(const QString& filePath);
 
-    virtual void moreSchemaUpdateSteps(int numberOfSteps);
-    virtual void schemaUpdateProgress(const QString& message, int numberOfSteps);
-    virtual void finishedSchemaUpdate(UpdateResult result);
-    virtual void connectCollectionScanner(CollectionScanner* scanner);
-    virtual void error(const QString& errorMessage);
-    virtual bool continueQuery();
-
     void createProgressDialog();
     void setInitializationMessage();
 
+    virtual void moreSchemaUpdateSteps(int numberOfSteps);
+    virtual void schemaUpdateProgress(const QString& message, int numberOfSteps);
+    virtual void finishedSchemaUpdate(UpdateResult result);
+    virtual void connectCollectionScanner(CollectionScanner* const scanner);
+    virtual void error(const QString& errorMessage);
+    virtual bool continueQuery();
+
 private:
 
-    friend class ScanControllerCreator;
     ScanController();
     ~ScanController();
 
+    friend class ScanControllerCreator;
+
 private:
 
-    class ScanControllerPriv;
-    ScanControllerPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

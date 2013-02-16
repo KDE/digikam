@@ -35,7 +35,7 @@ ImageAttributesWatch* ImageAttributesWatch::m_instance = 0;
 
 ImageAttributesWatch::ImageAttributesWatch()
 {
-    DatabaseWatch* dbwatch = DatabaseAccess::databaseWatch();
+    DatabaseWatch* const dbwatch = DatabaseAccess::databaseWatch();
 
     connect(dbwatch, SIGNAL(imageChange(ImageChangeset)),
             this, SLOT(slotImageChange(ImageChangeset)));

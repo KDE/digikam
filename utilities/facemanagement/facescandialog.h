@@ -46,7 +46,7 @@ class FaceScanDialog : public KDialog, public StateSavingObject
 
 public:
 
-    explicit FaceScanDialog(QWidget* parent = 0);
+    explicit FaceScanDialog(QWidget* const parent = 0);
     ~FaceScanDialog();
 
     FaceScanSettings settings() const;
@@ -71,8 +71,8 @@ private:
 
 private:
 
-    class FaceScanDialogPriv;
-    FaceScanDialogPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

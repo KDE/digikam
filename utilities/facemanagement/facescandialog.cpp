@@ -63,17 +63,17 @@ class ButtonExtendedLabel : public QLabel
 {
 public:
 
-    explicit ButtonExtendedLabel(QWidget* parent = 0)
+    explicit ButtonExtendedLabel(QWidget* const parent = 0)
         : QLabel(parent), m_button(0)
     {
     }
 
-    ButtonExtendedLabel(const QString& text, QWidget* parent = 0)
+    ButtonExtendedLabel(const QString& text, QWidget* const parent = 0)
         : QLabel(text, parent), m_button(0)
     {
     }
 
-    void setButton(QAbstractButton* button)
+    void setButton(QAbstractButton* const button)
     {
         setBuddy(button);
         m_button = button;
@@ -99,7 +99,7 @@ class ModelClearButton : public AnimatedClearButton
 {
 public:
 
-    explicit ModelClearButton(AbstractCheckableAlbumModel* model)
+    explicit ModelClearButton(AbstractCheckableAlbumModel* const model)
     {
         setPixmap(SmallIcon(qApp->isLeftToRight() ? "edit-clear-locationbar-rtl" : "edit-clear-locationbar-ltr",
                             0, KIconLoader::DefaultState));
@@ -112,11 +112,11 @@ public:
 
 // ------------------------------------------------------------------------------------------
 
-class FaceScanDialog::FaceScanDialogPriv
+class FaceScanDialog::Private
 {
 public:
 
-    FaceScanDialogPriv()
+    Private()
         : configName("Face Detection Dialog"),
           configMainTask("Face Scan Main Task"),
           configValueDetectAndRecognize("Detect and Recognize Faces"),
@@ -169,9 +169,9 @@ public:
     const QString                configSettingsVisible;
 };
 
-FaceScanDialog::FaceScanDialog(QWidget* parent)
+FaceScanDialog::FaceScanDialog(QWidget* const parent)
     : KDialog(parent), StateSavingObject(this),
-      d(new FaceScanDialogPriv)
+      d(new Private)
 {
     setButtons(Ok | Cancel | Details);
     setDefaultButton(Ok);
@@ -216,8 +216,7 @@ void FaceScanDialog::doLoadState()
 {
     kDebug() << getConfigGroup().name();
     KConfigGroup group = getConfigGroup();
-
-    QString mainTask = group.readEntry(entryName(d->configMainTask), d->configValueDetectAndRecognize);
+    QString mainTask   = group.readEntry(entryName(d->configMainTask), d->configValueDetectAndRecognize);
 
     if (mainTask == d->configValueRecognizedMarkedFaces)
     {
@@ -310,15 +309,15 @@ void FaceScanDialog::setupUi()
 {
     // --- Main Widget ---
 
-    QWidget* mainWidget     = new QWidget;
-    QGridLayout* mainLayout = new QGridLayout;
+    QWidget* const mainWidget     = new QWidget;
+    QGridLayout* const mainLayout = new QGridLayout;
 
     // ---- Introductory labels ----
 
-    QLabel* personIcon   = new QLabel;
+    QLabel* const personIcon   = new QLabel;
     personIcon->setPixmap(SmallIcon("edit-image-face-show", KIconLoader::SizeLarge));
 
-    QLabel* introduction = new QLabel;
+    QLabel* const introduction = new QLabel;
     introduction->setText(i18nc("@info",
                                 "digiKam can search for faces in your photos.<nl/> "
                                 "When you have identified your friends on a number of photos,<nl/> "
@@ -327,37 +326,37 @@ void FaceScanDialog::setupUi()
 
     // ---- Main option box ----
 
-    d->optionGroupBox         = new QGroupBox;
-    QGridLayout* optionLayout = new QGridLayout;
+    d->optionGroupBox               = new QGroupBox;
+    QGridLayout* const optionLayout = new QGridLayout;
 
-    d->detectAndRecognizeButton                  = new QRadioButton(i18nc("@option:radio", "Detect and recognize faces"));
-    ButtonExtendedLabel* detectAndRecognizeLabel = new ButtonExtendedLabel;
+    d->detectAndRecognizeButton                        = new QRadioButton(i18nc("@option:radio", "Detect and recognize faces"));
+    ButtonExtendedLabel* const detectAndRecognizeLabel = new ButtonExtendedLabel;
     detectAndRecognizeLabel->setText(i18nc("@info",
                                            "Find all faces in your photos<nl/> and try to recognize "
                                            "which person is depicted"));
     //detectAndRecognizeLabel->setWordWrap(true);
     detectAndRecognizeLabel->setButton(d->detectAndRecognizeButton);
-    ButtonExtendedLabel* detectAndRecognizeIcon  = new ButtonExtendedLabel;
+    ButtonExtendedLabel* const detectAndRecognizeIcon  = new ButtonExtendedLabel;
     detectAndRecognizeIcon->setPixmap(SmallIcon("edit-image-face-detect", KIconLoader::SizeLarge));
     detectAndRecognizeIcon->setButton(d->detectAndRecognizeButton);
     detectAndRecognizeIcon->setAlignment(Qt::AlignCenter);
-    d->alreadyScannedBox                         = new QComboBox;
+    d->alreadyScannedBox                               = new QComboBox;
     d->alreadyScannedBox->addItem(i18nc("@label:listbox", "Skip images already scanned"), FaceScanSettings::Skip);
     d->alreadyScannedBox->addItem(i18nc("@label:listbox", "Scan again and merge results"), FaceScanSettings::Merge);
     d->alreadyScannedBox->addItem(i18nc("@label:listbox", "Clear unconfirmed results and rescan"), FaceScanSettings::Rescan);
     d->alreadyScannedBox->setCurrentIndex(FaceScanSettings::Skip);
-    QGridLayout* detectAndRecognizeLabelLayout   = new QGridLayout;
+    QGridLayout* const detectAndRecognizeLabelLayout   = new QGridLayout;
     detectAndRecognizeLabelLayout->addWidget(detectAndRecognizeLabel, 0, 0, 1, -1);
     detectAndRecognizeLabelLayout->setColumnMinimumWidth(0, 10);
     detectAndRecognizeLabelLayout->addWidget(d->alreadyScannedBox, 1, 1);
 
-    d->reRecognizeButton                  = new QRadioButton(i18nc("@option:radio", "Recognize faces"));
-    ButtonExtendedLabel* reRecognizeLabel = new ButtonExtendedLabel;
+    d->reRecognizeButton                        = new QRadioButton(i18nc("@option:radio", "Recognize faces"));
+    ButtonExtendedLabel* const reRecognizeLabel = new ButtonExtendedLabel;
     reRecognizeLabel->setText(i18nc("@info",
                                     "Try again to recognize the people depicted<nl/> on marked but yet unconfirmed faces."));
     //reRecognizeLabel->setWordWrap(true);
     reRecognizeLabel->setButton(d->reRecognizeButton);
-    ButtonExtendedLabel* reRecognizeIcon = new ButtonExtendedLabel;
+    ButtonExtendedLabel* const reRecognizeIcon = new ButtonExtendedLabel;
     reRecognizeIcon->setPixmap(SmallIcon("edit-image-face-recognize", KIconLoader::SizeLarge));
     reRecognizeIcon->setButton(d->reRecognizeButton);
     reRecognizeIcon->setAlignment(Qt::AlignCenter);
@@ -393,11 +392,11 @@ void FaceScanDialog::setupUi()
 
     // ---- Album tab ----
 
-    QWidget* selectAlbumsTab        = new QWidget;
-    QGridLayout* selectAlbumsLayout = new QGridLayout;
+    QWidget* const selectAlbumsTab        = new QWidget;
+    QGridLayout* const selectAlbumsLayout = new QGridLayout;
 
-    QLabel* includeAlbumsLabel      = new QLabel(i18nc("@label", "Search in:"));
-    d->albumSelectCB                = new AlbumTreeViewSelectComboBox();
+    QLabel* const includeAlbumsLabel      = new QLabel(i18nc("@label", "Search in:"));
+    d->albumSelectCB                      = new AlbumTreeViewSelectComboBox();
     //d->albumSelectCB->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     d->albumSelectCB->setToolTip(i18nc("@info:tooltip", "Select all albums that should be included in the face scan."));
     d->albumSelectCB->setDefaultModel();
@@ -429,18 +428,18 @@ void FaceScanDialog::setupUi()
 
     // ---- Parameters tab ----
 
-    QWidget* parametersTab        = new QWidget;
-    QGridLayout* parametersLayout = new QGridLayout;
+    QWidget* const parametersTab        = new QWidget;
+    QGridLayout* const parametersLayout = new QGridLayout;
 
-    QLabel* detectionLabel        = new QLabel(i18nc("@label", "Parameters for face detection"));
+    QLabel* const detectionLabel        = new QLabel(i18nc("@label", "Parameters for face detection"));
 
-    d->parametersResetButton      = new QToolButton;
+    d->parametersResetButton            = new QToolButton;
     d->parametersResetButton->setAutoRaise(true);
     d->parametersResetButton->setFocusPolicy(Qt::NoFocus);
     d->parametersResetButton->setIcon(SmallIcon("document-revert"));
     d->parametersResetButton->setToolTip(i18nc("@action:button", "Reset to default values"));
 
-    d->accuracyInput = new KIntNumInput;
+    d->accuracyInput                    = new KIntNumInput;
     d->accuracyInput->setRange(0, 100, 10);
     d->accuracyInput->setSliderEnabled();
     d->accuracyInput->setLabel(i18nc("@label Two extremities of a scale", "Fast   -   Accurate"),
@@ -459,10 +458,10 @@ void FaceScanDialog::setupUi()
 
     // ---- Advanced tab ----
 
-    QWidget* advancedTab        = new QWidget;
-    QVBoxLayout* advancedLayout = new QVBoxLayout;
+    QWidget* const advancedTab        = new QWidget;
+    QVBoxLayout* const advancedLayout = new QVBoxLayout;
 
-    QLabel* cpuExplanation = new QLabel;
+    QLabel* const cpuExplanation      = new QLabel;
     cpuExplanation->setText(i18nc("@info",
                                   "Face detection is a time-consuming task. "
                                   "You can choose if you wish to employ all processor cores on your system, "

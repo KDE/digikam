@@ -59,7 +59,9 @@ ThumbnailLoadingTask::ThumbnailLoadingTask(LoadSaveThread* thread, const Loading
     : SharedLoadingTask(thread, description, LoadSaveThread::AccessModeRead,
                         LoadingTaskStatusLoading)
 {
-    ThumbnailLoadThread* thumbThread = dynamic_cast<ThumbnailLoadThread*>(thread);
+    // Thread must be a ThumbnailLoadThread, crashes otherwise.
+    // Not a clean but pragmatic solution.
+    ThumbnailLoadThread* thumbThread = static_cast<ThumbnailLoadThread*>(thread);
     m_creator = thumbThread->thumbnailCreator();
 }
 

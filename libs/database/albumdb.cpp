@@ -2183,11 +2183,11 @@ void AlbumDB::removeImageCopyrightProperties(qlonglong imageID, const QString& p
     {
         ++removeBy;
     }
-    else if (!extraValue.isNull())
+    if (!extraValue.isNull())
     {
         ++removeBy;
     }
-    else if (!value.isNull())
+    if (!value.isNull())
     {
         ++removeBy;
     }

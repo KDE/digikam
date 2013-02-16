@@ -32,8 +32,8 @@
 
 namespace KFaceIface
 {
-class Face;
-class Image;
+    class Face;
+    class Image;
 }
 
 class QImage;
@@ -134,14 +134,14 @@ public:
      * This uses a thumbnail load thread to load the image detail.
      * If requested, the faces will be scaled to the given (fixed) size.
      */
-    void                fillImageInFaces(ThumbnailImageCatcher* catcher, const QString& filePath,
+    void                fillImageInFaces(ThumbnailImageCatcher* const catcher, const QString& filePath,
                                          QList<KFaceIface::Face>& faceList, const QSize& scaleSize = QSize()) const;
 
     /**
      * Store the needed thumbnails for the given faces. This can be a huge optimization
      * when the has already been loaded anyway.
      */
-    void                storeThumbnails(ThumbnailLoadThread* thread, const QString& filePath,
+    void                storeThumbnails(ThumbnailLoadThread* const thread, const QString& filePath,
                                         const QList<DatabaseFace>& databaseFaces, const DImg& image);
 
     /**
@@ -169,7 +169,6 @@ protected:
     virtual void addNormalTag(qlonglong imageid, int tagId);
     virtual void removeNormalTag(qlonglong imageid, int tagId);
     virtual void removeNormalTags(qlonglong imageid, QList<int> tagId);
-
 };
 
 }  // Namespace Digikam

@@ -7,7 +7,7 @@
  * Description : Graphics View for DImg preview
  *
  * Copyright (C) 2010-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2011-2012 Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2011-2013 Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -95,7 +95,7 @@ protected:
      *  Use item() or previewItem() to get right version.
      *  Note: if you store a GraphicsDImgItem object, previewItem() will return 0.
      */
-    void setItem(GraphicsDImgItem* item);
+    void setItem(GraphicsDImgItem* const item);
 
     void installPanIcon();
 
@@ -111,7 +111,7 @@ protected:
     void finishPanning();
 
     void setShowText(bool value);
-    
+
     virtual bool acceptsMouseClick(QMouseEvent* e);
     virtual void scrollContentsBy(int dx, int dy);
 

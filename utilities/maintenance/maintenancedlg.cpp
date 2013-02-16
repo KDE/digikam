@@ -154,14 +154,14 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
 
     // --------------------------------------------------------------------------------------
 
-    d->scanThumbs = new QCheckBox(i18n("Scan for changed or non-cataloged items (faster)"));
+    d->scanThumbs        = new QCheckBox(i18n("Scan for changed or non-cataloged items (faster)"));
     d->expanderBox->insertItem(Private::Thumbnails, d->scanThumbs, SmallIcon("view-process-all"),
                                i18n("Rebuild Thumbnails"), "Thumbnails", false);
     d->expanderBox->setCheckBoxVisible(Private::Thumbnails, true);
 
     // --------------------------------------------------------------------------------------
 
-    d->scanFingerPrints = new QCheckBox(i18n("Scan for changed or non-cataloged items (faster)"));
+    d->scanFingerPrints  = new QCheckBox(i18n("Scan for changed or non-cataloged items (faster)"));
     d->expanderBox->insertItem(Private::FingerPrints, d->scanFingerPrints, SmallIcon("run-build"),
                                i18n("Rebuild Finger-prints"), "Fingerprints", false);
     d->expanderBox->setCheckBoxVisible(Private::FingerPrints, true);
@@ -270,14 +270,14 @@ void MaintenanceDlg::readSettings()
 
     d->expanderBox->setChecked(Private::NewItems,      group.readEntry(d->configNewItems,      prm.newItems));
     d->expanderBox->setChecked(Private::Thumbnails,    group.readEntry(d->configThumbnails,    prm.thumbnails));
-    d->scanThumbs->setChecked(group.readEntry(d->configScanThumbs,                        prm.scanThumbs));
+    d->scanThumbs->setChecked(group.readEntry(d->configScanThumbs,                             prm.scanThumbs));
     d->expanderBox->setChecked(Private::FingerPrints,  group.readEntry(d->configFingerPrints,  prm.fingerPrints));
-    d->scanFingerPrints->setChecked(group.readEntry(d->configScanFingerPrints,            prm.scanFingerPrints));
+    d->scanFingerPrints->setChecked(group.readEntry(d->configScanFingerPrints,                 prm.scanFingerPrints));
     d->expanderBox->setChecked(Private::Duplicates,    group.readEntry(d->configDuplicates,    prm.duplicates));
-    d->similarity->setValue(group.readEntry(d->configSimilarity,                          prm.similarity));
+    d->similarity->setValue(group.readEntry(d->configSimilarity,                               prm.similarity));
     d->expanderBox->setChecked(Private::Metadata,      group.readEntry(d->configMetadata,      prm.metadata));
     d->expanderBox->setChecked(Private::FaceDetection, group.readEntry(d->configFaceDetection, prm.faceDetection));
-    d->faceScannedHandling->setCurrentIndex(group.readEntry(d->configFaceScannedHandling, (int)prm.faceSettings.alreadyScannedHandling));
+    d->faceScannedHandling->setCurrentIndex(group.readEntry(d->configFaceScannedHandling,      (int)prm.faceSettings.alreadyScannedHandling));
 
     for (int i = Private::NewItems ; i < Private::Stretch ; ++i)
     {

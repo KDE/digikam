@@ -7,7 +7,7 @@
  * Description : a wrapper class for an ICC color profile
  *
  * Copyright (C) 2005-2006 by F.J. Cruz <fj dot cruz at supercable dot es>
- * Copyright (C) 2005-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -49,24 +49,24 @@
 namespace Digikam
 {
 
-class IccProfile::IccProfilePriv : public QSharedData
+class IccProfile::Private : public QSharedData
 {
 public:
 
-    IccProfilePriv() :
+    Private() :
         type(IccProfile::InvalidType),
         handle(0)
     {
     }
 
-    IccProfilePriv(const IccProfilePriv& other)
+    Private(const Private& other)
         : QSharedData(other)
     {
         handle   = 0;
         operator = (other);
     }
 
-    IccProfilePriv& operator=(const IccProfilePriv& other)
+    Private& operator=(const Private& other)
     {
         data        = other.data;
         filePath    = other.filePath;
@@ -77,7 +77,7 @@ public:
         return *this;
     }
 
-    ~IccProfilePriv()
+    ~Private()
     {
         close();
     }
@@ -91,6 +91,8 @@ public:
             handle = 0;
         }
     }
+
+public:
 
     QByteArray              data;
     QString                 filePath;
@@ -138,18 +140,18 @@ IccProfile::IccProfile()
 }
 
 IccProfile::IccProfile(const QByteArray& data)
-    : d(new IccProfilePriv)
+    : d(new Private)
 {
     d->data = data;
 }
 
 IccProfile::IccProfile(const QString& filePath)
-    : d(new IccProfilePriv)
+    : d(new Private)
 {
     d->filePath = filePath;
 }
 
-IccProfile::IccProfile(const char* location, const QString& relativePath)
+IccProfile::IccProfile(const char* const location, const QString& relativePath)
     : d(0)
 {
     QString filePath = KStandardDirs::locate(location, relativePath);
@@ -160,7 +162,7 @@ IccProfile::IccProfile(const char* location, const QString& relativePath)
         return;
     }
 
-    d           = new IccProfilePriv;
+    d           = new Private;
     d->filePath = filePath;
 }
 

@@ -68,6 +68,11 @@ VisibilityController::VisibilityController(QObject* parent)
 {
 }
 
+VisibilityController::~VisibilityController()
+{
+    delete d;
+}
+
 void VisibilityController::addObject(VisibilityObject* object)
 {
     d->objects << object;

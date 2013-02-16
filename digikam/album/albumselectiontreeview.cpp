@@ -124,8 +124,11 @@ public:
         {
             return;
         }
-        
+
         PAlbum* const album = dynamic_cast<PAlbum*>(a);
+
+        if (!album)
+            return;
 
         if (album->isAlbumRoot())
         {
@@ -160,6 +163,8 @@ public:
         // --------------------------------------------------------
         cmh.addActionEditAlbum(d->albumModificationHelper, album);
     }
+
+public:
 
     AlbumSelectionTreeView::Private* const d;
 };
@@ -210,6 +215,7 @@ void AlbumSelectionTreeView::slotFindDuplicates()
 void AlbumSelectionTreeView::slotRebuildThumbs()
 {
     PAlbum* const album = d->albumModificationHelper->boundAlbum(sender());
+
     if (!album)
     {
         return;

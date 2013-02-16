@@ -2592,51 +2592,48 @@ bool DImg::rotateAndFlip(int orientation)
 {
     bool rotatedOrFlipped = false;
 
-    if (orientation != DMetadata::ORIENTATION_NORMAL)
+    switch (orientation)
     {
-        switch (orientation)
-        {
-            case DMetadata::ORIENTATION_NORMAL:
-            case DMetadata::ORIENTATION_UNSPECIFIED:
-                break;
+        case DMetadata::ORIENTATION_NORMAL:
+        case DMetadata::ORIENTATION_UNSPECIFIED:
+            return false;
 
-            case DMetadata::ORIENTATION_HFLIP:
-                flip(DImg::HORIZONTAL);
-                rotatedOrFlipped = true;
-                break;
+        case DMetadata::ORIENTATION_HFLIP:
+            flip(DImg::HORIZONTAL);
+            rotatedOrFlipped = true;
+            break;
 
-            case DMetadata::ORIENTATION_ROT_180:
-                rotate(DImg::ROT180);
-                rotatedOrFlipped = true;
-                break;
+        case DMetadata::ORIENTATION_ROT_180:
+            rotate(DImg::ROT180);
+            rotatedOrFlipped = true;
+            break;
 
-            case DMetadata::ORIENTATION_VFLIP:
-                flip(DImg::VERTICAL);
-                rotatedOrFlipped = true;
-                break;
+        case DMetadata::ORIENTATION_VFLIP:
+            flip(DImg::VERTICAL);
+            rotatedOrFlipped = true;
+            break;
 
-            case DMetadata::ORIENTATION_ROT_90_HFLIP:
-                rotate(DImg::ROT90);
-                flip(DImg::HORIZONTAL);
-                rotatedOrFlipped = true;
-                break;
+        case DMetadata::ORIENTATION_ROT_90_HFLIP:
+            rotate(DImg::ROT90);
+            flip(DImg::HORIZONTAL);
+            rotatedOrFlipped = true;
+            break;
 
-            case DMetadata::ORIENTATION_ROT_90:
-                rotate(DImg::ROT90);
-                rotatedOrFlipped = true;
-                break;
+        case DMetadata::ORIENTATION_ROT_90:
+            rotate(DImg::ROT90);
+            rotatedOrFlipped = true;
+            break;
 
-            case DMetadata::ORIENTATION_ROT_90_VFLIP:
-                rotate(DImg::ROT90);
-                flip(DImg::VERTICAL);
-                rotatedOrFlipped = true;
-                break;
+        case DMetadata::ORIENTATION_ROT_90_VFLIP:
+            rotate(DImg::ROT90);
+            flip(DImg::VERTICAL);
+            rotatedOrFlipped = true;
+            break;
 
-            case DMetadata::ORIENTATION_ROT_270:
-                rotate(DImg::ROT270);
-                rotatedOrFlipped = true;
-                break;
-        }
+        case DMetadata::ORIENTATION_ROT_270:
+            rotate(DImg::ROT270);
+            rotatedOrFlipped = true;
+            break;
     }
 
     return rotatedOrFlipped;

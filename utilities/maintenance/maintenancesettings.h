@@ -46,6 +46,7 @@ public:
         duplicates       = false;
         similarity       = 90;
         metadata         = false;
+        faceDetection    = false;
     };
 
     virtual ~MaintenanceSettings()

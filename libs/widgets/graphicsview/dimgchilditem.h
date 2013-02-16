@@ -50,7 +50,7 @@ public:
      * From the set relative size, the boundingRect() is calculated.
      */
 
-    explicit DImgChildItem(QGraphicsItem* parent = 0);
+    explicit DImgChildItem(QGraphicsItem* const parent = 0);
     ~DImgChildItem();
 
     /**
@@ -206,8 +206,8 @@ private:
 
 private:
 
-    class DImgChildItemPriv;
-    DImgChildItemPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

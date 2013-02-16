@@ -6,8 +6,8 @@
  * Date        : 2005-05-17
  * Description : low level files management interface.
  *
- * Copyright (C) 2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005      by Renchi Raju <renchi dot raju at gmail dot com>
+ * Copyright (C) 2012-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -84,6 +84,7 @@ void SidecarFinder::process(const KUrl::List& files)
                 localFiles << DMetadata::sidecarUrl(url);
                 kDebug()   << "Detected a sidecar" << localFiles.last();
             }
+
             localFiles << url;
         }
         else
@@ -104,15 +105,18 @@ GroupedImagesFinder::GroupedImagesFinder(const QList<ImageInfo> source)
 void GroupedImagesFinder::process(const QList<ImageInfo> source)
 {
     QSet<qlonglong> ids;
+
     foreach (const ImageInfo& info, source)
     {
         ids << info.id();
     }
 
     infos.reserve(source.size());
+
     foreach (const ImageInfo& info, source)
     {
         infos << info;
+
         if (info.hasGroupedImages())
         {
             foreach (const ImageInfo& groupedImage, info.groupedImages())
@@ -121,6 +125,7 @@ void GroupedImagesFinder::process(const QList<ImageInfo> source)
                 {
                     continue;
                 }
+
                 infos << groupedImage;
                 ids << groupedImage.id();
             }
@@ -130,7 +135,7 @@ void GroupedImagesFinder::process(const QList<ImageInfo> source)
 
 // ------------------------------------------------------------------------------------------------
 
-DIO::DIOPriv::DIOPriv(DIO* const q)
+DIO::Private::Private(DIO* const q)
     : q(q)
 {
     connectAndSchedule(this, SIGNAL(jobToProcess(int, KUrl::List, KUrl)),
@@ -143,7 +148,7 @@ DIO::DIOPriv::DIOPriv(DIO* const q)
             q, SLOT(createJob(int, KUrl::List, KUrl)));
 }
 
-void DIO::DIOPriv::processJob(int operation, const KUrl::List& srcList, const KUrl& dest)
+void DIO::Private::processJob(int operation, const KUrl::List& srcList, const KUrl& dest)
 {
     SidecarFinder finder(srcList);
 
@@ -157,24 +162,26 @@ void DIO::DIOPriv::processJob(int operation, const KUrl::List& srcList, const KU
     }
 }
 
-void DIO::DIOPriv::processRename(const KUrl& src, const KUrl& dest)
+void DIO::Private::processRename(const KUrl& src, const KUrl& dest)
 {
     QString sidecar = DMetadata::sidecarFilePathForFile(src.toLocalFile());
+
     if (QFileInfo(sidecar).exists())
     {
         QString destSidecar = DMetadata::sidecarFilePathForFile(dest.toLocalFile());
         emit jobToCreate(Rename, KUrl::List() << KUrl::fromPath(sidecar), KUrl::fromPath(destSidecar));
     }
+
     emit jobToCreate(Rename, KUrl::List() << src, dest);
 }
 
-void DIO::DIOPriv::albumToAlbum(int operation, const PAlbum* src, const PAlbum* dest)
+void DIO::Private::albumToAlbum(int operation, const PAlbum* const src, const PAlbum* const dest)
 {
     ScanController::instance()->hintAtMoveOrCopyOfAlbum(src, dest);
     emit jobToCreate(operation, src->fileUrl(), dest->fileUrl());
 }
 
-void DIO::DIOPriv::imagesToAlbum(int operation, const QList<ImageInfo> infos, const PAlbum* dest)
+void DIO::Private::imagesToAlbum(int operation, const QList<ImageInfo> infos, const PAlbum* const dest)
 {
     // this is a fast db operation, do here
     GroupedImagesFinder finder(infos);
@@ -189,23 +196,24 @@ void DIO::DIOPriv::imagesToAlbum(int operation, const QList<ImageInfo> infos, co
         ids << info.id();
         urls << info.fileUrl();
     }
+
     ScanController::instance()->hintAtMoveOrCopyOfItems(ids, dest, filenames);
 
     emit jobToProcess(operation, urls, dest->fileUrl());
 }
 
-void DIO::DIOPriv::filesToAlbum(int operation, const KUrl::List& srcList, const PAlbum* dest)
+void DIO::Private::filesToAlbum(int operation, const KUrl::List& srcList, const PAlbum* const dest)
 {
     emit jobToProcess(operation, srcList, dest->fileUrl());
 }
 
-void DIO::DIOPriv::renameFile(const ImageInfo& info, const QString& newName)
+void DIO::Private::renameFile(const ImageInfo& info, const QString& newName)
 {
     KUrl oldUrl = info.fileUrl();
     KUrl newUrl = oldUrl;
     newUrl.setFileName(newName);
 
-    PAlbum* album = AlbumManager::instance()->findPAlbum(info.albumId());
+    PAlbum* const album = AlbumManager::instance()->findPAlbum(info.albumId());
 
     if (album)
     {
@@ -215,13 +223,15 @@ void DIO::DIOPriv::renameFile(const ImageInfo& info, const QString& newName)
     emit renameToProcess(oldUrl, newUrl);
 }
 
-void DIO::DIOPriv::deleteFiles(const QList<ImageInfo>& infos, bool useTrash)
+void DIO::Private::deleteFiles(const QList<ImageInfo>& infos, bool useTrash)
 {
     KUrl::List urls;
+
     foreach(const ImageInfo& info, infos)
     {
         urls << info.fileUrl();
     }
+
     emit jobToProcess(useTrash ? Trash : Delete, urls, KUrl());
 }
 
@@ -244,7 +254,7 @@ DIO* DIO::instance()
 }
 
 DIO::DIO()
-    : d(new DIOPriv(this))
+    : d(new Private(this))
 {
 }
 
@@ -266,8 +276,8 @@ KIO::Job* DIO::createJob(int operation, const KUrl::List& src, const KUrl& dest)
         return 0;
     }
 
-    KIO::Job* job = 0;
-    int flags     = operation & FlagMask;
+    KIO::Job* job  = 0;
+    int flags      = operation & FlagMask;
     operation     &= OperationMask;
 
     if (operation == Copy)
@@ -285,6 +295,7 @@ KIO::Job* DIO::createJob(int operation, const KUrl::List& src, const KUrl& dest)
             kError() << "Invalid operation: renaming is not 1:1";
             return 0;
         }
+
         job = KIO::move(src.first(), dest, KIO::HideProgressInfo);
         job->setProperty(renameFileProperty.toAscii(), src.first().toLocalFile());
 
@@ -313,7 +324,7 @@ KIO::Job* DIO::createJob(int operation, const KUrl::List& src, const KUrl& dest)
 
 void DIO::slotResult(KJob* kjob)
 {
-    KIO::Job* job = static_cast<KIO::Job*>(kjob);
+    KIO::Job* const job = static_cast<KIO::Job*>(kjob);
 
     if (job->error())
     {
@@ -324,6 +335,7 @@ void DIO::slotResult(KJob* kjob)
         if (!v.isNull())
         {
             KUrl url(v.toString());
+
             if (job->error() == KIO::Job::KilledJobError)
             {
                 emit renamingAborted(url);
@@ -339,11 +351,13 @@ void DIO::slotResult(KJob* kjob)
             return;
         }
 
-        QWidget* w = QApplication::activeWindow();
+        QWidget* const w = QApplication::activeWindow();
+
         if (w)
         {
             job->ui()->setWindow(w);
         }
+
         job->ui()->showErrorMessage();
     }
 }
@@ -366,71 +380,77 @@ void DIO::slotRenamed(KIO::Job* job, const KUrl&, const KUrl& newURL)
 
 // Album -> Album -----------------------------------------------------
 
-void DIO::copy(const PAlbum* src, const PAlbum* dest)
+void DIO::copy(const PAlbum* const src, const PAlbum* const dest)
 {
     if (!src || !dest)
     {
         return;
     }
+
     instance()->d->albumToAlbum(Copy, src, dest);
 }
 
-void DIO::move(const PAlbum* src, const PAlbum* dest)
+void DIO::move(const PAlbum* src, const PAlbum* const dest)
 {
     if (!src || !dest)
     {
         return;
     }
+
     instance()->d->albumToAlbum(Move, src, dest);
 }
 
 // Images -> Album ----------------------------------------------------
 
-void DIO::copy(const QList<ImageInfo> infos, const PAlbum* dest)
+void DIO::copy(const QList<ImageInfo> infos, const PAlbum* const dest)
 {
     if (!dest)
     {
         return;
     }
+
     instance()->d->imagesToAlbum(Copy, infos, dest);
 }
 
-void DIO::move(const QList<ImageInfo> infos, const PAlbum* dest)
+void DIO::move(const QList<ImageInfo> infos, const PAlbum* const dest)
 {
     if (!dest)
     {
         return;
     }
+
     instance()->d->imagesToAlbum(Move, infos, dest);
 }
 
 // External files -> album --------------------------------------------
 
-void DIO::copy(const KUrl& src, const PAlbum* dest)
+void DIO::copy(const KUrl& src, const PAlbum* const dest)
 {
     copy(KUrl::List() << src, dest);
 }
 
-void DIO::copy(const KUrl::List& srcList, const PAlbum* dest)
+void DIO::copy(const KUrl::List& srcList, const PAlbum* const dest)
 {
     if (!dest)
     {
         return;
     }
+
     instance()->d->filesToAlbum(Copy, srcList, dest);
 }
 
-void DIO::move(const KUrl& src, const PAlbum* dest)
+void DIO::move(const KUrl& src, const PAlbum* const dest)
 {
     move(KUrl::List() << src, dest);
 }
 
-void DIO::move(const KUrl::List& srcList, const PAlbum* dest)
+void DIO::move(const KUrl::List& srcList, const PAlbum* const dest)
 {
     if (!dest)
     {
         return;
     }
+
     instance()->d->filesToAlbum(Move, srcList, dest);
 }
 
@@ -453,12 +473,13 @@ void DIO::del(const ImageInfo& info, bool useTrash)
     del(QList<ImageInfo>() << info, useTrash);
 }
 
-void DIO::del(const PAlbum* album, bool useTrash)
+void DIO::del(const PAlbum* const album, bool useTrash)
 {
     if (!album)
     {
         return;
     }
+
     instance()->createJob(useTrash ? Trash : Delete, KUrl::List() << album->fileUrl(), KUrl());
 }
 

@@ -6,7 +6,7 @@
  * Date        : 2010-09-17
  * Description : Managing of face tag region items on a GraphicsDImgView
  *
- * Copyright (C) 2010 Aditya Bhatt <adityabhatt1991 at gmail dot com>
+ * Copyright (C) 2010      by Aditya Bhatt <adityabhatt1991 at gmail dot com>
  * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -66,11 +66,11 @@ class FaceItem : public RegionFrameItem
 {
 public:
 
-    explicit FaceItem(QGraphicsItem* parent = 0);
+    explicit FaceItem(QGraphicsItem* const parent = 0);
 
     void setFace(const DatabaseFace& face);
     DatabaseFace face() const;
-    void setHudWidget(AssignNameWidget* widget);
+    void setHudWidget(AssignNameWidget* const widget);
     AssignNameWidget* widget() const;
     void switchMode(AssignNameWidget::Mode mode);
     void setEditable(bool allowEdit);
@@ -85,7 +85,7 @@ protected:
 
 //-------------------------------------------------------------------------------
 
-FaceItem::FaceItem(QGraphicsItem* parent)
+FaceItem::FaceItem(QGraphicsItem* const parent)
     : RegionFrameItem(parent),
       m_widget(0), m_changer(0)
 {
@@ -103,7 +103,7 @@ DatabaseFace FaceItem::face() const
     return m_face;
 }
 
-void FaceItem::setHudWidget(AssignNameWidget* widget)
+void FaceItem::setHudWidget(AssignNameWidget* const widget)
 {
     m_widget = widget;
     updateCurrentTag();
@@ -147,7 +147,7 @@ void FaceItem::updateCurrentTag()
 
 //-------------------------------------------------------------------------------
 
-AssignNameWidgetHidingStateChanger::AssignNameWidgetHidingStateChanger(FaceItem* item)
+AssignNameWidgetHidingStateChanger::AssignNameWidgetHidingStateChanger(FaceItem* const item)
     : HidingStateChanger(item->widget(), "mode", item)
 {
     // The WidgetProxyItem
@@ -159,18 +159,19 @@ AssignNameWidgetHidingStateChanger::AssignNameWidgetHidingStateChanger(FaceItem*
 
 void AssignNameWidgetHidingStateChanger::slotStateChanged()
 {
-    FaceItem* item = static_cast<FaceItem*>(parent());
+    FaceItem* const item = static_cast<FaceItem*>(parent());
     // Show resize handles etc. only in edit modes
     item->setEditable(item->widget()->mode() != AssignNameWidget::ConfirmedMode);
 }
 
 //-------------------------------------------------------------------------------
 
-class FaceGroup::FaceGroupPriv
+class FaceGroup::Private
 {
 public:
 
-    explicit FaceGroupPriv(FaceGroup* q) : q(q)
+    explicit Private(FaceGroup* const q)
+        : q(q)
     {
         view                 = 0;
         autoSuggest          = false;
@@ -216,8 +217,8 @@ public:
     FaceGroup* const           q;
 };
 
-FaceGroup::FaceGroup(GraphicsDImgView* view)
-    : QObject(view), d(new FaceGroupPriv(this))
+FaceGroup::FaceGroup(GraphicsDImgView* const view)
+    : QObject(view), d(new Private(this))
 {
     d->view                 = view;
     d->visibilityController = new ItemVisibilityController(this);
@@ -275,10 +276,12 @@ ImageInfo FaceGroup::info() const
 QList<RegionFrameItem*> FaceGroup::items() const
 {
     QList<RegionFrameItem*> items;
-    foreach(FaceItem* item, d->items)
+
+    foreach(FaceItem* const item, d->items)
     {
         items << item;
     }
+
     return items;
 }
 
@@ -307,7 +310,7 @@ bool FaceGroup::showOnHover() const
     return d->showOnHover;
 }
 
-void FaceGroup::FaceGroupPriv::applyVisible()
+void FaceGroup::Private::applyVisible()
 {
     if (state == NoFaces)
     {
@@ -389,7 +392,7 @@ static QPointF closestPointOfRect(const QPointF& p, const QRectF& r)
     return cp;
 }
 
-RegionFrameItem* FaceGroup::closestItem(const QPointF& p, qreal* manhattanLength) const
+RegionFrameItem* FaceGroup::closestItem(const QPointF& p, qreal* const manhattanLength) const
 {
     RegionFrameItem* closestItem = 0;
     qreal minDistance            = 0;
@@ -397,13 +400,10 @@ RegionFrameItem* FaceGroup::closestItem(const QPointF& p, qreal* manhattanLength
 
     foreach(RegionFrameItem* item, d->items)
     {
-        QRectF r        = item->boundingRect().translated(item->pos());
+        QRectF r       = item->boundingRect().translated(item->pos());
         qreal distance = (p - closestPointOfRect(p, r)).manhattanLength();
 
-        if (!closestItem
-            || distance < minDistance
-            || (distance == 0 && (p - r.center()).manhattanLength() < minCenterDistance)
-           )
+        if (!closestItem || distance < minDistance || (distance == 0 && (p - r.center()).manhattanLength() < minCenterDistance))
         {
             closestItem = item;
             minDistance = distance;
@@ -423,7 +423,7 @@ RegionFrameItem* FaceGroup::closestItem(const QPointF& p, qreal* manhattanLength
     return closestItem;
 }
 
-QList<QGraphicsItem*> FaceGroup::FaceGroupPriv::hotItems(const QPointF& scenePos)
+QList<QGraphicsItem*> FaceGroup::Private::hotItems(const QPointF& scenePos)
 {
     if (!q->hasVisibleItems())
     {
@@ -440,12 +440,12 @@ QList<QGraphicsItem*> FaceGroup::FaceGroupPriv::hotItems(const QPointF& scenePos
 
     return closeItems;
 
-    /*
+/*
     qreal distance;
     d->faceGroup->closestItem(mapToScene(e->pos()), &distance);
     if (distance < 15)
         return false;
-    */
+*/
 }
 
 bool FaceGroup::acceptsMouseClick(const QPointF& scenePos)
@@ -458,7 +458,7 @@ void FaceGroup::itemHoverMoveEvent(QGraphicsSceneHoverEvent* e)
     if (d->showOnHover && !isVisible())
     {
         qreal distance;
-        RegionFrameItem* item = closestItem(e->scenePos(), &distance);
+        RegionFrameItem* const item = closestItem(e->scenePos(), &distance);
 
         // There's a possible nuisance when the direct mouse way from hovering pos to HUD widget
         // is not part of the condition. Maybe, we should add a exemption for this case.
@@ -471,10 +471,11 @@ void FaceGroup::itemHoverMoveEvent(QGraphicsSceneHoverEvent* e)
             // get all items close to pos
             QList<QGraphicsItem*> hotItems = d->hotItems(e->scenePos());
             // this will be the one item shown by mouse over
-            QList<QObject*> visible = d->visibilityController->visibleItems(ItemVisibilityController::ExcludeFadingOut);
-            foreach(QGraphicsItem* item, hotItems)
+            QList<QObject*> visible        = d->visibilityController->visibleItems(ItemVisibilityController::ExcludeFadingOut);
+
+            foreach(QGraphicsItem* const item, hotItems)
             {
-                foreach(QObject* parent, visible)
+                foreach(QObject* const parent, visible)
                 {
                     if (static_cast<QGraphicsObject*>(parent)->isAncestorOf(item))
                     {
@@ -482,6 +483,7 @@ void FaceGroup::itemHoverMoveEvent(QGraphicsSceneHoverEvent* e)
                     }
                 }
             }
+
             setVisibleItem(0);
         }
     }
@@ -507,9 +509,9 @@ void FaceGroup::enterEvent(QEvent*)
 {
 }
 
-FaceItem* FaceGroup::FaceGroupPriv::createItem(const DatabaseFace& face)
+FaceItem* FaceGroup::Private::createItem(const DatabaseFace& face)
 {
-    FaceItem* item = new FaceItem(view->previewItem());
+    FaceItem* const item = new FaceItem(view->previewItem());
     item->setFace(face);
     item->setOriginalRect(face.region().toRect());
     item->setVisible(false);
@@ -520,12 +522,12 @@ FaceItem* FaceGroup::FaceGroupPriv::createItem(const DatabaseFace& face)
     return item;
 }
 
-FaceItem* FaceGroup::FaceGroupPriv::addItem(const DatabaseFace& face)
+FaceItem* FaceGroup::Private::addItem(const DatabaseFace& face)
 {
-    FaceItem* item = createItem(face);
+    FaceItem* const item = createItem(face);
 
     // for identification, use index in our list
-    AssignNameWidget* assignWidget = createAssignNameWidget(face, items.size());
+    AssignNameWidget* const assignWidget = createAssignNameWidget(face, items.size());
     item->setHudWidget(assignWidget);
     //new StyleSheetDebugger(assignWidget);
 
@@ -535,7 +537,7 @@ FaceItem* FaceGroup::FaceGroupPriv::addItem(const DatabaseFace& face)
     return item;
 }
 
-void FaceGroup::FaceGroupPriv::checkModels()
+void FaceGroup::Private::checkModels()
 {
     if (!tagModel)
     {
@@ -553,7 +555,7 @@ void FaceGroup::FaceGroupPriv::checkModels()
     }
 }
 
-AssignNameWidget::Mode FaceGroup::FaceGroupPriv::assignWidgetMode(DatabaseFace::Type type)
+AssignNameWidget::Mode FaceGroup::Private::assignWidgetMode(DatabaseFace::Type type)
 {
     switch (type)
     {
@@ -569,9 +571,9 @@ AssignNameWidget::Mode FaceGroup::FaceGroupPriv::assignWidgetMode(DatabaseFace::
     }
 }
 
-AssignNameWidget* FaceGroup::FaceGroupPriv::createAssignNameWidget(const DatabaseFace& face, const QVariant& identifier)
+AssignNameWidget* FaceGroup::Private::createAssignNameWidget(const DatabaseFace& face, const QVariant& identifier)
 {
-    AssignNameWidget* assignWidget = new AssignNameWidget;
+    AssignNameWidget* const assignWidget = new AssignNameWidget;
     assignWidget->setMode(assignWidgetMode(face.type()));
     assignWidget->setTagEntryWidgetMode(AssignNameWidget::AddTagsComboBoxMode);
     assignWidget->setVisualStyle(AssignNameWidget::TranslucentDarkRound);
@@ -627,10 +629,12 @@ void FaceGroup::clear()
 {
     cancelAddItem();
     d->visibilityController->clear();
-    foreach(RegionFrameItem* item, d->items)
+
+    foreach(RegionFrameItem* const item, d->items)
     {
         delete item;
     }
+
     d->items.clear();
     d->state = NoFaces;
 }
@@ -641,13 +645,11 @@ void FaceGroup::rejectAll()
 
 void FaceGroup::slotAssigned(const TaggingAction& action, const ImageInfo&, const QVariant& faceIdentifier)
 {
-    FaceItem* item    = d->items[faceIdentifier.toInt()];
-
+    FaceItem* const item    = d->items[faceIdentifier.toInt()];
     DatabaseFace face       = item->face();
     TagRegion currentRegion = TagRegion(item->originalRect());
 
-    if (!face.isConfirmedName() || face.region() != currentRegion
-        || action.shallCreateNewTag() || (action.shallAssignTag() && action.tagId() != face.tagId()))
+    if (!face.isConfirmedName() || face.region() != currentRegion || action.shallCreateNewTag() || (action.shallAssignTag() && action.tagId() != face.tagId()))
     {
         int tagId = 0;
 
@@ -684,7 +686,7 @@ void FaceGroup::slotAssigned(const TaggingAction& action, const ImageInfo&, cons
 
 void FaceGroup::slotRejected(const ImageInfo&, const QVariant& faceIdentifier)
 {
-    FaceItem* item = d->items[faceIdentifier.toInt()];
+    FaceItem* const item = d->items[faceIdentifier.toInt()];
     d->editPipeline.remove(d->info, item->face());
 
     item->setFace(DatabaseFace());
@@ -693,7 +695,7 @@ void FaceGroup::slotRejected(const ImageInfo&, const QVariant& faceIdentifier)
 
 void FaceGroup::slotLabelClicked(const ImageInfo&, const QVariant& faceIdentifier)
 {
-    FaceItem* item = d->items[faceIdentifier.toInt()];
+    FaceItem* const item = d->items[faceIdentifier.toInt()];
     item->switchMode(AssignNameWidget::ConfirmedEditMode);
 }
 
@@ -751,9 +753,9 @@ void FaceGroup::slotAddItemFinished(const QRectF& rect)
     if (d->manuallyAddedItem)
     {
         d->manuallyAddedItem->setRectInSceneCoordinates(rect);
-        DatabaseFace face = d->editPipeline.addManually(d->info, d->view->previewItem()->image(),
-                                                        TagRegion(d->manuallyAddedItem->originalRect()));
-        FaceItem* item = d->addItem(face);
+        DatabaseFace face    = d->editPipeline.addManually(d->info, d->view->previewItem()->image(),
+                                                           TagRegion(d->manuallyAddedItem->originalRect()));
+        FaceItem* const item = d->addItem(face);
         d->visibilityController->setItemDirectlyVisible(item, true);
         item->switchMode(AssignNameWidget::UnconfirmedEditMode);
         d->manuallyAddWrapItem->stackBefore(item);
@@ -777,7 +779,7 @@ void FaceGroup::cancelAddItem()
 
 void FaceGroup::applyItemGeometryChanges()
 {
-    foreach(FaceItem* item, d->items)
+    foreach(FaceItem* const item, d->items)
     {
         if (item->face().isNull())
         {
@@ -785,6 +787,7 @@ void FaceGroup::applyItemGeometryChanges()
         }
 
         TagRegion currentRegion = TagRegion(item->originalRect());
+
         if (item->face().region() != currentRegion)
         {
             d->editPipeline.editRegion(d->info, d->view->previewItem()->image(), item->face(), currentRegion);

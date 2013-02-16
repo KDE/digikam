@@ -6,8 +6,8 @@
  * Date        : 2006-01-20
  * Description : image file IO threaded interface.
  *
- * Copyright (C) 2005-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2005-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -37,7 +37,7 @@
 namespace Digikam
 {
 
-ManagedLoadSaveThread::ManagedLoadSaveThread(QObject* parent)
+ManagedLoadSaveThread::ManagedLoadSaveThread(QObject* const parent)
     : LoadSaveThread(parent)
 {
     m_loadingPolicy     = LoadingPolicyAppend;
@@ -94,11 +94,11 @@ void ManagedLoadSaveThread::shutDown()
     LoadSaveThread::shutDown();
 }
 
-LoadingTask* ManagedLoadSaveThread::checkLoadingTask(LoadSaveTask* task, LoadingTaskFilter filter) const
+LoadingTask* ManagedLoadSaveThread::checkLoadingTask(LoadSaveTask* const task, LoadingTaskFilter filter) const
 {
     if (task && task->type() == LoadSaveTask::TaskTypeLoading)
     {
-        LoadingTask* loadingTask = static_cast<LoadingTask*>(task);
+        LoadingTask* const loadingTask = static_cast<LoadingTask*>(task);
 
         if (filter == LoadingTaskFilterAll)
         {
@@ -136,7 +136,7 @@ LoadingTask* ManagedLoadSaveThread::findExistingTask(const LoadingDescription& l
 
     for (int i = 0; i < m_todo.size(); ++i)
     {
-        LoadSaveTask* task = m_todo[i];
+        LoadSaveTask* const task = m_todo[i];
 
         if (task->type() == LoadSaveTask::TaskTypeLoading)
         {
@@ -345,7 +345,7 @@ void ManagedLoadSaveThread::loadThumbnail(const LoadingDescription& description)
     // so no need to differentiate with normal loading tasks.
 
     QMutexLocker lock(threadMutex());
-    LoadingTask* existingTask = findExistingTask(description);
+    LoadingTask* const existingTask = findExistingTask(description);
 
     // reuse task if it exists
     if (existingTask)
@@ -372,7 +372,7 @@ void ManagedLoadSaveThread::preloadThumbnail(const LoadingDescription& descripti
     }
 
     // create new loading task
-    ThumbnailLoadingTask* task = new ThumbnailLoadingTask(this, description);
+    ThumbnailLoadingTask* const task = new ThumbnailLoadingTask(this, description);
     // mark as preload task
     task->setStatus(LoadingTask::LoadingTaskStatusPreloading);
     // append to the end of the list
@@ -401,7 +401,7 @@ void ManagedLoadSaveThread::preloadThumbnailGroup(const QList<LoadingDescription
         }
 
         // create new loading task
-        ThumbnailLoadingTask* task = new ThumbnailLoadingTask(this, description);
+        ThumbnailLoadingTask* const task = new ThumbnailLoadingTask(this, description);
         // mark as preload task
         task->setStatus(LoadingTask::LoadingTaskStatusPreloading);
         // append to the end of the list
@@ -431,7 +431,7 @@ void ManagedLoadSaveThread::prependThumbnailGroup(const QList<LoadingDescription
 
     for (int i = 0; i < descriptions.size(); ++i)
     {
-        LoadingTask* existingTask = findExistingTask(descriptions.at(i));
+        LoadingTask* const existingTask = findExistingTask(descriptions.at(i));
 
         // remove task, if not the current task
         if (existingTask)
@@ -513,10 +513,11 @@ void ManagedLoadSaveThread::stopAllTasks()
         }
     }
 
-    foreach(LoadSaveTask* task, m_todo)
+    foreach(LoadSaveTask* const task, m_todo)
     {
         delete task;
     }
+
     m_todo.clear();
 }
 
@@ -527,7 +528,7 @@ void ManagedLoadSaveThread::stopSaving(const QString& filePath)
     // stop current task if it is matching the criteria
     if (m_currentTask && m_currentTask->type() == LoadSaveTask::TaskTypeSaving)
     {
-        SavingTask* savingTask = static_cast<SavingTask*>(m_currentTask);
+        SavingTask* const savingTask = static_cast<SavingTask*>(m_currentTask);
 
         if (filePath.isNull() || savingTask->filePath() == filePath)
         {
@@ -542,7 +543,7 @@ void ManagedLoadSaveThread::stopSaving(const QString& filePath)
 
         if (task->type() ==  LoadSaveTask::TaskTypeSaving)
         {
-            SavingTask* savingTask = static_cast<SavingTask*>(task);
+            SavingTask* const savingTask = static_cast<SavingTask*>(task);
 
             if (filePath.isNull() || savingTask->filePath() == filePath)
             {
@@ -600,9 +601,9 @@ void ManagedLoadSaveThread::save(DImg& image, const QString& filePath, const QSt
 
     for (i = 0; i < m_todo.count(); ++i)
     {
-        LoadSaveTask* task = m_todo[i];
+        LoadSaveTask* const task = m_todo[i];
 
-        if ((loadingTask = checkLoadingTask(task, LoadingTaskFilterPreloading)))
+        if (checkLoadingTask(task, LoadingTaskFilterPreloading))
         {
             break;
         }

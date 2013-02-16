@@ -348,11 +348,17 @@ void FreeRotationTool::setPreviewImage()
     d->previewWidget->updatePreview();
 
     QString temp;
-    QSize newSize = dynamic_cast<FreeRotationFilter*>(filter())->getNewSize();
-    int new_w     = (newSize.width()  == -1) ? iface->originalSize().width()  : newSize.width();
-    int new_h     = (newSize.height() == -1) ? iface->originalSize().height() : newSize.height();
-    d->newWidthLabel->setText(temp.setNum(new_w)  + i18n(" px") );
-    d->newHeightLabel->setText(temp.setNum(new_h) + i18n(" px") );
+
+    FreeRotationFilter* const tool = dynamic_cast<FreeRotationFilter*>(filter());
+
+    if (tool)
+    {
+        QSize newSize = tool->getNewSize();
+        int new_w     = (newSize.width()  == -1) ? iface->originalSize().width()  : newSize.width();
+        int new_h     = (newSize.height() == -1) ? iface->originalSize().height() : newSize.height();
+        d->newWidthLabel->setText(temp.setNum(new_w)  + i18n(" px") );
+        d->newHeightLabel->setText(temp.setNum(new_h) + i18n(" px") );
+    }
 }
 
 void FreeRotationTool::setFinalImage()

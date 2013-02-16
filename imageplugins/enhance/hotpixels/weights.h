@@ -52,9 +52,11 @@ public:
         {
             for (unsigned int j = 0; j < mHeight; ++j)
             {
-                delete[] mWeightMatrices[i][j];
+                delete [] mWeightMatrices[i][j];
             }
         }
+
+        delete mWeightMatrices;
     }
 
     unsigned int height() const

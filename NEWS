@@ -12,4 +12,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 004 ==> 314697 - Print image does not work.
 005 ==> 314726 - digiKam BQM RAW tool doesn't have options to work in 16 bits and to manage color profiles.
 006 ==> 301503 - No progress indicator or cancel button.
-007 ==> 
+007 ==> 314509 - Read face tags created by Picasa
+008 ==>

@@ -7,7 +7,7 @@
  * Description : A digital camera RAW files loader for DImg
  *               framework using an external dcraw instance.
  *
- * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2005-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -49,8 +49,8 @@
 #include "bcgfilter.h"
 #include "wbfilter.h"
 #include "globals.h"
-
 #include "dimagehistory.h"
+
 namespace Digikam
 {
 
@@ -60,8 +60,7 @@ RAWLoader::RAWLoader(DImg* const image, const DRawDecoding& rawDecodingSettings)
       m_filter(0)
 {
     m_rawDecodingSettings = rawDecodingSettings.rawPrm;
-
-    m_filter = new RawProcessingFilter(this);
+    m_filter              = new RawProcessingFilter(this);
     m_filter->setSettings(rawDecodingSettings);
 }
 
@@ -71,9 +70,9 @@ bool RAWLoader::load(const QString& filePath, DImgLoaderObserver* const observer
 
     readMetadata(filePath, DImg::RAW);
 
-    KDcrawIface::DcrawInfoContainer dcrawIdentify;
+    DcrawInfoContainer dcrawIdentify;
 
-    if (!KDcrawIface::KDcraw::rawFileIdentify(dcrawIdentify, filePath))
+    if (!KDcraw::rawFileIdentify(dcrawIdentify, filePath))
     {
         return false;
     }
@@ -122,7 +121,7 @@ bool RAWLoader::load(const QString& filePath, DImgLoaderObserver* const observer
             }
         }
 
-        if (!KDcrawIface::KDcraw::decodeRAWImage(filePath, m_rawDecodingSettings,
+        if (!KDcraw::decodeRAWImage(filePath, m_rawDecodingSettings,
                                                  data, width, height, rgbmax))
         {
             loadingFailed();
@@ -141,10 +140,10 @@ bool RAWLoader::load(const QString& filePath, DImgLoaderObserver* const observer
         imageHeight() = dcrawIdentify.imageSize.height();
     }
 
-    imageSetAttribute("format", "RAW");
+    imageSetAttribute("format",             "RAW");
     imageSetAttribute("originalColorModel", DImg::COLORMODELRAW);
-    imageSetAttribute("originalBitDepth", 16);
-    imageSetAttribute("originalSize", dcrawIdentify.imageSize);
+    imageSetAttribute("originalBitDepth",   16);
+    imageSetAttribute("originalSize",       dcrawIdentify.imageSize);
 
     return true;
 }
@@ -190,6 +189,7 @@ bool RAWLoader::loadedFromRawData(const QByteArray& data, int width, int height,
 
                 if (!observer->continueQuery(m_image))
                 {
+                    delete [] image;
                     return false;
                 }
 
@@ -211,10 +211,10 @@ bool RAWLoader::loadedFromRawData(const QByteArray& data, int width, int height,
                     dst[2] = (unsigned short)((src[0] * 256 + src[1]) * fac);    // Red
                 }
 
-                dst[3] = 0xFFFF;
+                dst[3]  = 0xFFFF;
 
-                dst += 4;
-                src += 6;
+                dst    += 4;
+                src    += 6;
             }
         }
 
@@ -232,9 +232,9 @@ bool RAWLoader::loadedFromRawData(const QByteArray& data, int width, int height,
             return false;
         }
 
-        uchar* dst   = image;
-        uchar* src   = (uchar*)data.data();
-        checkpoint   = 0;
+        uchar* dst = image;
+        uchar* src = (uchar*)data.data();
+        checkpoint = 0;
 
         for (int h = 0; h < height; ++h)
         {
@@ -245,6 +245,7 @@ bool RAWLoader::loadedFromRawData(const QByteArray& data, int width, int height,
 
                 if (!observer->continueQuery(m_image))
                 {
+                    delete [] image;
                     return false;
                 }
 
@@ -256,13 +257,13 @@ bool RAWLoader::loadedFromRawData(const QByteArray& data, int width, int height,
                 // No need to adapt RGB components accordingly with rgbmax value because dcraw
                 // always return rgbmax to 255 in 8 bits/color/pixels.
 
-                dst[0] = src[2];    // Blue
-                dst[1] = src[1];    // Green
-                dst[2] = src[0];    // Red
-                dst[3] = 0xFF;      // Alpha
+                dst[0]  = src[2];    // Blue
+                dst[1]  = src[1];    // Green
+                dst[2]  = src[0];    // Red
+                dst[3]  = 0xFF;      // Alpha
 
-                dst += 4;
-                src += 3;
+                dst    += 4;
+                src    += 3;
             }
         }
 
@@ -322,7 +323,7 @@ bool RAWLoader::loadedFromRawData(const QByteArray& data, int width, int height,
 
     imageWidth()        = width;
     imageHeight()       = height;
-    imageSetAttribute("rawDecodingSettings", QVariant::fromValue(m_filter->settings()));
+    imageSetAttribute("rawDecodingSettings",     QVariant::fromValue(m_filter->settings()));
     imageSetAttribute("rawDecodingFilterAction", QVariant::fromValue(action));
     // other attributes are set above
 

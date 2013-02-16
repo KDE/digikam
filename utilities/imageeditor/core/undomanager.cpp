@@ -256,7 +256,7 @@ void UndoManager::undoStep(bool saveRedo, bool execute, bool flyingRollback)
             // undo the action
             restoreSnapshot(d->undoActions.size() - 1, dataBeforeStep);
         }
-        else
+        else if (reversible) // checking pointer just to check for null pointer in case of a bug
         {
             reversible->getReverseFilter().apply(*d->core->getImg());
             d->core->imageUndoChanged(dataBeforeStep);
@@ -314,7 +314,7 @@ void UndoManager::redoStep(bool execute, bool flyingRollback)
         {
             restoreSnapshot(d->undoActions.size() + 1, dataAfterStep);
         }
-        else
+        else if (reversible) // checking pointer just to check for null pointer in case of a bug
         {
             reversible->getFilter().apply(*d->core->getImg());
             d->core->imageUndoChanged(dataAfterStep);
@@ -437,6 +437,10 @@ bool UndoManager::putImageDataAndHistory(DImg* const img, int stepsBack) const
         for (; snapshot > step; snapshot--)
         {
             UndoActionReversible* const reversible = dynamic_cast<UndoActionReversible*>(d->undoActions.at(snapshot - 1));
+            if (!reversible) // would be a bug
+            {
+                continue;
+            }
             reversible->getReverseFilter().apply(reverting);
         }
 

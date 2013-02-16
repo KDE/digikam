@@ -6,7 +6,7 @@
  * Date        : 2004-08-24
  * Description : a plugin to reduce CCD noise.
  *
- * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -166,7 +166,10 @@ void NoiseReductionTool::slotEstimateNoise()
 
 void NoiseReductionTool::analyserCompleted()
 {
-    d->nrSettings->setSettings(dynamic_cast<NREstimate*>(analyser())->settings());
+    NREstimate* const tool = dynamic_cast<NREstimate*>(analyser());
+    if (!tool) return;
+
+    d->nrSettings->setSettings(tool->settings());
     kapp->restoreOverrideCursor();
     slotPreview();
 }

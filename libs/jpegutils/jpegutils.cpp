@@ -496,20 +496,21 @@ bool JpegRotator::performJpegTransform(TransformAction action, const QString& sr
 
     transformoption.force_grayscale = false;
     transformoption.trim            = false;
-    transformoption.transform       = JXFORM_NONE;
+
 #if (JPEG_LIB_VERSION >= 80)
     // we need to initialize a few more parameters, see bug 274947
     transformoption.perfect         = false;
     transformoption.crop            = false;
 #endif
 
-    transformoption.transform = (JXFORM_CODE)action;
-
+    // NOTE : Cast is fine here. See libkexiv2/rotationmatrix.h for details.
+    transformoption.transform       = (JXFORM_CODE)action;
 
     if (transformoption.transform == JXFORM_NONE)
     {
         return true;
     }
+
     // A transformation must be done.
 
     struct jpeg_decompress_struct srcinfo;

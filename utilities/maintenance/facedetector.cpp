@@ -353,13 +353,13 @@ void FaceDetector::slotShowOneDetected(const FacePipelinePackage& package)
 {
     QPixmap pix;
 
-    if (!package.image.isNull())
-    {
-        pix = package.image.smoothScale(22, 22, Qt::KeepAspectRatio).convertToPixmap();
-    }
-    else if (!package.faces.isEmpty())
+    if (!package.faces.isEmpty())
     {
         pix = QPixmap::fromImage(package.faces.first().image().toQImage().scaled(22, 22, Qt::KeepAspectRatio));
+    }
+    else if (!package.image.isNull())
+    {
+        pix = package.image.smoothScale(22, 22, Qt::KeepAspectRatio).convertToPixmap();
     }
 
     setThumbnail(pix);

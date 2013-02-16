@@ -7,8 +7,8 @@
  * Description : a class to apply ICC color correction to image.
  *
  * Copyright (C) 2005-2006 by F.J. Cruz <fj dot cruz at supercable dot es>
- * Copyright (C) 2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009      by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -43,11 +43,20 @@ namespace Digikam
 {
 
 class DImgLoaderObserver;
-class IccTransformPriv;
 class TransformDescription;
 
 class DIGIKAM_EXPORT IccTransform
 {
+public:
+
+    enum RenderingIntent
+    {
+        Perceptual           = 0,
+        RelativeColorimetric = 1,
+        Saturation           = 2,
+        AbsoluteColorimetric = 3
+    };
+
 public:
 
     IccTransform();
@@ -60,20 +69,13 @@ public:
      * Apply this transform with the set profiles and options to the image.
      * Optionally pass an observer to get progress information.
      */
-    bool apply(DImg& image, DImgLoaderObserver* observer = 0);
+    bool apply(DImg& image, DImgLoaderObserver* const observer = 0);
+
     /// Apply this transform to the QImage. This has only basic functionality.
     bool apply(QImage& qimage);
 
     /// Closes the transform, not the profiles. Called at desctruction.
     void close();
-
-    enum RenderingIntent
-    {
-        Perceptual           = 0,
-        RelativeColorimetric = 1,
-        Saturation           = 2,
-        AbsoluteColorimetric = 3
-    };
 
     /**
      * Sets the input profiles of this transform.
@@ -84,10 +86,13 @@ public:
      */
     void setEmbeddedProfile(const DImg& image);
     void setInputProfile(const IccProfile& profile);
+
     /// Sets the output transform
     void setOutputProfile(const IccProfile& profile);
+
     /// Makes this transform a proofing transform, if profile is not null
     void setProofProfile(const IccProfile& profile);
+
     /**
      * Call this with 'true' if you do not want the output profile
      * to be set as embedded profile after apply() did a transformation.
@@ -112,15 +117,15 @@ public:
 
     /// Returns the contained profiles
     IccProfile embeddedProfile() const;
-    IccProfile inputProfile() const;
-    IccProfile outputProfile() const;
-    IccProfile proofProfile() const;
+    IccProfile inputProfile()    const;
+    IccProfile outputProfile()   const;
+    IccProfile proofProfile()    const;
 
-    RenderingIntent intent() const;
-    RenderingIntent proofIntent() const;
+    RenderingIntent intent()             const;
+    RenderingIntent proofIntent()        const;
     bool isUsingBlackPointCompensation() const;
-    bool isCheckingGamut() const;
-    QColor checkGamutMaskColor() const;
+    bool isCheckingGamut()               const;
+    QColor checkGamutMaskColor()         const;
 
     /**
      * Returns if this transformation will have an effect, i.e. if
@@ -145,12 +150,16 @@ private:
     TransformDescription getDescription(const QImage& image);
     bool open(TransformDescription& description);
     bool openProofing(TransformDescription& description);
-    void transform(DImg& img, const TransformDescription&, DImgLoaderObserver* observer = 0);
+    void transform(DImg& img, const TransformDescription&, DImgLoaderObserver* const observer = 0);
     void transform(QImage& img, const TransformDescription&);
+
+public:
+
+    class Private;
 
 private:
 
-    QSharedDataPointer<IccTransformPriv> d;
+    QSharedDataPointer<Private> d;
 };
 
 }  // namespace Digikam

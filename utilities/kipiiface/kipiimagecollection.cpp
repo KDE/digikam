@@ -103,17 +103,19 @@ QString KipiImageCollection::category()
     if (d->album->type() == Album::PHYSICAL)
     {
         PAlbum* const p = dynamic_cast<PAlbum*>(d->album);
-        return p->category();
+
+        if (p)
+            return p->category();
     }
     else if (d->album->type() == Album::TAG)
     {
         TAlbum* const p = dynamic_cast<TAlbum*>(d->album);
-        return i18n("Tag: %1", p->tagPath());
+
+        if (p)
+            return i18n("Tag: %1", p->tagPath());
     }
-    else
-    {
-        return QString();
-    }
+
+    return QString();
 }
 
 QDate KipiImageCollection::date()
@@ -121,12 +123,12 @@ QDate KipiImageCollection::date()
     if (d->album->type() == Album::PHYSICAL)
     {
         PAlbum* const p = dynamic_cast<PAlbum*>(d->album);
-        return p->date();
+
+        if (p)
+            return p->date();
     }
-    else
-    {
-        return QDate();
-    }
+
+    return QDate();
 }
 
 QString KipiImageCollection::comment()
@@ -134,12 +136,12 @@ QString KipiImageCollection::comment()
     if (d->album->type() == Album::PHYSICAL)
     {
         PAlbum* const p = dynamic_cast<PAlbum*>(d->album);
-        return p->caption();
+
+        if (p)
+            return p->caption();
     }
-    else
-    {
-        return QString();
-    }
+
+    return QString();
 }
 
 KUrl::List KipiImageCollection::images()
@@ -150,23 +152,25 @@ KUrl::List KipiImageCollection::images()
         {
             if (d->album->type() == Album::PHYSICAL)
             {
-                return d->imagesFromPAlbum(dynamic_cast<PAlbum*>(d->album));
+                PAlbum* const p = dynamic_cast<PAlbum*>(d->album);
+
+                if (p)
+                    return d->imagesFromPAlbum(p);
             }
             else if (d->album->type() == Album::TAG)
             {
-                return d->imagesFromTAlbum(dynamic_cast<TAlbum*>(d->album));
+                TAlbum* const p = dynamic_cast<TAlbum*>(d->album);
+
+                if (p)
+                    return d->imagesFromTAlbum(p);
             }
             else if (d->album->type() == Album::DATE ||
                      d->album->type() == Album::SEARCH)
             {
                 return DigikamApp::instance()->view()->allUrls();
             }
-            else
-            {
-                kWarning() << "Unknown album type";
-                return KUrl::List();
-            }
 
+            kWarning() << "Unknown album type";
             break;
         }
 
@@ -179,7 +183,6 @@ KUrl::List KipiImageCollection::images()
             break;
     }
 
-    // We should never reach here
     return KUrl::List();
 }
 
@@ -251,15 +254,17 @@ KUrl KipiImageCollection::path()
     if (d->album->type() == Album::PHYSICAL)
     {
         PAlbum* const p = dynamic_cast<PAlbum*>(d->album);
-        KUrl url;
-        url.setPath(p->folderPath());
-        return url;
+
+        if (p)
+        {
+            KUrl url;
+            url.setPath(p->folderPath());
+            return url;
+        }
     }
-    else
-    {
-        kWarning() << "Requesting KUrl from a virtual album";
-        return QString();
-    }
+
+    kWarning() << "Requesting KUrl from a virtual album";
+    return KUrl();
 }
 
 KUrl KipiImageCollection::uploadPath()
@@ -267,15 +272,17 @@ KUrl KipiImageCollection::uploadPath()
     if (d->album->type() == Album::PHYSICAL)
     {
         PAlbum* const p = dynamic_cast<PAlbum*>(d->album);
-        KUrl url;
-        url.setPath(p->folderPath());
-        return url;
+
+        if (p)
+        {
+            KUrl url;
+            url.setPath(p->folderPath());
+            return url;
+        }
     }
-    else
-    {
-        kWarning() << "Requesting KUrl from a virtual album";
-        return KUrl();
-    }
+
+    kWarning() << "Requesting KUrl from a virtual album";
+    return KUrl();
 }
 
 KUrl KipiImageCollection::uploadRoot()

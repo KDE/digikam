@@ -6,8 +6,8 @@
  * Date        : 2006-02-23
  * Description : image metadata interface
  *
- * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2006-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2011      by Leif Huhn <leif at dkstat dot com>
  *
  * This program is free software; you can redistribute it
@@ -106,6 +106,7 @@ bool DMetadata::load(const QString& filePath) const
     // else we will use dcraw to extract minimal information.
 
     FileReadLocker lock(filePath);
+
     if (!KExiv2::load(filePath))
     {
         if (!loadUsingDcraw(filePath))
@@ -221,16 +222,19 @@ int DMetadata::getMSecsInfo() const
     return 0;
 }
 
-bool DMetadata::mSecTimeStamp(const char* exifTagName, int& ms) const
+bool DMetadata::mSecTimeStamp(const char* const exifTagName, int& ms) const
 {
     bool ok     = false;
     QString val = getExifTagString(exifTagName);
+
     if (!val.isEmpty())
     {
         int sub = val.toUInt(&ok);
+
         if (ok)
         {
             int _ms = (int)(QString("0.%1").arg(sub).toFloat(&ok) * 1000.0);
+
             if (ok)
             {
                 ms = _ms;
@@ -238,6 +242,7 @@ bool DMetadata::mSecTimeStamp(const char* exifTagName, int& ms) const
             }
         }
     }
+
     return ok;
 }
 
@@ -557,6 +562,7 @@ bool DMetadata::setImageTitles(const CaptionsMap& titles) const
         // See if we have any non printable chars in there. If so, skip IPTC
         // to avoid confusing other apps and web services with invalid tags.
         bool hasInvalidChar = false;
+
         for (QString::const_iterator c = defaultTitle.constBegin(); c != defaultTitle.constEnd(); ++c)
         {
             if (!(*c).isPrint())
@@ -565,6 +571,7 @@ bool DMetadata::setImageTitles(const CaptionsMap& titles) const
                 break;
             }
         }
+
         if (!hasInvalidChar)
         {
             if (!setIptcTagString("Iptc.Application2.ObjectName", defaultTitle))
@@ -1292,15 +1299,45 @@ bool DMetadata::getImageFacesMap(QMap<QString,QVariant>& faces) const
         // indicated by W.WW and H.HH.
         QString rectString = getXmpTagString(rectPathTemplate.arg(i).toLatin1(), false);
         QStringList list   = rectString.split(',');
+
         if (list.size() < 4)
         {
             kDebug() << "Cannot parse WLPG rectangle string" << rectString;
             continue;
         }
+
         QRectF rect(list.at(0).toFloat(),
                     list.at(1).toFloat(),
                     list.at(2).toFloat(),
                     list.at(3).toFloat());
+
+        faces[person] = rect;
+    }
+
+    // Read face tags as saved by Picasa
+    // http://www.exiv2.org/tags-xmp-mwg-rs.html
+    const QString mwg_personPathTemplate  = "Xmp.mwg-rs.Regions/mwg-rs:RegionList[%1]/mwg-rs:Name";
+    const QString mwg_rect_x_PathTemplate = "Xmp.mwg-rs.Regions/mwg-rs:RegionList[%1]/mwg-rs:Area/stArea:x";
+    const QString mwg_rect_y_PathTemplate = "Xmp.mwg-rs.Regions/mwg-rs:RegionList[%1]/mwg-rs:Area/stArea:y";
+    const QString mwg_rect_w_PathTemplate = "Xmp.mwg-rs.Regions/mwg-rs:RegionList[%1]/mwg-rs:Area/stArea:w";
+    const QString mwg_rect_h_PathTemplate = "Xmp.mwg-rs.Regions/mwg-rs:RegionList[%1]/mwg-rs:Area/stArea:h";
+
+    for (int i=1; ; i++)
+    {
+        QString person = getXmpTagString(mwg_personPathTemplate.arg(i).toLatin1(), false);
+
+        if (person.isEmpty())
+            break;
+
+        // x and y is the center point
+        float x = getXmpTagString(mwg_rect_x_PathTemplate.arg(i).toLatin1(), false).toFloat();
+        float y = getXmpTagString(mwg_rect_y_PathTemplate.arg(i).toLatin1(), false).toFloat();
+        float w = getXmpTagString(mwg_rect_w_PathTemplate.arg(i).toLatin1(), false).toFloat();
+        float h = getXmpTagString(mwg_rect_h_PathTemplate.arg(i).toLatin1(), false).toFloat();
+        QRectF rect(x - w/2,
+                    y - h/2,
+                    w,
+                    h);
 
         faces[person] = rect;
     }
@@ -1866,7 +1903,7 @@ bool DMetadata::setIccProfile(const IccProfile& profile)
 }
 
 bool DMetadata::setIptcTag(const QString& text, int maxLength,
-                           const char* debugLabel, const char* tagKey)  const
+                           const char* const debugLabel, const char* const tagKey)  const
 {
     QString truncatedText = text;
     truncatedText.truncate(maxLength);
@@ -1874,7 +1911,7 @@ bool DMetadata::setIptcTag(const QString& text, int maxLength,
     return setIptcTagString(tagKey, truncatedText);    // returns false if failed
 }
 
-inline QVariant DMetadata::fromExifOrXmp(const char* exifTagName, const char* xmpTagName) const
+inline QVariant DMetadata::fromExifOrXmp(const char* const exifTagName, const char* const xmpTagName) const
 {
     QVariant var;
 
@@ -1901,7 +1938,7 @@ inline QVariant DMetadata::fromExifOrXmp(const char* exifTagName, const char* xm
     return var;
 }
 
-inline QVariant DMetadata::fromIptcOrXmp(const char* iptcTagName, const char* xmpTagName) const
+inline QVariant DMetadata::fromIptcOrXmp(const char* const iptcTagName, const char* const xmpTagName) const
 {
     if (iptcTagName)
     {
@@ -1926,12 +1963,12 @@ inline QVariant DMetadata::fromIptcOrXmp(const char* iptcTagName, const char* xm
     return QVariant(QVariant::String);
 }
 
-inline QVariant DMetadata::fromIptcEmulateList(const char* iptcTagName) const
+inline QVariant DMetadata::fromIptcEmulateList(const char* const iptcTagName) const
 {
     return toStringListVariant(getIptcTagsStringList(iptcTagName));
 }
 
-inline QVariant DMetadata::fromXmpList(const char* xmpTagName) const
+inline QVariant DMetadata::fromXmpList(const char* const xmpTagName) const
 {
     QVariant var = getXmpTagVariant(xmpTagName);
 
@@ -1943,7 +1980,7 @@ inline QVariant DMetadata::fromXmpList(const char* xmpTagName) const
     return var;
 }
 
-inline QVariant DMetadata::fromIptcEmulateLangAlt(const char* iptcTagName) const
+inline QVariant DMetadata::fromIptcEmulateLangAlt(const char* const iptcTagName) const
 {
     QString str = getIptcTagString(iptcTagName);
 
@@ -1957,7 +1994,7 @@ inline QVariant DMetadata::fromIptcEmulateLangAlt(const char* iptcTagName) const
     return map;
 }
 
-inline QVariant DMetadata::fromXmpLangAlt(const char* xmpTagName) const
+inline QVariant DMetadata::fromXmpLangAlt(const char* const xmpTagName) const
 {
     QVariant var = getXmpTagVariant(xmpTagName);
 
@@ -2474,6 +2511,7 @@ QString DMetadata::valueToString (const QVariant& value, MetadataInfo::Field fie
         case MetadataInfo::PositionAccuracy:
             //TODO
             return value.toString();
+
         case MetadataInfo::PositionDescription:
             return value.toString();
 
@@ -2551,9 +2589,10 @@ QString DMetadata::valueToString (const QVariant& value, MetadataInfo::Field fie
             return value.toString();
 
         default:
-            return QString();
+            break;
     }
-    return QString(); // silence -Werror=return-type
+
+    return QString();
 }
 
 QStringList DMetadata::valuesToString(const QVariantList& values, const MetadataFields& fields)
@@ -2817,7 +2856,7 @@ bool DMetadata::hasSidecar(const QString& path)
 
 // ---------- Pushed to libkexiv2 for KDE 4.4 --------------
 
-bool DMetadata::addToXmpTagStringBag(const char* xmpTagName, const QStringList& entriesToAdd,
+bool DMetadata::addToXmpTagStringBag(const char* const xmpTagName, const QStringList& entriesToAdd,
                                      bool setProgramName) const
 {
     //#ifdef _XMP_SUPPORT_
@@ -2849,7 +2888,7 @@ bool DMetadata::addToXmpTagStringBag(const char* xmpTagName, const QStringList& 
     return false;
 }
 
-bool DMetadata::removeFromXmpTagStringBag(const char* xmpTagName, const QStringList& entriesToRemove,
+bool DMetadata::removeFromXmpTagStringBag(const char* const xmpTagName, const QStringList& entriesToRemove,
         bool setProgramName) const
 {
     //#ifdef _XMP_SUPPORT_

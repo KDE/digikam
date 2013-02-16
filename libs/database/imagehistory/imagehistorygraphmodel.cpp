@@ -379,7 +379,7 @@ void ImageHistoryGraphModel::ImageHistoryGraphModelPriv::buildImagesTree()
         {
             parent->addItem(item);
         }
-        else if (currentLevel > previousLevel)
+        else if (currentLevel > previousLevel && previousItem) // check pointer, prevent crash is distances are faulty
         {
             previousItem->addItem(item);
             parent = previousItem;

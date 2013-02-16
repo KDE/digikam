@@ -7,8 +7,8 @@
  * Description : scan pictures interface.
  *
  * Copyright (C) 2005-2006 by Tom Albers <tomalbers@kde.nl>
- * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2007-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2006-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -75,7 +75,8 @@ class SimpleCollectionScannerObserver : public CollectionScannerObserver
 {
 public:
 
-    explicit SimpleCollectionScannerObserver(bool* var) : m_continue(var)
+    explicit SimpleCollectionScannerObserver(bool* const var)
+        : m_continue(var)
     {
         *m_continue = true;
     }
@@ -90,11 +91,11 @@ public:
 
 // ------------------------------------------------------------------------------
 
-class ScanController::ScanControllerPriv
+class ScanController::Private
 {
 public:
 
-    ScanControllerPriv() :
+    Private() :
         running(false),
         needsInitialization(false),
         needsCompleteScan(false),
@@ -223,9 +224,9 @@ public:
         // called with locked mutex
         QDateTime current = QDateTime::currentDateTime();
 
-        if (idle &&
+        if (idle                    &&
             lastHintAdded.isValid() &&
-            lastHintAdded.secsTo(current) > 5*60)
+            lastHintAdded.secsTo(current) > (5*60))
         {
             itemHints.clear();
             albumHints.clear();
@@ -270,6 +271,7 @@ public:
 
     ScanController object;
 };
+
 K_GLOBAL_STATIC(ScanControllerCreator, creator)
 
 // ------------------------------------------------------------------------------
@@ -280,7 +282,7 @@ ScanController* ScanController::instance()
 }
 
 ScanController::ScanController()
-    : d(new ScanControllerPriv)
+    : d(new Private)
 {
     // create event loop
     d->eventLoop = new QEventLoop(this);
@@ -340,6 +342,7 @@ void ScanController::shutDown()
     d->continueInitialization = false;
     d->continueScan           = false;
     d->continuePartialScan    = false;
+
     {
         QMutexLocker lock(&d->mutex);
         d->condVar.wakeAll();
@@ -401,19 +404,21 @@ ScanController::Advice ScanController::databaseInitialization()
     d->advice = Success;
     createProgressDialog();
     setInitializationMessage();
+
     {
         QMutexLocker lock(&d->mutex);
         d->needsInitialization = true;
         d->condVar.wakeAll();
     }
+
     // loop is quit by signal
     d->eventLoop->exec();
 
     // setup file watch service for LoadingCache - now that we are sure we have a DatabaseWatch
     if (!d->fileWatchInstalled)
     {
-        d->fileWatchInstalled = true; // once per application lifetime only
-        LoadingCache* cache   = LoadingCache::cache();
+        d->fileWatchInstalled     = true; // once per application lifetime only
+        LoadingCache* const cache = LoadingCache::cache();
         LoadingCache::CacheLock lock(cache);
         cache->setFileWatch(new ScanControllerLoadingCacheFileWatch);
     }
@@ -424,7 +429,7 @@ ScanController::Advice ScanController::databaseInitialization()
     return d->advice;
 }
 
-void ScanController::completeCollectionScanDeferFiles(SplashScreen* splash)
+void ScanController::completeCollectionScanDeferFiles(SplashScreen* const splash)
 {
     completeCollectionScan(splash, true);
 }
@@ -436,7 +441,7 @@ void ScanController::allowToScanDeferredFiles()
     d->condVar.wakeAll();
 }
 
-void ScanController::completeCollectionScan(SplashScreen* splash, bool defer)
+void ScanController::completeCollectionScan(SplashScreen* const splash, bool defer)
 {
     d->splash = splash;
     createProgressDialog();
@@ -450,6 +455,7 @@ void ScanController::completeCollectionScan(SplashScreen* splash, bool defer)
         d->deferFileScanning = defer;
         d->condVar.wakeAll();
     }
+
     // loop is quit by signal
     d->eventLoop->exec();
 
@@ -522,6 +528,7 @@ ImageInfo ScanController::scannedInfo(const QString& filePath)
     scanner.recordHints(d->itemChangeHints);
 
     ImageInfo info(filePath);
+
     if (info.isNull())
     {
         qlonglong id = scanner.scanFile(filePath, CollectionScanner::NormalScan);
@@ -732,6 +739,7 @@ void ScanController::run()
             scanner.completeScan();
 
             emit completeScanDone();
+
             if (doScanDeferred)
             {
                 d->completeScanDeferredAlbums = scanner.deferredAlbumPaths();
@@ -744,6 +752,7 @@ void ScanController::run()
             {
                 continue;
             }
+
             CollectionScanner scanner;
             connectCollectionScanner(&scanner);
 
@@ -788,7 +797,7 @@ void ScanController::run()
 }
 
 // (also implementing InitializationObserver)
-void ScanController::connectCollectionScanner(CollectionScanner* scanner)
+void ScanController::connectCollectionScanner(CollectionScanner* const scanner)
 {
     scanner->setSignalsEnabled(true);
 
@@ -820,6 +829,7 @@ void ScanController::slotTotalFilesToScan(int count)
     {
         d->progressDialog->incrementMaximum(count);
     }
+
     d->totalFilesToScan = count;
     emit totalFilesToScan(d->totalFilesToScan);
 }
@@ -829,7 +839,7 @@ void ScanController::slotStartCompleteScan()
     d->totalFilesToScan = 0;
     slotTriggerShowProgressDialog();
 
-    QString message = i18n("Preparing collection scan...");
+    QString message     = i18n("Preparing collection scan...");
 
     if (d->splash)
     {
@@ -858,6 +868,7 @@ void ScanController::slotScannedFiles(int scanned)
     {
         d->progressDialog->advance(scanned);
     }
+
     if (d->totalFilesToScan)
     {
         emit filesScanned(scanned);
@@ -995,7 +1006,7 @@ void ScanController::setInitializationMessage()
     }
 }
 
-static AlbumCopyMoveHint hintForAlbum(const PAlbum* album, int dstAlbumRootId, const QString& relativeDstPath,
+static AlbumCopyMoveHint hintForAlbum(const PAlbum* const album, int dstAlbumRootId, const QString& relativeDstPath,
                                       const QString& albumName)
 {
     QString dstAlbumPath;
@@ -1013,7 +1024,7 @@ static AlbumCopyMoveHint hintForAlbum(const PAlbum* album, int dstAlbumRootId, c
                              dstAlbumRootId, dstAlbumPath);
 }
 
-static QList<AlbumCopyMoveHint> hintsForAlbum(const PAlbum* album, int dstAlbumRootId, QString relativeDstPath,
+static QList<AlbumCopyMoveHint> hintsForAlbum(const PAlbum* const album, int dstAlbumRootId, QString relativeDstPath,
                                               const QString& albumName)
 {
     QList<AlbumCopyMoveHint> newHints;
@@ -1028,7 +1039,7 @@ static QList<AlbumCopyMoveHint> hintsForAlbum(const PAlbum* album, int dstAlbumR
 
     for (AlbumIterator it(const_cast<PAlbum*>(album)); *it; ++it)
     {
-        PAlbum* a = (PAlbum*)*it;
+        PAlbum* const a = (PAlbum*)*it;
         QString childAlbumPath = a->albumPath();
         newHints << hintForAlbum(a, dstAlbumRootId, relativeDstPath, albumName + childAlbumPath.mid(parentAlbumPath.length()));
     }
@@ -1036,7 +1047,7 @@ static QList<AlbumCopyMoveHint> hintsForAlbum(const PAlbum* album, int dstAlbumR
     return newHints;
 }
 
-void ScanController::hintAtMoveOrCopyOfAlbum(const PAlbum* album, const QString& dstPath, const QString& newAlbumName)
+void ScanController::hintAtMoveOrCopyOfAlbum(const PAlbum* const album, const QString& dstPath, const QString& newAlbumName)
 {
     // get album root and album from dst path
     CollectionLocation location = CollectionManager::instance()->locationForPath(dstPath);
@@ -1048,7 +1059,7 @@ void ScanController::hintAtMoveOrCopyOfAlbum(const PAlbum* album, const QString&
         return;
     }
 
-    QString relativeDstPath = CollectionManager::instance()->album(location, dstPath);
+    QString relativeDstPath           = CollectionManager::instance()->album(location, dstPath);
 
     QList<AlbumCopyMoveHint> newHints = hintsForAlbum(album, location.id(), relativeDstPath,
                                                       newAlbumName.isNull() ? album->title() : newAlbumName);
@@ -1057,7 +1068,7 @@ void ScanController::hintAtMoveOrCopyOfAlbum(const PAlbum* album, const QString&
     d->albumHints << newHints;
 }
 
-void ScanController::hintAtMoveOrCopyOfAlbum(const PAlbum* album, const PAlbum* dstAlbum, const QString& newAlbumName)
+void ScanController::hintAtMoveOrCopyOfAlbum(const PAlbum* const album, const PAlbum* const dstAlbum, const QString& newAlbumName)
 {
     QList<AlbumCopyMoveHint> newHints = hintsForAlbum(album, dstAlbum->albumRootId(), dstAlbum->albumPath(),
                                                       newAlbumName.isNull() ? album->title() : newAlbumName);
@@ -1066,7 +1077,7 @@ void ScanController::hintAtMoveOrCopyOfAlbum(const PAlbum* album, const PAlbum* 
     d->albumHints << newHints;
 }
 
-void ScanController::hintAtMoveOrCopyOfItems(const QList<qlonglong> ids, const PAlbum* dstAlbum,
+void ScanController::hintAtMoveOrCopyOfItems(const QList<qlonglong> ids, const PAlbum* const dstAlbum,
                                              const QStringList& itemNames)
 {
     ItemCopyMoveHint hint(ids, dstAlbum->albumRootId(), dstAlbum->id(), itemNames);
@@ -1076,7 +1087,7 @@ void ScanController::hintAtMoveOrCopyOfItems(const QList<qlonglong> ids, const P
     d->itemHints << hint;
 }
 
-void ScanController::hintAtMoveOrCopyOfItem(qlonglong id, const PAlbum* dstAlbum, const QString& itemName)
+void ScanController::hintAtMoveOrCopyOfItem(qlonglong id, const PAlbum* const dstAlbum, const QString& itemName)
 {
     ItemCopyMoveHint hint(QList<qlonglong>() << id, dstAlbum->albumRootId(), dstAlbum->id(), QStringList() << itemName);
 
@@ -1107,7 +1118,7 @@ void ScanController::hintAtModificationOfItem(qlonglong id)
 
 ScanControllerLoadingCacheFileWatch::ScanControllerLoadingCacheFileWatch()
 {
-    DatabaseWatch* dbwatch = DatabaseAccess::databaseWatch();
+    DatabaseWatch* const dbwatch = DatabaseAccess::databaseWatch();
 
     // we opt for a queued connection to make stuff a bit relaxed
     connect(dbwatch, SIGNAL(imageChange(ImageChangeset)),
@@ -1123,8 +1134,7 @@ void ScanControllerLoadingCacheFileWatch::slotImageChanged(const ImageChangeset&
     {
         DatabaseFields::Set changes = changeset.changes();
 
-        if (changes & DatabaseFields::ModificationDate
-            || changes & DatabaseFields::Orientation)
+        if (changes & DatabaseFields::ModificationDate || changes & DatabaseFields::Orientation)
         {
             ImageInfo info(imageId);
             //kDebug() << imageId << info.filePath();

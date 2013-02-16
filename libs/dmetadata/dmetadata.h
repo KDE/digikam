@@ -6,8 +6,8 @@
  * Date        : 2006-02-23
  * Description : image metadata interface
  *
- * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2006-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -158,7 +158,7 @@ public:
     /** Extract milliseconds time-stamp of photo from an Exif tag and store it to 'ms'.
      *  Returns true if data are extracted.
      */
-    bool mSecTimeStamp(const char* exifTagName, int& ms) const;
+    bool mSecTimeStamp(const char* const exifTagName, int& ms) const;
 
     /** Returns the requested metadata field as a QVariant. See metadatainfo.h for a specification
         of the format of the QVariant.
@@ -201,14 +201,14 @@ public:
         all new with all already existing entries to prevent duplicates in the image.
         Return true if the entries have been added to metadata.
      */
-    bool addToXmpTagStringBag(const char* xmpTagName, const QStringList& entriesToAdd,
+    bool addToXmpTagStringBag(const char* const xmpTagName, const QStringList& entriesToAdd,
                               bool setProgramName) const;
 
     /** Remove those Xmp tag entries that are listed in entriesToRemove from the entries in metadata.
         Return true if tag entries are no longer contained in metadata.
         All other entries are preserved.
      */
-    bool removeFromXmpTagStringBag(const char* xmpTagName, const QStringList& entriesToRemove,
+    bool removeFromXmpTagStringBag(const char* const xmpTagName, const QStringList& entriesToRemove,
                                    bool setProgramName) const;
 
     /** Return a strings list of Xmp keywords from image. Return an empty list if no keyword are set.
@@ -268,6 +268,7 @@ public:
 #if KEXIV2_VERSION < 0x010000
     KExiv2Data data() const;
     void setData(const KExiv2Data& data);
+
     QByteArray getExifEncoded(bool addExifHeader=false) const
     {
         return getExif(addExifHeader);
@@ -279,17 +280,16 @@ public:
 private:
 
     bool setProgramId(bool on=true) const;
-    bool setIptcTag(const QString& text, int maxLength, const char* debugLabel, const char* tagKey) const;
+    bool setIptcTag(const QString& text, int maxLength, const char* const debugLabel, const char* const tagKey) const;
 
-    QVariant fromExifOrXmp(const char* exifTagName, const char* xmpTagName) const;
-    QVariant fromIptcOrXmp(const char* iptcTagName, const char* xmpTagName) const;
-    QVariant fromXmpList(const char* xmpTagName) const;
-    QVariant fromIptcEmulateList(const char* iptcTagName) const;
-    QVariant fromXmpLangAlt(const char* xmpTagName) const;
-    QVariant fromIptcEmulateLangAlt(const char* iptcTagName) const;
-    QVariant toStringListVariant(const QStringList& list) const;
-
-    QString getExifTagStringFromTagsList(const QStringList& tagsList) const;
+    QVariant fromExifOrXmp(const char* const exifTagName, const char* const xmpTagName) const;
+    QVariant fromIptcOrXmp(const char* const iptcTagName, const char* const xmpTagName) const;
+    QVariant fromXmpList(const char* const xmpTagName)                                  const;
+    QVariant fromIptcEmulateList(const char* const iptcTagName)                         const;
+    QVariant fromXmpLangAlt(const char* const xmpTagName)                               const;
+    QVariant fromIptcEmulateLangAlt(const char* const iptcTagName)                      const;
+    QVariant toStringListVariant(const QStringList& list)                               const;
+    QString getExifTagStringFromTagsList(const QStringList& tagsList)                   const;
 };
 
 }  // namespace Digikam

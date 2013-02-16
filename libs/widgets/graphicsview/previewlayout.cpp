@@ -41,11 +41,11 @@
 namespace Digikam
 {
 
-class SinglePhotoPreviewLayout::SinglePhotoPreviewLayoutPriv
+class SinglePhotoPreviewLayout::Private
 {
 public:
 
-    SinglePhotoPreviewLayoutPriv()
+    Private()
     {
         view           = 0;
         item           = 0;
@@ -56,18 +56,6 @@ public:
         maxZoom        = 12.0;
     }
 
-    GraphicsDImgView* view;
-    GraphicsDImgItem* item;
-
-    bool              isFitToWindow;
-    double            previousZoom;
-
-    double            zoomMultiplier;
-    double            maxZoom;
-    double            minZoom;
-
-public:
-
     ImageZoomSettings* zoomSettings() const
     {
         return item->zoomSettings();
@@ -77,10 +65,22 @@ public:
     {
         return view->maximumViewportSize();
     }
+
+public:
+
+    GraphicsDImgView* view;
+    GraphicsDImgItem* item;
+
+    bool              isFitToWindow;
+    double            previousZoom;
+
+    double            zoomMultiplier;
+    double            maxZoom;
+    double            minZoom;
 };
 
-SinglePhotoPreviewLayout::SinglePhotoPreviewLayout(QObject* parent)
-    : QObject(parent), d(new SinglePhotoPreviewLayoutPriv)
+SinglePhotoPreviewLayout::SinglePhotoPreviewLayout(QObject* const parent)
+    : QObject(parent), d(new Private)
 {
 }
 
@@ -216,7 +216,7 @@ void SinglePhotoPreviewLayout::setZoomFactor(double z, const QPoint& givenAnchor
 
     if (flags & CenterView)
     {
-        d->view->centerOn(d->view->scene()->sceneRect().width() / 2.0,
+        d->view->centerOn(d->view->scene()->sceneRect().width()  / 2.0,
                           d->view->scene()->sceneRect().height() / 2.0);
     }
 
