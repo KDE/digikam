@@ -151,6 +151,7 @@ TableViewTreeView::TableViewTreeView(Digikam::TableViewShared* const tableViewSh
 {
     s->itemDelegate = new TableViewItemDelegate(s, this);
     setItemDelegate(s->itemDelegate);
+    setRootIsDecorated(false);
 
     d->actionHeaderContextMenuRemoveColumn = new KAction("Remove this column", this);
     connect(d->actionHeaderContextMenuRemoveColumn, SIGNAL(triggered(bool)),
