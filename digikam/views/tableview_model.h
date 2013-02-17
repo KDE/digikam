@@ -31,6 +31,7 @@
 
 // local includes
 
+#include "databasechangesets.h"
 #include "tableview_shared.h"
 
 namespace Digikam
@@ -42,6 +43,7 @@ class TableViewColumnDescription;
 class TableViewColumnConfiguration;
 class ImageFilterModel;
 class TableViewColumnFactory;
+class ImageChangeset;
 
 class TableViewModel : public QAbstractItemModel
 {
@@ -70,6 +72,23 @@ public:
 private Q_SLOTS:
 
     void slotColumnDataChanged(const QModelIndex& sourceIndex);
+
+    void slotSourceModelAboutToBeReset();
+    void slotSourceModelReset();
+    void slotSourceRowsAboutToBeInserted(const QModelIndex& parent, int start, int end);
+    void slotSourceRowsInserted(const QModelIndex& parent, int start, int end);
+    void slotSourceRowsAboutToBeRemoved(const QModelIndex& parent, int start, int end);
+    void slotSourceRowsRemoved(const QModelIndex& parent, int start, int end);
+    void slotSourceRowsAboutToBeMoved(const QModelIndex& sourceParent, int sourceStart, int sourceEnd,
+                                      const QModelIndex& destinationParent, int destinationRow);
+    void slotSourceRowsMoved(const QModelIndex& sourceParent, int sourceStart, int sourceEnd,
+                               const QModelIndex& destinationParent, int destinationRow);
+    void slotSourceLayoutAboutToBeChanged();
+    void slotSourceLayoutChanged();
+    void slotSourceDataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight);
+
+    void slotDatabaseImageChanged(const ImageChangeset& imageChangeset);
+
 
 private:
 

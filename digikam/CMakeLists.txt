@@ -275,6 +275,7 @@ KDE4_ADD_EXECUTABLE(digikam ${digikam_SRCS})
 TARGET_LINK_LIBRARIES(digikam
         ${QT_QTSQL_LIBRARY}
         ${QT_QT3SUPPORT_LIBRARY}
+        ${QT_QTTEST_LIBRARY}
 
         ${KDE4_KPARTS_LIBS}
         ${KDE4_PHONON_LIBS}

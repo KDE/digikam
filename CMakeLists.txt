@@ -1585,6 +1585,8 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview_model.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview_columns.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview_columnfactory.cpp
+        # TODO: remove modeltest before release
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/modeltest/modeltest.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/welcomepageview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/leftsidebarwidgets.cpp
 
