@@ -8,6 +8,8 @@
  *               camera GUI.
  *
  * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * @author Copyright (C) 2013 by Michael G. Hansen
+ *         <a href="mailto:mike at mghansen dot de">mike at mghansen dot de</a>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -72,6 +74,18 @@ Q_SIGNALS:
     void signalPrevItem();
     void signalNextItem();
     void signalLastItem();
+
+protected:
+
+    /**
+     * load the last view state from disk - called by StateSavingObject#loadState()
+     */
+    void doLoadState();
+
+    /**
+     * save the view state to disk - called by StateSavingObject#saveState()
+     */
+    void doSaveState();
 
 private Q_SLOTS:
 
