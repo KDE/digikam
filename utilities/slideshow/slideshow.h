@@ -6,7 +6,7 @@
  * Date        : 2005-04-21
  * Description : slide show tool using preview of pictures.
  *
- * Copyright (C) 2005-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -95,14 +95,14 @@ private:
     void inhibitScreenSaver();
     void allowScreenSaver();
     void makeCornerRectangles(const QRect& desktopRect, const QSize& size,
-                              QRect* topLeft, QRect* topRight, QRect* bottomLeft, QRect* bottomRight,
-                              QRect* topLeftLarger, QRect* topRightLarger, QRect* bottomLeftLarger,
-                              QRect* bottomRightLarger);
+                              QRect* const topLeft, QRect* const topRight, QRect* const bottomLeft, QRect* const bottomRight,
+                              QRect* const topLeftLarger, QRect* const topRightLarger, QRect* const bottomLeftLarger,
+                              QRect* const bottomRightLarger);
 
 private:
 
-    class SlideShowPriv;
-    SlideShowPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

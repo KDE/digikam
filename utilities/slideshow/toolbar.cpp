@@ -7,7 +7,7 @@
  * Description : a tool bar for slideshow
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -39,11 +39,11 @@
 namespace Digikam
 {
 
-class ToolBar::ToolBarPriv
+class ToolBar::Private
 {
 public:
 
-    ToolBarPriv() :
+    Private() :
         canHide(true),
         playBtn(0),
         stopBtn(0),
@@ -60,10 +60,10 @@ public:
     QToolButton* prevBtn;
 };
 
-ToolBar::ToolBar(QWidget* parent)
-    : QWidget(parent), d(new ToolBarPriv)
+ToolBar::ToolBar(QWidget* const parent)
+    : QWidget(parent), d(new Private)
 {
-    QHBoxLayout* lay = new QHBoxLayout();
+    QHBoxLayout* const lay = new QHBoxLayout();
     setLayout(lay);
     d->playBtn = new QToolButton(this);
     d->prevBtn = new QToolButton(this);
@@ -71,7 +71,7 @@ ToolBar::ToolBar(QWidget* parent)
     d->stopBtn = new QToolButton(this);
     d->playBtn->setCheckable(true);
 
-    KIconLoader* loader = KIconLoader::global();
+    KIconLoader* const loader = KIconLoader::global();
     d->playBtn->setIcon(loader->loadIcon("media-playback-pause", KIconLoader::NoGroup, 22));
     d->prevBtn->setIcon(loader->loadIcon("media-skip-backward",  KIconLoader::NoGroup, 22));
     d->nextBtn->setIcon(loader->loadIcon("media-skip-forward",   KIconLoader::NoGroup, 22));
@@ -147,7 +147,7 @@ void ToolBar::setEnabledPrev(bool val)
 
 void ToolBar::slotPlayBtnToggled()
 {
-    KIconLoader* loader = KIconLoader::global();
+    KIconLoader* const loader = KIconLoader::global();
 
     if (d->playBtn->isChecked())
     {
@@ -168,8 +168,8 @@ void ToolBar::slotNexPrevClicked()
     if (!d->playBtn->isChecked())
     {
         d->playBtn->setChecked(true);
-        d->canHide = false;
-        KIconLoader* loader = KIconLoader::global();
+        d->canHide                = false;
+        KIconLoader* const loader = KIconLoader::global();
         d->playBtn->setIcon(loader->loadIcon("media-playback-start", KIconLoader::NoGroup, 22));
         emit signalPause();
     }
