@@ -134,6 +134,7 @@ public:
 
     QList<TableViewColumnConfiguration> columnConfigurationList;
     QString name;
+    QByteArray headerState;
 
     void loadSettings(const KConfigGroup& configGroup);
     void saveSettings(KConfigGroup& configGroup);

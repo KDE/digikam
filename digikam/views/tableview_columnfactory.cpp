@@ -135,6 +135,7 @@ TableViewColumnProfile::~TableViewColumnProfile()
 void TableViewColumnProfile::loadSettings(const KConfigGroup& configGroup)
 {
     name = configGroup.readEntry("Profile Name", QString());
+    headerState = configGroup.readEntry("Header State", QByteArray());
     const int nColumns = configGroup.readEntry("Column Count", int(0));
 
     for (int i=0; i<nColumns; ++i)
@@ -164,6 +165,7 @@ void TableViewColumnProfile::saveSettings(KConfigGroup& configGroup)
     configGroup.writeEntry("Profile Name", name);
     const int nColumns = columnConfigurationList.count();
     configGroup.writeEntry("Column Count", nColumns);
+    configGroup.writeEntry("Header State", headerState);
 
     for (int i=0; i<nColumns; ++i)
     {

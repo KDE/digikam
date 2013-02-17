@@ -125,9 +125,13 @@ void TableView::doLoadState()
 
     TableViewColumnProfile profile;
     const KConfigGroup groupCurrentProfile = group.group("Current Profile");
-    /// @todo also store the QHeaderView settings into the column profile
     profile.loadSettings(groupCurrentProfile);
     s->tableViewModel->loadColumnProfile(profile);
+
+    if (!profile.headerState.isEmpty())
+    {
+        d->treeView->header()->restoreState(profile.headerState);
+    }
 }
 
 void TableView::doSaveState()
@@ -135,6 +139,7 @@ void TableView::doSaveState()
     KConfigGroup group = getConfigGroup();
 
     TableViewColumnProfile profile = s->tableViewModel->getColumnProfile();
+    profile.headerState = d->treeView->header()->saveState();
     KConfigGroup groupCurrentProfile = group.group("Current Profile");
     profile.saveSettings(groupCurrentProfile);
 }
