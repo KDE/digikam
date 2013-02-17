@@ -109,8 +109,9 @@ public:
 
 private:
 
+    class Private;
+    const QScopedPointer<Private> d;
     TableViewShared* const s;
-
 };
 
 } /* namespace Digikam */

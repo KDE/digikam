@@ -154,6 +154,8 @@ TableViewTreeView::TableViewTreeView(Digikam::TableViewShared* const tableViewSh
     header()->installEventFilter(this);
 
     setModel(s->sortModel);
+
+    setSortingEnabled(true);
 }
 
 TableViewTreeView::~TableViewTreeView()
@@ -286,7 +288,5 @@ QSize TableViewItemDelegate::sizeHint(const QStyleOptionViewItem& option, const 
 
     return QSize(columnSize.width(), maxHeight);
 }
-
-
 
 } /* namespace Digikam */

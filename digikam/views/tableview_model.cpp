@@ -396,8 +396,18 @@ void TableViewModel::slotDatabaseImageChanged(const ImageChangeset& imageChanges
     }
 }
 
+class TableViewSortFilterProxyModel::Private
+{
+public:
+    Private()
+    {
+    }
+
+};
+
 TableViewSortFilterProxyModel::TableViewSortFilterProxyModel(TableViewShared* const sPointer, QObject* parent)
   : QSortFilterProxyModel(parent),
+    d(new Private()),
     s(sPointer)
 {
     setSourceModel(s->tableViewModel);
