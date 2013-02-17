@@ -168,8 +168,25 @@ void TableViewModel::addColumnAt(const TableViewColumnConfiguration& configurati
         d->columnObjects.insert(newColumnIndex, newColumn);
     }
     endInsertColumns();
+
+    connect(newColumn, SIGNAL(signalDataChanged(QModelIndex)),
+            this, SLOT(slotColumnDataChanged(QModelIndex)));
 }
 
+void TableViewModel::slotColumnDataChanged(const QModelIndex& sourceIndex)
+{
+    TableViewColumn* const senderColumn = qobject_cast<TableViewColumn*>(sender());
+
+    /// @todo find a faster way to find the column number
+    const int iColumn = d->columnObjects.indexOf(senderColumn);
+    if (iColumn<0)
+    {
+        return;
+    }
+
+    QModelIndex changedIndex = index(sourceIndex.row(), iColumn, QModelIndex());
+    emit(dataChanged(changedIndex, changedIndex));
+}
 
 void TableViewModel::removeColumnAt(const int columnIndex)
 {

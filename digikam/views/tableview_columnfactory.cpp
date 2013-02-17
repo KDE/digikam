@@ -40,9 +40,11 @@ public:
 
 TableViewColumn::TableViewColumn(
         TableViewShared* const tableViewShared,
-        const TableViewColumnConfiguration& pConfiguration
+        const TableViewColumnConfiguration& pConfiguration,
+        QObject* const parent
     )
-  : s(tableViewShared),
+  : QObject(parent),
+    s(tableViewShared),
     configuration(pConfiguration)
 {
 

@@ -67,6 +67,10 @@ public:
     void loadColumnProfile(const TableViewColumnProfile& columnProfile);
     TableViewColumnProfile getColumnProfile() const;
 
+private Q_SLOTS:
+
+    void slotColumnDataChanged(const QModelIndex& sourceIndex);
+
 private:
 
     class Private;

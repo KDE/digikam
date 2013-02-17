@@ -45,13 +45,16 @@ namespace TableViewColumns
 
 class ColumnFilename : public TableViewColumn
 {
+    Q_OBJECT
+
 public:
 
     explicit ColumnFilename(
             TableViewShared* const tableViewShared,
-            const TableViewColumnConfiguration& pConfiguration
+            const TableViewColumnConfiguration& pConfiguration,
+            QObject* const parent = 0
         )
-      : TableViewColumn(tableViewShared, pConfiguration)
+      : TableViewColumn(tableViewShared, pConfiguration, parent)
     {
     }
     virtual ~ColumnFilename() { }
@@ -77,13 +80,16 @@ public:
 
 class ColumnCoordinates : public TableViewColumn
 {
+    Q_OBJECT
+
 public:
 
     explicit ColumnCoordinates(
             TableViewShared* const tableViewShared,
-            const TableViewColumnConfiguration& pConfiguration
+            const TableViewColumnConfiguration& pConfiguration,
+            QObject* const parent = 0
         )
-      : TableViewColumn(tableViewShared, pConfiguration)
+      : TableViewColumn(tableViewShared, pConfiguration, parent)
     {
     }
     virtual ~ColumnCoordinates() { }
@@ -121,15 +127,21 @@ public:
 
 class ColumnThumbnail : public TableViewColumn
 {
+    Q_OBJECT
+
 public:
 
     explicit ColumnThumbnail(
             TableViewShared* const tableViewShared,
-            const TableViewColumnConfiguration& pConfiguration
+            const TableViewColumnConfiguration& pConfiguration,
+            QObject* const parent = 0
         )
-      : TableViewColumn(tableViewShared, pConfiguration)
+      : TableViewColumn(tableViewShared, pConfiguration, parent)
     {
+        connect(s->thumbnailLoadThread, SIGNAL(signalThumbnailLoaded(LoadingDescription,QPixmap)),
+                this, SLOT(slotThumbnailLoaded(LoadingDescription,QPixmap)));
     }
+
     virtual ~ColumnThumbnail() { }
 
     static TableViewColumnDescription getDescription()
@@ -160,6 +172,7 @@ public:
             /// @todo handle unavailable thumbnails -> emit itemChanged(...) later
             if (s->thumbnailLoadThread->find(path, thumbnail, qMax(size.width()+2, size.height()+2)))
             {
+                /// @todo Is slotThumbnailLoaded still called when the thumbnail is found right away?
                 /// @todo remove borders
 //                 thumbnail = thumbnail.copy(1, 1, thumbnail.size().width()-2, thumbnail.size().height()-2)
                 const QSize availableSize = option.rect.size();
@@ -187,6 +200,23 @@ public:
         return TableViewColumnConfiguration("thumbnail");
     }
 
+private Q_SLOTS:
+
+    void slotThumbnailLoaded(const LoadingDescription& loadingDescription, const QPixmap& thumb)
+    {
+        if (thumb.isNull())
+        {
+            return;
+        }
+
+        const QModelIndex sourceIndex = s->imageFilterModel->indexForPath(loadingDescription.filePath);
+        if (!sourceIndex.isValid())
+        {
+            return;
+        }
+
+        emit(signalDataChanged(sourceIndex));
+    }
 
 };
 

@@ -20,6 +20,8 @@
  *
  * ============================================================ */
 
+#include "tableview_columns.moc"
+
 // Qt includes
 
 // KDE includes

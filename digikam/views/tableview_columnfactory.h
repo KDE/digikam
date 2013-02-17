@@ -78,8 +78,10 @@ public:
     void saveSettings(KConfigGroup& configGroup) const;
 };
 
-class TableViewColumn
+class TableViewColumn : public QObject
 {
+    Q_OBJECT
+
 protected:
     TableViewShared* const s;
     TableViewColumnConfiguration configuration;
@@ -88,7 +90,8 @@ public:
 
     explicit TableViewColumn(
             TableViewShared* const tableViewShared,
-            const TableViewColumnConfiguration& pConfiguration
+            const TableViewColumnConfiguration& pConfiguration,
+            QObject* const parent = 0
         );
     virtual ~TableViewColumn();
 
@@ -99,6 +102,9 @@ public:
     virtual QVariant data(const QModelIndex& sourceIndex, const int role);
     virtual bool paint(QPainter* const painter, const QStyleOptionViewItem& option, const QModelIndex& sourceIndex) const;
     virtual QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& sourceIndex) const;
+
+Q_SIGNALS:
+    void signalDataChanged(const QModelIndex& sourceIndex);
 };
 
 class TableViewColumnFactory : public QObject

@@ -494,6 +494,8 @@ QPersistentModelIndex MapViewModelHelper::bestRepresentativeIndexFromList(const 
 /**
  * @brief Because of a call to pixmapFromRepresentativeIndex, some thumbnails are not yet loaded at the time of requesting.
  *        When each thumbnail loads, this slot is called and emits a signal that announces the map that the thumbnail is available.
+ *
+ * This slot is used in the Digikam main application UI.
  */
 void MapViewModelHelper::slotThumbnailLoaded(const LoadingDescription& loadingDescription, const QPixmap& thumb)
 {
@@ -514,6 +516,8 @@ void MapViewModelHelper::slotThumbnailLoaded(const LoadingDescription& loadingDe
 /**
  * @brief Because of a call to pixmapFromRepresentativeIndex, some thumbnails are not yet loaded at the time of requesting.
  *        When each thumbnail loads, this slot is called and emits a signal that announces the map that the thumbnail is available.
+ *
+ * This slot is used in the ImportUI interface.
  */
 void MapViewModelHelper::slotThumbnailLoaded(const QString& folder, const QString& file, const CamItemInfo& /*info*/, const QImage& thumb)
 {
