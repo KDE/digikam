@@ -45,7 +45,6 @@ QTEST_KDEMAIN(SearchTextBarTest, GUI)
 
 void SearchTextBarTest::testHighlighting()
 {
-
     SearchTextBar textBar(0, "test");
     QCOMPARE(textBar.getCurrentHighlightState(), SearchTextBar::NEUTRAL);
 
@@ -77,18 +76,17 @@ void SearchTextBarTest::testHighlighting()
     // re-eetting highlighting to true must not change highlight state
     textBar.setHighlightOnResult(true);
     QCOMPARE(textBar.getCurrentHighlightState(), SearchTextBar::NO_RESULT);
-
 }
 
 void SearchTextBarTest::testSearchTextSettings()
 {
-
     SearchTextBar textBar(0, "test");
 
     SearchTextSettings defaultSettings;
     QCOMPARE(textBar.searchTextSettings(), defaultSettings);
 
     callCount = 0;
+
     connect(&textBar, SIGNAL(signalSearchTextSettings(SearchTextSettings)),
             this, SLOT(newSearchTextSettings(SearchTextSettings)));
 
@@ -103,7 +101,6 @@ void SearchTextBarTest::testSearchTextSettings()
     QCOMPARE(lastSearchTextSettings.text, textEntered);
 
     /** @todo test case modifications, but how to click context menu? */
-
 }
 
 void SearchTextBarTest::newSearchTextSettings(const SearchTextSettings& settings)
@@ -114,7 +111,6 @@ void SearchTextBarTest::newSearchTextSettings(const SearchTextSettings& settings
 
 void SearchTextBarTest::testModelParsing()
 {
-
     SearchTextBar textBar(0, "test");
 
     // create a simple test model
@@ -185,5 +181,4 @@ void SearchTextBarTest::testModelParsing()
     QCOMPARE(textBar.completionObject()->items().size(), 2);
     QVERIFY(textBar.completionObject()->items().contains(parent0 + 'x'));
     QVERIFY(textBar.completionObject()->items().contains(parent1 + 'x'));
-
 }

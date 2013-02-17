@@ -50,8 +50,7 @@ private Q_SLOTS:
 private:
 
     SearchTextSettings lastSearchTextSettings;
-    int callCount;
-
+    int                callCount;
 };
 
 #endif /* SEARCHTEXTBARTEST_H_ */
