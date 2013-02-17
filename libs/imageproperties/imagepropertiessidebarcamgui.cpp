@@ -8,6 +8,8 @@
  *               camera GUI.
  *
  * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * @author Copyright (C) 2013 by Michael G. Hansen
+ *         <a href="mailto:mike at mghansen dot de">mike at mghansen dot de</a>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -173,6 +175,45 @@ void ImagePropertiesSideBarCamGui::slotChangedTab(QWidget* tab)
     d->gpsTab->setActive(tab == d->gpsTab);
 
     unsetCursor();
+}
+
+void ImagePropertiesSideBarCamGui::doLoadState()
+{
+    /// @todo This code is taken from ImagePropertiesSideBar::doLoadState()
+    ///       Ideally ImagePropertiesSideBarCamGui should be a subclass of
+    ///       ImagePropertiesSideBar
+    Sidebar::doLoadState();
+
+    KConfigGroup group = getConfigGroup();
+
+    KConfigGroup groupCameraItemTab    = KConfigGroup(&group, entryName("Camera Item Properties Tab"));
+    d->cameraItemTab->readSettings(groupCameraItemTab);
+
+    KConfigGroup groupGPSTab      = KConfigGroup(&group, entryName("GPS Properties Tab"));
+    d->gpsTab->readSettings(groupGPSTab);
+
+    const KConfigGroup groupMetadataTab = KConfigGroup(&group, entryName("Metadata Properties Tab"));
+    d->metadataTab->readSettings(groupMetadataTab);
+}
+
+void ImagePropertiesSideBarCamGui::doSaveState()
+{
+    /// @todo This code is taken from ImagePropertiesSideBar::doSaveState()
+    ///       Ideally ImagePropertiesSideBarCamGui should be a subclass of
+    ///       ImagePropertiesSideBar
+
+    Sidebar::doSaveState();
+
+    KConfigGroup group = getConfigGroup();
+
+    KConfigGroup groupCameraItemTab    = KConfigGroup(&group, entryName("Camera Item Properties Tab"));
+    d->cameraItemTab->writeSettings(groupCameraItemTab);
+
+    KConfigGroup groupGPSTab      = KConfigGroup(&group, entryName("GPS Properties Tab"));
+    d->gpsTab->writeSettings(groupGPSTab);
+
+    KConfigGroup groupMetadataTab = KConfigGroup(&group, entryName("Metadata Properties Tab"));
+    d->metadataTab->writeSettings(groupMetadataTab);
 }
 
 }  // namespace Digikam
