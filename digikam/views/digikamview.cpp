@@ -1179,14 +1179,17 @@ void DigikamView::slotDispatchImageSelected()
             ImageInfo previousInfo;
             ImageInfo nextInfo;
 
-            if (d->stackedview->previewMode() != StackedView::MapWidgetMode)
+            if ( (d->stackedview->previewMode() != StackedView::MapWidgetMode) &&
+                 (d->stackedview->previewMode() != StackedView::TableViewMode) )
             {
+                /// @todo next/previous should also be available in TableViewMode!
                 previousInfo = d->iconView->previousInfo(list.first());
                 nextInfo     = d->iconView->nextInfo(list.first());
             }
 
             if ((d->stackedview->previewMode() != StackedView::PreviewAlbumMode) &&
-                (d->stackedview->previewMode() != StackedView::MapWidgetMode))
+                (d->stackedview->previewMode() != StackedView::MapWidgetMode) &&
+                (d->stackedview->previewMode() != StackedView::TableViewMode) )
             {
                 d->stackedview->setPreviewItem(list.first(), previousInfo, nextInfo);
             }
@@ -1451,6 +1454,7 @@ void DigikamView::slotImagePreview()
 void DigikamView::slotTogglePreviewMode(const ImageInfo& info)
 {
     if ( (d->stackedview->previewMode() == StackedView::PreviewAlbumMode ||
+          d->stackedview->previewMode() == StackedView::TableViewMode ||
           d->stackedview->previewMode() == StackedView::MapWidgetMode)   &&
          !info.isNull() )
     {
@@ -1498,6 +1502,9 @@ void DigikamView::slotViewModeChanged()
         case StackedView::MapWidgetMode:
             emit signalSwitchedToMapView();
             //TODO: connect map view's zoom buttons to main status bar zoom buttons
+            break;
+        case StackedView::TableViewMode:
+            emit signalSwitchedToTableView();
             break;
     }
 }

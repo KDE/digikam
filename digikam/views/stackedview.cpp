@@ -275,7 +275,9 @@ bool StackedView::isInSingleFileMode() const
 
 bool StackedView::isInMultipleFileMode() const
 {
-    return currentIndex() == PreviewAlbumMode || currentIndex() == MapWidgetMode;
+    return currentIndex() == PreviewAlbumMode
+        || currentIndex() == MapWidgetMode
+        || currentIndex() == TableViewMode;
 }
 
 bool StackedView::isInAbstractMode() const

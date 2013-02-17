@@ -109,6 +109,7 @@ Q_SIGNALS:
     void signalSwitchedToPreview();
     void signalSwitchedToIconView();
     void signalSwitchedToMapView();
+    void signalSwitchedToTableView();
 
     void signalGotoAlbumAndItem(const ImageInfo&);
     void signalGotoDateAndItem(AlbumIconItem*);
