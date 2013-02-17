@@ -85,7 +85,7 @@ TableViewModel::TableViewModel(TableViewColumnFactory* const tableViewColumnFact
             this, SLOT(slotSourceDataChanged(QModelIndex,QModelIndex)));
 
     connect(DatabaseAccess::databaseWatch(), SIGNAL(imageChange(ImageChangeset)),
-            this, SLOT(slotDatabaseImageChanged(ImageChangeSet)), Qt::QueuedConnection);
+            this, SLOT(slotDatabaseImageChanged(ImageChangeset)), Qt::QueuedConnection);
 
     d->columnObjects << d->columnFactory->getColumn(TableViewColumnConfiguration("thumbnail"));
     d->columnObjects << d->columnFactory->getColumn(TableViewColumnConfiguration("filename"));
