@@ -71,8 +71,11 @@ public:
       : columnId(id)
     {
     }
+
     QString columnId;
 
+    void loadSettings(const KConfigGroup& configGroup);
+    void saveSettings(KConfigGroup& configGroup) const;
 };
 
 class TableViewColumn
@@ -90,6 +93,7 @@ public:
     virtual ~TableViewColumn();
 
     static TableViewColumnDescription getDescription();
+    virtual TableViewColumnConfiguration getConfiguration() const = 0;
     virtual QString getTitle();
 
     virtual QVariant data(const QModelIndex& sourceIndex, const int role);
@@ -113,6 +117,20 @@ private:
     class Private;
     const QScopedPointer<Private> d;
     TableViewShared* const s;
+};
+
+class TableViewColumnProfile
+{
+public:
+
+    TableViewColumnProfile();
+    ~TableViewColumnProfile();
+
+    QList<TableViewColumnConfiguration> columnConfigurationList;
+    QString name;
+
+    void loadSettings(const KConfigGroup& configGroup);
+    void saveSettings(KConfigGroup& configGroup);
 };
 
 } /* namespace Digikam */

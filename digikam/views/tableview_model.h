@@ -36,10 +36,10 @@
 namespace Digikam
 {
 
+class TableViewColumnProfile;
 class TableViewColumn;
-
 class TableViewColumnDescription;
-
+class TableViewColumnConfiguration;
 class ImageFilterModel;
 class TableViewColumnFactory;
 
@@ -60,9 +60,12 @@ public:
     virtual QVariant headerData(int section, Qt::Orientation orientation, int role) const;
 
     void addColumnAt(const TableViewColumnDescription& description, const int targetColumn = -1);
+    void addColumnAt(const TableViewColumnConfiguration& configuration, const int targetColumn = -1);
     void removeColumnAt(const int columnIndex);
     TableViewColumn* getColumnObject(const int columnIndex);
     QModelIndex toImageFilterModelIndex(const QModelIndex& i) const;
+    void loadColumnProfile(const TableViewColumnProfile& columnProfile);
+    TableViewColumnProfile getColumnProfile() const;
 
 private:
 

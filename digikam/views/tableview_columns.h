@@ -68,6 +68,11 @@ public:
         return sourceIndex.data(role);
     }
 
+    virtual TableViewColumnConfiguration getConfiguration() const
+    {
+        return TableViewColumnConfiguration("filename");
+    }
+
 };
 
 class ColumnCoordinates : public TableViewColumn
@@ -105,6 +110,11 @@ public:
         const KGeoMap::GeoCoordinates coordinates(info.latitudeNumber(), info.longitudeNumber());
 
         return QString("%1,%2").arg(coordinates.latString()).arg(coordinates.lonString());
+    }
+
+    virtual TableViewColumnConfiguration getConfiguration() const
+    {
+        return TableViewColumnConfiguration("coordinates");
     }
 
 };
@@ -170,6 +180,11 @@ public:
     virtual QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& sourceIndex) const
     {
         return QSize(60, 60);
+    }
+
+    virtual TableViewColumnConfiguration getConfiguration() const
+    {
+        return TableViewColumnConfiguration("thumbnail");
     }
 
 

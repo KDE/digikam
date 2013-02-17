@@ -10,7 +10,7 @@
  * Copyright (C) 2002-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2011 by Johannes Wienke <languitar at semipol dot de>
  * Copyright (C) 2010-2011 by Andi Clemens <andi dot clemens at gmail dot com>
- * Copyright (C) 2011      by Michael G. Hansen <mike at mghansen dot de>
+ * Copyright (C) 2011-2013 by Michael G. Hansen <mike at mghansen dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -78,6 +78,7 @@
 #include "faceiface.h"
 #include "fileactionprogress.h"
 #include "versionmanagersettings.h"
+#include "tableview.h"
 
 #ifdef USE_PRESENTATION_MODE
 #include "qmlshow.h"
@@ -110,6 +111,7 @@ public:
         parent(0),
         iconView(0),
         mapView(0),
+        tableView(0),
         albumManager(0),
         albumHistory(0),
         stackedview(0),
@@ -159,6 +161,7 @@ public:
 
     DigikamImageView*             iconView;
     MapWidgetView*                mapView;
+    TableView*                    tableView;
     AlbumManager*                 albumManager;
     AlbumHistory*                 albumHistory;
     StackedView*                  stackedview;
@@ -254,6 +257,7 @@ DigikamView::DigikamView(QWidget* const parent, DigikamModelCollection* const mo
 
     d->iconView = d->stackedview->imageIconView();
     d->mapView  = d->stackedview->mapWidgetView();
+    d->tableView = d->stackedview->tableView();
 
     d->addPageUpDownActions(this, d->stackedview->imagePreviewView());
     d->addPageUpDownActions(this, d->stackedview->thumbBar());
@@ -655,6 +659,7 @@ void DigikamView::loadViewState()
     d->initialAlbumID = group.readEntry("InitialAlbumID", 0);
 
     d->mapView->loadState();
+    d->tableView->loadState();
     d->rightSideBar->loadState();
 }
 
@@ -692,7 +697,7 @@ void DigikamView::saveViewState()
     }
 
     d->mapView->saveState();
-
+    d->tableView->saveState();
     d->rightSideBar->saveState();
 }
 

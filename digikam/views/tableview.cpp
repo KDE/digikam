@@ -76,13 +76,15 @@ public:
     Private()
       : treeView(0),
         imageModel(0),
-        selectionModel(0)
+        selectionModel(0),
+        columnProfiles()
     {
     }
 
     TableViewTreeView*      treeView;
     ImageAlbumModel*        imageModel;
     QItemSelectionModel*    selectionModel;
+    QList<TableViewColumnProfile> columnProfiles;
 };
 
 TableView::TableView(
@@ -118,12 +120,22 @@ TableView::~TableView()
 
 void TableView::doLoadState()
 {
+    const KConfigGroup group = getConfigGroup();
 
+    TableViewColumnProfile profile;
+    const KConfigGroup groupCurrentProfile = group.group("Current Profile");
+    /// @todo also store the QHeaderView settings into the column profile
+    profile.loadSettings(groupCurrentProfile);
+    s->tableViewModel->loadColumnProfile(profile);
 }
 
 void TableView::doSaveState()
 {
+    KConfigGroup group = getConfigGroup();
 
+    TableViewColumnProfile profile = s->tableViewModel->getColumnProfile();
+    KConfigGroup groupCurrentProfile = group.group("Current Profile");
+    profile.saveSettings(groupCurrentProfile);
 }
 
 TableViewTreeView::TableViewTreeView(Digikam::TableViewShared* const tableViewShared, QWidget*const parent)

@@ -144,7 +144,12 @@ void TableViewModel::addColumnAt(const TableViewColumnDescription& description, 
     /// @todo take additional configuration data of the column into account
     TableViewColumnConfiguration newConfiguration(description.columnId);
 
-    TableViewColumn* const newColumn = d->columnFactory->getColumn(newConfiguration);
+    addColumnAt(newConfiguration, targetColumn);
+}
+
+void TableViewModel::addColumnAt(const TableViewColumnConfiguration& configuration, const int targetColumn)
+{
+    TableViewColumn* const newColumn = d->columnFactory->getColumn(configuration);
 
     int newColumnIndex = targetColumn;
     if (targetColumn<0)
@@ -165,6 +170,7 @@ void TableViewModel::addColumnAt(const TableViewColumnDescription& description, 
     endInsertColumns();
 }
 
+
 void TableViewModel::removeColumnAt(const int columnIndex)
 {
     beginRemoveColumns(QModelIndex(), columnIndex, columnIndex);
@@ -177,6 +183,33 @@ void TableViewModel::removeColumnAt(const int columnIndex)
 TableViewColumn* TableViewModel::getColumnObject(const int columnIndex)
 {
     return d->columnObjects.at(columnIndex);
+}
+
+TableViewColumnProfile TableViewModel::getColumnProfile() const
+{
+    TableViewColumnProfile profile;
+
+    for (int i=0; i<d->columnObjects.count(); ++i)
+    {
+        TableViewColumnConfiguration ic = d->columnObjects.at(i)->getConfiguration();
+        profile.columnConfigurationList << ic;
+    }
+
+    return profile;
+}
+
+void TableViewModel::loadColumnProfile(const TableViewColumnProfile& columnProfile)
+{
+    while (!d->columnObjects.isEmpty())
+    {
+        removeColumnAt(0);
+    }
+
+    /// @todo disable updating of the model while this happens
+    for (int i=0; i<columnProfile.columnConfigurationList.count(); ++i)
+    {
+        addColumnAt(columnProfile.columnConfigurationList.at(i), -1);
+    }
 }
 
 } /* namespace Digikam */

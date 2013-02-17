@@ -120,6 +120,68 @@ QSize TableViewColumn::sizeHint(const QStyleOptionViewItem& option, const QModel
     return QSize();
 }
 
+TableViewColumnProfile::TableViewColumnProfile()
+{
+
+}
+
+TableViewColumnProfile::~TableViewColumnProfile()
+{
+
+}
+
+void TableViewColumnProfile::loadSettings(const KConfigGroup& configGroup)
+{
+    name = configGroup.readEntry("Profile Name", QString());
+    const int nColumns = configGroup.readEntry("Column Count", int(0));
+
+    for (int i=0; i<nColumns; ++i)
+    {
+        /// @todo check for invalid column configurations
+        const QString configSubGroupName = QString("Column %1").arg(i);
+        const KConfigGroup subGroup = configGroup.group(configSubGroupName);
+
+        /// @todo move loading into TableViewColumnConfiguration
+        TableViewColumnConfiguration columnConfiguration;
+        columnConfiguration.loadSettings(subGroup);
+
+        columnConfigurationList << columnConfiguration;
+    }
+
+    if (columnConfigurationList.isEmpty())
+    {
+        // no data loaded, create default entries
+        columnConfigurationList << TableViewColumnConfiguration("thumbnail");
+        columnConfigurationList << TableViewColumnConfiguration("filename");
+        columnConfigurationList << TableViewColumnConfiguration("coordinates");
+    }
+}
+
+void TableViewColumnProfile::saveSettings(KConfigGroup& configGroup)
+{
+    configGroup.writeEntry("Profile Name", name);
+    const int nColumns = columnConfigurationList.count();
+    configGroup.writeEntry("Column Count", nColumns);
+
+    for (int i=0; i<nColumns; ++i)
+    {
+        const QString configSubGroupName = QString("Column %1").arg(i);
+        KConfigGroup subGroup = configGroup.group(configSubGroupName);
+
+        const TableViewColumnConfiguration& columnConfiguration = columnConfigurationList.at(i);;
+        columnConfiguration.saveSettings(subGroup);
+    }
+}
+
+void TableViewColumnConfiguration::loadSettings(const KConfigGroup& configGroup)
+{
+    columnId = configGroup.readEntry("Column Id", QString());
+}
+
+void TableViewColumnConfiguration::saveSettings(KConfigGroup& configGroup) const
+{
+    configGroup.writeEntry("Column Id", columnId);
+}
 
 } /* namespace Digikam */
 
