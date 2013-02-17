@@ -56,8 +56,8 @@ public:
     explicit TableViewItemDelegate(TableViewShared* const tableViewShared, QObject* parent = 0);
     virtual ~TableViewItemDelegate();
 
-    virtual void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& tableViewIndex) const;
-    virtual QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& tableViewIndex) const;
+    virtual void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& sortedIndex) const;
+    virtual QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& sortedIndex) const;
 
 private:
 

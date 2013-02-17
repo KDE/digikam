@@ -31,6 +31,7 @@ class TableViewColumnFactory;
 class TableViewItemDelegate;
 class ImageFilterModel;
 class ThumbnailLoadThread;
+class TableViewSortFilterProxyModel;
 
 class TableViewShared
 {
@@ -40,6 +41,7 @@ public:
     TableViewItemDelegate* itemDelegate;
     ImageFilterModel* imageFilterModel;
     ThumbnailLoadThread* thumbnailLoadThread;
+    TableViewSortFilterProxyModel* sortModel;
 };
 
 } /* namespace Digikam */

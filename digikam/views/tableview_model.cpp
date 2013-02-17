@@ -396,5 +396,23 @@ void TableViewModel::slotDatabaseImageChanged(const ImageChangeset& imageChanges
     }
 }
 
+TableViewSortFilterProxyModel::TableViewSortFilterProxyModel(TableViewShared* const sPointer, QObject* parent)
+  : QSortFilterProxyModel(parent),
+    s(sPointer)
+{
+    setSourceModel(s->tableViewModel);
+    setDynamicSortFilter(true);
+}
+
+TableViewSortFilterProxyModel::~TableViewSortFilterProxyModel()
+{
+
+}
+
+bool TableViewSortFilterProxyModel::lessThan(const QModelIndex& left, const QModelIndex& right) const
+{
+    return QSortFilterProxyModel::lessThan(left, right);
+}
+
 } /* namespace Digikam */
 

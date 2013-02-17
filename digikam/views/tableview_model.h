@@ -25,6 +25,7 @@
 
 // Qt includes
 #include <QAbstractItemModel>
+#include <QSortFilterProxyModel>
 
 // KDE includes
 
@@ -89,13 +90,28 @@ private Q_SLOTS:
 
     void slotDatabaseImageChanged(const ImageChangeset& imageChangeset);
 
-
 private:
 
     class Private;
     const QScopedPointer<Private> d;
 };
 
+class TableViewSortFilterProxyModel : public QSortFilterProxyModel
+{
+    Q_OBJECT
+
+public:
+
+    TableViewSortFilterProxyModel(TableViewShared* const sPointer, QObject* parent = 0);
+    virtual ~TableViewSortFilterProxyModel();
+
+    virtual bool lessThan(const QModelIndex& left, const QModelIndex& right) const;
+
+private:
+
+    TableViewShared* const s;
+
+};
 
 } /* namespace Digikam */
 

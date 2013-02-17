@@ -106,6 +106,7 @@ TableView::TableView(
     QVBoxLayout* const vbox1 = new QVBoxLayout();
 
     s->tableViewModel = new TableViewModel(s->columnFactory, s->imageFilterModel, this);
+    s->sortModel = new TableViewSortFilterProxyModel(s.data(), this);
     d->treeView = new TableViewTreeView(s.data(), this);
 
     vbox1->addWidget(d->treeView);
@@ -152,7 +153,7 @@ TableViewTreeView::TableViewTreeView(Digikam::TableViewShared* const tableViewSh
 
     header()->installEventFilter(this);
 
-    setModel(s->tableViewModel);
+    setModel(s->sortModel);
 }
 
 TableViewTreeView::~TableViewTreeView()
@@ -166,6 +167,9 @@ bool TableViewTreeView::eventFilter(QObject* watched, QEvent* event)
     if ( (watched==headerView) && (event->type()==QEvent::ContextMenu) )
     {
         showHeaderContextMenu(event);
+//         s->sortModel=new TableViewSortFilterProxyModel(s,this);
+//         s->sortModel->setSourceModel(s->tableViewModel);
+        setModel(s->sortModel);
         return true;
     }
 
@@ -237,23 +241,25 @@ TableViewItemDelegate::~TableViewItemDelegate()
 
 }
 
-void TableViewItemDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& tableViewIndex) const
+void TableViewItemDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& sortedIndex) const
 {
-    const int columnIndex = tableViewIndex.column();
+    const int columnIndex = sortedIndex.column();
     TableViewColumn* const columnObject = s->tableViewModel->getColumnObject(columnIndex);
 
+    const QModelIndex tableViewIndex = s->sortModel->mapToSource(sortedIndex);
     const QModelIndex sourceIndex = s->tableViewModel->toImageFilterModelIndex(tableViewIndex);
 
     if (!columnObject->paint(painter, option, sourceIndex))
     {
-        QItemDelegate::paint(painter, option, tableViewIndex);
+        QItemDelegate::paint(painter, option, sortedIndex);
     }
 }
 
-QSize TableViewItemDelegate::sizeHint(const QStyleOptionViewItem& option, const QModelIndex& tableViewIndex) const
+QSize TableViewItemDelegate::sizeHint(const QStyleOptionViewItem& option, const QModelIndex& sortedIndex) const
 {
-    const int columnIndex = tableViewIndex.column();
+    const int columnIndex = sortedIndex.column();
     TableViewColumn* const columnObject = s->tableViewModel->getColumnObject(columnIndex);
+    const QModelIndex tableViewIndex = s->sortModel->mapToSource(sortedIndex);
     const QModelIndex sourceIndex = s->tableViewModel->toImageFilterModelIndex(tableViewIndex);
 
     /// we have to take the maximum of all columns for the height
@@ -273,7 +279,7 @@ QSize TableViewItemDelegate::sizeHint(const QStyleOptionViewItem& option, const 
     QSize columnSize = columnObject->sizeHint(option, sourceIndex);
     if (!columnSize.isValid())
     {
-        columnSize = QItemDelegate::sizeHint(option, tableViewIndex);
+        columnSize = QItemDelegate::sizeHint(option, sortedIndex);
         /// @todo we have to incorporate the height given by QItemDelegate for the other columns, too
         maxHeight = qMax(maxHeight, columnSize.height());
     }
