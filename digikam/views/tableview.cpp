@@ -34,6 +34,7 @@
 
 #include <kmenu.h>
 #include <kaction.h>
+#include <klinkitemselectionmodel.h>
 
 // local includes
 
@@ -50,6 +51,7 @@
 #include "thumbnailloadthread.h"
 #include "tableview_model.h"
 #include "tableview_columnfactory.h"
+#include "tableview_selection_model_syncer.h"
 
 namespace Digikam
 {
@@ -76,14 +78,12 @@ public:
     Private()
       : treeView(0),
         imageModel(0),
-        selectionModel(0),
         columnProfiles()
     {
     }
 
     TableViewTreeView*      treeView;
     ImageAlbumModel*        imageModel;
-    QItemSelectionModel*    selectionModel;
     QList<TableViewColumnProfile> columnProfiles;
 };
 
@@ -100,13 +100,16 @@ TableView::TableView(
     s->thumbnailLoadThread = new ThumbnailLoadThread(this);
     s->imageFilterModel = dynamic_cast<ImageFilterModel*>(imageFilterModel);
     d->imageModel = dynamic_cast<ImageAlbumModel*>(imageFilterModel->sourceModel());
-    d->selectionModel = selectionModel;
+    s->imageFilterSelectionModel = selectionModel;
     s->columnFactory = new TableViewColumnFactory(s.data(), this);
 
     QVBoxLayout* const vbox1 = new QVBoxLayout();
 
     s->tableViewModel = new TableViewModel(s->columnFactory, s->imageFilterModel, this);
+    s->tableViewSelectionModel = new QItemSelectionModel(s->tableViewModel);
     s->sortModel = new TableViewSortFilterProxyModel(s.data(), this);
+    s->sortSelectionModel = new KLinkItemSelectionModel(s->sortModel, s->tableViewSelectionModel);
+    s->tableViewSelectionModelSyncer= new TableViewSelectionModelSyncer(s.data(), this);
     d->treeView = new TableViewTreeView(s.data(), this);
 
     vbox1->addWidget(d->treeView);
@@ -150,8 +153,10 @@ TableViewTreeView::TableViewTreeView(Digikam::TableViewShared* const tableViewSh
     s(tableViewShared)
 {
     s->itemDelegate = new TableViewItemDelegate(s, this);
+    setSelectionMode(QAbstractItemView::ExtendedSelection);
     setItemDelegate(s->itemDelegate);
     setRootIsDecorated(false);
+    setAllColumnsShowFocus(true);
 
     d->actionHeaderContextMenuRemoveColumn = new KAction("Remove this column", this);
     connect(d->actionHeaderContextMenuRemoveColumn, SIGNAL(triggered(bool)),
@@ -160,7 +165,7 @@ TableViewTreeView::TableViewTreeView(Digikam::TableViewShared* const tableViewSh
     header()->installEventFilter(this);
 
     setModel(s->sortModel);
-
+    setSelectionModel(s->sortSelectionModel);
     setSortingEnabled(true);
 }
 

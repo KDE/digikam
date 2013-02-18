@@ -23,6 +23,8 @@
 #ifndef TABLEVIEW_SHARED_H
 #define TABLEVIEW_SHARED_H
 
+class QItemSelectionModel;
+
 namespace Digikam
 {
 
@@ -32,16 +34,26 @@ class TableViewItemDelegate;
 class ImageFilterModel;
 class ThumbnailLoadThread;
 class TableViewSortFilterProxyModel;
+class TableViewSelectionModelSyncer;
 
 class TableViewShared
 {
 public:
+
+    ImageFilterModel* imageFilterModel;
+    QItemSelectionModel* imageFilterSelectionModel;
+    ThumbnailLoadThread* thumbnailLoadThread;
+
     TableViewModel* tableViewModel;
+    QItemSelectionModel* tableViewSelectionModel;
+
+    TableViewSortFilterProxyModel* sortModel;
+    QItemSelectionModel* sortSelectionModel;
+
+    TableViewSelectionModelSyncer* tableViewSelectionModelSyncer;
     TableViewColumnFactory* columnFactory;
     TableViewItemDelegate* itemDelegate;
-    ImageFilterModel* imageFilterModel;
-    ThumbnailLoadThread* thumbnailLoadThread;
-    TableViewSortFilterProxyModel* sortModel;
+
 };
 
 } /* namespace Digikam */
