@@ -57,11 +57,11 @@
 namespace Digikam
 {
 
-class VersionsWidget::VersionsWidgetPriv
+class VersionsWidget::Private
 {
 public:
 
-    VersionsWidgetPriv()
+    Private()
         : view(0),
           model(0),
           delegate(0),
@@ -86,34 +86,34 @@ public:
 
     static const QString     configCurrentMode;
 };
-const QString VersionsWidget::VersionsWidgetPriv::configCurrentMode("Version Properties View Mode");
+const QString VersionsWidget::Private::configCurrentMode("Version Properties View Mode");
 
 
-VersionsWidget::VersionsWidget(QWidget* parent)
-    : QWidget(parent), d(new VersionsWidgetPriv)
+VersionsWidget::VersionsWidget(QWidget* const parent)
+    : QWidget(parent), d(new Private)
 {
-    QGridLayout* layout   = new QGridLayout;
+    QGridLayout* const layout = new QGridLayout;
 
-    d->viewButtonGroup    = new QButtonGroup(this);
-    d->listModeButton     = new QToolButton;
+    d->viewButtonGroup        = new QButtonGroup(this);
+    d->listModeButton         = new QToolButton;
     d->listModeButton->setIcon(SmallIcon("view-list-icons"));
     d->listModeButton->setCheckable(true);
     d->listModeButton->setToolTip(i18n("Show available versions in a list"));
     d->viewButtonGroup->addButton(d->listModeButton, ImageHistoryGraphModel::ImagesListMode);
 
-    d->treeModeButton     = new QToolButton;
+    d->treeModeButton         = new QToolButton;
     d->treeModeButton->setIcon(SmallIcon("view-list-tree"));
     d->treeModeButton->setCheckable(true);
     d->treeModeButton->setToolTip(i18n("Show available versions as a tree"));
     d->viewButtonGroup->addButton(d->treeModeButton, ImageHistoryGraphModel::ImagesTreeMode);
 
-    d->combinedModeButton = new QToolButton;
+    d->combinedModeButton     = new QToolButton;
     d->combinedModeButton->setIcon(SmallIcon("view-list-details"));
     d->combinedModeButton->setCheckable(true);
     d->combinedModeButton->setToolTip(i18n("Show available versions and the applied filters in a combined list"));
     d->viewButtonGroup->addButton(d->combinedModeButton, ImageHistoryGraphModel::CombinedTreeMode);
 
-    QHBoxLayout* buttonLayout = new QHBoxLayout;
+    QHBoxLayout* const buttonLayout = new QHBoxLayout;
     buttonLayout->addWidget(d->listModeButton);
     buttonLayout->addWidget(d->treeModeButton);
     buttonLayout->addWidget(d->combinedModeButton);
@@ -159,6 +159,7 @@ VersionsWidget::~VersionsWidget()
 void VersionsWidget::readSettings(const KConfigGroup& group)
 {
     int mode = group.readEntry(d->configCurrentMode, (int)ImageHistoryGraphModel::CombinedTreeMode);
+
     switch (mode)
     {
         case ImageHistoryGraphModel::ImagesListMode:
@@ -167,11 +168,12 @@ void VersionsWidget::readSettings(const KConfigGroup& group)
         case ImageHistoryGraphModel::ImagesTreeMode:
             d->treeModeButton->setChecked(true);
             break;
-        default:
         case ImageHistoryGraphModel::CombinedTreeMode:
+        default:
             d->combinedModeButton->setChecked(true);
             break;
     }
+
     slotViewModeChanged(mode);
 }
 
@@ -187,7 +189,7 @@ VersionsDelegate* VersionsWidget::delegate() const
 
 ActionVersionsOverlay* VersionsWidget::addActionOverlay(const KGuiItem& item)
 {
-    ActionVersionsOverlay* overlay = new ActionVersionsOverlay(this, item);
+    ActionVersionsOverlay* const overlay = new ActionVersionsOverlay(this, item);
     d->view->addOverlay(overlay);
     return overlay;
 }
@@ -214,6 +216,7 @@ void VersionsWidget::setCurrentItem(const ImageInfo& info)
 void VersionsWidget::slotViewCurrentChanged(const QModelIndex& current, const QModelIndex& previous)
 {
     ImageInfo info = d->model->imageInfo(current);
+
     if (!info.isNull())
     {
         emit imageSelected(info);
@@ -266,6 +269,7 @@ void VersionsWidget::applyViewMode()
 void VersionsWidget::slotSetupChanged()
 {
     d->view->setToolTipEnabled(AlbumSettings::instance()->showToolTipsIsValid());
+
     if (d->showHideOverlay)
     {
         d->showHideOverlay->setSettings(AlbumSettings::instance()->getVersionManagerSettings());
