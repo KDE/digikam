@@ -26,13 +26,14 @@
 namespace Digikam
 {
 
-class ImageFiltersHistoryTreeItem::ImageFiltersHistoryTreeItemPriv
+class ImageFiltersHistoryTreeItem::Private
 {
 public:
 
-    ImageFiltersHistoryTreeItemPriv()
+    Private()
     {
         parentItem = 0;
+        disabled   = false;
     }
 
     QList<ImageFiltersHistoryTreeItem*> childItems;
@@ -41,22 +42,18 @@ public:
     bool                                disabled;
 };
 
-ImageFiltersHistoryTreeItem::ImageFiltersHistoryTreeItem(const QList<QVariant>& data,
-        ImageFiltersHistoryTreeItem* parent)
-    : d(new ImageFiltersHistoryTreeItemPriv)
+ImageFiltersHistoryTreeItem::ImageFiltersHistoryTreeItem(const QList<QVariant>& data, ImageFiltersHistoryTreeItem* const parent)
+    : d(new Private)
 {
     d->parentItem = parent;
     d->itemData   = data;
-    d->disabled = false;
 }
 
-ImageFiltersHistoryTreeItem::ImageFiltersHistoryTreeItem(const QString& data,
-        ImageFiltersHistoryTreeItem* parent)
-    : d(new ImageFiltersHistoryTreeItemPriv)
+ImageFiltersHistoryTreeItem::ImageFiltersHistoryTreeItem(const QString& data, ImageFiltersHistoryTreeItem* const parent)
+    : d(new Private)
 {
     d->parentItem = parent;
     d->itemData.append(data);
-    d->disabled = false;
 }
 
 ImageFiltersHistoryTreeItem::~ImageFiltersHistoryTreeItem()
@@ -65,12 +62,12 @@ ImageFiltersHistoryTreeItem::~ImageFiltersHistoryTreeItem()
     delete d;
 }
 
-void ImageFiltersHistoryTreeItem::appendChild(ImageFiltersHistoryTreeItem* item)
+void ImageFiltersHistoryTreeItem::appendChild(ImageFiltersHistoryTreeItem* const item)
 {
     d->childItems.append(item);
 }
 
-ImageFiltersHistoryTreeItem* ImageFiltersHistoryTreeItem::child(int row)
+ImageFiltersHistoryTreeItem* ImageFiltersHistoryTreeItem::child(int row) const
 {
     return d->childItems.value(row);
 }
