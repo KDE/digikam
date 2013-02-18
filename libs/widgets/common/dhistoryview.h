@@ -6,7 +6,7 @@
  * Date        : 2009-05-26
  * Description : History view.
  *
- * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -56,7 +56,7 @@ public:
 
 public:
 
-    explicit DHistoryView(QWidget* parent);
+    explicit DHistoryView(QWidget* const parent);
     virtual ~DHistoryView();
 
     void addedEntry(const QString& msg, EntryType type, const QVariant& metadata);

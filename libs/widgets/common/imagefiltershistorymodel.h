@@ -54,7 +54,7 @@ public:
 
     void setUrl(const KUrl& url);
     bool removeRows(int row, int count, const QModelIndex& parent);
-    void setupModelData(const QList<DImageHistory::Entry>& entries, ImageFiltersHistoryTreeItem* const parent = 0);
+    void setupModelData(const QList<DImageHistory::Entry>& entries, ImageFiltersHistoryTreeItem* parent = 0);
 
     Qt::ItemFlags flags(const QModelIndex& index)                                             const;
     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;

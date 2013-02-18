@@ -238,7 +238,7 @@ int ImageFiltersHistoryModel::rowCount(const QModelIndex& parent) const
     return parentItem->childCount();
 }
 
-void ImageFiltersHistoryModel::setupModelData(const QList<DImageHistory::Entry>& entries, ImageFiltersHistoryTreeItem* const parent)
+void ImageFiltersHistoryModel::setupModelData(const QList<DImageHistory::Entry>& entries, ImageFiltersHistoryTreeItem* parent)
 {
     beginResetModel();
 
