@@ -458,6 +458,11 @@ void DigikamView::setupConnections()
     connect(d->iconView, SIGNAL(signalPopupTagsView()),
             d->rightSideBar, SLOT(slotPopupTagsView()));
 
+    // -- TableView Connections -----------------------------------
+
+    connect(d->tableView, SIGNAL(signalPreviewRequested(ImageInfo)),
+            this, SLOT(slotTogglePreviewMode(ImageInfo)));
+
     // -- Sidebar Connections -------------------------------------
 
     connect(d->leftSideBar, SIGNAL(signalChangedTab(QWidget*)),

@@ -112,6 +112,9 @@ TableView::TableView(
     s->tableViewSelectionModelSyncer= new TableViewSelectionModelSyncer(s.data(), this);
     d->treeView = new TableViewTreeView(s.data(), this);
 
+    connect(d->treeView, SIGNAL(activated(QModelIndex)),
+            this, SLOT(slotItemActivated(QModelIndex)));
+
     vbox1->addWidget(d->treeView);
 
     setLayout(vbox1);
@@ -298,6 +301,22 @@ QSize TableViewItemDelegate::sizeHint(const QStyleOptionViewItem& option, const 
     }
 
     return QSize(columnSize.width(), maxHeight);
+}
+
+void TableView::slotItemActivated(const QModelIndex& sortedIndex)
+{
+    const QModelIndex& tableViewIndex = s->sortModel->mapToSource(sortedIndex);
+    const QModelIndex& imageFilterModelIndex = s->tableViewModel->toImageFilterModelIndex(tableViewIndex);
+
+    if (!imageFilterModelIndex.isValid())
+    {
+        return;
+    }
+
+    const ImageInfo info = s->imageFilterModel->imageInfo(imageFilterModelIndex);
+
+    /// @todo Respect edit/preview setting
+    emit signalPreviewRequested(info);
 }
 
 } /* namespace Digikam */

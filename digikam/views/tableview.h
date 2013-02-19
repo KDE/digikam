@@ -110,6 +110,14 @@ protected:
     void doLoadState();
     void doSaveState();
 
+protected Q_SLOTS:
+
+    void slotItemActivated(const QModelIndex& sortedIndex);
+
+Q_SIGNALS:
+
+    void signalPreviewRequested(const ImageInfo& info);
+
 private:
 
     class Private;
