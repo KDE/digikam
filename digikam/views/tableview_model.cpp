@@ -26,7 +26,9 @@
 #include "imagefiltermodel.h"
 #include "tableview_columnfactory.h"
 #include <valarray>
+#include <boost/config/posix_features.hpp>
 #include "modeltest/modeltest.h"
+#include "tableview_selection_model_syncer.h"
 #include "databasewatch.h"
 #include "databasechangesets.h"
 
@@ -423,6 +425,72 @@ bool TableViewSortFilterProxyModel::lessThan(const QModelIndex& left, const QMod
 {
     return QSortFilterProxyModel::lessThan(left, right);
 }
+
+class TableViewCurrentToSortedSyncer::Private
+{
+public:
+    Private()
+      : syncing(false)
+    {
+    }
+
+    bool syncing;
+};
+
+TableViewCurrentToSortedSyncer::TableViewCurrentToSortedSyncer(
+        TableViewShared* const sharedObject,
+        QObject*const parent
+    )
+  : QObject(parent), d(new Private()), s(sharedObject)
+{
+    connect(s->sortSelectionModel, SIGNAL(currentChanged(QModelIndex,QModelIndex)),
+            this, SLOT(slotSortedModelCurrentChanged(QModelIndex,QModelIndex)));
+
+    connect(s->tableViewSelectionModel, SIGNAL(currentChanged(QModelIndex,QModelIndex)),
+        this, SLOT(slotTableViewModelCurrentChanged(QModelIndex,QModelIndex)));
+}
+
+TableViewCurrentToSortedSyncer::~TableViewCurrentToSortedSyncer()
+{
+
+}
+
+void TableViewCurrentToSortedSyncer::slotSortedModelCurrentChanged(const QModelIndex& current, const QModelIndex& previous)
+{
+    Q_UNUSED(previous)
+
+    if (d->syncing)
+    {
+        return;
+    }
+    d->syncing = true;
+
+    const QModelIndex sortedIndexColumn0 = s->sortModel->index(current.row(), 0, QModelIndex());
+    const QModelIndex tableViewColumn0 = s->sortModel->mapToSource(sortedIndexColumn0);
+
+    s->tableViewSelectionModel->setCurrentIndex(tableViewColumn0, QItemSelectionModel::NoUpdate);
+
+    d->syncing = false;
+}
+
+void TableViewCurrentToSortedSyncer::slotTableViewModelCurrentChanged(const QModelIndex& current, const QModelIndex& previous)
+{
+    Q_UNUSED(previous)
+
+    if (d->syncing)
+    {
+        return;
+    }
+    d->syncing = true;
+
+    const QModelIndex tableViewColumn0 = s->tableViewModel->index(current.row(), 0, QModelIndex());
+    const QModelIndex sortedIndexColumn0 = s->sortModel->mapFromSource(tableViewColumn0);
+
+    s->sortSelectionModel->setCurrentIndex(sortedIndexColumn0, QItemSelectionModel::NoUpdate);
+
+    d->syncing = false;
+}
+
 
 } /* namespace Digikam */
 

@@ -114,6 +114,27 @@ private:
     TableViewShared* const s;
 };
 
+class TableViewCurrentToSortedSyncer : public QObject
+{
+    Q_OBJECT
+
+public:
+
+    explicit TableViewCurrentToSortedSyncer(TableViewShared* const sharedObject, QObject* const parent = 0);
+    virtual ~TableViewCurrentToSortedSyncer();
+
+private Q_SLOTS:
+
+    void slotSortedModelCurrentChanged(const QModelIndex& current, const QModelIndex& previous);
+    void slotTableViewModelCurrentChanged(const QModelIndex& current, const QModelIndex& previous);
+
+private:
+
+    class Private;
+    class QScopedPointer<Private> d;
+    TableViewShared* const s;
+};
+
 } /* namespace Digikam */
 
 #endif // TABLEVIEW_MODEL_H

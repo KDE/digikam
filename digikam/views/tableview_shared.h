@@ -35,6 +35,7 @@ class ImageFilterModel;
 class ThumbnailLoadThread;
 class TableViewSortFilterProxyModel;
 class TableViewSelectionModelSyncer;
+class TableViewCurrentToSortedSyncer;
 
 class TableViewShared
 {
@@ -53,7 +54,7 @@ public:
     TableViewSelectionModelSyncer* tableViewSelectionModelSyncer;
     TableViewColumnFactory* columnFactory;
     TableViewItemDelegate* itemDelegate;
-
+    TableViewCurrentToSortedSyncer* tableViewCurrentToSortedSyncer;
 };
 
 } /* namespace Digikam */
