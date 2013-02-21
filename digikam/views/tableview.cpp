@@ -263,10 +263,17 @@ void TableViewItemDelegate::paint(QPainter* painter, const QStyleOptionViewItem&
     const int columnIndex = sortedIndex.column();
     TableViewColumn* const columnObject = s->tableViewModel->getColumnObject(columnIndex);
 
-    const QModelIndex tableViewIndex = s->sortModel->mapToSource(sortedIndex);
-    const QModelIndex sourceIndex = s->tableViewModel->toImageFilterModelIndex(tableViewIndex);
+    bool useDefaultPainter = !columnObject->getColumnFlags().testFlag(TableViewColumn::ColumnCustomPainting);
 
-    if (!columnObject->paint(painter, option, sourceIndex))
+    if (!useDefaultPainter)
+    {
+        const QModelIndex tableViewIndex = s->sortModel->mapToSource(sortedIndex);
+        const QModelIndex sourceIndex = s->tableViewModel->toImageFilterModelIndex(tableViewIndex);
+
+        useDefaultPainter = !columnObject->paint(painter, option, sourceIndex);
+    }
+
+    if (useDefaultPainter)
     {
         QItemDelegate::paint(painter, option, sortedIndex);
     }
@@ -281,6 +288,7 @@ QSize TableViewItemDelegate::sizeHint(const QStyleOptionViewItem& option, const 
 
     /// we have to take the maximum of all columns for the height
     /// @todo somehow cache this calculation
+    /// @todo check column flags
     const int columnCount = s->tableViewModel->columnCount(QModelIndex());
     int maxHeight = 0;
     for (int i=0; i<columnCount; ++i)

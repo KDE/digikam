@@ -187,6 +187,11 @@ void TableViewColumnConfiguration::saveSettings(KConfigGroup& configGroup) const
     configGroup.writeEntry("Column Id", columnId);
 }
 
+TableViewColumn::ColumnFlags TableViewColumn::getColumnFlags() const
+{
+    return ColumnNoFlags;
+}
+
 } /* namespace Digikam */
 
 

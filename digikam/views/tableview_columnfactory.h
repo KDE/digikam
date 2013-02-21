@@ -88,6 +88,14 @@ protected:
 
 public:
 
+    enum ColumnFlag
+    {
+        ColumnNoFlags = 0,
+        ColumnCustomPainting = 1,
+        ColumnCustomSorting = 2
+    };
+    Q_DECLARE_FLAGS(ColumnFlags, ColumnFlag)
+
     explicit TableViewColumn(
             TableViewShared* const tableViewShared,
             const TableViewColumnConfiguration& pConfiguration,
@@ -97,6 +105,7 @@ public:
 
     static TableViewColumnDescription getDescription();
     virtual TableViewColumnConfiguration getConfiguration() const = 0;
+    virtual ColumnFlags getColumnFlags() const;
     virtual QString getTitle();
 
     virtual QVariant data(const QModelIndex& sourceIndex, const int role);
@@ -143,6 +152,8 @@ public:
 } /* namespace Digikam */
 
 Q_DECLARE_METATYPE(Digikam::TableViewColumnDescription)
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::TableViewColumn::ColumnFlags)
 
 #endif // TABLEVIEW_COLUMNFACTORY_H
 

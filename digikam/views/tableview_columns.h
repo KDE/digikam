@@ -148,6 +148,12 @@ public:
     {
         return TableViewColumnDescription(QLatin1String("thumbnail"), QLatin1String("Thumbnail"));
     }
+
+    virtual ColumnFlags getColumnFlags() const
+    {
+        return ColumnCustomPainting;
+    }
+
     virtual QString getTitle() { return i18n("Thumbnail"); }
 
     virtual QVariant data(const QModelIndex& sourceIndex, const int role)
