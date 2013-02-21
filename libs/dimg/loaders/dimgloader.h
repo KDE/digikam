@@ -90,7 +90,7 @@ public:
     static unsigned short* new_short_failureTolerant(size_t unsecureSize);
     static unsigned short* new_short_failureTolerant(quint64 w, quint64 h, uint typesPerPixel);
 
-    static int checkAllocation(qint64 fullSize);
+    static qint64 checkAllocation(qint64 fullSize);
 
     template <typename Type> static Type* new_failureTolerant(size_t unsecureSize);
     template <typename Type> static Type* new_failureTolerant(quint64 w, quint64 h, uint typesPerPixel);

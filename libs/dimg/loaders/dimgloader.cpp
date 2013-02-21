@@ -167,7 +167,7 @@ void DImgLoader::loadingFailed()
     m_image->m_priv->height = 0;
 }
 
-int DImgLoader::checkAllocation(qint64 fullSize)
+qint64 DImgLoader::checkAllocation(qint64 fullSize)
 {
     if (fullSize > std::numeric_limits<int>::max())
     {
@@ -175,22 +175,29 @@ int DImgLoader::checkAllocation(qint64 fullSize)
         return 0;
     }
 
-    int size = (int)fullSize;
-
     // Do extra check if allocating serious amounts of memory.
     // At the time of writing (2011), I consider 100 MB as "serious".
-    if (size > 100 * 1024 * 1024)
+    if (fullSize > (qint64)(100 * 1024 * 1024))
     {
         KMemoryInfo memory = KMemoryInfo::currentInfo();
 
-        if (size > memory.bytes(KMemoryInfo::AvailableMemory) && memory.isValid())
+        if (!memory.isValid())
         {
-            kError() << "Not enough memory to allocate buffer of size" << size;
+            kError() << "Error to get physical memory information";
+            return 0;
+        }
+        
+        qint64 available = memory.bytes(KMemoryInfo::AvailableMemory);
+
+        if (fullSize > available)
+        {
+            kError() << "Not enough memory to allocate buffer of size " << fullSize;
+            kError() << "Available memory size is " << available;
             return 0;
         }
     }
 
-    return size;
+    return fullSize;
 }
 
 bool DImgLoader::readMetadata(const QString& filePath, DImg::FORMAT /*ff*/)
