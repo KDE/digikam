@@ -28,6 +28,7 @@
 // KDE includes
 
 #include <kglobal.h>
+#include <kdebug.h>
 
 static bool fillMemoryInfo(Digikam::KMemoryInfo::KMemoryInfoData* data);
 
@@ -117,29 +118,42 @@ KMemoryInfo KMemoryInfo::currentInfo()
 qint64 KMemoryInfo::bytes(KMemoryInfo::MemoryDetails details) const
 {
     qint64 value = 0;
+    
     if (details & TotalRam)
     {
+        kDebug() << "TotalRam: " << d->totalRam;
+        
         if (d->totalRam == -1)
             return -1;
+        
         value += d->totalRam;
     }
     else if (details & AvailableRam)
     {
+        kDebug() << "AvailableRam: " << d->freeRam << " (cache: " << d->cacheRam << ")";
+
         if (d->freeRam == -1 || d->cacheRam == -1)
             return -1;
+        
         value += d->freeRam + d->cacheRam;
     }
 
     if (details & TotalSwap)
     {
+        kDebug() << "TotalSwap: " << d->totalSwap;
+        
         if (d->totalSwap == -1)
             return -1;
+        
         value += d->totalSwap;
     }
     else if (details & AvailableSwap)
     {
+        kDebug() << "AvailableSwap: " << d->freeSwap;
+        
         if (d->freeSwap == -1)
             return -1;
+        
         value += d->freeSwap;
     }
 
