@@ -144,15 +144,18 @@ public:
                 break;
 
             case SubColumnSize:
+                /// @todo Needs custom sorting
                 /// @todo Add configuration options for SI-prefixes
                 return QString("%1").arg(info.fileSize());
                 break;
 
             case SubColumnWidth:
+                /// @todo Needs custom sorting
                 return QString("%1").arg(info.dimensions().width());
                 break;
 
             case SubColumnHeight:
+                /// @todo Needs custom sorting
                 return QString("%1").arg(info.dimensions().height());
                 break;
 
@@ -163,44 +166,117 @@ public:
 
 };
 
-class ColumnCoordinates : public TableViewColumn
+class ColumnGeoProperties : public TableViewColumn
 {
     Q_OBJECT
 
 public:
 
-    explicit ColumnCoordinates(
+    enum SubColumn
+    {
+        SubColumnHasCoordinates = 0,
+        SubColumnCoordinates = 1,
+        SubColumnAltitude = 2
+    } subColumn;
+
+    explicit ColumnGeoProperties(
             TableViewShared* const tableViewShared,
             const TableViewColumnConfiguration& pConfiguration,
             QObject* const parent = 0
         )
-      : TableViewColumn(tableViewShared, pConfiguration, parent)
+      : TableViewColumn(tableViewShared, pConfiguration, parent),
+        subColumn(SubColumnCoordinates)
     {
+        const QString& subColumnSetting = configuration.getSetting("subcolumn");
+        if (subColumnSetting=="hascoordinates")
+        {
+            subColumn = SubColumnHasCoordinates;
+        }
+        else if (subColumnSetting=="coordinates")
+        {
+            subColumn = SubColumnCoordinates;
+        }
+        else if (subColumnSetting=="altitude")
+        {
+            subColumn = SubColumnAltitude;
+        }
     }
-    virtual ~ColumnCoordinates() { }
+    virtual ~ColumnGeoProperties() { }
     static TableViewColumnDescription getDescription()
     {
-        return TableViewColumnDescription(QLatin1String("coordinates"), QLatin1String("Coordinates"));
+        TableViewColumnDescription description(QLatin1String("geo-properties"), tr("Geo properties"));
+
+        description.addSubColumn(
+                TableViewColumnDescription("geo-properties", tr("Geotagged"), "subcolumn", "hascoordinates")
+            );
+
+        description.addSubColumn(
+                TableViewColumnDescription("geo-properties", tr("Coordinates"), "subcolumn", "coordinates")
+            );
+
+        description.addSubColumn(
+                TableViewColumnDescription("geo-properties", tr("Altitude"), "subcolumn", "altitude")
+            );
+
+        return description;
     }
-    virtual QString getTitle() { return i18n("Coordinates"); }
+
+    virtual QString getTitle()
+    {
+        switch (subColumn)
+        {
+            case SubColumnHasCoordinates:
+                return i18n("Geotagged");
+            case SubColumnCoordinates:
+                return i18n("Coordinates");
+            case SubColumnAltitude:
+                return i18n("Altitude");
+        }
+
+        return QString();
+    }
 
     virtual QVariant data(const QModelIndex& sourceIndex, const int role)
     {
         if (role!=Qt::DisplayRole)
         {
-            return QVariant();
+            /// @todo is this correct or does sourceIndex have column!=0?
+            return sourceIndex.data(role);
         }
 
         const ImageInfo info = getImageInfo(sourceIndex);
 
-        if (info.isNull() || !info.hasCoordinates())
+        switch (subColumn)
         {
-            return QVariant();
+            case SubColumnHasCoordinates:
+                return info.hasCoordinates() ? i18n("Yes") : i18n("No");
+                break;
+
+            case SubColumnCoordinates:
+            {
+                if (!info.hasCoordinates())
+                {
+                    return QString();
+                }
+                const KGeoMap::GeoCoordinates coordinates(info.latitudeNumber(), info.longitudeNumber());
+
+                return QString("%1,%2").arg(coordinates.latString()).arg(coordinates.lonString());
+                break;
+            }
+
+            case SubColumnAltitude:
+            {
+                /// @todo Needs custom sorting
+                if ((!info.hasCoordinates())||(!info.hasAltitude()))
+                {
+                    return QString();
+                }
+                return QString("%1").arg(info.altitudeNumber());
+                break;
+            }
         }
 
-        const KGeoMap::GeoCoordinates coordinates(info.latitudeNumber(), info.longitudeNumber());
-
-        return QString("%1,%2").arg(coordinates.latString()).arg(coordinates.lonString());
+        return QVariant();
     }
 
 };

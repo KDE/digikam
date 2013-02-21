@@ -71,13 +71,14 @@ TableViewColumn* TableViewColumnFactory::getColumn(const Digikam::TableViewColum
 {
     const QString& columnId = columnConfiguration.columnId;
 
+    /// @todo extract column ids from column class
     if (columnId=="file-properties")
     {
         return new TableViewColumns::ColumnFileProperties(s, columnConfiguration);
     }
-    else if (columnId=="coordinates")
+    else if (columnId=="geo-properties")
     {
-        return new TableViewColumns::ColumnCoordinates(s, columnConfiguration);
+        return new TableViewColumns::ColumnGeoProperties(s, columnConfiguration);
     }
     else if (columnId=="thumbnail")
     {
@@ -98,9 +99,9 @@ QList<TableViewColumnDescription> TableViewColumnFactory::getColumnDescriptionLi
 {
     QList<TableViewColumnDescription> descriptionList;
 
-    descriptionList << TableViewColumns::ColumnFileProperties::getDescription();
-    descriptionList << TableViewColumns::ColumnCoordinates::getDescription();
     descriptionList << TableViewColumns::ColumnThumbnail::getDescription();
+    descriptionList << TableViewColumns::ColumnFileProperties::getDescription();
+    descriptionList << TableViewColumns::ColumnGeoProperties::getDescription();
 
     return descriptionList;
 }
