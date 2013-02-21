@@ -39,43 +39,80 @@
 namespace Digikam
 {
 
+class TableViewColumnConfiguration
+{
+public:
+    explicit TableViewColumnConfiguration(const QString& id = QString())
+      : columnId(id),
+        columnSettings()
+    {
+    }
+
+    QString columnId;
+    QHash<QString, QString> columnSettings;
+
+    QString getSetting(const QString& key) const
+    {
+        return columnSettings.value(key);
+    }
+
+    void loadSettings(const KConfigGroup& configGroup);
+    void saveSettings(KConfigGroup& configGroup) const;
+};
+
 class TableViewColumnDescription
 {
 public:
     explicit TableViewColumnDescription()
       : columnId(),
-        columnTitle()
+        columnTitle(),
+        columnSettings(),
+        subColumns()
     {
     }
 
-    explicit TableViewColumnDescription(const QString& id, const QString title)
+    explicit TableViewColumnDescription(const QString& id, const QString title, const QString& settingKey = QString(), const QString& settingValue = QString())
       : columnId(id),
-        columnTitle(title)
+        columnTitle(title),
+        columnSettings(),
+        subColumns()
     {
+        if (!settingKey.isEmpty())
+        {
+            addSetting(settingKey, settingValue);
+        }
     }
 
     QString columnId;
     QString columnTitle;
+    QHash<QString, QString> columnSettings;
+    QList<TableViewColumnDescription> subColumns;
+
+    void addSubColumn(const TableViewColumnDescription& subColumnDescription)
+    {
+        subColumns << subColumnDescription;
+    }
+
+    void addSetting(const QString& key, const QString& value)
+    {
+        columnSettings.insert(key, value);
+    }
+
+    TableViewColumnConfiguration toConfiguration() const
+    {
+        TableViewColumnConfiguration configuration;
+
+        configuration.columnId = columnId;
+        configuration.columnSettings = columnSettings;
+
+        return configuration;
+    }
 };
 
 class TableViewColumnDataSource
 {
 public:
     ImageFilterModel* sourceModel;
-};
-
-class TableViewColumnConfiguration
-{
-public:
-    explicit TableViewColumnConfiguration(const QString& id = QString())
-      : columnId(id)
-    {
-    }
-
-    QString columnId;
-
-    void loadSettings(const KConfigGroup& configGroup);
-    void saveSettings(KConfigGroup& configGroup) const;
 };
 
 class TableViewColumn : public QObject
@@ -104,13 +141,15 @@ public:
     virtual ~TableViewColumn();
 
     static TableViewColumnDescription getDescription();
-    virtual TableViewColumnConfiguration getConfiguration() const = 0;
+    virtual TableViewColumnConfiguration getConfiguration() const;
     virtual ColumnFlags getColumnFlags() const;
     virtual QString getTitle();
 
     virtual QVariant data(const QModelIndex& sourceIndex, const int role);
     virtual bool paint(QPainter* const painter, const QStyleOptionViewItem& option, const QModelIndex& sourceIndex) const;
     virtual QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& sourceIndex) const;
+
+    ImageInfo getImageInfo(const QModelIndex sourceIndex) const;
 
 Q_SIGNALS:
     void signalDataChanged(const QModelIndex& sourceIndex);

@@ -44,6 +44,8 @@
 #include "tableview_columnfactory.h"
 #include "tableview_shared.h"
 
+class KMenu;
+
 namespace Digikam
 {
 
@@ -78,6 +80,8 @@ protected:
 
 private:
 
+    void addColumnDescriptionsToMenu(
+        const QList<TableViewColumnDescription>& columnDescriptions, KMenu* const menu);
     void showHeaderContextMenu(QEvent* const event);
 
 private Q_SLOTS:

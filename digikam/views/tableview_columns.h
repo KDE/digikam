@@ -43,37 +43,122 @@ namespace Digikam
 namespace TableViewColumns
 {
 
-class ColumnFilename : public TableViewColumn
+class ColumnFileProperties : public TableViewColumn
 {
     Q_OBJECT
 
+private:
+
+    enum SubColumn
+    {
+        SubColumnName = 0,
+        SubColumnSize = 1,
+        SubColumnWidth = 2,
+        SubColumnHeight = 3
+    } subColumn;
+
 public:
 
-    explicit ColumnFilename(
+    explicit ColumnFileProperties(
             TableViewShared* const tableViewShared,
             const TableViewColumnConfiguration& pConfiguration,
             QObject* const parent = 0
         )
-      : TableViewColumn(tableViewShared, pConfiguration, parent)
+      : TableViewColumn(tableViewShared, pConfiguration, parent),
+        subColumn(SubColumnName)
     {
+        const QString& subColumnSetting = configuration.getSetting("subcolumn");
+        if (subColumnSetting=="name")
+        {
+            subColumn = SubColumnName;
+        }
+        else if (subColumnSetting=="size")
+        {
+            subColumn = SubColumnSize;
+        }
+        else if (subColumnSetting=="width")
+        {
+            subColumn = SubColumnWidth;
+        }
+        else if (subColumnSetting=="height")
+        {
+            subColumn = SubColumnHeight;
+        }
     }
-    virtual ~ColumnFilename() { }
+    virtual ~ColumnFileProperties() { }
 
     static TableViewColumnDescription getDescription()
     {
-        return TableViewColumnDescription(QLatin1String("filename"), QLatin1String("Filename"));
+        TableViewColumnDescription description(QLatin1String("file-properties"), tr("File properties"));
+
+        description.addSubColumn(
+                TableViewColumnDescription("file-properties", tr("Filename"), "subcolumn", "name")
+            );
+
+        description.addSubColumn(
+                TableViewColumnDescription("file-properties", tr("Size"), "subcolumn", "size")
+            );
+
+        description.addSubColumn(
+                TableViewColumnDescription("file-properties", tr("Width"), "subcolumn", "width")
+            );
+
+        description.addSubColumn(
+                TableViewColumnDescription("file-properties", tr("Height"), "subcolumn", "height")
+            );
+
+        return description;
     }
-    virtual QString getTitle() { return i18n("Filename"); }
+
+    virtual QString getTitle()
+    {
+        switch (subColumn)
+        {
+            case SubColumnName:
+                return i18n("Filename");
+            case SubColumnSize:
+                return i18n("Size");
+            case SubColumnWidth:
+                return i18n("Width");
+            case SubColumnHeight:
+                return i18n("Height");
+        }
+
+        return QString();
+    }
 
     virtual QVariant data(const QModelIndex& sourceIndex, const int role)
     {
-        /// @todo is this correct or does sourceIndex have column!=0?
-        return sourceIndex.data(role);
-    }
+        if (role!=Qt::DisplayRole)
+        {
+            /// @todo is this correct or does sourceIndex have column!=0?
+            return sourceIndex.data(role);
+        }
 
-    virtual TableViewColumnConfiguration getConfiguration() const
-    {
-        return TableViewColumnConfiguration("filename");
+        const ImageInfo info = getImageInfo(sourceIndex);
+
+        switch (subColumn)
+        {
+            case SubColumnName:
+                return info.fileUrl().fileName();
+                break;
+
+            case SubColumnSize:
+                /// @todo Add configuration options for SI-prefixes
+                return QString("%1").arg(info.fileSize());
+                break;
+
+            case SubColumnWidth:
+                return QString("%1").arg(info.dimensions().width());
+                break;
+
+            case SubColumnHeight:
+                return QString("%1").arg(info.dimensions().height());
+                break;
+
+        }
+
+        return QVariant();
     }
 
 };
@@ -106,7 +191,7 @@ public:
             return QVariant();
         }
 
-        const ImageInfo info = s->imageFilterModel->imageInfo(sourceIndex);
+        const ImageInfo info = getImageInfo(sourceIndex);
 
         if (info.isNull() || !info.hasCoordinates())
         {
@@ -116,11 +201,6 @@ public:
         const KGeoMap::GeoCoordinates coordinates(info.latitudeNumber(), info.longitudeNumber());
 
         return QString("%1,%2").arg(coordinates.latString()).arg(coordinates.lonString());
-    }
-
-    virtual TableViewColumnConfiguration getConfiguration() const
-    {
-        return TableViewColumnConfiguration("coordinates");
     }
 
 };
@@ -168,7 +248,7 @@ public:
     virtual bool paint(QPainter* const painter, const QStyleOptionViewItem& option, const QModelIndex& sourceIndex) const
     {
         /// @todo do we have to reset the column?
-        const ImageInfo info = s->imageFilterModel->imageInfo(sourceIndex);
+        const ImageInfo info = getImageInfo(sourceIndex);
         if (!info.isNull())
         {
             QSize size(60, 60);
@@ -199,11 +279,6 @@ public:
     virtual QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& sourceIndex) const
     {
         return QSize(60, 60);
-    }
-
-    virtual TableViewColumnConfiguration getConfiguration() const
-    {
-        return TableViewColumnConfiguration("thumbnail");
     }
 
 private Q_SLOTS:

@@ -193,6 +193,33 @@ bool TableViewTreeView::eventFilter(QObject* watched, QEvent* event)
     return QObject::eventFilter(watched, event);
 }
 
+void TableViewTreeView::addColumnDescriptionsToMenu(
+        const QList<TableViewColumnDescription>& columnDescriptions, KMenu* const menu)
+{
+    for (int i = 0; i<columnDescriptions.count(); ++i)
+    {
+        const TableViewColumnDescription& desc = columnDescriptions.at(i);
+        KAction* const action = new KAction(desc.columnTitle, menu);
+
+        if (desc.subColumns.isEmpty())
+        {
+            connect(action, SIGNAL(triggered(bool)),
+                    this, SLOT(slotHeaderContextMenuAddColumn()));
+
+            action->setData(QVariant::fromValue<TableViewColumnDescription>(desc));
+        }
+        else
+        {
+            KMenu* const subMenu = new KMenu(menu);
+            addColumnDescriptionsToMenu(desc.subColumns, subMenu);
+
+            action->setMenu(subMenu);
+        }
+
+        menu->addAction(action);
+    }
+}
+
 void TableViewTreeView::showHeaderContextMenu(QEvent* const event)
 {
     QContextMenuEvent* const e = static_cast<QContextMenuEvent*>(event);
@@ -209,18 +236,7 @@ void TableViewTreeView::showHeaderContextMenu(QEvent* const event)
 
     // add actions for all columns
     QList<TableViewColumnDescription> columnDescriptions = s->columnFactory->getColumnDescriptionList();
-    for (int i = 0; i<columnDescriptions.count(); ++i)
-    {
-        const TableViewColumnDescription& desc = columnDescriptions.at(i);
-        KAction* const action = new KAction(desc.columnTitle, menu);
-
-        connect(action, SIGNAL(triggered(bool)),
-                this, SLOT(slotHeaderContextMenuAddColumn()));
-
-        action->setData(QVariant::fromValue<TableViewColumnDescription>(desc));
-
-        menu->addAction(action);
-    }
+    addColumnDescriptionsToMenu(columnDescriptions, menu);
 
     menu->exec(e->globalPos());
 }

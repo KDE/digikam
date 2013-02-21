@@ -89,10 +89,6 @@ TableViewModel::TableViewModel(TableViewColumnFactory* const tableViewColumnFact
     connect(DatabaseAccess::databaseWatch(), SIGNAL(imageChange(ImageChangeset)),
             this, SLOT(slotDatabaseImageChanged(ImageChangeset)), Qt::QueuedConnection);
 
-    d->columnObjects << d->columnFactory->getColumn(TableViewColumnConfiguration("thumbnail"));
-    d->columnObjects << d->columnFactory->getColumn(TableViewColumnConfiguration("filename"));
-    d->columnObjects << d->columnFactory->getColumn(TableViewColumnConfiguration("coordinates"));
-
     new ModelTest(this, this);
 }
 
@@ -202,7 +198,7 @@ QVariant TableViewModel::headerData(int section, Qt::Orientation orientation, in
 void TableViewModel::addColumnAt(const TableViewColumnDescription& description, const int targetColumn)
 {
     /// @todo take additional configuration data of the column into account
-    TableViewColumnConfiguration newConfiguration(description.columnId);
+    TableViewColumnConfiguration newConfiguration = description.toConfiguration();
 
     addColumnAt(newConfiguration, targetColumn);
 }
@@ -210,6 +206,10 @@ void TableViewModel::addColumnAt(const TableViewColumnDescription& description, 
 void TableViewModel::addColumnAt(const TableViewColumnConfiguration& configuration, const int targetColumn)
 {
     TableViewColumn* const newColumn = d->columnFactory->getColumn(configuration);
+    if (!newColumn)
+    {
+        return;
+    }
 
     int newColumnIndex = targetColumn;
     if (targetColumn<0)

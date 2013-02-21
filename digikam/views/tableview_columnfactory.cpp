@@ -71,9 +71,9 @@ TableViewColumn* TableViewColumnFactory::getColumn(const Digikam::TableViewColum
 {
     const QString& columnId = columnConfiguration.columnId;
 
-    if (columnId=="filename")
+    if (columnId=="file-properties")
     {
-        return new TableViewColumns::ColumnFilename(s, columnConfiguration);
+        return new TableViewColumns::ColumnFileProperties(s, columnConfiguration);
     }
     else if (columnId=="coordinates")
     {
@@ -98,7 +98,7 @@ QList<TableViewColumnDescription> TableViewColumnFactory::getColumnDescriptionLi
 {
     QList<TableViewColumnDescription> descriptionList;
 
-    descriptionList << TableViewColumns::ColumnFilename::getDescription();
+    descriptionList << TableViewColumns::ColumnFileProperties::getDescription();
     descriptionList << TableViewColumns::ColumnCoordinates::getDescription();
     descriptionList << TableViewColumns::ColumnThumbnail::getDescription();
 
@@ -180,17 +180,51 @@ void TableViewColumnProfile::saveSettings(KConfigGroup& configGroup)
 void TableViewColumnConfiguration::loadSettings(const KConfigGroup& configGroup)
 {
     columnId = configGroup.readEntry("Column Id", QString());
+
+    const int nSettings = configGroup.readEntry("NSettings", int(0));
+    for (int i=0; i<nSettings; ++i)
+    {
+        const QString& key = configGroup.readEntry(QString("Key %1").arg(i), QString());
+        const QString& value = configGroup.readEntry(QString("Value %1").arg(i), QString());
+
+        if (!key.isEmpty())
+        {
+            columnSettings.insert(key, value);
+        }
+    }
 }
 
 void TableViewColumnConfiguration::saveSettings(KConfigGroup& configGroup) const
 {
     configGroup.writeEntry("Column Id", columnId);
+
+    const int nSettings = columnSettings.count();
+    configGroup.writeEntry("NSettings", nSettings);
+
+    QHashIterator<QString, QString> settingsIterator(columnSettings);
+    for (int i=0; settingsIterator.hasNext(); ++i)
+    {
+        settingsIterator.next();
+        configGroup.writeEntry(QString("Key %1").arg(i), settingsIterator.key());
+        configGroup.writeEntry(QString("Value %1").arg(i), settingsIterator.value());
+    }
 }
 
 TableViewColumn::ColumnFlags TableViewColumn::getColumnFlags() const
 {
     return ColumnNoFlags;
 }
+
+ImageInfo TableViewColumn::getImageInfo(const QModelIndex sourceIndex) const
+{
+    return s->imageFilterModel->imageInfo(sourceIndex);
+}
+
+TableViewColumnConfiguration TableViewColumn::getConfiguration() const
+{
+    return configuration;
+}
+
 
 } /* namespace Digikam */
 
