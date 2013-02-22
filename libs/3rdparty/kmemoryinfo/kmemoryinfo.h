@@ -1,22 +1,27 @@
-/*
-   Copyright 2010 Pino Toscano <pino@kde.org>
-   Copyright 2011 Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
-
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Lesser General Public
-   License (LGPL) as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
-
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Lesser General Public License for more details.
-
-   You should have received a copy of the GNU Lesser General Public License
-   along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-   Boston, MA 02110-1301, USA.
-*/
+/* ============================================================
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2010-06-14
+ * Description : Memory info wrapper class
+ *
+ * Copyright (C) 2010 by Pino Toscano <pino at kde dot org>
+ * Copyright (C) 2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ *
+ * This program is free software; you can redistribute it
+ * and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation;
+ * either version 2, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * ============================================================ */
 
 #ifndef DIGIKAM_KMEMORYINFO_H
 #define DIGIKAM_KMEMORYINFO_H
