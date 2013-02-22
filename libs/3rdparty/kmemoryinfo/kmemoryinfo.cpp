@@ -104,7 +104,7 @@ KMemoryInfo& KMemoryInfo::operator=(const KMemoryInfo& other)
     return *this;
 }
 
-bool KMemoryInfo::isValid() const
+int KMemoryInfo::isValid() const
 {
     return d->valid;
 }
