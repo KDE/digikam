@@ -181,12 +181,19 @@ qint64 DImgLoader::checkAllocation(qint64 fullSize)
     {
         KMemoryInfo memory = KMemoryInfo::currentInfo();
 
-        if (!memory.isValid())
+        int res = memory.isValid();
+
+        if (res == -1)
         {
-            kError() << "Error to get physical memory information";
+            kError() << "Not a recognized platform to get memory information";
+            return -1;
+        }
+        else if (res == 0)
+        {
+            kError() << "Error to get physical memory information form a recognized platform";
             return 0;
         }
-        
+
         qint64 available = memory.bytes(KMemoryInfo::AvailableMemory);
 
         if (fullSize > available)

@@ -90,6 +90,10 @@ public:
     static unsigned short* new_short_failureTolerant(size_t unsecureSize);
     static unsigned short* new_short_failureTolerant(quint64 w, quint64 h, uint typesPerPixel);
 
+    /** Value returned : -1 : unsupported platform
+     *                    0 : parse failure from supported platform
+     *                    1 : parse done with sucess from supported platform
+     */
     static qint64 checkAllocation(qint64 fullSize);
 
     template <typename Type> static Type* new_failureTolerant(size_t unsecureSize);
@@ -156,9 +160,18 @@ Q_INLINE_TEMPLATE Type* DImgLoader::new_failureTolerant(quint64 w, quint64 h, ui
 template <typename Type>
 Q_INLINE_TEMPLATE Type* DImgLoader::new_failureTolerant(size_t size)
 {
-    if (!checkAllocation(size))
+    quint64 res = checkAllocation(size);
+
+    switch(res)
     {
-        return 0;
+        case 0:       // parse failure from supported platform
+            return 0;
+            break;
+        case -1:      // unsupported platform
+            // We will try to continue to allocate
+            break;
+        default:     // parse done with sucess from supported platform
+            break;
     }
 
     Type* reserved = 0;

@@ -30,7 +30,7 @@
 #include <kglobal.h>
 #include <kdebug.h>
 
-static bool fillMemoryInfo(Digikam::KMemoryInfo::KMemoryInfoData* const data);
+static int fillMemoryInfo(Digikam::KMemoryInfo::KMemoryInfoData* const data);
 
 namespace Digikam
 {
@@ -46,7 +46,7 @@ public:
 
     void reset()
     {
-        valid     = false;
+        valid     = -1;
         totalRam  = -1;
         freeRam   = -1;
         usedRam   = -1;
@@ -57,7 +57,7 @@ public:
     }
 
     QDateTime lastUpdate;
-    bool      valid;
+    int       valid;
     qint64    totalRam;
     qint64    freeRam;
     qint64    usedRam;
@@ -185,11 +185,11 @@ QDateTime KMemoryInfo::lastUpdate() const
     return d->lastUpdate;
 }
 
-bool KMemoryInfo::update()
+int KMemoryInfo::update()
 {
     d->reset();
-    const bool res = fillMemoryInfo(d);
-    d->lastUpdate  = QDateTime::currentDateTime();
+    const int res = fillMemoryInfo(d);
+    d->lastUpdate = QDateTime::currentDateTime();
     return res;
 }
 

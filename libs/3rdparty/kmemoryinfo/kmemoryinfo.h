@@ -82,9 +82,12 @@ public:
 
     /**
      * Request an update of the system memory.
-     * @returns whether the update was successful
+     * @returns whether the update was successful :
+     * -1 : unsupported platform
+     *  0 : parse failure from supported platform
+     *  1 : parse done with sucess from supported platform
      */
-    bool update();
+    int update();
 
     /**
      * Returns the specified memory @p details, as it was read by the last
