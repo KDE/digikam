@@ -65,6 +65,7 @@ public:
     qint64    totalSwap;
     qint64    usedSwap;
     qint64    freeSwap;
+    QString   platform;
 };
 
 // ------------------------------------------------------------------------------------------
@@ -189,6 +190,7 @@ int KMemoryInfo::update()
 {
     d->reset();
     const int res = fillMemoryInfo(d);
+    kDebug() << "Platform identified : " << d->platform;
     d->lastUpdate = QDateTime::currentDateTime();
     return res;
 }

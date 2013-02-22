@@ -238,7 +238,10 @@ int get_mem_stats(Digikam::KMemoryInfo::KMemoryInfoData* const data)
     MEMORYSTATUSEX memstats;
 #endif
 
+
 #ifdef Q_OS_HPUX
+    data->platform = QString("HPUX");
+
     if((pagesize = sysconf(_SC_PAGESIZE)) == -1)
     {
         //sg_set_error_with_errno(SG_ERROR_SYSCONF, "_SC_PAGESIZE");
@@ -267,6 +270,8 @@ int get_mem_stats(Digikam::KMemoryInfo::KMemoryInfoData* const data)
 #endif // Q_OS_HPUX
 
 #ifdef Q_OS_SOLARIS
+    data->platform = QString("SOLARIS");
+
     if((pagesize = sysconf(_SC_PAGESIZE)) == -1)
     {
         //sg_set_error_with_errno(SG_ERROR_SYSCONF, "_SC_PAGESIZE");
@@ -313,6 +318,8 @@ int get_mem_stats(Digikam::KMemoryInfo::KMemoryInfoData* const data)
 #endif // Q_OS_SOLARIS
 
 #if defined(Q_OS_LINUX) || defined(Q_OS_CYGWIN)
+    data->platform = QString("LINUX");
+
     if ((f = fopen("/proc/meminfo", "r")) == NULL)
     {
         //sg_set_error_with_errno(SG_ERROR_OPEN, "/proc/meminfo");
@@ -349,6 +356,8 @@ int get_mem_stats(Digikam::KMemoryInfo::KMemoryInfoData* const data)
 #endif // defined(Q_OS_LINUX) || defined(Q_OS_CYGWIN)
 
 #if defined(Q_OS_FREEBSD)
+    data->platform = QString("FREEBSD");
+
     /* Returns bytes */
     mib[0] = CTL_HW;
     mib[1] = HW_PHYSMEM;
@@ -404,6 +413,8 @@ int get_mem_stats(Digikam::KMemoryInfo::KMemoryInfoData* const data)
 #endif // defined(Q_OS_FREEBSD)
 
 #if defined(Q_OS_NETBSD)
+    data->platform = QString("NETBSD");
+
     if ((uvm = sg_get_uvmexp()) == NULL)
     {
         return 0;
@@ -418,6 +429,8 @@ int get_mem_stats(Digikam::KMemoryInfo::KMemoryInfoData* const data)
 #endif // defined(Q_OS_NETBSD)
 
 #if defined(Q_OS_OPENBSD)
+    data->platform = QString("OPENBSD");
+
     /* The code in this section is based on the code in the OpenBSD
      * top utility, located at src/usr.bin/top/machine.c in the
      * OpenBSD source tree.
@@ -470,6 +483,8 @@ int get_mem_stats(Digikam::KMemoryInfo::KMemoryInfoData* const data)
 #endif // defined(Q_OS_OPENBSD)
 
 #ifdef Q_OS_WIN32
+    data->platform = QString("WINDOWS");
+
     memstats.dwLength = sizeof(memstats);
 
     if (!GlobalMemoryStatusEx(&memstats))
