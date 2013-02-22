@@ -30,7 +30,7 @@
 #include <kglobal.h>
 #include <kdebug.h>
 
-static bool fillMemoryInfo(Digikam::KMemoryInfo::KMemoryInfoData* data);
+static bool fillMemoryInfo(Digikam::KMemoryInfo::KMemoryInfoData* const data);
 
 namespace Digikam
 {
@@ -118,14 +118,14 @@ KMemoryInfo KMemoryInfo::currentInfo()
 qint64 KMemoryInfo::bytes(KMemoryInfo::MemoryDetails details) const
 {
     qint64 value = 0;
-    
+
     if (details & TotalRam)
     {
         kDebug() << "TotalRam: " << d->totalRam;
-        
+
         if (d->totalRam == -1)
             return -1;
-        
+
         value += d->totalRam;
     }
     else if (details & AvailableRam)
@@ -134,26 +134,26 @@ qint64 KMemoryInfo::bytes(KMemoryInfo::MemoryDetails details) const
 
         if (d->freeRam == -1 || d->cacheRam == -1)
             return -1;
-        
+
         value += d->freeRam + d->cacheRam;
     }
 
     if (details & TotalSwap)
     {
         kDebug() << "TotalSwap: " << d->totalSwap;
-        
+
         if (d->totalSwap == -1)
             return -1;
-        
+
         value += d->totalSwap;
     }
     else if (details & AvailableSwap)
     {
         kDebug() << "AvailableSwap: " << d->freeSwap;
-        
+
         if (d->freeSwap == -1)
             return -1;
-        
+
         value += d->freeSwap;
     }
 
@@ -163,6 +163,7 @@ qint64 KMemoryInfo::bytes(KMemoryInfo::MemoryDetails details) const
 double KMemoryInfo::kilobytes(MemoryDetails detail) const
 {
     qint64 b = bytes(detail);
+
     if (b == -1)
         return -1;
 
@@ -172,6 +173,7 @@ double KMemoryInfo::kilobytes(MemoryDetails detail) const
 double KMemoryInfo::megabytes(MemoryDetails detail) const
 {
     qint64 b = bytes(detail);
+
     if (b == -1)
         return -1;
 

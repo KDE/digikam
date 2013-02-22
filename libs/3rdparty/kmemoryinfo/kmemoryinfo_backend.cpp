@@ -21,10 +21,10 @@
  * $Id: memory_stats.c,v 1.36 2010/02/21 10:04:26 tdb Exp $
  */
 
-static bool get_mem_stats(Digikam::KMemoryInfo::KMemoryInfoData* data);
-static bool get_swap_stats(Digikam::KMemoryInfo::KMemoryInfoData* data);
+static bool get_mem_stats(Digikam::KMemoryInfo::KMemoryInfoData* const data);
+static bool get_swap_stats(Digikam::KMemoryInfo::KMemoryInfoData* const data);
 
-static bool fillMemoryInfo(Digikam::KMemoryInfo::KMemoryInfoData* data)
+static bool fillMemoryInfo(Digikam::KMemoryInfo::KMemoryInfoData* const data)
 {
     if (!get_mem_stats(data))
     {
@@ -160,7 +160,7 @@ struct pst_KMemoryInfo::static *sg_get_pstat_static() {
 
 // ----------------------------------------------------------------------------
 
-bool get_mem_stats(Digikam::KMemoryInfo::KMemoryInfoData* data)
+bool get_mem_stats(Digikam::KMemoryInfo::KMemoryInfoData* const data)
 {
 
 #ifdef Q_OS_HPUX

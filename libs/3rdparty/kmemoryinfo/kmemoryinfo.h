@@ -94,7 +94,7 @@ public:
      * @returns the value of the specified detail if available, or -1 if any requested detail
      *          detail was not requested or not available in the last update()
      */
-    qint64 bytes(MemoryDetails detail) const;
+    qint64 bytes(MemoryDetails detail)     const;
     double kilobytes(MemoryDetails detail) const;
     double megabytes(MemoryDetails detail) const;
 
