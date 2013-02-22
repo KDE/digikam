@@ -54,7 +54,7 @@ public:
         totalSwap = -1;
         usedSwap  = -1;
         freeSwap  = -1;
-        platform  = QString("Unknow");
+        platform  = QString("Unknown");
     }
 
     QDateTime lastUpdate;

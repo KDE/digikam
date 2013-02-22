@@ -7,7 +7,7 @@
  * Description : DImg image loader interface
  *
  * Copyright (C) 2005      by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -308,10 +308,12 @@ bool DImgLoader::checkExifWorkingColorSpace() const
 void DImgLoader::storeColorProfileInMetadata()
 {
     IccProfile profile = m_image->getIccProfile();
+
     if (profile.isNull())
     {
         return;
     }
+
     DMetadata metaData(m_image->getMetadata());
     metaData.setIccProfile(profile);
     m_image->setMetadata(metaData.data());
@@ -405,7 +407,6 @@ QByteArray DImgLoader::uniqueHash(const QString& filePath, const DImg& img, bool
     char databuf[8192];
     int readlen     = 0;
     QByteArray size = 0;
-
     QByteArray hash;
 
     if (qfile.open(QIODevice::Unbuffered | QIODevice::ReadOnly))
