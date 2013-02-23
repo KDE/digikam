@@ -70,6 +70,9 @@
 #cmakedefine USE_LCMS_VERSION_1000 1
 #cmakedefine USE_LCMS_VERSION_2000 1
 
+/* Define to 1 if an external SQLite v2 is installed */
+#cmakedefine HAVE_SQLITE2 1
+
 #define LIBEXEC_INSTALL_DIR "${LIBEXEC_INSTALL_DIR}"
 
 /*

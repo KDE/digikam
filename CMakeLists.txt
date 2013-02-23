@@ -456,6 +456,9 @@ MACRO_BOOL_TO_01(ENABLE_ADVANCEDDEBUGMSG USE_ADVANCEDDEBUGMSG)
 
 MACRO_OPTIONAL_FIND_PACKAGE(Doxygen)
 
+MACRO_OPTIONAL_FIND_PACKAGE(Sqlite2)
+MACRO_BOOL_TO_01(SQLITE2_FOUND HAVE_SQLITE2)
+
 # Set config files accordingly with optional dependencies
 
 CONFIGURE_FILE(digikam/utils/config-digikam.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/digikam/utils/config-digikam.h)
@@ -577,6 +580,15 @@ ELSE(DOXYGEN_FOUND)
     MESSAGE(STATUS "")
 
 ENDIF(DOXYGEN_FOUND)
+
+IF(SQLITE2_FOUND)
+    MESSAGE(STATUS " SQLite v2 found.......................... YES (optional)")
+ELSE(SQLITE2_FOUND)
+    MESSAGE(STATUS " SQLite v2 found.......................... NO  (optional)")
+    MESSAGE(STATUS "")
+    MESSAGE(STATUS " digiKam will be compiled without support for importing databases of digiKam 0.7.")
+    MESSAGE(STATUS "")
+ENDIF(SQLITE2_FOUND)
 
 IF(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND Boost_FOUND AND JASPER_FOUND AND KDCRAW_FOUND AND KEXIV2_FOUND AND KIPI_FOUND AND KFACE_FOUND AND KGEOMAP_FOUND)
     MESSAGE(STATUS " digiKam can be compiled.................. YES")
@@ -1318,7 +1330,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
 
     SET(libdatabase_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/albumdb.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/albumdb_sqlite2.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/collectionscanner.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/collectionmanager.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/collectionlocation.cpp
@@ -1349,7 +1360,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/searchxml.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/schemaupdater.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/tagproperties.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/upgradedb_sqlite2tosqlite3.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databasechecker.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databasecopymanager.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databaseserverstarter.cpp
@@ -1369,41 +1379,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
 
     SET(pgfutils_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/threadimageio/pgfutils.cpp
-       )
-
-    SET(libsqlite2_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/attach.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/auth.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/btree.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/btree_rb.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/build.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/copy.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/date.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/delete.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/encode.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/expr.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/func.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/hash.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/insert.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/main.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/opcodes.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/os.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/pager.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/parse.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/pragma.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/printf.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/random.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/select.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/shell.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/table.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/tokenize.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/trigger.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/update.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/util.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/vacuum.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/vdbe.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/vdbeaux.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/where.c
        )
 
     SET(libkde3rdparty_SRCS
@@ -1591,6 +1566,11 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/utils/uifilevalidator.cpp
        )
 
+    SET(libalbumsqlite2_SRCS
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/albumdb_sqlite2.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/upgradedb_sqlite2tosqlite3.cpp
+       )
+
     INCLUDE_DIRECTORIES(
         ${DATABASESERVERDIR}
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam
@@ -1617,7 +1597,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dklcms
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/cimg
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/kmemoryinfo
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/kinotify
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database
