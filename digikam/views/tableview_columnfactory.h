@@ -109,12 +109,6 @@ public:
     }
 };
 
-class TableViewColumnDataSource
-{
-public:
-    ImageFilterModel* sourceModel;
-};
-
 class TableViewColumn : public QObject
 {
     Q_OBJECT
