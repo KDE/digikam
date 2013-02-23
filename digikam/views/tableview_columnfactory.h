@@ -51,8 +51,12 @@ public:
     QString columnId;
     QHash<QString, QString> columnSettings;
 
-    QString getSetting(const QString& key) const
+    QString getSetting(const QString& key, const QString& defaultValue = QString()) const
     {
+        if (!columnSettings.contains(key))
+        {
+            return defaultValue;
+        }
         return columnSettings.value(key);
     }
 
@@ -109,6 +113,23 @@ public:
     }
 };
 
+class TableViewColumnConfigurationWidget : public QWidget
+{
+    Q_OBJECT
+
+public:
+    explicit TableViewColumnConfigurationWidget(
+            TableViewShared* const sharedObject,
+            const TableViewColumnConfiguration& currentConfiguration,
+            QWidget* const parent = 0);
+    virtual ~TableViewColumnConfigurationWidget();
+
+    virtual TableViewColumnConfiguration getNewConfiguration() = 0;
+
+    TableViewShared* const s;
+    TableViewColumnConfiguration configuration;
+};
+
 class TableViewColumn : public QObject
 {
     Q_OBJECT
@@ -123,7 +144,8 @@ public:
     {
         ColumnNoFlags = 0,
         ColumnCustomPainting = 1,
-        ColumnCustomSorting = 2
+        ColumnCustomSorting = 2,
+        ColumnHasConfigurationWidget = 4
     };
     Q_DECLARE_FLAGS(ColumnFlags, ColumnFlag)
 
@@ -143,6 +165,8 @@ public:
 
     static TableViewColumnDescription getDescription();
     virtual TableViewColumnConfiguration getConfiguration() const;
+    virtual void setConfiguration(const TableViewColumnConfiguration& newConfiguration);
+    virtual TableViewColumnConfigurationWidget* getConfigurationWidget(QWidget* const parentWidget) const;
     virtual ColumnFlags getColumnFlags() const;
     virtual QString getTitle();
 

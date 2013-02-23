@@ -245,6 +245,33 @@ TableViewColumn::ColumnCompareResult TableViewColumn::compare(const QModelIndex&
     return CmpEqual;
 }
 
+TableViewColumnConfigurationWidget* TableViewColumn::getConfigurationWidget(QWidget* const parentWidget) const
+{
+    return 0;
+}
+
+TableViewColumnConfigurationWidget::TableViewColumnConfigurationWidget(
+        TableViewShared* const sharedObject,
+        const TableViewColumnConfiguration& currentConfiguration,
+        QWidget* const parent
+    )
+  : QWidget(parent),
+    configuration(currentConfiguration),
+    s(sharedObject)
+{
+
+}
+
+TableViewColumnConfigurationWidget::~TableViewColumnConfigurationWidget()
+{
+
+}
+
+void TableViewColumn::setConfiguration(const TableViewColumnConfiguration& newConfiguration)
+{
+    Q_UNUSED(newConfiguration)
+}
+
 } /* namespace Digikam */
 
 

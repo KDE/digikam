@@ -32,6 +32,7 @@
 // KDE includes
 
 #include "kcategorizedsortfilterproxymodel.h"
+#include "kdialog.h"
 
 // local includes
 
@@ -66,6 +67,24 @@ private:
     TableViewShared* const s;
 };
 
+class TableViewConfigurationDialog : public KDialog
+{
+    Q_OBJECT
+
+public:
+
+    explicit TableViewConfigurationDialog(TableViewShared* const sharedObject, const int columnIndex, QWidget* const parentWidget);
+    virtual ~TableViewConfigurationDialog();
+
+    TableViewColumnConfiguration getNewConfiguration() const;
+
+private:
+
+    class Private;
+    const QScopedPointer<Private> d;
+    TableViewShared* const s;
+};
+
 class TableViewTreeView : public QTreeView
 {
     Q_OBJECT
@@ -87,6 +106,7 @@ private:
 private Q_SLOTS:
 
     void slotHeaderContextMenuAddColumn();
+    void slotHeaderContextMenuConfigureColumn();
     void slotHeaderContextMenuActionRemoveColumnTriggered();
 
 private:

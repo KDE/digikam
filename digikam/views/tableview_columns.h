@@ -50,13 +50,16 @@ class ColumnFileProperties : public TableViewColumn
 {
     Q_OBJECT
 
-private:
+public:
 
     enum SubColumn
     {
         SubColumnName = 0,
         SubColumnSize = 1
-    } subColumn;
+    };
+
+private:
+    SubColumn subColumn;
 
 public:
 
@@ -64,104 +67,42 @@ public:
             TableViewShared* const tableViewShared,
             const TableViewColumnConfiguration& pConfiguration,
             QObject* const parent = 0
-        )
-      : TableViewColumn(tableViewShared, pConfiguration, parent),
-        subColumn(SubColumnName)
-    {
-        const QString& subColumnSetting = configuration.getSetting("subcolumn");
-        if (subColumnSetting=="name")
-        {
-            subColumn = SubColumnName;
-        }
-        else if (subColumnSetting=="size")
-        {
-            subColumn = SubColumnSize;
-        }
-    }
+        );
     virtual ~ColumnFileProperties() { }
 
-    static TableViewColumnDescription getDescription()
-    {
-        TableViewColumnDescription description(QLatin1String("file-properties"), i18n("File properties"));
+    static TableViewColumnDescription getDescription();
+    static QStringList getSubColumns();
+    virtual TableViewColumnConfigurationWidget* getConfigurationWidget(QWidget* const parentWidget) const;
+    virtual void setConfiguration(const TableViewColumnConfiguration& newConfiguration);
 
-        description.addSubColumn(
-                TableViewColumnDescription("file-properties", i18n("Filename"), "subcolumn", "name")
-            );
+    virtual QString getTitle();
 
-        description.addSubColumn(
-                TableViewColumnDescription("file-properties", i18n("Size"), "subcolumn", "size")
-            );
+    virtual ColumnFlags getColumnFlags() const;
 
-        return description;
-    }
+    virtual QVariant data(const QModelIndex& sourceIndex, const int role);
 
-    virtual QString getTitle()
-    {
-        switch (subColumn)
-        {
-            case SubColumnName:
-                return i18n("Filename");
-            case SubColumnSize:
-                return i18n("Size");
-        }
+    virtual ColumnCompareResult compare(const QModelIndex& sourceA, const QModelIndex& sourceB) const;
 
-        return QString();
-    }
+};
 
-    virtual ColumnFlags getColumnFlags() const
-    {
-        if (subColumn==SubColumnSize)
-        {
-            return ColumnCustomSorting;
-        }
+class ColumnFileConfigurationWidget : public TableViewColumnConfigurationWidget
+{
+    Q_OBJECT
 
-        return ColumnNoFlags;
-    }
+public:
+    explicit ColumnFileConfigurationWidget(
+            TableViewShared* const sharedObject,
+            const TableViewColumnConfiguration& columnConfiguration,
+            QWidget* const parentWidget
+        );
+    virtual ~ColumnFileConfigurationWidget();
 
-    virtual QVariant data(const QModelIndex& sourceIndex, const int role)
-    {
-        if (role!=Qt::DisplayRole)
-        {
-            /// @todo is this correct or does sourceIndex have column!=0?
-            return sourceIndex.data(role);
-        }
+    virtual TableViewColumnConfiguration getNewConfiguration();
 
-        const ImageInfo info = getImageInfo(sourceIndex);
+private:
 
-        switch (subColumn)
-        {
-            case SubColumnName:
-                return info.fileUrl().fileName();
-                break;
-
-            case SubColumnSize:
-                /// @todo Needs custom sorting
-                /// @todo Add configuration options for SI-prefixes
-                return KGlobal::locale()->formatNumber(info.fileSize(), 0);
-                break;
-
-        }
-
-        return QVariant();
-    }
-
-    virtual ColumnCompareResult compare(const QModelIndex& sourceA, const QModelIndex& sourceB) const
-    {
-        const ImageInfo infoA = getImageInfo(sourceA);
-        const ImageInfo infoB = getImageInfo(sourceB);
-
-        if (subColumn==SubColumnSize)
-        {
-            const int sizeA = infoA.fileSize();
-            const int sizeB = infoB.fileSize();
-
-            return compareHelper<int>(sizeA, sizeB);
-        }
-
-        kWarning()<<"file: unimplemented comparison, subColumn="<<subColumn;
-        return CmpEqual;
-    }
-
+    ColumnFileProperties::SubColumn subColumn;
+    QComboBox* selectorSizeType;
 };
 
 class ColumnItemProperties : public TableViewColumn
@@ -182,111 +123,18 @@ public:
             TableViewShared* const tableViewShared,
             const TableViewColumnConfiguration& pConfiguration,
             QObject* const parent = 0
-        )
-      : TableViewColumn(tableViewShared, pConfiguration, parent),
-        subColumn(SubColumnWidth)
-    {
-        const QString& subColumnSetting = configuration.getSetting("subcolumn");
-        if (subColumnSetting=="width")
-        {
-            subColumn = SubColumnWidth;
-        }
-        else if (subColumnSetting=="height")
-        {
-            subColumn = SubColumnHeight;
-        }
-    }
-    virtual ~ColumnItemProperties() { }
+        );
+    virtual ~ColumnItemProperties();
 
-    static TableViewColumnDescription getDescription()
-    {
-        TableViewColumnDescription description(QLatin1String("item-properties"), i18n("Item properties"));
+    static TableViewColumnDescription getDescription();
 
-        description.addSubColumn(
-                TableViewColumnDescription("item-properties", i18n("Width"), "subcolumn", "width")
-            );
+    virtual QString getTitle();
 
-        description.addSubColumn(
-                TableViewColumnDescription("item-properties", i18n("Height"), "subcolumn", "height")
-            );
+    virtual ColumnFlags getColumnFlags() const;
 
-        return description;
-    }
+    virtual QVariant data(const QModelIndex& sourceIndex, const int role);
 
-    virtual QString getTitle()
-    {
-        switch (subColumn)
-        {
-            case SubColumnWidth:
-                return i18n("Width");
-            case SubColumnHeight:
-                return i18n("Height");
-        }
-
-        return QString();
-    }
-
-    virtual ColumnFlags getColumnFlags() const
-    {
-        if (   (subColumn==SubColumnHeight)
-            || (subColumn==SubColumnWidth) )
-        {
-            return ColumnCustomSorting;
-        }
-
-        return ColumnNoFlags;
-    }
-
-    virtual QVariant data(const QModelIndex& sourceIndex, const int role)
-    {
-        if (role!=Qt::DisplayRole)
-        {
-            /// @todo is this correct or does sourceIndex have column!=0?
-            return sourceIndex.data(role);
-        }
-
-        const ImageInfo info = getImageInfo(sourceIndex);
-
-        switch (subColumn)
-        {
-            case SubColumnWidth:
-                /// @todo Needs custom sorting
-                return KGlobal::locale()->formatNumber(info.dimensions().width(), 0);
-                break;
-
-            case SubColumnHeight:
-                /// @todo Needs custom sorting
-                return KGlobal::locale()->formatNumber(info.dimensions().height(), 0);
-                break;
-
-        }
-
-        return QVariant();
-    }
-
-    virtual ColumnCompareResult compare(const QModelIndex& sourceA, const QModelIndex& sourceB) const
-    {
-        const ImageInfo infoA = getImageInfo(sourceA);
-        const ImageInfo infoB = getImageInfo(sourceB);
-
-        if (subColumn==SubColumnHeight)
-        {
-            const int heightA = infoA.dimensions().height();
-            const int heightB = infoB.dimensions().height();
-
-            return compareHelper<int>(heightA, heightB);
-        }
-        else if (subColumn==SubColumnWidth)
-        {
-            const int widthA = infoA.dimensions().width();
-            const int widthB = infoB.dimensions().width();
-
-            return compareHelper<int>(widthA, widthB);
-        }
-
-        kWarning()<<"item: unimplemented comparison, subColumn="<<subColumn;
-        return CmpEqual;
-    }
+    virtual ColumnCompareResult compare(const QModelIndex& sourceA, const QModelIndex& sourceB) const;
 };
 
 class ColumnGeoProperties : public TableViewColumn
@@ -306,141 +154,38 @@ public:
             TableViewShared* const tableViewShared,
             const TableViewColumnConfiguration& pConfiguration,
             QObject* const parent = 0
-        )
-      : TableViewColumn(tableViewShared, pConfiguration, parent),
-        subColumn(SubColumnCoordinates)
-    {
-        const QString& subColumnSetting = configuration.getSetting("subcolumn");
-        if (subColumnSetting=="hascoordinates")
-        {
-            subColumn = SubColumnHasCoordinates;
-        }
-        else if (subColumnSetting=="coordinates")
-        {
-            subColumn = SubColumnCoordinates;
-        }
-        else if (subColumnSetting=="altitude")
-        {
-            subColumn = SubColumnAltitude;
-        }
-    }
-    virtual ~ColumnGeoProperties() { }
-    static TableViewColumnDescription getDescription()
-    {
-        TableViewColumnDescription description(QLatin1String("geo-properties"), i18n("Geo properties"));
+        );
+    virtual ~ColumnGeoProperties();
+    static TableViewColumnDescription getDescription();
 
-        description.addSubColumn(
-                TableViewColumnDescription("geo-properties", i18n("Geotagged"), "subcolumn", "hascoordinates")
-            );
+    virtual QString getTitle();
 
-        description.addSubColumn(
-                TableViewColumnDescription("geo-properties", i18n("Coordinates"), "subcolumn", "coordinates")
-            );
+    virtual ColumnFlags getColumnFlags() const;
 
-        description.addSubColumn(
-                TableViewColumnDescription("geo-properties", i18n("Altitude"), "subcolumn", "altitude")
-            );
+    virtual QVariant data(const QModelIndex& sourceIndex, const int role);
 
-        return description;
-    }
+    virtual ColumnCompareResult compare(const QModelIndex& sourceA, const QModelIndex& sourceB) const;
 
-    virtual QString getTitle()
-    {
-        switch (subColumn)
-        {
-            case SubColumnHasCoordinates:
-                return i18n("Geotagged");
-            case SubColumnCoordinates:
-                return i18n("Coordinates");
-            case SubColumnAltitude:
-                return i18n("Altitude");
-        }
+    virtual TableViewColumnConfigurationWidget* getConfigurationWidget(QWidget* const parentWidget) const;
+};
 
-        return QString();
-    }
+class ColumnGeoConfigurationWidget : public TableViewColumnConfigurationWidget
+{
+    Q_OBJECT
 
-    virtual ColumnFlags getColumnFlags() const
-    {
-        if (subColumn==SubColumnAltitude)
-        {
-            return ColumnCustomSorting;
-        }
+public:
+    explicit ColumnGeoConfigurationWidget(
+            TableViewShared* const sharedObject,
+            const TableViewColumnConfiguration& columnConfiguration,
+            QWidget* const parentWidget
+        );
+    virtual ~ColumnGeoConfigurationWidget();
 
-        return ColumnNoFlags;
-    }
+    virtual TableViewColumnConfiguration getNewConfiguration();
 
-    virtual QVariant data(const QModelIndex& sourceIndex, const int role)
-    {
-        if (role!=Qt::DisplayRole)
-        {
-            /// @todo is this correct or does sourceIndex have column!=0?
-            return sourceIndex.data(role);
-        }
+private:
 
-        const ImageInfo info = getImageInfo(sourceIndex);
-
-        switch (subColumn)
-        {
-            case SubColumnHasCoordinates:
-                return info.hasCoordinates() ? i18n("Yes") : i18n("No");
-                break;
-
-            case SubColumnCoordinates:
-            {
-                if (!info.hasCoordinates())
-                {
-                    return QString();
-                }
-
-                return QString("%1,%2")
-                        .arg(
-                                KGlobal::locale()->formatNumber(info.latitudeNumber(), 7)
-                            )
-                        .arg(
-                                KGlobal::locale()->formatNumber(info.longitudeNumber(), 7)
-                            );
-                break;
-            }
-
-            case SubColumnAltitude:
-            {
-                /// @todo Needs custom sorting
-                if ((!info.hasCoordinates())||(!info.hasAltitude()))
-                {
-                    return QString();
-                }
-                return KGlobal::locale()->formatNumber(info.altitudeNumber());
-                break;
-            }
-        }
-
-        return QVariant();
-    }
-
-    virtual ColumnCompareResult compare(const QModelIndex& sourceA, const QModelIndex& sourceB) const
-    {
-        const ImageInfo infoA = getImageInfo(sourceA);
-        const ImageInfo infoB = getImageInfo(sourceB);
-
-        if (subColumn==SubColumnAltitude)
-        {
-            const bool hasAltitudeA = infoA.hasAltitude();
-            const bool hasAltitudeB = infoB.hasAltitude();
-
-            if (hasAltitudeA && hasAltitudeB)
-            {
-                const double altitudeA = infoA.altitudeNumber();
-                const double altitudeB = infoB.altitudeNumber();
-
-                return compareHelper<double>(altitudeA, altitudeB);
-            }
-
-            return compareHelper<int>(int(hasAltitudeA), int(hasAltitudeB));
-        }
-
-        kWarning()<<"geo: unimplemented comparison, subColumn="<<subColumn;
-        return CmpEqual;
-    }
+    ColumnGeoProperties::SubColumn subColumn;
 };
 
 class ColumnThumbnail : public TableViewColumn
@@ -453,90 +198,25 @@ public:
             TableViewShared* const tableViewShared,
             const TableViewColumnConfiguration& pConfiguration,
             QObject* const parent = 0
-        )
-      : TableViewColumn(tableViewShared, pConfiguration, parent)
-    {
-        connect(s->thumbnailLoadThread, SIGNAL(signalThumbnailLoaded(LoadingDescription,QPixmap)),
-                this, SLOT(slotThumbnailLoaded(LoadingDescription,QPixmap)));
-    }
+        );
 
-    virtual ~ColumnThumbnail() { }
+    virtual ~ColumnThumbnail();
 
-    static TableViewColumnDescription getDescription()
-    {
-        return TableViewColumnDescription(QLatin1String("thumbnail"), QLatin1String("Thumbnail"));
-    }
+    static TableViewColumnDescription getDescription();
 
-    virtual ColumnFlags getColumnFlags() const
-    {
-        return ColumnCustomPainting;
-    }
+    virtual ColumnFlags getColumnFlags() const;
 
-    virtual QString getTitle() { return i18n("Thumbnail"); }
+    virtual QString getTitle();
 
-    virtual QVariant data(const QModelIndex& sourceIndex, const int role)
-    {
-        Q_UNUSED(sourceIndex)
-        Q_UNUSED(role)
+    virtual QVariant data(const QModelIndex& sourceIndex, const int role);
 
-        // we do not return any data, but paint(...) something
-        return QVariant();
-    }
+    virtual bool paint(QPainter* const painter, const QStyleOptionViewItem& option, const QModelIndex& sourceIndex) const;
 
-    virtual bool paint(QPainter* const painter, const QStyleOptionViewItem& option, const QModelIndex& sourceIndex) const
-    {
-        /// @todo do we have to reset the column?
-        const ImageInfo info = getImageInfo(sourceIndex);
-        if (!info.isNull())
-        {
-            QSize size(60, 60);
-            const QString path = info.filePath();
-            QPixmap thumbnail;
-
-            /// @todo handle unavailable thumbnails -> emit itemChanged(...) later
-            if (s->thumbnailLoadThread->find(path, thumbnail, qMax(size.width()+2, size.height()+2)))
-            {
-                /// @todo Is slotThumbnailLoaded still called when the thumbnail is found right away?
-                /// @todo remove borders
-//                 thumbnail = thumbnail.copy(1, 1, thumbnail.size().width()-2, thumbnail.size().height()-2)
-                const QSize availableSize = option.rect.size();
-                const QSize pixmapSize    = thumbnail.size().boundedTo(availableSize);
-                QPoint startPoint((availableSize.width()-pixmapSize.width())/2,
-                                (availableSize.height()-pixmapSize.height())/2);
-                startPoint+=option.rect.topLeft();
-                painter->drawPixmap(QRect(startPoint, pixmapSize), thumbnail, QRect(QPoint(0, 0), pixmapSize));
-
-                return true;
-            }
-        }
-
-        // we did not get to paint a thumbnail...
-        return false;
-    }
-
-    virtual QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& sourceIndex) const
-    {
-        return QSize(60, 60);
-    }
+    virtual QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& sourceIndex) const;
 
 private Q_SLOTS:
 
-    void slotThumbnailLoaded(const LoadingDescription& loadingDescription, const QPixmap& thumb)
-    {
-        if (thumb.isNull())
-        {
-            return;
-        }
-
-        const QModelIndex sourceIndex = s->imageFilterModel->indexForPath(loadingDescription.filePath);
-        if (!sourceIndex.isValid())
-        {
-            return;
-        }
-
-        emit(signalDataChanged(sourceIndex));
-    }
-
+    void slotThumbnailLoaded(const LoadingDescription& loadingDescription, const QPixmap& thumb);
 };
 
 } /* namespace TableViewColumns */

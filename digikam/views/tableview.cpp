@@ -64,12 +64,14 @@ class TableViewTreeView::Private
 public:
     Private()
       : headerContextMenuActiveColumn(-1),
-        actionHeaderContextMenuRemoveColumn(0)
+        actionHeaderContextMenuRemoveColumn(0),
+        actionHeaderContextMenuConfigureColumn(0)
     {
     }
 
     int headerContextMenuActiveColumn;
     KAction* actionHeaderContextMenuRemoveColumn;
+    KAction* actionHeaderContextMenuConfigureColumn;
 };
 
 class TableView::Private
@@ -166,6 +168,10 @@ TableViewTreeView::TableViewTreeView(Digikam::TableViewShared* const tableViewSh
     connect(d->actionHeaderContextMenuRemoveColumn, SIGNAL(triggered(bool)),
             this, SLOT(slotHeaderContextMenuActionRemoveColumnTriggered()));
 
+    d->actionHeaderContextMenuConfigureColumn = new KAction("Configure this column", this);
+    connect(d->actionHeaderContextMenuConfigureColumn, SIGNAL(triggered(bool)),
+            this, SLOT(slotHeaderContextMenuConfigureColumn()));
+
     header()->installEventFilter(this);
 
     setModel(s->sortModel);
@@ -226,12 +232,16 @@ void TableViewTreeView::showHeaderContextMenu(QEvent* const event)
     QHeaderView* const headerView = header();
 
     d->headerContextMenuActiveColumn = headerView->logicalIndexAt(e->pos());
+    const TableViewColumn* const columnObject = s->tableViewModel->getColumnObject(d->headerContextMenuActiveColumn);
     KMenu* const menu = new KMenu(this);
 
     d->actionHeaderContextMenuRemoveColumn->setEnabled(
             s->tableViewModel->columnCount(QModelIndex())>1
         );
     menu->addAction(d->actionHeaderContextMenuRemoveColumn);
+    const bool columnCanConfigure = columnObject->getColumnFlags().testFlag(TableViewColumn::ColumnHasConfigurationWidget);
+    d->actionHeaderContextMenuConfigureColumn->setEnabled(columnCanConfigure);
+    menu->addAction(d->actionHeaderContextMenuConfigureColumn);
     menu->addSeparator();
 
     // add actions for all columns
@@ -342,6 +352,62 @@ void TableView::slotItemActivated(const QModelIndex& sortedIndex)
 
     /// @todo Respect edit/preview setting
     emit signalPreviewRequested(info);
+}
+
+void TableViewTreeView::slotHeaderContextMenuConfigureColumn()
+{
+    TableViewConfigurationDialog* const configurationDialog = new TableViewConfigurationDialog(s, d->headerContextMenuActiveColumn, this);
+
+    const int result = configurationDialog->exec();
+    if (result!=QDialog::Accepted)
+    {
+        return;
+    }
+
+    const TableViewColumnConfiguration newConfiguration = configurationDialog->getNewConfiguration();
+    s->tableViewModel->getColumnObject(d->headerContextMenuActiveColumn)->setConfiguration(newConfiguration);
+}
+
+class TableViewConfigurationDialog::Private
+{
+public:
+
+    Private()
+      : columnIndex(0),
+        columnObject(0)
+    {
+    }
+
+    int columnIndex;
+    TableViewColumn* columnObject;
+    TableViewColumnConfigurationWidget* columnConfigurationWidget;
+};
+
+TableViewConfigurationDialog::TableViewConfigurationDialog(
+            TableViewShared* const sharedObject,
+            const int columnIndex,
+            QWidget* const parentWidget)
+  : KDialog(parentWidget),
+    d(new Private()),
+    s(sharedObject)
+{
+    d->columnIndex = columnIndex;
+    d->columnObject = s->tableViewModel->getColumnObject(d->columnIndex);
+
+    setWindowTitle(i18n("Configure column \"%1\"").arg(d->columnObject->getTitle()));
+
+    d->columnConfigurationWidget = d->columnObject->getConfigurationWidget(this);
+    setMainWidget(d->columnConfigurationWidget);
+}
+
+TableViewConfigurationDialog::~TableViewConfigurationDialog()
+{
+
+}
+
+TableViewColumnConfiguration TableViewConfigurationDialog::getNewConfiguration() const
+{
+    return d->columnConfigurationWidget->getNewConfiguration();
 }
 
 } /* namespace Digikam */
