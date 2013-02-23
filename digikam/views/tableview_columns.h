@@ -31,6 +31,9 @@
 
 // KDE includes
 
+#include <kglobal.h>
+#include <klocale.h>
+
 // local includes
 
 #include "tableview_columnfactory.h"
@@ -134,7 +137,7 @@ public:
             case SubColumnSize:
                 /// @todo Needs custom sorting
                 /// @todo Add configuration options for SI-prefixes
-                return QString("%1").arg(info.fileSize());
+                return KGlobal::locale()->formatNumber(info.fileSize(), 0);
                 break;
 
         }
@@ -248,12 +251,12 @@ public:
         {
             case SubColumnWidth:
                 /// @todo Needs custom sorting
-                return QString("%1").arg(info.dimensions().width());
+                return KGlobal::locale()->formatNumber(info.dimensions().width(), 0);
                 break;
 
             case SubColumnHeight:
                 /// @todo Needs custom sorting
-                return QString("%1").arg(info.dimensions().height());
+                return KGlobal::locale()->formatNumber(info.dimensions().height(), 0);
                 break;
 
         }
@@ -388,9 +391,14 @@ public:
                 {
                     return QString();
                 }
-                const KGeoMap::GeoCoordinates coordinates(info.latitudeNumber(), info.longitudeNumber());
 
-                return QString("%1,%2").arg(coordinates.latString()).arg(coordinates.lonString());
+                return QString("%1,%2")
+                        .arg(
+                                KGlobal::locale()->formatNumber(info.latitudeNumber(), 7)
+                            )
+                        .arg(
+                                KGlobal::locale()->formatNumber(info.longitudeNumber(), 7)
+                            );
                 break;
             }
 
@@ -401,7 +409,7 @@ public:
                 {
                     return QString();
                 }
-                return QString("%1").arg(info.altitudeNumber());
+                return KGlobal::locale()->formatNumber(info.altitudeNumber());
                 break;
             }
         }
