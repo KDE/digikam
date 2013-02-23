@@ -71,9 +71,12 @@ public:
     KMemoryInfo& operator=(const KMemoryInfo& info);
 
     /**
-     * Returns true if the last update was successful and the data is valid.
+     * Returns status if last update was successful and the data is valid.
+     * -1 : not valid : unsupported platform
+     *  0 : not valid : parse failure from supported platform
+     *  1 : valid     : parse done with sucess from supported platform
      */
-    bool isValid() const;
+    int isValid() const;
 
     /**
      * Returns a KMemoryInfo object already updated to the current memory situation.
@@ -82,9 +85,12 @@ public:
 
     /**
      * Request an update of the system memory.
-     * @returns whether the update was successful
+     * @returns whether the update was successful :
+     * -1 : unsupported platform
+     *  0 : parse failure from supported platform
+     *  1 : parse done with sucess from supported platform
      */
-    bool update();
+    int update();
 
     /**
      * Returns the specified memory @p details, as it was read by the last
@@ -94,7 +100,7 @@ public:
      * @returns the value of the specified detail if available, or -1 if any requested detail
      *          detail was not requested or not available in the last update()
      */
-    qint64 bytes(MemoryDetails detail) const;
+    qint64 bytes(MemoryDetails detail)     const;
     double kilobytes(MemoryDetails detail) const;
     double megabytes(MemoryDetails detail) const;
 

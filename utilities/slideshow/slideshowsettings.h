@@ -6,7 +6,7 @@
  * Date        : 2007-02-13
  * Description : slide show settings container.
  *
- * Copyright (C) 2007-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -42,7 +42,8 @@
 namespace Digikam
 {
 
-/** This class contain the information of one picture to slide */
+/** This class contain the information of one picture to slide
+ */
 class DIGIKAM_EXPORT SlidePictureInfo
 {
 
@@ -55,7 +56,9 @@ public:
         pickLabel  = 0;
     };
 
-    ~SlidePictureInfo() {};
+    ~SlidePictureInfo()
+    {
+    };
 
 public:
 
@@ -63,19 +66,23 @@ public:
     int                colorLabel;
     int                pickLabel;
 
-    /** Picture Comment */
+    /** Picture Comment
+     */
     QString            comment;
 
-    /** Picture Title */
+    /** Picture Title
+     */
     QString            title;
 
-    /** Exif photo info of picture */
+    /** Exif photo info of picture
+     */
     PhotoInfoContainer photoInfo;
 };
 
 // --------------------------------------------------------------------------------
 
-/** This class contain all settings to perform a slide show of a group of pictures */
+/** This class contain all settings to perform a slide show of a group of pictures
+ */
 class DIGIKAM_EXPORT SlideShowSettings
 {
 
@@ -91,55 +98,72 @@ public:
 
     // Global Slide Show Settings
 
-    /** Start Slide with current selected item */
+    /** Start Slide with current selected item
+     */
     bool                         startWithCurrent;
 
-    /** Auto-rotate image accordingly with Exif Rotation tag */
+    /** Auto-rotate image accordingly with Exif Rotation tag
+     */
     bool                         exifRotate;
 
-    /** Print picture file name during slide */
+    /** Print picture file name during slide
+     */
     bool                         printName;
 
-    /** Print picture creation date during slide */
+    /** Print picture creation date during slide
+     */
     bool                         printDate;
 
-    /** Print camera Aperture and Focal during slide */
+    /** Print camera Aperture and Focal during slide
+     */
     bool                         printApertureFocal;
 
-    /** Print camera Make and Model during slide */
+    /** Print camera Make and Model during slide
+     */
     bool                         printMakeModel;
 
-    /** Print camera Exposure and Sensitivity during slide */
+    /** Print camera Exposure and Sensitivity during slide
+     */
     bool                         printExpoSensitivity;
 
-    /** Print picture comment during slide */
+    /** Print picture comment during slide
+     */
     bool                         printComment;
 
-    /** Print image title during slide */
+    /** Print image title during slide
+     */
     bool                         printTitle;
 
-    /** Print image captions if no title available during slide */
+    /** Print image captions if no title available during slide
+     */
     bool                         printCapIfNoTitle;
 
-    /** Print color label, pick label, and rating during slide */
+    /** Print color label, pick label, and rating during slide
+     */
     bool                         printLabels;
 
-    /** Print color label during slide */
+    /** Print color label during slide
+     */
     bool                         printColorLabel;
 
-    /** Slide pictures in loop */
+    /** Slide pictures in loop
+     */
     bool                         loop;
 
-    /** Delay in seconds */
+    /** Delay in seconds
+     */
     int                          delay;
 
-    /** Load images (previews) in full size, not reduced version */
+    /** Load images (previews) in full size, not reduced version
+     */
     bool                         useFullSizePreviews;
 
-    /** List of pictures URL to slide */
+    /** List of pictures URL to slide
+     */
     KUrl::List                   fileList;
 
-    /** Map of pictures information to slide */
+    /** Map of pictures information to slide
+     */
     QMap<KUrl, SlidePictureInfo> pictInfoMap;
 
 private:

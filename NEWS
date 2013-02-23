@@ -13,4 +13,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 005 ==> 314726 - digiKam BQM RAW tool doesn't have options to work in 16 bits and to manage color profiles.
 006 ==> 301503 - No progress indicator or cancel button.
 007 ==> 314509 - Read face tags created by Picasa
-008 ==>
+008 ==> 315376 - digiKam Crash on Startup with active X11 color profile.
+009 ==> 303217 - Cannot preview TIFF files on Mac OS due to "not enough memory" exceptions.
+010 ==> 

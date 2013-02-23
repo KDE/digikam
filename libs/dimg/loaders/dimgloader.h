@@ -7,7 +7,7 @@
  * Description : DImg image loader interface
  *
  * Copyright (C) 2005      by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -90,7 +90,11 @@ public:
     static unsigned short* new_short_failureTolerant(size_t unsecureSize);
     static unsigned short* new_short_failureTolerant(quint64 w, quint64 h, uint typesPerPixel);
 
-    static int checkAllocation(qint64 fullSize);
+    /** Value returned : -1 : unsupported platform
+     *                    0 : parse failure from supported platform
+     *                    1 : parse done with sucess from supported platform
+     */
+    static qint64 checkAllocation(qint64 fullSize);
 
     template <typename Type> static Type* new_failureTolerant(size_t unsecureSize);
     template <typename Type> static Type* new_failureTolerant(quint64 w, quint64 h, uint typesPerPixel);
@@ -144,21 +148,32 @@ template <typename Type>
 Q_INLINE_TEMPLATE Type* DImgLoader::new_failureTolerant(quint64 w, quint64 h, uint typesPerPixel)
 {
     quint64 requested = w * h * quint64(typesPerPixel);
+
     if (requested > std::numeric_limits<size_t>::max())
     {
         kError() << "Requested memory of" << requested*quint64(sizeof(Type))
                  << "is larger than size_t supported by platform.";
         return 0;
     }
+
     return new_failureTolerant<Type>(requested);
 }
 
 template <typename Type>
 Q_INLINE_TEMPLATE Type* DImgLoader::new_failureTolerant(size_t size)
 {
-    if (!checkAllocation(size))
+    quint64 res = checkAllocation(size);
+
+    switch(res)
     {
-        return 0;
+        case 0:       // parse failure from supported platform
+            return 0;
+            break;
+        case -1:      // unsupported platform
+            // We will try to continue to allocate
+            break;
+        default:     // parse done with sucess from supported platform
+            break;
     }
 
     Type* reserved = 0;

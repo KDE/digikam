@@ -45,7 +45,7 @@
 namespace Digikam
 {
 
-ImageFiltersHistoryItemDelegate::ImageFiltersHistoryItemDelegate(QObject* parent)
+ImageFiltersHistoryItemDelegate::ImageFiltersHistoryItemDelegate(QObject* const parent)
     : QStyledItemDelegate(parent)
 {
 }
@@ -90,7 +90,7 @@ void ImageFiltersHistoryItemDelegate::paint(QPainter* painter, const QStyleOptio
     painter->drawRect(option.rect);
     painter->setPen(oldPen);
 
-    /*
+/*
     painter->save();
     painter->setRenderHint(QPainter::Antialiasing, true);
     QApplication::style()->drawPrimitive(QStyle::PE_PanelItemViewItem, &option, painter);
@@ -142,13 +142,15 @@ void ImageFiltersHistoryItemDelegate::paint(QPainter* painter, const QStyleOptio
         painter->drawText(textRect, Qt::AlignVCenter, index.data(Qt::DecorationRole).toString());
     }
 
-    / *if (entryDisabled)
+    / *
+    if (entryDisabled)
     {
         //painter->fillRect(option.rect, QColor(200,200,200,160));
-    }* /
+    }
+    * /
 
     painter->restore();
-    */
+*/
 }
 
 } //namespace Digikam

@@ -1477,11 +1477,11 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/versionsdelegate.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/versionstreeview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/versionsoverlays.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/versionswidget.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/filtershistorywidget.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/imagefiltershistorytreeitem.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/imagefiltershistorymodel.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/imagefiltershistoryitemdelegate.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/imagehistory/versionswidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/imagehistory/filtershistorywidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/imagehistory/imagefiltershistorytreeitem.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/imagehistory/imagefiltershistorymodel.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/imagehistory/imagefiltershistoryitemdelegate.cpp
        )
 
     SET(libdigikamgui_SRCS
@@ -1674,6 +1674,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/itemview
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/iccprofiles
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/metadata
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/imagehistory
         ${CMAKE_CURRENT_SOURCE_DIR}/tests
         ${CMAKE_CURRENT_SOURCE_DIR}/tests/modeltest
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities

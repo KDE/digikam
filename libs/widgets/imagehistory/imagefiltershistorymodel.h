@@ -49,32 +49,32 @@ class ImageFiltersHistoryModel : public QAbstractItemModel
 
 public:
 
-    explicit ImageFiltersHistoryModel(QObject* parent = 0, const KUrl& url = KUrl());
+    explicit ImageFiltersHistoryModel(QObject* const parent = 0, const KUrl& url = KUrl());
     ~ImageFiltersHistoryModel();
 
-    Qt::ItemFlags flags(const QModelIndex& index) const;
-    QVariant headerData(int section, Qt::Orientation orientation,
-                        int role = Qt::DisplayRole) const;
     void setUrl(const KUrl& url);
-    QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
-    int columnCount(const QModelIndex& parent = QModelIndex()) const;
-    int rowCount(const QModelIndex& parent = QModelIndex()) const;
-    QModelIndex parent(const QModelIndex& index) const;
-    QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const;
     bool removeRows(int row, int count, const QModelIndex& parent);
     void setupModelData(const QList<DImageHistory::Entry>& entries, ImageFiltersHistoryTreeItem* parent = 0);
 
+    Qt::ItemFlags flags(const QModelIndex& index)                                             const;
+    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
+    QVariant data(const QModelIndex& index, int role = Qt::DisplayRole)                       const;
+    int columnCount(const QModelIndex& parent = QModelIndex())                                const;
+    int rowCount(const QModelIndex& parent = QModelIndex())                                   const;
+    QModelIndex parent(const QModelIndex& index)                                              const;
+    QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex())         const;
+
 public Q_SLOTS:
 
-    void removeEntry(QModelIndex index);
+    void removeEntry(const QModelIndex& index);
     void setEnabledEntries(int count);
     void disableEntries(int count);
     void enableEntries(int count);
 
 private:
 
-    class ImageFiltersHistoryModelPriv;
-    ImageFiltersHistoryModelPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } //namespace Digikam

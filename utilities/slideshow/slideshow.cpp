@@ -6,8 +6,8 @@
  * Date        : 2005-04-21
  * Description : slide show tool using preview of pictures.
  *
- * Copyright (C) 2005-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2004 by Enrico Ros <eros.kde@email.it>
+ * Copyright (C) 2005-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004      by Enrico Ros <eros.kde@email.it>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -69,30 +69,31 @@
 namespace Digikam
 {
 
-class SlideShow::SlideShowPriv
+class SlideShow::Private
 {
 public:
 
-    SlideShowPriv()
-        : endOfShow(false)
-        , pause(false)
-        , maxStringLen(80)
-        , deskX(0)
-        , deskY(0)
-        , deskWidth(0)
-        , deskHeight(0)
-        , fileIndex(-1)
-        , screenSaverCookie(-1)
-        , mouseMoveTimer(0)
-        , timer(0)
-        , labelsBox(0)
-        , previewThread(0)
-        , previewPreloadThread(0)
-        , toolBar(0)
-        , ratingWidget(0)
-        , clWidget(0)
-        , plWidget(0)
-    {}
+    Private()
+        : endOfShow(false),
+          pause(false),
+          maxStringLen(80),
+          deskX(0),
+          deskY(0),
+          deskWidth(0),
+          deskHeight(0),
+          fileIndex(-1),
+          screenSaverCookie(-1),
+          mouseMoveTimer(0),
+          timer(0),
+          labelsBox(0),
+          previewThread(0),
+          previewPreloadThread(0),
+          toolBar(0),
+          ratingWidget(0),
+          clWidget(0),
+          plWidget(0)
+    {
+    }
 
     bool                endOfShow;
     bool                pause;
@@ -130,7 +131,7 @@ public:
 };
 
 SlideShow::SlideShow(const SlideShowSettings& settings)
-    : QWidget(0, Qt::FramelessWindowHint), d(new SlideShowPriv)
+    : QWidget(0, Qt::FramelessWindowHint), d(new Private)
 {
     d->settings = settings;
 
@@ -300,7 +301,7 @@ void SlideShow::loadNextImage()
     else
     {
         d->currentImage = KUrl();
-        d->preview = DImg();
+        d->preview      = DImg();
         updatePixmap();
         update();
     }
@@ -334,7 +335,7 @@ void SlideShow::loadPrevImage()
     else
     {
         d->currentImage = KUrl();
-        d->preview = DImg();
+        d->preview      = DImg();
         updatePixmap();
         update();
     }
@@ -798,9 +799,9 @@ void SlideShow::keyPressEvent(QKeyEvent* e)
 }
 
 void SlideShow::makeCornerRectangles(const QRect& desktopRect, const QSize& size,
-                                     QRect* topLeft, QRect* topRight, QRect* bottomLeft, QRect* bottomRight,
-                                     QRect* topLeftLarger, QRect* topRightLarger, QRect* bottomLeftLarger,
-                                     QRect* bottomRightLarger)
+                                     QRect* const topLeft, QRect* const topRight, QRect* const bottomLeft, QRect* const bottomRight,
+                                     QRect* const topLeftLarger, QRect* const topRightLarger, QRect* const bottomLeftLarger,
+                                     QRect* const bottomRightLarger)
 {
     QRect sizeRect(QPoint(0, 0), size);
     *topLeft     = sizeRect;
@@ -880,8 +881,8 @@ void SlideShow::slotMouseMoveTimeOut()
                          &topLeft, &topRight, &bottomLeft, &bottomRight,
                          &topLeftLarger, &topRightLarger, &bottomLeftLarger, &bottomRightLarger);
 
-    if (topLeftLarger.contains(pos) || topRightLarger.contains(pos)
-        || bottomLeftLarger.contains(pos) || bottomRightLarger.contains(pos))
+    if (topLeftLarger.contains(pos)    || topRightLarger.contains(pos) ||
+        bottomLeftLarger.contains(pos) || bottomRightLarger.contains(pos))
     {
         return;
     }

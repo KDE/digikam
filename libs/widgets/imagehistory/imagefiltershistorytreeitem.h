@@ -40,25 +40,26 @@ class ImageFiltersHistoryTreeItem
 {
 public:
 
-    explicit ImageFiltersHistoryTreeItem(const QList<QVariant>& data, ImageFiltersHistoryTreeItem* parent = 0);
-    explicit ImageFiltersHistoryTreeItem(const QString& data, ImageFiltersHistoryTreeItem* parent = 0);
+    explicit ImageFiltersHistoryTreeItem(const QList<QVariant>& data, ImageFiltersHistoryTreeItem* const parent = 0);
+    explicit ImageFiltersHistoryTreeItem(const QString& data, ImageFiltersHistoryTreeItem* const parent = 0);
     ~ImageFiltersHistoryTreeItem();
 
-    void appendChild(ImageFiltersHistoryTreeItem* child);
+    void appendChild(ImageFiltersHistoryTreeItem* const child);
     void removeChild(int row);
-    ImageFiltersHistoryTreeItem* child(int row);
-    int childCount() const;
-    int columnCount() const;
-    QVariant data(int column) const;
-    int row() const;
+
+    ImageFiltersHistoryTreeItem* child(int row) const;
+    int childCount()                      const;
+    int columnCount()                     const;
+    QVariant data(int column)             const;
+    int row()                             const;
     ImageFiltersHistoryTreeItem* parent() const;
-    void setDisabled(bool disabled) const;
-    bool isDisabled() const;
+    void setDisabled(bool disabled)       const;
+    bool isDisabled()                     const;
 
 private:
 
-    class ImageFiltersHistoryTreeItemPriv;
-    ImageFiltersHistoryTreeItemPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

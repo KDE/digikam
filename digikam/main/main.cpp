@@ -147,6 +147,7 @@ int main(int argc, char* argv[])
     {
         AssistantDlg firstRun;
         app.setTopWidget(&firstRun);
+        firstRun.show();
 
         if (firstRun.exec() == QDialog::Rejected)
         {

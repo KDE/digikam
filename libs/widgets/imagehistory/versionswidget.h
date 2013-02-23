@@ -55,14 +55,14 @@ class VersionsWidget : public QWidget
 
 public:
 
-    explicit VersionsWidget(QWidget* parent = 0);
+    explicit VersionsWidget(QWidget* const parent = 0);
     ~VersionsWidget();
 
     void readSettings(const KConfigGroup& group);
     void writeSettings(KConfigGroup& group);
 
-    VersionsTreeView* view() const;
-    VersionsDelegate* delegate() const;
+    VersionsTreeView*        view()     const;
+    VersionsDelegate*        delegate() const;
 
     ActionVersionsOverlay*   addActionOverlay(const KGuiItem& gui);
     ShowHideVersionsOverlay* addShowHideOverlay();
@@ -85,8 +85,10 @@ private:
 
     void applyViewMode();
 
-    class VersionsWidgetPriv;
-    VersionsWidgetPriv* const d;
+private:
+
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

@@ -3,8 +3,8 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2010-06-23
- * Description : view for displaying all other versions of current image
+ * Date        : 2010-07-02
+ * Description : delegate for custom painting of used filters view
  *
  * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
@@ -21,31 +21,27 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEHISTORYVIEW_H
-#define IMAGEHISTORYVIEW_H
+#ifndef IMAGEFILTERSHISTORYITEMDELEGATE_H
+#define IMAGEFILTERSHISTORYITEMDELEGATE_H
 
 // Qt includes
 
-#include <QTreeView>
+#include <QStyledItemDelegate>
 
 namespace Digikam
 {
 
-class ImageHistoryView : QTreeView
+class ImageFiltersHistoryItemDelegate : public QStyledItemDelegate
 {
-    Q_OBJECT
-
 public:
 
-    explicit ImageHistoryView(QWidget* parent);
-    ~ImageHistoryView();
+    explicit ImageFiltersHistoryItemDelegate(QObject* const parent = 0);
+    ~ImageFiltersHistoryItemDelegate();
 
-private:
-
-    class ImageHistoryViewPriv;
-    ImageHistoryViewPriv* const d;
+    virtual void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
+    virtual QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const;
 };
 
-} // namespace Digikam
+} //namespace Digikam
 
-#endif // IMAGEHISTORYVIEW_H
+#endif // IMAGEFILTERSHISTORYITEMDELEGATE_H

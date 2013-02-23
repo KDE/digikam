@@ -7,7 +7,7 @@
  * Description : DImg image loader interface
  *
  * Copyright (C) 2005      by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -167,7 +167,7 @@ void DImgLoader::loadingFailed()
     m_image->m_priv->height = 0;
 }
 
-int DImgLoader::checkAllocation(qint64 fullSize)
+qint64 DImgLoader::checkAllocation(qint64 fullSize)
 {
     if (fullSize > std::numeric_limits<int>::max())
     {
@@ -175,22 +175,36 @@ int DImgLoader::checkAllocation(qint64 fullSize)
         return 0;
     }
 
-    int size = (int)fullSize;
-
     // Do extra check if allocating serious amounts of memory.
     // At the time of writing (2011), I consider 100 MB as "serious".
-    if (size > 100 * 1024 * 1024)
+    if (fullSize > (qint64)(100 * 1024 * 1024))
     {
         KMemoryInfo memory = KMemoryInfo::currentInfo();
 
-        if (size > memory.bytes(KMemoryInfo::AvailableMemory) && memory.isValid())
+        int res = memory.isValid();
+
+        if (res == -1)
         {
-            kError() << "Not enough memory to allocate buffer of size" << size;
+            kError() << "Not a recognized platform to get memory information";
+            return -1;
+        }
+        else if (res == 0)
+        {
+            kError() << "Error to get physical memory information form a recognized platform";
+            return 0;
+        }
+
+        qint64 available = memory.bytes(KMemoryInfo::AvailableMemory);
+
+        if (fullSize > available)
+        {
+            kError() << "Not enough memory to allocate buffer of size " << fullSize;
+            kError() << "Available memory size is " << available;
             return 0;
         }
     }
 
-    return size;
+    return fullSize;
 }
 
 bool DImgLoader::readMetadata(const QString& filePath, DImg::FORMAT /*ff*/)
@@ -294,10 +308,12 @@ bool DImgLoader::checkExifWorkingColorSpace() const
 void DImgLoader::storeColorProfileInMetadata()
 {
     IccProfile profile = m_image->getIccProfile();
+
     if (profile.isNull())
     {
         return;
     }
+
     DMetadata metaData(m_image->getMetadata());
     metaData.setIccProfile(profile);
     m_image->setMetadata(metaData.data());
@@ -391,7 +407,6 @@ QByteArray DImgLoader::uniqueHash(const QString& filePath, const DImg& img, bool
     char databuf[8192];
     int readlen     = 0;
     QByteArray size = 0;
-
     QByteArray hash;
 
     if (qfile.open(QIODevice::Unbuffered | QIODevice::ReadOnly))
