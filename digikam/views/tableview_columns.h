@@ -79,14 +79,14 @@ public:
 
     static TableViewColumnDescription getDescription()
     {
-        TableViewColumnDescription description(QLatin1String("file-properties"), tr("File properties"));
+        TableViewColumnDescription description(QLatin1String("file-properties"), i18n("File properties"));
 
         description.addSubColumn(
-                TableViewColumnDescription("file-properties", tr("Filename"), "subcolumn", "name")
+                TableViewColumnDescription("file-properties", i18n("Filename"), "subcolumn", "name")
             );
 
         description.addSubColumn(
-                TableViewColumnDescription("file-properties", tr("Size"), "subcolumn", "size")
+                TableViewColumnDescription("file-properties", i18n("Size"), "subcolumn", "size")
             );
 
         return description;
@@ -170,14 +170,14 @@ public:
 
     static TableViewColumnDescription getDescription()
     {
-        TableViewColumnDescription description(QLatin1String("item-properties"), tr("Item properties"));
+        TableViewColumnDescription description(QLatin1String("item-properties"), i18n("Item properties"));
 
         description.addSubColumn(
-                TableViewColumnDescription("item-properties", tr("Width"), "subcolumn", "width")
+                TableViewColumnDescription("item-properties", i18n("Width"), "subcolumn", "width")
             );
 
         description.addSubColumn(
-                TableViewColumnDescription("item-properties", tr("Height"), "subcolumn", "height")
+                TableViewColumnDescription("item-properties", i18n("Height"), "subcolumn", "height")
             );
 
         return description;
@@ -263,18 +263,18 @@ public:
     virtual ~ColumnGeoProperties() { }
     static TableViewColumnDescription getDescription()
     {
-        TableViewColumnDescription description(QLatin1String("geo-properties"), tr("Geo properties"));
+        TableViewColumnDescription description(QLatin1String("geo-properties"), i18n("Geo properties"));
 
         description.addSubColumn(
-                TableViewColumnDescription("geo-properties", tr("Geotagged"), "subcolumn", "hascoordinates")
+                TableViewColumnDescription("geo-properties", i18n("Geotagged"), "subcolumn", "hascoordinates")
             );
 
         description.addSubColumn(
-                TableViewColumnDescription("geo-properties", tr("Coordinates"), "subcolumn", "coordinates")
+                TableViewColumnDescription("geo-properties", i18n("Coordinates"), "subcolumn", "coordinates")
             );
 
         description.addSubColumn(
-                TableViewColumnDescription("geo-properties", tr("Altitude"), "subcolumn", "altitude")
+                TableViewColumnDescription("geo-properties", i18n("Altitude"), "subcolumn", "altitude")
             );
 
         return description;
