@@ -17,4 +17,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 009 ==> 303217 - Cannot preview TIFF files on Mac OS due to "not enough memory" exceptions.
 010 ==> 315494 - Error on startup: Failed to update the database schema from version 6 to version 7.
 011 ==> 237037 - SQLITE : convience copy in digiKam core [patch].
-012 ==> 
+012 ==> 257773 - Switch to full screen mode crash under MACOSX.
+013 ==> 
