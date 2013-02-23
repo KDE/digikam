@@ -105,6 +105,16 @@ public:
         return QString();
     }
 
+    virtual ColumnFlags getColumnFlags() const
+    {
+        if (subColumn==SubColumnSize)
+        {
+            return ColumnCustomSorting;
+        }
+
+        return ColumnNoFlags;
+    }
+
     virtual QVariant data(const QModelIndex& sourceIndex, const int role)
     {
         if (role!=Qt::DisplayRole)
@@ -130,6 +140,23 @@ public:
         }
 
         return QVariant();
+    }
+
+    virtual ColumnCompareResult compare(const QModelIndex& sourceA, const QModelIndex& sourceB) const
+    {
+        const ImageInfo infoA = getImageInfo(sourceA);
+        const ImageInfo infoB = getImageInfo(sourceB);
+
+        if (subColumn==SubColumnSize)
+        {
+            const int sizeA = infoA.fileSize();
+            const int sizeB = infoB.fileSize();
+
+            return compareHelper<int>(sizeA, sizeB);
+        }
+
+        kWarning()<<"file: unimplemented comparison, subColumn="<<subColumn;
+        return CmpEqual;
     }
 
 };
