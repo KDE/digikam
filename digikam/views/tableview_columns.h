@@ -52,9 +52,7 @@ private:
     enum SubColumn
     {
         SubColumnName = 0,
-        SubColumnSize = 1,
-        SubColumnWidth = 2,
-        SubColumnHeight = 3
+        SubColumnSize = 1
     } subColumn;
 
 public:
@@ -76,14 +74,6 @@ public:
         {
             subColumn = SubColumnSize;
         }
-        else if (subColumnSetting=="width")
-        {
-            subColumn = SubColumnWidth;
-        }
-        else if (subColumnSetting=="height")
-        {
-            subColumn = SubColumnHeight;
-        }
     }
     virtual ~ColumnFileProperties() { }
 
@@ -99,14 +89,6 @@ public:
                 TableViewColumnDescription("file-properties", tr("Size"), "subcolumn", "size")
             );
 
-        description.addSubColumn(
-                TableViewColumnDescription("file-properties", tr("Width"), "subcolumn", "width")
-            );
-
-        description.addSubColumn(
-                TableViewColumnDescription("file-properties", tr("Height"), "subcolumn", "height")
-            );
-
         return description;
     }
 
@@ -118,10 +100,6 @@ public:
                 return i18n("Filename");
             case SubColumnSize:
                 return i18n("Size");
-            case SubColumnWidth:
-                return i18n("Width");
-            case SubColumnHeight:
-                return i18n("Height");
         }
 
         return QString();
@@ -149,6 +127,87 @@ public:
                 return QString("%1").arg(info.fileSize());
                 break;
 
+        }
+
+        return QVariant();
+    }
+
+};
+
+class ColumnItemProperties : public TableViewColumn
+{
+    Q_OBJECT
+
+private:
+
+    enum SubColumn
+    {
+        SubColumnWidth = 0,
+        SubColumnHeight = 1
+    } subColumn;
+
+public:
+
+    explicit ColumnItemProperties(
+            TableViewShared* const tableViewShared,
+            const TableViewColumnConfiguration& pConfiguration,
+            QObject* const parent = 0
+        )
+      : TableViewColumn(tableViewShared, pConfiguration, parent),
+        subColumn(SubColumnWidth)
+    {
+        const QString& subColumnSetting = configuration.getSetting("subcolumn");
+        if (subColumnSetting=="width")
+        {
+            subColumn = SubColumnWidth;
+        }
+        else if (subColumnSetting=="height")
+        {
+            subColumn = SubColumnHeight;
+        }
+    }
+    virtual ~ColumnItemProperties() { }
+
+    static TableViewColumnDescription getDescription()
+    {
+        TableViewColumnDescription description(QLatin1String("item-properties"), tr("Item properties"));
+
+        description.addSubColumn(
+                TableViewColumnDescription("item-properties", tr("Width"), "subcolumn", "width")
+            );
+
+        description.addSubColumn(
+                TableViewColumnDescription("item-properties", tr("Height"), "subcolumn", "height")
+            );
+
+        return description;
+    }
+
+    virtual QString getTitle()
+    {
+        switch (subColumn)
+        {
+            case SubColumnWidth:
+                return i18n("Width");
+            case SubColumnHeight:
+                return i18n("Height");
+        }
+
+        return QString();
+    }
+
+    virtual QVariant data(const QModelIndex& sourceIndex, const int role)
+    {
+        if (role!=Qt::DisplayRole)
+        {
+            /// @todo is this correct or does sourceIndex have column!=0?
+            return sourceIndex.data(role);
+        }
+
+        const ImageInfo info = getImageInfo(sourceIndex);
+
+        switch (subColumn)
+        {
             case SubColumnWidth:
                 /// @todo Needs custom sorting
                 return QString("%1").arg(info.dimensions().width());
