@@ -109,6 +109,7 @@ libusb          >= 1.0.0                      http://www.libusb.org             
 liblqr-1        >= 0.4.1                      http://liblqr.wikidot.com                                         For Liquid Rescale tool. If no external libray is found, internal version is used instead.
 libpgf          >= 6.11.24                    http://www.libpgf.org                                             If no external libray is found, internal version is used instead.
 libclapack      >= 3.x                        http://www.netlib.org/clapack                                     If no external libray is found, internal version is used instead.
+libsqlite2      >= 2.x                        http://www.sqlite.org/                                            Only used to import old database version <= 0.7.
 
 Note : all library dependencies require development and binary packages installed on your
 computer to compile digiKam.
