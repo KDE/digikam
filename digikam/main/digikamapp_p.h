@@ -6,7 +6,7 @@
  * Date        : 2007-31-01
  * Description : main digiKam interface implementation
  *
- * Copyright (C) 2007-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -61,6 +61,7 @@
 class KToolBarPopupAction;
 class KToggleAction;
 class KActionMenu;
+class KToggleFullScreenAction;
 
 namespace Digikam
 {
@@ -82,20 +83,17 @@ public:
     bool    canCancel;
 };
 
-class DigikamApp::DigikamAppPriv
+class DigikamApp::Private
 {
 public:
 
-    DigikamAppPriv() :
-        fullScreen(false),
+    Private() :
         autoShowZoomToolTip(false),
         validIccPath(true),
-
         cameraMenu(0),
         usbMediaMenu(0),
         cardReaderMenu(0),
         config(0),
-
         newAction(0),
         moveSelectionToAlbumAction(0),
         deleteAction(0),
@@ -196,7 +194,6 @@ public:
     {
     }
 
-    bool                                fullScreen;
     bool                                autoShowZoomToolTip;
     bool                                validIccPath;
 
@@ -271,7 +268,7 @@ public:
     KAction*                            selectInvertAction;
 
     // View Actions
-    QAction*                            fullScreenAction;
+    KToggleFullScreenAction*            fullScreenAction;
     KAction*                            zoomPlusAction;
     KAction*                            zoomMinusAction;
     KAction*                            zoomFitToWindowAction;

@@ -187,7 +187,7 @@ private Q_SLOTS:
     void slotConfToolbars();
     void slotNewToolbarConfig();
     void slotConfNotifications();
-    void slotToggleFullScreen();
+    void slotToggleFullScreen(bool);
 
     void slotMaintenance();
     void slotMaintenanceDone();
@@ -213,8 +213,8 @@ private Q_SLOTS:
 
 private:
 
-    class DigikamAppPriv;
-    DigikamAppPriv* const d;
+    class Private;
+    Private* const d;
 
     static DigikamApp* m_instance;
 };

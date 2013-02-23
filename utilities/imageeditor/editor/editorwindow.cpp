@@ -194,7 +194,6 @@ EditorWindow::EditorWindow(const char* name)
     m_vSplitter                = 0;
     m_stackView                = 0;
     m_animLogo                 = 0;
-    m_fullScreen               = false;
     m_setExifOrientationTag    = true;
     m_cancelSlideShow          = false;
     m_fullScreenHideThumbBar   = true;
@@ -507,8 +506,9 @@ void EditorWindow::setupStandardActions()
 
     // --------------------------------------------------------
 
-    m_fullScreenAction = KStandardAction::fullScreen(this, SLOT(slotToggleFullScreen()), this, this);
+    m_fullScreenAction = KStandardAction::fullScreen(0, 0, this, this);
     actionCollection()->addAction("editorwindow_fullscreen", m_fullScreenAction);
+    connect(m_fullScreenAction, SIGNAL(toggled(bool)), this, SLOT(slotToggleFullScreen(bool)));
 
     d->slideShowAction = new KAction(KIcon("view-presentation"), i18n("Slideshow"), this);
     d->slideShowAction->setShortcut(KShortcut(Qt::Key_F9));
@@ -834,14 +834,6 @@ void EditorWindow::slotToggleOffFitToWindow()
     d->zoomFitToWindowAction->blockSignals(false);
 }
 
-void EditorWindow::slotEscapePressed()
-{
-    if (m_fullScreen)
-    {
-        m_fullScreenAction->activate(QAction::Trigger);
-    }
-}
-
 void EditorWindow::loadImagePlugins()
 {
     if (d->imagepluginsActionCollection)
@@ -927,7 +919,6 @@ void EditorWindow::readStandardSettings()
     if (group.readEntry(d->configFullScreenEntry, false))
     {
         m_fullScreenAction->activate(QAction::Trigger);
-        m_fullScreen = true;
     }
 
     // Restore Auto zoom action
@@ -1176,89 +1167,6 @@ void EditorWindow::toggleToolActions(EditorTool* tool)
 
     m_applyToolAction->setVisible(tool);
     m_closeToolAction->setVisible(tool);
-}
-
-void EditorWindow::slotToggleFullScreen()
-{
-    if (m_fullScreen) // out of fullscreen
-    {
-        setWindowState(windowState() & ~Qt::WindowFullScreen);   // reset
-        m_canvas->setBackgroundColor(m_bgColor);
-
-        slotShowMenuBar();
-        statusBar()->show();
-        showToolBars();
-
-        if (d->removeFullScreenButton)
-        {
-            QList<KToolBar*> toolbars = toolBars();
-            foreach(KToolBar* toolbar, toolbars)
-            {
-                // name is set in ui.rc XML file
-                if (toolbar->objectName() == "mainToolBar")
-                {
-                    toolbar->removeAction(m_fullScreenAction);
-                    break;
-                }
-            }
-        }
-
-        toggleGUI2FullScreen();
-        m_fullScreen = false;
-    }
-    else  // go to fullscreen
-    {
-        m_canvas->setBackgroundColor(QColor(Qt::black));
-
-        // hide the menubar and the statusbar
-        menuBar()->hide();
-        statusBar()->hide();
-
-        if (d->fullScreenHideToolBar)
-        {
-            hideToolBars();
-        }
-        else
-        {
-            showToolBars();
-
-            QList<KToolBar*> toolbars = toolBars();
-            KToolBar* mainToolbar     = 0;
-            foreach(KToolBar* toolbar, toolbars)
-            {
-                if (toolbar->objectName() == "mainToolBar")
-                {
-                    mainToolbar = toolbar;
-                    break;
-                }
-            }
-            kDebug() << mainToolbar;
-
-            // add fullscreen action if necessary
-            if (mainToolbar && !mainToolbar->actions().contains(m_fullScreenAction))
-            {
-                if (mainToolbar->actions().isEmpty())
-                {
-                    mainToolbar->addAction(m_fullScreenAction);
-                }
-                else
-                {
-                    mainToolbar->insertAction(mainToolbar->actions().first(), m_fullScreenAction);
-                }
-                d->removeFullScreenButton = true;
-            }
-            else
-            {
-                // If FullScreen button is enabled in toolbar settings,
-                // we shall not remove it when leaving of fullscreen mode.
-                d->removeFullScreenButton = false;
-            }
-        }
-
-        toggleGUI2FullScreen();
-        setWindowState(windowState() | Qt::WindowFullScreen);   // set
-        m_fullScreen = true;
-    }
 }
 
 void EditorWindow::keyPressEvent(QKeyEvent* e)
@@ -2890,30 +2798,6 @@ void EditorWindow::slotSelectionChanged(const QRect& sel)
     setToolInfoMessage(QString("(%1, %2) (%3 x %4)").arg(sel.x()).arg(sel.y()).arg(sel.width()).arg(sel.height()));
 }
 
-void EditorWindow::toggleGUI2FullScreen()
-{
-    if (m_fullScreen)
-    {
-        rightSideBar()->restore(QList<QWidget*>() << thumbBar(), d->fullscreenSizeBackup);
-
-        if (m_fullScreenHideThumbBar)
-        {
-            thumbBar()->restoreVisibility();
-        }
-    }
-    else
-    {
-        // See bug #166472, a simple backup()/restore() will hide non-sidebar splitter child widgets
-        // in horizontal mode thumbbar wont be member of the splitter, it is just ignored then
-        rightSideBar()->backup(QList<QWidget*>() << thumbBar(), &d->fullscreenSizeBackup);
-
-        if (m_fullScreenHideThumbBar)
-        {
-            thumbBar()->hide();
-        }
-    }
-}
-
 void EditorWindow::slotComponentsInfo()
 {
     LibsInfoDlg* dlg = new LibsInfoDlg(this);
@@ -3070,6 +2954,124 @@ void EditorWindow::addAction2ContextMenu(const QString& actionName, bool addDisa
     if (action && (action->isEnabled() || addDisabled))
     {
         m_contextMenu->addAction(action);
+    }
+}
+
+void EditorWindow::slotToggleFullScreen(bool b)
+{
+    KToggleFullScreenAction::setFullScreen(this, b);
+
+    if (!b)
+    {
+        // Switch off fullscreen
+
+        m_canvas->setBackgroundColor(m_bgColor);
+
+        slotShowMenuBar();
+        statusBar()->show();
+        showToolBars();
+
+        if (d->removeFullScreenButton)
+        {
+            QList<KToolBar*> toolbars = toolBars();
+
+            foreach(KToolBar* const toolbar, toolbars)
+            {
+                // name is set in ui.rc XML file
+                if (toolbar->objectName() == "mainToolBar")
+                {
+                    toolbar->removeAction(m_fullScreenAction);
+                    break;
+                }
+            }
+        }
+
+        toggleGUI2FullScreen();
+    }
+    else  // go to fullscreen
+    {
+        m_canvas->setBackgroundColor(QColor(Qt::black));
+
+        // hide the menubar and the statusbar
+        menuBar()->hide();
+        statusBar()->hide();
+
+        if (d->fullScreenHideToolBar)
+        {
+            hideToolBars();
+        }
+        else
+        {
+            showToolBars();
+
+            QList<KToolBar*> toolbars = toolBars();
+            KToolBar* mainToolbar     = 0;
+
+            foreach(KToolBar* const toolbar, toolbars)
+            {
+                if (toolbar->objectName() == "mainToolBar")
+                {
+                    mainToolbar = toolbar;
+                    break;
+                }
+            }
+
+            kDebug() << mainToolbar;
+
+            // add fullscreen action if necessary
+            if (mainToolbar && !mainToolbar->actions().contains(m_fullScreenAction))
+            {
+                if (mainToolbar->actions().isEmpty())
+                {
+                    mainToolbar->addAction(m_fullScreenAction);
+                }
+                else
+                {
+                    mainToolbar->insertAction(mainToolbar->actions().first(), m_fullScreenAction);
+                }
+                d->removeFullScreenButton = true;
+            }
+            else
+            {
+                // If FullScreen button is enabled in toolbar settings,
+                // we shall not remove it when leaving of fullscreen mode.
+                d->removeFullScreenButton = false;
+            }
+        }
+
+        toggleGUI2FullScreen();
+    }
+}
+
+void EditorWindow::toggleGUI2FullScreen()
+{
+    if (m_fullScreenAction->isChecked())
+    {
+        rightSideBar()->restore(QList<QWidget*>() << thumbBar(), d->fullscreenSizeBackup);
+
+        if (m_fullScreenHideThumbBar)
+        {
+            thumbBar()->restoreVisibility();
+        }
+    }
+    else
+    {
+        // See bug #166472, a simple backup()/restore() will hide non-sidebar splitter child widgets
+        // in horizontal mode thumbbar wont be member of the splitter, it is just ignored then
+        rightSideBar()->backup(QList<QWidget*>() << thumbBar(), &d->fullscreenSizeBackup);
+
+        if (m_fullScreenHideThumbBar)
+        {
+            thumbBar()->hide();
+        }
+    }
+}
+
+void EditorWindow::slotEscapePressed()
+{
+    if (m_fullScreenAction->isChecked())
+    {
+        m_fullScreenAction->activate(QAction::Trigger);
     }
 }
 

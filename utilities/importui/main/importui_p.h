@@ -7,7 +7,7 @@
  * Description : Camera interface
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -63,6 +63,8 @@
 #include "statusprogressbar.h"
 #include "importview.h"
 
+class KToggleFullScreenAction;
+
 using namespace KDcrawIface;
 
 namespace Digikam
@@ -76,7 +78,6 @@ public:
         deleteAfter(false),
         busy(false),
         closed(false),
-        fullScreen(false),
         removeFullScreenButton(false),
         fullScreenHideToolBar(false),
         downloadMenu(0),
@@ -149,7 +150,6 @@ public:
     bool                          deleteAfter;
     bool                          busy;
     bool                          closed;
-    bool                          fullScreen;
     bool                          removeFullScreenButton;
     bool                          fullScreenHideToolBar;
 
@@ -182,7 +182,7 @@ public:
     KAction*                      downloadDelNewAction;
     KAction*                      downloadDelAllAction;
     KAction*                      downloadDelSelectedAction;
-    KAction*                      fullScreenAction;
+    KToggleFullScreenAction*      fullScreenAction;
     KAction*                      libsInfoAction;
     KAction*                      dbStatAction;
     KAction*                      lockAction;

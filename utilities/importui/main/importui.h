@@ -7,7 +7,7 @@
  * Description : Camera interface
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2012      by Islam Wazery <wazery at ubuntu dot com>
  *
@@ -172,7 +172,7 @@ private Q_SLOTS:
     void slotZoomChanged(double zoom);
     void slotThumbSizeChanged(int size);
 
-    void slotToggleFullScreen();
+    void slotToggleFullScreen(bool);
     void slotEscapePressed();
 
     void slotUpload();

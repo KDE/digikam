@@ -6,7 +6,7 @@
  * Date        : 2007-03-05
  * Description : digiKam light table GUI
  *
- * Copyright (C) 2007-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -44,21 +44,23 @@
 #include "lighttablethumbbar.h"
 #include "thumbbardock.h"
 
+class KToggleFullScreenAction;
+
 namespace Digikam
 {
 
-class LightTableWindow::LightTableWindowPriv
+class LightTableWindow::Private
 {
 
 public:
 
-    LightTableWindowPriv() :
+    Private() :
         autoLoadOnRightPanel(true),
         autoSyncPreview(true),
         fullScreenHideToolBar(false),
-        fullScreen(false),
         removeFullScreenButton(false),
         cancelSlideShow(false),
+        fullScreenAction(0),
         setItemLeftAction(0),
         setItemRightAction(0),
         clearListAction(0),
@@ -67,7 +69,6 @@ public:
         fileDeleteAction(0),
         fileDeleteFinalAction(0),
         slideShowAction(0),
-        fullScreenAction(0),
         leftZoomPlusAction(0),
         leftZoomMinusAction(0),
         leftZoomTo100percents(0),
@@ -105,10 +106,10 @@ public:
     bool                      autoLoadOnRightPanel;
     bool                      autoSyncPreview;
     bool                      fullScreenHideToolBar;
-    bool                      fullScreen;
     bool                      removeFullScreenButton;
     bool                      cancelSlideShow;
 
+    KToggleFullScreenAction*  fullScreenAction;
     KAction*                  setItemLeftAction;
     KAction*                  setItemRightAction;
     KAction*                  clearListAction;
@@ -117,7 +118,6 @@ public:
     KAction*                  fileDeleteAction;
     KAction*                  fileDeleteFinalAction;
     KAction*                  slideShowAction;
-    KAction*                  fullScreenAction;
     KAction*                  leftZoomPlusAction;
     KAction*                  leftZoomMinusAction;
     KAction*                  leftZoomTo100percents;
