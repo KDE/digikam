@@ -127,6 +127,13 @@ public:
     };
     Q_DECLARE_FLAGS(ColumnFlags, ColumnFlag)
 
+    enum ColumnCompareResult
+    {
+        CmpEqual = 0,
+        CmpABiggerB = 1,
+        CmpALessB = 2
+    };
+
     explicit TableViewColumn(
             TableViewShared* const tableViewShared,
             const TableViewColumnConfiguration& pConfiguration,
@@ -140,10 +147,25 @@ public:
     virtual QString getTitle();
 
     virtual QVariant data(const QModelIndex& sourceIndex, const int role);
+    virtual ColumnCompareResult compare(const QModelIndex& sourceA, const QModelIndex& sourceB) const;
     virtual bool paint(QPainter* const painter, const QStyleOptionViewItem& option, const QModelIndex& sourceIndex) const;
     virtual QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& sourceIndex) const;
 
     ImageInfo getImageInfo(const QModelIndex sourceIndex) const;
+
+    template<class MyType> static ColumnCompareResult compareHelper(const MyType& A, const MyType& B)
+    {
+        if (A==B)
+        {
+            return CmpEqual;
+        }
+        else if (A>B)
+        {
+            return CmpABiggerB;
+        }
+
+        return CmpALessB;
+    }
 
 Q_SIGNALS:
     void signalDataChanged(const QModelIndex& sourceIndex);

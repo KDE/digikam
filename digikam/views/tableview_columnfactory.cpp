@@ -231,6 +231,19 @@ TableViewColumnConfiguration TableViewColumn::getConfiguration() const
     return configuration;
 }
 
+/**
+ * This function should never be called, because subclasses have to do the comparison on their own. But it can not be
+ * pure, since then every subclass which does not do custom comparison would have to implement an empty stub.
+ */
+TableViewColumn::ColumnCompareResult TableViewColumn::compare(const QModelIndex& sourceA, const QModelIndex& sourceB) const
+{
+    Q_UNUSED(sourceA)
+    Q_UNUSED(sourceB)
+
+    kWarning()<<"Unimplemented custom comparison. Make sure getColumnFlags() does not return ColumnCustomSorting.";
+
+    return CmpEqual;
+}
 
 } /* namespace Digikam */
 

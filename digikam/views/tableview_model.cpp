@@ -22,6 +22,10 @@
 
 #include "tableview_model.moc"
 
+// KDE includes
+
+#include <kdebug.h>
+
 // local includes
 #include "imagefiltermodel.h"
 #include "tableview_columnfactory.h"
@@ -421,9 +425,23 @@ TableViewSortFilterProxyModel::~TableViewSortFilterProxyModel()
 
 }
 
-bool TableViewSortFilterProxyModel::lessThan(const QModelIndex& left, const QModelIndex& right) const
+bool TableViewSortFilterProxyModel::lessThan(const QModelIndex& tableViewIndexLeft, const QModelIndex& tableViewIndexRight) const
 {
-    return QSortFilterProxyModel::lessThan(left, right);
+    const int iColumn = tableViewIndexLeft.column();
+
+    const TableViewColumn* columnObject = s->tableViewModel->getColumnObject(iColumn);
+
+    if (!columnObject->getColumnFlags().testFlag(TableViewColumn::ColumnCustomSorting))
+    {
+        return QSortFilterProxyModel::lessThan(tableViewIndexLeft, tableViewIndexRight);
+    }
+
+    const QModelIndex sourceIndexLeft = s->tableViewModel->toImageFilterModelIndex(tableViewIndexLeft);
+    const QModelIndex sourceIndexRight = s->tableViewModel->toImageFilterModelIndex(tableViewIndexRight);
+
+    const TableViewColumn::ColumnCompareResult cmpResult = columnObject->compare(sourceIndexLeft, sourceIndexRight);
+
+    return cmpResult == TableViewColumn::CmpALessB;
 }
 
 class TableViewCurrentToSortedSyncer::Private

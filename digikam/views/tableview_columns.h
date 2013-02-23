@@ -196,6 +196,17 @@ public:
         return QString();
     }
 
+    virtual ColumnFlags getColumnFlags() const
+    {
+        if (   (subColumn==SubColumnHeight)
+            || (subColumn==SubColumnWidth) )
+        {
+            return ColumnCustomSorting;
+        }
+
+        return ColumnNoFlags;
+    }
+
     virtual QVariant data(const QModelIndex& sourceIndex, const int role)
     {
         if (role!=Qt::DisplayRole)
@@ -223,6 +234,29 @@ public:
         return QVariant();
     }
 
+    virtual ColumnCompareResult compare(const QModelIndex& sourceA, const QModelIndex& sourceB) const
+    {
+        const ImageInfo infoA = getImageInfo(sourceA);
+        const ImageInfo infoB = getImageInfo(sourceB);
+
+        if (subColumn==SubColumnHeight)
+        {
+            const int heightA = infoA.dimensions().height();
+            const int heightB = infoB.dimensions().height();
+
+            return compareHelper<int>(heightA, heightB);
+        }
+        else if (subColumn==SubColumnWidth)
+        {
+            const int widthA = infoA.dimensions().width();
+            const int widthB = infoB.dimensions().width();
+
+            return compareHelper<int>(widthA, widthB);
+        }
+
+        kWarning()<<"item: unimplemented comparison, subColumn="<<subColumn;
+        return CmpEqual;
+    }
 };
 
 class ColumnGeoProperties : public TableViewColumn
@@ -295,6 +329,16 @@ public:
         return QString();
     }
 
+    virtual ColumnFlags getColumnFlags() const
+    {
+        if (subColumn==SubColumnAltitude)
+        {
+            return ColumnCustomSorting;
+        }
+
+        return ColumnNoFlags;
+    }
+
     virtual QVariant data(const QModelIndex& sourceIndex, const int role)
     {
         if (role!=Qt::DisplayRole)
@@ -338,6 +382,30 @@ public:
         return QVariant();
     }
 
+    virtual ColumnCompareResult compare(const QModelIndex& sourceA, const QModelIndex& sourceB) const
+    {
+        const ImageInfo infoA = getImageInfo(sourceA);
+        const ImageInfo infoB = getImageInfo(sourceB);
+
+        if (subColumn==SubColumnAltitude)
+        {
+            const bool hasAltitudeA = infoA.hasAltitude();
+            const bool hasAltitudeB = infoB.hasAltitude();
+
+            if (hasAltitudeA && hasAltitudeB)
+            {
+                const double altitudeA = infoA.altitudeNumber();
+                const double altitudeB = infoB.altitudeNumber();
+
+                return compareHelper<double>(altitudeA, altitudeB);
+            }
+
+            return compareHelper<int>(int(hasAltitudeA), int(hasAltitudeB));
+        }
+
+        kWarning()<<"geo: unimplemented comparison, subColumn="<<subColumn;
+        return CmpEqual;
+    }
 };
 
 class ColumnThumbnail : public TableViewColumn
