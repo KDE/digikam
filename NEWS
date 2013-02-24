@@ -18,4 +18,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 010 ==> 315494 - Error on startup: Failed to update the database schema from version 6 to version 7.
 011 ==> 237037 - SQLITE : convience copy in digiKam core [patch].
 012 ==> 257773 - Switch to full screen mode crash under MACOSX.
-013 ==> 
+013 ==> 315284 - digiKam crashes when quitting the program.
+014 ==> 
