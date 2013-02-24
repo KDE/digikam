@@ -43,9 +43,9 @@
 #include "resizetool.h"
 #include "ratiocroptool.h"
 
-#ifdef HAVE_GLIB2
+#ifdef HAVE_LIBLQR-1
 #include "contentawareresizetool.h"
-#endif /* HAVE_GLIB2 */
+#endif /* HAVE_LIBLQR-1 */
 
 namespace DigikamTransformImagePlugin
 {
@@ -99,7 +99,7 @@ ImagePlugin_Transform::ImagePlugin_Transform(QObject* const parent, const QVaria
     connect(d->aspectRatioCropAction, SIGNAL(triggered(bool)),
             this, SLOT(slotRatioCrop()));
 
-#ifdef HAVE_GLIB2
+#ifdef HAVE_LIBLQR-1
 
     d->contentAwareResizingAction = new KAction(KIcon("transform-scale"), i18n("Liquid Rescale..."), this);
     // d->contentAwareResizingAction->setShortcut(KShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_C));
@@ -107,7 +107,7 @@ ImagePlugin_Transform::ImagePlugin_Transform(QObject* const parent, const QVaria
     connect(d->contentAwareResizingAction, SIGNAL(triggered(bool)),
             this, SLOT(slotContentAwareResizing()));
 
-#endif /* HAVE_GLIB2 */
+#endif /* HAVE_LIBLQR-1 */
 
     //-----------------------------------------------------------------------------------
 
@@ -153,9 +153,9 @@ void ImagePlugin_Transform::setEnabledActions(bool b)
     d->sheartoolAction->setEnabled(b);
     d->aspectRatioCropAction->setEnabled(b);
 
-#ifdef HAVE_GLIB2
+#ifdef HAVE_LIBLQR-1
     d->contentAwareResizingAction->setEnabled(b);
-#endif /* HAVE_GLIB2 */
+#endif /* HAVE_LIBLQR-1 */
 }
 
 void ImagePlugin_Transform::slotPerspective()
@@ -180,9 +180,9 @@ void ImagePlugin_Transform::slotRatioCrop()
 
 void ImagePlugin_Transform::slotContentAwareResizing()
 {
-#ifdef HAVE_GLIB2
+#ifdef HAVE_LIBLQR-1
     loadTool(new ContentAwareResizeTool(this));
-#endif /* HAVE_GLIB2 */
+#endif /* HAVE_LIBLQR-1 */
 }
 
 void ImagePlugin_Transform::slotFreeRotation()

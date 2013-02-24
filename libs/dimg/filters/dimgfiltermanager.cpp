@@ -136,9 +136,9 @@ void DImgFilterManager::Private::setupCoreGenerators()
             << ImgFilterPtr(new BasicDImgFilterGenerator<CBFilter>())
             << ImgFilterPtr(new BasicDImgFilterGenerator<CharcoalFilter>())
             << ImgFilterPtr(new BasicDImgFilterGenerator<ColorFXFilter>())
-#ifdef HAVE_GLIB2
+#ifdef HAVE_LIBLQR_1
             << ImgFilterPtr(new BasicDImgFilterGenerator<ContentAwareFilter>())
-#endif
+#endif // HAVE_LIBLQR_1
             << ImgFilterPtr(new BasicDImgFilterGenerator<CurvesFilter>())
             << ImgFilterPtr(new BasicDImgFilterGenerator<DistortionFXFilter>())
             << ImgFilterPtr(new BasicDImgFilterGenerator<EmbossFilter>())
@@ -154,7 +154,7 @@ void DImgFilterManager::Private::setupCoreGenerators()
             << ImgFilterPtr(new BasicDImgFilterGenerator<LensDistortionFilter>())
 #ifdef HAVE_LENSFUN
             << ImgFilterPtr(new BasicDImgFilterGenerator<LensFunFilter>())
-#endif
+#endif // HAVE_LENSFUN
             << ImgFilterPtr(new BasicDImgFilterGenerator<LevelsFilter>())
             << ImgFilterPtr(new BasicDImgFilterGenerator<LocalContrastFilter>())
             << ImgFilterPtr(new BasicDImgFilterGenerator<MixerFilter>())
@@ -197,7 +197,6 @@ void DImgFilterManager::Private::setupFilterIcons()
     filterIcons.insert("digikam:FreeRotationFilter",   "freerotation");
     //filterIcons.insert("digikam:GreycstorationFilter", "");         //FIXME
     filterIcons.insert("digikam:HSLFilter",            "adjusthsl");
-    //filterIcons.insert("digikam:InfraredFilter",       "");         //FIXME
     filterIcons.insert("digikam:InvertFilter",         "invertimage");
     filterIcons.insert("digikam:LensDistortionFilter", "lensdistortion");
     //filterIcons.insert("digikam:LensFunFilter",        "");         //FIXME
@@ -267,6 +266,7 @@ DImgFilterManager::DImgFilterManager()
     d->setupCoreGenerators();
     d->setupFilterIcons();
     d->setupI18nStrings();
+
     foreach(const ImgFilterPtr& gen, d->coreGenerators)
     {
         d->addGenerator(gen);

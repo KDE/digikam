@@ -50,9 +50,9 @@
 #include "hotpixelstool.h"
 #include "config-digikam.h"
 
-#ifdef HAVE_GLIB2
+#ifdef HAVE_LENSFUN
 #include "lensautofixtool.h"
-#endif // HAVE_GLIB2
+#endif // HAVE_LENSFUN
 
 namespace DigikamEnhanceImagePlugin
 {
@@ -174,14 +174,14 @@ ImagePlugin_Enhance::ImagePlugin_Enhance(QObject* const parent, const QVariantLi
     connect(d->hotpixelsAction, SIGNAL(triggered(bool)),
             this, SLOT(slotHotPixels()));
 
-#ifdef HAVE_GLIB2
+#ifdef HAVE_LENSFUN
 
     d->lensAutoFixAction = new KAction(KIcon("lensautofix"), i18n("Auto-Correction..."), this);
     actionCollection()->addAction("imageplugin_lensautofix", d->lensAutoFixAction );
     connect(d->lensAutoFixAction, SIGNAL(triggered(bool)),
             this, SLOT(slotLensAutoFix()));
 
-#endif // HAVE_GLIB2
+#endif // HAVE_LENSFUN
 
     HotPixelsTool::registerFilter();
 
@@ -209,9 +209,9 @@ void ImagePlugin_Enhance::setEnabledActions(bool b)
     d->antivignettingAction->setEnabled(b);
     d->hotpixelsAction->setEnabled(b);
 
-#ifdef HAVE_GLIB2
+#ifdef HAVE_LENSFUN
     d->lensAutoFixAction->setEnabled(b);
-#endif // HAVE_GLIB2
+#endif // HAVE_LENSFUN
 }
 
 void ImagePlugin_Enhance::slotHotPixels()
