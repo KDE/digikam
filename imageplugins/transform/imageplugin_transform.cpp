@@ -43,9 +43,9 @@
 #include "resizetool.h"
 #include "ratiocroptool.h"
 
-#ifdef HAVE_LIBLQR-1
+#ifdef HAVE_LIBLQR_1
 #include "contentawareresizetool.h"
-#endif /* HAVE_LIBLQR-1 */
+#endif /* HAVE_LIBLQR_1 */
 
 namespace DigikamTransformImagePlugin
 {
