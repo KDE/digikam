@@ -6,7 +6,7 @@
  * Date        : 2005-02-17
  * Description : a plugin to transform image geometry.
  *
- * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -99,7 +99,7 @@ ImagePlugin_Transform::ImagePlugin_Transform(QObject* const parent, const QVaria
     connect(d->aspectRatioCropAction, SIGNAL(triggered(bool)),
             this, SLOT(slotRatioCrop()));
 
-#ifdef HAVE_LIBLQR-1
+#ifdef HAVE_LIBLQR_1
 
     d->contentAwareResizingAction = new KAction(KIcon("transform-scale"), i18n("Liquid Rescale..."), this);
     // d->contentAwareResizingAction->setShortcut(KShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_C));
@@ -107,7 +107,7 @@ ImagePlugin_Transform::ImagePlugin_Transform(QObject* const parent, const QVaria
     connect(d->contentAwareResizingAction, SIGNAL(triggered(bool)),
             this, SLOT(slotContentAwareResizing()));
 
-#endif /* HAVE_LIBLQR-1 */
+#endif /* HAVE_LIBLQR_1 */
 
     //-----------------------------------------------------------------------------------
 
@@ -122,13 +122,13 @@ ImagePlugin_Transform::ImagePlugin_Transform(QObject* const parent, const QVaria
     connect(point1Action, SIGNAL(triggered(bool)),
             this, SIGNAL(signalPoint1Action()));
 
-    KAction* point2Action = new KAction(i18n("Set Point 2"), this);
+    KAction* const point2Action = new KAction(i18n("Set Point 2"), this);
     point2Action->setShortcut(KShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_2));
     actionCollection()->addAction("imageplugin_freerotation_point2", point2Action);
     connect(point2Action, SIGNAL(triggered(bool)),
             this, SIGNAL(signalPoint2Action()));
 
-    KAction* autoAdjustAction = new KAction(i18n("Auto Adjust"), this);
+    KAction* const autoAdjustAction = new KAction(i18n("Auto Adjust"), this);
     autoAdjustAction->setShortcut(KShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_R));
     actionCollection()->addAction("imageplugin_freerotation_autoadjust", autoAdjustAction);
     connect(autoAdjustAction, SIGNAL(triggered(bool)),
@@ -153,9 +153,9 @@ void ImagePlugin_Transform::setEnabledActions(bool b)
     d->sheartoolAction->setEnabled(b);
     d->aspectRatioCropAction->setEnabled(b);
 
-#ifdef HAVE_LIBLQR-1
+#ifdef HAVE_LIBLQR_1
     d->contentAwareResizingAction->setEnabled(b);
-#endif /* HAVE_LIBLQR-1 */
+#endif /* HAVE_LIBLQR_1 */
 }
 
 void ImagePlugin_Transform::slotPerspective()
@@ -180,9 +180,9 @@ void ImagePlugin_Transform::slotRatioCrop()
 
 void ImagePlugin_Transform::slotContentAwareResizing()
 {
-#ifdef HAVE_LIBLQR-1
+#ifdef HAVE_LIBLQR_1
     loadTool(new ContentAwareResizeTool(this));
-#endif /* HAVE_LIBLQR-1 */
+#endif /* HAVE_LIBLQR_1 */
 }
 
 void ImagePlugin_Transform::slotFreeRotation()
