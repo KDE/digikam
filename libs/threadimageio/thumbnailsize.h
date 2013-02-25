@@ -53,16 +53,18 @@ public:
         m_Size = size;
     }
 
-    ~ThumbnailSize()
-    {
-    }
-
     ThumbnailSize(const ThumbnailSize& thumbsize)
     {
         if (this != &thumbsize)
         {
             m_Size = thumbsize.m_Size;
         }
+
+        m_Size = Medium;
+    }
+
+    ~ThumbnailSize()
+    {
     }
 
     ThumbnailSize& operator=(const ThumbnailSize& thumbsize)
