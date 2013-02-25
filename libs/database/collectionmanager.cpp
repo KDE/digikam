@@ -156,6 +156,13 @@ class SolidVolumeInfo
 
 public:
 
+    SolidVolumeInfo()
+        : isRemovable(false),
+          isOpticalDisc(false),
+          isMounted(false)
+    {
+    }
+
     QString udi;  // Solid device UDI of the StorageAccess device
     QString path; // mount path of volume, with trailing slash
     QString uuid; // UUID as from Solid
