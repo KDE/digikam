@@ -191,6 +191,17 @@ public:
         return CmpALessB;
     }
 
+    template<typename columnClass> typename columnClass::SubColumn getSubColumnIndex(const QString& subColumnId, const typename columnClass::SubColumn defaultSubColumn)
+    {
+        const int index = columnClass::getSubColumns().indexOf(subColumnId);
+        if (index<0)
+        {
+            return defaultSubColumn;
+        }
+
+        return typename columnClass::SubColumn(index);
+    }
+
 Q_SIGNALS:
     void signalDataChanged(const QModelIndex& sourceIndex);
 };

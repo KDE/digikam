@@ -44,23 +44,21 @@ ColumnGeoProperties::ColumnGeoProperties(
     subColumn(SubColumnCoordinates)
 {
     const QString& subColumnSetting = configuration.getSetting("subcolumn");
-    if (subColumnSetting == "hascoordinates")
-    {
-        subColumn = SubColumnHasCoordinates;
-    }
-    else if (subColumnSetting == "coordinates")
-    {
-        subColumn = SubColumnCoordinates;
-    }
-    else if (subColumnSetting == "altitude")
-    {
-        subColumn = SubColumnAltitude;
-    }
+    subColumn = getSubColumnIndex<ColumnGeoProperties>(subColumnSetting, SubColumnCoordinates);
 }
 
 ColumnGeoProperties::~ColumnGeoProperties()
 {
 
+}
+
+QStringList ColumnGeoProperties::getSubColumns()
+{
+    QStringList columns;
+    columns << QLatin1String("hascoordinates") << QLatin1String("coordinates")
+            << QLatin1String("altitude");
+
+    return columns;
 }
 
 TableViewColumnDescription ColumnGeoProperties::getDescription()

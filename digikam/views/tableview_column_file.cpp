@@ -46,11 +46,7 @@ ColumnFileProperties::ColumnFileProperties(
     subColumn(SubColumnName)
 {
     const QString& subColumnSetting = configuration.getSetting("subcolumn");
-    subColumn = SubColumn(getSubColumns().indexOf(subColumnSetting));
-    if (subColumn<0)
-    {
-        subColumn = SubColumnName;
-    }
+    subColumn = getSubColumnIndex<ColumnFileProperties>(subColumnSetting, SubColumnName);
 }
 
 TableViewColumnDescription ColumnFileProperties::getDescription()

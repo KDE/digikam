@@ -45,11 +45,7 @@ ColumnItemProperties::ColumnItemProperties(
     subColumn(SubColumnWidth)
 {
     const QString& subColumnSetting = configuration.getSetting("subcolumn");
-    subColumn = SubColumn(getSubColumns().indexOf(subColumnSetting));
-    if (subColumn<0)
-    {
-        subColumn = SubColumnWidth;
-    }
+    subColumn = getSubColumnIndex<ColumnItemProperties>(subColumnSetting, SubColumnWidth);
 }
 
 ColumnItemProperties::~ColumnItemProperties()

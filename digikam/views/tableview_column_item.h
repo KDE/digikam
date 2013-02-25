@@ -48,7 +48,7 @@ class ColumnItemProperties : public TableViewColumn
 {
     Q_OBJECT
 
-private:
+public:
 
     enum SubColumn
     {
@@ -56,7 +56,10 @@ private:
         SubColumnHeight = 1,
         SubColumnDimensions = 2,
         SubColumnPixelCount = 3
-    } subColumn;
+    };
+
+private:
+    SubColumn subColumn;
 
 public:
 

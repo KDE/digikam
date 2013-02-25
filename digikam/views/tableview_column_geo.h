@@ -69,7 +69,7 @@ public:
     virtual QString getTitle();
 
     virtual ColumnFlags getColumnFlags() const;
-
+    static QStringList getSubColumns();
     virtual QVariant data(const QModelIndex& sourceIndex, const int role);
 
     virtual ColumnCompareResult compare(const QModelIndex& sourceA, const QModelIndex& sourceB) const;
