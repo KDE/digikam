@@ -59,8 +59,9 @@ public:
     {
         inputFormat    = 0;
         outputFormat   = 0;
-        intent         = 0;
+        intent         = INTENT_PERCEPTUAL;
         transformFlags = 0;
+        proofIntent    = INTENT_ABSOLUTE_COLORIMETRIC;
     }
 
     bool operator==(const TransformDescription& other) const
