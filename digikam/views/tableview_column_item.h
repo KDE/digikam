@@ -53,7 +53,9 @@ private:
     enum SubColumn
     {
         SubColumnWidth = 0,
-        SubColumnHeight = 1
+        SubColumnHeight = 1,
+        SubColumnDimensions = 2,
+        SubColumnPixelCount = 3
     } subColumn;
 
 public:
@@ -66,7 +68,7 @@ public:
     virtual ~ColumnItemProperties();
 
     static TableViewColumnDescription getDescription();
-
+    static QStringList getSubColumns();
     virtual QString getTitle();
 
     virtual ColumnFlags getColumnFlags() const;
