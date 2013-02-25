@@ -6,8 +6,8 @@
  * Date        : 2005-06-14
  * Description : A QImage loader for DImg framework.
  *
- * Copyright (C) 2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2006-2007 by Caulier Gilles <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005      by Renchi Raju <renchi dot raju at gmail dot com>
+ * Copyright (C) 2006-2013 by Caulier Gilles <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -45,6 +45,7 @@ namespace Digikam
 QImageLoader::QImageLoader(DImg* const image)
     : DImgLoader(image)
 {
+    m_hasAlpha = false;
 }
 
 bool QImageLoader::load(const QString& filePath, DImgLoaderObserver* const observer)
@@ -65,7 +66,7 @@ bool QImageLoader::load(const QString& filePath, DImgLoaderObserver* const obser
         return false;
     }
 
-    int colorModel = DImg::COLORMODELUNKNOWN;
+    int colorModel    = DImg::COLORMODELUNKNOWN;
     int originalDepth = 0;
 
     switch (image.format())
@@ -99,12 +100,11 @@ bool QImageLoader::load(const QString& filePath, DImgLoaderObserver* const obser
             break;
     }
 
-    m_hasAlpha    = image.hasAlphaChannel();
-    QImage target = image.convertToFormat(QImage::Format_ARGB32);
-
-    uint w      = target.width();
-    uint h      = target.height();
-    uchar* data = new_failureTolerant(w, h, 4);
+    m_hasAlpha        = image.hasAlphaChannel();
+    QImage target     = image.convertToFormat(QImage::Format_ARGB32);
+    uint w            = target.width();
+    uint h            = target.height();
+    uchar* const data = new_failureTolerant(w, h, 4);
 
     if (!data)
     {
@@ -148,7 +148,7 @@ bool QImageLoader::load(const QString& filePath, DImgLoaderObserver* const obser
 bool QImageLoader::save(const QString& filePath, DImgLoaderObserver* const observer)
 {
     QVariant qualityAttr = imageGetAttribute("quality");
-    int quality = qualityAttr.isValid() ? qualityAttr.toInt() : 90;
+    int quality          = qualityAttr.isValid() ? qualityAttr.toInt() : 90;
 
     if (quality < 0)
     {
@@ -162,8 +162,7 @@ bool QImageLoader::save(const QString& filePath, DImgLoaderObserver* const obser
 
     QVariant formatAttr = imageGetAttribute("format");
     QByteArray format   = formatAttr.toByteArray();
-
-    QImage image = m_image->copyQImage();
+    QImage image        = m_image->copyQImage();
 
     if (observer)
     {
