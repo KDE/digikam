@@ -118,10 +118,24 @@ TableViewColumn::ColumnFlags ColumnItemProperties::getColumnFlags() const
 
 QVariant ColumnItemProperties::data(const QModelIndex& sourceIndex, const int role)
 {
-    if (role != Qt::DisplayRole)
+    if ( (role != Qt::DisplayRole) &&
+         (role != Qt::TextAlignmentRole) )
     {
-        /// @todo is this correct or does sourceIndex have column!=0?
         return sourceIndex.data(role);
+    }
+
+    if (role==Qt::TextAlignmentRole)
+    {
+        switch (subColumn)
+        {
+            case SubColumnHeight:
+            case SubColumnWidth:
+            case SubColumnPixelCount:
+                return QVariant(Qt::Alignment(Qt::AlignRight | Qt::AlignVCenter));
+
+            default:
+                return sourceIndex.data(role);
+        }
     }
 
     const ImageInfo info = getImageInfo(sourceIndex);
