@@ -297,7 +297,7 @@ void FreeSpaceWidget::paintEvent(QPaintEvent*)
         {
             barcol = QColor(240, 255, 62);   // Smooth Yellow.
         }
-        else if (peUsed > 95)
+        if (peUsed > 95)
         {
             barcol = QColor(255, 62, 62);    // Smooth Red.
         }
