@@ -1584,6 +1584,10 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview_model.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview_columns.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview_column_file.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview_column_geo.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview_column_item.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview_column_thumbnail.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview_columnfactory.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview_selection_model_syncer.cpp
         # TODO: remove modeltest before release

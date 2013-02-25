@@ -256,8 +256,8 @@ TableViewColumnConfigurationWidget::TableViewColumnConfigurationWidget(
         QWidget* const parent
     )
   : QWidget(parent),
-    configuration(currentConfiguration),
-    s(sharedObject)
+    s(sharedObject),
+    configuration(currentConfiguration)
 {
 
 }
