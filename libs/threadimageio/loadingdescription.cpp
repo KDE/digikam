@@ -87,9 +87,11 @@ LoadingDescription::LoadingDescription(const QString& filePath, ColorManagementS
 
 LoadingDescription::LoadingDescription(const QString& filePath, const DRawDecoding& settings,
                                        RawDecodingHint hint, ColorManagementSettings cm)
-    : filePath(filePath), rawDecodingSettings(settings), rawDecodingHint(hint)
+    : filePath(filePath),
+      rawDecodingSettings(settings),
+      rawDecodingHint(hint)
 {
-    postProcessingParameters.colorManagement = cm;
+      postProcessingParameters.colorManagement = cm;
 }
 
 LoadingDescription::LoadingDescription(const QString& filePath, int size,
@@ -116,7 +118,7 @@ QString LoadingDescription::cacheKey() const
     }
     else if (previewParameters.type == PreviewParameters::DetailThumbnail)
     {
-        QRect rect =  previewParameters.extraParameter.toRect();
+        QRect rect         =  previewParameters.extraParameter.toRect();
         QString rectString = QString("%1,%2-%3x%4-").arg(rect.x()).arg(rect.y()).arg(rect.width()).arg(rect.height());
         return filePath + "-thumbnail-" + rectString + QString::number(previewParameters.size);
     }
@@ -177,8 +179,8 @@ QStringList LoadingDescription::lookupCacheKeys() const
     // Build a hierarchy which cache entries may be used for this LoadingDescription.
 
     // Thumbnail loading. No other cache key included!
-    if (previewParameters.type == PreviewParameters::Thumbnail
-        || previewParameters.type == PreviewParameters::DetailThumbnail)
+    if (previewParameters.type == PreviewParameters::Thumbnail ||
+        previewParameters.type == PreviewParameters::DetailThumbnail)
     {
         return QStringList() << cacheKey();
     }
@@ -285,11 +287,13 @@ bool LoadingDescription::equalsOrBetterThan(const LoadingDescription& other) con
     DRawDecoding fast = rawDecodingSettings;
     fast.optimizeTimeLoading();
 
-    return filePath == other.filePath &&
+    return (filePath == other.filePath)
+           &&
            (
-               rawDecodingSettings == other.rawDecodingSettings ||
+               (rawDecodingSettings == other.rawDecodingSettings) ||
                fast == other.rawDecodingSettings
-           ) &&
+           )
+           &&
            (
                (previewParameters.size == other.previewParameters.size) ||
                other.previewParameters.size
@@ -298,8 +302,8 @@ bool LoadingDescription::equalsOrBetterThan(const LoadingDescription& other) con
 
 bool LoadingDescription::isThumbnail() const
 {
-    return previewParameters.type == PreviewParameters::Thumbnail
-           || previewParameters.type == PreviewParameters::DetailThumbnail;
+    return previewParameters.type == PreviewParameters::Thumbnail ||
+           previewParameters.type == PreviewParameters::DetailThumbnail;
 }
 
 bool LoadingDescription::isPreviewImage() const
