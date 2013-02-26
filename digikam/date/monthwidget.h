@@ -6,8 +6,8 @@
  * Date        : 2005-05-02
  * Description : a widget to perform month selection.
  *
- * Copyright (C) 2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005      by Renchi Raju <renchi dot raju at gmail dot com>
+ * Copyright (C) 2006-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -47,10 +47,10 @@ class MonthWidget : public QWidget
 
 public:
 
-    explicit MonthWidget(QWidget* parent);
+    explicit MonthWidget(QWidget* const parent);
     ~MonthWidget();
 
-    void setImageModel(ImageFilterModel* model);
+    void setImageModel(ImageFilterModel* const model);
 
     void setYearMonth(int year, int month);
     QSize sizeHint() const;
@@ -80,8 +80,8 @@ private:
 
 private:
 
-    class MonthWidgetPriv;
-    MonthWidgetPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam
