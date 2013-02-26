@@ -6,7 +6,7 @@
  * Date        : 2007-03-20
  * Description : Container for image info objects
  *
- * Copyright (C) 2007-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2007-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -41,10 +41,12 @@ ImageInfoList::ImageInfoList(const QList<qlonglong>& idList)
 QList<qlonglong> ImageInfoList::toImageIdList() const
 {
     QList<qlonglong> idList;
+
     foreach(const ImageInfo& info, *this)
     {
         idList << info.id();
     }
+
     return idList;
 }
 

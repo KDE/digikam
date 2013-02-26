@@ -110,8 +110,8 @@ public:
     {
         return !operator==(info);
     }
-    bool operator<(const ImageInfo& info) const;
-    uint hash()                           const;
+    bool operator<(const ImageInfo& info)  const;
+    uint hash()                            const;
 
     /**
      * Returns if this objects contains valid data
@@ -287,7 +287,7 @@ public:
      */
     DImageHistory imageHistory() const;
     void setImageHistory(const DImageHistory& history);
-    bool hasImageHistory() const;
+    bool hasImageHistory()       const;
 
     /**
      * Retrieves and sets this' images UUID
@@ -305,8 +305,8 @@ public:
      * is derived (ancestorImages) and images that have been derived
      * from this images (derivedImages).
      */
-    bool hasDerivedImages()  const;
-    bool hasAncestorImages() const;
+    bool hasDerivedImages()           const;
+    bool hasAncestorImages()          const;
 
     QList<ImageInfo> derivedImages()  const;
     QList<ImageInfo> ancestorImages() const;

@@ -6,8 +6,8 @@
  * Date        : 2008-05-12
  * Description : Access to copyright info of an image in the database
  *
- * Copyright (C) 2008-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -44,7 +44,7 @@ class ImageCopyrightCache
 {
 public:
 
-    explicit ImageCopyrightCache(ImageCopyright* object)
+    explicit ImageCopyrightCache(ImageCopyright* const object)
         : object(object)
     {
         // set this as cache
@@ -52,6 +52,7 @@ public:
         // read all properties
         infos = DatabaseAccess().db()->getImageCopyright(object->m_id, QString());
     }
+
     ~ImageCopyrightCache()
     {
         object->m_cache = 0;
@@ -63,6 +64,8 @@ private:
 
     ImageCopyright* object;
 };
+
+// -------------------------------------------------------------------------------------------
 
 ImageCopyright::ImageCopyright(qlonglong imageid)
     : m_id(imageid), m_cache(0)
@@ -111,6 +114,7 @@ void ImageCopyright::replaceFrom(const ImageCopyright& source)
     }
 
     QList<CopyrightInfo> infos = access.db()->getImageCopyright(source.m_id, QString());
+
     foreach(const CopyrightInfo& info, infos)
     {
         access.db()->setImageCopyrightProperty(m_id, info.property, info.value,
@@ -122,10 +126,12 @@ QStringList ImageCopyright::creator() const
 {
     QList<CopyrightInfo> infos = copyrightInfos(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCreator));
     QStringList list;
+
     foreach(const CopyrightInfo& info, infos)
     {
         list << info.value;
     }
+
     return list;
 }
 
@@ -143,7 +149,7 @@ void ImageCopyright::setCreator(const QString& creator, ReplaceMode mode)
     }
 
     DatabaseAccess().db()->setImageCopyrightProperty(m_id, ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCreator),
-            creator, QString(), uniqueness);
+                                                     creator, QString(), uniqueness);
 }
 
 void ImageCopyright::removeCreators()
@@ -254,14 +260,14 @@ void ImageCopyright::removeInstructions()
 IptcCoreContactInfo ImageCopyright::contactInfo()
 {
     IptcCoreContactInfo info;
-    info.city = readSimpleProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoCity));
-    info.country = readSimpleProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoCountry));
-    info.address = readSimpleProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoAddress));
-    info.postalCode = readSimpleProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoPostalCode));
+    info.city          = readSimpleProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoCity));
+    info.country       = readSimpleProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoCountry));
+    info.address       = readSimpleProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoAddress));
+    info.postalCode    = readSimpleProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoPostalCode));
     info.provinceState = readSimpleProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoProvinceState));
-    info.email = readSimpleProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoEmail));
-    info.phone = readSimpleProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoPhone));
-    info.webUrl = readSimpleProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoWebUrl));
+    info.email         = readSimpleProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoEmail));
+    info.phone         = readSimpleProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoPhone));
+    info.webUrl        = readSimpleProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoWebUrl));
     return info;
 }
 
@@ -378,6 +384,7 @@ QList<CopyrightInfo> ImageCopyright::copyrightInfos(const QString& property) con
     if (m_cache)
     {
         QList<CopyrightInfo> infos;
+
         foreach(const CopyrightInfo& info, m_cache->infos)
         {
             if (info.property == property)
@@ -385,6 +392,7 @@ QList<CopyrightInfo> ImageCopyright::copyrightInfos(const QString& property) con
                 infos << info;
             }
         }
+
         return infos;
     }
     else
@@ -406,7 +414,7 @@ void ImageCopyright::setSimpleProperty(const QString& property, const QString& v
 QString ImageCopyright::readLanguageProperty(const QString& property, const QString& languageCode)
 {
     QList<CopyrightInfo> infos = copyrightInfos(property);
-    int index = languageMatch(infos, languageCode);
+    int index                  = languageMatch(infos, languageCode);
 
     if (index == -1)
     {
@@ -422,15 +430,17 @@ KExiv2Iface::KExiv2::AltLangMap ImageCopyright::readLanguageProperties(const QSt
 {
     KExiv2Iface::KExiv2::AltLangMap map;
     QList<CopyrightInfo> infos = copyrightInfos(property);
+
     foreach(const CopyrightInfo& info, infos)
     {
         map[info.extraValue] = info.value;
     }
+
     return map;
 }
 
 void ImageCopyright::setLanguageProperty(const QString& property, const QString& value,
-        const QString& languageCode, ReplaceMode mode)
+                                         const QString& languageCode, ReplaceMode mode)
 {
     AlbumDB::CopyrightPropertyUnique uniqueness;
 
@@ -486,9 +496,9 @@ int ImageCopyright::languageMatch(const QList<CopyrightInfo> infos, const QStrin
     if (languageCode.isNull())
     {
         // find local language
-        KLocale* locale = KGlobal::locale();
-        langCode = locale->language().toLower() + '-';
-        fullCode = langCode + locale->country().toLower();
+        KLocale* const locale = KGlobal::locale();
+        langCode              = locale->language().toLower() + '-';
+        fullCode              = langCode + locale->country().toLower();
     }
     else if (languageCode == "x-default")
     {

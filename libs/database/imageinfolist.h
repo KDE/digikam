@@ -6,7 +6,7 @@
  * Date        : 2007-03-20
  * Description : Container for image info objects
  *
- * Copyright (C) 2007-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2007-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -44,15 +44,22 @@ class DIGIKAM_DATABASE_EXPORT ImageInfoList : public QList<ImageInfo>
 
 public:
 
-    ImageInfoList() {}
+    ImageInfoList()
+    {
+    }
+
     ImageInfoList(const QList<qlonglong>& idList);
+
     ImageInfoList(const QList<ImageInfo>& list)
-        : QList<ImageInfo>(list) {}
+        : QList<ImageInfo>(list)
+    {
+    }
 
     QList<qlonglong> toImageIdList() const;
 
     void loadGroupImageIds() const;
     void loadTagIds() const;
+
     bool static namefileLessThan(const ImageInfo &d1, const ImageInfo &d2);
 };
 

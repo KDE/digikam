@@ -193,7 +193,7 @@ ImageInfo::ImageInfo(qlonglong ID)
         else
         {
             // invalid image id
-            ImageInfoData* olddata = m_data.unassign();
+            ImageInfoData* const olddata = m_data.unassign();
 
             if (olddata)
             {
@@ -249,7 +249,7 @@ ImageInfo::ImageInfo(const KUrl& url)
 
 ImageInfo::~ImageInfo()
 {
-    ImageInfoData* olddata = m_data.unassign();
+    ImageInfoData* const olddata = m_data.unassign();
 
     if (olddata)
     {
@@ -269,7 +269,7 @@ ImageInfo& ImageInfo::operator=(const ImageInfo& info)
         return *this;
     }
 
-    ImageInfoData* olddata = m_data.assign(info.m_data);
+    ImageInfoData* const olddata = m_data.assign(info.m_data);
 
     if (olddata)
     {
@@ -412,6 +412,7 @@ QString ImageInfo::title() const
         ImageComments comments(access, m_data->id);
         title = comments.defaultComment(DatabaseComment::Title);
     }
+
     ImageInfoWriteLocker lock;
     m_data.constCastData()->defaultTitle       = title;
     m_data.constCastData()->defaultTitleCached = true;
@@ -433,6 +434,7 @@ QString ImageInfo::comment() const
         ImageComments comments(access, m_data->id);
         comment = comments.defaultComment();
     }
+
     ImageInfoWriteLocker lock;
     m_data.constCastData()->defaultComment       = comment;
     m_data.constCastData()->defaultCommentCached = true;
@@ -545,10 +547,12 @@ QSize ImageInfo::dimensions() const
     QVariantList values = DatabaseAccess().db()->getImageInformation(m_data->id, DatabaseFields::Width | DatabaseFields::Height);
     ImageInfoWriteLocker lock;
     m_data.constCastData()->imageSizeCached = true;
+
     if (values.size() == 2)
     {
         m_data.constCastData()->imageSize = QSize(values.at(0).toInt(), values.at(1).toInt());
     }
+
     return m_data->imageSize;
 }
 
@@ -573,14 +577,17 @@ void ImageInfoList::loadTagIds() const
     QVector<QList<int> > allTagIds = DatabaseAccess().db()->getItemsTagIDs(toImageIdList());
 
     ImageInfoWriteLocker lock;
+
     for (int i=0; i<size(); i++)
     {
         const ImageInfo& info = at(i);
         const QList<int>& ids = allTagIds.at(i);
+
         if (!info.m_data)
         {
             continue;
         }
+
         info.m_data.constCastData()->tagIds       = ids;
         info.m_data.constCastData()->tagIdsCached = true;
     }
@@ -637,8 +644,8 @@ QString ImageInfo::filePath() const
     }
 
     QString album = ImageInfoStatic::cache()->albumRelativePath(m_data->albumId);
-
     ImageInfoReadLocker lock;
+
     if (album == "/")
     {
         return albumRoot + album + m_data->name;
@@ -756,8 +763,7 @@ int ImageInfo::numberOfGroupedImages() const
 
     RETURN_IF_CACHED(groupedImages)
 
-    int groupedImages = DatabaseAccess().db()->getImagesRelatingTo(m_data->id, DatabaseRelation::Grouped).size();
-
+    int groupedImages                           = DatabaseAccess().db()->getImagesRelatingTo(m_data->id, DatabaseRelation::Grouped).size();
     ImageInfoWriteLocker lock;
     m_data.constCastData()->groupedImages       = groupedImages;
     m_data.constCastData()->groupedImagesCached = true;
@@ -775,7 +781,7 @@ qlonglong ImageInfo::groupImageId() const
 
     QList<qlonglong> ids = DatabaseAccess().db()->getImagesRelatedFrom(m_data->id, DatabaseRelation::Grouped);
     // list size should be 0 or 1
-    int groupImage = ids.isEmpty() ? -1 : ids.first();
+    int groupImage       = ids.isEmpty() ? -1 : ids.first();
 
     ImageInfoWriteLocker lock;
     m_data.constCastData()->groupImage       = groupImage;
@@ -785,18 +791,19 @@ qlonglong ImageInfo::groupImageId() const
 
 void ImageInfoList::loadGroupImageIds() const
 {
-    QVector<QList<qlonglong> > allGroupIds = DatabaseAccess().db()->getImagesRelatedFrom(toImageIdList(),
-                                                                                         DatabaseRelation::Grouped);
+    QVector<QList<qlonglong> > allGroupIds = DatabaseAccess().db()->getImagesRelatedFrom(toImageIdList(), DatabaseRelation::Grouped);
     ImageInfoWriteLocker lock;
 
     for (int i=0; i<size(); i++)
     {
         const ImageInfo& info            = at(i);
         const QList<qlonglong>& groupIds = allGroupIds.at(i);
+
         if (!info.m_data)
         {
             continue;
         }
+
         info.m_data.constCastData()->groupImage       = groupIds.isEmpty() ? -1 : groupIds.first();
         info.m_data.constCastData()->groupImageCached = true;
     }
@@ -810,10 +817,12 @@ bool ImageInfo::isGrouped() const
 ImageInfo ImageInfo::groupImage() const
 {
     qlonglong id = groupImageId();
+
     if (id == -1)
     {
         return ImageInfo();
     }
+
     return ImageInfo(id);
 }
 
@@ -1202,13 +1211,13 @@ VideoInfoContainer ImageInfo::videoInfoContainer() const
     VideoMetadataContainer meta = videoMetadataContainer();
     VideoInfoContainer videoInfo;
 
-    videoInfo.aspectRatio               = meta.aspectRatio;
-    videoInfo.audioBitRate              = meta.audioBitRate;
-    videoInfo.audioChannelType          = meta.audioChannelType;
-    videoInfo.audioCompressor           = meta.audioCompressor;
-    videoInfo.duration                  = meta.duration;
-    videoInfo.frameRate                 = meta.frameRate;
-    videoInfo.videoCodec                = meta.videoCodec;
+    videoInfo.aspectRatio       = meta.aspectRatio;
+    videoInfo.audioBitRate      = meta.audioBitRate;
+    videoInfo.audioChannelType  = meta.audioChannelType;
+    videoInfo.audioCompressor   = meta.audioCompressor;
+    videoInfo.duration          = meta.duration;
+    videoInfo.frameRate         = meta.frameRate;
+    videoInfo.videoCodec        = meta.videoCodec;
 
     return videoInfo;
 }
@@ -1272,6 +1281,7 @@ void ImageInfo::setPickLabel(int pickId)
     // Perform "switch" operation atomic
     {
         DatabaseAccess access;
+
         foreach(int tagId, currentTagIds)
         {
             if (pickLabelTags.contains(tagId))
@@ -1279,6 +1289,7 @@ void ImageInfo::setPickLabel(int pickId)
                 removeTag(tagId);
             }
         }
+
         setTag(pickLabelTags[pickId]);
     }
 
@@ -1301,6 +1312,7 @@ void ImageInfo::setColorLabel(int colorId)
     // Perform "switch" operation atomic
     {
         DatabaseAccess access;
+
         foreach(int tagId, currentTagIds)
         {
             if (colorLabelTags.contains(tagId))
@@ -1308,6 +1320,7 @@ void ImageInfo::setColorLabel(int colorId)
                 removeTag(tagId);
             }
         }
+
         setTag(colorLabelTags[colorId]);
     }
 

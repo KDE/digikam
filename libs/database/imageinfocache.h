@@ -6,8 +6,8 @@
  * Date        : 2007-05-01
  * Description : ImageInfo common data
  *
- * Copyright (C) 2007-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C)      2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C)      2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -99,13 +99,15 @@ private Q_SLOTS:
 
 private:
 
-    QHash<qlonglong, ImageInfoData*>      m_infos;
-    QMultiHash<QString, ImageInfoData*>   m_nameHash;
-    volatile bool                         m_needUpdateAlbums;
-    QList<AlbumShortInfo>                 m_albums;
-
     QList<AlbumShortInfo>::const_iterator findAlbum(int id);
     void                                  checkAlbums();
+
+private:
+
+    QHash<qlonglong, ImageInfoData*>    m_infos;
+    QMultiHash<QString, ImageInfoData*> m_nameHash;
+    volatile bool                       m_needUpdateAlbums;
+    QList<AlbumShortInfo>               m_albums;
 };
 
 }  // namespace Digikam

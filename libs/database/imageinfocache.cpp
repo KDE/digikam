@@ -6,8 +6,8 @@
  * Date        : 2007-05-01
  * Description : ImageInfo common data
  *
- * Copyright (C) 2007-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C)      2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C)      2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -43,7 +43,7 @@ ImageInfoCache::ImageInfoCache()
     qRegisterMetaType<ImageInfoList>("ImageInfoList");
     qRegisterMetaType<QList<ImageInfo> >("QList<ImageInfo>");
 
-    DatabaseWatch* dbwatch = DatabaseAccess::databaseWatch();
+    DatabaseWatch* const dbwatch = DatabaseAccess::databaseWatch();
 
     connect(dbwatch, SIGNAL(imageChange(ImageChangeset)),
             this, SLOT(slotImageChanged(ImageChangeset)),
@@ -81,6 +81,7 @@ DSharedDataPointer<T> toStrongRef(T* weakRef)
     // That means if the weakRef had a ref count of 0 before we incremented,
     // we need to drop it.
     int previousRef = weakRef->ref.fetchAndAddOrdered(1);
+
     if (previousRef == 0)
     {
         // drop weakRef
@@ -107,8 +108,8 @@ void ImageInfoCache::checkAlbums()
         // list comes sorted from db
         QList<AlbumShortInfo> infos = DatabaseAccess().db()->getAlbumShortInfos();
         ImageInfoWriteLocker lock;
-        m_albums = infos;
-        m_needUpdateAlbums = false;
+        m_albums                    = infos;
+        m_needUpdateAlbums          = false;
     }
 }
 
@@ -117,6 +118,7 @@ DSharedDataPointer<ImageInfoData> ImageInfoCache::infoForId(qlonglong id)
     {
         ImageInfoReadLocker lock;
         DSharedDataPointer<ImageInfoData> ptr = toStrongRef(m_infos.value(id));
+
         if (ptr)
         {
             return ptr;
@@ -124,9 +126,9 @@ DSharedDataPointer<ImageInfoData> ImageInfoCache::infoForId(qlonglong id)
     }
 
     ImageInfoWriteLocker lock;
-    ImageInfoData* data = new ImageInfoData();
-    data->id            = id;
-    m_infos[id]         = data;
+    ImageInfoData* const data = new ImageInfoData();
+    data->id                  = id;
+    m_infos[id]               = data;
     return DSharedDataPointer<ImageInfoData>(data);
 }
 
@@ -143,13 +145,12 @@ void ImageInfoCache::cacheByName(ImageInfoData* data)
     m_nameHash.insert(data->name, data);
 }
 
-
-
 DSharedDataPointer<ImageInfoData> ImageInfoCache::infoForPath(int albumRootId, const QString& relativePath, const QString& name)
 {
     ImageInfoReadLocker lock;
     // We check all entries in the multi hash with matching file name
     QMultiHash<QString, ImageInfoData*>::const_iterator it;
+
     for (it = m_nameHash.constFind(name); it != m_nameHash.constEnd() && it.key() == name; ++it)
     {
         // first check that album root matches
@@ -157,12 +158,15 @@ DSharedDataPointer<ImageInfoData> ImageInfoCache::infoForPath(int albumRootId, c
         {
             continue;
         }
+
         // check that relativePath matches. We get relativePath from entry's id and compare to given name.
         QList<AlbumShortInfo>::const_iterator albumIt = findAlbum(it.value()->albumId);
+
         if (albumIt == m_albums.constEnd() || albumIt->relativePath != relativePath)
         {
             continue;
         }
+
         // we have now a match by name, albumRootId and relativePath
         return toStrongRef(it.value());
     }
@@ -210,6 +214,7 @@ void ImageInfoCache::invalidate()
 {
     ImageInfoWriteLocker lock;
     QHash<qlonglong, ImageInfoData*>::iterator it;
+
     for (it = m_infos.begin(); it != m_infos.end(); ++it)
     {
         if ((*it)->isReferenced())
@@ -230,6 +235,7 @@ void ImageInfoCache::invalidate()
 void ImageInfoCache::slotImageChanged(const ImageChangeset& changeset)
 {
     ImageInfoWriteLocker lock;
+
     foreach(const qlonglong& imageId, changeset.ids())
     {
         QHash<qlonglong, ImageInfoData*>::iterator it = m_infos.find(imageId);
@@ -242,7 +248,7 @@ void ImageInfoCache::slotImageChanged(const ImageChangeset& changeset)
             if (changes & DatabaseFields::ImageCommentsAll)
             {
                 (*it)->defaultCommentCached = false;
-                (*it)->defaultTitleCached = false;
+                (*it)->defaultTitleCached   = false;
             }
 
             if (changes & DatabaseFields::Category)
@@ -290,7 +296,7 @@ void ImageInfoCache::slotImageChanged(const ImageChangeset& changeset)
                 (*it)->imageSizeCached = false;
             }
 
-            if (changes & DatabaseFields::LatitudeNumber     ||
+            if (changes & DatabaseFields::LatitudeNumber  ||
                 changes & DatabaseFields::LongitudeNumber ||
                 changes & DatabaseFields::Altitude)
             {
@@ -314,6 +320,7 @@ void ImageInfoCache::slotImageTagChanged(const ImageTagChangeset& changeset)
     }
 
     ImageInfoWriteLocker lock;
+
     foreach(const qlonglong& imageId, changeset.ids())
     {
         QHash<qlonglong, ImageInfoData*>::iterator it = m_infos.find(imageId);
