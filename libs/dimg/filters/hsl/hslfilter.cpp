@@ -49,8 +49,8 @@ public:
     {
         memset(&htransfer,   0, sizeof(htransfer));
         memset(&ltransfer,   0, sizeof(ltransfer));
-        memset(&htransfer,   0, sizeof(htransfer));
-        memset(&stransfer16, 0, sizeof(stransfer16));
+        memset(&stransfer,   0, sizeof(stransfer));
+        memset(&htransfer16, 0, sizeof(htransfer16));
         memset(&ltransfer16, 0, sizeof(ltransfer16));
         memset(&stransfer16, 0, sizeof(stransfer16));
     }

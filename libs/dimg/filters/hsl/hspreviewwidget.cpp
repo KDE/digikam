@@ -6,7 +6,7 @@
  * Date        : 2007-01-08
  * Description : Hue/Saturation preview widget
  *
- * Copyright (C) 2007-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -45,12 +45,12 @@
 namespace Digikam
 {
 
-class HSPreviewWidgetPrivate
+class HSPreviewWidget::Private
 {
 
 public:
 
-    HSPreviewWidgetPrivate() :
+    Private() :
         xBorder(0),
         hue(0.0),
         sat(0.0)
@@ -65,8 +65,8 @@ public:
     QPixmap pixmap;
 };
 
-HSPreviewWidget::HSPreviewWidget(QWidget* parent)
-    : QWidget(parent), d(new HSPreviewWidgetPrivate)
+HSPreviewWidget::HSPreviewWidget(QWidget* const parent)
+    : QWidget(parent), d(new Private)
 {
     d->xBorder = style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
     setAttribute(Qt::WA_DeleteOnClose);
@@ -104,7 +104,7 @@ void HSPreviewWidget::updatePixmap()
 
     DImg   image(xSize, ySize, false, false, 0, false);
     QColor col;
-    uint*  p;
+    uint*  p = 0;
 
     for (int s = ySize - 1 ; s >= 0 ; --s)
     {

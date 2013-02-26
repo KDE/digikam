@@ -6,7 +6,7 @@
  * Date        : 2010-02-11
  * Description : HSL settings view.
  *
- * Copyright (C) 2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2010      by Julien Narboux <julien at narboux dot fr>
  *
  * This program is free software; you can redistribute it
@@ -55,18 +55,19 @@ using namespace KDcrawIface;
 namespace Digikam
 {
 
-class HSLSettingsPriv
+class HSLSettings::Private
 {
 public:
 
-    HSLSettingsPriv() :
+    Private() :
         HSSelector(0),
         hInput(0),
         sInput(0),
         vInput(0),
         lInput(0),
         HSPreview(0)
-    {}
+    {
+    }
 
     static const QString    configHueAdjustmentEntry;
     static const QString    configSaturationAdjustmentEntry;
@@ -82,18 +83,19 @@ public:
 
     HSPreviewWidget*        HSPreview;
 };
-const QString HSLSettingsPriv::configHueAdjustmentEntry("HueAdjustment");
-const QString HSLSettingsPriv::configSaturationAdjustmentEntry("SaturationAdjustment");
-const QString HSLSettingsPriv::configVibranceAdjustmentEntry("VibranceAdjustment");
-const QString HSLSettingsPriv::configLighnessAdjustmentEntry("LighnessAdjustment");
+
+const QString HSLSettings::Private::configHueAdjustmentEntry("HueAdjustment");
+const QString HSLSettings::Private::configSaturationAdjustmentEntry("SaturationAdjustment");
+const QString HSLSettings::Private::configVibranceAdjustmentEntry("VibranceAdjustment");
+const QString HSLSettings::Private::configLighnessAdjustmentEntry("LighnessAdjustment");
 
 // --------------------------------------------------------
 
-HSLSettings::HSLSettings(QWidget* parent)
+HSLSettings::HSLSettings(QWidget* const parent)
     : QWidget(parent),
-      d(new HSLSettingsPriv)
+      d(new Private)
 {
-    QGridLayout* grid = new QGridLayout(parent);
+    QGridLayout* const grid = new QGridLayout(parent);
 
     d->HSSelector = new KHueSaturationSelector();
     d->HSSelector->setWhatsThis(i18n("Select the hue and saturation adjustments of the image."));
@@ -104,30 +106,30 @@ HSLSettings::HSLSettings(QWidget* parent)
                                     "saturation adjustments."));
     d->HSPreview->setMinimumSize(256, 15);
 
-    QLabel* label2 = new QLabel(i18n("Hue:"));
-    d->hInput      = new RDoubleNumInput();
+    QLabel* const label2 = new QLabel(i18n("Hue:"));
+    d->hInput            = new RDoubleNumInput();
     d->hInput->setDecimals(0);
     d->hInput->input()->setRange(-180.0, 180.0, 1.0, true);
     d->hInput->setDefaultValue(0.0);
     d->hInput->setWhatsThis(i18n("Set here the hue adjustment of the image."));
 
-    QLabel* label3 = new QLabel(i18n("Saturation:"));
-    d->sInput      = new RDoubleNumInput();
+    QLabel* const label3 = new QLabel(i18n("Saturation:"));
+    d->sInput            = new RDoubleNumInput();
     d->sInput->setDecimals(2);
     d->sInput->input()->setRange(-100.0, 100.0, 0.01, true);
     d->sInput->setDefaultValue(0.0);
     d->sInput->setWhatsThis(i18n("Set here the saturation adjustment of the image."));
 
-    QLabel* label4 = new QLabel(i18n("Vibrance:"));
-    d->vInput      = new RDoubleNumInput();
+    QLabel* const label4 = new QLabel(i18n("Vibrance:"));
+    d->vInput            = new RDoubleNumInput();
     d->vInput->setDecimals(2);
     d->vInput->input()->setRange(-100.0, 100.0, 0.01, true);
     d->vInput->setDefaultValue(0.0);
     d->vInput->setWhatsThis(i18n("Set here the vibrance adjustment of the image."
                                  "Vibrance performs selective saturation on less saturated colors and avoiding skin tones."));
 
-    QLabel* label5 = new QLabel(i18n("Lightness:"));
-    d->lInput      = new RDoubleNumInput();
+    QLabel* const label5 = new QLabel(i18n("Lightness:"));
+    d->lInput            = new RDoubleNumInput();
     d->lInput->setDecimals(2);
     d->lInput->input()->setRange(-100.0, 100.0, 0.01, true);
     d->lInput->setDefaultValue(0.0);
