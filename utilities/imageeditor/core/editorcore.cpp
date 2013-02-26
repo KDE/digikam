@@ -7,7 +7,7 @@
  * Description : DImg interface for image editor
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -138,7 +138,7 @@ void EditorCore::load(const QString& filePath, IOFileSettings* const iofileSetti
         {
             d->nextRawDescription = description;
 
-            RawImport* rawImport = new RawImport(KUrl(filePath), this);
+            RawImport* const rawImport = new RawImport(KUrl(filePath), this);
             EditorToolIface::editorToolIface()->loadTool(rawImport);
 
             connect(rawImport, SIGNAL(okClicked()),
@@ -163,13 +163,13 @@ void EditorCore::slotLoadRawFromTool()
 {
     if (EditorToolIface::editorToolIface())
     {
-        RawImport* rawImport = dynamic_cast<RawImport*>(EditorToolIface::editorToolIface()->currentTool());
+        RawImport* const rawImport = dynamic_cast<RawImport*>(EditorToolIface::editorToolIface()->currentTool());
 
-        if (rawImport)
-        {
-            d->nextRawDescription.rawDecodingSettings = rawImport->rawDecodingSettings();
-            d->nextRawDescription.rawDecodingHint     = LoadingDescription::RawDecodingCustomSettings;
-        }
+        if (!rawImport)
+            return;
+
+        d->nextRawDescription.rawDecodingSettings = rawImport->rawDecodingSettings();
+        d->nextRawDescription.rawDecodingHint     = LoadingDescription::RawDecodingCustomSettings;
 
         if (rawImport->hasPostProcessedImage())
         {
@@ -395,16 +395,16 @@ void EditorCore::rollbackToOrigin()
 }
 
 void EditorCore::saveAs(const QString& filePath, IOFileSettings* const iofileSettings,
-                           bool setExifOrientationTag, const QString& givenMimeType,
-                           const QString& intendedFilePath)
+                        bool setExifOrientationTag, const QString& givenMimeType,
+                        const QString& intendedFilePath)
 {
     d->saveAs(filePath, iofileSettings, setExifOrientationTag, givenMimeType,
               VersionFileOperation(), intendedFilePath);
 }
 
 void EditorCore::saveAs(const QString& filePath, IOFileSettings* const iofileSettings,
-                           bool setExifOrientationTag, const QString& givenMimeType,
-                           const VersionFileOperation& op)
+                        bool setExifOrientationTag, const QString& givenMimeType,
+                        const VersionFileOperation& op)
 {
     d->saveAs(filePath, iofileSettings, setExifOrientationTag, givenMimeType, op, op.saveFile.filePath());
 }
