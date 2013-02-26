@@ -355,7 +355,7 @@ bool UMSCamera::downloadItem(const QString& folder, const QString& itemName, con
     // of the original file
     struct stat st;
 
-    if (::stat(QFile::encodeName(src), &st) != 0)
+    if (::stat(QFile::encodeName(src), &st) == 0)
     {
         struct utimbuf ut;
         ut.modtime = st.st_mtime;
@@ -461,13 +461,15 @@ bool UMSCamera::uploadItem(const QString& folder, const QString& itemName, const
     // set the file modification time of the uploaded file to that
     // of the original file
     struct stat st;
-    ::stat(QFile::encodeName(src), &st);
 
-    struct utimbuf ut;
-    ut.modtime = st.st_mtime;
-    ut.actime  = st.st_atime;
+    if (::stat(QFile::encodeName(src), &st) == 0)
+    {
+        struct utimbuf ut;
+        ut.modtime = st.st_mtime;
+        ut.actime  = st.st_atime;
 
-    ::utime(QFile::encodeName(dest), &ut);
+        ::utime(QFile::encodeName(dest), &ut);
+    }
 
     // Get new camera item information.
 
