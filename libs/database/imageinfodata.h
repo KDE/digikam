@@ -6,8 +6,8 @@
  * Date        : 2007-05-01
  * Description : ImageInfo common data
  *
- * Copyright (C) 2007-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C)      2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C)      2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -53,25 +53,39 @@ public:
 
     static ImageInfoCache* cache();
 
-    ImageInfoCache m_cache;
-    QReadWriteLock m_lock;
+public:
+
+    ImageInfoCache          m_cache;
+    QReadWriteLock          m_lock;
 
     static ImageInfoStatic* m_instance;
 };
+
+// -----------------------------------------------------------------------------------
 
 class ImageInfoReadLocker : public QReadLocker
 {
 public:
 
-    ImageInfoReadLocker() : QReadLocker(&ImageInfoStatic::m_instance->m_lock) {}
+    ImageInfoReadLocker()
+        : QReadLocker(&ImageInfoStatic::m_instance->m_lock)
+    {
+    }
 };
+
+// -----------------------------------------------------------------------------------
 
 class ImageInfoWriteLocker : public QWriteLocker
 {
 public:
 
-    ImageInfoWriteLocker() : QWriteLocker(&ImageInfoStatic::m_instance->m_lock) {}
+    ImageInfoWriteLocker()
+        : QWriteLocker(&ImageInfoStatic::m_instance->m_lock)
+    {
+    }
 };
+
+// -----------------------------------------------------------------------------------
 
 class ImageInfoData : public DSharedData
 {
@@ -91,7 +105,6 @@ public:
     QString                defaultTitle;
     quint8                 pickLabel;
     quint8                 colorLabel;
-    quint8                 groupingFlags;
     qint8                  rating;
     DatabaseItem::Category category;
     QString                format;

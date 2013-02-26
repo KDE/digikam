@@ -107,8 +107,7 @@ ImageInfoData::ImageInfoData()
 
     groupedImages          = 0;
     groupImage             = -1;
-    groupingFlags          = 0;
-    
+
     defaultTitleCached     = false;
     defaultCommentCached   = false;
     pickLabelCached        = false;
