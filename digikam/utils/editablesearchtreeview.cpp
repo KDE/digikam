@@ -6,9 +6,9 @@
  * Date        : 2008-01-14
  * Description : Basic search tree view with editing functionality
  *
- * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2010 by Johannes Wienke <languitar at semipol dot de>
- * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmail dot com>
+ * Copyright (C) 2009      by Andi Clemens <andi dot clemens at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -42,24 +42,26 @@
 namespace Digikam
 {
 
-class EditableSearchTreeView::EditableSearchTreeViewPriv
+class EditableSearchTreeView::Private
 {
 public:
-    EditableSearchTreeViewPriv() :
-        searchModificationHelper(0)
+    Private() :
+        searchModificationHelper(0),
+        renameSearchAction(0),
+        deleteSearchAction(0)
     {
     }
 
     SearchModificationHelper* searchModificationHelper;
 
-    QAction* renameSearchAction;
-    QAction* deleteSearchAction;
+    QAction*                  renameSearchAction;
+    QAction*                  deleteSearchAction;
 };
 
-EditableSearchTreeView::EditableSearchTreeView(QWidget* parent,
-                                               SearchModel* searchModel,
-                                               SearchModificationHelper* searchModificationHelper)
-    : SearchTreeView(parent), d(new EditableSearchTreeViewPriv)
+EditableSearchTreeView::EditableSearchTreeView(QWidget* const parent,
+                                               SearchModel* const searchModel,
+                                               SearchModificationHelper* const searchModificationHelper)
+    : SearchTreeView(parent), d(new Private)
 {
     setAlbumModel(searchModel);
     d->searchModificationHelper = searchModificationHelper;
@@ -84,7 +86,7 @@ QString EditableSearchTreeView::contextMenuTitle() const
 
 void EditableSearchTreeView::addCustomContextMenuActions(ContextMenuHelper& cmh, Album* album)
 {
-    SAlbum* searchAlbum = dynamic_cast<SAlbum*>(album);
+    SAlbum* const searchAlbum = dynamic_cast<SAlbum*>(album);
 
     // disable actions if there is no album or the album is a temporary search
     bool activate = false;
@@ -103,8 +105,8 @@ void EditableSearchTreeView::addCustomContextMenuActions(ContextMenuHelper& cmh,
 
 void EditableSearchTreeView::handleCustomContextMenuAction(QAction* action, AlbumPointer<Album> album)
 {
-    Album* a            = album;
-    SAlbum* searchAlbum = dynamic_cast<SAlbum*>(a);
+    Album* const a            = album;
+    SAlbum* const searchAlbum = dynamic_cast<SAlbum*>(a);
 
     if (!searchAlbum || !action)
     {
