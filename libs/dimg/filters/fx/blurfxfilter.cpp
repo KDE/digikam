@@ -959,8 +959,10 @@ void BlurFXFilter::softenerBlur(DImg* const orgImage, DImg* const destImage)
                             offsetSoma = offset;
                         }
                         else
+                        {
                             offsetSoma = GetOffset(Width, (w + Lim_Max(w, b, Width)),
                                                    (h + Lim_Max(h, a, Height)), bytesDepth);
+                        }
 
                         colorSoma.setColor(data + offsetSoma, sixteenBit);
 
@@ -988,8 +990,10 @@ void BlurFXFilter::softenerBlur(DImg* const orgImage, DImg* const destImage)
                             offsetSoma = offset;
                         }
                         else
+                        {
                             offsetSoma = GetOffset(Width, (w + Lim_Max(w, b, Width)),
                                                    (h + Lim_Max(h, a, Height)), bytesDepth);
+                        }
 
                         colorSoma.setColor(data + offsetSoma, sixteenBit);
 
@@ -1364,15 +1368,25 @@ DColor BlurFXFilter::RandomColor(uchar* const Bits, int Width, int Height, bool 
 
     if (ErrorCount >= counter)
     {
-        color.setRed(AverageColorR[J] / counter);
+        if (counter == 0)
+        {
+            counter = 1;
+        }
+
+        color.setRed(AverageColorR[J]   / counter);
         color.setGreen(AverageColorG[J] / counter);
-        color.setBlue(AverageColorB[J] / counter);
+        color.setBlue(AverageColorB[J]  / counter);
     }
     else
     {
-        color.setRed(AverageColorR[J] / IntensityCount[J]);
+        if (IntensityCount[J] == 0)
+        {
+            IntensityCount[J] = 1;
+        }
+
+        color.setRed(AverageColorR[J]   / IntensityCount[J]);
         color.setGreen(AverageColorG[J] / IntensityCount[J]);
-        color.setBlue(AverageColorB[J] / IntensityCount[J]);
+        color.setBlue(AverageColorB[J]  / IntensityCount[J]);
     }
 
     return color;
