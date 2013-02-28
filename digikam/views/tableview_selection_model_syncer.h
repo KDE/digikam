@@ -52,6 +52,7 @@ public:
 
 private Q_SLOTS:
 
+    void slotSourceModelReset();
     void slotSourceCurrentChanged(const QModelIndex& current, const QModelIndex& previous);
 //     void slotSourceCurrentColumnChanged(const QModelIndex& current, const QModelIndex& previous);
 //     void slotSourceCurrentRowChanged(const QModelIndex& current, const QModelIndex& previous);

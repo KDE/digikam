@@ -60,6 +60,13 @@ TableViewSelectionModelSyncer::TableViewSelectionModelSyncer(TableViewShared* co
     connect(s->tableViewSelectionModel, SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
             this, SLOT(slotTargetSelectionChanged(QItemSelection,QItemSelection)));
 
+    /// @todo This is necessary to re-sync the selection when tags are added to images.
+    ///       Check whether both are necessary or whether we need more.
+    connect(s->imageFilterModel, SIGNAL(layoutChanged()),
+            this, SLOT(slotSourceModelReset()));
+    connect(s->imageFilterModel, SIGNAL(modelReset()),
+            this, SLOT(slotSourceModelReset()));
+
     doInitialSync();
 }
 
@@ -206,6 +213,11 @@ void TableViewSelectionModelSyncer::slotTargetSelectionChanged(const QItemSelect
     s->imageFilterSelectionModel->select(sourceDeselection, QItemSelectionModel::Deselect);
 
     d->syncing = false;
+}
+
+void TableViewSelectionModelSyncer::slotSourceModelReset()
+{
+    doInitialSync();
 }
 
 } /* namespace Digikam */
