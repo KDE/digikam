@@ -52,6 +52,8 @@
 #include "tableview_model.h"
 #include "tableview_columnfactory.h"
 #include "tableview_selection_model_syncer.h"
+#include "contextmenuhelper.h"
+#include "fileactionmngr.h"
 
 namespace Digikam
 {
@@ -114,6 +116,7 @@ TableView::TableView(
     s->tableViewCurrentToSortedSyncer = new TableViewCurrentToSortedSyncer(s.data(), this);
     s->tableViewSelectionModelSyncer= new TableViewSelectionModelSyncer(s.data(), this);
     d->treeView = new TableViewTreeView(s.data(), this);
+    d->treeView->installEventFilter(this);
 
     connect(d->treeView, SIGNAL(activated(QModelIndex)),
             this, SLOT(slotItemActivated(QModelIndex)));
@@ -408,6 +411,81 @@ TableViewConfigurationDialog::~TableViewConfigurationDialog()
 TableViewColumnConfiguration TableViewConfigurationDialog::getNewConfiguration() const
 {
     return d->columnConfigurationWidget->getNewConfiguration();
+}
+
+bool TableView::eventFilter(QObject* watched, QEvent* event)
+{
+    // we are looking for context menu events for the table view
+    if ((watched==d->treeView)&&(event->type()==QEvent::ContextMenu))
+    {
+        QContextMenuEvent* const e = static_cast<QContextMenuEvent*>(event);
+        e->accept();
+        showTreeViewContextMenu(e);
+
+        // event has been filtered by us
+        return true;
+    }
+
+    return QObject::eventFilter(watched, event);
+}
+
+void TableView::showTreeViewContextMenu(QContextMenuEvent* const event)
+{
+    KMenu menu(this);
+    ContextMenuHelper cmHelper(&menu);
+
+    // get a list of currently selected images' ids
+    const QModelIndexList selectedIndexes = s->imageFilterSelectionModel->selectedIndexes();
+    const QList<qlonglong> selectedImageIds =  s->imageFilterModel->imageIds(selectedIndexes);
+
+    cmHelper.addAssignTagsMenu(selectedImageIds);
+    cmHelper.addRemoveTagsMenu(selectedImageIds);
+    cmHelper.addSeparator();
+    cmHelper.addLabelsAction();
+
+    connect(&cmHelper, SIGNAL(signalAssignColorLabel(int)),
+            this, SLOT(slotAssignColorLabelToSelected(int)));
+    connect(&cmHelper, SIGNAL(signalAssignPickLabel(int)),
+            this, SLOT(slotAssignPickLabelToSelected(int)));
+    connect(&cmHelper, SIGNAL(signalAssignRating(int)),
+            this, SLOT(slotAssignRatingToSelected(int)));
+    connect(&cmHelper, SIGNAL(signalAssignTag(int)),
+            this, SLOT(slotAssignTagToSelected(int)));
+    connect(&cmHelper, SIGNAL(signalRemoveTag(int)),
+            this, SLOT(slotRemoveTagFromSelected(int)));
+
+    menu.exec(event->globalPos());
+}
+
+QList< ImageInfo > TableView::selectedImageInfos() const
+{
+    const QModelIndexList selectedIndexes = s->imageFilterSelectionModel->selectedIndexes();
+    return s->imageFilterModel->imageInfos(selectedIndexes);
+}
+
+void TableView::slotAssignColorLabelToSelected(const int colorLabelID)
+{
+    FileActionMngr::instance()->assignColorLabel(selectedImageInfos(), colorLabelID);
+}
+
+void TableView::slotAssignPickLabelToSelected(const int pickLabelID)
+{
+    FileActionMngr::instance()->assignPickLabel(selectedImageInfos(), pickLabelID);
+}
+
+void TableView::slotAssignRatingToSelected(const int rating)
+{
+    FileActionMngr::instance()->assignRating(selectedImageInfos(), rating);
+}
+
+void TableView::slotAssignTagToSelected(const int tagID)
+{
+    FileActionMngr::instance()->assignTags(selectedImageInfos(), QList<int>() << tagID);
+}
+
+void TableView::slotRemoveTagFromSelected(const int tagID)
+{
+    FileActionMngr::instance()->removeTags(selectedImageInfos(), QList<int>() << tagID);
 }
 
 } /* namespace Digikam */

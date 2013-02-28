@@ -46,6 +46,7 @@
 #include "tableview_shared.h"
 
 class KMenu;
+class QContextMenuEvent;
 
 namespace Digikam
 {
@@ -134,9 +135,19 @@ protected:
     void doLoadState();
     void doSaveState();
 
+    virtual bool eventFilter(QObject* watched, QEvent* event);
+    void showTreeViewContextMenu(QContextMenuEvent* const event);
+    QList<ImageInfo> selectedImageInfos() const;
+
 protected Q_SLOTS:
 
     void slotItemActivated(const QModelIndex& sortedIndex);
+    void slotAssignTagToSelected(const int tagID);
+    void slotRemoveTagFromSelected(const int tagID);
+    void slotAssignPickLabelToSelected(const int pickLabelID);
+    void slotAssignColorLabelToSelected(const int colorLabelID);
+    void slotAssignRatingToSelected(const int rating);
+
 
 Q_SIGNALS:
 
