@@ -55,12 +55,7 @@ public:
 
     ThumbnailSize(const ThumbnailSize& thumbsize)
     {
-        if (this != &thumbsize)
-        {
-            m_Size = thumbsize.m_Size;
-        }
-
-        m_Size = Medium;
+        m_Size = thumbsize.m_Size;
     }
 
     ~ThumbnailSize()
@@ -69,11 +64,7 @@ public:
 
     ThumbnailSize& operator=(const ThumbnailSize& thumbsize)
     {
-        if (this != &thumbsize)
-        {
-            m_Size = thumbsize.m_Size;
-        }
-
+        m_Size = thumbsize.m_Size;
         return *this;
     }
 
