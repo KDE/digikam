@@ -2417,6 +2417,12 @@ bool AlbumManager::moveTAlbum(TAlbum* album, TAlbum* newParent, QString& errMsg)
         return false;
     }
 
+    if (!newParent)
+    {
+        errMsg = "Attempt to move TAlbum to nowhere";
+        return false;
+    }
+
     if (album == d->rootTAlbum)
     {
         errMsg = i18n("Cannot move root tag");
@@ -2444,7 +2450,7 @@ bool AlbumManager::moveTAlbum(TAlbum* album, TAlbum* newParent, QString& errMsg)
     emit signalAlbumDeleted(album);
     emit signalAlbumHasBeenDeleted(album);
 
-    emit signalAlbumAboutToBeAdded(album, newParent, newParent ? newParent->lastChild() : 0);
+    emit signalAlbumAboutToBeAdded(album, newParent, newParent->lastChild());
     ChangingDB changing(d);
     DatabaseAccess().db()->setTagParentID(album->id(), newParent->id());
     album->setParent(newParent);
