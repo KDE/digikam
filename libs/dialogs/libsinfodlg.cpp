@@ -126,13 +126,9 @@ LibsInfoDlg::LibsInfoDlg(QWidget* const parent)
     list.insert(i18n("LibLensFun"),                  LensFunIface::lensFunVersion());
 #endif // HAVE_LENSFUN
 
-#ifndef USE_EXT_LIBLQR
-#   ifdef HAVE_GLIB2
-    list.insert(i18n("LibLqr"),                      i18n("internal library"));
-#   endif // HAVE_GLIB2
-#else
+#ifndef HAVE_LIBLQR_1
     list.insert(i18n("LibLqr"),                      i18n("external shared library"));
-#endif // USE_EXT_LIBLQR
+#endif // HAVE_LIBLQR_1
 
     list.insert(i18n("LibPNG"),                      QString(PNG_LIBPNG_VER_STRING));
     list.insert(i18n("LibTIFF"),                     QString(TIFFLIB_VERSION_STR).replace('\n', ' '));

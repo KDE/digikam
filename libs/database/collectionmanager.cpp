@@ -156,6 +156,13 @@ class SolidVolumeInfo
 
 public:
 
+    SolidVolumeInfo()
+        : isRemovable(false),
+          isOpticalDisc(false),
+          isMounted(false)
+    {
+    }
+
     QString udi;  // Solid device UDI of the StorageAccess device
     QString path; // mount path of volume, with trailing slash
     QString uuid; // UUID as from Solid
@@ -629,12 +636,9 @@ QString CollectionManagerPrivate::technicalDescription(const AlbumRootLocation* 
     }
     else if (url.protocol() == "networkshareid")
     {
-        return QString();
-
-        // FIXME: unreachable code??? What should this code really do?
         if (!(queryItem =  url.queryItem("mountpath")).isNull())
         {
-            return QString("\"%1\"").arg(queryItem);
+            return i18nc("@info", "Shared directory mounted at <filename>%1</filename>", queryItem);
         }
     }
 

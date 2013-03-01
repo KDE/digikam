@@ -7,8 +7,8 @@
  * Description : Handling accesses to one image and associated data
  *
  * Copyright (C) 2005      by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2007-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2009-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -110,8 +110,8 @@ public:
     {
         return !operator==(info);
     }
-    bool operator<(const ImageInfo& info) const;
-    uint hash()                           const;
+    bool operator<(const ImageInfo& info)  const;
+    uint hash()                            const;
 
     /**
      * Returns if this objects contains valid data
@@ -287,7 +287,7 @@ public:
      */
     DImageHistory imageHistory() const;
     void setImageHistory(const DImageHistory& history);
-    bool hasImageHistory() const;
+    bool hasImageHistory()       const;
 
     /**
      * Retrieves and sets this' images UUID
@@ -305,8 +305,8 @@ public:
      * is derived (ancestorImages) and images that have been derived
      * from this images (derivedImages).
      */
-    bool hasDerivedImages()  const;
-    bool hasAncestorImages() const;
+    bool hasDerivedImages()           const;
+    bool hasAncestorImages()          const;
 
     QList<ImageInfo> derivedImages()  const;
     QList<ImageInfo> ancestorImages() const;

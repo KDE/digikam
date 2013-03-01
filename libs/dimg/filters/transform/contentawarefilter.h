@@ -7,7 +7,7 @@
  * Description : Content aware resizer class.
  *
  * Copyright (C) 2009      by Julien Pontabry <julien dot pontabry at ulp dot u-strasbg dot fr>
- * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -36,9 +36,6 @@
 #include "dcolor.h"
 #include "digikam_export.h"
 #include "dimgthreadedfilter.h"
-
-// The filter is only compiled if GLib is available
-#ifdef HAVE_GLIB2
 
 namespace Digikam
 {
@@ -70,7 +67,9 @@ public:
         resize_order        = Qt::Horizontal;
     };
 
-    ~ContentAwareContainer() {};
+    ~ContentAwareContainer()
+    {
+    };
 
 public:
 
@@ -148,7 +147,5 @@ private:
 };
 
 } // namespace Digikam
-
-#endif // HAVE_GLIB2
 
 #endif /*CONTENT_AWARE_FILTER_H*/

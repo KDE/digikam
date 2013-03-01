@@ -6,7 +6,7 @@
  * Date        : 2009-08-03
  * Description : digiKam config header
  *
- * Copyright (C) 2009-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -27,11 +27,8 @@
 /* Define to 1 if you have KDEPIM shared library installed */
 #cmakedefine HAVE_KDEPIMLIBS 1
 
-/* Define to 1 if Glib2 shared library is installed */
-#cmakedefine HAVE_GLIB2 1
-
 /* Define to 1 if an external liblqr-1 shared library have been found */
-#cmakedefine USE_EXT_LIBLQR-1 1
+#cmakedefine HAVE_LIBLQR_1 1
 
 /* Define to 1 if an external libpgf shared library have been found */
 #cmakedefine USE_EXT_LIBPGF 1
@@ -69,6 +66,9 @@
 /* remember the lcms library version to use */
 #cmakedefine USE_LCMS_VERSION_1000 1
 #cmakedefine USE_LCMS_VERSION_2000 1
+
+/* Define to 1 if an external SQLite v2 is installed */
+#cmakedefine HAVE_SQLITE2 1
 
 #define LIBEXEC_INSTALL_DIR "${LIBEXEC_INSTALL_DIR}"
 

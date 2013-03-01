@@ -6,7 +6,7 @@
  * Date        : 2008-11-21
  * Description : Batch Queue Manager GUI
  *
- * Copyright (C) 2008-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -52,6 +52,7 @@
 #include <kstandardshortcut.h>
 #include <kstatusbar.h>
 #include <ktoggleaction.h>
+#include <ktogglefullscreenaction.h>
 #include <ktoolbar.h>
 #include <ktoolinvocation.h>
 #include <kwindowsystem.h>
@@ -411,8 +412,9 @@ void QueueMgrWindow::setupActions()
 
     // -- Standard 'View' menu actions ---------------------------------------------
 
-    d->fullScreenAction = actionCollection()->addAction(KStandardAction::FullScreen,
-                                                        "queuemgr_fullscreen", this, SLOT(slotToggleFullScreen()));
+    d->fullScreenAction = KStandardAction::fullScreen(0, 0, this, this);
+    actionCollection()->addAction("queuemgr_fullscreen", d->fullScreenAction);
+    connect(d->fullScreenAction, SIGNAL(toggled(bool)), this, SLOT(slotToggleFullScreen(bool)));
 
     // -- Standard 'Configure' menu actions ----------------------------------------
 
@@ -566,86 +568,6 @@ void QueueMgrWindow::refreshStatusBar()
         d->removeItemsDoneAction->setEnabled((items - pendingItems) > 0);
         d->clearQueueAction->setEnabled(items > 0);
         d->runAction->setEnabled((tasks > 0) && (pendingItems > 0));
-    }
-}
-
-void QueueMgrWindow::slotToggleFullScreen()
-{
-    if (d->fullScreen) // out of fullscreen
-    {
-        setWindowState(windowState() & ~Qt::WindowFullScreen);   // reset
-
-        slotShowMenuBar();
-        statusBar()->show();
-        showToolBars();
-
-        if (d->removeFullScreenButton)
-        {
-            QList<KToolBar*> toolbars = toolBars();
-
-            foreach(KToolBar* const toolbar, toolbars)
-            {
-                // name is set in ui.rc XML file
-                if (toolbar->objectName() == "ToolBar")
-                {
-                    toolbar->removeAction(d->fullScreenAction);
-                    break;
-                }
-            }
-        }
-
-        d->fullScreen = false;
-    }
-    else  // go to fullscreen
-    {
-        // hide the menubar and the statusbar
-        menuBar()->hide();
-        statusBar()->hide();
-
-        if (d->fullScreenHideToolBar)
-        {
-            hideToolBars();
-        }
-        else
-        {
-            showToolBars();
-
-            QList<KToolBar*> toolbars = toolBars();
-            KToolBar* mainToolbar     = 0;
-
-            foreach(KToolBar* const toolbar, toolbars)
-            {
-                if (toolbar->objectName() == "ToolBar")
-                {
-                    mainToolbar = toolbar;
-                    break;
-                }
-            }
-
-            // add fullscreen action if necessary
-            if (mainToolbar && !mainToolbar->actions().contains(d->fullScreenAction))
-            {
-                mainToolbar->addAction(d->fullScreenAction);
-                d->removeFullScreenButton = true;
-            }
-            else
-            {
-                // If FullScreen button is enabled in toolbar settings,
-                // we shall not remove it when leaving of fullscreen mode.
-                d->removeFullScreenButton = false;
-            }
-        }
-
-        setWindowState(windowState() | Qt::WindowFullScreen);   // set
-        d->fullScreen = true;
-    }
-}
-
-void QueueMgrWindow::slotEscapePressed()
-{
-    if (d->fullScreen)
-    {
-        d->fullScreenAction->activate(QAction::Trigger);
     }
 }
 
@@ -1152,6 +1074,85 @@ void QueueMgrWindow::slotSaveWorkflow()
     if (d->queuePool->saveWorkflow())
     {
         d->toolsView->showTab(ToolsView::WORKFLOW);
+    }
+}
+
+void QueueMgrWindow::slotToggleFullScreen(bool b)
+{
+    KToggleFullScreenAction::setFullScreen(this, b);
+
+    if (!b)
+    {
+        // Switch off fullscreen
+
+        slotShowMenuBar();
+        statusBar()->show();
+        showToolBars();
+
+        if (d->removeFullScreenButton)
+        {
+            QList<KToolBar*> toolbars = toolBars();
+
+            foreach(KToolBar* const toolbar, toolbars)
+            {
+                // name is set in ui.rc XML file
+                if (toolbar->objectName() == "ToolBar")
+                {
+                    toolbar->removeAction(d->fullScreenAction);
+                    break;
+                }
+            }
+        }
+    }
+    else
+    {
+        // Switch on fullscreen
+
+        // hide the menubar and the statusbar
+        menuBar()->hide();
+        statusBar()->hide();
+
+        if (d->fullScreenHideToolBar)
+        {
+            hideToolBars();
+        }
+        else
+        {
+            showToolBars();
+
+            QList<KToolBar*> toolbars = toolBars();
+            KToolBar* mainToolbar     = 0;
+
+            foreach(KToolBar* const toolbar, toolbars)
+            {
+                if (toolbar->objectName() == "ToolBar")
+                {
+                    mainToolbar = toolbar;
+                    break;
+                }
+            }
+
+            // add fullscreen action if necessary
+            if (mainToolbar && !mainToolbar->actions().contains(d->fullScreenAction))
+            {
+                mainToolbar->addAction(d->fullScreenAction);
+                d->removeFullScreenButton = true;
+            }
+            else
+            {
+                // If FullScreen button is enabled in toolbar settings,
+                // we shall not remove it when leaving of fullscreen mode.
+                d->removeFullScreenButton = false;
+            }
+        }
+    }
+}
+
+void QueueMgrWindow::slotEscapePressed()
+{
+    if (d->fullScreenAction->isChecked())
+    {
+        d->fullScreenAction->activate(QAction::Trigger);
     }
 }
 

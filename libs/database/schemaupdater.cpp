@@ -48,12 +48,15 @@
 #include "databasebackend.h"
 #include "databasetransaction.h"
 #include "databasechecker.h"
-#include "upgradedb_sqlite2tosqlite3.h"
 #include "collectionmanager.h"
 #include "collectionlocation.h"
 #include "collectionscanner.h"
 #include "imagequerybuilder.h"
 #include "collectionscannerobserver.h"
+#include "config-digikam.h"
+#ifdef HAVE_SQLITE2
+#include "upgradedb_sqlite2tosqlite3.h"
+#endif
 
 namespace Digikam
 {
@@ -746,12 +749,14 @@ bool SchemaUpdater::updateV2toV4(const QString& sqlite2DBPath)
 
     bool ret = false;
 
+#ifdef HAVE_SQLITE2
     if (upgradeDB_Sqlite2ToSqlite3(d->albumDB, d->backend, sqlite2DBPath))
     {
         d->currentVersion = 4;
         ret = true;
     }
     else
+#endif
     {
         QString errorMsg    = i18n("Could not update from the old SQLite2 file (\"%1\"). "
                                    "Please delete this file and try again, "

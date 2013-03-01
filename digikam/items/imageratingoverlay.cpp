@@ -113,7 +113,7 @@ void ImageRatingOverlay::hide()
 
 void ImageRatingOverlay::updatePosition()
 {
-    if (!m_index.isValid())
+    if (!m_index.isValid() || ! m_widget)
     {
         return;
     }
@@ -135,7 +135,7 @@ void ImageRatingOverlay::updatePosition()
 
 void ImageRatingOverlay::updateRating()
 {
-    if (!m_index.isValid())
+    if (!m_index.isValid() || !m_widget)
     {
         return;
     }

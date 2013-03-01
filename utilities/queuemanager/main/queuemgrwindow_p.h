@@ -6,7 +6,7 @@
  * Date        : 2008-11-21
  * Description : Batch Queue Manager GUI
  *
- * Copyright (C) 2008-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -50,6 +50,8 @@
 #include "toolsettingsview.h"
 #include "toolsview.h"
 
+class KToggleFullScreenAction;
+
 namespace Digikam
 {
 
@@ -66,7 +68,6 @@ public:
         VERTICAL_SPLITTER_CONFIG_KEY("BqmVerticalSplitter")
     {
         fullScreenHideToolBar  = false;
-        fullScreen             = false;
         removeFullScreenButton = false;
         busy                   = false;
         clearQueueAction       = 0;
@@ -105,60 +106,59 @@ public:
         currentQueueToProcess  = 0;
     }
 
-    bool                   fullScreenHideToolBar;
-    bool                   fullScreen;
-    bool                   removeFullScreenButton;
-    bool                   busy;
+    bool                     fullScreenHideToolBar;
+    bool                     removeFullScreenButton;
+    bool                     busy;
 
-    int                    currentQueueToProcess;
+    int                      currentQueueToProcess;
 
-    QLabel*                statusLabel;
+    QLabel*                  statusLabel;
 
-    KAction*               clearQueueAction;
-    KAction*               removeItemsSelAction;
-    QAction*               removeItemsDoneAction;
-    QAction*               fullScreenAction;
-    QAction*               moveUpToolAction;
-    QAction*               moveDownToolAction;
-    QAction*               removeToolAction;
-    QAction*               clearToolsAction;
+    KAction*                 clearQueueAction;
+    KAction*                 removeItemsSelAction;
+    QAction*                 removeItemsDoneAction;
+    QAction*                 moveUpToolAction;
+    QAction*                 moveDownToolAction;
+    QAction*                 removeToolAction;
+    QAction*                 clearToolsAction;
 
-    KAction*               runAction;
-    KAction*               stopAction;
-    KAction*               removeQueueAction;
-    KAction*               newQueueAction;
-    KAction*               saveQueueAction;
-    KAction*               donateMoneyAction;
-    KAction*               contributeAction;
-    KAction*               rawCameraListAction;
-    KAction*               libsInfoAction;
-    KAction*               dbStatAction;
+    KToggleFullScreenAction* fullScreenAction;
+    KAction*                 runAction;
+    KAction*                 stopAction;
+    KAction*                 removeQueueAction;
+    KAction*                 newQueueAction;
+    KAction*                 saveQueueAction;
+    KAction*                 donateMoneyAction;
+    KAction*                 contributeAction;
+    KAction*                 rawCameraListAction;
+    KAction*                 libsInfoAction;
+    KAction*                 dbStatAction;
 
-    SidebarSplitter*       topSplitter;
-    SidebarSplitter*       bottomSplitter;
-    SidebarSplitter*       verticalSplitter;
+    SidebarSplitter*         topSplitter;
+    SidebarSplitter*         bottomSplitter;
+    SidebarSplitter*         verticalSplitter;
 
-    KToggleAction*         showMenuBarAction;
+    KToggleAction*           showMenuBarAction;
 
-    DLogoAction*           animLogo;
+    DLogoAction*             animLogo;
 
-    BatchToolsManager*     batchToolsMgr;
+    BatchToolsManager*       batchToolsMgr;
 
-    StatusProgressBar*     statusProgressBar;
+    StatusProgressBar*       statusProgressBar;
 
-    ActionThread*          thread;
+    ActionThread*            thread;
 
-    ToolsView*             toolsView;
-    ToolSettingsView*      toolSettings;
-    AssignedListView*      assignedList;
-    QueuePool*             queuePool;
-    QueueSettingsView*     queueSettingsView;
+    ToolsView*               toolsView;
+    ToolSettingsView*        toolSettings;
+    AssignedListView*        assignedList;
+    QueuePool*               queuePool;
+    QueueSettingsView*       queueSettingsView;
 
-    DAboutData*            about;
+    DAboutData*              about;
 
-    const QString          TOP_SPLITTER_CONFIG_KEY;
-    const QString          BOTTOM_SPLITTER_CONFIG_KEY;
-    const QString          VERTICAL_SPLITTER_CONFIG_KEY;
+    const QString            TOP_SPLITTER_CONFIG_KEY;
+    const QString            BOTTOM_SPLITTER_CONFIG_KEY;
+    const QString            VERTICAL_SPLITTER_CONFIG_KEY;
 };
 
 }  // namespace Digikam

@@ -7,8 +7,8 @@
  * Description : digiKam 8/16 bits image management API
  *
  * Copyright (C) 2005      by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -118,7 +118,7 @@ public:
 
 public:
 
-    class DImgPrivate;
+    class Private;
 
 public:
 
@@ -654,8 +654,8 @@ private:
 
     bool load(const QString& filePath, int loadFlags, DImgLoaderObserver* const observer,
               const DRawDecoding& rawDecodingSettings=DRawDecoding());
-    void copyMetaData(const DImgPrivate* const src);
-    void copyImageData(const DImgPrivate* const src);
+    void copyMetaData(const Private* const src);
+    void copyImageData(const Private* const src);
     void setImageData(bool null, uint width, uint height, bool sixteenBit, bool alpha);
     void setImageDimension(uint width, uint height);
     int  allocateData();
@@ -678,7 +678,7 @@ private:
 
 private:
 
-    DSharedDataPointer<DImgPrivate> m_priv;
+    DSharedDataPointer<Private> m_priv;
 
     friend class DImgLoader;
 };

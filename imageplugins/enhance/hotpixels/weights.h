@@ -56,7 +56,7 @@ public:
             }
         }
 
-        delete mWeightMatrices;
+        delete [] mWeightMatrices;
     }
 
     unsigned int height() const

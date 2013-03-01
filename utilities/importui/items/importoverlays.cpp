@@ -271,7 +271,7 @@ void ImportRatingOverlay::hide()
 
 void ImportRatingOverlay::updatePosition()
 {
-    if (!m_index.isValid())
+    if (!m_index.isValid() || !m_widget)
     {
         return;
     }
@@ -293,7 +293,7 @@ void ImportRatingOverlay::updatePosition()
 
 void ImportRatingOverlay::updateRating()
 {
-    if (!m_index.isValid())
+    if (!m_index.isValid() || !m_widget)
     {
         return;
     }

@@ -140,24 +140,20 @@ INSTALL(TARGETS digikamcore ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 # Shared libdigikamdatabase ########################################################
 
-# Disable libsqlite2 C code warnings plus specific flags.
-IF(WIN32)
-    SET_SOURCE_FILES_PROPERTIES(${libsqlite2_SRCS} PROPERTIES COMPILE_FLAGS "-w -D_OFF_T_ -D_OFF_T_DEFINED")
-ELSE(WIN32)
-    SET_SOURCE_FILES_PROPERTIES(${libsqlite2_SRCS} PROPERTIES COMPILE_FLAGS "-w")
-ENDIF(WIN32)
-
 ## Disable libpgf warnings.
 #SET_SOURCE_FILES_PROPERTIES(${libpgf_SRCS} PROPERTIES COMPILE_FLAGS "-w")
 
 SET(digikamdatabase_LIB_SRCS
         ${libdatabase_SRCS}
         ${libdatabasemodels_SRCS}
-        ${libsqlite2_SRCS}
         ${libhaar_SRCS}
         ${libpgf_SRCS}
         ${pgfutils_SRCS}
 )
+
+IF(SQLITE2_FOUND)
+    SET(digikamdatabase_LIB_SRCS ${digikamdatabase_LIB_SRCS} ${libalbumsqlite2_SRCS})
+ENDIF(SQLITE2_FOUND)
 
 KDE4_ADD_LIBRARY(digikamdatabase SHARED ${digikamdatabase_LIB_SRCS})
 
@@ -185,6 +181,10 @@ ENDIF(USE_SCRIPT_IFACE)
 IF(PGF_FOUND)
     TARGET_LINK_LIBRARIES(digikamdatabase ${PGF_LIBRARIES})
 ENDIF(PGF_FOUND)
+
+IF(SQLITE2_FOUND)
+    TARGET_LINK_LIBRARIES(digikamdatabase ${SQLITE2_LIBRARIES})
+ENDIF(SQLITE2_FOUND)
 
 SET_TARGET_PROPERTIES(digikamdatabase PROPERTIES VERSION 3.0.0 SOVERSION 3)
 

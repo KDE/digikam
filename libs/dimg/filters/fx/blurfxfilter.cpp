@@ -48,26 +48,46 @@
 namespace Digikam
 {
 
-BlurFXFilter::BlurFXFilter(QObject* const parent)
-    : DImgThreadedFilter(parent)
+class BlurFXFilter::Private
 {
-    m_blurFXType = ZoomBlur;
-    m_distance   = 100;
-    m_level      = 45;
-    m_randomSeed = 0;
+public:
 
+    Private()
+    {
+        blurFXType = ZoomBlur;
+        distance   = 100;
+        level      = 45;
+        randomSeed = RandomNumberGenerator::timeSeed();
+    }
+
+    int     blurFXType;
+    int     distance;
+    int     level;
+    quint32 randomSeed;
+};
+
+BlurFXFilter::BlurFXFilter(QObject* const parent)
+    : DImgThreadedFilter(parent),
+      d(new Private)
+{
     initFilter();
 }
 
 BlurFXFilter::BlurFXFilter(DImg* const orgImage, QObject* const parent, int blurFXType, int distance, int level)
-    : DImgThreadedFilter(orgImage, parent, "BlurFX")
+    : DImgThreadedFilter(orgImage, parent, "BlurFX"),
+      d(new Private)
 {
-    m_blurFXType = blurFXType;
-    m_distance   = distance;
-    m_level      = level;
-    m_randomSeed = RandomNumberGenerator::timeSeed();
+    d->blurFXType = blurFXType;
+    d->distance   = distance;
+    d->level      = level;
 
     initFilter();
+}
+
+BlurFXFilter::~BlurFXFilter()
+{
+    cancelFilter();
+    delete d;
 }
 
 void BlurFXFilter::filterImage()
@@ -75,22 +95,22 @@ void BlurFXFilter::filterImage()
     int w = m_orgImage.width();
     int h = m_orgImage.height();
 
-    switch (m_blurFXType)
+    switch (d->blurFXType)
     {
         case ZoomBlur:
-            zoomBlur(&m_orgImage, &m_destImage, w / 2, h / 2, m_distance);
+            zoomBlur(&m_orgImage, &m_destImage, w / 2, h / 2, d->distance);
             break;
 
         case RadialBlur:
-            radialBlur(&m_orgImage, &m_destImage, w / 2, h / 2, m_distance);
+            radialBlur(&m_orgImage, &m_destImage, w / 2, h / 2, d->distance);
             break;
 
         case FarBlur:
-            farBlur(&m_orgImage, &m_destImage, m_distance);
+            farBlur(&m_orgImage, &m_destImage, d->distance);
             break;
 
         case MotionBlur:
-            motionBlur(&m_orgImage, &m_destImage, m_distance, (double)m_level);
+            motionBlur(&m_orgImage, &m_destImage, d->distance, (double)d->level);
             break;
 
         case SoftenerBlur:
@@ -98,23 +118,23 @@ void BlurFXFilter::filterImage()
             break;
 
         case ShakeBlur:
-            shakeBlur(&m_orgImage, &m_destImage, m_distance);
+            shakeBlur(&m_orgImage, &m_destImage, d->distance);
             break;
 
         case FocusBlur:
-            focusBlur(&m_orgImage, &m_destImage, w / 2, h / 2, m_distance, m_level * 10);
+            focusBlur(&m_orgImage, &m_destImage, w / 2, h / 2, d->distance, d->level * 10);
             break;
 
         case SmartBlur:
-            smartBlur(&m_orgImage, &m_destImage, m_distance, m_level);
+            smartBlur(&m_orgImage, &m_destImage, d->distance, d->level);
             break;
 
         case FrostGlass:
-            frostGlass(&m_orgImage, &m_destImage, m_distance);
+            frostGlass(&m_orgImage, &m_destImage, d->distance);
             break;
 
         case Mosaic:
-            mosaic(&m_orgImage, &m_destImage, m_distance, m_distance);
+            mosaic(&m_orgImage, &m_destImage, d->distance, d->distance);
             break;
     }
 }
@@ -226,9 +246,9 @@ void BlurFXFilter::zoomBlur(DImg* const orgImage, DImg* const destImage, int X, 
             color.setColor(data + offset, sixteenBit);
 
             // now, we have to calc the arithmetic average
-            color.setRed(sumR / nCount);
+            color.setRed(sumR   / nCount);
             color.setGreen(sumG / nCount);
-            color.setBlue(sumB / nCount);
+            color.setBlue(sumB  / nCount);
 
             // write color to destination
             color.setPixel(pResBits + offset);
@@ -356,9 +376,9 @@ void BlurFXFilter::radialBlur(DImg* const orgImage, DImg* const destImage, int X
             color.setColor(data + offset, sixteenBit);
 
             // now, we have to calc the arithmetic average
-            color.setRed(sumR / nCount);
+            color.setRed(sumR   / nCount);
             color.setGreen(sumG / nCount);
-            color.setBlue(sumB / nCount);
+            color.setBlue(sumB  / nCount);
 
             // write color to destination
             color.setPixel(pResBits + offset);
@@ -453,10 +473,10 @@ void BlurFXFilter::focusBlur(DImg* const orgImage, DImg* const destImage,
 
     DColor colorOrgImage, colorBlurredImage;
     int alpha;
-    uchar* ptr;
+    uchar* ptr = 0;
 
     // get composer for default blending
-    DColorComposer* composer = DColorComposer::getComposer(DColorComposer::PorterDuffNone);
+    DColorComposer* const composer = DColorComposer::getComposer(DColorComposer::PorterDuffNone);
 
     int nh = 0, nw = 0;
 
@@ -681,10 +701,15 @@ void BlurFXFilter::smartBlur(DImg* const orgImage, DImg* const destImage, int Ra
                 }
             }
 
+            if (nCount == 0)
+            {
+                nCount = 1;
+            }
+
             // now, we have to calc the arithmetic average
-            color.setRed(sumR / nCount);
+            color.setRed(sumR   / nCount);
             color.setGreen(sumG / nCount);
-            color.setBlue(sumB / nCount);
+            color.setBlue(sumB  / nCount);
 
             // write color to destination
             color.setPixel(pBlur.data() + offset);
@@ -746,10 +771,15 @@ void BlurFXFilter::smartBlur(DImg* const orgImage, DImg* const destImage, int Ra
                 }
             }
 
+            if (nCount == 0)
+            {
+                nCount = 1;
+            }
+
             // now, we have to calc the arithmetic average
-            color.setRed(sumR / nCount);
+            color.setRed(sumR   / nCount);
             color.setGreen(sumG / nCount);
-            color.setBlue(sumB / nCount);
+            color.setBlue(sumB  / nCount);
 
             // write color to destination
             color.setPixel(pResBits + offset);
@@ -859,9 +889,9 @@ void BlurFXFilter::motionBlur(DImg* const orgImage, DImg* const destImage, int D
             color.setColor(data + offset, sixteenBit);
 
             // now, we have to calc the arithmetic average
-            color.setRed(sumR / nCount);
+            color.setRed(sumR   / nCount);
             color.setGreen(sumG / nCount);
-            color.setBlue(sumB / nCount);
+            color.setBlue(sumB  / nCount);
 
             // write color to destination
             color.setPixel(pResBits + offset);
@@ -929,8 +959,10 @@ void BlurFXFilter::softenerBlur(DImg* const orgImage, DImg* const destImage)
                             offsetSoma = offset;
                         }
                         else
+                        {
                             offsetSoma = GetOffset(Width, (w + Lim_Max(w, b, Width)),
                                                    (h + Lim_Max(h, a, Height)), bytesDepth);
+                        }
 
                         colorSoma.setColor(data + offsetSoma, sixteenBit);
 
@@ -941,9 +973,9 @@ void BlurFXFilter::softenerBlur(DImg* const orgImage, DImg* const destImage)
                 }
 
                 // 7*7 = 49
-                color.setRed(SomaR / 49);
+                color.setRed(SomaR   / 49);
                 color.setGreen(SomaG / 49);
-                color.setBlue(SomaB / 49);
+                color.setBlue(SomaB  / 49);
                 color.setPixel(pResBits + offset);
             }
             else
@@ -958,8 +990,10 @@ void BlurFXFilter::softenerBlur(DImg* const orgImage, DImg* const destImage)
                             offsetSoma = offset;
                         }
                         else
+                        {
                             offsetSoma = GetOffset(Width, (w + Lim_Max(w, b, Width)),
                                                    (h + Lim_Max(h, a, Height)), bytesDepth);
+                        }
 
                         colorSoma.setColor(data + offsetSoma, sixteenBit);
 
@@ -970,9 +1004,9 @@ void BlurFXFilter::softenerBlur(DImg* const orgImage, DImg* const destImage)
                 }
 
                 // 3*3 = 9
-                color.setRed(SomaR / 9);
+                color.setRed(SomaR   / 9);
                 color.setGreen(SomaG / 9);
-                color.setBlue(SomaB / 9);
+                color.setBlue(SomaB  / 9);
                 color.setPixel(pResBits + offset);
             }
         }
@@ -1118,7 +1152,7 @@ void BlurFXFilter::frostGlass(DImg* const orgImage, DImg* const destImage, int F
 
     // Randomize.
     RandomNumberGenerator generator;
-    generator.seed(m_randomSeed);
+    generator.seed(d->randomSeed);
 
     int range = sixteenBit ? 65535 : 255;
 
@@ -1334,15 +1368,25 @@ DColor BlurFXFilter::RandomColor(uchar* const Bits, int Width, int Height, bool 
 
     if (ErrorCount >= counter)
     {
-        color.setRed(AverageColorR[J] / counter);
+        if (counter == 0)
+        {
+            counter = 1;
+        }
+
+        color.setRed(AverageColorR[J]   / counter);
         color.setGreen(AverageColorG[J] / counter);
-        color.setBlue(AverageColorB[J] / counter);
+        color.setBlue(AverageColorB[J]  / counter);
     }
     else
     {
-        color.setRed(AverageColorR[J] / IntensityCount[J]);
+        if (IntensityCount[J] == 0)
+        {
+            IntensityCount[J] = 1;
+        }
+
+        color.setRed(AverageColorR[J]   / IntensityCount[J]);
         color.setGreen(AverageColorG[J] / IntensityCount[J]);
-        color.setBlue(AverageColorB[J] / IntensityCount[J]);
+        color.setBlue(AverageColorB[J]  / IntensityCount[J]);
     }
 
     return color;
@@ -1392,13 +1436,15 @@ void BlurFXFilter::MakeConvolution(DImg* const orgImage, DImg* const destImage, 
 
     // We need to alloc a 2d array to help us to store the values
 
-    int** arrMult = Alloc2DArray(nKernelWidth, range);
+    int** const arrMult = Alloc2DArray(nKernelWidth, range);
 
     for (int i = 0; i < nKernelWidth; ++i)
+    {
         for (int j = 0; j < range; ++j)
         {
             arrMult[i][j] = j * Kernel[i];
         }
+    }
 
     // Now, we enter in the main loop
 
@@ -1443,15 +1489,15 @@ void BlurFXFilter::MakeConvolution(DImg* const orgImage, DImg* const destImage, 
             // now, we have to calc the arithmetic average
             if (sixteenBit)
             {
-                color.setRed(LimitValues16(nSumR / nCount));
+                color.setRed(LimitValues16(nSumR   / nCount));
                 color.setGreen(LimitValues16(nSumG / nCount));
-                color.setBlue(LimitValues16(nSumB / nCount));
+                color.setBlue(LimitValues16(nSumB  / nCount));
             }
             else
             {
-                color.setRed(LimitValues8(nSumR / nCount));
+                color.setRed(LimitValues8(nSumR   / nCount));
                 color.setGreen(LimitValues8(nSumG / nCount));
-                color.setBlue(LimitValues8(nSumB / nCount));
+                color.setBlue(LimitValues8(nSumB  / nCount));
             }
 
             // write color to blur bits
@@ -1508,15 +1554,15 @@ void BlurFXFilter::MakeConvolution(DImg* const orgImage, DImg* const destImage, 
             // now, we have to calc the arithmetic average
             if (sixteenBit)
             {
-                color.setRed(LimitValues16(nSumR / nCount));
+                color.setRed(LimitValues16(nSumR   / nCount));
                 color.setGreen(LimitValues16(nSumG / nCount));
-                color.setBlue(LimitValues16(nSumB / nCount));
+                color.setBlue(LimitValues16(nSumB  / nCount));
             }
             else
             {
-                color.setRed(LimitValues8(nSumR / nCount));
+                color.setRed(LimitValues8(nSumR   / nCount));
                 color.setGreen(LimitValues8(nSumG / nCount));
-                color.setBlue(LimitValues8(nSumB / nCount));
+                color.setBlue(LimitValues8(nSumB  / nCount));
             }
 
             // write color to destination
@@ -1541,13 +1587,13 @@ FilterAction BlurFXFilter::filterAction()
     FilterAction action(FilterIdentifier(), CurrentVersion());
     action.setDisplayableName(DisplayableName());
 
-    action.addParameter("type",     m_blurFXType);
-    action.addParameter("distance", m_distance);
-    action.addParameter("level",    m_level);
+    action.addParameter("type",     d->blurFXType);
+    action.addParameter("distance", d->distance);
+    action.addParameter("level",    d->level);
 
-    if (m_blurFXType == FrostGlass)
+    if (d->blurFXType == FrostGlass)
     {
-        action.addParameter("randomSeed", m_randomSeed);
+        action.addParameter("randomSeed", d->randomSeed);
     }
 
     return action;
@@ -1555,13 +1601,13 @@ FilterAction BlurFXFilter::filterAction()
 
 void BlurFXFilter::readParameters(const FilterAction& action)
 {
-    m_blurFXType = action.parameter("type").toInt();
-    m_distance   = action.parameter("distance").toInt();
-    m_level      = action.parameter("level").toInt();
+    d->blurFXType = action.parameter("type").toInt();
+    d->distance   = action.parameter("distance").toInt();
+    d->level      = action.parameter("level").toInt();
 
-    if (m_blurFXType == FrostGlass)
+    if (d->blurFXType == FrostGlass)
     {
-        m_randomSeed = action.parameter("randomSeed").toUInt();
+        d->randomSeed = action.parameter("randomSeed").toUInt();
     }
 }
 

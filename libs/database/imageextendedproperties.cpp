@@ -112,10 +112,10 @@ void ImageExtendedProperties::removeSubjectCode()
 IptcCoreLocationInfo ImageExtendedProperties::location()
 {
     IptcCoreLocationInfo location;
-    location.country = readProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCountry));
-    location.countryCode = readProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCountryCode));
-    location.city = readProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCity));
-    location.location = readProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreLocation));
+    location.country       = readProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCountry));
+    location.countryCode   = readProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCountryCode));
+    location.city          = readProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCity));
+    location.location      = readProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreLocation));
     location.provinceState = readProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreProvinceState));
     return location;
 }

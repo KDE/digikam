@@ -165,7 +165,7 @@ namespace Digikam
 DigikamApp* DigikamApp::m_instance = 0;
 
 DigikamApp::DigikamApp()
-    : KXmlGuiWindow(0), d(new DigikamAppPriv)
+    : KXmlGuiWindow(0), d(new Private)
 {
     // --------------------------------------------------------
 
@@ -1174,8 +1174,9 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    d->fullScreenAction = KStandardAction::fullScreen(this, SLOT(slotToggleFullScreen()), this, this);
+    d->fullScreenAction = KStandardAction::fullScreen(0, 0, this, this);
     actionCollection()->addAction("full_screen", d->fullScreenAction);
+    connect(d->fullScreenAction, SIGNAL(toggled(bool)), this, SLOT(slotToggleFullScreen(bool)));
 
     // -----------------------------------------------------------
 
@@ -2450,73 +2451,6 @@ void DigikamApp::slotConfNotifications()
     KNotifyConfigWidget::configure(this);
 }
 
-void DigikamApp::slotToggleFullScreen()
-{
-    static bool wasThumbBarVisible = true;
-    static bool wasToolbBarVisible = true;
-
-    if (d->fullScreen)
-    {
-        setWindowState( windowState() & ~Qt::WindowFullScreen ); // reset
-
-        slotShowMenuBar();
-        statusBar()->show();
-
-        showToolBars();
-        KToolBar* mainToolBar = toolBar("mainToolBar");
-        if (mainToolBar)
-        {
-            if (wasToolbBarVisible)
-            {
-                mainToolBar->show();
-            }
-            else
-            {
-                mainToolBar->hide();
-            }
-        }
-
-        showThumbBar(wasThumbBarVisible);
-
-        d->view->showSideBars();
-
-        d->fullScreen = false;
-    }
-    else
-    {
-        wasThumbBarVisible = d->view->isThumbBarVisible();
-        wasToolbBarVisible = true;
-        KToolBar* mainToolBar = toolBar("mainToolBar");
-        if (mainToolBar)
-        {
-            wasToolbBarVisible = mainToolBar->isVisible();
-        }
-
-        KConfigGroup group          = d->config->group("ImageViewer Settings");
-        bool fullScreenHideToolBar  = group.readEntry("FullScreen Hide ToolBar", false);
-        bool fullScreenHideThumbBar = group.readEntry("FullScreenHideThumbBar", true);
-
-        setWindowState( windowState() | Qt::WindowFullScreen ); // set
-
-        menuBar()->hide();
-        statusBar()->hide();
-
-        if (fullScreenHideToolBar)
-        {
-            showToolBars(false);
-        }
-
-        if (fullScreenHideThumbBar)
-        {
-            showThumbBar(false);
-        }
-
-        d->view->hideSideBars();
-
-        d->fullScreen = true;
-    }
-}
-
 void DigikamApp::slotShowTip()
 {
     QStringList tipsFiles;
@@ -2643,7 +2577,7 @@ void DigikamApp::slotThumbSizeChanged(int size)
 {
     d->zoomBar->setThumbsSize(size);
 
-    if (!d->fullScreen && d->autoShowZoomToolTip)
+    if (!d->fullScreenAction->isChecked() && d->autoShowZoomToolTip)
     {
         d->zoomBar->triggerZoomTrackerToolTip();
     }
@@ -2655,7 +2589,7 @@ void DigikamApp::slotZoomChanged(double zoom)
     double zmax = d->view->zoomMax();
     d->zoomBar->setZoom(zoom, zmin, zmax);
 
-    if (!d->fullScreen && d->autoShowZoomToolTip)
+    if (!d->fullScreenAction->isChecked() && d->autoShowZoomToolTip)
     {
         d->zoomBar->triggerZoomTrackerToolTip();
     }
@@ -3076,6 +3010,73 @@ void DigikamApp::rebuild()
         setXMLGUIBuildDocument(QDomDocument());
         loadStandardsXmlFile();
         setXMLFile(file, true);
+    }
+}
+
+void DigikamApp::slotToggleFullScreen(bool b)
+{
+    KToggleFullScreenAction::setFullScreen(this, b);
+
+    static bool wasThumbBarVisible = true;
+    static bool wasToolbBarVisible = true;
+
+    if (!b)
+    {
+        // Switch off fullscreen
+
+        slotShowMenuBar();
+        statusBar()->show();
+
+        showToolBars();
+        KToolBar* const mainToolBar = toolBar("mainToolBar");
+
+        if (mainToolBar)
+        {
+            if (wasToolbBarVisible)
+            {
+                mainToolBar->show();
+            }
+            else
+            {
+                mainToolBar->hide();
+            }
+        }
+
+        showThumbBar(wasThumbBarVisible);
+
+        d->view->showSideBars();
+    }
+    else
+    {
+        // Switch on fullscreen
+
+        wasThumbBarVisible          = d->view->isThumbBarVisible();
+        wasToolbBarVisible          = true;
+        KToolBar* const mainToolBar = toolBar("mainToolBar");
+
+        if (mainToolBar)
+        {
+            wasToolbBarVisible = mainToolBar->isVisible();
+        }
+
+        KConfigGroup group          = d->config->group("ImageViewer Settings");
+        bool fullScreenHideToolBar  = group.readEntry("FullScreen Hide ToolBar", false);
+        bool fullScreenHideThumbBar = group.readEntry("FullScreenHideThumbBar",  true);
+
+        menuBar()->hide();
+        statusBar()->hide();
+
+        if (fullScreenHideToolBar)
+        {
+            showToolBars(false);
+        }
+
+        if (fullScreenHideThumbBar)
+        {
+            showThumbBar(false);
+        }
+
+        d->view->hideSideBars();
     }
 }
 

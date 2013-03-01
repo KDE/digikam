@@ -99,7 +99,18 @@ public:
     bool getImageTagsPath(QStringList& tagsPath) const;
     bool setImageTagsPath(const QStringList& tagsPath) const;
 
+    /** Get Images Face Map based on tags stored in Picassa/Metadatagroup
+     * format. Use $ exiv2 -pa image to see the tag structure
+     */  
     bool getImageFacesMap(QMap<QString,QVariant>& facesPath) const;
+
+    /** Set Images Face Map tags in Picassa/Metadatagroup format
+     *  Use exiv2 -pa image to check for face tags
+     */ 
+    bool setImageFacesMap(QMap<QString,QVariant>& facesPath) const;
+
+    /** Delete all face tags from image's xmp metadata **/
+    void removeImageFaces() const;
 
     bool     setMetadataTemplate(const Template& t) const;
     Template getMetadataTemplate() const;

@@ -32,9 +32,6 @@
 #include "dimgthreadedfilter.h"
 #include "digikam_export.h"
 
-// The filter is only compiled if GLib is available
-#ifdef HAVE_GLIB2
-
 namespace Digikam
 {
 
@@ -131,7 +128,5 @@ private:
 };
 
 }  // namespace Digikam
-
-#endif // HAVE_GLIB2
 
 #endif /* LENSFUNFILTER_H */

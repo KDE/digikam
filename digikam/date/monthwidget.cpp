@@ -6,9 +6,9 @@
  * Date        : 2005-05-02
  * Description : a widget to perform month selection.
  *
- * Copyright (C) 2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2011 by Andi Clemens <andi dot clemens at gmail dot com>
+ * Copyright (C) 2005      by Renchi Raju <renchi dot raju at gmail dot com>
+ * Copyright (C) 2006-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2011      by Andi Clemens <andi dot clemens at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -53,12 +53,20 @@
 namespace Digikam
 {
 
-class MonthWidget::MonthWidgetPriv
+class MonthWidget::Private
 {
 public:
 
     struct Month
     {
+        Month()
+        {
+            active    = false;
+            selected  = false;
+            day       = 0;
+            numImages = 0;
+        }
+
         bool active;
         bool selected;
 
@@ -66,7 +74,9 @@ public:
         int  numImages;
     };
 
-    MonthWidgetPriv() :
+public:
+
+    Private() :
         active(true),
         model(0),
         timer(0),
@@ -94,8 +104,8 @@ public:
     struct Month      days[42];
 };
 
-MonthWidget::MonthWidget(QWidget* parent)
-    : QWidget(parent), d(new MonthWidgetPriv)
+MonthWidget::MonthWidget(QWidget* const parent)
+    : QWidget(parent), d(new Private)
 {
     setWindowFlags(Qt::WNoAutoErase);
     init();
@@ -194,12 +204,12 @@ void MonthWidget::paintEvent(QPaintEvent*)
 
     for (int j=3; j<9; ++j)
     {
-        sy = d->currh * j;
+        sy          = d->currh * j;
         weekvisible = false;
 
         for (int i=1; i<8; ++i)
         {
-            sx = d->currw * i;
+            sx     = d->currw * i;
             r.moveTopLeft(QPoint(sx,sy));
             rsmall = QRect(r.x()+1, r.y()+1, r.width()-2, r.height()-2);
 
@@ -267,7 +277,7 @@ void MonthWidget::paintEvent(QPaintEvent*)
 
     for (int i=1; i<8; ++i)
     {
-        sx = d->currw * i;
+        sx     = d->currw * i;
         r.moveTopLeft(QPoint(sx+1,sy+1));
         rsmall = r;
         rsmall.setWidth(r.width() - 2);
@@ -433,16 +443,21 @@ void MonthWidget::connectModel()
     {
         connect(d->model, SIGNAL(destroyed()),
                 this, SLOT(slotModelDestroyed()));
+
         connect(d->model, SIGNAL(rowsInserted(QModelIndex,int,int)),
                 this, SLOT(triggerUpdateDays()));
+
         connect(d->model, SIGNAL(rowsRemoved(QModelIndex,int,int)),
                 this, SLOT(triggerUpdateDays()));
+
         connect(d->model, SIGNAL(modelReset()),
                 this, SLOT(triggerUpdateDays()));
-        //        connect(d->model, SIGNAL(triggerUpdateDays()),
-        //                this, SLOT(triggerUpdateDays()));
+
+        //connect(d->model, SIGNAL(triggerUpdateDays()),
+        //        this, SLOT(triggerUpdateDays()));
+
         //connect(d->model, SIGNAL(dataChanged(QModelIndex,QModelIndex)),
-        //      this, SLOT(triggerUpdateDays()));
+        //        this, SLOT(triggerUpdateDays()));
     }
 }
 

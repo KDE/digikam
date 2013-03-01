@@ -40,28 +40,43 @@
 namespace Digikam
 {
 
-OilPaintFilter::OilPaintFilter(QObject* const parent)
-    : DImgThreadedFilter(parent)
+class OilPaintFilter::Private
 {
-    m_brushSize      = 1;
-    m_smoothness     = 30;
-    m_intensityCount = 0;
-    m_averageColorR  = 0;
-    m_averageColorG  = 0;
-    m_averageColorB  = 0;
+public:
 
+    Private() :
+        intensityCount(0),
+        brushSize(1),
+        smoothness(30),
+        averageColorR(0),
+        averageColorG(0),
+        averageColorB(0)
+    {
+    }
+
+    uchar* intensityCount;
+
+    int    brushSize;
+    int    smoothness;
+
+    uint*  averageColorR;
+    uint*  averageColorG;
+    uint*  averageColorB;
+};
+
+OilPaintFilter::OilPaintFilter(QObject* const parent)
+    : DImgThreadedFilter(parent),
+      d(new Private)
+{
     initFilter();
 }
 
 OilPaintFilter::OilPaintFilter(DImg* const orgImage, QObject* const parent, int brushSize, int smoothness)
-    : DImgThreadedFilter(orgImage, parent, "OilPaintFilter")
+    : DImgThreadedFilter(orgImage, parent, "OilPaintFilter"),
+      d(new Private)
 {
-    m_brushSize      = brushSize;
-    m_smoothness     = smoothness;
-    m_intensityCount = 0;
-    m_averageColorR  = 0;
-    m_averageColorG  = 0;
-    m_averageColorB  = 0;
+    d->brushSize  = brushSize;
+    d->smoothness = smoothness;
 
     initFilter();
 }
@@ -69,13 +84,14 @@ OilPaintFilter::OilPaintFilter(DImg* const orgImage, QObject* const parent, int 
 OilPaintFilter::~OilPaintFilter()
 {
     cancelFilter();
+    delete d;
 }
 
 /** Function to apply the OilPaintFilter effect.
  *  This method have been ported from Pieter Z. Voloshyn algorithm code.
  *
- *  Theory           => Using MostFrequentColor function we take the main color in
- *                      a matrix and simply write at the original position.
+ *  Theory: Using MostFrequentColor function we take the main color in
+ *          a matrix and simply write at the original position.
  */
 void OilPaintFilter::filterImage()
 {
@@ -92,16 +108,16 @@ void OilPaintFilter::filterImage()
 
     // Allocate some arrays to be used.
     // Do this here once for all to save a few million new / delete operations
-    m_intensityCount = new uchar[m_smoothness + 1];
-    m_averageColorR  = new uint[m_smoothness + 1];
-    m_averageColorG  = new uint[m_smoothness + 1];
-    m_averageColorB  = new uint[m_smoothness + 1];
+    d->intensityCount = new uchar[d->smoothness + 1];
+    d->averageColorR  = new uint[d->smoothness + 1];
+    d->averageColorG  = new uint[d->smoothness + 1];
+    d->averageColorB  = new uint[d->smoothness + 1];
 
     for (int h2 = 0; runningFlag() && (h2 < h); ++h2)
     {
         for (int w2 = 0; runningFlag() && (w2 < w); ++w2)
         {
-            mostFrequentColor = MostFrequentColor(m_orgImage, w2, h2, m_brushSize, m_smoothness);
+            mostFrequentColor = MostFrequentColor(m_orgImage, w2, h2, d->brushSize, d->smoothness);
             dptr              = dest + w2 * bytesDepth + (w * h2 * bytesDepth);
             mostFrequentColor.setPixel(dptr);
         }
@@ -115,10 +131,10 @@ void OilPaintFilter::filterImage()
     }
 
     // free all the arrays
-    delete [] m_intensityCount;
-    delete [] m_averageColorR;
-    delete [] m_averageColorG;
-    delete [] m_averageColorB;
+    delete [] d->intensityCount;
+    delete [] d->averageColorR;
+    delete [] d->averageColorG;
+    delete [] d->averageColorB;
 }
 
 /** Function to determine the most frequent color in a matrix
@@ -151,7 +167,7 @@ DColor OilPaintFilter::MostFrequentColor(DImg& src, int X, int Y, int Radius, in
     Height       = (int)src.height();
 
     // Erase the array
-    memset(m_intensityCount, 0, (Intensity + 1) * sizeof(uchar));
+    memset(d->intensityCount, 0, (Intensity + 1) * sizeof(uchar));
 
     for (w = X - Radius; w <= X + Radius; ++w)
     {
@@ -168,33 +184,33 @@ DColor OilPaintFilter::MostFrequentColor(DImg& src, int X, int Y, int Radius, in
                 blue          = (uint)color.blue();
 
                 I = lround(GetIntensity(red, green, blue) * Scale);
-                m_intensityCount[I]++;
+                d->intensityCount[I]++;
 
-                if (m_intensityCount[I] == 1)
+                if (d->intensityCount[I] == 1)
                 {
-                    m_averageColorR[I] = red;
-                    m_averageColorG[I] = green;
-                    m_averageColorB[I] = blue;
+                    d->averageColorR[I] = red;
+                    d->averageColorG[I] = green;
+                    d->averageColorB[I] = blue;
                 }
                 else
                 {
-                    m_averageColorR[I] += red;
-                    m_averageColorG[I] += green;
-                    m_averageColorB[I] += blue;
+                    d->averageColorR[I] += red;
+                    d->averageColorG[I] += green;
+                    d->averageColorB[I] += blue;
                 }
             }
         }
     }
 
-    I = 0;
-    int MaxInstance = 0;
+    I               = 0;
+    int MaxInstance = 1;
 
     for (i = 0 ; i <= Intensity ; ++i)
     {
-        if (m_intensityCount[i] > MaxInstance)
+        if (d->intensityCount[i] > MaxInstance)
         {
             I = i;
-            MaxInstance = m_intensityCount[i];
+            MaxInstance = d->intensityCount[i];
         }
     }
 
@@ -202,9 +218,9 @@ DColor OilPaintFilter::MostFrequentColor(DImg& src, int X, int Y, int Radius, in
     mostFrequentColor = src.getPixelColor(X, Y);
 
     // Overwrite RGB values to destination.
-    mostFrequentColor.setRed(m_averageColorR[I]   / MaxInstance);
-    mostFrequentColor.setGreen(m_averageColorG[I] / MaxInstance);
-    mostFrequentColor.setBlue(m_averageColorB[I]  / MaxInstance);
+    mostFrequentColor.setRed(d->averageColorR[I]   / MaxInstance);
+    mostFrequentColor.setGreen(d->averageColorG[I] / MaxInstance);
+    mostFrequentColor.setBlue(d->averageColorB[I]  / MaxInstance);
 
     return mostFrequentColor;
 }
@@ -222,16 +238,16 @@ FilterAction OilPaintFilter::filterAction()
     FilterAction action(FilterIdentifier(), CurrentVersion());
     action.setDisplayableName(DisplayableName());
 
-    action.addParameter("brushSize", m_brushSize);
-    action.addParameter("smoothness", m_smoothness);
+    action.addParameter("brushSize",  d->brushSize);
+    action.addParameter("smoothness", d->smoothness);
 
     return action;
 }
 
 void OilPaintFilter::readParameters(const Digikam::FilterAction& action)
 {
-    m_brushSize  = action.parameter("brushSize").toInt();
-    m_smoothness = action.parameter("smoothness").toInt();
+    d->brushSize  = action.parameter("brushSize").toInt();
+    d->smoothness = action.parameter("smoothness").toInt();
 }
 
 }  // namespace Digikam

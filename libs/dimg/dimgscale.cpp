@@ -10,7 +10,7 @@
  *               section of a image. Added 16bit image support
  *
  * Copyright (C) 2005      by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * Ported to C++/QImage by Daniel M. Duley
  * Following modification are (C) Daniel M. Duley
@@ -194,8 +194,7 @@ DImg DImg::smoothScaleClipped(const QSize& destSize, const QRect& clip) const
                                     clip.x(), clip.y(), clip.width(), clip.height());
 }
 
-DImg DImg::smoothScaleClipped(int dw, int dh,
-                              int clipx, int clipy, int clipw, int cliph) const
+DImg DImg::smoothScaleClipped(int dw, int dh, int clipx, int clipy, int clipw, int cliph) const
 {
     if (dw <= 0 || dh <= 0 || clipw <=0 || cliph <=0 || isNull())
     {
@@ -211,7 +210,7 @@ DImg DImg::smoothScaleClipped(int dw, int dh,
     }
 
     // ensure clip is valid
-    if (!DImgPrivate::clipped(clipx, clipy, clipw, cliph, dw, dh))
+    if (!Private::clipped(clipx, clipy, clipw, cliph, dw, dh))
     {
         return DImg();
     }
@@ -300,7 +299,7 @@ DImg DImg::smoothScaleSection(int sx, int sy,
     psw = sw;
     psh = sh;
 
-    if (!DImgPrivate::clipped(sx, sy, sw, sh, w, h))
+    if (!Private::clipped(sx, sy, sw, sh, w, h))
     {
         return DImg();
     }

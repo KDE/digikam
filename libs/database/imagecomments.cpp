@@ -6,8 +6,8 @@
  * Date        : 2007-09-19
  * Description : Access to comments of an image in the database
  *
- * Copyright (C) 2007-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2009-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -36,22 +36,15 @@
 namespace Digikam
 {
 
-class ImageCommentsPriv : public QSharedData
+class ImageComments::Private : public QSharedData
 {
 public:
 
-    ImageCommentsPriv() :
+    Private() :
         id(-1),
         unique(ImageComments::UniquePerLanguage)
     {
     }
-
-    qlonglong                     id;
-    QList<CommentInfo>            infos;
-    QSet<int>                     dirtyIndices;
-    QSet<int>                     newIndices;
-    QSet<int>                     idsToRemove;
-    ImageComments::UniqueBehavior unique;
 
     void init(DatabaseAccess& access, qlonglong imageId)
     {
@@ -121,6 +114,7 @@ public:
     void adjustStoredIndexes(QSet<int> &set, int removedIndex)
     {
         QSet<int> newSet;
+
         foreach(int index, set)
         {
             if (index > removedIndex)
@@ -134,6 +128,7 @@ public:
 
             // drop index == removedIndex
         }
+
         set = newSet;
     }
 
@@ -142,6 +137,15 @@ public:
         adjustStoredIndexes(dirtyIndices, removedIndex);
         adjustStoredIndexes(newIndices, removedIndex);
     }
+
+public:
+
+    qlonglong                     id;
+    QList<CommentInfo>            infos;
+    QSet<int>                     dirtyIndices;
+    QSet<int>                     newIndices;
+    QSet<int>                     idsToRemove;
+    ImageComments::UniqueBehavior unique;
 };
 
 ImageComments::ImageComments()
@@ -150,14 +154,14 @@ ImageComments::ImageComments()
 }
 
 ImageComments::ImageComments(qlonglong imageid)
-    : d(new ImageCommentsPriv)
+    : d(new Private)
 {
     DatabaseAccess access;
     d->init(access, imageid);
 }
 
 ImageComments::ImageComments(DatabaseAccess& access, qlonglong imageid)
-    : d(new ImageCommentsPriv)
+    : d(new Private)
 {
     d->init(access, imageid);
 }
@@ -183,16 +187,16 @@ bool ImageComments::isNull() const
     return !d;
 }
 
-QString ImageComments::defaultComment(int *index, DatabaseComment::Type type) const
+QString ImageComments::defaultComment(int* const index, DatabaseComment::Type type) const
 {
     if (!d)
     {
         return QString();
     }
 
-    KLocale* locale  = KGlobal::locale();
-    QString langCode = locale->language().toLower() + '-';
-    QString fullCode = langCode + locale->country().toLower();
+    KLocale* const locale = KGlobal::locale();
+    QString langCode      = locale->language().toLower() + '-';
+    QString fullCode      = langCode + locale->country().toLower();
 
     int fullCodeMatch, langCodeMatch, defaultCodeMatch, firstMatch;
 
@@ -230,8 +234,8 @@ QString ImageComments::defaultComment(int *index, DatabaseComment::Type type) co
     }
 }
 
-QString ImageComments::commentForLanguage(const QString& languageCode, int* index,
-        LanguageChoiceBehavior behavior) const
+QString ImageComments::commentForLanguage(const QString& languageCode, int* const index,
+                                          LanguageChoiceBehavior behavior) const
 {
     if (!d)
     {
@@ -365,7 +369,7 @@ void ImageComments::addComment(const QString& comment, const QString& lang, cons
     }
 
     bool multipleCommentsPerLanguage = (d->unique == UniquePerLanguageAndAuthor);
-    QString language = lang;
+    QString language                 = lang;
 
     if (language.isEmpty())
     {
@@ -547,6 +551,7 @@ void ImageComments::removeAll()
     {
         d->idsToRemove << info.id;
     }
+
     d->infos.clear();
     d->dirtyIndices.clear();
     d->newIndices.clear();
@@ -629,6 +634,7 @@ void ImageComments::apply(DatabaseAccess& access)
     {
         access.db()->removeImageComment(commentId, d->id);
     }
+
     d->idsToRemove.clear();
 
     foreach(int index, d->newIndices)
@@ -636,6 +642,7 @@ void ImageComments::apply(DatabaseAccess& access)
         CommentInfo& info = d->infos[index];
         info.id = access.db()->setImageComment(d->id, info.comment, info.type, info.language, info.author, info.date);
     }
+
     d->dirtyIndices.subtract(d->newIndices);
     d->newIndices.clear();
 
@@ -646,6 +653,7 @@ void ImageComments::apply(DatabaseAccess& access)
         values << (int)info.type << info.language << info.author << info.date << info.comment;
         access.db()->changeImageComment(info.id, d->id, values);
     }
+
     d->dirtyIndices.clear();
 }
 

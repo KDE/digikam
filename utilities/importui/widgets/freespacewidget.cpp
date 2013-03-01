@@ -83,7 +83,7 @@ public:
 
     Private() :
         isValid(false),
-        percentUsed(0),
+        percentUsed(-1),
         dSizeKb(0),
         kBSize(0),
         kBUsed(0),
@@ -192,6 +192,7 @@ void FreeSpaceWidget::addInformation(unsigned long kBSize,
     d->kBUsed      = 0;
     d->kBAvail     = 0;
     d->isValid     = false;
+    d->percentUsed = -1;
 
     foreach(const MountPointInfo& info, d->infos)
     {
@@ -204,7 +205,8 @@ void FreeSpaceWidget::addInformation(unsigned long kBSize,
         }
     }
 
-    d->percentUsed = lround(100.0 - (100.0 * kBAvail / kBSize));
+    if (kBSize > 0)
+        d->percentUsed = lround(100.0 - (100.0 * kBAvail / kBSize));
 
     updateToolTip();
     update();
@@ -297,7 +299,7 @@ void FreeSpaceWidget::paintEvent(QPaintEvent*)
         {
             barcol = QColor(240, 255, 62);   // Smooth Yellow.
         }
-        else if (peUsed > 95)
+        if (peUsed > 95)
         {
             barcol = QColor(255, 62, 62);    // Smooth Red.
         }

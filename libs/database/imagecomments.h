@@ -6,9 +6,9 @@
  * Date        : 2007-09-19
  * Description : Access to comments of an image in the database
  *
- * Copyright (C) 2007-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2009-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2008 by Patrick Spendrin <ps_ml at gmx dot de>
+ * Copyright (C) 2007-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008      by Patrick Spendrin <ps_ml at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -45,8 +45,6 @@ using namespace KExiv2Iface;
 
 namespace Digikam
 {
-
-class ImageCommentsPriv;
 
 class DIGIKAM_DATABASE_EXPORT ImageComments
 {
@@ -86,6 +84,8 @@ public:
         UniquePerLanguageAndAuthor
     };
 
+public:
+
     /** Create a null ImageComments object */
     ImageComments();
 
@@ -121,26 +121,29 @@ public:
      * Optionally also returns the index with which you can access further information about the comment.
      */
     QString defaultComment(Digikam::DatabaseComment::Type type = DatabaseComment::Comment) const
-    { return defaultComment(0, type); }
-    QString defaultComment(int* index, Digikam::DatabaseComment::Type type = DatabaseComment::Comment) const;
+    {
+        return defaultComment(0, type);
+    }
+
+    QString defaultComment(int* const index, Digikam::DatabaseComment::Type type = DatabaseComment::Comment) const;
 
     /**
      * Returns a comment for the specified language.
      * Matching behavior can be specified.
      * Optionally also returns the index with which you can access further information about the comment.
      */
-    QString commentForLanguage(const QString& languageCode, int* index = 0,
+    QString commentForLanguage(const QString& languageCode, int* const index = 0,
                                LanguageChoiceBehavior behavior = ReturnMatchingDefaultOrFirstLanguage) const;
 
     /** Returns the number of comments available. */
-    int numberOfComments() const;
+    int numberOfComments()                const;
 
     /// Access individual properties. Please ensure that the specified index is a valid index
     DatabaseComment::Type type(int index) const;
-    QString language(int index) const; /// RFC 3066 notation, or "x-default"
-    QString author(int index) const;
-    QDateTime date(int index) const;
-    QString comment(int index) const;
+    QString language(int index)           const; /// RFC 3066 notation, or "x-default"
+    QString author(int index)             const;
+    QDateTime date(int index)             const;
+    QString comment(int index)            const;
 
     /**
      * Add a new comment to the list of normal image comments, specified with language and author.
@@ -230,10 +233,13 @@ protected:
                             const QString& author,
                             DatabaseComment::Type type,
                             const QDateTime& date);
+public:
+
+    class Private;
 
 protected:
 
-    QSharedDataPointer<ImageCommentsPriv> d;
+    QSharedDataPointer<Private> d;
 };
 
 } // namespace Digikam

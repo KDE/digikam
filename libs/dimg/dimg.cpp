@@ -7,8 +7,8 @@
  * Description : digiKam 8/16 bits image management API
  *
  * Copyright (C) 2005      by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -95,20 +95,20 @@ namespace Digikam
 {
 
 DImg::DImg()
-    : m_priv(new DImgPrivate)
+    : m_priv(new Private)
 {
 }
 
 DImg::DImg(const QByteArray& filePath, DImgLoaderObserver* const observer,
            const DRawDecoding& rawDecodingSettings)
-    : m_priv(new DImgPrivate)
+    : m_priv(new Private)
 {
     load(filePath, observer, rawDecodingSettings);
 }
 
 DImg::DImg(const QString& filePath, DImgLoaderObserver* const observer,
            const DRawDecoding& rawDecodingSettings)
-    : m_priv(new DImgPrivate)
+    : m_priv(new Private)
 {
     load(filePath, observer, rawDecodingSettings);
 }
@@ -119,13 +119,13 @@ DImg::DImg(const DImg& image)
 }
 
 DImg::DImg(uint width, uint height, bool sixteenBit, bool alpha, uchar* const data, bool copyData)
-    : m_priv(new DImgPrivate)
+    : m_priv(new Private)
 {
     putImageData(width, height, sixteenBit, alpha, data, copyData);
 }
 
 DImg::DImg(const DImg& image, int w, int h)
-    : m_priv(new DImgPrivate)
+    : m_priv(new Private)
 {
     // This private constructor creates a copy of everything except the data.
     // The image size is set to the given values and a buffer corresponding to these values is allocated.
@@ -137,7 +137,7 @@ DImg::DImg(const DImg& image, int w, int h)
 }
 
 DImg::DImg(const QImage& image)
-    : m_priv(new DImgPrivate)
+    : m_priv(new Private)
 {
     if (!image.isNull())
     {
@@ -198,7 +198,7 @@ bool DImg::operator==(const DImg& image) const
 
 void DImg::reset()
 {
-    m_priv = new DImgPrivate;
+    m_priv = new Private;
 }
 
 void DImg::detach()
@@ -209,9 +209,9 @@ void DImg::detach()
         return;
     }
 
-    DSharedDataPointer<DImgPrivate> old = m_priv;
+    DSharedDataPointer<Private> old = m_priv;
 
-    m_priv = new DImgPrivate;
+    m_priv = new Private;
     copyImageData(old);
     copyMetaData(old);
 
@@ -294,7 +294,7 @@ uchar* DImg::stripImageData()
     return data;
 }
 
-void DImg::copyMetaData(const DImgPrivate* const src)
+void DImg::copyMetaData(const Private* const src)
 {
     m_priv->metaData     = src->metaData;
     m_priv->attributes   = src->attributes;
@@ -304,7 +304,7 @@ void DImg::copyMetaData(const DImgPrivate* const src)
     //FIXME: what about sharing and deleting lanczos_func?
 }
 
-void DImg::copyImageData(const DImgPrivate* const src)
+void DImg::copyImageData(const Private* const src)
 {
     setImageData(src->null, src->width, src->height, src->sixteenBit, src->alpha);
 }
@@ -771,7 +771,7 @@ DImg::FORMAT DImg::fileFormat(const QString& filePath)
 
     // In second, we trying to parse file header.
 
-    FILE* f = fopen(QFile::encodeName(filePath), "rb");
+    FILE* const f = fopen(QFile::encodeName(filePath), "rb");
 
     if (!f)
     {
@@ -812,9 +812,9 @@ DImg::FORMAT DImg::fileFormat(const QString& filePath)
     else if (memcmp(&header[0], "P", 1)  == 0 &&
              memcmp(&header[2], "\n", 1) == 0)       // PPM 16 bits file ?
     {
-        int width, height, rgbmax;
-        char nl;
-        FILE* file = fopen(QFile::encodeName(filePath), "rb");
+        int         width, height, rgbmax;
+        char        nl;
+        FILE* const file = fopen(QFile::encodeName(filePath), "rb");
 
         // FIXME: scanf without field width limits can crash with huge input data
         if (file && fscanf(file, "P6 %d %d %d%c", &width, &height, &rgbmax, &nl) == 4)
@@ -826,7 +826,8 @@ DImg::FORMAT DImg::fileFormat(const QString& filePath)
             }
         }
 
-        fclose(file);
+        if (file)
+            fclose(file);
     }
     else if (KDcrawIface::KDcraw::rawFileIdentify(dcrawIdentify, filePath)
              && dcrawIdentify.isDecodable)
@@ -1542,7 +1543,7 @@ DImg DImg::copy(int x, int y, int w, int h) const
         return DImg();
     }
 
-    if (!DImgPrivate::clipped(x, y, w, h, m_priv->width, m_priv->height))
+    if (!Private::clipped(x, y, w, h, m_priv->width, m_priv->height))
     {
         return DImg();
     }

@@ -399,10 +399,6 @@ MACRO_BOOL_TO_01(KDEPIMLIBS_FOUND HAVE_KDEPIMLIBS)
 
 SET(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules ${CMAKE_MODULE_PATH} )
 
-# Check GLib2 library for lrqr-1 libraries.
-MACRO_OPTIONAL_FIND_PACKAGE(GLIB2)
-MACRO_BOOL_TO_01(GLIB2_FOUND HAVE_GLIB2)
-
 # Check LensFun library for Lens auto-correction tool.
 MACRO_OPTIONAL_FIND_PACKAGE(LensFun)
 
@@ -426,7 +422,7 @@ MACRO_BOOL_TO_01(LENSFUN_FOUND HAVE_LENSFUN)
 
 # Check Lqr-1 library for Contents Aware Resizer tool.
 MACRO_OPTIONAL_FIND_PACKAGE(Lqr-1)
-MACRO_BOOL_TO_01(LQR-1_FOUND USE_EXT_LIBLQR-1)
+MACRO_BOOL_TO_01(LQR-1_FOUND HAVE_LIBLQR_1)
 
 MACRO_BOOL_TO_01(ENABLE_SCRIPTIFACE      USE_SCRIPT_IFACE)
 MACRO_BOOL_TO_01(ENABLE_PRESENTATIONMODE USE_PRESENTATION_MODE)
@@ -455,6 +451,9 @@ MACRO_BOOL_TO_01(ENABLE_ADVANCEDDEBUGMSG USE_ADVANCEDDEBUGMSG)
 #ENDIF (ENABLE_NEPOMUKSUPPORT)
 
 MACRO_OPTIONAL_FIND_PACKAGE(Doxygen)
+
+MACRO_OPTIONAL_FIND_PACKAGE(Sqlite2)
+MACRO_BOOL_TO_01(SQLITE2_FOUND HAVE_SQLITE2)
 
 # Set config files accordingly with optional dependencies
 
@@ -495,11 +494,15 @@ PRINT_LIBRARY_STATUS("libkdcraw"   "http://www.digikam.org/sharedlibs"          
 PRINT_LIBRARY_STATUS("libkface"    "http://www.digikam.org/sharedlibs"                              " (version >= 0.1.0)"                 KFACE_FOUND)
 PRINT_LIBRARY_STATUS("libkgeomap"  "http://www.digikam.org/sharedlibs"                              " (version >= 0.1.0)"                 KGEOMAP_FOUND)
 
+# ================================================================
+
 IF(PGF_FOUND)
     MESSAGE(STATUS " libpgf library found..................... YES (optional)")
 ELSE(PGF_FOUND)
     MESSAGE(STATUS " libpgf library found..................... NO  (optional - internal version used instead)")
 ENDIF(PGF_FOUND)
+
+# ================================================================
 
 IF(CLAPACK_FOUND)
     MESSAGE(STATUS " libclapack library found................. YES (optional)")
@@ -533,6 +536,8 @@ ELSE(KDEPIMLIBS_FOUND)
     MESSAGE(STATUS "")
 ENDIF(KDEPIMLIBS_FOUND)
 
+# ================================================================
+
 #IF(NEPOMUK_FOUND)
 #    MESSAGE(STATUS " Nepomuk libraries found.................. YES (optional)")
 #ELSE(NEPOMUK_FOUND)
@@ -546,26 +551,40 @@ ENDIF(KDEPIMLIBS_FOUND)
 #    MESSAGE(STATUS "")
 #ENDIF(NEPOMUK_FOUND)
 
-IF(GLIB2_FOUND)
-    MESSAGE(STATUS " libglib2 library found................... YES (optional)")
-    IF(LQR-1_FOUND)
-        MESSAGE(STATUS " liblqr-1 library found................... YES (optional)")
-    ELSE(LQR-1_FOUND)
-        MESSAGE(STATUS " liblqr-1 library found................... NO  (optional - internal version used instead)")
-    ENDIF(LQR-1_FOUND)
+# ================================================================
 
-    IF (LENSFUN_FOUND)
-        MESSAGE(STATUS " liblensfun library found................. YES (optional)")
-    ELSE(LENSFUN_FOUND)
-        MESSAGE(STATUS " liblensfun library found................. NO  (optional)")
-    ENDIF(LENSFUN_FOUND)
+IF(LQR-1_FOUND)
+    MESSAGE(STATUS " Liblqr-1 found........................... YES (optional)")
+ELSE(LQR-1_FOUND)
+    MESSAGE(STATUS " Liblqr-1 found........................... NO  (optional)")
+    MESSAGE(STATUS "")
+    MESSAGE(STATUS " digiKam will be compiled without Contents Aware Resizer tool support.")
+    MESSAGE(STATUS "")
+ENDIF(LQR-1_FOUND)
 
-ELSE(GLIB2_FOUND)
-    MESSAGE(STATUS " libglib2 library found................... NO  (optional)")
+# ================================================================
+
+IF(LENSFUN_FOUND)
+    MESSAGE(STATUS " Liblensfun found......................... YES (optional)")
+ELSE(LENSFUN_FOUND)
+    MESSAGE(STATUS " Liblensfun found......................... NO  (optional)")
     MESSAGE(STATUS "")
-    MESSAGE(STATUS " digiKam will be compiled without liquid rescale and lens auto-correction tools.")
+    MESSAGE(STATUS " digiKam will be compiled without Lens Auto Correction tool support.")
     MESSAGE(STATUS "")
-ENDIF(GLIB2_FOUND)
+ENDIF(LENSFUN_FOUND)
+
+# ================================================================
+
+IF(SQLITE2_FOUND)
+    MESSAGE(STATUS " Libsqlite v2 found....................... YES (optional)")
+ELSE(SQLITE2_FOUND)
+    MESSAGE(STATUS " Libsqlite v2 found....................... NO  (optional)")
+    MESSAGE(STATUS "")
+    MESSAGE(STATUS " digiKam will be compiled without importing databases of digiKam 0.7 support.")
+    MESSAGE(STATUS "")
+ENDIF(SQLITE2_FOUND)
+
+# ================================================================
 
 IF(DOXYGEN_FOUND)
     MESSAGE(STATUS " Doxygen found............................ YES (optional)")
@@ -575,8 +594,9 @@ ELSE(DOXYGEN_FOUND)
     MESSAGE(STATUS " You will not be able to to generate the API documentation.")
     MESSAGE(STATUS " This does not affect building digiKam in any way.")
     MESSAGE(STATUS "")
-
 ENDIF(DOXYGEN_FOUND)
+
+# ================================================================
 
 IF(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND Boost_FOUND AND JASPER_FOUND AND KDCRAW_FOUND AND KEXIV2_FOUND AND KIPI_FOUND AND KFACE_FOUND AND KGEOMAP_FOUND)
     MESSAGE(STATUS " digiKam can be compiled.................. YES")
@@ -747,43 +767,13 @@ IF(DIGIKAM_CAN_BE_COMPILED)
 
     # ==================================================================================================
     # Lensfun and LibLqr-1 library rules
-    # NOTE: LibLqr-1 library needs GLIB2 to link.
 
-    IF(GLIB2_FOUND)
+    IF(LQR-1_FOUND)
 
-        INCLUDE_DIRECTORIES(${GLIB2_INCLUDE_DIR})
+        INCLUDE_DIRECTORIES(${LQR-1_INCLUDE_DIRS})
+        SET(liblqr_LIBS ${LQR-1_LIBRARIES})
 
-        IF(LQR-1_FOUND)
-
-            INCLUDE_DIRECTORIES(${LQR-1_INCLUDE_DIRS})
-            SET(liblqr_LIBS ${LQR-1_LIBRARIES})
-
-        ELSE(LQR-1_FOUND)
-
-            INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty)
-            INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lqr)
-
-            SET(liblqr_SRCS
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lqr/lqr_carver_bias.c
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lqr/lqr_carver.c
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lqr/lqr_carver_list.c
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lqr/lqr_carver_rigmask.c
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lqr/lqr_cursor.c
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lqr/lqr_gradient.c
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lqr/lqr_progress.c
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lqr/lqr_vmap.c
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lqr/lqr_vmap_list.c
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lqr/lqr_energy.c
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lqr/lqr_rwindow.c
-            )
-
-            IF(WIN32)
-                ADD_DEFINITIONS(-DLQR_DISABLE_DECLSPEC)
-            ENDIF(WIN32)
-
-        ENDIF(LQR-1_FOUND)
-
-    ENDIF(GLIB2_FOUND)
+    ENDIF(LQR-1_FOUND)
 
     IF(LENSFUN_FOUND)
 
@@ -914,14 +904,14 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lens/pixelaccess.cpp
        )
 
-    IF(GLIB2_FOUND)
+    IF(LQR-1_FOUND)
 
         SET(libdimgfilters_SRCS ${libdimgfilters_SRCS}
             ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/transform/contentawarefilter.cpp
             ${liblqr_SRCS}
            )
 
-    ENDIF(GLIB2_FOUND)
+    ENDIF(LQR-1_FOUND)
 
     IF(LENSFUN_FOUND)
 
@@ -1318,7 +1308,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
 
     SET(libdatabase_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/albumdb.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/albumdb_sqlite2.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/collectionscanner.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/collectionmanager.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/collectionlocation.cpp
@@ -1349,7 +1338,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/searchxml.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/schemaupdater.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/tagproperties.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/upgradedb_sqlite2tosqlite3.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databasechecker.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databasecopymanager.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databaseserverstarter.cpp
@@ -1369,41 +1357,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
 
     SET(pgfutils_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/threadimageio/pgfutils.cpp
-       )
-
-    SET(libsqlite2_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/attach.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/auth.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/btree.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/btree_rb.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/build.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/copy.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/date.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/delete.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/encode.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/expr.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/func.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/hash.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/insert.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/main.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/opcodes.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/os.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/pager.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/parse.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/pragma.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/printf.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/random.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/select.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/shell.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/table.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/tokenize.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/trigger.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/update.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/util.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/vacuum.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/vdbe.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/vdbeaux.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/where.c
        )
 
     SET(libkde3rdparty_SRCS
@@ -1603,6 +1556,11 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/utils/uifilevalidator.cpp
        )
 
+    SET(libalbumsqlite2_SRCS
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/albumdb_sqlite2.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/upgradedb_sqlite2tosqlite3.cpp
+       )
+
     INCLUDE_DIRECTORIES(
         ${DATABASESERVERDIR}
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam
@@ -1629,7 +1587,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dklcms
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/cimg
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/kmemoryinfo
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/kinotify
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database

@@ -81,14 +81,8 @@ private:
 
 private:
 
-    uchar* m_intensityCount;
-
-    int    m_brushSize;
-    int    m_smoothness;
-
-    uint*  m_averageColorR;
-    uint*  m_averageColorG;
-    uint*  m_averageColorB;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

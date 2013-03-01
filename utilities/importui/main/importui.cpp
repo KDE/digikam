@@ -7,7 +7,7 @@
 * Description : Import tool interface
 *
 * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
-* Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+* Copyright (C) 2006-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
 * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
 * Copyright (C) 2012      by Andi Clemens <andi dot clemens at gmail dot com>
 * Copyright (C) 2012      by Islam Wazery <wazery at ubuntu dot com>
@@ -79,6 +79,7 @@
 #include <kstandarddirs.h>
 #include <kstatusbar.h>
 #include <ktoggleaction.h>
+#include <ktogglefullscreenaction.h>
 #include <ktoolbar.h>
 #include <ktoolinvocation.h>
 #include <kurllabel.h>
@@ -557,8 +558,9 @@ void ImportUI::setupActions()
 
     // ------------------------------------------------------------------------------------------------
 
-    d->fullScreenAction = actionCollection()->addAction(KStandardAction::FullScreen,
-                                                        "importui_fullscreen", this, SLOT(slotToggleFullScreen()));
+    d->fullScreenAction = KStandardAction::fullScreen(0, 0, this, this);
+    actionCollection()->addAction("importui_fullscreen", d->fullScreenAction);
+    connect(d->fullScreenAction, SIGNAL(toggled(bool)), this, SLOT(slotToggleFullScreen(bool)));
 
     d->showLogAction = new KToggleAction(KIcon("view-history"), i18n("Show History"), this);
     d->showLogAction->setShortcut(KShortcut(Qt::CTRL + Qt::Key_H));
@@ -1150,7 +1152,7 @@ void ImportUI::slotZoomChanged(double zoom)
     double zmax = d->view->zoomMax();
     d->zoomBar->setZoom(zoom, zmin, zmax);
 
-    if (!d->fullScreen)
+    if (!d->fullScreenAction->isChecked())
     {
         d->zoomBar->triggerZoomTrackerToolTip();
     }
@@ -1160,7 +1162,7 @@ void ImportUI::slotThumbSizeChanged(int size)
 {
     d->zoomBar->setThumbsSize(size);
 
-    if (!d->fullScreen)
+    if (!d->fullScreenAction->isChecked())
     {
         d->zoomBar->triggerZoomTrackerToolTip();
     }
@@ -2479,88 +2481,6 @@ void ImportUI::slotSetup()
     Setup::exec(this);
 }
 
-void ImportUI::slotToggleFullScreen()
-{
-    if (d->fullScreen) // out of fullscreen
-    {
-        setWindowState(windowState() & ~Qt::WindowFullScreen);   // reset
-
-        slotShowMenuBar();
-        statusBar()->show();
-        showToolBars();
-
-        if (d->removeFullScreenButton)
-        {
-            QList<KToolBar*> toolbars = toolBars();
-            foreach(KToolBar* const toolbar, toolbars)
-            {
-                // name is set in ui.rc XML file
-                if (toolbar->objectName() == "ToolBar")
-                {
-                    toolbar->removeAction(d->fullScreenAction);
-                    break;
-                }
-            }
-        }
-
-        d->rightSideBar->restore();
-
-        d->fullScreen = false;
-    }
-    else  // go to fullscreen
-    {
-        // hide the menubar and the statusbar
-        menuBar()->hide();
-        statusBar()->hide();
-
-        if (d->fullScreenHideToolBar)
-        {
-            hideToolBars();
-        }
-        else
-        {
-            showToolBars();
-
-            QList<KToolBar*> toolbars = toolBars();
-            KToolBar* mainToolbar     = 0;
-            foreach(KToolBar* const toolbar, toolbars)
-            {
-                if (toolbar->objectName() == "ToolBar")
-                {
-                    mainToolbar = toolbar;
-                    break;
-                }
-            }
-
-            // add fullscreen action if necessary
-            if (mainToolbar && !mainToolbar->actions().contains(d->fullScreenAction))
-            {
-                mainToolbar->addAction(d->fullScreenAction);
-                d->removeFullScreenButton = true;
-            }
-            else
-            {
-                // If FullScreen button is enabled in toolbar settings,
-                // we shall not remove it when leaving of fullscreen mode.
-                d->removeFullScreenButton = false;
-            }
-        }
-
-        d->rightSideBar->backup();
-
-        setWindowState(windowState() | Qt::WindowFullScreen);   // set
-        d->fullScreen = true;
-    }
-}
-
-void ImportUI::slotEscapePressed()
-{
-    if (d->fullScreen)
-    {
-        d->fullScreenAction->activate(QAction::Trigger);
-    }
-}
-
 void ImportUI::showToolBars()
 {
     QList<KToolBar*> toolbars = toolBars();
@@ -2670,6 +2590,89 @@ void ImportUI::slotHistoryEntryClicked(const QVariant& metadata)
     QString folder   = meta.at(0);
     QString file     = meta.at(1);
     d->view->scrollTo(folder, file);
+}
+
+void ImportUI::slotToggleFullScreen(bool b)
+{
+    KToggleFullScreenAction::setFullScreen(this, b);
+
+    if (!b)
+    {
+        // Switch off fullscreen
+
+        slotShowMenuBar();
+        statusBar()->show();
+        showToolBars();
+
+        if (d->removeFullScreenButton)
+        {
+            QList<KToolBar*> toolbars = toolBars();
+
+            foreach(KToolBar* const toolbar, toolbars)
+            {
+                // name is set in ui.rc XML file
+                if (toolbar->objectName() == "ToolBar")
+                {
+                    toolbar->removeAction(d->fullScreenAction);
+                    break;
+                }
+            }
+        }
+
+        d->rightSideBar->restore();
+    }
+    else
+    {
+        // Switch on fullscreen
+
+        // hide the menubar and the statusbar
+        menuBar()->hide();
+        statusBar()->hide();
+
+        if (d->fullScreenHideToolBar)
+        {
+            hideToolBars();
+        }
+        else
+        {
+            showToolBars();
+
+            QList<KToolBar*> toolbars = toolBars();
+            KToolBar* mainToolbar     = 0;
+
+            foreach(KToolBar* const toolbar, toolbars)
+            {
+                if (toolbar->objectName() == "ToolBar")
+                {
+                    mainToolbar = toolbar;
+                    break;
+                }
+            }
+
+            // add fullscreen action if necessary
+            if (mainToolbar && !mainToolbar->actions().contains(d->fullScreenAction))
+            {
+                mainToolbar->addAction(d->fullScreenAction);
+                d->removeFullScreenButton = true;
+            }
+            else
+            {
+                // If FullScreen button is enabled in toolbar settings,
+                // we shall not remove it when leaving of fullscreen mode.
+                d->removeFullScreenButton = false;
+            }
+        }
+
+        d->rightSideBar->backup();
+    }
+}
+
+void ImportUI::slotEscapePressed()
+{
+    if (d->fullScreenAction->isChecked())
+    {
+        d->fullScreenAction->activate(QAction::Trigger);
+    }
 }
 
 }  // namespace Digikam

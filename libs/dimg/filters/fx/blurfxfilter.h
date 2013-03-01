@@ -48,7 +48,7 @@ public:
     explicit BlurFXFilter(QObject* const parent = 0);
     explicit BlurFXFilter(DImg* const orgImage, QObject* const parent=0, int blurFXType=ZoomBlur,
                           int distance=100, int level=45);
-    ~BlurFXFilter() {};
+    ~BlurFXFilter();
 
     static QString          FilterIdentifier()
     {
@@ -244,10 +244,8 @@ private:
 
 private:
 
-    int     m_blurFXType;
-    int     m_distance;
-    int     m_level;
-    quint32 m_randomSeed;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

@@ -53,25 +53,18 @@ public:
         m_Size = size;
     }
 
+    ThumbnailSize(const ThumbnailSize& thumbsize)
+    {
+        m_Size = thumbsize.m_Size;
+    }
+
     ~ThumbnailSize()
     {
     }
 
-    ThumbnailSize(const ThumbnailSize& thumbsize)
-    {
-        if (this != &thumbsize)
-        {
-            m_Size = thumbsize.m_Size;
-        }
-    }
-
     ThumbnailSize& operator=(const ThumbnailSize& thumbsize)
     {
-        if (this != &thumbsize)
-        {
-            m_Size = thumbsize.m_Size;
-        }
-
+        m_Size = thumbsize.m_Size;
         return *this;
     }
 

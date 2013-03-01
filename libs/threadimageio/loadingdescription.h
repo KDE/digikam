@@ -90,11 +90,13 @@ public:
         };
         Q_DECLARE_FLAGS(PreviewFlags, PreviewFlag)
 
+    public:
+
         PreviewParameters()
         {
-            type            = NoPreview;
-            size            = 0;
-            flags           = NoFlags;
+            type  = NoPreview;
+            size  = 0;
+            flags = NoFlags;
         }
 
         bool onlyPregenerate() const
@@ -117,6 +119,8 @@ public:
         QVariant     extraParameter;
     };
 
+    // ---------------------------------------------------------------------
+
     class PostProcessingParameters
     {
     public:
@@ -130,11 +134,11 @@ public:
 
         void         setTransform(const IccTransform& transform);
         bool         hasTransform() const;
-        IccTransform transform() const;
+        IccTransform transform()    const;
 
         void       setProfile(const IccProfile& profile);
         bool       hasProfile() const;
-        IccProfile profile() const;
+        IccProfile profile()    const;
 
         bool operator==(const PostProcessingParameters& other) const;
 
@@ -151,13 +155,13 @@ public:
      */
     LoadingDescription()
     {
+        rawDecodingHint = RawDecodingDefaultSettings;
     }
 
     /**
      * Use this for full loading of non-raw files
      */
-    LoadingDescription(const QString& filePath,
-                                ColorManagementSettings = NoColorConversion);
+    LoadingDescription(const QString& filePath, ColorManagementSettings = NoColorConversion);
 
     /**
      * Use this for full loading of raw files

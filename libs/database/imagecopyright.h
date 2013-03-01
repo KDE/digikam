@@ -6,8 +6,8 @@
  * Date        : 2008-05-12
  * Description : Access to copyright info of an image in the database
  *
- * Copyright (C) 2008-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -49,17 +49,7 @@ class Template;
 
 class DIGIKAM_DATABASE_EXPORT ImageCopyright
 {
-
 public:
-
-    ImageCopyright(qlonglong imageid);
-
-    /** Create a null ImageCopyright object */
-    ImageCopyright();
-
-    ImageCopyright(const ImageCopyright& other);
-    ~ImageCopyright();
-    ImageCopyright& operator=(const ImageCopyright& other);
 
     enum ReplaceMode
     {
@@ -70,6 +60,18 @@ public:
         /// No constraints on adding the entry
         AddEntryToExisting
     };
+
+public:
+
+    ImageCopyright(qlonglong imageid);
+
+    /** Create a null ImageCopyright object */
+    ImageCopyright();
+
+    ImageCopyright(const ImageCopyright& other);
+    ~ImageCopyright();
+
+    ImageCopyright& operator=(const ImageCopyright& other);
 
     /** Returns the author/creator/byline.
      *  This is Photoshop Author.
@@ -86,10 +88,12 @@ public:
      *  the IPTC Core Creator value.&rdquo;
      */
     QStringList creator() const;
+
     QStringList author() const
     {
         return creator();
     }
+
     QStringList byLine() const
     {
         return creator();
@@ -101,10 +105,12 @@ public:
      *  You shall not use ReplaceLanguageEntry for this method, creators have no language associated.
      */
     void setCreator(const QString& creator, ReplaceMode mode = ReplaceAllEntries);
+
     void setAuthor(const QString& author, ReplaceMode mode = ReplaceAllEntries)
     {
         setCreator(author, mode);
     }
+
     void setByLine(const QString& byline, ReplaceMode mode = ReplaceAllEntries)
     {
         setCreator(byline, mode);
@@ -119,12 +125,14 @@ public:
      *  &ldquo;Identifies the provider of the news object, who is not necessarily the owner/creator.&rdquo;
      */
     QString provider() const;
+
     QString credit() const
     {
         return provider();
     }
 
     void setProvider(const QString& provider);
+
     void setCredit(const QString& credit)
     {
         setProvider(credit);
@@ -149,6 +157,7 @@ public:
      *  If you pass a null string as languageCode, the local language is returned.
      */
     QString copyrightNotice(const QString& languageCode = QString());
+
     QString rights(const QString& languageCode = QString())
     {
         return copyrightNotice(languageCode);
@@ -162,6 +171,7 @@ public:
      */
     void setCopyrightNotice(const QString& notice, const QString& languageCode = QString(),
                             ReplaceMode mode = ReplaceLanguageEntry);
+
     void setRights(const QString& notice, const QString& languageCode = QString(),
                    ReplaceMode mode = ReplaceLanguageEntry)
     {
@@ -208,20 +218,24 @@ public:
      *    using Creator's Jobtitle.&rdquo;
      */
     QString creatorJobTitle() const;
+
     QString authorsPosition() const
     {
         return creatorJobTitle();
     }
-    QString byLineTitle() const 
+
+    QString byLineTitle() const
     {
         return creatorJobTitle();
     }
 
     void setCreatorJobTitle(const QString& title);
+
     void setAuthorsPosition(const QString& position)
     {
         setCreatorJobTitle(position);
     }
+
     void setByLineTitle(const QString& title)
     {
         setCreatorJobTitle(title);
@@ -270,22 +284,23 @@ public:
 
 protected:
 
-    CopyrightInfo copyrightInfo(const QString& property) const;
-    QList<CopyrightInfo> copyrightInfos(const QString& property) const;
-    QString readSimpleProperty(const QString& property) const;
+    CopyrightInfo copyrightInfo(const QString& property)                                 const;
+    QList<CopyrightInfo> copyrightInfos(const QString& property)                         const;
+    QString readSimpleProperty(const QString& property)                                  const;
+    int     languageMatch(const QList<CopyrightInfo> infos, const QString& languageCode) const;
+
     void    setSimpleProperty(const QString& property, const QString& value);
     QString readLanguageProperty(const QString& property, const QString& languageCode);
     KExiv2Iface::KExiv2::AltLangMap readLanguageProperties(const QString& property);
     void    setLanguageProperty(const QString& property, const QString& value, const QString& languageCode, ReplaceMode mode);
     void    removeProperties(const QString& property);
     void    removeLanguageProperty(const QString& property, const QString& languageCode);
-    int     languageMatch(const QList<CopyrightInfo> infos, const QString& languageCode) const;
 
 protected:
 
     friend class ImageCopyrightCache;
 
-    qlonglong m_id;
+    qlonglong            m_id;
     ImageCopyrightCache* m_cache;
 };
 

@@ -6,7 +6,7 @@
  * Date        : 2010-02-11
  * Description : HSL settings view.
  *
- * Copyright (C) 2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -40,15 +40,13 @@
 namespace Digikam
 {
 
-class HSLSettingsPriv;
-
 class DIGIKAM_EXPORT HSLSettings : public QWidget
 {
     Q_OBJECT
 
 public:
 
-    explicit HSLSettings(QWidget* parent);
+    explicit HSLSettings(QWidget* const parent);
     ~HSLSettings();
 
     HSLContainer defaultSettings() const;
@@ -72,7 +70,8 @@ private Q_SLOTS:
 
 private:
 
-    HSLSettingsPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam
