@@ -394,8 +394,8 @@ void IccTransform::readFromConfig()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(QString("Color Management"));
 
-    int intent  = group.readEntry("RenderingIntent", 0);
-    bool useBPC = group.readEntry("BPCAlgorithm", false);
+    int intent                = group.readEntry("RenderingIntent", 0);
+    bool useBPC               = group.readEntry("BPCAlgorithm", false);
 
     setIntent(intent);
     setUseBlackPointCompensation(useBPC);
@@ -467,12 +467,12 @@ TransformDescription IccTransform::getDescription(const DImg& image)
 */
 
         // A Dimg is always BGRA, converted by the loader
-        description.inputFormat = TYPE_BGRA_16;
+        description.inputFormat  = TYPE_BGRA_16;
         description.outputFormat = TYPE_BGRA_16;
     }
     else
     {
-        description.inputFormat = TYPE_BGRA_8;
+        description.inputFormat  = TYPE_BGRA_8;
         description.outputFormat = TYPE_BGRA_8;
     }
 
@@ -722,11 +722,11 @@ void IccTransform::transform(DImg& image, const TransformDescription& descriptio
     {
         for (int p = pixels; p > 0; p -= pixelsPerStep)
         {
-            int pixelsThisStep = qMin(p, pixelsPerStep);
-            int size           = pixelsThisStep * bytesDepth;
+            int pixelsThisStep =  qMin(p, pixelsPerStep);
+            int size           =  pixelsThisStep * bytesDepth;
             LcmsLock lock;
             dkCmsDoTransform(d->handle, data, data, pixelsThisStep);
-            data += size;
+            data               += size;
 
             if (observer && p <= checkPoint)
             {
@@ -741,12 +741,12 @@ void IccTransform::transform(DImg& image, const TransformDescription& descriptio
 
         for (int p = pixels; p > 0; p -= pixelsPerStep)
         {
-            int pixelsThisStep = qMin(p, pixelsPerStep);
-            int size           = pixelsThisStep * bytesDepth;
+            int pixelsThisStep  = qMin(p, pixelsPerStep);
+            int size            = pixelsThisStep * bytesDepth;
             LcmsLock lock;
             memcpy(buffer.data(), data, size);
             dkCmsDoTransform(d->handle, buffer.data(), data, pixelsThisStep);
-            data += size;
+            data               += size;
 
             if (observer && p <= checkPoint)
             {
@@ -767,11 +767,11 @@ void IccTransform::transform(QImage& image, const TransformDescription&)
 
     for (int p = pixels; p > 0; p -= pixelsPerStep)
     {
-        int pixelsThisStep = qMin(p, pixelsPerStep);
-        int size           = pixelsThisStep * bytesDepth;
+        int pixelsThisStep =  qMin(p, pixelsPerStep);
+        int size           =  pixelsThisStep * bytesDepth;
         LcmsLock lock;
         dkCmsDoTransform(d->handle, data, data, pixelsThisStep);
-        data += size;
+        data               += size;
     }
 }
 

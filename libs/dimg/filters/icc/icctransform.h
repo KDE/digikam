@@ -106,20 +106,22 @@ public:
     {
         setIntent((RenderingIntent)intent);
     }
+
     void setProofIntent(RenderingIntent intent);
     void setProofIntent(int intent)
     {
         setProofIntent((RenderingIntent)intent);
     }
+
     void setUseBlackPointCompensation(bool useBPC);
     void setCheckGamut(bool checkGamut);
     void setCheckGamutMaskColor(const QColor& color);
 
     /// Returns the contained profiles
-    IccProfile embeddedProfile() const;
-    IccProfile inputProfile()    const;
-    IccProfile outputProfile()   const;
-    IccProfile proofProfile()    const;
+    IccProfile embeddedProfile()         const;
+    IccProfile inputProfile()            const;
+    IccProfile outputProfile()           const;
+    IccProfile proofProfile()            const;
 
     RenderingIntent intent()             const;
     RenderingIntent proofIntent()        const;
