@@ -122,7 +122,7 @@ void TagsLineEditOverlay::hide()
 
 void TagsLineEditOverlay::updatePosition()
 {
-    if (!m_index.isValid())
+    if (!m_index.isValid() || !m_widget)
     {
         return;
     }
