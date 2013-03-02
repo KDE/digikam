@@ -202,8 +202,14 @@ static DropAction groupAction(const QDropEvent*, QWidget* view)
 
 bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDropEvent* e, const QModelIndex& droppedOn)
 {
-    ImageCategorizedView* view = static_cast<ImageCategorizedView*>(abstractview);
-    Album* album               = view->albumAt(e->pos());
+    // Note that the drop event does not have to be in an ImageCategorizedView.
+    // It can also be a TableViewTreeView.
+    ImageCategorizedView* view = qobject_cast<ImageCategorizedView*>(abstractview);
+    Album* album = 0;
+    if (view)
+    {
+        album = view->albumAt(e->pos());
+    }
 
     // unless we are readonly anyway, we always want an album
     if (!m_readOnly && (!album || album->isRoot()) )

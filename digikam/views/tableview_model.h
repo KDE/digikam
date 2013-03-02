@@ -61,6 +61,7 @@ public:
     virtual int columnCount(const QModelIndex& i) const;
     virtual QVariant data(const QModelIndex& i, int role) const;
     virtual QVariant headerData(int section, Qt::Orientation orientation, int role) const;
+    virtual Qt::ItemFlags flags(const QModelIndex& index) const;
 
     void addColumnAt(const TableViewColumnDescription& description, const int targetColumn = -1);
     void addColumnAt(const TableViewColumnConfiguration& configuration, const int targetColumn = -1);
@@ -106,6 +107,9 @@ public:
     virtual ~TableViewSortFilterProxyModel();
 
     virtual bool lessThan(const QModelIndex& tableViewIndexLeft, const QModelIndex& tableViewIndexRight) const;
+
+    virtual QMimeData* mimeData(const QModelIndexList& indexes) const;
+    QModelIndex toImageModelIndex(const QModelIndex& index) const;
 
 private:
 

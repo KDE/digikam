@@ -509,6 +509,60 @@ void TableViewCurrentToSortedSyncer::slotTableViewModelCurrentChanged(const QMod
     d->syncing = false;
 }
 
+Qt::ItemFlags TableViewModel::flags(const QModelIndex& index) const
+{
+    const Qt::ItemFlags defaultFlags = QAbstractItemModel::flags(index);
+
+    /// @todo Handle read-only files etc. which can not be moved
+    if (index.isValid())
+    {
+        return Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled | defaultFlags;
+    }
+
+    return Qt::ItemIsDropEnabled | defaultFlags;
+}
+
+QModelIndex TableViewSortFilterProxyModel::toImageModelIndex(const QModelIndex& index) const
+{
+    // "index" is a sortModel index. We have to map it to the TableViewModel:
+    const QModelIndex tableViewModelIndex = mapToSource(index);
+
+    // Map to ImageFilterModel:
+    const QModelIndex imageFilterModelIndex = s->tableViewModel->toImageFilterModelIndex(tableViewModelIndex);
+
+    // map to the source of ImageFilterModel: ImageModel
+    const QModelIndex imageModelIndex = s->imageFilterModel->mapToSourceImageModel(imageFilterModelIndex);
+
+    kDebug()<<index<<tableViewModelIndex<<imageFilterModelIndex<<imageModelIndex;
+
+    return imageModelIndex;
+}
+
+QMimeData* TableViewSortFilterProxyModel::mimeData(const QModelIndexList& indexes) const
+{
+    // we pack the mime data via ImageModel's drag-drop handler
+    ImageModel* const imageModel = s->imageFilterModel->sourceImageModel();
+    AbstractItemDragDropHandler* const ddHandler = imageModel->dragDropHandler();
+
+    QModelIndexList imageModelIndexList;
+    Q_FOREACH(const QModelIndex& i, indexes)
+    {
+        if (i.column()>0)
+        {
+            continue;
+        }
+
+        const QModelIndex imageModelIndex = toImageModelIndex(i);
+        if (imageModelIndex.isValid())
+        {
+            imageModelIndexList << imageModelIndex;
+        }
+    }
+
+    QMimeData* const imageModelMimeData = ddHandler->createMimeData(imageModelIndexList);
+
+    return imageModelMimeData;
+}
 
 } /* namespace Digikam */
 

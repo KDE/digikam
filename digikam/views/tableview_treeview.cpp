@@ -88,6 +88,9 @@ TableViewTreeView::TableViewTreeView(Digikam::TableViewShared* const tableViewSh
     setItemDelegate(s->itemDelegate);
     setRootIsDecorated(false);
     setAllColumnsShowFocus(true);
+    setDragEnabled(true);
+    setAcceptDrops(true);
+//     viewport()->setAcceptDrops(true);
 
     d->actionHeaderContextMenuRemoveColumn = new KAction("Remove this column", this);
     connect(d->actionHeaderContextMenuRemoveColumn, SIGNAL(triggered(bool)),
@@ -209,6 +212,34 @@ void TableViewTreeView::slotHeaderContextMenuConfigureColumn()
 
     const TableViewColumnConfiguration newConfiguration = configurationDialog->getNewConfiguration();
     s->tableViewModel->getColumnObject(d->headerContextMenuActiveColumn)->setConfiguration(newConfiguration);
+}
+
+AbstractItemDragDropHandler* TableViewTreeView::dragDropHandler() const
+{
+    kDebug()<<s->imageFilterModel->sourceImageModel()->dragDropHandler();
+    return s->imageFilterModel->sourceImageModel()->dragDropHandler();
+}
+
+QModelIndex TableViewTreeView::mapIndexForDragDrop(const QModelIndex& index) const
+{
+    // "index" is a TableViewSortFilterProxyModel index.
+    // We are using the drag-drop-handler of ImageModel, thus
+    // we have to convert it to an index of ImageModel.
+
+    // map to the source of ImageFilterModel: ImageModel
+    const QModelIndex imageModelIndex = s->sortModel->toImageModelIndex(index);
+
+    return imageModelIndex;
+}
+
+QPixmap TableViewTreeView::pixmapForDrag(const QList< QModelIndex >& indexes) const
+{
+//     QStyleOptionViewItem option = viewOptions();
+//     option.rect                 = viewport()->rect();
+//     return d->delegate->pixmapForDrag(option, indexes);
+
+    kDebug()<<indexes;
+    return QPixmap();
 }
 
 } /* namespace Digikam */

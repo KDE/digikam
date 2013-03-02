@@ -44,6 +44,7 @@
 #include "imagefiltermodel.h"
 #include "tableview_columnfactory.h"
 #include "tableview_shared.h"
+#include "dragdropimplementations.h"
 
 class KMenu;
 class QContextMenuEvent;
@@ -51,7 +52,11 @@ class QContextMenuEvent;
 namespace Digikam
 {
 
-class TableViewTreeView : public QTreeView
+/// @todo For proper drag-and-drop support, we probably have to implement more
+///       of DragDropModelImplementation's functions in the TableViewModel or
+///       in the sort model. Subclassing DragDropModelImplementation would not
+///       work there, because we want to re-use ImageDragDropHandler...
+class TableViewTreeView : public QTreeView, public DragDropViewImplementation
 {
     Q_OBJECT
 
@@ -62,6 +67,12 @@ public:
 protected:
 
     virtual bool eventFilter(QObject* watched, QEvent* event);
+
+    DECLARE_VIEW_DRAG_DROP_METHODS(QTreeView)
+
+    virtual AbstractItemDragDropHandler* dragDropHandler() const;
+    virtual QModelIndex mapIndexForDragDrop(const QModelIndex& index) const;
+    virtual QPixmap     pixmapForDrag(const QList<QModelIndex>& indexes) const;
 
 private:
 
