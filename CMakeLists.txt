@@ -1535,6 +1535,9 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/mediaplayerview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/mapwidgetview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview_treeview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview_treeview_delegate.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview_column_configuration_dialog.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview_model.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview_columns.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview_column_file.cpp

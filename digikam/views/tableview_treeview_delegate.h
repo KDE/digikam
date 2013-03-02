@@ -3,8 +3,8 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2013-02-11
- * Description : Table view
+ * Date        : 2013-03-02
+ * Description : Table view: Tree view subelement
  *
  * Copyright (C) 2013 by Michael G. Hansen <mike at mghansen dot de>
  *
@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef TABLEVIEW_H
-#define TABLEVIEW_H
+#ifndef TABLEVIEW_TREEVIEW_DELEGATE_H
+#define TABLEVIEW_TREEVIEW_DELEGATE_H
 
 // Qt includes
 
@@ -51,49 +51,23 @@ class QContextMenuEvent;
 namespace Digikam
 {
 
-class TableView : public QWidget, public StateSavingObject
+class TableViewItemDelegate : public QItemDelegate
 {
     Q_OBJECT
 
 public:
 
-    explicit TableView(
-            QItemSelectionModel* const selectionModel,
-            KCategorizedSortFilterProxyModel* const imageFilterModel,
-            QWidget* const parent
-        );
-    virtual ~TableView();
+    explicit TableViewItemDelegate(TableViewShared* const tableViewShared, QObject* parent = 0);
+    virtual ~TableViewItemDelegate();
 
-protected:
-
-    void doLoadState();
-    void doSaveState();
-
-    virtual bool eventFilter(QObject* watched, QEvent* event);
-    void showTreeViewContextMenu(QContextMenuEvent* const event);
-    QList<ImageInfo> selectedImageInfos() const;
-
-protected Q_SLOTS:
-
-    void slotItemActivated(const QModelIndex& sortedIndex);
-    void slotAssignTagToSelected(const int tagID);
-    void slotRemoveTagFromSelected(const int tagID);
-    void slotAssignPickLabelToSelected(const int pickLabelID);
-    void slotAssignColorLabelToSelected(const int colorLabelID);
-    void slotAssignRatingToSelected(const int rating);
-
-
-Q_SIGNALS:
-
-    void signalPreviewRequested(const ImageInfo& info);
+    virtual void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& sortedIndex) const;
+    virtual QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& sortedIndex) const;
 
 private:
 
-    class Private;
-    const QScopedPointer<Private> d;
-    const QScopedPointer<TableViewShared> s;
+    TableViewShared* const s;
 };
 
 } /* namespace Digikam */
 
-#endif // TABLEVIEW_H
+#endif // TABLEVIEW_TREEVIEW_DELEGATE_H

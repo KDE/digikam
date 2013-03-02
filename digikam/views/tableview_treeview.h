@@ -3,8 +3,8 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2013-02-11
- * Description : Table view
+ * Date        : 2013-03-02
+ * Description : Table view: Tree view subelement
  *
  * Copyright (C) 2013 by Michael G. Hansen <mike at mghansen dot de>
  *
@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef TABLEVIEW_H
-#define TABLEVIEW_H
+#ifndef TABLEVIEW_TREEVIEW_H
+#define TABLEVIEW_TREEVIEW_H
 
 // Qt includes
 
@@ -51,49 +51,37 @@ class QContextMenuEvent;
 namespace Digikam
 {
 
-class TableView : public QWidget, public StateSavingObject
+class TableViewTreeView : public QTreeView
 {
     Q_OBJECT
 
 public:
-
-    explicit TableView(
-            QItemSelectionModel* const selectionModel,
-            KCategorizedSortFilterProxyModel* const imageFilterModel,
-            QWidget* const parent
-        );
-    virtual ~TableView();
+    explicit TableViewTreeView(TableViewShared* const tableViewShared, QWidget* const parent = 0);
+    virtual ~TableViewTreeView();
 
 protected:
 
-    void doLoadState();
-    void doSaveState();
-
     virtual bool eventFilter(QObject* watched, QEvent* event);
-    void showTreeViewContextMenu(QContextMenuEvent* const event);
-    QList<ImageInfo> selectedImageInfos() const;
 
-protected Q_SLOTS:
+private:
 
-    void slotItemActivated(const QModelIndex& sortedIndex);
-    void slotAssignTagToSelected(const int tagID);
-    void slotRemoveTagFromSelected(const int tagID);
-    void slotAssignPickLabelToSelected(const int pickLabelID);
-    void slotAssignColorLabelToSelected(const int colorLabelID);
-    void slotAssignRatingToSelected(const int rating);
+    void addColumnDescriptionsToMenu(
+        const QList<TableViewColumnDescription>& columnDescriptions, KMenu* const menu);
+    void showHeaderContextMenu(QEvent* const event);
 
+private Q_SLOTS:
 
-Q_SIGNALS:
-
-    void signalPreviewRequested(const ImageInfo& info);
+    void slotHeaderContextMenuAddColumn();
+    void slotHeaderContextMenuConfigureColumn();
+    void slotHeaderContextMenuActionRemoveColumnTriggered();
 
 private:
 
     class Private;
     const QScopedPointer<Private> d;
-    const QScopedPointer<TableViewShared> s;
+    TableViewShared* const s;
 };
 
 } /* namespace Digikam */
 
-#endif // TABLEVIEW_H
+#endif // TABLEVIEW_TREEVIEW_H
