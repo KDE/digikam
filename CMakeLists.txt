@@ -908,7 +908,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
 
         SET(libdimgfilters_SRCS ${libdimgfilters_SRCS}
             ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/transform/contentawarefilter.cpp
-            ${liblqr_SRCS}
            )
 
     ENDIF(LQR-1_FOUND)
@@ -920,7 +919,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
             ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lens/lensfuncameraselector.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lens/lensfuniface.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lens/lensfunsettings.cpp
-            ${liblensfun_SRCS}
         )
 
     ENDIF(LENSFUN_FOUND)

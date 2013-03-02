@@ -57,7 +57,6 @@
 #include "cbfilter.h"
 #include "charcoalfilter.h"
 #include "colorfxfilter.h"
-#include "contentawarefilter.h"
 #include "curvesfilter.h"
 #include "distortionfxfilter.h"
 #include "embossfilter.h"
@@ -87,6 +86,14 @@
 #include "unsharpmaskfilter.h"
 #include "wbfilter.h"
 #include "filmfilter_p.h"
+
+#ifdef HAVE_LIBLQR_1
+#include "contentawarefilter.h"
+#endif /* HAVE_LIBLQR_1 */
+
+#ifdef HAVE_LENSFUN
+#include "lensfunfilter.h"
+#endif // HAVE_LENSFUN
 
 namespace Digikam
 {
