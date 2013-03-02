@@ -69,7 +69,6 @@
 #include "infraredfilter.h"
 #include "invertfilter.h"
 #include "lensdistortionfilter.h"
-#include "lensfunfilter.h"
 #include "levelsfilter.h"
 #include "localcontrastfilter.h"
 #include "mixerfilter.h"
