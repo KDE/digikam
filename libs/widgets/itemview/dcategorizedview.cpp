@@ -109,7 +109,7 @@ QModelIndex DCategorizedView::Private::scrollPositionHint() const
         }
     }
 
-    return hint; 
+    return hint;
 }
 
 // -------------------------------------------------------------------------------
