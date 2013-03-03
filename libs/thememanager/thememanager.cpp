@@ -6,7 +6,7 @@
  * Date        : 2004-08-02
  * Description : theme manager
  *
- * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -71,11 +71,11 @@ K_GLOBAL_STATIC(ThemeManagerCreator, creator)
 // ---------------------------------------------------------------
 
 
-class ThemeManager::ThemeManagerPriv
+class ThemeManager::Private
 {
 public:
 
-    ThemeManagerPriv()
+    Private()
         : defaultThemeName(i18nc("default theme name", "Default")),
           themeMenuActionGroup(0),
           themeMenuAction(0)
@@ -90,7 +90,7 @@ public:
 };
 
 ThemeManager::ThemeManager()
-    : d(new ThemeManagerPriv)
+    : d(new Private)
 {
     connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
             this, SLOT(slotSettingsChanged()));
@@ -113,16 +113,23 @@ QString ThemeManager::defaultThemeName() const
 
 QString ThemeManager::currentThemeName() const
 {
-    if (!d->themeMenuAction || !d->themeMenuActionGroup) return defaultThemeName();
+    if (!d->themeMenuAction || !d->themeMenuActionGroup)
+        return defaultThemeName();
+
     QAction* action = d->themeMenuActionGroup->checkedAction();
-    return !action ? defaultThemeName() : action->text().remove('&');
+
+    return (!action ? defaultThemeName()
+                    : action->text().remove('&'));
 }
 
 void ThemeManager::setCurrentTheme(const QString& name)
 {
-    if (!d->themeMenuAction || !d->themeMenuActionGroup) return;
+    if (!d->themeMenuAction || !d->themeMenuActionGroup)
+        return;
+
     QList<QAction*> list = d->themeMenuActionGroup->actions();
-    foreach(QAction* action, list)
+
+    foreach(QAction* const action, list)
     {
         if (action->text().remove('&') == name)
         {
@@ -199,13 +206,16 @@ void ThemeManager::setThemeMenuAction(KActionMenu* const action)
 
 void ThemeManager::registerThemeActions(KXmlGuiWindow* const kwin)
 {
-    if (!d->themeMenuAction) return;
+    if (!d->themeMenuAction)
+        return;
+
     kwin->actionCollection()->addAction("theme_menu", d->themeMenuAction);
 }
 
 void ThemeManager::populateThemeMenu()
 {
-    if (!d->themeMenuAction) return;
+    if (!d->themeMenuAction)
+        return;
 
     QString theme(currentThemeName());
 
@@ -213,16 +223,18 @@ void ThemeManager::populateThemeMenu()
     delete d->themeMenuActionGroup;
 
     d->themeMenuActionGroup = new QActionGroup(d->themeMenuAction);
+
     connect(d->themeMenuActionGroup, SIGNAL(triggered(QAction*)),
             this, SLOT(slotChangePalette()));
 
-    KAction* action = new KAction(defaultThemeName(), d->themeMenuActionGroup);
+    KAction* const action         = new KAction(defaultThemeName(), d->themeMenuActionGroup);
     action->setCheckable(true);
     d->themeMenuAction->addAction(action);
 
     const QStringList schemeFiles = KGlobal::dirs()->findAllResources("data", "color-schemes/*.colors", KStandardDirs::NoDuplicates);
 
     QMap<QString, QAction*> actionMap;
+
     for (int i = 0; i < schemeFiles.size(); ++i)
     {
         const QString filename  = schemeFiles.at(i);
@@ -231,11 +243,11 @@ void ThemeManager::populateThemeMenu()
         QIcon icon              = createSchemePreviewIcon(config);
         KConfigGroup group(config, "General");
         const QString name      = group.readEntry("Name", info.baseName());
-        action                  = new KAction(name, d->themeMenuActionGroup);
+        KAction* const ac       = new KAction(name, d->themeMenuActionGroup);
         d->themeMap.insert(name, filename);
-        action->setIcon(icon);
-        action->setCheckable(true);
-        actionMap.insert(name, action);
+        ac->setIcon(icon);
+        ac->setCheckable(true);
+        actionMap.insert(name, ac);
     }
 
     // sort the list
@@ -251,7 +263,7 @@ void ThemeManager::populateThemeMenu()
     setCurrentTheme(theme);
 
     d->themeMenuAction->addSeparator();
-    KAction* config = new KAction(i18n("Configuration..."), d->themeMenuAction);
+    KAction* const config = new KAction(i18n("Configuration..."), d->themeMenuAction);
     config->setIcon(KIcon("preferences-desktop-theme"));
     d->themeMenuAction->addAction(config);
 
@@ -262,6 +274,7 @@ void ThemeManager::populateThemeMenu()
 void ThemeManager::slotConfigColors()
 {
     int ret = KToolInvocation::kdeinitExec("kcmshell4", QStringList() << "colors");
+
     if (ret > 0)
     {
         KMessageBox::error(0, i18n("Cannot start Colors Settings panel from KDE Control Center. "
@@ -272,7 +285,8 @@ void ThemeManager::slotConfigColors()
 void ThemeManager::updateCurrentKDEdefaultThemePreview()
 {
     QList<QAction*> list = d->themeMenuActionGroup->actions();
-    foreach(QAction* action, list)
+
+    foreach(QAction* const action, list)
     {
         if (action->text().remove('&') == defaultThemeName())
         {
