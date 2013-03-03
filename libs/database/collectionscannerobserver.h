@@ -40,9 +40,15 @@ class CollectionScanner;
 class DIGIKAM_DATABASE_EXPORT CollectionScannerObserver
 {
 public:
-    virtual ~CollectionScannerObserver() {}
+
+    virtual ~CollectionScannerObserver()
+    {
+    }
+
     virtual bool continueQuery() = 0;
 };
+
+// ------------------------------------------------------------------------------------------
 
 class DIGIKAM_DATABASE_EXPORT InitializationObserver : public CollectionScannerObserver
 {
@@ -55,14 +61,16 @@ public:
         UpdateErrorMustAbort
     };
 
-    virtual ~InitializationObserver() {};
+public:
+
+    virtual ~InitializationObserver()
+    {
+    };
 
     virtual void moreSchemaUpdateSteps(int numberOfSteps) = 0;
     virtual void schemaUpdateProgress(const QString& message, int numberOfSteps = 1) = 0;
     virtual void finishedSchemaUpdate(UpdateResult result) = 0;
-
-    virtual void connectCollectionScanner(CollectionScanner* scanner) = 0;
-
+    virtual void connectCollectionScanner(CollectionScanner* const scanner) = 0;
     virtual void error(const QString& errorMessage) = 0;
 };
 
