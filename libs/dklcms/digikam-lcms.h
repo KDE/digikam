@@ -282,7 +282,7 @@ LCMSAPI void          LCMSEXPORT           dkCmsDoTransform(cmsHTRANSFORM Transf
                                                             LPVOID OutputBuffer,
                                                             unsigned int Size);
 
-LCMSAPI void                    LCMSEXPORT dkCmsFloat2XYZEncoded(WORD XYZ[3], const cmsCIEXYZ* fXYZ);
+LCMSAPI void                    LCMSEXPORT dkCmsFloat2XYZEncoded(WORD XYZ[3], const cmsCIEXYZ* const fXYZ);
 
 LCMSAPI icColorSpaceSignature   LCMSEXPORT dkCmsGetColorSpace(cmsHPROFILE hProfile);
 
@@ -290,9 +290,9 @@ LCMSAPI icColorSpaceSignature   LCMSEXPORT dkCmsGetPCS(cmsHPROFILE hProfile);
 
 LCMSAPI LCMSBOOL                LCMSEXPORT dkCmsIsTag(cmsHPROFILE hProfile, icTagSignature sig);
 
-LCMSAPI cmsHPROFILE             LCMSEXPORT dkCmsOpenProfileFromFile(const char* ICCProfile, const char* sAccess);
+LCMSAPI cmsHPROFILE             LCMSEXPORT dkCmsOpenProfileFromFile(const char* const ICCProfile, const char* const sAccess);
 
-LCMSAPI void                    LCMSEXPORT dkCmsXYZ2xyY(LPcmsCIExyY Dest, const cmsCIEXYZ* Source);
+LCMSAPI void                    LCMSEXPORT dkCmsXYZ2xyY(LPcmsCIExyY Dest, const cmsCIEXYZ* const Source);
 
 #endif // defined(USE_LCMS_VERSION_2000)
 
