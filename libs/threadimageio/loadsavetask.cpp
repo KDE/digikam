@@ -6,8 +6,8 @@
  * Date        : 2005-12-17
  * Description : image file IO threaded interface.
  *
- * Copyright (C) 2005-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -84,7 +84,7 @@ void LoadingTask::setStatus(LoadingTaskStatus status)
 
 //---------------------------------------------------------------------------------------------------
 
-SharedLoadingTask::SharedLoadingTask(LoadSaveThread* thread, const LoadingDescription& description,
+SharedLoadingTask::SharedLoadingTask(LoadSaveThread* const thread, const LoadingDescription& description,
                                      LoadSaveThread::AccessMode mode, LoadingTaskStatus loadingTaskStatus)
     : LoadingTask(thread, description, loadingTaskStatus),
       m_completed(false),
@@ -340,7 +340,7 @@ void SharedLoadingTask::postProcess()
     removeListener(this);
 }
 
-void SharedLoadingTask::progressInfo(const DImg*, float progress)
+void SharedLoadingTask::progressInfo(const DImg* const, float progress)
 {
     if (m_loadingTaskStatus == LoadingTaskStatusLoading)
     {
@@ -359,7 +359,7 @@ void SharedLoadingTask::progressInfo(const DImg*, float progress)
     }
 }
 
-bool SharedLoadingTask::continueQuery(const DImg*)
+bool SharedLoadingTask::continueQuery(const DImg* const)
 {
     // If this is called, the thread is currently loading an image.
     // In shared loading, we cannot stop until all listeners have been removed as well

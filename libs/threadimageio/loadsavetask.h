@@ -6,8 +6,8 @@
  * Date        : 2006-01-20
  * Description : image file IO threaded interface.
  *
- * Copyright (C) 2005-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -54,7 +54,7 @@ public:
 
 public:
 
-    explicit LoadSaveTask(LoadSaveThread* thread)
+    explicit LoadSaveTask(LoadSaveThread* const thread)
         : m_thread(thread)
     {
     };
@@ -87,7 +87,7 @@ public:
 
 public:
 
-    LoadingTask(LoadSaveThread* thread, const LoadingDescription& description,
+    LoadingTask(LoadSaveThread* const thread, const LoadingDescription& description,
                 LoadingTaskStatus loadingTaskStatus = LoadingTaskStatusLoading)
         : LoadSaveTask(thread),
           m_loadingDescription(description),
@@ -136,13 +136,13 @@ class SharedLoadingTask : public LoadingTask,
 {
 public:
 
-    SharedLoadingTask(LoadSaveThread* thread, const LoadingDescription& description,
+    SharedLoadingTask(LoadSaveThread* const thread, const LoadingDescription& description,
                       LoadSaveThread::AccessMode mode = LoadSaveThread::AccessModeReadWrite,
                       LoadingTaskStatus loadingTaskStatus = LoadingTaskStatusLoading);
 
     virtual void execute();
-    virtual void progressInfo(const DImg*, float progress);
-    virtual bool continueQuery(const DImg* img = 0);
+    virtual void progressInfo(const DImg* const, float progress);
+    virtual bool continueQuery(const DImg* const img = 0);
     virtual void setStatus(LoadingTaskStatus status);
 
     virtual bool needsPostProcessing() const;
@@ -189,7 +189,7 @@ public:
 
 public:
 
-    SavingTask(LoadSaveThread* thread, DImg& img, const QString& filePath, const QString& format)
+    SavingTask(LoadSaveThread* const thread, DImg& img, const QString& filePath, const QString& format)
         : LoadSaveTask(thread),
           m_filePath(filePath),
           m_format(format),
