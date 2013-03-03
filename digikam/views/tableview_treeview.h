@@ -64,6 +64,8 @@ public:
     explicit TableViewTreeView(TableViewShared* const tableViewShared, QWidget* const parent = 0);
     virtual ~TableViewTreeView();
 
+    Album* albumAt(const QPoint& pos) const;
+
 protected:
 
     virtual bool eventFilter(QObject* watched, QEvent* event);

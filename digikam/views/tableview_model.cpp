@@ -564,5 +564,28 @@ QMimeData* TableViewSortFilterProxyModel::mimeData(const QModelIndexList& indexe
     return imageModelMimeData;
 }
 
+Qt::DropActions TableViewSortFilterProxyModel::supportedDropActions() const
+{
+    return Qt::CopyAction|Qt::MoveAction;
+}
+
+QStringList TableViewSortFilterProxyModel::mimeTypes() const
+{
+    ImageModel* const imageModel = s->imageFilterModel->sourceImageModel();
+    AbstractItemDragDropHandler* const ddHandler = imageModel->dragDropHandler();
+
+    if (ddHandler)
+    {
+        return ddHandler->mimeTypes();
+    }
+
+    return QStringList();
+}
+
+bool TableViewSortFilterProxyModel::dropMimeData(const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent)
+{
+    return false;
+}
+
 } /* namespace Digikam */
 

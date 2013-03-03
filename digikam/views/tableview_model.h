@@ -35,6 +35,8 @@
 #include "databasechangesets.h"
 #include "tableview_shared.h"
 
+class QMimeData;
+
 namespace Digikam
 {
 
@@ -108,6 +110,10 @@ public:
 
     virtual bool lessThan(const QModelIndex& tableViewIndexLeft, const QModelIndex& tableViewIndexRight) const;
 
+    // drag-and-drop related functions
+    virtual Qt::DropActions supportedDropActions() const;
+    virtual QStringList mimeTypes() const;
+    virtual bool dropMimeData(const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent);
     virtual QMimeData* mimeData(const QModelIndexList& indexes) const;
     QModelIndex toImageModelIndex(const QModelIndex& index) const;
 
