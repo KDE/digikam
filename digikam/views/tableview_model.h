@@ -116,6 +116,7 @@ public:
     virtual bool dropMimeData(const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent);
     virtual QMimeData* mimeData(const QModelIndexList& indexes) const;
     QModelIndex toImageModelIndex(const QModelIndex& index) const;
+    QModelIndex toImageFilterModelIndex(const QModelIndex& index) const;
 
 private:
 

@@ -522,7 +522,7 @@ Qt::ItemFlags TableViewModel::flags(const QModelIndex& index) const
     return Qt::ItemIsDropEnabled | defaultFlags;
 }
 
-QModelIndex TableViewSortFilterProxyModel::toImageModelIndex(const QModelIndex& index) const
+QModelIndex TableViewSortFilterProxyModel::toImageFilterModelIndex(const QModelIndex& index) const
 {
     // "index" is a sortModel index. We have to map it to the TableViewModel:
     const QModelIndex tableViewModelIndex = mapToSource(index);
@@ -530,10 +530,16 @@ QModelIndex TableViewSortFilterProxyModel::toImageModelIndex(const QModelIndex& 
     // Map to ImageFilterModel:
     const QModelIndex imageFilterModelIndex = s->tableViewModel->toImageFilterModelIndex(tableViewModelIndex);
 
+    return imageFilterModelIndex;
+}
+
+
+QModelIndex TableViewSortFilterProxyModel::toImageModelIndex(const QModelIndex& index) const
+{
+    const QModelIndex imageFilterModelIndex = toImageFilterModelIndex(index);
+
     // map to the source of ImageFilterModel: ImageModel
     const QModelIndex imageModelIndex = s->imageFilterModel->mapToSourceImageModel(imageFilterModelIndex);
-
-    kDebug()<<index<<tableViewModelIndex<<imageFilterModelIndex<<imageModelIndex;
 
     return imageModelIndex;
 }

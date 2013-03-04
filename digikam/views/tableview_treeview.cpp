@@ -49,6 +49,7 @@
 #include "digikam2kgeomap_database.h"
 #include "importui.h"
 #include "thumbnailloadthread.h"
+#include "thumbnailsize.h"
 #include "tableview_model.h"
 #include "tableview_columnfactory.h"
 #include "tableview_column_configuration_dialog.h"
@@ -69,13 +70,15 @@ public:
     Private()
       : headerContextMenuActiveColumn(-1),
         actionHeaderContextMenuRemoveColumn(0),
-        actionHeaderContextMenuConfigureColumn(0)
+        actionHeaderContextMenuConfigureColumn(0),
+        dragDropThumbnailSize()
     {
     }
 
     int headerContextMenuActiveColumn;
     KAction* actionHeaderContextMenuRemoveColumn;
     KAction* actionHeaderContextMenuConfigureColumn;
+    ThumbnailSize dragDropThumbnailSize;
 };
 
 TableViewTreeView::TableViewTreeView(Digikam::TableViewShared* const tableViewShared, QWidget*const parent)
@@ -234,12 +237,41 @@ QModelIndex TableViewTreeView::mapIndexForDragDrop(const QModelIndex& index) con
 
 QPixmap TableViewTreeView::pixmapForDrag(const QList< QModelIndex >& indexes) const
 {
-//     QStyleOptionViewItem option = viewOptions();
-//     option.rect                 = viewport()->rect();
-//     return d->delegate->pixmapForDrag(option, indexes);
+    const QModelIndex& firstIndex = indexes.at(0);
+    const QModelIndex& imageFilterModelIndex = s->sortModel->toImageFilterModelIndex(firstIndex);
+    const ImageInfo info = s->imageFilterModel->imageInfo(imageFilterModelIndex);
+    const QString path = info.filePath();
 
-    kDebug()<<indexes;
-    return QPixmap();
+    QPixmap thumbnailPixmap;
+    /// @todo The first thumbnail load always fails. We have to add thumbnail pre-generation
+    ///       like in ImageModel. Getting thumbnails from ImageModel does not help, because it
+    ///       does not necessarily prepare them the same way.
+    /// @todo Make a central drag-drop thumbnail generator?
+    if (!s->thumbnailLoadThread->find(path, thumbnailPixmap, d->dragDropThumbnailSize.size()))
+    {
+        /// @todo better default pixmap?
+        thumbnailPixmap.fill();
+    }
+
+    /// @todo Decorate the pixmap like the other drag-drop implementations?
+    /// @todo Write number of images onto the pixmap
+    return thumbnailPixmap;
+
+//     const QModelIndex& firstIndex = indexes.at(0);
+//     const QModelIndex& imageModelIndex = s->sortModel->toImageModelIndex(firstIndex);
+//     ImageModel* const imageModel = s->imageFilterModel->sourceImageModel();
+//
+//     /// @todo Determine how other views choose the size
+//     const QSize thumbnailSize(60, 60);
+//
+//     imageModel->setData(imageModelIndex, qMax(thumbnailSize.width(), thumbnailSize.height()), ImageModel::ThumbnailRole);
+//     QVariant thumbnailData = imageModel->data(imageModelIndex, ImageModel::ThumbnailRole);
+//     imageModel->setData(imageModelIndex, QVariant(), ImageModel::ThumbnailRole);
+//
+//     QPixmap thumbnailPixmap = thumbnailData.value<QPixmap>();
+//
+//     /// @todo Write number of images onto the pixmap
+//     return thumbnailPixmap;
 }
 
 Album* TableViewTreeView::albumAt(const QPoint& pos) const
