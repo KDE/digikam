@@ -1340,7 +1340,6 @@ bool DMetadata::getImageFacesMap(QMap<QString,QVariant>& faces) const
                     h);
 
         faces[person] = rect;
-        kDebug() << "Added face rectangle-----------------" << person << " " << rect;
     }
 
     return !faces.isEmpty();
@@ -1348,103 +1347,105 @@ bool DMetadata::getImageFacesMap(QMap<QString,QVariant>& faces) const
 
 bool DMetadata::setImageFacesMap(QMap< QString, QVariant >& facesPath) const
 {
+#if KEXIV2_VERSION >= 0x020301
+    QString qxmpTagName("Xmp.mwg-rs.Regions/mwg-rs:RegionList");
+    QString nameTagKey = qxmpTagName + QString("[%1]/mwg-rs:Name");
+    QString typeTagKey = qxmpTagName + QString("[%1]/mwg-rs:Type");
+    QString areaTagKey = qxmpTagName + QString("[%1]/mwg-rs:Area");
+    QString areaxTagKey = qxmpTagName + QString("[%1]/mwg-rs:Area/stArea:x");
+    QString areayTagKey = qxmpTagName + QString("[%1]/mwg-rs:Area/stArea:y");
+    QString areawTagKey = qxmpTagName + QString("[%1]/mwg-rs:Area/stArea:w");
+    QString areahTagKey = qxmpTagName + QString("[%1]/mwg-rs:Area/stArea:h");
+    QString areanormTagKey = qxmpTagName + QString("[%1]/mwg-rs:Area/stArea:unit");
 
-        QString qxmpTagName("Xmp.mwg-rs.Regions/mwg-rs:RegionList");
-        QString nameTagKey = qxmpTagName + QString("[%1]/mwg-rs:Name");
-        QString typeTagKey = qxmpTagName + QString("[%1]/mwg-rs:Type");
-        QString areaTagKey = qxmpTagName + QString("[%1]/mwg-rs:Area");
-        QString areaxTagKey = qxmpTagName + QString("[%1]/mwg-rs:Area/stArea:x");
-        QString areayTagKey = qxmpTagName + QString("[%1]/mwg-rs:Area/stArea:y");
-        QString areawTagKey = qxmpTagName + QString("[%1]/mwg-rs:Area/stArea:w");
-        QString areahTagKey = qxmpTagName + QString("[%1]/mwg-rs:Area/stArea:h");
-        QString areanormTagKey = qxmpTagName + QString("[%1]/mwg-rs:Area/stArea:unit");
+    removeImageFaces();
 
-        removeImageFaces();
+    setXmpTagString(qxmpTagName.toLatin1(),
+                    QString(),KExiv2::XmpTagType(1),false);
 
-        setXmpTagString(qxmpTagName.toLatin1(),
-                        QString(),KExiv2::XmpTagType(1),false);
+    QMap<QString,QVariant>::const_iterator it = facesPath.constBegin();
+    int i =1;
+    bool ok = true;
+    while(it != facesPath.constEnd())
+    {
+        qreal x,y,w,h;
+        it.value().toRectF().getRect(&x,&y,&w,&h);
+        x += w/2;
+        y += h/2;
+        /** Set tag name **/
+        ok &= setXmpTagString(nameTagKey.arg(i).toLatin1(),
+                              it.key(),KExiv2::XmpTagType(0),false);
+        /** Set tag type as Face **/
+        ok &= setXmpTagString(typeTagKey.arg(i).toLatin1(),
+                              QString("Face"),KExiv2::XmpTagType(0),false);
 
-        QMap<QString,QVariant>::const_iterator it = facesPath.constBegin();
-        int i =1;
-        bool ok = true;
-        while(it != facesPath.constEnd())
-        {
-            qreal x,y,w,h;
-            it.value().toRectF().getRect(&x,&y,&w,&h);
-            x += w/2;
-            y += h/2;
-            /** Set tag name **/
-            ok &= setXmpTagString(nameTagKey.arg(i).toLatin1(),
-                                  it.key(),KExiv2::XmpTagType(0),false);
-            /** Set tag type as Face **/
-            ok &= setXmpTagString(typeTagKey.arg(i).toLatin1(),
-                                  QString("Face"),KExiv2::XmpTagType(0),false);
+        /** Set tag Area, with xmp type struct **/
+        ok &= setXmpTagString(areaTagKey.arg(i).toLatin1(),
+                              QString(),KExiv2::XmpTagType(2),false);
 
-            /** Set tag Area, with xmp type struct **/
-            ok &= setXmpTagString(areaTagKey.arg(i).toLatin1(),
-                                  QString(),KExiv2::XmpTagType(2),false);
+        /** Set stArea:x inside Area structure **/
+        ok &= setXmpTagString(areaxTagKey.arg(i).toLatin1(),
+                              QString::number(x),KExiv2::XmpTagType(0),false);
 
-            /** Set stArea:x inside Area structure **/
-            ok &= setXmpTagString(areaxTagKey.arg(i).toLatin1(),
-                                  QString::number(x),KExiv2::XmpTagType(0),false);
+        /** Set stArea:y inside Area structure **/
+        ok &= setXmpTagString(areayTagKey.arg(i).toLatin1(),
+                              QString::number(y),KExiv2::XmpTagType(0),false);
 
-            /** Set stArea:y inside Area structure **/
-            ok &= setXmpTagString(areayTagKey.arg(i).toLatin1(),
-                                  QString::number(y),KExiv2::XmpTagType(0),false);
+        /** Set stArea:w inside Area structure **/
+        ok &= setXmpTagString(areawTagKey.arg(i).toLatin1(),
+                              QString::number(w),KExiv2::XmpTagType(0),false);
 
-            /** Set stArea:w inside Area structure **/
-            ok &= setXmpTagString(areawTagKey.arg(i).toLatin1(),
-                                  QString::number(w),KExiv2::XmpTagType(0),false);
+        /** Set stArea:h inside Area structure **/
+        ok &= setXmpTagString(areahTagKey.arg(i).toLatin1(),
+                              QString::number(h),KExiv2::XmpTagType(0),false);
 
-            /** Set stArea:h inside Area structure **/
-            ok &= setXmpTagString(areahTagKey.arg(i).toLatin1(),
-                                  QString::number(h),KExiv2::XmpTagType(0),false);
+        /** Set stArea:unit inside Area structure  as normalized **/
+        ok &= setXmpTagString(areanormTagKey.arg(i).toLatin1(),
+                              QString("normalized"),KExiv2::XmpTagType(0),false);
 
-            /** Set stArea:unit inside Area structure  as normalized **/
-            ok &= setXmpTagString(areanormTagKey.arg(i).toLatin1(),
-                                  QString("normalized"),KExiv2::XmpTagType(0),false);
-
-            ++it;
-            ++i;
-        }
+        ++it;
+        ++i;
+    }
 
     return ok;
-
+#else
+    return false;
+#endif
 }
 void DMetadata::removeImageFaces() const
 {
-        QString qxmpTagName("Xmp.mwg-rs.Regions/mwg-rs:RegionList");
-        QString regionTagKey = qxmpTagName + QString("[%1]");
-        QString nameTagKey = qxmpTagName + QString("[%1]/mwg-rs:Name");
-        QString typeTagKey = qxmpTagName + QString("[%1]/mwg-rs:Type");
-        QString areaTagKey = qxmpTagName + QString("[%1]/mwg-rs:Area");
-        QString areaxTagKey = qxmpTagName + QString("[%1]/mwg-rs:Area/stArea:x");
-        QString areayTagKey = qxmpTagName + QString("[%1]/mwg-rs:Area/stArea:y");
-        QString areawTagKey = qxmpTagName + QString("[%1]/mwg-rs:Area/stArea:w");
-        QString areahTagKey = qxmpTagName + QString("[%1]/mwg-rs:Area/stArea:h");
-        QString areanormTagKey = qxmpTagName + QString("[%1]/mwg-rs:Area/stArea:unit");
+    QString qxmpTagName("Xmp.mwg-rs.Regions/mwg-rs:RegionList");
+    QString regionTagKey = qxmpTagName + QString("[%1]");
+    QString nameTagKey = qxmpTagName + QString("[%1]/mwg-rs:Name");
+    QString typeTagKey = qxmpTagName + QString("[%1]/mwg-rs:Type");
+    QString areaTagKey = qxmpTagName + QString("[%1]/mwg-rs:Area");
+    QString areaxTagKey = qxmpTagName + QString("[%1]/mwg-rs:Area/stArea:x");
+    QString areayTagKey = qxmpTagName + QString("[%1]/mwg-rs:Area/stArea:y");
+    QString areawTagKey = qxmpTagName + QString("[%1]/mwg-rs:Area/stArea:w");
+    QString areahTagKey = qxmpTagName + QString("[%1]/mwg-rs:Area/stArea:h");
+    QString areanormTagKey = qxmpTagName + QString("[%1]/mwg-rs:Area/stArea:unit");
 
-        removeXmpTag(qxmpTagName.toLatin1(),false);
-        bool dirty= true;
-        int i=1;
+    removeXmpTag(qxmpTagName.toLatin1(),false);
+    bool dirty= true;
+    int i=1;
 
-        /** Check if we could delete at least one entry. This method delete all
+    /** Check if we could delete at least one entry. This method delete all
          * tags, even invalid face tag data structures
          */
-        while(dirty)
-        {
-            dirty = false;
-            dirty |=removeXmpTag(regionTagKey.arg(i).toLatin1(),false);
-            dirty |=removeXmpTag(nameTagKey.arg(i).toLatin1(),false);
-            dirty |=removeXmpTag(typeTagKey.arg(i).toLatin1(),false);
-            dirty |=removeXmpTag(areaTagKey.arg(i).toLatin1(),false);
-            dirty |=removeXmpTag(areaxTagKey.arg(i).toLatin1(),false);
-            dirty |=removeXmpTag(areayTagKey.arg(i).toLatin1(),false);
-            dirty |=removeXmpTag(areawTagKey.arg(i).toLatin1(),false);
-            dirty |=removeXmpTag(areahTagKey.arg(i).toLatin1(),false);
-            dirty |=removeXmpTag(areanormTagKey.arg(i).toLatin1(),false);
-            i++;
-        }
+    while(dirty)
+    {
+        dirty = false;
+        dirty |=removeXmpTag(regionTagKey.arg(i).toLatin1(),false);
+        dirty |=removeXmpTag(nameTagKey.arg(i).toLatin1(),false);
+        dirty |=removeXmpTag(typeTagKey.arg(i).toLatin1(),false);
+        dirty |=removeXmpTag(areaTagKey.arg(i).toLatin1(),false);
+        dirty |=removeXmpTag(areaxTagKey.arg(i).toLatin1(),false);
+        dirty |=removeXmpTag(areayTagKey.arg(i).toLatin1(),false);
+        dirty |=removeXmpTag(areawTagKey.arg(i).toLatin1(),false);
+        dirty |=removeXmpTag(areahTagKey.arg(i).toLatin1(),false);
+        dirty |=removeXmpTag(areanormTagKey.arg(i).toLatin1(),false);
+        i++;
+    }
 }
 
 bool DMetadata::setMetadataTemplate(const Template& t) const
