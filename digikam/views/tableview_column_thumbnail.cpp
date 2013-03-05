@@ -75,7 +75,11 @@ QVariant ColumnThumbnail::data(const QModelIndex& sourceIndex, const int role)
 
 bool ColumnThumbnail::paint(QPainter* const painter, const QStyleOptionViewItem& option, const QModelIndex& sourceIndex) const
 {
-    /// @todo do we have to reset the column?
+    if (option.state & QStyle::State_Selected)
+    {
+        painter->fillRect(option.rect, option.palette.highlight());
+    }
+
     const ImageInfo info = getImageInfo(sourceIndex);
     if (!info.isNull())
     {
@@ -83,7 +87,6 @@ bool ColumnThumbnail::paint(QPainter* const painter, const QStyleOptionViewItem&
         const QString path = info.filePath();
         QPixmap thumbnail;
 
-        /// @todo handle unavailable thumbnails -> emit itemChanged(...) later
         if (s->thumbnailLoadThread->find(path, thumbnail, qMax(size.width() + 2, size.height() + 2)))
         {
             /// @todo Is slotThumbnailLoaded still called when the thumbnail is found right away?
@@ -122,6 +125,8 @@ void ColumnThumbnail::slotThumbnailLoaded(const LoadingDescription& loadingDescr
         return;
     }
 
+    // The model will convert the sourceIndex to the index it needs
+    // and find out the column number and set it.
     emit(signalDataChanged(sourceIndex));
 }
 
