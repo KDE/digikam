@@ -439,7 +439,16 @@ bool TableViewSortFilterProxyModel::lessThan(const QModelIndex& tableViewIndexLe
     const QModelIndex sourceIndexLeft = s->tableViewModel->toImageFilterModelIndex(tableViewIndexLeft);
     const QModelIndex sourceIndexRight = s->tableViewModel->toImageFilterModelIndex(tableViewIndexRight);
 
-    const TableViewColumn::ColumnCompareResult cmpResult = columnObject->compare(sourceIndexLeft, sourceIndexRight);
+    TableViewColumn::ColumnCompareResult cmpResult = columnObject->compare(sourceIndexLeft, sourceIndexRight);
+
+    if (cmpResult==TableViewColumn::CmpEqual)
+    {
+        // compared items are equal, use the image id to enforce a repeatable sorting
+        const qlonglong imageIdLeft = s->imageFilterModel->imageId(sourceIndexLeft);
+        const qlonglong imageIdRight = s->imageFilterModel->imageId(sourceIndexRight);
+
+        return imageIdLeft < imageIdRight;
+    }
 
     return cmpResult == TableViewColumn::CmpALessB;
 }
