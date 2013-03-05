@@ -90,6 +90,7 @@ TableViewTreeView::TableViewTreeView(Digikam::TableViewShared* const tableViewSh
     setSelectionMode(QAbstractItemView::ExtendedSelection);
     setItemDelegate(s->itemDelegate);
     setRootIsDecorated(false);
+    setAlternatingRowColors(true);
     setAllColumnsShowFocus(true);
     setDragEnabled(true);
     setAcceptDrops(true);
