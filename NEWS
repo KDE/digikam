@@ -20,5 +20,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 011 ==> 237037 - SQLITE : convience copy in digiKam core [patch].
 012 ==> 257773 - Switch to full screen mode crash under MACOSX.
 013 ==> 315284 - digiKam crashes when quitting the program.
-014 ==> 14260 - Large .tif files are not loaded.
+014 ==> 314260 - Large .tif files are not loaded.
 015 ==> 
