@@ -85,7 +85,7 @@ TableViewColumnDescription ColumnItemProperties::getDescription()
     return description;
 }
 
-QString ColumnItemProperties::getTitle()
+QString ColumnItemProperties::getTitle() const
 {
     switch (subColumn)
     {
@@ -117,7 +117,7 @@ TableViewColumn::ColumnFlags ColumnItemProperties::getColumnFlags() const
     return flags;
 }
 
-QVariant ColumnItemProperties::data(const QModelIndex& sourceIndex, const int role)
+QVariant ColumnItemProperties::data(const QModelIndex& sourceIndex, const int role) const
 {
     if ( (role != Qt::DisplayRole) &&
          (role != Qt::TextAlignmentRole) )

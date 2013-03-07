@@ -251,7 +251,7 @@ void TableViewModel::slotColumnDataChanged(const QModelIndex& sourceIndex)
         return;
     }
 
-    QModelIndex changedIndex = index(sourceIndex.row(), iColumn, QModelIndex());
+    const QModelIndex changedIndex = index(sourceIndex.row(), iColumn, QModelIndex());
     emit(dataChanged(changedIndex, changedIndex));
 }
 
@@ -266,15 +266,15 @@ void TableViewModel::slotColumnAllDataChanged()
         return;
     }
 
-    QModelIndex changedIndexTopLeft = index(0, iColumn, QModelIndex());
-    QModelIndex changedIndexBottomRight = index(rowCount(QModelIndex())-1, iColumn, QModelIndex());
+    const QModelIndex changedIndexTopLeft = index(0, iColumn, QModelIndex());
+    const QModelIndex changedIndexBottomRight = index(rowCount(QModelIndex())-1, iColumn, QModelIndex());
     emit(dataChanged(changedIndexTopLeft, changedIndexBottomRight));
 }
 
 void TableViewModel::removeColumnAt(const int columnIndex)
 {
     beginRemoveColumns(QModelIndex(), columnIndex, columnIndex);
-    TableViewColumn* removedColumn = d->columnObjects.takeAt(columnIndex);
+    TableViewColumn* const removedColumn = d->columnObjects.takeAt(columnIndex);
     endRemoveColumns();
 
     delete removedColumn;

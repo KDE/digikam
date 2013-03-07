@@ -62,7 +62,7 @@ TableViewColumnFactory::TableViewColumnFactory(TableViewShared* const tableViewS
 {
 }
 
-QString TableViewColumn::getTitle()
+QString TableViewColumn::getTitle() const
 {
     return QString("Title");
 }
@@ -96,7 +96,7 @@ TableViewColumn* TableViewColumnFactory::getColumn(const Digikam::TableViewColum
     return 0;
 }
 
-QVariant TableViewColumn::data(const QModelIndex& sourceIndex, const int role)
+QVariant TableViewColumn::data(const QModelIndex& sourceIndex, const int role) const
 {
     Q_UNUSED(sourceIndex)
     Q_UNUSED(role)

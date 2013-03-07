@@ -73,7 +73,7 @@ TableViewColumnDescription ColumnDigikamProperties::getDescription()
     return description;
 }
 
-QString ColumnDigikamProperties::getTitle()
+QString ColumnDigikamProperties::getTitle() const
 {
     switch (subColumn)
     {
@@ -96,7 +96,7 @@ TableViewColumn::ColumnFlags ColumnDigikamProperties::getColumnFlags() const
     return flags;
 }
 
-QVariant ColumnDigikamProperties::data(const QModelIndex& sourceIndex, const int role)
+QVariant ColumnDigikamProperties::data(const QModelIndex& sourceIndex, const int role) const
 {
     if ( (role != Qt::DisplayRole) &&
          (role != Qt::TextAlignmentRole) )

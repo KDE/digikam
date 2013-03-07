@@ -63,12 +63,12 @@ TableViewColumn::ColumnFlags ColumnThumbnail::getColumnFlags() const
     return ColumnCustomPainting;
 }
 
-QString ColumnThumbnail::getTitle()
+QString ColumnThumbnail::getTitle() const
 {
     return i18n("Thumbnail");
 }
 
-QVariant ColumnThumbnail::data(const QModelIndex& sourceIndex, const int role)
+QVariant ColumnThumbnail::data(const QModelIndex& sourceIndex, const int role) const
 {
     Q_UNUSED(sourceIndex)
     Q_UNUSED(role)

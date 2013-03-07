@@ -180,9 +180,9 @@ public:
     virtual void setConfiguration(const TableViewColumnConfiguration& newConfiguration);
     virtual TableViewColumnConfigurationWidget* getConfigurationWidget(QWidget* const parentWidget) const;
     virtual ColumnFlags getColumnFlags() const;
-    virtual QString getTitle();
+    virtual QString getTitle() const;
 
-    virtual QVariant data(const QModelIndex& sourceIndex, const int role);
+    virtual QVariant data(const QModelIndex& sourceIndex, const int role) const;
     virtual ColumnCompareResult compare(const QModelIndex& sourceA, const QModelIndex& sourceB) const;
     virtual bool paint(QPainter* const painter, const QStyleOptionViewItem& option, const QModelIndex& sourceIndex) const;
     virtual QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& sourceIndex) const;

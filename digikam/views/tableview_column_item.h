@@ -72,11 +72,11 @@ public:
 
     static TableViewColumnDescription getDescription();
     static QStringList getSubColumns();
-    virtual QString getTitle();
+    virtual QString getTitle() const;
 
     virtual ColumnFlags getColumnFlags() const;
 
-    virtual QVariant data(const QModelIndex& sourceIndex, const int role);
+    virtual QVariant data(const QModelIndex& sourceIndex, const int role) const;
 
     virtual ColumnCompareResult compare(const QModelIndex& sourceA, const QModelIndex& sourceB) const;
 };

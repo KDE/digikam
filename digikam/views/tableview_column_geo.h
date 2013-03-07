@@ -66,11 +66,11 @@ public:
     virtual ~ColumnGeoProperties();
     static TableViewColumnDescription getDescription();
 
-    virtual QString getTitle();
+    virtual QString getTitle() const;
 
     virtual ColumnFlags getColumnFlags() const;
     static QStringList getSubColumns();
-    virtual QVariant data(const QModelIndex& sourceIndex, const int role);
+    virtual QVariant data(const QModelIndex& sourceIndex, const int role) const;
 
     virtual ColumnCompareResult compare(const QModelIndex& sourceA, const QModelIndex& sourceB) const;
 

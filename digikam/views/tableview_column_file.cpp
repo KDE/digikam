@@ -65,7 +65,7 @@ TableViewColumnDescription ColumnFileProperties::getDescription()
     return description;
 }
 
-QString ColumnFileProperties::getTitle()
+QString ColumnFileProperties::getTitle() const
 {
     switch (subColumn)
     {
@@ -88,7 +88,7 @@ TableViewColumn::ColumnFlags ColumnFileProperties::getColumnFlags() const
     return ColumnNoFlags;
 }
 
-QVariant ColumnFileProperties::data(const QModelIndex& sourceIndex, const int role)
+QVariant ColumnFileProperties::data(const QModelIndex& sourceIndex, const int role) const
 {
     if ( (role != Qt::DisplayRole) &&
          (role != Qt::TextAlignmentRole) )

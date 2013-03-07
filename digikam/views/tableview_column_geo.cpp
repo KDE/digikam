@@ -81,7 +81,7 @@ TableViewColumnDescription ColumnGeoProperties::getDescription()
     return description;
 }
 
-QString ColumnGeoProperties::getTitle()
+QString ColumnGeoProperties::getTitle() const
 {
     switch (subColumn)
     {
@@ -107,7 +107,7 @@ TableViewColumn::ColumnFlags ColumnGeoProperties::getColumnFlags() const
 
     return flags;
 }
-QVariant ColumnGeoProperties::data(const QModelIndex& sourceIndex, const int role)
+QVariant ColumnGeoProperties::data(const QModelIndex& sourceIndex, const int role) const
 {
     if ( (role != Qt::DisplayRole) &&
          (role != Qt::TextAlignmentRole) )

@@ -64,9 +64,9 @@ public:
 
     virtual ColumnFlags getColumnFlags() const;
 
-    virtual QString getTitle();
+    virtual QString getTitle() const;
 
-    virtual QVariant data(const QModelIndex& sourceIndex, const int role);
+    virtual QVariant data(const QModelIndex& sourceIndex, const int role) const;
 
     virtual bool paint(QPainter* const painter, const QStyleOptionViewItem& option, const QModelIndex& sourceIndex) const;
 
