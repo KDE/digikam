@@ -31,6 +31,11 @@
 #include <thumbnailsize.h>
 #include "tableview.h"
 
+namespace
+{
+    const int ThumbnailBorder = 2;
+}
+
 namespace Digikam
 {
 
@@ -87,19 +92,33 @@ bool ColumnThumbnail::paint(QPainter* const painter, const QStyleOptionViewItem&
     const ImageInfo info = getImageInfo(sourceIndex);
     if (!info.isNull())
     {
+        const QSize imageSize = info.dimensions();
+        const QSize availableSize = option.rect.size() - QSize(ThumbnailBorder, ThumbnailBorder);
+
         QSize size(m_thumbnailSize, m_thumbnailSize);
+        if (imageSize.isValid() && (imageSize.width()>imageSize.height()) )
+        {
+            // for landscape pictures, try to use all available horizontal space
+            qreal scaleFactor = qreal(availableSize.height()) / qreal(imageSize.height());
+            if (qreal(imageSize.width())*scaleFactor > availableSize.width())
+            {
+                scaleFactor = qreal(availableSize.width()) / qreal(imageSize.width());
+            }
+
+            size.setWidth(imageSize.width()*scaleFactor);
+        }
+
         const QString path = info.filePath();
         QPixmap thumbnail;
-
         if (s->thumbnailLoadThread->find(path, thumbnail, qMax(size.width()/* + 2*/, size.height()/* + 2*/)))
         {
             /// @todo Is slotThumbnailLoaded still called when the thumbnail is found right away?
             /// @todo Remove borders - but they actually look nice in the table
+            const QSize alignSize = option.rect.size();
 //                 thumbnail = thumbnail.copy(1, 1, thumbnail.size().width()-2, thumbnail.size().height()-2)
-            const QSize availableSize = option.rect.size();
             const QSize pixmapSize    = thumbnail.size().boundedTo(availableSize);
-            QPoint startPoint((availableSize.width() - pixmapSize.width()) / 2,
-                              (availableSize.height() - pixmapSize.height()) / 2);
+            QPoint startPoint((alignSize.width() - pixmapSize.width()) / 2,
+                              (alignSize.height() - pixmapSize.height()) / 2);
             startPoint += option.rect.topLeft();
             painter->drawPixmap(QRect(startPoint, pixmapSize), thumbnail, QRect(QPoint(0, 0), pixmapSize));
 
@@ -114,7 +133,7 @@ bool ColumnThumbnail::paint(QPainter* const painter, const QStyleOptionViewItem&
 QSize ColumnThumbnail::sizeHint(const QStyleOptionViewItem& option, const QModelIndex& sourceIndex) const
 {
     /// @todo On portrait pictures, the borders are too close. There should be a gap. Is this setting okay?
-    const int thumbnailSizeWithBorder = m_thumbnailSize+2;
+    const int thumbnailSizeWithBorder = m_thumbnailSize+ThumbnailBorder;
     return QSize(thumbnailSizeWithBorder, thumbnailSizeWithBorder);
 }
 
@@ -138,6 +157,8 @@ void ColumnThumbnail::slotThumbnailLoaded(const LoadingDescription& loadingDescr
 
 void ColumnThumbnail::updateThumbnailSize()
 {
+    /// @todo Set minimum column width to m_thumbnailSize
+
     m_thumbnailSize = s->tableView->getThumbnailSize().size();
 
     emit(signalAllDataChanged());
