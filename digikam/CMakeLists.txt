@@ -300,9 +300,6 @@ TARGET_LINK_LIBRARIES(digikam
 
         importui
         
-        opencv_highgui
-        opencv_core
-        opencv_imgproc
         tldinterface
 
 

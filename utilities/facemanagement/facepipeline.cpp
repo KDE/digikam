@@ -539,7 +539,7 @@ void RecognitionWorker::process(FacePipelineExtendedPackage::Ptr package)
         cvSetImageROI(imgt, cvRect(face.region().toRect().x(),face.region().toRect().y(),
                                    face.region().toRect().width(),face.region().toRect().height()));
 
-        IplImage* const img1           = cvCreateImage(cvSize(face.region().toRect().width(),face.region().toRect().height()),
+        IplImage* img1           = cvCreateImage(cvSize(face.region().toRect().width(),face.region().toRect().height()),
                                              imgt->depth,imgt->nChannels);
 
         cvCopy(imgt, img1);
@@ -933,7 +933,7 @@ void Trainer::process(FacePipelineExtendedPackage::Ptr package)
                 cvSetImageROI(imgt, cvRect(face.region().toRect().x(),face.region().toRect().y(),
                                            face.region().toRect().width(),face.region().toRect().height()));
 
-                IplImage* const img1                  = cvCreateImage(cvSize(face.region().toRect().width(),face.region().toRect().height()),
+                IplImage* img1                  = cvCreateImage(cvSize(face.region().toRect().width(),face.region().toRect().height()),
                                                                       imgt->depth, imgt->nChannels);
                 cvCopy(imgt, img1);
                 cvResetImageROI(imgt);
