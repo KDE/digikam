@@ -64,6 +64,7 @@ QStringList ColumnDigikamProperties::getSubColumns()
 TableViewColumnDescription ColumnDigikamProperties::getDescription()
 {
     TableViewColumnDescription description(QLatin1String("digikam-properties"), i18n("Digikam properties"));
+    description.setIcon("imagecomment");
 
     description.addSubColumn(
         TableViewColumnDescription("digikam-properties", i18n("Rating"), "subcolumn", "rating")

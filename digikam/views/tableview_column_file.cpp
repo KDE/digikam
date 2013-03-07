@@ -52,6 +52,7 @@ ColumnFileProperties::ColumnFileProperties(
 TableViewColumnDescription ColumnFileProperties::getDescription()
 {
     TableViewColumnDescription description(QLatin1String("file-properties"), i18n("File properties"));
+    description.setIcon("dialog-information");
 
     description.addSubColumn(
         TableViewColumnDescription("file-properties", i18n("Filename"), "subcolumn", "name")

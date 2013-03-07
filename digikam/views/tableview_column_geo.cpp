@@ -64,6 +64,7 @@ QStringList ColumnGeoProperties::getSubColumns()
 TableViewColumnDescription ColumnGeoProperties::getDescription()
 {
     TableViewColumnDescription description(QLatin1String("geo-properties"), i18n("Geo properties"));
+    description.setIcon("applications-internet");
 
     description.addSubColumn(
         TableViewColumnDescription("geo-properties", i18n("Geotagged"), "subcolumn", "hascoordinates")

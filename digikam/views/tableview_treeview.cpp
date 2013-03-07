@@ -96,11 +96,11 @@ TableViewTreeView::TableViewTreeView(Digikam::TableViewShared* const tableViewSh
     setAcceptDrops(true);
 //     viewport()->setAcceptDrops(true);
 
-    d->actionHeaderContextMenuRemoveColumn = new KAction("Remove this column", this);
+    d->actionHeaderContextMenuRemoveColumn = new KAction(KIcon("edit-table-delete-column"), i18n("Remove this column"), this);
     connect(d->actionHeaderContextMenuRemoveColumn, SIGNAL(triggered(bool)),
             this, SLOT(slotHeaderContextMenuActionRemoveColumnTriggered()));
 
-    d->actionHeaderContextMenuConfigureColumn = new KAction("Configure this column", this);
+    d->actionHeaderContextMenuConfigureColumn = new KAction(KIcon("configure"), i18n("Configure this column"), this);
     connect(d->actionHeaderContextMenuConfigureColumn, SIGNAL(triggered(bool)),
             this, SLOT(slotHeaderContextMenuConfigureColumn()));
 
@@ -138,6 +138,11 @@ void TableViewTreeView::addColumnDescriptionsToMenu(
     {
         const TableViewColumnDescription& desc = columnDescriptions.at(i);
         KAction* const action = new KAction(desc.columnTitle, menu);
+
+        if (!desc.columnIcon.isEmpty())
+        {
+            action->setIcon(KIcon(desc.columnIcon));
+        }
 
         if (desc.subColumns.isEmpty())
         {

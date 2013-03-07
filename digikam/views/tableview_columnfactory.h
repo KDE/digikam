@@ -70,6 +70,7 @@ public:
     explicit TableViewColumnDescription()
       : columnId(),
         columnTitle(),
+        columnIcon(),
         columnSettings(),
         subColumns()
     {
@@ -78,6 +79,7 @@ public:
     explicit TableViewColumnDescription(const QString& id, const QString title, const QString& settingKey = QString(), const QString& settingValue = QString())
       : columnId(id),
         columnTitle(title),
+        columnIcon(),
         columnSettings(),
         subColumns()
     {
@@ -89,6 +91,7 @@ public:
 
     QString columnId;
     QString columnTitle;
+    QString columnIcon;
     QHash<QString, QString> columnSettings;
     QList<TableViewColumnDescription> subColumns;
 
@@ -110,6 +113,13 @@ public:
         configuration.columnSettings = columnSettings;
 
         return configuration;
+    }
+
+    TableViewColumnDescription setIcon(const QString& iconName)
+    {
+        columnIcon = iconName;
+
+        return *this;
     }
 };
 

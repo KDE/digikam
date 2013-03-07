@@ -65,6 +65,7 @@ QStringList ColumnItemProperties::getSubColumns()
 TableViewColumnDescription ColumnItemProperties::getDescription()
 {
     TableViewColumnDescription description(QLatin1String("item-properties"), i18n("Item properties"));
+    description.setIcon("image-x-generic");
 
     description.addSubColumn(
         TableViewColumnDescription("item-properties", i18n("Width"), "subcolumn", "width")
