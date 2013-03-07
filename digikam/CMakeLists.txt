@@ -299,6 +299,12 @@ TARGET_LINK_LIBRARIES(digikam
         queuemanager
 
         importui
+        
+        opencv_highgui
+        opencv_core
+        opencv_imgproc
+        tldinterface
+
 
         # See B.K.O #258931: libgphoto2 library must be the last arg for linker.
         ${GPHOTO2_LIBRARIES}

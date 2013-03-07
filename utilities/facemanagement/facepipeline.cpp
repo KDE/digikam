@@ -34,9 +34,11 @@
 
 #include <kdebug.h>
 #include <klocale.h>
+#include <opencv/cv.h>
+#include <opencv/highgui.h>
 
 // Local includes
-
+#include "tlddatabase.h"
 #include "loadingdescription.h"
 #include "metadatasettings.h"
 #include "threadmanager.h"
@@ -278,7 +280,7 @@ FacePipelineExtendedPackage::Ptr ScanStateFilter::filter(const ImageInfo& info)
             if (!databaseFaces.isEmpty())
             {
                 FacePipelineExtendedPackage::Ptr package = d->buildPackage(info);
-                package->databaseFaces                   = databaseFaces;
+                package->databaseFaces = databaseFaces;
                 //kDebug() << "Prepared package with" << databaseFaces.size();
                 package->databaseFaces.setRole(FacePipelineDatabaseFace::ReadFromDatabase);
 
@@ -287,7 +289,7 @@ FacePipelineExtendedPackage::Ptr ScanStateFilter::filter(const ImageInfo& info)
                     package->databaseFaces.setRole(tasks);
                 }
 
-                package->faces = iface.toFaces(databaseFaces);
+                package->faces         = iface.toFaces(databaseFaces);
                 return package;
             }
 
@@ -521,8 +523,73 @@ RecognitionWorker::RecognitionWorker(FacePipeline::Private* const d)
 
 void RecognitionWorker::process(FacePipelineExtendedPackage::Ptr package)
 {
-/* Disable recognition for stable release. See bug 269720.
+    /*OpenTLD handler..............................*/
 
+    FaceIface iface;
+    QSize size                     = database.recommendedImageSize(package->image.size());
+    iface.fillImageInFaces(package->image, package->faces, size);
+
+    int removeindex                = 0;
+    Tlddatabase* const tlddatabase = new Tlddatabase();
+    IplImage* const imgt           = cvvLoadImage(qPrintable(package->filePath));
+
+    foreach(const FacePipelineDatabaseFace& face, package->databaseFaces)
+    {
+        vector<float> recognitionconfidence;
+        cvSetImageROI(imgt, cvRect(face.region().toRect().x(),face.region().toRect().y(),
+                                   face.region().toRect().width(),face.region().toRect().height()));
+
+        IplImage* const img1           = cvCreateImage(cvSize(face.region().toRect().width(),face.region().toRect().height()),
+                                             imgt->depth,imgt->nChannels);
+
+        cvCopy(imgt, img1);
+        cvResetImageROI(imgt);
+        IplImage* const inputfaceimage = cvCreateImage(cvSize(47,47),imgt->depth,imgt->nChannels);
+        cvResize(img1, inputfaceimage);
+        int count                      = -1;
+
+        for (int i = 1; i <= tlddatabase->queryNumfacesinDatabase();i++ )
+        {
+            unitFaceModel* const comparemodel = tlddatabase->getFaceModel(i);
+            Tldrecognition* const tmpTLD      = new Tldrecognition;
+            recognitionconfidence.push_back(tmpTLD->getRecognitionConfidence(inputfaceimage,comparemodel));
+            delete tmpTLD;
+            count++;
+        }
+
+        if(count != -1)
+        {
+            int maxConfIndex    = 0;
+            float maxConfidence = recognitionconfidence[0];
+
+            for(int tmpInt = 0; tmpInt <= count ; tmpInt++ )
+            {
+                if(recognitionconfidence[tmpInt] > maxConfidence)
+                {
+                    maxConfIndex  = tmpInt;
+                    maxConfidence = recognitionconfidence[tmpInt];
+                }
+            }
+
+            if(maxConfidence > 0.6 )
+            {
+                kDebug() << "preson  " << qPrintable(tlddatabase->querybyFaceid(maxConfIndex+1))
+                         << "   recognised in" << qPrintable(package->filePath);
+                package->faces[removeindex].setName(tlddatabase->querybyFaceid(maxConfIndex+1));
+                package->faces[removeindex].clearRecognition();
+            }
+        }
+
+        removeindex++;
+    }
+
+    delete tlddatabase;
+
+    /*OpenTLD handler..............................*/
+
+    /*
+     * Disable recognition for stable release. See bug 269720.
+     *
     FaceIface iface;
     QSize size = database.recommendedImageSize(package->image.size());
     iface.fillImageInFaces(package->image, package->faces, size);
@@ -541,7 +608,7 @@ void RecognitionWorker::process(FacePipelineExtendedPackage::Ptr package)
             package->faces[i].clearRecognition();
         }
     }
-*/
+    */
 
     package->processFlags |= FacePipelinePackage::ProcessedByRecognizer;
     emit processed(package);
@@ -567,7 +634,7 @@ void DatabaseWriter::process(FacePipelineExtendedPackage::Ptr package)
 
         FaceIface iface;
 
-        if (mode == FacePipeline::OverwriteUnconfirmed && package->processFlags & FacePipelinePackage::ProcessedByDetector)
+        if (mode == FacePipeline::OverwriteUnconfirmed && (package->processFlags & FacePipelinePackage::ProcessedByDetector))
         {
             QList<DatabaseFace> oldEntries = iface.unconfirmedDatabaseFaces(package->info.id());
             kDebug() << "Removing old entries" << oldEntries;
@@ -819,8 +886,9 @@ void Trainer::process(FacePipelineExtendedPackage::Ptr package)
 {
     //kDebug() << "Trainer: processing one package";
     // Get a list of faces with type FaceForTraining (probably type is ConfirmedFace)
-    QList<DatabaseFace> toTrain;
 
+    IplImage* const imgt = cvvLoadImage(qPrintable(package->filePath));
+    QList<DatabaseFace> toTrain;
     foreach(const FacePipelineDatabaseFace& face, package->databaseFaces)
     {
         if (face.roles & FacePipelineDatabaseFace::ForTraining)
@@ -831,11 +899,73 @@ void Trainer::process(FacePipelineExtendedPackage::Ptr package)
         }
     }
 
+    /*OpenTLD handler.....................*/
+
     if (!toTrain.isEmpty())
     {
         FaceIface iface;
 
-/* Disable recognition for stable release. See bug 269720 and 255520.
+        package->faces = iface.toFaces(toTrain);
+
+        QSize size = database.recommendedImageSize(package->image.size());
+        iface.fillImageInFaces(package->image, package->faces, size);
+        if (package->image.isNull())
+        {
+            if (!catcher)
+            {
+                catcher = new ThumbnailImageCatcher(d->thumbnailLoadThread, this);
+            }
+            catcher->setActive(true);
+            iface.fillImageInFaces(catcher, package->filePath, package->faces, size);
+            catcher->setActive(false);
+        }
+        else
+        {
+            iface.fillImageInFaces(package->image, package->faces, size);
+        }
+
+        int assignedNameindex = 0;
+
+        foreach(const FacePipelineDatabaseFace& face, package->databaseFaces)
+        {
+            if (face.roles & FacePipelineDatabaseFace::ForTraining)
+            {
+                cvSetImageROI(imgt, cvRect(face.region().toRect().x(),face.region().toRect().y(),
+                                           face.region().toRect().width(),face.region().toRect().height()));
+
+                IplImage* const img1                  = cvCreateImage(cvSize(face.region().toRect().width(),face.region().toRect().height()),
+                                                                      imgt->depth, imgt->nChannels);
+                cvCopy(imgt, img1);
+                cvResetImageROI(imgt);
+                IplImage* const inputfaceimage        = cvCreateImage(cvSize(47,47),imgt->depth,imgt->nChannels);
+                cvResize(img1,inputfaceimage);
+                Tlddatabase* const tlddatabase        = new Tlddatabase();
+                Tldrecognition* const tmpTLD          = new Tldrecognition;
+                unitFaceModel* const facemodeltostore = tmpTLD->getModeltoStore(inputfaceimage);
+                facemodeltostore->Name                = package->faces[assignedNameindex].name();
+
+                kDebug() << "person  " << qPrintable(package->faces.at(assignedNameindex).name())
+                         << "  stored in recognition database";
+
+                tlddatabase->insertFaceModel(facemodeltostore);             //store facemodel in tlddatabase
+
+                delete tmpTLD;
+                delete tlddatabase;
+                assignedNameindex++;
+            }
+        }
+
+        iface.removeFaces(toTrain);
+        package->databaseFaces.replaceRole(FacePipelineDatabaseFace::ForTraining, FacePipelineDatabaseFace::Trained);
+    }
+
+    /*OpenTLD handler.....................*/
+
+    /***if (!toTrain.isEmpty())
+    {
+        FaceIface iface;
+
+        // Disable recognition for stable release. See bug 269720 and 255520.
 
         // Get KFaceIface faces
         package->faces = iface.toFaces(toTrain);
@@ -862,12 +992,12 @@ void Trainer::process(FacePipelineExtendedPackage::Ptr package)
         // Train
         kDebug() << "Training" << package->faces.size() << "faces";
         database.updateFaces(package->faces);
-*/
+
 
         // Remove the "FaceForTraining" entry in database (tagRegion entry remains, of course, untouched)
         iface.removeFaces(toTrain);
         package->databaseFaces.replaceRole(FacePipelineDatabaseFace::ForTraining, FacePipelineDatabaseFace::Trained);
-    }
+    }***/
 
     package->processFlags |= FacePipelinePackage::ProcessedByTrainer;
     emit processed(package);

@@ -1272,6 +1272,15 @@ IF(DIGIKAM_CAN_BE_COMPILED)
     SET(libeditorgui_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/main/imagewindow.cpp
        )
+    
+    include_directories(${CMAKE_CURRENT_SOURCE_DIR}/utilities/facedetection
+                        ${CMAKE_CURRENT_SOURCE_DIR}/../extra/libkface/OpenTLD/tldinterface
+                        ${CMAKE_CURRENT_SOURCE_DIR}/../extra/libkface/OpenTLD/tldinterface
+                        ${CMAKE_CURRENT_SOURCE_DIR}/../extra/libkface/OpenTLD/src/3rdparty/cvblobs
+                        ${CMAKE_CURRENT_SOURCE_DIR}/../extra/libkface/OpenTLD/src/libopentld/mftracker
+                        ${CMAKE_CURRENT_SOURCE_DIR}/../extra/libkface/OpenTLD/src/libopentld/tld
+                        ${CMAKE_CURRENT_SOURCE_DIR}/../extra/libkface/OpenTLD/src/opentld/main
+                        )
 
     SET(libmaintenance_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/imageinfojob.cpp
