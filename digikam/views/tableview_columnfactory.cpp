@@ -165,9 +165,10 @@ void TableViewColumnProfile::loadSettings(const KConfigGroup& configGroup)
     if (columnConfigurationList.isEmpty())
     {
         // no data loaded, create default entries
+        /// @todo Make proper columns here.
         columnConfigurationList << TableViewColumnConfiguration("thumbnail");
-        columnConfigurationList << TableViewColumnConfiguration("filename");
-        columnConfigurationList << TableViewColumnConfiguration("coordinates");
+        columnConfigurationList << TableViewColumnConfiguration("file-properties");
+        columnConfigurationList << TableViewColumnConfiguration("geo-properties");
     }
 }
 
