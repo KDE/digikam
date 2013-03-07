@@ -44,7 +44,7 @@
 
 using namespace Digikam;
 
-QTEST_MAIN(DImageHistoryTest)
+QTEST_KDEMAIN(DImageHistoryTest, GUI)
 
 void DImageHistoryTest::initTestCase()
 {
