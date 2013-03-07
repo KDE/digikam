@@ -68,13 +68,15 @@ public:
     Private()
       : treeView(0),
         imageModel(0),
-        columnProfiles()
+        columnProfiles(),
+        thumbnailSize()
     {
     }
 
     TableViewTreeView*      treeView;
     ImageAlbumModel*        imageModel;
     QList<TableViewColumnProfile> columnProfiles;
+    ThumbnailSize           thumbnailSize;
 };
 
 TableView::TableView(
@@ -87,6 +89,7 @@ TableView::TableView(
     d(new Private()),
     s(new TableViewShared())
 {
+    s->tableView = this;
     s->thumbnailLoadThread = new ThumbnailLoadThread(this);
     s->imageFilterModel = dynamic_cast<ImageFilterModel*>(imageFilterModel);
     d->imageModel = dynamic_cast<ImageAlbumModel*>(imageFilterModel->sourceModel());
@@ -241,11 +244,18 @@ void TableView::slotRemoveTagFromSelected(const int tagID)
 
 void TableView::setThumbnailSize(const ThumbnailSize& size)
 {
+    d->thumbnailSize = size;
+
     const QList<TableViewColumn*> columnObjects = s->tableViewModel->getColumnObjects();
     Q_FOREACH(TableViewColumn* const iColumn, columnObjects)
     {
-        iColumn->setThumbnailSize(size);
+        iColumn->updateThumbnailSize();
     }
+}
+
+ThumbnailSize TableView::getThumbnailSize() const
+{
+    return d->thumbnailSize;
 }
 
 } /* namespace Digikam */

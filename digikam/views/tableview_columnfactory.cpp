@@ -278,9 +278,9 @@ void TableViewColumn::setConfiguration(const TableViewColumnConfiguration& newCo
     Q_UNUSED(newConfiguration)
 }
 
-void TableViewColumn::setThumbnailSize(const ThumbnailSize& size)
+void TableViewColumn::updateThumbnailSize()
 {
-    Q_UNUSED(size)
+
 }
 
 } /* namespace Digikam */

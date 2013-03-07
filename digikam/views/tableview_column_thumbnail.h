@@ -72,7 +72,7 @@ public:
 
     virtual QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& sourceIndex) const;
 
-    virtual void setThumbnailSize(const ThumbnailSize& size);
+    virtual void updateThumbnailSize();
 
 private Q_SLOTS:
 

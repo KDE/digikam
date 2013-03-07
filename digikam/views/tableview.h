@@ -67,6 +67,7 @@ public:
     virtual ~TableView();
 
     void setThumbnailSize(const ThumbnailSize& size);
+    ThumbnailSize getThumbnailSize() const;
 
 protected:
 

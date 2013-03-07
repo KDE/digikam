@@ -209,8 +209,6 @@ void TableViewModel::addColumnAt(const TableViewColumnDescription& description, 
 
 void TableViewModel::addColumnAt(const TableViewColumnConfiguration& configuration, const int targetColumn)
 {
-    /// @todo Apply current thumbnail size settings to this column.
-
     TableViewColumn* const newColumn = d->columnFactory->getColumn(configuration);
     if (!newColumn)
     {

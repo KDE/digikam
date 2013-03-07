@@ -186,7 +186,7 @@ public:
     virtual ColumnCompareResult compare(const QModelIndex& sourceA, const QModelIndex& sourceB) const;
     virtual bool paint(QPainter* const painter, const QStyleOptionViewItem& option, const QModelIndex& sourceIndex) const;
     virtual QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& sourceIndex) const;
-    virtual void setThumbnailSize(const ThumbnailSize& size);
+    virtual void updateThumbnailSize();
 
     ImageInfo getImageInfo(const QModelIndex sourceIndex) const;
 

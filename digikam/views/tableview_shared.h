@@ -28,6 +28,7 @@ class QItemSelectionModel;
 namespace Digikam
 {
 
+class TableView;
 class TableViewModel;
 class TableViewColumnFactory;
 class TableViewItemDelegate;
@@ -45,6 +46,7 @@ public:
     QItemSelectionModel* imageFilterSelectionModel;
     ThumbnailLoadThread* thumbnailLoadThread;
 
+    TableView* tableView;
     TableViewModel* tableViewModel;
     QItemSelectionModel* tableViewSelectionModel;
 

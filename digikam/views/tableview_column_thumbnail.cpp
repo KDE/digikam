@@ -29,6 +29,7 @@
 // local includes
 
 #include <thumbnailsize.h>
+#include "tableview.h"
 
 namespace Digikam
 {
@@ -41,7 +42,7 @@ ColumnThumbnail::ColumnThumbnail(
         const TableViewColumnConfiguration& pConfiguration,
         QObject* const parent)
   : TableViewColumn(tableViewShared, pConfiguration, parent),
-    m_thumbnailSize(ThumbnailSize::Medium)
+    m_thumbnailSize(s->tableView->getThumbnailSize().size())
 {
     connect(s->thumbnailLoadThread, SIGNAL(signalThumbnailLoaded(LoadingDescription, QPixmap)),
             this, SLOT(slotThumbnailLoaded(LoadingDescription, QPixmap)));
@@ -135,9 +136,9 @@ void ColumnThumbnail::slotThumbnailLoaded(const LoadingDescription& loadingDescr
     emit(signalDataChanged(sourceIndex));
 }
 
-void ColumnThumbnail::setThumbnailSize(const ThumbnailSize& size)
+void ColumnThumbnail::updateThumbnailSize()
 {
-    m_thumbnailSize = size.size();
+    m_thumbnailSize = s->tableView->getThumbnailSize().size();
 
     emit(signalAllDataChanged());
 }
