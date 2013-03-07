@@ -9,6 +9,8 @@ Known issues
   This is confusing when going into preview mode from the table view.
   Maybe allow table view controlled sorting for all views?
 - No thumbnail during drag and drop on first drag. Need to pre-generate thumbnails.
+- There is no clear visual separation between the columns yet.
+  This can make it hard to realize where the columns start and end.
 
 Until release
 -------------
