@@ -1,0 +1,34 @@
+TODO list for the table view
+
+Some items may also be as @todo in the source code.
+
+Known issues
+------------
+- New columns are not always created next to the column which was clicked in the header.
+- Sorting in the thumbbar is different from the sorting in the table view.
+  This is confusing when going into preview mode from the table view.
+  Maybe allow table view controlled sorting for all views?
+- No thumbnail during drag and drop on first drag. Need to pre-generate thumbnails.
+
+Until release
+-------------
+- Add columns:
+ - Color / pick label
+ - Title, description: Default digikam title, description and language selections.
+ - Exif info shown in the properties tab.
+ - Folder name
+- Add missing context menu actions.
+- Set the models as inactive if not shown to stop background syncing of selections.
+
+Nice to have
+------------
+- Configurable units for columns: For example: altitude in meters vs feet.
+- All exif/xmp tags as columns.
+
+Wishlist
+--------
+- Configurable column profiles for easy task switching: tagging, geotagging, image search
+- Editing of rating/metadata in the table. Need to check when to commit the data.
+- Geo:
+ - Distance to a point.
+ - Time to an event.
