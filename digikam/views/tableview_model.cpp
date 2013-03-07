@@ -209,6 +209,8 @@ void TableViewModel::addColumnAt(const TableViewColumnDescription& description, 
 
 void TableViewModel::addColumnAt(const TableViewColumnConfiguration& configuration, const int targetColumn)
 {
+    /// @todo Apply current thumbnail size settings to this column.
+
     TableViewColumn* const newColumn = d->columnFactory->getColumn(configuration);
     if (!newColumn)
     {
@@ -235,6 +237,9 @@ void TableViewModel::addColumnAt(const TableViewColumnConfiguration& configurati
 
     connect(newColumn, SIGNAL(signalDataChanged(QModelIndex)),
             this, SLOT(slotColumnDataChanged(QModelIndex)));
+
+    connect(newColumn, SIGNAL(signalAllDataChanged()),
+            this, SLOT(slotColumnAllDataChanged()));
 }
 
 void TableViewModel::slotColumnDataChanged(const QModelIndex& sourceIndex)
@@ -250,6 +255,22 @@ void TableViewModel::slotColumnDataChanged(const QModelIndex& sourceIndex)
 
     QModelIndex changedIndex = index(sourceIndex.row(), iColumn, QModelIndex());
     emit(dataChanged(changedIndex, changedIndex));
+}
+
+void TableViewModel::slotColumnAllDataChanged()
+{
+    TableViewColumn* const senderColumn = qobject_cast<TableViewColumn*>(sender());
+
+    /// @todo find a faster way to find the column number
+    const int iColumn = d->columnObjects.indexOf(senderColumn);
+    if (iColumn<0)
+    {
+        return;
+    }
+
+    QModelIndex changedIndexTopLeft = index(0, iColumn, QModelIndex());
+    QModelIndex changedIndexBottomRight = index(rowCount(QModelIndex())-1, iColumn, QModelIndex());
+    emit(dataChanged(changedIndexTopLeft, changedIndexBottomRight));
 }
 
 void TableViewModel::removeColumnAt(const int columnIndex)
@@ -600,6 +621,11 @@ QStringList TableViewSortFilterProxyModel::mimeTypes() const
 bool TableViewSortFilterProxyModel::dropMimeData(const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent)
 {
     return false;
+}
+
+QList< TableViewColumn* > TableViewModel::getColumnObjects()
+{
+    return d->columnObjects;
 }
 
 } /* namespace Digikam */

@@ -295,4 +295,26 @@ Album* TableViewTreeView::albumAt(const QPoint& pos) const
     return 0;
 }
 
+void TableViewTreeView::wheelEvent(QWheelEvent* event)
+{
+    if (event->modifiers() & Qt::ControlModifier)
+    {
+        const int delta = event->delta();
+
+        if (delta > 0)
+        {
+            emit(signalZoomInStep());
+        }
+        else if (delta < 0)
+        {
+            emit(signalZoomOutStep());
+        }
+
+        event->accept();
+        return;
+    }
+
+    QTreeView::wheelEvent(event);
+}
+
 } /* namespace Digikam */

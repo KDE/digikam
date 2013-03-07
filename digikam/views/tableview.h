@@ -51,6 +51,8 @@ class QContextMenuEvent;
 namespace Digikam
 {
 
+class ThumbnailSize;
+
 class TableView : public QWidget, public StateSavingObject
 {
     Q_OBJECT
@@ -63,6 +65,8 @@ public:
             QWidget* const parent
         );
     virtual ~TableView();
+
+    void setThumbnailSize(const ThumbnailSize& size);
 
 protected:
 
@@ -86,6 +90,8 @@ protected Q_SLOTS:
 Q_SIGNALS:
 
     void signalPreviewRequested(const ImageInfo& info);
+    void signalZoomInStep();
+    void signalZoomOutStep();
 
 private:
 

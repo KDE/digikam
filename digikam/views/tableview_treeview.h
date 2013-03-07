@@ -75,6 +75,7 @@ protected:
     virtual AbstractItemDragDropHandler* dragDropHandler() const;
     virtual QModelIndex mapIndexForDragDrop(const QModelIndex& index) const;
     virtual QPixmap     pixmapForDrag(const QList<QModelIndex>& indexes) const;
+    virtual void wheelEvent(QWheelEvent* event);
 
 private:
 
@@ -87,6 +88,11 @@ private Q_SLOTS:
     void slotHeaderContextMenuAddColumn();
     void slotHeaderContextMenuConfigureColumn();
     void slotHeaderContextMenuActionRemoveColumnTriggered();
+
+Q_SIGNALS:
+
+    void signalZoomInStep();
+    void signalZoomOutStep();
 
 private:
 

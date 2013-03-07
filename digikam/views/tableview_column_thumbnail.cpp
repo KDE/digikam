@@ -28,6 +28,8 @@
 
 // local includes
 
+#include <thumbnailsize.h>
+
 namespace Digikam
 {
 
@@ -38,7 +40,8 @@ ColumnThumbnail::ColumnThumbnail(
         TableViewShared* const tableViewShared,
         const TableViewColumnConfiguration& pConfiguration,
         QObject* const parent)
-  : TableViewColumn(tableViewShared, pConfiguration, parent)
+  : TableViewColumn(tableViewShared, pConfiguration, parent),
+    m_thumbnailSize(ThumbnailSize::Medium)
 {
     connect(s->thumbnailLoadThread, SIGNAL(signalThumbnailLoaded(LoadingDescription, QPixmap)),
             this, SLOT(slotThumbnailLoaded(LoadingDescription, QPixmap)));
@@ -83,14 +86,14 @@ bool ColumnThumbnail::paint(QPainter* const painter, const QStyleOptionViewItem&
     const ImageInfo info = getImageInfo(sourceIndex);
     if (!info.isNull())
     {
-        QSize size(60, 60);
+        QSize size(m_thumbnailSize, m_thumbnailSize);
         const QString path = info.filePath();
         QPixmap thumbnail;
 
-        if (s->thumbnailLoadThread->find(path, thumbnail, qMax(size.width() + 2, size.height() + 2)))
+        if (s->thumbnailLoadThread->find(path, thumbnail, qMax(size.width()/* + 2*/, size.height()/* + 2*/)))
         {
             /// @todo Is slotThumbnailLoaded still called when the thumbnail is found right away?
-            /// @todo remove borders
+            /// @todo Remove borders - but they actually look nice in the table
 //                 thumbnail = thumbnail.copy(1, 1, thumbnail.size().width()-2, thumbnail.size().height()-2)
             const QSize availableSize = option.rect.size();
             const QSize pixmapSize    = thumbnail.size().boundedTo(availableSize);
@@ -109,7 +112,9 @@ bool ColumnThumbnail::paint(QPainter* const painter, const QStyleOptionViewItem&
 
 QSize ColumnThumbnail::sizeHint(const QStyleOptionViewItem& option, const QModelIndex& sourceIndex) const
 {
-    return QSize(60, 60);
+    /// @todo On portrait pictures, the borders are too close. There should be a gap. Is this setting okay?
+    const int thumbnailSizeWithBorder = m_thumbnailSize+2;
+    return QSize(thumbnailSizeWithBorder, thumbnailSizeWithBorder);
 }
 
 void ColumnThumbnail::slotThumbnailLoaded(const LoadingDescription& loadingDescription, const QPixmap& thumb)
@@ -128,6 +133,13 @@ void ColumnThumbnail::slotThumbnailLoaded(const LoadingDescription& loadingDescr
     // The model will convert the sourceIndex to the index it needs
     // and find out the column number and set it.
     emit(signalDataChanged(sourceIndex));
+}
+
+void ColumnThumbnail::setThumbnailSize(const ThumbnailSize& size)
+{
+    m_thumbnailSize = size.size();
+
+    emit(signalAllDataChanged());
 }
 
 } /* namespace TableViewColumns */

@@ -463,6 +463,12 @@ void DigikamView::setupConnections()
     connect(d->tableView, SIGNAL(signalPreviewRequested(ImageInfo)),
             this, SLOT(slotTogglePreviewMode(ImageInfo)));
 
+    connect(d->tableView, SIGNAL(signalZoomOutStep()),
+            this, SLOT(slotZoomOut()));
+
+    connect(d->tableView, SIGNAL(signalZoomInStep()),
+            this, SLOT(slotZoomIn()));
+
     // -- Sidebar Connections -------------------------------------
 
     connect(d->leftSideBar, SIGNAL(signalChangedTab(QWidget*)),
@@ -1234,7 +1240,8 @@ void DigikamView::setThumbSize(int size)
         double z = DZoomBar::zoomFromSize(size, zoomMin(), zoomMax());
         setZoomFactor(z);
     }
-    else if (d->stackedview->previewMode() == StackedView::PreviewAlbumMode)
+    else if (   (d->stackedview->previewMode() == StackedView::PreviewAlbumMode)
+             || (d->stackedview->previewMode() == StackedView::TableViewMode) )
     {
         if (size > ThumbnailSize::Huge)
         {
@@ -1258,6 +1265,7 @@ void DigikamView::setThumbSize(int size)
 void DigikamView::slotThumbSizeEffect()
 {
     d->iconView->setThumbnailSize(d->thumbSize);
+    d->tableView->setThumbnailSize(d->thumbSize);
     toggleZoomActions();
 
     AlbumSettings::instance()->setDefaultIconSize(d->thumbSize);
@@ -1280,7 +1288,8 @@ void DigikamView::toggleZoomActions()
             d->parent->enableZoomMinusAction(false);
         }
     }
-    else if (d->stackedview->previewMode() == StackedView::PreviewAlbumMode)
+    else if (   (d->stackedview->previewMode() == StackedView::PreviewAlbumMode)
+             || (d->stackedview->previewMode() == StackedView::TableViewMode) )
     {
         d->parent->enableZoomMinusAction(true);
         d->parent->enableZoomPlusAction(true);
@@ -1304,7 +1313,8 @@ void DigikamView::toggleZoomActions()
 
 void DigikamView::slotZoomIn()
 {
-    if (d->stackedview->previewMode() == StackedView::PreviewAlbumMode)
+    if (   (d->stackedview->previewMode() == StackedView::PreviewAlbumMode)
+        || (d->stackedview->previewMode() == StackedView::TableViewMode) )
     {
         setThumbSize(d->thumbSize + ThumbnailSize::Step);
         toggleZoomActions();
@@ -1318,7 +1328,8 @@ void DigikamView::slotZoomIn()
 
 void DigikamView::slotZoomOut()
 {
-    if (d->stackedview->previewMode() == StackedView::PreviewAlbumMode)
+    if (   (d->stackedview->previewMode() == StackedView::PreviewAlbumMode)
+        || (d->stackedview->previewMode() == StackedView::TableViewMode) )
     {
         setThumbSize(d->thumbSize - ThumbnailSize::Step);
         toggleZoomActions();
@@ -1340,7 +1351,11 @@ void DigikamView::slotZoomTo100Percents()
 
 void DigikamView::slotFitToWindow()
 {
-    if (d->stackedview->previewMode() == StackedView::PreviewAlbumMode)
+    if (d->stackedview->previewMode() == StackedView::TableViewMode)
+    {
+        /// @todo We should choose an appropriate thumbnail size here
+    }
+    else if (d->stackedview->previewMode() == StackedView::PreviewAlbumMode)
     {
         int nts = d->iconView->fitToWidthIcons();
         kDebug() << "new thumb size = " << nts;

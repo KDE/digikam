@@ -72,9 +72,15 @@ public:
 
     virtual QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& sourceIndex) const;
 
+    virtual void setThumbnailSize(const ThumbnailSize& size);
+
 private Q_SLOTS:
 
     void slotThumbnailLoaded(const LoadingDescription& loadingDescription, const QPixmap& thumb);
+
+private:
+
+    int m_thumbnailSize;
 };
 
 } /* namespace TableViewColumns */

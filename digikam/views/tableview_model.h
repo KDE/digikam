@@ -69,6 +69,7 @@ public:
     void addColumnAt(const TableViewColumnConfiguration& configuration, const int targetColumn = -1);
     void removeColumnAt(const int columnIndex);
     TableViewColumn* getColumnObject(const int columnIndex);
+    QList<TableViewColumn*> getColumnObjects();
     QModelIndex toImageFilterModelIndex(const QModelIndex& i) const;
     void loadColumnProfile(const TableViewColumnProfile& columnProfile);
     TableViewColumnProfile getColumnProfile() const;
@@ -76,6 +77,7 @@ public:
 private Q_SLOTS:
 
     void slotColumnDataChanged(const QModelIndex& sourceIndex);
+    void slotColumnAllDataChanged();
 
     void slotSourceModelAboutToBeReset();
     void slotSourceModelReset();

@@ -107,6 +107,12 @@ TableView::TableView(
     connect(d->treeView, SIGNAL(activated(QModelIndex)),
             this, SLOT(slotItemActivated(QModelIndex)));
 
+    connect(d->treeView, SIGNAL(signalZoomInStep()),
+            this, SIGNAL(signalZoomInStep()));
+
+    connect(d->treeView, SIGNAL(signalZoomOutStep()),
+            this, SIGNAL(signalZoomOutStep()));
+
     vbox1->addWidget(d->treeView);
 
     setLayout(vbox1);
@@ -141,7 +147,6 @@ void TableView::doSaveState()
     KConfigGroup groupCurrentProfile = group.group("Current Profile");
     profile.saveSettings(groupCurrentProfile);
 }
-
 
 void TableView::slotItemActivated(const QModelIndex& sortedIndex)
 {
@@ -232,6 +237,15 @@ void TableView::slotAssignTagToSelected(const int tagID)
 void TableView::slotRemoveTagFromSelected(const int tagID)
 {
     FileActionMngr::instance()->removeTags(selectedImageInfos(), QList<int>() << tagID);
+}
+
+void TableView::setThumbnailSize(const ThumbnailSize& size)
+{
+    const QList<TableViewColumn*> columnObjects = s->tableViewModel->getColumnObjects();
+    Q_FOREACH(TableViewColumn* const iColumn, columnObjects)
+    {
+        iColumn->setThumbnailSize(size);
+    }
 }
 
 } /* namespace Digikam */

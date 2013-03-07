@@ -39,6 +39,8 @@
 namespace Digikam
 {
 
+class ThumbnailSize;
+
 class TableViewColumnConfiguration
 {
 public:
@@ -184,6 +186,7 @@ public:
     virtual ColumnCompareResult compare(const QModelIndex& sourceA, const QModelIndex& sourceB) const;
     virtual bool paint(QPainter* const painter, const QStyleOptionViewItem& option, const QModelIndex& sourceIndex) const;
     virtual QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& sourceIndex) const;
+    virtual void setThumbnailSize(const ThumbnailSize& size);
 
     ImageInfo getImageInfo(const QModelIndex sourceIndex) const;
 
@@ -214,6 +217,7 @@ public:
 
 Q_SIGNALS:
     void signalDataChanged(const QModelIndex& sourceIndex);
+    void signalAllDataChanged();
 };
 
 class TableViewColumnFactory : public QObject
