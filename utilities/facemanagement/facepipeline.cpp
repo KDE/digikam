@@ -38,7 +38,8 @@
 #include <opencv/highgui.h>
 
 // Local includes
-#include "tlddatabase.h"
+#include <libkface/tlddatabase.h>
+
 #include "loadingdescription.h"
 #include "metadatasettings.h"
 #include "threadmanager.h"
