@@ -34,7 +34,7 @@ SET(DIGIKAM_RELEASE_DATE "2013-03-10")
 # "-beta3" : beta3 release.
 # "-rc"    : release candidate.
 # ""       : final release. Can be used in production.
-SET(DIGIKAM_SUFFIX_VERSION "-git")
+SET(DIGIKAM_SUFFIX_VERSION "")
 
 # ==================================================================================================
 # Set env. variables accordingly.
