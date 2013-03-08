@@ -543,7 +543,19 @@ void RecognitionWorker::process(FacePipelineExtendedPackage::Ptr package)
         IplImage* img1           = cvCreateImage(cvSize(face.region().toRect().width(),face.region().toRect().height()),
                                              imgt->depth,imgt->nChannels);
 
-        cvCopy(imgt, img1);
+        try
+        {
+            cvCopy(imgt, img1);;
+        }
+        catch (cv::Exception& e)
+        {
+            kError() << "cv::Exception:" << e.what();
+        }
+        catch(...)
+        {
+            kDebug() << "cv::Exception";
+        }
+
         cvResetImageROI(imgt);
         IplImage* const inputfaceimage = cvCreateImage(cvSize(47,47),imgt->depth,imgt->nChannels);
         cvResize(img1, inputfaceimage);
@@ -936,7 +948,19 @@ void Trainer::process(FacePipelineExtendedPackage::Ptr package)
 
                 IplImage* img1                  = cvCreateImage(cvSize(face.region().toRect().width(),face.region().toRect().height()),
                                                                       imgt->depth, imgt->nChannels);
-                cvCopy(imgt, img1);
+                try
+                {
+                    cvCopy(imgt, img1);;
+                }
+                catch (cv::Exception& e)
+                {
+                    kError() << "cv::Exception:" << e.what();
+                }
+                catch(...)
+                {
+                    kDebug() << "cv::Exception";
+                }
+
                 cvResetImageROI(imgt);
                 IplImage* const inputfaceimage        = cvCreateImage(cvSize(47,47),imgt->depth,imgt->nChannels);
                 cvResize(img1,inputfaceimage);
