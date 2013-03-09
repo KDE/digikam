@@ -1456,7 +1456,8 @@ void DigikamView::slotImagePreview()
     const int currentPreviewMode = d->stackedview->previewMode();
     ImageInfo currentInfo;
 
-    if (currentPreviewMode == StackedView::PreviewAlbumMode)
+    if (    (currentPreviewMode == StackedView::PreviewAlbumMode)
+         || (currentPreviewMode == StackedView::TableViewMode) )
     {
         currentInfo = d->iconView->currentInfo();
     }
