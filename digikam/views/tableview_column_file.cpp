@@ -119,6 +119,7 @@ QVariant ColumnFileProperties::data(const QModelIndex& sourceIndex, const int ro
     case SubColumnSize:
     {
         /// @todo Add configuration options for SI-prefixes
+        /// @todo Use an enum instead to avoid lots of string comparisons
         const QString formatKey = configuration.getSetting("format", "kde");
         if (formatKey=="kde")
         {
@@ -158,23 +159,32 @@ ColumnFileConfigurationWidget::ColumnFileConfigurationWidget(
         TableViewShared* const sharedObject,
         const TableViewColumnConfiguration& columnConfiguration,
         QWidget* const parentWidget)
-  : TableViewColumnConfigurationWidget(sharedObject, columnConfiguration, parentWidget)
+  : TableViewColumnConfigurationWidget(sharedObject, columnConfiguration, parentWidget),
+    subColumn(ColumnFileProperties::SubColumnName),
+    selectorSizeType(0)
 {
     const QString& subColumnSetting = configuration.getSetting("subcolumn");
     subColumn = ColumnFileProperties::getSubColumnIndex<ColumnFileProperties>(subColumnSetting, ColumnFileProperties::SubColumnName);
 
-    if (subColumn==ColumnFileProperties::SubColumnSize)
+    switch (subColumn)
     {
-        QFormLayout* const box1 = new QFormLayout();
-        selectorSizeType = new QComboBox(this);
-        selectorSizeType->addItem(i18n("KDE default"), QString("kde"));
-        selectorSizeType->addItem(i18n("Plain"), QString("plain"));
-        box1->addRow(i18n("Display format"), selectorSizeType);
+    case ColumnFileProperties::SubColumnSize:
+        {
+            QFormLayout* const box1 = new QFormLayout();
+            selectorSizeType = new QComboBox(this);
+            selectorSizeType->addItem(i18n("KDE default"), QString("kde"));
+            selectorSizeType->addItem(i18n("Plain"), QString("plain"));
+            box1->addRow(i18n("Display format"), selectorSizeType);
 
-        setLayout(box1);
+            setLayout(box1);
 
-        const int index = selectorSizeType->findData(configuration.getSetting("format", "kde"));
-        selectorSizeType->setCurrentIndex(index>=0 ? index : 0);
+            const int index = selectorSizeType->findData(configuration.getSetting("format", "kde"));
+            selectorSizeType->setCurrentIndex(index>=0 ? index : 0);
+            break;
+        }
+
+    default:
+        break;
     }
 }
 
