@@ -53,7 +53,8 @@ public:
     enum SubColumn
     {
         SubColumnRating = 0,
-        SubColumnPickLabel = 1
+        SubColumnPickLabel = 1,
+        SubColumnColorLabel = 2
     };
 
 private:

@@ -58,7 +58,8 @@ ColumnDigikamProperties::~ColumnDigikamProperties()
 QStringList ColumnDigikamProperties::getSubColumns()
 {
     QStringList columns;
-    columns << QLatin1String("rating") << QLatin1String("picklabel");
+    columns << QLatin1String("rating") << QLatin1String("picklabel")
+            << QLatin1String("colorlabel");
 
     return columns;
 }
@@ -78,6 +79,10 @@ TableViewColumnDescription ColumnDigikamProperties::getDescription()
             .setIcon("flag-red")
     );
 
+    description.addSubColumn(
+        TableViewColumnDescription("digikam-properties", i18n("Color label"), "subcolumn", "colorlabel")
+    );
+
     return description;
 }
 
@@ -89,6 +94,8 @@ QString ColumnDigikamProperties::getTitle() const
         return i18n("Rating");
     case SubColumnPickLabel:
         return i18n("Pick label");
+    case SubColumnColorLabel:
+        return i18n("Color label");
     }
 
     return QString();
@@ -98,8 +105,9 @@ TableViewColumn::ColumnFlags ColumnDigikamProperties::getColumnFlags() const
 {
     ColumnFlags flags(ColumnNoFlags);
 
-    if (  (subColumn ==  SubColumnRating)
-       || (subColumn == SubColumnPickLabel) )
+    if (  (subColumn == SubColumnRating)
+       || (subColumn == SubColumnPickLabel)
+       || (subColumn == SubColumnColorLabel) )
     {
         flags|=ColumnCustomSorting;
     }
@@ -168,6 +176,63 @@ QVariant ColumnDigikamProperties::data(const QModelIndex& sourceIndex, const int
                 return QVariant::fromValue(labelBrush);
             }
 
+        case SubColumnColorLabel:
+            {
+                const ImageInfo info = getImageInfo(sourceIndex);
+                const ColorLabel colorLabel = ColorLabel(info.colorLabel());
+
+                QColor labelColor;
+                switch (colorLabel)
+                {
+                    case NoColorLabel:
+                        labelColor = Qt::lightGray;
+                        break;
+
+                    case RedLabel:
+                        labelColor = Qt::red;
+                        break;
+
+                    case OrangeLabel:
+                        labelColor = QColor(0xff, 0x80, 0x00);
+                        break;
+
+                    case YellowLabel:
+                        labelColor = Qt::darkYellow;
+                        break;
+
+                    case GreenLabel:
+                        labelColor = Qt::darkGreen;
+                        break;
+
+                    case BlueLabel:
+                        labelColor = Qt::darkBlue;
+                        break;
+
+                    case MagentaLabel:
+                        labelColor = Qt::magenta;
+                        break;
+
+                    case GrayLabel:
+                        labelColor = Qt::darkGray;
+                        break;
+
+                    case BlackLabel:
+                        labelColor = Qt::black;
+                        break;
+
+                    case WhiteLabel:
+                        labelColor = Qt::white;
+                        break;
+
+                    default:
+                        break;
+                }
+
+                QBrush labelBrush = sourceIndex.data(role).value<QBrush>();
+                labelBrush.setColor(labelColor);
+
+                return QVariant::fromValue(labelBrush);
+            }
         default:
             return sourceIndex.data(role);
         }
@@ -220,6 +285,60 @@ QVariant ColumnDigikamProperties::data(const QModelIndex& sourceIndex, const int
 
             return labelString;
         }
+
+    case SubColumnColorLabel:
+        {
+            const ColorLabel colorLabel = ColorLabel(info.colorLabel());
+
+            QString labelString;
+            switch (colorLabel)
+            {
+                case NoColorLabel:
+                    labelString = i18n("None");
+                    break;
+
+                case RedLabel:
+                    labelString = i18n("Red");
+                    break;
+
+                case OrangeLabel:
+                    labelString = i18n("Orange");
+                    break;
+
+                case YellowLabel:
+                    labelString = i18n("Yellow");
+                    break;
+
+                case GreenLabel:
+                    labelString = i18n("Green");
+                    break;
+
+                case BlueLabel:
+                    labelString = i18n("Blue");
+                    break;
+
+                case MagentaLabel:
+                    labelString = i18n("Magenta");
+                    break;
+
+                case GrayLabel:
+                    labelString = i18n("Gray");
+                    break;
+
+                case BlackLabel:
+                    labelString = i18n("Black");
+                    break;
+
+                case WhiteLabel:
+                    labelString = i18n("White");
+                    break;
+
+                default:
+                    break;
+            }
+
+            return labelString;
+        }
     }
 
     return QVariant();
@@ -248,6 +367,15 @@ TableViewColumn::ColumnCompareResult ColumnDigikamProperties::compare(const QMod
             const int pickLabelB = infoB.pickLabel();
 
             return compareHelper<int>(pickLabelA, pickLabelB);
+        }
+
+    case SubColumnColorLabel:
+        {
+            /// @todo Handle un-rated vs rated items differently?
+            const int colorLabelA = infoA.colorLabel();
+            const int colorLabelB = infoB.colorLabel();
+
+            return compareHelper<int>(colorLabelA, colorLabelB);
         }
 
     default:
