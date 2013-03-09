@@ -31,6 +31,8 @@
 
 // local includes
 
+#include "globals.h"
+
 namespace Digikam
 {
 
@@ -56,7 +58,7 @@ ColumnDigikamProperties::~ColumnDigikamProperties()
 QStringList ColumnDigikamProperties::getSubColumns()
 {
     QStringList columns;
-    columns << QLatin1String("rating");
+    columns << QLatin1String("rating") << QLatin1String("picklabel");
 
     return columns;
 }
@@ -68,6 +70,12 @@ TableViewColumnDescription ColumnDigikamProperties::getDescription()
 
     description.addSubColumn(
         TableViewColumnDescription("digikam-properties", i18n("Rating"), "subcolumn", "rating")
+            .setIcon("draw-star")
+    );
+
+    description.addSubColumn(
+        TableViewColumnDescription("digikam-properties", i18n("Pick label"), "subcolumn", "picklabel")
+            .setIcon("flag-red")
     );
 
     return description;
@@ -79,6 +87,8 @@ QString ColumnDigikamProperties::getTitle() const
     {
     case SubColumnRating:
         return i18n("Rating");
+    case SubColumnPickLabel:
+        return i18n("Pick label");
     }
 
     return QString();
@@ -88,7 +98,8 @@ TableViewColumn::ColumnFlags ColumnDigikamProperties::getColumnFlags() const
 {
     ColumnFlags flags(ColumnNoFlags);
 
-    if (subColumn == SubColumnRating)
+    if (  (subColumn ==  SubColumnRating)
+       || (subColumn == SubColumnPickLabel) )
     {
         flags|=ColumnCustomSorting;
     }
@@ -99,7 +110,8 @@ TableViewColumn::ColumnFlags ColumnDigikamProperties::getColumnFlags() const
 QVariant ColumnDigikamProperties::data(const QModelIndex& sourceIndex, const int role) const
 {
     if ( (role != Qt::DisplayRole) &&
-         (role != Qt::TextAlignmentRole) )
+         (role != Qt::TextAlignmentRole) &&
+         (role != Qt::ForegroundRole ) )
     {
         return sourceIndex.data(role);
     }
@@ -108,16 +120,63 @@ QVariant ColumnDigikamProperties::data(const QModelIndex& sourceIndex, const int
     {
         switch (subColumn)
         {
-            case SubColumnRating:
-                return QVariant(Qt::Alignment(Qt::AlignRight | Qt::AlignVCenter));
+        case SubColumnRating:
+            return QVariant(Qt::Alignment(Qt::AlignRight | Qt::AlignVCenter));
 
-            default:
-                return sourceIndex.data(role);
+        default:
+            return sourceIndex.data(role);
+        }
+    }
+
+    if (role==Qt::ForegroundRole)
+    {
+        switch (subColumn)
+        {
+        case SubColumnPickLabel:
+            {
+                const ImageInfo info = getImageInfo(sourceIndex);
+                const PickLabel pickLabel = PickLabel(info.pickLabel());
+
+                QColor labelColor;
+                switch (pickLabel)
+                {
+                    case NoPickLabel:
+                        labelColor = Qt::darkGray;
+                        break;
+
+                    case RejectedLabel:
+                        labelColor = Qt::red;
+                        break;
+
+                    case PendingLabel:
+                        // yellow is too hard to read
+                        labelColor = Qt::darkYellow;
+                        break;
+
+                    case AcceptedLabel:
+                        // green is too hard to read
+                        labelColor = Qt::darkGreen;
+                        break;
+
+                    default:
+                        break;
+                }
+
+                QBrush labelBrush = sourceIndex.data(role).value<QBrush>();
+                labelBrush.setColor(labelColor);
+
+                return QVariant::fromValue(labelBrush);
+            }
+
+        default:
+            return sourceIndex.data(role);
         }
     }
 
     const ImageInfo info = getImageInfo(sourceIndex);
 
+    /// @todo Also display the pick label icon?
+    /// @todo Make display of text/icon configurable.
     switch (subColumn)
     {
     case SubColumnRating:
@@ -130,6 +189,36 @@ QVariant ColumnDigikamProperties::data(const QModelIndex& sourceIndex, const int
             }
 
             return KGlobal::locale()->formatNumber(itemRating, 0);
+        }
+
+    case SubColumnPickLabel:
+        {
+            const PickLabel pickLabel = PickLabel(info.pickLabel());
+
+            QString labelString;
+            switch (pickLabel)
+            {
+                case NoPickLabel:
+                    labelString = i18n("None");
+                    break;
+
+                case RejectedLabel:
+                    labelString = i18n("Rejected");
+                    break;
+
+                case PendingLabel:
+                    labelString = i18n("Pending");
+                    break;
+
+                case AcceptedLabel:
+                    labelString = i18n("Accepted");
+                    break;
+
+                default:
+                    break;
+            }
+
+            return labelString;
         }
     }
 
@@ -150,6 +239,15 @@ TableViewColumn::ColumnCompareResult ColumnDigikamProperties::compare(const QMod
             const int ratingB = infoB.rating();
 
             return compareHelper<int>(ratingA, ratingB);
+        }
+
+    case SubColumnPickLabel:
+        {
+            /// @todo Handle un-rated vs rated items differently?
+            const int pickLabelA = infoA.pickLabel();
+            const int pickLabelB = infoB.pickLabel();
+
+            return compareHelper<int>(pickLabelA, pickLabelB);
         }
 
     default:

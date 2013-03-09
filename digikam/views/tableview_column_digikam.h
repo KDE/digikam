@@ -52,7 +52,8 @@ public:
 
     enum SubColumn
     {
-        SubColumnRating = 0
+        SubColumnRating = 0,
+        SubColumnPickLabel = 1
     };
 
 private:
