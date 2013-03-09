@@ -75,6 +75,7 @@ public:
     virtual ColumnCompareResult compare(const QModelIndex& sourceA, const QModelIndex& sourceB) const;
 
     virtual TableViewColumnConfigurationWidget* getConfigurationWidget(QWidget* const parentWidget) const;
+    virtual void setConfiguration(const TableViewColumnConfiguration& newConfiguration);
 };
 
 class ColumnGeoConfigurationWidget : public TableViewColumnConfigurationWidget
@@ -94,6 +95,7 @@ public:
 private:
 
     ColumnGeoProperties::SubColumn subColumn;
+    QComboBox* selectorAltitudeUnit;
 };
 
 } /* namespace TableViewColumns */
