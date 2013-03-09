@@ -161,11 +161,7 @@ ColumnFileConfigurationWidget::ColumnFileConfigurationWidget(
   : TableViewColumnConfigurationWidget(sharedObject, columnConfiguration, parentWidget)
 {
     const QString& subColumnSetting = configuration.getSetting("subcolumn");
-    subColumn = ColumnFileProperties::SubColumn(ColumnFileProperties::getSubColumns().indexOf(subColumnSetting));
-    if (subColumn<0)
-    {
-        subColumn = ColumnFileProperties::SubColumnName;
-    }
+    subColumn = ColumnFileProperties::getSubColumnIndex<ColumnFileProperties>(subColumnSetting, ColumnFileProperties::SubColumnName);
 
     if (subColumn==ColumnFileProperties::SubColumnSize)
     {
@@ -206,7 +202,8 @@ QStringList ColumnFileProperties::getSubColumns()
 void ColumnFileProperties::setConfiguration(const TableViewColumnConfiguration& newConfiguration)
 {
     configuration = newConfiguration;
-    /// @todo emit datachanged for this row
+
+    emit(signalAllDataChanged());
 }
 
 TableViewColumnConfigurationWidget* ColumnFileProperties::getConfigurationWidget(QWidget* const parentWidget) const

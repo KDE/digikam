@@ -204,7 +204,7 @@ public:
         return CmpALessB;
     }
 
-    template<typename columnClass> typename columnClass::SubColumn getSubColumnIndex(const QString& subColumnId, const typename columnClass::SubColumn defaultSubColumn)
+    template<typename columnClass> static typename columnClass::SubColumn getSubColumnIndex(const QString& subColumnId, const typename columnClass::SubColumn defaultSubColumn)
     {
         const int index = columnClass::getSubColumns().indexOf(subColumnId);
         if (index<0)
