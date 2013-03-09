@@ -59,7 +59,8 @@ QStringList ColumnDigikamProperties::getSubColumns()
 {
     QStringList columns;
     columns << QLatin1String("rating") << QLatin1String("picklabel")
-            << QLatin1String("colorlabel");
+            << QLatin1String("colorlabel") << QLatin1String("title")
+            << QLatin1String("caption");
 
     return columns;
 }
@@ -83,6 +84,16 @@ TableViewColumnDescription ColumnDigikamProperties::getDescription()
         TableViewColumnDescription("digikam-properties", i18n("Color label"), "subcolumn", "colorlabel")
     );
 
+    /// @todo This column will show the 'default' title. Add a configuration dialog to choose different languages.
+    description.addSubColumn(
+        TableViewColumnDescription("digikam-properties", i18n("Title"), "subcolumn", "title")
+    );
+
+    /// @todo This column will show the 'default' caption. Add a configuration dialog to choose different languages.
+    description.addSubColumn(
+        TableViewColumnDescription("digikam-properties", i18n("Caption"), "subcolumn", "caption")
+    );
+
     return description;
 }
 
@@ -96,6 +107,10 @@ QString ColumnDigikamProperties::getTitle() const
         return i18n("Pick label");
     case SubColumnColorLabel:
         return i18n("Color label");
+    case SubColumnTitle:
+        return i18n("Title");
+    case SubColumnCaption:
+        return i18n("Caption");
     }
 
     return QString();
@@ -338,6 +353,20 @@ QVariant ColumnDigikamProperties::data(const QModelIndex& sourceIndex, const int
             }
 
             return labelString;
+        }
+
+    case SubColumnTitle:
+        {
+            const QString title = info.title();
+
+            return title;
+        }
+
+    case SubColumnCaption:
+        {
+            const QString caption = info.comment();
+
+            return caption;
         }
     }
 

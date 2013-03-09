@@ -54,7 +54,9 @@ public:
     {
         SubColumnRating = 0,
         SubColumnPickLabel = 1,
-        SubColumnColorLabel = 2
+        SubColumnColorLabel = 2,
+        SubColumnTitle = 3,
+        SubColumnCaption = 4
     };
 
 private:
