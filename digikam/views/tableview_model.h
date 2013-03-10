@@ -54,7 +54,7 @@ class TableViewModel : public QAbstractItemModel
 
 public:
 
-    explicit TableViewModel(TableViewColumnFactory* const tableViewColumnFactory, ImageFilterModel* const sourceModel, QObject* parent = 0);
+    explicit TableViewModel(TableViewShared* const sharedObject, QObject* parent = 0);
     virtual ~TableViewModel();
 
     virtual QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const;
@@ -97,6 +97,7 @@ private Q_SLOTS:
 
 private:
 
+    TableViewShared* const s;
     class Private;
     const QScopedPointer<Private> d;
 };

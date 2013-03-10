@@ -98,7 +98,7 @@ TableView::TableView(
 
     QVBoxLayout* const vbox1 = new QVBoxLayout();
 
-    s->tableViewModel = new TableViewModel(s->columnFactory, s->imageFilterModel, this);
+    s->tableViewModel = new TableViewModel(s.data(), this);
     s->tableViewSelectionModel = new QItemSelectionModel(s->tableViewModel);
     s->sortModel = new TableViewSortFilterProxyModel(s.data(), this);
     s->sortSelectionModel = new KLinkItemSelectionModel(s->sortModel, s->tableViewSelectionModel);

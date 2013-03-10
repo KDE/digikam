@@ -55,39 +55,41 @@ namespace Digikam
 class TableViewModel::Private
 {
 public:
-    ImageFilterModel* sourceModel;
-    TableViewColumnFactory* columnFactory;
+
+    Private()
+      : columnObjects()
+    {
+    }
+
     QList<TableViewColumn*> columnObjects;
 };
 
-TableViewModel::TableViewModel(TableViewColumnFactory* const tableViewColumnFactory, Digikam::ImageFilterModel* const sourceModel, QObject* parent)
+TableViewModel::TableViewModel(TableViewShared* const sharedObject, QObject* parent)
   : QAbstractItemModel(parent),
+    s(sharedObject),
     d(new Private())
 {
-    d->sourceModel = sourceModel;
-    d->columnFactory = tableViewColumnFactory;
-
-    connect(d->sourceModel, SIGNAL(modelAboutToBeReset()),
+    connect(s->imageFilterModel, SIGNAL(modelAboutToBeReset()),
             this, SLOT(slotSourceModelAboutToBeReset()));
-    connect(d->sourceModel, SIGNAL(modelReset()),
+    connect(s->imageFilterModel, SIGNAL(modelReset()),
             this, SLOT(slotSourceModelReset()));
-    connect(d->sourceModel, SIGNAL(rowsAboutToBeInserted(QModelIndex,int,int)),
+    connect(s->imageFilterModel, SIGNAL(rowsAboutToBeInserted(QModelIndex,int,int)),
             this, SLOT(slotSourceRowsAboutToBeInserted(QModelIndex,int,int)));
-    connect(d->sourceModel, SIGNAL(rowsInserted(QModelIndex,int,int)),
+    connect(s->imageFilterModel, SIGNAL(rowsInserted(QModelIndex,int,int)),
             this, SLOT(slotSourceRowsInserted(QModelIndex,int,int)));
-    connect(d->sourceModel, SIGNAL(rowsAboutToBeRemoved(QModelIndex,int,int)),
+    connect(s->imageFilterModel, SIGNAL(rowsAboutToBeRemoved(QModelIndex,int,int)),
             this, SLOT(slotSourceRowsAboutToBeRemoved(QModelIndex,int,int)));
-    connect(d->sourceModel, SIGNAL(rowsRemoved(QModelIndex,int,int)),
+    connect(s->imageFilterModel, SIGNAL(rowsRemoved(QModelIndex,int,int)),
             this, SLOT(slotSourceRowsRemoved(QModelIndex,int,int)));
-    connect(d->sourceModel, SIGNAL(rowsAboutToBeMoved(QModelIndex,int,int,QModelIndex,int)),
+    connect(s->imageFilterModel, SIGNAL(rowsAboutToBeMoved(QModelIndex,int,int,QModelIndex,int)),
             this, SLOT(slotSourceRowsAboutToBeMoved(QModelIndex,int,int,QModelIndex,int)));
-    connect(d->sourceModel, SIGNAL(rowsMoved(QModelIndex,int,int,QModelIndex,int)),
+    connect(s->imageFilterModel, SIGNAL(rowsMoved(QModelIndex,int,int,QModelIndex,int)),
             this, SLOT(slotSourceRowsMoved(QModelIndex,int,int,QModelIndex,int)));
-    connect(d->sourceModel, SIGNAL(layoutAboutToBeChanged()),
+    connect(s->imageFilterModel, SIGNAL(layoutAboutToBeChanged()),
             this, SLOT(slotSourceLayoutAboutToBeChanged()));
-    connect(d->sourceModel, SIGNAL(layoutChanged()),
+    connect(s->imageFilterModel, SIGNAL(layoutChanged()),
             this, SLOT(slotSourceLayoutChanged()));
-    connect(d->sourceModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)),
+    connect(s->imageFilterModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)),
             this, SLOT(slotSourceDataChanged(QModelIndex,QModelIndex)));
 
     connect(DatabaseAccess::databaseWatch(), SIGNAL(imageChange(ImageChangeset)),
@@ -115,12 +117,12 @@ QModelIndex TableViewModel::toImageFilterModelIndex(const QModelIndex& i) const
 
     const int rowNumber = i.row();
 
-    if ( (rowNumber<0) || (rowNumber>=d->sourceModel->rowCount()) )
+    if ( (rowNumber<0) || (rowNumber>=s->imageFilterModel->rowCount()) )
     {
         return QModelIndex();
     }
 
-    const QModelIndex sourceIndex = d->sourceModel->index(rowNumber, 0);
+    const QModelIndex sourceIndex = s->imageFilterModel->index(rowNumber, 0);
     if (!sourceIndex.isValid())
     {
         return QModelIndex();
@@ -153,7 +155,7 @@ QModelIndex TableViewModel::index(int row, int column, const QModelIndex& parent
 
     // test for valid row/column values
     if ( (row<0) || (column<0) ||
-         (column>=d->columnObjects.count()) || (row>=d->sourceModel->rowCount())
+         (column>=d->columnObjects.count()) || (row>=s->imageFilterModel->rowCount())
        )
     {
         return QModelIndex();
@@ -179,7 +181,7 @@ int TableViewModel::rowCount(const QModelIndex& parent) const
         return 0;
     }
 
-    return d->sourceModel->rowCount();
+    return s->imageFilterModel->rowCount();
 }
 
 QVariant TableViewModel::headerData(int section, Qt::Orientation orientation, int role) const
@@ -209,7 +211,7 @@ void TableViewModel::addColumnAt(const TableViewColumnDescription& description, 
 
 void TableViewModel::addColumnAt(const TableViewColumnConfiguration& configuration, const int targetColumn)
 {
-    TableViewColumn* const newColumn = d->columnFactory->getColumn(configuration);
+    TableViewColumn* const newColumn = s->columnFactory->getColumn(configuration);
     if (!newColumn)
     {
         return;
@@ -413,7 +415,7 @@ void TableViewModel::slotDatabaseImageChanged(const ImageChangeset& imageChanges
 
     foreach(const qlonglong& id, imageChangeset.ids())
     {
-        const QModelIndex& changedIndex = d->sourceModel->indexForImageId(id);
+        const QModelIndex& changedIndex = s->imageFilterModel->indexForImageId(id);
         if (changedIndex.isValid())
         {
             emit(dataChanged(changedIndex, changedIndex));
