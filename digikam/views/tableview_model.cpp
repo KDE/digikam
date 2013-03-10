@@ -52,16 +52,72 @@
 namespace Digikam
 {
 
+class TableViewModelItem
+{
+public:
+
+    TableViewModelItem()
+      : imageId(0),
+        imageFilterModelIndex(),
+        parent(0),
+        children()
+    {
+    }
+
+    ~TableViewModelItem()
+    {
+        qDeleteAll(children);
+    }
+
+    void addChild(TableViewModelItem* const newChild)
+    {
+        newChild->parent = this;
+
+        children << newChild;
+    }
+
+    void takeChild(TableViewModelItem* const oldChild)
+    {
+        children.removeOne(oldChild);
+    }
+
+    TableViewModelItem* findChildWithImageId(const qlonglong searchImageId)
+    {
+        if (imageId==searchImageId)
+        {
+            return this;
+        }
+
+        Q_FOREACH(TableViewModelItem* const item, children)
+        {
+            TableViewModelItem* const iItem = item->findChildWithImageId(searchImageId);
+            if (iItem)
+            {
+                return iItem;
+            }
+        }
+
+        return 0;
+    }
+
+    qlonglong imageId;
+    QPersistentModelIndex imageFilterModelIndex;
+    TableViewModelItem* parent;
+    QList<TableViewModelItem*> children;
+};
+
 class TableViewModel::Private
 {
 public:
 
     Private()
-      : columnObjects()
+      : columnObjects(),
+        rootItem(new TableViewModelItem())
     {
     }
 
     QList<TableViewColumn*> columnObjects;
+    TableViewModelItem* rootItem;
 };
 
 TableViewModel::TableViewModel(TableViewShared* const sharedObject, QObject* parent)
@@ -96,11 +152,15 @@ TableViewModel::TableViewModel(TableViewShared* const sharedObject, QObject* par
             this, SLOT(slotDatabaseImageChanged(ImageChangeset)), Qt::QueuedConnection);
 
     new ModelTest(this, this);
+
+    beginResetModel();
+    slotPopulateModel();
+    endResetModel();
 }
 
 TableViewModel::~TableViewModel()
 {
-    /// @todo delete d->columnObjects, d->tableViewColumnDataSource
+    delete d->rootItem;
 }
 
 int TableViewModel::columnCount(const QModelIndex& i) const
@@ -110,25 +170,13 @@ int TableViewModel::columnCount(const QModelIndex& i) const
 
 QModelIndex TableViewModel::toImageFilterModelIndex(const QModelIndex& i) const
 {
-    if (i.isValid())
-    {
-        Q_ASSERT(i.model()==this);
-    }
-
-    const int rowNumber = i.row();
-
-    if ( (rowNumber<0) || (rowNumber>=s->imageFilterModel->rowCount()) )
+    TableViewModelItem* const item = itemFromIndex(i);
+    if (!item)
     {
         return QModelIndex();
     }
 
-    const QModelIndex sourceIndex = s->imageFilterModel->index(rowNumber, 0);
-    if (!sourceIndex.isValid())
-    {
-        return QModelIndex();
-    }
-
-    return sourceIndex;
+    return item->imageFilterModelIndex;
 }
 
 QVariant TableViewModel::data(const QModelIndex& i, int role) const
@@ -149,28 +197,27 @@ QModelIndex TableViewModel::index(int row, int column, const QModelIndex& parent
 {
     if (parent.isValid())
     {
-        // there are no sub-items
+        /// @todo there are no sub-items yet
         return QModelIndex();
     }
 
     // test for valid row/column values
     if ( (row<0) || (column<0) ||
-         (column>=d->columnObjects.count()) || (row>=s->imageFilterModel->rowCount())
+         (column>=d->columnObjects.count()) || (row>=d->rootItem->children.count())
        )
     {
         return QModelIndex();
     }
 
-    /// @todo range-check on row, column
-
-    return createIndex(row, column, 0);
+    TableViewModelItem* const itemPointer = d->rootItem->children.at(row);
+    return createIndex(row, column, itemPointer);
 }
 
 QModelIndex TableViewModel::parent(const QModelIndex& parent) const
 {
     Q_UNUSED(parent)
 
-    // we only have top level items
+    /// @todo we only have top level items for now
     return QModelIndex();
 }
 
@@ -181,7 +228,7 @@ int TableViewModel::rowCount(const QModelIndex& parent) const
         return 0;
     }
 
-    return s->imageFilterModel->rowCount();
+    return d->rootItem->children.count();
 }
 
 QVariant TableViewModel::headerData(int section, Qt::Orientation orientation, int role) const
@@ -323,6 +370,7 @@ void TableViewModel::slotSourceModelAboutToBeReset()
 void TableViewModel::slotSourceModelReset()
 {
     // the source model is done resetting.
+    slotPopulateModel();
     endResetModel();
 }
 
@@ -333,9 +381,12 @@ void TableViewModel::slotSourceRowsAboutToBeInserted(const QModelIndex& parent, 
 
 void TableViewModel::slotSourceRowsInserted(const QModelIndex& parent, int start, int end)
 {
-    Q_UNUSED(parent)
-    Q_UNUSED(start)
-    Q_UNUSED(end)
+    for (int i = start; i<=end; ++i)
+    {
+        const QModelIndex sourceIndex = s->imageFilterModel->index(i, 0, parent);
+
+        addSourceModelIndex(sourceIndex);
+    }
 
     endInsertRows();
 }
@@ -343,6 +394,18 @@ void TableViewModel::slotSourceRowsInserted(const QModelIndex& parent, int start
 void TableViewModel::slotSourceRowsAboutToBeRemoved(const QModelIndex& parent, int start, int end)
 {
     beginRemoveRows(parent, start, end);
+
+    for (int i=start; i<=end; ++i)
+    {
+        const QModelIndex sourceIndex = s->imageFilterModel->index(i, 0, parent);
+        const qlonglong imageId = s->imageFilterModel->imageId(sourceIndex);
+
+        TableViewModelItem* const item = itemFromImageId(imageId);
+        item->parent->takeChild(item);
+
+        /// @todo do proper row removing for this item
+        delete item;
+    }
 }
 
 void TableViewModel::slotSourceRowsRemoved(const QModelIndex& parent, int start, int end)
@@ -357,19 +420,22 @@ void TableViewModel::slotSourceRowsRemoved(const QModelIndex& parent, int start,
 void TableViewModel::slotSourceRowsAboutToBeMoved(const QModelIndex& sourceParent, int sourceStart, int sourceEnd,
                                                   const QModelIndex& destinationParent, int destinationRow)
 {
-    beginMoveRows(sourceParent, sourceStart, sourceEnd, destinationParent, destinationRow);
+//     beginMoveRows(sourceParent, sourceStart, sourceEnd, destinationParent, destinationRow);
+
+    /// @todo For our items, moving stuff around does not matter
 }
 
 void TableViewModel::slotSourceRowsMoved(const QModelIndex& sourceParent, int sourceStart, int sourceEnd,
                                          const QModelIndex& destinationParent, int destinationRow)
 {
+    /// @todo For our items, moving stuff around does not matter
     Q_UNUSED(sourceParent)
     Q_UNUSED(sourceStart)
     Q_UNUSED(sourceEnd)
     Q_UNUSED(destinationParent)
     Q_UNUSED(destinationRow)
 
-    endMoveRows();
+//     endMoveRows();
 }
 
 void TableViewModel::slotSourceLayoutAboutToBeChanged()
@@ -386,7 +452,9 @@ void TableViewModel::slotSourceLayoutAboutToBeChanged()
 void TableViewModel::slotSourceLayoutChanged()
 {
     /// @todo See note in TableViewModel#slotSourceLayoutAboutToBeChanged
-//     emit(layoutChanged());
+
+    slotPopulateModel();
+
     endResetModel();
 }
 
@@ -624,6 +692,60 @@ bool TableViewSortFilterProxyModel::dropMimeData(const QMimeData* data, Qt::Drop
 QList< TableViewColumn* > TableViewModel::getColumnObjects()
 {
     return d->columnObjects;
+}
+
+void TableViewModel::slotPopulateModel()
+{
+    if (d->rootItem)
+    {
+        delete d->rootItem;
+    }
+
+    d->rootItem = new TableViewModelItem();
+
+    const int sourceRowCount = s->imageFilterModel->rowCount(QModelIndex());
+    for (int i=0; i<sourceRowCount; ++i)
+    {
+        const QModelIndex sourceModelIndex = s->imageFilterModel->index(i, 0);
+        addSourceModelIndex(sourceModelIndex);
+    }
+}
+
+TableViewModelItem* TableViewModel::createItemFromSourceIndex(const QModelIndex& imageFilterModelIndex)
+{
+    TableViewModelItem* const item = new TableViewModelItem();
+    item->imageFilterModelIndex = imageFilterModelIndex;
+    item->imageId = s->imageFilterModel->imageId(imageFilterModelIndex);
+
+    return item;
+}
+
+void TableViewModel::addSourceModelIndex(const QModelIndex& imageFilterModelIndex)
+{
+    /// @todo Filter out grouped items here
+
+    TableViewModelItem* item = createItemFromSourceIndex(imageFilterModelIndex);
+
+    d->rootItem->addChild(item);
+}
+
+TableViewModelItem* TableViewModel::itemFromImageId(const qlonglong imageId) const
+{
+    return d->rootItem->findChildWithImageId(imageId);
+}
+
+TableViewModelItem* TableViewModel::itemFromIndex(const QModelIndex& i) const
+{
+    if (!i.isValid())
+    {
+        return 0;
+    }
+
+    Q_ASSERT(i.model()==this);
+
+    TableViewModelItem* const item = static_cast<TableViewModelItem*>(i.internalPointer());
+
+    return item;
 }
 
 } /* namespace Digikam */

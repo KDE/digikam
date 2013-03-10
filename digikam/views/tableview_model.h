@@ -40,13 +40,14 @@ class QMimeData;
 namespace Digikam
 {
 
-class TableViewColumnProfile;
-class TableViewColumn;
-class TableViewColumnDescription;
-class TableViewColumnConfiguration;
-class ImageFilterModel;
-class TableViewColumnFactory;
 class ImageChangeset;
+class ImageFilterModel;
+class TableViewColumn;
+class TableViewColumnConfiguration;
+class TableViewColumnDescription;
+class TableViewColumnFactory;
+class TableViewColumnProfile;
+class TableViewModelItem;
 
 class TableViewModel : public QAbstractItemModel
 {
@@ -75,6 +76,8 @@ public:
     TableViewColumnProfile getColumnProfile() const;
 
 private Q_SLOTS:
+    
+    void slotPopulateModel();
 
     void slotColumnDataChanged(const QModelIndex& sourceIndex);
     void slotColumnAllDataChanged();
@@ -96,6 +99,11 @@ private Q_SLOTS:
     void slotDatabaseImageChanged(const ImageChangeset& imageChangeset);
 
 private:
+
+    TableViewModelItem* createItemFromSourceIndex(const QModelIndex& imageFilterModelIndex);
+    TableViewModelItem* itemFromImageId(const qlonglong imageId) const;
+    TableViewModelItem* itemFromIndex(const QModelIndex& i) const;
+    void addSourceModelIndex(const QModelIndex& imageFilterModelIndex);
 
     TableViewShared* const s;
     class Private;
