@@ -577,8 +577,7 @@ QModelIndex TableViewSortFilterProxyModel::toImageModelIndex(const QModelIndex& 
 QMimeData* TableViewSortFilterProxyModel::mimeData(const QModelIndexList& indexes) const
 {
     // we pack the mime data via ImageModel's drag-drop handler
-    ImageModel* const imageModel = s->imageFilterModel->sourceImageModel();
-    AbstractItemDragDropHandler* const ddHandler = imageModel->dragDropHandler();
+    AbstractItemDragDropHandler* const ddHandler = s->imageModel->dragDropHandler();
 
     QModelIndexList imageModelIndexList;
     Q_FOREACH(const QModelIndex& i, indexes)
@@ -607,8 +606,7 @@ Qt::DropActions TableViewSortFilterProxyModel::supportedDropActions() const
 
 QStringList TableViewSortFilterProxyModel::mimeTypes() const
 {
-    ImageModel* const imageModel = s->imageFilterModel->sourceImageModel();
-    AbstractItemDragDropHandler* const ddHandler = imageModel->dragDropHandler();
+    AbstractItemDragDropHandler* const ddHandler = s->imageModel->dragDropHandler();
 
     if (ddHandler)
     {

@@ -67,14 +67,12 @@ class TableView::Private
 public:
     Private()
       : treeView(0),
-        imageModel(0),
         columnProfiles(),
         thumbnailSize()
     {
     }
 
     TableViewTreeView*      treeView;
-    ImageAlbumModel*        imageModel;
     QList<TableViewColumnProfile> columnProfiles;
     ThumbnailSize           thumbnailSize;
 };
@@ -92,7 +90,7 @@ TableView::TableView(
     s->tableView = this;
     s->thumbnailLoadThread = new ThumbnailLoadThread(this);
     s->imageFilterModel = dynamic_cast<ImageFilterModel*>(imageFilterModel);
-    d->imageModel = dynamic_cast<ImageAlbumModel*>(imageFilterModel->sourceModel());
+    s->imageModel = dynamic_cast<ImageModel*>(imageFilterModel->sourceModel());
     s->imageFilterSelectionModel = selectionModel;
     s->columnFactory = new TableViewColumnFactory(s.data(), this);
 

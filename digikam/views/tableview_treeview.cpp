@@ -284,8 +284,7 @@ Album* TableViewTreeView::albumAt(const QPoint& pos) const
 {
     Q_UNUSED(pos)
 
-    ImageModel* const imageModel = s->imageFilterModel->sourceImageModel();
-    ImageAlbumModel* const albumModel = qobject_cast<ImageAlbumModel*>(imageModel);
+    ImageAlbumModel* const albumModel = qobject_cast<ImageAlbumModel*>(s->imageModel);
 
     if (albumModel)
     {

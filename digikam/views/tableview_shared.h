@@ -28,20 +28,22 @@ class QItemSelectionModel;
 namespace Digikam
 {
 
-class TableView;
-class TableViewModel;
-class TableViewColumnFactory;
-class TableViewItemDelegate;
 class ImageFilterModel;
-class ThumbnailLoadThread;
-class TableViewSortFilterProxyModel;
-class TableViewSelectionModelSyncer;
+class ImageModel;
+class TableView;
+class TableViewColumnFactory;
 class TableViewCurrentToSortedSyncer;
+class TableViewItemDelegate;
+class TableViewModel;
+class TableViewSelectionModelSyncer;
+class TableViewSortFilterProxyModel;
+class ThumbnailLoadThread;
 
 class TableViewShared
 {
 public:
 
+    ImageModel* imageModel;
     ImageFilterModel* imageFilterModel;
     QItemSelectionModel* imageFilterSelectionModel;
     ThumbnailLoadThread* thumbnailLoadThread;
