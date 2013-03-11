@@ -71,6 +71,7 @@ public:
     void removeColumnAt(const int columnIndex);
     TableViewColumn* getColumnObject(const int columnIndex);
     QList<TableViewColumn*> getColumnObjects();
+    QModelIndex fromImageFilterModelIndex(const QModelIndex& imageFilterModelIndex);
     QModelIndex toImageFilterModelIndex(const QModelIndex& i) const;
     void loadColumnProfile(const TableViewColumnProfile& columnProfile);
     TableViewColumnProfile getColumnProfile() const;

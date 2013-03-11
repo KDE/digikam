@@ -748,5 +748,27 @@ TableViewModelItem* TableViewModel::itemFromIndex(const QModelIndex& i) const
     return item;
 }
 
+QModelIndex TableViewModel::fromImageFilterModelIndex(const QModelIndex& imageFilterModelIndex)
+{
+    const qlonglong imageId = s->imageFilterModel->imageId(imageFilterModelIndex);
+    if (!imageId)
+    {
+        return QModelIndex();
+    }
+
+    TableViewModelItem* const item = itemFromImageId(imageId);
+    if (!item)
+    {
+        return QModelIndex();
+    }
+    TableViewModelItem* const parentItem = item->parent;
+
+    /// @todo This is a waste of time because itemFromImageId already did this search.
+    ///       We should modify it to also give the row index.
+    const int rowIndex = parentItem->children.indexOf(item);
+
+    return createIndex(rowIndex, 0, item);
+}
+
 } /* namespace Digikam */
 

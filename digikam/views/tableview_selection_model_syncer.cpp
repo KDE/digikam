@@ -75,14 +75,14 @@ TableViewSelectionModelSyncer::~TableViewSelectionModelSyncer()
 
 }
 
-QModelIndex TableViewSelectionModelSyncer::toSource(const QModelIndex& targetIndex) const
+QModelIndex TableViewSelectionModelSyncer::toSource(const QModelIndex& tableViewIndex) const
 {
-    return s->imageFilterModel->index(targetIndex.row(), 0, QModelIndex());
+    return s->tableViewModel->toImageFilterModelIndex(tableViewIndex);
 }
 
 QModelIndex TableViewSelectionModelSyncer::toTarget(const QModelIndex& sourceIndex) const
 {
-    return s->tableViewModel->index(sourceIndex.row(), 0, QModelIndex());
+    return s->tableViewModel->fromImageFilterModelIndex(sourceIndex);
 }
 
 int TableViewSelectionModelSyncer::targetModelColumnCount() const
@@ -127,6 +127,7 @@ void TableViewSelectionModelSyncer::slotSourceCurrentChanged(const QModelIndex& 
 
     // we have to select the whole row of the target index
     const QModelIndex targetIndexCurrent = toTarget(current);
+
     s->tableViewSelectionModel->setCurrentIndex(targetIndexCurrent, QItemSelectionModel::Select);
 
     d->syncing = false;
@@ -139,10 +140,17 @@ QItemSelection TableViewSelectionModelSyncer::itemSelectionToSource(const QItemS
     {
         const int firstRow = range.top();
         const int lastRow = range.bottom();
-
-        const QModelIndex sourceTopLeft = s->imageFilterModel->index(firstRow, 0);
-        const QModelIndex sourceBottomRight = s->imageFilterModel->index(lastRow, 0);
-        sourceSelection.select(sourceTopLeft, sourceBottomRight);
+        
+        for (int row = firstRow; row<=lastRow; ++row)
+        {
+            const QModelIndex tableViewIndex = s->tableViewModel->index(row, 0, range.parent());
+            const QModelIndex sourceIndex = s->tableViewModel->toImageFilterModelIndex(tableViewIndex);
+            
+            if (sourceIndex.isValid())
+            {
+                sourceSelection.select(sourceIndex, sourceIndex);
+            }
+        }
     }
 
     return sourceSelection;
@@ -158,9 +166,19 @@ QItemSelection TableViewSelectionModelSyncer::itemSelectionToTarget(const QItemS
         const int firstRow = range.top();
         const int lastRow = range.bottom();
 
-        const QModelIndex targetTopLeft = s->tableViewModel->index(firstRow, 0);
-        const QModelIndex targetBottomRight = s->tableViewModel->index(lastRow, targetColumnCount-1);
-        targetSelection.select(targetTopLeft, targetBottomRight);
+        for (int row = firstRow; row<=lastRow; ++row)
+        {
+            
+            const QModelIndex sourceIndex = s->imageFilterModel->index(row, 0, range.parent());
+            const QModelIndex tableViewIndexTopLeft = s->tableViewModel->fromImageFilterModelIndex(sourceIndex);
+            const QModelIndex tableViewIndexBottomRight = s->tableViewModel->index(
+                    tableViewIndexTopLeft.row(),
+                    targetColumnCount-1,
+                    tableViewIndexTopLeft.parent()
+                );
+
+            targetSelection.select(tableViewIndexTopLeft, tableViewIndexBottomRight);
+        }
     }
 
     return targetSelection;
