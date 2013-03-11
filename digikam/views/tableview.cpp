@@ -27,35 +27,24 @@
 #include <QContextMenuEvent>
 #include <QHeaderView>
 #include <QItemSelectionModel>
-#include <QTreeView>
 #include <QVBoxLayout>
 
 // KDE includes
 
 #include <kmenu.h>
-#include <kaction.h>
 #include <klinkitemselectionmodel.h>
 
 // local includes
 
-/// @todo clean up includes
 #include "contextmenuhelper.h"
-#include "databasefields.h"
-#include "databasewatch.h"
 #include "digikam2kgeomap_database.h"
 #include "fileactionmngr.h"
-#include "imageinfo.h"
-#include "imagemodel.h"
-#include "imageposition.h"
-#include "importfiltermodel.h"
-#include "importimagemodel.h"
-#include "importui.h"
 #include "tableview_columnfactory.h"
 #include "tableview_model.h"
 #include "tableview_selection_model_syncer.h"
+#include "tableview_shared.h"
 #include "tableview_sortfilterproxymodel.h"
 #include "tableview_treeview.h"
-#include "thumbnailloadthread.h"
 
 namespace Digikam
 {

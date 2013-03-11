@@ -21,14 +21,21 @@
  * ============================================================ */
 
 #include "tableview_column_geo.moc"
-#include <klistwidget.h>
-#include <QFormLayout>
 
 // Qt includes
 
+#include <QFormLayout>
+#include <QComboBox>
+
 // KDE includes
 
+#include <kdebug.h>
+#include <kglobal.h>
+#include <klocale.h>
+
 // local includes
+
+#include "imageinfo.h"
 
 namespace
 {

@@ -24,32 +24,16 @@
 
 // Qt includes
 
-#include <QContextMenuEvent>
-#include <QHeaderView>
 #include <QItemSelectionModel>
-#include <QTreeView>
 #include <QVBoxLayout>
 
 // KDE includes
 
-#include <kmenu.h>
-#include <kaction.h>
-#include <klinkitemselectionmodel.h>
+#include <klauncher_iface.h>
+#include <klocale.h>
 
 // local includes
 
-/// @todo clean up includes
-#include "contextmenuhelper.h"
-#include "databasefields.h"
-#include "databasewatch.h"
-#include "digikam2kgeomap_database.h"
-#include "fileactionmngr.h"
-#include "imageinfo.h"
-#include "imagemodel.h"
-#include "imageposition.h"
-#include "importfiltermodel.h"
-#include "importimagemodel.h"
-#include "importui.h"
 #include "tableview_columnfactory.h"
 #include "tableview_model.h"
 #include "tableview_selection_model_syncer.h"

@@ -26,19 +26,27 @@
 // Qt includes
 
 #include <QObject>
+#include <QHash>
 #include <QStringList>
-#include <QModelIndex>
+#include <QWidget>
+// #include <QModelIndex>
 
 // KDE includes
 
+#include <kconfiggroup.h>
+
 // local includes
 
-#include "imagefiltermodel.h"
+// #include "imagefiltermodel.h"
 #include "tableview_shared.h"
+
+class QModelIndex;
+class QStyleOptionViewItem;
 
 namespace Digikam
 {
 
+class ImageInfo;
 class ThumbnailSize;
 
 class TableViewColumnConfiguration

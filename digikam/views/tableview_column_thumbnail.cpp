@@ -24,12 +24,19 @@
 
 // Qt includes
 
+#include <QPainter>
+#include <QStyleOptionViewItem>
+
 // KDE includes
+
+#include <klocale.h>
 
 // local includes
 
-#include <thumbnailsize.h>
+#include "imagefiltermodel.h"
 #include "tableview.h"
+#include "thumbnailloadthread.h"
+#include "thumbnailsize.h"
 
 namespace
 {

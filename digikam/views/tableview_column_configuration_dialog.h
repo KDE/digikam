@@ -25,25 +25,14 @@
 
 // Qt includes
 
-#include <QTreeView>
-#include <QWidget>
-#include <QItemDelegate>
-
 // KDE includes
 
-#include "kcategorizedsortfilterproxymodel.h"
 #include "kdialog.h"
 
 // local includes
 
-/// @todo clean up includes and use forward-declarations where possible
-#include "digikam_export.h"
-#include "imagealbummodel.h"
-#include "imagefiltermodel.h"
-#include "statesavingobject.h"
 #include "tableview_columnfactory.h"
 #include "tableview_shared.h"
-#include "thumbnailloadthread.h"
 
 class KMenu;
 class QContextMenuEvent;

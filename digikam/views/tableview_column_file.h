@@ -25,19 +25,15 @@
 
 // Qt includes
 
-#include <QObject>
-#include <QPainter>
 #include <QStringList>
 
 // KDE includes
 
-#include <kglobal.h>
-#include <klocale.h>
-
 // local includes
 
 #include "tableview_columnfactory.h"
-#include "thumbnailloadthread.h"
+
+class QComboBox;
 
 namespace Digikam
 {

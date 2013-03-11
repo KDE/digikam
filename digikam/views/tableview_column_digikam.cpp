@@ -23,15 +23,19 @@
 #include "tableview_column_digikam.moc"
 
 // Qt includes
+
 #include <QFormLayout>
+#include <QModelIndex>
 
 // KDE includes
 
 #include <kdebug.h>
+#include <klocale.h>
 
 // local includes
 
 #include "globals.h"
+#include "imageinfo.h"
 
 namespace Digikam
 {

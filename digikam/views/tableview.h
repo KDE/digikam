@@ -25,9 +25,7 @@
 
 // Qt includes
 
-#include <QTreeView>
 #include <QWidget>
-#include <QItemDelegate>
 
 // KDE includes
 
@@ -38,20 +36,20 @@
 
 /// @todo clean up includes and use forward-declarations where possible
 #include "digikam_export.h"
-#include "imagealbummodel.h"
-#include "imagefiltermodel.h"
+#include "imageinfo.h"
 #include "statesavingobject.h"
-#include "tableview_columnfactory.h"
-#include "tableview_shared.h"
-#include "thumbnailloadthread.h"
 
 class KMenu;
 class QContextMenuEvent;
+class QItemDelegate;
+class QItemSelectionModel;
+class QTreeView;
 
 namespace Digikam
 {
 
 class ThumbnailSize;
+class TableViewShared;
 
 class TableView : public QWidget, public StateSavingObject
 {

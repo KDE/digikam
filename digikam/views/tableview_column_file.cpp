@@ -21,15 +21,21 @@
  * ============================================================ */
 
 #include "tableview_column_file.moc"
-#include <QFormLayout>
 
 // Qt includes
+
+#include <QComboBox>
+#include <QFormLayout>
+#include <QModelIndex>
 
 // KDE includes
 
 #include <kdebug.h>
+#include <klocale.h>
 
 // local includes
+
+#include "imageinfo.h"
 
 namespace Digikam
 {

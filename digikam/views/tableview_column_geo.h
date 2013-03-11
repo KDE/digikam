@@ -25,22 +25,15 @@
 
 // Qt includes
 
-#include <QObject>
-#include <QPainter>
 #include <QStringList>
 
 // KDE includes
 
-#include <kglobal.h>
-#include <klocale.h>
-
-// libkgeomap includes
-
-#include <libkgeomap/geocoordinates.h>
-
 // local includes
 
 #include "tableview_columnfactory.h"
+
+class QComboBox;
 
 namespace Digikam
 {

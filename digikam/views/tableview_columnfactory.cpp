@@ -24,10 +24,16 @@
 
 // Qt includes
 
+#include <QModelIndex>
+
 // KDE includes
+
+#include <kdebug.h>
 
 // local includes
 
+#include "imagefiltermodel.h"
+#include "imageinfo.h"
 #include "tableview_columns.h"
 
 namespace Digikam
