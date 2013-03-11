@@ -24,11 +24,11 @@
 #define TABLEVIEW_MODEL_H
 
 // Qt includes
+
 #include <QAbstractItemModel>
 #include <QSortFilterProxyModel>
 
 // KDE includes
-
 
 // local includes
 

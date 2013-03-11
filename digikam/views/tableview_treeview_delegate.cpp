@@ -32,30 +32,30 @@
 
 // KDE includes
 
-#include <kmenu.h>
 #include <kaction.h>
 #include <klinkitemselectionmodel.h>
+#include <kmenu.h>
 
 // local includes
 
 /// @todo clean up includes
-#include "imageposition.h"
+#include "contextmenuhelper.h"
+#include "databasefields.h"
+#include "databasewatch.h"
+#include "digikam2kgeomap_database.h"
+#include "fileactionmngr.h"
 #include "imageinfo.h"
 #include "imagemodel.h"
+#include "imageposition.h"
 #include "importfiltermodel.h"
 #include "importimagemodel.h"
-#include "databasewatch.h"
-#include "databasefields.h"
-#include "digikam2kgeomap_database.h"
 #include "importui.h"
-#include "thumbnailloadthread.h"
-#include "tableview_model.h"
-#include "tableview_columnfactory.h"
 #include "tableview_column_configuration_dialog.h"
+#include "tableview_columnfactory.h"
+#include "tableview_model.h"
 #include "tableview_selection_model_syncer.h"
-#include "contextmenuhelper.h"
-#include "fileactionmngr.h"
 #include "tableview_sortfilterproxymodel.h"
+#include "thumbnailloadthread.h"
 
 namespace Digikam
 {

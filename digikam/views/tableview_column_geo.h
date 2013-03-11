@@ -34,10 +34,13 @@
 #include <kglobal.h>
 #include <klocale.h>
 
+// libkgeomap includes
+
+#include <libkgeomap/geocoordinates.h>
+
 // local includes
 
 #include "tableview_columnfactory.h"
-#include <libkgeomap/geocoordinates.h>
 
 namespace Digikam
 {

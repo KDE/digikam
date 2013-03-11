@@ -37,7 +37,6 @@
 // local includes
 
 #include "tableview_columnfactory.h"
-#include <libkgeomap/geocoordinates.h>
 #include "thumbnailloadthread.h"
 
 namespace Digikam

@@ -22,32 +22,38 @@
 
 #include "tableview_model.moc"
 
+// C++ includes
+
+#include <valarray>
+
 // KDE includes
 
 #include <kdebug.h>
 
-// local includes
-#include "imagefiltermodel.h"
-#include "tableview_columnfactory.h"
-#include <valarray>
+// boost includes
+
 #include <boost/config/posix_features.hpp>
-#include "modeltest/modeltest.h"
-#include "tableview_selection_model_syncer.h"
-#include "databasewatch.h"
-#include "databasechangesets.h"
+
+// local includes
 
 /// @todo Clean up include list
-#include "imageposition.h"
-#include "databasechangesets.h"
-#include "imagelister.h"
-#include "databaseaccess.h"
+
 #include "albumdb.h"
+#include "databaseaccess.h"
+#include "databasechangesets.h"
+#include "databasechangesets.h"
+#include "databasefields.h"
+#include "databasewatch.h"
+#include "imagefiltermodel.h"
 #include "imageinfo.h"
-#include "thumbnailloadthread.h"
+#include "imagelister.h"
+#include "imageposition.h"
+#include "modeltest/modeltest.h"
+#include "tableview_columnfactory.h"
+#include "tableview_selection_model_syncer.h"
 #include "thumbnaildatabaseaccess.h"
 #include "thumbnaildb.h"
-#include "databasefields.h"
-
+#include "thumbnailloadthread.h"
 
 namespace Digikam
 {

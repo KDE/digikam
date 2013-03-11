@@ -29,8 +29,8 @@
 // local includes
 
 #include "imagefiltermodel.h"
-#include "tableview_shared.h"
 #include "tableview_model.h"
+#include "tableview_shared.h"
 
 namespace Digikam
 {

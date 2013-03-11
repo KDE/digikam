@@ -25,8 +25,8 @@
 
 // Qt includes
 
-#include <QObject>
 #include <QItemSelectionModel>
+#include <QObject>
 
 namespace Digikam
 {

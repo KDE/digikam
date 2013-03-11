@@ -37,14 +37,14 @@
 // local includes
 
 /// @todo clean up includes and use forward-declarations where possible
-#include "statesavingobject.h"
 #include "digikam_export.h"
+#include "dragdropimplementations.h"
 #include "imagealbummodel.h"
-#include "thumbnailloadthread.h"
 #include "imagefiltermodel.h"
+#include "statesavingobject.h"
 #include "tableview_columnfactory.h"
 #include "tableview_shared.h"
-#include "dragdropimplementations.h"
+#include "thumbnailloadthread.h"
 
 class KMenu;
 class QContextMenuEvent;
