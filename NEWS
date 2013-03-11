@@ -6,4 +6,5 @@ NEW FEATURES:
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
-001 ==> 
+001 ==> 315098 - DNG Converter and DigiKam crashes when opening a .dng file.
+002 ==> 
