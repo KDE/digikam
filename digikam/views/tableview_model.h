@@ -111,53 +111,6 @@ private:
     const QScopedPointer<Private> d;
 };
 
-class TableViewSortFilterProxyModel : public QSortFilterProxyModel
-{
-    Q_OBJECT
-
-public:
-
-    TableViewSortFilterProxyModel(TableViewShared* const sPointer, QObject* parent = 0);
-    virtual ~TableViewSortFilterProxyModel();
-
-    virtual bool lessThan(const QModelIndex& tableViewIndexLeft, const QModelIndex& tableViewIndexRight) const;
-
-    // drag-and-drop related functions
-    virtual Qt::DropActions supportedDropActions() const;
-    virtual QStringList mimeTypes() const;
-    virtual bool dropMimeData(const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent);
-    virtual QMimeData* mimeData(const QModelIndexList& indexes) const;
-    QModelIndex toImageModelIndex(const QModelIndex& index) const;
-    QModelIndex toImageFilterModelIndex(const QModelIndex& index) const;
-
-private:
-
-    class Private;
-    const QScopedPointer<Private> d;
-    TableViewShared* const s;
-};
-
-class TableViewCurrentToSortedSyncer : public QObject
-{
-    Q_OBJECT
-
-public:
-
-    explicit TableViewCurrentToSortedSyncer(TableViewShared* const sharedObject, QObject* const parent = 0);
-    virtual ~TableViewCurrentToSortedSyncer();
-
-private Q_SLOTS:
-
-    void slotSortedModelCurrentChanged(const QModelIndex& current, const QModelIndex& previous);
-    void slotTableViewModelCurrentChanged(const QModelIndex& current, const QModelIndex& previous);
-
-private:
-
-    class Private;
-    class QScopedPointer<Private> d;
-    TableViewShared* const s;
-};
-
 } /* namespace Digikam */
 
 #endif // TABLEVIEW_MODEL_H

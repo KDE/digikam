@@ -55,6 +55,7 @@
 #include "tableview_selection_model_syncer.h"
 #include "contextmenuhelper.h"
 #include "fileactionmngr.h"
+#include "tableview_sortfilterproxymodel.h"
 
 namespace Digikam
 {
