@@ -172,9 +172,24 @@ void TableViewColumnProfile::loadSettings(const KConfigGroup& configGroup)
     {
         // no data loaded, create default entries
         /// @todo Make proper columns here.
+        /// @todo Set the default sorting column to something other than the thumbnail.
         columnConfigurationList << TableViewColumnConfiguration("thumbnail");
-        columnConfigurationList << TableViewColumnConfiguration("file-properties");
-        columnConfigurationList << TableViewColumnConfiguration("geo-properties");
+
+        columnConfigurationList <<
+            TableViewColumnDescription("file-properties", i18n("Filename"), "subcolumn", "name")
+            .toConfiguration();
+
+        columnConfigurationList <<
+            TableViewColumnDescription("digikam-properties", i18n("Rating"), "subcolumn", "rating")
+            .toConfiguration();
+
+        columnConfigurationList <<
+            TableViewColumnDescription("digikam-properties", i18n("Title"), "subcolumn", "title")
+            .toConfiguration();
+
+        columnConfigurationList <<
+            TableViewColumnDescription("geo-properties", i18n("Coordinates"), "subcolumn", "coordinates")
+            .toConfiguration();
     }
 }
 
