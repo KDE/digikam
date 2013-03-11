@@ -1532,6 +1532,22 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/imagepreviewview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/mediaplayerview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/mapwidgetview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview_sortfilterproxymodel.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview_treeview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview_treeview_delegate.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview_column_configuration_dialog.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview_model.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview_columns.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview_column_file.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview_column_geo.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview_column_digikam.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview_column_item.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview_column_thumbnail.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview_columnfactory.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview_selection_model_syncer.cpp
+        # TODO: remove modeltest before release
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/modeltest/modeltest.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/welcomepageview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/leftsidebarwidgets.cpp
 

@@ -10,7 +10,7 @@
  * Copyright (C) 2002-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2011 by Johannes Wienke <languitar at semipol dot de>
  * Copyright (C) 2010-2011 by Andi Clemens <andi dot clemens at gmail dot com>
- * Copyright (C) 2011      by Michael G. Hansen <mike at mghansen dot de>
+ * Copyright (C) 2011-2013 by Michael G. Hansen <mike at mghansen dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -78,6 +78,7 @@
 #include "faceiface.h"
 #include "fileactionprogress.h"
 #include "versionmanagersettings.h"
+#include "tableview.h"
 
 #ifdef USE_PRESENTATION_MODE
 #include "qmlshow.h"
@@ -110,6 +111,7 @@ public:
         parent(0),
         iconView(0),
         mapView(0),
+        tableView(0),
         albumManager(0),
         albumHistory(0),
         stackedview(0),
@@ -159,6 +161,7 @@ public:
 
     DigikamImageView*             iconView;
     MapWidgetView*                mapView;
+    TableView*                    tableView;
     AlbumManager*                 albumManager;
     AlbumHistory*                 albumHistory;
     StackedView*                  stackedview;
@@ -254,6 +257,7 @@ DigikamView::DigikamView(QWidget* const parent, DigikamModelCollection* const mo
 
     d->iconView = d->stackedview->imageIconView();
     d->mapView  = d->stackedview->mapWidgetView();
+    d->tableView = d->stackedview->tableView();
 
     d->addPageUpDownActions(this, d->stackedview->imagePreviewView());
     d->addPageUpDownActions(this, d->stackedview->thumbBar());
@@ -453,6 +457,17 @@ void DigikamView::setupConnections()
 
     connect(d->iconView, SIGNAL(signalPopupTagsView()),
             d->rightSideBar, SLOT(slotPopupTagsView()));
+
+    // -- TableView Connections -----------------------------------
+
+    connect(d->tableView, SIGNAL(signalPreviewRequested(ImageInfo)),
+            this, SLOT(slotTogglePreviewMode(ImageInfo)));
+
+    connect(d->tableView, SIGNAL(signalZoomOutStep()),
+            this, SLOT(slotZoomOut()));
+
+    connect(d->tableView, SIGNAL(signalZoomInStep()),
+            this, SLOT(slotZoomIn()));
 
     // -- Sidebar Connections -------------------------------------
 
@@ -655,6 +670,7 @@ void DigikamView::loadViewState()
     d->initialAlbumID = group.readEntry("InitialAlbumID", 0);
 
     d->mapView->loadState();
+    d->tableView->loadState();
     d->rightSideBar->loadState();
 }
 
@@ -692,7 +708,7 @@ void DigikamView::saveViewState()
     }
 
     d->mapView->saveState();
-
+    d->tableView->saveState();
     d->rightSideBar->saveState();
 }
 
@@ -1174,14 +1190,17 @@ void DigikamView::slotDispatchImageSelected()
             ImageInfo previousInfo;
             ImageInfo nextInfo;
 
-            if (d->stackedview->previewMode() != StackedView::MapWidgetMode)
+            if ( (d->stackedview->previewMode() != StackedView::MapWidgetMode) &&
+                 (d->stackedview->previewMode() != StackedView::TableViewMode) )
             {
+                /// @todo next/previous should also be available in TableViewMode!
                 previousInfo = d->iconView->previousInfo(list.first());
                 nextInfo     = d->iconView->nextInfo(list.first());
             }
 
             if ((d->stackedview->previewMode() != StackedView::PreviewAlbumMode) &&
-                (d->stackedview->previewMode() != StackedView::MapWidgetMode))
+                (d->stackedview->previewMode() != StackedView::MapWidgetMode) &&
+                (d->stackedview->previewMode() != StackedView::TableViewMode) )
             {
                 d->stackedview->setPreviewItem(list.first(), previousInfo, nextInfo);
             }
@@ -1221,7 +1240,8 @@ void DigikamView::setThumbSize(int size)
         double z = DZoomBar::zoomFromSize(size, zoomMin(), zoomMax());
         setZoomFactor(z);
     }
-    else if (d->stackedview->previewMode() == StackedView::PreviewAlbumMode)
+    else if (   (d->stackedview->previewMode() == StackedView::PreviewAlbumMode)
+             || (d->stackedview->previewMode() == StackedView::TableViewMode) )
     {
         if (size > ThumbnailSize::Huge)
         {
@@ -1245,6 +1265,7 @@ void DigikamView::setThumbSize(int size)
 void DigikamView::slotThumbSizeEffect()
 {
     d->iconView->setThumbnailSize(d->thumbSize);
+    d->tableView->setThumbnailSize(d->thumbSize);
     toggleZoomActions();
 
     AlbumSettings::instance()->setDefaultIconSize(d->thumbSize);
@@ -1267,7 +1288,8 @@ void DigikamView::toggleZoomActions()
             d->parent->enableZoomMinusAction(false);
         }
     }
-    else if (d->stackedview->previewMode() == StackedView::PreviewAlbumMode)
+    else if (   (d->stackedview->previewMode() == StackedView::PreviewAlbumMode)
+             || (d->stackedview->previewMode() == StackedView::TableViewMode) )
     {
         d->parent->enableZoomMinusAction(true);
         d->parent->enableZoomPlusAction(true);
@@ -1291,7 +1313,8 @@ void DigikamView::toggleZoomActions()
 
 void DigikamView::slotZoomIn()
 {
-    if (d->stackedview->previewMode() == StackedView::PreviewAlbumMode)
+    if (   (d->stackedview->previewMode() == StackedView::PreviewAlbumMode)
+        || (d->stackedview->previewMode() == StackedView::TableViewMode) )
     {
         setThumbSize(d->thumbSize + ThumbnailSize::Step);
         toggleZoomActions();
@@ -1305,7 +1328,8 @@ void DigikamView::slotZoomIn()
 
 void DigikamView::slotZoomOut()
 {
-    if (d->stackedview->previewMode() == StackedView::PreviewAlbumMode)
+    if (   (d->stackedview->previewMode() == StackedView::PreviewAlbumMode)
+        || (d->stackedview->previewMode() == StackedView::TableViewMode) )
     {
         setThumbSize(d->thumbSize - ThumbnailSize::Step);
         toggleZoomActions();
@@ -1327,7 +1351,11 @@ void DigikamView::slotZoomTo100Percents()
 
 void DigikamView::slotFitToWindow()
 {
-    if (d->stackedview->previewMode() == StackedView::PreviewAlbumMode)
+    if (d->stackedview->previewMode() == StackedView::TableViewMode)
+    {
+        /// @todo We should choose an appropriate thumbnail size here
+    }
+    else if (d->stackedview->previewMode() == StackedView::PreviewAlbumMode)
     {
         int nts = d->iconView->fitToWidthIcons();
         kDebug() << "new thumb size = " << nts;
@@ -1404,6 +1432,11 @@ void DigikamView::slotMapWidgetView()
     d->stackedview->setPreviewMode(StackedView::MapWidgetMode);
 }
 
+void DigikamView::slotTableView()
+{
+    d->stackedview->setPreviewMode(StackedView::TableViewMode);
+}
+
 void DigikamView::slotIconView()
 {
     if (d->stackedview->previewMode() == StackedView::PreviewImageMode)
@@ -1423,7 +1456,8 @@ void DigikamView::slotImagePreview()
     const int currentPreviewMode = d->stackedview->previewMode();
     ImageInfo currentInfo;
 
-    if (currentPreviewMode == StackedView::PreviewAlbumMode)
+    if (    (currentPreviewMode == StackedView::PreviewAlbumMode)
+         || (currentPreviewMode == StackedView::TableViewMode) )
     {
         currentInfo = d->iconView->currentInfo();
     }
@@ -1441,6 +1475,7 @@ void DigikamView::slotImagePreview()
 void DigikamView::slotTogglePreviewMode(const ImageInfo& info)
 {
     if ( (d->stackedview->previewMode() == StackedView::PreviewAlbumMode ||
+          d->stackedview->previewMode() == StackedView::TableViewMode ||
           d->stackedview->previewMode() == StackedView::MapWidgetMode)   &&
          !info.isNull() )
     {
@@ -1488,6 +1523,9 @@ void DigikamView::slotViewModeChanged()
         case StackedView::MapWidgetMode:
             emit signalSwitchedToMapView();
             //TODO: connect map view's zoom buttons to main status bar zoom buttons
+            break;
+        case StackedView::TableViewMode:
+            emit signalSwitchedToTableView();
             break;
     }
 }

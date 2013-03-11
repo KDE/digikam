@@ -109,6 +109,7 @@ Q_SIGNALS:
     void signalSwitchedToPreview();
     void signalSwitchedToIconView();
     void signalSwitchedToMapView();
+    void signalSwitchedToTableView();
 
     void signalGotoAlbumAndItem(const ImageInfo&);
     void signalGotoDateAndItem(AlbumIconItem*);
@@ -166,6 +167,7 @@ public Q_SLOTS:
     void slotImageAddToExistingQueue(int);
     void slotImagePreview();
     void slotMapWidgetView();
+    void slotTableView();
     void slotIconView();
     void slotImageEdit();
     void slotImageFindSimilar();

@@ -10,6 +10,7 @@
  * Copyright (C) 2002-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmail dot com>
+ * Copyright (C) 2013 by Michael G. Hansen <mike at mghansen dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -48,6 +49,7 @@
 #include "imagecategorizedview.h"
 #include "imageinfo.h"
 #include "imageinfolist.h"
+#include "tableview_treeview.h"
 
 namespace Digikam
 {
@@ -202,8 +204,22 @@ static DropAction groupAction(const QDropEvent*, QWidget* view)
 
 bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDropEvent* e, const QModelIndex& droppedOn)
 {
-    ImageCategorizedView* view = static_cast<ImageCategorizedView*>(abstractview);
-    Album* album               = view->albumAt(e->pos());
+    Album* album = 0;
+    // Note that the drop event does not have to be in an ImageCategorizedView.
+    // It can also be a TableViewTreeView.
+    ImageCategorizedView* view = qobject_cast<ImageCategorizedView*>(abstractview);
+    if (view)
+    {
+        album = view->albumAt(e->pos());
+    }
+    else
+    {
+        TableViewTreeView* const tableViewTreeView = qobject_cast<TableViewTreeView*>(abstractview);
+        if (tableViewTreeView)
+        {
+            album = tableViewTreeView->albumAt(e->pos());
+        }
+    }
 
     // unless we are readonly anyway, we always want an album
     if (!m_readOnly && (!album || album->isRoot()) )

@@ -1,0 +1,11 @@
+ModelTest code is now hosted here:
+
+http://qt.gitorious.org/qt/qt/trees/4.7/tests/auto/modeltest
+
+ModelTest was originally taken from here:
+
+http://labs.trolltech.com/page/Projects/Itemview/Modeltest
+
+KDevelop also uses it:
+
+http://gitorious.org/kdevelop/kdevplatform/trees/master/tests

@@ -235,6 +235,7 @@ public:
     KSelectAction*                      imageViewSelectionAction;
     KToggleAction*                      imagePreviewAction;
     KToggleAction*                      imageMapViewAction;
+    KToggleAction*                      imageTableViewAction;
     KToggleAction*                      imageIconViewAction;
     KAction*                            imageLightTableAction;
     KAction*                            imageAddLightTableAction;
