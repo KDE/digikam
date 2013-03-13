@@ -7,7 +7,7 @@
  * Description : a generic widget to display a panel to choose
  *               a rectangular image area.
  *
- * Copyright (C) 2004-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -49,12 +49,12 @@
 namespace Digikam
 {
 
-class PanIconWidget::PanIconWidgetPriv
+class PanIconWidget::Private
 {
 
 public:
 
-    PanIconWidgetPriv() :
+    Private() :
         moveSelection(false),
         flicker(false),
         width(0),
@@ -92,8 +92,8 @@ public:
     QPixmap pixmap;
 };
 
-PanIconWidget::PanIconWidget(QWidget* parent, Qt::WidgetAttribute attribute)
-    : QWidget(parent), d(new PanIconWidgetPriv)
+PanIconWidget::PanIconWidget(QWidget* const parent, Qt::WidgetAttribute attribute)
+    : QWidget(parent), d(new Private)
 {
     d->timer = new QTimer(this);
     d->timer->setInterval(800);
@@ -112,7 +112,7 @@ PanIconWidget::~PanIconWidget()
 
 QToolButton* PanIconWidget::button()
 {
-    QToolButton* btn = new QToolButton;
+    QToolButton* const btn = new QToolButton;
     btn->setToolButtonStyle(Qt::ToolButtonIconOnly);
     btn->setIcon(SmallIcon("transform-move"));
     btn->hide();
@@ -198,11 +198,10 @@ void PanIconWidget::setCursorToLocalRegionSelectionCenter()
 
 void PanIconWidget::setCenterSelection()
 {
-    setRegionSelection(QRect(
-                           (int)(((float)d->zoomedOrgWidth  / 2.0) - ((float)d->regionSelection.width()  / 2.0)),
-                           (int)(((float)d->zoomedOrgHeight / 2.0) - ((float)d->regionSelection.height() / 2.0)),
-                           d->regionSelection.width(),
-                           d->regionSelection.height()));
+    setRegionSelection(QRect((int)(((float)d->zoomedOrgWidth / 2.0) - ((float)d->regionSelection.width()  / 2.0)),
+                            (int)(((float)d->zoomedOrgHeight / 2.0) - ((float)d->regionSelection.height() / 2.0)),
+                            d->regionSelection.width(),
+                            d->regionSelection.height()));
 }
 
 void PanIconWidget::regionSelectionMoved(bool targetDone)
