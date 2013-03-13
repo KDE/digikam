@@ -248,7 +248,7 @@ TableViewColumn::ColumnFlags TableViewColumn::getColumnFlags() const
     return ColumnNoFlags;
 }
 
-ImageInfo TableViewColumn::getImageInfo(const QModelIndex sourceIndex) const
+ImageInfo TableViewColumn::getImageInfo(const QModelIndex& sourceIndex) const
 {
     return s->imageFilterModel->imageInfo(sourceIndex);
 }

@@ -196,7 +196,7 @@ public:
     virtual QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& sourceIndex) const;
     virtual void updateThumbnailSize();
 
-    ImageInfo getImageInfo(const QModelIndex sourceIndex) const;
+    ImageInfo getImageInfo(const QModelIndex& sourceIndex) const;
 
     template<class MyType> static ColumnCompareResult compareHelper(const MyType& A, const MyType& B)
     {
