@@ -99,6 +99,14 @@ void TableViewItemDelegate::paint(QPainter* painter, const QStyleOptionViewItem&
 QSize TableViewItemDelegate::sizeHint(const QStyleOptionViewItem& option, const QModelIndex& sortedIndex) const
 {
     const int columnIndex = sortedIndex.column();
+    /// @todo Debug output to find OSX crash
+    if (columnIndex>=s->tableViewModel->columnCount(QModelIndex()))
+    {
+        kDebug()<<"------ CRASH AHEAD: sortedIndex = "<<sortedIndex;
+        kDebug()<<"------ CRASH AHEAD: s->sortModel->columnCount(QModelIndex()) = "<<s->sortModel->columnCount(QModelIndex());
+        kDebug()<<"------ CRASH AHEAD: s->tableViewModel->columnCount(QModelIndex()) = "<<s->tableViewModel->columnCount(QModelIndex());
+        kDebug()<<"------ CRASH AHEAD: columnIndex: "<<columnIndex;
+    }
     TableViewColumn* const columnObject = s->tableViewModel->getColumnObject(columnIndex);
     const QModelIndex tableViewIndex = s->sortModel->mapToSource(sortedIndex);
     const QModelIndex sourceIndex = s->tableViewModel->toImageFilterModelIndex(tableViewIndex);
