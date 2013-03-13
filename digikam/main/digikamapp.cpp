@@ -857,7 +857,7 @@ void DigikamApp::setupActions()
     connect(d->imageMapViewAction, SIGNAL(triggered()), d->view, SLOT(slotMapWidgetView()));
     d->imageViewSelectionAction->addAction(d->imageMapViewAction);
 
-    d->imageTableViewAction = new KToggleAction(KIcon("table"),
+    d->imageTableViewAction = new KToggleAction(KIcon("view-list-details"),
                                                 i18nc("@action Switch to table view", "Table"), this);
     actionCollection()->addAction("table_view", d->imageTableViewAction);
     connect(d->imageTableViewAction, SIGNAL(triggered()), d->view, SLOT(slotTableView()));
