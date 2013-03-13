@@ -118,7 +118,7 @@ public:
 
     Private()
       : columnObjects(),
-        rootItem(new TableViewModelItem())
+        rootItem(0)
     {
     }
 
@@ -131,6 +131,8 @@ TableViewModel::TableViewModel(TableViewShared* const sharedObject, QObject* par
     s(sharedObject),
     d(new Private())
 {
+    d->rootItem = new TableViewModelItem();
+
     connect(s->imageFilterModel, SIGNAL(modelAboutToBeReset()),
             this, SLOT(slotSourceModelAboutToBeReset()));
     connect(s->imageFilterModel, SIGNAL(modelReset()),
