@@ -80,23 +80,23 @@ TableViewColumn* TableViewColumnFactory::getColumn(const Digikam::TableViewColum
     /// @todo extract column ids from column class
     if (columnId=="file-properties")
     {
-        return new TableViewColumns::ColumnFileProperties(s, columnConfiguration);
+        return new TableViewColumns::ColumnFileProperties(s, columnConfiguration, this);
     }
     else if (columnId=="item-properties")
     {
-        return new TableViewColumns::ColumnItemProperties(s, columnConfiguration);
+        return new TableViewColumns::ColumnItemProperties(s, columnConfiguration, this);
     }
     else if (columnId=="digikam-properties")
     {
-        return new TableViewColumns::ColumnDigikamProperties(s, columnConfiguration);
+        return new TableViewColumns::ColumnDigikamProperties(s, columnConfiguration, this);
     }
     else if (columnId=="geo-properties")
     {
-        return new TableViewColumns::ColumnGeoProperties(s, columnConfiguration);
+        return new TableViewColumns::ColumnGeoProperties(s, columnConfiguration, this);
     }
     else if (columnId=="thumbnail")
     {
-        return new TableViewColumns::ColumnThumbnail(s, columnConfiguration);
+        return new TableViewColumns::ColumnThumbnail(s, columnConfiguration, this);
     }
 
     return 0;

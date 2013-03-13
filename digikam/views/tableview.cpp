@@ -89,7 +89,7 @@ TableView::TableView(
     s->tableViewModel = new TableViewModel(s.data(), this);
     s->tableViewSelectionModel = new QItemSelectionModel(s->tableViewModel);
     s->sortModel = new TableViewSortFilterProxyModel(s.data(), this);
-    s->sortSelectionModel = new KLinkItemSelectionModel(s->sortModel, s->tableViewSelectionModel);
+    s->sortSelectionModel = new KLinkItemSelectionModel(s->sortModel, s->tableViewSelectionModel, this);
     s->tableViewCurrentToSortedSyncer = new TableViewCurrentToSortedSyncer(s.data(), this);
     s->tableViewSelectionModelSyncer= new TableViewSelectionModelSyncer(s.data(), this);
     d->treeView = new TableViewTreeView(s.data(), this);
