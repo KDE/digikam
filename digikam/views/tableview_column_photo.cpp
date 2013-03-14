@@ -73,7 +73,7 @@ QStringList ColumnPhotoProperties::getSubColumns()
 TableViewColumnDescription ColumnPhotoProperties::getDescription()
 {
     TableViewColumnDescription description(QLatin1String("photo-properties"), i18n("Photo properties"));
-    description.setIcon("image-x-generic");
+    description.setIcon("camera-photo");
 
     description.addSubColumn(
         TableViewColumnDescription("photo-properties", i18n("Camera maker"), "subcolumn", "cameramaker")
