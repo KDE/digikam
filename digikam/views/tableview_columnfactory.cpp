@@ -279,6 +279,8 @@ TableViewColumn::ColumnCompareResult TableViewColumn::compare(const QModelIndex&
 
 TableViewColumnConfigurationWidget* TableViewColumn::getConfigurationWidget(QWidget* const parentWidget) const
 {
+    Q_UNUSED(parentWidget)
+
     return 0;
 }
 

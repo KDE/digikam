@@ -119,6 +119,8 @@ void TableViewSelectionModelSyncer::doInitialSync()
 
 void TableViewSelectionModelSyncer::slotSourceCurrentChanged(const QModelIndex& current, const QModelIndex& previous)
 {
+    Q_UNUSED(previous)
+
     if (d->syncing)
     {
         return;
@@ -204,6 +206,8 @@ void TableViewSelectionModelSyncer::slotSourceSelectionChanged(const QItemSelect
 
 void TableViewSelectionModelSyncer::slotTargetCurrentChanged(const QModelIndex& current, const QModelIndex& previous)
 {
+    Q_UNUSED(previous)
+
     if (d->syncing)
     {
         return;

@@ -139,6 +139,9 @@ bool ColumnThumbnail::paint(QPainter* const painter, const QStyleOptionViewItem&
 
 QSize ColumnThumbnail::sizeHint(const QStyleOptionViewItem& option, const QModelIndex& sourceIndex) const
 {
+    Q_UNUSED(option)
+    Q_UNUSED(sourceIndex)
+
     /// @todo On portrait pictures, the borders are too close. There should be a gap. Is this setting okay?
     const int thumbnailSizeWithBorder = m_thumbnailSize+ThumbnailBorder;
     return QSize(thumbnailSizeWithBorder, thumbnailSizeWithBorder);
