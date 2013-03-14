@@ -24,12 +24,12 @@
 
 // Qt includes
 
-#include <QComboBox>
 #include <QFormLayout>
 #include <QModelIndex>
 
 // KDE includes
 
+#include <kcombobox.h>
 #include <kdebug.h>
 #include <klocale.h>
 
@@ -177,7 +177,7 @@ ColumnFileConfigurationWidget::ColumnFileConfigurationWidget(
     case ColumnFileProperties::SubColumnSize:
         {
             QFormLayout* const box1 = new QFormLayout();
-            selectorSizeType = new QComboBox(this);
+            selectorSizeType = new KComboBox(this);
             selectorSizeType->addItem(i18n("KDE default"), QString("kde"));
             selectorSizeType->addItem(i18n("Plain"), QString("plain"));
             box1->addRow(i18n("Display format"), selectorSizeType);
