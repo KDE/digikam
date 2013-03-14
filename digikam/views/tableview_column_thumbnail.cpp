@@ -56,8 +56,8 @@ ColumnThumbnail::ColumnThumbnail(
   : TableViewColumn(tableViewShared, pConfiguration, parent),
     m_thumbnailSize(s->tableView->getThumbnailSize().size())
 {
-    connect(s->thumbnailLoadThread, SIGNAL(signalThumbnailLoaded(LoadingDescription, QPixmap)),
-            this, SLOT(slotThumbnailLoaded(LoadingDescription, QPixmap)));
+    connect(s->thumbnailLoadThread, SIGNAL(signalThumbnailLoaded(LoadingDescription,QPixmap)),
+            this, SLOT(slotThumbnailLoaded(LoadingDescription,QPixmap)));
 }
 
 ColumnThumbnail::~ColumnThumbnail()
