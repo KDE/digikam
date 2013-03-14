@@ -51,24 +51,22 @@ public:
 
     Private()
       : columnIndex(0),
-        columnObject(0)
+        columnObject(0),
+        columnConfigurationWidget(0)
     {
     }
 
-    int columnIndex;
-    TableViewColumn* columnObject;
+    int                                 columnIndex;
+    TableViewColumn*                    columnObject;
     TableViewColumnConfigurationWidget* columnConfigurationWidget;
 };
 
-TableViewConfigurationDialog::TableViewConfigurationDialog(
-            TableViewShared* const sharedObject,
-            const int columnIndex,
-            QWidget* const parentWidget)
-  : KDialog(parentWidget),
-    d(new Private()),
-    s(sharedObject)
+TableViewConfigurationDialog::TableViewConfigurationDialog(TableViewShared* const sharedObject,
+                                                           const int columnIndex,
+                                                           QWidget* const parentWidget)
+    : KDialog(parentWidget), d(new Private()), s(sharedObject)
 {
-    d->columnIndex = columnIndex;
+    d->columnIndex  = columnIndex;
     d->columnObject = s->tableViewModel->getColumnObject(d->columnIndex);
 
     setWindowTitle(i18n("Configure column \"%1\"").arg(d->columnObject->getTitle()));
@@ -79,7 +77,6 @@ TableViewConfigurationDialog::TableViewConfigurationDialog(
 
 TableViewConfigurationDialog::~TableViewConfigurationDialog()
 {
-
 }
 
 TableViewColumnConfiguration TableViewConfigurationDialog::getNewConfiguration() const

@@ -27,7 +27,7 @@
 
 // KDE includes
 
-#include "kdialog.h"
+#include <kdialog.h>
 
 // local includes
 
@@ -55,7 +55,7 @@ private:
 
     class Private;
     const QScopedPointer<Private> d;
-    TableViewShared* const s;
+    TableViewShared* const        s;
 };
 
 } /* namespace Digikam */
