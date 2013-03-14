@@ -29,6 +29,7 @@
 #include "tableview_column_file.h"
 #include "tableview_column_geo.h"
 #include "tableview_column_item.h"
+#include "tableview_column_photo.h"
 #include "tableview_column_thumbnail.h"
 
 #endif // TABLEVIEW_COLUMNS_H

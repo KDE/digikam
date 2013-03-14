@@ -98,6 +98,10 @@ TableViewColumn* TableViewColumnFactory::getColumn(const Digikam::TableViewColum
     {
         return new TableViewColumns::ColumnThumbnail(s, columnConfiguration, this);
     }
+    else if (columnId=="photo-properties")
+    {
+        return new TableViewColumns::ColumnPhotoProperties(s, columnConfiguration, this);
+    }
 
     return 0;
 }
@@ -116,6 +120,7 @@ QList<TableViewColumnDescription> TableViewColumnFactory::getColumnDescriptionLi
     descriptionList << TableViewColumns::ColumnThumbnail::getDescription();
     descriptionList << TableViewColumns::ColumnFileProperties::getDescription();
     descriptionList << TableViewColumns::ColumnItemProperties::getDescription();
+    descriptionList << TableViewColumns::ColumnPhotoProperties::getDescription();
     descriptionList << TableViewColumns::ColumnDigikamProperties::getDescription();
     descriptionList << TableViewColumns::ColumnGeoProperties::getDescription();
 
