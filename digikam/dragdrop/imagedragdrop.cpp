@@ -205,9 +205,11 @@ static DropAction groupAction(const QDropEvent*, QWidget* view)
 bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDropEvent* e, const QModelIndex& droppedOn)
 {
     Album* album = 0;
+
     // Note that the drop event does not have to be in an ImageCategorizedView.
     // It can also be a TableViewTreeView.
-    ImageCategorizedView* view = qobject_cast<ImageCategorizedView*>(abstractview);
+    ImageCategorizedView* const view = qobject_cast<ImageCategorizedView*>(abstractview);
+
     if (view)
     {
         album = view->albumAt(e->pos());
@@ -215,6 +217,7 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
     else
     {
         TableViewTreeView* const tableViewTreeView = qobject_cast<TableViewTreeView*>(abstractview);
+
         if (tableViewTreeView)
         {
             album = tableViewTreeView->albumAt(e->pos());
@@ -452,7 +455,7 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
 
         TAlbum* talbum = AlbumManager::instance()->findTAlbum(tagID);
 
-        if (!talbum)
+        if (!talbum || !view)
         {
             return false;
         }
@@ -461,7 +464,7 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
 
         QList<ImageInfo> selectedInfos  = view->selectedImageInfosCurrentFirst();
         QAction* assignToSelectedAction = 0;
-        QAction* assignToThisAction = 0;
+        QAction* assignToThisAction     = 0;
 
         if (selectedInfos.count() > 1)
             assignToSelectedAction = popMenu.addAction(SmallIcon("tag"),
