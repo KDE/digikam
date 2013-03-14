@@ -40,7 +40,6 @@
 #include "albumdb.h"
 #include "databaseaccess.h"
 #include "databasechangesets.h"
-#include "databasechangesets.h"
 #include "databasefields.h"
 #include "databasewatch.h"
 #include "imagefiltermodel.h"
@@ -238,8 +237,16 @@ QStringList TableViewSortFilterProxyModel::mimeTypes() const
     return QStringList();
 }
 
-bool TableViewSortFilterProxyModel::dropMimeData(const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent)
+bool TableViewSortFilterProxyModel::dropMimeData(
+        const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent)
 {
+    Q_UNUSED(data)
+    Q_UNUSED(action)
+    Q_UNUSED(row)
+    Q_UNUSED(column)
+    Q_UNUSED(parent)
+
+    // the drop is handled by the drag-drop handler, therefore we return false here
     return false;
 }
 

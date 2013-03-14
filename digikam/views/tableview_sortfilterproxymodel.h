@@ -55,7 +55,7 @@ class TableViewSortFilterProxyModel : public QSortFilterProxyModel
 
 public:
 
-    TableViewSortFilterProxyModel(TableViewShared* const sPointer, QObject* parent = 0);
+    explicit TableViewSortFilterProxyModel(TableViewShared* const sPointer, QObject* parent = 0);
     virtual ~TableViewSortFilterProxyModel();
 
     virtual bool lessThan(const QModelIndex& tableViewIndexLeft, const QModelIndex& tableViewIndexRight) const;

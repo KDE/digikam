@@ -41,7 +41,6 @@
 #include "albumdb.h"
 #include "databaseaccess.h"
 #include "databasechangesets.h"
-#include "databasechangesets.h"
 #include "databasefields.h"
 #include "databasewatch.h"
 #include "imagefiltermodel.h"

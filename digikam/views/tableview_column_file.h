@@ -33,7 +33,7 @@
 
 #include "tableview_columnfactory.h"
 
-class QComboBox;
+class KComboBox;
 
 namespace Digikam
 {
@@ -97,7 +97,7 @@ public:
 private:
 
     ColumnFileProperties::SubColumn subColumn;
-    QComboBox* selectorSizeType;
+    KComboBox* selectorSizeType;
 };
 
 } /* namespace TableViewColumns */

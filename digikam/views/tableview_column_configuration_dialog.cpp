@@ -69,7 +69,7 @@ TableViewConfigurationDialog::TableViewConfigurationDialog(TableViewShared* cons
     d->columnIndex  = columnIndex;
     d->columnObject = s->tableViewModel->getColumnObject(d->columnIndex);
 
-    setWindowTitle(i18n("Configure column \"%1\"").arg(d->columnObject->getTitle()));
+    setWindowTitle(i18n("Configure column \"%1\"", d->columnObject->getTitle()));
 
     d->columnConfigurationWidget = d->columnObject->getConfigurationWidget(this);
     setMainWidget(d->columnConfigurationWidget);

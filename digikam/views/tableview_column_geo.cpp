@@ -25,10 +25,10 @@
 // Qt includes
 
 #include <QFormLayout>
-#include <QComboBox>
 
 // KDE includes
 
+#include <kcombobox.h>
 #include <kdebug.h>
 #include <kglobal.h>
 #include <klocale.h>
@@ -252,7 +252,7 @@ ColumnGeoConfigurationWidget::ColumnGeoConfigurationWidget(
     case ColumnGeoProperties::SubColumnAltitude:
         {
             QFormLayout* const box1 = new QFormLayout();
-            selectorAltitudeUnit = new QComboBox(this);
+            selectorAltitudeUnit = new KComboBox(this);
             selectorAltitudeUnit->addItem(i18n("KDE default"), QString("kde"));
             selectorAltitudeUnit->addItem(i18n("Metric units"), QString("metric"));
             selectorAltitudeUnit->addItem(i18n("Imperial units"), QString("imperial"));

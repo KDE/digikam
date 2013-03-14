@@ -50,7 +50,10 @@ public:
         SubColumnWidth = 0,
         SubColumnHeight = 1,
         SubColumnDimensions = 2,
-        SubColumnPixelCount = 3
+        SubColumnPixelCount = 3,
+        SubColumnBitDepth = 4,
+        SubColumnColorMode = 5,
+        SubColumnType = 6
     };
 
 private:

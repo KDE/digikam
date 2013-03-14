@@ -39,7 +39,7 @@ class TableViewSelectionModelSyncer : public QObject
 
 public:
 
-    TableViewSelectionModelSyncer(TableViewShared* const sharedObject, QObject* const parent = 0);
+    explicit TableViewSelectionModelSyncer(TableViewShared* const sharedObject, QObject* const parent = 0);
     virtual ~TableViewSelectionModelSyncer();
 
     void doInitialSync();
