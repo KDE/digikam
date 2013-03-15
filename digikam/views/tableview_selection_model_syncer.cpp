@@ -59,6 +59,8 @@ TableViewSelectionModelSyncer::TableViewSelectionModelSyncer(TableViewShared* co
             this, SLOT(slotTargetCurrentChanged(QModelIndex,QModelIndex)));
     connect(s->tableViewSelectionModel, SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
             this, SLOT(slotTargetSelectionChanged(QItemSelection,QItemSelection)));
+    connect(s->tableViewModel, SIGNAL(columnsInserted(QModelIndex,int,int)),
+            this, SLOT(slotTargetColumnsInserted(QModelIndex,int,int)));
 
     /// @todo This is necessary to re-sync the selection when tags are added to images.
     ///       Check whether both are necessary or whether we need more.
@@ -239,6 +241,23 @@ void TableViewSelectionModelSyncer::slotTargetSelectionChanged(const QItemSelect
 
 void TableViewSelectionModelSyncer::slotSourceModelReset()
 {
+    doInitialSync();
+}
+
+void TableViewSelectionModelSyncer::slotTargetColumnsInserted(const QModelIndex& parent, int start, int end)
+{
+    Q_UNUSED(parent)
+    Q_UNUSED(start)
+    Q_UNUSED(end)
+
+    if (d->syncing)
+    {
+        return;
+    }
+
+    // New columns were inserted. We have to make sure that all selected rows include the new columns.
+    // We just re-perform the initial synchronization.
+    /// @todo There may be more efficient ways.
     doInitialSync();
 }
 

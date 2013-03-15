@@ -61,6 +61,7 @@ private Q_SLOTS:
 //     void slotTargetCurrentColumnChanged(const QModelIndex& current, const QModelIndex& previous);
 //     void slotTargetCurrentRowChanged(const QModelIndex& current, const QModelIndex& previous);
     void slotTargetSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected);
+    void slotTargetColumnsInserted(const QModelIndex& parent, int start, int end);
 
 private:
 
