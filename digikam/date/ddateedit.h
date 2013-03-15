@@ -7,10 +7,10 @@
  * Description : a combo box to list date.
  *               this widget come from libkdepim.
  *
- * Copyright (C) 2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2002 Cornelius Schumacher <schumacher@kde.org>
- * Copyright (C) 2003-2004 Reinhold Kainhofer <reinhold@kainhofer.com>
- * Copyright (C) 2004 Tobias Koenig <tokoe@kde.org>
+ * Copyright (C) 2011-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2002      by Cornelius Schumacher <schumacher@kde.org>
+ * Copyright (C) 2003-2004 by Reinhold Kainhofer <reinhold@kainhofer.com>
+ * Copyright (C) 2004      by Tobias Koenig <tokoe@kde.org>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -65,7 +65,7 @@ class DDateEdit : public KComboBox
 
 public:
 
-    explicit DDateEdit(QWidget* parent=0, const char* name=0);
+    explicit DDateEdit(QWidget* const parent=0, const char* const name=0);
     virtual ~DDateEdit();
 
     /**
@@ -143,8 +143,8 @@ private:
 
 private:
 
-    class DDateEditPriv;
-    DDateEditPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

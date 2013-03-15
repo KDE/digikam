@@ -6,8 +6,8 @@
  * Date        : 2005-04-27
  * Description : a folder view for date albums.
  *
- * Copyright (C)      2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005      by Renchi Raju <renchi dot raju at gmail dot com>
+ * Copyright (C) 2006-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2010 by Johannes Wienke <languitar at semipol dot de>
  *
  * This program is free software; you can redistribute it
@@ -52,23 +52,23 @@ class DateFolderView: public KVBox, public StateSavingObject
 
 public:
 
-    DateFolderView(QWidget* parent, DateAlbumModel* dateAlbumModel);
+    DateFolderView(QWidget* const parent, DateAlbumModel* const dateAlbumModel);
     ~DateFolderView();
 
-    void setImageModel(ImageFilterModel* model);
+    void setImageModel(ImageFilterModel* const model);
 
     void setActive(bool val);
 
     void gotoDate(const QDate& dt);
 
-    void changeAlbumFromHistory(DAlbum* album);
+    void changeAlbumFromHistory(DAlbum* const album);
 
     AlbumPointer<DAlbum> currentAlbum() const;
 
-    virtual void setConfigGroup(const KConfigGroup& group);
-
     void doLoadState();
     void doSaveState();
+
+    virtual void setConfigGroup(const KConfigGroup& group);
 
 private Q_SLOTS:
 
@@ -77,8 +77,8 @@ private Q_SLOTS:
 
 private:
 
-    class DateFolderViewPriv;
-    DateFolderViewPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam
