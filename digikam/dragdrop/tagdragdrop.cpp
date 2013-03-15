@@ -43,7 +43,7 @@
 namespace Digikam
 {
 
-TagDragDropHandler::TagDragDropHandler(TagModel* model)
+TagDragDropHandler::TagDragDropHandler(TagModel* const model)
     : AlbumModelDragDropHandler(model)
 {
 }
@@ -55,7 +55,7 @@ bool TagDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* e,
         return false;
     }
 
-    TAlbum* destAlbum = model()->albumForIndex(droppedOn);
+    TAlbum* const destAlbum = model()->albumForIndex(droppedOn);
 
     if (DTagDrag::canDecode(e->mimeData()))
     {
@@ -66,7 +66,7 @@ bool TagDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* e,
             return false;
         }
 
-        TAlbum* talbum = AlbumManager::instance()->findTAlbum(tagID);
+        TAlbum* const talbum = AlbumManager::instance()->findTAlbum(tagID);
 
         if (!talbum)
         {
@@ -81,11 +81,11 @@ bool TagDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* e,
         KMenu popMenu(view);
         popMenu.addTitle(SmallIcon("digikam"), i18n("My Tags"));
 
-        QAction* gotoAction = popMenu.addAction(SmallIcon("go-jump"), i18n("&Move Here"));
+        QAction* const gotoAction = popMenu.addAction(SmallIcon("go-jump"), i18n("&Move Here"));
         popMenu.addSeparator();
         popMenu.addAction(SmallIcon("dialog-cancel"), i18n("C&ancel"));
         popMenu.setMouseTracking(true);
-        QAction* choice = popMenu.exec(QCursor::pos());
+        QAction* const choice     = popMenu.exec(QCursor::pos());
 
         if (choice == gotoAction)
         {
@@ -119,9 +119,9 @@ bool TagDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* e,
     }
     else if (DItemDrag::canDecode(e->mimeData()))
     {
-        KUrl::List urls;
-        KUrl::List kioURLs;
-        QList<int> albumIDs;
+        KUrl::List       urls;
+        KUrl::List       kioURLs;
+        QList<int>       albumIDs;
         QList<qlonglong> imageIDs;
 
         if (!DItemDrag::decode(e->mimeData(), urls, kioURLs, albumIDs, imageIDs))
@@ -160,8 +160,8 @@ bool TagDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* e,
                 popMenu.addAction( SmallIcon("dialog-cancel"), i18n("C&ancel") );
 
                 popMenu.setMouseTracking(true);
-                QAction* choice = popMenu.exec(QCursor::pos());
-                set = (choice == setAction);
+                QAction* const choice = popMenu.exec(QCursor::pos());
+                set                   = (choice == setAction);
             }
 
             if (set)
@@ -186,14 +186,14 @@ bool TagDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* e,
         {
             KMenu popMenu(view);
             popMenu.addTitle(SmallIcon("digikam"), i18n("My Tags"));
-            QAction* assignAction = popMenu.addAction(SmallIcon("tag"),
+            QAction* const assignAction = popMenu.addAction(SmallIcon("tag"),
                                                       i18n("Assign Tag '%1' to Items", destAlbum->prettyUrl()));
             popMenu.addSeparator();
             popMenu.addAction( SmallIcon("dialog-cancel"), i18n("C&ancel") );
 
             popMenu.setMouseTracking(true);
-            QAction* choice = popMenu.exec(QCursor::pos());
-            assign = (choice == assignAction);
+            QAction* const choice = popMenu.exec(QCursor::pos());
+            assign                = (choice == assignAction);
         }
 
         if (assign)
@@ -210,7 +210,7 @@ bool TagDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* e,
 Qt::DropAction TagDragDropHandler::accepts(const QDropEvent* e, const QModelIndex& dropIndex)
 {
 
-    TAlbum* destAlbum = model()->albumForIndex(dropIndex);
+    TAlbum* const destAlbum = model()->albumForIndex(dropIndex);
 
     // TODO update, list supporting...
     if (DTagDrag::canDecode(e->mimeData())/* || DTagListDrag::canDecode(data) */)
@@ -222,7 +222,7 @@ Qt::DropAction TagDragDropHandler::accepts(const QDropEvent* e, const QModelInde
             return Qt::IgnoreAction;
         }
 
-        TAlbum* droppedAlbum = AlbumManager::instance()->findTAlbum(droppedId);
+        TAlbum* const droppedAlbum = AlbumManager::instance()->findTAlbum(droppedId);
 
         if (!droppedAlbum)
         {
@@ -271,9 +271,11 @@ Qt::DropAction TagDragDropHandler::accepts(const QDropEvent* e, const QModelInde
 QStringList TagDragDropHandler::mimeTypes() const
 {
     QStringList mimeTypes;
+
     mimeTypes << DTagDrag::mimeTypes()
               << DTagListDrag::mimeTypes()
               << DItemDrag::mimeTypes();
+
     return mimeTypes;
 }
 

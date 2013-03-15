@@ -38,7 +38,7 @@ class TagDragDropHandler : public AlbumModelDragDropHandler
 
 public:
 
-    explicit TagDragDropHandler(TagModel* model);
+    explicit TagDragDropHandler(TagModel* const model);
 
     TagModel* model() const
     {

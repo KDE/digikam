@@ -40,7 +40,7 @@ class AlbumDragDropHandler : public AlbumModelDragDropHandler
 
 public:
 
-    explicit AlbumDragDropHandler(AlbumModel* model);
+    explicit AlbumDragDropHandler(AlbumModel* const model);
 
     AlbumModel* model() const
     {
