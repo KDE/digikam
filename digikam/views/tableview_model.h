@@ -55,12 +55,16 @@ class TableViewModel : public QAbstractItemModel
 
 public:
 
+    typedef DatabaseFields::Hash<QVariant> DatabaseFieldsHashRaw;
+    typedef DatabaseFields::Hash<QString> DatabaseFieldsHashString;
+
     class Item
     {
     public:
 
         qlonglong imageId;
         QPersistentModelIndex imageFilterModelIndex;
+        DatabaseFieldsHashRaw databaseFields;
         Item* parent;
         QList<Item*> children;
 
@@ -99,6 +103,9 @@ public:
     Item* itemFromImageId(const qlonglong imageId) const;
     Item* itemFromIndex(const QModelIndex& i) const;
     ImageInfo infoFromItem(Item* const item);
+    QVariant itemDatabaseFieldRaw(Item* const item, const DatabaseFields::Set requestedField);
+    DatabaseFieldsHashRaw itemDatabaseFieldsRaw(Item* const item, const DatabaseFields::Set requestedSet);
+    DatabaseFieldsHashString itemDatabaseFieldsString(Item* const item, const DatabaseFields::Set requestedSet);
 
 private Q_SLOTS:
 

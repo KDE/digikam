@@ -151,6 +151,14 @@ TableViewColumn::ColumnFlags ColumnPhotoProperties::getColumnFlags() const
 {
     ColumnFlags flags(ColumnNoFlags);
 
+    if (   (subColumn==SubColumnAperture)
+        || (subColumn==SubColumnFocal)
+        || (subColumn==SubColumnExposure)
+        || (subColumn==SubColumnSensitivity) )
+    {
+        flags|=ColumnCustomSorting;
+    }
+
     return flags;
 }
 
@@ -243,6 +251,47 @@ TableViewColumn::ColumnCompareResult ColumnPhotoProperties::compare(TableViewMod
 
     switch (subColumn)
     {
+
+    case SubColumnAperture:
+        {
+            const QVariant variantA = s->tableViewModel->itemDatabaseFieldRaw(itemA, DatabaseFields::Aperture);
+            const QVariant variantB = s->tableViewModel->itemDatabaseFieldRaw(itemB, DatabaseFields::Aperture);
+            const double apertureA = variantA.toDouble();
+            const double apertureB = variantB.toDouble();
+
+            return compareHelper<double>(apertureA, apertureB);
+        }
+
+    case SubColumnFocal:
+        {
+            /// @todo This just works if both have focal length set, not if focal length 35 has to be used
+            const QVariant variantA = s->tableViewModel->itemDatabaseFieldRaw(itemA, DatabaseFields::FocalLength);
+            const QVariant variantB = s->tableViewModel->itemDatabaseFieldRaw(itemB, DatabaseFields::FocalLength);
+            const double focalLengthA = variantA.toDouble();
+            const double focalLengthB = variantB.toDouble();
+
+            return compareHelper<double>(focalLengthA, focalLengthB);
+        }
+
+    case SubColumnExposure:
+        {
+            const QVariant variantA = s->tableViewModel->itemDatabaseFieldRaw(itemA, DatabaseFields::ExposureTime);
+            const QVariant variantB = s->tableViewModel->itemDatabaseFieldRaw(itemB, DatabaseFields::ExposureTime);
+            const double exposureTimeA = variantA.toDouble();
+            const double exposureTimeB = variantB.toDouble();
+
+            return compareHelper<double>(exposureTimeA, exposureTimeB);
+        }
+
+    case SubColumnSensitivity:
+        {
+            const QVariant variantA = s->tableViewModel->itemDatabaseFieldRaw(itemA, DatabaseFields::Sensitivity);
+            const QVariant variantB = s->tableViewModel->itemDatabaseFieldRaw(itemB, DatabaseFields::Sensitivity);
+            const double sensitivityA = variantA.toDouble();
+            const double sensitivityB = variantB.toDouble();
+
+            return compareHelper<double>(sensitivityA, sensitivityB);
+        }
 
     default:
         kWarning() << "item: unimplemented comparison, subColumn=" << subColumn;

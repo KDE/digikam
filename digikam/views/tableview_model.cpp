@@ -60,6 +60,7 @@ namespace Digikam
 TableViewModel::Item::Item()
   : imageId(0),
     imageFilterModelIndex(),
+    databaseFields(),
     parent(0),
     children()
 {
@@ -596,9 +597,68 @@ ImageInfo TableViewModel::infoFromItem(TableViewModel::Item* const item)
     }
 
     const ImageInfo info = s->imageFilterModel->imageInfo(item->imageFilterModelIndex);
-    
+
     return info;
 }
+
+TableViewModel::DatabaseFieldsHashRaw TableViewModel::itemDatabaseFieldsRaw(TableViewModel::Item* const item, const DatabaseFields::Set requestedSet)
+{
+    /// @todo Check that all requested fields are buffered
+    /// @todo For now, we just request all fields new
+    if (requestedSet.hasFieldsFromImageMetadata())
+    {
+        const DatabaseFields::ImageMetadata imageMetadataFields = requestedSet;
+        const QVariantList fieldValues = DatabaseAccess().db()->getImageMetadata(item->imageId, imageMetadataFields);
+
+        int fieldsIndex = 0;
+        for (DatabaseFields::ImageMetadataIterator it; !it.atEnd(); ++it)
+        {
+            /// @todo The typecasting here is a workaround...
+            if (imageMetadataFields.testFlag(DatabaseFields::ImageMetadataField(int(*it))))
+            {
+                const QVariant fieldValue = fieldValues.at(fieldsIndex);
+                ++fieldsIndex;
+
+                /// @todo Re-implement insert?
+                item->databaseFields.insert(DatabaseFieldsHashRaw::uniqueKey(*it), fieldValue);
+            }
+        }
+    }
+
+    return item->databaseFields;
+}
+
+TableViewModel::DatabaseFieldsHashString TableViewModel::itemDatabaseFieldsString(TableViewModel::Item* const item, const DatabaseFields::Set requestedSet)
+{
+    DatabaseFieldsHashRaw rawHash = itemDatabaseFieldsRaw(item, requestedSet);
+    const QList<unsigned int> rawHashKeys = rawHash.keys();
+    DatabaseFieldsHashString stringHash;
+    Q_FOREACH(unsigned int key, rawHashKeys)
+    {
+        /// @todo This is also a workaround because DatabaseFields::Hash<>::value(unsigned int) is ambigious
+        const QVariant value = static_cast<QHash<unsigned int, QVariant>*>(&rawHash)->value(key);
+        const QString valueString = value.toString();
+        stringHash.insert(key, valueString);
+    }
+
+    return stringHash;
+}
+
+QVariant TableViewModel::itemDatabaseFieldRaw(TableViewModel::Item* const item, const DatabaseFields::Set requestedField)
+{
+    const TableViewModel::DatabaseFieldsHashRaw rawHash = itemDatabaseFieldsRaw(item, requestedField);
+
+    if (requestedField.hasFieldsFromImageMetadata())
+    {
+        const DatabaseFields::ImageMetadata requestedFieldFlag = requestedField;
+        const QVariant value = rawHash.value(requestedFieldFlag);
+
+        return value;
+    }
+
+    return QVariant();
+}
+
 
 } /* namespace Digikam */
 
