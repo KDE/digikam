@@ -589,5 +589,17 @@ QModelIndex TableViewModel::fromImageFilterModelIndex(const QModelIndex& imageFi
     return createIndex(rowIndex, 0, item);
 }
 
+ImageInfo TableViewModel::infoFromItem(TableViewModel::Item* const item)
+{
+    if (!item->imageFilterModelIndex.isValid())
+    {
+        return ImageInfo();
+    }
+
+    const ImageInfo info = s->imageFilterModel->imageInfo(item->imageFilterModelIndex);
+    
+    return info;
+}
+
 } /* namespace Digikam */
 

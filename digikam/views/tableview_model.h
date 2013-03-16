@@ -42,12 +42,12 @@ namespace Digikam
 
 class ImageChangeset;
 class ImageFilterModel;
+class ImageInfo;
 class TableViewColumn;
 class TableViewColumnConfiguration;
 class TableViewColumnDescription;
 class TableViewColumnFactory;
 class TableViewColumnProfile;
-class TableViewModelItem;
 
 class TableViewModel : public QAbstractItemModel
 {
@@ -98,6 +98,7 @@ public:
 
     Item* itemFromImageId(const qlonglong imageId) const;
     Item* itemFromIndex(const QModelIndex& i) const;
+    ImageInfo infoFromItem(Item* const item);
 
 private Q_SLOTS:
 
