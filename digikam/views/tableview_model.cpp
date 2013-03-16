@@ -165,6 +165,11 @@ TableViewModel::~TableViewModel()
 
 int TableViewModel::columnCount(const QModelIndex& i) const
 {
+    if (i.isValid())
+    {
+        return 0;
+    }
+
     return d->columnObjects.count();
 }
 
