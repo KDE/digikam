@@ -97,6 +97,8 @@ Q_SIGNALS:
     void signalTransform(const FileActionImageInfoList& infos, int orientation);
     void signalCopyAttributes(const FileActionImageInfoList& infos, const QStringList& derivedPaths);
 
+    void signalTransformFinished();
+
 public:
 
     // -- Signal-emitter glue code --

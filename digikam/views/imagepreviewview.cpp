@@ -288,6 +288,8 @@ void ImagePreviewView::imageLoaded()
     d->rotRightAction->setEnabled(true);
 
     d->faceGroup->setInfo(d->item->imageInfo());
+    connect(FileActionMngr::instance(),SIGNAL(signalImageTransformed()),this,
+            SLOT(slotUpdateTagsView()),Qt::DirectConnection);
 }
 
 void ImagePreviewView::imageLoadingFailed()
@@ -505,17 +507,42 @@ void ImagePreviewView::slotSetupChanged()
 
 void ImagePreviewView::slotRotateLeft()
 {
+    /**
+     * Setting lock won't allow mouse hover events in FaceGroup class
+     */
+    d->faceGroup->setEditLock(true);
+
+    /**
+     * aboutToSetInfo will delete all face tags from FaceGroup storage
+     */
     FileActionMngr::instance()->transform(QList<ImageInfo>() << d->item->imageInfo(), KExiv2Iface::RotationMatrix::Rotate270);
 }
 
 void ImagePreviewView::slotRotateRight()
 {
+    /**
+     * Setting lock won't allow mouse hover events in FaceGroup class
+     */
+    d->faceGroup->setEditLock(true);
+
+    /**
+     * aboutToSetInfo will delete all face tags from FaceGroup storage
+     */
+    d->faceGroup->aboutToSetInfo(ImageInfo());
     FileActionMngr::instance()->transform(QList<ImageInfo>() << d->item->imageInfo(), KExiv2Iface::RotationMatrix::Rotate90);
 }
 
 void ImagePreviewView::slotDeleteItem()
 {
     emit signalDeleteItem();
+}
+
+void ImagePreviewView::slotUpdateTagsView()
+{
+    /**
+     * Remove edit lock after transform is finished
+     */
+    d->faceGroup->setEditLock(false);
 }
 
 }  // namespace Digikam

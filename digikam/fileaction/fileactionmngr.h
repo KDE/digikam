@@ -63,6 +63,7 @@ public:
 Q_SIGNALS:
 
     void signalImageChangeFailed(const QString& message, const QStringList& fileNames);
+    void signalImageTransformed();
 
 public Q_SLOTS:
 
@@ -103,6 +104,9 @@ public Q_SLOTS:
 
     void copyAttributes(const ImageInfo& source, const QStringList& derivedPaths);
     void copyAttributes(const ImageInfo& source, const QString& derivedPath);
+
+    //TODO: Debug slot, delete later
+    void slotImageTransformed();
 
 public:
 

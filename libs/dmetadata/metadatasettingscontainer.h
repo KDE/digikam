@@ -96,6 +96,7 @@ public:
 
     bool                        saveTemplate;
     bool                        saveTags;
+    bool                        saveFaceTags;
 
     bool                        writeRawFiles;
     bool                        updateFileTimeStamp;

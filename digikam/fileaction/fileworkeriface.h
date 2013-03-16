@@ -55,6 +55,7 @@ Q_SIGNALS:
 
     void imageDataChanged(const QString& path, bool removeThumbnails, bool notifyCache);
     void imageChangeFailed(const QString& message, const QStringList& fileNames);
+    void imageTransformFinished();
 };
 
 // ---------------------------------------------------------------------------------------------
@@ -73,6 +74,7 @@ public:
     void writeMetadataToFiles(FileActionImageInfoList infos);
     void writeMetadata(FileActionImageInfoList infos, MetadataHub* hub);
     void transform(FileActionImageInfoList infos, int orientation);
+    void ajustFaceRectangles(const ImageInfo &info, int action);
 
 private:
 

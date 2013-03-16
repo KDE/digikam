@@ -43,7 +43,7 @@ class AlbumSelectComboBox : public TreeViewLineEditComboBox
 
 public:
 
-    explicit AlbumSelectComboBox(QWidget* parent = 0);
+    explicit AlbumSelectComboBox(QWidget* const parent = 0);
     ~AlbumSelectComboBox();
 
     /** Once after creation, call one of these three methods.
@@ -56,15 +56,18 @@ public:
     void setDefaultTagModel();
     void setModel(AbstractCheckableAlbumModel* model, AlbumFilterModel* filterModel = 0);
 
-    /** Enable checkboxes next to the items. Default: true */
+    /** Enable checkboxes next to the items. Default: true
+     */
     void setCheckable(bool checkable);
     bool isCheckable() const;
 
-    /** Enable closing when an item was activated (clicked). Default: false. */
+    /** Enable closing when an item was activated (clicked). Default: false.
+     */
     void setCloseOnActivate(bool close);
 
     /** If the box is checkable, enable showing a resume a la "3 Albums checked"
-     *  in the combo box text. Default: True */
+     *  in the combo box text. Default: True
+     */
     void setShowCheckStateSummary(bool show);
 
     /** Sets the text that is used to describe the state when no album is selected.
@@ -73,9 +76,12 @@ public:
     */
     void setNoSelectionText(const QString& text);
 
-    /** Returns the source model. Retrieve selection information from here. */
+    /** Returns the source model. Retrieve selection information from here.
+     */
     AbstractCheckableAlbumModel* model() const;
-    /** Return the filter model in use. */
+
+    /** Return the filter model in use.
+     */
     QSortFilterProxyModel* filterModel() const;
 
 public Q_SLOTS:
@@ -94,8 +100,8 @@ protected:
 
 private:
 
-    class AlbumSelectComboBoxPriv;
-    AlbumSelectComboBoxPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 // ------------------------------------------------------------------------------------
@@ -120,14 +126,14 @@ public:
      * not a plain QTreeView, as view.
      */
 
-    explicit AbstractAlbumTreeViewSelectComboBox(QWidget* parent = 0);
+    explicit AbstractAlbumTreeViewSelectComboBox(QWidget* const parent = 0);
 
     /**
      * Set a tree view created by you instead of creating a default view
      * (in the subclasses).
      * Only takes effect before calling setModel.
      */
-    void setTreeView(AbstractAlbumTreeView* treeView);
+    void setTreeView(AbstractAlbumTreeView* const treeView);
 
     /**
      * Enables a context menu which contains options to
@@ -141,6 +147,8 @@ protected:
     virtual void installView(QAbstractItemView* view = 0);
     virtual void sendViewportEventToView(QEvent* e);
 
+protected:
+
     AbstractAlbumTreeView* m_treeView;
 };
 
@@ -152,7 +160,7 @@ class AlbumTreeViewSelectComboBox : public AbstractAlbumTreeViewSelectComboBox
 
 public:
 
-    explicit AlbumTreeViewSelectComboBox(QWidget* parent = 0);
+    explicit AlbumTreeViewSelectComboBox(QWidget* const parent = 0);
 
     void setDefaultModel();
     void setModel(AlbumModel* model, CheckableAlbumFilterModel* filterModel = 0);
@@ -167,7 +175,7 @@ class TagTreeViewSelectComboBox : public AbstractAlbumTreeViewSelectComboBox
 
 public:
 
-    explicit TagTreeViewSelectComboBox(QWidget* parent = 0);
+    explicit TagTreeViewSelectComboBox(QWidget* const parent = 0);
 
     void setDefaultModel();
     void setModel(TagModel* model, TagPropertiesFilterModel* filteredModel = 0, CheckableAlbumFilterModel* filterModel = 0);

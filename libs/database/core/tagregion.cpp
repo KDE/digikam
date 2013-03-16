@@ -28,6 +28,7 @@
 #include <QDebug>
 #include <QXmlStreamReader>
 #include <QXmlStreamWriter>
+#include <KDebug>
 
 // Local includes
 
@@ -219,6 +220,38 @@ QRect TagRegion::relativeToAbsolute(const QRectF& region, const QSize& fullSize)
                   region.y() * fullSize.height(),
                   region.width() * fullSize.width(),
                   region.height() * fullSize.height()).toRect();
+}
+
+QRectF TagRegion::absoluteToRelative(const QRect& region, const QSize& fullSize)
+{
+    return QRectF((qreal)region.x() / (qreal)fullSize.width(),
+                  (qreal)region.y() / (qreal)fullSize.height(),
+                  (qreal)region.width() / (qreal)fullSize.width(),
+                  (qreal)region.height() / (qreal)fullSize.height());
+}
+
+QRect TagRegion::ajustToRotatedImg(const QRect& region, const QSize &fullSize, int rotation)
+{
+    int x,y,w,h;
+    region.getRect(&x,&y,&w,&h);
+    int newx,newy,neww,newh;
+
+    if(rotation == 0) // Rotate right 90 degress
+    {
+       newx = fullSize.height() - y -h;
+       newy = x;
+       neww = h;
+       newh = w;
+
+    }
+    else             // Rotate left 90 degress
+    {
+        newx = y;
+        newy = fullSize.width() - x -w;
+        neww = h;
+        newh = w;
+    }
+    return QRect(newx,newy,neww,newh);
 }
 
 QDebug operator<<(QDebug dbg, const TagRegion& r)

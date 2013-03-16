@@ -71,6 +71,8 @@ FileActionMngr::FileActionMngr()
 
     connect(d->fileWorker, SIGNAL(imageChangeFailed(QString, QStringList)),
             this, SIGNAL(signalImageChangeFailed(QString, QStringList)));
+
+    d->fileWorker->connect(SIGNAL(imageTransformFinished()),this,SLOT(slotImageTransformed()));
 }
 
 FileActionMngr::~FileActionMngr()
@@ -279,6 +281,11 @@ void FileActionMngr::transform(const QList<ImageInfo>& infos, KExiv2Iface::Rotat
 void FileActionMngr::copyAttributes(const ImageInfo& source, const QString& derivedPath)
 {
     copyAttributes(source, QStringList() << derivedPath);
+}
+
+void FileActionMngr::slotImageTransformed()
+{
+    emit signalImageTransformed();
 }
 
 void FileActionMngr::copyAttributes(const ImageInfo& source, const QStringList& derivedPaths)

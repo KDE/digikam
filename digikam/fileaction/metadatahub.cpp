@@ -50,6 +50,8 @@
 #include "imageattributeswatch.h"
 #include "tagscache.h"
 
+#include "facetagseditor.h"
+
 namespace Digikam
 {
 
@@ -116,6 +118,8 @@ public:
 
     QStringList                       tagList;
 
+    QMap<QString, QVariant>           faceTagsList;
+
     MetadataHub::Status               dateTimeStatus;
     MetadataHub::Status               titlesStatus;
     MetadataHub::Status               commentsStatus;
@@ -166,7 +170,7 @@ void MetadataHub::reset()
 void MetadataHub::load(const ImageInfo& info)
 {
     d->count++;
-
+    //kDebug() << "---------------------------------Load from ImageInfo ----------------";
     CaptionsMap commentMap;
     CaptionsMap titleMap;
     {
@@ -190,12 +194,34 @@ void MetadataHub::load(const ImageInfo& info)
 
     QList<int> tagIds = info.tagIds();
     loadTags(tagIds);
+
+    FaceTagsEditor editor;
+    //kDebug() << "Image Dimensions ----------------" << info.dimensions();
+
+    QList<DatabaseFace> facesList = editor.confirmedDatabaseFaces(info.id());
+    d->faceTagsList.clear();
+
+    if(!facesList.isEmpty())
+    {
+        foreach(DatabaseFace dface,facesList)
+        {
+            QString faceName = FaceTags::faceNameForTag(dface.tagId());
+            if(faceName.isEmpty())
+                continue;
+            QRect   temprect = dface.region().toRect();
+            QRectF  faceRect = TagRegion::absoluteToRelative(temprect,info.dimensions());
+
+            d->faceTagsList[faceName] = QVariant(faceRect);
+            //kDebug() << "-----------------------------------------------------New faces added" << faceName << " " << faceRect;
+        }
+
+    }
+
 }
 
 void MetadataHub::load(const DMetadata& metadata)
 {
     d->count++;
-
     CaptionsMap comments;
     CaptionsMap titles;
     QStringList keywords;
@@ -255,6 +281,7 @@ void MetadataHub::load(const DMetadata& metadata)
 
 bool MetadataHub::load(const QString& filePath, const MetadataSettingsContainer& settings)
 {
+
     DMetadata metadata;
     metadata.setSettings(settings);
     bool success = metadata.load(filePath);
@@ -593,6 +620,7 @@ bool MetadataHub::write(DMetadata& metadata, WriteMode writeMode, const Metadata
     bool saveColorLabel = (settings.saveColorLabel && d->colorLabelStatus == MetadataAvailable);
     bool saveRating     = (settings.saveRating     && d->ratingStatus     == MetadataAvailable);
     bool saveTemplate   = (settings.saveTemplate   && d->templateStatus   == MetadataAvailable);
+    bool saveFaceTags   = settings.saveFaceTags;
     bool saveTags       = false;
 
     if (settings.saveTags)
@@ -687,7 +715,10 @@ bool MetadataHub::write(DMetadata& metadata, WriteMode writeMode, const Metadata
             dirty |= metadata.setMetadataTemplate(d->metadataTemplate);
         }
     }
-
+    if  (saveFaceTags) /// TODO: Figure out how to add faceTagsChanged option
+    {
+        metadata.setImageFacesMap(d->faceTagsList);
+    }
     if (saveTags && (writeAllFields || d->tagsChanged))
     {
         // Store tag paths as Iptc keywords tags.
@@ -752,6 +783,7 @@ bool MetadataHub::write(DMetadata& metadata, WriteMode writeMode, const Metadata
 bool MetadataHub::write(const QString& filePath, WriteMode writeMode, const MetadataSettingsContainer& settings)
 {
     applyChangeNotifications();
+    kDebug() << "------------MetadataHub::write(const QString& filePath, WriteMode writeMode, const MetadataSettingsContainer& settings)------------";
 
     // if no DMetadata object is needed at all, don't construct one -
     // important optimization if writing to file is turned off in setup!

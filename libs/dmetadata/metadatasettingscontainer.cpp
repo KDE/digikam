@@ -44,6 +44,7 @@ MetadataSettingsContainer::MetadataSettingsContainer()
     saveColorLabel        = false;
     saveRating            = false;
     saveTemplate          = false;
+    saveFaceTags          = false;
     saveTags              = false;
     writeRawFiles         = false;
     useXMPSidecar4Reading = false;
@@ -59,6 +60,7 @@ void MetadataSettingsContainer::readFromConfig(KConfigGroup& group)
 
     saveTags              = group.readEntry("Save Tags",                   false);
     saveTemplate          = group.readEntry("Save Template",               false);
+    saveFaceTags          = group.readEntry("Save FaceTags",               false);
 
     saveComments          = group.readEntry("Save EXIF Comments",          false);
     saveDateTime          = group.readEntry("Save Date Time",              false);
@@ -99,6 +101,7 @@ void MetadataSettingsContainer::writeToConfig(KConfigGroup& group) const
 
     group.writeEntry("Save Tags",                   saveTags);
     group.writeEntry("Save Template",               saveTemplate);
+    group.writeEntry("Save FaceTags",               saveFaceTags);
 
     group.writeEntry("Save EXIF Comments",          saveComments);
     group.writeEntry("Save Date Time",              saveDateTime);

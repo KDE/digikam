@@ -38,13 +38,14 @@
 #include "jpegutils.h"
 #include "dimg.h"
 
+#include "facetagseditor.h"
+
 namespace Digikam
 {
 
 void FileActionMngrFileWorker::writeOrientationToFiles(FileActionImageInfoList infos, int orientation)
 {
     QStringList failedItems;
-
     foreach(const ImageInfo& info, infos)
     {
         QString path                  = info.filePath();
@@ -171,6 +172,7 @@ void FileActionMngrFileWorker::transform(FileActionImageInfoList infos, int acti
                 }
             }
         }
+        ajustFaceRectangles(info,action);
 
         KExiv2Iface::RotationMatrix matrix;
         matrix *= currentOrientation;
@@ -265,6 +267,54 @@ void FileActionMngrFileWorker::transform(FileActionImageInfoList infos, int acti
 
     ScanController::instance()->resumeCollectionScan();
     infos.finishedWriting();
+
+    emit imageTransformFinished();
 }
 
+void FileActionMngrFileWorker::ajustFaceRectangles(const ImageInfo& info,
+                                                   int action)
+{
+    /**
+     *  Get all faces from database and rotate them
+     */
+    QList<DatabaseFace> facesList = FaceTagsEditor().databaseFaces(info.id());
+
+    QMap<QString, QRect> ajustedFaces;
+
+    foreach(DatabaseFace dface, facesList)
+    {
+        QString name = FaceTags::faceNameForTag(dface.tagId());
+
+        QRect oldrect = dface.region().toRect();
+        if(action == 5)
+        {
+            QRect newRect = TagRegion::ajustToRotatedImg(oldrect,info.dimensions(),0);
+            ajustedFaces[name] = newRect;
+
+        }
+        if(action == 7)
+        {
+            QRect newRect = TagRegion::ajustToRotatedImg(oldrect,info.dimensions(),1);
+            ajustedFaces[name] = newRect;
+
+        }
+
+    }
+    /**
+     *  Delete all old faces and add rotated ones
+     */
+    FaceTagsEditor().removeAllFaces(info.id());
+
+    QMap<QString,QRect>::ConstIterator it = ajustedFaces.constBegin();
+    for( ;it!=ajustedFaces.constEnd();++it)
+    {
+        int tagId = FaceTags::getOrCreateTagForPerson(it.key());
+        if (!tagId)
+        {
+            kDebug() << "Failed to create a person tag for name" << it.key();
+        }
+        TagRegion region(it.value());
+        FaceTagsEditor().add(info.id(), tagId, region, false);
+    }
+}
 } // namespace Digikam

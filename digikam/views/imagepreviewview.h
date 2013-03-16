@@ -112,6 +112,12 @@ private Q_SLOTS:
     void slotRotateRight();
     void slotDeleteItem();
 
+    /**
+     * @brief slotUpdateTagsView - after applying some transformation on
+     *                             image, update tags position
+     */
+    void slotUpdateTagsView();
+
 private:
 
     class Private;

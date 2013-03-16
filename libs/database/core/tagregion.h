@@ -102,8 +102,23 @@ public:
     static QRect mapToOriginalSize(const DImg& reducedSizeImage, const QRect& reducedSizeDetail);
     static QRect mapFromOriginalSize(const DImg& reducedSizeImage, const QRect& fullSizeDetail);
 
-    /// Takes a relative region and a full size and returns the absolute region
+    /**
+     * Takes a relative region and a full size and returns the absolute region
+     */
     static QRect relativeToAbsolute(const QRectF& region, const QSize& fullSize);
+
+    /**
+     *  Takes absolute region and full size to return the original relative region
+     * Used to write back rectangles into image's XMP. see MetadataHub::write
+     */
+    static QRectF absoluteToRelative(const QRect& region, const QSize& fullSize);
+
+    /** When images is rotated, rectangles are off-position, ajust them using
+     *  image's current size and rotation(left,right supported only)
+     */
+    static QRect ajustToRotatedImg(const QRect& region, const QSize& fullSize,
+                                    int rotation);
+
 
 protected:
 

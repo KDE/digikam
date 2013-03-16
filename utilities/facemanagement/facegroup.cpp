@@ -176,6 +176,7 @@ public:
         view                 = 0;
         autoSuggest          = false;
         showOnHover          = false;
+        editLock             = false;
         manuallyAddWrapItem  = 0;
         manuallyAddedItem    = 0;
         visibilityController = 0;
@@ -199,6 +200,7 @@ public:
     ImageInfo                  info;
     bool                       autoSuggest;
     bool                       showOnHover;
+    bool                       editLock;
 
     QList<FaceItem*>           items;
 
@@ -349,7 +351,6 @@ void FaceGroup::setInfo(const ImageInfo& info)
     clear();
 
     d->info = info;
-
     if (d->visibilityController->shallBeShown())
     {
         load();
@@ -423,6 +424,11 @@ RegionFrameItem* FaceGroup::closestItem(const QPointF& p, qreal* const manhattan
     return closestItem;
 }
 
+void FaceGroup::setEditLock(bool var)
+{
+    d->editLock = var;
+}
+
 QList<QGraphicsItem*> FaceGroup::Private::hotItems(const QPointF& scenePos)
 {
     if (!q->hasVisibleItems())
@@ -455,7 +461,7 @@ bool FaceGroup::acceptsMouseClick(const QPointF& scenePos)
 
 void FaceGroup::itemHoverMoveEvent(QGraphicsSceneHoverEvent* e)
 {
-    if (d->showOnHover && !isVisible())
+    if (d->showOnHover && !isVisible() && !d->editLock)
     {
         qreal distance;
         RegionFrameItem* const item = closestItem(e->scenePos(), &distance);
@@ -499,7 +505,7 @@ void FaceGroup::itemHoverEnterEvent(QGraphicsSceneHoverEvent*)
 
 void FaceGroup::leaveEvent(QEvent*)
 {
-    if (d->showOnHover && !isVisible())
+    if (d->showOnHover && !isVisible() && !d->editLock)
     {
         setVisibleItem(0);
     }
@@ -525,7 +531,6 @@ FaceItem* FaceGroup::Private::createItem(const DatabaseFace& face)
 FaceItem* FaceGroup::Private::addItem(const DatabaseFace& face)
 {
     FaceItem* const item = createItem(face);
-
     // for identification, use index in our list
     AssignNameWidget* const assignWidget = createAssignNameWidget(face, items.size());
     item->setHudWidget(assignWidget);
@@ -601,7 +606,7 @@ void FaceGroup::load()
     {
         return;
     }
-
+    kDebug() << "FaceGroup ----- Preparing to load...";
     d->state = LoadingFaces;
 
     if (d->info.isNull())
@@ -615,6 +620,7 @@ void FaceGroup::load()
     foreach(const DatabaseFace& face, faces)
     {
         d->addItem(face);
+        kDebug() << "FaceGroup LOAD  New faces added -----------------" << face.region().toRect();
     }
 
     d->state = FacesLoaded;
@@ -790,9 +796,15 @@ void FaceGroup::applyItemGeometryChanges()
 
         if (item->face().region() != currentRegion)
         {
-            d->editPipeline.editRegion(d->info, d->view->previewItem()->image(), item->face(), currentRegion);
+            /**
+             * This line add garbage tags to database when image is rotated
+             * Need to figure out were this line is used and how
+             */
+            //d->editPipeline.editRegion(d->info, d->view->previewItem()->image(), item->face(), currentRegion);
+
         }
     }
+
 }
 
 /*

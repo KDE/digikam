@@ -88,6 +88,7 @@ public:
         saveColorLabelBox(0),
         saveDateTimeBox(0),
         saveTemplateBox(0),
+        saveFaceTags(0),
         writeRawFilesBox(0),
         writeXMPSidecarBox(0),
         readXMPSidecarBox(0),
@@ -122,6 +123,7 @@ public:
     QCheckBox*     saveColorLabelBox;
     QCheckBox*     saveDateTimeBox;
     QCheckBox*     saveTemplateBox;
+    QCheckBox*     saveFaceTags;
 
     QCheckBox*     writeRawFilesBox;
     QCheckBox*     writeXMPSidecarBox;
@@ -209,6 +211,10 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
     d->saveTemplateBox->setWhatsThis(i18nc("@info:whatsthis", "Turn on this option to store the metadata "
                                            "template in the XMP and the IPTC tags. "
                                            "You can set template values to Template setup page."));
+    d->saveFaceTags = new QCheckBox;
+    d->saveFaceTags->setText(i18nc("@option:check", "Face Tags(including face rectangles)"));
+    d->saveTemplateBox->setWhatsThis(i18nc("@info:whatsthis", "Turn on this option to store face tags"
+                                           "with face rectangles in the XMP tags."));
 
     fieldsLayout->addWidget(fieldsIconLabel,       0, 0);
     fieldsLayout->addWidget(fieldsLabel,           0, 1);
@@ -219,6 +225,7 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
     fieldsLayout->addWidget(d->saveColorLabelBox,  5, 0, 1, 3);
     fieldsLayout->addWidget(d->saveDateTimeBox,    6, 0, 1, 3);
     fieldsLayout->addWidget(d->saveTemplateBox,    7, 0, 1, 3);
+    fieldsLayout->addWidget(d->saveFaceTags,       8 ,0, 1, 3);
     fieldsLayout->setColumnStretch(2, 1);
     d->fieldsGroup->setLayout(fieldsLayout);
 
@@ -604,6 +611,7 @@ void SetupMetadata::applySettings()
     set.saveRating            = d->saveRatingBox->isChecked();
     set.saveTags              = d->saveTagsBox->isChecked();
     set.saveTemplate          = d->saveTemplateBox->isChecked();
+    set.saveFaceTags          = d->saveFaceTags->isChecked();
 
     set.writeRawFiles         = d->writeRawFilesBox->isChecked();
     set.useXMPSidecar4Reading = d->readXMPSidecarBox->isChecked();
@@ -679,6 +687,7 @@ void SetupMetadata::readSettings()
     d->saveColorLabelBox->setChecked(set.saveColorLabel);
     d->saveDateTimeBox->setChecked(set.saveDateTime);
     d->saveTemplateBox->setChecked(set.saveTemplate);
+    d->saveFaceTags->setChecked(set.saveFaceTags);
 
     d->writeRawFilesBox->setChecked(set.writeRawFiles);
     d->readXMPSidecarBox->setChecked(set.useXMPSidecar4Reading);
