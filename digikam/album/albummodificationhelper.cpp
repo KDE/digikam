@@ -48,10 +48,10 @@
 namespace Digikam
 {
 
-class AlbumModificationHelper::AlbumModificationHelperPriv
+class AlbumModificationHelper::Private
 {
 public:
-    AlbumModificationHelperPriv() :
+    Private() :
         dialogParent(0)
     {
     }
@@ -59,8 +59,8 @@ public:
     QWidget* dialogParent;
 };
 
-AlbumModificationHelper::AlbumModificationHelper(QObject* parent, QWidget* dialogParent)
-    : QObject(parent), d(new AlbumModificationHelperPriv)
+AlbumModificationHelper::AlbumModificationHelper(QObject* const parent, QWidget* const dialogParent)
+    : QObject(parent), d(new Private)
 {
     d->dialogParent = dialogParent;
 }
@@ -70,18 +70,20 @@ AlbumModificationHelper::~AlbumModificationHelper()
     delete d;
 }
 
-void AlbumModificationHelper::bindAlbum(QAction* action, PAlbum* album) const
+void AlbumModificationHelper::bindAlbum(QAction* const action, PAlbum* const album) const
 {
     action->setData(QVariant::fromValue(AlbumPointer<PAlbum>(album)));
 }
 
-PAlbum* AlbumModificationHelper::boundAlbum(QObject* sender) const
+PAlbum* AlbumModificationHelper::boundAlbum(QObject* const sender) const
 {
-    QAction* action;
+    QAction* action = 0;
+
     if ( (action = qobject_cast<QAction*>(sender)) )
     {
         return action->data().value<AlbumPointer<PAlbum> >();
     }
+
     return 0;
 }
 
@@ -106,8 +108,9 @@ PAlbum* AlbumModificationHelper::slotAlbumNew(PAlbum* parent)
         return 0;
     }
 
-    /*
+/*
     QDir libraryDir(settings->getAlbumLibraryPath());
+
     if(!libraryDir.exists())
     {
         KMessageBox::error(0,
@@ -117,7 +120,7 @@ PAlbum* AlbumModificationHelper::slotAlbumNew(PAlbum* parent)
                                 "library."));
         return;
     }
-    */
+*/
 
     // if we create an album under root, need to supply the album root path.
     QString albumRootPath;
@@ -236,7 +239,7 @@ void AlbumModificationHelper::slotAlbumRename(PAlbum* album)
     }
 }
 
-void AlbumModificationHelper::addAlbumChildrenToList(KUrl::List& list, Album* album)
+void AlbumModificationHelper::addAlbumChildrenToList(KUrl::List& list, Album* const album)
 {
     // simple recursive helper function
     if (album)
