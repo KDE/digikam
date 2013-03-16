@@ -61,11 +61,11 @@ public:
 
     virtual QString getTitle() const;
 
-    virtual QVariant data(const QModelIndex& sourceIndex, const int role) const;
+    virtual QVariant data(TableViewModel::Item* const item, const int role) const;
 
-    virtual bool paint(QPainter* const painter, const QStyleOptionViewItem& option, const QModelIndex& sourceIndex) const;
+    virtual bool paint(QPainter*const painter, const QStyleOptionViewItem& option, TableViewModel::Item* const item) const;
 
-    virtual QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& sourceIndex) const;
+    virtual QSize sizeHint(const QStyleOptionViewItem& option, TableViewModel::Item* const item) const;
 
     virtual void updateThumbnailSize();
 

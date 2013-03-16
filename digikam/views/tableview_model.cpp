@@ -180,16 +180,15 @@ QModelIndex TableViewModel::toImageFilterModelIndex(const QModelIndex& i) const
 
 QVariant TableViewModel::data(const QModelIndex& i, int role) const
 {
-    const int columnNumber = i.column();
-
-    QModelIndex sourceIndex = toImageFilterModelIndex(i);
-    if (!sourceIndex.isValid())
+    Item* const item = itemFromIndex(i);
+    if (!item)
     {
         return QVariant();
     }
 
+    const int columnNumber = i.column();
     TableViewColumn* const myColumn = d->columnObjects.at(columnNumber);
-    return myColumn->data(sourceIndex, role);
+    return myColumn->data(item, role);
 }
 
 QModelIndex TableViewModel::index(int row, int column, const QModelIndex& parent) const

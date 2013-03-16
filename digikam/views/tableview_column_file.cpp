@@ -25,7 +25,6 @@
 // Qt includes
 
 #include <QFormLayout>
-#include <QModelIndex>
 
 // KDE includes
 
@@ -94,12 +93,12 @@ TableViewColumn::ColumnFlags ColumnFileProperties::getColumnFlags() const
     return ColumnNoFlags;
 }
 
-QVariant ColumnFileProperties::data(const QModelIndex& sourceIndex, const int role) const
+QVariant ColumnFileProperties::data(TableViewModel::Item* const item, const int role) const
 {
     if ( (role != Qt::DisplayRole) &&
          (role != Qt::TextAlignmentRole) )
     {
-        return sourceIndex.data(role);
+        return item->imageFilterModelIndex.data(role);
     }
 
     if (role==Qt::TextAlignmentRole)
@@ -110,11 +109,11 @@ QVariant ColumnFileProperties::data(const QModelIndex& sourceIndex, const int ro
                 return QVariant(Qt::Alignment(Qt::AlignRight | Qt::AlignVCenter));
 
             default:
-                return sourceIndex.data(role);
+                return item->imageFilterModelIndex.data(role);
         }
     }
 
-    const ImageInfo info = getImageInfo(sourceIndex);
+    const ImageInfo info = s->tableViewModel->infoFromItem(item);
 
     switch (subColumn)
     {
@@ -144,10 +143,10 @@ QVariant ColumnFileProperties::data(const QModelIndex& sourceIndex, const int ro
     return QVariant();
 }
 
-TableViewColumn::ColumnCompareResult ColumnFileProperties::compare(const QModelIndex& sourceA, const QModelIndex& sourceB) const
+TableViewColumn::ColumnCompareResult ColumnFileProperties::compare(TableViewModel::Item* const itemA, TableViewModel::Item* const itemB) const
 {
-    const ImageInfo infoA = getImageInfo(sourceA);
-    const ImageInfo infoB = getImageInfo(sourceB);
+    const ImageInfo infoA = s->tableViewModel->infoFromItem(itemA);
+    const ImageInfo infoB = s->tableViewModel->infoFromItem(itemB);
 
     if (subColumn == SubColumnSize)
     {

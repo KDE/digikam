@@ -74,9 +74,9 @@ public:
 
     virtual ColumnFlags getColumnFlags() const;
 
-    virtual QVariant data(const QModelIndex& sourceIndex, const int role) const;
+    virtual QVariant data(TableViewModel::Item* const item, const int role) const;
 
-    virtual ColumnCompareResult compare(const QModelIndex& sourceA, const QModelIndex& sourceB) const;
+    virtual ColumnCompareResult compare(TableViewModel::Item* const itemA, TableViewModel::Item* const itemB) const;
 };
 
 } /* namespace TableViewColumns */

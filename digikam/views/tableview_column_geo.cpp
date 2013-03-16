@@ -134,12 +134,12 @@ TableViewColumn::ColumnFlags ColumnGeoProperties::getColumnFlags() const
 
     return flags;
 }
-QVariant ColumnGeoProperties::data(const QModelIndex& sourceIndex, const int role) const
+QVariant ColumnGeoProperties::data(TableViewModel::Item* const item, const int role) const
 {
     if ( (role != Qt::DisplayRole) &&
          (role != Qt::TextAlignmentRole) )
     {
-        return sourceIndex.data(role);
+        return item->imageFilterModelIndex.data(role);
     }
 
     if (role==Qt::TextAlignmentRole)
@@ -150,11 +150,11 @@ QVariant ColumnGeoProperties::data(const QModelIndex& sourceIndex, const int rol
                 return QVariant(Qt::Alignment(Qt::AlignRight | Qt::AlignVCenter));
 
             default:
-                return sourceIndex.data(role);
+                return item->imageFilterModelIndex.data(role);
         }
     }
 
-    const ImageInfo info = getImageInfo(sourceIndex);
+    const ImageInfo info = s->tableViewModel->infoFromItem(item);
 
     switch (subColumn)
     {
@@ -205,10 +205,11 @@ QVariant ColumnGeoProperties::data(const QModelIndex& sourceIndex, const int rol
     return QVariant();
 }
 
-TableViewColumn::ColumnCompareResult ColumnGeoProperties::compare(const QModelIndex& sourceA, const QModelIndex& sourceB) const
+TableViewColumn::ColumnCompareResult ColumnGeoProperties::compare(
+    TableViewModel::Item* const itemA, TableViewModel::Item* const itemB) const
 {
-    const ImageInfo infoA = getImageInfo(sourceA);
-    const ImageInfo infoB = getImageInfo(sourceB);
+    const ImageInfo infoA = s->tableViewModel->infoFromItem(itemA);
+    const ImageInfo infoB = s->tableViewModel->infoFromItem(itemB);
 
     if (subColumn == SubColumnAltitude)
     {

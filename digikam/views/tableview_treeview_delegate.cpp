@@ -85,9 +85,9 @@ void TableViewItemDelegate::paint(QPainter* painter, const QStyleOptionViewItem&
     if (!useDefaultPainter)
     {
         const QModelIndex tableViewIndex = s->sortModel->mapToSource(sortedIndex);
-        const QModelIndex sourceIndex = s->tableViewModel->toImageFilterModelIndex(tableViewIndex);
+        TableViewModel::Item* const item = s->tableViewModel->itemFromIndex(tableViewIndex);
 
-        useDefaultPainter = !columnObject->paint(painter, option, sourceIndex);
+        useDefaultPainter = !columnObject->paint(painter, option, item);
     }
 
     if (useDefaultPainter)
@@ -109,7 +109,7 @@ QSize TableViewItemDelegate::sizeHint(const QStyleOptionViewItem& option, const 
     }
     TableViewColumn* const columnObject = s->tableViewModel->getColumnObject(columnIndex);
     const QModelIndex tableViewIndex = s->sortModel->mapToSource(sortedIndex);
-    const QModelIndex sourceIndex = s->tableViewModel->toImageFilterModelIndex(tableViewIndex);
+    TableViewModel::Item* const item = s->tableViewModel->itemFromIndex(tableViewIndex);
 
     /// we have to take the maximum of all columns for the height
     /// @todo somehow cache this calculation
@@ -119,14 +119,14 @@ QSize TableViewItemDelegate::sizeHint(const QStyleOptionViewItem& option, const 
     for (int i=0; i<columnCount; ++i)
     {
         TableViewColumn* const iColumnObject = s->tableViewModel->getColumnObject(i);
-        const QSize iColumnSize = iColumnObject->sizeHint(option, sourceIndex);
+        const QSize iColumnSize = iColumnObject->sizeHint(option, item);
         if (iColumnSize.isValid())
         {
             maxHeight = qMax(maxHeight, iColumnSize.height());
         }
     }
 
-    QSize columnSize = columnObject->sizeHint(option, sourceIndex);
+    QSize columnSize = columnObject->sizeHint(option, item);
     if (!columnSize.isValid())
     {
         columnSize = QItemDelegate::sizeHint(option, sortedIndex);

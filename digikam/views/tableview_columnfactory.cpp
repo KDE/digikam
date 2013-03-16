@@ -24,8 +24,6 @@
 
 // Qt includes
 
-#include <QModelIndex>
-
 // KDE includes
 
 #include <kdebug.h>
@@ -106,10 +104,11 @@ TableViewColumn* TableViewColumnFactory::getColumn(const Digikam::TableViewColum
     return 0;
 }
 
-QVariant TableViewColumn::data(const QModelIndex& sourceIndex, const int role) const
+QVariant TableViewColumn::data(TableViewModel::Item* const item, const int role) const
 {
-    Q_UNUSED(sourceIndex)
+    Q_UNUSED(item)
     Q_UNUSED(role)
+
     return QVariant();
 }
 
@@ -127,19 +126,19 @@ QList<TableViewColumnDescription> TableViewColumnFactory::getColumnDescriptionLi
     return descriptionList;
 }
 
-bool TableViewColumn::paint(QPainter*const painter, const QStyleOptionViewItem& option, const QModelIndex& sourceIndex) const
+bool TableViewColumn::paint(QPainter* const painter, const QStyleOptionViewItem& option, TableViewModel::Item* const item) const
 {
     Q_UNUSED(painter)
     Q_UNUSED(option)
-    Q_UNUSED(sourceIndex)
+    Q_UNUSED(item)
 
     return false;
 }
 
-QSize TableViewColumn::sizeHint(const QStyleOptionViewItem& option, const QModelIndex& sourceIndex) const
+QSize TableViewColumn::sizeHint(const QStyleOptionViewItem& option, TableViewModel::Item* const item) const
 {
     Q_UNUSED(option)
-    Q_UNUSED(sourceIndex)
+    Q_UNUSED(item)
 
     return QSize();
 }
@@ -253,11 +252,6 @@ TableViewColumn::ColumnFlags TableViewColumn::getColumnFlags() const
     return ColumnNoFlags;
 }
 
-ImageInfo TableViewColumn::getImageInfo(const QModelIndex& sourceIndex) const
-{
-    return s->imageFilterModel->imageInfo(sourceIndex);
-}
-
 TableViewColumnConfiguration TableViewColumn::getConfiguration() const
 {
     return configuration;
@@ -267,10 +261,10 @@ TableViewColumnConfiguration TableViewColumn::getConfiguration() const
  * This function should never be called, because subclasses have to do the comparison on their own. But it can not be
  * pure, since then every subclass which does not do custom comparison would have to implement an empty stub.
  */
-TableViewColumn::ColumnCompareResult TableViewColumn::compare(const QModelIndex& sourceA, const QModelIndex& sourceB) const
+TableViewColumn::ColumnCompareResult TableViewColumn::compare(TableViewModel::Item* const itemA, TableViewModel::Item* const itemB) const
 {
-    Q_UNUSED(sourceA)
-    Q_UNUSED(sourceB)
+    Q_UNUSED(itemA)
+    Q_UNUSED(itemB)
 
     kWarning()<<"Unimplemented custom comparison. Make sure getColumnFlags() does not return ColumnCustomSorting.";
 

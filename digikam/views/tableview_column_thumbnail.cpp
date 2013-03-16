@@ -80,23 +80,23 @@ QString ColumnThumbnail::getTitle() const
     return i18n("Thumbnail");
 }
 
-QVariant ColumnThumbnail::data(const QModelIndex& sourceIndex, const int role) const
+QVariant ColumnThumbnail::data(TableViewModel::Item* const item, const int role) const
 {
-    Q_UNUSED(sourceIndex)
+    Q_UNUSED(item)
     Q_UNUSED(role)
 
     // we do not return any data, but paint(...) something
     return QVariant();
 }
 
-bool ColumnThumbnail::paint(QPainter* const painter, const QStyleOptionViewItem& option, const QModelIndex& sourceIndex) const
+bool ColumnThumbnail::paint(QPainter* const painter, const QStyleOptionViewItem& option, TableViewModel::Item* const item) const
 {
     if (option.state & QStyle::State_Selected)
     {
         painter->fillRect(option.rect, option.palette.highlight());
     }
 
-    const ImageInfo info = getImageInfo(sourceIndex);
+    const ImageInfo info = s->tableViewModel->infoFromItem(item);
     if (!info.isNull())
     {
         const QSize imageSize = info.dimensions();
@@ -137,10 +137,10 @@ bool ColumnThumbnail::paint(QPainter* const painter, const QStyleOptionViewItem&
     return false;
 }
 
-QSize ColumnThumbnail::sizeHint(const QStyleOptionViewItem& option, const QModelIndex& sourceIndex) const
+QSize ColumnThumbnail::sizeHint(const QStyleOptionViewItem& option, TableViewModel::Item* const item) const
 {
     Q_UNUSED(option)
-    Q_UNUSED(sourceIndex)
+    Q_UNUSED(item)
 
     /// @todo On portrait pictures, the borders are too close. There should be a gap. Is this setting okay?
     const int thumbnailSizeWithBorder = m_thumbnailSize+ThumbnailBorder;

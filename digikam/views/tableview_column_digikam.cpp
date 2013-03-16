@@ -25,7 +25,6 @@
 // Qt includes
 
 #include <QFormLayout>
-#include <QModelIndex>
 
 // KDE includes
 
@@ -134,13 +133,13 @@ TableViewColumn::ColumnFlags ColumnDigikamProperties::getColumnFlags() const
     return flags;
 }
 
-QVariant ColumnDigikamProperties::data(const QModelIndex& sourceIndex, const int role) const
+QVariant ColumnDigikamProperties::data(TableViewModel::Item* const item, const int role) const
 {
     if ( (role != Qt::DisplayRole) &&
          (role != Qt::TextAlignmentRole) &&
          (role != Qt::ForegroundRole ) )
     {
-        return sourceIndex.data(role);
+        return item->imageFilterModelIndex.data(role);
     }
 
     if (role==Qt::TextAlignmentRole)
@@ -151,7 +150,7 @@ QVariant ColumnDigikamProperties::data(const QModelIndex& sourceIndex, const int
             return QVariant(Qt::Alignment(Qt::AlignRight | Qt::AlignVCenter));
 
         default:
-            return sourceIndex.data(role);
+            return item->imageFilterModelIndex.data(role);
         }
     }
 
@@ -161,7 +160,7 @@ QVariant ColumnDigikamProperties::data(const QModelIndex& sourceIndex, const int
         {
         case SubColumnPickLabel:
             {
-                const ImageInfo info = getImageInfo(sourceIndex);
+                const ImageInfo info = s->tableViewModel->infoFromItem(item);
                 const PickLabel pickLabel = PickLabel(info.pickLabel());
 
                 QColor labelColor;
@@ -189,7 +188,7 @@ QVariant ColumnDigikamProperties::data(const QModelIndex& sourceIndex, const int
                         break;
                 }
 
-                QBrush labelBrush = sourceIndex.data(role).value<QBrush>();
+                QBrush labelBrush = item->imageFilterModelIndex.data(role).value<QBrush>();
                 labelBrush.setColor(labelColor);
 
                 return QVariant::fromValue(labelBrush);
@@ -197,7 +196,7 @@ QVariant ColumnDigikamProperties::data(const QModelIndex& sourceIndex, const int
 
         case SubColumnColorLabel:
             {
-                const ImageInfo info = getImageInfo(sourceIndex);
+                const ImageInfo info = s->tableViewModel->infoFromItem(item);
                 const ColorLabel colorLabel = ColorLabel(info.colorLabel());
 
                 QColor labelColor;
@@ -247,17 +246,17 @@ QVariant ColumnDigikamProperties::data(const QModelIndex& sourceIndex, const int
                         break;
                 }
 
-                QBrush labelBrush = sourceIndex.data(role).value<QBrush>();
+                QBrush labelBrush = item->imageFilterModelIndex.data(role).value<QBrush>();
                 labelBrush.setColor(labelColor);
 
                 return QVariant::fromValue(labelBrush);
             }
         default:
-            return sourceIndex.data(role);
+            return item->imageFilterModelIndex.data(role);
         }
     }
 
-    const ImageInfo info = getImageInfo(sourceIndex);
+    const ImageInfo info = s->tableViewModel->infoFromItem(item);
 
     /// @todo Also display the pick label icon?
     /// @todo Make display of text/icon configurable.
@@ -377,10 +376,11 @@ QVariant ColumnDigikamProperties::data(const QModelIndex& sourceIndex, const int
     return QVariant();
 }
 
-TableViewColumn::ColumnCompareResult ColumnDigikamProperties::compare(const QModelIndex& sourceA, const QModelIndex& sourceB) const
+TableViewColumn::ColumnCompareResult ColumnDigikamProperties::compare(
+    TableViewModel::Item* const itemA, TableViewModel::Item* const itemB) const
 {
-    const ImageInfo infoA = getImageInfo(sourceA);
-    const ImageInfo infoB = getImageInfo(sourceB);
+    const ImageInfo infoA = s->tableViewModel->infoFromItem(itemA);
+    const ImageInfo infoB = s->tableViewModel->infoFromItem(itemB);
 
     switch (subColumn)
     {

@@ -144,12 +144,12 @@ TableViewColumn::ColumnFlags ColumnItemProperties::getColumnFlags() const
     return flags;
 }
 
-QVariant ColumnItemProperties::data(const QModelIndex& sourceIndex, const int role) const
+QVariant ColumnItemProperties::data(TableViewModel::Item* const item, const int role) const
 {
     if ( (role != Qt::DisplayRole) &&
          (role != Qt::TextAlignmentRole) )
     {
-        return sourceIndex.data(role);
+        return item->imageFilterModelIndex.data(role);
     }
 
     if (role==Qt::TextAlignmentRole)
@@ -162,11 +162,11 @@ QVariant ColumnItemProperties::data(const QModelIndex& sourceIndex, const int ro
                 return QVariant(Qt::Alignment(Qt::AlignRight | Qt::AlignVCenter));
 
             default:
-                return sourceIndex.data(role);
+                return item->imageFilterModelIndex.data(role);
         }
     }
 
-    const ImageInfo info = getImageInfo(sourceIndex);
+    const ImageInfo info = s->tableViewModel->infoFromItem(item);
 
     switch (subColumn)
     {
@@ -229,10 +229,11 @@ QVariant ColumnItemProperties::data(const QModelIndex& sourceIndex, const int ro
     return QVariant();
 }
 
-TableViewColumn::ColumnCompareResult ColumnItemProperties::compare(const QModelIndex& sourceA, const QModelIndex& sourceB) const
+TableViewColumn::ColumnCompareResult ColumnItemProperties::compare(
+    TableViewModel::Item* const itemA, TableViewModel::Item* const itemB) const
 {
-    const ImageInfo infoA = getImageInfo(sourceA);
-    const ImageInfo infoB = getImageInfo(sourceB);
+    const ImageInfo infoA = s->tableViewModel->infoFromItem(itemA);
+    const ImageInfo infoB = s->tableViewModel->infoFromItem(itemB);
 
     switch (subColumn)
     {

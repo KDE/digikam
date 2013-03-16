@@ -91,16 +91,18 @@ bool TableViewSortFilterProxyModel::lessThan(const QModelIndex& tableViewIndexLe
         return QSortFilterProxyModel::lessThan(tableViewIndexLeft, tableViewIndexRight);
     }
 
-    const QModelIndex sourceIndexLeft = s->tableViewModel->toImageFilterModelIndex(tableViewIndexLeft);
-    const QModelIndex sourceIndexRight = s->tableViewModel->toImageFilterModelIndex(tableViewIndexRight);
+    TableViewModel::Item* const itemA = s->tableViewModel->itemFromIndex(tableViewIndexLeft);
+    TableViewModel::Item* const itemB = s->tableViewModel->itemFromIndex(tableViewIndexRight);
+    const ImageInfo infoA = s->tableViewModel->infoFromItem(itemA);
+    const ImageInfo infoB = s->tableViewModel->infoFromItem(itemB);
 
-    TableViewColumn::ColumnCompareResult cmpResult = columnObject->compare(sourceIndexLeft, sourceIndexRight);
+    TableViewColumn::ColumnCompareResult cmpResult = columnObject->compare(itemA, itemB);
 
     if (cmpResult==TableViewColumn::CmpEqual)
     {
         // compared items are equal, use the image id to enforce a repeatable sorting
-        const qlonglong imageIdLeft = s->imageFilterModel->imageId(sourceIndexLeft);
-        const qlonglong imageIdRight = s->imageFilterModel->imageId(sourceIndexRight);
+        const qlonglong imageIdLeft = itemA->imageId;
+        const qlonglong imageIdRight = itemB->imageId;
 
         return imageIdLeft < imageIdRight;
     }

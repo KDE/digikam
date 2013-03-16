@@ -38,6 +38,7 @@
 // local includes
 
 // #include "imagefiltermodel.h"
+#include "tableview_model.h"
 #include "tableview_shared.h"
 
 class QModelIndex;
@@ -190,13 +191,11 @@ public:
     virtual ColumnFlags getColumnFlags() const;
     virtual QString getTitle() const;
 
-    virtual QVariant data(const QModelIndex& sourceIndex, const int role) const;
-    virtual ColumnCompareResult compare(const QModelIndex& sourceA, const QModelIndex& sourceB) const;
-    virtual bool paint(QPainter* const painter, const QStyleOptionViewItem& option, const QModelIndex& sourceIndex) const;
-    virtual QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& sourceIndex) const;
+    virtual QVariant data(TableViewModel::Item* const item, const int role) const;
+    virtual ColumnCompareResult compare(TableViewModel::Item* const itemA, TableViewModel::Item* const itemB) const;
+    virtual bool paint(QPainter* const painter, const QStyleOptionViewItem& option, TableViewModel::Item* const item) const;
+    virtual QSize sizeHint(const QStyleOptionViewItem& option, TableViewModel::Item* const item) const;
     virtual void updateThumbnailSize();
-
-    ImageInfo getImageInfo(const QModelIndex& sourceIndex) const;
 
     template<class MyType> static ColumnCompareResult compareHelper(const MyType& A, const MyType& B)
     {

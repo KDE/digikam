@@ -154,14 +154,14 @@ TableViewColumn::ColumnFlags ColumnPhotoProperties::getColumnFlags() const
     return flags;
 }
 
-QVariant ColumnPhotoProperties::data(const QModelIndex& sourceIndex, const int role) const
+QVariant ColumnPhotoProperties::data(TableViewModel::Item* const item, const int role) const
 {
     if (role != Qt::DisplayRole)
     {
-        return sourceIndex.data(role);
+        return item->imageFilterModelIndex.data(role);
     }
 
-    const ImageInfo info = getImageInfo(sourceIndex);
+    const ImageInfo info = s->tableViewModel->infoFromItem(item);
     const ImageMetadataContainer photoInfo = info.imageMetadataContainer();
 
     switch (subColumn)
@@ -236,10 +236,10 @@ QVariant ColumnPhotoProperties::data(const QModelIndex& sourceIndex, const int r
     return QVariant();
 }
 
-TableViewColumn::ColumnCompareResult ColumnPhotoProperties::compare(const QModelIndex& sourceA, const QModelIndex& sourceB) const
+TableViewColumn::ColumnCompareResult ColumnPhotoProperties::compare(TableViewModel::Item* const itemA, TableViewModel::Item* const itemB) const
 {
-    const ImageInfo infoA = getImageInfo(sourceA);
-    const ImageInfo infoB = getImageInfo(sourceB);
+    const ImageInfo infoA = s->tableViewModel->infoFromItem(itemA);
+    const ImageInfo infoB = s->tableViewModel->infoFromItem(itemB);
 
     switch (subColumn)
     {
