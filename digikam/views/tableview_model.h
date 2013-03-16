@@ -55,6 +55,26 @@ class TableViewModel : public QAbstractItemModel
 
 public:
 
+    class Item
+    {
+    public:
+
+        qlonglong imageId;
+        QPersistentModelIndex imageFilterModelIndex;
+        Item* parent;
+        QList<Item*> children;
+
+    public:
+
+        explicit Item();
+        ~Item();
+
+        void addChild(Item* const newChild);
+        void takeChild(Item* const oldChild);
+        Item* findChildWithImageId(const qlonglong searchImageId);
+
+    };
+
     explicit TableViewModel(TableViewShared* const sharedObject, QObject* parent = 0);
     virtual ~TableViewModel();
 
@@ -76,8 +96,11 @@ public:
     void loadColumnProfile(const TableViewColumnProfile& columnProfile);
     TableViewColumnProfile getColumnProfile() const;
 
+    Item* itemFromImageId(const qlonglong imageId) const;
+    Item* itemFromIndex(const QModelIndex& i) const;
+
 private Q_SLOTS:
-    
+
     void slotPopulateModel();
 
     void slotColumnDataChanged(const QModelIndex& sourceIndex);
@@ -101,9 +124,7 @@ private Q_SLOTS:
 
 private:
 
-    TableViewModelItem* createItemFromSourceIndex(const QModelIndex& imageFilterModelIndex);
-    TableViewModelItem* itemFromImageId(const qlonglong imageId) const;
-    TableViewModelItem* itemFromIndex(const QModelIndex& i) const;
+    Item* createItemFromSourceIndex(const QModelIndex& imageFilterModelIndex);
     void addSourceModelIndex(const QModelIndex& imageFilterModelIndex);
 
     TableViewShared* const s;

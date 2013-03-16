@@ -57,59 +57,51 @@
 namespace Digikam
 {
 
-class TableViewModelItem
+TableViewModel::Item::Item()
+  : imageId(0),
+    imageFilterModelIndex(),
+    parent(0),
+    children()
 {
-public:
 
-    TableViewModelItem()
-      : imageId(0),
-        imageFilterModelIndex(),
-        parent(0),
-        children()
+}
+
+TableViewModel::Item::~Item()
+{
+    qDeleteAll(children);
+}
+
+void TableViewModel::Item::addChild(TableViewModel::Item* const newChild)
+{
+    newChild->parent = this;
+
+    children << newChild;
+}
+
+
+void TableViewModel::Item::takeChild(TableViewModel::Item* const oldChild)
+{
+    children.removeOne(oldChild);
+}
+
+TableViewModel::Item* TableViewModel::Item::findChildWithImageId(const qlonglong searchImageId)
+{
+    if (imageId==searchImageId)
     {
+        return this;
     }
 
-    ~TableViewModelItem()
+    Q_FOREACH(Item* const item, children)
     {
-        qDeleteAll(children);
-    }
-
-    void addChild(TableViewModelItem* const newChild)
-    {
-        newChild->parent = this;
-
-        children << newChild;
-    }
-
-    void takeChild(TableViewModelItem* const oldChild)
-    {
-        children.removeOne(oldChild);
-    }
-
-    TableViewModelItem* findChildWithImageId(const qlonglong searchImageId)
-    {
-        if (imageId==searchImageId)
+        Item* const iItem = item->findChildWithImageId(searchImageId);
+        if (iItem)
         {
-            return this;
+            return iItem;
         }
-
-        Q_FOREACH(TableViewModelItem* const item, children)
-        {
-            TableViewModelItem* const iItem = item->findChildWithImageId(searchImageId);
-            if (iItem)
-            {
-                return iItem;
-            }
-        }
-
-        return 0;
     }
 
-    qlonglong imageId;
-    QPersistentModelIndex imageFilterModelIndex;
-    TableViewModelItem* parent;
-    QList<TableViewModelItem*> children;
-};
+    return 0;
+}
 
 class TableViewModel::Private
 {
@@ -122,7 +114,7 @@ public:
     }
 
     QList<TableViewColumn*> columnObjects;
-    TableViewModelItem* rootItem;
+    TableViewModel::Item* rootItem;
 };
 
 TableViewModel::TableViewModel(TableViewShared* const sharedObject, QObject* parent)
@@ -130,7 +122,7 @@ TableViewModel::TableViewModel(TableViewShared* const sharedObject, QObject* par
     s(sharedObject),
     d(new Private())
 {
-    d->rootItem = new TableViewModelItem();
+    d->rootItem = new Item();
 
     connect(s->imageFilterModel, SIGNAL(modelAboutToBeReset()),
             this, SLOT(slotSourceModelAboutToBeReset()));
@@ -177,7 +169,7 @@ int TableViewModel::columnCount(const QModelIndex& i) const
 
 QModelIndex TableViewModel::toImageFilterModelIndex(const QModelIndex& i) const
 {
-    TableViewModelItem* const item = itemFromIndex(i);
+    Item* const item = itemFromIndex(i);
     if (!item)
     {
         return QModelIndex();
@@ -216,7 +208,7 @@ QModelIndex TableViewModel::index(int row, int column, const QModelIndex& parent
         return QModelIndex();
     }
 
-    TableViewModelItem* const itemPointer = d->rootItem->children.at(row);
+    Item* const itemPointer = d->rootItem->children.at(row);
     return createIndex(row, column, itemPointer);
 }
 
@@ -412,7 +404,7 @@ void TableViewModel::slotSourceRowsAboutToBeRemoved(const QModelIndex& parent, i
         const QModelIndex sourceIndex = s->imageFilterModel->index(i, 0, parent);
         const qlonglong imageId = s->imageFilterModel->imageId(sourceIndex);
 
-        TableViewModelItem* const item = itemFromImageId(imageId);
+        Item* const item = itemFromImageId(imageId);
         item->parent->takeChild(item);
 
         /// @todo do proper row removing for this item
@@ -528,7 +520,7 @@ void TableViewModel::slotPopulateModel()
         delete d->rootItem;
     }
 
-    d->rootItem = new TableViewModelItem();
+    d->rootItem = new Item();
 
     const int sourceRowCount = s->imageFilterModel->rowCount(QModelIndex());
     for (int i=0; i<sourceRowCount; ++i)
@@ -538,9 +530,9 @@ void TableViewModel::slotPopulateModel()
     }
 }
 
-TableViewModelItem* TableViewModel::createItemFromSourceIndex(const QModelIndex& imageFilterModelIndex)
+TableViewModel::Item* TableViewModel::createItemFromSourceIndex(const QModelIndex& imageFilterModelIndex)
 {
-    TableViewModelItem* const item = new TableViewModelItem();
+    Item* const item = new Item();
     item->imageFilterModelIndex = imageFilterModelIndex;
     item->imageId = s->imageFilterModel->imageId(imageFilterModelIndex);
 
@@ -551,17 +543,17 @@ void TableViewModel::addSourceModelIndex(const QModelIndex& imageFilterModelInde
 {
     /// @todo Filter out grouped items here
 
-    TableViewModelItem* item = createItemFromSourceIndex(imageFilterModelIndex);
+    Item* item = createItemFromSourceIndex(imageFilterModelIndex);
 
     d->rootItem->addChild(item);
 }
 
-TableViewModelItem* TableViewModel::itemFromImageId(const qlonglong imageId) const
+TableViewModel::Item* TableViewModel::itemFromImageId(const qlonglong imageId) const
 {
     return d->rootItem->findChildWithImageId(imageId);
 }
 
-TableViewModelItem* TableViewModel::itemFromIndex(const QModelIndex& i) const
+TableViewModel::Item* TableViewModel::itemFromIndex(const QModelIndex& i) const
 {
     if (!i.isValid())
     {
@@ -570,7 +562,7 @@ TableViewModelItem* TableViewModel::itemFromIndex(const QModelIndex& i) const
 
     Q_ASSERT(i.model()==this);
 
-    TableViewModelItem* const item = static_cast<TableViewModelItem*>(i.internalPointer());
+    Item* const item = static_cast<Item*>(i.internalPointer());
 
     return item;
 }
@@ -583,12 +575,12 @@ QModelIndex TableViewModel::fromImageFilterModelIndex(const QModelIndex& imageFi
         return QModelIndex();
     }
 
-    TableViewModelItem* const item = itemFromImageId(imageId);
+    Item* const item = itemFromImageId(imageId);
     if (!item)
     {
         return QModelIndex();
     }
-    TableViewModelItem* const parentItem = item->parent;
+    Item* const parentItem = item->parent;
 
     /// @todo This is a waste of time because itemFromImageId already did this search.
     ///       We should modify it to also give the row index.
