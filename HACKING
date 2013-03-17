@@ -440,8 +440,9 @@ local branch checkout:
 
 $>git checkout master
 $>git pull --rebase
-$>git checkout -b MY_DEVEL_BRANCH remotes/origin/development/MY_DEVEL_BRANCH
-  Branch MY_DEVEL_BRANCH set up to track remote branch development/MY_DEVEL_BRANCH from origin.
+$>git checkout -b MY_DEVEL_BRANCH GIT_REMOTE_PATH
+  Branch 'MY_DEVEL_BRANCH' set up to track remote branch path 'GIT_REMOTE_PATH' from origin.
+  To list GIT_REMOTE_PATH, use 'git branch -a' command
   Switched to a new branch 'MY_DEVEL_BRANCH'
 $>git merge master
   Merge made by the 'recursive' strategy.
