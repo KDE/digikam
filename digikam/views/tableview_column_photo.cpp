@@ -24,10 +24,12 @@
 
 // Qt includes
 
+#include <QFormLayout>
 #include <QModelIndex>
 
 // KDE includes
 
+#include <kcombobox.h>
 #include <kdebug.h>
 #include <klocale.h>
 
@@ -160,6 +162,11 @@ TableViewColumn::ColumnFlags ColumnPhotoProperties::getColumnFlags() const
         flags|=ColumnCustomSorting;
     }
 
+    if (subColumn==SubColumnExposure)
+    {
+        flags|=ColumnHasConfigurationWidget;
+    }
+
     return flags;
 }
 
@@ -218,9 +225,46 @@ QVariant ColumnPhotoProperties::data(TableViewModel::Item* const item, const int
         {
             /// @todo Add a configuration option for fraction vs number, units s vs ms vs mus
             const QVariant exposureVariant = s->tableViewModel->itemDatabaseFieldRaw(item, DatabaseFields::ExposureTime);
-            const QString exposureString = DMetadata::valueToString(exposureVariant, MetadataInfo::ExposureTime);
 
-            return exposureString;
+            if (configuration.getSetting("format", "fraction")=="fraction")
+            {
+                const QString exposureString = DMetadata::valueToString(exposureVariant, MetadataInfo::ExposureTime);
+                return exposureString;
+            }
+
+            if (!exposureVariant.isValid())
+            {
+                return QString();
+            }
+            const QString unitKey = configuration.getSetting("unit", "seconds");
+            double multiplier = 1.0;
+            QString unit = i18n("s");
+
+            if (unitKey=="milliseconds")
+            {
+                multiplier = 1000.0;
+                unit = i18n("ms");
+            }
+            else if (unitKey=="microseconds")
+            {
+                multiplier = 1000000.0;
+
+                /// @todo How do I give "µ" to i18n?
+                unit = i18n("mus");
+            }
+
+            const double exposureTime = exposureVariant.toDouble() * multiplier;
+            /// @todo Seems like we have to check for 0 here, too, as an invalid value
+            if (exposureTime==0)
+            {
+                return QString();
+            }
+            /// @todo Remove trailing zeros?
+            /// @todo Align right? --> better align at decimal point
+            const QString exposureTimeString = QString("%1 %2")
+                .arg(KGlobal::locale()->formatNumber(exposureTime, 3))
+                .arg(unit);
+            return exposureTimeString;
         }
     case SubColumnSensitivity:
         {
@@ -326,6 +370,94 @@ TableViewColumn::ColumnCompareResult ColumnPhotoProperties::compare(TableViewMod
     default:
         kWarning() << "item: unimplemented comparison, subColumn=" << subColumn;
         return CmpEqual;
+    }
+}
+
+TableViewColumnConfigurationWidget* ColumnPhotoProperties::getConfigurationWidget(QWidget* const parentWidget) const
+{
+    TableViewColumnConfiguration myConfiguration = getConfiguration();
+    return new ColumnPhotoConfigurationWidget(s, myConfiguration, parentWidget);
+}
+
+ColumnPhotoConfigurationWidget::ColumnPhotoConfigurationWidget(
+        TableViewShared* const sharedObject,
+        const TableViewColumnConfiguration& columnConfiguration,
+        QWidget* const parentWidget)
+  : TableViewColumnConfigurationWidget(sharedObject, columnConfiguration, parentWidget),
+    subColumn(ColumnPhotoProperties::SubColumnExposure),
+    selectorExposureTimeFormat(0),
+    selectorExposureTimeUnit(0)
+{
+    const QString& subColumnSetting = configuration.getSetting("subcolumn");
+    subColumn = ColumnPhotoProperties::getSubColumnIndex<ColumnPhotoProperties>(subColumnSetting, ColumnPhotoProperties::SubColumnExposure);
+
+    switch (subColumn)
+    {
+    case ColumnPhotoProperties::SubColumnExposure:
+        {
+            QFormLayout* const box1 = new QFormLayout();
+
+            selectorExposureTimeFormat = new KComboBox(this);
+            selectorExposureTimeFormat->addItem(i18n("Fraction"), QString("fraction"));
+            selectorExposureTimeFormat->addItem(i18n("Rational"), QString("rational"));
+            box1->addRow(i18n("Format"), selectorExposureTimeFormat);
+
+            selectorExposureTimeUnit = new KComboBox(this);
+            selectorExposureTimeUnit->addItem(i18n("Seconds"), QString("seconds"));
+            selectorExposureTimeUnit->addItem(i18n("Milliseconds"), QString("milliseconds"));
+            selectorExposureTimeUnit->addItem(i18n("Microseconds"), QString("microseconds"));
+            box1->addRow(i18n("Unit"), selectorExposureTimeUnit);
+
+            setLayout(box1);
+
+            const int indexF = selectorExposureTimeFormat->findData(configuration.getSetting("format", "fraction"));
+            selectorExposureTimeFormat->setCurrentIndex(indexF>=0 ? indexF : 0);
+            const int indexU = selectorExposureTimeUnit->findData(configuration.getSetting("unit", "seconds"));
+            selectorExposureTimeUnit->setCurrentIndex(indexU>=0 ? indexU : 0);
+
+            slotUpdateUI();
+
+            connect(selectorExposureTimeFormat, SIGNAL(currentIndexChanged(int)),
+                    this, SLOT(slotUpdateUI()));
+            break;
+        }
+
+    default:
+        break;
+    }
+}
+
+ColumnPhotoConfigurationWidget::~ColumnPhotoConfigurationWidget()
+{
+
+}
+
+TableViewColumnConfiguration ColumnPhotoConfigurationWidget::getNewConfiguration()
+{
+    const QString formatKey = selectorExposureTimeFormat->itemData(selectorExposureTimeFormat->currentIndex()).toString();
+    configuration.columnSettings.insert("format", formatKey);
+
+    const QString unitKey = selectorExposureTimeUnit->itemData(selectorExposureTimeUnit->currentIndex()).toString();
+    configuration.columnSettings.insert("unit", unitKey);
+
+    return configuration;
+}
+
+void ColumnPhotoProperties::setConfiguration(const TableViewColumnConfiguration& newConfiguration)
+{
+    configuration = newConfiguration;
+
+    emit(signalAllDataChanged());
+}
+
+void ColumnPhotoConfigurationWidget::slotUpdateUI()
+{
+    if (selectorExposureTimeFormat)
+    {
+        const QString currentKey = selectorExposureTimeFormat->itemData(selectorExposureTimeFormat->currentIndex()).toString();
+        const bool needsUnits = currentKey=="rational";
+
+        selectorExposureTimeUnit->setEnabled(needsUnits);
     }
 }
 
