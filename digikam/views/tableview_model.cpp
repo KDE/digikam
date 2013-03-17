@@ -60,6 +60,7 @@ namespace Digikam
 TableViewModel::Item::Item()
   : imageId(0),
     imageFilterModelIndex(),
+    cachedDatabaseFields(),
     databaseFields(),
     parent(0),
     children()
@@ -145,8 +146,8 @@ TableViewModel::TableViewModel(TableViewShared* const sharedObject, QObject* par
             this, SLOT(slotSourceLayoutAboutToBeChanged()));
     connect(s->imageFilterModel, SIGNAL(layoutChanged()),
             this, SLOT(slotSourceLayoutChanged()));
-    connect(s->imageFilterModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)),
-            this, SLOT(slotSourceDataChanged(QModelIndex,QModelIndex)));
+
+    // We do not connect to ImageFilterModel::dataChanged, because we monitor changes directly from the database.
 
     connect(DatabaseAccess::databaseWatch(), SIGNAL(imageChange(ImageChangeset)),
             this, SLOT(slotDatabaseImageChanged(ImageChangeset)), Qt::QueuedConnection);
@@ -467,22 +468,6 @@ void TableViewModel::slotSourceLayoutChanged()
     endResetModel();
 }
 
-void TableViewModel::slotSourceDataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight)
-{
-    /// @todo Not sure when ImageFilterModel will emit this signal and whether
-    ///       it will be enough to monitor DatabaseAccess::databaseWatch()::imageChange(ImageChangeset)
-
-    const int topRow = topLeft.row();
-    const int bottomRow = bottomRight.row();
-
-    const int nColumns = d->columnObjects.count();
-
-    const QModelIndex myTopLeft = index(topRow, 0, QModelIndex());
-    const QModelIndex myBottomRight = index(bottomRow, nColumns-1, QModelIndex());
-
-    emit(dataChanged(myTopLeft, myBottomRight));
-}
-
 void TableViewModel::slotDatabaseImageChanged(const ImageChangeset& imageChangeset)
 {
 //     const DatabaseFields::Set changes = imageChangeset.changes();
@@ -492,10 +477,31 @@ void TableViewModel::slotDatabaseImageChanged(const ImageChangeset& imageChanges
 
     foreach(const qlonglong& id, imageChangeset.ids())
     {
-        const QModelIndex& changedIndex = s->imageFilterModel->indexForImageId(id);
-        if (changedIndex.isValid())
+        // first clear the item's cached values
+        /// @todo Clear only the fields which were changed
+        Item* const item = itemFromImageId(id);
+        if (!item)
         {
-            emit(dataChanged(changedIndex, changedIndex));
+            continue;
+        }
+
+        item->databaseFields.clear();
+        /// @todo Introduce/find a clear function
+        item->cachedDatabaseFields = DatabaseFields::Set();
+
+        /// @todo These are from the wrong model
+        const QModelIndex changedIndexTopLeft = indexFromImageId(id, 0);
+        if (changedIndexTopLeft.isValid())
+        {
+            const QModelIndex changedIndexBottomRight = index(
+                    changedIndexTopLeft.row(),
+                    columnCount(changedIndexTopLeft.parent())-1,
+                    changedIndexTopLeft.parent()
+                );
+            if (changedIndexBottomRight.isValid())
+            {
+                emit(dataChanged(changedIndexTopLeft, changedIndexBottomRight));
+            }
         }
     }
 }
@@ -580,18 +586,7 @@ QModelIndex TableViewModel::fromImageFilterModelIndex(const QModelIndex& imageFi
         return QModelIndex();
     }
 
-    Item* const item = itemFromImageId(imageId);
-    if (!item)
-    {
-        return QModelIndex();
-    }
-    Item* const parentItem = item->parent;
-
-    /// @todo This is a waste of time because itemFromImageId already did this search.
-    ///       We should modify it to also give the row index.
-    const int rowIndex = parentItem->children.indexOf(item);
-
-    return createIndex(rowIndex, 0, item);
+    return indexFromImageId(imageId, 0);
 }
 
 ImageInfo TableViewModel::infoFromItem(TableViewModel::Item* const item)
@@ -608,26 +603,33 @@ ImageInfo TableViewModel::infoFromItem(TableViewModel::Item* const item)
 
 TableViewModel::DatabaseFieldsHashRaw TableViewModel::itemDatabaseFieldsRaw(TableViewModel::Item* const item, const DatabaseFields::Set requestedSet)
 {
-    /// @todo Check that all requested fields are buffered
-    /// @todo For now, we just request all fields new
-    if (requestedSet.hasFieldsFromImageMetadata())
+    if ((item->cachedDatabaseFields & requestedSet)==0)
     {
-        const DatabaseFields::ImageMetadata imageMetadataFields = requestedSet;
-        const QVariantList fieldValues = DatabaseAccess().db()->getImageMetadata(item->imageId, imageMetadataFields);
+        // fields are not buffered yet, we have to request them
 
-        int fieldsIndex = 0;
-        for (DatabaseFields::ImageMetadataIterator it; !it.atEnd(); ++it)
+        if (requestedSet.hasFieldsFromImageMetadata())
         {
-            /// @todo The typecasting here is a workaround...
-            if (imageMetadataFields.testFlag(DatabaseFields::ImageMetadataField(int(*it))))
-            {
-                const QVariant fieldValue = fieldValues.at(fieldsIndex);
-                ++fieldsIndex;
+            const DatabaseFields::ImageMetadata imageMetadataFields = requestedSet;
+            const QVariantList fieldValues = DatabaseAccess().db()->getImageMetadata(item->imageId, imageMetadataFields);
 
-                /// @todo Re-implement insert?
-                item->databaseFields.insert(DatabaseFieldsHashRaw::uniqueKey(*it), fieldValue);
+            int fieldsIndex = 0;
+            for (DatabaseFields::ImageMetadataIterator it; !it.atEnd(); ++it)
+            {
+                /// @todo The typecasting here is a workaround...
+                if (imageMetadataFields.testFlag(DatabaseFields::ImageMetadataField(int(*it))))
+                {
+                    const QVariant fieldValue = fieldValues.at(fieldsIndex);
+                    ++fieldsIndex;
+
+                    /// @todo Re-implement insert?
+                    item->databaseFields.insert(DatabaseFieldsHashRaw::uniqueKey(*it), fieldValue);
+                }
             }
         }
+
+        // We assume that we found all requested tags here. If they were not found, we now know
+        // that they do not exist. Should they be created, the cache will be cleared.
+        item->cachedDatabaseFields.setFields(requestedSet);
     }
 
     return item->databaseFields;
@@ -664,6 +666,21 @@ QVariant TableViewModel::itemDatabaseFieldRaw(TableViewModel::Item* const item, 
     return QVariant();
 }
 
+QModelIndex TableViewModel::indexFromImageId(const qlonglong imageId, const int columnIndex) const
+{
+    Item* const item = itemFromImageId(imageId);
+    if (!item)
+    {
+        return QModelIndex();
+    }
+    Item* const parentItem = item->parent;
+
+    /// @todo This is a waste of time because itemFromImageId already did this search.
+    ///       We should modify it to also give the row index.
+    const int rowIndex = parentItem->children.indexOf(item);
+
+    return createIndex(rowIndex, columnIndex, item);
+}
 
 } /* namespace Digikam */
 

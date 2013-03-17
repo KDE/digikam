@@ -64,6 +64,7 @@ public:
 
         qlonglong imageId;
         QPersistentModelIndex imageFilterModelIndex;
+        DatabaseFields::Set cachedDatabaseFields;
         DatabaseFieldsHashRaw databaseFields;
         Item* parent;
         QList<Item*> children;
@@ -100,6 +101,7 @@ public:
     void loadColumnProfile(const TableViewColumnProfile& columnProfile);
     TableViewColumnProfile getColumnProfile() const;
 
+    QModelIndex indexFromImageId(const qlonglong imageId, const int columnIndex) const;
     Item* itemFromImageId(const qlonglong imageId) const;
     Item* itemFromIndex(const QModelIndex& i) const;
     ImageInfo infoFromItem(Item* const item);
@@ -126,7 +128,6 @@ private Q_SLOTS:
                                const QModelIndex& destinationParent, int destinationRow);
     void slotSourceLayoutAboutToBeChanged();
     void slotSourceLayoutChanged();
-    void slotSourceDataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight);
 
     void slotDatabaseImageChanged(const ImageChangeset& imageChangeset);
 
