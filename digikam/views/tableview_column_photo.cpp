@@ -238,19 +238,17 @@ QVariant ColumnPhotoProperties::data(TableViewModel::Item* const item, const int
             }
             const QString unitKey = configuration.getSetting("unit", "seconds");
             double multiplier = 1.0;
-            QString unit = i18n("s");
+            KLocalizedString exposureTimeLocalizedString = ki18n("%1 s");
 
             if (unitKey=="milliseconds")
             {
                 multiplier = 1000.0;
-                unit = i18n("ms");
+                exposureTimeLocalizedString = ki18n("%1 ms");
             }
             else if (unitKey=="microseconds")
             {
                 multiplier = 1000000.0;
-
-                /// @todo How do I give "µ" to i18n?
-                unit = i18n("mus");
+                exposureTimeLocalizedString = ki18n("%1 Âµs");
             }
 
             const double exposureTime = exposureVariant.toDouble() * multiplier;
@@ -261,9 +259,9 @@ QVariant ColumnPhotoProperties::data(TableViewModel::Item* const item, const int
             }
             /// @todo Remove trailing zeros?
             /// @todo Align right? --> better align at decimal point
-            const QString exposureTimeString = QString("%1 %2")
-                .arg(KGlobal::locale()->formatNumber(exposureTime, 3))
-                .arg(unit);
+            const QString exposureTimeString = exposureTimeLocalizedString
+                .subs(KGlobal::locale()->formatNumber(exposureTime, 3))
+                .toString();
             return exposureTimeString;
         }
     case SubColumnSensitivity:
