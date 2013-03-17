@@ -55,11 +55,11 @@ namespace Digikam
 typedef QMap<QString, QList<int> > PathAlbumMap;
 typedef QMap<int, QPixmap> AlbumThumbnailMap;
 
-class AlbumThumbnailLoader::AlbumThumbnailLoaderPrivate
+class AlbumThumbnailLoader::Private
 {
 public:
 
-    AlbumThumbnailLoaderPrivate()
+    Private()
     {
         iconSize             = AlbumSettings::instance()->getTreeViewIconSize();
         minBlendSize         = 20;
@@ -95,7 +95,7 @@ AlbumThumbnailLoader* AlbumThumbnailLoader::instance()
 }
 
 AlbumThumbnailLoader::AlbumThumbnailLoader()
-    : d(new AlbumThumbnailLoaderPrivate)
+    : d(new Private)
 {
     connect(this, SIGNAL(signalDispatchThumbnailInternal(int,QPixmap)),
             this, SLOT(slotDispatchThumbnailInternal(int,QPixmap)));
@@ -184,7 +184,7 @@ int AlbumThumbnailLoader::computeIconSize(RelativeSize relativeSize)
 
 QPixmap AlbumThumbnailLoader::loadIcon(const QString& name, int size)
 {
-    KIconLoader* iconLoader = KIconLoader::global();
+    KIconLoader* const iconLoader = KIconLoader::global();
     return iconLoader->loadIcon(name, KIconLoader::NoGroup, size);
 }
 
@@ -311,6 +311,7 @@ void AlbumThumbnailLoader::addUrl(Album* const album, const KUrl& url)
                 d->iconTagThumbThread = new ThumbnailLoadThread();
                 d->iconTagThumbThread->setThumbnailSize(d->iconSize);
                 d->iconTagThumbThread->setSendSurrogatePixmap(false);
+
                 connect(d->iconTagThumbThread,
                         SIGNAL(signalThumbnailLoaded(LoadingDescription,QPixmap)),
                         SLOT(slotGotThumbnailFromIcon(LoadingDescription,QPixmap)),
@@ -327,6 +328,7 @@ void AlbumThumbnailLoader::addUrl(Album* const album, const KUrl& url)
                 d->iconAlbumThumbThread = new ThumbnailLoadThread();
                 d->iconAlbumThumbThread->setThumbnailSize(d->iconSize);
                 d->iconAlbumThumbThread->setSendSurrogatePixmap(false);
+
                 connect(d->iconAlbumThumbThread,
                         SIGNAL(signalThumbnailLoaded(LoadingDescription,QPixmap)),
                         SLOT(slotGotThumbnailFromIcon(LoadingDescription,QPixmap)),
@@ -392,14 +394,14 @@ void AlbumThumbnailLoader::slotGotThumbnailFromIcon(const LoadingDescription& lo
 
     if (it != d->pathAlbumMap.end())
     {
-        AlbumManager* manager = AlbumManager::instance();
+        AlbumManager* const manager = AlbumManager::instance();
 
         if (thumbnail.isNull())
         {
             // Loading failed
             for (QList<int>::const_iterator vit = (*it).constBegin(); vit != (*it).constEnd(); ++vit)
             {
-                Album* album = manager->findAlbum(*vit);
+                Album* const album = manager->findAlbum(*vit);
 
                 if (album)
                 {
@@ -414,7 +416,7 @@ void AlbumThumbnailLoader::slotGotThumbnailFromIcon(const LoadingDescription& lo
             for (QList<int>::const_iterator vit = (*it).constBegin(); vit != (*it).constEnd(); ++vit)
             {
                 // look up with global id
-                Album* album = manager->findAlbum(*vit);
+                Album* const album = manager->findAlbum(*vit);
 
                 if (album)
                 {
@@ -432,8 +434,8 @@ void AlbumThumbnailLoader::slotDispatchThumbnailInternal(int albumID, const QPix
 {
     // for cached thumbnails
 
-    AlbumManager* manager = AlbumManager::instance();
-    Album* album          = manager->findAlbum(albumID);
+    AlbumManager* const manager = AlbumManager::instance();
+    Album* const album          = manager->findAlbum(albumID);
 
     if (album)
     {

@@ -144,7 +144,7 @@ public:
 
     QPixmap getStandardAlbumIcon(RelativeSize size = NormalSize);
     QPixmap getStandardAlbumRootIcon(RelativeSize size = NormalSize);
-    QPixmap getStandardAlbumIcon(PAlbum* album, RelativeSize size = NormalSize);
+    QPixmap getStandardAlbumIcon(PAlbum* const album, RelativeSize size = NormalSize);
 
 Q_SIGNALS:
 
@@ -188,8 +188,8 @@ private:
 
     friend class AlbumThumbnailLoaderCreator;
 
-    class AlbumThumbnailLoaderPrivate;
-    AlbumThumbnailLoaderPrivate* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam
