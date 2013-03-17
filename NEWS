@@ -9,4 +9,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 001 ==> 315098 - DNG Converter and DigiKam crashes when opening a .dng file.
 002 ==> 316556 - DIGIKAMSC_USE_PRIVATE_KDEGRAPHICS is set to ON.
-003 ==> 
+003 ==> 308418 - some keyboard shortcuts not working in full screen mode.
+004 ==> 
+
