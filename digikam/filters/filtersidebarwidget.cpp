@@ -149,7 +149,7 @@ FilterSideBarWidget::FilterSideBarWidget(QWidget* const parent, TagModel* const 
     // --------------------------------------------------------------------------------------------------------
 
 
-    QWidget* box3         = new QWidget(d->expbox);
+    QWidget* const box3   = new QWidget(d->expbox);
     d->tagFilterModel     = tagFilterModel;
     d->tagFilterView      = new TagFilterView(box3, tagFilterModel);
     d->tagFilterView->setObjectName("DigikamViewTagFilterView");
@@ -177,7 +177,7 @@ FilterSideBarWidget::FilterSideBarWidget(QWidget* const parent, TagModel* const 
     d->tagAndCondAction->setCheckable(true);
     d->tagOptionsBtn->setMenu(d->tagOptionsMenu);
 
-    QGridLayout* lay3 = new QGridLayout(box3);
+    QGridLayout* const lay3 = new QGridLayout(box3);
     lay3->addWidget(d->tagFilterView,      0, 0, 1, 3);
     lay3->addWidget(d->tagFilterSearchBar, 1, 0, 1, 3);
     lay3->addWidget(d->withoutTagCheckBox, 2, 0, 1, 1);
@@ -191,12 +191,12 @@ FilterSideBarWidget::FilterSideBarWidget(QWidget* const parent, TagModel* const 
 
     // --------------------------------------------------------------------------------------------------------
 
-    QWidget* box4       = new QWidget(d->expbox);
+    QWidget* const box4 = new QWidget(d->expbox);
     d->colorLabelFilter = new ColorLabelFilter(box4);
     d->pickLabelFilter  = new PickLabelFilter(box4);
     d->ratingFilter     = new RatingFilter(box4);
 
-    QGridLayout* lay4   = new QGridLayout(box4);
+    QGridLayout* const lay4 = new QGridLayout(box4);
     lay4->addWidget(d->colorLabelFilter, 0, 0, 1, 3);
     lay4->addWidget(d->pickLabelFilter,  1, 0, 1, 1);
     lay4->addWidget(d->ratingFilter,     1, 2, 1, 1);
@@ -218,7 +218,7 @@ FilterSideBarWidget::FilterSideBarWidget(QWidget* const parent, TagModel* const 
 
     connect(d->mimeFilter, SIGNAL(activated(int)),
             this, SIGNAL(signalMimeTypeFilterChanged(int)));
-    
+
     connect(d->geolocationFilter, SIGNAL(signalFilterChanged(ImageFilterSettings::GeolocationCondition)),
             this, SIGNAL(signalGeolocationFilterChanged(ImageFilterSettings::GeolocationCondition)));
 

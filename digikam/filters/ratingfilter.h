@@ -6,8 +6,8 @@
  * Date        : 2007-10-09
  * Description : a widget to filter album contents by rating
  *
- * Copyright (C) 2007-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2007 by Arnd Baecker <arnd dot baecker at web dot de>
+ * Copyright (C) 2007-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007      by Arnd Baecker <arnd dot baecker at web dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -45,7 +45,7 @@ class RatingFilterWidget : public RatingWidget
 
 public:
 
-    explicit RatingFilterWidget(QWidget* parent);
+    explicit RatingFilterWidget(QWidget* const parent);
     ~RatingFilterWidget();
 
     void setRatingFilterCondition(ImageFilterSettings::RatingCondition cond);
@@ -71,8 +71,8 @@ private Q_SLOTS:
 
 private:
 
-    class RatingFilterWidgetPriv;
-    RatingFilterWidgetPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 // -----------------------------------------------------------------------------
@@ -83,7 +83,7 @@ class RatingFilter : public KHBox
 
 public:
 
-    explicit RatingFilter(QWidget* parent);
+    explicit RatingFilter(QWidget* const parent);
     ~RatingFilter();
 
     void setRating(int val);
@@ -103,8 +103,8 @@ private Q_SLOTS:
 
 private:
 
-    class RatingFilterPriv;
-    RatingFilterPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

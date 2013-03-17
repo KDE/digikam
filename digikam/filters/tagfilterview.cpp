@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2009-2010 by Johannes Wienke <languitar at semipol dot de>
  * Copyright (C) 2010-2011 by Andi Clemens <andi dot clemens at gmail dot com>
- * Copyright (C)      2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2011-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -42,11 +42,11 @@
 namespace Digikam
 {
 
-class TagFilterView::TagFilterViewPriv
+class TagFilterView::Private
 {
 public:
 
-    TagFilterViewPriv() :
+    Private() :
         onRestoreTagFiltersAction(0),
         offRestoreTagFiltersAction(0),
         ignoreTagAction(0),
@@ -70,8 +70,8 @@ public:
     TagModel*      tagFilterModel;
 };
 
-TagFilterView::TagFilterView(QWidget* parent, TagModel* tagFilterModel)
-    : TagCheckView(parent, tagFilterModel), d(new TagFilterViewPriv)
+TagFilterView::TagFilterView(QWidget* const parent, TagModel* const tagFilterModel)
+    : TagCheckView(parent, tagFilterModel), d(new Private)
 {
     d->tagFilterModel             = tagFilterModel;
 

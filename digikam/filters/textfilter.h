@@ -6,7 +6,7 @@
  * Date        : 2011-02-23
  * Description : a widget to filter album contents by text query
  *
- * Copyright (C) 2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2011-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -46,7 +46,7 @@ class TextFilter : public KHBox
 
 public:
 
-    explicit TextFilter(QWidget* parent);
+    explicit TextFilter(QWidget* const parent);
     ~TextFilter();
 
     SearchTextBar* searchTextBar() const;
@@ -66,8 +66,8 @@ private Q_SLOTS:
 
 private:
 
-    class TextFilterPriv;
-    TextFilterPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

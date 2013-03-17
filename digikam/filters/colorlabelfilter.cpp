@@ -6,7 +6,7 @@
  * Date        : 2011-02-09
  * Description : color label filter
  *
- * Copyright (C) 2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2011-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -36,7 +36,7 @@
 namespace Digikam
 {
 
-ColorLabelFilter::ColorLabelFilter(QWidget* parent)
+ColorLabelFilter::ColorLabelFilter(QWidget* const parent)
     : ColorLabelWidget(parent)
 {
     setDescriptionBoxVisible(false);
