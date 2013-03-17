@@ -33,8 +33,9 @@
 
 // local includes
 
-#include <imageinfo.h>
 #include <databaseinfocontainers.h>
+#include <dmetadata.h>
+#include <imageinfo.h>
 
 namespace Digikam
 {
@@ -169,75 +170,104 @@ QVariant ColumnPhotoProperties::data(TableViewModel::Item* const item, const int
         return item->imageFilterModelIndex.data(role);
     }
 
-    const ImageInfo info = s->tableViewModel->infoFromItem(item);
-    const ImageMetadataContainer photoInfo = info.imageMetadataContainer();
-
     switch (subColumn)
     {
     case SubColumnCameraMaker:
         {
-            return photoInfo.make;
+            const QString cameraMaker = s->tableViewModel->itemDatabaseFieldRaw(item, DatabaseFields::Make).toString();
+            return cameraMaker;
         }
     case SubColumnCameraModel:
         {
-            return photoInfo.model;
+            const QString cameraModel = s->tableViewModel->itemDatabaseFieldRaw(item, DatabaseFields::Model).toString();
+            return cameraModel;
         }
     case SubColumnLens:
         {
-            return photoInfo.lens;
+            const QString cameraLens = s->tableViewModel->itemDatabaseFieldRaw(item, DatabaseFields::Lens).toString();
+            return cameraLens;
         }
     case SubColumnAperture:
         {
-            /// @todo this is a string, we need to use a number for custom sorting here
-            return photoInfo.aperture;
+            const QVariant apertureVariant = s->tableViewModel->itemDatabaseFieldRaw(item, DatabaseFields::Aperture);
+            const QString apertureString = DMetadata::valueToString(apertureVariant, MetadataInfo::Aperture);
+
+            return apertureString;
         }
     case SubColumnFocal:
         {
             /// @todo Make this configurable
-            if (photoInfo.focalLength35.isEmpty())
+            const QVariant focalLengthVariant = s->tableViewModel->itemDatabaseFieldRaw(item, DatabaseFields::FocalLength);
+            const QString focalLengthString = DMetadata::valueToString(focalLengthVariant, MetadataInfo::FocalLength);
+            const QVariant focalLength35Variant = s->tableViewModel->itemDatabaseFieldRaw(item, DatabaseFields::FocalLength35);
+            const QString focalLength35String = DMetadata::valueToString(focalLength35Variant, MetadataInfo::FocalLengthIn35mm);
+
+            if (focalLength35String.isEmpty())
             {
-                return photoInfo.focalLength;
+                return focalLengthString;
             }
-            if (photoInfo.focalLength.isEmpty())
+            if (focalLengthString.isEmpty())
             {
                 return QString();
             }
-            return i18n("%1 (35mm: %2)", photoInfo.focalLength, photoInfo.focalLength35);
+
+            /// @todo What if only 35 mm is set?
+            return i18n("%1 (35mm: %2)", focalLengthString, focalLength35String);
         }
     case SubColumnExposure:
         {
-            /// @todo this is a string, we need to use a number for custom sorting here
-            return photoInfo.exposureTime;
+            /// @todo Add a configuration option for fraction vs number, units s vs ms vs mus
+            const QVariant exposureVariant = s->tableViewModel->itemDatabaseFieldRaw(item, DatabaseFields::ExposureTime);
+            const QString exposureString = DMetadata::valueToString(exposureVariant, MetadataInfo::ExposureTime);
+
+            return exposureString;
         }
     case SubColumnSensitivity:
         {
-            /// @todo this is a string, we need to use a number for custom sorting here
-            return photoInfo.sensitivity.isEmpty() ? QString() : i18n("%1 ISO", photoInfo.sensitivity);
-        }
-    case SubColumnModeProgram:
-        {
-            if (photoInfo.exposureMode.isEmpty() && photoInfo.exposureProgram.isEmpty())
+            const QVariant sensitivityVariant = s->tableViewModel->itemDatabaseFieldRaw(item, DatabaseFields::Sensitivity);
+            const QString sensitivityString = DMetadata::valueToString(sensitivityVariant, MetadataInfo::Sensitivity);
+            if (sensitivityString.isEmpty())
             {
                 return QString();
             }
-            else if (!photoInfo.exposureMode.isEmpty() && photoInfo.exposureProgram.isEmpty())
+
+            return i18n("%1 ISO", sensitivityString);
+        }
+    case SubColumnModeProgram:
+        {
+            const QVariant exposureModeVariant = s->tableViewModel->itemDatabaseFieldRaw(item, DatabaseFields::ExposureMode);
+            const QString exposureModeString = DMetadata::valueToString(exposureModeVariant, MetadataInfo::ExposureMode);
+            const QVariant exposureProgramVariant = s->tableViewModel->itemDatabaseFieldRaw(item, DatabaseFields::ExposureProgram);
+            const QString exposureProgramString = DMetadata::valueToString(exposureProgramVariant, MetadataInfo::ExposureProgram);
+
+            if (exposureModeString.isEmpty() && exposureProgramString.isEmpty())
             {
-                return photoInfo.exposureMode;
+                return QString();
             }
-            else if (photoInfo.exposureMode.isEmpty() && !photoInfo.exposureProgram.isEmpty())
+            else if (!exposureModeString.isEmpty() && exposureProgramString.isEmpty())
             {
-                return photoInfo.exposureProgram;
+                return exposureModeString;
+            }
+            else if (exposureModeString.isEmpty() && !exposureProgramString.isEmpty())
+            {
+                return exposureProgramString;
             }
 
-            return QString("%1 / %2").arg(photoInfo.exposureMode).arg(photoInfo.exposureProgram);
+            return QString("%1 / %2").arg(exposureModeString).arg(exposureProgramString);
         }
     case SubColumnFlash:
         {
-            return photoInfo.flashMode;
+            const QVariant flashModeVariant = s->tableViewModel->itemDatabaseFieldRaw(item, DatabaseFields::FlashMode);
+            const QString flashModeString = DMetadata::valueToString(flashModeVariant, MetadataInfo::FlashMode);
+
+            return flashModeString;
         }
     case SubColumnWhiteBalance:
         {
-            return photoInfo.whiteBalance;
+            const QVariant whiteBalanceVariant = s->tableViewModel->itemDatabaseFieldRaw(item, DatabaseFields::WhiteBalance);
+            const QString whiteBalanceString = DMetadata::valueToString(whiteBalanceVariant, MetadataInfo::WhiteBalance);
+
+            return whiteBalanceString;
         }
     }
 

@@ -612,17 +612,20 @@ TableViewModel::DatabaseFieldsHashRaw TableViewModel::itemDatabaseFieldsRaw(Tabl
             const DatabaseFields::ImageMetadata imageMetadataFields = requestedSet;
             const QVariantList fieldValues = DatabaseAccess().db()->getImageMetadata(item->imageId, imageMetadataFields);
 
-            int fieldsIndex = 0;
-            for (DatabaseFields::ImageMetadataIterator it; !it.atEnd(); ++it)
+            if (!fieldValues.isEmpty())
             {
-                /// @todo The typecasting here is a workaround...
-                if (imageMetadataFields.testFlag(DatabaseFields::ImageMetadataField(int(*it))))
+                int fieldsIndex = 0;
+                for (DatabaseFields::ImageMetadataIterator it; !it.atEnd(); ++it)
                 {
-                    const QVariant fieldValue = fieldValues.at(fieldsIndex);
-                    ++fieldsIndex;
+                    /// @todo The typecasting here is a workaround...
+                    if (imageMetadataFields.testFlag(DatabaseFields::ImageMetadataField(int(*it))))
+                    {
+                        const QVariant fieldValue = fieldValues.at(fieldsIndex);
+                        ++fieldsIndex;
 
-                    /// @todo Re-implement insert?
-                    item->databaseFields.insert(DatabaseFieldsHashRaw::uniqueKey(*it), fieldValue);
+                        /// @todo Re-implement insert?
+                        item->databaseFields.insert(DatabaseFieldsHashRaw::uniqueKey(*it), fieldValue);
+                    }
                 }
             }
         }
@@ -633,22 +636,6 @@ TableViewModel::DatabaseFieldsHashRaw TableViewModel::itemDatabaseFieldsRaw(Tabl
     }
 
     return item->databaseFields;
-}
-
-TableViewModel::DatabaseFieldsHashString TableViewModel::itemDatabaseFieldsString(TableViewModel::Item* const item, const DatabaseFields::Set requestedSet)
-{
-    DatabaseFieldsHashRaw rawHash = itemDatabaseFieldsRaw(item, requestedSet);
-    const QList<unsigned int> rawHashKeys = rawHash.keys();
-    DatabaseFieldsHashString stringHash;
-    Q_FOREACH(unsigned int key, rawHashKeys)
-    {
-        /// @todo This is also a workaround because DatabaseFields::Hash<>::value(unsigned int) is ambigious
-        const QVariant value = static_cast<QHash<unsigned int, QVariant>*>(&rawHash)->value(key);
-        const QString valueString = value.toString();
-        stringHash.insert(key, valueString);
-    }
-
-    return stringHash;
 }
 
 QVariant TableViewModel::itemDatabaseFieldRaw(TableViewModel::Item* const item, const DatabaseFields::Set requestedField)
