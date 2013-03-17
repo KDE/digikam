@@ -33,6 +33,8 @@
 
 #include "tableview_columnfactory.h"
 
+class KComboBox;
+
 namespace Digikam
 {
 
@@ -80,6 +82,34 @@ public:
     virtual QVariant data(TableViewModel::Item* const item, const int role) const;
 
     virtual ColumnCompareResult compare(TableViewModel::Item* const itemA, TableViewModel::Item* const itemB) const;
+
+    virtual TableViewColumnConfigurationWidget* getConfigurationWidget(QWidget* const parentWidget) const;
+    virtual void setConfiguration(const TableViewColumnConfiguration& newConfiguration);
+};
+
+class ColumnPhotoConfigurationWidget : public TableViewColumnConfigurationWidget
+{
+    Q_OBJECT
+
+public:
+    explicit ColumnPhotoConfigurationWidget(
+            TableViewShared* const sharedObject,
+            const TableViewColumnConfiguration& columnConfiguration,
+            QWidget* const parentWidget
+        );
+    virtual ~ColumnPhotoConfigurationWidget();
+
+    virtual TableViewColumnConfiguration getNewConfiguration();
+
+private Q_SLOTS:
+
+    void slotUpdateUI();
+
+private:
+
+    ColumnPhotoProperties::SubColumn subColumn;
+    KComboBox* selectorExposureTimeFormat;
+    KComboBox* selectorExposureTimeUnit;
 };
 
 } /* namespace TableViewColumns */
