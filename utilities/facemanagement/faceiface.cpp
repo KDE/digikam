@@ -122,7 +122,7 @@ QList<KFaceIface::Face> FaceIface::toFaces(const QList<DatabaseFace>& databaseFa
         KFaceIface::Face f;
         f.setRect(rect);
 
-        if (FaceTags::isTheUnknownPerson(databaseFace.tagId()))
+        if (!FaceTags::isTheUnknownPerson(databaseFace.tagId()))
         {
             f.setName(FaceTags::faceNameForTag(databaseFace.tagId()));
         }
