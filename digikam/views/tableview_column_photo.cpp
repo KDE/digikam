@@ -174,7 +174,7 @@ QVariant ColumnPhotoProperties::data(TableViewModel::Item* const item, const int
 {
     if (role != Qt::DisplayRole)
     {
-        return item->imageFilterModelIndex.data(role);
+        return QVariant();
     }
 
     switch (subColumn)
@@ -204,9 +204,11 @@ QVariant ColumnPhotoProperties::data(TableViewModel::Item* const item, const int
     case SubColumnFocal:
         {
             /// @todo Make this configurable
-            const QVariant focalLengthVariant = s->tableViewModel->itemDatabaseFieldRaw(item, DatabaseFields::FocalLength);
+            const DatabaseFields::Set requiredSet = DatabaseFields::FocalLength | DatabaseFields::FocalLength35;
+            const TableViewModel::DatabaseFieldsHashRaw rawFields = s->tableViewModel->itemDatabaseFieldsRaw(item, requiredSet);
+            const QVariant focalLengthVariant = rawFields.value(DatabaseFields::FocalLength);
             const QString focalLengthString = DMetadata::valueToString(focalLengthVariant, MetadataInfo::FocalLength);
-            const QVariant focalLength35Variant = s->tableViewModel->itemDatabaseFieldRaw(item, DatabaseFields::FocalLength35);
+            const QVariant focalLength35Variant = rawFields.value(DatabaseFields::FocalLength35);
             const QString focalLength35String = DMetadata::valueToString(focalLength35Variant, MetadataInfo::FocalLengthIn35mm);
 
             if (focalLength35String.isEmpty())
@@ -277,9 +279,11 @@ QVariant ColumnPhotoProperties::data(TableViewModel::Item* const item, const int
         }
     case SubColumnModeProgram:
         {
-            const QVariant exposureModeVariant = s->tableViewModel->itemDatabaseFieldRaw(item, DatabaseFields::ExposureMode);
+            const DatabaseFields::Set requiredSet = DatabaseFields::ExposureMode | DatabaseFields::ExposureProgram;
+            const TableViewModel::DatabaseFieldsHashRaw rawFields = s->tableViewModel->itemDatabaseFieldsRaw(item, requiredSet);
+            const QVariant exposureModeVariant = rawFields.value(DatabaseFields::ExposureMode);
             const QString exposureModeString = DMetadata::valueToString(exposureModeVariant, MetadataInfo::ExposureMode);
-            const QVariant exposureProgramVariant = s->tableViewModel->itemDatabaseFieldRaw(item, DatabaseFields::ExposureProgram);
+            const QVariant exposureProgramVariant = rawFields.value(DatabaseFields::ExposureProgram);
             const QString exposureProgramString = DMetadata::valueToString(exposureProgramVariant, MetadataInfo::ExposureProgram);
 
             if (exposureModeString.isEmpty() && exposureProgramString.isEmpty())

@@ -98,7 +98,7 @@ QVariant ColumnFileProperties::data(TableViewModel::Item* const item, const int 
     if ( (role != Qt::DisplayRole) &&
          (role != Qt::TextAlignmentRole) )
     {
-        return item->imageFilterModelIndex.data(role);
+        return QVariant();
     }
 
     if (role==Qt::TextAlignmentRole)
@@ -109,7 +109,7 @@ QVariant ColumnFileProperties::data(TableViewModel::Item* const item, const int 
                 return QVariant(Qt::Alignment(Qt::AlignRight | Qt::AlignVCenter));
 
             default:
-                return item->imageFilterModelIndex.data(role);
+                return QVariant();
         }
     }
 

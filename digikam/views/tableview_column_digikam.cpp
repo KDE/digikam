@@ -139,7 +139,7 @@ QVariant ColumnDigikamProperties::data(TableViewModel::Item* const item, const i
          (role != Qt::TextAlignmentRole) &&
          (role != Qt::ForegroundRole ) )
     {
-        return item->imageFilterModelIndex.data(role);
+        return QVariant();
     }
 
     if (role==Qt::TextAlignmentRole)
@@ -150,7 +150,7 @@ QVariant ColumnDigikamProperties::data(TableViewModel::Item* const item, const i
             return QVariant(Qt::Alignment(Qt::AlignRight | Qt::AlignVCenter));
 
         default:
-            return item->imageFilterModelIndex.data(role);
+            return QVariant();
         }
     }
 
@@ -188,8 +188,7 @@ QVariant ColumnDigikamProperties::data(TableViewModel::Item* const item, const i
                         break;
                 }
 
-                QBrush labelBrush = item->imageFilterModelIndex.data(role).value<QBrush>();
-                labelBrush.setColor(labelColor);
+                QBrush labelBrush(labelColor);
 
                 return QVariant::fromValue(labelBrush);
             }
@@ -246,13 +245,12 @@ QVariant ColumnDigikamProperties::data(TableViewModel::Item* const item, const i
                         break;
                 }
 
-                QBrush labelBrush = item->imageFilterModelIndex.data(role).value<QBrush>();
-                labelBrush.setColor(labelColor);
+                QBrush labelBrush(labelColor);
 
                 return QVariant::fromValue(labelBrush);
             }
         default:
-            return item->imageFilterModelIndex.data(role);
+            return QVariant();
         }
     }
 

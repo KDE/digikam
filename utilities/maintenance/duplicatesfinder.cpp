@@ -107,11 +107,11 @@ void DuplicatesFinder::slotStart()
     connect(d->job, SIGNAL(result(KJob*)),
             this, SLOT(slotDone()));
 
-    connect(d->job, SIGNAL(totalAmount(KJob*, KJob::Unit, qulonglong)),
-            this, SLOT(slotDuplicatesSearchTotalAmount(KJob*, KJob::Unit, qulonglong)));
+    connect(d->job, SIGNAL(totalAmount(KJob*,KJob::Unit,qulonglong)),
+            this, SLOT(slotDuplicatesSearchTotalAmount(KJob*,KJob::Unit,qulonglong)));
 
-    connect(d->job, SIGNAL(processedAmount(KJob*, KJob::Unit, qulonglong)),
-            this, SLOT(slotDuplicatesSearchProcessedAmount(KJob*, KJob::Unit, qulonglong)));
+    connect(d->job, SIGNAL(processedAmount(KJob*,KJob::Unit,qulonglong)),
+            this, SLOT(slotDuplicatesSearchProcessedAmount(KJob*,KJob::Unit,qulonglong)));
 
     setLabel(i18n("Find duplicates items"));
     setThumbnail(KIcon("tools-wizard").pixmap(22));

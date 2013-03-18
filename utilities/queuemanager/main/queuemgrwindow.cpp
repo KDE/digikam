@@ -337,8 +337,8 @@ void QueueMgrWindow::setupConnections()
 
     // -- GUI connections ---------------------------------------------------
 
-    connect(d->toolsView, SIGNAL(signalHistoryEntryClicked(int, qlonglong)),
-            this, SLOT(slotHistoryEntryClicked(int, qlonglong)));
+    connect(d->toolsView, SIGNAL(signalHistoryEntryClicked(int,qlonglong)),
+            this, SLOT(slotHistoryEntryClicked(int,qlonglong)));
 
     connect(d->toolsView, SIGNAL(signalAssignQueueSettings(QString)),
             this, SLOT(slotAssignQueueSettings(QString)));

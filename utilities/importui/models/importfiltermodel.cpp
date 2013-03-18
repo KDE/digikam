@@ -333,19 +333,19 @@ void ImportFilterModel::setSendCamItemInfoSignals(bool sendSignals)
 {
     if (sendSignals)
     {
-        connect(this, SIGNAL(rowsInserted(QModelIndex, int, int)),
-                this, SLOT(slotRowsInserted(QModelIndex, int, int)));
+        connect(this, SIGNAL(rowsInserted(QModelIndex,int,int)),
+                this, SLOT(slotRowsInserted(QModelIndex,int,int)));
 
-        connect(this, SIGNAL(rowsAboutToBeRemoved(QModelIndex, int, int)),
-                this, SLOT(slotRowsAboutToBeRemoved(QModelIndex, int, int)));
+        connect(this, SIGNAL(rowsAboutToBeRemoved(QModelIndex,int,int)),
+                this, SLOT(slotRowsAboutToBeRemoved(QModelIndex,int,int)));
     }
     else
     {
-        disconnect(this, SIGNAL(rowsInserted(QModelIndex, int, int)),
-                   this, SLOT(slotRowsInserted(QModelIndex, int, int)));
+        disconnect(this, SIGNAL(rowsInserted(QModelIndex,int,int)),
+                   this, SLOT(slotRowsInserted(QModelIndex,int,int)));
 
-        disconnect(this, SIGNAL(rowsAboutToBeRemoved(QModelIndex, int, int)),
-                   this, SLOT(slotRowsAboutToBeRemoved(QModelIndex, int, int)));
+        disconnect(this, SIGNAL(rowsAboutToBeRemoved(QModelIndex,int,int)),
+                   this, SLOT(slotRowsAboutToBeRemoved(QModelIndex,int,int)));
     }
 }
 

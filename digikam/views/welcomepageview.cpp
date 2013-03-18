@@ -76,7 +76,7 @@ WelcomePageView::WelcomePageView(QWidget* const parent)
 
     // ------------------------------------------------------------
 
-    connect(browserExtension(), SIGNAL(openUrlRequest(KUrl, KParts::OpenUrlArguments, KParts::BrowserArguments)),
+    connect(browserExtension(), SIGNAL(openUrlRequest(KUrl,KParts::OpenUrlArguments,KParts::BrowserArguments)),
             this, SLOT(slotUrlOpen(KUrl)));
 
     connect(ThemeManager::instance(), SIGNAL(signalThemeChanged()),
