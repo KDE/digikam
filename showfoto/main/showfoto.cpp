@@ -1220,14 +1220,11 @@ void ShowFoto::slideShow(Digikam::SlideShowSettings& settings)
         return;
     }
 
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(EditorWindow::CONFIG_GROUP_NAME);
-
-    settings.exifRotate       = group.readEntry("EXIF Rotate", true);
-    settings.fileList         = d->thumbBar->itemsUrls();
-    int   i                   = 0;
-    float cnt                 = settings.fileList.count();
-    m_cancelSlideShow         = false;
+    settings.exifRotate = Digikam::MetadataSettings::instance()->settings().exifRotate;
+    settings.fileList   = d->thumbBar->itemsUrls();
+    int   i             = 0;
+    float cnt           = settings.fileList.count();
+    m_cancelSlideShow   = false;
     Digikam::DMetadata meta;
 
     m_nameLabel->progressBarMode(Digikam::StatusProgressBar::CancelProgressBarMode,
