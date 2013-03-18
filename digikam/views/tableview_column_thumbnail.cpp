@@ -154,6 +154,7 @@ void ColumnThumbnail::slotThumbnailLoaded(const LoadingDescription& loadingDescr
         return;
     }
 
+    /// @todo Find a way to do this without the ImageFilterModel
     const QModelIndex sourceIndex = s->imageFilterModel->indexForPath(loadingDescription.filePath);
     if (!sourceIndex.isValid())
     {

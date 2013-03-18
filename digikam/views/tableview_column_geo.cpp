@@ -139,7 +139,7 @@ QVariant ColumnGeoProperties::data(TableViewModel::Item* const item, const int r
     if ( (role != Qt::DisplayRole) &&
          (role != Qt::TextAlignmentRole) )
     {
-        return item->imageFilterModelIndex.data(role);
+        return QVariant();
     }
 
     if (role==Qt::TextAlignmentRole)
@@ -150,7 +150,7 @@ QVariant ColumnGeoProperties::data(TableViewModel::Item* const item, const int r
                 return QVariant(Qt::Alignment(Qt::AlignRight | Qt::AlignVCenter));
 
             default:
-                return item->imageFilterModelIndex.data(role);
+                return QVariant();
         }
     }
 

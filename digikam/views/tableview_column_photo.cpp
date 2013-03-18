@@ -174,7 +174,7 @@ QVariant ColumnPhotoProperties::data(TableViewModel::Item* const item, const int
 {
     if (role != Qt::DisplayRole)
     {
-        return item->imageFilterModelIndex.data(role);
+        return QVariant();
     }
 
     switch (subColumn)
