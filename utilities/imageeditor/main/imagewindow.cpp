@@ -478,13 +478,9 @@ void ImageWindow::slotSetupChanged()
 {
     applyStandardSettings();
 
-    MetadataSettingsContainer writeSettings = MetadataSettings::instance()->settings();
-    m_setExifOrientationTag                 = writeSettings.exifSetOrientation;
-    m_canvas->setExifOrient(writeSettings.exifRotate);
-
     VersionManagerSettings versionSettings = AlbumSettings::instance()->getVersionManagerSettings();
     d->versionManager.setSettings(versionSettings);
-    m_nonDestructive = versionSettings.enabled;
+    m_nonDestructive                       = versionSettings.enabled;
     toggleNonDestructiveActions();
 
     d->rightSideBar->setStyle(AlbumSettings::instance()->getSidebarTitleStyle());

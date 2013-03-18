@@ -6,7 +6,7 @@
  * Date        : 2004-11-22
  * Description : stand alone digiKam image editor GUI
  *
- * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at gmail dot com>
  * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
@@ -107,6 +107,7 @@ extern "C"
 #include "iofilesettings.h"
 #include "loadingcache.h"
 #include "loadingcacheinterface.h"
+#include "metadatasettings.h"
 #include "savingcontext.h"
 #include "setup.h"
 #include "setupmisc.h"
@@ -200,6 +201,7 @@ ShowFoto::ShowFoto(const KUrl::List& urlList)
     // Setup loading cache and thumbnails interface.
 
     Digikam::LoadingCacheInterface::initialize();
+    Digikam::MetadataSettings::instance();
 
     d->thumbLoadThread = new Digikam::ThumbnailLoadThread();
     d->thumbLoadThread->setThumbnailSize(Digikam::ThumbnailSize::Huge);
@@ -568,26 +570,21 @@ void ShowFoto::applySettings()
         m_fileDeleteAction->setText(i18n("Delete File"));
     }
 
-/*
-    bool exifRotate = group.readEntry("EXIF Rotate", true);
-    m_setExifOrientationTag   = group.readEntry("EXIF Set Orientation", true);
-*/
-
     Digikam::ThumbBarToolTipSettings settings;
-    settings.showToolTips   = group.readEntry("Show ToolTips", true);
-    settings.font           = group.readEntry("ToolTips Font", KGlobalSettings::generalFont());
-    settings.showFileName   = group.readEntry("ToolTips Show File Name", true);
-    settings.showFileDate   = group.readEntry("ToolTips Show File Date", false);
-    settings.showFileSize   = group.readEntry("ToolTips Show File Size", false);
-    settings.showImageType  = group.readEntry("ToolTips Show Image Type", false);
-    settings.showImageDim   = group.readEntry("ToolTips Show Image Dim", true);
-    settings.showPhotoMake  = group.readEntry("ToolTips Show Photo Make", true);
-    settings.showPhotoDate  = group.readEntry("ToolTips Show Photo Date", true);
+    settings.showToolTips   = group.readEntry("Show ToolTips",             true);
+    settings.font           = group.readEntry("ToolTips Font",             KGlobalSettings::generalFont());
+    settings.showFileName   = group.readEntry("ToolTips Show File Name",   true);
+    settings.showFileDate   = group.readEntry("ToolTips Show File Date",   false);
+    settings.showFileSize   = group.readEntry("ToolTips Show File Size",   false);
+    settings.showImageType  = group.readEntry("ToolTips Show Image Type",  false);
+    settings.showImageDim   = group.readEntry("ToolTips Show Image Dim",   true);
+    settings.showPhotoMake  = group.readEntry("ToolTips Show Photo Make",  true);
+    settings.showPhotoDate  = group.readEntry("ToolTips Show Photo Date",  true);
     settings.showPhotoFocal = group.readEntry("ToolTips Show Photo Focal", true);
-    settings.showPhotoExpo  = group.readEntry("ToolTips Show Photo Expo", true);
-    settings.showPhotoMode  = group.readEntry("ToolTips Show Photo Mode", true);
+    settings.showPhotoExpo  = group.readEntry("ToolTips Show Photo Expo",  true);
+    settings.showPhotoMode  = group.readEntry("ToolTips Show Photo Mode",  true);
     settings.showPhotoFlash = group.readEntry("ToolTips Show Photo Flash", false);
-    settings.showPhotoWB    = group.readEntry("ToolTips Show Photo WB", false);
+    settings.showPhotoWB    = group.readEntry("ToolTips Show Photo WB",    false);
     d->thumbBar->setToolTipSettings(settings);
 }
 
