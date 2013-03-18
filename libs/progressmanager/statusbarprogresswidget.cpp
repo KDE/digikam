@@ -141,12 +141,12 @@ StatusbarProgressWidget::StatusbarProgressWidget(ProgressView* const progressVie
             progressView, SLOT(slotToggleVisibility()));
 
     connect(ProgressManager::instance(), SIGNAL(progressItemAdded(ProgressItem*)),
-            this, SLOT( slotProgressItemAdded(ProgressItem*)));
+            this, SLOT(slotProgressItemAdded(ProgressItem*)));
 
     connect(ProgressManager::instance(), SIGNAL(progressItemCompleted(ProgressItem*)),
             this, SLOT(slotProgressItemCompleted(ProgressItem*)));
 
-    connect(ProgressManager::instance(), SIGNAL(progressItemUsesBusyIndicator(ProgressItem*, bool)),
+    connect(ProgressManager::instance(), SIGNAL(progressItemUsesBusyIndicator(ProgressItem*,bool)),
             this, SLOT(updateBusyMode()));
 
     connect(progressView, SIGNAL(visibilityChanged(bool)),
@@ -247,8 +247,8 @@ void StatusbarProgressWidget::connectSingleItem()
 {
     if (d->currentItem)
     {
-        disconnect(d->currentItem, SIGNAL(progressItemProgress(ProgressItem*, unsigned int)),
-                   this, SLOT(slotProgressItemProgress(ProgressItem*, unsigned int)));
+        disconnect(d->currentItem, SIGNAL(progressItemProgress(ProgressItem*,uint)),
+                   this, SLOT(slotProgressItemProgress(ProgressItem*,uint)));
         d->currentItem = 0;
     }
 
@@ -256,8 +256,8 @@ void StatusbarProgressWidget::connectSingleItem()
 
     if (d->currentItem)
     {
-        connect(d->currentItem, SIGNAL(progressItemProgress(ProgressItem*, unsigned int)),
-                this, SLOT(slotProgressItemProgress(ProgressItem*, unsigned int)));
+        connect(d->currentItem, SIGNAL(progressItemProgress(ProgressItem*,uint)),
+                this, SLOT(slotProgressItemProgress(ProgressItem*,uint)));
     }
 }
 

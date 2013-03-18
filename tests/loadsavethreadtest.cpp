@@ -49,17 +49,17 @@ LoadSaveThreadTest::LoadSaveThreadTest(int& argc, char** argv)
 
     m_thread = new LoadSaveThread;
 
-    connect( m_thread, SIGNAL(signalImageLoaded(LoadingDescription, DImg)),
-             this, SLOT(slotImageLoaded(LoadingDescription, DImg)) );
+    connect( m_thread, SIGNAL(signalImageLoaded(LoadingDescription,DImg)),
+             this, SLOT(slotImageLoaded(LoadingDescription,DImg)) );
 
-    connect( m_thread, SIGNAL(signalImageSaved(QString, bool)),
-             this, SLOT(slotImageSaved(QString, bool)) );
+    connect( m_thread, SIGNAL(signalImageSaved(QString,bool)),
+             this, SLOT(slotImageSaved(QString,bool)) );
 
-    connect( m_thread, SIGNAL(signalLoadingProgress(LoadingDescription, float)),
-             this, SLOT(slotLoadingProgress(LoadingDescription, float)) );
+    connect( m_thread, SIGNAL(signalLoadingProgress(LoadingDescription,float)),
+             this, SLOT(slotLoadingProgress(LoadingDescription,float)) );
 
-    connect( m_thread, SIGNAL(signalSavingProgress(QString, float)),
-             this, SLOT(slotSavingProgress(QString, float)) );
+    connect( m_thread, SIGNAL(signalSavingProgress(QString,float)),
+             this, SLOT(slotSavingProgress(QString,float)) );
 
     RawDecodingSettings settings;
     settings.halfSizeColorImage    = false;

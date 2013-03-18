@@ -180,8 +180,8 @@ DeleteItemList::DeleteItemList(QWidget* const parent)
     setToolTip(i18n("List of items that are about to be deleted."));
     setWhatsThis(i18n("This is the list of items that are about to be deleted."));
 
-    connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(LoadingDescription, QPixmap)),
-            this, SLOT(slotThumbnailLoaded(LoadingDescription, QPixmap)));
+    connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(LoadingDescription,QPixmap)),
+            this, SLOT(slotThumbnailLoaded(LoadingDescription,QPixmap)));
 }
 
 DeleteItemList::~DeleteItemList()

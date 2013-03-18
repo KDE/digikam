@@ -485,8 +485,8 @@ void FuzzySearchView::setupConnections()
     connect(d->sketchWidget, SIGNAL(signalSketchChanged(QImage)),
             this, SLOT(slotDirtySketch()));
 
-    connect(d->sketchWidget, SIGNAL(signalUndoRedoStateChanged(bool, bool)),
-            this, SLOT(slotUndoRedoStateChanged(bool, bool)));
+    connect(d->sketchWidget, SIGNAL(signalUndoRedoStateChanged(bool,bool)),
+            this, SLOT(slotUndoRedoStateChanged(bool,bool)));
 
     connect(d->undoBtnSketch, SIGNAL(clicked()),
             d->sketchWidget, SLOT(slotUndo()));
@@ -512,8 +512,8 @@ void FuzzySearchView::setupConnections()
     connect(d->nameEditImage, SIGNAL(returnPressed(QString)),
             d->saveBtnImage, SLOT(animateClick()));
 
-    connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(LoadingDescription, QPixmap)),
-            this, SLOT(slotThumbnailLoaded(LoadingDescription, QPixmap)));
+    connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(LoadingDescription,QPixmap)),
+            this, SLOT(slotThumbnailLoaded(LoadingDescription,QPixmap)));
 }
 
 FuzzySearchView::~FuzzySearchView()

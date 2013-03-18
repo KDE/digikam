@@ -94,17 +94,17 @@ EditorCore::EditorCore()
     d->undoMan = new UndoManager(this);
     d->thread  = new SharedLoadSaveThread;
 
-    connect( d->thread, SIGNAL(signalImageLoaded(LoadingDescription, DImg)),
-             this, SLOT(slotImageLoaded(LoadingDescription, DImg)) );
+    connect( d->thread, SIGNAL(signalImageLoaded(LoadingDescription,DImg)),
+             this, SLOT(slotImageLoaded(LoadingDescription,DImg)) );
 
-    connect( d->thread, SIGNAL(signalImageSaved(QString, bool)),
-             this, SLOT(slotImageSaved(QString, bool)) );
+    connect( d->thread, SIGNAL(signalImageSaved(QString,bool)),
+             this, SLOT(slotImageSaved(QString,bool)) );
 
-    connect( d->thread, SIGNAL(signalLoadingProgress(LoadingDescription, float)),
-             this, SLOT(slotLoadingProgress(LoadingDescription, float)) );
+    connect( d->thread, SIGNAL(signalLoadingProgress(LoadingDescription,float)),
+             this, SLOT(slotLoadingProgress(LoadingDescription,float)) );
 
-    connect( d->thread, SIGNAL(signalSavingProgress(QString, float)),
-             this, SLOT(slotSavingProgress(QString, float)) );
+    connect( d->thread, SIGNAL(signalSavingProgress(QString,float)),
+             this, SLOT(slotSavingProgress(QString,float)) );
 }
 
 EditorCore::~EditorCore()

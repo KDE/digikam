@@ -213,7 +213,7 @@ TransactionItem::TransactionItem(QWidget* const parent, ProgressItem* const item
         d->cancelButton = new QPushButton(SmallIcon("dialog-cancel"), QString(), h);
         d->cancelButton->setToolTip( i18n("Cancel this operation."));
 
-        connect(d->cancelButton, SIGNAL( clicked()),
+        connect(d->cancelButton, SIGNAL(clicked()),
                 this, SLOT(slotItemCanceled()));
 
         h->layout()->addWidget(d->cancelButton);
@@ -347,20 +347,20 @@ ProgressView::ProgressView(QWidget* const alignWidget, QWidget* const parent, co
     connect(pm, SIGNAL(progressItemCompleted(ProgressItem*)),
             this, SLOT(slotTransactionCompleted(ProgressItem*)));
 
-    connect(pm, SIGNAL(progressItemProgress(ProgressItem*, unsigned int)),
-            this, SLOT(slotTransactionProgress(ProgressItem*, unsigned int)));
+    connect(pm, SIGNAL(progressItemProgress(ProgressItem*,uint)),
+            this, SLOT(slotTransactionProgress(ProgressItem*,uint)));
 
-    connect(pm, SIGNAL(progressItemStatus(ProgressItem*, const QString&)),
-            this, SLOT(slotTransactionStatus(ProgressItem*, const QString&)));
+    connect(pm, SIGNAL(progressItemStatus(ProgressItem*,QString)),
+            this, SLOT(slotTransactionStatus(ProgressItem*,QString)));
 
-    connect(pm, SIGNAL(progressItemLabel(ProgressItem*, const QString&)),
-            this, SLOT(slotTransactionLabel(ProgressItem*, const QString&)));
+    connect(pm, SIGNAL(progressItemLabel(ProgressItem*,QString)),
+            this, SLOT(slotTransactionLabel(ProgressItem*,QString)));
 
-    connect(pm, SIGNAL(progressItemUsesBusyIndicator(ProgressItem*, bool)),
-            this, SLOT(slotTransactionUsesBusyIndicator(ProgressItem*, bool)));
+    connect(pm, SIGNAL(progressItemUsesBusyIndicator(ProgressItem*,bool)),
+            this, SLOT(slotTransactionUsesBusyIndicator(ProgressItem*,bool)));
 
-    connect(pm, SIGNAL(progressItemThumbnail(ProgressItem*, const QPixmap&)),
-            this, SLOT(slotTransactionThumbnail(ProgressItem*, const QPixmap&)));
+    connect(pm, SIGNAL(progressItemThumbnail(ProgressItem*,QPixmap)),
+            this, SLOT(slotTransactionThumbnail(ProgressItem*,QPixmap)));
 
     connect(pm, SIGNAL(showProgressView()),
             this, SLOT(slotShow()));
@@ -401,7 +401,7 @@ void ProgressView::slotTransactionAdded(ProgressItem* item)
         }
         if ( first && d->wasLastShown )
         {
-            QTimer::singleShot( 1000, this, SLOT( slotShow() ) );
+            QTimer::singleShot( 1000, this, SLOT(slotShow()) );
         }
     }
 }
@@ -413,16 +413,16 @@ void ProgressView::slotTransactionCompleted(ProgressItem* item)
         TransactionItem* const ti = d->transactionsToListviewItems[item];
         d->transactionsToListviewItems.remove( item );
         ti->setItemComplete();
-        QTimer::singleShot( 3000, ti, SLOT( deleteLater() ) );
+        QTimer::singleShot( 3000, ti, SLOT(deleteLater()) );
 
         // see the slot for comments as to why that works
-        connect ( ti, SIGNAL( destroyed() ),
-                d->scrollView, SLOT( slotLayoutFirstItem() ) );
+        connect ( ti, SIGNAL(destroyed()),
+                d->scrollView, SLOT(slotLayoutFirstItem()) );
     }
     // This was the last item, hide.
     if ( d->transactionsToListviewItems.empty() )
     {
-        QTimer::singleShot( 3000, this, SLOT( slotHide() ) );
+        QTimer::singleShot( 3000, this, SLOT(slotHide()) );
     }
 }
 

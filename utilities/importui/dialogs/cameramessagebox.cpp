@@ -156,8 +156,8 @@ void CameraItemList::setThumbCtrl(CameraThumbsCtrl* const ctrl)
 {
     d->ctrl = ctrl;
 
-    connect(d->ctrl, SIGNAL(signalThumbInfoReady(const CamItemInfo&)),
-            this, SLOT(slotThumbnailLoaded(const CamItemInfo&)));
+    connect(d->ctrl, SIGNAL(signalThumbInfoReady(CamItemInfo)),
+            this, SLOT(slotThumbnailLoaded(CamItemInfo)));
 }
 
 void CameraItemList::slotThumbnailLoaded(const CamItemInfo& info)

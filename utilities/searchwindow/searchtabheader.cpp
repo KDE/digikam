@@ -333,8 +333,8 @@ SearchWindow* SearchTabHeader::searchWindow() const
         // Create the advanced search edit window, deferred from constructor
         d->searchWindow = new SearchWindow;
 
-        connect(d->searchWindow, SIGNAL(searchEdited(int, QString)),
-                this, SLOT(advancedSearchEdited(int, QString)),
+        connect(d->searchWindow, SIGNAL(searchEdited(int,QString)),
+                this, SLOT(advancedSearchEdited(int,QString)),
                 Qt::QueuedConnection);
     }
 

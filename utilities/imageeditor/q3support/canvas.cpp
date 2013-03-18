@@ -207,20 +207,20 @@ Canvas::Canvas(QWidget* const parent)
     connect(d->im, SIGNAL(signalLoadingStarted(QString)),
             this, SIGNAL(signalLoadingStarted(QString)));
 
-    connect(d->im, SIGNAL(signalImageLoaded(QString, bool)),
-            this, SLOT(slotImageLoaded(QString, bool)));
+    connect(d->im, SIGNAL(signalImageLoaded(QString,bool)),
+            this, SLOT(slotImageLoaded(QString,bool)));
 
-    connect(d->im, SIGNAL(signalImageSaved(QString, bool)),
-            this, SLOT(slotImageSaved(QString, bool)));
+    connect(d->im, SIGNAL(signalImageSaved(QString,bool)),
+            this, SLOT(slotImageSaved(QString,bool)));
 
-    connect(d->im, SIGNAL(signalLoadingProgress(QString, float)),
-            this, SIGNAL(signalLoadingProgress(QString, float)));
+    connect(d->im, SIGNAL(signalLoadingProgress(QString,float)),
+            this, SIGNAL(signalLoadingProgress(QString,float)));
 
     connect(d->im, SIGNAL(signalSavingStarted(QString)),
             this, SIGNAL(signalSavingStarted(QString)));
 
-    connect(d->im, SIGNAL(signalSavingProgress(QString, float)),
-            this, SIGNAL(signalSavingProgress(QString, float)));
+    connect(d->im, SIGNAL(signalSavingProgress(QString,float)),
+            this, SIGNAL(signalSavingProgress(QString,float)));
 
     connect(this, SIGNAL(signalSelected(bool)),
             this, SLOT(slotSelected()));

@@ -480,8 +480,8 @@ void ProgressManager::addProgressItemImpl(ProgressItem* const t, ProgressItem* c
     connect(this, SIGNAL(completeTransactionDeferred(ProgressItem*)),
             this, SLOT(slotTransactionCompletedDeferred(ProgressItem*)));
 
-    connect(t, SIGNAL(progressItemProgress(ProgressItem*, unsigned int)),
-            this, SIGNAL(progressItemProgress(ProgressItem*, unsigned int)));
+    connect(t, SIGNAL(progressItemProgress(ProgressItem*,uint)),
+            this, SIGNAL(progressItemProgress(ProgressItem*,uint)));
 
     connect(t, SIGNAL(progressItemAdded(ProgressItem*)),
             this, SIGNAL(progressItemAdded(ProgressItem*)));
@@ -489,17 +489,17 @@ void ProgressManager::addProgressItemImpl(ProgressItem* const t, ProgressItem* c
     connect(t, SIGNAL(progressItemCanceled(ProgressItem*)),
             this, SIGNAL(progressItemCanceled(ProgressItem*)));
 
-    connect(t, SIGNAL(progressItemStatus(ProgressItem*, const QString&)),
-            this, SIGNAL(progressItemStatus(ProgressItem*, const QString&)));
+    connect(t, SIGNAL(progressItemStatus(ProgressItem*,QString)),
+            this, SIGNAL(progressItemStatus(ProgressItem*,QString)));
 
-    connect(t, SIGNAL(progressItemLabel(ProgressItem*, const QString&)),
-            this, SIGNAL(progressItemLabel(ProgressItem*, const QString&)));
+    connect(t, SIGNAL(progressItemLabel(ProgressItem*,QString)),
+            this, SIGNAL(progressItemLabel(ProgressItem*,QString)));
 
-    connect(t, SIGNAL(progressItemUsesBusyIndicator(ProgressItem*, bool)),
-            this, SIGNAL(progressItemUsesBusyIndicator(ProgressItem*, bool)));
+    connect(t, SIGNAL(progressItemUsesBusyIndicator(ProgressItem*,bool)),
+            this, SIGNAL(progressItemUsesBusyIndicator(ProgressItem*,bool)));
 
-    connect(t, SIGNAL(progressItemThumbnail(ProgressItem*, const QPixmap&)),
-            this, SIGNAL(progressItemThumbnail(ProgressItem*, const QPixmap&)));
+    connect(t, SIGNAL(progressItemThumbnail(ProgressItem*,QPixmap)),
+            this, SIGNAL(progressItemThumbnail(ProgressItem*,QPixmap)));
 
     d->addItem(t, parent);
 

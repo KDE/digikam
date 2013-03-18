@@ -267,8 +267,8 @@ private:
             kDebug() << "Successfully opened connection to inotify:" << m_inotifyFd;
             m_notifier = new QSocketNotifier( m_inotifyFd, QSocketNotifier::Read );
 
-            connect( m_notifier, SIGNAL( activated( int ) ), 
-                     q, SLOT( slotEvent( int ) ) );
+            connect( m_notifier, SIGNAL(activated(int)), 
+                     q, SLOT(slotEvent(int)) );
         }
     }
 
