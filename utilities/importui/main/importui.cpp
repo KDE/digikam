@@ -454,6 +454,8 @@ void ImportUI::setupActions()
     connect(d->mapViewAction, SIGNAL(triggered()), d->view, SLOT(slotMapWidgetView()));
     d->imageViewSelectionAction->addAction(d->mapViewAction);
 
+    /// @todo Add table view stuff here
+
     // -- Item Sorting ------------------------------------------------------------
 
     d->itemSortAction = new KSelectAction(i18n("&Sort Items"), this);
@@ -736,7 +738,7 @@ void ImportUI::setupStatusBar()
     //------------------------------------------------------------------------------
 
     d->statusNavigateBar = new StatusNavigateBar(statusBar());
-    statusBar()->addPermanentWidget(d->statusNavigateBar, 1);    
+    statusBar()->addPermanentWidget(d->statusNavigateBar, 1);
 }
 
 void ImportUI::setupCameraController(const QString& model, const QString& port, const QString& path)

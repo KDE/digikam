@@ -426,7 +426,7 @@ void GraphicsDImgView::slotCornerButtonPressed()
             this, SLOT(slotPanIconSelectionMoved(QRect,bool)));
 
     connect(pan, SIGNAL(signalHidden()),
-            this, SLOT(slotPanIconHiden()));
+            this, SLOT(slotPanIconHidden()));
 
     pan->setImage(180, 120, item()->image());
     QRectF sceneRect(mapToScene(viewport()->rect().topLeft()), mapToScene(viewport()->rect().bottomRight()));

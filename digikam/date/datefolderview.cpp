@@ -6,8 +6,8 @@
  * Date        : 2005-04-27
  * Description : a folder view for date albums.
  *
- * Copyright (C)      2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005      by Renchi Raju <renchi dot raju at gmail dot com>
+ * Copyright (C) 2006-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2010 by Johannes Wienke <languitar at semipol dot de>
  *
  * This program is free software; you can redistribute it
@@ -57,11 +57,11 @@
 namespace Digikam
 {
 
-class DateFolderView::DateFolderViewPriv
+class DateFolderView::Private
 {
 public:
 
-    DateFolderViewPriv() :
+    Private() :
         active(false),
         dateTreeView(0),
         monthview(0)
@@ -76,9 +76,9 @@ public:
     MonthWidget*       monthview;
 };
 
-DateFolderView::DateFolderView(QWidget* parent, DateAlbumModel* dateAlbumModel)
+DateFolderView::DateFolderView(QWidget* const parent, DateAlbumModel* const dateAlbumModel)
     : KVBox(parent), StateSavingObject(this),
-      d(new DateFolderViewPriv)
+      d(new Private)
 {
     setObjectName("DateFolderView");
 
@@ -106,7 +106,7 @@ DateFolderView::~DateFolderView()
     delete d;
 }
 
-void DateFolderView::setImageModel(ImageFilterModel* model)
+void DateFolderView::setImageModel(ImageFilterModel* const model)
 {
     d->monthview->setImageModel(model);
 }
@@ -122,8 +122,7 @@ void DateFolderView::setActive(bool val)
 
     if (d->active)
     {
-        AlbumManager::instance()->setCurrentAlbum(
-            d->dateTreeView->currentAlbum());
+        AlbumManager::instance()->setCurrentAlbum(d->dateTreeView->currentAlbum());
         slotSelectionChanged(d->dateTreeView->currentAlbum());
     }
     else
@@ -142,7 +141,7 @@ void DateFolderView::slotSelectionChanged(Album* selectedAlbum)
 
     d->monthview->setActive(false);
 
-    DAlbum* dalbum = dynamic_cast<DAlbum*> (selectedAlbum);
+    DAlbum* const dalbum = dynamic_cast<DAlbum*> (selectedAlbum);
 
     if (!dalbum)
     {
@@ -197,7 +196,7 @@ void DateFolderView::gotoDate(const QDate& dt)
         return;
     }
 
-    DAlbum* dateAlbum = d->dateTreeView->albumModel()->albumForIndex(dateIndex);
+    DAlbum* const dateAlbum = d->dateTreeView->albumModel()->albumForIndex(dateIndex);
 
     if (!dateAlbum)
     {
@@ -211,7 +210,7 @@ void DateFolderView::gotoDate(const QDate& dt)
 
 }
 
-void DateFolderView::changeAlbumFromHistory(DAlbum* album)
+void DateFolderView::changeAlbumFromHistory(DAlbum* const album)
 {
     d->dateTreeView->setCurrentAlbum(album);
 }

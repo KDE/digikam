@@ -162,8 +162,3 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 121 ==> 308310 - No thumbnails are created in the album view, rebuilding thumbnails doesn't work.
 122 ==> 291917 - digiKam 2.5.0 Crash on start up.
 123 ==> 265328 - digikam-2.0.0-beta2 core does not compile against kde-4.6.0 libkdcraw.
-124 ==> 
-
-
-
-

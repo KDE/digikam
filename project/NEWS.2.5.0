@@ -109,4 +109,3 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 099 ==> 289644 : digiKam crashes while resizing pictures.
 100 ==> 290157 : Libkdcraw should support LCMS2 [patch].
 101 ==> 290196 : PATCH: Improvements for Levels adjust tool.
-

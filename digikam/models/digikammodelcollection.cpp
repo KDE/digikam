@@ -7,7 +7,7 @@
  * Description : collection of basic models used for views in digikam
  *
  * Copyright (C) 2009-2010 by Johannes Wienke <languitar at semipol dot de>
- * Copyright (C) 2010 by Andi Clemens <andi dot clemens at gmail dot com>
+ * Copyright (C) 2010      by Andi Clemens <andi dot clemens at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -35,17 +35,17 @@
 namespace Digikam
 {
 
-class DigikamModelCollection::DigikamModelCollectionPriv
+class DigikamModelCollection::Private
 {
 
 public:
 
-    DigikamModelCollectionPriv()
+    Private()
     {
         albumModel        = 0;
         tagModel          = 0;
         tagFilterModel    = 0;
-        tagFacesModel    = 0;
+        tagFacesModel     = 0;
         searchModel       = 0;
         dateAlbumModel    = 0;
         imageVersionModel = 0;
@@ -61,13 +61,13 @@ public:
 };
 
 DigikamModelCollection::DigikamModelCollection() :
-    d(new DigikamModelCollectionPriv)
+    d(new Private)
 {
-    d->albumModel     = new AlbumModel(AlbumModel::IncludeRootAlbum);
-    d->tagModel       = new TagModel(AbstractAlbumModel::IncludeRootAlbum);
-    d->tagFilterModel = new TagModel(AbstractAlbumModel::IgnoreRootAlbum);
+    d->albumModel        = new AlbumModel(AlbumModel::IncludeRootAlbum);
+    d->tagModel          = new TagModel(AbstractAlbumModel::IncludeRootAlbum);
+    d->tagFilterModel    = new TagModel(AbstractAlbumModel::IgnoreRootAlbum);
     d->tagFilterModel->setAddExcludeTristate(true);
-    d->tagFacesModel = new TagModel(AbstractAlbumModel::IgnoreRootAlbum);
+    d->tagFacesModel     = new TagModel(AbstractAlbumModel::IgnoreRootAlbum);
     d->tagFacesModel->setTagCount(TagModel::FaceTagCount);
 
     d->searchModel       = new SearchModel();
@@ -129,13 +129,8 @@ ImageVersionsModel* DigikamModelCollection::getImageVersionsModel() const
 
 void DigikamModelCollection::slotAlbumSettingsChanged()
 {
-    d->dateAlbumModel->setPixmaps(
-        SmallIcon(
-            "view-calendar-list",
-            AlbumSettings::instance()->getTreeViewIconSize()),
-        SmallIcon(
-            "view-calendar-month",
-            AlbumSettings::instance()->getTreeViewIconSize()));
+    d->dateAlbumModel->setPixmaps(SmallIcon("view-calendar-list",  AlbumSettings::instance()->getTreeViewIconSize()),
+                                  SmallIcon("view-calendar-month", AlbumSettings::instance()->getTreeViewIconSize()));
 }
 
 } // namespace Digikam

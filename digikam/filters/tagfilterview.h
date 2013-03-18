@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2009-2010 by Johannes Wienke <languitar at semipol dot de>
  * Copyright (C) 2010-2011 by Andi Clemens <andi dot clemens at gmail dot com>
- * Copyright (C)      2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2011-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -56,7 +56,7 @@ public:
      * @param parent parent for qt parent child mechanism
      * @param tagFilterModel tag model to work on
      */
-    TagFilterView(QWidget* parent, TagModel* tagFilterModel);
+    TagFilterView(QWidget* const parent, TagModel* const tagFilterModel);
 
     /**
      * Destructor.
@@ -70,8 +70,8 @@ protected:
 
 private:
 
-    class TagFilterViewPriv;
-    TagFilterViewPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // nameSpace Digikam

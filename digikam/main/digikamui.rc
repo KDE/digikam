@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="210" name="digikam" >
+<gui version="212" name="digikam" >
 
  <MenuBar>
 
@@ -83,6 +83,7 @@
      <Action name="icon_view" />
      <Action name="image_view" />
      <Action name="map_view" />
+     <Action name="table_view" />
      <!--<Action name="view_selection" />-->
      <Separator/>
      <Action name="slideshow" />
@@ -183,6 +184,7 @@
   <Action name="icon_view" />
   <Action name="image_view" />
   <Action name="map_view" />
+  <Action name="table_view" />
   <Separator/>
   <Action name="slideshow" />
   <Action name="full_screen" />

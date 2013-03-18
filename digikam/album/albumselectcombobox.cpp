@@ -43,11 +43,11 @@
 namespace Digikam
 {
 
-class AlbumSelectComboBox::AlbumSelectComboBoxPriv
+class AlbumSelectComboBox::Private
 {
 public:
 
-    explicit AlbumSelectComboBoxPriv(AlbumSelectComboBox* q)
+    explicit Private(AlbumSelectComboBox* q)
         : q(q)
     {
         model                 = 0;
@@ -70,8 +70,8 @@ public:
     AlbumSelectComboBox* const   q;
 };
 
-AlbumSelectComboBox::AlbumSelectComboBox(QWidget* parent)
-    : TreeViewLineEditComboBox(parent), d(new AlbumSelectComboBoxPriv(this))
+AlbumSelectComboBox::AlbumSelectComboBox(QWidget* const parent)
+    : TreeViewLineEditComboBox(parent), d(new Private(this))
 {
     d->noSelectionText = i18n("No Album Selected");
 }
@@ -147,7 +147,7 @@ bool AlbumSelectComboBox::isCheckable() const
     return d->isCheckable;
 }
 
-void AlbumSelectComboBox::AlbumSelectComboBoxPriv::updateCheckable()
+void AlbumSelectComboBox::Private::updateCheckable()
 {
     if (!model)
     {
@@ -158,12 +158,12 @@ void AlbumSelectComboBox::AlbumSelectComboBoxPriv::updateCheckable()
 
     if (isCheckable)
     {
-        connect(model, SIGNAL(checkStateChanged(Album*,Qt::CheckState)),
+        connect(model, SIGNAL(checkStateChanged(Album*, Qt::CheckState)),
                 q, SLOT(updateText()));
     }
     else
     {
-        disconnect(model, SIGNAL(checkStateChanged(Album*,Qt::CheckState)),
+        disconnect(model, SIGNAL(checkStateChanged(Album*, Qt::CheckState)),
                    q, SLOT(updateText()));
     }
 }
@@ -179,7 +179,7 @@ void AlbumSelectComboBox::setCloseOnActivate(bool close)
     d->updateCloseOnActivate();
 }
 
-void AlbumSelectComboBox::AlbumSelectComboBoxPriv::updateCloseOnActivate()
+void AlbumSelectComboBox::Private::updateCloseOnActivate()
 {
     if (!q->view())
     {
@@ -285,7 +285,7 @@ void AlbumSelectComboBox::updateText()
 
 // ---------------------------------------------------------------------------------------------------
 
-AbstractAlbumTreeViewSelectComboBox::AbstractAlbumTreeViewSelectComboBox(QWidget* parent)
+AbstractAlbumTreeViewSelectComboBox::AbstractAlbumTreeViewSelectComboBox(QWidget* const parent)
     : AlbumSelectComboBox(parent), m_treeView(0)
 {
 }
@@ -306,7 +306,7 @@ void AbstractAlbumTreeViewSelectComboBox::sendViewportEventToView(QEvent* e)
     m_treeView->viewportEvent(e);
 }
 
-void AbstractAlbumTreeViewSelectComboBox::setTreeView(AbstractAlbumTreeView* treeView)
+void AbstractAlbumTreeViewSelectComboBox::setTreeView(AbstractAlbumTreeView* const treeView)
 {
     // this is independent from the installView mechanism, just to override
     // the tree view created below without the need to subclass
@@ -316,14 +316,21 @@ void AbstractAlbumTreeViewSelectComboBox::setTreeView(AbstractAlbumTreeView* tre
     }
 }
 
+// -------------------------------------------------------------------------------------------------------------------
+
 class CheckUncheckContextMenuElement : public QObject, public AbstractAlbumTreeView::ContextMenuElement
 {
 public:
-    explicit CheckUncheckContextMenuElement(QObject* parent) : QObject(parent) {}
 
-    void addActions(AbstractAlbumTreeView* view, ContextMenuHelper& cmh, Album* album)
+    explicit CheckUncheckContextMenuElement(QObject* const parent)
+        : QObject(parent)
     {
-        AbstractCheckableAlbumModel *checkable = qobject_cast<AbstractCheckableAlbumModel*>(view->albumModel());
+    }
+
+    void addActions(AbstractAlbumTreeView* const view, ContextMenuHelper& cmh, Album* const album)
+    {
+        AbstractCheckableAlbumModel* const checkable = qobject_cast<AbstractCheckableAlbumModel*>(view->albumModel());
+
         if (checkable)
         {
             cmh.setAlbumModel(checkable);
@@ -343,7 +350,7 @@ void AbstractAlbumTreeViewSelectComboBox::addCheckUncheckContextMenuActions()
 
 // ---------------------------------------------------------------------------------
 
-AlbumTreeViewSelectComboBox::AlbumTreeViewSelectComboBox(QWidget* parent)
+AlbumTreeViewSelectComboBox::AlbumTreeViewSelectComboBox(QWidget* const parent)
     : AbstractAlbumTreeViewSelectComboBox(parent)
 {
 }
@@ -386,7 +393,7 @@ void AlbumTreeViewSelectComboBox::setModel(AlbumModel* model, CheckableAlbumFilt
 
 // ---------------------------------------------------------------------------------------------------
 
-TagTreeViewSelectComboBox::TagTreeViewSelectComboBox(QWidget* parent)
+TagTreeViewSelectComboBox::TagTreeViewSelectComboBox(QWidget* const parent)
     : AbstractAlbumTreeViewSelectComboBox(parent)
 {
 }
@@ -402,7 +409,8 @@ void TagTreeViewSelectComboBox::setDefaultModel()
 }
 
 void TagTreeViewSelectComboBox::setModel(TagModel* model,
-                                         TagPropertiesFilterModel* filteredModel, CheckableAlbumFilterModel* filterModel)
+                                         TagPropertiesFilterModel* filteredModel,
+                                         CheckableAlbumFilterModel* filterModel)
 {
     if (!m_treeView)
     {

@@ -7,7 +7,7 @@
  * Description : setup Metadata tab.
  *
  * Copyright (C) 2003-2004 by Ralf Holzer <ralf at well dot com>
- * Copyright (C) 2003-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2003-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -152,13 +152,13 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
     setWidget(d->tab);
     setWidgetResizable(true);
 
-    QWidget* panel          = new QWidget;
-    QVBoxLayout* mainLayout = new QVBoxLayout;
+    QWidget* const panel          = new QWidget;
+    QVBoxLayout* const mainLayout = new QVBoxLayout;
 
     // --------------------------------------------------------
 
-    d->fieldsGroup            = new QGroupBox;
-    QGridLayout* fieldsLayout = new QGridLayout;
+    d->fieldsGroup                  = new QGroupBox;
+    QGridLayout* const fieldsLayout = new QGridLayout;
 
     d->fieldsGroup->setWhatsThis(i18nc("@info:whatsthis",
                                        "<para>In addition to the pixel content, image files usually "
@@ -168,23 +168,23 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
                                        "<para>Storing in metadata allows to preserve this information "
                                        "when moving or sending the files to different systems.</para>"));
 
-    QLabel* fieldsIconLabel = new QLabel;
+    QLabel* const fieldsIconLabel = new QLabel;
     fieldsIconLabel->setPixmap(SmallIcon("format-list-unordered", KIconLoader::SizeMedium));
 
-    QLabel* fieldsLabel     = new QLabel(i18nc("@label", "Write This Information to the Metadata"));
+    QLabel* const fieldsLabel     = new QLabel(i18nc("@label", "Write This Information to the Metadata"));
 
-    d->saveTagsBox          = new QCheckBox;
+    d->saveTagsBox      = new QCheckBox;
     d->saveTagsBox->setText(i18nc("@option:check", "Image tags"));
     d->saveTagsBox->setWhatsThis(i18nc("@info:whatsthis", "Turn on this option to store the image tags "
                                        "in the XMP and IPTC tags."));
 
-    d->saveCommentsBox = new QCheckBox;
+    d->saveCommentsBox  = new QCheckBox;
     d->saveCommentsBox->setText(i18nc("@option:check", "Captions and title"));
     d->saveCommentsBox->setWhatsThis(i18nc("@info:whatsthis", "Turn on this option to store image caption and title "
                                            "in the JFIF Comment section, the EXIF tag, the XMP tag, "
                                            "and the IPTC tag."));
 
-    d->saveRatingBox = new QCheckBox;
+    d->saveRatingBox    = new QCheckBox;
     d->saveRatingBox->setText(i18nc("@option:check", "Rating"));
     d->saveRatingBox->setWhatsThis(i18nc("@info:whatsthis", "Turn on this option to store the image rating "
                                          "in the EXIF tag and the XMP tags."));
@@ -199,12 +199,12 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
     d->saveColorLabelBox->setWhatsThis(i18nc("@info:whatsthis", "Turn on this option to store the image color label "
                                              "in the XMP tags."));
 
-    d->saveDateTimeBox = new QCheckBox;
+    d->saveDateTimeBox   = new QCheckBox;
     d->saveDateTimeBox->setText(i18nc("@option:check", "Timestamps"));
     d->saveDateTimeBox->setWhatsThis(i18nc("@info:whatsthis", "Turn on this option to store the image date and time "
                                            "in the EXIF, XMP, and IPTC tags."));
 
-    d->saveTemplateBox = new QCheckBox;
+    d->saveTemplateBox   = new QCheckBox;
     d->saveTemplateBox->setText(i18nc("@option:check", "Metadata templates (Copyright etc.)"));
     d->saveTemplateBox->setWhatsThis(i18nc("@info:whatsthis", "Turn on this option to store the metadata "
                                            "template in the XMP and the IPTC tags. "
@@ -224,27 +224,27 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    d->readWriteGroup            = new QGroupBox;
-    QGridLayout* readWriteLayout = new QGridLayout;
+    d->readWriteGroup                  = new QGroupBox;
+    QGridLayout* const readWriteLayout = new QGridLayout;
 
-    QLabel* readWriteIconLabel = new QLabel;
+    QLabel* const readWriteIconLabel   = new QLabel;
     readWriteIconLabel->setPixmap(SmallIcon("document-open", KIconLoader::SizeMedium));
 
-    QLabel* readWriteLabel = new QLabel(i18nc("@label", "Reading and Writing Metadata"));
+    QLabel* const readWriteLabel       = new QLabel(i18nc("@label", "Reading and Writing Metadata"));
 
-    d->readXMPSidecarBox   = new QCheckBox;
+    d->readXMPSidecarBox  = new QCheckBox;
     d->readXMPSidecarBox->setText(i18nc("@option:check", "Read from sidecar files"));
     d->readXMPSidecarBox->setWhatsThis(i18nc("@info:whatsthis",
                                              "Turn on this option to read metadata from XMP sidecar files when reading metadata."));
     d->readXMPSidecarBox->setEnabled(KExiv2::supportXmp());
 
-    d->writeXMPSidecarBox  = new QCheckBox;
+    d->writeXMPSidecarBox = new QCheckBox;
     d->writeXMPSidecarBox->setText(i18nc("@option:check", "Write to sidecar files"));
     d->writeXMPSidecarBox->setWhatsThis(i18nc("@info:whatsthis",
                                               "Turn on this option to save, as specified, metadata to XMP sidecar files."));
     d->writeXMPSidecarBox->setEnabled(KExiv2::supportXmp());
 
-    d->writingModeCombo    = new KComboBox;
+    d->writingModeCombo   = new KComboBox;
     d->writingModeCombo->addItem(i18n("Write to XMP sidecar for read-only image only"), KExiv2::WRITETOSIDECARONLY4READONLYFILES);
     d->writingModeCombo->addItem(i18n("Write to XMP sidecar only"),                     KExiv2::WRITETOSIDECARONLY);
     d->writingModeCombo->addItem(i18n("Write to image and XMP Sidecar"),                KExiv2::WRITETOSIDECARANDIMAGE);
@@ -278,17 +278,17 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    QFrame*      infoBox  = new QFrame;
-    QGridLayout* infoBoxGrid = new QGridLayout;
+    QFrame* const infoBox           = new QFrame;
+    QGridLayout* const infoBoxGrid  = new QGridLayout;
     infoBox->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
 
-    KUrlLabel* exiv2LogoLabel = new KUrlLabel(infoBox);
+    KUrlLabel* const exiv2LogoLabel = new KUrlLabel(infoBox);
     exiv2LogoLabel->setText(QString());
     exiv2LogoLabel->setUrl("http://www.exiv2.org");
     exiv2LogoLabel->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-exiv2.png")));
     exiv2LogoLabel->setWhatsThis(i18n("Visit Exiv2 project website"));
 
-    QLabel* explanation = new QLabel(infoBox);
+    QLabel* const explanation = new QLabel(infoBox);
     explanation->setOpenExternalLinks(true);
     explanation->setWordWrap(true);
     QString txt;
@@ -327,14 +327,14 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    QWidget* rotationPanel      = new QWidget(d->tab);
-    QVBoxLayout* rotationLayout = new QVBoxLayout;
+    QWidget* const rotationPanel      = new QWidget(d->tab);
+    QVBoxLayout* const rotationLayout = new QVBoxLayout;
 
-    d->rotationGroup                 = new QGroupBox;
-    QGridLayout* rotationGroupLayout = new QGridLayout;
+    d->rotationGroup                       = new QGroupBox;
+    QGridLayout* const rotationGroupLayout = new QGridLayout;
 
-    QLabel* rotationExplanation = new QLabel(i18nc("@label", "When rotating a file"));
-    QLabel* rotationIcon        = new QLabel;
+    QLabel* const rotationExplanation = new QLabel(i18nc("@label", "When rotating a file"));
+    QLabel* const rotationIcon        = new QLabel;
     rotationIcon->setPixmap(SmallIcon("transform-rotate", KIconLoader::SizeMedium));
 
     d->rotateByFlag             = new QRadioButton(i18nc("@option:radio", "Rotate by only setting a flag"));
@@ -401,11 +401,11 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    d->rotationAdvGroup            = new QGroupBox;
-    QGridLayout* rotationAdvLayout = new QGridLayout;
+    d->rotationAdvGroup                  = new QGroupBox;
+    QGridLayout* const rotationAdvLayout = new QGridLayout;
 
-    QLabel* rotationAdvExpl  = new QLabel(i18nc("@label", "Advanced Settings"));
-    QLabel* rotationAdvIcon  = new QLabel;
+    QLabel* const rotationAdvExpl  = new QLabel(i18nc("@label", "Advanced Settings"));
+    QLabel* const rotationAdvIcon  = new QLabel;
     rotationAdvIcon->setPixmap(SmallIcon("configure", KIconLoader::SizeMedium));
 
     d->exifRotateBox         = new QCheckBox;
@@ -431,16 +431,16 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    QWidget* displayPanel      = new QWidget;
-    QGridLayout* displayLayout = new QGridLayout;
+    QWidget* const displayPanel      = new QWidget;
+    QGridLayout* const displayLayout = new QGridLayout;
 
-    QLabel* displayLabel       = new QLabel(i18nc("@info:label", "Select Metadata Fields to Be Displayed"));
+    QLabel* const displayLabel       = new QLabel(i18nc("@info:label", "Select Metadata Fields to Be Displayed"));
 
-    QLabel* displayIcon        = new QLabel;
+    QLabel* const displayIcon        = new QLabel;
     displayIcon->setPixmap(SmallIcon("view-list-tree", KIconLoader::SizeMedium));//"folder-image"));
 
-    KTabWidget* displaySubTab  = new KTabWidget;
-    d->tagsCfgPanel            = new MetadataPanel(displaySubTab);
+    KTabWidget* const displaySubTab  = new KTabWidget;
+    d->tagsCfgPanel                  = new MetadataPanel(displaySubTab);
 
     displayLayout->addWidget(displayIcon,   0, 0);
     displayLayout->addWidget(displayLabel,  0, 1);
@@ -454,18 +454,18 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
 
 #ifdef HAVE_NEPOMUK
 
-    QWidget* nepoPanel      = new QWidget(d->tab);
-    QVBoxLayout* nepoLayout = new QVBoxLayout(nepoPanel);
+    QWidget* const nepoPanel      = new QWidget(d->tab);
+    QVBoxLayout* const nepoLayout = new QVBoxLayout(nepoPanel);
 
-    QGroupBox* nepoGroup    = new QGroupBox(i18n("Nepomuk Semantic Desktop"), nepoPanel);
-    QVBoxLayout* gLayout3   = new QVBoxLayout(nepoGroup);
+    QGroupBox* const nepoGroup    = new QGroupBox(i18n("Nepomuk Semantic Desktop"), nepoPanel);
+    QVBoxLayout* const gLayout3   = new QVBoxLayout(nepoGroup);
 
-    d->saveToNepomukBox     = new QCheckBox;
+    d->saveToNepomukBox           = new QCheckBox;
     d->saveToNepomukBox->setText(i18n("Store metadata from digiKam in Nepomuk"));
     d->saveToNepomukBox->setWhatsThis(i18n("Turn on this option to push rating, comments and tags "
                                            "from digiKam into the Nepomuk storage"));
 
-    d->readFromNepomukBox   = new QCheckBox;
+    d->readFromNepomukBox         = new QCheckBox;
     d->readFromNepomukBox->setText(i18n("Read metadata from Nepomuk"));
     d->readFromNepomukBox->setWhatsThis(i18n("Turn on this option if you want to apply changes to "
                                              "rating, comments and tags made in Nepomuk to digiKam's metadata storage. "
@@ -490,14 +490,14 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    QFrame*      nepoBox  = new QFrame(nepoPanel);
-    QGridLayout* nepoGrid = new QGridLayout(nepoBox);
+    QFrame* const nepoBox         = new QFrame(nepoPanel);
+    QGridLayout* const nepoGrid   = new QGridLayout(nepoBox);
     nepoBox->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
 
-    QLabel* nepoLogoLabel   = new QLabel;
+    QLabel* const nepoLogoLabel   = new QLabel;
     nepoLogoLabel->setPixmap(KIconLoader::global()->loadIcon("nepomuk", KIconLoader::NoGroup, KIconLoader::SizeLarge));
 
-    QLabel* nepoExplanation = new QLabel(nepoBox);
+    QLabel* const nepoExplanation = new QLabel(nepoBox);
     nepoExplanation->setOpenExternalLinks(true);
     nepoExplanation->setWordWrap(true);
     QString nepotxt;
@@ -561,14 +561,7 @@ void SetupMetadata::slotProcessExiv2Url(const QString& url)
 
 void SetupMetadata::applySettings()
 {
-    AlbumSettings* aSettings    = AlbumSettings::instance();
-
-    if (!aSettings)
-    {
-        return;
-    }
-
-    MetadataSettings* mSettings = MetadataSettings::instance();
+    MetadataSettings* const mSettings = MetadataSettings::instance();
 
     if (!mSettings)
     {
@@ -610,12 +603,12 @@ void SetupMetadata::applySettings()
 
     if (d->writeXMPSidecarBox->isChecked())
     {
-        set.metadataWritingMode   = (KExiv2::MetadataWritingMode)
-                                    d->writingModeCombo->itemData(d->writingModeCombo->currentIndex()).toInt();
+        set.metadataWritingMode = (KExiv2::MetadataWritingMode)
+                                  d->writingModeCombo->itemData(d->writingModeCombo->currentIndex()).toInt();
     }
     else
     {
-        set.metadataWritingMode   = KExiv2::WRITETOIMAGEONLY;
+        set.metadataWritingMode = KExiv2::WRITETOIMAGEONLY;
     }
 
     set.updateFileTimeStamp   = d->updateFileTimeStampBox->isChecked();
@@ -623,6 +616,13 @@ void SetupMetadata::applySettings()
     mSettings->setSettings(set);
 
 #ifdef HAVE_NEPOMUK
+    AlbumSettings* const aSettings = AlbumSettings::instance();
+
+    if (!aSettings)
+    {
+        return;
+    }
+
     aSettings->setSyncDigikamToNepomuk(d->saveToNepomukBox->isChecked());
     aSettings->setSyncNepomukToDigikam(d->readFromNepomukBox->isChecked());
 
@@ -631,23 +631,15 @@ void SetupMetadata::applySettings()
         aSettings->triggerResyncWithNepomuk();
     }
 
-#endif
-
     aSettings->saveSettings();
+#endif
 
     d->tagsCfgPanel->applySettings();
 }
 
 void SetupMetadata::readSettings()
 {
-    AlbumSettings* aSettings      = AlbumSettings::instance();
-
-    if (!aSettings)
-    {
-        return;
-    }
-
-    MetadataSettings* mSettings   = MetadataSettings::instance();
+    MetadataSettings* const mSettings = MetadataSettings::instance();
 
     if (!mSettings)
     {
@@ -695,6 +687,13 @@ void SetupMetadata::readSettings()
     }
 
 #ifdef HAVE_NEPOMUK
+    AlbumSettings* const aSettings = AlbumSettings::instance();
+
+    if (!aSettings)
+    {
+        return;
+    }
+
     d->saveToNepomukBox->setChecked(aSettings->getSyncDigikamToNepomuk());
     d->readFromNepomukBox->setChecked(aSettings->getSyncNepomukToDigikam());
     slotNepomukToggled();

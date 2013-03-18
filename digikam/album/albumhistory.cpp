@@ -6,8 +6,8 @@
  * Date        : 2004-11-17
  * Description : albums history manager.
  *
- * Copyright (C) 2004 by Joern Ahrens <joern dot ahrens at kdemail dot net>
- * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004      by Joern Ahrens <joern dot ahrens at kdemail dot net>
+ * Copyright (C) 2006-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -52,7 +52,7 @@ public:
         widget = 0;
     };
 
-    HistoryItem(Album* a, QWidget* w)
+    HistoryItem(Album* const a, QWidget* const w)
     {
         album  = a;
         widget = w;
@@ -89,21 +89,25 @@ public:
         return (current == item.current) && (select == item.select);
     }
 
-    ImageInfo  current;
+    ImageInfo        current;
     QList<ImageInfo> select;
 };
 
 // ---------------------------------------------------------------------
 
-class AlbumHistory::AlbumHistoryPriv
+class AlbumHistory::Private
 {
 public:
 
-    AlbumHistoryPriv() :
+    Private() :
         moving(false),
         blockSelection(false)
     {
     }
+
+    void forward(unsigned int steps = 1);
+
+public:
 
     bool                          moving;
     bool                          blockSelection;
@@ -111,11 +115,9 @@ public:
     QList<HistoryItem>            backwardStack;
     QList<HistoryItem>            forwardStack;
     QMap<Album*, HistoryPosition> historyPos;
-
-    void forward(unsigned int steps = 1);
 };
 
-void AlbumHistory::AlbumHistoryPriv::forward(unsigned int steps)
+void AlbumHistory::Private::forward(unsigned int steps)
 {
     if (forwardStack.isEmpty() || (int)steps > forwardStack.count())
     {
@@ -132,7 +134,7 @@ void AlbumHistory::AlbumHistoryPriv::forward(unsigned int steps)
 }
 
 AlbumHistory::AlbumHistory()
-    : d(new AlbumHistoryPriv)
+    : d(new Private)
 {
 }
 
@@ -151,7 +153,7 @@ void AlbumHistory::clearHistory()
     d->moving = false;
 }
 
-void AlbumHistory::addAlbum(Album* album, QWidget* widget)
+void AlbumHistory::addAlbum(Album* const album, QWidget* const widget)
 {
     if (!album || !widget || d->moving)
     {
@@ -172,7 +174,7 @@ void AlbumHistory::addAlbum(Album* album, QWidget* widget)
     d->forwardStack.clear();
 }
 
-void AlbumHistory::deleteAlbum(Album* album)
+void AlbumHistory::deleteAlbum(Album* const album)
 {
     if (!album || d->backwardStack.isEmpty())
     {
@@ -306,7 +308,7 @@ void AlbumHistory::getForwardHistory(QStringList& list) const
     }
 }
 
-void AlbumHistory::back(Album** album, QWidget** widget, unsigned int steps)
+void AlbumHistory::back(Album** const album, QWidget** const widget, unsigned int steps)
 {
     *album  = 0;
     *widget = 0;
@@ -333,7 +335,7 @@ void AlbumHistory::back(Album** album, QWidget** widget, unsigned int steps)
     *widget = d->backwardStack.last().widget;
 }
 
-void AlbumHistory::forward(Album** album, QWidget** widget, unsigned int steps)
+void AlbumHistory::forward(Album** const album, QWidget** const widget, unsigned int steps)
 {
     *album  = 0;
     *widget = 0;
@@ -354,7 +356,7 @@ void AlbumHistory::forward(Album** album, QWidget** widget, unsigned int steps)
     *widget = d->backwardStack.last().widget;
 }
 
-void AlbumHistory::getCurrentAlbum(Album** album, QWidget** widget) const
+void AlbumHistory::getCurrentAlbum(Album** const album, QWidget** const widget) const
 {
     *album  = 0;
     *widget = 0;
@@ -382,7 +384,7 @@ bool AlbumHistory::isBackwardEmpty() const
 
 void AlbumHistory::slotAlbumSelected()
 {
-    Album* currentAlbum = AlbumManager::instance()->currentAlbum();
+    Album* const currentAlbum = AlbumManager::instance()->currentAlbum();
 
     if (d->historyPos.contains(currentAlbum))
     {
@@ -393,7 +395,7 @@ void AlbumHistory::slotAlbumSelected()
 
 void AlbumHistory::slotAlbumCurrentChanged()
 {
-    Album* currentAlbum = AlbumManager::instance()->currentAlbum();
+    Album* const currentAlbum = AlbumManager::instance()->currentAlbum();
 
     if (d->historyPos.contains(currentAlbum))
     {
@@ -408,7 +410,7 @@ void AlbumHistory::slotAlbumCurrentChanged()
 
 void AlbumHistory::slotCurrentChange(const ImageInfo& info)
 {
-    Album* currentAlbum                 = AlbumManager::instance()->currentAlbum();
+    Album* const currentAlbum           = AlbumManager::instance()->currentAlbum();
     d->historyPos[currentAlbum].current = info;
 }
 
@@ -419,7 +421,7 @@ void AlbumHistory::slotImageSelected(const ImageInfoList& selectedImages)
         return;
     }
 
-    Album* currentAlbum = AlbumManager::instance()->currentAlbum();
+    Album* const currentAlbum = AlbumManager::instance()->currentAlbum();
 
     if (d->historyPos.contains(currentAlbum))
     {
@@ -429,7 +431,7 @@ void AlbumHistory::slotImageSelected(const ImageInfoList& selectedImages)
 
 void AlbumHistory::slotClearSelectPAlbum(const ImageInfo& imageInfo)
 {
-    Album* album = dynamic_cast<Album*>(AlbumManager::instance()->findPAlbum(imageInfo.albumId()));
+    Album* const album = dynamic_cast<Album*>(AlbumManager::instance()->findPAlbum(imageInfo.albumId()));
 
     if (d->historyPos.contains(album))
     {
@@ -439,7 +441,7 @@ void AlbumHistory::slotClearSelectPAlbum(const ImageInfo& imageInfo)
 
 void AlbumHistory::slotClearSelectTAlbum(int id)
 {
-    Album* album = dynamic_cast<Album*>(AlbumManager::instance()->findTAlbum(id));
+    Album* const album = dynamic_cast<Album*>(AlbumManager::instance()->findTAlbum(id));
 
     if (d->historyPos.contains(album))
     {

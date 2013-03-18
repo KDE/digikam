@@ -6,7 +6,7 @@
  * Date        : 2006-06-13
  * Description : a widget to display an image preview
  *
- * Copyright (C) 2006-2012 Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2013 Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -100,7 +100,7 @@ protected:
 protected Q_SLOTS:
 
     void slotCornerButtonPressed();
-    void slotPanIconHiden();
+    void slotPanIconHidden();
 
     virtual void slotPanIconSelectionMoved(const QRect&, bool);
     virtual void slotContentTakeFocus();

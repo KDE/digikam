@@ -7,7 +7,7 @@
  * Description : image editor canvas management class
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -1452,7 +1452,7 @@ void Canvas::slotCornerButtonPressed()
             this, SLOT(slotPanIconSelectionMoved(QRect,bool)));
 
     connect(pan, SIGNAL(signalHidden()),
-            this, SLOT(slotPanIconHiden()));
+            this, SLOT(slotPanIconHidden()));
 
     QRect r((int)(contentsX()    / d->zoom), (int)(contentsY()     / d->zoom),
             (int)(visibleWidth() / d->zoom), (int)(visibleHeight() / d->zoom));
@@ -1470,7 +1470,7 @@ void Canvas::slotCornerButtonPressed()
     pan->setCursorToLocalRegionSelectionCenter();
 }
 
-void Canvas::slotPanIconHiden()
+void Canvas::slotPanIconHidden()
 {
     d->cornerButton->blockSignals(true);
     d->cornerButton->animateClick();
@@ -1486,7 +1486,7 @@ void Canvas::slotPanIconSelectionMoved(const QRect& r, bool b)
         d->panIconPopup->hide();
         d->panIconPopup->deleteLater();
         d->panIconPopup = 0;
-        slotPanIconHiden();
+        slotPanIconHidden();
     }
 }
 

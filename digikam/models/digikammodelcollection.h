@@ -7,7 +7,7 @@
  * Description : collection of basic models used for views in digikam
  *
  * Copyright (C) 2009-2010 by Johannes Wienke <languitar at semipol dot de>
- * Copyright (C) 2010 by Andi Clemens <andi dot clemens at gmail dot com>
+ * Copyright (C) 2010      by Andi Clemens <andi dot clemens at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -54,12 +54,12 @@ public:
     DigikamModelCollection();
     virtual ~DigikamModelCollection();
 
-    AlbumModel* getAlbumModel() const;
-    TagModel* getTagModel() const;
-    TagModel* getTagFilterModel() const;
-    TagModel* getTagFacesModel() const;
-    SearchModel* getSearchModel() const;
-    DateAlbumModel* getDateAlbumModel() const;
+    AlbumModel*         getAlbumModel()         const;
+    TagModel*           getTagModel()           const;
+    TagModel*           getTagFilterModel()     const;
+    TagModel*           getTagFacesModel()      const;
+    SearchModel*        getSearchModel()        const;
+    DateAlbumModel*     getDateAlbumModel()     const;
     ImageVersionsModel* getImageVersionsModel() const;
 
 private Q_SLOTS:
@@ -68,8 +68,8 @@ private Q_SLOTS:
 
 private:
 
-    class DigikamModelCollectionPriv;
-    DigikamModelCollectionPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

@@ -309,6 +309,22 @@ public:
                (videoMetadata & other.videoMetadata);
     }
 
+    // overloading operator|= creates ambiguity with the database fields'
+    // operator|=, therefore we give it another name.
+    inline Set& setFields(const Set& otherSet)
+    {
+        images|= otherSet.images;
+        imageInformation|= otherSet.imageInformation;
+        imageMetadata|= otherSet.imageMetadata;
+        imageComments|= otherSet.imageComments;
+        imagePositions|= otherSet.imagePositions;
+        imageHistory|= otherSet.imageHistory;
+        customEnum|= otherSet.customEnum;
+        videoMetadata|= otherSet.videoMetadata;
+
+        return *this;
+    }
+
     inline CustomEnum& operator=(const CustomEnum& f)
     {
         return customEnum.operator=(f);

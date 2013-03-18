@@ -6,7 +6,7 @@
  * Date        : 2010-08-20
  * Description : central place for Metadata settings
  *
- * Copyright (C) 2010-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -41,11 +41,11 @@
 namespace Digikam
 {
 
-class MetadataSettings::MetadataSettingsPriv
+class MetadataSettings::Private
 {
 public:
 
-    MetadataSettingsPriv()
+    Private()
         : mutex(QMutex::Recursive),
           configGroup("Metadata Settings")
     {
@@ -63,7 +63,7 @@ public:
     MetadataSettingsContainer setSettings(const MetadataSettingsContainer& s);
 };
 
-MetadataSettingsContainer MetadataSettings::MetadataSettingsPriv::readFromConfig() const
+MetadataSettingsContainer MetadataSettings::Private::readFromConfig() const
 {
     MetadataSettingsContainer s;
     KSharedConfig::Ptr config = KGlobal::config();
@@ -72,14 +72,14 @@ MetadataSettingsContainer MetadataSettings::MetadataSettingsPriv::readFromConfig
     return s;
 }
 
-void MetadataSettings::MetadataSettingsPriv::writeToConfig() const
+void MetadataSettings::Private::writeToConfig() const
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(configGroup);
     settings.writeToConfig(group);
 }
 
-MetadataSettingsContainer MetadataSettings::MetadataSettingsPriv::setSettings(const MetadataSettingsContainer& s)
+MetadataSettingsContainer MetadataSettings::Private::setSettings(const MetadataSettingsContainer& s)
 {
     QMutexLocker lock(&mutex);
     MetadataSettingsContainer old;
@@ -107,7 +107,7 @@ MetadataSettings* MetadataSettings::instance()
 }
 
 MetadataSettings::MetadataSettings()
-    : d(new MetadataSettingsPriv)
+    : d(new Private)
 {
     readFromConfig();
     qRegisterMetaType<MetadataSettingsContainer>("MetadataSettingsContainer");

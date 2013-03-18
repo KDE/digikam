@@ -11,8 +11,8 @@
  *               http://www.cs.washington.edu/homes/salesin/abstracts.html
  *
  * Copyright (C) 2003      by Ricardo Niederberger Cabral <nieder at mail dot ru>
- * Copyright (C) 2008-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2008-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2008-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -56,7 +56,7 @@ namespace Haar
 static const float s_haar_weights[2][6][3] =
 {
     // For scanned picture (sketch=0):
-    //    Y      I      Q         idx    total       occurs
+    //       Y      I      Q         idx    total       occurs
     {   { 5.00F, 19.21F, 34.37F },   // 0   58.58       1 (`DC' component)
         { 0.83F,  1.26F,  0.36F },   // 1    2.45       3
         { 1.01F,  0.44F,  0.45F },   // 2    1.90       5
@@ -66,7 +66,7 @@ static const float s_haar_weights[2][6][3] =
     },  // 5    0.71       16384-25=16359
 
     // For handdrawn/painted sketch (sketch=1):
-    //    Y      I      Q
+    //       Y      I      Q
     {   { 4.04F, 15.14F, 22.62F },
         { 0.78F,  0.92F,  0.40F },
         { 0.46F,  0.53F,  0.63F },
@@ -188,6 +188,7 @@ public:
     {
         return m_bin[index];
     }
+
     unsigned char binAbs(int index) const
     {
         return (index > 0) ? m_bin[index] : m_bin[-index];
@@ -215,6 +216,7 @@ public:
     {
         return s_haar_weights[(int)m_type][weight][channel];
     }
+
     float weightForAverage(int channel)   const
     {
         return s_haar_weights[(int)m_type][0][channel];

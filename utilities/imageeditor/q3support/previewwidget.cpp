@@ -6,7 +6,7 @@
  * Date        : 2006-06-13
  * Description : a widget to display an image preview
  *
- * Copyright (C) 2006-2012 Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2013 Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -823,7 +823,7 @@ void PreviewWidget::slotCornerButtonPressed()
             this, SLOT(slotPanIconSelectionMoved(QRect,bool)));
 
     connect(pan, SIGNAL(signalHidden()),
-            this, SLOT(slotPanIconHiden()));
+            this, SLOT(slotPanIconHidden()));
 
     QRect r((int)(contentsX()    / zoomFactor()), (int)(contentsY()     / zoomFactor()),
             (int)(visibleWidth() / zoomFactor()), (int)(visibleHeight() / zoomFactor()));
@@ -842,7 +842,7 @@ void PreviewWidget::slotCornerButtonPressed()
     pan->setCursorToLocalRegionSelectionCenter();
 }
 
-void PreviewWidget::slotPanIconHiden()
+void PreviewWidget::slotPanIconHidden()
 {
     d->cornerButton->blockSignals(true);
     d->cornerButton->animateClick();
@@ -858,7 +858,7 @@ void PreviewWidget::slotPanIconSelectionMoved(const QRect& r, bool b)
         d->panIconPopup->hide();
         d->panIconPopup->deleteLater();
         d->panIconPopup = 0;
-        slotPanIconHiden();
+        slotPanIconHidden();
         slotContentLeaveFocus();
     }
 }

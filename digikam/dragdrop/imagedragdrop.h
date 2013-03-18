@@ -45,12 +45,13 @@ class ImageDragDropHandler : public AbstractItemDragDropHandler
 
 public:
 
-    explicit ImageDragDropHandler(ImageModel* model);
+    explicit ImageDragDropHandler(ImageModel* const model);
 
     ImageModel* model() const
     {
         return static_cast<ImageModel*>(m_model);
     }
+
     ImageAlbumModel* albumModel() const;
 
     /**

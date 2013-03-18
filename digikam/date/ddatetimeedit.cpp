@@ -6,8 +6,8 @@
  * Date        : 2005-04-21
  * Description : a widget to edit time stamp.
  *
- * Copyright (C) 2005 Tom Albers <tomalbers@kde.nl>
- * Copyright (C) 2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005      by Tom Albers <tomalbers@kde.nl>
+ * Copyright (C) 2011-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -35,11 +35,11 @@
 namespace Digikam
 {
 
-class DDateTimeEdit::DDateTimeEditPriv
+class DDateTimeEdit::Private
 {
 public:
 
-    DDateTimeEditPriv() :
+    Private() :
         timePopUp(0),
         datePopUp(0)
     {
@@ -49,8 +49,8 @@ public:
     DDateEdit* datePopUp;
 };
 
-DDateTimeEdit::DDateTimeEdit(QWidget* parent, const char* name)
-    : KHBox(parent), d(new DDateTimeEditPriv)
+DDateTimeEdit::DDateTimeEdit(QWidget* parent, const char* const name)
+    : KHBox(parent), d(new Private)
 {
     setObjectName(name);
 

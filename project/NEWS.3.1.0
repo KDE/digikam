@@ -1,0 +1,23 @@
+*****************************************************************************************************
+digiKam 3.1.0 - Release date: 2013-03-10
+
+NEW FEATURES:
+
+General           : Remove internal lqr-1 library code. Set only an optional and external dependency.
+
+BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
+
+001 ==> 313902 - OSM maps not refreshing.
+002 ==> 308696 - No thumbnails on first start of geolocation module for newly imported images.
+003 ==> 269033 - digiKam crashed after startup.
+004 ==> 314697 - Print image does not work.
+005 ==> 314726 - digiKam BQM RAW tool doesn't have options to work in 16 bits and to manage color profiles.
+006 ==> 301503 - No progress indicator or cancel button.
+007 ==> 314509 - Read face tags created by Picasa
+008 ==> 315376 - digiKam Crash on Startup with active X11 color profile.
+009 ==> 303217 - Cannot preview TIFF files on Mac OS due to "not enough memory" exceptions.
+010 ==> 315494 - Error on startup: Failed to update the database schema from version 6 to version 7.
+011 ==> 237037 - SQLITE : convience copy in digiKam core [patch].
+012 ==> 257773 - Switch to full screen mode crash under MACOSX.
+013 ==> 315284 - digiKam crashes when quitting the program.
+014 ==> 314260 - Large .tif files are not loaded.

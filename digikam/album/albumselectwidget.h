@@ -6,7 +6,7 @@
  * Date        : 2009-26-02
  * Description : a widget to select a physical album
  *
- * Copyright (C) 2009-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2010 by Johannes Wienke <languitar at semipol dot de>
  *
  * This program is free software; you can redistribute it
@@ -60,7 +60,7 @@ public:
      * @param albumModificationHelper helper object for modifying albums
      * @param parent parent for Qt's parent child mechanism
      */
-    AlbumSelectTreeView(AlbumModel* model, AlbumModificationHelper* albumModificationHelper, QWidget* parent = 0);
+    AlbumSelectTreeView(AlbumModel* const model, AlbumModificationHelper* const albumModificationHelper, QWidget* const parent = 0);
 
     /**
      * Destructor.
@@ -80,8 +80,8 @@ public Q_SLOTS:
 
 private:
 
-    class AlbumSelectTreeViewPriv;
-    AlbumSelectTreeViewPriv* d;
+    class Private;
+    Private* d;
 };
 
 // -----------------------------------------------------------------------------------------------
@@ -92,14 +92,14 @@ class AlbumSelectWidget : public QWidget
 
 public:
 
-    explicit AlbumSelectWidget(QWidget* parent = 0, PAlbum* albumToSelect = 0);
+    explicit AlbumSelectWidget(QWidget* const parent = 0, PAlbum* const albumToSelect = 0);
     ~AlbumSelectWidget();
 
     void setCurrentAlbumUrl(const KUrl& albumUrl);
     KUrl currentAlbumUrl() const;
 
     PAlbum* currentAlbum() const;
-    void    setCurrentAlbum(PAlbum* albumToSelect);
+    void    setCurrentAlbum(PAlbum* const albumToSelect);
 
 Q_SIGNALS:
 
@@ -111,8 +111,8 @@ private Q_SLOTS:
 
 private:
 
-    class AlbumSelectWidgetPriv;
-    AlbumSelectWidgetPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

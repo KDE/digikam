@@ -6,7 +6,7 @@
  * Date        : 2009-07-18
  * Description : setup Metadata tab.
  *
- * Copyright (C) 2009-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -55,6 +55,7 @@
 // Local includes
 
 #include "metadatapanel.h"
+#include "metadatasettings.h"
 
 using namespace Digikam;
 
@@ -70,43 +71,36 @@ public:
         exifSetOrientationBox(0),
         tab(0),
         tagsCfgPanel(0)
-    {}
+    {
+    }
 
-    static const QString  configGroupName;
-    static const QString  configEXIFRotateEntry;
-    static const QString  configEXIFSetOrientationEntry;
+    QCheckBox*     exifRotateBox;
+    QCheckBox*     exifSetOrientationBox;
 
-    QCheckBox*            exifRotateBox;
-    QCheckBox*            exifSetOrientationBox;
+    KTabWidget*    tab;
 
-    KTabWidget*           tab;
-
-    MetadataPanel*        tagsCfgPanel;
+    MetadataPanel* tagsCfgPanel;
 };
-
-const QString SetupMetadata::Private::configGroupName("ImageViewer Settings");
-const QString SetupMetadata::Private::configEXIFRotateEntry("EXIF Rotate");
-const QString SetupMetadata::Private::configEXIFSetOrientationEntry("EXIF Set Orientation");
 
 SetupMetadata::SetupMetadata(QWidget* const parent )
     : QScrollArea(parent), d(new Private)
 {
-    d->tab                   = new KTabWidget(viewport());
+    d->tab = new KTabWidget(viewport());
     setWidget(d->tab);
     setWidgetResizable(true);
 
-    QWidget* panel           = new QWidget(d->tab);
-    QVBoxLayout* mainLayout  = new QVBoxLayout(panel);
+    QWidget* const panel          = new QWidget(d->tab);
+    QVBoxLayout* const mainLayout = new QVBoxLayout(panel);
 
     // --------------------------------------------------------
 
-    QGroupBox* ExifGroup     = new QGroupBox(i18n("EXIF Actions"), panel);
-    QVBoxLayout* gLayout1    = new QVBoxLayout(ExifGroup);
+    QGroupBox* const ExifGroup  = new QGroupBox(i18n("EXIF Actions"), panel);
+    QVBoxLayout* const gLayout1 = new QVBoxLayout(ExifGroup);
 
-    d->exifRotateBox         = new QCheckBox(ExifGroup);
+    d->exifRotateBox            = new QCheckBox(ExifGroup);
     d->exifRotateBox->setText(i18n("Show images/thumbnails &rotated according to orientation tag."));
 
-    d->exifSetOrientationBox = new QCheckBox(ExifGroup);
+    d->exifSetOrientationBox    = new QCheckBox(ExifGroup);
     d->exifSetOrientationBox->setText(i18n("Set orientation tag to normal after rotate/flip."));
 
     gLayout1->addWidget(d->exifRotateBox);
@@ -116,17 +110,17 @@ SetupMetadata::SetupMetadata(QWidget* const parent )
 
     // --------------------------------------------------------
 
-    QFrame*      box  = new QFrame(panel);
-    QGridLayout* grid = new QGridLayout(box);
+    QFrame* const box       = new QFrame(panel);
+    QGridLayout* const grid = new QGridLayout(box);
     box->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
 
-    KUrlLabel* exiv2LogoLabel = new KUrlLabel(box);
+    KUrlLabel* const exiv2LogoLabel = new KUrlLabel(box);
     exiv2LogoLabel->setText(QString());
     exiv2LogoLabel->setUrl("http://www.exiv2.org");
     exiv2LogoLabel->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-exiv2.png")));
     exiv2LogoLabel->setWhatsThis(i18n("Visit Exiv2 project website"));
 
-    QLabel* explanation = new QLabel(box);
+    QLabel* const explanation = new QLabel(box);
     explanation->setOpenExternalLinks(true);
     explanation->setWordWrap(true);
     QString txt;
@@ -140,8 +134,10 @@ SetupMetadata::SetupMetadata(QWidget* const parent )
                     "photographer information in images.</p>"));
 
     if (KExiv2Iface::KExiv2::supportXmp())
+    {
         txt.append(i18n("<p><a href='http://en.wikipedia.org/wiki/Extensible_Metadata_Platform'>XMP</a> - "
                         "a new standard used in digital photography, designed to replace IPTC.</p>"));
+    }
 
     explanation->setText(txt);
     explanation->setFont(KGlobalSettings::smallestReadableFont());
@@ -191,23 +187,37 @@ void SetupMetadata::slotProcessExiv2Url(const QString& url)
     KToolInvocation::self()->invokeBrowser(url);
 }
 
-void SetupMetadata::readSettings()
-{
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(d->configGroupName);
-    d->exifRotateBox->setChecked(group.readEntry(d->configEXIFRotateEntry,                 true));
-    d->exifSetOrientationBox->setChecked(group.readEntry(d->configEXIFSetOrientationEntry, true));
-}
-
 void SetupMetadata::applySettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(d->configGroupName);
-    group.writeEntry(d->configEXIFRotateEntry,         d->exifRotateBox->isChecked());
-    group.writeEntry(d->configEXIFSetOrientationEntry, d->exifSetOrientationBox->isChecked());
-    config->sync();
+    MetadataSettings* const mSettings = MetadataSettings::instance();
+
+    if (!mSettings)
+    {
+        return;
+    }
+
+    MetadataSettingsContainer set;
+
+    set.exifRotate         = d->exifRotateBox->isChecked();
+    set.exifSetOrientation = d->exifSetOrientationBox->isChecked();
+    mSettings->setSettings(set);
 
     d->tagsCfgPanel->applySettings();
+}
+
+void SetupMetadata::readSettings()
+{
+    MetadataSettings* const mSettings = MetadataSettings::instance();
+
+    if (!mSettings)
+    {
+        return;
+    }
+
+    MetadataSettingsContainer set     = mSettings->settings();
+
+    d->exifRotateBox->setChecked(set.exifRotate);
+    d->exifSetOrientationBox->setChecked(set.exifSetOrientation);
 }
 
 }  // namespace ShowFoto

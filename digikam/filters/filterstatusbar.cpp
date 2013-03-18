@@ -6,8 +6,8 @@
  * Date        : 2007-11-27
  * Description : a bar to indicate icon-view filters status
  *
- * Copyright (C) 2007-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2011 by Michael G. Hansen <mike at mghansen dot de>
+ * Copyright (C) 2007-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2011      by Michael G. Hansen <mike at mghansen dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -40,7 +40,7 @@
 namespace Digikam
 {
 
-class FilterStatusBar::FilterStatusBarPriv
+class FilterStatusBar::Private
 {
 public:
 
@@ -53,7 +53,7 @@ public:
 
 public:
 
-    FilterStatusBarPriv()
+    Private()
     {
         status      = None;
         info        = 0;
@@ -70,12 +70,11 @@ public:
     ImageFilterSettings settings;
 };
 
-FilterStatusBar::FilterStatusBar(QWidget* parent)
-    : QWidget(parent), d(new FilterStatusBarPriv)
+FilterStatusBar::FilterStatusBar(QWidget* const parent)
+    : QWidget(parent), d(new Private)
 {
-    QHBoxLayout* vlay = new QHBoxLayout(this);
-
-    QLabel* space = new QLabel(this);
+    QHBoxLayout* const vlay = new QHBoxLayout(this);
+    QLabel* const space     = new QLabel(this);
     space->setFixedWidth(KDialog::spacingHint());
 
     d->resetBtn   = new QToolButton(this);
@@ -122,7 +121,7 @@ FilterStatusBar::~FilterStatusBar()
 
 void FilterStatusBar::paintEvent(QPaintEvent* e)
 {
-    if (d->status == FilterStatusBarPriv::None)
+    if (d->status == Private::None)
     {
         QWidget::paintEvent(e);
         return;
@@ -130,7 +129,7 @@ void FilterStatusBar::paintEvent(QPaintEvent* e)
 
     QColor bgnd = QColor(255, 200, 200);
 
-    if (d->status == FilterStatusBarPriv::Match)
+    if (d->status == Private::Match)
     {
         bgnd = QColor(200, 255, 200);
     }
@@ -198,7 +197,7 @@ void FilterStatusBar::slotFilterMatches(bool match)
         d->info->setText(i18n("No active filter"));
         d->info->setToolTip(QString());
         d->resetBtn->setEnabled(false);
-        d->status = FilterStatusBarPriv::None;
+        d->status = Private::None;
     }
     else
     {
@@ -213,7 +212,7 @@ void FilterStatusBar::slotFilterMatches(bool match)
 
         d->info->setToolTip(message);
         d->resetBtn->setEnabled(true);
-        d->status = match ? FilterStatusBarPriv::Match : FilterStatusBarPriv::NotMatch;
+        d->status = match ? Private::Match : Private::NotMatch;
     }
 
     update();

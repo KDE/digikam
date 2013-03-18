@@ -7,10 +7,10 @@
  * Description : a combo box to list date.
  *               this widget come from libkdepim.
  *
- * Copyright (C) 2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2002 Cornelius Schumacher <schumacher@kde.org>
- * Copyright (C) 2003-2004 Reinhold Kainhofer <reinhold@kainhofer.com>
- * Copyright (C) 2004 Tobias Koenig <tokoe@kde.org>
+ * Copyright (C) 2011-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2002      by Cornelius Schumacher <schumacher@kde.org>
+ * Copyright (C) 2003-2004 by Reinhold Kainhofer <reinhold@kainhofer.com>
+ * Copyright (C) 2004      by Tobias Koenig <tokoe@kde.org>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -55,9 +55,10 @@ class DateValidator : public QValidator
 {
 public:
 
-    DateValidator( const QStringList& keywords, QWidget* parent )
+    DateValidator( const QStringList& keywords, QWidget* const parent )
         : QValidator( parent ), mKeywords( keywords )
-    {}
+    {
+    }
 
     virtual State validate( QString& str, int& ) const
     {
@@ -94,11 +95,11 @@ private:
 
 // -----------------------------------------------------------------------------------
 
-class DDateEdit::DDateEditPriv
+class DDateEdit::Private
 {
 public:
 
-    DDateEditPriv() :
+    Private() :
         readOnly(false),
         textChanged(false),
         discardNextMousePress(false),
@@ -117,8 +118,8 @@ public:
     DDatePickerPopup*   popup;
 };
 
-DDateEdit::DDateEdit(QWidget* parent, const char* name)
-    : KComboBox(parent), d(new DDateEditPriv)
+DDateEdit::DDateEdit(QWidget* const parent, const char* const name)
+    : KComboBox(parent), d(new Private)
 {
     setObjectName(name);
     // need at least one entry for popup to work
@@ -234,16 +235,16 @@ void DDateEdit::showPopup()
     // The combo box is now shown pressed. Make it show not pressed again
     // by causing its (invisible) list box to emit a 'selected' signal.
     // First, ensure that the list box contains the date currently displayed.
-    QDate date = parseDate();
+    QDate date                  = parseDate();
     assignDate( date );
     updateView();
     // Now, simulate an Enter to unpress it
-    QAbstractItemView* lb = view();
+    QAbstractItemView* const lb = view();
 
     if (lb)
     {
         lb->setCurrentIndex( lb->model()->index( 0, 0 ) );
-        QKeyEvent* keyEvent = new QKeyEvent(QEvent::KeyPress, Qt::Key_Enter, Qt::NoModifier);
+        QKeyEvent* const keyEvent = new QKeyEvent(QEvent::KeyPress, Qt::Key_Enter, Qt::NoModifier);
         QApplication::postEvent(lb, keyEvent);
     }
 }
@@ -291,7 +292,7 @@ void DDateEdit::lineEnterPressed()
 QDate DDateEdit::parseDate( bool* replaced ) const
 {
     QString text = currentText();
-    QDate result;
+    QDate   result;
 
     if ( replaced )
     {
@@ -305,7 +306,7 @@ QDate DDateEdit::parseDate( bool* replaced ) const
     else if ( d->keywordMap.contains( text.toLower() ) )
     {
         QDate today = QDate::currentDate();
-        int i = d->keywordMap[ text.toLower() ];
+        int i       = d->keywordMap[ text.toLower() ];
 
         if ( i >= 100 )
         {
@@ -359,7 +360,7 @@ bool DDateEdit::eventFilter( QObject* object, QEvent* event )
         else if ( event->type() == QEvent::KeyPress )
         {
             // Up and down arrow keys step the date
-            QKeyEvent* keyEvent = (QKeyEvent*)event;
+            QKeyEvent* const keyEvent = (QKeyEvent*)event;
 
             if ( keyEvent->key() == Qt::Key_Return )
             {
@@ -404,7 +405,7 @@ bool DDateEdit::eventFilter( QObject* object, QEvent* event )
             case QEvent::MouseButtonDblClick:
             case QEvent::MouseButtonPress:
             {
-                QMouseEvent* mouseEvent = (QMouseEvent*)event;
+                QMouseEvent* const mouseEvent = (QMouseEvent*)event;
 
                 if ( !d->popup->rect().contains( mouseEvent->pos() ) )
                 {
@@ -470,7 +471,7 @@ void DDateEdit::setupKeywords()
 
 bool DDateEdit::assignDate( const QDate& date )
 {
-    d->date = date;
+    d->date        = date;
     d->textChanged = false;
     return true;
 }

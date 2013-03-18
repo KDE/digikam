@@ -58,7 +58,7 @@ public:
      * @param parent parent for qt parent child mechanism
      * @param dialogParent parent widget for dialogs displayed by this object
      */
-    AlbumModificationHelper(QObject* parent, QWidget* dialogParent);
+    AlbumModificationHelper(QObject* const parent, QWidget* const dialogParent);
 
     /**
      * Destructor.
@@ -71,14 +71,14 @@ public:
      * to the desired slot, slotTagNew(), slotTagEdit() or slotTagDelete().
      * Note: Changes the Action's user data.
      */
-    void bindAlbum(QAction* action, PAlbum* parent) const;
+    void bindAlbum(QAction* const action, PAlbum* const parent) const;
 
     /**
      * Returns the album bound with bindAlbum. The given QObject shall be
      * a QAction, but for convenience the given object
      * will be checked with qobject_cast first, so you can pass QObject::sender().
      */
-    PAlbum* boundAlbum(QObject* action) const;
+    PAlbum* boundAlbum(QObject* const action) const;
 
 public Q_SLOTS:
 
@@ -122,12 +122,12 @@ public Q_SLOTS:
 
 private:
 
-    void addAlbumChildrenToList(KUrl::List& list, Album* album);
+    void addAlbumChildrenToList(KUrl::List& list, Album* const album);
 
 private:
 
-    class AlbumModificationHelperPriv;
-    AlbumModificationHelperPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam
