@@ -255,7 +255,7 @@ ShowFoto::ShowFoto(const KUrl::List& urlList)
     // -- Load current items ---------------------------
 
     for (KUrl::List::const_iterator it = urlList.constBegin();
-         it != urlList.constEnd(); ++it)
+        it != urlList.constEnd(); ++it)
     {
         KUrl url = *it;
 
@@ -266,13 +266,30 @@ ShowFoto::ShowFoto(const KUrl::List& urlList)
             if (fi.isDir())
             {
                 // Local Dir
+
                 openFolder(url);
+                toggleNavigation(1);
             }
             else
             {
                 // Local file
-                new Digikam::ThumbBarItem(d->thumbBar, url);
-                d->lastOpenedDirectory=(*it);
+
+                if (urlList.count() == 1)
+                {
+                    // Special case if just one item in urls is passed.
+                    // We need to handle whole current dir content in thummbar.
+                    // See B.K.O #316752 for details.
+
+                    openFolder(url.directory());
+                    d->thumbBar->setSelected(d->thumbBar->findItemByUrl(url));
+                    d->currentItem = d->thumbBar->currentItem();
+                }
+                else
+                {
+                    new Digikam::ThumbBarItem(d->thumbBar, url);
+                    d->lastOpenedDirectory = (*it);
+                    toggleNavigation(1);
+                }
             }
         }
         else
@@ -280,6 +297,7 @@ ShowFoto::ShowFoto(const KUrl::List& urlList)
             // Remote file.
             new Digikam::ThumbBarItem(d->thumbBar, url);
             d->lastOpenedDirectory=(*it);
+            toggleNavigation(1);
         }
     }
 
@@ -288,10 +306,6 @@ ShowFoto::ShowFoto(const KUrl::List& urlList)
         emit signalNoCurrentItem();
         toggleActions(false);
         toggleNavigation(0);
-    }
-    else
-    {
-        toggleNavigation(1);
     }
 }
 
@@ -403,19 +417,19 @@ void ShowFoto::setupUserArea()
     KSharedConfig::Ptr config  = KGlobal::config();
     KConfigGroup group         = config->group(EditorWindow::CONFIG_GROUP_NAME);
 
-    QWidget* widget            = new QWidget(this);
-    QHBoxLayout* hlay          = new QHBoxLayout(widget);
+    QWidget* const widget      = new QWidget(this);
+    QHBoxLayout* const hlay    = new QHBoxLayout(widget);
     m_splitter                 = new Digikam::SidebarSplitter(widget);
 
-    KMainWindow* viewContainer = new KMainWindow(widget, Qt::Widget);
+    KMainWindow* const viewContainer = new KMainWindow(widget, Qt::Widget);
     m_splitter->addWidget(viewContainer);
-    m_stackView                = new Digikam::EditorStackView(viewContainer);
-    m_canvas                   = new Digikam::Canvas(m_stackView);
+    m_stackView                      = new Digikam::EditorStackView(viewContainer);
+    m_canvas                         = new Digikam::Canvas(m_stackView);
     viewContainer->setCentralWidget(m_stackView);
 
     m_splitter->setStretchFactor(1, 10);      // set Canvas default size to max.
 
-    d->rightSideBar            = new Digikam::ImagePropertiesSideBar(widget, m_splitter, KMultiTabBar::Right);
+    d->rightSideBar = new Digikam::ImagePropertiesSideBar(widget, m_splitter, KMultiTabBar::Right);
     d->rightSideBar->setObjectName("ShowFoto Sidebar Right");
 
     hlay->addWidget(m_splitter);
@@ -522,7 +536,7 @@ void ShowFoto::readSettings()
     d->rightSideBar->loadState();
 
     Digikam::ThemeManager::instance()->setCurrentTheme(group.readEntry("Theme",
-                                                      Digikam::ThemeManager::instance()->defaultThemeName()));
+                                                       Digikam::ThemeManager::instance()->defaultThemeName()));
 }
 
 void ShowFoto::saveSettings()
@@ -606,7 +620,7 @@ void ShowFoto::slotOpenFile()
              it != urls.constEnd(); ++it)
         {
             new Digikam::ThumbBarItem(d->thumbBar, *it);
-            d->lastOpenedDirectory=(*it);
+            d->lastOpenedDirectory = (*it);
         }
     }
 }
@@ -660,8 +674,8 @@ void ShowFoto::slotChanged()
     {
         if (d->currentItem->url().isValid())
         {
-            QRect sel          = m_canvas->getSelectedArea();
-            Digikam::DImg* img = m_canvas->interface()->getImg();
+            QRect sel                = m_canvas->getSelectedArea();
+            Digikam::DImg* const img = m_canvas->interface()->getImg();
             d->rightSideBar->itemChanged(d->currentItem->url(), sel, img);
         }
     }
@@ -714,8 +728,7 @@ bool ShowFoto::setup(bool iccSetupPage)
 void ShowFoto::slotUpdateItemInfo()
 {
     d->itemsNb = d->thumbBar->countItems();
-
-    int index = 0;
+    int index  = 0;
     QString text;
 
     if (d->itemsNb > 0)
@@ -745,7 +758,6 @@ void ShowFoto::slotUpdateItemInfo()
     }
 
     m_nameLabel->setText(text);
-
     toggleNavigation( index );
 }
 
