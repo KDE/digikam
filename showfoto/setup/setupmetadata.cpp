@@ -74,23 +74,23 @@ public:
     {
     }
 
-    QCheckBox*            exifRotateBox;
-    QCheckBox*            exifSetOrientationBox;
+    QCheckBox*     exifRotateBox;
+    QCheckBox*     exifSetOrientationBox;
 
-    KTabWidget*           tab;
+    KTabWidget*    tab;
 
-    MetadataPanel*        tagsCfgPanel;
+    MetadataPanel* tagsCfgPanel;
 };
 
 SetupMetadata::SetupMetadata(QWidget* const parent )
     : QScrollArea(parent), d(new Private)
 {
-    d->tab                   = new KTabWidget(viewport());
+    d->tab = new KTabWidget(viewport());
     setWidget(d->tab);
     setWidgetResizable(true);
 
-    QWidget* const panel     = new QWidget(d->tab);
-    QVBoxLayout* mainLayout  = new QVBoxLayout(panel);
+    QWidget* const panel          = new QWidget(d->tab);
+    QVBoxLayout* const mainLayout = new QVBoxLayout(panel);
 
     // --------------------------------------------------------
 
@@ -134,8 +134,10 @@ SetupMetadata::SetupMetadata(QWidget* const parent )
                     "photographer information in images.</p>"));
 
     if (KExiv2Iface::KExiv2::supportXmp())
+    {
         txt.append(i18n("<p><a href='http://en.wikipedia.org/wiki/Extensible_Metadata_Platform'>XMP</a> - "
                         "a new standard used in digital photography, designed to replace IPTC.</p>"));
+    }
 
     explanation->setText(txt);
     explanation->setFont(KGlobalSettings::smallestReadableFont());
