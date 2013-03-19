@@ -34,15 +34,17 @@
 
 #include <kdebug.h>
 #include <klocale.h>
-#include <opencv/cv.h>
-#include <opencv/highgui.h>
+
+// Libkface includes
+
+#include <libkface/tlddatabase.h>
 
 // Local includes
-#include <libkface/tlddatabase.h>
 
 #include "loadingdescription.h"
 #include "metadatasettings.h"
 #include "threadmanager.h"
+#include "libopencv.h"
 
 namespace Digikam
 {
