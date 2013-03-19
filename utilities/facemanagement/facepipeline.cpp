@@ -529,12 +529,12 @@ void RecognitionWorker::process(FacePipelineExtendedPackage::Ptr package)
     /*OpenTLD handler..............................*/
 
     FaceIface iface;
-    QSize size                     = database.recommendedImageSize(package->image.size());
+    QSize size = database.recommendedImageSize(package->image.size());
     iface.fillImageInFaces(package->image, package->faces, size);
 
-    int removeindex                = 0;
-    Tlddatabase* const tlddatabase = new Tlddatabase();
-    IplImage* const imgt           = cvvLoadImage(qPrintable(package->filePath));
+    int removeindex                            = 0;
+    KFaceIface::Tlddatabase* const tlddatabase = new KFaceIface::Tlddatabase();
+    IplImage* const imgt                       = cvvLoadImage(qPrintable(package->filePath));
 
     foreach(const FacePipelineDatabaseFace& face, package->databaseFaces)
     {
@@ -565,8 +565,8 @@ void RecognitionWorker::process(FacePipelineExtendedPackage::Ptr package)
 
         for (int i = 1; i <= tlddatabase->queryNumfacesinDatabase();i++ )
         {
-            unitFaceModel* const comparemodel = tlddatabase->getFaceModel(i);
-            Tldrecognition* const tmpTLD      = new Tldrecognition;
+            KFaceIface::unitFaceModel* const comparemodel = tlddatabase->getFaceModel(i);
+            KFaceIface::Tldrecognition* const tmpTLD      = new KFaceIface::Tldrecognition;
             recognitionconfidence.push_back(tmpTLD->getRecognitionConfidence(inputfaceimage,comparemodel));
             delete tmpTLD;
             count++;
@@ -948,8 +948,8 @@ void Trainer::process(FacePipelineExtendedPackage::Ptr package)
                 cvSetImageROI(imgt, cvRect(face.region().toRect().x(),face.region().toRect().y(),
                                            face.region().toRect().width(),face.region().toRect().height()));
 
-                IplImage* img1                  = cvCreateImage(cvSize(face.region().toRect().width(),face.region().toRect().height()),
-                                                                      imgt->depth, imgt->nChannels);
+                IplImage* img1 = cvCreateImage(cvSize(face.region().toRect().width(),face.region().toRect().height()),
+                                               imgt->depth, imgt->nChannels);
                 try
                 {
                     cvCopy(imgt, img1);;
@@ -964,12 +964,12 @@ void Trainer::process(FacePipelineExtendedPackage::Ptr package)
                 }
 
                 cvResetImageROI(imgt);
-                IplImage* const inputfaceimage        = cvCreateImage(cvSize(47,47),imgt->depth,imgt->nChannels);
+                IplImage* const inputfaceimage                    = cvCreateImage(cvSize(47,47),imgt->depth,imgt->nChannels);
                 cvResize(img1,inputfaceimage);
-                Tlddatabase* const tlddatabase        = new Tlddatabase();
-                Tldrecognition* const tmpTLD          = new Tldrecognition;
-                unitFaceModel* const facemodeltostore = tmpTLD->getModeltoStore(inputfaceimage);
-                facemodeltostore->Name                = package->faces[assignedNameindex].name();
+                KFaceIface::Tlddatabase* const tlddatabase        = new KFaceIface::Tlddatabase();
+                KFaceIface::Tldrecognition* const tmpTLD          = new KFaceIface::Tldrecognition;
+                KFaceIface::unitFaceModel* const facemodeltostore = tmpTLD->getModeltoStore(inputfaceimage);
+                facemodeltostore->Name                            = package->faces[assignedNameindex].name();
 
                 kDebug() << "person  " << qPrintable(package->faces.at(assignedNameindex).name())
                          << "  stored in recognition database";
