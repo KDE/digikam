@@ -302,12 +302,6 @@ TARGET_LINK_LIBRARIES(digikam
         importui
 
         ${OpenCV_LIBRARIES}
-        tldinterface
-        main
-        opentld
-        cvblobs
-        sqlite3
-        QtSql
 
         # See B.K.O #258931: libgphoto2 library must be the last arg for linker.
         ${GPHOTO2_LIBRARIES}
