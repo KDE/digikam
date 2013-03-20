@@ -246,58 +246,58 @@ FacePipelineExtendedPackage::Ptr ScanStateFilter::filter(const ImageInfo& info)
 
     switch (mode)
     {
-        case FacePipeline::ScanAll:
+    case FacePipeline::ScanAll:
+    {
+        return d->buildPackage(info);
+    }
+
+    case FacePipeline::SkipAlreadyScanned:
+    {
+        if (!iface.hasBeenScanned(info))
         {
             return d->buildPackage(info);
         }
 
-        case FacePipeline::SkipAlreadyScanned:
-        {
-            if (!iface.hasBeenScanned(info))
-            {
-                return d->buildPackage(info);
-            }
+        break;
+    }
 
-            break;
+    case FacePipeline::ReadUnconfirmedFaces:
+    case FacePipeline::ReadFacesForTraining:
+    case FacePipeline::ReadConfirmedFaces:
+    {
+        QList<DatabaseFace> databaseFaces;
+
+        if (mode == FacePipeline::ReadUnconfirmedFaces)
+        {
+            databaseFaces = iface.unconfirmedDatabaseFaces(info.id());
+        }
+        else if (mode == FacePipeline::ReadFacesForTraining)
+        {
+            databaseFaces = iface.databaseFacesForTraining(info.id());
+        }
+        else
+        {
+            databaseFaces = iface.confirmedDatabaseFaces(info.id());
         }
 
-        case FacePipeline::ReadUnconfirmedFaces:
-        case FacePipeline::ReadFacesForTraining:
-        case FacePipeline::ReadConfirmedFaces:
+        if (!databaseFaces.isEmpty())
         {
-            QList<DatabaseFace> databaseFaces;
+            FacePipelineExtendedPackage::Ptr package = d->buildPackage(info);
+            package->databaseFaces = databaseFaces;
+            //kDebug() << "Prepared package with" << databaseFaces.size();
+            package->databaseFaces.setRole(FacePipelineDatabaseFace::ReadFromDatabase);
 
-            if (mode == FacePipeline::ReadUnconfirmedFaces)
+            if (tasks)
             {
-                databaseFaces = iface.unconfirmedDatabaseFaces(info.id());
-            }
-            else if (mode == FacePipeline::ReadFacesForTraining)
-            {
-                databaseFaces = iface.databaseFacesForTraining(info.id());
-            }
-            else
-            {
-                databaseFaces = iface.confirmedDatabaseFaces(info.id());
+                package->databaseFaces.setRole(tasks);
             }
 
-            if (!databaseFaces.isEmpty())
-            {
-                FacePipelineExtendedPackage::Ptr package = d->buildPackage(info);
-                package->databaseFaces = databaseFaces;
-                //kDebug() << "Prepared package with" << databaseFaces.size();
-                package->databaseFaces.setRole(FacePipelineDatabaseFace::ReadFromDatabase);
-
-                if (tasks)
-                {
-                    package->databaseFaces.setRole(tasks);
-                }
-
-                package->faces         = iface.toFaces(databaseFaces);
-                return package;
-            }
-
-            break;
+            package->faces         = iface.toFaces(databaseFaces);
+            return package;
         }
+
+        break;
+    }
     }
 
     return FacePipelineExtendedPackage::Ptr();
@@ -490,6 +490,77 @@ void DetectionWorker::process(FacePipelineExtendedPackage::Ptr package)
 
     package->faces          = detector.detectFaces(image);
 
+    int removeindex                            = 0;
+    KFaceIface::Tlddatabase* const tlddatabase = new KFaceIface::Tlddatabase();
+    IplImage* const imgt                       = cvvLoadImage(qPrintable(package->filePath));
+
+    foreach(const KFaceIface::Face & face, package->faces)
+    {
+        vector<float> recognitionconfidence;
+        cvSetImageROI(imgt, cvRect(TagRegion::mapToOriginalSize(package->detectionImage, face.toRect()).x(),
+                                   TagRegion::mapToOriginalSize(package->detectionImage, face.toRect()).y(),
+                                   TagRegion::mapToOriginalSize(package->detectionImage, face.toRect()).width(),
+                                   TagRegion::mapToOriginalSize(package->detectionImage, face.toRect()).height()));
+
+        IplImage* img1           = cvCreateImage(cvSize(TagRegion::mapToOriginalSize(package->detectionImage,face.toRect()).width(),
+                                                        TagRegion::mapToOriginalSize(package->detectionImage, face.toRect()).height()),
+                                                 imgt->depth,imgt->nChannels);
+
+        try
+        {
+            cvCopy(imgt, img1);;
+        }
+        catch (cv::Exception& e)
+        {
+            kError() << "cv::Exception:" << e.what();
+        }
+        catch(...)
+        {
+            kDebug() << "cv::Exception";
+        }
+
+        cvResetImageROI(imgt);
+        IplImage* const inputfaceimage = cvCreateImage(cvSize(47,47),imgt->depth,imgt->nChannels);
+        cvResize(img1, inputfaceimage);
+        int count                      = -1;
+
+        for (int i = 1; i <= tlddatabase->queryNumfacesinDatabase();i++ )
+        {
+            KFaceIface::unitFaceModel* const comparemodel = tlddatabase->getFaceModel(i);
+            KFaceIface::Tldrecognition* const tmpTLD      = new KFaceIface::Tldrecognition;
+            recognitionconfidence.push_back(tmpTLD->getRecognitionConfidence(inputfaceimage,comparemodel));
+            delete tmpTLD;
+            count++;
+        }
+
+        if(count != -1)
+        {
+            int maxConfIndex    = 0;
+            float maxConfidence = recognitionconfidence[0];
+
+            for(int tmpInt = 0; tmpInt <= count ; tmpInt++ )
+            {
+                if(recognitionconfidence[tmpInt] > maxConfidence)
+                {
+                    maxConfIndex  = tmpInt;
+                    maxConfidence = recognitionconfidence[tmpInt];
+                }
+            }
+
+            if(maxConfidence > 0.6 )
+            {
+                kDebug() << "preson  " << qPrintable(tlddatabase->querybyFaceid(maxConfIndex+1))
+                         << "   recognised in" << qPrintable(package->filePath);
+                package->faces[removeindex].setName(tlddatabase->querybyFaceid(maxConfIndex+1));
+                //                package->faces[removeindex].clearRecognition();
+            }
+        }
+
+        removeindex++;
+    }
+
+    delete tlddatabase;
+
     kDebug() << "Found" << package->faces.size() << "faces in" << package->info.name()
              << package->image.size() << package->image.originalSize();
 
@@ -543,7 +614,7 @@ void RecognitionWorker::process(FacePipelineExtendedPackage::Ptr package)
                                    face.region().toRect().width(),face.region().toRect().height()));
 
         IplImage* img1           = cvCreateImage(cvSize(face.region().toRect().width(),face.region().toRect().height()),
-                                             imgt->depth,imgt->nChannels);
+                                                 imgt->depth,imgt->nChannels);
 
         try
         {
@@ -832,7 +903,7 @@ QString Benchmarker::result() const
                                      "This means the result is cannot be representative; "
                                      "it can only be used to compare preselected collections, "
                                      "and the specificity and false-positive rate have little meaning. </p>")
-                             .arg(negativeImages).arg(totalImages);
+                .arg(negativeImages).arg(totalImages);
         negativeImages     = qMax(negativeImages, 1);
     }
 
@@ -878,10 +949,10 @@ QString Benchmarker::result() const
                    "Given face with no images on it, the detector will with a probability "
                    "of %5% falsely find a face on it. "
                    "</p>")
-           .arg(totalImages).arg(faces).arg(pixelCoverage * 100, 0, 'f', 1)
-           .arg(specificity * 100, 0, 'f', 1).arg(falsePositiveRate * 100, 0, 'f', 1)
-           .arg(sensitivity * 100, 0, 'f', 1).arg(ppv * 100, 0, 'f', 1)
-           .arg(specificityWarning).arg(sensitivityWarning);
+            .arg(totalImages).arg(faces).arg(pixelCoverage * 100, 0, 'f', 1)
+            .arg(specificity * 100, 0, 'f', 1).arg(falsePositiveRate * 100, 0, 'f', 1)
+            .arg(sensitivity * 100, 0, 'f', 1).arg(ppv * 100, 0, 'f', 1)
+            .arg(specificityWarning).arg(sensitivityWarning);
 }
 
 // ----------------------------------------------------------------------------------------
