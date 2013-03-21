@@ -6,8 +6,8 @@
  * Date        : 2012-10-18
  * Description : Wavelets YCrCb Noise Reduction settings estimation by image content analys.
  *
- * Copyright (C) 2012 by Sayantan Datta <sayantan dot knz at gmail dot com>
- * Copyright (C) 2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2012-2013 by Sayantan Datta <sayantan dot knz at gmail dot com>
+ * Copyright (C) 2012-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General

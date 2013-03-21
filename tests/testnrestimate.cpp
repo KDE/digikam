@@ -6,9 +6,9 @@
  * @date   2012-10-23
  * @brief  a command line tool to test DImg image loader
  *
- * @author Copyright (C) 2012 by Gilles Caulier
+ * @author Copyright (C) 2012-2013 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
- *         Copyright (C) 2012 by Sayantan Datta
+ *         Copyright (C) 2012-2013 by Sayantan Datta
  *         <a href="mailto:sayantan dot knz at gmail dot com">sayantan dot knz at gmail dot com</a>
  *
  * This program is free software; you can redistribute it
@@ -26,7 +26,10 @@
 
 #include <QFileInfo>
 #include <QString>
-#include <QDebug>
+
+// KDE includes
+
+#include <kdebug.h>
 
 // LibKExiv2 includes
 
@@ -39,7 +42,6 @@
 #include "nrestimate.h"
 #include "nrfilter.h"
 #include "dimgthreadedfilter.h"
-#include "libopencv.h"
 
 using namespace Digikam;
 using namespace KExiv2Iface;
@@ -49,8 +51,8 @@ int main(int argc, char** argv)
 {
     if (argc != 2)
     {
-        qDebug() << "testnrestimate - test NR parameters";
-        qDebug() << "Usage: <image>";
+        kDebug() << "testnrestimate - test NR parameters";
+        kDebug() << "Usage: <image>";
         return -1;
     }
 
@@ -71,7 +73,7 @@ int main(int argc, char** argv)
     nre.startFilterDirectly();
     NRContainer prm = nre.settings();
 
-    qDebug() << prm;
+    kDebug() << prm;
 
     NRFilter nrf(&img, 0, prm);
     nrf.startFilterDirectly();
