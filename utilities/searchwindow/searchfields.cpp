@@ -213,7 +213,7 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
         field->setText(i18n("Width"), i18n("Find pictures with a width between"));
         field->setBetweenText(i18nc("Find pictures with a width between...and...", "and"));
         field->setNumberPrefixAndSuffix(QString(), i18nc("Pixels", "px"));
-        field->setBoundary(1, 100000, 250);
+        field->setBoundary(1, 1000000, 250);
         field->setSuggestedValues(QList<int>()
                                   << 50 << 100 << 200 << 300 << 400 << 500 << 600 << 700 << 800 << 900
                                   << 1000 << 1250 << 1500 << 1750 << 2000 << 3000 << 4000
@@ -230,7 +230,7 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
         field->setText(i18n("Height"), i18n("Find pictures with a height between"));
         field->setBetweenText(i18nc("Find pictures with a height between...and...", "and"));
         field->setNumberPrefixAndSuffix(QString(), i18nc("Pixels", "px"));
-        field->setBoundary(1, 100000, 250);
+        field->setBoundary(1, 1000000, 250);
         field->setSuggestedValues(QList<int>()
                                   << 50 << 100 << 200 << 300 << 400 << 500 << 600 << 700 << 800 << 900
                                   << 1000 << 1250 << 1500 << 1750 << 2000 << 3000 << 4000
@@ -317,7 +317,7 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
         field->setBetweenText("-");
         field->setNoValueText("f/#");
         field->setNumberPrefixAndSuffix("f/", QString());
-        field->setBoundary(0.3, 128, 1, 0.1);
+        field->setBoundary(0.3, 65536, 1, 0.1);
         field->setSuggestedValues(QList<double>()
                                   << 0.5 << 0.7 << 1.0 << 1.4 << 2 << 2.8 << 4 << 5.6
                                   << 8 << 11 << 16 << 22 << 32 << 45 << 64 << 90 << 128
@@ -334,7 +334,7 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
         field->setText(i18n("Focal length"), i18n("Focal length of the lens"));
         field->setBetweenText("-");
         field->setNumberPrefixAndSuffix(QString(), "mm");
-        field->setBoundary(0, 20000, 10);
+        field->setBoundary(0, 200000, 10);
         field->setSuggestedValues(QList<int>()
                                   << 10 << 15 << 20 << 25 << 30 << 40 << 50 << 60 << 70 << 80 << 90
                                   << 100 << 150 << 200 << 250 << 300 << 400 << 500 << 750 << 1000
@@ -351,7 +351,7 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
         field->setText(i18n("Focal length"), i18n("35mm equivalent focal length"));
         field->setBetweenText("-");
         field->setNumberPrefixAndSuffix(QString(), "mm");
-        field->setBoundary(0, 10000, 10);
+        field->setBoundary(0, 200000, 10);
         field->setSuggestedValues(QList<int>()
                                   << 8 << 10 << 15 << 16 << 20 << 28 << 30 << 40 << 50 << 60 << 70 << 80
                                   << 90 << 100 << 150 << 200 << 250 << 300 << 400 << 500 << 750 << 1000
@@ -369,11 +369,11 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
         field->setBetweenText("-");
         field->setNumberPrefixAndSuffix(QString(), "s");
         field->enableFractionMagic("1/"); // it's 1/250, not 250 as in the spin box
-        field->setBoundary(120, -10000, 10); // negative is 1/
+        field->setBoundary(86400, -1024000, 10); // negative is 1/
         field->setSuggestedValues(QList<int>()
                                   << 30 << 15 << 8 << 4 << 2 << 1 << -2 << -4 << -8 << -15
                                   << -30 << -50 << -60 << -100 << -125 << -150 << -200
-                                  << -250 << -500 << -750 << -1000 << -2000 << -4000 << -8000
+                                  << -250 << -500 << -750 << -1000 << -2000 << -4000 << -8000 << -16000
                                  );
         field->setSuggestedInitialValue(-200);
         field->setSingleSteps(2000, 5);
@@ -406,7 +406,7 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
         field->setFieldName(name);
         field->setText(i18n("Sensitivity"), i18n("ISO film speed (linear scale, ASA)"));
         field->setBetweenText("-");
-        field->setBoundary(5, 6400, 50);
+        field->setBoundary(0, 2000000, 50);
         field->setSuggestedValues(QList<int>()
                                   << 6 << 8 << 10 << 12 << 16 << 20 << 25 << 32 << 40 << 50 << 64
                                   << 80 << 100 << 125 << 160 << 200 << 250 << 320 << 400 << 500
@@ -448,7 +448,7 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
         field->setText(i18n("White balance"), i18n("Color temperature used for white balance"));
         field->setBetweenText("-");
         field->setNumberPrefixAndSuffix(QString(), "K");
-        field->setBoundary(1, 1000, 100);
+        field->setBoundary(1, 100000, 100);
         return field;
     }
     else if (name == "meteringmode")
@@ -469,7 +469,7 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
         field->setText(i18n("Subject Distance"), i18n("Distance of the subject from the lens"));
         field->setBetweenText("-");
         field->setNumberPrefixAndSuffix(QString(), "m");
-        field->setBoundary(0.5, 128, 1, 0.1);
+        field->setBoundary(0, 50000, 1, 0.1);
         return field;
     }
     else if (name == "subjectdistancecategory")
