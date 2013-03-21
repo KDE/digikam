@@ -6,7 +6,7 @@
  * Date        : 2012-12-17
  * Description : workflow manager.
  *
- * Copyright (C) 2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2012-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -146,6 +146,7 @@ void WorkflowManager::removePrivate(const Workflow& q)
         {
             if (it->title == q.title)
             {
+                kDebug() << "Remove " << it->title << " from Workflow list";
                 it = d->qList.erase(it);
                 break;
             }
@@ -290,6 +291,7 @@ bool WorkflowManager::save()
 
     if (!file.open(QIODevice::WriteOnly))
     {
+        kDebug() << "Cannot open XML file to store Workflow";
         return false;
     }
 
@@ -310,6 +312,7 @@ bool WorkflowManager::load(QStringList& failed)
 
     if (!file.open(QIODevice::ReadOnly))
     {
+        kDebug() << "Cannot open XML file to load Workflow";
         return false;
     }
 
@@ -317,6 +320,7 @@ bool WorkflowManager::load(QStringList& failed)
 
     if (!doc.setContent(&file))
     {
+        kDebug() << "Cannot load Workflow XML file";
         return false;
     }
 
@@ -324,6 +328,7 @@ bool WorkflowManager::load(QStringList& failed)
 
     if (docElem.tagName() != "queuelist")
     {
+        kDebug() << "Workflow XML file do not content Queue List data";
         return false;
     }
 
@@ -432,6 +437,7 @@ bool WorkflowManager::load(QStringList& failed)
                 }
 
                 BatchTool* const tool = BatchToolsManager::instance()->findTool(set.name, set.group);
+
                 if (tool)
                 {
                     if (set.version == tool->toolVersion())
