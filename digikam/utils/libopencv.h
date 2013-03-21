@@ -7,7 +7,7 @@
  * @date   2010-06-16
  * @brief  Wrapper for OpenCV header files
  *
- * @author Copyright (C) 2012 by Gilles Caulier
+ * @author Copyright (C) 2012-2013 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  *
  * This program is free software; you can redistribute it
@@ -35,14 +35,14 @@
 #define OPENCV_TEST_VERSION(major,minor,patch) ( OPENCV_VERSION >= OPENCV_MAKE_VERSION(major,minor,patch) )
 
 #if OPENCV_TEST_VERSION(2,3,0)
-#include <opencv2/opencv.hpp>
-#include <opencv2/legacy/compat.hpp>
-#include <opencv/cvaux.h>
+#   include <opencv2/opencv.hpp>
+#   include <opencv2/legacy/compat.hpp>
+#   include <opencv/cvaux.h>
 #else
-#include <opencv/cv.h>
-#include <opencv/cvaux.h>
-#include <opencv/cxcore.h>
-#include <opencv/highgui.h>
+#   include <opencv/cv.h>
+#   include <opencv/cvaux.h>
+#   include <opencv/cxcore.h>
+#   include <opencv/highgui.h>
 #endif
 
 #endif // LIB_OPEN_CV_H

@@ -90,8 +90,8 @@ KipiInterface::KipiInterface(QObject* const parent, const char* name)
     connect(DigikamApp::instance()->view(), SIGNAL(signalSelectionChanged(int)),
             this, SLOT(slotSelectionChanged(int)));
 
-    connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(LoadingDescription, QPixmap)),
-            this, SLOT(slotThumbnailLoaded(LoadingDescription, QPixmap)));
+    connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(LoadingDescription,QPixmap)),
+            this, SLOT(slotThumbnailLoaded(LoadingDescription,QPixmap)));
 }
 
 KipiInterface::~KipiInterface()

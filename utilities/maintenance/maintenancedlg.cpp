@@ -223,8 +223,8 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
     connect(this, SIGNAL(okClicked()),
             this, SLOT(slotOk()));
 
-    connect(d->expanderBox, SIGNAL(signalItemToggled(int, bool)),
-            this, SLOT(slotItemToggled(int, bool)));
+    connect(d->expanderBox, SIGNAL(signalItemToggled(int,bool)),
+            this, SLOT(slotItemToggled(int,bool)));
 
     connect(d->metadataSetup, SIGNAL(clicked()),
             this, SLOT(slotMetadataSetup()));

@@ -24,17 +24,20 @@
 
 // Qt includes
 
+#include <QFormLayout>
 #include <QModelIndex>
 
 // KDE includes
 
+#include <kcombobox.h>
 #include <kdebug.h>
 #include <klocale.h>
 
 // local includes
 
-#include <imageinfo.h>
 #include <databaseinfocontainers.h>
+#include <dmetadata.h>
+#include <imageinfo.h>
 
 namespace Digikam
 {
@@ -159,6 +162,11 @@ TableViewColumn::ColumnFlags ColumnPhotoProperties::getColumnFlags() const
         flags|=ColumnCustomSorting;
     }
 
+    if (subColumn==SubColumnExposure)
+    {
+        flags|=ColumnHasConfigurationWidget;
+    }
+
     return flags;
 }
 
@@ -166,78 +174,146 @@ QVariant ColumnPhotoProperties::data(TableViewModel::Item* const item, const int
 {
     if (role != Qt::DisplayRole)
     {
-        return item->imageFilterModelIndex.data(role);
+        return QVariant();
     }
-
-    const ImageInfo info = s->tableViewModel->infoFromItem(item);
-    const ImageMetadataContainer photoInfo = info.imageMetadataContainer();
 
     switch (subColumn)
     {
     case SubColumnCameraMaker:
         {
-            return photoInfo.make;
+            const QString cameraMaker = s->tableViewModel->itemDatabaseFieldRaw(item, DatabaseFields::Make).toString();
+            return cameraMaker;
         }
     case SubColumnCameraModel:
         {
-            return photoInfo.model;
+            const QString cameraModel = s->tableViewModel->itemDatabaseFieldRaw(item, DatabaseFields::Model).toString();
+            return cameraModel;
         }
     case SubColumnLens:
         {
-            return photoInfo.lens;
+            const QString cameraLens = s->tableViewModel->itemDatabaseFieldRaw(item, DatabaseFields::Lens).toString();
+            return cameraLens;
         }
     case SubColumnAperture:
         {
-            /// @todo this is a string, we need to use a number for custom sorting here
-            return photoInfo.aperture;
+            const QVariant apertureVariant = s->tableViewModel->itemDatabaseFieldRaw(item, DatabaseFields::Aperture);
+            const QString apertureString = DMetadata::valueToString(apertureVariant, MetadataInfo::Aperture);
+
+            return apertureString;
         }
     case SubColumnFocal:
         {
             /// @todo Make this configurable
-            if (photoInfo.focalLength35.isEmpty())
+            const DatabaseFields::Set requiredSet = DatabaseFields::FocalLength | DatabaseFields::FocalLength35;
+            const TableViewModel::DatabaseFieldsHashRaw rawFields = s->tableViewModel->itemDatabaseFieldsRaw(item, requiredSet);
+            const QVariant focalLengthVariant = rawFields.value(DatabaseFields::FocalLength);
+            const QString focalLengthString = DMetadata::valueToString(focalLengthVariant, MetadataInfo::FocalLength);
+            const QVariant focalLength35Variant = rawFields.value(DatabaseFields::FocalLength35);
+            const QString focalLength35String = DMetadata::valueToString(focalLength35Variant, MetadataInfo::FocalLengthIn35mm);
+
+            if (focalLength35String.isEmpty())
             {
-                return photoInfo.focalLength;
+                return focalLengthString;
             }
-            if (photoInfo.focalLength.isEmpty())
+            if (focalLengthString.isEmpty())
             {
                 return QString();
             }
-            return i18n("%1 (35mm: %2)", photoInfo.focalLength, photoInfo.focalLength35);
+
+            /// @todo What if only 35 mm is set?
+            return i18n("%1 (35mm: %2)", focalLengthString, focalLength35String);
         }
     case SubColumnExposure:
         {
-            /// @todo this is a string, we need to use a number for custom sorting here
-            return photoInfo.exposureTime;
-        }
-    case SubColumnSensitivity:
-        {
-            /// @todo this is a string, we need to use a number for custom sorting here
-            return photoInfo.sensitivity.isEmpty() ? QString() : i18n("%1 ISO", photoInfo.sensitivity);
-        }
-    case SubColumnModeProgram:
-        {
-            if (photoInfo.exposureMode.isEmpty() && photoInfo.exposureProgram.isEmpty())
+            /// @todo Add a configuration option for fraction vs number, units s vs ms vs mus
+            const QVariant exposureVariant = s->tableViewModel->itemDatabaseFieldRaw(item, DatabaseFields::ExposureTime);
+
+            if (configuration.getSetting("format", "fraction")=="fraction")
+            {
+                const QString exposureString = DMetadata::valueToString(exposureVariant, MetadataInfo::ExposureTime);
+                return exposureString;
+            }
+
+            if (!exposureVariant.isValid())
             {
                 return QString();
             }
-            else if (!photoInfo.exposureMode.isEmpty() && photoInfo.exposureProgram.isEmpty())
+            const QString unitKey = configuration.getSetting("unit", "seconds");
+            double multiplier = 1.0;
+            KLocalizedString exposureTimeLocalizedString = ki18n("%1 s");
+
+            if (unitKey=="milliseconds")
             {
-                return photoInfo.exposureMode;
+                multiplier = 1000.0;
+                exposureTimeLocalizedString = ki18n("%1 ms");
             }
-            else if (photoInfo.exposureMode.isEmpty() && !photoInfo.exposureProgram.isEmpty())
+            else if (unitKey=="microseconds")
             {
-                return photoInfo.exposureProgram;
+                multiplier = 1000000.0;
+                exposureTimeLocalizedString = ki18n("%1 µs");
             }
 
-            return QString("%1 / %2").arg(photoInfo.exposureMode).arg(photoInfo.exposureProgram);
+            const double exposureTime = exposureVariant.toDouble() * multiplier;
+            /// @todo Seems like we have to check for 0 here, too, as an invalid value
+            if (exposureTime==0)
+            {
+                return QString();
+            }
+            /// @todo Remove trailing zeros?
+            /// @todo Align right? --> better align at decimal point
+            const QString exposureTimeString = exposureTimeLocalizedString
+                .subs(KGlobal::locale()->formatNumber(exposureTime, 3))
+                .toString();
+            return exposureTimeString;
+        }
+    case SubColumnSensitivity:
+        {
+            const QVariant sensitivityVariant = s->tableViewModel->itemDatabaseFieldRaw(item, DatabaseFields::Sensitivity);
+            const QString sensitivityString = DMetadata::valueToString(sensitivityVariant, MetadataInfo::Sensitivity);
+            if (sensitivityString.isEmpty())
+            {
+                return QString();
+            }
+
+            return i18n("%1 ISO", sensitivityString);
+        }
+    case SubColumnModeProgram:
+        {
+            const DatabaseFields::Set requiredSet = DatabaseFields::ExposureMode | DatabaseFields::ExposureProgram;
+            const TableViewModel::DatabaseFieldsHashRaw rawFields = s->tableViewModel->itemDatabaseFieldsRaw(item, requiredSet);
+            const QVariant exposureModeVariant = rawFields.value(DatabaseFields::ExposureMode);
+            const QString exposureModeString = DMetadata::valueToString(exposureModeVariant, MetadataInfo::ExposureMode);
+            const QVariant exposureProgramVariant = rawFields.value(DatabaseFields::ExposureProgram);
+            const QString exposureProgramString = DMetadata::valueToString(exposureProgramVariant, MetadataInfo::ExposureProgram);
+
+            if (exposureModeString.isEmpty() && exposureProgramString.isEmpty())
+            {
+                return QString();
+            }
+            else if (!exposureModeString.isEmpty() && exposureProgramString.isEmpty())
+            {
+                return exposureModeString;
+            }
+            else if (exposureModeString.isEmpty() && !exposureProgramString.isEmpty())
+            {
+                return exposureProgramString;
+            }
+
+            return QString("%1 / %2").arg(exposureModeString).arg(exposureProgramString);
         }
     case SubColumnFlash:
         {
-            return photoInfo.flashMode;
+            const QVariant flashModeVariant = s->tableViewModel->itemDatabaseFieldRaw(item, DatabaseFields::FlashMode);
+            const QString flashModeString = DMetadata::valueToString(flashModeVariant, MetadataInfo::FlashMode);
+
+            return flashModeString;
         }
     case SubColumnWhiteBalance:
         {
-            return photoInfo.whiteBalance;
+            const QVariant whiteBalanceVariant = s->tableViewModel->itemDatabaseFieldRaw(item, DatabaseFields::WhiteBalance);
+            const QString whiteBalanceString = DMetadata::valueToString(whiteBalanceVariant, MetadataInfo::WhiteBalance);
+
+            return whiteBalanceString;
         }
     }
 
@@ -296,6 +372,94 @@ TableViewColumn::ColumnCompareResult ColumnPhotoProperties::compare(TableViewMod
     default:
         kWarning() << "item: unimplemented comparison, subColumn=" << subColumn;
         return CmpEqual;
+    }
+}
+
+TableViewColumnConfigurationWidget* ColumnPhotoProperties::getConfigurationWidget(QWidget* const parentWidget) const
+{
+    TableViewColumnConfiguration myConfiguration = getConfiguration();
+    return new ColumnPhotoConfigurationWidget(s, myConfiguration, parentWidget);
+}
+
+ColumnPhotoConfigurationWidget::ColumnPhotoConfigurationWidget(
+        TableViewShared* const sharedObject,
+        const TableViewColumnConfiguration& columnConfiguration,
+        QWidget* const parentWidget)
+  : TableViewColumnConfigurationWidget(sharedObject, columnConfiguration, parentWidget),
+    subColumn(ColumnPhotoProperties::SubColumnExposure),
+    selectorExposureTimeFormat(0),
+    selectorExposureTimeUnit(0)
+{
+    const QString& subColumnSetting = configuration.getSetting("subcolumn");
+    subColumn = ColumnPhotoProperties::getSubColumnIndex<ColumnPhotoProperties>(subColumnSetting, ColumnPhotoProperties::SubColumnExposure);
+
+    switch (subColumn)
+    {
+    case ColumnPhotoProperties::SubColumnExposure:
+        {
+            QFormLayout* const box1 = new QFormLayout();
+
+            selectorExposureTimeFormat = new KComboBox(this);
+            selectorExposureTimeFormat->addItem(i18n("Fraction"), QString("fraction"));
+            selectorExposureTimeFormat->addItem(i18n("Rational"), QString("rational"));
+            box1->addRow(i18n("Format"), selectorExposureTimeFormat);
+
+            selectorExposureTimeUnit = new KComboBox(this);
+            selectorExposureTimeUnit->addItem(i18n("Seconds"), QString("seconds"));
+            selectorExposureTimeUnit->addItem(i18n("Milliseconds"), QString("milliseconds"));
+            selectorExposureTimeUnit->addItem(i18n("Microseconds"), QString("microseconds"));
+            box1->addRow(i18n("Unit"), selectorExposureTimeUnit);
+
+            setLayout(box1);
+
+            const int indexF = selectorExposureTimeFormat->findData(configuration.getSetting("format", "fraction"));
+            selectorExposureTimeFormat->setCurrentIndex(indexF>=0 ? indexF : 0);
+            const int indexU = selectorExposureTimeUnit->findData(configuration.getSetting("unit", "seconds"));
+            selectorExposureTimeUnit->setCurrentIndex(indexU>=0 ? indexU : 0);
+
+            slotUpdateUI();
+
+            connect(selectorExposureTimeFormat, SIGNAL(currentIndexChanged(int)),
+                    this, SLOT(slotUpdateUI()));
+            break;
+        }
+
+    default:
+        break;
+    }
+}
+
+ColumnPhotoConfigurationWidget::~ColumnPhotoConfigurationWidget()
+{
+
+}
+
+TableViewColumnConfiguration ColumnPhotoConfigurationWidget::getNewConfiguration()
+{
+    const QString formatKey = selectorExposureTimeFormat->itemData(selectorExposureTimeFormat->currentIndex()).toString();
+    configuration.columnSettings.insert("format", formatKey);
+
+    const QString unitKey = selectorExposureTimeUnit->itemData(selectorExposureTimeUnit->currentIndex()).toString();
+    configuration.columnSettings.insert("unit", unitKey);
+
+    return configuration;
+}
+
+void ColumnPhotoProperties::setConfiguration(const TableViewColumnConfiguration& newConfiguration)
+{
+    configuration = newConfiguration;
+
+    emit(signalAllDataChanged());
+}
+
+void ColumnPhotoConfigurationWidget::slotUpdateUI()
+{
+    if (selectorExposureTimeFormat)
+    {
+        const QString currentKey = selectorExposureTimeFormat->itemData(selectorExposureTimeFormat->currentIndex()).toString();
+        const bool needsUnits = currentKey=="rational";
+
+        selectorExposureTimeUnit->setEnabled(needsUnits);
     }
 }
 

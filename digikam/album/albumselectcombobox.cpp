@@ -158,12 +158,12 @@ void AlbumSelectComboBox::Private::updateCheckable()
 
     if (isCheckable)
     {
-        connect(model, SIGNAL(checkStateChanged(Album*, Qt::CheckState)),
+        connect(model, SIGNAL(checkStateChanged(Album*,Qt::CheckState)),
                 q, SLOT(updateText()));
     }
     else
     {
-        disconnect(model, SIGNAL(checkStateChanged(Album*, Qt::CheckState)),
+        disconnect(model, SIGNAL(checkStateChanged(Album*,Qt::CheckState)),
                    q, SLOT(updateText()));
     }
 }

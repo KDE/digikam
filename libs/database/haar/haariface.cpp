@@ -7,8 +7,8 @@
  * Description : Haar Database interface
  *
  * Copyright (C) 2003      by Ricardo Niederberger Cabral <nieder at mail dot ru>
- * Copyright (C) 2009-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2009-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -75,11 +75,16 @@ class DatabaseBlob
 {
 public:
 
-    enum { Version = 1 };
+    enum
+    {
+        Version = 1
+    };
 
 public:
 
-    DatabaseBlob() {}
+    DatabaseBlob()
+    {
+    }
 
     /** Read the QByteArray into the Haar::SignatureData.
      */
@@ -107,10 +112,12 @@ public:
 
         // read coefficients
         for (int i=0; i<3; ++i)
+        {
             for (int j=0; j<Haar::NumberOfCoefficients; ++j)
             {
                 stream >> data->sig[i][j];
             }
+        }
     }
 
     QByteArray write(Haar::SignatureData* const data)
@@ -144,21 +151,21 @@ public:
 
 // -----------------------------------------------------------------------------------------------------
 
-class HaarIface::HaarIfacePriv
+class HaarIface::Private
 {
 public:
 
-    HaarIfacePriv()
+    Private()
     {
-        data              = 0;
-        bin               = 0;
-        signatureCache    = 0;
-        useSignatureCache = false;
+        data                       = 0;
+        bin                        = 0;
+        signatureCache             = 0;
+        useSignatureCache          = false;
 
-        signatureQuery    = QString("SELECT M.imageid, 0, M.matrix "
-                                    " FROM ImageHaarMatrix AS M "
-                                    "    INNER JOIN Images ON Images.id=M.imageid "
-                                    " WHERE Images.status=1; ");
+        signatureQuery             = QString("SELECT M.imageid, 0, M.matrix "
+                                             " FROM ImageHaarMatrix AS M "
+                                             "    INNER JOIN Images ON Images.id=M.imageid "
+                                             " WHERE Images.status=1; ");
 
         signatureByAlbumRootsQuery = QString("SELECT M.imageid, Albums.albumRoot, M.matrix "
                                              " FROM ImageHaarMatrix AS M "
@@ -167,7 +174,7 @@ public:
                                              " WHERE Images.status=1;");
     }
 
-    ~HaarIfacePriv()
+    ~Private()
     {
         delete data;
         delete bin;
@@ -267,7 +274,7 @@ public:
 };
 
 HaarIface::HaarIface()
-    : d(new HaarIfacePriv())
+    : d(new Private())
 {
 }
 
@@ -475,9 +482,9 @@ QList<qlonglong> HaarIface::bestMatches(Haar::SignatureData* const querySig, int
     // We make use of the feature that QMap keys are sorted in ascending order
     // Of course, images can have the same score, so we need a multi map
     QMultiMap<double, qlonglong> bestMatches;
-    bool initialFill = false;
-    double score, worstScore, bestScore;
-    qlonglong id;
+    bool                         initialFill = false;
+    double                       score, worstScore, bestScore;
+    qlonglong                    id;
 
     for (QMap<qlonglong, double>::const_iterator it = scores.constBegin(); it != scores.constEnd(); ++it)
     {
@@ -516,10 +523,11 @@ QList<qlonglong> HaarIface::bestMatches(Haar::SignatureData* const querySig, int
         }
     }
 
-    /*
-        for (QMap<double, qlonglong>::iterator it = bestMatches.begin(); it != bestMatches.end(); ++it)
-            kDebug() << it.key() << it.value();
-    */
+/*
+    for (QMap<double, qlonglong>::iterator it = bestMatches.begin(); it != bestMatches.end(); ++it)
+        kDebug() << it.key() << it.value();
+*/
+
     return bestMatches.values();
 }
 

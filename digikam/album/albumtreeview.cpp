@@ -301,7 +301,6 @@ void AbstractAlbumTreeView::setAlbumFilterModel(AlbumFilterModel* const filterMo
         connect(m_albumFilterModel, SIGNAL(searchTextSettingsChanged(bool,bool)),
                 this, SLOT(slotSearchTextSettingsChanged(bool,bool)));
 
-
         connect(selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
                 this, SLOT(slotCurrentChanged()));
 
@@ -532,7 +531,7 @@ void AbstractAlbumTreeView::mousePressEvent(QMouseEvent* e)
 
         if (index.isValid())
         {
-            Album* album = albumFilterModel()->albumForIndex(index);
+            Album* const album = albumFilterModel()->albumForIndex(index);
 
             if (album && d->setInAlbumManager)
             {
@@ -569,7 +568,7 @@ void AbstractAlbumTreeView::mousePressEvent(QMouseEvent* e)
     }
     else if (m_checkOnMiddleClick && e->button() == Qt::MidButton)
     {
-        Album* a = m_albumFilterModel->albumForIndex(indexAt(e->pos()));
+        Album* const a = m_albumFilterModel->albumForIndex(indexAt(e->pos()));
 
         if (a)
         {
@@ -941,7 +940,7 @@ void AbstractAlbumTreeView::doSaveState()
 
 void AbstractAlbumTreeView::saveStateRecursive(const QModelIndex& index, QList<int>& selection, QList<int>& expansion)
 {
-    Album* album = albumFilterModel()->albumForIndex(index);
+    Album* const album = albumFilterModel()->albumForIndex(index);
 
     if (album)
     {
@@ -1223,7 +1222,7 @@ void AbstractCheckableAlbumTreeView::setCheckOnMiddleClick(bool doThat)
 
 void AbstractCheckableAlbumTreeView::middleButtonPressed(Album* a)
 {
-    AbstractCheckableAlbumModel* model = static_cast<AbstractCheckableAlbumModel*>(m_albumModel);
+    AbstractCheckableAlbumModel* const model = static_cast<AbstractCheckableAlbumModel*>(m_albumModel);
 
     if (!model)
     {
@@ -1340,7 +1339,7 @@ void AbstractCheckableAlbumTreeView::restoreCheckStateForHierarchy(const QModelI
 
 void AbstractCheckableAlbumTreeView::restoreCheckState(const QModelIndex& index)
 {
-    Album* album = checkableModel()->albumForIndex(index);
+    Album* const album = checkableModel()->albumForIndex(index);
 
     if (!album)
     {
@@ -1575,7 +1574,7 @@ void TagTreeView::setCurrentAlbum(TAlbum* album, bool selectInAlbumManager)
 
 void TagTreeView::setCurrentAlbum(int albumId, bool selectInAlbumManager)
 {
-    TAlbum* album = AlbumManager::instance()->findTAlbum(albumId);
+    TAlbum* const album = AlbumManager::instance()->findTAlbum(albumId);
     setCurrentAlbum(album, selectInAlbumManager);
 }
 

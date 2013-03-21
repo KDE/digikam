@@ -679,8 +679,8 @@ void ImportUI::setupConnections()
 
     // -------------------------------------------------------------------------
 
-    connect(CollectionManager::instance(), SIGNAL(locationStatusChanged(CollectionLocation, int)),
-            this, SLOT(slotCollectionLocationStatusChanged(CollectionLocation, int)));
+    connect(CollectionManager::instance(), SIGNAL(locationStatusChanged(CollectionLocation,int)),
+            this, SLOT(slotCollectionLocationStatusChanged(CollectionLocation,int)));
 
     //connect(ImportSettings::instance(), SIGNAL(setupChanged()),
             //this, SLOT(slotSidebarTabTitleStyleChanged()));

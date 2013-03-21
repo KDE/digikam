@@ -567,8 +567,8 @@ void DigikamView::setupConnections()
 
     // -- FileActionMngr progress ---------------
 
-    connect(FileActionMngr::instance(), SIGNAL(signalImageChangeFailed(QString, QStringList)),
-            this, SLOT(slotImageChangeFailed(QString, QStringList)));
+    connect(FileActionMngr::instance(), SIGNAL(signalImageChangeFailed(QString,QStringList)),
+            this, SLOT(slotImageChangeFailed(QString,QStringList)));
 
     // -- timers ---------------
 
@@ -1815,14 +1815,14 @@ void DigikamView::slotSlideShowBuilderComplete(const SlideShowSettings& settings
         slide->setCurrent(d->iconView->currentUrl());
     }
 
-    connect(slide, SIGNAL(signalRatingChanged(KUrl, int)),
-            this, SLOT(slotRatingChanged(KUrl, int)));
+    connect(slide, SIGNAL(signalRatingChanged(KUrl,int)),
+            this, SLOT(slotRatingChanged(KUrl,int)));
 
-    connect(slide, SIGNAL(signalColorLabelChanged(KUrl, int)),
-            this, SLOT(slotColorLabelChanged(KUrl, int)));
+    connect(slide, SIGNAL(signalColorLabelChanged(KUrl,int)),
+            this, SLOT(slotColorLabelChanged(KUrl,int)));
 
-    connect(slide, SIGNAL(signalPickLabelChanged(KUrl, int)),
-            this, SLOT(slotPickLabelChanged(KUrl, int)));
+    connect(slide, SIGNAL(signalPickLabelChanged(KUrl,int)),
+            this, SLOT(slotPickLabelChanged(KUrl,int)));
 
     slide->show();
 }

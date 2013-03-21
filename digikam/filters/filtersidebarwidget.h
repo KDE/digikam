@@ -45,7 +45,6 @@
 namespace Digikam
 {
 
-
 enum FilterType
 {
     TEXT = 0,
@@ -54,7 +53,7 @@ enum FilterType
     TAGS,
     LABELS
 };
-    
+
 class TagModel;
 class TAlbum;
 

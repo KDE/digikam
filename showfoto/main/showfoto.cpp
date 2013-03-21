@@ -6,7 +6,7 @@
  * Date        : 2004-11-22
  * Description : stand alone digiKam image editor GUI
  *
- * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at gmail dot com>
  * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
@@ -107,6 +107,7 @@ extern "C"
 #include "iofilesettings.h"
 #include "loadingcache.h"
 #include "loadingcacheinterface.h"
+#include "metadatasettings.h"
 #include "savingcontext.h"
 #include "setup.h"
 #include "setupmisc.h"
@@ -200,6 +201,7 @@ ShowFoto::ShowFoto(const KUrl::List& urlList)
     // Setup loading cache and thumbnails interface.
 
     Digikam::LoadingCacheInterface::initialize();
+    Digikam::MetadataSettings::instance();
 
     d->thumbLoadThread = new Digikam::ThumbnailLoadThread();
     d->thumbLoadThread->setThumbnailSize(Digikam::ThumbnailSize::Huge);
@@ -253,7 +255,7 @@ ShowFoto::ShowFoto(const KUrl::List& urlList)
     // -- Load current items ---------------------------
 
     for (KUrl::List::const_iterator it = urlList.constBegin();
-         it != urlList.constEnd(); ++it)
+        it != urlList.constEnd(); ++it)
     {
         KUrl url = *it;
 
@@ -264,13 +266,30 @@ ShowFoto::ShowFoto(const KUrl::List& urlList)
             if (fi.isDir())
             {
                 // Local Dir
+
                 openFolder(url);
+                toggleNavigation(1);
             }
             else
             {
                 // Local file
-                new Digikam::ThumbBarItem(d->thumbBar, url);
-                d->lastOpenedDirectory=(*it);
+
+                if (urlList.count() == 1)
+                {
+                    // Special case if just one item in urls is passed.
+                    // We need to handle whole current dir content in thummbar.
+                    // See B.K.O #316752 for details.
+
+                    openFolder(url.directory());
+                    d->thumbBar->setSelected(d->thumbBar->findItemByUrl(url));
+                    d->currentItem = d->thumbBar->currentItem();
+                }
+                else
+                {
+                    new Digikam::ThumbBarItem(d->thumbBar, url);
+                    d->lastOpenedDirectory = (*it);
+                    toggleNavigation(1);
+                }
             }
         }
         else
@@ -278,6 +297,7 @@ ShowFoto::ShowFoto(const KUrl::List& urlList)
             // Remote file.
             new Digikam::ThumbBarItem(d->thumbBar, url);
             d->lastOpenedDirectory=(*it);
+            toggleNavigation(1);
         }
     }
 
@@ -286,10 +306,6 @@ ShowFoto::ShowFoto(const KUrl::List& urlList)
         emit signalNoCurrentItem();
         toggleActions(false);
         toggleNavigation(0);
-    }
-    else
-    {
-        toggleNavigation(1);
     }
 }
 
@@ -401,19 +417,19 @@ void ShowFoto::setupUserArea()
     KSharedConfig::Ptr config  = KGlobal::config();
     KConfigGroup group         = config->group(EditorWindow::CONFIG_GROUP_NAME);
 
-    QWidget* widget            = new QWidget(this);
-    QHBoxLayout* hlay          = new QHBoxLayout(widget);
+    QWidget* const widget      = new QWidget(this);
+    QHBoxLayout* const hlay    = new QHBoxLayout(widget);
     m_splitter                 = new Digikam::SidebarSplitter(widget);
 
-    KMainWindow* viewContainer = new KMainWindow(widget, Qt::Widget);
+    KMainWindow* const viewContainer = new KMainWindow(widget, Qt::Widget);
     m_splitter->addWidget(viewContainer);
-    m_stackView                = new Digikam::EditorStackView(viewContainer);
-    m_canvas                   = new Digikam::Canvas(m_stackView);
+    m_stackView                      = new Digikam::EditorStackView(viewContainer);
+    m_canvas                         = new Digikam::Canvas(m_stackView);
     viewContainer->setCentralWidget(m_stackView);
 
     m_splitter->setStretchFactor(1, 10);      // set Canvas default size to max.
 
-    d->rightSideBar            = new Digikam::ImagePropertiesSideBar(widget, m_splitter, KMultiTabBar::Right);
+    d->rightSideBar = new Digikam::ImagePropertiesSideBar(widget, m_splitter, KMultiTabBar::Right);
     d->rightSideBar->setObjectName("ShowFoto Sidebar Right");
 
     hlay->addWidget(m_splitter);
@@ -520,7 +536,7 @@ void ShowFoto::readSettings()
     d->rightSideBar->loadState();
 
     Digikam::ThemeManager::instance()->setCurrentTheme(group.readEntry("Theme",
-                                                      Digikam::ThemeManager::instance()->defaultThemeName()));
+                                                       Digikam::ThemeManager::instance()->defaultThemeName()));
 }
 
 void ShowFoto::saveSettings()
@@ -568,26 +584,21 @@ void ShowFoto::applySettings()
         m_fileDeleteAction->setText(i18n("Delete File"));
     }
 
-/*
-    bool exifRotate = group.readEntry("EXIF Rotate", true);
-    m_setExifOrientationTag   = group.readEntry("EXIF Set Orientation", true);
-*/
-
     Digikam::ThumbBarToolTipSettings settings;
-    settings.showToolTips   = group.readEntry("Show ToolTips", true);
-    settings.font           = group.readEntry("ToolTips Font", KGlobalSettings::generalFont());
-    settings.showFileName   = group.readEntry("ToolTips Show File Name", true);
-    settings.showFileDate   = group.readEntry("ToolTips Show File Date", false);
-    settings.showFileSize   = group.readEntry("ToolTips Show File Size", false);
-    settings.showImageType  = group.readEntry("ToolTips Show Image Type", false);
-    settings.showImageDim   = group.readEntry("ToolTips Show Image Dim", true);
-    settings.showPhotoMake  = group.readEntry("ToolTips Show Photo Make", true);
-    settings.showPhotoDate  = group.readEntry("ToolTips Show Photo Date", true);
+    settings.showToolTips   = group.readEntry("Show ToolTips",             true);
+    settings.font           = group.readEntry("ToolTips Font",             KGlobalSettings::generalFont());
+    settings.showFileName   = group.readEntry("ToolTips Show File Name",   true);
+    settings.showFileDate   = group.readEntry("ToolTips Show File Date",   false);
+    settings.showFileSize   = group.readEntry("ToolTips Show File Size",   false);
+    settings.showImageType  = group.readEntry("ToolTips Show Image Type",  false);
+    settings.showImageDim   = group.readEntry("ToolTips Show Image Dim",   true);
+    settings.showPhotoMake  = group.readEntry("ToolTips Show Photo Make",  true);
+    settings.showPhotoDate  = group.readEntry("ToolTips Show Photo Date",  true);
     settings.showPhotoFocal = group.readEntry("ToolTips Show Photo Focal", true);
-    settings.showPhotoExpo  = group.readEntry("ToolTips Show Photo Expo", true);
-    settings.showPhotoMode  = group.readEntry("ToolTips Show Photo Mode", true);
+    settings.showPhotoExpo  = group.readEntry("ToolTips Show Photo Expo",  true);
+    settings.showPhotoMode  = group.readEntry("ToolTips Show Photo Mode",  true);
     settings.showPhotoFlash = group.readEntry("ToolTips Show Photo Flash", false);
-    settings.showPhotoWB    = group.readEntry("ToolTips Show Photo WB", false);
+    settings.showPhotoWB    = group.readEntry("ToolTips Show Photo WB",    false);
     d->thumbBar->setToolTipSettings(settings);
 }
 
@@ -609,7 +620,7 @@ void ShowFoto::slotOpenFile()
              it != urls.constEnd(); ++it)
         {
             new Digikam::ThumbBarItem(d->thumbBar, *it);
-            d->lastOpenedDirectory=(*it);
+            d->lastOpenedDirectory = (*it);
         }
     }
 }
@@ -663,8 +674,8 @@ void ShowFoto::slotChanged()
     {
         if (d->currentItem->url().isValid())
         {
-            QRect sel          = m_canvas->getSelectedArea();
-            Digikam::DImg* img = m_canvas->interface()->getImg();
+            QRect sel                = m_canvas->getSelectedArea();
+            Digikam::DImg* const img = m_canvas->interface()->getImg();
             d->rightSideBar->itemChanged(d->currentItem->url(), sel, img);
         }
     }
@@ -717,8 +728,7 @@ bool ShowFoto::setup(bool iccSetupPage)
 void ShowFoto::slotUpdateItemInfo()
 {
     d->itemsNb = d->thumbBar->countItems();
-
-    int index = 0;
+    int index  = 0;
     QString text;
 
     if (d->itemsNb > 0)
@@ -748,7 +758,6 @@ void ShowFoto::slotUpdateItemInfo()
     }
 
     m_nameLabel->setText(text);
-
     toggleNavigation( index );
 }
 
@@ -1211,14 +1220,11 @@ void ShowFoto::slideShow(Digikam::SlideShowSettings& settings)
         return;
     }
 
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(EditorWindow::CONFIG_GROUP_NAME);
-
-    settings.exifRotate       = group.readEntry("EXIF Rotate", true);
-    settings.fileList         = d->thumbBar->itemsUrls();
-    int   i                   = 0;
-    float cnt                 = settings.fileList.count();
-    m_cancelSlideShow         = false;
+    settings.exifRotate = Digikam::MetadataSettings::instance()->settings().exifRotate;
+    settings.fileList   = d->thumbBar->itemsUrls();
+    int   i             = 0;
+    float cnt           = settings.fileList.count();
+    m_cancelSlideShow   = false;
     Digikam::DMetadata meta;
 
     m_nameLabel->progressBarMode(Digikam::StatusProgressBar::CancelProgressBarMode,

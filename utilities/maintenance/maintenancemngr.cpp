@@ -108,7 +108,7 @@ void MaintenanceMngr::slotStage1()
         connect(tool, SIGNAL(signalComplete()),
                 this, SLOT(slotStage2()));
 
-        connect(tool, SIGNAL(progressItemCanceled(const QString&)),
+        connect(tool, SIGNAL(progressItemCanceled(QString)),
                 this, SLOT(slotCancel()));
 
         tool->start();
@@ -130,7 +130,7 @@ void MaintenanceMngr::slotStage2()
         connect(tool, SIGNAL(signalComplete()),
                 this, SLOT(slotStage3()));
 
-        connect(tool, SIGNAL(progressItemCanceled(const QString&)),
+        connect(tool, SIGNAL(progressItemCanceled(QString)),
                 this, SLOT(slotCancel()));
 
         tool->start();
@@ -152,7 +152,7 @@ void MaintenanceMngr::slotStage3()
         connect(tool, SIGNAL(signalComplete()),
                 this, SLOT(slotStage4()));
 
-        connect(tool, SIGNAL(progressItemCanceled(const QString&)),
+        connect(tool, SIGNAL(progressItemCanceled(QString)),
                 this, SLOT(slotCancel()));
 
         tool->start();
@@ -173,7 +173,7 @@ void MaintenanceMngr::slotStage4()
         connect(tool, SIGNAL(signalComplete()),
                 this, SLOT(slotStage5()));
 
-        connect(tool, SIGNAL(progressItemCanceled(const QString&)),
+        connect(tool, SIGNAL(progressItemCanceled(QString)),
                 this, SLOT(slotCancel()));
 
         tool->start();
@@ -194,7 +194,7 @@ void MaintenanceMngr::slotStage5()
         connect(tool, SIGNAL(signalComplete()),
                 this, SLOT(slotStage6()));
 
-        connect(tool, SIGNAL(progressItemCanceled(const QString&)),
+        connect(tool, SIGNAL(progressItemCanceled(QString)),
                 this, SLOT(slotCancel()));
 
         tool->start();
@@ -215,7 +215,7 @@ void MaintenanceMngr::slotStage6()
         connect(tool, SIGNAL(signalComplete()),
                 this, SLOT(slotDone()));
 
-        connect(tool, SIGNAL(progressItemCanceled(const QString&)),
+        connect(tool, SIGNAL(progressItemCanceled(QString)),
                 this, SLOT(slotCancel()));
 
         tool->start();

@@ -157,8 +157,8 @@ QPixmap SyncJob::getTagThumbnailPriv(TAlbum* const album)
     d->thumbnail                       = new QPixmap();
     AlbumThumbnailLoader* const loader = AlbumThumbnailLoader::instance();
 
-    connect(loader, SIGNAL(signalThumbnail(Album*, QPixmap)),
-            this, SLOT(slotGotThumbnailFromIcon(Album*, QPixmap)),
+    connect(loader, SIGNAL(signalThumbnail(Album*,QPixmap)),
+            this, SLOT(slotGotThumbnailFromIcon(Album*,QPixmap)),
             Qt::QueuedConnection);
 
     connect(loader, SIGNAL(signalFailed(Album*)),

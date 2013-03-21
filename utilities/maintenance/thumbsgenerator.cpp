@@ -85,8 +85,8 @@ ThumbsGenerator::ThumbsGenerator(bool rebuildAll, int albumId, ProgressItem* con
     d->rebuildAll      = rebuildAll;
     d->albumId         = albumId;
 
-    connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(LoadingDescription, QPixmap)),
-            this, SLOT(slotGotThumbnail(LoadingDescription, QPixmap)));
+    connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(LoadingDescription,QPixmap)),
+            this, SLOT(slotGotThumbnail(LoadingDescription,QPixmap)));
 
     setLabel(i18n("Thumbs"));
 }

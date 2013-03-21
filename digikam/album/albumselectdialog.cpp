@@ -7,8 +7,8 @@
  * Description : a dialog to select a target album to download
  *               pictures from camera
  *
- * Copyright (C) 2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005      by Renchi Raju <renchi dot raju at gmail dot com>
+ * Copyright (C) 2006-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -53,12 +53,12 @@
 namespace Digikam
 {
 
-class AlbumSelectDialog::AlbumSelectDialogPrivate
+class AlbumSelectDialog::Private
 {
 
 public:
 
-    AlbumSelectDialogPrivate()
+    Private()
     {
         albumSel  = 0;
         searchBar = 0;
@@ -69,8 +69,8 @@ public:
     SearchTextBar*     searchBar;
 };
 
-AlbumSelectDialog::AlbumSelectDialog(QWidget* parent, PAlbum* albumToSelect, const QString& header)
-    : KDialog(parent), d(new AlbumSelectDialogPrivate)
+AlbumSelectDialog::AlbumSelectDialog(QWidget* const parent, PAlbum* const albumToSelect, const QString& header)
+    : KDialog(parent), d(new Private)
 {
     setCaption(i18n("Select Album"));
     setButtons(Help|Ok|Cancel);
@@ -79,15 +79,15 @@ AlbumSelectDialog::AlbumSelectDialog(QWidget* parent, PAlbum* albumToSelect, con
 
     // -------------------------------------------------------------
 
-    QWidget* page     = new QWidget(this);
+    QWidget* const page     = new QWidget(this);
     setMainWidget(page);
 
-    QGridLayout* grid = new QGridLayout(page);
-    QLabel* logo      = new QLabel(page);
+    QGridLayout* const grid = new QGridLayout(page);
+    QLabel* const logo      = new QLabel(page);
     logo->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
                     .scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
-    QLabel* message   = new QLabel(page);
+    QLabel* const message   = new QLabel(page);
     message->setWordWrap(true);
 
     if (!header.isEmpty())
@@ -123,7 +123,7 @@ AlbumSelectDialog::~AlbumSelectDialog()
 
 void AlbumSelectDialog::slotSelectionChanged()
 {
-    PAlbum* currentAlbum = d->albumSel->currentAlbum();
+    PAlbum* const currentAlbum = d->albumSel->currentAlbum();
 
     if (!currentAlbum || (currentAlbum->isRoot()))
     {
@@ -134,7 +134,7 @@ void AlbumSelectDialog::slotSelectionChanged()
     enableButtonOk(true);
 }
 
-PAlbum* AlbumSelectDialog::selectAlbum(QWidget* parent, PAlbum* albumToSelect, const QString& header)
+PAlbum* AlbumSelectDialog::selectAlbum(QWidget* const parent, PAlbum* const albumToSelect, const QString& header)
 {
     QPointer<AlbumSelectDialog> dlg = new AlbumSelectDialog(parent, albumToSelect, header);
 
@@ -144,7 +144,7 @@ PAlbum* AlbumSelectDialog::selectAlbum(QWidget* parent, PAlbum* albumToSelect, c
         return 0;
     }
 
-    PAlbum* selectedAlbum = dlg->d->albumSel->currentAlbum();
+    PAlbum* const selectedAlbum = dlg->d->albumSel->currentAlbum();
 
     if (!selectedAlbum || (selectedAlbum->isRoot()))
     {
@@ -153,6 +153,7 @@ PAlbum* AlbumSelectDialog::selectAlbum(QWidget* parent, PAlbum* albumToSelect, c
     }
 
     delete dlg;
+
     return selectedAlbum;
 }
 

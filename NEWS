@@ -9,6 +9,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 001 ==> 315098 - DNG Converter and DigiKam crashes when opening a .dng file.
 002 ==> 316556 - DIGIKAMSC_USE_PRIVATE_KDEGRAPHICS is set to ON.
-003 ==> 308418 - some keyboard shortcuts not working in full screen mode.
-004 ==> 
-
+003 ==> 308418 - Some keyboard shortcuts not working in full screen mode.
+004 ==> 312549 - Showfoto does not correctly rotate images in the main view.
+005 ==> 316752 - Make the forward, back, first & last arrows cycle properly.
+006 ==> 

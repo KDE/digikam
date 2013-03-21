@@ -223,8 +223,8 @@ void ImportView::setupConnections()
 
     // -- FileActionMngr progress ---------------
 
-    connect(FileActionMngr::instance(), SIGNAL(signalImageChangeFailed(QString, QStringList)),
-            this, SLOT(slotImageChangeFailed(QString, QStringList)));
+    connect(FileActionMngr::instance(), SIGNAL(signalImageChangeFailed(QString,QStringList)),
+            this, SLOT(slotImageChangeFailed(QString,QStringList)));
 
     // -- timers ---------------
 

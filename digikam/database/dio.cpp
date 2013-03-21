@@ -138,14 +138,14 @@ void GroupedImagesFinder::process(const QList<ImageInfo> source)
 DIO::Private::Private(DIO* const q)
     : q(q)
 {
-    connectAndSchedule(this, SIGNAL(jobToProcess(int, KUrl::List, KUrl)),
-                       this, SLOT(processJob(int, KUrl::List, KUrl)));
+    connectAndSchedule(this, SIGNAL(jobToProcess(int,KUrl::List,KUrl)),
+                       this, SLOT(processJob(int,KUrl::List,KUrl)));
 
-    connectAndSchedule(this, SIGNAL(renameToProcess(KUrl, KUrl)),
-                       this, SLOT(processRename(KUrl, KUrl)));
+    connectAndSchedule(this, SIGNAL(renameToProcess(KUrl,KUrl)),
+                       this, SLOT(processRename(KUrl,KUrl)));
 
-    connect(this, SIGNAL(jobToCreate(int, KUrl::List, KUrl)),
-            q, SLOT(createJob(int, KUrl::List, KUrl)));
+    connect(this, SIGNAL(jobToCreate(int,KUrl::List,KUrl)),
+            q, SLOT(createJob(int,KUrl::List,KUrl)));
 }
 
 void DIO::Private::processJob(int operation, const KUrl::List& srcList, const KUrl& dest)

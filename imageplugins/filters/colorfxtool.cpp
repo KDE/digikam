@@ -127,7 +127,7 @@ ColorFxTool::ColorFxTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
-    connect(d->previewWidget, SIGNAL(spotPositionChangedFromTarget(Digikam::DColor, QPoint)),
+    connect(d->previewWidget, SIGNAL(spotPositionChangedFromTarget(Digikam::DColor,QPoint)),
             this, SLOT(slotColorSelectedFromTarget(Digikam::DColor)));
 
     connect(d->previewWidget, SIGNAL(signalResized()),

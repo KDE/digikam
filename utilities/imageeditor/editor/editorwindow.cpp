@@ -6,7 +6,7 @@
  * Date        : 2006-01-20
  * Description : core image editor GUI implementation
  *
- * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -138,6 +138,7 @@
 #include "imageplugin.h"
 #include "imagepluginloader.h"
 #include "iofilesettings.h"
+#include "metadatasettings.h"
 #include "libsinfodlg.h"
 #include "loadingcacheinterface.h"
 #include "printhelper.h"
@@ -160,7 +161,7 @@ namespace Digikam
 
 const QString EditorWindow::CONFIG_GROUP_NAME = "ImageViewer Settings";
 
-EditorWindow::EditorWindow(const char* name)
+EditorWindow::EditorWindow(const char* const name)
     : KXmlGuiWindow(0), d(new Private)
 {
     setObjectName(name);
@@ -961,6 +962,12 @@ void EditorWindow::applyStandardSettings()
     d->exposureSettings->overExposurePercent   = group.readEntry(d->configOverExposurePercentsEntry,  1.0);
     d->exposureSettings->exposureIndicatorMode = group.readEntry(d->configExpoIndicatorModeEntry,     true);
     d->toolIface->updateExposureSettings();
+
+    // -- Metadata Settings --------------------------------------------------
+
+    MetadataSettingsContainer writeSettings = MetadataSettings::instance()->settings();
+    m_setExifOrientationTag                 = writeSettings.exifSetOrientation;
+    m_canvas->setExifOrient(writeSettings.exifRotate);
 }
 
 void EditorWindow::applyIOSettings()

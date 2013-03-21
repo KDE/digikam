@@ -85,6 +85,8 @@ public:
     };
     Q_DECLARE_FLAGS(Flags, Flag)
 
+public:
+
     /**
      * Constructs an album tree view.
      * If you give 0 for model, call setAlbumModel afterwards.

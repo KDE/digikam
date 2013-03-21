@@ -353,13 +353,13 @@ ImageDescEditTab::ImageDescEditTab(QWidget* const parent)
 
     // --------------------------------------------------
 
-    connect(d->tagCheckView->checkableModel(), SIGNAL(checkStateChanged(Album*, Qt::CheckState)),
-            this, SLOT(slotTagStateChanged(Album*, Qt::CheckState)));
+    connect(d->tagCheckView->checkableModel(), SIGNAL(checkStateChanged(Album*,Qt::CheckState)),
+            this, SLOT(slotTagStateChanged(Album*,Qt::CheckState)));
 
-    connect(d->titleEdit, SIGNAL(signalModified(QString, QString)),
+    connect(d->titleEdit, SIGNAL(signalModified(QString,QString)),
             this, SLOT(slotTitleChanged()));
 
-    connect(d->titleEdit, SIGNAL(signalValueAdded(QString, QString)),
+    connect(d->titleEdit, SIGNAL(signalValueAdded(QString,QString)),
             this, SLOT(slotTitleChanged()));
 
     connect(d->titleEdit, SIGNAL(signalValueDeleted(QString)),
@@ -410,8 +410,8 @@ ImageDescEditTab::ImageDescEditTab(QWidget* const parent)
     connect(d->metadataChangeTimer, SIGNAL(timeout()),
             this, SLOT(slotReloadForMetadataChange()));
 
-    connect(this, SIGNAL(askToApplyChanges(const QList<ImageInfo>&, MetadataHubOnTheRoad*)),
-            this, SLOT(slotAskToApplyChanges(const QList<ImageInfo>&, MetadataHubOnTheRoad*)),
+    connect(this, SIGNAL(askToApplyChanges(QList<ImageInfo>,MetadataHubOnTheRoad*)),
+            this, SLOT(slotAskToApplyChanges(QList<ImageInfo>,MetadataHubOnTheRoad*)),
             Qt::QueuedConnection
            );
 
