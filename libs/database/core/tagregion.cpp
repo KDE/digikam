@@ -182,11 +182,12 @@ QRect TagRegion::mapToOriginalSize(const QSize& fullImageSize, const QSize& redu
         return reducedSizeDetail;
     }
 
-    double ratio = double(fullImageSize.width()) / double(reducedImageSize.width());
-    return QRectF(reducedSizeDetail.x() * ratio,
-                  reducedSizeDetail.y() * ratio,
-                  reducedSizeDetail.width() * ratio,
-                  reducedSizeDetail.height() * ratio).toRect();
+    double ratioWidth = double(fullImageSize.width()) / double(reducedImageSize.width());
+    double ratioHeight = double(fullImageSize.height()) / double(reducedImageSize.height());
+    return QRectF(reducedSizeDetail.x() * ratioWidth,
+                  reducedSizeDetail.y() * ratioHeight,
+                  reducedSizeDetail.width() * ratioWidth,
+                  reducedSizeDetail.height() * ratioHeight).toRect();
 }
 
 QRect TagRegion::mapFromOriginalSize(const QSize& fullImageSize, const QSize& reducedImageSize, const QRect& fullSizeDetail)
@@ -196,11 +197,12 @@ QRect TagRegion::mapFromOriginalSize(const QSize& fullImageSize, const QSize& re
         return fullSizeDetail;
     }
 
-    double ratio = double(reducedImageSize.width()) / double(fullImageSize.width());
-    return QRectF(fullSizeDetail.x() * ratio,
-                  fullSizeDetail.y() * ratio,
-                  fullSizeDetail.width() * ratio,
-                  fullSizeDetail.height() * ratio).toRect();
+    double ratioWidth = double(reducedImageSize.width()) / double(fullImageSize.width());
+    double ratioHeight = double(reducedImageSize.height()) / double(fullImageSize.height());
+    return QRectF(fullSizeDetail.x() * ratioWidth,
+                  fullSizeDetail.y() * ratioHeight,
+                  fullSizeDetail.width() * ratioWidth,
+                  fullSizeDetail.height() * ratioHeight).toRect();
 }
 
 QRect TagRegion::mapToOriginalSize(const DImg& reducedSizeImage, const QRect& reducedSizeDetail)
