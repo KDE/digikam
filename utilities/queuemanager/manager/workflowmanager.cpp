@@ -432,7 +432,13 @@ bool WorkflowManager::load(QStringList& failed)
                     {
                         QString pname = e3.attribute(QString::fromLatin1("name"));
                         QString type  = e3.attribute(QString::fromLatin1("type"));
-                        set.settings.insert(pname, QVariant(val3).convert(QVariant::nameToType(type.toAscii())));
+                        QVariant var(val3);
+                        var.convert(QVariant::nameToType(type.toAscii()));
+/*
+                        kDebug() << "name=" << pname << " :: " << "type=" << type << " :: " << "value=" << val3
+                                 << " :: " << "QVariant=" << var;
+*/
+                        set.settings.insert(pname, var);
                     }
                 }
 
