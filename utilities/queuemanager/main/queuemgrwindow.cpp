@@ -1063,6 +1063,9 @@ void QueueMgrWindow::slotAssignQueueSettings(const QString& title)
             queue->setSettings(q.qSettings);
             AssignedBatchTools tools;
             tools.m_toolsList = q.aTools;
+
+            kDebug() << tools.m_toolsList;
+
             queue->setAssignedTools(tools);
             d->queuePool->slotQueueSelected(d->queuePool->currentIndex());
         }
