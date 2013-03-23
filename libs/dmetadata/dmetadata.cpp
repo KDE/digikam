@@ -1911,13 +1911,10 @@ QString DMetadata::getLensDescription() const
     lensExifTags.append("Exif.Sigma.LensRange");       // Sigma Cameras Makernote.
     lensExifTags.append("Exif.Samsung2.LensType");     // Samsung Cameras Makernote.
     lensExifTags.append("Exif.Photo.0xFDEA");          // Non-standard Exif tag set by Camera Raw.
+    lensExifTags.append("Exif.OlympusEq.LensModel");   // Olympus Cameras Makernote.
+    //lensExifTags.append("Exif.OlympusEq.LensType");    // Olympus Cameras Makernote. FIXME is this necessary? exiv2 returns complete name, which doesn't match with lensfun information, see #311295
 
-    // TODO : add Fuji and Olympus, camera Makernotes.
-
-    // For Olympus, there is an encrypted tag dedicated to identify Lens :
-    // Exif.OlympusEq.LensType
-    // See http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/Olympus.html for details.
-    // Exiv2 need to be patched to decrypt this tag.
+    // TODO : add Fuji camera Makernotes.
 
     // -------------------------------------------------------------------
     // Try to get Lens Data information from Exif.
