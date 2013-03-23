@@ -196,50 +196,50 @@ void QueueMgrWindow::closeEvent(QCloseEvent* e)
 
 void QueueMgrWindow::setupUserArea()
 {
-    QWidget* mainW          = new QWidget(this);
-    QVBoxLayout* mainLayout = new QVBoxLayout(mainW);
+    QWidget* const mainW          = new QWidget(this);
+    QVBoxLayout* const mainLayout = new QVBoxLayout(mainW);
 
     // ------------------------------------------------------------------------------
 
-    QGroupBox* queuesBox = new QGroupBox(i18n("Queues"), mainW);
-    QVBoxLayout* vlay1   = new QVBoxLayout(queuesBox);
-    d->queuePool         = new QueuePool(queuesBox);
+    QGroupBox* const queuesBox = new QGroupBox(i18n("Queues"), mainW);
+    QVBoxLayout* const vlay1   = new QVBoxLayout(queuesBox);
+    d->queuePool               = new QueuePool(queuesBox);
     vlay1->addWidget(d->queuePool);
     vlay1->setSpacing(0);
     vlay1->setMargin(0);
 
     // ------------------------------------------------------------------------------
 
-    QGroupBox* queueSettingsBox = new QGroupBox(i18n("Queue Settings"), mainW);
-    QVBoxLayout* vlay2          = new QVBoxLayout(queueSettingsBox);
-    d->queueSettingsView        = new QueueSettingsView(queueSettingsBox);
+    QGroupBox* const queueSettingsBox = new QGroupBox(i18n("Queue Settings"), mainW);
+    QVBoxLayout* const vlay2          = new QVBoxLayout(queueSettingsBox);
+    d->queueSettingsView              = new QueueSettingsView(queueSettingsBox);
     vlay2->addWidget(d->queueSettingsView);
     vlay2->setSpacing(0);
     vlay2->setMargin(0);
 
     // ------------------------------------------------------------------------------
 
-    QGroupBox* toolsBox = new QGroupBox(i18n("Control Panel"), mainW);
-    QVBoxLayout* vlay3  = new QVBoxLayout(toolsBox);
-    d->toolsView        = new ToolsView(toolsBox);
+    QGroupBox* const toolsBox = new QGroupBox(i18n("Control Panel"), mainW);
+    QVBoxLayout* const vlay3  = new QVBoxLayout(toolsBox);
+    d->toolsView              = new ToolsView(toolsBox);
     vlay3->addWidget(d->toolsView);
     vlay3->setSpacing(0);
     vlay3->setMargin(0);
 
     // ------------------------------------------------------------------------------
 
-    QGroupBox* assignBox = new QGroupBox(i18n("Assigned Tools"), mainW);
-    QVBoxLayout* vlay4   = new QVBoxLayout(assignBox);
-    d->assignedList      = new AssignedListView(assignBox);
+    QGroupBox* const assignBox = new QGroupBox(i18n("Assigned Tools"), mainW);
+    QVBoxLayout* const vlay4   = new QVBoxLayout(assignBox);
+    d->assignedList            = new AssignedListView(assignBox);
     vlay4->addWidget(d->assignedList);
     vlay4->setSpacing(0);
     vlay4->setMargin(0);
 
     // ------------------------------------------------------------------------------
 
-    QGroupBox* toolSettingsBox = new QGroupBox(i18n("Tool Settings"), mainW);
-    QVBoxLayout* vlay5         = new QVBoxLayout(toolSettingsBox);
-    d->toolSettings            = new ToolSettingsView(toolSettingsBox);
+    QGroupBox* const toolSettingsBox = new QGroupBox(i18n("Tool Settings"), mainW);
+    QVBoxLayout* const vlay5         = new QVBoxLayout(toolSettingsBox);
+    d->toolSettings                  = new ToolSettingsView(toolSettingsBox);
     vlay5->addWidget(d->toolSettings);
     vlay5->setSpacing(0);
     vlay5->setMargin(0);
@@ -934,11 +934,11 @@ void QueueMgrWindow::slotHistoryEntryClicked(int queueId, qlonglong itemId)
         return;
     }
 
-    QueueListView* view = d->queuePool->findQueueByIndex(queueId);
+    QueueListView* const view = d->queuePool->findQueueByIndex(queueId);
 
     if (view)
     {
-        QueueListViewItem* item = view->findItemById(itemId);
+        QueueListViewItem* const item = view->findItemById(itemId);
 
         if (item)
         {
@@ -1064,7 +1064,7 @@ void QueueMgrWindow::slotAssignQueueSettings(const QString& title)
             AssignedBatchTools tools;
             tools.m_toolsList = q.aTools;
 
-            kDebug() << tools.m_toolsList;
+            //kDebug() << tools.m_toolsList;
 
             queue->setAssignedTools(tools);
             d->queuePool->slotQueueSelected(d->queuePool->currentIndex());
