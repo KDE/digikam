@@ -13,4 +13,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 004 ==> 312549 - Showfoto does not correctly rotate images in the main view.
 005 ==> 316752 - Make the forward, back, first & last arrows cycle properly.
 006 ==> 311295 - digiKam not detecting my OLYMPUS M.14-42mm F3.5-5.6 II R lens.
-007 ==> 
+007 ==> 313938 - Workflow doesn't save/restore tool parameters.
+008 ==> 
