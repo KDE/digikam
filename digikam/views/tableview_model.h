@@ -103,9 +103,12 @@ public:
     QModelIndex indexFromImageId(const qlonglong imageId, const int columnIndex) const;
     Item* itemFromImageId(const qlonglong imageId) const;
     Item* itemFromIndex(const QModelIndex& i) const;
-    ImageInfo infoFromItem(Item* const item);
+    ImageInfo infoFromItem(Item* const item) const;
     QVariant itemDatabaseFieldRaw(Item* const item, const DatabaseFields::Set requestedField);
     DatabaseFieldsHashRaw itemDatabaseFieldsRaw(Item* const item, const DatabaseFields::Set requestedSet);
+    QList<qlonglong> imageIds(const QModelIndexList& indexList) const;
+    QList<ImageInfo> imageInfos(const QModelIndexList& indexList) const;
+    ImageInfo imageInfo(const QModelIndex& index) const;
 
 private Q_SLOTS:
 

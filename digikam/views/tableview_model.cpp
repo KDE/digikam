@@ -589,7 +589,7 @@ QModelIndex TableViewModel::fromImageFilterModelIndex(const QModelIndex& imageFi
     return indexFromImageId(imageId, 0);
 }
 
-ImageInfo TableViewModel::infoFromItem(TableViewModel::Item* const item)
+ImageInfo TableViewModel::infoFromItem(Digikam::TableViewModel::Item*const item) const
 {
     if (!item->imageFilterModelIndex.isValid())
     {
@@ -668,6 +668,52 @@ QModelIndex TableViewModel::indexFromImageId(const qlonglong imageId, const int 
 
     return createIndex(rowIndex, columnIndex, item);
 }
+
+QList<qlonglong> TableViewModel::imageIds(const QModelIndexList& indexList) const
+{
+    QList<qlonglong> idList;
+    Q_FOREACH(const QModelIndex& index, indexList)
+    {
+        const Item* const item = itemFromIndex(index);
+        if (!item)
+        {
+            continue;
+        }
+
+        idList << item->imageId;
+    }
+
+    return idList;
+}
+
+QList<ImageInfo> TableViewModel::imageInfos(const QModelIndexList& indexList) const
+{
+    QList<ImageInfo> infoList;
+    Q_FOREACH(const QModelIndex& index, indexList)
+    {
+        Item* const item = itemFromIndex(index);
+        if (!item)
+        {
+            continue;
+        }
+
+        infoList << infoFromItem(item);
+    }
+
+    return infoList;
+}
+
+ImageInfo TableViewModel::imageInfo(const QModelIndex& index) const
+{
+    Item* const item = itemFromIndex(index);
+    if (!item)
+    {
+        return ImageInfo();
+    }
+
+    return infoFromItem(item);
+}
+
 
 } /* namespace Digikam */
 

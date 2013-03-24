@@ -142,14 +142,7 @@ void TableView::doSaveState()
 void TableView::slotItemActivated(const QModelIndex& sortedIndex)
 {
     const QModelIndex& tableViewIndex = s->sortModel->mapToSource(sortedIndex);
-    const QModelIndex& imageFilterModelIndex = s->tableViewModel->toImageFilterModelIndex(tableViewIndex);
-
-    if (!imageFilterModelIndex.isValid())
-    {
-        return;
-    }
-
-    const ImageInfo info = s->imageFilterModel->imageInfo(imageFilterModelIndex);
+    const ImageInfo info = s->tableViewModel->imageInfo(tableViewIndex);
 
     /// @todo Respect edit/preview setting
     emit signalPreviewRequested(info);
@@ -177,8 +170,8 @@ void TableView::showTreeViewContextMenu(QContextMenuEvent* const event)
     ContextMenuHelper cmHelper(&menu);
 
     // get a list of currently selected images' ids
-    const QModelIndexList selectedIndexes = s->imageFilterSelectionModel->selectedIndexes();
-    const QList<qlonglong> selectedImageIds =  s->imageFilterModel->imageIds(selectedIndexes);
+    const QModelIndexList selectedIndexes = s->tableViewSelectionModel->selectedIndexes();
+    const QList<qlonglong> selectedImageIds =  s->tableViewModel->imageIds(selectedIndexes);
 
     cmHelper.addAssignTagsMenu(selectedImageIds);
     cmHelper.addRemoveTagsMenu(selectedImageIds);
@@ -201,8 +194,9 @@ void TableView::showTreeViewContextMenu(QContextMenuEvent* const event)
 
 QList< ImageInfo > TableView::selectedImageInfos() const
 {
-    const QModelIndexList selectedIndexes = s->imageFilterSelectionModel->selectedIndexes();
-    return s->imageFilterModel->imageInfos(selectedIndexes);
+    const QModelIndexList selectedIndexes = s->tableViewSelectionModel->selectedIndexes();
+
+    return s->tableViewModel->imageInfos(selectedIndexes);
 }
 
 void TableView::slotAssignColorLabelToSelected(const int colorLabelID)
