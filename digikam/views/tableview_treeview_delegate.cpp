@@ -60,9 +60,6 @@
 namespace Digikam
 {
 
-class ImageAlbumModel;
-class ImageFilterModel;
-
 TableViewItemDelegate::TableViewItemDelegate(TableViewShared* const tableViewShared, QObject* parent)
   : QItemDelegate(parent),
     s(tableViewShared)

@@ -30,10 +30,6 @@
 
 #include <kdebug.h>
 
-// boost includes
-
-#include <boost/config/posix_features.hpp>
-
 // local includes
 
 /// @todo Clean up include list

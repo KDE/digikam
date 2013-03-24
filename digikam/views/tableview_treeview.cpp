@@ -33,6 +33,7 @@
 // KDE includes
 
 #include <kaction.h>
+#include <kdebug.h>
 #include <klinkitemselectionmodel.h>
 #include <kmenu.h>
 
@@ -40,30 +41,18 @@
 
 /// @todo clean up includes
 #include "contextmenuhelper.h"
-#include "databasefields.h"
-#include "databasewatch.h"
-#include "digikam2kgeomap_database.h"
-#include "fileactionmngr.h"
 #include "imageinfo.h"
 #include "imagemodel.h"
-#include "imageposition.h"
-#include "importfiltermodel.h"
-#include "importimagemodel.h"
-#include "importui.h"
 #include "tableview_column_configuration_dialog.h"
 #include "tableview_columnfactory.h"
 #include "tableview_model.h"
 #include "tableview_selection_model_syncer.h"
 #include "tableview_sortfilterproxymodel.h"
 #include "tableview_treeview_delegate.h"
-#include "thumbnailloadthread.h"
 #include "thumbnailsize.h"
 
 namespace Digikam
 {
-
-class ImageAlbumModel;
-class ImageFilterModel;
 
 class TableViewTreeView::Private
 {
@@ -226,8 +215,8 @@ void TableViewTreeView::slotHeaderContextMenuConfigureColumn()
 
 AbstractItemDragDropHandler* TableViewTreeView::dragDropHandler() const
 {
-    kDebug()<<s->imageFilterModel->sourceImageModel()->dragDropHandler();
-    return s->imageFilterModel->sourceImageModel()->dragDropHandler();
+    kDebug()<<s->imageModel->dragDropHandler();
+    return s->imageModel->dragDropHandler();
 }
 
 QModelIndex TableViewTreeView::mapIndexForDragDrop(const QModelIndex& index) const
@@ -236,7 +225,7 @@ QModelIndex TableViewTreeView::mapIndexForDragDrop(const QModelIndex& index) con
     // We are using the drag-drop-handler of ImageModel, thus
     // we have to convert it to an index of ImageModel.
 
-    // map to the source of ImageFilterModel: ImageModel
+    // map to ImageModel
     const QModelIndex imageModelIndex = s->sortModel->toImageModelIndex(index);
 
     return imageModelIndex;
@@ -245,8 +234,8 @@ QModelIndex TableViewTreeView::mapIndexForDragDrop(const QModelIndex& index) con
 QPixmap TableViewTreeView::pixmapForDrag(const QList< QModelIndex >& indexes) const
 {
     const QModelIndex& firstIndex = indexes.at(0);
-    const QModelIndex& imageFilterModelIndex = s->sortModel->toImageFilterModelIndex(firstIndex);
-    const ImageInfo info = s->imageFilterModel->imageInfo(imageFilterModelIndex);
+    const QModelIndex& tableViewIndex = s->sortModel->mapToSource(firstIndex);
+    const ImageInfo info = s->tableViewModel->imageInfo(tableViewIndex);
     const QString path = info.filePath();
 
     QPixmap thumbnailPixmap;
