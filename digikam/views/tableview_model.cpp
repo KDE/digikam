@@ -30,13 +30,7 @@
 
 #include <kdebug.h>
 
-// boost includes
-
-#include <boost/config/posix_features.hpp>
-
 // local includes
-
-/// @todo Clean up include list
 
 #include "albumdb.h"
 #include "databaseaccess.h"
@@ -46,14 +40,9 @@
 #include "imagefiltermodel.h"
 #include "imagefiltersettings.h"
 #include "imageinfo.h"
-#include "imagelister.h"
-#include "imageposition.h"
 #include "modeltest/modeltest.h"
 #include "tableview_columnfactory.h"
 #include "tableview_selection_model_syncer.h"
-#include "thumbnaildatabaseaccess.h"
-#include "thumbnaildb.h"
-#include "thumbnailloadthread.h"
 
 #define ASSERT_MODEL(index, modelPointer) if (index.isValid()) { Q_ASSERT(index.model()==modelPointer); }
 
