@@ -42,6 +42,7 @@ namespace Digikam
 
 class ImageChangeset;
 class ImageFilterModel;
+class ImageFilterSettings;
 class ImageInfo;
 class TableViewColumn;
 class TableViewColumnConfiguration;
@@ -62,7 +63,6 @@ public:
     public:
 
         qlonglong imageId;
-        QPersistentModelIndex imageFilterModelIndex;
         DatabaseFields::Set cachedDatabaseFields;
         DatabaseFieldsHashRaw databaseFields;
         Item* parent;
@@ -96,7 +96,9 @@ public:
     TableViewColumn* getColumnObject(const int columnIndex);
     QList<TableViewColumn*> getColumnObjects();
     QModelIndex fromImageFilterModelIndex(const QModelIndex& imageFilterModelIndex);
+    QModelIndex fromImageModelIndex(const QModelIndex& imageModelIndex);
     QModelIndex toImageFilterModelIndex(const QModelIndex& i) const;
+    QModelIndex toImageModelIndex(const QModelIndex& i) const;
     void loadColumnProfile(const TableViewColumnProfile& columnProfile);
     TableViewColumnProfile getColumnProfile() const;
 
@@ -114,7 +116,7 @@ private Q_SLOTS:
 
     void slotPopulateModel();
 
-    void slotColumnDataChanged(const QModelIndex& sourceIndex);
+    void slotColumnDataChanged(const qlonglong imageId);
     void slotColumnAllDataChanged();
 
     void slotSourceModelAboutToBeReset();
@@ -131,6 +133,8 @@ private Q_SLOTS:
     void slotSourceLayoutChanged();
 
     void slotDatabaseImageChanged(const ImageChangeset& imageChangeset);
+
+    void slotFilterSettingsChanged(const ImageFilterSettings& settings);
 
 private:
 

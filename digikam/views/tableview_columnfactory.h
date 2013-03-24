@@ -223,7 +223,7 @@ public:
     }
 
 Q_SIGNALS:
-    void signalDataChanged(const QModelIndex& sourceIndex);
+    void signalDataChanged(const qlonglong imageId);
     void signalAllDataChanged();
 };
 
