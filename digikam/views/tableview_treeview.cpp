@@ -47,7 +47,6 @@
 #include "tableview_columnfactory.h"
 #include "tableview_model.h"
 #include "tableview_selection_model_syncer.h"
-#include "tableview_sortfilterproxymodel.h"
 #include "tableview_treeview_delegate.h"
 #include "thumbnailsize.h"
 
@@ -96,8 +95,8 @@ TableViewTreeView::TableViewTreeView(Digikam::TableViewShared* const tableViewSh
 
     header()->installEventFilter(this);
 
-    setModel(s->sortModel);
-    setSelectionModel(s->sortSelectionModel);
+    setModel(s->tableViewModel);
+    setSelectionModel(s->tableViewSelectionModel);
     setSortingEnabled(true);
 }
 
@@ -112,9 +111,7 @@ bool TableViewTreeView::eventFilter(QObject* watched, QEvent* event)
     if ( (watched==headerView) && (event->type()==QEvent::ContextMenu) )
     {
         showHeaderContextMenu(event);
-//         s->sortModel=new TableViewSortFilterProxyModel(s,this);
-//         s->sortModel->setSourceModel(s->tableViewModel);
-        setModel(s->sortModel);
+
         return true;
     }
 
@@ -221,12 +218,12 @@ AbstractItemDragDropHandler* TableViewTreeView::dragDropHandler() const
 
 QModelIndex TableViewTreeView::mapIndexForDragDrop(const QModelIndex& index) const
 {
-    // "index" is a TableViewSortFilterProxyModel index.
+    // "index" is a TableViewModel index.
     // We are using the drag-drop-handler of ImageModel, thus
     // we have to convert it to an index of ImageModel.
 
     // map to ImageModel
-    const QModelIndex imageModelIndex = s->sortModel->toImageModelIndex(index);
+    const QModelIndex imageModelIndex = s->tableViewModel->toImageModelIndex(index);
 
     return imageModelIndex;
 }
@@ -234,8 +231,7 @@ QModelIndex TableViewTreeView::mapIndexForDragDrop(const QModelIndex& index) con
 QPixmap TableViewTreeView::pixmapForDrag(const QList< QModelIndex >& indexes) const
 {
     const QModelIndex& firstIndex = indexes.at(0);
-    const QModelIndex& tableViewIndex = s->sortModel->mapToSource(firstIndex);
-    const ImageInfo info = s->tableViewModel->imageInfo(tableViewIndex);
+    const ImageInfo info = s->tableViewModel->imageInfo(firstIndex);
     const QString path = info.filePath();
 
     QPixmap thumbnailPixmap;

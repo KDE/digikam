@@ -54,7 +54,6 @@
 #include "tableview_columnfactory.h"
 #include "tableview_model.h"
 #include "tableview_selection_model_syncer.h"
-#include "tableview_sortfilterproxymodel.h"
 #include "thumbnailloadthread.h"
 
 namespace Digikam
@@ -72,41 +71,38 @@ TableViewItemDelegate::~TableViewItemDelegate()
 
 }
 
-void TableViewItemDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& sortedIndex) const
+void TableViewItemDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& tableViewModelIndex) const
 {
-    const int columnIndex = sortedIndex.column();
+    const int columnIndex = tableViewModelIndex.column();
     TableViewColumn* const columnObject = s->tableViewModel->getColumnObject(columnIndex);
 
     bool useDefaultPainter = !columnObject->getColumnFlags().testFlag(TableViewColumn::ColumnCustomPainting);
 
     if (!useDefaultPainter)
     {
-        const QModelIndex tableViewIndex = s->sortModel->mapToSource(sortedIndex);
-        TableViewModel::Item* const item = s->tableViewModel->itemFromIndex(tableViewIndex);
+        TableViewModel::Item* const item = s->tableViewModel->itemFromIndex(tableViewModelIndex);
 
         useDefaultPainter = !columnObject->paint(painter, option, item);
     }
 
     if (useDefaultPainter)
     {
-        QItemDelegate::paint(painter, option, sortedIndex);
+        QItemDelegate::paint(painter, option, tableViewModelIndex);
     }
 }
 
-QSize TableViewItemDelegate::sizeHint(const QStyleOptionViewItem& option, const QModelIndex& sortedIndex) const
+QSize TableViewItemDelegate::sizeHint(const QStyleOptionViewItem& option, const QModelIndex& tableViewModelIndex) const
 {
-    const int columnIndex = sortedIndex.column();
+    const int columnIndex = tableViewModelIndex.column();
     /// @todo Debug output to find OSX crash
     if (columnIndex>=s->tableViewModel->columnCount(QModelIndex()))
     {
-        kDebug()<<"------ CRASH AHEAD: sortedIndex = "<<sortedIndex;
-        kDebug()<<"------ CRASH AHEAD: s->sortModel->columnCount(QModelIndex()) = "<<s->sortModel->columnCount(QModelIndex());
+        kDebug()<<"------ CRASH AHEAD: tableViewModelIndex = "<<tableViewModelIndex;
         kDebug()<<"------ CRASH AHEAD: s->tableViewModel->columnCount(QModelIndex()) = "<<s->tableViewModel->columnCount(QModelIndex());
         kDebug()<<"------ CRASH AHEAD: columnIndex: "<<columnIndex;
     }
     TableViewColumn* const columnObject = s->tableViewModel->getColumnObject(columnIndex);
-    const QModelIndex tableViewIndex = s->sortModel->mapToSource(sortedIndex);
-    TableViewModel::Item* const item = s->tableViewModel->itemFromIndex(tableViewIndex);
+    TableViewModel::Item* const item = s->tableViewModel->itemFromIndex(tableViewModelIndex);
 
     /// we have to take the maximum of all columns for the height
     /// @todo somehow cache this calculation
@@ -126,7 +122,7 @@ QSize TableViewItemDelegate::sizeHint(const QStyleOptionViewItem& option, const 
     QSize columnSize = columnObject->sizeHint(option, item);
     if (!columnSize.isValid())
     {
-        columnSize = QItemDelegate::sizeHint(option, sortedIndex);
+        columnSize = QItemDelegate::sizeHint(option, tableViewModelIndex);
         /// @todo we have to incorporate the height given by QItemDelegate for the other columns, too
         maxHeight = qMax(maxHeight, columnSize.height());
     }

@@ -78,7 +78,7 @@ protected:
 
 protected Q_SLOTS:
 
-    void slotItemActivated(const QModelIndex& sortedIndex);
+    void slotItemActivated(const QModelIndex& tableViewIndex);
     void slotAssignTagToSelected(const int tagID);
     void slotRemoveTagFromSelected(const int tagID);
     void slotAssignPickLabelToSelected(const int pickLabelID);

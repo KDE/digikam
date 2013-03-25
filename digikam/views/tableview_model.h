@@ -112,6 +112,22 @@ public:
     QList<ImageInfo> imageInfos(const QModelIndexList& indexList) const;
     ImageInfo imageInfo(const QModelIndex& index) const;
 
+    QList<Item*> sortItems(const QList<Item*> itemList);
+    class LessThan;
+    bool lessThan(Item* const itemA, Item* const itemB);
+
+    // drag-and-drop related functions
+    virtual Qt::DropActions supportedDropActions() const;
+    virtual QStringList mimeTypes() const;
+    virtual bool dropMimeData(const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent);
+    virtual QMimeData* mimeData(const QModelIndexList& indexes) const;
+
+    void scheduleResort();
+
+protected:
+
+    virtual void sort(int column, Qt::SortOrder order = Qt::AscendingOrder);
+
 private Q_SLOTS:
 
     void slotPopulateModel();
@@ -135,6 +151,7 @@ private Q_SLOTS:
     void slotDatabaseImageChanged(const ImageChangeset& imageChangeset);
 
     void slotFilterSettingsChanged(const ImageFilterSettings& settings);
+    void slotResortModel();
 
 private:
 

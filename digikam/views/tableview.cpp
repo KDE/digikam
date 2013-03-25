@@ -43,7 +43,6 @@
 #include "tableview_model.h"
 #include "tableview_selection_model_syncer.h"
 #include "tableview_shared.h"
-#include "tableview_sortfilterproxymodel.h"
 #include "tableview_treeview.h"
 
 namespace Digikam
@@ -88,9 +87,6 @@ TableView::TableView(
 
     s->tableViewModel = new TableViewModel(s.data(), this);
     s->tableViewSelectionModel = new QItemSelectionModel(s->tableViewModel);
-    s->sortModel = new TableViewSortFilterProxyModel(s.data(), this);
-    s->sortSelectionModel = new KLinkItemSelectionModel(s->sortModel, s->tableViewSelectionModel, this);
-    s->tableViewCurrentToSortedSyncer = new TableViewCurrentToSortedSyncer(s.data(), this);
     s->tableViewSelectionModelSyncer= new TableViewSelectionModelSyncer(s.data(), this);
     d->treeView = new TableViewTreeView(s.data(), this);
     d->treeView->installEventFilter(this);
@@ -139,9 +135,8 @@ void TableView::doSaveState()
     profile.saveSettings(groupCurrentProfile);
 }
 
-void TableView::slotItemActivated(const QModelIndex& sortedIndex)
+void TableView::slotItemActivated(const QModelIndex& tableViewIndex)
 {
-    const QModelIndex& tableViewIndex = s->sortModel->mapToSource(sortedIndex);
     const ImageInfo info = s->tableViewModel->imageInfo(tableViewIndex);
 
     /// @todo Respect edit/preview setting

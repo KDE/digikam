@@ -24,7 +24,12 @@
 
 // C++ includes
 
+#include <functional>
 #include <valarray>
+
+// Qt includes
+
+#include <QTimer>
 
 // KDE includes
 
@@ -103,13 +108,19 @@ public:
     Private()
       : columnObjects(),
         rootItem(0),
-        imageFilterSettings()
+        imageFilterSettings(),
+        sortColumn(0),
+        sortOrder(Qt::AscendingOrder),
+        sortRequired(false)
     {
     }
 
     QList<TableViewColumn*> columnObjects;
     TableViewModel::Item* rootItem;
     ImageFilterSettings imageFilterSettings;
+    int sortColumn;
+    Qt::SortOrder sortOrder;
+    bool sortRequired;
 };
 
 TableViewModel::TableViewModel(TableViewShared* const sharedObject, QObject* parent)
@@ -406,6 +417,9 @@ void TableViewModel::slotSourceRowsInserted(const QModelIndex& parent, int start
     }
 
     endInsertRows();
+
+    /// @todo Smarter insertion of new data is better
+    scheduleResort();
 }
 
 void TableViewModel::slotSourceRowsAboutToBeRemoved(const QModelIndex& parent, int start, int end)
@@ -555,6 +569,9 @@ void TableViewModel::slotDatabaseImageChanged(const ImageChangeset& imageChanges
             emit(dataChanged(changedIndexTopLeft, changedIndexBottomRight));
         }
     }
+
+    /// @todo React smarter just to the changed items
+    scheduleResort();
 }
 
 Qt::ItemFlags TableViewModel::flags(const QModelIndex& index) const
@@ -590,6 +607,9 @@ void TableViewModel::slotPopulateModel()
         const QModelIndex sourceModelIndex = s->imageModel->index(i, 0);
         addSourceModelIndex(sourceModelIndex);
     }
+
+    /// @todo Sort directly on insertion?
+    slotResortModel();
 }
 
 TableViewModel::Item* TableViewModel::createItemFromSourceIndex(const QModelIndex& imageModelIndex)
@@ -807,5 +827,166 @@ void TableViewModel::slotFilterSettingsChanged(const ImageFilterSettings& settin
     endResetModel();
 }
 
-} /* namespace Digikam */
+class TableViewModel::LessThan
+{
+public:
+    explicit LessThan(TableViewModel* const model)
+      : m(model)
+    {
+    }
+    TableViewModel* m;
+    bool operator()(const TableViewModel::Item* const itemA, const TableViewModel::Item* const itemB)
+    {
+        const bool compareResult = m->lessThan(const_cast<Item*>(itemA), const_cast<Item*>(itemB));
+        if (m->d->sortOrder==Qt::DescendingOrder)
+        {
+            return !compareResult;
+        }
 
+        return compareResult;
+    }
+};
+
+QList<TableViewModel::Item*> TableViewModel::sortItems(const QList<TableViewModel::Item*> itemList)
+{
+    QList<Item*> sortedList = itemList;
+    qSort(
+            sortedList.begin(),
+            sortedList.end(),
+            LessThan(this)
+        );
+
+    return sortedList;
+}
+
+void TableViewModel::sort(int column, Qt::SortOrder order)
+{
+    d->sortColumn = column;
+    d->sortOrder = order;
+
+    /// @todo re-sort items
+    QList<Item*> itemsRequiringSorting;
+    itemsRequiringSorting << d->rootItem;
+
+    beginResetModel();
+    while (!itemsRequiringSorting.isEmpty())
+    {
+        Item* const itemToSort = itemsRequiringSorting.takeFirst();
+        Q_FOREACH(Item* const itemToCheck, itemToSort->children)
+        {
+            if (!itemToCheck->children.isEmpty())
+            {
+                itemsRequiringSorting << itemToCheck;
+            }
+        }
+
+        itemToSort->children = sortItems(itemToSort->children);
+    }
+    endResetModel();
+}
+
+bool TableViewModel::lessThan(TableViewModel::Item* const itemA, TableViewModel::Item* const itemB)
+{
+    if ( (d->sortColumn<0) || (d->sortColumn>=d->columnObjects.count()) )
+    {
+        return itemA->imageId < itemB->imageId;
+    }
+
+    const TableViewColumn* columnObject = s->tableViewModel->getColumnObject(d->sortColumn);
+
+    if (!columnObject->getColumnFlags().testFlag(TableViewColumn::ColumnCustomSorting))
+    {
+        const QString stringA = columnObject->data(itemA, Qt::DisplayRole).toString();
+        const QString stringB = columnObject->data(itemB, Qt::DisplayRole).toString();
+
+        if ( (stringA==stringB) || (stringA.isEmpty()&&stringB.isEmpty()) )
+        {
+            return itemA->imageId < itemB->imageId;
+        }
+
+        return stringA < stringB;
+    }
+
+    TableViewColumn::ColumnCompareResult cmpResult = columnObject->compare(itemA, itemB);
+
+    if (cmpResult==TableViewColumn::CmpEqual)
+    {
+        // compared items are equal, use the image id to enforce a repeatable sorting
+        const qlonglong imageIdA = itemA->imageId;
+        const qlonglong imageIdB = itemB->imageId;
+
+        return imageIdA < imageIdB;
+    }
+
+    return cmpResult == TableViewColumn::CmpALessB;
+}
+
+QMimeData* TableViewModel::mimeData(const QModelIndexList& indexes) const
+{
+    // we pack the mime data via ImageModel's drag-drop handler
+    AbstractItemDragDropHandler* const ddHandler = s->imageModel->dragDropHandler();
+
+    QModelIndexList imageModelIndexList;
+    Q_FOREACH(const QModelIndex& i, indexes)
+    {
+        if (i.column()>0)
+        {
+            continue;
+        }
+
+        const QModelIndex imageModelIndex = toImageModelIndex(i);
+        if (imageModelIndex.isValid())
+        {
+            imageModelIndexList << imageModelIndex;
+        }
+    }
+
+    QMimeData* const imageModelMimeData = ddHandler->createMimeData(imageModelIndexList);
+
+    return imageModelMimeData;
+}
+
+Qt::DropActions TableViewModel::supportedDropActions() const
+{
+    return Qt::CopyAction|Qt::MoveAction;
+}
+
+QStringList TableViewModel::mimeTypes() const
+{
+    AbstractItemDragDropHandler* const ddHandler = s->imageModel->dragDropHandler();
+
+    if (ddHandler)
+    {
+        return ddHandler->mimeTypes();
+    }
+
+    return QStringList();
+}
+
+bool TableViewModel::dropMimeData(
+        const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent)
+{
+    Q_UNUSED(data)
+    Q_UNUSED(action)
+    Q_UNUSED(row)
+    Q_UNUSED(column)
+    Q_UNUSED(parent)
+
+    // the drop is handled by the drag-drop handler, therefore we return false here
+    return false;
+}
+
+void TableViewModel::slotResortModel()
+{
+    beginResetModel();
+    sort(d->sortColumn, d->sortOrder);
+    endResetModel();
+}
+
+void TableViewModel::scheduleResort()
+{
+    d->sortRequired = true;
+    QTimer::singleShot(100, this, SLOT(slotResortModel()));
+}
+
+} /* namespace Digikam */
