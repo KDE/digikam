@@ -111,7 +111,9 @@ public:
         imageFilterSettings(),
         sortColumn(0),
         sortOrder(Qt::AscendingOrder),
-        sortRequired(false)
+        sortRequired(false),
+        groupingMode(GroupingShowSubItems),
+        orphanedGroupedItems()
     {
     }
 
@@ -121,6 +123,8 @@ public:
     int sortColumn;
     Qt::SortOrder sortOrder;
     bool sortRequired;
+    GroupingMode groupingMode;
+    QList<qlonglong> orphanedGroupedItems;
 };
 
 TableViewModel::TableViewModel(TableViewShared* const sharedObject, QObject* parent)
@@ -161,9 +165,7 @@ TableViewModel::TableViewModel(TableViewShared* const sharedObject, QObject* par
 
     new ModelTest(this, this);
 
-    beginResetModel();
-    slotPopulateModel();
-    endResetModel();
+    slotPopulateModel(true);
 }
 
 TableViewModel::~TableViewModel()
@@ -221,6 +223,12 @@ QModelIndex TableViewModel::index(int row, int column, const QModelIndex& parent
     Item* parentItem = d->rootItem;
     if (parent.isValid())
     {
+        if (parent.column()>0)
+        {
+            // only column 0 can have children, the other columns can not
+            return QModelIndex();
+        }
+
         parentItem = itemFromIndex(parent);
     }
 
@@ -412,7 +420,7 @@ void TableViewModel::slotSourceModelAboutToBeReset()
 void TableViewModel::slotSourceModelReset()
 {
     // the source model is done resetting.
-    slotPopulateModel();
+    slotPopulateModel(false);
     endResetModel();
 }
 
@@ -431,6 +439,8 @@ void TableViewModel::slotSourceRowsInserted(const QModelIndex& parent, int start
 
         addSourceModelIndex(sourceIndex, true);
     }
+
+    addOrphanedGroupedItems(true);
 
     /// @todo Smarter insertion of new data is better
     scheduleResort();
@@ -512,7 +522,7 @@ void TableViewModel::slotSourceLayoutChanged()
 {
     /// @todo See note in TableViewModel#slotSourceLayoutAboutToBeChanged
 
-    slotPopulateModel();
+    slotPopulateModel(false);
 
     endResetModel();
 }
@@ -551,6 +561,12 @@ void TableViewModel::slotDatabaseImageChanged(const ImageChangeset& imageChanges
             continue;
         }
 
+        /// force an update of the database fields on next access
+        item->databaseFields.clear();
+        /// @todo Introduce/find a clear function
+        item->cachedDatabaseFields = DatabaseFields::Set();
+
+
         // Re-check filtering for this item.
         const QModelIndex changedIndexTopLeft = indexFromImageId(id, 0);
         if (!changedIndexTopLeft.isValid())
@@ -570,9 +586,8 @@ void TableViewModel::slotDatabaseImageChanged(const ImageChangeset& imageChanges
             continue;
         }
 
-        item->databaseFields.clear();
-        /// @todo Introduce/find a clear function
-        item->cachedDatabaseFields = DatabaseFields::Set();
+        /// @todo Re-check grouping for this item
+
         const QModelIndex changedIndexBottomRight = index(
                 changedIndexTopLeft.row(),
                 columnCount(changedIndexTopLeft.parent())-1,
@@ -606,9 +621,12 @@ QList< TableViewColumn* > TableViewModel::getColumnObjects()
     return d->columnObjects;
 }
 
-void TableViewModel::slotPopulateModel()
+void TableViewModel::slotPopulateModel(const bool sendNotifications)
 {
-    beginResetModel();
+    if (sendNotifications)
+    {
+        beginResetModel();
+    }
 
     if (d->rootItem)
     {
@@ -621,13 +639,18 @@ void TableViewModel::slotPopulateModel()
     for (int i=0; i<sourceRowCount; ++i)
     {
         const QModelIndex sourceModelIndex = s->imageModel->index(i, 0);
-        addSourceModelIndex(sourceModelIndex, false);
+        addSourceModelIndex(sourceModelIndex, sendNotifications);
     }
+
+    addOrphanedGroupedItems(sendNotifications);
 
     /// @todo Sort directly on insertion?
     sort(d->sortColumn, d->sortOrder);
 
-    endResetModel();
+    if (sendNotifications)
+    {
+        endResetModel();
+    }
 }
 
 TableViewModel::Item* TableViewModel::createItemFromSourceIndex(const QModelIndex& imageModelIndex)
@@ -651,18 +674,51 @@ void TableViewModel::addSourceModelIndex(const QModelIndex& imageModelIndex, con
         return;
     }
 
-    /// @todo Implement filtering, grouping and sorting
+    /// @todo Implement Grouping and sorting
+    Item* parentItem = d->rootItem;
+    if (imageInfo.isGrouped())
+    {
+        switch (d->groupingMode)
+        {
+        case GroupingHideGrouped:
+            // we do not show grouped items at all
+            return;
+
+        case GroupingIgnoreGrouping:
+            // nothing to do, we just add it to the root item
+            break;
+
+        case GroupingShowSubItems:
+            {
+                // the item has to be added to items group leader item
+                const qlonglong groupLeaderId = imageInfo.groupImageId();
+                Item* const groupLeaderItem = itemFromImageId(groupLeaderId);
+
+                if (!groupLeaderItem)
+                {
+                    // group leader is not in this model yet, delay adding of this item
+                    /// @todo What if the group leader is not in the image model???
+                    d->orphanedGroupedItems << imageInfo.id();
+                    return;
+                }
+
+                parentItem = groupLeaderItem;
+
+                break;
+            }
+        }
+    }
 
     Item* item = createItemFromSourceIndex(imageModelIndex);
 
     if (sendNotifications)
     {
-        const QModelIndex parentIndex = QModelIndex();
-        const int newRowIndex = d->rootItem->children.count();
+        const QModelIndex parentIndex = itemIndex(parentItem);
+        const int newRowIndex = parentItem->children.count();
         beginInsertRows(parentIndex, newRowIndex, newRowIndex);
     }
 
-    d->rootItem->addChild(item);
+    parentItem->addChild(item);
 
     if (sendNotifications)
     {
@@ -852,9 +908,7 @@ void TableViewModel::slotFilterSettingsChanged(const ImageFilterSettings& settin
 {
     d->imageFilterSettings = settings;
 
-    beginResetModel();
-    slotPopulateModel();
-    endResetModel();
+    slotPopulateModel(true);
 }
 
 class TableViewModel::LessThan
@@ -1029,6 +1083,50 @@ void TableViewModel::scheduleResort()
 
     d->sortRequired = true;
     QTimer::singleShot(100, this, SLOT(slotResortModel()));
+}
+
+QModelIndex TableViewModel::itemIndex(TableViewModel::Item* const item) const
+{
+    if ( (!item) || (item==d->rootItem) )
+    {
+        return QModelIndex();
+    }
+
+    const int rowIndex = item->parent->children.indexOf(item);
+
+    return createIndex(rowIndex, 0, item);
+}
+
+void TableViewModel::addOrphanedGroupedItems(const bool sendNotifications)
+{
+    while (!d->orphanedGroupedItems.isEmpty())
+    {
+        const qlonglong imageId = d->orphanedGroupedItems.takeFirst();
+        const QModelIndex imageModelIndex = s->imageModel->indexForImageId(imageId);
+        if (!imageModelIndex.isValid())
+        {
+            continue;
+        }
+
+        addSourceModelIndex(imageModelIndex, sendNotifications);
+    }
+}
+
+bool TableViewModel::hasChildren(const QModelIndex& parent) const
+{
+    Item* parentItem = d->rootItem;
+    if (parent.isValid())
+    {
+        if (parent.column()>0)
+        {
+            // only column 0 can have children
+            return false;
+        }
+
+        parentItem = itemFromIndex(parent);
+    }
+
+    return !parentItem->children.isEmpty();
 }
 
 } /* namespace Digikam */

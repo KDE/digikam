@@ -96,8 +96,8 @@ QItemSelection TableViewSelectionModelSyncer::targetIndexToRowItemSelection(cons
 {
     const int row = targetIndex.row();
 
-    const QModelIndex topLeft = s->tableViewModel->index(row, 0, QModelIndex());
-    const QModelIndex bottomRight = s->tableViewModel->index(row, targetModelColumnCount()-1, QModelIndex());
+    const QModelIndex topLeft = s->tableViewModel->index(row, 0, targetIndex.parent());
+    const QModelIndex bottomRight = s->tableViewModel->index(row, targetModelColumnCount()-1, targetIndex.parent());
     const QItemSelection mySelection(topLeft, bottomRight);
 
     return mySelection;

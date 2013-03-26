@@ -56,6 +56,13 @@ class TableViewModel : public QAbstractItemModel
 
 public:
 
+    enum GroupingMode
+    {
+        GroupingHideGrouped = 0,
+        GroupingIgnoreGrouping = 1,
+        GroupingShowSubItems = 2
+    };
+
     typedef DatabaseFields::Hash<QVariant> DatabaseFieldsHashRaw;
 
     class Item
@@ -89,6 +96,7 @@ public:
     virtual QVariant data(const QModelIndex& i, int role) const;
     virtual QVariant headerData(int section, Qt::Orientation orientation, int role) const;
     virtual Qt::ItemFlags flags(const QModelIndex& index) const;
+    virtual bool hasChildren(const QModelIndex& parent = QModelIndex()) const;
 
     void addColumnAt(const TableViewColumnDescription& description, const int targetColumn = -1);
     void addColumnAt(const TableViewColumnConfiguration& configuration, const int targetColumn = -1);
@@ -111,6 +119,7 @@ public:
     QList<qlonglong> imageIds(const QModelIndexList& indexList) const;
     QList<ImageInfo> imageInfos(const QModelIndexList& indexList) const;
     ImageInfo imageInfo(const QModelIndex& index) const;
+    QModelIndex itemIndex(Item* const item) const;
 
     QList<Item*> sortItems(const QList<Item*> itemList);
     class LessThan;
@@ -123,6 +132,7 @@ public:
     virtual QMimeData* mimeData(const QModelIndexList& indexes) const;
 
     void scheduleResort();
+    void addOrphanedGroupedItems(const bool sendNotifications);
 
 protected:
 
@@ -130,7 +140,7 @@ protected:
 
 private Q_SLOTS:
 
-    void slotPopulateModel();
+    void slotPopulateModel(const bool sendNotifications);
 
     void slotColumnDataChanged(const qlonglong imageId);
     void slotColumnAllDataChanged();

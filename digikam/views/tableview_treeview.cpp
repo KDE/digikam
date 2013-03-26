@@ -78,7 +78,7 @@ TableViewTreeView::TableViewTreeView(Digikam::TableViewShared* const tableViewSh
     s->itemDelegate = new TableViewItemDelegate(s, this);
     setSelectionMode(QAbstractItemView::ExtendedSelection);
     setItemDelegate(s->itemDelegate);
-    setRootIsDecorated(false);
+    setRootIsDecorated(true);
     setAlternatingRowColors(true);
     setAllColumnsShowFocus(true);
     setDragEnabled(true);
