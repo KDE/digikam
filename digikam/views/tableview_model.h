@@ -83,7 +83,7 @@ public:
     virtual ~TableViewModel();
 
     virtual QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const;
-    virtual QModelIndex parent(const QModelIndex& parent) const;
+    virtual QModelIndex parent(const QModelIndex& childIndex) const;
     virtual int rowCount(const QModelIndex& parent) const;
     virtual int columnCount(const QModelIndex& i) const;
     virtual QVariant data(const QModelIndex& i, int role) const;

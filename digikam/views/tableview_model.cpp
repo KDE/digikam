@@ -218,40 +218,54 @@ QVariant TableViewModel::data(const QModelIndex& i, int role) const
 
 QModelIndex TableViewModel::index(int row, int column, const QModelIndex& parent) const
 {
+    Item* parentItem = d->rootItem;
     if (parent.isValid())
     {
-        /// @todo there are no sub-items yet
-        return QModelIndex();
+        parentItem = itemFromIndex(parent);
     }
 
     // test for valid row/column values
     if ( (row<0) || (column<0) ||
-         (column>=d->columnObjects.count()) || (row>=d->rootItem->children.count())
+         (column>=d->columnObjects.count()) || (row>=parentItem->children.count())
        )
     {
         return QModelIndex();
     }
 
-    Item* const itemPointer = d->rootItem->children.at(row);
+    Item* const itemPointer = parentItem->children.at(row);
     return createIndex(row, column, itemPointer);
 }
 
-QModelIndex TableViewModel::parent(const QModelIndex& parent) const
+QModelIndex TableViewModel::parent(const QModelIndex& childIndex) const
 {
-    Q_UNUSED(parent)
+    if (!childIndex.isValid())
+    {
+        return QModelIndex();
+    }
 
-    /// @todo we only have top level items for now
-    return QModelIndex();
+    Item* const childItem = itemFromIndex(childIndex);
+    Item* const parentItem = childItem->parent;
+    if (parentItem==d->rootItem)
+    {
+        return QModelIndex();
+    }
+
+    Item* const grandParentItem = parentItem->parent;
+    const int rowIndex = grandParentItem->children.indexOf(parentItem);
+
+    /// @todo What should be the column number?
+    return createIndex(rowIndex, 0, parentItem);
 }
 
 int TableViewModel::rowCount(const QModelIndex& parent) const
 {
+    Item* parentItem = d->rootItem;
     if (parent.isValid())
     {
-        return 0;
+        parentItem = itemFromIndex(parent);
     }
 
-    return d->rootItem->children.count();
+    return parentItem->children.count();
 }
 
 QVariant TableViewModel::headerData(int section, Qt::Orientation orientation, int role) const
