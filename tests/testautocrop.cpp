@@ -71,7 +71,7 @@ int main(int argc, char** argv)
 
     AutoCrop ac(&img);
     ac.startFilterDirectly();
-    QRect rect = ac.autoOuterCrop();
+    QRect rect = ac.autoInnerCrop();
 
     kDebug() << "Cropped image area: " << rect;
 

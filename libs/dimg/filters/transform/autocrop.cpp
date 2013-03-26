@@ -4,7 +4,11 @@
  * http://www.digikam.org
  *
  * Date        : 2012-10-18
- * Description : Auto Crop Tool for panaroma images generated from hugin
+ * Description : Auto Crop analyser
+ * 
+ * Algorithm based on "finding the largest axis aligned rectangle in a polygon
+ * in o(n log n) time" method from Ralph P. Boland and Jorge Urrutia.
+ * http://www.cccg.ca/proceedings/2001/rboland-98103.ps.gz. 
  *
  * Copyright (C) 2013 by Sayantan Datta <sayantan dot knz at gmail dot com>
  * Copyright (C) 2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -53,14 +57,9 @@ public:
 
     Private()
     {
-        for(int c =0 ; c < 3 ; c++ )
-        {
-            fimg[c] = 0;
-        }
     }
 
     QRect  cropArea;
-    float* fimg[3];
 };
 
 AutoCrop::AutoCrop(DImg* const img, QObject* const parent)
@@ -558,31 +557,7 @@ void AutoCrop::startAnalyse()
     qDebug () << "Inner Crop Area : " << d->cropArea;
 }
 
-//void AutoCrop::readImage() const
-//{
-//    DColor col;
-
-//    for (int c = 0;   (c < 3); c++)
-//    {
-//        d->fimg[c] = new float[m_orgImage.numPixels()];
-//    }
-
-//    int j = 0;
-
-//    for (uint y = 0;   (y < m_orgImage.height()); y++)
-//    {
-//        for (uint x = 0;   (x < m_orgImage.width()); x++)
-//        {
-//            col           = m_orgImage.getPixelColor(x, y);
-//            d->fimg[0][j] = col.red();
-//            d->fimg[1][j] = col.green();
-//            d->fimg[2][j] = col.blue();
-//            j++;
-//        }
-//    }
-//}
-
-QRect AutoCrop::autoOuterCrop() const
+QRect AutoCrop::autoInnerCrop() const
 {
     return d->cropArea;
 }
