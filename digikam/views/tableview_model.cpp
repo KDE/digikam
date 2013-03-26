@@ -404,7 +404,9 @@ void TableViewModel::slotSourceModelReset()
 
 void TableViewModel::slotSourceRowsAboutToBeInserted(const QModelIndex& parent, int start, int end)
 {
-    beginInsertRows(parent, start, end);
+    Q_UNUSED(parent)
+    Q_UNUSED(start)
+    Q_UNUSED(end)
 }
 
 void TableViewModel::slotSourceRowsInserted(const QModelIndex& parent, int start, int end)
@@ -413,10 +415,8 @@ void TableViewModel::slotSourceRowsInserted(const QModelIndex& parent, int start
     {
         const QModelIndex sourceIndex = s->imageModel->index(i, 0, parent);
 
-        addSourceModelIndex(sourceIndex);
+        addSourceModelIndex(sourceIndex, true);
     }
-
-    endInsertRows();
 
     /// @todo Smarter insertion of new data is better
     scheduleResort();
@@ -531,7 +531,7 @@ void TableViewModel::slotDatabaseImageChanged(const ImageChangeset& imageChanges
             if (d->imageFilterSettings.matches(imageInfo))
             {
                 // need to add the item
-                addSourceModelIndex(imageModelIndex);
+                addSourceModelIndex(imageModelIndex, true);
             }
 
             continue;
@@ -594,6 +594,8 @@ QList< TableViewColumn* > TableViewModel::getColumnObjects()
 
 void TableViewModel::slotPopulateModel()
 {
+    beginResetModel();
+
     if (d->rootItem)
     {
         delete d->rootItem;
@@ -605,12 +607,12 @@ void TableViewModel::slotPopulateModel()
     for (int i=0; i<sourceRowCount; ++i)
     {
         const QModelIndex sourceModelIndex = s->imageModel->index(i, 0);
-        addSourceModelIndex(sourceModelIndex);
+        addSourceModelIndex(sourceModelIndex, false);
     }
 
     /// @todo Sort directly on insertion?
-    beginResetModel();
     sort(d->sortColumn, d->sortOrder);
+
     endResetModel();
 }
 
@@ -624,7 +626,7 @@ TableViewModel::Item* TableViewModel::createItemFromSourceIndex(const QModelInde
     return item;
 }
 
-void TableViewModel::addSourceModelIndex(const QModelIndex& imageModelIndex)
+void TableViewModel::addSourceModelIndex(const QModelIndex& imageModelIndex, const bool sendNotifications)
 {
     ASSERT_MODEL(imageModelIndex, s->imageModel);
 
@@ -639,7 +641,19 @@ void TableViewModel::addSourceModelIndex(const QModelIndex& imageModelIndex)
 
     Item* item = createItemFromSourceIndex(imageModelIndex);
 
+    if (sendNotifications)
+    {
+        const QModelIndex parentIndex = QModelIndex();
+        const int newRowIndex = d->rootItem->children.count();
+        beginInsertRows(parentIndex, newRowIndex, newRowIndex);
+    }
+
     d->rootItem->addChild(item);
+
+    if (sendNotifications)
+    {
+        endInsertRows();
+    }
 }
 
 TableViewModel::Item* TableViewModel::itemFromImageId(const qlonglong imageId) const

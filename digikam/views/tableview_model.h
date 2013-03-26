@@ -156,7 +156,7 @@ private Q_SLOTS:
 private:
 
     Item* createItemFromSourceIndex(const QModelIndex& imageFilterModelIndex);
-    void addSourceModelIndex(const QModelIndex& imageFilterModelIndex);
+    void addSourceModelIndex(const QModelIndex& imageModelIndex, const bool sendNotifications);
 
     TableViewShared* const s;
     class Private;
