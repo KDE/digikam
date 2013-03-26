@@ -609,7 +609,9 @@ void TableViewModel::slotPopulateModel()
     }
 
     /// @todo Sort directly on insertion?
-    slotResortModel();
+    beginResetModel();
+    sort(d->sortColumn, d->sortOrder);
+    endResetModel();
 }
 
 TableViewModel::Item* TableViewModel::createItemFromSourceIndex(const QModelIndex& imageModelIndex)
@@ -978,13 +980,25 @@ bool TableViewModel::dropMimeData(
 
 void TableViewModel::slotResortModel()
 {
+    if (!d->sortRequired)
+    {
+        return;
+    }
+
     beginResetModel();
     sort(d->sortColumn, d->sortOrder);
     endResetModel();
+
+    d->sortRequired = false;
 }
 
 void TableViewModel::scheduleResort()
 {
+    if (d->sortRequired)
+    {
+        return;
+    }
+
     d->sortRequired = true;
     QTimer::singleShot(100, this, SLOT(slotResortModel()));
 }
