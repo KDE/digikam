@@ -655,7 +655,9 @@ void TableViewModel::slotPopulateModel(const bool sendNotifications)
     for (int i=0; i<sourceRowCount; ++i)
     {
         const QModelIndex sourceModelIndex = s->imageModel->index(i, 0);
-        addSourceModelIndex(sourceModelIndex, sendNotifications);
+        // do not send notifications in addSourceModelIndex, because this function here
+        // already started a model reset
+        addSourceModelIndex(sourceModelIndex, false);
     }
 
     /// @todo Sort directly on insertion?
