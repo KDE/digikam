@@ -113,7 +113,7 @@ public:
         sortOrder(Qt::AscendingOrder),
         sortRequired(false),
         groupingMode(GroupingShowSubItems),
-        orphanedGroupedItems()
+        cachedImageInfos()
     {
     }
 
@@ -124,7 +124,7 @@ public:
     Qt::SortOrder sortOrder;
     bool sortRequired;
     GroupingMode groupingMode;
-    QList<qlonglong> orphanedGroupedItems;
+    QHash<qlonglong, ImageInfo> cachedImageInfos;
 };
 
 TableViewModel::TableViewModel(TableViewShared* const sharedObject, QObject* parent)
@@ -440,8 +440,6 @@ void TableViewModel::slotSourceRowsInserted(const QModelIndex& parent, int start
         addSourceModelIndex(sourceIndex, true);
     }
 
-    addOrphanedGroupedItems(true);
-
     /// @todo Smarter insertion of new data is better
     scheduleResort();
 }
@@ -452,6 +450,7 @@ void TableViewModel::slotSourceRowsAboutToBeRemoved(const QModelIndex& parent, i
     {
         const QModelIndex imageModelIndex = s->imageModel->index(i, 0, parent);
         const qlonglong imageId = s->imageModel->imageId(imageModelIndex);
+        d->cachedImageInfos.remove(imageId);
 
         const QModelIndex tableViewIndex = indexFromImageId(imageId, 0);
         if (!tableViewIndex.isValid())
@@ -466,6 +465,17 @@ void TableViewModel::slotSourceRowsAboutToBeRemoved(const QModelIndex& parent, i
 
         beginRemoveRows(tableViewIndex.parent(), tableViewIndex.row(), tableViewIndex.row());
         item->parent->takeChild(item);
+        // delete image info of children from cache
+        QList<Item*> itemsToRemoveFromCache = item->children;
+        while (!itemsToRemoveFromCache.isEmpty())
+        {
+            Item* const itemToRemove = itemsToRemoveFromCache.takeFirst();
+            itemsToRemoveFromCache << itemToRemove->children;
+
+            d->cachedImageInfos.remove(itemToRemove->imageId);
+
+            // child items will be deleted when item is deleted
+        }
         delete item;
         endRemoveRows();
     }
@@ -534,8 +544,6 @@ void TableViewModel::slotDatabaseImageChanged(const ImageChangeset& imageChanges
     /// @todo Decide which changes are relevant here or
     ///       let the TableViewColumn object decide which are relevant
 
-    /// @todo Re-apply the filter on the item
-
     foreach(const qlonglong& id, imageChangeset.ids())
     {
         // first clear the item's cached values
@@ -566,6 +574,13 @@ void TableViewModel::slotDatabaseImageChanged(const ImageChangeset& imageChanges
         /// @todo Introduce/find a clear function
         item->cachedDatabaseFields = DatabaseFields::Set();
 
+        // remove cached info and re-insert it
+        if (d->cachedImageInfos.contains(item->imageId))
+        {
+            const ImageInfo itemInfo(item->imageId);
+            d->cachedImageInfos.remove(item->imageId);
+            d->cachedImageInfos.insert(item->imageId, itemInfo);
+        }
 
         // Re-check filtering for this item.
         const QModelIndex changedIndexTopLeft = indexFromImageId(id, 0);
@@ -634,6 +649,7 @@ void TableViewModel::slotPopulateModel(const bool sendNotifications)
     }
 
     d->rootItem = new Item();
+    d->cachedImageInfos.clear();
 
     const int sourceRowCount = s->imageModel->rowCount(QModelIndex());
     for (int i=0; i<sourceRowCount; ++i)
@@ -641,8 +657,6 @@ void TableViewModel::slotPopulateModel(const bool sendNotifications)
         const QModelIndex sourceModelIndex = s->imageModel->index(i, 0);
         addSourceModelIndex(sourceModelIndex, sendNotifications);
     }
-
-    addOrphanedGroupedItems(sendNotifications);
 
     /// @todo Sort directly on insertion?
     sort(d->sortColumn, d->sortOrder);
@@ -689,23 +703,8 @@ void TableViewModel::addSourceModelIndex(const QModelIndex& imageModelIndex, con
             break;
 
         case GroupingShowSubItems:
-            {
-                // the item has to be added to items group leader item
-                const qlonglong groupLeaderId = imageInfo.groupImageId();
-                Item* const groupLeaderItem = itemFromImageId(groupLeaderId);
-
-                if (!groupLeaderItem)
-                {
-                    // group leader is not in this model yet, delay adding of this item
-                    /// @todo What if the group leader is not in the image model???
-                    d->orphanedGroupedItems << imageInfo.id();
-                    return;
-                }
-
-                parentItem = groupLeaderItem;
-
-                break;
-            }
+            // we do not add this subitem, because it has been automatically added to the group leader
+            return;
         }
     }
 
@@ -723,6 +722,33 @@ void TableViewModel::addSourceModelIndex(const QModelIndex& imageModelIndex, con
     if (sendNotifications)
     {
         endInsertRows();
+    }
+
+    if ( (d->groupingMode==GroupingShowSubItems) && imageInfo.hasGroupedImages() )
+    {
+        // the item was a group leader, add its subitems
+        const QList<ImageInfo> groupedImages = imageInfo.groupedImages();
+
+        if (sendNotifications)
+        {
+            const QModelIndex groupLeaderIndex = itemIndex(item);
+            beginInsertRows(groupLeaderIndex, 0, groupedImages.count()-1);
+        }
+
+        Q_FOREACH(const ImageInfo& groupedInfo, groupedImages)
+        {
+            d->cachedImageInfos.insert(groupedInfo.id(), groupedInfo);
+
+            Item* const groupedItem = new Item();
+            groupedItem->imageId = groupedInfo.id();
+
+            item->addChild(groupedItem);
+        }
+
+        if (sendNotifications)
+        {
+            endInsertRows();
+        }
     }
 }
 
@@ -777,7 +803,9 @@ ImageInfo TableViewModel::infoFromItem(Digikam::TableViewModel::Item* const item
     const QModelIndex imageModelIndex = s->imageModel->indexForImageId(item->imageId);
     if (!imageModelIndex.isValid())
     {
-        return ImageInfo();
+        const ImageInfo fromCache = d->cachedImageInfos.value(item->imageId);
+
+        return fromCache;
     }
 
     const ImageInfo info = s->imageModel->imageInfo(imageModelIndex);
@@ -1095,21 +1123,6 @@ QModelIndex TableViewModel::itemIndex(TableViewModel::Item* const item) const
     const int rowIndex = item->parent->children.indexOf(item);
 
     return createIndex(rowIndex, 0, item);
-}
-
-void TableViewModel::addOrphanedGroupedItems(const bool sendNotifications)
-{
-    while (!d->orphanedGroupedItems.isEmpty())
-    {
-        const qlonglong imageId = d->orphanedGroupedItems.takeFirst();
-        const QModelIndex imageModelIndex = s->imageModel->indexForImageId(imageId);
-        if (!imageModelIndex.isValid())
-        {
-            continue;
-        }
-
-        addSourceModelIndex(imageModelIndex, sendNotifications);
-    }
 }
 
 bool TableViewModel::hasChildren(const QModelIndex& parent) const

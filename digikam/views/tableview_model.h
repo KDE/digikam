@@ -132,7 +132,6 @@ public:
     virtual QMimeData* mimeData(const QModelIndexList& indexes) const;
 
     void scheduleResort();
-    void addOrphanedGroupedItems(const bool sendNotifications);
 
 protected:
 
