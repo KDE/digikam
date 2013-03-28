@@ -36,6 +36,7 @@ class TableViewCurrentToSortedSyncer;
 class TableViewItemDelegate;
 class TableViewModel;
 class TableViewSelectionModelSyncer;
+class TableViewTreeView;
 class ThumbnailLoadThread;
 
 class TableViewShared
@@ -48,6 +49,7 @@ public:
     ThumbnailLoadThread* thumbnailLoadThread;
 
     TableView* tableView;
+    TableViewTreeView* treeView;
     TableViewModel* tableViewModel;
     QItemSelectionModel* tableViewSelectionModel;
 

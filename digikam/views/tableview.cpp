@@ -55,13 +55,11 @@ class TableView::Private
 {
 public:
     Private()
-      : treeView(0),
-        columnProfiles(),
+      : columnProfiles(),
         thumbnailSize()
     {
     }
 
-    TableViewTreeView*      treeView;
     QList<TableViewColumnProfile> columnProfiles;
     ThumbnailSize           thumbnailSize;
 };
@@ -88,19 +86,19 @@ TableView::TableView(
     s->tableViewModel = new TableViewModel(s.data(), this);
     s->tableViewSelectionModel = new QItemSelectionModel(s->tableViewModel);
     s->tableViewSelectionModelSyncer= new TableViewSelectionModelSyncer(s.data(), this);
-    d->treeView = new TableViewTreeView(s.data(), this);
-    d->treeView->installEventFilter(this);
+    s->treeView = new TableViewTreeView(s.data(), this);
+    s->treeView->installEventFilter(this);
 
-    connect(d->treeView, SIGNAL(activated(QModelIndex)),
+    connect(s->treeView, SIGNAL(activated(QModelIndex)),
             this, SLOT(slotItemActivated(QModelIndex)));
 
-    connect(d->treeView, SIGNAL(signalZoomInStep()),
+    connect(s->treeView, SIGNAL(signalZoomInStep()),
             this, SIGNAL(signalZoomInStep()));
 
-    connect(d->treeView, SIGNAL(signalZoomOutStep()),
+    connect(s->treeView, SIGNAL(signalZoomOutStep()),
             this, SIGNAL(signalZoomOutStep()));
 
-    vbox1->addWidget(d->treeView);
+    vbox1->addWidget(s->treeView);
 
     setLayout(vbox1);
 }
@@ -121,7 +119,7 @@ void TableView::doLoadState()
 
     if (!profile.headerState.isEmpty())
     {
-        d->treeView->header()->restoreState(profile.headerState);
+        s->treeView->header()->restoreState(profile.headerState);
     }
 }
 
@@ -130,7 +128,7 @@ void TableView::doSaveState()
     KConfigGroup group = getConfigGroup();
 
     TableViewColumnProfile profile = s->tableViewModel->getColumnProfile();
-    profile.headerState = d->treeView->header()->saveState();
+    profile.headerState = s->treeView->header()->saveState();
     KConfigGroup groupCurrentProfile = group.group("Current Profile");
     profile.saveSettings(groupCurrentProfile);
 }
@@ -146,7 +144,7 @@ void TableView::slotItemActivated(const QModelIndex& tableViewIndex)
 bool TableView::eventFilter(QObject* watched, QEvent* event)
 {
     // we are looking for context menu events for the table view
-    if ((watched==d->treeView)&&(event->type()==QEvent::ContextMenu))
+    if ((watched==s->treeView)&&(event->type()==QEvent::ContextMenu))
     {
         QContextMenuEvent* const e = static_cast<QContextMenuEvent*>(event);
         e->accept();
