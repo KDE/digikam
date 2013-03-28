@@ -175,7 +175,7 @@ TableViewModel::~TableViewModel()
 
 int TableViewModel::columnCount(const QModelIndex& i) const
 {
-    if (i.isValid())
+    if (i.column()>0)
     {
         return 0;
     }
@@ -267,6 +267,11 @@ QModelIndex TableViewModel::parent(const QModelIndex& childIndex) const
 
 int TableViewModel::rowCount(const QModelIndex& parent) const
 {
+    if (parent.column()>0)
+    {
+        return 0;
+    }
+
     Item* parentItem = d->rootItem;
     if (parent.isValid())
     {
