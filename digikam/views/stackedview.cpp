@@ -123,14 +123,14 @@ StackedView::StackedView(QWidget* parent)
         );
     d->tableView->setObjectName("mainwindow_tableview");
 
-    insertWidget(PreviewAlbumMode, d->imageIconView);
+    insertWidget(IconViewMode,     d->imageIconView);
     insertWidget(PreviewImageMode, d->imagePreviewView);
     insertWidget(WelcomePageMode,  d->welcomePageView->view());
     insertWidget(MediaPlayerMode,  d->mediaPlayerView);
     insertWidget(MapWidgetMode,    d->mapWidgetView);
     insertWidget(TableViewMode,    d->tableView);
 
-    setPreviewMode(PreviewAlbumMode);
+    setViewMode(IconViewMode);
     setAttribute(Qt::WA_DeleteOnClose);
 
     readSettings();
@@ -237,7 +237,7 @@ ImageThumbnailBar* StackedView::thumbBar() const
 
 void StackedView::slotEscapePreview()
 {
-    if (previewMode() == MediaPlayerMode)
+    if (viewMode() == MediaPlayerMode)
     {
         d->mediaPlayerView->escapePreview();
     }
@@ -275,7 +275,7 @@ bool StackedView::isInSingleFileMode() const
 
 bool StackedView::isInMultipleFileMode() const
 {
-    return currentIndex() == PreviewAlbumMode
+    return currentIndex() == IconViewMode
         || currentIndex() == MapWidgetMode
         || currentIndex() == TableViewMode;
 }
@@ -289,11 +289,11 @@ void StackedView::setPreviewItem(const ImageInfo& info, const ImageInfo& previou
 {
     if (info.isNull())
     {
-        if (previewMode() == MediaPlayerMode)
+        if (viewMode() == MediaPlayerMode)
         {
             d->mediaPlayerView->setCurrentItem();
         }
-        else if (previewMode() == PreviewImageMode)
+        else if (viewMode() == PreviewImageMode)
         {
             d->imagePreviewView->setImageInfo();
         }
@@ -303,18 +303,18 @@ void StackedView::setPreviewItem(const ImageInfo& info, const ImageInfo& previou
         if (info.category() == DatabaseItem::Audio || info.category() == DatabaseItem::Video)
         {
             // Stop image viewer
-            if (previewMode() == PreviewImageMode)
+            if (viewMode() == PreviewImageMode)
             {
                 d->imagePreviewView->setImageInfo();
             }
 
-            setPreviewMode(MediaPlayerMode);
+            setViewMode(MediaPlayerMode);
             d->mediaPlayerView->setCurrentItem(info.fileUrl(), !previous.isNull(), !next.isNull());
         }
         else
         {
             // Stop media player if running...
-            if (previewMode() == MediaPlayerMode)
+            if (viewMode() == MediaPlayerMode)
             {
                 d->mediaPlayerView->setCurrentItem();
             }
@@ -332,16 +332,14 @@ void StackedView::setPreviewItem(const ImageInfo& info, const ImageInfo& previou
     }
 }
 
-int StackedView::previewMode()
+StackedView::StackedViewMode StackedView::viewMode() const
 {
-    return indexOf(currentWidget());
+    return StackedViewMode(indexOf(currentWidget()));
 }
 
-void StackedView::setPreviewMode(const int mode)
+void StackedView::setViewMode(const StackedViewMode mode)
 {
-    if (mode != PreviewAlbumMode && mode != PreviewImageMode &&
-        mode != WelcomePageMode  && mode != MediaPlayerMode &&
-        mode != MapWidgetMode && mode != TableViewMode)
+    if ((mode<StackedViewModeFirst)||(mode>StackedViewModeLast))
     {
         return;
     }
@@ -356,7 +354,7 @@ void StackedView::setPreviewMode(const int mode)
         d->thumbBarDock->hide();
     }
 
-    if (mode == PreviewAlbumMode || mode == WelcomePageMode || mode == MapWidgetMode || mode == TableViewMode)
+    if (mode == IconViewMode || mode == WelcomePageMode || mode == MapWidgetMode || mode == TableViewMode)
     {
         setPreviewItem();
         setCurrentIndex(mode);
@@ -368,7 +366,7 @@ void StackedView::setPreviewMode(const int mode)
 
     d->mapWidgetView->setActive(mode == MapWidgetMode);
 
-    if (mode == PreviewAlbumMode)
+    if (mode == IconViewMode)
     {
         d->imageIconView->setFocus();
     }
@@ -424,7 +422,7 @@ void StackedView::slotThumbBarSelectionChanged()
 
 void StackedView::slotIconViewSelectionChanged()
 {
-    if (currentIndex() != PreviewAlbumMode)
+    if (currentIndex() != IconViewMode)
     {
         return;
     }
@@ -444,7 +442,7 @@ void StackedView::previewLoaded()
 
 void StackedView::slotZoomFactorChanged(double z)
 {
-    if (previewMode() == PreviewImageMode)
+    if (viewMode() == PreviewImageMode)
     {
         emit signalZoomFactorChanged(z);
     }
@@ -513,7 +511,7 @@ double StackedView::zoomMax()
 
 void StackedView::slotPreviewLoaded(bool)
 {
-    setPreviewMode(StackedView::PreviewImageMode);
+    setViewMode(StackedView::PreviewImageMode);
     previewLoaded();
 }
 

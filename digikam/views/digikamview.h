@@ -89,6 +89,8 @@ public:
     KUrl::List allUrls()      const;
     KUrl::List selectedUrls() const;
     bool hasCurrentItem()     const;
+    ImageInfo currentInfo() const;
+    QList<ImageInfo> selectedInfoList() const;
 
     double zoomMin() const;
     double zoomMax() const;
