@@ -48,6 +48,7 @@ class QTreeView;
 namespace Digikam
 {
 
+class Album;
 class ThumbnailSize;
 class TableViewShared;
 
@@ -66,6 +67,9 @@ public:
 
     void setThumbnailSize(const ThumbnailSize& size);
     ThumbnailSize getThumbnailSize() const;
+    QList<qlonglong> selectedImageIdsCurrentFirst() const;
+    QList<ImageInfo> selectedImageInfos() const;
+    ImageInfo currentInfo();
 
 protected:
 
@@ -73,8 +77,9 @@ protected:
     void doSaveState();
 
     virtual bool eventFilter(QObject* watched, QEvent* event);
-    void showTreeViewContextMenu(QContextMenuEvent* const event);
-    QList<ImageInfo> selectedImageInfos() const;
+    void showTreeViewContextMenuOnItem(QContextMenuEvent* const event, const QModelIndex& indexAtMenu);
+    void showTreeViewContextMenuOnEmptyArea(QContextMenuEvent* const event);
+    Album* currentAlbum();
 
 protected Q_SLOTS:
 
@@ -84,13 +89,19 @@ protected Q_SLOTS:
     void slotAssignPickLabelToSelected(const int pickLabelID);
     void slotAssignColorLabelToSelected(const int colorLabelID);
     void slotAssignRatingToSelected(const int rating);
-
+    void slotInsertSelectedToExistingQueue(const int queueId);
+    void slotSetAsAlbumThumbnail(const ImageInfo& info);
+    void slotPaste();
 
 Q_SIGNALS:
 
     void signalPreviewRequested(const ImageInfo& info);
     void signalZoomInStep();
     void signalZoomOutStep();
+    void signalPopupTagsView();
+    void signalGotoTagAndImageRequested(const int tagId);
+    void signalGotoAlbumAndImageRequested(const ImageInfo& info);
+    void signalGotoDateAndImageRequested(const ImageInfo& info);
 
 private:
 

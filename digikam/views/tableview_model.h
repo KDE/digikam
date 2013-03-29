@@ -116,6 +116,7 @@ public:
     ImageInfo infoFromItem(Item* const item) const;
     QVariant itemDatabaseFieldRaw(Item* const item, const DatabaseFields::Set requestedField);
     DatabaseFieldsHashRaw itemDatabaseFieldsRaw(Item* const item, const DatabaseFields::Set requestedSet);
+    qlonglong imageId(const QModelIndex& anIndex) const;
     QList<qlonglong> imageIds(const QModelIndexList& indexList) const;
     QList<ImageInfo> imageInfos(const QModelIndexList& indexList) const;
     ImageInfo imageInfo(const QModelIndex& index) const;

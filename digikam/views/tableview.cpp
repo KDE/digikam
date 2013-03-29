@@ -31,6 +31,7 @@
 
 // KDE includes
 
+#include <kaction.h>
 #include <kmenu.h>
 #include <klinkitemselectionmodel.h>
 
@@ -39,6 +40,8 @@
 #include "contextmenuhelper.h"
 #include "digikam2kgeomap_database.h"
 #include "fileactionmngr.h"
+#include "album.h"
+#include "imageviewutilities.h"
 #include "tableview_columnfactory.h"
 #include "tableview_model.h"
 #include "tableview_selection_model_syncer.h"
@@ -56,12 +59,14 @@ class TableView::Private
 public:
     Private()
       : columnProfiles(),
-        thumbnailSize()
+        thumbnailSize(),
+        imageViewUtilities(0)
     {
     }
 
     QList<TableViewColumnProfile> columnProfiles;
-    ThumbnailSize           thumbnailSize;
+    ThumbnailSize                 thumbnailSize;
+    ImageViewUtilities*           imageViewUtilities;
 };
 
 TableView::TableView(
@@ -88,6 +93,8 @@ TableView::TableView(
     s->tableViewSelectionModelSyncer= new TableViewSelectionModelSyncer(s.data(), this);
     s->treeView = new TableViewTreeView(s.data(), this);
     s->treeView->installEventFilter(this);
+
+    d->imageViewUtilities = new ImageViewUtilities(this);
 
     connect(s->treeView, SIGNAL(activated(QModelIndex)),
             this, SLOT(slotItemActivated(QModelIndex)));
@@ -148,7 +155,16 @@ bool TableView::eventFilter(QObject* watched, QEvent* event)
     {
         QContextMenuEvent* const e = static_cast<QContextMenuEvent*>(event);
         e->accept();
-        showTreeViewContextMenu(e);
+
+        const QModelIndex contextMenuIndex = s->treeView->indexAt(e->pos());
+        if (contextMenuIndex.isValid())
+        {
+            showTreeViewContextMenuOnItem(e, contextMenuIndex);
+        }
+        else
+        {
+            showTreeViewContextMenuOnEmptyArea(e);
+        }
 
         // event has been filtered by us
         return true;
@@ -157,19 +173,78 @@ bool TableView::eventFilter(QObject* watched, QEvent* event)
     return QObject::eventFilter(watched, event);
 }
 
-void TableView::showTreeViewContextMenu(QContextMenuEvent* const event)
+void TableView::showTreeViewContextMenuOnEmptyArea(QContextMenuEvent* const event)
 {
+    Album* const album = currentAlbum();
+
+    if (!album ||
+        album->isRoot() ||
+        (album->type() != Album::PHYSICAL && album->type() != Album::TAG) )
+    {
+        return;
+    }
+
     KMenu menu(this);
     ContextMenuHelper cmHelper(&menu);
 
-    // get a list of currently selected images' ids
-    const QModelIndexList selectedIndexes = s->tableViewSelectionModel->selectedIndexes();
-    const QList<qlonglong> selectedImageIds =  s->tableViewModel->imageIds(selectedIndexes);
+    cmHelper.addAction("full_screen");
+    cmHelper.addSeparator();
+    cmHelper.addStandardActionPaste(this, SLOT(slotPaste()));
 
+    cmHelper.exec(event->globalPos());
+}
+
+void TableView::showTreeViewContextMenuOnItem(QContextMenuEvent* const event, const QModelIndex& indexAtMenu)
+{
+    // get a list of currently selected images' ids
+    const QList<qlonglong> selectedImageIds =  selectedImageIdsCurrentFirst();
+    kDebug()<<selectedImageIds;
+
+    // Temporary actions --------------------------------------
+
+    KAction* const viewAction = new KAction(i18nc("View the selected image", "Preview"), this);
+    viewAction->setIcon(SmallIcon("viewimage"));
+    viewAction->setEnabled(selectedImageIds.count() == 1);
+
+    // Creation of the menu -----------------------------------
+    KMenu menu(this);
+    ContextMenuHelper cmHelper(&menu);
+
+    cmHelper.addAction("full_screen");
+    cmHelper.addSeparator();
+    // ---
+    cmHelper.addAction("move_selection_to_album");
+    cmHelper.addAction(viewAction);
+    cmHelper.addAction("image_edit");
+//     cmHelper.addServicesMenu(selectedUrls());
+    cmHelper.addGotoMenu(selectedImageIds);
+    cmHelper.addAction("image_rotate");
+    cmHelper.addSeparator();
+    // ---
+    cmHelper.addAction("image_find_similar");
+    cmHelper.addStandardActionLightTable();
+    cmHelper.addQueueManagerMenu();
+    cmHelper.addSeparator();
+    // ---
+    cmHelper.addAction("image_rename");
+    cmHelper.addAction("cut_album_selection");
+    cmHelper.addAction("copy_album_selection");
+    cmHelper.addAction("paste_album_selection");
+//     cmHelper.addStandardActionItemDelete(this, SLOT(deleteSelected()), selectedImageIds.count());
+    cmHelper.addSeparator();
+    // ---
+    cmHelper.addStandardActionThumbnail(selectedImageIds, currentAlbum());
+    // ---
     cmHelper.addAssignTagsMenu(selectedImageIds);
     cmHelper.addRemoveTagsMenu(selectedImageIds);
     cmHelper.addSeparator();
     cmHelper.addLabelsAction();
+
+    /// @todo check in digikamimageview.cpp how this works
+//     if (!d->faceMode)
+//     {
+//         cmHelper.addGroupMenu(selectedImageIDs);
+//     }
 
     connect(&cmHelper, SIGNAL(signalAssignColorLabel(int)),
             this, SLOT(slotAssignColorLabelToSelected(int)));
@@ -181,13 +256,33 @@ void TableView::showTreeViewContextMenu(QContextMenuEvent* const event)
             this, SLOT(slotAssignTagToSelected(int)));
     connect(&cmHelper, SIGNAL(signalRemoveTag(int)),
             this, SLOT(slotRemoveTagFromSelected(int)));
+    connect(&cmHelper, SIGNAL(signalAddToExistingQueue(int)),
+            this, SLOT(slotInsertSelectedToExistingQueue(int)));
+    connect(&cmHelper, SIGNAL(signalPopupTagsView()),
+            this, SIGNAL(signalPopupTagsView()));
+    connect(&cmHelper, SIGNAL(signalGotoTag(int)),
+            this, SIGNAL(signalGotoTagAndImageRequested(int)));
+    connect(&cmHelper, SIGNAL(signalGotoAlbum(ImageInfo)),
+            this, SIGNAL(signalGotoAlbumAndImageRequested(ImageInfo)));
+    connect(&cmHelper, SIGNAL(signalGotoDate(ImageInfo)),
+            this, SIGNAL(signalGotoDateAndImageRequested(ImageInfo)));
+    connect(&cmHelper, SIGNAL(signalSetThumbnail(ImageInfo)),
+            this, SLOT(slotSetAsAlbumThumbnail(ImageInfo)));
 
-    menu.exec(event->globalPos());
+
+    QAction* const choice = cmHelper.exec(event->globalPos());
+
+    if (choice && (choice == viewAction) )
+    {
+
+        emit(signalPreviewRequested(s->tableViewModel->imageInfo(indexAtMenu)));
+    }
 }
 
-QList< ImageInfo > TableView::selectedImageInfos() const
+QList<ImageInfo> TableView::selectedImageInfos() const
 {
     const QModelIndexList selectedIndexes = s->tableViewSelectionModel->selectedIndexes();
+    kDebug()<<selectedIndexes;
 
     return s->tableViewModel->imageInfos(selectedIndexes);
 }
@@ -231,6 +326,70 @@ void TableView::setThumbnailSize(const ThumbnailSize& size)
 ThumbnailSize TableView::getThumbnailSize() const
 {
     return d->thumbnailSize;
+}
+
+QList<qlonglong> TableView::selectedImageIdsCurrentFirst() const
+{
+    const QModelIndexList selectedIndexes = s->tableViewSelectionModel->selectedIndexes();
+    QList<qlonglong> selectedImageIds =  s->tableViewModel->imageIds(selectedIndexes);
+
+    const QModelIndex currentIndex = s->tableViewSelectionModel->currentIndex();
+    qlonglong currentId = s->tableViewModel->imageId(currentIndex);
+    if (currentId>=0)
+    {
+        if (selectedImageIds.first()!=currentId)
+        {
+            selectedImageIds.removeOne(currentId);
+            selectedImageIds.prepend(currentId);
+        }
+    }
+    kDebug()<<selectedImageIds;
+    return selectedImageIds;
+}
+
+void TableView::slotInsertSelectedToExistingQueue(const int queueId)
+{
+    kDebug()<<"_________________________"<<queueId;
+    const ImageInfoList imageInfoList = selectedImageInfos();
+
+    if (!imageInfoList.isEmpty())
+    {
+        d->imageViewUtilities->insertSilentToQueueManager(imageInfoList, imageInfoList.first(), queueId);
+    }
+}
+
+void TableView::slotSetAsAlbumThumbnail(const ImageInfo& info)
+{
+    Album* const theCurrentAlbum = currentAlbum();
+    if (!theCurrentAlbum)
+    {
+        return;
+    }
+
+    d->imageViewUtilities->setAsAlbumThumbnail(theCurrentAlbum, info);
+}
+
+Album* TableView::currentAlbum()
+{
+    ImageAlbumModel* const albumModel = qobject_cast<ImageAlbumModel*>(s->imageModel);
+
+    if (!albumModel)
+    {
+        return 0;
+    }
+
+    return albumModel->currentAlbum();
+}
+
+void TableView::slotPaste()
+{
+    DragDropViewImplementation* const dragDropViewImplementation = s->treeView;
+    dragDropViewImplementation->paste();
+}
+
+ImageInfo TableView::currentInfo()
+{
+    return s->tableViewModel->imageInfo(s->tableViewSelectionModel->currentIndex());
 }
 
 } /* namespace Digikam */

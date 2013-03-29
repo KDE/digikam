@@ -895,6 +895,11 @@ QList<qlonglong> TableViewModel::imageIds(const QModelIndexList& indexList) cons
     {
         ASSERT_MODEL(index, this);
 
+        if (index.column()>0)
+        {
+            continue;
+        }
+
         const Item* const item = itemFromIndex(index);
         if (!item)
         {
@@ -913,6 +918,11 @@ QList<ImageInfo> TableViewModel::imageInfos(const QModelIndexList& indexList) co
     Q_FOREACH(const QModelIndex& index, indexList)
     {
         ASSERT_MODEL(index, this);
+
+        if (index.column()>0)
+        {
+            continue;
+        }
 
         Item* const item = itemFromIndex(index);
         if (!item)
@@ -1147,6 +1157,17 @@ bool TableViewModel::hasChildren(const QModelIndex& parent) const
     }
 
     return !parentItem->children.isEmpty();
+}
+
+qlonglong TableViewModel::imageId(const QModelIndex& anIndex) const
+{
+    const Item* const anItem = itemFromIndex(anIndex);
+    if (!anItem)
+    {
+        return -1;
+    }
+
+    return anItem->imageId;
 }
 
 } /* namespace Digikam */

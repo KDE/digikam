@@ -469,6 +469,18 @@ void DigikamView::setupConnections()
     connect(d->tableView, SIGNAL(signalZoomInStep()),
             this, SLOT(slotZoomIn()));
 
+    connect(d->tableView, SIGNAL(signalPopupTagsView()),
+            d->rightSideBar, SLOT(slotPopupTagsView()));
+
+    connect(d->tableView, SIGNAL(signalGotoAlbumAndImageRequested(ImageInfo)),
+            this, SLOT(slotGotoAlbumAndItem(ImageInfo)));
+
+    connect(d->tableView, SIGNAL(signalGotoDateAndImageRequested(ImageInfo)),
+            this, SLOT(slotGotoDateAndItem(ImageInfo)));
+
+    connect(d->tableView, SIGNAL(signalGotoTagAndImageRequested(int)),
+            this, SLOT(slotGotoTagAndItem(int)));
+
     // -- Sidebar Connections -------------------------------------
 
     connect(d->leftSideBar, SIGNAL(signalChangedTab(QWidget*)),
@@ -1563,38 +1575,54 @@ void DigikamView::slotImageEdit()
 
 void DigikamView::slotImageLightTable()
 {
-    /// @todo Care about MapWidgetMode
+    ImageInfoList selectedImageInfoList;
+    ImageInfo currentImageInfo;
     if (d->stackedview->previewMode() == StackedView::PreviewAlbumMode)
     {
-        // put images into an emptied light table
-        d->iconView->setSelectedOnLightTable();
+        /// @todo remove d->iconView->setOnLightTable
+        selectedImageInfoList << d->iconView->selectedImageInfos();
+        currentImageInfo = d->iconView->currentInfo();
+    }
+    else if (d->stackedview->previewMode() == StackedView::TableViewMode)
+    {
+        selectedImageInfoList << d->tableView->selectedImageInfos();
+        currentImageInfo = d->tableView->currentInfo();
     }
     else
     {
-        ImageInfoList list;
-        ImageInfo info = d->stackedview->imagePreviewView()->getImageInfo();
-        list.append(info);
-        // put images into an emptied light table
-        d->iconView->utilities()->insertToLightTable(list, info, false);
+        currentImageInfo = d->stackedview->imagePreviewView()->getImageInfo();
+        selectedImageInfoList << currentImageInfo;
     }
+
+    ImageInfo firstInfo = selectedImageInfoList.first();
+    kDebug()<<firstInfo.id()<<currentImageInfo.id();
+    d->iconView->utilities()->insertToLightTable(selectedImageInfoList, currentImageInfo, false);
 }
 
 void DigikamView::slotImageAddToLightTable()
 {
-    /// @todo Care about MapWidgetMode
+    ImageInfoList selectedImageInfoList;
+    ImageInfo currentImageInfo;
     if (d->stackedview->previewMode() == StackedView::PreviewAlbumMode)
     {
-        // add images to the existing images in the light table
-        d->iconView->addSelectedToLightTable();
+        /// @todo remove d->iconView->addSelectedToLightTable
+        selectedImageInfoList << d->iconView->selectedImageInfos();
+        currentImageInfo = d->iconView->currentInfo();
+    }
+    else if (d->stackedview->previewMode() == StackedView::TableViewMode)
+    {
+        selectedImageInfoList << d->tableView->selectedImageInfos();
+        currentImageInfo = d->tableView->currentInfo();
     }
     else
     {
-        ImageInfoList list;
-        ImageInfo info = d->stackedview->imagePreviewView()->getImageInfo();
-        list.append(info);
-        // add images to the existing images in the light table
-        d->iconView->utilities()->insertToLightTable(list, info, true);
+        currentImageInfo = d->stackedview->imagePreviewView()->getImageInfo();
+        selectedImageInfoList << currentImageInfo;
     }
+
+    ImageInfo firstInfo = selectedImageInfoList.first();
+    kDebug()<<firstInfo.id()<<currentImageInfo.id();
+    d->iconView->utilities()->insertToLightTable(selectedImageInfoList, currentImageInfo, true);
 }
 
 void DigikamView::slotImageAddToCurrentQueue()
