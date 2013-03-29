@@ -575,22 +575,6 @@ void DigikamImageView::deleteSelectedDirectly(bool permanently)
     awayFromSelection();
 }
 
-void DigikamImageView::toggleTagToSelected(int tagID)
-{
-    ImageInfoList tagToRemove, tagToAssign;
-
-    foreach(ImageInfo info, selectedImageInfos())
-    {
-        if (info.tagIds().contains(tagID))
-            tagToRemove.append(info);
-        else
-            tagToAssign.append(info);
-    }
-
-    FileActionMngr::instance()->assignTags(tagToAssign, QList<int>() << tagID);
-    FileActionMngr::instance()->removeTags(tagToRemove, QList<int>() << tagID);
-}
-
 void DigikamImageView::assignTagToSelected(int tagID)
 {
     FileActionMngr::instance()->assignTags(selectedImageInfos(), QList<int>() << tagID);

@@ -1724,22 +1724,34 @@ void DigikamView::slotLeftSidebarChangedTab(QWidget* w)
 
 void DigikamView::toggleTag(int tagID)
 {
-    d->iconView->toggleTagToSelected(tagID);
+    ImageInfoList tagToRemove, tagToAssign;
+
+    const ImageInfoList selectedList = selectedInfoList();
+    foreach(ImageInfo info, selectedList)
+    {
+        if (info.tagIds().contains(tagID))
+            tagToRemove.append(info);
+        else
+            tagToAssign.append(info);
+    }
+
+    FileActionMngr::instance()->assignTags(tagToAssign, QList<int>() << tagID);
+    FileActionMngr::instance()->removeTags(tagToRemove, QList<int>() << tagID);
 }
 
 void DigikamView::slotAssignPickLabel(int pickId)
 {
-    d->iconView->assignPickLabelToSelected(pickId);
+    FileActionMngr::instance()->assignPickLabel(selectedInfoList(), pickId);
 }
 
 void DigikamView::slotAssignColorLabel(int colorId)
 {
-    d->iconView->assignColorLabelToSelected(colorId);
+    FileActionMngr::instance()->assignColorLabel(selectedInfoList(), colorId);
 }
 
 void DigikamView::slotAssignRating(int rating)
 {
-    d->iconView->assignRatingToSelected(rating);
+    FileActionMngr::instance()->assignRating(selectedInfoList(), rating);
 }
 
 void DigikamView::slotSlideShowAll()

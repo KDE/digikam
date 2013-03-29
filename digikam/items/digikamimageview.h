@@ -45,7 +45,6 @@ public:
 
     ImageViewUtilities* utilities() const;
 
-    void toggleTagToSelected(int tagID);
     int  fitToWidthIcons();
 
     virtual void setThumbnailSize(const ThumbnailSize& size);
@@ -68,6 +67,7 @@ public Q_SLOTS:
     void assignPickLabelToSelected(int pickId);
     void assignColorLabelToSelected(int colorId);
     void assignRatingToSelected(int rating);
+
     void setAsAlbumThumbnail(const ImageInfo& setAsThumbnail);
     void createNewAlbumForSelected();
     void rename();
