@@ -9,6 +9,7 @@
  * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2009-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2011 by Andi Clemens <andi dot clemens at gmail dot com>
+ * Copyright (C) 2013 by Michael G. Hansen <mike at mghansen dot de>
  *
  * This program is free software you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -646,45 +647,10 @@ void DigikamImageView::createGroupFromSelection()
     FileActionMngr::instance()->addToGroup(groupLeader, selectedInfos);
 }
 
-namespace
-{
-bool lessThanByTimeForImageInfo(const ImageInfo& a, const ImageInfo& b)
-{
-    return a.dateTime() < b.dateTime();
-}
-}
-
 void DigikamImageView::createGroupByTimeFromSelection()
 {
-    QList<ImageInfo> selectedInfos = selectedImageInfos();
-    // sort by time
-    qStableSort(selectedInfos.begin(), selectedInfos.end(), lessThanByTimeForImageInfo);
-
-    QList<ImageInfo>::iterator it, it2;
-    for (it = selectedInfos.begin(); it != selectedInfos.end(); )
-    {
-        const ImageInfo& leader = *it;
-        QList<ImageInfo> group;
-        QDateTime time = it->dateTime();
-        for (it2 = it + 1; it2 != selectedInfos.end(); ++it2)
-        {
-            if (abs(time.secsTo(it2->dateTime())) < 2)
-            {
-                group << *it2;
-            }
-            else
-            {
-                break;
-            }
-        }
-        // increment to next item not put in the group
-        it = it2;
-
-        if (!group.isEmpty())
-        {
-            FileActionMngr::instance()->addToGroup(leader, group);
-        }
-    }
+    const QList<ImageInfo> selectedInfos = selectedImageInfos();
+    d->utilities->createGroupByTimeFromInfoList(selectedInfos);
 }
 
 void DigikamImageView::ungroupSelected()

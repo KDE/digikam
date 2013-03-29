@@ -137,6 +137,8 @@ public:
     virtual QMimeData* mimeData(const QModelIndexList& indexes) const;
 
     void scheduleResort();
+    GroupingMode groupingMode() const;
+    void setGroupingMode(const GroupingMode newGroupingMode);
 
 protected:
 
@@ -144,6 +146,7 @@ protected:
 
 private Q_SLOTS:
 
+    void slotPopulateModelWithNotifications();
     void slotPopulateModel(const bool sendNotifications);
 
     void slotColumnDataChanged(const qlonglong imageId);
@@ -178,6 +181,8 @@ private:
 };
 
 } /* namespace Digikam */
+
+Q_DECLARE_METATYPE(Digikam::TableViewModel::GroupingMode);
 
 #endif // TABLEVIEW_MODEL_H
 

@@ -124,6 +124,10 @@ void TableView::doLoadState()
     profile.loadSettings(groupCurrentProfile);
     s->tableViewModel->loadColumnProfile(profile);
 
+    const TableViewModel::GroupingMode groupingMode =
+        TableViewModel::GroupingMode(group.readEntry<int>("Grouping mode", int(TableViewModel::GroupingShowSubItems)));
+    s->tableViewModel->setGroupingMode(groupingMode);
+
     if (!profile.headerState.isEmpty())
     {
         s->treeView->header()->restoreState(profile.headerState);
@@ -138,6 +142,7 @@ void TableView::doSaveState()
     profile.headerState = s->treeView->header()->saveState();
     KConfigGroup groupCurrentProfile = group.group("Current Profile");
     profile.saveSettings(groupCurrentProfile);
+    group.writeEntry("Grouping mode", int(s->tableViewModel->groupingMode()));
 }
 
 void TableView::slotItemActivated(const QModelIndex& tableViewIndex)
@@ -190,6 +195,8 @@ void TableView::showTreeViewContextMenuOnEmptyArea(QContextMenuEvent* const even
     cmHelper.addAction("full_screen");
     cmHelper.addSeparator();
     cmHelper.addStandardActionPaste(this, SLOT(slotPaste()));
+    cmHelper.addSeparator();
+    cmHelper.addGroupMenu(QList<qlonglong>(), getExtraGroupingActions(&cmHelper));
 
     cmHelper.exec(event->globalPos());
 }
@@ -198,7 +205,6 @@ void TableView::showTreeViewContextMenuOnItem(QContextMenuEvent* const event, co
 {
     // get a list of currently selected images' ids
     const QList<qlonglong> selectedImageIds =  selectedImageIdsCurrentFirst();
-    kDebug()<<selectedImageIds;
 
     // Temporary actions --------------------------------------
 
@@ -240,11 +246,8 @@ void TableView::showTreeViewContextMenuOnItem(QContextMenuEvent* const event, co
     cmHelper.addSeparator();
     cmHelper.addLabelsAction();
 
-    /// @todo check in digikamimageview.cpp how this works
-//     if (!d->faceMode)
-//     {
-//         cmHelper.addGroupMenu(selectedImageIDs);
-//     }
+    /// @todo In digikamimageview.cpp, this is not available in face mode
+    cmHelper.addGroupMenu(selectedImageIds, getExtraGroupingActions(&cmHelper));
 
     connect(&cmHelper, SIGNAL(signalAssignColorLabel(int)),
             this, SLOT(slotAssignColorLabelToSelected(int)));
@@ -268,6 +271,14 @@ void TableView::showTreeViewContextMenuOnItem(QContextMenuEvent* const event, co
             this, SIGNAL(signalGotoDateAndImageRequested(ImageInfo)));
     connect(&cmHelper, SIGNAL(signalSetThumbnail(ImageInfo)),
             this, SLOT(slotSetAsAlbumThumbnail(ImageInfo)));
+    connect(&cmHelper, SIGNAL(signalCreateGroup()),
+            this, SLOT(slotCreateGroupFromSelection()));
+    connect(&cmHelper, SIGNAL(signalRemoveFromGroup()),
+            this, SLOT(slotRemoveSelectedFromGroup()));
+    connect(&cmHelper, SIGNAL(signalUngroup()),
+            this, SLOT(slotUngroupSelected()));
+    connect(&cmHelper, SIGNAL(signalCreateGroupByTime()),
+            this, SLOT(slotCreateGroupByTimeFromSelection()));
 
 
     QAction* const choice = cmHelper.exec(event->globalPos());
@@ -341,7 +352,7 @@ QList<qlonglong> TableView::selectedImageIdsCurrentFirst() const
             selectedImageIds.prepend(currentId);
         }
     }
-    kDebug()<<selectedImageIds;
+
     return selectedImageIds;
 }
 
@@ -401,5 +412,80 @@ void TableView::slotDeleteSelected(const bool permanently)
 
     d->imageViewUtilities->deleteImages(infoList, permanently);
 }
+
+void TableView::slotRemoveSelectedFromGroup()
+{
+    FileActionMngr::instance()->removeFromGroup(selectedImageInfos());
+}
+
+void TableView::slotUngroupSelected()
+{
+    FileActionMngr::instance()->ungroup(selectedImageInfos());
+}
+
+void TableView::slotCreateGroupFromSelection()
+{
+    const QList<ImageInfo> selectedInfos = selectedImageInfos();
+    const ImageInfo groupLeader = currentInfo();
+    FileActionMngr::instance()->addToGroup(groupLeader, selectedInfos);
+}
+
+void TableView::slotCreateGroupByTimeFromSelection()
+{
+    const QList<ImageInfo> selectedInfos = selectedImageInfos();
+    d->imageViewUtilities->createGroupByTimeFromInfoList(selectedInfos);
+}
+
+QList<QAction*> TableView::getExtraGroupingActions(QObject* const parentObject) const
+{
+    QList<QAction*> actionList;
+
+    const TableViewModel::GroupingMode currentGroupingMode = s->tableViewModel->groupingMode();
+
+    KAction* const actionHideGrouped = new KAction(i18n("Hide grouped items"), parentObject);
+    actionHideGrouped->setCheckable(true);
+    actionHideGrouped->setChecked(currentGroupingMode==TableViewModel::GroupingHideGrouped);
+    actionHideGrouped->setData(
+            QVariant::fromValue<TableViewModel::GroupingMode>(TableViewModel::GroupingHideGrouped)
+        );
+    connect(actionHideGrouped, SIGNAL(triggered(bool)),
+            this, SLOT(slotGroupingModeActionTriggered()));
+    actionList << actionHideGrouped;
+
+    KAction* const actionIgnoreGrouping = new KAction(i18n("Ignore grouping"), parentObject);
+    actionIgnoreGrouping->setCheckable(true);
+    actionIgnoreGrouping->setChecked(currentGroupingMode==TableViewModel::GroupingIgnoreGrouping);
+    actionIgnoreGrouping->setData(
+            QVariant::fromValue<TableViewModel::GroupingMode>(TableViewModel::GroupingIgnoreGrouping)
+        );
+    connect(actionIgnoreGrouping, SIGNAL(triggered(bool)),
+            this, SLOT(slotGroupingModeActionTriggered()));
+    actionList << actionIgnoreGrouping;
+
+    KAction* const actionShowSubItems = new KAction(i18n("Show grouping in tree"), parentObject);
+    actionShowSubItems->setCheckable(true);
+    actionShowSubItems->setChecked(currentGroupingMode==TableViewModel::GroupingShowSubItems);
+    actionShowSubItems->setData(
+            QVariant::fromValue<TableViewModel::GroupingMode>(TableViewModel::GroupingShowSubItems)
+        );
+    connect(actionShowSubItems, SIGNAL(triggered(bool)),
+            this, SLOT(slotGroupingModeActionTriggered()));
+    actionList << actionShowSubItems;
+
+    return actionList;
+}
+
+void TableView::slotGroupingModeActionTriggered()
+{
+    const QAction* const senderAction = qobject_cast<QAction*>(sender());
+    if (!senderAction)
+    {
+        return;
+    }
+
+    const TableViewModel::GroupingMode newGroupingMode = senderAction->data().value<TableViewModel::GroupingMode>();
+    s->tableViewModel->setGroupingMode(newGroupingMode);
+}
+
 
 } /* namespace Digikam */

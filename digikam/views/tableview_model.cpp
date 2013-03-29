@@ -641,6 +641,11 @@ QList< TableViewColumn* > TableViewModel::getColumnObjects()
     return d->columnObjects;
 }
 
+void TableViewModel::slotPopulateModelWithNotifications()
+{
+    slotPopulateModel(true);
+}
+
 void TableViewModel::slotPopulateModel(const bool sendNotifications)
 {
     if (sendNotifications)
@@ -1209,6 +1214,20 @@ KUrl::List TableViewModel::urlsFromIndexes(const QModelIndexList& indexList) con
     }
 
     return resultList;
+}
+
+TableViewModel::GroupingMode TableViewModel::groupingMode() const
+{
+    return d->groupingMode;
+}
+
+void TableViewModel::setGroupingMode(const TableViewModel::GroupingMode newGroupingMode)
+{
+    if (d->groupingMode!=newGroupingMode)
+    {
+        d->groupingMode = newGroupingMode;
+        QTimer::singleShot(100, this, SLOT(slotPopulateModelWithNotifications()));
+    }
 }
 
 } /* namespace Digikam */

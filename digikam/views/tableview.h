@@ -81,6 +81,7 @@ protected:
     void showTreeViewContextMenuOnItem(QContextMenuEvent* const event, const QModelIndex& indexAtMenu);
     void showTreeViewContextMenuOnEmptyArea(QContextMenuEvent* const event);
     Album* currentAlbum();
+    QList<QAction*> getExtraGroupingActions(QObject*const parentObject) const;
 
 protected Q_SLOTS:
 
@@ -94,6 +95,11 @@ protected Q_SLOTS:
     void slotSetAsAlbumThumbnail(const ImageInfo& info);
     void slotPaste();
     void slotDeleteSelected(const bool permanently = false);
+    void slotRemoveSelectedFromGroup();
+    void slotUngroupSelected();
+    void slotCreateGroupFromSelection();
+    void slotCreateGroupByTimeFromSelection();
+    void slotGroupingModeActionTriggered();
 
 Q_SIGNALS:
 

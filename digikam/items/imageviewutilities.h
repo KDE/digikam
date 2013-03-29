@@ -73,6 +73,8 @@ public Q_SLOTS:
     void rename(const KUrl& imageUrl, const QString& newName);
     void setAsAlbumThumbnail(Album* album, const ImageInfo& imageInfo);
 
+    void createGroupByTimeFromInfoList(const ImageInfoList& imageInfoList);
+
 Q_SIGNALS:
 
     void editorCurrentUrlChanged(const KUrl& url);
