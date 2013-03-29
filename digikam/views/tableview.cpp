@@ -221,6 +221,7 @@ void TableView::showTreeViewContextMenuOnItem(QContextMenuEvent* const event, co
     // ---
     cmHelper.addAction("move_selection_to_album");
     cmHelper.addAction(viewAction);
+    /// @todo image_edit is grayed out on first invocation of the menu for some reason
     cmHelper.addAction("image_edit");
     cmHelper.addServicesMenu(s->tableViewModel->selectedUrls());
     cmHelper.addGotoMenu(selectedImageIds);
@@ -487,5 +488,26 @@ void TableView::slotGroupingModeActionTriggered()
     s->tableViewModel->setGroupingMode(newGroupingMode);
 }
 
+KUrl::List TableView::allUrls() const
+{
+    const ImageInfoList allInfo = s->tableViewModel->allImageInfo();
+    KUrl::List resultList;
+    Q_FOREACH(const ImageInfo& info, allInfo)
+    {
+        resultList << info.fileUrl();
+    }
+
+    return resultList;
+}
+
+KUrl::List TableView::selectedUrls() const
+{
+    return s->tableViewModel->selectedUrls();
+}
+
+int TableView::numberOfSelectedItems() const
+{
+    return s->tableViewSelectionModel->selectedRows().count();
+}
 
 } /* namespace Digikam */

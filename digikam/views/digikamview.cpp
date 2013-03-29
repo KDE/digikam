@@ -731,12 +731,28 @@ QList<SidebarWidget*> DigikamView::leftSidebarWidgets() const
 
 KUrl::List DigikamView::allUrls() const
 {
-    return d->iconView->urls();
+    /// @todo This functions seems not to be used anywhere right now
+
+    switch (d->stackedview->viewMode())
+    {
+    case StackedView::TableViewMode:
+        return d->tableView->allUrls();
+
+    default:
+        return d->iconView->urls();
+    }
 }
 
 KUrl::List DigikamView::selectedUrls() const
 {
-    return d->iconView->selectedUrls();
+    switch (d->stackedview->viewMode())
+    {
+    case StackedView::TableViewMode:
+        return d->tableView->selectedUrls();
+
+    default:
+        return d->iconView->selectedUrls();
+    }
 }
 
 void DigikamView::showSideBars()
@@ -753,6 +769,7 @@ void DigikamView::hideSideBars()
 
 void DigikamView::slotFirstItem()
 {
+    /// @todo Adapt to TableView or disable these actions
     d->iconView->toFirstIndex();
 }
 
@@ -773,6 +790,8 @@ void DigikamView::slotLastItem()
 
 void DigikamView::slotSelectItemByUrl(const KUrl& url)
 {
+    /// @todo This functions seems not to be used anywhere right now
+    /// @todo Adapt to TableView
     d->iconView->toIndex(url);
 }
 
@@ -935,6 +954,7 @@ void DigikamView::slotGotoAlbumAndItem(const ImageInfo& imageInfo)
 
     // Set the activate item url to find in the Album View after
     // all items have be reloaded.
+    /// @todo Adapt to TableView here and in similar functions below
     d->iconView->setCurrentWhenAvailable(imageInfo.id());
 
     // And finally toggle album manager to handle album history and
@@ -1167,6 +1187,7 @@ void DigikamView::slotAlbumRefresh()
 
     if (currentId != -1)
     {
+        /// @todo Adapt to TableView
         d->iconView->setCurrentWhenAvailable(currentId);
     }
 }
@@ -1176,7 +1197,15 @@ void DigikamView::slotImageSelected()
     // delay to slotDispatchImageSelected
     d->needDispatchSelection = true;
     d->selectionTimer->start();
-    emit signalSelectionChanged(d->iconView->numberOfSelectedIndexes());
+    switch (d->stackedview->viewMode())
+    {
+    case StackedView::TableViewMode:
+        emit signalSelectionChanged(d->tableView->numberOfSelectedItems());
+        break;
+
+    default:
+        emit signalSelectionChanged(d->iconView->numberOfSelectedIndexes());
+    }
 }
 
 void DigikamView::slotDispatchImageSelected()
@@ -1412,15 +1441,17 @@ void DigikamView::slotAlbumReadMetadata()
 
 void DigikamView::slotImageWriteMetadata()
 {
-    ImageInfoList selected           = d->iconView->selectedImageInfos();
-    MetadataSynchronizer* const tool = new MetadataSynchronizer(selected, MetadataSynchronizer::WriteFromDatabaseToFile);
+    const ImageInfoList selected = selectedInfoList();
+    MetadataSynchronizer* const tool = new MetadataSynchronizer(
+            selected, MetadataSynchronizer::WriteFromDatabaseToFile);
     tool->start();
 }
 
 void DigikamView::slotImageReadMetadata()
 {
-    ImageInfoList selected           = d->iconView->selectedImageInfos();
-    MetadataSynchronizer* const tool = new MetadataSynchronizer(selected, MetadataSynchronizer::ReadFromFileToDatabase);
+    const ImageInfoList selected = selectedInfoList();
+    MetadataSynchronizer* const tool = new MetadataSynchronizer(
+            selected, MetadataSynchronizer::ReadFromFileToDatabase);
     tool->start();
 }
 
@@ -1465,20 +1496,7 @@ void DigikamView::slotIconView()
 
 void DigikamView::slotImagePreview()
 {
-    const int currentPreviewMode = d->stackedview->viewMode();
-    ImageInfo currentInfo;
-
-    if (    (currentPreviewMode == StackedView::IconViewMode)
-         || (currentPreviewMode == StackedView::TableViewMode) )
-    {
-        currentInfo = d->iconView->currentInfo();
-    }
-    else if (currentPreviewMode == StackedView::MapWidgetMode)
-    {
-        currentInfo = d->mapView->currentImageInfo();
-    }
-
-    slotTogglePreviewMode(currentInfo);
+    slotTogglePreviewMode(currentInfo());
 }
 
 /**
@@ -1555,7 +1573,16 @@ void DigikamView::slotImageFindSimilar()
 
 void DigikamView::slotEditor()
 {
-    d->iconView->openEditor();
+    const ImageInfoList imageInfoList = selectedInfoList();
+    ImageInfo singleInfo = currentInfo();
+    if (singleInfo.isNull() && !imageInfoList.isEmpty())
+    {
+        singleInfo = imageInfoList.first();
+    }
+
+    // the current album is the same for all views
+    Album* const currentAlbum = d->iconView->currentAlbum();
+    d->iconView->utilities()->openInEditor(singleInfo, imageInfoList, currentAlbum);
 }
 
 void DigikamView::slotLightTable()
@@ -1574,7 +1601,8 @@ void DigikamView::slotQueueMgr()
 
 void DigikamView::slotImageEdit()
 {
-    d->iconView->openCurrentInEditor();
+    // Where is the difference to slotEditor?
+    slotEditor();
 }
 
 void DigikamView::slotImageLightTable()
@@ -1933,6 +1961,8 @@ ImageInfo DigikamView::currentInfo() const
         return d->tableView->currentInfo();
 
     case StackedView::MapWidgetMode:
+        return d->mapView->currentImageInfo();
+
     case StackedView::IconViewMode:
         return d->iconView->currentInfo();
 

@@ -71,6 +71,9 @@ public:
     QList<ImageInfo> selectedImageInfos() const;
     ImageInfo currentInfo();
     ImageInfoList allInfo() const;
+    KUrl::List allUrls() const;
+    KUrl::List selectedUrls() const;
+    int numberOfSelectedItems() const;
 
 protected:
 
