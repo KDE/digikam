@@ -1575,115 +1575,50 @@ void DigikamView::slotImageEdit()
 
 void DigikamView::slotImageLightTable()
 {
-    ImageInfoList selectedImageInfoList;
-    ImageInfo currentImageInfo;
-    if (d->stackedview->viewMode() == StackedView::IconViewMode)
-    {
-        /// @todo remove d->iconView->setOnLightTable
-        selectedImageInfoList << d->iconView->selectedImageInfos();
-        currentImageInfo = d->iconView->currentInfo();
-    }
-    else if (d->stackedview->viewMode() == StackedView::TableViewMode)
-    {
-        selectedImageInfoList << d->tableView->selectedImageInfos();
-        currentImageInfo = d->tableView->currentInfo();
-    }
-    else
-    {
-        currentImageInfo = d->stackedview->imagePreviewView()->getImageInfo();
-        selectedImageInfoList << currentImageInfo;
-    }
+    const ImageInfoList selectedList = selectedInfoList();
+    const ImageInfo currentImageInfo = currentInfo();
 
-    ImageInfo firstInfo = selectedImageInfoList.first();
-    kDebug()<<firstInfo.id()<<currentImageInfo.id();
-    d->iconView->utilities()->insertToLightTable(selectedImageInfoList, currentImageInfo, false);
+    // replace images in light table
+    d->iconView->utilities()->insertToLightTable(selectedList, currentImageInfo, false);
 }
 
 void DigikamView::slotImageAddToLightTable()
 {
-    ImageInfoList selectedImageInfoList;
-    ImageInfo currentImageInfo;
-    if (d->stackedview->viewMode() == StackedView::IconViewMode)
-    {
-        /// @todo remove d->iconView->addSelectedToLightTable
-        selectedImageInfoList << d->iconView->selectedImageInfos();
-        currentImageInfo = d->iconView->currentInfo();
-    }
-    else if (d->stackedview->viewMode() == StackedView::TableViewMode)
-    {
-        selectedImageInfoList << d->tableView->selectedImageInfos();
-        currentImageInfo = d->tableView->currentInfo();
-    }
-    else
-    {
-        currentImageInfo = d->stackedview->imagePreviewView()->getImageInfo();
-        selectedImageInfoList << currentImageInfo;
-    }
+    const ImageInfoList selectedList = selectedInfoList();
+    const ImageInfo currentImageInfo = currentInfo();
 
-    ImageInfo firstInfo = selectedImageInfoList.first();
-    kDebug()<<firstInfo.id()<<currentImageInfo.id();
-    d->iconView->utilities()->insertToLightTable(selectedImageInfoList, currentImageInfo, true);
+    // add to images in light table
+    d->iconView->utilities()->insertToLightTable(selectedList, currentImageInfo, true);
 }
 
 void DigikamView::slotImageAddToCurrentQueue()
 {
-    /// @todo Care about MapWidgetMode
-    if (d->stackedview->viewMode() == StackedView::IconViewMode)
-    {
-        d->iconView->insertSelectedToCurrentQueue();
-    }
-    else
-    {
-        ImageInfoList list;
-        ImageInfo info = d->stackedview->imagePreviewView()->getImageInfo();
-        list.append(info);
-        d->iconView->utilities()->insertToQueueManager(list, info, false);
-    }
+    const ImageInfoList selectedList = selectedInfoList();
+    const ImageInfo currentImageInfo = currentInfo();
+
+    d->iconView->utilities()->insertToQueueManager(selectedList, currentImageInfo, false);
 }
 
 void DigikamView::slotImageAddToNewQueue()
 {
     /// @todo Care about MapWidgetMode
-    bool newQueue = QueueMgrWindow::queueManagerWindowCreated() &&
+    const bool newQueue = QueueMgrWindow::queueManagerWindowCreated() &&
                     !QueueMgrWindow::queueManagerWindow()->queuesMap().isEmpty();
 
-    if (d->stackedview->viewMode() == StackedView::IconViewMode)
-    {
-        if (newQueue)
-        {
-            d->iconView->insertSelectedToNewQueue();
-        }
-        else
-        {
-            d->iconView->insertSelectedToCurrentQueue();
-        }
-    }
-    else
-    {
-        // FIXME
-        ImageInfoList list;
-        ImageInfo info = d->stackedview->imagePreviewView()->getImageInfo();
-        list.append(info);
-        d->iconView->utilities()->insertToQueueManager(list, info, newQueue);
-    }
+    const ImageInfoList selectedList = selectedInfoList();
+    const ImageInfo currentImageInfo = currentInfo();
+
+    d->iconView->utilities()->insertToQueueManager(selectedList, currentImageInfo, newQueue);
 }
 
 void DigikamView::slotImageAddToExistingQueue(int queueid)
 {
-    ImageInfoList list;
+    const ImageInfoList selectedList = selectedInfoList();
+    const ImageInfo currentImageInfo = currentInfo();
 
-    if (d->stackedview->viewMode() == StackedView::IconViewMode)
+    if (!selectedList.isEmpty())
     {
-        list = d->stackedview->imageIconView()->selectedImageInfos();
-    }
-    else
-    {
-        list << d->stackedview->imagePreviewView()->getImageInfo();
-    }
-
-    if (!list.isEmpty())
-    {
-        d->iconView->utilities()->insertSilentToQueueManager(list, list.first(), queueid);
+        d->iconView->utilities()->insertSilentToQueueManager(selectedList, currentImageInfo, queueid);
     }
 }
 
@@ -1973,6 +1908,53 @@ void DigikamView::imageTransform(RotationMatrix::TransformationAction transform)
 {
     FileActionMngr::instance()->transform(d->iconView->selectedImageInfos(), transform);
 }
+
+ImageInfo DigikamView::currentInfo() const
+{
+    switch (d->stackedview->viewMode())
+    {
+    case StackedView::TableViewMode:
+        return d->tableView->currentInfo();
+
+    case StackedView::MapWidgetMode:
+    case StackedView::IconViewMode:
+        return d->iconView->currentInfo();
+
+    case StackedView::PreviewImageMode:
+        return d->stackedview->imagePreviewView()->getImageInfo();
+
+    case StackedView::MediaPlayerMode:
+        /// @todo What should we return here?
+        return ImageInfo();
+
+    default:
+        return ImageInfo();
+    }
+}
+
+QList< ImageInfo > DigikamView::selectedInfoList() const
+{
+    switch (d->stackedview->viewMode())
+    {
+    case StackedView::TableViewMode:
+        return d->tableView->selectedImageInfos();
+
+    case StackedView::MapWidgetMode:
+    case StackedView::IconViewMode:
+        return d->iconView->selectedImageInfos();
+
+    case StackedView::PreviewImageMode:
+        return QList<ImageInfo>() << d->stackedview->imagePreviewView()->getImageInfo();
+
+    case StackedView::MediaPlayerMode:
+        /// @todo What should we return here?
+        return QList<ImageInfo>();
+
+    default:
+        return QList<ImageInfo>();
+    }
+}
+
 
 #ifdef USE_PRESENTATION_MODE
 
