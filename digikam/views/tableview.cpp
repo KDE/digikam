@@ -280,8 +280,7 @@ void TableView::showTreeViewContextMenuOnItem(QContextMenuEvent* const event, co
 
 QList<ImageInfo> TableView::selectedImageInfos() const
 {
-    const QModelIndexList selectedIndexes = s->tableViewSelectionModel->selectedIndexes();
-    kDebug()<<selectedIndexes;
+    const QModelIndexList selectedIndexes = s->tableViewSelectionModel->selectedRows();
 
     return s->tableViewModel->imageInfos(selectedIndexes);
 }
@@ -329,7 +328,7 @@ ThumbnailSize TableView::getThumbnailSize() const
 
 QList<qlonglong> TableView::selectedImageIdsCurrentFirst() const
 {
-    const QModelIndexList selectedIndexes = s->tableViewSelectionModel->selectedIndexes();
+    const QModelIndexList selectedIndexes = s->tableViewSelectionModel->selectedRows();
     QList<qlonglong> selectedImageIds =  s->tableViewModel->imageIds(selectedIndexes);
 
     const QModelIndex currentIndex = s->tableViewSelectionModel->currentIndex();
