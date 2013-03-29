@@ -121,6 +121,7 @@ public:
     QList<ImageInfo> imageInfos(const QModelIndexList& indexList) const;
     ImageInfo imageInfo(const QModelIndex& index) const;
     QModelIndex itemIndex(Item* const item) const;
+    QList<ImageInfo> allImageInfo() const;
 
     QList<Item*> sortItems(const QList<Item*> itemList);
     class LessThan;

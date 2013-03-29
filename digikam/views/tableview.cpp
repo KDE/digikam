@@ -392,4 +392,10 @@ ImageInfo TableView::currentInfo()
     return s->tableViewModel->imageInfo(s->tableViewSelectionModel->currentIndex());
 }
 
+ImageInfoList TableView::allInfo() const
+{
+    return s->tableViewModel->allImageInfo();
+}
+
+
 } /* namespace Digikam */

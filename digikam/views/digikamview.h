@@ -91,6 +91,7 @@ public:
     bool hasCurrentItem()     const;
     ImageInfo currentInfo() const;
     QList<ImageInfo> selectedInfoList() const;
+    ImageInfoList allInfo() const;
 
     double zoomMin() const;
     double zoomMax() const;

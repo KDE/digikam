@@ -1170,4 +1170,22 @@ qlonglong TableViewModel::imageId(const QModelIndex& anIndex) const
     return anItem->imageId;
 }
 
+QList<ImageInfo> TableViewModel::allImageInfo() const
+{
+    QList<ImageInfo> infoList;
+    QList<Item*> itemsToList = d->rootItem->children;
+    while (!itemsToList.isEmpty())
+    {
+        Item* const item = itemsToList.takeFirst();
+        infoList << infoFromItem(item);
+
+        if (!item->children.isEmpty())
+        {
+            itemsToList << item->children;
+        }
+    }
+
+    return infoList;
+}
+
 } /* namespace Digikam */

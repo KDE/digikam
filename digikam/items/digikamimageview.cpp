@@ -513,11 +513,6 @@ void DigikamImageView::openEditor()
     d->utilities->openInEditor(singleInfo, imageInfoList, currentAlbum());
 }
 
-void DigikamImageView::setOnLightTable()
-{
-    d->utilities->insertToLightTableAuto(imageInfos(), selectedImageInfos(), currentInfo());
-}
-
 void DigikamImageView::insertToQueue()
 {
     ImageInfoList imageInfoList = selectedImageInfos();

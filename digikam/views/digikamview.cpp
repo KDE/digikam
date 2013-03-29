@@ -1560,7 +1560,11 @@ void DigikamView::slotEditor()
 
 void DigikamView::slotLightTable()
 {
-    d->iconView->setOnLightTable();
+    const ImageInfoList allInfoList = allInfo();
+    const ImageInfoList selectedList = selectedInfoList();
+    const ImageInfo currentImageInfo = currentInfo();
+
+    d->iconView->utilities()->insertToLightTableAuto(allInfoList, selectedList, currentImageInfo);
 }
 
 void DigikamView::slotQueueMgr()
@@ -1949,6 +1953,27 @@ QList< ImageInfo > DigikamView::selectedInfoList() const
     case StackedView::MediaPlayerMode:
         /// @todo What should we return here?
         return QList<ImageInfo>();
+
+    default:
+        return QList<ImageInfo>();
+    }
+}
+
+ImageInfoList DigikamView::allInfo() const
+{
+    switch (d->stackedview->viewMode())
+    {
+    case StackedView::TableViewMode:
+        return d->tableView->allInfo();
+
+    case StackedView::MapWidgetMode:
+    case StackedView::IconViewMode:
+        return d->iconView->imageInfos();
+
+    case StackedView::PreviewImageMode:
+    case StackedView::MediaPlayerMode:
+        /// @todo What should we return here?
+        return d->iconView->imageInfos();
 
     default:
         return QList<ImageInfo>();

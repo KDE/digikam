@@ -70,6 +70,7 @@ public:
     QList<qlonglong> selectedImageIdsCurrentFirst() const;
     QList<ImageInfo> selectedImageInfos() const;
     ImageInfo currentInfo();
+    ImageInfoList allInfo() const;
 
 protected:
 
