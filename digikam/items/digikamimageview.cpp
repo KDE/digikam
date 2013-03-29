@@ -518,32 +518,6 @@ void DigikamImageView::setOnLightTable()
     d->utilities->insertToLightTableAuto(imageInfos(), selectedImageInfos(), currentInfo());
 }
 
-void DigikamImageView::addSelectedToLightTable()
-{
-    // Run Light Table with all selected image files in the current Album.
-    // If addTo is false, the light table will be emptied before adding
-    // the images.
-    ImageInfoList imageInfoList = selectedImageInfos();
-
-    if (!imageInfoList.isEmpty())
-    {
-        d->utilities->insertToLightTable(imageInfoList, imageInfoList.first(), true);
-    }
-}
-
-void DigikamImageView::setSelectedOnLightTable()
-{
-    // Run Light Table with all selected image files in the current Album.
-    // If addTo is false, the light table will be emptied before adding
-    // the images.
-    ImageInfoList imageInfoList = selectedImageInfos();
-
-    if (!imageInfoList.isEmpty())
-    {
-        d->utilities->insertToLightTable(imageInfoList, imageInfoList.first(), false);
-    }
-}
-
 void DigikamImageView::insertToQueue()
 {
     ImageInfoList imageInfoList = selectedImageInfos();

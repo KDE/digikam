@@ -57,8 +57,6 @@ public Q_SLOTS:
     void openCurrentInEditor();
 
     void setOnLightTable();
-    void addSelectedToLightTable();
-    void setSelectedOnLightTable();
 
     void insertToQueue();
     void insertSelectedToCurrentQueue();
