@@ -216,7 +216,7 @@ void TableView::showTreeViewContextMenuOnItem(QContextMenuEvent* const event, co
     cmHelper.addAction("move_selection_to_album");
     cmHelper.addAction(viewAction);
     cmHelper.addAction("image_edit");
-//     cmHelper.addServicesMenu(selectedUrls());
+    cmHelper.addServicesMenu(s->tableViewModel->selectedUrls());
     cmHelper.addGotoMenu(selectedImageIds);
     cmHelper.addAction("image_rotate");
     cmHelper.addSeparator();
@@ -230,7 +230,7 @@ void TableView::showTreeViewContextMenuOnItem(QContextMenuEvent* const event, co
     cmHelper.addAction("cut_album_selection");
     cmHelper.addAction("copy_album_selection");
     cmHelper.addAction("paste_album_selection");
-//     cmHelper.addStandardActionItemDelete(this, SLOT(deleteSelected()), selectedImageIds.count());
+    cmHelper.addStandardActionItemDelete(this, SLOT(slotDeleteSelected()), selectedImageIds.count());
     cmHelper.addSeparator();
     // ---
     cmHelper.addStandardActionThumbnail(selectedImageIds, currentAlbum());
@@ -274,7 +274,6 @@ void TableView::showTreeViewContextMenuOnItem(QContextMenuEvent* const event, co
 
     if (choice && (choice == viewAction) )
     {
-
         emit(signalPreviewRequested(s->tableViewModel->imageInfo(indexAtMenu)));
     }
 }
@@ -397,5 +396,11 @@ ImageInfoList TableView::allInfo() const
     return s->tableViewModel->allImageInfo();
 }
 
+void TableView::slotDeleteSelected(const bool permanently)
+{
+    const ImageInfoList infoList = selectedImageInfos();
+
+    d->imageViewUtilities->deleteImages(infoList, permanently);
+}
 
 } /* namespace Digikam */

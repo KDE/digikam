@@ -1188,4 +1188,27 @@ QList<ImageInfo> TableViewModel::allImageInfo() const
     return infoList;
 }
 
+KUrl::List TableViewModel::selectedUrls() const
+{
+    return urlsFromIndexes(s->tableViewSelectionModel->selectedRows());
+}
+
+KUrl::List TableViewModel::urlsFromIndexes(const QModelIndexList& indexList) const
+{
+    KUrl::List resultList;
+    Q_FOREACH(const QModelIndex& index, indexList)
+    {
+        Item* const item = itemFromIndex(index);
+        const ImageInfo info = infoFromItem(item);
+
+        const KUrl itemUrl = info.fileUrl();
+        if (!itemUrl.isEmpty())
+        {
+            resultList << itemUrl;
+        }
+    }
+
+    return resultList;
+}
+
 } /* namespace Digikam */

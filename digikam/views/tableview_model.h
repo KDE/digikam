@@ -27,6 +27,7 @@
 
 #include <QAbstractItemModel>
 #include <QSortFilterProxyModel>
+#include <kurl.h>
 
 // KDE includes
 
@@ -122,6 +123,8 @@ public:
     ImageInfo imageInfo(const QModelIndex& index) const;
     QModelIndex itemIndex(Item* const item) const;
     QList<ImageInfo> allImageInfo() const;
+    KUrl::List urlsFromIndexes(const QModelIndexList& indexList) const;
+    KUrl::List selectedUrls() const;
 
     QList<Item*> sortItems(const QList<Item*> itemList);
     class LessThan;

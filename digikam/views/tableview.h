@@ -93,6 +93,7 @@ protected Q_SLOTS:
     void slotInsertSelectedToExistingQueue(const int queueId);
     void slotSetAsAlbumThumbnail(const ImageInfo& info);
     void slotPaste();
+    void slotDeleteSelected(const bool permanently = false);
 
 Q_SIGNALS:
 
