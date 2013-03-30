@@ -15,4 +15,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 005 ==> 316752 - Make the forward, back, first & last arrows cycle properly.
 006 ==> 311295 - digiKam not detecting my OLYMPUS M.14-42mm F3.5-5.6 II R lens.
 007 ==> 313938 - Workflow doesn't save/restore tool parameters.
-008 ==> 
+008 ==> 251563 - Getting rid of the lapack dependancy using Eigen [patch].
+009 ==> 
