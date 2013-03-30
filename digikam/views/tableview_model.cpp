@@ -1230,4 +1230,122 @@ void TableViewModel::setGroupingMode(const TableViewModel::GroupingMode newGroup
     }
 }
 
+QModelIndex TableViewModel::deepRowIndex(const int rowNumber) const
+{
+    int targetRowNumber = rowNumber;
+    if (rowNumber<0)
+    {
+        targetRowNumber+=deepRowCount();
+    }
+
+    QModelIndex cIndex = index(0, 0);
+    for (int i = 0; i<targetRowNumber; ++i)
+    {
+        if (hasChildren(cIndex))
+        {
+            cIndex = cIndex.child(0, 0);
+        }
+        else
+        {
+            QModelIndex candidateIndex = cIndex.sibling(cIndex.row() + 1, 0);
+            if (!candidateIndex.isValid())
+            {
+                QModelIndex parentIndex = cIndex.parent();
+                if (!parentIndex.isValid())
+                {
+                    return QModelIndex();
+                }
+
+                candidateIndex = parentIndex.sibling(parentIndex.row() + 1, 0);
+            }
+
+            cIndex = candidateIndex;
+        }
+    }
+
+    return cIndex;
+}
+
+int TableViewModel::indexToDeepRowNumber(const QModelIndex& rowIndex) const
+{
+    const QModelIndex column0Index = toCol0(rowIndex);
+    int deepRowNumber = 0;
+    QModelIndex cIndex = index(0, 0);
+    while (cIndex.isValid())
+    {
+        if (cIndex==column0Index)
+        {
+            break;
+        }
+
+        ++deepRowNumber;
+
+        if (hasChildren(cIndex))
+        {
+            cIndex = cIndex.child(0, 0);
+        }
+        else
+        {
+            QModelIndex candidateIndex = cIndex.sibling(cIndex.row() + 1, 0);
+            if (!candidateIndex.isValid())
+            {
+                QModelIndex parentIndex = cIndex.parent();
+                if (!parentIndex.isValid())
+                {
+                    break;
+                }
+
+                candidateIndex = parentIndex.sibling(parentIndex.row() + 1, 0);
+            }
+
+            cIndex = candidateIndex;
+        }
+    }
+
+    if (!cIndex.isValid())
+    {
+        return -1;
+    }
+
+    return deepRowNumber;
+}
+
+int TableViewModel::deepRowCount() const
+{
+    int deepRowNumber = 0;
+    QModelIndex cIndex = index(0, 0);
+    while (cIndex.isValid())
+    {
+        ++deepRowNumber;
+
+        if (hasChildren(cIndex))
+        {
+            cIndex = cIndex.child(0, 0);
+        }
+        else
+        {
+            QModelIndex candidateIndex = cIndex.sibling(cIndex.row() + 1, 0);
+            if (!candidateIndex.isValid())
+            {
+                QModelIndex parentIndex = cIndex.parent();
+                if (!parentIndex.isValid())
+                {
+                    break;
+                }
+
+                candidateIndex = parentIndex.sibling(parentIndex.row() + 1, 0);
+            }
+
+            cIndex = candidateIndex;
+        }
+    }
+
+    return deepRowNumber;
+}
+
+QModelIndex TableViewModel::toCol0(const QModelIndex& anIndex) const
+{
+    return anIndex.sibling(anIndex.row(), 0);
+}
+
 } /* namespace Digikam */

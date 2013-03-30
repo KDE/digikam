@@ -125,6 +125,10 @@ public:
     QList<ImageInfo> allImageInfo() const;
     KUrl::List urlsFromIndexes(const QModelIndexList& indexList) const;
     KUrl::List selectedUrls() const;
+    QModelIndex deepRowIndex(const int rowNumber) const;
+    int indexToDeepRowNumber(const QModelIndex& index) const;
+    int deepRowCount() const;
+    QModelIndex toCol0(const QModelIndex& anIndex) const;
 
     QList<Item*> sortItems(const QList<Item*> itemList);
     class LessThan;

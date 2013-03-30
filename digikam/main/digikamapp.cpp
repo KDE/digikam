@@ -1470,6 +1470,7 @@ void DigikamApp::slotTagSelected(bool val)
 void DigikamApp::slotImageSelected(const ImageInfoList& selection, bool hasPrev, bool hasNext,
                                    const ImageInfoList& listAll)
 {
+    /// @todo Currently only triggered by IconView, need to adapt to TableView
     int num_images = listAll.count();
     QString text;
 

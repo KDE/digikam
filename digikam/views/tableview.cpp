@@ -297,6 +297,22 @@ QList<ImageInfo> TableView::selectedImageInfos() const
     return s->tableViewModel->imageInfos(selectedIndexes);
 }
 
+QList<ImageInfo> TableView::selectedImageInfosCurrentFirst() const
+{
+    QModelIndexList selectedIndexes = s->tableViewSelectionModel->selectedRows();
+    const QModelIndex cIndex = s->tableViewSelectionModel->currentIndex();
+    if (!selectedIndexes.isEmpty())
+    {
+        if (selectedIndexes.first()!=cIndex)
+        {
+            selectedIndexes.removeOne(cIndex);
+            selectedIndexes.prepend(cIndex);
+        }
+    }
+
+    return s->tableViewModel->imageInfos(selectedIndexes);
+}
+
 void TableView::slotAssignColorLabelToSelected(const int colorLabelID)
 {
     FileActionMngr::instance()->assignColorLabel(selectedImageInfos(), colorLabelID);
@@ -508,6 +524,74 @@ KUrl::List TableView::selectedUrls() const
 int TableView::numberOfSelectedItems() const
 {
     return s->tableViewSelectionModel->selectedRows().count();
+}
+
+void TableView::slotGoToRow(const int rowNumber, const bool relativeMove)
+{
+    int nextDeepRowNumber = rowNumber;
+    if (relativeMove)
+    {
+        const QModelIndex currentTableViewIndex = s->tableViewSelectionModel->currentIndex();
+        const int currentDeepRowNumber = s->tableViewModel->indexToDeepRowNumber(currentTableViewIndex);
+
+        nextDeepRowNumber+= currentDeepRowNumber;
+    }
+
+    const QModelIndex nextIndex = s->tableViewModel->deepRowIndex(nextDeepRowNumber);
+    if (nextIndex.isValid())
+    {
+        const QItemSelection rowSelection = s->tableViewSelectionModelSyncer->targetIndexToRowItemSelection(nextIndex);
+        s->tableViewSelectionModel->select(rowSelection, QItemSelectionModel::ClearAndSelect);
+        s->tableViewSelectionModel->setCurrentIndex(nextIndex, QItemSelectionModel::Select);
+    }
+}
+
+ImageInfo TableView::deepRowImageInfo(const int rowNumber, const bool relative) const
+{
+    int targetRowNumber = rowNumber;
+    if (relative)
+    {
+        const QModelIndex& currentTableViewIndex = s->tableViewSelectionModel->currentIndex();
+        if (!currentTableViewIndex.isValid())
+        {
+            return ImageInfo();
+        }
+        const int currentDeepRowNumber = s->tableViewModel->indexToDeepRowNumber(currentTableViewIndex);
+        targetRowNumber+= currentDeepRowNumber;
+    }
+
+    const QModelIndex targetIndex = s->tableViewModel->deepRowIndex(targetRowNumber);
+    return s->tableViewModel->imageInfo(targetIndex);
+}
+
+ImageInfo TableView::nextInfo() const
+{
+    const QModelIndex cIndex = s->tableViewSelectionModel->currentIndex();
+    const int currentDeepRowNumber = s->tableViewModel->indexToDeepRowNumber(cIndex);
+    const int nextDeepRowNumber = currentDeepRowNumber + 1;
+
+    if (nextDeepRowNumber>=s->tableViewModel->deepRowCount())
+    {
+        return ImageInfo();
+    }
+
+    const QModelIndex nextDeepRowIndex = s->tableViewModel->deepRowIndex(nextDeepRowNumber);
+    return s->tableViewModel->imageInfo(nextDeepRowIndex);
+}
+
+ImageInfo TableView::previousInfo() const
+{
+    const QModelIndex cIndex = s->tableViewSelectionModel->currentIndex();
+    const int currentDeepRowNumber = s->tableViewModel->indexToDeepRowNumber(cIndex);
+    const int previousDeepRowNumber = currentDeepRowNumber - 1;
+
+    if (previousDeepRowNumber<0)
+    {
+        return ImageInfo();
+    }
+
+    const QModelIndex previousDeepRowIndex = s->tableViewModel->deepRowIndex(previousDeepRowNumber);
+    return s->tableViewModel->imageInfo(previousDeepRowIndex);
 }
 
 } /* namespace Digikam */

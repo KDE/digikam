@@ -69,11 +69,15 @@ public:
     ThumbnailSize getThumbnailSize() const;
     QList<qlonglong> selectedImageIdsCurrentFirst() const;
     QList<ImageInfo> selectedImageInfos() const;
+    QList<ImageInfo> selectedImageInfosCurrentFirst() const;
     ImageInfo currentInfo();
     ImageInfoList allInfo() const;
     KUrl::List allUrls() const;
     KUrl::List selectedUrls() const;
     int numberOfSelectedItems() const;
+    ImageInfo deepRowImageInfo(const int rowNumber, const bool relative) const;
+    ImageInfo nextInfo() const;
+    ImageInfo previousInfo() const;
 
 protected:
 
@@ -85,6 +89,10 @@ protected:
     void showTreeViewContextMenuOnEmptyArea(QContextMenuEvent* const event);
     Album* currentAlbum();
     QList<QAction*> getExtraGroupingActions(QObject*const parentObject) const;
+
+public Q_SLOTS:
+
+    void slotGoToRow(const int rowNumber, const bool relativeMove);
 
 protected Q_SLOTS:
 

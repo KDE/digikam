@@ -769,23 +769,58 @@ void DigikamView::hideSideBars()
 
 void DigikamView::slotFirstItem()
 {
-    /// @todo Adapt to TableView or disable these actions
-    d->iconView->toFirstIndex();
+    switch (d->stackedview->viewMode())
+    {
+    case StackedView::TableViewMode:
+        d->tableView->slotGoToRow(0, false);
+        break;
+
+    default:
+        // all other views are tied to IconView's selection model
+        d->iconView->toFirstIndex();
+    }
 }
 
 void DigikamView::slotPrevItem()
 {
-    d->iconView->toPreviousIndex();
+    switch (d->stackedview->viewMode())
+    {
+    case StackedView::TableViewMode:
+        d->tableView->slotGoToRow(-1, true);
+        break;
+
+    default:
+        // all other views are tied to IconView's selection model
+        d->iconView->toPreviousIndex();
+    }
 }
 
 void DigikamView::slotNextItem()
 {
-    d->iconView->toNextIndex();
+    switch (d->stackedview->viewMode())
+    {
+    case StackedView::TableViewMode:
+        d->tableView->slotGoToRow(1, true);
+        break;
+
+    default:
+        // all other views are tied to IconView's selection model
+        d->iconView->toNextIndex();
+    }
 }
 
 void DigikamView::slotLastItem()
 {
-    d->iconView->toLastIndex();
+    switch (d->stackedview->viewMode())
+    {
+    case StackedView::TableViewMode:
+        d->tableView->slotGoToRow(-1, false);
+        break;
+
+    default:
+        // all other views are tied to IconView's selection model
+        d->iconView->toLastIndex();
+    }
 }
 
 void DigikamView::slotSelectItemByUrl(const KUrl& url)
@@ -1215,8 +1250,8 @@ void DigikamView::slotDispatchImageSelected()
         // the list of ImageInfos of currently selected items, currentItem first
         // since the iconView tracks the changes also while we are in map widget mode,
         // we can still pull the data from the iconView
-        const ImageInfoList list      = d->iconView->selectedImageInfosCurrentFirst();
-        const ImageInfoList allImages = d->iconView->imageInfos();
+        const ImageInfoList list      = selectedInfoList(true);
+        const ImageInfoList allImages = allInfo();
 
         if (list.isEmpty())
         {
@@ -1231,10 +1266,13 @@ void DigikamView::slotDispatchImageSelected()
             ImageInfo previousInfo;
             ImageInfo nextInfo;
 
-            if ( (d->stackedview->viewMode() != StackedView::MapWidgetMode) &&
-                 (d->stackedview->viewMode() != StackedView::TableViewMode) )
+            if (d->stackedview->viewMode() == StackedView::TableViewMode)
             {
-                /// @todo next/previous should also be available in TableViewMode!
+                previousInfo = d->tableView->previousInfo();
+                nextInfo     = d->tableView->nextInfo();
+            }
+            else
+            {
                 previousInfo = d->iconView->previousInfo(list.first());
                 nextInfo     = d->iconView->nextInfo(list.first());
             }
@@ -1978,15 +2016,23 @@ ImageInfo DigikamView::currentInfo() const
     }
 }
 
-QList< ImageInfo > DigikamView::selectedInfoList() const
+QList< ImageInfo > DigikamView::selectedInfoList(const bool currentFirst) const
 {
     switch (d->stackedview->viewMode())
     {
     case StackedView::TableViewMode:
+        if (currentFirst)
+        {
+            return d->tableView->selectedImageInfosCurrentFirst();
+        }
         return d->tableView->selectedImageInfos();
 
     case StackedView::MapWidgetMode:
     case StackedView::IconViewMode:
+        if (currentFirst)
+        {
+            return d->iconView->selectedImageInfosCurrentFirst();
+        }
         return d->iconView->selectedImageInfos();
 
     case StackedView::PreviewImageMode:
