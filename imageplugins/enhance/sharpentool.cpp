@@ -45,13 +45,17 @@
 
 // Local includes
 
+#include "config-digikam.h"
 #include "sharpsettings.h"
-#include "refocusfilter.h"
 #include "sharpenfilter.h"
 #include "unsharpmaskfilter.h"
 #include "editortoolsettings.h"
 #include "imageiface.h"
 #include "imageregionwidget.h"
+
+#ifdef HAVE_EIGEN3
+#include "refocusfilter.h"
+#endif // HAVE_EIGEN3
 
 namespace DigikamEnhanceImagePlugin
 {
@@ -193,6 +197,7 @@ void SharpenTool::preparePreview()
 
         case SharpContainer::Refocus:
         {
+#ifdef HAVE_EIGEN3
             DImg   img = d->previewWidget->getOriginalRegionImage();
             double r   = settings.rfRadius;
             double c   = settings.rfCorrelation;
@@ -201,6 +206,7 @@ void SharpenTool::preparePreview()
             int    ms  = settings.rfMatrix;
 
             setFilter(new RefocusFilter(&img, this, ms, r, g, c, n));
+#endif // HAVE_EIGEN3
             break;
         }
     }
@@ -249,6 +255,7 @@ void SharpenTool::prepareFinal()
 
         case SharpContainer::Refocus:
         {
+#ifdef HAVE_EIGEN3
             double r   = settings.rfRadius;
             double c   = settings.rfCorrelation;
             double n   = settings.rfNoise;
@@ -256,6 +263,7 @@ void SharpenTool::prepareFinal()
             int    ms  = settings.rfMatrix;
 
             setFilter(new RefocusFilter(iface.original(), this, ms, r, g, c, n));
+#endif // HAVE_EIGEN3
             break;
         }
     }
@@ -282,7 +290,9 @@ void SharpenTool::setFinalImage()
 
         case SharpContainer::Refocus:
         {
+#ifdef HAVE_EIGEN3
             iface.setOriginal(i18n("Refocus"), filter()->filterAction(), filter()->getTargetImage());
+#endif // HAVE_EIGEN3
             break;
         }
     }

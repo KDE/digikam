@@ -155,15 +155,15 @@ void ColumnThumbnail::slotThumbnailLoaded(const LoadingDescription& loadingDescr
     }
 
     /// @todo Find a way to do this without the ImageFilterModel
-    const QModelIndex sourceIndex = s->imageFilterModel->indexForPath(loadingDescription.filePath);
-    if (!sourceIndex.isValid())
+    const QModelIndex imageModelIndex = s->imageModel->indexForPath(loadingDescription.filePath);
+    if (!imageModelIndex.isValid())
     {
         return;
     }
 
-    // The model will convert the sourceIndex to the index it needs
-    // and find out the column number and set it.
-    emit(signalDataChanged(sourceIndex));
+    const qlonglong imageId = s->imageModel->imageId(imageModelIndex);
+
+    emit(signalDataChanged(imageId));
 }
 
 void ColumnThumbnail::updateThumbnailSize()

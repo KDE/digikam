@@ -63,12 +63,14 @@ public:
 
     enum StackedViewMode
     {
-        PreviewAlbumMode=0,
-        PreviewImageMode,
-        WelcomePageMode,
-        MediaPlayerMode,
-        MapWidgetMode,
-        TableViewMode
+        StackedViewModeFirst = 0,
+        IconViewMode = 0,
+        PreviewImageMode = 1,
+        WelcomePageMode = 2,
+        MediaPlayerMode = 3,
+        MapWidgetMode = 4,
+        TableViewMode = 5,
+        StackedViewModeLast = 5
     };
 
 public:
@@ -99,8 +101,8 @@ public:
     void setPreviewItem(const ImageInfo& info = ImageInfo(),
                         const ImageInfo& previous = ImageInfo(),
                         const ImageInfo& next = ImageInfo());
-    int  previewMode();
-    void setPreviewMode(const int mode);
+    StackedViewMode viewMode() const;
+    void setViewMode(const StackedViewMode mode);
     void previewLoaded();
 
     void   increaseZoom();

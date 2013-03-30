@@ -26,6 +26,7 @@
 
 // Qt includes
 
+#include <QApplication>
 #include <QTimer>
 
 // KDE includes
@@ -96,7 +97,11 @@ void NewItemsFinder::slotStart()
         {
             kDebug() << "scan mode: CompleteCollectionScan";
 
-            ScanController::instance()->completeCollectionScan();
+            QApplication::setOverrideCursor(Qt::WaitCursor);
+            ScanController::instance()->completeCollectionScanDeferFiles();
+            QApplication::restoreOverrideCursor();
+
+            ScanController::instance()->allowToScanDeferredFiles();
             break;
         }
 

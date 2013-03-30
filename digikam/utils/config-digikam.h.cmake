@@ -39,6 +39,9 @@
 /* Define to 1 if an external lensfun shared library have been found */
 #cmakedefine HAVE_LENSFUN 1
 
+/* Define to 1 if an external Eigen3 shared library have been found */
+#cmakedefine HAVE_EIGEN3
+
 /* Define to 1 if GPhoto2 shared library is installed */
 #cmakedefine HAVE_GPHOTO2 1
 

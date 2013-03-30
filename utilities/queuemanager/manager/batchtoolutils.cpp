@@ -54,6 +54,17 @@ bool BatchToolSet::operator==(const BatchToolSet& set) const
            );
 }
 
+QDebug operator<<(QDebug dbg, const BatchToolSet& s)
+{
+    dbg.nospace() << "BatchToolSet::";
+    dbg.nospace() << "index: "    << s.index   << ", ";
+    dbg.nospace() << "version: "  << s.version << ", ";
+    dbg.nospace() << "name: "     << s.name    << ", ";
+    dbg.nospace() << "group: "    << s.group   << ", ";
+    dbg.nospace() << "settings: " << s.settings;
+    return dbg.space();
+}
+
 // ---------------------------------------------------------------------------------------------
 
 AssignedBatchTools::AssignedBatchTools()

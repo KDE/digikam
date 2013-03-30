@@ -404,6 +404,12 @@ LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta
         temp = meta.getExifTagString("Exif.NikonLd3.FocusDistance");
     }
 
+    if (temp.isEmpty())
+    {
+        // From Olympus Makernote.
+        temp = meta.getExifTagString("Exif.OlympusFi.FocusDistance");
+    }
+
     // TODO: Add here others Makernotes tags.
 
     if (temp.isEmpty())
@@ -414,7 +420,11 @@ LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta
     else
     {
         temp                        = temp.remove(" m");
-        d->settings.subjectDistance = temp.toDouble();
+        bool ok;
+        d->settings.subjectDistance = temp.toDouble(&ok);
+        if(!ok) {
+            d->settings.subjectDistance = -1.0;
+        }
         kDebug() << "Subject dist.  : " << d->settings.subjectDistance;
     }
 
