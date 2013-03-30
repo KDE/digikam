@@ -76,7 +76,6 @@
 #include "nrfilter.h"
 #include "oilpaintfilter.h"
 #include "raindropfilter.h"
-#include "refocusfilter.h"
 #include "sharpenfilter.h"
 #include "shearfilter.h"
 #include "stretchfilter.h"
@@ -93,6 +92,10 @@
 #ifdef HAVE_LENSFUN
 #include "lensfunfilter.h"
 #endif // HAVE_LENSFUN
+
+#ifdef HAVE_EIGEN3
+#include "refocusfilter.h"
+#endif // HAVE_EIGEN3
 
 namespace Digikam
 {
@@ -168,7 +171,9 @@ void DImgFilterManager::Private::setupCoreGenerators()
             << ImgFilterPtr(new BasicDImgFilterGenerator<NRFilter>())
             << ImgFilterPtr(new BasicDImgFilterGenerator<OilPaintFilter>())
             << ImgFilterPtr(new BasicDImgFilterGenerator<RainDropFilter>())
+#ifdef HAVE_EIGEN3
             << ImgFilterPtr(new BasicDImgFilterGenerator<RefocusFilter>())
+#endif // HAVE_EIGEN3
             << ImgFilterPtr(new BasicDImgFilterGenerator<SharpenFilter>())
             << ImgFilterPtr(new BasicDImgFilterGenerator<ShearFilter>())
             << ImgFilterPtr(new BasicDImgFilterGenerator<StretchFilter>())

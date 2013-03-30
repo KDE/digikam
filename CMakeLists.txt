@@ -160,7 +160,7 @@ FIND_PACKAGE(Jasper)
 FIND_PACKAGE(Kface)
 FIND_PACKAGE(KGeoMap)
 FIND_PACKAGE(PGF)
-FIND_PACKAGE(CLAPACK)
+FIND_PACKAGE(Eigen3)
 FIND_PACKAGE(Boost) # 1.36.0)
 
 # BEGIN SPECIAL OPENCV HANDLING
@@ -455,6 +455,8 @@ MACRO_OPTIONAL_FIND_PACKAGE(Doxygen)
 MACRO_OPTIONAL_FIND_PACKAGE(Sqlite2)
 MACRO_BOOL_TO_01(SQLITE2_FOUND HAVE_SQLITE2)
 
+MACRO_BOOL_TO_01(EIGEN3_FOUND HAVE_EIGEN3)
+
 # Set config files accordingly with optional dependencies
 
 CONFIGURE_FILE(digikam/utils/config-digikam.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/digikam/utils/config-digikam.h)
@@ -504,11 +506,14 @@ ENDIF(PGF_FOUND)
 
 # ================================================================
 
-IF(CLAPACK_FOUND)
-    MESSAGE(STATUS " libclapack library found................. YES (optional)")
-ELSE(CLAPACK_FOUND)
-    MESSAGE(STATUS " libclapack library found................. NO  (optional - internal version used instead)")
-ENDIF(CLAPACK_FOUND)
+IF(EIGEN3_FOUND)
+    MESSAGE(STATUS " Eigen3 library found..................... YES (optional)")
+ELSE(EIGEN3_FOUND)
+    MESSAGE(STATUS " Eigen3 library found..................... NO  (optional)")
+    MESSAGE(STATUS "")
+    MESSAGE(STATUS " digiKam will be compiled without Refocus tool support.")
+    MESSAGE(STATUS "")
+ENDIF(EIGEN3_FOUND)
 
 # ================================================================
 
@@ -606,11 +611,11 @@ ELSE(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND Boost_FOUND AND 
     SET(DIGIKAM_CAN_BE_COMPILED false)
 ENDIF(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND Boost_FOUND AND JASPER_FOUND AND KDCRAW_FOUND AND KEXIV2_FOUND AND KIPI_FOUND AND KFACE_FOUND AND KGEOMAP_FOUND)
 
-IF(DIGIKAM_CAN_BE_COMPILED AND FORCED_UNBUNDLE AND ((NOT PGF_FOUND) OR (NOT CLAPACK_FOUND)))
+IF(DIGIKAM_CAN_BE_COMPILED AND FORCED_UNBUNDLE AND ((NOT PGF_FOUND) OR (NOT EIGEN3_FOUND)))
     MESSAGE(STATUS "")
     MESSAGE(FATAL_ERROR " BUNDLED LIBRARIES HAVE BEEN FORCE-DISABLED IN THIS BUILD. Aborting.")
     SET(DIGIKAM_CAN_BE_COMPILED false)
-ENDIF(DIGIKAM_CAN_BE_COMPILED AND FORCED_UNBUNDLE AND ((NOT PGF_FOUND) OR (NOT CLAPACK_FOUND)))
+ENDIF(DIGIKAM_CAN_BE_COMPILED AND FORCED_UNBUNDLE AND ((NOT PGF_FOUND) OR (NOT EIGEN3_FOUND)))
 
 MESSAGE(STATUS "----------------------------------------------------------------------------------")
 MESSAGE(STATUS "")
@@ -726,46 +731,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
        )
     ENDIF(PGF_FOUND)
 
-    IF(CLAPACK_FOUND)
-        INCLUDE_DIRECTORIES(${CLAPACK_INCLUDE_DIR})
-    ELSE(CLAPACK_FOUND)
-        INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack)
-        SET(libclapack_SRCS
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/abort_.c
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/dgesv.c
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/dlaswp.c
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/endfile.c
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/idamax.c
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/open.c
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/sig_die.c
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/wref.c
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/close.c
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/dgetf2.c
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/dscal.c
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/err.c
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/ieeeck.c
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/s_cmp.c
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/s_stop.c
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/wrtfmt.c
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/dgemm.c
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/dgetrf.c
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/dswap.c
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/fmt.c
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/ilaenv.c
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/s_copy.c
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/wsfe.c
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/dger.c
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/dgetrs.c
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/dtrsm.c
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/fmtlib.c
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/lsame.c
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/sfe.c
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/util.c
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/xerbla.c
-        )
-    ENDIF(CLAPACK_FOUND)
-
-    # ==================================================================================================
     # Lensfun and LibLqr-1 library rules
 
     IF(LQR-1_FOUND)
@@ -781,6 +746,16 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         SET(liblensfun_LIBS ${LENSFUN_LIBRARIES})
 
     ENDIF(LENSFUN_FOUND)
+
+
+    # Refocus tool dependency
+
+    IF(EIGEN3_FOUND)
+
+        INCLUDE_DIRECTORIES(${EIGEN3_INCLUDE_DIR})
+        ADD_DEFINITIONS(-DEIGEN3_VERSION_NUMBER="${EIGEN3_VERSION}")
+
+    ENDIF(EIGEN3_FOUND)
 
     # ==================================================================================================
     # Common targets parts
@@ -815,7 +790,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
        )
 
     SET(libdimgfilters_SRCS
-        ${libclapack_SRCS}
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dklcms/digikam-lcms.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/dimgbuiltinfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/dimgthreadedfilter.cpp
@@ -875,8 +849,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/nr/nrsettings.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/sharp/sharpenfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/sharp/unsharpmaskfilter.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/sharp/refocusfilter.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/sharp/matrix.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/sharp/sharpsettings.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/levels/imagelevels.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/levels/levelsfilter.cpp
@@ -920,9 +892,18 @@ IF(DIGIKAM_CAN_BE_COMPILED)
             ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lens/lensfuncameraselector.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lens/lensfuniface.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lens/lensfunsettings.cpp
-        )
+           )
 
     ENDIF(LENSFUN_FOUND)
+
+    IF(EIGEN3_FOUND)
+
+        SET(libdimgfilters_SRCS ${libdimgfilters_SRCS}
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/sharp/refocusfilter.cpp
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/sharp/matrix.cpp
+           )
+
+    ENDIF(EIGEN3_FOUND)
 
     SET(libdmetadata_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dmetadata/metadatasettings.cpp

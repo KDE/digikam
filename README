@@ -103,12 +103,12 @@ libkgeomap      >= 2.0.0                      https://projects.kde.org/projects/
 Optional :
 
 libkdepimlibs   >= 4.4.x                      http://pim.kde.org                                                To support KAddressBook entries.
-liblensfun      >= 0.2.6                      http://lensfun.berlios.de                                         To support LensCorrection editor. If no external libray is found, internal version is used instead.  plugin.
+liblensfun      >= 0.2.6                      http://lensfun.berlios.de                                         To support LensCorrection tool.
+liblqr-1        >= 0.4.1                      http://liblqr.wikidot.com                                         To support Liquid Rescale tool.
+libeigen3       >= 3.x                        http://eigen.tuxfamily.org                                        To support Refocus tool.
 libgphoto2      >= 2.4.0                      http://www.gphoto.org                                             To support Gphoto2 Cameras.
 libusb          >= 1.0.0                      http://www.libusb.org                                             Required by Gphoto2 as linking dependency. See details in B.K.O #268267
-liblqr-1        >= 0.4.1                      http://liblqr.wikidot.com                                         For Liquid Rescale tool. If no external libray is found, internal version is used instead.
 libpgf          >= 6.11.24                    http://www.libpgf.org                                             If no external libray is found, internal version is used instead.
-libclapack      >= 3.x                        http://www.netlib.org/clapack                                     If no external libray is found, internal version is used instead.
 libsqlite2      >= 2.x                        http://www.sqlite.org/                                            Only used to import old database version <= 0.7.
 
 Note : all library dependencies require development and binary packages installed on your

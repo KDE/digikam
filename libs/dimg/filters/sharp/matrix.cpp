@@ -32,14 +32,6 @@
 
 #include "matrix.h"
 
-// C ANSI includes
-
-extern "C"
-{
-#include "f2c.h"
-#include "clapack.h"
-}
-
 // C++ includes
 
 #include <cmath>
@@ -47,6 +39,11 @@ extern "C"
 // Qt includes
 
 #include <QString>
+
+//Including Eigen
+
+#include <Eigen/Eigen>
+#include <Eigen/LU>
 
 // KDE includes
 
@@ -419,7 +416,20 @@ CMat* RefocusMatrix::compute_g(const CMat* const convolution, const int m, const
     Q_ASSERT(s->cols == s->rows);
     Q_ASSERT(s->rows == b->rows);
     //    status =
-    dgesv(s->rows, 1, s->data, s->rows, b->data, b->rows);
+    //  dgesv(s->rows, 1, s->data, s->rows, b->data, b->rows);
+
+
+   // Solve Ax=B using Eigen:
+
+   // Those are mappings, ie 'eigen' views of the data, there is NO
+   // copy involved. Digikam and Eigen both default to column-major.
+   Eigen::Map<Eigen::MatrixXd> A(s->data,s->rows, s->rows);
+   Eigen::Map<Eigen::VectorXd> B(b->data,b->rows);   
+   // there's no "solveinplace" for lu in Eigen, use a temporary matrix
+   Eigen::VectorXd X(b->rows);
+   X=A.lu().solve(B);
+   B=X; // maps are writeable, too.
+
 
     if (symmetric)
     {
@@ -645,17 +655,5 @@ void RefocusMatrix::make_circle_convolution(const double radius, CMat* convoluti
     fill_matrix(convolution, m, circle_intensity, radius);
 }
 
-int RefocusMatrix::dgesv(const int N, const int NRHS, double* A, const int lda, double* B, const int ldb)
-{
-    int result  = 0;
-    integer i_N = N, i_NHRS = NRHS, i_lda = lda, i_ldb = ldb, info;
-    QScopedArrayPointer<integer> ipiv(new integer[N]);
-
-    // Clapack call.
-    dgesv_(&i_N, &i_NHRS, A, &i_lda, ipiv.data(), B, &i_ldb, &info);
-
-    result = info;
-    return (result);
-}
 
 }  // namespace Digikam

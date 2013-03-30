@@ -107,6 +107,10 @@ LibsInfoDlg::LibsInfoDlg(QWidget* const parent)
                 i18n("Yes") : i18n("No"));
 #endif
 
+#ifdef HAVE_EIGEN3
+    list.insert(i18n("LibEigen"),                               QString(EIGEN3_VERSION_NUMBER));
+#endif // HAVE_EIGEN3
+      
     list.insert(i18n("LibKExiv2"),                   KExiv2::version());
     list.insert(i18n("LibExiv2"),                    KExiv2::Exiv2Version());
     list.insert(i18n("Exiv2 supports XMP metadata"), KExiv2::supportXmp() ?
@@ -146,12 +150,6 @@ LibsInfoDlg::LibsInfoDlg(QWidget* const parent)
 #endif // USE_EXT_LIBPGF
 
     list.insert(i18n("Parallelized PGF codec"),      PGFUtils::libPGFUseOpenMP() ? i18n("Yes") : i18n("No"));
-
-#ifdef USE_EXT_LIBCLAPACK
-    list.insert(i18n("LibClapack"),                  i18n("external shared library"));
-#else
-    list.insert(i18n("LibClapack"),                  i18n("internal library"));
-#endif // USE_EXT_LIBCLAPACK
 
     listView()->setHeaderLabels(QStringList() << i18n("Component") << i18n("Info"));
     setInfoMap(list);
