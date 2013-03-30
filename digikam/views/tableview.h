@@ -48,6 +48,7 @@ class QTreeView;
 namespace Digikam
 {
 
+class Album;
 class ThumbnailSize;
 class TableViewShared;
 
@@ -66,6 +67,17 @@ public:
 
     void setThumbnailSize(const ThumbnailSize& size);
     ThumbnailSize getThumbnailSize() const;
+    QList<qlonglong> selectedImageIdsCurrentFirst() const;
+    QList<ImageInfo> selectedImageInfos() const;
+    QList<ImageInfo> selectedImageInfosCurrentFirst() const;
+    ImageInfo currentInfo();
+    ImageInfoList allInfo() const;
+    KUrl::List allUrls() const;
+    KUrl::List selectedUrls() const;
+    int numberOfSelectedItems() const;
+    ImageInfo deepRowImageInfo(const int rowNumber, const bool relative) const;
+    ImageInfo nextInfo() const;
+    ImageInfo previousInfo() const;
 
 protected:
 
@@ -73,24 +85,42 @@ protected:
     void doSaveState();
 
     virtual bool eventFilter(QObject* watched, QEvent* event);
-    void showTreeViewContextMenu(QContextMenuEvent* const event);
-    QList<ImageInfo> selectedImageInfos() const;
+    void showTreeViewContextMenuOnItem(QContextMenuEvent* const event, const QModelIndex& indexAtMenu);
+    void showTreeViewContextMenuOnEmptyArea(QContextMenuEvent* const event);
+    Album* currentAlbum();
+    QList<QAction*> getExtraGroupingActions(QObject*const parentObject) const;
+
+public Q_SLOTS:
+
+    void slotGoToRow(const int rowNumber, const bool relativeMove);
 
 protected Q_SLOTS:
 
-    void slotItemActivated(const QModelIndex& sortedIndex);
+    void slotItemActivated(const QModelIndex& tableViewIndex);
     void slotAssignTagToSelected(const int tagID);
     void slotRemoveTagFromSelected(const int tagID);
     void slotAssignPickLabelToSelected(const int pickLabelID);
     void slotAssignColorLabelToSelected(const int colorLabelID);
     void slotAssignRatingToSelected(const int rating);
-
+    void slotInsertSelectedToExistingQueue(const int queueId);
+    void slotSetAsAlbumThumbnail(const ImageInfo& info);
+    void slotPaste();
+    void slotDeleteSelected(const bool permanently = false);
+    void slotRemoveSelectedFromGroup();
+    void slotUngroupSelected();
+    void slotCreateGroupFromSelection();
+    void slotCreateGroupByTimeFromSelection();
+    void slotGroupingModeActionTriggered();
 
 Q_SIGNALS:
 
     void signalPreviewRequested(const ImageInfo& info);
     void signalZoomInStep();
     void signalZoomOutStep();
+    void signalPopupTagsView();
+    void signalGotoTagAndImageRequested(const int tagId);
+    void signalGotoAlbumAndImageRequested(const ImageInfo& info);
+    void signalGotoDateAndImageRequested(const ImageInfo& info);
 
 private:
 

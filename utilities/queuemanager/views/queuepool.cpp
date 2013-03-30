@@ -6,7 +6,7 @@
  * Date        : 2009-02-13
  * Description : tabbed queue items list.
  *
- * Copyright (C) 2009-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -98,8 +98,10 @@ void QueuePool::setBusy(bool b)
 
     for (int i = 0; i < count(); ++i)
     {
-        QueueListView* queue = dynamic_cast<QueueListView*>(widget(i));
-        queue->viewport()->setEnabled(!b);
+        QueueListView* const queue = dynamic_cast<QueueListView*>(widget(i));
+
+        if (queue)
+            queue->viewport()->setEnabled(!b);
     }
 }
 
@@ -157,7 +159,11 @@ QString QueuePool::queueTitle(int index) const
 void QueuePool::slotAddQueue()
 {
     QueueListView* const queue = new QueueListView(this);
-    int index                  = addTab(queue, SmallIcon("bqm-diff"), QString("#%1").arg(count() + 1));
+
+    if (!queue)
+        return;
+
+    int index = addTab(queue, SmallIcon("bqm-diff"), QString("#%1").arg(count() + 1));
 
     connect(queue, SIGNAL(signalQueueContentsChanged()),
             this, SIGNAL(signalQueueContentsChanged()));
@@ -175,13 +181,17 @@ QueuePoolItemsList QueuePool::queueItemsList(int index) const
     QueuePoolItemsList qpool;
 
     QueueListView* const queue = dynamic_cast<QueueListView*>(widget(index));
-    ImageInfoList list         = queue->pendingItemsList();
 
-    for (ImageInfoList::const_iterator it = list.constBegin() ; it != list.constEnd() ; ++it)
+    if (queue)
     {
-        ImageInfo info = *it;
-        ItemInfoSet set(index, info);
-        qpool.append(set);
+        ImageInfoList list = queue->pendingItemsList();
+
+        for (ImageInfoList::const_iterator it = list.constBegin() ; it != list.constEnd() ; ++it)
+        {
+            ImageInfo info = *it;
+            ItemInfoSet set(index, info);
+            qpool.append(set);
+        }
     }
 
     return qpool;
@@ -194,7 +204,9 @@ int QueuePool::totalPendingItems() const
     for (int i = 0; i < count(); ++i)
     {
         QueueListView* const queue = dynamic_cast<QueueListView*>(widget(i));
-        items                      += queue->pendingItemsCount();
+
+        if (queue)
+            items += queue->pendingItemsCount();
     }
 
     return items;
@@ -207,7 +219,9 @@ int QueuePool::totalPendingTasks() const
     for (int i = 0; i < count(); ++i)
     {
         QueueListView* const queue = dynamic_cast<QueueListView*>(widget(i));
-        tasks                      += queue->pendingTasksCount();
+
+        if (queue)
+            tasks += queue->pendingTasksCount();
     }
 
     return tasks;
@@ -337,7 +351,11 @@ void QueuePool::slotCloseQueueRequest(QWidget* w)
 void QueuePool::removeTab(int index)
 {
     QueueListView* const queue = dynamic_cast<QueueListView*>(widget(index));
-    int count                  = queue->pendingItemsCount();
+
+    if (!queue)
+        return;
+
+    int count = queue->pendingItemsCount();
 
     if (count > 0)
     {

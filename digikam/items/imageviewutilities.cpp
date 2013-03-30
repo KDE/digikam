@@ -56,6 +56,7 @@
 #include "loadingcacheinterface.h"
 #include "queuemgrwindow.h"
 #include "thumbnailloadthread.h"
+#include "fileactionmngr.h"
 
 namespace Digikam
 {
@@ -299,6 +300,47 @@ void ImageViewUtilities::openInEditor(const ImageInfo& info, const QList<ImageIn
     }
 
     KWindowSystem::activateWindow(imview->winId());
+}
+
+namespace
+{
+bool lessThanByTimeForImageInfo(const ImageInfo& a, const ImageInfo& b)
+{
+    return a.dateTime() < b.dateTime();
+}
+}
+
+void ImageViewUtilities::createGroupByTimeFromInfoList(const ImageInfoList& imageInfoList)
+{
+    QList<ImageInfo> groupingList = imageInfoList;
+    // sort by time
+    qStableSort(groupingList.begin(), groupingList.end(), lessThanByTimeForImageInfo);
+
+    QList<ImageInfo>::iterator it, it2;
+    for (it = groupingList.begin(); it != groupingList.end(); )
+    {
+        const ImageInfo& leader = *it;
+        QList<ImageInfo> group;
+        QDateTime time = it->dateTime();
+        for (it2 = it + 1; it2 != groupingList.end(); ++it2)
+        {
+            if (abs(time.secsTo(it2->dateTime())) < 2)
+            {
+                group << *it2;
+            }
+            else
+            {
+                break;
+            }
+        }
+        // increment to next item not put in the group
+        it = it2;
+
+        if (!group.isEmpty())
+        {
+            FileActionMngr::instance()->addToGroup(leader, group);
+        }
+    }
 }
 
 } // namespace Digikam

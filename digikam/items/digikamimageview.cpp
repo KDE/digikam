@@ -9,6 +9,7 @@
  * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2009-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2011 by Andi Clemens <andi dot clemens at gmail dot com>
+ * Copyright (C) 2013 by Michael G. Hansen <mike at mghansen dot de>
  *
  * This program is free software you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -491,59 +492,6 @@ void DigikamImageView::openInEditor(const ImageInfo& info)
     d->utilities->openInEditor(info, imageInfos(), currentAlbum());
 }
 
-void DigikamImageView::openCurrentInEditor()
-{
-    ImageInfo info = currentInfo();
-
-    if (!info.isNull())
-    {
-        d->utilities->openInEditor(info, imageInfos(), currentAlbum());
-    }
-}
-
-void DigikamImageView::openEditor()
-{
-    ImageInfoList imageInfoList = imageInfos();
-    ImageInfo     singleInfo    = currentInfo();
-    if (singleInfo.isNull() && !imageInfoList.isEmpty())
-    {
-        singleInfo = imageInfoList.first();
-    }
-
-    d->utilities->openInEditor(singleInfo, imageInfoList, currentAlbum());
-}
-
-void DigikamImageView::setOnLightTable()
-{
-    d->utilities->insertToLightTableAuto(imageInfos(), selectedImageInfos(), currentInfo());
-}
-
-void DigikamImageView::addSelectedToLightTable()
-{
-    // Run Light Table with all selected image files in the current Album.
-    // If addTo is false, the light table will be emptied before adding
-    // the images.
-    ImageInfoList imageInfoList = selectedImageInfos();
-
-    if (!imageInfoList.isEmpty())
-    {
-        d->utilities->insertToLightTable(imageInfoList, imageInfoList.first(), true);
-    }
-}
-
-void DigikamImageView::setSelectedOnLightTable()
-{
-    // Run Light Table with all selected image files in the current Album.
-    // If addTo is false, the light table will be emptied before adding
-    // the images.
-    ImageInfoList imageInfoList = selectedImageInfos();
-
-    if (!imageInfoList.isEmpty())
-    {
-        d->utilities->insertToLightTable(imageInfoList, imageInfoList.first(), false);
-    }
-}
-
 void DigikamImageView::insertToQueue()
 {
     ImageInfoList imageInfoList = selectedImageInfos();
@@ -604,22 +552,6 @@ void DigikamImageView::deleteSelectedDirectly(bool permanently)
     ImageInfoList imageInfoList = selectedImageInfos();
     d->utilities->deleteImagesDirectly(imageInfoList, permanently);
     awayFromSelection();
-}
-
-void DigikamImageView::toggleTagToSelected(int tagID)
-{
-    ImageInfoList tagToRemove, tagToAssign;
-
-    foreach(ImageInfo info, selectedImageInfos())
-    {
-        if (info.tagIds().contains(tagID))
-            tagToRemove.append(info);
-        else
-            tagToAssign.append(info);
-    }
-
-    FileActionMngr::instance()->assignTags(tagToAssign, QList<int>() << tagID);
-    FileActionMngr::instance()->removeTags(tagToRemove, QList<int>() << tagID);
 }
 
 void DigikamImageView::assignTagToSelected(int tagID)
@@ -693,45 +625,10 @@ void DigikamImageView::createGroupFromSelection()
     FileActionMngr::instance()->addToGroup(groupLeader, selectedInfos);
 }
 
-namespace
-{
-bool lessThanByTimeForImageInfo(const ImageInfo& a, const ImageInfo& b)
-{
-    return a.dateTime() < b.dateTime();
-}
-}
-
 void DigikamImageView::createGroupByTimeFromSelection()
 {
-    QList<ImageInfo> selectedInfos = selectedImageInfos();
-    // sort by time
-    qStableSort(selectedInfos.begin(), selectedInfos.end(), lessThanByTimeForImageInfo);
-
-    QList<ImageInfo>::iterator it, it2;
-    for (it = selectedInfos.begin(); it != selectedInfos.end(); )
-    {
-        const ImageInfo& leader = *it;
-        QList<ImageInfo> group;
-        QDateTime time = it->dateTime();
-        for (it2 = it + 1; it2 != selectedInfos.end(); ++it2)
-        {
-            if (abs(time.secsTo(it2->dateTime())) < 2)
-            {
-                group << *it2;
-            }
-            else
-            {
-                break;
-            }
-        }
-        // increment to next item not put in the group
-        it = it2;
-
-        if (!group.isEmpty())
-        {
-            FileActionMngr::instance()->addToGroup(leader, group);
-        }
-    }
+    const QList<ImageInfo> selectedInfos = selectedImageInfos();
+    d->utilities->createGroupByTimeFromInfoList(selectedInfos);
 }
 
 void DigikamImageView::ungroupSelected()

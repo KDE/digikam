@@ -115,7 +115,7 @@ public:
         albumManager(0),
         albumHistory(0),
         stackedview(0),
-        lastPreviewMode(StackedView::PreviewAlbumMode),
+        lastViewMode(StackedView::IconViewMode),
         albumModificationHelper(0),
         tagModificationHelper(0),
         searchModificationHelper(0),
@@ -165,7 +165,7 @@ public:
     AlbumManager*                 albumManager;
     AlbumHistory*                 albumHistory;
     StackedView*                  stackedview;
-    int                           lastPreviewMode;
+    StackedView::StackedViewMode  lastViewMode;
 
     AlbumModificationHelper*      albumModificationHelper;
     TagModificationHelper*        tagModificationHelper;
@@ -469,6 +469,18 @@ void DigikamView::setupConnections()
     connect(d->tableView, SIGNAL(signalZoomInStep()),
             this, SLOT(slotZoomIn()));
 
+    connect(d->tableView, SIGNAL(signalPopupTagsView()),
+            d->rightSideBar, SLOT(slotPopupTagsView()));
+
+    connect(d->tableView, SIGNAL(signalGotoAlbumAndImageRequested(ImageInfo)),
+            this, SLOT(slotGotoAlbumAndItem(ImageInfo)));
+
+    connect(d->tableView, SIGNAL(signalGotoDateAndImageRequested(ImageInfo)),
+            this, SLOT(slotGotoDateAndItem(ImageInfo)));
+
+    connect(d->tableView, SIGNAL(signalGotoTagAndImageRequested(int)),
+            this, SLOT(slotGotoTagAndItem(int)));
+
     // -- Sidebar Connections -------------------------------------
 
     connect(d->leftSideBar, SIGNAL(signalChangedTab(QWidget*)),
@@ -719,12 +731,28 @@ QList<SidebarWidget*> DigikamView::leftSidebarWidgets() const
 
 KUrl::List DigikamView::allUrls() const
 {
-    return d->iconView->urls();
+    /// @todo This functions seems not to be used anywhere right now
+
+    switch (d->stackedview->viewMode())
+    {
+    case StackedView::TableViewMode:
+        return d->tableView->allUrls();
+
+    default:
+        return d->iconView->urls();
+    }
 }
 
 KUrl::List DigikamView::selectedUrls() const
 {
-    return d->iconView->selectedUrls();
+    switch (d->stackedview->viewMode())
+    {
+    case StackedView::TableViewMode:
+        return d->tableView->selectedUrls();
+
+    default:
+        return d->iconView->selectedUrls();
+    }
 }
 
 void DigikamView::showSideBars()
@@ -741,26 +769,64 @@ void DigikamView::hideSideBars()
 
 void DigikamView::slotFirstItem()
 {
-    d->iconView->toFirstIndex();
+    switch (d->stackedview->viewMode())
+    {
+    case StackedView::TableViewMode:
+        d->tableView->slotGoToRow(0, false);
+        break;
+
+    default:
+        // all other views are tied to IconView's selection model
+        d->iconView->toFirstIndex();
+    }
 }
 
 void DigikamView::slotPrevItem()
 {
-    d->iconView->toPreviousIndex();
+    switch (d->stackedview->viewMode())
+    {
+    case StackedView::TableViewMode:
+        d->tableView->slotGoToRow(-1, true);
+        break;
+
+    default:
+        // all other views are tied to IconView's selection model
+        d->iconView->toPreviousIndex();
+    }
 }
 
 void DigikamView::slotNextItem()
 {
-    d->iconView->toNextIndex();
+    switch (d->stackedview->viewMode())
+    {
+    case StackedView::TableViewMode:
+        d->tableView->slotGoToRow(1, true);
+        break;
+
+    default:
+        // all other views are tied to IconView's selection model
+        d->iconView->toNextIndex();
+    }
 }
 
 void DigikamView::slotLastItem()
 {
-    d->iconView->toLastIndex();
+    switch (d->stackedview->viewMode())
+    {
+    case StackedView::TableViewMode:
+        d->tableView->slotGoToRow(-1, false);
+        break;
+
+    default:
+        // all other views are tied to IconView's selection model
+        d->iconView->toLastIndex();
+    }
 }
 
 void DigikamView::slotSelectItemByUrl(const KUrl& url)
 {
+    /// @todo This functions seems not to be used anywhere right now
+    /// @todo Adapt to TableView
     d->iconView->toIndex(url);
 }
 
@@ -923,6 +989,7 @@ void DigikamView::slotGotoAlbumAndItem(const ImageInfo& imageInfo)
 
     // Set the activate item url to find in the Album View after
     // all items have be reloaded.
+    /// @todo Adapt to TableView here and in similar functions below
     d->iconView->setCurrentWhenAvailable(imageInfo.id());
 
     // And finally toggle album manager to handle album history and
@@ -1060,11 +1127,11 @@ void DigikamView::slotAlbumSelected(Album* album)
 
     if (album->isRoot())
     {
-        d->stackedview->setPreviewMode(StackedView::WelcomePageMode);
+        d->stackedview->setViewMode(StackedView::WelcomePageMode);
     }
     else
     {
-        switch (d->stackedview->previewMode())
+        switch (d->stackedview->viewMode())
         {
             case StackedView::PreviewImageMode:
             case StackedView::MediaPlayerMode:
@@ -1155,6 +1222,7 @@ void DigikamView::slotAlbumRefresh()
 
     if (currentId != -1)
     {
+        /// @todo Adapt to TableView
         d->iconView->setCurrentWhenAvailable(currentId);
     }
 }
@@ -1164,7 +1232,15 @@ void DigikamView::slotImageSelected()
     // delay to slotDispatchImageSelected
     d->needDispatchSelection = true;
     d->selectionTimer->start();
-    emit signalSelectionChanged(d->iconView->numberOfSelectedIndexes());
+    switch (d->stackedview->viewMode())
+    {
+    case StackedView::TableViewMode:
+        emit signalSelectionChanged(d->tableView->numberOfSelectedItems());
+        break;
+
+    default:
+        emit signalSelectionChanged(d->iconView->numberOfSelectedIndexes());
+    }
 }
 
 void DigikamView::slotDispatchImageSelected()
@@ -1174,8 +1250,8 @@ void DigikamView::slotDispatchImageSelected()
         // the list of ImageInfos of currently selected items, currentItem first
         // since the iconView tracks the changes also while we are in map widget mode,
         // we can still pull the data from the iconView
-        const ImageInfoList list      = d->iconView->selectedImageInfosCurrentFirst();
-        const ImageInfoList allImages = d->iconView->imageInfos();
+        const ImageInfoList list      = selectedInfoList(true);
+        const ImageInfoList allImages = allInfo();
 
         if (list.isEmpty())
         {
@@ -1190,17 +1266,20 @@ void DigikamView::slotDispatchImageSelected()
             ImageInfo previousInfo;
             ImageInfo nextInfo;
 
-            if ( (d->stackedview->previewMode() != StackedView::MapWidgetMode) &&
-                 (d->stackedview->previewMode() != StackedView::TableViewMode) )
+            if (d->stackedview->viewMode() == StackedView::TableViewMode)
             {
-                /// @todo next/previous should also be available in TableViewMode!
+                previousInfo = d->tableView->previousInfo();
+                nextInfo     = d->tableView->nextInfo();
+            }
+            else
+            {
                 previousInfo = d->iconView->previousInfo(list.first());
                 nextInfo     = d->iconView->nextInfo(list.first());
             }
 
-            if ((d->stackedview->previewMode() != StackedView::PreviewAlbumMode) &&
-                (d->stackedview->previewMode() != StackedView::MapWidgetMode) &&
-                (d->stackedview->previewMode() != StackedView::TableViewMode) )
+            if ((d->stackedview->viewMode() != StackedView::IconViewMode) &&
+                (d->stackedview->viewMode() != StackedView::MapWidgetMode) &&
+                (d->stackedview->viewMode() != StackedView::TableViewMode) )
             {
                 d->stackedview->setPreviewItem(list.first(), previousInfo, nextInfo);
             }
@@ -1235,13 +1314,13 @@ void DigikamView::slotZoomFactorChanged(double zoom)
 
 void DigikamView::setThumbSize(int size)
 {
-    if (d->stackedview->previewMode() == StackedView::PreviewImageMode)
+    if (d->stackedview->viewMode() == StackedView::PreviewImageMode)
     {
         double z = DZoomBar::zoomFromSize(size, zoomMin(), zoomMax());
         setZoomFactor(z);
     }
-    else if (   (d->stackedview->previewMode() == StackedView::PreviewAlbumMode)
-             || (d->stackedview->previewMode() == StackedView::TableViewMode) )
+    else if (   (d->stackedview->viewMode() == StackedView::IconViewMode)
+             || (d->stackedview->viewMode() == StackedView::TableViewMode) )
     {
         if (size > ThumbnailSize::Huge)
         {
@@ -1273,7 +1352,7 @@ void DigikamView::slotThumbSizeEffect()
 
 void DigikamView::toggleZoomActions()
 {
-    if (d->stackedview->previewMode() == StackedView::PreviewImageMode)
+    if (d->stackedview->viewMode() == StackedView::PreviewImageMode)
     {
         d->parent->enableZoomMinusAction(true);
         d->parent->enableZoomPlusAction(true);
@@ -1288,8 +1367,8 @@ void DigikamView::toggleZoomActions()
             d->parent->enableZoomMinusAction(false);
         }
     }
-    else if (   (d->stackedview->previewMode() == StackedView::PreviewAlbumMode)
-             || (d->stackedview->previewMode() == StackedView::TableViewMode) )
+    else if (   (d->stackedview->viewMode() == StackedView::IconViewMode)
+             || (d->stackedview->viewMode() == StackedView::TableViewMode) )
     {
         d->parent->enableZoomMinusAction(true);
         d->parent->enableZoomPlusAction(true);
@@ -1313,14 +1392,14 @@ void DigikamView::toggleZoomActions()
 
 void DigikamView::slotZoomIn()
 {
-    if (   (d->stackedview->previewMode() == StackedView::PreviewAlbumMode)
-        || (d->stackedview->previewMode() == StackedView::TableViewMode) )
+    if (   (d->stackedview->viewMode() == StackedView::IconViewMode)
+        || (d->stackedview->viewMode() == StackedView::TableViewMode) )
     {
         setThumbSize(d->thumbSize + ThumbnailSize::Step);
         toggleZoomActions();
         emit signalThumbSizeChanged(d->thumbSize);
     }
-    else if (d->stackedview->previewMode() == StackedView::PreviewImageMode)
+    else if (d->stackedview->viewMode() == StackedView::PreviewImageMode)
     {
         d->stackedview->increaseZoom();
     }
@@ -1328,14 +1407,14 @@ void DigikamView::slotZoomIn()
 
 void DigikamView::slotZoomOut()
 {
-    if (   (d->stackedview->previewMode() == StackedView::PreviewAlbumMode)
-        || (d->stackedview->previewMode() == StackedView::TableViewMode) )
+    if (   (d->stackedview->viewMode() == StackedView::IconViewMode)
+        || (d->stackedview->viewMode() == StackedView::TableViewMode) )
     {
         setThumbSize(d->thumbSize - ThumbnailSize::Step);
         toggleZoomActions();
         emit signalThumbSizeChanged(d->thumbSize);
     }
-    else if (d->stackedview->previewMode() == StackedView::PreviewImageMode)
+    else if (d->stackedview->viewMode() == StackedView::PreviewImageMode)
     {
         d->stackedview->decreaseZoom();
     }
@@ -1343,7 +1422,7 @@ void DigikamView::slotZoomOut()
 
 void DigikamView::slotZoomTo100Percents()
 {
-    if (d->stackedview->previewMode() == StackedView::PreviewImageMode)
+    if (d->stackedview->viewMode() == StackedView::PreviewImageMode)
     {
         d->stackedview->toggleFitToWindowOr100();
     }
@@ -1351,11 +1430,11 @@ void DigikamView::slotZoomTo100Percents()
 
 void DigikamView::slotFitToWindow()
 {
-    if (d->stackedview->previewMode() == StackedView::TableViewMode)
+    if (d->stackedview->viewMode() == StackedView::TableViewMode)
     {
         /// @todo We should choose an appropriate thumbnail size here
     }
-    else if (d->stackedview->previewMode() == StackedView::PreviewAlbumMode)
+    else if (d->stackedview->viewMode() == StackedView::IconViewMode)
     {
         int nts = d->iconView->fitToWidthIcons();
         kDebug() << "new thumb size = " << nts;
@@ -1363,7 +1442,7 @@ void DigikamView::slotFitToWindow()
         toggleZoomActions();
         emit signalThumbSizeChanged(d->thumbSize);
     }
-    else if (d->stackedview->previewMode() == StackedView::PreviewImageMode)
+    else if (d->stackedview->viewMode() == StackedView::PreviewImageMode)
     {
         d->stackedview->fitToWindow();
     }
@@ -1400,15 +1479,17 @@ void DigikamView::slotAlbumReadMetadata()
 
 void DigikamView::slotImageWriteMetadata()
 {
-    ImageInfoList selected           = d->iconView->selectedImageInfos();
-    MetadataSynchronizer* const tool = new MetadataSynchronizer(selected, MetadataSynchronizer::WriteFromDatabaseToFile);
+    const ImageInfoList selected = selectedInfoList();
+    MetadataSynchronizer* const tool = new MetadataSynchronizer(
+            selected, MetadataSynchronizer::WriteFromDatabaseToFile);
     tool->start();
 }
 
 void DigikamView::slotImageReadMetadata()
 {
-    ImageInfoList selected           = d->iconView->selectedImageInfos();
-    MetadataSynchronizer* const tool = new MetadataSynchronizer(selected, MetadataSynchronizer::ReadFromFileToDatabase);
+    const ImageInfoList selected = selectedInfoList();
+    MetadataSynchronizer* const tool = new MetadataSynchronizer(
+            selected, MetadataSynchronizer::ReadFromFileToDatabase);
     tool->start();
 }
 
@@ -1416,8 +1497,8 @@ void DigikamView::slotImageReadMetadata()
 
 void DigikamView::slotEscapePreview()
 {
-    if (d->stackedview->previewMode() == StackedView::PreviewAlbumMode ||
-        d->stackedview->previewMode() == StackedView::WelcomePageMode)
+    if (d->stackedview->viewMode() == StackedView::IconViewMode ||
+        d->stackedview->viewMode() == StackedView::WelcomePageMode)
     {
         return;
     }
@@ -1429,23 +1510,23 @@ void DigikamView::slotEscapePreview()
 
 void DigikamView::slotMapWidgetView()
 {
-    d->stackedview->setPreviewMode(StackedView::MapWidgetMode);
+    d->stackedview->setViewMode(StackedView::MapWidgetMode);
 }
 
 void DigikamView::slotTableView()
 {
-    d->stackedview->setPreviewMode(StackedView::TableViewMode);
+    d->stackedview->setViewMode(StackedView::TableViewMode);
 }
 
 void DigikamView::slotIconView()
 {
-    if (d->stackedview->previewMode() == StackedView::PreviewImageMode)
+    if (d->stackedview->viewMode() == StackedView::PreviewImageMode)
     {
         emit signalThumbSizeChanged(d->iconView->thumbnailSize().size());
     }
 
     // and switch to icon view
-    d->stackedview->setPreviewMode(StackedView::PreviewAlbumMode);
+    d->stackedview->setViewMode(StackedView::IconViewMode);
 
     // make sure the next/previous buttons are updated
     slotImageSelected();
@@ -1453,20 +1534,7 @@ void DigikamView::slotIconView()
 
 void DigikamView::slotImagePreview()
 {
-    const int currentPreviewMode = d->stackedview->previewMode();
-    ImageInfo currentInfo;
-
-    if (    (currentPreviewMode == StackedView::PreviewAlbumMode)
-         || (currentPreviewMode == StackedView::TableViewMode) )
-    {
-        currentInfo = d->iconView->currentInfo();
-    }
-    else if (currentPreviewMode == StackedView::MapWidgetMode)
-    {
-        currentInfo = d->mapView->currentImageInfo();
-    }
-
-    slotTogglePreviewMode(currentInfo);
+    slotTogglePreviewMode(currentInfo());
 }
 
 /**
@@ -1474,14 +1542,14 @@ void DigikamView::slotImagePreview()
  */
 void DigikamView::slotTogglePreviewMode(const ImageInfo& info)
 {
-    if ( (d->stackedview->previewMode() == StackedView::PreviewAlbumMode ||
-          d->stackedview->previewMode() == StackedView::TableViewMode ||
-          d->stackedview->previewMode() == StackedView::MapWidgetMode)   &&
+    if ( (d->stackedview->viewMode() == StackedView::IconViewMode ||
+          d->stackedview->viewMode() == StackedView::TableViewMode ||
+          d->stackedview->viewMode() == StackedView::MapWidgetMode)   &&
          !info.isNull() )
     {
-        d->lastPreviewMode = d->stackedview->previewMode();
+        d->lastViewMode = d->stackedview->viewMode();
 
-        if (d->stackedview->previewMode() == StackedView::PreviewAlbumMode)
+        if (d->stackedview->viewMode() == StackedView::IconViewMode)
         {
             d->stackedview->setPreviewItem(info, d->iconView->previousInfo(info), d->iconView->nextInfo(info));
         }
@@ -1493,7 +1561,7 @@ void DigikamView::slotTogglePreviewMode(const ImageInfo& info)
     else
     {
         // go back to either AlbumViewMode or MapWidgetMode
-        d->stackedview->setPreviewMode( d->lastPreviewMode );
+        d->stackedview->setViewMode( d->lastViewMode );
     }
 
     // make sure the next/previous buttons are updated
@@ -1504,9 +1572,9 @@ void DigikamView::slotViewModeChanged()
 {
     toggleZoomActions();
 
-    switch (d->stackedview->previewMode())
+    switch (d->stackedview->viewMode())
     {
-        case StackedView::PreviewAlbumMode:
+        case StackedView::IconViewMode:
             emit signalSwitchedToIconView();
             emit signalThumbSizeChanged(d->iconView->thumbnailSize().size());
             break;
@@ -1543,12 +1611,25 @@ void DigikamView::slotImageFindSimilar()
 
 void DigikamView::slotEditor()
 {
-    d->iconView->openEditor();
+    const ImageInfoList imageInfoList = selectedInfoList();
+    ImageInfo singleInfo = currentInfo();
+    if (singleInfo.isNull() && !imageInfoList.isEmpty())
+    {
+        singleInfo = imageInfoList.first();
+    }
+
+    // the current album is the same for all views
+    Album* const currentAlbum = d->iconView->currentAlbum();
+    d->iconView->utilities()->openInEditor(singleInfo, imageInfoList, currentAlbum);
 }
 
 void DigikamView::slotLightTable()
 {
-    d->iconView->setOnLightTable();
+    const ImageInfoList allInfoList = allInfo();
+    const ImageInfoList selectedList = selectedInfoList();
+    const ImageInfo currentImageInfo = currentInfo();
+
+    d->iconView->utilities()->insertToLightTableAuto(allInfoList, selectedList, currentImageInfo);
 }
 
 void DigikamView::slotQueueMgr()
@@ -1558,104 +1639,56 @@ void DigikamView::slotQueueMgr()
 
 void DigikamView::slotImageEdit()
 {
-    d->iconView->openCurrentInEditor();
+    // Where is the difference to slotEditor?
+    slotEditor();
 }
 
 void DigikamView::slotImageLightTable()
 {
-    /// @todo Care about MapWidgetMode
-    if (d->stackedview->previewMode() == StackedView::PreviewAlbumMode)
-    {
-        // put images into an emptied light table
-        d->iconView->setSelectedOnLightTable();
-    }
-    else
-    {
-        ImageInfoList list;
-        ImageInfo info = d->stackedview->imagePreviewView()->getImageInfo();
-        list.append(info);
-        // put images into an emptied light table
-        d->iconView->utilities()->insertToLightTable(list, info, false);
-    }
+    const ImageInfoList selectedList = selectedInfoList();
+    const ImageInfo currentImageInfo = currentInfo();
+
+    // replace images in light table
+    d->iconView->utilities()->insertToLightTable(selectedList, currentImageInfo, false);
 }
 
 void DigikamView::slotImageAddToLightTable()
 {
-    /// @todo Care about MapWidgetMode
-    if (d->stackedview->previewMode() == StackedView::PreviewAlbumMode)
-    {
-        // add images to the existing images in the light table
-        d->iconView->addSelectedToLightTable();
-    }
-    else
-    {
-        ImageInfoList list;
-        ImageInfo info = d->stackedview->imagePreviewView()->getImageInfo();
-        list.append(info);
-        // add images to the existing images in the light table
-        d->iconView->utilities()->insertToLightTable(list, info, true);
-    }
+    const ImageInfoList selectedList = selectedInfoList();
+    const ImageInfo currentImageInfo = currentInfo();
+
+    // add to images in light table
+    d->iconView->utilities()->insertToLightTable(selectedList, currentImageInfo, true);
 }
 
 void DigikamView::slotImageAddToCurrentQueue()
 {
-    /// @todo Care about MapWidgetMode
-    if (d->stackedview->previewMode() == StackedView::PreviewAlbumMode)
-    {
-        d->iconView->insertSelectedToCurrentQueue();
-    }
-    else
-    {
-        ImageInfoList list;
-        ImageInfo info = d->stackedview->imagePreviewView()->getImageInfo();
-        list.append(info);
-        d->iconView->utilities()->insertToQueueManager(list, info, false);
-    }
+    const ImageInfoList selectedList = selectedInfoList();
+    const ImageInfo currentImageInfo = currentInfo();
+
+    d->iconView->utilities()->insertToQueueManager(selectedList, currentImageInfo, false);
 }
 
 void DigikamView::slotImageAddToNewQueue()
 {
     /// @todo Care about MapWidgetMode
-    bool newQueue = QueueMgrWindow::queueManagerWindowCreated() &&
+    const bool newQueue = QueueMgrWindow::queueManagerWindowCreated() &&
                     !QueueMgrWindow::queueManagerWindow()->queuesMap().isEmpty();
 
-    if (d->stackedview->previewMode() == StackedView::PreviewAlbumMode)
-    {
-        if (newQueue)
-        {
-            d->iconView->insertSelectedToNewQueue();
-        }
-        else
-        {
-            d->iconView->insertSelectedToCurrentQueue();
-        }
-    }
-    else
-    {
-        // FIXME
-        ImageInfoList list;
-        ImageInfo info = d->stackedview->imagePreviewView()->getImageInfo();
-        list.append(info);
-        d->iconView->utilities()->insertToQueueManager(list, info, newQueue);
-    }
+    const ImageInfoList selectedList = selectedInfoList();
+    const ImageInfo currentImageInfo = currentInfo();
+
+    d->iconView->utilities()->insertToQueueManager(selectedList, currentImageInfo, newQueue);
 }
 
 void DigikamView::slotImageAddToExistingQueue(int queueid)
 {
-    ImageInfoList list;
+    const ImageInfoList selectedList = selectedInfoList();
+    const ImageInfo currentImageInfo = currentInfo();
 
-    if (d->stackedview->previewMode() == StackedView::PreviewAlbumMode)
+    if (!selectedList.isEmpty())
     {
-        list = d->stackedview->imageIconView()->selectedImageInfos();
-    }
-    else
-    {
-        list << d->stackedview->imagePreviewView()->getImageInfo();
-    }
-
-    if (!list.isEmpty())
-    {
-        d->iconView->utilities()->insertSilentToQueueManager(list, list.first(), queueid);
+        d->iconView->utilities()->insertSilentToQueueManager(selectedList, currentImageInfo, queueid);
     }
 }
 
@@ -1757,22 +1790,34 @@ void DigikamView::slotLeftSidebarChangedTab(QWidget* w)
 
 void DigikamView::toggleTag(int tagID)
 {
-    d->iconView->toggleTagToSelected(tagID);
+    ImageInfoList tagToRemove, tagToAssign;
+
+    const ImageInfoList selectedList = selectedInfoList();
+    foreach(ImageInfo info, selectedList)
+    {
+        if (info.tagIds().contains(tagID))
+            tagToRemove.append(info);
+        else
+            tagToAssign.append(info);
+    }
+
+    FileActionMngr::instance()->assignTags(tagToAssign, QList<int>() << tagID);
+    FileActionMngr::instance()->removeTags(tagToRemove, QList<int>() << tagID);
 }
 
 void DigikamView::slotAssignPickLabel(int pickId)
 {
-    d->iconView->assignPickLabelToSelected(pickId);
+    FileActionMngr::instance()->assignPickLabel(selectedInfoList(), pickId);
 }
 
 void DigikamView::slotAssignColorLabel(int colorId)
 {
-    d->iconView->assignColorLabelToSelected(colorId);
+    FileActionMngr::instance()->assignColorLabel(selectedInfoList(), colorId);
 }
 
 void DigikamView::slotAssignRating(int rating)
 {
-    d->iconView->assignRatingToSelected(rating);
+    FileActionMngr::instance()->assignRating(selectedInfoList(), rating);
 }
 
 void DigikamView::slotSlideShowAll()
@@ -1945,6 +1990,84 @@ void DigikamView::imageTransform(RotationMatrix::TransformationAction transform)
 {
     FileActionMngr::instance()->transform(d->iconView->selectedImageInfos(), transform);
 }
+
+ImageInfo DigikamView::currentInfo() const
+{
+    switch (d->stackedview->viewMode())
+    {
+    case StackedView::TableViewMode:
+        return d->tableView->currentInfo();
+
+    case StackedView::MapWidgetMode:
+        return d->mapView->currentImageInfo();
+
+    case StackedView::IconViewMode:
+        return d->iconView->currentInfo();
+
+    case StackedView::PreviewImageMode:
+        return d->stackedview->imagePreviewView()->getImageInfo();
+
+    case StackedView::MediaPlayerMode:
+        /// @todo What should we return here?
+        return ImageInfo();
+
+    default:
+        return ImageInfo();
+    }
+}
+
+QList< ImageInfo > DigikamView::selectedInfoList(const bool currentFirst) const
+{
+    switch (d->stackedview->viewMode())
+    {
+    case StackedView::TableViewMode:
+        if (currentFirst)
+        {
+            return d->tableView->selectedImageInfosCurrentFirst();
+        }
+        return d->tableView->selectedImageInfos();
+
+    case StackedView::MapWidgetMode:
+    case StackedView::IconViewMode:
+        if (currentFirst)
+        {
+            return d->iconView->selectedImageInfosCurrentFirst();
+        }
+        return d->iconView->selectedImageInfos();
+
+    case StackedView::PreviewImageMode:
+        return QList<ImageInfo>() << d->stackedview->imagePreviewView()->getImageInfo();
+
+    case StackedView::MediaPlayerMode:
+        /// @todo What should we return here?
+        return QList<ImageInfo>();
+
+    default:
+        return QList<ImageInfo>();
+    }
+}
+
+ImageInfoList DigikamView::allInfo() const
+{
+    switch (d->stackedview->viewMode())
+    {
+    case StackedView::TableViewMode:
+        return d->tableView->allInfo();
+
+    case StackedView::MapWidgetMode:
+    case StackedView::IconViewMode:
+        return d->iconView->imageInfos();
+
+    case StackedView::PreviewImageMode:
+    case StackedView::MediaPlayerMode:
+        /// @todo What should we return here?
+        return d->iconView->imageInfos();
+
+    default:
+        return QList<ImageInfo>();
+    }
+}
+
 
 #ifdef USE_PRESENTATION_MODE
 

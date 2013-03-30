@@ -3110,7 +3110,7 @@ QString DMetadata::getExifTagStringFromTagsList(const QStringList& tagsList) con
 {
     QString val;
 
-    foreach(QString tag, tagsList)
+    foreach(const QString& tag, tagsList)
     {
         val = getExifTagString(tag.toAscii());
         if (!val.isEmpty())

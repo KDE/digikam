@@ -327,4 +327,17 @@ TARGET_LINK_LIBRARIES (testnrestimate
                ${KDCRAW_LIBRARIES}
                ${OpenCV_LIBRARIES}
                )
-    
+
+#------------------------------------------------------------------------
+
+SET (testautocrop_SRCS testautocrop.cpp)
+KDE4_ADD_EXECUTABLE(testautocrop NOGUI ${testautocrop_SRCS})
+TARGET_LINK_LIBRARIES (testautocrop
+               digikamcore
+               ${QT_QTCORE_LIBRARY}
+               ${QT_QTGUI_LIBRARY}
+               ${KDE4_KDECORE_LIBS}
+               ${KEXIV2_LIBRARIES}
+               ${KDCRAW_LIBRARIES}
+               ${OpenCV_LIBRARIES}
+               )

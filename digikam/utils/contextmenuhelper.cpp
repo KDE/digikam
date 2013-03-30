@@ -870,13 +870,25 @@ void ContextMenuHelper::slotDeselectParents()
     d->albumModel->resetCheckedParentAlbums(d->indexForAlbumFromAction(sender()));
 }
 
-void ContextMenuHelper::addGroupMenu(const imageIds &ids)
+void ContextMenuHelper::addGroupMenu(const imageIds &ids, const QList<QAction*>& extraMenuItems)
 {
     QList<QAction*> actions = groupMenuActions(ids);
 
-    if (actions.isEmpty())
+    if (actions.isEmpty() && extraMenuItems.isEmpty())
     {
         return;
+    }
+
+    if (!extraMenuItems.isEmpty())
+    {
+        if (!actions.isEmpty())
+        {
+            QAction* separator = new QAction(this);
+            separator->setSeparator(true);
+            actions << separator;
+        }
+
+        actions << extraMenuItems;
     }
 
     KMenu* menu = new KMenu(i18n("Group"));

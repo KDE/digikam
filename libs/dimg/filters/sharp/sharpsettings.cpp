@@ -6,7 +6,7 @@
  * Date        : 2010-02-10
  * Description : sharp settings view.
  *
- * Copyright (C) 2010-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -55,7 +55,11 @@
 
 // Local includes
 
+#include "config-digikam.h"
+
+#ifdef HAVE_EIGEN3
 #include "refocusfilter.h"
+#endif // HAVE_EIGEN3
 
 using namespace KDcrawIface;
 
@@ -73,12 +77,14 @@ public:
         radiusInput(0),
         radiusInput2(0),
         amountInput(0),
-        thresholdInput(0),
-        radius(0),
+        thresholdInput(0)
+#ifdef HAVE_EIGEN3
+        ,radius(0),
         correlation(0),
         noise(0),
         gauss(0),
         matrixSize(0)
+#endif // HAVE_EIGEN3
     {
     }
 
@@ -105,12 +111,14 @@ public:
     RDoubleNumInput*     amountInput;
     RDoubleNumInput*     thresholdInput;
 
+#ifdef HAVE_EIGEN3
     // Refocus.
     RDoubleNumInput*     radius;
     RDoubleNumInput*     correlation;
     RDoubleNumInput*     noise;
     RDoubleNumInput*     gauss;
     RIntNumInput*        matrixSize;
+#endif // HAVE_EIGEN3
 };
 
 const QString SharpSettings::Private::configSharpenMethodEntry("SharpenMethod");
@@ -214,6 +222,8 @@ SharpSettings::SharpSettings(QWidget* const parent)
 
     // -------------------------------------------------------------
 
+#ifdef HAVE_EIGEN3
+
     QWidget* refocusSettings = new QWidget(d->stack);
     QGridLayout* grid3       = new QGridLayout(refocusSettings);
 
@@ -281,14 +291,12 @@ SharpSettings::SharpSettings(QWidget* const parent)
     grid3->setSpacing(0);
 
     d->stack->insertWidget(SharpContainer::Refocus, refocusSettings);
+#endif // HAVE_EIGEN3
 
     // -------------------------------------------------------------
 
     connect(d->sharpMethod, SIGNAL(activated(int)),
             this, SLOT(slotSharpMethodChanged(int)));
-
-    connect(d->matrixSize, SIGNAL(valueChanged(int)),
-            this, SIGNAL(signalSettingsChanged()));
 
     connect(d->radiusInput, SIGNAL(valueChanged(int)),
             this, SIGNAL(signalSettingsChanged()));
@@ -296,10 +304,15 @@ SharpSettings::SharpSettings(QWidget* const parent)
     connect(d->radiusInput2, SIGNAL(valueChanged(double)),
             this, SIGNAL(signalSettingsChanged()));
 
-    connect(d->radius, SIGNAL(valueChanged(double)),
+    connect(d->amountInput, SIGNAL(valueChanged(double)),
             this, SIGNAL(signalSettingsChanged()));
 
-    connect(d->gauss, SIGNAL(valueChanged(double)),
+    connect(d->thresholdInput, SIGNAL(valueChanged(double)),
+            this, SIGNAL(signalSettingsChanged()));
+
+#ifdef HAVE_EIGEN3
+
+    connect(d->radius, SIGNAL(valueChanged(double)),
             this, SIGNAL(signalSettingsChanged()));
 
     connect(d->correlation, SIGNAL(valueChanged(double)),
@@ -308,11 +321,13 @@ SharpSettings::SharpSettings(QWidget* const parent)
     connect(d->noise, SIGNAL(valueChanged(double)),
             this, SIGNAL(signalSettingsChanged()));
 
-    connect(d->amountInput, SIGNAL(valueChanged(double)),
+    connect(d->gauss, SIGNAL(valueChanged(double)),
             this, SIGNAL(signalSettingsChanged()));
 
-    connect(d->thresholdInput, SIGNAL(valueChanged(double)),
+    connect(d->matrixSize, SIGNAL(valueChanged(int)),
             this, SIGNAL(signalSettingsChanged()));
+
+#endif // HAVE_EIGEN3
 }
 
 SharpSettings::~SharpSettings()
@@ -338,11 +353,13 @@ SharpContainer SharpSettings::settings() const
     prm.umAmount      = d->amountInput->value();
     prm.umThreshold   = d->thresholdInput->value();
 
+#ifdef HAVE_EIGEN3
     prm.rfRadius      = d->radius->value();
     prm.rfCorrelation = d->correlation->value();
     prm.rfNoise       = d->noise->value();
     prm.rfGauss       = d->gauss->value();
     prm.rfMatrix      = d->matrixSize->value();
+#endif // HAVE_EIGEN3
 
     return prm;
 }
@@ -360,11 +377,13 @@ void SharpSettings::setSettings(const SharpContainer& settings)
     d->amountInput->setValue(settings.umAmount);
     d->thresholdInput->setValue(settings.umThreshold);
 
+#ifdef HAVE_EIGEN3
     d->radius->setValue(settings.rfRadius);
     d->correlation->setValue(settings.rfCorrelation);
     d->noise->setValue(settings.rfNoise);
     d->gauss->setValue(settings.rfGauss);
     d->matrixSize->setValue(settings.rfMatrix);
+#endif // HAVE_EIGEN3
 
     blockSignals(false);
 }
@@ -382,11 +401,13 @@ void SharpSettings::resetToDefault()
     d->amountInput->slotReset();
     d->thresholdInput->slotReset();
 
+#ifdef HAVE_EIGEN3
     d->radius->slotReset();
     d->correlation->slotReset();
     d->noise->slotReset();
     d->gauss->slotReset();
     d->matrixSize->slotReset();
+#endif // HAVE_EIGEN3
 
     blockSignals(false);
 }
@@ -403,11 +424,13 @@ SharpContainer SharpSettings::defaultSettings() const
     prm.umAmount      = d->amountInput->defaultValue();
     prm.umThreshold   = d->thresholdInput->defaultValue();
 
+#ifdef HAVE_EIGEN3
     prm.rfRadius      = d->radius->defaultValue();
     prm.rfCorrelation = d->correlation->defaultValue();
     prm.rfNoise       = d->noise->defaultValue();
     prm.rfGauss       = d->gauss->defaultValue();
     prm.rfMatrix      = d->matrixSize->defaultValue();
+#endif // HAVE_EIGEN3
 
     return prm;
 }
@@ -425,11 +448,13 @@ void SharpSettings::readSettings(KConfigGroup& group)
     prm.umAmount      = group.readEntry(d->configUnsharpMaskAmountAdjustmentEntry,    defaultPrm.umAmount);
     prm.umThreshold   = group.readEntry(d->configUnsharpMaskThresholdAdjustmentEntry, defaultPrm.umThreshold);
 
+#ifdef HAVE_EIGEN3
     prm.rfRadius      = group.readEntry(d->configRefocusRadiusAdjustmentEntry,        defaultPrm.rfRadius);
     prm.rfCorrelation = group.readEntry(d->configRefocusCorrelationAdjustmentEntry,   defaultPrm.rfCorrelation);
     prm.rfNoise       = group.readEntry(d->configRefocusNoiseAdjustmentEntry,         defaultPrm.rfNoise);
     prm.rfGauss       = group.readEntry(d->configRefocusGaussAdjustmentEntry,         defaultPrm.rfGauss);
     prm.rfMatrix      = group.readEntry(d->configRefocusMatrixSizeEntry,              defaultPrm.rfMatrix);
+#endif // HAVE_EIGEN3
 
     setSettings(prm);
 }
@@ -446,11 +471,13 @@ void SharpSettings::writeSettings(KConfigGroup& group)
     group.writeEntry(d->configUnsharpMaskAmountAdjustmentEntry,    prm.umAmount);
     group.writeEntry(d->configUnsharpMaskThresholdAdjustmentEntry, prm.umThreshold);
 
+#ifdef HAVE_EIGEN3
     group.writeEntry(d->configRefocusRadiusAdjustmentEntry,        prm.rfRadius);
     group.writeEntry(d->configRefocusCorrelationAdjustmentEntry,   prm.rfCorrelation);
     group.writeEntry(d->configRefocusNoiseAdjustmentEntry,         prm.rfNoise);
     group.writeEntry(d->configRefocusGaussAdjustmentEntry,         prm.rfGauss);
     group.writeEntry(d->configRefocusMatrixSizeEntry,              prm.rfMatrix);
+#endif // HAVE_EIGEN3
 }
 
 void SharpSettings::loadSettings()
@@ -480,11 +507,13 @@ void SharpSettings::loadSettings()
         }
 
         blockSignals(true);
+#ifdef HAVE_EIGEN3
         d->matrixSize->setValue(stream.readLine().toInt());
         d->radius->setValue(stream.readLine().toDouble());
         d->gauss->setValue(stream.readLine().toDouble());
         d->correlation->setValue(stream.readLine().toDouble());
         d->noise->setValue(stream.readLine().toDouble());
+#endif // HAVE_EIGEN3
         blockSignals(false);
     }
     else
@@ -512,11 +541,13 @@ void SharpSettings::saveAsSettings()
     {
         QTextStream stream(&file);
         stream << "# Photograph Refocus Configuration File\n";
+#ifdef HAVE_EIGEN3
         stream << d->matrixSize->value() << "\n";
         stream << d->radius->value() << "\n";
         stream << d->gauss->value() << "\n";
         stream << d->correlation->value() << "\n";
         stream << d->noise->value() << "\n";
+#endif // HAVE_EIGEN3
     }
     else
     {

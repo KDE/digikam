@@ -37,11 +37,15 @@
 
 // Local includes
 
+#include "config-digikam.h"
 #include "dimg.h"
-#include "refocusfilter.h"
 #include "sharpenfilter.h"
 #include "unsharpmaskfilter.h"
 #include "sharpsettings.h"
+
+#ifdef HAVE_EIGEN3
+#include "refocusfilter.h"
+#endif // HAVE_EIGEN3
 
 namespace Digikam
 {
@@ -76,22 +80,24 @@ BatchToolSettings Sharpen::defaultSettings()
     SharpContainer defaultPrm = m_settingsView->defaultSettings();
 
     // sharpen method
-    settings.insert("SharpenFilterType", (int)defaultPrm.method);
+    settings.insert("SharpenFilterType",    (int)defaultPrm.method);
 
     // simple sharp
-    settings.insert("SimpleSharpRadius", (int)defaultPrm.ssRadius);
+    settings.insert("SimpleSharpRadius",    (int)defaultPrm.ssRadius);
 
     // unsharp mask
-    settings.insert("UnsharpMaskRadius", (double)defaultPrm.umRadius);
-    settings.insert("UnsharpMaskAmount", (double)defaultPrm.umAmount);
+    settings.insert("UnsharpMaskRadius",    (double)defaultPrm.umRadius);
+    settings.insert("UnsharpMaskAmount",    (double)defaultPrm.umAmount);
     settings.insert("UnsharpMaskThreshold", (double)defaultPrm.umThreshold);
 
+#ifdef HAVE_EIGEN3
     // refocus
-    settings.insert("RefocusRadius", (double)defaultPrm.rfRadius);
-    settings.insert("RefocusCorrelation", (double)defaultPrm.rfCorrelation);
-    settings.insert("RefocusNoise", (double)defaultPrm.rfNoise);
-    settings.insert("RefocusGauss", (double)defaultPrm.rfGauss);
-    settings.insert("RefocusMatrixSize", (int)defaultPrm.rfMatrix);
+    settings.insert("RefocusRadius",        (double)defaultPrm.rfRadius);
+    settings.insert("RefocusCorrelation",   (double)defaultPrm.rfCorrelation);
+    settings.insert("RefocusNoise",         (double)defaultPrm.rfNoise);
+    settings.insert("RefocusGauss",         (double)defaultPrm.rfGauss);
+    settings.insert("RefocusMatrixSize",    (int)defaultPrm.rfMatrix);
+#endif // HAVE_EIGEN3
 
     return settings;
 }
@@ -111,12 +117,14 @@ void Sharpen::slotAssignSettings2Widget()
     prm.umAmount      = settings()["UnsharpMaskAmount"].toDouble();
     prm.umThreshold   = settings()["UnsharpMaskThreshold"].toDouble();
 
+#ifdef HAVE_EIGEN3
     // refocus
     prm.rfRadius      = settings()["RefocusRadius"].toDouble();
     prm.rfCorrelation = settings()["RefocusCorrelation"].toDouble();
     prm.rfNoise       = settings()["RefocusNoise"].toDouble();
     prm.rfGauss       = settings()["RefocusGauss"].toDouble();
     prm.rfMatrix      = settings()["RefocusMatrixSize"].toInt();
+#endif // HAVE_EIGEN3
 
     m_settingsView->setSettings(prm);
 }
@@ -127,22 +135,24 @@ void Sharpen::slotSettingsChanged()
     SharpContainer prm = m_settingsView->settings();
 
     // sharpen method
-    settings.insert("SharpenFilterType", (int)prm.method);
+    settings.insert("SharpenFilterType",    (int)prm.method);
 
     // simple sharp
-    settings.insert("SimpleSharpRadius", (int)prm.ssRadius);
+    settings.insert("SimpleSharpRadius",    (int)prm.ssRadius);
 
     // unsharp mask
-    settings.insert("UnsharpMaskRadius", (double)prm.umRadius);
-    settings.insert("UnsharpMaskAmount", (double)prm.umAmount);
+    settings.insert("UnsharpMaskRadius",    (double)prm.umRadius);
+    settings.insert("UnsharpMaskAmount",    (double)prm.umAmount);
     settings.insert("UnsharpMaskThreshold", (double)prm.umThreshold);
 
+#ifdef HAVE_EIGEN3
     // refocus
-    settings.insert("RefocusRadius", (double)prm.rfRadius);
-    settings.insert("RefocusCorrelation", (double)prm.rfCorrelation);
-    settings.insert("RefocusNoise", (double)prm.rfNoise);
-    settings.insert("RefocusGauss", (double)prm.rfGauss);
-    settings.insert("RefocusMatrixSize", (int)prm.rfMatrix);
+    settings.insert("RefocusRadius",        (double)prm.rfRadius);
+    settings.insert("RefocusCorrelation",   (double)prm.rfCorrelation);
+    settings.insert("RefocusNoise",         (double)prm.rfNoise);
+    settings.insert("RefocusGauss",         (double)prm.rfGauss);
+    settings.insert("RefocusMatrixSize",    (int)prm.rfMatrix);
+#endif // HAVE_EIGEN3
 
     BatchTool::slotSettingsChanged(settings);
 }
@@ -190,6 +200,7 @@ bool Sharpen::toolOperations()
 
         case SharpContainer::Refocus:
         {
+#ifdef HAVE_EIGEN3
             double radius      = settings()["RefocusRadius"].toDouble();
             double correlation = settings()["RefocusCorrelation"].toDouble();
             double noise       = settings()["RefocusNoise"].toDouble();
@@ -198,6 +209,7 @@ bool Sharpen::toolOperations()
 
             RefocusFilter filter(&image(), 0L, matrixSize, radius, gauss, correlation, noise);
             applyFilter(&filter);
+#endif // HAVE_EIGEN3
             break;
         }
     }

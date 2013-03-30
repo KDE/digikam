@@ -152,8 +152,6 @@ private:
     static double circle_integral (const double x, const double radius);
     static double circle_intensity (const int x, const int y, const double radius);
 
-    // CLapack interface.
-    static int dgesv (const int N, const int NRHS, double* A, const int lda, double* B, const int ldb);
 };
 
 }  // namespace DigikamImagesPluginCore

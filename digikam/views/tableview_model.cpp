@@ -24,19 +24,18 @@
 
 // C++ includes
 
+#include <functional>
 #include <valarray>
+
+// Qt includes
+
+#include <QTimer>
 
 // KDE includes
 
 #include <kdebug.h>
 
-// boost includes
-
-#include <boost/config/posix_features.hpp>
-
 // local includes
-
-/// @todo Clean up include list
 
 #include "albumdb.h"
 #include "databaseaccess.h"
@@ -44,22 +43,19 @@
 #include "databasefields.h"
 #include "databasewatch.h"
 #include "imagefiltermodel.h"
+#include "imagefiltersettings.h"
 #include "imageinfo.h"
-#include "imagelister.h"
-#include "imageposition.h"
 #include "modeltest/modeltest.h"
 #include "tableview_columnfactory.h"
 #include "tableview_selection_model_syncer.h"
-#include "thumbnaildatabaseaccess.h"
-#include "thumbnaildb.h"
-#include "thumbnailloadthread.h"
+
+#define ASSERT_MODEL(index, modelPointer) if (index.isValid()) { Q_ASSERT(index.model()==modelPointer); }
 
 namespace Digikam
 {
 
 TableViewModel::Item::Item()
   : imageId(0),
-    imageFilterModelIndex(),
     cachedDatabaseFields(),
     databaseFields(),
     parent(0),
@@ -111,12 +107,24 @@ public:
 
     Private()
       : columnObjects(),
-        rootItem(0)
+        rootItem(0),
+        imageFilterSettings(),
+        sortColumn(0),
+        sortOrder(Qt::AscendingOrder),
+        sortRequired(false),
+        groupingMode(GroupingShowSubItems),
+        cachedImageInfos()
     {
     }
 
     QList<TableViewColumn*> columnObjects;
     TableViewModel::Item* rootItem;
+    ImageFilterSettings imageFilterSettings;
+    int sortColumn;
+    Qt::SortOrder sortOrder;
+    bool sortRequired;
+    GroupingMode groupingMode;
+    QHash<qlonglong, ImageInfo> cachedImageInfos;
 };
 
 TableViewModel::TableViewModel(TableViewShared* const sharedObject, QObject* parent)
@@ -125,27 +133,30 @@ TableViewModel::TableViewModel(TableViewShared* const sharedObject, QObject* par
     d(new Private())
 {
     d->rootItem = new Item();
+    d->imageFilterSettings = s->imageFilterModel->imageFilterSettings();
 
-    connect(s->imageFilterModel, SIGNAL(modelAboutToBeReset()),
+    connect(s->imageModel, SIGNAL(modelAboutToBeReset()),
             this, SLOT(slotSourceModelAboutToBeReset()));
-    connect(s->imageFilterModel, SIGNAL(modelReset()),
+    connect(s->imageModel, SIGNAL(modelReset()),
             this, SLOT(slotSourceModelReset()));
-    connect(s->imageFilterModel, SIGNAL(rowsAboutToBeInserted(QModelIndex,int,int)),
+    connect(s->imageModel, SIGNAL(rowsAboutToBeInserted(QModelIndex,int,int)),
             this, SLOT(slotSourceRowsAboutToBeInserted(QModelIndex,int,int)));
-    connect(s->imageFilterModel, SIGNAL(rowsInserted(QModelIndex,int,int)),
+    connect(s->imageModel, SIGNAL(rowsInserted(QModelIndex,int,int)),
             this, SLOT(slotSourceRowsInserted(QModelIndex,int,int)));
-    connect(s->imageFilterModel, SIGNAL(rowsAboutToBeRemoved(QModelIndex,int,int)),
+    connect(s->imageModel, SIGNAL(rowsAboutToBeRemoved(QModelIndex,int,int)),
             this, SLOT(slotSourceRowsAboutToBeRemoved(QModelIndex,int,int)));
-    connect(s->imageFilterModel, SIGNAL(rowsRemoved(QModelIndex,int,int)),
+    connect(s->imageModel, SIGNAL(rowsRemoved(QModelIndex,int,int)),
             this, SLOT(slotSourceRowsRemoved(QModelIndex,int,int)));
-    connect(s->imageFilterModel, SIGNAL(rowsAboutToBeMoved(QModelIndex,int,int,QModelIndex,int)),
+    connect(s->imageModel, SIGNAL(rowsAboutToBeMoved(QModelIndex,int,int,QModelIndex,int)),
             this, SLOT(slotSourceRowsAboutToBeMoved(QModelIndex,int,int,QModelIndex,int)));
-    connect(s->imageFilterModel, SIGNAL(rowsMoved(QModelIndex,int,int,QModelIndex,int)),
+    connect(s->imageModel, SIGNAL(rowsMoved(QModelIndex,int,int,QModelIndex,int)),
             this, SLOT(slotSourceRowsMoved(QModelIndex,int,int,QModelIndex,int)));
-    connect(s->imageFilterModel, SIGNAL(layoutAboutToBeChanged()),
+    connect(s->imageModel, SIGNAL(layoutAboutToBeChanged()),
             this, SLOT(slotSourceLayoutAboutToBeChanged()));
-    connect(s->imageFilterModel, SIGNAL(layoutChanged()),
+    connect(s->imageModel, SIGNAL(layoutChanged()),
             this, SLOT(slotSourceLayoutChanged()));
+    connect(s->imageFilterModel, SIGNAL(filterSettingsChanged(ImageFilterSettings)),
+            this, SLOT(slotFilterSettingsChanged(ImageFilterSettings)));
 
     // We do not connect to ImageFilterModel::dataChanged, because we monitor changes directly from the database.
 
@@ -154,9 +165,7 @@ TableViewModel::TableViewModel(TableViewShared* const sharedObject, QObject* par
 
     new ModelTest(this, this);
 
-    beginResetModel();
-    slotPopulateModel();
-    endResetModel();
+    slotPopulateModel(true);
 }
 
 TableViewModel::~TableViewModel()
@@ -166,7 +175,7 @@ TableViewModel::~TableViewModel()
 
 int TableViewModel::columnCount(const QModelIndex& i) const
 {
-    if (i.isValid())
+    if (i.column()>0)
     {
         return 0;
     }
@@ -182,7 +191,18 @@ QModelIndex TableViewModel::toImageFilterModelIndex(const QModelIndex& i) const
         return QModelIndex();
     }
 
-    return item->imageFilterModelIndex;
+    return s->imageFilterModel->indexForImageId(item->imageId);
+}
+
+QModelIndex TableViewModel::toImageModelIndex(const QModelIndex& i) const
+{
+    Item* const item = itemFromIndex(i);
+    if (!item)
+    {
+        return QModelIndex();
+    }
+
+    return s->imageModel->indexForImageId(item->imageId);
 }
 
 QVariant TableViewModel::data(const QModelIndex& i, int role) const
@@ -200,40 +220,65 @@ QVariant TableViewModel::data(const QModelIndex& i, int role) const
 
 QModelIndex TableViewModel::index(int row, int column, const QModelIndex& parent) const
 {
+    Item* parentItem = d->rootItem;
     if (parent.isValid())
     {
-        /// @todo there are no sub-items yet
-        return QModelIndex();
+        if (parent.column()>0)
+        {
+            // only column 0 can have children, the other columns can not
+            return QModelIndex();
+        }
+
+        parentItem = itemFromIndex(parent);
     }
 
     // test for valid row/column values
     if ( (row<0) || (column<0) ||
-         (column>=d->columnObjects.count()) || (row>=d->rootItem->children.count())
+         (column>=d->columnObjects.count()) || (row>=parentItem->children.count())
        )
     {
         return QModelIndex();
     }
 
-    Item* const itemPointer = d->rootItem->children.at(row);
+    Item* const itemPointer = parentItem->children.at(row);
     return createIndex(row, column, itemPointer);
 }
 
-QModelIndex TableViewModel::parent(const QModelIndex& parent) const
+QModelIndex TableViewModel::parent(const QModelIndex& childIndex) const
 {
-    Q_UNUSED(parent)
+    if (!childIndex.isValid())
+    {
+        return QModelIndex();
+    }
 
-    /// @todo we only have top level items for now
-    return QModelIndex();
+    Item* const childItem = itemFromIndex(childIndex);
+    Item* const parentItem = childItem->parent;
+    if (parentItem==d->rootItem)
+    {
+        return QModelIndex();
+    }
+
+    Item* const grandParentItem = parentItem->parent;
+    const int rowIndex = grandParentItem->children.indexOf(parentItem);
+
+    /// @todo What should be the column number?
+    return createIndex(rowIndex, 0, parentItem);
 }
 
 int TableViewModel::rowCount(const QModelIndex& parent) const
 {
-    if (parent.isValid())
+    if (parent.column()>0)
     {
         return 0;
     }
 
-    return d->rootItem->children.count();
+    Item* parentItem = d->rootItem;
+    if (parent.isValid())
+    {
+        parentItem = itemFromIndex(parent);
+    }
+
+    return parentItem->children.count();
 }
 
 QVariant TableViewModel::headerData(int section, Qt::Orientation orientation, int role) const
@@ -287,14 +332,14 @@ void TableViewModel::addColumnAt(const TableViewColumnConfiguration& configurati
     }
     endInsertColumns();
 
-    connect(newColumn, SIGNAL(signalDataChanged(QModelIndex)),
-            this, SLOT(slotColumnDataChanged(QModelIndex)));
+    connect(newColumn, SIGNAL(signalDataChanged(qlonglong)),
+            this, SLOT(slotColumnDataChanged(qlonglong)));
 
     connect(newColumn, SIGNAL(signalAllDataChanged()),
             this, SLOT(slotColumnAllDataChanged()));
 }
 
-void TableViewModel::slotColumnDataChanged(const QModelIndex& sourceIndex)
+void TableViewModel::slotColumnDataChanged(const qlonglong imageId)
 {
     TableViewColumn* const senderColumn = qobject_cast<TableViewColumn*>(sender());
 
@@ -305,7 +350,7 @@ void TableViewModel::slotColumnDataChanged(const QModelIndex& sourceIndex)
         return;
     }
 
-    const QModelIndex changedIndex = index(sourceIndex.row(), iColumn, QModelIndex());
+    const QModelIndex changedIndex = indexFromImageId(imageId, iColumn);
     emit(dataChanged(changedIndex, changedIndex));
 }
 
@@ -380,51 +425,74 @@ void TableViewModel::slotSourceModelAboutToBeReset()
 void TableViewModel::slotSourceModelReset()
 {
     // the source model is done resetting.
-    slotPopulateModel();
+    slotPopulateModel(false);
     endResetModel();
 }
 
 void TableViewModel::slotSourceRowsAboutToBeInserted(const QModelIndex& parent, int start, int end)
 {
-    beginInsertRows(parent, start, end);
+    Q_UNUSED(parent)
+    Q_UNUSED(start)
+    Q_UNUSED(end)
 }
 
 void TableViewModel::slotSourceRowsInserted(const QModelIndex& parent, int start, int end)
 {
     for (int i = start; i<=end; ++i)
     {
-        const QModelIndex sourceIndex = s->imageFilterModel->index(i, 0, parent);
+        const QModelIndex sourceIndex = s->imageModel->index(i, 0, parent);
 
-        addSourceModelIndex(sourceIndex);
+        addSourceModelIndex(sourceIndex, true);
     }
 
-    endInsertRows();
+    /// @todo Smarter insertion of new data is better
+    scheduleResort();
 }
 
 void TableViewModel::slotSourceRowsAboutToBeRemoved(const QModelIndex& parent, int start, int end)
 {
-    beginRemoveRows(parent, start, end);
-
     for (int i=start; i<=end; ++i)
     {
-        const QModelIndex sourceIndex = s->imageFilterModel->index(i, 0, parent);
-        const qlonglong imageId = s->imageFilterModel->imageId(sourceIndex);
+        const QModelIndex imageModelIndex = s->imageModel->index(i, 0, parent);
+        const qlonglong imageId = s->imageModel->imageId(imageModelIndex);
+        d->cachedImageInfos.remove(imageId);
 
-        Item* const item = itemFromImageId(imageId);
+        const QModelIndex tableViewIndex = indexFromImageId(imageId, 0);
+        if (!tableViewIndex.isValid())
+        {
+            continue;
+        }
+        Item* const item = itemFromIndex(tableViewIndex);
+        if (!item)
+        {
+            continue;
+        }
+
+        beginRemoveRows(tableViewIndex.parent(), tableViewIndex.row(), tableViewIndex.row());
         item->parent->takeChild(item);
+        // delete image info of children from cache
+        QList<Item*> itemsToRemoveFromCache = item->children;
+        while (!itemsToRemoveFromCache.isEmpty())
+        {
+            Item* const itemToRemove = itemsToRemoveFromCache.takeFirst();
+            itemsToRemoveFromCache << itemToRemove->children;
 
-        /// @todo do proper row removing for this item
+            d->cachedImageInfos.remove(itemToRemove->imageId);
+
+            // child items will be deleted when item is deleted
+        }
         delete item;
+        endRemoveRows();
     }
 }
 
 void TableViewModel::slotSourceRowsRemoved(const QModelIndex& parent, int start, int end)
 {
+    /// @todo Do we need to do anything here?
+
     Q_UNUSED(parent)
     Q_UNUSED(start)
     Q_UNUSED(end)
-
-    endRemoveRows();
 }
 
 void TableViewModel::slotSourceRowsAboutToBeMoved(const QModelIndex& sourceParent, int sourceStart, int sourceEnd,
@@ -432,13 +500,19 @@ void TableViewModel::slotSourceRowsAboutToBeMoved(const QModelIndex& sourceParen
 {
 //     beginMoveRows(sourceParent, sourceStart, sourceEnd, destinationParent, destinationRow);
 
-    /// @todo For our items, moving stuff around does not matter
+    /// @todo For our items, moving stuff around does not matter --> remove this slot
+    Q_UNUSED(sourceParent)
+    Q_UNUSED(sourceStart)
+    Q_UNUSED(sourceEnd)
+    Q_UNUSED(destinationParent)
+    Q_UNUSED(destinationRow)
 }
 
 void TableViewModel::slotSourceRowsMoved(const QModelIndex& sourceParent, int sourceStart, int sourceEnd,
                                          const QModelIndex& destinationParent, int destinationRow)
 {
-    /// @todo For our items, moving stuff around does not matter
+    /// @todo For our items, moving stuff around does not matter --> remove this slot
+
     Q_UNUSED(sourceParent)
     Q_UNUSED(sourceStart)
     Q_UNUSED(sourceEnd)
@@ -463,7 +537,7 @@ void TableViewModel::slotSourceLayoutChanged()
 {
     /// @todo See note in TableViewModel#slotSourceLayoutAboutToBeChanged
 
-    slotPopulateModel();
+    slotPopulateModel(false);
 
     endResetModel();
 }
@@ -482,28 +556,71 @@ void TableViewModel::slotDatabaseImageChanged(const ImageChangeset& imageChanges
         Item* const item = itemFromImageId(id);
         if (!item)
         {
+            // Item is not in this model. If it is in the ImageModel,
+            // it has been filtered out and we have to re-check the filtering.
+            const QModelIndex& imageModelIndex = s->imageModel->indexForImageId(id);
+            if (!imageModelIndex.isValid())
+            {
+                continue;
+            }
+
+            const ImageInfo imageInfo = s->imageModel->imageInfo(imageModelIndex);
+            if (d->imageFilterSettings.matches(imageInfo))
+            {
+                // need to add the item
+                addSourceModelIndex(imageModelIndex, true);
+            }
+
             continue;
         }
 
+        /// force an update of the database fields on next access
         item->databaseFields.clear();
         /// @todo Introduce/find a clear function
         item->cachedDatabaseFields = DatabaseFields::Set();
 
-        /// @todo These are from the wrong model
-        const QModelIndex changedIndexTopLeft = indexFromImageId(id, 0);
-        if (changedIndexTopLeft.isValid())
+        // remove cached info and re-insert it
+        if (d->cachedImageInfos.contains(item->imageId))
         {
-            const QModelIndex changedIndexBottomRight = index(
-                    changedIndexTopLeft.row(),
-                    columnCount(changedIndexTopLeft.parent())-1,
-                    changedIndexTopLeft.parent()
-                );
-            if (changedIndexBottomRight.isValid())
-            {
-                emit(dataChanged(changedIndexTopLeft, changedIndexBottomRight));
-            }
+            const ImageInfo itemInfo(item->imageId);
+            d->cachedImageInfos.remove(item->imageId);
+            d->cachedImageInfos.insert(item->imageId, itemInfo);
+        }
+
+        // Re-check filtering for this item.
+        const QModelIndex changedIndexTopLeft = indexFromImageId(id, 0);
+        if (!changedIndexTopLeft.isValid())
+        {
+            continue;
+        }
+
+        const ImageInfo myImageInfo = imageInfo(changedIndexTopLeft);
+        if (!d->imageFilterSettings.matches(myImageInfo))
+        {
+            // Filter does not match, remove the item.
+            beginRemoveRows(changedIndexTopLeft.parent(), changedIndexTopLeft.row(), changedIndexTopLeft.row());
+            item->parent->takeChild(item);
+            delete item;
+            endRemoveRows();
+
+            continue;
+        }
+
+        /// @todo Re-check grouping for this item
+
+        const QModelIndex changedIndexBottomRight = index(
+                changedIndexTopLeft.row(),
+                columnCount(changedIndexTopLeft.parent())-1,
+                changedIndexTopLeft.parent()
+            );
+        if (changedIndexBottomRight.isValid())
+        {
+            emit(dataChanged(changedIndexTopLeft, changedIndexBottomRight));
         }
     }
+
+    /// @todo React smarter just to the changed items
+    scheduleResort();
 }
 
 Qt::ItemFlags TableViewModel::flags(const QModelIndex& index) const
@@ -524,39 +641,127 @@ QList< TableViewColumn* > TableViewModel::getColumnObjects()
     return d->columnObjects;
 }
 
-void TableViewModel::slotPopulateModel()
+void TableViewModel::slotPopulateModelWithNotifications()
 {
+    slotPopulateModel(true);
+}
+
+void TableViewModel::slotPopulateModel(const bool sendNotifications)
+{
+    if (sendNotifications)
+    {
+        beginResetModel();
+    }
+
     if (d->rootItem)
     {
         delete d->rootItem;
     }
 
     d->rootItem = new Item();
+    d->cachedImageInfos.clear();
 
-    const int sourceRowCount = s->imageFilterModel->rowCount(QModelIndex());
+    const int sourceRowCount = s->imageModel->rowCount(QModelIndex());
     for (int i=0; i<sourceRowCount; ++i)
     {
-        const QModelIndex sourceModelIndex = s->imageFilterModel->index(i, 0);
-        addSourceModelIndex(sourceModelIndex);
+        const QModelIndex sourceModelIndex = s->imageModel->index(i, 0);
+        // do not send notifications in addSourceModelIndex, because this function here
+        // already started a model reset
+        addSourceModelIndex(sourceModelIndex, false);
+    }
+
+    /// @todo Sort directly on insertion?
+    sort(d->sortColumn, d->sortOrder);
+
+    if (sendNotifications)
+    {
+        endResetModel();
     }
 }
 
-TableViewModel::Item* TableViewModel::createItemFromSourceIndex(const QModelIndex& imageFilterModelIndex)
+TableViewModel::Item* TableViewModel::createItemFromSourceIndex(const QModelIndex& imageModelIndex)
 {
+    ASSERT_MODEL(imageModelIndex, s->imageModel);
+
     Item* const item = new Item();
-    item->imageFilterModelIndex = imageFilterModelIndex;
-    item->imageId = s->imageFilterModel->imageId(imageFilterModelIndex);
+    item->imageId = s->imageModel->imageId(imageModelIndex);
 
     return item;
 }
 
-void TableViewModel::addSourceModelIndex(const QModelIndex& imageFilterModelIndex)
+void TableViewModel::addSourceModelIndex(const QModelIndex& imageModelIndex, const bool sendNotifications)
 {
-    /// @todo Filter out grouped items here
+    ASSERT_MODEL(imageModelIndex, s->imageModel);
 
-    Item* item = createItemFromSourceIndex(imageFilterModelIndex);
+    const ImageInfo imageInfo = s->imageModel->imageInfo(imageModelIndex);
+    const bool passedFilter = d->imageFilterSettings.matches(imageInfo);
+    if (!passedFilter)
+    {
+        return;
+    }
 
-    d->rootItem->addChild(item);
+    /// @todo Implement Grouping and sorting
+    Item* parentItem = d->rootItem;
+    if (imageInfo.isGrouped())
+    {
+        switch (d->groupingMode)
+        {
+        case GroupingHideGrouped:
+            // we do not show grouped items at all
+            return;
+
+        case GroupingIgnoreGrouping:
+            // nothing to do, we just add it to the root item
+            break;
+
+        case GroupingShowSubItems:
+            // we do not add this subitem, because it has been automatically added to the group leader
+            return;
+        }
+    }
+
+    Item* item = createItemFromSourceIndex(imageModelIndex);
+
+    if (sendNotifications)
+    {
+        const QModelIndex parentIndex = itemIndex(parentItem);
+        const int newRowIndex = parentItem->children.count();
+        beginInsertRows(parentIndex, newRowIndex, newRowIndex);
+    }
+
+    parentItem->addChild(item);
+
+    if (sendNotifications)
+    {
+        endInsertRows();
+    }
+
+    if ( (d->groupingMode==GroupingShowSubItems) && imageInfo.hasGroupedImages() )
+    {
+        // the item was a group leader, add its subitems
+        const QList<ImageInfo> groupedImages = imageInfo.groupedImages();
+
+        if (sendNotifications)
+        {
+            const QModelIndex groupLeaderIndex = itemIndex(item);
+            beginInsertRows(groupLeaderIndex, 0, groupedImages.count()-1);
+        }
+
+        Q_FOREACH(const ImageInfo& groupedInfo, groupedImages)
+        {
+            d->cachedImageInfos.insert(groupedInfo.id(), groupedInfo);
+
+            Item* const groupedItem = new Item();
+            groupedItem->imageId = groupedInfo.id();
+
+            item->addChild(groupedItem);
+        }
+
+        if (sendNotifications)
+        {
+            endInsertRows();
+        }
+    }
 }
 
 TableViewModel::Item* TableViewModel::itemFromImageId(const qlonglong imageId) const
@@ -580,6 +785,8 @@ TableViewModel::Item* TableViewModel::itemFromIndex(const QModelIndex& i) const
 
 QModelIndex TableViewModel::fromImageFilterModelIndex(const QModelIndex& imageFilterModelIndex)
 {
+    ASSERT_MODEL(imageFilterModelIndex, s->imageFilterModel);
+
     const qlonglong imageId = s->imageFilterModel->imageId(imageFilterModelIndex);
     if (!imageId)
     {
@@ -589,14 +796,31 @@ QModelIndex TableViewModel::fromImageFilterModelIndex(const QModelIndex& imageFi
     return indexFromImageId(imageId, 0);
 }
 
-ImageInfo TableViewModel::infoFromItem(TableViewModel::Item* const item)
+QModelIndex TableViewModel::fromImageModelIndex(const QModelIndex& imageModelIndex)
 {
-    if (!item->imageFilterModelIndex.isValid())
+    ASSERT_MODEL(imageModelIndex, s->imageModel);
+
+    const qlonglong imageId = s->imageModel->imageId(imageModelIndex);
+    if (!imageId)
     {
-        return ImageInfo();
+        return QModelIndex();
     }
 
-    const ImageInfo info = s->imageFilterModel->imageInfo(item->imageFilterModelIndex);
+    return indexFromImageId(imageId, 0);
+}
+
+ImageInfo TableViewModel::infoFromItem(Digikam::TableViewModel::Item* const item) const
+{
+    /// @todo Is there a way to do it without first looking up the index in the ImageModel?
+    const QModelIndex imageModelIndex = s->imageModel->indexForImageId(item->imageId);
+    if (!imageModelIndex.isValid())
+    {
+        const ImageInfo fromCache = d->cachedImageInfos.value(item->imageId);
+
+        return fromCache;
+    }
+
+    const ImageInfo info = s->imageModel->imageInfo(imageModelIndex);
 
     return info;
 }
@@ -669,5 +893,459 @@ QModelIndex TableViewModel::indexFromImageId(const qlonglong imageId, const int 
     return createIndex(rowIndex, columnIndex, item);
 }
 
-} /* namespace Digikam */
+QList<qlonglong> TableViewModel::imageIds(const QModelIndexList& indexList) const
+{
+    QList<qlonglong> idList;
+    Q_FOREACH(const QModelIndex& index, indexList)
+    {
+        ASSERT_MODEL(index, this);
 
+        if (index.column()>0)
+        {
+            continue;
+        }
+
+        const Item* const item = itemFromIndex(index);
+        if (!item)
+        {
+            continue;
+        }
+
+        idList << item->imageId;
+    }
+
+    return idList;
+}
+
+QList<ImageInfo> TableViewModel::imageInfos(const QModelIndexList& indexList) const
+{
+    QList<ImageInfo> infoList;
+    Q_FOREACH(const QModelIndex& index, indexList)
+    {
+        ASSERT_MODEL(index, this);
+
+        if (index.column()>0)
+        {
+            continue;
+        }
+
+        Item* const item = itemFromIndex(index);
+        if (!item)
+        {
+            continue;
+        }
+
+        infoList << infoFromItem(item);
+    }
+
+    return infoList;
+}
+
+ImageInfo TableViewModel::imageInfo(const QModelIndex& index) const
+{
+    ASSERT_MODEL(index, this);
+
+    Item* const item = itemFromIndex(index);
+    if (!item)
+    {
+        return ImageInfo();
+    }
+
+    return infoFromItem(item);
+}
+
+void TableViewModel::slotFilterSettingsChanged(const ImageFilterSettings& settings)
+{
+    d->imageFilterSettings = settings;
+
+    slotPopulateModel(true);
+}
+
+class TableViewModel::LessThan
+{
+public:
+    explicit LessThan(TableViewModel* const model)
+      : m(model)
+    {
+    }
+    TableViewModel* m;
+    bool operator()(const TableViewModel::Item* const itemA, const TableViewModel::Item* const itemB)
+    {
+        const bool compareResult = m->lessThan(const_cast<Item*>(itemA), const_cast<Item*>(itemB));
+        if (m->d->sortOrder==Qt::DescendingOrder)
+        {
+            return !compareResult;
+        }
+
+        return compareResult;
+    }
+};
+
+QList<TableViewModel::Item*> TableViewModel::sortItems(const QList<TableViewModel::Item*> itemList)
+{
+    QList<Item*> sortedList = itemList;
+    qSort(
+            sortedList.begin(),
+            sortedList.end(),
+            LessThan(this)
+        );
+
+    return sortedList;
+}
+
+void TableViewModel::sort(int column, Qt::SortOrder order)
+{
+    d->sortColumn = column;
+    d->sortOrder = order;
+
+    /// @todo re-sort items
+    QList<Item*> itemsRequiringSorting;
+    itemsRequiringSorting << d->rootItem;
+
+    beginResetModel();
+    while (!itemsRequiringSorting.isEmpty())
+    {
+        Item* const itemToSort = itemsRequiringSorting.takeFirst();
+        Q_FOREACH(Item* const itemToCheck, itemToSort->children)
+        {
+            if (!itemToCheck->children.isEmpty())
+            {
+                itemsRequiringSorting << itemToCheck;
+            }
+        }
+
+        itemToSort->children = sortItems(itemToSort->children);
+    }
+    endResetModel();
+}
+
+bool TableViewModel::lessThan(TableViewModel::Item* const itemA, TableViewModel::Item* const itemB)
+{
+    if ( (d->sortColumn<0) || (d->sortColumn>=d->columnObjects.count()) )
+    {
+        return itemA->imageId < itemB->imageId;
+    }
+
+    const TableViewColumn* columnObject = s->tableViewModel->getColumnObject(d->sortColumn);
+
+    if (!columnObject->getColumnFlags().testFlag(TableViewColumn::ColumnCustomSorting))
+    {
+        const QString stringA = columnObject->data(itemA, Qt::DisplayRole).toString();
+        const QString stringB = columnObject->data(itemB, Qt::DisplayRole).toString();
+
+        if ( (stringA==stringB) || (stringA.isEmpty()&&stringB.isEmpty()) )
+        {
+            return itemA->imageId < itemB->imageId;
+        }
+
+        return stringA < stringB;
+    }
+
+    TableViewColumn::ColumnCompareResult cmpResult = columnObject->compare(itemA, itemB);
+
+    if (cmpResult==TableViewColumn::CmpEqual)
+    {
+        // compared items are equal, use the image id to enforce a repeatable sorting
+        const qlonglong imageIdA = itemA->imageId;
+        const qlonglong imageIdB = itemB->imageId;
+
+        return imageIdA < imageIdB;
+    }
+
+    return cmpResult == TableViewColumn::CmpALessB;
+}
+
+QMimeData* TableViewModel::mimeData(const QModelIndexList& indexes) const
+{
+    // we pack the mime data via ImageModel's drag-drop handler
+    AbstractItemDragDropHandler* const ddHandler = s->imageModel->dragDropHandler();
+
+    QModelIndexList imageModelIndexList;
+    Q_FOREACH(const QModelIndex& i, indexes)
+    {
+        if (i.column()>0)
+        {
+            continue;
+        }
+
+        const QModelIndex imageModelIndex = toImageModelIndex(i);
+        if (imageModelIndex.isValid())
+        {
+            imageModelIndexList << imageModelIndex;
+        }
+    }
+
+    QMimeData* const imageModelMimeData = ddHandler->createMimeData(imageModelIndexList);
+
+    return imageModelMimeData;
+}
+
+Qt::DropActions TableViewModel::supportedDropActions() const
+{
+    return Qt::CopyAction|Qt::MoveAction;
+}
+
+QStringList TableViewModel::mimeTypes() const
+{
+    AbstractItemDragDropHandler* const ddHandler = s->imageModel->dragDropHandler();
+
+    if (ddHandler)
+    {
+        return ddHandler->mimeTypes();
+    }
+
+    return QStringList();
+}
+
+bool TableViewModel::dropMimeData(
+        const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent)
+{
+    Q_UNUSED(data)
+    Q_UNUSED(action)
+    Q_UNUSED(row)
+    Q_UNUSED(column)
+    Q_UNUSED(parent)
+
+    // the drop is handled by the drag-drop handler, therefore we return false here
+    return false;
+}
+
+void TableViewModel::slotResortModel()
+{
+    if (!d->sortRequired)
+    {
+        return;
+    }
+
+    beginResetModel();
+    sort(d->sortColumn, d->sortOrder);
+    endResetModel();
+
+    d->sortRequired = false;
+}
+
+void TableViewModel::scheduleResort()
+{
+    if (d->sortRequired)
+    {
+        return;
+    }
+
+    d->sortRequired = true;
+    QTimer::singleShot(100, this, SLOT(slotResortModel()));
+}
+
+QModelIndex TableViewModel::itemIndex(TableViewModel::Item* const item) const
+{
+    if ( (!item) || (item==d->rootItem) )
+    {
+        return QModelIndex();
+    }
+
+    const int rowIndex = item->parent->children.indexOf(item);
+
+    return createIndex(rowIndex, 0, item);
+}
+
+bool TableViewModel::hasChildren(const QModelIndex& parent) const
+{
+    Item* parentItem = d->rootItem;
+    if (parent.isValid())
+    {
+        if (parent.column()>0)
+        {
+            // only column 0 can have children
+            return false;
+        }
+
+        parentItem = itemFromIndex(parent);
+    }
+
+    return !parentItem->children.isEmpty();
+}
+
+qlonglong TableViewModel::imageId(const QModelIndex& anIndex) const
+{
+    const Item* const anItem = itemFromIndex(anIndex);
+    if (!anItem)
+    {
+        return -1;
+    }
+
+    return anItem->imageId;
+}
+
+QList<ImageInfo> TableViewModel::allImageInfo() const
+{
+    QList<ImageInfo> infoList;
+    QList<Item*> itemsToList = d->rootItem->children;
+    while (!itemsToList.isEmpty())
+    {
+        Item* const item = itemsToList.takeFirst();
+        infoList << infoFromItem(item);
+
+        if (!item->children.isEmpty())
+        {
+            itemsToList << item->children;
+        }
+    }
+
+    return infoList;
+}
+
+KUrl::List TableViewModel::selectedUrls() const
+{
+    return urlsFromIndexes(s->tableViewSelectionModel->selectedRows());
+}
+
+KUrl::List TableViewModel::urlsFromIndexes(const QModelIndexList& indexList) const
+{
+    KUrl::List resultList;
+    Q_FOREACH(const QModelIndex& index, indexList)
+    {
+        Item* const item = itemFromIndex(index);
+        const ImageInfo info = infoFromItem(item);
+
+        const KUrl itemUrl = info.fileUrl();
+        if (!itemUrl.isEmpty())
+        {
+            resultList << itemUrl;
+        }
+    }
+
+    return resultList;
+}
+
+TableViewModel::GroupingMode TableViewModel::groupingMode() const
+{
+    return d->groupingMode;
+}
+
+void TableViewModel::setGroupingMode(const TableViewModel::GroupingMode newGroupingMode)
+{
+    if (d->groupingMode!=newGroupingMode)
+    {
+        d->groupingMode = newGroupingMode;
+        QTimer::singleShot(100, this, SLOT(slotPopulateModelWithNotifications()));
+    }
+}
+
+QModelIndex TableViewModel::deepRowIndex(const int rowNumber) const
+{
+    int targetRowNumber = rowNumber;
+    if (rowNumber<0)
+    {
+        targetRowNumber+=deepRowCount();
+    }
+
+    QModelIndex cIndex = index(0, 0);
+    for (int i = 0; i<targetRowNumber; ++i)
+    {
+        if (hasChildren(cIndex))
+        {
+            cIndex = cIndex.child(0, 0);
+        }
+        else
+        {
+            QModelIndex candidateIndex = cIndex.sibling(cIndex.row() + 1, 0);
+            if (!candidateIndex.isValid())
+            {
+                QModelIndex parentIndex = cIndex.parent();
+                if (!parentIndex.isValid())
+                {
+                    return QModelIndex();
+                }
+
+                candidateIndex = parentIndex.sibling(parentIndex.row() + 1, 0);
+            }
+
+            cIndex = candidateIndex;
+        }
+    }
+
+    return cIndex;
+}
+
+int TableViewModel::indexToDeepRowNumber(const QModelIndex& rowIndex) const
+{
+    const QModelIndex column0Index = toCol0(rowIndex);
+    int deepRowNumber = 0;
+    QModelIndex cIndex = index(0, 0);
+    while (cIndex.isValid())
+    {
+        if (cIndex==column0Index)
+        {
+            break;
+        }
+
+        ++deepRowNumber;
+
+        if (hasChildren(cIndex))
+        {
+            cIndex = cIndex.child(0, 0);
+        }
+        else
+        {
+            QModelIndex candidateIndex = cIndex.sibling(cIndex.row() + 1, 0);
+            if (!candidateIndex.isValid())
+            {
+                QModelIndex parentIndex = cIndex.parent();
+                if (!parentIndex.isValid())
+                {
+                    break;
+                }
+
+                candidateIndex = parentIndex.sibling(parentIndex.row() + 1, 0);
+            }
+
+            cIndex = candidateIndex;
+        }
+    }
+
+    if (!cIndex.isValid())
+    {
+        return -1;
+    }
+
+    return deepRowNumber;
+}
+
+int TableViewModel::deepRowCount() const
+{
+    int deepRowNumber = 0;
+    QModelIndex cIndex = index(0, 0);
+    while (cIndex.isValid())
+    {
+        ++deepRowNumber;
+
+        if (hasChildren(cIndex))
+        {
+            cIndex = cIndex.child(0, 0);
+        }
+        else
+        {
+            QModelIndex candidateIndex = cIndex.sibling(cIndex.row() + 1, 0);
+            if (!candidateIndex.isValid())
+            {
+                QModelIndex parentIndex = cIndex.parent();
+                if (!parentIndex.isValid())
+                {
+                    break;
+                }
+
+                candidateIndex = parentIndex.sibling(parentIndex.row() + 1, 0);
+            }
+
+            cIndex = candidateIndex;
+        }
+    }
+
+    return deepRowNumber;
+}
+
+QModelIndex TableViewModel::toCol0(const QModelIndex& anIndex) const
+{
+    return anIndex.sibling(anIndex.row(), 0);
+}
+
+} /* namespace Digikam */

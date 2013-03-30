@@ -36,7 +36,7 @@ class TableViewCurrentToSortedSyncer;
 class TableViewItemDelegate;
 class TableViewModel;
 class TableViewSelectionModelSyncer;
-class TableViewSortFilterProxyModel;
+class TableViewTreeView;
 class ThumbnailLoadThread;
 
 class TableViewShared
@@ -49,16 +49,13 @@ public:
     ThumbnailLoadThread* thumbnailLoadThread;
 
     TableView* tableView;
+    TableViewTreeView* treeView;
     TableViewModel* tableViewModel;
     QItemSelectionModel* tableViewSelectionModel;
-
-    TableViewSortFilterProxyModel* sortModel;
-    QItemSelectionModel* sortSelectionModel;
 
     TableViewSelectionModelSyncer* tableViewSelectionModelSyncer;
     TableViewColumnFactory* columnFactory;
     TableViewItemDelegate* itemDelegate;
-    TableViewCurrentToSortedSyncer* tableViewCurrentToSortedSyncer;
 };
 
 } /* namespace Digikam */
