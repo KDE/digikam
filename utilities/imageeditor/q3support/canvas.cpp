@@ -66,6 +66,7 @@
 
 // Local includes
 
+#include "autocrop.h"
 #include "imagehistogram.h"
 #include "paniconwidget.h"
 #include "editorcore.h"
@@ -1270,6 +1271,18 @@ void Canvas::slotFlipHoriz()
 void Canvas::slotFlipVert()
 {
     d->im->flipVert();
+}
+
+void Canvas::slotAutoCrop()
+{
+    QApplication::setOverrideCursor(Qt::WaitCursor);
+
+    AutoCrop ac(d->im->getImg());
+    ac.startFilterDirectly();
+    QRect rect = ac.autoInnerCrop();
+    d->im->crop(rect);
+
+    QApplication::restoreOverrideCursor();
 }
 
 void Canvas::slotCrop()
