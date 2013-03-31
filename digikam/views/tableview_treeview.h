@@ -79,8 +79,7 @@ protected:
 
 private:
 
-    void addColumnDescriptionsToMenu(
-        const QList<TableViewColumnDescription>& columnDescriptions, KMenu* const menu);
+    void addColumnDescriptionsToMenu(const QList<TableViewColumnDescription>& columnDescriptions, KMenu* const menu);
     void showHeaderContextMenu(QEvent* const event);
 
 private Q_SLOTS:
@@ -98,6 +97,7 @@ private:
 
     class Private;
     const QScopedPointer<Private> d;
+
     TableViewShared* const s;
 };
 
