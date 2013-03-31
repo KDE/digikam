@@ -87,6 +87,7 @@ private Q_SLOTS:
     void slotHeaderContextMenuAddColumn();
     void slotHeaderContextMenuConfigureColumn();
     void slotHeaderContextMenuActionRemoveColumnTriggered();
+    void slotModelGroupingModeChanged();
 
 Q_SIGNALS:
 

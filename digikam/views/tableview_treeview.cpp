@@ -78,7 +78,6 @@ TableViewTreeView::TableViewTreeView(TableViewShared* const tableViewShared, QWi
     s->itemDelegate = new TableViewItemDelegate(s, this);
     setSelectionMode(QAbstractItemView::ExtendedSelection);
     setItemDelegate(s->itemDelegate);
-    setRootIsDecorated(false);
     setAlternatingRowColors(true);
     setAllColumnsShowFocus(true);
     setDragEnabled(true);
@@ -98,6 +97,10 @@ TableViewTreeView::TableViewTreeView(TableViewShared* const tableViewShared, QWi
     setModel(s->tableViewModel);
     setSelectionModel(s->tableViewSelectionModel);
     setSortingEnabled(true);
+    slotModelGroupingModeChanged();
+
+    connect(s->tableViewModel, SIGNAL(signalGroupingModeChanged()),
+            this, SLOT(slotModelGroupingModeChanged()));
 }
 
 TableViewTreeView::~TableViewTreeView()
@@ -298,6 +301,11 @@ void TableViewTreeView::wheelEvent(QWheelEvent* event)
     }
 
     QTreeView::wheelEvent(event);
+}
+
+void TableViewTreeView::slotModelGroupingModeChanged()
+{
+    setRootIsDecorated(s->tableViewModel->groupingMode()==TableViewModel::GroupingShowSubItems);
 }
 
 } /* namespace Digikam */
