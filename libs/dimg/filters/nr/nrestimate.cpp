@@ -163,7 +163,7 @@ void NREstimate::startAnalyse()
                   cvTermCriteria(CV_TERMCRIT_EPS + CV_TERMCRIT_ITER, 10, 1.0), 3, 0, 0, centers, 0);
     }
 
-    kDebug() << "cvKmeans2 succesfully run";
+    kDebug() << "cvKmeans2 successfully run";
     postProgress(15);
 
     //-- Divide into cluster->columns, sample->rows, in matrix standard deviation ---------------------------
