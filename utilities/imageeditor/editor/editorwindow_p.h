@@ -79,6 +79,7 @@ public:
         imagepluginsActionCollection(0),
         copyAction(0),
         cropAction(0),
+        autoCropAction(0),
         filePrintAction(0),
         flipHorizAction(0),
         flipVertAction(0),
@@ -163,6 +164,7 @@ public:
     KAction*                   contributeAction;
     KAction*                   copyAction;
     KAction*                   cropAction;
+    KAction*                   autoCropAction;
     KAction*                   donateMoneyAction;
     KAction*                   filePrintAction;
     KAction*                   flipHorizAction;

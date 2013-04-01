@@ -1227,6 +1227,7 @@ void TableViewModel::setGroupingMode(const TableViewModel::GroupingMode newGroup
     {
         d->groupingMode = newGroupingMode;
         QTimer::singleShot(100, this, SLOT(slotPopulateModelWithNotifications()));
+        emit(signalGroupingModeChanged());
     }
 }
 

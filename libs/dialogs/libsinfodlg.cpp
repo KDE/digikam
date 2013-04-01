@@ -72,6 +72,7 @@ extern "C"
 #include "greycstorationfilter.h"
 #include "pgfutils.h"
 #include "digikam-lcms.h"
+#include "config-digikam.h"
 
 #ifdef HAVE_LENSFUN
 #       include "lensfuniface.h"
@@ -108,7 +109,7 @@ LibsInfoDlg::LibsInfoDlg(QWidget* const parent)
 #endif
 
 #ifdef HAVE_EIGEN3
-    list.insert(i18n("LibEigen"),                               QString(EIGEN3_VERSION_NUMBER));
+    list.insert(i18n("LibEigen"),                               QString(EIGEN3_VERSION_STRING));
 #endif // HAVE_EIGEN3
       
     list.insert(i18n("LibKExiv2"),                   KExiv2::version());

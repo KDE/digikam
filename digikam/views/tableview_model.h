@@ -174,6 +174,10 @@ private Q_SLOTS:
     void slotFilterSettingsChanged(const ImageFilterSettings& settings);
     void slotResortModel();
 
+Q_SIGNALS:
+
+    void signalGroupingModeChanged();
+
 private:
 
     Item* createItemFromSourceIndex(const QModelIndex& imageFilterModelIndex);

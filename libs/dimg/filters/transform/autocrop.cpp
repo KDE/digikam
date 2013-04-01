@@ -106,21 +106,6 @@ void AutoCrop::startAnalyse()
     breakflag  = 0;
     int width  = img.width();
     int height = img.height();
-    QPoint p;
-
-    //    for(i=210; i < 211; i++)
-    //    {
-    //        for(j=400; j < 410; j++)
-    //        {
-    //            p.setX(j);
-    //            p.setY(i);
-    //            c = QColor::fromRgb(img.pixel(p));
-    //            kDebug() << c;
-    //            if(c == Qt::white)
-    //                kDebug() << "WHITE! yay!";
-    //        }
-    //    }
-    //    kDebug() << "I'm a genius!";
 
     for(i=0; i < width; i++)
     {
@@ -427,15 +412,17 @@ void AutoCrop::startAnalyse()
     bool fixrightmargin  = false;
     bool fixleftmargin   = false;
     bool fixbottommargin = false;
-    //    int count=0;
+    int count=0;
 
     endupi      = centeri;
     endupj      = centerj;
     travelright = traveldown = -1;
     travelleft  = travelup   = 0;
+    count       = limitcolumn + limitrow - 2;
 
-    while(true)
+    while(count!=0)
     {
+        count--;
         switch((counter%4))
         {
             case 0 :    //travelling right
@@ -661,6 +648,7 @@ void AutoCrop::startAnalyse()
             break;
     }
 
+    kDebug() << "Count     : " << count;
     kDebug() << "Endupi    : " << endupi;
     kDebug() << "Endupj    : " << endupj;
     kDebug() << "Endrighti : " << endrighti;
@@ -689,6 +677,10 @@ void AutoCrop::startAnalyse()
     d->cropArea.setTopLeft(icp1);
     d->cropArea.setBottomRight(icp2);
 
+    if( count == 0 )
+    {
+        d->cropArea = crop;
+    }
     kDebug () << "Inner Crop Area : " << d->cropArea;
 }
 
