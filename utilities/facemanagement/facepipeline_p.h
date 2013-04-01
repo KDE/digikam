@@ -239,6 +239,7 @@ Q_SIGNALS:
 
 protected:
 
+    ThumbnailImageCatcher*          catcher;
     KFaceIface::RecognitionDatabase database;
     double                          recognitionThreshold;
     FacePipeline::Private* const    d;

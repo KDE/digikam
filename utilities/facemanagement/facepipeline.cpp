@@ -491,56 +491,6 @@ void DetectionWorker::process(FacePipelineExtendedPackage::Ptr package)
     detector.setColorMode("color");
     package->faces          = detector.detectFaces(image);
 
-    int removeindex                            = 0;
-    KFaceIface::Tlddatabase* const tlddatabase = new KFaceIface::Tlddatabase();
-
-    foreach(const KFaceIface::Face & face, package->faces)
-    {
-        QList<float> recognitionconfidence;
-        IplImage *img1 = tlddatabase->QImage2IplImage(face.image().toQImage());
-        //cvSaveImage(qPrintable(package->filePath + QString ("hi.jpg")),img1);
-        IplImage* const inputfaceimage = cvCreateImage(cvSize(47,47),img1->depth,img1->nChannels);
-        cvResize(img1, inputfaceimage);
-
-        int count                      = -1;
-
-        for (int i = 1; i <= tlddatabase->queryNumfacesinDatabase();i++ )
-        {
-            KFaceIface::unitFaceModel* const comparemodel = tlddatabase->getFaceModel(i);
-            KFaceIface::Tldrecognition* const tmpTLD      = new KFaceIface::Tldrecognition;
-            recognitionconfidence.push_back(tmpTLD->getRecognitionConfidence(inputfaceimage,comparemodel));
-            delete tmpTLD;
-            count++;
-        }
-
-        if(count != -1)
-        {
-            int maxConfIndex    = 0;
-            float maxConfidence = recognitionconfidence[0];
-
-            for(int tmpInt = 0; tmpInt <= count ; tmpInt++ )
-            {
-                if(recognitionconfidence[tmpInt] > maxConfidence)
-                {
-                    maxConfIndex  = tmpInt;
-                    maxConfidence = recognitionconfidence[tmpInt];
-                }
-            }
-
-            if(maxConfidence > 0.6 )
-            {
-                kDebug() << "preson  " << qPrintable(tlddatabase->querybyFaceid(maxConfIndex+1))
-                         << "   recognised in" << qPrintable(package->filePath);
-                package->faces[removeindex].setName(tlddatabase->querybyFaceid(maxConfIndex+1));
-                //                package->faces[removeindex].clearRecognition();
-            }
-        }
-
-        removeindex++;
-    }
-
-    delete tlddatabase;
-
     kDebug() << "Found" << package->faces.size() << "faces in" << package->info.name()
              << package->image.size() << package->image.originalSize();
 
@@ -571,21 +521,16 @@ void DetectionWorker::setAccuracy(double accuracy)
 RecognitionWorker::RecognitionWorker(FacePipeline::Private* const d)
     : d(d)
 {
+    catcher = 0;
     database             = KFaceIface::RecognitionDatabase::addDatabase();
     recognitionThreshold = 10000000;
 }
 
 void RecognitionWorker::process(FacePipelineExtendedPackage::Ptr package)
 {
-    /*OpenTLD handler..............................*/
-
     FaceIface iface;
     QSize size = database.recommendedImageSize(package->image.size());
-    package->image = DImg(package->filePath);
-    iface.fillImageInFaces(package->image, package->faces, size);
 
-
-    /*
     if (package->image.isNull())
     {
         if (!catcher)
@@ -600,7 +545,7 @@ void RecognitionWorker::process(FacePipelineExtendedPackage::Ptr package)
     {
         iface.fillImageInFaces(package->image, package->faces, size);
     }
-* /
+
     int removeindex                            = 0;
     KFaceIface::Tlddatabase* const tlddatabase = new KFaceIface::Tlddatabase();
 
@@ -608,9 +553,8 @@ void RecognitionWorker::process(FacePipelineExtendedPackage::Ptr package)
     {
         vector<float> recognitionconfidence;
 
-        IplImage *img1 = tlddatabase->QImage2IplImage(face.image().toQImage());
+        IplImage *img1 = face.image().toIplImage();
         IplImage* const inputfaceimage = cvCreateImage(cvSize(47,47),img1->depth,img1->nChannels);
-        cvSaveImage(qPrintable(package->filePath + QString ("hi.jpg")),img1);
         cvResize(img1, inputfaceimage);
 
         int count                      = -1;
@@ -638,11 +582,14 @@ void RecognitionWorker::process(FacePipelineExtendedPackage::Ptr package)
                 }
             }
 
-            if(maxConfidence > 0.6 )
+            if(maxConfidence > 0.3 )
             {
                 kDebug() << "preson  " << qPrintable(tlddatabase->querybyFaceid(maxConfIndex+1))
                          << "   recognised in" << qPrintable(package->filePath);
                 package->faces[removeindex].setName(tlddatabase->querybyFaceid(maxConfIndex+1));
+                package->databaseFaces[removeindex].roles = FacePipelineDatabaseFace::ForConfirmation;
+                cout << tlddatabase->queryFaceID(maxConfIndex+1) << endl;
+                package->databaseFaces[removeindex].assignedTagId = tlddatabase->queryFaceID(maxConfIndex+1);
             }
         }
 
@@ -650,31 +597,6 @@ void RecognitionWorker::process(FacePipelineExtendedPackage::Ptr package)
     }
 
     delete tlddatabase;
-
-    /*OpenTLD handler..............................*/
-
-    /*
-     * Disable recognition for stable release. See bug 269720.
-     *
-    FaceIface iface;
-    QSize size = database.recommendedImageSize(package->image.size());
-    iface.fillImageInFaces(package->image, package->faces, size);
-
-    QList<double> distances = database.recognizeFaces(package->faces);
-
-    for (int i=0; i<distances.size(); ++i)
-    {
-        kDebug() << "Recognition:"  << package->info.id()     << package->faces[i].toRect()
-                 << "recognized as" << package->faces[i].id() << package->faces[i].name()
-                 << "at distance"   << distances[i]
-                 << ((distances[i] > recognitionThreshold) ? "(discarded)" : "(accepted)");
-
-        if (distances[i] > recognitionThreshold)
-        {
-            package->faces[i].clearRecognition();
-        }
-    }
-    */
 
     package->processFlags |= FacePipelinePackage::ProcessedByRecognizer;
     emit processed(package);
@@ -697,7 +619,6 @@ void DatabaseWriter::process(FacePipelineExtendedPackage::Ptr package)
     if (package->databaseFaces.isEmpty())
     {
         // Detection / Recognition
-
         FaceIface iface;
 
         if (mode == FacePipeline::OverwriteUnconfirmed && (package->processFlags & FacePipelinePackage::ProcessedByDetector))
@@ -801,6 +722,7 @@ void Benchmarker::process(FacePipelineExtendedPackage::Ptr package)
 
         FaceIface iface;
         QList<DatabaseFace> groundTruth = iface.databaseFaces(package->info.id());
+
         QList<DatabaseFace> testedFaces = iface.toDatabaseFaces(package->detectionImage, package->info.id(), package->faces);
 
         QList<DatabaseFace> unmatchedTrueFaces = groundTruth;
@@ -964,15 +886,13 @@ void Trainer::process(FacePipelineExtendedPackage::Ptr package)
         }
     }
 
-    /*OpenTLD handler.....................*/
-
     FaceIface iface;
     if (!toTrain.isEmpty())
     {
         package->faces = iface.toFaces(toTrain);
 
         QSize size = database.recommendedImageSize(package->image.size());
-        iface.fillImageInFaces(package->image, package->faces, size);
+
         if (package->image.isNull())
         {
             if (!catcher)
@@ -991,20 +911,20 @@ void Trainer::process(FacePipelineExtendedPackage::Ptr package)
         int assignedNameindex = 0;
 
         KFaceIface::Tlddatabase* const tlddatabase        = new KFaceIface::Tlddatabase();
+
         foreach(const KFaceIface::Face & face, package->faces)
         {
-            IplImage *img1 = face.image().toIplImage();
+            IplImage  *img1 = face.image().toIplImage();// tlddatabase->QImage2IplImage(face.image().toQImage());
 
             IplImage* const inputfaceimage                    = cvCreateImage(cvSize(47,47),img1->depth,img1->nChannels);
             cvResize(img1,inputfaceimage);
-            //cvSaveImage(qPrintable(package->filePath + QString ("hi.jpg")),img1);
 
             KFaceIface::Tldrecognition* const tmpTLD          = new KFaceIface::Tldrecognition;
             KFaceIface::unitFaceModel* const facemodeltostore = tmpTLD->getModeltoStore(inputfaceimage);
             facemodeltostore->Name                            = package->faces[assignedNameindex].name();
-
+            facemodeltostore->faceid                          = package->databaseFaces[assignedNameindex].assignedTagId;
             kDebug() << "person  " << qPrintable(package->faces.at(assignedNameindex).name())
-                     << "  stored in recognition database";
+                     << "  stored in recognition database" ;
 
             tlddatabase->insertFaceModel(facemodeltostore);             //store facemodel in tlddatabase
 
@@ -1016,47 +936,6 @@ void Trainer::process(FacePipelineExtendedPackage::Ptr package)
 
     iface.removeFaces(toTrain);
     package->databaseFaces.replaceRole(FacePipelineDatabaseFace::ForTraining, FacePipelineDatabaseFace::Trained);
-
-
-    /*OpenTLD handler.....................*/
-
-    /***if (!toTrain.isEmpty())
-    {
-        FaceIface iface;
-
-        // Disable recognition for stable release. See bug 269720 and 255520.
-
-        // Get KFaceIface faces
-        package->faces = iface.toFaces(toTrain);
-
-        // Fill images in faces - either from given DImg, or from thumbnails
-        QSize size = database.recommendedImageSize(package->image.size());
-
-        if (package->image.isNull())
-        {
-            if (!catcher)
-            {
-                catcher = new ThumbnailImageCatcher(d->thumbnailLoadThread, this);
-            }
-
-            catcher->setActive(true);
-            iface.fillImageInFaces(catcher, package->filePath, package->faces, size);
-            catcher->setActive(false);
-        }
-        else
-        {
-            iface.fillImageInFaces(package->image, package->faces, size);
-        }
-
-        // Train
-        kDebug() << "Training" << package->faces.size() << "faces";
-        database.updateFaces(package->faces);
-
-
-        // Remove the "FaceForTraining" entry in database (tagRegion entry remains, of course, untouched)
-        iface.removeFaces(toTrain);
-        package->databaseFaces.replaceRole(FacePipelineDatabaseFace::ForTraining, FacePipelineDatabaseFace::Trained);
-    }***/
 
     package->processFlags |= FacePipelinePackage::ProcessedByTrainer;
     emit processed(package);
@@ -1458,6 +1337,7 @@ void FacePipeline::plugParallelFaceDetectors()
 void FacePipeline::plugFaceRecognizer()
 {
     d->recognitionWorker = new RecognitionWorker(d);
+    d->createThumbnailLoadThread();
 
     connect(d, SIGNAL(thresholdChanged(double)),
             d->recognitionWorker, SLOT(setThreshold(double)));
