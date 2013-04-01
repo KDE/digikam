@@ -2001,15 +2001,11 @@ ImageInfo DigikamView::currentInfo() const
     case StackedView::MapWidgetMode:
         return d->mapView->currentImageInfo();
 
-    case StackedView::IconViewMode:
-        return d->iconView->currentInfo();
-
-    case StackedView::PreviewImageMode:
-        return d->stackedview->imagePreviewView()->getImageInfo();
-
     case StackedView::MediaPlayerMode:
-        /// @todo What should we return here?
-        return ImageInfo();
+    case StackedView::PreviewImageMode:
+    case StackedView::IconViewMode:
+        // all of these modes use the same selection model and data as the IconViewMode
+        return d->iconView->currentInfo();
 
     default:
         return ImageInfo();
@@ -2027,20 +2023,16 @@ QList< ImageInfo > DigikamView::selectedInfoList(const bool currentFirst) const
         }
         return d->tableView->selectedImageInfos();
 
+    case StackedView::PreviewImageMode:
+    case StackedView::MediaPlayerMode:
     case StackedView::MapWidgetMode:
     case StackedView::IconViewMode:
+        // all of these modes use the same selection model and data as the IconViewMode
         if (currentFirst)
         {
             return d->iconView->selectedImageInfosCurrentFirst();
         }
         return d->iconView->selectedImageInfos();
-
-    case StackedView::PreviewImageMode:
-        return QList<ImageInfo>() << d->stackedview->imagePreviewView()->getImageInfo();
-
-    case StackedView::MediaPlayerMode:
-        /// @todo What should we return here?
-        return QList<ImageInfo>();
 
     default:
         return QList<ImageInfo>();
@@ -2055,12 +2047,10 @@ ImageInfoList DigikamView::allInfo() const
         return d->tableView->allInfo();
 
     case StackedView::MapWidgetMode:
-    case StackedView::IconViewMode:
-        return d->iconView->imageInfos();
-
     case StackedView::PreviewImageMode:
     case StackedView::MediaPlayerMode:
-        /// @todo What should we return here?
+    case StackedView::IconViewMode:
+        // all of these modes use the same selection model and data as the IconViewMode
         return d->iconView->imageInfos();
 
     default:
