@@ -105,6 +105,21 @@ TableView::TableView(
     connect(s->treeView, SIGNAL(signalZoomOutStep()),
             this, SIGNAL(signalZoomOutStep()));
 
+    connect(s->tableViewSelectionModel, SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
+            this, SIGNAL(signalItemsChanged()));
+
+    connect(s->tableViewModel, SIGNAL(rowsInserted(QModelIndex,int,int)),
+            this, SIGNAL(signalItemsChanged()));
+
+    connect(s->tableViewModel, SIGNAL(rowsRemoved(QModelIndex,int,int)),
+            this, SIGNAL(signalItemsChanged()));
+
+    connect(s->tableViewModel, SIGNAL(layoutChanged()),
+            this, SIGNAL(signalItemsChanged()));
+
+    connect(s->tableViewModel, SIGNAL(modelReset()),
+            this, SIGNAL(signalItemsChanged()));
+
     vbox1->addWidget(s->treeView);
 
     setLayout(vbox1);

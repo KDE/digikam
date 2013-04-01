@@ -481,6 +481,11 @@ void DigikamView::setupConnections()
     connect(d->tableView, SIGNAL(signalGotoTagAndImageRequested(int)),
             this, SLOT(slotGotoTagAndItem(int)));
 
+    // TableView::signalItemsChanged is emitted when something changes in the model that
+    // DigikamView should care about, not only the selection.
+    connect(d->tableView, SIGNAL(signalItemsChanged()),
+            this, SLOT(slotImageSelected()));
+
     // -- Sidebar Connections -------------------------------------
 
     connect(d->leftSideBar, SIGNAL(signalChangedTab(QWidget*)),
@@ -1976,9 +1981,7 @@ void DigikamView::slotPickLabelChanged(const KUrl& url, int pick)
 
 bool DigikamView::hasCurrentItem() const
 {
-    // We should actually get this directly from the selection model,
-    // but the iconView is fine for now.
-    return !d->iconView->currentInfo().isNull();
+    return !currentInfo().isNull();
 }
 
 void DigikamView::slotImageExifOrientation(int orientation)

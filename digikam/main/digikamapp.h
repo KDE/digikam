@@ -124,6 +124,7 @@ private:
     bool    setup();
     bool    setupICC();
     void    setupView();
+    void    setupViewConnections();
     void    setupStatusBar();
     void    setupActions();
     void    setupAccelerators();

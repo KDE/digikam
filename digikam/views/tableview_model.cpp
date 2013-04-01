@@ -165,7 +165,14 @@ TableViewModel::TableViewModel(TableViewShared* const sharedObject, QObject* par
 
     new ModelTest(this, this);
 
-    slotPopulateModel(true);
+    // We only have to trigger population of the model if data is in the source model,
+    // otherwise the source model will tell us about any new data.
+    const int itemsInImageModel = s->imageModel->rowCount();
+    if (itemsInImageModel>0)
+    {
+        // populate the model once later, not now
+        QTimer::singleShot(0, this, SLOT(slotPopulateModelWithNotifications()));
+    }
 }
 
 TableViewModel::~TableViewModel()

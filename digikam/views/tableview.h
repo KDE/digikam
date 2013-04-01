@@ -121,6 +121,7 @@ Q_SIGNALS:
     void signalGotoTagAndImageRequested(const int tagId);
     void signalGotoAlbumAndImageRequested(const ImageInfo& info);
     void signalGotoDateAndImageRequested(const ImageInfo& info);
+    void signalItemsChanged();
 
 private:
 
