@@ -19,4 +19,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 009 ==> 310477 - Correct Camera identified - Canon PowerShot A470 but drop-down list shows A740 option.
 010 ==> 316790 - While showing support of NIKON 800 on starting page, in import, one cannot choose thois model.
 011 ==> 311393 - Cannot import photos from autodetected Canon PowerShot A1300 [patch].
-012 ==> 
+012 ==> 317714 - Consider working on NFS shares a legitimate use case (even for the targeted home environment).
+013 ==> 
