@@ -6,9 +6,8 @@
  * Date        : 2012-10-18
  * Description : Auto Crop analyser
  * 
- * Algorithm based on "finding the largest axis aligned rectangle in a polygon
- * in o(n log n) time" method from Ralph P. Boland and Jorge Urrutia.
- * http://www.cccg.ca/proceedings/2001/rboland-98103.ps.gz. 
+ * Algorithm based on black point detection on the basis of spiral
+ * traversal
  *
  * Copyright (C) 2013 by Sayantan Datta <sayantan dot knz at gmail dot com>
  * Copyright (C) 2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -71,6 +70,363 @@ AutoCrop::AutoCrop(DImg* const img, QObject* const parent)
 AutoCrop::~AutoCrop()
 {
     delete d;
+}
+
+QRect AutoCrop::spiralClockwiseTraversal(QImage source,int topCrop, int bottomCrop)
+{
+    int i,j,ni;
+    if(topCrop == -1)
+    {
+        topCrop=0;
+    }
+    if(bottomCrop == -1)
+    {
+        bottomCrop=source.height();
+    }
+    QSize resultsize = QSize(source.width(),(source.height()-topCrop-(source.height()-bottomCrop)));
+    QImage threshold = QImage(resultsize, QImage::Format_RGB888);
+    for(i=topCrop, ni=0; i<bottomCrop ; i++, ni++)
+    {
+        for(j=0; j<source.width(); j++)
+        {
+            threshold.setPixel(j,ni,source.pixel(j,i));
+        }
+    }
+
+    QColor c;
+    int limitcolumn      = threshold.width();
+    int limitrow         = threshold.height();
+    int centeri          = ((limitrow/2)-1);
+    int centerj          = ((limitcolumn/2)-1);
+    int startrighti      = 0;
+    int startrightj      = 0;
+    int endrighti        = 0;
+    int endrightj        = 0;
+    int startlefti       = 0;
+    int startleftj       = 0;
+    int endlefti         = 0;
+    int endleftj         = 0;
+    int startupi         = 0;
+    int startupj         = 0;
+    int endupi           = 0;
+    int endupj           = 0;
+    int startdowni       = 0;
+    int startdownj       = 0;
+    int enddowni         = 0;
+    int enddownj         = 0;
+    int travelright      = 0;
+    int travelleft       = 0;
+    int travelup         = 0;
+    int traveldown       = 0;
+    int rightmargin      = 0;
+    int leftmargin       = 0;
+    int bottommargin     = 0;
+    int topmargin        = 0;
+    int counter          = 0;
+    bool fixtopmargin    = false;
+    bool fixrightmargin  = false;
+    bool fixleftmargin   = false;
+    bool fixbottommargin = false;
+//    int count            = limitcolumn + limitrow -1;
+    bool rightEdge       = false;
+    bool leftEdge        = false;
+    bool topEdge         = false;
+    bool bottomEdge      = false;
+    endupi = centeri;
+    endupj = centerj;
+    travelright = traveldown = -1;
+    travelleft  = travelup   = 0;
+    kDebug() << "Center pixel : "<<centerj<<" , "<< centeri;
+    while(true)
+    {
+//        kDebug() << "count = "<<count;
+        switch((counter%4))
+        {
+        case 0 :    //travelling right
+        {
+            if(fixtopmargin==true)
+            {
+                if(fixrightmargin==false)
+                {
+                    endrightj++;
+                    if(endrightj >= threshold.width())
+                    {
+                        kDebug() << "We cannot go right anymore";
+                        fixrightmargin = true;
+                        rightmargin = limitcolumn - 1;
+                        rightEdge = true;
+                    }
+                }
+                break;
+            }
+            travelright += 2;
+            if(fixrightmargin==true)
+                travelright--;
+            if(fixleftmargin==true)
+                travelright--;
+
+//            kDebug() << "TRAVELLING RIGHT";
+//            kDebug() << "Endupi" << endupi;
+            startrighti=endupi;
+            startrightj=endupj;
+            endrightj=startrightj+travelright;
+            //            kDebug() << "Moving Right EndRight = " << endrightj;
+            if(endrightj >= limitcolumn)
+            {
+                kDebug() << "We have reached limitcolumn, i.e. width";
+                endrightj = limitcolumn-1;
+                fixrightmargin=true;
+                rightmargin=limitcolumn-1;
+                counter++;
+                travelright--;
+                rightEdge = true;
+            }
+            i=startrighti;
+            j=startrightj;
+            for(j=startrightj+1;j<=endrightj;j++)
+            {
+//                kDebug() << "At pixel "<< j << " , " << i;
+                c=QColor::fromRgb(threshold.pixel(j,i));
+                if(c == Qt::black)
+                {
+                    //we have found an empty space
+                    fixtopmargin=true;
+                    topmargin=i;
+                    endupi++;
+                    travelup--;
+                    break;
+                }
+            }
+            endrighti=startrighti;
+
+            break;
+        }
+        case 1 :    //travelling down
+        {
+            if(fixrightmargin==true)
+            {
+                if(fixbottommargin==false)
+                {
+                    enddowni++;
+                    if(enddowni >= limitrow)
+                    {
+                        fixbottommargin = true;
+                        bottommargin = limitrow-1;
+                        bottomEdge = true;
+                    }
+                }
+                //endrightj--;
+                // kDebug() << "Travelling down : Case Skipped\n";
+                break;
+            }
+            traveldown += 2;
+            if(fixbottommargin==true)
+                traveldown--;
+            if(fixtopmargin==true)
+                traveldown--;
+
+            startdowni=endrighti;
+            startdownj=endrightj;
+            enddowni = startdowni + traveldown;
+            //            kDebug() << "Moving Down EndDown = " << enddowni;
+            if(enddowni >= limitrow)
+            {
+                kDebug() << "We have reached limitrow, i.e. Height";
+                enddowni = limitrow-1;
+                counter++;
+                bottommargin=limitrow-1;
+                fixbottommargin=true;
+                traveldown--;
+                bottomEdge = true;
+            }
+            i=startdowni;
+            j=startdownj;
+            for(i=startdowni+1; i<=enddowni; i++)
+            {
+//                kDebug() << "At pixel "<< j << " , " << i;
+                c=QColor::fromRgb(threshold.pixel(j,i));
+                if(c == Qt::black)
+                {
+                    //we have found an empty space
+                    fixrightmargin=true;
+                    rightmargin=j;
+                    endrightj--;
+                    travelright--;
+                    break;
+                }
+            }
+            enddownj=startdownj;
+
+            break;
+        }
+        case 2 :    //travelling left
+        {
+            if(fixbottommargin==true)
+            {
+                if(fixleftmargin==false)
+                {
+                    endleftj--;
+                    if(endleftj < 0)
+                    {
+                        fixleftmargin = true;
+                        leftmargin = 0;
+                        leftEdge = true;
+                    }
+                }
+                break;
+            }
+            travelleft += 2;
+            if(fixleftmargin==true)
+                travelleft--;
+            if(fixrightmargin==true)
+                travelleft--;
+
+            startlefti=enddowni;
+            startleftj=enddownj;
+            endleftj = startleftj - travelleft;
+            //            kDebug() << "Moving Left Endleft = " << endleftj;
+            if(endleftj < 0)
+            {
+                kDebug() << "We have gone too left";
+                endleftj = 0;
+                counter++;
+                leftmargin=0;
+                fixleftmargin=true;
+                travelleft--;
+                leftEdge = true;
+            }
+            i=startlefti;
+            j=startleftj;
+            for(j=startleftj-1;j>=endleftj;j--)
+            {
+//                kDebug() << "At pixel "<< j << " , " << i;
+                c=QColor::fromRgb(threshold.pixel(j,i));
+                if(c == Qt::black)
+                {
+                    //we have found an empty space
+                    fixbottommargin=true;
+                    bottommargin=i;
+                    enddowni--;
+                    traveldown--;
+                    break;
+                }
+            }
+            endlefti=startlefti;
+
+            break;
+        }
+        case 3 :    //travelling up
+        {
+            if(fixleftmargin==true)
+            {
+                if(fixtopmargin==false)
+                {
+                    endupi--;
+                    endupj=leftmargin;
+                    if(endupi < 0)
+                    {
+                        fixtopmargin = true;
+                        topmargin = 0;
+                        topEdge = true;
+                    }
+                }
+                break;
+            }
+            travelup += 2;
+            if(fixbottommargin==true)
+                travelup--;
+            if(fixtopmargin==true)
+                travelup--;
+
+            startupi=endlefti;
+            startupj=endleftj;
+            endupi = startupi - travelup;
+            //            kDebug() << "Moving Up Endup = " << endupi;
+            if(endupi < 0)
+            {
+                kDebug() << "We have gone too right";
+                endupi = 0;
+                topEdge = true;
+                counter++;
+                fixtopmargin=true;
+                topmargin=0;
+                travelup--;
+            }
+            i=startupi;
+            j=startupj;
+            for(i=startupi-1; i>=endupi; i--)
+            {
+//                kDebug() << "At pixel "<< j << " , " << i;
+                c=QColor::fromRgb(threshold.pixel(j,i));
+                if(c == Qt::black)
+                {
+                    //we have found an empty space
+                    fixleftmargin=true;
+                    leftmargin=j;
+                    endleftj++;
+                    travelleft--;
+                    break;
+                }
+            }
+            endupj=startupj;
+
+            break;
+        }
+        }
+        counter++;
+        if ( fixbottommargin==true && fixtopmargin==true && fixleftmargin==true && fixrightmargin==true)
+            break;
+    }
+//    kDebug() << "Count     : "<<count;
+    kDebug() << "Endupi    : "<<endupi;
+    kDebug() << "Endupj    : "<<endupj;
+    kDebug() << "Endrighti : "<<endrighti;
+    kDebug() << "Endrightj : "<<endrightj;
+    kDebug() << "Enddowni  : "<<enddowni;
+    kDebug() << "Enddownj  : "<<enddownj;
+    kDebug() << "Endlefti  : "<<endlefti;
+    kDebug() << "Endleftj  : "<<endleftj;
+    kDebug() << "Done\n";
+
+    kDebug() << "Left   Margin   : "<<leftmargin;
+    kDebug() << "Right  Margin   : "<<rightmargin;
+    kDebug() << "Top    Margin   : "<<topmargin;
+    kDebug() << "Bottom Margin   : "<<bottommargin;
+    kDebug() << "Done\n";
+
+    kDebug() << "Left Edge   : "<<leftEdge;
+    kDebug() << "Right Edge  : "<<rightEdge;
+    kDebug() << "Top Edge    : "<<topEdge;
+    kDebug() << "Bottom Edge : "<<bottomEdge;
+    kDebug() << "Done\n";
+
+    if(bottomEdge)
+    {
+        bottommargin++;
+    }
+    if(topEdge)
+    {
+        topmargin--;
+    }
+    if(leftEdge)
+    {
+        leftmargin--;
+    }
+    if(rightEdge)
+    {
+        rightmargin++;
+    }
+    //----------------------releasing images
+    QPoint icp1;
+    icp1.setX(leftmargin+1);
+    icp1.setY(topCrop+topmargin+1);
+    QPoint icp2;
+    icp2.setX(rightmargin-1);
+    icp2.setY(topCrop+bottommargin-1);
+    QRect cropArea;
+    cropArea.setTopLeft(icp1);
+    cropArea.setBottomRight(icp2);
+    return cropArea;
 }
 
 void AutoCrop::startAnalyse()
@@ -278,409 +634,277 @@ void AutoCrop::startAnalyse()
     //---------------------threshold the image
 
     QImage threshold = QImage(resultsize,QImage::Format_RGB888);
-    int toggleflag1  = 0;
-    int toggleflag2  = 0;
+    int toggleflag1=0,toggleflag2=0;
+    int whitepixelCount = 0;
 
     //-----initialize
 
-    for(i=0; i < result.height(); i++)
-    {
-        for(j=0; j < result.width(); j++)
-        {
-            threshold.setPixel(j, i, Qt::black);
-        }
-    }
+    for(i=0;i<result.height();i++)
+        for(j=0;j<result.width();j++)
+            threshold.setPixel(j,i,Qt::black);
 
     //----------mark points on horizontal scan
-
-    for(i=0; i < result.height(); i++)
+    for(i=0;i<result.height();i++)
     {
-        toggleflag1 = -1;
-        toggleflag2 =- 1;
-
-        for(j=0; j < result.width(); j++)
+        toggleflag1=-1;
+        toggleflag2=-1;
+        for(j=0;j<result.width();j++)
         {
-            c = QColor::fromRgb(result.pixel(j, i));
-
+            c = QColor::fromRgb (result.pixel(j,i) );
             if(c != Qt::black)
             {
-                toggleflag1 = j;
+                toggleflag1=j;
                 break;
             }
         }
-
-        for(j=(result.width()-1); j >= 0; j--)
+        for(j=(result.width()-1);j>=0;j--)
         {
-            c = QColor::fromRgb(result.pixel(j, i));
-
+            c = QColor::fromRgb (result.pixel(j,i) );
             if(c != Qt::black)
             {
-                toggleflag2 = j;
+                toggleflag2=j;
                 break;
             }
         }
-
-        if(toggleflag1 >= 0)
-        {
-            for(j = toggleflag1; j <= toggleflag2; j++)
-            {
-                threshold.setPixel(j, i, qRgb(255, 255, 255));
-            }
-        }
+        if(toggleflag1>=0)
+            for(j=toggleflag1;j<=toggleflag2;j++)
+                threshold.setPixel(j,i,qRgb(255,255,255));
     }
 
     //----------fill black points on vertical scan
-
-    for(j=0; j < result.width(); j++)
+    for(j=0;j<result.width();j++)
     {
-        toggleflag1 = -1;
-        toggleflag2 = -2;
-
-        for(i=0; i < result.height(); i++)
+        toggleflag1=-1;
+        toggleflag2=-2;
+        for(i=0;i<result.height();i++)
         {
-            c = QColor::fromRgb(result.pixel(j, i));
-
+            c = QColor::fromRgb (result.pixel(j,i) );
             if(c != Qt::black)
             {
-                toggleflag1 = i;
+                toggleflag1=i;
                 break;
             }
         }
-
-        for(i = (result.height()-1); i >= 0; i--)
+        for(i=(result.height()-1);i>=0;i--)
         {
-            c = QColor::fromRgb(result.pixel(j, i));
-
+            c = QColor::fromRgb (result.pixel(j,i) );
             if(c != Qt::black)
             {
-                toggleflag2 = i;
+                toggleflag2=i;
                 break;
             }
         }
-
-        if(toggleflag1 >= 0)
-        {
-            for(i=0; i < toggleflag1; i++)
-            {
-                threshold.setPixel(j, i, qRgb(0, 0, 0));
-            }
-        }
-
-        if(toggleflag2 >= 0)
-        {
-            for(i=(toggleflag2+1);i<(result.height());i++)
-            {
+        if(toggleflag1>=0)
+            for(i=0;i<toggleflag1;i++)
                 threshold.setPixel(j,i,qRgb(0,0,0));
+
+        if(toggleflag2>=0)
+            for(i=(toggleflag2+1);i<(result.height());i++)
+                threshold.setPixel(j,i,qRgb(0,0,0));
+    }
+
+    // ---count of white pixel in threshold
+
+    for(i = 0; i <threshold.height(); i++)
+    {
+        for (j = 0; j<threshold.width(); j++)
+        {
+            c=QColor::fromRgb(threshold.pixel(j,i));
+            if( c == Qt::white)
+            {
+                whitepixelCount++;
             }
         }
     }
-    
+
+    kDebug() << "White pixel count in thresholded image = " << whitepixelCount;
     kDebug() << "Thresholding Complete\n";
 
     //---------------------inner crop
+    QRect InrCrop = spiralClockwiseTraversal(threshold,-1,-1);
+    QPoint icp1;
+    icp1.setX(InrCrop.topLeft().x()+leftColumn);
+    icp1.setY(InrCrop.topLeft().y()+topRow);
+    QPoint icp2;
+    icp2.setX(InrCrop.bottomRight().x()+leftColumn);
+    icp2.setY(InrCrop.bottomRight().y()+topRow);
+    QRect cropArea;
+    cropArea.setTopLeft(icp1);
+    cropArea.setBottomRight(icp2);
 
-    int limitcolumn      = threshold.width();
-    int limitrow         = threshold.height();
-    int centeri          = ((limitrow/2)-1);
-    int centerj          = ((limitcolumn/2)-1);
-    int startrighti      = 0;
-    int startrightj      = 0;
-    int endrighti        = 0;
-    int endrightj        = 0;
-    int startlefti       = 0;
-    int startleftj       = 0;
-    int endlefti         = 0;
-    int endleftj         = 0;
-    int startupi         = 0;
-    int startupj         = 0;
-    int endupi           = 0;
-    int endupj           = 0;
-    int startdowni       = 0;
-    int startdownj       = 0;
-    int enddowni         = 0;
-    int enddownj         = 0;
-    int travelright      = 0;
-    int travelleft       = 0;
-    int travelup         = 0;
-    int traveldown       = 0;
-    int rightmargin      = 0;
-    int leftmargin       = 0;
-    int bottommargin     = 0;
-    int topmargin        = 0;
-    int counter          = 0;
-    bool fixtopmargin    = false;
-    bool fixrightmargin  = false;
-    bool fixleftmargin   = false;
-    bool fixbottommargin = false;
-    int count=0;
 
-    endupi      = centeri;
-    endupj      = centerj;
-    travelright = traveldown = -1;
-    travelleft  = travelup   = 0;
-    count       = limitcolumn + limitrow - 2;
+    kDebug() << "cropArea : "<<cropArea;
+    //    if(count == 0)kDebug () << "Inner Crop Area : " << d->cropArea;
+//    {
+//        kDebug() << "WE FOUND COUNT = 0";
+//        if(fixbottommargin==true && fixtopmargin==true && fixleftmargin==true && fixrightmargin==true)
+//        {
+//            ;
+//        }
+//        else
+//        {
+//            cropArea=crop;
+//        }
+//    }
 
-    while(count!=0)
+    //Step 1. check for extra small crop
+    //Step 2. Find out first minima from left and right, crop accordingly
+
+    //-----Step 1 -- Check for extra small crop
+
+    int area = cropArea.height() * cropArea.width();
+
+    if(area > (whitepixelCount/2))
     {
-        count--;
-        switch((counter%4))
+        d->cropArea.setTopLeft(icp1);
+        d->cropArea.setBottomRight(icp2);
+        kDebug () << "Inner Crop Area : " << d->cropArea;
+        return;
+    }
+    else
+    {
+//         threshold.save("ThresholdedImage.jpg",0,100);
+        kDebug() << "Area not adequate!";
+        kDebug() << "Extra Cropping Required";
+        // --- Step 2 -- Search between local minima
+        kDebug() << "In local minima function";
+        //We need to find the maxima between the first two local minima from either side
+        int blackpointCount[threshold.width()];
+        int leftminima  = 0;
+        int rightminima = (threshold.width()-1);
+        int temp;
+        int temppos;
+        int topCropLine    = 0;
+        int bottomCropLine = threshold.height()-1;
+        int count;
+        for(j=0; j<threshold.width(); j++)
         {
-            case 0 :    //travelling right
-
-                travelright += 2;
-
-                if(fixrightmargin == true)
-                    travelright--;
-
-                if(fixleftmargin == true)
-                    travelright--;
-
-                if(fixtopmargin == true)
+            count = 0;
+            for(i=0; i<threshold.height(); i++)
+            {
+                c = QColor::fromRgb(threshold.pixel(j,i));
+                if ( c == Qt::black)
                 {
-                    if(fixrightmargin == false)
-                        endrightj++;
-
+                    count++;
+                }
+                else
+                {
                     break;
                 }
+            }
+            blackpointCount[j] = count;
+        }
+        kDebug() << "Top black element count Data Entry Completed";
 
-                startrighti = endupi;
-                startrightj = endupj;
-                endrightj   = startrightj+travelright;
-
-                if(endrightj >= limitcolumn)
-                {
-                    endrightj      = limitcolumn-1;
-                    fixrightmargin = true;
-                    rightmargin    = limitcolumn-1;
-                    counter++;
-                    travelright--;
-                }
-
-                i = startrighti;
-                j = startrightj;
-
-                for(j=startrightj+1; j <= endrightj; j++)
-                {
-                    c = QColor::fromRgb(threshold.pixel(j, i));
-
-                    if(c == Qt::black)
-                    {
-                        //we have found an empty space
-                        fixtopmargin = true;
-                        topmargin    = i;
-                        endupi++;
-                        travelup--;
-                        break;
-                    }
-                }
-
-                endrighti = startrighti;
-
+        // --- Searching left minima
+        for(j=1;j<threshold.width();j++)
+        {
+            if((blackpointCount[j]>blackpointCount[j-1]) && (blackpointCount[j]<(0.2*threshold.height())))
+            {
+                leftminima = j-1;
                 break;
-
-            case 1 :    //travelling down
-
-                traveldown += 2;
-
-                if(fixbottommargin == true)
-                    traveldown--;
-
-                if(fixtopmargin == true)
-                    traveldown--;
-
-                if(fixrightmargin == true)
-                {
-                    if(fixbottommargin == false)
-                        enddowni++;
-
-                    //endrightj--;
-                    // kDebug() << "Travelling down : Case Skipped\n";
-                    break;
-                }
-
-                startdowni = endrighti;
-                startdownj = endrightj;
-                enddowni   = startdowni + traveldown;
-
-                if(enddowni >= limitrow)
-                {
-                    enddowni        = limitrow-1;
-                    counter++;
-                    bottommargin    = limitrow-1;
-                    fixbottommargin = true;
-                    traveldown--;
-                }
-
-                i = startdowni;
-                j = startdownj;
-
-                for(i=startdowni+1; i <= enddowni; i++)
-                {
-                    c = QColor::fromRgb(threshold.pixel(j, i));
-
-                    if(c == Qt::black)
-                    {
-                        //we have found an empty space
-                        fixrightmargin = true;
-                        rightmargin    = j;
-                        endrightj--;
-                        travelright--;
-                        break;
-                    }
-                }
-
-                enddownj = startdownj;
-
+            }
+        }
+        for(j=(threshold.width()-2); j>=0; j--)
+        {
+            if((blackpointCount[j]>blackpointCount[j+1]) && (blackpointCount[j]<(0.2*threshold.height())))
+            {
+                rightminima = j+1;
                 break;
-
-            case 2 :    //travelling left
-
-                travelleft += 2;
-
-                if(fixleftmargin == true)
-                    travelleft--;
-
-                if(fixrightmargin == true)
-                    travelleft--;
-
-                if(fixbottommargin == true)
-                {
-                    if(fixleftmargin == false)
-                        endleftj--;
-
-                    break;
-                }
-
-                startlefti = enddowni;
-                startleftj = enddownj;
-                endleftj   = startleftj - travelleft;
-
-                if(endleftj < 0)
-                {
-                    endleftj      = 0;
-                    counter++;
-                    leftmargin    = 0;
-                    fixleftmargin = true;
-                    travelleft--;
-                }
-
-                i = startlefti;
-                j = startleftj;
-
-                for(j=startleftj-1; j >= endleftj; j--)
-                {
-                    c = QColor::fromRgb(threshold.pixel(j,i));
-
-                    if(c == Qt::black)
-                    {
-                        //we have found an empty space
-                        fixbottommargin = true;
-                        bottommargin    = i;
-                        enddowni--;
-                        traveldown--;
-                        break;
-                    }
-                }
-
-                endlefti = startlefti;
-
-                break;
-
-            case 3 :    //travelling up
-
-                travelup += 2;
-
-                if(fixbottommargin == true)
-                    travelup--;
-
-                if(fixtopmargin == true)
-                    travelup--;
-
-                if(fixleftmargin == true)
-                {
-                    if(fixtopmargin == false)
-                        endupi--;
-
-                    break;
-                }
-
-                startupi = endlefti;
-                startupj = endleftj;
-                endupi   = startupi - travelup;
-
-                if(endupi < 0)
-                {
-                    endupi       = 0;
-                    counter++;
-                    fixtopmargin = true;
-                    topmargin    = 0;
-                    travelup--;
-                }
-
-                i = startupi;
-                j = startupj;
-
-                for(i=startupi-1; i>=endupi; i--)
-                {
-                    c = QColor::fromRgb(threshold.pixel(j, i));
-
-                    if(c == Qt::black)
-                    {
-                        //we have found an empty space
-                        fixleftmargin = true;
-                        leftmargin    = j;
-                        endleftj++;
-                        travelleft--;
-                        break;
-                    }
-                }
-
-                endupj = startupj;
-                break;
+            }
+        }
+        kDebug() << "Top Part right minima : " << rightminima << " Left Minima : " << leftminima;
+        // --- find the maximum among these minima
+        temp    = blackpointCount[leftminima];
+        temppos = leftminima;
+        for(j=leftminima+1; j<=rightminima; j++)
+        {
+            if(temp < blackpointCount[j])
+            {
+                temp    = blackpointCount[j];
+                temppos = j;
+            }
         }
 
-        counter++;
+        topCropLine = temp;
+        kDebug() << "Found top crop line";
+        kDebug() << "Found in column = " << temppos << "and the topCropLine is "<< topCropLine;
+        kDebug() << "Searching for bottom crop line";
 
-        if ( fixbottommargin == true && 
-             fixtopmargin    == true &&
-             fixleftmargin   == true && 
-             fixrightmargin  == true)
-            break;
+        for(j=0; j<threshold.width(); j++)
+        {
+            count = 0;
+            for(i=(threshold.height()-1); i>=0; i--)
+            {
+                c = QColor::fromRgb(result.pixel(j,i));
+                if ( c == Qt::black)
+                    count++;
+                else
+                    break;
+            }
+            blackpointCount[j] = count;
+        }
+        kDebug() << "Bottom black element count Data Entry Completed";
+
+        // --- Searching left minima
+        for(j=1;j<threshold.width();j++)
+        {
+            if((blackpointCount[j]>blackpointCount[j-1]) && (blackpointCount[j]<(0.2*threshold.height())))
+            {
+                leftminima = j-1;
+                break;
+            }
+        }
+        for(j=(threshold.width()-2); j>=0; j--)
+        {
+            if((blackpointCount[j]>blackpointCount[j+1]) && (blackpointCount[j]<(0.2*threshold.height())))
+            {
+                rightminima = j+1;
+                break;
+            }
+        }
+        // --- find the maximum among these minima
+        temp    = blackpointCount[leftminima];
+        temppos = leftminima;
+        for(j=leftminima+1; j<=rightminima; j++)
+        {
+            if(temp < blackpointCount[j])
+            {
+                temp    = blackpointCount[j];
+                temppos = j;
+            }
+        }
+        bottomCropLine = temp;
+        kDebug() << "Found top crop line";
+        kDebug() << "Found in column = " << temppos;
+
+        QRect newCrop = spiralClockwiseTraversal(threshold,topCropLine,(threshold.height()-bottomCropLine));
+        if(newCrop!=crop)
+        {
+            icp1.setX(newCrop.topLeft().x()+leftColumn);
+            icp1.setY(newCrop.topLeft().y()+topRow);
+            icp2.setX(newCrop.bottomRight().x()+leftColumn);
+            icp2.setY(newCrop.bottomRight().y()+topRow);
+            d->cropArea.setTopLeft(icp1);
+            d->cropArea.setBottomRight(icp2);
+        }
     }
-
-    kDebug() << "Count     : " << count;
-    kDebug() << "Endupi    : " << endupi;
-    kDebug() << "Endupj    : " << endupj;
-    kDebug() << "Endrighti : " << endrighti;
-    kDebug() << "Endrightj : " << endrightj;
-    kDebug() << "Enddowni  : " << enddowni;
-    kDebug() << "Enddownj  : " << enddownj;
-    kDebug() << "Endlefti  : " << endlefti;
-    kDebug() << "Endleftj  : " << endleftj;
-    kDebug() << "Done\n";
-
-    kDebug() << "\n";
-    kDebug() << "Left   Margin   : " << leftmargin;
-    kDebug() << "Right  Margin   : " << rightmargin;
-    kDebug() << "Top    Margin   : " << topmargin;
-    kDebug() << "Bottom Margin   : " << bottommargin;
-    kDebug() << "Bottom Margin   : " << bottommargin<<"\n";
-
-    //----------------------releasing images
-
-    QPoint icp1;
-    icp1.setX(leftColumn+leftmargin+1);
-    icp1.setY(topRow+topmargin+1);
-    QPoint icp2;
-    icp2.setX(leftColumn+rightmargin-1);
-    icp2.setY(topRow+bottommargin-1);
-    d->cropArea.setTopLeft(icp1);
-    d->cropArea.setBottomRight(icp2);
-
-    if( count == 0 )
-    {
-        d->cropArea = crop;
-    }
+    kDebug () << "Inner Crop Area : " << cropArea;
+//    return(cropArea);
+//    resultsize = QSize (cropArea.width(), cropArea.height());
+//    QImage ic = QImage(resultsize,img.format());
+//    for(i=cropArea.top(), ni=0 ; i<=cropArea.bottom() ; i++, ni++ )
+//    {
+//        for (j=cropArea.left(), nj=0 ; j<=cropArea.right();j++,nj++ )
+//        {
+//            ic.setPixel(nj,ni,img.pixel(j,i));
+//        }
+//    }
+//    kDebug() << "From "<<cropArea.top()<<" to "<<cropArea.bottom()<<" & "<<cropArea.left()<<" to "<<cropArea.right();
+//    if(ic.save("InnerCrop.jpg",0,100))
+//        kDebug() << "Inner Crop Function Saves the day!";
+//    else
+//        kDebug() << "Inner Crop Functions fails";
     kDebug () << "Inner Crop Area : " << d->cropArea;
 }
 
