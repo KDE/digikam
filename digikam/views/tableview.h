@@ -93,6 +93,7 @@ protected:
 public Q_SLOTS:
 
     void slotGoToRow(const int rowNumber, const bool relativeMove);
+    void slotSetCurrentWhenAvailable(const qlonglong id);
 
 protected Q_SLOTS:
 

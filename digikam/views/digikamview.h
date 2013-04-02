@@ -88,6 +88,7 @@ public:
 
     KUrl::List allUrls()      const;
     KUrl::List selectedUrls() const;
+    KUrl currentUrl() const;
     bool hasCurrentItem()     const;
     ImageInfo currentInfo() const;
     QList<ImageInfo> selectedInfoList(const bool currentFirst = false) const;
@@ -151,6 +152,7 @@ public Q_SLOTS:
     void slotGotoTagAndItem(int tagID);
 
     void slotSelectAlbum(const KUrl& url);
+    void slotSetCurrentWhenAvailable(const qlonglong id);
 
     // Tag action slots
     void slotNewTag();

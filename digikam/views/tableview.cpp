@@ -609,4 +609,16 @@ ImageInfo TableView::previousInfo() const
     return s->tableViewModel->imageInfo(previousDeepRowIndex);
 }
 
+void TableView::slotSetCurrentWhenAvailable(const qlonglong id)
+{
+    const QModelIndex idx = s->tableViewModel->indexFromImageId(id, 0);
+    if (!idx.isValid())
+    {
+        /// @todo Actually buffer this request until the model is fully populated
+        return;
+    }
+
+    s->tableViewSelectionModel->setCurrentIndex(idx, QItemSelectionModel::ClearAndSelect);
+}
+
 } /* namespace Digikam */

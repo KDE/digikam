@@ -621,7 +621,7 @@ void DigikamView::setupConnections()
             d->albumHistory, SLOT(slotAlbumCurrentChanged()));
 
     connect(d->albumHistory, SIGNAL(signalSetCurrent(qlonglong)),
-            d->iconView, SLOT(setCurrentWhenAvailable(qlonglong)));
+            this, SLOT(slotSetCurrentWhenAvailable(qlonglong)));
 
     connect(d->albumHistory, SIGNAL(signalSetSelectedInfos(QList<ImageInfo>)),
             d->iconView, SLOT(setSelectedImageInfos(QList<ImageInfo>)));
@@ -994,8 +994,7 @@ void DigikamView::slotGotoAlbumAndItem(const ImageInfo& imageInfo)
 
     // Set the activate item url to find in the Album View after
     // all items have be reloaded.
-    /// @todo Adapt to TableView here and in similar functions below
-    d->iconView->setCurrentWhenAvailable(imageInfo.id());
+    slotSetCurrentWhenAvailable(imageInfo.id());
 
     // And finally toggle album manager to handle album history and
     // reload all items.
@@ -1016,7 +1015,7 @@ void DigikamView::slotGotoDateAndItem(const ImageInfo& imageInfo)
 
     // Set the activate item url to find in the Album View after
     // all items have be reloaded.
-    d->iconView->setCurrentWhenAvailable(imageInfo.id());
+    slotSetCurrentWhenAvailable(imageInfo.id());
 
     // Change the year and month of the iconItem (day is unused).
     d->dateViewSideBar->gotoDate(date);
@@ -1222,13 +1221,14 @@ void DigikamView::slotAlbumRefresh()
     }
 
     // force reload. Should normally not be necessary, but we may have bugs
+    /// @todo Adapt to TableView
     qlonglong currentId = d->iconView->currentInfo().id();
     d->iconView->imageAlbumModel()->refresh();
 
     if (currentId != -1)
     {
         /// @todo Adapt to TableView
-        d->iconView->setCurrentWhenAvailable(currentId);
+        slotSetCurrentWhenAvailable(currentId);
     }
 }
 
@@ -1605,7 +1605,7 @@ void DigikamView::slotViewModeChanged()
 
 void DigikamView::slotImageFindSimilar()
 {
-    ImageInfo current = d->iconView->currentInfo();
+    const ImageInfo current = currentInfo();
 
     if (!current.isNull())
     {
@@ -1676,7 +1676,6 @@ void DigikamView::slotImageAddToCurrentQueue()
 
 void DigikamView::slotImageAddToNewQueue()
 {
-    /// @todo Care about MapWidgetMode
     const bool newQueue = QueueMgrWindow::queueManagerWindowCreated() &&
                     !QueueMgrWindow::queueManagerWindow()->queuesMap().isEmpty();
 
@@ -1827,12 +1826,12 @@ void DigikamView::slotAssignRating(int rating)
 
 void DigikamView::slotSlideShowAll()
 {
-    slideShow(d->iconView->imageInfos());
+    slideShow(allInfo());
 }
 
 void DigikamView::slotSlideShowSelection()
 {
-    slideShow(d->iconView->selectedImageInfos());
+    slideShow(selectedInfoList());
 }
 
 void DigikamView::slotSlideShowRecursive()
@@ -1862,7 +1861,7 @@ void DigikamView::slotSlideShowBuilderComplete(const SlideShowSettings& settings
 
     if (settings.startWithCurrent)
     {
-        slide->setCurrent(d->iconView->currentUrl());
+        slide->setCurrent(currentUrl());
     }
 
     connect(slide, SIGNAL(signalRatingChanged(KUrl,int)),
@@ -1986,12 +1985,12 @@ bool DigikamView::hasCurrentItem() const
 
 void DigikamView::slotImageExifOrientation(int orientation)
 {
-    FileActionMngr::instance()->setExifOrientation(d->iconView->selectedImageInfos(), orientation);
+    FileActionMngr::instance()->setExifOrientation(selectedInfoList(), orientation);
 }
 
 void DigikamView::imageTransform(RotationMatrix::TransformationAction transform)
 {
-    FileActionMngr::instance()->transform(d->iconView->selectedImageInfos(), transform);
+    FileActionMngr::instance()->transform(selectedInfoList(), transform);
 }
 
 ImageInfo DigikamView::currentInfo() const
@@ -2061,6 +2060,26 @@ ImageInfoList DigikamView::allInfo() const
     }
 }
 
+KUrl DigikamView::currentUrl() const
+{
+    const ImageInfo cInfo = currentInfo();
+
+    return cInfo.fileUrl();
+}
+
+void DigikamView::slotSetCurrentWhenAvailable(const qlonglong id)
+{
+    switch (d->stackedview->viewMode())
+    {
+    case StackedView::TableViewMode:
+        d->tableView->slotSetCurrentWhenAvailable(id);
+        break;
+
+    default:
+        d->iconView->setCurrentWhenAvailable(id);
+    }
+}
+
 
 #ifdef USE_PRESENTATION_MODE
 
@@ -2075,7 +2094,7 @@ void DigikamView::slotSlideShowQml()
 */
     SlideShowSettings settings;
     settings.readFromConfig();
-    QmlShow* const qmlShow = new QmlShow(d->iconView->imageInfos(),settings);
+    QmlShow* const qmlShow = new QmlShow(allInfo(), settings);
     qmlShow->setWindowState(Qt::WindowFullScreen);
     qmlShow->show();
 }
