@@ -1503,6 +1503,8 @@ void DigikamView::slotImageReadMetadata()
 void DigikamView::slotEscapePreview()
 {
     if (d->stackedview->viewMode() == StackedView::IconViewMode ||
+        d->stackedview->viewMode() == StackedView::MapWidgetMode ||
+        d->stackedview->viewMode() == StackedView::TableViewMode ||
         d->stackedview->viewMode() == StackedView::WelcomePageMode)
     {
         return;
