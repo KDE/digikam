@@ -6,8 +6,8 @@
  * Date        : 2007-09-19
  * Description : Scanning of a single image
  *
- * Copyright (C) 2007-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C)      2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C)      2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -52,12 +52,14 @@
 #include "tagregion.h"
 #include "tagscache.h"
 #include "iostream"
+
 namespace Digikam
 {
 
 class ImageScannerCommit
 {
 public:
+
     ImageScannerCommit()
         : operation(NoOp),
           copyImageAttributesId(-1),
@@ -112,60 +114,63 @@ public:
     QString    uuid;
 };
 
-class ImageScanner::ImageScannerPriv
+class ImageScanner::Private
 {
 public:
 
-    ImageScannerPriv()
-        : hasImage(false), hasMetadata(false), loadedFromDisk(false),
-          scanMode(ModifiedScan), hasHistoryToResolve(false)
+    Private()
+        : hasImage(false),
+          hasMetadata(false),
+          loadedFromDisk(false),
+          scanMode(ModifiedScan),
+          hasHistoryToResolve(false)
     {
         time.start();
     }
 
-    bool         hasImage;
-    bool         hasMetadata;
-    bool         loadedFromDisk;
+    bool                   hasImage;
+    bool                   hasMetadata;
+    bool                   loadedFromDisk;
 
-    QFileInfo    fileInfo;
+    QFileInfo              fileInfo;
 
-    DMetadata    metadata;
-    DImg         img;
-    ItemScanInfo scanInfo;
+    DMetadata              metadata;
+    DImg                   img;
+    ItemScanInfo           scanInfo;
     ImageScanner::ScanMode scanMode;
 
-    bool         hasHistoryToResolve;
+    bool                   hasHistoryToResolve;
 
-    ImageScannerCommit commit;
+    ImageScannerCommit     commit;
 
-    QTime time;
+    QTime                  time;
 };
 
 ImageScanner::ImageScanner(const QFileInfo& info, const ItemScanInfo& scanInfo)
-    : d(new ImageScannerPriv)
+    : d(new Private)
 {
     d->fileInfo = info;
     d->scanInfo = scanInfo;
 }
 
 ImageScanner::ImageScanner(const QFileInfo& info)
-    : d(new ImageScannerPriv)
+    : d(new Private)
 {
     d->fileInfo = info;
 }
 
 ImageScanner::ImageScanner(qlonglong imageid)
-    : d(new ImageScannerPriv)
+    : d(new Private)
 {
     ItemShortInfo shortInfo;
     {
         DatabaseAccess access;
-        shortInfo  = access.db()->getItemShortInfo(imageid);
+        shortInfo   = access.db()->getItemShortInfo(imageid);
         d->scanInfo = access.db()->getItemScanInfo(imageid);
     }
 
     QString albumRootPath = CollectionManager::instance()->albumRootPath(shortInfo.albumRootID);
-    d->fileInfo            = QFileInfo(DatabaseUrl::fromAlbumAndName(shortInfo.itemName,
+    d->fileInfo           = QFileInfo(DatabaseUrl::fromAlbumAndName(shortInfo.itemName,
                                       shortInfo.album, albumRootPath, shortInfo.albumRootID).fileUrl().toLocalFile());
 }
 
@@ -189,6 +194,7 @@ void ImageScanner::setCategory(DatabaseItem::Category category)
 void ImageScanner::commit()
 {
     kDebug() << "Scanning took" << d->time.restart() << "ms";
+
     switch (d->commit.operation)
     {
         case ImageScannerCommit::NoOp:
@@ -394,10 +400,10 @@ void ImageScanner::prepareAddImage(int albumId)
 
 void ImageScanner::commitAddImage()
 {
-    d->scanInfo.id  = DatabaseAccess().db()->addItem(d->scanInfo.albumID, d->scanInfo.itemName,
-                                                     d->scanInfo.status, d->scanInfo.category,
-                                                     d->scanInfo.modificationDate, d->scanInfo.fileSize,
-                                                     d->scanInfo.uniqueHash);
+    d->scanInfo.id = DatabaseAccess().db()->addItem(d->scanInfo.albumID, d->scanInfo.itemName,
+                                                    d->scanInfo.status, d->scanInfo.category,
+                                                    d->scanInfo.modificationDate, d->scanInfo.fileSize,
+                                                    d->scanInfo.uniqueHash);
 }
 
 void ImageScanner::prepareUpdateImage()
@@ -427,6 +433,7 @@ void ImageScanner::scanFile(ScanMode mode)
         else if (d->scanInfo.category == DatabaseItem::Video)
         {
             scanVideoInformation();
+
             // NOTE: Here, we only scan fields which can be expected to have changed, when we detect a change of file data.
             // It seems to me that at the moment video metadata contains such fields (which may change after editing).
             // In contrast, with photos, ImageMetadata contains fields which describe the moment of taking the photo,
@@ -458,6 +465,7 @@ void ImageScanner::scanFile(ScanMode mode)
         else if (d->scanInfo.category == DatabaseItem::Video)
         {
             scanVideoInformation();
+
             if (d->hasMetadata)
             {
                 scanVideoMetadata();
@@ -493,12 +501,14 @@ bool ImageScanner::checkRatingFromMetadata(const QVariant& ratingFromMetadata) c
             return false;
         }
     }
+
     return true;
 }
 
 void ImageScanner::scanImageInformation()
 {
     d->commit.commitImageInformation = true;
+
     if (d->scanMode == NewScan || d->scanMode == Rescan)
     {
         d->commit.imageInformationFields = DatabaseFields::ImageInformationAll;
@@ -523,7 +533,8 @@ void ImageScanner::scanImageInformation()
     else
     {
         // Does _not_ update rating and orientation (unless dims were exchanged)!
-        /*int orientation = d->metadata.getImageOrientation();
+/*
+        int orientation = d->metadata.getImageOrientation();
         QVariantList data = DatabaseAccess().db()->getImageInformation(d->scanInfo.id,
                                                                        DatabaseFields::Width |
                                                                        DatabaseFields::Height |
@@ -532,7 +543,8 @@ void ImageScanner::scanImageInformation()
         {
             // be careful not to overwrite our value set in the database
             // But there is a special case: if the dims were
-        }*/
+        }
+*/
 
         d->commit.imageInformationFields =
                 DatabaseFields::Width      |
@@ -559,13 +571,7 @@ void ImageScanner::commitImageInformation()
                                                    d->commit.imageInformationInfos,
                                                    d->commit.imageInformationFields);
     }
-    else if (d->scanMode == Rescan)
-    {
-        DatabaseAccess().db()->changeImageInformation(d->scanInfo.id,
-                                                      d->commit.imageInformationInfos,
-                                                      d->commit.imageInformationFields);
-    }
-    else // ModifiedScan
+    else // d->scanMode == Rescan or d->scanMode == ModifiedScan
     {
         DatabaseAccess().db()->changeImageInformation(d->scanInfo.id,
                                                       d->commit.imageInformationInfos,
@@ -746,7 +752,7 @@ void ImageScanner::scanIPTCCore()
         return;
     }
 
-    d->commit.commitIPTCCore = true;
+    d->commit.commitIPTCCore        = true;
     d->commit.iptcCoreMetadataInfos = metadataInfos;
 }
 
@@ -802,11 +808,13 @@ void ImageScanner::scanTags()
     // Check Pick Label tag.
 
     int pickId = d->metadata.getImagePickLabel();
+
     if (pickId != -1)
     {
         kDebug() << "Pick Label found : " << pickId;
 
         int tagId = TagsCache::instance()->tagForPickLabel((PickLabel)pickId);
+
         if (tagId)
         {
             d->commit.tagIds << tagId;
@@ -821,11 +829,13 @@ void ImageScanner::scanTags()
     // Check Color Label tag.
 
     int colorId = d->metadata.getImageColorLabel();
+
     if (colorId != -1)
     {
         kDebug() << "Color Label found : " << colorId;
 
         int tagId = TagsCache::instance()->tagForColorLabel((ColorLabel)colorId);
+
         if (tagId)
         {
             d->commit.tagIds << tagId;
@@ -846,12 +856,14 @@ void ImageScanner::commitTags()
 void ImageScanner::scanFaces()
 {
     QSize size = d->img.size();
+
     if (!size.isValid())
     {
         return;
     }
 
     QMap<QString,QVariant> metadataFacesMap;
+
     if (!d->metadata.getImageFacesMap(metadataFacesMap))
     {
         return;
@@ -865,6 +877,7 @@ void ImageScanner::commitFaces()
 {
     QSize size = d->img.size();
     QMap<QString,QVariant>::const_iterator it;
+
     for (it = d->commit.metadataFacesMap.constBegin(); it != d->commit.metadataFacesMap.constEnd(); ++it)
     {
         QString name = it.key();
@@ -876,6 +889,7 @@ void ImageScanner::commitFaces()
         }
 
         int tagId = FaceTags::getOrCreateTagForPerson(name);
+
         if (!tagId)
         {
             kDebug() << "Failed to create a person tag for name" << name;
@@ -907,6 +921,7 @@ void ImageScanner::commitImageHistory()
                                           getOrCreateInternalTag(InternalTagName::needResolvingHistory()));
         d->hasHistoryToResolve = true;
     }
+
     if (!d->commit.uuid.isNull())
     {
         DatabaseAccess().db()->setImageUuid(d->scanInfo.id, d->commit.uuid);
@@ -1148,11 +1163,13 @@ static bool uuidDoesNotDiffer(const HistoryImageId& referenceId, qlonglong id)
     if (referenceId.hasUuid())
     {
         QString uuid = DatabaseAccess().db()->getImageUuid(id);
+
         if (!uuid.isEmpty())
         {
             return referenceId.m_uuid == uuid;
         }
     }
+
     return true;
 }
 
@@ -1191,10 +1208,12 @@ QList<qlonglong> ImageScanner::resolveHistoryImageId(const HistoryImageId& histo
         uuidList = DatabaseAccess().db()->getItemsForUuid(historyId.m_uuid);
 
         // If all images had a UUID, we would be finished and could return here with a result:
-        /*if (!uuidList.isEmpty())
+/*
+        if (!uuidList.isEmpty())
         {
             return uuidList;
-        }*/
+        }
+*/
         // But as identical images may have no UUID yet, we need to continue
     }
 
@@ -1206,6 +1225,7 @@ QList<qlonglong> ImageScanner::resolveHistoryImageId(const HistoryImageId& histo
         if (!infos.isEmpty())
         {
             QList<qlonglong> ids;
+
             foreach(const ItemScanInfo& info, infos)
             {
                 if (info.status != DatabaseItem::Removed)
@@ -1213,6 +1233,7 @@ QList<qlonglong> ImageScanner::resolveHistoryImageId(const HistoryImageId& histo
                     ids << info.id;
                 }
             }
+
             return mergedIdLists(historyId, uuidList, ids);
         }
     }
@@ -1243,8 +1264,8 @@ QList<qlonglong> ImageScanner::resolveHistoryImageId(const HistoryImageId& histo
 
             if (!location.isNull())
             {
-                QString album = CollectionManager::instance()->album(file.path());
-                QString name  = file.fileName();
+                QString album      = CollectionManager::instance()->album(file.path());
+                QString name       = file.fileName();
                 ItemShortInfo info = DatabaseAccess().db()->getItemShortInfo(location.id(), album, name);
 
                 if (info.id)
@@ -1813,7 +1834,7 @@ void ImageScanner::fillCommonContainer(qlonglong imageid, ImageCommonContainer* 
 void ImageScanner::fillMetadataContainer(qlonglong imageid, ImageMetadataContainer* const container)
 {
     // read from database
-    QVariantList fields = DatabaseAccess().db()->getImageMetadata(imageid);
+    QVariantList fields      = DatabaseAccess().db()->getImageMetadata(imageid);
     // check we have at least one valid field
     container->allFieldsNull = !hasValidField(fields);
 
@@ -1847,9 +1868,10 @@ void ImageScanner::fillMetadataContainer(qlonglong imageid, ImageMetadataContain
 void ImageScanner::fillVideoMetadataContainer(qlonglong imageid, VideoMetadataContainer* const container)
 {
     // read from database
-    QVariantList fields = DatabaseAccess().db()->getVideoMetadata(imageid);
+    QVariantList fields      = DatabaseAccess().db()->getVideoMetadata(imageid);
     // check we have at least one valid field
     container->allFieldsNull = !hasValidField(fields);
+
     if (container->allFieldsNull)
     {
         return;
