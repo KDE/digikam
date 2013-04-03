@@ -99,10 +99,11 @@ void Task::setItem(const AssignedBatchTools& tools)
 
 void Task::slotCancel()
 {
-    d->cancel = true;
-
     if (d->tool)
         d->tool->cancel();
+
+    d->cancel = true;
+
 }
 
 void Task::emitActionData(ActionData::ActionStatus st, const QString& mess, const KUrl& dest)
