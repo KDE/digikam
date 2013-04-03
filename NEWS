@@ -1,10 +1,11 @@
 *****************************************************************************************************
-digiKam 3.2.0 - Release date: 2013-04-07
+digiKam 3.2.0-beta1 - Release date: 2013-04-07
 
 NEW FEATURES:
 
-AlbumGUI : New "Table-View" view mode dedictaed to show album items in a list view.
-General  : Remove internal clapack library code. Set only an optional and external dependency to eigen3.
+AlbumGUI    : New "Table-View" view mode dedictaed to show album items in a list view.
+General     : Remove internal clapack library code. Set only an optional and external dependency to eigen3.
+General     : New tool to auto-crop image based on black hole borders detection.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 

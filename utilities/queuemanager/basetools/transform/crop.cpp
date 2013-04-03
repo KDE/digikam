@@ -29,6 +29,7 @@
 #include <QRect>
 #include <QWidget>
 #include <QGridLayout>
+#include <QCheckBox>
 
 // KDE includes
 
@@ -43,6 +44,7 @@
 
 // Local includes
 
+#include "autocrop.h"
 #include "dimg.h"
 #include "dimgbuiltinfilter.h"
 
@@ -54,6 +56,7 @@ class Crop::Private
 public:
 
     Private() :
+        autoCrop(0),
         heightInput(0),
         widthInput(0),
         xInput(0),
@@ -62,6 +65,8 @@ public:
     }
 
 public:
+
+    QCheckBox*    autoCrop;
 
     RIntNumInput* heightInput;
     RIntNumInput* widthInput;
@@ -74,7 +79,7 @@ Crop::Crop(QObject* const parent)
       d(new Private)
 {
     setToolTitle(i18n("Crop"));
-    setToolDescription(i18n("Crop images with a customized region."));
+    setToolDescription(i18n("Crop images to a region."));
     setToolIconName("transform-crop");
 }
 
@@ -88,6 +93,10 @@ void Crop::registerSettingsWidget()
     m_settingsWidget = new QWidget;
 
     // -------------------------------------------------------------
+
+    d->autoCrop = new QCheckBox(i18n("Auto-Crop"), m_settingsWidget);
+    d->autoCrop->setWhatsThis(i18n("Compute automatically crop area settings by a parse of "
+                                   "black hole image borders."));
 
     QLabel* const positionLabel = new QLabel(i18n("Position:"), m_settingsWidget);
     positionLabel->setAlignment(Qt::AlignLeft|Qt::AlignVCenter);
@@ -124,16 +133,25 @@ void Crop::registerSettingsWidget()
     // -------------------------------------------------------------
 
     QGridLayout* const mainLayout = new QGridLayout(m_settingsWidget);
-    mainLayout->addWidget(positionLabel,                0, 0, 1, 1);
-    mainLayout->addWidget(d->xInput,                    0, 1, 1, 3);
-    mainLayout->addWidget(d->yInput,                    1, 1, 1, 3);
-    mainLayout->addWidget(sizeLabel,                    2, 0, 1, 1);
-    mainLayout->addWidget(d->widthInput,                2, 1, 1, 3);
-    mainLayout->addWidget(d->heightInput,               3, 1, 1, 3);
-    mainLayout->addWidget(new QLabel(m_settingsWidget), 4, 1, 1, 3);
-    mainLayout->setRowStretch(4, 10);
+    mainLayout->addWidget(d->autoCrop,                  0, 0, 1, 1);
+    mainLayout->addWidget(positionLabel,                1, 0, 1, 1);
+    mainLayout->addWidget(d->xInput,                    1, 1, 1, 3);
+    mainLayout->addWidget(d->yInput,                    2, 1, 1, 3);
+    mainLayout->addWidget(sizeLabel,                    3, 0, 1, 1);
+    mainLayout->addWidget(d->widthInput,                3, 1, 1, 3);
+    mainLayout->addWidget(d->heightInput,               4, 1, 1, 3);
+    mainLayout->addWidget(new QLabel(m_settingsWidget), 5, 1, 1, 3);
+    mainLayout->setRowStretch(5, 10);
     mainLayout->setMargin(KDialog::spacingHint());
     mainLayout->setSpacing(KDialog::spacingHint());
+
+    // -------------------------------------------------------------
+
+    connect(d->autoCrop, SIGNAL(clicked(bool)),
+            this, SLOT(slotDisableParameters(bool)));
+
+    connect(this, SIGNAL(signalAutoCrop()),
+            this, SLOT(slotSettingsChanged()));
 
     connect(d->xInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotSettingsChanged()));
@@ -150,6 +168,17 @@ void Crop::registerSettingsWidget()
     BatchTool::registerSettingsWidget();
 }
 
+void Crop::slotDisableParameters(bool b)
+{
+    d->xInput->setDisabled(b);
+    d->yInput->setDisabled(b);
+    d->widthInput->setDisabled(b);
+    d->heightInput->setDisabled(b);
+
+    if (b)
+        emit signalAutoCrop();
+}
+
 BatchToolSettings Crop::defaultSettings()
 {
     BatchToolSettings settings;
@@ -157,6 +186,7 @@ BatchToolSettings Crop::defaultSettings()
     settings.insert("yInput",      50);
     settings.insert("widthInput",  800);
     settings.insert("heightInput", 600);
+    settings.insert("AutoCrop",    false);
     return settings;
 }
 
@@ -166,6 +196,7 @@ void Crop::slotAssignSettings2Widget()
     d->yInput->setValue(settings()["yInput"].toInt());
     d->widthInput->setValue(settings()["widthInput"].toInt());
     d->heightInput->setValue(settings()["heightInput"].toInt());
+    d->autoCrop->setChecked(settings()["AutoCrop"].toBool());
 }
 
 void Crop::slotSettingsChanged()
@@ -175,6 +206,7 @@ void Crop::slotSettingsChanged()
     settings.insert("yInput",      d->yInput->value());
     settings.insert("widthInput",  d->widthInput->value());
     settings.insert("heightInput", d->heightInput->value());
+    settings.insert("AutoCrop",    d->autoCrop->isChecked());
     BatchTool::slotSettingsChanged(settings);
 }
 
@@ -184,6 +216,7 @@ bool Crop::toolOperations()
     int yInput      = settings()["yInput"].toInt();
     int widthInput  = settings()["widthInput"].toInt();
     int heightInput = settings()["heightInput"].toInt();
+    bool autoCrop   = settings()["AutoCrop"].toBool();
 
     if (!loadToDImg())
     {
@@ -191,6 +224,13 @@ bool Crop::toolOperations()
     }
 
     QRect rect(xInput, yInput, widthInput, heightInput);
+
+    if (autoCrop)
+    {
+        AutoCrop ac(&image());
+        ac.startFilterDirectly();
+        rect = ac.autoInnerCrop();
+    }
 
     if (!rect.isValid())
     {
