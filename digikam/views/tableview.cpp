@@ -438,11 +438,23 @@ ImageInfoList TableView::allInfo() const
     return s->tableViewModel->allImageInfo();
 }
 
-void TableView::slotDeleteSelected(const bool permanently)
+void TableView::slotDeleteSelected(const ImageViewUtilities::DeleteMode deleteMode)
 {
     const ImageInfoList infoList = selectedImageInfos();
 
-    d->imageViewUtilities->deleteImages(infoList, permanently);
+    /// @todo Update parameter naming for deleteImages
+    if (d->imageViewUtilities->deleteImages(infoList, deleteMode))
+    {
+        slotAwayFromSelection();
+    }
+}
+
+void TableView::slotDeleteSelectedWithoutConfirmation(const ImageViewUtilities::DeleteMode deleteMode)
+{
+    const ImageInfoList infoList = selectedImageInfos();
+
+    d->imageViewUtilities->deleteImagesDirectly(infoList, deleteMode);
+    slotAwayFromSelection();
 }
 
 void TableView::slotRemoveSelectedFromGroup()
@@ -619,6 +631,62 @@ void TableView::slotSetCurrentWhenAvailable(const qlonglong id)
     }
 
     s->tableViewSelectionModel->setCurrentIndex(idx, QItemSelectionModel::ClearAndSelect);
+}
+
+/**
+ * @brief Unselects the current selection and changes the current item
+ *
+ * @todo This may not work correctly if grouped items are deleted, but are not selected
+ */
+void TableView::slotAwayFromSelection()
+{
+    QModelIndexList selection = s->tableViewSelectionModel->selectedRows(0);
+    if (selection.isEmpty())
+    {
+        return;
+    }
+
+    const QModelIndex firstIndex = s->tableViewModel->deepRowIndex(0);
+    const QModelIndex lastIndex = s->tableViewModel->deepRowIndex(-1);
+
+    if (selection.contains(firstIndex) && selection.contains(lastIndex))
+    {
+        // both the first and the last index are selected, we have to
+        // select an index inbetween
+        const int nextFreeDeepRow= s->tableViewModel->firstDeepRowNotInList(selection);
+
+        if (nextFreeDeepRow<0)
+        {
+            s->tableViewSelectionModel->clearSelection();
+            s->tableViewSelectionModel->setCurrentIndex(QModelIndex(), QItemSelectionModel::ClearAndSelect);
+        }
+        else
+        {
+            const QModelIndex nextFreeIndex = s->tableViewModel->deepRowIndex(nextFreeDeepRow);
+            s->tableViewSelectionModel->setCurrentIndex(nextFreeIndex, QItemSelectionModel::ClearAndSelect);
+            const QItemSelection nextFreeIndexAsRow =
+                    s->tableViewSelectionModelSyncer->targetIndexToRowItemSelection(nextFreeIndex);
+            s->tableViewSelectionModel->select(nextFreeIndexAsRow, QItemSelectionModel::ClearAndSelect);
+        }
+    }
+    else if (selection.contains(lastIndex))
+    {
+        const int firstSelectedRowNumber = s->tableViewModel->indexToDeepRowNumber(selection.first());
+        const QModelIndex newIndex = s->tableViewModel->deepRowIndex(firstSelectedRowNumber-1);
+        s->tableViewSelectionModel->setCurrentIndex(newIndex, QItemSelectionModel::ClearAndSelect);
+        const QItemSelection newIndexAsRow =
+                s->tableViewSelectionModelSyncer->targetIndexToRowItemSelection(newIndex);
+        s->tableViewSelectionModel->select(newIndexAsRow, QItemSelectionModel::ClearAndSelect);
+    }
+    else
+    {
+        const int lastSelectedRowNumber = s->tableViewModel->indexToDeepRowNumber(selection.last());
+        const QModelIndex newIndex = s->tableViewModel->deepRowIndex(lastSelectedRowNumber+1);
+        s->tableViewSelectionModel->setCurrentIndex(newIndex, QItemSelectionModel::ClearAndSelect);
+        const QItemSelection newIndexAsRow =
+                s->tableViewSelectionModelSyncer->targetIndexToRowItemSelection(newIndex);
+        s->tableViewSelectionModel->select(newIndexAsRow, QItemSelectionModel::ClearAndSelect);
+    }
 }
 
 } /* namespace Digikam */

@@ -101,7 +101,7 @@ void ImageViewUtilities::rename(const KUrl& imageUrl, const QString& newName)
     DIO::rename(info, newName);
 }
 
-bool ImageViewUtilities::deleteImages(const QList<ImageInfo>& infos, bool deletePermanently)
+bool ImageViewUtilities::deleteImages(const QList<ImageInfo>& infos, const DeleteMode deleteMode)
 {
     if (infos.isEmpty())
     {
@@ -116,22 +116,27 @@ bool ImageViewUtilities::deleteImages(const QList<ImageInfo>& infos, bool delete
 
     DeleteDialog dialog(m_widget);
 
-    if (!dialog.confirmDeleteList(urlList,
-                                  DeleteDialogMode::Files,
-                                  deletePermanently ?
-                                  DeleteDialogMode::NoChoiceDeletePermanently :
-                                  DeleteDialogMode::NoChoiceTrash))
+    DeleteDialogMode::DeleteMode deleteDialogMode = DeleteDialogMode::NoChoiceTrash;
+    if (deleteMode==ImageViewUtilities::DeletePermanently)
+    {
+        deleteDialogMode = DeleteDialogMode::NoChoiceDeletePermanently;
+    }
+    if (!dialog.confirmDeleteList(
+                urlList,
+                DeleteDialogMode::Files,
+                deleteDialogMode
+            ))
     {
         return false;
     }
 
-    bool useTrash = !dialog.shouldDelete();
-
+    const bool useTrash = !dialog.shouldDelete();
     DIO::del(infos, useTrash);
+
     return true;
 }
 
-void ImageViewUtilities::deleteImagesDirectly(const QList<ImageInfo>& infos, bool useTrash)
+void ImageViewUtilities::deleteImagesDirectly(const QList<ImageInfo>& infos, const DeleteMode deleteMode)
 {
     // This method deletes the selected items directly, without confirmation.
     // It is not used in the default setup.
@@ -140,6 +145,7 @@ void ImageViewUtilities::deleteImagesDirectly(const QList<ImageInfo>& infos, boo
     {
         return;
     }
+    const bool useTrash = (deleteMode==ImageViewUtilities::DeleteUseTrash);
     DIO::del(infos, useTrash);
 }
 

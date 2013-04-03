@@ -236,6 +236,7 @@ private Q_SLOTS:
     void slotNextItem();
     void slotLastItem();
     void slotSelectItemByUrl(const KUrl&);
+    void slotAwayFromSelection();
 
     void slotViewModeChanged();
     void slotEscapePreview();

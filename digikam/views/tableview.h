@@ -36,6 +36,7 @@
 
 /// @todo clean up includes and use forward-declarations where possible
 #include "digikam_export.h"
+#include <imageviewutilities.h>
 #include "imageinfo.h"
 #include "statesavingobject.h"
 
@@ -94,6 +95,9 @@ public Q_SLOTS:
 
     void slotGoToRow(const int rowNumber, const bool relativeMove);
     void slotSetCurrentWhenAvailable(const qlonglong id);
+    void slotAwayFromSelection();
+    void slotDeleteSelected(const ImageViewUtilities::DeleteMode deleteMode = ImageViewUtilities::DeleteUseTrash);
+    void slotDeleteSelectedWithoutConfirmation(const ImageViewUtilities::DeleteMode deleteMode = ImageViewUtilities::DeleteUseTrash);
 
 protected Q_SLOTS:
 
@@ -106,7 +110,6 @@ protected Q_SLOTS:
     void slotInsertSelectedToExistingQueue(const int queueId);
     void slotSetAsAlbumThumbnail(const ImageInfo& info);
     void slotPaste();
-    void slotDeleteSelected(const bool permanently = false);
     void slotRemoveSelectedFromGroup();
     void slotUngroupSelected();
     void slotCreateGroupFromSelection();

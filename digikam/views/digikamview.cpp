@@ -1703,22 +1703,54 @@ void DigikamView::slotImageRename()
 
 void DigikamView::slotImageDelete()
 {
-    d->iconView->deleteSelected(false);
+    switch (d->stackedview->viewMode())
+    {
+    case StackedView::TableViewMode:
+        d->tableView->slotDeleteSelected(ImageViewUtilities::DeleteUseTrash);
+        break;
+
+    default:
+        d->iconView->deleteSelected(ImageViewUtilities::DeleteUseTrash);
+    }
 }
 
 void DigikamView::slotImageDeletePermanently()
 {
-    d->iconView->deleteSelected(true);
+    switch (d->stackedview->viewMode())
+    {
+    case StackedView::TableViewMode:
+        d->tableView->slotDeleteSelected(ImageViewUtilities::DeletePermanently);
+        break;
+
+    default:
+        d->iconView->deleteSelected(ImageViewUtilities::DeletePermanently);
+    }
 }
 
 void DigikamView::slotImageDeletePermanentlyDirectly()
 {
-    d->iconView->deleteSelectedDirectly(false);
+    switch (d->stackedview->viewMode())
+    {
+    case StackedView::TableViewMode:
+        d->tableView->slotDeleteSelectedWithoutConfirmation(ImageViewUtilities::DeletePermanently);
+        break;
+
+    default:
+        d->iconView->deleteSelectedDirectly(ImageViewUtilities::DeletePermanently);
+    }
 }
 
 void DigikamView::slotImageTrashDirectly()
 {
-    d->iconView->deleteSelectedDirectly(true);
+    switch (d->stackedview->viewMode())
+    {
+    case StackedView::TableViewMode:
+        d->tableView->slotDeleteSelectedWithoutConfirmation(ImageViewUtilities::DeleteUseTrash);
+        break;
+
+    default:
+        d->iconView->deleteSelectedDirectly(ImageViewUtilities::DeleteUseTrash);
+    }
 }
 
 void DigikamView::slotSelectAll()
@@ -2077,6 +2109,19 @@ void DigikamView::slotSetCurrentWhenAvailable(const qlonglong id)
 
     default:
         d->iconView->setCurrentWhenAvailable(id);
+    }
+}
+
+void DigikamView::slotAwayFromSelection()
+{
+    switch (d->stackedview->viewMode())
+    {
+    case StackedView::TableViewMode:
+        d->tableView->slotAwayFromSelection();
+        break;
+
+    default:
+        d->iconView->awayFromSelection();
     }
 }
 

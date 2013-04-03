@@ -28,6 +28,7 @@
 // Local includes
 
 #include "imagecategorizedview.h"
+#include "imageviewutilities.h"
 
 namespace Digikam
 {
@@ -58,8 +59,8 @@ public Q_SLOTS:
     void insertSelectedToNewQueue();
     void insertSelectedToExistingQueue(int queueid);
 
-    void deleteSelected(bool permanently = false);
-    void deleteSelectedDirectly(bool permanently = false);
+    void deleteSelected(const ImageViewUtilities::DeleteMode deleteMode = ImageViewUtilities::DeleteUseTrash);
+    void deleteSelectedDirectly(const ImageViewUtilities::DeleteMode deleteMode = ImageViewUtilities::DeleteUseTrash);
     void assignTagToSelected(int tagID);
     void removeTagFromSelected(int tagID);
     void assignPickLabelToSelected(int pickId);

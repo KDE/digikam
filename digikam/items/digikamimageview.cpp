@@ -537,20 +537,21 @@ void DigikamImageView::insertSelectedToExistingQueue(int queueid)
     }
 }
 
-void DigikamImageView::deleteSelected(bool permanently)
+void DigikamImageView::deleteSelected(const ImageViewUtilities::DeleteMode deleteMode)
 {
     ImageInfoList imageInfoList = selectedImageInfos();
 
-    if (d->utilities->deleteImages(imageInfoList, permanently))
+    if (d->utilities->deleteImages(imageInfoList, deleteMode))
     {
         awayFromSelection();
     }
 }
 
-void DigikamImageView::deleteSelectedDirectly(bool permanently)
+void DigikamImageView::deleteSelectedDirectly(const ImageViewUtilities::DeleteMode deleteMode)
 {
     ImageInfoList imageInfoList = selectedImageInfos();
-    d->utilities->deleteImagesDirectly(imageInfoList, permanently);
+    
+    d->utilities->deleteImagesDirectly(imageInfoList, deleteMode);
     awayFromSelection();
 }
 
