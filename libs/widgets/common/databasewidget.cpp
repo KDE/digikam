@@ -7,7 +7,7 @@
  * Description : database migration dialog
  *
  * Copyright (C) 2009-2010 by Holger Foerster <Hamsi2k at freenet dot de>
- * Copyright (C) 2010-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -52,12 +52,12 @@
 namespace Digikam
 {
 
-class DatabaseWidget::DatabaseWidgetPriv
+class DatabaseWidget::Private
 {
 
 public:
 
-    DatabaseWidgetPriv()
+    Private()
     {
         databasePathLabel = 0;
         expertSettings    = 0;
@@ -67,8 +67,8 @@ public:
     QGroupBox* expertSettings;
 };
 
-DatabaseWidget::DatabaseWidget(QWidget* parent)
-    : QWidget(parent), d(new DatabaseWidgetPriv)
+DatabaseWidget::DatabaseWidget(QWidget* const parent)
+    : QWidget(parent), d(new Private)
 {
     setupMainArea();
 }
@@ -82,58 +82,59 @@ void DatabaseWidget::setupMainArea()
 {
     setAutoFillBackground(false);
 
-    QVBoxLayout* layout  = new QVBoxLayout();
+    QVBoxLayout* const layout  = new QVBoxLayout();
     setLayout(layout);
 
     // --------------------------------------------------------
 
-    QGroupBox* dbPathBox = new QGroupBox(i18n("Database File Path"), this);
-    QVBoxLayout* vlay    = new QVBoxLayout(dbPathBox);
-    d->databasePathLabel = new QLabel(i18n("<p>The location where the database file will be stored on your system. "
-                                           "There is one common database file for all root albums.<br/>"
-                                           "Write access is required to be able to edit image properties.</p>"
-                                           "<p>Note: a remote file system, such as NFS, cannot be used here.</p><p></p>"),
-                                      dbPathBox);
+    QGroupBox* const dbPathBox = new QGroupBox(i18n("Database File Path"), this);
+    QVBoxLayout* const vlay    = new QVBoxLayout(dbPathBox);
+    d->databasePathLabel       = new QLabel(i18n("<p>The location where the database file will be stored on your system. "
+                                                 "There is one common database file for all root albums.<br/>"
+                                                 "Write access is required to be able to edit image properties.</p>"
+                                                 "<p>Note: a remote file system, such as NFS, cannot be used here.</p><p></p>"),
+                                            dbPathBox);
     d->databasePathLabel->setWordWrap(true);
     d->databasePathLabel->setFont(KGlobalSettings::smallestReadableFont());
 
-    databasePathEdit     = new KUrlRequester(dbPathBox);
+    databasePathEdit                                 = new KUrlRequester(dbPathBox);
     databasePathEdit->setMode(KFile::Directory | KFile::LocalOnly);
 
-    QLabel* databaseTypeLabel           = new QLabel(i18n("Type"));
-    databaseType                        = new QComboBox();
-    QLabel* internalServerLabel         = new QLabel(i18n("Internal Server"));
-    internalServer                      = new QCheckBox();
-    QLabel* databaseNameLabel           = new QLabel(i18n("Schema Name"));
-    databaseName                        = new QLineEdit();
-    QLabel* databaseNameThumbnailsLabel = new QLabel(i18n("Thumbnails<br>Schema Name"));
-    databaseNameThumbnails              = new QLineEdit();
-    QLabel* hostNameLabel               = new QLabel(i18n("Host Name"));
-    hostName                            = new QLineEdit();
-    QLabel* hostPortLabel               = new QLabel(i18n("Port"));
-    hostPort                            = new QSpinBox();
+    QLabel* const databaseTypeLabel                  = new QLabel(i18n("Type"));
+    databaseType                                     = new QComboBox();
+    QLabel* const internalServerLabel                = new QLabel(i18n("Internal Server"));
+    internalServer                                   = new QCheckBox();
+    QLabel* const databaseNameLabel                  = new QLabel(i18n("Schema Name"));
+    databaseName                                     = new QLineEdit();
+    QLabel* const databaseNameThumbnailsLabel        = new QLabel(i18n("Thumbnails<br>Schema Name"));
+    databaseNameThumbnails                           = new QLineEdit();
+    QLabel* const hostNameLabel                      = new QLabel(i18n("Host Name"));
+    hostName                                         = new QLineEdit();
+    QLabel* const hostPortLabel                      = new QLabel(i18n("Port"));
+    hostPort                                         = new QSpinBox();
     hostPort->setMaximum(65535);
 
-    QLabel* connectionOptionsLabel      = new QLabel(i18n("Database<br>Connection<br>Options"));
-    connectionOptions                   = new QLineEdit();
+    QLabel* const connectionOptionsLabel             = new QLabel(i18n("Database<br>Connection<br>Options"));
+    connectionOptions                                = new QLineEdit();
 
-    QLabel* userNameLabel               = new QLabel(i18n("User"));
-    userName                            = new QLineEdit();
+    QLabel* const userNameLabel                      = new QLabel(i18n("User"));
+    userName                                         = new QLineEdit();
 
-    QLabel* passwordLabel               = new QLabel(i18n("Password"));
-    password                            = new QLineEdit();
+    QLabel* const passwordLabel                      = new QLabel(i18n("Password"));
+    password                                         = new QLineEdit();
     password->setEchoMode(QLineEdit::Password);
 
-    QPushButton* checkDatabaseConnectionButton = new QPushButton(i18n("Check DB Connection"));
+    QPushButton* const checkDatabaseConnectionButton = new QPushButton(i18n("Check DB Connection"));
 
-    d->expertSettings                   = new QGroupBox();
+    d->expertSettings                                = new QGroupBox();
     d->expertSettings->setFlat(true);
-    QFormLayout* expertSettinglayout    = new QFormLayout();
+    QFormLayout* const expertSettinglayout           = new QFormLayout();
     d->expertSettings->setLayout(expertSettinglayout);
 
 #ifdef HAVE_INTERNALMYSQL
     expertSettinglayout->addRow(internalServerLabel, internalServer);
 #endif // HAVE_INTERNALMYSQL
+
     expertSettinglayout->addRow(hostNameLabel, hostName);
     expertSettinglayout->addRow(hostPortLabel, hostPort);
     expertSettinglayout->addRow(databaseNameLabel, databaseName);
@@ -316,7 +317,7 @@ void DatabaseWidget::checkDBPath()
     //d->mainDialog->enableButtonOk(dbOk);
 }
 
-void DatabaseWidget::setParametersFromSettings(const AlbumSettings* settings)
+void DatabaseWidget::setParametersFromSettings(const AlbumSettings* const settings)
 {
     originalDbPath = settings->getDatabaseFilePath();
     originalDbType = settings->getDatabaseType();
