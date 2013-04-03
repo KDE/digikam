@@ -147,6 +147,7 @@ QRect AutoCrop::spiralClockwiseTraversal(const QImage& source, int topCrop, int 
     while(true)
     {
 //        kDebug() << "count = "<<count;
+
         switch((counter%4))
         {
             case 0 :    //travelling right
@@ -165,6 +166,7 @@ QRect AutoCrop::spiralClockwiseTraversal(const QImage& source, int topCrop, int 
                             rightEdge      = true;
                         }
                     }
+
                     break;
                 }
 
@@ -299,6 +301,7 @@ QRect AutoCrop::spiralClockwiseTraversal(const QImage& source, int topCrop, int 
                             leftEdge      = true;
                         }
                     }
+
                     break;
                 }
 
@@ -365,6 +368,7 @@ QRect AutoCrop::spiralClockwiseTraversal(const QImage& source, int topCrop, int 
                             topEdge      = true;
                         }
                     }
+
                     break;
                 }
 
@@ -811,20 +815,7 @@ void AutoCrop::startAnalyse()
     cropArea.setTopLeft(icp1);
     cropArea.setBottomRight(icp2);
 
-
     kDebug() << "cropArea : "<<cropArea;
-    //    if(count == 0)kDebug() << "Inner Crop Area : " << d->cropArea;
-//    {
-//        kDebug() << "WE FOUND COUNT = 0";
-//        if(fixbottommargin==true && fixtopmargin==true && fixleftmargin==true && fixrightmargin==true)
-//        {
-//            ;
-//        }
-//        else
-//        {
-//            cropArea=crop;
-//        }
-//    }
 
     //Step 1. check for extra small crop
     //Step 2. Find out first minima from left and right, crop accordingly
@@ -833,7 +824,7 @@ void AutoCrop::startAnalyse()
 
     int area = cropArea.height() * cropArea.width();
 
-    if(area > (whitepixelCount/2))
+    if(area > (whitepixelCount/1.43))
     {
         d->cropArea.setTopLeft(icp1);
         d->cropArea.setBottomRight(icp2);
