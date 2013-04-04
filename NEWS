@@ -23,4 +23,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 012 ==> 317714 - Consider working on NFS shares a legitimate use case (even for the targeted home environment).
 013 ==> 267436 - Automatic lens correction : add auto-crop feature to remove black borders.
 014 ==> 204135 - JPEG lossless cropping support.
-015 ==> 
+015 ==> 317745 - Store metadata incl. geolocation data into CR2 files.
+016 ==> 
