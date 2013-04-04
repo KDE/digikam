@@ -1221,13 +1221,11 @@ void DigikamView::slotAlbumRefresh()
     }
 
     // force reload. Should normally not be necessary, but we may have bugs
-    /// @todo Adapt to TableView
-    qlonglong currentId = d->iconView->currentInfo().id();
+    qlonglong currentId = currentInfo().id();
     d->iconView->imageAlbumModel()->refresh();
 
     if (currentId != -1)
     {
-        /// @todo Adapt to TableView
         slotSetCurrentWhenAvailable(currentId);
     }
 }
@@ -1641,7 +1639,21 @@ void DigikamView::slotLightTable()
 
 void DigikamView::slotQueueMgr()
 {
-    d->iconView->insertToQueue();
+    ImageInfoList imageInfoList = selectedInfoList();
+    ImageInfo     singleInfo    = currentInfo();
+    if (singleInfo.isNull() && !imageInfoList.isEmpty())
+    {
+        singleInfo = imageInfoList.first();
+    }
+    if (singleInfo.isNull())
+    {
+        const ImageInfoList allItems = allInfo();
+        if (!allItems.isEmpty())
+        {
+            singleInfo = allItems.first();
+        }
+    }
+    d->iconView->utilities()->insertToQueueManager(imageInfoList, singleInfo, true);
 }
 
 void DigikamView::slotImageEdit()

@@ -492,21 +492,6 @@ void DigikamImageView::openInEditor(const ImageInfo& info)
     d->utilities->openInEditor(info, imageInfos(), currentAlbum());
 }
 
-void DigikamImageView::insertToQueue()
-{
-    ImageInfoList imageInfoList = selectedImageInfos();
-    ImageInfo     singleInfo    = currentInfo();
-    if (singleInfo.isNull() && !imageInfoList.isEmpty())
-    {
-        singleInfo = imageInfoList.first();
-    }
-    if (singleInfo.isNull() && model()->rowCount())
-    {
-        singleInfo = imageInfos().first();
-    }
-    d->utilities->insertToQueueManager(imageInfoList, singleInfo, true);
-}
-
 void DigikamImageView::insertSelectedToCurrentQueue()
 {
     ImageInfoList imageInfoList = selectedImageInfos();

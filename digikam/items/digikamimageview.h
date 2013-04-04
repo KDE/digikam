@@ -54,7 +54,6 @@ public Q_SLOTS:
 
     void openInEditor(const ImageInfo& info);
 
-    void insertToQueue();
     void insertSelectedToCurrentQueue();
     void insertSelectedToNewQueue();
     void insertSelectedToExistingQueue(int queueid);
