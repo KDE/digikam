@@ -1331,8 +1331,6 @@ void ImageWindow::slotFilePrint()
 
 void ImageWindow::slideShow(SlideShowSettings& settings)
 {
-    float cnt;
-    int i               = 0;
     m_cancelSlideShow   = false;
     settings.exifRotate = MetadataSettings::instance()->settings().exifRotate;
 
@@ -1343,8 +1341,8 @@ void ImageWindow::slideShow(SlideShowSettings& settings)
         m_nameLabel->progressBarMode(StatusProgressBar::CancelProgressBarMode,
                                      i18n("Preparing slideshow. Please wait..."));
 
-        cnt = (float)d->imageInfoModel->rowCount();
-
+        float cnt = (float)d->imageInfoModel->rowCount();
+        int i = 0;
         foreach(const ImageInfo& info, d->imageInfoModel->imageInfos())
         {
             SlidePictureInfo pictInfo;
