@@ -523,7 +523,7 @@ RecognitionWorker::RecognitionWorker(FacePipeline::Private* const d)
 {
     catcher = 0;
     database             = KFaceIface::RecognitionDatabase::addDatabase();
-    recognitionThreshold = 10000000;
+    recognitionThreshold = 0.8;
 }
 
 void RecognitionWorker::process(FacePipelineExtendedPackage::Ptr package)
@@ -582,13 +582,12 @@ void RecognitionWorker::process(FacePipelineExtendedPackage::Ptr package)
                 }
             }
 
-            if(maxConfidence > 0.3 )
+            if(maxConfidence > recognitionThreshold )
             {
                 kDebug() << "preson  " << qPrintable(tlddatabase->querybyFaceid(maxConfIndex+1))
                          << "   recognised in" << qPrintable(package->filePath);
                 package->faces[removeindex].setName(tlddatabase->querybyFaceid(maxConfIndex+1));
                 package->databaseFaces[removeindex].roles = FacePipelineDatabaseFace::ForConfirmation;
-                cout << tlddatabase->queryFaceID(maxConfIndex+1) << endl;
                 package->databaseFaces[removeindex].assignedTagId = tlddatabase->queryFaceID(maxConfIndex+1);
             }
         }
@@ -604,7 +603,7 @@ void RecognitionWorker::process(FacePipelineExtendedPackage::Ptr package)
 
 void RecognitionWorker::setThreshold(double threshold)
 {
-    recognitionThreshold = threshold;
+    recognitionThreshold = (float) threshold;
 }
 
 // ----------------------------------------------------------------------------------------
@@ -1339,7 +1338,7 @@ void FacePipeline::plugFaceRecognizer()
     d->recognitionWorker = new RecognitionWorker(d);
     d->createThumbnailLoadThread();
 
-    connect(d, SIGNAL(thresholdChanged(double)),
+    connect(d, SIGNAL(accuracyChanged(double)),
             d->recognitionWorker, SLOT(setThreshold(double)));
 }
 
