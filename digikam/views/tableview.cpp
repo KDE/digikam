@@ -34,6 +34,7 @@
 #include <kaction.h>
 #include <kmenu.h>
 #include <klinkitemselectionmodel.h>
+#include <boost/concept_check.hpp>
 
 // local includes
 
@@ -687,6 +688,55 @@ void TableView::slotAwayFromSelection()
                 s->tableViewSelectionModelSyncer->targetIndexToRowItemSelection(newIndex);
         s->tableViewSelectionModel->select(newIndexAsRow, QItemSelectionModel::ClearAndSelect);
     }
+}
+
+void TableView::clearSelection()
+{
+    s->tableViewSelectionModel->clearSelection();
+}
+
+void TableView::invertSelection()
+{
+    const int deepRowCount = s->tableViewModel->deepRowCount();
+    QList<int> rowsToSelect;
+    int lastSelectedRow = -1;
+    /// @todo Create a DeepRowIterator because there is a lot of overhead here
+    for (int i = 0; i<deepRowCount; ++i)
+    {
+        const QModelIndex iIndex = s->tableViewModel->deepRowIndex(i);
+        if (s->tableViewSelectionModel->isSelected(iIndex))
+        {
+            if (i-1>lastSelectedRow)
+            {
+                for (int j=lastSelectedRow+1; j<i; ++j)
+                {
+                    rowsToSelect << j;
+                }
+            }
+            lastSelectedRow = i;
+        }
+    }
+    if (lastSelectedRow+1<deepRowCount)
+    {
+        for (int j=lastSelectedRow+1; j<deepRowCount; ++j)
+        {
+            rowsToSelect << j;
+        }
+    }
+
+    s->tableViewSelectionModel->clearSelection();
+    Q_FOREACH(const int i, rowsToSelect)
+    {
+        const QModelIndex iIndex = s->tableViewModel->deepRowIndex(i);
+        const QItemSelection is = s->tableViewSelectionModelSyncer->targetIndexToRowItemSelection(iIndex);
+        s->tableViewSelectionModel->select(is, QItemSelectionModel::Select);
+    }
+}
+
+void TableView::selectAll()
+{
+    /// @todo This only selects expanded items.
+    s->treeView->selectAll();
 }
 
 } /* namespace Digikam */

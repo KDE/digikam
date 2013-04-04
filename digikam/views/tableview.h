@@ -79,6 +79,9 @@ public:
     ImageInfo deepRowImageInfo(const int rowNumber, const bool relative) const;
     ImageInfo nextInfo() const;
     ImageInfo previousInfo() const;
+    void selectAll();
+    void clearSelection();
+    void invertSelection();
 
 protected:
 

@@ -1757,17 +1757,41 @@ void DigikamView::slotImageTrashDirectly()
 
 void DigikamView::slotSelectAll()
 {
-    d->iconView->selectAll();
+    switch (d->stackedview->viewMode())
+    {
+    case StackedView::TableViewMode:
+        d->tableView->selectAll();
+        break;
+
+    default:
+        d->iconView->selectAll();
+    }
 }
 
 void DigikamView::slotSelectNone()
 {
-    d->iconView->clearSelection();
+    switch (d->stackedview->viewMode())
+    {
+    case StackedView::TableViewMode:
+        d->tableView->clearSelection();
+        break;
+
+    default:
+        d->iconView->clearSelection();
+    }
 }
 
 void DigikamView::slotSelectInvert()
 {
-    d->iconView->invertSelection();
+    switch (d->stackedview->viewMode())
+    {
+    case StackedView::TableViewMode:
+        d->tableView->invertSelection();
+        break;
+
+    default:
+        d->iconView->invertSelection();
+    }
 }
 
 void DigikamView::slotSortImages(int sortRole)
