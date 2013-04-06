@@ -24,4 +24,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 013 ==> 267436 - Automatic lens correction : add auto-crop feature to remove black borders.
 014 ==> 204135 - JPEG lossless cropping support.
 015 ==> 317745 - Store metadata incl. geolocation data into CR2 files.
-016 ==> 
+016 ==> 295423 - External libclapack not used [patch].
+017 ==> 
+
