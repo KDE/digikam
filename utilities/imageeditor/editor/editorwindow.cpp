@@ -558,6 +558,12 @@ void EditorWindow::setupStandardActions()
     d->cropAction->setWhatsThis(i18n("This option can be used to crop the image. "
                                      "Select a region of the image to enable this action."));
 
+    d->autoCropAction = new KAction(KIcon("transform-crop"), i18nc("@action", "Auto-Crop"), this);
+    d->autoCropAction->setShortcut(KShortcut(Qt::SHIFT + Qt::CTRL + Qt::Key_X));
+    connect(d->autoCropAction, SIGNAL(triggered()), m_canvas, SLOT(slotAutoCrop()));
+    actionCollection()->addAction("editorwindow_autocrop", d->autoCropAction);
+    d->autoCropAction->setWhatsThis(i18n("This option can be used to crop automatically the image."));
+
     // -- Standard 'Flip' menu actions ---------------------------------------------
 
     d->flipHorizAction = new KAction(KIcon("object-flip-horizontal"), i18n("Flip Horizontally"), this);
@@ -2890,6 +2896,7 @@ KCategorizedView* EditorWindow::createToolSelectionView()
     actionModel->addAction(d->flipHorizAction, basicTransformCategory);
     actionModel->addAction(d->flipVertAction, basicTransformCategory);
     actionModel->addAction(d->cropAction, basicTransformCategory);
+    actionModel->addAction(d->autoCropAction, basicTransformCategory);
 
     // parse menus for image plugin actions
     actionModel->addActions(menuBar(), d->imagepluginsActionCollection->actions());

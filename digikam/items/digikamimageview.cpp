@@ -492,21 +492,6 @@ void DigikamImageView::openInEditor(const ImageInfo& info)
     d->utilities->openInEditor(info, imageInfos(), currentAlbum());
 }
 
-void DigikamImageView::insertToQueue()
-{
-    ImageInfoList imageInfoList = selectedImageInfos();
-    ImageInfo     singleInfo    = currentInfo();
-    if (singleInfo.isNull() && !imageInfoList.isEmpty())
-    {
-        singleInfo = imageInfoList.first();
-    }
-    if (singleInfo.isNull() && model()->rowCount())
-    {
-        singleInfo = imageInfos().first();
-    }
-    d->utilities->insertToQueueManager(imageInfoList, singleInfo, true);
-}
-
 void DigikamImageView::insertSelectedToCurrentQueue()
 {
     ImageInfoList imageInfoList = selectedImageInfos();
@@ -537,20 +522,21 @@ void DigikamImageView::insertSelectedToExistingQueue(int queueid)
     }
 }
 
-void DigikamImageView::deleteSelected(bool permanently)
+void DigikamImageView::deleteSelected(const ImageViewUtilities::DeleteMode deleteMode)
 {
     ImageInfoList imageInfoList = selectedImageInfos();
 
-    if (d->utilities->deleteImages(imageInfoList, permanently))
+    if (d->utilities->deleteImages(imageInfoList, deleteMode))
     {
         awayFromSelection();
     }
 }
 
-void DigikamImageView::deleteSelectedDirectly(bool permanently)
+void DigikamImageView::deleteSelectedDirectly(const ImageViewUtilities::DeleteMode deleteMode)
 {
     ImageInfoList imageInfoList = selectedImageInfos();
-    d->utilities->deleteImagesDirectly(imageInfoList, permanently);
+    
+    d->utilities->deleteImagesDirectly(imageInfoList, deleteMode);
     awayFromSelection();
 }
 

@@ -70,7 +70,7 @@ public:
     ThumbnailSize dragDropThumbnailSize;
 };
 
-TableViewTreeView::TableViewTreeView(Digikam::TableViewShared* const tableViewShared, QWidget*const parent)
+TableViewTreeView::TableViewTreeView(TableViewShared* const tableViewShared, QWidget* const parent)
   : QTreeView(parent),
     d(new Private()),
     s(tableViewShared)
@@ -78,7 +78,6 @@ TableViewTreeView::TableViewTreeView(Digikam::TableViewShared* const tableViewSh
     s->itemDelegate = new TableViewItemDelegate(s, this);
     setSelectionMode(QAbstractItemView::ExtendedSelection);
     setItemDelegate(s->itemDelegate);
-    setRootIsDecorated(true);
     setAlternatingRowColors(true);
     setAllColumnsShowFocus(true);
     setDragEnabled(true);
@@ -98,6 +97,10 @@ TableViewTreeView::TableViewTreeView(Digikam::TableViewShared* const tableViewSh
     setModel(s->tableViewModel);
     setSelectionModel(s->tableViewSelectionModel);
     setSortingEnabled(true);
+    slotModelGroupingModeChanged();
+
+    connect(s->tableViewModel, SIGNAL(signalGroupingModeChanged()),
+            this, SLOT(slotModelGroupingModeChanged()));
 }
 
 TableViewTreeView::~TableViewTreeView()
@@ -108,6 +111,7 @@ TableViewTreeView::~TableViewTreeView()
 bool TableViewTreeView::eventFilter(QObject* watched, QEvent* event)
 {
     QHeaderView* const headerView = header();
+
     if ( (watched==headerView) && (event->type()==QEvent::ContextMenu) )
     {
         showHeaderContextMenu(event);
@@ -118,13 +122,12 @@ bool TableViewTreeView::eventFilter(QObject* watched, QEvent* event)
     return QObject::eventFilter(watched, event);
 }
 
-void TableViewTreeView::addColumnDescriptionsToMenu(
-        const QList<TableViewColumnDescription>& columnDescriptions, KMenu* const menu)
+void TableViewTreeView::addColumnDescriptionsToMenu(const QList<TableViewColumnDescription>& columnDescriptions, KMenu* const menu)
 {
     for (int i = 0; i<columnDescriptions.count(); ++i)
     {
         const TableViewColumnDescription& desc = columnDescriptions.at(i);
-        KAction* const action = new KAction(desc.columnTitle, menu);
+        KAction* const action                  = new KAction(desc.columnTitle, menu);
 
         if (!desc.columnIcon.isEmpty())
         {
@@ -152,16 +155,14 @@ void TableViewTreeView::addColumnDescriptionsToMenu(
 
 void TableViewTreeView::showHeaderContextMenu(QEvent* const event)
 {
-    QContextMenuEvent* const e = static_cast<QContextMenuEvent*>(event);
+    QContextMenuEvent* const e    = static_cast<QContextMenuEvent*>(event);
     QHeaderView* const headerView = header();
 
-    d->headerContextMenuActiveColumn = headerView->logicalIndexAt(e->pos());
+    d->headerContextMenuActiveColumn          = headerView->logicalIndexAt(e->pos());
     const TableViewColumn* const columnObject = s->tableViewModel->getColumnObject(d->headerContextMenuActiveColumn);
-    KMenu* const menu = new KMenu(this);
+    KMenu* const menu                         = new KMenu(this);
 
-    d->actionHeaderContextMenuRemoveColumn->setEnabled(
-            s->tableViewModel->columnCount(QModelIndex())>1
-        );
+    d->actionHeaderContextMenuRemoveColumn->setEnabled(s->tableViewModel->columnCount(QModelIndex())>1);
     menu->addAction(d->actionHeaderContextMenuRemoveColumn);
     const bool columnCanConfigure = columnObject->getColumnFlags().testFlag(TableViewColumn::ColumnHasConfigurationWidget);
     d->actionHeaderContextMenuConfigureColumn->setEnabled(columnCanConfigure);
@@ -199,8 +200,8 @@ void TableViewTreeView::slotHeaderContextMenuActionRemoveColumnTriggered()
 void TableViewTreeView::slotHeaderContextMenuConfigureColumn()
 {
     TableViewConfigurationDialog* const configurationDialog = new TableViewConfigurationDialog(s, d->headerContextMenuActiveColumn, this);
+    const int result                                        = configurationDialog->exec();
 
-    const int result = configurationDialog->exec();
     if (result!=QDialog::Accepted)
     {
         return;
@@ -231,8 +232,8 @@ QModelIndex TableViewTreeView::mapIndexForDragDrop(const QModelIndex& index) con
 QPixmap TableViewTreeView::pixmapForDrag(const QList< QModelIndex >& indexes) const
 {
     const QModelIndex& firstIndex = indexes.at(0);
-    const ImageInfo info = s->tableViewModel->imageInfo(firstIndex);
-    const QString path = info.filePath();
+    const ImageInfo info          = s->tableViewModel->imageInfo(firstIndex);
+    const QString path            = info.filePath();
 
     QPixmap thumbnailPixmap;
     /// @todo The first thumbnail load always fails. We have to add thumbnail pre-generation
@@ -300,6 +301,11 @@ void TableViewTreeView::wheelEvent(QWheelEvent* event)
     }
 
     QTreeView::wheelEvent(event);
+}
+
+void TableViewTreeView::slotModelGroupingModeChanged()
+{
+    setRootIsDecorated(s->tableViewModel->groupingMode()==TableViewModel::GroupingShowSubItems);
 }
 
 } /* namespace Digikam */

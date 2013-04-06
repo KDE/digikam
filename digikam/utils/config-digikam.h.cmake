@@ -42,6 +42,9 @@
 /* Define to 1 if an external Eigen3 shared library have been found */
 #cmakedefine HAVE_EIGEN3
 
+/* The Eigen3 version string, if found, or an empty string otherwise */
+#define EIGEN3_VERSION_STRING "${EIGEN3_VERSION}"
+
 /* Define to 1 if GPhoto2 shared library is installed */
 #cmakedefine HAVE_GPHOTO2 1
 

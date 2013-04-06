@@ -6,7 +6,7 @@
  * Date        : 2005-05-25
  * Description : Refocus threaded image filter.
  *
- * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009      by Matthias Welwarsky <matze at welwarsky dot de>
  * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
@@ -39,10 +39,10 @@
 #include "dcolor.h"
 #include "matrix.h"
 
-#define MAX_MATRIX_SIZE 25
-
 namespace Digikam
 {
+
+const int MAX_MATRIX_SIZE = 25;
 
 class RefocusFilter::Private
 {
@@ -57,14 +57,14 @@ public:
     {
     }
 
-    DImg   preImage;
+    DImg      preImage;
 
-    int    matrixSize;
+    int       matrixSize;
 
-    double radius;
-    double gauss;
-    double correlation;
-    double noise;
+    double    radius;
+    double    gauss;
+    double    correlation;
+    double    noise;
 };
 
 RefocusFilter::RefocusFilter(QObject* const parent)

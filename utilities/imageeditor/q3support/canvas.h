@@ -150,6 +150,7 @@ public Q_SLOTS:
     void slotFlipHoriz();
     void slotFlipVert();
     void slotCrop();
+    void slotAutoCrop();
 
     void slotRestore();
     void slotUndo(int steps = 1);

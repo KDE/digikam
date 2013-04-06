@@ -29,6 +29,7 @@
 
 #include <QObject>
 #include <QRect>
+#include <QImage>
 
 // Local includes
 
@@ -57,6 +58,15 @@ public:
     /** Return inner crop area detected by startAnalyse().
      */
     QRect autoInnerCrop() const;
+
+private :
+
+    /** Takes in a binary image and crops it on the basis of black point
+     *  detection, spirally moving outwards.
+     *  topCrop can be set to explicitly crop a upper portion of the image
+     *  bottomCrop can be set to explicitly crop a bottom portion of the image
+     */
+    QRect spiralClockwiseTraversal(const QImage& source, int topCrop=-1, int bottomCrop=-1);
 
 private :
 

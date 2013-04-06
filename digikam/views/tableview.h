@@ -36,6 +36,7 @@
 
 /// @todo clean up includes and use forward-declarations where possible
 #include "digikam_export.h"
+#include <imageviewutilities.h>
 #include "imageinfo.h"
 #include "statesavingobject.h"
 
@@ -78,6 +79,9 @@ public:
     ImageInfo deepRowImageInfo(const int rowNumber, const bool relative) const;
     ImageInfo nextInfo() const;
     ImageInfo previousInfo() const;
+    void selectAll();
+    void clearSelection();
+    void invertSelection();
 
 protected:
 
@@ -93,6 +97,10 @@ protected:
 public Q_SLOTS:
 
     void slotGoToRow(const int rowNumber, const bool relativeMove);
+    void slotSetCurrentWhenAvailable(const qlonglong id);
+    void slotAwayFromSelection();
+    void slotDeleteSelected(const ImageViewUtilities::DeleteMode deleteMode = ImageViewUtilities::DeleteUseTrash);
+    void slotDeleteSelectedWithoutConfirmation(const ImageViewUtilities::DeleteMode deleteMode = ImageViewUtilities::DeleteUseTrash);
 
 protected Q_SLOTS:
 
@@ -105,7 +113,6 @@ protected Q_SLOTS:
     void slotInsertSelectedToExistingQueue(const int queueId);
     void slotSetAsAlbumThumbnail(const ImageInfo& info);
     void slotPaste();
-    void slotDeleteSelected(const bool permanently = false);
     void slotRemoveSelectedFromGroup();
     void slotUngroupSelected();
     void slotCreateGroupFromSelection();
@@ -121,6 +128,7 @@ Q_SIGNALS:
     void signalGotoTagAndImageRequested(const int tagId);
     void signalGotoAlbumAndImageRequested(const ImageInfo& info);
     void signalGotoDateAndImageRequested(const ImageInfo& info);
+    void signalItemsChanged();
 
 private:
 

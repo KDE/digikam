@@ -300,17 +300,17 @@ void DistortionFXFilter::fisheye(DImg* orgImage, DImg* destImage, double Coeff, 
  * data             => The image data in RGBA mode.
  * Width            => Width of image.
  * Height           => Height of image.
- * Twirl            => Distance value.
+ * dist             => Distance value.
  * Antialias        => Smart blurring result.
  *
  * Theory           => Take spiral studies, you will understand better, I'm studying
  *                     hard on this effect, because it is not too fast.
  */
-void DistortionFXFilter::twirl(DImg* orgImage, DImg* destImage, int Twirl, bool AntiAlias)
+void DistortionFXFilter::twirl(DImg* orgImage, DImg* destImage, int dist, bool AntiAlias)
 {
-    // if twirl value is zero, we do nothing
+    // if dist value is zero, we do nothing
 
-    if (Twirl == 0)
+    if (dist == 0)
     {
         return;
     }
@@ -343,8 +343,8 @@ void DistortionFXFilter::twirl(DImg* orgImage, DImg* destImage, int Twirl, bool 
         lfXScale = (double)Height / (double)Width;
     }
 
-    // the angle step is twirl divided by 10000
-    lfAngleStep = Twirl / 10000.0;
+    // the angle step is dist divided by 10000
+    lfAngleStep = dist / 10000.0;
     // now, we get the minimum radius
     lfRadMax = (double)qMax(Width, Height) / 2.0;
 

@@ -1,10 +1,11 @@
 *****************************************************************************************************
-digiKam 3.2.0 - Release date: 2013-04-07
+digiKam 3.2.0-beta1 - Release date: 2013-04-07
 
 NEW FEATURES:
 
-AlbumGUI : New "Table-View" view mode dedictaed to show album items in a list view.
-General  : Remove internal clapack library code. Set only an optional and external dependency to eigen3.
+AlbumGUI    : New "Table-View" view mode dedictaed to show album items in a list view.
+General     : Remove internal clapack library code. Set only an optional and external dependency to eigen3.
+General     : New tool to auto-crop image based on black hole borders detection.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
@@ -16,5 +17,13 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 006 ==> 311295 - digiKam not detecting my OLYMPUS M.14-42mm F3.5-5.6 II R lens.
 007 ==> 313938 - Workflow doesn't save/restore tool parameters.
 008 ==> 251563 - Getting rid of the lapack dependancy using Eigen [patch].
-009 ==> 295423 - External libclapack not used [patch].
-010 ==> 
+009 ==> 310477 - Correct Camera identified - Canon PowerShot A470 but drop-down list shows A740 option.
+010 ==> 316790 - While showing support of NIKON 800 on starting page, in import, one cannot choose thois model.
+011 ==> 311393 - Cannot import photos from autodetected Canon PowerShot A1300 [patch].
+012 ==> 317714 - Consider working on NFS shares a legitimate use case (even for the targeted home environment).
+013 ==> 267436 - Automatic lens correction : add auto-crop feature to remove black borders.
+014 ==> 204135 - JPEG lossless cropping support.
+015 ==> 317745 - Store metadata incl. geolocation data into CR2 files.
+016 ==> 295423 - External libclapack not used [patch].
+017 ==> 
+

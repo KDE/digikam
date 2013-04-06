@@ -209,7 +209,7 @@ void ImportCategoryDrawer::textForFormat(const QModelIndex& index, QString* head
     }
     else
     {
-        format         = "Unkown Format";
+        format         = i18n("Unknown Format");
         *header        = format;
     }
 

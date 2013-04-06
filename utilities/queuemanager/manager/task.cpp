@@ -6,7 +6,7 @@
  * Date        : 2009-02-06
  * Description : Thread actions task.
  *
- * Copyright (C) 2009-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2012      by Pankaj Kumar <me at panks dot me>
  *
  * This program is free software; you can redistribute it
@@ -99,10 +99,11 @@ void Task::setItem(const AssignedBatchTools& tools)
 
 void Task::slotCancel()
 {
-    d->cancel = true;
-
     if (d->tool)
         d->tool->cancel();
+
+    d->cancel = true;
+
 }
 
 void Task::emitActionData(ActionData::ActionStatus st, const QString& mess, const KUrl& dest)
@@ -166,8 +167,9 @@ void Task::run()
         if (d->cancel)
         {
             emitActionData(ActionData::BatchCanceled);
+            delete d->tool;
+            d->tool = 0;
             return;
-            break;
         }
         else if (!success)
         {

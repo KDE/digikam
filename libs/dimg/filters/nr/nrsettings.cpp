@@ -124,6 +124,8 @@ NRSettings::NRSettings(QWidget* const parent)
     // -------------------------------------------------------------
 
     d->checkAutoEst     = new QCheckBox(i18n("Estimate Noise"));
+    d->checkAutoEst->setWhatsThis( i18n("Compute automatically all noise reduction settings by a parse of "
+                                        "noise contained in image."));
 
     d->advExpanderBox   = new RExpanderBox;
     d->advExpanderBox->setObjectName("Noise Reduction Settings Expander");

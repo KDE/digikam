@@ -128,6 +128,7 @@ public:
     QModelIndex deepRowIndex(const int rowNumber) const;
     int indexToDeepRowNumber(const QModelIndex& index) const;
     int deepRowCount() const;
+    int firstDeepRowNotInList(const QList<QModelIndex>& needleList);
     QModelIndex toCol0(const QModelIndex& anIndex) const;
 
     QList<Item*> sortItems(const QList<Item*> itemList);
@@ -173,6 +174,10 @@ private Q_SLOTS:
 
     void slotFilterSettingsChanged(const ImageFilterSettings& settings);
     void slotResortModel();
+
+Q_SIGNALS:
+
+    void signalGroupingModeChanged();
 
 private:
 

@@ -481,6 +481,11 @@ void DigikamView::setupConnections()
     connect(d->tableView, SIGNAL(signalGotoTagAndImageRequested(int)),
             this, SLOT(slotGotoTagAndItem(int)));
 
+    // TableView::signalItemsChanged is emitted when something changes in the model that
+    // DigikamView should care about, not only the selection.
+    connect(d->tableView, SIGNAL(signalItemsChanged()),
+            this, SLOT(slotImageSelected()));
+
     // -- Sidebar Connections -------------------------------------
 
     connect(d->leftSideBar, SIGNAL(signalChangedTab(QWidget*)),
@@ -616,7 +621,7 @@ void DigikamView::setupConnections()
             d->albumHistory, SLOT(slotAlbumCurrentChanged()));
 
     connect(d->albumHistory, SIGNAL(signalSetCurrent(qlonglong)),
-            d->iconView, SLOT(setCurrentWhenAvailable(qlonglong)));
+            this, SLOT(slotSetCurrentWhenAvailable(qlonglong)));
 
     connect(d->albumHistory, SIGNAL(signalSetSelectedInfos(QList<ImageInfo>)),
             d->iconView, SLOT(setSelectedImageInfos(QList<ImageInfo>)));
@@ -989,8 +994,7 @@ void DigikamView::slotGotoAlbumAndItem(const ImageInfo& imageInfo)
 
     // Set the activate item url to find in the Album View after
     // all items have be reloaded.
-    /// @todo Adapt to TableView here and in similar functions below
-    d->iconView->setCurrentWhenAvailable(imageInfo.id());
+    slotSetCurrentWhenAvailable(imageInfo.id());
 
     // And finally toggle album manager to handle album history and
     // reload all items.
@@ -1011,7 +1015,7 @@ void DigikamView::slotGotoDateAndItem(const ImageInfo& imageInfo)
 
     // Set the activate item url to find in the Album View after
     // all items have be reloaded.
-    d->iconView->setCurrentWhenAvailable(imageInfo.id());
+    slotSetCurrentWhenAvailable(imageInfo.id());
 
     // Change the year and month of the iconItem (day is unused).
     d->dateViewSideBar->gotoDate(date);
@@ -1217,13 +1221,12 @@ void DigikamView::slotAlbumRefresh()
     }
 
     // force reload. Should normally not be necessary, but we may have bugs
-    qlonglong currentId = d->iconView->currentInfo().id();
+    qlonglong currentId = currentInfo().id();
     d->iconView->imageAlbumModel()->refresh();
 
     if (currentId != -1)
     {
-        /// @todo Adapt to TableView
-        d->iconView->setCurrentWhenAvailable(currentId);
+        slotSetCurrentWhenAvailable(currentId);
     }
 }
 
@@ -1498,6 +1501,8 @@ void DigikamView::slotImageReadMetadata()
 void DigikamView::slotEscapePreview()
 {
     if (d->stackedview->viewMode() == StackedView::IconViewMode ||
+        d->stackedview->viewMode() == StackedView::MapWidgetMode ||
+        d->stackedview->viewMode() == StackedView::TableViewMode ||
         d->stackedview->viewMode() == StackedView::WelcomePageMode)
     {
         return;
@@ -1600,7 +1605,7 @@ void DigikamView::slotViewModeChanged()
 
 void DigikamView::slotImageFindSimilar()
 {
-    ImageInfo current = d->iconView->currentInfo();
+    const ImageInfo current = currentInfo();
 
     if (!current.isNull())
     {
@@ -1634,7 +1639,21 @@ void DigikamView::slotLightTable()
 
 void DigikamView::slotQueueMgr()
 {
-    d->iconView->insertToQueue();
+    ImageInfoList imageInfoList = selectedInfoList();
+    ImageInfo     singleInfo    = currentInfo();
+    if (singleInfo.isNull() && !imageInfoList.isEmpty())
+    {
+        singleInfo = imageInfoList.first();
+    }
+    if (singleInfo.isNull())
+    {
+        const ImageInfoList allItems = allInfo();
+        if (!allItems.isEmpty())
+        {
+            singleInfo = allItems.first();
+        }
+    }
+    d->iconView->utilities()->insertToQueueManager(imageInfoList, singleInfo, true);
 }
 
 void DigikamView::slotImageEdit()
@@ -1671,7 +1690,6 @@ void DigikamView::slotImageAddToCurrentQueue()
 
 void DigikamView::slotImageAddToNewQueue()
 {
-    /// @todo Care about MapWidgetMode
     const bool newQueue = QueueMgrWindow::queueManagerWindowCreated() &&
                     !QueueMgrWindow::queueManagerWindow()->queuesMap().isEmpty();
 
@@ -1699,37 +1717,93 @@ void DigikamView::slotImageRename()
 
 void DigikamView::slotImageDelete()
 {
-    d->iconView->deleteSelected(false);
+    switch (d->stackedview->viewMode())
+    {
+    case StackedView::TableViewMode:
+        d->tableView->slotDeleteSelected(ImageViewUtilities::DeleteUseTrash);
+        break;
+
+    default:
+        d->iconView->deleteSelected(ImageViewUtilities::DeleteUseTrash);
+    }
 }
 
 void DigikamView::slotImageDeletePermanently()
 {
-    d->iconView->deleteSelected(true);
+    switch (d->stackedview->viewMode())
+    {
+    case StackedView::TableViewMode:
+        d->tableView->slotDeleteSelected(ImageViewUtilities::DeletePermanently);
+        break;
+
+    default:
+        d->iconView->deleteSelected(ImageViewUtilities::DeletePermanently);
+    }
 }
 
 void DigikamView::slotImageDeletePermanentlyDirectly()
 {
-    d->iconView->deleteSelectedDirectly(false);
+    switch (d->stackedview->viewMode())
+    {
+    case StackedView::TableViewMode:
+        d->tableView->slotDeleteSelectedWithoutConfirmation(ImageViewUtilities::DeletePermanently);
+        break;
+
+    default:
+        d->iconView->deleteSelectedDirectly(ImageViewUtilities::DeletePermanently);
+    }
 }
 
 void DigikamView::slotImageTrashDirectly()
 {
-    d->iconView->deleteSelectedDirectly(true);
+    switch (d->stackedview->viewMode())
+    {
+    case StackedView::TableViewMode:
+        d->tableView->slotDeleteSelectedWithoutConfirmation(ImageViewUtilities::DeleteUseTrash);
+        break;
+
+    default:
+        d->iconView->deleteSelectedDirectly(ImageViewUtilities::DeleteUseTrash);
+    }
 }
 
 void DigikamView::slotSelectAll()
 {
-    d->iconView->selectAll();
+    switch (d->stackedview->viewMode())
+    {
+    case StackedView::TableViewMode:
+        d->tableView->selectAll();
+        break;
+
+    default:
+        d->iconView->selectAll();
+    }
 }
 
 void DigikamView::slotSelectNone()
 {
-    d->iconView->clearSelection();
+    switch (d->stackedview->viewMode())
+    {
+    case StackedView::TableViewMode:
+        d->tableView->clearSelection();
+        break;
+
+    default:
+        d->iconView->clearSelection();
+    }
 }
 
 void DigikamView::slotSelectInvert()
 {
-    d->iconView->invertSelection();
+    switch (d->stackedview->viewMode())
+    {
+    case StackedView::TableViewMode:
+        d->tableView->invertSelection();
+        break;
+
+    default:
+        d->iconView->invertSelection();
+    }
 }
 
 void DigikamView::slotSortImages(int sortRole)
@@ -1822,12 +1896,12 @@ void DigikamView::slotAssignRating(int rating)
 
 void DigikamView::slotSlideShowAll()
 {
-    slideShow(d->iconView->imageInfos());
+    slideShow(allInfo());
 }
 
 void DigikamView::slotSlideShowSelection()
 {
-    slideShow(d->iconView->selectedImageInfos());
+    slideShow(selectedInfoList());
 }
 
 void DigikamView::slotSlideShowRecursive()
@@ -1857,7 +1931,7 @@ void DigikamView::slotSlideShowBuilderComplete(const SlideShowSettings& settings
 
     if (settings.startWithCurrent)
     {
-        slide->setCurrent(d->iconView->currentUrl());
+        slide->setCurrent(currentUrl());
     }
 
     connect(slide, SIGNAL(signalRatingChanged(KUrl,int)),
@@ -1976,19 +2050,17 @@ void DigikamView::slotPickLabelChanged(const KUrl& url, int pick)
 
 bool DigikamView::hasCurrentItem() const
 {
-    // We should actually get this directly from the selection model,
-    // but the iconView is fine for now.
-    return !d->iconView->currentInfo().isNull();
+    return !currentInfo().isNull();
 }
 
 void DigikamView::slotImageExifOrientation(int orientation)
 {
-    FileActionMngr::instance()->setExifOrientation(d->iconView->selectedImageInfos(), orientation);
+    FileActionMngr::instance()->setExifOrientation(selectedInfoList(), orientation);
 }
 
 void DigikamView::imageTransform(RotationMatrix::TransformationAction transform)
 {
-    FileActionMngr::instance()->transform(d->iconView->selectedImageInfos(), transform);
+    FileActionMngr::instance()->transform(selectedInfoList(), transform);
 }
 
 ImageInfo DigikamView::currentInfo() const
@@ -2001,15 +2073,11 @@ ImageInfo DigikamView::currentInfo() const
     case StackedView::MapWidgetMode:
         return d->mapView->currentImageInfo();
 
-    case StackedView::IconViewMode:
-        return d->iconView->currentInfo();
-
-    case StackedView::PreviewImageMode:
-        return d->stackedview->imagePreviewView()->getImageInfo();
-
     case StackedView::MediaPlayerMode:
-        /// @todo What should we return here?
-        return ImageInfo();
+    case StackedView::PreviewImageMode:
+    case StackedView::IconViewMode:
+        // all of these modes use the same selection model and data as the IconViewMode
+        return d->iconView->currentInfo();
 
     default:
         return ImageInfo();
@@ -2027,20 +2095,16 @@ QList< ImageInfo > DigikamView::selectedInfoList(const bool currentFirst) const
         }
         return d->tableView->selectedImageInfos();
 
+    case StackedView::PreviewImageMode:
+    case StackedView::MediaPlayerMode:
     case StackedView::MapWidgetMode:
     case StackedView::IconViewMode:
+        // all of these modes use the same selection model and data as the IconViewMode
         if (currentFirst)
         {
             return d->iconView->selectedImageInfosCurrentFirst();
         }
         return d->iconView->selectedImageInfos();
-
-    case StackedView::PreviewImageMode:
-        return QList<ImageInfo>() << d->stackedview->imagePreviewView()->getImageInfo();
-
-    case StackedView::MediaPlayerMode:
-        /// @todo What should we return here?
-        return QList<ImageInfo>();
 
     default:
         return QList<ImageInfo>();
@@ -2055,16 +2119,47 @@ ImageInfoList DigikamView::allInfo() const
         return d->tableView->allInfo();
 
     case StackedView::MapWidgetMode:
-    case StackedView::IconViewMode:
-        return d->iconView->imageInfos();
-
     case StackedView::PreviewImageMode:
     case StackedView::MediaPlayerMode:
-        /// @todo What should we return here?
+    case StackedView::IconViewMode:
+        // all of these modes use the same selection model and data as the IconViewMode
         return d->iconView->imageInfos();
 
     default:
         return QList<ImageInfo>();
+    }
+}
+
+KUrl DigikamView::currentUrl() const
+{
+    const ImageInfo cInfo = currentInfo();
+
+    return cInfo.fileUrl();
+}
+
+void DigikamView::slotSetCurrentWhenAvailable(const qlonglong id)
+{
+    switch (d->stackedview->viewMode())
+    {
+    case StackedView::TableViewMode:
+        d->tableView->slotSetCurrentWhenAvailable(id);
+        break;
+
+    default:
+        d->iconView->setCurrentWhenAvailable(id);
+    }
+}
+
+void DigikamView::slotAwayFromSelection()
+{
+    switch (d->stackedview->viewMode())
+    {
+    case StackedView::TableViewMode:
+        d->tableView->slotAwayFromSelection();
+        break;
+
+    default:
+        d->iconView->awayFromSelection();
     }
 }
 
@@ -2082,7 +2177,7 @@ void DigikamView::slotSlideShowQml()
 */
     SlideShowSettings settings;
     settings.readFromConfig();
-    QmlShow* const qmlShow = new QmlShow(d->iconView->imageInfos(),settings);
+    QmlShow* const qmlShow = new QmlShow(allInfo(), settings);
     qmlShow->setWindowState(Qt::WindowFullScreen);
     qmlShow->show();
 }

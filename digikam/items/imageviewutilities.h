@@ -53,13 +53,19 @@ class ImageViewUtilities : public QObject
 
 public:
 
+    enum DeleteMode
+    {
+        DeletePermanently = 1,
+        DeleteUseTrash = 2
+    };
+
     explicit ImageViewUtilities(QWidget* parentWidget);
 
 public Q_SLOTS:
 
     void createNewAlbumForInfos(const QList<ImageInfo>& infos, Album* currentAlbum);
-    bool deleteImages(const QList<ImageInfo>& infos, bool deletePermanently);
-    void deleteImagesDirectly(const QList<ImageInfo>& infos, bool useTrash);
+    bool deleteImages(const QList<ImageInfo>& infos, const DeleteMode deleteMode);
+    void deleteImagesDirectly(const QList<ImageInfo>& infos, const DeleteMode deleteMode);
 
     void insertToLightTableAuto(const QList<ImageInfo>& all, const QList<ImageInfo>& selected, const ImageInfo& current);
     void insertToLightTable(const QList<ImageInfo>& list, const ImageInfo& current, bool addTo);
@@ -85,5 +91,7 @@ protected:
 };
 
 } // namespace Digikam
+
+Q_DECLARE_METATYPE(Digikam::ImageViewUtilities::DeleteMode)
 
 #endif /* IMAGEVIEWUTILITIES_H */
