@@ -1295,8 +1295,7 @@ bool GPCamera::uploadItem(const QString& folder, const QString& itemName, const 
 #ifdef HAVE_GPHOTO2
     int         errorCode;
     CameraFile* cfile = 0;
-
-    errorCode = gp_file_new(&cfile);
+    errorCode         = gp_file_new(&cfile);
 
     if (errorCode != GP_OK)
     {
@@ -1599,11 +1598,10 @@ void GPCamera::getSupportedCameras(int& count, QStringList& clist)
     clist.clear();
     count = 0;
 
-    CameraAbilitiesList* abilList = 0;
     CameraAbilities      abil;
+    CameraAbilitiesList* abilList = 0;
     GPContext*           context  = 0;
-
-    context = gp_context_new();
+    context                       = gp_context_new();
 
     gp_abilities_list_new(&abilList);
     gp_abilities_list_load(abilList, context);
@@ -1661,7 +1659,7 @@ void GPCamera::getSupportedPorts(QStringList& plist)
         {
             gp_port_info_list_get_info(list, i, &info);
 #ifdef HAVE_GPHOTO25
-	    char *xpath;
+            char* xpath = 0;
             gp_port_info_get_name (info, &xpath);
             plist.append(xpath);
 #else
@@ -1685,8 +1683,7 @@ void GPCamera::getCameraSupportedPorts(const QString& model, QStringList& plist)
     CameraAbilities      abilities;
     CameraAbilitiesList* abilList = 0;
     GPContext*           context  = 0;
-
-    context = gp_context_new();
+    context                       = gp_context_new();
 
     gp_abilities_list_new(&abilList);
     gp_abilities_list_load(abilList, context);
@@ -1719,8 +1716,8 @@ int GPCamera::autoDetect(QString& model, QString& port)
     GPPortInfoList*      infoList  = 0;
     const char*          camModel_ = 0, *camPort_ = 0;
     GPContext*           context   = 0;
+    context                        = gp_context_new();
 
-    context = gp_context_new();
     gp_list_new(&camList);
 
     gp_abilities_list_new(&abilList);
@@ -1789,8 +1786,9 @@ bool GPCamera::findConnectedUsbCamera(int vendorId, int productId, QString& mode
     CameraList*          camList  = 0;
     bool                 success  = false;
     // get name and port of detected camera
-    const char* model_str = 0, *port_str = 0;
-    context = gp_context_new();
+    const char* model_str         = 0;
+    const char* port_str          = 0;
+    context                       = gp_context_new();
 
     // get list of all ports
     gp_port_info_list_new(&list);
@@ -1804,30 +1802,71 @@ bool GPCamera::findConnectedUsbCamera(int vendorId, int productId, QString& mode
     gp_list_new (&camList);
     gp_abilities_list_detect(abilList, list, camList, context);
     gp_context_unref(context);
-    gp_port_info_list_free(list);
 
     int count = gp_list_count(camList);
-    int cnt = 0;
+    int cnt   = 0;
 
     for (int i = 0 ; i < count ; i++)
     {
         const char* xmodel = 0;
         gp_list_get_name(camList, i, &xmodel);
-        int model = gp_abilities_list_lookup_model (abilList, xmodel);
+        int model          = gp_abilities_list_lookup_model (abilList, xmodel);
         CameraAbilities ab;
-        gp_abilities_list_get_abilities (abilList, model, &ab);
+        gp_abilities_list_get_abilities(abilList, model, &ab);
 
-        if (ab.port != GP_PORT_USB)	continue;
-        if (ab.usb_vendor != vendorId)	continue;
-        if (ab.usb_product != productId)continue;
+        if (ab.port != GP_PORT_USB)
+            continue;
 
-        /* keep it, and continue iterating, in case we find anohter one */
+        /* KDE provides us USB Vendor and Product, but we might just
+         * have covered this via a class match. Check class matched
+         * cameras also for matchingo USB vendor/product id
+         */
+        if (ab.usb_vendor == 0)
+        {
+            int ret;
+            GPPortInfo info;
+            const char* xport = 0;
+            GPPort* gpport    = 0;
+
+            /* get the port path so we only look at this bus position */
+            gp_list_get_value(camList, i, &xport);
+            ret = gp_port_info_list_lookup_path (list, xport);
+
+            if (ret < GP_OK) /* should not happen */
+                continue;
+
+            /* get the lowlevel port info  for the path */
+            gp_port_info_list_get_info(list, ret, &info);
+
+            /* open lowlevel driver interface briefly to search */
+            gp_port_new(&gpport);
+            gp_port_set_info(gpport, info);
+
+            /* And now call into the lowlevel usb driver to see if the bus position
+                * has that specific vendor/product id */
+            if (gp_port_usb_find_device(gpport, vendorId, productId) == GP_OK)
+            {
+                ab.usb_vendor  = vendorId;
+                ab.usb_product = productId;
+            }
+
+            gp_port_free (gpport);
+        }
+
+        if (ab.usb_vendor != vendorId)
+            continue;
+
+        if (ab.usb_product != productId)
+            continue;
+
+        /* keep it, and continue iterating, in case we find another one */
         gp_list_get_name (camList, i, &model_str);
         gp_list_get_value(camList, i, &port_str);
 
         cnt++;
     }
 
+    gp_port_info_list_free(list);
     gp_abilities_list_free(abilList);
 
     if (cnt > 0)

@@ -110,7 +110,7 @@ private:
 
     // Backported from ImageProcessing version 2
     void fisheye(DImg* orgImage, DImg* destImage, double Coeff, bool AntiAlias=true);
-    void twirl(DImg* orgImage, DImg* destImage, int Twirl, bool AntiAlias=true);
+    void twirl(DImg* orgImage, DImg* destImage, int dist, bool AntiAlias=true);
     void cilindrical(DImg* orgImage, DImg* destImage, double Coeff,
                      bool Horizontal, bool Vertical, bool AntiAlias=true);
     void multipleCorners(DImg* orgImage, DImg* destImage, int Factor, bool AntiAlias=true);

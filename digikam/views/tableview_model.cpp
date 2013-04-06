@@ -165,7 +165,14 @@ TableViewModel::TableViewModel(TableViewShared* const sharedObject, QObject* par
 
     new ModelTest(this, this);
 
-    slotPopulateModel(true);
+    // We only have to trigger population of the model if data is in the source model,
+    // otherwise the source model will tell us about any new data.
+    const int itemsInImageModel = s->imageModel->rowCount();
+    if (itemsInImageModel>0)
+    {
+        // populate the model once later, not now
+        QTimer::singleShot(0, this, SLOT(slotPopulateModelWithNotifications()));
+    }
 }
 
 TableViewModel::~TableViewModel()
@@ -1227,6 +1234,7 @@ void TableViewModel::setGroupingMode(const TableViewModel::GroupingMode newGroup
     {
         d->groupingMode = newGroupingMode;
         QTimer::singleShot(100, this, SLOT(slotPopulateModelWithNotifications()));
+        emit(signalGroupingModeChanged());
     }
 }
 
@@ -1346,6 +1354,55 @@ int TableViewModel::deepRowCount() const
 QModelIndex TableViewModel::toCol0(const QModelIndex& anIndex) const
 {
     return anIndex.sibling(anIndex.row(), 0);
+}
+
+int TableViewModel::firstDeepRowNotInList(const QList<QModelIndex>& needleList)
+{
+    int currentNeedlePos = 0;
+    QModelIndex currentNeedleIndex = toCol0(needleList.first());
+    int deepRowNumber = 0;
+    QModelIndex cIndex = index(0, 0);
+    while (cIndex.isValid())
+    {
+        if (cIndex!=currentNeedleIndex)
+        {
+            return deepRowNumber;
+        }
+
+        if (hasChildren(cIndex))
+        {
+            cIndex = cIndex.child(0, 0);
+        }
+        else
+        {
+            QModelIndex candidateIndex = cIndex.sibling(cIndex.row() + 1, 0);
+            if (!candidateIndex.isValid())
+            {
+                QModelIndex parentIndex = cIndex.parent();
+                if (!parentIndex.isValid())
+                {
+                    break;
+                }
+
+                candidateIndex = parentIndex.sibling(parentIndex.row() + 1, 0);
+            }
+
+            cIndex = candidateIndex;
+        }
+
+        if (cIndex.isValid())
+        {
+            ++deepRowNumber;
+            ++currentNeedlePos;
+            if (currentNeedlePos>=needleList.count())
+            {
+                return deepRowNumber;
+            }
+            currentNeedleIndex = toCol0(needleList.at(currentNeedlePos));
+        }
+    }
+
+    return -1;
 }
 
 } /* namespace Digikam */

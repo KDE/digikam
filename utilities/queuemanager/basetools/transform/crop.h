@@ -46,10 +46,15 @@ public:
 
     void registerSettingsWidget();
 
+Q_SIGNALS:
+
+    void signalAutoCrop();
+
 private Q_SLOTS:
 
     void slotAssignSettings2Widget();
     void slotSettingsChanged();
+    void slotDisableParameters(bool);
 
 private:
 

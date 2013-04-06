@@ -34,6 +34,7 @@
 #include <kaction.h>
 #include <kmenu.h>
 #include <klinkitemselectionmodel.h>
+#include <boost/concept_check.hpp>
 
 // local includes
 
@@ -104,6 +105,21 @@ TableView::TableView(
 
     connect(s->treeView, SIGNAL(signalZoomOutStep()),
             this, SIGNAL(signalZoomOutStep()));
+
+    connect(s->tableViewSelectionModel, SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
+            this, SIGNAL(signalItemsChanged()));
+
+    connect(s->tableViewModel, SIGNAL(rowsInserted(QModelIndex,int,int)),
+            this, SIGNAL(signalItemsChanged()));
+
+    connect(s->tableViewModel, SIGNAL(rowsRemoved(QModelIndex,int,int)),
+            this, SIGNAL(signalItemsChanged()));
+
+    connect(s->tableViewModel, SIGNAL(layoutChanged()),
+            this, SIGNAL(signalItemsChanged()));
+
+    connect(s->tableViewModel, SIGNAL(modelReset()),
+            this, SIGNAL(signalItemsChanged()));
 
     vbox1->addWidget(s->treeView);
 
@@ -423,11 +439,23 @@ ImageInfoList TableView::allInfo() const
     return s->tableViewModel->allImageInfo();
 }
 
-void TableView::slotDeleteSelected(const bool permanently)
+void TableView::slotDeleteSelected(const ImageViewUtilities::DeleteMode deleteMode)
 {
     const ImageInfoList infoList = selectedImageInfos();
 
-    d->imageViewUtilities->deleteImages(infoList, permanently);
+    /// @todo Update parameter naming for deleteImages
+    if (d->imageViewUtilities->deleteImages(infoList, deleteMode))
+    {
+        slotAwayFromSelection();
+    }
+}
+
+void TableView::slotDeleteSelectedWithoutConfirmation(const ImageViewUtilities::DeleteMode deleteMode)
+{
+    const ImageInfoList infoList = selectedImageInfos();
+
+    d->imageViewUtilities->deleteImagesDirectly(infoList, deleteMode);
+    slotAwayFromSelection();
 }
 
 void TableView::slotRemoveSelectedFromGroup()
@@ -592,6 +620,123 @@ ImageInfo TableView::previousInfo() const
 
     const QModelIndex previousDeepRowIndex = s->tableViewModel->deepRowIndex(previousDeepRowNumber);
     return s->tableViewModel->imageInfo(previousDeepRowIndex);
+}
+
+void TableView::slotSetCurrentWhenAvailable(const qlonglong id)
+{
+    const QModelIndex idx = s->tableViewModel->indexFromImageId(id, 0);
+    if (!idx.isValid())
+    {
+        /// @todo Actually buffer this request until the model is fully populated
+        return;
+    }
+
+    s->tableViewSelectionModel->setCurrentIndex(idx, QItemSelectionModel::ClearAndSelect);
+}
+
+/**
+ * @brief Unselects the current selection and changes the current item
+ *
+ * @todo This may not work correctly if grouped items are deleted, but are not selected
+ */
+void TableView::slotAwayFromSelection()
+{
+    QModelIndexList selection = s->tableViewSelectionModel->selectedRows(0);
+    if (selection.isEmpty())
+    {
+        return;
+    }
+
+    const QModelIndex firstIndex = s->tableViewModel->deepRowIndex(0);
+    const QModelIndex lastIndex = s->tableViewModel->deepRowIndex(-1);
+
+    if (selection.contains(firstIndex) && selection.contains(lastIndex))
+    {
+        // both the first and the last index are selected, we have to
+        // select an index inbetween
+        const int nextFreeDeepRow= s->tableViewModel->firstDeepRowNotInList(selection);
+
+        if (nextFreeDeepRow<0)
+        {
+            s->tableViewSelectionModel->clearSelection();
+            s->tableViewSelectionModel->setCurrentIndex(QModelIndex(), QItemSelectionModel::ClearAndSelect);
+        }
+        else
+        {
+            const QModelIndex nextFreeIndex = s->tableViewModel->deepRowIndex(nextFreeDeepRow);
+            s->tableViewSelectionModel->setCurrentIndex(nextFreeIndex, QItemSelectionModel::ClearAndSelect);
+            const QItemSelection nextFreeIndexAsRow =
+                    s->tableViewSelectionModelSyncer->targetIndexToRowItemSelection(nextFreeIndex);
+            s->tableViewSelectionModel->select(nextFreeIndexAsRow, QItemSelectionModel::ClearAndSelect);
+        }
+    }
+    else if (selection.contains(lastIndex))
+    {
+        const int firstSelectedRowNumber = s->tableViewModel->indexToDeepRowNumber(selection.first());
+        const QModelIndex newIndex = s->tableViewModel->deepRowIndex(firstSelectedRowNumber-1);
+        s->tableViewSelectionModel->setCurrentIndex(newIndex, QItemSelectionModel::ClearAndSelect);
+        const QItemSelection newIndexAsRow =
+                s->tableViewSelectionModelSyncer->targetIndexToRowItemSelection(newIndex);
+        s->tableViewSelectionModel->select(newIndexAsRow, QItemSelectionModel::ClearAndSelect);
+    }
+    else
+    {
+        const int lastSelectedRowNumber = s->tableViewModel->indexToDeepRowNumber(selection.last());
+        const QModelIndex newIndex = s->tableViewModel->deepRowIndex(lastSelectedRowNumber+1);
+        s->tableViewSelectionModel->setCurrentIndex(newIndex, QItemSelectionModel::ClearAndSelect);
+        const QItemSelection newIndexAsRow =
+                s->tableViewSelectionModelSyncer->targetIndexToRowItemSelection(newIndex);
+        s->tableViewSelectionModel->select(newIndexAsRow, QItemSelectionModel::ClearAndSelect);
+    }
+}
+
+void TableView::clearSelection()
+{
+    s->tableViewSelectionModel->clearSelection();
+}
+
+void TableView::invertSelection()
+{
+    const int deepRowCount = s->tableViewModel->deepRowCount();
+    QList<int> rowsToSelect;
+    int lastSelectedRow = -1;
+    /// @todo Create a DeepRowIterator because there is a lot of overhead here
+    for (int i = 0; i<deepRowCount; ++i)
+    {
+        const QModelIndex iIndex = s->tableViewModel->deepRowIndex(i);
+        if (s->tableViewSelectionModel->isSelected(iIndex))
+        {
+            if (i-1>lastSelectedRow)
+            {
+                for (int j=lastSelectedRow+1; j<i; ++j)
+                {
+                    rowsToSelect << j;
+                }
+            }
+            lastSelectedRow = i;
+        }
+    }
+    if (lastSelectedRow+1<deepRowCount)
+    {
+        for (int j=lastSelectedRow+1; j<deepRowCount; ++j)
+        {
+            rowsToSelect << j;
+        }
+    }
+
+    s->tableViewSelectionModel->clearSelection();
+    Q_FOREACH(const int i, rowsToSelect)
+    {
+        const QModelIndex iIndex = s->tableViewModel->deepRowIndex(i);
+        const QItemSelection is = s->tableViewSelectionModelSyncer->targetIndexToRowItemSelection(iIndex);
+        s->tableViewSelectionModel->select(is, QItemSelectionModel::Select);
+    }
+}
+
+void TableView::selectAll()
+{
+    /// @todo This only selects expanded items.
+    s->treeView->selectAll();
 }
 
 } /* namespace Digikam */

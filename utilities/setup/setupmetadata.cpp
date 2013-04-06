@@ -167,7 +167,7 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
                                        "contain a variety of metadata. A lot of the parameters you can use "
                                        "in digiKam to manage files, such as rating or comment, can be written "
                                        "to the files' metadata.</para> "
-                                       "<para>Storing in metadata allows to preserve this information "
+                                       "<para>Storing in metadata allows one to preserve this information "
                                        "when moving or sending the files to different systems.</para>"));
 
     QLabel* const fieldsIconLabel = new QLabel;

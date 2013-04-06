@@ -255,11 +255,16 @@ DigikamApp::DigikamApp()
 
     d->modelCollection = new DigikamModelCollection;
 
+    // First create everything, then connect.
+    // Otherwise some items may send signals and the slots can try
+    // to access items which were not created yet.
     setupView();
     setupAccelerators();
     setupActions();
     setupStatusBar();
     initGui();
+
+    setupViewConnections();
 
     // This manager must be created after collection setup.
     d->tagsActionManager = new TagsActionMngr(this);
@@ -522,8 +527,11 @@ void DigikamApp::setupView()
     d->view = new DigikamView(this, d->modelCollection);
     setCentralWidget(d->view);
     d->view->applySettings();
+}
 
-    connect(d->view, SIGNAL(signalAlbumSelected(bool)),
+void DigikamApp::setupViewConnections()
+{
+        connect(d->view, SIGNAL(signalAlbumSelected(bool)),
             this, SLOT(slotAlbumSelected(bool)));
 
     connect(d->view, SIGNAL(signalTagSelected(bool)),

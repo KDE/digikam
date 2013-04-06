@@ -34,7 +34,7 @@ SET(DIGIKAM_RELEASE_DATE "2013-04-07")
 # "-beta3" : beta3 release.
 # "-rc"    : release candidate.
 # ""       : final release. Can be used in production.
-SET(DIGIKAM_SUFFIX_VERSION "-git")
+SET(DIGIKAM_SUFFIX_VERSION "-beta1")
 
 # ==================================================================================================
 # Set env. variables accordingly.
@@ -753,7 +753,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
     IF(EIGEN3_FOUND)
 
         INCLUDE_DIRECTORIES(${EIGEN3_INCLUDE_DIR})
-        ADD_DEFINITIONS(-DEIGEN3_VERSION_NUMBER="${EIGEN3_VERSION}")
 
     ENDIF(EIGEN3_FOUND)
 
