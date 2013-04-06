@@ -239,8 +239,9 @@ Q_SIGNALS:
 
 protected:
 
+    ThumbnailImageCatcher*          catcher;
     KFaceIface::RecognitionDatabase database;
-    double                          recognitionThreshold;
+    float                          recognitionThreshold;
     FacePipeline::Private* const    d;
 };
 
