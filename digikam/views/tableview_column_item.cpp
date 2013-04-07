@@ -64,7 +64,7 @@ QStringList ColumnItemProperties::getSubColumns()
     columns << QLatin1String("width") << QLatin1String("height")
             << QLatin1String("dimensions") << QLatin1String("pixelcount")
             << QLatin1String("bitdepth") << QLatin1String("colormode")
-            << QLatin1String("type");
+            << QLatin1String("type") << QLatin1String("creationdatetime");
 
     return columns;
 }
@@ -102,6 +102,10 @@ TableViewColumnDescription ColumnItemProperties::getDescription()
         TableViewColumnDescription("item-properties", i18n("Type"), "subcolumn", "type")
     );
 
+    description.addSubColumn(
+        TableViewColumnDescription("item-properties", i18n("Creation date/time"), "subcolumn", "creationdatetime")
+    );
+
     return description;
 }
 
@@ -123,6 +127,8 @@ QString ColumnItemProperties::getTitle() const
         return i18n("Color mode");
     case SubColumnType:
         return i18n("Type");
+    case SubColumnCreationDateTime:
+        return i18n("Creation date/time");
     }
 
     return QString();
@@ -136,7 +142,8 @@ TableViewColumn::ColumnFlags ColumnItemProperties::getColumnFlags() const
         || (subColumn == SubColumnWidth)
         || (subColumn == SubColumnDimensions)
         || (subColumn == SubColumnBitDepth)
-        || (subColumn == SubColumnPixelCount) )
+        || (subColumn == SubColumnPixelCount)
+        || (subColumn == SubColumnCreationDateTime) )
     {
         flags|=ColumnCustomSorting;
     }
@@ -224,6 +231,13 @@ QVariant ColumnItemProperties::data(TableViewModel::Item* const item, const int 
 
             return commonInfo.format;
         }
+
+    case SubColumnCreationDateTime:
+        {
+            const QDateTime creationDateTime = info.dateTime();
+
+            return KGlobal::locale()->formatDateTime(creationDateTime, KLocale::ShortDate, true);
+        }
     }
 
     return QVariant();
@@ -292,6 +306,13 @@ TableViewColumn::ColumnCompareResult ColumnItemProperties::compare(
             return compareHelper<int>(bitDepthA, bitDepthB);
         }
 
+    case SubColumnCreationDateTime:
+        {
+            const QDateTime dtA = infoA.dateTime();
+            const QDateTime dtB = infoB.dateTime();
+
+            return compareHelper<QDateTime>(dtA, dtB);
+        }
     default:
         kWarning() << "item: unimplemented comparison, subColumn=" << subColumn;
         return CmpEqual;
