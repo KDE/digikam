@@ -82,7 +82,6 @@ void DItemDelegate::clearCaches()
 
 QPixmap DItemDelegate::thumbnailBorderPixmap(const QSize& pixSize) const
 {
-    const int radius         = 3;
     const QColor borderColor = QColor(0, 0, 0, 128);
 
     QString cacheKey  = QString::number(pixSize.width()) + '-' + QString::number(pixSize.height());
@@ -90,6 +89,7 @@ QPixmap DItemDelegate::thumbnailBorderPixmap(const QSize& pixSize) const
 
     if (!cachePix)
     {
+        const int radius = 3;
         QPixmap pix = ThumbBarDock::generateFuzzyRect(QSize(pixSize.width()  + 2*radius,
                       pixSize.height() + 2*radius),
                       borderColor, radius);

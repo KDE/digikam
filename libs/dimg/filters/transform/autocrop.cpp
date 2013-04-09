@@ -848,6 +848,12 @@ void AutoCrop::startAnalyse()
         int temppos;
         int count;
 
+        //initialize black point count
+        for(i=0; i<threshold.width(); i++)
+        {
+            blackpointCount[i] = 0;
+        }
+
         for(j=0; j<threshold.width(); j++)
         {
             count = 0;
@@ -911,6 +917,14 @@ void AutoCrop::startAnalyse()
         kDebug() << "Found top crop line";
         kDebug() << "Found in column = " << temppos << "and the topCropLine is "<< topCropLine;
         kDebug() << "Searching for bottom crop line";
+
+        //-----For the bottom of the image
+
+        //initialize black point count
+        for(i=0; i<threshold.width(); i++)
+        {
+            blackpointCount[i] = 0;
+        }
 
         for(j=0; j<threshold.width(); j++)
         {
