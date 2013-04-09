@@ -1,5 +1,5 @@
 *****************************************************************************************************
-digiKam 3.2.0-beta1 - Release date: 2013-04-07
+digiKam 3.2.0-beta2 - Release date: 2013-04-21
 
 NEW FEATURES:
 
@@ -25,5 +25,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 014 ==> 204135 - JPEG lossless cropping support.
 015 ==> 317745 - Store metadata incl. geolocation data into CR2 files.
 016 ==> 295423 - External libclapack not used [patch].
-017 ==> 
-
+017 ==> 179209 - Batch resize only to album not to any directory [patch].
+018 ==> 318067 - Dead link on contribution page.
+019 ==> 
