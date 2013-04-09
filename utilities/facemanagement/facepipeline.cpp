@@ -523,7 +523,7 @@ RecognitionWorker::RecognitionWorker(FacePipeline::Private* const d)
 {
     catcher = 0;
     database             = KFaceIface::RecognitionDatabase::addDatabase();
-    recognitionThreshold = 0.8;
+    recognitionThreshold = 0.3;
 }
 
 void RecognitionWorker::process(FacePipelineExtendedPackage::Ptr package)

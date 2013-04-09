@@ -239,12 +239,12 @@ void FaceIface::storeThumbnails(ThumbnailLoadThread* const thread, const QString
         {
             QRect mapped  = TagRegion::mapFromOriginalSize(image, rect);
             QImage detail = image.copyQImage(mapped);
-	    
-	    DMetadata tmpMeta(filePath);
+
+            DMetadata tmpMeta(filePath);
             DImg tmpImage(detail);
             int rotationDirection = tmpMeta.getImageOrientation();
             
-	    if(rotationDirection == 8)
+            if(rotationDirection == 8)
             {
                 tmpImage.rotate(DImg::ROT90);
             }
