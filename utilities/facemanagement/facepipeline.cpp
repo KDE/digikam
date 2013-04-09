@@ -486,7 +486,7 @@ void DetectionWorker::process(FacePipelineExtendedPackage::Ptr package)
     KFaceIface::Image image = FaceIface::toImage(package->detectionImage);
     image.setOriginalSize(package->image.originalSize());
 
-    detector.setColorMode("color");
+    detector.setColorMode(1);
     package->faces          = detector.detectFaces(image);
 
     kDebug() << "Found" << package->faces.size() << "faces in" << package->info.name()
