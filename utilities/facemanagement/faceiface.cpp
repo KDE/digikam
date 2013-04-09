@@ -51,6 +51,7 @@
 #include "tagscache.h"
 #include "tagregion.h"
 #include "thumbnailloadthread.h"
+#include "dmetadata.h"
 
 namespace Digikam
 {
@@ -212,8 +213,20 @@ void FaceIface::fillImageInFaces(ThumbnailImageCatcher* const catcher, const QSt
         {
             detail = detail.scaled(scaleSize, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
         }
-
-        face.setImage(detail);
+        
+        DMetadata tmpMeta(filePath);
+        DImg tmpImage(detail);
+        int rotationDirection = tmpMeta.getImageOrientation();
+        if(rotationDirection == 8)
+        {
+            tmpImage.rotate(DImg::ROT90);
+        }
+        else
+        {
+            tmpImage.rotateAndFlip(rotationDirection);
+        }
+        
+        face.setImage(tmpImage.copyQImage());
     }
 }
 
