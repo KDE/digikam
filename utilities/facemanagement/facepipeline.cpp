@@ -37,14 +37,12 @@
 
 // Libkface includes
 
-#include <libkface/tlddatabase.h>
-
+#include <libkface/facerecognizer.h>
 // Local includes
 
 #include "loadingdescription.h"
 #include "metadatasettings.h"
 #include "threadmanager.h"
-#include "libopencv.h"
 
 namespace Digikam
 {
@@ -546,56 +544,20 @@ void RecognitionWorker::process(FacePipelineExtendedPackage::Ptr package)
         iface.fillImageInFaces(package->image, package->faces, size);
     }
 
-    int removeindex                            = 0;
-    KFaceIface::Tlddatabase* const tlddatabase = new KFaceIface::Tlddatabase();
+    KFaceIface::FaceRecognizer *recogniser = new KFaceIface::FaceRecognizer();
 
-    foreach(const KFaceIface::Face & face, package->faces)
+    QList<float> recgnitionRate =  recogniser->recognizeFaces(package->faces);
+    
+    for(int faceindex = 0;faceindex < package->faces.size() ;faceindex++ )
     {
-        vector<float> recognitionconfidence;
-
-        IplImage *img1 = face.image().toIplImage();
-        IplImage* const inputfaceimage = cvCreateImage(cvSize(47,47),img1->depth,img1->nChannels);
-        cvResize(img1, inputfaceimage);
-
-        int count                      = -1;
-
-        for (int i = 1; i <= tlddatabase->queryNumfacesinDatabase();i++ )
-        {
-            KFaceIface::unitFaceModel* const comparemodel = tlddatabase->getFaceModel(i);
-            KFaceIface::Tldrecognition* const tmpTLD      = new KFaceIface::Tldrecognition;
-            recognitionconfidence.push_back(tmpTLD->getRecognitionConfidence(inputfaceimage,comparemodel));
-            delete tmpTLD;
-            count++;
-        }
-
-        if(count != -1)
-        {
-            int maxConfIndex    = 0;
-            float maxConfidence = recognitionconfidence[0];
-
-            for(int tmpInt = 0; tmpInt <= count ; tmpInt++ )
+            if(recgnitionRate[faceindex] > recognitionThreshold )
             {
-                if(recognitionconfidence[tmpInt] > maxConfidence)
-                {
-                    maxConfIndex  = tmpInt;
-                    maxConfidence = recognitionconfidence[tmpInt];
-                }
-            }
-
-            if(maxConfidence > recognitionThreshold )
-            {
-                kDebug() << "preson  " << qPrintable(tlddatabase->querybyFaceid(maxConfIndex+1))
+                kDebug() << "preson  " << qPrintable(package->faces[faceindex].name())
                          << "   recognised in" << qPrintable(package->filePath);
-                package->faces[removeindex].setName(tlddatabase->querybyFaceid(maxConfIndex+1));
-                package->databaseFaces[removeindex].roles = FacePipelineDatabaseFace::ForConfirmation;
-                package->databaseFaces[removeindex].assignedTagId = tlddatabase->queryFaceID(maxConfIndex+1);
+                package->databaseFaces[faceindex].roles = FacePipelineDatabaseFace::ForConfirmation;
+                package->databaseFaces[faceindex].assignedTagId = package->faces[faceindex].id();
             }
-        }
-
-        removeindex++;
     }
-
-    delete tlddatabase;
 
     package->processFlags |= FacePipelinePackage::ProcessedByRecognizer;
     emit processed(package);
@@ -907,30 +869,15 @@ void Trainer::process(FacePipelineExtendedPackage::Ptr package)
             iface.fillImageInFaces(package->image, package->faces, size);
         }
 
-        int assignedNameindex = 0;
-
-        KFaceIface::Tlddatabase* const tlddatabase        = new KFaceIface::Tlddatabase();
-
-        foreach(const KFaceIface::Face & face, package->faces)
+        KFaceIface::FaceRecognizer * const recogniser = new KFaceIface::FaceRecognizer();
+        
+        for(int faceindex = 0;faceindex < package->faces.size();faceindex++)
         {
-            IplImage  *img1 = face.image().toIplImage();// tlddatabase->QImage2IplImage(face.image().toQImage());
-
-            IplImage* const inputfaceimage                    = cvCreateImage(cvSize(47,47),img1->depth,img1->nChannels);
-            cvResize(img1,inputfaceimage);
-
-            KFaceIface::Tldrecognition* const tmpTLD          = new KFaceIface::Tldrecognition;
-            KFaceIface::unitFaceModel* const facemodeltostore = tmpTLD->getModeltoStore(inputfaceimage);
-            facemodeltostore->Name                            = package->faces[assignedNameindex].name();
-            facemodeltostore->faceid                          = package->databaseFaces[assignedNameindex].assignedTagId;
-            kDebug() << "person  " << qPrintable(package->faces.at(assignedNameindex).name())
+            package->faces[faceindex].setId(package->databaseFaces[faceindex].assignedTagId);
+            kDebug() << "person  " << qPrintable(package->faces.at(faceindex).name())
                      << "  stored in recognition database" ;
-
-            tlddatabase->insertFaceModel(facemodeltostore);             //store facemodel in tlddatabase
-
-            delete tmpTLD;
-            assignedNameindex++;
         }
-        delete tlddatabase;
+        recogniser->storeFaces(package->faces);
     }
 
     iface.removeFaces(toTrain);
