@@ -214,19 +214,7 @@ void FaceIface::fillImageInFaces(ThumbnailImageCatcher* const catcher, const QSt
             detail = detail.scaled(scaleSize, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
         }
         
-        DMetadata tmpMeta(filePath);
-        DImg tmpImage(detail);
-        int rotationDirection = tmpMeta.getImageOrientation();
-        if(rotationDirection == 8)
-        {
-            tmpImage.rotate(DImg::ROT90);
-        }
-        else
-        {
-            tmpImage.rotateAndFlip(rotationDirection);
-        }
-        
-        face.setImage(tmpImage.copyQImage());
+        face.setImage(detail);
     }
 }
 
@@ -251,7 +239,21 @@ void FaceIface::storeThumbnails(ThumbnailLoadThread* const thread, const QString
         {
             QRect mapped  = TagRegion::mapFromOriginalSize(image, rect);
             QImage detail = image.copyQImage(mapped);
-            thread->storeDetailThumbnail(filePath, rect, detail, true);
+	    
+	    DMetadata tmpMeta(filePath);
+            DImg tmpImage(detail);
+            int rotationDirection = tmpMeta.getImageOrientation();
+            
+	    if(rotationDirection == 8)
+            {
+                tmpImage.rotate(DImg::ROT90);
+            }
+            else
+            {
+                tmpImage.rotateAndFlip(rotationDirection);
+            }
+        
+            thread->storeDetailThumbnail(filePath, rect, tmpImage.copyQImage(), true);
         }
     }
 }
