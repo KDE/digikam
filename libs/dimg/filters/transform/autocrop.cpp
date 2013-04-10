@@ -25,6 +25,8 @@
  *
  * ============================================================ */
 
+#include "autocrop.h"
+
 // C++ includes
 
 #include <cmath>
@@ -42,10 +44,6 @@
 // KDE includes
 
 #include <kdebug.h>
-
-// Local includes
-
-#include "autocrop.h"
 
 namespace Digikam
 {
