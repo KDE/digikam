@@ -189,7 +189,7 @@ QueueSettingsView::QueueSettingsView(QWidget* const parent)
     QVBoxLayout* const vlay2     = new QVBoxLayout(rawLoadingBox);
     d->rawLoadingButtonGroup     = new QButtonGroup(rawLoadingBox);
     d->demosaicingButton         = new QRadioButton(i18n("Perform RAW demosaicing"),          rawLoadingBox);
-    d->extractJPEGButton         = new QRadioButton(i18n("Extract embeded preview (faster)"), rawLoadingBox);
+    d->extractJPEGButton         = new QRadioButton(i18n("Extract embedded preview (faster)"), rawLoadingBox);
     d->rawLoadingButtonGroup->addButton(d->extractJPEGButton, QueueSettings::USEEMBEDEDJPEG);
     d->rawLoadingButtonGroup->addButton(d->demosaicingButton, QueueSettings::DEMOSAICING);
     d->rawLoadingButtonGroup->setExclusive(true);

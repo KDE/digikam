@@ -92,7 +92,7 @@ public:
 
     /** Value returned : -1 : unsupported platform
      *                    0 : parse failure from supported platform
-     *                    1 : parse done with sucess from supported platform
+     *                    1 : parse done with success from supported platform
      */
     static qint64 checkAllocation(qint64 fullSize);
 
@@ -172,7 +172,7 @@ Q_INLINE_TEMPLATE Type* DImgLoader::new_failureTolerant(size_t size)
         case -1:      // unsupported platform
             // We will try to continue to allocate
             break;
-        default:     // parse done with sucess from supported platform
+        default:     // parse done with success from supported platform
             break;
     }
 
