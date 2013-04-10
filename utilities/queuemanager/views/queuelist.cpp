@@ -51,11 +51,10 @@
 #include "ddragobjects.h"
 #include "defaultrenameparser.h"
 #include "queuemgrwindow.h"
+#include "queuesettings.h"
 #include "queuetooltip.h"
 #include "thumbnailloadthread.h"
 #include "thumbnailsize.h"
-#include "queuesettings.h"
-#include "queuemgrwindow.h"
 #include "workflowmanager.h"
 
 namespace Digikam

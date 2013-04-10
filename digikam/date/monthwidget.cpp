@@ -39,11 +39,10 @@
 
 // KDE includes
 
-#include <kdeversion.h>
-#include <klocale.h>
-#include <kglobal.h>
 #include <kcalendarsystem.h>
 #include <kdeversion.h>
+#include <kglobal.h>
+#include <klocale.h>
 
 // Local includes
 
