@@ -2360,7 +2360,7 @@ void ImportUI::slotItemsSelected(CamItemInfo info, bool selected)
 
 QString ImportUI::identifyCategoryforMime(const QString& mime)
 {
-    return mime.split("/").at(0);
+    return mime.split('/').at(0);
 }
 
 void ImportUI::autoRotateItems()
