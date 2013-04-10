@@ -548,7 +548,7 @@ void RecognitionWorker::process(FacePipelineExtendedPackage::Ptr package)
 
     QList<float> recgnitionRate =  recogniser->recognizeFaces(package->faces);
     
-    if(recgnitionRate)
+    if(!recgnitionRate.empty())
     {
         for(int faceindex = 0;faceindex < package->faces.size() ;faceindex++ )
         {
