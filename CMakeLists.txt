@@ -222,7 +222,7 @@ ENDIF (KDCRAW_VERSION)
 # Future plans:
 #   2.7 will compile against lcms2 by default but lcms1 will stay as a fallback
 #   2.8 will support lcms2 only, probably ENABLE_LCMS2 will be removed too
-#       unless we decide to support another color managment library
+#       unless we decide to support another color management library
 # Note: if ENABLE_LCMS2 is on and no LCMS2 is available, build will fail, even if LCMS1 is present
 IF (ENABLE_LCMS2)
     MESSAGE(STATUS "Check for LCMS2 availability...")
@@ -287,7 +287,7 @@ IF(NOT APPLE AND NOT USE_EXT_LIBPGF)
     IF(OPENMP_FOUND)
         SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
 
-        # OpenMP defintions ${OpenMP_CXX_FLAGS} is set on right digiKam components through sub-cmake scripts.
+        # OpenMP definitions ${OpenMP_CXX_FLAGS} is set on right digiKam components through sub-cmake scripts.
         IF("${OpenMP_CXX_FLAGS}" STREQUAL "-fopenmp" )
             SET(OPENMP_LDFLAGS "-lgomp")
         ENDIF("${OpenMP_CXX_FLAGS}" STREQUAL "-fopenmp" )
