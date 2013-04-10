@@ -42,7 +42,7 @@ class MaintenanceTool : public ProgressItem
 
 public:
 
-    MaintenanceTool(const QString& id, ProgressItem* const parent = 0);
+    explicit MaintenanceTool(const QString& id, ProgressItem* const parent = 0);
     virtual ~MaintenanceTool();
 
     /** If true, show a notification message on desktop notification manager

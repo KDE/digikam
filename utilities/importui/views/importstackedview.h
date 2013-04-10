@@ -58,7 +58,7 @@ public:
 
 public:
 
-    ImportStackedView(CameraController* const controller, QWidget* const parent = 0);
+    explicit ImportStackedView(CameraController* const controller, QWidget* const parent = 0);
     ~ImportStackedView();
 
     void setDockArea(QMainWindow*);

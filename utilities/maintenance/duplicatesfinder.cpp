@@ -72,7 +72,7 @@ DuplicatesFinder::DuplicatesFinder(const QStringList& albumsIdList, const QStrin
     d->tagsIdList   = tagsIdList;
 }
 
-DuplicatesFinder::DuplicatesFinder(int similarity, ProgressItem* const parent)
+DuplicatesFinder::DuplicatesFinder(const int similarity, ProgressItem* const parent)
     : MaintenanceTool("DuplicatesFinder", parent),
       d(new Private)
 {
