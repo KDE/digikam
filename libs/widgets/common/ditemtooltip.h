@@ -50,7 +50,7 @@ class DIGIKAM_EXPORT DToolTipStyleSheet
 
 public:
 
-    DToolTipStyleSheet(const QFont& font = KGlobalSettings::generalFont());
+    explicit DToolTipStyleSheet(const QFont& font = KGlobalSettings::generalFont());
     QString breakString(const QString& input);
     QString elidedText(const QString& input, Qt::TextElideMode mode);
 
