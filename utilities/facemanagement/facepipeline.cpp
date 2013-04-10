@@ -548,8 +548,10 @@ void RecognitionWorker::process(FacePipelineExtendedPackage::Ptr package)
 
     QList<float> recgnitionRate =  recogniser->recognizeFaces(package->faces);
     
-    for(int faceindex = 0;faceindex < package->faces.size() ;faceindex++ )
+    if(recgnitionRate)
     {
+        for(int faceindex = 0;faceindex < package->faces.size() ;faceindex++ )
+        {
             if(recgnitionRate[faceindex] > recognitionThreshold )
             {
                 kDebug() << "preson  " << qPrintable(package->faces[faceindex].name())
@@ -557,6 +559,7 @@ void RecognitionWorker::process(FacePipelineExtendedPackage::Ptr package)
                 package->databaseFaces[faceindex].roles = FacePipelineDatabaseFace::ForConfirmation;
                 package->databaseFaces[faceindex].assignedTagId = package->faces[faceindex].id();
             }
+        }
     }
 
     package->processFlags |= FacePipelinePackage::ProcessedByRecognizer;
