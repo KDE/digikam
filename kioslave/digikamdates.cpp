@@ -66,10 +66,10 @@ void kio_digikamdates::special(const QByteArray& data)
 
     kDebug() << "Entered kio_digikamdates::special";
 
-    Digikam::DatabaseUrl dbUrl(kurl);
+    Digikam::DatabaseParameters dbParameters(kurl);
     QDBusConnection::sessionBus().registerService(QString("org.kde.digikam.KIO-digikamtags-%1")
                                                   .arg(QString::number(QCoreApplication::instance()->applicationPid())));
-    Digikam::DatabaseAccess::setParameters(dbUrl);
+    Digikam::DatabaseAccess::setParameters(dbParameters);
 
     if (folders)
     {

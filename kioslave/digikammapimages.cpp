@@ -65,10 +65,10 @@ void kio_digikammapimages::special(const QByteArray& data)
     QDataStream ds(data);
     ds >> kurl;
 
-    Digikam::DatabaseUrl dbUrl(kurl);
+    Digikam::DatabaseParameters dbParameters(kurl);
     QDBusConnection::sessionBus().registerService(QString("org.kde.digikam.KIO-digikammapimages-%1")
                                                   .arg(QString::number(QCoreApplication::instance()->applicationPid())));
-    Digikam::DatabaseAccess::setParameters(dbUrl);
+    Digikam::DatabaseAccess::setParameters(dbParameters);
 
     if (wantDirectQuery)
     {
