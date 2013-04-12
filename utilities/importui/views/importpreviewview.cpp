@@ -306,7 +306,7 @@ void ImportPreviewView::setCamItemInfo(const CamItemInfo& info, const CamItemInf
 
 QString ImportPreviewView::identifyCategoryforMime(QString mime)
 {
-    return mime.split("/").at(0);
+    return mime.split('/').at(0);
 }
 
 CamItemInfo ImportPreviewView::getCamItemInfo() const

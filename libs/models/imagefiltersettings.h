@@ -266,7 +266,7 @@ class DIGIKAM_DATABASE_EXPORT VersionImageFilterSettings
 public:
 
     VersionImageFilterSettings();
-    VersionImageFilterSettings(const VersionManagerSettings& settings);
+    explicit VersionImageFilterSettings(const VersionManagerSettings& settings);
 
     bool operator==(const VersionImageFilterSettings& other) const;
 

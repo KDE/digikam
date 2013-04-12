@@ -341,3 +341,4 @@ TARGET_LINK_LIBRARIES (testautocrop
                ${KDCRAW_LIBRARIES}
                ${OpenCV_LIBRARIES}
                )
+

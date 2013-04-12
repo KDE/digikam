@@ -55,7 +55,7 @@ public:
     QStringList foldersToScan;
 };
 
-NewItemsFinder::NewItemsFinder(FinderMode mode, const QStringList& foldersToScan, ProgressItem* const parent)
+NewItemsFinder::NewItemsFinder(const FinderMode mode, const QStringList& foldersToScan, ProgressItem* const parent)
     : MaintenanceTool("NewItemsFinder", parent), d(new Private)
 {
     connect(ScanController::instance(), SIGNAL(collectionScanStarted(QString)),

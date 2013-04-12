@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef CAMERAUIPRIVATE_H
-#define CAMERAUIPRIVATE_H
+#ifndef IMPORTUI_P_H
+#define IMPORTUI_P_H
 
 // Qt includes
 
@@ -256,4 +256,4 @@ const QString ImportUI::Private::importFiltersConfigGroupName("Import Filters");
 
 }  // namespace Digikam
 
-#endif /* CAMERAUIPRIVATE_H */
+#endif // IMPORTUI_P_H

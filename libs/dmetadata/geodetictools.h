@@ -295,7 +295,7 @@ class DIGIKAM_EXPORT GeodeticCalculator
 
 public:
 
-    GeodeticCalculator(const Ellipsoid& e = Ellipsoid::WGS84());
+    explicit GeodeticCalculator(const Ellipsoid& e = Ellipsoid::WGS84());
 
 
     /**

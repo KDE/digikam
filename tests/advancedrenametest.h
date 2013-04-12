@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef ADVANCEDRENAMEINPUTTEST_H
-#define ADVANCEDRENAMEINPUTTEST_H
+#ifndef ADVANCEDRENAMETEST_H
+#define ADVANCEDRENAMETEST_H
 
 // Qt includes
 
@@ -90,4 +90,4 @@ private Q_SLOTS:
     void testEmptyParseString();
 };
 
-#endif /* ADVANCEDRENAMEINPUTTEST_H_ */
+#endif // ADVANCEDRENAMETEST_H

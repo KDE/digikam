@@ -22,7 +22,6 @@
  * ============================================================ */
 
 #include "importmodel.moc"
-#include "importmodel.h"
 
 namespace Digikam
 {

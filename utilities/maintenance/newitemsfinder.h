@@ -50,7 +50,7 @@ public:
 
 public:
 
-    NewItemsFinder(FinderMode mode = CompleteCollectionScan, const QStringList& foldersToScan = QStringList(),
+    explicit NewItemsFinder(const FinderMode mode = CompleteCollectionScan, const QStringList& foldersToScan = QStringList(),
                    ProgressItem* const parent = 0);
     ~NewItemsFinder();
 

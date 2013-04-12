@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIMAGEHISTORYTEST_H
-#define DIMAGEHISTORYTEST_H
+#ifndef DIMAGEFILTERACTIONTEST_H
+#define DIMAGEFILTERACTIONTEST_H
 
 // Qt includes
 
@@ -56,4 +56,4 @@ private Q_SLOTS:
     void cleanupTestCase();
 };
 
-#endif
+#endif // DIMAGEFILTERACTIONTEST_H

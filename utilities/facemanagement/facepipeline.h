@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef FACEDETECTOR_H
-#define FACEDETECTOR_H
+#ifndef FACEPIPELINE_H
+#define FACEPIPELINE_H
 
 // Qt includes
 
@@ -312,4 +312,4 @@ Q_DECLARE_METATYPE(Digikam::FacePipelinePackage)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::FacePipelineDatabaseFace::Roles)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::FacePipelinePackage::ProcessFlags)
 
-#endif // FACEDETECTOR_H
+#endif // FACEPIPELINE_H

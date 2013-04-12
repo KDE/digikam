@@ -36,7 +36,6 @@
 
 #include "dimg.h"
 #include "queuesettings.h"
-#include "dimg.h"
 
 class QWidget;
 

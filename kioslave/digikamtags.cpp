@@ -67,10 +67,10 @@ void kio_digikamtagsProtocol::special(const QByteArray& data)
     QDataStream ds(data);
     ds >> kurl;
 
-    Digikam::DatabaseUrl dbUrl(kurl);
+    Digikam::DatabaseParameters dbParameters(kurl);
     QDBusConnection::sessionBus().registerService(QString("org.kde.digikam.KIO-%1")
                                                   .arg(QString::number(QCoreApplication::instance()->applicationPid())));
-    Digikam::DatabaseAccess::setParameters(dbUrl);
+    Digikam::DatabaseAccess::setParameters(dbParameters);
 
     bool folders     = (metaData("folders") == "true");
     bool facefolders = (metaData("facefolders") == "true");

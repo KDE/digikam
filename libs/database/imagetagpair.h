@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGETAGPROPERTIES_H
-#define IMAGETAGPROPERTIES_H
+#ifndef IMAGETAGPAIR_H
+#define IMAGETAGPAIR_H
 
 // Qt includes
 
@@ -119,5 +119,5 @@ private:
 
 } // namespace
 
-#endif // IMAGETAGPROPERTIES_H
+#endif // IMAGETAGPAIR_H
 

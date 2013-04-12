@@ -72,7 +72,7 @@ public:
     HaarIface          haarIface;
 };
 
-FingerPrintsGenerator::FingerPrintsGenerator(bool rebuildAll, ProgressItem* const parent)
+FingerPrintsGenerator::FingerPrintsGenerator(const bool rebuildAll, ProgressItem* const parent)
     : MaintenanceTool("FingerPrintsGenerator", parent),
       d(new Private)
 {

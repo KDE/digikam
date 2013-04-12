@@ -371,7 +371,7 @@ void DigikamView::applySettings()
         sidebarWidget->applySettings();
     }
 
-    d->iconView->imageFilterModel()->setVersionImageFilterSettings(AlbumSettings::instance()->getVersionManagerSettings());
+    d->iconView->imageFilterModel()->setVersionImageFilterSettings(VersionImageFilterSettings(AlbumSettings::instance()->getVersionManagerSettings()));
 
     refreshView();
 }
