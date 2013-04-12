@@ -47,7 +47,7 @@ public:
 
     DuplicatesFinder(const QStringList& albumsIdList, const QStringList& tagsIdList, int similarity = 90, ProgressItem* const parent = 0);
     /// Version to find all duplicates over whole collections
-    DuplicatesFinder(int similarity = 90, ProgressItem* const parent = 0);
+    explicit DuplicatesFinder(const int similarity = 90, ProgressItem* const parent = 0);
     ~DuplicatesFinder();
 
 private Q_SLOTS:

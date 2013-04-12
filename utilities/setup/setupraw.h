@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef SETUPDCRAW_H
-#define SETUPDCRAW_H
+#ifndef SETUPRAW_H
+#define SETUPRAW_H
 
 // Qt includes
 
@@ -63,4 +63,4 @@ private:
 
 }  // namespace Digikam
 
-#endif // SETUPDCRAW_H 
+#endif // SETUPRAW_H

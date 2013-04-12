@@ -49,13 +49,13 @@ public:
 public:
 
     /** Constructor which sync all pictures metadata pictures from whole Albums collection */
-    MetadataSynchronizer(SyncDirection direction, ProgressItem* const parent = 0);
+    explicit MetadataSynchronizer(SyncDirection direction, ProgressItem* const parent = 0);
 
     /** Constructor which sync all pictures metadata from an Album */
-    MetadataSynchronizer(Album* const album, SyncDirection direction = WriteFromDatabaseToFile, ProgressItem* const parent = 0);
+    explicit MetadataSynchronizer(Album* const album, SyncDirection direction = WriteFromDatabaseToFile, ProgressItem* const parent = 0);
 
     /** Constructor which sync all pictures metadata from an images list */
-    MetadataSynchronizer(const ImageInfoList& list, SyncDirection = WriteFromDatabaseToFile, ProgressItem* const parent = 0);
+    explicit MetadataSynchronizer(const ImageInfoList& list, SyncDirection = WriteFromDatabaseToFile, ProgressItem* const parent = 0);
 
     ~MetadataSynchronizer();
 

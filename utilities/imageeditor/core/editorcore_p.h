@@ -21,6 +21,9 @@
  *
  * ============================================================ */
 
+#ifndef EDITORCORE_P_H
+#define EDITORCORE_P_H
+
 #define OPACITY  0.7
 #define RCOL     0xAA
 #define GCOL     0xAA
@@ -388,3 +391,5 @@ void EditorCore::Private::load(const LoadingDescription& description)
 }
 
 }  // namespace Digikam
+
+#endif // EDITORCORE_P_H

@@ -46,12 +46,12 @@
 #include <QPushButton>
 #include <QRadioButton>
 #include <QScrollArea>
+#include <QSignalMapper>
 #include <QSplitter>
 #include <QTimer>
 #include <QToolButton>
 #include <QVBoxLayout>
 #include <QWidget>
-#include <QSignalMapper>
 
 // KDE includes
 
@@ -61,6 +61,7 @@
 #include <kcalendarsystem.h>
 #include <kcombobox.h>
 #include <kconfig.h>
+#include <kdebug.h>
 #include <kdialog.h>
 #include <kedittoolbar.h>
 #include <kfiledialog.h>
@@ -71,8 +72,8 @@
 #include <kinputdialog.h>
 #include <kio/global.h>
 #include <klocale.h>
-#include <kmenu.h>
 #include <kmenubar.h>
+#include <kmenu.h>
 #include <kmessagebox.h>
 #include <knotifyconfigwidget.h>
 #include <kshortcutsdialog.h>
@@ -84,51 +85,49 @@
 #include <ktoolinvocation.h>
 #include <kurllabel.h>
 #include <kvbox.h>
-#include <kdebug.h>
 
 // Libkdcraw includes
 
-#include <libkdcraw/version.h>
 #include <libkdcraw/kdcraw.h>
 #include <libkdcraw/rexpanderbox.h>
+#include <libkdcraw/version.h>
 
 // Local includes
 
-#include "componentsinfo.h"
-#include "statusprogressbar.h"
-#include "statusnavigatebar.h"
-#include "dlogoaction.h"
-#include "thumbnailsize.h"
-#include "sidebar.h"
-#include "thememanager.h"
-#include "setup.h"
-#include "downloadhistory.h"
-#include "dzoombar.h"
-#include "imagepropertiessidebarcamgui.h"
-#include "albummanager.h"
-#include "importsettings.h"
 #include "album.h"
+#include "albummanager.h"
 #include "albumselectdialog.h"
-#include "renamecustomizer.h"
-#include "freespacewidget.h"
-#include "collectionscanner.h"
-#include "collectionmanager.h"
-#include "collectionlocation.h"
-#include "scancontroller.h"
-#include "capturedlg.h"
+#include "cameracontroller.h"
 #include "camerafolderdialog.h"
 #include "camerainfodialog.h"
-#include "cameracontroller.h"
 #include "cameralist.h"
-#include "cameratype.h"
 #include "cameranamehelper.h"
-//#include "cameramessagebox.h"
-#include "uifilevalidator.h"
+#include "cameratype.h"
+#include "capturedlg.h"
+#include "collectionlocation.h"
+#include "collectionmanager.h"
+#include "collectionscanner.h"
+#include "componentsinfo.h"
+#include "dlogoaction.h"
+#include "downloadhistory.h"
+#include "dzoombar.h"
+#include "fileactionmngr.h"
+#include "freespacewidget.h"
+#include "imagepropertiessidebarcamgui.h"
+#include "importmodel.h"
+#include "importsettings.h"
+#include "importview.h"
 #include "knotificationwrapper.h"
 #include "newitemsfinder.h"
-#include "fileactionmngr.h"
-#include "importview.h"
-#include "importmodel.h"
+#include "renamecustomizer.h"
+#include "scancontroller.h"
+#include "setup.h"
+#include "sidebar.h"
+#include "statusnavigatebar.h"
+#include "statusprogressbar.h"
+#include "thememanager.h"
+#include "thumbnailsize.h"
+#include "uifilevalidator.h"
 
 using namespace KDcrawIface;
 
@@ -2360,7 +2359,7 @@ void ImportUI::slotItemsSelected(CamItemInfo info, bool selected)
 
 QString ImportUI::identifyCategoryforMime(const QString& mime)
 {
-    return mime.split("/").at(0);
+    return mime.split('/').at(0);
 }
 
 void ImportUI::autoRotateItems()

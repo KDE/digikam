@@ -58,6 +58,7 @@
 #include "digikam_export.h"
 #include "imagelister.h"
 
+
 kio_digikamalbums::kio_digikamalbums(const QByteArray& pool_socket, const QByteArray& app_socket)
     : SlaveBase("kio_digikamalbums", pool_socket, app_socket)
 {
@@ -78,9 +79,9 @@ void kio_digikamalbums::special(const QByteArray& data)
 
     kDebug() << "kio_digikamalbums::special " << kurl;
 
-    Digikam::DatabaseUrl dbUrl(kurl);
+    Digikam::DatabaseParameters dbParameters(kurl);
     QDBusConnection::sessionBus().registerService(QString("org.kde.digikam.KIO-digikamtags-%1").arg(QString::number(QCoreApplication::instance()->applicationPid())));
-    Digikam::DatabaseAccess::setParameters(dbUrl);
+    Digikam::DatabaseAccess::setParameters(dbParameters);
 
     bool folders = (metaData("folders") == "true");
 
@@ -134,7 +135,7 @@ void kio_digikamalbums::put(const KUrl& url, int permissions, KIO::JobFlags flag
     kDebug() << " : " << url.url();
 
     Digikam::DatabaseUrl dbUrl(url);
-    Digikam::DatabaseAccess::setParameters(dbUrl);
+    Digikam::DatabaseAccess::setParameters((Digikam::DatabaseParameters)dbUrl);
     Digikam::DatabaseAccess access;
 
     // get the parent album
@@ -179,7 +180,7 @@ void kio_digikamalbums::copy(const KUrl& src, const KUrl& dst, int mode, KIO::Jo
         return;
     }
 
-    Digikam::DatabaseAccess::setParameters(dbUrlSrc);
+    Digikam::DatabaseAccess::setParameters((Digikam::DatabaseParameters)dbUrlSrc);
     Digikam::DatabaseAccess access;
 
     // find the src parent album - do not create
@@ -253,7 +254,7 @@ void kio_digikamalbums::rename(const KUrl& src, const KUrl& dst, KIO::JobFlags f
         return;
     }
 
-    Digikam::DatabaseAccess::setParameters(dbUrlSrc);
+    Digikam::DatabaseAccess::setParameters((Digikam::DatabaseParameters)dbUrlSrc);
     Digikam::DatabaseAccess access;
 
     // check if we are renaming an album or a image
@@ -323,7 +324,7 @@ void kio_digikamalbums::mkdir(const KUrl& url, int permissions)
     Digikam::DatabaseUrl dbUrl(url);
     // DatabaseUrl has a strong opinion there should be a slash, KDE does not
     dbUrl.adjustPath(KUrl::AddTrailingSlash);
-    Digikam::DatabaseAccess::setParameters(dbUrl);
+    Digikam::DatabaseAccess::setParameters((Digikam::DatabaseParameters)dbUrl);
     Digikam::DatabaseAccess access;
 
     KIO::SimpleJob* job = KIO::mkdir(dbUrl.fileUrl(), permissions);
@@ -370,7 +371,7 @@ void kio_digikamalbums::del(const KUrl& url, bool isFile)
     }
 
     Digikam::DatabaseUrl dbUrl(url);
-    Digikam::DatabaseAccess::setParameters(dbUrl);
+    Digikam::DatabaseAccess::setParameters((Digikam::DatabaseParameters)dbUrl);
     Digikam::DatabaseAccess access;
 
     int albumID;

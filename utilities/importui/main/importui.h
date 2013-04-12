@@ -24,8 +24,8 @@
  *
  * ============================================================ */
 
-#ifndef CAMERAUI_H
-#define CAMERAUI_H
+#ifndef IMPORTUI_H
+#define IMPORTUI_H
 
 // Qt includes
 
@@ -241,4 +241,4 @@ private:
 
 }  // namespace Digikam
 
-#endif /* CAMERAUI_H */
+#endif // IMPORTUI_H

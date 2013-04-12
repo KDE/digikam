@@ -94,7 +94,7 @@ void kio_digikamsearch::special(const QByteArray& data)
     Digikam::DatabaseUrl dbUrl(kurl);
     QDBusConnection::sessionBus().registerService(QString("org.kde.digikam.KIO-digikamtags-%1")
                                                   .arg(QString::number(QCoreApplication::instance()->applicationPid())));
-    Digikam::DatabaseAccess::setParameters(dbUrl);
+    Digikam::DatabaseAccess::setParameters((Digikam::DatabaseParameters)dbUrl);
 
     if (!duplicates)
     {

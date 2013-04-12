@@ -126,7 +126,7 @@ public:
         {
         }
 
-        QueryState(QueryStateEnum value)
+        QueryState(const QueryStateEnum value)
             : value(value)
         {
         }

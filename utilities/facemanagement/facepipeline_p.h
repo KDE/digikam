@@ -21,6 +21,9 @@
  *
  * ============================================================ */
 
+#ifndef FACEPIPELINE_P_H
+#define FACEPIPELINE_P_H
+
 #include "facepipeline.h"
 
 // Qt includes
@@ -411,3 +414,5 @@ private:
 };
 
 } // namespace Digikam
+
+#endif // FACEPIPELINE_P_H

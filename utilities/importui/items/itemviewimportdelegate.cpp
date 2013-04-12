@@ -324,7 +324,7 @@ void ItemViewImportDelegate::drawImageFormat(QPainter* p, const QRect& r, const 
 
     if (!mime.isEmpty() && !r.isNull())
     {
-        QString type = mime.split("/").at(1);
+        QString type = mime.split('/').at(1);
         type = ImageScanner::formatToString(type);
 
         p->save();

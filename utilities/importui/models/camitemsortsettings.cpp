@@ -21,13 +21,11 @@
  *
  * ============================================================ */
 
+#include "camitemsortsettings.h"
+
 // Qt includes
 
 #include <QRectF>
-
-// Local includes
-
-#include "camitemsortsettings.h"
 
 namespace Digikam
 {

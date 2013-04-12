@@ -296,7 +296,7 @@ void ImportStackedView::setPreviewItem(const CamItemInfo& info, const CamItemInf
 
 QString ImportStackedView::identifyCategoryforMime(const QString& mime) const
 {
-    return mime.split("/").at(0);
+    return mime.split('/').at(0);
 }
 
 int ImportStackedView::previewMode() const

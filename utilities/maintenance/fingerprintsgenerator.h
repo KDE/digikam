@@ -40,7 +40,7 @@ class FingerPrintsGenerator : public MaintenanceTool
 
 public:
 
-    FingerPrintsGenerator(bool rebuildAll, ProgressItem* const parent = 0);
+    explicit FingerPrintsGenerator(const bool rebuildAll, ProgressItem* const parent = 0);
     ~FingerPrintsGenerator();
 
 private:
