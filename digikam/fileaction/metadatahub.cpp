@@ -195,28 +195,7 @@ void MetadataHub::load(const ImageInfo& info)
     QList<int> tagIds = info.tagIds();
     loadTags(tagIds);
 
-    FaceTagsEditor editor;
-    //kDebug() << "Image Dimensions ----------------" << info.dimensions();
-
-    QList<DatabaseFace> facesList = editor.confirmedDatabaseFaces(info.id());
-    d->faceTagsList.clear();
-
-    if(!facesList.isEmpty())
-    {
-        foreach(DatabaseFace dface,facesList)
-        {
-            QString faceName = FaceTags::faceNameForTag(dface.tagId());
-            if(faceName.isEmpty())
-                continue;
-            QRect   temprect = dface.region().toRect();
-            QRectF  faceRect = TagRegion::absoluteToRelative(temprect,info.dimensions());
-
-            d->faceTagsList[faceName] = QVariant(faceRect);
-            //kDebug() << "-----------------------------------------------------New faces added" << faceName << " " << faceRect;
-        }
-
-    }
-
+    loadFaceTags(info, info.dimensions());
 }
 
 void MetadataHub::load(const DMetadata& metadata)
@@ -372,7 +351,7 @@ void MetadataHub::loadTags(const QStringList& loadedTagPaths)
 */
 
 // private common code to load dateTime, comment, color label, pick label, rating
-void MetadataHub::load(const QDateTime& dateTime, 
+void MetadataHub::load(const QDateTime& dateTime,
                        const CaptionsMap& titles, const CaptionsMap& comments,
                        int colorLabel, int pickLabel,
                        int rating, const Template& t)
@@ -620,7 +599,7 @@ bool MetadataHub::write(DMetadata& metadata, WriteMode writeMode, const Metadata
     bool saveColorLabel = (settings.saveColorLabel && d->colorLabelStatus == MetadataAvailable);
     bool saveRating     = (settings.saveRating     && d->ratingStatus     == MetadataAvailable);
     bool saveTemplate   = (settings.saveTemplate   && d->templateStatus   == MetadataAvailable);
-    bool saveFaceTags   = settings.saveFaceTags;
+    //bool saveFaceTags   = settings.saveFaceTags; //Disabled, can produce rectangle inconsistency
     bool saveTags       = false;
 
     if (settings.saveTags)
@@ -715,10 +694,9 @@ bool MetadataHub::write(DMetadata& metadata, WriteMode writeMode, const Metadata
             dirty |= metadata.setMetadataTemplate(d->metadataTemplate);
         }
     }
-    if  (saveFaceTags) /// TODO: Figure out how to add faceTagsChanged option
-    {
+
         metadata.setImageFacesMap(d->faceTagsList);
-    }
+
     if (saveTags && (writeAllFields || d->tagsChanged))
     {
         // Store tag paths as Iptc keywords tags.
@@ -1277,6 +1255,34 @@ void MetadataHubOnTheRoad::slotInvalidate()
 {
     QMutexLocker locker(&d->mutex);
     d->invalid = true;
+}
+
+void Digikam::MetadataHub::loadFaceTags(const ImageInfo info, QSize size)
+{
+    FaceTagsEditor editor;
+    //kDebug() << "Image Dimensions ----------------" << info.dimensions();
+
+    QList<DatabaseFace> facesList = editor.confirmedDatabaseFaces(info.id());
+    d->faceTagsList.clear();
+
+    if(!facesList.isEmpty())
+    {
+        foreach(DatabaseFace dface,facesList)
+        {
+            QString faceName = FaceTags::faceNameForTag(dface.tagId());
+            if(faceName.isEmpty())
+                continue;
+            kDebug() << "------------------------------------Adding rectangle" << dface.region().toRect ();
+            QRect   temprect = dface.region().toRect();
+            QRectF  faceRect = TagRegion::absoluteToRelative(temprect,size);
+
+            d->faceTagsList[faceName] = QVariant(faceRect);
+            //kDebug() << "-----------------------------------------------------New faces added" << faceName << " " << faceRect;
+        }
+
+    }
+
+
 }
 
 } // namespace Digikam

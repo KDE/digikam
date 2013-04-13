@@ -264,9 +264,10 @@ void FileActionMngrFileWorker::transform(FileActionImageInfoList infos, int acti
     {
         emit imageChangeFailed(i18n("Failed to transform these files:"), failedItems);
     }
+    infos.finishedWriting();
 
     ScanController::instance()->resumeCollectionScan();
-    infos.finishedWriting();
+
 
     emit imageTransformFinished();
 }
@@ -316,5 +317,13 @@ void FileActionMngrFileWorker::ajustFaceRectangles(const ImageInfo& info,
         TagRegion region(it.value());
         FaceTagsEditor().add(info.id(), tagId, region, false);
     }
+
+    /** Write medatada **/
+
+    MetadataHub hub;
+    hub.load(info);
+    QSize tempS = info.dimensions ();
+    hub.loadFaceTags (info,QSize(tempS.height (),tempS.width ()));
+    hub.write (info.filePath (),MetadataHub::FullWrite);
 }
 } // namespace Digikam

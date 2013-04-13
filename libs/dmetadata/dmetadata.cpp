@@ -1313,7 +1313,10 @@ bool DMetadata::getImageFacesMap(QMap<QString,QVariant>& faces) const
 
         faces[person] = rect;
     }
-
+    /** Read face tags only if libkexiv can write them, otherwise
+     *  garbage tags will be generated on image transformation
+     */
+#if KEXIV2_VERSION >= 0x020301
     // Read face tags as saved by Picasa
     // http://www.exiv2.org/tags-xmp-mwg-rs.html
     const QString mwg_personPathTemplate  = "Xmp.mwg-rs.Regions/mwg-rs:RegionList[%1]/mwg-rs:Name";
@@ -1340,14 +1343,18 @@ bool DMetadata::getImageFacesMap(QMap<QString,QVariant>& faces) const
                     h);
 
         faces[person] = rect;
+        qDebug() << "Found new rect " << person << " "<< rect;
     }
+#endif
 
     return !faces.isEmpty();
 }
 
 bool DMetadata::setImageFacesMap(QMap< QString, QVariant >& facesPath) const
 {
+    qDebug() << "Setting Faces Map";
 #if KEXIV2_VERSION >= 0x020301
+    qDebug() << "Setting Faces Map 2";
     QString qxmpTagName("Xmp.mwg-rs.Regions/mwg-rs:RegionList");
     QString nameTagKey = qxmpTagName + QString("[%1]/mwg-rs:Name");
     QString typeTagKey = qxmpTagName + QString("[%1]/mwg-rs:Type");
@@ -1370,8 +1377,10 @@ bool DMetadata::setImageFacesMap(QMap< QString, QVariant >& facesPath) const
     {
         qreal x,y,w,h;
         it.value().toRectF().getRect(&x,&y,&w,&h);
+        kDebug() << "----------------------------Set tagregion to metadata" << it.value().toRectF();
         x += w/2;
         y += h/2;
+
         /** Set tag name **/
         ok &= setXmpTagString(nameTagKey.arg(i).toLatin1(),
                               it.key(),KExiv2::XmpTagType(0),false);

@@ -898,6 +898,7 @@ void ImageScanner::commitFaces()
         TagRegion region(TagRegion::relativeToAbsolute(rect, size));
 
         FaceTagsEditor editor;
+
         editor.add(d->scanInfo.id, tagId, region, false);
     }
 }
@@ -1285,7 +1286,7 @@ class lessThanByProximityToSubject
 {
 public:
 
-    explicit lessThanByProximityToSubject(const ImageInfo& subject) 
+    explicit lessThanByProximityToSubject(const ImageInfo& subject)
         : subject(subject)
     {
     }

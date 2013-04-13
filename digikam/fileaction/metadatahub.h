@@ -373,8 +373,16 @@ public:
     */
     void resetChanged();
 
+    /**
+        Dedicated method to set face rectangles from database
+        When called from outside the metadatahub and  ImageInfo is cached,
+        method dimension() can return wrong values, QSize must be specified
+        manually
+     */
+    void loadFaceTags(const ImageInfo info, QSize size);
+
 protected:
-    void load(const QDateTime& dateTime, 
+    void load(const QDateTime& dateTime,
               const CaptionsMap& titles, const CaptionsMap& comment,
               int colorLabel, int pickLabel,
               int rating, const Template& t);

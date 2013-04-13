@@ -94,7 +94,7 @@ QList<DatabaseFace> FaceTagsEditor::databaseFaces(qlonglong imageid, DatabaseFac
             foreach(const QString& regionString, pair.values(attribute))
             {
                 TagRegion region(regionString);
-                kDebug() << "rect found as "<< region << "for attribute" << attribute << "tag" << pair.tagId();
+                //kDebug() << "rect found as "<< region << "for attribute" << attribute << "tag" << pair.tagId();
 
                 if (!region.isValid())
                 {
@@ -237,6 +237,7 @@ DatabaseFace FaceTagsEditor::confirmName(const DatabaseFace& face, int tagId, co
 
 DatabaseFace FaceTagsEditor::add(qlonglong imageId, int tagId, const TagRegion& region, bool trainFace)
 {
+    kDebug () << "Adding face with rectangle  " << region.toRect () << " to database";
     DatabaseFace newEntry(DatabaseFace::ConfirmedName, imageId, tagId, region);
     add(newEntry, trainFace);
     return newEntry;
