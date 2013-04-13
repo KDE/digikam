@@ -28,4 +28,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 017 ==> 179209 - Batch resize only to album not to any directory [patch].
 018 ==> 318067 - Dead link on contribution page.
 019 ==> 318200 - Toolbar nearly unusable after upgrading to digiKam 3.10.
-020 ==> 
+020 ==> 318154 - digiKam crashes after a few seconds.
+021 ==> 
