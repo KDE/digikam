@@ -67,6 +67,10 @@ TableViewColumnDescription ColumnFileProperties::getDescription()
         TableViewColumnDescription("file-properties", i18n("Size"), "subcolumn", "size")
     );
 
+    description.addSubColumn(
+        TableViewColumnDescription("file-properties", i18n("Last modified"), "subcolumn", "lastmodified")
+    );
+
     return description;
 }
 
@@ -78,6 +82,8 @@ QString ColumnFileProperties::getTitle() const
         return i18n("Filename");
     case SubColumnSize:
         return i18n("Size");
+    case SubColumnLastModified:
+        return i18n("Last modified");
     }
 
     return QString();
@@ -85,7 +91,8 @@ QString ColumnFileProperties::getTitle() const
 
 TableViewColumn::ColumnFlags ColumnFileProperties::getColumnFlags() const
 {
-    if (subColumn == SubColumnSize)
+    if (   (subColumn == SubColumnSize)
+        || (subColumn == SubColumnLastModified) )
     {
         return ColumnCustomSorting | ColumnHasConfigurationWidget;
     }
@@ -138,6 +145,13 @@ QVariant ColumnFileProperties::data(TableViewModel::Item* const item, const int 
         break;
     }
 
+    case SubColumnLastModified:
+    {
+        const QDateTime lastModifiedTime = info.modDateTime();
+
+        return KGlobal::locale()->formatDateTime(lastModifiedTime, KLocale::ShortDate, true);
+    }
+
     }
 
     return QVariant();
@@ -148,7 +162,9 @@ TableViewColumn::ColumnCompareResult ColumnFileProperties::compare(TableViewMode
     const ImageInfo infoA = s->tableViewModel->infoFromItem(itemA);
     const ImageInfo infoB = s->tableViewModel->infoFromItem(itemB);
 
-    if (subColumn == SubColumnSize)
+    switch (subColumn)
+    {
+    case SubColumnSize:
     {
         const int sizeA = infoA.fileSize();
         const int sizeB = infoB.fileSize();
@@ -156,8 +172,20 @@ TableViewColumn::ColumnCompareResult ColumnFileProperties::compare(TableViewMode
         return compareHelper<int>(sizeA, sizeB);
     }
 
-    kWarning() << "file: unimplemented comparison, subColumn=" << subColumn;
-    return CmpEqual;
+    case SubColumnLastModified:
+    {
+        const QDateTime dtA = infoA.modDateTime();
+        const QDateTime dtB = infoB.modDateTime();
+
+        return compareHelper<QDateTime>(dtA, dtB);
+    }
+
+    default:
+
+        kWarning() << "file: unimplemented comparison, subColumn=" << subColumn;
+        return CmpEqual;
+    }
+
 }
 
 ColumnFileConfigurationWidget::ColumnFileConfigurationWidget(
@@ -209,7 +237,7 @@ TableViewColumnConfiguration ColumnFileConfigurationWidget::getNewConfiguration(
 QStringList ColumnFileProperties::getSubColumns()
 {
     QStringList columns;
-    columns << QLatin1String("name") << QLatin1String("size");
+    columns << QLatin1String("name") << QLatin1String("size") << QLatin1String("lastmodified");
 
     return columns;
 }
