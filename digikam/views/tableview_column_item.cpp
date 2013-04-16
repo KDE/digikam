@@ -313,6 +313,7 @@ TableViewColumn::ColumnCompareResult ColumnItemProperties::compare(
 
             return compareHelper<QDateTime>(dtA, dtB);
         }
+
     default:
         kWarning() << "item: unimplemented comparison, subColumn=" << subColumn;
         return CmpEqual;
