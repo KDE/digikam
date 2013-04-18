@@ -562,6 +562,8 @@ void RecognitionWorker::process(FacePipelineExtendedPackage::Ptr package)
         }
     }
 
+    delete recogniser;
+
     package->processFlags |= FacePipelinePackage::ProcessedByRecognizer;
     emit processed(package);
 }
@@ -881,6 +883,7 @@ void Trainer::process(FacePipelineExtendedPackage::Ptr package)
                      << "  stored in recognition database" ;
         }
         recogniser->storeFaces(package->faces);
+        delete recogniser;
     }
 
     iface.removeFaces(toTrain);
