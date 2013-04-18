@@ -300,7 +300,8 @@ QImage ThumbnailCreator::load(const QString& path, const QRect& rect, bool prege
     if (d->thumbnailStorage == ThumbnailDatabase)
     {
         // image is stored, or created, unrotated, and is now rotated for display
-        if (d->exifRotate)
+        // detail thumbnails are stored readily rotated
+        if (d->exifRotate && rect.isNull())
         {
             image.qimage = exifRotate(image.qimage, image.exifOrientation);
         }
@@ -309,10 +310,8 @@ QImage ThumbnailCreator::load(const QString& path, const QRect& rect, bool prege
     return image.qimage;
 }
 
-QImage ThumbnailCreator::scaleForStorage(const QImage& qimage, bool isFace) const
+QImage ThumbnailCreator::scaleForStorage(const QImage& qimage) const
 {
-    Q_UNUSED(isFace)
-
     if (qimage.width() > d->storageSize() || qimage.height() > d->storageSize())
     {
         /*
@@ -365,19 +364,19 @@ void ThumbnailCreator::store(const QString& path, const QImage& i) const
     store(path, i, QRect());
 }
 
-void ThumbnailCreator::storeDetailThumbnail(const QString& path, const QRect& detailRect, const QImage& i, bool isFace) const
+void ThumbnailCreator::storeDetailThumbnail(const QString& path, const QRect& detailRect, const QImage& i) const
 {
-    store(path, i, detailRect, isFace);
+    store(path, i, detailRect);
 }
 
-void ThumbnailCreator::store(const QString& path, const QImage& i, const QRect& rect, bool isFace) const
+void ThumbnailCreator::store(const QString& path, const QImage& i, const QRect& rect) const
 {
     if (i.isNull())
     {
         return;
     }
 
-    QImage         qimage = scaleForStorage(i, isFace);
+    QImage         qimage = scaleForStorage(i);
     ThumbnailInfo  info   = makeThumbnailInfo(path, rect);
     ThumbnailImage image;
     image.qimage          = qimage;
@@ -427,7 +426,7 @@ void ThumbnailCreator::deleteThumbnailsFromDisk(const QString& filePath) const
 
 // --------------- Thumbnail generation and image handling -----------------------
 
-ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo& info, const QRect& detailRect, bool isFace) const
+ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo& info, const QRect& detailRect) const
 {
     const QString path = info.filePath;
 
@@ -456,82 +455,84 @@ ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo& info, cons
         qimage = loadImageDetail(info, metadata, detailRect, &profile);
         fromDetail = !qimage.isNull();
     }
-
-    if (qimage.isNull())
+    else
     {
-        // Try to extract Exif/IPTC preview first.
-        qimage = loadImagePreview(metadata);
-    }
-
-    QFileInfo fileInfo(path);
-    // To speed-up thumb extraction, we now try to load the images by the file extension.
-    QString ext = fileInfo.suffix().toUpper();
-
-    if (qimage.isNull() && !ext.isEmpty())
-    {
-        if (ext == QString("JPEG") || ext == QString("JPG") || ext == QString("JPE"))
+        if (qimage.isNull())
         {
-            if (colorManage)
-            {
-                qimage = loadWithDImg(path, &profile);
-            }
-            else
-                // use jpegutils
-            {
-                JPEGUtils::loadJPEGScaled(qimage, path, d->storageSize());
-            }
-
-            failedAtJPEGScaled = qimage.isNull();
+            // Try to extract Exif/IPTC preview first.
+            qimage = loadImagePreview(metadata);
         }
-        else if (ext == QString("PNG")  ||
-                 ext == QString("TIFF") ||
-                 ext == QString("TIF"))
+
+        QFileInfo fileInfo(path);
+        // To speed-up thumb extraction, we now try to load the images by the file extension.
+        QString ext = fileInfo.suffix().toUpper();
+
+        if (qimage.isNull() && !ext.isEmpty())
         {
-            qimage       = loadWithDImg(path, &profile);
-            failedAtDImg = qimage.isNull();
+            if (ext == QString("JPEG") || ext == QString("JPG") || ext == QString("JPE"))
+            {
+                if (colorManage)
+                {
+                    qimage = loadWithDImg(path, &profile);
+                }
+                else
+                    // use jpegutils
+                {
+                    JPEGUtils::loadJPEGScaled(qimage, path, d->storageSize());
+                }
+
+                failedAtJPEGScaled = qimage.isNull();
+            }
+            else if (ext == QString("PNG")  ||
+                    ext == QString("TIFF") ||
+                    ext == QString("TIF"))
+            {
+                qimage       = loadWithDImg(path, &profile);
+                failedAtDImg = qimage.isNull();
+            }
+            else if (ext == QString("PGF"))
+            {
+                // use pgf library to extract reduced version
+                PGFUtils::loadPGFScaled(qimage, path, d->storageSize());
+                failedAtPGFScaled = qimage.isNull();
+            }
         }
-        else if (ext == QString("PGF"))
+
+        // Trying to load with dcraw: RAW files.
+        if (qimage.isNull())
         {
-            // use pgf library to extract reduced version
+            if (KDcraw::loadEmbeddedPreview(qimage, path))
+            {
+                fromEmbeddedPreview = true;
+                profile             = metadata.getIccProfile();
+            }
+        }
+
+        if (qimage.isNull())
+        {
+            //TODO: Use DImg based loader instead?
+            KDcraw::loadHalfPreview(qimage, path);
+        }
+
+        // DImg-dependent loading methods: TIFF, PNG, everything supported by QImage
+        if (qimage.isNull() && !failedAtDImg)
+        {
+            qimage = loadWithDImg(path, &profile);
+        }
+
+        // Try JPEG anyway
+        if (qimage.isNull() && !failedAtJPEGScaled)
+        {
+            // use jpegutils
+            JPEGUtils::loadJPEGScaled(qimage, path, d->storageSize());
+        }
+
+        // Try PGF anyway
+        if (qimage.isNull() && !failedAtPGFScaled)
+        {
+            // use jpegutils
             PGFUtils::loadPGFScaled(qimage, path, d->storageSize());
-            failedAtPGFScaled = qimage.isNull();
         }
-    }
-
-    // Trying to load with dcraw: RAW files.
-    if (qimage.isNull())
-    {
-        if (KDcraw::loadEmbeddedPreview(qimage, path))
-        {
-            fromEmbeddedPreview = true;
-            profile             = metadata.getIccProfile();
-        }
-    }
-
-    if (qimage.isNull())
-    {
-        //TODO: Use DImg based loader instead?
-        KDcraw::loadHalfPreview(qimage, path);
-    }
-
-    // DImg-dependent loading methods: TIFF, PNG, everything supported by QImage
-    if (qimage.isNull() && !failedAtDImg)
-    {
-        qimage = loadWithDImg(path, &profile);
-    }
-
-    // Try JPEG anyway
-    if (qimage.isNull() && !failedAtJPEGScaled)
-    {
-        // use jpegutils
-        JPEGUtils::loadJPEGScaled(qimage, path, d->storageSize());
-    }
-
-    // Try PGF anyway
-    if (qimage.isNull() && !failedAtPGFScaled)
-    {
-        // use jpegutils
-        PGFUtils::loadPGFScaled(qimage, path, d->storageSize());
     }
 
     if (qimage.isNull())
@@ -541,7 +542,7 @@ ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo& info, cons
         return ThumbnailImage();
     }
 
-    qimage = scaleForStorage(qimage, isFace);
+    qimage = scaleForStorage(qimage);
 
     if (colorManage && !profile.isNull())
     {
