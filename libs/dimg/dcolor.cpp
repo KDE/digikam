@@ -35,17 +35,6 @@
 namespace Digikam
 {
 
-/*
-DColor::DColor(const DColor& color)
-{
-    m_red        = color.m_red;
-    m_green      = color.m_green;
-    m_blue       = color.m_blue;
-    m_alpha      = color.m_alpha;
-    m_sixteenBit = color.m_sixteenBit;
-}
-*/
-
 DColor::DColor(const QColor& color, bool sixteenBit)
 {
     // initialize as eight bit
@@ -72,18 +61,6 @@ DColor::DColor(const QColor& color, bool sixteenBit)
         convertToSixteenBit();
     }
 }
-
-/*
-DColor& DColor::operator=(const DColor& color)
-{
-    m_red        = color.m_red;
-    m_green      = color.m_green;
-    m_blue       = color.m_blue;
-    m_alpha      = color.m_alpha;
-    m_sixteenBit = color.m_sixteenBit;
-    return *this;
-}
-*/
 
 QColor DColor::getQColor() const
 {
@@ -398,5 +375,26 @@ void DColor::setYCbCr(double y, double cb, double cr, bool sixteenBit)
         m_alpha = 255;
     }
 }
+
+/*
+DColor::DColor(const DColor& color)
+{
+    m_red        = color.m_red;
+    m_green      = color.m_green;
+    m_blue       = color.m_blue;
+    m_alpha      = color.m_alpha;
+    m_sixteenBit = color.m_sixteenBit;
+}
+
+DColor& DColor::operator=(const DColor& color)
+{
+    m_red        = color.m_red;
+    m_green      = color.m_green;
+    m_blue       = color.m_blue;
+    m_alpha      = color.m_alpha;
+    m_sixteenBit = color.m_sixteenBit;
+    return *this;
+}
+*/
 
 }  // namespace Digikam
