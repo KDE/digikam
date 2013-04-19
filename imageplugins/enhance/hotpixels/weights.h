@@ -127,7 +127,7 @@ protected:
 
 private:
 
-    double polyTerm(const size_t i_coeff, const int x, const int y, const int poly_order);
+    double polyTerm(const size_t i_coeff, const int x, const int y, const int poly_order) const;
     void   matrixInv(double* const a, const size_t size);
 
 private:

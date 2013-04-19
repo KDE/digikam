@@ -41,11 +41,19 @@ Weights::Weights() :
     mCoefficientNumber(0),
     mTwoDim(false),
     mPolynomeOrder(0),
-    mWeightMatrices(0)
+    mWeightMatrices(0),
+    mPositions(QList<QPoint>())
 {
 }
 
-Weights::Weights(const Weights& w)
+Weights::Weights(const Weights& w) :
+    mHeight(0),
+    mWidth(0),
+    mCoefficientNumber(0),
+    mTwoDim(false),
+    mPolynomeOrder(0),
+    mWeightMatrices(0),
+    mPositions(QList<QPoint>())
 {
     (*this) = w;
 }
@@ -54,7 +62,7 @@ Weights& Weights::operator=(const Weights& w)
 {
     mHeight            = w.height();
     mWidth             = w.width();
-    mPositions         = (w.positions());
+    mPositions         = w.positions();
     mCoefficientNumber = w.coefficientNumber();
     mTwoDim            = w.twoDim();
     mPolynomeOrder     = w.polynomeOrder();
@@ -68,7 +76,7 @@ Weights& Weights::operator=(const Weights& w)
     }
     else
     {
-        double** * origMatrices = w.weightMatrices();
+        double** * const origMatrices = w.weightMatrices();
         // Allocate mPositions.count() matrices
         mWeightMatrices         = new double** [mPositions.count()];
 
@@ -145,7 +153,7 @@ void Weights::calculateWeights()
 
     // Allocate memory.
 
-    QScopedArrayPointer<double> matrix(new double[mCoefficientNumber * mCoefficientNumber]);
+    QScopedArrayPointer<double> matrix (new double[mCoefficientNumber * mCoefficientNumber]);
     QScopedArrayPointer<double> vector0(new double[mPositions.count() * mCoefficientNumber]);
     QScopedArrayPointer<double> vector1(new double[mPositions.count() * mCoefficientNumber]);
 
@@ -299,7 +307,7 @@ void Weights::matrixInv (double* const a, const size_t size)
 }
 
 // Calculates one term of the polynomial
-double Weights::polyTerm (const size_t i_coeff, const int x, const int y, const int poly_order)
+double Weights::polyTerm (const size_t i_coeff, const int x, const int y, const int poly_order) const
 {
     const size_t x_power = i_coeff / ((size_t)poly_order + 1);
     const size_t y_power = i_coeff % ((size_t)poly_order + 1);
