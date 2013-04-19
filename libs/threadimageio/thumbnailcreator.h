@@ -202,7 +202,7 @@ public:
      */
     void store(const QString& path, const QImage& image) const;
 
-    void storeDetailThumbnail(const QString& path, const QRect& detailRect, const QImage& image, bool isFace = false) const;
+    void storeDetailThumbnail(const QString& path, const QRect& detailRect, const QImage& image) const;
 
     /**
      * Returns the last error that occurred.
@@ -224,7 +224,7 @@ private:
 
     void initialize();
 
-    ThumbnailImage createThumbnail(const ThumbnailInfo& info, const QRect& detailRect = QRect(), bool isFace = false) const;
+    ThumbnailImage createThumbnail(const ThumbnailInfo& info, const QRect& detailRect = QRect()) const;
 
     QImage load(const QString& path, const QRect& rect, bool pregenerate) const;
     QImage loadWithDImg(const QString& path, IccProfile* const profile) const;
@@ -236,11 +236,11 @@ private:
     int    exifOrientation(const ThumbnailInfo& info, const DMetadata& metadata, bool fromEmbeddedPreview, bool fromDetail) const;
     QImage exifRotate(const QImage& thumb, int orientation) const;
 
-    void store(const QString& path, const QImage& i, const QRect& rect, bool isFace = false) const;
+    void store(const QString& path, const QImage& i, const QRect& rect) const;
 
     ThumbnailInfo makeThumbnailInfo(const QString& path, const QRect& rect) const;
     QString identifierForDetail(const QString& path, const QRect& rect) const;
-    QImage scaleForStorage(const QImage& qimage, bool isFace) const;
+    QImage scaleForStorage(const QImage& qimage) const;
 
     void storeInDatabase(const ThumbnailInfo& info, const ThumbnailImage& image) const;
     DatabaseThumbnailInfo loadDatabaseThumbnailInfo(const ThumbnailInfo& info) const;

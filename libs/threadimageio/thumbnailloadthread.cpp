@@ -906,7 +906,8 @@ QPixmap ThumbnailLoadThread::surrogatePixmap(const LoadingDescription& descripti
 
 void ThumbnailLoadThread::storeDetailThumbnail(const QString& filePath, const QRect& detailRect, const QImage& image, bool isFace)
 {
-    d->creator->storeDetailThumbnail(filePath, detailRect, image, isFace);
+    Q_UNUSED(isFace);
+    d->creator->storeDetailThumbnail(filePath, detailRect, image);
 }
 
 int ThumbnailLoadThread::storedSize() const
