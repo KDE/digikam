@@ -197,9 +197,6 @@ void ImageLevels::levelsAuto(ImageHistogram* const hist)
 
 void ImageLevels::levelsChannelAuto(ImageHistogram* const hist, int channel)
 {
-    int    i;
-    double count, new_count, percentage, next_percentage;
-
     if (!d->levels || !hist)
     {
         return;
@@ -208,7 +205,7 @@ void ImageLevels::levelsChannelAuto(ImageHistogram* const hist, int channel)
     d->levels->gamma[channel]       = 1.0;
     d->levels->low_output[channel]  = 0;
     d->levels->high_output[channel] = d->sixteenBit ? 65535 : 255;
-    count                           = hist->getCount(channel, 0, d->sixteenBit ? 65535 : 255);
+    double count                    = hist->getCount(channel, 0, d->sixteenBit ? 65535 : 255);
 
     if (count == 0.0)
     {
@@ -219,7 +216,10 @@ void ImageLevels::levelsChannelAuto(ImageHistogram* const hist, int channel)
     {
         //  Set the low input
 
-        new_count = 0.0;
+        double new_count       = 0.0;
+        double percentage      = 0.0;
+        double next_percentage = 0.0;
+        int i;
 
         for (i = 0 ; i < (d->sixteenBit ? 65535 : 255) ; ++i)
         {
