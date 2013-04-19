@@ -163,13 +163,11 @@ void DistortionFXFilter::setPixelFromOther(int Width, int Height, bool sixteenBi
                                            int w, int h, double nw, double nh, bool AntiAlias)
 {
     DColor color;
-    int offset, offsetOther;
-
-    offset = getOffset(Width, w, h, bytesDepth);
+    int offset = getOffset(Width, w, h, bytesDepth);
 
     if (AntiAlias)
     {
-        uchar* ptr = pResBits + offset;
+        uchar* const ptr = pResBits + offset;
 
         if (sixteenBit)
         {
@@ -186,7 +184,7 @@ void DistortionFXFilter::setPixelFromOther(int Width, int Height, bool sixteenBi
     else
     {
         // we get the position adjusted
-        offsetOther = getOffsetAdjusted(Width, Height, (int)nw, (int)nh, bytesDepth);
+        int offsetOther = getOffsetAdjusted(Width, Height, (int)nw, (int)nh, bytesDepth);
         // read color
         color.setColor(data + offsetOther, sixteenBit);
         // write color to destination
@@ -757,17 +755,15 @@ void DistortionFXFilter::waves(DImg* orgImage, DImg* destImage,
         Frequency = 0;
     }
 
-    int Width       = orgImage->width();
-    int Height      = orgImage->height();
-
+    int Width  = orgImage->width();
+    int Height = orgImage->height();
     int progress;
-    int h, w;
 
     if (Direction)        // Horizontal
     {
         int tx;
 
-        for (h = 0; runningFlag() && (h < Height); ++h)
+        for (int h = 0; runningFlag() && (h < Height); ++h)
         {
             tx = lround(Amplitude * qSin((Frequency * 2) * h * (M_PI / 180)));
             destImage->bitBltImage(orgImage, 0, h,  Width, 1,  tx, h);
@@ -791,7 +787,7 @@ void DistortionFXFilter::waves(DImg* orgImage, DImg* destImage,
     {
         int ty;
 
-        for (w = 0; runningFlag() && (w < Width); ++w)
+        for (int w = 0; runningFlag() && (w < Width); ++w)
         {
             ty = lround(Amplitude * qSin((Frequency * 2) * w * (M_PI / 180)));
             destImage->bitBltImage(orgImage, w, 0, 1, Height, w, ty);
