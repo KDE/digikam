@@ -21,6 +21,10 @@
 #ifndef KCATEGORIZEDVIEW_P_H
 #define KCATEGORIZEDVIEW_P_H
 
+// Qt includes
+
+#include <QVector>
+
 class KCategorizedSortFilterProxyModel;
 class KCategoryDrawer;
 
@@ -30,8 +34,11 @@ namespace Digikam
 class SparseModelIndexVector : public QVector<QModelIndex>
 {
 public:
-    SparseModelIndexVector(int rowCount, QAbstractItemModel* model, int column)
-        : QVector<QModelIndex>(rowCount), model(model), column(column)
+
+    SparseModelIndexVector(int rowCount, QAbstractItemModel* const model, int column)
+        : QVector<QModelIndex>(rowCount),
+          model(model),
+          column(column)
     {
     }
 
@@ -54,6 +61,8 @@ private:
         return QVector<QModelIndex>::operator[](i);
     }
 
+private:
+
     QAbstractItemModel* model;
     int                 column;
 };
@@ -65,7 +74,7 @@ class DigikamKCategorizedView::Private
 {
 public:
 
-    explicit Private(DigikamKCategorizedView* listView);
+    explicit Private(DigikamKCategorizedView* const listView);
     ~Private();
 
     // Methods

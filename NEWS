@@ -31,5 +31,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 020 ==> 318154 - digiKam crashes after a few seconds.
 021 ==> 318353 - Implement kind of a read-only mode.
 022 ==> 166820 - Wish: Specify a ISO over which to apply noise reduction.
-023 ==> 
+023 ==> 313190 - Thumbnails of faces not rotated correctly according to the configuration settings.
+024 ==> 
 
