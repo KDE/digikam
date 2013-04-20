@@ -703,11 +703,12 @@ void DImgScale::dimgScaleAARGBA(DImgScaleInfo* const isi, uint* const dest,
                 for (x = x_begin; x < x_end; ++x)
                 {
                     int r, g, b, a;
-                    int rr, gg, bb, aa;
                     uint* pix=0;
 
                     if (XAP > 0)
                     {
+                        int rr, gg, bb, aa;
+
                         pix = ypoints[dyy + y] + xpoints[x];
                         r   = R_VAL(pix) * INV_XAP;
                         g   = G_VAL(pix) * INV_XAP;
@@ -770,11 +771,12 @@ void DImgScale::dimgScaleAARGBA(DImgScaleInfo* const isi, uint* const dest,
             {
                 for (x = x_begin; x < x_end; ++x)
                 {
-                    int r, g, b, a;
                     uint* pix=0;
 
                     if (XAP > 0)
                     {
+                        int r, g, b, a;
+
                         pix = ypoints[dyy + y] + xpoints[x];
                         r   = R_VAL(pix) * INV_XAP;
                         g   = G_VAL(pix) * INV_XAP;
@@ -1171,12 +1173,13 @@ void DImgScale::dimgScaleAARGB(DImgScaleInfo* const isi, uint* const dest,
             {
                 for (x = x_begin; x < x_end; ++x)
                 {
-                    int r = 0, g = 0, b = 0;
-                    int rr = 0, gg = 0, bb = 0;
+                    int   r = 0, g = 0, b = 0;
                     uint* pix=0;
 
                     if (XAP > 0)
                     {
+                        int rr = 0, gg = 0, bb = 0;
+
                         pix = ypoints[dyy + y] + xpoints[x];
                         r   = R_VAL(pix) * INV_XAP;
                         g   = G_VAL(pix) * INV_XAP;
@@ -1231,11 +1234,12 @@ void DImgScale::dimgScaleAARGB(DImgScaleInfo* const isi, uint* const dest,
             {
                 for (x = x_begin; x < x_end; ++x)
                 {
-                    int r = 0, g = 0, b = 0;
                     uint* pix=0;
 
                     if (XAP > 0)
                     {
+                        int r = 0, g = 0, b = 0;
+
                         pix = ypoints[dyy + y] + xpoints[x];
                         r   = R_VAL(pix) * INV_XAP;
                         g   = G_VAL(pix) * INV_XAP;
@@ -1599,11 +1603,12 @@ void DImgScale::dimgScaleAARGB16(DImgScaleInfo* const isi, ullong* const dest,
                 for (x = x_begin; x < x_end; ++x)
                 {
                     llong r = 0, g = 0, b = 0;
-                    llong rr = 0, gg = 0, bb = 0;
                     ullong* pix=0;
 
                     if (XAP > 0)
                     {
+                        llong rr = 0, gg = 0, bb = 0;
+
                         pix = ypoints[dyy + y] + xpoints[x];
                         r   = R_VAL16(pix) * INV_XAP;
                         g   = G_VAL16(pix) * INV_XAP;
@@ -1658,11 +1663,12 @@ void DImgScale::dimgScaleAARGB16(DImgScaleInfo* const isi, ullong* const dest,
             {
                 for (x = x_begin; x < x_end; ++x)
                 {
-                    llong r = 0, g = 0, b = 0;
                     ullong* pix=0;
 
                     if (XAP > 0)
                     {
+                        llong r = 0, g = 0, b = 0;
+
                         pix = ypoints[dyy + y] + xpoints[x];
                         r   = R_VAL16(pix) * INV_XAP;
                         g   = G_VAL16(pix) * INV_XAP;
