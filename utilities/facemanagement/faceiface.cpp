@@ -51,7 +51,6 @@
 #include "tagscache.h"
 #include "tagregion.h"
 #include "thumbnailloadthread.h"
-#include "dmetadata.h"
 
 namespace Digikam
 {
@@ -123,7 +122,7 @@ QList<KFaceIface::Face> FaceIface::toFaces(const QList<DatabaseFace>& databaseFa
         KFaceIface::Face f;
         f.setRect(rect);
 
-        if (!FaceTags::isTheUnknownPerson(databaseFace.tagId()))
+        if (FaceTags::isTheUnknownPerson(databaseFace.tagId()))
         {
             f.setName(FaceTags::faceNameForTag(databaseFace.tagId()));
         }
@@ -213,7 +212,7 @@ void FaceIface::fillImageInFaces(ThumbnailImageCatcher* const catcher, const QSt
         {
             detail = detail.scaled(scaleSize, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
         }
-        
+
         face.setImage(detail);
     }
 }
@@ -239,21 +238,7 @@ void FaceIface::storeThumbnails(ThumbnailLoadThread* const thread, const QString
         {
             QRect mapped  = TagRegion::mapFromOriginalSize(image, rect);
             QImage detail = image.copyQImage(mapped);
-
-            DMetadata tmpMeta(filePath);
-            DImg tmpImage(detail);
-            int rotationDirection = tmpMeta.getImageOrientation();
-            
-            if(rotationDirection == 8)
-            {
-                tmpImage.rotate(DImg::ROT90);
-            }
-            else
-            {
-                tmpImage.rotateAndFlip(rotationDirection);
-            }
-        
-            thread->storeDetailThumbnail(filePath, rect, tmpImage.copyQImage(), true);
+            thread->storeDetailThumbnail(filePath, rect, detail, true);
         }
     }
 }
