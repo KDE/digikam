@@ -545,7 +545,8 @@ void RecognitionWorker::process(FacePipelineExtendedPackage::Ptr package)
     }
 
     KFaceIface::FaceRecognizer *recogniser = new KFaceIface::FaceRecognizer();
-
+    recogniser->setRecognitionThreshold(recognitionThreshold);
+    
     QList<float> recgnitionRate =  recogniser->recognizeFaces(package->faces);
     
     if(!recgnitionRate.empty())
