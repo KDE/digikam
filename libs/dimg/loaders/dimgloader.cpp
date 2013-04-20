@@ -62,7 +62,6 @@ DImgLoader::~DImgLoader()
 {
 }
 
-
 void DImgLoader::setLoadFlags(LoadFlags flags)
 {
     m_loadFlags = flags;
@@ -405,14 +404,15 @@ QByteArray DImgLoader::uniqueHash(const QString& filePath, const DImg& img, bool
     QFile qfile(filePath);
 
     char databuf[8192];
-    int readlen     = 0;
-    QByteArray size = 0;
     QByteArray hash;
 
     if (qfile.open(QIODevice::Unbuffered | QIODevice::ReadOnly))
     {
+        int readlen = 0;
+
         if ((readlen = qfile.read(databuf, 8192)) > 0)
         {
+            QByteArray size = 0;
             md5.update(databuf, readlen);
             md5.update(size.setNum(qfile.size()));
             hash = md5.hexDigest();

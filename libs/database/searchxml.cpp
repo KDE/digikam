@@ -500,10 +500,10 @@ bool SearchXmlReader::readToStartOfElement(const QString& elementName)
 
 void SearchXmlReader::readToEndOfElement()
 {
-    int stack = 1;
-
     if (isStartElement())
     {
+        int stack = 1;
+
         forever
         {
             switch (QXmlStreamReader::readNext())

@@ -6,7 +6,7 @@
  * Date        : 2005-12-02
  * Description : 8-16 bits color container.
  *
- * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * RGB<->HLS transformation algorithms are inspired from methods
  * describe at this url :
@@ -35,17 +35,6 @@
 namespace Digikam
 {
 
-/*
-DColor::DColor(const DColor& color)
-{
-    m_red        = color.m_red;
-    m_green      = color.m_green;
-    m_blue       = color.m_blue;
-    m_alpha      = color.m_alpha;
-    m_sixteenBit = color.m_sixteenBit;
-}
-*/
-
 DColor::DColor(const QColor& color, bool sixteenBit)
 {
     // initialize as eight bit
@@ -72,18 +61,6 @@ DColor::DColor(const QColor& color, bool sixteenBit)
         convertToSixteenBit();
     }
 }
-
-/*
-DColor& DColor::operator=(const DColor& color)
-{
-    m_red        = color.m_red;
-    m_green      = color.m_green;
-    m_blue       = color.m_blue;
-    m_alpha      = color.m_alpha;
-    m_sixteenBit = color.m_sixteenBit;
-    return *this;
-}
-*/
 
 QColor DColor::getQColor() const
 {
@@ -125,7 +102,6 @@ void DColor::convertToEightBit()
     m_sixteenBit = false;
 }
 
-
 void DColor::getHSL(int* const h, int* const s, int* const l) const
 {
     double min;
@@ -133,7 +109,6 @@ void DColor::getHSL(int* const h, int* const s, int* const l) const
     double red;
     double green;
     double blue;
-    double delta;
     double sum;
     double hue, sat, lig;
 
@@ -190,7 +165,7 @@ void DColor::getHSL(int* const h, int* const s, int* const l) const
 
     if (max != min)
     {
-        delta = max - min;
+        double delta = max - min;
 
         if (lig <= 0.5)
         {
@@ -234,12 +209,6 @@ void DColor::getHSL(int* const h, int* const s, int* const l) const
 
 void DColor::setHSL(int h, int s, int l, bool sixteenBit)
 {
-    double hue;
-    double lightness;
-    double saturation;
-    double m1, m2;
-    double r, g, b;
-
     double range = m_sixteenBit ? 65535.0 : 255.0;
 
     if (s == 0)
@@ -250,9 +219,10 @@ void DColor::setHSL(int h, int s, int l, bool sixteenBit)
     }
     else
     {
-        hue        = (double)(h * 360.0 / range);
-        lightness  = (double)(l         / range);
-        saturation = (double)(s         / range);
+        double r, g, b, m2;
+        double hue        = (double)(h * 360.0 / range);
+        double lightness  = (double)(l         / range);
+        double saturation = (double)(s         / range);
 
         if (lightness <= 0.5)
         {
@@ -263,7 +233,7 @@ void DColor::setHSL(int h, int s, int l, bool sixteenBit)
             m2 = lightness + saturation - lightness * saturation;
         }
 
-        m1 = 2 * lightness - m2;
+        double m1 = 2 * lightness - m2;
 
         double mh;
 
@@ -405,5 +375,26 @@ void DColor::setYCbCr(double y, double cb, double cr, bool sixteenBit)
         m_alpha = 255;
     }
 }
+
+/*
+DColor::DColor(const DColor& color)
+{
+    m_red        = color.m_red;
+    m_green      = color.m_green;
+    m_blue       = color.m_blue;
+    m_alpha      = color.m_alpha;
+    m_sixteenBit = color.m_sixteenBit;
+}
+
+DColor& DColor::operator=(const DColor& color)
+{
+    m_red        = color.m_red;
+    m_green      = color.m_green;
+    m_blue       = color.m_blue;
+    m_alpha      = color.m_alpha;
+    m_sixteenBit = color.m_sixteenBit;
+    return *this;
+}
+*/
 
 }  // namespace Digikam

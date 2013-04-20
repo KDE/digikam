@@ -231,18 +231,17 @@ bool RainDropFilter::CreateRainDrop(uchar* const pBits, int Width, int Height, b
                                     uchar* const pResBits, uchar* const pStatusBits,
                                     int X, int Y, int DropSize, double Coeff, bool bLimitRange)
 {
-    register int w, h, nw1, nh1, nw2, nh2;
-    int          nHalfSize = DropSize / 2;
-    int          nBright;
-    double       lfRadius, lfOldRadius, lfAngle, lfDiv;
-    DColor       imageData;
-    uint         nTotalR, nTotalG, nTotalB, offset;
-    int          nBlurPixels, nBlurRadius;
-
     if (CanBeDropped(Width, Height, pStatusBits, X, Y, DropSize, bLimitRange))
     {
-        Coeff *= 0.01;
-        lfDiv = (double)nHalfSize / log(Coeff * (double)nHalfSize + 1.0);
+        register int w, h, nw1, nh1, nw2, nh2;
+        int          nBright;
+        double       lfRadius, lfOldRadius, lfAngle;
+        DColor       imageData;
+        uint         nTotalR, nTotalG, nTotalB, offset;
+        int          nBlurPixels, nBlurRadius;
+        Coeff         *= 0.01;
+        int nHalfSize =  DropSize / 2;
+        double lfDiv  =  (double)nHalfSize / log(Coeff * (double)nHalfSize + 1.0);
 
         for (h = -nHalfSize; runningFlag() && (h <= nHalfSize); ++h)
         {

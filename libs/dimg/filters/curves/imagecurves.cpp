@@ -968,7 +968,6 @@ void ImageCurves::setCurveValue(int channel, int bin, int val)
 
 void ImageCurves::setCurveValues(int channel, const QPolygon& vals)
 {
-    int index;
     kDebug() << "vals size: " << vals.size();
     kDebug() << "segmentMax: " << d->segmentMax + 1;
 
@@ -982,6 +981,8 @@ void ImageCurves::setCurveValues(int channel, const QPolygon& vals)
         // Bits depth are different ?
         else if (vals.size() != d->segmentMax + 1)
         {
+            int index;
+
             if (vals.size() == 256)
             {
                 kDebug() << "8 to 16 bits curves transform";
