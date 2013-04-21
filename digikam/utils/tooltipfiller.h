@@ -42,6 +42,8 @@ namespace ToolTipFiller
     QString filterActionTipContents(const FilterAction& action);
 }
 
+int gcd(int a, int b);
+
 }  // namespace Digikam
 
 #endif /* TOOLTIPFILLER_H */

@@ -68,7 +68,9 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
         settings->getToolTipsShowFileDate()  ||
         settings->getToolTipsShowFileSize()  ||
         settings->getToolTipsShowImageType() ||
-        settings->getToolTipsShowImageDim())
+        settings->getToolTipsShowImageDim()  ||
+        settings->getToolTipsShowImageAR())
+
     {
         tip += cnt.headBeg + i18n("File Properties") + cnt.headEnd;
 
@@ -118,6 +120,44 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
 
             tip += cnt.cellBeg + i18n("Dimensions:") + cnt.cellMid + str + cnt.cellEnd;
         }
+
+       if (settings->getToolTipsShowImageAR())
+        {
+            if (commonInfo.width == 0 || commonInfo.height == 0)
+            {
+                str = i18nc("unknown / invalid image aspect ratio",
+                            "Unknown");
+            }
+            else
+            {
+                QString aratio;
+                QString ar_width2;
+                QString ar_height2;
+                double aratio2;
+                int gcd_divisor;
+                int ar_width;
+                int ar_height;
+
+                gcd_divisor = gcd(commonInfo.width, commonInfo.height);
+                ar_width = commonInfo.width / gcd_divisor;
+                ar_height = commonInfo.height / gcd_divisor;
+                aratio2 = double(commonInfo.width) / double(commonInfo.height);
+
+                if ((ar_width == 8 && ar_height == 5) || (ar_height == 8 && ar_width == 5))
+                {
+                        ar_width = ar_width * 2;
+                        ar_height = ar_height * 2;
+                }
+                aratio.setNum(aratio2, 'f', 2);
+                ar_width2.setNum(ar_width);
+                ar_height2.setNum(ar_height);
+                str = i18nc("width : height (Aspect Ratio)", "%1:%2 (%3)",
+                            ar_width2, ar_height2, aratio);
+            }
+
+            tip += cnt.cellBeg + i18n("Aspect Ratio:") + cnt.cellMid + str + cnt.cellEnd;
+        }
+
     }
 
     // -- Photograph Info ----------------------------------------------------
@@ -639,5 +679,18 @@ QString ToolTipFiller::filterActionTipContents(const FilterAction& action)
 
     return tip;
 }
+
+int gcd(int a, int b)
+{
+  int c = a % b;
+  while(c != 0)
+  {
+    a = b;
+    b = c;
+    c = a % b;
+  }
+  return b;
+}
+
 
 }  // namespace Digikam

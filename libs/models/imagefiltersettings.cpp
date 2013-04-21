@@ -24,6 +24,8 @@
  *
  * ============================================================ */
 
+#include <math.h>
+
 #include "imagefiltersettings.h"
 
 // Qt includes
@@ -633,6 +635,60 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool* const foundText) 
             m_albumNameHash.value(info.albumId()).contains(m_textFilterSettings.text, m_textFilterSettings.caseSensitive))
         {
             textMatch = true;
+        }
+
+        // Image Aspect Ratio
+        if (m_textFilterSettings.textFields & SearchTextFilterSettings::ImageAspectRatio)
+        {
+            QRegExp expRatio ("^\\d+:\\d+$");
+            QRegExp expFloat ("^\\d+(.\\d+)?$");
+            if (expRatio.indexIn(m_textFilterSettings.text) > -1 && m_textFilterSettings.text.contains(QRegExp(":\\d+")))
+            {
+                QString trimmedTextFilterSettingsText = m_textFilterSettings.text;
+                QStringList numberStringList = trimmedTextFilterSettingsText.split(":", QString::SkipEmptyParts);
+                if (numberStringList.length() == 2)
+                {
+                    QString numString = (QString)numberStringList.at(0), denomString = (QString)numberStringList.at(1);
+                    bool canConverseNum, canConverseDenom;
+                    int num = numString.toInt(&canConverseNum, 10), denom = denomString.toInt(&canConverseDenom, 10);
+                    if (canConverseNum && canConverseDenom)
+                    {
+                        if (fabs(info.aspectRatio() - (double)num / denom) < 0.1)
+                            textMatch = true;
+                    }
+                }
+            }
+            else if (expFloat.indexIn(m_textFilterSettings.text) > -1)
+            {
+                QString trimmedTextFilterSettingsText = m_textFilterSettings.text;
+                bool canConverse;
+                double ratio = trimmedTextFilterSettingsText.toDouble(&canConverse);
+                if (canConverse)
+                {
+                    if (fabs(info.aspectRatio() - ratio) < 0.1)
+                        textMatch = true;
+                }
+            }
+        }
+
+        // Image Pixel Size
+        if (m_textFilterSettings.textFields & SearchTextFilterSettings::ImagePixelSize)
+        {
+            QSize size = info.dimensions();
+            int pixelSize = size.height()*size.width();
+            QString text = m_textFilterSettings.text;
+            if(text.contains(QRegExp("^>\\d{1,15}$")) && pixelSize > (text.remove(0,1)).toInt())
+            {
+                textMatch = true;
+            }
+            else if(text.contains(QRegExp("^<\\d{1,15}$")) && pixelSize < (text.remove(0,1)).toInt())
+            {
+                textMatch = true;
+            }
+            else if(pixelSize == text.toInt())
+            {
+                textMatch = true;
+            }
         }
 
         match &= textMatch;

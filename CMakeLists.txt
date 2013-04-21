@@ -15,6 +15,7 @@ OPTION(ENABLE_LCMS2            "Link digiKam to LCMS2 instead LCMS1 (experimenta
 # NOTE: since 6.11.24, libpgf do not support very well OpenMP. We disable it temporally.
 # See B.K.O #273765 for details.
 OPTION(ENABLE_PGF_OPENMP       "Build digiKam with paralelized PGF codec (experimental) (default=OFF)" OFF)
+OPTION(DIGIKAM_ENABLE_MODELTEST "Enable ModelTest on some models for debugging (default=OFF)"          OFF)
 
 # ==================================================================================================
 # Information to update before to release this package.
@@ -1527,13 +1528,20 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview_column_thumbnail.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview_columnfactory.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview_selection_model_syncer.cpp
-        # TODO: remove modeltest before release
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/modeltest/modeltest.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/welcomepageview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/leftsidebarwidgets.cpp
 
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/models/digikammodelcollection.cpp
        )
+
+    IF(DIGIKAM_ENABLE_MODELTEST)
+        # TODO move modeltest code to a more central location
+        MESSAGE(STATUS "Modeltest enabled")
+        SET(libdigikamgui_SRCS ${libdigikamgui_SRCS}
+            ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/modeltest/modeltest.cpp
+            )
+        ADD_DEFINITIONS(-DDIGIKAM_ENABLE_MODELTEST)
+    ENDIF(DIGIKAM_ENABLE_MODELTEST)
 
     SET(libdigikamhelpers_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/utils/uifilevalidator.cpp

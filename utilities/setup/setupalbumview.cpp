@@ -60,6 +60,7 @@ public:
         iconShowDateBox(0),
         iconShowModDateBox(0),
         iconShowResolutionBox(0),
+        iconShowAspectRatioBox(0),
         iconShowTitleBox(0),
         iconShowCommentsBox(0),
         iconShowTagsBox(0),
@@ -83,6 +84,7 @@ public:
     QCheckBox*   iconShowDateBox;
     QCheckBox*   iconShowModDateBox;
     QCheckBox*   iconShowResolutionBox;
+    QCheckBox*   iconShowAspectRatioBox;
     QCheckBox*   iconShowTitleBox;
     QCheckBox*   iconShowCommentsBox;
     QCheckBox*   iconShowTagsBox;
@@ -132,6 +134,10 @@ SetupAlbumView::SetupAlbumView(QWidget* const parent)
     d->iconShowResolutionBox->setWhatsThis(i18n("Set this option to show the image size in pixels "
                                                 "below the image thumbnail."));
 
+    d->iconShowAspectRatioBox = new QCheckBox(i18n("Show image aspect ratio"), iconViewGroup);
+    d->iconShowAspectRatioBox->setWhatsThis(i18n("Set this option to show the image aspect ratio "
+                                                "below the image thumbnail."));
+
     d->iconShowFormatBox     = new QCheckBox(i18n("Show image Format"), iconViewGroup);
     d->iconShowFormatBox->setWhatsThis(i18n("Set this option to show image format over image thumbnail."));
 
@@ -169,7 +175,8 @@ SetupAlbumView::SetupAlbumView(QWidget* const parent)
     grid->addWidget(d->iconShowDateBox,          2, 0, 1, 1);
     grid->addWidget(d->iconShowModDateBox,       3, 0, 1, 1);
     grid->addWidget(d->iconShowResolutionBox,    4, 0, 1, 1);
-    grid->addWidget(d->iconShowFormatBox,        5, 0, 1, 1);
+    grid->addWidget(d->iconShowAspectRatioBox,   5, 0, 1, 1);
+    grid->addWidget(d->iconShowFormatBox,        6, 0, 1, 1);
 
     grid->addWidget(d->iconShowTitleBox,         0, 1, 1, 1);
     grid->addWidget(d->iconShowCommentsBox,      1, 1, 1, 1);
@@ -177,9 +184,9 @@ SetupAlbumView::SetupAlbumView(QWidget* const parent)
     grid->addWidget(d->iconShowRatingBox,        3, 1, 1, 1);
     grid->addWidget(d->iconShowOverlaysBox,      4, 1, 1, 1);
 
-    grid->addWidget(leftClickLabel,              6, 0, 1, 1);
-    grid->addWidget(d->leftClickActionComboBox,  6, 1, 1, 1);
-    grid->addWidget(d->iconViewFontSelect,       7, 0, 1, 2);
+    grid->addWidget(leftClickLabel,              7, 0, 1, 1);
+    grid->addWidget(d->leftClickActionComboBox,  7, 1, 1, 1);
+    grid->addWidget(d->iconViewFontSelect,       8, 0, 1, 2);
     grid->setSpacing(KDialog::spacingHint());
     grid->setMargin(KDialog::spacingHint());
 
@@ -273,6 +280,7 @@ void SetupAlbumView::applySettings()
     settings->setIconShowDate(d->iconShowDateBox->isChecked());
     settings->setIconShowModDate(d->iconShowModDateBox->isChecked());
     settings->setIconShowResolution(d->iconShowResolutionBox->isChecked());
+    settings->setIconShowAspectRatio(d->iconShowAspectRatioBox->isChecked());
     settings->setIconShowTitle(d->iconShowTitleBox->isChecked());
     settings->setIconShowComments(d->iconShowCommentsBox->isChecked());
     settings->setIconShowOverlays(d->iconShowOverlaysBox->isChecked());
@@ -322,6 +330,7 @@ void SetupAlbumView::readSettings()
     d->iconShowDateBox->setChecked(settings->getIconShowDate());
     d->iconShowModDateBox->setChecked(settings->getIconShowModDate());
     d->iconShowResolutionBox->setChecked(settings->getIconShowResolution());
+    d->iconShowAspectRatioBox->setChecked(settings->getIconShowAspectRatio());
     d->iconShowTitleBox->setChecked(settings->getIconShowTitle());
     d->iconShowCommentsBox->setChecked(settings->getIconShowComments());
     d->iconShowOverlaysBox->setChecked(settings->getIconShowOverlays());

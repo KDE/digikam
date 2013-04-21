@@ -70,6 +70,7 @@ void ImageDelegate::ImageDelegatePrivate::clearRects()
     titleRect            = QRect(0, 0, 0, 0);
     commentsRect         = QRect(0, 0, 0, 0);
     resolutionRect       = QRect(0, 0, 0, 0);
+    arRect               = QRect(0, 0, 0, 0);
     sizeRect             = QRect(0, 0, 0, 0);
     tagRect              = QRect(0, 0, 0, 0);
     imageInformationRect = QRect(0, 0, 0, 0);
@@ -311,6 +312,11 @@ void ImageDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, const
     if (!d->resolutionRect.isNull())
     {
         drawImageSize(p, d->resolutionRect, info.dimensions());
+    }
+
+    if (!d->arRect.isNull())
+    {
+        drawAspectRatio(p, d->arRect, info.dimensions());
     }
 
     if (!d->sizeRect.isNull())

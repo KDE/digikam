@@ -85,12 +85,14 @@ public:
         iconShowOverlays(false),
         iconShowRating(false),
         iconShowImageFormat(false),
+        iconShowAspectRatio(false),
         showToolTips(false),
         tooltipShowFileName(false),
         tooltipShowFileDate(false),
         tooltipShowFileSize(false),
         tooltipShowImageType(false),
         tooltipShowImageDim(false),
+        tooltipShowImageAR(false),
         tooltipShowPhotoMake(false),
         tooltipShowPhotoDate(false),
         tooltipShowPhotoFocal(false),
@@ -169,6 +171,7 @@ public:
     static const QString                configIconShowOverlaysEntry;
     static const QString                configIconShowRatingEntry;
     static const QString                configIconShowImageFormatEntry;
+    static const QString                configIconShowAspectRatioEntry;
     static const QString                configIconViewFontEntry;
     static const QString                configToolTipsFontEntry;
     static const QString                configShowToolTipsEntry;
@@ -177,6 +180,7 @@ public:
     static const QString                configToolTipsShowFileSizeEntry;
     static const QString                configToolTipsShowImageTypeEntry;
     static const QString                configToolTipsShowImageDimEntry;
+    static const QString                configToolTipsShowImageAREntry;
     static const QString                configToolTipsShowPhotoMakeEntry;
     static const QString                configToolTipsShowPhotoDateEntry;
     static const QString                configToolTipsShowPhotoFocalEntry;
@@ -240,7 +244,7 @@ public:
     bool                                iconShowOverlays;
     bool                                iconShowRating;
     bool                                iconShowImageFormat;
-
+    bool                                iconShowAspectRatio;
     QFont                               iconviewFont;
 
     // Icon-view tooltip settings
@@ -250,6 +254,7 @@ public:
     bool                                tooltipShowFileSize;
     bool                                tooltipShowImageType;
     bool                                tooltipShowImageDim;
+    bool                                tooltipShowImageAR;
     bool                                tooltipShowPhotoMake;
     bool                                tooltipShowPhotoDate;
     bool                                tooltipShowPhotoFocal;
@@ -365,6 +370,7 @@ const QString AlbumSettings::Private::configIconShowCommentsEntry("Icon Show Com
 const QString AlbumSettings::Private::configIconShowTagsEntry("Icon Show Tags");
 const QString AlbumSettings::Private::configIconShowRatingEntry("Icon Show Rating");
 const QString AlbumSettings::Private::configIconShowImageFormatEntry("Icon Show Image Format");
+const QString AlbumSettings::Private::configIconShowAspectRatioEntry("Icon Show Aspect Ratio");
 const QString AlbumSettings::Private::configIconShowOverlaysEntry("Icon Show Overlays");
 const QString AlbumSettings::Private::configIconViewFontEntry("IconView Font");
 const QString AlbumSettings::Private::configToolTipsFontEntry("ToolTips Font");
@@ -374,6 +380,7 @@ const QString AlbumSettings::Private::configToolTipsShowFileDateEntry("ToolTips 
 const QString AlbumSettings::Private::configToolTipsShowFileSizeEntry("ToolTips Show File Size");
 const QString AlbumSettings::Private::configToolTipsShowImageTypeEntry("ToolTips Show Image Type");
 const QString AlbumSettings::Private::configToolTipsShowImageDimEntry("ToolTips Show Image Dim");
+const QString AlbumSettings::Private::configToolTipsShowImageAREntry("ToolTips Show Image AR");
 const QString AlbumSettings::Private::configToolTipsShowPhotoMakeEntry("ToolTips Show Photo Make");
 const QString AlbumSettings::Private::configToolTipsShowPhotoDateEntry("ToolTips Show Photo Date");
 const QString AlbumSettings::Private::configToolTipsShowPhotoFocalEntry("ToolTips Show Photo Focal");
@@ -484,12 +491,12 @@ void AlbumSettings::init()
     d->iconShowTitle                = true;
     d->iconShowComments             = true;
     d->iconShowResolution           = false;
+    d->iconShowAspectRatio           = false;
     d->iconShowTags                 = true;
     d->iconShowOverlays             = true;
     d->iconShowRating               = true;
     d->iconShowImageFormat          = false;
     d->iconviewFont                 = KGlobalSettings::generalFont();
-
     d->toolTipsFont                 = KGlobalSettings::generalFont();
     d->showToolTips                 = false;
     d->tooltipShowFileName          = true;
@@ -497,6 +504,7 @@ void AlbumSettings::init()
     d->tooltipShowFileSize          = false;
     d->tooltipShowImageType         = false;
     d->tooltipShowImageDim          = true;
+    d->tooltipShowImageAR          = true;
     d->tooltipShowPhotoMake         = true;
     d->tooltipShowPhotoDate         = true;
     d->tooltipShowPhotoFocal        = true;
@@ -588,6 +596,7 @@ void AlbumSettings::readSettings()
 
     d->iconShowName                 = group.readEntry(d->configIconShowNameEntry,                 false);
     d->iconShowResolution           = group.readEntry(d->configIconShowResolutionEntry,           false);
+    d->iconShowAspectRatio          = group.readEntry(d->configIconShowAspectRatioEntry,          false);
     d->iconShowSize                 = group.readEntry(d->configIconShowSizeEntry,                 false);
     d->iconShowDate                 = group.readEntry(d->configIconShowDateEntry,                 true);
     d->iconShowModDate              = group.readEntry(d->configIconShowModificationDateEntry,     true);
@@ -606,6 +615,7 @@ void AlbumSettings::readSettings()
     d->tooltipShowFileSize          = group.readEntry(d->configToolTipsShowFileSizeEntry,         false);
     d->tooltipShowImageType         = group.readEntry(d->configToolTipsShowImageTypeEntry,        false);
     d->tooltipShowImageDim          = group.readEntry(d->configToolTipsShowImageDimEntry,         true);
+    d->tooltipShowImageAR           = group.readEntry(d->configToolTipsShowImageAREntry,          true);
     d->tooltipShowPhotoMake         = group.readEntry(d->configToolTipsShowPhotoMakeEntry,        true);
     d->tooltipShowPhotoDate         = group.readEntry(d->configToolTipsShowPhotoDateEntry,        true);
     d->tooltipShowPhotoFocal        = group.readEntry(d->configToolTipsShowPhotoFocalEntry,       true);
@@ -706,6 +716,7 @@ void AlbumSettings::saveSettings()
 
     group.writeEntry(d->configIconShowNameEntry,                 d->iconShowName);
     group.writeEntry(d->configIconShowResolutionEntry,           d->iconShowResolution);
+    group.writeEntry(d->configIconShowAspectRatioEntry,          d->iconShowAspectRatio);
     group.writeEntry(d->configIconShowSizeEntry,                 d->iconShowSize);
     group.writeEntry(d->configIconShowDateEntry,                 d->iconShowDate);
     group.writeEntry(d->configIconShowModificationDateEntry,     d->iconShowModDate);
@@ -724,6 +735,7 @@ void AlbumSettings::saveSettings()
     group.writeEntry(d->configToolTipsShowFileSizeEntry,         d->tooltipShowFileSize);
     group.writeEntry(d->configToolTipsShowImageTypeEntry,        d->tooltipShowImageType);
     group.writeEntry(d->configToolTipsShowImageDimEntry,         d->tooltipShowImageDim);
+    group.writeEntry(d->configToolTipsShowImageAREntry,          d->tooltipShowImageAR);
     group.writeEntry(d->configToolTipsShowPhotoMakeEntry,        d->tooltipShowPhotoMake);
     group.writeEntry(d->configToolTipsShowPhotoDateEntry,        d->tooltipShowPhotoDate);
     group.writeEntry(d->configToolTipsShowPhotoFocalEntry,       d->tooltipShowPhotoFocal);
@@ -1106,6 +1118,16 @@ bool AlbumSettings::getIconShowResolution() const
     return d->iconShowResolution;
 }
 
+void AlbumSettings::setIconShowAspectRatio(bool val)
+{
+    d->iconShowAspectRatio = val;
+}
+
+bool AlbumSettings::getIconShowAspectRatio() const
+{
+    return d->iconShowAspectRatio;
+}
+
 void AlbumSettings::setIconShowTags(bool val)
 {
     d->iconShowTags = val;
@@ -1234,6 +1256,16 @@ void AlbumSettings::setToolTipsShowImageDim(bool val)
 bool AlbumSettings::getToolTipsShowImageDim() const
 {
     return d->tooltipShowImageDim;
+}
+
+void AlbumSettings::setToolTipsShowImageAR(bool val)
+{
+    d->tooltipShowImageAR = val;
+}
+
+bool AlbumSettings::getToolTipsShowImageAR() const
+{
+    return d->tooltipShowImageAR;
 }
 
 void AlbumSettings::setToolTipsShowPhotoMake(bool val)
@@ -1545,6 +1577,7 @@ bool AlbumSettings::showToolTipsIsValid() const
             d->tooltipShowFileSize   ||
             d->tooltipShowImageType  ||
             d->tooltipShowImageDim   ||
+            d->tooltipShowImageAR    ||
             d->tooltipShowPhotoMake  ||
             d->tooltipShowPhotoDate  ||
             d->tooltipShowPhotoFocal ||

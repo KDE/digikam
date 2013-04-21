@@ -1064,18 +1064,24 @@ void DigikamApp::setupActions()
     QAction* sortByDateAction = d->imageSortAction->addAction(i18n("By Date"));
     QAction* sortByFileSizeAction = d->imageSortAction->addAction(i18n("By File Size"));
     QAction* sortByRatingAction = d->imageSortAction->addAction(i18n("By Rating"));
+    QAction* sortByImageSizeAction = d->imageSortAction->addAction(i18n("By Image Size"));
+    QAction* sortByAspectRatioAction = d->imageSortAction->addAction(i18n("By Aspect Ratio"));
 
     connect(sortByNameAction, SIGNAL(triggered()), imageSortMapper, SLOT(map()));
     connect(sortByPathAction, SIGNAL(triggered()), imageSortMapper, SLOT(map()));
     connect(sortByDateAction, SIGNAL(triggered()), imageSortMapper, SLOT(map()));
     connect(sortByFileSizeAction, SIGNAL(triggered()), imageSortMapper, SLOT(map()));
     connect(sortByRatingAction, SIGNAL(triggered()), imageSortMapper, SLOT(map()));
+    connect(sortByImageSizeAction, SIGNAL(triggered()), imageSortMapper, SLOT(map()));
+    connect(sortByAspectRatioAction, SIGNAL(triggered()), imageSortMapper, SLOT(map()));
 
     imageSortMapper->setMapping(sortByNameAction, (int)ImageSortSettings::SortByFileName);
     imageSortMapper->setMapping(sortByPathAction, (int)ImageSortSettings::SortByFilePath);
     imageSortMapper->setMapping(sortByDateAction, (int)ImageSortSettings::SortByCreationDate);
     imageSortMapper->setMapping(sortByFileSizeAction, (int)ImageSortSettings::SortByFileSize);
     imageSortMapper->setMapping(sortByRatingAction, (int)ImageSortSettings::SortByRating);
+    imageSortMapper->setMapping(sortByImageSizeAction, (int)ImageSortSettings::SortByImageSize);
+    imageSortMapper->setMapping(sortByAspectRatioAction, (int)ImageSortSettings::SortByAspectRatio);
 
     // -----------------------------------------------------------
 

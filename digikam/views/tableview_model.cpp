@@ -45,7 +45,9 @@
 #include "imagefiltermodel.h"
 #include "imagefiltersettings.h"
 #include "imageinfo.h"
+#ifdef DIGIKAM_ENABLE_MODELTEST
 #include "modeltest/modeltest.h"
+#endif // DIGIKAM_ENABLE_MODELTEST
 #include "tableview_columnfactory.h"
 #include "tableview_selection_model_syncer.h"
 
@@ -163,7 +165,9 @@ TableViewModel::TableViewModel(TableViewShared* const sharedObject, QObject* par
     connect(DatabaseAccess::databaseWatch(), SIGNAL(imageChange(ImageChangeset)),
             this, SLOT(slotDatabaseImageChanged(ImageChangeset)), Qt::QueuedConnection);
 
+#ifdef DIGIKAM_ENABLE_MODELTEST
     new ModelTest(this, this);
+#endif // DIGIKAM_ENABLE_MODELTEST
 
     // We only have to trigger population of the model if data is in the source model,
     // otherwise the source model will tell us about any new data.

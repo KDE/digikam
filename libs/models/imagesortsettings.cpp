@@ -135,6 +135,8 @@ Qt::SortOrder ImageSortSettings::defaultSortOrderForSortRole(SortRole role)
         case SortByRating:
         case SortByImageSize:
             return Qt::DescendingOrder;
+        case SortByAspectRatio:
+            return Qt::DescendingOrder;
         default:
             return Qt::AscendingOrder;
     }
@@ -250,6 +252,14 @@ int ImageSortSettings::compare(const ImageInfo& left, const ImageInfo& right, So
             int rightPixels = rightSize.width() * rightSize.height();
             return compareByOrder(leftPixels, rightPixels, currentSortOrder);
         }
+        case SortByAspectRatio:
+        {
+            QSize leftSize = left.dimensions();
+            QSize rightSize = right.dimensions();
+            int leftAR = (double(leftSize.width()) / double(leftSize.height())) * 1000000;
+            int rightAR = (double(rightSize.width()) / double(rightSize.height())) * 1000000;
+            return compareByOrder(leftAR, rightAR, currentSortOrder);
+        }
         default:
             return 1;
     }
@@ -335,6 +345,9 @@ DatabaseFields::Set ImageSortSettings::watchFlags() const
             set |= DatabaseFields::Rating;
             break;
         case SortByImageSize:
+            set |= DatabaseFields::Width | DatabaseFields::Height;
+            break;
+        case SortByAspectRatio:
             set |= DatabaseFields::Width | DatabaseFields::Height;
             break;
     }

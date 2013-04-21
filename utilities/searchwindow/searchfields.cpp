@@ -543,6 +543,23 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
         field->setText(QString(), i18n("Find pictures that have associated all these words:"));
         return field;
     }
+    else if (name == "aspectratio")
+    {
+        SearchFieldText* const field = new SearchFieldText(parent);
+        field->setFieldName(name);
+        field->setText(i18n("Aspect Ratio"), i18n("Return pictures with the aspect ratio"));
+        return field;
+    }
+    else if (name == "pixelsize")
+    {
+        SearchFieldRangeInt* const field = new SearchFieldRangeInt(parent);
+        field->setFieldName(name);
+        field->setText(i18n("Pixel Size"), i18n("Value of (Width * Height) between"));
+        field->setBetweenText("and");
+        field->setNumberPrefixAndSuffix(QString(), "px");
+        field->setBoundary(1, 2000000000, 100);
+        return field;
+    }
     else
     {
         kWarning() << "SearchField::createField: cannot create SearchField for" << name;
