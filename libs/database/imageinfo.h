@@ -189,6 +189,11 @@ public:
     QString comment() const;
 
     /**
+     * @return the id of the Aspect Ratio for this item
+     */
+    double aspectRatio() const;
+
+    /**
      * Returns the Pick Label Id (see PickLabel values in globals.h)
      */
     int pickLabel() const;

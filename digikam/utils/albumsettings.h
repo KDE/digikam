@@ -175,6 +175,9 @@ public:
     void setIconShowResolution(bool val);
     bool getIconShowResolution() const;
 
+    void setIconShowAspectRatio(bool val);
+    bool getIconShowAspectRatio() const;
+
     void setIconShowTags(bool val);
     bool getIconShowTags() const;
 
@@ -219,6 +222,9 @@ public:
 
     void setToolTipsShowImageDim(bool val);
     bool getToolTipsShowImageDim() const;
+
+    void setToolTipsShowImageAR(bool val);
+    bool getToolTipsShowImageAR() const;
 
     void setToolTipsShowPhotoMake(bool val);
     bool getToolTipsShowPhotoMake() const;

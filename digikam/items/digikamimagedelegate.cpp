@@ -132,6 +132,12 @@ void DigikamImageDelegate::updateRects()
         y                 = d->resolutionRect.bottom() ;
     }
 
+    if (albumSettings->getIconShowAspectRatio())
+    {
+        d->arRect = QRect(d->margin, y, d->contentWidth, d->oneRowXtraRect.height());
+        y                 = d->arRect.bottom() ;
+    }
+
     if (albumSettings->getIconShowSize())
     {
         d->sizeRect = QRect(d->margin, y, d->contentWidth, d->oneRowXtraRect.height());

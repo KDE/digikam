@@ -121,7 +121,8 @@ public:
         SortByFileSize,
         SortByRating,
         SortByModificationDate,
-        SortByImageSize // pixel number
+        SortByImageSize, // pixel number
+        SortByAspectRatio // width / height * 100000
     };
 
     SortRole                sortRole;
