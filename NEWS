@@ -3,9 +3,12 @@ digiKam 3.2.0-beta2 - Release date: 2013-04-21
 
 NEW FEATURES:
 
-AlbumGUI    : New "Table-View" view mode dedictaed to show album items in a list view.
 General     : Remove internal clapack library code. Set only an optional and external dependency to eigen3.
 General     : New tool to auto-crop image based on black hole borders detection.
+AlbumGUI    : New "Table-View" view mode dedictaed to show album items in a list view.
+AlbumGUI    : New Aspect Ratio information displayed in icon-view and tooltips.
+AlbumGUI    : New filter based on Aspect Ration information.
+Searches    : New search tool to find items based on Aspect Ration Information.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
@@ -32,5 +35,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 021 ==> 318353 - Implement kind of a read-only mode.
 022 ==> 166820 - Wish: Specify a ISO over which to apply noise reduction.
 023 ==> 313190 - Thumbnails of faces not rotated correctly according to the configuration settings.
-024 ==> 
+024 ==> 121313 - Filter pictures by aspect ratio [patch].
+025 ==> 224549 - Filter pictures by sizes.
+026 ==> 
 
