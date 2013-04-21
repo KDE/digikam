@@ -374,6 +374,16 @@ QString ImageInfo::name() const
         }                         \
     }
 
+#define RETURN_ASPECTRATIO_IF_IMAGESIZE_CACHED()       \
+    if (m_data->imageSizeCached)  \
+    {                             \
+        ImageInfoReadLocker lock; \
+        if (m_data->imageSizeCached)    \
+        {                         \
+    return (double)m_data->imageSize.width()/m_data->imageSize.height();     \
+        }                         \
+    }
+
 #define STORE_IN_CACHE_AND_RETURN(x, retrieveMethod) \
     ImageInfoWriteLocker lock;                       \
     m_data.constCastData()->x##Cached = true;        \
@@ -439,6 +449,18 @@ QString ImageInfo::comment() const
     m_data.constCastData()->defaultComment       = comment;
     m_data.constCastData()->defaultCommentCached = true;
     return m_data->defaultComment;
+}
+
+double ImageInfo::aspectRatio() const
+{
+    if(!m_data)
+    {
+        return 0;
+    }
+
+    RETURN_ASPECTRATIO_IF_IMAGESIZE_CACHED()
+
+    return (double)m_data->imageSize.width() / m_data->imageSize.height();
 }
 
 int ImageInfo::pickLabel() const

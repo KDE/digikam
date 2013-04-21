@@ -58,6 +58,8 @@ public:
     QAction*       imageCommentAction;
     QAction*       tagNameAction;
     QAction*       albumNameAction;
+    QAction*       imageAspectRatioAction;
+    QAction*       imagePixelSizeAction;
 
     QToolButton*   optionsBtn;
 
@@ -92,6 +94,10 @@ TextFilter::TextFilter(QWidget* const parent)
     d->tagNameAction->setCheckable(true);
     d->albumNameAction    = d->optionsMenu->addAction(i18n("Album Name"));
     d->albumNameAction->setCheckable(true);
+    d->imageAspectRatioAction = d->optionsMenu->addAction(i18n("Image Aspect Ratio"));
+    d->imageAspectRatioAction->setCheckable(true);
+    d->imagePixelSizeAction = d->optionsMenu->addAction(i18n("Image Pixel Size"));
+    d->imagePixelSizeAction->setCheckable(true);
     d->optionsBtn->setMenu(d->optionsMenu);
 
     setMargin(0);
@@ -138,6 +144,14 @@ SearchTextFilterSettings::TextFilterFields TextFilter::searchTextFields()
     {
         fields |= SearchTextFilterSettings::AlbumName;
     }
+    if (d->imageAspectRatioAction->isChecked())
+    {
+        fields |= SearchTextFilterSettings::ImageAspectRatio;
+    }
+    if (d->imagePixelSizeAction->isChecked())
+    {
+        fields |= SearchTextFilterSettings::ImagePixelSize;
+    }
 
     return (SearchTextFilterSettings::TextFilterFields)fields;
 }
@@ -149,6 +163,8 @@ void TextFilter::setsearchTextFields(SearchTextFilterSettings::TextFilterFields 
     d->imageCommentAction->setChecked(fields & SearchTextFilterSettings::ImageComment);
     d->tagNameAction->setChecked(fields & SearchTextFilterSettings::TagName);
     d->albumNameAction->setChecked(fields & SearchTextFilterSettings::AlbumName);
+    d->imageAspectRatioAction->setChecked(fields & SearchTextFilterSettings::ImageAspectRatio);
+    d->imagePixelSizeAction->setChecked(fields & SearchTextFilterSettings::ImagePixelSize);
 }
 
 void TextFilter::slotSearchFieldsChanged()

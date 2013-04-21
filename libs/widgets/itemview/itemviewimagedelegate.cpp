@@ -375,6 +375,54 @@ void ItemViewImageDelegate::drawImageSize(QPainter* p, const QRect& dimsRect, co
     }
 }
 
+void ItemViewImageDelegate::drawAspectRatio(QPainter* p, const QRect& dimsRect, const QSize& dims) const
+{
+    Q_D(const ItemViewImageDelegate);
+
+    if (dims.isValid())
+    {
+        p->setFont(d->fontXtra);
+        double aratio2;
+        int gcd_divisor;
+        int ar_width;
+        int ar_height;
+        QString aratio, ar_width2, ar_height2, resolution;
+
+        if (dims.width() == 0 || dims.height() == 0)
+        {
+            gcd_divisor = 1;
+        }
+        else
+        {
+            gcd_divisor = gcd(dims.width(), dims.height());
+        }
+        ar_width = dims.width() / gcd_divisor;
+        ar_height = dims.height() / gcd_divisor;
+        aratio2 = double(dims.width()) / double(dims.height());
+
+        if ((ar_width == 8 && ar_height == 5) || (ar_height == 8 && ar_width == 5))
+        {
+             ar_width = ar_width * 2;
+             ar_height = ar_height * 2;
+        }
+        aratio.setNum(aratio2, 'f', 2);
+        ar_width2.setNum(ar_width);
+        ar_height2.setNum(ar_height);
+
+        if (dims.isValid())
+        {
+            resolution = i18nc("%1 width : %2 height (%3 Aspect Ratio)", "%1:%2 (%3)",
+                               ar_width2, ar_height2, aratio);
+        }
+        else
+        {
+             resolution = i18nc("unknown image resolution", "Unknown");
+        }
+
+        p->drawText(dimsRect, Qt::AlignCenter, resolution);//squeezedTextCached(p, dimsRect.width(), resolution));
+    }
+}
+
 void ItemViewImageDelegate::drawFileSize(QPainter* p, const QRect& r, qlonglong bytes) const
 {
     Q_D(const ItemViewImageDelegate);
@@ -696,6 +744,18 @@ QPixmap ItemViewImageDelegate::ratingPixmap(int rating, bool selected) const
     {
         return d->ratingPixmaps.at(rating);
     }
+}
+
+int gcd(int a, int b)
+{
+  int c = a % b;
+  while(c != 0)
+  {
+    a = b;
+    b = c;
+    c = a % b;
+  }
+  return b;
 }
 
 } // namespace Digikam

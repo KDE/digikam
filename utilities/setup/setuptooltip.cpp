@@ -56,6 +56,7 @@ public:
         showFileSizeBox(0),
         showImageTypeBox(0),
         showImageDimBox(0),
+        showImageARBox(0),
         showPhotoMakeBox(0),
         showPhotoDateBox(0),
         showPhotoFocalBox(0),
@@ -109,6 +110,7 @@ public:
     QCheckBox*   showFileSizeBox;
     QCheckBox*   showImageTypeBox;
     QCheckBox*   showImageDimBox;
+    QCheckBox*   showImageARBox;
 
     QCheckBox*   showPhotoMakeBox;
     QCheckBox*   showPhotoDateBox;
@@ -202,11 +204,16 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
     d->showImageDimBox    = new QCheckBox(i18n("Show image dimensions"), d->fileSettingBox);
     d->showImageDimBox->setWhatsThis(i18n("Set this option to display the image dimensions in pixels."));
 
+    d->showImageARBox    = new QCheckBox(i18n("Show image aspect ratio"), d->fileSettingBox);
+    d->showImageARBox->setWhatsThis(i18n("Set this option to display the image aspect ratio."));
+
     vlay2->addWidget(d->showFileNameBox);
     vlay2->addWidget(d->showFileDateBox);
     vlay2->addWidget(d->showFileSizeBox);
     vlay2->addWidget(d->showImageTypeBox);
     vlay2->addWidget(d->showImageDimBox);
+    vlay2->addWidget(d->showImageARBox);
+
     vlay2->setMargin(KDialog::spacingHint());
     vlay2->setSpacing(0);
 
@@ -477,6 +484,7 @@ void SetupToolTip::applySettings()
     settings->setToolTipsShowFileName(d->showFileNameBox->isChecked());
     settings->setToolTipsShowFileDate(d->showFileDateBox->isChecked());
     settings->setToolTipsShowFileSize(d->showFileSizeBox->isChecked());
+    settings->setToolTipsShowImageAR(d->showImageARBox->isChecked());
     settings->setToolTipsShowImageType(d->showImageTypeBox->isChecked());
     settings->setToolTipsShowImageDim(d->showImageDimBox->isChecked());
 
@@ -549,6 +557,7 @@ void SetupToolTip::readSettings()
     d->showFileNameBox->setChecked(settings->getToolTipsShowFileName());
     d->showFileDateBox->setChecked(settings->getToolTipsShowFileDate());
     d->showFileSizeBox->setChecked(settings->getToolTipsShowFileSize());
+    d->showImageARBox->setChecked(settings->getToolTipsShowImageAR());
     d->showImageTypeBox->setChecked(settings->getToolTipsShowImageType());
     d->showImageDimBox->setChecked(settings->getToolTipsShowImageDim());
 

@@ -1026,6 +1026,30 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
         fieldQuery.addIntField("ImageInformation.width");
         sql += " ) ) ";
     }
+    else if (name == "aspectratio")
+    {
+        QString query;
+        QString readerString = (reader.valueToStringOrStringList()).at(0);
+        if(readerString.contains(QRegExp("^\\d+:\\d+$")))
+        {
+            QStringList ratioNum = readerString.split(":", QString::SkipEmptyParts);
+            int num = ratioNum.at(0).toInt();
+            int denominator = ratioNum.at(1).toInt();
+            query = "abs((ImageInformation.width/CAST(ImageInformation.height as REAL)) - ?)  < 0.1";
+            sql += " (" + query + ") ";
+            *boundValues << (double)num/denominator;
+        }
+        else if(readerString.contains(QRegExp("^\\d+(.\\d+)?$")))
+        {
+            query = "abs((ImageInformation.width/CAST(ImageInformation.height as REAL)) - ?)  < 0.1";
+            sql += " (" + query + ") ";
+            *boundValues << readerString.toDouble();
+        }
+    }
+    else if (name == "pixelsize")
+    {
+        fieldQuery.addIntField("(ImageInformation.width * ImageInformation.height)");
+    }
     else if (name == "pixels")
     {
         fieldQuery.addIntField("(ImageInformation.width * ImageInformation.height)");

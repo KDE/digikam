@@ -68,6 +68,7 @@ public:
     QRect                 titleRect;
     QRect                 commentsRect;
     QRect                 resolutionRect;
+    QRect                 arRect;
     QRect                 sizeRect;
     QRect                 tagRect;
     QRect                 imageInformationRect;

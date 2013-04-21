@@ -71,7 +71,9 @@ public:
         ImageComment = 0x04,
         TagName      = 0x08,
         AlbumName    = 0x10,
-        All          = ImageName | ImageTitle | ImageComment | TagName | AlbumName
+        ImageAspectRatio = 0x12,
+        ImagePixelSize   = 0x14,
+        All          = ImageName | ImageTitle | ImageComment | TagName | AlbumName | ImageAspectRatio | ImagePixelSize
     };
 
 public:
