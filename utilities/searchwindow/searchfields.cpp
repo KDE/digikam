@@ -543,7 +543,7 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
         field->setText(QString(), i18n("Find pictures that have associated all these words:"));
         return field;
     }
-    else if (name == "aspectratio")
+    else if (name == "aspectratioimg")
     {
         SearchFieldText* const field = new SearchFieldText(parent);
         field->setFieldName(name);
