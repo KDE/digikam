@@ -43,14 +43,16 @@ public:
 
     Private()
     {
-        imageNameAction    = 0;
-        imageTitleAction   = 0;
-        imageCommentAction = 0;
-        tagNameAction      = 0;
-        albumNameAction    = 0;
-        optionsBtn         = 0;
-        optionsMenu        = 0;
-        searchTextBar      = 0;
+        imageNameAction        = 0;
+        imageTitleAction       = 0;
+        imageCommentAction     = 0;
+        tagNameAction          = 0;
+        albumNameAction        = 0;
+        optionsBtn             = 0;
+        optionsMenu            = 0;
+        searchTextBar          = 0;
+        imageAspectRatioAction = 0;
+        imagePixelSizeAction   = 0;
     }
 
     QAction*       imageNameAction;
@@ -83,20 +85,20 @@ TextFilter::TextFilter(QWidget* const parent)
     d->optionsBtn->setPopupMode(QToolButton::InstantPopup);
     d->optionsBtn->setWhatsThis(i18n("Defines which fields to search for the text in."));
 
-    d->optionsMenu        = new KMenu(d->optionsBtn);
-    d->imageNameAction    = d->optionsMenu->addAction(i18n("Image Name"));
+    d->optionsMenu            = new KMenu(d->optionsBtn);
+    d->imageNameAction        = d->optionsMenu->addAction(i18n("Image Name"));
     d->imageNameAction->setCheckable(true);
-    d->imageTitleAction   = d->optionsMenu->addAction(i18n("Image Title"));
+    d->imageTitleAction       = d->optionsMenu->addAction(i18n("Image Title"));
     d->imageTitleAction->setCheckable(true);
-    d->imageCommentAction = d->optionsMenu->addAction(i18n("Image Comment"));
+    d->imageCommentAction     = d->optionsMenu->addAction(i18n("Image Comment"));
     d->imageCommentAction->setCheckable(true);
-    d->tagNameAction      = d->optionsMenu->addAction(i18n("Tag Name"));
+    d->tagNameAction          = d->optionsMenu->addAction(i18n("Tag Name"));
     d->tagNameAction->setCheckable(true);
-    d->albumNameAction    = d->optionsMenu->addAction(i18n("Album Name"));
+    d->albumNameAction        = d->optionsMenu->addAction(i18n("Album Name"));
     d->albumNameAction->setCheckable(true);
     d->imageAspectRatioAction = d->optionsMenu->addAction(i18n("Image Aspect Ratio"));
     d->imageAspectRatioAction->setCheckable(true);
-    d->imagePixelSizeAction = d->optionsMenu->addAction(i18n("Image Pixel Size"));
+    d->imagePixelSizeAction   = d->optionsMenu->addAction(i18n("Image Pixel Size"));
     d->imagePixelSizeAction->setCheckable(true);
     d->optionsBtn->setMenu(d->optionsMenu);
 
