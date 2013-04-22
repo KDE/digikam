@@ -49,6 +49,23 @@ class CollectionScannerObserver;
 class ImageInfo;
 class ItemCopyMoveHint;
 class ItemChangeHint;
+class ItemMetadataAdjustmentHint;
+
+class CollectionScannerHintContainer
+{
+public:
+
+    /// Note: All methods of this class must be thread-safe.
+
+    virtual ~CollectionScannerHintContainer() {};
+
+    virtual void recordHints(const QList<AlbumCopyMoveHint>& hints) = 0;
+    virtual void recordHints(const QList<ItemCopyMoveHint>& hints) = 0;
+    virtual void recordHints(const QList<ItemChangeHint>& hints) = 0;
+    virtual void recordHint(const ItemMetadataAdjustmentHint& hints) = 0;
+
+    virtual void clear() = 0;
+};
 
 class DIGIKAM_DATABASE_EXPORT CollectionScanner : public QObject
 {
@@ -131,6 +148,17 @@ public:
     void scanFile(const ImageInfo& info, FileScanMode mode = ModifiedScan);
 
     /**
+     * Hints give the scanner additional info about things that happened in the past
+     * carried out by higher level which the collection scanner cannot know.
+     * They allow to carry out optimizations.
+     * Record hints in a container, and provide the container to the collection scanner.
+     * The Container set in setHintContainer must be one created by createContainer.
+     */
+    static CollectionScannerHintContainer* createHintContainer();
+    void setHintContainer(CollectionScannerHintContainer* container);
+    void setUpdateHashHint(bool hint = true);
+
+    /**
      * Call this to enable the progress info signals.
      * Default is off.
      */
@@ -142,14 +170,6 @@ public:
      * Default is off. If on, setSignalEnabled() must be on to take effect.
      */
     void setNeedFileCount(bool on);
-
-    /**
-     * Record hints for the collection scanner.
-     */
-    void recordHints(const QList<AlbumCopyMoveHint>& hint);
-    void recordHints(const QList<ItemCopyMoveHint>& hint);
-    void recordHints(const QList<ItemChangeHint>& hint);
-    void setUpdateHashHint(bool hint = true);
 
     /**
      * Utility method:
@@ -192,7 +212,7 @@ protected:
     qlonglong scanNewFile(const QFileInfo& info, int albumId);
     qlonglong scanNewFileFullScan(const QFileInfo& info, int albumId);
     void scanModifiedFile(const QFileInfo& info, const ItemScanInfo& scanInfo);
-    QString scanFileUpdateHash(const QFileInfo& info, const ItemScanInfo& scanInfo);
+    void scanFileUpdateHashReuseThumbnail(const QFileInfo& fi, const ItemScanInfo& scanInfo, bool fileWasEdited);
     void rescanFile(const QFileInfo& info, const ItemScanInfo& scanInfo);
     void itemsWereRemoved(const QList<qlonglong> &removedIds);
     void completeHistoryScanning();

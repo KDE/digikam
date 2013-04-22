@@ -294,4 +294,61 @@ const ItemChangeHint& ItemChangeHint::operator>>(QDBusArgument& argument) const
     return *this;
 }
 
+// ---------------------------------------------------------------------------------------
+
+ItemMetadataAdjustmentHint::ItemMetadataAdjustmentHint()
+    : m_id(0), m_status(AboutToEditMetadata)
+{
+}
+
+ItemMetadataAdjustmentHint::ItemMetadataAdjustmentHint(qlonglong id, AdjustmentStatus status, 
+                                                       const QDateTime& modificationDateOnDisk, qlonglong fileSize)
+    : m_id(id), m_status(status), m_modificationDate(modificationDateOnDisk), m_fileSize(fileSize)
+{
+}
+
+qlonglong ItemMetadataAdjustmentHint::id()  const
+{
+    return m_id;
+}
+
+ItemMetadataAdjustmentHint::AdjustmentStatus ItemMetadataAdjustmentHint::adjustmentStatus() const
+{
+    return m_status;
+}
+
+QDateTime ItemMetadataAdjustmentHint::modificationDate() const
+{
+    return m_modificationDate;
+}
+
+qlonglong ItemMetadataAdjustmentHint::fileSize() const
+{
+    return m_fileSize;
+}
+
+ItemMetadataAdjustmentHint& ItemMetadataAdjustmentHint::operator<<(const QDBusArgument& argument)
+{
+    argument.beginStructure();
+    int status;
+    argument >> m_id
+             >> status
+             >> m_modificationDate
+             >> m_fileSize;
+    argument.endStructure();
+    return *this;
+}
+
+const ItemMetadataAdjustmentHint& ItemMetadataAdjustmentHint::operator>>(QDBusArgument& argument) const
+{
+    argument.beginStructure();
+    argument << m_id
+             << (int)m_status
+             << m_modificationDate
+             << m_fileSize;
+    argument.endStructure();
+    return *this;
+}
+
+
 } // namespace Digikam
