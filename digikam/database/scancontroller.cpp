@@ -55,6 +55,7 @@
 #include "databaseaccess.h"
 #include "collectionmanager.h"
 #include "collectionlocation.h"
+#include "filereadwritelock.h"
 #include "loadingcache.h"
 #include "databasewatch.h"
 #include "databasechangesets.h"
@@ -111,6 +112,7 @@ public:
         eventLoop(0),
         showTimer(0),
         relaxedTimer(0),
+        hints(CollectionScanner::createHintContainer()),
         progressDialog(0),
         splash(0),
         advice(ScanController::Success),
@@ -152,9 +154,13 @@ public:
     QPixmap                   actionPix;
     QPixmap                   errorPix;
 
+    /* Lists only needed for inter-process / network-wide communication, all DBUS-able
     QList<AlbumCopyMoveHint>  albumHints;
     QList<ItemCopyMoveHint>   itemHints;
     QList<ItemChangeHint>     itemChangeHints;
+    QList<ItemMetadataAdjustmentHint> itemMetadataAdjustmentHints;
+    */
+    CollectionScannerHintContainer* hints;
 
     QDateTime                 lastHintAdded;
 
@@ -221,16 +227,19 @@ public:
 
     void garbageCollectHints(bool setAccessTime)
     {
-        // called with locked mutex
         QDateTime current = QDateTime::currentDateTime();
 
         if (idle                    &&
             lastHintAdded.isValid() &&
             lastHintAdded.secsTo(current) > (5*60))
         {
+            /*
             itemHints.clear();
             albumHints.clear();
             itemChangeHints.clear();
+            itemMetadataAdjustmentHints.clear();
+            */
+            hints->clear();
         }
 
         if (setAccessTime)
@@ -524,8 +533,7 @@ void ScanController::slotRelaxedScanning()
 ImageInfo ScanController::scannedInfo(const QString& filePath)
 {
     CollectionScanner scanner;
-    scanner.recordHints(d->itemHints);
-    scanner.recordHints(d->itemChangeHints);
+    scanner.setHintContainer(d->hints);
 
     ImageInfo info(filePath);
 
@@ -544,11 +552,7 @@ ImageInfo ScanController::scannedInfo(const QString& filePath)
 ScanController::FileMetadataWrite::FileMetadataWrite(const ImageInfo& info)
     : m_info(info), m_changed(false)
 {
-    // This class does not implement the optimization which is possible
-    // Idea: Get modification time before and after the operation,
-    // if file was properly scanned at all times (seen from mod times)
-    // use a shortened scan which only updates the hard values,
-    // and also take care to reuse the thumbnail.
+    ScanController::instance()->beginFileMetadataWrite(info);
 }
 
 void ScanController::FileMetadataWrite::changed(bool wasChanged)
@@ -558,10 +562,7 @@ void ScanController::FileMetadataWrite::changed(bool wasChanged)
 
 ScanController::FileMetadataWrite::~FileMetadataWrite()
 {
-    if (m_changed)
-    {
-        ScanController::instance()->scanFileDirectly(m_info.filePath());
-    }
+    ScanController::instance()->finishFileMetadataWrite(m_info, m_changed);
 }
 
 void ScanController::scanFileDirectly(const QString& filePath)
@@ -569,11 +570,17 @@ void ScanController::scanFileDirectly(const QString& filePath)
     suspendCollectionScan();
 
     CollectionScanner scanner;
-    scanner.recordHints(d->itemHints);
-    scanner.recordHints(d->itemChangeHints);
+    scanner.setHintContainer(d->hints);
     scanner.scanFile(filePath);
 
     resumeCollectionScan();
+}
+
+void ScanController::scanFileDirectlyNormal(const ImageInfo& info)
+{
+    CollectionScanner scanner;
+    scanner.setHintContainer(d->hints);
+    scanner.scanFile(info, CollectionScanner::NormalScan);
 }
 
 /*
@@ -728,10 +735,7 @@ void ScanController::run()
 
             scanner.setNeedFileCount(d->needTotalFiles);
             scanner.setDeferredFileScanning(doScanDeferred);
-
-            scanner.recordHints(d->albumHints);
-            scanner.recordHints(d->itemHints);
-            scanner.recordHints(d->itemChangeHints);
+            scanner.setHintContainer(d->hints);
 
             SimpleCollectionScannerObserver observer(&d->continueScan);
             scanner.setObserver(&observer);
@@ -760,9 +764,7 @@ void ScanController::run()
             //TODO: reconsider performance
             scanner.setNeedFileCount(true);//d->needTotalFiles);
 
-            scanner.recordHints(d->albumHints);
-            scanner.recordHints(d->itemHints);
-            scanner.recordHints(d->itemChangeHints);
+            scanner.setHintContainer(d->hints);
 
             SimpleCollectionScannerObserver observer(&d->continueScan);
             scanner.setObserver(&observer);
@@ -776,9 +778,7 @@ void ScanController::run()
         else if (doPartialScan)
         {
             CollectionScanner scanner;
-            scanner.recordHints(d->albumHints);
-            scanner.recordHints(d->itemHints);
-            scanner.recordHints(d->itemChangeHints);
+            scanner.setHintContainer(d->hints);
             //connectCollectionScanner(&scanner);
             SimpleCollectionScannerObserver observer(&d->continuePartialScan);
             scanner.setObserver(&observer);
@@ -1064,8 +1064,9 @@ void ScanController::hintAtMoveOrCopyOfAlbum(const PAlbum* const album, const QS
     QList<AlbumCopyMoveHint> newHints = hintsForAlbum(album, location.id(), relativeDstPath,
                                                       newAlbumName.isNull() ? album->title() : newAlbumName);
 
-    QMutexLocker lock(&d->mutex);
-    d->albumHints << newHints;
+    //QMutexLocker lock(&d->mutex);
+    //d->albumHints << newHints;
+    d->hints->recordHints(newHints);
 }
 
 void ScanController::hintAtMoveOrCopyOfAlbum(const PAlbum* const album, const PAlbum* const dstAlbum, const QString& newAlbumName)
@@ -1073,8 +1074,9 @@ void ScanController::hintAtMoveOrCopyOfAlbum(const PAlbum* const album, const PA
     QList<AlbumCopyMoveHint> newHints = hintsForAlbum(album, dstAlbum->albumRootId(), dstAlbum->albumPath(),
                                                       newAlbumName.isNull() ? album->title() : newAlbumName);
 
-    QMutexLocker lock(&d->mutex);
-    d->albumHints << newHints;
+    //QMutexLocker lock(&d->mutex);
+    //d->albumHints << newHints;
+    d->hints->recordHints(newHints);
 }
 
 void ScanController::hintAtMoveOrCopyOfItems(const QList<qlonglong> ids, const PAlbum* const dstAlbum,
@@ -1082,36 +1084,58 @@ void ScanController::hintAtMoveOrCopyOfItems(const QList<qlonglong> ids, const P
 {
     ItemCopyMoveHint hint(ids, dstAlbum->albumRootId(), dstAlbum->id(), itemNames);
 
-    QMutexLocker lock(&d->mutex);
     d->garbageCollectHints(true);
-    d->itemHints << hint;
+    //d->itemHints << hint;
+    d->hints->recordHints(QList<ItemCopyMoveHint>() << hint);
 }
 
 void ScanController::hintAtMoveOrCopyOfItem(qlonglong id, const PAlbum* const dstAlbum, const QString& itemName)
 {
     ItemCopyMoveHint hint(QList<qlonglong>() << id, dstAlbum->albumRootId(), dstAlbum->id(), QStringList() << itemName);
 
-    QMutexLocker lock(&d->mutex);
     d->garbageCollectHints(true);
-    d->itemHints << hint;
+    //d->itemHints << hint;
+    d->hints->recordHints(QList<ItemCopyMoveHint>() << hint);
 }
 
 void ScanController::hintAtModificationOfItems(const QList<qlonglong> ids)
 {
     ItemChangeHint hint(ids, ItemChangeHint::ItemModified);
 
-    QMutexLocker lock(&d->mutex);
     d->garbageCollectHints(true);
-    d->itemChangeHints << hint;
+    //d->itemHints << hint;
+    d->hints->recordHints(QList<ItemChangeHint>() << hint);
 }
 
 void ScanController::hintAtModificationOfItem(qlonglong id)
 {
     ItemChangeHint hint(QList<qlonglong>() << id, ItemChangeHint::ItemModified);
 
-    QMutexLocker lock(&d->mutex);
     d->garbageCollectHints(true);
-    d->itemChangeHints << hint;
+    //d->itemHints << hint;
+    d->hints->recordHints(QList<ItemChangeHint>() << hint);
+}
+
+void ScanController::beginFileMetadataWrite(const ImageInfo& info)
+{
+    {
+        // throw in a lock to synchronize with all parallel writing
+        FileReadLocker locker(info.filePath());
+    }
+    QFileInfo fi(info.filePath());
+    d->hints->recordHint(ItemMetadataAdjustmentHint(info.id(), ItemMetadataAdjustmentHint::AboutToEditMetadata,
+                                                    fi.lastModified(), fi.size()));
+}
+
+void ScanController::finishFileMetadataWrite(const ImageInfo& info, bool changed)
+{
+    QFileInfo fi(info.filePath());
+    d->hints->recordHint(ItemMetadataAdjustmentHint(info.id(),
+                                                    changed ? ItemMetadataAdjustmentHint::MetadataEditingFinished :
+                                                              ItemMetadataAdjustmentHint::MetadataEditingAborted,
+                                                    fi.lastModified(), fi.size()));
+
+    scanFileDirectlyNormal(info);
 }
 
 // --------------------------------------------------------------------------------------------
