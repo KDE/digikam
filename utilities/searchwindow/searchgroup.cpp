@@ -121,7 +121,7 @@ void SearchGroup::setup(Type type)
     group->addField(SearchField::createField("pageorientation", group));
     group->addField(SearchField::createField("width", group));
     group->addField(SearchField::createField("height", group));
-    group->addField(SearchField::createField("aspectratio", group));
+    group->addField(SearchField::createField("aspectratioimg", group));
     group->addField(SearchField::createField("pixelsize", group));
     group->addField(SearchField::createField("format", group));
     group->addField(SearchField::createField("colordepth", group));
