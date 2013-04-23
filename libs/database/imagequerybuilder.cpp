@@ -1026,7 +1026,7 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
         fieldQuery.addIntField("ImageInformation.width");
         sql += " ) ) ";
     }
-    else if (name == "aspectratio")
+    else if (name == "aspectratioimg")
     {
         QString query;
         QString readerString = (reader.valueToStringOrStringList()).at(0);
