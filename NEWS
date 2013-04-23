@@ -37,5 +37,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 023 ==> 313190 - Thumbnails of faces not rotated correctly according to the configuration settings.
 024 ==> 121313 - Filter pictures by aspect ratio [patch].
 025 ==> 224549 - Filter pictures by sizes.
-026 ==> 
+026 ==> 318721 - digiKam crashed at startup.
+027 ==> 
 
