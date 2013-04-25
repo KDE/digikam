@@ -74,7 +74,6 @@ class Sidebar;
 class SidebarSplitter;
 class SlideShowSettings;
 class StatusProgressBar;
-class ThumbBarView;
 class VersionManager;
 class VersionFileOperation;
 

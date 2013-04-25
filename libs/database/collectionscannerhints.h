@@ -26,6 +26,7 @@
 
 // Qt includes
 
+#include <QDateTime>
 #include <QList>
 #include <QStringList>
 #include <QDBusArgument>
@@ -264,6 +265,60 @@ protected:
 
     QList<qlonglong>  m_ids;
     ChangeType        m_type;
+};
+
+// ---------------------------------------------------------------------------
+
+class DIGIKAM_DATABASE_EXPORT ItemMetadataAdjustmentHint
+{
+public:
+
+    /** The file's has been edited writing out information from
+      *  the database, i.e., the db is already guaranteed to contain
+      *  all changed information in the file's metadata.
+      *  There is no need for a full rescan, optimizations are possible.
+      */
+
+    enum AdjustmentStatus
+    {
+        AboutToEditMetadata,       /// The file is about to be edited. Suspends scanning. The Finished hint must follow.
+        MetadataEditingFinished,   /// The file's metadata has been edited as described above.
+        MetadataEditingAborted     /// The file's metadata has not been edited, despite sending AboutToEditMedata
+    };
+
+    ItemMetadataAdjustmentHint();
+    explicit ItemMetadataAdjustmentHint(qlonglong id, AdjustmentStatus status,
+                                        const QDateTime& modificationDateOnDisk, qlonglong fileSize);
+
+    qlonglong id()  const;
+    AdjustmentStatus adjustmentStatus() const;
+    QDateTime modificationDate() const;
+    qlonglong fileSize() const;
+
+    bool isAboutToEdit() const
+    {
+        return adjustmentStatus() == AboutToEditMetadata;
+    }
+
+    bool isEditingFinished() const
+    {
+        return adjustmentStatus() == MetadataEditingFinished;
+    }
+
+    bool isEditingFinishedAborted() const
+    {
+        return adjustmentStatus() == MetadataEditingAborted;
+    }
+
+    ItemMetadataAdjustmentHint& operator<<(const QDBusArgument& argument);
+    const ItemMetadataAdjustmentHint& operator>>(QDBusArgument& argument) const;
+
+protected:
+
+    qlonglong         m_id;
+    AdjustmentStatus  m_status;
+    QDateTime         m_modificationDate;
+    qlonglong         m_fileSize;
 };
 
 inline uint qHash(const Digikam::AlbumCopyMoveHint& hint)

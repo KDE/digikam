@@ -427,7 +427,6 @@ void ImageScanner::scanFile(ScanMode mode)
         if (d->scanInfo.category == DatabaseItem::Image)
         {
             scanImageInformation();
-            scanFaces();
             scanImageHistoryIfModified();
         }
         else if (d->scanInfo.category == DatabaseItem::Video)
@@ -935,7 +934,7 @@ void ImageScanner::scanImageHistoryIfModified()
     QString previousUuid = DatabaseAccess().db()->getImageUuid(d->scanInfo.id);
     QString currentUuid  = d->metadata.getImageUniqueId();
 
-    if (previousUuid != currentUuid)
+    if (!currentUuid.isEmpty() && previousUuid != currentUuid)
     {
         scanImageHistory();
     }

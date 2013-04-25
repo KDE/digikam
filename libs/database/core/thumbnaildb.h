@@ -119,6 +119,7 @@ public:
     QHash<QString, int> getFilePathsWithThumbnail();
 
     void replaceUniqueHash(const QString& oldUniqueHash, int oldFileSize, const QString& newUniqueHash, int newFileSize);
+    DatabaseCoreBackend::QueryState updateModificationDate(int thumbId, const QDateTime& modificationDate);
 
     //QStringList getAllThumbnailPaths();
 
