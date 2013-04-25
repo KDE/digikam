@@ -277,6 +277,11 @@ DatabaseCoreBackend::QueryState ThumbnailDB::replaceThumbnail(const DatabaseThum
                           QList<QVariant>() << info.id << info.type << info.modificationDate << info.orientationHint << info.data);
 }
 
+DatabaseCoreBackend::QueryState ThumbnailDB::updateModificationDate(int thumbId, const QDateTime& modificationDate)
+{
+    return d->db->execSql("UPDATE Thumbnails SET modificationDate=? WHERE id=?;", thumbId, modificationDate);
+}
+
 void ThumbnailDB::replaceUniqueHash(const QString& oldUniqueHash, int oldFileSize,
                                     const QString& newUniqueHash, int newFileSize)
 {

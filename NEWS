@@ -38,5 +38,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 024 ==> 121313 - Filter pictures by aspect ratio [patch].
 025 ==> 224549 - Filter pictures by sizes.
 026 ==> 318721 - digiKam crashed at startup.
-027 ==> 
+027 ==> 306116 - Crash on start (during the collection re-scan).
+028 ==> 
 

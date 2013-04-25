@@ -30,6 +30,7 @@
 
 #include <QThread>
 #include <QString>
+    void scanFileDirectly(const QString& filePath);
 
 // KDE includes
 
@@ -191,6 +192,12 @@ public:
     void hintAtModificationOfItems(const QList<qlonglong> ids);
     void hintAtModificationOfItem(qlonglong id);
 
+    /**
+     * Implementation of FileMetadataWrite, see there. Calling these methods is equivalent.
+     */
+    void beginFileMetadataWrite(const ImageInfo& info);
+    void finishFileMetadataWrite(const ImageInfo& info, bool changed);
+    
 Q_SIGNALS:
 
     void databaseInitialized(bool success);
@@ -237,6 +244,7 @@ private:
      * The scan is finished when returning from the method.
      */
     void scanFileDirectly(const QString& filePath);
+    void scanFileDirectlyNormal(const ImageInfo& info);
 
     void createProgressDialog();
     void setInitializationMessage();

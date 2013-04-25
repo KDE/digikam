@@ -35,9 +35,12 @@
 
 #include <QDir>
 #include <QFileInfo>
+#include <QReadWriteLock>
+#include <QReadLocker>
 #include <QStringList>
 #include <QSet>
 #include <QTime>
+#include <QWriteLocker>
 
 // KDE includes
 
@@ -96,6 +99,58 @@ inline uint qHash(const NewlyAppearedFile& file)
 
 // --------------------------------------------------------------------
 
+static bool modificationDateEquals(const QDateTime& a, const QDateTime& b)
+{
+    if (a != b)
+    {
+        // allow a "modify window" of one second.
+        // FAT filesystems store the modify date in 2-second resolution.
+        int diff = a.secsTo(b);
+
+        if (abs(diff) > 1)
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
+// --------------------------------------------------------------------
+
+class CollectionScannerHintContainerImplementation : public CollectionScannerHintContainer
+{
+public:
+
+    virtual void recordHints(const QList<AlbumCopyMoveHint>& hints);
+    virtual void recordHints(const QList<ItemCopyMoveHint>& hints);
+    virtual void recordHints(const QList<ItemChangeHint>& hints);
+    virtual void recordHint(const ItemMetadataAdjustmentHint& hint);
+
+    virtual void clear();
+
+    QReadWriteLock lock;
+
+    QHash<CollectionScannerHints::DstPath, CollectionScannerHints::Album> albumHints;
+    QHash<NewlyAppearedFile, qlonglong>                                   itemHints;
+    QSet<qlonglong>                                                       modifiedItemHints;
+    QSet<qlonglong>                                                       rescanItemHints;
+    QHash<qlonglong, QDateTime>                                           metadataAboutToAdjustHints;
+    QHash<qlonglong, QDateTime>                                           metadataAdjustedHints;
+
+    bool hasAlbumHints() { QReadLocker locker(&lock); return !albumHints.isEmpty(); }
+
+    bool hasAnyNormalHint(qlonglong id)
+    {
+        QReadLocker locker(&lock);
+        return modifiedItemHints.contains(id) || rescanItemHints.contains(id) ||
+               metadataAboutToAdjustHints.contains(id) || metadataAdjustedHints.contains(id);
+    }
+    bool hasModificationHint(qlonglong id) { QReadLocker locker(&lock); return modifiedItemHints.contains(id); }
+    bool hasRescanHint(qlonglong id)       { QReadLocker locker(&lock); return rescanItemHints.contains(id); }
+    bool hasMetadataAboutToAdjustHint(qlonglong id) { QReadLocker locker(&lock); return metadataAboutToAdjustHints.contains(id); }
+    bool hasMetadataAdjustedHint(qlonglong id)      { QReadLocker locker(&lock); return metadataAdjustedHints.contains(id); }
+};
+
 class CollectionScanner::CollectionScannerPriv
 {
 
@@ -104,6 +159,7 @@ public:
     CollectionScannerPriv() :
         wantSignals(false),
         needTotalFiles(false),
+        hints(0),
         updatingHashHint(false),
         recordHistoryIds(false),
         deferredFileScanning(false),
@@ -156,11 +212,8 @@ public:
 
     QDateTime                                                             removedItemsTime;
 
-    QHash<CollectionScannerHints::DstPath, CollectionScannerHints::Album> albumHints;
-    QHash<NewlyAppearedFile, qlonglong>                                   itemHints;
+    CollectionScannerHintContainerImplementation*                         hints;
     QHash<int, int>                                                       establishedSourceAlbums;
-    QSet<int>                                                             modifiedItemHints;
-    QSet<int>                                                             rescanItemHints;
     bool                                                                  updatingHashHint;
 
     bool                                                                  recordHistoryIds;
@@ -172,6 +225,105 @@ public:
 
     CollectionScannerObserver*                                            observer;
 };
+
+// ---
+
+void CollectionScannerHintContainerImplementation::recordHints(const QList<AlbumCopyMoveHint>& hints)
+{
+    QWriteLocker locker(&lock);
+    foreach(const AlbumCopyMoveHint& hint, hints)
+    {
+        // automagic casting to src and dst
+        albumHints[hint] = hint;
+    }
+}
+
+void CollectionScannerHintContainerImplementation::recordHints(const QList<ItemCopyMoveHint>& hints)
+{
+    QWriteLocker locker(&lock);
+    foreach(const ItemCopyMoveHint& hint, hints)
+    {
+        QList<qlonglong> ids = hint.srcIds();
+        QStringList dstNames = hint.dstNames();
+
+        for (int i=0; i<ids.size(); ++i)
+        {
+            itemHints[NewlyAppearedFile(hint.albumIdDst(), dstNames.at(i))] = ids.at(i);
+        }
+    }
+}
+
+void CollectionScannerHintContainerImplementation::recordHints(const QList<ItemChangeHint>& hints)
+{
+    QWriteLocker locker(&lock);
+    foreach(const ItemChangeHint& hint, hints)
+    {
+        const QList<qlonglong>& ids = hint.ids();
+
+        for (int i=0; i<ids.size(); ++i)
+        {
+            if (hint.isModified())
+            {
+                modifiedItemHints << ids.at(i);
+            }
+            else
+            {
+                rescanItemHints << ids.at(i);
+            }
+        }
+    }
+}
+
+void CollectionScannerHintContainerImplementation::recordHint(const ItemMetadataAdjustmentHint& hint)
+{
+    if (hint.isAboutToEdit())
+    {
+        ImageInfo info(hint.id());
+        if (!
+            (modificationDateEquals(hint.modificationDate(), info.modDateTime())
+             && hint.fileSize() == info.fileSize())
+           )
+        {
+            // refuse to create a hint as a rescan is required already before any metadata edit
+            // or, in case of multiple edits, there is already a hint with an older date, then all is fine.
+            return;
+        }
+        QWriteLocker locker(&lock);
+        metadataAboutToAdjustHints[hint.id()] = hint.modificationDate();
+    }
+    else if (hint.isEditingFinished())
+    {
+        QWriteLocker locker(&lock);
+        QHash<qlonglong, QDateTime>::iterator it = metadataAboutToAdjustHints.find(hint.id());
+        if (it == metadataAboutToAdjustHints.end())
+        {
+            return;
+        }
+        QDateTime date = it.value();
+        metadataAboutToAdjustHints.erase(it);
+
+        metadataAdjustedHints[hint.id()] = hint.modificationDate();
+    }
+    else // Aborted
+    {
+         QWriteLocker locker(&lock);
+         QDateTime formerDate = metadataAboutToAdjustHints.take(hint.id());
+    }
+}
+
+void CollectionScannerHintContainerImplementation::clear()
+{
+    QWriteLocker locker(&lock);
+
+    albumHints.clear();
+    itemHints.clear();
+    modifiedItemHints.clear();
+    rescanItemHints.clear();
+    metadataAboutToAdjustHints.clear();
+    metadataAdjustedHints.clear();
+}
+
+// -------
 
 CollectionScanner::CollectionScanner()
     : d(new CollectionScannerPriv)
@@ -193,47 +345,15 @@ void CollectionScanner::setNeedFileCount(bool on)
     d->needTotalFiles = on;
 }
 
-void CollectionScanner::recordHints(const QList<AlbumCopyMoveHint>& hints)
+CollectionScannerHintContainer* CollectionScanner::createHintContainer()
 {
-    foreach(const AlbumCopyMoveHint& hint, hints)
-    {
-        // automagic casting to src and dst
-        d->albumHints[hint] = hint;
-    }
+    return new CollectionScannerHintContainerImplementation;
 }
 
-void CollectionScanner::recordHints(const QList<ItemCopyMoveHint>& hints)
+void CollectionScanner::setHintContainer(CollectionScannerHintContainer* container)
 {
-    foreach(const ItemCopyMoveHint& hint, hints)
-    {
-        QList<qlonglong> ids = hint.srcIds();
-        QStringList dstNames = hint.dstNames();
-
-        for (int i=0; i<ids.size(); ++i)
-        {
-            d->itemHints[NewlyAppearedFile(hint.albumIdDst(), dstNames.at(i))] = ids.at(i);
-        }
-    }
-}
-
-void CollectionScanner::recordHints(const QList<ItemChangeHint>& hints)
-{
-    foreach(const ItemChangeHint& hint, hints)
-    {
-        QList<qlonglong> ids = hint.ids();
-
-        for (int i=0; i<ids.size(); ++i)
-        {
-            if (hint.isModified())
-            {
-                d->modifiedItemHints << ids.at(i);
-            }
-            else
-            {
-                d->rescanItemHints << ids.at(i);
-            }
-        }
-    }
+    // the API specs require the object given here to be created by createContainer, so we can cast.
+    d->hints = static_cast<CollectionScannerHintContainerImplementation*>(container);
 }
 
 void CollectionScanner::setUpdateHashHint(bool hint)
@@ -309,7 +429,7 @@ void CollectionScanner::completeScan()
     }
 
     // if we have no hints to follow, clean up all stale albums
-    if (d->albumHints.isEmpty())
+    if (!d->hints || !d->hints->hasAlbumHints())
     {
         DatabaseAccess().db()->deleteStaleAlbums();
     }
@@ -488,7 +608,7 @@ void CollectionScanner::partialScan(const QString& albumRoot, const QString& alb
 
     // if we have no hints to follow, clean up all stale albums
     // Hint: Rethink with next major db update
-    if (d->albumHints.isEmpty())
+    if (!d->hints || !d->hints->hasAlbumHints())
     {
         DatabaseAccess().db()->deleteStaleAlbums();
     }
@@ -498,15 +618,20 @@ void CollectionScanner::partialScan(const QString& albumRoot, const QString& alb
     // also scan the second location
     QSet<int> locationIdsToScan;
     locationIdsToScan << location.id();
-    QHash<CollectionScannerHints::DstPath, CollectionScannerHints::Album>::const_iterator it;
 
-    for (it = d->albumHints.constBegin(); it != d->albumHints.constEnd(); ++it)
+    if (d->hints)
     {
-        if (it.key().albumRootId == location.id())
+        QReadLocker locker(&d->hints->lock);
+        QHash<CollectionScannerHints::DstPath, CollectionScannerHints::Album>::const_iterator it;
+        for (it = d->hints->albumHints.constBegin(); it != d->hints->albumHints.constEnd(); ++it)
         {
-            locationIdsToScan << it.key().albumRootId;
+            if (it.key().albumRootId == location.id())
+            {
+                locationIdsToScan << it.key().albumRootId;
+            }
         }
     }
+
     scanForStaleAlbums(locationIdsToScan.toList());
 
     if (!d->checkObserver())
@@ -723,13 +848,19 @@ void CollectionScanner::scanForStaleAlbums(const QList<int>& locationIdsToScan)
     // We can still copy over album attributes later, but we cannot identify
     // the former album of removed images.
     // Just renaming the album is also much cheaper than rescanning all files.
-    if (!toBeDeleted.isEmpty() && !d->albumHints.isEmpty())
+    if (!toBeDeleted.isEmpty() && d->hints)
     {
+        // shallow copy for reading without caring for locks
+        QHash<CollectionScannerHints::DstPath, CollectionScannerHints::Album> albumHints;
+        {
+            QReadLocker locker(&d->hints->lock);
+            albumHints = d->hints->albumHints;
+        }
+
         // go through all album copy/move hints
         QHash<CollectionScannerHints::DstPath, CollectionScannerHints::Album>::const_iterator it;
         int toBeDeletedIndex;
-
-        for (it = d->albumHints.constBegin(); it != d->albumHints.constEnd(); ++it)
+        for (it = albumHints.constBegin(); it != albumHints.constEnd(); ++it)
         {
             // if the src entry of a hint is found in toBeDeleted, we have a move/rename, no copy. Handle these here.
             toBeDeletedIndex = toBeDeleted.indexOf(it.value().albumId);
@@ -804,13 +935,20 @@ int CollectionScanner::checkAlbum(const CollectionLocation& location, const QStr
         albumID = DatabaseAccess().db()->addAlbum(location.id(), album, QString(), fi.lastModified().date(), QString());
 
         // have album this one was copied from?
-        CollectionScannerHints::Album src = d->albumHints.value(CollectionScannerHints::DstPath(location.id(), album));
-
-        if (!src.isNull())
+        if (d->hints)
         {
-            //kDebug() << "Identified album" << src.albumId << "as source of new album" << fi.filePath();
-            DatabaseAccess().db()->copyAlbumProperties(src.albumId, albumID);
-            d->establishedSourceAlbums[albumID] = src.albumId;
+            CollectionScannerHints::Album src;
+            {
+                QReadLocker locker(&d->hints->lock);
+                src = d->hints->albumHints.value(CollectionScannerHints::DstPath(location.id(), album));
+            }
+
+            if (!src.isNull())
+            {
+                //kDebug() << "Identified album" << src.albumId << "as source of new album" << fi.filePath();
+                DatabaseAccess().db()->copyAlbumProperties(src.albumId, albumID);
+                d->establishedSourceAlbums[albumID] = src.albumId;
+            }
         }
     }
 
@@ -952,36 +1090,46 @@ void CollectionScanner::scanAlbum(const CollectionLocation& location, const QStr
     }
 }
 
-static bool modificationDateEquals(const QDateTime& a, const QDateTime& b)
-{
-    if (a != b)
-    {
-        // allow a "modify window" of one second.
-        // FAT filesystems store the modify date in 2-second resolution.
-        int diff = a.secsTo(b);
-
-        if (abs(diff) > 1)
-        {
-            return false;
-        }
-    }
-    return true;
-}
-
 void CollectionScanner::scanFileNormal(const QFileInfo& fi, const ItemScanInfo& scanInfo)
 {
+    bool hasAnyHint = d->hints && d->hints->hasAnyNormalHint(scanInfo.id);
+
     // if the date is null, this signals a full rescan
-    if (scanInfo.modificationDate.isNull() || d->rescanItemHints.contains(scanInfo.id))
+    if (scanInfo.modificationDate.isNull() || 
+        (hasAnyHint && d->hints->hasRescanHint(scanInfo.id)) )
     {
-        d->rescanItemHints.remove(scanInfo.id);
+        {
+            QWriteLocker locker(&d->hints->lock);
+            d->hints->rescanItemHints.remove(scanInfo.id);
+        }
         rescanFile(fi, scanInfo);
         return;
     }
-    else if (d->modifiedItemHints.contains(scanInfo.id))
+    else if (hasAnyHint && d->hints->hasModificationHint(scanInfo.id))
     {
-        d->modifiedItemHints.remove(scanInfo.id);
+        {
+            QWriteLocker locker(&d->hints->lock);
+            d->hints->modifiedItemHints.remove(scanInfo.id);
+        }
         scanModifiedFile(fi, scanInfo);
         return;
+    }
+    else if (hasAnyHint) // metadata adjustment hints
+    {
+        if (d->hints->hasMetadataAboutToAdjustHint(scanInfo.id))
+        {
+            // postpone scan
+            return;
+        }
+        else // hasMetadataAdjustedHint
+        {
+            {
+                QWriteLocker locker(&d->hints->lock);
+                d->hints->metadataAdjustedHints.remove(scanInfo.id);
+            }
+            scanFileUpdateHashReuseThumbnail(fi, scanInfo, true);
+            return;
+        }
     }
     else if (d->updatingHashHint)
     {
@@ -989,13 +1137,7 @@ void CollectionScanner::scanFileNormal(const QFileInfo& fi, const ItemScanInfo& 
         if (modificationDateEquals(fi.lastModified(), scanInfo.modificationDate)
             && fi.size() == scanInfo.fileSize)
         {
-            QString oldHash = scanInfo.uniqueHash;
-            QString newHash = scanFileUpdateHash(fi, scanInfo);
-            if (ThumbnailDatabaseAccess::isInitialized())
-            {
-                ThumbnailDatabaseAccess().db()->replaceUniqueHash(oldHash, scanInfo.fileSize,
-                                                                  newHash, scanInfo.fileSize);
-            }
+            scanFileUpdateHashReuseThumbnail(fi, scanInfo, false);
             return;
         }
     }
@@ -1032,7 +1174,12 @@ qlonglong CollectionScanner::scanNewFile(const QFileInfo& info, int albumId)
     scanner.setCategory(category(info));
 
     // Check copy/move hints for single items
-    qlonglong srcId = d->itemHints.value(NewlyAppearedFile(albumId, info.fileName()));
+    qlonglong srcId = 0;
+    if (d->hints)
+    {
+        QReadLocker locker(&d->hints->lock);
+        srcId = d->hints->itemHints.value(NewlyAppearedFile(albumId, info.fileName()));
+    }
 
     if (srcId != 0)
     {
@@ -1091,14 +1238,41 @@ void CollectionScanner::scanModifiedFile(const QFileInfo& info, const ItemScanIn
     d->finishScanner(scanner);
 }
 
-QString CollectionScanner::scanFileUpdateHash(const QFileInfo& info, const ItemScanInfo& scanInfo)
+void CollectionScanner::scanFileUpdateHashReuseThumbnail(const QFileInfo& info, const ItemScanInfo& scanInfo, bool fileWasEdited)
 {
+    QString oldHash = scanInfo.uniqueHash;
+    qlonglong oldSize = scanInfo.fileSize;
+
     // same code as scanModifiedFile
     ImageScanner scanner(info, scanInfo);
     scanner.setCategory(category(info));
     scanner.fileModified();
+
+    QString newHash = scanner.itemScanInfo().uniqueHash;
+    qlonglong newSize = scanner.itemScanInfo().fileSize;
+    if (ThumbnailDatabaseAccess::isInitialized())
+    {
+        if (fileWasEdited)
+        {
+            // The file was edited in such a way that we know that the pixel content did not change, so we can reuse the thumbnail.
+            // We need to add a link the the thumbnail data with the new hash/file size _and_ adjust
+            // the file modification date in the data table.
+            DatabaseThumbnailInfo thumbDbInfo = ThumbnailDatabaseAccess().db()->findByHash(oldHash, oldSize);
+            if (thumbDbInfo.id != -1)
+            {
+                ThumbnailDatabaseAccess().db()->insertUniqueHash(newHash, newSize, thumbDbInfo.id);
+                ThumbnailDatabaseAccess().db()->updateModificationDate(thumbDbInfo.id, scanner.itemScanInfo().modificationDate);
+                // TODO: also update details thumbnails (by file path and URL scheme)
+            }
+        }
+        else
+        {
+            ThumbnailDatabaseAccess().db()->replaceUniqueHash(oldHash, oldSize,
+                                                              newHash, newSize);
+        }
+    }
+
     d->finishScanner(scanner);
-    return scanner.itemScanInfo().uniqueHash;
 }
 
 void CollectionScanner::rescanFile(const QFileInfo& info, const ItemScanInfo& scanInfo)
