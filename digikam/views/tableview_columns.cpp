@@ -20,7 +20,7 @@
  *
  * ============================================================ */
 
-#include "tableview_columns.moc"
+#include "tableview_columns.h"
 
 // Qt includes
 
@@ -37,4 +37,3 @@ namespace TableViewColumns
 } /* namespace TableViewColumns */
 
 } /* namespace Digikam */
-
