@@ -64,7 +64,8 @@ QStringList ColumnItemProperties::getSubColumns()
     columns << QLatin1String("width") << QLatin1String("height")
             << QLatin1String("dimensions") << QLatin1String("pixelcount")
             << QLatin1String("bitdepth") << QLatin1String("colormode")
-            << QLatin1String("type") << QLatin1String("creationdatetime");
+            << QLatin1String("type") << QLatin1String("creationdatetime")
+            << QLatin1String("digitizationtime");
 
     return columns;
 }
@@ -106,6 +107,10 @@ TableViewColumnDescription ColumnItemProperties::getDescription()
         TableViewColumnDescription("item-properties", i18n("Creation date/time"), "subcolumn", "creationdatetime")
     );
 
+    description.addSubColumn(
+        TableViewColumnDescription("item-properties", i18n("Digitization date/time"), "subcolumn", "digitizationtime")
+    );
+
     return description;
 }
 
@@ -129,6 +134,8 @@ QString ColumnItemProperties::getTitle() const
         return i18n("Type");
     case SubColumnCreationDateTime:
         return i18n("Creation date/time");
+    case SubColumnDigitizationDateTime:
+        return i18n("Digitization date/time");
     }
 
     return QString();
@@ -143,7 +150,8 @@ TableViewColumn::ColumnFlags ColumnItemProperties::getColumnFlags() const
         || (subColumn == SubColumnDimensions)
         || (subColumn == SubColumnBitDepth)
         || (subColumn == SubColumnPixelCount)
-        || (subColumn == SubColumnCreationDateTime) )
+        || (subColumn == SubColumnCreationDateTime)
+        || (subColumn == SubColumnDigitizationDateTime) )
     {
         flags|=ColumnCustomSorting;
     }
@@ -238,6 +246,13 @@ QVariant ColumnItemProperties::data(TableViewModel::Item* const item, const int 
 
             return KGlobal::locale()->formatDateTime(creationDateTime, KLocale::ShortDate, true);
         }
+    case SubColumnDigitizationDateTime:
+        {
+            const ImageCommonContainer commonInfo = info.imageCommonContainer();
+            const QDateTime digitizationDateTime = commonInfo.digitizationDate;
+
+            return KGlobal::locale()->formatDateTime(digitizationDateTime, KLocale::ShortDate, true);
+        }
     }
 
     return QVariant();
@@ -310,6 +325,16 @@ TableViewColumn::ColumnCompareResult ColumnItemProperties::compare(
         {
             const QDateTime dtA = infoA.dateTime();
             const QDateTime dtB = infoB.dateTime();
+
+            return compareHelper<QDateTime>(dtA, dtB);
+        }
+
+    case SubColumnDigitizationDateTime:
+        {
+            const ImageCommonContainer commonInfoA = infoA.imageCommonContainer();
+            const ImageCommonContainer commonInfoB = infoB.imageCommonContainer();
+            const QDateTime dtA = commonInfoA.digitizationDate;
+            const QDateTime dtB = commonInfoB.digitizationDate;
 
             return compareHelper<QDateTime>(dtA, dtB);
         }
