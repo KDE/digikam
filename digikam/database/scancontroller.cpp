@@ -337,6 +337,7 @@ ScanController::~ScanController()
     shutDown();
 
     delete d->progressDialog;
+    delete d->hints;
     delete d;
 }
 
