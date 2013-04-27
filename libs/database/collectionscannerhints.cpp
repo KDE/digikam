@@ -297,7 +297,7 @@ const ItemChangeHint& ItemChangeHint::operator>>(QDBusArgument& argument) const
 // ---------------------------------------------------------------------------------------
 
 ItemMetadataAdjustmentHint::ItemMetadataAdjustmentHint()
-    : m_id(0), m_status(AboutToEditMetadata)
+    : m_id(0), m_status(AboutToEditMetadata), m_fileSize(0)
 {
 }
 
