@@ -241,6 +241,8 @@ public:
         ItemRescan    /// reread metadata
     };
 
+public:
+
     ItemChangeHint();
     explicit ItemChangeHint(QList<qlonglong> srcIds, ChangeType type = ItemModified);
 
@@ -286,14 +288,16 @@ public:
         MetadataEditingAborted     /// The file's metadata has not been edited, despite sending AboutToEditMedata
     };
 
+public:
+
     ItemMetadataAdjustmentHint();
     explicit ItemMetadataAdjustmentHint(qlonglong id, AdjustmentStatus status,
                                         const QDateTime& modificationDateOnDisk, qlonglong fileSize);
 
-    qlonglong id()  const;
+    qlonglong id()                      const;
     AdjustmentStatus adjustmentStatus() const;
-    QDateTime modificationDate() const;
-    qlonglong fileSize() const;
+    QDateTime modificationDate()        const;
+    qlonglong fileSize()                const;
 
     bool isAboutToEdit() const
     {

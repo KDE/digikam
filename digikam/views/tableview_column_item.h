@@ -54,7 +54,8 @@ public:
         SubColumnBitDepth = 4,
         SubColumnColorMode = 5,
         SubColumnType = 6,
-        SubColumnCreationDateTime = 7
+        SubColumnCreationDateTime = 7,
+        SubColumnDigitizationDateTime = 8
     };
 
 private:
