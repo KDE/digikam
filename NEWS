@@ -39,5 +39,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 025 ==> 224549 - Filter pictures by sizes.
 026 ==> 318721 - digiKam crashed at startup.
 027 ==> 306116 - Crash on start (during the collection re-scan).
-028 ==> 
+028 ==> 318834 - Images vanish and Properties not shown if image is picked from Image Thumbbar on right and dropped on to the Thumbbar itself [patch].
+029 ==> 318240 - Keywords stored in IPTC do not show up in thumbnail preview and are not searchable.
+030 ==> 
 

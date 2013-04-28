@@ -45,12 +45,12 @@ namespace TableViewColumns
 ColumnItemProperties::ColumnItemProperties(
         TableViewShared* const tableViewShared,
         const TableViewColumnConfiguration& pConfiguration,
+        const SubColumn pSubColumn,
         QObject* const parent)
   : TableViewColumn(tableViewShared, pConfiguration, parent),
-    subColumn(SubColumnWidth)
+    subColumn(pSubColumn)
 {
-    const QString& subColumnSetting = configuration.getSetting("subcolumn");
-    subColumn = getSubColumnIndex<ColumnItemProperties>(subColumnSetting, SubColumnWidth);
+
 }
 
 ColumnItemProperties::~ColumnItemProperties()
@@ -64,8 +64,8 @@ QStringList ColumnItemProperties::getSubColumns()
     columns << QLatin1String("width") << QLatin1String("height")
             << QLatin1String("dimensions") << QLatin1String("pixelcount")
             << QLatin1String("bitdepth") << QLatin1String("colormode")
-            << QLatin1String("type") << QLatin1String("creationdatetime")
-            << QLatin1String("digitizationtime");
+            << QLatin1String("itemtype") << QLatin1String("itemcreationdatetime")
+            << QLatin1String("itemdigitizationtime");
 
     return columns;
 }
@@ -76,39 +76,39 @@ TableViewColumnDescription ColumnItemProperties::getDescription()
     description.setIcon("image-x-generic");
 
     description.addSubColumn(
-        TableViewColumnDescription("item-properties", i18n("Width"), "subcolumn", "width")
+        TableViewColumnDescription("width", i18n("Width"))
     );
 
     description.addSubColumn(
-        TableViewColumnDescription("item-properties", i18n("Height"), "subcolumn", "height")
+        TableViewColumnDescription("height", i18n("Height"))
     );
 
     description.addSubColumn(
-        TableViewColumnDescription("item-properties", i18n("Dimensions"), "subcolumn", "dimensions")
+        TableViewColumnDescription("dimensions", i18n("Dimensions"))
     );
 
     description.addSubColumn(
-        TableViewColumnDescription("item-properties", i18n("Pixel count"), "subcolumn", "pixelcount")
+        TableViewColumnDescription("pixelcount", i18n("Pixel count"))
     );
 
     description.addSubColumn(
-        TableViewColumnDescription("item-properties", i18n("Bit depth"), "subcolumn", "bitdepth")
+        TableViewColumnDescription("bitdepth", i18n("Bit depth"))
     );
 
     description.addSubColumn(
-        TableViewColumnDescription("item-properties", i18n("Color mode"), "subcolumn", "colormode")
+        TableViewColumnDescription("colormode", i18n("Color mode"))
     );
 
     description.addSubColumn(
-        TableViewColumnDescription("item-properties", i18n("Type"), "subcolumn", "type")
+        TableViewColumnDescription("itemtype", i18n("Type"))
     );
 
     description.addSubColumn(
-        TableViewColumnDescription("item-properties", i18n("Creation date/time"), "subcolumn", "creationdatetime")
+        TableViewColumnDescription("itemcreationdatetime", i18n("Creation date/time"))
     );
 
     description.addSubColumn(
-        TableViewColumnDescription("item-properties", i18n("Digitization date/time"), "subcolumn", "digitizationtime")
+        TableViewColumnDescription("itemdigitizationtime", i18n("Digitization date/time"))
     );
 
     return description;

@@ -189,7 +189,7 @@ public:
     virtual void setConfiguration(const TableViewColumnConfiguration& newConfiguration);
     virtual TableViewColumnConfigurationWidget* getConfigurationWidget(QWidget* const parentWidget) const;
     virtual ColumnFlags getColumnFlags() const;
-    virtual QString getTitle() const;
+    virtual QString getTitle() const = 0;
 
     virtual QVariant data(TableViewModel::Item* const item, const int role) const;
     virtual ColumnCompareResult compare(TableViewModel::Item* const itemA, TableViewModel::Item* const itemB) const;
@@ -211,15 +211,34 @@ public:
         return CmpALessB;
     }
 
-    template<typename columnClass> static typename columnClass::SubColumn getSubColumnIndex(const QString& subColumnId, const typename columnClass::SubColumn defaultSubColumn)
+    template<typename columnClass> static bool getSubColumnIndex(const QString& subColumnId, typename columnClass::SubColumn* const subColumn)
     {
         const int index = columnClass::getSubColumns().indexOf(subColumnId);
         if (index<0)
         {
-            return defaultSubColumn;
+            return false;
         }
 
-        return typename columnClass::SubColumn(index);
+        *subColumn = typename columnClass::SubColumn(index);
+        return true;
+    }
+
+    template<typename columnClass> static bool CreateFromConfiguration(
+            TableViewShared* const tableViewShared,
+            const TableViewColumnConfiguration& pConfiguration,
+            TableViewColumn** const pNewColumn,
+            QObject* const parent
+        )
+    {
+        typename columnClass::SubColumn subColumn;
+        if (!getSubColumnIndex<columnClass>(pConfiguration.columnId, &subColumn))
+        {
+            return false;
+        }
+
+        *pNewColumn = new columnClass(tableViewShared, pConfiguration, subColumn, parent);
+
+        return true;
     }
 
 Q_SIGNALS:

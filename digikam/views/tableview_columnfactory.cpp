@@ -66,39 +66,32 @@ TableViewColumnFactory::TableViewColumnFactory(TableViewShared* const tableViewS
 {
 }
 
-QString TableViewColumn::getTitle() const
-{
-    return QString("Title");
-}
-
 TableViewColumn* TableViewColumnFactory::getColumn(const Digikam::TableViewColumnConfiguration& columnConfiguration)
 {
-    const QString& columnId = columnConfiguration.columnId;
-
-    /// @todo extract column ids from column class
-    if (columnId=="file-properties")
+    TableViewColumn* newColumn = 0;
+    if (TableViewColumns::ColumnThumbnail::CreateFromConfiguration(s, columnConfiguration, &newColumn, this))
     {
-        return new TableViewColumns::ColumnFileProperties(s, columnConfiguration, this);
+        return newColumn;
     }
-    else if (columnId=="item-properties")
+    if (TableViewColumns::ColumnDigikamProperties::CreateFromConfiguration<TableViewColumns::ColumnDigikamProperties>(s, columnConfiguration, &newColumn, this))
     {
-        return new TableViewColumns::ColumnItemProperties(s, columnConfiguration, this);
+        return newColumn;
     }
-    else if (columnId=="digikam-properties")
+    if (TableViewColumns::ColumnPhotoProperties::CreateFromConfiguration<TableViewColumns::ColumnPhotoProperties>(s, columnConfiguration, &newColumn, this))
     {
-        return new TableViewColumns::ColumnDigikamProperties(s, columnConfiguration, this);
+        return newColumn;
     }
-    else if (columnId=="geo-properties")
+    if (TableViewColumns::ColumnFileProperties::CreateFromConfiguration<TableViewColumns::ColumnFileProperties>(s, columnConfiguration, &newColumn, this))
     {
-        return new TableViewColumns::ColumnGeoProperties(s, columnConfiguration, this);
+        return newColumn;
     }
-    else if (columnId=="thumbnail")
+    if (TableViewColumns::ColumnGeoProperties::CreateFromConfiguration<TableViewColumns::ColumnGeoProperties>(s, columnConfiguration, &newColumn, this))
     {
-        return new TableViewColumns::ColumnThumbnail(s, columnConfiguration, this);
+        return newColumn;
     }
-    else if (columnId=="photo-properties")
+    if (TableViewColumns::ColumnItemProperties::CreateFromConfiguration<TableViewColumns::ColumnItemProperties>(s, columnConfiguration, &newColumn, this))
     {
-        return new TableViewColumns::ColumnPhotoProperties(s, columnConfiguration, this);
+        return newColumn;
     }
 
     return 0;

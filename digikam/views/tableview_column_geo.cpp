@@ -66,12 +66,12 @@ namespace TableViewColumns
 ColumnGeoProperties::ColumnGeoProperties(
         TableViewShared* const tableViewShared,
         const TableViewColumnConfiguration& pConfiguration,
+        const SubColumn pSubColumn,
         QObject* const parent)
   : TableViewColumn(tableViewShared, pConfiguration, parent),
-    subColumn(SubColumnCoordinates)
+    subColumn(pSubColumn)
 {
-    const QString& subColumnSetting = configuration.getSetting("subcolumn");
-    subColumn = getSubColumnIndex<ColumnGeoProperties>(subColumnSetting, SubColumnCoordinates);
+
 }
 
 ColumnGeoProperties::~ColumnGeoProperties()
@@ -82,8 +82,8 @@ ColumnGeoProperties::~ColumnGeoProperties()
 QStringList ColumnGeoProperties::getSubColumns()
 {
     QStringList columns;
-    columns << QLatin1String("hascoordinates") << QLatin1String("coordinates")
-            << QLatin1String("altitude");
+    columns << QLatin1String("geohascoordinates") << QLatin1String("geocoordinates")
+            << QLatin1String("geoaltitude");
 
     return columns;
 }
@@ -94,15 +94,15 @@ TableViewColumnDescription ColumnGeoProperties::getDescription()
     description.setIcon("applications-internet");
 
     description.addSubColumn(
-        TableViewColumnDescription("geo-properties", i18n("Geotagged"), "subcolumn", "hascoordinates")
+        TableViewColumnDescription("geohascoordinates", i18n("Geotagged"))
     );
 
     description.addSubColumn(
-        TableViewColumnDescription("geo-properties", i18n("Coordinates"), "subcolumn", "coordinates")
+        TableViewColumnDescription("geocoordinates", i18n("Coordinates"))
     );
 
     description.addSubColumn(
-        TableViewColumnDescription("geo-properties", i18n("Altitude"), "subcolumn", "altitude")
+        TableViewColumnDescription("geoaltitude", i18n("Altitude"))
     );
 
     return description;
@@ -245,8 +245,7 @@ ColumnGeoConfigurationWidget::ColumnGeoConfigurationWidget(
     subColumn(ColumnGeoProperties::SubColumnHasCoordinates),
     selectorAltitudeUnit(0)
 {
-    const QString& subColumnSetting = configuration.getSetting("subcolumn");
-    subColumn = ColumnGeoProperties::getSubColumnIndex<ColumnGeoProperties>(subColumnSetting, ColumnGeoProperties::SubColumnHasCoordinates);
+    ColumnGeoProperties::getSubColumnIndex<ColumnGeoProperties>(configuration.columnId, &subColumn);
 
     switch (subColumn)
     {

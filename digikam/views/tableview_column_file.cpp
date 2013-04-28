@@ -43,15 +43,15 @@ namespace TableViewColumns
 {
 
 ColumnFileProperties::ColumnFileProperties(
-    TableViewShared* const tableViewShared,
-    const TableViewColumnConfiguration& pConfiguration,
-    QObject* const parent)
-  : TableViewColumn(tableViewShared,
-    pConfiguration, parent),
-    subColumn(SubColumnName)
+        TableViewShared* const tableViewShared,
+        const TableViewColumnConfiguration& pConfiguration,
+        const SubColumn pSubColumn,
+        QObject* const parent
+    )
+  : TableViewColumn(tableViewShared, pConfiguration, parent),
+    subColumn(pSubColumn)
 {
-    const QString& subColumnSetting = configuration.getSetting("subcolumn");
-    subColumn = getSubColumnIndex<ColumnFileProperties>(subColumnSetting, SubColumnName);
+
 }
 
 TableViewColumnDescription ColumnFileProperties::getDescription()
@@ -60,18 +60,26 @@ TableViewColumnDescription ColumnFileProperties::getDescription()
     description.setIcon("dialog-information");
 
     description.addSubColumn(
-        TableViewColumnDescription("file-properties", i18n("Filename"), "subcolumn", "name")
+        TableViewColumnDescription("filename", i18n("Filename"))
     );
 
     description.addSubColumn(
-        TableViewColumnDescription("file-properties", i18n("Size"), "subcolumn", "size")
+        TableViewColumnDescription("filesize", i18n("Size"))
     );
 
     description.addSubColumn(
-        TableViewColumnDescription("file-properties", i18n("Last modified"), "subcolumn", "lastmodified")
+        TableViewColumnDescription("filelastmodified", i18n("Last modified"))
     );
 
     return description;
+}
+
+QStringList ColumnFileProperties::getSubColumns()
+{
+    QStringList columns;
+    columns << QLatin1String("filename") << QLatin1String("filesize") << QLatin1String("filelastmodified");
+
+    return columns;
 }
 
 QString ColumnFileProperties::getTitle() const
@@ -196,8 +204,7 @@ ColumnFileConfigurationWidget::ColumnFileConfigurationWidget(
     subColumn(ColumnFileProperties::SubColumnName),
     selectorSizeType(0)
 {
-    const QString& subColumnSetting = configuration.getSetting("subcolumn");
-    subColumn = ColumnFileProperties::getSubColumnIndex<ColumnFileProperties>(subColumnSetting, ColumnFileProperties::SubColumnName);
+    ColumnFileProperties::getSubColumnIndex<ColumnFileProperties>(configuration.columnId, &subColumn);
 
     switch (subColumn)
     {
@@ -232,14 +239,6 @@ TableViewColumnConfiguration ColumnFileConfigurationWidget::getNewConfiguration(
     configuration.columnSettings.insert("format", formatKey);
 
     return configuration;
-}
-
-QStringList ColumnFileProperties::getSubColumns()
-{
-    QStringList columns;
-    columns << QLatin1String("name") << QLatin1String("size") << QLatin1String("lastmodified");
-
-    return columns;
 }
 
 void ColumnFileProperties::setConfiguration(const TableViewColumnConfiguration& newConfiguration)

@@ -48,12 +48,12 @@ namespace TableViewColumns
 ColumnPhotoProperties::ColumnPhotoProperties(
         TableViewShared* const tableViewShared,
         const TableViewColumnConfiguration& pConfiguration,
+        const SubColumn pSubColumn,
         QObject* const parent)
   : TableViewColumn(tableViewShared, pConfiguration, parent),
-    subColumn(SubColumnCameraMaker)
+    subColumn(pSubColumn)
 {
-    const QString& subColumnSetting = configuration.getSetting("subcolumn");
-    subColumn = getSubColumnIndex<ColumnPhotoProperties>(subColumnSetting, SubColumnCameraMaker);
+
 }
 
 ColumnPhotoProperties::~ColumnPhotoProperties()
@@ -79,43 +79,43 @@ TableViewColumnDescription ColumnPhotoProperties::getDescription()
     description.setIcon("camera-photo");
 
     description.addSubColumn(
-        TableViewColumnDescription("photo-properties", i18n("Camera maker"), "subcolumn", "cameramaker")
+        TableViewColumnDescription("cameramaker", i18n("Camera maker"))
     );
 
     description.addSubColumn(
-        TableViewColumnDescription("photo-properties", i18n("Camera model"), "subcolumn", "cameramodel")
+        TableViewColumnDescription("cameramodel", i18n("Camera model"))
     );
 
     description.addSubColumn(
-        TableViewColumnDescription("photo-properties", i18n("Lens"), "subcolumn", "lens")
+        TableViewColumnDescription("lens", i18n("Lens"))
     );
 
     description.addSubColumn(
-        TableViewColumnDescription("photo-properties", i18n("Aperture"), "subcolumn", "aperture")
+        TableViewColumnDescription("aperture", i18n("Aperture"))
     );
 
     description.addSubColumn(
-        TableViewColumnDescription("photo-properties", i18n("Focal length"), "subcolumn", "focal")
+        TableViewColumnDescription("focal", i18n("Focal length"))
     );
 
     description.addSubColumn(
-        TableViewColumnDescription("photo-properties", i18n("Exposure"), "subcolumn", "exposure")
+        TableViewColumnDescription("exposure", i18n("Exposure"))
     );
 
     description.addSubColumn(
-        TableViewColumnDescription("photo-properties", i18n("Sensitivity"), "subcolumn", "sensitivity")
+        TableViewColumnDescription("sensitivity", i18n("Sensitivity"))
     );
 
     description.addSubColumn(
-        TableViewColumnDescription("photo-properties", i18n("Mode/program"), "subcolumn", "modeprogram")
+        TableViewColumnDescription("modeprogram", i18n("Mode/program"))
     );
 
     description.addSubColumn(
-        TableViewColumnDescription("photo-properties", i18n("Flash"), "subcolumn", "flash")
+        TableViewColumnDescription("flash", i18n("Flash"))
     );
 
     description.addSubColumn(
-        TableViewColumnDescription("photo-properties", i18n("White balance"), "subcolumn", "whitebalance")
+        TableViewColumnDescription("whitebalance", i18n("White balance"))
     );
 
     return description;
@@ -390,8 +390,7 @@ ColumnPhotoConfigurationWidget::ColumnPhotoConfigurationWidget(
     selectorExposureTimeFormat(0),
     selectorExposureTimeUnit(0)
 {
-    const QString& subColumnSetting = configuration.getSetting("subcolumn");
-    subColumn = ColumnPhotoProperties::getSubColumnIndex<ColumnPhotoProperties>(subColumnSetting, ColumnPhotoProperties::SubColumnExposure);
+    ColumnPhotoProperties::getSubColumnIndex<ColumnPhotoProperties>(configuration.columnId, &subColumn);
 
     switch (subColumn)
     {

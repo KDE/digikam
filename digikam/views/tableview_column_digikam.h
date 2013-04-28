@@ -62,8 +62,10 @@ public:
     explicit ColumnDigikamProperties(
             TableViewShared* const tableViewShared,
             const TableViewColumnConfiguration& pConfiguration,
+            const SubColumn pSubColumn,
             QObject* const parent = 0
         );
+
     virtual ~ColumnDigikamProperties();
 
     static TableViewColumnDescription getDescription();
