@@ -86,20 +86,17 @@ TableViewColumn* TableViewColumnFactory::getColumn(const Digikam::TableViewColum
     {
         return newColumn;
     }
-
-    const QString& columnId = columnConfiguration.columnId;
-    /// @todo extract column ids from column class
-    if (columnId=="file-properties")
+    if (TableViewColumns::ColumnFileProperties::CreateFromConfiguration<TableViewColumns::ColumnFileProperties>(s, columnConfiguration, &newColumn, this))
     {
-        return new TableViewColumns::ColumnFileProperties(s, columnConfiguration, this);
+        return newColumn;
     }
-    else if (columnId=="item-properties")
+    if (TableViewColumns::ColumnGeoProperties::CreateFromConfiguration<TableViewColumns::ColumnGeoProperties>(s, columnConfiguration, &newColumn, this))
     {
-        return new TableViewColumns::ColumnItemProperties(s, columnConfiguration, this);
+        return newColumn;
     }
-    else if (columnId=="geo-properties")
+    if (TableViewColumns::ColumnItemProperties::CreateFromConfiguration<TableViewColumns::ColumnItemProperties>(s, columnConfiguration, &newColumn, this))
     {
-        return new TableViewColumns::ColumnGeoProperties(s, columnConfiguration, this);
+        return newColumn;
     }
 
     return 0;

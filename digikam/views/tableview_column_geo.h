@@ -57,6 +57,7 @@ public:
     explicit ColumnGeoProperties(
             TableViewShared* const tableViewShared,
             const TableViewColumnConfiguration& pConfiguration,
+            const SubColumn pSubColumn,
             QObject* const parent = 0
         );
     virtual ~ColumnGeoProperties();
