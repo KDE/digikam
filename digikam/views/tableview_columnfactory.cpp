@@ -73,8 +73,17 @@ QString TableViewColumn::getTitle() const
 
 TableViewColumn* TableViewColumnFactory::getColumn(const Digikam::TableViewColumnConfiguration& columnConfiguration)
 {
-    const QString& columnId = columnConfiguration.columnId;
+    TableViewColumn* newColumn = 0;
+    if (TableViewColumns::ColumnThumbnail::CreateFromConfiguration(s, columnConfiguration, &newColumn, this))
+    {
+        return newColumn;
+    }
+    if (TableViewColumns::ColumnDigikamProperties::CreateFromConfiguration(s, columnConfiguration, &newColumn, this))
+    {
+        return newColumn;
+    }
 
+    const QString& columnId = columnConfiguration.columnId;
     /// @todo extract column ids from column class
     if (columnId=="file-properties")
     {
@@ -84,17 +93,9 @@ TableViewColumn* TableViewColumnFactory::getColumn(const Digikam::TableViewColum
     {
         return new TableViewColumns::ColumnItemProperties(s, columnConfiguration, this);
     }
-    else if (columnId=="digikam-properties")
-    {
-        return new TableViewColumns::ColumnDigikamProperties(s, columnConfiguration, this);
-    }
     else if (columnId=="geo-properties")
     {
         return new TableViewColumns::ColumnGeoProperties(s, columnConfiguration, this);
-    }
-    else if (columnId=="thumbnail")
-    {
-        return new TableViewColumns::ColumnThumbnail(s, columnConfiguration, this);
     }
     else if (columnId=="photo-properties")
     {

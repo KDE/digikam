@@ -222,6 +222,18 @@ public:
         return typename columnClass::SubColumn(index);
     }
 
+    template<typename columnClass> static bool getSubColumnIndex(const QString& subColumnId, typename columnClass::SubColumn* const subColumn)
+    {
+        const int index = columnClass::getSubColumns().indexOf(subColumnId);
+        if (index<0)
+        {
+            return false;
+        }
+
+        *subColumn = typename columnClass::SubColumn(index);
+        return true;
+    }
+
 Q_SIGNALS:
     void signalDataChanged(const qlonglong imageId);
     void signalAllDataChanged();

@@ -45,12 +45,12 @@ namespace TableViewColumns
 ColumnDigikamProperties::ColumnDigikamProperties(
         TableViewShared* const tableViewShared,
         const TableViewColumnConfiguration& pConfiguration,
+        const SubColumn pSubColumn,
         QObject* const parent)
   : TableViewColumn(tableViewShared, pConfiguration, parent),
-    subColumn(SubColumnRating)
+    subColumn(pSubColumn)
 {
-    const QString& subColumnSetting = configuration.getSetting("subcolumn");
-    subColumn = getSubColumnIndex<ColumnDigikamProperties>(subColumnSetting, SubColumnRating);
+
 }
 
 ColumnDigikamProperties::~ColumnDigikamProperties()
@@ -58,12 +58,30 @@ ColumnDigikamProperties::~ColumnDigikamProperties()
 
 }
 
+bool ColumnDigikamProperties::CreateFromConfiguration(
+            TableViewShared* const tableViewShared,
+            const TableViewColumnConfiguration& pConfiguration,
+            TableViewColumn** const pNewColumn,
+            QObject* const parent
+        )
+{
+    SubColumn subColumn;
+    if (!getSubColumnIndex<ColumnDigikamProperties>(pConfiguration.columnId, &subColumn))
+    {
+        return false;
+    }
+
+    *pNewColumn = new ColumnDigikamProperties(tableViewShared, pConfiguration, subColumn, parent);
+
+    return true;
+}
+
 QStringList ColumnDigikamProperties::getSubColumns()
 {
     QStringList columns;
-    columns << QLatin1String("rating") << QLatin1String("picklabel")
-            << QLatin1String("colorlabel") << QLatin1String("title")
-            << QLatin1String("caption");
+    columns << QLatin1String("digikam-rating") << QLatin1String("digikam-picklabel")
+            << QLatin1String("digikam-colorlabel") << QLatin1String("digikam-title")
+            << QLatin1String("digikam-caption");
 
     return columns;
 }
@@ -74,27 +92,27 @@ TableViewColumnDescription ColumnDigikamProperties::getDescription()
     description.setIcon("imagecomment");
 
     description.addSubColumn(
-        TableViewColumnDescription("digikam-properties", i18n("Rating"), "subcolumn", "rating")
+        TableViewColumnDescription("digikam-rating", i18n("Rating"))
             .setIcon("draw-star")
     );
 
     description.addSubColumn(
-        TableViewColumnDescription("digikam-properties", i18n("Pick label"), "subcolumn", "picklabel")
+        TableViewColumnDescription("digikam-picklabel", i18n("Pick label"))
             .setIcon("flag-red")
     );
 
     description.addSubColumn(
-        TableViewColumnDescription("digikam-properties", i18n("Color label"), "subcolumn", "colorlabel")
+        TableViewColumnDescription("digikam-colorlabel", i18n("Color label"))
     );
 
     /// @todo This column will show the 'default' title. Add a configuration dialog to choose different languages.
     description.addSubColumn(
-        TableViewColumnDescription("digikam-properties", i18n("Title"), "subcolumn", "title")
+        TableViewColumnDescription("digikam-title", i18n("Title"))
     );
 
     /// @todo This column will show the 'default' caption. Add a configuration dialog to choose different languages.
     description.addSubColumn(
-        TableViewColumnDescription("digikam-properties", i18n("Caption"), "subcolumn", "caption")
+        TableViewColumnDescription("digikam-caption", i18n("Caption"))
     );
 
     return description;
