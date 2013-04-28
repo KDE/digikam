@@ -189,7 +189,7 @@ public:
     virtual void setConfiguration(const TableViewColumnConfiguration& newConfiguration);
     virtual TableViewColumnConfigurationWidget* getConfigurationWidget(QWidget* const parentWidget) const;
     virtual ColumnFlags getColumnFlags() const;
-    virtual QString getTitle() const;
+    virtual QString getTitle() const = 0;
 
     virtual QVariant data(TableViewModel::Item* const item, const int role) const;
     virtual ColumnCompareResult compare(TableViewModel::Item* const itemA, TableViewModel::Item* const itemB) const;

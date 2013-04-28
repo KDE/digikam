@@ -66,11 +66,6 @@ TableViewColumnFactory::TableViewColumnFactory(TableViewShared* const tableViewS
 {
 }
 
-QString TableViewColumn::getTitle() const
-{
-    return QString("Title");
-}
-
 TableViewColumn* TableViewColumnFactory::getColumn(const Digikam::TableViewColumnConfiguration& columnConfiguration)
 {
     TableViewColumn* newColumn = 0;
