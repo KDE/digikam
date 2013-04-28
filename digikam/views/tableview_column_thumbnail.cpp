@@ -65,9 +65,26 @@ ColumnThumbnail::~ColumnThumbnail()
 
 }
 
+bool ColumnThumbnail::CreateFromConfiguration(
+            TableViewShared* const tableViewShared,
+            const TableViewColumnConfiguration& pConfiguration,
+            TableViewColumn** const pNewColumn,
+            QObject* const parent
+        )
+{
+    if (pConfiguration.columnId!=QLatin1String("thumbnail"))
+    {
+        return false;
+    }
+
+    *pNewColumn = new ColumnThumbnail(tableViewShared, pConfiguration, parent);
+
+    return true;
+}
+
 TableViewColumnDescription ColumnThumbnail::getDescription()
 {
-    return TableViewColumnDescription(QLatin1String("thumbnail"), QLatin1String("Thumbnail"));
+    return TableViewColumnDescription(QLatin1String("thumbnail"), i18n("Thumbnail"));
 }
 
 TableViewColumn::ColumnFlags ColumnThumbnail::getColumnFlags() const

@@ -593,12 +593,33 @@ void ImageWindow::slotThumbBarImageSelected(const ImageInfo& info)
 
 void ImageWindow::slotDroppedOnThumbbar(const QList<ImageInfo>& infos)
 {
+    // Check whether dropped image list is empty
+
     if (infos.isEmpty())
     {
         return;
     }
 
-    loadImageInfos(infos, infos.first(), QString());
+    // Create new list and images that are not present currently in the thumbbar
+
+    QList<ImageInfo> toAdd;
+
+    foreach(ImageInfo it, infos)
+    {
+        QModelIndex index(d->imageFilterModel->indexForImageInfo(it));
+
+        if( !index.isValid() )
+        {
+            toAdd.append(it);
+        }
+    }
+
+    // Loading images if new images are dropped
+
+    if(!toAdd.isEmpty())
+    {
+        loadImageInfos(toAdd, toAdd.first(), QString());
+    }
 }
 
 void ImageWindow::slotFileOriginChanged(const QString& filePath)
