@@ -58,24 +58,6 @@ ColumnDigikamProperties::~ColumnDigikamProperties()
 
 }
 
-bool ColumnDigikamProperties::CreateFromConfiguration(
-            TableViewShared* const tableViewShared,
-            const TableViewColumnConfiguration& pConfiguration,
-            TableViewColumn** const pNewColumn,
-            QObject* const parent
-        )
-{
-    SubColumn subColumn;
-    if (!getSubColumnIndex<ColumnDigikamProperties>(pConfiguration.columnId, &subColumn))
-    {
-        return false;
-    }
-
-    *pNewColumn = new ColumnDigikamProperties(tableViewShared, pConfiguration, subColumn, parent);
-
-    return true;
-}
-
 QStringList ColumnDigikamProperties::getSubColumns()
 {
     QStringList columns;

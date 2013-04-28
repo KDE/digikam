@@ -234,6 +234,24 @@ public:
         return true;
     }
 
+    template<typename columnClass> static bool CreateFromConfiguration(
+            TableViewShared* const tableViewShared,
+            const TableViewColumnConfiguration& pConfiguration,
+            TableViewColumn** const pNewColumn,
+            QObject* const parent
+        )
+    {
+        typename columnClass::SubColumn subColumn;
+        if (!getSubColumnIndex<columnClass>(pConfiguration.columnId, &subColumn))
+        {
+            return false;
+        }
+
+        *pNewColumn = new columnClass(tableViewShared, pConfiguration, subColumn, parent);
+
+        return true;
+    }
+
 Q_SIGNALS:
     void signalDataChanged(const qlonglong imageId);
     void signalAllDataChanged();

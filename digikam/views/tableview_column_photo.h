@@ -62,6 +62,7 @@ public:
     };
 
 private:
+
     SubColumn subColumn;
 
 public:
@@ -69,8 +70,10 @@ public:
     explicit ColumnPhotoProperties(
             TableViewShared* const tableViewShared,
             const TableViewColumnConfiguration& pConfiguration,
+            const SubColumn pSubColumn,
             QObject* const parent = 0
         );
+
     virtual ~ColumnPhotoProperties();
 
     static TableViewColumnDescription getDescription();

@@ -78,7 +78,11 @@ TableViewColumn* TableViewColumnFactory::getColumn(const Digikam::TableViewColum
     {
         return newColumn;
     }
-    if (TableViewColumns::ColumnDigikamProperties::CreateFromConfiguration(s, columnConfiguration, &newColumn, this))
+    if (TableViewColumns::ColumnDigikamProperties::CreateFromConfiguration<TableViewColumns::ColumnDigikamProperties>(s, columnConfiguration, &newColumn, this))
+    {
+        return newColumn;
+    }
+    if (TableViewColumns::ColumnPhotoProperties::CreateFromConfiguration<TableViewColumns::ColumnPhotoProperties>(s, columnConfiguration, &newColumn, this))
     {
         return newColumn;
     }
@@ -96,10 +100,6 @@ TableViewColumn* TableViewColumnFactory::getColumn(const Digikam::TableViewColum
     else if (columnId=="geo-properties")
     {
         return new TableViewColumns::ColumnGeoProperties(s, columnConfiguration, this);
-    }
-    else if (columnId=="photo-properties")
-    {
-        return new TableViewColumns::ColumnPhotoProperties(s, columnConfiguration, this);
     }
 
     return 0;

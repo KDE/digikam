@@ -57,6 +57,8 @@ public:
 private:
     SubColumn subColumn;
 
+public:
+
     explicit ColumnDigikamProperties(
             TableViewShared* const tableViewShared,
             const TableViewColumnConfiguration& pConfiguration,
@@ -64,16 +66,7 @@ private:
             QObject* const parent = 0
         );
 
-public:
-
     virtual ~ColumnDigikamProperties();
-
-    static bool CreateFromConfiguration(
-            TableViewShared* const tableViewShared,
-            const TableViewColumnConfiguration& pConfiguration,
-            TableViewColumn** const pNewColumn,
-            QObject* const parent = 0
-        );
 
     static TableViewColumnDescription getDescription();
     static QStringList getSubColumns();
