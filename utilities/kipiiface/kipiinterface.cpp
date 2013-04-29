@@ -435,6 +435,27 @@ void KipiInterface::progressCompleted(const QString& id)
     }
 }
 
+#if KIPI_VERSION >= 0x020100
+void KipiInterface::aboutToEdit(const KUrl& url, KIPI::EditHints hints)
+{
+    if (hints == KIPI::HintMetadataOnlyChange)
+    {
+        ImageInfo info(url.toLocalFile());
+        ScanController::instance()->beginFileMetadataWrite(info);
+    }
+}
+
+void KipiInterface::editingFinished(const KUrl& url, KIPI::EditHints hints)
+{
+    if ((hints & ~KIPI::HintEditAborted) == KIPI::HintMetadataOnlyChange)
+    {
+        ImageInfo info(url.toLocalFile());
+        ScanController::instance()->finishFileMetadataWrite(info, !(hints & KIPI::HintEditAborted));
+    }
+}
+#endif
+
+
 // ---------------------------------------------------------------------------------------
 
 class KipiInterfaceFileReadWriteLock : public KIPI::FileReadWriteLock

@@ -40,6 +40,7 @@
 // LibKIPI includes
 
 #include <libkipi/interface.h>
+#include <libkipi/version.h>
 
 // Local includes
 
@@ -95,6 +96,11 @@ public:
     void    progressCompleted(const QString& id);
 
     KIPI::FileReadWriteLock* createReadWriteLock(const KUrl& url) const;
+
+    #if KIPI_VERSION >= 0x020100
+    void aboutToEdit(const KUrl& url, KIPI::EditHints hints);
+    void editingFinished(const KUrl& url, KIPI::EditHints hints);
+    #endif
 
 public Q_SLOTS:
 
