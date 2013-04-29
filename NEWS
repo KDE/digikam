@@ -6,9 +6,9 @@ NEW FEATURES:
 General     : Remove internal clapack library code. Set only an optional and external dependency to eigen3.
 General     : New tool to auto-crop image based on black hole borders detection.
 AlbumGUI    : New "Table-View" view mode dedictaed to show album items in a list view.
-AlbumGUI    : New Aspect Ratio information displayed in icon-view and tooltips.
-AlbumGUI    : New filter based on Aspect Ration information.
-Searches    : New search tool to find items based on Aspect Ration Information.
+AlbumGUI    : New Aspect-Ratio information displayed in icon-view and tooltips.
+AlbumGUI    : New filter based on Aspect-Ratio information.
+Searches    : New search tool to find items based on Aspect-Ratio Information.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
