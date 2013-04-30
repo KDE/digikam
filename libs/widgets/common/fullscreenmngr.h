@@ -44,13 +44,20 @@ class KToggleFullScreenAction;
 namespace Digikam
 {
 
+enum FullScreenOptions
+{
+    FS_TOOLBAR  = 0x00000001,
+    FS_THUMBBAR = 0x00000002,
+    FS_DEFAULT  = FS_TOOLBAR | FS_THUMBBAR    // Image Editor config.
+};
+
 /** Data container to use in managed window.
  */
 class DIGIKAM_EXPORT FullScreenMngr
 {
 public:
 
-    explicit FullScreenMngr();
+    explicit FullScreenMngr(int options);
     virtual ~FullScreenMngr();
 
     /** Set instance of managed window
@@ -80,7 +87,7 @@ public:
 
 public:
 
-    /** Settigns taken from managed window configuration to handle toolbar visibility  in full-screen mode
+    /** Settings taken from managed window configuration to handle toolbar visibility  in full-screen mode
      */
     bool m_fullScreenHideToolBar;
 
@@ -98,14 +105,6 @@ private:
 
 class DIGIKAM_EXPORT FullScreenSettings : public QWidget
 {
-
-public:
-
-    enum FullScreenOptions
-    {
-        TOOLBAR  = 0x00000001,
-        THUMBBAR = 0x00000002
-    };
 
 public:
 

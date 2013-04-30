@@ -206,7 +206,7 @@ public:
 
     QList<int>                 fullscreenSizeBackup;
 
-    FullScreenMngr             fullScreenMngr;
+    FullScreenMngr*            fullScreenMngr;
 };
 
 const QString EditorWindow::Private::configAutoZoomEntry("AutoZoom");

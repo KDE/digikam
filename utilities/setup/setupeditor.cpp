@@ -145,8 +145,7 @@ SetupEditor::SetupEditor(QWidget* const parent)
     d->backgroundColor->setWhatsThis(i18n("Customize the background color to use "
                                           "in the image editor area."));
 
-    d->fullScreenSettings            = new FullScreenSettings(FullScreenSettings::TOOLBAR | FullScreenSettings::THUMBBAR,
-                                                              interfaceOptionsGroup);
+    d->fullScreenSettings            = new FullScreenSettings(FS_DEFAULT, interfaceOptionsGroup);
 
     gLayout1->addWidget(d->themebackgroundColor);
     gLayout1->addWidget(d->colorBox);
@@ -291,10 +290,10 @@ void SetupEditor::slotExpoSettingsChanged()
     prm.underExposureColor     = d->underExposureColor->color();
     prm.overExposureColor      = d->overExposureColor->color();
 
-    QPixmap pix          = d->preview.convertToPixmap();
+    QPixmap pix                = d->preview.convertToPixmap();
     QPainter p(&pix);
-    QImage pureColorMask = d->preview.pureColorMask(&prm);
-    QPixmap pixMask      = QPixmap::fromImage(pureColorMask);
+    QImage pureColorMask       = d->preview.pureColorMask(&prm);
+    QPixmap pixMask            = QPixmap::fromImage(pureColorMask);
     p.drawPixmap(0, 0, pixMask, 0, 0, pixMask.width(), pixMask.height());
 
     d->expoPreview->setPixmap(pix);

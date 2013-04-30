@@ -204,8 +204,8 @@ EditorWindow::EditorWindow(const char* const name)
     d->toolIface               = new EditorToolIface(this);
     m_IOFileSettings           = new IOFileSettings();
     d->waitingLoop             = new QEventLoop(this);
-
-    d->fullScreenMngr.setManagedWindow(this);
+    d->fullScreenMngr          = new FullScreenMngr(FS_DEFAULT);
+    d->fullScreenMngr->setManagedWindow(this);
 }
 
 EditorWindow::~EditorWindow()
@@ -214,6 +214,7 @@ EditorWindow::~EditorWindow()
     delete m_IOFileSettings;
     delete d->toolIface;
     delete d->exposureSettings;
+    delete d->fullScreenMngr;
     delete d;
 }
 
@@ -507,7 +508,7 @@ void EditorWindow::setupStandardActions()
 
     // --------------------------------------------------------
 
-    QAction* const fullScreenAction = d->fullScreenMngr.createFullScreenAction("editorwindow_fullscreen");
+    QAction* const fullScreenAction = d->fullScreenMngr->createFullScreenAction("editorwindow_fullscreen");
     connect(fullScreenAction, SIGNAL(toggled(bool)), this, SLOT(slotToggleFullScreen(bool)));
 
     d->slideShowAction = new KAction(KIcon("view-presentation"), i18n("Slideshow"), this);
@@ -922,7 +923,7 @@ void EditorWindow::readStandardSettings()
     }
 
     // Restore full screen Mode
-    d->fullScreenMngr.readSettings(group);
+    d->fullScreenMngr->readSettings(group);
 
     // Restore Auto zoom action
     bool autoZoom = group.readEntry(d->configAutoZoomEntry, true);
@@ -950,7 +951,7 @@ void EditorWindow::applyStandardSettings()
 
     d->legacyUpdateSplitterState(group);
     m_splitter->restoreState(group);
-    d->fullScreenMngr.readSettings(group);
+    d->fullScreenMngr->readSettings(group);
 
     slotThemeChanged();
 
@@ -1062,7 +1063,7 @@ void EditorWindow::saveStandardSettings()
     group.writeEntry(d->configUnderExposureIndicatorEntry, d->exposureSettings->underExposureIndicator);
     group.writeEntry(d->configOverExposureIndicatorEntry, d->exposureSettings->overExposureIndicator);
     d->previewToolBar->writeSettings(group);
-    d->fullScreenMngr.saveSettings(group);
+    d->fullScreenMngr->saveSettings(group);
     config->sync();
 }
 
@@ -2958,7 +2959,7 @@ void EditorWindow::addAction2ContextMenu(const QString& actionName, bool addDisa
 
 void EditorWindow::slotToggleFullScreen(bool b)
 {
-    d->fullScreenMngr.switchWindowToFullScreen(b);
+    d->fullScreenMngr->switchWindowToFullScreen(b);
 
     if (!b)
     {
@@ -2968,7 +2969,7 @@ void EditorWindow::slotToggleFullScreen(bool b)
 
         rightSideBar()->restore(QList<QWidget*>() << thumbBar(), d->fullscreenSizeBackup);
 
-        if (d->fullScreenMngr.m_fullScreenHideThumbBar)
+        if (d->fullScreenMngr->m_fullScreenHideThumbBar)
         {
             thumbBar()->restoreVisibility();
         }
@@ -2983,7 +2984,7 @@ void EditorWindow::slotToggleFullScreen(bool b)
         // in horizontal mode thumbbar wont be member of the splitter, it is just ignored then
         rightSideBar()->backup(QList<QWidget*>() << thumbBar(), &d->fullscreenSizeBackup);
 
-        if (d->fullScreenMngr.m_fullScreenHideThumbBar)
+        if (d->fullScreenMngr->m_fullScreenHideThumbBar)
         {
             thumbBar()->hide();
         }
@@ -2994,7 +2995,7 @@ void EditorWindow::keyPressEvent(QKeyEvent* e)
 {
     if (e->key() == Qt::Key_Escape)
     {
-        d->fullScreenMngr.escapePressed();
+        d->fullScreenMngr->escapePressed();
     }
 }
 
