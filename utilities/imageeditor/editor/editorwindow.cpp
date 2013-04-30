@@ -507,9 +507,8 @@ void EditorWindow::setupStandardActions()
 
     // --------------------------------------------------------
 
-    d->fullScreenMngr.m_fullScreenAction = KStandardAction::fullScreen(0, 0, this, this);
-    actionCollection()->addAction("editorwindow_fullscreen", d->fullScreenMngr.m_fullScreenAction);
-    connect(d->fullScreenMngr.m_fullScreenAction, SIGNAL(toggled(bool)), this, SLOT(slotToggleFullScreen(bool)));
+    QAction* const fullScreenAction = d->fullScreenMngr.createFullScreenAction("editorwindow_fullscreen");
+    connect(fullScreenAction, SIGNAL(toggled(bool)), this, SLOT(slotToggleFullScreen(bool)));
 
     d->slideShowAction = new KAction(KIcon("view-presentation"), i18n("Slideshow"), this);
     d->slideShowAction->setShortcut(KShortcut(Qt::Key_F9));

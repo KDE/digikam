@@ -25,6 +25,8 @@
 
 #include <QString>
 #include <QList>
+#include <QVBoxLayout>
+#include <QCheckBox>
 
 // KDE includes
 
@@ -35,6 +37,10 @@
 #include <kmenubar.h>
 #include <kstatusbar.h>
 #include <ktoolbar.h>
+#include <kstandardaction.h>
+#include <kactioncollection.h>
+#include <kdialog.h>
+#include <klocale.h>
 
 // Local includes
 
@@ -50,6 +56,7 @@ public:
     Private()
     {
         win                    = 0;
+        fullScreenAction       = 0;
         removeFullScreenButton = false;
     }
 
@@ -62,6 +69,9 @@ public:
 
     /** Windo instance to manage */
     KXmlGuiWindow*           win;
+
+    /** Action plug in managed window to switch fullscreen state*/
+    KToggleFullScreenAction* fullScreenAction;
 
     /** Used by switchWindowToFullScreen() to manage state of full-screen button on managed window
      */
@@ -103,7 +113,6 @@ FullScreenMngr::FullScreenMngr()
 {
     m_fullScreenHideToolBar  = false;
     m_fullScreenHideThumbBar = true;
-    m_fullScreenAction       = 0;
 }
 
 FullScreenMngr::~FullScreenMngr()
@@ -116,6 +125,13 @@ void FullScreenMngr::setManagedWindow(KXmlGuiWindow* const win)
     d->win = win;
 }
 
+QAction* FullScreenMngr::createFullScreenAction(const QString& name)
+{
+    d->fullScreenAction = KStandardAction::fullScreen(0, 0, d->win, d->win);
+    d->win->actionCollection()->addAction(name, d->fullScreenAction);
+    return d->fullScreenAction;
+}
+
 void FullScreenMngr::readSettings(const KConfigGroup& group)
 {
     m_fullScreenHideToolBar  = group.readEntry(d->configFullScreenHideToolBarEntry,  false);
@@ -123,8 +139,8 @@ void FullScreenMngr::readSettings(const KConfigGroup& group)
 
     if (group.readEntry(d->configFullScreenEntry, false))
     {
-        if (m_fullScreenAction)
-            m_fullScreenAction->activate(QAction::Trigger);
+        if (d->fullScreenAction)
+            d->fullScreenAction->activate(QAction::Trigger);
     }
 }
 
@@ -133,8 +149,8 @@ void FullScreenMngr::saveSettings(KConfigGroup& group)
     group.writeEntry(d->configFullScreenHideToolBarEntry,  m_fullScreenHideToolBar);
     group.writeEntry(d->configFullScreenHideThumbBarEntry, m_fullScreenHideThumbBar);
 
-    if (m_fullScreenAction)
-        group.writeEntry(d->configFullScreenEntry, m_fullScreenAction->isChecked());
+    if (d->fullScreenAction)
+        group.writeEntry(d->configFullScreenEntry, d->fullScreenAction->isChecked());
 }
 
 void FullScreenMngr::switchWindowToFullScreen(bool set)
@@ -159,7 +175,7 @@ void FullScreenMngr::switchWindowToFullScreen(bool set)
 
                 if (toolbar->objectName() == "mainToolBar")
                 {
-                    toolbar->removeAction(m_fullScreenAction);
+                    toolbar->removeAction(d->fullScreenAction);
                     break;
                 }
             }
@@ -197,15 +213,15 @@ void FullScreenMngr::switchWindowToFullScreen(bool set)
 
             // add fullscreen action if necessary in toolbar
 
-            if (mainToolbar && !mainToolbar->actions().contains(m_fullScreenAction))
+            if (mainToolbar && !mainToolbar->actions().contains(d->fullScreenAction))
             {
                 if (mainToolbar->actions().isEmpty())
                 {
-                    mainToolbar->addAction(m_fullScreenAction);
+                    mainToolbar->addAction(d->fullScreenAction);
                 }
                 else
                 {
-                    mainToolbar->insertAction(mainToolbar->actions().first(), m_fullScreenAction);
+                    mainToolbar->insertAction(mainToolbar->actions().first(), d->fullScreenAction);
                 }
 
                 d->removeFullScreenButton = true;
@@ -222,10 +238,72 @@ void FullScreenMngr::switchWindowToFullScreen(bool set)
 
 void FullScreenMngr::escapePressed()
 {
-    if (m_fullScreenAction->isChecked())
+    if (d->fullScreenAction->isChecked())
     {
-        m_fullScreenAction->activate(QAction::Trigger);
+        d->fullScreenAction->activate(QAction::Trigger);
     }
+}
+
+// -------------------------------------------------------------------------------------------------------------
+
+class FullScreenSettings::Private
+{
+public:
+
+    Private()
+    {
+        hideToolBar  = 0;
+        hideThumbBar = 0;
+    }
+
+    QCheckBox* hideToolBar;
+    QCheckBox* hideThumbBar;
+};
+
+FullScreenSettings::FullScreenSettings(int options, QWidget* const parent)
+    : QWidget(parent), d(new Private)
+{
+    QVBoxLayout* const vlay = new QVBoxLayout(this);
+    d->hideToolBar          = new QCheckBox(i18n("H&ide toolbar in fullscreen mode"),  this);
+    d->hideThumbBar         = new QCheckBox(i18n("Hide &thumbbar in fullscreen mode"), this);
+
+    if (!(options & TOOLBAR))  d->hideToolBar->hide();
+    if (!(options & THUMBBAR)) d->hideThumbBar->hide();
+
+    vlay->addWidget(d->hideToolBar);
+    vlay->addWidget(d->hideThumbBar);
+    vlay->setMargin(0);
+    vlay->setSpacing(KDialog::spacingHint());
+}
+
+FullScreenSettings::~FullScreenSettings()
+{
+    delete d;
+}
+
+void FullScreenSettings::readSettings(const KConfigGroup& group)
+{
+    FullScreenMngr mngr;
+    mngr.readSettings(group);
+
+    if (d->hideToolBar->isVisible())
+        d->hideToolBar->setChecked(mngr.m_fullScreenHideToolBar);
+
+    if (d->hideThumbBar->isVisible())
+        d->hideThumbBar->setChecked(mngr.m_fullScreenHideThumbBar);
+}
+
+void FullScreenSettings::saveSettings(KConfigGroup& group)
+{
+    FullScreenMngr mngr;
+
+    if (d->hideToolBar->isVisible())
+        mngr.m_fullScreenHideToolBar  = d->hideToolBar->isChecked();
+
+    if (d->hideThumbBar->isVisible())
+        mngr.m_fullScreenHideThumbBar = d->hideThumbBar->isChecked();
+
+    mngr.saveSettings(group);
 }
 
 } // namespace Digikam

@@ -24,6 +24,10 @@
 #ifndef FULLSCREENMNGR_H
 #define FULLSCREENMNGR_H
 
+// Qt includes
+
+#include <QWidget>
+
 // KDE includes
 
 #include <kconfiggroup.h>
@@ -31,6 +35,8 @@
 // Local includes
 
 #include "digikam_export.h"
+
+class QAction;
 
 class KXmlGuiWindow;
 class KToggleFullScreenAction;
@@ -44,12 +50,19 @@ class DIGIKAM_EXPORT FullScreenMngr
 {
 public:
 
-    FullScreenMngr();
+    explicit FullScreenMngr();
     virtual ~FullScreenMngr();
 
     /** Set instance of managed window
      */
     void setManagedWindow(KXmlGuiWindow* const win);
+
+    /** Create Full-screen action to action collection instance from managed window
+     *  set through setManagedWindow(). This action must be connected to relevant slot in managed window instance.
+     *  Use fullScreenAction() to get instance of created action.
+     *  'name' is action name used in KDE UI rc file.
+     */
+    QAction* createFullScreenAction(const QString& name);
 
     /** Read and write settings from/to KDE config file
      */
@@ -69,14 +82,38 @@ public:
 
     /** Settigns taken from managed window configuration to handle toolbar visibility  in full-screen mode
      */
-    bool                     m_fullScreenHideToolBar;
+    bool m_fullScreenHideToolBar;
 
     /** Settigns taken from managed window configuration to handle thumbbar visibility in full-screen mode
      */
-    bool                     m_fullScreenHideThumbBar;
+    bool m_fullScreenHideThumbBar;
 
-    /** Action from window used to sxitch fullscreen state*/
-    KToggleFullScreenAction* m_fullScreenAction;
+private:
+
+    class Private;
+    Private* const d;
+};
+
+// -------------------------------------------------------------------------------------------------------------
+
+class DIGIKAM_EXPORT FullScreenSettings : public QWidget
+{
+
+public:
+
+    enum FullScreenOptions
+    {
+        TOOLBAR  = 0x00000001,
+        THUMBBAR = 0x00000002
+    };
+
+public:
+
+    explicit FullScreenSettings(int options, QWidget* const parent);
+    virtual ~FullScreenSettings();
+
+    void readSettings(const KConfigGroup& group);
+    void saveSettings(KConfigGroup& group);
 
 private:
 

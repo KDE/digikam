@@ -6,7 +6,7 @@
  * Date        : 2004-08-03
  * Description : setup Image Editor tab.
  *
- * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -67,8 +67,6 @@ public:
 
     Private() :
         themebackgroundColor(0),
-        hideToolBar(0),
-        hideThumbBar(0),
         expoIndicatorMode(0),
         expoPreview(0),
         colorBox(0),
@@ -76,6 +74,7 @@ public:
         underExposureColor(0),
         overExposureColor(0),
         expoPreviewHisto(0),
+        fullScreenSettings(0),
         underExposurePcents(0),
         overExposurePcents(0)
     {}
@@ -89,24 +88,24 @@ public:
     static const QString  configOverExposurePercentsEntry;
     static const QString  configExpoIndicatorModeEntry;
 
-    QCheckBox*       themebackgroundColor;
-    QCheckBox*       hideToolBar;
-    QCheckBox*       hideThumbBar;
-    QCheckBox*       expoIndicatorMode;
+    QCheckBox*          themebackgroundColor;
+    QCheckBox*          expoIndicatorMode;
 
-    QLabel*          expoPreview;
+    QLabel*             expoPreview;
 
-    KHBox*           colorBox;
-    KColorButton*    backgroundColor;
-    KColorButton*    underExposureColor;
-    KColorButton*    overExposureColor;
+    KHBox*              colorBox;
+    KColorButton*       backgroundColor;
+    KColorButton*       underExposureColor;
+    KColorButton*       overExposureColor;
 
-    HistogramWidget* expoPreviewHisto;
+    HistogramWidget*    expoPreviewHisto;
 
-    DImg             preview;
+    FullScreenSettings* fullScreenSettings;
 
-    RDoubleNumInput* underExposurePcents;
-    RDoubleNumInput* overExposurePcents;
+    DImg                preview;
+
+    RDoubleNumInput*    underExposurePcents;
+    RDoubleNumInput*    overExposurePcents;
 };
 
 const QString SetupEditor::Private::configGroupName("ImageViewer Settings");
@@ -146,13 +145,12 @@ SetupEditor::SetupEditor(QWidget* const parent)
     d->backgroundColor->setWhatsThis(i18n("Customize the background color to use "
                                           "in the image editor area."));
 
-    d->hideToolBar                   = new QCheckBox(i18n("H&ide toolbar in fullscreen mode"), interfaceOptionsGroup);
-    d->hideThumbBar                  = new QCheckBox(i18n("Hide &thumbbar in fullscreen mode"), interfaceOptionsGroup);
+    d->fullScreenSettings            = new FullScreenSettings(FullScreenSettings::TOOLBAR | FullScreenSettings::THUMBBAR,
+                                                              interfaceOptionsGroup);
 
     gLayout1->addWidget(d->themebackgroundColor);
     gLayout1->addWidget(d->colorBox);
-    gLayout1->addWidget(d->hideToolBar);
-    gLayout1->addWidget(d->hideThumbBar);
+    gLayout1->addWidget(d->fullScreenSettings);
     gLayout1->setMargin(KDialog::spacingHint());
     gLayout1->setSpacing(KDialog::spacingHint());
 
@@ -329,11 +327,7 @@ void SetupEditor::readSettings()
     d->expoIndicatorMode->setChecked(group.readEntry(d->configExpoIndicatorModeEntry,          true));
     d->underExposurePcents->setValue(group.readEntry(d->configUnderExposurePercentsEntry,      1.0));
     d->overExposurePcents->setValue(group.readEntry(d->configOverExposurePercentsEntry,        1.0));
-
-    FullScreenMngr mngr;
-    mngr.readSettings(group);
-    d->hideToolBar->setChecked(mngr.m_fullScreenHideToolBar);
-    d->hideThumbBar->setChecked(mngr.m_fullScreenHideThumbBar);
+    d->fullScreenSettings->readSettings(group);
 }
 
 void SetupEditor::applySettings()
@@ -348,10 +342,7 @@ void SetupEditor::applySettings()
     group.writeEntry(d->configUnderExposurePercentsEntry,   d->underExposurePcents->value());
     group.writeEntry(d->configOverExposurePercentsEntry,    d->overExposurePcents->value());
 
-    FullScreenMngr mngr;
-    mngr.m_fullScreenHideToolBar  = d->hideToolBar->isChecked();
-    mngr.m_fullScreenHideThumbBar = d->hideThumbBar->isChecked();
-    mngr.saveSettings(group);
+    d->fullScreenSettings->saveSettings(group);
 
     group.sync();
 }
