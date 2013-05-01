@@ -44,10 +44,13 @@ class KToggleFullScreenAction;
 namespace Digikam
 {
 
+/** Optional parts which can be hiddedn or not from managed window configuration panel
+ */
 enum FullScreenOptions
 {
     FS_TOOLBAR  = 0x00000001,
     FS_THUMBBAR = 0x00000002,
+    FS_NONE     = 0x00000004,
     FS_DEFAULT  = FS_TOOLBAR | FS_THUMBBAR    // Image Editor config.
 };
 

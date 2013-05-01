@@ -86,6 +86,7 @@ Q_SIGNALS:
 protected:
 
     void moveEvent(QMoveEvent* e);
+    void keyPressEvent(QKeyEvent* e);
 
 public Q_SLOTS:
 
@@ -119,7 +120,6 @@ private:
 private Q_SLOTS:
 
     void slotToggleFullScreen(bool);
-    void slotEscapePressed();
     void slotEditKeys();
     void slotShowMenuBar();
     void slotConfToolbars();
