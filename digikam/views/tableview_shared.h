@@ -56,6 +56,8 @@ public:
     TableViewSelectionModelSyncer* tableViewSelectionModelSyncer;
     TableViewColumnFactory* columnFactory;
     TableViewItemDelegate* itemDelegate;
+
+    bool isActive;
 };
 
 } /* namespace Digikam */

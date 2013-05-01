@@ -25,6 +25,7 @@
 // KDE includes
 
 #include <kdebug.h>
+#include <QTimer>
 
 // local includes
 
@@ -61,6 +62,10 @@ TableViewSelectionModelSyncer::TableViewSelectionModelSyncer(TableViewShared* co
             this, SLOT(slotTargetSelectionChanged(QItemSelection,QItemSelection)));
     connect(s->tableViewModel, SIGNAL(columnsInserted(QModelIndex,int,int)),
             this, SLOT(slotTargetColumnsInserted(QModelIndex,int,int)));
+    connect(s->tableViewModel, SIGNAL(modelReset()),
+            this, SLOT(slotTargetModelReset()));
+    connect(s->tableViewModel, SIGNAL(rowsInserted(QModelIndex,int,int)),
+            this, SLOT(slotTargetModelRowsInserted(QModelIndex,int,int)));
 
     /// @todo This is necessary to re-sync the selection when tags are added to images.
     ///       Check whether both are necessary or whether we need more.
@@ -69,7 +74,7 @@ TableViewSelectionModelSyncer::TableViewSelectionModelSyncer(TableViewShared* co
     connect(s->imageFilterModel, SIGNAL(modelReset()),
             this, SLOT(slotSourceModelReset()));
 
-    doInitialSync();
+    slotDoInitialSync();
 }
 
 TableViewSelectionModelSyncer::~TableViewSelectionModelSyncer()
@@ -103,8 +108,13 @@ QItemSelection TableViewSelectionModelSyncer::targetIndexToRowItemSelection(cons
     return mySelection;
 }
 
-void TableViewSelectionModelSyncer::doInitialSync()
+void TableViewSelectionModelSyncer::slotDoInitialSync()
 {
+    if (!s->isActive)
+    {
+        return;
+    }
+
     d->syncing = true;
 
     s->tableViewSelectionModel->clearSelection();
@@ -121,6 +131,11 @@ void TableViewSelectionModelSyncer::doInitialSync()
 
 void TableViewSelectionModelSyncer::slotSourceCurrentChanged(const QModelIndex& current, const QModelIndex& previous)
 {
+    if (!s->isActive)
+    {
+        return;
+    }
+
     Q_UNUSED(previous)
 
     if (d->syncing)
@@ -191,6 +206,11 @@ QItemSelection TableViewSelectionModelSyncer::itemSelectionToTarget(const QItemS
 
 void TableViewSelectionModelSyncer::slotSourceSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected)
 {
+    if (!s->isActive)
+    {
+        return;
+    }
+
     if (d->syncing)
     {
         return;
@@ -208,6 +228,11 @@ void TableViewSelectionModelSyncer::slotSourceSelectionChanged(const QItemSelect
 
 void TableViewSelectionModelSyncer::slotTargetCurrentChanged(const QModelIndex& current, const QModelIndex& previous)
 {
+    if (!s->isActive)
+    {
+        return;
+    }
+
     Q_UNUSED(previous)
 
     if (d->syncing)
@@ -224,6 +249,11 @@ void TableViewSelectionModelSyncer::slotTargetCurrentChanged(const QModelIndex& 
 
 void TableViewSelectionModelSyncer::slotTargetSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected)
 {
+    if (!s->isActive)
+    {
+        return;
+    }
+
     if (d->syncing)
     {
         return;
@@ -241,11 +271,18 @@ void TableViewSelectionModelSyncer::slotTargetSelectionChanged(const QItemSelect
 
 void TableViewSelectionModelSyncer::slotSourceModelReset()
 {
-    doInitialSync();
+    // QAbstractItemModel will also react to the modelReset signal
+    // make sure we transfer the update after that.
+    QTimer::singleShot(0, this, SLOT(slotDoInitialSync()));
 }
 
 void TableViewSelectionModelSyncer::slotTargetColumnsInserted(const QModelIndex& parent, int start, int end)
 {
+    if (!s->isActive)
+    {
+        return;
+    }
+
     Q_UNUSED(parent)
     Q_UNUSED(start)
     Q_UNUSED(end)
@@ -258,7 +295,54 @@ void TableViewSelectionModelSyncer::slotTargetColumnsInserted(const QModelIndex&
     // New columns were inserted. We have to make sure that all selected rows include the new columns.
     // We just re-perform the initial synchronization.
     /// @todo There may be more efficient ways.
-    doInitialSync();
+    slotDoInitialSync();
+}
+
+void Digikam::TableViewSelectionModelSyncer::slotSetActive(const bool isActive)
+{
+    if (isActive)
+    {
+        slotSourceModelReset();
+    }
+}
+
+void Digikam::TableViewSelectionModelSyncer::slotTargetModelReset()
+{
+    slotDoInitialSync();
+}
+
+void Digikam::TableViewSelectionModelSyncer::slotTargetModelRowsInserted(const QModelIndex& parent, int start, int end)
+{
+    if (!s->isActive)
+    {
+        return;
+    }
+
+    // look up the state of the source indexes and transfer them here
+    for (int i=start; i<=end; ++i)
+    {
+        const QModelIndex iTarget = s->tableViewModel->index(i, 0, parent);
+        if (!iTarget.isValid())
+        {
+            continue;
+        }
+
+        const QModelIndex iSource = toSource(iTarget);
+        if (!iSource.isValid())
+        {
+            continue;
+        }
+        if (s->imageFilterSelectionModel->isSelected(iSource))
+        {
+            const QItemSelection targetSelection = targetIndexToRowItemSelection(iTarget);
+            s->tableViewSelectionModel->select(targetSelection, QItemSelectionModel::Select);
+        }
+    }
+
+    // also transfer the current index if necessary
+    const QModelIndex sourceCurrentIndex = s->imageFilterSelectionModel->currentIndex();
+    const QModelIndex targetIndexCurrent = toTarget(sourceCurrentIndex);
+    s->tableViewSelectionModel->setCurrentIndex(targetIndexCurrent, QItemSelectionModel::NoUpdate);
 }
 
 } /* namespace Digikam */

@@ -42,7 +42,6 @@ public:
     explicit TableViewSelectionModelSyncer(TableViewShared* const sharedObject, QObject* const parent = 0);
     virtual ~TableViewSelectionModelSyncer();
 
-    void doInitialSync();
     QModelIndex toSource(const QModelIndex& targetIndex) const;
     QModelIndex toTarget(const QModelIndex& sourceIndex) const;
     QItemSelection itemSelectionToSource(const QItemSelection& selection) const;
@@ -62,6 +61,13 @@ private Q_SLOTS:
 //     void slotTargetCurrentRowChanged(const QModelIndex& current, const QModelIndex& previous);
     void slotTargetSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected);
     void slotTargetColumnsInserted(const QModelIndex& parent, int start, int end);
+    void slotTargetModelRowsInserted(const QModelIndex& parent, int start, int end);
+    void slotTargetModelReset();
+    void slotDoInitialSync();
+
+public Q_SLOTS:
+
+    void slotSetActive(const bool isActive);
 
 private:
 

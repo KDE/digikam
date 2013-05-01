@@ -101,6 +101,7 @@ public Q_SLOTS:
     void slotAwayFromSelection();
     void slotDeleteSelected(const ImageViewUtilities::DeleteMode deleteMode = ImageViewUtilities::DeleteUseTrash);
     void slotDeleteSelectedWithoutConfirmation(const ImageViewUtilities::DeleteMode deleteMode = ImageViewUtilities::DeleteUseTrash);
+    void slotSetActive(const bool isActive);
 
 protected Q_SLOTS:
 
