@@ -44,5 +44,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 030 ==> 318902 - Very long lasting search for new items after copy of sqlite3 database.
 031 ==> 318074 - digiKam hangs when opening album.
 032 ==> 281095 - BQM AdjustCurve tool : curves adjustment doesn't work.
-033 ==> 
+033 ==> 296651 - digiKam takes very long to display the embedded JPEG in a raw file [patch].
+034 ==> 
 
