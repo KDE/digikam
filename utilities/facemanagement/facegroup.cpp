@@ -800,7 +800,7 @@ void FaceGroup::applyItemGeometryChanges()
              * This line add garbage tags to database when image is rotated
              * Need to figure out were this line is used and how
              */
-            //d->editPipeline.editRegion(d->info, d->view->previewItem()->image(), item->face(), currentRegion);
+            d->editPipeline.editRegion(d->info, d->view->previewItem()->image(), item->face(), currentRegion);
 
         }
     }
