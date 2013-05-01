@@ -43,5 +43,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 029 ==> 318240 - Keywords stored in IPTC do not show up in thumbnail preview and are not searchable.
 030 ==> 318902 - Very long lasting search for new items after copy of sqlite3 database.
 031 ==> 318074 - digiKam hangs when opening album.
-032 ==> 
+032 ==> 281095 - BQM AdjustCurve tool : curves adjustment doesn't work.
+033 ==> 
 
