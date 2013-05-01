@@ -181,20 +181,20 @@ ImageCurves& ImageCurves::operator=(const ImageCurves& other)
 
 void ImageCurves::fillFromOtherCurves(ImageCurves* const otherCurves)
 {
-    kDebug() << "Filling this curve from other curve " << otherCurves;
+    //kDebug() << "Filling this curve from other curve " << otherCurves;
 
     curvesReset();
 
     // if the other curves have the same bit depth, simply copy their data
     if (isSixteenBits() == otherCurves->isSixteenBits())
     {
-        kDebug() << "Both curves have same type: isSixteenBits = " << isSixteenBits();
+        //kDebug() << "Both curves have same type: isSixteenBits = " << isSixteenBits();
 
         for (int channel = 0; channel < NUM_CHANNELS; ++channel)
         {
             if (otherCurves->getCurveType(channel) == CURVE_SMOOTH)
             {
-                kDebug() << "Other is CURVE_SMOOTH";
+                //kDebug() << "Other is CURVE_SMOOTH";
                 setCurveType(channel, CURVE_SMOOTH);
 
                 for (int point = 0; point < NUM_POINTS; ++point)
@@ -209,7 +209,7 @@ void ImageCurves::fillFromOtherCurves(ImageCurves* const otherCurves)
             }
             else
             {
-                kDebug() << "Other is CURVE_FREE";
+                //kDebug() << "Other is CURVE_FREE";
                 setCurveType(channel, CURVE_FREE);
 
                 for (int i = 0 ; i <= d->segmentMax ; ++i)
@@ -222,13 +222,13 @@ void ImageCurves::fillFromOtherCurves(ImageCurves* const otherCurves)
     // other curve is 8 bit and this curve is 16 bit
     else if (isSixteenBits() && !otherCurves->isSixteenBits())
     {
-        kDebug() << "This curve is 16 bit and the other is 8 bit";
+        //kDebug() << "This curve is 16 bit and the other is 8 bit";
 
         for (int channel = 0; channel < NUM_CHANNELS; ++channel)
         {
             if (otherCurves->getCurveType(channel) == CURVE_SMOOTH)
             {
-                kDebug() << "Other is CURVE_SMOOTH";
+                //kDebug() << "Other is CURVE_SMOOTH";
                 setCurveType(channel, CURVE_SMOOTH);
 
                 for (int point = 0; point < NUM_POINTS; ++point)
@@ -245,7 +245,7 @@ void ImageCurves::fillFromOtherCurves(ImageCurves* const otherCurves)
             }
             else
             {
-                kDebug() << "Other is CURVE_FREE";
+                //kDebug() << "Other is CURVE_FREE";
                 setCurveType(channel, CURVE_FREE);
 
                 for (int i = 0 ; i <= d->segmentMax ; ++i)
@@ -258,13 +258,13 @@ void ImageCurves::fillFromOtherCurves(ImageCurves* const otherCurves)
     // other curve is 16 bit and this is 8 bit
     else if (!isSixteenBits() && otherCurves->isSixteenBits())
     {
-        kDebug() << "This curve is 8 bit and the other is 16 bit";
+        //kDebug() << "This curve is 8 bit and the other is 16 bit";
 
         for (int channel = 0; channel < NUM_CHANNELS; ++channel)
         {
             if (otherCurves->getCurveType(channel) == CURVE_SMOOTH)
             {
-                kDebug() << "Other is CURVE_SMOOTH";
+                //kDebug() << "Other is CURVE_SMOOTH";
                 setCurveType(channel, CURVE_SMOOTH);
 
                 //kDebug() << "Adopting points of channel " << channel;
@@ -288,7 +288,7 @@ void ImageCurves::fillFromOtherCurves(ImageCurves* const otherCurves)
             }
             else
             {
-                kDebug() << "Other is CURVE_FREE";
+                //kDebug() << "Other is CURVE_FREE";
                 setCurveType(channel, CURVE_FREE);
 
                 for (int i = 0 ; i <= d->segmentMax ; ++i)
@@ -968,14 +968,14 @@ void ImageCurves::setCurveValue(int channel, int bin, int val)
 
 void ImageCurves::setCurveValues(int channel, const QPolygon& vals)
 {
-    kDebug() << "vals size: " << vals.size();
-    kDebug() << "segmentMax: " << d->segmentMax + 1;
+    //kDebug() << "vals size: " << vals.size();
+    //kDebug() << "segmentMax: " << d->segmentMax + 1;
 
     if (d->curves && channel >= 0 && channel < NUM_CHANNELS)
     {
         if (vals.isEmpty())
         {
-            kDebug() << "No curves values to assign: reset";
+            //kDebug() << "No curves values to assign: reset";
             curvesChannelReset(channel);
         }
         // Bits depth are different ?
@@ -985,7 +985,7 @@ void ImageCurves::setCurveValues(int channel, const QPolygon& vals)
 
             if (vals.size() == 256)
             {
-                kDebug() << "8 to 16 bits curves transform";
+                //kDebug() << "8 to 16 bits curves transform";
 
                 // 8 to 16 bits.
                 ImageCurves curve8(false);
@@ -1007,7 +1007,7 @@ void ImageCurves::setCurveValues(int channel, const QPolygon& vals)
             }
             else
             {
-                kDebug() << "16 to 8 bits curves transform";
+                //kDebug() << "16 to 8 bits curves transform";
 
                 // 16 to 8 bits.
                 ImageCurves curve8(false);
@@ -1030,7 +1030,7 @@ void ImageCurves::setCurveValues(int channel, const QPolygon& vals)
         }
         else
         {
-            kDebug() << "Assign curves values directly";
+            //kDebug() << "Assign curves values directly";
 
             for (int j = 0 ; j <= d->segmentMax ; ++j)
             {
@@ -1353,7 +1353,7 @@ bool ImageCurves::isLinear(int channel) const
  * Data then converted to base64.
  */
 
-QByteArray ImageCurves::channelToBase64(int channel) const
+QByteArray ImageCurves::channelToBinary(int channel) const
 {
     if (!d->curves || channel < 0 || channel >= NUM_CHANNELS)
     {
@@ -1432,29 +1432,23 @@ QByteArray ImageCurves::channelToBase64(int channel) const
         }
     }
 
-    return data.toBase64();
+    return data;
 }
 
-bool ImageCurves::setChannelFromBase64(int channel, const QByteArray& array)
+bool ImageCurves::setChannelFromBinary(int channel, const QByteArray& data)
 {
     if (!d->curves || channel < 0 || channel >= NUM_CHANNELS)
     {
         return false;
     }
 
-    if (array.isEmpty())
+    if (data.isEmpty())
     {
         curvesChannelReset(channel);
-    }
-
-    QByteArray decoded = QByteArray::fromBase64(array);
-
-    if (decoded.isEmpty())
-    {
         return false;
     }
 
-    QDataStream s(decoded);
+    QDataStream s(data);
 
     quint32 nothing, count;
     quint16 version;
