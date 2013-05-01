@@ -6,7 +6,7 @@
  * Date        : 2004-08-03
  * Description : setup Image Editor tab.
  *
- * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -54,6 +54,7 @@
 #include "dimg.h"
 #include "histogramwidget.h"
 #include "exposurecontainer.h"
+#include "fullscreenmngr.h"
 
 using namespace KDcrawIface;
 
@@ -66,8 +67,6 @@ public:
 
     Private() :
         themebackgroundColor(0),
-        hideToolBar(0),
-        hideThumbBar(0),
         expoIndicatorMode(0),
         expoPreview(0),
         colorBox(0),
@@ -75,6 +74,7 @@ public:
         underExposureColor(0),
         overExposureColor(0),
         expoPreviewHisto(0),
+        fullScreenSettings(0),
         underExposurePcents(0),
         overExposurePcents(0)
     {}
@@ -82,39 +82,35 @@ public:
     static const QString  configGroupName;
     static const QString  configUseThemeBackgroundColorEntry;
     static const QString  configBackgroundColorEntry;
-    static const QString  configFullScreenHideToolBarEntry;
-    static const QString  configFullScreenHideThumbBarEntry;
     static const QString  configUnderExposureColorEntry;
     static const QString  configOverExposureColorEntry;
     static const QString  configUnderExposurePercentsEntry;
     static const QString  configOverExposurePercentsEntry;
     static const QString  configExpoIndicatorModeEntry;
 
-    QCheckBox*       themebackgroundColor;
-    QCheckBox*       hideToolBar;
-    QCheckBox*       hideThumbBar;
-    QCheckBox*       expoIndicatorMode;
+    QCheckBox*          themebackgroundColor;
+    QCheckBox*          expoIndicatorMode;
 
-    QLabel*          expoPreview;
+    QLabel*             expoPreview;
 
-    KHBox*           colorBox;
-    KColorButton*    backgroundColor;
-    KColorButton*    underExposureColor;
-    KColorButton*    overExposureColor;
+    KHBox*              colorBox;
+    KColorButton*       backgroundColor;
+    KColorButton*       underExposureColor;
+    KColorButton*       overExposureColor;
 
-    HistogramWidget* expoPreviewHisto;
+    HistogramWidget*    expoPreviewHisto;
 
-    DImg             preview;
+    FullScreenSettings* fullScreenSettings;
 
-    RDoubleNumInput* underExposurePcents;
-    RDoubleNumInput* overExposurePcents;
+    DImg                preview;
+
+    RDoubleNumInput*    underExposurePcents;
+    RDoubleNumInput*    overExposurePcents;
 };
 
 const QString SetupEditor::Private::configGroupName("ImageViewer Settings");
 const QString SetupEditor::Private::configUseThemeBackgroundColorEntry("UseThemeBackgroundColor");
 const QString SetupEditor::Private::configBackgroundColorEntry("BackgroundColor");
-const QString SetupEditor::Private::configFullScreenHideToolBarEntry("FullScreen Hide ToolBar");
-const QString SetupEditor::Private::configFullScreenHideThumbBarEntry("FullScreenHideThumbBar");
 const QString SetupEditor::Private::configUnderExposureColorEntry("UnderExposureColor");
 const QString SetupEditor::Private::configOverExposureColorEntry("OverExposureColor");
 const QString SetupEditor::Private::configUnderExposurePercentsEntry("UnderExposurePercentsEntry");
@@ -149,13 +145,11 @@ SetupEditor::SetupEditor(QWidget* const parent)
     d->backgroundColor->setWhatsThis(i18n("Customize the background color to use "
                                           "in the image editor area."));
 
-    d->hideToolBar                   = new QCheckBox(i18n("H&ide toolbar in fullscreen mode"), interfaceOptionsGroup);
-    d->hideThumbBar                  = new QCheckBox(i18n("Hide &thumbbar in fullscreen mode"), interfaceOptionsGroup);
+    d->fullScreenSettings            = new FullScreenSettings(FS_DEFAULT, interfaceOptionsGroup);
 
     gLayout1->addWidget(d->themebackgroundColor);
     gLayout1->addWidget(d->colorBox);
-    gLayout1->addWidget(d->hideToolBar);
-    gLayout1->addWidget(d->hideThumbBar);
+    gLayout1->addWidget(d->fullScreenSettings);
     gLayout1->setMargin(KDialog::spacingHint());
     gLayout1->setSpacing(KDialog::spacingHint());
 
@@ -296,10 +290,10 @@ void SetupEditor::slotExpoSettingsChanged()
     prm.underExposureColor     = d->underExposureColor->color();
     prm.overExposureColor      = d->overExposureColor->color();
 
-    QPixmap pix          = d->preview.convertToPixmap();
+    QPixmap pix                = d->preview.convertToPixmap();
     QPainter p(&pix);
-    QImage pureColorMask = d->preview.pureColorMask(&prm);
-    QPixmap pixMask      = QPixmap::fromImage(pureColorMask);
+    QImage pureColorMask       = d->preview.pureColorMask(&prm);
+    QPixmap pixMask            = QPixmap::fromImage(pureColorMask);
     p.drawPixmap(0, 0, pixMask, 0, 0, pixMask.width(), pixMask.height());
 
     d->expoPreview->setPixmap(pix);
@@ -327,13 +321,12 @@ void SetupEditor::readSettings()
     QColor White(Qt::white);
     d->themebackgroundColor->setChecked(group.readEntry(d->configUseThemeBackgroundColorEntry, true));
     d->backgroundColor->setColor(group.readEntry(d->configBackgroundColorEntry,                Black));
-    d->hideToolBar->setChecked(group.readEntry(d->configFullScreenHideToolBarEntry,            false));
-    d->hideThumbBar->setChecked(group.readEntry(d->configFullScreenHideThumbBarEntry,          true));
     d->underExposureColor->setColor(group.readEntry(d->configUnderExposureColorEntry,          White));
     d->overExposureColor->setColor(group.readEntry(d->configOverExposureColorEntry,            Black));
     d->expoIndicatorMode->setChecked(group.readEntry(d->configExpoIndicatorModeEntry,          true));
     d->underExposurePcents->setValue(group.readEntry(d->configUnderExposurePercentsEntry,      1.0));
     d->overExposurePcents->setValue(group.readEntry(d->configOverExposurePercentsEntry,        1.0));
+    d->fullScreenSettings->readSettings(group);
 }
 
 void SetupEditor::applySettings()
@@ -342,13 +335,14 @@ void SetupEditor::applySettings()
     KConfigGroup group        = config->group(d->configGroupName);
     group.writeEntry(d->configUseThemeBackgroundColorEntry, d->themebackgroundColor->isChecked());
     group.writeEntry(d->configBackgroundColorEntry,         d->backgroundColor->color());
-    group.writeEntry(d->configFullScreenHideToolBarEntry,   d->hideToolBar->isChecked());
-    group.writeEntry(d->configFullScreenHideThumbBarEntry,  d->hideThumbBar->isChecked());
     group.writeEntry(d->configUnderExposureColorEntry,      d->underExposureColor->color());
     group.writeEntry(d->configOverExposureColorEntry,       d->overExposureColor->color());
     group.writeEntry(d->configExpoIndicatorModeEntry,       d->expoIndicatorMode->isChecked());
     group.writeEntry(d->configUnderExposurePercentsEntry,   d->underExposurePcents->value());
     group.writeEntry(d->configOverExposurePercentsEntry,    d->overExposurePcents->value());
+
+    d->fullScreenSettings->saveSettings(group);
+
     group.sync();
 }
 

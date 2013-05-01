@@ -1,14 +1,14 @@
 *****************************************************************************************************
-digiKam 3.2.0-beta2 - Release date: 2013-04-21
+digiKam 3.2.0 - Release date: 2013-05-05
 
 NEW FEATURES:
 
 General     : Remove internal clapack library code. Set only an optional and external dependency to eigen3.
-General     : New tool to auto-crop image based on black hole borders detection.
-AlbumGUI    : New "Table-View" view mode dedictaed to show album items in a list view.
-AlbumGUI    : New Aspect Ratio information displayed in icon-view and tooltips.
-AlbumGUI    : New filter based on Aspect Ration information.
-Searches    : New search tool to find items based on Aspect Ration Information.
+General     : New tool to Auto-Crop image based on black hole borders detection.
+AlbumGUI    : New "Table-View" view mode dedicated to show album items in a list view.
+AlbumGUI    : New Aspect-Ratio information displayed in icon-view and tooltips.
+AlbumGUI    : New filter based on Aspect-Ratio information.
+Searches    : New search tool to find items based on Aspect-Ratio Information.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
@@ -41,5 +41,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 027 ==> 306116 - Crash on start (during the collection re-scan).
 028 ==> 318834 - Images vanish and Properties not shown if image is picked from Image Thumbbar on right and dropped on to the Thumbbar itself [patch].
 029 ==> 318240 - Keywords stored in IPTC do not show up in thumbnail preview and are not searchable.
-030 ==> 
+030 ==> 318902 - Very long lasting search for new items after copy of sqlite3 database.
+031 ==> 318074 - digiKam hangs when opening album.
+032 ==> 
 

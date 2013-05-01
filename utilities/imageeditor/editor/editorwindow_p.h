@@ -42,6 +42,7 @@
 #include "daboutdata.h"
 #include "editorwindow.h"
 #include "versionmanager.h"
+#include "fullscreenmngr.h"
 
 class QDialog;
 class QEventLoop;
@@ -70,8 +71,6 @@ class EditorWindow::Private
 public:
 
     Private() :
-        removeFullScreenButton(false),
-        fullScreenHideToolBar(false),
         cmViewIndicator(0),
         underExposureIndicator(0),
         overExposureIndicator(0),
@@ -126,9 +125,6 @@ public:
 
     static const QString       configAutoZoomEntry;
     static const QString       configBackgroundColorEntry;
-    static const QString       configFullScreenEntry;
-    static const QString       configFullScreenHideThumbBarEntry;
-    static const QString       configFullScreenHideToolBarEntry;
     static const QString       configJpeg2000CompressionEntry;
     static const QString       configJpeg2000LossLessEntry;
     static const QString       configJpegCompressionEntry;
@@ -149,9 +145,6 @@ public:
     static const QString       configUseThemeBackgroundColorEntry;
     static const QString       configVerticalSplitterSizesEntry;
     static const QString       configVerticalSplitterStateEntry;
-
-    bool                       removeFullScreenButton;
-    bool                       fullScreenHideToolBar;
 
     QToolButton*               cmViewIndicator;
     QToolButton*               underExposureIndicator;
@@ -198,8 +191,6 @@ public:
 
     ActionCategorizedView*     selectToolsActionView;
 
-    QList<int>                 fullscreenSizeBackup;
-
     ICCSettingsContainer*      ICCSettings;
 
     DZoomBar*                  zoomBar;
@@ -212,13 +203,14 @@ public:
     VersionManager             defaultVersionManager;
 
     DAboutData*                about;
+
+    QList<int>                 fullscreenSizeBackup;
+
+    FullScreenMngr*            fullScreenMngr;
 };
 
 const QString EditorWindow::Private::configAutoZoomEntry("AutoZoom");
 const QString EditorWindow::Private::configBackgroundColorEntry("BackgroundColor");
-const QString EditorWindow::Private::configFullScreenEntry("FullScreen");
-const QString EditorWindow::Private::configFullScreenHideThumbBarEntry("FullScreenHideThumbBar");
-const QString EditorWindow::Private::configFullScreenHideToolBarEntry("FullScreen Hide ToolBar");
 const QString EditorWindow::Private::configJpeg2000CompressionEntry("JPEG2000Compression");
 const QString EditorWindow::Private::configJpeg2000LossLessEntry("JPEG2000LossLess");
 const QString EditorWindow::Private::configJpegCompressionEntry("JPEGCompression");
