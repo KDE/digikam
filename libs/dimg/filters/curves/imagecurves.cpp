@@ -277,8 +277,8 @@ void ImageCurves::fillFromOtherCurves(ImageCurves* const otherCurves)
                     {
                         p.setX(p.x() / MULTIPLIER_16BIT);
                         p.setY(p.y() / MULTIPLIER_16BIT);
-                        //kDebug() << "Setting curve point " << point << " to " << p;
                         setCurvePoint(channel, point, p);
+                        //kDebug() << "Setting curve point " << point << " to " << getCurvePoint(channel, point);
                     }
                     else
                     {
