@@ -78,6 +78,7 @@ public Q_SLOTS:
 protected:
 
     void moveEvent(QMoveEvent* e);
+    void keyPressEvent(QKeyEvent* e);
 
 private:
 
@@ -88,8 +89,6 @@ private:
     void setupUserArea();
     void setupStatusBar();
     void slideShow(SlideShowSettings& settings);
-    void showToolBars();
-    void hideToolBars();
     void readSettings();
     void writeSettings();
 
@@ -145,7 +144,6 @@ private Q_SLOTS:
     void slotProgressBarCancelButtonPressed();
     void slotToggleSlideShow();
     void slotToggleFullScreen(bool);
-    void slotEscapePressed();
     void slotEditKeys();
     void slotConfToolbars();
     void slotConfNotifications();

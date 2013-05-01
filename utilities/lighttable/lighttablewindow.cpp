@@ -128,6 +128,11 @@ LightTableWindow::LightTableWindow()
     // We don't want to be deleted on close
     setAttribute(Qt::WA_DeleteOnClose, false);
 
+    // --------------------------------------------------------
+
+    d->fullScreenMngr = new FullScreenMngr(FS_TOOLBAR);
+    d->fullScreenMngr->setManagedWindow(this);
+
     // -- Build the GUI -------------------------------
 
     setupUserArea();
@@ -158,6 +163,7 @@ LightTableWindow::~LightTableWindow()
     delete d->thumbView;
     delete d->rightSideBar;
     delete d->leftSideBar;
+    delete d->fullScreenMngr;
     delete d;
 }
 
@@ -175,6 +181,8 @@ void LightTableWindow::readSettings()
     d->leftSideBar->loadState();
     d->rightSideBar->setConfigGroup(KConfigGroup(&group, "Right Sidebar"));
     d->rightSideBar->loadState();
+
+    d->fullScreenMngr->readSettings(group);
 }
 
 void LightTableWindow::writeSettings()
@@ -190,6 +198,9 @@ void LightTableWindow::writeSettings()
     d->leftSideBar->saveState();
     d->rightSideBar->setConfigGroup(KConfigGroup(&group, "Right Sidebar"));
     d->rightSideBar->saveState();
+
+    d->fullScreenMngr->saveSettings(group);
+
     config->sync();
 }
 
@@ -199,9 +210,12 @@ void LightTableWindow::applySettings()
     KConfigGroup group        = config->group("LightTable Settings");
     d->autoLoadOnRightPanel   = group.readEntry("Auto Load Right Panel",   true);
     d->autoSyncPreview        = group.readEntry("Auto Sync Preview",       true);
-    d->fullScreenHideToolBar  = group.readEntry("FullScreen Hide ToolBar", false);
     d->clearOnCloseAction->setChecked(group.readEntry("Clear On Close", false));
     d->previewView->setLoadFullImageSize(group.readEntry("Load Full Image size", false));
+
+    // Restore full screen Mode
+    d->fullScreenMngr->readSettings(group);
+
     // NOTE: Image orientation settings in thumbbar is managed by image model.
     refreshView();
 }
@@ -534,9 +548,8 @@ void LightTableWindow::setupActions()
     d->showThumbBarAction = d->barViewDock->getToggleAction(this);
     actionCollection()->addAction("lighttable_showthumbbar", d->showThumbBarAction);
 
-    d->fullScreenAction = KStandardAction::fullScreen(0, 0, this, this);
-    actionCollection()->addAction("lighttable_fullscreen", d->fullScreenAction);
-    connect(d->fullScreenAction, SIGNAL(toggled(bool)), this, SLOT(slotToggleFullScreen(bool)));
+    QAction* const fullScreenAction = d->fullScreenMngr->createFullScreenAction("lighttable_fullscreen");
+    connect(fullScreenAction, SIGNAL(toggled(bool)), this, SLOT(slotToggleFullScreen(bool)));
 
     d->slideShowAction = new KAction(KIcon("view-presentation"), i18n("Slideshow"), this);
     d->slideShowAction->setShortcut(KShortcut(Qt::Key_F9));
@@ -1445,26 +1458,6 @@ void LightTableWindow::slotProgressBarCancelButtonPressed()
     d->cancelSlideShow = true;
 }
 
-void LightTableWindow::showToolBars()
-{
-    QList<KToolBar*> toolbars = toolBars();
-
-    foreach(KToolBar* const toolbar, toolbars)
-    {
-        toolbar->show();
-    }
-}
-
-void LightTableWindow::hideToolBars()
-{
-    QList<KToolBar*> toolbars = toolBars();
-
-    foreach(KToolBar* const toolbar, toolbars)
-    {
-        toolbar->hide();
-    }
-}
-
 void LightTableWindow::slotEditKeys()
 {
     KShortcutsDialog dialog(KShortcutsEditor::AllActions,
@@ -1626,86 +1619,29 @@ void LightTableWindow::slotThemeChanged()
 
 void LightTableWindow::slotToggleFullScreen(bool b)
 {
-    KToggleFullScreenAction::setFullScreen(this, b);
+    d->fullScreenMngr->switchWindowToFullScreen(b);
 
     if (!b)
     {
-        // Switch off fullscreen
-
-        slotShowMenuBar();
-        statusBar()->show();
-        showToolBars();
-
-        if (d->removeFullScreenButton)
-        {
-            QList<KToolBar*> toolbars = toolBars();
-
-            foreach(KToolBar* const toolbar, toolbars)
-            {
-                // name is set in ui.rc XML file
-                if (toolbar->objectName() == "ToolBar")
-                {
-                    toolbar->removeAction(d->fullScreenAction);
-                    break;
-                }
-            }
-        }
+        kDebug() << "TURN OFF fullscreen";
 
         d->leftSideBar->restore();
         d->rightSideBar->restore();
     }
     else
     {
-        // Switch on fullscreen
-
-        // hide the menubar and the statusbar
-        menuBar()->hide();
-        statusBar()->hide();
-
-        if (d->fullScreenHideToolBar)
-        {
-            hideToolBars();
-        }
-        else
-        {
-            showToolBars();
-
-            QList<KToolBar*> toolbars = toolBars();
-            KToolBar* mainToolbar     = 0;
-
-            foreach(KToolBar* const toolbar, toolbars)
-            {
-                if (toolbar->objectName() == "ToolBar")
-                {
-                    mainToolbar = toolbar;
-                    break;
-                }
-            }
-
-            // add fullscreen action if necessary
-            if (mainToolbar && !mainToolbar->actions().contains(d->fullScreenAction))
-            {
-                mainToolbar->addAction(d->fullScreenAction);
-                d->removeFullScreenButton = true;
-            }
-            else
-            {
-                // If FullScreen button is enabled in toolbar settings,
-                // we shall not remove it when leaving of fullscreen mode.
-                d->removeFullScreenButton = false;
-            }
-        }
+        kDebug() << "TURN ON fullscreen";
 
         d->leftSideBar->backup();
         d->rightSideBar->backup();
     }
 }
 
-void LightTableWindow::slotEscapePressed()
+void LightTableWindow::keyPressEvent(QKeyEvent* e)
 {
-    if (d->fullScreenAction->isChecked())
+    if (e->key() == Qt::Key_Escape)
     {
-        d->fullScreenAction->activate(QAction::Trigger);
+        d->fullScreenMngr->escapePressed();
     }
 }
 
