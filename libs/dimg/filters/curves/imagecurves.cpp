@@ -293,7 +293,7 @@ void ImageCurves::fillFromOtherCurves(ImageCurves* const otherCurves)
 
                 for (int i = 0 ; i <= d->segmentMax ; ++i)
                 {
-                    setCurveValue(channel, i / MULTIPLIER_16BIT, otherCurves->getCurveValue(channel, i) / MULTIPLIER_16BIT);
+                    setCurveValue(channel, i, otherCurves->getCurveValue(channel, i * MULTIPLIER_16BIT) / MULTIPLIER_16BIT);
                 }
             }
         }
