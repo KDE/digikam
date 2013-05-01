@@ -108,7 +108,7 @@ void CurvesContainer::initialize()
 
             // First and last points init.
             values[i].setPoint(0, 0, 0);
-            values[i].setPoint(0, segmentMax, segmentMax);
+            values[i].setPoint(ImageCurves::NUM_POINTS - 1, segmentMax, segmentMax);
         }
     }
 }
