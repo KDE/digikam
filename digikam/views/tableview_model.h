@@ -174,6 +174,11 @@ private Q_SLOTS:
 
     void slotFilterSettingsChanged(const ImageFilterSettings& settings);
     void slotResortModel();
+    void slotClearModel(const bool sendNotifications);
+
+public Q_SLOTS:
+
+    void slotSetActive(const bool isActive);
 
 Q_SIGNALS:
 

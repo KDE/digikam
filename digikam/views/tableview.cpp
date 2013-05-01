@@ -80,6 +80,7 @@ TableView::TableView(
     d(new Private()),
     s(new TableViewShared())
 {
+    s->isActive = false;
     s->tableView = this;
     s->thumbnailLoadThread = new ThumbnailLoadThread(this);
     s->imageFilterModel = dynamic_cast<ImageFilterModel*>(imageFilterModel);
@@ -737,6 +738,16 @@ void TableView::selectAll()
 {
     /// @todo This only selects expanded items.
     s->treeView->selectAll();
+}
+
+void TableView::slotSetActive(const bool isActive)
+{
+    if (s->isActive!=isActive)
+    {
+        s->isActive = isActive;
+        s->tableViewModel->slotSetActive(isActive);
+        s->tableViewSelectionModelSyncer->slotSetActive(isActive);
+    }
 }
 
 } /* namespace Digikam */

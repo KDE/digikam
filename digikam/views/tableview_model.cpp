@@ -115,7 +115,8 @@ public:
         sortOrder(Qt::AscendingOrder),
         sortRequired(false),
         groupingMode(GroupingShowSubItems),
-        cachedImageInfos()
+        cachedImageInfos(),
+        outdated(true)
     {
     }
 
@@ -127,6 +128,7 @@ public:
     bool sortRequired;
     GroupingMode groupingMode;
     QHash<qlonglong, ImageInfo> cachedImageInfos;
+    bool outdated;
 };
 
 TableViewModel::TableViewModel(TableViewShared* const sharedObject, QObject* parent)
@@ -429,12 +431,23 @@ void TableViewModel::loadColumnProfile(const TableViewColumnProfile& columnProfi
 
 void TableViewModel::slotSourceModelAboutToBeReset()
 {
+    if (!s->isActive)
+    {
+        slotClearModel(true);
+        return;
+    }
+
     // the source model is about to be reset. Propagate that change:
     beginResetModel();
 }
 
 void TableViewModel::slotSourceModelReset()
 {
+    if (!s->isActive)
+    {
+        return;
+    }
+
     // the source model is done resetting.
     slotPopulateModel(false);
     endResetModel();
@@ -449,6 +462,12 @@ void TableViewModel::slotSourceRowsAboutToBeInserted(const QModelIndex& parent, 
 
 void TableViewModel::slotSourceRowsInserted(const QModelIndex& parent, int start, int end)
 {
+    if (!s->isActive)
+    {
+        slotClearModel(true);
+        return;
+    }
+
     for (int i = start; i<=end; ++i)
     {
         const QModelIndex sourceIndex = s->imageModel->index(i, 0, parent);
@@ -462,6 +481,12 @@ void TableViewModel::slotSourceRowsInserted(const QModelIndex& parent, int start
 
 void TableViewModel::slotSourceRowsAboutToBeRemoved(const QModelIndex& parent, int start, int end)
 {
+    if (!s->isActive)
+    {
+        slotClearModel(true);
+        return;
+    }
+
     for (int i=start; i<=end; ++i)
     {
         const QModelIndex imageModelIndex = s->imageModel->index(i, 0, parent);
@@ -535,6 +560,12 @@ void TableViewModel::slotSourceRowsMoved(const QModelIndex& sourceParent, int so
 
 void TableViewModel::slotSourceLayoutAboutToBeChanged()
 {
+    if (!s->isActive)
+    {
+        slotClearModel(true);
+        return;
+    }
+
     /// @todo Emitting layoutAboutToBeChanged and layoutChanged is tricky,
     ///       because we do not know what will change.
     ///       It looks like ImageFilterModel emits layoutAboutToBeChanged and layoutChanged
@@ -546,6 +577,11 @@ void TableViewModel::slotSourceLayoutAboutToBeChanged()
 
 void TableViewModel::slotSourceLayoutChanged()
 {
+    if (!s->isActive)
+    {
+        return;
+    }
+
     /// @todo See note in TableViewModel#slotSourceLayoutAboutToBeChanged
 
     slotPopulateModel(false);
@@ -555,6 +591,12 @@ void TableViewModel::slotSourceLayoutChanged()
 
 void TableViewModel::slotDatabaseImageChanged(const ImageChangeset& imageChangeset)
 {
+    if (!s->isActive)
+    {
+        slotClearModel(true);
+        return;
+    }
+
 //     const DatabaseFields::Set changes = imageChangeset.changes();
 
     /// @todo Decide which changes are relevant here or
@@ -657,8 +699,15 @@ void TableViewModel::slotPopulateModelWithNotifications()
     slotPopulateModel(true);
 }
 
-void TableViewModel::slotPopulateModel(const bool sendNotifications)
+void TableViewModel::slotClearModel(const bool sendNotifications)
 {
+    if (d->outdated)
+    {
+        return;
+    }
+
+    d->outdated = true;
+
     if (sendNotifications)
     {
         beginResetModel();
@@ -671,6 +720,34 @@ void TableViewModel::slotPopulateModel(const bool sendNotifications)
 
     d->rootItem = new Item();
     d->cachedImageInfos.clear();
+
+    if (sendNotifications)
+    {
+        endResetModel();
+    }
+}
+
+void TableViewModel::slotPopulateModel(const bool sendNotifications)
+{
+    if (!s->isActive)
+    {
+        slotClearModel(sendNotifications);
+        return;
+    }
+
+    if (sendNotifications)
+    {
+        beginResetModel();
+    }
+
+    if (d->rootItem)
+    {
+        delete d->rootItem;
+    }
+
+    d->rootItem = new Item();
+    d->cachedImageInfos.clear();
+    d->outdated = false;
 
     const int sourceRowCount = s->imageModel->rowCount(QModelIndex());
     for (int i=0; i<sourceRowCount; ++i)
@@ -1407,6 +1484,18 @@ int TableViewModel::firstDeepRowNotInList(const QList<QModelIndex>& needleList)
     }
 
     return -1;
+}
+
+void TableViewModel::slotSetActive(const bool isActive)
+{
+    if (isActive)
+    {
+        if (d->outdated)
+        {
+            // populate the model once later, not now
+            QTimer::singleShot(0, this, SLOT(slotPopulateModelWithNotifications()));
+        }
+    }
 }
 
 } /* namespace Digikam */
