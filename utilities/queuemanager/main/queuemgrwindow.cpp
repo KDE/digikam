@@ -141,6 +141,11 @@ QueueMgrWindow::QueueMgrWindow()
     // We don't want to be deleted on close
     setAttribute(Qt::WA_DeleteOnClose, false);
 
+    // --------------------------------------------------------
+
+    d->fullScreenMngr = new FullScreenMngr(FS_NONE);
+    d->fullScreenMngr->setManagedWindow(this);
+
     // -- Build the GUI -------------------------------
 
     setupUserArea();
@@ -165,6 +170,7 @@ QueueMgrWindow::QueueMgrWindow()
 QueueMgrWindow::~QueueMgrWindow()
 {
     m_instance = 0;
+    delete d->fullScreenMngr;
     delete d;
 }
 
@@ -412,9 +418,8 @@ void QueueMgrWindow::setupActions()
 
     // -- Standard 'View' menu actions ---------------------------------------------
 
-    d->fullScreenAction = KStandardAction::fullScreen(0, 0, this, this);
-    actionCollection()->addAction("queuemgr_fullscreen", d->fullScreenAction);
-    connect(d->fullScreenAction, SIGNAL(toggled(bool)), this, SLOT(slotToggleFullScreen(bool)));
+    QAction* const fullScreenAction = d->fullScreenMngr->createFullScreenAction("queuemgr_fullscreen");
+    connect(fullScreenAction, SIGNAL(toggled(bool)), this, SLOT(slotToggleFullScreen(bool)));
 
     // -- Standard 'Configure' menu actions ----------------------------------------
 
@@ -470,10 +475,10 @@ void QueueMgrWindow::readSettings()
     KConfigGroup group        = config->group("Batch Queue Manager Settings");
 
     d->verticalSplitter->restoreState(group, d->VERTICAL_SPLITTER_CONFIG_KEY);
-    d->bottomSplitter->restoreState(group, d->BOTTOM_SPLITTER_CONFIG_KEY);
-    d->topSplitter->restoreState(group, d->TOP_SPLITTER_CONFIG_KEY);
+    d->bottomSplitter->restoreState(group,   d->BOTTOM_SPLITTER_CONFIG_KEY);
+    d->topSplitter->restoreState(group,      d->TOP_SPLITTER_CONFIG_KEY);
 
-    // TODO
+    d->fullScreenMngr->readSettings(group);
 }
 
 void QueueMgrWindow::writeSettings()
@@ -481,11 +486,12 @@ void QueueMgrWindow::writeSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("Batch Queue Manager Settings");
 
-    d->topSplitter->saveState(group, d->TOP_SPLITTER_CONFIG_KEY);
-    d->bottomSplitter->saveState(group, d->BOTTOM_SPLITTER_CONFIG_KEY);
+    d->topSplitter->saveState(group,      d->TOP_SPLITTER_CONFIG_KEY);
+    d->bottomSplitter->saveState(group,   d->BOTTOM_SPLITTER_CONFIG_KEY);
     d->verticalSplitter->saveState(group, d->VERTICAL_SPLITTER_CONFIG_KEY);
 
-    // TODO
+    d->fullScreenMngr->saveSettings(group);
+
     config->sync();
 }
 
@@ -498,6 +504,10 @@ void QueueMgrWindow::applySettings()
     }
 
     d->queuePool->applySettings();
+
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group("Batch Queue Manager Settings");
+    d->fullScreenMngr->readSettings(group);
 }
 
 void QueueMgrWindow::refreshStatusBar()
@@ -1082,80 +1092,14 @@ void QueueMgrWindow::slotSaveWorkflow()
 
 void QueueMgrWindow::slotToggleFullScreen(bool b)
 {
-    KToggleFullScreenAction::setFullScreen(this, b);
-
-    if (!b)
-    {
-        // Switch off fullscreen
-
-        slotShowMenuBar();
-        statusBar()->show();
-        showToolBars();
-
-        if (d->removeFullScreenButton)
-        {
-            QList<KToolBar*> toolbars = toolBars();
-
-            foreach(KToolBar* const toolbar, toolbars)
-            {
-                // name is set in ui.rc XML file
-                if (toolbar->objectName() == "ToolBar")
-                {
-                    toolbar->removeAction(d->fullScreenAction);
-                    break;
-                }
-            }
-        }
-    }
-    else
-    {
-        // Switch on fullscreen
-
-        // hide the menubar and the statusbar
-        menuBar()->hide();
-        statusBar()->hide();
-
-        if (d->fullScreenHideToolBar)
-        {
-            hideToolBars();
-        }
-        else
-        {
-            showToolBars();
-
-            QList<KToolBar*> toolbars = toolBars();
-            KToolBar* mainToolbar     = 0;
-
-            foreach(KToolBar* const toolbar, toolbars)
-            {
-                if (toolbar->objectName() == "ToolBar")
-                {
-                    mainToolbar = toolbar;
-                    break;
-                }
-            }
-
-            // add fullscreen action if necessary
-            if (mainToolbar && !mainToolbar->actions().contains(d->fullScreenAction))
-            {
-                mainToolbar->addAction(d->fullScreenAction);
-                d->removeFullScreenButton = true;
-            }
-            else
-            {
-                // If FullScreen button is enabled in toolbar settings,
-                // we shall not remove it when leaving of fullscreen mode.
-                d->removeFullScreenButton = false;
-            }
-        }
-    }
+    d->fullScreenMngr->switchWindowToFullScreen(b);
 }
 
-void QueueMgrWindow::slotEscapePressed()
+void QueueMgrWindow::keyPressEvent(QKeyEvent* e)
 {
-    if (d->fullScreenAction->isChecked())
+    if (e->key() == Qt::Key_Escape)
     {
-        d->fullScreenAction->activate(QAction::Trigger);
+        d->fullScreenMngr->escapePressed();
     }
 }
 

@@ -6,7 +6,7 @@
  * Date        : 2007-05-11
  * Description : setup Light Table tab.
  *
- * Copyright (C) 2007-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -38,6 +38,10 @@
 #include <kglobal.h>
 #include <klocale.h>
 
+// Local includes
+
+#include "fullscreenmngr.h"
+
 namespace Digikam
 {
 
@@ -46,29 +50,28 @@ class SetupLightTable::Private
 public:
 
     Private() :
-        hideToolBar(0),
         autoSyncPreview(0),
         autoLoadOnRightPanel(0),
         loadFullImageSize(0),
-        clearOnClose(0)
+        clearOnClose(0),
+        fullScreenSettings(0)
     {}
 
     static const QString configGroupName;
-    static const QString configFullScreenHideToolBarEntry;
     static const QString configAutoSyncPreviewEntry;
     static const QString configAutoLoadRightPanelEntry;
     static const QString configLoadFullImagesizeEntry;
     static const QString configClearOnCloseEntry;
 
-    QCheckBox*           hideToolBar;
     QCheckBox*           autoSyncPreview;
     QCheckBox*           autoLoadOnRightPanel;
     QCheckBox*           loadFullImageSize;
     QCheckBox*           clearOnClose;
+
+    FullScreenSettings*  fullScreenSettings;
 };
 
 const QString SetupLightTable::Private::configGroupName("LightTable Settings");
-const QString SetupLightTable::Private::configFullScreenHideToolBarEntry("FullScreen Hide ToolBar");
 const QString SetupLightTable::Private::configAutoSyncPreviewEntry("Auto Sync Preview");
 const QString SetupLightTable::Private::configAutoLoadRightPanelEntry("Auto Load Right Panel");
 const QString SetupLightTable::Private::configLoadFullImagesizeEntry("Load Full Image size");
@@ -108,7 +111,7 @@ SetupLightTable::SetupLightTable(QWidget* const parent)
                                             "<p><b>Note:</b> for Raw images, a half size version of the Raw data "
                                             "is used instead of the embedded JPEG preview.</p>"));
 
-    d->hideToolBar  = new QCheckBox(i18n("H&ide toolbar in fullscreen mode"), interfaceOptionsGroup);
+    d->fullScreenSettings = new FullScreenSettings(FS_TOOLBAR, interfaceOptionsGroup);
 
     d->clearOnClose = new QCheckBox(i18n("Clear the light table on close"));
     d->clearOnClose->setWhatsThis(i18n("Set this option to remove all images "
@@ -119,7 +122,7 @@ SetupLightTable::SetupLightTable(QWidget* const parent)
     gLayout->addWidget(d->autoSyncPreview);
     gLayout->addWidget(d->autoLoadOnRightPanel);
     gLayout->addWidget(d->loadFullImageSize);
-    gLayout->addWidget(d->hideToolBar);
+    gLayout->addWidget(d->fullScreenSettings);
     gLayout->addWidget(d->clearOnClose);
     gLayout->setMargin(KDialog::spacingHint());
     gLayout->setSpacing(0);
@@ -154,7 +157,7 @@ void SetupLightTable::readSettings()
     QColor Black(Qt::black);
     QColor White(Qt::white);
 
-    d->hideToolBar->setChecked(group.readEntry(d->configFullScreenHideToolBarEntry,       false));
+    d->fullScreenSettings->readSettings(group);
     d->autoSyncPreview->setChecked(group.readEntry(d->configAutoSyncPreviewEntry,         true));
     d->autoLoadOnRightPanel->setChecked(group.readEntry(d->configAutoLoadRightPanelEntry, true));
     d->loadFullImageSize->setChecked(group.readEntry(d->configLoadFullImagesizeEntry,     false));
@@ -165,7 +168,7 @@ void SetupLightTable::applySettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
-    group.writeEntry(d->configFullScreenHideToolBarEntry, d->hideToolBar->isChecked());
+    d->fullScreenSettings->saveSettings(group);
     group.writeEntry(d->configAutoSyncPreviewEntry,       d->autoSyncPreview->isChecked());
     group.writeEntry(d->configAutoLoadRightPanelEntry,    d->autoLoadOnRightPanel->isChecked());
     group.writeEntry(d->configLoadFullImagesizeEntry,     d->loadFullImageSize->isChecked());
