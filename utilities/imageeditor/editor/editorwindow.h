@@ -54,7 +54,6 @@ class KActionMenu;
 class KCategorizedView;
 class KSelectAction;
 class KToggleAction;
-class KToggleFullScreenAction;
 class KToolBarPopupAction;
 class KMenu;
 
@@ -103,7 +102,6 @@ Q_SIGNALS:
 protected:
 
     bool                      m_nonDestructive;
-    bool                      m_fullScreenHideThumbBar;
     bool                      m_cancelSlideShow;
     bool                      m_setExifOrientationTag;
     bool                      m_editingOriginalImage;
@@ -128,7 +126,6 @@ protected:
     KAction*                  m_fileDeleteAction;
     KAction*                  m_forwardAction;
     KAction*                  m_backwardAction;
-    KToggleFullScreenAction*  m_fullScreenAction;
 
     KAction*                  m_lastAction;
     KAction*                  m_firstAction;
@@ -208,7 +205,6 @@ protected:
     void colorManage();
     void execSavingProgressDialog();
 
-    void toggleGUI2FullScreen();
     void resetOrigin();
     void resetOriginSwitchFile();
 
@@ -267,7 +263,6 @@ protected Q_SLOTS:
     void slotNewToolbarConfig();
 
     void slotToggleFullScreen(bool b);
-    void slotEscapePressed();
 
     void slotSelected(bool);
 

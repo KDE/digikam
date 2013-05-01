@@ -43,8 +43,7 @@
 #include "lighttableview.h"
 #include "lighttablethumbbar.h"
 #include "thumbbardock.h"
-
-class KToggleFullScreenAction;
+#include "fullscreenmngr.h"
 
 namespace Digikam
 {
@@ -57,10 +56,7 @@ public:
     Private() :
         autoLoadOnRightPanel(true),
         autoSyncPreview(true),
-        fullScreenHideToolBar(false),
-        removeFullScreenButton(false),
         cancelSlideShow(false),
-        fullScreenAction(0),
         setItemLeftAction(0),
         setItemRightAction(0),
         clearListAction(0),
@@ -105,11 +101,8 @@ public:
 
     bool                      autoLoadOnRightPanel;
     bool                      autoSyncPreview;
-    bool                      fullScreenHideToolBar;
-    bool                      removeFullScreenButton;
     bool                      cancelSlideShow;
 
-    KToggleFullScreenAction*  fullScreenAction;
     KAction*                  setItemLeftAction;
     KAction*                  setItemRightAction;
     KAction*                  clearListAction;
@@ -162,6 +155,8 @@ public:
     ImagePropertiesSideBarDB* rightSideBar;
 
     DAboutData*               about;
+
+    FullScreenMngr*           fullScreenMngr;
 };
 
 }  // namespace Digikam

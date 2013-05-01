@@ -49,8 +49,7 @@
 #include "sidebar.h"
 #include "toolsettingsview.h"
 #include "toolsview.h"
-
-class KToggleFullScreenAction;
+#include "fullscreenmngr.h"
 
 namespace Digikam
 {
@@ -67,8 +66,6 @@ public:
         BOTTOM_SPLITTER_CONFIG_KEY("BqmBottomSplitter"),
         VERTICAL_SPLITTER_CONFIG_KEY("BqmVerticalSplitter")
     {
-        fullScreenHideToolBar  = false;
-        removeFullScreenButton = false;
         busy                   = false;
         clearQueueAction       = 0;
         moveUpToolAction       = 0;
@@ -77,7 +74,6 @@ public:
         removeItemsSelAction   = 0;
         removeItemsDoneAction  = 0;
         clearToolsAction       = 0;
-        fullScreenAction       = 0;
         donateMoneyAction      = 0;
         statusProgressBar      = 0;
         statusLabel            = 0;
@@ -103,11 +99,10 @@ public:
         thread                 = 0;
         animLogo               = 0;
         about                  = 0;
+        fullScreenMngr         = 0;
         currentQueueToProcess  = 0;
     }
 
-    bool                     fullScreenHideToolBar;
-    bool                     removeFullScreenButton;
     bool                     busy;
 
     int                      currentQueueToProcess;
@@ -122,7 +117,6 @@ public:
     QAction*                 removeToolAction;
     QAction*                 clearToolsAction;
 
-    KToggleFullScreenAction* fullScreenAction;
     KAction*                 runAction;
     KAction*                 stopAction;
     KAction*                 removeQueueAction;
@@ -155,6 +149,8 @@ public:
     QueueSettingsView*       queueSettingsView;
 
     DAboutData*              about;
+
+    FullScreenMngr*          fullScreenMngr;
 
     const QString            TOP_SPLITTER_CONFIG_KEY;
     const QString            BOTTOM_SPLITTER_CONFIG_KEY;

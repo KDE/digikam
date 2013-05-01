@@ -180,7 +180,7 @@ ImagePlugin_Color::ImagePlugin_Color(QObject* const parent, const QVariantList&)
 
     d->curvesAction = new KAction(KIcon("adjustcurves"), i18n("Curves Adjust..."), this);
     // NOTE: Photoshop 7 use CTRL+M (but it's used in KDE to toogle menu bar).
-    d->curvesAction->setShortcut(KShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_M));
+    d->curvesAction->setShortcut(KShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_C));
     actionCollection()->addAction("imageplugin_adjustcurves", d->curvesAction);
     connect(d->curvesAction, SIGNAL(triggered(bool)),
             this, SLOT(slotCurvesAdjust()));
