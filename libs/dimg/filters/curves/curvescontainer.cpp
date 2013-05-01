@@ -144,7 +144,7 @@ void CurvesContainer::writeToFilterAction(FilterAction& action, const QString& p
 
     for (int i = 0; i < ColorChannels; ++i)
     {
-        action.addParameter(prefix + QString("curveData[%1]").arg(i), curves.channelToBase64(i));
+        action.addParameter(prefix + QString("curveData[%1]").arg(i), curves.channelToBinary(i).toBase64());
     }
 }
 
@@ -161,7 +161,7 @@ CurvesContainer CurvesContainer::fromFilterAction(const FilterAction& action, co
     {
         QByteArray base64 = action.parameter(prefix + QString("curveData[%1]").arg(i), QByteArray());
         // check return value and set readParametersError?
-        curves.setChannelFromBase64(i, base64);
+        curves.setChannelFromBinary(i, QByteArray::fromBase64(base64));
     }
 
     // We don't need to call curves.curvesCalculateAllCurves() here ???
