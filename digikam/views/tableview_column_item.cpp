@@ -343,8 +343,10 @@ TableViewColumn::ColumnCompareResult ColumnItemProperties::compare(
                 return CmpEqual;
             }
 
-            const qreal aspectRatioA = widthA / heightA;
-            const qreal aspectRatioB = widthB / heightB;
+            const qreal aspectRatioA = qreal(widthA) / qreal(heightA);
+            const qreal aspectRatioB = qreal(widthB) / qreal(heightB);
+            kDebug()<<aspectRatioA<<widthA<<heightA;
+            kDebug()<<aspectRatioB<<widthB<<heightB;
 
             /// @todo use fuzzy compare?
             return compareHelper<qreal>(aspectRatioA, aspectRatioB);
