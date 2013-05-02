@@ -139,6 +139,12 @@ void FullScreenMngr::setManagedWindow(KXmlGuiWindow* const win)
 
 QAction* FullScreenMngr::createFullScreenAction(const QString& name)
 {
+    if (!d->win)
+    {
+        kDebug() << "Managed window is not initialized";
+        return 0;
+    }
+
     d->fullScreenAction = KStandardAction::fullScreen(0, 0, d->win, d->win);
     d->win->actionCollection()->addAction(name, d->fullScreenAction);
     d->fullScreenBtn    = new QToolButton(d->win);
@@ -269,10 +275,19 @@ void FullScreenMngr::switchWindowToFullScreen(bool set)
 
 void FullScreenMngr::escapePressed()
 {
-    if (d->fullScreenAction->isChecked())
+    if (fullScreenIsActive())
     {
         d->fullScreenAction->activate(QAction::Trigger);
     }
+}
+
+bool FullScreenMngr::fullScreenIsActive() const
+{
+    if (d->fullScreenAction)
+        return d->fullScreenAction->isChecked();
+
+    kDebug() << "FullScreenAction is not initialized";
+    return false;
 }
 
 bool FullScreenMngr::eventFilter(QObject* obj, QEvent* ev)
@@ -284,7 +299,7 @@ bool FullScreenMngr::eventFilter(QObject* obj, QEvent* ev)
             // We will handle a stand alone FullScreen button action on top/right corner of screen
             // only if managed window tool bar is hidden, and if we switched already in Full Screen mode.
 
-            if ((d->options & FS_TOOLBAR) && m_fullScreenHideToolBar && d->fullScreenAction->isChecked())
+            if ((d->options & FS_TOOLBAR) && m_fullScreenHideToolBar && fullScreenIsActive())
             {
                 QHoverEvent* const mev = dynamic_cast<QHoverEvent*>(ev);
 

@@ -92,6 +92,10 @@ public:
      */
     void escapePressed();
 
+    /** Return true if managed window is currently in Full Screen Mode
+     */
+    bool fullScreenIsActive() const;
+
 public:
 
     /** Settings taken from managed window configuration to handle toolbar visibility  in full-screen mode
