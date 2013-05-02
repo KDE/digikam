@@ -338,6 +338,7 @@ TableViewColumn::ColumnCompareResult ColumnItemProperties::compare(
             const int heightA = infoA.dimensions().height();
             const int heightB = infoB.dimensions().height();
 
+            /// @todo This breaks sorting, needs to return CmpBroken?
             if ( (heightA==0) || (heightB==0) )
             {
                 return CmpEqual;

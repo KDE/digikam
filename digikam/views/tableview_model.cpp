@@ -78,6 +78,13 @@ void TableViewModel::Item::addChild(TableViewModel::Item* const newChild)
     children << newChild;
 }
 
+void TableViewModel::Item::insertChild(const int pos, TableViewModel::Item* const newChild)
+{
+    newChild->parent = this;
+
+    children.insert(pos, newChild);
+}
+
 
 void TableViewModel::Item::takeChild(TableViewModel::Item* const oldChild)
 {
@@ -474,9 +481,6 @@ void TableViewModel::slotSourceRowsInserted(const QModelIndex& parent, int start
 
         addSourceModelIndex(sourceIndex, true);
     }
-
-    /// @todo Smarter insertion of new data is better
-    scheduleResort();
 }
 
 void TableViewModel::slotSourceRowsAboutToBeRemoved(const QModelIndex& parent, int start, int end)
@@ -809,15 +813,14 @@ void TableViewModel::addSourceModelIndex(const QModelIndex& imageModelIndex, con
     }
 
     Item* item = createItemFromSourceIndex(imageModelIndex);
-
+    const int newRowIndex = findChildSortedPosition(parentItem, item);
     if (sendNotifications)
     {
         const QModelIndex parentIndex = itemIndex(parentItem);
-        const int newRowIndex = parentItem->children.count();
         beginInsertRows(parentIndex, newRowIndex, newRowIndex);
     }
 
-    parentItem->addChild(item);
+    parentItem->insertChild(newRowIndex, item);
 
     if (sendNotifications)
     {
@@ -842,7 +845,8 @@ void TableViewModel::addSourceModelIndex(const QModelIndex& imageModelIndex, con
             Item* const groupedItem = new Item();
             groupedItem->imageId = groupedInfo.id();
 
-            item->addChild(groupedItem);
+            const int newRowIndex = findChildSortedPosition(item, groupedItem);
+            item->insertChild(newRowIndex, groupedItem);
         }
 
         if (sendNotifications)
@@ -1496,6 +1500,24 @@ void TableViewModel::slotSetActive(const bool isActive)
             QTimer::singleShot(0, this, SLOT(slotPopulateModelWithNotifications()));
         }
     }
+}
+
+int TableViewModel::findChildSortedPosition(TableViewModel::Item* const parentItem, TableViewModel::Item* const childItem)
+{
+    for (int i = 0; i<parentItem->children.count(); ++i)
+    {
+        bool compareResult = lessThan(childItem, parentItem->children.at(i));
+        if (d->sortOrder==Qt::DescendingOrder)
+        {
+            compareResult = !compareResult;
+        }
+        if (compareResult)
+        {
+            return i;
+        }
+    }
+
+    return parentItem->children.count();
 }
 
 } /* namespace Digikam */
