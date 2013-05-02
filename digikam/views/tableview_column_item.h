@@ -55,7 +55,8 @@ public:
         SubColumnColorMode = 5,
         SubColumnType = 6,
         SubColumnCreationDateTime = 7,
-        SubColumnDigitizationDateTime = 8
+        SubColumnDigitizationDateTime = 8,
+        SubColumnAspectRatio = 9
     };
 
 private:

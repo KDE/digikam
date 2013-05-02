@@ -37,12 +37,11 @@ class PAlbum;
 
 namespace ToolTipFiller
 {
+    bool aspectRatioToString(const int width, const int height, QString* const arString);
     QString imageInfoTipContents(const ImageInfo& info);
     QString albumTipContents(PAlbum* const album, int count);
     QString filterActionTipContents(const FilterAction& action);
 }
-
-int gcd(int a, int b);
 
 }  // namespace Digikam
 

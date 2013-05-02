@@ -187,12 +187,12 @@ void TableViewColumnProfile::loadSettings(const KConfigGroup& configGroup)
             columnConfigurationList << nextDesc.toConfiguration();
         }
 
-        if (TableViewColumnDescription::FindInListById(allColumns, "digikam-title", &nextDesc))
+        if (TableViewColumnDescription::FindInListById(allColumns, "itemcreationdatetime", &nextDesc))
         {
             columnConfigurationList << nextDesc.toConfiguration();
         }
 
-        if (TableViewColumnDescription::FindInListById(allColumns, "itemcreationdatetime", &nextDesc))
+        if (TableViewColumnDescription::FindInListById(allColumns, "digikam-title", &nextDesc))
         {
             columnConfigurationList << nextDesc.toConfiguration();
         }
