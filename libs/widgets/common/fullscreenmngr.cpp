@@ -44,7 +44,6 @@
 #include <kactioncollection.h>
 #include <kdialog.h>
 #include <klocale.h>
-#include <kapplication.h>
 
 // Local includes
 
@@ -88,12 +87,12 @@ public:
      */
     bool                     removeFullScreenButton;
 
-    static const QString     configRestoreFullScreenEntry;
+    static const QString     configRestoreFullScreenModeEntry;
     static const QString     configFullScreenHideThumbBarEntry;
     static const QString     configFullScreenHideToolBarEntry;
 };
 
-const QString FullScreenMngr::Private::configRestoreFullScreenEntry("RestoreFullScreen");
+const QString FullScreenMngr::Private::configRestoreFullScreenModeEntry("Restore Full Screen Mode");
 const QString FullScreenMngr::Private::configFullScreenHideThumbBarEntry("FullScreen Hide ThumbBar");
 const QString FullScreenMngr::Private::configFullScreenHideToolBarEntry("FullScreen Hide ToolBar");
 
@@ -157,7 +156,7 @@ void FullScreenMngr::readSettings(const KConfigGroup& group)
     if (d->options & FS_THUMBBAR)
         m_fullScreenHideThumbBar = group.readEntry(d->configFullScreenHideThumbBarEntry, true);
 
-    if (group.readEntry(d->configRestoreFullScreenEntry, false))
+    if (group.readEntry(d->configRestoreFullScreenModeEntry, false))
     {
         if (d->fullScreenAction)
             d->fullScreenAction->activate(QAction::Trigger);
@@ -173,7 +172,7 @@ void FullScreenMngr::saveSettings(KConfigGroup& group)
         group.writeEntry(d->configFullScreenHideThumbBarEntry, m_fullScreenHideThumbBar);
 
     if (d->fullScreenAction)
-        group.writeEntry(d->configRestoreFullScreenEntry, d->fullScreenAction->isChecked());
+        group.writeEntry(d->configRestoreFullScreenModeEntry, d->fullScreenAction->isChecked());
 }
 
 void FullScreenMngr::switchWindowToFullScreen(bool set)
@@ -282,14 +281,17 @@ bool FullScreenMngr::eventFilter(QObject* obj, QEvent* ev)
     {
         if (ev && (ev->type() == QEvent::HoverMove))
         {
-            if ((d->options & FS_TOOLBAR) && m_fullScreenHideToolBar)
+            // We will handle a stand alone FullScreen button action on top/right corner of screen
+            // only if managed window tool bar is hidden, and if we switched already in Full Screen mode.
+
+            if ((d->options & FS_TOOLBAR) && m_fullScreenHideToolBar && d->fullScreenAction->isChecked())
             {
                 QHoverEvent* const mev = dynamic_cast<QHoverEvent*>(ev);
 
                 if (mev)
                 {
                     QPoint pos(mev->pos());
-                    QRect  desktopRect = KGlobalSettings::desktopGeometry(kapp->activeWindow());
+                    QRect  desktopRect = KGlobalSettings::desktopGeometry(d->win);
 
                     QRect sizeRect(QPoint(0, 0), d->fullScreenBtn->size());
                     QRect topLeft, topRight;
