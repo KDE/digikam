@@ -214,7 +214,6 @@ EditorWindow::~EditorWindow()
     delete m_IOFileSettings;
     delete d->toolIface;
     delete d->exposureSettings;
-    delete d->fullScreenMngr;
     delete d;
 }
 

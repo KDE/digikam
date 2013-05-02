@@ -27,6 +27,8 @@
 // Qt includes
 
 #include <QWidget>
+#include <QObject>
+#include <QRect>
 
 // KDE includes
 
@@ -36,6 +38,7 @@
 
 #include "digikam_export.h"
 
+class QEvent;
 class QAction;
 
 class KXmlGuiWindow;
@@ -56,8 +59,9 @@ enum FullScreenOptions
 
 /** Data container to use in managed window.
  */
-class DIGIKAM_EXPORT FullScreenMngr
+class DIGIKAM_EXPORT FullScreenMngr : public QObject
 {
+
 public:
 
     explicit FullScreenMngr(int options);
@@ -97,6 +101,10 @@ public:
     /** Settigns taken from managed window configuration to handle thumbbar visibility in full-screen mode
      */
     bool m_fullScreenHideThumbBar;
+
+protected:
+
+    bool eventFilter(QObject* obj, QEvent* ev);
 
 private:
 

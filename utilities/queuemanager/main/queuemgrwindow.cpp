@@ -170,7 +170,6 @@ QueueMgrWindow::QueueMgrWindow()
 QueueMgrWindow::~QueueMgrWindow()
 {
     m_instance = 0;
-    delete d->fullScreenMngr;
     delete d;
 }
 
