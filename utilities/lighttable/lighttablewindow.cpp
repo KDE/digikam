@@ -163,7 +163,6 @@ LightTableWindow::~LightTableWindow()
     delete d->thumbView;
     delete d->rightSideBar;
     delete d->leftSideBar;
-    delete d->fullScreenMngr;
     delete d;
 }
 

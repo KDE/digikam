@@ -27,6 +27,9 @@
 #include <QList>
 #include <QVBoxLayout>
 #include <QCheckBox>
+#include <QToolButton>
+#include <QEvent>
+#include <QHoverEvent>
 
 // KDE includes
 
@@ -41,6 +44,7 @@
 #include <kactioncollection.h>
 #include <kdialog.h>
 #include <klocale.h>
+#include <kapplication.h>
 
 // Local includes
 
@@ -58,6 +62,7 @@ public:
         options                = FS_DEFAULT;
         win                    = 0;
         fullScreenAction       = 0;
+        fullScreenBtn          = 0;
         removeFullScreenButton = false;
     }
 
@@ -73,8 +78,11 @@ public:
     /** Windo instance to manage */
     KXmlGuiWindow*           win;
 
-    /** Action plug in managed window to switch fullscreen state*/
+    /** Action plug in managed window to switch fullscreen state */
     KToggleFullScreenAction* fullScreenAction;
+
+    /** Show only if toolbar is hidden */
+    QToolButton*             fullScreenBtn;
 
     /** Used by switchWindowToFullScreen() to manage state of full-screen button on managed window
      */
@@ -127,12 +135,17 @@ FullScreenMngr::~FullScreenMngr()
 void FullScreenMngr::setManagedWindow(KXmlGuiWindow* const win)
 {
     d->win = win;
+    d->win->installEventFilter(this);
 }
 
 QAction* FullScreenMngr::createFullScreenAction(const QString& name)
 {
     d->fullScreenAction = KStandardAction::fullScreen(0, 0, d->win, d->win);
     d->win->actionCollection()->addAction(name, d->fullScreenAction);
+    d->fullScreenBtn    = new QToolButton(d->win);
+    d->fullScreenBtn->setDefaultAction(d->fullScreenAction);
+    d->fullScreenBtn->hide();
+
     return d->fullScreenAction;
 }
 
@@ -179,6 +192,7 @@ void FullScreenMngr::switchWindowToFullScreen(bool set)
         // restore toolbar
 
         d->showToolBars();
+        d->fullScreenBtn->hide();
 
         if (d->removeFullScreenButton)
         {
@@ -260,6 +274,54 @@ void FullScreenMngr::escapePressed()
     {
         d->fullScreenAction->activate(QAction::Trigger);
     }
+}
+
+bool FullScreenMngr::eventFilter(QObject* obj, QEvent* ev)
+{
+    if (d->win && (obj == d->win))
+    {
+        if (ev && (ev->type() == QEvent::HoverMove))
+        {
+            if ((d->options & FS_TOOLBAR) && m_fullScreenHideToolBar)
+            {
+                QHoverEvent* const mev = dynamic_cast<QHoverEvent*>(ev);
+
+                if (mev)
+                {
+                    QPoint pos(mev->pos());
+                    QRect  desktopRect = KGlobalSettings::desktopGeometry(kapp->activeWindow());
+
+                    QRect sizeRect(QPoint(0, 0), d->fullScreenBtn->size());
+                    QRect topLeft, topRight;
+                    QRect topRightLarger;
+
+                    desktopRect       = QRect(desktopRect.y(), desktopRect.y(), desktopRect.width(), desktopRect.height());
+                    topLeft           = sizeRect;
+                    topRight          = sizeRect;
+
+                    topLeft.moveTo(desktopRect.x(), desktopRect.y());
+                    topRight.moveTo(desktopRect.x() + desktopRect.width() - sizeRect.width() - 1, topLeft.y());
+
+                    topRightLarger    = topRight.adjusted(-25, 0, 0, 10);
+
+                    if (topRightLarger.contains(pos))
+                    {
+                        d->fullScreenBtn->move(topRight.topLeft());
+                        d->fullScreenBtn->show();
+                    }
+                    else
+                    {
+                        d->fullScreenBtn->hide();
+                    }
+
+                    return false;
+                }
+            }
+        }
+    }
+
+    // pass the event on to the parent class
+    return QObject::eventFilter(obj, ev);
 }
 
 // -------------------------------------------------------------------------------------------------------------
