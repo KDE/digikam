@@ -363,7 +363,6 @@ void FaceGroup::aboutToSetInfo(const ImageInfo& info)
     {
         return;
     }
-
     applyItemGeometryChanges();
     clear();
 }
@@ -420,7 +419,6 @@ RegionFrameItem* FaceGroup::closestItem(const QPointF& p, qreal* const manhattan
     {
         *manhattanLength = minDistance;
     }
-
     return closestItem;
 }
 
@@ -532,6 +530,7 @@ FaceItem* FaceGroup::Private::addItem(const DatabaseFace& face)
 {
     FaceItem* const item = createItem(face);
     // for identification, use index in our list
+
     AssignNameWidget* const assignWidget = createAssignNameWidget(face, items.size());
     item->setHudWidget(assignWidget);
     //new StyleSheetDebugger(assignWidget);
@@ -606,7 +605,6 @@ void FaceGroup::load()
     {
         return;
     }
-    kDebug() << "FaceGroup ----- Preparing to load...";
     d->state = LoadingFaces;
 
     if (d->info.isNull())
@@ -616,11 +614,10 @@ void FaceGroup::load()
     }
 
     QList<DatabaseFace> faces = FaceTagsEditor().databaseFaces(d->info.id());
-
+    d->visibilityController->clear();
     foreach(const DatabaseFace& face, faces)
     {
         d->addItem(face);
-        kDebug() << "FaceGroup LOAD  New faces added -----------------" << face.region().toRect();
     }
 
     d->state = FacesLoaded;
@@ -719,7 +716,6 @@ void FaceGroup::addFace()
     {
         return;
     }
-
     d->manuallyAddWrapItem = new ClickDragReleaseItem(d->view->previewItem());
     d->manuallyAddWrapItem->setFocus();
     d->view->setFocus();
@@ -796,12 +792,7 @@ void FaceGroup::applyItemGeometryChanges()
 
         if (item->face().region() != currentRegion)
         {
-            /**
-             * This line add garbage tags to database when image is rotated
-             * Need to figure out were this line is used and how
-             */
             d->editPipeline.editRegion(d->info, d->view->previewItem()->image(), item->face(), currentRegion);
-
         }
     }
 

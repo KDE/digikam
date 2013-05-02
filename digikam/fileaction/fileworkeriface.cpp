@@ -267,9 +267,6 @@ void FileActionMngrFileWorker::transform(FileActionImageInfoList infos, int acti
     infos.finishedWriting();
 
     ScanController::instance()->resumeCollectionScan();
-
-
-    emit imageTransformFinished();
 }
 
 void FileActionMngrFileWorker::ajustFaceRectangles(const ImageInfo& info,

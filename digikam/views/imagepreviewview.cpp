@@ -49,6 +49,7 @@
 #include <kstandarddirs.h>
 #include <kglobalsettings.h>
 
+
 // Local includes
 
 #include "albumsettings.h"
@@ -288,8 +289,11 @@ void ImagePreviewView::imageLoaded()
     d->rotRightAction->setEnabled(true);
 
     d->faceGroup->setInfo(d->item->imageInfo());
-    connect(FileActionMngr::instance(),SIGNAL(signalImageTransformed()),this,
-            SLOT(slotUpdateTagsView()),Qt::DirectConnection);
+
+    connect(d->item,
+            SIGNAL(imageChanged()),
+            this,
+            SLOT(slotUpdateFaces()));
 }
 
 void ImagePreviewView::imageLoadingFailed()
@@ -510,11 +514,13 @@ void ImagePreviewView::slotRotateLeft()
     /**
      * Setting lock won't allow mouse hover events in FaceGroup class
      */
+    d->item->setAcceptHoverEvents(false);
     d->faceGroup->setEditLock(true);
 
     /**
      * aboutToSetInfo will delete all face tags from FaceGroup storage
      */
+    d->faceGroup->aboutToSetInfo(ImageInfo());
     FileActionMngr::instance()->transform(QList<ImageInfo>() << d->item->imageInfo(), KExiv2Iface::RotationMatrix::Rotate270);
 }
 
@@ -523,6 +529,7 @@ void ImagePreviewView::slotRotateRight()
     /**
      * Setting lock won't allow mouse hover events in FaceGroup class
      */
+    d->item->setAcceptHoverEvents(false);
     d->faceGroup->setEditLock(true);
 
     /**
@@ -537,12 +544,11 @@ void ImagePreviewView::slotDeleteItem()
     emit signalDeleteItem();
 }
 
-void ImagePreviewView::slotUpdateTagsView()
+void Digikam::ImagePreviewView::slotUpdateFaces()
 {
-    /**
-     * Remove edit lock after transform is finished
-     */
+    d->faceGroup->aboutToSetInfo(ImageInfo());
     d->faceGroup->setEditLock(false);
+    d->item->setAcceptHoverEvents(true);
 }
 
 }  // namespace Digikam

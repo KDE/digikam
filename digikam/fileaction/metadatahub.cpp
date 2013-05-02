@@ -599,7 +599,6 @@ bool MetadataHub::write(DMetadata& metadata, WriteMode writeMode, const Metadata
     bool saveColorLabel = (settings.saveColorLabel && d->colorLabelStatus == MetadataAvailable);
     bool saveRating     = (settings.saveRating     && d->ratingStatus     == MetadataAvailable);
     bool saveTemplate   = (settings.saveTemplate   && d->templateStatus   == MetadataAvailable);
-    //bool saveFaceTags   = settings.saveFaceTags; //Disabled, can produce rectangle inconsistency
     bool saveTags       = false;
 
     if (settings.saveTags)
@@ -761,7 +760,6 @@ bool MetadataHub::write(DMetadata& metadata, WriteMode writeMode, const Metadata
 bool MetadataHub::write(const QString& filePath, WriteMode writeMode, const MetadataSettingsContainer& settings)
 {
     applyChangeNotifications();
-    kDebug() << "------------MetadataHub::write(const QString& filePath, WriteMode writeMode, const MetadataSettingsContainer& settings)------------";
 
     // if no DMetadata object is needed at all, don't construct one -
     // important optimization if writing to file is turned off in setup!
@@ -1272,12 +1270,11 @@ void Digikam::MetadataHub::loadFaceTags(const ImageInfo info, QSize size)
             QString faceName = FaceTags::faceNameForTag(dface.tagId());
             if(faceName.isEmpty())
                 continue;
-            kDebug() << "------------------------------------Adding rectangle" << dface.region().toRect ();
+
             QRect   temprect = dface.region().toRect();
             QRectF  faceRect = TagRegion::absoluteToRelative(temprect,size);
 
             d->faceTagsList[faceName] = QVariant(faceRect);
-            //kDebug() << "-----------------------------------------------------New faces added" << faceName << " " << faceRect;
         }
 
     }

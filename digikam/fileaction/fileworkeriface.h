@@ -55,7 +55,6 @@ Q_SIGNALS:
 
     void imageDataChanged(const QString& path, bool removeThumbnails, bool notifyCache);
     void imageChangeFailed(const QString& message, const QStringList& fileNames);
-    void imageTransformFinished();
 };
 
 // ---------------------------------------------------------------------------------------------
