@@ -147,13 +147,13 @@ void DXmlGuiWindow::slotToggleFullScreen(bool set)
         showSideBar(true);
         showThumbBar(true);
 
-        // restore toolbars
+        // restore toolbars and manage full-screen button
 
         showToolBars(true);
         d->fullScreenBtn->hide();
 
         if (d->dirtyMainToolBar)
-        {
+        { 
             KToolBar* const mainbar = mainToolBar();
 
             if (mainbar)
@@ -173,7 +173,7 @@ void DXmlGuiWindow::slotToggleFullScreen(bool set)
         showSideBar(false);
         showThumbBar(false);
 
-        // hide toolbars
+        // hide toolbars and manage full-screen button
 
         if ((d->options & FS_TOOLBAR) && m_fullScreenHideToolBar)
         {
