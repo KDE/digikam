@@ -40,6 +40,8 @@
 
 class QEvent;
 
+class KToolBar;
+
 namespace Digikam
 {
 
@@ -88,10 +90,6 @@ public:
      */
     void switchWindowToFullScreen(bool set);
 
-    /** Active full-screen action from managed window. Called typically when Escape key is pressed.
-     */
-    void escapePressed();
-
     /** Return true if managed window is currently in Full Screen Mode
      */
     bool fullScreenIsActive() const;
@@ -125,6 +123,10 @@ private:
     /** Used by slotToggleFullScreen() to switch tool-bar visibility in managed window
      */
     void showToolBars(bool visible);
+
+    /** Return main tool bar instance created in managed window.
+     */
+    KToolBar* mainToolBar() const;
 
 private:
 

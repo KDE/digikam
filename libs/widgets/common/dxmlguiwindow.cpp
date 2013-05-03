@@ -61,7 +61,7 @@ public:
         options                = FS_DEFAULT;
         fullScreenAction       = 0;
         fullScreenBtn          = 0;
-        removeFullScreenButton = false;
+        dirtyMainToolBar = false;
     }
 
 public:
@@ -76,7 +76,7 @@ public:
 
     /** Used by switchWindowToFullScreen() to manage state of full-screen button on managed window
      */
-    bool                     removeFullScreenButton;
+    bool                     dirtyMainToolBar;
 };
 
 // --------------------------------------------------------------------------------------------------------
@@ -151,19 +151,13 @@ void DXmlGuiWindow::slotToggleFullScreen(bool set)
         showToolBars(true);
         d->fullScreenBtn->hide();
 
-        if (d->removeFullScreenButton)
+        if (d->dirtyMainToolBar)
         {
-            QList<KToolBar*> toolbars = toolBars();
+            KToolBar* const mainbar = mainToolBar();
 
-            foreach(KToolBar* const toolbar, toolbars)
+            if (mainbar)
             {
-                // NOTE: name must be configured properly in ui.rc XML file of managed window
-
-                if (toolbar->objectName() == "mainToolBar")
-                {
-                    toolbar->removeAction(d->fullScreenAction);
-                    break;
-                }
+                mainbar->removeAction(d->fullScreenAction);
             }
         }
     }
@@ -187,40 +181,28 @@ void DXmlGuiWindow::slotToggleFullScreen(bool set)
         {
             showToolBars(true);
 
-            QList<KToolBar*> toolbars = toolBars();
-            KToolBar* mainToolbar     = 0;
-
-            foreach(KToolBar* const toolbar, toolbars)
-            {
-                if (toolbar->objectName() == "mainToolBar")
-                {
-                    mainToolbar = toolbar;
-                    break;
-                }
-            }
-
-            kDebug() << mainToolbar;
-
             // add fullscreen action if necessary in toolbar
 
-            if (mainToolbar && !mainToolbar->actions().contains(d->fullScreenAction))
+            KToolBar* const mainbar = mainToolBar();
+
+            if (mainbar && !mainbar->actions().contains(d->fullScreenAction))
             {
-                if (mainToolbar->actions().isEmpty())
+                if (mainbar->actions().isEmpty())
                 {
-                    mainToolbar->addAction(d->fullScreenAction);
+                    mainbar->addAction(d->fullScreenAction);
                 }
                 else
                 {
-                    mainToolbar->insertAction(mainToolbar->actions().first(), d->fullScreenAction);
+                    mainbar->insertAction(mainbar->actions().first(), d->fullScreenAction);
                 }
 
-                d->removeFullScreenButton = true;
+                d->dirtyMainToolBar = true;
             }
             else
             {
                 // If FullScreen button is enabled in toolbar settings,
                 // we shall not remove it when leaving of fullscreen mode.
-                d->removeFullScreenButton = false;
+                d->dirtyMainToolBar = false;
             }
         }
     }
@@ -297,6 +279,23 @@ void DXmlGuiWindow::showToolBars(bool visible)
         else
             toolbar->hide();
     }
+}
+
+KToolBar* DXmlGuiWindow::mainToolBar() const
+{
+    QList<KToolBar*> toolbars = toolBars();
+    KToolBar* mainToolbar     = 0;
+
+    foreach(KToolBar* const toolbar, toolbars)
+    {
+        if (toolbar->objectName() == "mainToolBar")
+        {
+            mainToolbar = toolbar;
+            break;
+        }
+    }
+
+    return mainToolbar;
 }
 
 void DXmlGuiWindow::keyPressEvent(QKeyEvent* e)
