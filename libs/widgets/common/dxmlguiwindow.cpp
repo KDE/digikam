@@ -58,15 +58,27 @@ public:
 
     Private()
     {
-        options                = FS_DEFAULT;
+        fsOptions              = FS_DEFAULT;
         fullScreenAction       = 0;
         fullScreenBtn          = 0;
-        dirtyMainToolBar = false;
+        dirtyMainToolBar       = false;
+        fullScreenHideToolBar  = false;
+        fullScreenHideThumbBar = true;
     }
 
 public:
 
-    int                      options;
+    /** Settings taken from managed window configuration to handle toolbar visibility  in full-screen mode
+     */
+    bool                     fullScreenHideToolBar;
+
+    /** Settings taken from managed window configuration to handle thumbbar visibility in full-screen mode
+     */
+    bool                     fullScreenHideThumbBar;
+
+    /** Full-Screen options. See FullScreenOptions enum and setFullScreenOptions() for details.
+     */
+    int                      fsOptions;
 
     /** Action plug in managed window to switch fullscreen state */
     KToggleFullScreenAction* fullScreenAction;
@@ -84,8 +96,6 @@ public:
 DXmlGuiWindow::DXmlGuiWindow(QWidget* const parent, Qt::WindowFlags f)
     : KXmlGuiWindow(parent, f), d(new Private)
 {
-    m_fullScreenHideToolBar  = false;
-    m_fullScreenHideThumbBar = true;
     installEventFilter(this);
 }
 
@@ -96,7 +106,7 @@ DXmlGuiWindow::~DXmlGuiWindow()
 
 void DXmlGuiWindow::setFullScreenOptions(int options)
 {
-    d->options = options;
+    d->fsOptions = options;
 }
 
 void DXmlGuiWindow::createFullScreenAction(const QString& name)
@@ -113,11 +123,11 @@ void DXmlGuiWindow::createFullScreenAction(const QString& name)
 
 void DXmlGuiWindow::readFullScreenSettings(const KConfigGroup& group)
 {
-    if (d->options & FS_TOOLBAR)
-        m_fullScreenHideToolBar  = group.readEntry(s_configFullScreenHideToolBarEntry,  false);
+    if (d->fsOptions & FS_TOOLBAR)
+        d->fullScreenHideToolBar  = group.readEntry(s_configFullScreenHideToolBarEntry,  false);
 
-    if (d->options & FS_THUMBBAR)
-        m_fullScreenHideThumbBar = group.readEntry(s_configFullScreenHideThumbBarEntry, true);
+    if (d->fsOptions & FS_THUMBBAR)
+        d->fullScreenHideThumbBar = group.readEntry(s_configFullScreenHideThumbBarEntry, true);
 
     if (group.readEntry(s_configRestoreFullScreenModeEntry, false))
     {
@@ -145,7 +155,9 @@ void DXmlGuiWindow::slotToggleFullScreen(bool set)
         menuBar()->show();
         statusBar()->show();
         showSideBar(true);
-        showThumbBar(true);
+
+        if ((d->fsOptions & FS_THUMBBAR) && d->fullScreenHideThumbBar)
+            showThumbBar(true);
 
         // restore toolbars and manage full-screen button
 
@@ -171,11 +183,13 @@ void DXmlGuiWindow::slotToggleFullScreen(bool set)
         menuBar()->hide();
         statusBar()->hide();
         showSideBar(false);
-        showThumbBar(false);
+
+        if ((d->fsOptions & FS_THUMBBAR) && d->fullScreenHideThumbBar)
+            showThumbBar(false);
 
         // hide toolbars and manage full-screen button
 
-        if ((d->options & FS_TOOLBAR) && m_fullScreenHideToolBar)
+        if ((d->fsOptions & FS_TOOLBAR) && d->fullScreenHideToolBar)
         {
             showToolBars(false);
         }
@@ -228,7 +242,7 @@ bool DXmlGuiWindow::eventFilter(QObject* obj, QEvent* ev)
             // We will handle a stand alone FullScreen button action on top/right corner of screen
             // only if managed window tool bar is hidden, and if we switched already in Full Screen mode.
 
-            if ((d->options & FS_TOOLBAR) && m_fullScreenHideToolBar && fullScreenIsActive())
+            if ((d->fsOptions & FS_TOOLBAR) && d->fullScreenHideToolBar && fullScreenIsActive())
             {
                 QHoverEvent* const mev = dynamic_cast<QHoverEvent*>(ev);
 

@@ -94,16 +94,6 @@ public:
      */
     bool fullScreenIsActive() const;
 
-public:
-
-    /** Settings taken from managed window configuration to handle toolbar visibility  in full-screen mode
-     */
-    bool m_fullScreenHideToolBar;
-
-    /** Settigns taken from managed window configuration to handle thumbbar visibility in full-screen mode
-     */
-    bool m_fullScreenHideThumbBar;
-
 protected:
 
     bool eventFilter(QObject* obj, QEvent* ev);

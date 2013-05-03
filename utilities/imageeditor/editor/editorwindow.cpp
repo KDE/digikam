@@ -2954,17 +2954,11 @@ void EditorWindow::showThumbBar(bool visible)
 {
     if (visible)
     {
-        if (m_fullScreenHideThumbBar)
-        {
-            thumbBar()->restoreVisibility();
-        }
+        thumbBar()->restoreVisibility();
     }
     else
     {
-        if (m_fullScreenHideThumbBar)
-        {
-            thumbBar()->hide();
-        }
+        thumbBar()->hide();
     }
 }
 
