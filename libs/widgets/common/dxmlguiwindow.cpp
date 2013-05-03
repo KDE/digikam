@@ -148,7 +148,7 @@ void DXmlGuiWindow::slotToggleFullScreen(bool set)
 
         // restore toolbar
 
-        showToolBars();
+        showToolBars(true);
         d->fullScreenBtn->hide();
 
         if (d->removeFullScreenButton)
@@ -181,11 +181,11 @@ void DXmlGuiWindow::slotToggleFullScreen(bool set)
 
         if ((d->options & FS_TOOLBAR) && m_fullScreenHideToolBar)
         {
-            hideToolBars();
+            showToolBars(false);
         }
         else
         {
-            showToolBars();
+            showToolBars(true);
 
             QList<KToolBar*> toolbars = toolBars();
             KToolBar* mainToolbar     = 0;
@@ -286,23 +286,16 @@ bool DXmlGuiWindow::eventFilter(QObject* obj, QEvent* ev)
     return QObject::eventFilter(obj, ev);
 }
 
-void DXmlGuiWindow::hideToolBars()
+void DXmlGuiWindow::showToolBars(bool visible)
 {
     QList<KToolBar*> toolbars = toolBars();
 
     foreach(KToolBar* const toolbar, toolbars)
     {
-        toolbar->hide();
-    }
-}
-
-void DXmlGuiWindow::showToolBars()
-{
-    QList<KToolBar*> toolbars = toolBars();
-
-    foreach(KToolBar* const toolbar, toolbars)
-    {
-        toolbar->show();
+        if (visible)
+            toolbar->show();
+        else
+            toolbar->hide();
     }
 }
 

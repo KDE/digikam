@@ -122,10 +122,9 @@ protected Q_SLOTS:
 
 private:
 
-    /** Used by switchWindowToFullScreen() to switch tool-bar visibility in managed window
+    /** Used by slotToggleFullScreen() to switch tool-bar visibility in managed window
      */
-    void hideToolBars();
-    void showToolBars();
+    void showToolBars(bool visible);
 
 private:
 
