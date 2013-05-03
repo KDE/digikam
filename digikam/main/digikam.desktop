@@ -2,7 +2,7 @@
 [Desktop Entry]
 Type=Application
 Categories=Qt;KDE;Graphics;Photography;
-Exec=digikam -caption "%c" %i
+Exec=digikam -caption %c %i
 Icon=digikam
 X-DocPath=digikam/index.html
 MimeType=x-content/image-dcf;x-content/image-picturecd;
