@@ -25,6 +25,7 @@
 
 #include <QString>
 #include <QList>
+#include <QMap>
 #include <QVBoxLayout>
 #include <QCheckBox>
 #include <QToolButton>
@@ -89,6 +90,8 @@ public:
     /** Used by switchWindowToFullScreen() to manage state of full-screen button on managed window
      */
     bool                     dirtyMainToolBar;
+
+    QMap<KToolBar*, bool>    toolbarVisibilityMap;
 };
 
 // --------------------------------------------------------------------------------------------------------
@@ -165,7 +168,7 @@ void DXmlGuiWindow::slotToggleFullScreen(bool set)
         d->fullScreenBtn->hide();
 
         if (d->dirtyMainToolBar)
-        { 
+        {
             KToolBar* const mainbar = mainToolBar();
 
             if (mainbar)
@@ -237,44 +240,49 @@ bool DXmlGuiWindow::eventFilter(QObject* obj, QEvent* ev)
 {
     if (this && (obj == this))
     {
-        if (ev && (ev->type() == QEvent::HoverMove))
+        if (ev && (ev->type() == QEvent::HoverMove) && fullScreenIsActive())
         {
             // We will handle a stand alone FullScreen button action on top/right corner of screen
             // only if managed window tool bar is hidden, and if we switched already in Full Screen mode.
 
-            if ((d->fsOptions & FS_TOOLBAR) && d->fullScreenHideToolBar && fullScreenIsActive())
+            KToolBar* const mainbar = mainToolBar();
+
+            if (mainbar)
             {
-                QHoverEvent* const mev = dynamic_cast<QHoverEvent*>(ev);
-
-                if (mev)
+                if (((d->fsOptions & FS_TOOLBAR) && d->fullScreenHideToolBar) || !mainbar->isVisible())
                 {
-                    QPoint pos(mev->pos());
-                    QRect  desktopRect = KGlobalSettings::desktopGeometry(this);
+                    QHoverEvent* const mev = dynamic_cast<QHoverEvent*>(ev);
 
-                    QRect sizeRect(QPoint(0, 0), d->fullScreenBtn->size());
-                    QRect topLeft, topRight;
-                    QRect topRightLarger;
-
-                    desktopRect       = QRect(desktopRect.y(), desktopRect.y(), desktopRect.width(), desktopRect.height());
-                    topLeft           = sizeRect;
-                    topRight          = sizeRect;
-
-                    topLeft.moveTo(desktopRect.x(), desktopRect.y());
-                    topRight.moveTo(desktopRect.x() + desktopRect.width() - sizeRect.width() - 1, topLeft.y());
-
-                    topRightLarger    = topRight.adjusted(-25, 0, 0, 10);
-
-                    if (topRightLarger.contains(pos))
+                    if (mev)
                     {
-                        d->fullScreenBtn->move(topRight.topLeft());
-                        d->fullScreenBtn->show();
-                    }
-                    else
-                    {
-                        d->fullScreenBtn->hide();
-                    }
+                        QPoint pos(mev->pos());
+                        QRect  desktopRect = KGlobalSettings::desktopGeometry(this);
 
-                    return false;
+                        QRect sizeRect(QPoint(0, 0), d->fullScreenBtn->size());
+                        QRect topLeft, topRight;
+                        QRect topRightLarger;
+
+                        desktopRect       = QRect(desktopRect.y(), desktopRect.y(), desktopRect.width(), desktopRect.height());
+                        topLeft           = sizeRect;
+                        topRight          = sizeRect;
+
+                        topLeft.moveTo(desktopRect.x(), desktopRect.y());
+                        topRight.moveTo(desktopRect.x() + desktopRect.width() - sizeRect.width() - 1, topLeft.y());
+
+                        topRightLarger    = topRight.adjusted(-25, 0, 0, 10);
+
+                        if (topRightLarger.contains(pos))
+                        {
+                            d->fullScreenBtn->move(topRight.topLeft());
+                            d->fullScreenBtn->show();
+                        }
+                        else
+                        {
+                            d->fullScreenBtn->hide();
+                        }
+
+                        return false;
+                    }
                 }
             }
         }
@@ -284,16 +292,14 @@ bool DXmlGuiWindow::eventFilter(QObject* obj, QEvent* ev)
     return QObject::eventFilter(obj, ev);
 }
 
-void DXmlGuiWindow::showToolBars(bool visible)
+void DXmlGuiWindow::keyPressEvent(QKeyEvent* e)
 {
-    QList<KToolBar*> toolbars = toolBars();
-
-    foreach(KToolBar* const toolbar, toolbars)
+    if (e->key() == Qt::Key_Escape)
     {
-        if (visible)
-            toolbar->show();
-        else
-            toolbar->hide();
+        if (fullScreenIsActive())
+        {
+            d->fullScreenAction->activate(QAction::Trigger);
+        }
     }
 }
 
@@ -304,7 +310,7 @@ KToolBar* DXmlGuiWindow::mainToolBar() const
 
     foreach(KToolBar* const toolbar, toolbars)
     {
-        if (toolbar->objectName() == "mainToolBar")
+        if (toolbar && (toolbar->objectName() == "mainToolBar"))
         {
             mainToolbar = toolbar;
             break;
@@ -314,13 +320,55 @@ KToolBar* DXmlGuiWindow::mainToolBar() const
     return mainToolbar;
 }
 
-void DXmlGuiWindow::keyPressEvent(QKeyEvent* e)
+void DXmlGuiWindow::showToolBars(bool visible)
 {
-    if (e->key() == Qt::Key_Escape)
+    // We will hide toolbars: store previous state for future restoring.
+    if (!visible)
     {
-        if (fullScreenIsActive())
+        d->toolbarVisibilityMap.clear();
+
+        foreach(KToolBar* const toolbar, toolBars())
         {
-            d->fullScreenAction->activate(QAction::Trigger);
+            if (toolbar)
+            {
+                bool visibility = toolbar->isVisible();
+                d->toolbarVisibilityMap.insert(toolbar, visibility);
+            }
+        }
+
+        kDebug() << d->toolbarVisibilityMap;
+    }
+
+    // Switch toolbars visibility
+
+    for (QMap<KToolBar*, bool>::const_iterator it = d->toolbarVisibilityMap.constBegin(); it != d->toolbarVisibilityMap.constEnd(); ++it)
+    {
+        KToolBar* const toolbar = it.key();
+        bool visibility         = it.value();
+
+        if (toolbar)
+        {
+            if (visible && visibility)
+                toolbar->show();
+            else
+                toolbar->hide();
+        }
+    }
+
+    // We will show toolbars: restore previous state.
+    if (visible)
+    {
+        kDebug() << d->toolbarVisibilityMap;
+
+        for (QMap<KToolBar*, bool>::const_iterator it = d->toolbarVisibilityMap.constBegin(); it != d->toolbarVisibilityMap.constEnd(); ++it)
+        {
+            KToolBar* const toolbar = it.key();
+            bool visibility         = it.value();
+
+            if (toolbar)
+            {
+                visibility ? toolbar->show() : toolbar->hide();
+            }
         }
     }
 }
