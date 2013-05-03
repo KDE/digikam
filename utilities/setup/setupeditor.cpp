@@ -54,7 +54,8 @@
 #include "dimg.h"
 #include "histogramwidget.h"
 #include "exposurecontainer.h"
-#include "fullscreenmngr.h"
+#include "fullscreensettings.h"
+#include "dxmlguiwindow.h"
 
 using namespace KDcrawIface;
 

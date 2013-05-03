@@ -32,11 +32,11 @@
 // KDE includes
 
 #include <kurl.h>
-#include <kxmlguiwindow.h>
 #include <ktoggleaction.h>
 
 // Local includes
 
+#include "dxmlguiwindow.h"
 #include "imageinfo.h"
 
 namespace Digikam
@@ -44,7 +44,7 @@ namespace Digikam
 
 class SlideShowSettings;
 
-class LightTableWindow : public KXmlGuiWindow
+class LightTableWindow : public DXmlGuiWindow
 {
     Q_OBJECT
 
@@ -78,10 +78,10 @@ public Q_SLOTS:
 protected:
 
     void moveEvent(QMoveEvent* e);
-    void keyPressEvent(QKeyEvent* e);
 
 private:
 
+    void showSideBar(bool visible);
     void closeEvent(QCloseEvent* e);
     void showEvent(QShowEvent*);
     void setupActions();
@@ -143,7 +143,6 @@ private Q_SLOTS:
 
     void slotProgressBarCancelButtonPressed();
     void slotToggleSlideShow();
-    void slotToggleFullScreen(bool);
     void slotEditKeys();
     void slotConfToolbars();
     void slotConfNotifications();

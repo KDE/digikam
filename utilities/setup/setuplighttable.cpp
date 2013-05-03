@@ -40,7 +40,8 @@
 
 // Local includes
 
-#include "fullscreenmngr.h"
+#include "fullscreensettings.h"
+#include "dxmlguiwindow.h"
 
 namespace Digikam
 {

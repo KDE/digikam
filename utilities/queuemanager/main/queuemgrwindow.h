@@ -33,13 +33,13 @@
 // KDE includes
 
 #include <kurl.h>
-#include <kxmlguiwindow.h>
 
 // Local includes
 
 #include "imageinfo.h"
 #include "setup.h"
 #include "dhistoryview.h"
+#include "dxmlguiwindow.h"
 
 class KAction;
 
@@ -51,7 +51,7 @@ class BatchToolsManager;
 class AssignedBatchTools;
 class QueueListViewItem;
 
-class QueueMgrWindow : public KXmlGuiWindow
+class QueueMgrWindow : public DXmlGuiWindow
 {
     Q_OBJECT
 
@@ -86,7 +86,6 @@ Q_SIGNALS:
 protected:
 
     void moveEvent(QMoveEvent* e);
-    void keyPressEvent(QKeyEvent* e);
 
 public Q_SLOTS:
 
@@ -119,7 +118,6 @@ private:
 
 private Q_SLOTS:
 
-    void slotToggleFullScreen(bool);
     void slotEditKeys();
     void slotShowMenuBar();
     void slotConfToolbars();

@@ -43,7 +43,6 @@
 #include "lighttableview.h"
 #include "lighttablethumbbar.h"
 #include "thumbbardock.h"
-#include "fullscreenmngr.h"
 
 namespace Digikam
 {
@@ -155,8 +154,6 @@ public:
     ImagePropertiesSideBarDB* rightSideBar;
 
     DAboutData*               about;
-
-    FullScreenMngr*           fullScreenMngr;
 };
 
 }  // namespace Digikam
