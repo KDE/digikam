@@ -762,9 +762,6 @@ void TableViewModel::slotPopulateModel(const bool sendNotifications)
         addSourceModelIndex(sourceModelIndex, false);
     }
 
-    /// @todo Sort directly on insertion?
-    sort(d->sortColumn, d->sortOrder);
-
     if (sendNotifications)
     {
         endResetModel();
