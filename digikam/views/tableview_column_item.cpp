@@ -338,10 +338,11 @@ TableViewColumn::ColumnCompareResult ColumnItemProperties::compare(
             const int heightA = infoA.dimensions().height();
             const int heightB = infoB.dimensions().height();
 
-            /// @todo This breaks sorting, needs to return CmpBroken?
             if ( (heightA==0) || (heightB==0) )
             {
-                return CmpEqual;
+                // at least one of the two does not have valid data,
+                // sort based on which one has data at all
+                return compareHelper<int>(heightA, heightB);
             }
 
             const qreal aspectRatioA = qreal(widthA) / qreal(heightA);
