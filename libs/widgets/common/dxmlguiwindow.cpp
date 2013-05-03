@@ -66,6 +66,8 @@ public:
         fullScreenHideToolBar  = false;
         fullScreenHideThumbBar = true;
         thumbbarVisibility     = true;
+        menubarVisibility      = true;
+        statusbarVisibility    = true;
     }
 
 public:
@@ -99,6 +101,14 @@ public:
     /** Store previous visibility of thumbbar before ful-screen mode.
      */
     bool                     thumbbarVisibility;
+
+    /** Store previous visibility of menubar before ful-screen mode.
+     */
+    bool                     menubarVisibility;
+
+    /** Store previous visibility of statusbar before ful-screen mode.
+     */
+    bool                     statusbarVisibility;
 };
 
 // --------------------------------------------------------------------------------------------------------
@@ -160,11 +170,21 @@ void DXmlGuiWindow::slotToggleFullScreen(bool set)
     {
         kDebug() << "TURN OFF fullscreen";
 
-        // restore menubar, statusbar, sidebar, and thummbbar
+        // restore menubar
 
-        menuBar()->show();
-        statusBar()->show();
+        if (d->menubarVisibility)
+            menuBar()->show();
+
+        // restore statusbar
+
+        if (d->statusbarVisibility)
+            statusBar()->show();
+
+        // restore sidebars
+
         showSideBar(true);
+
+        // restore thummbbar
 
         if ((d->fsOptions & FS_THUMBBAR) && d->fullScreenHideThumbBar)
             showThumbBar(d->thumbbarVisibility);
@@ -188,11 +208,21 @@ void DXmlGuiWindow::slotToggleFullScreen(bool set)
     {
         kDebug() << "TURN ON fullscreen";
 
-        // hide menubar, statusbar, sidebar, and thummbbar
+        // hide menubar
 
+        d->menubarVisibility = menuBar()->isVisible();
         menuBar()->hide();
+
+        // hide statusbar
+
+        d->statusbarVisibility = statusBar()->isVisible();
         statusBar()->hide();
+
+        // hide sidebars
+
         showSideBar(false);
+
+        // hide thummbbar
 
         d->thumbbarVisibility = thumbbarVisibility();
 
