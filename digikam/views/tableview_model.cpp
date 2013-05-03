@@ -1504,20 +1504,79 @@ void TableViewModel::slotSetActive(const bool isActive)
 
 int TableViewModel::findChildSortedPosition(TableViewModel::Item* const parentItem, TableViewModel::Item* const childItem)
 {
-    for (int i = 0; i<parentItem->children.count(); ++i)
+    if (parentItem->children.isEmpty())
     {
-        bool compareResult = lessThan(childItem, parentItem->children.at(i));
-        if (d->sortOrder==Qt::DescendingOrder)
-        {
-            compareResult = !compareResult;
-        }
-        if (compareResult)
-        {
-            return i;
-        }
+        return 0;
     }
 
-    return parentItem->children.count();
+    // nChildren is guaranteed to be >=1
+    const int nChildren = parentItem->children.count();
+    int stepSize = nChildren/2;
+    // make sure pos is at least 0 if there is only one item
+    int pos = qMin(nChildren-1, stepSize);
+    while (true)
+    {
+        stepSize = stepSize/2;
+        if (stepSize==0)
+        {
+            stepSize = 1;
+        }
+
+        bool isLessThanUpper = lessThan(childItem, parentItem->children.at(pos));
+        if (d->sortOrder==Qt::DescendingOrder)
+        {
+            isLessThanUpper = !isLessThanUpper;
+        }
+
+        if (!isLessThanUpper)
+        {
+            // need to jump up, quit if we can not jump up by 1
+            if (pos+1>=nChildren)
+            {
+                pos=nChildren;
+                break;
+            }
+
+            // jump up by stepSize and make sure we do not jump over the end
+            pos+=stepSize;
+            if (pos>=nChildren)
+            {
+                pos = nChildren-1;
+            }
+            continue;
+        }
+
+        // can we go lower?
+        const bool lowerThere = pos>0;
+        if (!lowerThere)
+        {
+            // no, stop
+            pos = 0;
+            break;
+        }
+
+        bool isLessThanLower = lessThan(childItem, parentItem->children.at(pos-1));
+        if (d->sortOrder==Qt::DescendingOrder)
+        {
+            isLessThanLower = !isLessThanLower;
+        }
+
+        if (isLessThanLower)
+        {
+            // go lower and make sure we do not jump too low
+            pos-=stepSize;
+            if (pos<0)
+            {
+                pos = 0;
+            }
+            continue;
+        }
+
+        break;
+    }
+
+    return pos;
 }
 
 } /* namespace Digikam */
+
