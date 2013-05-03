@@ -330,6 +330,7 @@ private:
     void enterWaitingLoop();
     void quitWaitingLoop();
     void showSideBar(bool visible);
+    void showThumbBar(bool visible);
     void setColorManagedViewIndicatorToolTip(bool available, bool cmv);
     void setUnderExposureToolTip(bool uei);
     void setOverExposureToolTip(bool oei);

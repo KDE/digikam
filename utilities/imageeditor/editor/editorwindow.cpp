@@ -2941,7 +2941,19 @@ void EditorWindow::showSideBar(bool visible)
     if (visible)
     {
         rightSideBar()->restore(QList<QWidget*>() << thumbBar(), d->fullscreenSizeBackup);
+    }
+    else
+    {
+        // See bug #166472, a simple backup()/restore() will hide non-sidebar splitter child widgets
+        // in horizontal mode thumbbar wont be member of the splitter, it is just ignored then
+        rightSideBar()->backup(QList<QWidget*>() << thumbBar(), &d->fullscreenSizeBackup);
+    }
+}
 
+void EditorWindow::showThumbBar(bool visible)
+{
+    if (visible)
+    {
         if (m_fullScreenHideThumbBar)
         {
             thumbBar()->restoreVisibility();
@@ -2949,10 +2961,6 @@ void EditorWindow::showSideBar(bool visible)
     }
     else
     {
-        // See bug #166472, a simple backup()/restore() will hide non-sidebar splitter child widgets
-        // in horizontal mode thumbbar wont be member of the splitter, it is just ignored then
-        rightSideBar()->backup(QList<QWidget*>() << thumbBar(), &d->fullscreenSizeBackup);
-
         if (m_fullScreenHideThumbBar)
         {
             thumbBar()->hide();

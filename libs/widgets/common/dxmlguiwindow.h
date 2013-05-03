@@ -109,10 +109,15 @@ protected:
     bool eventFilter(QObject* obj, QEvent* ev);
     void keyPressEvent(QKeyEvent* e);
 
-    /** Re-implement this method if you want to manage sidebar visibility.
+    /** Re-implement this method if you want to manage sidebar visibility.in managed window
      *  By default this method do nothing.
      */
     virtual void showSideBar(bool visible);
+
+    /** Re-implement this method if you want to manage thumbbar visibility.in managed window
+     *  By default this method do nothing.
+     */
+    virtual void showThumbBar(bool visible);
 
 protected Q_SLOTS:
 

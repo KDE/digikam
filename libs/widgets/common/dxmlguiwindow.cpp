@@ -140,13 +140,14 @@ void DXmlGuiWindow::slotToggleFullScreen(bool set)
     {
         kDebug() << "TURN OFF fullscreen";
 
-        // restore menubar, statusbar, and sidebar
+        // restore menubar, statusbar, sidebar, and thummbbar
 
         menuBar()->show();
         statusBar()->show();
         showSideBar(true);
+        showThumbBar(true);
 
-        // restore toolbar
+        // restore toolbars
 
         showToolBars(true);
         d->fullScreenBtn->hide();
@@ -165,13 +166,14 @@ void DXmlGuiWindow::slotToggleFullScreen(bool set)
     {
         kDebug() << "TURN ON fullscreen";
 
-        // hide menubar, statusbar, and sidebar
+        // hide menubar, statusbar, sidebar, and thummbbar
 
         menuBar()->hide();
         statusBar()->hide();
         showSideBar(false);
+        showThumbBar(false);
 
-        // hide toolbar
+        // hide toolbars
 
         if ((d->options & FS_TOOLBAR) && m_fullScreenHideToolBar)
         {
@@ -310,6 +312,11 @@ void DXmlGuiWindow::keyPressEvent(QKeyEvent* e)
 }
 
 void DXmlGuiWindow::showSideBar(bool visible)
+{
+    Q_UNUSED(visible);
+}
+
+void DXmlGuiWindow::showThumbBar(bool visible)
 {
     Q_UNUSED(visible);
 }
