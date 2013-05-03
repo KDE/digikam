@@ -331,6 +331,7 @@ private:
     void quitWaitingLoop();
     void showSideBar(bool visible);
     void showThumbBar(bool visible);
+    bool thumbbarVisibility() const;
     void setColorManagedViewIndicatorToolTip(bool available, bool cmv);
     void setUnderExposureToolTip(bool uei);
     void setOverExposureToolTip(bool oei);

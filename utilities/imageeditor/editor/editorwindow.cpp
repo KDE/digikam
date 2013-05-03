@@ -2976,4 +2976,9 @@ void EditorWindow::slotToggleFullScreen(bool b)
     }
 }
 
+bool EditorWindow::thumbbarVisibility() const
+{
+    return thumbBar()->isVisible();
+}
+
 }  // namespace Digikam

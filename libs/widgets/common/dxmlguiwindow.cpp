@@ -65,6 +65,7 @@ public:
         dirtyMainToolBar       = false;
         fullScreenHideToolBar  = false;
         fullScreenHideThumbBar = true;
+        thumbbarVisibility     = true;
     }
 
 public:
@@ -91,7 +92,13 @@ public:
      */
     bool                     dirtyMainToolBar;
 
-    QMap<KToolBar*, bool>    toolbarVisibilityMap;
+    /** Store previous visibility of toolbars before ful-screen mode.
+     */
+    QMap<KToolBar*, bool>    toolbarsVisibility;
+
+    /** Store previous visibility of thumbbar before ful-screen mode.
+     */
+    bool                     thumbbarVisibility;
 };
 
 // --------------------------------------------------------------------------------------------------------
@@ -160,7 +167,7 @@ void DXmlGuiWindow::slotToggleFullScreen(bool set)
         showSideBar(true);
 
         if ((d->fsOptions & FS_THUMBBAR) && d->fullScreenHideThumbBar)
-            showThumbBar(true);
+            showThumbBar(d->thumbbarVisibility);
 
         // restore toolbars and manage full-screen button
 
@@ -186,6 +193,8 @@ void DXmlGuiWindow::slotToggleFullScreen(bool set)
         menuBar()->hide();
         statusBar()->hide();
         showSideBar(false);
+
+        d->thumbbarVisibility = thumbbarVisibility();
 
         if ((d->fsOptions & FS_THUMBBAR) && d->fullScreenHideThumbBar)
             showThumbBar(false);
@@ -325,23 +334,21 @@ void DXmlGuiWindow::showToolBars(bool visible)
     // We will hide toolbars: store previous state for future restoring.
     if (!visible)
     {
-        d->toolbarVisibilityMap.clear();
+        d->toolbarsVisibility.clear();
 
         foreach(KToolBar* const toolbar, toolBars())
         {
             if (toolbar)
             {
                 bool visibility = toolbar->isVisible();
-                d->toolbarVisibilityMap.insert(toolbar, visibility);
+                d->toolbarsVisibility.insert(toolbar, visibility);
             }
         }
-
-        kDebug() << d->toolbarVisibilityMap;
     }
 
     // Switch toolbars visibility
 
-    for (QMap<KToolBar*, bool>::const_iterator it = d->toolbarVisibilityMap.constBegin(); it != d->toolbarVisibilityMap.constEnd(); ++it)
+    for (QMap<KToolBar*, bool>::const_iterator it = d->toolbarsVisibility.constBegin(); it != d->toolbarsVisibility.constEnd(); ++it)
     {
         KToolBar* const toolbar = it.key();
         bool visibility         = it.value();
@@ -358,9 +365,7 @@ void DXmlGuiWindow::showToolBars(bool visible)
     // We will show toolbars: restore previous state.
     if (visible)
     {
-        kDebug() << d->toolbarVisibilityMap;
-
-        for (QMap<KToolBar*, bool>::const_iterator it = d->toolbarVisibilityMap.constBegin(); it != d->toolbarVisibilityMap.constEnd(); ++it)
+        for (QMap<KToolBar*, bool>::const_iterator it = d->toolbarsVisibility.constBegin(); it != d->toolbarsVisibility.constEnd(); ++it)
         {
             KToolBar* const toolbar = it.key();
             bool visibility         = it.value();
@@ -381,6 +386,11 @@ void DXmlGuiWindow::showSideBar(bool visible)
 void DXmlGuiWindow::showThumbBar(bool visible)
 {
     Q_UNUSED(visible);
+}
+
+bool DXmlGuiWindow::thumbbarVisibility() const
+{
+    return true;
 }
 
 } // namespace Digikam

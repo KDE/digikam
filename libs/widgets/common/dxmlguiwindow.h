@@ -109,6 +109,10 @@ protected:
      */
     virtual void showThumbBar(bool visible);
 
+    /** Re-implement this method if managed window has a thumbbar. This must return visibility state of it.
+     */
+    virtual bool thumbbarVisibility() const;
+
 protected Q_SLOTS:
 
     virtual void slotToggleFullScreen(bool);
