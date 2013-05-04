@@ -262,8 +262,6 @@ protected Q_SLOTS:
     void slotConfNotifications();
     void slotNewToolbarConfig();
 
-    void slotToggleFullScreen(bool b);
-
     void slotSelected(bool);
 
     void slotLoadingProgress(const QString& filePath, float progress);
@@ -331,6 +329,7 @@ private:
     void quitWaitingLoop();
     void showSideBar(bool visible);
     void showThumbBar(bool visible);
+    void showCustomizedView(bool visible);
     bool thumbbarVisibility() const;
     void setColorManagedViewIndicatorToolTip(bool available, bool cmv);
     void setUnderExposureToolTip(bool uei);

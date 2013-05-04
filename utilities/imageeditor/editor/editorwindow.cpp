@@ -2952,33 +2952,19 @@ void EditorWindow::showSideBar(bool visible)
 
 void EditorWindow::showThumbBar(bool visible)
 {
-    if (visible)
-    {
-        thumbBar()->restoreVisibility();
-    }
-    else
-    {
-        thumbBar()->hide();
-    }
-}
-
-void EditorWindow::slotToggleFullScreen(bool b)
-{
-    DXmlGuiWindow::slotToggleFullScreen(b);
-
-    if (!b)
-    {
-        m_canvas->setBackgroundColor(m_bgColor);
-    }
-    else
-    {
-        m_canvas->setBackgroundColor(QColor(Qt::black));
-    }
+    visible ? thumbBar()->restoreVisibility()
+            : thumbBar()->hide();
 }
 
 bool EditorWindow::thumbbarVisibility() const
 {
     return thumbBar()->isVisible();
+}
+
+void EditorWindow::showCustomizedView(bool visible)
+{
+    visible ? m_canvas->setBackgroundColor(QColor(Qt::black))
+            : m_canvas->setBackgroundColor(m_bgColor);
 }
 
 }  // namespace Digikam

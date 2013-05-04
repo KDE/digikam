@@ -99,23 +99,28 @@ protected:
     bool eventFilter(QObject* obj, QEvent* ev);
     void keyPressEvent(QKeyEvent* e);
 
-    /** Re-implement this method if you want to manage sidebar visibility.in managed window
+    /** Re-implement this method if you want to manage sidebar visibility in full-screen mode.
      *  By default this method do nothing.
      */
     virtual void showSideBar(bool visible);
 
-    /** Re-implement this method if you want to manage thumbbar visibility.in managed window
+    /** Re-implement this method if you want to manage thumbbar visibility in full-screen mode.
      *  By default this method do nothing.
      */
     virtual void showThumbBar(bool visible);
+
+    /** Re-implement this method if you want to manage customized view visibility in full-screen mode.
+     *  By default this method do nothing.
+     */
+    virtual void showCustomizedView(bool visible);
 
     /** Re-implement this method if managed window has a thumbbar. This must return visibility state of it.
      */
     virtual bool thumbbarVisibility() const;
 
-protected Q_SLOTS:
+private Q_SLOTS:
 
-    virtual void slotToggleFullScreen(bool);
+    void slotToggleFullScreen(bool);
 
 private:
 

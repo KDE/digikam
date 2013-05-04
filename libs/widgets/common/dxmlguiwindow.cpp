@@ -166,6 +166,8 @@ void DXmlGuiWindow::slotToggleFullScreen(bool set)
 {
     KToggleFullScreenAction::setFullScreen(this, set);
 
+    showCustomizedView(!set);
+
     if (!set)
     {
         kDebug() << "TURN OFF fullscreen";
@@ -414,6 +416,11 @@ void DXmlGuiWindow::showSideBar(bool visible)
 }
 
 void DXmlGuiWindow::showThumbBar(bool visible)
+{
+    Q_UNUSED(visible);
+}
+
+void DXmlGuiWindow::showCustomizedView(bool visible)
 {
     Q_UNUSED(visible);
 }

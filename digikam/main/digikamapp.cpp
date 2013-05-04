@@ -10,7 +10,7 @@
  * Copyright (C)      2006 by Tom Albers <tomalbers at kde dot nl>
  * Copyright (C) 2002-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2012 by Andi Clemens <andi dot clemens at gmail dot com>
- * Copyright (C) 2013 by Michael G. Hansen <mike at mghansen dot de>
+ * Copyright (C) 2013      by Michael G. Hansen <mike at mghansen dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -165,10 +165,11 @@ namespace Digikam
 DigikamApp* DigikamApp::m_instance = 0;
 
 DigikamApp::DigikamApp()
-    : KXmlGuiWindow(0), d(new Private)
+    : DXmlGuiWindow(0), d(new Private)
 {
     // --------------------------------------------------------
 
+    setFullScreenOptions(FS_NONE);
     setXMLFile("digikamui.rc");
 
     // --------------------------------------------------------
@@ -1188,9 +1189,7 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    d->fullScreenAction = KStandardAction::fullScreen(0, 0, this, this);
-    actionCollection()->addAction("full_screen", d->fullScreenAction);
-    connect(d->fullScreenAction, SIGNAL(toggled(bool)), this, SLOT(slotToggleFullScreen(bool)));
+    createFullScreenAction("full_screen");
 
     // -----------------------------------------------------------
 
@@ -2592,7 +2591,7 @@ void DigikamApp::slotThumbSizeChanged(int size)
 {
     d->zoomBar->setThumbsSize(size);
 
-    if (!d->fullScreenAction->isChecked() && d->autoShowZoomToolTip)
+    if (!fullScreenIsActive() && d->autoShowZoomToolTip)
     {
         d->zoomBar->triggerZoomTrackerToolTip();
     }
@@ -2604,7 +2603,7 @@ void DigikamApp::slotZoomChanged(double zoom)
     double zmax = d->view->zoomMax();
     d->zoomBar->setZoom(zoom, zmin, zmax);
 
-    if (!d->fullScreenAction->isChecked() && d->autoShowZoomToolTip)
+    if (!fullScreenIsActive() && d->autoShowZoomToolTip)
     {
         d->zoomBar->triggerZoomTrackerToolTip();
     }
@@ -2914,20 +2913,6 @@ void DigikamApp::slotComponentsInfo()
     showDigikamComponentsInfo();
 }
 
-void DigikamApp::showToolBars(bool show)
-{
-    QList<KToolBar*> toolbars = toolBars();
-    foreach(KToolBar* toolbar, toolbars)
-    {
-        show ? toolbar->show() : toolbar->hide();
-    }
-}
-
-void DigikamApp::showThumbBar(bool show)
-{
-    d->view->toggleShowBar(show);
-}
-
 void DigikamApp::setupImageTransformActions()
 {
     d->imageRotateActionMenu = new KActionMenu(KIcon("object-rotate-right"), i18n("Rotate"), actionCollection());
@@ -3028,71 +3013,20 @@ void DigikamApp::rebuild()
     }
 }
 
-void DigikamApp::slotToggleFullScreen(bool b)
+void DigikamApp::showSideBar(bool visible)
 {
-    KToggleFullScreenAction::setFullScreen(this, b);
+    visible ? d->view->showSideBars()
+            : d->view->hideSideBars();
+}
 
-    static bool wasThumbBarVisible = true;
-    static bool wasToolbBarVisible = true;
+void DigikamApp::showThumbBar(bool visible)
+{
+    d->view->toggleShowBar(visible);
+}
 
-    if (!b)
-    {
-        // Switch off fullscreen
-
-        slotShowMenuBar();
-        statusBar()->show();
-
-        showToolBars();
-        KToolBar* const mainToolBar = toolBar("mainToolBar");
-
-        if (mainToolBar)
-        {
-            if (wasToolbBarVisible)
-            {
-                mainToolBar->show();
-            }
-            else
-            {
-                mainToolBar->hide();
-            }
-        }
-
-        showThumbBar(wasThumbBarVisible);
-
-        d->view->showSideBars();
-    }
-    else
-    {
-        // Switch on fullscreen
-
-        wasThumbBarVisible          = d->view->isThumbBarVisible();
-        wasToolbBarVisible          = true;
-        KToolBar* const mainToolBar = toolBar("mainToolBar");
-
-        if (mainToolBar)
-        {
-            wasToolbBarVisible = mainToolBar->isVisible();
-        }
-
-        KConfigGroup group          = d->config->group("ImageViewer Settings");
-        bool fullScreenHideToolBar  = group.readEntry("FullScreen Hide ToolBar", false);
-        bool fullScreenHideThumbBar = group.readEntry("FullScreenHideThumbBar",  true);
-
-        menuBar()->hide();
-        statusBar()->hide();
-
-        if (fullScreenHideToolBar)
-        {
-            showToolBars(false);
-        }
-
-        if (fullScreenHideThumbBar)
-        {
-            showThumbBar(false);
-        }
-
-        d->view->hideSideBars();
-    }
+bool DigikamApp::thumbbarVisibility() const
+{
+    return d->view->isThumbBarVisible();
 }
 
 }  // namespace Digikam
