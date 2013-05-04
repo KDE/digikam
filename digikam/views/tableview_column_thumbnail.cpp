@@ -30,6 +30,7 @@
 // KDE includes
 
 #include <klocale.h>
+#include <boost/graph/graph_concepts.hpp>
 
 // local includes
 
@@ -132,9 +133,16 @@ bool ColumnThumbnail::paint(QPainter* const painter, const QStyleOptionViewItem&
             size.setWidth(imageSize.width()*scaleFactor);
         }
 
+        // Calculate the maximum thumbnail size
+        // The idea here is that for landscape images, we adjust the height to
+        // to be as high as the row height as long as the width can stretch enough
+        // because the column is wider than the thumbnail size.
+        const int bestSize = qMax(size.width()/* + 2*/, size.height()/* + 2*/);
+        // However, digiKam limits the thumbnail size to 256, so we also do that here
+        const int maxSize = qMin(bestSize, 256);
         const QString path = info.filePath();
         QPixmap thumbnail;
-        if (s->thumbnailLoadThread->find(path, thumbnail, qMax(size.width()/* + 2*/, size.height()/* + 2*/)))
+        if (s->thumbnailLoadThread->find(path, thumbnail, maxSize))
         {
             /// @todo Is slotThumbnailLoaded still called when the thumbnail is found right away?
             /// @todo Remove borders - but they actually look nice in the table
