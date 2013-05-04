@@ -306,6 +306,9 @@ DigikamApp::DigikamApp()
 
 DigikamApp::~DigikamApp()
 {
+    KConfigGroup group = AlbumSettings::instance()->defaultConfigGroup();
+    saveFullScreenSettings(group);
+
     ProgressManager::instance()->slotAbortAll();
 
     ImageAttributesWatch::shutDown();
@@ -414,6 +417,10 @@ void DigikamApp::show()
             d->config->sync();
         }
     }
+
+    // Restore full screen Mode
+    KConfigGroup group = AlbumSettings::instance()->defaultConfigGroup();
+    readFullScreenSettings(group);
 
     // Init album icon view zoom factor.
     slotThumbSizeChanged(AlbumSettings::instance()->getDefaultIconSize());

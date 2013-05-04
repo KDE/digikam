@@ -38,7 +38,6 @@
 
 // KDE includes
 
-#include <kxmlguiwindow.h>
 #include <kurl.h>
 
 // Local includes
@@ -50,6 +49,7 @@
 #include "downloadsettings.h"
 #include "importiconview.h"
 #include "importview.h"
+#include "dxmlguiwindow.h"
 
 namespace Digikam
 {
@@ -59,7 +59,7 @@ class CollectionLocation;
 class CameraHistoryUpdater;
 class ImportIconView;
 
-class ImportUI : public KXmlGuiWindow
+class ImportUI : public DXmlGuiWindow
 {
     Q_OBJECT
 
@@ -123,8 +123,6 @@ private:
 
     bool dialogClosed();
     void finishDialog();
-    void showToolBars();
-    void hideToolBars();
     void refreshFreeSpace();
     void refreshCollectionFreeSpace();
     void deleteItems(bool onlySelected, bool onlyDownloaded);
@@ -145,6 +143,10 @@ private:
                         const QDate& date);
     bool createDateBasedSubAlbum(KUrl &downloadUrl, const CamItemInfo& info);
     bool createExtBasedSubAlbum(KUrl &downloadUrl, const CamItemInfo& info);
+
+    void showThumbBar(bool visible);
+    void showSideBar(bool visible);
+    bool thumbbarVisibility() const;
 
 private Q_SLOTS:
 
@@ -171,9 +173,6 @@ private Q_SLOTS:
     void slotZoomSliderChanged(int size);
     void slotZoomChanged(double zoom);
     void slotThumbSizeChanged(int size);
-
-    void slotToggleFullScreen(bool);
-    void slotEscapePressed();
 
     void slotUpload();
 
