@@ -47,5 +47,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 033 ==> 296651 - digiKam takes very long to display the embedded JPEG in a raw file [patch].
 034 ==> 319294 - Thumbnails disappear when stretching Thumbnail column in Table view [patch].
 035 ==> 319296 - When switching from Thumbnails to Preview Image and then Table, zoom slider gets set to incorrect value [patch].
-036 ==> 
+036 ==> 244422 - For better overviewing large image collections, I wish to have a _list_ view.
+037 ==>
 
