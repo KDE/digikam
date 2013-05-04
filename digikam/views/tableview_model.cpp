@@ -724,6 +724,7 @@ void TableViewModel::slotClearModel(const bool sendNotifications)
 
     d->rootItem = new Item();
     d->cachedImageInfos.clear();
+    d->sortRequired = false;
 
     if (sendNotifications)
     {
@@ -752,6 +753,7 @@ void TableViewModel::slotPopulateModel(const bool sendNotifications)
     d->rootItem = new Item();
     d->cachedImageInfos.clear();
     d->outdated = false;
+    d->sortRequired = false;
 
     const int sourceRowCount = s->imageModel->rowCount(QModelIndex());
     for (int i=0; i<sourceRowCount; ++i)
@@ -810,7 +812,15 @@ void TableViewModel::addSourceModelIndex(const QModelIndex& imageModelIndex, con
     }
 
     Item* item = createItemFromSourceIndex(imageModelIndex);
-    const int newRowIndex = findChildSortedPosition(parentItem, item);
+
+    // Normally we do the sorting of items here on insertion.
+    // However, if the sorting is currently outdated, we just
+    // append the items because the model will be resorted later.
+    int newRowIndex = parentItem->children.count();
+    if (!d->sortRequired)
+    {
+        newRowIndex = findChildSortedPosition(parentItem, item);
+    }
     if (sendNotifications)
     {
         const QModelIndex parentIndex = itemIndex(parentItem);
@@ -839,10 +849,18 @@ void TableViewModel::addSourceModelIndex(const QModelIndex& imageModelIndex, con
         {
             d->cachedImageInfos.insert(groupedInfo.id(), groupedInfo);
 
+            /// @todo Grouped items are currently not filtered. Should they?
             Item* const groupedItem = new Item();
             groupedItem->imageId = groupedInfo.id();
 
-            const int newRowIndex = findChildSortedPosition(item, groupedItem);
+            // Normally we do the sorting of items here on insertion.
+            // However, if the sorting is currently outdated, we just
+            // append the items because the model will be resorted later.
+            int newRowIndex = item->children.count();
+            if (!d->sortRequired)
+            {
+                newRowIndex = findChildSortedPosition(item, groupedItem);
+            }
             item->insertChild(newRowIndex, groupedItem);
         }
 
