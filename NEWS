@@ -45,5 +45,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 031 ==> 318074 - digiKam hangs when opening album.
 032 ==> 281095 - BQM AdjustCurve tool : curves adjustment doesn't work.
 033 ==> 296651 - digiKam takes very long to display the embedded JPEG in a raw file [patch].
-034 ==> 
+034 ==> 319294 - Thumbnails disappear when stretching Thumbnail column in Table view [patch].
+035 ==> 319296 - When switching from Thumbnails to Preview Image and then Table, zoom slider gets set to incorrect value [patch].
+036 ==> 
 
