@@ -49,5 +49,10 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 035 ==> 319296 - When switching from Thumbnails to Preview Image and then Table, zoom slider gets set to incorrect value [patch].
 036 ==> 244422 - For better overviewing large image collections, I wish to have a _list_ view.
 037 ==> 319350 - Some PNG images need fixing for libpng 1.6.
-038 ==> 
+038 ==> 258180 - digiKam doesn't remember layout of main window if you switch to fullscreen and back.
+039 ==> 214107 - Show/hide toolbar forgotten when switching fullscreen mode.
+040 ==> 236234 - Display sidebars in fullscreen.
+041 ==> 289262 - Hitting ESC in "fullscreen picture preview" messes up thumbbar-state in "thumbnail view".
+042 ==> 220739 - Image Editor shows sidebar after applying effect in full screen mode.
+043 ==> 
 
