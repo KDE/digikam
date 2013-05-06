@@ -146,13 +146,14 @@ SetupEditor::SetupEditor(QWidget* const parent)
     d->backgroundColor->setWhatsThis(i18n("Customize the background color to use "
                                           "in the image editor area."));
 
-    d->fullScreenSettings            = new FullScreenSettings(FS_DEFAULT, interfaceOptionsGroup);
-
     gLayout1->addWidget(d->themebackgroundColor);
     gLayout1->addWidget(d->colorBox);
-    gLayout1->addWidget(d->fullScreenSettings);
     gLayout1->setMargin(KDialog::spacingHint());
     gLayout1->setSpacing(KDialog::spacingHint());
+
+    // --------------------------------------------------------
+
+    d->fullScreenSettings            = new FullScreenSettings(FS_DEFAULT, panel);
 
     // --------------------------------------------------------
 
@@ -228,6 +229,7 @@ SetupEditor::SetupEditor(QWidget* const parent)
     // --------------------------------------------------------
 
     layout->addWidget(interfaceOptionsGroup);
+    layout->addWidget(d->fullScreenSettings);
     layout->addWidget(exposureOptionsGroup);
     layout->addStretch();
     layout->setMargin(0);

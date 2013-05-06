@@ -112,8 +112,6 @@ SetupLightTable::SetupLightTable(QWidget* const parent)
                                             "<p><b>Note:</b> for Raw images, a half size version of the Raw data "
                                             "is used instead of the embedded JPEG preview.</p>"));
 
-    d->fullScreenSettings = new FullScreenSettings(FS_TOOLBAR, interfaceOptionsGroup);
-
     d->clearOnClose = new QCheckBox(i18n("Clear the light table on close"));
     d->clearOnClose->setWhatsThis(i18n("Set this option to remove all images "
                                        "from the light table when you close it, "
@@ -130,7 +128,12 @@ SetupLightTable::SetupLightTable(QWidget* const parent)
 
     // --------------------------------------------------------
 
+    d->fullScreenSettings = new FullScreenSettings(FS_TOOLBAR, panel);
+
+    // --------------------------------------------------------
+
     layout->addWidget(interfaceOptionsGroup);
+    layout->addWidget(d->fullScreenSettings);
     layout->setMargin(0);
     layout->setSpacing(KDialog::spacingHint());
     layout->addStretch();

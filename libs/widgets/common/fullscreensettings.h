@@ -26,7 +26,7 @@
 
 // Qt includes
 
-#include <QWidget>
+#include <QGroupBox>
 
 // KDE includes
 
@@ -39,7 +39,7 @@
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT FullScreenSettings : public QWidget
+class DIGIKAM_EXPORT FullScreenSettings : public QGroupBox
 {
 
 public:
