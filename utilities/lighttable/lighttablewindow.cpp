@@ -127,7 +127,7 @@ LightTableWindow::LightTableWindow()
     setCaption(i18n("Light Table"));
     // We don't want to be deleted on close
     setAttribute(Qt::WA_DeleteOnClose, false);
-    setFullScreenOptions(FS_TOOLBARS);
+    setFullScreenOptions(FS_LIGHTTABLE);
 
     // -- Build the GUI -------------------------------
 

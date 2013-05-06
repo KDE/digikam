@@ -153,7 +153,7 @@ SetupEditor::SetupEditor(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    d->fullScreenSettings            = new FullScreenSettings(FS_DEFAULT, panel);
+    d->fullScreenSettings            = new FullScreenSettings(FS_EDITOR, panel);
 
     // --------------------------------------------------------
 

@@ -127,7 +127,7 @@ SetupLightTable::SetupLightTable(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    d->fullScreenSettings = new FullScreenSettings(FS_TOOLBARS, panel);
+    d->fullScreenSettings = new FullScreenSettings(FS_LIGHTTABLE, panel);
 
     // --------------------------------------------------------
 

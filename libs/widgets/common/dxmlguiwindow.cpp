@@ -59,7 +59,7 @@ public:
 
     Private()
     {
-        fsOptions              = FS_DEFAULT;
+        fsOptions              = FS_NONE;
         fullScreenAction       = 0;
         fullScreenBtn          = 0;
         dirtyMainToolBar       = false;

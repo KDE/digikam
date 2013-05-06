@@ -166,7 +166,7 @@ EditorWindow::EditorWindow(const char* const name)
 {
     setObjectName(name);
     setWindowFlags(Qt::Window);
-    setFullScreenOptions(FS_DEFAULT);
+    setFullScreenOptions(FS_EDITOR);
 
     m_nonDestructive           = true;
     m_contextMenu              = 0;

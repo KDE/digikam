@@ -48,7 +48,7 @@ public:
 
     Private()
     {
-        options      = FS_DEFAULT;
+        options      = FS_NONE;
         hideToolBars = 0;
         hideThumbBar = 0;
         hideSideBars = 0;
@@ -77,6 +77,7 @@ FullScreenSettings::FullScreenSettings(int options, QWidget* const parent)
 
     vlay->addWidget(d->hideToolBars);
     vlay->addWidget(d->hideThumbBar);
+    vlay->addWidget(d->hideSideBars);
     vlay->setMargin(0);
     vlay->setSpacing(KDialog::spacingHint());
 

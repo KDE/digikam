@@ -49,11 +49,13 @@ namespace Digikam
  */
 enum FullScreenOptions
 {
-    FS_TOOLBARS = 0x00000001,
-    FS_THUMBBAR = 0x00000002,
-    FS_SIDEBARS = 0x00000004,
-    FS_NONE     = 0x00000008,
-    FS_DEFAULT  = FS_TOOLBARS | FS_THUMBBAR    // Image Editor config.
+    FS_TOOLBARS   = 0x00000001,                                 /// Manage Tools bar in full-screen mode.
+    FS_THUMBBAR   = 0x00000002,                                 /// Manage Thumb bar in full-screen mode.
+    FS_SIDEBARS   = 0x00000004,                                 /// Manage Side bars in full-screen mode.
+    FS_NONE       = 0x00000008,                                 /// No full-screen options.
+
+    FS_EDITOR     = FS_TOOLBARS | FS_THUMBBAR | FS_SIDEBARS,    /// Image Editor Config.
+    FS_LIGHTTABLE = FS_TOOLBARS | FS_SIDEBARS                   /// Light Table Config.
 };
 
 static const QString s_configFullScreenHideToolBarsEntry("FullScreen Hide ToolBars");
