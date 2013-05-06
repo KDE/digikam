@@ -54,6 +54,7 @@ enum FullScreenOptions
     FS_SIDEBARS   = 0x00000004,                                 /// Manage Side bars in full-screen mode.
     FS_NONE       = 0x00000008,                                 /// No full-screen options.
 
+    FS_ALBUMGUI   = FS_TOOLBARS | FS_THUMBBAR | FS_SIDEBARS,    /// Album GUI Config.
     FS_EDITOR     = FS_TOOLBARS | FS_THUMBBAR | FS_SIDEBARS,    /// Image Editor Config.
     FS_LIGHTTABLE = FS_TOOLBARS | FS_SIDEBARS                   /// Light Table Config.
 };

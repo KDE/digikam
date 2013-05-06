@@ -45,6 +45,8 @@
 
 #include "albumsettings.h"
 #include "dfontselect.h"
+#include "fullscreensettings.h"
+#include "dxmlguiwindow.h"
 
 namespace Digikam
 {
@@ -73,33 +75,36 @@ public:
         iconTreeThumbSize(0),
         leftClickActionComboBox(0),
         iconViewFontSelect(0),
-        treeViewFontSelect(0)
+        treeViewFontSelect(0),
+        fullScreenSettings(0)
     {
     }
 
-    QLabel*      iconTreeThumbLabel;
+    QLabel*             iconTreeThumbLabel;
 
-    QCheckBox*   iconShowNameBox;
-    QCheckBox*   iconShowSizeBox;
-    QCheckBox*   iconShowDateBox;
-    QCheckBox*   iconShowModDateBox;
-    QCheckBox*   iconShowResolutionBox;
-    QCheckBox*   iconShowAspectRatioBox;
-    QCheckBox*   iconShowTitleBox;
-    QCheckBox*   iconShowCommentsBox;
-    QCheckBox*   iconShowTagsBox;
-    QCheckBox*   iconShowOverlaysBox;
-    QCheckBox*   iconShowRatingBox;
-    QCheckBox*   iconShowFormatBox;
-    QCheckBox*   previewLoadFullImageSize;
-    QCheckBox*   previewShowIcons;
-    QCheckBox*   showFolderTreeViewItemsCount;
+    QCheckBox*          iconShowNameBox;
+    QCheckBox*          iconShowSizeBox;
+    QCheckBox*          iconShowDateBox;
+    QCheckBox*          iconShowModDateBox;
+    QCheckBox*          iconShowResolutionBox;
+    QCheckBox*          iconShowAspectRatioBox;
+    QCheckBox*          iconShowTitleBox;
+    QCheckBox*          iconShowCommentsBox;
+    QCheckBox*          iconShowTagsBox;
+    QCheckBox*          iconShowOverlaysBox;
+    QCheckBox*          iconShowRatingBox;
+    QCheckBox*          iconShowFormatBox;
+    QCheckBox*          previewLoadFullImageSize;
+    QCheckBox*          previewShowIcons;
+    QCheckBox*          showFolderTreeViewItemsCount;
 
-    KComboBox*   iconTreeThumbSize;
-    KComboBox*   leftClickActionComboBox;
+    KComboBox*          iconTreeThumbSize;
+    KComboBox*          leftClickActionComboBox;
 
-    DFontSelect* iconViewFontSelect;
-    DFontSelect* treeViewFontSelect;
+    DFontSelect*        iconViewFontSelect;
+    DFontSelect*        treeViewFontSelect;
+
+    FullScreenSettings* fullScreenSettings;
 };
 
 SetupAlbumView::SetupAlbumView(QWidget* const parent)
@@ -239,11 +244,16 @@ SetupAlbumView::SetupAlbumView(QWidget* const parent)
 
     // --------------------------------------------------------
 
+    d->fullScreenSettings = new FullScreenSettings(FS_ALBUMGUI, panel);
+
+    // --------------------------------------------------------
+
     layout->setMargin(0);
     layout->setSpacing(KDialog::spacingHint());
     layout->addWidget(iconViewGroup);
     layout->addWidget(folderViewGroup);
     layout->addWidget(interfaceOptionsGroup);
+    layout->addWidget(d->fullScreenSettings);
     layout->addStretch();
 
     // --------------------------------------------------------
@@ -295,6 +305,9 @@ void SetupAlbumView::applySettings()
     settings->setPreviewShowIcons(d->previewShowIcons->isChecked());
     settings->setShowFolderTreeViewItemsCount(d->showFolderTreeViewItemsCount->isChecked());
     settings->saveSettings();
+
+    KConfigGroup group = settings->defaultConfigGroup();
+    d->fullScreenSettings->saveSettings(group);
 }
 
 void SetupAlbumView::readSettings()
@@ -343,6 +356,9 @@ void SetupAlbumView::readSettings()
     d->previewLoadFullImageSize->setChecked(settings->getPreviewLoadFullImageSize());
     d->previewShowIcons->setChecked(settings->getPreviewShowIcons());
     d->showFolderTreeViewItemsCount->setChecked(settings->getShowFolderTreeViewItemsCount());
+
+    KConfigGroup group = settings->defaultConfigGroup();
+    d->fullScreenSettings->readSettings(group);
 }
 
 }  // namespace Digikam

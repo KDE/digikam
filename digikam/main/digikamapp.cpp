@@ -169,7 +169,7 @@ DigikamApp::DigikamApp()
 {
     // --------------------------------------------------------
 
-    setFullScreenOptions(FS_NONE);
+    setFullScreenOptions(FS_ALBUMGUI);
     setXMLFile("digikamui.rc");
 
     // --------------------------------------------------------
