@@ -70,13 +70,13 @@ FullScreenSettings::FullScreenSettings(int options, QWidget* const parent)
     d->hideThumbBar          = new QCheckBox(i18n("Hide &thumbbar"), this);
     d->hideThumbBar->setWhatsThis(i18n("Hide thumbbar view when window switch in full-screen mode."));
 
-    if (!(options & FS_TOOLBAR))  d->hideToolBars->hide();
-    if (!(options & FS_THUMBBAR)) d->hideThumbBar->hide();
-
     vlay->addWidget(d->hideToolBars);
     vlay->addWidget(d->hideThumbBar);
     vlay->setMargin(0);
     vlay->setSpacing(KDialog::spacingHint());
+
+    if (!(options & FS_TOOLBAR))  d->hideToolBars->hide();
+    if (!(options & FS_THUMBBAR)) d->hideThumbBar->hide();
 }
 
 FullScreenSettings::~FullScreenSettings()

@@ -121,7 +121,6 @@ SetupLightTable::SetupLightTable(QWidget* const parent)
     gLayout->addWidget(d->autoSyncPreview);
     gLayout->addWidget(d->autoLoadOnRightPanel);
     gLayout->addWidget(d->loadFullImageSize);
-    gLayout->addWidget(d->fullScreenSettings);
     gLayout->addWidget(d->clearOnClose);
     gLayout->setMargin(KDialog::spacingHint());
     gLayout->setSpacing(0);
