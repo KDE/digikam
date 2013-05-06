@@ -145,7 +145,7 @@ private:
     bool createExtBasedSubAlbum(KUrl &downloadUrl, const CamItemInfo& info);
 
     void showThumbBar(bool visible);
-    void showSideBar(bool visible);
+    void showSideBars(bool visible);
     bool thumbbarVisibility() const;
 
 private Q_SLOTS:

@@ -100,8 +100,6 @@ private:
     void setupConnections();
     void setupUserArea();
     void setupStatusBar();
-    void showToolBars();
-    void hideToolBars();
     void readSettings();
     void writeSettings();
     void refreshStatusBar();

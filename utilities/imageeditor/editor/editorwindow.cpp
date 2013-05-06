@@ -2935,7 +2935,7 @@ void EditorWindow::addAction2ContextMenu(const QString& actionName, bool addDisa
     }
 }
 
-void EditorWindow::showSideBar(bool visible)
+void EditorWindow::showSideBars(bool visible)
 {
     if (visible)
     {

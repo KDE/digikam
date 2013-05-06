@@ -49,14 +49,16 @@ namespace Digikam
  */
 enum FullScreenOptions
 {
-    FS_TOOLBAR  = 0x00000001,
+    FS_TOOLBARS = 0x00000001,
     FS_THUMBBAR = 0x00000002,
-    FS_NONE     = 0x00000004,
-    FS_DEFAULT  = FS_TOOLBAR | FS_THUMBBAR    // Image Editor config.
+    FS_SIDEBARS = 0x00000004,
+    FS_NONE     = 0x00000008,
+    FS_DEFAULT  = FS_TOOLBARS | FS_THUMBBAR    // Image Editor config.
 };
 
+static const QString s_configFullScreenHideToolBarsEntry("FullScreen Hide ToolBars");
 static const QString s_configFullScreenHideThumbBarEntry("FullScreen Hide ThumbBar");
-static const QString s_configFullScreenHideToolBarEntry("FullScreen Hide ToolBar");
+static const QString s_configFullScreenHideSideBarsEntry("FullScreen Hide SideBars");
 
 /** Data container to use in managed window.
  */
@@ -97,10 +99,10 @@ protected:
     bool eventFilter(QObject* obj, QEvent* ev);
     void keyPressEvent(QKeyEvent* e);
 
-    /** Re-implement this method if you want to manage sidebar visibility in full-screen mode.
+    /** Re-implement this method if you want to manage sidebars visibility in full-screen mode.
      *  By default this method do nothing.
      */
-    virtual void showSideBar(bool visible);
+    virtual void showSideBars(bool visible);
 
     /** Re-implement this method if you want to manage thumbbar visibility in full-screen mode.
      *  By default this method do nothing.

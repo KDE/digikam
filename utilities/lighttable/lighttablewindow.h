@@ -81,7 +81,7 @@ protected:
 
 private:
 
-    void showSideBar(bool visible);
+    void showSideBars(bool visible);
     void closeEvent(QCloseEvent* e);
     void showEvent(QShowEvent*);
     void setupActions();

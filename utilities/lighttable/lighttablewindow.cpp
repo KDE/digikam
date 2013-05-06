@@ -127,7 +127,7 @@ LightTableWindow::LightTableWindow()
     setCaption(i18n("Light Table"));
     // We don't want to be deleted on close
     setAttribute(Qt::WA_DeleteOnClose, false);
-    setFullScreenOptions(FS_TOOLBAR);
+    setFullScreenOptions(FS_TOOLBARS);
 
     // -- Build the GUI -------------------------------
 
@@ -1609,7 +1609,7 @@ void LightTableWindow::slotThemeChanged()
     d->previewView->checkForSelection(d->previewView->rightImageInfo());
 }
 
-void LightTableWindow::showSideBar(bool visible)
+void LightTableWindow::showSideBars(bool visible)
 {
     if (visible)
     {

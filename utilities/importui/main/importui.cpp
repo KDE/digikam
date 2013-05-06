@@ -2575,7 +2575,7 @@ void ImportUI::slotHistoryEntryClicked(const QVariant& metadata)
     d->view->scrollTo(folder, file);
 }
 
-void ImportUI::showSideBar(bool visible)
+void ImportUI::showSideBars(bool visible)
 {
     visible ? d->rightSideBar->restore()
             : d->rightSideBar->backup();

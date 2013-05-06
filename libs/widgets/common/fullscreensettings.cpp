@@ -51,12 +51,14 @@ public:
         options      = FS_DEFAULT;
         hideToolBars = 0;
         hideThumbBar = 0;
+        hideSideBars = 0;
     }
 
     int        options;
 
     QCheckBox* hideToolBars;
     QCheckBox* hideThumbBar;
+    QCheckBox* hideSideBars;
 };
 
 FullScreenSettings::FullScreenSettings(int options, QWidget* const parent)
@@ -70,13 +72,17 @@ FullScreenSettings::FullScreenSettings(int options, QWidget* const parent)
     d->hideThumbBar          = new QCheckBox(i18n("Hide &thumbbar"), this);
     d->hideThumbBar->setWhatsThis(i18n("Hide thumbbar view when window switch in full-screen mode."));
 
+    d->hideSideBars          = new QCheckBox(i18n("Hide &sidebars"), this);
+    d->hideSideBars->setWhatsThis(i18n("Hide all side-bars when window switch in full-screen mode."));
+
     vlay->addWidget(d->hideToolBars);
     vlay->addWidget(d->hideThumbBar);
     vlay->setMargin(0);
     vlay->setSpacing(KDialog::spacingHint());
 
-    if (!(options & FS_TOOLBAR))  d->hideToolBars->hide();
+    if (!(options & FS_TOOLBARS)) d->hideToolBars->hide();
     if (!(options & FS_THUMBBAR)) d->hideThumbBar->hide();
+    if (!(options & FS_SIDEBARS)) d->hideSideBars->hide();
 }
 
 FullScreenSettings::~FullScreenSettings()
@@ -86,20 +92,26 @@ FullScreenSettings::~FullScreenSettings()
 
 void FullScreenSettings::readSettings(const KConfigGroup& group)
 {
-    if (d->options & FS_TOOLBAR)
-        d->hideToolBars->setChecked(group.readEntry(s_configFullScreenHideToolBarEntry,  false));
+    if (d->options & FS_TOOLBARS)
+        d->hideToolBars->setChecked(group.readEntry(s_configFullScreenHideToolBarsEntry,  false));
 
     if (d->options & FS_THUMBBAR)
         d->hideThumbBar->setChecked(group.readEntry(s_configFullScreenHideThumbBarEntry, true));
+
+    if (d->options & FS_SIDEBARS)
+        d->hideSideBars->setChecked(group.readEntry(s_configFullScreenHideSideBarsEntry, false));
 }
 
 void FullScreenSettings::saveSettings(KConfigGroup& group)
 {
-    if (d->options & FS_TOOLBAR)
-        group.writeEntry(s_configFullScreenHideToolBarEntry,  d->hideToolBars->isChecked());
+    if (d->options & FS_TOOLBARS)
+        group.writeEntry(s_configFullScreenHideToolBarsEntry,  d->hideToolBars->isChecked());
 
     if (d->options & FS_THUMBBAR)
         group.writeEntry(s_configFullScreenHideThumbBarEntry, d->hideThumbBar->isChecked());
+
+    if (d->options & FS_SIDEBARS)
+        group.writeEntry(s_configFullScreenHideSideBarsEntry,  d->hideSideBars->isChecked());
 
     group.sync();
 }

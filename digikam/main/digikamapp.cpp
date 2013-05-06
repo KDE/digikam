@@ -3017,7 +3017,7 @@ void DigikamApp::rebuild()
     }
 }
 
-void DigikamApp::showSideBar(bool visible)
+void DigikamApp::showSideBars(bool visible)
 {
     visible ? d->view->showSideBars()
             : d->view->hideSideBars();

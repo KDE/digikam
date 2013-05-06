@@ -327,7 +327,7 @@ private:
 
     void enterWaitingLoop();
     void quitWaitingLoop();
-    void showSideBar(bool visible);
+    void showSideBars(bool visible);
     void showThumbBar(bool visible);
     void showCustomizedView(bool visible);
     bool thumbbarVisibility() const;

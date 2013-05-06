@@ -573,26 +573,6 @@ void QueueMgrWindow::refreshStatusBar()
     }
 }
 
-void QueueMgrWindow::showToolBars()
-{
-    QList<KToolBar*> toolbars = toolBars();
-
-    foreach(KToolBar* const toolbar, toolbars)
-    {
-        toolbar->show();
-    }
-}
-
-void QueueMgrWindow::hideToolBars()
-{
-    QList<KToolBar*> toolbars = toolBars();
-
-    foreach(KToolBar* const toolbar, toolbars)
-    {
-        toolbar->hide();
-    }
-}
-
 void QueueMgrWindow::slotEditKeys()
 {
     KShortcutsDialog dialog(KShortcutsEditor::AllActions,

@@ -63,8 +63,9 @@ public:
         fullScreenAction       = 0;
         fullScreenBtn          = 0;
         dirtyMainToolBar       = false;
-        fullScreenHideToolBar  = false;
+        fullScreenHideToolBars = false;
         fullScreenHideThumbBar = true;
+        fullScreenHideSideBars = false;
         thumbbarVisibility     = true;
         menubarVisibility      = true;
         statusbarVisibility    = true;
@@ -74,11 +75,15 @@ public:
 
     /** Settings taken from managed window configuration to handle toolbar visibility  in full-screen mode
      */
-    bool                     fullScreenHideToolBar;
+    bool                     fullScreenHideToolBars;
 
     /** Settings taken from managed window configuration to handle thumbbar visibility in full-screen mode
      */
     bool                     fullScreenHideThumbBar;
+
+    /** Settings taken from managed window configuration to handle toolbar visibility  in full-screen mode
+     */
+    bool                     fullScreenHideSideBars;
 
     /** Full-Screen options. See FullScreenOptions enum and setFullScreenOptions() for details.
      */
@@ -143,11 +148,14 @@ void DXmlGuiWindow::createFullScreenAction(const QString& name)
 
 void DXmlGuiWindow::readFullScreenSettings(const KConfigGroup& group)
 {
-    if (d->fsOptions & FS_TOOLBAR)
-        d->fullScreenHideToolBar  = group.readEntry(s_configFullScreenHideToolBarEntry,  false);
+    if (d->fsOptions & FS_TOOLBARS)
+        d->fullScreenHideToolBars  = group.readEntry(s_configFullScreenHideToolBarsEntry,  false);
 
     if (d->fsOptions & FS_THUMBBAR)
         d->fullScreenHideThumbBar = group.readEntry(s_configFullScreenHideThumbBarEntry, true);
+
+    if (d->fsOptions & FS_SIDEBARS)
+        d->fullScreenHideSideBars  = group.readEntry(s_configFullScreenHideSideBarsEntry,  false);
 }
 
 void DXmlGuiWindow::slotToggleFullScreen(bool set)
@@ -172,7 +180,7 @@ void DXmlGuiWindow::slotToggleFullScreen(bool set)
 
         // restore sidebars
 
-        showSideBar(true);
+        showSideBars(true);
 
         // restore thummbbar
 
@@ -210,7 +218,8 @@ void DXmlGuiWindow::slotToggleFullScreen(bool set)
 
         // hide sidebars
 
-        showSideBar(false);
+        if ((d->fsOptions & FS_SIDEBARS) && d->fullScreenHideSideBars)
+            showSideBars(false);
 
         // hide thummbbar
 
@@ -221,7 +230,7 @@ void DXmlGuiWindow::slotToggleFullScreen(bool set)
 
         // hide toolbars and manage full-screen button
 
-        if ((d->fsOptions & FS_TOOLBAR) && d->fullScreenHideToolBar)
+        if ((d->fsOptions & FS_TOOLBARS) && d->fullScreenHideToolBars)
         {
             showToolBars(false);
         }
@@ -278,7 +287,7 @@ bool DXmlGuiWindow::eventFilter(QObject* obj, QEvent* ev)
 
             if (mainbar)
             {
-                if (((d->fsOptions & FS_TOOLBAR) && d->fullScreenHideToolBar) || !mainbar->isVisible())
+                if (((d->fsOptions & FS_TOOLBARS) && d->fullScreenHideToolBars) || !mainbar->isVisible())
                 {
                     QHoverEvent* const mev = dynamic_cast<QHoverEvent*>(ev);
 
@@ -398,7 +407,7 @@ void DXmlGuiWindow::showToolBars(bool visible)
     }
 }
 
-void DXmlGuiWindow::showSideBar(bool visible)
+void DXmlGuiWindow::showSideBars(bool visible)
 {
     Q_UNUSED(visible);
 }

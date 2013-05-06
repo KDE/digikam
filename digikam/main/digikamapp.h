@@ -143,7 +143,7 @@ private:
     void    updateQuickImportAction();
     void    initGui();
     void    showThumbBar(bool visible);
-    void    showSideBar(bool visible);
+    void    showSideBars(bool visible);
     bool    thumbbarVisibility() const;
 
 private Q_SLOTS:
