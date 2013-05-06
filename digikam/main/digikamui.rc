@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="212" name="digikam" >
+<gui version="213" name="digikam" >
 
  <MenuBar>
 
@@ -95,7 +95,6 @@
     <Separator/>
      <Action name="album_zoomto100percents" />
      <Action name="album_zoomfit2window" />
-     <Action name="showthumbs" />
      <Separator />
      <Action name="album_sort" />
      <Action name="image_sort" />
@@ -147,6 +146,7 @@
      <Action name="options_show_menubar"/>
      <Action name="options_show_statusbar"/>
      <Action name="options_show_toolbar"/>
+     <Action name="showthumbs" />
      <Separator/>
      <Action name="theme_menu" />
      <Action name="options_configure_keybinding"/>
