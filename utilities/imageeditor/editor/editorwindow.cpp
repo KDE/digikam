@@ -1060,7 +1060,6 @@ void EditorWindow::saveStandardSettings()
     group.writeEntry(d->configUnderExposureIndicatorEntry, d->exposureSettings->underExposureIndicator);
     group.writeEntry(d->configOverExposureIndicatorEntry, d->exposureSettings->overExposureIndicator);
     d->previewToolBar->writeSettings(group);
-    saveFullScreenSettings(group);
     config->sync();
 }
 

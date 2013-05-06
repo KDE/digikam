@@ -872,7 +872,6 @@ void ImportUI::saveSettings()
     d->splitter->saveState(group);
     //d->filterComboBox->saveSettings();
 
-    saveFullScreenSettings(group);
     config->sync();
 }
 

@@ -148,18 +148,6 @@ void DXmlGuiWindow::readFullScreenSettings(const KConfigGroup& group)
 
     if (d->fsOptions & FS_THUMBBAR)
         d->fullScreenHideThumbBar = group.readEntry(s_configFullScreenHideThumbBarEntry, true);
-
-    if (group.readEntry(s_configRestoreFullScreenModeEntry, false))
-    {
-        if (d->fullScreenAction)
-            d->fullScreenAction->activate(QAction::Trigger);
-    }
-}
-
-void DXmlGuiWindow::saveFullScreenSettings(KConfigGroup& group)
-{
-    if (d->fullScreenAction)
-        group.writeEntry(s_configRestoreFullScreenModeEntry, d->fullScreenAction->isChecked());
 }
 
 void DXmlGuiWindow::slotToggleFullScreen(bool set)

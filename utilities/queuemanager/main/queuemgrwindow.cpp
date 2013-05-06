@@ -484,8 +484,6 @@ void QueueMgrWindow::writeSettings()
     d->bottomSplitter->saveState(group,   d->BOTTOM_SPLITTER_CONFIG_KEY);
     d->verticalSplitter->saveState(group, d->VERTICAL_SPLITTER_CONFIG_KEY);
 
-    saveFullScreenSettings(group);
-
     config->sync();
 }
 

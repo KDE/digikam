@@ -55,7 +55,6 @@ enum FullScreenOptions
     FS_DEFAULT  = FS_TOOLBAR | FS_THUMBBAR    // Image Editor config.
 };
 
-static const QString s_configRestoreFullScreenModeEntry("Restore Full Screen Mode");
 static const QString s_configFullScreenHideThumbBarEntry("FullScreen Hide ThumbBar");
 static const QString s_configFullScreenHideToolBarEntry("FullScreen Hide ToolBar");
 
@@ -80,10 +79,9 @@ public:
      */
     void createFullScreenAction(const QString& name);
 
-    /** Read and write full-screen settings from/to KDE config file
+    /** Read full-screen settings from KDE config file.
      */
     void readFullScreenSettings(const KConfigGroup& group);
-    void saveFullScreenSettings(KConfigGroup& group);
 
     /** Switch Window 'win' to full screen mode.
      *  'set' argument will set or reset the fullscreen state of window.

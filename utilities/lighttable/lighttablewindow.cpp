@@ -194,8 +194,6 @@ void LightTableWindow::writeSettings()
     d->rightSideBar->setConfigGroup(KConfigGroup(&group, "Right Sidebar"));
     d->rightSideBar->saveState();
 
-    saveFullScreenSettings(group);
-
     config->sync();
 }
 
@@ -203,8 +201,8 @@ void LightTableWindow::applySettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("LightTable Settings");
-    d->autoLoadOnRightPanel   = group.readEntry("Auto Load Right Panel",   true);
-    d->autoSyncPreview        = group.readEntry("Auto Sync Preview",       true);
+    d->autoLoadOnRightPanel   = group.readEntry("Auto Load Right Panel", true);
+    d->autoSyncPreview        = group.readEntry("Auto Sync Preview",     true);
     d->clearOnCloseAction->setChecked(group.readEntry("Clear On Close", false));
     d->previewView->setLoadFullImageSize(group.readEntry("Load Full Image size", false));
 
