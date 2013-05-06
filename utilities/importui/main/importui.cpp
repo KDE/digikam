@@ -142,7 +142,7 @@ ImportUI::ImportUI(QWidget* const parent, const QString& cameraTitle,
     : DXmlGuiWindow(parent), d(new Private)
 {
     setXMLFile("importui.rc");
-    setFullScreenOptions(FS_NONE);
+    setFullScreenOptions(FS_IMPORTUI);
 
     // --------------------------------------------------------
 

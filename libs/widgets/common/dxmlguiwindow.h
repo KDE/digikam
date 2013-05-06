@@ -56,7 +56,8 @@ enum FullScreenOptions
 
     FS_ALBUMGUI   = FS_TOOLBARS | FS_THUMBBAR | FS_SIDEBARS,    /// Album GUI Config.
     FS_EDITOR     = FS_TOOLBARS | FS_THUMBBAR | FS_SIDEBARS,    /// Image Editor Config.
-    FS_LIGHTTABLE = FS_TOOLBARS | FS_SIDEBARS                   /// Light Table Config.
+    FS_LIGHTTABLE = FS_TOOLBARS | FS_SIDEBARS,                  /// Light Table Config.
+    FS_IMPORTUI   = FS_TOOLBARS | FS_THUMBBAR | FS_SIDEBARS,    /// Import UI Config.
 };
 
 static const QString s_configFullScreenHideToolBarsEntry("FullScreen Hide ToolBars");
