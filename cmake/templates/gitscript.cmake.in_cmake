@@ -5,7 +5,11 @@ FIND_PROGRAM(GITEXEC git)
 
 # Read the version if installed, else set to "unknown"
 IF (GITEXEC)
-    EXEC_PROGRAM(${GITEXEC} ARGS --git-dir=@CMAKE_CURRENT_SOURCE_DIR@/.git rev-parse HEAD OUTPUT_VARIABLE MYVERSION)
+    EXECUTE_PROCESS(COMMAND ${GITEXEC} --git-dir=@CMAKE_CURRENT_SOURCE_DIR@/.git rev-parse HEAD OUTPUT_VARIABLE MYVERSION)
+    IF (MYVERSION)
+        # Remove the newline that git returns
+        STRING(STRIP ${MYVERSION} MYVERSION)
+    ENDIF (MYVERSION)
 ELSE (GITEXEC)
     SET(MYVERSION unknown)
 ENDIF (GITEXEC)

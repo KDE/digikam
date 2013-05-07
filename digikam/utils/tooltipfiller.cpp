@@ -48,8 +48,53 @@
 #include "colorlabelwidget.h"
 #include "picklabelwidget.h"
 
+namespace
+{
+
+int gcd(int a, int b)
+{
+  int c = a % b;
+  while(c != 0)
+  {
+    a = b;
+    b = c;
+    c = a % b;
+  }
+  return b;
+}
+
+} /* anonymous namespace */
+
 namespace Digikam
 {
+
+bool ToolTipFiller::aspectRatioToString(const int width, const int height, QString* const arString)
+{
+    if ( (width==0) || (height==0) )
+    {
+        return false;
+    }
+
+    const int gcd_divisor = gcd(width, height);
+    int ar_width = width / gcd_divisor;
+    int ar_height = height / gcd_divisor;
+    const double aratio2 = double(width) / double(height);
+
+    if ((ar_width == 8 && ar_height == 5) || (ar_height == 8 && ar_width == 5))
+    {
+            ar_width = ar_width * 2;
+            ar_height = ar_height * 2;
+    }
+
+    const QString aratio = KGlobal::locale()->formatNumber(aratio2, 2);
+    const QString ar_width2 = QString::number(ar_width);
+    const QString ar_height2 = QString::number(ar_height);
+
+    *arString = i18nc("width : height (Aspect Ratio)", "%1:%2 (%3)",
+                ar_width2, ar_height2, aratio);
+
+    return true;
+}
 
 QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
 {
@@ -123,36 +168,10 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
 
        if (settings->getToolTipsShowImageAR())
         {
-            if (commonInfo.width == 0 || commonInfo.height == 0)
+            if (!aspectRatioToString(commonInfo.width, commonInfo.height, &str))
             {
                 str = i18nc("unknown / invalid image aspect ratio",
                             "Unknown");
-            }
-            else
-            {
-                QString aratio;
-                QString ar_width2;
-                QString ar_height2;
-                double aratio2;
-                int gcd_divisor;
-                int ar_width;
-                int ar_height;
-
-                gcd_divisor = gcd(commonInfo.width, commonInfo.height);
-                ar_width = commonInfo.width / gcd_divisor;
-                ar_height = commonInfo.height / gcd_divisor;
-                aratio2 = double(commonInfo.width) / double(commonInfo.height);
-
-                if ((ar_width == 8 && ar_height == 5) || (ar_height == 8 && ar_width == 5))
-                {
-                        ar_width = ar_width * 2;
-                        ar_height = ar_height * 2;
-                }
-                aratio.setNum(aratio2, 'f', 2);
-                ar_width2.setNum(ar_width);
-                ar_height2.setNum(ar_height);
-                str = i18nc("width : height (Aspect Ratio)", "%1:%2 (%3)",
-                            ar_width2, ar_height2, aratio);
             }
 
             tip += cnt.cellBeg + i18n("Aspect Ratio:") + cnt.cellMid + str + cnt.cellEnd;
@@ -679,18 +698,5 @@ QString ToolTipFiller::filterActionTipContents(const FilterAction& action)
 
     return tip;
 }
-
-int gcd(int a, int b)
-{
-  int c = a % b;
-  while(c != 0)
-  {
-    a = b;
-    b = c;
-    c = a % b;
-  }
-  return b;
-}
-
 
 }  // namespace Digikam

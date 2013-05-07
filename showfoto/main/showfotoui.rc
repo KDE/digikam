@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="202" name="showfoto" >
+<gui version="203" name="showfoto" >
 
 <MenuBar>
 
@@ -43,8 +43,6 @@
         <Action name="editorwindow_zoomto100percents" />
         <Action name="editorwindow_zoomfit2window" />
         <Action name="editorwindow_zoomfit2select" />
-        <Separator/>
-        <Action name="editorwindow_showthumbs" />
         <Separator/>
         <Action name="editorwindow_underexposure" />
         <Action name="editorwindow_overexposure" />
@@ -92,6 +90,7 @@
         <Action name="options_show_menubar"/>
         <Action name="options_show_statusbar"/>
         <Action name="options_show_toolbar"/>
+        <Action name="editorwindow_showthumbs" />
         <Separator/>
         <Action name="theme_menu" />
         <Action name="options_configure_keybinding" />

@@ -10,7 +10,7 @@
  * Copyright (C)      2006 by Tom Albers <tomalbers at kde dot nl>
  * Copyright (C) 2002-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at gmail dot com>
- * Copyright (C) 2013 by Michael G. Hansen <mike at mghansen dot de>
+ * Copyright (C) 2013      by Michael G. Hansen <mike at mghansen dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -37,7 +37,6 @@
 // KDE includes
 
 #include <kurl.h>
-#include <kxmlguiwindow.h>
 #include <kio/global.h>
 #include <kio/netaccess.h>
 #include <solid/solidnamespace.h>
@@ -46,6 +45,7 @@
 
 #include "config-digikam.h"
 #include "digikam_export.h"
+#include "dxmlguiwindow.h"
 
 class KAction;
 class KActionMenu;
@@ -65,7 +65,7 @@ class ImageInfo;
 class ImageInfoList;
 class CameraType;
 
-class DigikamApp : public KXmlGuiWindow
+class DigikamApp : public DXmlGuiWindow
 {
     Q_OBJECT
 
@@ -142,8 +142,9 @@ private:
     void    updateCameraMenu();
     void    updateQuickImportAction();
     void    initGui();
-    void    showToolBars(bool show=true);
-    void    showThumbBar(bool show=true);
+    void    showThumbBar(bool visible);
+    void    showSideBars(bool visible);
+    bool    thumbbarVisibility() const;
 
 private Q_SLOTS:
 
@@ -189,7 +190,6 @@ private Q_SLOTS:
     void slotConfToolbars();
     void slotNewToolbarConfig();
     void slotConfNotifications();
-    void slotToggleFullScreen(bool);
 
     void slotMaintenance();
     void slotMaintenanceDone();

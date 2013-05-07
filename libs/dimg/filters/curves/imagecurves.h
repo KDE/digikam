@@ -149,19 +149,19 @@ public:
     bool isLinear()            const;
 
     /**
-     * Writes the given channel to a base64 representation.
+     * Writes the given channel to a raw binary representation.
      * Note that 16bit free curves take a lot of memory (~85kB)
      * while all other forms take less than 400 bytes.
      */
-    QByteArray channelToBase64(int channel) const;
+    QByteArray channelToBinary(int channel) const;
 
     /**
-     * Set the channel from the given base64 representation.
+     * Set the channel from the given raw binary representation.
      * The data is checked for validity, only on valid data true is returned.
      * Note that the bytes depth (isSixteenBits()) of the encoded
      * representation must match the depth of this curves object.
      */
-    bool setChannelFromBase64(int channel, const QByteArray& array);
+    bool setChannelFromBinary(int channel, const QByteArray& array);
 
     /// Methods for to save/load the curves values to/from a Gimp curves text file.
 

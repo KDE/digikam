@@ -78,6 +78,9 @@ public:
 class TableViewColumnDescription
 {
 public:
+
+    typedef QList<TableViewColumnDescription> List;
+
     explicit TableViewColumnDescription()
       : columnId(),
         columnTitle(),
@@ -131,6 +134,27 @@ public:
         columnIcon = iconName;
 
         return *this;
+    }
+
+    static bool FindInListById(const TableViewColumnDescription::List& listToSearch, const QString targetId, TableViewColumnDescription* const resultDescription)
+    {
+        TableViewColumnDescription::List leftToSearch = listToSearch;
+        while (!leftToSearch.isEmpty())
+        {
+            const TableViewColumnDescription desc = leftToSearch.takeFirst();
+            if (desc.columnId==targetId)
+            {
+                *resultDescription = desc;
+                return true;
+            }
+
+            if (!desc.subColumns.isEmpty())
+            {
+                leftToSearch << desc.subColumns;
+            }
+        }
+
+        return false;
     }
 };
 
@@ -254,7 +278,7 @@ public:
 
     explicit TableViewColumnFactory(TableViewShared* const tableViewShared, QObject* parent = 0);
 
-    QList<TableViewColumnDescription> getColumnDescriptionList();
+    static QList<TableViewColumnDescription> getColumnDescriptionList();
     TableViewColumn* getColumn(const TableViewColumnConfiguration& columnConfiguration);
 
 private:

@@ -168,25 +168,34 @@ void TableViewColumnProfile::loadSettings(const KConfigGroup& configGroup)
     if (columnConfigurationList.isEmpty())
     {
         // no data loaded, create default entries
-        /// @todo Make proper columns here.
         /// @todo Set the default sorting column to something other than the thumbnail.
-        columnConfigurationList << TableViewColumnConfiguration("thumbnail");
+        TableViewColumnDescription::List allColumns = TableViewColumnFactory::getColumnDescriptionList();
 
-        columnConfigurationList <<
-            TableViewColumnDescription("file-properties", i18n("Filename"), "subcolumn", "name")
-            .toConfiguration();
+        TableViewColumnDescription nextDesc;
+        if (TableViewColumnDescription::FindInListById(allColumns, "thumbnail", &nextDesc))
+        {
+            columnConfigurationList << nextDesc.toConfiguration();
+        }
 
-        columnConfigurationList <<
-            TableViewColumnDescription("digikam-properties", i18n("Rating"), "subcolumn", "rating")
-            .toConfiguration();
+        if (TableViewColumnDescription::FindInListById(allColumns, "filename", &nextDesc))
+        {
+            columnConfigurationList << nextDesc.toConfiguration();
+        }
 
-        columnConfigurationList <<
-            TableViewColumnDescription("digikam-properties", i18n("Title"), "subcolumn", "title")
-            .toConfiguration();
+        if (TableViewColumnDescription::FindInListById(allColumns, "digikam-rating", &nextDesc))
+        {
+            columnConfigurationList << nextDesc.toConfiguration();
+        }
 
-        columnConfigurationList <<
-            TableViewColumnDescription("geo-properties", i18n("Coordinates"), "subcolumn", "coordinates")
-            .toConfiguration();
+        if (TableViewColumnDescription::FindInListById(allColumns, "itemcreationdatetime", &nextDesc))
+        {
+            columnConfigurationList << nextDesc.toConfiguration();
+        }
+
+        if (TableViewColumnDescription::FindInListById(allColumns, "digikam-title", &nextDesc))
+        {
+            columnConfigurationList << nextDesc.toConfiguration();
+        }
     }
 }
 

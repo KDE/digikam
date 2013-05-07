@@ -34,7 +34,6 @@
 
 // KDE includes
 
-#include <kxmlguiwindow.h>
 #include <kurl.h>
 #include <kjob.h>
 #include <kprogressdialog.h>
@@ -45,6 +44,7 @@
 #include "thumbbardock.h"
 #include "previewtoolbar.h"
 #include "savingcontext.h"
+#include "dxmlguiwindow.h"
 
 class QSplitter;
 
@@ -76,7 +76,7 @@ class StatusProgressBar;
 class VersionManager;
 class VersionFileOperation;
 
-class DIGIKAM_EXPORT EditorWindow : public KXmlGuiWindow
+class DIGIKAM_EXPORT EditorWindow : public DXmlGuiWindow
 {
     Q_OBJECT
 
@@ -262,8 +262,6 @@ protected Q_SLOTS:
     void slotConfNotifications();
     void slotNewToolbarConfig();
 
-    void slotToggleFullScreen(bool b);
-
     void slotSelected(bool);
 
     void slotLoadingProgress(const QString& filePath, float progress);
@@ -325,16 +323,14 @@ private Q_SLOTS:
     void slotSelectToolsMenuAboutToShow();
     void slotThemeChanged();
 
-protected:
-
-    void keyPressEvent(QKeyEvent* e);
-
 private:
 
     void enterWaitingLoop();
     void quitWaitingLoop();
-    void hideToolBars();
-    void showToolBars();
+    void showSideBars(bool visible);
+    void showThumbBar(bool visible);
+    void showCustomizedView(bool visible);
+    bool thumbbarVisibility() const;
     void setColorManagedViewIndicatorToolTip(bool available, bool cmv);
     void setUnderExposureToolTip(bool uei);
     void setOverExposureToolTip(bool oei);

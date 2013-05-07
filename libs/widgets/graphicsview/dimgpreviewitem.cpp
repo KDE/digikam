@@ -80,18 +80,10 @@ void DImgPreviewItem::DImgPreviewItemPrivate::init(DImgPreviewItem* const q)
                      q, SLOT(preloadNext()));
 
     // get preview size from screen size, but limit from VGA to WQXGA
-    previewSize = qMax(QApplication::desktop()->height(),
-                       QApplication::desktop()->width());
-
-    if (previewSize < 640)
-    {
-        previewSize = 640;
-    }
-
-    if (previewSize > 2560)
-    {
-        previewSize = 2560;
-    }
+    previewSize = qBound(640,
+                         qMax(QApplication::desktop()->availableGeometry(-1).height(),
+                              QApplication::desktop()->availableGeometry(-1).width()),
+                         2560);
 
     LoadingCacheInterface::connectToSignalFileChanged(q, SLOT(slotFileChanged(QString)));
 

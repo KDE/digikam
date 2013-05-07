@@ -365,6 +365,7 @@ void StackedView::setViewMode(const StackedViewMode mode)
     }
 
     d->mapWidgetView->setActive(mode == MapWidgetMode);
+    d->tableView->slotSetActive(mode == TableViewMode);
 
     if (mode == IconViewMode)
     {

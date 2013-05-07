@@ -42,7 +42,6 @@
 #include "daboutdata.h"
 #include "editorwindow.h"
 #include "versionmanager.h"
-#include "fullscreenmngr.h"
 
 class QDialog;
 class QEventLoop;
@@ -205,8 +204,6 @@ public:
     DAboutData*                about;
 
     QList<int>                 fullscreenSizeBackup;
-
-    FullScreenMngr*            fullScreenMngr;
 };
 
 const QString EditorWindow::Private::configAutoZoomEntry("AutoZoom");

@@ -7,7 +7,7 @@
  * Description : camera setup tab.
  *
  * Copyright (C) 2003-2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -64,6 +64,8 @@
 #include "importfilters.h"
 #include "dfontselect.h"
 #include "importsettings.h"
+#include "fullscreensettings.h"
+#include "dxmlguiwindow.h"
 
 namespace Digikam
 {
@@ -193,7 +195,8 @@ public:
         importListView(0),
         tab(0),
         ignoreNamesEdit(0),
-        ignoreExtensionsEdit(0)
+        ignoreExtensionsEdit(0),
+        fullScreenSettings(0)
     {
     }
 
@@ -244,6 +247,8 @@ public:
     QLineEdit*           ignoreExtensionsEdit;
 
     FilterList           filters;
+
+    FullScreenSettings*  fullScreenSettings;
 };
 
 const QString SetupCamera::Private::configGroupName("Camera Settings");
@@ -472,7 +477,7 @@ SetupCamera::SetupCamera(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    QGroupBox* interfaceOptionsGroup = new QGroupBox(i18n("Preview Options"), panel);
+    QGroupBox* interfaceOptionsGroup = new QGroupBox(i18n("Preview Options"), panel4);
     QGridLayout* grid3               = new QGridLayout(interfaceOptionsGroup);
 
     d->previewLoadFullImageSize      = new QCheckBox(i18n("Embedded preview loads full-sized images"), interfaceOptionsGroup);
@@ -495,13 +500,18 @@ SetupCamera::SetupCamera(QWidget* const parent)
     grid3->addWidget(d->previewItemsWhileDownload, 1, 0, 1, 2);
     grid3->addWidget(d->previewShowIcons,          2, 0, 1, 2);
 
+    // --------------------------------------------------------
+
+    d->fullScreenSettings = new FullScreenSettings(FS_IMPORTUI, panel4);
+
     layout2->setMargin(0);
     layout2->setSpacing(KDialog::spacingHint());
     layout2->addWidget(iconViewGroup);
     layout2->addWidget(interfaceOptionsGroup);
+    layout2->addWidget(d->fullScreenSettings);
     layout2->addStretch();
 
-    d->tab->insertTab(3, panel4, i18n("Icon View"));
+    d->tab->insertTab(3, panel4, i18n("Import Window"));
 
     // -------------------------------------------------------------
 
@@ -590,6 +600,8 @@ void SetupCamera::readSettings()
     PAlbum* album = AlbumManager::instance()->findPAlbum(group.readEntry(d->configDefaultTargetAlbumId, 0));
     d->target1AlbumSelector->setCurrentAlbum(album);
     d->target1AlbumSelector->setEnabled(d->useDefaultTargetAlbum->isChecked());
+
+    d->fullScreenSettings->readSettings(group);
 
     // -------------------------------------------------------
 
@@ -685,6 +697,9 @@ void SetupCamera::applySettings()
     group.writeEntry(d->configUseDefaultTargetAlbum, d->useDefaultTargetAlbum->isChecked());
     PAlbum* const album = d->target1AlbumSelector->currentAlbum();
     group.writeEntry(d->configDefaultTargetAlbumId, album ? album->id() : 0);
+
+    d->fullScreenSettings->saveSettings(group);
+
     group.sync();
 
     // -------------------------------------------------------

@@ -106,7 +106,7 @@ bool LightTableWindow::lightTableWindowCreated()
 }
 
 LightTableWindow::LightTableWindow()
-    : KXmlGuiWindow(0), d(new Private)
+    : DXmlGuiWindow(0), d(new Private)
 {
     setXMLFile("lighttablewindowui.rc");
 
@@ -127,11 +127,7 @@ LightTableWindow::LightTableWindow()
     setCaption(i18n("Light Table"));
     // We don't want to be deleted on close
     setAttribute(Qt::WA_DeleteOnClose, false);
-
-    // --------------------------------------------------------
-
-    d->fullScreenMngr = new FullScreenMngr(FS_TOOLBAR);
-    d->fullScreenMngr->setManagedWindow(this);
+    setFullScreenOptions(FS_LIGHTTABLE);
 
     // -- Build the GUI -------------------------------
 
@@ -163,7 +159,6 @@ LightTableWindow::~LightTableWindow()
     delete d->thumbView;
     delete d->rightSideBar;
     delete d->leftSideBar;
-    delete d->fullScreenMngr;
     delete d;
 }
 
@@ -182,7 +177,7 @@ void LightTableWindow::readSettings()
     d->rightSideBar->setConfigGroup(KConfigGroup(&group, "Right Sidebar"));
     d->rightSideBar->loadState();
 
-    d->fullScreenMngr->readSettings(group);
+    readFullScreenSettings(group);
 }
 
 void LightTableWindow::writeSettings()
@@ -199,8 +194,6 @@ void LightTableWindow::writeSettings()
     d->rightSideBar->setConfigGroup(KConfigGroup(&group, "Right Sidebar"));
     d->rightSideBar->saveState();
 
-    d->fullScreenMngr->saveSettings(group);
-
     config->sync();
 }
 
@@ -208,13 +201,13 @@ void LightTableWindow::applySettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("LightTable Settings");
-    d->autoLoadOnRightPanel   = group.readEntry("Auto Load Right Panel",   true);
-    d->autoSyncPreview        = group.readEntry("Auto Sync Preview",       true);
+    d->autoLoadOnRightPanel   = group.readEntry("Auto Load Right Panel", true);
+    d->autoSyncPreview        = group.readEntry("Auto Sync Preview",     true);
     d->clearOnCloseAction->setChecked(group.readEntry("Clear On Close", false));
     d->previewView->setLoadFullImageSize(group.readEntry("Load Full Image size", false));
 
     // Restore full screen Mode
-    d->fullScreenMngr->readSettings(group);
+    readFullScreenSettings(group);
 
     // NOTE: Image orientation settings in thumbbar is managed by image model.
     refreshView();
@@ -548,8 +541,7 @@ void LightTableWindow::setupActions()
     d->showThumbBarAction = d->barViewDock->getToggleAction(this);
     actionCollection()->addAction("lighttable_showthumbbar", d->showThumbBarAction);
 
-    QAction* const fullScreenAction = d->fullScreenMngr->createFullScreenAction("lighttable_fullscreen");
-    connect(fullScreenAction, SIGNAL(toggled(bool)), this, SLOT(slotToggleFullScreen(bool)));
+    createFullScreenAction("lighttable_fullscreen");
 
     d->slideShowAction = new KAction(KIcon("view-presentation"), i18n("Slideshow"), this);
     d->slideShowAction->setShortcut(KShortcut(Qt::Key_F9));
@@ -1617,31 +1609,17 @@ void LightTableWindow::slotThemeChanged()
     d->previewView->checkForSelection(d->previewView->rightImageInfo());
 }
 
-void LightTableWindow::slotToggleFullScreen(bool b)
+void LightTableWindow::showSideBars(bool visible)
 {
-    d->fullScreenMngr->switchWindowToFullScreen(b);
-
-    if (!b)
+    if (visible)
     {
-        kDebug() << "TURN OFF fullscreen";
-
         d->leftSideBar->restore();
         d->rightSideBar->restore();
     }
     else
     {
-        kDebug() << "TURN ON fullscreen";
-
         d->leftSideBar->backup();
         d->rightSideBar->backup();
-    }
-}
-
-void LightTableWindow::keyPressEvent(QKeyEvent* e)
-{
-    if (e->key() == Qt::Key_Escape)
-    {
-        d->fullScreenMngr->escapePressed();
     }
 }
 

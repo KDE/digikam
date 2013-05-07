@@ -36,7 +36,6 @@
 #include <klocale.h>
 #include <kapplication.h>
 #include <kglobal.h>
-#include <kconfiggroup.h>
 #include <kglobalsettings.h>
 #include <kstandarddirs.h>
 
@@ -553,13 +552,18 @@ void AlbumSettings::init()
             this, SLOT(applyNepomukSettings()));
 }
 
+KConfigGroup AlbumSettings::defaultConfigGroup() const
+{
+    return d->config->group(d->configGroupDefault);
+}
+
 void AlbumSettings::readSettings()
 {
     KSharedConfigPtr config = d->config;
 
     // ---------------------------------------------------------------------
 
-    KConfigGroup group  = config->group(d->configGroupDefault);
+    KConfigGroup group  = defaultConfigGroup();
 
     QStringList collectionList = group.readEntry(d->configAlbumCollectionsEntry, QStringList());
 
@@ -697,7 +701,7 @@ void AlbumSettings::saveSettings()
 
     // ---------------------------------------------------------------------
 
-    KConfigGroup group = config->group(d->configGroupDefault);
+    KConfigGroup group = defaultConfigGroup();
 
     group.writeEntry(d->configAlbumCollectionsEntry,             d->albumCategoryNames);
     group.writeEntry(d->configAlbumSortOrderEntry,               (int)d->albumSortOrder);
