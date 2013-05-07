@@ -8,7 +8,8 @@ General     : New tool to Auto-Crop image based on black hole borders detection.
 AlbumGUI    : New "Table-View" view mode dedicated to show album items in a list view.
 AlbumGUI    : New Aspect-Ratio information displayed in icon-view and tooltips.
 AlbumGUI    : New filter based on Aspect-Ratio information.
-Searches    : New search tool to find items based on Aspect-Ratio Information.
+Searches    : New search tool to find images based on Aspect-Ratio Information.
+Searches    : New search tool to find videos based on shot properties.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
@@ -54,5 +55,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 040 ==> 236234 - Display sidebars in fullscreen.
 041 ==> 289262 - Hitting ESC in "fullscreen picture preview" messes up thumbbar-state in "thumbnail view".
 042 ==> 220739 - Image Editor shows sidebar after applying effect in full screen mode.
-043 ==> 
-
+043 ==> 164442 - Manage videos just like photos [patch].
+044 ==> 
