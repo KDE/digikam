@@ -82,6 +82,7 @@ TableViewTreeView::TableViewTreeView(TableViewShared* const tableViewShared, QWi
     setAllColumnsShowFocus(true);
     setDragEnabled(true);
     setAcceptDrops(true);
+    setWordWrap(true);
 //     viewport()->setAcceptDrops(true);
 
     d->actionHeaderContextMenuRemoveColumn = new KAction(KIcon("edit-table-delete-column"), i18n("Remove this column"), this);
