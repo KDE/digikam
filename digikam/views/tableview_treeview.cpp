@@ -189,7 +189,26 @@ void TableViewTreeView::slotHeaderContextMenuAddColumn()
 
     const TableViewColumnDescription desc = actionData.value<TableViewColumnDescription>();
     qDebug()<<"clicked: "<<desc.columnTitle;
-    s->tableViewModel->addColumnAt(desc, d->headerContextMenuActiveColumn+1);
+    const int newColumnLogicalIndex = d->headerContextMenuActiveColumn+1;
+    s->tableViewModel->addColumnAt(desc, newColumnLogicalIndex);
+
+    // since the header column order is not the same as the model's column order, we need
+    // to make sure the new column is moved directly behind the current column in the header:
+    const int clickedVisualIndex = header()->visualIndex(d->headerContextMenuActiveColumn);
+    const int newColumnVisualIndex = header()->visualIndex(newColumnLogicalIndex);
+    int newColumnVisualTargetIndex = clickedVisualIndex + 1;
+    // If the column is inserted before the clicked column, we have to
+    // subtract one from the target index because it looks like QHeaderView first removes
+    // the column and then inserts it.
+    if (newColumnVisualIndex<clickedVisualIndex)
+    {
+        newColumnVisualTargetIndex--;
+    }
+    kDebug()<<clickedVisualIndex<<newColumnVisualIndex<<newColumnVisualTargetIndex;
+    if (newColumnVisualIndex!=newColumnVisualTargetIndex)
+    {
+        header()->moveSection(newColumnVisualIndex, newColumnVisualTargetIndex);
+    }
 }
 
 void TableViewTreeView::slotHeaderContextMenuActionRemoveColumnTriggered()
