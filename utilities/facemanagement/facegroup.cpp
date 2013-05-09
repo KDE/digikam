@@ -176,7 +176,6 @@ public:
         view                 = 0;
         autoSuggest          = false;
         showOnHover          = false;
-        editLock             = false;
         manuallyAddWrapItem  = 0;
         manuallyAddedItem    = 0;
         visibilityController = 0;
@@ -200,7 +199,6 @@ public:
     ImageInfo                  info;
     bool                       autoSuggest;
     bool                       showOnHover;
-    bool                       editLock;
 
     QList<FaceItem*>           items;
 
@@ -422,11 +420,6 @@ RegionFrameItem* FaceGroup::closestItem(const QPointF& p, qreal* const manhattan
     return closestItem;
 }
 
-void FaceGroup::setEditLock(bool var)
-{
-    d->editLock = var;
-}
-
 QList<QGraphicsItem*> FaceGroup::Private::hotItems(const QPointF& scenePos)
 {
     if (!q->hasVisibleItems())
@@ -459,7 +452,7 @@ bool FaceGroup::acceptsMouseClick(const QPointF& scenePos)
 
 void FaceGroup::itemHoverMoveEvent(QGraphicsSceneHoverEvent* e)
 {
-    if (d->showOnHover && !isVisible() && !d->editLock)
+    if (d->showOnHover && !isVisible())
     {
         qreal distance;
         RegionFrameItem* const item = closestItem(e->scenePos(), &distance);
@@ -503,7 +496,7 @@ void FaceGroup::itemHoverEnterEvent(QGraphicsSceneHoverEvent*)
 
 void FaceGroup::leaveEvent(QEvent*)
 {
-    if (d->showOnHover && !isVisible() && !d->editLock)
+    if (d->showOnHover && !isVisible())
     {
         setVisibleItem(0);
     }

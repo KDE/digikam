@@ -85,13 +85,6 @@ public:
      */
     RegionFrameItem* closestItem(const QPointF& p, qreal* const manhattanLength = 0) const;
 
-    /**
-     * If you hover mouse over picture and it's in a transform process,
-     * tags can be displayed incorrecly. Lock the hover action until transform
-     * is done.
-     */
-    void setEditLock(bool var);
-
     bool acceptsMouseClick(const QPointF& scenePos);
     void itemHoverEnterEvent(QGraphicsSceneHoverEvent* event);
     void itemHoverMoveEvent(QGraphicsSceneHoverEvent* event);

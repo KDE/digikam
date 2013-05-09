@@ -139,6 +139,7 @@ public:
         scale               = 1.0;
         item                = 0;
         isValid             = false;
+        rotationLock        = false;
         toolBar             = 0;
         escapePreviewAction = 0;
         prevAction          = 0;
@@ -155,6 +156,7 @@ public:
     bool                   fullSize;
     double                 scale;
     bool                   isValid;
+    bool                   rotationLock;
 
     ImagePreviewView::Mode mode;
 
@@ -511,11 +513,15 @@ void ImagePreviewView::slotSetupChanged()
 
 void ImagePreviewView::slotRotateLeft()
 {
+    if(d->rotationLock)
+        return;
+
+    d->rotationLock = true;
+
     /**
-     * Setting lock won't allow mouse hover events in FaceGroup class
+     * Setting lock won't allow mouse hover events in ImagePreviewViewItem class
      */
     d->item->setAcceptHoverEvents(false);
-    d->faceGroup->setEditLock(true);
 
     /**
      * aboutToSetInfo will delete all face tags from FaceGroup storage
@@ -526,12 +532,15 @@ void ImagePreviewView::slotRotateLeft()
 
 void ImagePreviewView::slotRotateRight()
 {
+    if(d->rotationLock)
+        return;
+
+    d->rotationLock = true;
 
     /**
-     * Setting lock won't allow mouse hover events in FaceGroup class
+     * Setting lock won't allow mouse hover events in ImagePreviewViewItem class
      */
     d->item->setAcceptHoverEvents(false);
-    d->faceGroup->setEditLock(true);
 
     /**
      * aboutToSetInfo will delete all face tags from FaceGroup storage
@@ -548,8 +557,11 @@ void ImagePreviewView::slotDeleteItem()
 void Digikam::ImagePreviewView::slotUpdateFaces()
 {
     d->faceGroup->aboutToSetInfo(ImageInfo());
-    d->faceGroup->setEditLock(false);
     d->item->setAcceptHoverEvents(true);
+    /**
+     * Release rotation lock after rotation
+     */
+    d->rotationLock = false;
 }
 
 }  // namespace Digikam
