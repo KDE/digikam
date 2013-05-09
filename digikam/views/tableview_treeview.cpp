@@ -204,11 +204,17 @@ void TableViewTreeView::slotHeaderContextMenuAddColumn()
     {
         newColumnVisualTargetIndex--;
     }
-    kDebug()<<clickedVisualIndex<<newColumnVisualIndex<<newColumnVisualTargetIndex;
     if (newColumnVisualIndex!=newColumnVisualTargetIndex)
     {
         header()->moveSection(newColumnVisualIndex, newColumnVisualTargetIndex);
     }
+
+    // Ensure that the newly created column is visible.
+    // This is especially important if the new column is the last one,
+    // because then it can be outside of the viewport.
+    const QModelIndex topIndex = indexAt(QPoint(0, 0));
+    const QModelIndex targetIndex = s->tableViewModel->index(topIndex.row(), newColumnLogicalIndex, topIndex.parent());
+    scrollTo(targetIndex, EnsureVisible);
 }
 
 void TableViewTreeView::slotHeaderContextMenuActionRemoveColumnTriggered()
