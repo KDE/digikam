@@ -1274,7 +1274,6 @@ bool DMetadata::setImageTagsPath(const QStringList& tagsPath) const
 bool DMetadata::getImageFacesMap(QMap<QString,QVariant>& faces) const
 {
     faces.clear();
-    kDebug() << "-------------------------DMetadata::Reading face Tags---------------------------";
     // The example code for Exiv2 says:
     // > There are no specialized values for structures, qualifiers and nested
     // > types. However, these can be added by using an XmpTextValue and a path as
@@ -1350,7 +1349,7 @@ bool DMetadata::getImageFacesMap(QMap<QString,QVariant>& faces) const
     return !faces.isEmpty();
 }
 
-bool DMetadata::setImageFacesMap(QMap< QString, QVariant >& facesPath) const
+bool DMetadata::setImageFacesMap(QMap< QString, QVariant >& facesPath, bool write) const
 {
     qDebug() << "Setting Faces Map";
 #if KEXIV2_VERSION >= 0x020301
@@ -1365,6 +1364,13 @@ bool DMetadata::setImageFacesMap(QMap< QString, QVariant >& facesPath) const
     QString areahTagKey = qxmpTagName + QString("[%1]/mwg-rs:Area/stArea:h");
     QString areanormTagKey = qxmpTagName + QString("[%1]/mwg-rs:Area/stArea:unit");
 
+    if(!write)
+    {
+        QString check = getXmpTagString(nameTagKey.arg(0).toLatin1());
+
+        if(check.isEmpty())
+            return true;
+    }
     removeImageFaces();
 
     setXmpTagString(qxmpTagName.toLatin1(),
@@ -1377,7 +1383,6 @@ bool DMetadata::setImageFacesMap(QMap< QString, QVariant >& facesPath) const
     {
         qreal x,y,w,h;
         it.value().toRectF().getRect(&x,&y,&w,&h);
-        kDebug() << "----------------------------Set tagregion to metadata" << it.value().toRectF();
         x += w/2;
         y += h/2;
 

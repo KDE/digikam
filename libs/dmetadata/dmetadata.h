@@ -101,13 +101,15 @@ public:
 
     /** Get Images Face Map based on tags stored in Picassa/Metadatagroup
      * format. Use $ exiv2 -pa image to see the tag structure
-     */  
+     */
     bool getImageFacesMap(QMap<QString,QVariant>& facesPath) const;
 
     /** Set Images Face Map tags in Picassa/Metadatagroup format
-     *  Use exiv2 -pa image to check for face tags
-     */ 
-    bool setImageFacesMap(QMap<QString,QVariant>& facesPath) const;
+     *  Use exiv2 -pa image to check for face tags,
+     *  @param write    - if true all faces will be written, else update mode:
+     *                    search if at least a face tag exist and write if true
+     */
+    bool setImageFacesMap(QMap<QString,QVariant>& facesPath, bool write) const;
 
     /** Delete all face tags from image's xmp metadata **/
     void removeImageFaces() const;

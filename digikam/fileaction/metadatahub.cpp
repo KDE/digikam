@@ -599,6 +599,7 @@ bool MetadataHub::write(DMetadata& metadata, WriteMode writeMode, const Metadata
     bool saveColorLabel = (settings.saveColorLabel && d->colorLabelStatus == MetadataAvailable);
     bool saveRating     = (settings.saveRating     && d->ratingStatus     == MetadataAvailable);
     bool saveTemplate   = (settings.saveTemplate   && d->templateStatus   == MetadataAvailable);
+    bool saveFaces      =  settings.saveFaceTags;
     bool saveTags       = false;
 
     if (settings.saveTags)
@@ -694,7 +695,10 @@ bool MetadataHub::write(DMetadata& metadata, WriteMode writeMode, const Metadata
         }
     }
 
-        metadata.setImageFacesMap(d->faceTagsList);
+    if(saveFaces)
+        metadata.setImageFacesMap(d->faceTagsList,true);
+    else
+        metadata.setImageFacesMap(d->faceTagsList,false);
 
     if (saveTags && (writeAllFields || d->tagsChanged))
     {
