@@ -139,9 +139,10 @@ ImportUI* ImportUI::m_instance = 0;
 ImportUI::ImportUI(QWidget* const parent, const QString& cameraTitle,
                    const QString& model, const QString& port,
                    const QString& path, int startIndex)
-    : KXmlGuiWindow(parent), d(new Private)
+    : DXmlGuiWindow(parent), d(new Private)
 {
     setXMLFile("importui.rc");
+    setFullScreenOptions(FS_IMPORTUI);
 
     // --------------------------------------------------------
 
@@ -557,9 +558,7 @@ void ImportUI::setupActions()
 
     // ------------------------------------------------------------------------------------------------
 
-    d->fullScreenAction = KStandardAction::fullScreen(0, 0, this, this);
-    actionCollection()->addAction("importui_fullscreen", d->fullScreenAction);
-    connect(d->fullScreenAction, SIGNAL(toggled(bool)), this, SLOT(slotToggleFullScreen(bool)));
+    createFullScreenAction("importui_fullscreen");
 
     d->showLogAction = new KToggleAction(KIcon("view-history"), i18n("Show History"), this);
     d->showLogAction->setShortcut(KShortcut(Qt::CTRL + Qt::Key_H));
@@ -832,6 +831,8 @@ void ImportUI::readSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
 
+    readFullScreenSettings(group);
+
     d->showBarAction->setChecked(ImportSettings::instance()->getShowThumbbar());
     d->showLogAction->setChecked(group.readEntry("ShowLog",               false));
     d->albumCustomizer->readSettings(group);
@@ -870,6 +871,7 @@ void ImportUI::saveSettings()
     d->rightSideBar->saveState();
     d->splitter->saveState(group);
     //d->filterComboBox->saveSettings();
+
     config->sync();
 }
 
@@ -1151,7 +1153,7 @@ void ImportUI::slotZoomChanged(double zoom)
     double zmax = d->view->zoomMax();
     d->zoomBar->setZoom(zoom, zmin, zmax);
 
-    if (!d->fullScreenAction->isChecked())
+    if (!fullScreenIsActive())
     {
         d->zoomBar->triggerZoomTrackerToolTip();
     }
@@ -1161,7 +1163,7 @@ void ImportUI::slotThumbSizeChanged(int size)
 {
     d->zoomBar->setThumbsSize(size);
 
-    if (!d->fullScreenAction->isChecked())
+    if (!fullScreenIsActive())
     {
         d->zoomBar->triggerZoomTrackerToolTip();
     }
@@ -2480,24 +2482,6 @@ void ImportUI::slotSetup()
     Setup::exec(this);
 }
 
-void ImportUI::showToolBars()
-{
-    QList<KToolBar*> toolbars = toolBars();
-    foreach(KToolBar* const toolbar, toolbars)
-    {
-        toolbar->show();
-    }
-}
-
-void ImportUI::hideToolBars()
-{
-    QList<KToolBar*> toolbars = toolBars();
-    foreach(KToolBar* const toolbar, toolbars)
-    {
-        toolbar->hide();
-    }
-}
-
 void ImportUI::slotCameraFreeSpaceInfo(unsigned long kBSize, unsigned long kBAvail)
 {
     d->cameraFreeSpace->addInformation(kBSize, kBSize - kBAvail, kBAvail, QString());
@@ -2555,7 +2539,7 @@ void ImportUI::slotCollectionLocationStatusChanged(const CollectionLocation&, in
 
 void ImportUI::slotToggleShowBar()
 {
-    d->view->toggleShowBar(d->showBarAction->isChecked());
+    showThumbBar(d->showBarAction->isChecked());
 }
 
 void ImportUI::slotShowMenuBar()
@@ -2591,87 +2575,20 @@ void ImportUI::slotHistoryEntryClicked(const QVariant& metadata)
     d->view->scrollTo(folder, file);
 }
 
-void ImportUI::slotToggleFullScreen(bool b)
+void ImportUI::showSideBars(bool visible)
 {
-    KToggleFullScreenAction::setFullScreen(this, b);
-
-    if (!b)
-    {
-        // Switch off fullscreen
-
-        slotShowMenuBar();
-        statusBar()->show();
-        showToolBars();
-
-        if (d->removeFullScreenButton)
-        {
-            QList<KToolBar*> toolbars = toolBars();
-
-            foreach(KToolBar* const toolbar, toolbars)
-            {
-                // name is set in ui.rc XML file
-                if (toolbar->objectName() == "ToolBar")
-                {
-                    toolbar->removeAction(d->fullScreenAction);
-                    break;
-                }
-            }
-        }
-
-        d->rightSideBar->restore();
-    }
-    else
-    {
-        // Switch on fullscreen
-
-        // hide the menubar and the statusbar
-        menuBar()->hide();
-        statusBar()->hide();
-
-        if (d->fullScreenHideToolBar)
-        {
-            hideToolBars();
-        }
-        else
-        {
-            showToolBars();
-
-            QList<KToolBar*> toolbars = toolBars();
-            KToolBar* mainToolbar     = 0;
-
-            foreach(KToolBar* const toolbar, toolbars)
-            {
-                if (toolbar->objectName() == "ToolBar")
-                {
-                    mainToolbar = toolbar;
-                    break;
-                }
-            }
-
-            // add fullscreen action if necessary
-            if (mainToolbar && !mainToolbar->actions().contains(d->fullScreenAction))
-            {
-                mainToolbar->addAction(d->fullScreenAction);
-                d->removeFullScreenButton = true;
-            }
-            else
-            {
-                // If FullScreen button is enabled in toolbar settings,
-                // we shall not remove it when leaving of fullscreen mode.
-                d->removeFullScreenButton = false;
-            }
-        }
-
-        d->rightSideBar->backup();
-    }
+    visible ? d->rightSideBar->restore()
+            : d->rightSideBar->backup();
 }
 
-void ImportUI::slotEscapePressed()
+void ImportUI::showThumbBar(bool visible)
 {
-    if (d->fullScreenAction->isChecked())
-    {
-        d->fullScreenAction->activate(QAction::Trigger);
-    }
+    d->view->toggleShowBar(visible);
+}
+
+bool ImportUI::thumbbarVisibility() const
+{
+    return d->view->isThumbBarVisible();
 }
 
 }  // namespace Digikam

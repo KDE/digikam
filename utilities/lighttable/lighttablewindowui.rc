@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="201" name="lighttablewindow" >
+<gui version="203" name="lighttablewindow" >
 
 <MenuBar>
 
@@ -40,8 +40,6 @@
             <Action name="lighttable_zoomto100percents_right" />
             <Action name="lighttable_zoomfit2window_right" />
         </Menu>
-        <Separator/>
-        <Action name="lighttable_showthumbbar" />
     </Menu>
 
     <Menu name="help" ><text>&amp;Help</text>
@@ -59,6 +57,7 @@
         <Action name="options_show_menubar"/>
         <Action name="options_show_statusbar"/>
         <Action name="options_show_toolbar"/>
+        <Action name="lighttable_showthumbbar" />
         <Separator/>
         <Action name="theme_menu" />
         <Action name="options_configure_keybinding"/>

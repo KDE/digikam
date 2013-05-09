@@ -78,6 +78,13 @@ void TableViewModel::Item::addChild(TableViewModel::Item* const newChild)
     children << newChild;
 }
 
+void TableViewModel::Item::insertChild(const int pos, TableViewModel::Item* const newChild)
+{
+    newChild->parent = this;
+
+    children.insert(pos, newChild);
+}
+
 
 void TableViewModel::Item::takeChild(TableViewModel::Item* const oldChild)
 {
@@ -474,9 +481,6 @@ void TableViewModel::slotSourceRowsInserted(const QModelIndex& parent, int start
 
         addSourceModelIndex(sourceIndex, true);
     }
-
-    /// @todo Smarter insertion of new data is better
-    scheduleResort();
 }
 
 void TableViewModel::slotSourceRowsAboutToBeRemoved(const QModelIndex& parent, int start, int end)
@@ -748,6 +752,7 @@ void TableViewModel::slotPopulateModel(const bool sendNotifications)
     d->rootItem = new Item();
     d->cachedImageInfos.clear();
     d->outdated = false;
+    d->sortRequired = false;
 
     const int sourceRowCount = s->imageModel->rowCount(QModelIndex());
     for (int i=0; i<sourceRowCount; ++i)
@@ -757,9 +762,6 @@ void TableViewModel::slotPopulateModel(const bool sendNotifications)
         // already started a model reset
         addSourceModelIndex(sourceModelIndex, false);
     }
-
-    /// @todo Sort directly on insertion?
-    sort(d->sortColumn, d->sortOrder);
 
     if (sendNotifications)
     {
@@ -810,14 +812,21 @@ void TableViewModel::addSourceModelIndex(const QModelIndex& imageModelIndex, con
 
     Item* item = createItemFromSourceIndex(imageModelIndex);
 
+    // Normally we do the sorting of items here on insertion.
+    // However, if the sorting is currently outdated, we just
+    // append the items because the model will be resorted later.
+    int newRowIndex = parentItem->children.count();
+    if (!d->sortRequired)
+    {
+        newRowIndex = findChildSortedPosition(parentItem, item);
+    }
     if (sendNotifications)
     {
         const QModelIndex parentIndex = itemIndex(parentItem);
-        const int newRowIndex = parentItem->children.count();
         beginInsertRows(parentIndex, newRowIndex, newRowIndex);
     }
 
-    parentItem->addChild(item);
+    parentItem->insertChild(newRowIndex, item);
 
     if (sendNotifications)
     {
@@ -839,10 +848,19 @@ void TableViewModel::addSourceModelIndex(const QModelIndex& imageModelIndex, con
         {
             d->cachedImageInfos.insert(groupedInfo.id(), groupedInfo);
 
+            /// @todo Grouped items are currently not filtered. Should they?
             Item* const groupedItem = new Item();
             groupedItem->imageId = groupedInfo.id();
 
-            item->addChild(groupedItem);
+            // Normally we do the sorting of items here on insertion.
+            // However, if the sorting is currently outdated, we just
+            // append the items because the model will be resorted later.
+            int newRowIndex = item->children.count();
+            if (!d->sortRequired)
+            {
+                newRowIndex = findChildSortedPosition(item, groupedItem);
+            }
+            item->insertChild(newRowIndex, groupedItem);
         }
 
         if (sendNotifications)
@@ -1498,4 +1516,81 @@ void TableViewModel::slotSetActive(const bool isActive)
     }
 }
 
+int TableViewModel::findChildSortedPosition(TableViewModel::Item* const parentItem, TableViewModel::Item* const childItem)
+{
+    if (parentItem->children.isEmpty())
+    {
+        return 0;
+    }
+
+    // nChildren is guaranteed to be >=1
+    const int nChildren = parentItem->children.count();
+    int stepSize = nChildren/2;
+    // make sure pos is at least 0 if there is only one item
+    int pos = qMin(nChildren-1, stepSize);
+    while (true)
+    {
+        stepSize = stepSize/2;
+        if (stepSize==0)
+        {
+            stepSize = 1;
+        }
+
+        bool isLessThanUpper = lessThan(childItem, parentItem->children.at(pos));
+        if (d->sortOrder==Qt::DescendingOrder)
+        {
+            isLessThanUpper = !isLessThanUpper;
+        }
+
+        if (!isLessThanUpper)
+        {
+            // need to jump up, quit if we can not jump up by 1
+            if (pos+1>=nChildren)
+            {
+                pos=nChildren;
+                break;
+            }
+
+            // jump up by stepSize and make sure we do not jump over the end
+            pos+=stepSize;
+            if (pos>=nChildren)
+            {
+                pos = nChildren-1;
+            }
+            continue;
+        }
+
+        // can we go lower?
+        const bool lowerThere = pos>0;
+        if (!lowerThere)
+        {
+            // no, stop
+            pos = 0;
+            break;
+        }
+
+        bool isLessThanLower = lessThan(childItem, parentItem->children.at(pos-1));
+        if (d->sortOrder==Qt::DescendingOrder)
+        {
+            isLessThanLower = !isLessThanLower;
+        }
+
+        if (isLessThanLower)
+        {
+            // go lower and make sure we do not jump too low
+            pos-=stepSize;
+            if (pos<0)
+            {
+                pos = 0;
+            }
+            continue;
+        }
+
+        break;
+    }
+
+    return pos;
+}
+
 } /* namespace Digikam */
+

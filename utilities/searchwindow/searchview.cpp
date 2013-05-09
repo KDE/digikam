@@ -295,6 +295,7 @@ QString SearchView::write() const
     SearchXmlWriter writer;
     writeGroups(writer);
     writer.finish();
+    kDebug() << writer.xml();
     return writer.xml();
 }
 

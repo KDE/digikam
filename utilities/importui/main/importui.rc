@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="301" name="importui" >
+<gui version="302" name="importui" >
 
 <MenuBar>
 
@@ -48,8 +48,6 @@
         <Action name="importui_fullscreen" />
         <Action name="importui_showlog" />
         <Separator/>
-        <Action name="showthumbs" />
-        <Separator/>
         <Action name="importui_zoomplus" />
         <Action name="importui_zoomminus" />
         <Action name="import_zoomfit2window" />
@@ -75,6 +73,7 @@
         <Action name="options_show_menubar"/>
         <Action name="options_show_statusbar"/>
         <Action name="options_show_toolbar"/>
+        <Action name="showthumbs" />
         <Separator/>
         <Action name="theme_menu" />
         <Action name="options_configure_keybinding"/>

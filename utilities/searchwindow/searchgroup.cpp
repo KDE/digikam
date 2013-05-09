@@ -138,6 +138,26 @@ void SearchGroup::setup(Type type)
     // ----- //
 
     label = new SearchFieldGroupLabel(this);
+    label->setTitle(i18n("Video Properties"));
+    group = new SearchFieldGroup(this);
+    group->setLabel(label);
+
+    group->addField(SearchField::createField("videoaspectratio", group));
+    group->addField(SearchField::createField("videoduration", group));
+    group->addField(SearchField::createField("videoframerate", group));
+    group->addField(SearchField::createField("videocodec", group));
+    group->addField(SearchField::createField("videoaudiobitrate", group));
+    group->addField(SearchField::createField("videoaudiochanneltype", group));
+    group->addField(SearchField::createField("videoaudiocompressor", group));
+
+    m_fieldLabels << label;
+    m_fieldGroups << group;
+    m_layout->addWidget(label);
+    m_layout->addWidget(group);
+
+    // ----- //
+
+    label = new SearchFieldGroupLabel(this);
     label->setTitle(i18n("Caption, Comment, Title"));
     group = new SearchFieldGroup(this);
     group->setLabel(label);

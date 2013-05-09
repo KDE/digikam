@@ -162,10 +162,11 @@ namespace Digikam
 const QString EditorWindow::CONFIG_GROUP_NAME = "ImageViewer Settings";
 
 EditorWindow::EditorWindow(const char* const name)
-    : KXmlGuiWindow(0), d(new Private)
+    : DXmlGuiWindow(0), d(new Private)
 {
     setObjectName(name);
     setWindowFlags(Qt::Window);
+    setFullScreenOptions(FS_EDITOR);
 
     m_nonDestructive           = true;
     m_contextMenu              = 0;
@@ -204,8 +205,6 @@ EditorWindow::EditorWindow(const char* const name)
     d->toolIface               = new EditorToolIface(this);
     m_IOFileSettings           = new IOFileSettings();
     d->waitingLoop             = new QEventLoop(this);
-    d->fullScreenMngr          = new FullScreenMngr(FS_DEFAULT);
-    d->fullScreenMngr->setManagedWindow(this);
 }
 
 EditorWindow::~EditorWindow()
@@ -507,8 +506,7 @@ void EditorWindow::setupStandardActions()
 
     // --------------------------------------------------------
 
-    QAction* const fullScreenAction = d->fullScreenMngr->createFullScreenAction("editorwindow_fullscreen");
-    connect(fullScreenAction, SIGNAL(toggled(bool)), this, SLOT(slotToggleFullScreen(bool)));
+    createFullScreenAction("editorwindow_fullscreen");
 
     d->slideShowAction = new KAction(KIcon("view-presentation"), i18n("Slideshow"), this);
     d->slideShowAction->setShortcut(KShortcut(Qt::Key_F9));
@@ -922,7 +920,7 @@ void EditorWindow::readStandardSettings()
     }
 
     // Restore full screen Mode
-    d->fullScreenMngr->readSettings(group);
+    readFullScreenSettings(group);
 
     // Restore Auto zoom action
     bool autoZoom = group.readEntry(d->configAutoZoomEntry, true);
@@ -950,7 +948,7 @@ void EditorWindow::applyStandardSettings()
 
     d->legacyUpdateSplitterState(group);
     m_splitter->restoreState(group);
-    d->fullScreenMngr->readSettings(group);
+    readFullScreenSettings(group);
 
     slotThemeChanged();
 
@@ -1062,7 +1060,6 @@ void EditorWindow::saveStandardSettings()
     group.writeEntry(d->configUnderExposureIndicatorEntry, d->exposureSettings->underExposureIndicator);
     group.writeEntry(d->configOverExposureIndicatorEntry, d->exposureSettings->overExposureIndicator);
     d->previewToolBar->writeSettings(group);
-    d->fullScreenMngr->saveSettings(group);
     config->sync();
 }
 
@@ -1604,24 +1601,6 @@ void EditorWindow::slotSelected(bool val)
     else
     {
         setToolInfoMessage(i18n("No selection"));
-    }
-}
-
-void EditorWindow::hideToolBars()
-{
-    QList<KToolBar*> toolbars = toolBars();
-    foreach(KToolBar* toolbar, toolbars)
-    {
-        toolbar->hide();
-    }
-}
-
-void EditorWindow::showToolBars()
-{
-    QList<KToolBar*> toolbars = toolBars();
-    foreach(KToolBar* toolbar, toolbars)
-    {
-        toolbar->show();
     }
 }
 
@@ -2956,46 +2935,35 @@ void EditorWindow::addAction2ContextMenu(const QString& actionName, bool addDisa
     }
 }
 
-void EditorWindow::slotToggleFullScreen(bool b)
+void EditorWindow::showSideBars(bool visible)
 {
-    d->fullScreenMngr->switchWindowToFullScreen(b);
-
-    if (!b)
+    if (visible)
     {
-        kDebug() << "TURN OFF fullscreen";
-
-        m_canvas->setBackgroundColor(m_bgColor);
-
         rightSideBar()->restore(QList<QWidget*>() << thumbBar(), d->fullscreenSizeBackup);
-
-        if (d->fullScreenMngr->m_fullScreenHideThumbBar)
-        {
-            thumbBar()->restoreVisibility();
-        }
     }
     else
     {
-        kDebug() << "TURN ON fullscreen";
-
-        m_canvas->setBackgroundColor(QColor(Qt::black));
-
         // See bug #166472, a simple backup()/restore() will hide non-sidebar splitter child widgets
         // in horizontal mode thumbbar wont be member of the splitter, it is just ignored then
         rightSideBar()->backup(QList<QWidget*>() << thumbBar(), &d->fullscreenSizeBackup);
-
-        if (d->fullScreenMngr->m_fullScreenHideThumbBar)
-        {
-            thumbBar()->hide();
-        }
     }
 }
 
-void EditorWindow::keyPressEvent(QKeyEvent* e)
+void EditorWindow::showThumbBar(bool visible)
 {
-    if (e->key() == Qt::Key_Escape)
-    {
-        d->fullScreenMngr->escapePressed();
-    }
+    visible ? thumbBar()->restoreVisibility()
+            : thumbBar()->hide();
+}
+
+bool EditorWindow::thumbbarVisibility() const
+{
+    return thumbBar()->isVisible();
+}
+
+void EditorWindow::showCustomizedView(bool visible)
+{
+    visible ? m_canvas->setBackgroundColor(QColor(Qt::black))
+            : m_canvas->setBackgroundColor(m_bgColor);
 }
 
 }  // namespace Digikam

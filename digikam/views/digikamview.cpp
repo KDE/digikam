@@ -1599,6 +1599,7 @@ void DigikamView::slotViewModeChanged()
             break;
         case StackedView::TableViewMode:
             emit signalSwitchedToTableView();
+            emit signalThumbSizeChanged(d->tableView->getThumbnailSize().size());
             break;
     }
 }

@@ -61,7 +61,6 @@
 class KToolBarPopupAction;
 class KToggleAction;
 class KActionMenu;
-class KToggleFullScreenAction;
 
 namespace Digikam
 {
@@ -144,7 +143,6 @@ public:
         selectAllAction(0),
         selectNoneAction(0),
         selectInvertAction(0),
-        fullScreenAction(0),
         zoomPlusAction(0),
         zoomMinusAction(0),
         zoomFitToWindowAction(0),
@@ -163,7 +161,7 @@ public:
         slideShowRecursiveAction(0),
         bqmAction(0),
         maintenanceAction(0),
-	slideShowQmlAction(0),
+        slideShowQmlAction(0),
 #ifdef USE_SCRIPT_IFACE
         scriptConsoleAction(0),
 #endif
@@ -269,7 +267,6 @@ public:
     KAction*                            selectInvertAction;
 
     // View Actions
-    KToggleFullScreenAction*            fullScreenAction;
     KAction*                            zoomPlusAction;
     KAction*                            zoomMinusAction;
     KAction*                            zoomFitToWindowAction;
@@ -290,7 +287,7 @@ public:
     KAction*                            slideShowRecursiveAction;
     KAction*                            bqmAction;
     KAction*                            maintenanceAction;
-    KAction*				slideShowQmlAction;
+    KAction*                            slideShowQmlAction;
 
 #ifdef USE_SCRIPT_IFACE
     KAction*                            scriptConsoleAction;

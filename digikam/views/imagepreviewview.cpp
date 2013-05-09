@@ -526,6 +526,7 @@ void ImagePreviewView::slotRotateLeft()
 
 void ImagePreviewView::slotRotateRight()
 {
+
     /**
      * Setting lock won't allow mouse hover events in FaceGroup class
      */

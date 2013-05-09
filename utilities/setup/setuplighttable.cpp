@@ -40,7 +40,8 @@
 
 // Local includes
 
-#include "fullscreenmngr.h"
+#include "fullscreensettings.h"
+#include "dxmlguiwindow.h"
 
 namespace Digikam
 {
@@ -111,8 +112,6 @@ SetupLightTable::SetupLightTable(QWidget* const parent)
                                             "<p><b>Note:</b> for Raw images, a half size version of the Raw data "
                                             "is used instead of the embedded JPEG preview.</p>"));
 
-    d->fullScreenSettings = new FullScreenSettings(FS_TOOLBAR, interfaceOptionsGroup);
-
     d->clearOnClose = new QCheckBox(i18n("Clear the light table on close"));
     d->clearOnClose->setWhatsThis(i18n("Set this option to remove all images "
                                        "from the light table when you close it, "
@@ -122,14 +121,18 @@ SetupLightTable::SetupLightTable(QWidget* const parent)
     gLayout->addWidget(d->autoSyncPreview);
     gLayout->addWidget(d->autoLoadOnRightPanel);
     gLayout->addWidget(d->loadFullImageSize);
-    gLayout->addWidget(d->fullScreenSettings);
     gLayout->addWidget(d->clearOnClose);
     gLayout->setMargin(KDialog::spacingHint());
     gLayout->setSpacing(0);
 
     // --------------------------------------------------------
 
+    d->fullScreenSettings = new FullScreenSettings(FS_LIGHTTABLE, panel);
+
+    // --------------------------------------------------------
+
     layout->addWidget(interfaceOptionsGroup);
+    layout->addWidget(d->fullScreenSettings);
     layout->setMargin(0);
     layout->setSpacing(KDialog::spacingHint());
     layout->addStretch();

@@ -49,7 +49,6 @@
 #include "sidebar.h"
 #include "toolsettingsview.h"
 #include "toolsview.h"
-#include "fullscreenmngr.h"
 
 namespace Digikam
 {
@@ -99,7 +98,6 @@ public:
         thread                 = 0;
         animLogo               = 0;
         about                  = 0;
-        fullScreenMngr         = 0;
         currentQueueToProcess  = 0;
     }
 
@@ -149,8 +147,6 @@ public:
     QueueSettingsView*       queueSettingsView;
 
     DAboutData*              about;
-
-    FullScreenMngr*          fullScreenMngr;
 
     const QString            TOP_SPLITTER_CONFIG_KEY;
     const QString            BOTTOM_SPLITTER_CONFIG_KEY;

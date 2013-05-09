@@ -36,6 +36,7 @@
 // KDE includes
 
 #include <kmultitabbar.h>
+#include <kconfiggroup.h>
 
 // Local includes
 
@@ -391,6 +392,8 @@ public:
 
     void setApplicationStyle(const QString& style);
     QString getApplicationStyle() const;
+
+    KConfigGroup defaultConfigGroup() const;
 
 public Q_SLOTS:
 

@@ -1066,33 +1066,197 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
     {
         fieldQuery.addIntField("ImageInformation.colorModel");
     }
-    else if (name == "aspectratio")
+    else if (name == "videoaspectratio")
     {
-        fieldQuery.addStringField("VideoMetadata.aspectRatio");
+        if (relation == SearchXml::OneOf)
+        {
+            QStringList values = reader.valueToStringList();
+
+            if (values.isEmpty())
+            {
+                kDebug() << "List for OneOf is empty";
+            }
+
+            QList<double> ratioValues;
+            foreach(const QString& value, values)
+            {
+                 *boundValues << value;
+
+                 if (value.contains(":"))
+                 {
+                     QStringList ratioNum = value.split(":", QString::SkipEmptyParts);
+                     int num = ratioNum.at(0).toInt();
+                     int denominator = ratioNum.at(1).toInt();
+                     ratioValues << (double)num/denominator;
+                 }
+            }
+
+            sql += "(VideoMetadata.aspectRatio IN (";
+            AlbumDB::addBoundValuePlaceholders(sql, values.size());
+            sql += ") ";
+            QString query = "abs((CAST(VideoMetadata.aspectRatio as REAL) - ?)  < 0.1) ";
+
+            foreach(double value, ratioValues)
+            {
+                *boundValues << value;
+                sql +=  "OR " + query;
+            }
+
+            sql += ") ";
+        }
+        else
+        {
+            QString value = reader.value();
+            *boundValues << value;
+
+            if (value.contains(":"))
+            {
+                QStringList ratioNum = value.split(":", QString::SkipEmptyParts);
+                int num = ratioNum.at(0).toInt();
+                int denominator = ratioNum.at(1).toInt();
+                *boundValues << (double)num/denominator;
+            }
+
+            sql += "(VideoMetadata.aspectRatio=? OR abs((CAST(VideoMetadata.aspectRatio as REAL) - ?)  < 0.1 )) ";
+        }
     }
-    else if (name == "audiobitrate")
+    else if (name == "videoaudiobitrate")
     {
-        fieldQuery.addStringField("VideoMetadata.audioBitRate");
+        //fieldQuery.addIntField("VideoMetadata.audioBitRate");
+        QList<int> values = reader.valueToIntList();
+
+        if (values.size() != 2)
+        {
+            kWarning() << "Relation Interval requires a list of two values";
+        }
+
+        sql += " ( CAST(VideoMetadata.audioBitRate AS INTEGER)";
+        ImageQueryBuilder::addSqlRelation(sql,
+                                          relation == SearchXml::Interval ? SearchXml::GreaterThanOrEqual : SearchXml::GreaterThan);
+        sql += " ? AND CAST(VideoMetadata.audioBitRate AS INTEGER)";
+        ImageQueryBuilder::addSqlRelation(sql,
+                                          relation == SearchXml::Interval ? SearchXml::LessThanOrEqual : SearchXml::LessThan);
+        sql += " ?) ";
+
+        *boundValues << values.first() << values.last();
     }
-    else if (name == "audiochanneltype")
+    else if (name == "videoaudiochanneltype")
     {
-        fieldQuery.addStringField("VideoMetadata.audioChannelType");
+        if (relation == SearchXml::OneOf)
+        {
+            QStringList values = reader.valueToStringList();
+
+            if (values.isEmpty())
+            {
+                kDebug() << "List for OneOf is empty";
+            }
+
+            foreach(const QString& value, values)
+            {
+                 *boundValues << value;
+
+                 if (value=="1")
+                 {
+                     *boundValues << "Mono";
+                 }
+                 else if (value == "2")
+                 {
+                     *boundValues << "Stereo";
+                 }
+            }
+
+            sql += "(VideoMetadata.audioChannelType IN (";
+            AlbumDB::addBoundValuePlaceholders(sql, boundValues->size());
+            sql += ")) ";
+        }
+        else
+        {
+            QString value = reader.value();
+            *boundValues << value;
+
+            if (value=="1")
+            {
+                *boundValues << "Mono";
+            }
+            else if (value == "2")
+            {
+                *boundValues << "Stereo";
+            }
+
+            sql += "(VideoMetadata.audioChannelType IN (";
+            AlbumDB::addBoundValuePlaceholders(sql, boundValues->size());
+            sql += ")) ";
+        }
     }
-    else if (name == "audiocompressor")
+    else if (name == "videoaudiocompressor")
     {
-        fieldQuery.addStringField("VideoMetadata.audioCompressor");
+        fieldQuery.addChoiceStringField("VideoMetadata.audioCompressor");
     }
-    else if (name == "duration")
+    else if (name == "videoduration")
     {
-        fieldQuery.addStringField("VideoMetadata.duration");
+        QList<int> values = reader.valueToIntList();
+
+        if (values.size() != 2)
+        {
+            kWarning() << "Relation Interval requires a list of two values";
+        }
+
+        sql += " ( CAST(VideoMetadata.duration AS INTEGER)";
+        ImageQueryBuilder::addSqlRelation(sql,
+                                          relation == SearchXml::Interval ? SearchXml::GreaterThanOrEqual : SearchXml::GreaterThan);
+        sql += " ? AND CAST(VideoMetadata.duration AS INTEGER)";
+        ImageQueryBuilder::addSqlRelation(sql,
+                                          relation == SearchXml::Interval ? SearchXml::LessThanOrEqual : SearchXml::LessThan);
+        sql += " ?) ";
+
+        *boundValues << values.first()*1000 << values.last()*1000;
     }
-    else if (name == "framerate")
+    else if (name == "videoframerate")
     {
-        fieldQuery.addStringField("VideoMetadata.frameRate");
+        //fieldQuery.addChoiceStringField("VideoMetadata.frameRate");
+        QList<double> values = reader.valueToDoubleList();
+
+        if (values.size() != 2)
+        {
+            kWarning() << "Relation Interval requires a list of two values";
+        }
+
+        sql += " ( CAST(VideoMetadata.frameRate AS REAL)";
+        ImageQueryBuilder::addSqlRelation(sql,
+                                          relation == SearchXml::Interval ? SearchXml::GreaterThanOrEqual : SearchXml::GreaterThan);
+        sql += " ? AND CAST(VideoMetadata.frameRate AS REAL)";
+        ImageQueryBuilder::addSqlRelation(sql,
+                                          relation == SearchXml::Interval ? SearchXml::LessThanOrEqual : SearchXml::LessThan);
+        sql += " ?) ";
+
+        *boundValues << values.first() << values.last();
     }
     else if (name == "videocodec")
     {
-        fieldQuery.addStringField("VideoMetadata.videoCodec");
+        if (relation == SearchXml::OneOf)
+        {
+            QStringList values = reader.valueToStringList();
+
+            if (values.isEmpty())
+            {
+                kDebug() << "List for OneOf is empty";
+            }
+
+            foreach(const QString& value, values)
+            {
+                sql += "( Upper(VideoMetadata.videoCodec) LIKE '%" + value.toUpper() + "%' ";
+                if (value!=values.last())
+                {
+                    sql += "OR ";
+                }
+            }
+            sql += ") ";
+        }
+        else
+        {
+            QString value = reader.value();
+            sql += "(Upper(VideoMetadata.videoCodec) LIKE '%" + value.toUpper() + "%') ";
+        }
     }
     else if (name == "make")
     {

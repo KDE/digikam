@@ -63,8 +63,6 @@
 #include "statusprogressbar.h"
 #include "importview.h"
 
-class KToggleFullScreenAction;
-
 using namespace KDcrawIface;
 
 namespace Digikam
@@ -78,8 +76,6 @@ public:
         deleteAfter(false),
         busy(false),
         closed(false),
-        removeFullScreenButton(false),
-        fullScreenHideToolBar(false),
         downloadMenu(0),
         deleteMenu(0),
         imageMenu(0),
@@ -99,7 +95,6 @@ public:
         downloadDelNewAction(0),
         downloadDelAllAction(0),
         downloadDelSelectedAction(0),
-        fullScreenAction(0),
         libsInfoAction(0),
         dbStatAction(0),
         lockAction(0),
@@ -150,8 +145,6 @@ public:
     bool                          deleteAfter;
     bool                          busy;
     bool                          closed;
-    bool                          removeFullScreenButton;
-    bool                          fullScreenHideToolBar;
 
     QString                       cameraTitle;
 
@@ -182,7 +175,6 @@ public:
     KAction*                      downloadDelNewAction;
     KAction*                      downloadDelAllAction;
     KAction*                      downloadDelSelectedAction;
-    KToggleFullScreenAction*      fullScreenAction;
     KAction*                      libsInfoAction;
     KAction*                      dbStatAction;
     KAction*                      lockAction;

@@ -82,6 +82,7 @@ public:
         ~Item();
 
         void addChild(Item* const newChild);
+        void insertChild(const int pos, Item* const newChild);
         void takeChild(Item* const oldChild);
         Item* findChildWithImageId(const qlonglong searchImageId);
 
@@ -134,6 +135,7 @@ public:
     QList<Item*> sortItems(const QList<Item*> itemList);
     class LessThan;
     bool lessThan(Item* const itemA, Item* const itemB);
+    int findChildSortedPosition(Item* const parentItem, Item* const childItem);
 
     // drag-and-drop related functions
     virtual Qt::DropActions supportedDropActions() const;

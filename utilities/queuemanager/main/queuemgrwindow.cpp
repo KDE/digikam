@@ -113,7 +113,7 @@ bool QueueMgrWindow::queueManagerWindowCreated()
 }
 
 QueueMgrWindow::QueueMgrWindow()
-    : KXmlGuiWindow(0), d(new Private)
+    : DXmlGuiWindow(0), d(new Private)
 {
     setXMLFile("queuemgrwindowui.rc");
 
@@ -140,11 +140,7 @@ QueueMgrWindow::QueueMgrWindow()
     setCaption(i18n("Batch Queue Manager"));
     // We don't want to be deleted on close
     setAttribute(Qt::WA_DeleteOnClose, false);
-
-    // --------------------------------------------------------
-
-    d->fullScreenMngr = new FullScreenMngr(FS_NONE);
-    d->fullScreenMngr->setManagedWindow(this);
+    setFullScreenOptions(FS_NONE);
 
     // -- Build the GUI -------------------------------
 
@@ -417,8 +413,7 @@ void QueueMgrWindow::setupActions()
 
     // -- Standard 'View' menu actions ---------------------------------------------
 
-    QAction* const fullScreenAction = d->fullScreenMngr->createFullScreenAction("queuemgr_fullscreen");
-    connect(fullScreenAction, SIGNAL(toggled(bool)), this, SLOT(slotToggleFullScreen(bool)));
+    createFullScreenAction("queuemgr_fullscreen");
 
     // -- Standard 'Configure' menu actions ----------------------------------------
 
@@ -477,7 +472,7 @@ void QueueMgrWindow::readSettings()
     d->bottomSplitter->restoreState(group,   d->BOTTOM_SPLITTER_CONFIG_KEY);
     d->topSplitter->restoreState(group,      d->TOP_SPLITTER_CONFIG_KEY);
 
-    d->fullScreenMngr->readSettings(group);
+    readFullScreenSettings(group);
 }
 
 void QueueMgrWindow::writeSettings()
@@ -488,8 +483,6 @@ void QueueMgrWindow::writeSettings()
     d->topSplitter->saveState(group,      d->TOP_SPLITTER_CONFIG_KEY);
     d->bottomSplitter->saveState(group,   d->BOTTOM_SPLITTER_CONFIG_KEY);
     d->verticalSplitter->saveState(group, d->VERTICAL_SPLITTER_CONFIG_KEY);
-
-    d->fullScreenMngr->saveSettings(group);
 
     config->sync();
 }
@@ -506,7 +499,7 @@ void QueueMgrWindow::applySettings()
 
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("Batch Queue Manager Settings");
-    d->fullScreenMngr->readSettings(group);
+    readFullScreenSettings(group);
 }
 
 void QueueMgrWindow::refreshStatusBar()
@@ -577,26 +570,6 @@ void QueueMgrWindow::refreshStatusBar()
         d->removeItemsDoneAction->setEnabled((items - pendingItems) > 0);
         d->clearQueueAction->setEnabled(items > 0);
         d->runAction->setEnabled((tasks > 0) && (pendingItems > 0));
-    }
-}
-
-void QueueMgrWindow::showToolBars()
-{
-    QList<KToolBar*> toolbars = toolBars();
-
-    foreach(KToolBar* const toolbar, toolbars)
-    {
-        toolbar->show();
-    }
-}
-
-void QueueMgrWindow::hideToolBars()
-{
-    QList<KToolBar*> toolbars = toolBars();
-
-    foreach(KToolBar* const toolbar, toolbars)
-    {
-        toolbar->hide();
     }
 }
 
@@ -1086,19 +1059,6 @@ void QueueMgrWindow::slotSaveWorkflow()
     if (d->queuePool->saveWorkflow())
     {
         d->toolsView->showTab(ToolsView::WORKFLOW);
-    }
-}
-
-void QueueMgrWindow::slotToggleFullScreen(bool b)
-{
-    d->fullScreenMngr->switchWindowToFullScreen(b);
-}
-
-void QueueMgrWindow::keyPressEvent(QKeyEvent* e)
-{
-    if (e->key() == Qt::Key_Escape)
-    {
-        d->fullScreenMngr->escapePressed();
     }
 }
 

@@ -35,6 +35,7 @@
 
 #include <imageinfo.h>
 #include <databaseinfocontainers.h>
+#include <tooltipfiller.h>
 
 namespace Digikam
 {
@@ -65,7 +66,7 @@ QStringList ColumnItemProperties::getSubColumns()
             << QLatin1String("dimensions") << QLatin1String("pixelcount")
             << QLatin1String("bitdepth") << QLatin1String("colormode")
             << QLatin1String("itemtype") << QLatin1String("itemcreationdatetime")
-            << QLatin1String("itemdigitizationtime");
+            << QLatin1String("itemdigitizationtime") << QLatin1String("itemaspectratio");
 
     return columns;
 }
@@ -111,6 +112,10 @@ TableViewColumnDescription ColumnItemProperties::getDescription()
         TableViewColumnDescription("itemdigitizationtime", i18n("Digitization date/time"))
     );
 
+    description.addSubColumn(
+        TableViewColumnDescription("itemaspectratio", i18n("Aspect ratio"))
+    );
+
     return description;
 }
 
@@ -136,6 +141,8 @@ QString ColumnItemProperties::getTitle() const
         return i18n("Creation date/time");
     case SubColumnDigitizationDateTime:
         return i18n("Digitization date/time");
+    case SubColumnAspectRatio:
+        return i18n("Aspect ratio");
     }
 
     return QString();
@@ -151,7 +158,8 @@ TableViewColumn::ColumnFlags ColumnItemProperties::getColumnFlags() const
         || (subColumn == SubColumnBitDepth)
         || (subColumn == SubColumnPixelCount)
         || (subColumn == SubColumnCreationDateTime)
-        || (subColumn == SubColumnDigitizationDateTime) )
+        || (subColumn == SubColumnDigitizationDateTime)
+        || (subColumn == SubColumnAspectRatio) )
     {
         flags|=ColumnCustomSorting;
     }
@@ -216,6 +224,18 @@ QVariant ColumnItemProperties::data(TableViewModel::Item* const item, const int 
 
             /// @todo make this configurable with si-prefixes
             return KGlobal::locale()->formatNumber(pixelCount, 0);
+        }
+
+    case SubColumnAspectRatio:
+        {
+            const QSize imgSize = info.dimensions();
+            QString aspectRatioString;
+            if (!ToolTipFiller::aspectRatioToString(imgSize.width(), imgSize.height(), &aspectRatioString))
+            {
+                return QString();
+            }
+
+            return aspectRatioString;
         }
 
     case SubColumnBitDepth:
@@ -309,6 +329,27 @@ TableViewColumn::ColumnCompareResult ColumnItemProperties::compare(
             const int pixelCountB = widthB*heightB;
 
             return compareHelper<int>(pixelCountA, pixelCountB);
+        }
+
+    case SubColumnAspectRatio:
+        {
+            const int widthA = infoA.dimensions().width();
+            const int widthB = infoB.dimensions().width();
+            const int heightA = infoA.dimensions().height();
+            const int heightB = infoB.dimensions().height();
+
+            if ( (heightA==0) || (heightB==0) )
+            {
+                // at least one of the two does not have valid data,
+                // sort based on which one has data at all
+                return compareHelper<int>(heightA, heightB);
+            }
+
+            const qreal aspectRatioA = qreal(widthA) / qreal(heightA);
+            const qreal aspectRatioB = qreal(widthB) / qreal(heightB);
+
+            /// @todo use fuzzy compare?
+            return compareHelper<qreal>(aspectRatioA, aspectRatioB);
         }
 
     case SubColumnBitDepth:

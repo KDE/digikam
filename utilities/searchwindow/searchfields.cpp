@@ -560,6 +560,120 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
         field->setBoundary(1, 2000000000, 100);
         return field;
     }
+
+
+    else if (name == "videoaspectratio")
+    {
+        SearchFieldChoice* field = new SearchFieldChoice(parent);
+        field->setFieldName(name);
+        field->setText(i18n("Aspect Ratio"), i18n("Return video with the frame aspect ratio"));
+        QStringList ratio;
+        ratio << "4:3"<< "4:3";
+        ratio << "3:2"<< "3:2";
+        ratio << "16:9" << "16:9";
+        ratio << "2:1" << "2:1";
+        // TODO: add more possible aspect ratio
+        field->setChoice(ratio);
+        return field;
+    }
+    else if (name == "videoduration")
+    {
+        SearchFieldRangeInt* field = new SearchFieldRangeInt(parent);
+        field->setFieldName(name);
+        field->setText(i18n("Duration"), i18n("Length of the video"));
+        field->setBetweenText(i18nc("Find video with a lenght between...and...", "and"));
+        field->setNumberPrefixAndSuffix(QString(), i18nc("Seconds", "s"));
+        field->setBoundary(1, 10000, 100);
+        field->setSuggestedValues(QList<int>()
+                                  << 10 << 30 << 60 << 90 << 120 << 240 << 360 << 500 << 1000 << 2000
+                                  << 3000 << 4000 << 5000 << 6000 << 7000 << 8000 << 9000 << 10000
+                                  // TODO : adjust default values
+                                 );
+        field->setSuggestedInitialValue(10);
+        field->setSingleSteps(10, 100);
+        return field;
+    }
+    else if (name == "videoframerate")
+    {
+        SearchFieldRangeInt* field = new SearchFieldRangeInt(parent);
+        field->setFieldName(name);
+        field->setText(i18n("Frame Rate"), i18n("Return video with the frame rate"));
+        field->setBetweenText(i18nc("Find video with frame rate between...and...", "and"));
+        field->setNumberPrefixAndSuffix(QString(), i18nc("Frames per Second", "fps"));
+        field->setBoundary(10, 60, 5);
+        field->setSuggestedValues(QList<int>()
+                                  << 10 << 15 << 20 << 25 << 30 << 35 << 40 << 45 << 55 << 60
+                                  // TODO : adjust default values
+                                 );
+        field->setSuggestedInitialValue(10);
+        field->setSingleSteps(5, 60);
+        return field;
+    }
+    else if (name == "videocodec")
+    {
+        SearchFieldChoice* field = new SearchFieldChoice(parent);
+        field->setFieldName(name);
+        field->setText(i18n("Codec"), i18n("Return video codec"));
+        QStringList codec;
+        codec << "avi"  << "Audio Video Interleave";
+        codec << "mov"  << "QuickTime";
+        codec << "mp4"  << "MPEG Layer 4";
+        codec << "3gp"  << "3GPP";
+        codec << "divx" << "DivX";
+        codec << "wma"  << "Windows Media Video";
+        codec << "mkv"  << "Matroska";
+        codec << "s263" << "H.263";
+        codec << "mjpg" << "Motion JPEG";
+        // TODO: add more possible codec
+        field->setChoice(codec);
+        return field;
+    }
+    else if (name == "videoaudiobitrate")
+    {
+        SearchFieldRangeInt* field = new SearchFieldRangeInt(parent);
+        field->setFieldName(name);
+        field->setText(i18n("Audio Bit Rate"), i18n("Return video audio bits rate"));
+        field->setBetweenText(i18nc("Find video with audio bit rate between...and...", "and"));
+        field->setNumberPrefixAndSuffix(QString(), i18nc("Bits per Second", "bps"));
+        field->setBoundary(1000, 100000, 1000);
+        field->setSuggestedValues(QList<int>()
+                                  << 1000 << 4000 << 8000 << 12000 << 16000 << 20000 << 30000 << 40000 << 50000
+                                  << 60000 << 700000 << 800000 << 900000 << 100000
+                                  // TODO : adjust default values
+                                 );
+        field->setSuggestedInitialValue(1000);
+        field->setSingleSteps(1000, 1000);
+        return field;
+    }
+    else if (name == "videoaudiochanneltype")
+    {
+        SearchFieldChoice* field = new SearchFieldChoice(parent);
+        field->setFieldName(name);
+        field->setText(i18n("Audio Channel Type"), i18n("Return video audio Channel Type"));
+        QStringList type;
+        type << "1" << i18n("Mono");
+        type << "2" << i18n("Stereo");
+        // TODO: add more possible audio channel type
+        field->setChoice(type);
+        return field;
+    }
+    else if (name == "videoaudiocompressor")
+    {
+        SearchFieldChoice* field = new SearchFieldChoice(parent);
+        field->setFieldName(name);
+        field->setText(i18n("Audio Compressor"), i18n("Return video audio Compressor"));
+        QStringList type;
+        type << "raw" << "RAW";
+        type << "mp3" << "MPEG Layer 3";
+        type << "mp4a" << "MPEG4 Audio";
+        type << "samr" << "Adaptive Multi-rate Audio";
+        type << "sowt" << "Apple QuickTime SWOT Little Endian PCM Audio";
+        type << "Microsoft PCM" << "Microsoft PCM";
+        // TODO: add more possible audio compressor
+        field->setChoice(type);
+        return field;
+    }
+
     else
     {
         kWarning() << "SearchField::createField: cannot create SearchField for" << name;

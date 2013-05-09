@@ -142,7 +142,7 @@ Comment[uk]=Керуйте вашими фотографіями як профе
 Comment[x-test]=xxManage your photographs like a professional with the power of open sourcexx
 Comment[zh_CN]=专业照片管理 彰显开源力量
 Comment[zh_TW]=運用開放原始碼的力量像專業人士般管理您的照片
-Exec=showfoto %i -caption "%c" %U
+Exec=showfoto %i -caption %c %U
 Icon=showfoto
 Type=Application
 # TODO: What is image/x-eim? Register it to freedesktop.org if you need it.
