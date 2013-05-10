@@ -372,7 +372,7 @@ QList<SolidVolumeInfo> CollectionManagerPrivate::actuallyListVolumes()
 
         SolidVolumeInfo info;
         info.udi = accessDevice.udi();
-        info.path = access->filePath();
+        info.path = QDir::fromNativeSeparators(access->filePath());
         info.isMounted = access->isAccessible();
 
         if (!info.path.isEmpty() && !info.path.endsWith('/'))

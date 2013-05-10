@@ -1943,7 +1943,7 @@ void DigikamApp::openSolidUsmDevice(const QString& udi, const QString& givenLabe
 
         // Create Camera UI
 
-        QString path = access->filePath();
+        QString path = QDir::fromNativeSeparators(access->filePath());
 
         if (mediaLabel.isNull())
         {
