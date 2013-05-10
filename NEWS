@@ -57,4 +57,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 042 ==> 220739 - Image Editor shows sidebar after applying effect in full screen mode.
 043 ==> 164442 - Manage videos just like photos [patch].
 044 ==> 319267 - libkdcraw contains invalid icc profiles, applications fail to save png file with libpng-1.6.x.
-045 ==> 
+045 ==> 319142 - Digikam complains it cannot find the database and then hangs forever.
+046 ==> 
+
