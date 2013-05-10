@@ -197,11 +197,6 @@ void AdvancedRenameManager::setParserType(ParserType type)
 
 Parser* AdvancedRenameManager::getParser() const
 {
-    if (!d->parser)
-    {
-        return 0;
-    }
-
     return d->parser;
 }
 
