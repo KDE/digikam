@@ -228,6 +228,8 @@ void DatabaseWidget::slotDatabasePathEdited(const QString& newPath)
 
 #endif
 
+    databasePathEdit->setText(QDir::toNativeSeparators(databasePathEdit->text()));
+
     checkDBPath();
 }
 

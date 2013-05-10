@@ -1214,7 +1214,7 @@ bool EditorWindow::promptForOverWrite()
     {
 
         QFileInfo fi(m_canvas->currentImageFilePath());
-        QString warnMsg(i18n("About to overwrite file \"%1\"\nAre you sure?", fi.fileName()));
+        QString warnMsg(i18n("About to overwrite file \"%1\"\nAre you sure?", QDir::toNativeSeparators(fi.fileName())));
         return (KMessageBox::warningContinueCancel(this,
                                                    warnMsg,
                                                    i18n("Warning"),
@@ -1883,7 +1883,7 @@ void EditorWindow::setupTempSaveFile(const KUrl& url)
     if (!m_savingContext.saveTempFile->open())
     {
         KMessageBox::error(this, i18n("Could not open a temporary file in the folder \"%1\": %2 (%3)",
-                                      tempDir, m_savingContext.saveTempFile->errorString(),
+                                      QDir::toNativeSeparators(tempDir), m_savingContext.saveTempFile->errorString(),
                                       m_savingContext.saveTempFile->error()));
         return;
     }
@@ -2549,8 +2549,8 @@ bool EditorWindow::localFileRename(const QString& src, const QString& destPath)
     if (info.isSymLink())
     {
         dest = info.symLinkTarget();
-        kDebug() << "Target filePath" << dest << "is a symlink pointing to"
-                 << dest << ". Storing image there.";
+        kDebug() << "Target filePath" << QDir::toNativeSeparators(dest) << "is a symlink pointing to"
+                 << QDir::toNativeSeparators(dest) << ". Storing image there.";
     }
 
 #ifndef Q_OS_WIN32

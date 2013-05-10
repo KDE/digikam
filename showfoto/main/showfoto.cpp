@@ -749,7 +749,7 @@ void ShowFoto::slotUpdateItemInfo()
                      "%1 (%2 of %3)", d->currentItem->url().fileName(),
                      index, d->itemsNb);
 
-        setCaption(d->currentItem->url().directory());
+        setCaption(QDir::toNativeSeparators(d->currentItem->url().directory()));
     }
     else
     {
