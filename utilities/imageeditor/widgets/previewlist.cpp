@@ -247,7 +247,7 @@ PreviewList::PreviewList(QObject* const /*parent*/)
     setWordWrap(false);
     setMovement(QListView::Static);
     setSpacing(5);
-    setGridSize(QSize(128, 100 + fontMetrics().height()));
+    setGridSize(QSize(125, 100 + fontMetrics().height()));
     setResizeMode(QListView::Adjust);
     setTextElideMode(Qt::ElideRight);
     setCursor(Qt::PointingHandCursor);
