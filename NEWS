@@ -1,5 +1,5 @@
 *****************************************************************************************************
-digiKam 3.2.0 - Release date: 2013-05-05
+digiKam 3.2.0 - Release date: 2013-05-12
 
 NEW FEATURES:
 
@@ -56,4 +56,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 041 ==> 289262 - Hitting ESC in "fullscreen picture preview" messes up thumbbar-state in "thumbnail view".
 042 ==> 220739 - Image Editor shows sidebar after applying effect in full screen mode.
 043 ==> 164442 - Manage videos just like photos [patch].
-044 ==> 
+044 ==> 319267 - libkdcraw contains invalid icc profiles, applications fail to save png file with libpng-1.6.x.
+045 ==> 319142 - digiKam complains it cannot find the database and then hangs forever.
+046 ==> 307885 - PreviewList not correctly aligned when starting an imageplugin [patch].
+047 ==> 
+

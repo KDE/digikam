@@ -407,7 +407,7 @@ static bool moveToBackup(const QFileInfo& info)
         {
             KMessageBox::error(0, i18n("Failed to backup the existing database file (\"%1\"). "
                                        "Refusing to replace file without backup, using the existing file.",
-                                       info.filePath()));
+                                       QDir::toNativeSeparators(info.filePath())));
             return false;
         }
     }
@@ -424,7 +424,7 @@ static bool copyToNewLocation(const QFileInfo& oldFile, const QFileInfo& newFile
         message = i18n("Failed to copy the old database file (\"%1\") "
                        "to its new location (\"%2\"). "
                        "Starting with an empty database.",
-                       oldFile.filePath(), newFile.filePath());
+                       QDir::toNativeSeparators(oldFile.filePath()), QDir::toNativeSeparators(newFile.filePath()));
 
     KIO::Job* job = KIO::file_copy(oldFile.filePath(), newFile.filePath(), -1,
                                    KIO::Overwrite /*| KIO::HideProgressInfo*/);
@@ -461,7 +461,7 @@ void AlbumManager::checkDatabaseDirsAfterFirstRun(const QString& dbPath, const Q
                                                         "<p>Would you like to upgrade the old database file - confirming "
                                                         "that this database file was indeed created for the pictures located in the folder \"%2\" - "
                                                         "or ignore the old file and start with a new database?</p> ",
-                                                        newDir.path(), albumDir.path()),
+                                                        QDir::toNativeSeparators(newDir.path()), QDir::toNativeSeparators(albumDir.path())),
                                                    i18n("Database Folder"),
                                                    upgrade, startFresh);
 
@@ -513,7 +513,7 @@ void AlbumManager::changeDatabase(const DatabaseParameters& newParams)
                                                                   "A database file from an older version of digiKam is found in this folder.</p> "
                                                                   "<p>Would you like to upgrade the old database file, start with a new database, "
                                                                   "or copy the current database to this location and continue using it?</p> ",
-                                                                  newDir.path()),
+                                                                  QDir::toNativeSeparators(newDir.path())),
                                                              i18n("New database folder"),
                                                              upgrade, startFresh, copyCurrent);
                 }
@@ -523,7 +523,7 @@ void AlbumManager::changeDatabase(const DatabaseParameters& newParams)
                                                        i18n("<p>You have chosen the folder \"%1\" as the new place to store the database. "
                                                             "A database file from an older version of digiKam is found in this folder.</p> "
                                                             "<p>Would you like to upgrade the old database file or start with a new database?</p>",
-                                                            newDir.path()),
+                                                            QDir::toNativeSeparators(newDir.path())),
                                                        i18n("New database folder"),
                                                        upgrade, startFresh);
                 }
@@ -549,7 +549,7 @@ void AlbumManager::changeDatabase(const DatabaseParameters& newParams)
                     copyToNewLocation(oldFile, newFile, i18n("Failed to copy the old database file (\"%1\") "
                                                              "to its new location (\"%2\"). "
                                                              "Trying to upgrade old databases.",
-                                                             oldFile.filePath(), newFile.filePath()));
+                                                             QDir::toNativeSeparators(oldFile.filePath()), QDir::toNativeSeparators(newFile.filePath())));
                 }
             }
             else
@@ -564,7 +564,7 @@ void AlbumManager::changeDatabase(const DatabaseParameters& newParams)
                                                        i18n("<p>You have chosen the folder \"%1\" as the new place to store the database.</p>"
                                                             "<p>Would you like to copy the current database to this location "
                                                             "and continue using it, or start with a new database?</p> ",
-                                                            newDir.path()),
+                                                            QDir::toNativeSeparators(newDir.path())),
                                                        i18n("New database folder"),
                                                        startFresh, copyCurrent);
                 }
@@ -590,7 +590,7 @@ void AlbumManager::changeDatabase(const DatabaseParameters& newParams)
                                                         "There is already a database file in this location.</p> "
                                                         "<p>Would you like to use this existing file as the new database, or remove it "
                                                         "and copy the current database to this place?</p> ",
-                                                        newDir.path()),
+                                                        QDir::toNativeSeparators(newDir.path())),
                                                    i18n("New database folder"),
                                                    replaceItem, useExistingItem);
             }
@@ -853,7 +853,7 @@ bool AlbumManager::setDatabase(const DatabaseParameters& params, bool priority, 
         QLabel* mainLabel = new QLabel(
             i18n("<p>The collection </p><p><b>%1</b><br/>(%2)</p><p> is currently not found on your system.<br/> "
                  "Please choose the most appropriate option to handle this situation:</p>",
-                 loc.label(), locDescription));
+                 loc.label(), QDir::toNativeSeparators(locDescription)));
         mainLabel->setWordWrap(true);
         mainLayout->addWidget(mainLabel, 0, 1);
 
@@ -880,7 +880,7 @@ bool AlbumManager::setDatabase(const DatabaseParameters& params, bool priority, 
 
             for (int i = 0; i < candidateIds.size(); ++i)
             {
-                migrateChoices->addItem(candidateDescriptions.at(i), candidateIds.at(i));
+                migrateChoices->addItem(QDir::toNativeSeparators(candidateDescriptions.at(i)), candidateIds.at(i));
             }
 
             layout->addWidget(migrateButton,  0, 0, Qt::AlignTop);
@@ -1311,7 +1311,7 @@ void AlbumManager::scanPAlbums()
             if (!parent)
             {
                 kError() <<  "Could not find parent with url: "
-                         << parentPath << " for: " << info.relativePath;
+                         << QDir::toNativeSeparators(parentPath) << " for: " << QDir::toNativeSeparators(info.relativePath);
                 continue;
             }
 

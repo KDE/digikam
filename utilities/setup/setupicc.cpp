@@ -535,6 +535,9 @@ SetupICC::SetupICC(QWidget* const parent, KPageDialog* const dialog)
     connect(d->defaultPathKU, SIGNAL(urlSelected(KUrl)),
             this, SLOT(slotUrlChanged()));
 
+    connect(d->defaultPathKU, SIGNAL(textChanged(QString)),
+            this, SLOT(slotUrlTextChanged()));
+
     connect(d->iccFolderLabel, SIGNAL(linkActivated(QString)),
             this, SLOT(slotShowDefaultSearchPaths()));
 
@@ -724,6 +727,11 @@ void SetupICC::slotUrlChanged()
 {
     IccSettings::instance()->setIccPath(d->defaultPathKU->url().toLocalFile());
     fillCombos(true);
+}
+
+void SetupICC::slotUrlTextChanged()
+{
+    d->defaultPathKU->setText(QDir::toNativeSeparators(d->defaultPathKU->text()));
 }
 
 void SetupICC::fillCombos(bool report)

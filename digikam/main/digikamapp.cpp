@@ -1943,7 +1943,7 @@ void DigikamApp::openSolidUsmDevice(const QString& udi, const QString& givenLabe
 
         // Create Camera UI
 
-        QString path = access->filePath();
+        QString path = QDir::fromNativeSeparators(access->filePath());
 
         if (mediaLabel.isNull())
         {
@@ -2277,7 +2277,7 @@ void DigikamApp::fillSolidMenus()
             {
                 if (!access->filePath().isEmpty())
                     label += i18nc("<drive type> \"<device name or label>\" at <mount path>",
-                                   "%1 \"%2\" at %3", driveType, labelOrProduct, access->filePath());
+                                   "%1 \"%2\" at %3", driveType, labelOrProduct, QDir::toNativeSeparators(access->filePath()));
                 else
                     label += i18nc("<drive type> \"<device name or label>\"",
                                    "%1 \"%2\"", driveType, labelOrProduct);
@@ -2286,7 +2286,7 @@ void DigikamApp::fillSolidMenus()
             {
                 if (!access->filePath().isEmpty())
                     label += i18nc("<drive type> at <mount path>",
-                                   "%1 at %2", driveType, access->filePath());
+                                   "%1 at %2", driveType, QDir::toNativeSeparators(access->filePath()));
                 else
                 {
                     label += driveType;

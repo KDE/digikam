@@ -241,13 +241,13 @@ PreviewList::PreviewList(QObject* const /*parent*/)
     setSelectionMode(QAbstractItemView::SingleSelection);
     setDropIndicatorShown(true);
     setSortingEnabled(false);
-    setIconSize(QSize(128, 128));
+    setIconSize(QSize(96, 96));
     setViewMode(QListView::IconMode);
     setWrapping(true);
     setWordWrap(false);
     setMovement(QListView::Static);
     setSpacing(5);
-    setGridSize(QSize(130, 130 + fontMetrics().height()));
+    setGridSize(QSize(125, 100 + fontMetrics().height()));
     setResizeMode(QListView::Adjust);
     setTextElideMode(Qt::ElideRight);
     setCursor(Qt::PointingHandCursor);
