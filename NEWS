@@ -1,63 +1,8 @@
 *****************************************************************************************************
-digiKam 3.2.0 - Release date: 2013-05-12
+digiKam 3.3.0-beta1 - Release date: 2013-05-19
 
 NEW FEATURES:
 
-General     : Remove internal clapack library code. Set only an optional and external dependency to eigen3.
-General     : New tool to Auto-Crop image based on black hole borders detection.
-AlbumGUI    : New "Table-View" view mode dedicated to show album items in a list view.
-AlbumGUI    : New Aspect-Ratio information displayed in icon-view and tooltips.
-AlbumGUI    : New filter based on Aspect-Ratio information.
-Searches    : New search tool to find images based on Aspect-Ratio Information.
-Searches    : New search tool to find videos based on shot properties.
-
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
-001 ==> 315098 - DNG Converter and DigiKam crashes when opening a .dng file.
-002 ==> 316556 - DIGIKAMSC_USE_PRIVATE_KDEGRAPHICS is set to ON.
-003 ==> 308418 - Some keyboard shortcuts not working in full screen mode.
-004 ==> 312549 - Showfoto does not correctly rotate images in the main view.
-005 ==> 316752 - Make the forward, back, first & last arrows cycle properly.
-006 ==> 311295 - digiKam not detecting my OLYMPUS M.14-42mm F3.5-5.6 II R lens.
-007 ==> 313938 - Workflow doesn't save/restore tool parameters.
-008 ==> 251563 - Getting rid of the lapack dependancy using Eigen [patch].
-009 ==> 310477 - Correct Camera identified - Canon PowerShot A470 but drop-down list shows A740 option.
-010 ==> 316790 - While showing support of NIKON 800 on starting page, in import, one cannot choose thois model.
-011 ==> 311393 - Cannot import photos from autodetected Canon PowerShot A1300 [patch].
-012 ==> 317714 - Consider working on NFS shares a legitimate use case (even for the targeted home environment).
-013 ==> 267436 - Automatic lens correction : add auto-crop feature to remove black borders.
-014 ==> 204135 - JPEG lossless cropping support.
-015 ==> 317745 - Store metadata incl. geolocation data into CR2 files.
-016 ==> 295423 - External libclapack not used [patch].
-017 ==> 179209 - Batch resize only to album not to any directory [patch].
-018 ==> 318067 - Dead link on contribution page.
-019 ==> 318200 - Toolbar nearly unusable after upgrading to digiKam 3.10.
-020 ==> 318154 - digiKam crashes after a few seconds.
-021 ==> 318353 - Implement kind of a read-only mode.
-022 ==> 166820 - Wish: Specify a ISO over which to apply noise reduction.
-023 ==> 313190 - Thumbnails of faces not rotated correctly according to the configuration settings.
-024 ==> 121313 - Filter pictures by aspect ratio [patch].
-025 ==> 224549 - Filter pictures by sizes.
-026 ==> 318721 - digiKam crashed at startup.
-027 ==> 306116 - Crash on start (during the collection re-scan).
-028 ==> 318834 - Images vanish and Properties not shown if image is picked from Image Thumbbar on right and dropped on to the Thumbbar itself [patch].
-029 ==> 318240 - Keywords stored in IPTC do not show up in thumbnail preview and are not searchable.
-030 ==> 318902 - Very long lasting search for new items after copy of sqlite3 database.
-031 ==> 318074 - digiKam hangs when opening album.
-032 ==> 281095 - BQM AdjustCurve tool : curves adjustment doesn't work.
-033 ==> 296651 - digiKam takes very long to display the embedded JPEG in a raw file [patch].
-034 ==> 319294 - Thumbnails disappear when stretching Thumbnail column in Table view [patch].
-035 ==> 319296 - When switching from Thumbnails to Preview Image and then Table, zoom slider gets set to incorrect value [patch].
-036 ==> 244422 - For better overviewing large image collections, I wish to have a _list_ view.
-037 ==> 319350 - Some PNG images need fixing for libpng 1.6.
-038 ==> 258180 - digiKam doesn't remember layout of main window if you switch to fullscreen and back.
-039 ==> 214107 - Show/hide toolbar forgotten when switching fullscreen mode.
-040 ==> 236234 - Display sidebars in fullscreen.
-041 ==> 289262 - Hitting ESC in "fullscreen picture preview" messes up thumbbar-state in "thumbnail view".
-042 ==> 220739 - Image Editor shows sidebar after applying effect in full screen mode.
-043 ==> 164442 - Manage videos just like photos [patch].
-044 ==> 319267 - libkdcraw contains invalid icc profiles, applications fail to save png file with libpng-1.6.x.
-045 ==> 319142 - digiKam complains it cannot find the database and then hangs forever.
-046 ==> 307885 - PreviewList not correctly aligned when starting an imageplugin [patch].
-047 ==> 
-
+001 ==> 
