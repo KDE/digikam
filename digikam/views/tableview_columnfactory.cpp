@@ -93,6 +93,10 @@ TableViewColumn* TableViewColumnFactory::getColumn(const Digikam::TableViewColum
     {
         return newColumn;
     }
+    if (TableViewColumns::ColumnAudioVideoProperties::CreateFromConfiguration<TableViewColumns::ColumnAudioVideoProperties>(s, columnConfiguration, &newColumn, this))
+    {
+        return newColumn;
+    }
 
     return 0;
 }
@@ -115,6 +119,7 @@ QList<TableViewColumnDescription> TableViewColumnFactory::getColumnDescriptionLi
     descriptionList << TableViewColumns::ColumnPhotoProperties::getDescription();
     descriptionList << TableViewColumns::ColumnDigikamProperties::getDescription();
     descriptionList << TableViewColumns::ColumnGeoProperties::getDescription();
+    descriptionList << TableViewColumns::ColumnAudioVideoProperties::getDescription();
 
     return descriptionList;
 }

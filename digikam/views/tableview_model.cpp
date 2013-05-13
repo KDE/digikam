@@ -960,6 +960,30 @@ TableViewModel::DatabaseFieldsHashRaw TableViewModel::itemDatabaseFieldsRaw(Tabl
             }
         }
 
+        if (requestedSet.hasFieldsFromVideoMetadata())
+        {
+            const DatabaseFields::VideoMetadata videoMetadataFields = requestedSet;
+            const QVariantList fieldValues = DatabaseAccess().db()->getVideoMetadata(item->imageId, videoMetadataFields);
+
+            if (!fieldValues.isEmpty())
+            {
+                int fieldsIndex = 0;
+                for (DatabaseFields::VideoMetadataIterator it; !it.atEnd(); ++it)
+                {
+                    /// @todo The typecasting here is a workaround...
+                    if (videoMetadataFields.testFlag(DatabaseFields::VideoMetadataField(int(*it))))
+                    {
+                        const QVariant fieldValue = fieldValues.at(fieldsIndex);
+                        ++fieldsIndex;
+
+                        /// @todo Re-implement insert?
+                        item->databaseFields.insert(DatabaseFieldsHashRaw::uniqueKey(*it), fieldValue);
+                    }
+                }
+            }
+        }
+
+
         // We assume that we found all requested tags here. If they were not found, we now know
         // that they do not exist. Should they be created, the cache will be cleared.
         item->cachedDatabaseFields.setFields(requestedSet);
@@ -975,6 +999,14 @@ QVariant TableViewModel::itemDatabaseFieldRaw(TableViewModel::Item* const item, 
     if (requestedField.hasFieldsFromImageMetadata())
     {
         const DatabaseFields::ImageMetadata requestedFieldFlag = requestedField;
+        const QVariant value = rawHash.value(requestedFieldFlag);
+
+        return value;
+    }
+
+    if (requestedField.hasFieldsFromVideoMetadata())
+    {
+        const DatabaseFields::VideoMetadata requestedFieldFlag = requestedField;
         const QVariant value = rawHash.value(requestedFieldFlag);
 
         return value;

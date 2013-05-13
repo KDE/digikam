@@ -25,6 +25,7 @@
 
 // local includes
 
+#include "tableview_column_audiovideo.h"
 #include "tableview_column_digikam.h"
 #include "tableview_column_file.h"
 #include "tableview_column_geo.h"
