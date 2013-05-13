@@ -60,6 +60,11 @@ Weights::Weights(const Weights& w) :
 
 Weights& Weights::operator=(const Weights& w)
 {
+    if (this == &w) {
+        // we have to be sure that we are not self-assignment
+        return *this;
+    }
+
     mHeight            = w.height();
     mWidth             = w.width();
     mPositions         = w.positions();

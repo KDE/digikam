@@ -486,7 +486,7 @@ void SetupCollectionModel::apply()
 
         foreach(const Item& item, failedItems)
         {
-            failedPaths << item.path;
+            failedPaths << QDir::toNativeSeparators(item.path);
         }
 
         KMessageBox::errorList(m_dialogParentWidget,
@@ -589,7 +589,7 @@ void SetupCollectionModel::addCollection(int category)
                 if (path == item.path || path.startsWith(item.path + '/'))
                 {
                     messageFromManager = i18n("You have previously added a collection "
-                                              "that contains the path \"%1\".", path);
+                                              "that contains the path \"%1\".", QDir::toNativeSeparators(path));
                     result = CollectionManager::LocationNotAllowed;
                     break;
                 }
@@ -828,12 +828,12 @@ QVariant SetupCollectionModel::data(const QModelIndex& index, int role) const
                 {
                     if (!item.path.isNull())
                     {
-                        return item.path;
+                        return QDir::toNativeSeparators(item.path);
                     }
 
                     //TODO: Path can be empty for items not available,
                     // query more info from CollectionManager
-                    return item.location.albumRootPath();
+                    return QDir::toNativeSeparators(item.location.albumRootPath());
                 }
 
                 break;

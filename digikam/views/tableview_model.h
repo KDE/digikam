@@ -198,7 +198,7 @@ private:
 
 } /* namespace Digikam */
 
-Q_DECLARE_METATYPE(Digikam::TableViewModel::GroupingMode);
+Q_DECLARE_METATYPE(Digikam::TableViewModel::GroupingMode)
 
 #endif // TABLEVIEW_MODEL_H
 

@@ -27,6 +27,7 @@
 
 #include <QGridLayout>
 #include <QStyle>
+#include <QDir>
 #include <QFile>
 #include <QPixmap>
 #include <QPainter>
@@ -484,7 +485,7 @@ void ImagePropertiesTab::setCurrentURL(const KUrl& url)
     setEnabled(true);
 
     d->labelFile->setText(url.fileName());
-    d->labelFolder->setText(url.directory());
+    d->labelFolder->setText(QDir::toNativeSeparators(url.directory()));
 }
 
 void ImagePropertiesTab::setPhotoInfoDisable(const bool b)

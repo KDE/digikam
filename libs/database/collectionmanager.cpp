@@ -372,7 +372,7 @@ QList<SolidVolumeInfo> CollectionManagerPrivate::actuallyListVolumes()
 
         SolidVolumeInfo info;
         info.udi = accessDevice.udi();
-        info.path = access->filePath();
+        info.path = QDir::fromNativeSeparators(access->filePath());
         info.isMounted = access->isAccessible();
 
         if (!info.path.isEmpty() && !info.path.endsWith('/'))
@@ -621,13 +621,13 @@ QString CollectionManagerPrivate::technicalDescription(const AlbumRootLocation* 
         {
             return i18nc("\"relative path\" on harddisk partition with \"UUID\"",
                          "Folder \"%1\" on the volume with the id \"%2\"",
-                         albumLoc->specificPath, queryItem);
+                         QDir::toNativeSeparators(albumLoc->specificPath), queryItem);
         }
         else if (!(queryItem = url.queryItem("label")).isNull())
         {
             return i18nc("\"relative path\" on harddisk partition with \"label\"",
                          "Folder \"%1\" on the volume labeled \"%2\"",
-                         albumLoc->specificPath, queryItem);
+                         QDir::toNativeSeparators(albumLoc->specificPath), queryItem);
         }
         else if (!(queryItem = url.queryItem("mountpath")).isNull())
         {
@@ -638,7 +638,7 @@ QString CollectionManagerPrivate::technicalDescription(const AlbumRootLocation* 
     {
         if (!(queryItem =  url.queryItem("mountpath")).isNull())
         {
-            return i18nc("@info", "Shared directory mounted at <filename>%1</filename>", queryItem);
+            return i18nc("@info", "Shared directory mounted at <filename>%1</filename>", QDir::toNativeSeparators(queryItem));
         }
     }
 
@@ -889,7 +889,7 @@ CollectionManager::LocationCheckResult CollectionManager::checkLocation(const KU
     {
         if (message)
         {
-            *message = i18n("There is already a collection containing the folder \"%1\"", path);
+            *message = i18n("There is already a collection containing the folder \"%1\"", QDir::toNativeSeparators(path));
         }
 
         if (iconName)
@@ -1001,7 +1001,7 @@ CollectionManager::LocationCheckResult CollectionManager::checkLocation(const KU
             if (message)
                 *message = i18n("This entry will only be identified by the path where it is found on your system (\"%1\"). "
                                 "No more specific means of identification (UUID, label) is available.",
-                                volume.path);
+                                QDir::toNativeSeparators(volume.path));
 
             if (iconName)
             {
