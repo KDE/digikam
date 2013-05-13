@@ -431,8 +431,8 @@ void FaceScanDialog::setupUi()
     QWidget* const parametersTab        = new QWidget;
     QGridLayout* const parametersLayout = new QGridLayout;
 
-    QLabel* const detectionLabel        = new QLabel(i18nc("@label", "Parameters for face detection"));
-
+    QLabel* const detectionLabel        = new QLabel(i18nc("@label", "Parameters for face detection and Recognition"));
+    
     d->parametersResetButton            = new QToolButton;
     d->parametersResetButton->setAutoRaise(true);
     d->parametersResetButton->setFocusPolicy(Qt::NoFocus);

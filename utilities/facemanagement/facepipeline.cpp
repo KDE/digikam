@@ -35,6 +35,10 @@
 #include <kdebug.h>
 #include <klocale.h>
 
+// Libkface includes
+
+#include <libkface/facerecognizer.h>
+
 // Local includes
 
 #include "loadingdescription.h"
@@ -483,6 +487,7 @@ void DetectionWorker::process(FacePipelineExtendedPackage::Ptr package)
     KFaceIface::Image image = FaceIface::toImage(package->detectionImage);
     image.setOriginalSize(package->image.originalSize());
 
+    detector.setColorMode(1);
     package->faces          = detector.detectFaces(image);
 
     kDebug() << "Found" << package->faces.size() << "faces in" << package->info.name()
@@ -515,41 +520,58 @@ void DetectionWorker::setAccuracy(double accuracy)
 RecognitionWorker::RecognitionWorker(FacePipeline::Private* const d)
     : d(d)
 {
+    catcher              = 0;   
     database             = KFaceIface::RecognitionDatabase::addDatabase();
-    recognitionThreshold = 10000000;
+    recognitionThreshold = 0.9;
 }
 
 void RecognitionWorker::process(FacePipelineExtendedPackage::Ptr package)
 {
-/* Disable recognition for stable release. See bug 269720.
-
     FaceIface iface;
     QSize size = database.recommendedImageSize(package->image.size());
-    iface.fillImageInFaces(package->image, package->faces, size);
 
-    QList<double> distances = database.recognizeFaces(package->faces);
-
-    for (int i=0; i<distances.size(); ++i)
+    if (package->image.isNull())
     {
-        kDebug() << "Recognition:"  << package->info.id()     << package->faces[i].toRect()
-                 << "recognized as" << package->faces[i].id() << package->faces[i].name()
-                 << "at distance"   << distances[i]
-                 << ((distances[i] > recognitionThreshold) ? "(discarded)" : "(accepted)");
-
-        if (distances[i] > recognitionThreshold)
+        if (!catcher)
         {
-            package->faces[i].clearRecognition();
+            catcher = new ThumbnailImageCatcher(d->thumbnailLoadThread, this);
+        }
+        catcher->setActive(true);
+        iface.fillImageInFaces(catcher, package->filePath, package->faces, size);
+        catcher->setActive(false);
+    }
+    else
+    {
+        iface.fillImageInFaces(package->image, package->faces, size);
+    }
+
+    KFaceIface::FaceRecognizer *recogniser = new KFaceIface::FaceRecognizer();
+    recogniser->setRecognitionThreshold(recognitionThreshold);
+    
+    QList<float> recgnitionRate =  recogniser->recognizeFaces(package->faces);
+    
+    if(!recgnitionRate.empty())
+    {
+        for(int faceindex = 0;faceindex < package->faces.size() ;faceindex++ )
+        {
+            if(recgnitionRate[faceindex] > recognitionThreshold )
+            {
+                kDebug() << "preson  " << qPrintable(package->faces[faceindex].name())
+                         << "   recognised in" << qPrintable(package->filePath);
+                package->databaseFaces[faceindex].roles = FacePipelineDatabaseFace::ForConfirmation;
+                package->databaseFaces[faceindex].assignedTagId = package->faces[faceindex].id();
+            }
         }
     }
-*/
-
+    
+    delete recogniser;    
     package->processFlags |= FacePipelinePackage::ProcessedByRecognizer;
     emit processed(package);
 }
 
 void RecognitionWorker::setThreshold(double threshold)
 {
-    recognitionThreshold = threshold;
+    recognitionThreshold = (float) threshold;
 }
 
 // ----------------------------------------------------------------------------------------
@@ -831,16 +853,11 @@ void Trainer::process(FacePipelineExtendedPackage::Ptr package)
         }
     }
 
+    FaceIface iface;
     if (!toTrain.isEmpty())
     {
-        FaceIface iface;
-
-/* Disable recognition for stable release. See bug 269720 and 255520.
-
-        // Get KFaceIface faces
         package->faces = iface.toFaces(toTrain);
 
-        // Fill images in faces - either from given DImg, or from thumbnails
         QSize size = database.recommendedImageSize(package->image.size());
 
         if (package->image.isNull())
@@ -849,7 +866,6 @@ void Trainer::process(FacePipelineExtendedPackage::Ptr package)
             {
                 catcher = new ThumbnailImageCatcher(d->thumbnailLoadThread, this);
             }
-
             catcher->setActive(true);
             iface.fillImageInFaces(catcher, package->filePath, package->faces, size);
             catcher->setActive(false);
@@ -859,15 +875,20 @@ void Trainer::process(FacePipelineExtendedPackage::Ptr package)
             iface.fillImageInFaces(package->image, package->faces, size);
         }
 
-        // Train
-        kDebug() << "Training" << package->faces.size() << "faces";
-        database.updateFaces(package->faces);
-*/
-
-        // Remove the "FaceForTraining" entry in database (tagRegion entry remains, of course, untouched)
-        iface.removeFaces(toTrain);
-        package->databaseFaces.replaceRole(FacePipelineDatabaseFace::ForTraining, FacePipelineDatabaseFace::Trained);
+        KFaceIface::FaceRecognizer * const recogniser = new KFaceIface::FaceRecognizer();
+        
+        for(int faceindex = 0;faceindex < package->faces.size();faceindex++)
+        {
+            package->faces[faceindex].setId(package->databaseFaces[faceindex].assignedTagId);
+            kDebug() << "person  " << qPrintable(package->faces.at(faceindex).name())
+                     << "  stored in recognition database" ;
+        }
+        recogniser->storeFaces(package->faces);
+        delete recogniser;
     }
+
+    iface.removeFaces(toTrain);
+    package->databaseFaces.replaceRole(FacePipelineDatabaseFace::ForTraining, FacePipelineDatabaseFace::Trained);
 
     package->processFlags |= FacePipelinePackage::ProcessedByTrainer;
     emit processed(package);
@@ -1269,8 +1290,9 @@ void FacePipeline::plugParallelFaceDetectors()
 void FacePipeline::plugFaceRecognizer()
 {
     d->recognitionWorker = new RecognitionWorker(d);
+    d->createThumbnailLoadThread();
 
-    connect(d, SIGNAL(thresholdChanged(double)),
+    connect(d, SIGNAL(accuracyChanged(double)),
             d->recognitionWorker, SLOT(setThreshold(double)));
 }
 
