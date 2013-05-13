@@ -166,6 +166,7 @@ FaceDetector::FaceDetector(const FaceScanSettings& settings, ProgressItem* const
         }
         else // if (settings.task == FaceScanSettings::RecognizeMarkedFaces)
         {
+	    d->pipeline.plugFaceRecognizer();
             filterMode = FacePipeline::ReadUnconfirmedFaces;
             writeMode  = FacePipeline::NormalWrite;
         }
@@ -186,7 +187,6 @@ FaceDetector::FaceDetector(const FaceScanSettings& settings, ProgressItem* const
             }
         }
 
-        d->pipeline.plugFaceRecognizer();
         d->pipeline.plugDatabaseWriter(writeMode);
         d->pipeline.construct();
         d->pipeline.setDetectionAccuracy(settings.accuracy);
