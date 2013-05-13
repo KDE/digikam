@@ -241,10 +241,9 @@ Q_SIGNALS:
     void processed(FacePipelineExtendedPackage::Ptr package);
 
 protected:
-    
-    ThumbnailImageCatcher*          catcher;
+
     KFaceIface::RecognitionDatabase database;
-    float                           recognitionThreshold;
+    double                          recognitionThreshold;
     FacePipeline::Private* const    d;
 };
 
