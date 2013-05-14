@@ -213,7 +213,7 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
                                            "You can set template values to Template setup page."));
     d->saveFaceTags = new QCheckBox;
     d->saveFaceTags->setText(i18nc("@option:check", "Face Tags(including face rectangles)"));
-    d->saveTemplateBox->setWhatsThis(i18nc("@info:whatsthis", "Turn on this option to store face tags"
+    d->saveFaceTags->setWhatsThis(i18nc("@info:whatsthis", "Turn on this option to store face tags "
                                            "with face rectangles in the XMP tags."));
 
     fieldsLayout->addWidget(fieldsIconLabel,       0, 0);
