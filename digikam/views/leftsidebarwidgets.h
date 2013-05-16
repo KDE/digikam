@@ -7,7 +7,7 @@
  * Description : left sidebar widgets
  *
  * Copyright (C) 2009-2010 by Johannes Wienke <languitar at semipol dot de>
- * Copyright (C) 2010-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -56,15 +56,15 @@ class AlbumFolderViewSideBarWidget : public SidebarWidget
 
 public:
 
-    AlbumFolderViewSideBarWidget(QWidget* parent, AlbumModel* model,
-                                 AlbumModificationHelper* albumModificationHelper);
+    AlbumFolderViewSideBarWidget(QWidget* const parent, AlbumModel* const model,
+                                 AlbumModificationHelper* const albumModificationHelper);
     virtual ~AlbumFolderViewSideBarWidget();
 
     void    setActive(bool active);
     void    doLoadState();
     void    doSaveState();
     void    applySettings();
-    void    changeAlbumFromHistory(Album* album);
+    void    changeAlbumFromHistory(Album* const album);
     QPixmap getIcon();
     QString getCaption();
 
@@ -80,8 +80,8 @@ Q_SIGNALS:
 
 private:
 
-    class AlbumFolderViewSideBarWidgetPriv;
-    AlbumFolderViewSideBarWidgetPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 // -----------------------------------------------------------------------------------------
@@ -98,14 +98,14 @@ class TagViewSideBarWidget : public SidebarWidget
 
 public:
 
-    TagViewSideBarWidget(QWidget* parent, TagModel* model);
+    TagViewSideBarWidget(QWidget* const parent, TagModel* const model);
     virtual ~TagViewSideBarWidget();
 
     void    setActive(bool active);
     void    doLoadState();
     void    doSaveState();
     void    applySettings();
-    void    changeAlbumFromHistory(Album* album);
+    void    changeAlbumFromHistory(Album* const album);
     QPixmap getIcon();
     QString getCaption();
 
@@ -121,12 +121,12 @@ Q_SIGNALS:
 
 public:
 
-    // Declared as public due to use by PeopleSideBarWidgetPriv
-    class TagViewSideBarWidgetPriv;
+    // Declared as public due to use by Private
+    class Private;
 
 private:
 
-    TagViewSideBarWidgetPriv* const d;
+    Private* const d;
 };
 
 // -----------------------------------------------------------------------------------------
@@ -142,15 +142,15 @@ class DateFolderViewSideBarWidget : public SidebarWidget
 
 public:
 
-    DateFolderViewSideBarWidget(QWidget* parent, DateAlbumModel* model,
-                                ImageAlbumFilterModel* imageFilterModel);
+    DateFolderViewSideBarWidget(QWidget* const parent, DateAlbumModel* const model,
+                                ImageAlbumFilterModel* const imageFilterModel);
     virtual ~DateFolderViewSideBarWidget();
 
     void    setActive(bool active);
     void    doLoadState();
     void    doSaveState();
     void    applySettings();
-    void    changeAlbumFromHistory(Album* album);
+    void    changeAlbumFromHistory(Album* const album);
     QPixmap getIcon();
     QString getCaption();
 
@@ -160,8 +160,8 @@ public:
 
 private:
 
-    class DateFolderViewSideBarWidgetPriv;
-    DateFolderViewSideBarWidgetPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 // -----------------------------------------------------------------------------------------
@@ -177,15 +177,15 @@ class TimelineSideBarWidget : public SidebarWidget
 
 public:
 
-    TimelineSideBarWidget(QWidget* parent, SearchModel* searchModel,
-                          SearchModificationHelper* searchModificationHelper);
+    TimelineSideBarWidget(QWidget* const parent, SearchModel* const searchModel,
+                          SearchModificationHelper* const searchModificationHelper);
     virtual ~TimelineSideBarWidget();
 
     void    setActive(bool active);
     void    doLoadState();
     void    doSaveState();
     void    applySettings();
-    void    changeAlbumFromHistory(Album* album);
+    void    changeAlbumFromHistory(Album* const album);
     QPixmap getIcon();
     QString getCaption();
 
@@ -206,8 +206,8 @@ private Q_SLOTS:
 
 private:
 
-    class TimelineSideBarWidgetPriv;
-    TimelineSideBarWidgetPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 // -----------------------------------------------------------------------------------------
@@ -223,15 +223,15 @@ class SearchSideBarWidget : public SidebarWidget
 
 public:
 
-    SearchSideBarWidget(QWidget* parent, SearchModel* searchModel,
-                        SearchModificationHelper* searchModeificationHelper);
+    SearchSideBarWidget(QWidget* const parent, SearchModel* const searchModel,
+                        SearchModificationHelper* const searchModeificationHelper);
     virtual ~SearchSideBarWidget();
 
     void    setActive(bool active);
     void    doLoadState();
     void    doSaveState();
     void    applySettings();
-    void    changeAlbumFromHistory(Album* album);
+    void    changeAlbumFromHistory(Album* const album);
     QPixmap getIcon();
     QString getCaption();
 
@@ -240,8 +240,8 @@ public:
 
 private:
 
-    class SearchSideBarWidgetPriv;
-    SearchSideBarWidgetPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 // -----------------------------------------------------------------------------------------
@@ -255,15 +255,15 @@ class FuzzySearchSideBarWidget : public SidebarWidget
 {
     Q_OBJECT
 public:
-    FuzzySearchSideBarWidget(QWidget* parent, SearchModel* searchModel,
-                             SearchModificationHelper* searchModificationHelper);
+    FuzzySearchSideBarWidget(QWidget* const parent, SearchModel* const searchModel,
+                             SearchModificationHelper* const searchModificationHelper);
     virtual ~FuzzySearchSideBarWidget();
 
     void    setActive(bool active);
     void    doLoadState();
     void    doSaveState();
     void    applySettings();
-    void    changeAlbumFromHistory(Album* album);
+    void    changeAlbumFromHistory(Album* const album);
     QPixmap getIcon();
     QString getCaption();
 
@@ -272,8 +272,8 @@ public:
 
 private:
 
-    class FuzzySearchSideBarWidgetPriv;
-    FuzzySearchSideBarWidgetPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 // -----------------------------------------------------------------------------------------
@@ -289,16 +289,16 @@ class GPSSearchSideBarWidget : public SidebarWidget
 
 public:
 
-    GPSSearchSideBarWidget(QWidget* parent, SearchModel* searchModel,
-                           SearchModificationHelper* searchModificationHelper,
-                           ImageFilterModel* imageFilterModel, QItemSelectionModel* itemSelectionModel);
+    GPSSearchSideBarWidget(QWidget* const parent, SearchModel* const searchModel,
+                           SearchModificationHelper* const searchModificationHelper,
+                           ImageFilterModel* const imageFilterModel, QItemSelectionModel* const itemSelectionModel);
     virtual ~GPSSearchSideBarWidget();
 
     void    setActive(bool active);
     void    doLoadState();
     void    doSaveState();
     void    applySettings();
-    void    changeAlbumFromHistory(Album* album);
+    void    changeAlbumFromHistory(Album* const album);
     QPixmap getIcon();
     QString getCaption();
 
@@ -308,8 +308,8 @@ Q_SIGNALS:
 
 private:
 
-    class GPSSearchSideBarWidgetPriv;
-    GPSSearchSideBarWidgetPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 // -----------------------------------------------------------------------------------------
@@ -325,15 +325,15 @@ class PeopleSideBarWidget : public SidebarWidget
 
 public:
 
-    PeopleSideBarWidget(QWidget* parent, TagModel* tagModel,
-                        SearchModificationHelper* searchModificationHelper);
+    PeopleSideBarWidget(QWidget* const parent, TagModel* const tagModel,
+                        SearchModificationHelper* const searchModificationHelper);
     virtual ~PeopleSideBarWidget();
 
     void    setActive(bool active);
     void    doLoadState();
     void    doSaveState();
     void    applySettings();
-    void    changeAlbumFromHistory(Album* album);
+    void    changeAlbumFromHistory(Album* const album);
     QPixmap getIcon();
     QString getCaption();
 
@@ -350,8 +350,8 @@ Q_SIGNALS:
 
 private:
 
-    class PeopleSideBarWidgetPriv;
-    PeopleSideBarWidgetPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

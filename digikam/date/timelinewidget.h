@@ -6,7 +6,7 @@
  * Date        : 2007-12-08
  * Description : a widget to display date and time statistics of pictures
  *
- * Copyright (C) 2007-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2011-2012 by Andi Clemens <andi dot clemens at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -72,7 +72,7 @@ public:
 
 public:
 
-    explicit TimeLineWidget(QWidget* parent = 0);
+    explicit TimeLineWidget(QWidget* const parent = 0);
     ~TimeLineWidget();
 
     void      setTimeUnit(TimeUnit timeUnit);
@@ -89,8 +89,8 @@ public:
     DateRangeList selectedDateRange(int& totalCount) const;
     void          setSelectedDateRange(const DateRangeList& list);
 
-    int  totalIndex() const;
-    int  indexForRefDateTime() const;
+    int  totalIndex()             const;
+    int  indexForRefDateTime()    const;
     int  indexForCursorDateTime() const;
     void setCurrentIndex(int index);
 
@@ -157,8 +157,8 @@ private:
 
 private:
 
-    class TimeLineWidgetPriv;
-    TimeLineWidgetPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

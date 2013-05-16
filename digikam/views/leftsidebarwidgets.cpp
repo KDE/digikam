@@ -7,8 +7,8 @@
  * Description : left sidebar widgets
  *
  * Copyright (C) 2009-2010 by Johannes Wienke <languitar at semipol dot de>
- * Copyright (C) 2010-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2012 by Andi Clemens <andi dot clemens at gmail dot com>
+ * Copyright (C) 2010-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2012      by Andi Clemens <andi dot clemens at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -66,11 +66,11 @@
 namespace Digikam
 {
 
-class AlbumFolderViewSideBarWidget::AlbumFolderViewSideBarWidgetPriv
+class AlbumFolderViewSideBarWidget::Private
 {
 public:
 
-    AlbumFolderViewSideBarWidgetPriv() :
+    Private() :
         albumModificationHelper(0),
         albumFolderView(0),
         searchTextBar(0)
@@ -82,9 +82,9 @@ public:
     SearchTextBar*           searchTextBar;
 };
 
-AlbumFolderViewSideBarWidget::AlbumFolderViewSideBarWidget(QWidget* parent, AlbumModel* model,
-                                                           AlbumModificationHelper* albumModificationHelper)
-    : SidebarWidget(parent), d(new AlbumFolderViewSideBarWidgetPriv)
+AlbumFolderViewSideBarWidget::AlbumFolderViewSideBarWidget(QWidget* const parent, AlbumModel* const model,
+                                                           AlbumModificationHelper* const albumModificationHelper)
+    : SidebarWidget(parent), d(new Private)
 {
     setObjectName("AlbumFolderView Sidebar");
 
@@ -139,7 +139,7 @@ void AlbumFolderViewSideBarWidget::applySettings()
     d->albumFolderView->setEnableToolTips(settings->getShowAlbumToolTips());
 }
 
-void AlbumFolderViewSideBarWidget::changeAlbumFromHistory(Album* album)
+void AlbumFolderViewSideBarWidget::changeAlbumFromHistory(Album* const album)
 {
     d->albumFolderView->setCurrentAlbum(dynamic_cast<PAlbum*>(album));
 }
@@ -167,11 +167,11 @@ QString AlbumFolderViewSideBarWidget::getCaption()
 
 // -----------------------------------------------------------------------------
 
-class TagViewSideBarWidget::TagViewSideBarWidgetPriv
+class TagViewSideBarWidget::Private
 {
 public:
 
-    TagViewSideBarWidgetPriv() :
+    Private() :
         tagModel(0),
         tagSearchBar(0),
         tagFolderView(0)
@@ -183,8 +183,8 @@ public:
     TagFolderView* tagFolderView;
 };
 
-TagViewSideBarWidget::TagViewSideBarWidget(QWidget* parent, TagModel* model)
-    : SidebarWidget(parent), d(new TagViewSideBarWidgetPriv)
+TagViewSideBarWidget::TagViewSideBarWidget(QWidget* const parent, TagModel* const model)
+    : SidebarWidget(parent), d(new Private)
 {
     setObjectName("TagView Sidebar");
 
@@ -235,7 +235,7 @@ void TagViewSideBarWidget::applySettings()
 {
 }
 
-void TagViewSideBarWidget::changeAlbumFromHistory(Album* album)
+void TagViewSideBarWidget::changeAlbumFromHistory(Album* const album)
 {
     d->tagFolderView->setCurrentAlbum(dynamic_cast<TAlbum*>(album));
 }
@@ -262,11 +262,11 @@ void TagViewSideBarWidget::setCurrentAlbum(TAlbum* album)
 
 // -----------------------------------------------------------------------------
 
-class DateFolderViewSideBarWidget::DateFolderViewSideBarWidgetPriv
+class DateFolderViewSideBarWidget::Private
 {
 public:
 
-    DateFolderViewSideBarWidgetPriv() :
+    Private() :
         dateFolderView(0)
     {
     }
@@ -274,9 +274,9 @@ public:
     DateFolderView* dateFolderView;
 };
 
-DateFolderViewSideBarWidget::DateFolderViewSideBarWidget(QWidget* parent, DateAlbumModel* model,
-                                                         ImageAlbumFilterModel* imageFilterModel)
-    : SidebarWidget(parent), d(new DateFolderViewSideBarWidgetPriv)
+DateFolderViewSideBarWidget::DateFolderViewSideBarWidget(QWidget* const parent, DateAlbumModel* const model,
+                                                         ImageAlbumFilterModel* const imageFilterModel)
+    : SidebarWidget(parent), d(new Private)
 {
     setObjectName("DateFolderView Sidebar");
 
@@ -313,7 +313,7 @@ void DateFolderViewSideBarWidget::applySettings()
 {
 }
 
-void DateFolderViewSideBarWidget::changeAlbumFromHistory(Album* album)
+void DateFolderViewSideBarWidget::changeAlbumFromHistory(Album* const album)
 {
     d->dateFolderView->changeAlbumFromHistory(dynamic_cast<DAlbum*>(album));
 }
@@ -340,11 +340,11 @@ QString DateFolderViewSideBarWidget::getCaption()
 
 // -----------------------------------------------------------------------------
 
-class TimelineSideBarWidget::TimelineSideBarWidgetPriv
+class TimelineSideBarWidget::Private
 {
 public:
 
-    TimelineSideBarWidgetPriv() :
+    Private() :
         scaleBG(0),
         cursorCountLabel(0),
         scrollBar(0),
@@ -386,15 +386,15 @@ public:
 
     AlbumPointer<SAlbum>      currentTimelineSearch;
 };
-const QString TimelineSideBarWidget::TimelineSideBarWidgetPriv::configHistogramTimeUnitEntry("Histogram TimeUnit");
-const QString TimelineSideBarWidget::TimelineSideBarWidgetPriv::configHistogramScaleEntry("Histogram Scale");
-const QString TimelineSideBarWidget::TimelineSideBarWidgetPriv::configCursorPositionEntry("Cursor Position");
+const QString TimelineSideBarWidget::Private::configHistogramTimeUnitEntry("Histogram TimeUnit");
+const QString TimelineSideBarWidget::Private::configHistogramScaleEntry("Histogram Scale");
+const QString TimelineSideBarWidget::Private::configCursorPositionEntry("Cursor Position");
 
 // --------------------------------------------------------
 
-TimelineSideBarWidget::TimelineSideBarWidget(QWidget* parent, SearchModel* searchModel,
-                                             SearchModificationHelper* searchModificationHelper)
-    : SidebarWidget(parent), d(new TimelineSideBarWidgetPriv)
+TimelineSideBarWidget::TimelineSideBarWidget(QWidget* const parent, SearchModel* const searchModel,
+                                             SearchModificationHelper* const searchModificationHelper)
+    : SidebarWidget(parent), d(new Private)
 {
     setObjectName("TimeLine Sidebar");
 
@@ -652,7 +652,7 @@ void TimelineSideBarWidget::applySettings()
     // nothing to do here right now
 }
 
-void TimelineSideBarWidget::changeAlbumFromHistory(Album* album)
+void TimelineSideBarWidget::changeAlbumFromHistory(Album* const album)
 {
     d->timeLineFolderView->setCurrentAlbum(dynamic_cast<SAlbum*>(album));
 }
@@ -695,10 +695,11 @@ void TimelineSideBarWidget::slotCursorPositionChanged()
     QString txt;
     int val = d->timeLineWidget->cursorInfo(txt);
     d->cursorDateLabel->setText(txt);
+
     if (val >= 2)
-        d->cursorCountLabel->setText(QString::number(val) + " items");
+        d->cursorCountLabel->setText(i18n("%1 items", QString::number(val)));
     else
-        d->cursorCountLabel->setText(QString::number(val) + " item");
+        d->cursorCountLabel->setText(i18n("%1 item", QString::number(val)));
 }
 
 void TimelineSideBarWidget::slotSelectionChanged()
@@ -821,10 +822,10 @@ void TimelineSideBarWidget::slotCheckAboutSelection()
 
 // -----------------------------------------------------------------------------
 
-class SearchSideBarWidget::SearchSideBarWidgetPriv
+class SearchSideBarWidget::Private
 {
 public:
-    SearchSideBarWidgetPriv() :
+    Private() :
         searchSearchBar(0),
         searchTreeView(0),
         searchTabHeader(0),
@@ -838,9 +839,9 @@ public:
     SearchModel*          searchModel;
 };
 
-SearchSideBarWidget::SearchSideBarWidget(QWidget* parent, SearchModel* searchModel,
-                                         SearchModificationHelper* searchModeificationHelper)
-    : SidebarWidget(parent), d(new SearchSideBarWidgetPriv)
+SearchSideBarWidget::SearchSideBarWidget(QWidget* const parent, SearchModel* const searchModel,
+                                         SearchModificationHelper* const searchModeificationHelper)
+    : SidebarWidget(parent), d(new Private)
 {
     setObjectName("Search Sidebar");
 
@@ -905,7 +906,7 @@ void SearchSideBarWidget::applySettings()
 {
 }
 
-void SearchSideBarWidget::changeAlbumFromHistory(Album* album)
+void SearchSideBarWidget::changeAlbumFromHistory(Album* const album)
 {
     d->searchTreeView->setCurrentAlbum(dynamic_cast<SAlbum*>(album));
 }
@@ -932,10 +933,10 @@ void SearchSideBarWidget::newAdvancedSearch()
 
 // -----------------------------------------------------------------------------
 
-class FuzzySearchSideBarWidget::FuzzySearchSideBarWidgetPriv
+class FuzzySearchSideBarWidget::Private
 {
 public:
-    FuzzySearchSideBarWidgetPriv() :
+    Private() :
         fuzzySearchView(0),
         searchModel(0),
         searchModificationHelper(0)
@@ -947,9 +948,9 @@ public:
     SearchModificationHelper* searchModificationHelper;
 };
 
-FuzzySearchSideBarWidget::FuzzySearchSideBarWidget(QWidget* parent, SearchModel* searchModel,
-                                                   SearchModificationHelper* searchModificationHelper)
-    : SidebarWidget(parent), d(new FuzzySearchSideBarWidgetPriv)
+FuzzySearchSideBarWidget::FuzzySearchSideBarWidget(QWidget* const parent, SearchModel* const searchModel,
+                                                   SearchModificationHelper* const searchModificationHelper)
+    : SidebarWidget(parent), d(new Private)
 {
     setObjectName("Fuzzy Search Sidebar");
 
@@ -992,7 +993,7 @@ void FuzzySearchSideBarWidget::applySettings()
 {
 }
 
-void FuzzySearchSideBarWidget::changeAlbumFromHistory(Album* album)
+void FuzzySearchSideBarWidget::changeAlbumFromHistory(Album* const album)
 {
     SAlbum* salbum = dynamic_cast<SAlbum*>(album);
     d->fuzzySearchView->setCurrentAlbum(salbum);
@@ -1025,10 +1026,10 @@ void FuzzySearchSideBarWidget::newSimilarSearch(const ImageInfo& imageInfo)
 
 // -----------------------------------------------------------------------------
 
-class GPSSearchSideBarWidget::GPSSearchSideBarWidgetPriv
+class GPSSearchSideBarWidget::Private
 {
 public:
-    GPSSearchSideBarWidgetPriv() :
+    Private() :
         gpsSearchView(0),
         searchModel(0)
     {
@@ -1038,10 +1039,10 @@ public:
     SearchModel*   searchModel;
 };
 
-GPSSearchSideBarWidget::GPSSearchSideBarWidget(QWidget* parent, SearchModel* searchModel,
-                                               SearchModificationHelper* searchModificationHelper,
-                                               ImageFilterModel* imageFilterModel,  QItemSelectionModel* itemSelectionModel)
-    : SidebarWidget(parent), d(new GPSSearchSideBarWidgetPriv)
+GPSSearchSideBarWidget::GPSSearchSideBarWidget(QWidget* const parent, SearchModel* const searchModel,
+                                               SearchModificationHelper* const searchModificationHelper,
+                                               ImageFilterModel* const imageFilterModel,  QItemSelectionModel* const itemSelectionModel)
+    : SidebarWidget(parent), d(new Private)
 {
     setObjectName("GPS Search Sidebar");
 
@@ -1086,7 +1087,7 @@ void GPSSearchSideBarWidget::applySettings()
 {
 }
 
-void GPSSearchSideBarWidget::changeAlbumFromHistory(Album* album)
+void GPSSearchSideBarWidget::changeAlbumFromHistory(Album* const album)
 {
     d->gpsSearchView->changeAlbumFromHistory(dynamic_cast<SAlbum*>(album));
 }
@@ -1103,11 +1104,11 @@ QString GPSSearchSideBarWidget::getCaption()
 
 // -----------------------------------------------------------------------------
 
-class PeopleSideBarWidget::PeopleSideBarWidgetPriv : public TagViewSideBarWidget::TagViewSideBarWidgetPriv
+class PeopleSideBarWidget::Private : public TagViewSideBarWidget::Private
 {
 public:
 
-    PeopleSideBarWidgetPriv()
+    Private()
     {
         personIcon               = 0;
         textLabel                = 0;
@@ -1122,9 +1123,9 @@ public:
     SearchModificationHelper* searchModificationHelper;
 };
 
-PeopleSideBarWidget::PeopleSideBarWidget(QWidget* parent, TagModel* model,
-                                         SearchModificationHelper* searchModificationHelper)
-    : SidebarWidget(parent), d(new PeopleSideBarWidgetPriv)
+PeopleSideBarWidget::PeopleSideBarWidget(QWidget* const parent, TagModel* const model,
+                                         SearchModificationHelper* const searchModificationHelper)
+    : SidebarWidget(parent), d(new Private)
 {
     setObjectName("People Sidebar");
 
@@ -1217,7 +1218,7 @@ void PeopleSideBarWidget::applySettings()
 {
 }
 
-void PeopleSideBarWidget::changeAlbumFromHistory(Album* album)
+void PeopleSideBarWidget::changeAlbumFromHistory(Album* const album)
 {
     d->tagFolderView->setCurrentAlbum(dynamic_cast<TAlbum*>(album));
 }
