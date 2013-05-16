@@ -421,6 +421,7 @@ DatabaseUrl PAlbum::databaseUrl() const
 QString PAlbum::prettyUrl() const
 {
     QString u = i18n("My Albums") + albumRootPath().section('/', -1, -1, QString::SectionIncludeLeadingSep) + albumPath();
+    if (u.endsWith('/')) u.truncate(u.length() - 1);
     return u;
 }
 
