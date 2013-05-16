@@ -282,7 +282,7 @@ void ImageCategoryDrawer::textForPAlbum(PAlbum* album, bool recursive, int count
         *subLine        += " - " + caption.replace('\n', ' ');
     }
 
-    *header = album->prettyUrl().left(-1);
+    *header = album->prettyUrl();
 }
 
 void ImageCategoryDrawer::textForTAlbum(TAlbum* talbum, bool recursive, int count, QString* header,
