@@ -695,11 +695,7 @@ void TimelineSideBarWidget::slotCursorPositionChanged()
     QString txt;
     int val = d->timeLineWidget->cursorInfo(txt);
     d->cursorDateLabel->setText(txt);
-
-    if (val >= 2)
-        d->cursorCountLabel->setText(i18n("%1 items", QString::number(val)));
-    else
-        d->cursorCountLabel->setText(i18n("%1 item", QString::number(val)));
+    d->cursorCountLabel->setText(i18np("%1 item", "%1 items", val));
 }
 
 void TimelineSideBarWidget::slotSelectionChanged()
