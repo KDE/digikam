@@ -148,9 +148,15 @@ QVariant ColumnAudioVideoProperties::data(TableViewModel::Item* const item, cons
     {
     case SubColumnAudioBitRate:
         {
-            /// @todo Proper locale aware formatting
-            const QString audioBitRate = s->tableViewModel->itemDatabaseFieldRaw(item, DatabaseFields::AudioBitRate).toString();
-            return audioBitRate;
+            bool ok;
+            const int audioBitRate = s->tableViewModel->itemDatabaseFieldRaw(item, DatabaseFields::AudioBitRate).toInt(&ok);
+            if (!ok)
+            {
+                return QString();
+            }
+
+            const QString audioBitRateString = KGlobal::locale()->formatNumber(audioBitRate, 0);
+            return audioBitRateString;
         }
     case SubColumnAudioChannelType:
         {
@@ -194,10 +200,18 @@ TableViewColumn::ColumnCompareResult ColumnAudioVideoProperties::compare(TableVi
         {
             const QVariant variantA = s->tableViewModel->itemDatabaseFieldRaw(itemA, DatabaseFields::AudioBitRate);
             const QVariant variantB = s->tableViewModel->itemDatabaseFieldRaw(itemB, DatabaseFields::AudioBitRate);
-            const double audioBitRateA = variantA.toDouble();
-            const double audioBitRateB = variantB.toDouble();
+            bool okA;
+            const int audioBitRateA = variantA.toInt(&okA);
+            bool okB;
+            const int audioBitRateB = variantB.toDouble(&okB);
 
-            return compareHelper<double>(audioBitRateA, audioBitRateB);
+            ColumnCompareResult result;
+            if (!compareHelperBoolFailCheck(okA, okB, &result))
+            {
+                return result;
+            }
+
+            return compareHelper<int>(audioBitRateA, audioBitRateB);
         }
 
     case SubColumnDuration:

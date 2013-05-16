@@ -312,6 +312,29 @@ void TableViewColumn::updateThumbnailSize()
 
 }
 
+bool TableViewColumn::compareHelperBoolFailCheck(const bool okA, const bool okB, ColumnCompareResult* const result)
+{
+    if (okA&&okB)
+    {
+        return true;
+    }
+
+    if (okA && !okB)
+    {
+        *result = CmpABiggerB;
+        return false;
+    }
+
+    if (okB && !okA)
+    {
+        *result = CmpALessB;
+        return false;
+    }
+
+    *result = CmpEqual;
+    return false;
+}
+
 } /* namespace Digikam */
 
 

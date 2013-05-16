@@ -221,6 +221,8 @@ public:
     virtual QSize sizeHint(const QStyleOptionViewItem& option, TableViewModel::Item* const item) const;
     virtual void updateThumbnailSize();
 
+    static bool compareHelperBoolFailCheck(const bool okA, const bool okB, ColumnCompareResult* const result);
+
     template<class MyType> static ColumnCompareResult compareHelper(const MyType& A, const MyType& B)
     {
         if (A==B)
