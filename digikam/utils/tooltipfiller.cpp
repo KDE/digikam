@@ -347,14 +347,22 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
 
             if (settings->getToolTipsShowVideoDuration())
             {
-                str = videoInfo.duration.isEmpty() ? cnt.unavailable : videoInfo.duration;
+                QString durationString;
+                bool ok;
+                const double durationDouble = videoInfo.duration.toDouble(&ok);
+                if (ok)
+                {
+                    const QTime durationTime = QTime().addMSecs(durationDouble);
+                    durationString = KGlobal::locale()->formatTime(durationTime, true, true);
+                }
+                str = videoInfo.duration.isEmpty() ? cnt.unavailable : durationString;
 
                 if (str.length() > cnt.maxStringLength)
                 {
                     str = str.left(cnt.maxStringLength-3) + "...";
                 }
 
-                metaStr += cnt.cellBeg + i18n("Duration:") + cnt.cellMid + Qt::escape(str) + i18n("s") + cnt.cellEnd;
+                metaStr += cnt.cellBeg + i18n("Duration:") + cnt.cellMid + Qt::escape(str) + cnt.cellEnd;
             }
 
             if (settings->getToolTipsShowVideoFrameRate())

@@ -698,7 +698,18 @@ void ImagePropertiesTab::setVideoAudioCompressor(const QString& str)
 
 void ImagePropertiesTab::setVideoDuration(const QString& str)
 {
-    d->labelVideoDuration->setText(str);
+    // duration is given as a string in milliseconds
+    // use string given as parameter by default because it contains the value for "unavailable" if needed
+    QString durationString = str;
+    bool ok;
+    const double durationDouble = str.toDouble(&ok);
+    if (ok)
+    {
+        const QTime durationTime = QTime().addMSecs(durationDouble);
+        durationString = KGlobal::locale()->formatTime(durationTime, true, true);
+    }
+
+    d->labelVideoDuration->setText(durationString);
 }
 
 void ImagePropertiesTab::setVideoFrameRate(const QString& str)

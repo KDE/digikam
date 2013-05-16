@@ -171,14 +171,14 @@ QVariant ColumnAudioVideoProperties::data(TableViewModel::Item* const item, cons
     case SubColumnDuration:
         {
             bool ok;
-            /// @todo Duration returned here is not in seconds, but something strange...
+            // duration is in milliseconds
             const double duration = s->tableViewModel->itemDatabaseFieldRaw(item, DatabaseFields::Duration).toDouble(&ok);
             if (!ok)
             {
                 return QString();
             }
 
-            QTime durationTime = QTime().addSecs(duration);
+            const QTime durationTime = QTime().addMSecs(duration);
             const QString durationString = KGlobal::locale()->formatTime(durationTime, true, true);
             return durationString;
         }

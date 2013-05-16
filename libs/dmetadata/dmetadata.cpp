@@ -2439,7 +2439,7 @@ QVariant DMetadata::getMetadataField(MetadataInfo::Field field) const
         case MetadataInfo::AudioCompressor:
             return fromXmpLangAlt("Xmp.audio.Compressor");
         case MetadataInfo::Duration:
-            return fromXmpLangAlt("Xmp.video.Duration");
+            return fromXmpLangAlt("Xmp.video.Duration"); // duration is in ms
         case MetadataInfo::FrameRate:
             return fromXmpLangAlt("Xmp.video.FrameRate");
         case MetadataInfo::VideoCodec:
