@@ -170,15 +170,29 @@ QVariant ColumnAudioVideoProperties::data(TableViewModel::Item* const item, cons
         }
     case SubColumnDuration:
         {
-            /// @todo Format as HH:MM:SS or make format configurable
-            const QString duration = s->tableViewModel->itemDatabaseFieldRaw(item, DatabaseFields::Duration).toString();
-            return duration;
+            bool ok;
+            /// @todo Duration returned here is not in seconds, but something strange...
+            const double duration = s->tableViewModel->itemDatabaseFieldRaw(item, DatabaseFields::Duration).toDouble(&ok);
+            if (!ok)
+            {
+                return QString();
+            }
+
+            QTime durationTime = QTime().addSecs(duration);
+            const QString durationString = KGlobal::locale()->formatTime(durationTime, true, true);
+            return durationString;
         }
     case SubColumnFrameRate:
         {
-            /// @todo Proper locale aware formatting
-            const QString frameRate = s->tableViewModel->itemDatabaseFieldRaw(item, DatabaseFields::FrameRate).toString();
-            return frameRate;
+            bool ok;
+            const double frameRate = s->tableViewModel->itemDatabaseFieldRaw(item, DatabaseFields::FrameRate).toDouble(&ok);
+            if (!ok)
+            {
+                return QString();
+            }
+
+            const QString frameRateString = KGlobal::locale()->formatNumber(frameRate);
+            return frameRateString;
         }
     case SubColumnVideoCodec:
         {
@@ -218,8 +232,16 @@ TableViewColumn::ColumnCompareResult ColumnAudioVideoProperties::compare(TableVi
         {
             const QVariant variantA = s->tableViewModel->itemDatabaseFieldRaw(itemA, DatabaseFields::Duration);
             const QVariant variantB = s->tableViewModel->itemDatabaseFieldRaw(itemB, DatabaseFields::Duration);
-            const double durationA = variantA.toDouble();
-            const double durationB = variantB.toDouble();
+            bool okA;
+            const double durationA = variantA.toDouble(&okA);
+            bool okB;
+            const double durationB = variantB.toDouble(&okB);
+
+            ColumnCompareResult result;
+            if (!compareHelperBoolFailCheck(okA, okB, &result))
+            {
+                return result;
+            }
 
             return compareHelper<double>(durationA, durationB);
         }
@@ -228,8 +250,16 @@ TableViewColumn::ColumnCompareResult ColumnAudioVideoProperties::compare(TableVi
         {
             const QVariant variantA = s->tableViewModel->itemDatabaseFieldRaw(itemA, DatabaseFields::FrameRate);
             const QVariant variantB = s->tableViewModel->itemDatabaseFieldRaw(itemB, DatabaseFields::FrameRate);
-            const double frameRateA = variantA.toDouble();
-            const double frameRateB = variantB.toDouble();
+            bool okA;
+            const double frameRateA = variantA.toDouble(&okA);
+            bool okB;
+            const double frameRateB = variantB.toDouble(&okB);
+
+            ColumnCompareResult result;
+            if (!compareHelperBoolFailCheck(okA, okB, &result))
+            {
+                return result;
+            }
 
             return compareHelper<double>(frameRateA, frameRateB);
         }
