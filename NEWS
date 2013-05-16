@@ -1,8 +1,9 @@
 *****************************************************************************************************
-digiKam 3.3.0-beta1 - Release date: 2013-05-19
+digiKam 3.3.0-beta1 - Release date: 2013-06-02
 
 NEW FEATURES:
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
-001 ==> 
+001 ==> 319853 : Untranslatable strings in timeline tab.
+002 ==> 
