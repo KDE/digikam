@@ -67,7 +67,7 @@ public:
      *  Keeps a current TaggingAction, which is set when the user selects
      *  a tag in the drop down box.
      */
-    explicit AddTagsCompletionBox(QWidget* parent = 0);
+    explicit AddTagsCompletionBox(QWidget* const parent = 0);
     ~AddTagsCompletionBox();
 
     /** Updates the completion box. Gives the current text in the line edit
@@ -149,8 +149,8 @@ protected Q_SLOTS:
 
 private:
 
-    class AddTagsCompletionBoxPriv;
-    AddTagsCompletionBoxPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

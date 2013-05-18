@@ -6,12 +6,12 @@
  * Date        : 2010-06-12
  * Description : KCompletionBox for tags
  *
- * Copyright (C) 2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 1997 Sven Radej (sven.radej@iname.com)
- * Copyright (c) 1999 Patrick Ward <PAT_WARD@HP-USA-om5.om.hp.com>
- * Copyright (c) 1999 Preston Brown <pbrown@kde.org>
- * Copyright (c) 2000, 2001 Dawit Alemayehu <adawit@kde.org>
- * Copyright (c) 2000, 2001 Carsten Pfeiffer <pfeiffer@kde.org>
+ * Copyright (C) 2010       by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 1997       by Sven Radej (sven.radej@iname.com)
+ * Copyright (c) 1999       by Patrick Ward <PAT_WARD@HP-USA-om5.om.hp.com>
+ * Copyright (c) 1999       by Preston Brown <pbrown@kde.org>
+ * Copyright (c) 2000, 2001 by Dawit Alemayehu <adawit@kde.org>
+ * Copyright (c) 2000, 2001 by Carsten Pfeiffer <pfeiffer@kde.org>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -69,7 +69,7 @@ void TagModelCompletion::setModel(AlbumFilterModel* model)
 
 TagModel* TagModelCompletion::model() const
 {
-    QAbstractItemModel* model = ModelCompletion::model();
+    QAbstractItemModel* const model = ModelCompletion::model();
 
     if (dynamic_cast<TagModel*>(model))
     {
@@ -97,10 +97,12 @@ public:
     {
         m_action = action;
     }
+    
     TaggingAction& action()
     {
         return m_action;
     }
+    
     const TaggingAction action() const
     {
         return m_action;
@@ -113,7 +115,7 @@ protected:
 
 // ---------------------------------------------------------------------------------------
 
-class AddTagsCompletionBox::AddTagsCompletionBoxPriv
+class AddTagsCompletionBox::Private
 {
 public:
 
@@ -123,7 +125,7 @@ public:
         TaggingActionRole  = Qt::UserRole + 1
     };
 
-    AddTagsCompletionBoxPriv()
+    Private()
     {
         upwardBox         = false;
         model             = 0;
@@ -147,8 +149,8 @@ public:
 
 };
 
-AddTagsCompletionBox::AddTagsCompletionBox(QWidget* parent)
-    : KCompletionBox(parent), d(new AddTagsCompletionBoxPriv)
+AddTagsCompletionBox::AddTagsCompletionBox(QWidget* const parent)
+    : KCompletionBox(parent), d(new Private)
 {
     connect(this, SIGNAL(currentItemChanged(QListWidgetItem*,QListWidgetItem*)),
             this, SLOT(slotCurrentItemChanged(QListWidgetItem*,QListWidgetItem*)));
@@ -164,27 +166,26 @@ AddTagsCompletionBox::~AddTagsCompletionBox()
 
 void AddTagsCompletionBox::setTagModel(TagModel* model)
 {
-    d->model = model;
+    d->model       = model;
     d->filterModel = 0;
 }
 
 void AddTagsCompletionBox::setTagModel(AlbumFilterModel* model)
 {
     d->filterModel = model;
-    d->model = 0;
+    d->model       = 0;
 }
 
-AddTagsCompletionBoxItem* AddTagsCompletionBox::AddTagsCompletionBoxPriv::createItemForExistingTag(TAlbum* talbum,
-        bool uniqueName)
+AddTagsCompletionBoxItem* AddTagsCompletionBox::Private::createItemForExistingTag(TAlbum* talbum, bool uniqueName)
 {
     if (!talbum || talbum->isRoot())
     {
         return 0;
     }
 
-    AddTagsCompletionBoxItem* item = new AddTagsCompletionBoxItem;
+    AddTagsCompletionBoxItem* const item = new AddTagsCompletionBoxItem;
 
-    TAlbum* parent = static_cast<TAlbum*>(talbum->parent());
+    TAlbum* const parent = static_cast<TAlbum*>(talbum->parent());
 
     if (parent->isRoot() || uniqueName)
     {
@@ -218,8 +219,7 @@ AddTagsCompletionBoxItem* AddTagsCompletionBox::AddTagsCompletionBoxPriv::create
     return item;
 }
 
-AddTagsCompletionBoxItem* AddTagsCompletionBox::AddTagsCompletionBoxPriv::createItemForNewTag(const QString& newName,
-        TAlbum* parent)
+AddTagsCompletionBoxItem* AddTagsCompletionBox::Private::createItemForNewTag(const QString& newName, TAlbum* parent)
 {
     int parentTagId = parent ? parent->id() : 0;
 
@@ -229,7 +229,7 @@ AddTagsCompletionBoxItem* AddTagsCompletionBox::AddTagsCompletionBoxPriv::create
         return 0;
     }
 
-    AddTagsCompletionBoxItem* item = new AddTagsCompletionBoxItem;
+    AddTagsCompletionBoxItem* const item = new AddTagsCompletionBoxItem;
 
     if (parent)
     {
@@ -242,7 +242,6 @@ AddTagsCompletionBoxItem* AddTagsCompletionBox::AddTagsCompletionBoxPriv::create
     }
 
     item->setData(Qt::DecorationRole, AlbumThumbnailLoader::instance()->getNewTagIcon());
-
     item->setData(CompletionTextRole, newName);
     item->setAction(TaggingAction(newName, parentTagId));
 
@@ -264,9 +263,10 @@ void AddTagsCompletionBox::setItems(const QString& currentText, const QStringLis
         createItemUnderParent = d->createItemForNewTag(currentText, d->parentTag);
     }
 
-    AddTagsCompletionBoxItem* createItemTopLevel    = d->createItemForNewTag(currentText, 0);
+    AddTagsCompletionBoxItem* const createItemTopLevel    = d->createItemForNewTag(currentText, 0);
 
     QList<AddTagsCompletionBoxItem*> assignItems;
+
     foreach(const QString& tagName, completionEntries)
     {
         QList<int> tagIds = TagsCache::instance()->tagsForName(tagName);
@@ -274,7 +274,7 @@ void AddTagsCompletionBox::setItems(const QString& currentText, const QStringLis
 
         foreach(int tagId, tagIds)
         {
-            AddTagsCompletionBoxItem* item = d->createItemForExistingTag(AlbumManager::instance()->findTAlbum(tagId), uniqueName);
+            AddTagsCompletionBoxItem* const item = d->createItemForExistingTag(AlbumManager::instance()->findTAlbum(tagId), uniqueName);
 
             if (!item)
             {
@@ -292,26 +292,30 @@ void AddTagsCompletionBox::setItems(const QString& currentText, const QStringLis
         {
             addItem(createItemUnderParent);
             setCurrentItem(createItemUnderParent);
-            foreach(AddTagsCompletionBoxItem* item, assignItems)
+	    
+            foreach(AddTagsCompletionBoxItem* const item, assignItems)
             {
                 addItem(item);
             }
+            
             addItem(createItemTopLevel);
         }
         else // if (createItemTopLevel && createItemTopLevel->action() == defaultAction)
         {
             addItem(createItemTopLevel);
             setCurrentItem(createItemTopLevel);
-            foreach(AddTagsCompletionBoxItem* item, assignItems)
+	    
+            foreach(AddTagsCompletionBoxItem* const item, assignItems)
             {
                 addItem(item);
             }
+            
             addItem(createItemUnderParent);
         }
     }
     else
     {
-        foreach(AddTagsCompletionBoxItem* item, assignItems)
+        foreach(AddTagsCompletionBoxItem* const item, assignItems)
         {
             addItem(item);
 
@@ -320,6 +324,7 @@ void AddTagsCompletionBox::setItems(const QString& currentText, const QStringLis
                 setCurrentItem(item);
             }
         }
+        
         addItem(createItemUnderParent);
         addItem(createItemTopLevel);
     }
@@ -338,7 +343,7 @@ QString currentCompletionText() const;
 void AddTagsCompletionBox::setCurrentCompletionText(const QString &completionText)
 {
     QModelIndexList indexes = model()->match(model()->index(0, 0, QModelIndex()),
-                                             AddTagsCompletionBox::AddTagsCompletionBoxPriv::CompletionTextRole,
+                                             AddTagsCompletionBox::Private::CompletionTextRole,
                                              completionText, 1, Qt::MatchExactly);
     if (!indexes.isEmpty())
         setCurrentIndex(indexes.first());
@@ -347,11 +352,11 @@ void AddTagsCompletionBox::setCurrentCompletionText(const QString &completionTex
 
 QString AddTagsCompletionBox::currentCompletionText() const
 {
-    QListWidgetItem* current = currentItem();
+    QListWidgetItem* const current = currentItem();
 
     if (current)
     {
-        return current->data(AddTagsCompletionBox::AddTagsCompletionBoxPriv::CompletionTextRole).toString();
+        return current->data(AddTagsCompletionBox::Private::CompletionTextRole).toString();
     }
 
     return QString();
@@ -359,7 +364,7 @@ QString AddTagsCompletionBox::currentCompletionText() const
 
 TaggingAction AddTagsCompletionBox::currentTaggingAction()
 {
-    AddTagsCompletionBoxItem* current = static_cast<AddTagsCompletionBoxItem*>(currentItem());
+    AddTagsCompletionBoxItem* const current = static_cast<AddTagsCompletionBoxItem*>(currentItem());
 
     if (current)
     {
@@ -401,9 +406,8 @@ void AddTagsCompletionBox::slotCurrentItemChanged(QListWidgetItem* current, QLis
 {
     if (current)
     {
-        AddTagsCompletionBoxItem* boxItem = static_cast<AddTagsCompletionBoxItem*>(current);
-        emit currentCompletionTextChanged(current->data(
-                                              AddTagsCompletionBox::AddTagsCompletionBoxPriv::CompletionTextRole).toString());
+        AddTagsCompletionBoxItem* const boxItem = static_cast<AddTagsCompletionBoxItem*>(current);
+        emit currentCompletionTextChanged(current->data(AddTagsCompletionBox::Private::CompletionTextRole).toString());
         emit currentTaggingActionChanged(boxItem->action());
     }
     else
@@ -448,7 +452,7 @@ void AddTagsCompletionBox::sizeAndPosition(bool wasVisible)
 
             if (y + height() > screenSize.bottom() )
             {
-                y = y - height() - parentWidget()->height();
+                y            = y - height() - parentWidget()->height();
                 d->upwardBox = true;
             }
             else
@@ -520,8 +524,8 @@ QRect AddTagsCompletionBox::calculateGeometry() const
 
     if (d->allowExceedBounds)
     {
-        const int scrollBarMargin = (count() > suggestedShownItems && verticalScrollBar())
-                        ? verticalScrollBar()->sizeHint().width() : 0;
+        const int scrollBarMargin = (count() > suggestedShownItems && verticalScrollBar()) ?
+                                    verticalScrollBar()->sizeHint().width() : 0;
         w = qMin(itemSizeHint.width() + scrollBarMargin, maxSize.width());
     }
     else
@@ -555,11 +559,13 @@ void AddTagsCompletionBox::popup()
     }
     else
     {
-        /*bool block = signalsBlocked();
+/*
+        bool block = signalsBlocked();
         blockSignals( true );
         setCurrentRow( -1 );
         blockSignals( block );
-        clearSelection();*/
+        clearSelection();
+*/
         if ( !isVisible() )
         {
             show();
@@ -576,7 +582,7 @@ QSize AddTagsCompletionBox::sizeHint() const
     return calculateGeometry().size();
 }
 
-QSize AddTagsCompletionBox::AddTagsCompletionBoxPriv::maximumAvailableScreenSize(const QPoint& orig)
+QSize AddTagsCompletionBox::Private::maximumAvailableScreenSize(const QPoint& orig)
 {
     QRect screenGeom = QApplication::desktop()->availableGeometry(orig);
     //kDebug() << screenSize << orig << qMax(orig.y() - screenSize.top(), screenSize.bottom() - orig.y());

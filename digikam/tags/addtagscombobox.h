@@ -47,7 +47,7 @@ class AddTagsComboBox : public TagTreeViewSelectComboBox
 
 public:
 
-    explicit AddTagsComboBox(QWidget* parent = 0);
+    explicit AddTagsComboBox(QWidget* const parent = 0);
     ~AddTagsComboBox();
 
     /** You must call this after construction.
@@ -76,7 +76,7 @@ public:
     QString text() const;
     void setText(const QString& text);
 
-    AddTagsLineEdit* lineEdit() const;
+    AddTagsLineEdit* lineEdit()           const;
     AddTagsCompletionBox* completionBox() const;
 
 public Q_SLOTS:
@@ -109,8 +109,8 @@ private:
 
 private:
 
-    class AddTagsComboBoxPriv;
-    AddTagsComboBoxPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam
