@@ -47,6 +47,8 @@ public:
         CreateNewTag
     };
 
+public:
+
     /** Create a NoAction
      */
     TaggingAction();
@@ -63,16 +65,16 @@ public:
 
     bool operator==(const TaggingAction& other) const;
 
-    Type type() const;
-    bool isValid() const;
-    bool shallAssignTag() const;
+    Type type()              const;
+    bool isValid()           const;
+    bool shallAssignTag()    const;
     bool shallCreateNewTag() const;
 
     /// If shallAssignTag(), returns the tag id
     int tagId() const;
 
     /// If shallCreateNewTag(), returns the tag name and the parent tag id, 0 for toplevel tag
-    QString newTagName() const;
+    QString newTagName()  const;
     int     parentTagId() const;
 
 protected:

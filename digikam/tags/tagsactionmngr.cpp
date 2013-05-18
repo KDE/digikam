@@ -6,7 +6,7 @@
  * Date        : 2011-01-24
  * Description : Tags Action Manager
  *
- * Copyright (C) 2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2011-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -61,11 +61,11 @@ TagsActionMngr* TagsActionMngr::defaultManager()
     return m_defaultManager;
 }
 
-class TagsActionMngr::TagsActionMngrPrivate
+class TagsActionMngr::Private
 {
 public:
 
-    TagsActionMngrPrivate()
+    Private()
         : ratingShortcutPrefix("rateshortcut"),
           tagShortcutPrefix("tagshortcut"),
           pickShortcutPrefix("pickshortcut"),
@@ -84,8 +84,8 @@ public:
 
 // -------------------------------------------------------------------------------------------------
 
-TagsActionMngr::TagsActionMngr(QWidget* parent)
-    : QObject(parent), d(new TagsActionMngrPrivate)
+TagsActionMngr::TagsActionMngr(QWidget* const parent)
+    : QObject(parent), d(new Private)
 {
     if (!m_defaultManager)
     {
@@ -144,6 +144,7 @@ void TagsActionMngr::createActions()
     // Create Tags shortcuts.
 
     QList<int> tagIds = TagsCache::instance()->tagsWithProperty(TagPropertyName::tagKeyboardShortcut());
+
     foreach(int tagId, tagIds)
     {
         createTagActionShortcut(tagId);
@@ -151,7 +152,7 @@ void TagsActionMngr::createActions()
 
     // Create Rating shortcuts.
 
-    foreach(KActionCollection* ac, d->actionCollectionList)
+    foreach(KActionCollection* const ac, d->actionCollectionList)
     {
         for (int i = RatingMin ; i <= RatingMax ; ++i)
         {
@@ -161,7 +162,7 @@ void TagsActionMngr::createActions()
 
     // Create Color Label shortcuts.
 
-    foreach(KActionCollection* ac, d->actionCollectionList)
+    foreach(KActionCollection* const ac, d->actionCollectionList)
     {
         for (int i = NoColorLabel ; i <= WhiteLabel ; ++i)
         {
@@ -171,7 +172,7 @@ void TagsActionMngr::createActions()
 
     // Create Pick Label shortcuts.
 
-    foreach(KActionCollection* ac, d->actionCollectionList)
+    foreach(KActionCollection* const ac, d->actionCollectionList)
     {
         for (int i = NoPickLabel ; i <= AcceptedLabel ; ++i)
         {
@@ -180,11 +181,11 @@ void TagsActionMngr::createActions()
     }
 }
 
-bool TagsActionMngr::createRatingActionShortcut(KActionCollection* ac, int rating)
+bool TagsActionMngr::createRatingActionShortcut(KActionCollection* const ac, int rating)
 {
     if (ac)
     {
-        KAction* action = ac->addAction(QString("%1-%2").arg(d->ratingShortcutPrefix).arg(rating));
+        KAction* const action = ac->addAction(QString("%1-%2").arg(d->ratingShortcutPrefix).arg(rating));
         action->setText(i18n("Assign Rating \"%1 Star\"", rating));
         action->setShortcut(KShortcut(QString("CTRL+%1").arg(rating)));
         action->setShortcutConfigurable(false);
@@ -200,11 +201,11 @@ bool TagsActionMngr::createRatingActionShortcut(KActionCollection* ac, int ratin
     return false;
 }
 
-bool TagsActionMngr::createPickLabelActionShortcut(KActionCollection* ac, int pickId)
+bool TagsActionMngr::createPickLabelActionShortcut(KActionCollection* const ac, int pickId)
 {
     if (ac)
     {
-        KAction* action = ac->addAction(QString("%1-%2").arg(d->pickShortcutPrefix).arg(pickId));
+        KAction* const action = ac->addAction(QString("%1-%2").arg(d->pickShortcutPrefix).arg(pickId));
         action->setText(i18n("Assign Pick Label \"%1\"", PickLabelWidget::labelPickName((PickLabel)pickId)));
         action->setShortcut(KShortcut(QString("ALT+%1").arg(pickId)));
         action->setShortcutConfigurable(false);
@@ -220,11 +221,11 @@ bool TagsActionMngr::createPickLabelActionShortcut(KActionCollection* ac, int pi
     return false;
 }
 
-bool TagsActionMngr::createColorLabelActionShortcut(KActionCollection* ac, int colorId)
+bool TagsActionMngr::createColorLabelActionShortcut(KActionCollection* const ac, int colorId)
 {
     if (ac)
     {
-        KAction* action = ac->addAction(QString("%1-%2").arg(d->colorShortcutPrefix).arg(colorId));
+        KAction* const action = ac->addAction(QString("%1-%2").arg(d->colorShortcutPrefix).arg(colorId));
         action->setText(i18n("Assign Color Label \"%1\"", ColorLabelWidget::labelColorName((ColorLabel)colorId)));
         action->setShortcut(KShortcut(QString("ALT+CTRL+%1").arg(colorId)));
         action->setShortcutConfigurable(false);
@@ -247,7 +248,7 @@ bool TagsActionMngr::createTagActionShortcut(int tagId)
         return false;
     }
 
-    TAlbum* talbum = AlbumManager::instance()->findTAlbum(tagId);
+    TAlbum* const talbum = AlbumManager::instance()->findTAlbum(tagId);
 
     if (!talbum)
     {
@@ -268,9 +269,9 @@ bool TagsActionMngr::createTagActionShortcut(int tagId)
     kDebug() << "Create Shortcut " << ks.toString()
              << " to Tag " << talbum->title() << " (" << tagId << ")";
 
-    foreach(KActionCollection* ac, d->actionCollectionList)
+    foreach(KActionCollection* const ac, d->actionCollectionList)
     {
-        KAction* action = ac->addAction(QString("%1-%2").arg(d->tagShortcutPrefix).arg(tagId));
+        KAction* const action = ac->addAction(QString("%1-%2").arg(d->tagShortcutPrefix).arg(tagId));
         action->setText(i18n("Assign Tag \"%1\"", talbum->title()));
         action->setParent(this);
         action->setShortcut(ks);
@@ -293,7 +294,7 @@ bool TagsActionMngr::createTagActionShortcut(int tagId)
 
 void TagsActionMngr::slotTagActionChanged()
 {
-    KAction* action = dynamic_cast<KAction*>(sender());
+    KAction* const action = dynamic_cast<KAction*>(sender());
 
     if (!action)
     {
@@ -338,7 +339,7 @@ void TagsActionMngr::updateTagShortcut(int tagId, const QKeySequence& ks)
 
 void TagsActionMngr::slotAlbumDeleted(Album* album)
 {
-    TAlbum* talbum = dynamic_cast<TAlbum*>(album);
+    TAlbum* const talbum = dynamic_cast<TAlbum*>(album);
 
     if (!talbum)
     {
@@ -356,11 +357,11 @@ bool TagsActionMngr::removeTagActionShortcut(int tagId)
         return false;
     }
 
-    foreach(KAction* act, d->tagsActionMap.values(tagId))
+    foreach(KAction* const act, d->tagsActionMap.values(tagId))
     {
         if (act)
         {
-            KActionCollection* ac = dynamic_cast<KActionCollection*>(act->parent());
+            KActionCollection* const ac = dynamic_cast<KActionCollection*>(act->parent());
 
             if (ac)
             {
@@ -378,7 +379,7 @@ bool TagsActionMngr::removeTagActionShortcut(int tagId)
 
 void TagsActionMngr::slotAssignFromShortcut()
 {
-    KAction* action = dynamic_cast<KAction*>(sender());
+    KAction* const action = dynamic_cast<KAction*>(sender());
 
     if (!action)
     {
@@ -388,8 +389,8 @@ void TagsActionMngr::slotAssignFromShortcut()
     int val = action->data().toInt();
     //kDebug() << "Shortcut value: " << val;
 
-    QWidget* w      = kapp->activeWindow();
-    DigikamApp* dkw = dynamic_cast<DigikamApp*>(w);
+    QWidget* const w      = kapp->activeWindow();
+    DigikamApp* const dkw = dynamic_cast<DigikamApp*>(w);
 
     if (dkw)
     {
@@ -415,7 +416,7 @@ void TagsActionMngr::slotAssignFromShortcut()
         return;
     }
 
-    ImageWindow* imw = dynamic_cast<ImageWindow*>(w);
+    ImageWindow* const imw = dynamic_cast<ImageWindow*>(w);
 
     if (imw)
     {
@@ -441,7 +442,7 @@ void TagsActionMngr::slotAssignFromShortcut()
         return;
     }
 
-    LightTableWindow* ltw = dynamic_cast<LightTableWindow*>(w);
+    LightTableWindow* const ltw = dynamic_cast<LightTableWindow*>(w);
 
     if (ltw)
     {

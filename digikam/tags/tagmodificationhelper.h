@@ -7,7 +7,7 @@
  * Description : helper class used to modify tag albums in views
  *
  * Copyright (C) 2009-2010 by Johannes Wienke <languitar at semipol dot de>
- * Copyright (C) 2010-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -60,7 +60,7 @@ public:
      * @param parent parent for qt parent child mechanism
      * @param dialogParent paret widget for dialogs displayed by this object
      */
-    TagModificationHelper(QObject* parent, QWidget* dialogParent);
+    TagModificationHelper(QObject* const parent, QWidget* const dialogParent);
 
     /**
      * Destructor.
@@ -133,8 +133,8 @@ Q_SIGNALS:
 
 private:
 
-    class TagModificationHelperPriv;
-    TagModificationHelperPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

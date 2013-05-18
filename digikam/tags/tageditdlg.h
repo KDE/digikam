@@ -7,7 +7,7 @@
  * Description : dialog to edit and create digiKam Tags
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -48,15 +48,15 @@ class TagEditDlg : public KDialog
 
 public:
 
-    TagEditDlg(QWidget* parent, TAlbum* album, bool create=false);
+    TagEditDlg(QWidget* const parent, TAlbum* const album, bool create=false);
     ~TagEditDlg();
 
     QString      title() const;
     QString      icon() const;
     QKeySequence shortcut() const;
 
-    static bool tagEdit(QWidget* parent, TAlbum* album, QString& title, QString& icon, QKeySequence& ks);
-    static bool tagCreate(QWidget* parent, TAlbum* album, QString& title, QString& icon, QKeySequence& ks);
+    static bool tagEdit(QWidget* const parent, TAlbum* const album, QString& title, QString& icon, QKeySequence& ks);
+    static bool tagCreate(QWidget* const parent, TAlbum* const album, QString& title, QString& icon, QKeySequence& ks);
 
     /** Create a list of new Tag album using a list of tags hierarchies separated by ",".
         A hierarchy of tags is a string path of tags name separated by "/".
@@ -65,10 +65,10 @@ public:
         'errMap' is Map of TAlbum path and error message if tag creation failed.
         Return the list of created Albums.
     */
-    static AlbumList createTAlbum(TAlbum* mainRootAlbum, const QString& tagStr, const QString& icon,
+    static AlbumList createTAlbum(TAlbum* const mainRootAlbum, const QString& tagStr, const QString& icon,
                                   const QKeySequence& ks, QMap<QString, QString>& errMap);
 
-    static void showtagsListCreationError(QWidget* parent, const QMap<QString, QString>& errMap);
+    static void showtagsListCreationError(QWidget* const parent, const QMap<QString, QString>& errMap);
 
 private Q_SLOTS:
 
@@ -78,8 +78,8 @@ private Q_SLOTS:
 
 private:
 
-    class TagEditDlgPriv;
-    TagEditDlgPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

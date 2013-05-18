@@ -7,7 +7,7 @@
  * Description : helper class used to modify tag albums in views
  *
  * Copyright (C) 2009-2010 by Johannes Wienke <languitar at semipol dot de>
- * Copyright (C) 2010-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -50,11 +50,11 @@
 namespace Digikam
 {
 
-class TagModificationHelper::TagModificationHelperPriv
+class TagModificationHelper::Private
 {
 public:
 
-    TagModificationHelperPriv()
+    Private()
     {
         parentTag    = 0;
         dialogParent = 0;
@@ -64,8 +64,8 @@ public:
     QWidget*              dialogParent;
 };
 
-TagModificationHelper::TagModificationHelper(QObject* parent, QWidget* dialogParent)
-    : QObject(parent), d(new TagModificationHelperPriv)
+TagModificationHelper::TagModificationHelper(QObject* const parent, QWidget* const dialogParent)
+    : QObject(parent), d(new Private)
 {
     d->dialogParent = dialogParent;
 }
@@ -82,11 +82,13 @@ void TagModificationHelper::bindTag(QAction* action, TAlbum* album) const
 
 TAlbum* TagModificationHelper::boundTag(QObject* sender) const
 {
-    QAction* action;
+    QAction* action = 0;
+
     if ( (action = qobject_cast<QAction*>(sender)) )
     {
         return action->data().value<AlbumPointer<TAlbum> >();
     }
+
     return 0;
 }
 
@@ -126,7 +128,7 @@ TAlbum* TagModificationHelper::slotTagNew(TAlbum* parent, const QString& title, 
 
     if (errMap.isEmpty() && !tList.isEmpty())
     {
-        TAlbum* tag = static_cast<TAlbum*>(tList.last());
+        TAlbum* const tag = static_cast<TAlbum*>(tList.last());
         emit tagCreated(tag);
         return tag;
     }
