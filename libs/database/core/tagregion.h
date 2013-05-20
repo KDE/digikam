@@ -106,6 +106,8 @@ public:
      * Takes a relative region and a full size and returns the absolute region
      */
     static QRect relativeToAbsolute(const QRectF& region, const QSize& fullSize);
+    /// Takes the original and reduced size from the DImg, maps to original size
+    static QRect relativeToAbsolute(const QRectF& region, const DImg& reducedSizeImage);
 
     /**
      *  Takes absolute region and full size to return the original relative region

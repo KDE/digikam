@@ -74,7 +74,7 @@ QString FaceTagsHelper::tagPath(const QString& name, int parentId)
 
 void FaceTagsHelper::makeFaceTag(int tagId, const QString& fullName)
 {
-    QString kfaceId  = fullName;
+    QString kfaceName  = fullName;
     /*
      *    // find a unique kfaceId
      *    for (int i=0; d->findFirstTagWithProperty(TagPropertyName::kfaceId(), kfaceId); ++i)
@@ -82,7 +82,7 @@ void FaceTagsHelper::makeFaceTag(int tagId, const QString& fullName)
      */
     TagProperties props(tagId);
     props.setProperty(TagPropertyName::person(), fullName);
-    props.setProperty(TagPropertyName::kfaceId(), kfaceId);
+    props.setProperty(TagPropertyName::kfaceName(), kfaceName);
 }
 
 int FaceTagsHelper::tagForName(const QString& name, int tagId, int parentId, const QString& givenFullName,
@@ -231,23 +231,57 @@ int FaceTags::scannedForFacesTagId()
     return TagsCache::instance()->getOrCreateInternalTag(InternalTagName::scannedForFaces()); // no i18n
 }
 
-int FaceTags::tagForFaceName(const QString& kfaceId)
+int FaceTags::getOrCreateTagForIdentity(const QMap<QString, QString>& attributes)
 {
-    if (kfaceId.isNull())
+    // Attributes from libkface's Identity object
+    if (attributes.isEmpty())
     {
         return FaceTags::unknownPersonTagId();
     }
 
-    // Find in "kfaceId" attribute
-    int tagId = FaceTagsHelper::findFirstTagWithProperty(TagPropertyName::kfaceId(), kfaceId);
+    int tagId;
 
-    if (tagId)
+    // First, look for UUID
+    if (!attributes.value("uuid").isEmpty())
+    {
+        if ( (tagId = FaceTagsHelper::findFirstTagWithProperty(TagPropertyName::kfaceUuid(), attributes.value("uuid"))) )
+        {
+            return tagId;
+        }
+    }
+
+    // Second, look for full name
+    if (!attributes.value("fullName").isEmpty())
+    {
+        if ( (tagId = FaceTagsHelper::findFirstTagWithProperty(TagPropertyName::person(), attributes.value("fullName"))) )
+        {
+            return tagId;
+        }
+    }
+
+    // Third, look for either name or full name
+    // TODO: better support for "fullName"
+    QString name = attributes.value("name");
+    if (name.isEmpty())
+    {
+        name = attributes.value("fullName");
+    }
+    if (name.isEmpty())
+    {
+        return FaceTags::unknownPersonTagId();
+    }
+
+    if ( (tagId = FaceTagsHelper::findFirstTagWithProperty(TagPropertyName::kfaceName(), name)) )
+    {
+        return tagId;
+    }
+    if ( (tagId = FaceTagsHelper::findFirstTagWithProperty(TagPropertyName::person(), name)) )
     {
         return tagId;
     }
 
-    // First find by full name or name. If not, id is in libface's database, but not in ours, so create.
-    return getOrCreateTagForPerson(kfaceId);
+    // identity is in libkface's database, but not in ours, so create.
+    return FaceTagsHelper::tagForName(name, 0, -1, attributes.value("fullName"), true, true);
 }
 
 QString FaceTags::faceNameForTag(int tagId)
@@ -257,12 +291,7 @@ QString FaceTags::faceNameForTag(int tagId)
         return QString();
     }
 
-    QString id = TagsCache::instance()->propertyValue(tagId, TagPropertyName::kfaceId());
-
-    if (id.isNull())
-    {
-        id = TagsCache::instance()->propertyValue(tagId, TagPropertyName::person());
-    }
+    QString id = TagsCache::instance()->propertyValue(tagId, TagPropertyName::person());
 
     if (id.isNull())
     {

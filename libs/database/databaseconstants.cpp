@@ -146,14 +146,20 @@ QLatin1String TagPropertyName::unknownPerson()
     return QLatin1String("unknownPerson");
 }
 
-QLatin1String TagPropertyName::kfaceId()
+QLatin1String TagPropertyName::kfaceName()
 {
+    // kept at its historical value for compatibility
     return QLatin1String("kfaceId");
 }
 
 QLatin1String TagPropertyName::tagKeyboardShortcut()
 {
     return QLatin1String("tagKeyboardShortcut");
+}
+
+QLatin1String TagPropertyName::kfaceUuid()
+{
+    return QLatin1String("kfaceUuid");
 }
 
 // ----------------------------------------------------------------------------------

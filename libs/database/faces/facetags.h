@@ -28,6 +28,7 @@
 // Qt includes
 
 #include <QList>
+#include <QMap>
 #include <QRect>
 #include <QString>
 
@@ -95,10 +96,13 @@ public:
     static QString        getNameForRect(qlonglong imageid, const QRect& faceRect);
 
     /**
-     * Translate between the name set in a face, and the tag used by digikam
+     * Use attributes as used by libkface to identify or create a person tag
      */
-    static int            tagForFaceName(const QString& kfaceId);
+    static int            getOrCreateTagForIdentity(const QMap<QString, QString>& attributes);
 
+    /**
+     * Return a person's name for a tag
+     */
     static QString        faceNameForTag(int tagId);
 
     static int            scannedForFacesTagId();

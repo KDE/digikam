@@ -224,6 +224,11 @@ QRect TagRegion::relativeToAbsolute(const QRectF& region, const QSize& fullSize)
                   region.height() * fullSize.height()).toRect();
 }
 
+QRect TagRegion::relativeToAbsolute(const QRectF& region, const DImg& reducedSizeImage)
+{
+    return relativeToAbsolute(region, reducedSizeImage.originalSize());
+}
+
 QRectF TagRegion::absoluteToRelative(const QRect& region, const QSize& fullSize)
 {
     return QRectF((qreal)region.x() / (qreal)fullSize.width(),

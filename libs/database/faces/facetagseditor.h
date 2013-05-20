@@ -92,6 +92,11 @@ public:
     DatabaseFace addManually(const DatabaseFace& face);
 
     /**
+     * Switches an unknownPersonEntry or unconfirmedEntry to an unconfirmedEntry (with a different suggested name)
+     */
+    DatabaseFace        changeSuggestedName(const DatabaseFace& previousEntry, int unconfirmedNameTagId);
+
+    /**
      * Assign the name tag for given face entry.
      * Pass the tagId if it changed or was newly assigned (UnknownName).
      * Pass the new, corrected region if it changed.

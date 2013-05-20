@@ -204,6 +204,29 @@ DatabaseFace FaceTagsEditor::addManually(const DatabaseFace& face)
     return face;
 }
 
+DatabaseFace FaceTagsEditor::changeSuggestedName(const DatabaseFace& previousEntry, int unconfirmedNameTagId)
+{
+    if (!previousEntry.isConfirmedName())
+    {
+        kDebug() << "Refusing to reset a confirmed name to an unconfirmed name";
+        return previousEntry;
+    }
+
+    DatabaseFace newEntry = unconfirmedEntry(previousEntry.imageId(), unconfirmedNameTagId, previousEntry.region());
+
+    if (newEntry == previousEntry)
+    {
+        return previousEntry;
+    }
+
+    removeFace(previousEntry);
+
+    ImageTagPair pair(newEntry.imageId(), newEntry.tagId());
+    // UnconfirmedName and UnknownName have the same attribute
+    addFaceAndTag(pair, newEntry, DatabaseFace::attributesForFlags(DatabaseFace::UnconfirmedName), false);
+    return newEntry;
+}
+
 DatabaseFace FaceTagsEditor::confirmName(const DatabaseFace& face, int tagId, const TagRegion& confirmedRegion)
 {
     DatabaseFace newEntry = confirmedEntry(face, tagId, confirmedRegion);
