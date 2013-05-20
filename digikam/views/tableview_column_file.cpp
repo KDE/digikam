@@ -64,6 +64,10 @@ TableViewColumnDescription ColumnFileProperties::getDescription()
     );
 
     description.addSubColumn(
+        TableViewColumnDescription("filepath", i18n("Path"))
+    );
+
+    description.addSubColumn(
         TableViewColumnDescription("filesize", i18n("Size"))
     );
 
@@ -77,7 +81,8 @@ TableViewColumnDescription ColumnFileProperties::getDescription()
 QStringList ColumnFileProperties::getSubColumns()
 {
     QStringList columns;
-    columns << QLatin1String("filename") << QLatin1String("filesize") << QLatin1String("filelastmodified");
+    columns << QLatin1String("filename") << QLatin1String("filepath")
+            << QLatin1String("filesize") << QLatin1String("filelastmodified");
 
     return columns;
 }
@@ -88,6 +93,8 @@ QString ColumnFileProperties::getTitle() const
     {
     case SubColumnName:
         return i18n("Filename");
+    case SubColumnFilePath:
+        return i18n("Path");
     case SubColumnSize:
         return i18n("Size");
     case SubColumnLastModified:
@@ -134,6 +141,10 @@ QVariant ColumnFileProperties::data(TableViewModel::Item* const item, const int 
     {
     case SubColumnName:
         return info.fileUrl().fileName();
+        break;
+
+    case SubColumnFilePath:
+        return info.fileUrl().path();
         break;
 
     case SubColumnSize:

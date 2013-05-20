@@ -50,8 +50,9 @@ public:
     enum SubColumn
     {
         SubColumnName = 0,
-        SubColumnSize = 1,
-        SubColumnLastModified = 2
+        SubColumnFilePath = 1,
+        SubColumnSize = 2,
+        SubColumnLastModified = 3
     };
 
 private:
