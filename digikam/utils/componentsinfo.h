@@ -41,7 +41,7 @@
 
 // LibKface includes
 
-#include <libkface/face.h>
+#include <libkface/recognitiondatabase.h>
 
 // Local includes
 
@@ -75,7 +75,6 @@ static inline void showDigikamComponentsInfo()
 #endif /* HAVE_GPHOTO2 */
 
     list.insert(i18n("LibOpenCV"),    KFaceIface::LibOpenCVVersion());
-    list.insert(i18n("Libface"),      KFaceIface::LibFaceVersion());
     list.insert(i18n("LibKface"),     KFaceIface::version());
     list.insert(i18n("LibKipi"),      KIPI::Interface::version());
     list.insert(i18n("Kipi-Plugins"), KIPI::PluginLoader::instance()->kipiPluginsVersion());

@@ -92,10 +92,6 @@
 #include <libkdcraw/kdcraw.h>
 #include <libkdcraw/version.h>
 
-// LibKFace includes
-
-#include <libkface/face.h>
-
 // Libkexiv2
 
 #include <libkexiv2/rotationmatrix.h>
