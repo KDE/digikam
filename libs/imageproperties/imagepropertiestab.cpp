@@ -7,6 +7,7 @@
  * Description : A tab to display general image information
  *
  * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2013      by Michael G. Hansen <mike at mghansen dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -683,7 +684,16 @@ void ImagePropertiesTab::setVideoAspectRatio(const QString& str)
 
 void ImagePropertiesTab::setVideoAudioBitRate(const QString& str)
 {
-    d->labelVideoAudioBitRate->setText(str);
+    // use string given as parameter by default because it contains the value for "unavailable" if needed
+    QString audioBitRateString = str;
+    bool ok;
+    const int audioBitRateInt = str.toInt(&ok);
+    if (ok)
+    {
+        audioBitRateString = KGlobal::locale()->formatNumber(audioBitRateInt, 0);
+    }
+
+    d->labelVideoAudioBitRate->setText(audioBitRateString);
 }
 
 void ImagePropertiesTab::setVideoAudioChannelType(const QString& str)
@@ -714,7 +724,16 @@ void ImagePropertiesTab::setVideoDuration(const QString& str)
 
 void ImagePropertiesTab::setVideoFrameRate(const QString& str)
 {
-    d->labelVideoFrameRate->setText(str);
+    // use string given as parameter by default because it contains the value for "unavailable" if needed
+    QString frameRateString = str;
+    bool ok;
+    const double frameRateDouble = str.toDouble(&ok);
+    if (ok)
+    {
+        frameRateString = KGlobal::locale()->formatNumber(frameRateDouble);
+    }
+
+    d->labelVideoFrameRate->setText(frameRateString);
 }
 
 void ImagePropertiesTab::setVideoVideoCodec(const QString& str)
