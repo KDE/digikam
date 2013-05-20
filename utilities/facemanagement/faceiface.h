@@ -25,16 +25,18 @@
 #ifndef FACEIFACE_H
 #define FACEIFACE_H
 
+// Qt includes
+
+#include <QStringList>
+
+// Libkface includes
+
+#include <libkface/identity.h>
+
 // Local includes
 
 #include "facetagseditor.h"
 #include "digikam_export.h"
-
-namespace KFaceIface
-{
-    class Face;
-    class Image;
-}
 
 class QImage;
 
@@ -69,40 +71,10 @@ public:
      * The returned list contains the faces written to the database and has the same size as the given list.
      * If a face was skipped (because of an existing entry), a null DatabaseFace will be at this place.
      */
-    QList<DatabaseFace> writeUnconfirmedResults(const DImg& image, qlonglong imageid, const QList<KFaceIface::Face>& faceList);
-
-    /**
-     * Detects faces from the image and returns a list of faces
-     * @param image The DImg , from which face rectangles will be cropped out
-     * @param imageid The image id from the database
-     * @return A list of faces found in the given image. With cropped face images.
-     */
-    QList<KFaceIface::Face> findAndTagFaces(const DImg& image, qlonglong imageid, FaceRecognitionSteps steps = DetectAndRecognize);
-
-    /**
-     * Tries to recognize a Face, returns a string containing the name for the face.
-     * Respects the match threshold.
-     */
-    QString             recognizeFace(const KFaceIface::Face& face);
-
-    // --- Training ---
-
-    /**
-     * For the given images, train all faces marked for training.
-     */
-    void                trainImages(const QList<ImageInfo>& imageInfos);
-
-    /**
-     * Updates libkface's face database with a list of Face objects
-     * Any faces that have a null name or image will be dropped.
-     */
-    void                trainFaces(const QList<KFaceIface::Face>& faceList);
-
-    /**
-     * Updates libkface's face database with a list of Face objects
-     * Any faces that have a null name or image will be dropped.
-     */
-    void                trainFace(const KFaceIface::Face& face);
+    QList<DatabaseFace> writeUnconfirmedResults(qlonglong imageid,
+                                                const QList<QRectF>& detectedFaces,
+                                                const QList<KFaceIface::Identity> recognitionResults,
+                                                const QSize& fullSize);
 
     // --- Status flags ---
 
@@ -120,22 +92,12 @@ public:
 
     // --- Utilities ---
 
-    QList<KFaceIface::Face> facesFromTags(qlonglong imageId) const;
-    QList<KFaceIface::Face> unconfirmedFacesFromTags(qlonglong imageId) const;
-
-    /**
-     * Edits the given face(s): From the given DImg, the face regions are copied.
-     * If requested, the faces will be scaled to the given (fixed) size.
-     */
-    void                fillImageInFace(const DImg& image, KFaceIface::Face& face, const QSize& scaleSize = QSize()) const;
-    void                fillImageInFaces(const DImg& image, QList<KFaceIface::Face>& faceList,
-                                         const QSize& scaleSize = QSize()) const;
     /**
      * This uses a thumbnail load thread to load the image detail.
      * If requested, the faces will be scaled to the given (fixed) size.
      */
-    void                fillImageInFaces(ThumbnailImageCatcher* const catcher, const QString& filePath,
-                                         QList<KFaceIface::Face>& faceList, const QSize& scaleSize = QSize()) const;
+    //void                fillImageInFaces(ThumbnailImageCatcher* const catcher, const QString& filePath,
+      //                                   QList<KFaceIface::Face>& faceList, const QSize& scaleSize = QSize()) const;
 
     /**
      * Store the needed thumbnails for the given faces. This can be a huge optimization
@@ -145,16 +107,12 @@ public:
                                         const QList<DatabaseFace>& databaseFaces, const DImg& image);
 
     /**
-     * Converts the DImg to a KFaceIface::Image
-     */
-    static KFaceIface::Image toImage(const DImg& image);
-
-    /**
      * Conversion
      */
-    QList<KFaceIface::Face> toFaces(const QList<DatabaseFace>& databaseFaces) const;
-    QList<DatabaseFace> toDatabaseFaces(const DImg& image, qlonglong imageid,
-                                        const QList<KFaceIface::Face>& faces) const;
+    QList<DatabaseFace> toDatabaseFaces(qlonglong imageid,
+                                        const QList<QRectF>& detectedFaces,
+                                        const QList<KFaceIface::Identity> recognitionResults,
+                                        const QSize& fullSize) const;
 
     /**
      * For display, it may be desirable to display a slightly larger region than the strict

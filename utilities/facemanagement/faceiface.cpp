@@ -33,10 +33,6 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-// Libkface Includes
-
-#include <libkface/face.h>
-
 // Local includes
 
 #include "databaseaccess.h"
@@ -94,55 +90,26 @@ void FaceIface::markAsScanned(const ImageInfo& info, bool hasBeenScanned) const
     }
 }
 
-// --- Convert between KFaceIface::Face and DatabaseFace ---
+// --- Convert between KFace results and DatabaseFace ---
 
-QList<KFaceIface::Face> FaceIface::facesFromTags(qlonglong imageId) const
-{
-    return toFaces(databaseFaces(imageId));
-}
-
-QList<KFaceIface::Face> FaceIface::unconfirmedFacesFromTags(qlonglong imageId) const
-{
-    return toFaces(unconfirmedDatabaseFaces(imageId));
-}
-
-QList<KFaceIface::Face> FaceIface::toFaces(const QList<DatabaseFace>& databaseFaces) const
-{
-    QList<KFaceIface::Face> faceList;
-
-    foreach(const DatabaseFace& databaseFace, databaseFaces)
-    {
-        QRect rect = databaseFace.region().toRect();
-
-        if (!rect.isValid())
-        {
-            continue;
-        }
-
-        KFaceIface::Face f;
-        f.setRect(rect);
-
-        if (FaceTags::isTheUnknownPerson(databaseFace.tagId()))
-        {
-            f.setName(FaceTags::faceNameForTag(databaseFace.tagId()));
-        }
-
-        faceList += f;
-    }
-
-    return faceList;
-}
-
-QList<DatabaseFace> FaceIface::toDatabaseFaces(const DImg& image, qlonglong imageid,
-                                               const QList<KFaceIface::Face>& faceList) const
+QList<DatabaseFace> FaceIface::toDatabaseFaces(qlonglong imageid,
+                                               const QList<QRectF>& detectedFaces,
+                                               const QList<KFaceIface::Identity> recognitionResults,
+                                               const QSize& fullSize) const
 {
     QList<DatabaseFace> faces;
 
-    foreach(const KFaceIface::Face& face, faceList)
+    for (int i=0; i<detectedFaces.size(); ++i)
     {
-        // We'll get the unknownPersonTagId if face.name() is null
-        int tagId          = FaceTags::tagForFaceName(face.name());
-        QRect fullSizeRect = TagRegion::mapToOriginalSize(image, face.toRect());
+        KFaceIface::Identity identity;
+        if (!recognitionResults.isEmpty())
+        {
+            identity = recognitionResults[i];
+        }
+        // We'll get the unknownPersonTagId if the identity is null
+        int tagId               = FaceTags::getOrCreateTagForIdentity(identity.attributes);
+        QRect fullSizeRect      = TagRegion::relativeToAbsolute(detectedFaces[i], fullSize);
+        DatabaseFace::Type type = identity.isNull() ? DatabaseFace::UnknownName : DatabaseFace::UnconfirmedName;
 
         if (!tagId || !fullSizeRect.isValid())
         {
@@ -151,78 +118,12 @@ QList<DatabaseFace> FaceIface::toDatabaseFaces(const DImg& image, qlonglong imag
         }
 
         //kDebug() << "New Entry" << fullSizeRect << tagId;
-        faces << DatabaseFace(DatabaseFace::UnconfirmedName, imageid, tagId, TagRegion(fullSizeRect));
+        faces << DatabaseFace(type, imageid, tagId, TagRegion(fullSizeRect));
     }
     return faces;
 }
 
 // --- Images in faces and thumbnails ---
-
-void FaceIface::fillImageInFaces(const DImg& image, QList<KFaceIface::Face>& faceList, const QSize& scaleSize) const
-{
-    for (int i = 0; i < faceList.size(); ++i)
-    {
-        fillImageInFace(image, faceList[i], scaleSize);
-    }
-}
-
-void FaceIface::fillImageInFace(const DImg& image, KFaceIface::Face& face, const QSize& scaleSize) const
-{
-    QRect rect = TagRegion::mapFromOriginalSize(image, face.toRect());
-
-    if (rect.isValid())
-    {
-        DImg detail = image.copy(rect);
-
-        if (scaleSize.isValid())
-        {
-            detail = detail.smoothScale(scaleSize, Qt::IgnoreAspectRatio);
-        }
-
-        face.setImage(toImage(detail));
-    }
-}
-
-void FaceIface::fillImageInFaces(ThumbnailImageCatcher* const catcher, const QString& filePath,
-                                 QList<KFaceIface::Face>& faces, const QSize& scaleSize) const
-{
-    foreach(const KFaceIface::Face& face, faces)
-    {
-        QRect rect = face.toRect();
-
-        if (!rect.isValid())
-        {
-            continue;
-        }
-
-        catcher->thread()->find(filePath, rect);
-        catcher->enqueue();
-    }
-
-    QList<QImage> details = catcher->waitForThumbnails();
-    kDebug() << details.size();
-
-    for (int i = 0; i < faces.size(); ++i)
-    {
-        KFaceIface::Face& face = faces[i];
-        QImage detail          = details[i];
-        kDebug() << "Loaded detail" << detail.size();
-
-        if (scaleSize.isValid())
-        {
-            detail = detail.scaled(scaleSize, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-        }
-
-        face.setImage(detail);
-    }
-}
-
-KFaceIface::Image FaceIface::toImage(const DImg& image)
-{
-    return KFaceIface::Image(image.width(), image.height(),
-                             image.sixteenBit(), image.hasAlpha(),
-                             image.bits());
-}
 
 void FaceIface::storeThumbnails(ThumbnailLoadThread* const thread, const QString& filePath,
                                 const QList<DatabaseFace>& databaseFaces, const DImg& image)
@@ -245,11 +146,13 @@ void FaceIface::storeThumbnails(ThumbnailLoadThread* const thread, const QString
 
 // --- Face detection: merging results ------------------------------------------------------------------------------------
 
-QList<DatabaseFace> FaceIface::writeUnconfirmedResults(const DImg& image, qlonglong imageid,
-                                                       const QList<KFaceIface::Face>& faceList)
+QList<DatabaseFace> FaceIface::writeUnconfirmedResults(qlonglong imageid,
+                                                       const QList<QRectF>& detectedFaces,
+                                                       const QList<KFaceIface::Identity> recognitionResults,
+                                                       const QSize& fullSize)
 {
     // Build list of new entries
-    QList<DatabaseFace> newFaces = toDatabaseFaces(image, imageid, faceList);
+    QList<DatabaseFace> newFaces = toDatabaseFaces(imageid, detectedFaces, recognitionResults, fullSize);
 
     if (newFaces.isEmpty())
     {
