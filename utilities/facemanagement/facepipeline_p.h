@@ -200,7 +200,7 @@ public:
         wait();    // protect detector
     }
 
-    DImg scaleForDetection(const DImg& image) const;
+    QImage scaleForDetection(const DImg& image) const;
 
 public Q_SLOTS:
 
@@ -215,6 +215,25 @@ protected:
 
     KFaceIface::FaceDetector     detector;
     FacePipeline::Private* const d;
+};
+
+// ----------------------------------------------------------------------------------------
+
+class FaceImageRetriever
+{
+public:
+
+    FaceImageRetriever(FacePipeline::Private* const d);
+    void cancel();
+
+    ThumbnailImageCatcher* thumbnailCatcher();
+    QList<QImage> getDetails(const DImg& src, const QList<QRectF>& rects);
+    QList<QImage> getDetails(const DImg& src, const QList<DatabaseFace>& faces);
+    QList<QImage> getThumbnails(const QString& filePath, const QList<DatabaseFace>& faces);
+
+protected:
+
+    ThumbnailImageCatcher* catcher;
 };
 
 // ----------------------------------------------------------------------------------------
@@ -236,15 +255,18 @@ public Q_SLOTS:
     void process(FacePipelineExtendedPackage::Ptr package);
     void setThreshold(double threshold);
 
+protected:
+
+    virtual void aboutToDeactivate();
+
 Q_SIGNALS:
 
     void processed(FacePipelineExtendedPackage::Ptr package);
 
 protected:
 
-    ThumbnailImageCatcher*          catcher;
+    FaceImageRetriever              imageRetriever;
     KFaceIface::RecognitionDatabase database;
-    float                          recognitionThreshold;
     FacePipeline::Private* const    d;
 };
 
@@ -270,6 +292,39 @@ protected:
 
     FacePipeline::WriteMode      mode;
     FacePipeline::Private* const d;
+};
+
+// ----------------------------------------------------------------------------------------
+
+class Trainer : public WorkerObject
+{
+    Q_OBJECT
+
+public:
+
+    explicit Trainer(FacePipeline::Private* const d);
+    ~Trainer()
+    {
+        wait();    // protect detector
+    }
+
+protected:
+
+    virtual void aboutToDeactivate();
+
+public Q_SLOTS:
+
+    void process(FacePipelineExtendedPackage::Ptr package);
+
+Q_SIGNALS:
+
+    void processed(FacePipelineExtendedPackage::Ptr package);
+
+protected:
+
+    KFaceIface::RecognitionDatabase database;
+    FaceImageRetriever              imageRetriever;
+    FacePipeline::Private* const    d;
 };
 
 // ----------------------------------------------------------------------------------------
@@ -306,39 +361,6 @@ protected:
     int                          falsePositiveFaces;
 
     FacePipeline::Private* const d;
-};
-
-// ----------------------------------------------------------------------------------------
-
-class Trainer : public WorkerObject
-{
-    Q_OBJECT
-
-public:
-
-    explicit Trainer(FacePipeline::Private* const d);
-    ~Trainer()
-    {
-        wait();    // protect detector
-    }
-
-protected:
-
-    virtual void aboutToDeactivate();
-
-public Q_SLOTS:
-
-    void process(FacePipelineExtendedPackage::Ptr package);
-
-Q_SIGNALS:
-
-    void processed(FacePipelineExtendedPackage::Ptr package);
-
-protected:
-
-    ThumbnailImageCatcher*          catcher;
-    KFaceIface::RecognitionDatabase database;
-    FacePipeline::Private* const    d;
 };
 
 // ----------------------------------------------------------------------------------------

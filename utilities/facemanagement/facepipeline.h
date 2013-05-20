@@ -35,7 +35,7 @@
 
 // libkface includes
 
-#include <libkface/face.h>
+#include <libkface/identity.h>
 
 // Local includes
 
@@ -60,9 +60,10 @@ public:
         DetectedFromImage  = 1 << 2,
 
         /// Task
-        ForConfirmation    = 1 << 10,
-        ForTraining        = 1 << 11,
-        ForEditing         = 1 << 12, // Add, Change or remove
+        ForRecognition     = 1 << 10,
+        ForConfirmation    = 1 << 11,
+        ForTraining        = 1 << 12,
+        ForEditing         = 1 << 13, // Add, Change or remove
 
         /// Executed action (task is cleared)
         Confirmed          = 1 << 20,
@@ -131,7 +132,8 @@ public:
 
     ImageInfo                    info;
     DImg                         image;
-    QList<KFaceIface::Face>      faces;
+    QList<QRectF>                detectedFaces;
+    QList<KFaceIface::Identity>  recognitionResults;
     FacePipelineDatabaseFaceList databaseFaces;
 
     ProcessFlags                 processFlags;
@@ -203,6 +205,7 @@ public:
      */
 
     void plugDatabaseFilter(FilterMode mode);
+    void plugRerecognizingDatabaseFilter();
     void plugRetrainingDatabaseFilter();
     void plugPreviewLoader();
     void plugFaceDetector();

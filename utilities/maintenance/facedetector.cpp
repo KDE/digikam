@@ -351,7 +351,8 @@ void FaceDetector::slotImagesSkipped(const QList<ImageInfo>& infos)
 
 void FaceDetector::slotShowOneDetected(const FacePipelinePackage& package)
 {
-    QPixmap pix;
+    //TODO: Embedded images are gone. Needs to be solved by loading thumbnails
+    /*QPixmap pix;
 
     if (!package.faces.isEmpty())
     {
@@ -363,6 +364,7 @@ void FaceDetector::slotShowOneDetected(const FacePipelinePackage& package)
     }
 
     setThumbnail(pix);
+    */
     advance(1);
 }
 
