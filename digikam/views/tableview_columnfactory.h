@@ -217,6 +217,7 @@ public:
 
     virtual QVariant data(TableViewModel::Item* const item, const int role) const;
     virtual ColumnCompareResult compare(TableViewModel::Item* const itemA, TableViewModel::Item* const itemB) const;
+    virtual bool columnAffectedByChangeset(const ImageChangeset& imageChangeset) const;
     virtual bool paint(QPainter* const painter, const QStyleOptionViewItem& option, TableViewModel::Item* const item) const;
     virtual QSize sizeHint(const QStyleOptionViewItem& option, TableViewModel::Item* const item) const;
     virtual void updateThumbnailSize();

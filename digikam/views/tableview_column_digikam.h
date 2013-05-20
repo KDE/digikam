@@ -77,6 +77,7 @@ public:
     virtual QVariant data(TableViewModel::Item* const item, const int role) const;
 
     virtual ColumnCompareResult compare(TableViewModel::Item* const itemA, TableViewModel::Item* const itemB) const;
+    virtual bool columnAffectedByChangeset(const ImageChangeset& imageChangeset) const;
 };
 
 } /* namespace TableViewColumns */

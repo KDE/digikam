@@ -33,6 +33,7 @@
 
 // local includes
 
+#include "databasefields.h"
 #include "globals.h"
 #include "imageinfo.h"
 
@@ -413,6 +414,29 @@ TableViewColumn::ColumnCompareResult ColumnDigikamProperties::compare(
         kWarning() << "item: unimplemented comparison, subColumn=" << subColumn;
         return CmpEqual;
     }
+}
+
+bool Digikam::TableViewColumns::ColumnDigikamProperties::columnAffectedByChangeset(const Digikam::ImageChangeset& imageChangeset) const
+{
+    switch (subColumn)
+    {
+        case SubColumnTitle:
+        case SubColumnCaption:
+            return true;
+            /// @todo These are not the right flags for these columns
+//             return imageChangeset.changes() & DatabaseFields::ImageCommentsAll;
+
+        case SubColumnRating:
+            return imageChangeset.changes() & DatabaseFields::Rating;
+
+        case SubColumnPickLabel:
+            return imageChangeset.changes() & DatabaseFields::PickLabel;
+
+        case SubColumnColorLabel:
+            return imageChangeset.changes() & DatabaseFields::ColorLabel;
+    }
+
+    return false;
 }
 
 } /* namespace TableViewColumns */

@@ -605,6 +605,14 @@ void TableViewModel::slotDatabaseImageChanged(const ImageChangeset& imageChanges
 
     /// @todo Decide which changes are relevant here or
     ///       let the TableViewColumn object decide which are relevant
+    /// @todo Re-population of the model is also triggered, thus making this
+    ///       check irrelevant. Needs to be fixed.
+    bool needToResort = false;
+    if ((d->sortColumn>=0)&&(d->sortColumn<=d->columnObjects.count()))
+    {
+        TableViewColumn* const sortColumnObject = d->columnObjects.at(d->sortColumn);
+        needToResort = sortColumnObject->columnAffectedByChangeset(imageChangeset);
+    }
 
     foreach(const qlonglong& id, imageChangeset.ids())
     {
@@ -665,19 +673,25 @@ void TableViewModel::slotDatabaseImageChanged(const ImageChangeset& imageChanges
 
         /// @todo Re-check grouping for this item
 
-        const QModelIndex changedIndexBottomRight = index(
-                changedIndexTopLeft.row(),
-                columnCount(changedIndexTopLeft.parent())-1,
-                changedIndexTopLeft.parent()
-            );
-        if (changedIndexBottomRight.isValid())
+        // only update now if we do not resort later anyway
+        if (!needToResort)
         {
-            emit(dataChanged(changedIndexTopLeft, changedIndexBottomRight));
+            const QModelIndex changedIndexBottomRight = index(
+                    changedIndexTopLeft.row(),
+                    columnCount(changedIndexTopLeft.parent())-1,
+                    changedIndexTopLeft.parent()
+                );
+            if (changedIndexBottomRight.isValid())
+            {
+                emit(dataChanged(changedIndexTopLeft, changedIndexBottomRight));
+            }
         }
     }
 
-    /// @todo React smarter just to the changed items
-    scheduleResort();
+    if (needToResort)
+    {
+        scheduleResort();
+    }
 }
 
 Qt::ItemFlags TableViewModel::flags(const QModelIndex& index) const
