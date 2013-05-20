@@ -7,6 +7,7 @@
  * Description : album icon view tool tip
  *
  * Copyright (C) 2008-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2013      by Michael G. Hansen <mike at mghansen dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -367,7 +368,14 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
 
             if (settings->getToolTipsShowVideoFrameRate())
             {
-                str = videoInfo.frameRate.isEmpty() ? cnt.unavailable : videoInfo.frameRate;
+                QString frameRateString;
+                bool ok;
+                const double frameRateDouble = videoInfo.frameRate.toDouble(&ok);
+                if (ok)
+                {
+                    frameRateString = KGlobal::locale()->formatNumber(frameRateDouble);
+                }
+                str = videoInfo.frameRate.isEmpty() ? cnt.unavailable : frameRateString;
 
                 if (str.length() > cnt.maxStringLength)
                 {
@@ -391,7 +399,14 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
 
             if (settings->getToolTipsShowVideoAudioBitRate())
             {
-                str = videoInfo.audioBitRate.isEmpty() ? cnt.unavailable : videoInfo.audioBitRate;
+                QString audioBitRateString = str;
+                bool ok;
+                const int audioBitRateInt = videoInfo.audioBitRate.toInt(&ok);
+                if (ok)
+                {
+                    audioBitRateString = KGlobal::locale()->formatNumber(audioBitRateInt, 0);
+                }
+                str = videoInfo.audioBitRate.isEmpty() ? cnt.unavailable : audioBitRateString;
 
                 if (str.length() > cnt.maxStringLength)
                 {
