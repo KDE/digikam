@@ -1535,6 +1535,20 @@ DImg DImg::copy(const QRect& rect) const
     return copy(rect.x(), rect.y(), rect.width(), rect.height());
 }
 
+DImg DImg::copy(const QRectF& rel) const
+{
+    if (isNull() || !rel.isValid())
+    {
+        return DImg();
+    }
+
+    return copy(QRectF(rel.x()      * m_priv->width,
+                       rel.y()      * m_priv->height,
+                       rel.width()  * m_priv->width,
+                       rel.height() * m_priv->height)
+                .toRect());
+}
+
 DImg DImg::copy(int x, int y, int w, int h) const
 {
     if (isNull() || w <= 0 || h <= 0)
@@ -1900,6 +1914,20 @@ QImage DImg::copyQImage() const
 QImage DImg::copyQImage(const QRect& rect) const
 {
     return (copyQImage(rect.x(), rect.y(), rect.width(), rect.height()));
+}
+
+QImage DImg::copyQImage(const QRectF& rel) const
+{
+    if (isNull() || !rel.isValid())
+    {
+        return QImage();
+    }
+
+    return copyQImage(QRectF(rel.x()      * m_priv->width,
+                             rel.y()      * m_priv->height,
+                             rel.width()  * m_priv->width,
+                             rel.height() * m_priv->height)
+                      .toRect());
 }
 
 QImage DImg::copyQImage(int x, int y, int w, int h) const

@@ -473,6 +473,7 @@ public:
     /** Return a region of image
      */
     DImg       copy(const QRect& rect)          const;
+    DImg       copy(const QRectF& relativeRect) const;
     DImg       copy(int x, int y, int w, int h) const;
 
     /** Copy a region of pixels from a source image to this image.
@@ -513,6 +514,7 @@ public:
      */
     QImage     copyQImage()                           const;
     QImage     copyQImage(const QRect& rect)          const;
+    QImage     copyQImage(const QRectF& relativeRect) const;
     QImage     copyQImage(int x, int y, int w, int h) const;
 
     /** Crop image to the specified region
