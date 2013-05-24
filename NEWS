@@ -3,7 +3,12 @@ digiKam 3.3.0-beta1 - Release date: 2013-06-02
 
 NEW FEATURES:
 
+Faces Managament : Better management of Picasa Face Tags import/export through metadata
+Faces Management : New Face Recognition engine based on OpenTLD.
+
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 001 ==> 319853 : Untranslatable strings in timeline tab.
-002 ==> 
+002 ==> 277429 - Write out face rectangles to XMP file.
+003 ==> 314509 - Read face tags created by Picasa [patch].
+004 ==> 
