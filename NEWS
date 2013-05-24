@@ -8,7 +8,8 @@ Faces Management : New Face Recognition engine based on OpenTLD.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
-001 ==> 319853 : Untranslatable strings in timeline tab.
+001 ==> 319853 - Untranslatable strings in timeline tab.
 002 ==> 277429 - Write out face rectangles to XMP file.
 003 ==> 314509 - Read face tags created by Picasa [patch].
-004 ==> 
+004 ==> 319731 - digikam crashes when trying to decode Panasonic Raw (.rw2).
+005 ==> 
