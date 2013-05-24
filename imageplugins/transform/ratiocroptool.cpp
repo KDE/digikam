@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2007      by Jaromir Malenko <malenko at email dot cz>
  * Copyright (C) 2008      by Roberto Castagnola <roberto dot castagnola at gmail dot com>
- * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -249,7 +249,7 @@ RatioCropTool::RatioCropTool(QObject* const parent)
     // -------------------------------------------------------------
 
     // need to set the button to a KStdGuiItem that has no icon
-    KPushButton* tryBtn = d->gboxSettings->button(EditorToolSettings::Try);
+    KPushButton* const tryBtn = d->gboxSettings->button(EditorToolSettings::Try);
     tryBtn->setGuiItem(KStandardGuiItem::Test);
     tryBtn->setText(i18n("Max. Aspect"));
     tryBtn->setToolTip(i18n("Set selection area to the maximum size according "
@@ -257,21 +257,21 @@ RatioCropTool::RatioCropTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
-    QVBoxLayout* vlay      = new QVBoxLayout(d->gboxSettings->plainPage());
-    d->expbox              = new RExpanderBox(d->gboxSettings->plainPage());
+    QVBoxLayout* const vlay = new QVBoxLayout(d->gboxSettings->plainPage());
+    d->expbox               = new RExpanderBox(d->gboxSettings->plainPage());
     d->expbox->setObjectName("RatioCropTool Expander");
-    
+
     // -------------------------------------------------------------
 
-    QWidget* cropInfo  = new QWidget(d->expbox);
-    QGridLayout* grid3 = new QGridLayout(cropInfo);
-    
-    d->histogramBox    = new HistogramBox(cropInfo, Digikam::LRGBAC);
+    QWidget* const cropInfo  = new QWidget(d->expbox);
+    QGridLayout* const grid3 = new QGridLayout(cropInfo);
 
-    QLabel* resolution = new QLabel(i18n("Resolution:"), cropInfo);
-    d->resLabel        = new QLabel(cropInfo);
+    d->histogramBox          = new HistogramBox(cropInfo, Digikam::LRGBAC);
+
+    QLabel* const resolution = new QLabel(i18n("Resolution:"), cropInfo);
+    d->resLabel              = new QLabel(cropInfo);
     d->resLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-    
+
     grid3->addWidget(d->histogramBox, 0, 0, 1, 3);
     grid3->addWidget(resolution,      1, 0, 1, 1);
     grid3->addWidget(d->resLabel,     1, 1, 1, 2);
@@ -280,22 +280,26 @@ RatioCropTool::RatioCropTool(QObject* const parent)
 
     d->expbox->addItem(cropInfo, SmallIcon("help-about"),
                        i18n("Crop Information"), QString("CropInformation"), true);
-    
-    // -------------------------------------------------------------
-    
-    QWidget* cropSelection = new QWidget(d->expbox);
 
-    QLabel* label = new QLabel(i18n("Aspect ratio:"), cropSelection);
-    d->ratioCB    = new RComboBox(cropSelection);
+    // -------------------------------------------------------------
+
+    QWidget* const cropSelection = new QWidget(d->expbox);
+
+    QLabel* const label = new QLabel(i18n("Aspect ratio:"), cropSelection);
+    d->ratioCB          = new RComboBox(cropSelection);
     d->ratioCB->addItem(i18nc("custom aspect ratio crop settings", "Custom"));
     // NOTE: Order is important there. Look ImageSelectionWidget::RatioAspect for details.
     d->ratioCB->addItem("1:1");
+    d->ratioCB->addItem("2:1");
     d->ratioCB->addItem("2:3");
+    d->ratioCB->addItem("3:1");
     d->ratioCB->addItem("3:4");
+    d->ratioCB->addItem("4:1");
     d->ratioCB->addItem("4:5");
     d->ratioCB->addItem("5:7");
     d->ratioCB->addItem("7:10");
     d->ratioCB->addItem("8:5");
+    d->ratioCB->addItem("16:9");
     d->ratioCB->addItem(i18n("Golden Ratio"));
     d->ratioCB->addItem(i18n("Current Image Aspect Ratio"));
     d->ratioCB->addItem(i18nc("no crop mode", "None"));
@@ -314,7 +318,9 @@ RatioCropTool::RatioCropTool(QObject* const parent)
                                    "<p><b>4:5</b>: 20x25cm, 40x50cm, 8x10\", 16x20\"</p>"
                                    "<p><b>5:7</b>: 15x21cm, 30x42cm, 5x7\"</p>"
                                    "<p><b>7:10</b>: 21x30cm, 42x60cm, 3.5x5\"</p>"
-                                   "<p><b>8:5</b>: common widescreen monitor (as 1680x1050)</p>"
+                                   "<p><b>8:5</b>: common wide-screen monitor (as 1680x1050)</p>"
+                                   "<p><b>2:1</b>, <b>3:1</b>, <b>4:1</b>: common panoramic sizes</p>"
+                                   "<p><b>16:9</b>: common tv-screen (as HDTV or Full-HD)</p>"
                                    "<p>The <b>Golden Ratio</b> is 1:1.618. A composition following this rule "
                                    "is considered visually harmonious but can be unadapted to print on "
                                    "standard photographic paper.</p>"
@@ -353,7 +359,7 @@ RatioCropTool::RatioCropTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
-    QLabel* positionLabel = new QLabel(i18n("Position:"), cropSelection);
+    QLabel* const positionLabel = new QLabel(i18n("Position:"), cropSelection);
     positionLabel->setAlignment(Qt::AlignLeft|Qt::AlignVCenter);
     
     d->xInput = new RIntNumInput(cropSelection);
@@ -370,7 +376,7 @@ RatioCropTool::RatioCropTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
-    QLabel* sizeLabel = new QLabel(i18n("Size:"), cropSelection);
+    QLabel* const sizeLabel = new QLabel(i18n("Size:"), cropSelection);
     sizeLabel->setAlignment(Qt::AlignLeft|Qt::AlignVCenter);
 
     d->widthInput = new RIntNumInput(cropSelection);
@@ -399,7 +405,7 @@ RatioCropTool::RatioCropTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
-    QGridLayout* mainLayout = new QGridLayout(cropSelection);
+    QGridLayout* const mainLayout = new QGridLayout(cropSelection);
     mainLayout->addWidget(label,                0, 0, 1, 1);
     mainLayout->addWidget(d->ratioCB,           0, 1, 1, 3);
     mainLayout->addWidget(d->preciseCrop,       0, 4, 1, 1);
@@ -425,11 +431,11 @@ RatioCropTool::RatioCropTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
-    QWidget* compositionGuide = new QWidget(d->expbox);
-    QGridLayout* grid2        = new QGridLayout(compositionGuide);
+    QWidget* const compositionGuide = new QWidget(d->expbox);
+    QGridLayout* const grid2        = new QGridLayout(compositionGuide);
 
-    QLabel* labelGuideLines = new QLabel(i18n("Geometric form:"), compositionGuide);
-    d->guideLinesCB         = new RComboBox(compositionGuide);
+    QLabel* const labelGuideLines = new QLabel(i18n("Geometric form:"), compositionGuide);
+    d->guideLinesCB               = new RComboBox(compositionGuide);
     d->guideLinesCB->addItem(i18n("Rules of Thirds"));
     d->guideLinesCB->addItem(i18n("Diagonal Method"));
     d->guideLinesCB->addItem(i18n("Harmonious Triangles"));
@@ -722,8 +728,8 @@ void RatioCropTool::writeSettings()
     group.writeEntry(d->configGoldenFlipVerticalEntry,     d->flipVerBox->isChecked());
     group.writeEntry(d->configGuideColorEntry,             d->guideColorBt->color());
     group.writeEntry(d->configGuideWidthEntry,             d->guideSize->value());
-    group.writeEntry(d->configHistogramChannelEntry, (int)d->histogramBox->channel());
-    group.writeEntry(d->configHistogramScaleEntry,   (int)d->histogramBox->scale());
+    group.writeEntry(d->configHistogramChannelEntry,       (int)d->histogramBox->channel());
+    group.writeEntry(d->configHistogramScaleEntry,         (int)d->histogramBox->scale());
 
 #if KDCRAW_VERSION >= 0x020000
     d->expbox->writeSettings(group);
@@ -791,21 +797,29 @@ void RatioCropTool::setRatioCBText(int orientation)
 
     if (orientation == ImageSelectionWidget::Landscape)
     {
+        d->ratioCB->addItem("1:2");
         d->ratioCB->addItem("3:2");
+        d->ratioCB->addItem("1:3");
         d->ratioCB->addItem("4:3");
+        d->ratioCB->addItem("1:4");
         d->ratioCB->addItem("5:4");
         d->ratioCB->addItem("7:5");
         d->ratioCB->addItem("10:7");
         d->ratioCB->addItem("5:8");
+        d->ratioCB->addItem("9:16");
     }
     else
     {
+        d->ratioCB->addItem("2:1");
         d->ratioCB->addItem("2:3");
+        d->ratioCB->addItem("3:1");
         d->ratioCB->addItem("3:4");
+        d->ratioCB->addItem("4:1");
         d->ratioCB->addItem("4:5");
         d->ratioCB->addItem("5:7");
         d->ratioCB->addItem("7:10");
         d->ratioCB->addItem("8:5");
+        d->ratioCB->addItem("16:9");
     }
 
     d->ratioCB->addItem(i18n("Golden Ratio"));

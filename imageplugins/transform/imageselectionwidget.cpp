@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2007      by Jaromir Malenko <malenko at email.cz>
  * Copyright (C) 2008      by Roberto Castagnola <roberto dot castagnola at gmail dot com>
- * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -485,48 +485,68 @@ void ImageSelectionWidget::setSelectionAspectRatioType(int aspectRatioType)
     switch (aspectRatioType)
     {
         case RATIO01X01:
-            d->currentWidthRatioValue  = 1.0;
             d->currentHeightRatioValue = 1.0;
+            d->currentWidthRatioValue  = 1.0;
+            break;
+
+        case RATIO02x01:
+            d->currentHeightRatioValue = 2.0;
+            d->currentWidthRatioValue  = 1.0;
             break;
 
         case RATIO02x03:
-            d->currentWidthRatioValue  = 3.0;
             d->currentHeightRatioValue = 2.0;
+            d->currentWidthRatioValue  = 3.0;
+            break;
+
+        case RATIO03X01:
+            d->currentHeightRatioValue = 3.0;
+            d->currentWidthRatioValue  = 1.0;
             break;
 
         case RATIO03X04:
-            d->currentWidthRatioValue  = 4.0;
             d->currentHeightRatioValue = 3.0;
+            d->currentWidthRatioValue  = 4.0;
+            break;
+
+        case RATIO04X01:
+            d->currentHeightRatioValue = 4.0;
+            d->currentWidthRatioValue  = 1.0;
             break;
 
         case RATIO04X05:
-            d->currentWidthRatioValue  = 5.0;
             d->currentHeightRatioValue = 4.0;
+            d->currentWidthRatioValue  = 5.0;
             break;
 
         case RATIO05x07:
-            d->currentWidthRatioValue  = 7.0;
             d->currentHeightRatioValue = 5.0;
+            d->currentWidthRatioValue  = 7.0;
             break;
 
         case RATIO07x10:
-            d->currentWidthRatioValue  = 10.0;
             d->currentHeightRatioValue = 7.0;
+            d->currentWidthRatioValue  = 10.0;
             break;
 
         case RATIO08x05:
-            d->currentWidthRatioValue  = 5.0;
             d->currentHeightRatioValue = 8.0;
+            d->currentWidthRatioValue  = 5.0;
+            break;
+
+        case RATIO16x09:
+            d->currentHeightRatioValue = 16.0;
+            d->currentWidthRatioValue  = 9.0;
             break;
 
         case RATIOGOLDEN:
-            d->currentWidthRatioValue  = PHI;
             d->currentHeightRatioValue = 1.0;
+            d->currentWidthRatioValue  = PHI;
             break;
 
         case RATIOCURRENT:
-            d->currentWidthRatioValue  = d->image.width();
             d->currentHeightRatioValue = d->image.height();
+            d->currentWidthRatioValue  = d->image.width();
             break;
     }
 
@@ -863,8 +883,8 @@ void ImageSelectionWidget::drawHarmoniousTriangles(QPainter& p, const int& dst)
 }
 
 void ImageSelectionWidget::drawGoldenMean(QPainter& p, const QRect& R1,
-        const QRect& R2, const QRect& R3, const QRect& R4,
-        const QRect& R5, const QRect& R6, const QRect& R7)
+                                          const QRect& R2, const QRect& R3, const QRect& R4,
+                                          const QRect& R5, const QRect& R6, const QRect& R7)
 {
     p.setRenderHint(QPainter::Antialiasing);
 

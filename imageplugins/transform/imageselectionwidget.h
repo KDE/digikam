@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2007      by Jaromir Malenko <malenko at email.cz>
  * Copyright (C) 2008      by Roberto Castagnola <roberto dot castagnola at gmail dot com>
- * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -34,7 +34,7 @@
 
 namespace Digikam
 {
-class ImageIface;
+    class ImageIface;
 }
 
 using namespace Digikam;
@@ -48,16 +48,20 @@ class ImageSelectionWidget : public QWidget
 
 public:
 
-    enum RatioAspect               // Constrained Aspect Ratio list.
-    {
+    enum RatioAspect               // Constrained Aspect Ratio list. See ImageSelectionWidget::setSelectionAspectRatioType()
+    {                              // method for crop-value implementations.
         RATIOCUSTOM=0,             // Custom aspect ratio.
         RATIO01X01,                // 1:1
+        RATIO02x01,                // 2:1
         RATIO02x03,                // 2:3
+        RATIO03X01,                // 3:1
         RATIO03X04,                // 3:4
+        RATIO04X01,                // 4:1
         RATIO04X05,                // 4:5
         RATIO05x07,                // 5:7
         RATIO07x10,                // 7:10
         RATIO08x05,                // 8:5
+        RATIO16x09,                // 19:9
         RATIOGOLDEN,               // Golden ratio : 1:1.618
         RATIOCURRENT,              // Current loaded image aspect ratio
         RATIONONE                  // No aspect ratio.
