@@ -6,7 +6,7 @@
  * Date        : 2012-01-24
  * Description : slideshow builder progress indicator
  *
- * Copyright (C) 2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2012-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -42,11 +42,11 @@
 namespace Digikam
 {
 
-class SlideShowBuilder::SlideShowBuilderPriv
+class SlideShowBuilder::Private
 {
 public:
 
-    SlideShowBuilderPriv() :
+    Private() :
         cancel(false),
         album(0)
     {
@@ -59,7 +59,7 @@ public:
     
 SlideShowBuilder::SlideShowBuilder(const ImageInfoList& infoList)
     : ProgressItem(0, "SlideShowBuilder", QString(), QString(), true, true),
-      d(new SlideShowBuilderPriv)
+      d(new Private)
 {
     d->infoList = infoList;
 
@@ -68,9 +68,9 @@ SlideShowBuilder::SlideShowBuilder(const ImageInfoList& infoList)
     QTimer::singleShot(500, this, SLOT(slotRun()));
 }
 
-SlideShowBuilder::SlideShowBuilder(Album* album)
+SlideShowBuilder::SlideShowBuilder(Album* const album)
     : ProgressItem(0, "SlideShowBuilder", QString(), QString(), true, true),
-      d(new SlideShowBuilderPriv)
+      d(new Private)
 {
     d->album = album;
 
@@ -104,9 +104,11 @@ void SlideShowBuilder::slotRun()
             ++it;
         }
 
-        ImageInfoAlbumsJob* job = new ImageInfoAlbumsJob;
+        ImageInfoAlbumsJob* const job = new ImageInfoAlbumsJob;
+
         connect(job, SIGNAL(signalCompleted(ImageInfoList)),
                 this, SLOT(slotParseImageInfoList(ImageInfoList)));
+
         job->allItemsFromAlbums(albumList);
     }
     else

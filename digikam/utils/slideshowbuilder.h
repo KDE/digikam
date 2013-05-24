@@ -6,7 +6,7 @@
  * Date        : 2012-01-24
  * Description : slideshow builder progress indicator
  *
- * Copyright (C) 2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2012-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -47,7 +47,7 @@ public:
     /** Contructor to work on image list */
     explicit SlideShowBuilder(const ImageInfoList& infoList);
     /** Contructor to work on recursive mode from album */
-    explicit SlideShowBuilder(Album* album);
+    explicit SlideShowBuilder(Album* const album);
     ~SlideShowBuilder();
 
 Q_SIGNALS:
@@ -62,8 +62,8 @@ private Q_SLOTS:
 
 private:
 
-    class SlideShowBuilderPriv;
-    SlideShowBuilderPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam
