@@ -7,7 +7,7 @@
  * Description : A wrapper around KNotification which uses
  *               KPassivePopup if KNotify is unavailable
  *
- * Copyright (C) 2009-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2011 by Michael G. Hansen <mike at mghansen dot de>
  *
  * This program is free software; you can redistribute it
@@ -35,6 +35,7 @@
 #include <kglobalsettings.h>
 #include <kaboutdata.h>
 #include <kiconloader.h>
+#include <kstandarddirs.h>
 #include <knotification.h>
 #include <kpassivepopup.h>
 #include <kdebug.h>
@@ -84,11 +85,13 @@ void KNotificationWrapper(const QString& eventId, const QString& message,
     {
         if (KGlobal::mainComponent().aboutData()->appName() == QString("digikam"))
         {
-            logoPixmap = QPixmap(SmallIcon("digikam"));
+            logoPixmap = QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
+                         .scaled(48, 48, Qt::KeepAspectRatio, Qt::SmoothTransformation);
         }
         else
         {
-            logoPixmap = QPixmap(SmallIcon("showfoto"));
+            logoPixmap = QPixmap(KStandardDirs::locate("data", "digikam/data/logo-showfoto.png"))
+                         .scaled(48, 48, Qt::KeepAspectRatio, Qt::SmoothTransformation);
         }
     }
 
@@ -101,7 +104,8 @@ void KNotificationWrapper(const QString& eventId, const QString& message,
         {
             return;
         }
-        NotificationPassivePopup* popup = new NotificationPassivePopup(parent);
+
+        NotificationPassivePopup* const popup = new NotificationPassivePopup(parent);
         popup->showNotification(windowTitle, message, logoPixmap);
     }
     else
