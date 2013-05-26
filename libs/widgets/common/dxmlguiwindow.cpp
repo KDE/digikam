@@ -21,6 +21,8 @@
  *
  * ============================================================ */
 
+#include "dxmlguiwindow.moc"
+
 // Qt includes
 
 #include <QString>
@@ -45,10 +47,6 @@
 #include <kactioncollection.h>
 #include <kdialog.h>
 #include <klocale.h>
-
-// Local includes
-
-#include "dxmlguiwindow.h"
 
 namespace Digikam
 {
