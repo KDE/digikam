@@ -15,4 +15,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 005 ==> 308489 - Raw image development produces artifacts in digikam 3.0.0-beta 2.
 006 ==> 305382 - Editing RAW gives artefacts with Bilinear quality.
 007 ==> 320049 - Libkdcraw is crashing on decoding some sigma raw files.
-008 ==> 
+008 ==> 320351 - Request camera support for Sony A77.
+009 ==> 
