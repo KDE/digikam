@@ -16,4 +16,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 006 ==> 305382 - Editing RAW gives artefacts with Bilinear quality.
 007 ==> 320049 - Libkdcraw is crashing on decoding some sigma raw files.
 008 ==> 320351 - Request camera support for Sony A77.
-009 ==> 
+009 ==> 320371 - Panels not hidden when they should be.
+010 ==> 320016 - Full-screen options are not applied after restarting digiKam.
+011 ==> 319876 - Panels state changed after exit from full screen mode.
+012 ==> 
