@@ -552,9 +552,9 @@ void AlbumSettings::init()
             this, SLOT(applyNepomukSettings()));
 }
 
-KConfigGroup AlbumSettings::defaultConfigGroup() const
+KConfigGroup AlbumSettings::generalConfigGroup() const
 {
-    return d->config->group(d->configGroupDefault);
+    return d->config->group(d->configGroupGeneral);
 }
 
 void AlbumSettings::readSettings()
@@ -563,7 +563,7 @@ void AlbumSettings::readSettings()
 
     // ---------------------------------------------------------------------
 
-    KConfigGroup group  = defaultConfigGroup();
+    KConfigGroup group = config->group(d->configGroupDefault);
 
     QStringList collectionList = group.readEntry(d->configAlbumCollectionsEntry, QStringList());
 
@@ -655,7 +655,7 @@ void AlbumSettings::readSettings()
 
     // ---------------------------------------------------------------------
 
-    group = config->group(d->configGroupGeneral);
+    group = generalConfigGroup();
 
     d->showSplash                = group.readEntry(d->configShowSplashEntry,                      true);
     d->useTrash                  = group.readEntry(d->configUseTrashEntry,                        true);
@@ -701,7 +701,7 @@ void AlbumSettings::saveSettings()
 
     // ---------------------------------------------------------------------
 
-    KConfigGroup group = defaultConfigGroup();
+    KConfigGroup group = config->group(d->configGroupDefault);
 
     group.writeEntry(d->configAlbumCollectionsEntry,             d->albumCategoryNames);
     group.writeEntry(d->configAlbumSortOrderEntry,               (int)d->albumSortOrder);
@@ -775,7 +775,7 @@ void AlbumSettings::saveSettings()
 
     // ---------------------------------------------------------------------
 
-    group = config->group(d->configGroupGeneral);
+    group = generalConfigGroup();
 
     group.writeEntry(d->configShowSplashEntry,                   d->showSplash);
     group.writeEntry(d->configUseTrashEntry,                     d->useTrash);

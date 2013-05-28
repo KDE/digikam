@@ -110,11 +110,11 @@ public:
 SetupAlbumView::SetupAlbumView(QWidget* const parent)
     : QScrollArea(parent), d(new Private)
 {
-    QWidget* panel      = new QWidget(viewport());
+    QWidget* const panel      = new QWidget(viewport());
     setWidget(panel);
     setWidgetResizable(true);
 
-    QVBoxLayout* layout = new QVBoxLayout(panel);
+    QVBoxLayout* const layout = new QVBoxLayout(panel);
 
     // --------------------------------------------------------
 
@@ -306,7 +306,7 @@ void SetupAlbumView::applySettings()
     settings->setShowFolderTreeViewItemsCount(d->showFolderTreeViewItemsCount->isChecked());
     settings->saveSettings();
 
-    KConfigGroup group = settings->defaultConfigGroup();
+    KConfigGroup group = settings->generalConfigGroup();
     d->fullScreenSettings->saveSettings(group);
 }
 
@@ -357,7 +357,7 @@ void SetupAlbumView::readSettings()
     d->previewShowIcons->setChecked(settings->getPreviewShowIcons());
     d->showFolderTreeViewItemsCount->setChecked(settings->getShowFolderTreeViewItemsCount());
 
-    KConfigGroup group = settings->defaultConfigGroup();
+    KConfigGroup group = settings->generalConfigGroup();
     d->fullScreenSettings->readSettings(group);
 }
 

@@ -190,7 +190,9 @@ DigikamApp::DigikamApp()
 
     setObjectName("Digikam");
 
-    if (d->config->group("General Settings").readEntry("Show Splash", true) &&
+    KConfigGroup group = AlbumSettings::instance()->generalConfigGroup();
+
+    if (group.readEntry("Show Splash", true) &&
         !kapp->isSessionRestored())
     {
         d->splashScreen = new SplashScreen();
@@ -208,7 +210,7 @@ DigikamApp::DigikamApp()
             + QString::number(QCoreApplication::instance()->applicationPid()));
 
     // collection scan
-    if (d->config->group("General Settings").readEntry("Scan At Start", true) ||
+    if (group.readEntry("Scan At Start", true) ||
         !CollectionScanner::databaseInitialScanDone())
     {
         ScanController::instance()->completeCollectionScanDeferFiles(d->splashScreen);
@@ -220,7 +222,6 @@ DigikamApp::DigikamApp()
     }
 
     // ensure creation
-    AlbumSettings::instance();
     AlbumManager::instance();
     LoadingCacheInterface::initialize();
     IccSettings::instance()->loadAllProfilesProperties();
@@ -266,7 +267,7 @@ DigikamApp::DigikamApp()
     // This manager must be created after collection setup.
     d->tagsActionManager = new TagsActionMngr(this);
 
-    applyMainWindowSettings(d->config->group("General Settings"));
+    applyMainWindowSettings(group);
 
     // Check ICC profiles repository availability
 
@@ -291,10 +292,11 @@ DigikamApp::DigikamApp()
     // preload additional windows
     preloadWindows();
 
-    setAutoSaveSettings("General Settings", true);
+    readFullScreenSettings(group);
+    setAutoSaveSettings(group, true);
 
     // Now, enable finished the collection scan as deferred process
-    NewItemsFinder* tool = new NewItemsFinder(NewItemsFinder::ScanDeferredFiles);
+    NewItemsFinder* const tool = new NewItemsFinder(NewItemsFinder::ScanDeferredFiles);
     tool->start();
 
     LoadSaveThread::setInfoProvider(new DatabaseLoadSaveFileInfoProvider);
@@ -2414,7 +2416,7 @@ void DigikamApp::slotSetupChanged()
     }
 
     // Load full-screen options
-    KConfigGroup group = AlbumSettings::instance()->defaultConfigGroup();
+    KConfigGroup group = AlbumSettings::instance()->generalConfigGroup();
     readFullScreenSettings(group);
 
     d->view->applySettings();
@@ -2446,7 +2448,7 @@ void DigikamApp::slotEditKeys()
 
 void DigikamApp::slotConfToolbars()
 {
-    saveMainWindowSettings(d->config->group("General Settings"));
+    saveMainWindowSettings(AlbumSettings::instance()->generalConfigGroup());
     KEditToolBar dlg(factory(), this);
 
     connect(&dlg, SIGNAL(newToolBarConfig()),
@@ -2457,7 +2459,7 @@ void DigikamApp::slotConfToolbars()
 
 void DigikamApp::slotNewToolbarConfig()
 {
-    applyMainWindowSettings(d->config->group("General Settings"));
+    applyMainWindowSettings(AlbumSettings::instance()->generalConfigGroup());
 }
 
 void DigikamApp::slotConfNotifications()

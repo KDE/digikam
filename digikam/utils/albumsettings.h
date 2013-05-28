@@ -393,7 +393,7 @@ public:
     void setApplicationStyle(const QString& style);
     QString getApplicationStyle() const;
 
-    KConfigGroup defaultConfigGroup() const;
+    KConfigGroup generalConfigGroup() const;
 
 public Q_SLOTS:
 
