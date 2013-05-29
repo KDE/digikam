@@ -178,7 +178,8 @@ void DXmlGuiWindow::slotToggleFullScreen(bool set)
 
         // restore sidebars
 
-        showSideBars(true);
+        if ((d->fsOptions & FS_SIDEBARS) && d->fullScreenHideSideBars)
+            showSideBars(true);
 
         // restore thummbbar
 

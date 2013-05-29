@@ -7,7 +7,7 @@
  * Description : a widget to manage sidebar in GUI.
  *
  * Copyright (C) 2005-2006 by Joern Ahrens <joern dot ahrens at kdemail dot net>
- * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2008-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -44,6 +44,7 @@
 #include <kdeversion.h>
 #include <kglobal.h>
 #include <kiconloader.h>
+#include <kdebug.h>
 
 namespace Digikam
 {
@@ -85,7 +86,9 @@ public:
 
     bool                          minimizedDefault;
     bool                          minimized;
-    bool                          isMinimized;      // Backup of minimized status (used with Fullscreen)
+    bool                          isMinimized;      // Backup of shrinked status before backup(), restored by restore()
+                                                    // NOTE: when sidebar is hidden, only icon bar is affected. If sidebar view is 
+                                                    // visible, this one must be shrink and restored accordingly.
 
     int                           tabs;
     int                           activeTab;
@@ -182,12 +185,11 @@ void Sidebar::doSaveState()
 
 void Sidebar::backup()
 {
+    // backup preview state of sidebar view (shrink or not)
     d->isMinimized = d->minimized;
-
-    if (!d->isMinimized)
-    {
-        shrink();
-    }
+    
+    // In all case, shrink sidebar view 
+    shrink();
 
     KMultiTabBar::hide();
 }
@@ -205,12 +207,13 @@ void Sidebar::backup(const QList<QWidget*> thirdWidgetsToBackup, QList<int> *siz
 
 void Sidebar::restore()
 {
+    KMultiTabBar::show();
+
+    // restore preview state of sidebar view, stored in backup()
     if (!d->isMinimized)
     {
         expand();
     }
-
-    KMultiTabBar::show();
 }
 
 void Sidebar::restore(const QList<QWidget*> thirdWidgetsToRestore, const QList<int>& sizes)
