@@ -74,7 +74,7 @@ public:
                    Use KMultiTabBar::Left or KMultiTabBar::Right.
      * @param minimizedDefault hide the sidebar when the program is started the first time.
      */
-    Sidebar(QWidget* parent, SidebarSplitter* sp, KMultiTabBarPosition side=KMultiTabBar::Left,
+    Sidebar(QWidget* const parent, SidebarSplitter* const sp, KMultiTabBarPosition side=KMultiTabBar::Left,
             bool minimizedDefault=false);
 
     virtual ~Sidebar();
@@ -87,17 +87,17 @@ public:
      * @param pic icon which is shown in this tab
      * @param title text which is shown it this tab
      */
-    void appendTab(QWidget* w, const QPixmap& pic, const QString& title);
+    void appendTab(QWidget* const w, const QPixmap& pic, const QString& title);
 
     /**
      * Deletes a tab from the tabbar
      */
-    void deleteTab(QWidget* w);
+    void deleteTab(QWidget* const w);
 
     /**
      * Activates a tab
      */
-    void setActiveTab(QWidget* w);
+    void setActiveTab(QWidget* const w);
 
     /**
      * Returns the currently activated tab, or 0 if no tab is active
@@ -124,7 +124,7 @@ public:
      * If there are other widgets in this splitter, stores
      * their sizes in the provided list.
      */
-    void backup(const QList<QWidget*> thirdWidgetsToBackup, QList<int> *sizes);
+    void backup(const QList<QWidget*> thirdWidgetsToBackup, QList<int>* const sizes);
 
     /**
      * show sidebar and restore minimized state.
@@ -186,8 +186,8 @@ private:
 
     friend class SidebarSplitter;
 
-    class SidebarPriv;
-    SidebarPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 // -----------------------------------------------------------------------------
@@ -204,8 +204,8 @@ public:
      *  This is a QSplitter with better support for storing its state
      *  in config files, especially if Sidebars are contained in the splitter.
      */
-    explicit SidebarSplitter(QWidget* parent = 0);
-    explicit SidebarSplitter(Qt::Orientation orientation, QWidget* parent = 0);
+    explicit SidebarSplitter(QWidget* const parent = 0);
+    explicit SidebarSplitter(Qt::Orientation orientation, QWidget* const parent = 0);
 
     ~SidebarSplitter();
 
@@ -218,7 +218,7 @@ public:
      * Saves the splitter state to group, handling minimized sidebars correctly.
      * This version uses a specified key in the config group.
      */
-    void saveState(KConfigGroup& group, QString key);
+    void saveState(KConfigGroup& group, const QString& key);
     /**
      * Restores the splitter state from group, handling minimized sidebars correctly.
      * DEFAULT_CONFIG_KEY is used for restoring the state.
@@ -228,21 +228,21 @@ public:
      * Restores the splitter state from group, handling minimized sidebars correctly.
      * This version uses a specified key in the config group.
      */
-    void restoreState(KConfigGroup& group, QString key);
+    void restoreState(KConfigGroup& group, const QString& key);
 
     /**
      * Returns the value of sizes() that corresponds to the given Sidebar or splitter child widget.
      */
-    int size(Sidebar* bar) const;
-    int size(QWidget* widget) const;
+    int size(Sidebar* const bar) const;
+    int size(QWidget* const widget) const;
     /**
      * Sets the splitter size for the given sidebar or splitter child widget to size.
      * Special value -1: Sets the minimum size hint of the widget.
      */
-    void setSize(Sidebar* bar, int size);
-    void setSize(QWidget* widget, int size);
+    void setSize(Sidebar* const bar, int size);
+    void setSize(QWidget* const widget, int size);
 
-    void addSplitterCollapserButton(QWidget* widget);
+    void addSplitterCollapserButton(QWidget* const widget);
 
 private Q_SLOTS:
 
@@ -252,8 +252,8 @@ private:
 
     friend class Sidebar;
 
-    class SidebarSplitterPriv;
-    SidebarSplitterPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam
