@@ -837,7 +837,7 @@ void AutoCrop::startAnalyse()
         // --- Step 2 -- Search between local minima
         kDebug() << "In local minima function";
         //We need to find the maxima between the first two local minima from either side
-        int blackpointCount[threshold.width()];
+        int* const blackpointCount = new int[threshold.width()];
         int leftminima     = 0;
         int rightminima    = (threshold.width()-1);
         int topCropLine    = 0;
@@ -995,6 +995,8 @@ void AutoCrop::startAnalyse()
             d->cropArea.setTopLeft(icp1);
             d->cropArea.setBottomRight(icp2);
         }
+        
+        delete [] blackpointCount;
     }
 
     kDebug() << "Inner Crop Area : " << cropArea;
