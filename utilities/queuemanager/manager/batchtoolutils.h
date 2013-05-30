@@ -73,7 +73,7 @@ public:
 };
 
 //! kDebug() stream operator. Writes property @a t to the debug output in a nicely formatted way.
-DIGIKAM_EXPORT QDebug operator<<(QDebug dbg, const BatchToolSet& s);
+QDebug operator<<(QDebug dbg, const BatchToolSet& s);
 
 // -------------------------------------------------------------------------------------------------------------
 
