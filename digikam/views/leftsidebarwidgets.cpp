@@ -139,7 +139,7 @@ void AlbumFolderViewSideBarWidget::applySettings()
     d->albumFolderView->setEnableToolTips(settings->getShowAlbumToolTips());
 }
 
-void AlbumFolderViewSideBarWidget::changeAlbumFromHistory(Album* const album)
+void AlbumFolderViewSideBarWidget::changeAlbumFromHistory(Album* album)
 {
     d->albumFolderView->setCurrentAlbum(dynamic_cast<PAlbum*>(album));
 }
@@ -235,7 +235,7 @@ void TagViewSideBarWidget::applySettings()
 {
 }
 
-void TagViewSideBarWidget::changeAlbumFromHistory(Album* const album)
+void TagViewSideBarWidget::changeAlbumFromHistory(Album* album)
 {
     d->tagFolderView->setCurrentAlbum(dynamic_cast<TAlbum*>(album));
 }
@@ -313,7 +313,7 @@ void DateFolderViewSideBarWidget::applySettings()
 {
 }
 
-void DateFolderViewSideBarWidget::changeAlbumFromHistory(Album* const album)
+void DateFolderViewSideBarWidget::changeAlbumFromHistory(Album* album)
 {
     d->dateFolderView->changeAlbumFromHistory(dynamic_cast<DAlbum*>(album));
 }
@@ -652,7 +652,7 @@ void TimelineSideBarWidget::applySettings()
     // nothing to do here right now
 }
 
-void TimelineSideBarWidget::changeAlbumFromHistory(Album* const album)
+void TimelineSideBarWidget::changeAlbumFromHistory(Album* album)
 {
     d->timeLineFolderView->setCurrentAlbum(dynamic_cast<SAlbum*>(album));
 }
@@ -902,7 +902,7 @@ void SearchSideBarWidget::applySettings()
 {
 }
 
-void SearchSideBarWidget::changeAlbumFromHistory(Album* const album)
+void SearchSideBarWidget::changeAlbumFromHistory(Album* album)
 {
     d->searchTreeView->setCurrentAlbum(dynamic_cast<SAlbum*>(album));
 }
@@ -989,7 +989,7 @@ void FuzzySearchSideBarWidget::applySettings()
 {
 }
 
-void FuzzySearchSideBarWidget::changeAlbumFromHistory(Album* const album)
+void FuzzySearchSideBarWidget::changeAlbumFromHistory(Album* album)
 {
     SAlbum* salbum = dynamic_cast<SAlbum*>(album);
     d->fuzzySearchView->setCurrentAlbum(salbum);
@@ -1083,7 +1083,7 @@ void GPSSearchSideBarWidget::applySettings()
 {
 }
 
-void GPSSearchSideBarWidget::changeAlbumFromHistory(Album* const album)
+void GPSSearchSideBarWidget::changeAlbumFromHistory(Album* album)
 {
     d->gpsSearchView->changeAlbumFromHistory(dynamic_cast<SAlbum*>(album));
 }
@@ -1214,7 +1214,7 @@ void PeopleSideBarWidget::applySettings()
 {
 }
 
-void PeopleSideBarWidget::changeAlbumFromHistory(Album* const album)
+void PeopleSideBarWidget::changeAlbumFromHistory(Album* album)
 {
     d->tagFolderView->setCurrentAlbum(dynamic_cast<TAlbum*>(album));
 }

@@ -64,7 +64,7 @@ public:
     void    doLoadState();
     void    doSaveState();
     void    applySettings();
-    void    changeAlbumFromHistory(Album* const album);
+    void    changeAlbumFromHistory(Album* album);
     QPixmap getIcon();
     QString getCaption();
 
@@ -105,7 +105,7 @@ public:
     void    doLoadState();
     void    doSaveState();
     void    applySettings();
-    void    changeAlbumFromHistory(Album* const album);
+    void    changeAlbumFromHistory(Album* album);
     QPixmap getIcon();
     QString getCaption();
 
@@ -150,7 +150,7 @@ public:
     void    doLoadState();
     void    doSaveState();
     void    applySettings();
-    void    changeAlbumFromHistory(Album* const album);
+    void    changeAlbumFromHistory(Album* album);
     QPixmap getIcon();
     QString getCaption();
 
@@ -185,7 +185,7 @@ public:
     void    doLoadState();
     void    doSaveState();
     void    applySettings();
-    void    changeAlbumFromHistory(Album* const album);
+    void    changeAlbumFromHistory(Album* album);
     QPixmap getIcon();
     QString getCaption();
 
@@ -231,7 +231,7 @@ public:
     void    doLoadState();
     void    doSaveState();
     void    applySettings();
-    void    changeAlbumFromHistory(Album* const album);
+    void    changeAlbumFromHistory(Album* album);
     QPixmap getIcon();
     QString getCaption();
 
@@ -263,7 +263,7 @@ public:
     void    doLoadState();
     void    doSaveState();
     void    applySettings();
-    void    changeAlbumFromHistory(Album* const album);
+    void    changeAlbumFromHistory(Album* album);
     QPixmap getIcon();
     QString getCaption();
 
@@ -298,7 +298,7 @@ public:
     void    doLoadState();
     void    doSaveState();
     void    applySettings();
-    void    changeAlbumFromHistory(Album* const album);
+    void    changeAlbumFromHistory(Album* album);
     QPixmap getIcon();
     QString getCaption();
 
@@ -333,7 +333,7 @@ public:
     void    doLoadState();
     void    doSaveState();
     void    applySettings();
-    void    changeAlbumFromHistory(Album* const album);
+    void    changeAlbumFromHistory(Album* album);
     QPixmap getIcon();
     QString getCaption();
 
