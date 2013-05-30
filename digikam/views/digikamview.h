@@ -79,7 +79,6 @@ public:
     void hideSideBars();
     void setThumbSize(int size);
     void toggleShowBar(bool);
-    bool isThumbBarVisible();
     void setRecurseAlbums(bool recursive);
     void setRecurseTags(bool recursive);
     void imageTransform(RotationMatrix::TransformationAction transform);

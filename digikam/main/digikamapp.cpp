@@ -3028,7 +3028,7 @@ void DigikamApp::showThumbBar(bool visible)
 
 bool DigikamApp::thumbbarVisibility() const
 {
-    return d->view->isThumbBarVisible();
+    return d->showBarAction->isChecked();
 }
 
 }  // namespace Digikam

@@ -775,11 +775,6 @@ void ImportView::toggleShowBar(bool b)
     d->StackedView->thumbBarDock()->showThumbBar(b);
 }
 
-bool ImportView::isThumbBarVisible()
-{
-    return d->StackedView->thumbBarDock()->isVisible();
-}
-
 void ImportView::scrollTo(const QString& folder, const QString& file)
 {
     CamItemInfo info  = camItemInfo(folder, file);

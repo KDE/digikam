@@ -2588,7 +2588,7 @@ void ImportUI::showThumbBar(bool visible)
 
 bool ImportUI::thumbbarVisibility() const
 {
-    return d->view->isThumbBarVisible();
+    return d->showBarAction->isChecked();
 }
 
 }  // namespace Digikam

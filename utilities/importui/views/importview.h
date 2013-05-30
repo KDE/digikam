@@ -58,7 +58,6 @@ public:
     void hideSideBars();
     void setThumbSize(int size);
     void toggleShowBar(bool b);
-    bool isThumbBarVisible();
 
     void scrollTo(const QString& folder, const QString& file);
 
