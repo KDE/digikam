@@ -327,7 +327,7 @@ public:
     {
     }
 
-    void addActions(AbstractAlbumTreeView* const view, ContextMenuHelper& cmh, Album* const album)
+    void addActions(AbstractAlbumTreeView* view, ContextMenuHelper& cmh, Album* album)
     {
         AbstractCheckableAlbumModel* const checkable = qobject_cast<AbstractCheckableAlbumModel*>(view->albumModel());
 
