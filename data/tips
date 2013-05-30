@@ -139,7 +139,8 @@
 <p>
 <table border="0" cellpadding="0" cellspacing="10" align="center">
 <tr>
-<td><img src="hicolor/32x32/apps/digikam.png"></td>
+<td><img src="hicolor/32x32/apps/digikam.png">
+</td>
 <td>
 ... that you can use remote computer repository as images Collection? Go to Setup dialog and Collection section for details.
 </td>
@@ -188,7 +189,8 @@
 <table border="0" cellpadding="0" cellspacing="10" align="center">
 <tr>
 <td>
-<img src="hicolor/32x32/apps/digikam.png"></td>
+<img src="hicolor/32x32/apps/digikam.png">
+</td>
 <td>
 ... that most of the settings in a dialog box have small explanation text, called "<b>What's this?</b>" information, available when you hover over an item and right click with your mouse?
 </td>
