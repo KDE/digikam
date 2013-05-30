@@ -885,7 +885,7 @@ public:
     {
     }
 
-    KFaceIface::ImageListProvider* newImages(const KFaceIface::Identity& id)
+    KFaceIface::ImageListProvider* newImages(const KFaceIface::Identity& /*id*/)
     {
         return &empty;
     }
