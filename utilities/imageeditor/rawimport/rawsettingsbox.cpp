@@ -141,8 +141,7 @@ public:
 
     QPushButton*         abortBtn;
     QPushButton*         updateBtn;
-
-    QToolButton*         resetCurveBtn;
+    QPushButton*         resetCurveBtn;
 
     KTabWidget*          tabView;
 
@@ -272,14 +271,11 @@ RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget* const parent)
     QLabel* const spacev                 = new QLabel(d->curveBox);
     spacev->setFixedWidth(1);
 
-    d->curveWidget   = new CurvesWidget(256, 192, d->curveBox);
+    d->curveWidget     = new CurvesWidget(256, 192, d->curveBox);
     d->curveWidget->setWhatsThis(i18n("This is the curve adjustment of the image luminosity"));
 
-    d->resetCurveBtn = new QToolButton(d->curveBox);
-    d->resetCurveBtn->setFixedSize(11, 11);
-    d->resetCurveBtn->setIcon(SmallIcon("document-revert", 8));
-    d->resetCurveBtn->setFocusPolicy(Qt::NoFocus);
-    d->resetCurveBtn->setAutoRaise(true);
+    d->resetCurveBtn   = new QPushButton(i18n("Reset"), d->curveBox);
+    d->resetCurveBtn->setIcon(SmallIcon("document-revert"));
     d->resetCurveBtn->setToolTip(i18n("Reset curve to linear"));
 
     QLabel* const spaceh                 = new QLabel(d->curveBox);
@@ -288,13 +284,14 @@ RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget* const parent)
     ColorGradientWidget* const hGradient = new ColorGradientWidget(Qt::Horizontal, 10, d->curveBox);
     hGradient->setColors(QColor("black"), QColor("white"));
 
-    curveLayout->addWidget(vGradient,        0, 0, 1, 1);
-    curveLayout->addWidget(spacev,           0, 1, 1, 1);
-    curveLayout->addWidget(d->curveWidget,   0, 2, 1, 1);
-    curveLayout->addWidget(spaceh,           1, 2, 1, 1);
-    curveLayout->addWidget(d->resetCurveBtn, 1, 0, 2, 2);
-    curveLayout->addWidget(hGradient,        2, 2, 1, 1);
-    curveLayout->setRowStretch(3, 10);
+    curveLayout->addWidget(vGradient,             0, 0, 1, 1);
+    curveLayout->addWidget(spacev,                0, 1, 1, 1);
+    curveLayout->addWidget(d->curveWidget,        0, 2, 1, 2);
+    curveLayout->addWidget(spaceh,                1, 2, 1, 2);
+    curveLayout->addWidget(hGradient,             2, 2, 1, 2);
+    curveLayout->addWidget(d->resetCurveBtn,      3, 3, 1, 1);
+    curveLayout->setRowStretch(4, 10);
+    curveLayout->setColumnStretch(2, 10);
     curveLayout->setSpacing(0);
     curveLayout->setMargin(spacingHint());
 
