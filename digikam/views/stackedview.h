@@ -8,7 +8,7 @@
  *               or the current image preview.
  *
  * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2013 by Michael G. Hansen <mike at mghansen dot de>
+ * Copyright (C) 2013      by Michael G. Hansen <mike at mghansen dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -64,13 +64,13 @@ public:
     enum StackedViewMode
     {
         StackedViewModeFirst = 0,
-        IconViewMode = 0,
-        PreviewImageMode = 1,
-        WelcomePageMode = 2,
-        MediaPlayerMode = 3,
-        MapWidgetMode = 4,
-        TableViewMode = 5,
-        StackedViewModeLast = 5
+        IconViewMode         = 0,
+        PreviewImageMode     = 1,
+        WelcomePageMode      = 2,
+        MediaPlayerMode      = 3,
+        MapWidgetMode        = 4,
+        TableViewMode        = 5,
+        StackedViewModeLast  = 5
     };
 
 public:
@@ -81,22 +81,22 @@ public:
     /* Attach the thumbnail dock widget to the specified QMainWindow. */
     void setDockArea(QMainWindow*);
 
-    ThumbBarDock*     thumbBarDock()     const;
-    ImageThumbnailBar*thumbBar()     const;
-    DigikamImageView* imageIconView()    const;
-    ImagePreviewView* imagePreviewView() const;
-    MapWidgetView*    mapWidgetView()    const;
-    TableView*        tableView() const;
-    MediaPlayerView*  mediaPlayerView()  const;
+    ThumbBarDock*      thumbBarDock()     const;
+    ImageThumbnailBar* thumbBar()         const;
+    DigikamImageView*  imageIconView()    const;
+    ImagePreviewView*  imagePreviewView() const;
+    MapWidgetView*     mapWidgetView()    const;
+    TableView*         tableView()        const;
+    MediaPlayerView*   mediaPlayerView()  const;
 
     /**
      * Single-file mode is image preview or media player,
      * multi-file is icon view or map,
      * abstract modes do not handle files (welcome page)
      */
-    bool isInSingleFileMode() const;
+    bool isInSingleFileMode()   const;
     bool isInMultipleFileMode() const;
-    bool isInAbstractMode() const;
+    bool isInAbstractMode()     const;
 
     void setPreviewItem(const ImageInfo& info = ImageInfo(),
                         const ImageInfo& previous = ImageInfo(),

@@ -78,8 +78,8 @@ public:
                         const CamItemInfo& previous = CamItemInfo(),
                         const CamItemInfo& next = CamItemInfo());
 
-    int  previewMode() const;
-    void setPreviewMode(const int mode);
+    StackedViewMode  viewMode() const;
+    void setViewMode(const StackedViewMode mode);
     void previewLoaded();
 
     void   increaseZoom();

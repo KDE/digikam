@@ -530,7 +530,7 @@ void DigikamApp::setupView()
 
 void DigikamApp::setupViewConnections()
 {
-        connect(d->view, SIGNAL(signalAlbumSelected(bool)),
+    connect(d->view, SIGNAL(signalAlbumSelected(bool)),
             this, SLOT(slotAlbumSelected(bool)));
 
     connect(d->view, SIGNAL(signalTagSelected(bool)),
@@ -1148,13 +1148,24 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
+    d->showBarAction = new KToggleAction(KIcon("view-choose"), i18n("Show Thumbbar"), this);
+    d->showBarAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_T));
+    connect(d->showBarAction, SIGNAL(triggered()), this, SLOT(slotToggleShowBar()));
+    actionCollection()->addAction("showthumbs", d->showBarAction);
+    
     d->showMenuBarAction = KStandardAction::showMenubar(this, SLOT(slotShowMenuBar()), actionCollection());
-
+    
     KStandardAction::keyBindings(this,            SLOT(slotEditKeys()),          actionCollection());
     KStandardAction::configureToolbars(this,      SLOT(slotConfToolbars()),      actionCollection());
     KStandardAction::configureNotifications(this, SLOT(slotConfNotifications()), actionCollection());
     KStandardAction::preferences(this,            SLOT(slotSetup()),             actionCollection());
 
+    // Provides a menu entry that allows showing/hiding the toolbar(s)
+    setStandardToolBarMenuEnabled(true);
+
+    // Provides a menu entry that allows showing/hiding the statusbar
+    createStandardStatusBarAction();
+    
     // -----------------------------------------------------------
 
     d->zoomPlusAction  = KStandardAction::zoomIn(d->view, SLOT(slotZoomIn()), this);
@@ -1220,13 +1231,6 @@ void DigikamApp::setupActions()
     actionCollection()->addAction("slideshow_qml", d->slideShowQmlAction);
     d->slideShowAction->addAction(d->slideShowQmlAction);
 #endif // USE_PRESENTATION_MODE
-
-   // -----------------------------------------------------------
-
-    d->showBarAction = new KToggleAction(KIcon("view-choose"), i18n("Show Thumbbar"), this);
-    d->showBarAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_T));
-    connect(d->showBarAction, SIGNAL(triggered()), this, SLOT(slotToggleShowBar()));
-    actionCollection()->addAction("showthumbs", d->showBarAction);
 
     // -----------------------------------------------------------
 
@@ -1305,12 +1309,6 @@ void DigikamApp::setupActions()
     actionCollection()->addAction("camera_add", cameraAction);
 
     // -----------------------------------------------------------
-
-    // Provides a menu entry that allows showing/hiding the toolbar(s)
-    setStandardToolBarMenuEnabled(true);
-
-    // Provides a menu entry that allows showing/hiding the statusbar
-    createStandardStatusBarAction();
 
     // Load Cameras -- do this before the createGUI so that the cameras
     // are plugged into the toolbar at startup
@@ -1557,36 +1555,6 @@ void DigikamApp::slotSelectionChanged(int selectionCount)
         slotResetExifOrientationActions();
     }
 }
-
-void DigikamApp::slotSwitchedToPreview()
-{
-    d->imagePreviewAction->setChecked(true);
-    d->zoomBar->setBarMode(DZoomBar::PreviewZoomCtrl);
-    d->showBarAction->setEnabled(true);
-}
-
-void DigikamApp::slotSwitchedToIconView()
-{
-    d->zoomBar->setBarMode(DZoomBar::ThumbsSizeCtrl);
-    d->imageIconViewAction->setChecked(true);
-    d->showBarAction->setEnabled(false);
-}
-
-void DigikamApp::slotSwitchedToMapView()
-{
-    //TODO: Link to map view's zoom actions
-    d->zoomBar->setBarMode(DZoomBar::ThumbsSizeCtrl);
-    d->imageMapViewAction->setChecked(true);
-    d->showBarAction->setEnabled(false);
-}
-
-void DigikamApp::slotSwitchedToTableView()
-{
-    d->zoomBar->setBarMode(DZoomBar::ThumbsSizeCtrl);
-    d->imageTableViewAction->setChecked(true);
-    d->showBarAction->setEnabled(false);
-}
-
 
 void DigikamApp::slotExit()
 {
@@ -3023,12 +2991,64 @@ void DigikamApp::showSideBars(bool visible)
 
 void DigikamApp::showThumbBar(bool visible)
 {
-    d->view->toggleShowBar(visible);
+    d->view->toggleShowBar(visible & d->showBarAction->isEnabled());
 }
 
 bool DigikamApp::thumbbarVisibility() const
 {
     return d->showBarAction->isChecked();
+}
+
+void DigikamApp::slotSwitchedToPreview()
+{
+    d->imagePreviewAction->setChecked(true);
+    d->zoomBar->setBarMode(DZoomBar::PreviewZoomCtrl);
+    toogleShowBar();
+}
+
+void DigikamApp::slotSwitchedToIconView()
+{
+    d->zoomBar->setBarMode(DZoomBar::ThumbsSizeCtrl);
+    d->imageIconViewAction->setChecked(true);
+    toogleShowBar();
+}
+
+void DigikamApp::slotSwitchedToMapView()
+{
+    //TODO: Link to map view's zoom actions
+    d->zoomBar->setBarMode(DZoomBar::ThumbsSizeCtrl);
+    d->imageMapViewAction->setChecked(true);
+    toogleShowBar();
+}
+
+void DigikamApp::slotSwitchedToTableView()
+{
+    d->zoomBar->setBarMode(DZoomBar::ThumbsSizeCtrl);
+    d->imageTableViewAction->setChecked(true);
+    toogleShowBar();
+}
+
+void DigikamApp::customizedFullScreenMode(bool set)
+{
+    statusBarMenuAction()->setEnabled(!set);
+    toolBarMenuAction()->setEnabled(!set);
+    d->showMenuBarAction->setEnabled(!set);
+    set ? d->showBarAction->setEnabled(false)
+        : toogleShowBar();
+}
+
+void DigikamApp::toogleShowBar()
+{
+    switch (d->view->viewMode())
+    {
+        case StackedView::PreviewImageMode:
+            d->showBarAction->setEnabled(true);
+            break;
+            
+        default:
+            d->showBarAction->setEnabled(false);
+            break;
+    }
 }
 
 }  // namespace Digikam

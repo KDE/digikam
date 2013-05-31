@@ -80,7 +80,8 @@ protected:
     void moveEvent(QMoveEvent* e);
 
 private:
-
+    
+    void customizedFullScreenMode(bool set);
     void showSideBars(bool visible);
     void closeEvent(QCloseEvent* e);
     void showEvent(QShowEvent*);

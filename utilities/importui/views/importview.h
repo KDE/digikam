@@ -34,6 +34,7 @@
 #include "sidebarwidget.h"
 #include "importui.h"
 #include "importmodel.h"
+#include "importstackedview.h"
 
 namespace Digikam
 {
@@ -79,6 +80,7 @@ public:
     double zoomMax();
 
     ThumbnailSize thumbnailSize();
+    ImportStackedView::StackedViewMode viewMode() const;
 
 Q_SIGNALS:
 

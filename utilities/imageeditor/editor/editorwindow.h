@@ -329,7 +329,7 @@ private:
     void quitWaitingLoop();
     void showSideBars(bool visible);
     void showThumbBar(bool visible);
-    void showCustomizedView(bool visible);
+    void customizedFullScreenMode(bool set);
     bool thumbbarVisibility() const;
     void setColorManagedViewIndicatorToolTip(bool available, bool cmv);
     void setUnderExposureToolTip(bool uei);

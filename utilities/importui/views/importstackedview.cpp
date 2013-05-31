@@ -97,7 +97,7 @@ ImportStackedView::ImportStackedView(CameraController* const controller, QWidget
     insertWidget(MediaPlayerMode,   d->mediaPlayerView);
     insertWidget(MapWidgetMode,     d->mapWidgetView);
 
-    setPreviewMode(PreviewCameraMode);
+    setViewMode(PreviewCameraMode);
     setAttribute(Qt::WA_DeleteOnClose);
 
     readSettings();
@@ -211,7 +211,7 @@ ImportThumbnailBar* ImportStackedView::thumbBar() const
 
 void ImportStackedView::slotEscapePreview()
 {
-    if (previewMode() == MediaPlayerMode)
+    if (viewMode() == MediaPlayerMode)
     {
         d->mediaPlayerView->escapePreview();
     }
@@ -251,11 +251,11 @@ void ImportStackedView::setPreviewItem(const CamItemInfo& info, const CamItemInf
 {
     if (info.isNull())
     {
-        if (previewMode() == MediaPlayerMode)
+        if (viewMode() == MediaPlayerMode)
         {
             d->mediaPlayerView->setCurrentItem();
         }
-        else if (previewMode() == PreviewImageMode)
+        else if (viewMode() == PreviewImageMode)
         {
             d->importPreviewView->setCamItemInfo();
         }
@@ -265,18 +265,18 @@ void ImportStackedView::setPreviewItem(const CamItemInfo& info, const CamItemInf
         if (identifyCategoryforMime(info.mime) == "audio" || identifyCategoryforMime(info.mime) == "video")
         {
             // Stop image viewer
-            if (previewMode() == PreviewImageMode)
+            if (viewMode() == PreviewImageMode)
             {
                 d->importPreviewView->setCamItemInfo();
             }
 
-            setPreviewMode(MediaPlayerMode);
+            setViewMode(MediaPlayerMode);
             d->mediaPlayerView->setCurrentItem(info.url(), !previous.isNull(), !next.isNull());
         }
         else
         {
             // Stop media player if running...
-            if (previewMode() == MediaPlayerMode)
+            if (viewMode() == MediaPlayerMode)
             {
                 d->mediaPlayerView->setCurrentItem();
             }
@@ -299,12 +299,12 @@ QString ImportStackedView::identifyCategoryforMime(const QString& mime) const
     return mime.split('/').at(0);
 }
 
-int ImportStackedView::previewMode() const
+ImportStackedView::StackedViewMode ImportStackedView::viewMode() const
 {
-    return indexOf(currentWidget());
+    return (StackedViewMode)(indexOf(currentWidget()));
 }
 
-void ImportStackedView::setPreviewMode(const int mode)
+void ImportStackedView::setViewMode(const StackedViewMode mode)
 {
     if (mode != PreviewCameraMode && mode != PreviewImageMode &&
         mode != MediaPlayerMode   && mode != MapWidgetMode)
@@ -407,7 +407,7 @@ void ImportStackedView::previewLoaded()
 
 void ImportStackedView::slotZoomFactorChanged(double z)
 {
-    if (previewMode() == PreviewImageMode)
+    if (viewMode() == PreviewImageMode)
     {
         emit signalZoomFactorChanged(z);
     }
@@ -476,7 +476,7 @@ double ImportStackedView::zoomMax() const
 
 void ImportStackedView::slotPreviewLoaded(bool)
 {
-    setPreviewMode(ImportStackedView::PreviewImageMode);
+    setViewMode(ImportStackedView::PreviewImageMode);
     previewLoaded();
 }
 

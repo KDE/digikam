@@ -37,7 +37,6 @@
 
 #include "importui.h"
 #include "importiconview.h"
-#include "importstackedview.h"
 #include "thumbnailsize.h"
 #include "fileactionmngr.h"
 #include "importsettings.h"
@@ -63,33 +62,33 @@ public:
         parent(0),
         iconView(0),
         mapView(0),
-        StackedView(0),
-        lastPreviewMode(ImportStackedView::PreviewCameraMode)
+        stackedView(0),
+        lastViewMode(ImportStackedView::PreviewCameraMode)
         //FIXME: filterWidget(0)
     {
     }
 
-    void                          addPageUpDownActions(ImportView* const q, QWidget* const w);
+    void addPageUpDownActions(ImportView* const q, QWidget* const w);
 
 public:
 
-    bool                          needDispatchSelection;
+    bool                               needDispatchSelection;
 
-    int                           thumbSize;
+    int                                thumbSize;
 
-    QMainWindow*                  dockArea;
+    QMainWindow*                       dockArea;
 
-    SidebarSplitter*              splitter;
+    SidebarSplitter*                   splitter;
 
-    QTimer*                       selectionTimer;
-    QTimer*                       thumbSizeTimer;
+    QTimer*                            selectionTimer;
+    QTimer*                            thumbSizeTimer;
 
-    ImportUI*                     parent;
+    ImportUI*                          parent;
 
-    ImportIconView*               iconView;
-    MapWidgetView*                mapView;
-    ImportStackedView*            StackedView;
-    int                           lastPreviewMode;
+    ImportIconView*                    iconView;
+    MapWidgetView*                     mapView;
+    ImportStackedView*                 stackedView;
+    ImportStackedView::StackedViewMode lastViewMode;
 
     //FIXME: FilterSideBarWidget* filterWidget;
 
@@ -125,16 +124,16 @@ ImportView::ImportView(ImportUI* const ui, QWidget* const parent)
     // The dock area where the thumbnail bar is allowed to go.
     d->dockArea    = new QMainWindow(this, Qt::Widget);
     d->splitter->addWidget(d->dockArea);
-    d->StackedView = new ImportStackedView(d->parent->getCameraController(), d->dockArea);
-    d->dockArea->setCentralWidget(d->StackedView);
-    d->StackedView->setDockArea(d->dockArea);
+    d->stackedView = new ImportStackedView(d->parent->getCameraController(), d->dockArea);
+    d->dockArea->setCentralWidget(d->stackedView);
+    d->stackedView->setDockArea(d->dockArea);
 
-    d->iconView    = d->StackedView->importIconView();
-    d->mapView     = d->StackedView->mapWidgetView();
+    d->iconView    = d->stackedView->importIconView();
+    d->mapView     = d->stackedView->mapWidgetView();
 
-    d->addPageUpDownActions(this, d->StackedView->importPreviewView());
-    d->addPageUpDownActions(this, d->StackedView->thumbBar());
-    d->addPageUpDownActions(this, d->StackedView->mediaPlayerView());
+    d->addPageUpDownActions(this, d->stackedView->importPreviewView());
+    d->addPageUpDownActions(this, d->stackedView->thumbBar());
+    d->addPageUpDownActions(this, d->stackedView->mediaPlayerView());
 
     d->selectionTimer = new QTimer(this);
     d->selectionTimer->setSingleShot(true);
@@ -172,7 +171,7 @@ void ImportView::setupConnections()
             this, SLOT(slotEscapePreview()));
 
     connect(d->parent, SIGNAL(signalEscapePressed()),
-            d->StackedView, SLOT(slotEscapePreview()));
+            d->stackedView, SLOT(slotEscapePreview()));
 
     // Preview items while download.
     connect(d->parent, SIGNAL(signalPreviewRequested(CamItemInfo,bool)),
@@ -203,22 +202,22 @@ void ImportView::setupConnections()
 
     // -- Preview image widget Connections ------------------------
 
-    connect(d->StackedView, SIGNAL(signalNextItem()),
+    connect(d->stackedView, SIGNAL(signalNextItem()),
             this, SLOT(slotNextItem()));
 
-    connect(d->StackedView, SIGNAL(signalPrevItem()),
+    connect(d->stackedView, SIGNAL(signalPrevItem()),
             this, SLOT(slotPrevItem()));
 
-    //connect(d->StackedView, SIGNAL(signalEditItem()),
+    //connect(d->stackedView, SIGNAL(signalEditItem()),
             //this, SLOT(slotImageEdit()));
 
-    connect(d->StackedView, SIGNAL(signalViewModeChanged()),
+    connect(d->stackedView, SIGNAL(signalViewModeChanged()),
             this, SLOT(slotViewModeChanged()));
 
-    connect(d->StackedView, SIGNAL(signalEscapePreview()),
+    connect(d->stackedView, SIGNAL(signalEscapePreview()),
             this, SLOT(slotEscapePreview()));
 
-    connect(d->StackedView, SIGNAL(signalZoomFactorChanged(double)),
+    connect(d->stackedView, SIGNAL(signalZoomFactorChanged(double)),
             this, SLOT(slotZoomFactorChanged(double)));
 
     // -- FileActionMngr progress ---------------
@@ -295,7 +294,7 @@ void ImportView::saveViewState()
     // needs to be closed explicitly, because when it is floating and visible
     // (when the user is in image preview mode) when the layout is saved, it
     // also reappears when restoring the view, while it should always be hidden.
-    d->StackedView->thumbBarDock()->close();
+    d->stackedView->thumbBarDock()->close();
     group.writeEntry("ThumbbarState", d->dockArea->saveState().toBase64());
 
     d->mapView->saveState();
@@ -418,7 +417,7 @@ void ImportView::slotDispatchImageSelected()
 
         if (list.isEmpty())
         {
-            d->StackedView->setPreviewItem();
+            d->stackedView->setPreviewItem();
             emit signalImageSelected(list, false, false, allImages);
             emit signalNewSelection(false);
             emit signalNoCurrentItem();
@@ -428,16 +427,16 @@ void ImportView::slotDispatchImageSelected()
             CamItemInfo previousInfo;
             CamItemInfo nextInfo;
 
-            if (d->StackedView->previewMode() != ImportStackedView::MapWidgetMode)
+            if (d->stackedView->viewMode() != ImportStackedView::MapWidgetMode)
             {
                 previousInfo = d->iconView->previousInfo(list.first());
                 nextInfo = d->iconView->nextInfo(list.first());
             }
 
-            if (   (d->StackedView->previewMode() != ImportStackedView::PreviewCameraMode)
-                   && (d->StackedView->previewMode() != ImportStackedView::MapWidgetMode) )
+            if (   (d->stackedView->viewMode() != ImportStackedView::PreviewCameraMode) &&
+                   (d->stackedView->viewMode() != ImportStackedView::MapWidgetMode) )
             {
-                d->StackedView->setPreviewItem(list.first(), previousInfo, nextInfo);
+                d->stackedView->setPreviewItem(list.first(), previousInfo, nextInfo);
             }
 
             emit signalImageSelected(list, !previousInfo.isNull(), !nextInfo.isNull(), allImages);
@@ -450,17 +449,17 @@ void ImportView::slotDispatchImageSelected()
 
 double ImportView::zoomMin()
 {
-    return d->StackedView->zoomMin();
+    return d->stackedView->zoomMin();
 }
 
 double ImportView::zoomMax()
 {
-    return d->StackedView->zoomMax();
+    return d->stackedView->zoomMax();
 }
 
 void ImportView::setZoomFactor(double zoom)
 {
-    d->StackedView->setZoomFactorSnapped(zoom);
+    d->stackedView->setZoomFactorSnapped(zoom);
 }
 
 void ImportView::slotZoomFactorChanged(double zoom)
@@ -471,12 +470,12 @@ void ImportView::slotZoomFactorChanged(double zoom)
 
 void ImportView::setThumbSize(int size)
 {
-    if (d->StackedView->previewMode() == ImportStackedView::PreviewImageMode)
+    if (d->stackedView->viewMode() == ImportStackedView::PreviewImageMode)
     {
         double z = DZoomBar::zoomFromSize(size, zoomMin(), zoomMax());
         setZoomFactor(z);
     }
-    else if (d->StackedView->previewMode() == ImportStackedView::PreviewCameraMode)
+    else if (d->stackedView->viewMode() == ImportStackedView::PreviewCameraMode)
     {
         if (size > ThumbnailSize::Huge)
         {
@@ -512,22 +511,22 @@ void ImportView::slotThumbSizeEffect()
 
 void ImportView::toggleZoomActions()
 {
-    if (d->StackedView->previewMode() == ImportStackedView::PreviewImageMode)
+    if (d->stackedView->viewMode() == ImportStackedView::PreviewImageMode)
     {
         d->parent->enableZoomMinusAction(true);
         d->parent->enableZoomPlusAction(true);
 
-        if (d->StackedView->maxZoom())
+        if (d->stackedView->maxZoom())
         {
             d->parent->enableZoomPlusAction(false);
         }
 
-        if (d->StackedView->minZoom())
+        if (d->stackedView->minZoom())
         {
             d->parent->enableZoomMinusAction(false);
         }
     }
-    else if (d->StackedView->previewMode() == ImportStackedView::PreviewCameraMode)
+    else if (d->stackedView->viewMode() == ImportStackedView::PreviewCameraMode)
     {
         d->parent->enableZoomMinusAction(true);
         d->parent->enableZoomPlusAction(true);
@@ -551,59 +550,59 @@ void ImportView::toggleZoomActions()
 
 void ImportView::slotZoomIn()
 {
-    if (d->StackedView->previewMode() == ImportStackedView::PreviewCameraMode)
+    if (d->stackedView->viewMode() == ImportStackedView::PreviewCameraMode)
     {
         setThumbSize(d->thumbSize + ThumbnailSize::Step);
         toggleZoomActions();
         emit signalThumbSizeChanged(d->thumbSize);
     }
-    else if (d->StackedView->previewMode() == ImportStackedView::PreviewImageMode)
+    else if (d->stackedView->viewMode() == ImportStackedView::PreviewImageMode)
     {
-        d->StackedView->increaseZoom();
+        d->stackedView->increaseZoom();
     }
 }
 
 void ImportView::slotZoomOut()
 {
-    if (d->StackedView->previewMode() == ImportStackedView::PreviewCameraMode)
+    if (d->stackedView->viewMode() == ImportStackedView::PreviewCameraMode)
     {
         setThumbSize(d->thumbSize - ThumbnailSize::Step);
         toggleZoomActions();
         emit signalThumbSizeChanged(d->thumbSize);
     }
-    else if (d->StackedView->previewMode() == ImportStackedView::PreviewImageMode)
+    else if (d->stackedView->viewMode() == ImportStackedView::PreviewImageMode)
     {
-        d->StackedView->decreaseZoom();
+        d->stackedView->decreaseZoom();
     }
 }
 
 void ImportView::slotZoomTo100Percents()
 {
-    if (d->StackedView->previewMode() == ImportStackedView::PreviewImageMode)
+    if (d->stackedView->viewMode() == ImportStackedView::PreviewImageMode)
     {
-        d->StackedView->toggleFitToWindowOr100();
+        d->stackedView->toggleFitToWindowOr100();
     }
 }
 
 void ImportView::slotFitToWindow()
 {
-    if (d->StackedView->previewMode() == ImportStackedView::PreviewCameraMode)
+    if (d->stackedView->viewMode() == ImportStackedView::PreviewCameraMode)
     {
         int nts = d->iconView->fitToWidthIcons();
         setThumbSize(nts);
         toggleZoomActions();
         emit signalThumbSizeChanged(d->thumbSize);
     }
-    else if (d->StackedView->previewMode() == ImportStackedView::PreviewImageMode)
+    else if (d->stackedView->viewMode() == ImportStackedView::PreviewImageMode)
     {
-        d->StackedView->fitToWindow();
+        d->stackedView->fitToWindow();
     }
 }
 
 void ImportView::slotEscapePreview()
 {
-    if (d->StackedView->previewMode() == ImportStackedView::PreviewCameraMode)
-        //TODO: || d->StackedView->previewMode() == ImportStackedView::WelcomePageMode)
+    if (d->stackedView->viewMode() == ImportStackedView::PreviewCameraMode)
+        //TODO: || d->stackedView->viewMode() == ImportStackedView::WelcomePageMode)
     {
         return;
     }
@@ -615,18 +614,18 @@ void ImportView::slotEscapePreview()
 
 void ImportView::slotMapWidgetView()
 {
-    d->StackedView->setPreviewMode(ImportStackedView::MapWidgetMode);
+    d->stackedView->setViewMode(ImportStackedView::MapWidgetMode);
 }
 
 void ImportView::slotIconView()
 {
-    if (d->StackedView->previewMode() == ImportStackedView::PreviewImageMode)
+    if (d->stackedView->viewMode() == ImportStackedView::PreviewImageMode)
     {
         emit signalThumbSizeChanged(d->iconView->thumbnailSize().size());
     }
 
     // and switch to icon view
-    d->StackedView->setPreviewMode(0);
+    d->stackedView->setViewMode(ImportStackedView::PreviewCameraMode);
 
     // make sure the next/previous buttons are updated
     slotImageSelected();
@@ -634,7 +633,7 @@ void ImportView::slotIconView()
 
 void ImportView::slotImagePreview()
 {
-    const int   currentPreviewMode = d->StackedView->previewMode();
+    const int   currentPreviewMode = d->stackedView->viewMode();
     CamItemInfo currentInfo;
 
     if (currentPreviewMode == ImportStackedView::PreviewCameraMode)
@@ -655,25 +654,25 @@ void ImportView::slotImagePreview()
  */
 void ImportView::slotTogglePreviewMode(const CamItemInfo& info, bool downloadPreview)
 {
-    if (  (d->StackedView->previewMode() == ImportStackedView::PreviewCameraMode ||
-           d->StackedView->previewMode() == ImportStackedView::MapWidgetMode || downloadPreview)
+    if (  (d->stackedView->viewMode() == ImportStackedView::PreviewCameraMode ||
+           d->stackedView->viewMode() == ImportStackedView::MapWidgetMode || downloadPreview)
           && !info.isNull() )
     {
-        d->lastPreviewMode = d->StackedView->previewMode();
+        d->lastViewMode = d->stackedView->viewMode();
 
-        if (d->StackedView->previewMode() == ImportStackedView::PreviewCameraMode)
+        if (d->stackedView->viewMode() == ImportStackedView::PreviewCameraMode)
         {
-            d->StackedView->setPreviewItem(info, d->iconView->previousInfo(info), d->iconView->nextInfo(info));
+            d->stackedView->setPreviewItem(info, d->iconView->previousInfo(info), d->iconView->nextInfo(info));
         }
         else
         {
-            d->StackedView->setPreviewItem(info, CamItemInfo(), CamItemInfo());
+            d->stackedView->setPreviewItem(info, CamItemInfo(), CamItemInfo());
         }
     }
     else
     {
         // go back to either CameraViewMode or MapWidgetMode
-        d->StackedView->setPreviewMode(d->lastPreviewMode);
+        d->stackedView->setViewMode(d->lastViewMode);
     }
 
     if(!downloadPreview)
@@ -687,7 +686,7 @@ void ImportView::slotViewModeChanged()
 {
     toggleZoomActions();
 
-    switch (d->StackedView->previewMode())
+    switch (d->stackedView->viewMode())
     {
         case ImportStackedView::PreviewCameraMode:
             emit signalSwitchedToIconView();
@@ -695,7 +694,7 @@ void ImportView::slotViewModeChanged()
             break;
         case ImportStackedView::PreviewImageMode:
             emit signalSwitchedToPreview();
-            slotZoomFactorChanged(d->StackedView->zoomFactor());
+            slotZoomFactorChanged(d->stackedView->zoomFactor());
             break;
         //TODO: case ImportStackedView::WelcomePageMode:
             //emit signalSwitchedToIconView();
@@ -772,7 +771,7 @@ void ImportView::slotGroupImages(int categoryMode)
 
 void ImportView::toggleShowBar(bool b)
 {
-    d->StackedView->thumbBarDock()->showThumbBar(b);
+    d->stackedView->thumbBarDock()->showThumbBar(b);
 }
 
 void ImportView::scrollTo(const QString& folder, const QString& file)
@@ -806,5 +805,10 @@ void ImportView::slotImageExifOrientation(int orientation)
     FileActionMngr::instance()->setExifOrientation(d->iconView->selectedCamItemInfos(), orientation);
 }
 */
+
+ImportStackedView::StackedViewMode ImportView::viewMode() const
+{
+    return d->stackedView->viewMode();
+}
 
 } // namespace Digikam

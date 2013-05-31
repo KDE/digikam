@@ -160,7 +160,7 @@ void DXmlGuiWindow::slotToggleFullScreen(bool set)
 {
     KToggleFullScreenAction::setFullScreen(this, set);
 
-    showCustomizedView(!set);
+    customizedFullScreenMode(set);
 
     if (!set)
     {
@@ -406,6 +406,19 @@ void DXmlGuiWindow::showToolBars(bool visible)
     }
 }
 
+QAction* DXmlGuiWindow::statusBarMenuAction() const
+{
+    QList<QAction*> lst = actionCollection()->actions();
+
+    foreach(QAction* const act, lst)
+    {
+        if (act && QString(act->objectName()) == QString("options_show_statusbar"))
+            return act;
+    }
+    
+    return 0;
+}
+
 void DXmlGuiWindow::showSideBars(bool visible)
 {
     Q_UNUSED(visible);
@@ -416,9 +429,9 @@ void DXmlGuiWindow::showThumbBar(bool visible)
     Q_UNUSED(visible);
 }
 
-void DXmlGuiWindow::showCustomizedView(bool visible)
+void DXmlGuiWindow::customizedFullScreenMode(bool set)
 {
-    Q_UNUSED(visible);
+    Q_UNUSED(set);
 }
 
 bool DXmlGuiWindow::thumbbarVisibility() const

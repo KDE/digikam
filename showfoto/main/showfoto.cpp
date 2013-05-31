@@ -487,12 +487,6 @@ void ShowFoto::setupActions()
     Digikam::ThemeManager::instance()->setThemeMenuAction(new KActionMenu(i18n("&Themes"), this));
     setupStandardActions();
 
-    // Provides a menu entry that allows showing/hiding the toolbar(s)
-    setStandardToolBarMenuEnabled(true);
-
-    // Provides a menu entry that allows showing/hiding the statusbar
-    createStandardStatusBarAction();
-
     // Extra 'File' menu actions ---------------------------------------------
 
     d->fileOpenAction = actionCollection()->addAction(KStandardAction::Open, "showfoto_open_file",

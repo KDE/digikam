@@ -78,7 +78,7 @@ public:
         lastAction(0),
         libsInfoAction(0),
         dbStatAction(0),
-        showThumbBarAction(0),
+        showBarAction(0),
         syncPreviewAction(0),
         navigateByPairAction(0),
         showMenuBarAction(0),
@@ -129,7 +129,7 @@ public:
     KAction*                  libsInfoAction;
     KAction*                  dbStatAction;
 
-    KToggleAction*            showThumbBarAction;
+    KToggleAction*            showBarAction;
     KToggleAction*            syncPreviewAction;
     KToggleAction*            navigateByPairAction;
     KToggleAction*            showMenuBarAction;

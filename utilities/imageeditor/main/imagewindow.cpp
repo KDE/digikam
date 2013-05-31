@@ -426,12 +426,6 @@ void ImageWindow::setupActions()
 {
     setupStandardActions();
 
-    // Provides a menu entry that allows showing/hiding the toolbar(s)
-    setStandardToolBarMenuEnabled(true);
-
-    // Provides a menu entry that allows showing/hiding the statusbar
-    createStandardStatusBarAction();
-
     d->toMainWindowAction = new KAction(KIcon("view-list-icons"),
                                         i18nc("@action Finish editing, close editor, back to main window", "Close Editor"), this);
     connect(d->toMainWindowAction, SIGNAL(triggered()), this, SLOT(slotToMainWindow()));

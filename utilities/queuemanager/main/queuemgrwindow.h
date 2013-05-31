@@ -95,6 +95,7 @@ public Q_SLOTS:
 
 private:
 
+    void customizedFullScreenMode(bool set);
     void closeEvent(QCloseEvent* e);
     void setupActions();
     void setupConnections();

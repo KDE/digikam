@@ -97,6 +97,8 @@ public:
     /** Return true if managed window is currently in Full Screen Mode
      */
     bool fullScreenIsActive() const;
+    
+    QAction* statusBarMenuAction() const;
 
 protected:
 
@@ -114,9 +116,9 @@ protected:
     virtual void showThumbBar(bool visible);
 
     /** Re-implement this method if you want to manage customized view visibility in full-screen mode.
-     *  By default this method do nothing.
+     *  This method is called by switchWindowToFullScreen(). By default this method do nothing.
      */
-    virtual void showCustomizedView(bool visible);
+    virtual void customizedFullScreenMode(bool set);
 
     /** Re-implement this method if managed window has a thumbbar. This must return visibility state of it.
      */

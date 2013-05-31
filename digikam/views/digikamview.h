@@ -49,6 +49,7 @@
 #include "imageinfo.h"
 #include "digikammodelcollection.h"
 #include "sidebarwidget.h"
+#include "stackedview.h"
 
 using namespace KExiv2Iface;
 
@@ -98,7 +99,8 @@ public:
 
     void toggleTag(int tagID);
     QList<SidebarWidget*> leftSidebarWidgets() const;
-
+    StackedView::StackedViewMode viewMode() const;
+    
 Q_SIGNALS:
 
     void signalAlbumSelected(bool val);

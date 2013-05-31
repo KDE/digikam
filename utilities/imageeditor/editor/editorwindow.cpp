@@ -542,9 +542,6 @@ void EditorWindow::setupStandardActions()
     connect(d->viewSoftProofAction, SIGNAL(triggered()), this, SLOT(slotUpdateSoftProofingState()));
     actionCollection()->addAction("editorwindow_softproofview", d->viewSoftProofAction);
 
-    m_showBarAction = thumbBar()->getToggleAction(this);
-    actionCollection()->addAction("editorwindow_showthumbs", m_showBarAction);
-
     // -- Standard 'Transform' menu actions ---------------------------------------------
 
     d->cropAction = new KAction(KIcon("transform-crop-and-resize"), i18nc("@action", "Crop to Selection"), this);
@@ -591,14 +588,23 @@ void EditorWindow::setupStandardActions()
 
     // -- Standard 'Configure' menu actions ----------------------------------------
 
+    m_showBarAction = thumbBar()->getToggleAction(this);
+    actionCollection()->addAction("editorwindow_showthumbs", m_showBarAction);
+    
     d->showMenuBarAction = KStandardAction::showMenubar(this, SLOT(slotShowMenuBar()), actionCollection());
     d->showMenuBarAction->setChecked(!menuBar()->isHidden());  // NOTE: workaround for B.K.O #171080
 
     KStandardAction::keyBindings(this,            SLOT(slotEditKeys()),          actionCollection());
     KStandardAction::configureToolbars(this,      SLOT(slotConfToolbars()),      actionCollection());
     KStandardAction::configureNotifications(this, SLOT(slotConfNotifications()), actionCollection());
-    KStandardAction::preferences(this,            SLOT(setup()),             actionCollection());
+    KStandardAction::preferences(this,            SLOT(setup()),                 actionCollection());
+    
+    // Provides a menu entry that allows showing/hiding the toolbar(s)
+    setStandardToolBarMenuEnabled(true);
 
+    // Provides a menu entry that allows showing/hiding the statusbar
+    createStandardStatusBarAction();
+    
     // ---------------------------------------------------------------------------------
 
     ThemeManager::instance()->registerThemeActions(this);
@@ -2960,10 +2966,15 @@ bool EditorWindow::thumbbarVisibility() const
     return thumbBar()->isVisible();
 }
 
-void EditorWindow::showCustomizedView(bool visible)
+void EditorWindow::customizedFullScreenMode(bool set)
 {
-    visible ? m_canvas->setBackgroundColor(QColor(Qt::black))
-            : m_canvas->setBackgroundColor(m_bgColor);
+    set ? m_canvas->setBackgroundColor(QColor(Qt::black))
+        : m_canvas->setBackgroundColor(m_bgColor);
+        
+    statusBarMenuAction()->setEnabled(!set);
+    toolBarMenuAction()->setEnabled(!set);
+    d->showMenuBarAction->setEnabled(!set);
+    m_showBarAction->setEnabled(!set);
 }
 
 }  // namespace Digikam

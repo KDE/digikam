@@ -538,8 +538,8 @@ void LightTableWindow::setupActions()
     d->clearOnCloseAction->setWhatsThis(i18n("Remove all images from the light table when it is closed"));
     actionCollection()->addAction("lighttable_clearonclose", d->clearOnCloseAction);
 
-    d->showThumbBarAction = d->barViewDock->getToggleAction(this);
-    actionCollection()->addAction("lighttable_showthumbbar", d->showThumbBarAction);
+    d->showBarAction = d->barViewDock->getToggleAction(this);
+    actionCollection()->addAction("lighttable_showthumbbar", d->showBarAction);
 
     createFullScreenAction("lighttable_fullscreen");
 
@@ -1621,6 +1621,14 @@ void LightTableWindow::showSideBars(bool visible)
         d->leftSideBar->backup();
         d->rightSideBar->backup();
     }
+}
+
+void LightTableWindow::customizedFullScreenMode(bool set)
+{
+    statusBarMenuAction()->setEnabled(!set);
+    toolBarMenuAction()->setEnabled(!set);
+    d->showMenuBarAction->setEnabled(!set);
+    d->showBarAction->setEnabled(!set);
 }
 
 }  // namespace Digikam

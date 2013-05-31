@@ -1062,4 +1062,11 @@ void QueueMgrWindow::slotSaveWorkflow()
     }
 }
 
+void QueueMgrWindow::customizedFullScreenMode(bool set)
+{
+    statusBarMenuAction()->setEnabled(!set);
+    toolBarMenuAction()->setEnabled(!set);
+    d->showMenuBarAction->setEnabled(!set);
+}
+
 }  // namespace Digikam

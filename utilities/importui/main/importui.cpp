@@ -2386,31 +2386,6 @@ void ImportUI::autoRotateItems()
     FileActionMngr::instance()->transform(list, KExiv2Iface::RotationMatrix::NoTransformation);
 }
 
-#include "../main/importui.h"
-void ImportUI::slotSwitchedToPreview()
-{
-    d->camItemPreviewAction->setChecked(true);
-    d->zoomBar->setBarMode(DZoomBar::PreviewZoomCtrl);
-    d->showBarAction->setEnabled(true);
-    d->imageViewSelectionAction->setCurrentAction(d->camItemPreviewAction);
-}
-
-void ImportUI::slotSwitchedToIconView()
-{
-    d->zoomBar->setBarMode(DZoomBar::ThumbsSizeCtrl);
-    d->iconViewAction->setChecked(true);
-    d->showBarAction->setEnabled(false);
-    d->imageViewSelectionAction->setCurrentAction(d->iconViewAction);
-}
-
-void ImportUI::slotSwitchedToMapView()
-{
-    d->zoomBar->setBarMode(DZoomBar::ThumbsSizeCtrl);
-    d->mapViewAction->setChecked(true);
-    d->showBarAction->setEnabled(false);
-    d->imageViewSelectionAction->setCurrentAction(d->mapViewAction);
-}
-
 bool ImportUI::createAutoAlbum(const KUrl& parentURL, const QString& sub,
                                const QDate& date, QString& errMsg) const
 {
@@ -2583,12 +2558,59 @@ void ImportUI::showSideBars(bool visible)
 
 void ImportUI::showThumbBar(bool visible)
 {
-    d->view->toggleShowBar(visible);
+    d->view->toggleShowBar(visible & d->showBarAction->isEnabled());    
 }
 
 bool ImportUI::thumbbarVisibility() const
 {
     return d->showBarAction->isChecked();
+}
+
+void ImportUI::slotSwitchedToPreview()
+{
+    d->camItemPreviewAction->setChecked(true);
+    d->zoomBar->setBarMode(DZoomBar::PreviewZoomCtrl);
+    d->imageViewSelectionAction->setCurrentAction(d->camItemPreviewAction);
+    toogleShowBar();
+}
+
+void ImportUI::slotSwitchedToIconView()
+{
+    d->zoomBar->setBarMode(DZoomBar::ThumbsSizeCtrl);
+    d->iconViewAction->setChecked(true);
+    d->imageViewSelectionAction->setCurrentAction(d->iconViewAction);
+    toogleShowBar();
+}
+
+void ImportUI::slotSwitchedToMapView()
+{
+    d->zoomBar->setBarMode(DZoomBar::ThumbsSizeCtrl);
+    d->mapViewAction->setChecked(true);
+    d->imageViewSelectionAction->setCurrentAction(d->mapViewAction);
+    toogleShowBar();
+}
+
+void ImportUI::customizedFullScreenMode(bool set)
+{
+    statusBarMenuAction()->setEnabled(!set);
+    toolBarMenuAction()->setEnabled(!set);
+    d->showMenuBarAction->setEnabled(!set);
+    set ? d->showBarAction->setEnabled(false)
+        : toogleShowBar();
+}
+
+void ImportUI::toogleShowBar()
+{
+    switch (d->view->viewMode())
+    {
+        case ImportStackedView::PreviewImageMode:
+            d->showBarAction->setEnabled(true);
+            break;
+            
+        default:
+            d->showBarAction->setEnabled(false);
+            break;
+    }
 }
 
 }  // namespace Digikam

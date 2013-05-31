@@ -145,6 +145,8 @@ private:
     void    showThumbBar(bool visible);
     void    showSideBars(bool visible);
     bool    thumbbarVisibility() const;
+    void    customizedFullScreenMode(bool set);
+    void    toogleShowBar();
 
 private Q_SLOTS:
 
