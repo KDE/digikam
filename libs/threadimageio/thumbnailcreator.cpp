@@ -1082,6 +1082,7 @@ void ThumbnailCreator::storeFreedesktop(const ThumbnailInfo& info, const Thumbna
 
             temp.close();
 
+#ifndef Q_OS_WIN
 #if KDE_IS_VERSION(4,2,85)
             // KDE 4.3.0
             ret = KDE::rename(QFile::encodeName(tempFileName),
@@ -1093,6 +1094,9 @@ void ThumbnailCreator::storeFreedesktop(const ThumbnailInfo& info, const Thumbna
 #endif
 
             if (ret != 0)
+#else
+            if(::MoveFileEx(tempFileName.utf16(), thumbPath.utf16(), MOVEFILE_REPLACE_EXISTING | MOVEFILE_WRITE_THROUGH) == 0)
+#endif
             {
                 kDebug() << "Cannot rename thumb file (" << tempFileName << ")";
                 kDebug() << "to (" << thumbPath << ")...";
