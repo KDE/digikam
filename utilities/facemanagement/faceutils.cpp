@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "faceiface.h"
+#include "faceutils.h"
 
 // Qt includes
 
@@ -53,32 +53,32 @@ namespace Digikam
 
 // --- Constructor / Destructor -------------------------------------------------------------------------------------
 
-FaceIface::FaceIface()
+FaceUtils::FaceUtils()
 {
 }
 
-FaceIface::~FaceIface()
+FaceUtils::~FaceUtils()
 {
 }
 
 // --- Mark for scanning and training -------------------------------------------------------------------------------
 
-bool FaceIface::hasBeenScanned(qlonglong imageid) const
+bool FaceUtils::hasBeenScanned(qlonglong imageid) const
 {
     return hasBeenScanned(ImageInfo(imageid));
 }
 
-bool FaceIface::hasBeenScanned(const ImageInfo& info) const
+bool FaceUtils::hasBeenScanned(const ImageInfo& info) const
 {
     return info.tagIds().contains(FaceTags::scannedForFacesTagId());
 }
 
-void FaceIface::markAsScanned(qlonglong imageid, bool hasBeenScanned) const
+void FaceUtils::markAsScanned(qlonglong imageid, bool hasBeenScanned) const
 {
     return markAsScanned(ImageInfo(imageid), hasBeenScanned);
 }
 
-void FaceIface::markAsScanned(const ImageInfo& info, bool hasBeenScanned) const
+void FaceUtils::markAsScanned(const ImageInfo& info, bool hasBeenScanned) const
 {
     if (hasBeenScanned)
     {
@@ -92,7 +92,7 @@ void FaceIface::markAsScanned(const ImageInfo& info, bool hasBeenScanned) const
 
 // --- Convert between KFace results and DatabaseFace ---
 
-QList<DatabaseFace> FaceIface::toDatabaseFaces(qlonglong imageid,
+QList<DatabaseFace> FaceUtils::toDatabaseFaces(qlonglong imageid,
                                                const QList<QRectF>& detectedFaces,
                                                const QList<KFaceIface::Identity> recognitionResults,
                                                const QSize& fullSize) const
@@ -125,7 +125,7 @@ QList<DatabaseFace> FaceIface::toDatabaseFaces(qlonglong imageid,
 
 // --- Images in faces and thumbnails ---
 
-void FaceIface::storeThumbnails(ThumbnailLoadThread* const thread, const QString& filePath,
+void FaceUtils::storeThumbnails(ThumbnailLoadThread* const thread, const QString& filePath,
                                 const QList<DatabaseFace>& databaseFaces, const DImg& image)
 {
     foreach(const DatabaseFace& face, databaseFaces)
@@ -146,7 +146,7 @@ void FaceIface::storeThumbnails(ThumbnailLoadThread* const thread, const QString
 
 // --- Face detection: merging results ------------------------------------------------------------------------------------
 
-QList<DatabaseFace> FaceIface::writeUnconfirmedResults(qlonglong imageid,
+QList<DatabaseFace> FaceUtils::writeUnconfirmedResults(qlonglong imageid,
                                                        const QList<QRectF>& detectedFaces,
                                                        const QList<KFaceIface::Identity> recognitionResults,
                                                        const QSize& fullSize)
@@ -257,26 +257,46 @@ QList<DatabaseFace> FaceIface::writeUnconfirmedResults(qlonglong imageid,
     return newFaces;
 }
 
+KFaceIface::Identity FaceUtils::identityForTag(int tagId, KFaceIface::RecognitionDatabase db) const
+{
+    QMap<QString, QString> attributes = FaceTags::identityAttributes(tagId);
+    KFaceIface::Identity identity = db.findIdentity(attributes);
+    if (!identity.isNull())
+    {
+        kDebug() << "Found kface identity" << identity.id << "for tag" << tagId;
+        return identity;
+    }
+    kDebug() << "Adding new kface identity with attributes" << attributes;
+    identity = db.addIdentity(attributes);
+    FaceTags::applyTagIdentityMapping(tagId, identity.attributes);
+    return identity;
+}
+
+int FaceUtils::tagForIdentity(const KFaceIface::Identity& identity) const
+{
+    return FaceTags::getOrCreateTagForIdentity(identity.attributes);
+}
+
 // --- Editing normal tags, reimplemented with FileActionMngr ---
 
-void FaceIface::addNormalTag(qlonglong imageid, int tagId)
+void FaceUtils::addNormalTag(qlonglong imageid, int tagId)
 {
     FileActionMngr::instance()->assignTag(ImageInfo(imageid), tagId);
 }
 
-void FaceIface::removeNormalTag(qlonglong imageId, int tagId)
+void FaceUtils::removeNormalTag(qlonglong imageId, int tagId)
 {
     FileActionMngr::instance()->removeTag(ImageInfo(imageId), tagId);
 }
 
-void FaceIface::removeNormalTags(qlonglong imageId, QList<int> tagIds)
+void FaceUtils::removeNormalTags(qlonglong imageId, QList<int> tagIds)
 {
     FileActionMngr::instance()->removeTags(ImageInfo(imageId), tagIds);
 }
 
 // --- Utilities ---
 
-int FaceIface::faceRectDisplayMargin()
+int FaceUtils::faceRectDisplayMargin()
 {
     /*
      * Do not change that value unless you know what you do.

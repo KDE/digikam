@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef FACEIFACE_H
-#define FACEIFACE_H
+#ifndef FACEUTILS_H
+#define FACEUTILS_H
 
 // Qt includes
 
@@ -32,6 +32,7 @@
 // Libkface includes
 
 #include <libkface/identity.h>
+#include <libkface/recognitiondatabase.h>
 
 // Local includes
 
@@ -47,7 +48,7 @@ class DImg;
 class ThumbnailLoadThread;
 class ThumbnailImageCatcher;
 
-class FaceIface : public FaceTagsEditor
+class FaceUtils : public FaceTagsEditor
 {
 
 public:
@@ -60,8 +61,8 @@ public:
 
 public:
 
-    FaceIface();
-    virtual ~FaceIface();
+    FaceUtils();
+    virtual ~FaceUtils();
 
     // --- Face detection and recognition ---
 
@@ -121,6 +122,9 @@ public:
      */
     static int          faceRectDisplayMargin();
 
+    KFaceIface::Identity identityForTag(int tagId, KFaceIface::RecognitionDatabase db) const;
+    int                  tagForIdentity(const KFaceIface::Identity& identity) const;
+
 protected:
 
     /* Reimplemented */
@@ -131,4 +135,4 @@ protected:
 
 }  // Namespace Digikam
 
-#endif // FACEIFACE_H
+#endif // FACEUTILS_H
