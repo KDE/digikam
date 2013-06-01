@@ -34,7 +34,6 @@
 #include "imagecategorizedview.h"
 #include "itemviewhoverbutton.h"
 #include "imageinfo.h"
-#include "faceiface.h"
 #include "digikamimagefacedelegate.h"
 #include "imagemodel.h"
 

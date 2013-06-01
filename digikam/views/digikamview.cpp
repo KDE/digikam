@@ -74,7 +74,6 @@
 #include "imagepropertiesversionstab.h"
 #include "tagscache.h"
 #include "searchxml.h"
-#include "faceiface.h"
 #include "fileactionprogress.h"
 #include "versionmanagersettings.h"
 #include "tableview.h"

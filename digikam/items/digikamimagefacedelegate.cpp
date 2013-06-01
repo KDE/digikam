@@ -35,7 +35,7 @@
 
 #include "albumsettings.h"
 #include "databaseface.h"
-#include "faceiface.h"
+#include "faceutils.h"
 #include "imagemodel.h"
 #include "tagregion.h"
 #include "digikamimagedelegatepriv.h"
@@ -91,7 +91,7 @@ QRect DigikamImageFaceDelegate::largerFaceRect(const QModelIndex& index) const
         return rect;
     }
 
-    const int margin = FaceIface::faceRectDisplayMargin();
+    const int margin = FaceUtils::faceRectDisplayMargin();
 
     return rect.adjusted(-margin, -margin, margin, margin);
 }

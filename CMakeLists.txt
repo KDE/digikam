@@ -1216,7 +1216,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
        )
 
     SET(libfacemanagement_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/facemanagement/faceiface.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/facemanagement/faceutils.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/facemanagement/facegroup.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/facemanagement/facepipeline.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/facemanagement/facescandialog.cpp

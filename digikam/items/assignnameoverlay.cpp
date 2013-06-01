@@ -47,8 +47,8 @@
 #include "albumfiltermodel.h"
 #include "assignnamewidget.h"
 #include "databaseface.h"
-#include "faceiface.h"
 #include "facepipeline.h"
+#include "facetags.h"
 #include "imagedelegate.h"
 #include "imagemodel.h"
 #include "imagecategorizedview.h"
@@ -72,8 +72,6 @@ public:
     TagModel                  tagModel;
     CheckableAlbumFilterModel filterModel;
     TagPropertiesFilterModel  filteredModel;
-
-    FaceIface                 faceIface;
 
     AssignNameWidget*         assignNameWidget;
     QPersistentModelIndex     index;

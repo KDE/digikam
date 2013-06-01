@@ -68,7 +68,6 @@
 #include "tagscache.h"
 #include "imagetagpair.h"
 #include "albummanager.h"
-#include "faceiface.h"
 
 namespace Digikam
 {

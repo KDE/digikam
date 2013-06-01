@@ -53,7 +53,6 @@
 #include "thumbnailloadthread.h"
 #include "tooltipfiller.h"
 #include "digikamimagefacedelegate.h"
-#include "faceiface.h"
 
 namespace Digikam
 {

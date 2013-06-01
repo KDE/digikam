@@ -66,7 +66,6 @@
 #include "digikamimagefacedelegate.h"
 #include "dio.h"
 #include "facerejectionoverlay.h"
-#include "faceiface.h"
 #include "groupindicatoroverlay.h"
 #include "imagealbumfiltermodel.h"
 #include "imagealbummodel.h"
