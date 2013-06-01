@@ -47,7 +47,7 @@ namespace Digikam
 
 NonDeterministicRandomData::NonDeterministicRandomData(int s)
 {
-#ifndef Q_OS_WIN32
+#ifndef Q_OS_WIN
     {
         // Try urandom for UNIX platforms.
         QFile urandom("/dev/urandom");

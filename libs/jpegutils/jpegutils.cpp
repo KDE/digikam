@@ -482,7 +482,7 @@ void JpegRotator::updateMetadata(const QString& fileName, const RotationMatrix &
         }
     }
 
-#ifndef Q_OS_WIN32
+#ifndef Q_OS_WIN
     // restore permissions
     if (::chmod(QFile::encodeName(fileName), st.st_mode) != 0)
     {

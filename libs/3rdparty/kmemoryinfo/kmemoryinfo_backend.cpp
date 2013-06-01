@@ -80,7 +80,7 @@ static int fillMemoryInfo(Digikam::KMemoryInfo::KMemoryInfoData* const data)
 #include <sys/pstat.h>
 #include <unistd.h>
 #endif
-#ifdef Q_OS_WIN32
+#ifdef Q_OS_WIN
 #include <windows.h>
 //#include "win32.h"
 #endif
@@ -234,7 +234,7 @@ int get_mem_stats(Digikam::KMemoryInfo::KMemoryInfoData* const data)
     int    pagesize, page_multiplier;
 #endif // defined(Q_OS_OPENBSD)
 
-#ifdef Q_OS_WIN32
+#ifdef Q_OS_WIN
     MEMORYSTATUSEX memstats;
 #endif
 
@@ -482,7 +482,7 @@ int get_mem_stats(Digikam::KMemoryInfo::KMemoryInfoData* const data)
     return 1;
 #endif // defined(Q_OS_OPENBSD)
 
-#ifdef Q_OS_WIN32
+#ifdef Q_OS_WIN
     data->platform = QString("WINDOWS");
 
     memstats.dwLength = sizeof(memstats);
@@ -502,7 +502,7 @@ int get_mem_stats(Digikam::KMemoryInfo::KMemoryInfoData* const data)
     //}
 
     return 1;
-#endif // Q_OS_WIN32
+#endif // Q_OS_WIN
 
     return -1;
 }
@@ -544,7 +544,7 @@ int get_mem_stats(Digikam::KMemoryInfo::KMemoryInfoData* const data)
 #include <unistd.h>
 #define SWAP_BATCH 5
 #endif
-#ifdef Q_OS_WIN32
+#ifdef Q_OS_WIN
 #include <windows.h>
 #endif
 
@@ -585,9 +585,9 @@ int get_swap_stats(Digikam::KMemoryInfo::KMemoryInfoData* const data)
     struct uvmexp* uvm = 0;
 #endif // defined(Q_OS_NETBSD) || defined(Q_OS_OPENBSD)
 
-#ifdef Q_OS_WIN32
+#ifdef Q_OS_WIN
     MEMORYSTATUSEX memstats;
-#endif // Q_OS_WIN32
+#endif // Q_OS_WIN
 
 #ifdef Q_OS_HPUX
     data->totalSwap = 0;
@@ -765,7 +765,7 @@ int get_swap_stats(Digikam::KMemoryInfo::KMemoryInfoData* const data)
     return 1;
 #endif // defined(Q_OS_NETBSD) || defined(Q_OS_OPENBSD)
 
-#ifdef Q_OS_WIN32
+#ifdef Q_OS_WIN
     memstats.dwLength = sizeof(memstats);
 
     if (!GlobalMemoryStatusEx(&memstats))

@@ -2559,7 +2559,7 @@ bool EditorWindow::localFileRename(const QString& src, const QString& destPath)
                  << QDir::toNativeSeparators(dest) << ". Storing image there.";
     }
 
-#ifndef Q_OS_WIN32
+#ifndef Q_OS_WIN
     QByteArray dstFileName = QFile::encodeName(dest);
 
     // Store old permissions:
@@ -2588,7 +2588,7 @@ bool EditorWindow::localFileRename(const QString& src, const QString& destPath)
         return false;
     }
 
-#ifndef Q_OS_WIN32
+#ifndef Q_OS_WIN
 
     // restore permissions
     if (::chmod(dstFileName, filePermissions) != 0)
