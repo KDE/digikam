@@ -43,7 +43,7 @@
 
 // Local includes
 
-#include "faceiface.h"
+#include "faceutils.h"
 #include "previewloadthread.h"
 #include "thumbnailloadthread.h"
 #include "workerobject.h"
@@ -291,6 +291,7 @@ Q_SIGNALS:
 protected:
 
     FacePipeline::WriteMode      mode;
+    ThumbnailLoadThread*         thumbnailLoadThread;
     FacePipeline::Private* const d;
 };
 
@@ -393,7 +394,7 @@ public:
     void wait();
     void applyPriority();
 
-    void createThumbnailLoadThread();
+    ThumbnailLoadThread* createThumbnailLoadThread();
 
 public:
 
@@ -409,7 +410,7 @@ public:
     QList<QObject*>      pipeline;
     QThread::Priority    priority;
 
-    ThumbnailLoadThread* thumbnailLoadThread;
+    QList<ThumbnailLoadThread*> thumbnailLoadThreads;
     bool                 started;
     int                  infosForFiltering;
     int                  packagesOnTheRoad;

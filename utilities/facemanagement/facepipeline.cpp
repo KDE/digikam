@@ -237,7 +237,7 @@ ScanStateFilter::ScanStateFilter(FacePipeline::FilterMode mode, FacePipeline::Pr
 
 FacePipelineExtendedPackage::Ptr ScanStateFilter::filter(const ImageInfo& info)
 {
-    FaceIface iface;
+    FaceUtils utils;
 
     switch (mode)
     {
@@ -248,7 +248,7 @@ FacePipelineExtendedPackage::Ptr ScanStateFilter::filter(const ImageInfo& info)
 
     case FacePipeline::SkipAlreadyScanned:
     {
-        if (!iface.hasBeenScanned(info))
+        if (!utils.hasBeenScanned(info))
         {
             return d->buildPackage(info);
         }
@@ -264,16 +264,16 @@ FacePipelineExtendedPackage::Ptr ScanStateFilter::filter(const ImageInfo& info)
 
         if (mode == FacePipeline::ReadUnconfirmedFaces)
         {
-            databaseFaces = iface.unconfirmedDatabaseFaces(info.id());
+            databaseFaces = utils.unconfirmedDatabaseFaces(info.id());
 
         }
         else if (mode == FacePipeline::ReadFacesForTraining)
         {
-            databaseFaces = iface.databaseFacesForTraining(info.id());
+            databaseFaces = utils.databaseFacesForTraining(info.id());
         }
         else
         {
-            databaseFaces = iface.confirmedDatabaseFaces(info.id());
+            databaseFaces = utils.confirmedDatabaseFaces(info.id());
         }
 
         if (!databaseFaces.isEmpty())
@@ -513,7 +513,7 @@ void DetectionWorker::setAccuracy(double accuracy)
 // ----------------------------------------------------------------------------------------
 
 FaceImageRetriever::FaceImageRetriever(FacePipeline::Private* const d)
-    : catcher(new ThumbnailImageCatcher(d->thumbnailLoadThread, d))
+    : catcher(new ThumbnailImageCatcher(d->createThumbnailLoadThread(), d))
 {
 }
 
@@ -573,7 +573,7 @@ RecognitionWorker::RecognitionWorker(FacePipeline::Private* const d)
 
 void RecognitionWorker::process(FacePipelineExtendedPackage::Ptr package)
 {
-    FaceIface iface;
+    FaceUtils utils;
     QList<QImage> images;
 
     if (package->processFlags & FacePipelinePackage::ProcessedByDetector)
@@ -605,7 +605,7 @@ void RecognitionWorker::aboutToDeactivate()
 // ----------------------------------------------------------------------------------------
 
 DatabaseWriter::DatabaseWriter(FacePipeline::WriteMode mode, FacePipeline::Private* const d)
-    : mode(mode), d(d)
+    : mode(mode), thumbnailLoadThread(d->createThumbnailLoadThread()), d(d)
 {
 }
 
@@ -614,23 +614,23 @@ void DatabaseWriter::process(FacePipelineExtendedPackage::Ptr package)
     if (package->databaseFaces.isEmpty())
     {
         // Detection / Recognition
-        FaceIface iface;
+        FaceUtils utils;
 
         // OverwriteUnconfirmed means that a new scan discared unconfirmed results of previous scans
         // (assuming at least equal or new, better methodology is in use compared to the previous scan)
         if (mode == FacePipeline::OverwriteUnconfirmed && (package->processFlags & FacePipelinePackage::ProcessedByDetector))
         {
-            QList<DatabaseFace> oldEntries = iface.unconfirmedDatabaseFaces(package->info.id());
+            QList<DatabaseFace> oldEntries = utils.unconfirmedDatabaseFaces(package->info.id());
             kDebug() << "Removing old entries" << oldEntries;
-            iface.removeFaces(oldEntries);
+            utils.removeFaces(oldEntries);
         }
 
         // mark the whole image as scanned-for-faces
-        iface.markAsScanned(package->info);
+        utils.markAsScanned(package->info);
 
         if (!package->info.isNull() && !package->detectedFaces.isEmpty())
         {
-            package->databaseFaces = iface.writeUnconfirmedResults(package->info.id(),
+            package->databaseFaces = utils.writeUnconfirmedResults(package->info.id(),
                                                                    package->detectedFaces,
                                                                    package->recognitionResults,
                                                                    package->image.originalSize());
@@ -638,21 +638,21 @@ void DatabaseWriter::process(FacePipelineExtendedPackage::Ptr package)
 
             if (!package->image.isNull())
             {
-                iface.storeThumbnails(d->thumbnailLoadThread, package->filePath,
+                utils.storeThumbnails(thumbnailLoadThread, package->filePath,
                                       package->databaseFaces.toDatabaseFaceList(), package->image);
             }
         }
     }
     else if (package->processFlags & FacePipelinePackage::ProcessedByRecognizer)
     {
-        FaceIface iface;
+        FaceUtils utils;
         for (int i=0; i<package->databaseFaces.size(); i++)
         {
             if ((package->databaseFaces[i].roles & FacePipelineDatabaseFace::ForRecognition)
                 && !package->recognitionResults[i].isNull())
             {
                 int tagId = FaceTags::getOrCreateTagForIdentity(package->recognitionResults[i].attributes);
-                package->databaseFaces[i] = iface.changeSuggestedName(package->databaseFaces[i], tagId);
+                package->databaseFaces[i] = utils.changeSuggestedName(package->databaseFaces[i], tagId);
 
                 package->databaseFaces[i].roles &= ~FacePipelineDatabaseFace::ForRecognition;
            }
@@ -662,7 +662,7 @@ void DatabaseWriter::process(FacePipelineExtendedPackage::Ptr package)
     {
         // Editing database entries
 
-        FaceIface iface;
+        FaceUtils utils;
         FacePipelineDatabaseFaceList add;
         FacePipelineDatabaseFaceList::iterator it;
 
@@ -670,7 +670,7 @@ void DatabaseWriter::process(FacePipelineExtendedPackage::Ptr package)
         {
             if (it->roles & FacePipelineDatabaseFace::ForConfirmation)
             {
-                FacePipelineDatabaseFace confirmed  = iface.confirmName(*it, it->assignedTagId, it->assignedRegion);
+                FacePipelineDatabaseFace confirmed  = utils.confirmName(*it, it->assignedTagId, it->assignedRegion);
                 confirmed.roles                    |= FacePipelineDatabaseFace::Confirmed | FacePipelineDatabaseFace::ForTraining;
                 add << confirmed;
             }
@@ -679,18 +679,18 @@ void DatabaseWriter::process(FacePipelineExtendedPackage::Ptr package)
                 if (it->isNull())
                 {
                     // add Manually
-                    DatabaseFace newFace = iface.unconfirmedEntry(package->info.id(), it->assignedTagId, it->assignedRegion);
-                    iface.addManually(newFace);
+                    DatabaseFace newFace = utils.unconfirmedEntry(package->info.id(), it->assignedTagId, it->assignedRegion);
+                    utils.addManually(newFace);
                     add << newFace;
                 }
                 else if (it->assignedRegion.isValid())
                 {
-                    add << iface.changeRegion(*it, it->assignedRegion);
+                    add << utils.changeRegion(*it, it->assignedRegion);
                     // not implemented: changing tag id
                 }
                 else
                 {
-                    iface.removeFace(*it);
+                    utils.removeFace(*it);
                 }
 
                 it->roles &= ~FacePipelineDatabaseFace::ForEditing;
@@ -702,7 +702,7 @@ void DatabaseWriter::process(FacePipelineExtendedPackage::Ptr package)
 
         if (!package->image.isNull())
         {
-            iface.storeThumbnails(d->thumbnailLoadThread, package->filePath, add.toDatabaseFaceList(), package->image);
+            utils.storeThumbnails(thumbnailLoadThread, package->filePath, add.toDatabaseFaceList(), package->image);
         }
 
         package->databaseFaces << add;
@@ -737,10 +737,10 @@ void Benchmarker::process(FacePipelineExtendedPackage::Ptr package)
         // Detection / Recognition
         kDebug() << "Benchmarking image" << package->info.name();
 
-        FaceIface iface;
-        QList<DatabaseFace> groundTruth = iface.databaseFaces(package->info.id());
+        FaceUtils utils;
+        QList<DatabaseFace> groundTruth = utils.databaseFaces(package->info.id());
 
-        QList<DatabaseFace> testedFaces = iface.toDatabaseFaces(package->info.id(), package->detectedFaces,
+        QList<DatabaseFace> testedFaces = utils.toDatabaseFaces(package->info.id(), package->detectedFaces,
                                                                 package->recognitionResults, package->image.originalSize());
 
         QList<DatabaseFace> unmatchedTrueFaces = groundTruth;
@@ -877,24 +877,33 @@ QString Benchmarker::result() const
 
 // ----------------------------------------------------------------------------------------
 
-class TrainingDataProvider : public KFaceIface::TrainingDataProvider
+class MapListTrainingDataProvider : public KFaceIface::TrainingDataProvider
 {
 public:
 
-    TrainingDataProvider()
+    MapListTrainingDataProvider()
     {
     }
 
-    KFaceIface::ImageListProvider* newImages(const KFaceIface::Identity& /*id*/)
+    KFaceIface::ImageListProvider* newImages(const KFaceIface::Identity& identity)
     {
+        if (imagesToTrain.contains(identity.id))
+        {
+            KFaceIface::QListImageListProvider& provider = imagesToTrain[identity.id];
+            provider.reset();
+            return &provider;
+        }
         return &empty;
     }
+
     KFaceIface::ImageListProvider* images(const KFaceIface::Identity&)
     {
+        // Unimplemented. Would be needed if we use a backend with a "holistic" approach that needs all images to train.
         return &empty;
     }
 
-    KFaceIface::QListImageListProvider empty;
+    KFaceIface::EmptyImageListProvider            empty;
+    QMap<int, KFaceIface::QListImageListProvider> imagesToTrain;
 };
 
 
@@ -911,6 +920,10 @@ void Trainer::process(FacePipelineExtendedPackage::Ptr package)
     // Get a list of faces with type FaceForTraining (probably type is ConfirmedFace)
 
     QList<DatabaseFace> toTrain;
+    QList<int> identities;
+    QList<KFaceIface::Identity> identitySet;
+    FaceUtils utils;
+
     foreach(const FacePipelineDatabaseFace& face, package->databaseFaces)
     {
         if (face.roles & FacePipelineDatabaseFace::ForTraining)
@@ -918,10 +931,16 @@ void Trainer::process(FacePipelineExtendedPackage::Ptr package)
             DatabaseFace dbFace = face;
             dbFace.setType(DatabaseFace::FaceForTraining);
             toTrain << dbFace;
+
+            KFaceIface::Identity identity = utils.identityForTag(dbFace.tagId(), database);
+            identities  << identity.id;
+            if (!identitySet.contains(identity))
+            {
+                identitySet << identity;
+            }
         }
     }
 
-    FaceIface iface;
     if (!toTrain.isEmpty())
     {
         QList<QImage> images;
@@ -934,14 +953,16 @@ void Trainer::process(FacePipelineExtendedPackage::Ptr package)
             images = imageRetriever.getDetails(package->image, toTrain);
         }
 
-        //TODO: Provide data!
-        QList<KFaceIface::Identity> toBeTrained;
-
-        TrainingDataProvider provider;
-        database.train(toBeTrained, &provider, "digikam");
+        MapListTrainingDataProvider provider;
+        // Group images by identity
+        for (int i = 0; i<toTrain.size(); ++i)
+        {
+            provider.imagesToTrain[identities[i]].list << images[i];
+        }
+        database.train(identitySet, &provider, "digikam");
     }
 
-    iface.removeFaces(toTrain);
+    utils.removeFaces(toTrain);
     package->databaseFaces.replaceRole(FacePipelineDatabaseFace::ForTraining, FacePipelineDatabaseFace::Trained);
 
     package->processFlags |= FacePipelinePackage::ProcessedByTrainer;
@@ -966,7 +987,6 @@ FacePipeline::Private::Private(FacePipeline* const q)
     databaseWriter       = 0;
     trainer              = 0;
     benchmarker          = 0;
-    thumbnailLoadThread  = 0;
     priority             = QThread::LowPriority;
     started              = false;
     infosForFiltering    = 0;
@@ -1232,24 +1252,22 @@ void FacePipeline::Private::applyPriority()
         }
     }
 
-    if (thumbnailLoadThread)
+    foreach (ThumbnailLoadThread* thread, thumbnailLoadThreads)
     {
-        thumbnailLoadThread->setPriority(priority);
+        thread->setPriority(priority);
     }
 }
 
-void FacePipeline::Private::createThumbnailLoadThread()
+ThumbnailLoadThread* FacePipeline::Private::createThumbnailLoadThread()
 {
-    if (!thumbnailLoadThread)
-    {
-        thumbnailLoadThread = new ThumbnailLoadThread;
-        thumbnailLoadThread->setPixmapRequested(false);
-        thumbnailLoadThread->setThumbnailSize(ThumbnailLoadThread::maximumThumbnailSize());
-        // KFaceIface::Image::recommendedSizeForRecognition()
-        thumbnailLoadThread->setPriority(priority);
-    }
+    ThumbnailLoadThread* thumbnailLoadThread = new ThumbnailLoadThread;
+    thumbnailLoadThread->setPixmapRequested(false);
+    thumbnailLoadThread->setThumbnailSize(ThumbnailLoadThread::maximumThumbnailSize());
+    // KFaceIface::Image::recommendedSizeForRecognition()
+    thumbnailLoadThread->setPriority(priority);
 
-    //FaceIface::faceRectDisplayMargin()
+    thumbnailLoadThreads << thumbnailLoadThread;
+    return thumbnailLoadThread;
 }
 
 // ----------------------------------------------------------------------------------------
@@ -1272,7 +1290,7 @@ FacePipeline::~FacePipeline()
     delete d->recognitionWorker;
     delete d->databaseWriter;
     delete d->trainer;
-    delete d->thumbnailLoadThread;
+    qDeleteAll(d->thumbnailLoadThreads);
     delete d->benchmarker;
     delete d;
 }
