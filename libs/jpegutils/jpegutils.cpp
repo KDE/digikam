@@ -388,12 +388,16 @@ bool JpegRotator::exifTransform(const RotationMatrix& matrix)
 
     for (int i=0; i<actions.size(); i++)
     {
-        SafeTemporaryFile temp(dir + "/JpegRotator-XXXXXX.digikamtempfile.jpg");
-        temp.setAutoRemove(false);
-        temp.open();
+        SafeTemporaryFile* temp = new SafeTemporaryFile(dir + "/JpegRotator-XXXXXX.digikamtempfile.jpg");
+        temp->setAutoRemove(false);
+        temp->open();
+        QString tempFile = temp->fileName();
+        // Crash fix: a QTemporaryFile is not properly closed until its destructor is called.
+        delete temp;
 
-        if (!performJpegTransform(actions[i], src, temp))
+        if (!performJpegTransform(actions[i], src, tempFile))
         {
+            ::unlink(QFile::encodeName(tempFile));
             kError() << "JPEG transform of" << src << "failed";
             return false;
         }
@@ -401,19 +405,23 @@ bool JpegRotator::exifTransform(const RotationMatrix& matrix)
         if (i+1 != actions.size())
         {
             // another round
-            src = temp.fileName();
-            unlinkLater << temp.fileName();
+            src = tempFile;
+            unlinkLater << tempFile;
             continue;
         }
 
         // finalize
-        updateMetadata(temp.fileName(), matrix);
+        updateMetadata(tempFile, matrix);
 
         // atomic rename
-        if (::rename(QFile::encodeName(temp.fileName()), QFile::encodeName(m_destFile)) != 0)
+#ifndef Q_OS_WIN
+        if (::rename(QFile::encodeName(tempFile), QFile::encodeName(dest)) != 0)
+#else
+        if (::MoveFileEx(tempFile.utf16(), dest.utf16(), MOVEFILE_REPLACE_EXISTING | MOVEFILE_WRITE_THROUGH) == 0)
+#endif
         {
-            unlinkLater << temp.fileName();
-            kError() << "Renaming" << temp.fileName() << "to" << m_destFile << "failed";
+            unlinkLater << tempFile;
+            kError() << "Renaming" << tempFile << "to" << dest << "failed";
             break;
         }
     }
@@ -486,10 +494,10 @@ void JpegRotator::updateMetadata(const QString& fileName, const RotationMatrix &
 #endif
 }
 
-bool JpegRotator::performJpegTransform(TransformAction action, const QString& src, QFile& dest)
+bool JpegRotator::performJpegTransform(TransformAction action, const QString& src, const QString& dest)
 {
     QByteArray in                   = QFile::encodeName(src);
-    QByteArray out                  = QFile::encodeName(dest.fileName());
+    QByteArray out                  = QFile::encodeName(dest);
 
     JCOPY_OPTION copyoption         = JCOPYOPT_ALL;
     jpeg_transform_info transformoption;
@@ -542,7 +550,7 @@ bool JpegRotator::performJpegTransform(TransformAction action, const QString& sr
         return false;
     }
 
-    output_file = fdopen(dest.handle(), "wb");
+    output_file = fopen(out, "wb");
 
     if (!output_file)
     {
