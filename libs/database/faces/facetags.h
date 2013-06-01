@@ -96,9 +96,17 @@ public:
     static QString        getNameForRect(qlonglong imageid, const QRect& faceRect);
 
     /**
-     * Use attributes as used by libkface to identify or create a person tag
+     * Use attributes as used by libkface to identify or create a person tag;
+     * From the database, produce the identity attributes identifying the corresponding identity.
      */
     static int            getOrCreateTagForIdentity(const QMap<QString, QString>& attributes);
+    static QMap<QString, QString> identityAttributes(int tagId);
+
+    /**
+     * Map an existing tag to a kface Identity.
+     * Subsequently, the Identity can be retrieved via the identityAttributes().
+     */
+    static void applyTagIdentityMapping(int tagId, const QMap<QString, QString>& attributes);
 
     /**
      * Return a person's name for a tag

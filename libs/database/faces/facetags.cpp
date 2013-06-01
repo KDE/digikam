@@ -231,9 +231,58 @@ int FaceTags::scannedForFacesTagId()
     return TagsCache::instance()->getOrCreateInternalTag(InternalTagName::scannedForFaces()); // no i18n
 }
 
+QMap<QString, QString> FaceTags::identityAttributes(int tagId)
+{
+    QMap<QString, QString> attributes;
+    QString uuid = TagsCache::instance()->propertyValue(tagId, TagPropertyName::kfaceUuid());
+    if (!uuid.isEmpty())
+    {
+        attributes["uuid"] = uuid;
+    }
+
+    QString fullName = TagsCache::instance()->propertyValue(tagId, TagPropertyName::person());
+    if (!uuid.isEmpty())
+    {
+        attributes["fullName"] = fullName;
+    }
+
+    QString kfaceName = TagsCache::instance()->propertyValue(tagId, TagPropertyName::person());
+    QString tagName = TagsCache::instance()->tagName(tagId);
+    if (tagName != kfaceName)
+    {
+        attributes.insertMulti("name", kfaceName);
+        attributes.insertMulti("name", tagName);
+    }
+    else
+    {
+        attributes["name"] = tagName;
+    }
+
+    return attributes;
+}
+
+void FaceTags::applyTagIdentityMapping(int tagId, const QMap<QString, QString>& attributes)
+{
+    TagProperties props(tagId);
+
+    if (attributes.contains("fullName"))
+    {
+        props.setProperty(TagPropertyName::person(), attributes.value("fullName"));
+    }
+
+    // we do not change the digikam tag name at this point, but we have this extra tag property
+    if (attributes.contains("name"))
+    {
+        props.setProperty(TagPropertyName::kfaceName(), attributes.value("name"));
+    }
+
+    props.setProperty(TagPropertyName::kfaceUuid(), attributes.value("uuid"));
+}
+
 int FaceTags::getOrCreateTagForIdentity(const QMap<QString, QString>& attributes)
 {
-    // Attributes from libkface's Identity object
+    // Attributes from libkface's Identity object.
+    // The text constants are defines in libkface's API docs
     if (attributes.isEmpty())
     {
         return FaceTags::unknownPersonTagId();
@@ -281,7 +330,9 @@ int FaceTags::getOrCreateTagForIdentity(const QMap<QString, QString>& attributes
     }
 
     // identity is in libkface's database, but not in ours, so create.
-    return FaceTagsHelper::tagForName(name, 0, -1, attributes.value("fullName"), true, true);
+    tagId = FaceTagsHelper::tagForName(name, 0, -1, attributes.value("fullName"), true, true);
+    applyTagIdentityMapping(tagId, attributes);
+    return tagId;
 }
 
 QString FaceTags::faceNameForTag(int tagId)
