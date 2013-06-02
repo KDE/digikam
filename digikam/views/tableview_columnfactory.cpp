@@ -335,7 +335,7 @@ bool TableViewColumn::compareHelperBoolFailCheck(const bool okA, const bool okB,
     return false;
 }
 
-bool TableViewColumn::columnAffectedByChangeset(const ImageChangeset& imageChangeset) const
+bool TableViewColumn::columnAffectedByChangeset(const ImageChangeset& /*imageChangeset*/) const
 {
     return true;
 }
