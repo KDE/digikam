@@ -241,7 +241,7 @@ QMap<QString, QString> FaceTags::identityAttributes(int tagId)
     }
 
     QString fullName = TagsCache::instance()->propertyValue(tagId, TagPropertyName::person());
-    if (!uuid.isEmpty())
+    if (!fullName.isEmpty())
     {
         attributes["fullName"] = fullName;
     }
