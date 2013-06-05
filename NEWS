@@ -20,4 +20,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 010 ==> 320016 - Full-screen options are not applied after restarting digiKam.
 011 ==> 319876 - Panels state changed after exit from full screen mode.
 012 ==> 320462 - Button for resetting curve in RAW import tool is very small.
-013 ==> 
+013 ==> 320714 - Build failed.
+014 ==> 
