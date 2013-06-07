@@ -118,7 +118,6 @@ FaceDetector::FaceDetector(const FaceScanSettings& settings, ProgressItem* const
 
     if (settings.task == FaceScanSettings::RetrainAll)
     {
-        KFaceIface::RecognitionDatabase::addDatabase();
         d->pipeline.plugRetrainingDatabaseFilter();
         d->pipeline.plugTrainer();
         d->pipeline.construct();
@@ -141,55 +140,50 @@ FaceDetector::FaceDetector(const FaceScanSettings& settings, ProgressItem* const
         d->pipeline.plugBenchmarker();
         d->pipeline.construct();
     }
-    else
+    else if (settings.task == FaceScanSettings::DetectAndRecognize)
     {
         FacePipeline::FilterMode filterMode;
         FacePipeline::WriteMode  writeMode;
 
-        if (settings.task == FaceScanSettings::DetectAndRecognize)
+        if (settings.alreadyScannedHandling == FaceScanSettings::Skip)
         {
-            if (settings.alreadyScannedHandling == FaceScanSettings::Skip)
-            {
-                filterMode = FacePipeline::SkipAlreadyScanned;
-                writeMode  = FacePipeline::NormalWrite;
-            }
-            else if (settings.alreadyScannedHandling == FaceScanSettings::Rescan)
-            {
-                filterMode = FacePipeline::ScanAll;
-                writeMode  = FacePipeline::OverwriteUnconfirmed;
-            }
-            else // if (settings.alreadyScannedHandling == FaceScanSettings::Merge)
-            {
-                filterMode = FacePipeline::ScanAll;
-                writeMode  = FacePipeline::NormalWrite;
-            }
+            filterMode = FacePipeline::SkipAlreadyScanned;
+            writeMode  = FacePipeline::NormalWrite;
         }
-        else // if (settings.task == FaceScanSettings::RecognizeMarkedFaces)
+        else if (settings.alreadyScannedHandling == FaceScanSettings::Rescan)
         {
-	    d->pipeline.plugFaceRecognizer();
-            filterMode = FacePipeline::ReadUnconfirmedFaces;
+            filterMode = FacePipeline::ScanAll;
+            writeMode  = FacePipeline::OverwriteUnconfirmed;
+        }
+        else // if (settings.alreadyScannedHandling == FaceScanSettings::Merge)
+        {
+            filterMode = FacePipeline::ScanAll;
             writeMode  = FacePipeline::NormalWrite;
         }
 
         d->pipeline.plugDatabaseFilter(filterMode);
+        d->pipeline.plugPreviewLoader();
 
-        if (settings.task == FaceScanSettings::DetectAndRecognize)
+        if (settings.useFullCpu)
         {
-            d->pipeline.plugPreviewLoader();
-
-            if (settings.useFullCpu)
-            {
-                d->pipeline.plugParallelFaceDetectors();
-            }
-            else
-            {
-                d->pipeline.plugFaceDetector();
-            }
+            d->pipeline.plugParallelFaceDetectors();
+        }
+        else
+        {
+            d->pipeline.plugFaceDetector();
         }
 
+        d->pipeline.plugFaceRecognizer();
         d->pipeline.plugDatabaseWriter(writeMode);
         d->pipeline.construct();
         d->pipeline.setDetectionAccuracy(settings.accuracy);
+    }
+    else // if (settings.task == FaceScanSettings::RecognizeMarkedFaces)
+    {
+        d->pipeline.plugRerecognizingDatabaseFilter();
+        d->pipeline.plugFaceRecognizer();
+        d->pipeline.plugDatabaseWriter(FacePipeline::NormalWrite);
+        d->pipeline.construct();
     }
 
     connect(&d->albumListing, SIGNAL(signalItemsInfo(ImageInfoList)),
