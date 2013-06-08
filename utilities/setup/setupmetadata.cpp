@@ -212,7 +212,7 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
                                            "template in the XMP and the IPTC tags. "
                                            "You can set template values to Template setup page."));
     d->saveFaceTags = new QCheckBox;
-    d->saveFaceTags->setText(i18nc("@option:check", "Face Tags(including face rectangles)"));
+    d->saveFaceTags->setText(i18nc("@option:check", "Face Tags (including face rectangles)"));
     d->saveFaceTags->setWhatsThis(i18nc("@info:whatsthis", "Turn on this option to store face tags "
                                            "with face rectangles in the XMP tags."));
 
