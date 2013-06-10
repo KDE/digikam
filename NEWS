@@ -22,8 +22,10 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 012 ==> 320462 - Button for resetting curve in RAW import tool is very small.
 013 ==> 320714 - Build failed.
 014 ==> 320794 - Libkdcraw uses obsolete libraw library.
-015 ==> 320891 - Missing space in “Face Tags(including face rectangles)”.
+015 ==> 320891 - Missing space in Face Tags(including face rectangles).
 016 ==> 290961 - digiKam crashes after closing the configure dialog.
 017 ==> 192258 - starting takes long time.
 018 ==> 285821 - Once installed, DK does not start
-019 ==> 
+019 ==> 319267] libkdcraw contains invalid icc profiles, applications fail to save png file with libpng-1.6.x.
+020 ==> 
+
