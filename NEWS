@@ -25,4 +25,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 015 ==> 320891 - Missing space in “Face Tags(including face rectangles)”.
 016 ==> 290961 - digiKam crashes after closing the configure dialog.
 017 ==> 192258 - starting takes long time.
-018 ==> 
+018 ==> 285821 - Once installed, DK does not start
+019 ==> 
