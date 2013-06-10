@@ -1,5 +1,5 @@
 *****************************************************************************************************
-digiKam 3.3.0-beta1 - Release date: 2013-06-02
+digiKam 3.3.0-beta2- Release date: 2013-06-16
 
 NEW FEATURES:
 
@@ -23,4 +23,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 013 ==> 320714 - Build failed.
 014 ==> 320794 - Libkdcraw uses obsolete libraw library.
 015 ==> 320891 - Missing space in “Face Tags(including face rectangles)”.
-016 ==> 
+016 ==> 290961 - digiKam crashes after closing the configure dialog.
+017 ==> 
