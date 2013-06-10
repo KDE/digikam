@@ -24,4 +24,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 014 ==> 320794 - Libkdcraw uses obsolete libraw library.
 015 ==> 320891 - Missing space in “Face Tags(including face rectangles)”.
 016 ==> 290961 - digiKam crashes after closing the configure dialog.
-017 ==> 
+017 ==> 192258 - starting takes long time.
+018 ==> 
