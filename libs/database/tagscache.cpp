@@ -411,7 +411,7 @@ QList<int> TagsCache::tagsForName(const QString& tagName, HiddenTagsPolicy hidde
         QList<int> ids;
         QMultiHash<QString, int>::const_iterator it;
 
-        for (it = d->nameHash.find(tagName); it != d->nameHash.end() && it.key() == tagName; ++it)
+        for (it = d->nameHash.constFind(tagName); it != d->nameHash.constEnd() && it.key() == tagName; ++it)
         {
             if (!d->internalTags.contains(it.value()))
             {
@@ -804,7 +804,7 @@ QList<int> TagsCache::tagsWithProperty(const QString& property, const QString& v
     QReadLocker locker(&d->lock);
     QList<int>  ids;
 
-    for (TagPropertiesConstIterator it = d->tagProperties.begin(); it != d->tagProperties.end(); )
+    for (TagPropertiesConstIterator it = d->tagProperties.constBegin(); it != d->tagProperties.constEnd(); )
     {
         // sort out invalid entries, see bug #277169
         if (it->tagId <= 0)

@@ -779,7 +779,7 @@ void ThumbnailLoadThread::startKdePreviewJob()
     if (d->previewPlugins.isEmpty())
       d->previewPlugins = KIO::PreviewJob::availablePlugins();
     
-    for (KUrl::List::ConstIterator it = list.begin() ; it != list.end() ; ++it)
+    for (KUrl::List::ConstIterator it = list.constBegin() ; it != list.constEnd() ; ++it)
     {
         if ((*it).isValid())
             items.append(KFileItem(KFileItem::Unknown, KFileItem::Unknown, *it, true));

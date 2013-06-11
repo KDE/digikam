@@ -285,10 +285,10 @@ void ImportThumbnailModel::startKdePreviewJob()
 
 #if KDE_IS_VERSION(4,7,0)
     KFileItemList items;
-    for (KUrl::List::ConstIterator it = list.begin() ; it != list.end() ; ++it)
+    foreach (const KUrl& url, list)
     {
-        if ((*it).isValid())
-            items.append(KFileItem(KFileItem::Unknown, KFileItem::Unknown, *it, true));
+        if (url.isValid())
+            items.append(KFileItem(KFileItem::Unknown, KFileItem::Unknown, url, true));
     }
     d->kdeJob = KIO::filePreview(items, QSize(ThumbnailSize::Huge, ThumbnailSize::Huge));
 #else
