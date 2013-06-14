@@ -212,7 +212,7 @@ ImageInfo::ImageInfo(const KUrl& url)
     if (location.isNull())
     {
         m_data = 0;
-        qWarning() << "No location could be retrieved for url" << url;
+        kWarning() << "No location could be retrieved for url" << url;
         return;
     }
 
@@ -231,7 +231,7 @@ ImageInfo::ImageInfo(const KUrl& url)
         if (!info.id)
         {
             m_data = 0;
-            qWarning() << "No itemShortInfo could be retrieved from the database for image" << name;
+            kWarning() << "No itemShortInfo could be retrieved from the database for image" << name;
             return;
         }
 
