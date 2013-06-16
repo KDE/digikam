@@ -585,7 +585,6 @@ int TagsCache::createTag(const QString& tagPathToCreate)
 
     d->checkNameHash();
 
-    int  parentTagID      = 0;
     int  tagID            = 0;
     bool parentTagExisted = true;
 
@@ -593,6 +592,7 @@ int TagsCache::createTag(const QString& tagPathToCreate)
     int parentTagIDForCreation = 0;
 
     {
+        int  parentTagID = 0;
         QReadLocker locker(&d->lock);
 
         // Traverse hierarchy from top to bottom
