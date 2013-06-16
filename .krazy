@@ -1,1 +1,2 @@
-SKIP /libs/3rdparty/\|/libs/jpegutils/\|/imageplugins/contentawareresizing/lqr/
+SKIP /libs/3rdparty/|/libs/jpegutils/|/imageplugins/contentawareresizing/lqr/
+
