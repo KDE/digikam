@@ -1,0 +1,5 @@
+cmake_minimum_required(VERSION 2.8)
+project( DisplayImage )
+find_package( OpenCV REQUIRED )
+add_executable( amisharp amisharpcanny.cpp )
+target_link_libraries( amisharp ${OpenCV_LIBS} )
