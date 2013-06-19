@@ -206,11 +206,15 @@ DatabaseFace FaceTagsEditor::addManually(const DatabaseFace& face)
 
 DatabaseFace FaceTagsEditor::changeSuggestedName(const DatabaseFace& previousEntry, int unconfirmedNameTagId)
 {
+    //Fixme:Resolve face tagging action conflict :Following condition is commented because Database writer in facepipeline couldnt assign tag
+    //to recognized faces
+    /*
     if (!previousEntry.isConfirmedName())
     {
         kDebug() << "Refusing to reset a confirmed name to an unconfirmed name";
         return previousEntry;
     }
+    */
 
     DatabaseFace newEntry = unconfirmedEntry(previousEntry.imageId(), unconfirmedNameTagId, previousEntry.region());
 
