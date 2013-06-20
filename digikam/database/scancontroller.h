@@ -30,7 +30,6 @@
 
 #include <QThread>
 #include <QString>
-    void scanFileDirectly(const QString& filePath);
 
 // KDE includes
 
