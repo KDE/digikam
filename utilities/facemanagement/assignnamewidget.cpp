@@ -151,10 +151,10 @@ bool AssignNameWidget::Private::isValid() const
 void AssignNameWidget::Private::clearWidgets()
 {
     delete comboBox;
-    comboBox  = 0;
+    comboBox = 0;
 
     delete lineEdit;
-    lineEdit  = 0;
+    lineEdit = 0;
 
     delete confirmButton;
     confirmButton = 0;
@@ -265,7 +265,7 @@ void AssignNameWidget::Private::checkWidgets()
 
             if (!rejectButton)
             {
-                rejectButton  = createToolButton(KStandardGuiItem::remove());
+                rejectButton = createToolButton(KStandardGuiItem::remove());
 
                 q->connect(rejectButton, SIGNAL(clicked()),
                            q, SLOT(slotReject()));
@@ -336,9 +336,9 @@ void AssignNameWidget::Private::updateLayout()
 
                 case FullLine:
                 {
-                    layout->addWidget(addTagsWidget(),  0, 0);
-                    layout->addWidget(confirmButton,    0, 1);
-                    layout->addWidget(rejectButton,     0, 2);
+                    layout->addWidget(addTagsWidget(), 0, 0);
+                    layout->addWidget(confirmButton,   0, 1);
+                    layout->addWidget(rejectButton,    0, 2);
                     layout->setColumnStretch(0, 1);
 
                     setSizePolicies(QSizePolicy::Expanding, QSizePolicy::Preferred);
@@ -351,9 +351,9 @@ void AssignNameWidget::Private::updateLayout()
                 case TwoLines:
                 case Compact:
                 {
-                    layout->addWidget(addTagsWidget(),  0, 0, 1, 2);
-                    layout->addWidget(confirmButton,    1, 0);
-                    layout->addWidget(rejectButton,     1, 1);
+                    layout->addWidget(addTagsWidget(), 0, 0, 1, 2);
+                    layout->addWidget(confirmButton,   1, 0);
+                    layout->addWidget(rejectButton,    1, 1);
 
                     setSizePolicies(QSizePolicy::Expanding, QSizePolicy::Minimum);
 
@@ -458,11 +458,13 @@ void AssignNameWidget::Private::updateVisualStyle()
                     "QLabel { "
                     "  color: white; background-color: transparent; border: none; "
                     " }"
-                    /*"KCompletionBox::item:hover, KCompletionBox::item:selected { "
+/*
+                    "KCompletionBox::item:hover, KCompletionBox::item:selected { "
                     "  background-color: "
                     "     qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 rgba(150,150,150,80%), "
                     "                     stop:0.5 rgba(25,25,25,100%), stop:1 rgba(150,150,150,80%)); "
-                    " } "*/
+                    " } "
+*/
                 ).arg(styleSheetFontDescriptor(KGlobalSettings::smallestReadableFont()))
             );
             break;
@@ -484,7 +486,9 @@ void AssignNameWidget::Private::updateVisualStyle()
                     "  border-radius: 8px; "
                     "} "
                 ).arg(styleSheetFontDescriptor(KGlobalSettings::smallestReadableFont()))
-                .arg(bg.red()).arg(bg.green()).arg(bg.blue())
+                 .arg(bg.red())
+                 .arg(bg.green())
+                 .arg(bg.blue())
             );
             break;
         }
@@ -535,7 +539,7 @@ void AssignNameWidget::Private::updateContents()
     }
 }
 
-// ---
+// -------------------------------------------------------------------
 
 AssignNameWidget::AssignNameWidget(QWidget* const parent)
     : QFrame(parent), d(new Private(this))

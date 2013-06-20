@@ -97,8 +97,10 @@ public:
      * This uses a thumbnail load thread to load the image detail.
      * If requested, the faces will be scaled to the given (fixed) size.
      */
-    //void                fillImageInFaces(ThumbnailImageCatcher* const catcher, const QString& filePath,
-      //                                   QList<KFaceIface::Face>& faceList, const QSize& scaleSize = QSize()) const;
+/*
+    void                fillImageInFaces(ThumbnailImageCatcher* const catcher, const QString& filePath,
+                                         QList<KFaceIface::Face>& faceList, const QSize& scaleSize = QSize()) const;
+*/
 
     /**
      * Store the needed thumbnails for the given faces. This can be a huge optimization

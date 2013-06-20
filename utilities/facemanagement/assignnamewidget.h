@@ -84,6 +84,8 @@ public:
         TranslucentThemedFrameless
     };
 
+public:
+
     /** Please take care: you must set all four modes before usage! */
 
     explicit AssignNameWidget(QWidget* const parent = 0);
@@ -105,7 +107,7 @@ public:
     void setVisualStyle(VisualStyle style);
     VisualStyle visualStyle() const;
 
-    ImageInfo info() const;
+    ImageInfo info()           const;
     QVariant  faceIdentifier() const;
 
     /// The combo box or line edit in use, if any

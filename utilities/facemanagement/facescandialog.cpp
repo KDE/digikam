@@ -301,7 +301,6 @@ void FaceScanDialog::doSaveState()
     d->tagSelectCB->view()->saveState();
 
     group.writeEntry(entryName(d->configUseFullCpu), d->useFullCpuButton->isChecked());
-
     group.writeEntry(entryName(d->configSettingsVisible), isDetailsWidgetVisible());
 }
 

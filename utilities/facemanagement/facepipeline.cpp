@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-
 #include "facepipeline.moc"
 #include "facepipeline_p.moc"
 
@@ -241,57 +240,58 @@ FacePipelineExtendedPackage::Ptr ScanStateFilter::filter(const ImageInfo& info)
 
     switch (mode)
     {
-    case FacePipeline::ScanAll:
-    {
-        return d->buildPackage(info);
-    }
-
-    case FacePipeline::SkipAlreadyScanned:
-    {
-        if (!utils.hasBeenScanned(info))
+        case FacePipeline::ScanAll:
         {
             return d->buildPackage(info);
         }
 
-        break;
-    }
-
-    case FacePipeline::ReadUnconfirmedFaces:
-    case FacePipeline::ReadFacesForTraining:
-    case FacePipeline::ReadConfirmedFaces:
-    {
-        QList<DatabaseFace> databaseFaces;
-
-        if (mode == FacePipeline::ReadUnconfirmedFaces)
+        case FacePipeline::SkipAlreadyScanned:
         {
-            databaseFaces = utils.unconfirmedDatabaseFaces(info.id());
-
-        }
-        else if (mode == FacePipeline::ReadFacesForTraining)
-        {
-            databaseFaces = utils.databaseFacesForTraining(info.id());
-        }
-        else
-        {
-            databaseFaces = utils.confirmedDatabaseFaces(info.id());
-        }
-
-        if (!databaseFaces.isEmpty())
-        {
-            FacePipelineExtendedPackage::Ptr package = d->buildPackage(info);
-            package->databaseFaces = databaseFaces;
-            //kDebug() << "Prepared package with" << databaseFaces.size();
-            package->databaseFaces.setRole(FacePipelineDatabaseFace::ReadFromDatabase);
-
-            if (tasks)
+            if (!utils.hasBeenScanned(info))
             {
-                package->databaseFaces.setRole(tasks);
+                return d->buildPackage(info);
             }
-            return package;
+
+            break;
         }
 
-        break;
-    }
+        case FacePipeline::ReadUnconfirmedFaces:
+        case FacePipeline::ReadFacesForTraining:
+        case FacePipeline::ReadConfirmedFaces:
+        {
+            QList<DatabaseFace> databaseFaces;
+
+            if (mode == FacePipeline::ReadUnconfirmedFaces)
+            {
+                databaseFaces = utils.unconfirmedDatabaseFaces(info.id());
+
+            }
+            else if (mode == FacePipeline::ReadFacesForTraining)
+            {
+                databaseFaces = utils.databaseFacesForTraining(info.id());
+            }
+            else
+            {
+                databaseFaces = utils.confirmedDatabaseFaces(info.id());
+            }
+
+            if (!databaseFaces.isEmpty())
+            {
+                FacePipelineExtendedPackage::Ptr package = d->buildPackage(info);
+                package->databaseFaces = databaseFaces;
+                //kDebug() << "Prepared package with" << databaseFaces.size();
+                package->databaseFaces.setRole(FacePipelineDatabaseFace::ReadFromDatabase);
+
+                if (tasks)
+                {
+                    package->databaseFaces.setRole(tasks);
+                }
+
+                return package;
+            }
+
+            break;
+        }
     }
 
     return FacePipelineExtendedPackage::Ptr();
@@ -458,7 +458,7 @@ void PreviewLoader::slotImageLoaded(const LoadingDescription& loadingDescription
 bool PreviewLoader::sentOutLimitReached()
 {
     int packagesInTheFollowingPipeline = d->packagesOnTheRoad - scheduledPackages.size();
-    return packagesInTheFollowingPipeline > maximumSentOutPackages;
+    return (packagesInTheFollowingPipeline > maximumSentOutPackages);
 }
 
 void PreviewLoader::checkRestart()
@@ -478,14 +478,13 @@ DetectionWorker::DetectionWorker(FacePipeline::Private* const d)
 
 void DetectionWorker::process(FacePipelineExtendedPackage::Ptr package)
 {
-    QImage detectionImage = scaleForDetection(package->image);
-
-    package->detectedFaces  = detector.detectFaces(detectionImage, package->image.originalSize());
+    QImage detectionImage  = scaleForDetection(package->image);
+    package->detectedFaces = detector.detectFaces(detectionImage, package->image.originalSize());
 
     kDebug() << "Found" << package->detectedFaces.size() << "faces in" << package->info.name()
              << package->image.size() << package->image.originalSize();
 
-    package->processFlags  |= FacePipelinePackage::ProcessedByDetector;
+    package->processFlags |= FacePipelinePackage::ProcessedByDetector;
 
     emit processed(package);
 }
@@ -505,7 +504,7 @@ QImage DetectionWorker::scaleForDetection(const DImg& image) const
 void DetectionWorker::setAccuracy(double accuracy)
 {
     QVariantMap params;
-    params["accuracy"] = accuracy;
+    params["accuracy"]    = accuracy;
     params["specificity"] = 0.8; //TODO: add UI for sensitivity - specificity
     detector.setParameters(params);
 }
@@ -530,6 +529,7 @@ void FaceImageRetriever::cancel()
 QList<QImage> FaceImageRetriever::getDetails(const DImg& src, const QList<QRectF>& rects)
 {
     QList<QImage> images;
+
     foreach (const QRectF& rect, rects)
     {
         images << src.copyQImage(rect);
@@ -540,25 +540,30 @@ QList<QImage> FaceImageRetriever::getDetails(const DImg& src, const QList<QRectF
 QList<QImage> FaceImageRetriever::getDetails(const DImg& src, const QList<DatabaseFace>& faces)
 {
     QList<QImage> images;
+
     foreach (const DatabaseFace& face, faces)
     {
         QRect rect = TagRegion::mapFromOriginalSize(src, face.region().toRect());
         images << src.copyQImage(rect);
     }
+
     return images;
 }
 
 QList<QImage> FaceImageRetriever::getThumbnails(const QString& filePath, const QList<DatabaseFace>& faces)
 {
     thumbnailCatcher()->setActive(true);
+
     foreach (const DatabaseFace& face, faces)
     {
         QRect rect = face.region().toRect();
         catcher->thread()->find(filePath, rect);
         catcher->enqueue();
     }
+
     QList<QImage> images = catcher->waitForThumbnails();
     thumbnailCatcher()->setActive(false);
+    
     return images;
 }
 
@@ -568,7 +573,7 @@ RecognitionWorker::RecognitionWorker(FacePipeline::Private* const d)
     : imageRetriever(d),
       d(d)
 {
-    database             = KFaceIface::RecognitionDatabase::addDatabase();
+    database = KFaceIface::RecognitionDatabase::addDatabase();
 }
 
 void RecognitionWorker::process(FacePipelineExtendedPackage::Ptr package)
@@ -586,9 +591,9 @@ void RecognitionWorker::process(FacePipelineExtendedPackage::Ptr package)
         images = imageRetriever.getThumbnails(package->filePath, package->databaseFaces.toDatabaseFaceList());
     }
 
-    package->recognitionResults = database.recognizeFaces(images);
+    package->recognitionResults  = database.recognizeFaces(images);
+    package->processFlags       |= FacePipelinePackage::ProcessedByRecognizer;
 
-    package->processFlags |= FacePipelinePackage::ProcessedByRecognizer;
     emit processed(package);
 }
 
@@ -646,6 +651,7 @@ void DatabaseWriter::process(FacePipelineExtendedPackage::Ptr package)
     else if (package->processFlags & FacePipelinePackage::ProcessedByRecognizer)
     {
         FaceUtils utils;
+
         for (int i=0; i<package->databaseFaces.size(); i++)
         {
             if ((package->databaseFaces[i].roles & FacePipelineDatabaseFace::ForRecognition)
@@ -743,17 +749,17 @@ void Benchmarker::process(FacePipelineExtendedPackage::Ptr package)
         QList<DatabaseFace> testedFaces = utils.toDatabaseFaces(package->info.id(), package->detectedFaces,
                                                                 package->recognitionResults, package->image.originalSize());
 
-        QList<DatabaseFace> unmatchedTrueFaces = groundTruth;
+        QList<DatabaseFace> unmatchedTrueFaces   = groundTruth;
         QList<DatabaseFace> unmatchedTestedFaces = testedFaces;
         QList<DatabaseFace> matchedTrueFaces;
 
-        int trueFaces = groundTruth.size();
+        int trueFaces           = groundTruth.size();
         const double minOverlap = 0.75;
 
         kDebug() << "There are" << trueFaces << "faces to be detected. The detector found" << testedFaces.size();
 
         ++totalImages;
-        faces += trueFaces;
+        faces       += trueFaces;
         totalPixels += package->image.originalSize().width() * package->image.originalSize().height();
 
         foreach(const DatabaseFace& trueFace, groundTruth)
@@ -772,6 +778,7 @@ void Benchmarker::process(FacePipelineExtendedPackage::Ptr package)
                 }
             }
         }
+
         foreach(const DatabaseFace& testedFace, testedFaces)
         {
             foreach(const DatabaseFace& trueFace, groundTruth)
@@ -832,7 +839,7 @@ QString Benchmarker::result() const
         sensitivityWarning = QString("<p><b>Note:</b><br/> "
                                      "No picture in the test collection contained a face. "
                                      "This means that sensitivity and PPV have no meaning and will be zero. </p>");
-        trueFaces = 1;
+        trueFaces          = 1;
     }
 
     // collection properties
@@ -893,6 +900,7 @@ public:
             provider.reset();
             return &provider;
         }
+
         return &empty;
     }
 
@@ -934,6 +942,7 @@ void Trainer::process(FacePipelineExtendedPackage::Ptr package)
 
             KFaceIface::Identity identity = utils.identityForTag(dbFace.tagId(), database);
             identities  << identity.id;
+
             if (!identitySet.contains(identity))
             {
                 identitySet << identity;
@@ -944,6 +953,7 @@ void Trainer::process(FacePipelineExtendedPackage::Ptr package)
     if (!toTrain.isEmpty())
     {
         QList<QImage> images;
+
         if (package->image.isNull())
         {
             images = imageRetriever.getThumbnails(package->filePath, toTrain);
@@ -954,11 +964,13 @@ void Trainer::process(FacePipelineExtendedPackage::Ptr package)
         }
 
         MapListTrainingDataProvider provider;
+
         // Group images by identity
         for (int i = 0; i<toTrain.size(); ++i)
         {
             provider.imagesToTrain[identities[i]].list << images[i];
         }
+
         database.train(identitySet, &provider, "digikam");
     }
 
@@ -1181,7 +1193,7 @@ void FacePipeline::Private::stop()
     ParallelPipes* pipes       = 0;
     DynamicThread* thread      = 0;
 
-    foreach(QObject* const  element, pipeline)
+    foreach(QObject* const element, pipeline)
     {
         if ((workerObject = qobject_cast<WorkerObject*>(element)))
         {
@@ -1353,7 +1365,7 @@ void FacePipeline::plugParallelFaceDetectors()
 
     for (int i = 0; i < n; ++i)
     {
-        DetectionWorker* worker = new DetectionWorker(d);
+        DetectionWorker* const worker = new DetectionWorker(d);
 
         connect(d, SIGNAL(accuracyChanged(double)),
                 worker, SLOT(setAccuracy(double)));
