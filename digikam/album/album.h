@@ -525,7 +525,7 @@ private:
 
     // disable copying and construction without an album
     AlbumIterator();
-    Q_DISABLE_COPY(AlbumIterator);
+    Q_DISABLE_COPY(AlbumIterator)
 
 private:
 
