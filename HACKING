@@ -434,8 +434,8 @@ _YOUR_ACCOUNT_ is your subversion login name.
 Working with branches from Git repository
 ========================================================================
 
-As with Subversion, it usual to use a dedicated developement branche from Git and let the
-master code as stable for production. To synchronize branche with master, use these commands into your
+As with Subversion, it typical to use a dedicated developement branch in Git to keep the
+master code stable for production. To synchronize branches with master, use these commands in your
 local branch checkout:
 
 $>git checkout master
@@ -450,7 +450,6 @@ $>git merge master
 $>git push
   ...
 
-The 2 first lines take a sure that your local master repository is up to date. The 3rd line create in local the "MY_DEVEL_BRANCH"
-development branch. If you have already created this branch, just run "git checkout MY_DEVEL_BRANCH". 
-Merge between master and "MY_DEVEL_BRANCH" branch is done with 4th line. Git can ask you to resolve conflicts here.
-When it's done, it will ask you a commit comment. Finally push your merge into remote KDE repository.
+The first 2 lines make sure that your local master repository is up to date. The 3rd line creates the local development branch "MY_DEVEL_BRANCH". If you have already created this branch, just run "git checkout MY_DEVEL_BRANCH". 
+Merging between master and "MY_DEVEL_BRANCH" branch is done in the 4th line. Git might ask you to resolve conflicts here.
+When it's done, it will ask you to provide a commit message. Finally you push your merge into the remote KDE repository.
