@@ -772,6 +772,9 @@ void ImportView::slotGroupImages(int categoryMode)
 void ImportView::toggleShowBar(bool b)
 {
     d->stackedView->thumbBarDock()->showThumbBar(b);
+    
+    // See B.K.O #319876 : force to reload current view mode to set thumbbar visibility properly.
+    d->stackedView->setViewMode(viewMode());
 }
 
 void ImportView::scrollTo(const QString& folder, const QString& file)

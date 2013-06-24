@@ -2991,7 +2991,7 @@ void DigikamApp::showSideBars(bool visible)
 
 void DigikamApp::showThumbBar(bool visible)
 {
-    d->view->toggleShowBar(visible & d->showBarAction->isEnabled());
+    view()->toggleShowBar(visible);
 }
 
 bool DigikamApp::thumbbarVisibility() const
@@ -3042,6 +3042,7 @@ void DigikamApp::toogleShowBar()
     switch (d->view->viewMode())
     {
         case StackedView::PreviewImageMode:
+        case StackedView::MediaPlayerMode:
             d->showBarAction->setEnabled(true);
             break;
             

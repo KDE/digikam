@@ -1948,6 +1948,9 @@ void DigikamView::slotSlideShowBuilderComplete(const SlideShowSettings& settings
 void DigikamView::toggleShowBar(bool b)
 {
     d->stackedview->thumbBarDock()->showThumbBar(b);
+    
+    // See B.K.O #319876 : force to reload current view mode to set thumbbar visibility properly.
+    d->stackedview->setViewMode(viewMode());
 }
 
 void DigikamView::setRecurseAlbums(bool recursive)

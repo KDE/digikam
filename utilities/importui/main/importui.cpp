@@ -2558,7 +2558,7 @@ void ImportUI::showSideBars(bool visible)
 
 void ImportUI::showThumbBar(bool visible)
 {
-    d->view->toggleShowBar(visible & d->showBarAction->isEnabled());    
+    d->view->toggleShowBar(visible);    
 }
 
 bool ImportUI::thumbbarVisibility() const
@@ -2604,6 +2604,7 @@ void ImportUI::toogleShowBar()
     switch (d->view->viewMode())
     {
         case ImportStackedView::PreviewImageMode:
+        case ImportStackedView::MediaPlayerMode:
             d->showBarAction->setEnabled(true);
             break;
             
