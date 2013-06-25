@@ -58,7 +58,7 @@ public:
     RenameCustomizer(QWidget* const parent, const QString& cameraTitle);
     ~RenameCustomizer();
 
-    void    setUseDefault(bool val);
+    //void    setUseDefault(bool val);
     bool    useDefault() const;
     QString newName(const QString& fileName, const QDateTime& date) const;
     Case    changeCase() const;
