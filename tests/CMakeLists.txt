@@ -21,6 +21,26 @@ TARGET_LINK_LIBRARIES(advancedrenametest
 
 #------------------------------------------------------------------------
 
+SET(renamecustomizertest_SRCS
+    renamecustomizertest.cpp
+   )
+
+KDE4_ADD_UNIT_TEST(renamecustomizertest ${renamecustomizertest_SRCS})
+
+TARGET_LINK_LIBRARIES(renamecustomizertest
+                      ${KDE4_KDEUI_LIBS}
+                      ${KEXIV2_LIBRARIES}
+                      ${KDCRAW_LIBRARIES}
+                      ${QT_QTGUI_LIBRARY}
+                      ${QT_QTTEST_LIBRARY}
+                      digikamcore
+                      digikamdatabase
+importui
+                      advancedrename
+                     )
+
+#------------------------------------------------------------------------
+
 SET(cameranamehelper_SRCS
     cameranamehelpertest.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/importui/views/cameranamehelper.cpp

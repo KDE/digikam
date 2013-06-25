@@ -120,9 +120,9 @@ RenameCustomizer::RenameCustomizer(QWidget* const parent, const QString& cameraT
     d->renameDefaultCase->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
 
     d->renameDefaultCaseType = new KComboBox(d->renameDefaultBox);
-    d->renameDefaultCaseType->insertItem(0, i18nc("Leave filename as it is", "Leave as-is"));
-    d->renameDefaultCaseType->insertItem(1, i18nc("Filename to uppercase",   "Upper"));
-    d->renameDefaultCaseType->insertItem(2, i18nc("Filename to lowercase",   "Lower"));
+    d->renameDefaultCaseType->insertItem(NONE,  i18nc("Leave filename as it is", "Leave as-is"));
+    d->renameDefaultCaseType->insertItem(UPPER, i18nc("Filename to uppercase",   "Upper"));
+    d->renameDefaultCaseType->insertItem(LOWER, i18nc("Filename to lowercase",   "Lower"));
     d->renameDefaultCaseType->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
     d->renameDefaultCaseType->setWhatsThis(i18n("Set the method to use to change the case "
                                                 "of the image filenames."));
@@ -178,6 +178,18 @@ RenameCustomizer::~RenameCustomizer()
     delete d;
 }
 
+void RenameCustomizer::setUseDefault(bool val)
+{
+    if (val)
+    {
+        d->renameDefault->setChecked(true);
+    }
+    else
+    {
+        d->renameCustom->setChecked(true);
+    }
+}
+
 bool RenameCustomizer::useDefault() const
 {
     return d->renameDefault->isChecked();
@@ -208,34 +220,29 @@ QString RenameCustomizer::newName(const QString& fileName, const QDateTime& date
 {
     Q_UNUSED(dateTime)
 
+    QString result = fileName.trimmed();
+
     if (d->renameDefault->isChecked())
     {
         switch (changeCase())
         {
-        case UPPER: return fileName.toUpper(); break;
-        case LOWER: return fileName.toLower(); break;
-        default: return QString();
+        case UPPER: return result.toUpper(); break;
+        case LOWER: return result.toLower(); break;
+        default: return result;
         }
     }
 
-    return d->advancedRenameManager->newName(fileName);
+    return d->advancedRenameManager->newName(result);
 }
 
 RenameCustomizer::Case RenameCustomizer::changeCase() const
 {
-    RenameCustomizer::Case type = NONE;
+    return static_cast<Case>(d->renameDefaultCaseType->currentIndex());
+}
 
-    if (d->renameDefaultCaseType->currentIndex() == 1)
-    {
-        type = UPPER;
-    }
-
-    if (d->renameDefaultCaseType->currentIndex() == 2)
-    {
-        type = LOWER;
-    }
-
-    return type;
+void RenameCustomizer::setChangeCase(RenameCustomizer::Case val)
+{
+    d->renameDefaultCaseType->setCurrentIndex(val);
 }
 
 void RenameCustomizer::slotRadioButtonClicked(int id)
