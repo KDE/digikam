@@ -2031,6 +2031,10 @@ bool ImportUI::downloadCameraItems(PAlbum* pAlbum, bool onlySelected, bool delet
         d->renameCustomizer->renameManager()->addFiles(renameFiles);
         d->renameCustomizer->renameManager()->parseFiles();
     }
+    else
+    {
+        d->renameCustomizer->renameManager()->reset();
+    }
 
     foreach(CamItemInfo info, list)
     {
