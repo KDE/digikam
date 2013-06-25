@@ -210,7 +210,12 @@ QString RenameCustomizer::newName(const QString& fileName, const QDateTime& date
 
     if (d->renameDefault->isChecked())
     {
-        return QString();
+        switch (changeCase())
+        {
+        case UPPER: return fileName.toUpper(); break;
+        case LOWER: return fileName.toLower(); break;
+        default: return QString();
+        }
     }
 
     return d->advancedRenameManager->newName(fileName);
