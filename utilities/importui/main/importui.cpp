@@ -97,6 +97,7 @@
 #include "advancedrenamemanager.h"
 #include "album.h"
 #include "albummanager.h"
+#include "albumsettings.h"
 #include "albumselectdialog.h"
 #include "cameracontroller.h"
 #include "camerafolderdialog.h"
@@ -682,8 +683,8 @@ void ImportUI::setupConnections()
     connect(CollectionManager::instance(), SIGNAL(locationStatusChanged(CollectionLocation,int)),
             this, SLOT(slotCollectionLocationStatusChanged(CollectionLocation,int)));
 
-    //connect(ImportSettings::instance(), SIGNAL(setupChanged()),
-            //this, SLOT(slotSidebarTabTitleStyleChanged()));
+    connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
+            this, SLOT(slotSidebarTabTitleStyleChanged()));
 }
 
 void ImportUI::setupStatusBar()
@@ -2547,8 +2548,8 @@ void ImportUI::slotShowMenuBar()
 
 void ImportUI::slotSidebarTabTitleStyleChanged()
 {
-//    d->rightSideBar->setStyle(ImportSettings::instance()->getSidebarTitleStyle());
-//    d->rightSideBar->applySettings();
+    d->rightSideBar->setStyle(AlbumSettings::instance()->getSidebarTitleStyle());
+    d->rightSideBar->applySettings();
 }
 
 void ImportUI::slotLogMsg(const QString& msg, DHistoryView::EntryType type,
