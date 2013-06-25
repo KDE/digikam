@@ -94,6 +94,7 @@
 
 // Local includes
 
+#include "advancedrenamemanager.h"
 #include "album.h"
 #include "albummanager.h"
 #include "albumselectdialog.h"
@@ -119,6 +120,7 @@
 #include "importview.h"
 #include "knotificationwrapper.h"
 #include "newitemsfinder.h"
+#include "parsesettings.h"
 #include "renamecustomizer.h"
 #include "scancontroller.h"
 #include "setup.h"
@@ -2013,6 +2015,23 @@ bool ImportUI::downloadCameraItems(PAlbum* pAlbum, bool onlySelected, bool delet
     QSet<QString> usedDownloadPaths;
     CamItemInfoList list = d->view->allItems();
 
+    if (!d->renameCustomizer->useDefault())
+    {
+        QList<ParseSettings> renameFiles;
+        foreach(CamItemInfo info, list)
+        {
+            if (onlySelected && (d->view->isSelected(info.url())))
+            {
+                ParseSettings parseSettings;
+                parseSettings.fileUrl = info.name;
+                parseSettings.creationTime = info.mtime;
+                renameFiles.append(parseSettings);
+            }
+        }
+        d->renameCustomizer->renameManager()->addFiles(renameFiles);
+        d->renameCustomizer->renameManager()->parseFiles();
+    }
+
     foreach(CamItemInfo info, list)
     {
         if (onlySelected && !(d->view->isSelected(info.url())))
@@ -2025,8 +2044,8 @@ bool ImportUI::downloadCameraItems(PAlbum* pAlbum, bool onlySelected, bool delet
         settings.pickLabel  = info.pickLabel;
         settings.colorLabel = info.colorLabel;
         settings.rating     = info.rating;
-        downloadName        = info.downloadName;
         dateTime            = info.mtime;
+        downloadName        = d->renameCustomizer->newName(info.name, info.mtime);
 
         KUrl downloadUrl(url);
 
