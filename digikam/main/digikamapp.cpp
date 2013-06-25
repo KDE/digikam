@@ -824,6 +824,11 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
+    d->openTagMngrAction = new KAction(KIcon("tag"), i18n("Open Tag Manager"), this);
+    //connect(d->openTagMngrAction, SIGNAL(triggered()), d->view, SLOT(slotLeftSideBarActivateTags()));
+    actionCollection()->addAction("open_tag_mngr", d->openTagMngrAction);
+
+    // -----------------------------------------------------------
     d->newTagAction = new KAction(KIcon("tag-new"), i18nc("new tag", "N&ew..."), this);
     connect(d->newTagAction, SIGNAL(triggered()), d->view, SLOT(slotNewTag()));
     actionCollection()->addAction("tag_new", d->newTagAction);
@@ -1152,9 +1157,9 @@ void DigikamApp::setupActions()
     d->showBarAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_T));
     connect(d->showBarAction, SIGNAL(triggered()), this, SLOT(slotToggleShowBar()));
     actionCollection()->addAction("showthumbs", d->showBarAction);
-    
+
     d->showMenuBarAction = KStandardAction::showMenubar(this, SLOT(slotShowMenuBar()), actionCollection());
-    
+
     KStandardAction::keyBindings(this,            SLOT(slotEditKeys()),          actionCollection());
     KStandardAction::configureToolbars(this,      SLOT(slotConfToolbars()),      actionCollection());
     KStandardAction::configureNotifications(this, SLOT(slotConfNotifications()), actionCollection());
@@ -1165,7 +1170,7 @@ void DigikamApp::setupActions()
 
     // Provides a menu entry that allows showing/hiding the statusbar
     createStandardStatusBarAction();
-    
+
     // -----------------------------------------------------------
 
     d->zoomPlusAction  = KStandardAction::zoomIn(d->view, SLOT(slotZoomIn()), this);
@@ -1471,6 +1476,7 @@ void DigikamApp::slotTagSelected(bool val)
 
     bool enabled = val && album && !album->isRoot();
     d->browseTagsAction->setEnabled(!val);
+    d->openTagMngrAction->setEnabled(val);
     d->newTagAction->setEnabled(enabled);
     d->deleteTagAction->setEnabled(enabled);
     d->editTagAction->setEnabled(enabled);
@@ -3045,7 +3051,7 @@ void DigikamApp::toogleShowBar()
         case StackedView::MediaPlayerMode:
             d->showBarAction->setEnabled(true);
             break;
-            
+
         default:
             d->showBarAction->setEnabled(false);
             break;

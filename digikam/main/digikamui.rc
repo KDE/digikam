@@ -38,6 +38,7 @@
   <Menu name="Tag" >
    <text>T&amp;ag</text>
      <Action name="browse_tag_long" />
+     <Action name="open_tag_mngr"/>
    <Separator/>
      <Action name="tag_new" />
      <Action name="tag_edit" />

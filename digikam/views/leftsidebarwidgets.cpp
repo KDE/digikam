@@ -37,6 +37,7 @@
 // KDE includes
 
 #include <kcombobox.h>
+#include <kpushbutton.h>
 #include <kdebug.h>
 #include <kdialog.h>
 #include <kicon.h>
@@ -173,12 +174,14 @@ public:
 
     Private() :
         tagModel(0),
+        openTagMngr(0),
         tagSearchBar(0),
         tagFolderView(0)
     {
     }
 
     TagModel*      tagModel;
+    KPushButton*   openTagMngr;
     SearchTextBar* tagSearchBar;
     TagFolderView* tagFolderView;
 };
@@ -192,6 +195,7 @@ TagViewSideBarWidget::TagViewSideBarWidget(QWidget* const parent, TagModel* cons
 
     QVBoxLayout* layout = new QVBoxLayout(this);
 
+    d->openTagMngr   = new KPushButton( i18n("Open Tag Manager"));
     d->tagFolderView = new TagFolderView(this, model);
     d->tagFolderView->setConfigGroup(getConfigGroup());
     d->tagFolderView->setExpandNewCurrentItem(true);
@@ -201,6 +205,7 @@ TagViewSideBarWidget::TagViewSideBarWidget(QWidget* const parent, TagModel* cons
     d->tagSearchBar->setModel(model, AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
     d->tagSearchBar->setFilterModel(d->tagFolderView->albumFilterModel());
 
+    layout->addWidget(d->openTagMngr);
     layout->addWidget(d->tagFolderView);
     layout->addWidget(d->tagSearchBar);
 
