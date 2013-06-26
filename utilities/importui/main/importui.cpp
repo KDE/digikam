@@ -94,8 +94,10 @@
 
 // Local includes
 
+#include "advancedrenamemanager.h"
 #include "album.h"
 #include "albummanager.h"
+#include "albumsettings.h"
 #include "albumselectdialog.h"
 #include "cameracontroller.h"
 #include "camerafolderdialog.h"
@@ -119,6 +121,7 @@
 #include "importview.h"
 #include "knotificationwrapper.h"
 #include "newitemsfinder.h"
+#include "parsesettings.h"
 #include "renamecustomizer.h"
 #include "scancontroller.h"
 #include "setup.h"
@@ -680,8 +683,8 @@ void ImportUI::setupConnections()
     connect(CollectionManager::instance(), SIGNAL(locationStatusChanged(CollectionLocation,int)),
             this, SLOT(slotCollectionLocationStatusChanged(CollectionLocation,int)));
 
-    //connect(ImportSettings::instance(), SIGNAL(setupChanged()),
-            //this, SLOT(slotSidebarTabTitleStyleChanged()));
+    connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
+            this, SLOT(slotSidebarTabTitleStyleChanged()));
 }
 
 void ImportUI::setupStatusBar()
@@ -2013,6 +2016,27 @@ bool ImportUI::downloadCameraItems(PAlbum* pAlbum, bool onlySelected, bool delet
     QSet<QString> usedDownloadPaths;
     CamItemInfoList list = d->view->allItems();
 
+    if (!d->renameCustomizer->useDefault())
+    {
+        QList<ParseSettings> renameFiles;
+        foreach(CamItemInfo info, list)
+        {
+            if (onlySelected && (d->view->isSelected(info.url())))
+            {
+                ParseSettings parseSettings;
+                parseSettings.fileUrl = info.name;
+                parseSettings.creationTime = info.mtime;
+                renameFiles.append(parseSettings);
+            }
+        }
+        d->renameCustomizer->renameManager()->addFiles(renameFiles);
+        d->renameCustomizer->renameManager()->parseFiles();
+    }
+    else
+    {
+        d->renameCustomizer->renameManager()->reset();
+    }
+
     foreach(CamItemInfo info, list)
     {
         if (onlySelected && !(d->view->isSelected(info.url())))
@@ -2025,8 +2049,8 @@ bool ImportUI::downloadCameraItems(PAlbum* pAlbum, bool onlySelected, bool delet
         settings.pickLabel  = info.pickLabel;
         settings.colorLabel = info.colorLabel;
         settings.rating     = info.rating;
-        downloadName        = info.downloadName;
         dateTime            = info.mtime;
+        downloadName        = d->renameCustomizer->newName(info.name, info.mtime);
 
         KUrl downloadUrl(url);
 
@@ -2524,8 +2548,8 @@ void ImportUI::slotShowMenuBar()
 
 void ImportUI::slotSidebarTabTitleStyleChanged()
 {
-//    d->rightSideBar->setStyle(ImportSettings::instance()->getSidebarTitleStyle());
-//    d->rightSideBar->applySettings();
+    d->rightSideBar->setStyle(AlbumSettings::instance()->getSidebarTitleStyle());
+    d->rightSideBar->applySettings();
 }
 
 void ImportUI::slotLogMsg(const QString& msg, DHistoryView::EntryType type,
