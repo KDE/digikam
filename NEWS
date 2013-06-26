@@ -28,7 +28,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 018 ==> 285821 - Once installed, DK does not start.
 019 ==> 319267 - Libkdcraw contains invalid icc profiles, applications fail to save png file with libpng-1.6.x.
 020 ==> 314033 - Crashed when attempting to vie images in folders.
-021 ==> 320763 - build failed.
-022 ==> 
+021 ==> 320763 - Build failed.
+022 ==> 204138 - Possibility to extract JPEG previews from RAW files during camera import.
+023 ==> 
 
 
