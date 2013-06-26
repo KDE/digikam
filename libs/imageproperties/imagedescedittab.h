@@ -120,6 +120,7 @@ private Q_SLOTS:
     void slotChangingItems();
     void slotTagsSearchChanged(const SearchTextSettings& settings);
     void slotTagStateChanged(Album* album, Qt::CheckState checkState);
+    void slotOpenTagsManager();
     void slotCommentChanged();
     void slotTitleChanged();
     void slotDateTimeChanged(const QDateTime& dateTime);

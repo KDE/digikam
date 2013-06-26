@@ -63,6 +63,7 @@
 #include "timelinewidget.h"
 #include "facescandialog.h"
 #include "facedetector.h"
+#include "tagsmanager.h"
 
 namespace Digikam
 {
@@ -209,6 +210,8 @@ TagViewSideBarWidget::TagViewSideBarWidget(QWidget* const parent, TagModel* cons
     layout->addWidget(d->tagFolderView);
     layout->addWidget(d->tagSearchBar);
 
+    connect(d->openTagMngr, SIGNAL(clicked()),this,SLOT(slotOpenTagManager()));
+
     connect(d->tagFolderView, SIGNAL(signalFindDuplicatesInAlbum(Album*)),
             this, SIGNAL(signalFindDuplicatesInAlbum(Album*)));
 }
@@ -263,6 +266,12 @@ QString TagViewSideBarWidget::getCaption()
 void TagViewSideBarWidget::setCurrentAlbum(TAlbum* album)
 {
     d->tagFolderView->setCurrentAlbum(album);
+}
+
+void TagViewSideBarWidget::slotOpenTagManager()
+{
+    TagsManager* tm = new TagsManager();
+    tm->show();
 }
 
 // -----------------------------------------------------------------------------
@@ -1234,5 +1243,6 @@ void PeopleSideBarWidget::slotScanForFaces()
         tool->start();
     }
 }
+
 
 } // namespace Digikam

@@ -77,6 +77,7 @@
 #include "fileactionprogress.h"
 #include "versionmanagersettings.h"
 #include "tableview.h"
+#include "tagsmanager.h"
 
 #ifdef USE_PRESENTATION_MODE
 #include "qmlshow.h"
@@ -889,6 +890,11 @@ void DigikamView::slotEditTag()
     d->tagModificationHelper->slotTagEdit(d->tagViewSideBar->currentAlbum());
 }
 
+void DigikamView::slotOpenTagsManager()
+{
+    TagsManager* tm = new TagsManager();
+    tm->show();
+}
 void DigikamView::slotNewKeywordSearch()
 {
     slotLeftSideBarActivate(d->searchSideBar);
@@ -1948,7 +1954,7 @@ void DigikamView::slotSlideShowBuilderComplete(const SlideShowSettings& settings
 void DigikamView::toggleShowBar(bool b)
 {
     d->stackedview->thumbBarDock()->showThumbBar(b);
-    
+
     // See B.K.O #319876 : force to reload current view mode to set thumbbar visibility properly.
     d->stackedview->setViewMode(viewMode());
 }

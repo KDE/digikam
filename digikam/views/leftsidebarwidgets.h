@@ -114,6 +114,7 @@ public:
 public Q_SLOTS:
 
     void setCurrentAlbum(TAlbum* album);
+    void slotOpenTagManager();
 
 Q_SIGNALS:
 

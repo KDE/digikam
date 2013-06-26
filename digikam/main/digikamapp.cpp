@@ -825,7 +825,7 @@ void DigikamApp::setupActions()
     // -----------------------------------------------------------
 
     d->openTagMngrAction = new KAction(KIcon("tag"), i18n("Open Tag Manager"), this);
-    //connect(d->openTagMngrAction, SIGNAL(triggered()), d->view, SLOT(slotLeftSideBarActivateTags()));
+    connect(d->openTagMngrAction, SIGNAL(triggered()), d->view, SLOT(slotOpenTagsManager()));
     actionCollection()->addAction("open_tag_mngr", d->openTagMngrAction);
 
     // -----------------------------------------------------------
@@ -1476,7 +1476,6 @@ void DigikamApp::slotTagSelected(bool val)
 
     bool enabled = val && album && !album->isRoot();
     d->browseTagsAction->setEnabled(!val);
-    d->openTagMngrAction->setEnabled(val);
     d->newTagAction->setEnabled(enabled);
     d->deleteTagAction->setEnabled(enabled);
     d->editTagAction->setEnabled(enabled);

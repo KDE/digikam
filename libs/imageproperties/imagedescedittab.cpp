@@ -82,6 +82,7 @@
 #include "colorlabelwidget.h"
 #include "picklabelwidget.h"
 #include "fileactionprogress.h"
+#include "tagsmanager.h"
 
 namespace Digikam
 {
@@ -290,6 +291,8 @@ ImageDescEditTab::ImageDescEditTab(QWidget* const parent)
     d->tagCheckView->setCheckNewTags(true);
 
     d->openTagMngr = new KPushButton( i18n("Open Tag Manger"));
+    connect(d->openTagMngr,SIGNAL(clicked()),this, SLOT(slotOpenTagsManager()));
+
     d->newTagEdit   = new AddTagsLineEdit(tagsArea);
     d->newTagEdit->setModel(d->tagModel);
     d->newTagEdit->setTagTreeView(d->tagCheckView);
@@ -1218,6 +1221,11 @@ void ImageDescEditTab::slotImageTagsChanged(qlonglong imageId)
     metadataChange(imageId);
 }
 
+void ImageDescEditTab::slotOpenTagsManager()
+{
+    TagsManager* tm = new TagsManager();
+    tm->show();
+}
 void ImageDescEditTab::slotImagesChanged(int albumId)
 {
     if (d->ignoreImageAttributesWatch || d->modified)
@@ -1481,5 +1489,6 @@ void ImageDescEditTab::initProgressIndicator()
                 item, SLOT(slotCompleted()));
     }
 }
+
 
 }  // namespace Digikam

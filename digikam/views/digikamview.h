@@ -100,7 +100,7 @@ public:
     void toggleTag(int tagID);
     QList<SidebarWidget*> leftSidebarWidgets() const;
     StackedView::StackedViewMode viewMode() const;
-    
+
 Q_SIGNALS:
 
     void signalAlbumSelected(bool val);
@@ -159,6 +159,7 @@ public Q_SLOTS:
     void slotNewTag();
     void slotDeleteTag();
     void slotEditTag();
+    void slotOpenTagsManager();
 
     // Search action slots
     void slotNewKeywordSearch();
