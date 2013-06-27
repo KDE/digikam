@@ -166,6 +166,12 @@ QString SequenceNumberOption::parseOperation(ParseSettings& settings)
     {
         start = 1;
     }
+
+    if (step < 1)
+    {
+        step = 1;
+    }
+
     number  = start + ((index - 1) * step);
     result  = QString("%1").arg(number, slength, 10, QChar('0'));
 

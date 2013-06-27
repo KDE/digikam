@@ -599,6 +599,11 @@ void AdvancedRenameTest::sequencenumber_tests_data()
             << QString("#[4,4]")
             << files
             << (QStringList() << "4.jpg" << "8.jpg" << "12.jpg");
+
+    QTest::newRow("#[4,-4]")
+            << QString("#[4,-4]")
+            << files
+            << (QStringList() << "4.jpg" << "5.jpg" << "6.jpg");
 }
 
 void AdvancedRenameTest::sequencenumber_tests()
