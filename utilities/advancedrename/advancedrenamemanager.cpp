@@ -430,14 +430,7 @@ int AdvancedRenameManager::indexOfFile(const QString& filename)
 
 int AdvancedRenameManager::indexOfFolder(const QString& filename)
 {
-    int index = -1;
-
-    if (d->folderIndexMap.contains(filename))
-    {
-        index = d->folderIndexMap.value(filename);
-    }
-
-    return index;
+    return d->folderIndexMap.value(filename, -1);
 }
 
 int AdvancedRenameManager::indexOfFileGroup(const QString& filename)
