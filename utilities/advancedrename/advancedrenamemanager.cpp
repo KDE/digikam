@@ -69,9 +69,9 @@ struct SortBySize
 {
     bool operator() (const QString& s1, const QString& s2) const
     {
-        ImageInfo i1 = ImageInfo(KUrl(s1));
-        ImageInfo i2 = ImageInfo(KUrl(s2));
-        return i1.fileSize() < i2.fileSize();
+        QFileInfo fi1(s1);
+        QFileInfo fi2(s2);
+        return fi1.size() < fi2.size();
     }
 };
 
@@ -150,7 +150,8 @@ AdvancedRenameManager::SortDirection AdvancedRenameManager::sortDirection() cons
 
 void AdvancedRenameManager::setStartIndex(int index) const
 {
-    d->startIndex = index;
+    d->startIndex = index < 1 ? 1 : index;
+    initialize();
 }
 
 void AdvancedRenameManager::setWidget(AdvancedRenameWidget* widget)
@@ -334,15 +335,9 @@ QStringList AdvancedRenameManager::fileList() const
             break;
     }
 
-    switch (d->sortDirection)
+    if (d->sortAction != SortCustom && d->sortDirection == SortDescending)
     {
-        case SortDescending:
-            std::reverse(tmpFiles.begin(), tmpFiles.end());
-            break;
-
-        case SortAscending:
-        default:
-            break;
+        std::reverse(tmpFiles.begin(), tmpFiles.end());
     }
 
     return tmpFiles;

@@ -34,7 +34,7 @@
 #include "defaultrenameparser.h"
 #include "parsesettings.h"
 
-class AdvancedRenameWidgetTest : public QObject
+class AdvancedRenameTest : public QObject
 {
     Q_OBJECT
 
@@ -83,6 +83,29 @@ private Q_SLOTS:
     void testChainedModifiers_data();
 
     void testUniqueModifier();
+
+    /*
+     * MANAGER TESTS
+     */
+    void addFiles_should_only_add_files();
+    void addFiles_should_only_add_files2();
+    void reset_removes_everything();
+    void parseFiles_does_nothing_without_assigned_widget();
+    void setStartIndex_invalid_index();
+    void setStartIndex_sequencenumber_no_custom_start();
+    void setStartIndex_sequencenumber_with_custom_start();
+
+    void sequencenumber_tests_data();
+    void sequencenumber_tests();
+    void sequencenumber_tests_startIndex_data();
+    void sequencenumber_tests_startIndex();
+
+    void sortAction_custom_asc_should_sort();
+    void sortAction_custom_desc_should_not_sort();
+    void sortAction_name_asc();
+    void sortAction_name_desc();
+    void sortAction_size_asc();
+    void sortAction_size_desc();
 
     /*
      * OTHER TESTS

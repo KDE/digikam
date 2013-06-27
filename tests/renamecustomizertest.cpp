@@ -80,9 +80,9 @@ private Q_SLOTS:
     void newName_should_return_empty_string_with_empty_filename_data();
     void newName_should_return_empty_string_with_empty_filename();
 
-    void setCaseType_none();
-    void setCaseType_upper();
-    void setCaseType_lower();
+    void setCaseType_set_to_none();
+    void setCaseType_set_to_upper();
+    void setCaseType_set_to_lower();
 
     void setUseDefault_true();
     void setUseDefault_false();
@@ -116,21 +116,21 @@ void RenameCustomizerTest::newName_should_return_empty_string_with_empty_filenam
     QCOMPARE(customizer.newName(filename, QDateTime::currentDateTime()), result);
 }
 
-void RenameCustomizerTest::setCaseType_none()
+void RenameCustomizerTest::setCaseType_set_to_none()
 {
     RenameCustomizer customizer(0, "Unit Tests");
     customizer.setChangeCase(RenameCustomizer::NONE);
     QCOMPARE(customizer.changeCase(), RenameCustomizer::NONE);
 }
 
-void RenameCustomizerTest::setCaseType_upper()
+void RenameCustomizerTest::setCaseType_set_to_upper()
 {
     RenameCustomizer customizer(0, "Unit Tests");
     customizer.setChangeCase(RenameCustomizer::UPPER);
     QCOMPARE(customizer.changeCase(), RenameCustomizer::UPPER);
 }
 
-void RenameCustomizerTest::setCaseType_lower()
+void RenameCustomizerTest::setCaseType_set_to_lower()
 {
     RenameCustomizer customizer(0, "Unit Tests");
     customizer.setChangeCase(RenameCustomizer::LOWER);
