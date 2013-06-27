@@ -1609,4 +1609,27 @@ ImageInfo::DatabaseFieldsHashRaw ImageInfo::getDatabaseFieldsRaw(const DatabaseF
     return m_data->databaseFieldsHashRaw;
 }
 
+QVariant ImageInfo::getDatabaseFieldRaw(const DatabaseFields::Set& requestedField) const
+{
+    DatabaseFieldsHashRaw rawHash = getDatabaseFieldsRaw(requestedField);
+
+//     if (requestedField.hasFieldsFromImageMetadata())
+//     {
+//         const DatabaseFields::ImageMetadata requestedFieldFlag = requestedField;
+//         const QVariant value = rawHash.value(requestedFieldFlag);
+//
+//         return value;
+//     }
+
+    if (requestedField.hasFieldsFromVideoMetadata())
+    {
+        const DatabaseFields::VideoMetadata requestedFieldFlag = requestedField;
+        const QVariant value = rawHash.value(requestedFieldFlag);
+
+        return value;
+    }
+
+    return QVariant();
+}
+
 }  // namespace Digikam
