@@ -335,15 +335,9 @@ QStringList AdvancedRenameManager::fileList() const
             break;
     }
 
-    switch (d->sortDirection)
+    if (!d->sortAction == SortCustom && d->sortDirection == SortDescending)
     {
-        case SortDescending:
-            std::reverse(tmpFiles.begin(), tmpFiles.end());
-            break;
-
-        case SortAscending:
-        default:
-            break;
+        std::reverse(tmpFiles.begin(), tmpFiles.end());
     }
 
     return tmpFiles;

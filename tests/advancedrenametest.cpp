@@ -689,6 +689,61 @@ void AdvancedRenameTest::sequencenumber_tests_startIndex()
     }
 }
 
+void AdvancedRenameTest::sortAction_custom_asc_should_sort()
+{
+    QList<ParseSettings> files;
+    ParseSettings ps;
+
+    QStringList filePaths;
+    filePaths << filePath << filePath2 << filePath3
+              << filePath4 << filePath5 << filePath6
+              << filePath7 << filePath8 << filePath9;
+
+    foreach (const QString& filePath, filePaths)
+    {
+        ps.fileUrl = KUrl(filePath);
+        files << ps;
+    }
+
+    AdvancedRenameManager manager(files);
+
+    QStringList managedFiles = manager.fileList();
+    QVERIFY(managedFiles.count() == filePaths.count());
+
+    for (int i = 0; i < managedFiles.count(); ++i)
+    {
+        QCOMPARE(managedFiles.at(i), filePaths.at(i));
+    }
+}
+
+void AdvancedRenameTest::sortAction_custom_desc_should_not_sort()
+{
+    QList<ParseSettings> files;
+    ParseSettings ps;
+
+    QStringList filePaths;
+    filePaths << filePath << filePath2 << filePath3
+              << filePath4 << filePath5 << filePath6
+              << filePath7 << filePath8 << filePath9;
+
+    foreach (const QString& filePath, filePaths)
+    {
+        ps.fileUrl = KUrl(filePath);
+        files << ps;
+    }
+
+    AdvancedRenameManager manager(files);
+    manager.setSortDirection(AdvancedRenameManager::SortDescending);
+
+    QStringList managedFiles = manager.fileList();
+    QVERIFY(managedFiles.count() == filePaths.count());
+
+    for (int i = 0; i < managedFiles.count(); ++i)
+    {
+        QCOMPARE(managedFiles.at(i), filePaths.at(i));
+    }
+}
+
 void AdvancedRenameTest::testReplaceModifier_data()
 {
     QTest::addColumn<QString>("parseString");
