@@ -507,7 +507,7 @@ void AdvancedRenameTest::parseFiles_does_nothing_without_assigned_widget()
     QCOMPARE(manager.newName(filePath3), filePath3);
 }
 
-void AdvancedRenameTest::setStartIndex_sets_zero_with_invalid_index()
+void AdvancedRenameTest::setStartIndex_invalid_index()
 {
     QList<ParseSettings> files;
     ParseSettings ps;

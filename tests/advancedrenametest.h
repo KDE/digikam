@@ -91,7 +91,7 @@ private Q_SLOTS:
     void addFiles_should_only_add_files2();
     void reset_removes_everything();
     void parseFiles_does_nothing_without_assigned_widget();
-    void setStartIndex_sets_zero_with_invalid_index();
+    void setStartIndex_invalid_index();
 
     /*
      * OTHER TESTS
