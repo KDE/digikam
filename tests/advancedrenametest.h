@@ -97,6 +97,8 @@ private Q_SLOTS:
 
     void sequencenumber_tests_data();
     void sequencenumber_tests();
+    void sequencenumber_tests_startIndex_data();
+    void sequencenumber_tests_startIndex();
 
     /*
      * OTHER TESTS

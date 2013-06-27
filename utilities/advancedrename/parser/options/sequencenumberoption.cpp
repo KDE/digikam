@@ -164,7 +164,7 @@ QString SequenceNumberOption::parseOperation(ParseSettings& settings)
 
     if (start < 1)
     {
-        start = 1;
+        start = settings.startIndex;
     }
 
     if (step < 1)
