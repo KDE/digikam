@@ -693,7 +693,7 @@ void AdvancedRenameTest::sequencenumber_tests_startIndex()
     }
 }
 
-void AdvancedRenameTest::sortAction_custom_asc_should_sort()
+void AdvancedRenameTest::sortAction_custom_asc_should_not_sort()
 {
     QList<ParseSettings> files;
     ParseSettings ps;

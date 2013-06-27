@@ -100,7 +100,7 @@ private Q_SLOTS:
     void sequencenumber_tests_startIndex_data();
     void sequencenumber_tests_startIndex();
 
-    void sortAction_custom_asc_should_sort();
+    void sortAction_custom_asc_should_not_sort();
     void sortAction_custom_desc_should_not_sort();
     void sortAction_name_asc();
     void sortAction_name_desc();
