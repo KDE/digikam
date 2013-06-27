@@ -102,6 +102,8 @@ private Q_SLOTS:
 
     void sortAction_custom_asc_should_sort();
     void sortAction_custom_desc_should_not_sort();
+    void sortAction_name_asc();
+    void sortAction_name_desc();
 
     /*
      * OTHER TESTS
