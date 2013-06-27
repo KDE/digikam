@@ -999,6 +999,19 @@ void AdvancedRenameTest::testRangeModifier_data()
     QTest::newRow("[file]{range:0}")
             << QString("[file]{range:0}")
             << QString("advancedrename_testimage.jpg");
+
+    QTest::newRow("[file]{range:-100}")
+            << QString("[file]{range:-100}")
+            << QString("a.jpg");
+
+    QTest::newRow("[file]{range:-100,}")
+            << QString("[file]{range:-100,}")
+            << QString("advancedrename_testimage.jpg");
+
+
+    QTest::newRow("[file]{range:-100,2}")
+            << QString("[file]{range:-100,2}")
+            << QString("ad.jpg");
 }
 
 void AdvancedRenameTest::testRangeModifier()
