@@ -388,6 +388,7 @@ public:
      * @todo Supports only VideoMetadataField values for now.
      */
     DatabaseFieldsHashRaw getDatabaseFieldsRaw(const DatabaseFields::Set& requestedSet) const;
+    QVariant getDatabaseFieldRaw(const DatabaseFields::Set& requestedField) const;
 
     /**
      * Retrieve metadata template information about the image.

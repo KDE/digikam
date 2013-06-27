@@ -144,12 +144,14 @@ QVariant ColumnAudioVideoProperties::data(TableViewModel::Item* const item, cons
         return QVariant();
     }
 
+    const ImageInfo info = s->tableViewModel->infoFromItem(item);
+
     switch (subColumn)
     {
     case SubColumnAudioBitRate:
         {
             bool ok;
-            const int audioBitRate = s->tableViewModel->itemDatabaseFieldRaw(item, DatabaseFields::AudioBitRate).toInt(&ok);
+            const int audioBitRate = info.getDatabaseFieldRaw(DatabaseFields::AudioBitRate).toInt(&ok);
             if (!ok)
             {
                 return QString();
@@ -160,19 +162,19 @@ QVariant ColumnAudioVideoProperties::data(TableViewModel::Item* const item, cons
         }
     case SubColumnAudioChannelType:
         {
-            const QString audioChannelType = s->tableViewModel->itemDatabaseFieldRaw(item, DatabaseFields::AudioChannelType).toString();
+            const QString audioChannelType = info.getDatabaseFieldRaw(DatabaseFields::AudioChannelType).toString();
             return audioChannelType;
         }
     case SubColumnAudioCompressor:
         {
-            const QString audioCompressor = s->tableViewModel->itemDatabaseFieldRaw(item, DatabaseFields::AudioCompressor).toString();
+            const QString audioCompressor = info.getDatabaseFieldRaw(DatabaseFields::AudioCompressor).toString();
             return audioCompressor;
         }
     case SubColumnDuration:
         {
             bool ok;
             // duration is in milliseconds
-            const double duration = s->tableViewModel->itemDatabaseFieldRaw(item, DatabaseFields::Duration).toDouble(&ok);
+            const double duration = info.getDatabaseFieldRaw(DatabaseFields::Duration).toDouble(&ok);
             if (!ok)
             {
                 return QString();
@@ -185,7 +187,7 @@ QVariant ColumnAudioVideoProperties::data(TableViewModel::Item* const item, cons
     case SubColumnFrameRate:
         {
             bool ok;
-            const double frameRate = s->tableViewModel->itemDatabaseFieldRaw(item, DatabaseFields::FrameRate).toDouble(&ok);
+            const double frameRate = info.getDatabaseFieldRaw(DatabaseFields::FrameRate).toDouble(&ok);
             if (!ok)
             {
                 return QString();
@@ -196,7 +198,7 @@ QVariant ColumnAudioVideoProperties::data(TableViewModel::Item* const item, cons
         }
     case SubColumnVideoCodec:
         {
-            const QString videoCodec = s->tableViewModel->itemDatabaseFieldRaw(item, DatabaseFields::VideoCodec).toString();
+            const QString videoCodec = info.getDatabaseFieldRaw(DatabaseFields::VideoCodec).toString();
             return videoCodec;
         }
     }
@@ -206,14 +208,17 @@ QVariant ColumnAudioVideoProperties::data(TableViewModel::Item* const item, cons
 
 TableViewColumn::ColumnCompareResult ColumnAudioVideoProperties::compare(TableViewModel::Item* const itemA, TableViewModel::Item* const itemB) const
 {
+    const ImageInfo infoA = s->tableViewModel->infoFromItem(itemA);
+    const ImageInfo infoB = s->tableViewModel->infoFromItem(itemB);
+
     /// @todo All the values used here are actually returned as strings in the QVariants, but should be stored as int/double
     switch (subColumn)
     {
 
     case SubColumnAudioBitRate:
         {
-            const QVariant variantA = s->tableViewModel->itemDatabaseFieldRaw(itemA, DatabaseFields::AudioBitRate);
-            const QVariant variantB = s->tableViewModel->itemDatabaseFieldRaw(itemB, DatabaseFields::AudioBitRate);
+            const QVariant variantA = infoA.getDatabaseFieldRaw(DatabaseFields::AudioBitRate);
+            const QVariant variantB = infoB.getDatabaseFieldRaw(DatabaseFields::AudioBitRate);
             bool okA;
             const int audioBitRateA = variantA.toInt(&okA);
             bool okB;
@@ -230,8 +235,8 @@ TableViewColumn::ColumnCompareResult ColumnAudioVideoProperties::compare(TableVi
 
     case SubColumnDuration:
         {
-            const QVariant variantA = s->tableViewModel->itemDatabaseFieldRaw(itemA, DatabaseFields::Duration);
-            const QVariant variantB = s->tableViewModel->itemDatabaseFieldRaw(itemB, DatabaseFields::Duration);
+            const QVariant variantA = infoA.getDatabaseFieldRaw(DatabaseFields::Duration);
+            const QVariant variantB = infoB.getDatabaseFieldRaw(DatabaseFields::Duration);
             bool okA;
             const double durationA = variantA.toDouble(&okA);
             bool okB;
@@ -248,8 +253,8 @@ TableViewColumn::ColumnCompareResult ColumnAudioVideoProperties::compare(TableVi
 
     case SubColumnFrameRate:
         {
-            const QVariant variantA = s->tableViewModel->itemDatabaseFieldRaw(itemA, DatabaseFields::FrameRate);
-            const QVariant variantB = s->tableViewModel->itemDatabaseFieldRaw(itemB, DatabaseFields::FrameRate);
+            const QVariant variantA = infoA.getDatabaseFieldRaw(DatabaseFields::FrameRate);
+            const QVariant variantB = infoB.getDatabaseFieldRaw(DatabaseFields::FrameRate);
             bool okA;
             const double frameRateA = variantA.toDouble(&okA);
             bool okB;
