@@ -105,6 +105,7 @@ private Q_SLOTS:
 
     void indexOfFile_invalid_input_returns_minus_one();
     void indexOfFolder_invalid_input_returns_minus_one();
+    void indexOfFileGroup_invalid_input_returns_minus_one();
 
     void sortAction_custom_asc_should_not_sort();
     void sortAction_custom_desc_should_not_sort();

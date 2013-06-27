@@ -727,6 +727,17 @@ void AdvancedRenameTest::indexOfFolder_invalid_input_returns_minus_one()
     QCOMPARE(manager.indexOfFolder("none_existent_file.png"), -1);
 }
 
+void AdvancedRenameTest::indexOfFileGroup_invalid_input_returns_minus_one()
+{
+    QList<ParseSettings> files;
+    ParseSettings ps;
+    ps.fileUrl = KUrl(filePath);
+    files << ps;
+
+    AdvancedRenameManager manager(files);
+    QCOMPARE(manager.indexOfFileGroup("none_existent_file.png"), -1);
+}
+
 void AdvancedRenameTest::sequencenumber_tests_startIndex_data()
 {
     QStringList files;

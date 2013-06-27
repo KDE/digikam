@@ -312,27 +312,27 @@ QStringList AdvancedRenameManager::fileList() const
 
     switch (d->sortAction)
     {
-        case SortName:
-        {
-            qSort(tmpFiles.begin(), tmpFiles.end(), SortByNameCaseInsensitive());
-            break;
-        }
+    case SortName:
+    {
+        qSort(tmpFiles.begin(), tmpFiles.end(), SortByNameCaseInsensitive());
+        break;
+    }
 
-        case SortDate:
-        {
-            qSort(tmpFiles.begin(), tmpFiles.end(), SortByDate());
-            break;
-        }
+    case SortDate:
+    {
+        qSort(tmpFiles.begin(), tmpFiles.end(), SortByDate());
+        break;
+    }
 
-        case SortSize:
-        {
-            qSort(tmpFiles.begin(), tmpFiles.end(), SortBySize());
-            break;
-        }
+    case SortSize:
+    {
+        qSort(tmpFiles.begin(), tmpFiles.end(), SortBySize());
+        break;
+    }
 
-        case SortCustom:
-        default:
-            break;
+    case SortCustom:
+    default:
+        break;
     }
 
     if (d->sortAction != SortCustom && d->sortDirection == SortDescending)
@@ -435,14 +435,7 @@ int AdvancedRenameManager::indexOfFolder(const QString& filename)
 
 int AdvancedRenameManager::indexOfFileGroup(const QString& filename)
 {
-    int index = -1;
-
-    if (d->fileGroupIndexMap.contains(fileGroupKey(filename)))
-    {
-        index = d->fileGroupIndexMap.value(fileGroupKey(filename));
-    }
-
-    return index;
+    return d->fileGroupIndexMap.value(fileGroupKey(filename), -1);
 }
 
 QString AdvancedRenameManager::newName(const QString& filename)
