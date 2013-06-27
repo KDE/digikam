@@ -491,6 +491,7 @@ void AdvancedRenameTest::reset_removes_everything()
 
     manager.reset();
     QCOMPARE(manager.fileList().count(), 0);
+    QCOMPARE(manager.newFileList().count(), 0);
 }
 
 void AdvancedRenameTest::parseFiles_does_nothing_without_assigned_widget()
