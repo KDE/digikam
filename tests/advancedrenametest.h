@@ -106,6 +106,8 @@ private Q_SLOTS:
     void sortAction_name_desc();
     void sortAction_size_asc();
     void sortAction_size_desc();
+    void sortAction_date_asc();
+    void sortAction_date_desc();
 
     /*
      * OTHER TESTS

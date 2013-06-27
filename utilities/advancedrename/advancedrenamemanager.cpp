@@ -59,9 +59,9 @@ struct SortByDate
 {
     bool operator() (const QString& s1, const QString& s2) const
     {
-        ImageInfo i1 = ImageInfo(KUrl(s1));
-        ImageInfo i2 = ImageInfo(KUrl(s2));
-        return i1.dateTime() < i2.dateTime();
+        QFileInfo fi1(s1);
+        QFileInfo fi2(s2);
+        return fi1.created() < fi2.created();
     }
 };
 
