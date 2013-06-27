@@ -30,6 +30,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 020 ==> 314033 - Crashed when attempting to vie images in folders.
 021 ==> 320763 - Build failed.
 022 ==> 204138 - Possibility to extract JPEG previews from RAW files during camera import.
-023 ==> 
-
+023 ==> 261907 - digiKam empty context menus (relevant of default KDE widget style for Windows set to CDE instead Oxygen).
+024 ==> 
 
