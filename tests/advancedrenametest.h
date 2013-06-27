@@ -93,6 +93,7 @@ private Q_SLOTS:
     void parseFiles_does_nothing_without_assigned_widget();
     void setStartIndex_invalid_index();
     void setStartIndex_sequencenumber_no_custom_start();
+    void setStartIndex_sequencenumber_with_custom_start();
 
     /*
      * OTHER TESTS
