@@ -95,6 +95,9 @@ private Q_SLOTS:
     void setStartIndex_sequencenumber_no_custom_start();
     void setStartIndex_sequencenumber_with_custom_start();
 
+    void sequencenumber_tests_data();
+    void sequencenumber_tests();
+
     /*
      * OTHER TESTS
      */
