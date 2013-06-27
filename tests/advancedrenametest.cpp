@@ -619,7 +619,6 @@ void AdvancedRenameTest::sequencenumber_tests()
     {
         ps.fileUrl = KUrl(file);
         files2 << ps;
-
     }
 
     AdvancedRenameManager manager(files2);
@@ -676,7 +675,6 @@ void AdvancedRenameTest::sequencenumber_tests_startIndex()
     {
         ps.fileUrl = KUrl(file);
         files2 << ps;
-
     }
 
     AdvancedRenameManager manager(files2);
