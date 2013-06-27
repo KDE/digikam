@@ -636,6 +636,74 @@ void AdvancedRenameTest::sequencenumber_tests()
     }
 }
 
+void AdvancedRenameTest::newFileList_tests_data()
+{
+    QStringList files;
+    files << filePath << filePath2 << filePath3;
+
+    QTest::addColumn<QString>("parseString");
+    QTest::addColumn<QStringList>("files");
+    QTest::addColumn<QStringList>("results");
+
+    QTest::newRow("####")
+            << QString("####")
+            << files
+            << (QStringList() << "0001.jpg" << "0002.jpg" << "0003.jpg");
+
+    QTest::newRow("###[-2]")
+            << QString("###[-2]")
+            << files
+            << (QStringList() << "001.jpg" << "002.jpg" << "003.jpg");
+
+    QTest::newRow("###[2]")
+            << QString("###[2]")
+            << files
+            << (QStringList() << "002.jpg" << "003.jpg" << "004.jpg");
+
+    QTest::newRow("##[3,3]")
+            << QString("##[3,3]")
+            << files
+            << (QStringList() << "03.jpg" << "06.jpg" << "09.jpg");
+
+    QTest::newRow("#[4,4]")
+            << QString("#[4,4]")
+            << files
+            << (QStringList() << "4.jpg" << "8.jpg" << "12.jpg");
+
+    QTest::newRow("#[4,-4]")
+            << QString("#[4,-4]")
+            << files
+            << (QStringList() << "4.jpg" << "5.jpg" << "6.jpg");
+}
+
+void AdvancedRenameTest::newFileList_tests()
+{
+    QFETCH(QString,       parseString);
+    QFETCH(QStringList,   files);
+    QFETCH(QStringList,   results);
+
+    ParseSettings ps;
+
+    QList<ParseSettings> files2;
+    foreach (const QString& file, files)
+    {
+        ps.fileUrl = KUrl(file);
+        files2 << ps;
+    }
+
+    AdvancedRenameManager manager(files2);
+    manager.parseFiles(parseString);
+
+    QVERIFY(files.count() == results.count());
+
+    QMap<QString, QString> newFileList = manager.newFileList();
+
+    for (int i = 0; i < files.count(); ++i)
+    {
+        QCOMPARE(newFileList.value(files.at(i)), results.at(i));
+    }
+}
+
 void AdvancedRenameTest::sequencenumber_tests_startIndex_data()
 {
     QStringList files;
