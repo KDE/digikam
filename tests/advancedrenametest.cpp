@@ -520,6 +520,26 @@ void AdvancedRenameTest::setStartIndex_invalid_index()
     QCOMPARE(manager.newName(filePath), QString("0001.jpg"));
 }
 
+void AdvancedRenameTest::setStartIndex_sequencenumber_no_custom_start()
+{
+    QList<ParseSettings> files;
+    ParseSettings ps;
+    ps.fileUrl = KUrl(filePath);
+    files << ps;
+    AdvancedRenameManager manager(files);
+    manager.parseFiles("####");
+
+    QCOMPARE(manager.newName(filePath), QString("0001.jpg"));
+
+    manager.setStartIndex(12);
+    manager.parseFiles("####");
+    QCOMPARE(manager.newName(filePath), QString("0012.jpg"));
+
+    manager.setStartIndex(-1000);
+    manager.parseFiles("####");
+    QCOMPARE(manager.newName(filePath), QString("0001.jpg"));
+}
+
 void AdvancedRenameTest::testReplaceModifier_data()
 {
     QTest::addColumn<QString>("parseString");

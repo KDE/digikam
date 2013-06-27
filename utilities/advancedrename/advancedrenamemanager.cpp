@@ -151,6 +151,7 @@ AdvancedRenameManager::SortDirection AdvancedRenameManager::sortDirection() cons
 void AdvancedRenameManager::setStartIndex(int index) const
 {
     d->startIndex = index < 1 ? 1 : index;
+    initialize();
 }
 
 void AdvancedRenameManager::setWidget(AdvancedRenameWidget* widget)
