@@ -85,6 +85,15 @@ private Q_SLOTS:
     void testUniqueModifier();
 
     /*
+     * MANAGER TESTS
+     */
+    void addFiles_should_only_add_files();
+    void addFiles_should_only_add_files2();
+    void reset_removes_everything();
+    void parseFiles_does_nothing_without_assigned_widget();
+    void setStartIndex_sets_zero_with_invalid_index();
+
+    /*
      * OTHER TESTS
      */
     void testEmptyParseString();

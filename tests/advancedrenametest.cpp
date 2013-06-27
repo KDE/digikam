@@ -418,6 +418,108 @@ void AdvancedRenameTest::testUniqueModifier()
     QCOMPARE(parsed2, parsed4);
 }
 
+void AdvancedRenameTest::addFiles_should_only_add_files()
+{
+    QList<ParseSettings> files;
+    ParseSettings ps;
+    ps.fileUrl = KUrl(filePath);
+    files << ps;
+    ps.fileUrl = KUrl(filePath2);
+    files << ps;
+    ps.fileUrl = KUrl(filePath3);
+    files << ps;
+    ps.fileUrl = KUrl(filePath4);
+    files << ps;
+    ps.fileUrl = KUrl(filePath5);
+    files << ps;
+    AdvancedRenameManager manager(files);
+    QCOMPARE(manager.fileList().count(), 5);
+
+    QList<ParseSettings> additionalFiles;
+    ps.fileUrl = KUrl(filePath6);
+    additionalFiles << ps;
+    ps.fileUrl = KUrl(filePath7);
+    additionalFiles << ps;
+    ps.fileUrl = KUrl(filePath8);
+    additionalFiles << ps;
+    ps.fileUrl = KUrl(filePath9);
+    additionalFiles << ps;
+    manager.addFiles(additionalFiles);
+    QCOMPARE(manager.fileList().count(), 9);
+}
+
+void AdvancedRenameTest::addFiles_should_only_add_files2()
+{
+    QList<ParseSettings> files;
+    ParseSettings ps;
+    ps.fileUrl = KUrl(filePath);
+    files << ps;
+    ps.fileUrl = KUrl(filePath2);
+    files << ps;
+    ps.fileUrl = KUrl(filePath3);
+    files << ps;
+    ps.fileUrl = KUrl(filePath4);
+    files << ps;
+    ps.fileUrl = KUrl(filePath5);
+    files << ps;
+    AdvancedRenameManager manager;
+    manager.addFiles(files);
+    QCOMPARE(manager.fileList().count(), 5);
+}
+
+void AdvancedRenameTest::reset_removes_everything()
+{
+    QList<ParseSettings> files;
+    ParseSettings ps;
+    ps.fileUrl = KUrl(filePath);
+    files << ps;
+    ps.fileUrl = KUrl(filePath2);
+    files << ps;
+    ps.fileUrl = KUrl(filePath3);
+    files << ps;
+    ps.fileUrl = KUrl(filePath4);
+    files << ps;
+    ps.fileUrl = KUrl(filePath5);
+    files << ps;
+    AdvancedRenameManager manager;
+    manager.addFiles(files);
+    QCOMPARE(manager.fileList().count(), 5);
+
+    manager.reset();
+    QCOMPARE(manager.fileList().count(), 0);
+}
+
+void AdvancedRenameTest::parseFiles_does_nothing_without_assigned_widget()
+{
+    QList<ParseSettings> files;
+    ParseSettings ps;
+    ps.fileUrl = KUrl(filePath);
+    files << ps;
+    ps.fileUrl = KUrl(filePath2);
+    files << ps;
+    ps.fileUrl = KUrl(filePath3);
+    files << ps;
+    AdvancedRenameManager manager(files);
+    manager.parseFiles();
+
+    QCOMPARE(manager.newName(filePath), filePath);
+    QCOMPARE(manager.newName(filePath2), filePath2);
+    QCOMPARE(manager.newName(filePath3), filePath3);
+}
+
+void AdvancedRenameTest::setStartIndex_sets_zero_with_invalid_index()
+{
+    QList<ParseSettings> files;
+    ParseSettings ps;
+    ps.fileUrl = KUrl(filePath);
+    files << ps;
+    AdvancedRenameManager manager(files);
+    manager.setStartIndex(-1);
+    manager.parseFiles("####");
+
+    QCOMPARE(manager.newName(filePath), QString("0001.jpg"));
+}
+
 void AdvancedRenameTest::testReplaceModifier_data()
 {
     QTest::addColumn<QString>("parseString");
