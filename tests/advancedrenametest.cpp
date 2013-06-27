@@ -34,7 +34,7 @@
 
 using namespace Digikam;
 
-QTEST_KDEMAIN(AdvancedRenameWidgetTest, GUI)
+QTEST_KDEMAIN(AdvancedRenameTest, GUI)
 
 const QString imagesDir("advancedrenameimages/");
 
@@ -63,7 +63,7 @@ const QString filePath7 = createFilePath(fileName7);
 const QString filePath8 = createFilePath(fileName8);
 const QString filePath9 = createFilePath(fileName9);
 
-void AdvancedRenameWidgetTest::testFileNameToken()
+void AdvancedRenameTest::testFileNameToken()
 {
     QList<ParseSettings> files;
     ParseSettings ps;
@@ -77,7 +77,7 @@ void AdvancedRenameWidgetTest::testFileNameToken()
     QCOMPARE(parsed, fileName);
 }
 
-void AdvancedRenameWidgetTest::testFileExtensionToken_data()
+void AdvancedRenameTest::testFileExtensionToken_data()
 {
     QTest::addColumn<QString>("parseString");
     QTest::addColumn<QString>("result");
@@ -123,7 +123,7 @@ void AdvancedRenameWidgetTest::testFileExtensionToken_data()
             << QString("jpg_lala_0001JPG.jpg");
 }
 
-void AdvancedRenameWidgetTest::testFileExtensionToken()
+void AdvancedRenameTest::testFileExtensionToken()
 {
     QFETCH(QString,   parseString);
     QFETCH(QString,   result);
@@ -140,7 +140,7 @@ void AdvancedRenameWidgetTest::testFileExtensionToken()
     QCOMPARE(parsed, result);
 }
 
-void AdvancedRenameWidgetTest::testFileOwnerToken()
+void AdvancedRenameTest::testFileOwnerToken()
 {
     QList<ParseSettings> files;
     ParseSettings ps;
@@ -162,7 +162,7 @@ void AdvancedRenameWidgetTest::testFileOwnerToken()
     QCOMPARE(parsed, result);
 }
 
-void AdvancedRenameWidgetTest::testFileGroupToken()
+void AdvancedRenameTest::testFileGroupToken()
 {
     QList<ParseSettings> files;
     ParseSettings ps;
@@ -184,7 +184,7 @@ void AdvancedRenameWidgetTest::testFileGroupToken()
     QCOMPARE(parsed, result);
 }
 
-void AdvancedRenameWidgetTest::testDirectoryNameToken_data()
+void AdvancedRenameTest::testDirectoryNameToken_data()
 {
     QTest::addColumn<QString>("parseString");
     QTest::addColumn<QString>("result");
@@ -213,7 +213,7 @@ void AdvancedRenameWidgetTest::testDirectoryNameToken_data()
             << fileName;
 }
 
-void AdvancedRenameWidgetTest::testDirectoryNameToken()
+void AdvancedRenameTest::testDirectoryNameToken()
 {
     QFETCH(QString,   parseString);
     QFETCH(QString,   result);
@@ -230,7 +230,7 @@ void AdvancedRenameWidgetTest::testDirectoryNameToken()
     QCOMPARE(parsed, result);
 }
 
-void AdvancedRenameWidgetTest::testNumberToken_data()
+void AdvancedRenameTest::testNumberToken_data()
 {
     QTest::addColumn<QString>("parseString");
     QTest::addColumn<QString>("result");
@@ -264,7 +264,7 @@ void AdvancedRenameWidgetTest::testNumberToken_data()
             << QString("001_bla.jpg");
 }
 
-void AdvancedRenameWidgetTest::testNumberToken()
+void AdvancedRenameTest::testNumberToken()
 {
     QFETCH(QString,   parseString);
     QFETCH(QString,   result);
@@ -281,7 +281,7 @@ void AdvancedRenameWidgetTest::testNumberToken()
     QCOMPARE(parsed, result);
 }
 
-void AdvancedRenameWidgetTest::testFirstLetterOfEachWordUppercaseModifier_data()
+void AdvancedRenameTest::testFirstLetterOfEachWordUppercaseModifier_data()
 {
     QTest::addColumn<QString>("parseString");
     QTest::addColumn<QString>("file");
@@ -328,7 +328,7 @@ void AdvancedRenameWidgetTest::testFirstLetterOfEachWordUppercaseModifier_data()
             << QString("Advancedrename_Testimage.jpg");
 }
 
-void AdvancedRenameWidgetTest::testFirstLetterOfEachWordUppercaseModifier()
+void AdvancedRenameTest::testFirstLetterOfEachWordUppercaseModifier()
 {
     QFETCH(QString, parseString);
     QFETCH(QString, file);
@@ -345,7 +345,7 @@ void AdvancedRenameWidgetTest::testFirstLetterOfEachWordUppercaseModifier()
     QCOMPARE(parsed, result);
 }
 
-void AdvancedRenameWidgetTest::testChainedModifiers_data()
+void AdvancedRenameTest::testChainedModifiers_data()
 {
     QTest::addColumn<QString>("parseString");
     QTest::addColumn<QString>("result");
@@ -363,7 +363,7 @@ void AdvancedRenameWidgetTest::testChainedModifiers_data()
             << QString("Vancedreage_Testimage.jpg");
 }
 
-void AdvancedRenameWidgetTest::testChainedModifiers()
+void AdvancedRenameTest::testChainedModifiers()
 {
     QFETCH(QString,   parseString);
     QFETCH(QString,   result);
@@ -379,7 +379,7 @@ void AdvancedRenameWidgetTest::testChainedModifiers()
     QCOMPARE(parsed, result);
 }
 
-void AdvancedRenameWidgetTest::testUppercaseModifier()
+void AdvancedRenameTest::testUppercaseModifier()
 {
     QList<ParseSettings> files;
     ParseSettings ps;
@@ -394,7 +394,7 @@ void AdvancedRenameWidgetTest::testUppercaseModifier()
     QCOMPARE(parsed, tmp);
 }
 
-void AdvancedRenameWidgetTest::testUniqueModifier()
+void AdvancedRenameTest::testUniqueModifier()
 {
     QList<ParseSettings> files;
     ParseSettings ps;
@@ -418,7 +418,7 @@ void AdvancedRenameWidgetTest::testUniqueModifier()
     QCOMPARE(parsed2, parsed4);
 }
 
-void AdvancedRenameWidgetTest::testReplaceModifier_data()
+void AdvancedRenameTest::testReplaceModifier_data()
 {
     QTest::addColumn<QString>("parseString");
     QTest::addColumn<QString>("result");
@@ -452,7 +452,7 @@ void AdvancedRenameWidgetTest::testReplaceModifier_data()
             << QString("AAAancedrename_testimage.jpg");
 }
 
-void AdvancedRenameWidgetTest::testReplaceModifier()
+void AdvancedRenameTest::testReplaceModifier()
 {
     QFETCH(QString,   parseString);
     QFETCH(QString,   result);
@@ -469,7 +469,7 @@ void AdvancedRenameWidgetTest::testReplaceModifier()
     QCOMPARE(parsed, result);
 }
 
-void AdvancedRenameWidgetTest::testRangeModifier_data()
+void AdvancedRenameTest::testRangeModifier_data()
 {
     QTest::addColumn<QString>("parseString");
     QTest::addColumn<QString>("result");
@@ -497,7 +497,7 @@ void AdvancedRenameWidgetTest::testRangeModifier_data()
             << QString("advancedrename_testimage.jpg");
 }
 
-void AdvancedRenameWidgetTest::testRangeModifier()
+void AdvancedRenameTest::testRangeModifier()
 {
     QFETCH(QString,   parseString);
     QFETCH(QString,   result);
@@ -514,7 +514,7 @@ void AdvancedRenameWidgetTest::testRangeModifier()
     QCOMPARE(parsed, result);
 }
 
-void AdvancedRenameWidgetTest::testDefaultValueModifier_data()
+void AdvancedRenameTest::testDefaultValueModifier_data()
 {
     QTest::addColumn<QString>("parseString");
     QTest::addColumn<QString>("result");
@@ -530,7 +530,7 @@ void AdvancedRenameWidgetTest::testDefaultValueModifier_data()
             << QString("Unknown_advancedrename_testimage.jpg");
 }
 
-void AdvancedRenameWidgetTest::testDefaultValueModifier()
+void AdvancedRenameTest::testDefaultValueModifier()
 {
     QFETCH(QString,   parseString);
     QFETCH(QString,   result);
@@ -547,7 +547,7 @@ void AdvancedRenameWidgetTest::testDefaultValueModifier()
     QCOMPARE(parsed, result);
 }
 
-void AdvancedRenameWidgetTest::testLowercaseModifier()
+void AdvancedRenameTest::testLowercaseModifier()
 {
     QList<ParseSettings> files;
     ParseSettings ps;
@@ -560,7 +560,7 @@ void AdvancedRenameWidgetTest::testLowercaseModifier()
     QCOMPARE(parsed, fileName.toLower());
 }
 
-void AdvancedRenameWidgetTest::testEmptyParseString()
+void AdvancedRenameTest::testEmptyParseString()
 {
     QList<ParseSettings> files;
     ParseSettings ps;

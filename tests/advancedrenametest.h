@@ -34,7 +34,7 @@
 #include "defaultrenameparser.h"
 #include "parsesettings.h"
 
-class AdvancedRenameWidgetTest : public QObject
+class AdvancedRenameTest : public QObject
 {
     Q_OBJECT
 
