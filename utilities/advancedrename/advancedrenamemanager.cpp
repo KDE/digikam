@@ -285,7 +285,6 @@ void AdvancedRenameManager::clearMappings() const
     d->folderIndexMap.clear();
     d->fileGroupIndexMap.clear();
     d->renamedFiles.clear();
-    d->fileGroupIndexMap.clear();
 }
 
 void AdvancedRenameManager::clearAll()
