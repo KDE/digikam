@@ -47,6 +47,8 @@ QString createFilePath(const QString& file)
     return QString(KDESRCDIR + imagesDir + file);
 }
 
+Q_DECLARE_METATYPE(QList<int>)
+
 const QString fileName  = "advancedrename_testimage.jpg";
 const QString fileName2 = "advancedrename_testimage2.jpg";
 const QString fileName3 = "001a.jpg";
@@ -702,6 +704,69 @@ void AdvancedRenameTest::newFileList_tests()
     for (int i = 0; i < files.count(); ++i)
     {
         QCOMPARE(newFileList.value(files.at(i)), results.at(i));
+    }
+}
+
+void AdvancedRenameTest::indexOfFile_sorting_data()
+{
+    QStringList files;
+    files << filePath << filePath2 << filePath3;
+
+    QTest::addColumn<int>("sortAction");
+    QTest::addColumn<int>("sortDirection");
+    QTest::addColumn<QStringList>("files");
+    QTest::addColumn<QList<int> >("results");
+
+    QTest::newRow("custom_asc")
+            << static_cast<int>(AdvancedRenameManager::SortCustom)
+            << static_cast<int>(AdvancedRenameManager::SortAscending)
+            << files
+            << (QList<int>() << 1 << 2 << 3);
+
+    QTest::newRow("custom_desc")
+            << static_cast<int>(AdvancedRenameManager::SortCustom)
+            << static_cast<int>(AdvancedRenameManager::SortDescending)
+            << files
+            << (QList<int>() << 1 << 2 << 3);
+
+    QTest::newRow("name_asc")
+            << static_cast<int>(AdvancedRenameManager::SortName)
+            << static_cast<int>(AdvancedRenameManager::SortAscending)
+            << files
+            << (QList<int>() << 2 << 3 << 1);
+
+    QTest::newRow("name_desc")
+            << static_cast<int>(AdvancedRenameManager::SortName)
+            << static_cast<int>(AdvancedRenameManager::SortDescending)
+            << files
+            << (QList<int>() << 2 << 1 << 3);
+}
+
+void AdvancedRenameTest::indexOfFile_sorting()
+{
+    QFETCH(int,           sortAction);
+    QFETCH(int,           sortDirection);
+    QFETCH(QStringList,   files);
+    QFETCH(QList<int>,    results);
+
+    ParseSettings ps;
+
+    QList<ParseSettings> files2;
+    foreach (const QString& file, files)
+    {
+        ps.fileUrl = KUrl(file);
+        files2 << ps;
+    }
+
+    AdvancedRenameManager manager(files2);
+    manager.setSortAction(static_cast<AdvancedRenameManager::SortAction>(sortAction));
+    manager.setSortDirection(static_cast<AdvancedRenameManager::SortDirection>(sortDirection));
+
+    QVERIFY(files.count() == results.count());
+
+    for (int i = 0; i < files.count(); ++i)
+    {
+        QCOMPARE(manager.indexOfFile(files.at(i)), results.at(i));
     }
 }
 

@@ -89,7 +89,7 @@ public:
     void setSortDirection(SortDirection direction);
     SortDirection sortDirection() const;
 
-    void setStartIndex(int index) const;
+    void setStartIndex(int index);
 
     void setWidget(AdvancedRenameWidget* widget);
 
@@ -112,12 +112,13 @@ private:
 
     void addFile(const QString& filename) const;
     void addFile(const QString& filename, const QDateTime& datetime) const;
-    bool initialize() const;
+    bool initialize();
+    void initializeFileList();
     void resetState();
 
     QString fileGroupKey(const QString& filename) const;
 
-    void clearMappings() const;
+    void clearMappings();
     void clearAll();
 
 private:
