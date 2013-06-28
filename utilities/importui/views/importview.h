@@ -84,8 +84,7 @@ public:
 
 Q_SIGNALS:
 
-    void signalImageSelected(const CamItemInfoList& selectedImage, bool hasPrevious, bool hasNext,
-                             const CamItemInfoList& allImages);
+    void signalImageSelected(const CamItemInfoList& selectedImage, const CamItemInfoList& allImages);
     void signalNewSelection(bool hasSelection);
     void signalNoCurrentItem();
     void signalSelectionChanged(int numberOfSelectedItems);

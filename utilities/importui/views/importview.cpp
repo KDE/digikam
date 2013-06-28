@@ -418,7 +418,7 @@ void ImportView::slotDispatchImageSelected()
         if (list.isEmpty())
         {
             d->stackedView->setPreviewItem();
-            emit signalImageSelected(list, false, false, allImages);
+            emit signalImageSelected(list, allImages);
             emit signalNewSelection(false);
             emit signalNoCurrentItem();
         }
@@ -439,7 +439,7 @@ void ImportView::slotDispatchImageSelected()
                 d->stackedView->setPreviewItem(list.first(), previousInfo, nextInfo);
             }
 
-            emit signalImageSelected(list, !previousInfo.isNull(), !nextInfo.isNull(), allImages);
+            emit signalImageSelected(list, allImages);
             emit signalNewSelection(true);
         }
 

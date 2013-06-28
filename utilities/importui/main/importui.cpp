@@ -126,7 +126,6 @@
 #include "scancontroller.h"
 #include "setup.h"
 #include "sidebar.h"
-#include "statusnavigatebar.h"
 #include "statusprogressbar.h"
 #include "thememanager.h"
 #include "thumbnailsize.h"
@@ -637,8 +636,8 @@ void ImportUI::setupConnections()
     //connect(d->view, SIGNAL(signalSelected(CamItemInfo,bool)),
             //this, SLOT(slotItemsSelected(CamItemInfo,bool)));
 
-    connect(d->view, SIGNAL(signalImageSelected(CamItemInfoList,bool,bool,CamItemInfoList)),
-            this, SLOT(slotImageSelected(CamItemInfoList,bool,bool,CamItemInfoList)));
+    connect(d->view, SIGNAL(signalImageSelected(CamItemInfoList,CamItemInfoList)),
+            this, SLOT(slotImageSelected(CamItemInfoList,CamItemInfoList)));
 
     connect(d->view, SIGNAL(signalSwitchedToPreview()),
             this, SLOT(slotSwitchedToPreview()));
@@ -648,18 +647,6 @@ void ImportUI::setupConnections()
 
     connect(d->view, SIGNAL(signalNewSelection(bool)),
             this, SLOT(slotNewSelection(bool)));
-
-    connect(d->statusNavigateBar, SIGNAL(signalFirstItem()),
-            d->view, SLOT(slotFirstItem()));
-
-    connect(d->statusNavigateBar, SIGNAL(signalNextItem()),
-            d->view, SLOT(slotNextItem()));
-
-    connect(d->statusNavigateBar, SIGNAL(signalPrevItem()),
-            d->view, SLOT(slotPrevItem()));
-
-    connect(d->statusNavigateBar, SIGNAL(signalLastItem()),
-            d->view, SLOT(slotLastItem()));
 
     // -------------------------------------------------------------------------
 
@@ -735,11 +722,6 @@ void ImportUI::setupStatusBar()
     d->zoomBar->setZoomMinusAction(d->decreaseThumbsAction);
     d->zoomBar->setBarMode(DZoomBar::ThumbsSizeCtrl);
     statusBar()->addPermanentWidget(d->zoomBar, 1);
-
-    //------------------------------------------------------------------------------
-
-    d->statusNavigateBar = new StatusNavigateBar(statusBar());
-    statusBar()->addPermanentWidget(d->statusNavigateBar, 1);
 }
 
 void ImportUI::setupCameraController(const QString& model, const QString& port, const QString& path)
@@ -800,33 +782,33 @@ void ImportUI::setupAccelerators()
     actionCollection()->addAction("exit_preview_mode", escapeAction);
     escapeAction->setShortcut( KShortcut(Qt::Key_Escape) );
     connect(escapeAction, SIGNAL(triggered()), this, SIGNAL(signalEscapePressed()));
-
+    
     KAction* nextImageAction = new KAction(i18n("Next Image"), this);
     nextImageAction->setIcon(SmallIcon("go-next"));
     actionCollection()->addAction("next_image", nextImageAction);
     nextImageAction->setShortcut(KShortcut(Qt::Key_Space));
-    connect(nextImageAction, SIGNAL(triggered()), d->statusNavigateBar, SIGNAL(signalNextItem()));
+    connect(nextImageAction, SIGNAL(triggered()), d->view, SLOT(slotNextItem()));
 
     KAction* previousImageAction = new KAction(i18n("Previous Image"), this);
     previousImageAction->setIcon(SmallIcon("go-previous"));
     actionCollection()->addAction("previous_image", previousImageAction);
     previousImageAction->setShortcut(KShortcut(Qt::Key_Backspace));
-    connect(previousImageAction, SIGNAL(triggered()), d->statusNavigateBar, SIGNAL(signalPrevItem()));
+    connect(previousImageAction, SIGNAL(triggered()), d->view, SLOT(slotPrevItem()));
 
     KAction* altpreviousImageAction = new KAction(i18n("Previous Image"), this);
     actionCollection()->addAction("alt_previous_image_shift_space", altpreviousImageAction);
     altpreviousImageAction->setShortcut( KShortcut(Qt::SHIFT+Qt::Key_Space) );
-    connect(altpreviousImageAction, SIGNAL(triggered()), d->statusNavigateBar, SIGNAL(signalPrevItem()));
+    connect(altpreviousImageAction, SIGNAL(triggered()), d->view, SLOT(slotPrevItem()));
 
     KAction* firstImageAction = new KAction(i18n("First Image"), this);
     actionCollection()->addAction("first_image", firstImageAction);
     firstImageAction->setShortcut(KShortcut(Qt::Key_Home) );
-    connect(firstImageAction, SIGNAL(triggered()), d->statusNavigateBar, SIGNAL(signalFirstItem()));
+    connect(firstImageAction, SIGNAL(triggered()), d->view, SLOT(slotFirstItem()));
 
     KAction* lastImageAction = new KAction(i18n("Last Image"), this);
     actionCollection()->addAction("last_image", lastImageAction);
     lastImageAction->setShortcut(KShortcut(Qt::Key_End) );
-    connect(lastImageAction, SIGNAL(triggered()), d->statusNavigateBar, SIGNAL(signalLastItem()));
+    connect(lastImageAction, SIGNAL(triggered()), d->view, SLOT(slotLastItem()));
 }
 
 void ImportUI::readSettings()
@@ -2300,8 +2282,7 @@ void ImportUI::slotNewSelection(bool hasSelection)
     d->albumLibraryFreeSpace->setEstimatedDSizeKb(dSize);
 }
 
-void ImportUI::slotImageSelected(const CamItemInfoList& selection, bool hasPrev, bool hasNext,
-                                 const CamItemInfoList& listAll)
+void ImportUI::slotImageSelected(const CamItemInfoList& selection, const CamItemInfoList& listAll)
 {
     int num_images = listAll.count();
 
@@ -2349,7 +2330,6 @@ void ImportUI::slotImageSelected(const CamItemInfoList& selection, bool hasPrev,
     }
 
     slotNewSelection(d->view->selectedCamItemInfos().count() > 0);
-    d->statusNavigateBar->setNavigateBarState(hasPrev, hasNext);
 }
 
 //FIXME: To be removed.
