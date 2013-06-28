@@ -569,16 +569,6 @@ void DigikamApp::setupStatusBar()
 
     //------------------------------------------------------------------------------
 
-    d->zoomBar = new DZoomBar(statusBar());
-    d->zoomBar->setZoomToFitAction(d->zoomFitToWindowAction);
-    d->zoomBar->setZoomTo100Action(d->zoomTo100percents);
-    d->zoomBar->setZoomPlusAction(d->zoomPlusAction);
-    d->zoomBar->setZoomMinusAction(d->zoomMinusAction);
-    d->zoomBar->setBarMode(DZoomBar::ThumbsSizeCtrl);
-    statusBar()->addPermanentWidget(d->zoomBar);
-
-    //------------------------------------------------------------------------------
-
     ProgressView* view = new ProgressView(statusBar(), this);
     view->hide();
 
@@ -588,11 +578,16 @@ void DigikamApp::setupStatusBar()
 
     //------------------------------------------------------------------------------
 
-    d->statusNavigateBar = new StatusNavigateBar(statusBar());
-    statusBar()->addPermanentWidget(d->statusNavigateBar, 1);
+    d->zoomBar = new DZoomBar(statusBar());
+    d->zoomBar->setZoomToFitAction(d->zoomFitToWindowAction);
+    d->zoomBar->setZoomTo100Action(d->zoomTo100percents);
+    d->zoomBar->setZoomPlusAction(d->zoomPlusAction);
+    d->zoomBar->setZoomMinusAction(d->zoomMinusAction);
+    d->zoomBar->setBarMode(DZoomBar::ThumbsSizeCtrl);
+    statusBar()->addPermanentWidget(d->zoomBar);
 
     //------------------------------------------------------------------------------
-
+    
     connect(d->zoomBar, SIGNAL(signalZoomSliderChanged(int)),
             this, SLOT(slotZoomSliderChanged(int)));
 
@@ -607,18 +602,6 @@ void DigikamApp::setupStatusBar()
 
     connect(d->view, SIGNAL(signalThumbSizeChanged(int)),
             this, SLOT(slotThumbSizeChanged(int)));
-
-    connect(d->statusNavigateBar, SIGNAL(signalFirstItem()),
-            d->view, SLOT(slotFirstItem()));
-
-    connect(d->statusNavigateBar, SIGNAL(signalNextItem()),
-            d->view, SLOT(slotNextItem()));
-
-    connect(d->statusNavigateBar, SIGNAL(signalPrevItem()),
-            d->view, SLOT(slotPrevItem()));
-
-    connect(d->statusNavigateBar, SIGNAL(signalLastItem()),
-            d->view, SLOT(slotLastItem()));
 }
 
 void DigikamApp::setupAccelerators()
@@ -1518,7 +1501,6 @@ void DigikamApp::slotImageSelected(const ImageInfoList& selection, bool hasPrev,
     }
 
     d->statusLabel->setText(d->statusBarSelectionText);
-    d->statusNavigateBar->setNavigateBarState(hasPrev, hasNext);
 }
 
 void DigikamApp::slotSelectionChanged(int selectionCount)
