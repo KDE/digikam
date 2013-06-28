@@ -491,6 +491,7 @@ void AdvancedRenameTest::reset_removes_everything()
 
     manager.reset();
     QCOMPARE(manager.fileList().count(), 0);
+    QCOMPARE(manager.newFileList().count(), 0);
 }
 
 void AdvancedRenameTest::parseFiles_does_nothing_without_assigned_widget()
@@ -636,6 +637,107 @@ void AdvancedRenameTest::sequencenumber_tests()
     }
 }
 
+void AdvancedRenameTest::newFileList_tests_data()
+{
+    QStringList files;
+    files << filePath << filePath2 << filePath3;
+
+    QTest::addColumn<QString>("parseString");
+    QTest::addColumn<QStringList>("files");
+    QTest::addColumn<QStringList>("results");
+
+    QTest::newRow("####")
+            << QString("####")
+            << files
+            << (QStringList() << "0001.jpg" << "0002.jpg" << "0003.jpg");
+
+    QTest::newRow("###[-2]")
+            << QString("###[-2]")
+            << files
+            << (QStringList() << "001.jpg" << "002.jpg" << "003.jpg");
+
+    QTest::newRow("###[2]")
+            << QString("###[2]")
+            << files
+            << (QStringList() << "002.jpg" << "003.jpg" << "004.jpg");
+
+    QTest::newRow("##[3,3]")
+            << QString("##[3,3]")
+            << files
+            << (QStringList() << "03.jpg" << "06.jpg" << "09.jpg");
+
+    QTest::newRow("#[4,4]")
+            << QString("#[4,4]")
+            << files
+            << (QStringList() << "4.jpg" << "8.jpg" << "12.jpg");
+
+    QTest::newRow("#[4,-4]")
+            << QString("#[4,-4]")
+            << files
+            << (QStringList() << "4.jpg" << "5.jpg" << "6.jpg");
+}
+
+void AdvancedRenameTest::newFileList_tests()
+{
+    QFETCH(QString,       parseString);
+    QFETCH(QStringList,   files);
+    QFETCH(QStringList,   results);
+
+    ParseSettings ps;
+
+    QList<ParseSettings> files2;
+    foreach (const QString& file, files)
+    {
+        ps.fileUrl = KUrl(file);
+        files2 << ps;
+    }
+
+    AdvancedRenameManager manager(files2);
+    manager.parseFiles(parseString);
+
+    QVERIFY(files.count() == results.count());
+
+    QMap<QString, QString> newFileList = manager.newFileList();
+
+    for (int i = 0; i < files.count(); ++i)
+    {
+        QCOMPARE(newFileList.value(files.at(i)), results.at(i));
+    }
+}
+
+void AdvancedRenameTest::indexOfFile_invalid_input_returns_minus_one()
+{
+    QList<ParseSettings> files;
+    ParseSettings ps;
+    ps.fileUrl = KUrl(filePath);
+    files << ps;
+
+    AdvancedRenameManager manager(files);
+    QCOMPARE(manager.indexOfFile("none_existent_file.png"), -1);
+}
+
+void AdvancedRenameTest::indexOfFolder_invalid_input_returns_minus_one()
+{
+    QList<ParseSettings> files;
+    ParseSettings ps;
+    ps.fileUrl = KUrl(filePath);
+    files << ps;
+
+    AdvancedRenameManager manager(files);
+    QCOMPARE(manager.indexOfFolder("none_existent_file.png"), -1);
+}
+
+void AdvancedRenameTest::indexOfFileGroup_invalid_input_returns_minus_one()
+{
+    QList<ParseSettings> files;
+    ParseSettings ps;
+    ps.fileUrl = KUrl(filePath);
+    files << ps;
+
+    AdvancedRenameManager manager(files);
+    QCOMPARE(manager.indexOfFileGroup("none_existent_file.png"), -1);
+}
+
 void AdvancedRenameTest::sequencenumber_tests_startIndex_data()
 {
     QStringList files;
@@ -693,7 +795,7 @@ void AdvancedRenameTest::sequencenumber_tests_startIndex()
     }
 }
 
-void AdvancedRenameTest::sortAction_custom_asc_should_sort()
+void AdvancedRenameTest::sortAction_custom_asc_should_not_sort()
 {
     QList<ParseSettings> files;
     ParseSettings ps;
@@ -865,6 +967,63 @@ void AdvancedRenameTest::sortAction_size_desc()
     }
 }
 
+void AdvancedRenameTest::sortAction_date_asc()
+{
+    QList<ParseSettings> files;
+    ParseSettings ps;
+
+    QStringList filePaths;
+    filePaths << filePath4 << filePath3 << filePath
+              << filePath2 << filePath9 << filePath7
+              << filePath8 << filePath6 << filePath5;
+
+    foreach (const QString& filePath, filePaths)
+    {
+        ps.fileUrl = KUrl(filePath);
+        files << ps;
+    }
+
+    AdvancedRenameManager manager(files);
+    manager.setSortAction(AdvancedRenameManager::SortDate);
+
+    QStringList managedFiles = manager.fileList();
+    QVERIFY(managedFiles.count() == filePaths.count());
+
+    for (int i = 0; i < managedFiles.count(); ++i)
+    {
+        QCOMPARE(managedFiles.at(i), filePaths.at(i));
+    }
+}
+
+void AdvancedRenameTest::sortAction_date_desc()
+{
+    QList<ParseSettings> files;
+    ParseSettings ps;
+
+    QStringList filePaths;
+    filePaths << filePath5 << filePath6 << filePath8
+              << filePath7 << filePath9 << filePath2
+              << filePath << filePath3 << filePath4;
+
+    foreach (const QString& filePath, filePaths)
+    {
+        ps.fileUrl = KUrl(filePath);
+        files << ps;
+    }
+
+    AdvancedRenameManager manager(files);
+    manager.setSortAction(AdvancedRenameManager::SortDate);
+    manager.setSortDirection(AdvancedRenameManager::SortDescending);
+
+    QStringList managedFiles = manager.fileList();
+    QVERIFY(managedFiles.count() == filePaths.count());
+
+    for (int i = 0; i < managedFiles.count(); ++i)
+    {
+        QCOMPARE(managedFiles.at(i), filePaths.at(i));
+    }
+}
+
 void AdvancedRenameTest::testReplaceModifier_data()
 {
     QTest::addColumn<QString>("parseString");
@@ -942,6 +1101,19 @@ void AdvancedRenameTest::testRangeModifier_data()
     QTest::newRow("[file]{range:0}")
             << QString("[file]{range:0}")
             << QString("advancedrename_testimage.jpg");
+
+    QTest::newRow("[file]{range:-100}")
+            << QString("[file]{range:-100}")
+            << QString("a.jpg");
+
+    QTest::newRow("[file]{range:-100,}")
+            << QString("[file]{range:-100,}")
+            << QString("advancedrename_testimage.jpg");
+
+
+    QTest::newRow("[file]{range:-100,2}")
+            << QString("[file]{range:-100,2}")
+            << QString("ad.jpg");
 }
 
 void AdvancedRenameTest::testRangeModifier()

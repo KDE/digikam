@@ -31,5 +31,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 021 ==> 320763 - Build failed.
 022 ==> 204138 - Possibility to extract JPEG previews from RAW files during camera import.
 023 ==> 261907 - digiKam empty context menus (relevant of default KDE widget style for Windows set to CDE instead Oxygen).
-024 ==> 
+024 ==> 249387 - Showfoto 1.1.0 crash when saving JPEG in WinVista64.
+025 ==> 
+
 

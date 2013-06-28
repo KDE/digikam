@@ -59,9 +59,9 @@ struct SortByDate
 {
     bool operator() (const QString& s1, const QString& s2) const
     {
-        ImageInfo i1 = ImageInfo(KUrl(s1));
-        ImageInfo i2 = ImageInfo(KUrl(s2));
-        return i1.dateTime() < i2.dateTime();
+        QFileInfo fi1(s1);
+        QFileInfo fi2(s2);
+        return fi1.created() < fi2.created();
     }
 };
 
@@ -312,27 +312,27 @@ QStringList AdvancedRenameManager::fileList() const
 
     switch (d->sortAction)
     {
-        case SortName:
-        {
-            qSort(tmpFiles.begin(), tmpFiles.end(), SortByNameCaseInsensitive());
-            break;
-        }
+    case SortName:
+    {
+        qSort(tmpFiles.begin(), tmpFiles.end(), SortByNameCaseInsensitive());
+        break;
+    }
 
-        case SortDate:
-        {
-            qSort(tmpFiles.begin(), tmpFiles.end(), SortByDate());
-            break;
-        }
+    case SortDate:
+    {
+        qSort(tmpFiles.begin(), tmpFiles.end(), SortByDate());
+        break;
+    }
 
-        case SortSize:
-        {
-            qSort(tmpFiles.begin(), tmpFiles.end(), SortBySize());
-            break;
-        }
+    case SortSize:
+    {
+        qSort(tmpFiles.begin(), tmpFiles.end(), SortBySize());
+        break;
+    }
 
-        case SortCustom:
-        default:
-            break;
+    case SortCustom:
+    default:
+        break;
     }
 
     if (d->sortAction != SortCustom && d->sortDirection == SortDescending)
@@ -425,38 +425,17 @@ QString AdvancedRenameManager::fileGroupKey(const QString& filename) const
 
 int AdvancedRenameManager::indexOfFile(const QString& filename)
 {
-    int index = -1;
-
-    if (d->fileIndexMap.contains(filename))
-    {
-        index = d->fileIndexMap.value(filename);
-    }
-
-    return index;
+    return d->fileIndexMap.value(filename, -1);
 }
 
 int AdvancedRenameManager::indexOfFolder(const QString& filename)
 {
-    int index = -1;
-
-    if (d->folderIndexMap.contains(filename))
-    {
-        index = d->folderIndexMap.value(filename);
-    }
-
-    return index;
+    return d->folderIndexMap.value(filename, -1);
 }
 
 int AdvancedRenameManager::indexOfFileGroup(const QString& filename)
 {
-    int index = -1;
-
-    if (d->fileGroupIndexMap.contains(fileGroupKey(filename)))
-    {
-        index = d->fileGroupIndexMap.value(fileGroupKey(filename));
-    }
-
-    return index;
+    return d->fileGroupIndexMap.value(fileGroupKey(filename), -1);
 }
 
 QString AdvancedRenameManager::newName(const QString& filename)

@@ -100,12 +100,21 @@ private Q_SLOTS:
     void sequencenumber_tests_startIndex_data();
     void sequencenumber_tests_startIndex();
 
-    void sortAction_custom_asc_should_sort();
+    void newFileList_tests_data();
+    void newFileList_tests();
+
+    void indexOfFile_invalid_input_returns_minus_one();
+    void indexOfFolder_invalid_input_returns_minus_one();
+    void indexOfFileGroup_invalid_input_returns_minus_one();
+
+    void sortAction_custom_asc_should_not_sort();
     void sortAction_custom_desc_should_not_sort();
     void sortAction_name_asc();
     void sortAction_name_desc();
     void sortAction_size_asc();
     void sortAction_size_desc();
+    void sortAction_date_asc();
+    void sortAction_date_desc();
 
     /*
      * OTHER TESTS

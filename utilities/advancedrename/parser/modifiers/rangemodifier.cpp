@@ -72,7 +72,7 @@ RangeModifier::RangeModifier()
 {
     addToken("{range:||from||,||to||}", i18n("Extract a specific range (if '||to||' is omitted, go to the end of string)"));
 
-    QRegExp reg("\\{range(:(\\d+)(,((-1|\\d+))?)?)\\}");
+    QRegExp reg("\\{range(:(-?\\d+)(,((-1|\\d+))?)?)\\}");
     reg.setMinimal(true);
     setRegExp(reg);
 }
@@ -111,10 +111,10 @@ QString RangeModifier::parseOperation(ParseSettings& settings)
     const QRegExp& reg = regExp();
     bool ok = false;
 
-    // if the start parameter can not be extracted, set it to 1
+    // if the start parameter can not be extracted or is a negative value, set it to 1
     int start = reg.cap(2).simplified().toInt(&ok);
 
-    if (!ok)
+    if (!ok || start < 0)
     {
         start = 1;
     }
