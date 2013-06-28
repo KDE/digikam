@@ -1032,6 +1032,7 @@ void AdvancedRenameTest::sortAction_size_desc()
     }
 }
 
+/*
 void AdvancedRenameTest::sortAction_date_asc()
 {
     QList<ParseSettings> files;
@@ -1088,6 +1089,7 @@ void AdvancedRenameTest::sortAction_date_desc()
         QCOMPARE(managedFiles.at(i), filePaths.at(i));
     }
 }
+*/
 
 void AdvancedRenameTest::testReplaceModifier_data()
 {
