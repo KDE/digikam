@@ -3,6 +3,11 @@
 #include <klocale.h>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
+#include <kiconloader.h>
+#include <kstandarddirs.h>
+#include <kaction.h>
+#include <ktoolbar.h>
+#include <kmainwindow.h>
 
 TagsManager::TagsManager()
     : KDialog(0)
@@ -31,31 +36,27 @@ void TagsManager::setupUi(KDialog *Dialog)
      QVBoxLayout* mainLayout = new QVBoxLayout(Dialog);
      QHBoxLayout* firstLine = new QHBoxLayout(Dialog);
 
-     tagPixmap = new QLabel(Dialog);
-     //tagPixmap->setGeometry(QRect(10, 10, 31, 31));
+     tagPixmap = new QLabel();
      tagPixmap->setText("Tag Pixmap");
-     //tagPixmap->setScaledContents(true);
      tagPixmap->setMaximumWidth(40);
-     lineEdit = new QLineEdit(Dialog);
-     lineEdit->setObjectName(QString::fromUtf8("lineEdit"));
+     tagPixmap->setPixmap(KIcon("tag").pixmap());
+
+     lineEdit = new QLineEdit();
      lineEdit->setText(i18n("Search..."));
      lineEdit->setMaximumWidth(200);
-     //lineEdit->setGeometry(QRect(60, 10, 211, 41));
 
-     digikamPixmap = new QLabel(Dialog);
-     //digikamPixmap->setGeometry(QRect(50, 10, 900, 41));
-     digikamPixmap->setAutoFillBackground(false);
-     digikamPixmap->setText("Digikam pixmap");
-     digikamPixmap->setAlignment(Qt::AlignRight);
+     digikamPixmap = new QLabel();
+     digikamPixmap->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/about/top-left-digikam.png")).scaled(40,40,Qt::KeepAspectRatio));
+     digikamPixmap->setMaximumHeight(40);
+     digikamPixmap->setScaledContents(true);
 
-     firstLine->addWidget(tagPixmap);
-     firstLine->setAlignment(tagPixmap,Qt::AlignLeft);
-     firstLine->addWidget(lineEdit);
-     firstLine->setAlignment(tagPixmap,Qt::AlignLeft);
+
+     QHBoxLayout* tempLayout = new QHBoxLayout();
+     tempLayout->setAlignment(Qt::AlignLeft);
+     tempLayout->addWidget(tagPixmap);
+     tempLayout->addWidget(lineEdit);
+     firstLine->addLayout(tempLayout);
      firstLine->addWidget(digikamPixmap);
-     firstLine->setAlignment(tagPixmap,Qt::AlignRight);
-
-     QHBoxLayout* secondLine = new QHBoxLayout(Dialog);
 
      tagmngrLabel = new QLabel(Dialog);
      tagmngrLabel->setObjectName(QString::fromUtf8("label"));
@@ -66,55 +67,27 @@ void TagsManager::setupUi(KDialog *Dialog)
      font2.setWeight(75);
      tagmngrLabel->setFont(font2);
      tagmngrLabel->setAutoFillBackground(true);
-     tagmngrLabel->setAlignment(Qt::AlignCenter);
 
-     addBttn = new QToolButton(Dialog);
-     addBttn->setObjectName(QString::fromUtf8("toolButton_2"));
-     //addBttn->setGeometry(QRect(220, 70, 31, 24));
-     QIcon icon9;
-     icon9.addFile(QString::fromUtf8("plus.png"), QSize(), QIcon::Normal, QIcon::Off);
-     addBttn->setIcon(icon9);
+     treeWindow = new KMainWindow();
+     toolbar = new KToolBar(treeWindow);
 
-     removeBttn = new QToolButton(Dialog);
-     removeBttn->setObjectName(QString::fromUtf8("toolButton_21"));
-     //removeBttn->setGeometry(QRect(260, 70, 31, 24));
+     addAction = new KAction(i18n("Add"),this);
+     delAction = new KAction(i18n("Del"),this);
 
-     QIcon icon10;
-     icon10.addFile(QString::fromUtf8("remove.png"), QSize(), QIcon::Normal, QIcon::Off);
-     removeBttn->setIcon(icon10);
+     organizeAction   = new KActionMenu(i18n("Organize"),this);
+     organizeAction->setDelayed(false);
+     organizeAction->addAction(new KAction("New Tag",this));
 
-     organizeBox = new QComboBox(Dialog);
-     QIcon icon6;
-     icon6.addFile(QString::fromUtf8("1362446149_blockdevice.png"), QSize(), QIcon::Normal, QIcon::Off);
-     organizeBox->addItem(icon6, QString());
-     organizeBox->addItem(QString());
-     organizeBox->setObjectName(QString::fromUtf8("comboBox"));
-     organizeBox->setItemText(0, i18n("Organize"));
-     organizeBox->setItemText(1, i18n("New Tag"));
-     //organizeBox->setGeometry(QRect(300, 70, 111, 24));
+     syncexportAction = new KActionMenu(i18n("Sync & Export"),this);
 
-     syncExportBox = new QComboBox(Dialog);
-     QIcon icon7;
-     icon7.addFile(QString::fromUtf8("1362444297_database.png"), QSize(), QIcon::Normal, QIcon::On);
-     syncExportBox->addItem(icon7, QString());
-     syncExportBox->setItemText(0, i18n("Sync & Export"));
-     //syncExportBox->setGeometry(QRect(420, 70, 141, 24));
+     tagProperties = new KAction(i18n("Tag Properties"),this);
 
-     pushButton = new QPushButton(Dialog);
-     pushButton->setObjectName(QString::fromUtf8("pushButton"));
-     pushButton->setText(i18n("Tag Properties"));
-     //pushButton->setGeometry(QRect(800, 70, 141, 25));
-     QIcon icon8;
-     icon8.addFile(QString::fromUtf8("1362446779_desktop.png"), QSize(), QIcon::Normal, QIcon::Off);
-     pushButton->setIcon(icon8);
-     pushButton->setDefault(true);
-
-     //secondLine->addWidget(tagmngrLabel);
-     secondLine->addWidget(addBttn);
-     secondLine->addWidget(removeBttn);
-     secondLine->addWidget(organizeBox);
-     secondLine->addWidget(syncExportBox);
-     secondLine->addWidget(pushButton);
+     toolbar->addAction(addAction);
+     toolbar->addAction(delAction);
+     toolbar->addAction(organizeAction);
+     toolbar->addAction(syncexportAction);
+     toolbar->addAction(tagProperties);
+     treeWindow->addToolBar(toolbar);
 
      QHBoxLayout* thirdLine = new QHBoxLayout(Dialog);
      listView = new QListView(Dialog);
@@ -125,24 +98,20 @@ void TagsManager::setupUi(KDialog *Dialog)
 
      treeModel = new QTreeView(Dialog);
      treeModel->setObjectName(QString::fromUtf8("treeModel"));
-     //treeModel->setGeometry(QRect(220, 100, 721, 611));
 
 
      QVBoxLayout* listLayout = new QVBoxLayout();
      listLayout->addWidget(tagmngrLabel);
      listLayout->addWidget(listView);
 
-     QVBoxLayout* treeLayout = new QVBoxLayout();
-     treeLayout->addLayout(secondLine);
-     treeLayout->addWidget(treeModel);
+     treeWindow->setCentralWidget(treeModel);
 
      thirdLine->addLayout(listLayout);
      thirdLine->setStretchFactor(listLayout,3);
-     thirdLine->addLayout(treeLayout);
-     thirdLine->setStretchFactor(treeLayout,9);
+     thirdLine->addWidget(treeWindow);
+     thirdLine->setStretchFactor(treeWindow,9);
 
      mainLayout->addLayout(firstLine);
-     //mainLayout->addLayout(secondLine);
      mainLayout->addLayout(thirdLine);
 
      this->mainWidget()->setLayout(mainLayout);

@@ -9,6 +9,10 @@
 #include <QtGui/QPushButton>
 #include <QtGui/QToolButton>
 #include <QTreeView>
+#include <kactionmenu.h>
+
+class KMainWindow;
+class KToolBar;
 
 class TagsManager : public KDialog
 {
@@ -22,14 +26,16 @@ public:
 
     QTreeView *treeModel;
     QLabel *tagmngrLabel;
-    QLabel *tagPixmap;
-    QLabel *digikamPixmap;
-    QComboBox *organizeBox;
-    QLineEdit *lineEdit;
-    QComboBox *syncExportBox;
-    QPushButton *pushButton;
+    QLabel          *tagPixmap;
+    QLabel          *digikamPixmap;
+    QLineEdit       *lineEdit;
+
+    KMainWindow     *treeWindow;
+    KToolBar        *toolbar;
+    KActionMenu     *organizeAction;
+    KActionMenu     *syncexportAction;
+    KAction*        tagProperties;
+    KAction*        addAction;
+    KAction*        delAction;
     QListView *listView;
-    QToolButton *addBttn;
-    QToolButton *removeBttn;
-    QWidget* tagProperties;
 };
