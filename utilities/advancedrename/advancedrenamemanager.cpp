@@ -439,12 +439,7 @@ int AdvancedRenameManager::indexOfFileGroup(const QString& filename)
 
 QString AdvancedRenameManager::newName(const QString& filename)
 {
-    if (!d->renamedFiles.contains(filename))
-    {
-        return filename;
-    }
-
-    return d->renamedFiles.value(filename);
+    return d->renamedFiles.value(filename, filename);
 }
 
 void AdvancedRenameManager::addFile(const QString& filename) const
