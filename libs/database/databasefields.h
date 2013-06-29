@@ -213,6 +213,17 @@ Q_DECLARE_FLAGS(ImagePositions, ImagePositionsField)
 Q_DECLARE_FLAGS(ImageHistoryInfo, ImageHistoryInfoField)
 Q_DECLARE_FLAGS(VideoMetadata, VideoMetadataField)
 
+template<typename FieldName> class FieldMetaInfo { };
+#define DECLARE_FIELDMETAINFO(FieldName) \
+    template<> class FieldMetaInfo <FieldName> { public: static const FieldName##Field Last = FieldName##Last; };
+DECLARE_FIELDMETAINFO(Images)
+DECLARE_FIELDMETAINFO(ImageInformation)
+DECLARE_FIELDMETAINFO(ImageMetadata)
+DECLARE_FIELDMETAINFO(ImageComments)
+DECLARE_FIELDMETAINFO(ImagePositions)
+DECLARE_FIELDMETAINFO(ImageHistoryInfo)
+DECLARE_FIELDMETAINFO(VideoMetadata)
+
 /**
  * You can iterate over each of the Enumerations defined above:
  * ImagesIterator, ImageMetadataIterator etc.
