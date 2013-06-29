@@ -36,6 +36,7 @@ private Q_SLOTS:
 
     void testIterators();
     void testMetaInfo();
+    void testIteratorsSetOnly();
 
     void initTestCase();
     void cleanupTestCase();
