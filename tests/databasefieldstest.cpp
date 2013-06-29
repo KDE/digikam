@@ -78,7 +78,26 @@ void DatabaseFieldsTest::testMetaInfo()
     QCOMPARE(FieldMetaInfo<ImagePositions>::Last, ImagePositionsLast);
     QCOMPARE(FieldMetaInfo<ImageHistoryInfo>::Last, ImageHistoryInfoLast);
     QCOMPARE(FieldMetaInfo<VideoMetadata>::Last, VideoMetadataLast);
-
 }
 
+#define DECLARE_ITERATORSETONLY_TEST(Field)                                                 \
+    for (Field i = Field##None; i<=Field##All; i=Field(int(i)+1))                           \
+    {                                                                                       \
+        Field i2 = Field##None;                                                             \
+        for (DatabaseFieldsEnumIteratorSetOnly<Field> iOnly(i); !iOnly.atEnd(); ++iOnly)    \
+        {                                                                                   \
+            i2 |= *iOnly;                                                                   \
+        }                                                                                   \
+        QCOMPARE(i, i2);                                                                    \
+    }
 
+void DatabaseFieldsTest::testIteratorsSetOnly()
+{
+    DECLARE_ITERATORSETONLY_TEST(Images)
+    DECLARE_ITERATORSETONLY_TEST(ImageInformation)
+    DECLARE_ITERATORSETONLY_TEST(ImageMetadata)
+    DECLARE_ITERATORSETONLY_TEST(VideoMetadata)
+    DECLARE_ITERATORSETONLY_TEST(ImagePositions)
+    DECLARE_ITERATORSETONLY_TEST(ImageComments)
+    DECLARE_ITERATORSETONLY_TEST(ImageHistoryInfo)
+}

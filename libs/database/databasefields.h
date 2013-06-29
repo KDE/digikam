@@ -261,8 +261,53 @@ public:
     }
 };
 
-#define DATABASEFIELDS_ENUM_ITERATOR(Flag)            \
-    typedef DatabaseFieldsEnumIterator<Flag> Flag##Iterator;
+/**
+ * An iterator that iterates only over the flags which are set
+ */
+template<typename FieldName> class DatabaseFieldsEnumIteratorSetOnly
+{
+private:
+    DatabaseFieldsEnumIterator<FieldName> i;
+    const FieldName values;
+
+public:
+
+    DatabaseFieldsEnumIteratorSetOnly(const FieldName setValues)
+      : i(),
+        values(setValues)
+    {
+        if (! (*i & values) )
+        {
+            operator++();
+        }
+    }
+
+    bool atEnd() const
+    {
+        return i.atEnd();
+    }
+
+    void operator++()
+    {
+        while (!i.atEnd())
+        {
+            ++i;
+            if (*i & values)
+            {
+                break;
+            }
+        }
+    }
+
+    FieldName operator*() const
+    {
+        return *i;
+    }
+};
+
+#define DATABASEFIELDS_ENUM_ITERATOR(Flag)                                      \
+    typedef DatabaseFieldsEnumIterator<Flag> Flag##Iterator;                    \
+    typedef DatabaseFieldsEnumIteratorSetOnly<Flag> Flag##IteratorSetOnly;
 
 DATABASEFIELDS_ENUM_ITERATOR(Images)
 DATABASEFIELDS_ENUM_ITERATOR(ImageInformation)
