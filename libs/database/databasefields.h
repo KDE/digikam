@@ -214,8 +214,12 @@ Q_DECLARE_FLAGS(ImageHistoryInfo, ImageHistoryInfoField)
 Q_DECLARE_FLAGS(VideoMetadata, VideoMetadataField)
 
 template<typename FieldName> class FieldMetaInfo { };
-#define DECLARE_FIELDMETAINFO(FieldName) \
-    template<> class FieldMetaInfo <FieldName> { public: static const FieldName##Field Last = FieldName##Last; };
+#define DECLARE_FIELDMETAINFO(FieldName)                            \
+    template<> class FieldMetaInfo <FieldName> { public:            \
+        static const FieldName##Field First = FieldName##First;     \
+        static const FieldName##Field Last = FieldName##Last;       \
+    };
+
 DECLARE_FIELDMETAINFO(Images)
 DECLARE_FIELDMETAINFO(ImageInformation)
 DECLARE_FIELDMETAINFO(ImageMetadata)
@@ -230,19 +234,35 @@ DECLARE_FIELDMETAINFO(VideoMetadata)
  * for (ImagesIterator it; !it.atEnd(); ++it) {}
  */
 
-#define DATABASEFIELDS_ENUM_ITERATOR(Flag)            \
-                                                      \
-class Flag##Iterator                                  \
-{                                                     \
-    int i;                                            \
-                                                      \
-public:                                               \
-                                                      \
-    Flag##Iterator()       { i = Flag##First;       } \
-    bool atEnd()           { return i > Flag##Last; } \
-    void operator++()      { i = (i << 1);          } \
-    Flag operator*() const { return (Flag)i;        } \
+template<typename FieldName> class DatabaseFieldsEnumIterator
+{
+private:
+    int i;
+
+public:
+    DatabaseFieldsEnumIterator()
+      : i(FieldMetaInfo<FieldName>::First)
+    {
+    }
+
+    bool atEnd() const
+    {
+        return i > FieldMetaInfo<FieldName>::Last;
+    }
+
+    void operator++()
+    {
+        i = (i << 1);
+    }
+
+    FieldName operator*() const
+    {
+        return FieldName(i);
+    }
 };
+
+#define DATABASEFIELDS_ENUM_ITERATOR(Flag)            \
+    typedef DatabaseFieldsEnumIterator<Flag> Flag##Iterator;
 
 DATABASEFIELDS_ENUM_ITERATOR(Images)
 DATABASEFIELDS_ENUM_ITERATOR(ImageInformation)
