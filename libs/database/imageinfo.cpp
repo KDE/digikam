@@ -1587,16 +1587,12 @@ ImageInfo::DatabaseFieldsHashRaw ImageInfo::getDatabaseFieldsRaw(const DatabaseF
             else
             {
                 int fieldsIndex = 0;
-                for (DatabaseFields::VideoMetadataIterator it; !it.atEnd(); ++it)
+                for (DatabaseFields::VideoMetadataIteratorSetOnly it(missingVideoMetadata); !it.atEnd(); ++it)
                 {
-                    /// @todo The typecasting here is a workaround...
-                    if (missingVideoMetadata.testFlag(DatabaseFields::VideoMetadataField(int(*it))))
-                    {
-                        const QVariant fieldValue = fieldValues.at(fieldsIndex);
-                        ++fieldsIndex;
+                    const QVariant fieldValue = fieldValues.at(fieldsIndex);
+                    ++fieldsIndex;
 
-                        m_data.constCastData()->databaseFieldsHashRaw.insert(DatabaseFieldsHashRaw::uniqueKey(*it), fieldValue);
-                    }
+                    m_data.constCastData()->databaseFieldsHashRaw.insert(DatabaseFieldsHashRaw::uniqueKey(*it), fieldValue);
                 }
 
                 m_data.constCastData()->videoMetadataCached|=missingVideoMetadata;

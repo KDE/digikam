@@ -959,17 +959,13 @@ TableViewModel::DatabaseFieldsHashRaw TableViewModel::itemDatabaseFieldsRaw(Tabl
             if (!fieldValues.isEmpty())
             {
                 int fieldsIndex = 0;
-                for (DatabaseFields::ImageMetadataIterator it; !it.atEnd(); ++it)
+                for (DatabaseFields::ImageMetadataIteratorSetOnly it(imageMetadataFields); !it.atEnd(); ++it)
                 {
-                    /// @todo The typecasting here is a workaround...
-                    if (imageMetadataFields.testFlag(DatabaseFields::ImageMetadataField(int(*it))))
-                    {
-                        const QVariant fieldValue = fieldValues.at(fieldsIndex);
-                        ++fieldsIndex;
+                    const QVariant fieldValue = fieldValues.at(fieldsIndex);
+                    ++fieldsIndex;
 
-                        /// @todo Re-implement insert?
-                        item->databaseFields.insert(DatabaseFieldsHashRaw::uniqueKey(*it), fieldValue);
-                    }
+                    /// @todo Re-implement insert?
+                    item->databaseFields.insert(DatabaseFieldsHashRaw::uniqueKey(*it), fieldValue);
                 }
             }
         }
@@ -982,17 +978,13 @@ TableViewModel::DatabaseFieldsHashRaw TableViewModel::itemDatabaseFieldsRaw(Tabl
             if (!fieldValues.isEmpty())
             {
                 int fieldsIndex = 0;
-                for (DatabaseFields::VideoMetadataIterator it; !it.atEnd(); ++it)
+                for (DatabaseFields::VideoMetadataIteratorSetOnly it(videoMetadataFields); !it.atEnd(); ++it)
                 {
-                    /// @todo The typecasting here is a workaround...
-                    if (videoMetadataFields.testFlag(DatabaseFields::VideoMetadataField(int(*it))))
-                    {
-                        const QVariant fieldValue = fieldValues.at(fieldsIndex);
-                        ++fieldsIndex;
+                    const QVariant fieldValue = fieldValues.at(fieldsIndex);
+                    ++fieldsIndex;
 
-                        /// @todo Re-implement insert?
-                        item->databaseFields.insert(DatabaseFieldsHashRaw::uniqueKey(*it), fieldValue);
-                    }
+                    /// @todo Re-implement insert?
+                    item->databaseFields.insert(DatabaseFieldsHashRaw::uniqueKey(*it), fieldValue);
                 }
             }
         }
