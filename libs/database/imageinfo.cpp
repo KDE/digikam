@@ -9,7 +9,7 @@
  * Copyright (C) 2005      by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C) 2007-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2009-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2013 by Michael G. Hansen <mike at mghansen dot de>
+ * Copyright (C)      2013 by Michael G. Hansen <mike at mghansen dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -1581,7 +1581,7 @@ ImageInfo::DatabaseFieldsHashRaw ImageInfo::getDatabaseFieldsRaw(const DatabaseF
             if (fieldValues.isEmpty())
             {
                 m_data.constCastData()->hasVideoMetadata = false;
-                /// @todo purge all video metadata from the hash?
+                m_data.constCastData()->databaseFieldsHashRaw.removeAllFields(DatabaseFields::VideoMetadataAll);
                 m_data.constCastData()->videoMetadataCached = DatabaseFields::VideoMetadataNone;
             }
             else
@@ -1592,13 +1592,12 @@ ImageInfo::DatabaseFieldsHashRaw ImageInfo::getDatabaseFieldsRaw(const DatabaseF
                     const QVariant fieldValue = fieldValues.at(fieldsIndex);
                     ++fieldsIndex;
 
-                    m_data.constCastData()->databaseFieldsHashRaw.insert(DatabaseFieldsHashRaw::uniqueKey(*it), fieldValue);
+                    m_data.constCastData()->databaseFieldsHashRaw.insertField(*it, fieldValue);
                 }
 
                 m_data.constCastData()->videoMetadataCached|=missingVideoMetadata;
             }
         }
-
     }
 
     // We always return all fields, the caller can just retrieve the ones he needs.
