@@ -276,7 +276,7 @@ void ImportDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, cons
 
     if (!d->nameRect.isNull())
     {
-        drawName(p, d->nameRect, info.name);
+        drawName(p, d->nameRect, info.downloadName);
     }
 
     if (!d->modDateRect.isNull())
