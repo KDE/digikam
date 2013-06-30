@@ -25,6 +25,7 @@
 
 // KDE includes
 
+#include <kdebug.h>
 #include <qtest_kde.h>
 
 // Local includes
@@ -101,3 +102,136 @@ void DatabaseFieldsTest::testIteratorsSetOnly()
     DECLARE_ITERATORSETONLY_TEST(ImageComments)
     DECLARE_ITERATORSETONLY_TEST(ImageHistoryInfo)
 }
+
+void DatabaseFieldsTest::testSet()
+{
+    QCOMPARE(Set(ImagesFirst).getImages(), ImagesFirst);
+    QCOMPARE(Set(ImageInformationFirst).getImageInformation(), ImageInformationFirst);
+    QCOMPARE(Set(ImageMetadataFirst).getImageMetadata(), ImageMetadataFirst);
+    QCOMPARE(Set(VideoMetadataFirst).getVideoMetadata(), VideoMetadataFirst);
+    QCOMPARE(Set(ImagePositionsFirst).getImagePositions(), ImagePositionsFirst);
+    QCOMPARE(Set(ImageCommentsFirst).getImageComments(), ImageCommentsFirst);
+    QCOMPARE(Set(ImageHistoryInfoFirst).getImageHistoryInfo(), ImageHistoryInfoFirst);
+}
+
+typedef Hash<Set> SetHash;
+
+SetHash SetHashAddSets(const SetHash& targetIn, const Set& bits)
+{
+    SetHash target(targetIn);
+
+    for (DatabaseFieldsEnumIteratorSetOnly<Images> it(bits.getImages()); !it.atEnd(); ++it)
+    {
+        target.insertField(*it, Set(*it));
+    }
+
+    for (DatabaseFieldsEnumIteratorSetOnly<ImageInformation> it(bits.getImageInformation()); !it.atEnd(); ++it)
+    {
+        target.insertField(*it, Set(*it));
+    }
+
+    for (DatabaseFieldsEnumIteratorSetOnly<ImageMetadata> it(bits.getImageMetadata()); !it.atEnd(); ++it)
+    {
+        target.insertField(*it, Set(*it));
+    }
+
+    for (DatabaseFieldsEnumIteratorSetOnly<VideoMetadata> it(bits.getVideoMetadata()); !it.atEnd(); ++it)
+    {
+        target.insertField(*it, Set(*it));
+    }
+
+    for (DatabaseFieldsEnumIteratorSetOnly<ImageComments> it(bits.getImageComments()); !it.atEnd(); ++it)
+    {
+        target.insertField(*it, Set(*it));
+    }
+
+    for (DatabaseFieldsEnumIteratorSetOnly<ImagePositions> it(bits.getImagePositions()); !it.atEnd(); ++it)
+    {
+        target.insertField(*it, Set(*it));
+    }
+
+    for (DatabaseFieldsEnumIteratorSetOnly<ImageHistoryInfo> it(bits.getImageHistoryInfo()); !it.atEnd(); ++it)
+    {
+        target.insertField(*it, Set(*it));
+    }
+
+    return target;
+}
+
+void DatabaseFieldsTest::testSetHashAddSets()
+{
+    SetHash t;
+    int itemCount = 0;
+
+    QVERIFY(t.isEmpty());
+    t = SetHashAddSets(t, ImagesFirst);
+    ++itemCount;
+    QCOMPARE(t.size(), itemCount);
+    QCOMPARE(t.value(ImagesFirst).getImages(), ImagesFirst);
+
+    t = SetHashAddSets(t, ImagesLast);
+    ++itemCount;
+    QCOMPARE(t.size(), itemCount);
+    QCOMPARE(t.value(ImagesFirst).getImages(), ImagesFirst);
+
+    // test insertion of or`ed values
+    t = SetHashAddSets(t, ImageInformationFirst|ImageInformationLast);
+    itemCount+=2;
+    QCOMPARE(t.size(), itemCount);
+    QCOMPARE(t.value(ImageInformationFirst).getImageInformation(), ImageInformationFirst);
+    QCOMPARE(t.value(ImageInformationLast).getImageInformation(), ImageInformationLast);
+
+    t = SetHashAddSets(t, ImageMetadataFirst);
+    ++itemCount;
+    QCOMPARE(t.size(), itemCount);
+    QCOMPARE(t.value(ImageMetadataFirst).getImageMetadata(), ImageMetadataFirst);
+
+    t = SetHashAddSets(t, VideoMetadataFirst);
+    ++itemCount;
+    QCOMPARE(t.size(), itemCount);
+    QCOMPARE(t.value(VideoMetadataFirst).getVideoMetadata(), VideoMetadataFirst);
+
+    t = SetHashAddSets(t, ImageCommentsFirst);
+    ++itemCount;
+    QCOMPARE(t.size(), itemCount);
+    QCOMPARE(t.value(ImageCommentsFirst).getImageComments(), ImageCommentsFirst);
+
+    t = SetHashAddSets(t, ImagePositionsFirst);
+    ++itemCount;
+    QCOMPARE(t.size(), itemCount);
+    QCOMPARE(t.value(ImagePositionsFirst).getImagePositions(), ImagePositionsFirst);
+
+    t = SetHashAddSets(t, ImageHistoryInfoFirst);
+    ++itemCount;
+    QCOMPARE(t.size(), itemCount);
+    QCOMPARE(t.value(ImageHistoryInfoFirst).getImageHistoryInfo(), ImageHistoryInfoFirst);
+}
+
+
+void DatabaseFieldsTest::testHashRemoveAll()
+{
+    Set setToAdd =
+                Set(ImagesFirst|ImagesLast)
+                .setFields(ImageInformationFirst)
+                .setFields(ImageMetadataFirst)
+                .setFields(VideoMetadataFirst)
+                .setFields(ImageCommentsFirst)
+                .setFields(ImagePositionsFirst|ImagePositionsLast)
+                .setFields(ImageHistoryInfoFirst);
+
+    SetHash t;
+    t = SetHashAddSets(t, setToAdd);
+
+    const int c1 = t.size();
+
+    // test regular remove
+    SetHash t2(t);
+    QCOMPARE(t2.remove(ImagesFirst), 1);
+    QCOMPARE(t2.size(), c1-1);
+
+    // test removeAllFields: First and Last are in the hash, None is not --> 2 entries should be removed
+    SetHash t3(t);
+    QCOMPARE(t3.removeAllFields(ImagesFirst | ImagesLast | ImagesNone), 2);
+    QCOMPARE(t3.size(), c1-2);
+}
+

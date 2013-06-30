@@ -8,6 +8,7 @@
  *
  * Copyright (C) 2007-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2011-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2013 by Michael G. Hansen <mike at mghansen dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -336,7 +337,8 @@ Q_DECLARE_FLAGS(CustomEnum, CustomEnumFlags)
     inline Flag operator^(Flag f) const     { return variable.operator^(f);  } \
     inline Flag operator&(Flag f) const     { return variable.operator&(f);  } \
     inline operator Flag() const            { return variable;               } \
-    inline bool hasFieldsFrom##Flag() const { return variable & Flag##All;   }
+    inline bool hasFieldsFrom##Flag() const { return variable & Flag##All;   } \
+    inline Flag get##Flag() const           { return variable;               }
 
 /**
  * This class provides a set of all DatabasFields enums,
@@ -448,7 +450,17 @@ private:
 };
 
 #define DATABASEFIELDS_HASH_DECLARE_METHODS(Key, method)                                                                            \
+    void insertField(const Key& key, const T& value)           { QHash<unsigned int, T>::insert(method(key), value);              } \
     int remove(const Key& key)                                 { return QHash<unsigned int, T>::remove(method(key));              } \
+    int removeAllFields(const Key& key)                                                                                             \
+    {                                                                                                                               \
+        int removedCount = 0;                                                                                                       \
+        for (DatabaseFieldsEnumIteratorSetOnly<Key> it(key); !it.atEnd(); ++it)                                                     \
+        {                                                                                                                           \
+            removedCount+=remove(*it);                                                                                              \
+        }                                                                                                                           \
+        return removedCount;                                                                                                        \
+    }                                                                                                                               \
     T take(const Key& key)                                     { return QHash<unsigned int, T>::take(method(key));                } \
                                                                                                                                     \
     bool contains(const Key& key) const                        { return QHash<unsigned int, T>::contains(method(key));            } \
