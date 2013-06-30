@@ -965,7 +965,7 @@ TableViewModel::DatabaseFieldsHashRaw TableViewModel::itemDatabaseFieldsRaw(Tabl
                     ++fieldsIndex;
 
                     /// @todo Re-implement insert?
-                    item->databaseFields.insert(DatabaseFieldsHashRaw::uniqueKey(*it), fieldValue);
+                    item->databaseFields.insertField(*it, fieldValue);
                 }
             }
         }
@@ -983,8 +983,7 @@ TableViewModel::DatabaseFieldsHashRaw TableViewModel::itemDatabaseFieldsRaw(Tabl
                     const QVariant fieldValue = fieldValues.at(fieldsIndex);
                     ++fieldsIndex;
 
-                    /// @todo Re-implement insert?
-                    item->databaseFields.insert(DatabaseFieldsHashRaw::uniqueKey(*it), fieldValue);
+                    item->databaseFields.insertField(*it, fieldValue);
                 }
             }
         }
