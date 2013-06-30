@@ -128,7 +128,9 @@ ImageInfoData::ImageInfoData()
     invalid                = false;
 
     videoMetadataCached    = DatabaseFields::VideoMetadataNone;
+    imageMetadataCached    = DatabaseFields::ImageMetadataNone;
     hasVideoMetadata       = true;
+    hasImageMetadata       = true;
 }
 
 ImageInfoData::~ImageInfoData()
@@ -170,7 +172,9 @@ ImageInfo::ImageInfo(const ImageListerRecord& record)
     m_data->fileSizeCached         = m_data->fileSize != -1;
     m_data->imageSizeCached        = true;
     m_data->videoMetadataCached    = DatabaseFields::VideoMetadataNone;
+    m_data->imageMetadataCached    = DatabaseFields::ImageMetadataNone;
     m_data->hasVideoMetadata       = true;
+    m_data->hasImageMetadata       = true;
     m_data->databaseFieldsHashRaw.clear();
 
     if (newlyCreated)
@@ -1570,7 +1574,7 @@ ImageInfo::DatabaseFieldsHashRaw ImageInfo::getDatabaseFieldsRaw(const DatabaseF
     ImageInfoReadLocker readLocker;
     if (requestedSet.hasFieldsFromVideoMetadata() && m_data->hasVideoMetadata)
     {
-        const DatabaseFields::VideoMetadata requestedVideoMetadata = requestedSet;
+        const DatabaseFields::VideoMetadata requestedVideoMetadata = requestedSet.getVideoMetadata();
 
         const DatabaseFields::VideoMetadata missingVideoMetadata = requestedVideoMetadata & ~m_data->videoMetadataCached;
         kDebug()<<QString("videometadata: requested: %1 missing: %3").arg(requestedVideoMetadata, 0, 16).arg(missingVideoMetadata, 0, 16);
@@ -1600,6 +1604,38 @@ ImageInfo::DatabaseFieldsHashRaw ImageInfo::getDatabaseFieldsRaw(const DatabaseF
         }
     }
 
+    if (requestedSet.hasFieldsFromImageMetadata() && m_data->hasImageMetadata)
+    {
+        const DatabaseFields::ImageMetadata requestedImageMetadata = requestedSet.getImageMetadata();
+
+        const DatabaseFields::ImageMetadata missingImageMetadata = requestedImageMetadata & ~m_data->imageMetadataCached;
+        kDebug()<<QString("imagemetadata: requested: %1 missing: %3").arg(requestedImageMetadata, 0, 16).arg(missingImageMetadata, 0, 16);
+        if (missingImageMetadata)
+        {
+            const QVariantList fieldValues = DatabaseAccess().db()->getImageMetadata(m_data->id, missingImageMetadata);
+
+            if (fieldValues.isEmpty())
+            {
+                m_data.constCastData()->hasImageMetadata = false;
+                m_data.constCastData()->databaseFieldsHashRaw.removeAllFields(DatabaseFields::ImageMetadataAll);
+                m_data.constCastData()->imageMetadataCached = DatabaseFields::ImageMetadataNone;
+            }
+            else
+            {
+                int fieldsIndex = 0;
+                for (DatabaseFields::ImageMetadataIteratorSetOnly it(missingImageMetadata); !it.atEnd(); ++it)
+                {
+                    const QVariant fieldValue = fieldValues.at(fieldsIndex);
+                    ++fieldsIndex;
+
+                    m_data.constCastData()->databaseFieldsHashRaw.insertField(*it, fieldValue);
+                }
+
+                m_data.constCastData()->imageMetadataCached|=missingImageMetadata;
+            }
+        }
+    }
+
     // We always return all fields, the caller can just retrieve the ones he needs.
     return m_data->databaseFieldsHashRaw;
 }
@@ -1608,13 +1644,13 @@ QVariant ImageInfo::getDatabaseFieldRaw(const DatabaseFields::Set& requestedFiel
 {
     DatabaseFieldsHashRaw rawHash = getDatabaseFieldsRaw(requestedField);
 
-//     if (requestedField.hasFieldsFromImageMetadata())
-//     {
-//         const DatabaseFields::ImageMetadata requestedFieldFlag = requestedField;
-//         const QVariant value = rawHash.value(requestedFieldFlag);
-//
-//         return value;
-//     }
+    if (requestedField.hasFieldsFromImageMetadata())
+    {
+        const DatabaseFields::ImageMetadata requestedFieldFlag = requestedField;
+        const QVariant value = rawHash.value(requestedFieldFlag);
+
+        return value;
+    }
 
     if (requestedField.hasFieldsFromVideoMetadata())
     {

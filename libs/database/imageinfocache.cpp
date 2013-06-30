@@ -317,6 +317,14 @@ void ImageInfoCache::slotImageChanged(const ImageChangeset& changeset)
 
                 (*it)->databaseFieldsHashRaw.removeAllFields(changedVideoMetadata);
             }
+
+            if (changes.hasFieldsFromImageMetadata())
+            {
+                const DatabaseFields::ImageMetadata changedImageMetadata = changes.getImageMetadata();
+                (*it)->imageMetadataCached&=~changedImageMetadata;
+
+                (*it)->databaseFieldsHashRaw.removeAllFields(changedImageMetadata);
+            }
         }
     }
 }

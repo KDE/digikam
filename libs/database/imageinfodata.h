@@ -148,7 +148,9 @@ public:
     /// @todo Currently only 7 bits of VideoMetadataField are used,
     ///       we could store only a byte instead.
     DatabaseFields::VideoMetadata videoMetadataCached;
+    DatabaseFields::ImageMetadata imageMetadataCached;
     bool                   hasVideoMetadata       : 1;
+    bool                   hasImageMetadata       : 1;
 
     typedef DatabaseFields::Hash<QVariant> DatabaseFieldsHashRaw;
     DatabaseFieldsHashRaw databaseFieldsHashRaw;
