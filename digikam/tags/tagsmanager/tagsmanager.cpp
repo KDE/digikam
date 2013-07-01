@@ -9,6 +9,11 @@
 #include <ktoolbar.h>
 #include <kmainwindow.h>
 
+#include "tagpropwidget.h"
+
+namespace Digikam
+{
+
 TagsManager::TagsManager()
     : KDialog(0)
 {
@@ -39,14 +44,16 @@ void TagsManager::setupUi(KDialog *Dialog)
      tagPixmap = new QLabel();
      tagPixmap->setText("Tag Pixmap");
      tagPixmap->setMaximumWidth(40);
-     tagPixmap->setPixmap(KIcon("tag").pixmap());
+     tagPixmap->setPixmap(KIcon("tag").pixmap(30,30));
 
      lineEdit = new QLineEdit();
      lineEdit->setText(i18n("Search..."));
+
      lineEdit->setMaximumWidth(200);
 
      digikamPixmap = new QLabel();
-     digikamPixmap->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/about/top-left-digikam.png")).scaled(40,40,Qt::KeepAspectRatio));
+     QPixmap dpix (KStandardDirs::locate("data", "digikam/about/top-left-digikam.png"));
+     digikamPixmap->setPixmap(dpix.scaled(40,40,Qt::KeepAspectRatio));
      digikamPixmap->setMaximumHeight(40);
      digikamPixmap->setScaledContents(true);
 
@@ -61,6 +68,7 @@ void TagsManager::setupUi(KDialog *Dialog)
      tagmngrLabel = new QLabel(Dialog);
      tagmngrLabel->setObjectName(QString::fromUtf8("label"));
      tagmngrLabel->setText(i18n("Tags Manager"));
+     tagmngrLabel->setAlignment(Qt::AlignCenter);
      QFont font2;
      font2.setPointSize(12);
      font2.setBold(true);
@@ -69,7 +77,7 @@ void TagsManager::setupUi(KDialog *Dialog)
      tagmngrLabel->setAutoFillBackground(true);
 
      treeWindow = new KMainWindow();
-     toolbar = new KToolBar(treeWindow);
+     mainToolbar = new KToolBar(treeWindow);
 
      addAction = new KAction(i18n("Add"),this);
      delAction = new KAction(i18n("Del"),this);
@@ -82,12 +90,28 @@ void TagsManager::setupUi(KDialog *Dialog)
 
      tagProperties = new KAction(i18n("Tag Properties"),this);
 
-     toolbar->addAction(addAction);
-     toolbar->addAction(delAction);
-     toolbar->addAction(organizeAction);
-     toolbar->addAction(syncexportAction);
-     toolbar->addAction(tagProperties);
-     treeWindow->addToolBar(toolbar);
+     mainToolbar->addAction(addAction);
+     mainToolbar->addAction(delAction);
+     mainToolbar->addAction(organizeAction);
+     mainToolbar->addAction(syncexportAction);
+     //mainToolbar->addAction(tagProperties);
+     treeWindow->addToolBar(mainToolbar);
+
+     SidebarSplitter* splitter    = new SidebarSplitter;
+     splitter->setFrameStyle( QFrame::NoFrame );
+     splitter->setFrameShadow( QFrame::Plain );
+     splitter->setFrameShape( QFrame::NoFrame );
+     splitter->setOpaqueResize(false);
+
+     rightSidebar = new Sidebar(treeWindow, splitter, KMultiTabBar::Right);
+     rightSidebar->setObjectName("Digikam Left Sidebar");
+     splitter->setParent(this);
+
+     TagPropWidget* tagprop = new TagPropWidget(this);
+     rightSidebar->appendTab(tagprop,dpix,"Test");
+     //rightToolBar = new KToolBar(treeWindow);
+     //rightToolBar->addAction(tagProperties);
+     //treeWindow->addToolBar(Qt::RightToolBarArea,rightToolBar);
 
      QHBoxLayout* thirdLine = new QHBoxLayout(Dialog);
      listView = new QListView(Dialog);
@@ -110,10 +134,14 @@ void TagsManager::setupUi(KDialog *Dialog)
      thirdLine->setStretchFactor(listLayout,3);
      thirdLine->addWidget(treeWindow);
      thirdLine->setStretchFactor(treeWindow,9);
+     //thirdLine->addWidget(tagprop);
+     thirdLine->addWidget(rightSidebar);
 
      mainLayout->addLayout(firstLine);
      mainLayout->addLayout(thirdLine);
 
      this->mainWidget()->setLayout(mainLayout);
 
- }
+}
+
+} // namespace Digikam

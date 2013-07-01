@@ -10,9 +10,14 @@
 #include <QtGui/QToolButton>
 #include <QTreeView>
 #include <kactionmenu.h>
+#include <sidebar.h>
 
 class KMainWindow;
 class KToolBar;
+
+namespace Digikam
+{
+
 
 class TagsManager : public KDialog
 {
@@ -31,7 +36,9 @@ public:
     QLineEdit       *lineEdit;
 
     KMainWindow     *treeWindow;
-    KToolBar        *toolbar;
+    KToolBar        *mainToolbar;
+    //KToolBar        *rightToolBar;
+    Sidebar*        rightSidebar;
     KActionMenu     *organizeAction;
     KActionMenu     *syncexportAction;
     KAction*        tagProperties;
@@ -39,3 +46,5 @@ public:
     KAction*        delAction;
     QListView *listView;
 };
+
+}
