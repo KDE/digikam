@@ -207,8 +207,7 @@ private Q_SLOTS:
     void slotProgressTimerDone();
 
     void slotNewSelection(bool);
-    void slotImageSelected(const CamItemInfoList& selection, bool hasPrev, bool hasNext,
-                           const CamItemInfoList& listAll);
+    void slotImageSelected(const CamItemInfoList& selection, const CamItemInfoList& listAll);
 
     void slotItemsSelected(CamItemInfo info, bool selected);
 

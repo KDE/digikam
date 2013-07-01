@@ -164,7 +164,7 @@ RenameCustomizer::RenameCustomizer(QWidget* const parent, const QString& cameraT
             this, SIGNAL(signalChanged()));
 
     connect(d->advancedRenameWidget, SIGNAL(signalTextChanged(QString)),
-            this, SLOT(slotRenameOptionsChanged()));
+            this, SLOT(slotCustomRenameChanged()));
 
     // --------------------------------------------------------
 
@@ -266,6 +266,12 @@ void RenameCustomizer::slotRenameOptionsChanged()
 
     d->changedTimer->setSingleShot(true);
     d->changedTimer->start(500);
+}
+
+void RenameCustomizer::slotCustomRenameChanged()
+{
+    d->advancedRenameManager->parseFiles();
+    slotRenameOptionsChanged();
 }
 
 void RenameCustomizer::readSettings()

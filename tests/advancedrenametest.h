@@ -103,6 +103,8 @@ private Q_SLOTS:
     void newFileList_tests_data();
     void newFileList_tests();
 
+    void indexOfFile_sorting_data();
+    void indexOfFile_sorting();
     void indexOfFile_invalid_input_returns_minus_one();
     void indexOfFolder_invalid_input_returns_minus_one();
     void indexOfFileGroup_invalid_input_returns_minus_one();
@@ -113,8 +115,10 @@ private Q_SLOTS:
     void sortAction_name_desc();
     void sortAction_size_asc();
     void sortAction_size_desc();
+    /*
     void sortAction_date_asc();
     void sortAction_date_desc();
+    */
 
     /*
      * OTHER TESTS

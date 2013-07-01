@@ -55,7 +55,6 @@
 #include "daboutdata.h"
 #include "splashscreen.h"
 #include "dzoombar.h"
-#include "statusnavigatebar.h"
 #include "digikamview.h"
 
 class KToolBarPopupAction;
@@ -187,7 +186,6 @@ public:
         tagsActionManager(0),
         zoomBar(0),
         statusLabel(0),
-        statusNavigateBar(0),
         about(0),
         modelCollection(0)
     {
@@ -323,7 +321,6 @@ public:
     TagsActionMngr*                     tagsActionManager;
     DZoomBar*                           zoomBar;
     KSqueezedTextLabel*                 statusLabel;
-    StatusNavigateBar*                  statusNavigateBar;
     QString                             statusBarSelectionText;
     KComboBox*                          mapViewSwitcher;
 

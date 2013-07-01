@@ -87,6 +87,7 @@ private Q_SLOTS:
 
     void slotRadioButtonClicked(int);
     void slotRenameOptionsChanged();
+    void slotCustomRenameChanged();
 
 private:
 

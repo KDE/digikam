@@ -59,7 +59,6 @@
 #include "scriptingsettings.h"
 #include "sidebar.h"
 #include "filterstatusbar.h"
-#include "statusnavigatebar.h"
 #include "statusprogressbar.h"
 #include "importview.h"
 
@@ -125,7 +124,6 @@ public:
         rightSideBar(0),
         zoomBar(0),
         statusProgressBar(0),
-        statusNavigateBar(0),
         albumLibraryFreeSpace(0),
         cameraFreeSpace(0),
         progressTimer(0),
@@ -223,7 +221,6 @@ public:
 
     DZoomBar*                     zoomBar;
     StatusProgressBar*            statusProgressBar;
-    StatusNavigateBar*            statusNavigateBar;
 
     FreeSpaceWidget*              albumLibraryFreeSpace;
     FreeSpaceWidget*              cameraFreeSpace;
