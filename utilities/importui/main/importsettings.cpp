@@ -6,7 +6,8 @@
  * Date        : 2012-07-15
  * Description : Settings for the import tool
  *
- * Copyright (C) 2012 by Islam Wazery <wazery at ubuntu dot com>
+ * Copyright (C) 2012      by Islam Wazery <wazery at ubuntu dot com>
+ * Copyright (C) 2012-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -45,8 +46,7 @@ public:
     Private() :
         iconShowName(true),
         iconShowSize(false),
-        iconShowDate(false),
-        iconShowModDate(false),
+        iconShowDate(true),
         iconShowTitle(false),
         iconShowResolution(false),
         iconShowTags(false),
@@ -75,7 +75,7 @@ public:
         previewLoadFullImageSize(false),
         previewItemsWhileDownload(false),
         previewShowIcons(true),
-        //ratingFilterCond(0),
+//      ratingFilterCond(0),
         showThumbbar(false)
     {
     }
@@ -90,7 +90,6 @@ public:
     static const QString                configIconShowResolutionEntry;
     static const QString                configIconShowSizeEntry;
     static const QString                configIconShowDateEntry;
-    static const QString                configIconShowModificationDateEntry;
     static const QString                configIconShowTitleEntry;
     static const QString                configIconShowTagsEntry;
     static const QString                configIconShowOverlaysEntry;
@@ -122,7 +121,6 @@ public:
     bool                                iconShowName;
     bool                                iconShowSize;
     bool                                iconShowDate;
-    bool                                iconShowModDate;
     bool                                iconShowTitle;
     bool                                iconShowResolution;
     bool                                iconShowTags;
@@ -176,7 +174,6 @@ const QString ImportSettings::Private::configIconShowNameEntry("Icon Show Name")
 //const QString ImportSettings::Private::configIconShowResolutionEntry("Icon Show Resolution");
 const QString ImportSettings::Private::configIconShowSizeEntry("Icon Show Size");
 const QString ImportSettings::Private::configIconShowDateEntry("Icon Show Date");
-const QString ImportSettings::Private::configIconShowModificationDateEntry("Icon Show Modification Date");
 const QString ImportSettings::Private::configIconShowTitleEntry("Icon Show Title");
 const QString ImportSettings::Private::configIconShowTagsEntry("Icon Show Tags");
 const QString ImportSettings::Private::configIconShowRatingEntry("Icon Show Rating");
@@ -246,8 +243,7 @@ void ImportSettings::init()
 
     d->iconShowName                 = true;
     d->iconShowSize                 = false;
-    d->iconShowDate                 = false;
-    d->iconShowModDate              = true;
+    d->iconShowDate                 = true;
     d->iconShowTitle                = true;
     d->iconShowImageFormat          = false;
     d->iconShowOverlays             = true;
@@ -295,7 +291,6 @@ void ImportSettings::readSettings()
 //  d->iconShowResolution           = group.readEntry(d->configIconShowResolutionEntry,           false);
     d->iconShowSize                 = group.readEntry(d->configIconShowSizeEntry,                 false);
     d->iconShowDate                 = group.readEntry(d->configIconShowDateEntry,                 true);
-    d->iconShowModDate              = group.readEntry(d->configIconShowModificationDateEntry,     true);
     d->iconShowTitle                = group.readEntry(d->configIconShowTitleEntry,                true);
     d->iconShowTags                 = group.readEntry(d->configIconShowTagsEntry,                 true);
     d->iconShowOverlays             = group.readEntry(d->configIconShowOverlaysEntry,             true);
@@ -347,7 +342,6 @@ void ImportSettings::saveSettings()
     group.writeEntry(d->configIconShowNameEntry,                 d->iconShowName);
     group.writeEntry(d->configIconShowSizeEntry,                 d->iconShowSize);
     group.writeEntry(d->configIconShowDateEntry,                 d->iconShowDate);
-    group.writeEntry(d->configIconShowModificationDateEntry,     d->iconShowModDate);
     group.writeEntry(d->configIconShowTitleEntry,                d->iconShowTitle);
     group.writeEntry(d->configIconShowTagsEntry,                 d->iconShowTags);
     group.writeEntry(d->configIconShowOverlaysEntry,             d->iconShowOverlays);
@@ -484,14 +478,14 @@ bool ImportSettings::getIconShowTags() const
     return d->iconShowTags;
 }
 
-void ImportSettings::setIconShowModDate(bool val)
+void ImportSettings::setIconShowDate(bool val)
 {
-    d->iconShowModDate = val;
+    d->iconShowDate = val;
 }
 
-bool ImportSettings::getIconShowModDate() const
+bool ImportSettings::getIconShowDate() const
 {
-    return d->iconShowModDate;
+    return d->iconShowDate;
 }
 
 void ImportSettings::setIconShowRating(bool val)
@@ -679,8 +673,8 @@ bool ImportSettings::showToolTipsIsValid() const
             d->tooltipShowPhotoFlash ||
             d->tooltipShowPhotoWb    ||
             d->tooltipShowFolderName ||
-            d->tooltipShowLabelRating) /*||*/
-            //d->tooltipShowTags)
+            d->tooltipShowLabelRating) /*||
+            d->tooltipShowTags)*/
         {
             return true;
         }

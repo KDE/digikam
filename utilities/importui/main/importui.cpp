@@ -1579,7 +1579,7 @@ void ImportUI::slotDownloaded(const QString& folder, const QString& file, int st
             DownloadHistory::setDownloaded(d->controller->cameraMD5ID(),
                                            info.name,
                                            info.size,
-                                           info.mtime);
+                                           info.ctime);
         }
     }
 
@@ -1637,7 +1637,7 @@ void ImportUI::slotMarkAsDownloaded()
         DownloadHistory::setDownloaded(d->controller->cameraMD5ID(),
                                        info.name,
                                        info.size,
-                                       info.mtime);
+                                       info.ctime);
     }
 }
 
@@ -1694,10 +1694,11 @@ void ImportUI::slotLocked(const QString& folder, const QString& file, bool statu
 void ImportUI::slotDownloadNameChanged()
 {
     CamItemInfoList list = d->view->allItems();
+
     foreach (CamItemInfo info, list)
     {
         CamItemInfo& refInfo = d->view->camItemInfoRef(info.folder, info.name);
-        refInfo.downloadName = d->renameCustomizer->newName(info.name, info.mtime);
+        refInfo.downloadName = d->renameCustomizer->newName(info.name, info.ctime);
     }
 
     // connected to slotUpdateDownloadNames, and used externally
@@ -2003,16 +2004,18 @@ bool ImportUI::downloadCameraItems(PAlbum* pAlbum, bool onlySelected, bool delet
     if (!d->renameCustomizer->useDefault())
     {
         QList<ParseSettings> renameFiles;
+
         foreach(CamItemInfo info, list)
         {
             if (onlySelected && (d->view->isSelected(info.url())))
             {
                 ParseSettings parseSettings;
-                parseSettings.fileUrl = info.name;
-                parseSettings.creationTime = info.mtime;
+                parseSettings.fileUrl      = info.name;
+                parseSettings.creationTime = info.ctime;
                 renameFiles.append(parseSettings);
             }
         }
+
         d->renameCustomizer->renameManager()->addFiles(renameFiles);
         d->renameCustomizer->renameManager()->parseFiles();
     }
@@ -2033,8 +2036,8 @@ bool ImportUI::downloadCameraItems(PAlbum* pAlbum, bool onlySelected, bool delet
         settings.pickLabel  = info.pickLabel;
         settings.colorLabel = info.colorLabel;
         settings.rating     = info.rating;
-        dateTime            = info.mtime;
-        downloadName        = d->renameCustomizer->newName(info.name, info.mtime);
+        dateTime            = info.ctime;
+        downloadName        = d->renameCustomizer->newName(info.name, info.ctime);
 
         KUrl downloadUrl(url);
 
@@ -2122,9 +2125,10 @@ bool ImportUI::createSubAlbums(KUrl& downloadUrl, const CamItemInfo& info)
     return success;
 }
 
-bool ImportUI::createSubAlbum(KUrl &downloadUrl, const QString &subalbum, const QDate &date)
+bool ImportUI::createSubAlbum(KUrl& downloadUrl, const QString& subalbum, const QDate& date)
 {
     QString errMsg;
+
     if (!createAutoAlbum(downloadUrl, subalbum, date, errMsg))
     {
         KMessageBox::error(this, errMsg);
@@ -2135,28 +2139,28 @@ bool ImportUI::createSubAlbum(KUrl &downloadUrl, const QString &subalbum, const 
     return true;
 }
 
-bool ImportUI::createDateBasedSubAlbum(KUrl &downloadUrl, const CamItemInfo &info)
+bool ImportUI::createDateBasedSubAlbum(KUrl& downloadUrl, const CamItemInfo& info)
 {
     QString dirName;
-    QDateTime dateTime = info.mtime;
+    QDateTime dateTime = info.ctime;
 
     switch (d->albumCustomizer->folderDateFormat())
     {
-    case AlbumCustomizer::TextDateFormat:
-        dirName = dateTime.date().toString(Qt::TextDate);
-        break;
+        case AlbumCustomizer::TextDateFormat:
+            dirName = dateTime.date().toString(Qt::TextDate);
+            break;
 
-    case AlbumCustomizer::LocalDateFormat:
-        dirName = dateTime.date().toString(Qt::LocalDate);
-        break;
+        case AlbumCustomizer::LocalDateFormat:
+            dirName = dateTime.date().toString(Qt::LocalDate);
+            break;
 
-    case AlbumCustomizer::IsoDateFormat:
-        dirName = dateTime.date().toString(Qt::ISODate);
-        break;
+        case AlbumCustomizer::IsoDateFormat:
+            dirName = dateTime.date().toString(Qt::ISODate);
+            break;
 
-    default:        // Custom
-        dirName = dateTime.date().toString(d->albumCustomizer->customDateFormat());
-        break;
+        default:        // Custom
+            dirName = dateTime.date().toString(d->albumCustomizer->customDateFormat());
+            break;
     }
 
     // See B.K.O #136927 : we need to support file system which do not
@@ -2166,7 +2170,7 @@ bool ImportUI::createDateBasedSubAlbum(KUrl &downloadUrl, const CamItemInfo &inf
     return createSubAlbum(downloadUrl, dirName, dateTime.date());
 }
 
-bool ImportUI::createExtBasedSubAlbum(KUrl& downloadUrl, const CamItemInfo &info)
+bool ImportUI::createExtBasedSubAlbum(KUrl& downloadUrl, const CamItemInfo& info)
 {
     // We use the target file name to compute sub-albums name to take a care about
     // conversion on the fly option.
@@ -2177,7 +2181,7 @@ bool ImportUI::createExtBasedSubAlbum(KUrl& downloadUrl, const CamItemInfo &info
     QString subAlbum = fi.suffix().toUpper();
 
     if (fi.suffix().toUpper() == QString("JPEG") ||
-            fi.suffix().toUpper() == QString("JPE"))
+        fi.suffix().toUpper() == QString("JPE"))
     {
         subAlbum = QString("JPG");
     }
@@ -2188,8 +2192,8 @@ bool ImportUI::createExtBasedSubAlbum(KUrl& downloadUrl, const CamItemInfo &info
     }
 
     if (fi.suffix().toUpper() == QString("MPEG") ||
-            fi.suffix().toUpper() == QString("MPE") ||
-            fi.suffix().toUpper() == QString("MPO"))
+        fi.suffix().toUpper() == QString("MPE") ||
+        fi.suffix().toUpper() == QString("MPO"))
     {
         subAlbum = QString("MPG");
     }
@@ -2198,7 +2202,7 @@ bool ImportUI::createExtBasedSubAlbum(KUrl& downloadUrl, const CamItemInfo &info
     // handle upper case properly.
     subAlbum = subAlbum.toLower();
 
-    return createSubAlbum(downloadUrl, subAlbum, info.mtime.date());
+    return createSubAlbum(downloadUrl, subAlbum, info.ctime.date());
 }
 
 void ImportUI::slotDeleteNew()
@@ -2282,17 +2286,20 @@ void ImportUI::slotNewSelection(bool hasSelection)
     {
         QList<ParseSettings> renameFiles;
         CamItemInfoList list = hasSelection ? d->view->selectedCamItemInfos() : d->view->allItems();
+
         foreach(CamItemInfo info, list)
         {
             ParseSettings parseSettings;
             parseSettings.fileUrl = info.name;
-            parseSettings.creationTime = info.mtime;
+            parseSettings.creationTime = info.ctime;
             renameFiles.append(parseSettings);
         }
+
         d->renameCustomizer->renameManager()->reset();
         d->renameCustomizer->renameManager()->addFiles(renameFiles);
         d->renameCustomizer->renameManager()->parseFiles();
     }
+
     slotDownloadNameChanged();
 
     unsigned long fSize = 0;
@@ -2307,45 +2314,45 @@ void ImportUI::slotImageSelected(const CamItemInfoList& selection, const CamItem
 
     switch (selection.count())
     {
-    case 0:
-    {
-        d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode, i18np("No item selected (%1 item)",
-                                                                                 "No item selected (%1 items)",
-                                                                                 num_images));
-
-        d->rightSideBar->slotNoCurrentItem();
-        break;
-    }
-    case 1:
-    {
-        // if selected item is in the list of item which will be deleted, set no current item
-        if (!d->currentlyDeleting.contains(selection.first().folder + selection.first().name))
+        case 0:
         {
-            d->rightSideBar->itemChanged(selection.first(), DMetadata());
-            d->controller->getMetadata(selection.first().folder, selection.first().name);
-
-            int index = listAll.indexOf(selection.first()) + 1;
-
-            d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode, selection.first().url().fileName()
-                                                  + i18n(" (%1 of %2)", index, num_images));
-        }
-        else
-        {
-            d->rightSideBar->slotNoCurrentItem();
             d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode, i18np("No item selected (%1 item)",
                                                                                      "No item selected (%1 items)",
                                                                                      num_images));
-        }
 
-        break;
-    }
-    default:
-    {
-        d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode, i18np("%2/%1 item selected",
-                                                                                 "%2/%1 items selected",
-                                                                                 num_images, selection.count()));
-        break;
-    }
+            d->rightSideBar->slotNoCurrentItem();
+            break;
+        }
+        case 1:
+        {
+            // if selected item is in the list of item which will be deleted, set no current item
+            if (!d->currentlyDeleting.contains(selection.first().folder + selection.first().name))
+            {
+                d->rightSideBar->itemChanged(selection.first(), DMetadata());
+                d->controller->getMetadata(selection.first().folder, selection.first().name);
+
+                int index = listAll.indexOf(selection.first()) + 1;
+
+                d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode, selection.first().url().fileName()
+                                                      + i18n(" (%1 of %2)", index, num_images));
+            }
+            else
+            {
+                d->rightSideBar->slotNoCurrentItem();
+                d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode, i18np("No item selected (%1 item)",
+                                                                                         "No item selected (%1 items)",
+                                                                                         num_images));
+            }
+
+            break;
+        }
+        default:
+        {
+            d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode, i18np("%2/%1 item selected",
+                                                                                     "%2/%1 items selected",
+                                                                                     num_images, selection.count()));
+            break;
+        }
     }
 
     slotNewSelection(d->view->selectedCamItemInfos().count() > 0);
@@ -2400,6 +2407,7 @@ void ImportUI::autoRotateItems()
     }
 
     ImageInfoList list;
+
     foreach (CamItemInfo info, d->autoRotateItemsList)
     {
         //TODO: Needs test for Gphoto items.
@@ -2435,7 +2443,7 @@ bool ImportUI::createAutoAlbum(const KUrl& parentURL, const QString& sub,
 
     // looks like the directory does not exist, try to create it
 
-    PAlbum* parent = AlbumManager::instance()->findPAlbum(parentURL);
+    PAlbum* const parent = AlbumManager::instance()->findPAlbum(parentURL);
 
     if (!parent)
     {
@@ -2626,14 +2634,14 @@ void ImportUI::toogleShowBar()
 {
     switch (d->view->viewMode())
     {
-    case ImportStackedView::PreviewImageMode:
-    case ImportStackedView::MediaPlayerMode:
-        d->showBarAction->setEnabled(true);
-        break;
+        case ImportStackedView::PreviewImageMode:
+        case ImportStackedView::MediaPlayerMode:
+            d->showBarAction->setEnabled(true);
+            break;
 
-    default:
-        d->showBarAction->setEnabled(false);
-        break;
+        default:
+            d->showBarAction->setEnabled(false);
+            break;
     }
 }
 

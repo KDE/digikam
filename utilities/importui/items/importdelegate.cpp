@@ -6,7 +6,8 @@
  * Date        : 2012-07-08
  * Description : Qt item view for images - the delegate
  *
- * Copyright (C) 2012 by Islam Wazery <wazery at ubuntu dot com>
+ * Copyright (C) 2012      by Islam Wazery <wazery at ubuntu dot com>
+ * Copyright (C) 2012-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -49,11 +50,11 @@ namespace Digikam
 void ImportDelegate::ImportDelegatePrivate::clearRects()
 {
     ItemViewImportDelegatePrivate::clearRects();
-    modDateRect          = QRect(0, 0, 0, 0);
+    dateRect             = QRect(0, 0, 0, 0);
     pixmapRect           = QRect(0, 0, 0, 0);
     nameRect             = QRect(0, 0, 0, 0);
-    //titleRect            = QRect(0, 0, 0, 0);
-    //commentsRect         = QRect(0, 0, 0, 0);
+//  titleRect            = QRect(0, 0, 0, 0);
+//  commentsRect         = QRect(0, 0, 0, 0);
     resolutionRect       = QRect(0, 0, 0, 0);
     sizeRect             = QRect(0, 0, 0, 0);
     downloadRect         = QRect(0, 0, 0, 0);
@@ -208,7 +209,7 @@ QPixmap ImportDelegate::retrieveThumbnailPixmap(const QModelIndex& index, int th
     // set requested thumbnail size
     model->setData(index, thumbnailSize, ImportImageModel::ThumbnailRole);
     // get data from model
-    QVariant thumbData = index.data(ImportImageModel::ThumbnailRole);
+    QVariant thumbData        = index.data(ImportImageModel::ThumbnailRole);
 
     return thumbData.value<QPixmap>();
 }
@@ -279,9 +280,9 @@ void ImportDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, cons
         drawName(p, d->nameRect, info.downloadName);
     }
 
-    if (!d->modDateRect.isNull())
+    if (!d->dateRect.isNull())
     {
-        drawModificationDate(p, d->modDateRect, info.mtime);
+        drawCreationDate(p, d->dateRect, info.ctime);
     }
 
     if (!d->sizeRect.isNull())
@@ -481,7 +482,7 @@ QRect ImportDelegate::actualPixmapRect(const QModelIndex& index) const
 {
     Q_D(const ImportDelegate);
     // We do not recompute if not found. Assumption is cache is always properly updated.
-    QRect* rect = d->actualPixmapRectCache.object(index.row());
+    QRect* const rect = d->actualPixmapRectCache.object(index.row());
 
     if (rect)
     {
@@ -496,7 +497,7 @@ QRect ImportDelegate::actualPixmapRect(const QModelIndex& index) const
 void ImportDelegate::updateActualPixmapRect(const QModelIndex& index, const QRect& rect)
 {
     Q_D(ImportDelegate);
-    QRect* old = d->actualPixmapRectCache.object(index.row());
+    QRect* const old = d->actualPixmapRectCache.object(index.row());
 
     if (!old || *old != rect)
     {
@@ -702,18 +703,18 @@ void ImportNormalDelegate::updateRects()
 {
     Q_D(ImportNormalDelegate);
 
-    int y                                = d->margin;
-    d->pixmapRect                        = QRect(d->margin, y, d->contentWidth, d->contentWidth);
-    y                                    = d->pixmapRect.bottom();
-    d->imageInformationRect              = QRect(d->margin, y, d->contentWidth, 0);
-    const ImportSettings* importSettings = ImportSettings::instance();
-    d->drawImageFormat                   = importSettings->getIconShowImageFormat();
-    const int iconSize                   = KIconLoader::SizeSmall;
+    int y                                      = d->margin;
+    d->pixmapRect                              = QRect(d->margin, y, d->contentWidth, d->contentWidth);
+    y                                          = d->pixmapRect.bottom();
+    d->imageInformationRect                    = QRect(d->margin, y, d->contentWidth, 0);
+    const ImportSettings* const importSettings = ImportSettings::instance();
+    d->drawImageFormat                         = importSettings->getIconShowImageFormat();
+    const int iconSize                         = KIconLoader::SizeSmall;
 
     d->pickLabelRect   = QRect(d->margin, y, iconSize, iconSize);
-    //TODO: d->groupRect       = QRect(d->contentWidth - iconSize, y, iconSize, iconSize);
-    d->downloadRect     =  QRect(d->contentWidth - iconSize - 14, d->pixmapRect.top(), iconSize, iconSize);
-    d->lockRect         =  QRect(d->contentWidth - iconSize + 2, d->pixmapRect.top(), iconSize, iconSize);
+//  d->groupRect       = QRect(d->contentWidth - iconSize, y, iconSize, iconSize); // TODO
+    d->downloadRect    =  QRect(d->contentWidth - iconSize - 14, d->pixmapRect.top(), iconSize, iconSize);
+    d->lockRect        =  QRect(d->contentWidth - iconSize + 2, d->pixmapRect.top(), iconSize, iconSize);
 
     if (importSettings->getIconShowRating())
     {
@@ -727,10 +728,10 @@ void ImportNormalDelegate::updateRects()
         y           = d->nameRect.bottom();
     }
 
-    if (importSettings->getIconShowModDate())
+    if (importSettings->getIconShowDate())
     {
-        d->modDateRect = QRect(d->margin, y, d->contentWidth, d->oneRowXtraRect.height());
-        y              = d->modDateRect.bottom();
+        d->dateRect = QRect(d->margin, y, d->contentWidth, d->oneRowXtraRect.height());
+        y           = d->dateRect.bottom();
     }
 
     //TODO: Add resolution entry in importSettings.

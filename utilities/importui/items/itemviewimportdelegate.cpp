@@ -6,7 +6,8 @@
  * Date        : 2012-07-08
  * Description : Qt item view for images - the delegate
  *
- * Copyright (C) 2012 by Islam Wazery <wazery at ubuntu dot com>
+ * Copyright (C) 2012      by Islam Wazery <wazery at ubuntu dot com>
+ * Copyright (C) 2012-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -309,12 +310,12 @@ void ItemViewImportDelegate::drawName(QPainter* p,const QRect& nameRect, const Q
     p->drawText(nameRect, Qt::AlignCenter, name);//squeezedTextCached(p, nameRect.width(), name));
 }
 
-void ItemViewImportDelegate::drawModificationDate(QPainter* p, const QRect& dateRect, const QDateTime& date) const
+void ItemViewImportDelegate::drawCreationDate(QPainter* p, const QRect& dateRect, const QDateTime& date) const
 {
     Q_D(const ItemViewImportDelegate);
     p->setFont(d->fontXtra);
     QString str = dateToString(date);
-    str         = i18nc("date of last image modification", "modified: %1",str);
+    str         = i18nc("date of image creation", "created: %1", str);
     p->drawText(dateRect, Qt::AlignCenter, str);//squeezedTextCached(p, dateRect.width(), str));
 }
 
@@ -325,7 +326,7 @@ void ItemViewImportDelegate::drawImageFormat(QPainter* p, const QRect& r, const 
     if (!mime.isEmpty() && !r.isNull())
     {
         QString type = mime.split('/').at(1);
-        type = ImageScanner::formatToString(type);
+        type         = ImageScanner::formatToString(type);
 
         p->save();
 
@@ -408,6 +409,7 @@ void ItemViewImportDelegate::drawPickLabelIcon(QPainter* p, const QRect& r, int 
         {
             icon = KIconLoader::global()->loadIcon("flag-green", KIconLoader::NoGroup, r.width());
         }
+
         icon.paint(p, r);
     }
 }
@@ -474,10 +476,12 @@ void ItemViewImportDelegate::drawDownloadIndicator(QPainter* p, const QRect& r, 
 void ItemViewImportDelegate::drawLockIndicator(QPainter* p, const QRect& r, int lockStatus) const
 {
     QIcon icon;
+
     if (lockStatus == 0)
     {
         icon = KIconLoader::global()->loadIcon("object-locked", KIconLoader::NoGroup, KIconLoader::SizeSmall);
     }
+
     if (lockStatus == 1)
     {
         icon = KIconLoader::global()->loadIcon("object-unlocked", KIconLoader::NoGroup, KIconLoader::SizeSmall);
@@ -703,6 +707,5 @@ QPixmap ItemViewImportDelegate::ratingPixmap(int rating, bool selected) const
         return d->ratingPixmaps.at(rating);
     }
 }
-
 
 } // namespace Digikam

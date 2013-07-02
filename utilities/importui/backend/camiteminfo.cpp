@@ -7,7 +7,7 @@
  * Description : camera item info container
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -64,7 +64,7 @@ bool CamItemInfo::isNull() const
            name.isNull()                         &&
            folder.isNull()                       &&
            mime.isNull()                         &&
-           mtime.isNull()                        &&
+           ctime.isNull()                        &&
            photoInfo.isNull()                    &&
            downloadName.isNull()                 &&
            tagIds.isEmpty();
@@ -88,7 +88,7 @@ bool CamItemInfo::operator==(const CamItemInfo& info) const
     bool b6  = name             == info.name;
     bool b7  = folder           == info.folder;
     bool b8  = mime             == info.mime;
-    bool b9  = mtime            == info.mtime;
+    bool b9  = ctime            == info.ctime;
     bool b10 = photoInfo        == info.photoInfo;
     bool b11 = id               == info.id;
     bool b12 = rating           == info.rating;
@@ -104,12 +104,11 @@ bool CamItemInfo::operator!=(const CamItemInfo& info) const
     return !operator==(info);
 }
 
-
 QDataStream& operator<<(QDataStream& ds, const CamItemInfo& info)
 {
     ds << info.name;
     ds << info.folder;
-    ds << info.mtime;
+    ds << info.ctime;
     ds << info.mime;
     ds << info.size;
     ds << info.width;
@@ -132,7 +131,7 @@ QDataStream& operator>>(QDataStream& ds, CamItemInfo& info)
 {
     ds >> info.name;
     ds >> info.folder;
-    ds >> info.mtime;
+    ds >> info.ctime;
     ds >> info.mime;
     ds >> info.size;
     ds >> info.width;
@@ -169,8 +168,8 @@ QDebug operator<<(QDebug dbg, const CamItemInfo& info)
                   << info.folder << ", ";
     dbg.nospace() << "CamItemInfo::mime: "
                   << info.mime << ", ";
-    dbg.nospace() << "CamItemInfo::mtime: "
-                  << info.mtime << ", ";
+    dbg.nospace() << "CamItemInfo::ctime: "
+                  << info.ctime << ", ";
     dbg.nospace() << "CamItemInfo::downloaded: "
                   << info.downloaded;
     dbg.nospace() << "CamItemInfo::downloadName: "

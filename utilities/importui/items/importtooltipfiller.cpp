@@ -6,8 +6,8 @@
  * Date        : 2012-28-07
  * Description : Import icon view tool tip
  *
- * Copyright (C) 2008-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2012 by Islam Wazery <wazery at ubuntu dot com>
+ * Copyright (C) 2012      by Islam Wazery <wazery at ubuntu dot com>
+ * Copyright (C) 2008-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -46,8 +46,8 @@ namespace Digikam
 
 QString ImportToolTipFiller::CamItemInfoTipContents(const CamItemInfo& info)
 {
-    QString            str;
-    ImportSettings*    settings = ImportSettings::instance();
+    QString str;
+    ImportSettings* const settings = ImportSettings::instance();
     DToolTipStyleSheet cnt(settings->getToolTipsFont());
 
     PhotoInfoContainer photoInfo = info.photoInfo;
@@ -72,9 +72,9 @@ QString ImportToolTipFiller::CamItemInfoTipContents(const CamItemInfo& info)
 
         if (settings->getToolTipsShowFileDate())
         {
-            QDateTime modifiedDate = info.mtime;
-            str = KGlobal::locale()->formatDateTime(modifiedDate, KLocale::ShortDate, true);
-            tip += cnt.cellBeg + i18n("Date:") + cnt.cellMid + str + cnt.cellEnd;
+            QDateTime createdDate  = info.ctime;
+            str                     = KGlobal::locale()->formatDateTime(createdDate, KLocale::ShortDate, true);
+            tip                    += cnt.cellBeg + i18n("Date:") + cnt.cellMid + str + cnt.cellEnd;
         }
 
         if (settings->getToolTipsShowFileSize())

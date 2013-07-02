@@ -179,7 +179,7 @@ public:
         useDefaultTargetAlbum(0),
         iconShowNameBox(0),
         iconShowSizeBox(0),
-        iconShowModDateBox(0),
+        iconShowDateBox(0),
         iconShowResolutionBox(0),
         iconShowTagsBox(0),
         iconShowOverlaysBox(0),
@@ -221,7 +221,7 @@ public:
 
     QCheckBox*           iconShowNameBox;
     QCheckBox*           iconShowSizeBox;
-    QCheckBox*           iconShowModDateBox;
+    QCheckBox*           iconShowDateBox;
     QCheckBox*           iconShowResolutionBox;
     QCheckBox*           iconShowTagsBox;
     QCheckBox*           iconShowOverlaysBox;
@@ -426,9 +426,9 @@ SetupCamera::SetupCamera(QWidget* const parent)
     d->iconShowSizeBox       = new QCheckBox(i18n("Show file si&ze"), iconViewGroup);
     d->iconShowSizeBox->setWhatsThis(i18n("Set this option to show the file size below the image thumbnail."));
 
-    d->iconShowModDateBox    = new QCheckBox(i18n("Show file &modification date"), iconViewGroup);
-    d->iconShowModDateBox->setWhatsThis(i18n("Set this option to show the file modification date "
-                                             "below the image thumbnail."));
+    d->iconShowDateBox    = new QCheckBox(i18n("Show camera creation &date"), iconViewGroup);
+    d->iconShowDateBox->setWhatsThis(i18n("Set this option to show the camera creation date "
+                                             "below the image thumbnail"));
 
 /*
     d->iconShowResolutionBox = new QCheckBox(i18n("Show ima&ge dimensions"), iconViewGroup);
@@ -462,7 +462,7 @@ SetupCamera::SetupCamera(QWidget* const parent)
 
     grid2->addWidget(d->iconShowNameBox,          0, 0, 1, 1);
     grid2->addWidget(d->iconShowSizeBox,          1, 0, 1, 1);
-    grid2->addWidget(d->iconShowModDateBox,       2, 0, 1, 1);
+    grid2->addWidget(d->iconShowDateBox,       2, 0, 1, 1);
 //  grid2->addWidget(d->iconShowResolutionBox,    3, 0, 1, 1);              TODO
     grid2->addWidget(d->iconShowFormatBox,        3, 0, 1, 1);
 
@@ -641,7 +641,7 @@ void SetupCamera::readSettings()
     d->iconShowNameBox->setChecked(settings->getIconShowName());
     d->iconShowTagsBox->setChecked(settings->getIconShowTags());
     d->iconShowSizeBox->setChecked(settings->getIconShowSize());
-    d->iconShowModDateBox->setChecked(settings->getIconShowModDate());
+    d->iconShowDateBox->setChecked(settings->getIconShowDate());
     //TODO: d->iconShowResolutionBox->setChecked(settings->getIconShowResolution());
     d->iconShowOverlaysBox->setChecked(settings->getIconShowOverlays());
     d->iconShowRatingBox->setChecked(settings->getIconShowRating());
@@ -717,7 +717,7 @@ void SetupCamera::applySettings()
     importGroup.writeEntry("IgnoreExtensions", d->ignoreExtensionsEdit->text());
     importGroup.sync();
 
-    ImportSettings*  const settings = ImportSettings::instance();
+    ImportSettings* const settings = ImportSettings::instance();
 
     if (!settings)
     {
@@ -727,7 +727,7 @@ void SetupCamera::applySettings()
     settings->setIconShowName(d->iconShowNameBox->isChecked());
     settings->setIconShowTags(d->iconShowTagsBox->isChecked());
     settings->setIconShowSize(d->iconShowSizeBox->isChecked());
-    settings->setIconShowModDate(d->iconShowModDateBox->isChecked());
+    settings->setIconShowDate(d->iconShowDateBox->isChecked());
     //TODO: settings->setIconShowResolution(d->iconShowResolutionBox->isChecked());
     settings->setIconShowOverlays(d->iconShowOverlaysBox->isChecked());
     settings->setIconShowRating(d->iconShowRatingBox->isChecked());
