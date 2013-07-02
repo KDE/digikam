@@ -430,9 +430,11 @@ SetupCamera::SetupCamera(QWidget* const parent)
     d->iconShowModDateBox->setWhatsThis(i18n("Set this option to show the file modification date "
                                              "below the image thumbnail."));
 
-    //d->iconShowResolutionBox = new QCheckBox(i18n("Show ima&ge dimensions"), iconViewGroup);
-    //d->iconShowResolutionBox->setWhatsThis(i18n("Set this option to show the image size in pixels "
-                                                //"below the image thumbnail."));
+/*
+    d->iconShowResolutionBox = new QCheckBox(i18n("Show ima&ge dimensions"), iconViewGroup);
+    d->iconShowResolutionBox->setWhatsThis(i18n("Set this option to show the image size in pixels "
+                                                "below the image thumbnail."));
+*/
 
     d->iconShowFormatBox     = new QCheckBox(i18n("Show image Format"), iconViewGroup);
     d->iconShowFormatBox->setWhatsThis(i18n("Set this option to show image format over image thumbnail."));
@@ -460,14 +462,13 @@ SetupCamera::SetupCamera(QWidget* const parent)
 
     grid2->addWidget(d->iconShowNameBox,          0, 0, 1, 1);
     grid2->addWidget(d->iconShowSizeBox,          1, 0, 1, 1);
-    grid2->addWidget(d->iconShowRatingBox,        2, 0, 1, 1);
-    grid2->addWidget(d->iconShowModDateBox,       3, 0, 1, 1);
-    //TODO: grid2->addWidget(d->iconShowResolutionBox,    4, 0, 1, 1);
-    grid2->addWidget(d->iconShowFormatBox,        4, 0, 1, 1);
+    grid2->addWidget(d->iconShowModDateBox,       2, 0, 1, 1);
+//  grid2->addWidget(d->iconShowResolutionBox,    3, 0, 1, 1);              TODO
+    grid2->addWidget(d->iconShowFormatBox,        3, 0, 1, 1);
 
     grid2->addWidget(d->iconShowTagsBox,          0, 1, 1, 1);
-
-    grid2->addWidget(d->iconShowOverlaysBox,      1, 1, 1, 1);
+    grid2->addWidget(d->iconShowRatingBox,        1, 1, 1, 1);
+    grid2->addWidget(d->iconShowOverlaysBox,      2, 1, 1, 1);
     grid2->addWidget(leftClickLabel,              5, 0, 1, 1);
     grid2->addWidget(d->leftClickActionComboBox,  5, 1, 1, 1);
     grid2->addWidget(d->iconViewFontSelect,       6, 0, 1, 2);
@@ -615,7 +616,7 @@ void SetupCamera::readSettings()
             break;
         }
 
-        Filter* f = new Filter;
+        Filter* const f = new Filter;
         f->fromString(filter);
         d->filters.append(f);
     }
