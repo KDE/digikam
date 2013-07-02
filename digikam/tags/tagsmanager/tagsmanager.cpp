@@ -1,4 +1,3 @@
-#include "tagsmanager.h"
 #include <kdebug.h>
 #include <klocale.h>
 #include <QVBoxLayout>
@@ -8,28 +7,92 @@
 #include <kaction.h>
 #include <ktoolbar.h>
 #include <kmainwindow.h>
+#include <kmultitabbar.h>
+#include <QTreeView>
 
+#include "tagsmanager.h"
 #include "tagpropwidget.h"
 
 namespace Digikam
 {
 
-TagsManager::TagsManager()
-    : KDialog(0)
+
+class TagsManager::PrivateTagMngr
 {
-    //this->resize(800,600);
+
+public:
+
+    PrivateTagMngr()
+    {
+        treeModel       = 0;
+        tagmngrLabel    = 0;
+        tagPixmap       = 0;
+        digikamPixmap   = 0;
+        lineEdit        = 0;
+        treeWinLayout   = 0;
+        treeWindow      = 0;
+        mainToolbar     = 0;
+        rightToolBar    = 0;
+        organizeAction  = 0;
+        syncexportAction = 0;
+        tagProperties   = 0;
+        addAction       = 0;
+        delAction       = 0;
+        listView        = 0;
+    }
+
+    ~PrivateTagMngr()
+    {
+        delete treeModel;
+        delete tagmngrLabel;
+        delete tagPixmap;
+        delete digikamPixmap;
+        delete lineEdit;
+        delete treeWinLayout;
+        delete treeWindow;
+        delete mainToolbar;
+        delete rightToolBar;
+        delete organizeAction;
+        delete syncexportAction;
+        delete tagProperties;
+        delete addAction;
+        delete delAction;
+        delete listView;
+    }
+
+    QTreeView*      treeModel;
+    QLabel *        tagmngrLabel;
+    QLabel*         tagPixmap;
+    QLabel*         digikamPixmap;
+    QLineEdit*      lineEdit;
+
+    QHBoxLayout*    treeWinLayout;
+    KMainWindow*    treeWindow;
+    KToolBar*       mainToolbar;
+    KMultiTabBar*   rightToolBar;
+    KActionMenu*    organizeAction;
+    KActionMenu*    syncexportAction;
+    KAction*        tagProperties;
+    KAction*        addAction;
+    KAction*        delAction;
+    QListView*      listView;
+
+    TagPropWidget*  tagPropWidget;
+};
+
+TagsManager::TagsManager()
+    : KDialog(0), d(new PrivateTagMngr())
+{
 
     /** No buttons **/
     this->setButtons(0x00);
 
     setupUi(this);
-    //this->show();
-
-    kDebug() << "My new Tags Manager class";
 }
 
 TagsManager::~TagsManager()
 {
+    delete d;
 }
 
 void TagsManager::setupUi(KDialog *Dialog)
@@ -38,109 +101,120 @@ void TagsManager::setupUi(KDialog *Dialog)
      Dialog->resize(972, 722);
      Dialog->setWindowTitle(i18n("Tags Manager"));
 
-     QVBoxLayout* mainLayout = new QVBoxLayout(Dialog);
-     QHBoxLayout* firstLine = new QHBoxLayout(Dialog);
+     QVBoxLayout* mainLayout = new QVBoxLayout();
+     QHBoxLayout* firstLine = new QHBoxLayout();
 
-     tagPixmap = new QLabel();
-     tagPixmap->setText("Tag Pixmap");
-     tagPixmap->setMaximumWidth(40);
-     tagPixmap->setPixmap(KIcon("tag").pixmap(30,30));
+     d->tagPixmap = new QLabel();
+     d->tagPixmap->setText("Tag Pixmap");
+     d->tagPixmap->setMaximumWidth(40);
+     d->tagPixmap->setPixmap(KIcon("tag").pixmap(30,30));
 
-     lineEdit = new QLineEdit();
-     lineEdit->setText(i18n("Search..."));
+     d->lineEdit = new QLineEdit();
+     d->lineEdit->setText(i18n("Search..."));
 
-     lineEdit->setMaximumWidth(200);
+     d->lineEdit->setMaximumWidth(200);
 
-     digikamPixmap = new QLabel();
+     d->digikamPixmap = new QLabel();
      QPixmap dpix (KStandardDirs::locate("data", "digikam/about/top-left-digikam.png"));
-     digikamPixmap->setPixmap(dpix.scaled(40,40,Qt::KeepAspectRatio));
-     digikamPixmap->setMaximumHeight(40);
-     digikamPixmap->setScaledContents(true);
+     d->digikamPixmap->setPixmap(dpix.scaled(40,40,Qt::KeepAspectRatio));
+     d->digikamPixmap->setMaximumHeight(40);
+     d->digikamPixmap->setScaledContents(true);
 
 
      QHBoxLayout* tempLayout = new QHBoxLayout();
      tempLayout->setAlignment(Qt::AlignLeft);
-     tempLayout->addWidget(tagPixmap);
-     tempLayout->addWidget(lineEdit);
+     tempLayout->addWidget(d->tagPixmap);
+     tempLayout->addWidget(d->lineEdit);
      firstLine->addLayout(tempLayout);
-     firstLine->addWidget(digikamPixmap);
+     firstLine->addWidget(d->digikamPixmap);
 
-     tagmngrLabel = new QLabel(Dialog);
-     tagmngrLabel->setObjectName(QString::fromUtf8("label"));
-     tagmngrLabel->setText(i18n("Tags Manager"));
-     tagmngrLabel->setAlignment(Qt::AlignCenter);
+     d->tagmngrLabel = new QLabel(Dialog);
+     d->tagmngrLabel->setObjectName(QString::fromUtf8("label"));
+     d->tagmngrLabel->setText(i18n("Tags Manager"));
+     d->tagmngrLabel->setAlignment(Qt::AlignCenter);
      QFont font2;
      font2.setPointSize(12);
      font2.setBold(true);
      font2.setWeight(75);
-     tagmngrLabel->setFont(font2);
-     tagmngrLabel->setAutoFillBackground(true);
+     d->tagmngrLabel->setFont(font2);
+     d->tagmngrLabel->setAutoFillBackground(true);
 
-     treeWindow = new KMainWindow();
-     mainToolbar = new KToolBar(treeWindow);
+     d->treeWindow = new KMainWindow(this);
+     d->mainToolbar = new KToolBar(d->treeWindow);
 
-     addAction = new KAction(i18n("Add"),this);
-     delAction = new KAction(i18n("Del"),this);
+     d->addAction = new KAction(i18n("Add"),d->treeWindow);
+     d->delAction = new KAction(i18n("Del"),d->treeWindow);
 
-     organizeAction   = new KActionMenu(i18n("Organize"),this);
-     organizeAction->setDelayed(false);
-     organizeAction->addAction(new KAction("New Tag",this));
+     d->organizeAction   = new KActionMenu(i18n("Organize"),this);
+     d->organizeAction->setDelayed(false);
+     d->organizeAction->addAction(new KAction("New Tag",this));
 
-     syncexportAction = new KActionMenu(i18n("Sync & Export"),this);
+     d->syncexportAction = new KActionMenu(i18n("Sync & Export"),this);
 
-     tagProperties = new KAction(i18n("Tag Properties"),this);
+     d->tagProperties = new KAction(i18n("Tag Properties"),this);
 
-     mainToolbar->addAction(addAction);
-     mainToolbar->addAction(delAction);
-     mainToolbar->addAction(organizeAction);
-     mainToolbar->addAction(syncexportAction);
-     //mainToolbar->addAction(tagProperties);
-     treeWindow->addToolBar(mainToolbar);
+     d->mainToolbar->addAction(d->addAction);
+     d->mainToolbar->addAction(d->delAction);
+     d->mainToolbar->addAction(d->organizeAction);
+     d->mainToolbar->addAction(d->syncexportAction);
+     d->treeWindow->addToolBar(d->mainToolbar);
 
-     SidebarSplitter* splitter    = new SidebarSplitter;
-     splitter->setFrameStyle( QFrame::NoFrame );
-     splitter->setFrameShadow( QFrame::Plain );
-     splitter->setFrameShape( QFrame::NoFrame );
-     splitter->setOpaqueResize(false);
 
-     rightSidebar = new Sidebar(treeWindow, splitter, KMultiTabBar::Right);
-     rightSidebar->setObjectName("Digikam Left Sidebar");
-     splitter->setParent(this);
+     d->rightToolBar = new KMultiTabBar(KMultiTabBar::Right);
+     d->rightToolBar->appendTab(dpix,0,"Tag Properties");
+     d->rightToolBar->setStyle(KMultiTabBar::KDEV3ICON);
 
-     TagPropWidget* tagprop = new TagPropWidget(this);
-     rightSidebar->appendTab(tagprop,dpix,"Test");
-     //rightToolBar = new KToolBar(treeWindow);
-     //rightToolBar->addAction(tagProperties);
-     //treeWindow->addToolBar(Qt::RightToolBarArea,rightToolBar);
+     connect(d->rightToolBar->tab(0),SIGNAL(clicked()),this, SLOT(slotOpenProperties()));
 
-     QHBoxLayout* thirdLine = new QHBoxLayout(Dialog);
-     listView = new QListView(Dialog);
-     listView->setObjectName(QString::fromUtf8("listView"));
+
+     QHBoxLayout* thirdLine = new QHBoxLayout();
+     d->listView = new QListView(Dialog);
+     d->listView->setObjectName(QString::fromUtf8("listView"));
      //listView->setGeometry(QRect(0, 100, 221, 611));
-     listView->setContextMenuPolicy(Qt::CustomContextMenu);
-     listView->setMaximumWidth(300);
+     d->listView->setContextMenuPolicy(Qt::CustomContextMenu);
+     d->listView->setMaximumWidth(300);
 
-     treeModel = new QTreeView(Dialog);
-     treeModel->setObjectName(QString::fromUtf8("treeModel"));
+     d->treeModel = new QTreeView();
+     d->treeModel->setObjectName(QString::fromUtf8("treeModel"));
 
 
      QVBoxLayout* listLayout = new QVBoxLayout();
-     listLayout->addWidget(tagmngrLabel);
-     listLayout->addWidget(listView);
+     listLayout->addWidget(d->tagmngrLabel);
+     listLayout->addWidget(d->listView);
 
-     treeWindow->setCentralWidget(treeModel);
+     d->treeWinLayout = new QHBoxLayout(d->treeWindow);
+     d->treeWinLayout->addWidget(d->treeModel,9);
+     d->tagPropWidget = new TagPropWidget(d->treeModel);
+     d->tagPropWidget->setMaximumWidth(350);
+     d->treeWinLayout->addWidget(d->tagPropWidget,3);
+     d->tagPropWidget->hide();
 
-     thirdLine->addLayout(listLayout);
-     thirdLine->setStretchFactor(listLayout,3);
-     thirdLine->addWidget(treeWindow);
-     thirdLine->setStretchFactor(treeWindow,9);
+     QWidget* treeCentralW = new QWidget(d->treeWindow);
+     treeCentralW->setLayout(d->treeWinLayout);
+
+     d->treeWindow->setCentralWidget(treeCentralW);
+     //treeWindow->centralWidget()->setLayout(treeWinLayout);
+
+     thirdLine->addLayout(listLayout,2);
+     thirdLine->addWidget(d->treeWindow,9);
+     thirdLine->addWidget(d->rightToolBar);
      //thirdLine->addWidget(tagprop);
-     thirdLine->addWidget(rightSidebar);
 
      mainLayout->addLayout(firstLine);
      mainLayout->addLayout(thirdLine);
 
      this->mainWidget()->setLayout(mainLayout);
+
+}
+
+void TagsManager::slotOpenProperties()
+{
+    KMultiTabBarTab* sender = (KMultiTabBarTab*)QObject::sender();
+    kDebug() << "Is checked " << sender->isChecked();
+    if(sender->isChecked())
+        d->tagPropWidget->show();
+    else
+        d->tagPropWidget->hide();
 
 }
 
