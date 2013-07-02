@@ -152,7 +152,7 @@ private Q_SLOTS:
 
     void slotAlbumSelected(bool val);
     void slotTagSelected(bool val);
-    void slotImageSelected(const ImageInfoList&, bool, bool, const ImageInfoList&);
+    void slotImageSelected(const ImageInfoList&, const ImageInfoList&);
     void slotSelectionChanged(int selectionCount);
     void slotExit();
     void slotShowTip();

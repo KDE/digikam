@@ -539,8 +539,8 @@ void DigikamApp::setupViewConnections()
     connect(d->view, SIGNAL(signalSelectionChanged(int)),
             this, SLOT(slotSelectionChanged(int)));
 
-    connect(d->view, SIGNAL(signalImageSelected(ImageInfoList,bool,bool,ImageInfoList)),
-            this, SLOT(slotImageSelected(ImageInfoList,bool,bool,ImageInfoList)));
+    connect(d->view, SIGNAL(signalImageSelected(ImageInfoList,ImageInfoList)),
+            this, SLOT(slotImageSelected(ImageInfoList,ImageInfoList)));
 
     connect(d->view, SIGNAL(signalSwitchedToPreview()),
             this, SLOT(slotSwitchedToPreview()));
@@ -1459,8 +1459,7 @@ void DigikamApp::slotTagSelected(bool val)
     d->editTagAction->setEnabled(enabled);
 }
 
-void DigikamApp::slotImageSelected(const ImageInfoList& selection, bool hasPrev, bool hasNext,
-                                   const ImageInfoList& listAll)
+void DigikamApp::slotImageSelected(const ImageInfoList& selection, const ImageInfoList& listAll)
 {
     /// @todo Currently only triggered by IconView, need to adapt to TableView
     int num_images = listAll.count();

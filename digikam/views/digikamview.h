@@ -105,8 +105,7 @@ Q_SIGNALS:
 
     void signalAlbumSelected(bool val);
     void signalTagSelected(bool val);
-    void signalImageSelected(const ImageInfoList& selectedImage, bool hasPrevious, bool hasNext,
-                             const ImageInfoList& allImages);
+    void signalImageSelected(const ImageInfoList& selectedImage, const ImageInfoList& allImages);
     void signalNoCurrentItem();
     void signalSelectionChanged(int numberOfSelectedItems);
     void signalThumbSizeChanged(int);
