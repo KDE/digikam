@@ -261,15 +261,15 @@ const QString SetupCamera::Private::importFiltersConfigGroupName("Import Filters
 SetupCamera::SetupCamera(QWidget* const parent)
     : QScrollArea(parent), d(new Private)
 {
-    d->tab            = new KTabWidget(viewport());
+    d->tab               = new KTabWidget(viewport());
     setWidget(d->tab);
     setWidgetResizable(true);
 
-    QWidget* panel    = new QWidget(d->tab);
+    QWidget* const panel = new QWidget(d->tab);
     panel->setAutoFillBackground(false);
 
-    QGridLayout* grid = new QGridLayout(panel);
-    d->listView       = new QTreeWidget(panel);
+    QGridLayout* const grid = new QGridLayout(panel);
+    d->listView             = new QTreeWidget(panel);
     d->listView->setColumnCount(4);
     d->listView->setRootIsDecorated(false);
     d->listView->setSelectionMode(QAbstractItemView::SingleSelection);
@@ -309,9 +309,8 @@ SetupCamera::SetupCamera(QWidget* const parent)
 
     // -------------------------------------------------------------
 
-    QSpacerItem* spacer = new QSpacerItem(20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding);
-
-    KUrlLabel* gphotoLogoLabel = new KUrlLabel(panel);
+    QSpacerItem* const spacer        = new QSpacerItem(20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding);
+    KUrlLabel* const gphotoLogoLabel = new KUrlLabel(panel);
     gphotoLogoLabel->setText(QString());
     gphotoLogoLabel->setUrl("http://www.gphoto.org");
     gphotoLogoLabel->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-gphoto.png")));
@@ -340,14 +339,14 @@ SetupCamera::SetupCamera(QWidget* const parent)
 
     // -------------------------------------------------------------
 
-    QWidget* panel2          = new QWidget(d->tab);
+    QWidget* const panel2     = new QWidget(d->tab);
     panel2->setAutoFillBackground(false);
 
-    QVBoxLayout* layout      = new QVBoxLayout(panel2);
-    d->useDateFromMetadata   = new QCheckBox(i18n("Use date from metadata to sort items instead file-system date (makes connection slower)"), panel2);
-    d->turnHighQualityThumbs = new QCheckBox(i18n("Turn on high quality thumbnail loading (slower loading)"), panel2);
-    d->useDefaultTargetAlbum = new QCheckBox(i18n("Use a default target album to download from camera"), panel2);
-    d->target1AlbumSelector  = new AlbumSelectWidget(panel2);
+    QVBoxLayout* const layout = new QVBoxLayout(panel2);
+    d->useDateFromMetadata    = new QCheckBox(i18n("Use date from metadata to sort items instead file-system date (makes connection slower)"), panel2);
+    d->turnHighQualityThumbs  = new QCheckBox(i18n("Turn on high quality thumbnail loading (slower loading)"), panel2);
+    d->useDefaultTargetAlbum  = new QCheckBox(i18n("Use a default target album to download from camera"), panel2);
+    d->target1AlbumSelector   = new AlbumSelectWidget(panel2);
 
     d->tab->insertTab(1, panel2, i18n("Behavior"));
 
@@ -361,30 +360,30 @@ SetupCamera::SetupCamera(QWidget* const parent)
 
     // -------------------------------------------------------------
 
-    QWidget* panel3 = new QWidget(d->tab);
+    QWidget* const panel3         = new QWidget(d->tab);
     panel3->setAutoFillBackground(false);
 
-    QGridLayout* importGrid = new QGridLayout(panel3);
-    d->importListView       = new QListWidget(panel3);
+    QGridLayout* const importGrid = new QGridLayout(panel3);
+    d->importListView             = new QListWidget(panel3);
     d->importListView->setSelectionMode(QAbstractItemView::SingleSelection);
     d->importListView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     d->importListView->setWhatsThis(i18n("Here you can see filters that can be used to filter "
                                          "files in import dialog."));
 
-    d->importAddButton    = new QPushButton(panel3);
-    d->importRemoveButton = new QPushButton(panel3);
-    d->importEditButton   = new QPushButton(panel3);
-    QSpacerItem* spacer2  = new QSpacerItem(20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding);
+    d->importAddButton         = new QPushButton(panel3);
+    d->importRemoveButton      = new QPushButton(panel3);
+    d->importEditButton        = new QPushButton(panel3);
+    QSpacerItem* const spacer2 = new QSpacerItem(20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
-    QGroupBox* groupBox         = new QGroupBox(panel3);
-    QVBoxLayout* verticalLayout = new QVBoxLayout(groupBox);
-    QLabel* label               = new QLabel(groupBox);
+    QGroupBox* const groupBox         = new QGroupBox(panel3);
+    QVBoxLayout* const verticalLayout = new QVBoxLayout(groupBox);
+    QLabel* const label               = new QLabel(groupBox);
     verticalLayout->addWidget(label);
-    d->ignoreNamesEdit          = new QLineEdit(groupBox);
+    d->ignoreNamesEdit                = new QLineEdit(groupBox);
     verticalLayout->addWidget(d->ignoreNamesEdit);
-    QLabel* label2              = new QLabel(groupBox);
+    QLabel* const label2              = new QLabel(groupBox);
     verticalLayout->addWidget(label2);
-    d->ignoreExtensionsEdit     = new QLineEdit(groupBox);
+    d->ignoreExtensionsEdit           = new QLineEdit(groupBox);
     verticalLayout->addWidget(d->ignoreExtensionsEdit);
 
     groupBox->setTitle(i18n("Always ignore"));
@@ -413,13 +412,13 @@ SetupCamera::SetupCamera(QWidget* const parent)
 
     // -- Import Icon View ----------------------------------------------------------
 
-    QWidget* panel4 = new QWidget(d->tab);
+    QWidget* const panel4      = new QWidget(d->tab);
     panel4->setAutoFillBackground(false);
 
-    QVBoxLayout* layout2 = new QVBoxLayout(panel4);
+    QVBoxLayout* const layout2 = new QVBoxLayout(panel4);
 
-    QGroupBox* iconViewGroup = new QGroupBox(i18n("Icon-View Options"), panel4);
-    QGridLayout* grid2       = new QGridLayout(iconViewGroup);
+    QGroupBox* const iconViewGroup = new QGroupBox(i18n("Icon-View Options"), panel4);
+    QGridLayout* const grid2       = new QGridLayout(iconViewGroup);
 
     d->iconShowNameBox       = new QCheckBox(i18n("Show file&name"), iconViewGroup);
     d->iconShowNameBox->setWhatsThis(i18n("Set this option to show the filename below the image thumbnail."));
@@ -450,8 +449,8 @@ SetupCamera::SetupCamera(QWidget* const parent)
     d->iconShowOverlaysBox->setWhatsThis(i18n("Set this option to show overlay buttons on "
                                               "the image thumbnail for image rotation."));
 
-    QLabel* leftClickLabel     = new QLabel(i18n("Thumbnail click action:"), iconViewGroup);
-    d->leftClickActionComboBox = new KComboBox(iconViewGroup);
+    QLabel* const leftClickLabel = new QLabel(i18n("Thumbnail click action:"), iconViewGroup);
+    d->leftClickActionComboBox   = new KComboBox(iconViewGroup);
     d->leftClickActionComboBox->addItem(i18n("Show embedded preview"), ImportSettings::ShowPreview);
     d->leftClickActionComboBox->addItem(i18n("Start image editor"), ImportSettings::StartEditor);
     d->leftClickActionComboBox->setToolTip(i18n("Choose what should happen when you click on a thumbnail."));
@@ -470,17 +469,17 @@ SetupCamera::SetupCamera(QWidget* const parent)
 
     grid2->addWidget(d->iconShowOverlaysBox,      1, 1, 1, 1);
     grid2->addWidget(leftClickLabel,              5, 0, 1, 1);
-    grid2->addWidget(d->leftClickActionComboBox,  6, 1, 1, 1);
-    grid2->addWidget(d->iconViewFontSelect,       7, 0, 1, 2);
+    grid2->addWidget(d->leftClickActionComboBox,  5, 1, 1, 1);
+    grid2->addWidget(d->iconViewFontSelect,       6, 0, 1, 2);
     grid2->setSpacing(KDialog::spacingHint());
     grid2->setMargin(KDialog::spacingHint());
 
     // --------------------------------------------------------
 
-    QGroupBox* interfaceOptionsGroup = new QGroupBox(i18n("Preview Options"), panel4);
-    QGridLayout* grid3               = new QGridLayout(interfaceOptionsGroup);
+    QGroupBox* const interfaceOptionsGroup = new QGroupBox(i18n("Preview Options"), panel4);
+    QGridLayout* const grid3               = new QGridLayout(interfaceOptionsGroup);
 
-    d->previewLoadFullImageSize      = new QCheckBox(i18n("Embedded preview loads full-sized images"), interfaceOptionsGroup);
+    d->previewLoadFullImageSize  = new QCheckBox(i18n("Embedded preview loads full-sized images"), interfaceOptionsGroup);
     d->previewLoadFullImageSize->setWhatsThis(i18n("<p>Set this option to load images at their full size "
                                                    "for preview, rather than at a reduced size. As this option "
                                                    "will make it take longer to load images, only use it if you have "
@@ -488,10 +487,10 @@ SetupCamera::SetupCamera(QWidget* const parent)
                                                    "<p><b>Note:</b> for Raw images, a half size version of the Raw data "
                                                    "is used instead of the embedded JPEG preview.</p>"));
 
-    d->previewItemsWhileDownload      = new QCheckBox(i18n("Preview each item while downloading it"), interfaceOptionsGroup);
+    d->previewItemsWhileDownload = new QCheckBox(i18n("Preview each item while downloading it"), interfaceOptionsGroup);
     d->previewItemsWhileDownload->setWhatsThis(i18n("<p>Set this option to preview each item while downloading.</p>"));
 
-    d->previewShowIcons              = new QCheckBox(i18n("Show icons and text over preview"), interfaceOptionsGroup);
+    d->previewShowIcons          = new QCheckBox(i18n("Show icons and text over preview"), interfaceOptionsGroup);
     d->previewShowIcons->setWhatsThis(i18n("Uncheck this if you don't want to see icons and text in the image preview."));
 
     grid3->setMargin(KDialog::spacingHint());
@@ -581,7 +580,7 @@ void SetupCamera::readSettings()
 
     if (clist)
     {
-        QList<CameraType*>* cl = clist->cameraList();
+        QList<CameraType*>* const cl = clist->cameraList();
 
         foreach(CameraType* const ctype, *cl)
         {
@@ -717,7 +716,7 @@ void SetupCamera::applySettings()
     importGroup.writeEntry("IgnoreExtensions", d->ignoreExtensionsEdit->text());
     importGroup.sync();
 
-    ImportSettings* settings = ImportSettings::instance();
+    ImportSettings*  const settings = ImportSettings::instance();
 
     if (!settings)
     {

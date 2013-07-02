@@ -37,12 +37,13 @@
 
 namespace Digikam
 {
+
 class ImportSettings::Private
 {
 
 public:
     Private() :
-        iconShowName(false),
+        iconShowName(true),
         iconShowSize(false),
         iconShowDate(false),
         iconShowModDate(false),
@@ -290,8 +291,8 @@ void ImportSettings::readSettings()
 
     d->thumbnailSize                = group.readEntry(d->configDefaultIconSizeEntry,              (int)ThumbnailSize::Medium);
 
-    d->iconShowName                 = group.readEntry(d->configIconShowNameEntry,                 false);
-    //d->iconShowResolution           = group.readEntry(d->configIconShowResolutionEntry,           false);
+    d->iconShowName                 = group.readEntry(d->configIconShowNameEntry,                 true);
+//  d->iconShowResolution           = group.readEntry(d->configIconShowResolutionEntry,           false);
     d->iconShowSize                 = group.readEntry(d->configIconShowSizeEntry,                 false);
     d->iconShowDate                 = group.readEntry(d->configIconShowDateEntry,                 true);
     d->iconShowModDate              = group.readEntry(d->configIconShowModificationDateEntry,     true);
@@ -312,15 +313,15 @@ void ImportSettings::readSettings()
     d->tooltipShowPhotoMake         = group.readEntry(d->configToolTipsShowPhotoMakeEntry,        true);
     d->tooltipShowPhotoFocal        = group.readEntry(d->configToolTipsShowPhotoFocalEntry,       true);
     d->tooltipShowPhotoExpo         = group.readEntry(d->configToolTipsShowPhotoExpoEntry,        true);
-    //d->tooltipShowPhotoMode         = group.readEntry(d->configToolTipsShowPhotoModeEntry,        true);
+//  d->tooltipShowPhotoMode         = group.readEntry(d->configToolTipsShowPhotoModeEntry,        true);
     d->tooltipShowPhotoFlash        = group.readEntry(d->configToolTipsShowPhotoFlashEntry,       false);
     d->tooltipShowPhotoWb           = group.readEntry(d->configToolTipsShowPhotoWBEntry,          false);
-    d->tooltipShowFolderName         = group.readEntry(d->configToolTipsShowFolderNameEntry,        false);
+    d->tooltipShowFolderName         = group.readEntry(d->configToolTipsShowFolderNameEntry,      false);
     d->tooltipShowTags              = group.readEntry(d->configToolTipsShowTagsEntry,             true);
     d->tooltipShowLabelRating       = group.readEntry(d->configToolTipsShowLabelRatingEntry,      true);
 
     d->previewLoadFullImageSize     = group.readEntry(d->configPreviewLoadFullImageSizeEntry,     false);
-    d->previewItemsWhileDownload    = group.readEntry(d->configPreviewItemsWhileDownloadEntry,     false);
+    d->previewItemsWhileDownload    = group.readEntry(d->configPreviewItemsWhileDownloadEntry,    false);
     d->previewShowIcons             = group.readEntry(d->configPreviewShowIconsEntry,             true);
     d->showThumbbar                 = group.readEntry(d->configShowThumbbarEntry,                 true);
 
@@ -366,12 +367,12 @@ void ImportSettings::saveSettings()
     group.writeEntry(d->configToolTipsShowPhotoExpoEntry,        d->tooltipShowPhotoExpo);
     group.writeEntry(d->configToolTipsShowPhotoFlashEntry,       d->tooltipShowPhotoFlash);
     group.writeEntry(d->configToolTipsShowPhotoWBEntry,          d->tooltipShowPhotoWb);
-    group.writeEntry(d->configToolTipsShowFolderNameEntry,        d->tooltipShowFolderName);
+    group.writeEntry(d->configToolTipsShowFolderNameEntry,       d->tooltipShowFolderName);
     group.writeEntry(d->configToolTipsShowTagsEntry,             d->tooltipShowTags);
     group.writeEntry(d->configToolTipsShowLabelRatingEntry,      d->tooltipShowLabelRating);
 
     group.writeEntry(d->configPreviewLoadFullImageSizeEntry,     d->previewLoadFullImageSize);
-    group.writeEntry(d->configPreviewItemsWhileDownloadEntry,     d->previewItemsWhileDownload);
+    group.writeEntry(d->configPreviewItemsWhileDownloadEntry,    d->previewItemsWhileDownload);
     group.writeEntry(d->configPreviewShowIconsEntry,             d->previewShowIcons);
     group.writeEntry(d->configShowThumbbarEntry,                 d->showThumbbar);
 

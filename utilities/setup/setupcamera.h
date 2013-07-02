@@ -36,7 +36,6 @@
 namespace Digikam
 {
 
-
 class SetupCamera : public QScrollArea
 {
     Q_OBJECT
