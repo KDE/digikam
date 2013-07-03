@@ -1717,8 +1717,8 @@ ImageInfo::DatabaseFieldsHashRaw ImageInfo::getDatabaseFieldsRaw(const DatabaseF
     }
 
     // keep the system locked to make sure all fields are taken from the same cache state
-    /// @todo Actually we need a read-write-lock
-    ImageInfoReadLocker readLocker;
+    /// @todo Actually we need a read-write-lock, but we only have a write lock.
+    ImageInfoWriteLocker writeLocker;
     if (requestedSet.hasFieldsFromVideoMetadata() && m_data->hasVideoMetadata)
     {
         const DatabaseFields::VideoMetadata requestedVideoMetadata = requestedSet.getVideoMetadata();

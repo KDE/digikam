@@ -385,7 +385,7 @@ public:
     typedef DatabaseFields::Hash<QVariant> DatabaseFieldsHashRaw;
 
     /**
-     * @todo Supports only VideoMetadataField values for now.
+     * @todo Supports only VideoMetadataField and ImageMetadataField values for now.
      */
     DatabaseFieldsHashRaw getDatabaseFieldsRaw(const DatabaseFields::Set& requestedSet) const;
     QVariant getDatabaseFieldRaw(const DatabaseFields::Set& requestedField) const;
