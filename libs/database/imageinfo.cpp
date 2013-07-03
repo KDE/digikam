@@ -1290,7 +1290,90 @@ ImageMetadataContainer ImageInfo::imageMetadataContainer() const
     }
 
     ImageMetadataContainer container;
-    ImageScanner::fillMetadataContainer(m_data->id, &container);
+    const DatabaseFieldsHashRaw rawVideoMetadata = getDatabaseFieldsRaw(DatabaseFields::ImageMetadataAll);
+    bool allFieldsNull = true;
+    for (DatabaseFields::ImageMetadataIterator it; !it.atEnd(); ++it)
+    {
+        const QVariant fieldValue = rawVideoMetadata.value(*it);
+
+        allFieldsNull&=fieldValue.isNull();
+
+        if (!fieldValue.isNull())
+        {
+            const MetadataInfo::Field mdField = DatabaseImageMetadataFieldsToMetadataInfoField(*it);
+            const QString fieldString = DMetadata::valueToString(fieldValue, mdField);
+
+            switch (*it)
+            {
+                case DatabaseFields::Make:
+                    container.make = fieldString;
+                    break;
+
+                case DatabaseFields::Model:
+                    container.model = fieldString;
+                    break;
+
+                case DatabaseFields::Lens:
+                    container.lens = fieldString;
+                    break;
+
+                case DatabaseFields::Aperture:
+                    container.aperture = fieldString;
+                    break;
+
+                case DatabaseFields::FocalLength:
+                    container.focalLength = fieldString;
+                    break;
+
+                case DatabaseFields::FocalLength35:
+                    container.focalLength35 = fieldString;
+                    break;
+
+                case DatabaseFields::ExposureTime:
+                    container.exposureTime = fieldString;
+                    break;
+
+                case DatabaseFields::ExposureProgram:
+                    container.exposureProgram = fieldString;
+                    break;
+
+                case DatabaseFields::ExposureMode:
+                    container.exposureMode = fieldString;
+                    break;
+
+                case DatabaseFields::Sensitivity:
+                    container.sensitivity = fieldString;
+                    break;
+
+                case DatabaseFields::FlashMode:
+                    container.flashMode = fieldString;
+                    break;
+
+                case DatabaseFields::WhiteBalance:
+                    container.whiteBalance = fieldString;
+                    break;
+
+                case DatabaseFields::WhiteBalanceColorTemperature:
+                    container.whiteBalanceColorTemperature = fieldString;
+                    break;
+
+                case DatabaseFields::SubjectDistance:
+                    container.subjectDistance = fieldString;
+                    break;
+
+                case DatabaseFields::SubjectDistanceCategory:
+                    container.subjectDistanceCategory = fieldString;
+                    break;
+
+                default:
+                    break;
+            }
+        }
+    }
+
+    // store whether we have at least one valid field
+    container.allFieldsNull = allFieldsNull;
+
     return container;
 }
 
