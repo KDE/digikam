@@ -108,7 +108,7 @@ public:
     }
 
     bool         cameraUseFileMetadata;
-    
+
     QCheckBox*   showToolTipsBox;
 
     QCheckBox*   showFileNameBox;
@@ -186,9 +186,9 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    KVBox* const vbox     = new KVBox(panel);
+    KVBox* const vbox       = new KVBox(panel);
 
-    d->showToolTipsBox    = new QCheckBox(i18n("Show icon-view and thumb-bar items' tool-tips"), vbox);
+    d->showToolTipsBox      = new QCheckBox(i18n("Show icon-view and thumb-bar items' tool-tips"), vbox);
     d->showToolTipsBox->setWhatsThis(i18n("Set this option to display image information when "
                                           "the mouse hovers over an icon-view or thumb-bar item."));
 
@@ -228,30 +228,30 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
     d->photoSettingBox       = new QGroupBox(i18n("Photograph Information"), vbox);
     QVBoxLayout* const vlay3 = new QVBoxLayout(d->photoSettingBox);
 
-    d->showPhotoMakeBox   = new QCheckBox(i18n("Show camera make and model"), d->photoSettingBox);
+    d->showPhotoMakeBox  = new QCheckBox(i18n("Show camera make and model"), d->photoSettingBox);
     d->showPhotoMakeBox->setWhatsThis(i18n("Set this option to display the make and model of the "
                                            "camera with which the image has been taken."));
 
-    d->showPhotoDateBox   = new QCheckBox(i18n("Show camera date"), d->photoSettingBox);
+    d->showPhotoDateBox  = new QCheckBox(i18n("Show camera date"), d->photoSettingBox);
     d->showPhotoDateBox->setWhatsThis(i18n("Set this option to display the date when the image was taken."));
 
-    d->showPhotoFocalBox  = new QCheckBox(i18n("Show camera aperture and focal length"), d->photoSettingBox);
+    d->showPhotoFocalBox = new QCheckBox(i18n("Show camera aperture and focal length"), d->photoSettingBox);
     d->showPhotoFocalBox->setWhatsThis(i18n("Set this option to display the camera aperture and focal settings "
                                             "used to take the image."));
 
-    d->showPhotoExpoBox   = new QCheckBox(i18n("Show camera exposure and sensitivity"), d->photoSettingBox);
+    d->showPhotoExpoBox  = new QCheckBox(i18n("Show camera exposure and sensitivity"), d->photoSettingBox);
     d->showPhotoExpoBox->setWhatsThis(i18n("Set this option to display the camera exposure and sensitivity "
                                            "used to take the image."));
 
-    d->showPhotoModeBox   = new QCheckBox(i18n("Show camera mode and program"), d->photoSettingBox);
+    d->showPhotoModeBox  = new QCheckBox(i18n("Show camera mode and program"), d->photoSettingBox);
     d->showPhotoModeBox->setWhatsThis(i18n("Set this option to display the camera mode and program "
                                            "used to take the image."));
 
-    d->showPhotoFlashBox  = new QCheckBox(i18n("Show camera flash settings"), d->photoSettingBox);
+    d->showPhotoFlashBox = new QCheckBox(i18n("Show camera flash settings"), d->photoSettingBox);
     d->showPhotoFlashBox->setWhatsThis(i18n("Set this option to display the camera flash settings "
                                             "used to take the image."));
 
-    d->showPhotoWbBox     = new QCheckBox(i18n("Show camera white balance settings"), d->photoSettingBox);
+    d->showPhotoWbBox    = new QCheckBox(i18n("Show camera white balance settings"), d->photoSettingBox);
     d->showPhotoWbBox->setWhatsThis(i18n("Set this option to display the camera white balance settings "
                                          "used to take the image."));
 
@@ -393,7 +393,7 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
 
     KSeparator* const line   = new KSeparator(Qt::Horizontal, d->photoSettingBox);
     QLabel* const label      = new QLabel(i18n("Note: these settings require \"Use File Metadata\" option from Camera Setup Behavior page."), d->photoSettingBox);
-    
+
     d->showItemPhotoMakeBox  = new QCheckBox(i18n("Show camera make and model"), d->photoSettingBox);
     d->showItemPhotoMakeBox->setWhatsThis(i18n("Set this option to display the make and model of the "
                                                "camera with which the image has been taken."));
@@ -465,7 +465,7 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
 
     connect(d->showImportToolTipsBox, SIGNAL(toggled(bool)),
             this, SLOT(slotImportToolTipsChanged()));    
-    
+
     // --------------------------------------------------------
 
     readSettings();
@@ -630,6 +630,8 @@ void SetupToolTip::readSettings()
     d->showItemPhotoExpoBox->setChecked(importSettings->getToolTipsShowPhotoExpo());
     d->showItemPhotoFlashBox->setChecked(importSettings->getToolTipsShowPhotoFlash());
     d->showItemPhotoWBBox->setChecked(importSettings->getToolTipsShowPhotoWB());
+
+    refreshCameraOptions();
 }
 
 void SetupToolTip::slotUseFileMetadataChanged(bool b)
