@@ -119,9 +119,9 @@ public:
     double                 latitude;
     double                 altitude;
 
-    // number of grouped images, if this is group leader
+    //! number of grouped images, if this is group leader
     int                    groupedImages;
-    // group leader, if the is grouped
+    //! group leader, if the image is grouped
     qlonglong              groupImage;
 
     bool                   hasCoordinates         : 1;
@@ -145,12 +145,15 @@ public:
 
     bool                   invalid                : 1;
 
+    // These two are initially true because we assume the data is there.
+    // Once we query the data and find out it is missing, we set them to false.
+    bool                   hasVideoMetadata       : 1;
+    bool                   hasImageMetadata       : 1;
+
     /// @todo Currently only 7 bits of VideoMetadataField are used,
     ///       we could store only a byte instead.
     DatabaseFields::VideoMetadata videoMetadataCached;
     DatabaseFields::ImageMetadata imageMetadataCached;
-    bool                   hasVideoMetadata       : 1;
-    bool                   hasImageMetadata       : 1;
 
     typedef DatabaseFields::Hash<QVariant> DatabaseFieldsHashRaw;
     DatabaseFieldsHashRaw databaseFieldsHashRaw;
