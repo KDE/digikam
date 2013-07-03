@@ -50,8 +50,8 @@ QString ImportToolTipFiller::CamItemInfoTipContents(const CamItemInfo& info)
     ImportSettings* const settings = ImportSettings::instance();
     DToolTipStyleSheet cnt(settings->getToolTipsFont());
 
-    PhotoInfoContainer photoInfo = info.photoInfo;
-    QString tip                  = cnt.tipHeader;
+    PhotoInfoContainer photoInfo   = info.photoInfo;
+    QString tip                    = cnt.tipHeader;
 
     // -- File properties ----------------------------------------------
 
@@ -111,7 +111,8 @@ QString ImportToolTipFiller::CamItemInfoTipContents(const CamItemInfo& info)
         }
     }
 
-    // -- Photograph Info ----------------------------------------------------
+    // -- Photograph Info -----------------------------------------------------------------------
+    // NOTE: these info require \"Use File Metadata\" option from Camera Setup Behavior page.
 
     if (settings->getToolTipsShowPhotoMake()  ||
         settings->getToolTipsShowPhotoFocal() ||
@@ -119,7 +120,6 @@ QString ImportToolTipFiller::CamItemInfoTipContents(const CamItemInfo& info)
         settings->getToolTipsShowPhotoFlash() ||
         settings->getToolTipsShowPhotoWB())
     {
-        //FIXME: PhotoInfoContainer is always null, which needs investigation.
         if (!photoInfo.isNull())
         {
             QString metaStr;
@@ -138,26 +138,26 @@ QString ImportToolTipFiller::CamItemInfoTipContents(const CamItemInfo& info)
                 metaStr += cnt.cellBeg + i18n("Make/Model:") + cnt.cellMid + Qt::escape(str) + cnt.cellEnd;
             }
 
-//            if (settings->getToolTipsShowPhotoFocal())
-//            {
-//                str = photoInfo.aperture.isEmpty() ? cnt.unavailable : photoInfo.aperture;
+            if (settings->getToolTipsShowPhotoFocal())
+            {
+                str = photoInfo.aperture.isEmpty() ? cnt.unavailable : photoInfo.aperture;
 
-//                if (photoInfo.focalLength35.isEmpty())
-//                {
-//                    str += QString(" / %1").arg(photoInfo.focalLength.isEmpty() ? cnt.unavailable : photoInfo.focalLength);
-//                }
-//                else
-//                {
-//                    str += QString(" / %1").arg(i18n("%1 (35mm: %2)",photoInfo.focalLength,photoInfo.focalLength35));
-//                }
+                if (photoInfo.focalLength35mm.isEmpty())
+                {
+                    str += QString(" / %1").arg(photoInfo.focalLength.isEmpty() ? cnt.unavailable : photoInfo.focalLength);
+                }
+                else
+                {
+                    str += QString(" / %1").arg(i18n("%1 (35mm: %2)",photoInfo.focalLength, photoInfo.focalLength35mm));
+                }
 
-//                if (str.length() > cnt.maxStringLength)
-//                {
-//                    str = str.left(cnt.maxStringLength-3) + "...";
-//                }
+                if (str.length() > cnt.maxStringLength)
+                {
+                    str = str.left(cnt.maxStringLength-3) + "...";
+                }
 
-//                metaStr += cnt.cellBeg + i18n("Aperture/Focal:") + cnt.cellMid + Qt::escape(str) + cnt.cellEnd;
-//            }
+                metaStr += cnt.cellBeg + i18n("Aperture/Focal:") + cnt.cellMid + Qt::escape(str) + cnt.cellEnd;
+            }
 
             if (settings->getToolTipsShowPhotoExpo())
             {
@@ -172,18 +172,18 @@ QString ImportToolTipFiller::CamItemInfoTipContents(const CamItemInfo& info)
                 metaStr += cnt.cellBeg + i18n("Exposure/Sensitivity:") + cnt.cellMid + Qt::escape(str) + cnt.cellEnd;
             }
 
-//            if (settings->getToolTipsShowPhotoFlash())
-//            {
-//                str = photoInfo.flashMode.isEmpty() ? cnt.unavailable : photoInfo.flashMode;
+            if (settings->getToolTipsShowPhotoFlash())
+            {
+                str = photoInfo.flash.isEmpty() ? cnt.unavailable : photoInfo.flash;
 
-//                if (str.length() > cnt.maxStringLength)
-//                {
-//                    str = str.left(cnt.maxStringLength-3) + "...";
-//                }
+                if (str.length() > cnt.maxStringLength)
+                {
+                    str = str.left(cnt.maxStringLength-3) + "...";
+                }
 
-//                metaStr += cnt.cellBeg + i18nc("camera flash settings",
-//                                               "Flash:") + cnt.cellMid + Qt::escape(str) + cnt.cellEnd;
-//            }
+                metaStr += cnt.cellBeg + i18nc("camera flash settings",
+                                               "Flash:") + cnt.cellMid + Qt::escape(str) + cnt.cellEnd;
+            }
 
             if (settings->getToolTipsShowPhotoWB())
             {

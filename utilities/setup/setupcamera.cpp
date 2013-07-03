@@ -174,7 +174,7 @@ public:
         importAddButton(0),
         importRemoveButton(0),
         importEditButton(0),
-        useDateFromMetadata(0),
+        useFileMetadata(0),
         turnHighQualityThumbs(0),
         useDefaultTargetAlbum(0),
         iconShowNameBox(0),
@@ -201,7 +201,7 @@ public:
     }
 
     static const QString configGroupName;
-    static const QString configUseMetadataDateEntry;
+    static const QString configUseFileMetadata;
     static const QString configTrunHighQualityThumbs;
     static const QString configUseDefaultTargetAlbum;
     static const QString configDefaultTargetAlbumId;
@@ -215,7 +215,7 @@ public:
     QPushButton*         importRemoveButton;
     QPushButton*         importEditButton;
 
-    QCheckBox*           useDateFromMetadata;
+    QCheckBox*           useFileMetadata;
     QCheckBox*           turnHighQualityThumbs;
     QCheckBox*           useDefaultTargetAlbum;
 
@@ -252,7 +252,7 @@ public:
 };
 
 const QString SetupCamera::Private::configGroupName("Camera Settings");
-const QString SetupCamera::Private::configUseMetadataDateEntry("UseThemeBackgroundColor");
+const QString SetupCamera::Private::configUseFileMetadata("UseFileMetadata");
 const QString SetupCamera::Private::configTrunHighQualityThumbs("TurnHighQualityThumbs");
 const QString SetupCamera::Private::configUseDefaultTargetAlbum("UseDefaultTargetAlbum");
 const QString SetupCamera::Private::configDefaultTargetAlbumId("DefaultTargetAlbumId");
@@ -343,7 +343,7 @@ SetupCamera::SetupCamera(QWidget* const parent)
     panel2->setAutoFillBackground(false);
 
     QVBoxLayout* const layout = new QVBoxLayout(panel2);
-    d->useDateFromMetadata    = new QCheckBox(i18n("Use date from metadata to sort items instead file-system date (makes connection slower)"), panel2);
+    d->useFileMetadata        = new QCheckBox(i18n("Use file metadata (makes connection slower)"), panel2);
     d->turnHighQualityThumbs  = new QCheckBox(i18n("Turn on high quality thumbnail loading (slower loading)"), panel2);
     d->useDefaultTargetAlbum  = new QCheckBox(i18n("Use a default target album to download from camera"), panel2);
     d->target1AlbumSelector   = new AlbumSelectWidget(panel2);
@@ -352,7 +352,7 @@ SetupCamera::SetupCamera(QWidget* const parent)
 
     layout->setMargin(KDialog::spacingHint());
     layout->setSpacing(KDialog::spacingHint());
-    layout->addWidget(d->useDateFromMetadata);
+    layout->addWidget(d->useFileMetadata);
     layout->addWidget(d->turnHighQualityThumbs);
     layout->addWidget(d->useDefaultTargetAlbum);
     layout->addWidget(d->target1AlbumSelector);
@@ -462,7 +462,7 @@ SetupCamera::SetupCamera(QWidget* const parent)
 
     grid2->addWidget(d->iconShowNameBox,          0, 0, 1, 1);
     grid2->addWidget(d->iconShowSizeBox,          1, 0, 1, 1);
-    grid2->addWidget(d->iconShowDateBox,       2, 0, 1, 1);
+    grid2->addWidget(d->iconShowDateBox,          2, 0, 1, 1);
 //  grid2->addWidget(d->iconShowResolutionBox,    3, 0, 1, 1);              TODO
     grid2->addWidget(d->iconShowFormatBox,        3, 0, 1, 1);
 
@@ -565,12 +565,25 @@ SetupCamera::SetupCamera(QWidget* const parent)
 
     // -------------------------------------------------------------
 
+    connect(d->useFileMetadata, SIGNAL(toggled(bool)),
+            this, SIGNAL(signalUseFileMetadataChanged(bool)));
+
+    // -------------------------------------------------------------
+
     readSettings();
 }
 
 SetupCamera::~SetupCamera()
 {
     delete d;
+}
+
+bool SetupCamera::useFileMetadata()
+{
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group(d->configGroupName);
+
+    return (group.readEntry(d->configUseFileMetadata, false));
 }
 
 void SetupCamera::readSettings()
@@ -594,10 +607,10 @@ void SetupCamera::readSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
 
-    d->useDateFromMetadata->setChecked(group.readEntry(d->configUseMetadataDateEntry, false));
+    d->useFileMetadata->setChecked(useFileMetadata());
     d->turnHighQualityThumbs->setChecked(group.readEntry(d->configTrunHighQualityThumbs, false));
     d->useDefaultTargetAlbum->setChecked(group.readEntry(d->configUseDefaultTargetAlbum, false));
-    PAlbum* album = AlbumManager::instance()->findPAlbum(group.readEntry(d->configDefaultTargetAlbumId, 0));
+    PAlbum* const album = AlbumManager::instance()->findPAlbum(group.readEntry(d->configDefaultTargetAlbumId, 0));
     d->target1AlbumSelector->setCurrentAlbum(album);
     d->target1AlbumSelector->setEnabled(d->useDefaultTargetAlbum->isChecked());
 
@@ -692,7 +705,7 @@ void SetupCamera::applySettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
 
-    group.writeEntry(d->configUseMetadataDateEntry, d->useDateFromMetadata->isChecked());
+    group.writeEntry(d->configUseFileMetadata,  d->useFileMetadata->isChecked());
     group.writeEntry(d->configTrunHighQualityThumbs, d->turnHighQualityThumbs->isChecked());
     group.writeEntry(d->configUseDefaultTargetAlbum, d->useDefaultTargetAlbum->isChecked());
     PAlbum* const album = d->target1AlbumSelector->currentAlbum();

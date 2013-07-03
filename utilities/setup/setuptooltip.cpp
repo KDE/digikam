@@ -27,6 +27,7 @@
 
 #include <QCheckBox>
 #include <QGroupBox>
+#include <QLabel>
 #include <QVBoxLayout>
 
 // KDE includes
@@ -35,11 +36,13 @@
 #include <klocale.h>
 #include <ktabwidget.h>
 #include <kvbox.h>
+#include <kseparator.h>
 
 // Local includes
 
 #include "albumsettings.h"
 #include "importsettings.h"
+#include "setupcamera.h"
 #include "dfontselect.h"
 
 namespace Digikam
@@ -50,6 +53,7 @@ class SetupToolTip::Private
 public:
 
     Private() :
+        cameraUseFileMetadata(false),
         showToolTipsBox(0),
         showFileNameBox(0),
         showFileDateBox(0),
@@ -103,6 +107,8 @@ public:
     {
     }
 
+    bool         cameraUseFileMetadata;
+    
     QCheckBox*   showToolTipsBox;
 
     QCheckBox*   showFileNameBox;
@@ -167,27 +173,27 @@ public:
 SetupToolTip::SetupToolTip(QWidget* const parent)
     : QScrollArea(parent), d(new Private)
 {
-    QWidget* panel        = new QWidget(viewport());
+    QWidget* const panel    = new QWidget(viewport());
     setWidget(panel);
     setWidgetResizable(true);
 
-    QVBoxLayout* vlay     = new QVBoxLayout(panel);
+    QVBoxLayout* const vlay = new QVBoxLayout(panel);
 
-    d->fontSelect         = new DFontSelect(i18n("Tool-Tips Font:"), panel);
+    d->fontSelect           = new DFontSelect(i18n("Tool-Tips Font:"), panel);
     d->fontSelect->setToolTip(i18n("Select here the font used to display text in tool-tips."));
 
-    d->tab                = new KTabWidget(panel);
+    d->tab                  = new KTabWidget(panel);
 
     // --------------------------------------------------------
 
-    KVBox* vbox           = new KVBox(panel);
+    KVBox* const vbox     = new KVBox(panel);
 
     d->showToolTipsBox    = new QCheckBox(i18n("Show icon-view and thumb-bar items' tool-tips"), vbox);
     d->showToolTipsBox->setWhatsThis(i18n("Set this option to display image information when "
                                           "the mouse hovers over an icon-view or thumb-bar item."));
 
-    d->fileSettingBox     = new QGroupBox(i18n("File/Item Information"), vbox);
-    QVBoxLayout* vlay2    = new QVBoxLayout(d->fileSettingBox);
+    d->fileSettingBox        = new QGroupBox(i18n("File/Item Information"), vbox);
+    QVBoxLayout* const vlay2 = new QVBoxLayout(d->fileSettingBox);
 
     d->showFileNameBox    = new QCheckBox(i18n("Show file name"), d->fileSettingBox);
     d->showFileNameBox->setWhatsThis(i18n("Set this option to display the image file name."));
@@ -204,7 +210,7 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
     d->showImageDimBox    = new QCheckBox(i18n("Show image dimensions"), d->fileSettingBox);
     d->showImageDimBox->setWhatsThis(i18n("Set this option to display the image dimensions in pixels."));
 
-    d->showImageARBox    = new QCheckBox(i18n("Show image aspect ratio"), d->fileSettingBox);
+    d->showImageARBox     = new QCheckBox(i18n("Show image aspect ratio"), d->fileSettingBox);
     d->showImageARBox->setWhatsThis(i18n("Set this option to display the image aspect ratio."));
 
     vlay2->addWidget(d->showFileNameBox);
@@ -219,8 +225,8 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    d->photoSettingBox    = new QGroupBox(i18n("Photograph Information"), vbox);
-    QVBoxLayout* vlay3    = new QVBoxLayout(d->photoSettingBox);
+    d->photoSettingBox       = new QGroupBox(i18n("Photograph Information"), vbox);
+    QVBoxLayout* const vlay3 = new QVBoxLayout(d->photoSettingBox);
 
     d->showPhotoMakeBox   = new QCheckBox(i18n("Show camera make and model"), d->photoSettingBox);
     d->showPhotoMakeBox->setWhatsThis(i18n("Set this option to display the make and model of the "
@@ -261,8 +267,8 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    d->digikamSettingBox = new QGroupBox(i18n("digiKam Information"), vbox);
-    QVBoxLayout* vlay4   = new QVBoxLayout(d->digikamSettingBox);
+    d->digikamSettingBox     = new QGroupBox(i18n("digiKam Information"), vbox);
+    QVBoxLayout* const vlay4 = new QVBoxLayout(d->digikamSettingBox);
 
     d->showAlbumNameBox  = new QCheckBox(i18n("Show album name"), d->digikamSettingBox);
     d->showAlbumNameBox->setWhatsThis(i18n("Set this option to display the album name."));
@@ -286,7 +292,7 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
     // --------------------------------------------------------
 
     d->videoSettingBox             = new QGroupBox(i18n("Video Information"), vbox);
-    QVBoxLayout* vlay5             = new QVBoxLayout(d->videoSettingBox);
+    QVBoxLayout* const vlay5       = new QVBoxLayout(d->videoSettingBox);
 
     d->showVideoAspectRatio        = new QCheckBox(i18n("Show Video Aspect Ratio"), d->videoSettingBox);
     d->showVideoAspectRatio->setWhatsThis(i18n("Set this option to display the Aspect Ratio of the Video"));
@@ -319,14 +325,14 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
     vlay5->setMargin(KDialog::spacingHint());
     vlay5->setSpacing(0);
 
-    QWidget* space = new QWidget(vbox);
+    QWidget* const space = new QWidget(vbox);
     vbox->setStretchFactor(space, 10);
     vbox->setMargin(KDialog::spacingHint());
     vbox->setSpacing(KDialog::spacingHint());
 
     // --------------------------------------------------------
 
-    KVBox* vbox2              = new KVBox(panel);
+    KVBox* const vbox2        = new KVBox(panel);
     d->showAlbumToolTipsBox   = new QCheckBox(i18n("Show album items' tool-tips"), vbox2);
     d->albumSettingBox        = new QGroupBox(i18n("Album Information"), vbox2);
 
@@ -348,7 +354,7 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
     d->showAlbumCaptionBox    = new QCheckBox(i18n("Show album caption"));
     d->showAlbumCaptionBox->setWhatsThis(i18n("Set this option to display the album caption."));
 
-    QVBoxLayout* albumSettingBoxLayout = new QVBoxLayout;
+    QVBoxLayout* const albumSettingBoxLayout = new QVBoxLayout;
     albumSettingBoxLayout->addWidget(d->showAlbumTitleBox);
     albumSettingBoxLayout->addWidget(d->showAlbumDateBox);
     albumSettingBoxLayout->addWidget(d->showAlbumCollectionBox);
@@ -356,14 +362,14 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
     albumSettingBoxLayout->addWidget(d->showAlbumCaptionBox);
     d->albumSettingBox->setLayout(albumSettingBoxLayout);
 
-    QWidget* space2 = new QWidget(vbox2);
+    QWidget* const space2 = new QWidget(vbox2);
     vbox2->setStretchFactor(space2, 10);
     vbox2->setMargin(KDialog::spacingHint());
     vbox2->setSpacing(KDialog::spacingHint());
 
     // --------------------------------------------------------
 
-    KVBox* vbox3             = new KVBox(panel);
+    KVBox* const vbox3       = new KVBox(panel);
     d->showImportToolTipsBox = new QCheckBox(i18n("Show import items' tool-tips"), vbox3);
     d->importSettingBox      = new QGroupBox(i18n("Import Information"), vbox3);
 
@@ -385,6 +391,9 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
     d->showItemDimensionsBox = new QCheckBox(i18n("Show item dimensions"));
     d->showItemDimensionsBox->setWhatsThis(i18n("Set this option to display the item dimensions."));
 
+    KSeparator* const line   = new KSeparator(Qt::Horizontal, d->photoSettingBox);
+    QLabel* const label      = new QLabel(i18n("Note: these settings require \"Use File Metadata\" option from Camera Setup Behavior page."), d->photoSettingBox);
+    
     d->showItemPhotoMakeBox  = new QCheckBox(i18n("Show camera make and model"), d->photoSettingBox);
     d->showItemPhotoMakeBox->setWhatsThis(i18n("Set this option to display the make and model of the "
                                                "camera with which the image has been taken."));
@@ -403,14 +412,16 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
 
     d->showItemPhotoWBBox    = new QCheckBox(i18n("Show camera white balance settings"), d->photoSettingBox);
     d->showItemPhotoWBBox->setWhatsThis(i18n("Set this option to display the camera white balance settings "
-                                         "used to take the image."));
+                                             "used to take the image."));
 
-    QVBoxLayout* importSettingBoxLayout = new QVBoxLayout;
+    QVBoxLayout* const importSettingBoxLayout = new QVBoxLayout;
     importSettingBoxLayout->addWidget(d->showItemTitleBox);
     importSettingBoxLayout->addWidget(d->showItemDateBox);
     importSettingBoxLayout->addWidget(d->showItemSizeBox);
     importSettingBoxLayout->addWidget(d->showItemTypeBox);
     importSettingBoxLayout->addWidget(d->showItemDimensionsBox);
+    importSettingBoxLayout->addWidget(line);
+    importSettingBoxLayout->addWidget(label);
     importSettingBoxLayout->addWidget(d->showItemPhotoMakeBox);
     importSettingBoxLayout->addWidget(d->showItemPhotoFocalBox);
     importSettingBoxLayout->addWidget(d->showItemPhotoExpoBox);
@@ -418,7 +429,7 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
     importSettingBoxLayout->addWidget(d->showItemPhotoWBBox);
     d->importSettingBox->setLayout(importSettingBoxLayout);
 
-    QWidget* space3 = new QWidget(vbox3);
+    QWidget* const space3 = new QWidget(vbox3);
     vbox3->setStretchFactor(space3, 10);
     vbox3->setMargin(KDialog::spacingHint());
     vbox3->setSpacing(KDialog::spacingHint());
@@ -452,6 +463,9 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
     connect(d->showAlbumToolTipsBox, SIGNAL(toggled(bool)),
             d->albumSettingBox, SLOT(setEnabled(bool)));
 
+    connect(d->showImportToolTipsBox, SIGNAL(toggled(bool)),
+            this, SLOT(slotImportToolTipsChanged()));    
+    
     // --------------------------------------------------------
 
     readSettings();
@@ -616,6 +630,28 @@ void SetupToolTip::readSettings()
     d->showItemPhotoExpoBox->setChecked(importSettings->getToolTipsShowPhotoExpo());
     d->showItemPhotoFlashBox->setChecked(importSettings->getToolTipsShowPhotoFlash());
     d->showItemPhotoWBBox->setChecked(importSettings->getToolTipsShowPhotoWB());
+}
+
+void SetupToolTip::slotUseFileMetadataChanged(bool b)
+{
+    d->cameraUseFileMetadata = b;
+    refreshCameraOptions();
+}
+
+void SetupToolTip::slotImportToolTipsChanged()
+{
+    refreshCameraOptions();
+}
+
+void SetupToolTip::refreshCameraOptions()
+{
+    bool b = d->showImportToolTipsBox->isChecked();
+    d->importSettingBox->setEnabled(b);
+    d->showItemPhotoMakeBox->setEnabled(b && d->cameraUseFileMetadata);
+    d->showItemPhotoFocalBox->setEnabled(b && d->cameraUseFileMetadata);
+    d->showItemPhotoExpoBox->setEnabled(b && d->cameraUseFileMetadata);
+    d->showItemPhotoFlashBox->setEnabled(b && d->cameraUseFileMetadata);
+    d->showItemPhotoWBBox->setEnabled(b && d->cameraUseFileMetadata);
 }
 
 }  // namespace Digikam

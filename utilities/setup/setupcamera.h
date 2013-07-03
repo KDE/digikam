@@ -48,6 +48,12 @@ public:
     void applySettings();
     bool checkSettings();
 
+    bool useFileMetadata();
+
+Q_SIGNALS:
+    
+    void signalUseFileMetadataChanged(bool);
+    
 private Q_SLOTS:
 
     void slotProcessGphotoUrl(const QString& url);
