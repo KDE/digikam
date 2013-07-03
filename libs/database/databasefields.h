@@ -26,6 +26,10 @@
 #ifndef DATABASEFIELDS_H
 #define DATABASEFIELDS_H
 
+// C++ includes
+
+#include <stdint.h>
+
 // Qt includes
 
 #include <QFlags>
@@ -59,6 +63,7 @@ enum ImagesField
     ImagesFirst        = Album,
     ImagesLast         = UniqueHash
 };
+typedef uint8_t ImagesMinSizeType;
 
 enum ImageInformationField
 {
@@ -88,6 +93,7 @@ enum ImageInformationField
     ImageInformationFirst = Rating,
     ImageInformationLast  = PickLabel
 };
+typedef uint16_t ImageInformationMinSizeType;
 
 enum ImageMetadataField
 {
@@ -127,6 +133,7 @@ enum ImageMetadataField
     ImageMetadataFirst           = Make,
     ImageMetadataLast            = SubjectDistanceCategory
 };
+typedef uint16_t ImageMetadataMinSizeType;
 
 enum ImagePositionsField
 {
@@ -154,6 +161,7 @@ enum ImagePositionsField
     ImagePositionsFirst = Latitude,
     ImagePositionsLast  = PositionDescription
 };
+typedef uint16_t ImagePositionsMinSizeType;
 
 enum ImageCommentsField
 {
@@ -171,6 +179,7 @@ enum ImageCommentsField
     ImageCommentsFirst = CommentType,
     ImageCommentsLast  = Comment
 };
+typedef uint8_t ImageCommentsMinSizeType;
 
 enum ImageHistoryInfoField
 {
@@ -184,6 +193,7 @@ enum ImageHistoryInfoField
     ImageHistoryInfoFirst = ImageUUID,
     ImageHistoryInfoLast  = ImageRelations
 };
+typedef uint8_t ImageHistoryInfoMinSizeType;
 
 enum VideoMetadataField
 {
@@ -205,6 +215,7 @@ enum VideoMetadataField
     VideoMetadataFirst           = AspectRatio,
     VideoMetadataLast            = VideoCodec
 };
+typedef uint8_t VideoMetadataMinSizeType;
 
 Q_DECLARE_FLAGS(Images, ImagesField)
 Q_DECLARE_FLAGS(ImageInformation, ImageInformationField)
@@ -219,6 +230,9 @@ template<typename FieldName> class FieldMetaInfo { };
     template<> class FieldMetaInfo <FieldName> { public:            \
         static const FieldName##Field First = FieldName##First;     \
         static const FieldName##Field Last = FieldName##Last;       \
+        typedef FieldName##MinSizeType MinSizeType;                 \
+        inline static MinSizeType toMinSizeType(const FieldName value) { return MinSizeType(value); } \
+        inline static FieldName fromMinSizeType(const MinSizeType value) { return FieldName(value); } \
     };
 
 DECLARE_FIELDMETAINFO(Images)

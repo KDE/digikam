@@ -34,6 +34,7 @@ class DatabaseFieldsTest : public QObject
 
 private Q_SLOTS:
 
+    void testMinSizeType();
     void testIterators();
     void testMetaInfo();
     void testIteratorsSetOnly();

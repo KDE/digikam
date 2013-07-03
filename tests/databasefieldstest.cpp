@@ -235,3 +235,24 @@ void DatabaseFieldsTest::testHashRemoveAll()
     QCOMPARE(t3.size(), c1-2);
 }
 
+#define DECLARE_MINSIZE_TEST(FieldName)                                     \
+    {                                                                       \
+        const FieldMetaInfo<FieldName>::MinSizeType m = FieldName##All;     \
+        const FieldName v = FieldMetaInfo<FieldName>::fromMinSizeType(m);  \
+        QCOMPARE(v, FieldName##All);                                        \
+    }
+
+/**
+ * Verify that the minimum size types still hold all info of the enum.
+ */
+void DatabaseFieldsTest::testMinSizeType()
+{
+    DECLARE_MINSIZE_TEST(Images)
+    DECLARE_MINSIZE_TEST(ImageInformation)
+    DECLARE_MINSIZE_TEST(ImageMetadata)
+    DECLARE_MINSIZE_TEST(ImageComments)
+    DECLARE_MINSIZE_TEST(ImagePositions)
+    DECLARE_MINSIZE_TEST(ImageHistoryInfo)
+    DECLARE_MINSIZE_TEST(VideoMetadata)
+}
+
