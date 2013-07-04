@@ -604,9 +604,6 @@ void ImportUI::setupActions()
 
     // ---------------------------------------------------------------------------------
 
-    d->anim = new DLogoAction(this);
-    actionCollection()->addAction("logo_action", d->anim);
-
     createGUI(xmlFile());
 
     d->showMenuBarAction->setChecked(!menuBar()->isHidden());  // NOTE: workaround for B.K.O #171080
@@ -1050,7 +1047,7 @@ void ImportUI::slotBusy(bool val)
         // downloadSelectedAction, downloadDelSelectedAction, deleteSelectedAction
         slotNewSelection(d->view->selectedUrls().count() > 0);
 
-        d->anim->stop();
+        m_animLogo->stop();
         d->statusProgressBar->setNotify(false);
 
         // like WDestructiveClose, but after camera controller operation has safely finished
@@ -1066,9 +1063,9 @@ void ImportUI::slotBusy(bool val)
             return;
         }
 
-        if (!d->anim->running())
+        if (!m_animLogo->running())
         {
-            d->anim->start();
+            m_animLogo->start();
         }
 
         d->busy = true;

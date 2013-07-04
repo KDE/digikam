@@ -48,7 +48,6 @@
 
 #include "cameracontroller.h"
 #include "filtercombo.h"
-#include "dlogoaction.h"
 #include "dzoombar.h"
 #include "freespacewidget.h"
 #include "imagepropertiessidebarcamgui.h"
@@ -117,7 +116,6 @@ public:
         renameCustomizer(0),
         albumCustomizer(0),
         advancedSettings(0),
-        anim(0),
         rightSideBar(0),
         zoomBar(0),
         statusProgressBar(0),
@@ -207,8 +205,6 @@ public:
     AlbumCustomizer*              albumCustomizer;
     AdvancedSettings*             advancedSettings;
     ScriptingSettings*            scriptingSettings;
-
-    DLogoAction*                  anim;
 
     FilterStatusBar*              filterStatusBar;
     ImagePropertiesSideBarCamGui* rightSideBar;

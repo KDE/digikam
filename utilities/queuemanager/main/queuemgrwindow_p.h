@@ -40,7 +40,6 @@
 
 #include "actionthread.h"
 #include "assignedlist.h"
-#include "dlogoaction.h"
 #include "queuelist.h"
 #include "queuepool.h"
 #include "queuesettingsview.h"
@@ -93,7 +92,6 @@ public:
         toolSettings           = 0;
         showMenuBarAction      = 0;
         thread                 = 0;
-        animLogo               = 0;
         currentQueueToProcess  = 0;
     }
 
@@ -125,8 +123,6 @@ public:
     SidebarSplitter*         verticalSplitter;
 
     KToggleAction*           showMenuBarAction;
-
-    DLogoAction*             animLogo;
 
     BatchToolsManager*       batchToolsMgr;
 

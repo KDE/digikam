@@ -37,6 +37,7 @@
 // Local includes
 
 #include "digikam_export.h"
+#include "dlogoaction.h"
 
 class QEvent;
 
@@ -104,6 +105,10 @@ public:
     
     QAction* statusBarMenuAction() const;
 
+protected:
+
+    DLogoAction* m_animLogo;
+    
 protected:
 
     bool eventFilter(QObject* obj, QEvent* ev);

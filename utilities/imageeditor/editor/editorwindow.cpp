@@ -194,7 +194,6 @@ EditorWindow::EditorWindow(const char* const name)
     m_splitter                 = 0;
     m_vSplitter                = 0;
     m_stackView                = 0;
-    m_animLogo                 = 0;
     m_setExifOrientationTag    = true;
     m_cancelSlideShow          = false;
     m_editingOriginalImage     = true;
@@ -638,10 +637,6 @@ void EditorWindow::setupStandardActions()
     actionCollection()->addAction("editorwindow_closetool", m_closeToolAction);
     m_closeToolAction->setShortcut(KShortcut(Qt::Key_Escape));
     connect(m_closeToolAction, SIGNAL(triggered()), this, SLOT(slotCloseTool()));
-
-
-    m_animLogo = new DLogoAction(this);
-    actionCollection()->addAction("logo_action", m_animLogo);
 
     toggleNonDestructiveActions();
     toggleToolActions();
