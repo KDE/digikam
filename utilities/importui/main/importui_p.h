@@ -93,7 +93,6 @@ public:
         downloadDelNewAction(0),
         downloadDelAllAction(0),
         downloadDelSelectedAction(0),
-        dbStatAction(0),
         lockAction(0),
         selectAllAction(0),
         selectInvertAction(0),
@@ -170,7 +169,6 @@ public:
     KAction*                      downloadDelNewAction;
     KAction*                      downloadDelAllAction;
     KAction*                      downloadDelSelectedAction;
-    KAction*                      dbStatAction;
     KAction*                      lockAction;
     KAction*                      selectAllAction;
     KAction*                      selectInvertAction;

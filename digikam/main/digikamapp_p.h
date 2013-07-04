@@ -163,7 +163,6 @@ public:
 #ifdef USE_SCRIPT_IFACE
         scriptConsoleAction(0),
 #endif
-        dbStatAction(0),
         kipiHelpAction(0),
         addCameraSeparatorAction(0),
         quitAction(0),
@@ -289,7 +288,6 @@ public:
 #endif
 
     // Application Actions
-    KAction*                            dbStatAction;
     KAction*                            kipiHelpAction;
     QAction*                            addCameraSeparatorAction;
     QAction*                            quitAction;

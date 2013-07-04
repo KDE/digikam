@@ -613,10 +613,6 @@ void EditorWindow::setupStandardActions()
             this, SLOT(slotThemeChanged()));
 
 
-    // -- Standard 'Help' menu actions ---------------------------------------------
-
-    createHelpActions();
-
     // -- Keyboard-only actions added to <MainWindow> ------------------------------
 
     KAction* altBackwardAction = new KAction(i18n("Previous Image"), this);

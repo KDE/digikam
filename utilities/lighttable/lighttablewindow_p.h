@@ -75,7 +75,6 @@ public:
         backwardAction(0),
         firstAction(0),
         lastAction(0),
-        dbStatAction(0),
         showBarAction(0),
         syncPreviewAction(0),
         navigateByPairAction(0),
@@ -123,7 +122,6 @@ public:
     KAction*                  donateMoneyAction;
     KAction*                  contributeAction;
     KAction*                  rawCameraListAction;
-    KAction*                  dbStatAction;
 
     KToggleAction*            showBarAction;
     KToggleAction*            syncPreviewAction;

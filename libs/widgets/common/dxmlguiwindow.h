@@ -77,7 +77,7 @@ public:
 
     /** Create common actions from Help menu for all digiKam main windows
      */
-    void createHelpActions();
+    void createHelpActions(bool coreOptions=true);
     
     /** Set full-screen options to managed window
      */
@@ -132,7 +132,9 @@ private Q_SLOTS:
 
     void slotToggleFullScreen(bool);
     
+    // Slots for common Help Actions
     virtual void slotComponentsInfo() {};
+    virtual void slotDBStat()         {};
 
 private:
 

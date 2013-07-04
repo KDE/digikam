@@ -1226,12 +1226,6 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    d->dbStatAction = new KAction(KIcon("network-server-database"), i18n("Database Statistics"), this);
-    connect(d->dbStatAction, SIGNAL(triggered()), this, SLOT(slotDBStat()));
-    actionCollection()->addAction("help_dbstat", d->dbStatAction);
-
-    // -----------------------------------------------------------
-
     d->kipiHelpAction = new KAction(KIcon("kipi"), i18n("Kipi Plugins Handbook"), this);
     connect(d->kipiHelpAction, SIGNAL(triggered()), this, SLOT(slotShowKipiHelp()));
     actionCollection()->addAction("help_kipi", d->kipiHelpAction);

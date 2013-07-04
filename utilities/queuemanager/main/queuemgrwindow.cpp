@@ -432,10 +432,6 @@ void QueueMgrWindow::setupActions()
 
     createHelpActions();
         
-    d->dbStatAction = new KAction(KIcon("network-server-database"), i18n("Database Statistics"), this);
-    connect(d->dbStatAction, SIGNAL(triggered()), this, SLOT(slotDBStat()));
-    actionCollection()->addAction("queuemgr_dbstat", d->dbStatAction);
-
     // Provides a menu entry that allows showing/hiding the toolbar(s)
     setStandardToolBarMenuEnabled(true);
 

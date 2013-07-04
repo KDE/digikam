@@ -73,6 +73,7 @@ public:
         statusbarVisibility    = true;
         libsInfoAction         = 0;
         about                  = 0;
+        dbStatAction           = 0;
     }
 
 public:
@@ -120,6 +121,7 @@ public:
     bool                     statusbarVisibility;
     
     // Common Help menu actions
+    KAction*                 dbStatAction;
     KAction*                 libsInfoAction;
     DAboutData*              about;
 };
@@ -137,7 +139,7 @@ DXmlGuiWindow::~DXmlGuiWindow()
     delete d;
 }
 
-void DXmlGuiWindow::createHelpActions()
+void DXmlGuiWindow::createHelpActions(bool coreOptions)
 {
     d->libsInfoAction = new KAction(KIcon("help-about"), i18n("Components Information"), this);
     connect(d->libsInfoAction, SIGNAL(triggered()), this, SLOT(slotComponentsInfo()));
@@ -145,6 +147,14 @@ void DXmlGuiWindow::createHelpActions()
 
     d->about = new DAboutData(this);
     d->about->registerHelpActions();
+    
+    // Add options only for core components (typically all excepted Showfoto)
+    if (coreOptions)
+    {
+        d->dbStatAction = new KAction(KIcon("network-server-database"), i18n("Database Statistics"), this);
+        connect(d->dbStatAction, SIGNAL(triggered()), this, SLOT(slotDBStat()));
+        actionCollection()->addAction("help_dbstat", d->dbStatAction);
+    }
 }
 
 void DXmlGuiWindow::setFullScreenOptions(int options)
