@@ -52,7 +52,6 @@
 #include "albummanager.h"
 #include "albumsettings.h"
 #include "cameralist.h"
-#include "daboutdata.h"
 #include "splashscreen.h"
 #include "dzoombar.h"
 #include "digikamview.h"
@@ -164,8 +163,6 @@ public:
 #ifdef USE_SCRIPT_IFACE
         scriptConsoleAction(0),
 #endif
-        libsInfoAction(0),
-        dbStatAction(0),
         kipiHelpAction(0),
         addCameraSeparatorAction(0),
         quitAction(0),
@@ -185,7 +182,6 @@ public:
         tagsActionManager(0),
         zoomBar(0),
         statusLabel(0),
-        about(0),
         modelCollection(0)
     {
     }
@@ -292,8 +288,6 @@ public:
 #endif
 
     // Application Actions
-    KAction*                            libsInfoAction;
-    KAction*                            dbStatAction;
     KAction*                            kipiHelpAction;
     QAction*                            addCameraSeparatorAction;
     QAction*                            quitAction;
@@ -321,8 +315,6 @@ public:
     KSqueezedTextLabel*                 statusLabel;
     QString                             statusBarSelectionText;
     KComboBox*                          mapViewSwitcher;
-
-    DAboutData*                         about;
 
     DigikamModelCollection*             modelCollection;
 };

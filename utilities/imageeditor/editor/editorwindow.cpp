@@ -194,7 +194,6 @@ EditorWindow::EditorWindow(const char* const name)
     m_splitter                 = 0;
     m_vSplitter                = 0;
     m_stackView                = 0;
-    m_animLogo                 = 0;
     m_setExifOrientationTag    = true;
     m_cancelSlideShow          = false;
     m_editingOriginalImage     = true;
@@ -613,15 +612,6 @@ void EditorWindow::setupStandardActions()
             this, SLOT(slotThemeChanged()));
 
 
-    // -- Standard 'Help' menu actions ---------------------------------------------
-
-    d->about = new DAboutData(this);
-    d->about->registerHelpActions();
-
-    d->libsInfoAction = new KAction(KIcon("help-about"), i18n("Components Information"), this);
-    connect(d->libsInfoAction, SIGNAL(triggered()), this, SLOT(slotComponentsInfo()));
-    actionCollection()->addAction("editorwindow_librariesinfo", d->libsInfoAction);
-
     // -- Keyboard-only actions added to <MainWindow> ------------------------------
 
     KAction* altBackwardAction = new KAction(i18n("Previous Image"), this);
@@ -647,10 +637,6 @@ void EditorWindow::setupStandardActions()
     actionCollection()->addAction("editorwindow_closetool", m_closeToolAction);
     m_closeToolAction->setShortcut(KShortcut(Qt::Key_Escape));
     connect(m_closeToolAction, SIGNAL(triggered()), this, SLOT(slotCloseTool()));
-
-
-    m_animLogo = new DLogoAction(this);
-    actionCollection()->addAction("logo_action", m_animLogo);
 
     toggleNonDestructiveActions();
     toggleToolActions();
@@ -2766,7 +2752,7 @@ void EditorWindow::setOverExposureToolTip(bool on)
 {
     d->overExposureIndicator->setToolTip(
         on ? i18n("Over-Exposure indicator is enabled")
-        : i18n("Over-Exposure indicator is disabled"));
+           : i18n("Over-Exposure indicator is disabled"));
 }
 
 void EditorWindow::slotToggleSlideShow()
@@ -2783,7 +2769,7 @@ void EditorWindow::slotSelectionChanged(const QRect& sel)
 
 void EditorWindow::slotComponentsInfo()
 {
-    LibsInfoDlg* dlg = new LibsInfoDlg(this);
+    LibsInfoDlg* const dlg = new LibsInfoDlg(this);
     dlg->show();
 }
 

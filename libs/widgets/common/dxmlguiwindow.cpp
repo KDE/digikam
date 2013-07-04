@@ -48,6 +48,10 @@
 #include <kdialog.h>
 #include <klocale.h>
 
+// Local includes
+
+#include "daboutdata.h"
+
 namespace Digikam
 {
 
@@ -67,6 +71,9 @@ public:
         thumbbarVisibility     = true;
         menubarVisibility      = true;
         statusbarVisibility    = true;
+        libsInfoAction         = 0;
+        about                  = 0;
+        dbStatAction           = 0;
     }
 
 public:
@@ -112,6 +119,12 @@ public:
     /** Store previous visibility of statusbar before ful-screen mode.
      */
     bool                     statusbarVisibility;
+    
+    // Common Help actions
+    KAction*                 dbStatAction;
+    KAction*                 libsInfoAction;
+    DAboutData*              about;
+    DLogoAction*             anim;
 };
 
 // --------------------------------------------------------------------------------------------------------
@@ -119,12 +132,34 @@ public:
 DXmlGuiWindow::DXmlGuiWindow(QWidget* const parent, Qt::WindowFlags f)
     : KXmlGuiWindow(parent, f), d(new Private)
 {
+    m_animLogo = 0;
     installEventFilter(this);
 }
 
 DXmlGuiWindow::~DXmlGuiWindow()
 {
     delete d;
+}
+
+void DXmlGuiWindow::createHelpActions(bool coreOptions)
+{
+    d->libsInfoAction = new KAction(KIcon("help-about"), i18n("Components Information"), this);
+    connect(d->libsInfoAction, SIGNAL(triggered()), this, SLOT(slotComponentsInfo()));
+    actionCollection()->addAction("help_librariesinfo", d->libsInfoAction);   
+
+    d->about = new DAboutData(this);
+    d->about->registerHelpActions();
+    
+    m_animLogo = new DLogoAction(this);
+    actionCollection()->addAction("logo_action", m_animLogo);
+    
+    // Add options only for core components (typically all excepted Showfoto)
+    if (coreOptions)
+    {
+        d->dbStatAction = new KAction(KIcon("network-server-database"), i18n("Database Statistics"), this);
+        connect(d->dbStatAction, SIGNAL(triggered()), this, SLOT(slotDBStat()));
+        actionCollection()->addAction("help_dbstat", d->dbStatAction);
+    }
 }
 
 void DXmlGuiWindow::setFullScreenOptions(int options)

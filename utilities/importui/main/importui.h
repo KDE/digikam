@@ -208,7 +208,7 @@ private Q_SLOTS:
     void slotNewSelection(bool);
     void slotImageSelected(const CamItemInfoList& selection, const CamItemInfoList& listAll);
 
-    void slotItemsSelected(CamItemInfo info, bool selected);
+    void slotItemsSelected(const CamItemInfo& info, bool selected);
 
     void slotSwitchedToPreview();
     void slotSwitchedToIconView();

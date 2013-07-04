@@ -502,6 +502,10 @@ void ShowFoto::setupActions()
 
     actionCollection()->addAction(KStandardAction::Quit, "showfoto_quit", this, SLOT(close()));
 
+    // -- Standard 'Help' menu actions ---------------------------------------------
+
+    createHelpActions(false);
+    
     // --- Create the GUI ----------------------------------------------------
 
     createGUI(xmlFile());

@@ -1222,20 +1222,7 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    d->libsInfoAction = new KAction(KIcon("help-about"), i18n("Components Information"), this);
-    connect(d->libsInfoAction, SIGNAL(triggered()), this, SLOT(slotComponentsInfo()));
-    actionCollection()->addAction("help_librariesinfo", d->libsInfoAction);
-
-    // -----------------------------------------------------------
-
-    d->about = new DAboutData(this);
-    d->about->registerHelpActions();
-
-    // -----------------------------------------------------------
-
-    d->dbStatAction = new KAction(KIcon("network-server-database"), i18n("Database Statistics"), this);
-    connect(d->dbStatAction, SIGNAL(triggered()), this, SLOT(slotDBStat()));
-    actionCollection()->addAction("help_dbstat", d->dbStatAction);
+    createHelpActions();
 
     // -----------------------------------------------------------
 
@@ -1247,10 +1234,6 @@ void DigikamApp::setupActions()
 
     d->tipAction = actionCollection()->addAction(KStandardAction::TipofDay, "help_tipofday",
                                                  this, SLOT(slotShowTip()));
-
-    // -- Logo on the right of tool bar --------------------------
-
-    actionCollection()->addAction("logo_action", new DLogoAction(this));
 
     //------------------------------------------------------------
 
@@ -2859,11 +2842,6 @@ void DigikamApp::slotSetCheckedExifOrientationAction(const ImageInfo& info)
     }
 }
 
-void DigikamApp::slotComponentsInfo()
-{
-    showDigikamComponentsInfo();
-}
-
 void DigikamApp::setupImageTransformActions()
 {
     d->imageRotateActionMenu = new KActionMenu(KIcon("object-rotate-right"), i18n("Rotate"), actionCollection());
@@ -3031,6 +3009,11 @@ void DigikamApp::toogleShowBar()
             d->showBarAction->setEnabled(false);
             break;
     }
+}
+
+void DigikamApp::slotComponentsInfo()
+{
+    showDigikamComponentsInfo();
 }
 
 }  // namespace Digikam

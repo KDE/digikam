@@ -55,7 +55,6 @@
 
 // KDE includes
 
-#include <kaboutdata.h>
 #include <kactioncollection.h>
 #include <kapplication.h>
 #include <kcalendarsystem.h>
@@ -231,12 +230,12 @@ ImportUI* ImportUI::instance()
 
 void ImportUI::setupUserArea()
 {
-    KHBox* widget   = new KHBox(this);
-    d->splitter     = new SidebarSplitter(widget);
-    KVBox* vbox     = new KVBox(d->splitter);
-    d->view         = new ImportView(this, vbox);
-    d->historyView  = new DHistoryView(vbox);
-    d->rightSideBar = new ImagePropertiesSideBarCamGui(widget, d->splitter, KMultiTabBar::Right, true);
+    KHBox* const widget = new KHBox(this);
+    d->splitter         = new SidebarSplitter(widget);
+    KVBox* const vbox   = new KVBox(d->splitter);
+    d->view             = new ImportView(this, vbox);
+    d->historyView      = new DHistoryView(vbox);
+    d->rightSideBar     = new ImagePropertiesSideBarCamGui(widget, d->splitter, KMultiTabBar::Right, true);
     d->rightSideBar->setObjectName("CameraGui Sidebar Right");
     d->splitter->setFrameStyle(QFrame::NoFrame);
     d->splitter->setFrameShadow(QFrame::Plain);
@@ -460,25 +459,25 @@ void ImportUI::setupActions()
 
     // -- Item Sorting ------------------------------------------------------------
 
-    d->itemSortAction = new KSelectAction(i18n("&Sort Items"), this);
+    d->itemSortAction                    = new KSelectAction(i18n("&Sort Items"), this);
     d->itemSortAction->setWhatsThis(i18n("The value by which the items are sorted in the thumbnail view"));
-    QSignalMapper* imageSortMapper = new QSignalMapper(this);
+    QSignalMapper* const imageSortMapper = new QSignalMapper(this);
     connect(imageSortMapper, SIGNAL(mapped(int)), d->view, SLOT(slotSortImages(int)));
     actionCollection()->addAction("item_sort", d->itemSortAction);
 
     // map to CamItemSortSettings enum
-    QAction* sortByNameAction = d->itemSortAction->addAction(i18n("By Name"));
-    QAction* sortByPathAction = d->itemSortAction->addAction(i18n("By Path"));
-    QAction* sortByDateAction = d->itemSortAction->addAction(i18n("By Date")); //TODO: Implement sort by creation date.
-    QAction* sortByFileSizeAction = d->itemSortAction->addAction(i18n("By Size"));
-    QAction* sortByRatingAction = d->itemSortAction->addAction(i18n("By Rating"));
-    QAction* sortByDownloadAction = d->itemSortAction->addAction(i18n("By Download State"));
+    QAction* const sortByNameAction     = d->itemSortAction->addAction(i18n("By Name"));
+    QAction* const sortByPathAction     = d->itemSortAction->addAction(i18n("By Path"));
+    QAction* const sortByDateAction     = d->itemSortAction->addAction(i18n("By Date")); //TODO: Implement sort by creation date.
+    QAction* const sortByFileSizeAction = d->itemSortAction->addAction(i18n("By Size"));
+    QAction* const sortByRatingAction   = d->itemSortAction->addAction(i18n("By Rating"));
+    QAction* const sortByDownloadAction = d->itemSortAction->addAction(i18n("By Download State"));
 
-    connect(sortByNameAction, SIGNAL(triggered()), imageSortMapper, SLOT(map()));
-    connect(sortByPathAction, SIGNAL(triggered()), imageSortMapper, SLOT(map()));
-    connect(sortByDateAction, SIGNAL(triggered()), imageSortMapper, SLOT(map())); //TODO: Implement sort by creation date.
+    connect(sortByNameAction,     SIGNAL(triggered()), imageSortMapper, SLOT(map()));
+    connect(sortByPathAction,     SIGNAL(triggered()), imageSortMapper, SLOT(map()));
+    connect(sortByDateAction,     SIGNAL(triggered()), imageSortMapper, SLOT(map())); //TODO: Implement sort by creation date.
     connect(sortByFileSizeAction, SIGNAL(triggered()), imageSortMapper, SLOT(map()));
-    connect(sortByRatingAction, SIGNAL(triggered()), imageSortMapper, SLOT(map()));
+    connect(sortByRatingAction,   SIGNAL(triggered()), imageSortMapper, SLOT(map()));
     connect(sortByDownloadAction, SIGNAL(triggered()), imageSortMapper, SLOT(map()));
 
     imageSortMapper->setMapping(sortByNameAction, (int)CamItemSortSettings::SortByFileName);
@@ -492,16 +491,16 @@ void ImportUI::setupActions()
 
     // -- Item Sort Order ------------------------------------------------------------
 
-    d->itemSortOrderAction = new KSelectAction(i18n("Item Sorting &Order"), this);
+    d->itemSortOrderAction                    = new KSelectAction(i18n("Item Sorting &Order"), this);
     d->itemSortOrderAction->setWhatsThis(i18n("Defines whether items are sorted in ascending or descending manner."));
-    QSignalMapper* imageSortOrderMapper = new QSignalMapper(this);
+    QSignalMapper* const imageSortOrderMapper = new QSignalMapper(this);
     connect(imageSortOrderMapper, SIGNAL(mapped(int)), d->view, SLOT(slotSortImagesOrder(int)));
     actionCollection()->addAction("item_sort_order", d->itemSortOrderAction);
 
-    QAction* sortAscendingAction = d->itemSortOrderAction->addAction(KIcon("view-sort-ascending"), i18n("Ascending"));
-    QAction* sortDescendingAction = d->itemSortOrderAction->addAction(KIcon("view-sort-descending"), i18n("Descending"));
+    QAction* const sortAscendingAction = d->itemSortOrderAction->addAction(KIcon("view-sort-ascending"), i18n("Ascending"));
+    QAction* const sortDescendingAction = d->itemSortOrderAction->addAction(KIcon("view-sort-descending"), i18n("Descending"));
 
-    connect(sortAscendingAction, SIGNAL(triggered()), imageSortOrderMapper, SLOT(map()));
+    connect(sortAscendingAction,  SIGNAL(triggered()), imageSortOrderMapper, SLOT(map()));
     connect(sortDescendingAction, SIGNAL(triggered()), imageSortOrderMapper, SLOT(map()));
 
     imageSortOrderMapper->setMapping(sortAscendingAction, (int)CamItemSortSettings::AscendingOrder);
@@ -511,20 +510,20 @@ void ImportUI::setupActions()
 
     // -- Item Grouping ------------------------------------------------------------
 
-    d->itemsGroupAction = new KSelectAction(i18n("&Group Items"), this);
+    d->itemsGroupAction                  = new KSelectAction(i18n("&Group Items"), this);
     d->itemsGroupAction->setWhatsThis(i18n("The categories in which the items in the thumbnail view are displayed"));
-    QSignalMapper* itemGroupMapper = new QSignalMapper(this);
+    QSignalMapper* const itemGroupMapper = new QSignalMapper(this);
     connect(itemGroupMapper, SIGNAL(mapped(int)), d->view, SLOT(slotGroupImages(int)));
     actionCollection()->addAction("item_group", d->itemsGroupAction);
 
     // map to CamItemSortSettings enum
-    QAction* noCategoriesAction  = d->itemsGroupAction->addAction(i18n("Flat List"));
-    QAction* CategoryByFolderAction = d->itemsGroupAction->addAction(i18n("By Folder"));
-    QAction* groupByFormatAction = d->itemsGroupAction->addAction(i18n("By Format"));
+    QAction* const noCategoriesAction  = d->itemsGroupAction->addAction(i18n("Flat List"));
+    QAction* const CategoryByFolderAction = d->itemsGroupAction->addAction(i18n("By Folder"));
+    QAction* const groupByFormatAction = d->itemsGroupAction->addAction(i18n("By Format"));
 
-    connect(noCategoriesAction, SIGNAL(triggered()), itemGroupMapper, SLOT(map()));
+    connect(noCategoriesAction,     SIGNAL(triggered()), itemGroupMapper, SLOT(map()));
     connect(CategoryByFolderAction, SIGNAL(triggered()), itemGroupMapper, SLOT(map()));
-    connect(groupByFormatAction, SIGNAL(triggered()), itemGroupMapper, SLOT(map()));
+    connect(groupByFormatAction,    SIGNAL(triggered()), itemGroupMapper, SLOT(map()));
 
     itemGroupMapper->setMapping(noCategoriesAction,     (int)CamItemSortSettings::NoCategories);
     itemGroupMapper->setMapping(CategoryByFolderAction, (int)CamItemSortSettings::CategoryByFolder);
@@ -588,17 +587,8 @@ void ImportUI::setupActions()
 
     // -- Standard 'Help' menu actions ---------------------------------------------
 
-    d->about = new DAboutData(this);
-    d->about->registerHelpActions();
-
-    d->libsInfoAction = new KAction(KIcon("help-about"), i18n("Components Information"), this);
-    connect(d->libsInfoAction, SIGNAL(triggered()), this, SLOT(slotComponentsInfo()));
-    actionCollection()->addAction("importui_librariesinfo", d->libsInfoAction);
-
-    d->dbStatAction = new KAction(KIcon("network-server-database"), i18n("Database Statistics"), this);
-    connect(d->dbStatAction, SIGNAL(triggered()), this, SLOT(slotDBStat()));
-    actionCollection()->addAction("importui_dbstat", d->dbStatAction);
-
+    createHelpActions();
+    
     // Provides a menu entry that allows showing/hiding the toolbar(s)
     setStandardToolBarMenuEnabled(true);
 
@@ -607,15 +597,12 @@ void ImportUI::setupActions()
 
     // -- Keyboard-only actions added to <MainWindow> ------------------------------
 
-    KAction* altBackwardAction = new KAction(i18n("Previous Image"), this);
+    KAction* const altBackwardAction = new KAction(i18n("Previous Image"), this);
     actionCollection()->addAction("importui_backward_shift_space", altBackwardAction);
     altBackwardAction->setShortcut(KShortcut(Qt::SHIFT + Qt::Key_Space));
     connect(altBackwardAction, SIGNAL(triggered()), d->view, SLOT(slotPrevItem()));
 
     // ---------------------------------------------------------------------------------
-
-    d->anim = new DLogoAction(this);
-    actionCollection()->addAction("logo_action", d->anim);
 
     createGUI(xmlFile());
 
@@ -1060,7 +1047,7 @@ void ImportUI::slotBusy(bool val)
         // downloadSelectedAction, downloadDelSelectedAction, deleteSelectedAction
         slotNewSelection(d->view->selectedUrls().count() > 0);
 
-        d->anim->stop();
+        m_animLogo->stop();
         d->statusProgressBar->setNotify(false);
 
         // like WDestructiveClose, but after camera controller operation has safely finished
@@ -1076,9 +1063,9 @@ void ImportUI::slotBusy(bool val)
             return;
         }
 
-        if (!d->anim->running())
+        if (!m_animLogo->running())
         {
-            d->anim->start();
+            m_animLogo->start();
         }
 
         d->busy = true;
@@ -2359,7 +2346,7 @@ void ImportUI::slotImageSelected(const CamItemInfoList& selection, const CamItem
 }
 
 //FIXME: To be removed.
-void ImportUI::slotItemsSelected(CamItemInfo info, bool selected)
+void ImportUI::slotItemsSelected(const CamItemInfo& info, bool selected)
 {
     if (!d->controller)
     {
