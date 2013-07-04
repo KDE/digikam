@@ -1,3 +1,26 @@
+/* ============================================================
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 20013-07-03
+ * Description : Tag Manager main class
+ *
+ * Copyright (C) 2013 by Veaceslav Munteanu <veaceslav dot munteanu90 at gmail dot com>
+ *
+ * This program is free software; you can redistribute it
+ * and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation;
+ * either version 2, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * ============================================================ */
+
 #include <kdebug.h>
 #include <klocale.h>
 #include <QVBoxLayout>
@@ -9,9 +32,15 @@
 #include <kmainwindow.h>
 #include <kmultitabbar.h>
 #include <QTreeView>
+#include <QtGui/QHeaderView>
+#include <QtGui/QLabel>
+#include <QtGui/QLineEdit>
+#include <QtGui/QListView>
+#include <kactionmenu.h>
 
 #include "tagsmanager.h"
 #include "tagpropwidget.h"
+#include "tagfolderview.h"
 
 namespace Digikam
 {
@@ -61,6 +90,7 @@ public:
     }
 
     QTreeView*      treeModel;
+    TagFolderView*  tagFolderView;
     QLabel *        tagmngrLabel;
     QLabel*         tagPixmap;
     QLabel*         digikamPixmap;
@@ -78,13 +108,16 @@ public:
     QListView*      listView;
 
     TagPropWidget*  tagPropWidget;
+
+    TagModel*       tagModel;
 };
 
-TagsManager::TagsManager()
+TagsManager::TagsManager(TagModel* model)
     : KDialog(0), d(new PrivateTagMngr())
 {
 
     /** No buttons **/
+    d->tagModel = model;
     this->setButtons(0x00);
 
     setupUi(this);
@@ -102,6 +135,8 @@ void TagsManager::setupUi(KDialog *Dialog)
      Dialog->setWindowTitle(i18n("Tags Manager"));
 
      QVBoxLayout* mainLayout = new QVBoxLayout();
+
+     /** Tag Pixmap, search and digikam.org logo **/
      QHBoxLayout* firstLine = new QHBoxLayout();
 
      d->tagPixmap = new QLabel();
@@ -139,6 +174,8 @@ void TagsManager::setupUi(KDialog *Dialog)
      d->tagmngrLabel->setFont(font2);
      d->tagmngrLabel->setAutoFillBackground(true);
 
+     /** Tree Widget & Actions + Tag Properties sidebar **/
+
      d->treeWindow = new KMainWindow(this);
      d->mainToolbar = new KToolBar(d->treeWindow);
 
@@ -166,39 +203,46 @@ void TagsManager::setupUi(KDialog *Dialog)
 
      connect(d->rightToolBar->tab(0),SIGNAL(clicked()),this, SLOT(slotOpenProperties()));
 
-
-     QHBoxLayout* thirdLine = new QHBoxLayout();
-     d->listView = new QListView(Dialog);
-     d->listView->setObjectName(QString::fromUtf8("listView"));
-     //listView->setGeometry(QRect(0, 100, 221, 611));
-     d->listView->setContextMenuPolicy(Qt::CustomContextMenu);
-     d->listView->setMaximumWidth(300);
-
-     d->treeModel = new QTreeView();
-     d->treeModel->setObjectName(QString::fromUtf8("treeModel"));
-
-
-     QVBoxLayout* listLayout = new QVBoxLayout();
-     listLayout->addWidget(d->tagmngrLabel);
-     listLayout->addWidget(d->listView);
-
      d->treeWinLayout = new QHBoxLayout(d->treeWindow);
-     d->treeWinLayout->addWidget(d->treeModel,9);
+
+     if(d->tagModel == 0)
+     {
+        d->treeModel = new QTreeView();
+        d->treeWinLayout->addWidget(d->treeModel,9);
+     }
+     else
+     {
+         d->tagFolderView = new TagFolderView(this,d->tagModel);
+         d->treeWinLayout->addWidget(d->tagFolderView,9);
+     }
+
      d->tagPropWidget = new TagPropWidget(d->treeModel);
      d->tagPropWidget->setMaximumWidth(350);
      d->treeWinLayout->addWidget(d->tagPropWidget,3);
      d->tagPropWidget->hide();
 
+     /** Tag List and Tag Manager Title **/
+
+     QHBoxLayout* thirdLine = new QHBoxLayout();
+     d->listView = new QListView(Dialog);
+     d->listView->setObjectName(QString::fromUtf8("listView"));
+
+     d->listView->setContextMenuPolicy(Qt::CustomContextMenu);
+     d->listView->setMaximumWidth(300);
+
+     QVBoxLayout* listLayout = new QVBoxLayout();
+     listLayout->addWidget(d->tagmngrLabel);
+     listLayout->addWidget(d->listView);
+
+
      QWidget* treeCentralW = new QWidget(d->treeWindow);
      treeCentralW->setLayout(d->treeWinLayout);
 
      d->treeWindow->setCentralWidget(treeCentralW);
-     //treeWindow->centralWidget()->setLayout(treeWinLayout);
 
      thirdLine->addLayout(listLayout,2);
      thirdLine->addWidget(d->treeWindow,9);
      thirdLine->addWidget(d->rightToolBar);
-     //thirdLine->addWidget(tagprop);
 
      mainLayout->addLayout(firstLine);
      mainLayout->addLayout(thirdLine);
@@ -210,7 +254,6 @@ void TagsManager::setupUi(KDialog *Dialog)
 void TagsManager::slotOpenProperties()
 {
     KMultiTabBarTab* sender = (KMultiTabBarTab*)QObject::sender();
-    kDebug() << "Is checked " << sender->isChecked();
     if(sender->isChecked())
         d->tagPropWidget->show();
     else

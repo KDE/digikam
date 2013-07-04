@@ -1,3 +1,27 @@
+/* ============================================================
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 20013-07-03
+ * Description : Tag Properties widget to display tag properties
+ *               when a tag or multiple tags are selected
+ *
+ * Copyright (C) 2013 by Veaceslav Munteanu <veaceslav dot munteanu90 at gmail dot com>
+ *
+ * This program is free software; you can redistribute it
+ * and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation;
+ * either version 2, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * ============================================================ */
+
 #include "tagpropwidget.h"
 #include <QLabel>
 #include <QVBoxLayout>
@@ -20,7 +44,6 @@ public:
         titleEdit       = 0;
         iconButton      = 0;
         resetIconButton = 0;
-       // mainRootAlbum   = 0;
         topLabel        = 0;
         keySeqWidget    = 0;
         create          = false;
@@ -36,29 +59,12 @@ public:
     QPushButton*        resetIconButton;
 
     KKeySequenceWidget* keySeqWidget;
-
-    //TAlbum*             mainRootAlbum;
     SearchTextBar*      titleEdit;
 };
 
 TagPropWidget::TagPropWidget(QWidget* const parent)
     : QWidget(parent), d(new PrivateTagProp())
 {
-    //QVBoxLayout* layout = new QVBoxLayout(this);
-
-    //layout->addWidget(new QLabel("Tag Properties"));
-    //layout->addWidget(new QLabel("Tag Properties"));
-/*
-    setButtons(Help|Ok|Cancel);
-    setDefaultButton(Ok);
-    setModal(true);
-    setHelp("tagscreation.anchor", "digikam");
-*/
-
-    //QWidget* const this = new QWidget(this);
-    //setMainWidget(this);
-
-    // --------------------------------------------------------
 
     QGridLayout* const grid = new QGridLayout(this);
     QLabel* const logo      = new QLabel(this);
@@ -83,24 +89,6 @@ TagPropWidget::TagPropWidget(QWidget* const parent)
     QLabel* const tipLabel = new QLabel(this);
     tipLabel->setTextFormat(Qt::RichText);
     tipLabel->setWordWrap(true);
-/**
-    if (d->create)
-    {
-        AlbumList tList = AlbumManager::instance()->allTAlbums();
-
-        for (AlbumList::const_iterator it = tList.constBegin(); it != tList.constEnd(); ++it)
-        {
-            TAlbum* const tag = static_cast<TAlbum*>(*it);
-            d->titleEdit->completionObject()->addItem(tag->tagPath());
-        }
-    }
-    else
-    {
-        d->titleEdit->setText(d->mainRootAlbum->title());
-        tipLabel->hide();
-    }
-*/
-    // --------------------------------------------------------
 
     QLabel* const iconTextLabel = new QLabel(this);
     iconTextLabel->setText(i18n("&Icon:"));
@@ -109,28 +97,15 @@ TagPropWidget::TagPropWidget(QWidget* const parent)
     d->iconButton->setFixedSize(40, 40);
     iconTextLabel->setBuddy(d->iconButton);
 
-    // In create mode, by default assign the icon of the parent (if not root) to this new tag.
-    //d->icon = album->icon();
-
-    //d->iconButton->setIcon(SyncJob::getTagThumbnail(album));
 
     d->resetIconButton = new QPushButton(KIcon("view-refresh"), i18n("Reset"), this);
 
-
-     //   d->resetIconButton->hide();
-
-
-    // --------------------------------------------------------
 
     QLabel* const kscTextLabel = new QLabel(this);
     kscTextLabel->setText(i18n("&Shortcut:"));
 
     d->keySeqWidget      = new KKeySequenceWidget(this);
     kscTextLabel->setBuddy(d->keySeqWidget);
-    // Do not inherit tag shortcut, only creates a conflict shortcut, see bug 309558.
-    //KShortcut ksc(album->property(TagPropertyName::tagKeyboardShortcut()));
-    //d->keySeqWidget->setKeySequence(ksc.primary(), KKeySequenceWidget::NoValidate);
-    //d->keySeqWidget->setCheckActionCollections(TagsActionMngr::defaultManager()->actionCollections());
 
     QLabel* const tipLabel2 = new QLabel(this);
     tipLabel2->setTextFormat(Qt::RichText);
@@ -154,23 +129,7 @@ TagPropWidget::TagPropWidget(QWidget* const parent)
     grid->setRowStretch(7, 10);
     grid->setColumnStretch(3, 10);
     grid->setMargin(0);
-    //grid->setSpacing(KDialog::spacingHint());
 
-    // --------------------------------------------------------
-/**
-    connect(d->iconButton, SIGNAL(clicked()),
-            this, SLOT(slotIconChanged()));
-
-    connect(d->resetIconButton, SIGNAL(clicked()),
-            this, SLOT(slotIconResetClicked()));
-
-    connect(d->titleEdit, SIGNAL(textChanged(QString)),
-            this, SLOT(slotTitleChanged(QString)));
-*/
-    // --------------------------------------------------------
-
-    //slotTitleChanged(d->titleEdit->text());
-    //d->titleEdit->setFocus();
     adjustSize();
 }
 

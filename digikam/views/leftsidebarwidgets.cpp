@@ -185,6 +185,7 @@ public:
     KPushButton*   openTagMngr;
     SearchTextBar* tagSearchBar;
     TagFolderView* tagFolderView;
+    TagsManager*   tagMngr;
 };
 
 TagViewSideBarWidget::TagViewSideBarWidget(QWidget* const parent, TagModel* const model)
@@ -270,8 +271,9 @@ void TagViewSideBarWidget::setCurrentAlbum(TAlbum* album)
 
 void TagViewSideBarWidget::slotOpenTagManager()
 {
-    TagsManager* tm = new TagsManager();
-    tm->show();
+    if(!d->tagMngr)
+        d->tagMngr = new TagsManager(d->tagModel);
+    d->tagMngr->show();
 }
 
 // -----------------------------------------------------------------------------
