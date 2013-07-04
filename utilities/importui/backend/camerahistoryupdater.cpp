@@ -158,7 +158,7 @@ void CameraHistoryUpdater::proccessMap(const QByteArray& id, CHUpdateItemMap& ma
     do
     {
         // We query database to check if (*it).have been already downloaded from camera.
-        switch (DownloadHistory::status(id, (*it).name, (*it).size, (*it).mtime))
+        switch (DownloadHistory::status(id, (*it).name, (*it).size, (*it).ctime))
         {
             case DownloadHistory::NotDownloaded:
                 (*it).downloaded = CamItemInfo::NewPicture;

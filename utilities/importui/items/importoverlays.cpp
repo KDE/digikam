@@ -231,8 +231,10 @@ void ImportRatingOverlay::setActive(bool active)
                 this, SLOT(slotRatingChanged(int)));
 
         if (view()->model())
+        {
             connect(view()->model(), SIGNAL(dataChanged(QModelIndex,QModelIndex)),
                     this, SLOT(slotDataChanged(QModelIndex,QModelIndex)));
+        }
     }
     else
     {

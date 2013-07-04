@@ -48,7 +48,6 @@
 
 #include "cameracontroller.h"
 #include "filtercombo.h"
-#include "daboutdata.h"
 #include "dlogoaction.h"
 #include "dzoombar.h"
 #include "freespacewidget.h"
@@ -94,8 +93,6 @@ public:
         downloadDelNewAction(0),
         downloadDelAllAction(0),
         downloadDelSelectedAction(0),
-        libsInfoAction(0),
-        dbStatAction(0),
         lockAction(0),
         selectAllAction(0),
         selectInvertAction(0),
@@ -129,8 +126,7 @@ public:
         progressTimer(0),
         progressValue(0),
         historyView(0),
-        filterComboBox(0),
-        about(0)
+        filterComboBox(0)
     {
     }
 
@@ -173,8 +169,6 @@ public:
     KAction*                      downloadDelNewAction;
     KAction*                      downloadDelAllAction;
     KAction*                      downloadDelSelectedAction;
-    KAction*                      libsInfoAction;
-    KAction*                      dbStatAction;
     KAction*                      lockAction;
     KAction*                      selectAllAction;
     KAction*                      selectInvertAction;
@@ -233,8 +227,6 @@ public:
     FilterComboBox*               filterComboBox;
 
     CHUpdateItemMap               map;
-
-    DAboutData*                   about;
 };
 
 const QString ImportUI::Private::configGroupName("Camera Settings");

@@ -194,15 +194,15 @@ void UMSCamera::getItemInfo(const QString& folder, const QString& itemName, CamI
             fillItemInfoFromMetadata(info, meta);
 
             // Fall back to file system info
-            if (info.mtime.isNull())
+            if (info.ctime.isNull())
             {
-                info.mtime = ImageScanner::creationDateFromFilesystem(fi);
+                info.ctime = ImageScanner::creationDateFromFilesystem(fi);
             }
         }
         else
         {
             // Only use file system date
-            info.mtime = ImageScanner::creationDateFromFilesystem(fi);
+            info.ctime = ImageScanner::creationDateFromFilesystem(fi);
         }
     }
 }
@@ -497,7 +497,7 @@ bool UMSCamera::uploadItem(const QString& folder, const QString& itemName, const
         info.name             = fi.fileName();
         info.folder           = !folder.endsWith('/') ? folder + QString("/") : folder;
         info.mime             = mime;
-        info.mtime            = dt;
+        info.ctime            = dt;
         info.size             = fi.size();
         info.width            = dims.width();
         info.height           = dims.height();

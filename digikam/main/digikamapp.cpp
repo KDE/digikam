@@ -539,8 +539,8 @@ void DigikamApp::setupViewConnections()
     connect(d->view, SIGNAL(signalSelectionChanged(int)),
             this, SLOT(slotSelectionChanged(int)));
 
-    connect(d->view, SIGNAL(signalImageSelected(ImageInfoList,bool,bool,ImageInfoList)),
-            this, SLOT(slotImageSelected(ImageInfoList,bool,bool,ImageInfoList)));
+    connect(d->view, SIGNAL(signalImageSelected(ImageInfoList,ImageInfoList)),
+            this, SLOT(slotImageSelected(ImageInfoList,ImageInfoList)));
 
     connect(d->view, SIGNAL(signalSwitchedToPreview()),
             this, SLOT(slotSwitchedToPreview()));
@@ -1227,20 +1227,7 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    d->libsInfoAction = new KAction(KIcon("help-about"), i18n("Components Information"), this);
-    connect(d->libsInfoAction, SIGNAL(triggered()), this, SLOT(slotComponentsInfo()));
-    actionCollection()->addAction("help_librariesinfo", d->libsInfoAction);
-
-    // -----------------------------------------------------------
-
-    d->about = new DAboutData(this);
-    d->about->registerHelpActions();
-
-    // -----------------------------------------------------------
-
-    d->dbStatAction = new KAction(KIcon("network-server-database"), i18n("Database Statistics"), this);
-    connect(d->dbStatAction, SIGNAL(triggered()), this, SLOT(slotDBStat()));
-    actionCollection()->addAction("help_dbstat", d->dbStatAction);
+    createHelpActions();
 
     // -----------------------------------------------------------
 
@@ -1464,8 +1451,7 @@ void DigikamApp::slotTagSelected(bool val)
     d->editTagAction->setEnabled(enabled);
 }
 
-void DigikamApp::slotImageSelected(const ImageInfoList& selection, bool hasPrev, bool hasNext,
-                                   const ImageInfoList& listAll)
+void DigikamApp::slotImageSelected(const ImageInfoList& selection, const ImageInfoList& listAll)
 {
     /// @todo Currently only triggered by IconView, need to adapt to TableView
     int num_images = listAll.count();
@@ -2865,11 +2851,6 @@ void DigikamApp::slotSetCheckedExifOrientationAction(const ImageInfo& info)
     }
 }
 
-void DigikamApp::slotComponentsInfo()
-{
-    showDigikamComponentsInfo();
-}
-
 void DigikamApp::setupImageTransformActions()
 {
     d->imageRotateActionMenu = new KActionMenu(KIcon("object-rotate-right"), i18n("Rotate"), actionCollection());
@@ -3037,6 +3018,11 @@ void DigikamApp::toogleShowBar()
             d->showBarAction->setEnabled(false);
             break;
     }
+}
+
+void DigikamApp::slotComponentsInfo()
+{
+    showDigikamComponentsInfo();
 }
 
 }  // namespace Digikam

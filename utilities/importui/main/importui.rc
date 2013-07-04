@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="302" name="importui" >
+<gui version="304" name="importui" >
 
 <MenuBar>
 
@@ -60,8 +60,9 @@
 
     <Menu name="help" ><text>&amp;Help</text>
         <Action name="help_rawcameralist"/>
-        <Action name="importui_librariesinfo"/>
-        <Action name="importui_dbstat"/>
+        <Action name="help_librariesinfo"/>
+        <Action name="help_dbstat"/>
+        <Separator/>        
         <Action name="help_donatemoney" />
         <Action name="help_contribute" />
     </Menu>

@@ -39,7 +39,6 @@
 
 // Local includes
 
-#include "daboutdata.h"
 #include "editorwindow.h"
 #include "versionmanager.h"
 
@@ -81,7 +80,6 @@ public:
         filePrintAction(0),
         flipHorizAction(0),
         flipVertAction(0),
-        libsInfoAction(0),
         rotateLeftAction(0),
         rotateRightAction(0),
         selectAllAction(0),
@@ -108,8 +106,7 @@ public:
         zoomBar(0),
         previewToolBar(0),
         exposureSettings(0),
-        toolIface(0),
-        about(0)
+        toolIface(0)
     {
     }
 
@@ -161,7 +158,6 @@ public:
     KAction*                   filePrintAction;
     KAction*                   flipHorizAction;
     KAction*                   flipVertAction;
-    KAction*                   libsInfoAction;
     KAction*                   rawCameraListAction;
     KAction*                   rotateLeftAction;
     KAction*                   rotateRightAction;
@@ -200,8 +196,6 @@ public:
     EditorToolIface*           toolIface;
 
     VersionManager             defaultVersionManager;
-
-    DAboutData*                about;
 
     QList<int>                 fullscreenSizeBackup;
 };

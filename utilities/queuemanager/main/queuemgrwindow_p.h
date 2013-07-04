@@ -40,7 +40,6 @@
 
 #include "actionthread.h"
 #include "assignedlist.h"
-#include "daboutdata.h"
 #include "dlogoaction.h"
 #include "queuelist.h"
 #include "queuepool.h"
@@ -82,8 +81,6 @@ public:
         newQueueAction         = 0;
         saveQueueAction        = 0;
         rawCameraListAction    = 0;
-        libsInfoAction         = 0;
-        dbStatAction           = 0;
         topSplitter            = 0;
         bottomSplitter         = 0;
         verticalSplitter       = 0;
@@ -97,7 +94,6 @@ public:
         showMenuBarAction      = 0;
         thread                 = 0;
         animLogo               = 0;
-        about                  = 0;
         currentQueueToProcess  = 0;
     }
 
@@ -123,8 +119,6 @@ public:
     KAction*                 donateMoneyAction;
     KAction*                 contributeAction;
     KAction*                 rawCameraListAction;
-    KAction*                 libsInfoAction;
-    KAction*                 dbStatAction;
 
     SidebarSplitter*         topSplitter;
     SidebarSplitter*         bottomSplitter;
@@ -145,8 +139,6 @@ public:
     AssignedListView*        assignedList;
     QueuePool*               queuePool;
     QueueSettingsView*       queueSettingsView;
-
-    DAboutData*              about;
 
     const QString            TOP_SPLITTER_CONFIG_KEY;
     const QString            BOTTOM_SPLITTER_CONFIG_KEY;

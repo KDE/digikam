@@ -6,8 +6,8 @@
  * Date        : 2012-28-07
  * Description : Import icon view tool tip
  *
- * Copyright (C) 2008-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2012 by Islam Wazery <wazery at ubuntu dot com>
+ * Copyright (C) 2012      by Islam Wazery <wazery at ubuntu dot com>
+ * Copyright (C) 2008-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -46,12 +46,12 @@ namespace Digikam
 
 QString ImportToolTipFiller::CamItemInfoTipContents(const CamItemInfo& info)
 {
-    QString            str;
-    ImportSettings*    settings = ImportSettings::instance();
+    QString str;
+    ImportSettings* const settings = ImportSettings::instance();
     DToolTipStyleSheet cnt(settings->getToolTipsFont());
 
-    PhotoInfoContainer photoInfo = info.photoInfo;
-    QString tip                  = cnt.tipHeader;
+    PhotoInfoContainer photoInfo   = info.photoInfo;
+    QString tip                    = cnt.tipHeader;
 
     // -- File properties ----------------------------------------------
 
@@ -72,9 +72,9 @@ QString ImportToolTipFiller::CamItemInfoTipContents(const CamItemInfo& info)
 
         if (settings->getToolTipsShowFileDate())
         {
-            QDateTime modifiedDate = info.mtime;
-            str = KGlobal::locale()->formatDateTime(modifiedDate, KLocale::ShortDate, true);
-            tip += cnt.cellBeg + i18n("Date:") + cnt.cellMid + str + cnt.cellEnd;
+            QDateTime createdDate  = info.ctime;
+            str                     = KGlobal::locale()->formatDateTime(createdDate, KLocale::ShortDate, true);
+            tip                    += cnt.cellBeg + i18n("Date:") + cnt.cellMid + str + cnt.cellEnd;
         }
 
         if (settings->getToolTipsShowFileSize())
@@ -111,7 +111,8 @@ QString ImportToolTipFiller::CamItemInfoTipContents(const CamItemInfo& info)
         }
     }
 
-    // -- Photograph Info ----------------------------------------------------
+    // -- Photograph Info -----------------------------------------------------------------------
+    // NOTE: these info require \"Use File Metadata\" option from Camera Setup Behavior page.
 
     if (settings->getToolTipsShowPhotoMake()  ||
         settings->getToolTipsShowPhotoFocal() ||
@@ -119,7 +120,6 @@ QString ImportToolTipFiller::CamItemInfoTipContents(const CamItemInfo& info)
         settings->getToolTipsShowPhotoFlash() ||
         settings->getToolTipsShowPhotoWB())
     {
-        //FIXME: PhotoInfoContainer is always null, which needs investigation.
         if (!photoInfo.isNull())
         {
             QString metaStr;
@@ -138,26 +138,26 @@ QString ImportToolTipFiller::CamItemInfoTipContents(const CamItemInfo& info)
                 metaStr += cnt.cellBeg + i18n("Make/Model:") + cnt.cellMid + Qt::escape(str) + cnt.cellEnd;
             }
 
-//            if (settings->getToolTipsShowPhotoFocal())
-//            {
-//                str = photoInfo.aperture.isEmpty() ? cnt.unavailable : photoInfo.aperture;
+            if (settings->getToolTipsShowPhotoFocal())
+            {
+                str = photoInfo.aperture.isEmpty() ? cnt.unavailable : photoInfo.aperture;
 
-//                if (photoInfo.focalLength35.isEmpty())
-//                {
-//                    str += QString(" / %1").arg(photoInfo.focalLength.isEmpty() ? cnt.unavailable : photoInfo.focalLength);
-//                }
-//                else
-//                {
-//                    str += QString(" / %1").arg(i18n("%1 (35mm: %2)",photoInfo.focalLength,photoInfo.focalLength35));
-//                }
+                if (photoInfo.focalLength35mm.isEmpty())
+                {
+                    str += QString(" / %1").arg(photoInfo.focalLength.isEmpty() ? cnt.unavailable : photoInfo.focalLength);
+                }
+                else
+                {
+                    str += QString(" / %1").arg(i18n("%1 (35mm: %2)",photoInfo.focalLength, photoInfo.focalLength35mm));
+                }
 
-//                if (str.length() > cnt.maxStringLength)
-//                {
-//                    str = str.left(cnt.maxStringLength-3) + "...";
-//                }
+                if (str.length() > cnt.maxStringLength)
+                {
+                    str = str.left(cnt.maxStringLength-3) + "...";
+                }
 
-//                metaStr += cnt.cellBeg + i18n("Aperture/Focal:") + cnt.cellMid + Qt::escape(str) + cnt.cellEnd;
-//            }
+                metaStr += cnt.cellBeg + i18n("Aperture/Focal:") + cnt.cellMid + Qt::escape(str) + cnt.cellEnd;
+            }
 
             if (settings->getToolTipsShowPhotoExpo())
             {
@@ -172,18 +172,18 @@ QString ImportToolTipFiller::CamItemInfoTipContents(const CamItemInfo& info)
                 metaStr += cnt.cellBeg + i18n("Exposure/Sensitivity:") + cnt.cellMid + Qt::escape(str) + cnt.cellEnd;
             }
 
-//            if (settings->getToolTipsShowPhotoFlash())
-//            {
-//                str = photoInfo.flashMode.isEmpty() ? cnt.unavailable : photoInfo.flashMode;
+            if (settings->getToolTipsShowPhotoFlash())
+            {
+                str = photoInfo.flash.isEmpty() ? cnt.unavailable : photoInfo.flash;
 
-//                if (str.length() > cnt.maxStringLength)
-//                {
-//                    str = str.left(cnt.maxStringLength-3) + "...";
-//                }
+                if (str.length() > cnt.maxStringLength)
+                {
+                    str = str.left(cnt.maxStringLength-3) + "...";
+                }
 
-//                metaStr += cnt.cellBeg + i18nc("camera flash settings",
-//                                               "Flash:") + cnt.cellMid + Qt::escape(str) + cnt.cellEnd;
-//            }
+                metaStr += cnt.cellBeg + i18nc("camera flash settings",
+                                               "Flash:") + cnt.cellMid + Qt::escape(str) + cnt.cellEnd;
+            }
 
             if (settings->getToolTipsShowPhotoWB())
             {

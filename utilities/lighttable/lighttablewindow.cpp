@@ -617,16 +617,7 @@ void LightTableWindow::setupActions()
 
     // -- Standard 'Help' menu actions ---------------------------------------------
 
-    d->about = new DAboutData(this);
-    d->about->registerHelpActions();
-
-    d->libsInfoAction = new KAction(KIcon("help-about"), i18n("Components Information"), this);
-    connect(d->libsInfoAction, SIGNAL(triggered()), this, SLOT(slotComponentsInfo()));
-    actionCollection()->addAction("lighttable_librariesinfo", d->libsInfoAction);
-
-    d->dbStatAction = new KAction(KIcon("network-server-database"), i18n("Database Statistics"), this);
-    connect(d->dbStatAction, SIGNAL(triggered()), this, SLOT(slotDBStat()));
-    actionCollection()->addAction("lighttable_dbstat", d->dbStatAction);
+    createHelpActions();
 
     // Provides a menu entry that allows showing/hiding the toolbar(s)
     setStandardToolBarMenuEnabled(true);

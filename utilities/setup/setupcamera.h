@@ -36,7 +36,6 @@
 namespace Digikam
 {
 
-
 class SetupCamera : public QScrollArea
 {
     Q_OBJECT
@@ -49,6 +48,12 @@ public:
     void applySettings();
     bool checkSettings();
 
+    bool useFileMetadata();
+
+Q_SIGNALS:
+    
+    void signalUseFileMetadataChanged(bool);
+    
 private Q_SLOTS:
 
     void slotProcessGphotoUrl(const QString& url);

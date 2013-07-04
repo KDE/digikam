@@ -613,15 +613,6 @@ void EditorWindow::setupStandardActions()
             this, SLOT(slotThemeChanged()));
 
 
-    // -- Standard 'Help' menu actions ---------------------------------------------
-
-    d->about = new DAboutData(this);
-    d->about->registerHelpActions();
-
-    d->libsInfoAction = new KAction(KIcon("help-about"), i18n("Components Information"), this);
-    connect(d->libsInfoAction, SIGNAL(triggered()), this, SLOT(slotComponentsInfo()));
-    actionCollection()->addAction("editorwindow_librariesinfo", d->libsInfoAction);
-
     // -- Keyboard-only actions added to <MainWindow> ------------------------------
 
     KAction* altBackwardAction = new KAction(i18n("Previous Image"), this);
@@ -2766,7 +2757,7 @@ void EditorWindow::setOverExposureToolTip(bool on)
 {
     d->overExposureIndicator->setToolTip(
         on ? i18n("Over-Exposure indicator is enabled")
-        : i18n("Over-Exposure indicator is disabled"));
+           : i18n("Over-Exposure indicator is disabled"));
 }
 
 void EditorWindow::slotToggleSlideShow()
@@ -2783,7 +2774,7 @@ void EditorWindow::slotSelectionChanged(const QRect& sel)
 
 void EditorWindow::slotComponentsInfo()
 {
-    LibsInfoDlg* dlg = new LibsInfoDlg(this);
+    LibsInfoDlg* const dlg = new LibsInfoDlg(this);
     dlg->show();
 }
 
