@@ -55,7 +55,6 @@
 
 // KDE includes
 
-#include <kaboutdata.h>
 #include <kactioncollection.h>
 #include <kapplication.h>
 #include <kcalendarsystem.h>
@@ -590,9 +589,6 @@ void ImportUI::setupActions()
 
     createHelpActions();
     
-    d->about = new DAboutData(this);
-    d->about->registerHelpActions();
-
     d->dbStatAction = new KAction(KIcon("network-server-database"), i18n("Database Statistics"), this);
     connect(d->dbStatAction, SIGNAL(triggered()), this, SLOT(slotDBStat()));
     actionCollection()->addAction("importui_dbstat", d->dbStatAction);

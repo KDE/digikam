@@ -48,6 +48,10 @@
 #include <kdialog.h>
 #include <klocale.h>
 
+// Local includes
+
+#include "daboutdata.h"
+
 namespace Digikam
 {
 
@@ -68,6 +72,7 @@ public:
         menubarVisibility      = true;
         statusbarVisibility    = true;
         libsInfoAction         = 0;
+        about                  = 0;
     }
 
 public:
@@ -114,8 +119,9 @@ public:
      */
     bool                     statusbarVisibility;
     
-    // Common actions
+    // Common Help menu actions
     KAction*                 libsInfoAction;
+    DAboutData*              about;
 };
 
 // --------------------------------------------------------------------------------------------------------
@@ -136,6 +142,9 @@ void DXmlGuiWindow::createHelpActions()
     d->libsInfoAction = new KAction(KIcon("help-about"), i18n("Components Information"), this);
     connect(d->libsInfoAction, SIGNAL(triggered()), this, SLOT(slotComponentsInfo()));
     actionCollection()->addAction("help_librariesinfo", d->libsInfoAction);   
+
+    d->about = new DAboutData(this);
+    d->about->registerHelpActions();
 }
 
 void DXmlGuiWindow::setFullScreenOptions(int options)

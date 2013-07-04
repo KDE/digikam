@@ -616,9 +616,6 @@ void EditorWindow::setupStandardActions()
     // -- Standard 'Help' menu actions ---------------------------------------------
 
     createHelpActions();
-    
-    d->about = new DAboutData(this);
-    d->about->registerHelpActions();
 
     // -- Keyboard-only actions added to <MainWindow> ------------------------------
 

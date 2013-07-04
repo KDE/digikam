@@ -48,7 +48,6 @@
 
 #include "cameracontroller.h"
 #include "filtercombo.h"
-#include "daboutdata.h"
 #include "dlogoaction.h"
 #include "dzoombar.h"
 #include "freespacewidget.h"
@@ -128,8 +127,7 @@ public:
         progressTimer(0),
         progressValue(0),
         historyView(0),
-        filterComboBox(0),
-        about(0)
+        filterComboBox(0)
     {
     }
 
@@ -231,8 +229,6 @@ public:
     FilterComboBox*               filterComboBox;
 
     CHUpdateItemMap               map;
-
-    DAboutData*                   about;
 };
 
 const QString ImportUI::Private::configGroupName("Camera Settings");

@@ -52,7 +52,6 @@
 #include "albummanager.h"
 #include "albumsettings.h"
 #include "cameralist.h"
-#include "daboutdata.h"
 #include "splashscreen.h"
 #include "dzoombar.h"
 #include "digikamview.h"
@@ -184,7 +183,6 @@ public:
         tagsActionManager(0),
         zoomBar(0),
         statusLabel(0),
-        about(0),
         modelCollection(0)
     {
     }
@@ -319,8 +317,6 @@ public:
     KSqueezedTextLabel*                 statusLabel;
     QString                             statusBarSelectionText;
     KComboBox*                          mapViewSwitcher;
-
-    DAboutData*                         about;
 
     DigikamModelCollection*             modelCollection;
 };

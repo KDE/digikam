@@ -39,7 +39,6 @@
 
 // Local includes
 
-#include "daboutdata.h"
 #include "editorwindow.h"
 #include "versionmanager.h"
 
@@ -107,8 +106,7 @@ public:
         zoomBar(0),
         previewToolBar(0),
         exposureSettings(0),
-        toolIface(0),
-        about(0)
+        toolIface(0)
     {
     }
 
@@ -198,8 +196,6 @@ public:
     EditorToolIface*           toolIface;
 
     VersionManager             defaultVersionManager;
-
-    DAboutData*                about;
 
     QList<int>                 fullscreenSizeBackup;
 };

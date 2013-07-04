@@ -38,7 +38,6 @@
 
 #include "imagepropertiessidebardb.h"
 #include "statusprogressbar.h"
-#include "daboutdata.h"
 #include "dzoombar.h"
 #include "lighttableview.h"
 #include "lighttablethumbbar.h"
@@ -92,8 +91,7 @@ public:
         rightZoomBar(0),
         statusProgressBar(0),
         leftSideBar(0),
-        rightSideBar(0),
-        about(0)
+        rightSideBar(0)
     {
     }
 
@@ -150,8 +148,6 @@ public:
 
     ImagePropertiesSideBarDB* leftSideBar;
     ImagePropertiesSideBarDB* rightSideBar;
-
-    DAboutData*               about;
 };
 
 }  // namespace Digikam

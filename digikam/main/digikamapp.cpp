@@ -1223,9 +1223,6 @@ void DigikamApp::setupActions()
     // -----------------------------------------------------------
 
     createHelpActions();
-    
-    d->about = new DAboutData(this);
-    d->about->registerHelpActions();
 
     // -----------------------------------------------------------
 
