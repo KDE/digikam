@@ -68,9 +68,8 @@ TagPropWidget::TagPropWidget(QWidget* const parent)
 
     QGridLayout* const grid = new QGridLayout(this);
     QLabel* const logo      = new QLabel(this);
-    logo->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
-                    .scaled(48, 48, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
+    logo->setPixmap(KIcon("tag-properties").pixmap(30,30));
     d->topLabel = new QLabel(this);
     d->topLabel->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     d->topLabel->setWordWrap(false);

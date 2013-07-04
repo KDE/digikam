@@ -41,6 +41,7 @@
 #include "tagsmanager.h"
 #include "tagpropwidget.h"
 #include "tagfolderview.h"
+#include "searchtextbar.h"
 
 namespace Digikam
 {
@@ -57,7 +58,7 @@ public:
         tagmngrLabel    = 0;
         tagPixmap       = 0;
         digikamPixmap   = 0;
-        lineEdit        = 0;
+        searchBar       = 0;
         treeWinLayout   = 0;
         treeWindow      = 0;
         mainToolbar     = 0;
@@ -76,7 +77,7 @@ public:
         delete tagmngrLabel;
         delete tagPixmap;
         delete digikamPixmap;
-        delete lineEdit;
+        delete searchBar;
         delete treeWinLayout;
         delete treeWindow;
         delete mainToolbar;
@@ -94,7 +95,8 @@ public:
     QLabel *        tagmngrLabel;
     QLabel*         tagPixmap;
     QLabel*         digikamPixmap;
-    QLineEdit*      lineEdit;
+    SearchTextBar*  searchBar;
+
 
     QHBoxLayout*    treeWinLayout;
     KMainWindow*    treeWindow;
@@ -144,14 +146,14 @@ void TagsManager::setupUi(KDialog *Dialog)
      d->tagPixmap->setMaximumWidth(40);
      d->tagPixmap->setPixmap(KIcon("tag").pixmap(30,30));
 
-     d->lineEdit = new QLineEdit();
-     d->lineEdit->setText(i18n("Search..."));
-
-     d->lineEdit->setMaximumWidth(200);
+     d->searchBar  = new SearchTextBar(this, "DigikamViewTagSearchBar");
+     d->searchBar->setHighlightOnResult(true);
+     d->searchBar->setModel(d->tagModel, AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
+     d->searchBar->setMaximumWidth(200);
 
      d->digikamPixmap = new QLabel();
      QPixmap dpix (KStandardDirs::locate("data", "digikam/about/top-left-digikam.png"));
-     d->digikamPixmap->setPixmap(dpix.scaled(40,40,Qt::KeepAspectRatio));
+     d->digikamPixmap->setPixmap(dpix.scaled(40,40,Qt::KeepAspectRatio, Qt::SmoothTransformation));
      d->digikamPixmap->setMaximumHeight(40);
      d->digikamPixmap->setScaledContents(true);
 
@@ -159,7 +161,7 @@ void TagsManager::setupUi(KDialog *Dialog)
      QHBoxLayout* tempLayout = new QHBoxLayout();
      tempLayout->setAlignment(Qt::AlignLeft);
      tempLayout->addWidget(d->tagPixmap);
-     tempLayout->addWidget(d->lineEdit);
+     tempLayout->addWidget(d->searchBar);
      firstLine->addLayout(tempLayout);
      firstLine->addWidget(d->digikamPixmap);
 
@@ -173,22 +175,22 @@ void TagsManager::setupUi(KDialog *Dialog)
      font2.setWeight(75);
      d->tagmngrLabel->setFont(font2);
      d->tagmngrLabel->setAutoFillBackground(true);
+     d->tagmngrLabel->setMinimumHeight(30);
 
      /** Tree Widget & Actions + Tag Properties sidebar **/
 
      d->treeWindow = new KMainWindow(this);
      d->mainToolbar = new KToolBar(d->treeWindow);
 
-     d->addAction = new KAction(i18n("Add"),d->treeWindow);
-     d->delAction = new KAction(i18n("Del"),d->treeWindow);
+     d->addAction = new KAction(KIcon("list-add"),i18n(""),d->treeWindow);
 
-     d->organizeAction   = new KActionMenu(i18n("Organize"),this);
+     d->delAction = new KAction(KIcon("list-remove"),i18n(""),d->treeWindow);
+
+     d->organizeAction   = new KActionMenu(KIcon("autocorrection"),i18n("Organize"),this);
      d->organizeAction->setDelayed(false);
-     d->organizeAction->addAction(new KAction("New Tag",this));
+     d->organizeAction->addAction(new KAction(KIcon("tag-new"),"New Tag",this));
 
-     d->syncexportAction = new KActionMenu(i18n("Sync & Export"),this);
-
-     d->tagProperties = new KAction(i18n("Tag Properties"),this);
+     d->syncexportAction = new KActionMenu(KIcon("server-database"),i18n("Sync &Export"),this);
 
      d->mainToolbar->addAction(d->addAction);
      d->mainToolbar->addAction(d->delAction);
@@ -198,7 +200,7 @@ void TagsManager::setupUi(KDialog *Dialog)
 
 
      d->rightToolBar = new KMultiTabBar(KMultiTabBar::Right);
-     d->rightToolBar->appendTab(dpix,0,"Tag Properties");
+     d->rightToolBar->appendTab(KIcon("tag-properties").pixmap(10,10),0,"Tag Properties");
      d->rightToolBar->setStyle(KMultiTabBar::KDEV3ICON);
 
      connect(d->rightToolBar->tab(0),SIGNAL(clicked()),this, SLOT(slotOpenProperties()));
