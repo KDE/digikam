@@ -82,7 +82,6 @@ public:
         newQueueAction         = 0;
         saveQueueAction        = 0;
         rawCameraListAction    = 0;
-        libsInfoAction         = 0;
         dbStatAction           = 0;
         topSplitter            = 0;
         bottomSplitter         = 0;
@@ -123,7 +122,6 @@ public:
     KAction*                 donateMoneyAction;
     KAction*                 contributeAction;
     KAction*                 rawCameraListAction;
-    KAction*                 libsInfoAction;
     KAction*                 dbStatAction;
 
     SidebarSplitter*         topSplitter;

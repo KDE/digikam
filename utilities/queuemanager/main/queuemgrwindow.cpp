@@ -430,13 +430,11 @@ void QueueMgrWindow::setupActions()
 
     // -- Standard 'Help' menu actions ---------------------------------------------
 
+    createHelpActions();
+        
     d->about = new DAboutData(this);
     d->about->registerHelpActions();
-
-    d->libsInfoAction = new KAction(KIcon("help-about"), i18n("Components Information"), this);
-    connect(d->libsInfoAction, SIGNAL(triggered()), this, SLOT(slotComponentsInfo()));
-    actionCollection()->addAction("queuemgr_librariesinfo", d->libsInfoAction);
-
+    
     d->dbStatAction = new KAction(KIcon("network-server-database"), i18n("Database Statistics"), this);
     connect(d->dbStatAction, SIGNAL(triggered()), this, SLOT(slotDBStat()));
     actionCollection()->addAction("queuemgr_dbstat", d->dbStatAction);

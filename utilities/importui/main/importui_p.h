@@ -94,7 +94,6 @@ public:
         downloadDelNewAction(0),
         downloadDelAllAction(0),
         downloadDelSelectedAction(0),
-        libsInfoAction(0),
         dbStatAction(0),
         lockAction(0),
         selectAllAction(0),
@@ -173,7 +172,6 @@ public:
     KAction*                      downloadDelNewAction;
     KAction*                      downloadDelAllAction;
     KAction*                      downloadDelSelectedAction;
-    KAction*                      libsInfoAction;
     KAction*                      dbStatAction;
     KAction*                      lockAction;
     KAction*                      selectAllAction;

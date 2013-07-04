@@ -157,8 +157,8 @@ private Q_SLOTS:
     void slotExit();
     void slotShowTip();
     void slotShowKipiHelp();
-    void slotComponentsInfo();
     void slotDBStat();
+    void slotComponentsInfo();
 
     void slotRecurseAlbums(bool);
     void slotRecurseTags(bool);

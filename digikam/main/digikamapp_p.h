@@ -164,7 +164,6 @@ public:
 #ifdef USE_SCRIPT_IFACE
         scriptConsoleAction(0),
 #endif
-        libsInfoAction(0),
         dbStatAction(0),
         kipiHelpAction(0),
         addCameraSeparatorAction(0),
@@ -292,7 +291,6 @@ public:
 #endif
 
     // Application Actions
-    KAction*                            libsInfoAction;
     KAction*                            dbStatAction;
     KAction*                            kipiHelpAction;
     QAction*                            addCameraSeparatorAction;

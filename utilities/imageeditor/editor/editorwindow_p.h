@@ -81,7 +81,6 @@ public:
         filePrintAction(0),
         flipHorizAction(0),
         flipVertAction(0),
-        libsInfoAction(0),
         rotateLeftAction(0),
         rotateRightAction(0),
         selectAllAction(0),
@@ -161,7 +160,6 @@ public:
     KAction*                   filePrintAction;
     KAction*                   flipHorizAction;
     KAction*                   flipVertAction;
-    KAction*                   libsInfoAction;
     KAction*                   rawCameraListAction;
     KAction*                   rotateLeftAction;
     KAction*                   rotateRightAction;

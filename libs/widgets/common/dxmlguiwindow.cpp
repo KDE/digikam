@@ -67,6 +67,7 @@ public:
         thumbbarVisibility     = true;
         menubarVisibility      = true;
         statusbarVisibility    = true;
+        libsInfoAction         = 0;
     }
 
 public:
@@ -112,6 +113,9 @@ public:
     /** Store previous visibility of statusbar before ful-screen mode.
      */
     bool                     statusbarVisibility;
+    
+    // Common actions
+    KAction*                 libsInfoAction;
 };
 
 // --------------------------------------------------------------------------------------------------------
@@ -125,6 +129,13 @@ DXmlGuiWindow::DXmlGuiWindow(QWidget* const parent, Qt::WindowFlags f)
 DXmlGuiWindow::~DXmlGuiWindow()
 {
     delete d;
+}
+
+void DXmlGuiWindow::createHelpActions()
+{
+    d->libsInfoAction = new KAction(KIcon("help-about"), i18n("Components Information"), this);
+    connect(d->libsInfoAction, SIGNAL(triggered()), this, SLOT(slotComponentsInfo()));
+    actionCollection()->addAction("help_librariesinfo", d->libsInfoAction);   
 }
 
 void DXmlGuiWindow::setFullScreenOptions(int options)
