@@ -440,9 +440,6 @@ void QueueMgrWindow::setupActions()
 
     // ---------------------------------------------------------------------------------
 
-    d->animLogo = new DLogoAction(this);
-    actionCollection()->addAction("logo_action", d->animLogo);
-
     createGUI(xmlFile());
 
     d->showMenuBarAction->setChecked(!menuBar()->isHidden());  // NOTE: workaround for B.K.O #171080
@@ -805,7 +802,7 @@ void QueueMgrWindow::busy(bool busy)
     slotItemSelectionChanged();
 
     d->busy ? d->queuePool->setCursor(Qt::WaitCursor) : d->queuePool->unsetCursor();
-    d->busy ? d->animLogo->start() : d->animLogo->stop();
+    d->busy ? m_animLogo->start() : m_animLogo->stop();
 
     emit signalBqmIsBusy(d->busy);
 }

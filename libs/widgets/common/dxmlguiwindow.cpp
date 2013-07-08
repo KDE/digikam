@@ -120,10 +120,11 @@ public:
      */
     bool                     statusbarVisibility;
     
-    // Common Help menu actions
+    // Common Help actions
     KAction*                 dbStatAction;
     KAction*                 libsInfoAction;
     DAboutData*              about;
+    DLogoAction*             anim;
 };
 
 // --------------------------------------------------------------------------------------------------------
@@ -131,6 +132,7 @@ public:
 DXmlGuiWindow::DXmlGuiWindow(QWidget* const parent, Qt::WindowFlags f)
     : KXmlGuiWindow(parent, f), d(new Private)
 {
+    m_animLogo = 0;
     installEventFilter(this);
 }
 
@@ -147,6 +149,9 @@ void DXmlGuiWindow::createHelpActions(bool coreOptions)
 
     d->about = new DAboutData(this);
     d->about->registerHelpActions();
+    
+    m_animLogo = new DLogoAction(this);
+    actionCollection()->addAction("logo_action", m_animLogo);
     
     // Add options only for core components (typically all excepted Showfoto)
     if (coreOptions)

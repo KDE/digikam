@@ -66,7 +66,6 @@
 #include "digikamapp.h"
 #include "thememanager.h"
 #include "dimg.h"
-#include "dlogoaction.h"
 #include "dmetadata.h"
 #include "metadatasettings.h"
 #include "albumsettings.h"
@@ -633,8 +632,6 @@ void LightTableWindow::setupActions()
     connect(altBackwardAction, SIGNAL(triggered()), this, SLOT(slotBackward()));
 
     // ---------------------------------------------------------------------------------
-
-    actionCollection()->addAction("logo_action", new DLogoAction(this));
 
     createGUI(xmlFile());
 

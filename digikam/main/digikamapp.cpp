@@ -1240,10 +1240,6 @@ void DigikamApp::setupActions()
     d->tipAction = actionCollection()->addAction(KStandardAction::TipofDay, "help_tipofday",
                                                  this, SLOT(slotShowTip()));
 
-    // -- Logo on the right of tool bar --------------------------
-
-    actionCollection()->addAction("logo_action", new DLogoAction(this));
-
     //------------------------------------------------------------
 
     KAction* findAction = new KAction(KIcon("system-search"), i18n("Search..."), this);
