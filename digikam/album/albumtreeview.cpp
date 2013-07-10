@@ -587,7 +587,6 @@ void AbstractAlbumTreeView::middleButtonPressed(Album*)
 void AbstractAlbumTreeView::startDrag(Qt::DropActions supportedActions)
 {
     QModelIndexList indexes = selectedIndexes();
-
     if (indexes.count() > 0)
     {
         QMimeData* data = m_albumFilterModel->mimeData(indexes);
@@ -596,7 +595,6 @@ void AbstractAlbumTreeView::startDrag(Qt::DropActions supportedActions)
         {
             return;
         }
-
         QStyleOptionViewItem option = viewOptions();
         option.rect       = viewport()->rect();
         QPixmap pixmap    = /*m_delegate->*/pixmapForDrag(option, indexes);
@@ -623,7 +621,6 @@ QPixmap AbstractAlbumTreeView::pixmapForDrag(const QStyleOptionViewItem&, QList<
 void AbstractAlbumTreeView::dragEnterEvent(QDragEnterEvent* e)
 {
     AlbumModelDragDropHandler* const handler = m_albumModel->dragDropHandler();
-
     if (handler && handler->acceptsMimeData(e->mimeData()))
     {
         setState(DraggingState);
@@ -1481,6 +1478,7 @@ TagTreeView::TagTreeView(QWidget* const parent, Flags flags)
     setAcceptDrops(true);
     setDropIndicatorShown(false);
     setAutoExpandDelay(300);
+    setSelectionMode(QAbstractItemView::ExtendedSelection);
 
     if (flags & CreateDefaultModel)
     {
