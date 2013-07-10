@@ -29,13 +29,14 @@
 #include <QToolButton>
 #include <QPainter>
 #include <QHBoxLayout>
+#include <QLabel>
 
 // KDE includes
 
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kdialog.h>
-#include <ksqueezedtextlabel.h>
+#include <klineedit.h>
 
 namespace Digikam
 {
@@ -63,7 +64,7 @@ public:
 
     int                 status;
 
-    KSqueezedTextLabel* info;
+    KLineEdit*          info;
     QToolButton*        resetBtn;
     QToolButton*        settingsBtn;
 
@@ -77,7 +78,7 @@ FilterStatusBar::FilterStatusBar(QWidget* const parent)
     QLabel* const space     = new QLabel(this);
     space->setFixedWidth(KDialog::spacingHint());
 
-    d->resetBtn   = new QToolButton(this);
+    d->resetBtn    = new QToolButton(this);
     d->resetBtn->setIcon(KIconLoader::global()->loadIcon("document-revert", KIconLoader::Toolbar));
     d->resetBtn->setToolTip(i18n("Reset all active filters"));
     d->resetBtn->setFocusPolicy(Qt::NoFocus);
@@ -89,7 +90,10 @@ FilterStatusBar::FilterStatusBar(QWidget* const parent)
     d->settingsBtn->setFocusPolicy(Qt::NoFocus);
     d->settingsBtn->setAutoRaise(true);
 
-    d->info        = new KSqueezedTextLabel(this);
+    d->info        = new KLineEdit(this);
+    d->info->setClearButtonShown(false);
+    d->info->setClickMessage(QString());
+    d->info->setReadOnly(true);
     d->info->setWhatsThis(i18n("Background color indicates the global image filter status, "
                                "encompassing all filter settings from the right sidebar.\n\n"
                                "NO COLOR: no filter is active, all items are visible.\n"
@@ -117,28 +121,6 @@ FilterStatusBar::FilterStatusBar(QWidget* const parent)
 FilterStatusBar::~FilterStatusBar()
 {
     delete d;
-}
-
-void FilterStatusBar::paintEvent(QPaintEvent* e)
-{
-    if (d->status == Private::None)
-    {
-        QWidget::paintEvent(e);
-        return;
-    }
-
-    QColor bgnd = QColor(255, 200, 200);
-
-    if (d->status == Private::Match)
-    {
-        bgnd = QColor(200, 255, 200);
-    }
-
-    QPainter p(this);
-    p.setBrush(bgnd);
-    p.setPen(Qt::NoPen);
-    p.drawRoundedRect(QRect(0, 0, width()-1, height()-1), 3.0, 3.0);
-    p.end();
 }
 
 void FilterStatusBar::slotFilterMatches(bool match)
@@ -194,7 +176,7 @@ void FilterStatusBar::slotFilterMatches(bool match)
 
     if (filtersList.isEmpty())
     {
-        d->info->setText(i18n("No active filter"));
+        d->info->setSqueezedText(i18n("No active filter"));
         d->info->setToolTip(QString());
         d->resetBtn->setEnabled(false);
         d->status = Private::None;
@@ -203,17 +185,35 @@ void FilterStatusBar::slotFilterMatches(bool match)
     {
         if (filtersList.count() == 1)
         {
-            d->info->setText(i18n("One active filter"));
+            d->info->setSqueezedText(i18n("One active filter"));
         }
         else
         {
-            d->info->setText(i18np("1 active filter", "%1 active filters", filtersList.count()));
+            d->info->setSqueezedText(i18np("1 active filter", "%1 active filters", filtersList.count()));
         }
 
         d->info->setToolTip(message);
         d->resetBtn->setEnabled(true);
         d->status = match ? Private::Match : Private::NotMatch;
     }
+
+    QPalette pal = palette();
+
+    switch(d->status)
+    {
+        case Private::NotMatch:
+            pal.setColor(QPalette::Active, QPalette::Base, QColor(255, 200, 200));
+            pal.setColor(QPalette::Active, QPalette::Text, Qt::black);
+            break;
+        case Private::Match:
+            pal.setColor(QPalette::Active, QPalette::Base, QColor(200, 255, 200));
+            pal.setColor(QPalette::Active, QPalette::Text, Qt::black);
+            break;
+        default: // Private::None
+            break;
+    }
+
+    d->info->setPalette(pal);
 
     update();
 }
