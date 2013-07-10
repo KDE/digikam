@@ -564,7 +564,7 @@ void DigikamApp::setupStatusBar()
     //------------------------------------------------------------------------------
 
     d->filterStatusBar = new FilterStatusBar(statusBar());
-    statusBar()->addWidget(d->filterStatusBar, 20);
+    statusBar()->addWidget(d->filterStatusBar, 50);
     d->view->connectIconViewFilter(d->filterStatusBar);
 
     //------------------------------------------------------------------------------
