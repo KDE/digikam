@@ -94,6 +94,7 @@ FilterStatusBar::FilterStatusBar(QWidget* const parent)
     d->info->setClearButtonShown(false);
     d->info->setClickMessage(QString());
     d->info->setReadOnly(true);
+    d->info->setFocusPolicy(Qt::NoFocus);
     d->info->setWhatsThis(i18n("Background color indicates the global image filter status, "
                                "encompassing all filter settings from the right sidebar.\n\n"
                                "NO COLOR: no filter is active, all items are visible.\n"
