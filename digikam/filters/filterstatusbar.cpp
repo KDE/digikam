@@ -94,7 +94,7 @@ FilterStatusBar::FilterStatusBar(QWidget* const parent)
     d->info->setClearButtonShown(false);
     d->info->setClickMessage(QString());
     d->info->setReadOnly(true);
-    d->info->setContextMenuEnabled(false);
+    d->info->setContextMenuPolicy(Qt::NoContextMenu);
     d->info->setSqueezedTextEnabled(true);
     d->info->setDragEnabled(false);
     d->info->setFocusPolicy(Qt::NoFocus);
