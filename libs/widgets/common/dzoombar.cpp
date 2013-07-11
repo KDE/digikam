@@ -6,7 +6,7 @@
  * Date        : 2007-04-15
  * Description : a zoom bar used in status bar.
  *
- * Copyright (C) 2007-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -52,12 +52,12 @@
 namespace Digikam
 {
 
-class DZoomBar::DZoomBarPriv
+class DZoomBar::Private
 {
 
 public:
 
-    DZoomBarPriv()
+    Private()
     {
         zoomToFitButton = 0;
         zoomTo100Button = 0;
@@ -83,8 +83,8 @@ public:
     DTipTracker* zoomTracker;
 };
 
-DZoomBar::DZoomBar(QWidget* parent)
-    : KHBox(parent), d(new DZoomBarPriv)
+DZoomBar::DZoomBar(QWidget* const parent)
+    : KHBox(parent), d(new Private)
 {
     setAttribute(Qt::WA_DeleteOnClose);
     setFocusPolicy(Qt::NoFocus);
@@ -169,22 +169,22 @@ DZoomBar::~DZoomBar()
     delete d;
 }
 
-void DZoomBar::setZoomToFitAction(QAction* action)
+void DZoomBar::setZoomToFitAction(QAction* const action)
 {
     d->zoomToFitButton->setDefaultAction(action);
 }
 
-void DZoomBar::setZoomTo100Action(QAction* action)
+void DZoomBar::setZoomTo100Action(QAction* const action)
 {
     d->zoomTo100Button->setDefaultAction(action);
 }
 
-void DZoomBar::setZoomPlusAction(QAction* action)
+void DZoomBar::setZoomPlusAction(QAction* const action)
 {
     d->zoomPlusButton->setDefaultAction(action);
 }
 
-void DZoomBar::setZoomMinusAction(QAction* action)
+void DZoomBar::setZoomMinusAction(QAction* const action)
 {
     d->zoomMinusButton->setDefaultAction(action);
 }
@@ -198,8 +198,10 @@ void DZoomBar::slotZoomSliderChanged(int)
     }
 
     d->zoomTimer = new QTimer( this );
+
     connect(d->zoomTimer, SIGNAL(timeout()),
             this, SLOT(slotDelayedZoomSliderChanged()) );
+
     d->zoomTimer->setSingleShot(true);
     d->zoomTimer->start(300);
 }
@@ -294,8 +296,8 @@ void DZoomBar::slotZoomTextChanged(const QString& txt)
 
 void DZoomBar::setBarMode(BarMode mode)
 {
-    QAction* zfitAction = d->zoomToFitButton->defaultAction();
-    QAction* z100Action = d->zoomTo100Button->defaultAction();
+    QAction* const zfitAction = d->zoomToFitButton->defaultAction();
+    QAction* const z100Action = d->zoomTo100Button->defaultAction();
 
     switch (mode)
     {
