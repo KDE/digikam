@@ -564,15 +564,15 @@ void DigikamApp::setupStatusBar()
     //------------------------------------------------------------------------------
 
     d->filterStatusBar = new FilterStatusBar(statusBar());
-    statusBar()->addWidget(d->filterStatusBar, 100);
+    statusBar()->addWidget(d->filterStatusBar, 50);
     d->view->connectIconViewFilter(d->filterStatusBar);
 
     //------------------------------------------------------------------------------
 
-    ProgressView* view = new ProgressView(statusBar(), this);
+    ProgressView* const view = new ProgressView(statusBar(), this);
     view->hide();
 
-    StatusbarProgressWidget* littleProgress = new StatusbarProgressWidget(view, statusBar());
+    StatusbarProgressWidget* const littleProgress = new StatusbarProgressWidget(view, statusBar());
     littleProgress->show();
     statusBar()->addPermanentWidget(littleProgress);
 
@@ -587,7 +587,7 @@ void DigikamApp::setupStatusBar()
     statusBar()->addPermanentWidget(d->zoomBar);
 
     //------------------------------------------------------------------------------
-    
+
     connect(d->zoomBar, SIGNAL(signalZoomSliderChanged(int)),
             this, SLOT(slotZoomSliderChanged(int)));
 

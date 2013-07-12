@@ -6,7 +6,7 @@
  * Date        : 2007-27-08
  * Description : a tool bar action object to display animated logo
  *
- * Copyright (C) 2007-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -53,11 +53,11 @@
 namespace Digikam
 {
 
-class DLogoAction::DLogoActionPriv
+class DLogoAction::Private
 {
 public:
 
-    DLogoActionPriv()
+    Private()
     {
         alignOnright  = true;
         progressTimer = 0;
@@ -76,8 +76,8 @@ public:
     KUrlLabel* urlLabel;
 };
 
-DLogoAction::DLogoAction(QObject* parent, bool alignOnright)
-    : KAction(parent), d(new DLogoActionPriv)
+DLogoAction::DLogoAction(QObject* const parent, bool alignOnright)
+    : KAction(parent), d(new Private)
 {
     setText("digikam.org");
 
@@ -147,9 +147,9 @@ void DLogoAction::slotProgressTimerDone()
 
 QWidget* DLogoAction::createWidget(QWidget* parent)
 {
-    QWidget* container  = new QWidget(parent);
-    QHBoxLayout* layout = new QHBoxLayout(container);
-    d->urlLabel         = new KUrlLabel(DAboutData::webProjectUrl().url(), QString(), container);
+    QWidget* const container  = new QWidget(parent);
+    QHBoxLayout* const layout = new QHBoxLayout(container);
+    d->urlLabel               = new KUrlLabel(DAboutData::webProjectUrl().url(), QString(), container);
     d->urlLabel->setMargin(0);
     d->urlLabel->setScaledContents(false);
     d->urlLabel->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));

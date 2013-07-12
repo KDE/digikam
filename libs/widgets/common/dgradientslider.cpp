@@ -6,8 +6,8 @@
  * Date        : 2008-07-03
  * Description : a color gradient slider
  *
- * Copyright (C) 2008-2010 by Gilles Caulier<caulier dot gilles at gmail dot com>
- * Copyright (C) 2008 Cyrille Berger <cberger@cberger.net>
+ * Copyright (C) 2008-2013 by Gilles Caulier<caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008      by Cyrille Berger <cberger@cberger.net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -34,7 +34,7 @@
 namespace Digikam
 {
 
-class DGradientSlider::DGradientSliderPriv
+class DGradientSlider::Private
 {
 
 public:
@@ -49,7 +49,7 @@ public:
 
 public:
 
-    DGradientSliderPriv()
+    Private()
     {
         activeCursor     = NoCursor;
         parent           = 0;
@@ -85,22 +85,25 @@ public:
     {
         return parent->height() / 3;
     }
+
     int cursorWidth() const
     {
         return gradientHeight();
     }
+
     int gradientWidth() const
     {
         return parent->width() - cursorWidth();
     }
+
     int gradientOffset() const
     {
         return cursorWidth() / 2;
     }
 };
 
-DGradientSlider::DGradientSlider(QWidget* parent)
-    : QWidget(parent), d(new DGradientSliderPriv)
+DGradientSlider::DGradientSlider(QWidget* const parent)
+    : QWidget(parent), d(new Private)
 {
     d->parent = this;
 
@@ -192,22 +195,22 @@ void DGradientSlider::mousePressEvent(QMouseEvent* e)
         // Select cursor
         if ( isCursorClicked( e->pos(), d->leftCursor , cursorWidth, gradientHeight, gradientWidth ) )
         {
-            d->activeCursor = DGradientSliderPriv::LeftCursor;
+            d->activeCursor = Private::LeftCursor;
         }
         else if ( d->showMiddleCursor && isCursorClicked( e->pos(), d->middleCursor , cursorWidth, gradientHeight, gradientWidth ) )
         {
-            d->activeCursor = DGradientSliderPriv::MiddleCursor;
+            d->activeCursor = Private::MiddleCursor;
         }
         else if ( isCursorClicked( e->pos(), d->rightCursor , cursorWidth, gradientHeight, gradientWidth ) )
         {
-            d->activeCursor = DGradientSliderPriv::RightCursor;
+            d->activeCursor = Private::RightCursor;
         }
     }
 }
 
 void DGradientSlider::mouseReleaseEvent(QMouseEvent*)
 {
-    d->activeCursor = DGradientSliderPriv::NoCursor;
+    d->activeCursor = Private::NoCursor;
 }
 
 void DGradientSlider::mouseMoveEvent(QMouseEvent* e)
@@ -216,13 +219,13 @@ void DGradientSlider::mouseMoveEvent(QMouseEvent* e)
 
     switch (d->activeCursor)
     {
-        case DGradientSliderPriv::LeftCursor:
+        case Private::LeftCursor:
             setLeftValue( v );
             break;
-        case DGradientSliderPriv::MiddleCursor:
+        case Private::MiddleCursor:
             setMiddleValue( v );
             break;
-        case DGradientSliderPriv::RightCursor:
+        case Private::RightCursor:
             setRightValue( v );
             break;
         default:
@@ -232,7 +235,7 @@ void DGradientSlider::mouseMoveEvent(QMouseEvent* e)
 
 void DGradientSlider::leaveEvent(QEvent*)
 {
-    d->activeCursor = DGradientSliderPriv::NoCursor;
+    d->activeCursor = Private::NoCursor;
 }
 
 void DGradientSlider::showMiddleCursor(bool b)

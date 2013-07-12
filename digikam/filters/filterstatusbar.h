@@ -57,10 +57,6 @@ Q_SIGNALS:
 
 private:
 
-    void paintEvent(QPaintEvent* e);
-
-private:
-
     class Private;
     Private* const d;
 };
