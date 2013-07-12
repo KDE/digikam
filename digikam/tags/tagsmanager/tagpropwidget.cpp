@@ -30,7 +30,15 @@
 #include <kseparator.h>
 #include <kicon.h>
 #include <kstandarddirs.h>
+#include <kdebug.h>
+#include <kicon.h>
+#include <kiconloader.h>
+#include <kicondialog.h>
+
 #include "searchtextbar.h"
+#include "album.h"
+#include "tagsactionmngr.h"
+#include "syncjob.h"
 
 namespace Digikam
 {
@@ -57,7 +65,7 @@ public:
 
     QPushButton*        iconButton;
     QPushButton*        resetIconButton;
-
+    TAlbum*             mainRootAlbum;
     KKeySequenceWidget* keySeqWidget;
     SearchTextBar*      titleEdit;
 };
@@ -71,6 +79,7 @@ TagPropWidget::TagPropWidget(QWidget* const parent)
 
     logo->setPixmap(KIcon("tag-properties").pixmap(30,30));
     d->topLabel = new QLabel(this);
+    d->topLabel->setText("Tag Properties");
     d->topLabel->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     d->topLabel->setWordWrap(false);
 
@@ -97,7 +106,10 @@ TagPropWidget::TagPropWidget(QWidget* const parent)
     iconTextLabel->setBuddy(d->iconButton);
 
 
-    d->resetIconButton = new QPushButton(KIcon("view-refresh"), i18n("Reset"), this);
+    d->resetIconButton = new QPushButton(KIcon("view-refresh"),
+                                         i18n("Reset"), this);
+    connect(d->resetIconButton, SIGNAL(clicked()),
+            this,SLOT(slotIconResetClicked()));
 
 
     QLabel* const kscTextLabel = new QLabel(this);
@@ -105,11 +117,15 @@ TagPropWidget::TagPropWidget(QWidget* const parent)
 
     d->keySeqWidget      = new KKeySequenceWidget(this);
     kscTextLabel->setBuddy(d->keySeqWidget);
+    d->keySeqWidget->setCheckActionCollections(TagsActionMngr::defaultManager()->actionCollections());
 
     QLabel* const tipLabel2 = new QLabel(this);
     tipLabel2->setTextFormat(Qt::RichText);
     tipLabel2->setWordWrap(true);
     tipLabel2->setText(i18n("<p><b>Note</b>: this shortcut can be used to assign or unassign tag to items.</p>"));
+
+    QPushButton* saveButton = new QPushButton("Save");
+    QPushButton* discardButton = new QPushButton("Discard");
 
     // --------------------------------------------------------
 
@@ -125,11 +141,47 @@ TagPropWidget::TagPropWidget(QWidget* const parent)
     grid->addWidget(kscTextLabel,       5, 0, 1, 1);
     grid->addWidget(d->keySeqWidget,    5, 1, 1, 3);
     grid->addWidget(tipLabel2,          6, 0, 1, 4);
-    grid->setRowStretch(7, 10);
+    grid->addWidget(saveButton,         7, 0, 1, 1);
+    grid->addWidget(discardButton,      7, 1, 1, 1);
+    grid->setRowStretch(8, 10);
     grid->setColumnStretch(3, 10);
     grid->setMargin(0);
+    grid->setVerticalSpacing(10);
 
     adjustSize();
+
+    connect(d->iconButton, SIGNAL(clicked()),
+            this, SLOT(slotIconChanged()));
 }
 
+void TagPropWidget::slotSelectionChanged(TAlbum* album)
+{
+    kDebug() << "Selection changed";
+    if(!album)
+        kDebug() << "Error! No valid pointer for TAlbum";
+    d->mainRootAlbum = album;
+    d->titleEdit->setText(album->title());
+    d->icon = album->icon();
+    d->iconButton->setIcon(SyncJob::getTagThumbnail(album));
+}
+
+void TagPropWidget::slotIconResetClicked()
+{
+    d->icon = QString("tag");
+    d->iconButton->setIcon(KIconLoader::global()->loadIcon(d->icon, KIconLoader::NoGroup, 20));
+}
+void TagPropWidget::slotIconChanged()
+{
+    KIconDialog dlg(this);
+    dlg.setup(KIconLoader::NoGroup, KIconLoader::Application, false, 20, false, false, false);
+    QString icon = dlg.openDialog();
+
+    if (icon.isEmpty() || icon == d->icon)
+    {
+        return;
+    }
+
+    d->icon = icon;
+    d->iconButton->setIcon(KIconLoader::global()->loadIcon(d->icon, KIconLoader::NoGroup, 20));
+}
 }

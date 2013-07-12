@@ -30,12 +30,20 @@
 namespace Digikam
 {
 
+class TAlbum;
+
 class TagPropWidget : public QWidget
 {
     Q_OBJECT
 
 public:
     TagPropWidget(QWidget* const parent);
+
+public Q_SLOTS:
+    void slotSelectionChanged(TAlbum* album);
+private Q_SLOTS:
+    void slotIconResetClicked();
+    void slotIconChanged();
 
 private:
     class PrivateTagProp;

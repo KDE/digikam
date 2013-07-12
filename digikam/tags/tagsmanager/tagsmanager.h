@@ -26,6 +26,7 @@ namespace Digikam
 {
 
 class TagModel;
+class TAlbum;
 
 class TagsManager : public KDialog
 {
@@ -42,6 +43,9 @@ public:
     void setupUi(KDialog *Dialog);
 
 
+Q_SIGNALS:
+    void signalSelectionChanged(TAlbum* album);
+
 private Q_SLOTS:
 
     /**
@@ -49,6 +53,10 @@ private Q_SLOTS:
      *                             activating Tag Properties from right sidebar
      */
     void slotOpenProperties();
+
+    void slotSelectionChanged();
+
+    void slotItemChanged();
 
 private:
     class PrivateTagMngr;

@@ -123,6 +123,14 @@ TagsManager::TagsManager(TagModel* model)
     this->setButtons(0x00);
 
     setupUi(this);
+
+    connect(d->tagFolderView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
+            this, SLOT(slotItemChanged()));
+
+    //connect(d->tagFolderView->selectionModel(),SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
+    //        this, SLOT(slotSelectionChanged()));
+    connect(this, SIGNAL(signalSelectionChanged(TAlbum*)),
+            d->tagPropWidget, SLOT(slotSelectionChanged(TAlbum*)));
 }
 
 TagsManager::~TagsManager()
@@ -261,6 +269,18 @@ void TagsManager::slotOpenProperties()
     else
         d->tagPropWidget->hide();
 
+}
+
+void TagsManager::slotSelectionChanged()
+{
+
+}
+
+void TagsManager::slotItemChanged()
+{
+    kDebug() << "Item Changed";
+    TAlbum* currentAl = static_cast<TAlbum*>(d->tagFolderView->currentAlbum());
+    emit signalSelectionChanged(currentAl);
 }
 
 } // namespace Digikam
