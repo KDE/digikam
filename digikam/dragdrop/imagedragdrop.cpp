@@ -446,70 +446,6 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
 
         return true;
     }
-    else if (DTagDrag::canDecode(e->mimeData()))
-    {
-        int tagID;
-
-        if (!DTagDrag::decode(e->mimeData(), tagID))
-        {
-            return false;
-        }
-
-        TAlbum* const talbum = AlbumManager::instance()->findTAlbum(tagID);
-
-        if (!talbum || !view)
-        {
-            return false;
-        }
-
-        KMenu popMenu(view);
-
-        QList<ImageInfo> selectedInfos  = view->selectedImageInfosCurrentFirst();
-        QAction* assignToSelectedAction = 0;
-        QAction* assignToThisAction     = 0;
-
-        if (selectedInfos.count() > 1)
-        {
-            assignToSelectedAction = popMenu.addAction(SmallIcon("tag"),
-                                                       i18n("Assign '%1' to &Selected Items",
-                                                            talbum->tagPath().mid(1)));
-        }
-
-        if (droppedOn.isValid())
-        {
-            assignToThisAction = popMenu.addAction(SmallIcon("tag"),
-                                                   i18n("Assign '%1' to &This Item",
-                                                        talbum->tagPath().mid(1)));
-        }
-
-        QAction* const assignToAllAction = popMenu.addAction(SmallIcon("tag"),
-                                                             i18n("Assign '%1' to &All Items",
-                                                                  talbum->tagPath().mid(1)));
-
-        popMenu.addSeparator();
-        popMenu.addAction(SmallIcon("dialog-cancel"), i18n("&Cancel"));
-
-        popMenu.setMouseTracking(true);
-        QAction* const choice = popMenu.exec(view->mapToGlobal(e->pos()));
-
-        if (choice)
-        {
-            if (choice == assignToSelectedAction)    // Selected Items
-            {
-                emit assignTags(selectedInfos, QList<int>() << tagID);
-            }
-            else if (choice == assignToAllAction)    // All Items
-            {
-                emit assignTags(view->imageInfos(), QList<int>() << tagID);
-            }
-            else if (choice == assignToThisAction)  // Dropped Item only.
-            {
-                emit assignTags(QList<ImageInfo>() << model()->imageInfo(droppedOn), QList<int>() << tagID);
-            }
-        }
-
-        return true;
-    }
     else if (DTagListDrag::canDecode(e->mimeData()))
     {
         QList<int> tagIDs;
@@ -622,8 +558,7 @@ Qt::DropAction ImageDragDropHandler::accepts(const QDropEvent* e, const QModelIn
         return Qt::MoveAction;
     }
 
-    if (DTagDrag::canDecode(e->mimeData())            ||
-        DTagListDrag::canDecode(e->mimeData())        ||
+    if (DTagListDrag::canDecode(e->mimeData())        ||
         DCameraItemListDrag::canDecode(e->mimeData()) ||
         DCameraDragObject::canDecode(e->mimeData()))
     {
@@ -638,7 +573,6 @@ QStringList ImageDragDropHandler::mimeTypes() const
     QStringList mimeTypes;
 
     mimeTypes << DItemDrag::mimeTypes()
-              << DTagDrag::mimeTypes()
               << DTagListDrag::mimeTypes()
               << DCameraItemListDrag::mimeTypes()
               << DCameraDragObject::mimeTypes()

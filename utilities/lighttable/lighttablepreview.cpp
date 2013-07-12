@@ -110,7 +110,7 @@ bool LightTablePreview::dragEventWrapper(const QMimeData* data) const
 
         if (DItemDrag::decode(data, urls, kioURLs, albumIDs, imageIDs) ||
             DAlbumDrag::decode(data, urls, albumID)                    ||
-            DTagDrag::canDecode(data))
+            DTagListDrag::canDecode(data))
         {
             return true;
         }
@@ -142,16 +142,16 @@ void LightTablePreview::dropEvent(QDropEvent* e)
             e->accept();
             return;
         }
-        else if (DTagDrag::canDecode(e->mimeData()))
+        else if (DTagListDrag::canDecode(e->mimeData()))
         {
-            int tagID;
+            QList<int> tagIDs;
 
-            if (!DTagDrag::decode(e->mimeData(), tagID))
+            if (!DTagListDrag::decode(e->mimeData(), tagIDs))
             {
                 return;
             }
 
-            QList<qlonglong> itemIDs = DatabaseAccess().db()->getItemIDsInTag(tagID, true);
+            QList<qlonglong> itemIDs = DatabaseAccess().db()->getItemIDsInTag(tagIDs.first(), true);
             ImageInfoList imageInfoList;
 
             emit signalDroppedItems(ImageInfoList(itemIDs));

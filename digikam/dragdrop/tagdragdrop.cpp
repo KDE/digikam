@@ -220,8 +220,7 @@ Qt::DropAction TagDragDropHandler::accepts(const QDropEvent* e, const QModelInde
 
     TAlbum* const destAlbum = model()->albumForIndex(dropIndex);
 
-    // TODO update, list supporting...
-    if (/*DTagDrag::canDecode(e->mimeData()) || */ DTagListDrag::canDecode(e->mimeData()))
+    if (DTagListDrag::canDecode(e->mimeData()))
     {
         //int droppedId = 0;
         QList<int> droppedId;
@@ -282,8 +281,7 @@ QStringList TagDragDropHandler::mimeTypes() const
 {
     QStringList mimeTypes;
 
-    mimeTypes << DTagDrag::mimeTypes()
-              << DTagListDrag::mimeTypes()
+    mimeTypes << DTagListDrag::mimeTypes()
               << DItemDrag::mimeTypes();
 
     return mimeTypes;

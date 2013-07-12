@@ -175,9 +175,6 @@ bool ImportDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDr
     }
 /*
     TODO: Implement tag dropping in import tool.
-    else if (DTagDrag::canDecode(e->mimeData()))
-    {
-    }
     else if (DTagListDrag::canDecode(e->mimeData()))
     {
     }
@@ -201,8 +198,7 @@ Qt::DropAction ImportDragDropHandler::accepts(const QDropEvent* e, const QModelI
         return Qt::MoveAction;
     }
 
-    if (DTagDrag::canDecode(e->mimeData())            ||
-        DTagListDrag::canDecode(e->mimeData())        ||
+    if (DTagListDrag::canDecode(e->mimeData())            ||
         DCameraItemListDrag::canDecode(e->mimeData()) ||
         DCameraDragObject::canDecode(e->mimeData()))
     {
@@ -216,7 +212,6 @@ QStringList ImportDragDropHandler::mimeTypes() const
 {
     QStringList mimeTypes;
     mimeTypes << DItemDrag::mimeTypes()
-              << DTagDrag::mimeTypes()
               << DTagListDrag::mimeTypes()
               << DCameraItemListDrag::mimeTypes()
               << DCameraDragObject::mimeTypes()
