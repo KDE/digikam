@@ -54,9 +54,26 @@ private Q_SLOTS:
      */
     void slotOpenProperties();
 
+    /**
+     * @brief slotSelectionChanged - update tag properties in tagPropWidget when 
+     *                               different item is selected
+     */
     void slotSelectionChanged();
 
+    /**
+     * Not used yet
+     */
     void slotItemChanged();
+
+    /**
+     * @brief slotAddAction     - add new tag when addAction(+) is triggered
+     */
+    void slotAddAction();
+
+    /**
+     * @brief slotDeleteAction  - delete tag/tags when delAction is triggered
+     */
+    void slotDeleteAction();
 
 private:
     class PrivateTagMngr;

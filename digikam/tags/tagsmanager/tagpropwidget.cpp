@@ -156,7 +156,6 @@ TagPropWidget::TagPropWidget(QWidget* const parent)
 
 void TagPropWidget::slotSelectionChanged(TAlbum* album)
 {
-    kDebug() << "Selection changed";
     if(!album)
         kDebug() << "Error! No valid pointer for TAlbum";
     d->mainRootAlbum = album;

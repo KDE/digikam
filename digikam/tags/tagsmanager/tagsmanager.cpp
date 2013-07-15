@@ -37,11 +37,14 @@
 #include <QtGui/QLineEdit>
 #include <QtGui/QListView>
 #include <kactionmenu.h>
+#include <kapplication.h>
 
 #include "tagsmanager.h"
 #include "tagpropwidget.h"
 #include "tagfolderview.h"
+#include "ddragobjects.h"
 #include "searchtextbar.h"
+#include "tageditdlg.h"
 
 namespace Digikam
 {
@@ -124,13 +127,18 @@ TagsManager::TagsManager(TagModel* model)
 
     setupUi(this);
 
-    connect(d->tagFolderView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
-            this, SLOT(slotItemChanged()));
+    /*----------------------------Connects---------------------------*/
 
-    //connect(d->tagFolderView->selectionModel(),SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
-    //        this, SLOT(slotSelectionChanged()));
+    connect(d->tagFolderView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
+            this, SLOT(slotSelectionChanged()));
+
     connect(this, SIGNAL(signalSelectionChanged(TAlbum*)),
             d->tagPropWidget, SLOT(slotSelectionChanged(TAlbum*)));
+
+    connect(d->addAction, SIGNAL(triggered()), this, SLOT(slotAddAction()));
+
+    connect(d->delAction, SIGNAL(triggered()), this, SLOT(slotDeleteAction()));
+
 }
 
 TagsManager::~TagsManager()
@@ -273,14 +281,38 @@ void TagsManager::slotOpenProperties()
 
 void TagsManager::slotSelectionChanged()
 {
-
+    TAlbum* currentAl = static_cast<TAlbum*>(d->tagFolderView->currentAlbum());
+    emit signalSelectionChanged(currentAl);
 }
 
 void TagsManager::slotItemChanged()
 {
-    kDebug() << "Item Changed";
-    TAlbum* currentAl = static_cast<TAlbum*>(d->tagFolderView->currentAlbum());
-    emit signalSelectionChanged(currentAl);
+
 }
+
+void TagsManager::slotAddAction()
+{
+    QModelIndexList selectedList = d->tagFolderView->selectionModel()->selectedIndexes();
+
+    TAlbum* parent = static_cast<TAlbum*>(d->tagFolderView->albumForIndex(selectedList.at(0)));
+    QString      title, icon;
+    QKeySequence ks;
+
+    if (!TagEditDlg::tagCreate(kapp->activeWindow(), parent, title, icon, ks))
+    {
+        return;
+    }
+
+    QMap<QString, QString> errMap;
+    AlbumList tList = TagEditDlg::createTAlbum(parent, title, icon, ks, errMap);
+    TagEditDlg::showtagsListCreationError(kapp->activeWindow(), errMap);
+}
+
+void TagsManager::slotDeleteAction()
+{
+    kDebug() << "Delete Action";
+}
+
+
 
 } // namespace Digikam
