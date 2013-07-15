@@ -95,15 +95,15 @@ public:
      */
     ShowfotoItemInfo  showfotoItemInfo(int row)    const;
     ShowfotoItemInfo& showfotoItemInfoRef(int row) const;
-    qlonglong         showfotoitemId(int row)      const;
+    qlonglong         showfotoItemId(int row)      const;
 
     /**
      * Return the index of a given ShowfotoItemInfo, it it exists in the model.
      */
-    QModelIndex        indexForCamItemInfo(const ShowfotoItemInfo& info)   const;
-    QList<QModelIndex> indexesForCamItemInfo(const ShowfotoItemInfo& info) const;
-    QModelIndex        indexForCamItemId(qlonglong id)                     const;
-    QList<QModelIndex> indexesForCamItemId(qlonglong id)                   const;
+    QModelIndex        indexForShowfotoItemInfo(const ShowfotoItemInfo& info)   const;
+    QList<QModelIndex> indexesForShowfotoItemInfo(const ShowfotoItemInfo& info) const;
+    QModelIndex        indexForShowfotoItemId(qlonglong id)                     const;
+    QList<QModelIndex> indexesForShowfotoItemId(qlonglong id)                   const;
 
     /**
      * Returns the index or ShowfotoItemInfo object from the underlying data for
@@ -137,8 +137,8 @@ public:
      */
     void setShowfotoItemInfos(const QList<ShowfotoItemInfo>& infos);
 
-    QList<ShowfotoItemInfo> ShowfotoItemInfos()       const;
-    QList<qlonglong>        ShowfotoItemIds()         const;
+    QList<ShowfotoItemInfo> showfotoItemInfos()       const;
+    QList<qlonglong>        showfotoItemIds()         const;
     QList<ShowfotoItemInfo> uniqueShowfotoItemInfos() const;
 
     bool hasImage(qlonglong id) const;
@@ -155,14 +155,14 @@ public:
     void removeShowfotoItemInfos(const QList<ShowfotoItemInfo>& infos);
 
     int numberOfIndexesForShowfotoItemInfo(const ShowfotoItemInfo& info) const;
-    int numberOfIndexesForShowfotoId(qlonglong id)                       const;
+    int numberOfIndexesForShowfotoItemId(qlonglong id)                       const;
 
-//    /**
-//     * Retrieve the ShowfotoItemInfo object from the data() function of the given index
-//     * The index may be from a QSortFilterProxyModel as long as an ImportImageModel is at the end.
-//     */
-//    static ShowfotoItemInfo retrieveShowfotoItemInfo(const QModelIndex& index);
-//    static qlonglong        retrieveShowfotoId(const QModelIndex& index);
+    /**
+     * Retrieve the ShowfotoItemInfo object from the data() function of the given index
+     * The index may be from a QSortFilterProxyModel as long as an ImportImageModel is at the end.
+     */
+    static ShowfotoItemInfo retrieveShowfotoItemInfo(const QModelIndex& index);
+    static qlonglong        retrieveShowfotoItemId(const QModelIndex& index);
 
     // QAbstractListModel implementation
     virtual int           rowCount(const QModelIndex& parent)                            const;
@@ -202,91 +202,91 @@ Q_SIGNALS:
     void ShowfotoItemInfosAdded(const QList<ShowfotoItemInfo>& infos);
 
 
-//    /**
-//     * Informs that ShowfotoItemInfos will be removed from the model.
-//     * This signal is sent before the model data is changed and views are informed.
-//     * Note: You need to explicitly enable sending of this signal. It is not sent
-//     * in clearShowfotoItemInfos().
-//     */
-//    void ShowfotoItemInfosAboutToBeRemoved(const QList<ShowfotoItemInfo>& infos);
+    /**
+     * Informs that ShowfotoItemInfos will be removed from the model.
+     * This signal is sent before the model data is changed and views are informed.
+     * Note: You need to explicitly enable sending of this signal. It is not sent
+     * in clearShowfotoItemInfos().
+     */
+    void ShowfotoItemInfosAboutToBeRemoved(const QList<ShowfotoItemInfo>& infos);
 
-//    /**
-//     * Informs that ShowfotoItemInfos have been removed from the model.
-//     * This signal is sent after the model data is changed and views are informed.
-//     * Note: You need to explicitly enable sending of this signal. It is not sent
-//     * in clearShowfotoItemInfos().
-//     */
-//    void ShowfotoItemInfosRemoved(const QList<ShowfotoItemInfo>& infos);
+    /**
+     * Informs that ShowfotoItemInfos have been removed from the model.
+     * This signal is sent after the model data is changed and views are informed.
+     * Note: You need to explicitly enable sending of this signal. It is not sent
+     * in clearShowfotoItemInfos().
+     */
+    void ShowfotoItemInfosRemoved(const QList<ShowfotoItemInfo>& infos);
 
-//    /**
-//     * Connect to this signal only if you are the current preprocessor.
-//     */
-//    void preprocess(const QList<ShowfotoItemInfo>& infos);
-//    void processAdded(const QList<ShowfotoItemInfo>& infos);
+    /**
+     * Connect to this signal only if you are the current preprocessor.
+     */
+    void preprocess(const QList<ShowfotoItemInfo>& infos);
+    void processAdded(const QList<ShowfotoItemInfo>& infos);
 
-//    /**
-//     * Signals that the model is right now ready to start an incremental refresh.
-//     * This is guaranteed only for the scope of emitting this signal.
-//     */
-//    void readyForIncrementalRefresh();
+    /**
+     * Signals that the model is right now ready to start an incremental refresh.
+     * This is guaranteed only for the scope of emitting this signal.
+     */
+    void readyForIncrementalRefresh();
 
-//    /**
-//     * Signals that the model has finished currently with all scheduled
-//     * refreshing, full or incremental, and all preprocessing.
-//     * The model is in polished, clean situation right now.
-//     */
-//    void allRefreshingFinished();
+    /**
+     * Signals that the model has finished currently with all scheduled
+     * refreshing, full or incremental, and all preprocessing.
+     * The model is in polished, clean situation right now.
+     */
+    void allRefreshingFinished();
 
 public Q_SLOTS:
 
     void reAddShowfotoItemInfos(ShowfotoItemInfoList& infos);
-//    void reAddingFinished();
-//    void slotFileDeleted(const QString& folder, const QString& file, bool status);
-//    void slotFileUploaded(const ShowfotoItemInfo& info);
+    void reAddingFinished();
+    void slotFileDeleted(const QString& folder, const QString& file, bool status);
+    void slotFileUploaded(const ShowfotoItemInfo& info);
 
-//protected:
+protected:
 
-//    /**
-//     * Subclasses that add ShowfotoItemInfos in batches shall call startRefresh()
-//     * when they start sending batches and finishRefresh() when they have finished.
-//     * No incremental refreshes will be started while listing.
-//     * A clearShowfotoItemInfos() always stops listing, calling finishRefresh() is then not necessary.
-//     */
-//    void startRefresh();
-//    void finishRefresh();
+    /**
+     * Subclasses that add ShowfotoItemInfos in batches shall call startRefresh()
+     * when they start sending batches and finishRefresh() when they have finished.
+     * No incremental refreshes will be started while listing.
+     * A clearShowfotoItemInfos() always stops listing, calling finishRefresh() is then not necessary.
+     */
+    void startRefresh();
+    void finishRefresh();
 
-//    /**
-//     * As soon as the model is ready to start an incremental refresh, the signal
-//     * readyForIncrementalRefresh() will be emitted. The signal will be emitted inline
-//     * if the model is ready right now.
-//     */
-//    void requestIncrementalRefresh();
-//    bool hasIncrementalRefreshPending() const;
+    /**
+     * As soon as the model is ready to start an incremental refresh, the signal
+     * readyForIncrementalRefresh() will be emitted. The signal will be emitted inline
+     * if the model is ready right now.
+     */
+    void requestIncrementalRefresh();
+    bool hasIncrementalRefreshPending() const;
 
-//    /**
-//     * Starts an incremental refresh operation. You shall only call this method from a slot
-//     * connected to readyForIncrementalRefresh(). To initiate an incremental refresh,
-//     * call requestIncrementalRefresh().
-//     */
-//    void startIncrementalRefresh();
-//    void finishIncrementalRefresh();
+    /**
+     * Starts an incremental refresh operation. You shall only call this method from a slot
+     * connected to readyForIncrementalRefresh(). To initiate an incremental refresh,
+     * call requestIncrementalRefresh().
+     */
+    void startIncrementalRefresh();
+    void finishIncrementalRefresh();
 
-//    void emitDataChangedForAll();
-//    void emitDataChangedForSelections(const QItemSelection& selection);
+    void emitDataChangedForAll();
+    void emitDataChangedForSelections(const QItemSelection& selection);
 
-//    // Called when the internal storage is cleared.
-//    virtual void ShowfotoItemInfosCleared() {};
+    // Called when the internal storage is cleared.
+    virtual void showfotoItemInfosCleared() {};
 
-//    // Called before rowsAboutToBeRemoved
-//    virtual void ShowfotoItemInfosAboutToBeRemoved(int /*begin*/, int /*end*/) {};
+    // Called before rowsAboutToBeRemoved
+    virtual void showfotoItemInfosAboutToBeRemoved(int /*begin*/, int /*end*/) {};
 
-//private:
+private:
 
-//    void appendInfos(const QList<ShowfotoItemInfo>& infos);
+    void appendInfos(const QList<ShowfotoItemInfo>& infos);
     void publiciseInfos(const QList<ShowfotoItemInfo>& infos);
-//    void cleanSituationChecks();
-//    void removeRowPairs(const QList<QPair<int, int> >& toRemove);
-//    void removeRowPairsWithCheck(const QList<QPair<int, int> >& toRemove);
+    void cleanSituationChecks();
+    void removeRowPairs(const QList<QPair<int, int> >& toRemove);
+    void removeRowPairsWithCheck(const QList<QPair<int, int> >& toRemove);
 
 public:
 
