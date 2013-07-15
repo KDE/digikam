@@ -309,8 +309,7 @@ void InPaintingTool::writeSettings()
     group.writeEntry(d->configIterationEntry,     prm.nbIter);
     group.writeEntry(d->configTileEntry,          prm.tile);
     group.writeEntry(d->configBTileEntry,         prm.btile);
-
-    config->sync();
+    group.sync();
 }
 
 void InPaintingTool::slotResetValues(int i)

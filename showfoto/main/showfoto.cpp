@@ -121,6 +121,7 @@ extern "C"
 #include "thumbnailsize.h"
 #include "uifilevalidator.h"
 #include "knotificationwrapper.h"
+#include "thumbbar/showfotoitemloader.h"
 
 namespace ShowFoto
 {
@@ -133,6 +134,7 @@ public:
         deleteItem2Trash(true),
         validIccPath(true),
         itemsNb(0),
+        loader(0),
         vSplitter(0),
         fileOpenAction(0),
         openFilesInFolderAction(0),
@@ -149,6 +151,8 @@ public:
     bool                             validIccPath;
 
     int                              itemsNb;
+
+    ShowfotoItemLoader*              loader;
 
     QSplitter*                       vSplitter;
 
@@ -207,6 +211,10 @@ ShowFoto::ShowFoto(const KUrl::List& urlList)
     d->thumbLoadThread->setThumbnailSize(Digikam::ThumbnailSize::Huge);
     d->thumbLoadThread->setSendSurrogatePixmap(true);
 
+    // loader
+
+    d->loader = new ShowfotoItemLoader();
+
     // Check ICC profiles repository availability
 
     if (d->splash)
@@ -254,59 +262,7 @@ ShowFoto::ShowFoto(const KUrl::List& urlList)
 
     // -- Load current items ---------------------------
 
-    for (KUrl::List::const_iterator it = urlList.constBegin();
-        it != urlList.constEnd(); ++it)
-    {
-        KUrl url = *it;
-
-        if (url.isLocalFile())
-        {
-            QFileInfo fi(url.toLocalFile());
-
-            if (fi.isDir())
-            {
-                // Local Dir
-
-                openFolder(url);
-                toggleNavigation(1);
-            }
-            else
-            {
-                // Local file
-
-                if (urlList.count() == 1)
-                {
-                    // Special case if just one item in urls is passed.
-                    // We need to handle whole current dir content in thummbar.
-                    // See B.K.O #316752 for details.
-
-                    openFolder(url.directory());
-                    d->thumbBar->setSelected(d->thumbBar->findItemByUrl(url));
-                    d->currentItem = d->thumbBar->currentItem();
-                }
-                else
-                {
-                    new Digikam::ThumbBarItem(d->thumbBar, url);
-                    d->lastOpenedDirectory = (*it);
-                    toggleNavigation(1);
-                }
-            }
-        }
-        else
-        {
-            // Remote file.
-            new Digikam::ThumbBarItem(d->thumbBar, url);
-            d->lastOpenedDirectory=(*it);
-            toggleNavigation(1);
-        }
-    }
-
-    if ( urlList.isEmpty() )
-    {
-        emit signalNoCurrentItem();
-        toggleActions(false);
-        toggleNavigation(0);
-    }
+    emit signalLoadCurrentItem(urlList);
 }
 
 ShowFoto::~ShowFoto()
@@ -319,6 +275,7 @@ ShowFoto::~ShowFoto()
     Digikam::ThumbnailLoadThread::cleanUp();
     Digikam::LoadingCacheInterface::cleanUp();
 
+    delete d->loader;
     delete m_imagePluginLoader;
     delete d->thumbBar;
     delete d->rightSideBar;
@@ -408,8 +365,39 @@ void ShowFoto::setupConnections()
     connect(this, SIGNAL(signalSelectionChanged(QRect)),
             d->rightSideBar, SLOT(slotImageSelectionChanged(QRect)));
 
-    connect(this, SIGNAL(signalNoCurrentItem()),
+    connect(d->loader, SIGNAL(signalNoCurrentItem()),
             d->rightSideBar, SLOT(slotNoCurrentItem()));
+
+    connect(this, SIGNAL(signalLoadCurrentItem(KUrl::List)),
+            d->loader, SLOT(slotLoadCurrentItem(KUrl::List)));
+
+    connect(this, SIGNAL(signalOpenFolder(KUrl)),
+            d->loader, SLOT(slotOpenFolder(KUrl)));
+
+    connect(this, SIGNAL(signalOpenFile(KUrl::List)),
+            d->loader, SLOT(slotOpenFile(KUrl::List)));
+
+    connect(d->loader, SIGNAL(signalToggleNav(int)),
+            this, SLOT(slotToggleNav(int)));
+
+    connect(d->loader, SIGNAL(signalToggleAction(bool)),
+            this, SLOT(slotToggleActions(bool)));
+
+    connect(d->loader, SIGNAL(signalSetSelceted(KUrl)),
+            this, SLOT(slotSetSelected(KUrl)));
+
+    connect(d->loader, SIGNAL(signalSetCurrentItem()),
+            this, SLOT(slotSetCurrentItem()));
+
+    connect(d->loader, SIGNAL(signalNewThumbItem(KUrl)),
+            this, SLOT(slotNewThumbItem(KUrl)));
+
+    connect(d->loader, SIGNAL(signalLastDirectory(KUrl::List::const_iterator)),
+            this, SLOT(slotLastDirectory(KUrl::List::const_iterator)));
+
+    connect(d->loader, SIGNAL(signalSorry()),
+            this, SLOT(slotSorry()));
+
 }
 
 void ShowFoto::setupUserArea()
@@ -505,7 +493,7 @@ void ShowFoto::setupActions()
     // -- Standard 'Help' menu actions ---------------------------------------------
 
     createHelpActions(false);
-    
+
     // --- Create the GUI ----------------------------------------------------
 
     createGUI(xmlFile());
@@ -614,12 +602,7 @@ void ShowFoto::slotOpenFile()
         d->currentItem = 0;
         d->thumbBar->clear();
 
-        for (KUrl::List::const_iterator it = urls.constBegin();
-             it != urls.constEnd(); ++it)
-        {
-            new Digikam::ThumbBarItem(d->thumbBar, *it);
-            d->lastOpenedDirectory = (*it);
-        }
+        emit signalOpenFile(urls);
     }
 }
 
@@ -770,131 +753,8 @@ void ShowFoto::slotOpenFolder(const KUrl& url)
     d->thumbBar->clear(true);
     emit signalNoCurrentItem();
     d->currentItem = 0;
-    openFolder(url);
+    emit signalOpenFolder(url);
     toggleNavigation(1);
-}
-
-void ShowFoto::openFolder(const KUrl& url)
-{
-    if (!url.isValid() || !url.isLocalFile())
-    {
-        return;
-    }
-
-    // Parse KDE image IO mime types registration to get files filter pattern.
-
-    QStringList mimeTypes = KImageIO::mimeTypes(KImageIO::Reading);
-    QString filter;
-
-    for (QStringList::ConstIterator it = mimeTypes.constBegin() ; it != mimeTypes.constEnd() ; ++it)
-    {
-        QString format = KImageIO::typeForMime(*it).at(0).toUpper();
-        filter.append ("*.");
-        filter.append (format);
-        filter.append (" ");
-    }
-
-    // Because KImageIO return only *.JPEG and *.TIFF mime types.
-    if ( filter.contains("*.TIFF") )
-    {
-        filter.append (" *.TIF");
-    }
-
-    if ( filter.contains("*.JPEG") )
-    {
-        filter.append (" *.JPG");
-        filter.append (" *.JPE");
-    }
-
-    // Added RAW files extensions supported by dcraw program and
-    // defines to digikam/libs/dcraw/rawfiles.h
-    filter.append (" ");
-    filter.append ( QString(KDcrawIface::KDcraw::rawFiles()) );
-    filter.append (" ");
-
-    QString patterns = filter.toLower();
-    patterns.append (" ");
-    patterns.append (filter.toUpper());
-
-    kDebug() << "patterns=" << patterns;
-
-    // Get all image files from directory.
-
-    QDir dir(url.toLocalFile(), patterns);
-    dir.setFilter ( QDir::Files );
-
-    if (!dir.exists())
-    {
-        return;
-    }
-
-    // Determine sort ordering for the entries from configuration setting:
-
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(EditorWindow::CONFIG_GROUP_NAME);
-
-    QDir::SortFlags flag;
-    bool            reverse   = group.readEntry("ReverseSort", false);
-
-    switch (group.readEntry("SortOrder", (int)SetupMisc::SortByDate))
-    {
-        case SetupMisc::SortByName:
-        {
-            flag = QDir::Name;  // Ordering by file name.
-
-            if (reverse)
-            {
-                flag = flag | QDir::Reversed;
-            }
-
-            break;
-        }
-        case SetupMisc::SortByFileSize:
-        {
-            flag = QDir::Size;  // Ordering by file size.
-
-            // Disabled reverse in the settings leads e.g. to increasing file sizes
-            // Note, that this is just the opposite to the sort order for QDir.
-            if (!reverse)
-            {
-                flag = flag | QDir::Reversed;
-            }
-
-            break;
-        }
-        default:
-        {
-            flag = QDir::Time;  // Ordering by file date.
-
-            // Disabled reverse in the settings leads e.g. to increasing dates
-            // Note, that this is just the opposite to the sort order for QDir.
-            if (!reverse)
-            {
-                flag = flag | QDir::Reversed;
-            }
-
-            break;
-        }
-    }
-
-    dir.setSorting(flag);
-
-    QFileInfoList fileinfolist = dir.entryInfoList();
-
-    if (fileinfolist.isEmpty())
-    {
-        KMessageBox::sorry(this, i18n("There are no images in this folder."));
-        return;
-    }
-
-    QFileInfoList::const_iterator fi;
-
-    // And open all items in image editor.
-
-    for (fi = fileinfolist.constBegin(); fi != fileinfolist.constEnd(); ++fi)
-    {
-        new Digikam::ThumbBarItem( d->thumbBar, KUrl(fi->filePath()) );
-    }
 }
 
 void ShowFoto::slotOpenFilesInFolder()
@@ -1283,6 +1143,43 @@ bool ShowFoto::saveNewVersionAs()
 bool ShowFoto::saveNewVersionInFormat(const QString&)
 {
     return false;
+}
+
+//new slots
+
+void ShowFoto::slotSetSelected(KUrl url)
+{
+    d->thumbBar->setSelected(d->thumbBar->findItemByUrl(url));
+}
+
+void ShowFoto::slotSetCurrentItem()
+{
+    d->currentItem = d->thumbBar->currentItem();
+}
+
+void ShowFoto::slotNewThumbItem(KUrl url)
+{
+    new Digikam::ThumbBarItem(d->thumbBar, url);
+}
+
+void ShowFoto::slotLastDirectory(KUrl::List::ConstIterator it)
+{
+   d->lastOpenedDirectory = (*it);
+}
+
+void ShowFoto::slotSorry()
+{
+    KMessageBox::sorry(this, i18n("There are no images in this folder."));
+}
+
+void ShowFoto::slotToggleNav(int i)
+{
+    toggleNavigation(i);
+}
+
+void ShowFoto::slotToggleActions(bool b)
+{
+    toggleActions(b);
 }
 
 }   // namespace ShowFoto

@@ -126,6 +126,20 @@ private Q_SLOTS:
     void slotContextMenu();
     void slotRevert();
 
+    //new slots
+    void slotSetSelected(KUrl url);
+    void slotSetCurrentItem();
+    void slotNewThumbItem(KUrl url);
+    void slotLastDirectory(KUrl::List::const_iterator);
+    void slotSorry();
+    void slotToggleNav(int i);
+    void slotToggleActions(bool b);
+
+Q_SIGNALS:
+    void signalLoadCurrentItem(const KUrl::List& urlList);
+    void signalOpenFolder(const KUrl&);
+    void signalOpenFile(const KUrl::List& urls);
+
 private:
 
     class Private;

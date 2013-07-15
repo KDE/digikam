@@ -4,6 +4,7 @@ SET_DEBUG_AREA_CODE(${AREA_CODE_SHOWFOTO})
 # otherwise the one from the "utilities" dir will be used
 INCLUDE_DIRECTORIES(BEFORE
         ${CMAKE_CURRENT_SOURCE_DIR}/setup
+	${CMAKE_CURRENT_SOURCE_DIR}/thumbbar
         ${CMAKE_CURRENT_SOURCE_DIR}/main
 )
 
@@ -15,7 +16,10 @@ ENDIF(NOT MSVC)
 SET(showfoto_SRCS
     ${libsetupshowfoto_SRCS}
     ${libshowfotosetup_SRCS}
-
+    
+    thumbbar/showfotoiteminfo.cpp
+    thumbbar/showfotoitemloader.cpp
+    thumbbar/showfotoimagemodel.cpp
     main/main.cpp
     main/showfoto.cpp
    )
