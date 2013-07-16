@@ -21,30 +21,37 @@
  *
  * ============================================================ */
 
-#include <kdebug.h>
-#include <klocale.h>
+/** Qt includes **/
+#include <QtAlgorithms>
+#include <QTreeView>
+#include <QtGui/QHeaderView>
+#include <QtGui/QLabel>
+#include <QtGui/QLineEdit>
+#include <QtGui/QListView>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
+
+/** KDE includes **/
+#include <kdebug.h>
+#include <klocale.h>
 #include <kiconloader.h>
 #include <kstandarddirs.h>
 #include <kaction.h>
 #include <ktoolbar.h>
 #include <kmainwindow.h>
 #include <kmultitabbar.h>
-#include <QTreeView>
-#include <QtGui/QHeaderView>
-#include <QtGui/QLabel>
-#include <QtGui/QLineEdit>
-#include <QtGui/QListView>
 #include <kactionmenu.h>
 #include <kapplication.h>
+#include <kmessagebox.h>
 
+/** local includes **/
 #include "tagsmanager.h"
 #include "tagpropwidget.h"
 #include "tagfolderview.h"
 #include "ddragobjects.h"
 #include "searchtextbar.h"
 #include "tageditdlg.h"
+#include "albumdb.h"
 
 namespace Digikam
 {
@@ -282,7 +289,9 @@ void TagsManager::slotOpenProperties()
 void TagsManager::slotSelectionChanged()
 {
     TAlbum* currentAl = static_cast<TAlbum*>(d->tagFolderView->currentAlbum());
-    emit signalSelectionChanged(currentAl);
+    /** When deleting a tag, current Album is not valid **/
+    if(currentAl)
+        emit signalSelectionChanged(currentAl);
 }
 
 void TagsManager::slotItemChanged()
@@ -294,6 +303,8 @@ void TagsManager::slotAddAction()
 {
     QModelIndexList selectedList = d->tagFolderView->selectionModel()->selectedIndexes();
 
+    if(selectedList.isEmpty())
+        return;
     TAlbum* parent = static_cast<TAlbum*>(d->tagFolderView->albumForIndex(selectedList.at(0)));
     QString      title, icon;
     QKeySequence ks;
@@ -310,7 +321,107 @@ void TagsManager::slotAddAction()
 
 void TagsManager::slotDeleteAction()
 {
-    kDebug() << "Delete Action";
+
+    QModelIndexList selectedList = d->tagFolderView->selectionModel()->selectedIndexes();
+    /**
+     * With multiple tags selected, you should begin to delete the children first,
+     * or deleting a parent will delete all its children, but won't change their model indexes
+     * and everything will crash
+     */
+    qSort(selectedList.begin(),selectedList.end());
+
+    QVector<AlbumPointer<TAlbum> > tags;
+    tags.reserve(selectedList.count());
+
+    QString tagWithChildrens;
+    QString tagWithImages;
+    foreach(QModelIndex index, selectedList)
+    {
+        if(!index.isValid())
+            return;
+        kDebug() << index;
+
+        TAlbum* t = static_cast<TAlbum*>(d->tagFolderView->albumForIndex(index));
+
+        if (!t || t->isRoot())
+        {
+            return;
+        }
+
+        AlbumPointer<TAlbum> tag(t);
+
+        // find number of subtags
+        int children = 0;
+        AlbumIterator iter(tag);
+
+        while (iter.current())
+        {
+            ++children;
+            ++iter;
+        }
+
+        if(children)
+            tagWithChildrens.append(tag->title() + QString(" "));
+
+        QList<qlonglong> assignedItems = DatabaseAccess().db()->getItemIDsInTag(tag->id());
+
+        if(!assignedItems.isEmpty())
+            tagWithImages.append(tag->title() + QString(" "));
+
+        tags.push_back(tag);
+    }
+
+            // ask for deletion of children
+        if (!tagWithChildrens.isEmpty())
+        {
+            int result = KMessageBox::warningContinueCancel(this,
+                                                            i18n("Tags '%1' has one or more subtags. "
+                                                                "Deleting this will also delete "
+                                                                "the subtag."
+                                                                "Do you want to continue?",
+                                                                tagWithChildrens));
+
+            if (result != KMessageBox::Continue)
+            {
+                return;
+            }
+        }
+
+        QString message;
+
+        /**
+
+        if (!assignedItems.isEmpty())
+        {
+            message = i18np("Tag '%2' is assigned to one item. "
+                            "Do you want to continue?",
+                            "Tag '%2' is assigned to %1 items. "
+                            "Do you want to continue?",
+                            assignedItems.count(), tag->title());
+        }
+        else
+        {
+            message = i18n("Delete '%1' tag?", tag->title());
+        }
+
+        int result = KMessageBox::warningContinueCancel(0, message,
+                                                        i18n("Delete Tag"),
+                                                        KGuiItem(i18n("Delete"),
+                                                                "edit-delete"));
+        */
+        //if (result == KMessageBox::Continue && tag)
+        //{
+            //emit aboutToDeleteTag(tag);
+        for(int ind=0;ind<tags.size();++ind)
+        {
+            QString errMsg;
+
+            if (!AlbumManager::instance()->deleteTAlbum(tags[ind], errMsg))
+            {
+                KMessageBox::error(0, errMsg);
+            }
+        }
+        //}
 }
 
 
