@@ -33,6 +33,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 023 ==> 261907 - digiKam empty context menus (relevant of default KDE widget style for Windows set to CDE instead Oxygen).
 024 ==> 249387 - Showfoto 1.1.0 crash when saving JPEG in WinVista64.
 025 ==> 262186 - "Save file is completed" notification cannot be turned off.
-026 ==> 
+026 ==> 321296 - opencv error message during face scan.
+027 ==> 304002 - Segfault when using inpainting.
+028 ==> 319632 - Digikam crashes when in-painting applied to photo.
+029 ==> 
 
 
