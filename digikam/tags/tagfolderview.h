@@ -99,6 +99,14 @@ protected:
      */
     virtual void handleCustomContextMenuAction(QAction* action, AlbumPointer<Album> album);
 
+    /**
+     * Reimplement contextMenuEvent from AbstractAlbumTree to support multiple
+     * selection
+     *
+     * @param event context menu event triggered by right click
+     */
+    void contextMenuEvent(QContextMenuEvent* event);
+
 private Q_SLOTS:
 
     void slotTagNewFromABCMenu(const QString& personName);

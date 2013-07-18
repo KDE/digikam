@@ -64,7 +64,6 @@ public:
 
     PrivateTagMngr()
     {
-        treeModel       = 0;
         tagmngrLabel    = 0;
         tagPixmap       = 0;
         digikamPixmap   = 0;
@@ -81,26 +80,6 @@ public:
         listView        = 0;
     }
 
-    ~PrivateTagMngr()
-    {
-        delete treeModel;
-        delete tagmngrLabel;
-        delete tagPixmap;
-        delete digikamPixmap;
-        delete searchBar;
-        delete treeWinLayout;
-        delete treeWindow;
-        delete mainToolbar;
-        delete rightToolBar;
-        delete organizeAction;
-        delete syncexportAction;
-        delete tagProperties;
-        delete addAction;
-        delete delAction;
-        delete listView;
-    }
-
-    QTreeView*      treeModel;
     TagFolderView*  tagFolderView;
     QLabel *        tagmngrLabel;
     QLabel*         tagPixmap;
@@ -130,6 +109,7 @@ TagsManager::TagsManager(TagModel* model)
 
     /** No buttons **/
     d->tagModel = model;
+    d->tagModel->setCheckable(false);
     this->setButtons(0x00);
 
     setupUi(this);
@@ -230,18 +210,10 @@ void TagsManager::setupUi(KDialog *Dialog)
 
      d->treeWinLayout = new QHBoxLayout(d->treeWindow);
 
-     if(d->tagModel == 0)
-     {
-        d->treeModel = new QTreeView();
-        d->treeWinLayout->addWidget(d->treeModel,9);
-     }
-     else
-     {
-         d->tagFolderView = new TagFolderView(this,d->tagModel);
-         d->treeWinLayout->addWidget(d->tagFolderView,9);
-     }
+     d->tagFolderView = new TagFolderView(this,d->tagModel);
+     d->treeWinLayout->addWidget(d->tagFolderView,9);
 
-     d->tagPropWidget = new TagPropWidget(d->treeModel);
+     d->tagPropWidget = new TagPropWidget(d->treeWindow);
      d->tagPropWidget->setMaximumWidth(350);
      d->treeWinLayout->addWidget(d->tagPropWidget,3);
      d->tagPropWidget->hide();
@@ -288,7 +260,7 @@ void TagsManager::slotOpenProperties()
 
 void TagsManager::slotSelectionChanged()
 {
-    TAlbum* currentAl = static_cast<TAlbum*>(d->tagFolderView->currentAlbum());
+    TAlbum* currentAl = d->tagFolderView->currentAlbum();
     /** When deleting a tag, current Album is not valid **/
     if(currentAl)
         emit signalSelectionChanged(currentAl);
@@ -389,39 +361,34 @@ void TagsManager::slotDeleteAction()
 
         QString message;
 
-        /**
-
-        if (!assignedItems.isEmpty())
+        if (!tagWithImages.isEmpty())
         {
-            message = i18np("Tag '%2' is assigned to one item. "
+            message = i18n("Tags '%1' are assigned to one or more items. "
                             "Do you want to continue?",
-                            "Tag '%2' is assigned to %1 items. "
-                            "Do you want to continue?",
-                            assignedItems.count(), tag->title());
+                            tagWithImages);
         }
         else
         {
-            message = i18n("Delete '%1' tag?", tag->title());
+            message = i18n("Delete '%1' tag(s)?", tagWithImages);
         }
 
         int result = KMessageBox::warningContinueCancel(0, message,
                                                         i18n("Delete Tag"),
                                                         KGuiItem(i18n("Delete"),
                                                                 "edit-delete"));
-        */
-        //if (result == KMessageBox::Continue && tag)
-        //{
-            //emit aboutToDeleteTag(tag);
-        for(int ind=0;ind<tags.size();++ind)
-        {
-            QString errMsg;
 
-            if (!AlbumManager::instance()->deleteTAlbum(tags[ind], errMsg))
+        if (result == KMessageBox::Continue)
+        {
+            for(int ind=0;ind<tags.size();++ind)
             {
-                KMessageBox::error(0, errMsg);
+                QString errMsg;
+
+                if (!AlbumManager::instance()->deleteTAlbum(tags[ind], errMsg))
+                {
+                    KMessageBox::error(0, errMsg);
+                }
             }
         }
-        //}
 }
 
 

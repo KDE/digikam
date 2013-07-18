@@ -30,7 +30,7 @@
 
 #include <QAction>
 #include <QEvent>
-
+#include <QContextMenuEvent>
 // KDE includes
 
 #include <kdebug.h>
@@ -43,6 +43,7 @@
 #include "albummanager.h"
 #include "contextmenuhelper.h"
 #include "tagmodificationhelper.h"
+
 
 namespace Digikam
 {
@@ -161,5 +162,44 @@ void TagFolderView::handleCustomContextMenuAction(QAction* action, AlbumPointer<
         emit signalFindDuplicatesInAlbum(tag);
     }
 }
+void TagFolderView::contextMenuEvent(QContextMenuEvent* event)
+{
+    /**
+    if (!d->enableContextMenu)
+    {
+        return;
+    }
+    */
+    Album* album = albumFilterModel()->albumForIndex(indexAt(event->pos()));
 
+    /**
+    if (!showContextMenuAt(event, album))
+    {
+        return;
+    }
+    */
+    // switch to the selected album if need
+    /**
+    if (d->selectOnContextMenu && album)
+    {
+        setCurrentAlbum(album);
+    }
+    */
+    // --------------------------------------------------------
+    kDebug() << "Context Menu triggered";
+    KMenu popmenu(this);
+    popmenu.addTitle(contextMenuIcon(), contextMenuTitle());
+    ContextMenuHelper cmhelper(&popmenu);
+
+    addCustomContextMenuActions(cmhelper, album);
+    /**
+    foreach(ContextMenuElement* const element, d->contextMenuElements)
+    {
+        element->addActions(this, cmhelper, album);
+    }
+     */
+    AlbumPointer<Album> albumPointer(album);
+    QAction* const choice = cmhelper.exec(QCursor::pos());
+    handleCustomContextMenuAction(choice, albumPointer);
+}
 } // namespace Digikam

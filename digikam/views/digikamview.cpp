@@ -892,7 +892,8 @@ void DigikamView::slotEditTag()
 
 void DigikamView::slotOpenTagsManager()
 {
-    TagsManager* tm = new TagsManager();
+    TagModel* tmod = new TagModel(AbstractAlbumModel::IncludeRootAlbum, this);
+    TagsManager* tm = new TagsManager(tmod);
     tm->show();
 }
 void DigikamView::slotNewKeywordSearch()

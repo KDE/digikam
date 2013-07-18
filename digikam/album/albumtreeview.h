@@ -537,6 +537,11 @@ public:
     /// Contains only the tags filtered by properties - prefer to albumModel()
     TagPropertiesFilterModel* filteredModel() const;
 
+    /**
+     * @brief currentAlbums     - after enabling multiple selection, current
+     *                            albums can be one or more, some options
+     *                            should be ported to fit the both cases
+     */
     TAlbum* currentAlbum() const;
     TAlbum* albumForIndex(const QModelIndex& index) const;
     TagModificationHelper* tagModificationHelper() const;
