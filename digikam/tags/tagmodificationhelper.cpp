@@ -27,6 +27,7 @@
 // Qt includes
 
 #include <QAction>
+#include <QDeclarativeContext>
 
 // KDE includes
 
@@ -90,6 +91,22 @@ TAlbum* TagModificationHelper::boundTag(QObject* sender) const
     }
 
     return 0;
+}
+void TagModificationHelper::bindMultipleTags(QAction* action, QList<TAlbum*> tags)
+{
+    action->setData(QVariant::fromValue(tags));
+}
+
+QList<TAlbum*> TagModificationHelper::boundMultipleTags(QObject* sender)
+{
+    QAction* action = 0;
+
+    if ( (action = qobject_cast<QAction*>(sender)) )
+    {
+        return (action->data().value<QList<TAlbum*> >());
+    }
+
+    return QList<TAlbum*>();
 }
 
 TAlbum* TagModificationHelper::slotTagNew(TAlbum* parent, const QString& title, const QString& iconName)
@@ -271,6 +288,96 @@ void TagModificationHelper::slotTagDelete(TAlbum* t)
 void TagModificationHelper::slotTagDelete()
 {
     slotTagDelete(boundTag(sender()));
+}
+
+void TagModificationHelper::slotMultipleTagDel(QList<TAlbum* >& tags)
+{
+    QString tagWithChildrens;
+    QString tagWithImages;
+    foreach(TAlbum* t, tags)
+    {
+
+        if (!t || t->isRoot())
+        {
+            continue;
+        }
+
+        AlbumPointer<TAlbum> tag(t);
+
+        // find number of subtags
+        int children = 0;
+        AlbumIterator iter(tag);
+
+        while (iter.current())
+        {
+            ++children;
+            ++iter;
+        }
+
+        if(children)
+            tagWithChildrens.append(tag->title() + QString(" "));
+
+        QList<qlonglong> assignedItems = DatabaseAccess().db()->getItemIDsInTag(tag->id());
+
+        if(!assignedItems.isEmpty())
+            tagWithImages.append(tag->title() + QString(" "));
+
+    }
+
+            // ask for deletion of children
+        if (!tagWithChildrens.isEmpty())
+        {
+            int result = KMessageBox::warningContinueCancel(0,
+                                                            i18n("Tags '%1' has one or more subtags. "
+                                                                "Deleting this will also delete "
+                                                                "the subtag."
+                                                                "Do you want to continue?",
+                                                                tagWithChildrens));
+
+            if (result != KMessageBox::Continue)
+            {
+                return;
+            }
+        }
+
+        QString message;
+
+        if (!tagWithImages.isEmpty())
+        {
+            message = i18n("Tags '%1' are assigned to one or more items. "
+                            "Do you want to continue?",
+                            tagWithImages);
+        }
+        else
+        {
+            message = i18n("Delete '%1' tag(s)?", tagWithImages);
+        }
+
+        int result = KMessageBox::warningContinueCancel(0, message,
+                                                        i18n("Delete Tag"),
+                                                        KGuiItem(i18n("Delete"),
+                                                                "edit-delete"));
+
+        if (result == KMessageBox::Continue)
+        {
+            for(int ind=0;ind<tags.size();++ind)
+            {
+                kDebug() << "Deleting tag" << (tags[ind])->title();
+                QString errMsg;
+
+                if (!AlbumManager::instance()->deleteTAlbum(tags[ind], errMsg))
+                {
+                    KMessageBox::error(0, errMsg);
+                }
+            }
+        }
+}
+
+void TagModificationHelper::slotMultipleTagDel()
+{
+    QList<TAlbum* > lst = boundMultipleTags(sender());
+    kDebug() << lst.size();
+    slotMultipleTagDel(lst);
 }
 
 } // namespace Digikam

@@ -162,6 +162,25 @@ void TagFolderView::handleCustomContextMenuAction(QAction* action, AlbumPointer<
         emit signalFindDuplicatesInAlbum(tag);
     }
 }
+
+void TagFolderView::setContexMenuItems(ContextMenuHelper& cmh, QList< TAlbum* > albums)
+{
+    if(albums.size() == 1)
+    {
+        addCustomContextMenuActions(cmh, albums.first());
+        return;
+    }
+
+    if (d->showFindDuplicateAction)
+    {
+        cmh.addAction(d->findDuplAction);
+    }
+    cmh.addExportMenu();
+    cmh.addBatchMenu();
+    cmh.addActionDeleteTags(tagModificationHelper(),albums);
+    cmh.addSeparator();
+}
+
 void TagFolderView::contextMenuEvent(QContextMenuEvent* event)
 {
     /**
@@ -186,12 +205,23 @@ void TagFolderView::contextMenuEvent(QContextMenuEvent* event)
     }
     */
     // --------------------------------------------------------
+    QModelIndexList selectedItems = selectionModel()->selectedIndexes();
+
+    qSort(selectedItems.begin(),selectedItems.end());
+    QList<TAlbum*> items;
+
+    foreach(QModelIndex mIndex, selectedItems)
+    {
+        TAlbum* temp = static_cast<TAlbum*>(albumForIndex(mIndex));
+        kDebug() << "Adding tag" << temp->title();
+        items.push_back(temp);
+    }
     kDebug() << "Context Menu triggered";
     KMenu popmenu(this);
     popmenu.addTitle(contextMenuIcon(), contextMenuTitle());
     ContextMenuHelper cmhelper(&popmenu);
 
-    addCustomContextMenuActions(cmhelper, album);
+    setContexMenuItems(cmhelper, items);
     /**
     foreach(ContextMenuElement* const element, d->contextMenuElements)
     {

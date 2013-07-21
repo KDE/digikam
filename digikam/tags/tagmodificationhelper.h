@@ -108,7 +108,23 @@ public Q_SLOTS:
      * @param tag the tag to delete, must not be the root tag album
      */
     void slotTagDelete(TAlbum* tag);
+
+    /**
+     * must use bindTag and a QAction
+     */
     void slotTagDelete(); /// must use bindTag and a QAction
+
+    /**
+     * Delete multiple tags and prompt user only once for all
+     *
+     * @param tags tags to be deleted, without root tag
+     */
+    void slotMultipleTagDel(QList<TAlbum* >& tags);
+
+    /**
+     * must use bindMultipleTags and a QAction
+     */
+    void slotMultipleTagDel();
 
     /**
      * Sets the tag that the given action operates on.
@@ -124,6 +140,21 @@ public Q_SLOTS:
      * will be checked with qobject_cast first, so you can pass QObject::sender().
      */
     TAlbum* boundTag(QObject* action) const;
+
+    /**
+     * Set QVector's pointer into action's data. Make sure that QVector is not
+     * a local object and it's not destroyed before boundMultipleTags are called
+     *
+     * @param action    - action to store pointer
+     * @param tags      - QVector pointer to be stored
+     */
+    void bindMultipleTags(QAction* action, QList<TAlbum*> tags);
+
+    /**
+     * Return QVector pointer bound with bindMultipleTags. Use when context menu
+     * should delete more than one item: multiple-selection.
+     */
+    QList< TAlbum* > boundMultipleTags(QObject* sender);
 
 Q_SIGNALS:
 

@@ -424,6 +424,15 @@ void ContextMenuHelper::addActionDeleteTag(TagModificationHelper* helper, TAlbum
             helper, SLOT(slotTagDelete()));
 }
 
+void ContextMenuHelper::addActionDeleteTags(Digikam::TagModificationHelper* helper, QList< TAlbum* > tags)
+{
+    QAction* deleteTagsAction = new QAction(SmallIcon("user-trash"), i18n("Delete Tags"), this);
+    addAction(deleteTagsAction);
+    helper->bindMultipleTags(deleteTagsAction, tags);
+    connect(deleteTagsAction, SIGNAL(triggered()),
+            helper, SLOT(slotMultipleTagDel()));
+}
+
 void ContextMenuHelper::addActionEditTag(TagModificationHelper* helper, TAlbum* tag)
 {
     QAction* editTagAction = new QAction(SmallIcon("tag-properties"), i18nc("Edit Tag Properties", "Properties..."), this);
