@@ -294,6 +294,7 @@ void TagModificationHelper::slotMultipleTagDel(QList<TAlbum* >& tags)
 {
     QString tagWithChildrens;
     QString tagWithImages;
+    QMultiMap<int, TAlbum*> sortedTags;
     foreach(TAlbum* t, tags)
     {
 
@@ -321,6 +322,22 @@ void TagModificationHelper::slotMultipleTagDel(QList<TAlbum* >& tags)
 
         if(!assignedItems.isEmpty())
             tagWithImages.append(tag->title() + QString(" "));
+
+        /**
+         * Tags must be deleted from children to parents, if we don't want
+         * to step on invalid index. Use QMultiMap to order them by distance
+         * to root tag
+         */
+
+        Album* parent = t;
+        int depth = 0;
+        while(!parent->isRoot())
+        {
+            parent = parent->parent();
+            depth++;
+        }
+
+        sortedTags.insert(depth,tag);
 
     }
 
@@ -360,12 +377,15 @@ void TagModificationHelper::slotMultipleTagDel(QList<TAlbum* >& tags)
 
         if (result == KMessageBox::Continue)
         {
-            for(int ind=0;ind<tags.size();++ind)
+            QMultiMap<int, TAlbum*>::iterator it;
+            /**
+             * QMultimap doesn't provide reverse iterator, -1 is required
+             * because end() points after the last element
+             */
+            for(it = sortedTags.end()-1; it != sortedTags.begin()-1; --it)
             {
-                kDebug() << "Deleting tag" << (tags[ind])->title();
                 QString errMsg;
-
-                if (!AlbumManager::instance()->deleteTAlbum(tags[ind], errMsg))
+                if (!AlbumManager::instance()->deleteTAlbum(it.value(), errMsg))
                 {
                     KMessageBox::error(0, errMsg);
                 }

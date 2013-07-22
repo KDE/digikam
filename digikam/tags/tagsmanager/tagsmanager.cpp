@@ -295,25 +295,19 @@ void TagsManager::slotDeleteAction()
 {
 
     QModelIndexList selectedList = d->tagFolderView->selectionModel()->selectedIndexes();
-    /**
-     * With multiple tags selected, you should begin to delete the children first,
-     * or deleting a parent will delete all its children, but won't change their model indexes
-     * and everything will crash
-     */
-    qSort(selectedList.begin(),selectedList.end());
-
-    QVector<AlbumPointer<TAlbum> > tags;
-    tags.reserve(selectedList.count());
 
     QString tagWithChildrens;
     QString tagWithImages;
+    QMultiMap<int, TAlbum*> sortedTags;
+
     foreach(QModelIndex index, selectedList)
     {
         if(!index.isValid())
             return;
-        kDebug() << index;
 
         TAlbum* t = static_cast<TAlbum*>(d->tagFolderView->albumForIndex(index));
+
+        int deph = 0;
 
         if (!t || t->isRoot())
         {
@@ -340,9 +334,21 @@ void TagsManager::slotDeleteAction()
         if(!assignedItems.isEmpty())
             tagWithImages.append(tag->title() + QString(" "));
 
-        tags.push_back(tag);
-    }
+        /**
+         * Tags must be deleted from children to parents, if we don't want
+         * to step on invalid index. Use QMultiMap to order them by distance
+         * to root tag
+         */
+        Album* parent = t;
 
+        while(!parent->isRoot())
+        {
+            parent = parent->parent();
+            deph++;
+        }
+
+        sortedTags.insert(deph,tag);
+    }
             // ask for deletion of children
         if (!tagWithChildrens.isEmpty())
         {
@@ -379,11 +385,15 @@ void TagsManager::slotDeleteAction()
 
         if (result == KMessageBox::Continue)
         {
-            for(int ind=0;ind<tags.size();++ind)
+            QMultiMap<int, TAlbum*>::iterator it;
+            /**
+             * QMultimap doesn't provide reverse iterator, -1 is required
+             * because end() points after the last element
+             */
+            for(it = sortedTags.end()-1; it != sortedTags.begin()-1; --it)
             {
                 QString errMsg;
-
-                if (!AlbumManager::instance()->deleteTAlbum(tags[ind], errMsg))
+                if (!AlbumManager::instance()->deleteTAlbum(it.value(), errMsg))
                 {
                     KMessageBox::error(0, errMsg);
                 }
