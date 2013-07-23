@@ -399,6 +399,19 @@ DImgThreadedFilter* EditorToolThreaded::filter() const
     return d->threadedFilter;
 }
 
+void EditorToolThreaded::slotInit()
+{
+    EditorTool::slotInit();
+    
+    QWidget* const view = toolView();
+    
+    if (dynamic_cast<ImageGuideWidget*>(view) || dynamic_cast<ImageRegionWidget*>(view))
+    {
+        connect(view, SIGNAL(signalResized()),
+                this, SLOT(slotResized()));
+    }
+}
+
 void EditorToolThreaded::setFilter(DImgThreadedFilter* const filter)
 {
     delete d->threadedFilter;
@@ -564,20 +577,8 @@ void EditorToolThreaded::slotAnalyserFinished(bool success)
     }
     else
     {
-
         kDebug() << "Analys " << toolName() << " failed...";
         slotAbort();
-    }
-}
-
-void EditorToolThreaded::setToolView(QWidget* const view)
-{
-    EditorTool::setToolView(view);
-
-    if (dynamic_cast<ImageGuideWidget*>(view) || dynamic_cast<ImageRegionWidget*>(view))
-    {
-        connect(view, SIGNAL(signalResized()),
-                this, SLOT(slotResized()));
     }
 }
 
