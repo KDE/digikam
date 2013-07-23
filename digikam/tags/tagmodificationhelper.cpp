@@ -384,6 +384,7 @@ void TagModificationHelper::slotMultipleTagDel(QList<TAlbum* >& tags)
              */
             for(it = sortedTags.end()-1; it != sortedTags.begin()-1; --it)
             {
+                emit aboutToDeleteTag(it.value());
                 QString errMsg;
                 if (!AlbumManager::instance()->deleteTAlbum(it.value(), errMsg))
                 {

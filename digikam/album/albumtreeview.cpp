@@ -538,6 +538,7 @@ void AbstractAlbumTreeView::mousePressEvent(QMouseEvent* e)
                 AlbumManager::instance()->setCurrentAlbum(album);
             }
         }
+
     }
 
     if ((d->expandOnSingleClick || d->expandNewCurrent) && e->button() == Qt::LeftButton)
@@ -577,6 +578,20 @@ void AbstractAlbumTreeView::mousePressEvent(QMouseEvent* e)
     }
 
     QTreeView::mousePressEvent(e);
+
+    /**
+     * Multi selection fix for currentAlbum()
+     */
+    QModelIndexList list = selectionModel()->selectedIndexes();
+    QList<Album*> currentAlbums;
+    currentAlbums.reserve(list.size());
+
+    foreach(QModelIndex index, list)
+    {
+        currentAlbums.push_back(m_albumFilterModel->albumForIndex(index));
+    }
+
+    AlbumManager::instance()->setCurrentAlbums(currentAlbums);
 }
 
 void AbstractAlbumTreeView::middleButtonPressed(Album*)

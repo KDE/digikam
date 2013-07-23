@@ -212,6 +212,8 @@ public:
     QMultiHash<Album*, Album**> guardedPointers;
 
     Album*                      currentAlbum;
+    /** For multiple selection support **/
+    QList<Album*>               currentAlbums;
 
     bool                        changingDB;
     QTimer*                     scanPAlbumsTimer;
@@ -1838,6 +1840,20 @@ void AlbumManager::setCurrentAlbum(Album* album)
 Album* AlbumManager::currentAlbum() const
 {
     return d->currentAlbum;
+}
+
+void AlbumManager::setCurrentAlbums(QList<Album*> albums)
+{
+    if(albums.isEmpty())
+        return;
+    d->currentAlbums.clear();
+    d->currentAlbums+=albums;
+    emit signalAlbumCurrentChanged(albums.first());
+}
+
+AlbumList AlbumManager::currentAlbums() const
+{
+    return d->currentAlbums;
 }
 
 PAlbum* AlbumManager::currentPAlbum() const

@@ -191,6 +191,17 @@ public:
     Album*    currentAlbum() const;
 
     /**
+    * set current album to @p albums. It's similar to setCurrentAlbum,
+    * but suport multiple selected albums
+    */
+    void setCurrentAlbums(QList<Album*> albums);
+
+    /**
+    * @returns current albums, previously set up by setCurrentAlbums
+    */
+    AlbumList currentAlbums() const;
+
+    /**
      * @returns the current PAlbum or null if no one is selected
      */
     PAlbum* currentPAlbum() const;
