@@ -37,6 +37,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 027 ==> 304002 - Segfault when using inpainting.
 028 ==> 319632 - digiKam crashes when in-painting applied to photo.
 029 ==> 322213 - when renaming files by date, the "format settings" link incorrectly links to doc.trolltech.com.
-030 ==> 
-
+030 ==> 322656 - When opening a pic, dark areas show artefacts.
+031 ==> 
 
