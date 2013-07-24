@@ -1859,12 +1859,30 @@ AlbumList AlbumManager::currentAlbums() const
 
 PAlbum* AlbumManager::currentPAlbum() const
 {
-    return dynamic_cast<PAlbum*>(d->currentAlbum);
+    /**
+     * Temporary fix, to return multiple items,
+     * iterate and cast each element
+     */
+    if(!d->currentAlbums.isEmpty())
+        return dynamic_cast<PAlbum*>(d->currentAlbums.first());
+    else
+        return 0;
 }
 
-TAlbum* AlbumManager::currentTAlbum() const
+QList<TAlbum*> AlbumManager::currentTAlbums() const
 {
-    return dynamic_cast<TAlbum*>(d->currentAlbum);
+    /**
+     * This method is not yet used
+     */
+    QList<TAlbum*> talbums;
+    QList<Album*>::iterator it;
+    for(it = d->currentAlbums.begin(); it != d->currentAlbums.end(); ++it)
+    {
+        TAlbum* temp = dynamic_cast<TAlbum*>(*it);
+        if(temp)
+            talbums.push_back(temp);
+    }
+    return talbums;
 }
 
 PAlbum* AlbumManager::findPAlbum(const KUrl& url) const

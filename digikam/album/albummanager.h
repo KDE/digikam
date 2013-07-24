@@ -209,7 +209,7 @@ public:
     /**
      * @returns the current TAlbum or null if no one is selected
      */
-    TAlbum* currentTAlbum() const;
+    QList<TAlbum*> currentTAlbums() const;
 
     /**
      * @returns the current FAlbum or null if no one is selected

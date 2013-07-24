@@ -712,7 +712,13 @@ void DigikamView::saveViewState()
     d->stackedview->thumbBarDock()->close();
     group.writeEntry("ThumbbarState", d->dockArea->saveState().toBase64());
 
-    Album* const album = AlbumManager::instance()->currentAlbums().first();
+    QList<Album*> albumList = AlbumManager::instance()->currentAlbums();
+    Album* album = 0;
+
+    if(!albumList.isEmpty())
+    {
+        album = albumList.first();
+    }
 
     if (album)
     {
@@ -1912,7 +1918,13 @@ void DigikamView::slotSlideShowSelection()
 
 void DigikamView::slotSlideShowRecursive()
 {
-    Album* const album = AlbumManager::instance()->currentAlbums().first();
+    QList<Album*> albumList = AlbumManager::instance()->currentAlbums();
+    Album* album = 0;
+
+    if(!albumList.isEmpty())
+    {
+        album = albumList.first();
+    }
 
     if (album)
     {

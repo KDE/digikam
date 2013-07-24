@@ -1377,7 +1377,13 @@ void DigikamApp::slotAlbumSelected(bool val)
 {
     // NOTE: val is true when a PAlbum is selected.
 
-    Album* album = AlbumManager::instance()->currentAlbums().first();
+    QList<Album*> albumList = AlbumManager::instance()->currentAlbums();
+    Album* album = 0;
+
+    if(!albumList.isEmpty())
+    {
+        album = albumList.first();
+    }
 
     if (album)
     {
@@ -1433,7 +1439,13 @@ void DigikamApp::slotAlbumSelected(bool val)
 
 void DigikamApp::slotTagSelected(bool val)
 {
-    Album* album = AlbumManager::instance()->currentAlbums().first();
+    QList<Album*> albumList = AlbumManager::instance()->currentAlbums();
+    Album* album = 0;
+
+    if(!albumList.isEmpty())
+    {
+        album = albumList.first();
+    }
 
     if (!album)
     {
@@ -2428,7 +2440,15 @@ void DigikamApp::loadPlugins()
     new KipiPluginLoader(this, d->splashScreen);
 
     // Setting the initial menu options after all plugins have been loaded
-    d->view->slotAlbumSelected(AlbumManager::instance()->currentAlbums().first());
+    QList<Album*> albumList = AlbumManager::instance()->currentAlbums();
+    Album* currentAlbum = 0;
+
+    if(!albumList.isEmpty())
+    {
+        currentAlbum = albumList.first();
+    }
+
+    d->view->slotAlbumSelected(currentAlbum);
 
     // Load Image Editor plugins.
     new ImagePluginLoader(this, d->splashScreen);
@@ -2507,7 +2527,14 @@ void DigikamApp::slotMaintenanceDone()
 
 void DigikamApp::slotRebuildAlbumThumbnails()
 {
-    int id = AlbumManager::instance()->currentAlbums().first()->id();
+    QList<Album*> albumList = AlbumManager::instance()->currentAlbums();
+    int id = 0;
+
+    if(!albumList.isEmpty())
+    {
+        id = albumList.first()->id();
+    }
+
     ThumbsGenerator* tool = new ThumbsGenerator(true, id);
     tool->start();
 }
@@ -2589,7 +2616,13 @@ void DigikamApp::slotImportAddFolders()
         return;
     }
 
-    Album* album = AlbumManager::instance()->currentAlbums().first();
+    QList<Album*> albumList = AlbumManager::instance()->currentAlbums();
+    Album* album = 0;
+
+    if(!albumList.isEmpty())
+    {
+        album = albumList.first();
+    }
 
     if (album && album->type() != Album::PHYSICAL)
     {

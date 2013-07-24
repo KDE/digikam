@@ -733,7 +733,17 @@ void ContextMenuHelper::addGotoMenu(const imageIds &ids)
     /**
      * TODO:tags to be ported to multiple selection
      */
-    Album* currentAlbum = AlbumManager::instance()->currentAlbums().first();
+    QList<Album*> albumList = AlbumManager::instance()->currentAlbums();
+    Album* currentAlbum = 0;
+
+    if(!albumList.isEmpty())
+    {
+        currentAlbum = albumList.first();
+    }
+    else
+    {
+        return;
+    }
 
     if (currentAlbum->type() == Album::PHYSICAL)
     {

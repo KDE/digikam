@@ -145,7 +145,16 @@ void KipiPluginLoader::Private::loadPlugins()
 
     kipiPluginLoader->loadPlugins();
 
-    kipiInterface->slotCurrentAlbumChanged(AlbumManager::instance()->currentAlbums().first());
+    QList<Album*> albumList = AlbumManager::instance()->currentAlbums();
+
+    if(!albumList.isEmpty())
+    {
+        kipiInterface->slotCurrentAlbumChanged(albumList.first());
+    }
+    else
+    {
+        kipiInterface->slotCurrentAlbumChanged(0);
+    }
 
     parent->connect(AlbumManager::instance(), SIGNAL(signalAlbumCurrentChanged(Album*)),
                     kipiInterface, SLOT(slotCurrentAlbumChanged(Album*)));
