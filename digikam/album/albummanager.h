@@ -188,7 +188,7 @@ public:
     /**
     * @returns the current album
     */
-    Album*    currentAlbum() const;
+    //Album*    currentAlbum() const;
 
     /**
     * set current album to @p albums. It's similar to setCurrentAlbum,

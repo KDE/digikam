@@ -1837,11 +1837,12 @@ void AlbumManager::setCurrentAlbum(Album* album)
     emit signalAlbumCurrentChanged(album);
 }
 */
+/**
 Album* AlbumManager::currentAlbum() const
 {
     return d->currentAlbum;
 }
-
+*/
 void AlbumManager::setCurrentAlbums(QList<Album*> albums)
 {
     if(albums.isEmpty())

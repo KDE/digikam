@@ -712,7 +712,7 @@ void DigikamView::saveViewState()
     d->stackedview->thumbBarDock()->close();
     group.writeEntry("ThumbbarState", d->dockArea->saveState().toBase64());
 
-    Album* const album = AlbumManager::instance()->currentAlbum();
+    Album* const album = AlbumManager::instance()->currentAlbums().first();
 
     if (album)
     {
@@ -1155,7 +1155,7 @@ void DigikamView::slotAlbumSelected(Album* album)
 
 void DigikamView::slotAlbumOpenInFileManager()
 {
-    Album* const album = d->albumManager->currentAlbum();
+    Album* const album = d->albumManager->currentAlbums().first();
 
     if (!album || album->type() != Album::PHYSICAL)
     {
@@ -1178,7 +1178,7 @@ void DigikamView::slotAlbumOpenInFileManager()
 
 void DigikamView::slotAlbumOpenInTerminal()
 {
-    Album* const album = d->albumManager->currentAlbum();
+    Album* const album = d->albumManager->currentAlbums().first();
 
     if (!album || album->type() != Album::PHYSICAL)
     {
@@ -1463,7 +1463,7 @@ void DigikamView::slotAlbumPropsEdit()
 
 void DigikamView::slotAlbumWriteMetadata()
 {
-    Album* const album = d->albumManager->currentAlbum();
+    Album* const album = d->albumManager->currentAlbums().first();
 
     if (!album)
     {
@@ -1475,7 +1475,7 @@ void DigikamView::slotAlbumWriteMetadata()
 
 void DigikamView::slotAlbumReadMetadata()
 {
-    Album* const album = d->albumManager->currentAlbum();
+    Album* const album = d->albumManager->currentAlbums().first();
 
     if (!album)
     {
@@ -1912,7 +1912,7 @@ void DigikamView::slotSlideShowSelection()
 
 void DigikamView::slotSlideShowRecursive()
 {
-    Album* const album = AlbumManager::instance()->currentAlbum();
+    Album* const album = AlbumManager::instance()->currentAlbums().first();
 
     if (album)
     {

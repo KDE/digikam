@@ -730,7 +730,10 @@ void ContextMenuHelper::addGotoMenu(const imageIds &ids)
         gotoTag->setEnabled(false);
     }
 
-    Album* currentAlbum = AlbumManager::instance()->currentAlbum();
+    /**
+     * TODO:tags to be ported to multiple selection
+     */
+    Album* currentAlbum = AlbumManager::instance()->currentAlbums().first();
 
     if (currentAlbum->type() == Album::PHYSICAL)
     {

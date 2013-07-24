@@ -384,7 +384,7 @@ bool AlbumHistory::isBackwardEmpty() const
 
 void AlbumHistory::slotAlbumSelected()
 {
-    Album* const currentAlbum = AlbumManager::instance()->currentAlbum();
+    Album* const currentAlbum = AlbumManager::instance()->currentAlbums().first();
 
     if (d->historyPos.contains(currentAlbum))
     {
@@ -395,7 +395,7 @@ void AlbumHistory::slotAlbumSelected()
 
 void AlbumHistory::slotAlbumCurrentChanged()
 {
-    Album* const currentAlbum = AlbumManager::instance()->currentAlbum();
+    Album* const currentAlbum = AlbumManager::instance()->currentAlbums().first();
 
     if (d->historyPos.contains(currentAlbum))
     {
@@ -410,7 +410,7 @@ void AlbumHistory::slotAlbumCurrentChanged()
 
 void AlbumHistory::slotCurrentChange(const ImageInfo& info)
 {
-    Album* const currentAlbum           = AlbumManager::instance()->currentAlbum();
+    Album* const currentAlbum = AlbumManager::instance()->currentAlbums().first();
     d->historyPos[currentAlbum].current = info;
 }
 
@@ -421,7 +421,7 @@ void AlbumHistory::slotImageSelected(const ImageInfoList& selectedImages)
         return;
     }
 
-    Album* const currentAlbum = AlbumManager::instance()->currentAlbum();
+    Album* const currentAlbum = AlbumManager::instance()->currentAlbums().first();
 
     if (d->historyPos.contains(currentAlbum))
     {

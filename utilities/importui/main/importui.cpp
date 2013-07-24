@@ -588,7 +588,7 @@ void ImportUI::setupActions()
     // -- Standard 'Help' menu actions ---------------------------------------------
 
     createHelpActions();
-    
+
     // Provides a menu entry that allows showing/hiding the toolbar(s)
     setStandardToolBarMenuEnabled(true);
 
@@ -772,7 +772,7 @@ void ImportUI::setupAccelerators()
     actionCollection()->addAction("exit_preview_mode", escapeAction);
     escapeAction->setShortcut( KShortcut(Qt::Key_Escape) );
     connect(escapeAction, SIGNAL(triggered()), this, SIGNAL(signalEscapePressed()));
-    
+
     KAction* nextImageAction = new KAction(i18n("Next Image"), this);
     nextImageAction->setIcon(SmallIcon("go-next"));
     actionCollection()->addAction("next_image", nextImageAction);
@@ -1483,7 +1483,7 @@ void ImportUI::slotDownload(bool onlySelected, bool deleteAfter, Album* album)
         }
         else
         {
-            album = man->currentAlbum();
+            album = man->currentAlbums().first();
 
             if (album && album->type() != Album::PHYSICAL)
             {

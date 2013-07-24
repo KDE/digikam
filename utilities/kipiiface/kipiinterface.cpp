@@ -101,7 +101,7 @@ KipiInterface::~KipiInterface()
 
 KIPI::ImageCollection KipiInterface::currentAlbum()
 {
-    Album* currAlbum = d->albumManager->currentAlbum();
+    Album* currAlbum = d->albumManager->currentAlbums().first();
 
     if (currAlbum)
     {
@@ -117,7 +117,7 @@ KIPI::ImageCollection KipiInterface::currentAlbum()
 
 KIPI::ImageCollection KipiInterface::currentSelection()
 {
-    Album* currAlbum = d->albumManager->currentAlbum();
+    Album* currAlbum = d->albumManager->currentAlbums().first();
 
     if (currAlbum)
     {

@@ -145,7 +145,7 @@ void KipiPluginLoader::Private::loadPlugins()
 
     kipiPluginLoader->loadPlugins();
 
-    kipiInterface->slotCurrentAlbumChanged(AlbumManager::instance()->currentAlbum());
+    kipiInterface->slotCurrentAlbumChanged(AlbumManager::instance()->currentAlbums().first());
 
     parent->connect(AlbumManager::instance(), SIGNAL(signalAlbumCurrentChanged(Album*)),
                     kipiInterface, SLOT(slotCurrentAlbumChanged(Album*)));
