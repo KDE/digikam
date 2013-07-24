@@ -7,7 +7,7 @@
  * Description : a digiKam image editor plugin to inpaint
  *               a photograph
  *
- * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -79,10 +79,10 @@ public:
 
     enum InPaintingFilteringPreset
     {
-        NoPreset = 0,
-        RemoveSmallArtefact,
+        RemoveSmallArtefact=0,
         RemoveMediumArtefact,
-        RemoveLargeArtefact
+        RemoveLargeArtefact,
+        Custom
     };
 
 public:
@@ -171,31 +171,31 @@ InPaintingTool::InPaintingTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
-    d->mainTab               = new KTabWidget(d->gboxSettings->plainPage());
-    QWidget* firstPage       = new QWidget(d->mainTab);
+    d->mainTab                     = new KTabWidget(d->gboxSettings->plainPage());
+    QWidget* const firstPage       = new QWidget(d->mainTab);
 
-    KUrlLabel* cimgLogoLabel = new KUrlLabel();
+    KUrlLabel* const cimgLogoLabel = new KUrlLabel();
     cimgLogoLabel->setText(QString());
     cimgLogoLabel->setUrl("http://cimg.sourceforge.net");
     cimgLogoLabel->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-cimg.png")));
     cimgLogoLabel->setToolTip(i18n("Visit CImg library website"));
 
-    QLabel* typeLabel   = new QLabel(i18n("Filtering type:"));
+    QLabel* const typeLabel = new QLabel(i18n("Filtering type:"));
     typeLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-    d->inpaintingTypeCB = new KComboBox();
-    d->inpaintingTypeCB->addItem(i18nc("no inpainting type", "None"));
+    d->inpaintingTypeCB     = new KComboBox();
     d->inpaintingTypeCB->addItem(i18n("Remove Small Artifact"));
     d->inpaintingTypeCB->addItem(i18n("Remove Medium Artifact"));
     d->inpaintingTypeCB->addItem(i18n("Remove Large Artifact"));
+    d->inpaintingTypeCB->addItem(i18nc("custom inpainting settings", "Custom"));
     d->inpaintingTypeCB->setWhatsThis(i18n("<p>Select the filter preset to use for photograph restoration here:</p>"
-                                           "<p><b>None</b>: Most common values. Puts settings to default.<br/>"
-                                           "<b>Remove Small Artifact</b>: in-paint small image artifacts, such as image glitches.<br/>"
+                                           "<p><b>Remove Small Artifact</b>: in-paint small image artifacts, such as image glitches.<br/>"
                                            "<b>Remove Medium Artifact</b>: in-paint medium image artifacts.<br/>"
-                                           "<b>Remove Large Artifact</b>: in-paint large image artifacts, such as unwanted objects.</p>"));
+                                           "<b>Remove Large Artifact</b>: in-paint large image artifacts, such as unwanted objects.<br/>"
+                                           "<b>Custom</b>: Puts settings to most common values, fully customizable.</p>"));
 
     // -------------------------------------------------------------
 
-    QGridLayout* firstPageLayout  = new QGridLayout();
+    QGridLayout* const firstPageLayout  = new QGridLayout();
     firstPageLayout->addWidget(cimgLogoLabel,       0, 1, 1, 1);
     firstPageLayout->addWidget(typeLabel,           1, 0, 1, 1);
     firstPageLayout->addWidget(d->inpaintingTypeCB, 1, 1, 1, 1);
@@ -213,7 +213,7 @@ InPaintingTool::InPaintingTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
-    QGridLayout* mainLayout = new QGridLayout(d->gboxSettings->plainPage());
+    QGridLayout* const mainLayout = new QGridLayout(d->gboxSettings->plainPage());
     mainLayout->addWidget(d->mainTab,   0, 1, 1, 1);
     mainLayout->addWidget(spacer,       1, 1, 1, 1);
     mainLayout->setRowStretch(1, 10);
@@ -276,10 +276,10 @@ void InPaintingTool::readSettings()
     prm.btile      = group.readEntry(d->configBTileEntry,         defaults.btile);
     d->settingsWidget->setSettings(prm);
 
-    int p = group.readEntry(d->configPresetEntry, (int)Private::NoPreset);
+    int p = group.readEntry(d->configPresetEntry, (int)Private::RemoveSmallArtefact);
     d->inpaintingTypeCB->setCurrentIndex(p);
 
-    if (p == Private::NoPreset)
+    if (p == Private::Custom)
     {
         d->settingsWidget->setEnabled(true);
     }
@@ -314,7 +314,7 @@ void InPaintingTool::writeSettings()
 
 void InPaintingTool::slotResetValues(int i)
 {
-    if (i == Private::NoPreset)
+    if (i == Private::Custom)
     {
         d->settingsWidget->setEnabled(true);
     }
@@ -350,6 +350,9 @@ void InPaintingTool::slotResetSettings()
             settings.nbIter    = 100;
             break;
         }
+        
+        default: // Custom
+            break;
     }
 
     d->settingsWidget->setSettings(settings);
@@ -439,7 +442,7 @@ void InPaintingTool::prepareFinal()
 
 void InPaintingTool::setPreviewImage()
 {
-    ImageIface* iface                = d->previewWidget->imageIface();
+    ImageIface* const iface          = d->previewWidget->imageIface();
     GreycstorationContainer settings = d->settingsWidget->settings();
 
     d->cropImage = filter()->getTargetImage();
@@ -502,7 +505,7 @@ void InPaintingTool::slotLoadSettings()
 
     file.close();
     d->inpaintingTypeCB->blockSignals(true);
-    d->inpaintingTypeCB->setCurrentIndex(Private::NoPreset);
+    d->inpaintingTypeCB->setCurrentIndex(Private::Custom);
     d->inpaintingTypeCB->blockSignals(false);
     d->settingsWidget->setEnabled(true);
 }

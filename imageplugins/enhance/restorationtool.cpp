@@ -7,7 +7,7 @@
  * Description : a digiKam image editor plugin to restore
  *               a photograph
  *
- * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -64,10 +64,10 @@ public:
 
     enum RestorationFilteringPreset
     {
-        NoPreset = 0,
-        ReduceUniformNoise,
+        ReduceUniformNoise=0,
         ReduceJPEGArtefacts,
-        ReduceTexturing
+        ReduceTexturing,
+        Custom
     };
 
 public:
@@ -141,32 +141,31 @@ RestorationTool::RestorationTool(QObject* const parent)
                                 EditorToolSettings::SaveAs|
                                 EditorToolSettings::Try);
 
-    QGridLayout* gridSettings = new QGridLayout(d->gboxSettings->plainPage());
-    d->mainTab = new KTabWidget( d->gboxSettings->plainPage() );
+    QGridLayout* const gridSettings = new QGridLayout(d->gboxSettings->plainPage());
+    d->mainTab                      = new KTabWidget( d->gboxSettings->plainPage() );
 
-    QWidget* firstPage = new QWidget( d->mainTab );
-    QGridLayout* grid  = new QGridLayout(firstPage);
+    QWidget* const firstPage = new QWidget( d->mainTab );
+    QGridLayout* const grid  = new QGridLayout(firstPage);
     d->mainTab->addTab( firstPage, i18n("Preset") );
 
-    KUrlLabel* cimgLogoLabel = new KUrlLabel(firstPage);
+    KUrlLabel* const cimgLogoLabel = new KUrlLabel(firstPage);
     cimgLogoLabel->setText(QString());
     cimgLogoLabel->setUrl("http://cimg.sourceforge.net");
     cimgLogoLabel->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-cimg.png")));
     cimgLogoLabel->setToolTip( i18n("Visit CImg library website"));
 
-    QLabel* typeLabel   = new QLabel(i18n("Filtering type:"), firstPage);
+    QLabel* const typeLabel = new QLabel(i18n("Filtering type:"), firstPage);
     typeLabel->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
-    d->restorationTypeCB = new KComboBox(firstPage);
-    d->restorationTypeCB->addItem( i18nc("no restoration preset", "None") );
+    d->restorationTypeCB    = new KComboBox(firstPage);
     d->restorationTypeCB->addItem( i18n("Reduce Uniform Noise") );
     d->restorationTypeCB->addItem( i18n("Reduce JPEG Artifacts") );
     d->restorationTypeCB->addItem( i18n("Reduce Texturing") );
+    d->restorationTypeCB->addItem( i18nc("custom restoration settings", "Custom") );
     d->restorationTypeCB->setWhatsThis(i18n("<p>Select the filter preset to use for photograph restoration here:</p>"
-                                            "<p><b>None</b>: Most common values. Puts settings to default.<br/>"
-                                            "<b>Reduce Uniform Noise</b>: reduce small image artifacts such as sensor noise.<br/>"
+                                            "<p><b>Reduce Uniform Noise</b>: reduce small image artifacts such as sensor noise.<br/>"
                                             "<b>Reduce JPEG Artifacts</b>: reduce large image artifacts, such as a JPEG compression mosaic.<br/>"
-                                            "<b>Reduce Texturing</b>: reduce image artifacts, such as paper texture, or Moire patterns "
-                                            "on scanned images.</p>"));
+                                            "<b>Reduce Texturing</b>: reduce image artifacts, such as paper texture, or Moire patterns on scanned images.<br/>"
+                                            "<b>Custom</b>: Puts settings to most common values, fully customizable.</p>"));
 
     grid->addWidget(cimgLogoLabel,        0, 1, 1, 1);
     grid->addWidget(typeLabel,            1, 0, 1, 1);
@@ -237,10 +236,10 @@ void RestorationTool::readSettings()
     prm.btile      = group.readEntry(d->configBTileEntry,         defaults.btile);
     d->settingsWidget->setSettings(prm);
 
-    int p = group.readEntry(d->configPresetEntry, (int)Private::NoPreset);
+    int p = group.readEntry(d->configPresetEntry, (int)Private::ReduceUniformNoise);
     d->restorationTypeCB->setCurrentIndex(p);
 
-    if (p == Private::NoPreset)
+    if (p == Private::Custom)
     {
         d->settingsWidget->setEnabled(true);
     }
@@ -275,7 +274,7 @@ void RestorationTool::writeSettings()
 
 void RestorationTool::slotResetValues(int i)
 {
-    if (i == Private::NoPreset)
+    if (i == Private::Custom)
     {
         d->settingsWidget->setEnabled(true);
     }
@@ -317,6 +316,9 @@ void RestorationTool::slotResetSettings()
             settings.nbIter    = 2;
             break;
         }
+        
+        default: // Custom
+            break;
     }
 
     d->settingsWidget->setSettings(settings);
@@ -391,7 +393,7 @@ void RestorationTool::slotLoadSettings()
 
     file.close();
     d->restorationTypeCB->blockSignals(true);
-    d->restorationTypeCB->setCurrentIndex((int)Private::NoPreset);
+    d->restorationTypeCB->setCurrentIndex((int)Private::Custom);
     d->restorationTypeCB->blockSignals(false);
     d->settingsWidget->setEnabled(true);
 }

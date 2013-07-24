@@ -168,7 +168,6 @@ protected:
      */
     void deleteFilterInstance(bool b = true);
 
-    virtual void setToolView(QWidget* const view);
     virtual void preparePreview()    {};
     virtual void prepareFinal()      {};
     virtual void setPreviewImage()   {};
@@ -192,6 +191,7 @@ protected Q_SLOTS:
      */
     void slotProgress(int progress);
 
+    virtual void slotInit();
     virtual void slotOk();
     virtual void slotCancel();
     virtual void slotPreview();
