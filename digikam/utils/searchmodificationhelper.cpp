@@ -174,7 +174,7 @@ SAlbum* SearchModificationHelper::slotCreateTimeLineSearch(const QString& desire
 
     if (dateRanges.isEmpty())
     {
-        AlbumManager::instance()->setCurrentAlbum(0);
+        AlbumManager::instance()->setCurrentAlbums(QList<Album*>());
         return 0;
     }
 
@@ -199,7 +199,8 @@ SAlbum* SearchModificationHelper::slotCreateTimeLineSearch(const QString& desire
     kDebug() << "Date search XML:\n" << writer.xml();
 
     SAlbum* album = AlbumManager::instance()->createSAlbum(name, DatabaseSearch::TimeLineSearch, writer.xml());
-    AlbumManager::instance()->setCurrentAlbum(album);
+
+    AlbumManager::instance()->setCurrentAlbums(QList<Album*>() << album);
     return album;
 }
 
@@ -240,7 +241,7 @@ SAlbum* SearchModificationHelper::createFuzzySearchFromSketch(const QString& pro
 
     SAlbum* salbum = AlbumManager::instance()->createSAlbum(name,
                                                             DatabaseSearch::HaarSearch, writer.xml());
-    AlbumManager::instance()->setCurrentAlbum(salbum);
+    AlbumManager::instance()->setCurrentAlbums(QList<Album*>() << salbum);
 
     return salbum;
 }
@@ -288,7 +289,7 @@ SAlbum* SearchModificationHelper::createFuzzySearchFromImage(const QString& prop
 
     SAlbum* salbum = AlbumManager::instance()->createSAlbum(name,
                                                             DatabaseSearch::HaarSearch, writer.xml());
-    AlbumManager::instance()->setCurrentAlbum(salbum);
+    AlbumManager::instance()->setCurrentAlbums(QList<Album*>() << salbum);
 
     return salbum;
 }

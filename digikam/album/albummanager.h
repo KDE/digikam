@@ -183,7 +183,7 @@ public:
     * listing of albums. This also causes it to fire the signal
     * signalAlbumCurrentChanged()
     */
-    void      setCurrentAlbum(Album* album);
+    //void      setCurrentAlbum(Album* album);
 
     /**
     * @returns the current album

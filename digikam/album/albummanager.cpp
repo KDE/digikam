@@ -1825,7 +1825,7 @@ AlbumList AlbumManager::allDAlbums() const
 
     return list;
 }
-
+/**
 void AlbumManager::setCurrentAlbum(Album* album)
 {
     if (d->currentAlbum == album)
@@ -1836,7 +1836,7 @@ void AlbumManager::setCurrentAlbum(Album* album)
     d->currentAlbum = album;
     emit signalAlbumCurrentChanged(album);
 }
-
+*/
 Album* AlbumManager::currentAlbum() const
 {
     return d->currentAlbum;

@@ -121,7 +121,8 @@ void AlbumFolderViewSideBarWidget::setActive(bool active)
 {
     if (active)
     {
-        AlbumManager::instance()->setCurrentAlbum(d->albumFolderView->currentAlbum());
+        AlbumManager::instance()->setCurrentAlbums(QList<Album*>()
+                                                   << d->albumFolderView->currentAlbum());
     }
 }
 
@@ -226,7 +227,8 @@ void TagViewSideBarWidget::setActive(bool active)
 {
     if (active)
     {
-        AlbumManager::instance()->setCurrentAlbum(d->tagFolderView->currentAlbum());
+        AlbumManager::instance()->setCurrentAlbums(QList<Album*>()
+                                                   << d->tagFolderView->currentAlbum());
     }
 }
 
@@ -618,7 +620,8 @@ void TimelineSideBarWidget::setActive(bool active)
         }
         if (d->currentTimelineSearch)
         {
-            AlbumManager::instance()->setCurrentAlbum(d->currentTimelineSearch);
+            AlbumManager::instance()->setCurrentAlbums(QList<Album*>()
+                                                       << d->currentTimelineSearch);
         }
         else
         {
@@ -755,7 +758,7 @@ void TimelineSideBarWidget::slotAlbumSelected(Album* album)
     }
 
     d->currentTimelineSearch = salbum;
-    AlbumManager::instance()->setCurrentAlbum(salbum);
+    AlbumManager::instance()->setCurrentAlbums(QList<Album*>() << salbum);
 
     SearchXmlReader reader(salbum->query());
 
@@ -809,7 +812,7 @@ void TimelineSideBarWidget::slotResetSelection()
 {
     d->timeLineWidget->slotResetSelection();
     slotCheckAboutSelection();
-    AlbumManager::instance()->setCurrentAlbum(0);
+    AlbumManager::instance()->setCurrentAlbums(QList<Album*>());
 }
 
 void TimelineSideBarWidget::slotCheckAboutSelection()
@@ -901,7 +904,8 @@ void SearchSideBarWidget::setActive(bool active)
 {
     if (active)
     {
-        AlbumManager::instance()->setCurrentAlbum(d->searchTreeView->currentAlbum());
+        AlbumManager::instance()->setCurrentAlbums(QList<Album*>()
+                                                    << d->searchTreeView->currentAlbum());
     }
 }
 
@@ -988,7 +992,8 @@ void FuzzySearchSideBarWidget::setActive(bool active)
 
     if (active)
     {
-        AlbumManager::instance()->setCurrentAlbum(d->fuzzySearchView->currentAlbum());
+        AlbumManager::instance()->setCurrentAlbums(QList<Album*>()
+                                                   << d->fuzzySearchView->currentAlbum());
     }
 }
 

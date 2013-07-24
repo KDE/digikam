@@ -509,7 +509,7 @@ void AbstractAlbumTreeView::setCurrentAlbum(Album* album, bool selectInAlbumMana
     // check local and global flag
     if (selectInAlbumManager && d->setInAlbumManager)
     {
-        AlbumManager::instance()->setCurrentAlbum(album);
+        AlbumManager::instance()->setCurrentAlbums(QList<Album*>() << album);
     }
 }
 
@@ -535,7 +535,7 @@ void AbstractAlbumTreeView::mousePressEvent(QMouseEvent* e)
 
             if (album && d->setInAlbumManager)
             {
-                AlbumManager::instance()->setCurrentAlbum(album);
+                AlbumManager::instance()->setCurrentAlbums(QList<Album*>() << album);
             }
         }
 

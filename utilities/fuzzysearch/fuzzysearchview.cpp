@@ -55,6 +55,7 @@
 #include <kstandarddirs.h>
 #include <ktabwidget.h>
 #include <kvbox.h>
+#include <boost/concept_check.hpp>
 
 // Local includes
 
@@ -631,25 +632,32 @@ void FuzzySearchView::setActive(bool val)
 
 void FuzzySearchView::slotTabChanged(int tab)
 {
+    /**
+     * Set a list with only one element, albummanager can set only multiple albums
+     */
+    QList<Album*> albums;
     switch (tab)
     {
         case Private::SIMILARS:
         {
-            AlbumManager::instance()->setCurrentAlbum(d->imageSAlbum);
+            albums << d->imageSAlbum;
+            AlbumManager::instance()->setCurrentAlbums(albums);
             d->folderView->setVisible(true);
             break;
         }
 
         case Private::SKETCH:
         {
-            AlbumManager::instance()->setCurrentAlbum(d->sketchSAlbum);
+            albums << d->sketchSAlbum;
+            AlbumManager::instance()->setCurrentAlbums(albums);
             d->folderView->setVisible(true);
             break;
         }
 
         default:  // DUPLICATES
         {
-            AlbumManager::instance()->setCurrentAlbum(d->findDuplicatesPanel->currentFindDuplicatesAlbum());
+            albums << d->findDuplicatesPanel->currentFindDuplicatesAlbum();
+            AlbumManager::instance()->setCurrentAlbums(albums);
             d->folderView->setVisible(false);
             break;
         }
@@ -796,7 +804,7 @@ void FuzzySearchView::slotTimerSketchDone()
 
 void FuzzySearchView::createNewFuzzySearchAlbumFromSketch(const QString& name, bool force)
 {
-    AlbumManager::instance()->setCurrentAlbum(0);
+    AlbumManager::instance()->setCurrentAlbums(QList<Album*>());
     d->sketchSAlbum = d->searchModificationHelper->createFuzzySearchFromSketch(name, d->sketchWidget, d->resultsSketch->value(), force);
     d->searchTreeView->setCurrentAlbum(d->sketchSAlbum);
 }
@@ -805,7 +813,7 @@ void FuzzySearchView::slotClearSketch()
 {
     d->sketchWidget->slotClear();
     slotCheckNameEditSketchConditions();
-    AlbumManager::instance()->setCurrentAlbum(0);
+    AlbumManager::instance()->setCurrentAlbums(QList<Album*>());
 }
 
 void FuzzySearchView::slotCheckNameEditSketchConditions()
@@ -917,7 +925,7 @@ void FuzzySearchView::slotThumbnailLoaded(const LoadingDescription& desc, const 
 
 void FuzzySearchView::createNewFuzzySearchAlbumFromImage(const QString& name, bool force)
 {
-    AlbumManager::instance()->setCurrentAlbum(0);
+    AlbumManager::instance()->setCurrentAlbums(QList<Album*>());
     d->imageSAlbum = d->searchModificationHelper->createFuzzySearchFromImage(name, d->imageInfo, d->levelImage->value() / 100.0, force);
     d->searchTreeView->setCurrentAlbum(d->imageSAlbum);
 }

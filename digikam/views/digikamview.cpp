@@ -847,7 +847,7 @@ void DigikamView::slotAllAlbumsLoaded()
     // now that all albums have been loaded, activate the albumHistory
     d->useAlbumHistory = true;
     Album* const album = d->albumManager->findAlbum(d->initialAlbumID);
-    d->albumManager->setCurrentAlbum(album);
+    d->albumManager->setCurrentAlbums(QList<Album*>() << album);
 }
 
 void DigikamView::slotSortAlbums(int order)
@@ -1003,7 +1003,7 @@ void DigikamView::slotGotoAlbumAndItem(const ImageInfo& imageInfo)
 
     // And finally toggle album manager to handle album history and
     // reload all items.
-    d->albumManager->setCurrentAlbum(album);
+    d->albumManager->setCurrentAlbums(QList<Album*>() << album);
 
 }
 

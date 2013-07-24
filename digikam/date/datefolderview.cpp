@@ -122,7 +122,8 @@ void DateFolderView::setActive(bool val)
 
     if (d->active)
     {
-        AlbumManager::instance()->setCurrentAlbum(d->dateTreeView->currentAlbum());
+        AlbumManager::instance()->setCurrentAlbums(QList<Album*>()
+                                                    << d->dateTreeView->currentAlbum());
         slotSelectionChanged(d->dateTreeView->currentAlbum());
     }
     else
@@ -161,8 +162,8 @@ void DateFolderView::slotAllAlbumsLoaded()
 {
     if (d->active)
     {
-        AlbumManager::instance()->setCurrentAlbum(
-            d->dateTreeView->currentAlbum());
+        AlbumManager::instance()->setCurrentAlbums(QList<Album*>()
+                                                    << d->dateTreeView->currentAlbum());
         slotSelectionChanged(d->dateTreeView->currentAlbum());
     }
 }
