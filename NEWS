@@ -35,7 +35,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 025 ==> 262186 - "Save file is completed" notification cannot be turned off.
 026 ==> 321296 - opencv error message during face scan.
 027 ==> 304002 - Segfault when using inpainting.
-028 ==> 319632 - Digikam crashes when in-painting applied to photo.
-029 ==> 
-
+028 ==> 319632 - digiKam crashes when in-painting applied to photo.
+029 ==> 322213 - when renaming files by date, the "format settings" link incorrectly links to doc.trolltech.com.
+030 ==> 322656 - When opening a pic, dark areas show artefacts.
+031 ==> 
 
