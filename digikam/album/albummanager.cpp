@@ -1845,6 +1845,7 @@ Album* AlbumManager::currentAlbum() const
 */
 void AlbumManager::setCurrentAlbums(QList<Album*> albums)
 {
+    kDebug() << "************************** Set current Albums";
     if(albums.isEmpty())
         return;
     d->currentAlbums.clear();
@@ -1854,6 +1855,7 @@ void AlbumManager::setCurrentAlbums(QList<Album*> albums)
 
 AlbumList AlbumManager::currentAlbums() const
 {
+    //kDebug() << "======================================= Get current Albums";
     return d->currentAlbums;
 }
 

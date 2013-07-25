@@ -525,21 +525,6 @@ void AbstractAlbumTreeView::slotSelectionChanged()
 
 void AbstractAlbumTreeView::mousePressEvent(QMouseEvent* e)
 {
-    if (d->selectAlbumOnClick && e->button() == Qt::LeftButton)
-    {
-        QModelIndex index = indexVisuallyAt(e->pos());
-
-        if (index.isValid())
-        {
-            Album* const album = albumFilterModel()->albumForIndex(index);
-
-            if (album && d->setInAlbumManager)
-            {
-                AlbumManager::instance()->setCurrentAlbums(QList<Album*>() << album);
-            }
-        }
-
-    }
 
     if ((d->expandOnSingleClick || d->expandNewCurrent) && e->button() == Qt::LeftButton)
     {
@@ -580,18 +565,22 @@ void AbstractAlbumTreeView::mousePressEvent(QMouseEvent* e)
     QTreeView::mousePressEvent(e);
 
     /**
-     * Multi selection fix for currentAlbum()
+     * Multi selection fix for currentAlbum(), use only after
+     * QTreeView::mousePressEvent, to get the right selection
      */
-    QModelIndexList list = selectionModel()->selectedIndexes();
-    QList<Album*> currentAlbums;
-    currentAlbums.reserve(list.size());
-
-    foreach(QModelIndex index, list)
+    if(d->selectAlbumOnClick)
     {
-        currentAlbums.push_back(m_albumFilterModel->albumForIndex(index));
-    }
+        QModelIndexList list = selectionModel()->selectedIndexes();
+        QList<Album*> currentAlbums;
+        currentAlbums.reserve(list.size());
 
-    AlbumManager::instance()->setCurrentAlbums(currentAlbums);
+        foreach(QModelIndex index, list)
+        {
+            currentAlbums.push_back(m_albumFilterModel->albumForIndex(index));
+        }
+
+        AlbumManager::instance()->setCurrentAlbums(currentAlbums);
+    }
 }
 
 void AbstractAlbumTreeView::middleButtonPressed(Album*)

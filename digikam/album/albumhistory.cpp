@@ -28,6 +28,7 @@
 
 #include <QString>
 #include <QWidget>
+#include <kdebug.h>
 
 // Local includes
 
@@ -385,6 +386,7 @@ bool AlbumHistory::isBackwardEmpty() const
 void AlbumHistory::slotAlbumSelected()
 {
     QList<Album*> albumList = AlbumManager::instance()->currentAlbums();
+    kDebug() << "+++++++++++++++++++++++++++ Get current Albums";
     Album* currentAlbum = 0;
 
     if(!albumList.isEmpty())
@@ -392,7 +394,8 @@ void AlbumHistory::slotAlbumSelected()
         currentAlbum = albumList.first();
     }
 
-    if (d->historyPos.contains(currentAlbum))
+    /** Support only for single selection **/
+    if (d->historyPos.contains(currentAlbum) && albumList.count() == 1)
     {
         d->blockSelection = true;
         emit signalSetCurrent(d->historyPos[currentAlbum].current.id());
@@ -402,6 +405,7 @@ void AlbumHistory::slotAlbumSelected()
 void AlbumHistory::slotAlbumCurrentChanged()
 {
     QList<Album*> albumList = AlbumManager::instance()->currentAlbums();
+    kDebug() << "+++++++++++++++++++++++++++ Get current Albums";
     Album* currentAlbum = 0;
 
     if(!albumList.isEmpty())
@@ -423,6 +427,7 @@ void AlbumHistory::slotAlbumCurrentChanged()
 void AlbumHistory::slotCurrentChange(const ImageInfo& info)
 {
     QList<Album*> albumList = AlbumManager::instance()->currentAlbums();
+    kDebug() << "+++++++++++++++++++++++++++ Get current Albums";
     Album* currentAlbum = 0;
 
     if(!albumList.isEmpty())
@@ -441,6 +446,7 @@ void AlbumHistory::slotImageSelected(const ImageInfoList& selectedImages)
     }
 
     QList<Album*> albumList = AlbumManager::instance()->currentAlbums();
+    kDebug() << "+++++++++++++++++++++++++++ Get current Albums";
     Album* currentAlbum = 0;
 
     if(!albumList.isEmpty())
