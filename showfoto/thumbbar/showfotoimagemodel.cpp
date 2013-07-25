@@ -22,7 +22,6 @@
  * ============================================================ */
 
 #include "showfotoimagemodel.moc"
-#include "showfotoimagemodel.h"
 
 // Qt includes
 

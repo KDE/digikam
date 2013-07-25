@@ -38,20 +38,26 @@
 
 // Local includes
 #include "showfotoiteminfo.h"
+#include "thumbnailloadthread.h"
+#include "thumbnailsize.h"
+
+using namespace Digikam;
 
 namespace ShowFoto {
 
+typedef QPair<ShowfotoItemInfo, QPixmap> CachedItem;
 
 class ShowfotoItemLoader : public QObject
 {
     Q_OBJECT
 public:
-    ShowfotoItemLoader();
+    ShowfotoItemLoader(ThumbnailLoadThread* thumbLoadThread);
     ~ShowfotoItemLoader();
 
     void openFolder(const KUrl& url);
     void openFile(const KUrl& url);
-
+    QPixmap mimeTypeThumbnail(const QString& itemName, int thumbSize) const;
+    bool loadThumbnailForItem(const ShowfotoItemInfo& info, CachedItem& item, ThumbnailSize thumbSize ,bool thumbChanged) const;
 
 Q_SIGNALS:
     void signalNoCurrentItem();

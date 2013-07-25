@@ -20,6 +20,7 @@ SET(showfoto_SRCS
     thumbbar/showfotoiteminfo.cpp
     thumbbar/showfotoitemloader.cpp
     thumbbar/showfotoimagemodel.cpp
+    thumbbar/showfotothumbnailmodel.cpp
     main/main.cpp
     main/showfoto.cpp
    )

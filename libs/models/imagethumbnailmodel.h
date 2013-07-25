@@ -47,7 +47,7 @@ public:
      *  An ImageModel that supports thumbnail loading.
      *  You need to set a ThumbnailLoadThread to enable thumbnail loading.
      *  Adjust the thumbnail size to your needs.
-     *  Note that setKeepsFilePathCache is enabled per default.
+     *  Note that setKeepsFilePatindexesForPathhCache is enabled per default.
      */
     explicit ImageThumbnailModel(QObject* parent);
     ~ImageThumbnailModel();

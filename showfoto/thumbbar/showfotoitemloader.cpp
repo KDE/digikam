@@ -77,7 +77,9 @@ extern "C"
 #include "setupmisc.h"
 #include "showfotoiteminfo.h"
 #include "showfotoimagemodel.h"
-
+#include "showfotothumbnailmodel.h"
+#include "thumbnailloadthread.h"
+#include "thumbnailsize.h"
 
 namespace ShowFoto
 {
@@ -90,32 +92,52 @@ public:
 
     Private() :
         itemsNb(0),
-        model(0)
+        model(0),
+        thumbModel(0),
+        thumbLoadThread(0)
+
+
     {
+        thumbSize = 0;
+        maxTileSize = 256;
     }
 
    int                              itemsNb;
+   int                              maxTileSize;
+   int                              thumbSize;
    KUrl :: List                     urlList;
    QDir                             dir;
    ShowfotoImageModel*              model;
+   ShowfotoThumbnailModel*          thumbModel;
    ShowfotoItemInfoList             InfoList;
+   ThumbnailLoadThread*             thumbLoadThread;
+
 
 };
 
-ShowfotoItemLoader::ShowfotoItemLoader()
+//TODO: add thumbnail loadthread
+ShowfotoItemLoader::ShowfotoItemLoader(ThumbnailLoadThread* thumbLoadThread)
     : d(new Private)
 {
+    //TODO: make sure the parent here is correct
     d->model = new ShowfotoImageModel(this);
+
     connect(this,SIGNAL(signalInfoList(ShowfotoItemInfoList&)),
             d->model,SLOT(reAddShowfotoItemInfos(ShowfotoItemInfoList&)));
+
+    d->thumbLoadThread = thumbLoadThread;
+
+    d->thumbModel = new ShowfotoThumbnailModel(d->model);
+    d->thumbModel->setLoader(this);
+
+    connect(d->thumbLoadThread,SIGNAL(signalThumbnailLoaded(const LoadingDescription&, const QPixmap&)),
+            d->thumbModel,SLOT(slotThumbnailLoaded(const LoadingDescription&, const QPixmap&)));
 }
 
 ShowfotoItemLoader::~ShowfotoItemLoader()
 {
     delete d;
 }
-
-
 
 void  ShowfotoItemLoader::slotLoadCurrentItem(const KUrl::List& urlList)
 {
@@ -297,6 +319,7 @@ void ShowfotoItemLoader::openFolder(const KUrl& url)
 
     QFileInfoList::const_iterator fi;
     ShowfotoItemInfo iteminfo;
+    QPixmap pix;
     int i = 0;
 
     // And open all items in image editor.
@@ -311,11 +334,16 @@ void ShowfotoItemLoader::openFolder(const KUrl& url)
         iteminfo.folder = (*fi).path();
         iteminfo.url = (*fi).filePath();
         d->InfoList.append(iteminfo);
+
+        //thumbnails
+        d->thumbLoadThread->find(iteminfo.url.toLocalFile(),pix,256);
+
         i++;
     }
 
     qDebug()<< "signal emmited with the list";
     emit signalInfoList(d->InfoList);
+
 
 }
 
@@ -328,6 +356,7 @@ void ShowfotoItemLoader::slotOpenFolder(const KUrl &url)
 void ShowfotoItemLoader::slotOpenFile(const KUrl::List &urls)
 {
     ShowfotoItemInfo iteminfo;
+    QPixmap pix;
     int i = 0;
     for (KUrl::List::const_iterator it = urls.constBegin();
          it != urls.constEnd(); ++it)
@@ -342,13 +371,76 @@ void ShowfotoItemLoader::slotOpenFile(const KUrl::List &urls)
         iteminfo.url  = fi.filePath();
         iteminfo.folder = fi.path();
         d->InfoList.append(iteminfo);
+
+        //thumbnails
+        d->thumbLoadThread->find(iteminfo.url.toLocalFile(),pix,256);
+
         i++;
     }
     emit signalInfoList(d->InfoList);
-
 }
 
+QPixmap ShowfotoItemLoader::mimeTypeThumbnail(const QString &itemName, int thumbSize) const
+{
 
+    QFileInfo fi(itemName);
+    QString mime = fi.suffix().toLower();
+
+    if (mime.startsWith(QLatin1String("image/x-raw")))
+    {
+        return DesktopIcon("kdcraw", thumbSize);
+    }
+    else if (mime.startsWith(QLatin1String("image/")))
+    {
+        return DesktopIcon("image-x-generic", thumbSize);
+    }
+    else if (mime.startsWith(QLatin1String("video/")))
+    {
+        return DesktopIcon("video-x-generic", thumbSize);
+    }
+    else if (mime.startsWith(QLatin1String("audio/")))
+    {
+        return DesktopIcon("audio-x-generic", thumbSize);
+    }
+
+    return DesktopIcon("unknown", thumbSize);
+}
+
+// the same parms as in getThumbInfo function ln:121 in ImportThumbnailModel.cpp
+bool ShowfotoItemLoader::loadThumbnailForItem(const ShowfotoItemInfo& info, CachedItem& item, ThumbnailSize thumbSize ,bool thumbChanged) const
+{
+    // TODO: load thumbs here
+    // create d->thumbSize variable and assign it 256 or any temporary value
+    // add ThumbBarView::pixmapForItem functionality here
+    // fire signal thumbnailLoaded
+    // add slot in thumbnailModel to connect to signal thumbnailLoaded and set the connection in the showfoto.cpp
+    // use the QPixmap in the cachedItem pair (second item) in the thumbnalLoadThread::find
+    Q_UNUSED(thumbSize);
+    Q_UNUSED(thumbChanged);
+    d->thumbSize = 256; // temporarly
+    if (d->thumbSize > d->maxTileSize)
+    {
+        //TODO: Install a widget maximum size to prevent this situation
+        bool hasPixmap = d->thumbLoadThread->find(info.url.toLocalFile(), item.second, d->maxTileSize);
+
+        if (hasPixmap)
+        {
+            kWarning() << "Thumbbar: Requested thumbnail size" << d->thumbSize
+                       << "is larger than the maximum thumbnail size" << d->maxTileSize
+                       << ". Returning a scaled-up image.";
+            item.second = item.second.scaled(d->thumbSize, d->thumbSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    else
+    {
+        return d->thumbLoadThread->find(info.url.toLocalFile(), item.second, d->thumbSize);
+    }
+}
 
 
 }//namespace Digikam

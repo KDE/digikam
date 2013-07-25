@@ -213,7 +213,7 @@ ShowFoto::ShowFoto(const KUrl::List& urlList)
 
     // loader
 
-    d->loader = new ShowfotoItemLoader();
+    d->loader = new ShowfotoItemLoader(d->thumbLoadThread);
 
     // Check ICC profiles repository availability
 
