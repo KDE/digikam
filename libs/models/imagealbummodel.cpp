@@ -31,6 +31,7 @@
 
 #include <kio/job.h>
 #include <kdebug.h>
+#include <boost/concept_check.hpp>
 
 // Local includes
 
@@ -39,6 +40,7 @@
 #include "databasechangesets.h"
 #include "databaseface.h"
 #include "databasewatch.h"
+#include "databaseurl.h"
 #include "imageinfo.h"
 #include "imageinfolist.h"
 #include "imagelister.h"
@@ -52,7 +54,6 @@ public:
 
     ImageAlbumModelPriv()
     {
-        currentAlbum     = 0;
         job              = 0;
         refreshTimer     = 0;
         incrementalTimer = 0;
@@ -61,7 +62,7 @@ public:
         extraValueJob    = false;
     }
 
-    Album*            currentAlbum;
+    QList<Album*>     currentAlbums;
     KIO::TransferJob* job;
     QTimer*           refreshTimer;
     QTimer*           incrementalTimer;
@@ -122,9 +123,9 @@ ImageAlbumModel::~ImageAlbumModel()
     delete d;
 }
 
-Album* ImageAlbumModel::currentAlbum() const
+QList<Album*> ImageAlbumModel::currentAlbums() const
 {
-    return d->currentAlbum;
+    return d->currentAlbums;
 }
 
 void ImageAlbumModel::setRecurseAlbums(bool recursiveListing)
@@ -164,15 +165,26 @@ void ImageAlbumModel::setSpecialTagListing(const QString& specialListing)
     }
 }
 
-void ImageAlbumModel::openAlbum(Album* album)
+void ImageAlbumModel::openAlbum(QList<Album*> albums)
 {
-    if (d->currentAlbum == album)
+    if (d->currentAlbums == albums)
     {
         return;
     }
 
-    d->currentAlbum = album;
-    emit listedAlbumChanged(d->currentAlbum);
+    d->currentAlbums.clear();
+
+    /**
+     * Extra safety, ensure that no null pointers are added
+     */
+    QList<Album*>::iterator it;
+    for(it = albums.begin(); it != albums.end(); ++it)
+    {
+        if((*it))
+            d->currentAlbums.append(*it);
+    }
+    kDebug() << "List size" << d->currentAlbums.size();
+    emit listedAlbumChanged(d->currentAlbums);
     refresh();
 }
 
@@ -186,19 +198,21 @@ void ImageAlbumModel::refresh()
 
     clearImageInfos();
 
-    if (!d->currentAlbum)
+    if (d->currentAlbums.isEmpty())
     {
         return;
     }
 
+    /** TODO: Figure out how to deal with root album
     if (d->currentAlbum->isRoot())
     {
         return;
     }
+    */
 
     startRefresh();
 
-    startListJob(d->currentAlbum);
+    startListJob(d->currentAlbums);
 }
 
 void ImageAlbumModel::incrementalRefresh()
@@ -208,7 +222,7 @@ void ImageAlbumModel::incrementalRefresh()
     // -> ImageModel::requestIncrementalRefresh -> waits until model is ready, maybe immediately
     // -> to this method via SIGNAL(readyForIncrementalRefresh())
 
-    if (!d->currentAlbum)
+    if (!d->currentAlbums.isEmpty())
     {
         return;
     }
@@ -221,7 +235,7 @@ void ImageAlbumModel::incrementalRefresh()
 
     startIncrementalRefresh();
 
-    startListJob(d->currentAlbum);
+    startListJob(d->currentAlbums);
 }
 
 bool ImageAlbumModel::hasScheduledRefresh() const
@@ -272,15 +286,27 @@ void ImageAlbumModel::slotNextIncrementalRefresh()
     }
 }
 
-void ImageAlbumModel::startListJob(Album* album)
+void ImageAlbumModel::startListJob(QList<Album*> albums)
 {
-    KUrl url = album->databaseUrl();
+    if(albums.isEmpty())
+    {
+        return;
+    }
+
+    QList<int> tagIds;
+
+    for(QList<Album*>::iterator it = albums.begin(); it != albums.end(); ++it)
+    {
+        tagIds << (*it)->id();
+    }
+    //KUrl url = DatabaseUrl::fromTagIds(tagIds);
+    KUrl url = albums.first()->databaseUrl();
     d->extraValueJob = false;
     d->job   = ImageLister::startListJob(url);
     d->job->addMetaData("listAlbumsRecursively", d->recurseAlbums ? "true" : "false");
     d->job->addMetaData("listTagsRecursively", d->recurseTags ? "true" : "false");
 
-    if (album->type() == Album::TAG && !d->specialListing.isNull())
+    if (albums.first()->type() == Album::TAG && !d->specialListing.isNull())
     {
         d->job->addMetaData("specialTagListing", d->specialListing);
         d->extraValueJob = true;
@@ -384,7 +410,7 @@ void ImageAlbumModel::slotData(KIO::Job* job, const QByteArray& data)
 
 void ImageAlbumModel::slotImageChange(const ImageChangeset& changeset)
 {
-    if (!d->currentAlbum)
+    if (!d->currentAlbums.isEmpty())
     {
         return;
     }
@@ -402,41 +428,50 @@ void ImageAlbumModel::slotImageChange(const ImageChangeset& changeset)
     }
 
     // If we list a search, a change to a property may alter the search result
-    if (d->currentAlbum->type() == Album::SEARCH)
+
+    QList<Album*>::iterator it;
+    /**
+     * QList is designed for multiple selection, for now, only tags are supported
+     * for SAlbum it will be a list with one element
+     */
+    for(it = d->currentAlbums.begin(); it != d->currentAlbums.end(); ++it)
     {
-        SAlbum* salbum = static_cast<SAlbum*>(d->currentAlbum);
+        if ((*it)->type() == Album::SEARCH)
+        {
+            SAlbum* salbum = static_cast<SAlbum*>(*it);
 
-        bool needCheckRefresh = false;
-        if (salbum->isNormalSearch())
-        {
-            // For searches any touched field can require a refresh.
-            // We cannot easily find out which fields are searched for, so we refresh for any change.
-            needCheckRefresh = true;
-        }
-        else if (salbum->isTimelineSearch())
-        {
-            if (changeset.changes() & DatabaseFields::CreationDate)
+            bool needCheckRefresh = false;
+            if (salbum->isNormalSearch())
             {
+                // For searches any touched field can require a refresh.
+                // We cannot easily find out which fields are searched for, so we refresh for any change.
                 needCheckRefresh = true;
             }
-        }
-        else if (salbum->isMapSearch())
-        {
-            if (changeset.changes() & DatabaseFields::ImagePositionsAll)
+            else if (salbum->isTimelineSearch())
             {
-                needCheckRefresh = true;
-            }
-        }
-
-        if (needCheckRefresh)
-        {
-            foreach(const qlonglong& id, changeset.ids())
-            {
-                // if one matching image id is found, trigger a refresh
-                if (hasImage(id))
+                if (changeset.changes() & DatabaseFields::CreationDate)
                 {
-                    scheduleIncrementalRefresh();
-                    break;
+                    needCheckRefresh = true;
+                }
+            }
+            else if (salbum->isMapSearch())
+            {
+                if (changeset.changes() & DatabaseFields::ImagePositionsAll)
+                {
+                    needCheckRefresh = true;
+                }
+            }
+
+            if (needCheckRefresh)
+            {
+                foreach(const qlonglong& id, changeset.ids())
+                {
+                    // if one matching image id is found, trigger a refresh
+                    if (hasImage(id))
+                    {
+                        scheduleIncrementalRefresh();
+                        break;
+                    }
                 }
             }
         }
@@ -447,29 +482,38 @@ void ImageAlbumModel::slotImageChange(const ImageChangeset& changeset)
 
 void ImageAlbumModel::slotImageTagChange(const ImageTagChangeset& changeset)
 {
-    if (!d->currentAlbum)
+    if (d->currentAlbums.isEmpty())
     {
         return;
     }
 
     bool doRefresh = false;
+    QList<Album*>::iterator it;
 
-    if (d->currentAlbum->type() == Album::TAG)
+    for(it = d->currentAlbums.begin(); it != d->currentAlbums.end(); ++it)
     {
-        doRefresh = changeset.containsTag(d->currentAlbum->id());
-
-        if (!doRefresh && d->recurseTags)
+        if ((*it)->type() == Album::TAG)
         {
-            foreach(int tagId, changeset.tags())
-            {
-                Album* a = AlbumManager::instance()->findTAlbum(tagId);
+            doRefresh = changeset.containsTag((*it)->id());
 
-                if (a && d->currentAlbum->isAncestorOf(a))
+            if (!doRefresh && d->recurseTags)
+            {
+                foreach(int tagId, changeset.tags())
                 {
-                    doRefresh = true;
-                    break;
+                    Album* a = AlbumManager::instance()->findTAlbum(tagId);
+
+                    if (a && (*it)->isAncestorOf(a))
+                    {
+                        doRefresh = true;
+                        break;
+                    }
                 }
             }
+        }
+
+        if(doRefresh)
+        {
+            break;
         }
     }
 
@@ -483,7 +527,7 @@ void ImageAlbumModel::slotImageTagChange(const ImageTagChangeset& changeset)
 
 void ImageAlbumModel::slotCollectionImageChange(const CollectionImageChangeset& changeset)
 {
-    if (!d->currentAlbum)
+    if (d->currentAlbums.isEmpty())
     {
         return;
     }
@@ -496,53 +540,61 @@ void ImageAlbumModel::slotCollectionImageChange(const CollectionImageChangeset& 
 
     bool doRefresh = false;
 
-    switch (changeset.operation())
+    QList<Album*>::iterator it;
+
+    for(it = d->currentAlbums.begin(); it != d->currentAlbums.end(); ++it)
     {
-        case CollectionImageChangeset::Added:
+        switch (changeset.operation())
         {
-            switch (d->currentAlbum->type())
+            case CollectionImageChangeset::Added:
             {
-                case Album::PHYSICAL:
-                    // that's easy: try if our album is affected
-                    doRefresh = changeset.containsAlbum(d->currentAlbum->id());
+                switch ((*it)->type())
+                {
+                    case Album::PHYSICAL:
+                        // that's easy: try if our album is affected
+                        doRefresh = changeset.containsAlbum((*it)->id());
 
-                    if (!doRefresh && d->recurseAlbums)
-                    {
-                        foreach(int albumId, changeset.albums())
+                        if (!doRefresh && d->recurseAlbums)
                         {
-                            Album* a = AlbumManager::instance()->findPAlbum(albumId);
-
-                            if (a && d->currentAlbum->isAncestorOf(a))
+                            foreach(int albumId, changeset.albums())
                             {
-                                doRefresh = true;
-                                break;
+                                Album* a = AlbumManager::instance()->findPAlbum(albumId);
+
+                                if (a && (*it)->isAncestorOf(a))
+                                {
+                                    doRefresh = true;
+                                    break;
+                                }
                             }
                         }
-                    }
 
-                    break;
-                default:
-                    // we cannot easily know if we are affected
-                    doRefresh = true;
-                    break;
-            }
-            break;
-        }
-        case CollectionImageChangeset::Removed:
-        case CollectionImageChangeset::RemovedAll:
-            // is one of our images affected?
-            foreach(const qlonglong& id, changeset.ids())
-            {
-                // if one matching image id is found, trigger a refresh
-                if (hasImage(id))
-                {
-                    doRefresh = true;
-                    break;
+                        break;
+                    default:
+                        // we cannot easily know if we are affected
+                        doRefresh = true;
+                        break;
                 }
+                break;
             }
-            break;
+            case CollectionImageChangeset::Removed:
+            case CollectionImageChangeset::RemovedAll:
+                // is one of our images affected?
+                foreach(const qlonglong& id, changeset.ids())
+                {
+                    // if one matching image id is found, trigger a refresh
+                    if (hasImage(id))
+                    {
+                        doRefresh = true;
+                        break;
+                    }
+                }
+                break;
 
-        default:
+            default:
+                break;
+        }
+
+        if(doRefresh)
             break;
     }
 
@@ -554,7 +606,7 @@ void ImageAlbumModel::slotCollectionImageChange(const CollectionImageChangeset& 
 
 void ImageAlbumModel::slotSearchChange(const SearchChangeset& changeset)
 {
-    if (!d->currentAlbum)
+    if (d->currentAlbums.isEmpty())
     {
         return;
     }
@@ -566,9 +618,14 @@ void ImageAlbumModel::slotSearchChange(const SearchChangeset& changeset)
 
     SAlbum* album = AlbumManager::instance()->findSAlbum(changeset.searchId());
 
-    if (album && d->currentAlbum == album)
+    QList<Album*>::iterator it;
+
+    for(it = d->currentAlbums.begin(); it != d->currentAlbums.end(); ++it)
     {
-        scheduleIncrementalRefresh();
+        if (album && (*it) == album)
+        {
+            scheduleIncrementalRefresh();
+        }
     }
 }
 
@@ -578,9 +635,9 @@ void ImageAlbumModel::slotAlbumAdded(Album* /*album*/)
 
 void ImageAlbumModel::slotAlbumDeleted(Album* album)
 {
-    if (d->currentAlbum == album)
+    if (d->currentAlbums.contains(album))
     {
-        d->currentAlbum = 0;
+        d->currentAlbums.removeOne(album);
         clearImageInfos();
         return;
     }
@@ -595,7 +652,7 @@ void ImageAlbumModel::slotAlbumDeleted(Album* album)
 void ImageAlbumModel::slotAlbumRenamed(Album* album)
 {
     // display changed names
-    if (album == d->currentAlbum)
+    if(d->currentAlbums.contains(album))
     {
         emitDataChangedForAll();
     }
@@ -603,7 +660,7 @@ void ImageAlbumModel::slotAlbumRenamed(Album* album)
 
 void ImageAlbumModel::slotAlbumsCleared()
 {
-    d->currentAlbum = 0;
+    d->currentAlbums.clear();
     clearImageInfos();
 }
 

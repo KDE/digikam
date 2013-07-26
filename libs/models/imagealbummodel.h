@@ -52,7 +52,7 @@ public:
     explicit ImageAlbumModel(QObject* parent = 0);
     ~ImageAlbumModel();
 
-    Album* currentAlbum() const;
+    QList<Album*> currentAlbums() const;
 
     bool hasScheduledRefresh() const;
     bool isRecursingAlbums() const;
@@ -65,7 +65,7 @@ public Q_SLOTS:
      * If called with 0, the model will be empty.
      * Opening the same album again is a no-op.
      */
-    void openAlbum(Album* album);
+    void openAlbum(QList<Album*> album);
     /** Reloads the current album */
     void refresh();
 
@@ -76,7 +76,7 @@ public Q_SLOTS:
 
 Q_SIGNALS:
 
-    void listedAlbumChanged(Album* album);
+    void listedAlbumChanged(QList<Album*> album);
 
 protected Q_SLOTS:
 
@@ -104,7 +104,7 @@ protected Q_SLOTS:
 
 protected:
 
-    void startListJob(Album* album);
+    void startListJob(QList<Album*> album);
 
 private:
 

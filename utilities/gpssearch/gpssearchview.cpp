@@ -448,7 +448,7 @@ void GPSSearchView::createNewGPSSearchAlbum(const QString& name)
     AlbumManager::instance()->setCurrentAlbums(QList<Album*>() << salbum);
     d->imageInfoJob.allItemsFromAlbum(salbum);
     d->searchTreeView->setCurrentAlbum(salbum);
-    d->imageAlbumModel->openAlbum(salbum);
+    d->imageAlbumModel->openAlbum(QList<Album*>() << salbum);
 }
 
 /**

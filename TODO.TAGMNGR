@@ -16,4 +16,5 @@ TODO:
   2. Add custom list for tagmanager
   3. Port Nepomuk 
   5. Add database options
-  6. To be continued
+  6. core/libs/models/imagealbummodel.cpp:193 TODO: treat root album on QList
+  7. To be continued

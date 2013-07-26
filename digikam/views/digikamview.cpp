@@ -1085,7 +1085,7 @@ void DigikamView::slotAlbumSelected(QList<Album*> albums)
 
     if (albums.isEmpty() || !(albums.first()))
     {
-        d->iconView->openAlbum(0);
+        d->iconView->openAlbum(QList<Album*>());
         d->mapView->openAlbum(0);
         emit signalAlbumSelected(false);
         emit signalTagSelected(false);
@@ -1139,7 +1139,7 @@ void DigikamView::slotAlbumSelected(QList<Album*> albums)
     d->parent->enableAlbumBackwardHistory(d->useAlbumHistory && !d->albumHistory->isBackwardEmpty());
     d->parent->enableAlbumForwardHistory(d->useAlbumHistory && !d->albumHistory->isForwardEmpty());
 
-    d->iconView->openAlbum(album);
+    d->iconView->openAlbum(albums);
 
     if (album->isRoot())
     {

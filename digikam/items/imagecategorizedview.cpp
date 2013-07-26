@@ -278,10 +278,10 @@ void ImageCategorizedView::setItemDelegate(ImageDelegate* delegate)
 Album* ImageCategorizedView::currentAlbum() const
 {
     ImageAlbumModel* albumModel = imageAlbumModel();
-
-    if (albumModel)
+    /** TODO: Change to QList return type **/
+    if (albumModel && !(albumModel->currentAlbums().isEmpty()))
     {
-        return albumModel->currentAlbum();
+        return albumModel->currentAlbums().first();
     }
 
     return 0;
@@ -412,13 +412,13 @@ QModelIndex ImageCategorizedView::nextIndexHint(const QModelIndex& anchor, const
     return hint;
 }
 
-void ImageCategorizedView::openAlbum(Album* album)
+void ImageCategorizedView::openAlbum(QList<Album*> albums)
 {
     ImageAlbumModel* albumModel = imageAlbumModel();
 
     if (albumModel)
     {
-        albumModel->openAlbum(album);
+        albumModel->openAlbum(albums);
     }
 }
 

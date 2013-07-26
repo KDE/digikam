@@ -205,9 +205,17 @@ void ImageCategoryDrawer::viewHeaderText(const QModelIndex& index, QString* head
 
     if (albumModel)
     {
-        Album* album = albumModel->currentAlbum();
+        QList<Album*> albums = albumModel->currentAlbums();
+        Album* album;
 
-        if (!album)
+        if (albums.isEmpty())
+        {
+            return;
+        }
+
+        album = albums.first();
+
+        if(!album)
         {
             return;
         }

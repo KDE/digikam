@@ -420,8 +420,12 @@ Album* TableView::currentAlbum()
     {
         return 0;
     }
+    if(albumModel->currentAlbums().isEmpty())
+    {
+        return 0;
+    }
 
-    return albumModel->currentAlbum();
+    return albumModel->currentAlbums().first();
 }
 
 void TableView::slotPaste()

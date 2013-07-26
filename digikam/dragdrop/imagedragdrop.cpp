@@ -237,7 +237,10 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
 
     if (album)
     {
-        Album* const currentAlbum = albumModel() ? albumModel()->currentAlbum() : 0;
+        Album* currentAlbum = 0;
+
+        if(albumModel() && !(albumModel()->currentAlbums().isEmpty()))
+            currentAlbum = albumModel()->currentAlbums().first();
 
         if (album->type() == Album::PHYSICAL)
         {
@@ -539,7 +542,7 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
 
 Qt::DropAction ImageDragDropHandler::accepts(const QDropEvent* e, const QModelIndex& /*dropIndex*/)
 {
-    if (albumModel() && !albumModel()->currentAlbum())
+    if (albumModel() && albumModel()->currentAlbums().isEmpty())
     {
         return Qt::IgnoreAction;
     }
