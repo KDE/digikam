@@ -638,7 +638,7 @@ Q_SIGNALS:
     /// For identification purposes, the former album pointer is passed.
     void signalAlbumHasBeenDeleted(void*);
     void signalAlbumsCleared();
-    void signalAlbumCurrentChanged(Album* album);
+    void signalAlbumCurrentChanged(QList<Album*> album);
     void signalAllAlbumsLoaded();
     void signalAllDAlbumsLoaded();
     void signalAlbumIconChanged(Album* album);

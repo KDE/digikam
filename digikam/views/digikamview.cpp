@@ -413,8 +413,8 @@ void DigikamView::setupConnections()
 
     // -- AlbumManager connections --------------------------------
 
-    connect(d->albumManager, SIGNAL(signalAlbumCurrentChanged(Album*)),
-            this, SLOT(slotAlbumSelected(Album*)));
+    connect(d->albumManager, SIGNAL(signalAlbumCurrentChanged(QList<Album*>)),
+            this, SLOT(slotAlbumSelected(QList<Album*>)));
 
     connect(d->albumManager, SIGNAL(signalAllAlbumsLoaded()),
             this, SLOT(slotAllAlbumsLoaded()));
@@ -1079,11 +1079,11 @@ void DigikamView::slotSelectAlbum(const KUrl& url)
     d->albumFolderSideBar->setCurrentAlbum(album);
 }
 
-void DigikamView::slotAlbumSelected(Album* album)
+void DigikamView::slotAlbumSelected(QList<Album*> albums)
 {
     emit signalNoCurrentItem();
 
-    if (!album)
+    if (albums.isEmpty() || !(albums.first()))
     {
         d->iconView->openAlbum(0);
         d->mapView->openAlbum(0);
@@ -1093,6 +1093,7 @@ void DigikamView::slotAlbumSelected(Album* album)
         return;
     }
 
+    Album* album = albums.first();
     if (album->type() == Album::PHYSICAL)
     {
         emit signalAlbumSelected(true);

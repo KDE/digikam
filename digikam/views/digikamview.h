@@ -145,7 +145,7 @@ public Q_SLOTS:
     void slotAlbumHistoryForward(int steps=1);
     void slotAlbumWriteMetadata();
     void slotAlbumReadMetadata();
-    void slotAlbumSelected(Album* album);
+    void slotAlbumSelected(QList<Album*> albums);
 
     void slotGotoAlbumAndItem(const ImageInfo& imageInfo);
     void slotGotoDateAndItem(const ImageInfo& imageInfo);

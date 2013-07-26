@@ -1,0 +1,19 @@
+DONE:
+  1. Tag Manatger GUI
+  2. Add Option
+  3. Del Option with multi-selection(tag manager option & context menu version)
+  4. Tag properties
+  5. Enable multi-drop on tree view
+  6. Custom context menu for single & multiple selection
+  7. Port current Album to QList<Album*>
+  
+BUGS:
+  1. Fix AlbumHistory: slotAlbumSelected, slotCurrentAlbumChanged, slot currentChanged, slotImagechanged
+  2. Tag Properties don't save changes
+  
+TODO:
+  1. Patch views to support multiple tags
+  2. Add custom list for tagmanager
+  3. Port Nepomuk 
+  5. Add database options
+  6. To be continued

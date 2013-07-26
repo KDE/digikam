@@ -2443,14 +2443,8 @@ void DigikamApp::loadPlugins()
 
     // Setting the initial menu options after all plugins have been loaded
     QList<Album*> albumList = AlbumManager::instance()->currentAlbums();
-    Album* currentAlbum = 0;
 
-    if(!albumList.isEmpty())
-    {
-        currentAlbum = albumList.first();
-    }
-
-    d->view->slotAlbumSelected(currentAlbum);
+    d->view->slotAlbumSelected(albumList);
 
     // Load Image Editor plugins.
     new ImagePluginLoader(this, d->splashScreen);

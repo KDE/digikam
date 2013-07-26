@@ -171,7 +171,6 @@ public:
         rootDAlbum(0),
         rootSAlbum(0),
         currentlyMovingAlbum(0),
-        currentAlbum(0),
         changingDB(false),
         scanPAlbumsTimer(0),
         scanTAlbumsTimer(0),
@@ -211,7 +210,6 @@ public:
 
     QMultiHash<Album*, Album**> guardedPointers;
 
-    Album*                      currentAlbum;
     /** For multiple selection support **/
     QList<Album*>               currentAlbums;
 
@@ -653,8 +651,8 @@ bool AlbumManager::setDatabase(const DatabaseParameters& params, bool priority, 
 
     cleanUp();
 
-    d->currentAlbum = 0;
-    emit signalAlbumCurrentChanged(0);
+    d->currentAlbums.clear();
+    emit signalAlbumCurrentChanged(d->currentAlbums);
     emit signalAlbumsCleared();
 
     d->albumPathHash.clear();
@@ -1850,7 +1848,7 @@ void AlbumManager::setCurrentAlbums(QList<Album*> albums)
         return;
     d->currentAlbums.clear();
     d->currentAlbums+=albums;
-    emit signalAlbumCurrentChanged(albums.first());
+    emit signalAlbumCurrentChanged(d->currentAlbums);
 }
 
 AlbumList AlbumManager::currentAlbums() const
@@ -2773,10 +2771,11 @@ bool AlbumManager::updateSAlbum(SAlbum* album, const QString& changedQuery,
         emit signalAlbumRenamed(album);
     }
 
-    if (d->currentAlbum == album)
-    {
-        emit signalAlbumCurrentChanged(d->currentAlbum);
-    }
+    if(!d->currentAlbums.isEmpty())
+        if (d->currentAlbums.first() == album)
+        {
+            emit signalAlbumCurrentChanged(d->currentAlbums);
+        }
 
     return true;
 }
@@ -2877,11 +2876,12 @@ void AlbumManager::removePAlbum(PAlbum* album)
 
     DatabaseUrl url = album->databaseUrl();
 
-    if (album == d->currentAlbum)
-    {
-        d->currentAlbum = 0;
-        emit signalAlbumCurrentChanged(0);
-    }
+    if(!d->currentAlbums.isEmpty())
+        if (album == d->currentAlbums.first())
+        {
+            d->currentAlbums.clear();
+            emit signalAlbumCurrentChanged(d->currentAlbums);
+        }
 
     if (album->isAlbumRoot())
     {
@@ -2940,10 +2940,13 @@ void AlbumManager::removeTAlbum(TAlbum* album)
     emit signalAlbumAboutToBeDeleted(album);
     d->allAlbumsIdHash.remove(album->globalID());
 
-    if (album == d->currentAlbum)
+    if(!d->currentAlbums.isEmpty())
     {
-        d->currentAlbum = 0;
-        emit signalAlbumCurrentChanged(0);
+        if (album == d->currentAlbums.first())
+        {
+            d->currentAlbums.clear();
+            emit signalAlbumCurrentChanged(d->currentAlbums);
+        }
     }
 
     emit signalAlbumDeleted(album);
@@ -3304,14 +3307,17 @@ void AlbumManager::slotSearchChange(const SearchChangeset& changeset)
             break;
 
         case SearchChangeset::Changed:
-
-            if (d->currentAlbum && d->currentAlbum->type() == Album::SEARCH
-                && d->currentAlbum->id() == changeset.searchId())
+            if(!d->currentAlbums.isEmpty())
             {
-                // the pointer is the same, but the contents changed
-                emit signalAlbumCurrentChanged(d->currentAlbum);
-            }
+                Album* currentAlbum = d->currentAlbums.first();
 
+                if (currentAlbum && currentAlbum->type() == Album::SEARCH
+                    && currentAlbum->id() == changeset.searchId())
+                {
+                    // the pointer is the same, but the contents changed
+                    emit signalAlbumCurrentChanged(d->currentAlbums);
+                }
+            }
             break;
 
         case SearchChangeset::Unknown:
