@@ -7,7 +7,7 @@
 using namespace cv;
 using namespace std;
 
-/// Global variable
+// Global variable
 Mat src, src_gray;
 Mat dst, detected_edges;
 
@@ -19,13 +19,13 @@ char* window_name = "Edge Map";
 
 void CannyThreshold(int, void*)
 {
-  /// Reduce noise with a kernel 3x3
+  // Reduce noise with a kernel 3x3
   blur( src_gray, detected_edges, Size(3,3) );
 
-  /// Canny detector
+  // Canny detector
   Canny( detected_edges, detected_edges, lowThreshold, lowThreshold*ratio, kernel_size );
 
-  /// Using Canny's output as a mask, we display our result
+  // Using Canny's output as a mask, we display our result
   dst = Scalar::all(0);
 
   src.copyTo( dst, detected_edges);
@@ -33,7 +33,7 @@ void CannyThreshold(int, void*)
  }
 
 
-/** @function main */
+/* @function main */
 int main( int argc, char** argv )
 {
   // Load an image
@@ -64,7 +64,7 @@ int main( int argc, char** argv )
     cout<<"The maximum of the edge intensity is "<<maxval<<std::endl;
     cout<<"The result of the edge intensity is "<<blurresult<<std::endl;
 
-  /// Wait until user exit program by pressing a key
+  // Wait until user exit program by pressing a key
   waitKey(0);
 
   return 0;
