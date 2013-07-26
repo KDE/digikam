@@ -4,10 +4,10 @@
  * http://www.digikam.org
  *
  * Date        : 2007-01-24
- * Description : a progress bar used to display file access
+ * Description : a progress bar used to display action
  *               progress or a text in status bar.
  *
- * Copyright (C) 2007-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -54,7 +54,7 @@ public:
 
 public:
 
-    explicit StatusProgressBar(QWidget* parent=0);
+    explicit StatusProgressBar(QWidget* const parent=0);
     ~StatusProgressBar();
 
     void setAlignment(Qt::Alignment a);
@@ -85,8 +85,8 @@ private:
 
 private:
 
-    class StatusProgressBarPriv;
-    StatusProgressBarPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

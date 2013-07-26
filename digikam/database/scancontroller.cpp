@@ -784,6 +784,7 @@ void ScanController::run()
             SimpleCollectionScannerObserver observer(&d->continuePartialScan);
             scanner.setObserver(&observer);
             scanner.partialScan(task);
+            emit partialScanDone(task);
         }
         else if (doUpdateUniqueHash)
         {

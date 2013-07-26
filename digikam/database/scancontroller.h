@@ -212,6 +212,7 @@ Q_SIGNALS:
     void collectionScanStarted(const QString& message);
     void scanningProgress(float progress);
     void collectionScanFinished();
+    void partialScanDone(const QString& path);
 
 private Q_SLOTS:
 

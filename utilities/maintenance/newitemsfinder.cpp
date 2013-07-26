@@ -53,6 +53,7 @@ public:
 
     FinderMode  mode;
     QStringList foldersToScan;
+    QStringList foldersScanned;
 };
 
 NewItemsFinder::NewItemsFinder(const FinderMode mode, const QStringList& foldersToScan, ProgressItem* const parent)
@@ -69,9 +70,13 @@ NewItemsFinder::NewItemsFinder(const FinderMode mode, const QStringList& folders
 
     connect(ScanController::instance(), SIGNAL(completeScanDone()),
             this, SLOT(slotDone()));
+    
+    connect(ScanController::instance(), SIGNAL(partialScanDone(QString)),
+            this, SLOT(slotPartialScanDone(QString)));
 
     d->mode          = mode;
     d->foldersToScan = foldersToScan;
+    d->foldersToScan.sort();
 }
 
 NewItemsFinder::~NewItemsFinder()
@@ -107,8 +112,9 @@ void NewItemsFinder::slotStart()
 
         case ScheduleCollectionScan:
         {
-            kDebug() << "scan mode: ScheduleCollectionScan";
-
+            kDebug() << "scan mode: ScheduleCollectionScan :: " << d->foldersToScan;
+            d->foldersScanned.clear();
+            
             foreach(const QString& folder, d->foldersToScan)
                 ScanController::instance()->scheduleCollectionScan(folder);
 
@@ -141,6 +147,23 @@ void NewItemsFinder::slotCancel()
 {
     ScanController::instance()->cancelCompleteScan();
     MaintenanceTool::slotCancel();
+}
+
+void NewItemsFinder::slotPartialScanDone(const QString& path)
+{
+    // Check if path scanned is included in planed list.
+
+    if (d->foldersToScan.contains(path) && !d->foldersScanned.contains(path))
+    {
+        d->foldersScanned.append(path);
+        d->foldersScanned.sort();
+
+        // Check if all planed scanning is done
+        if (d->foldersScanned == d->foldersToScan)
+        {
+            slotDone();
+        }
+    }
 }
 
 void NewItemsFinder::slotDone()
