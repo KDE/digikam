@@ -183,7 +183,6 @@ void ImageAlbumModel::openAlbum(QList<Album*> albums)
         if((*it))
             d->currentAlbums.append(*it);
     }
-    kDebug() << "List size" << d->currentAlbums.size();
     emit listedAlbumChanged(d->currentAlbums);
     refresh();
 }
@@ -293,14 +292,20 @@ void ImageAlbumModel::startListJob(QList<Album*> albums)
         return;
     }
 
-    QList<int> tagIds;
-
-    for(QList<Album*>::iterator it = albums.begin(); it != albums.end(); ++it)
+    KUrl url;
+    if(albums.first()->type() == Album::TAG)
     {
-        tagIds << (*it)->id();
+        QList<int> tagIds;
+
+        for(QList<Album*>::iterator it = albums.begin(); it != albums.end(); ++it)
+        {
+            tagIds << (*it)->id();
+        }
+        url = DatabaseUrl::fromTagIds(tagIds);
     }
-    //KUrl url = DatabaseUrl::fromTagIds(tagIds);
-    KUrl url = albums.first()->databaseUrl();
+    else
+        url = albums.first()->databaseUrl();
+
     d->extraValueJob = false;
     d->job   = ImageLister::startListJob(url);
     d->job->addMetaData("listAlbumsRecursively", d->recurseAlbums ? "true" : "false");
