@@ -6,6 +6,7 @@
  * Date        : 2007-01-24
  * Description : a progress bar used to display action
  *               progress or a text in status bar.
+ *               Progress events are dispatched to ProgressManager.
  *
  * Copyright (C) 2007-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *

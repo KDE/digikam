@@ -45,6 +45,7 @@
 #include "metadatasynchronizer.h"
 #include "facedetector.h"
 #include "knotificationwrapper.h"
+#include "progressmanager.h"
 
 namespace Digikam
 {
@@ -55,7 +56,13 @@ public:
 
     Private()
     {
-        running = false;
+        running               = false;
+        newItemsFinder        = 0;
+        thumbsGenerator       = 0;
+        fingerPrintsGenerator = 0;
+        duplicatesFinder      = 0;
+        metadataSynchronizer  = 0;
+        faceDetector          = 0;
     }
 
     bool                running;
@@ -63,11 +70,23 @@ public:
     QTime               duration;
 
     MaintenanceSettings settings;
+    
+    NewItemsFinder*        newItemsFinder;
+    ThumbsGenerator*       thumbsGenerator;
+    FingerPrintsGenerator* fingerPrintsGenerator;
+    DuplicatesFinder*      duplicatesFinder;
+    MetadataSynchronizer*  metadataSynchronizer;
+    FaceDetector*          faceDetector;
 };
 
 MaintenanceMngr::MaintenanceMngr(QObject* const parent)
     : QObject(parent), d(new Private)
 {
+    connect(ProgressManager::instance(), SIGNAL(progressItemCompleted(ProgressItem*)),
+            this, SLOT(slotToolCompleted(ProgressItem*)));
+
+    connect(ProgressManager::instance(), SIGNAL(progressItemCanceled(ProgressItem*)),
+            this, SLOT(slotToolCanceled(ProgressItem*)));
 }
 
 MaintenanceMngr::~MaintenanceMngr()
@@ -95,138 +114,159 @@ void MaintenanceMngr::setSettings(const MaintenanceSettings& settings)
     kDebug() << "settings.faceScannedHandling : " << d->settings.faceSettings.alreadyScannedHandling;
 
     d->duration.start();
-    slotStage1();
+    stage1();
 }
 
-void MaintenanceMngr::slotStage1()
+void MaintenanceMngr::slotToolCompleted(ProgressItem* tool)
 {
+    // At each stage, relevant tool instance is set to zero to prevent redondant call to this slot
+    // from ProgressManager. This will disable multiple triggering in this method.
+    // There is no memory leak. Each tool instance are delete later by ProgressManager.
+
+    if (tool == dynamic_cast<ProgressItem*>(d->newItemsFinder))
+    {
+        d->newItemsFinder = 0;
+        stage2();    
+    }
+    else if (tool == dynamic_cast<ProgressItem*>(d->thumbsGenerator))
+    {
+        d->thumbsGenerator = 0;
+        stage3();    
+    }
+    else if (tool == dynamic_cast<ProgressItem*>(d->fingerPrintsGenerator))
+    {
+        d->fingerPrintsGenerator = 0;
+        stage4();    
+    }
+    else if (tool == dynamic_cast<ProgressItem*>(d->duplicatesFinder))
+    {
+        d->duplicatesFinder = 0;
+        stage5();    
+    }
+    else if (tool == dynamic_cast<ProgressItem*>(d->metadataSynchronizer))
+    {
+        d->metadataSynchronizer = 0;
+        stage6();    
+    }
+    else if (tool == dynamic_cast<ProgressItem*>(d->faceDetector))
+    {
+        d->faceDetector = 0;
+        done();    
+    }
+}
+
+void MaintenanceMngr::slotToolCanceled(ProgressItem* tool)
+{
+    if (tool == dynamic_cast<ProgressItem*>(d->newItemsFinder)        ||
+        tool == dynamic_cast<ProgressItem*>(d->thumbsGenerator)       ||
+        tool == dynamic_cast<ProgressItem*>(d->fingerPrintsGenerator) || 
+        tool == dynamic_cast<ProgressItem*>(d->duplicatesFinder)      ||
+        tool == dynamic_cast<ProgressItem*>(d->metadataSynchronizer)  ||
+        tool == dynamic_cast<ProgressItem*>(d->faceDetector))
+    {
+        cancel();    
+    }
+}
+
+void MaintenanceMngr::stage1()
+{
+    kDebug() << "stage1";
+    
     if (d->settings.newItems)
     {
-        NewItemsFinder* const tool = new NewItemsFinder();
-        tool->setNotificationEnabled(false);
-
-        connect(tool, SIGNAL(signalComplete()),
-                this, SLOT(slotStage2()));
-
-        connect(tool, SIGNAL(progressItemCanceled(QString)),
-                this, SLOT(slotCancel()));
-
-        tool->start();
+        d->newItemsFinder = new NewItemsFinder();
+        d->newItemsFinder->setNotificationEnabled(false);
+        d->newItemsFinder->start();
     }
     else
     {
-        slotStage2();
+        stage2();
     }
 }
 
-void MaintenanceMngr::slotStage2()
+void MaintenanceMngr::stage2()
 {
+    kDebug() << "stage2";
+        
     if (d->settings.thumbnails)
     {
-        bool rebuildAll             = d->settings.scanThumbs == false;
-        ThumbsGenerator* const tool = new ThumbsGenerator(rebuildAll);
-        tool->setNotificationEnabled(false);
-
-        connect(tool, SIGNAL(signalComplete()),
-                this, SLOT(slotStage3()));
-
-        connect(tool, SIGNAL(progressItemCanceled(QString)),
-                this, SLOT(slotCancel()));
-
-        tool->start();
+        bool rebuildAll    = (d->settings.scanThumbs == false);
+        d->thumbsGenerator = new ThumbsGenerator(rebuildAll);
+        d->thumbsGenerator->setNotificationEnabled(false);
+        d->thumbsGenerator->start();
     }
     else
     {
-        slotStage3();
+        stage3();
     }
 }
 
-void MaintenanceMngr::slotStage3()
+void MaintenanceMngr::stage3()
 {
+    kDebug() << "stage3";
+
     if (d->settings.fingerPrints)
     {
-        bool rebuildAll                   = d->settings.scanFingerPrints == false;
-        FingerPrintsGenerator* const tool = new FingerPrintsGenerator(rebuildAll);
-        tool->setNotificationEnabled(false);
-
-        connect(tool, SIGNAL(signalComplete()),
-                this, SLOT(slotStage4()));
-
-        connect(tool, SIGNAL(progressItemCanceled(QString)),
-                this, SLOT(slotCancel()));
-
-        tool->start();
+        bool rebuildAll          = (d->settings.scanFingerPrints == false);
+        d->fingerPrintsGenerator = new FingerPrintsGenerator(rebuildAll);
+        d->fingerPrintsGenerator->setNotificationEnabled(false);
+        d->fingerPrintsGenerator->start();
     }
     else
     {
-        slotStage4();
+        stage4();
     }
 }
 
-void MaintenanceMngr::slotStage4()
+void MaintenanceMngr::stage4()
 {
+    kDebug() << "stage4";
+
     if (d->settings.duplicates)
     {
-        DuplicatesFinder* const tool = new DuplicatesFinder(d->settings.similarity);
-        tool->setNotificationEnabled(false);
-
-        connect(tool, SIGNAL(signalComplete()),
-                this, SLOT(slotStage5()));
-
-        connect(tool, SIGNAL(progressItemCanceled(QString)),
-                this, SLOT(slotCancel()));
-
-        tool->start();
+        d->duplicatesFinder = new DuplicatesFinder(d->settings.similarity);
+        d->duplicatesFinder->setNotificationEnabled(false);
+        d->duplicatesFinder->start();
     }
     else
     {
-        slotStage5();
+        stage5();
     }
 }
 
-void MaintenanceMngr::slotStage5()
+void MaintenanceMngr::stage5()
 {
+    kDebug() << "stage5";
+
     if (d->settings.metadata)
     {
-        MetadataSynchronizer* const tool = new MetadataSynchronizer(MetadataSynchronizer::WriteFromDatabaseToFile);
-        tool->setNotificationEnabled(false);
-
-        connect(tool, SIGNAL(signalComplete()),
-                this, SLOT(slotStage6()));
-
-        connect(tool, SIGNAL(progressItemCanceled(QString)),
-                this, SLOT(slotCancel()));
-
-        tool->start();
+        d->metadataSynchronizer = new MetadataSynchronizer(MetadataSynchronizer::WriteFromDatabaseToFile);
+        d->metadataSynchronizer->setNotificationEnabled(false);
+        d->metadataSynchronizer->start();
     }
     else
     {
-        slotStage6();
+        stage6();
     }
 }
 
-void MaintenanceMngr::slotStage6()
+void MaintenanceMngr::stage6()
 {
+    kDebug() << "stage6";
+    
     if (d->settings.faceDetection)
     {
-        FaceDetector* const tool = new FaceDetector(d->settings.faceSettings);
-        tool->setNotificationEnabled(false);
-
-        connect(tool, SIGNAL(signalComplete()),
-                this, SLOT(slotDone()));
-
-        connect(tool, SIGNAL(progressItemCanceled(QString)),
-                this, SLOT(slotCancel()));
-
-        tool->start();
+        d->faceDetector = new FaceDetector(d->settings.faceSettings);
+        d->faceDetector->setNotificationEnabled(false);
+        d->faceDetector->start();
     }
     else
     {
-        slotDone();
+        done();
     }
 }
 
-void MaintenanceMngr::slotDone()
+void MaintenanceMngr::done()
 {
     d->running   = false;
     QTime now, t = now.addMSecs(d->duration.elapsed());
@@ -238,7 +278,7 @@ void MaintenanceMngr::slotDone()
     emit signalComplete();
 }
 
-void MaintenanceMngr::slotCancel()
+void MaintenanceMngr::cancel()
 {
     d->running = false;
     emit signalComplete();

@@ -202,7 +202,7 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
     d->faceScannedHandling->addItem(i18n("Scan again and merge results"),         FaceScanSettings::Merge);
     d->faceScannedHandling->addItem(i18n("Clear unconfirmed results and rescan"), FaceScanSettings::Rescan);
     d->expanderBox->insertItem(Private::FaceDetection, d->hbox3, SmallIcon("edit-image-face-detect"),
-                               i18n("Face Detection"), "FaceDetection", false);
+                               i18n("Detect and recognize Faces"), "FaceDetection", false);
     d->expanderBox->setCheckBoxVisible(Private::FaceDetection, true);
 
     d->expanderBox->insertStretch(Private::Stretch);

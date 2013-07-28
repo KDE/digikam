@@ -114,6 +114,7 @@ FaceDetector::FaceDetector(const FaceScanSettings& settings, ProgressItem* const
     : MaintenanceTool("FaceDetector", parent),
       d(new Private)
 {
+    setLabel(i18n("Updating faces database."));
     ProgressManager::addProgressItem(this);
 
     if (settings.task == FaceScanSettings::RetrainAll)
@@ -281,7 +282,6 @@ void FaceDetector::slotStart()
     d->total = qMax(1, d->total);
 
     setUsesBusyIndicator(false);
-    setLabel(i18n("Updating faces database."));
     setTotalItems(d->total);
 
     slotContinueAlbumListing();
