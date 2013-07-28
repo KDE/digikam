@@ -293,6 +293,11 @@ Setup::Setup(QWidget* const parent)
     d->page_slideshow->setHeader(i18n("<qt>Slide Show Settings<br/>"
                                       "<i>Customize slideshow settings</i></qt>"));
     d->page_slideshow->setIcon(KIcon("view-presentation"));
+    
+    d->ImagequalitysorterPage = new SetupImageQualitySorter();
+    d->page_imagequalitysorter = addPage(d->ImagequalitysorterPage,i18n("Image Quality Sorter"));
+    d->page_imagequalitysorter->setHeader(i18n("<qt>Image Quality Sorter Settings<br/>"));
+    d->page_imagequalitysorter->setIcon(KIcon("digiKam"));
 
     d->ImagequalitysorterPage = new SetupImageQualitySorter();
     d->page_imagequalitysorter = addPage(d->ImagequalitysorterPage,i18n("Image Quality Sorter"));
