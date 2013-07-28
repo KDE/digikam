@@ -60,6 +60,7 @@
 #include "setupmime.h"
 #include "setupmisc.h"
 #include "setupslideshow.h"
+#include "setupimagequalitysorter.h"
 #include "setuptooltip.h"
 #include "setupdatabase.h"
 #include "setupfacetags.h"
@@ -93,6 +94,7 @@ public:
         page_raw(0),
         page_iofiles(0),
         page_slideshow(0),
+        page_imagequalitysorter(0),
         page_icc(0),
         page_camera(0),
         page_misc(0),
@@ -115,6 +117,7 @@ public:
         rawPage(0),
         iofilesPage(0),
         slideshowPage(0),
+        ImagequalitysorterPage(0),
         iccPage(0),
         cameraPage(0),
         //faceTagsPage(0),
@@ -141,6 +144,7 @@ public:
     KPageWidgetItem*    page_raw;
     KPageWidgetItem*    page_iofiles;
     KPageWidgetItem*    page_slideshow;
+    KPageWidgetItem*    page_imagequalitysorter;
     KPageWidgetItem*    page_icc;
     KPageWidgetItem*    page_camera;
     KPageWidgetItem*    page_misc;
@@ -164,6 +168,7 @@ public:
     SetupRaw*           rawPage;
     SetupIOFiles*       iofilesPage;
     SetupSlideShow*     slideshowPage;
+    SetupImageQualitySorter* ImagequalitysorterPage;
     SetupICC*           iccPage;
     SetupCamera*        cameraPage;
     SetupMisc*          miscPage;
@@ -288,6 +293,11 @@ Setup::Setup(QWidget* const parent)
     d->page_slideshow->setHeader(i18n("<qt>Slide Show Settings<br/>"
                                       "<i>Customize slideshow settings</i></qt>"));
     d->page_slideshow->setIcon(KIcon("view-presentation"));
+    
+    d->ImagequalitysorterPage = new SetupImageQualitySorter();
+    d->page_imagequalitysorter = addPage(d->ImagequalitysorterPage,i18n("Image Quality Sorter"));
+    d->page_imagequalitysorter->setHeader(i18n("<qt>Image Quality Sorter Settings<br/>"));
+    d->page_imagequalitysorter->setIcon(KIcon("digiKam"));
 
     d->cameraPage  = new SetupCamera();
     d->page_camera = addPage(d->cameraPage, i18n("Cameras"));
