@@ -43,4 +43,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 033 ==> 295256 - Indicator missing while digiKam is filling the maintenance queue.
 034 ==> 295255 - Running maintenance twice results in error.
 035 ==> 320121 - if running maintenance, "rebuild thumbnails", digiKam hangs endlessly.
-036 ==> 
+036 ==> 306282 - Improvements for maintenance tool.
+037 ==> 
+
