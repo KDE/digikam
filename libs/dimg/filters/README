@@ -8,6 +8,7 @@ fx            : Special Effects.
 greystoration : CImg library interface for Greystoration filter.
 hsl           : Hue / Saturation / Lightness.
 icc           : Color Management.
+la            : Local Adjustment Tool
 levels        : Histogram Levels Correction.
 lens          : Misc lens correction filters.
 lc            : Local Contrast (LDR Tonemapping).

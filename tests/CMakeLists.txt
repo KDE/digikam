@@ -362,3 +362,17 @@ TARGET_LINK_LIBRARIES (testautocrop
                ${OpenCV_LIBRARIES}
                )
 
+#------------------------------------------------------------------------
+
+SET (testlocaladjustmenttool_SRCS testlocaladjustmenttool)
+KDE4_ADD_EXECUTABLE(testlocaladjustmenttool NOGUI ${testlocaladjustmenttool_SRCS})
+TARGET_LINK_LIBRARIES (testlocaladjustmenttool
+               digikamcore
+               ${QT_QTCORE_LIBRARY}
+               ${QT_QTGUI_LIBRARY}
+               ${KDE4_KDECORE_LIBS}
+               ${KEXIV2_LIBRARIES}
+               ${KDCRAW_LIBRARIES}
+               ${OpenCV_LIBRARIES}
+               )
+

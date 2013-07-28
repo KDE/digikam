@@ -844,6 +844,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lc/localcontrastfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lc/localcontrastsettings.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lc/localcontrastcontainer.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/la/localadjustmenttool.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/nr/nrfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/nr/nrestimate.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/nr/nrsettings.cpp
@@ -869,6 +870,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/transform/freerotationsettings.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/transform/shearfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/transform/autocrop.cpp
+#         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/transform/localadjustmenttool.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/greycstoration/greycstorationfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/greycstoration/greycstorationsettings.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lens/antivignettingfilter.cpp
@@ -1601,6 +1603,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/greycstoration
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/hsl
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/icc
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/la
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lc
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lens
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/levels
