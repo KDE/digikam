@@ -1,9 +1,9 @@
 /* ============================================================
- * 
+ *
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 
+ * Date        :
  * Description :
  *
  * Copyright (C) 2013-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>

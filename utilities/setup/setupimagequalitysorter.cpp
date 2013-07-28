@@ -3,7 +3,7 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 
+ * Date        :
  * Description :
  *
  * Copyright (C) 2013-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -128,7 +128,7 @@ SetupImageQualitySorter::SetupImageQualitySorter(QWidget* const parent)
     layout->addWidget(d->detectBlur);
     layout->addWidget(d->detectNoise);
     layout->addWidget(d->detectCompression);
-  
+
     QHBoxLayout* layouth1  = new QHBoxLayout;
     layouth1->addWidget(d->setRejected);
     layouth1->addWidget(workIcon1);

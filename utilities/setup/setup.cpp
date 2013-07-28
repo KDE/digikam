@@ -267,7 +267,7 @@ Setup::Setup(QWidget* const parent)
     d->rawPage  = new SetupRaw();
     d->page_raw = addPage(d->rawPage, i18n("RAW Decoding"));
     d->page_raw->setHeader(i18n("<qt>Image Editor: RAW File Decoding<br/>"
-                                  "<i>Configure RAW decoding settings of the image editor</i></qt>"));
+                                "<i>Configure RAW decoding settings of the image editor</i></qt>"));
     d->page_raw->setIcon(KIcon("kdcraw"));
 
     d->iofilesPage  = new SetupIOFiles();
@@ -293,7 +293,7 @@ Setup::Setup(QWidget* const parent)
     d->page_slideshow->setHeader(i18n("<qt>Slide Show Settings<br/>"
                                       "<i>Customize slideshow settings</i></qt>"));
     d->page_slideshow->setIcon(KIcon("view-presentation"));
-    
+
     d->ImagequalitysorterPage = new SetupImageQualitySorter();
     d->page_imagequalitysorter = addPage(d->ImagequalitysorterPage,i18n("Image Quality Sorter"));
     d->page_imagequalitysorter->setHeader(i18n("<qt>Image Quality Sorter Settings<br/>"));
@@ -307,7 +307,7 @@ Setup::Setup(QWidget* const parent)
 
     connect(d->cameraPage, SIGNAL(signalUseFileMetadataChanged(bool)),
             d->tooltipPage, SLOT(slotUseFileMetadataChanged(bool)));
-    
+
     d->pluginsPage  = new ConfigWidget();
     d->pluginFilter = new SearchTextBar(d->pluginsPage, "PluginsSearchBar");
     d->pluginsPage->setFilterWidget(d->pluginFilter);
@@ -472,7 +472,7 @@ bool Setup::execTemplateEditor(QWidget* const parent, const Template& t)
 
 void Setup::slotSearchTextChanged(const SearchTextSettings& settings)
 {
-     d->pluginsPage->slotSetFilter(settings.text, settings.caseSensitive);
+    d->pluginsPage->slotSetFilter(settings.text, settings.caseSensitive);
 }
 
 void Setup::slotButtonClicked(int button)
