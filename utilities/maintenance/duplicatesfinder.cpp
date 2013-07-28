@@ -92,6 +92,8 @@ DuplicatesFinder::~DuplicatesFinder()
 void DuplicatesFinder::slotStart()
 {
     MaintenanceTool::slotStart();
+    setLabel(i18n("Find duplicates items"));
+    setThumbnail(KIcon("tools-wizard").pixmap(22));
     ProgressManager::addProgressItem(this);
 
     double thresh = d->similarity / 100.0;
@@ -112,9 +114,6 @@ void DuplicatesFinder::slotStart()
 
     connect(d->job, SIGNAL(processedAmount(KJob*,KJob::Unit,qulonglong)),
             this, SLOT(slotDuplicatesSearchProcessedAmount(KJob*,KJob::Unit,qulonglong)));
-
-    setLabel(i18n("Find duplicates items"));
-    setThumbnail(KIcon("tools-wizard").pixmap(22));
 }
 
 void DuplicatesFinder::slotDuplicatesSearchTotalAmount(KJob*, KJob::Unit, qulonglong amount)

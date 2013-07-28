@@ -39,5 +39,10 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 029 ==> 322213 - when renaming files by date, the "format settings" link incorrectly links to doc.trolltech.com.
 030 ==> 322656 - When opening a pic, dark areas show artefacts.
 031 ==> 302904 - Import photos causes progress manager to pop up.
-032 ==> 
+032 ==> 297614 - Maintenance tool disabled after running some tasks.
+033 ==> 295256 - Indicator missing while digiKam is filling the maintenance queue.
+034 ==> 295255 - Running maintenance twice results in error.
+035 ==> 320121 - if running maintenance, "rebuild thumbnails", digiKam hangs endlessly.
+036 ==> 306282 - Improvements for maintenance tool.
+037 ==> 
 

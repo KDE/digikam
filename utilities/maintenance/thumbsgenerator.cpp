@@ -79,6 +79,7 @@ ThumbsGenerator::ThumbsGenerator(bool rebuildAll, int albumId, ProgressItem* con
     : MaintenanceTool("ThumbsGenerator", parent),
       d(new Private)
 {
+    setLabel(i18n("Thumbs"));
     ProgressManager::addProgressItem(this);
 
     d->thumbLoadThread = ThumbnailLoadThread::defaultThread();
@@ -87,8 +88,6 @@ ThumbsGenerator::ThumbsGenerator(bool rebuildAll, int albumId, ProgressItem* con
 
     connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(LoadingDescription,QPixmap)),
             this, SLOT(slotGotThumbnail(LoadingDescription,QPixmap)));
-
-    setLabel(i18n("Thumbs"));
 }
 
 ThumbsGenerator::~ThumbsGenerator()

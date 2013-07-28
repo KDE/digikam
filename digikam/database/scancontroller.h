@@ -90,6 +90,11 @@ public:
     void allowToScanDeferredFiles();
 
     /**
+     * Scan Whole collection without to display a progress dialog or to manage splashscreen, as for NewItemsFinder tool.
+     */
+    void completeCollectionScanInBackground(bool defer);
+    
+    /**
      * Carries out a complete collection scan, at the same time updating
      * the unique hash in the database and thumbnail database.
      * Synchronous, returns when ready.
@@ -248,6 +253,8 @@ private:
 
     void createProgressDialog();
     void setInitializationMessage();
+
+    void completeCollectionScanCore(bool needTotalFiles, bool defer);
 
     virtual void moreSchemaUpdateSteps(int numberOfSteps);
     virtual void schemaUpdateProgress(const QString& message, int numberOfSteps);

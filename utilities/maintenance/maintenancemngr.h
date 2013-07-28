@@ -32,6 +32,7 @@ namespace Digikam
 {
 
 class MaintenanceSettings;
+class ProgressItem;
 
 class MaintenanceMngr : public QObject
 {
@@ -53,16 +54,21 @@ Q_SIGNALS:
 
 private Q_SLOTS:
 
-    void slotStage1();  // New items
-    void slotStage2();  // Thumbnails
-    void slotStage3();  // Finger-prints
-    void slotStage4();  // Duplicates
-    void slotStage5();  // Metadata
-    void slotStage6();  // Face detection
+    void slotToolCompleted(ProgressItem*);
+    void slotToolCanceled(ProgressItem*);
 
-    void slotDone();
-    void slotCancel();
+private:
 
+    void stage1();  // New items
+    void stage2();  // Thumbnails
+    void stage3();  // Finger-prints
+    void stage4();  // Duplicates
+    void stage5();  // Metadata
+    void stage6();  // Face detection
+
+    void done();    // Called when all scheduled tools are done.
+    void cancel();  // Called when a tol is canceled.
+    
 private:
 
     class Private;
