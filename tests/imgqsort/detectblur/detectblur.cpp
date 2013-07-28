@@ -37,7 +37,6 @@ void CannyThreshold(int, void*)
   imshow( window_name, dst );
  }
 
-
 /* @function main */
 int main( int argc, char** argv )
 {
@@ -46,20 +45,14 @@ int main( int argc, char** argv )
 
   if( !src.data )
   { return -1; }
-
+  
   // Create a matrix of the same type and size as src (for dst)
   dst.create( src.size(), src.type() );
 
   // Convert the image to grayscale
   cvtColor( src, src_gray, CV_BGR2GRAY );
 
-  // Create a window
-//  namedWindow( window_name, CV_WINDOW_AUTOSIZE );
 
-  // Create a Trackbar for user to enter threshold
- // createTrackbar( "Min Threshold:", window_name, &lowThreshold, max_lowThreshold, CannyThreshold );
-
-  // Show the image
   CannyThreshold(0, 0);
 
     double average=mean(detected_edges)[0];
@@ -71,7 +64,7 @@ int main( int argc, char** argv )
     cout<<"The average of the edge intensity is "<<average<<std::endl;
     cout<<"The maximum of the edge intensity is "<<maxval<<std::endl;
     cout<<"The result of the edge intensity is "<<blurresult<<std::endl;
-
+  // Wait until user exit program by pressing a key
   // Wait until user exit program by pressing a key
   waitKey(0);
 
