@@ -6,8 +6,8 @@
  * Date        : 2010-07-27
  * Description : Widget showing a throbber ("working" animation)
  *
- * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
- * Copyright (C) 2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
+ * Copyright (C) 2010-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -42,7 +42,7 @@ class DIGIKAM_EXPORT WorkingWidget : public QLabel
 
 public:
 
-    explicit WorkingWidget(QWidget* parent = 0);
+    explicit WorkingWidget(QWidget* const parent = 0);
     ~WorkingWidget();
 
 Q_SIGNALS:
@@ -50,6 +50,7 @@ Q_SIGNALS:
     void animationStep();
 
 public Q_SLOTS:
+
     void toggleTimer(bool turnOn = false);
 
 private Q_SLOTS:
@@ -58,8 +59,8 @@ private Q_SLOTS:
 
 private:
 
-    class WorkingWidgetPriv;
-    WorkingWidgetPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

@@ -6,8 +6,8 @@
  * Date        : 2010-07-27
  * Description : Widget showing a throbber ("working" animation)
  *
- * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
- * Copyright (C) 2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
+ * Copyright (C) 2010-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -39,12 +39,12 @@
 namespace Digikam
 {
 
-class WorkingWidget::WorkingWidgetPriv
+class WorkingWidget::Private
 {
 
 public:
 
-    WorkingWidgetPriv()
+    Private()
     {
         currentPixmap = 0;
     }
@@ -54,8 +54,8 @@ public:
     QTimer          timer;
 };
 
-WorkingWidget::WorkingWidget(QWidget* parent)
-    : QLabel(parent), d(new WorkingWidgetPriv)
+WorkingWidget::WorkingWidget(QWidget* const parent)
+    : QLabel(parent), d(new Private)
 {
     QPixmap pix(KIconLoader::global()->iconPath("process-working.png", KIconLoader::Dialog));
 

@@ -43,6 +43,15 @@ class DImg;
 
 class DIGIKAM_EXPORT TagRegion
 {
+
+public:
+    
+    enum Type
+    {
+        Invalid,
+        Rect
+    };
+    
 public:
 
     /**
@@ -57,12 +66,6 @@ public:
     explicit TagRegion(const QString& descriptor);
     /// Construct with the region
     explicit TagRegion(const QRect& rect);
-
-    enum Type
-    {
-        Invalid,
-        Rect
-    };
 
     Type type() const;
     bool isValid() const;
@@ -118,9 +121,7 @@ public:
     /** When images is rotated, rectangles are off-position, ajust them using
      *  image's current size and rotation(left,right supported only)
      */
-    static QRect ajustToRotatedImg(const QRect& region, const QSize& fullSize,
-                                    int rotation);
-
+    static QRect ajustToRotatedImg(const QRect& region, const QSize& fullSize, int rotation);
 
 protected:
 
