@@ -6,7 +6,7 @@
  * Date        : 2009-28-04
  * Description : first run assistant dialog
  *
- * Copyright (C) 2009-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -32,15 +32,16 @@
 #include <kvbox.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
+#include <kiconloader.h>
 
 namespace Digikam
 {
 
-StartScanPage::StartScanPage(KAssistantDialog* dlg)
+StartScanPage::StartScanPage(KAssistantDialog* const dlg)
     : AssistantDlgPage(dlg, i18n("Scan Your Collection"))
 {
-    KVBox* vbox  = new KVBox(this);
-    QLabel* text = new QLabel(vbox);
+    KVBox* const vbox  = new KVBox(this);
+    QLabel* const text = new QLabel(vbox);
     text->setWordWrap(true);
     text->setOpenExternalLinks(true);
     text->setText(i18n("<qt>"
@@ -60,9 +61,7 @@ StartScanPage::StartScanPage(KAssistantDialog* dlg)
                        "</qt>"));
 
     setPageWidget(vbox);
-
-    QPixmap leftPix = KStandardDirs::locate("data", "digikam/data/assistant-scancollection.png");
-    setLeftBottomPix(leftPix.scaledToWidth(128, Qt::SmoothTransformation));
+    setLeftBottomPix(KIconLoader::global()->loadIcon("system-search", KIconLoader::NoGroup, KIconLoader::SizeEnormous));
 }
 
 StartScanPage::~StartScanPage()
