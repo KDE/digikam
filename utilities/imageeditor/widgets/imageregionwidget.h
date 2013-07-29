@@ -3,10 +3,12 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2004-08-17
+ * Date        : 2013-07-15
  * Description : a widget to draw an image clip region.
  *
- * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2013 by Yiou Wang <geow812 at gmail dot com>
+ * Copyright (C) 2010-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2011-2013 Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -19,7 +21,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
- * ============================================================ */
+ * ============================================================ */ 
 
 #ifndef IMAGEREGIONWIDGET_H
 #define IMAGEREGIONWIDGET_H
@@ -37,13 +39,16 @@
 // Local includes
 
 #include "dimg.h"
-#include "previewwidget.h"
+#include "graphicsdimgview.h"
+#include "imagezoomsettings.h"
 #include "digikam_export.h"
 
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT ImageRegionWidget : public PreviewWidget
+class ImageZoomSettings;
+
+class DIGIKAM_EXPORT ImageRegionWidget : public GraphicsDImgView
 {
     Q_OBJECT
 
@@ -70,15 +75,24 @@ public:
     bool   capturePointMode() const;
 
     void   setHighLightPoints(const QPolygon& pointsList);
-    void   setCenterImageRegionPosition();
 
     void   ICCSettingsChanged();
     void   exposureSettingsChanged();
+
+    void   toggleFitToWindow();
+    void   setZoomFactor(double zoom);
+
+private:
+    double zoomFactor() const;
 
 Q_SIGNALS:
 
     void signalOriginalClipFocusChanged();
     void signalCapturedPointFromOriginal(const Digikam::DColor&, const QPoint&);
+    void signalContentsMovedEvent(bool);
+    //void signalContentTakeFocus();
+    void signalResized();
+    void signalZoomFactorChanged(double);
 
 public Q_SLOTS:
 
@@ -89,38 +103,6 @@ private Q_SLOTS:
 
     void slotZoomFactorChanged();
     void slotPanIconSelectionMoved(const QRect& rect, bool targetDone);
-    void slotContentTakeFocus();
-    void slotContentLeaveFocus();
-
-private:
-
-    void   setContentsPosition(int x, int y, bool targetDone);
-
-    /** To get image region including original or/and target area depending of separate view mode.
-        The region is given using not scaled image unit.
-     */
-    QRect  getOriginalImageRegion()      const;
-
-    QRect  getLocalImageRegionToRender() const;
-
-    void   backupPixmapRegion();
-    void   restorePixmapRegion();
-
-    void   enterEvent(QEvent*);
-    void   leaveEvent(QEvent*);
-    void   contentsMousePressEvent(QMouseEvent*);
-    void   contentsMouseReleaseEvent(QMouseEvent*);
-
-    int    previewWidth()  const;
-    int    previewHeight() const;
-    bool   previewIsNull() const;
-    void   resetPreview();
-    QImage previewToQImage() const;
-
-    void   viewportPaintExtraData();
-    void   emitCapturedPointFromOriginal(const QPoint& pt);
-
-    inline void paintPreview(QPixmap* const pix, int sx, int sy, int sw, int sh);
 
 private:
 

@@ -1081,10 +1081,11 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/widgets/imagepreviewitem.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/widgets/previewtoolbar.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/widgets/previewlist.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/widgets/imageregionwidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/widgets/imageregionitem.cpp
 
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/q3support/drubberband.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/q3support/previewwidget.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/q3support/imageregionwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/q3support/canvas.cpp
        )
 
