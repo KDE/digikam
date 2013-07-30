@@ -453,6 +453,13 @@ void AlbumHistory::slotImageSelected(const ImageInfoList& selectedImages)
     {
         currentAlbum = albumList.first();
     }
+    /**
+     * Multiple tags selected can lead to images being selected from different
+     * albums and it's hard to split them by each album
+     * add support later
+     */
+    if(albumList.size() > 1)
+        return;
 
     if (d->historyPos.contains(currentAlbum))
     {

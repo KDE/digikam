@@ -183,30 +183,7 @@ void TagsManager::setupUi(KDialog *Dialog)
      /** Tree Widget & Actions + Tag Properties sidebar **/
 
      d->treeWindow = new KMainWindow(this);
-     d->mainToolbar = new KToolBar(d->treeWindow);
-
-     d->addAction = new KAction(KIcon("list-add"),i18n(""),d->treeWindow);
-
-     d->delAction = new KAction(KIcon("list-remove"),i18n(""),d->treeWindow);
-
-     d->organizeAction   = new KActionMenu(KIcon("autocorrection"),i18n("Organize"),this);
-     d->organizeAction->setDelayed(false);
-     d->organizeAction->addAction(new KAction(KIcon("tag-new"),"New Tag",this));
-
-     d->syncexportAction = new KActionMenu(KIcon("server-database"),i18n("Sync &Export"),this);
-
-     d->mainToolbar->addAction(d->addAction);
-     d->mainToolbar->addAction(d->delAction);
-     d->mainToolbar->addAction(d->organizeAction);
-     d->mainToolbar->addAction(d->syncexportAction);
-     d->treeWindow->addToolBar(d->mainToolbar);
-
-
-     d->rightToolBar = new KMultiTabBar(KMultiTabBar::Right);
-     d->rightToolBar->appendTab(KIcon("tag-properties").pixmap(10,10),0,"Tag Properties");
-     d->rightToolBar->setStyle(KMultiTabBar::KDEV3ICON);
-
-     connect(d->rightToolBar->tab(0),SIGNAL(clicked()),this, SLOT(slotOpenProperties()));
+     setupActions();
 
      d->treeWinLayout = new QHBoxLayout(d->treeWindow);
 
@@ -399,6 +376,74 @@ void TagsManager::slotDeleteAction()
                 }
             }
         }
+}
+
+void TagsManager::setupActions()
+{
+    d->mainToolbar = new KToolBar(d->treeWindow);
+
+    d->addAction = new KAction(KIcon("list-add"),i18n(""),d->treeWindow);
+
+    d->delAction = new KAction(KIcon("list-remove"),i18n(""),d->treeWindow);
+
+    /** organize group **/
+    d->organizeAction   = new KActionMenu(KIcon("autocorrection"),
+                                           i18n("Organize"),this);
+    d->organizeAction->setDelayed(false);
+
+    KAction* resetIcon     = new KAction(KIcon("view-refresh"),
+                                          i18n("Reset tag Icon"), this);
+    KAction* createTagAddr = new KAction(KIcon("tag-addressbook"),
+                                          i18n("Create Tag from Addess Book"), this);
+    KAction* invSel        = new KAction(KIcon(),
+                                          i18n("Invert Selection"), this);
+    KAction* expandTree    = new KAction(KIcon("format-indent-more"),
+                                          i18n("Expand Tag Tree"), this);
+    KAction* expandSel     = new KAction(KIcon("format-indent-more"),
+                                          i18n("Expand Selected Nodes"), this);
+
+    d->organizeAction->addAction(resetIcon);
+    d->organizeAction->addAction(createTagAddr);
+    d->organizeAction->addAction(invSel);
+    d->organizeAction->addAction(expandTree);
+    d->organizeAction->addAction(expandSel);
+
+    /** Sync & Export Group **/
+    d->syncexportAction = new KActionMenu(KIcon("server-database"),i18n("Sync &Export"),this);
+    d->syncexportAction->setDelayed(false);
+
+    KAction* wrDbImg       = new KAction(KIcon("view-refresh"),
+                                         i18n("Write Tags from Database to Image"), this);
+    KAction* readTags      = new KAction(KIcon("tag-new"),
+                                         i18n("Read Tags from Image"), this);
+    KAction* wipeAll       = new KAction(KIcon("draw-eraser"),
+                                         i18n("Wipe all tags from Database and read from images"), this);
+    KAction* exportToKipi  = new KAction(KIcon("kipi"),
+                                         i18n("Export to kipi"), this);
+    KAction* syncNepomuk   = new KAction(KIcon("nepomuk"),
+                                         i18n("Sync Database with Nepomuk"), this);
+
+    d->syncexportAction->addAction(wrDbImg);
+    d->syncexportAction->addAction(readTags);
+    d->syncexportAction->addAction(wipeAll);
+    d->syncexportAction->addAction(exportToKipi);
+    d->syncexportAction->addAction(syncNepomuk);
+
+    d->mainToolbar->addAction(d->addAction);
+    d->mainToolbar->addAction(d->delAction);
+    d->mainToolbar->addAction(d->organizeAction);
+    d->mainToolbar->addAction(d->syncexportAction);
+    d->treeWindow->addToolBar(d->mainToolbar);
+
+
+    /**
+     * Right Toolbar with vertical properties button
+     */
+    d->rightToolBar = new KMultiTabBar(KMultiTabBar::Right);
+    d->rightToolBar->appendTab(KIcon("tag-properties").pixmap(10,10),0,"Tag Properties");
+    d->rightToolBar->setStyle(KMultiTabBar::KDEV3ICON);
+
+    connect(d->rightToolBar->tab(0),SIGNAL(clicked()),this, SLOT(slotOpenProperties()));
 }
 
 

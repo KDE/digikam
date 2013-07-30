@@ -18,3 +18,31 @@ TODO:
   5. Add database options
   6. core/libs/models/imagealbummodel.cpp:193 TODO: treat root album on QList
   7. To be continued
+
+  
+backtrace to investigate:
+
+#5  0x00007ffb6ed30e84 in ?? () from /usr/lib/libQtGui.so.4
+#6  0x00007ffb6ed30f9d in QSortFilterProxyModel::mapToSource(QModelIndex const&) const () from /usr/lib/libQtGui.so.4
+#7  0x00007ffb6ed2dbcb in QSortFilterProxyModel::index(int, int, QModelIndex const&) const () from /usr/lib/libQtGui.so.4
+#8  0x00007ffb6ed30ebc in ?? () from /usr/lib/libQtGui.so.4
+#9  0x00007ffb6ed30f9d in QSortFilterProxyModel::mapToSource(QModelIndex const&) const () from /usr/lib/libQtGui.so.4
+#10 0x00007ffb6ed29a16 in QSortFilterProxyModel::flags(QModelIndex const&) const () from /usr/lib/libQtGui.so.4
+#11 0x00007ffb6ecb54b1 in QAbstractItemView::focusInEvent(QFocusEvent*) () from /usr/lib/libQtGui.so.4
+#12 0x00007ffb6e80839f in QWidget::event(QEvent*) () from /usr/lib/libQtGui.so.4
+#13 0x00007ffb6eba5b8e in QFrame::event(QEvent*) () from /usr/lib/libQtGui.so.4
+#14 0x00007ffb6ec2208b in QAbstractScrollArea::event(QEvent*) () from /usr/lib/libQtGui.so.4
+#15 0x00007ffb6ecb4aab in QAbstractItemView::event(QEvent*) () from /usr/lib/libQtGui.so.4
+#16 0x00007ffb6e7b912c in QApplicationPrivate::notify_helper(QObject*, QEvent*) () from /usr/lib/libQtGui.so.4
+#17 0x00007ffb6e7bf6f0 in QApplication::notify(QObject*, QEvent*) () from /usr/lib/libQtGui.so.4
+#18 0x00007ffb6f4d9f5a in KApplication::notify(QObject*, QEvent*) () from /usr/lib/libkdeui.so.5
+#19 0x00007ffb6db62efd in QCoreApplication::notifyInternal(QObject*, QEvent*) () from /usr/lib/libQtCore.so.4
+#20 0x00007ffb6e7bd8ca in QApplicationPrivate::setFocusWidget(QWidget*, Qt::FocusReason) () from /usr/lib/libQtGui.so.4
+#21 0x00007ffb6e80382b in QWidget::setFocus(Qt::FocusReason) () from /usr/lib/libQtGui.so.4
+#22 0x00007ffb6e7bdf18 in QApplication::setActiveWindow(QWidget*) () from /usr/lib/libQtGui.so.4
+#23 0x00007ffb6e82ffbf in QApplication::x11ProcessEvent(_XEvent*) () from /usr/lib/libQtGui.so.4
+#24 0x00007ffb6e856232 in ?? () from /usr/lib/libQtGui.so.4
+#25 0x00007ffb671cada6 in g_main_context_dispatch () from /usr/lib/libglib-2.0.so.0
+#26 0x00007ffb671cb0f8 in ?? () from /usr/lib/libglib-2.0.so.0
+#27 0x00007ffb671cb19c in g_main_context_iteration () from /usr/lib/libglib-2.0.so.0
+#28 0x00007ffb6db8fb85 in QEventDispatcherGlib::processEvents(QFlags<QEventLoop::ProcessEventsFlag>) () from /usr/lib/libQtCore.so.4
