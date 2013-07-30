@@ -85,14 +85,20 @@ void ImageRegionItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* o
 {
     Q_D(GraphicsDImgItem);
     
+    //qDebug()<<"ImageRegionItem::paint";
     QRect     drawRect = option->exposedRect.intersected(boundingRect()).toAlignedRect();
     d_ptr->imageRegion = drawRect;
     QRect     pixSourceRect;
     QPixmap   pix;
     
     // scale "as if" scaling to whole image, but clip output to our exposed region
-    DImg scaledImage     = d->image.smoothScaleClipped(d->image.width(), d->image.height(),
-                                                       drawRect.x(), drawRect.y(), drawRect.width(), drawRect.height());
+    //DImg scaledImage     = d->image.smoothScale(d->zoomSettings.zoomedSize().width(), d->zoomSettings.zoomedSize().height(), Qt::IgnoreAspectRatio);
+
+    QSize   completeSize = boundingRect().size().toSize();
+
+    // scale "as if" scaling to whole image, but clip output to our exposed region
+    DImg scaledImage     = d->image.smoothScale(completeSize.width(), completeSize.height());
+                                                       //drawRect.x(), drawRect.y(), drawRect.width(), drawRect.height());
 
     if (d->cachedPixmaps.find(drawRect, &pix, &pixSourceRect))
     {

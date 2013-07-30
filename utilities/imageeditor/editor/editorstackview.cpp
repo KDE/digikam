@@ -383,6 +383,7 @@ void EditorStackView::slotZoomChanged(double zoom)
 
         if (preview)
         {
+            //qDebug("EditorStackView::slotZoomChanged");
             max = preview->layout()->atMaxZoom();
             min = preview->layout()->atMinZoom();
             emit signalZoomChanged(max, min, zoom);

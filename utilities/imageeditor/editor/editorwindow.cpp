@@ -829,6 +829,7 @@ void EditorWindow::slotZoomTo100Percents()
 
 void EditorWindow::slotZoomChanged(bool isMax, bool isMin, double zoom)
 {
+    //qDebug()<<"EditorWindow::slotZoomChanged";
     d->zoomPlusAction->setEnabled(!isMax);
     d->zoomMinusAction->setEnabled(!isMin);
 

@@ -307,6 +307,7 @@ bool GraphicsDImgView::acceptsMouseClick(QMouseEvent* e)
 
 void GraphicsDImgView::resizeEvent(QResizeEvent* e)
 {
+    qDebug()<<"GraphicsDImgView::resizeEvent";
     QGraphicsView::resizeEvent(e);
     d->layout->updateZoomAndSize();
     emit resized();

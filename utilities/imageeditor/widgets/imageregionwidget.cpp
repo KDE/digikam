@@ -39,6 +39,7 @@
 // Local includes
 
 #include "previewtoolbar.h"
+#include "previewlayout.h"
 #include "imageregionitem.h"
 #include "imageiface.h"
 
@@ -94,6 +95,8 @@ ImageRegionWidget::ImageRegionWidget(QWidget* const parent)
     connect(this, SIGNAL(signalContentsMovedEvent(bool)),
             this, SLOT(slotOriginalImageRegionChanged(bool)));
 
+    layout()->fitToWindow();
+
 }
 
 ImageRegionWidget::~ImageRegionWidget()
@@ -135,6 +138,7 @@ bool ImageRegionWidget::capturePointMode() const
 
 void ImageRegionWidget::slotZoomFactorChanged()
 {
+    qDebug()<<"ImageRegionWidget::slotZoomFactorChanged()";
     emit signalResized();
     emit signalContentsMovedEvent(true);
 }
@@ -147,6 +151,7 @@ void ImageRegionWidget::slotPreviewModeChanged(int mode)
 
 double ImageRegionWidget::zoomFactor() const
 {
+    qDebug()<<"ImageRegionWidget::zoomFactor()";
     return d->item->zoomSettings()->zoomFactor();
 }
 
@@ -200,6 +205,7 @@ DImg ImageRegionWidget::getOriginalRegionImage(bool useDownscaledImage) const
 
 void ImageRegionWidget::slotPanIconSelectionMoved(const QRect& rect, bool targetDone)
 {
+    qDebug("ImageRegionWidget::slotPanIconSelectionMoved");
     GraphicsDImgView::slotPanIconSelectionMoved(rect, targetDone);
     //setContentsPosition((int)(rect.x()*zoomFactor()), (int)(rect.y()*zoomFactor()), targetDone);
     scrollContentsBy((int)(rect.x()*zoomFactor()), (int)(rect.y()*zoomFactor()));
@@ -245,15 +251,15 @@ void ImageRegionWidget::toggleFitToWindow()
     updateContentsSize();
     zoomFactorChanged(d->zoom);
     viewport()->update();*/
-    emit signalZoomFactorChanged(1.0);
+    //emit signalZoomFactorChanged(d->zoomSettings()->zoomFactor());
     update();
 }
 
 void ImageRegionWidget::setZoomFactor(double zoom)
 {
-    qDebug("ImageRegionWidget::setZoomFactor");
+    //qDebug("ImageRegionWidget::setZoomFactor");
+    //qDebug()<<zoom;
     d->item->zoomSettings()->setZoomFactor(zoom);
-
 }
 
 }  // namespace Digikam
