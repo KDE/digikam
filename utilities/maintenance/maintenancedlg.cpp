@@ -42,7 +42,7 @@
 #include <kiconloader.h>
 #include <kstandarddirs.h>
 #include <knuminput.h>
-#include <khbox.h>
+#include <kvbox.h>
 #include <kseparator.h>
 #include <kconfig.h>
 
@@ -50,6 +50,7 @@
 
 #include "setup.h"
 #include "facescansettings.h"
+#include "metadatasynchronizer.h"
 
 using namespace KDcrawIface;
 
@@ -79,9 +80,10 @@ public:
         scanThumbs(0),
         scanFingerPrints(0),
         metadataSetup(0),
+        syncDirection(0),
         faceScannedHandling(0),
         hbox(0),
-        hbox2(0),
+        vbox(0),
         hbox3(0),
         similarity(0),
         expanderBox(0)
@@ -97,6 +99,7 @@ public:
     static const QString configDuplicates;
     static const QString configSimilarity;
     static const QString configMetadata;
+    static const QString configSyncDirection;
     static const QString configFaceDetection;
     static const QString configFaceScannedHandling;
 
@@ -105,9 +108,10 @@ public:
     QCheckBox*           scanThumbs;
     QCheckBox*           scanFingerPrints;
     QPushButton*         metadataSetup;
+    QComboBox*           syncDirection;
     QComboBox*           faceScannedHandling;
     KHBox*               hbox;
-    KHBox*               hbox2;
+    KVBox*               vbox;
     KHBox*               hbox3;
     KIntNumInput*        similarity;
     RExpanderBox*        expanderBox;
@@ -122,6 +126,7 @@ const QString MaintenanceDlg::Private::configScanFingerPrints("ScanFingerPrints"
 const QString MaintenanceDlg::Private::configDuplicates("Duplicates");
 const QString MaintenanceDlg::Private::configSimilarity("Similarity");
 const QString MaintenanceDlg::Private::configMetadata("Metadata");
+const QString MaintenanceDlg::Private::configSyncDirection("SyncDirection");
 const QString MaintenanceDlg::Private::configFaceDetection("FaceDetection");
 const QString MaintenanceDlg::Private::configFaceScannedHandling("FaceScannedHandling");
 
@@ -182,13 +187,22 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
 
     // --------------------------------------------------------------------------------------
 
-    d->hbox2              = new KHBox;
-    new QLabel(i18n("Check metadata setup panel for details: "), d->hbox2);
-    QWidget* const space2 = new QWidget(d->hbox2);
-    d->hbox2->setStretchFactor(space2, 10);
-    d->metadataSetup      = new QPushButton(i18n("Settings..."), d->hbox2);
-    d->expanderBox->insertItem(Private::Metadata, d->hbox2, SmallIcon("run-build-file"),
-                               i18n("Sync image metadata with Database"), "Metadata", false);
+    d->vbox              = new KVBox;
+    KHBox* const hbox21  = new KHBox(d->vbox);
+    new QLabel(i18n("Sync Direction: "), hbox21);
+    QWidget* const space4  = new QWidget(hbox21);
+    hbox21->setStretchFactor(space4, 10);
+    d->syncDirection = new QComboBox(hbox21);
+    d->syncDirection->addItem(i18n("From database to image metadata"), MetadataSynchronizer::WriteFromDatabaseToFile);
+    d->syncDirection->addItem(i18n("From image metadata to database"), MetadataSynchronizer::ReadFromFileToDatabase);
+
+    KHBox* const hbox22  = new KHBox(d->vbox);
+    new QLabel(i18n("Check metadata setup panel for details: "), hbox22);
+    QWidget* const space2 = new QWidget(hbox22);
+    hbox22->setStretchFactor(space2, 10);
+    d->metadataSetup      = new QPushButton(i18n("Settings..."), hbox22);
+    d->expanderBox->insertItem(Private::Metadata, d->vbox, SmallIcon("run-build-file"),
+                               i18n("Sync Metadata and Database"), "Metadata", false);
     d->expanderBox->setCheckBoxVisible(Private::Metadata, true);
 
     // --------------------------------------------------------------------------------------
@@ -196,7 +210,7 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
     d->hbox3               = new KHBox;
     new QLabel(i18n("Faces data management: "), d->hbox3);
     QWidget* const space3  = new QWidget(d->hbox3);
-    d->hbox2->setStretchFactor(space3, 10);
+    d->hbox3->setStretchFactor(space3, 10);
     d->faceScannedHandling = new QComboBox(d->hbox3);
     d->faceScannedHandling->addItem(i18n("Skip images already scanned"),          FaceScanSettings::Skip);
     d->faceScannedHandling->addItem(i18n("Scan again and merge results"),         FaceScanSettings::Merge);
@@ -255,6 +269,7 @@ MaintenanceSettings MaintenanceDlg::settings() const
     prm.duplicates                          = d->expanderBox->isChecked(Private::Duplicates);
     prm.similarity                          = d->similarity->value();
     prm.metadata                            = d->expanderBox->isChecked(Private::Metadata);
+    prm.syncDirection                       = d->syncDirection->currentIndex();
     prm.faceDetection                       = d->expanderBox->isChecked(Private::FaceDetection);
     prm.faceSettings.alreadyScannedHandling = (FaceScanSettings::AlreadyScannedHandling)d->faceScannedHandling->currentIndex();
     return prm;
@@ -276,6 +291,7 @@ void MaintenanceDlg::readSettings()
     d->expanderBox->setChecked(Private::Duplicates,    group.readEntry(d->configDuplicates,    prm.duplicates));
     d->similarity->setValue(group.readEntry(d->configSimilarity,                               prm.similarity));
     d->expanderBox->setChecked(Private::Metadata,      group.readEntry(d->configMetadata,      prm.metadata));
+    d->syncDirection->setCurrentIndex(group.readEntry(d->configSyncDirection,                  prm.syncDirection));
     d->expanderBox->setChecked(Private::FaceDetection, group.readEntry(d->configFaceDetection, prm.faceDetection));
     d->faceScannedHandling->setCurrentIndex(group.readEntry(d->configFaceScannedHandling,      (int)prm.faceSettings.alreadyScannedHandling));
 
@@ -301,6 +317,7 @@ void MaintenanceDlg::writeSettings()
     group.writeEntry(d->configDuplicates,          prm.duplicates);
     group.writeEntry(d->configSimilarity,          prm.similarity);
     group.writeEntry(d->configMetadata,            prm.metadata);
+    group.writeEntry(d->configSyncDirection,       prm.syncDirection);
     group.writeEntry(d->configFaceDetection,       prm.faceDetection);
     group.writeEntry(d->configFaceScannedHandling, (int)prm.faceSettings.alreadyScannedHandling);
 }
@@ -322,7 +339,7 @@ void MaintenanceDlg::slotItemToggled(int index, bool b)
             break;
 
         case Private::Metadata:
-            d->hbox2->setEnabled(b);
+            d->vbox->setEnabled(b);
             break;
 
         case Private::FaceDetection:

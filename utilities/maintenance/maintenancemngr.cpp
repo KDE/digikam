@@ -102,16 +102,7 @@ bool MaintenanceMngr::isRunning() const
 void MaintenanceMngr::setSettings(const MaintenanceSettings& settings)
 {
     d->settings = settings;
-    kDebug() << "settings.newItems            : " << d->settings.newItems;
-    kDebug() << "settings.thumbnails          : " << d->settings.thumbnails;
-    kDebug() << "settings.scanThumbs          : " << d->settings.scanThumbs;
-    kDebug() << "settings.fingerPrints        : " << d->settings.fingerPrints;
-    kDebug() << "settings.scanFingerPrints    : " << d->settings.scanFingerPrints;
-    kDebug() << "settings.duplicates          : " << d->settings.duplicates;
-    kDebug() << "settings.similarity          : " << d->settings.similarity;
-    kDebug() << "settings.metadata            : " << d->settings.metadata;
-    kDebug() << "settings.facedetection       : " << d->settings.faceDetection;
-    kDebug() << "settings.faceScannedHandling : " << d->settings.faceSettings.alreadyScannedHandling;
+    kDebug() << d->settings;
 
     d->duration.start();
     stage1();
@@ -126,32 +117,32 @@ void MaintenanceMngr::slotToolCompleted(ProgressItem* tool)
     if (tool == dynamic_cast<ProgressItem*>(d->newItemsFinder))
     {
         d->newItemsFinder = 0;
-        stage2();    
+        stage2();
     }
     else if (tool == dynamic_cast<ProgressItem*>(d->thumbsGenerator))
     {
         d->thumbsGenerator = 0;
-        stage3();    
+        stage3();
     }
     else if (tool == dynamic_cast<ProgressItem*>(d->fingerPrintsGenerator))
     {
         d->fingerPrintsGenerator = 0;
-        stage4();    
+        stage4();
     }
     else if (tool == dynamic_cast<ProgressItem*>(d->duplicatesFinder))
     {
         d->duplicatesFinder = 0;
-        stage5();    
+        stage5();
     }
     else if (tool == dynamic_cast<ProgressItem*>(d->metadataSynchronizer))
     {
         d->metadataSynchronizer = 0;
-        stage6();    
+        stage6();
     }
     else if (tool == dynamic_cast<ProgressItem*>(d->faceDetector))
     {
         d->faceDetector = 0;
-        done();    
+        done();
     }
 }
 
@@ -164,7 +155,7 @@ void MaintenanceMngr::slotToolCanceled(ProgressItem* tool)
         tool == dynamic_cast<ProgressItem*>(d->metadataSynchronizer)  ||
         tool == dynamic_cast<ProgressItem*>(d->faceDetector))
     {
-        cancel();    
+        cancel();
     }
 }
 
@@ -187,7 +178,7 @@ void MaintenanceMngr::stage1()
 void MaintenanceMngr::stage2()
 {
     kDebug() << "stage2";
-        
+
     if (d->settings.thumbnails)
     {
         bool rebuildAll    = (d->settings.scanThumbs == false);
@@ -240,7 +231,7 @@ void MaintenanceMngr::stage5()
 
     if (d->settings.metadata)
     {
-        d->metadataSynchronizer = new MetadataSynchronizer(MetadataSynchronizer::WriteFromDatabaseToFile);
+        d->metadataSynchronizer = new MetadataSynchronizer(MetadataSynchronizer::SyncDirection(d->settings.syncDirection));
         d->metadataSynchronizer->setNotificationEnabled(false);
         d->metadataSynchronizer->start();
     }
@@ -253,7 +244,7 @@ void MaintenanceMngr::stage5()
 void MaintenanceMngr::stage6()
 {
     kDebug() << "stage6";
-    
+
     if (d->settings.faceDetection)
     {
         d->faceDetector = new FaceDetector(d->settings.faceSettings);

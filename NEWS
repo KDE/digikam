@@ -44,5 +44,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 034 ==> 295255 - Running maintenance twice results in error.
 035 ==> 320121 - if running maintenance, "rebuild thumbnails", digiKam hangs endlessly.
 036 ==> 306282 - Improvements for maintenance tool.
-037 ==> 
-
+037 ==> 306246 - Add new maintainance option to update DB using image metadata.
+038 ==> 

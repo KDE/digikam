@@ -1255,7 +1255,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
     SET(libeditorgui_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/main/imagewindow.cpp
        )
-    
+
     SET(libmaintenance_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/imageinfojob.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/imageinfoalbumsjob.cpp
@@ -1268,6 +1268,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/maintenancedlg.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/maintenancemngr.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/maintenancetool.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/maintenancesettings.cpp
        )
 
     SET(libdatabasecore_SRCS
