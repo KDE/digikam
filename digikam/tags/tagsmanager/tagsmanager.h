@@ -21,6 +21,7 @@
  *
  * ============================================================ */
 #include <kdialog.h>
+#include <qvarlengtharray.h>
 
 namespace Digikam
 {
@@ -74,6 +75,69 @@ private Q_SLOTS:
      * @brief slotDeleteAction  - delete tag/tags when delAction is triggered
      */
     void slotDeleteAction();
+
+    /**
+     * @brief slotResetTagIcon  - connected to resetTagIcon action and
+     *                            will reset icon to all selected tags
+     */
+    void slotResetTagIcon();
+
+    /**
+     * @brief slotCreateTagAddr - connected to createTagAddr action and
+     *                            will create tags from Adressbook
+     */
+    void slotCreateTagAddr();
+
+    /**
+     * @brief slotInvertSel     - connected to invSel action and will
+     *                            invert selection of current items
+     */
+    void slotInvertSel();
+
+    /**
+     * @brief slotExpandTree    - connected to expandTree action and will
+     *                            expand tree by one level
+     */
+    void slotExpandTree();
+
+    /**
+     * @brief slotExpandSelected - connected to expandSel action and will
+     *                             expand selected nodes by one level
+     */
+    void slotExpandSelected();
+
+    /**
+     * @brief slotWriteToImg     - connected to wrDbImg action and will
+     *                             write all metadata from database to images
+     */
+    void slotWriteToImg();
+
+    /**
+     * @brief slotReadFromImg     - coonected to readTags action and will
+     *                              reread all images metadata into database
+     */
+    void slotReadFromImg();
+
+    /**
+     * @brief slotWipeAll         - connected to wipeAll action and will
+     *                              wipe all tag related data from database
+     *                              and reread from image's metadata
+     */
+    void slotWipeAll();
+
+    /**
+     * @brief slotExportKipi      - connected to exportToKipi action and
+     *                              images that correspond to selected tags
+     *                              will be exported to kipi-plugins
+     */
+    void slotExportKipi();
+
+    /**
+     * @brief slotSyncNepomuk      - coonected to syncNepomuk action and
+     *                               will sync all Database tags with nepomuk
+     *                               interface
+     */
+    void slotSyncNepomuk();
 
 private:
 

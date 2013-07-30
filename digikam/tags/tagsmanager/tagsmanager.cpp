@@ -149,17 +149,19 @@ void TagsManager::setupUi(KDialog *Dialog)
      d->tagPixmap->setMaximumWidth(40);
      d->tagPixmap->setPixmap(KIcon("tag").pixmap(30,30));
 
-     d->searchBar  = new SearchTextBar(this, "DigikamViewTagSearchBar");
-     d->searchBar->setHighlightOnResult(true);
-     d->searchBar->setModel(d->tagModel, AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
-     d->searchBar->setMaximumWidth(200);
-
      d->digikamPixmap = new QLabel();
      QPixmap dpix (KStandardDirs::locate("data", "digikam/about/top-left-digikam.png"));
      d->digikamPixmap->setPixmap(dpix.scaled(40,40,Qt::KeepAspectRatio, Qt::SmoothTransformation));
      d->digikamPixmap->setMaximumHeight(40);
      d->digikamPixmap->setScaledContents(true);
 
+     d->tagFolderView = new TagFolderView(this,d->tagModel);
+
+     d->searchBar  = new SearchTextBar(this, "DigikamViewTagSearchBar");
+     d->searchBar->setHighlightOnResult(true);
+     d->searchBar->setModel(d->tagModel, AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
+     d->searchBar->setMaximumWidth(200);
+     d->searchBar->setFilterModel(d->tagFolderView->albumFilterModel());
 
      QHBoxLayout* tempLayout = new QHBoxLayout();
      tempLayout->setAlignment(Qt::AlignLeft);
@@ -187,7 +189,6 @@ void TagsManager::setupUi(KDialog *Dialog)
 
      d->treeWinLayout = new QHBoxLayout(d->treeWindow);
 
-     d->tagFolderView = new TagFolderView(this,d->tagModel);
      d->treeWinLayout->addWidget(d->tagFolderView,9);
 
      d->tagPropWidget = new TagPropWidget(d->treeWindow);
@@ -402,6 +403,21 @@ void TagsManager::setupActions()
     KAction* expandSel     = new KAction(KIcon("format-indent-more"),
                                           i18n("Expand Selected Nodes"), this);
 
+    connect(resetIcon, SIGNAL(triggered()),
+            this, SLOT(slotResetTagIcon()));
+
+    connect(createTagAddr, SIGNAL(triggered()),
+            this, SLOT(slotCreateTagAddr()));
+
+    connect(invSel, SIGNAL(triggered()),
+            this, SLOT(slotInvertSel()));
+
+    connect(expandTree, SIGNAL(triggered()),
+            this, SLOT(slotExpandTree()));
+
+    connect(expandSel, SIGNAL(triggered()),
+            this, SLOT(slotExpandSelected()));
+
     d->organizeAction->addAction(resetIcon);
     d->organizeAction->addAction(createTagAddr);
     d->organizeAction->addAction(invSel);
@@ -422,6 +438,21 @@ void TagsManager::setupActions()
                                          i18n("Export to kipi"), this);
     KAction* syncNepomuk   = new KAction(KIcon("nepomuk"),
                                          i18n("Sync Database with Nepomuk"), this);
+
+    connect(wrDbImg, SIGNAL(triggered()),
+            this, SLOT(slotWriteToImg()));
+
+    connect(readTags, SIGNAL(triggered()),
+            this, SLOT(slotReadFromImg()));
+
+    connect(wipeAll, SIGNAL(triggered()),
+            this, SLOT(slotWipeAll()));
+
+    connect(exportToKipi, SIGNAL(triggered()),
+            this, SLOT(slotExportKipi()));
+
+    connect(syncNepomuk, SIGNAL(triggered()),
+            this, SLOT(slotSyncNepomuk()));
 
     d->syncexportAction->addAction(wrDbImg);
     d->syncexportAction->addAction(readTags);
@@ -446,6 +477,54 @@ void TagsManager::setupActions()
     connect(d->rightToolBar->tab(0),SIGNAL(clicked()),this, SLOT(slotOpenProperties()));
 }
 
+void TagsManager::slotResetTagIcon()
+{
 
+}
+
+void TagsManager::slotCreateTagAddr()
+{
+
+}
+
+void TagsManager::slotInvertSel()
+{
+
+}
+
+void TagsManager::slotExpandTree()
+{
+
+}
+
+void TagsManager::slotExpandSelected()
+{
+
+}
+
+void TagsManager::slotWriteToImg()
+{
+
+}
+
+void TagsManager::slotReadFromImg()
+{
+
+}
+
+void TagsManager::slotWipeAll()
+{
+
+}
+
+void TagsManager::slotExportKipi()
+{
+
+}
+
+void TagsManager::slotSyncNepomuk()
+{
+
+}
 
 } // namespace Digikam

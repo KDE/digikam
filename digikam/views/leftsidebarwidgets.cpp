@@ -268,7 +268,6 @@ QString TagViewSideBarWidget::getCaption()
 
 void TagViewSideBarWidget::setCurrentAlbum(TAlbum* album)
 {
-    kDebug() << "Set Current album from sidebar";
     d->tagFolderView->setCurrentAlbum(album);
 }
 
