@@ -1,15 +1,93 @@
+/* ============================================================
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 20013-07-31
+ * Description : Tag List implementation as Quick Acess for various
+ *               subtrees in Tag Manager
+ *
+ * Copyright (C) 2013 by Veaceslav Munteanu <veaceslav dot munteanu90 at gmail dot com>
+ *
+ * This program is free software; you can redistribute it
+ * and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation;
+ * either version 2, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * ============================================================ */
+
+#include <QVBoxLayout>
+#include <QListWidget>
+#include <QPushButton>
+
+#include <kdebug.h>
+
 #include "taglist.h"
 #include "albumtreeview.h"
+#include "tagfolderview.h"
 
 namespace Digikam {
 
-TagList::TagList(TagModel* model)
+class TagList::TagListPriv
 {
+public:
+    TagListPriv()
+    {
+        addButton   = 0;
+        tagList     = 0;
+        treeView    = 0;
+    }
 
+    QPushButton*    addButton;
+    QListWidget*    tagList;
+    TagFolderView*  treeView;
+};
+
+TagList::TagList(TagFolderView* treeView, QWidget* parent)
+        : QWidget(parent), d(new TagListPriv())
+{
+    d->treeView     = treeView;
+
+    QVBoxLayout* layout = new QVBoxLayout();
+    d->addButton    = new QPushButton("(+)");
+    d->tagList      = new QListWidget(this);
+
+    d->tagList->addItem("All Tags");
+    d->tagList->setCurrentRow(0);
+
+    layout->addWidget(d->addButton);
+    layout->addWidget(d->tagList);
+
+    connect(d->addButton, SIGNAL(clicked()),
+            this, SLOT(slotAddPressed()));
+
+    this->setLayout(layout);
 }
 
 TagList::~TagList()
 {
+    delete d;
+}
+
+void TagList::slotAddPressed()
+{
+    QModelIndexList selected = d->treeView->selectionModel()->selectedIndexes();
+    /**
+     * Figure out how to implement multiple selection
+     */
+    if(selected.isEmpty())
+        return;
+
+    TAlbum* album = static_cast<TAlbum*>(d->treeView->albumForIndex(selected.first()));
+
+    d->tagList->addItem(album->title());
+    d->tagList->setCurrentRow(d->tagList->count()-1);
 
 }
 

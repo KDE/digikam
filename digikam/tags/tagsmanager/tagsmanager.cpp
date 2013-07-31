@@ -47,6 +47,8 @@
 /** local includes **/
 #include "tagsmanager.h"
 #include "tagpropwidget.h"
+#include "taglist.h"
+
 #include "tagfolderview.h"
 #include "ddragobjects.h"
 #include "searchtextbar.h"
@@ -81,7 +83,7 @@ public:
     }
 
     TagFolderView*  tagFolderView;
-    QLabel *        tagmngrLabel;
+    QLabel*         tagmngrLabel;
     QLabel*         tagPixmap;
     QLabel*         digikamPixmap;
     SearchTextBar*  searchBar;
@@ -96,7 +98,7 @@ public:
     KAction*        tagProperties;
     KAction*        addAction;
     KAction*        delAction;
-    QListView*      listView;
+    TagList*      listView;
 
     TagPropWidget*  tagPropWidget;
 
@@ -187,7 +189,7 @@ void TagsManager::setupUi(KDialog *Dialog)
      d->treeWindow = new KMainWindow(this);
      setupActions();
 
-     d->treeWinLayout = new QHBoxLayout(d->treeWindow);
+     d->treeWinLayout = new QHBoxLayout();
 
      d->treeWinLayout->addWidget(d->tagFolderView,9);
 
@@ -199,10 +201,7 @@ void TagsManager::setupUi(KDialog *Dialog)
      /** Tag List and Tag Manager Title **/
 
      QHBoxLayout* thirdLine = new QHBoxLayout();
-     d->listView = new QListView(Dialog);
-     d->listView->setObjectName(QString::fromUtf8("listView"));
-
-     d->listView->setContextMenuPolicy(Qt::CustomContextMenu);
+     d->listView = new TagList(d->tagFolderView,Dialog);
      d->listView->setMaximumWidth(300);
 
      QVBoxLayout* listLayout = new QVBoxLayout();
@@ -210,7 +209,7 @@ void TagsManager::setupUi(KDialog *Dialog)
      listLayout->addWidget(d->listView);
 
 
-     QWidget* treeCentralW = new QWidget(d->treeWindow);
+     QWidget* treeCentralW = new QWidget(this);
      treeCentralW->setLayout(d->treeWinLayout);
 
      d->treeWindow->setCentralWidget(treeCentralW);
@@ -251,11 +250,11 @@ void TagsManager::slotItemChanged()
 
 void TagsManager::slotAddAction()
 {
-    QModelIndexList selectedList = d->tagFolderView->selectionModel()->selectedIndexes();
+    QModelIndexList selected = d->tagFolderView->selectionModel()->selectedIndexes();
 
-    if(selectedList.isEmpty())
+    if(selected.isEmpty())
         return;
-    TAlbum* parent = static_cast<TAlbum*>(d->tagFolderView->albumForIndex(selectedList.at(0)));
+    TAlbum* parent = static_cast<TAlbum*>(d->tagFolderView->albumForIndex(selected.at(0)));
     QString      title, icon;
     QKeySequence ks;
 
@@ -272,13 +271,13 @@ void TagsManager::slotAddAction()
 void TagsManager::slotDeleteAction()
 {
 
-    QModelIndexList selectedList = d->tagFolderView->selectionModel()->selectedIndexes();
+    QModelIndexList selected = d->tagFolderView->selectionModel()->selectedIndexes();
 
     QString tagWithChildrens;
     QString tagWithImages;
     QMultiMap<int, TAlbum*> sortedTags;
 
-    foreach(QModelIndex index, selectedList)
+    foreach(QModelIndex index, selected)
     {
         if(!index.isValid())
             return;
