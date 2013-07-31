@@ -61,8 +61,8 @@ public:
         thumbsGenerator       = 0;
         fingerPrintsGenerator = 0;
         duplicatesFinder      = 0;
-        metadataSynchronizer  = 0;
         faceDetector          = 0;
+        metadataSynchronizer  = 0;
     }
 
     bool                running;
@@ -70,13 +70,13 @@ public:
     QTime               duration;
 
     MaintenanceSettings settings;
-    
+
     NewItemsFinder*        newItemsFinder;
     ThumbsGenerator*       thumbsGenerator;
     FingerPrintsGenerator* fingerPrintsGenerator;
     DuplicatesFinder*      duplicatesFinder;
-    MetadataSynchronizer*  metadataSynchronizer;
     FaceDetector*          faceDetector;
+    MetadataSynchronizer*  metadataSynchronizer;
 };
 
 MaintenanceMngr::MaintenanceMngr(QObject* const parent)
@@ -134,14 +134,14 @@ void MaintenanceMngr::slotToolCompleted(ProgressItem* tool)
         d->duplicatesFinder = 0;
         stage5();
     }
-    else if (tool == dynamic_cast<ProgressItem*>(d->metadataSynchronizer))
-    {
-        d->metadataSynchronizer = 0;
-        stage6();
-    }
     else if (tool == dynamic_cast<ProgressItem*>(d->faceDetector))
     {
         d->faceDetector = 0;
+        stage6();
+    }
+    else if (tool == dynamic_cast<ProgressItem*>(d->metadataSynchronizer))
+    {
+        d->metadataSynchronizer = 0;
         done();
     }
 }
@@ -152,8 +152,8 @@ void MaintenanceMngr::slotToolCanceled(ProgressItem* tool)
         tool == dynamic_cast<ProgressItem*>(d->thumbsGenerator)       ||
         tool == dynamic_cast<ProgressItem*>(d->fingerPrintsGenerator) || 
         tool == dynamic_cast<ProgressItem*>(d->duplicatesFinder)      ||
-        tool == dynamic_cast<ProgressItem*>(d->metadataSynchronizer)  ||
-        tool == dynamic_cast<ProgressItem*>(d->faceDetector))
+        tool == dynamic_cast<ProgressItem*>(d->faceDetector)          ||
+        tool == dynamic_cast<ProgressItem*>(d->metadataSynchronizer))
     {
         cancel();
     }
@@ -229,11 +229,11 @@ void MaintenanceMngr::stage5()
 {
     kDebug() << "stage5";
 
-    if (d->settings.metadata)
+    if (d->settings.faceManagement)
     {
-        d->metadataSynchronizer = new MetadataSynchronizer(MetadataSynchronizer::SyncDirection(d->settings.syncDirection));
-        d->metadataSynchronizer->setNotificationEnabled(false);
-        d->metadataSynchronizer->start();
+        d->faceDetector = new FaceDetector(d->settings.faceSettings);
+        d->faceDetector->setNotificationEnabled(false);
+        d->faceDetector->start();
     }
     else
     {
@@ -245,11 +245,11 @@ void MaintenanceMngr::stage6()
 {
     kDebug() << "stage6";
 
-    if (d->settings.faceDetection)
+    if (d->settings.metadataSync)
     {
-        d->faceDetector = new FaceDetector(d->settings.faceSettings);
-        d->faceDetector->setNotificationEnabled(false);
-        d->faceDetector->start();
+        d->metadataSynchronizer = new MetadataSynchronizer(MetadataSynchronizer::SyncDirection(d->settings.syncDirection));
+        d->metadataSynchronizer->setNotificationEnabled(false);
+        d->metadataSynchronizer->start();
     }
     else
     {

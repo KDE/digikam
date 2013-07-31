@@ -64,15 +64,15 @@ public:
     /// Similarity between items to compare, in percents.
     int              similarity;
 
-    /// Sync metadata and DB
-    bool             metadata;
-    /// Sync direction (image metadata <-> DB)
-    int              syncDirection;
-
     /// Scan for faces
-    bool             faceDetection;
+    bool             faceManagement;
     /// Face detection settings
     FaceScanSettings faceSettings;
+
+    /// Sync metadata and DB
+    bool             metadataSync;
+    /// Sync direction (image metadata <-> DB)
+    int              syncDirection;
 };
 
 //! kDebug() stream operator. Writes property @a s to the debug output in a nicely formatted way.

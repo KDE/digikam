@@ -35,9 +35,9 @@ MaintenanceSettings::MaintenanceSettings()
     scanFingerPrints = false;
     duplicates       = false;
     similarity       = 90;
-    metadata         = false;
+    faceManagement   = false;
+    metadataSync     = false;
     syncDirection    = MetadataSynchronizer::WriteFromDatabaseToFile;
-    faceDetection    = false;
 };
 
 MaintenanceSettings::~MaintenanceSettings()
@@ -54,10 +54,10 @@ QDebug operator<<(QDebug dbg, const MaintenanceSettings& s)
     dbg.nospace() << "scanFingerPrints    : " << s.scanFingerPrints;
     dbg.nospace() << "duplicates          : " << s.duplicates;
     dbg.nospace() << "similarity          : " << s.similarity;
-    dbg.nospace() << "metadata            : " << s.metadata;
-    dbg.nospace() << "syncDirection       : " << s.syncDirection;
-    dbg.nospace() << "facedetection       : " << s.faceDetection;
+    dbg.nospace() << "faceManagement      : " << s.faceManagement;
     dbg.nospace() << "faceScannedHandling : " << s.faceSettings.alreadyScannedHandling;
+    dbg.nospace() << "metadataSync        : " << s.metadataSync;
+    dbg.nospace() << "syncDirection       : " << s.syncDirection;
     return dbg.space();
 }
 
