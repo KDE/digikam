@@ -52,11 +52,12 @@ StartScanPage::StartScanPage(KAssistantDialog* const dlg)
                        "You can also read the manual online from the "
                        "<a href='http://www.digikam.org/docs'>digikam.org website</a>.</p>"
                        "<p>Press <b>Finish</b> to close this assistant. digiKam will scan your "
-                       "collection to register all items in the database.</p>"
+                       "collection to register all albums in the database. Items including in "
+                       "albums are collected after startup stage in background.</p>"
                        "<p><i>Note:</i> depending of your collection size, this operation can take a while. "
                        "If you cancel the scanning operation, it will start again at next digiKam session.</p>"
                        "<p>When scanning has completed, at next start-up, digiKam will only check your collection "
-                       "to identify new items - which is much faster. Scanning for images can also be started "
+                       "to identify new albuls - which is much faster. You can force digiKam to scan for new items "
                        "manually using the <b>Tools->Maintenance->Scan for new items</b> menu entry.</p>"
                        "</qt>"));
 
