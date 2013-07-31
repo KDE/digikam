@@ -313,7 +313,6 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
                         "a new standard used in digital photography, designed to replace IPTC.</p>"));
 
     explanation->setText(txt);
-    explanation->setFont(KGlobalSettings::smallestReadableFont());
 
     infoBoxGrid->addWidget(exiv2LogoLabel, 0, 0, 1, 1);
     infoBoxGrid->addWidget(explanation,    0, 1, 1, 2);
@@ -518,7 +517,6 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
                         "are not automatically applied to the image's metadata when read into digiKam's database.</p> "));
 
     nepoExplanation->setText(nepotxt);
-    nepoExplanation->setFont(KGlobalSettings::smallestReadableFont());
 
     nepoGrid->addWidget(nepoLogoLabel,   0, 0, 1, 1);
     nepoGrid->addWidget(nepoExplanation, 0, 1, 1, 2);

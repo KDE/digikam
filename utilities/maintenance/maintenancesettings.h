@@ -24,9 +24,14 @@
 #ifndef MAINTENANCESETTINGS_H
 #define MAINTENANCESETTINGS_H
 
+// Qt includes
+
+#include <QDebug>
+
 // Local includes
 
 #include "facescansettings.h"
+#include "metadatasynchronizer.h"
 
 namespace Digikam
 {
@@ -36,22 +41,8 @@ class MaintenanceSettings
 
 public:
 
-    MaintenanceSettings()
-    {
-        newItems         = false;
-        thumbnails       = false;
-        scanThumbs       = false;
-        fingerPrints     = false;
-        scanFingerPrints = false;
-        duplicates       = false;
-        similarity       = 90;
-        metadata         = false;
-        faceDetection    = false;
-    };
-
-    virtual ~MaintenanceSettings()
-    {
-    };
+    MaintenanceSettings();
+    virtual ~MaintenanceSettings();
 
 public:
 
@@ -73,14 +64,19 @@ public:
     /// Similarity between items to compare, in percents.
     int              similarity;
 
-    /// Sync image metadata with DB
-    bool             metadata;
-
     /// Scan for faces
-    bool             faceDetection;
+    bool             faceManagement;
     /// Face detection settings
     FaceScanSettings faceSettings;
+
+    /// Sync metadata and DB
+    bool             metadataSync;
+    /// Sync direction (image metadata <-> DB)
+    int              syncDirection;
 };
+
+//! kDebug() stream operator. Writes property @a s to the debug output in a nicely formatted way.
+QDebug operator<<(QDebug dbg, const MaintenanceSettings& s);
 
 }  // namespace Digikam
 

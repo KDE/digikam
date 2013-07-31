@@ -35,9 +35,10 @@ DBActionType::DBActionType()
 
 DBActionType::DBActionType(const DBActionType& actionType)
 {
-    m_isValue       = actionType.m_isValue;
-    m_ActionValue   = actionType.m_ActionValue;
+    m_isValue     = actionType.m_isValue;
+    m_ActionValue = actionType.m_ActionValue;
 }
+
 DBActionType::~DBActionType()
 {
     m_ActionValue.~QVariant();

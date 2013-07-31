@@ -105,8 +105,7 @@ SetupCollections::SetupCollections(KPageDialog* const dialog, QWidget* const par
                                          albumPathBox);
 #endif
     albumPathLabel->setWordWrap(true);
-    albumPathLabel->setFont(KGlobalSettings::smallestReadableFont());
-
+    
     d->collectionView  = new SetupCollectionTreeView(albumPathBox);
     d->collectionModel = new SetupCollectionModel(panel);
     d->collectionView->setModel(d->collectionModel);
