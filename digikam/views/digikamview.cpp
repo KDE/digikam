@@ -927,12 +927,13 @@ void DigikamView::slotAlbumsCleared()
 
 void DigikamView::slotAlbumHistoryBack(int steps)
 {
-    Album* album    = 0;
+    QList<Album*> album;
     QWidget* widget = 0;
 
-    d->albumHistory->back(&album, &widget, steps);
+    d->albumHistory->back(album, &widget, steps);
 
-    changeAlbumFromHistory(album, widget);
+    if(!(album.isEmpty()))
+        changeAlbumFromHistory(album.first(), widget);
 }
 
 void DigikamView::slotAlbumHistoryForward(int steps)
@@ -1133,7 +1134,7 @@ void DigikamView::slotAlbumSelected(QList<Album*> albums)
 
     if (d->useAlbumHistory)
     {
-        d->albumHistory->addAlbum(album, d->leftSideBar->getActiveTab());
+        d->albumHistory->addAlbum(albums, d->leftSideBar->getActiveTab());
     }
 
     d->parent->enableAlbumBackwardHistory(d->useAlbumHistory && !d->albumHistory->isBackwardEmpty());

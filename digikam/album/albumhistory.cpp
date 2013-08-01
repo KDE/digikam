@@ -158,15 +158,13 @@ void AlbumHistory::clearHistory()
     d->moving = false;
 }
 
-void AlbumHistory::addAlbum(Album* const album, QWidget* const widget)
+void AlbumHistory::addAlbum(QList<Album*> const albums, QWidget* const widget)
 {
-    if (!album || !widget || d->moving)
+    if (albums.isEmpty() || !widget || d->moving)
     {
         d->moving = false;
         return;
     }
-    QList<Album*> albums;
-    albums << album;
 
     // Same album as before in the history
     if (!d->backwardStack.isEmpty() && d->backwardStack.last().albums == albums)
@@ -295,10 +293,16 @@ void AlbumHistory::getBackwardHistory(QStringList& list) const
     {
         if (!(it->albums.isEmpty()))
         {
+            QString name;
             for(int iter = 0; iter < it->albums.size(); ++iter)
             {
-                list.push_front(it->albums.at(iter)->title());
+                name.append(it->albums.at(iter)->title());
+                if(iter+1 < it->albums.size())
+                {
+                    name.append("/");
+                }
             }
+            list.push_front(name);
         }
     }
 }
@@ -316,17 +320,23 @@ void AlbumHistory::getForwardHistory(QStringList& list) const
     {
         if (!(it->albums.isEmpty()))
         {
+            QString name;
             for(int iter = 0; iter < it->albums.size(); ++iter)
             {
-                list.append(it->albums.at(iter)->title());
+                name.append(it->albums.at(iter)->title());
+                if(iter+1 < it->albums.size())
+                {
+                    name.append("/");
+                }
             }
+            list.push_front(name);
         }
     }
 }
 
-void AlbumHistory::back(Album** const album, QWidget** const widget, unsigned int steps)
+void AlbumHistory::back(QList<Album*>& album, QWidget** const widget, unsigned int steps)
 {
-    *album  = 0;
+    //*album  = 0;
     *widget = 0;
 
     if (d->backwardStack.count() <= 1 || (int)steps > d->backwardStack.count())
@@ -346,11 +356,13 @@ void AlbumHistory::back(Album** const album, QWidget** const widget, unsigned in
     {
         return;
     }
-
+    /**
     if(!(d->backwardStack.last().albums.isEmpty()))
     {
         *album  = d->backwardStack.last().albums.first();
     }
+    */
+    album.append(d->backwardStack.last().albums);
     *widget = d->backwardStack.last().widget;
 }
 
