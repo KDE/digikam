@@ -1823,29 +1823,16 @@ AlbumList AlbumManager::allDAlbums() const
 
     return list;
 }
-/**
-void AlbumManager::setCurrentAlbum(Album* album)
-{
-    if (d->currentAlbum == album)
-    {
-        return;
-    }
 
-    d->currentAlbum = album;
-    emit signalAlbumCurrentChanged(album);
-}
-*/
-/**
-Album* AlbumManager::currentAlbum() const
-{
-    return d->currentAlbum;
-}
-*/
 void AlbumManager::setCurrentAlbums(QList<Album*> albums)
 {
-    kDebug() << "************************** Set current Albums";
+
     if(albums.isEmpty())
         return;
+    /**
+     * Sort is needed to identify selection correctly, ex AlbumHistory
+     */
+    qSort(albums.begin(),albums.end());
     d->currentAlbums.clear();
     d->currentAlbums+=albums;
     emit signalAlbumCurrentChanged(d->currentAlbums);
@@ -1853,7 +1840,6 @@ void AlbumManager::setCurrentAlbums(QList<Album*> albums)
 
 AlbumList AlbumManager::currentAlbums() const
 {
-    //kDebug() << "======================================= Get current Albums";
     return d->currentAlbums;
 }
 

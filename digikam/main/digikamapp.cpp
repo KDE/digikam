@@ -1378,7 +1378,6 @@ void DigikamApp::slotAlbumSelected(bool val)
     // NOTE: val is true when a PAlbum is selected.
 
     QList<Album*> albumList = AlbumManager::instance()->currentAlbums();
-    kDebug() << "+++++++++++++++++++++++++++ Get current Albums";
     Album* album = 0;
 
     if(!albumList.isEmpty())
@@ -1441,7 +1440,6 @@ void DigikamApp::slotAlbumSelected(bool val)
 void DigikamApp::slotTagSelected(bool val)
 {
     QList<Album*> albumList = AlbumManager::instance()->currentAlbums();
-    kDebug() << "+++++++++++++++++++++++++++ Get current Albums";
     Album* album = 0;
 
     if(!albumList.isEmpty())

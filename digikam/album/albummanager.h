@@ -179,18 +179,6 @@ public:
     AlbumList allFAlbums() const;
 
     /**
-    * set the current album to @p album. Call this from views which show
-    * listing of albums. This also causes it to fire the signal
-    * signalAlbumCurrentChanged()
-    */
-    //void      setCurrentAlbum(Album* album);
-
-    /**
-    * @returns the current album
-    */
-    //Album*    currentAlbum() const;
-
-    /**
     * set current album to @p albums. It's similar to setCurrentAlbum,
     * but suport multiple selected albums
     */

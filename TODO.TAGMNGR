@@ -8,10 +8,10 @@ DONE:
   7. Port current Album to QList<Album*>
   8. Port ImageAlbumModel to QList<Album*>
   9. Port HistoryItem to QList<Album*>
+  10. Fix AlbumHistory: slotAlbumSelected, slotCurrentAlbumChanged, slot currentChanged, slotImagechanged
 
 BUGS:
-  1. Fix AlbumHistory: slotAlbumSelected, slotCurrentAlbumChanged, slot currentChanged, slotImagechanged
-  2. Tag Properties don't save changes
+  1. Tag Properties don't save changes
 
 TODO:
   1. Patch views to support multiple tags
