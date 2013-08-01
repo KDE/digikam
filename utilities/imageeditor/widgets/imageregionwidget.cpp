@@ -69,17 +69,16 @@ public:
     QPolygon    hightlightPoints;
     
     ImageRegionItem* item;
-    
     ImageIface* iface;
 };
 
 ImageRegionWidget::ImageRegionWidget(QWidget* const parent)
-    : GraphicsDImgView(parent), d(new Private)
+    : GraphicsDImgView(parent), d_ptr(new Private)
 {
-    d->iface = new ImageIface;
-    d->item = new ImageRegionItem();
-    d->item->setImage(d->iface->original()->copy());
-    setItem(d->item);
+    d_ptr->iface = new ImageIface;
+    d_ptr->item = new ImageRegionItem(this);
+    d_ptr->item->setImage(d_ptr->iface->original()->copy());
+    setItem(d_ptr->item);
 
     setAttribute(Qt::WA_DeleteOnClose);
     setFrameStyle(QFrame::NoFrame);
@@ -101,77 +100,78 @@ ImageRegionWidget::ImageRegionWidget(QWidget* const parent)
 
 ImageRegionWidget::~ImageRegionWidget()
 {
-    delete d->iface;
-    delete d->item;
-    delete d;
+    delete d_ptr->iface;
+    delete d_ptr->item;
+    delete d_ptr;
 }
 
 void ImageRegionWidget::setHighLightPoints(const QPolygon& pointsList)
 {
-    d->item->setHighLightPoints(pointsList);
-    //repaintContents(false);
+    d_ptr->item->setHighLightPoints(pointsList);
     update();
 }
 
 void ImageRegionWidget::setCapturePointMode(bool b)
 {
-    d->capturePtMode = b;
+    d_ptr->capturePtMode = b;
     viewport()->setMouseTracking(b);
 
     if (b)
     {
-        d->oldRenderingPreviewMode = d->renderingPreviewMode;
+        d_ptr->oldRenderingPreviewMode = d_ptr->renderingPreviewMode;
         slotPreviewModeChanged(PreviewToolBar::PreviewOriginalImage);
         viewport()->setCursor(QCursor(SmallIcon("color-picker", 32), 1, 28));
     }
     else
     {
-        slotPreviewModeChanged(d->oldRenderingPreviewMode);
+        slotPreviewModeChanged(d_ptr->oldRenderingPreviewMode);
         viewport()->unsetCursor();
     }
 }
 
 bool ImageRegionWidget::capturePointMode() const
 {
-    return d->capturePtMode;
+    return d_ptr->capturePtMode;
 }
 
 void ImageRegionWidget::slotZoomFactorChanged()
 {
-    qDebug()<<"ImageRegionWidget::slotZoomFactorChanged()";
     emit signalResized();
     emit signalContentsMovedEvent(true);
 }
 
 void ImageRegionWidget::slotPreviewModeChanged(int mode)
 {
-    d->renderingPreviewMode = mode;
+    d_ptr->renderingPreviewMode = mode;
+    d_ptr->item->setRenderingPreviewMode(mode);
     slotZoomFactorChanged();
+    update();
 }
 
 double ImageRegionWidget::zoomFactor() const
 {
-    qDebug()<<"ImageRegionWidget::zoomFactor()";
-    return d->item->zoomSettings()->zoomFactor();
+    //qDebug()<<"ImageRegionWidget::zoomFactor()";
+    return d_ptr->item->zoomSettings()->zoomFactor();
 }
 
 QRect ImageRegionWidget::getOriginalImageRegionToRender() const
 {
-     QRect r = d->item->getImageRegion();
+    QRect r = d_ptr->item->getImageRegion();
 
-     int x = (int)((double)r.x() / zoomFactor());
-     int y = (int)((double)r.y() / zoomFactor());
-     int w = (int)((double)r.width() / zoomFactor());
-     int h = (int)((double)r.height() / zoomFactor());
+    int x = (int)((double)r.x() / zoomFactor());
+    int y = (int)((double)r.y() / zoomFactor());
+    int w = (int)((double)r.width() / zoomFactor());
+    int h = (int)((double)r.height() / zoomFactor());
 
-     QRect rect(x, y, w, h);
+    QRect rect(x, y, w, h);
     return (rect);
 }
 
 void ImageRegionWidget::setPreviewImage(const DImg& img)
 {
+    qDebug()<<"ImageRegionWidget::setPreviewImage";
     DImg image = img;
-    QRect r    = d->item->getImageRegion();
+    QRect r    = d_ptr->item->getImageRegion();
     image.resize(r.width(), r.height());
 
     // Because image plugins are tool which only work on image data, the DImg container
@@ -180,23 +180,23 @@ void ImageRegionWidget::setPreviewImage(const DImg& img)
     // However, some plugins may set a profile on the preview image, which we accept of course.
     if (image.getIccProfile().isNull())
     {
-        image.setIccProfile(d->item->image().getIccProfile());
+        image.setIccProfile(d_ptr->item->image().getIccProfile());
     }
     
-    d->item->setTargetImage(image);
+    d_ptr->item->setTargetImage(image);
     update();
 
-//     d->pixmapRegion = d->iface->convertToPixmap(image);
+//     d_ptr->pixmapRegion = d_ptr->iface->convertToPixmap(image);
 //     repaintContents(false);
 }
 
 DImg ImageRegionWidget::getOriginalRegionImage(bool useDownscaledImage) const
 {
-    DImg image = d->item->image().copy(getOriginalImageRegionToRender());
+    DImg image = d_ptr->item->image().copy(getOriginalImageRegionToRender());
 
     if (useDownscaledImage)
     {
-        QRect r = d->item->getImageRegion();
+        QRect r = d_ptr->item->getImageRegion();
         image.resize(r.width(), r.height());
     }
 
@@ -222,44 +222,46 @@ void ImageRegionWidget::slotOriginalImageRegionChanged(bool targetDone)
 
 void ImageRegionWidget::exposureSettingsChanged()
 {
+    qDebug()<<"ImageRegionWidget::exposureSettingsChanged()";
     //clearCache();
     //viewport()->update();
+    update();
 }
 
 void ImageRegionWidget::ICCSettingsChanged()
 {
+    qDebug()<<"ImageRegionWidget::ICCSettingsChanged()";
     //clearCache();
     //viewport()->update();
+    update();
 }
 
 void ImageRegionWidget::toggleFitToWindow()
 {
     qDebug("ImageRegionWidget::toggleFitToWindow");
-/*    d->autoZoom = !d->autoZoom;
+/*    d_ptr->autoZoom = !d_ptr->autoZoom;
 
-    if (d->autoZoom)
+    if (d_ptr->autoZoom)
     {
         updateAutoZoom();
     }
     else
     {
-        d->zoom       = 1.0;
-        d->zoomWidth  = (int)(previewWidth());
-        d->zoomHeight = (int)(previewHeight());
+        d_ptr->zoom       = 1.0;
+        d_ptr->zoomWidth  = (int)(previewWidth());
+        d_ptr->zoomHeight = (int)(previewHeight());
     }
 
     updateContentsSize();
-    zoomFactorChanged(d->zoom);
+    zoomFactorChanged(d_ptr->zoom);
     viewport()->update();*/
-    //emit signalZoomFactorChanged(d->zoomSettings()->zoomFactor());
+    //emit signalZoomFactorChanged(d_ptr->zoomSettings()->zoomFactor());
     update();
 }
 
 void ImageRegionWidget::setZoomFactor(double zoom)
 {
-    //qDebug("ImageRegionWidget::setZoomFactor");
-    //qDebug()<<zoom;
-    d->item->zoomSettings()->setZoomFactor(zoom);
+    d_ptr->item->zoomSettings()->setZoomFactor(zoom);
 }
 
 }  // namespace Digikam

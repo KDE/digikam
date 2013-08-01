@@ -47,6 +47,7 @@ namespace Digikam
 {
 
 class ImageZoomSettings;
+class GraphicsDImgViewPrivate;
 
 class DIGIKAM_EXPORT ImageRegionWidget : public GraphicsDImgView
 {
@@ -107,7 +108,7 @@ private Q_SLOTS:
 private:
 
     class Private;
-    Private* const d;
+    Private* const d_ptr;
 };
 
 }  // namespace Digikam

@@ -33,6 +33,7 @@
 #include "graphicsdimgitem.h"
 #include "digikam_export.h"
 #include "dimg.h"
+#include "imageregionwidget.h"
 
 namespace Digikam
 {
@@ -44,13 +45,17 @@ class DIGIKAM_EXPORT ImageRegionItem : public GraphicsDImgItem
 
 public:
 
-    ImageRegionItem();
+    ImageRegionItem(ImageRegionWidget* view);
     virtual ~ImageRegionItem();
     
     void setTargetImage(const DImg& img);
     void setHighLightPoints(const QPolygon& pointsList);
+    void setRenderingPreviewMode(int mode);
+    void paintExtraData(QPainter* p);
     QRect getImageRegion();
     void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget);
+    void hoverEnterEvent ( QGraphicsSceneHoverEvent * );
+    void hoverLeaveEvent ( QGraphicsSceneHoverEvent * );
 
 private:
 
