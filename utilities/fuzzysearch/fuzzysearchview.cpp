@@ -531,7 +531,7 @@ SAlbum* FuzzySearchView::currentAlbum() const
 
 void FuzzySearchView::setCurrentAlbum(SAlbum* const album)
 {
-    d->searchTreeView->setCurrentAlbum(album);
+    d->searchTreeView->setCurrentAlbums(QList<Album*>() << album);
 }
 
 void FuzzySearchView::newDuplicatesSearch(Album* const album)
@@ -806,7 +806,7 @@ void FuzzySearchView::createNewFuzzySearchAlbumFromSketch(const QString& name, b
 {
     AlbumManager::instance()->setCurrentAlbums(QList<Album*>());
     d->sketchSAlbum = d->searchModificationHelper->createFuzzySearchFromSketch(name, d->sketchWidget, d->resultsSketch->value(), force);
-    d->searchTreeView->setCurrentAlbum(d->sketchSAlbum);
+    d->searchTreeView->setCurrentAlbums(QList<Album*>() << d->sketchSAlbum);
 }
 
 void FuzzySearchView::slotClearSketch()
@@ -927,7 +927,7 @@ void FuzzySearchView::createNewFuzzySearchAlbumFromImage(const QString& name, bo
 {
     AlbumManager::instance()->setCurrentAlbums(QList<Album*>());
     d->imageSAlbum = d->searchModificationHelper->createFuzzySearchFromImage(name, d->imageInfo, d->levelImage->value() / 100.0, force);
-    d->searchTreeView->setCurrentAlbum(d->imageSAlbum);
+    d->searchTreeView->setCurrentAlbums(QList<Album*>() << d->imageSAlbum);
 }
 
 void FuzzySearchView::slotCheckNameEditImageConditions()

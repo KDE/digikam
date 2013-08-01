@@ -217,7 +217,7 @@ private:
     void setupConnections();
     void loadViewState();
     void saveViewState();
-    void changeAlbumFromHistory(Album* const album, QWidget* const widget);
+    void changeAlbumFromHistory(QList<Album*> album, QWidget* const widget);
     void slideShow(const ImageInfoList& infoList);
 
 private Q_SLOTS:

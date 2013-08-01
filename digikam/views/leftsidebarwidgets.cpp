@@ -142,9 +142,9 @@ void AlbumFolderViewSideBarWidget::applySettings()
     d->albumFolderView->setEnableToolTips(settings->getShowAlbumToolTips());
 }
 
-void AlbumFolderViewSideBarWidget::changeAlbumFromHistory(Album* album)
+void AlbumFolderViewSideBarWidget::changeAlbumFromHistory(QList<Album*> album)
 {
-    d->albumFolderView->setCurrentAlbum(dynamic_cast<PAlbum*>(album));
+    d->albumFolderView->setCurrentAlbums(album);
 }
 
 AlbumPointer<PAlbum> AlbumFolderViewSideBarWidget::currentAlbum() const
@@ -155,7 +155,7 @@ AlbumPointer<PAlbum> AlbumFolderViewSideBarWidget::currentAlbum() const
 void AlbumFolderViewSideBarWidget::setCurrentAlbum(PAlbum* album)
 {
     // Change the current album in list view.
-    d->albumFolderView->setCurrentAlbum(album);
+    d->albumFolderView->setCurrentAlbums(QList<Album*>() << album);
 }
 
 QPixmap AlbumFolderViewSideBarWidget::getIcon()
@@ -246,9 +246,9 @@ void TagViewSideBarWidget::applySettings()
 {
 }
 
-void TagViewSideBarWidget::changeAlbumFromHistory(Album* album)
+void TagViewSideBarWidget::changeAlbumFromHistory(QList<Album*> album)
 {
-    d->tagFolderView->setCurrentAlbum(dynamic_cast<TAlbum*>(album));
+    d->tagFolderView->setCurrentAlbums(album);
 }
 
 AlbumPointer<TAlbum> TagViewSideBarWidget::currentAlbum() const
@@ -268,7 +268,7 @@ QString TagViewSideBarWidget::getCaption()
 
 void TagViewSideBarWidget::setCurrentAlbum(TAlbum* album)
 {
-    d->tagFolderView->setCurrentAlbum(album);
+    d->tagFolderView->setCurrentAlbums(QList<Album*>() << album);
 }
 
 void TagViewSideBarWidget::slotOpenTagManager()
@@ -331,9 +331,9 @@ void DateFolderViewSideBarWidget::applySettings()
 {
 }
 
-void DateFolderViewSideBarWidget::changeAlbumFromHistory(Album* album)
+void DateFolderViewSideBarWidget::changeAlbumFromHistory(QList<Album*> album)
 {
-    d->dateFolderView->changeAlbumFromHistory(dynamic_cast<DAlbum*>(album));
+    d->dateFolderView->changeAlbumFromHistory(dynamic_cast<DAlbum*>(album.first()));
 }
 
 AlbumPointer<DAlbum> DateFolderViewSideBarWidget::currentAlbum() const
@@ -671,9 +671,9 @@ void TimelineSideBarWidget::applySettings()
     // nothing to do here right now
 }
 
-void TimelineSideBarWidget::changeAlbumFromHistory(Album* album)
+void TimelineSideBarWidget::changeAlbumFromHistory(QList<Album*> album)
 {
-    d->timeLineFolderView->setCurrentAlbum(dynamic_cast<SAlbum*>(album));
+    d->timeLineFolderView->setCurrentAlbums(album);
 }
 
 QPixmap TimelineSideBarWidget::getIcon()
@@ -922,9 +922,9 @@ void SearchSideBarWidget::applySettings()
 {
 }
 
-void SearchSideBarWidget::changeAlbumFromHistory(Album* album)
+void SearchSideBarWidget::changeAlbumFromHistory(QList<Album*> album)
 {
-    d->searchTreeView->setCurrentAlbum(dynamic_cast<SAlbum*>(album));
+    d->searchTreeView->setCurrentAlbums(album);
 }
 
 QPixmap SearchSideBarWidget::getIcon()
@@ -1010,9 +1010,9 @@ void FuzzySearchSideBarWidget::applySettings()
 {
 }
 
-void FuzzySearchSideBarWidget::changeAlbumFromHistory(Album* album)
+void FuzzySearchSideBarWidget::changeAlbumFromHistory(QList<Album*> album)
 {
-    SAlbum* salbum = dynamic_cast<SAlbum*>(album);
+    SAlbum* salbum = dynamic_cast<SAlbum*>(album.first());
     d->fuzzySearchView->setCurrentAlbum(salbum);
 }
 
@@ -1104,9 +1104,9 @@ void GPSSearchSideBarWidget::applySettings()
 {
 }
 
-void GPSSearchSideBarWidget::changeAlbumFromHistory(Album* album)
+void GPSSearchSideBarWidget::changeAlbumFromHistory(QList<Album*> album)
 {
-    d->gpsSearchView->changeAlbumFromHistory(dynamic_cast<SAlbum*>(album));
+    d->gpsSearchView->changeAlbumFromHistory(dynamic_cast<SAlbum*>(album.first()));
 }
 
 QPixmap GPSSearchSideBarWidget::getIcon()
@@ -1217,7 +1217,7 @@ void PeopleSideBarWidget::setActive(bool active)
 
     if (active)
     {
-        d->tagFolderView->setCurrentAlbum(d->tagFolderView->currentAlbum());
+        d->tagFolderView->setCurrentAlbums(QList<Album*>() << d->tagFolderView->currentAlbum());
     }
 }
 
@@ -1235,9 +1235,9 @@ void PeopleSideBarWidget::applySettings()
 {
 }
 
-void PeopleSideBarWidget::changeAlbumFromHistory(Album* album)
+void PeopleSideBarWidget::changeAlbumFromHistory(QList<Album*> album)
 {
-    d->tagFolderView->setCurrentAlbum(dynamic_cast<TAlbum*>(album));
+    d->tagFolderView->setCurrentAlbums(album);
 }
 
 void PeopleSideBarWidget::slotScanForFaces()

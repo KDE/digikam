@@ -125,7 +125,7 @@ void AddTagsComboBox::setParentTag(TAlbum* album)
 
 void AddTagsComboBox::setCurrentTag(TAlbum* album)
 {
-    view()->setCurrentAlbum(album);
+    view()->setCurrentAlbums(QList<Album*>() << album);
     slotViewIndexActivated(view()->currentIndex());
 }
 

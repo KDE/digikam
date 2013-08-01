@@ -927,29 +927,28 @@ void DigikamView::slotAlbumsCleared()
 
 void DigikamView::slotAlbumHistoryBack(int steps)
 {
-    QList<Album*> album;
+    QList<Album*> albums;
     QWidget* widget = 0;
 
-    d->albumHistory->back(album, &widget, steps);
+    d->albumHistory->back(albums, &widget, steps);
 
-    if(!(album.isEmpty()))
-        changeAlbumFromHistory(album.first(), widget);
+    changeAlbumFromHistory(albums, widget);
 }
 
 void DigikamView::slotAlbumHistoryForward(int steps)
 {
-    Album* album    = 0;
+    QList<Album*> albums;
     QWidget* widget = 0;
 
-    d->albumHistory->forward(&album, &widget, steps);
+    d->albumHistory->forward(albums, &widget, steps);
 
-    changeAlbumFromHistory(album, widget);
+    changeAlbumFromHistory(albums , widget);
 }
 
 // TODO update, use SideBarWidget instead of QWidget
-void DigikamView::changeAlbumFromHistory(Album* const album, QWidget* const widget)
+void DigikamView::changeAlbumFromHistory(QList<Album*> album, QWidget* const widget)
 {
-    if (album && widget)
+    if (!(album.isEmpty()) && widget)
     {
         // TODO update, temporary casting until signature is changed
         SidebarWidget* const sideBarWidget = dynamic_cast<SidebarWidget*>(widget);

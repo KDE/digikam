@@ -223,7 +223,7 @@ public Q_SLOTS:
      * @param selectInAlbumManager the album will be set as current album, if both
      * this parameter is true and setAlbumManagerCurrentAlbum() was set to true.
      */
-    void setCurrentAlbum(Album* album, bool selectInAlbumManager = true);
+    void setCurrentAlbums(QList<Album*> albums, bool selectInAlbumManager = true);
 
     /**
      * Adapt the column sizes to the contents of the tree view.
@@ -517,7 +517,7 @@ public:
 
 public Q_SLOTS:
 
-    void setCurrentAlbum(PAlbum* album, bool selectInAlbumManager = true);
+    void setCurrentAlbums(QList<Album*> albums, bool selectInAlbumManager = true);
     void setCurrentAlbum(int albumId, bool selectInAlbumManager = true);
 };
 
@@ -551,7 +551,7 @@ public:
 
 public Q_SLOTS:
 
-    void setCurrentAlbum(TAlbum* tag, bool selectInAlbumManager = true);
+    void setCurrentAlbums(QList<Album*> tags, bool selectInAlbumManager = true);
     void setCurrentAlbum(int tagId, bool selectInAlbumManager = true);
 
 Q_SIGNALS:
@@ -587,7 +587,7 @@ public:
 
 public Q_SLOTS:
 
-    void setCurrentAlbum(SAlbum* album, bool selectInAlbumManager = true);
+    void setCurrentAlbums(QList<Album*> albums, bool selectInAlbumManager = true);
     void setCurrentAlbum(int searchId, bool selectInAlbumManager = true);
 
 protected:
@@ -614,7 +614,7 @@ public:
 
 public Q_SLOTS:
 
-    void setCurrentAlbum(DAlbum* album, bool selectInAlbumManager = true);
+    void setCurrentAlbums(QList<Album*> albums, bool selectInAlbumManager = true);
     void setCurrentAlbum(int dateId, bool selectInAlbumManager = true);
 };
 

@@ -382,9 +382,9 @@ void AlbumHistory::back(QList<Album*>& album, QWidget** const widget, unsigned i
     *widget = d->backwardStack.last().widget;
 }
 
-void AlbumHistory::forward(Album** const album, QWidget** const widget, unsigned int steps)
+void AlbumHistory::forward(QList<Album*>& album, QWidget** const widget, unsigned int steps)
 {
-    *album  = 0;
+
     *widget = 0;
 
     if (d->forwardStack.isEmpty() || (int)steps > d->forwardStack.count())
@@ -399,10 +399,7 @@ void AlbumHistory::forward(Album** const album, QWidget** const widget, unsigned
         return;
     }
 
-    if(!(d->backwardStack.last().albums.isEmpty()))
-    {
-        *album  = d->backwardStack.last().albums.first();
-    }
+    album.append(d->backwardStack.last().albums);
     *widget = d->backwardStack.last().widget;
 }
 
