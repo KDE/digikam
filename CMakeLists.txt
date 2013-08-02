@@ -1427,6 +1427,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album/albummanager.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album/albummodificationhelper.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album/albumpropsedit.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album/albumselectors.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album/albumselectcombobox.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album/albumselectdialog.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album/albumselectiontreeview.cpp
