@@ -124,6 +124,7 @@ DImgPreviewItem* GraphicsDImgView::previewItem() const
 
 bool GraphicsDImgView::movingInProgress()
 {
+    //qDebug()<<"GraphicsDImgView::movingInProgress() "<<d->movingInProgress;
     return d->movingInProgress;
 }
 
@@ -329,6 +330,7 @@ void GraphicsDImgView::startPanning(const QPoint& pos)
 {
     if (horizontalScrollBar()->maximum() || verticalScrollBar()->maximum())
     {
+        //qDebug()<<"GraphicsDImgView::startPanning";
         d->movingInProgress = true;
         d->mousePressPos    = pos;
         d->panningScrollPos = QPoint(horizontalScrollBar()->value(), verticalScrollBar()->value());
@@ -347,6 +349,7 @@ void GraphicsDImgView::continuePanning(const QPoint& pos)
 
 void GraphicsDImgView::finishPanning()
 {
+   // qDebug()<<"GraphicsDImgView::finishPanning";
     emit contentsMoved(true);
     viewport()->unsetCursor();
 }
@@ -475,6 +478,7 @@ void GraphicsDImgView::slotPanIconSelectionMoved(const QRect& imageRect, bool b)
 
 void GraphicsDImgView::slotContentsMoved()
 {
+    qDebug()<<"GraphicsDImgView::slotContentsMoved()";
     emit contentsMoving(horizontalScrollBar()->value(), verticalScrollBar()->value());
 }
 
