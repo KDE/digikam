@@ -159,7 +159,7 @@ public:
 
     /**
      * Retrieve the ShowfotoItemInfo object from the data() function of the given index
-     * The index may be from a QSortFilterProxyModel as long as an ImportImageModel is at the end.
+     * The index may be from a QSortFilterProxyModel as long as an ShowfotoImageModel is at the end.
      */
     static ShowfotoItemInfo retrieveShowfotoItemInfo(const QModelIndex& index);
     static qlonglong        retrieveShowfotoItemId(const QModelIndex& index);

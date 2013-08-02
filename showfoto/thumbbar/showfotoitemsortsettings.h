@@ -6,7 +6,7 @@
  * Date        : 29-07-2013
  * Description : Sort settings for showfoto item infos
  *
- * Copyright (C) 2012 by Mohamed Anwer <moahmmed dot ahmed dot anwer at gmail dot com>
+ * Copyright (C) 2013 by Mohamed Anwer <moahmmed dot ahmed dot anwer at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General

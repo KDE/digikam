@@ -851,7 +851,7 @@ void ShowfotoImageModel::removeRowPairs(const QList<QPair<int, int> >& toRemove)
     }
 }
 
-// ------------ ImportImageModelIncrementalUpdater ------------
+// ------------ ShowfotoImageModelIncrementalUpdater ------------
 
 ShowfotoImageModelIncrementalUpdater::ShowfotoImageModelIncrementalUpdater(ShowfotoImageModel::Private* const d)
 {

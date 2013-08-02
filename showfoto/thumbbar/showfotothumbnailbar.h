@@ -6,7 +6,7 @@
  * Date        : 02-08-2013
  * Description : Thumbnail bar for Showfoto
  *
- * Copyright (C) 2013 by Mohamed Anwer <wazery at ubuntu dot com>
+ * Copyright (C) 2013 by Mohamed Anwer <mohammed dot ahmed dot anwer at gmail dot com>
  *
  * This program is free software you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -49,7 +49,7 @@ public:
     void setModels(ShowfotoImageModel* model, ShowfotoSortFilterModel* filterModel);
 
     /**
-     * This installs a duplicate filter model, if the ImportImageModel may contain duplicates.
+     * This installs a duplicate filter model, if the ShowfotoImageModel may contain duplicates.
      * Otherwise, just use setModels().
      */
     void setModelsFiltered(ShowfotoImageModel* model, ShowfotoSortFilterModel* filterModel);

@@ -1,3 +1,26 @@
+/* ============================================================
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2013-08-01
+ * Description : Qt item view for images - the delegate
+ *
+ * Copyright (C) 2013 by Mohamed Anwer <mohammed dot ahmed dot anwer at gmail dot com>
+ *
+ * This program is free software; you can redistribute it
+ * and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation;
+ * either version 2, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * ============================================================ */
+
 #ifndef SHOWFOTODELEGATE_H
 #define SHOWFOTODELEGATE_H
 
@@ -48,14 +71,14 @@ public:
     virtual QPixmap pixmapForDrag(const QStyleOptionViewItem& option, const QList<QModelIndex>& indexes) const;
 
     /**
-     * Retrieve the thumbnail pixmap in given size for the ImportImageModel::ThumbnailRole for
-     * the given index from the given index, which must adhere to ImportThumbnailModel semantics.
+     * Retrieve the thumbnail pixmap in given size for the ShowfotoImageModel::ThumbnailRole for
+     * the given index from the given index, which must adhere to ShowfotoThumbnailModel semantics.
      */
     static QPixmap retrieveThumbnailPixmap(const QModelIndex& index, int thumbnailSize);
 
 public:
 
-    // Declared as public because of use in ImportNormalDelegate class.
+    // Declared as public because of use in ShowfotoNormalDelegate class.
     class ShowfotoDelegatePrivate;
 
 protected:
