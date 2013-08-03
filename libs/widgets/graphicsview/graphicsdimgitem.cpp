@@ -172,6 +172,12 @@ void GraphicsDImgItem::sizeHasChanged()
     emit imageSizeChanged(d->zoomSettings.zoomedSize());
 }
 
+void GraphicsDImgItem::clearCache()
+{
+    Q_D(GraphicsDImgItem);
+    d->cachedPixmaps.clear();
+}
+
 const ImageZoomSettings* GraphicsDImgItem::zoomSettings() const
 {
     Q_D(const GraphicsDImgItem);

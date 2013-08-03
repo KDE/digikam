@@ -84,12 +84,15 @@ QRect ImageRegionItem::getImageRegion()
 
 void ImageRegionItem::setTargetImage(const DImg& img)
 {
+    qDebug()<<"setTargetImage";
     d_ptr->targetImage = img;
+    update();
 }
 
 void ImageRegionItem::setRenderingPreviewMode(int mode)
 {
     d_ptr->renderingPreviewMode = mode;
+    update();
 }
 
 void ImageRegionItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
@@ -181,6 +184,7 @@ void ImageRegionItem::paintExtraData(QPainter* p)
                  (d_ptr->renderingPreviewMode == PreviewToolBar::PreviewToggleOnMouseOver && d_ptr->onMouseMovePreviewToggled))
         {
             p->drawPixmap(d_ptr->drawRect.x(), d_ptr->drawRect.y(), d_ptr->targetPix, 0, 0, d_ptr->drawRect.width(), d_ptr->drawRect.height());
+            qDebug()<<"target image drawn";
 
             if (d_ptr->renderingPreviewMode == PreviewToolBar::PreviewTargetImage ||
                 d_ptr->renderingPreviewMode == PreviewToolBar::PreviewToggleOnMouseOver)
@@ -266,20 +270,18 @@ void ImageRegionItem::paintExtraData(QPainter* p)
                 }
             }
         }
-
-        p->end();
     }
 }
 
 void ImageRegionItem::hoverEnterEvent ( QGraphicsSceneHoverEvent * )
 {
-    d_ptr->onMouseMovePreviewToggled = true;
+    d_ptr->onMouseMovePreviewToggled = false;
     update();
 }
 
 void ImageRegionItem::hoverLeaveEvent ( QGraphicsSceneHoverEvent * )
 {
-    d_ptr->onMouseMovePreviewToggled = false;
+    d_ptr->onMouseMovePreviewToggled = true;
     update();
 }
 

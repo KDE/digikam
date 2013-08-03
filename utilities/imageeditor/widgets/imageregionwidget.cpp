@@ -150,7 +150,6 @@ void ImageRegionWidget::slotPreviewModeChanged(int mode)
 
 double ImageRegionWidget::zoomFactor() const
 {
-    //qDebug()<<"ImageRegionWidget::zoomFactor()";
     return d_ptr->item->zoomSettings()->zoomFactor();
 }
 
@@ -158,7 +157,7 @@ QRect ImageRegionWidget::getOriginalImageRegionToRender() const
 {
     QRect r = d_ptr->item->getImageRegion();
 
-    int x = (int)((double)r.x() / zoomFactor());
+    int x = (int)((double)r.x() / zoomFactor());    viewport()->update();
     int y = (int)((double)r.y() / zoomFactor());
     int w = (int)((double)r.width() / zoomFactor());
     int h = (int)((double)r.height() / zoomFactor());
@@ -169,7 +168,6 @@ QRect ImageRegionWidget::getOriginalImageRegionToRender() const
 
 void ImageRegionWidget::setPreviewImage(const DImg& img)
 {
-    qDebug()<<"ImageRegionWidget::setPreviewImage";
     DImg image = img;
     QRect r    = d_ptr->item->getImageRegion();
     image.resize(r.width(), r.height());
@@ -184,10 +182,6 @@ void ImageRegionWidget::setPreviewImage(const DImg& img)
     }
     
     d_ptr->item->setTargetImage(image);
-    update();
-
-//     d_ptr->pixmapRegion = d_ptr->iface->convertToPixmap(image);
-//     repaintContents(false);
 }
 
 DImg ImageRegionWidget::getOriginalRegionImage(bool useDownscaledImage) const
@@ -205,7 +199,6 @@ DImg ImageRegionWidget::getOriginalRegionImage(bool useDownscaledImage) const
 
 void ImageRegionWidget::slotPanIconSelectionMoved(const QRect& rect, bool targetDone)
 {
-    qDebug("ImageRegionWidget::slotPanIconSelectionMoved");
     GraphicsDImgView::slotPanIconSelectionMoved(rect, targetDone);
     //setContentsPosition((int)(rect.x()*zoomFactor()), (int)(rect.y()*zoomFactor()), targetDone);
     scrollContentsBy((int)(rect.x()*zoomFactor()), (int)(rect.y()*zoomFactor()));
@@ -215,47 +208,25 @@ void ImageRegionWidget::slotOriginalImageRegionChanged(bool targetDone)
 {
     if (targetDone)
     {
-        //backupPixmapRegion();
         emit signalOriginalClipFocusChanged();//For Image Edit Tools
     }
 }
 
 void ImageRegionWidget::exposureSettingsChanged()
 {
-    qDebug()<<"ImageRegionWidget::exposureSettingsChanged()";
-    //clearCache();
-    //viewport()->update();
+    d_ptr->item->clearCache();
     update();
 }
 
 void ImageRegionWidget::ICCSettingsChanged()
 {
-    qDebug()<<"ImageRegionWidget::ICCSettingsChanged()";
-    //clearCache();
-    //viewport()->update();
+    d_ptr->item->clearCache();
     update();
 }
 
 void ImageRegionWidget::toggleFitToWindow()
 {
-    qDebug("ImageRegionWidget::toggleFitToWindow");
-/*    d_ptr->autoZoom = !d_ptr->autoZoom;
-
-    if (d_ptr->autoZoom)
-    {
-        updateAutoZoom();
-    }
-    else
-    {
-        d_ptr->zoom       = 1.0;
-        d_ptr->zoomWidth  = (int)(previewWidth());
-        d_ptr->zoomHeight = (int)(previewHeight());
-    }
-
-    updateContentsSize();
-    zoomFactorChanged(d_ptr->zoom);
-    viewport()->update();*/
-    //emit signalZoomFactorChanged(d_ptr->zoomSettings()->zoomFactor());
+    layout()->toggleFitToWindow();
     update();
 }
 
