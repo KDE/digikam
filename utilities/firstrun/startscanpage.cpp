@@ -57,7 +57,7 @@ StartScanPage::StartScanPage(KAssistantDialog* const dlg)
                        "<p><i>Note:</i> depending of your collection size, this operation can take a while. "
                        "If you cancel the scanning operation, it will start again at next digiKam session.</p>"
                        "<p>When scanning has completed, at next start-up, digiKam will only check your collection "
-                       "to identify new albuls - which is much faster. You can force digiKam to scan for new items "
+                       "to identify new albums - which is much faster. You can force digiKam to scan for new items "
                        "manually using the <b>Tools->Maintenance->Scan for new items</b> menu entry.</p>"
                        "</qt>"));
 
