@@ -89,18 +89,16 @@ void ImageRegionItem::setTargetImage(const DImg& img)
 
 void ImageRegionItem::setRenderingPreviewMode(int mode)
 {
-    //qDebug()<<"ImageRegionItem::setRenderingPreviewMode"<<mode;
     d_ptr->renderingPreviewMode = mode;
 }
 
 void ImageRegionItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
 {
     Q_D(GraphicsDImgItem);
+    Q_UNUSED(option);
     
-    //qDebug()<<"movingInProgress "<<((GraphicsDImgView *)d_ptr->view)->movingInProgress();
     if (! ((GraphicsDImgView *)d_ptr->view)->movingInProgress())
     {
-        //d_ptr->drawRect = option->exposedRect.intersected(boundingRect()).toAlignedRect();
         d_ptr->drawRect = boundingRect().toAlignedRect();
         QRect     pixSourceRect;
 
@@ -110,7 +108,6 @@ void ImageRegionItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* o
 
         if (d->cachedPixmaps.find(d_ptr->drawRect, &d_ptr->pix, &pixSourceRect))
         {
-            //qDebug()<<"Found in cache";
             if (pixSourceRect.isNull())
             {
                 painter->drawPixmap(d_ptr->drawRect.topLeft(), d_ptr->pix);
@@ -122,12 +119,10 @@ void ImageRegionItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* o
         }
         else
         {
-            //qDebug()<<"Not found in cache";
             ICCSettingsContainer iccSettings = EditorCore::defaultInstance()->getICCSettings();
 
             if (iccSettings.enableCM && iccSettings.useManagedView)
             {
-                //qDebug()<<"paint ICCSettings";
                 IccManager   manager(scaledImage);
                 IccTransform monitorICCtrans = manager.displayTransform(widget);
                 d_ptr->pix = scaledImage.convertToPixmap(monitorICCtrans);
@@ -152,7 +147,6 @@ void ImageRegionItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* o
 
         if (expoSettings)
         {
-            //qDebug()<<"paint ExposureSettings";
             if (expoSettings->underExposureIndicator || expoSettings->overExposureIndicator)
             {
                 QImage pureColorMask = scaledImage.pureColorMask(expoSettings);
@@ -237,11 +231,11 @@ void ImageRegionItem::paintExtraData(QPainter* p)
         }
 
         // Drawing highlighted points.
-/*
+
         if (!d_ptr->hightlightPoints.isEmpty())
         {
             QPoint pt;
-            QRect  hpArea;
+            QRectF  hpArea;
 
             for (int i = 0 ; i < d_ptr->hightlightPoints.count() ; ++i)
             {
@@ -250,11 +244,11 @@ void ImageRegionItem::paintExtraData(QPainter* p)
 
                 if (d_ptr->drawRect.contains(pt))
                 {
-                    qDebug("hightLightPoints drawLine");
                     int x = (int)((double)pt.x() / zoomFactor);
                     int y = (int)((double)pt.y()/ zoomFactor);
 
-                    QPoint hp(mapToScene(QPointF(x, y)));
+                    //QPoint hp(contentsToViewport(QPointF(x, y)));
+                    QPointF hp(mapToScene(QPointF(x, y)));
                     hpArea.setSize(QSize((int)(16 * zoomFactor), (int)(16 * zoomFactor)));
                     hpArea.moveCenter(hp);
 
@@ -273,20 +267,18 @@ void ImageRegionItem::paintExtraData(QPainter* p)
             }
         }
 
-        p->end();*/
+        p->end();
     }
 }
 
 void ImageRegionItem::hoverEnterEvent ( QGraphicsSceneHoverEvent * )
 {
-    qDebug()<<"ImageRegionItem::hoverEnterEvent";
     d_ptr->onMouseMovePreviewToggled = true;
     update();
 }
 
 void ImageRegionItem::hoverLeaveEvent ( QGraphicsSceneHoverEvent * )
 {
-    qDebug()<<"ImageRegionItem::hoverLeaveEvent";
     d_ptr->onMouseMovePreviewToggled = false;
     update();
 }
