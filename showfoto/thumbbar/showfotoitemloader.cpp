@@ -445,4 +445,4 @@ bool ShowfotoItemLoader::loadThumbnailForItem(const ShowfotoItemInfo& info, Cach
 }
 
 
-}//namespace Digikam
+}//namespace ShowFoto
