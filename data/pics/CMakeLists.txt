@@ -47,13 +47,6 @@ INSTALL(FILES splash-digikam.png
               duplicatebothvert.png
               duplicatebothhorz.png
               togglemouseover.png
-              assistant-collection.png
-              assistant-rawimport.png
-              assistant-tooltips.png
-              assistant-metadata.png
-              assistant-preview.png
-              assistant-openfile.png
-              assistant-scancollection.png
               colors-luma.png
               colors-chromablue.png
               colors-chromared.png

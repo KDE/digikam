@@ -6,7 +6,7 @@
  * Date        : 2009-28-04
  * Description : first run assistant dialog
  *
- * Copyright (C) 2009-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -42,11 +42,11 @@
 namespace Digikam
 {
 
-class PreviewPage::PreviewPagePriv
+class PreviewPage::Private
 {
 public:
 
-    PreviewPagePriv() :
+    Private() :
         loadReduced(0),
         loadimage(0),
         previewBehavior(0)
@@ -59,19 +59,19 @@ public:
     QButtonGroup* previewBehavior;
 };
 
-PreviewPage::PreviewPage(KAssistantDialog* dlg)
+PreviewPage::PreviewPage(KAssistantDialog* const dlg)
     : AssistantDlgPage(dlg, i18n("<b>Configure Preview Behavior</b>")),
-      d(new PreviewPagePriv)
+      d(new Private)
 {
-    KVBox* vbox    = new KVBox(this);
-    QLabel* label1 = new QLabel(vbox);
+    KVBox* const vbox    = new KVBox(this);
+    QLabel* const label1 = new QLabel(vbox);
     label1->setWordWrap(true);
     label1->setText(i18n("<qt>"
                          "<p>Set here how images are displayed in preview mode and on the light table:</p>"
                          "</qt>"));
 
-    QWidget* btns      = new QWidget(vbox);
-    QVBoxLayout* vlay  = new QVBoxLayout(btns);
+    QWidget* const btns      = new QWidget(vbox);
+    QVBoxLayout* const vlay  = new QVBoxLayout(btns);
 
     d->previewBehavior = new QButtonGroup(btns);
     d->loadReduced     = new QRadioButton(btns);
@@ -88,7 +88,7 @@ PreviewPage::PreviewPage(KAssistantDialog* dlg)
     vlay->setMargin(KDialog::spacingHint());
     vlay->setSpacing(KDialog::spacingHint());
 
-    QLabel* label2 = new QLabel(vbox);
+    QLabel* const label2 = new QLabel(vbox);
     label2->setWordWrap(true);
     label2->setText(i18n("<qt>"
                          "<p><i>Note:</i> loading a reduced version of an image is faster but can differ "
@@ -99,9 +99,7 @@ PreviewPage::PreviewPage(KAssistantDialog* dlg)
                          "</qt>"));
 
     setPageWidget(vbox);
-
-    QPixmap leftPix = KStandardDirs::locate("data", "digikam/data/assistant-preview.png");
-    setLeftBottomPix(leftPix.scaledToWidth(128, Qt::SmoothTransformation));
+    setLeftBottomPix(KIconLoader::global()->loadIcon("viewimage", KIconLoader::NoGroup, KIconLoader::SizeEnormous));
 }
 
 PreviewPage::~PreviewPage()

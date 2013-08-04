@@ -26,11 +26,11 @@
 namespace Digikam
 {
 
-class VisibilityController::VisibilityControllerPriv
+class VisibilityController::Private
 {
 public:
 
-    VisibilityControllerPriv() :
+    Private() :
         status(VisibilityController::Unknown),
         containerWidget(0)
     {
@@ -45,7 +45,7 @@ class VisibilityWidgetWrapper : public QObject, public VisibilityObject
 {
 public:
 
-    VisibilityWidgetWrapper(VisibilityController* parent, QWidget* widget)
+    VisibilityWidgetWrapper(VisibilityController* const parent, QWidget* const widget)
         : QObject(parent), m_widget(widget)
     {
     }
@@ -63,8 +63,10 @@ public:
     QWidget* m_widget;
 };
 
-VisibilityController::VisibilityController(QObject* parent)
-    : QObject(parent), d(new VisibilityControllerPriv)
+// -------------------------------------------------------------------------------------
+
+VisibilityController::VisibilityController(QObject* const parent)
+    : QObject(parent), d(new Private)
 {
 }
 
@@ -73,7 +75,7 @@ VisibilityController::~VisibilityController()
     delete d;
 }
 
-void VisibilityController::addObject(VisibilityObject* object)
+void VisibilityController::addObject(VisibilityObject* const object)
 {
     d->objects << object;
 
@@ -101,12 +103,12 @@ void VisibilityController::addObject(VisibilityObject* object)
     }
 }
 
-void VisibilityController::addWidget(QWidget* widget)
+void VisibilityController::addWidget(QWidget* const widget)
 {
     addObject(new VisibilityWidgetWrapper(this, widget));
 }
 
-void VisibilityController::setContainerWidget(QWidget* widget)
+void VisibilityController::setContainerWidget(QWidget* const widget)
 {
     d->containerWidget = widget;
 }
@@ -178,7 +180,7 @@ void VisibilityController::step()
 {
     if (d->status == Showing)
     {
-        foreach(VisibilityObject* o, d->objects)
+        foreach(VisibilityObject* const o, d->objects)
         {
             if (!o->isVisible())
             {
@@ -189,7 +191,7 @@ void VisibilityController::step()
     }
     else if (d->status == Hiding)
     {
-        foreach(VisibilityObject* o, d->objects)
+        foreach(VisibilityObject* const o, d->objects)
         {
             if (o->isVisible())
             {
@@ -209,7 +211,7 @@ void VisibilityController::allSteps()
             d->containerWidget->setUpdatesEnabled(false);
         }
 
-        foreach(VisibilityObject* o, d->objects)
+        foreach(VisibilityObject* const o, d->objects)
         {
             o->setVisible(true);
         }
@@ -226,7 +228,7 @@ void VisibilityController::allSteps()
             d->containerWidget->setUpdatesEnabled(false);
         }
 
-        foreach(VisibilityObject* o, d->objects)
+        foreach(VisibilityObject* const o, d->objects)
         {
             o->setVisible(false);
         }

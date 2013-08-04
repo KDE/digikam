@@ -6,7 +6,7 @@
  * Date        : 2010-06-13
  * Description : A KCompletion for AbstractAlbumModels
  *
- * Copyright (C) 2007-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2010 by Johannes Wienke <languitar at semipol dot de>
  * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
@@ -37,11 +37,11 @@
 namespace Digikam
 {
 
-class ModelCompletion::ModelCompletionPriv
+class ModelCompletion::Private
 {
 public:
 
-    ModelCompletionPriv() :
+    Private() :
         displayRole(Qt::DisplayRole),
         uniqueIdRole(Qt::DisplayRole),
         model(0)
@@ -65,7 +65,7 @@ public:
 
 ModelCompletion::ModelCompletion()
     : KCompletion(),
-      d(new ModelCompletionPriv)
+      d(new Private)
 {
     setOrder(KCompletion::Sorted);
     setIgnoreCase(true);
@@ -76,7 +76,7 @@ ModelCompletion::~ModelCompletion()
     delete d;
 }
 
-void ModelCompletion::setModel(QAbstractItemModel* model, int uniqueIdRole, int displayRole)
+void ModelCompletion::setModel(QAbstractItemModel* const model, int uniqueIdRole, int displayRole)
 {
     // first release old model
     if (d->model)
@@ -100,7 +100,7 @@ void ModelCompletion::setModel(QAbstractItemModel* model, int uniqueIdRole, int 
     }
 }
 
-void ModelCompletion::connectToModel(QAbstractItemModel* model)
+void ModelCompletion::connectToModel(QAbstractItemModel* const model)
 {
     connect(model, SIGNAL(rowsInserted(QModelIndex,int,int)),
             this, SLOT(slotRowsInserted(QModelIndex,int,int)));
@@ -234,12 +234,12 @@ void ModelCompletion::slotDataChanged(const QModelIndex& topLeft, const QModelIn
     }
 }
 
-void ModelCompletion::disconnectFromModel(QAbstractItemModel* model)
+void ModelCompletion::disconnectFromModel(QAbstractItemModel* const model)
 {
     disconnect(model);
 }
 
-void ModelCompletion::sync(QAbstractItemModel* model)
+void ModelCompletion::sync(QAbstractItemModel* const model)
 {
     //kDebug() << "Starting sync with model " << model
     //         << ", rowCount for parent: " << model->rowCount();
@@ -254,7 +254,7 @@ void ModelCompletion::sync(QAbstractItemModel* model)
     }
 }
 
-void ModelCompletion::sync(QAbstractItemModel* model, const QModelIndex& index)
+void ModelCompletion::sync(QAbstractItemModel* const model, const QModelIndex& index)
 {
     QString itemName = index.data(d->displayRole).toString();
     //kDebug() << "sync adding item '" << itemName << "' for index " << index;

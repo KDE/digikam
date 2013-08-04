@@ -63,8 +63,8 @@ private:
     void stage2();  // Thumbnails
     void stage3();  // Finger-prints
     void stage4();  // Duplicates
-    void stage5();  // Metadata
-    void stage6();  // Face detection
+    void stage5();  // Faces Management
+    void stage6();  // Metadata
 
     void done();    // Called when all scheduled tools are done.
     void cancel();  // Called when a tol is canceled.

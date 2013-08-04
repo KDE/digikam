@@ -62,25 +62,25 @@ NewItemsFinder::NewItemsFinder(const FinderMode mode, const QStringList& folders
     setLabel(i18n("Find new items"));
     setThumbnail(KIcon("view-refresh").pixmap(22));
     ProgressManager::addProgressItem(this);
-    
+
     d->mode = mode;
 
     // Common conections to ScanController
-    
+
     connect(ScanController::instance(), SIGNAL(collectionScanStarted(QString)),
             this, SLOT(slotScanStarted(QString)));
 
     connect(ScanController::instance(), SIGNAL(totalFilesToScan(int)),
             this, SLOT(slotTotalFilesToScan(int)));
-    
+
     connect(ScanController::instance(), SIGNAL(filesScanned(int)),
             this, SLOT(slotFilesScanned(int)));
 
     // Connection and rules for ScheduleCollectionScan mode.
-    
+
     connect(ScanController::instance(), SIGNAL(partialScanDone(QString)),
             this, SLOT(slotPartialScanDone(QString)));
-                
+
     d->foldersToScan = foldersToScan;
     d->foldersToScan.sort();
 }
@@ -99,26 +99,26 @@ void NewItemsFinder::slotStart()
         case ScanDeferredFiles:
         {
             kDebug() << "scan mode: ScanDeferredFiles";
-                            
+
             connect(ScanController::instance(), SIGNAL(completeScanDone()),
                     this, SLOT(slotDone()));
-                
+
+            ScanController::instance()->completeCollectionScanInBackground(false);
             ScanController::instance()->allowToScanDeferredFiles();
-            ScanController::instance()->completeCollectionScanInBackground(true);            
             break;
         }
 
         case CompleteCollectionScan:
         {
             kDebug() << "scan mode: CompleteCollectionScan";
-            
-            ScanController::instance()->completeCollectionScanInBackground(false);            
+
+            ScanController::instance()->completeCollectionScanInBackground(false);
 
             connect(ScanController::instance(), SIGNAL(completeScanDone()),
                     this, SLOT(slotDone()));
 
             ScanController::instance()->allowToScanDeferredFiles();
-            ScanController::instance()->completeCollectionScanInBackground(true);            
+            ScanController::instance()->completeCollectionScanInBackground(true);
             break;
         }
 
@@ -126,7 +126,7 @@ void NewItemsFinder::slotStart()
         {
             kDebug() << "scan mode: ScheduleCollectionScan :: " << d->foldersToScan;
             d->foldersScanned.clear();
-                       
+
             foreach(const QString& folder, d->foldersToScan)
                 ScanController::instance()->scheduleCollectionScan(folder);
 

@@ -6,7 +6,7 @@
  * Date        : 2009-28-04
  * Description : first run assistant dialog
  *
- * Copyright (C) 2009-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -42,11 +42,11 @@
 namespace Digikam
 {
 
-class TooltipsPage::TooltipsPagePriv
+class TooltipsPage::Private
 {
 public:
 
-    TooltipsPagePriv() :
+    Private() :
         showTooltips(0),
         hideTooltips(0),
         tooltipsBehavior(0)
@@ -59,19 +59,19 @@ public:
     QButtonGroup* tooltipsBehavior;
 };
 
-TooltipsPage::TooltipsPage(KAssistantDialog* dlg)
+TooltipsPage::TooltipsPage(KAssistantDialog* const dlg)
     : AssistantDlgPage(dlg, i18n("<b>Enabled Contextual Tooltips</b>")),
-      d(new TooltipsPagePriv)
+      d(new Private)
 {
-    KVBox* vbox    = new KVBox(this);
-    QLabel* label1 = new QLabel(vbox);
+    KVBox* const vbox    = new KVBox(this);
+    QLabel* const label1 = new QLabel(vbox);
     label1->setWordWrap(true);
     label1->setText(i18n("<qt>"
                          "<p>Set here if you want to show contextual tooltips in icon-view and folder-view:</p>"
                          "</qt>"));
 
-    QWidget* btns       = new QWidget(vbox);
-    QVBoxLayout* vlay   = new QVBoxLayout(btns);
+    QWidget* const btns     = new QWidget(vbox);
+    QVBoxLayout* const vlay = new QVBoxLayout(btns);
 
     d->tooltipsBehavior = new QButtonGroup(btns);
     d->hideTooltips     = new QRadioButton(btns);
@@ -88,7 +88,7 @@ TooltipsPage::TooltipsPage(KAssistantDialog* dlg)
     vlay->setMargin(KDialog::spacingHint());
     vlay->setSpacing(KDialog::spacingHint());
 
-    QLabel* label2 = new QLabel(vbox);
+    QLabel* const label2 = new QLabel(vbox);
     label2->setWordWrap(true);
     label2->setText(i18n("<qt>"
                          "<p><i>Note:</i> tooltips show photograph and digiKam metadata on the fly, "
@@ -100,9 +100,7 @@ TooltipsPage::TooltipsPage(KAssistantDialog* dlg)
                          "</qt>"));
 
     setPageWidget(vbox);
-
-    QPixmap leftPix = KStandardDirs::locate("data", "digikam/data/assistant-tooltips.png");
-    setLeftBottomPix(leftPix.scaledToWidth(128, Qt::SmoothTransformation));
+    setLeftBottomPix(KIconLoader::global()->loadIcon("dialog-information", KIconLoader::NoGroup, KIconLoader::SizeEnormous));
 }
 
 TooltipsPage::~TooltipsPage()
