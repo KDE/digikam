@@ -6,7 +6,8 @@
  * Date        : 2012-05-07
  * Description : Item delegate for import interface items.
  *
- * Copyright (C) 2012 by Islam Wazery <wazery at ubuntu dot com>
+ * Copyright (C) 2012      by Islam Wazery <wazery at ubuntu dot com>
+ * Copyright (C) 2012-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -105,7 +106,7 @@ protected:
     QRect drawThumbnail(QPainter* p, const QRect& thumbRect, const QPixmap& background, const QPixmap& thumbnail) const;
     void drawRating(QPainter* p, const QModelIndex& index, const QRect& ratingRect, int rating, bool isSelected) const;
     void drawName(QPainter* p,const QRect& nameRect, const QString& name) const;
-    void drawModificationDate(QPainter* p, const QRect& dateRect, const QDateTime& date) const;
+    void drawCreationDate(QPainter* p, const QRect& dateRect, const QDateTime& date) const;
     void drawImageSize(QPainter* p, const QRect& dimsRect, const QSize& dims) const;
     void drawImageFormat(QPainter* p, const QRect& dimsRect, const QString& mime) const;
     void drawFileSize(QPainter* p, const QRect& r, qlonglong bytes) const;

@@ -31,7 +31,7 @@ SqlQuery::SqlQuery(const QSqlQuery& other)
 {
 }
 
-SqlQuery::SqlQuery(QSqlDatabase db)
+SqlQuery::SqlQuery(const QSqlDatabase& db)
     : QSqlQuery(db)
 {
 }

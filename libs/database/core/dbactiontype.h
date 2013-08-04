@@ -43,6 +43,7 @@ namespace Digikam
 class DIGIKAM_EXPORT DBActionType
 {
 public:
+    
     DBActionType();
     DBActionType(const DBActionType& actionType);
     ~DBActionType();

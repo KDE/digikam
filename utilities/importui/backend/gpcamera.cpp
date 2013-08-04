@@ -551,7 +551,7 @@ bool GPCamera::capture(CamItemInfo& itemInfo)
         return false;
     }
 
-    itemInfo.mtime            = QDateTime();
+    itemInfo.ctime            = QDateTime();
     itemInfo.mime             = "";
     itemInfo.size             = -1;
     itemInfo.width            = -1;
@@ -568,7 +568,7 @@ bool GPCamera::capture(CamItemInfo& itemInfo)
 
     if (info.file.fields & GP_FILE_INFO_MTIME)
     {
-        itemInfo.mtime = QDateTime::fromTime_t(info.file.mtime);
+        itemInfo.ctime = QDateTime::fromTime_t(info.file.mtime);
     }
 
     if (info.file.fields & GP_FILE_INFO_SIZE)
@@ -899,9 +899,9 @@ void GPCamera::getItemInfoInternal(const QString& folder, const QString& itemNam
             fillItemInfoFromMetadata(info, meta);
 
             // Fall back to camera file system info
-            if (info.mtime.isNull())
+            if (info.ctime.isNull())
             {
-                info.mtime = QDateTime::fromTime_t(cfinfo.file.mtime);
+                info.ctime = QDateTime::fromTime_t(cfinfo.file.mtime);
             }
         }
         else
@@ -909,7 +909,7 @@ void GPCamera::getItemInfoInternal(const QString& folder, const QString& itemNam
             // Only use properties provided by camera.
             if (cfinfo.file.fields & GP_FILE_INFO_MTIME)
             {
-                info.mtime = QDateTime::fromTime_t(cfinfo.file.mtime);
+                info.ctime = QDateTime::fromTime_t(cfinfo.file.mtime);
             }
 
             if (cfinfo.file.fields & GP_FILE_INFO_WIDTH)
@@ -1371,7 +1371,7 @@ bool GPCamera::uploadItem(const QString& folder, const QString& itemName, const 
         return false;
     }
 
-    itemInfo.mtime            = QDateTime();
+    itemInfo.ctime            = QDateTime();
     itemInfo.mime             = "";
     itemInfo.size             = -1;
     itemInfo.width            = -1;
@@ -1388,7 +1388,7 @@ bool GPCamera::uploadItem(const QString& folder, const QString& itemName, const 
 
     if (info.file.fields & GP_FILE_INFO_MTIME)
     {
-        itemInfo.mtime = QDateTime::fromTime_t(info.file.mtime);
+        itemInfo.ctime = QDateTime::fromTime_t(info.file.mtime);
     }
 
     if (info.file.fields & GP_FILE_INFO_SIZE)

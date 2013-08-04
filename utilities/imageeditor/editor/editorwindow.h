@@ -62,7 +62,6 @@ namespace Digikam
 
 class Canvas;
 class DImageHistory;
-class DLogoAction;
 class EditorTool;
 class EditorStackView;
 class ExposureSettingsContainer;
@@ -140,7 +139,6 @@ protected:
 
     KActionMenu*              m_selectToolsAction;
 
-    DLogoAction*              m_animLogo;
     KMenu*                    m_contextMenu;
     EditorStackView*          m_stackView;
     Canvas*                   m_canvas;

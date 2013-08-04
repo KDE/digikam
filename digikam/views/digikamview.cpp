@@ -603,7 +603,7 @@ void DigikamView::setupConnections()
     connect(this, SIGNAL(signalAlbumSelected(bool)),
             d->albumHistory, SLOT(slotAlbumSelected()));
 
-    connect(this, SIGNAL(signalImageSelected(ImageInfoList,bool,bool,ImageInfoList)),
+    connect(this, SIGNAL(signalImageSelected(ImageInfoList, ImageInfoList)),
             d->albumHistory, SLOT(slotImageSelected(ImageInfoList)));
 
     connect(d->iconView, SIGNAL(currentChanged(ImageInfo)),
@@ -1257,7 +1257,7 @@ void DigikamView::slotDispatchImageSelected()
         if (list.isEmpty())
         {
             d->stackedview->setPreviewItem();
-            emit signalImageSelected(list, false, false, allImages);
+            emit signalImageSelected(list, allImages);
             emit signalNoCurrentItem();
         }
         else
@@ -1285,7 +1285,7 @@ void DigikamView::slotDispatchImageSelected()
                 d->stackedview->setPreviewItem(list.first(), previousInfo, nextInfo);
             }
 
-            emit signalImageSelected(list, !previousInfo.isNull(), !nextInfo.isNull(), allImages);
+            emit signalImageSelected(list, allImages);
         }
 
         d->needDispatchSelection = false;
@@ -1948,6 +1948,9 @@ void DigikamView::slotSlideShowBuilderComplete(const SlideShowSettings& settings
 void DigikamView::toggleShowBar(bool b)
 {
     d->stackedview->thumbBarDock()->showThumbBar(b);
+    
+    // See B.K.O #319876 : force to reload current view mode to set thumbbar visibility properly.
+    d->stackedview->setViewMode(viewMode());
 }
 
 void DigikamView::setRecurseAlbums(bool recursive)

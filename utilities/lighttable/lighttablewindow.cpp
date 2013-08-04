@@ -66,7 +66,6 @@
 #include "digikamapp.h"
 #include "thememanager.h"
 #include "dimg.h"
-#include "dlogoaction.h"
 #include "dmetadata.h"
 #include "metadatasettings.h"
 #include "albumsettings.h"
@@ -617,16 +616,7 @@ void LightTableWindow::setupActions()
 
     // -- Standard 'Help' menu actions ---------------------------------------------
 
-    d->about = new DAboutData(this);
-    d->about->registerHelpActions();
-
-    d->libsInfoAction = new KAction(KIcon("help-about"), i18n("Components Information"), this);
-    connect(d->libsInfoAction, SIGNAL(triggered()), this, SLOT(slotComponentsInfo()));
-    actionCollection()->addAction("lighttable_librariesinfo", d->libsInfoAction);
-
-    d->dbStatAction = new KAction(KIcon("network-server-database"), i18n("Database Statistics"), this);
-    connect(d->dbStatAction, SIGNAL(triggered()), this, SLOT(slotDBStat()));
-    actionCollection()->addAction("lighttable_dbstat", d->dbStatAction);
+    createHelpActions();
 
     // Provides a menu entry that allows showing/hiding the toolbar(s)
     setStandardToolBarMenuEnabled(true);
@@ -642,8 +632,6 @@ void LightTableWindow::setupActions()
     connect(altBackwardAction, SIGNAL(triggered()), this, SLOT(slotBackward()));
 
     // ---------------------------------------------------------------------------------
-
-    actionCollection()->addAction("logo_action", new DLogoAction(this));
 
     createGUI(xmlFile());
 

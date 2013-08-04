@@ -30,7 +30,6 @@
 
 #include <QThread>
 #include <QString>
-    void scanFileDirectly(const QString& filePath);
 
 // KDE includes
 
@@ -90,6 +89,11 @@ public:
     void completeCollectionScanDeferFiles(SplashScreen* const splash=0);
     void allowToScanDeferredFiles();
 
+    /**
+     * Scan Whole collection without to display a progress dialog or to manage splashscreen, as for NewItemsFinder tool.
+     */
+    void completeCollectionScanInBackground(bool defer);
+    
     /**
      * Carries out a complete collection scan, at the same time updating
      * the unique hash in the database and thumbnail database.
@@ -213,6 +217,7 @@ Q_SIGNALS:
     void collectionScanStarted(const QString& message);
     void scanningProgress(float progress);
     void collectionScanFinished();
+    void partialScanDone(const QString& path);
 
 private Q_SLOTS:
 
@@ -248,6 +253,8 @@ private:
 
     void createProgressDialog();
     void setInitializationMessage();
+
+    void completeCollectionScanCore(bool needTotalFiles, bool defer);
 
     virtual void moreSchemaUpdateSteps(int numberOfSteps);
     virtual void schemaUpdateProgress(const QString& message, int numberOfSteps);

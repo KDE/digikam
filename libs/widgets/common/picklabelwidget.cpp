@@ -6,7 +6,7 @@
  * Date        : 2011-02-14
  * Description : pick label widget
  *
- * Copyright (C) 2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2011-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -52,12 +52,12 @@
 namespace Digikam
 {
 
-class PickLabelWidget::PickLabelWidgetPriv
+class PickLabelWidget::Private
 {
 
 public:
 
-    PickLabelWidgetPriv()
+    Private()
     {
         pickBtns = 0;
         btnNone  = 0;
@@ -83,13 +83,13 @@ public:
     KSqueezedTextLabel* shortcut;
 };
 
-PickLabelWidget::PickLabelWidget(QWidget* parent)
-    : KVBox(parent), d(new PickLabelWidgetPriv)
+PickLabelWidget::PickLabelWidget(QWidget* const parent)
+    : KVBox(parent), d(new Private)
 {
     setAttribute(Qt::WA_DeleteOnClose);
     setFocusPolicy(Qt::NoFocus);
 
-    KHBox* hbox = new KHBox(this);
+    KHBox* const hbox = new KHBox(this);
     hbox->setMargin(0);
     hbox->setSpacing(0);
 
@@ -156,7 +156,7 @@ void PickLabelWidget::setDescriptionBoxVisible(bool b)
     d->descBox->setVisible(b);
     if (!b)
     {
-        foreach(QAbstractButton* btn, d->pickBtns->buttons())
+        foreach(QAbstractButton* const btn, d->pickBtns->buttons())
         {
             PickLabel id = (PickLabel)(d->pickBtns->id(btn));
             btn->setToolTip(labelPickName(id));
@@ -173,10 +173,10 @@ void PickLabelWidget::updateDescription(PickLabel label)
 {
     d->desc->setText(labelPickName(label));
 
-    KXmlGuiWindow* app = dynamic_cast<KXmlGuiWindow*>(kapp->activeWindow());
+    KXmlGuiWindow* const app = dynamic_cast<KXmlGuiWindow*>(kapp->activeWindow());
     if (app)
     {
-        QAction* ac = app->actionCollection()->action(QString("pickshortcut-%1").arg(label));
+        QAction* const ac = app->actionCollection()->action(QString("pickshortcut-%1").arg(label));
         if (ac)
             d->shortcut->setText(ac->shortcut().toString());
     }
@@ -223,7 +223,7 @@ bool PickLabelWidget::eventFilter(QObject* obj, QEvent* ev)
 
 void PickLabelWidget::setPickLabels(const QList<PickLabel>& list)
 {
-    foreach(QAbstractButton* btn, d->pickBtns->buttons())
+    foreach(QAbstractButton* const btn, d->pickBtns->buttons())
     {
         PickLabel id = (PickLabel)(d->pickBtns->id(btn));
         btn->setChecked(list.contains(id));
@@ -234,7 +234,7 @@ void PickLabelWidget::setPickLabels(const QList<PickLabel>& list)
 QList<PickLabel> PickLabelWidget::colorLabels() const
 {
     QList<PickLabel> list;
-    foreach(QAbstractButton* btn, d->pickBtns->buttons())
+    foreach(QAbstractButton* const btn, d->pickBtns->buttons())
     {
         if (btn && btn->isChecked())
             list.append((PickLabel)(d->pickBtns->id(btn)));
@@ -289,12 +289,12 @@ QString PickLabelWidget::labelPickName(PickLabel label)
 
 // -----------------------------------------------------------------------------
 
-class PickLabelSelector::PickLabelSelectorPriv
+class PickLabelSelector::Private
 {
 
 public:
 
-    PickLabelSelectorPriv()
+    Private()
     {
         plw = 0;
     }
@@ -302,14 +302,14 @@ public:
     PickLabelWidget* plw;
 };
 
-PickLabelSelector::PickLabelSelector(QWidget* parent)
-    : QPushButton(parent), d(new PickLabelSelectorPriv)
+PickLabelSelector::PickLabelSelector(QWidget* const parent)
+    : QPushButton(parent), d(new Private)
 {
-    KMenu* popup = new KMenu(this);
+    KMenu* const popup = new KMenu(this);
     setMenu(popup);
 
-    QWidgetAction* action = new QWidgetAction(this);
-    d->plw                = new PickLabelWidget(this);
+    QWidgetAction* const action = new QWidgetAction(this);
+    d->plw                      = new PickLabelWidget(this);
     action->setDefaultWidget(d->plw);
     popup->addAction(action);
     slotPickLabelChanged(NoPickLabel);
@@ -355,12 +355,12 @@ void PickLabelSelector::slotPickLabelChanged(int id)
 
 // -----------------------------------------------------------------------------
 
-PickLabelMenuAction::PickLabelMenuAction(QMenu* parent)
+PickLabelMenuAction::PickLabelMenuAction(QMenu* const parent)
     : KActionMenu(parent)
 {
     setText(i18n("Pick"));
-    QWidgetAction* wa    = new QWidgetAction(this);
-    PickLabelWidget* plw = new PickLabelWidget(parent);
+    QWidgetAction* const wa    = new QWidgetAction(this);
+    PickLabelWidget* const plw = new PickLabelWidget(parent);
     wa->setDefaultWidget(plw);
     addAction(wa);
 

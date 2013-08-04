@@ -739,8 +739,6 @@ bool DMetadata::setImagePickLabel(int pickId) const
         return false;
     }
 
-    // Set standard XMP rating tag.
-
     if (supportXmp())
     {
         if (!setXmpTagString("Xmp.digiKam.PickLabel", QString::number(pickId)))
@@ -766,8 +764,6 @@ bool DMetadata::setImageColorLabel(int colorId) const
     {
         return false;
     }
-
-    // Set standard XMP rating tag.
 
     if (supportXmp())
     {

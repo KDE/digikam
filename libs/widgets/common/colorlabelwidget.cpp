@@ -6,7 +6,7 @@
  * Date        : 2011-01-28
  * Description : color label widget
  *
- * Copyright (C) 2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2011-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -51,12 +51,12 @@
 namespace Digikam
 {
 
-class ColorLabelWidget::ColorLabelWidgetPriv
+class ColorLabelWidget::Private
 {
 
 public:
 
-    ColorLabelWidgetPriv()
+    Private()
     {
         colorBtns  = 0;
         btnNone    = 0;
@@ -94,8 +94,8 @@ public:
     KSqueezedTextLabel* shortcut;
 };
 
-ColorLabelWidget::ColorLabelWidget(QWidget* parent)
-    : KVBox(parent), d(new ColorLabelWidgetPriv)
+ColorLabelWidget::ColorLabelWidget(QWidget* const parent)
+    : KVBox(parent), d(new Private)
 {
     setAttribute(Qt::WA_DeleteOnClose);
     setFocusPolicy(Qt::NoFocus);
@@ -209,7 +209,7 @@ void ColorLabelWidget::setDescriptionBoxVisible(bool b)
     d->descBox->setVisible(b);
     if (!b)
     {
-        foreach(QAbstractButton* btn, d->colorBtns->buttons())
+        foreach(QAbstractButton* const btn, d->colorBtns->buttons())
         {
             ColorLabel id = (ColorLabel)(d->colorBtns->id(btn));
             btn->setToolTip(labelColorName(id));
@@ -226,10 +226,12 @@ void ColorLabelWidget::updateDescription(ColorLabel label)
 {
     d->desc->setText(labelColorName(label));
 
-    KXmlGuiWindow* app = dynamic_cast<KXmlGuiWindow*>(kapp->activeWindow());
+    KXmlGuiWindow* const app = dynamic_cast<KXmlGuiWindow*>(kapp->activeWindow());
+
     if (app)
     {
-        QAction* ac = app->actionCollection()->action(QString("colorshortcut-%1").arg(label));
+        QAction* const ac = app->actionCollection()->action(QString("colorshortcut-%1").arg(label));
+
         if (ac)
             d->shortcut->setText(ac->shortcut().toString());
     }
@@ -324,7 +326,7 @@ bool ColorLabelWidget::eventFilter(QObject* obj, QEvent* ev)
 
 void ColorLabelWidget::setColorLabels(const QList<ColorLabel>& list)
 {
-    foreach(QAbstractButton* btn, d->colorBtns->buttons())
+    foreach(QAbstractButton* const btn, d->colorBtns->buttons())
     {
         ColorLabel id = (ColorLabel)(d->colorBtns->id(btn));
         btn->setChecked(list.contains(id));
@@ -335,7 +337,8 @@ void ColorLabelWidget::setColorLabels(const QList<ColorLabel>& list)
 QList<ColorLabel> ColorLabelWidget::colorLabels() const
 {
     QList<ColorLabel> list;
-    foreach(QAbstractButton* btn, d->colorBtns->buttons())
+
+    foreach(QAbstractButton* const btn, d->colorBtns->buttons())
     {
         if (btn && btn->isChecked())
             list.append((ColorLabel)(d->colorBtns->id(btn)));
@@ -442,12 +445,12 @@ QString ColorLabelWidget::labelColorName(ColorLabel label)
 
 // -----------------------------------------------------------------------------
 
-class ColorLabelSelector::ColorLabelSelectorPriv
+class ColorLabelSelector::Private
 {
 
 public:
 
-    ColorLabelSelectorPriv()
+    Private()
     {
         clw = 0;
     }
@@ -456,13 +459,13 @@ public:
 };
 
 ColorLabelSelector::ColorLabelSelector(QWidget* parent)
-    : QPushButton(parent), d(new ColorLabelSelectorPriv)
+    : QPushButton(parent), d(new Private)
 {
-    KMenu* popup = new KMenu(this);
+    KMenu* const popup          = new KMenu(this);
     setMenu(popup);
 
-    QWidgetAction* action = new QWidgetAction(this);
-    d->clw                = new ColorLabelWidget(this);
+    QWidgetAction* const action = new QWidgetAction(this);
+    d->clw                      = new ColorLabelWidget(this);
     action->setDefaultWidget(d->clw);
     popup->addAction(action);
     slotColorLabelChanged(NoColorLabel);
@@ -490,6 +493,7 @@ void ColorLabelSelector::setColorLabel(ColorLabel label)
 ColorLabel ColorLabelSelector::colorLabel()
 {
     QList<ColorLabel> list = d->clw->colorLabels();
+
     if (!list.isEmpty())
         return list.first();
 
@@ -508,12 +512,12 @@ void ColorLabelSelector::slotColorLabelChanged(int id)
 
 // -----------------------------------------------------------------------------
 
-ColorLabelMenuAction::ColorLabelMenuAction(QMenu* parent)
+ColorLabelMenuAction::ColorLabelMenuAction(QMenu* const parent)
     : KActionMenu(parent)
 {
     setText(i18n("Color"));
-    QWidgetAction* wa     = new QWidgetAction(this);
-    ColorLabelWidget* clw = new ColorLabelWidget(parent);
+    QWidgetAction* const wa     = new QWidgetAction(this);
+    ColorLabelWidget* const clw = new ColorLabelWidget(parent);
     wa->setDefaultWidget(clw);
     addAction(wa);
 

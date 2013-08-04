@@ -7,7 +7,7 @@
  * Description : A helper class to disable the icon of a togglebutton, if it is not checked.
  *               This will simulate a disabled button, that is still clickable.
  *
- * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -46,7 +46,7 @@ class DIGIKAM_EXPORT ButtonIconDisabler : public QObject
 
 public:
 
-    explicit ButtonIconDisabler(QAbstractButton* button);
+    explicit ButtonIconDisabler(QAbstractButton* const button);
     ~ButtonIconDisabler();
 
 private Q_SLOTS:
@@ -55,8 +55,8 @@ private Q_SLOTS:
 
 private:
 
-    class ButtonIconDisablerPriv;
-    ButtonIconDisablerPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

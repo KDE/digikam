@@ -41,12 +41,17 @@ class DIGIKAM_EXPORT DatabaseActionElement
 {
 public:
 
-    DatabaseActionElement() : order(0) {}
+    DatabaseActionElement()
+        : order(0)
+    {
+    }
 
     QString mode;
     int     order;
     QString statement;
 };
+
+// ---------------------------------------------------------------
 
 class DIGIKAM_EXPORT DatabaseAction
 {
@@ -56,6 +61,8 @@ public:
     QString                      mode;
     QList<DatabaseActionElement> dbActionElements;
 };
+
+// ---------------------------------------------------------------
 
 class DIGIKAM_EXPORT DatabaseConfigElement
 {

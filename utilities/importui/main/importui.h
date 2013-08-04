@@ -137,12 +137,11 @@ private:
     void autoRotateItems();
 
     bool checkDiskSpace(PAlbum* pAlbum);
-    bool downloadCameraItems(PAlbum *pAlbum, bool onlySelected, bool deleteAfter);
-    bool createSubAlbums(KUrl &downloadUrl, const CamItemInfo &info);
-    bool createSubAlbum(KUrl &downloadUrl, const QString& subalbum,
-                        const QDate& date);
-    bool createDateBasedSubAlbum(KUrl &downloadUrl, const CamItemInfo& info);
-    bool createExtBasedSubAlbum(KUrl &downloadUrl, const CamItemInfo& info);
+    bool downloadCameraItems(PAlbum* pAlbum, bool onlySelected, bool deleteAfter);
+    bool createSubAlbums(KUrl& downloadUrl, const CamItemInfo& info);
+    bool createSubAlbum(KUrl& downloadUrl, const QString& subalbum, const QDate& date);
+    bool createDateBasedSubAlbum(KUrl& downloadUrl, const CamItemInfo& info);
+    bool createExtBasedSubAlbum(KUrl& downloadUrl, const CamItemInfo& info);
 
     void showThumbBar(bool visible);
     void showSideBars(bool visible);
@@ -207,10 +206,9 @@ private Q_SLOTS:
     void slotProgressTimerDone();
 
     void slotNewSelection(bool);
-    void slotImageSelected(const CamItemInfoList& selection, bool hasPrev, bool hasNext,
-                           const CamItemInfoList& listAll);
+    void slotImageSelected(const CamItemInfoList& selection, const CamItemInfoList& listAll);
 
-    void slotItemsSelected(CamItemInfo info, bool selected);
+    void slotItemsSelected(const CamItemInfo& info, bool selected);
 
     void slotSwitchedToPreview();
     void slotSwitchedToIconView();

@@ -6,7 +6,7 @@
  * Date        : 2010-06-13
  * Description : A KCompletion for AbstractAlbumModels
  *
- * Copyright (C) 2007-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2010 by Johannes Wienke <languitar at semipol dot de>
  * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
@@ -58,7 +58,7 @@ public:
      * @param uniqueIdRole a role for which the model will return a unique integer for each entry
      * @param displayRole the role to retrieve the text for completion, default is Qt::DisplayRole.
      */
-    void setModel(QAbstractItemModel* model, int uniqueIdRole, int displayRole = Qt::DisplayRole);
+    void setModel(QAbstractItemModel* const model, int uniqueIdRole, int displayRole = Qt::DisplayRole);
     QAbstractItemModel* model() const;
 
 private Q_SLOTS:
@@ -70,15 +70,15 @@ private Q_SLOTS:
 
 private:
 
-    void connectToModel(QAbstractItemModel* model);
-    void disconnectFromModel(QAbstractItemModel* model);
-    void sync(QAbstractItemModel* model);
-    void sync(QAbstractItemModel* model, const QModelIndex& index);
+    void connectToModel(QAbstractItemModel* const model);
+    void disconnectFromModel(QAbstractItemModel* const model);
+    void sync(QAbstractItemModel* const model);
+    void sync(QAbstractItemModel* const model, const QModelIndex& index);
 
 private:
 
-    class ModelCompletionPriv;
-    ModelCompletionPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

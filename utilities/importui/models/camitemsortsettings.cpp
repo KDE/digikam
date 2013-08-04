@@ -214,7 +214,7 @@ int CamItemSortSettings::compare(const CamItemInfo& left, const CamItemInfo& rig
             return compareByOrder(left.size, right.size, currentSortOrder);
             //FIXME: Change it to creation date instead of modification date.
         case SortByCreationDate:
-            return compareByOrder(left.mtime, right.mtime, currentSortOrder);
+            return compareByOrder(left.ctime, right.ctime, currentSortOrder);
         case SortByRating:
             return compareByOrder(left.rating, right.rating, currentSortOrder);
         case SortByDownloadState:

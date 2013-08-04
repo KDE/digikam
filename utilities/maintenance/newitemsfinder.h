@@ -51,17 +51,17 @@ public:
 public:
 
     explicit NewItemsFinder(const FinderMode mode = CompleteCollectionScan, const QStringList& foldersToScan = QStringList(),
-                   ProgressItem* const parent = 0);
+                            ProgressItem* const parent = 0);
     ~NewItemsFinder();
 
 private Q_SLOTS:
 
     void slotStart();
     void slotScanStarted(const QString&);
+    void slotPartialScanDone(const QString&);
     void slotTotalFilesToScan(int);
     void slotFilesScanned(int);
     void slotCancel();
-    void slotDone();
 
 private:
 

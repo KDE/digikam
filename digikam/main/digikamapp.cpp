@@ -539,8 +539,8 @@ void DigikamApp::setupViewConnections()
     connect(d->view, SIGNAL(signalSelectionChanged(int)),
             this, SLOT(slotSelectionChanged(int)));
 
-    connect(d->view, SIGNAL(signalImageSelected(ImageInfoList,bool,bool,ImageInfoList)),
-            this, SLOT(slotImageSelected(ImageInfoList,bool,bool,ImageInfoList)));
+    connect(d->view, SIGNAL(signalImageSelected(ImageInfoList,ImageInfoList)),
+            this, SLOT(slotImageSelected(ImageInfoList,ImageInfoList)));
 
     connect(d->view, SIGNAL(signalSwitchedToPreview()),
             this, SLOT(slotSwitchedToPreview()));
@@ -564,8 +564,17 @@ void DigikamApp::setupStatusBar()
     //------------------------------------------------------------------------------
 
     d->filterStatusBar = new FilterStatusBar(statusBar());
-    statusBar()->addWidget(d->filterStatusBar, 100);
+    statusBar()->addWidget(d->filterStatusBar, 50);
     d->view->connectIconViewFilter(d->filterStatusBar);
+
+    //------------------------------------------------------------------------------
+
+    ProgressView* const view = new ProgressView(statusBar(), this);
+    view->hide();
+
+    StatusbarProgressWidget* const littleProgress = new StatusbarProgressWidget(view, statusBar());
+    littleProgress->show();
+    statusBar()->addPermanentWidget(littleProgress);
 
     //------------------------------------------------------------------------------
 
@@ -576,20 +585,6 @@ void DigikamApp::setupStatusBar()
     d->zoomBar->setZoomMinusAction(d->zoomMinusAction);
     d->zoomBar->setBarMode(DZoomBar::ThumbsSizeCtrl);
     statusBar()->addPermanentWidget(d->zoomBar);
-
-    //------------------------------------------------------------------------------
-
-    ProgressView* view = new ProgressView(statusBar(), this);
-    view->hide();
-
-    StatusbarProgressWidget* littleProgress = new StatusbarProgressWidget(view, statusBar());
-    littleProgress->show();
-    statusBar()->addPermanentWidget(littleProgress);
-
-    //------------------------------------------------------------------------------
-
-    d->statusNavigateBar = new StatusNavigateBar(statusBar());
-    statusBar()->addPermanentWidget(d->statusNavigateBar, 1);
 
     //------------------------------------------------------------------------------
 
@@ -607,18 +602,6 @@ void DigikamApp::setupStatusBar()
 
     connect(d->view, SIGNAL(signalThumbSizeChanged(int)),
             this, SLOT(slotThumbSizeChanged(int)));
-
-    connect(d->statusNavigateBar, SIGNAL(signalFirstItem()),
-            d->view, SLOT(slotFirstItem()));
-
-    connect(d->statusNavigateBar, SIGNAL(signalNextItem()),
-            d->view, SLOT(slotNextItem()));
-
-    connect(d->statusNavigateBar, SIGNAL(signalPrevItem()),
-            d->view, SLOT(slotPrevItem()));
-
-    connect(d->statusNavigateBar, SIGNAL(signalLastItem()),
-            d->view, SLOT(slotLastItem()));
 }
 
 void DigikamApp::setupAccelerators()
@@ -1239,20 +1222,7 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    d->libsInfoAction = new KAction(KIcon("help-about"), i18n("Components Information"), this);
-    connect(d->libsInfoAction, SIGNAL(triggered()), this, SLOT(slotComponentsInfo()));
-    actionCollection()->addAction("help_librariesinfo", d->libsInfoAction);
-
-    // -----------------------------------------------------------
-
-    d->about = new DAboutData(this);
-    d->about->registerHelpActions();
-
-    // -----------------------------------------------------------
-
-    d->dbStatAction = new KAction(KIcon("network-server-database"), i18n("Database Statistics"), this);
-    connect(d->dbStatAction, SIGNAL(triggered()), this, SLOT(slotDBStat()));
-    actionCollection()->addAction("help_dbstat", d->dbStatAction);
+    createHelpActions();
 
     // -----------------------------------------------------------
 
@@ -1264,10 +1234,6 @@ void DigikamApp::setupActions()
 
     d->tipAction = actionCollection()->addAction(KStandardAction::TipofDay, "help_tipofday",
                                                  this, SLOT(slotShowTip()));
-
-    // -- Logo on the right of tool bar --------------------------
-
-    actionCollection()->addAction("logo_action", new DLogoAction(this));
 
     //------------------------------------------------------------
 
@@ -1476,8 +1442,7 @@ void DigikamApp::slotTagSelected(bool val)
     d->editTagAction->setEnabled(enabled);
 }
 
-void DigikamApp::slotImageSelected(const ImageInfoList& selection, bool hasPrev, bool hasNext,
-                                   const ImageInfoList& listAll)
+void DigikamApp::slotImageSelected(const ImageInfoList& selection, const ImageInfoList& listAll)
 {
     /// @todo Currently only triggered by IconView, need to adapt to TableView
     int num_images = listAll.count();
@@ -1518,7 +1483,6 @@ void DigikamApp::slotImageSelected(const ImageInfoList& selection, bool hasPrev,
     }
 
     d->statusLabel->setText(d->statusBarSelectionText);
-    d->statusNavigateBar->setNavigateBarState(hasPrev, hasNext);
 }
 
 void DigikamApp::slotSelectionChanged(int selectionCount)
@@ -2878,11 +2842,6 @@ void DigikamApp::slotSetCheckedExifOrientationAction(const ImageInfo& info)
     }
 }
 
-void DigikamApp::slotComponentsInfo()
-{
-    showDigikamComponentsInfo();
-}
-
 void DigikamApp::setupImageTransformActions()
 {
     d->imageRotateActionMenu = new KActionMenu(KIcon("object-rotate-right"), i18n("Rotate"), actionCollection());
@@ -2991,7 +2950,7 @@ void DigikamApp::showSideBars(bool visible)
 
 void DigikamApp::showThumbBar(bool visible)
 {
-    d->view->toggleShowBar(visible & d->showBarAction->isEnabled());
+    view()->toggleShowBar(visible);
 }
 
 bool DigikamApp::thumbbarVisibility() const
@@ -3042,6 +3001,7 @@ void DigikamApp::toogleShowBar()
     switch (d->view->viewMode())
     {
         case StackedView::PreviewImageMode:
+        case StackedView::MediaPlayerMode:
             d->showBarAction->setEnabled(true);
             break;
             
@@ -3049,6 +3009,11 @@ void DigikamApp::toogleShowBar()
             d->showBarAction->setEnabled(false);
             break;
     }
+}
+
+void DigikamApp::slotComponentsInfo()
+{
+    showDigikamComponentsInfo();
 }
 
 }  // namespace Digikam

@@ -7,7 +7,7 @@
  * Description : camera item info container
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -95,7 +95,7 @@ public:
     QString            folder;               // Folder path to access to file in camera
     QString            mime;                 // Type mime of camera file
 
-    QDateTime          mtime;                // Modified time stamp of camera file
+    QDateTime          ctime;                // Created time stamp of camera file
 
     PhotoInfoContainer photoInfo;            // Photo Info from camera file (get from file metadata)
 

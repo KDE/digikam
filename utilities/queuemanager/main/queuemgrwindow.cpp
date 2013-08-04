@@ -430,17 +430,8 @@ void QueueMgrWindow::setupActions()
 
     // -- Standard 'Help' menu actions ---------------------------------------------
 
-    d->about = new DAboutData(this);
-    d->about->registerHelpActions();
-
-    d->libsInfoAction = new KAction(KIcon("help-about"), i18n("Components Information"), this);
-    connect(d->libsInfoAction, SIGNAL(triggered()), this, SLOT(slotComponentsInfo()));
-    actionCollection()->addAction("queuemgr_librariesinfo", d->libsInfoAction);
-
-    d->dbStatAction = new KAction(KIcon("network-server-database"), i18n("Database Statistics"), this);
-    connect(d->dbStatAction, SIGNAL(triggered()), this, SLOT(slotDBStat()));
-    actionCollection()->addAction("queuemgr_dbstat", d->dbStatAction);
-
+    createHelpActions();
+        
     // Provides a menu entry that allows showing/hiding the toolbar(s)
     setStandardToolBarMenuEnabled(true);
 
@@ -448,9 +439,6 @@ void QueueMgrWindow::setupActions()
     createStandardStatusBarAction();
 
     // ---------------------------------------------------------------------------------
-
-    d->animLogo = new DLogoAction(this);
-    actionCollection()->addAction("logo_action", d->animLogo);
 
     createGUI(xmlFile());
 
@@ -814,7 +802,7 @@ void QueueMgrWindow::busy(bool busy)
     slotItemSelectionChanged();
 
     d->busy ? d->queuePool->setCursor(Qt::WaitCursor) : d->queuePool->unsetCursor();
-    d->busy ? d->animLogo->start() : d->animLogo->stop();
+    d->busy ? m_animLogo->start() : m_animLogo->stop();
 
     emit signalBqmIsBusy(d->busy);
 }

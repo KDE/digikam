@@ -358,10 +358,14 @@ protected:
         {
             for (unsigned int k=0; k<numberOfThreads; k++)
             {
-                GreycstorationWorkingThread* thread = new GreycstorationWorkingThread(this, k);
-                ++activeThreads;
-                thread->start();
-                threads << thread;
+                if (threads.size() == k) {
+                    GreycstorationWorkingThread* thread = new GreycstorationWorkingThread(this, k);
+                    ++activeThreads;
+                    thread->start();
+                    threads << thread;
+                } else {
+                    threads[k]->start();
+                }
             }
         }
         else

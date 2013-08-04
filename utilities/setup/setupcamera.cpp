@@ -174,12 +174,12 @@ public:
         importAddButton(0),
         importRemoveButton(0),
         importEditButton(0),
-        useDateFromMetadata(0),
+        useFileMetadata(0),
         turnHighQualityThumbs(0),
         useDefaultTargetAlbum(0),
         iconShowNameBox(0),
         iconShowSizeBox(0),
-        iconShowModDateBox(0),
+        iconShowDateBox(0),
         iconShowResolutionBox(0),
         iconShowTagsBox(0),
         iconShowOverlaysBox(0),
@@ -201,7 +201,7 @@ public:
     }
 
     static const QString configGroupName;
-    static const QString configUseMetadataDateEntry;
+    static const QString configUseFileMetadata;
     static const QString configTrunHighQualityThumbs;
     static const QString configUseDefaultTargetAlbum;
     static const QString configDefaultTargetAlbumId;
@@ -215,13 +215,13 @@ public:
     QPushButton*         importRemoveButton;
     QPushButton*         importEditButton;
 
-    QCheckBox*           useDateFromMetadata;
+    QCheckBox*           useFileMetadata;
     QCheckBox*           turnHighQualityThumbs;
     QCheckBox*           useDefaultTargetAlbum;
 
     QCheckBox*           iconShowNameBox;
     QCheckBox*           iconShowSizeBox;
-    QCheckBox*           iconShowModDateBox;
+    QCheckBox*           iconShowDateBox;
     QCheckBox*           iconShowResolutionBox;
     QCheckBox*           iconShowTagsBox;
     QCheckBox*           iconShowOverlaysBox;
@@ -252,7 +252,7 @@ public:
 };
 
 const QString SetupCamera::Private::configGroupName("Camera Settings");
-const QString SetupCamera::Private::configUseMetadataDateEntry("UseThemeBackgroundColor");
+const QString SetupCamera::Private::configUseFileMetadata("UseFileMetadata");
 const QString SetupCamera::Private::configTrunHighQualityThumbs("TurnHighQualityThumbs");
 const QString SetupCamera::Private::configUseDefaultTargetAlbum("UseDefaultTargetAlbum");
 const QString SetupCamera::Private::configDefaultTargetAlbumId("DefaultTargetAlbumId");
@@ -261,15 +261,15 @@ const QString SetupCamera::Private::importFiltersConfigGroupName("Import Filters
 SetupCamera::SetupCamera(QWidget* const parent)
     : QScrollArea(parent), d(new Private)
 {
-    d->tab            = new KTabWidget(viewport());
+    d->tab               = new KTabWidget(viewport());
     setWidget(d->tab);
     setWidgetResizable(true);
 
-    QWidget* panel    = new QWidget(d->tab);
+    QWidget* const panel = new QWidget(d->tab);
     panel->setAutoFillBackground(false);
 
-    QGridLayout* grid = new QGridLayout(panel);
-    d->listView       = new QTreeWidget(panel);
+    QGridLayout* const grid = new QGridLayout(panel);
+    d->listView             = new QTreeWidget(panel);
     d->listView->setColumnCount(4);
     d->listView->setRootIsDecorated(false);
     d->listView->setSelectionMode(QAbstractItemView::SingleSelection);
@@ -309,9 +309,8 @@ SetupCamera::SetupCamera(QWidget* const parent)
 
     // -------------------------------------------------------------
 
-    QSpacerItem* spacer = new QSpacerItem(20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding);
-
-    KUrlLabel* gphotoLogoLabel = new KUrlLabel(panel);
+    QSpacerItem* const spacer        = new QSpacerItem(20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding);
+    KUrlLabel* const gphotoLogoLabel = new KUrlLabel(panel);
     gphotoLogoLabel->setText(QString());
     gphotoLogoLabel->setUrl("http://www.gphoto.org");
     gphotoLogoLabel->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-gphoto.png")));
@@ -340,20 +339,20 @@ SetupCamera::SetupCamera(QWidget* const parent)
 
     // -------------------------------------------------------------
 
-    QWidget* panel2          = new QWidget(d->tab);
+    QWidget* const panel2     = new QWidget(d->tab);
     panel2->setAutoFillBackground(false);
 
-    QVBoxLayout* layout      = new QVBoxLayout(panel2);
-    d->useDateFromMetadata   = new QCheckBox(i18n("Use date from metadata to sort items instead file-system date (makes connection slower)"), panel2);
-    d->turnHighQualityThumbs = new QCheckBox(i18n("Turn on high quality thumbnail loading (slower loading)"), panel2);
-    d->useDefaultTargetAlbum = new QCheckBox(i18n("Use a default target album to download from camera"), panel2);
-    d->target1AlbumSelector  = new AlbumSelectWidget(panel2);
+    QVBoxLayout* const layout = new QVBoxLayout(panel2);
+    d->useFileMetadata        = new QCheckBox(i18n("Use file metadata (makes connection slower)"), panel2);
+    d->turnHighQualityThumbs  = new QCheckBox(i18n("Turn on high quality thumbnail loading (slower loading)"), panel2);
+    d->useDefaultTargetAlbum  = new QCheckBox(i18n("Use a default target album to download from camera"), panel2);
+    d->target1AlbumSelector   = new AlbumSelectWidget(panel2);
 
     d->tab->insertTab(1, panel2, i18n("Behavior"));
 
     layout->setMargin(KDialog::spacingHint());
     layout->setSpacing(KDialog::spacingHint());
-    layout->addWidget(d->useDateFromMetadata);
+    layout->addWidget(d->useFileMetadata);
     layout->addWidget(d->turnHighQualityThumbs);
     layout->addWidget(d->useDefaultTargetAlbum);
     layout->addWidget(d->target1AlbumSelector);
@@ -361,30 +360,30 @@ SetupCamera::SetupCamera(QWidget* const parent)
 
     // -------------------------------------------------------------
 
-    QWidget* panel3 = new QWidget(d->tab);
+    QWidget* const panel3         = new QWidget(d->tab);
     panel3->setAutoFillBackground(false);
 
-    QGridLayout* importGrid = new QGridLayout(panel3);
-    d->importListView       = new QListWidget(panel3);
+    QGridLayout* const importGrid = new QGridLayout(panel3);
+    d->importListView             = new QListWidget(panel3);
     d->importListView->setSelectionMode(QAbstractItemView::SingleSelection);
     d->importListView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     d->importListView->setWhatsThis(i18n("Here you can see filters that can be used to filter "
                                          "files in import dialog."));
 
-    d->importAddButton    = new QPushButton(panel3);
-    d->importRemoveButton = new QPushButton(panel3);
-    d->importEditButton   = new QPushButton(panel3);
-    QSpacerItem* spacer2  = new QSpacerItem(20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding);
+    d->importAddButton         = new QPushButton(panel3);
+    d->importRemoveButton      = new QPushButton(panel3);
+    d->importEditButton        = new QPushButton(panel3);
+    QSpacerItem* const spacer2 = new QSpacerItem(20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
-    QGroupBox* groupBox         = new QGroupBox(panel3);
-    QVBoxLayout* verticalLayout = new QVBoxLayout(groupBox);
-    QLabel* label               = new QLabel(groupBox);
+    QGroupBox* const groupBox         = new QGroupBox(panel3);
+    QVBoxLayout* const verticalLayout = new QVBoxLayout(groupBox);
+    QLabel* const label               = new QLabel(groupBox);
     verticalLayout->addWidget(label);
-    d->ignoreNamesEdit          = new QLineEdit(groupBox);
+    d->ignoreNamesEdit                = new QLineEdit(groupBox);
     verticalLayout->addWidget(d->ignoreNamesEdit);
-    QLabel* label2              = new QLabel(groupBox);
+    QLabel* const label2              = new QLabel(groupBox);
     verticalLayout->addWidget(label2);
-    d->ignoreExtensionsEdit     = new QLineEdit(groupBox);
+    d->ignoreExtensionsEdit           = new QLineEdit(groupBox);
     verticalLayout->addWidget(d->ignoreExtensionsEdit);
 
     groupBox->setTitle(i18n("Always ignore"));
@@ -413,13 +412,13 @@ SetupCamera::SetupCamera(QWidget* const parent)
 
     // -- Import Icon View ----------------------------------------------------------
 
-    QWidget* panel4 = new QWidget(d->tab);
+    QWidget* const panel4      = new QWidget(d->tab);
     panel4->setAutoFillBackground(false);
 
-    QVBoxLayout* layout2 = new QVBoxLayout(panel4);
+    QVBoxLayout* const layout2 = new QVBoxLayout(panel4);
 
-    QGroupBox* iconViewGroup = new QGroupBox(i18n("Icon-View Options"), panel4);
-    QGridLayout* grid2       = new QGridLayout(iconViewGroup);
+    QGroupBox* const iconViewGroup = new QGroupBox(i18n("Icon-View Options"), panel4);
+    QGridLayout* const grid2       = new QGridLayout(iconViewGroup);
 
     d->iconShowNameBox       = new QCheckBox(i18n("Show file&name"), iconViewGroup);
     d->iconShowNameBox->setWhatsThis(i18n("Set this option to show the filename below the image thumbnail."));
@@ -427,13 +426,15 @@ SetupCamera::SetupCamera(QWidget* const parent)
     d->iconShowSizeBox       = new QCheckBox(i18n("Show file si&ze"), iconViewGroup);
     d->iconShowSizeBox->setWhatsThis(i18n("Set this option to show the file size below the image thumbnail."));
 
-    d->iconShowModDateBox    = new QCheckBox(i18n("Show file &modification date"), iconViewGroup);
-    d->iconShowModDateBox->setWhatsThis(i18n("Set this option to show the file modification date "
-                                             "below the image thumbnail."));
+    d->iconShowDateBox    = new QCheckBox(i18n("Show camera creation &date"), iconViewGroup);
+    d->iconShowDateBox->setWhatsThis(i18n("Set this option to show the camera creation date "
+                                             "below the image thumbnail"));
 
-    //d->iconShowResolutionBox = new QCheckBox(i18n("Show ima&ge dimensions"), iconViewGroup);
-    //d->iconShowResolutionBox->setWhatsThis(i18n("Set this option to show the image size in pixels "
-                                                //"below the image thumbnail."));
+/*
+    d->iconShowResolutionBox = new QCheckBox(i18n("Show ima&ge dimensions"), iconViewGroup);
+    d->iconShowResolutionBox->setWhatsThis(i18n("Set this option to show the image size in pixels "
+                                                "below the image thumbnail."));
+*/
 
     d->iconShowFormatBox     = new QCheckBox(i18n("Show image Format"), iconViewGroup);
     d->iconShowFormatBox->setWhatsThis(i18n("Set this option to show image format over image thumbnail."));
@@ -450,8 +451,8 @@ SetupCamera::SetupCamera(QWidget* const parent)
     d->iconShowOverlaysBox->setWhatsThis(i18n("Set this option to show overlay buttons on "
                                               "the image thumbnail for image rotation."));
 
-    QLabel* leftClickLabel     = new QLabel(i18n("Thumbnail click action:"), iconViewGroup);
-    d->leftClickActionComboBox = new KComboBox(iconViewGroup);
+    QLabel* const leftClickLabel = new QLabel(i18n("Thumbnail click action:"), iconViewGroup);
+    d->leftClickActionComboBox   = new KComboBox(iconViewGroup);
     d->leftClickActionComboBox->addItem(i18n("Show embedded preview"), ImportSettings::ShowPreview);
     d->leftClickActionComboBox->addItem(i18n("Start image editor"), ImportSettings::StartEditor);
     d->leftClickActionComboBox->setToolTip(i18n("Choose what should happen when you click on a thumbnail."));
@@ -461,26 +462,25 @@ SetupCamera::SetupCamera(QWidget* const parent)
 
     grid2->addWidget(d->iconShowNameBox,          0, 0, 1, 1);
     grid2->addWidget(d->iconShowSizeBox,          1, 0, 1, 1);
-    grid2->addWidget(d->iconShowRatingBox,        2, 0, 1, 1);
-    grid2->addWidget(d->iconShowModDateBox,       3, 0, 1, 1);
-    //TODO: grid2->addWidget(d->iconShowResolutionBox,    4, 0, 1, 1);
-    grid2->addWidget(d->iconShowFormatBox,        4, 0, 1, 1);
+    grid2->addWidget(d->iconShowDateBox,          2, 0, 1, 1);
+//  grid2->addWidget(d->iconShowResolutionBox,    3, 0, 1, 1);              TODO
+    grid2->addWidget(d->iconShowFormatBox,        3, 0, 1, 1);
 
     grid2->addWidget(d->iconShowTagsBox,          0, 1, 1, 1);
-
-    grid2->addWidget(d->iconShowOverlaysBox,      1, 1, 1, 1);
+    grid2->addWidget(d->iconShowRatingBox,        1, 1, 1, 1);
+    grid2->addWidget(d->iconShowOverlaysBox,      2, 1, 1, 1);
     grid2->addWidget(leftClickLabel,              5, 0, 1, 1);
-    grid2->addWidget(d->leftClickActionComboBox,  6, 1, 1, 1);
-    grid2->addWidget(d->iconViewFontSelect,       7, 0, 1, 2);
+    grid2->addWidget(d->leftClickActionComboBox,  5, 1, 1, 1);
+    grid2->addWidget(d->iconViewFontSelect,       6, 0, 1, 2);
     grid2->setSpacing(KDialog::spacingHint());
     grid2->setMargin(KDialog::spacingHint());
 
     // --------------------------------------------------------
 
-    QGroupBox* interfaceOptionsGroup = new QGroupBox(i18n("Preview Options"), panel4);
-    QGridLayout* grid3               = new QGridLayout(interfaceOptionsGroup);
+    QGroupBox* const interfaceOptionsGroup = new QGroupBox(i18n("Preview Options"), panel4);
+    QGridLayout* const grid3               = new QGridLayout(interfaceOptionsGroup);
 
-    d->previewLoadFullImageSize      = new QCheckBox(i18n("Embedded preview loads full-sized images"), interfaceOptionsGroup);
+    d->previewLoadFullImageSize  = new QCheckBox(i18n("Embedded preview loads full-sized images"), interfaceOptionsGroup);
     d->previewLoadFullImageSize->setWhatsThis(i18n("<p>Set this option to load images at their full size "
                                                    "for preview, rather than at a reduced size. As this option "
                                                    "will make it take longer to load images, only use it if you have "
@@ -488,10 +488,10 @@ SetupCamera::SetupCamera(QWidget* const parent)
                                                    "<p><b>Note:</b> for Raw images, a half size version of the Raw data "
                                                    "is used instead of the embedded JPEG preview.</p>"));
 
-    d->previewItemsWhileDownload      = new QCheckBox(i18n("Preview each item while downloading it"), interfaceOptionsGroup);
+    d->previewItemsWhileDownload = new QCheckBox(i18n("Preview each item while downloading it"), interfaceOptionsGroup);
     d->previewItemsWhileDownload->setWhatsThis(i18n("<p>Set this option to preview each item while downloading.</p>"));
 
-    d->previewShowIcons              = new QCheckBox(i18n("Show icons and text over preview"), interfaceOptionsGroup);
+    d->previewShowIcons          = new QCheckBox(i18n("Show icons and text over preview"), interfaceOptionsGroup);
     d->previewShowIcons->setWhatsThis(i18n("Uncheck this if you don't want to see icons and text in the image preview."));
 
     grid3->setMargin(KDialog::spacingHint());
@@ -565,12 +565,25 @@ SetupCamera::SetupCamera(QWidget* const parent)
 
     // -------------------------------------------------------------
 
+    connect(d->useFileMetadata, SIGNAL(toggled(bool)),
+            this, SIGNAL(signalUseFileMetadataChanged(bool)));
+
+    // -------------------------------------------------------------
+
     readSettings();
 }
 
 SetupCamera::~SetupCamera()
 {
     delete d;
+}
+
+bool SetupCamera::useFileMetadata()
+{
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group(d->configGroupName);
+
+    return (group.readEntry(d->configUseFileMetadata, false));
 }
 
 void SetupCamera::readSettings()
@@ -581,7 +594,7 @@ void SetupCamera::readSettings()
 
     if (clist)
     {
-        QList<CameraType*>* cl = clist->cameraList();
+        QList<CameraType*>* const cl = clist->cameraList();
 
         foreach(CameraType* const ctype, *cl)
         {
@@ -594,10 +607,10 @@ void SetupCamera::readSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
 
-    d->useDateFromMetadata->setChecked(group.readEntry(d->configUseMetadataDateEntry, false));
+    d->useFileMetadata->setChecked(useFileMetadata());
     d->turnHighQualityThumbs->setChecked(group.readEntry(d->configTrunHighQualityThumbs, false));
     d->useDefaultTargetAlbum->setChecked(group.readEntry(d->configUseDefaultTargetAlbum, false));
-    PAlbum* album = AlbumManager::instance()->findPAlbum(group.readEntry(d->configDefaultTargetAlbumId, 0));
+    PAlbum* const album = AlbumManager::instance()->findPAlbum(group.readEntry(d->configDefaultTargetAlbumId, 0));
     d->target1AlbumSelector->setCurrentAlbum(album);
     d->target1AlbumSelector->setEnabled(d->useDefaultTargetAlbum->isChecked());
 
@@ -616,7 +629,7 @@ void SetupCamera::readSettings()
             break;
         }
 
-        Filter* f = new Filter;
+        Filter* const f = new Filter;
         f->fromString(filter);
         d->filters.append(f);
     }
@@ -641,7 +654,7 @@ void SetupCamera::readSettings()
     d->iconShowNameBox->setChecked(settings->getIconShowName());
     d->iconShowTagsBox->setChecked(settings->getIconShowTags());
     d->iconShowSizeBox->setChecked(settings->getIconShowSize());
-    d->iconShowModDateBox->setChecked(settings->getIconShowModDate());
+    d->iconShowDateBox->setChecked(settings->getIconShowDate());
     //TODO: d->iconShowResolutionBox->setChecked(settings->getIconShowResolution());
     d->iconShowOverlaysBox->setChecked(settings->getIconShowOverlays());
     d->iconShowRatingBox->setChecked(settings->getIconShowRating());
@@ -692,7 +705,7 @@ void SetupCamera::applySettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
 
-    group.writeEntry(d->configUseMetadataDateEntry, d->useDateFromMetadata->isChecked());
+    group.writeEntry(d->configUseFileMetadata,  d->useFileMetadata->isChecked());
     group.writeEntry(d->configTrunHighQualityThumbs, d->turnHighQualityThumbs->isChecked());
     group.writeEntry(d->configUseDefaultTargetAlbum, d->useDefaultTargetAlbum->isChecked());
     PAlbum* const album = d->target1AlbumSelector->currentAlbum();
@@ -717,7 +730,7 @@ void SetupCamera::applySettings()
     importGroup.writeEntry("IgnoreExtensions", d->ignoreExtensionsEdit->text());
     importGroup.sync();
 
-    ImportSettings* settings = ImportSettings::instance();
+    ImportSettings* const settings = ImportSettings::instance();
 
     if (!settings)
     {
@@ -727,7 +740,7 @@ void SetupCamera::applySettings()
     settings->setIconShowName(d->iconShowNameBox->isChecked());
     settings->setIconShowTags(d->iconShowTagsBox->isChecked());
     settings->setIconShowSize(d->iconShowSizeBox->isChecked());
-    settings->setIconShowModDate(d->iconShowModDateBox->isChecked());
+    settings->setIconShowDate(d->iconShowDateBox->isChecked());
     //TODO: settings->setIconShowResolution(d->iconShowResolutionBox->isChecked());
     settings->setIconShowOverlays(d->iconShowOverlaysBox->isChecked());
     settings->setIconShowRating(d->iconShowRatingBox->isChecked());

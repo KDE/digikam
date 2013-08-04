@@ -6,7 +6,7 @@
  * Date        : 2009-28-04
  * Description : first run assistant dialog
  *
- * Copyright (C) 2009-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -42,11 +42,11 @@
 namespace Digikam
 {
 
-class RawPage::RawPagePriv
+class RawPage::Private
 {
 public:
 
-    RawPagePriv() :
+    Private() :
         openDirectly(0),
         useRawImport(0),
         rawHandling(0)
@@ -59,19 +59,19 @@ public:
     QButtonGroup* rawHandling;
 };
 
-RawPage::RawPage(KAssistantDialog* dlg)
+RawPage::RawPage(KAssistantDialog* const dlg)
     : AssistantDlgPage(dlg, i18n("<b>Configure Raw File Handling</b>")),
-      d(new RawPagePriv)
+      d(new Private)
 {
-    KVBox* vbox    = new KVBox(this);
-    QLabel* label1 = new QLabel(vbox);
+    KVBox* const vbox    = new KVBox(this);
+    QLabel* const label1 = new QLabel(vbox);
     label1->setWordWrap(true);
     label1->setText(i18n("<qt>"
                          "<p>Set here how you want to open Raw images in the editor:</p>"
                          "</qt>"));
 
-    QWidget* btns     = new QWidget(vbox);
-    QVBoxLayout* vlay = new QVBoxLayout(btns);
+    QWidget* const btns     = new QWidget(vbox);
+    QVBoxLayout* const vlay = new QVBoxLayout(btns);
 
     d->rawHandling    = new QButtonGroup(btns);
     d->openDirectly   = new QRadioButton(btns);
@@ -88,7 +88,7 @@ RawPage::RawPage(KAssistantDialog* dlg)
     vlay->setMargin(KDialog::spacingHint());
     vlay->setSpacing(KDialog::spacingHint());
 
-    QLabel* label2 = new QLabel(vbox);
+    QLabel* const label2 = new QLabel(vbox);
     label2->setWordWrap(true);
     label2->setText(i18n("<qt>"
                          "<p><i>Note:</i> the Raw import tool is designed for advanced users who "
@@ -97,9 +97,7 @@ RawPage::RawPage(KAssistantDialog* dlg)
                          "</qt>"));
 
     setPageWidget(vbox);
-
-    QPixmap leftPix = KStandardDirs::locate("data", "digikam/data/assistant-rawimport.png");
-    setLeftBottomPix(leftPix.scaledToWidth(128, Qt::SmoothTransformation));
+    setLeftBottomPix(KIconLoader::global()->loadIcon("kdcraw", KIconLoader::NoGroup, KIconLoader::SizeEnormous));
 }
 
 RawPage::~RawPage()

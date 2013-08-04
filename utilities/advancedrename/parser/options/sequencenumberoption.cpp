@@ -67,7 +67,7 @@ SequenceNumberOption::SequenceNumberOption()
     addToken("#[||options||,||start||]",          i18n("Sequence number (custom start)"));
     addToken("#[||options||,||start||,||step||]", i18n("Sequence number (custom start + step)"));
 
-    QRegExp reg("(#+)(\\[(e?f?,?)?((\\d+)(,(\\d+))?)?\\])?");
+    QRegExp reg("(#+)(\\[(e?f?,?)?((-?\\d+)(,(-?\\d+))?)?\\])?");
     setRegExp(reg);
 }
 
@@ -161,6 +161,16 @@ QString SequenceNumberOption::parseOperation(ParseSettings& settings)
     slength = reg.cap(1).length();
     start   = reg.cap(5).isEmpty() ? settings.startIndex : reg.cap(5).toInt();
     step    = reg.cap(7).isEmpty() ? 1 : reg.cap(7).toInt();
+
+    if (start < 1)
+    {
+        start = settings.startIndex;
+    }
+
+    if (step < 1)
+    {
+        step = 1;
+    }
 
     number  = start + ((index - 1) * step);
     result  = QString("%1").arg(number, slength, 10, QChar('0'));

@@ -60,7 +60,9 @@ public:
     DatabaseConfigElement readDatabase(QDomElement& databaseElement);
     void readDBActions(QDomElement& sqlStatementElements, DatabaseConfigElement& configElement);
 
-    bool isValid;
+public:
+
+    bool    isValid;
     QString errorMessage;
 };
 
@@ -69,6 +71,7 @@ K_GLOBAL_STATIC(DatabaseConfigElementLoader, loader)
 DatabaseConfigElementLoader::DatabaseConfigElementLoader()
 {
     isValid = readConfig();
+    
     if (!isValid)
     {
         kError() << errorMessage;
@@ -78,7 +81,7 @@ DatabaseConfigElementLoader::DatabaseConfigElementLoader()
 DatabaseConfigElement DatabaseConfigElementLoader::readDatabase(QDomElement& databaseElement)
 {
     DatabaseConfigElement configElement;
-    configElement.databaseID="Unidentified";
+    configElement.databaseID = "Unidentified";
 
     if (!databaseElement.hasAttribute("name"))
     {
@@ -86,8 +89,7 @@ DatabaseConfigElement DatabaseConfigElementLoader::readDatabase(QDomElement& dat
     }
 
     configElement.databaseID = databaseElement.attribute("name");
-
-    QDomElement element =  databaseElement.namedItem("databaseName").toElement();
+    QDomElement element      =  databaseElement.namedItem("databaseName").toElement();
 
     if (element.isNull())
     {
@@ -104,8 +106,7 @@ DatabaseConfigElement DatabaseConfigElementLoader::readDatabase(QDomElement& dat
     }
 
     configElement.userName = element.text();
-
-    element =  databaseElement.namedItem("password").toElement();
+    element                = databaseElement.namedItem("password").toElement();
 
     if (element.isNull())
     {
@@ -113,8 +114,7 @@ DatabaseConfigElement DatabaseConfigElementLoader::readDatabase(QDomElement& dat
     }
 
     configElement.password = element.text();
-
-    element =  databaseElement.namedItem("hostName").toElement();
+    element                = databaseElement.namedItem("hostName").toElement();
 
     if (element.isNull())
     {
@@ -122,8 +122,7 @@ DatabaseConfigElement DatabaseConfigElementLoader::readDatabase(QDomElement& dat
     }
 
     configElement.hostName = element.text();
-
-    element =  databaseElement.namedItem("port").toElement();
+    element                = databaseElement.namedItem("port").toElement();
 
     if (element.isNull())
     {
@@ -131,8 +130,7 @@ DatabaseConfigElement DatabaseConfigElementLoader::readDatabase(QDomElement& dat
     }
 
     configElement.port = element.text();
-
-    element =  databaseElement.namedItem("connectoptions").toElement();
+    element            = databaseElement.namedItem("connectoptions").toElement();
 
     if (element.isNull())
     {
@@ -140,8 +138,7 @@ DatabaseConfigElement DatabaseConfigElementLoader::readDatabase(QDomElement& dat
     }
 
     configElement.connectOptions = element.text();
-
-    element =  databaseElement.namedItem("dbservercmd").toElement();
+    element                      = databaseElement.namedItem("dbservercmd").toElement();
 
     if (element.isNull())
     {
@@ -149,8 +146,7 @@ DatabaseConfigElement DatabaseConfigElementLoader::readDatabase(QDomElement& dat
     }
 
     configElement.dbServerCmd = element.text();
-
-    element =  databaseElement.namedItem("dbinitcmd").toElement();
+    element                   = databaseElement.namedItem("dbinitcmd").toElement();
 
     if (element.isNull())
     {
@@ -158,8 +154,7 @@ DatabaseConfigElement DatabaseConfigElementLoader::readDatabase(QDomElement& dat
     }
 
     configElement.dbInitCmd = element.text();
-
-    element =  databaseElement.namedItem("dbactions").toElement();
+    element                 = databaseElement.namedItem("dbactions").toElement();
 
     if (element.isNull())
     {
@@ -190,7 +185,6 @@ void DatabaseConfigElementLoader::readDBActions(QDomElement& sqlStatementElement
         {
             action.mode = dbActionElement.attribute("mode");
         }
-
 
         QDomElement databaseElement = dbActionElement.firstChildElement("statement");
 
@@ -265,9 +259,10 @@ bool DatabaseConfigElementLoader::readConfig()
     }
 
     QDomElement versionElement = element.namedItem("version").toElement();
-    int version = 0;
+    int version                = 0;
 
     kDebug() << versionElement.isNull() << versionElement.text() << versionElement.text().toInt() << dbconfig_xml_version;
+
     if (!versionElement.isNull())
     {
         version = versionElement.text().toInt();
@@ -286,7 +281,7 @@ bool DatabaseConfigElementLoader::readConfig()
     kDebug() << "Default DB Node contains: " << defaultDB.text();
 #endif
 
-    QDomElement databaseElement =  element.firstChildElement("database");
+    QDomElement databaseElement = element.firstChildElement("database");
 
     for ( ; !databaseElement.isNull();  databaseElement=databaseElement.nextSiblingElement("database"))
     {
@@ -296,6 +291,7 @@ bool DatabaseConfigElementLoader::readConfig()
 
 #ifdef DATABASEPARAMETERS_DEBUG
     kDebug() << "Found entries: " << databaseConfigs.size();
+    
     foreach(const DatabaseConfigElement& configElement, databaseConfigs )
     {
         kDebug() << "DatabaseID: " << configElement.databaseID;
@@ -308,7 +304,7 @@ bool DatabaseConfigElementLoader::readConfig()
         kDebug() << "Database Server CMD: " << configElement.dbServerCmd;
         kDebug() << "Database Init CMD: " << configElement.dbInitCmd;
 
-        /*
+/*
         kDebug() << "Statements:";
 
         foreach(const QString actionKey, configElement.sqlStatements.keys())
@@ -320,7 +316,7 @@ bool DatabaseConfigElementLoader::readConfig()
                 kDebug() << "\tMode ["<< statement.mode <<"] Value ["<< statement.statement <<"]";
             }
         }
-        */
+*/
     }
 #endif
 

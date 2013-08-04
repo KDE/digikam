@@ -418,7 +418,7 @@ void ImportView::slotDispatchImageSelected()
         if (list.isEmpty())
         {
             d->stackedView->setPreviewItem();
-            emit signalImageSelected(list, false, false, allImages);
+            emit signalImageSelected(list, allImages);
             emit signalNewSelection(false);
             emit signalNoCurrentItem();
         }
@@ -439,7 +439,7 @@ void ImportView::slotDispatchImageSelected()
                 d->stackedView->setPreviewItem(list.first(), previousInfo, nextInfo);
             }
 
-            emit signalImageSelected(list, !previousInfo.isNull(), !nextInfo.isNull(), allImages);
+            emit signalImageSelected(list, allImages);
             emit signalNewSelection(true);
         }
 
@@ -772,6 +772,9 @@ void ImportView::slotGroupImages(int categoryMode)
 void ImportView::toggleShowBar(bool b)
 {
     d->stackedView->thumbBarDock()->showThumbBar(b);
+    
+    // See B.K.O #319876 : force to reload current view mode to set thumbbar visibility properly.
+    d->stackedView->setViewMode(viewMode());
 }
 
 void ImportView::scrollTo(const QString& folder, const QString& file)

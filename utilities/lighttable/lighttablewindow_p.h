@@ -38,7 +38,6 @@
 
 #include "imagepropertiessidebardb.h"
 #include "statusprogressbar.h"
-#include "daboutdata.h"
 #include "dzoombar.h"
 #include "lighttableview.h"
 #include "lighttablethumbbar.h"
@@ -76,8 +75,6 @@ public:
         backwardAction(0),
         firstAction(0),
         lastAction(0),
-        libsInfoAction(0),
-        dbStatAction(0),
         showBarAction(0),
         syncPreviewAction(0),
         navigateByPairAction(0),
@@ -93,8 +90,7 @@ public:
         rightZoomBar(0),
         statusProgressBar(0),
         leftSideBar(0),
-        rightSideBar(0),
-        about(0)
+        rightSideBar(0)
     {
     }
 
@@ -126,8 +122,6 @@ public:
     KAction*                  donateMoneyAction;
     KAction*                  contributeAction;
     KAction*                  rawCameraListAction;
-    KAction*                  libsInfoAction;
-    KAction*                  dbStatAction;
 
     KToggleAction*            showBarAction;
     KToggleAction*            syncPreviewAction;
@@ -152,8 +146,6 @@ public:
 
     ImagePropertiesSideBarDB* leftSideBar;
     ImagePropertiesSideBarDB* rightSideBar;
-
-    DAboutData*               about;
 };
 
 }  // namespace Digikam

@@ -1,5 +1,5 @@
 *****************************************************************************************************
-digiKam 3.3.0-beta2- Release date: 2013-06-16
+digiKam 3.3.0-beta3- Release date: 2013-06-30
 
 NEW FEATURES:
 
@@ -24,10 +24,25 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 014 ==> 320794 - Libkdcraw uses obsolete libraw library.
 015 ==> 320891 - Missing space in Face Tags(including face rectangles).
 016 ==> 290961 - digiKam crashes after closing the configure dialog.
-017 ==> 192258 - starting takes long time.
-018 ==> 285821 - Once installed, DK does not start
-019 ==> 319267] libkdcraw contains invalid icc profiles, applications fail to save png file with libpng-1.6.x.
+017 ==> 192258 - Starting takes long time.
+018 ==> 285821 - Once installed, DK does not start.
+019 ==> 319267 - Libkdcraw contains invalid icc profiles, applications fail to save png file with libpng-1.6.x.
 020 ==> 314033 - Crashed when attempting to vie images in folders.
-021 ==> 
-
-
+021 ==> 320763 - Build failed.
+022 ==> 204138 - Possibility to extract JPEG previews from RAW files during camera import.
+023 ==> 261907 - digiKam empty context menus (relevant of default KDE widget style for Windows set to CDE instead Oxygen).
+024 ==> 249387 - Showfoto 1.1.0 crash when saving JPEG in WinVista64.
+025 ==> 262186 - "Save file is completed" notification cannot be turned off.
+026 ==> 321296 - opencv error message during face scan.
+027 ==> 304002 - Segfault when using inpainting.
+028 ==> 319632 - digiKam crashes when in-painting applied to photo.
+029 ==> 322213 - when renaming files by date, the "format settings" link incorrectly links to doc.trolltech.com.
+030 ==> 322656 - When opening a pic, dark areas show artefacts.
+031 ==> 302904 - Import photos causes progress manager to pop up.
+032 ==> 297614 - Maintenance tool disabled after running some tasks.
+033 ==> 295256 - Indicator missing while digiKam is filling the maintenance queue.
+034 ==> 295255 - Running maintenance twice results in error.
+035 ==> 320121 - if running maintenance, "rebuild thumbnails", digiKam hangs endlessly.
+036 ==> 306282 - Improvements for maintenance tool.
+037 ==> 306246 - Add new maintainance option to update DB using image metadata.
+038 ==> 

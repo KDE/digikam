@@ -59,7 +59,6 @@ public:
         fileDeletePermanentlyAction(0),
         fileDeletePermanentlyDirectlyAction(0),
         fileTrashDirectlyAction(0),
-        dbStatAction(0),
         imageInfoModel(0),
         imageFilterModel(0),
         dragDropHandler(0),
@@ -150,8 +149,6 @@ public:
     KAction*                  fileDeletePermanentlyAction;
     KAction*                  fileDeletePermanentlyDirectlyAction;
     KAction*                  fileTrashDirectlyAction;
-
-    KAction*                  dbStatAction;
 
     ImageInfo                 currentImageInfo;
     ImageListModel*           imageInfoModel;

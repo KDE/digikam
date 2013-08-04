@@ -6,7 +6,7 @@
  * Date        : 2009-28-04
  * Description : first run assistant dialog
  *
- * Copyright (C) 2009-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -39,11 +39,11 @@
 namespace Digikam
 {
 
-WelcomePage::WelcomePage(KAssistantDialog* dlg)
+WelcomePage::WelcomePage(KAssistantDialog* const dlg)
     : AssistantDlgPage(dlg, i18n("Welcome to digiKam %1", QString(digikam_version_short)))
 {
-    KVBox* vbox   = new KVBox(this);
-    QLabel* title = new QLabel(vbox);
+    KVBox* const vbox   = new KVBox(this);
+    QLabel* const title = new QLabel(vbox);
     title->setWordWrap(true);
     title->setText(i18n("<qt>"
                         "<p><h1><b>Welcome to digiKam %1</b></h1></p>"

@@ -6,7 +6,7 @@
  * Date        : 2007-04-15
  * Description : a zoom bar used in status bar.
  *
- * Copyright (C) 2007-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -56,17 +56,17 @@ public:
 
 public:
 
-    explicit DZoomBar(QWidget* parent=0);
+    explicit DZoomBar(QWidget* const parent=0);
     ~DZoomBar();
 
     void setBarMode(BarMode mode);
     void setZoom(double zoom, double zmin, double zmax);
     void setThumbsSize(int size);
 
-    void setZoomToFitAction(QAction* action);
-    void setZoomTo100Action(QAction* action);
-    void setZoomPlusAction(QAction* action);
-    void setZoomMinusAction(QAction* action);
+    void setZoomToFitAction(QAction* const action);
+    void setZoomTo100Action(QAction* const action);
+    void setZoomPlusAction(QAction* const action);
+    void setZoomMinusAction(QAction* const action);
 
     void triggerZoomTrackerToolTip();
 
@@ -94,8 +94,8 @@ private Q_SLOTS:
 
 private:
 
-    class DZoomBarPriv;
-    DZoomBarPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

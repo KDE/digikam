@@ -158,9 +158,9 @@ QString DKCamera::mimeType(const QString& fileext) const
 void DKCamera::fillItemInfoFromMetadata(CamItemInfo& info, const DMetadata& meta) const
 {
     QSize dims     = meta.getImageDimensions();
-    info.mtime     = meta.getImageDateTime();
+    info.ctime     = meta.getImageDateTime();
     //NOTE: see B.K.O #246401 to sort based on milliseconds for items  taken quickly.
-    info.mtime.setTime(info.mtime.time().addMSecs(meta.getMSecsInfo()));
+    info.ctime.setTime(info.ctime.time().addMSecs(meta.getMSecsInfo()));
     info.width     = dims.width();
     info.height    = dims.height();
     info.photoInfo = meta.getPhotographInformation();

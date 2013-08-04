@@ -55,7 +55,6 @@
 
 // KDE includes
 
-#include <kaboutdata.h>
 #include <kactioncollection.h>
 #include <kapplication.h>
 #include <kcalendarsystem.h>
@@ -94,8 +93,10 @@
 
 // Local includes
 
+#include "advancedrenamemanager.h"
 #include "album.h"
 #include "albummanager.h"
+#include "albumsettings.h"
 #include "albumselectdialog.h"
 #include "cameracontroller.h"
 #include "camerafolderdialog.h"
@@ -119,11 +120,11 @@
 #include "importview.h"
 #include "knotificationwrapper.h"
 #include "newitemsfinder.h"
+#include "parsesettings.h"
 #include "renamecustomizer.h"
 #include "scancontroller.h"
 #include "setup.h"
 #include "sidebar.h"
-#include "statusnavigatebar.h"
 #include "statusprogressbar.h"
 #include "thememanager.h"
 #include "thumbnailsize.h"
@@ -188,7 +189,7 @@ ImportUI::ImportUI(QWidget* const parent, const QString& cameraTitle,
     d->historyUpdater = new CameraHistoryUpdater(this);
 
     //connect (d->historyUpdater, SIGNAL(signalHistoryMap(CHUpdateItemMap)),
-             //this, SLOT(slotRefreshIconView(CHUpdateItemMap)));
+    //this, SLOT(slotRefreshIconView(CHUpdateItemMap)));
 
     connect(d->historyUpdater, SIGNAL(signalBusy(bool)),
             this, SLOT(slotBusy(bool)));
@@ -229,12 +230,12 @@ ImportUI* ImportUI::instance()
 
 void ImportUI::setupUserArea()
 {
-    KHBox* widget   = new KHBox(this);
-    d->splitter     = new SidebarSplitter(widget);
-    KVBox* vbox     = new KVBox(d->splitter);
-    d->view         = new ImportView(this, vbox);
-    d->historyView  = new DHistoryView(vbox);
-    d->rightSideBar = new ImagePropertiesSideBarCamGui(widget, d->splitter, KMultiTabBar::Right, true);
+    KHBox* const widget = new KHBox(this);
+    d->splitter         = new SidebarSplitter(widget);
+    KVBox* const vbox   = new KVBox(d->splitter);
+    d->view             = new ImportView(this, vbox);
+    d->historyView      = new DHistoryView(vbox);
+    d->rightSideBar     = new ImagePropertiesSideBarCamGui(widget, d->splitter, KMultiTabBar::Right, true);
     d->rightSideBar->setObjectName("CameraGui Sidebar Right");
     d->splitter->setFrameStyle(QFrame::NoFrame);
     d->splitter->setFrameShadow(QFrame::Plain);
@@ -437,7 +438,7 @@ void ImportUI::setupActions()
     actionCollection()->addAction("importui_view_selection", d->imageViewSelectionAction);
 
     d->iconViewAction = new KToggleAction(KIcon("view-list-icons"),
-                                               i18nc("@action Go to thumbnails (icon) view", "Thumbnails"), this);
+                                          i18nc("@action Go to thumbnails (icon) view", "Thumbnails"), this);
     actionCollection()->addAction("importui_icon_view", d->iconViewAction);
     connect(d->iconViewAction, SIGNAL(triggered()), d->view, SLOT(slotIconView()));
     d->imageViewSelectionAction->addAction(d->iconViewAction);
@@ -449,7 +450,7 @@ void ImportUI::setupActions()
     d->imageViewSelectionAction->addAction(d->camItemPreviewAction);
 
     d->mapViewAction = new KToggleAction(KIcon("applications-internet"),
-                                              i18nc("@action Switch to map view", "Map"), this);
+                                         i18nc("@action Switch to map view", "Map"), this);
     actionCollection()->addAction("importui_map_view", d->mapViewAction);
     connect(d->mapViewAction, SIGNAL(triggered()), d->view, SLOT(slotMapWidgetView()));
     d->imageViewSelectionAction->addAction(d->mapViewAction);
@@ -458,25 +459,25 @@ void ImportUI::setupActions()
 
     // -- Item Sorting ------------------------------------------------------------
 
-    d->itemSortAction = new KSelectAction(i18n("&Sort Items"), this);
+    d->itemSortAction                    = new KSelectAction(i18n("&Sort Items"), this);
     d->itemSortAction->setWhatsThis(i18n("The value by which the items are sorted in the thumbnail view"));
-    QSignalMapper* imageSortMapper = new QSignalMapper(this);
+    QSignalMapper* const imageSortMapper = new QSignalMapper(this);
     connect(imageSortMapper, SIGNAL(mapped(int)), d->view, SLOT(slotSortImages(int)));
     actionCollection()->addAction("item_sort", d->itemSortAction);
 
     // map to CamItemSortSettings enum
-    QAction* sortByNameAction = d->itemSortAction->addAction(i18n("By Name"));
-    QAction* sortByPathAction = d->itemSortAction->addAction(i18n("By Path"));
-    QAction* sortByDateAction = d->itemSortAction->addAction(i18n("By Date")); //TODO: Implement sort by creation date.
-    QAction* sortByFileSizeAction = d->itemSortAction->addAction(i18n("By Size"));
-    QAction* sortByRatingAction = d->itemSortAction->addAction(i18n("By Rating"));
-    QAction* sortByDownloadAction = d->itemSortAction->addAction(i18n("By Download State"));
+    QAction* const sortByNameAction     = d->itemSortAction->addAction(i18n("By Name"));
+    QAction* const sortByPathAction     = d->itemSortAction->addAction(i18n("By Path"));
+    QAction* const sortByDateAction     = d->itemSortAction->addAction(i18n("By Date")); //TODO: Implement sort by creation date.
+    QAction* const sortByFileSizeAction = d->itemSortAction->addAction(i18n("By Size"));
+    QAction* const sortByRatingAction   = d->itemSortAction->addAction(i18n("By Rating"));
+    QAction* const sortByDownloadAction = d->itemSortAction->addAction(i18n("By Download State"));
 
-    connect(sortByNameAction, SIGNAL(triggered()), imageSortMapper, SLOT(map()));
-    connect(sortByPathAction, SIGNAL(triggered()), imageSortMapper, SLOT(map()));
-    connect(sortByDateAction, SIGNAL(triggered()), imageSortMapper, SLOT(map())); //TODO: Implement sort by creation date.
+    connect(sortByNameAction,     SIGNAL(triggered()), imageSortMapper, SLOT(map()));
+    connect(sortByPathAction,     SIGNAL(triggered()), imageSortMapper, SLOT(map()));
+    connect(sortByDateAction,     SIGNAL(triggered()), imageSortMapper, SLOT(map())); //TODO: Implement sort by creation date.
     connect(sortByFileSizeAction, SIGNAL(triggered()), imageSortMapper, SLOT(map()));
-    connect(sortByRatingAction, SIGNAL(triggered()), imageSortMapper, SLOT(map()));
+    connect(sortByRatingAction,   SIGNAL(triggered()), imageSortMapper, SLOT(map()));
     connect(sortByDownloadAction, SIGNAL(triggered()), imageSortMapper, SLOT(map()));
 
     imageSortMapper->setMapping(sortByNameAction, (int)CamItemSortSettings::SortByFileName);
@@ -490,16 +491,16 @@ void ImportUI::setupActions()
 
     // -- Item Sort Order ------------------------------------------------------------
 
-    d->itemSortOrderAction = new KSelectAction(i18n("Item Sorting &Order"), this);
+    d->itemSortOrderAction                    = new KSelectAction(i18n("Item Sorting &Order"), this);
     d->itemSortOrderAction->setWhatsThis(i18n("Defines whether items are sorted in ascending or descending manner."));
-    QSignalMapper* imageSortOrderMapper = new QSignalMapper(this);
+    QSignalMapper* const imageSortOrderMapper = new QSignalMapper(this);
     connect(imageSortOrderMapper, SIGNAL(mapped(int)), d->view, SLOT(slotSortImagesOrder(int)));
     actionCollection()->addAction("item_sort_order", d->itemSortOrderAction);
 
-    QAction* sortAscendingAction = d->itemSortOrderAction->addAction(KIcon("view-sort-ascending"), i18n("Ascending"));
-    QAction* sortDescendingAction = d->itemSortOrderAction->addAction(KIcon("view-sort-descending"), i18n("Descending"));
+    QAction* const sortAscendingAction = d->itemSortOrderAction->addAction(KIcon("view-sort-ascending"), i18n("Ascending"));
+    QAction* const sortDescendingAction = d->itemSortOrderAction->addAction(KIcon("view-sort-descending"), i18n("Descending"));
 
-    connect(sortAscendingAction, SIGNAL(triggered()), imageSortOrderMapper, SLOT(map()));
+    connect(sortAscendingAction,  SIGNAL(triggered()), imageSortOrderMapper, SLOT(map()));
     connect(sortDescendingAction, SIGNAL(triggered()), imageSortOrderMapper, SLOT(map()));
 
     imageSortOrderMapper->setMapping(sortAscendingAction, (int)CamItemSortSettings::AscendingOrder);
@@ -509,20 +510,20 @@ void ImportUI::setupActions()
 
     // -- Item Grouping ------------------------------------------------------------
 
-    d->itemsGroupAction = new KSelectAction(i18n("&Group Items"), this);
+    d->itemsGroupAction                  = new KSelectAction(i18n("&Group Items"), this);
     d->itemsGroupAction->setWhatsThis(i18n("The categories in which the items in the thumbnail view are displayed"));
-    QSignalMapper* itemGroupMapper = new QSignalMapper(this);
+    QSignalMapper* const itemGroupMapper = new QSignalMapper(this);
     connect(itemGroupMapper, SIGNAL(mapped(int)), d->view, SLOT(slotGroupImages(int)));
     actionCollection()->addAction("item_group", d->itemsGroupAction);
 
     // map to CamItemSortSettings enum
-    QAction* noCategoriesAction  = d->itemsGroupAction->addAction(i18n("Flat List"));
-    QAction* CategoryByFolderAction = d->itemsGroupAction->addAction(i18n("By Folder"));
-    QAction* groupByFormatAction = d->itemsGroupAction->addAction(i18n("By Format"));
+    QAction* const noCategoriesAction  = d->itemsGroupAction->addAction(i18n("Flat List"));
+    QAction* const CategoryByFolderAction = d->itemsGroupAction->addAction(i18n("By Folder"));
+    QAction* const groupByFormatAction = d->itemsGroupAction->addAction(i18n("By Format"));
 
-    connect(noCategoriesAction, SIGNAL(triggered()), itemGroupMapper, SLOT(map()));
+    connect(noCategoriesAction,     SIGNAL(triggered()), itemGroupMapper, SLOT(map()));
     connect(CategoryByFolderAction, SIGNAL(triggered()), itemGroupMapper, SLOT(map()));
-    connect(groupByFormatAction, SIGNAL(triggered()), itemGroupMapper, SLOT(map()));
+    connect(groupByFormatAction,    SIGNAL(triggered()), itemGroupMapper, SLOT(map()));
 
     itemGroupMapper->setMapping(noCategoriesAction,     (int)CamItemSortSettings::NoCategories);
     itemGroupMapper->setMapping(CategoryByFolderAction, (int)CamItemSortSettings::CategoryByFolder);
@@ -586,17 +587,8 @@ void ImportUI::setupActions()
 
     // -- Standard 'Help' menu actions ---------------------------------------------
 
-    d->about = new DAboutData(this);
-    d->about->registerHelpActions();
-
-    d->libsInfoAction = new KAction(KIcon("help-about"), i18n("Components Information"), this);
-    connect(d->libsInfoAction, SIGNAL(triggered()), this, SLOT(slotComponentsInfo()));
-    actionCollection()->addAction("importui_librariesinfo", d->libsInfoAction);
-
-    d->dbStatAction = new KAction(KIcon("network-server-database"), i18n("Database Statistics"), this);
-    connect(d->dbStatAction, SIGNAL(triggered()), this, SLOT(slotDBStat()));
-    actionCollection()->addAction("importui_dbstat", d->dbStatAction);
-
+    createHelpActions();
+    
     // Provides a menu entry that allows showing/hiding the toolbar(s)
     setStandardToolBarMenuEnabled(true);
 
@@ -605,15 +597,12 @@ void ImportUI::setupActions()
 
     // -- Keyboard-only actions added to <MainWindow> ------------------------------
 
-    KAction* altBackwardAction = new KAction(i18n("Previous Image"), this);
+    KAction* const altBackwardAction = new KAction(i18n("Previous Image"), this);
     actionCollection()->addAction("importui_backward_shift_space", altBackwardAction);
     altBackwardAction->setShortcut(KShortcut(Qt::SHIFT + Qt::Key_Space));
     connect(altBackwardAction, SIGNAL(triggered()), d->view, SLOT(slotPrevItem()));
 
     // ---------------------------------------------------------------------------------
-
-    d->anim = new DLogoAction(this);
-    actionCollection()->addAction("logo_action", d->anim);
 
     createGUI(xmlFile());
 
@@ -632,10 +621,10 @@ void ImportUI::setupConnections()
     // -------------------------------------------------------------------------
 
     //connect(d->view, SIGNAL(signalSelected(CamItemInfo,bool)),
-            //this, SLOT(slotItemsSelected(CamItemInfo,bool)));
+    //this, SLOT(slotItemsSelected(CamItemInfo,bool)));
 
-    connect(d->view, SIGNAL(signalImageSelected(CamItemInfoList,bool,bool,CamItemInfoList)),
-            this, SLOT(slotImageSelected(CamItemInfoList,bool,bool,CamItemInfoList)));
+    connect(d->view, SIGNAL(signalImageSelected(CamItemInfoList,CamItemInfoList)),
+            this, SLOT(slotImageSelected(CamItemInfoList,CamItemInfoList)));
 
     connect(d->view, SIGNAL(signalSwitchedToPreview()),
             this, SLOT(slotSwitchedToPreview()));
@@ -645,18 +634,6 @@ void ImportUI::setupConnections()
 
     connect(d->view, SIGNAL(signalNewSelection(bool)),
             this, SLOT(slotNewSelection(bool)));
-
-    connect(d->statusNavigateBar, SIGNAL(signalFirstItem()),
-            d->view, SLOT(slotFirstItem()));
-
-    connect(d->statusNavigateBar, SIGNAL(signalNextItem()),
-            d->view, SLOT(slotNextItem()));
-
-    connect(d->statusNavigateBar, SIGNAL(signalPrevItem()),
-            d->view, SLOT(slotPrevItem()));
-
-    connect(d->statusNavigateBar, SIGNAL(signalLastItem()),
-            d->view, SLOT(slotLastItem()));
 
     // -------------------------------------------------------------------------
 
@@ -680,8 +657,11 @@ void ImportUI::setupConnections()
     connect(CollectionManager::instance(), SIGNAL(locationStatusChanged(CollectionLocation,int)),
             this, SLOT(slotCollectionLocationStatusChanged(CollectionLocation,int)));
 
-    //connect(ImportSettings::instance(), SIGNAL(setupChanged()),
-            //this, SLOT(slotSidebarTabTitleStyleChanged()));
+    connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
+            this, SLOT(slotSidebarTabTitleStyleChanged()));
+
+    connect(d->renameCustomizer, SIGNAL(signalChanged()),
+            this, SLOT(slotDownloadNameChanged()));
 }
 
 void ImportUI::setupStatusBar()
@@ -732,11 +712,6 @@ void ImportUI::setupStatusBar()
     d->zoomBar->setZoomMinusAction(d->decreaseThumbsAction);
     d->zoomBar->setBarMode(DZoomBar::ThumbsSizeCtrl);
     statusBar()->addPermanentWidget(d->zoomBar, 1);
-
-    //------------------------------------------------------------------------------
-
-    d->statusNavigateBar = new StatusNavigateBar(statusBar());
-    statusBar()->addPermanentWidget(d->statusNavigateBar, 1);
 }
 
 void ImportUI::setupCameraController(const QString& model, const QString& port, const QString& path)
@@ -768,7 +743,7 @@ void ImportUI::setupCameraController(const QString& model, const QString& port, 
             this, SLOT(slotDownloadComplete(QString,QString,QString,QString)));
 
     //connect(d->controller, SIGNAL(signalFinished()),
-            //this, SLOT(slotFinished()));
+    //this, SLOT(slotFinished()));
 
     connect(d->controller, SIGNAL(signalSkipped(QString,QString)),
             this, SLOT(slotSkipped(QString,QString)));
@@ -797,33 +772,33 @@ void ImportUI::setupAccelerators()
     actionCollection()->addAction("exit_preview_mode", escapeAction);
     escapeAction->setShortcut( KShortcut(Qt::Key_Escape) );
     connect(escapeAction, SIGNAL(triggered()), this, SIGNAL(signalEscapePressed()));
-
+    
     KAction* nextImageAction = new KAction(i18n("Next Image"), this);
     nextImageAction->setIcon(SmallIcon("go-next"));
     actionCollection()->addAction("next_image", nextImageAction);
     nextImageAction->setShortcut(KShortcut(Qt::Key_Space));
-    connect(nextImageAction, SIGNAL(triggered()), d->statusNavigateBar, SIGNAL(signalNextItem()));
+    connect(nextImageAction, SIGNAL(triggered()), d->view, SLOT(slotNextItem()));
 
     KAction* previousImageAction = new KAction(i18n("Previous Image"), this);
     previousImageAction->setIcon(SmallIcon("go-previous"));
     actionCollection()->addAction("previous_image", previousImageAction);
     previousImageAction->setShortcut(KShortcut(Qt::Key_Backspace));
-    connect(previousImageAction, SIGNAL(triggered()), d->statusNavigateBar, SIGNAL(signalPrevItem()));
+    connect(previousImageAction, SIGNAL(triggered()), d->view, SLOT(slotPrevItem()));
 
     KAction* altpreviousImageAction = new KAction(i18n("Previous Image"), this);
     actionCollection()->addAction("alt_previous_image_shift_space", altpreviousImageAction);
     altpreviousImageAction->setShortcut( KShortcut(Qt::SHIFT+Qt::Key_Space) );
-    connect(altpreviousImageAction, SIGNAL(triggered()), d->statusNavigateBar, SIGNAL(signalPrevItem()));
+    connect(altpreviousImageAction, SIGNAL(triggered()), d->view, SLOT(slotPrevItem()));
 
     KAction* firstImageAction = new KAction(i18n("First Image"), this);
     actionCollection()->addAction("first_image", firstImageAction);
     firstImageAction->setShortcut(KShortcut(Qt::Key_Home) );
-    connect(firstImageAction, SIGNAL(triggered()), d->statusNavigateBar, SIGNAL(signalFirstItem()));
+    connect(firstImageAction, SIGNAL(triggered()), d->view, SLOT(slotFirstItem()));
 
     KAction* lastImageAction = new KAction(i18n("Last Image"), this);
     actionCollection()->addAction("last_image", lastImageAction);
     lastImageAction->setShortcut(KShortcut(Qt::Key_End) );
-    connect(lastImageAction, SIGNAL(triggered()), d->statusNavigateBar, SIGNAL(signalLastItem()));
+    connect(lastImageAction, SIGNAL(triggered()), d->view, SLOT(slotLastItem()));
 }
 
 void ImportUI::readSettings()
@@ -944,7 +919,7 @@ void ImportUI::moveEvent(QMoveEvent* e)
 
 void ImportUI::slotClose()
 {
-/*FIXME
+    /*FIXME
     if (dialogClosed())
         reject();
 */
@@ -962,7 +937,7 @@ bool ImportUI::dialogClosed()
         if (KMessageBox::questionYesNo(this,
                                        i18n("Do you want to close the dialog "
                                             "and cancel the current operation?"))
-            == KMessageBox::No)
+                == KMessageBox::No)
         {
             return false;
         }
@@ -1072,9 +1047,10 @@ void ImportUI::slotBusy(bool val)
         // downloadSelectedAction, downloadDelSelectedAction, deleteSelectedAction
         slotNewSelection(d->view->selectedUrls().count() > 0);
 
-        d->anim->stop();
-        d->statusProgressBar->setNotify(false);
-
+        m_animLogo->stop();
+        d->statusProgressBar->setProgressValue(0);
+        d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode, i18n("Ready"));
+        
         // like WDestructiveClose, but after camera controller operation has safely finished
         if (d->closed)
         {
@@ -1088,9 +1064,9 @@ void ImportUI::slotBusy(bool val)
             return;
         }
 
-        if (!d->anim->running())
+        if (!m_animLogo->running())
         {
-            d->anim->start();
+            m_animLogo->start();
         }
 
         d->busy = true;
@@ -1181,7 +1157,7 @@ void ImportUI::slotConnected(bool val)
                                       i18n("Connection Failed"),
                                       KGuiItem(i18n("Retry")),
                                       KGuiItem(i18n("Abort")))
-            == KMessageBox::Yes)
+                == KMessageBox::Yes)
         {
             QTimer::singleShot(0, d->controller, SLOT(slotConnect()));
         }
@@ -1236,13 +1212,13 @@ void ImportUI::slotFileList(const CamItemInfoList& fileList)
 // FIXME: To be removed.
 void ImportUI::slotFilterChanged()
 {
-//    CamItemInfoList items = d->view->allItems();
+    //    CamItemInfoList items = d->view->allItems();
 
-//    foreach(CamItemInfo info, items)
-//    {
-//        d->view->removeItem(info);
-//    }
-//    d->historyUpdater->addItems(d->controller->cameraMD5ID(), d->map);
+    //    foreach(CamItemInfo info, items)
+    //    {
+    //        d->view->removeItem(info);
+    //    }
+    //    d->historyUpdater->addItems(d->controller->cameraMD5ID(), d->map);
 }
 
 void ImportUI::slotCapture()
@@ -1449,7 +1425,7 @@ void ImportUI::slotDownloadAndDeleteAll()
 void ImportUI::slotDownload(bool onlySelected, bool deleteAfter, Album* album)
 {
     if (d->albumCustomizer->folderDateFormat() == AlbumCustomizer::CustomDateFormat &&
-        !d->albumCustomizer->customDateFormatIsValid())
+            !d->albumCustomizer->customDateFormatIsValid())
     {
         KMessageBox::information(this, i18n("Your custom target album date format is not valid. Please check your settings..."));
         return;
@@ -1581,17 +1557,17 @@ void ImportUI::slotDownloaded(const QString& folder, const QString& file, int st
             int curr = d->statusProgressBar->progressValue();
             d->statusProgressBar->setProgressValue(curr + 1);
 
-        if (autoRotate)
-        {
-            d->autoRotateItemsList << info;
-        }
+            if (autoRotate)
+            {
+                d->autoRotateItemsList << info;
+            }
 
-        d->renameCustomizer->setStartIndex(d->renameCustomizer->startIndex() + 1);
+            d->renameCustomizer->setStartIndex(d->renameCustomizer->startIndex() + 1);
 
-        DownloadHistory::setDownloaded(d->controller->cameraMD5ID(),
-                                       info.name,
-                                       info.size,
-                                       info.mtime);
+            DownloadHistory::setDownloaded(d->controller->cameraMD5ID(),
+                                           info.name,
+                                           info.size,
+                                           info.ctime);
         }
     }
 
@@ -1600,7 +1576,7 @@ void ImportUI::slotDownloaded(const QString& folder, const QString& file, int st
     {
         if (d->deleteAfter)
         {
-            // No need passive pop-up here, because wil ask to confirm items deletion with dialog.
+            // No need passive pop-up here, because we will ask to confirm items deletion with dialog.
             deleteItems(true, true);
         }
         else
@@ -1649,7 +1625,7 @@ void ImportUI::slotMarkAsDownloaded()
         DownloadHistory::setDownloaded(d->controller->cameraMD5ID(),
                                        info.name,
                                        info.size,
-                                       info.mtime);
+                                       info.ctime);
     }
 }
 
@@ -1705,16 +1681,16 @@ void ImportUI::slotLocked(const QString& folder, const QString& file, bool statu
 
 void ImportUI::slotDownloadNameChanged()
 {
-    bool hasSelection = false;
+    CamItemInfoList list = d->view->allItems();
 
-    CamItemInfoList list = d->view->selectedCamItemInfos();
-    if(list.count() > 0)
+    foreach (CamItemInfo info, list)
     {
-        hasSelection = true;
+        CamItemInfo& refInfo = d->view->camItemInfoRef(info.folder, info.name);
+        refInfo.downloadName = d->renameCustomizer->newName(info.name, info.ctime);
     }
 
     // connected to slotUpdateDownloadNames, and used externally
-    emit signalNewSelection(hasSelection);
+    //emit signalNewSelection(hasSelection);
 }
 
 //FIXME: the new pictures are marked by CameraHistoryUpdater which is not working yet.
@@ -1933,30 +1909,30 @@ void ImportUI::deleteItems(bool onlySelected, bool onlyDownloaded)
                           "Are you sure?",
                           deleteList.count()));
 
-//    if (CameraMessageBox::warningContinueCancelList(this,
-//                                                    warnMsg,
-//                                                    deleteList,
-//                                                    i18n("Warning"),
-//                                                    KGuiItem(i18n("Delete")),
-//                                                    KStandardGuiItem::cancel(),
-//                                                    QString("DontAskAgainToDeleteItemsFromCamera"))
-//        ==  KMessageBox::Continue)
-//    {
-        QStringList::const_iterator itFolder = folders.constBegin();
-        QStringList::const_iterator itFile   = files.constBegin();
+    //    if (CameraMessageBox::warningContinueCancelList(this,
+    //                                                    warnMsg,
+    //                                                    deleteList,
+    //                                                    i18n("Warning"),
+    //                                                    KGuiItem(i18n("Delete")),
+    //                                                    KStandardGuiItem::cancel(),
+    //                                                    QString("DontAskAgainToDeleteItemsFromCamera"))
+    //        ==  KMessageBox::Continue)
+    //    {
+    QStringList::const_iterator itFolder = folders.constBegin();
+    QStringList::const_iterator itFile   = files.constBegin();
 
-        d->statusProgressBar->setProgressValue(0);
-        d->statusProgressBar->setProgressTotalSteps(deleteList.count());
-        d->statusProgressBar->progressBarMode(StatusProgressBar::ProgressBarMode);
+    d->statusProgressBar->setProgressValue(0);
+    d->statusProgressBar->setProgressTotalSteps(deleteList.count());
+    d->statusProgressBar->progressBarMode(StatusProgressBar::ProgressBarMode);
 
-        for (; itFolder != folders.constEnd(); ++itFolder, ++itFile)
-        {
-            d->controller->deleteFile(*itFolder, *itFile);
-            // the currentlyDeleting list is used to prevent loading items which
-            // will immanently be deleted into the sidebar and wasting time
-            d->currentlyDeleting.append(*itFolder + *itFile);
-        }
-//    }
+    for (; itFolder != folders.constEnd(); ++itFolder, ++itFile)
+    {
+        d->controller->deleteFile(*itFolder, *itFile);
+        // the currentlyDeleting list is used to prevent loading items which
+        // will immanently be deleted into the sidebar and wasting time
+        d->currentlyDeleting.append(*itFolder + *itFile);
+    }
+    //    }
 }
 
 bool ImportUI::checkDiskSpace(PAlbum *pAlbum)
@@ -1979,15 +1955,15 @@ bool ImportUI::checkDiskSpace(PAlbum *pAlbum)
         KGuiItem cancel = KStandardGuiItem::cancel();
         cancel.setText(i18n("Cancel Download"));
         int result =
-            KMessageBox::warningYesNo(this,
-                                      i18n("There is not enough free space on the disk of the album you selected "
-                                           "to download and process the selected pictures from the camera.\n\n"
-                                           "Estimated space required: %1\n"
-                                           "Available free space: %2",
-                                           KIO::convertSizeFromKiB(dSize),
-                                           KIO::convertSizeFromKiB(kBAvail)),
-                                      i18n("Insufficient Disk Space"),
-                                      cont, cancel);
+                KMessageBox::warningYesNo(this,
+                                          i18n("There is not enough free space on the disk of the album you selected "
+                                               "to download and process the selected pictures from the camera.\n\n"
+                                               "Estimated space required: %1\n"
+                                               "Available free space: %2",
+                                               KIO::convertSizeFromKiB(dSize),
+                                               KIO::convertSizeFromKiB(kBAvail)),
+                                          i18n("Insufficient Disk Space"),
+                                          cont, cancel);
 
         if (result == KMessageBox::No)
         {
@@ -2013,6 +1989,29 @@ bool ImportUI::downloadCameraItems(PAlbum* pAlbum, bool onlySelected, bool delet
     QSet<QString> usedDownloadPaths;
     CamItemInfoList list = d->view->allItems();
 
+    if (!d->renameCustomizer->useDefault())
+    {
+        QList<ParseSettings> renameFiles;
+
+        foreach(CamItemInfo info, list)
+        {
+            if (onlySelected && (d->view->isSelected(info.url())))
+            {
+                ParseSettings parseSettings;
+                parseSettings.fileUrl      = info.name;
+                parseSettings.creationTime = info.ctime;
+                renameFiles.append(parseSettings);
+            }
+        }
+
+        d->renameCustomizer->renameManager()->addFiles(renameFiles);
+        d->renameCustomizer->renameManager()->parseFiles();
+    }
+    else
+    {
+        d->renameCustomizer->renameManager()->reset();
+    }
+
     foreach(CamItemInfo info, list)
     {
         if (onlySelected && !(d->view->isSelected(info.url())))
@@ -2025,8 +2024,8 @@ bool ImportUI::downloadCameraItems(PAlbum* pAlbum, bool onlySelected, bool delet
         settings.pickLabel  = info.pickLabel;
         settings.colorLabel = info.colorLabel;
         settings.rating     = info.rating;
-        downloadName        = info.downloadName;
-        dateTime            = info.mtime;
+        dateTime            = info.ctime;
+        downloadName        = d->renameCustomizer->newName(info.name, info.ctime);
 
         KUrl downloadUrl(url);
 
@@ -2114,9 +2113,10 @@ bool ImportUI::createSubAlbums(KUrl& downloadUrl, const CamItemInfo& info)
     return success;
 }
 
-bool ImportUI::createSubAlbum(KUrl &downloadUrl, const QString &subalbum, const QDate &date)
+bool ImportUI::createSubAlbum(KUrl& downloadUrl, const QString& subalbum, const QDate& date)
 {
     QString errMsg;
+
     if (!createAutoAlbum(downloadUrl, subalbum, date, errMsg))
     {
         KMessageBox::error(this, errMsg);
@@ -2127,28 +2127,28 @@ bool ImportUI::createSubAlbum(KUrl &downloadUrl, const QString &subalbum, const 
     return true;
 }
 
-bool ImportUI::createDateBasedSubAlbum(KUrl &downloadUrl, const CamItemInfo &info)
+bool ImportUI::createDateBasedSubAlbum(KUrl& downloadUrl, const CamItemInfo& info)
 {
     QString dirName;
-    QDateTime dateTime = info.mtime;
+    QDateTime dateTime = info.ctime;
 
     switch (d->albumCustomizer->folderDateFormat())
     {
-    case AlbumCustomizer::TextDateFormat:
-        dirName = dateTime.date().toString(Qt::TextDate);
-        break;
+        case AlbumCustomizer::TextDateFormat:
+            dirName = dateTime.date().toString(Qt::TextDate);
+            break;
 
-    case AlbumCustomizer::LocalDateFormat:
-        dirName = dateTime.date().toString(Qt::LocalDate);
-        break;
+        case AlbumCustomizer::LocalDateFormat:
+            dirName = dateTime.date().toString(Qt::LocalDate);
+            break;
 
-    case AlbumCustomizer::IsoDateFormat:
-        dirName = dateTime.date().toString(Qt::ISODate);
-        break;
+        case AlbumCustomizer::IsoDateFormat:
+            dirName = dateTime.date().toString(Qt::ISODate);
+            break;
 
-    default:        // Custom
-        dirName = dateTime.date().toString(d->albumCustomizer->customDateFormat());
-        break;
+        default:        // Custom
+            dirName = dateTime.date().toString(d->albumCustomizer->customDateFormat());
+            break;
     }
 
     // See B.K.O #136927 : we need to support file system which do not
@@ -2158,7 +2158,7 @@ bool ImportUI::createDateBasedSubAlbum(KUrl &downloadUrl, const CamItemInfo &inf
     return createSubAlbum(downloadUrl, dirName, dateTime.date());
 }
 
-bool ImportUI::createExtBasedSubAlbum(KUrl& downloadUrl, const CamItemInfo &info)
+bool ImportUI::createExtBasedSubAlbum(KUrl& downloadUrl, const CamItemInfo& info)
 {
     // We use the target file name to compute sub-albums name to take a care about
     // conversion on the fly option.
@@ -2169,7 +2169,7 @@ bool ImportUI::createExtBasedSubAlbum(KUrl& downloadUrl, const CamItemInfo &info
     QString subAlbum = fi.suffix().toUpper();
 
     if (fi.suffix().toUpper() == QString("JPEG") ||
-            fi.suffix().toUpper() == QString("JPE"))
+        fi.suffix().toUpper() == QString("JPE"))
     {
         subAlbum = QString("JPG");
     }
@@ -2180,8 +2180,8 @@ bool ImportUI::createExtBasedSubAlbum(KUrl& downloadUrl, const CamItemInfo &info
     }
 
     if (fi.suffix().toUpper() == QString("MPEG") ||
-            fi.suffix().toUpper() == QString("MPE") ||
-            fi.suffix().toUpper() == QString("MPO"))
+        fi.suffix().toUpper() == QString("MPE") ||
+        fi.suffix().toUpper() == QString("MPO"))
     {
         subAlbum = QString("MPG");
     }
@@ -2190,7 +2190,7 @@ bool ImportUI::createExtBasedSubAlbum(KUrl& downloadUrl, const CamItemInfo &info
     // handle upper case properly.
     subAlbum = subAlbum.toLower();
 
-    return createSubAlbum(downloadUrl, subAlbum, info.mtime.date());
+    return createSubAlbum(downloadUrl, subAlbum, info.ctime.date());
 }
 
 void ImportUI::slotDeleteNew()
@@ -2270,14 +2270,33 @@ void ImportUI::slotNewSelection(bool hasSelection)
         d->markAsDownloadedAction->setEnabled(false);
     }
 
+    if (!d->renameCustomizer->useDefault())
+    {
+        QList<ParseSettings> renameFiles;
+        CamItemInfoList list = hasSelection ? d->view->selectedCamItemInfos() : d->view->allItems();
+
+        foreach(CamItemInfo info, list)
+        {
+            ParseSettings parseSettings;
+            parseSettings.fileUrl = info.name;
+            parseSettings.creationTime = info.ctime;
+            renameFiles.append(parseSettings);
+        }
+
+        d->renameCustomizer->renameManager()->reset();
+        d->renameCustomizer->renameManager()->addFiles(renameFiles);
+        d->renameCustomizer->renameManager()->parseFiles();
+    }
+
+    slotDownloadNameChanged();
+
     unsigned long fSize = 0;
     unsigned long dSize = 0;
     itemsSelectionSizeInfo(fSize, dSize);
     d->albumLibraryFreeSpace->setEstimatedDSizeKb(dSize);
 }
 
-void ImportUI::slotImageSelected(const CamItemInfoList& selection, bool hasPrev, bool hasNext,
-                                 const CamItemInfoList& listAll)
+void ImportUI::slotImageSelected(const CamItemInfoList& selection, const CamItemInfoList& listAll)
 {
     int num_images = listAll.count();
 
@@ -2285,9 +2304,9 @@ void ImportUI::slotImageSelected(const CamItemInfoList& selection, bool hasPrev,
     {
         case 0:
         {
-        d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode, i18np("No item selected (%1 item)",
-                                              "No item selected (%1 items)",
-                                              num_images));
+            d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode, i18np("No item selected (%1 item)",
+                                                                                     "No item selected (%1 items)",
+                                                                                     num_images));
 
             d->rightSideBar->slotNoCurrentItem();
             break;
@@ -2303,14 +2322,14 @@ void ImportUI::slotImageSelected(const CamItemInfoList& selection, bool hasPrev,
                 int index = listAll.indexOf(selection.first()) + 1;
 
                 d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode, selection.first().url().fileName()
-                                            + i18n(" (%1 of %2)", index, num_images));
+                                                      + i18n(" (%1 of %2)", index, num_images));
             }
             else
             {
                 d->rightSideBar->slotNoCurrentItem();
                 d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode, i18np("No item selected (%1 item)",
-                                                  "No item selected (%1 items)",
-                                                  num_images));
+                                                                                         "No item selected (%1 items)",
+                                                                                         num_images));
             }
 
             break;
@@ -2318,18 +2337,17 @@ void ImportUI::slotImageSelected(const CamItemInfoList& selection, bool hasPrev,
         default:
         {
             d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode, i18np("%2/%1 item selected",
-                                              "%2/%1 items selected",
-                                              num_images, selection.count()));
+                                                                                     "%2/%1 items selected",
+                                                                                     num_images, selection.count()));
             break;
         }
     }
 
     slotNewSelection(d->view->selectedCamItemInfos().count() > 0);
-    d->statusNavigateBar->setNavigateBarState(hasPrev, hasNext);
 }
 
 //FIXME: To be removed.
-void ImportUI::slotItemsSelected(CamItemInfo info, bool selected)
+void ImportUI::slotItemsSelected(const CamItemInfo& info, bool selected)
 {
     if (!d->controller)
     {
@@ -2377,6 +2395,7 @@ void ImportUI::autoRotateItems()
     }
 
     ImageInfoList list;
+
     foreach (CamItemInfo info, d->autoRotateItemsList)
     {
         //TODO: Needs test for Gphoto items.
@@ -2412,7 +2431,7 @@ bool ImportUI::createAutoAlbum(const KUrl& parentURL, const QString& sub,
 
     // looks like the directory does not exist, try to create it
 
-    PAlbum* parent = AlbumManager::instance()->findPAlbum(parentURL);
+    PAlbum* const parent = AlbumManager::instance()->findPAlbum(parentURL);
 
     if (!parent)
     {
@@ -2524,8 +2543,8 @@ void ImportUI::slotShowMenuBar()
 
 void ImportUI::slotSidebarTabTitleStyleChanged()
 {
-//    d->rightSideBar->setStyle(ImportSettings::instance()->getSidebarTitleStyle());
-//    d->rightSideBar->applySettings();
+    d->rightSideBar->setStyle(AlbumSettings::instance()->getSidebarTitleStyle());
+    d->rightSideBar->applySettings();
 }
 
 void ImportUI::slotLogMsg(const QString& msg, DHistoryView::EntryType type,
@@ -2558,7 +2577,7 @@ void ImportUI::showSideBars(bool visible)
 
 void ImportUI::showThumbBar(bool visible)
 {
-    d->view->toggleShowBar(visible & d->showBarAction->isEnabled());    
+    d->view->toggleShowBar(visible);
 }
 
 bool ImportUI::thumbbarVisibility() const
@@ -2604,9 +2623,10 @@ void ImportUI::toogleShowBar()
     switch (d->view->viewMode())
     {
         case ImportStackedView::PreviewImageMode:
+        case ImportStackedView::MediaPlayerMode:
             d->showBarAction->setEnabled(true);
             break;
-            
+
         default:
             d->showBarAction->setEnabled(false);
             break;

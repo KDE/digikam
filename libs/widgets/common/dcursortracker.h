@@ -7,7 +7,7 @@
  * Description : A tool tip widget which follows cursor movements.
  *               Tool tip content is displayed without delay.
  *
- * Copyright (C) 2007-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -41,8 +41,6 @@ class QTimer;
 namespace Digikam
 {
 
-class DCursorTrackerPriv;
-
 /**
  * This class implements a decoration-less window which will follow the cursor
  * when it's over a specified widget.
@@ -53,7 +51,7 @@ class DIGIKAM_EXPORT DCursorTracker : public QLabel
 
 public:
 
-    DCursorTracker(const QString& txt, QWidget* parent, Qt::Alignment align = Qt::AlignCenter);
+    DCursorTracker(const QString& txt, QWidget* const parent, Qt::Alignment align = Qt::AlignCenter);
     ~DCursorTracker();
 
     void setText(const QString& txt);
@@ -74,12 +72,13 @@ private Q_SLOTS:
 
 private:
 
-    void moveToParent(QWidget* parent);
+    void moveToParent(QWidget* const parent);
     bool canBeDisplayed();
 
 private:
 
-    DCursorTrackerPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 
@@ -91,7 +90,7 @@ class DIGIKAM_EXPORT DTipTracker : public DCursorTracker
 
 public:
 
-    DTipTracker(const QString& txt, QWidget* parent, Qt::Alignment align = Qt::AlignCenter);
+    DTipTracker(const QString& txt, QWidget* const parent, Qt::Alignment align = Qt::AlignCenter);
 };
 
 } // namespace Digikam

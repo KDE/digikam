@@ -6,7 +6,7 @@
  * Date        : 2009-28-04
  * Description : first run assistant dialog
  *
- * Copyright (C) 2009-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -32,15 +32,16 @@
 #include <kvbox.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
+#include <kiconloader.h>
 
 namespace Digikam
 {
 
-StartScanPage::StartScanPage(KAssistantDialog* dlg)
+StartScanPage::StartScanPage(KAssistantDialog* const dlg)
     : AssistantDlgPage(dlg, i18n("Scan Your Collection"))
 {
-    KVBox* vbox  = new KVBox(this);
-    QLabel* text = new QLabel(vbox);
+    KVBox* const vbox  = new KVBox(this);
+    QLabel* const text = new QLabel(vbox);
     text->setWordWrap(true);
     text->setOpenExternalLinks(true);
     text->setText(i18n("<qt>"
@@ -51,18 +52,17 @@ StartScanPage::StartScanPage(KAssistantDialog* dlg)
                        "You can also read the manual online from the "
                        "<a href='http://www.digikam.org/docs'>digikam.org website</a>.</p>"
                        "<p>Press <b>Finish</b> to close this assistant. digiKam will scan your "
-                       "collection to register all items in the database.</p>"
+                       "collection to register all albums in the database. Items including in "
+                       "albums are collected after startup stage in background.</p>"
                        "<p><i>Note:</i> depending of your collection size, this operation can take a while. "
                        "If you cancel the scanning operation, it will start again at next digiKam session.</p>"
                        "<p>When scanning has completed, at next start-up, digiKam will only check your collection "
-                       "to identify new items - which is much faster. Scanning for images can also be started "
+                       "to identify new albums - which is much faster. You can force digiKam to scan for new items "
                        "manually using the <b>Tools->Maintenance->Scan for new items</b> menu entry.</p>"
                        "</qt>"));
 
     setPageWidget(vbox);
-
-    QPixmap leftPix = KStandardDirs::locate("data", "digikam/data/assistant-scancollection.png");
-    setLeftBottomPix(leftPix.scaledToWidth(128, Qt::SmoothTransformation));
+    setLeftBottomPix(KIconLoader::global()->loadIcon("system-search", KIconLoader::NoGroup, KIconLoader::SizeEnormous));
 }
 
 StartScanPage::~StartScanPage()

@@ -1,5 +1,6 @@
 SET(libimportui_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/main/importui.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/main/importsettings.cpp
 
     ${CMAKE_CURRENT_SOURCE_DIR}/backend/cameracontroller.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/backend/camerahistoryupdater.cpp
@@ -38,7 +39,6 @@ SET(libimportui_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/views/camerafolderview.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/views/cameranamehelper.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/views/freespacetooltip.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/views/importsettings.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/views/importcategorizedview.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/views/importthumbnailbar.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/views/importpreviewview.cpp

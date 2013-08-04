@@ -102,10 +102,12 @@ QList<DatabaseFace> FaceUtils::toDatabaseFaces(qlonglong imageid,
     for (int i=0; i<detectedFaces.size(); ++i)
     {
         KFaceIface::Identity identity;
+
         if (!recognitionResults.isEmpty())
         {
             identity = recognitionResults[i];
         }
+
         // We'll get the unknownPersonTagId if the identity is null
         int tagId               = FaceTags::getOrCreateTagForIdentity(identity.attributes);
         QRect fullSizeRect      = TagRegion::relativeToAbsolute(detectedFaces[i], fullSize);
@@ -120,6 +122,7 @@ QList<DatabaseFace> FaceUtils::toDatabaseFaces(qlonglong imageid,
         //kDebug() << "New Entry" << fullSizeRect << tagId;
         faces << DatabaseFace(type, imageid, tagId, TagRegion(fullSizeRect));
     }
+
     return faces;
 }
 
@@ -260,15 +263,18 @@ QList<DatabaseFace> FaceUtils::writeUnconfirmedResults(qlonglong imageid,
 KFaceIface::Identity FaceUtils::identityForTag(int tagId, KFaceIface::RecognitionDatabase db) const
 {
     QMap<QString, QString> attributes = FaceTags::identityAttributes(tagId);
-    KFaceIface::Identity identity = db.findIdentity(attributes);
+    KFaceIface::Identity identity     = db.findIdentity(attributes);
+
     if (!identity.isNull())
     {
         kDebug() << "Found kface identity" << identity.id << "for tag" << tagId;
         return identity;
     }
+
     kDebug() << "Adding new kface identity with attributes" << attributes;
     identity = db.addIdentity(attributes);
     FaceTags::applyTagIdentityMapping(tagId, identity.attributes);
+
     return identity;
 }
 

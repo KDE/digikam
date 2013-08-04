@@ -206,7 +206,7 @@ DatabaseFace FaceTagsEditor::addManually(const DatabaseFace& face)
 
 DatabaseFace FaceTagsEditor::changeSuggestedName(const DatabaseFace& previousEntry, int unconfirmedNameTagId)
 {
-    if (!previousEntry.isConfirmedName())
+    if (previousEntry.isConfirmedName())
     {
         kDebug() << "Refusing to reset a confirmed name to an unconfirmed name";
         return previousEntry;

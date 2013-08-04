@@ -7,7 +7,7 @@
  * Description : digiKam setup dialog.
  *
  * Copyright (C) 2003-2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2003-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2003-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU Album
@@ -295,6 +295,9 @@ Setup::Setup(QWidget* const parent)
                                    "<i>Manage your camera devices</i></qt>"));
     d->page_camera->setIcon(KIcon("camera-photo"));
 
+    connect(d->cameraPage, SIGNAL(signalUseFileMetadataChanged(bool)),
+            d->tooltipPage, SLOT(slotUseFileMetadataChanged(bool)));
+    
     d->pluginsPage  = new ConfigWidget();
     d->pluginFilter = new SearchTextBar(d->pluginsPage, "PluginsSearchBar");
     d->pluginsPage->setFilterWidget(d->pluginFilter);
@@ -396,9 +399,9 @@ QSize Setup::sizeHint() const
                 continue;
             }
 
-            QWidget* page           = item->widget();
-            maxHintHeight           = qMax(maxHintHeight, page->sizeHint().height());
-            QScrollArea* scrollArea = qobject_cast<QScrollArea*>(page);
+            QWidget* const page           = item->widget();
+            maxHintHeight                 = qMax(maxHintHeight, page->sizeHint().height());
+            QScrollArea* const scrollArea = qobject_cast<QScrollArea*>(page);
 
             if (scrollArea)
             {

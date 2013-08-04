@@ -37,6 +37,7 @@
 // Local includes
 
 #include "digikam_export.h"
+#include "dlogoaction.h"
 
 class QEvent;
 
@@ -45,7 +46,7 @@ class KToolBar;
 namespace Digikam
 {
 
-/** Optional parts which can be hiddedn or not from managed window configuration panel
+/** Optional parts which can be hidden or not from managed window configuration panel
  */
 enum FullScreenOptions
 {
@@ -75,6 +76,10 @@ public:
     explicit DXmlGuiWindow(QWidget* const parent=0, Qt::WindowFlags f=KDE_DEFAULT_WINDOWFLAGS);
     virtual ~DXmlGuiWindow();
 
+    /** Create common actions from Help menu for all digiKam main windows
+     */
+    void createHelpActions(bool coreOptions=true);
+    
     /** Set full-screen options to managed window
      */
     void setFullScreenOptions(int options);
@@ -102,6 +107,10 @@ public:
 
 protected:
 
+    DLogoAction* m_animLogo;
+    
+protected:
+
     bool eventFilter(QObject* obj, QEvent* ev);
     void keyPressEvent(QKeyEvent* e);
 
@@ -127,6 +136,10 @@ protected:
 private Q_SLOTS:
 
     void slotToggleFullScreen(bool);
+    
+    // Slots for common Help Actions
+    virtual void slotComponentsInfo() {};
+    virtual void slotDBStat()         {};
 
 private:
 

@@ -348,8 +348,8 @@ void FaceGroup::setInfo(const ImageInfo& info)
     }
 
     clear();
-
     d->info = info;
+
     if (d->visibilityController->shallBeShown())
     {
         load();
@@ -362,6 +362,7 @@ void FaceGroup::aboutToSetInfo(const ImageInfo& info)
     {
         return;
     }
+
     applyItemGeometryChanges();
     clear();
 }
@@ -397,7 +398,7 @@ RegionFrameItem* FaceGroup::closestItem(const QPointF& p, qreal* const manhattan
     qreal minDistance            = 0;
     qreal minCenterDistance      = 0;
 
-    foreach(RegionFrameItem* item, d->items)
+    foreach(RegionFrameItem* const item, d->items)
     {
         QRectF r       = item->boundingRect().translated(item->pos());
         qreal distance = (p - closestPointOfRect(p, r)).manhattanLength();
@@ -428,10 +429,8 @@ QList<QGraphicsItem*> FaceGroup::Private::hotItems(const QPointF& scenePos)
         return QList<QGraphicsItem*>();
     }
 
-    const int distance = 15;
-
-    QRectF hotSceneRect = QRectF(scenePos, QSize(0, 0)).adjusted(-distance, -distance, distance, distance);
-
+    const int distance               = 15;
+    QRectF hotSceneRect              = QRectF(scenePos, QSize(0, 0)).adjusted(-distance, -distance, distance, distance);
     QList<QGraphicsItem*> closeItems = view->scene()->items(hotSceneRect, Qt::IntersectsItemBoundingRect);
 
     closeItems.removeOne(view->previewItem());
@@ -522,7 +521,7 @@ FaceItem* FaceGroup::Private::createItem(const DatabaseFace& face)
 
 FaceItem* FaceGroup::Private::addItem(const DatabaseFace& face)
 {
-    FaceItem* const item = createItem(face);
+    FaceItem* const item                 = createItem(face);
     // for identification, use index in our list
 
     AssignNameWidget* const assignWidget = createAssignNameWidget(face, items.size());
@@ -599,6 +598,7 @@ void FaceGroup::load()
     {
         return;
     }
+
     d->state = LoadingFaces;
 
     if (d->info.isNull())
@@ -609,6 +609,7 @@ void FaceGroup::load()
 
     QList<DatabaseFace> faces = FaceTagsEditor().databaseFaces(d->info.id());
     d->visibilityController->clear();
+
     foreach(const DatabaseFace& face, faces)
     {
         d->addItem(face);
@@ -710,6 +711,7 @@ void FaceGroup::addFace()
     {
         return;
     }
+
     d->manuallyAddWrapItem = new ClickDragReleaseItem(d->view->previewItem());
     d->manuallyAddWrapItem->setFocus();
     d->view->setFocus();
@@ -789,7 +791,6 @@ void FaceGroup::applyItemGeometryChanges()
             d->editPipeline.editRegion(d->info, d->view->previewItem()->image(), item->face(), currentRegion);
         }
     }
-
 }
 
 /*
@@ -817,6 +818,7 @@ void ImagePreviewView::suggestFaces()
     / *
     // Assign tentative names to the face list
     QList<Face> recogList;
+
     foreach(Face f, d->currentFaces)
     {
         if(!d->faceIface->isFaceRecognized(getImageInfo().id(), f.toRect(), f.name()) && f.name().isEmpty())
@@ -834,6 +836,7 @@ void ImagePreviewView::suggestFaces()
 
     kDebug() << "Number of suggestions = " << recogList.size();
     kDebug() << "Number of faceitems = " << d->faceitems.size();
+
     // Now find the relevant face items and suggest faces
     for(int i = 0; i < recogList.size(); ++i)
     {
