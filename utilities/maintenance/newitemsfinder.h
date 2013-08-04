@@ -62,7 +62,6 @@ private Q_SLOTS:
     void slotTotalFilesToScan(int);
     void slotFilesScanned(int);
     void slotCancel();
-    void slotDone();
 
 private:
 

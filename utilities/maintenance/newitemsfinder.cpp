@@ -59,6 +59,14 @@ public:
 NewItemsFinder::NewItemsFinder(const FinderMode mode, const QStringList& foldersToScan, ProgressItem* const parent)
     : MaintenanceTool("NewItemsFinder", parent), d(new Private)
 {
+    setLabel(i18n("Find new items"));
+    setThumbnail(KIcon("view-refresh").pixmap(22));
+    ProgressManager::addProgressItem(this);
+
+    d->mode = mode;
+
+    // Common conections to ScanController
+
     connect(ScanController::instance(), SIGNAL(collectionScanStarted(QString)),
             this, SLOT(slotScanStarted(QString)));
 
@@ -68,13 +76,11 @@ NewItemsFinder::NewItemsFinder(const FinderMode mode, const QStringList& folders
     connect(ScanController::instance(), SIGNAL(filesScanned(int)),
             this, SLOT(slotFilesScanned(int)));
 
-    connect(ScanController::instance(), SIGNAL(completeScanDone()),
-            this, SLOT(slotDone()));
-    
+    // Connection and rules for ScheduleCollectionScan mode.
+
     connect(ScanController::instance(), SIGNAL(partialScanDone(QString)),
             this, SLOT(slotPartialScanDone(QString)));
 
-    d->mode          = mode;
     d->foldersToScan = foldersToScan;
     d->foldersToScan.sort();
 }
@@ -94,6 +100,10 @@ void NewItemsFinder::slotStart()
         {
             kDebug() << "scan mode: ScanDeferredFiles";
 
+            connect(ScanController::instance(), SIGNAL(completeScanDone()),
+                    this, SLOT(slotDone()));
+
+            ScanController::instance()->completeCollectionScanInBackground(false);
             ScanController::instance()->allowToScanDeferredFiles();
             break;
         }
@@ -102,11 +112,13 @@ void NewItemsFinder::slotStart()
         {
             kDebug() << "scan mode: CompleteCollectionScan";
 
-            QApplication::setOverrideCursor(Qt::WaitCursor);
-            ScanController::instance()->completeCollectionScanDeferFiles();
-            QApplication::restoreOverrideCursor();
+            ScanController::instance()->completeCollectionScanInBackground(false);
+
+            connect(ScanController::instance(), SIGNAL(completeScanDone()),
+                    this, SLOT(slotDone()));
 
             ScanController::instance()->allowToScanDeferredFiles();
+            ScanController::instance()->completeCollectionScanInBackground(true);
             break;
         }
 
@@ -114,7 +126,7 @@ void NewItemsFinder::slotStart()
         {
             kDebug() << "scan mode: ScheduleCollectionScan :: " << d->foldersToScan;
             d->foldersScanned.clear();
-            
+
             foreach(const QString& folder, d->foldersToScan)
                 ScanController::instance()->scheduleCollectionScan(folder);
 
@@ -125,15 +137,13 @@ void NewItemsFinder::slotStart()
 
 void NewItemsFinder::slotScanStarted(const QString& info)
 {
-    ProgressManager::addProgressItem(this);
-    setLabel(i18n("Find new items"));
+    kDebug() << info;
     setStatus(info);
-    setThumbnail(KIcon("view-refresh").pixmap(22));
 }
 
 void NewItemsFinder::slotTotalFilesToScan(int t)
 {
-    //kDebug() << "total scan value : " << t;
+    kDebug() << "total scan value : " << t;
     setTotalItems(t);
 }
 
@@ -164,12 +174,6 @@ void NewItemsFinder::slotPartialScanDone(const QString& path)
             slotDone();
         }
     }
-}
-
-void NewItemsFinder::slotDone()
-{
-    //kDebug() << "fired!! ";
-    MaintenanceTool::slotDone();
 }
 
 }  // namespace Digikam

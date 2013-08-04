@@ -991,7 +991,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/sidebar.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/splashscreen.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/statesavingobject.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/statusprogressbar.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/visibilitycontroller.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/workingwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/ratingwidget.cpp
@@ -1124,6 +1123,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/progressmanager/progressview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/progressmanager/progressmanager.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/progressmanager/statusbarprogresswidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/progressmanager/statusprogressbar.cpp
        )
 
     SET(libthememanager_SRCS
@@ -1257,7 +1257,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
     SET(libeditorgui_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/main/imagewindow.cpp
        )
-    
+
     SET(libmaintenance_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/imageinfojob.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/imageinfoalbumsjob.cpp
@@ -1270,6 +1270,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/maintenancedlg.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/maintenancemngr.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/maintenancetool.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/maintenancesettings.cpp
        )
 
     SET(libdatabasecore_SRCS
@@ -1428,6 +1429,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album/albummanager.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album/albummodificationhelper.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album/albumpropsedit.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album/albumselectors.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album/albumselectcombobox.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album/albumselectdialog.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album/albumselectiontreeview.cpp

@@ -7,7 +7,7 @@
  * Description : mics configuration setup tab
  *
  * Copyright (C) 2004      by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -59,7 +59,6 @@ public:
         showTrashDeleteDialogCheck(0),
         showPermanentDeleteDialogCheck(0),
         sidebarApplyDirectlyCheck(0),
-        scanAtStart(0),
         sidebarType(0),
         stringComparisonType(0),
         applicationStyle(0)
@@ -74,7 +73,6 @@ public:
     QCheckBox* showTrashDeleteDialogCheck;
     QCheckBox* showPermanentDeleteDialogCheck;
     QCheckBox* sidebarApplyDirectlyCheck;
-    QCheckBox* scanAtStart;
 
     KComboBox* sidebarType;
     KComboBox* stringComparisonType;
@@ -84,33 +82,32 @@ public:
 SetupMisc::SetupMisc(QWidget* const parent)
     : QScrollArea(parent), d(new Private)
 {
-    QWidget* panel = new QWidget(viewport());
+    QWidget* const panel = new QWidget(viewport());
     setWidget(panel);
     setWidgetResizable(true);
 
     // --------------------------------------------------------
 
-    QVBoxLayout* layout               = new QVBoxLayout(panel);
+    QVBoxLayout* const layout         = new QVBoxLayout(panel);
     d->showTrashDeleteDialogCheck     = new QCheckBox(i18n("Confirm when moving items to the &trash"), panel);
     d->showPermanentDeleteDialogCheck = new QCheckBox(i18n("Confirm when permanently deleting items"), panel);
     d->sidebarApplyDirectlyCheck      = new QCheckBox(i18n("Do not confirm when applying changes in the &right sidebar"), panel);
     d->showSplashCheck                = new QCheckBox(i18n("&Show splash screen at startup"), panel);
-    d->scanAtStart                    = new QCheckBox(i18n("&Scan for new items at startup (makes startup slower)"), panel);
-
+    
     // --------------------------------------------------------
 
-    KHBox* tabStyleHbox = new KHBox(panel);
-    d->sidebarTypeLabel = new QLabel(i18n("Sidebar tab title:"), tabStyleHbox);
-    d->sidebarType      = new KComboBox(tabStyleHbox);
+    KHBox* const tabStyleHbox = new KHBox(panel);
+    d->sidebarTypeLabel       = new QLabel(i18n("Sidebar tab title:"), tabStyleHbox);
+    d->sidebarType            = new KComboBox(tabStyleHbox);
     d->sidebarType->addItem(i18n("Only For Active Tab"), 0);
     d->sidebarType->addItem(i18n("For All Tabs"),        1);
     d->sidebarType->setToolTip(i18n("Set this option to configure how sidebar tab titles are visible."));
 
     // --------------------------------------------------------
 
-    KHBox* stringComparisonHbox  = new KHBox(panel);
-    d->stringComparisonTypeLabel = new QLabel(i18n("String comparison type:"), stringComparisonHbox);
-    d->stringComparisonType      = new KComboBox(stringComparisonHbox);
+    KHBox* const stringComparisonHbox = new KHBox(panel);
+    d->stringComparisonTypeLabel      = new QLabel(i18n("String comparison type:"), stringComparisonHbox);
+    d->stringComparisonType           = new KComboBox(stringComparisonHbox);
     d->stringComparisonType->addItem(i18nc("method to compare strings", "Natural"), AlbumSettings::Natural);
     d->stringComparisonType->addItem(i18nc("method to compare strings", "Normal"),  AlbumSettings::Normal);
     d->stringComparisonType->setToolTip(i18n("<qt>Sets the way in which strings are compared inside digiKam. "
@@ -123,9 +120,9 @@ SetupMisc::SetupMisc(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    KHBox* appStyleHbox      = new KHBox(panel);
-    d->applicationStyleLabel = new QLabel(i18n("Widget style:"), appStyleHbox);
-    d->applicationStyle      = new KComboBox(appStyleHbox);
+    KHBox* const appStyleHbox = new KHBox(panel);
+    d->applicationStyleLabel  = new QLabel(i18n("Widget style:"), appStyleHbox);
+    d->applicationStyle       = new KComboBox(appStyleHbox);
     d->applicationStyle->setToolTip(i18n("Set this option to choose the default window decoration and looks."));
 
     QStringList styleList = QStyleFactory::keys();
@@ -143,7 +140,6 @@ SetupMisc::SetupMisc(QWidget* const parent)
     layout->addWidget(d->showPermanentDeleteDialogCheck);
     layout->addWidget(d->sidebarApplyDirectlyCheck);
     layout->addWidget(d->showSplashCheck);
-    layout->addWidget(d->scanAtStart);
     layout->addWidget(tabStyleHbox);
     layout->addWidget(appStyleHbox);
     layout->addWidget(stringComparisonHbox);
@@ -166,13 +162,12 @@ SetupMisc::~SetupMisc()
 
 void SetupMisc::applySettings()
 {
-    AlbumSettings* settings = AlbumSettings::instance();
+    AlbumSettings* const settings = AlbumSettings::instance();
 
     settings->setShowSplashScreen(d->showSplashCheck->isChecked());
     settings->setShowTrashDeleteDialog(d->showTrashDeleteDialogCheck->isChecked());
     settings->setShowPermanentDeleteDialog(d->showPermanentDeleteDialogCheck->isChecked());
     settings->setApplySidebarChangesDirectly(d->sidebarApplyDirectlyCheck->isChecked());
-    settings->setScanAtStart(d->scanAtStart->isChecked());
     settings->setSidebarTitleStyle(d->sidebarType->currentIndex() == 0 ? KMultiTabBar::VSNET : KMultiTabBar::KDEV3ICON);
     settings->setStringComparisonType((AlbumSettings::StringComparisonType)d->stringComparisonType->itemData(d->stringComparisonType->currentIndex()).toInt());
     settings->setApplicationStyle(d->applicationStyle->currentText());
@@ -181,13 +176,12 @@ void SetupMisc::applySettings()
 
 void SetupMisc::readSettings()
 {
-    AlbumSettings* settings = AlbumSettings::instance();
+    AlbumSettings* const settings = AlbumSettings::instance();
 
     d->showSplashCheck->setChecked(settings->getShowSplashScreen());
     d->showTrashDeleteDialogCheck->setChecked(settings->getShowTrashDeleteDialog());
     d->showPermanentDeleteDialogCheck->setChecked(settings->getShowPermanentDeleteDialog());
     d->sidebarApplyDirectlyCheck->setChecked(settings->getApplySidebarChangesDirectly());
-    d->scanAtStart->setChecked(settings->getScanAtStart());
     d->sidebarType->setCurrentIndex(settings->getSidebarTitleStyle() == KMultiTabBar::VSNET ? 0 : 1);
     d->stringComparisonType->setCurrentIndex(settings->getStringComparisonType());
     d->applicationStyle->setCurrentIndex(d->applicationStyle->findText(settings->getApplicationStyle()));

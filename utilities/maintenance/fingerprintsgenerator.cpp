@@ -76,6 +76,7 @@ FingerPrintsGenerator::FingerPrintsGenerator(const bool rebuildAll, ProgressItem
     : MaintenanceTool("FingerPrintsGenerator", parent),
       d(new Private)
 {
+    setLabel(i18n("Finger-prints"));
     ProgressManager::addProgressItem(this);
 
     d->rebuildAll        = rebuildAll;
@@ -83,8 +84,6 @@ FingerPrintsGenerator::FingerPrintsGenerator(const bool rebuildAll, ProgressItem
 
     connect(d->previewLoadThread, SIGNAL(signalImageLoaded(LoadingDescription,DImg)),
             this, SLOT(slotGotImagePreview(LoadingDescription,DImg)));
-
-    setLabel(i18n("Finger-prints"));
 }
 
 FingerPrintsGenerator::~FingerPrintsGenerator()

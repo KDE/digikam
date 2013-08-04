@@ -455,10 +455,26 @@ void ScanController::completeCollectionScan(SplashScreen* const splash, bool def
 {
     d->splash = splash;
     createProgressDialog();
+    
     // we only need to count the files in advance
-    //if we show a progress percentage in progress dialog
-    d->needTotalFiles = (!d->splash || !CollectionScanner::databaseInitialScanDone());
+    // if we show a progress percentage in progress dialog
+    completeCollectionScanCore(!d->splash || !CollectionScanner::databaseInitialScanDone(), defer);
 
+    delete d->progressDialog;
+    d->progressDialog = 0;
+    // We do not delete Splashscreen here.
+    d->splash         = 0;
+}
+
+void ScanController::completeCollectionScanInBackground(bool defer)
+{
+    completeCollectionScanCore(true, defer);
+}
+
+void ScanController::completeCollectionScanCore(bool needTotalFiles, bool defer)
+{
+    d->needTotalFiles = needTotalFiles;
+    
     {
         QMutexLocker lock(&d->mutex);
         d->needsCompleteScan = true;
@@ -468,11 +484,7 @@ void ScanController::completeCollectionScan(SplashScreen* const splash, bool def
 
     // loop is quit by signal
     d->eventLoop->exec();
-
-    delete d->progressDialog;
-    d->progressDialog = 0;
-    // We do not delete Splashscreen here.
-    d->splash         = 0;
+    
     d->needTotalFiles = false;
 }
 
@@ -1154,8 +1166,6 @@ ScanControllerLoadingCacheFileWatch::ScanControllerLoadingCacheFileWatch()
 
 void ScanControllerLoadingCacheFileWatch::slotImageChanged(const ImageChangeset& changeset)
 {
-    DatabaseAccess access;
-
     foreach(const qlonglong& imageId, changeset.ids())
     {
         DatabaseFields::Set changes = changeset.changes();
