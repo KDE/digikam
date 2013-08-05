@@ -1826,9 +1826,9 @@ AlbumList AlbumManager::allDAlbums() const
 
 void AlbumManager::setCurrentAlbums(QList<Album*> albums)
 {
-
     if(albums.isEmpty())
         return;
+
     /**
      * Sort is needed to identify selection correctly, ex AlbumHistory
      */

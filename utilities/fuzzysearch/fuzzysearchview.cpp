@@ -656,7 +656,9 @@ void FuzzySearchView::slotTabChanged(int tab)
 
         default:  // DUPLICATES
         {
-            albums << d->findDuplicatesPanel->currentFindDuplicatesAlbum();
+            Album* album = d->findDuplicatesPanel->currentFindDuplicatesAlbum();
+            if(album)
+                albums << album;
             AlbumManager::instance()->setCurrentAlbums(albums);
             d->folderView->setVisible(false);
             break;

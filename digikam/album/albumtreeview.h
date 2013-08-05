@@ -209,6 +209,9 @@ public:
     void removeContextMenuElement(ContextMenuElement* const element);
     QList<ContextMenuElement*> contextMenuElements() const;
 
+    template<class A>
+    QList<A*> currentAlbums();
+
     // for internal use: public viewportEvent
     virtual bool viewportEvent(QEvent* event);
 
@@ -538,11 +541,18 @@ public:
     TagPropertiesFilterModel* filteredModel() const;
 
     /**
-     * @brief currentAlbums     - after enabling multiple selection, current
-     *                            albums can be one or more, some options
-     *                            should be ported to fit the both cases
+     * @brief currentAlbum     - even if multiple selection is enabled current
+     *                           Album can be only one, the last clicked item
+     *                          if you need selected items, see seletectedAlbums()
+     *                          It's NOT the same as AlbumManager::currentAlbums()
      */
     TAlbum* currentAlbum() const;
+
+    /**
+     * @brief selectedAlbums - return a list of all selected items in tag model
+     */
+    QList<Album*> selectedTags();
+
     TAlbum* albumForIndex(const QModelIndex& index) const;
     TagModificationHelper* tagModificationHelper() const;
 

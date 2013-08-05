@@ -199,7 +199,6 @@ SAlbum* SearchModificationHelper::slotCreateTimeLineSearch(const QString& desire
     kDebug() << "Date search XML:\n" << writer.xml();
 
     SAlbum* album = AlbumManager::instance()->createSAlbum(name, DatabaseSearch::TimeLineSearch, writer.xml());
-
     AlbumManager::instance()->setCurrentAlbums(QList<Album*>() << album);
     return album;
 }

@@ -62,7 +62,7 @@ public:
     AlbumHistory();
     ~AlbumHistory();
 
-    void            addAlbum(QList<Album*> const albums, QWidget* const widget = 0);
+    void            addAlbums(QList<Album*> const albums, QWidget* const widget = 0);
     void            deleteAlbum(Album* const album);
     void            clearHistory();
     void            back(QList<Album*>& album, QWidget** const widget, unsigned int steps=1);

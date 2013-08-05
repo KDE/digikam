@@ -180,8 +180,9 @@ void AlbumHistory::clearHistory()
     d->moving = false;
 }
 
-void AlbumHistory::addAlbum(QList<Album*> const albums, QWidget* const widget)
+void AlbumHistory::addAlbums(QList<Album*> const albums, QWidget* const widget)
 {
+
     if (albums.isEmpty() || !widget || d->moving)
     {
         d->moving = false;

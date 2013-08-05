@@ -99,6 +99,11 @@ public:
      * Note: No check is possible for the TraditionalFormat, always returns true.
      */
     static bool checkStream(ImageListerRecord::BinaryFormat format, QDataStream& data);
+
+    bool operator==(ImageListerRecord& record) const
+    {
+        return this->imageID == record.imageID;
+    }
 };
 
 DIGIKAM_DATABASE_EXPORT QDataStream& operator<<(QDataStream& os, const ImageListerRecord& record);

@@ -227,8 +227,7 @@ void TagViewSideBarWidget::setActive(bool active)
 {
     if (active)
     {
-        AlbumManager::instance()->setCurrentAlbums(QList<Album*>()
-                                                   << d->tagFolderView->currentAlbum());
+        AlbumManager::instance()->setCurrentAlbums(d->tagFolderView->selectedTags());
     }
 }
 

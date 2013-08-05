@@ -9,11 +9,12 @@ DONE:
   8. Port ImageAlbumModel to QList<Album*>
   9. Port HistoryItem to QList<Album*>
   10. Fix AlbumHistory: slotAlbumSelected, slotCurrentAlbumChanged, slot currentChanged, slotImagechanged
+  11. Selection is not cleared on moving Forward/backward
+  12. Images on view are not displayed after navigating backward/forward
 
 BUGS:
   1. Tag Properties don't save changes
-  2. Selection is not cleared on moving Forward/backward
-  3. Images on view are not displayed after navigating backward/forward
+
 
 TODO:
   1. Patch views to support multiple tags
@@ -22,3 +23,6 @@ TODO:
   5. Add database options
   6. core/libs/models/imagealbummodel.cpp:193 TODO: treat root album on QList
   7. To be continued
+
+DEAD CODE:
+   1. Albumtreeview.cpp 306-309 deleting this 2 connects doesn't affect digikam behaviour

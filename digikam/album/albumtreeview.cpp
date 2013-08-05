@@ -56,12 +56,6 @@ namespace Digikam
 {
 
 template <class A>
-static inline A* currentAlbum(QItemSelectionModel* const selModel, AlbumFilterModel* const filterModel)
-{
-    return static_cast<A*>(filterModel->albumForIndex(selModel->currentIndex()));
-}
-
-template <class A>
 static QList<A*> selectedAlbums(QItemSelectionModel* const selModel, AlbumFilterModel* const filterModel)
 {
     QList<QModelIndex> indexes = selModel->selectedIndexes();
@@ -302,6 +296,7 @@ void AbstractAlbumTreeView::setAlbumFilterModel(AlbumFilterModel* const filterMo
         connect(m_albumFilterModel, SIGNAL(searchTextSettingsChanged(bool,bool)),
                 this, SLOT(slotSearchTextSettingsChanged(bool,bool)));
 
+        /** Deleting this two, won't change digikam behavior */
         connect(selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
                 this, SLOT(slotCurrentChanged()));
 
@@ -371,6 +366,20 @@ QModelIndex AbstractAlbumTreeView::indexVisuallyAt(const QPoint& p)
     return QModelIndex();
 }
 
+template<class A>
+QList<A*> AbstractAlbumTreeView::currentAlbums()
+{
+    QList<A*> albums;
+    QList<Album*> currentAl = AlbumManager::instance()->currentAlbums();
+
+    for(QList<Album*>::iterator it = currentAl.begin(); it != currentAl.end(); ++it)
+    {
+        A* item = dynamic_cast<A*>(*it);
+        if(item)
+            albums.append(item);
+    }
+    return albums;
+}
 void AbstractAlbumTreeView::slotSearchTextSettingsAboutToChange(bool searched, bool willSearch)
 {
     // backup before we begin searching
@@ -390,7 +399,7 @@ void AbstractAlbumTreeView::slotSearchTextSettingsAboutToChange(bool searched, b
 
         // also backup the last selected album in case this didn't work via the
         // slot
-        Album* const current = currentAlbum<Album>(selectionModel(), m_albumFilterModel);
+        Album* const current = selectedAlbums<Album>(selectionModel(), m_albumFilterModel).first();
         d->lastSelectedAlbum = current;
     }
 }
@@ -504,31 +513,37 @@ void AbstractAlbumTreeView::setCurrentAlbums(QList<Album*> albums, bool selectIn
     {
         return;
     }
+    if (selectInAlbumManager && d->setInAlbumManager)
+    {
+        AlbumManager::instance()->setCurrentAlbums(albums);
+    }
 
-    //setCurrentIndex(albumFilterModel()->indexForAlbum(album));
+    setCurrentIndex(albumFilterModel()->indexForAlbum(albums.first()));
+
     QItemSelectionModel* model = selectionModel();
-
+    model->clearSelection();
     for(int it = 0; it < albums.size(); ++ it)
     {
         model->select(albumFilterModel()->indexForAlbum(albums.at(it)),
                       model->Select);
     }
-    emit selectedAlbumsChanged(selectedAlbums<Album>(selectionModel(), m_albumFilterModel));
-    // check local and global flag
-    if (selectInAlbumManager && d->setInAlbumManager)
-    {
-        AlbumManager::instance()->setCurrentAlbums(albums);
-    }
+
 }
 
 void AbstractAlbumTreeView::slotCurrentChanged()
 {
-    emit currentAlbumChanged(currentAlbum<Album>(selectionModel(), m_albumFilterModel));
+    QList<Album*> selected = selectedAlbums<Album>(selectionModel(),
+                                                   m_albumFilterModel);
+    if(selected.isEmpty())
+        return;
+
+    emit currentAlbumChanged(selected.first());
 }
 
 void AbstractAlbumTreeView::slotSelectionChanged()
 {
-    emit selectedAlbumsChanged(selectedAlbums<Album>(selectionModel(), m_albumFilterModel));
+    /** Dead signal? Nobody listens to it **/
+    //emit selectedAlbumsChanged(selectedAlbums<Album>(selectionModel(), m_albumFilterModel));
 }
 
 void AbstractAlbumTreeView::mousePressEvent(QMouseEvent* e)
@@ -1565,6 +1580,11 @@ TagPropertiesFilterModel* TagTreeView::filteredModel() const
 TAlbum* TagTreeView::currentAlbum() const
 {
     return dynamic_cast<TAlbum*> (m_albumFilterModel->albumForIndex(currentIndex()));
+}
+
+QList< Album* > TagTreeView::selectedTags()
+{
+    return selectedAlbums<Album>(selectionModel(),m_filteredModel);
 }
 
 TAlbum* TagTreeView::albumForIndex(const QModelIndex& index) const

@@ -1133,7 +1133,7 @@ void DigikamView::slotAlbumSelected(QList<Album*> albums)
 
     if (d->useAlbumHistory)
     {
-        d->albumHistory->addAlbum(albums, d->leftSideBar->getActiveTab());
+        d->albumHistory->addAlbums(albums, d->leftSideBar->getActiveTab());
     }
 
     d->parent->enableAlbumBackwardHistory(d->useAlbumHistory && !d->albumHistory->isBackwardEmpty());

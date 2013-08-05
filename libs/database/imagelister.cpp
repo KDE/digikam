@@ -66,6 +66,13 @@
 namespace Digikam
 {
 
+/**
+ * Used by QSet
+ */
+uint qHash(const ImageListerRecord& key)
+{
+    return key.imageID;
+}
 /*
  * The binary field for file size is only 32 bit.
  * If the value fits, we pass it. If it does not, we pass -1,
@@ -279,6 +286,7 @@ void ImageLister::listAlbum(ImageListerReceiver* const receiver, int albumRootId
 
 void ImageLister::listTag(ImageListerReceiver* const receiver, QList<int> tagIds)
 {
+    QSet<ImageListerRecord> records;
     QList<int>::iterator it;
     for(it = tagIds.begin(); it != tagIds.end(); ++it)
     {
@@ -340,9 +348,15 @@ void ImageLister::listTag(ImageListerReceiver* const receiver, QList<int> tagIds
 
             record.imageSize         = QSize(width, height);
 
-            receiver->receive(record);
+            records.insert(record);
         }
     }
+
+    for(QSet<ImageListerRecord>::iterator it = records.begin(); it != records.end(); ++it)
+    {
+        receiver->receive(*it);
+    }
+
 }
 
 void ImageLister::listFaces(ImageListerReceiver* const receiver, int personId)
