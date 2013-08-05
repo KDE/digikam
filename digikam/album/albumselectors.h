@@ -43,6 +43,16 @@ public:
     explicit AlbumSelectors(const QString& label, const QString& configName, QWidget* const parent = 0);
     ~AlbumSelectors();
 
+    /** Return list of Physical Albums selected
+     */
+    QList<Album*> selectedPAlbums() const;
+
+    /** Return list of Tag Albums selected
+     */
+    QList<Album*> selectedTAlbums() const;
+
+    /** Return list of Physical and Tag Albums selected
+     */
     QList<Album*> selectedAlbums() const;
 
     void loadState();

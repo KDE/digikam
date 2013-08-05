@@ -149,10 +149,22 @@ void AlbumSelectors::slotUpdateClearButtons()
 QList<Album*> AlbumSelectors::selectedAlbums() const
 {
     QList<Album*> albums;
-    albums << d->albumSelectCB->model()->checkedAlbums();
-    albums << d->tagSelectCB->model()->checkedAlbums();
+    albums << selectedPAlbums();
+    albums << selectedTAlbums();
+    return albums;
+}
 
-    kDebug() << albums;
+QList<Album*> AlbumSelectors::selectedPAlbums() const
+{
+    QList<Album*> albums;
+    albums << d->albumSelectCB->model()->checkedAlbums();
+    return albums;
+}
+
+QList<Album*> AlbumSelectors::selectedTAlbums() const
+{
+    QList<Album*> albums;
+    albums << d->tagSelectCB->model()->checkedAlbums();
     return albums;
 }
 
