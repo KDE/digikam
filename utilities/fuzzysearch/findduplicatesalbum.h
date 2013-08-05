@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2008-05-19
- * Description : Find Duplicates View.
+ * Description : Find Duplicates tree-view search album.
  *
  * Copyright (C) 2008-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2008-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
@@ -23,64 +23,38 @@
  *
  * ============================================================ */
 
-#ifndef FINDDUPLICATESVIEW_H
-#define FINDDUPLICATESVIEW_H
+#ifndef FINDDUPLICATESALBUM_H
+#define FINDDUPLICATESALBUM_H
 
 // Qt includes
 
 #include <QWidget>
+#include <QPixmap>
+#include <QTreeWidget>
 
-class QTreeWidgetItem;
+// Local includes
+
+#include "thumbnailloadthread.h"
 
 namespace Digikam
 {
-class Album;
-class SAlbum;
 
-class FindDuplicatesView : public QWidget
+class FindDuplicatesAlbum : public QTreeWidget
 {
     Q_OBJECT
 
 public:
 
-    explicit FindDuplicatesView(QWidget* const parent = 0);
-    ~FindDuplicatesView();
+    explicit FindDuplicatesAlbum(QWidget* const parent = 0);
+    virtual ~FindDuplicatesAlbum();
 
-    SAlbum* currentFindDuplicatesAlbum() const;
+private :
 
-public Q_SLOTS:
-
-    void slotSetSelectedAlbum(Album*);
-    void slotSetSelectedTag(Album*);
+    void drawRow(QPainter* p, const QStyleOptionViewItem& opt, const QModelIndex& index) const;
 
 private Q_SLOTS:
 
-    void populateTreeView();
-    void slotAlbumAdded(Album* a);
-    void slotAlbumDeleted(Album* a);
-    void slotSearchUpdated(SAlbum* a);
-    void slotClear();
-    void slotFindDuplicates();
-    void slotDuplicatesAlbumActived(QTreeWidgetItem*, int);
-    void slotComplete();
-    void slotUpdateFingerPrints();
-
-    void slotAlbumSelectionChanged(Album*, Qt::CheckState);
-    void slotTagSelectionChanged(Album*, Qt::CheckState);
-    void slotUpdateAlbumsAndTags();
-
-private:
-
-    void enableControlWidgets(bool);
-    bool checkForValidSettings();
-
-    void updateAlbumsBox();
-    void updateTagsBox();
-
-    bool validAlbumSettings();
-    bool validTagSettings();
-
-    void resetAlbumsAndTags();
+    void slotThumbnailLoaded(const LoadingDescription&, const QPixmap&);
 
 private:
 
@@ -90,4 +64,4 @@ private:
 
 }  // namespace Digikam
 
-#endif /* FINDDUPLICATESVIEW_H */
+#endif /* FINDDUPLICATESALBUM_H */

@@ -29,7 +29,6 @@
 
 #include <QHeaderView>
 #include <QLayout>
-#include <QPainter>
 #include <QPushButton>
 #include <QSpinBox>
 
@@ -47,6 +46,7 @@
 #include "albummanager.h"
 #include "databaseaccess.h"
 #include "databasebackend.h"
+#include "findduplicatesalbum.h"
 #include "findduplicatesalbumitem.h"
 #include "duplicatesfinder.h"
 #include "albumselectcombobox.h"
@@ -55,82 +55,6 @@
 
 namespace Digikam
 {
-
-class FindDuplicatesAlbum::Private
-{
-
-public:
-
-    Private()
-        : iconSize(64)
-    {
-        thumbLoadThread = 0;
-    }
-
-    const int            iconSize;
-
-    ThumbnailLoadThread* thumbLoadThread;
-};
-
-FindDuplicatesAlbum::FindDuplicatesAlbum(QWidget* const parent)
-    : QTreeWidget(parent), d(new Private)
-{
-    d->thumbLoadThread = ThumbnailLoadThread::defaultThread();
-
-    setRootIsDecorated(false);
-    setSelectionMode(QAbstractItemView::SingleSelection);
-    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    setAllColumnsShowFocus(true);
-    setIconSize(QSize(d->iconSize, d->iconSize));
-    setSortingEnabled(true);
-    setColumnCount(2);
-    setHeaderLabels(QStringList() << i18n("Ref. images") << i18n("Items"));
-    header()->setResizeMode(0, QHeaderView::Stretch);
-    header()->setResizeMode(1, QHeaderView::ResizeToContents);
-    setWhatsThis(i18n("This shows all found duplicate items."));
-
-    connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(LoadingDescription,QPixmap)),
-            this, SLOT(slotThumbnailLoaded(LoadingDescription,QPixmap)));
-}
-
-FindDuplicatesAlbum::~FindDuplicatesAlbum()
-{
-    delete d;
-}
-
-void FindDuplicatesAlbum::slotThumbnailLoaded(const LoadingDescription& desc, const QPixmap& pix)
-{
-    QTreeWidgetItemIterator it(this);
-
-    while (*it)
-    {
-        FindDuplicatesAlbumItem* const item = dynamic_cast<FindDuplicatesAlbumItem*>(*it);
-
-        if (item && (item->refUrl().toLocalFile() == desc.filePath))
-        {
-            if (!pix.isNull())
-            {
-                item->setThumb(pix.scaled(d->iconSize, d->iconSize, Qt::KeepAspectRatio));
-            }
-        }
-
-        ++it;
-    }
-}
-
-void FindDuplicatesAlbum::drawRow(QPainter* p, const QStyleOptionViewItem& opt, const QModelIndex& index) const
-{
-    FindDuplicatesAlbumItem* const item = dynamic_cast<FindDuplicatesAlbumItem*>(itemFromIndex(index));
-
-    if (item && !item->hasValidThumbnail())
-    {
-        d->thumbLoadThread->find(item->refUrl().toLocalFile());
-    }
-
-    QTreeWidget::drawRow(p, opt, index);
-}
-
-// ------------------------------------------------------------------------------------------------------
 
 class FindDuplicatesView::Private
 {
