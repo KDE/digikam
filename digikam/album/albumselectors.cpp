@@ -144,16 +144,52 @@ void AlbumSelectors::slotUpdateClearButtons()
 {
     d->albumClearButton->animateVisible(!d->albumSelectCB->model()->checkedAlbums().isEmpty());
     d->tagClearButton->animateVisible(!d->tagSelectCB->model()->checkedAlbums().isEmpty());
+    
+    emit signalSelectionChanged();
 }
 
 QList<Album*> AlbumSelectors::selectedAlbums() const
 {
     QList<Album*> albums;
-    albums << d->albumSelectCB->model()->checkedAlbums();
-    albums << d->tagSelectCB->model()->checkedAlbums();
-
-    kDebug() << albums;
+    albums << selectedPAlbums();
+    albums << selectedTAlbums();
     return albums;
+}
+
+QList<Album*> AlbumSelectors::selectedPAlbums() const
+{
+    QList<Album*> albums;
+    albums << d->albumSelectCB->model()->checkedAlbums();
+    return albums;
+}
+
+QList<Album*> AlbumSelectors::selectedTAlbums() const
+{
+    QList<Album*> albums;
+    albums << d->tagSelectCB->model()->checkedAlbums();
+    return albums;
+}
+
+void AlbumSelectors::setPAlbumSelected(Album* const album, bool singleSelection)
+{
+    if (!album)
+        return;
+    
+    if (singleSelection) 
+        d->albumSelectCB->model()->resetCheckedAlbums();
+
+    d->albumSelectCB->model()->setChecked(album, true);
+}
+
+void AlbumSelectors::setTAlbumSelected(Album* const album, bool singleSelection)
+{
+    if (!album)
+        return;
+    
+    if (singleSelection) 
+        d->tagSelectCB->model()->resetCheckedAlbums();
+
+    d->tagSelectCB->model()->setChecked(album, true);
 }
 
 void AlbumSelectors::loadState()
@@ -168,4 +204,10 @@ void AlbumSelectors::saveState()
     d->tagSelectCB->view()->saveState();
 }
 
+void AlbumSelectors::resetSelection()
+{
+    d->albumSelectCB->model()->resetCheckedAlbums();
+    d->tagSelectCB->model()->resetCheckedAlbums();
+}
+    
 } // namespace Digikam

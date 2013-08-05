@@ -29,9 +29,9 @@
 
 #include <QHeaderView>
 #include <QLayout>
-#include <QPainter>
 #include <QPushButton>
 #include <QSpinBox>
+#include <QLabel>
 
 // KDE includes
 
@@ -45,92 +45,16 @@
 #include "album.h"
 #include "albumdb.h"
 #include "albummanager.h"
+#include "albumselectors.h"
 #include "databaseaccess.h"
 #include "databasebackend.h"
+#include "findduplicatesalbum.h"
 #include "findduplicatesalbumitem.h"
 #include "duplicatesfinder.h"
-#include "albumselectcombobox.h"
-#include "abstractalbummodel.h"
 #include "fingerprintsgenerator.h"
 
 namespace Digikam
 {
-
-class FindDuplicatesAlbum::Private
-{
-
-public:
-
-    Private()
-        : iconSize(64)
-    {
-        thumbLoadThread = 0;
-    }
-
-    const int            iconSize;
-
-    ThumbnailLoadThread* thumbLoadThread;
-};
-
-FindDuplicatesAlbum::FindDuplicatesAlbum(QWidget* const parent)
-    : QTreeWidget(parent), d(new Private)
-{
-    d->thumbLoadThread = ThumbnailLoadThread::defaultThread();
-
-    setRootIsDecorated(false);
-    setSelectionMode(QAbstractItemView::SingleSelection);
-    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    setAllColumnsShowFocus(true);
-    setIconSize(QSize(d->iconSize, d->iconSize));
-    setSortingEnabled(true);
-    setColumnCount(2);
-    setHeaderLabels(QStringList() << i18n("Ref. images") << i18n("Items"));
-    header()->setResizeMode(0, QHeaderView::Stretch);
-    header()->setResizeMode(1, QHeaderView::ResizeToContents);
-    setWhatsThis(i18n("This shows all found duplicate items."));
-
-    connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(LoadingDescription,QPixmap)),
-            this, SLOT(slotThumbnailLoaded(LoadingDescription,QPixmap)));
-}
-
-FindDuplicatesAlbum::~FindDuplicatesAlbum()
-{
-    delete d;
-}
-
-void FindDuplicatesAlbum::slotThumbnailLoaded(const LoadingDescription& desc, const QPixmap& pix)
-{
-    QTreeWidgetItemIterator it(this);
-
-    while (*it)
-    {
-        FindDuplicatesAlbumItem* const item = dynamic_cast<FindDuplicatesAlbumItem*>(*it);
-
-        if (item && (item->refUrl().toLocalFile() == desc.filePath))
-        {
-            if (!pix.isNull())
-            {
-                item->setThumb(pix.scaled(d->iconSize, d->iconSize, Qt::KeepAspectRatio));
-            }
-        }
-
-        ++it;
-    }
-}
-
-void FindDuplicatesAlbum::drawRow(QPainter* p, const QStyleOptionViewItem& opt, const QModelIndex& index) const
-{
-    FindDuplicatesAlbumItem* const item = dynamic_cast<FindDuplicatesAlbumItem*>(itemFromIndex(index));
-
-    if (item && !item->hasValidThumbnail())
-    {
-        d->thumbLoadThread->find(item->refUrl().toLocalFile());
-    }
-
-    QTreeWidget::drawRow(p, opt, index);
-}
-
-// ------------------------------------------------------------------------------------------------------
 
 class FindDuplicatesView::Private
 {
@@ -143,13 +67,9 @@ public:
         scanDuplicatesBtn  = 0;
         updateFingerPrtBtn = 0;
         progressItem       = 0;
-        includeAlbumsLabel = 0;
         similarityLabel    = 0;
         similarity         = 0;
-        albumSelectCB      = 0;
-        tagSelectCB        = 0;
-        albumModel         = 0;
-        tagModel           = 0;
+        albumSelectors     = 0;
     }
 
     QLabel*                      includeAlbumsLabel;
@@ -164,11 +84,7 @@ public:
 
     ProgressItem*                progressItem;
 
-    AlbumSelectComboBox*         albumSelectCB;
-    AlbumSelectComboBox*         tagSelectCB;
-
-    AbstractCheckableAlbumModel* albumModel;
-    AbstractCheckableAlbumModel* tagModel;
+    AlbumSelectors*              albumSelectors;
 };
 
 FindDuplicatesView::FindDuplicatesView(QWidget* const parent)
@@ -191,22 +107,8 @@ FindDuplicatesView::FindDuplicatesView(QWidget* const parent)
 
     // ---------------------------------------------------------------
 
-    d->includeAlbumsLabel = new QLabel(i18n("Search in:"));
-
-    d->albumSelectCB      = new AlbumSelectComboBox();
-    d->albumSelectCB->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-
-    QString albumSelectStr = i18n("Select all albums that should be included in the search.");
-    d->albumSelectCB->setWhatsThis(albumSelectStr);
-    d->albumSelectCB->setToolTip(albumSelectStr);
-
-    d->tagSelectCB        = new AlbumSelectComboBox();
-    d->tagSelectCB->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-
-    QString tagSelectStr  = i18n("Select all tags that should be included in the search.");
-    d->tagSelectCB->setWhatsThis(tagSelectStr);
-    d->tagSelectCB->setToolTip(tagSelectStr);
-
+    d->albumSelectors = new AlbumSelectors(i18nc("@label", "Search in:"), "Find Duplicates View");
+    
     // ---------------------------------------------------------------
 
     d->similarity = new QSpinBox();
@@ -222,13 +124,11 @@ FindDuplicatesView::FindDuplicatesView(QWidget* const parent)
 
     QGridLayout* const mainLayout = new QGridLayout();
     mainLayout->addWidget(d->listView,           0, 0, 1, -1);
-    mainLayout->addWidget(d->includeAlbumsLabel, 1, 0, 1, 1);
-    mainLayout->addWidget(d->albumSelectCB,      1, 1, 1, -1);
-    mainLayout->addWidget(d->tagSelectCB,        2, 1, 1, -1);
-    mainLayout->addWidget(d->similarityLabel,    3, 0, 1, 1);
-    mainLayout->addWidget(d->similarity,         3, 2, 1, 1);
-    mainLayout->addWidget(d->updateFingerPrtBtn, 4, 0, 1, -1);
-    mainLayout->addWidget(d->scanDuplicatesBtn,  5, 0, 1, -1);
+    mainLayout->addWidget(d->albumSelectors,     1, 0, 1, -1);
+    mainLayout->addWidget(d->similarityLabel,    2, 0, 1, 1);
+    mainLayout->addWidget(d->similarity,         2, 2, 1, 1);
+    mainLayout->addWidget(d->updateFingerPrtBtn, 3, 0, 1, -1);
+    mainLayout->addWidget(d->scanDuplicatesBtn,  4, 0, 1, -1);
     mainLayout->setRowStretch(0, 10);
     mainLayout->setColumnStretch(1, 10);
     mainLayout->setMargin(KDialog::spacingHint());
@@ -246,11 +146,11 @@ FindDuplicatesView::FindDuplicatesView(QWidget* const parent)
     connect(d->listView, SIGNAL(itemClicked(QTreeWidgetItem*,int)),
             this, SLOT(slotDuplicatesAlbumActived(QTreeWidgetItem*,int)));
 
+    connect(d->albumSelectors, SIGNAL(signalSelectionChanged()),
+            this, SLOT(slotCheckForValidSettings()));
+    
     connect(AlbumManager::instance(), SIGNAL(signalAllAlbumsLoaded()),
             this, SLOT(populateTreeView()));
-
-    connect(AlbumManager::instance(), SIGNAL(signalAllAlbumsLoaded()),
-            this, SLOT(slotUpdateAlbumsAndTags()));
 
     connect(AlbumManager::instance(), SIGNAL(signalAlbumAdded(Album*)),
             this, SLOT(slotAlbumAdded(Album*)));
@@ -301,46 +201,6 @@ void FindDuplicatesView::populateTreeView()
 
     d->listView->sortByColumn(1, Qt::DescendingOrder);
     d->listView->resizeColumnToContents(0);
-}
-
-void FindDuplicatesView::slotUpdateAlbumsAndTags()
-{
-    updateAlbumsBox();
-    updateTagsBox();
-    checkForValidSettings();
-}
-
-void FindDuplicatesView::updateAlbumsBox()
-{
-    if (d->albumModel)
-    {
-        disconnect(d->albumModel, 0, this, 0);
-    }
-
-    d->albumSelectCB->setDefaultAlbumModel();
-    d->albumModel = d->albumSelectCB->model();
-    d->albumSelectCB->view()->expandToDepth(0);
-    d->albumSelectCB->setNoSelectionText(i18n("No albums selected"));
-
-    connect(d->albumModel, SIGNAL(checkStateChanged(Album*,Qt::CheckState)),
-            this, SLOT(slotAlbumSelectionChanged(Album*,Qt::CheckState)));
-}
-
-void FindDuplicatesView::updateTagsBox()
-{
-    if (d->tagModel)
-    {
-        disconnect(d->tagModel, 0, this, 0);
-    }
-
-
-    d->tagSelectCB->setDefaultTagModel();
-    d->tagModel = d->tagSelectCB->model();
-    d->tagSelectCB->view()->expandToDepth(0);
-    d->tagSelectCB->setNoSelectionText(i18n("No tags selected"));
-
-    connect(d->tagModel, SIGNAL(checkStateChanged(Album*,Qt::CheckState)),
-            this, SLOT(slotTagSelectionChanged(Album*,Qt::CheckState)));
 }
 
 void FindDuplicatesView::slotAlbumAdded(Album* a)
@@ -410,11 +270,11 @@ void FindDuplicatesView::slotClear()
 
 void FindDuplicatesView::enableControlWidgets(bool val)
 {
-    d->scanDuplicatesBtn->setEnabled(val && checkForValidSettings());
+    d->scanDuplicatesBtn->setEnabled(val);
+    slotCheckForValidSettings();
+
     d->updateFingerPrtBtn->setEnabled(val);
-    d->includeAlbumsLabel->setEnabled(val);
-    d->albumSelectCB->setEnabled(val);
-    d->tagSelectCB->setEnabled(val);
+    d->albumSelectors->setEnabled(val);
     d->similarityLabel->setEnabled(val);
     d->similarity->setEnabled(val);
 }
@@ -426,12 +286,12 @@ void FindDuplicatesView::slotFindDuplicates()
 
     QStringList albumsIdList, tagsIdList;
 
-    foreach(const Album* const album, d->albumModel->checkedAlbums())
+    foreach(const Album* const album, d->albumSelectors->selectedPAlbums())
     {
         albumsIdList << QString::number(album->id());
     }
 
-    foreach(const Album* const album, d->tagModel->checkedAlbums())
+    foreach(const Album* const album, d->albumSelectors->selectedTAlbums())
     {
         tagsIdList << QString::number(album->id());
     }
@@ -461,40 +321,18 @@ void FindDuplicatesView::slotDuplicatesAlbumActived(QTreeWidgetItem* item, int)
     }
 }
 
-void FindDuplicatesView::slotAlbumSelectionChanged(Album* album, Qt::CheckState checkState)
+void FindDuplicatesView::slotCheckForValidSettings()
 {
-    QModelIndex index = d->albumModel->indexForAlbum(album);
+    bool valid = false;
+    valid      = d->albumSelectors->selectedPAlbums().count() || d->albumSelectors->selectedTAlbums().count();
 
-    if (index.isValid() && d->albumModel->hasChildren(index))
-    {
-        AlbumIterator it(album);
-
-        while (it.current())
-        {
-            d->albumModel->setCheckState(it.current(), checkState);
-            ++it;
-        }
-    }
-
-    checkForValidSettings();
+    d->scanDuplicatesBtn->setEnabled(valid);
 }
 
-void FindDuplicatesView::slotTagSelectionChanged(Album* album, Qt::CheckState checkState)
+void FindDuplicatesView::slotUpdateFingerPrints()
 {
-    QModelIndex index = d->tagModel->indexForAlbum(album);
-
-    if (index.isValid() && d->tagModel->hasChildren(index))
-    {
-        AlbumIterator it(album);
-
-        while (it.current())
-        {
-            d->tagModel->setCheckState(it.current(), checkState);
-            ++it;
-        }
-    }
-
-    checkForValidSettings();
+    FingerPrintsGenerator* const tool = new FingerPrintsGenerator(false);
+    tool->start();
 }
 
 void FindDuplicatesView::slotSetSelectedAlbum(Album* album)
@@ -505,8 +343,8 @@ void FindDuplicatesView::slotSetSelectedAlbum(Album* album)
     }
 
     resetAlbumsAndTags();
-    d->albumModel->setChecked(album, true);
-    slotAlbumSelectionChanged(album, Qt::Checked);
+    d->albumSelectors->setPAlbumSelected(album, true);
+    slotCheckForValidSettings();
 }
 
 void FindDuplicatesView::slotSetSelectedTag(Album* album)
@@ -517,54 +355,14 @@ void FindDuplicatesView::slotSetSelectedTag(Album* album)
     }
 
     resetAlbumsAndTags();
-    d->tagModel->setChecked(album, true);
-    slotTagSelectionChanged(album, Qt::Checked);
-}
-
-bool FindDuplicatesView::checkForValidSettings()
-{
-    bool valid = false;
-    valid      = validAlbumSettings() || validTagSettings();
-
-    d->scanDuplicatesBtn->setEnabled(valid);
-    return valid;
-}
-
-bool FindDuplicatesView::validAlbumSettings()
-{
-    bool valid = false;
-
-    if (d->albumModel)
-    {
-        valid = d->albumModel->checkedAlbums().count();
-    }
-
-    return valid;
-}
-
-bool FindDuplicatesView::validTagSettings()
-{
-    bool valid = false;
-
-    if (d->tagModel)
-    {
-        valid = d->tagModel->checkedAlbums().count();
-    }
-
-    return valid;
+    d->albumSelectors->setTAlbumSelected(album, true);
+    slotCheckForValidSettings();
 }
 
 void FindDuplicatesView::resetAlbumsAndTags()
 {
-    d->albumModel->resetCheckedAlbums();
-    d->tagModel->resetCheckedAlbums();
-    checkForValidSettings();
-}
-
-void FindDuplicatesView::slotUpdateFingerPrints()
-{
-    FingerPrintsGenerator* const tool = new FingerPrintsGenerator(false);
-    tool->start();
+    d->albumSelectors->resetSelection();
+    slotCheckForValidSettings();
 }
 
 }  // namespace Digikam
