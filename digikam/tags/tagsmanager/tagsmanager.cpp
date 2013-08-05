@@ -47,6 +47,7 @@
 /** local includes **/
 #include "tagsmanager.h"
 #include "tagpropwidget.h"
+#include "tagmngrtreeview.h"
 #include "taglist.h"
 
 #include "tagfolderview.h"
@@ -82,7 +83,7 @@ public:
         listView        = 0;
     }
 
-    TagFolderView*  tagFolderView;
+    TagMngrTreeView*  tagMngrView;
     QLabel*         tagmngrLabel;
     QLabel*         tagPixmap;
     QLabel*         digikamPixmap;
@@ -118,7 +119,7 @@ TagsManager::TagsManager(TagModel* model)
 
     /*----------------------------Connects---------------------------*/
 
-    connect(d->tagFolderView->selectionModel(),
+    connect(d->tagMngrView->selectionModel(),
             SIGNAL(currentChanged(QModelIndex,QModelIndex)),
             this, SLOT(slotSelectionChanged()));
 
@@ -161,7 +162,7 @@ void TagsManager::setupUi(KDialog *Dialog)
      d->digikamPixmap->setMaximumHeight(40);
      d->digikamPixmap->setScaledContents(true);
 
-     d->tagFolderView = new TagFolderView(this,d->tagModel);
+     d->tagMngrView = new TagMngrTreeView(this,d->tagModel);
 
      d->searchBar  = new SearchTextBar(this, "DigikamViewTagSearchBar");
      d->searchBar->setHighlightOnResult(true);
@@ -169,7 +170,7 @@ void TagsManager::setupUi(KDialog *Dialog)
                             AbstractAlbumModel::AlbumIdRole,
                             AbstractAlbumModel::AlbumTitleRole);
      d->searchBar->setMaximumWidth(200);
-     d->searchBar->setFilterModel(d->tagFolderView->albumFilterModel());
+     d->searchBar->setFilterModel(d->tagMngrView->albumFilterModel());
 
      QHBoxLayout* tempLayout = new QHBoxLayout();
      tempLayout->setAlignment(Qt::AlignLeft);
@@ -197,7 +198,7 @@ void TagsManager::setupUi(KDialog *Dialog)
 
      d->treeWinLayout = new QHBoxLayout();
 
-     d->treeWinLayout->addWidget(d->tagFolderView,9);
+     d->treeWinLayout->addWidget(d->tagMngrView,9);
 
      d->tagPropWidget = new TagPropWidget(d->treeWindow);
      d->tagPropWidget->setMaximumWidth(350);
@@ -207,7 +208,7 @@ void TagsManager::setupUi(KDialog *Dialog)
      /** Tag List and Tag Manager Title **/
 
      QHBoxLayout* thirdLine = new QHBoxLayout();
-     d->listView = new TagList(d->tagFolderView,Dialog);
+     d->listView = new TagList(d->tagMngrView,Dialog);
      d->listView->setMaximumWidth(300);
 
      QVBoxLayout* listLayout = new QVBoxLayout();
@@ -243,7 +244,7 @@ void TagsManager::slotOpenProperties()
 
 void TagsManager::slotSelectionChanged()
 {
-    TAlbum* currentAl = d->tagFolderView->currentAlbum();
+    TAlbum* currentAl = d->tagMngrView->currentAlbum();
     /** When deleting a tag, current Album is not valid **/
     if(currentAl)
         emit signalSelectionChanged(currentAl);
@@ -257,7 +258,7 @@ void TagsManager::slotItemChanged()
 void TagsManager::slotAddAction()
 {
 
-    TAlbum* parent = d->tagFolderView->currentAlbum();
+    TAlbum* parent = d->tagMngrView->currentAlbum();
     QString      title, icon;
     QKeySequence ks;
 
@@ -274,7 +275,7 @@ void TagsManager::slotAddAction()
 void TagsManager::slotDeleteAction()
 {
 
-    QModelIndexList selected = d->tagFolderView->selectionModel()->selectedIndexes();
+    QModelIndexList selected = d->tagMngrView->selectionModel()->selectedIndexes();
 
     QString tagWithChildrens;
     QString tagWithImages;
@@ -285,7 +286,7 @@ void TagsManager::slotDeleteAction()
         if(!index.isValid())
             return;
 
-        TAlbum* t = static_cast<TAlbum*>(d->tagFolderView->albumForIndex(index));
+        TAlbum* t = static_cast<TAlbum*>(d->tagMngrView->albumForIndex(index));
 
         int deph = 0;
 
@@ -416,10 +417,10 @@ void TagsManager::setupActions()
             this, SLOT(slotInvertSel()));
 
     connect(expandTree, SIGNAL(triggered()),
-            this, SLOT(slotExpandTree()));
+            d->tagMngrView, SLOT(slotExpandTree()));
 
     connect(expandSel, SIGNAL(triggered()),
-            this, SLOT(slotExpandSelected()));
+            d->tagMngrView, SLOT(slotExpandSelected()));
 
     d->organizeAction->addAction(resetIcon);
     d->organizeAction->addAction(createTagAddr);
@@ -506,20 +507,6 @@ void TagsManager::slotInvertSel()
 
 }
 
-void TagsManager::slotExpandTree()
-{
-
-}
-
-void TagsManager::slotExpandSelected()
-{
-    QModelIndexList list = d->tagFolderView->selectionModel()->selectedIndexes();
-    foreach(QModelIndex index, list)
-    {
-        d->tagFolderView->expand(index);
-    }
-}
-
 void TagsManager::slotWriteToImg()
 {
 
@@ -548,7 +535,7 @@ void TagsManager::slotSyncNepomuk()
 void TagsManager::slotForkTags()
 {
     int numTags = 10;
-    TAlbum* parent = d->tagFolderView->currentAlbum();
+    TAlbum* parent = d->tagMngrView->currentAlbum();
     QMap<QString, QString> errMap;
 
     for(int it =0; it< numTags; it++)

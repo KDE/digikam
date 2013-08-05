@@ -1509,6 +1509,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/tagsmanager/tagsmanager.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/tagsmanager/tagpropwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/tagsmanager/taglist.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/tagsmanager/tagmngrtreeview.cpp
 
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/utils/albumsettings.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/utils/contextmenuhelper.cpp

@@ -96,18 +96,6 @@ private Q_SLOTS:
     void slotInvertSel();
 
     /**
-     * @brief slotExpandTree    - connected to expandTree action and will
-     *                            expand tree by one level
-     */
-    void slotExpandTree();
-
-    /**
-     * @brief slotExpandSelected - connected to expandSel action and will
-     *                             expand selected nodes by one level
-     */
-    void slotExpandSelected();
-
-    /**
      * @brief slotWriteToImg     - connected to wrDbImg action and will
      *                             write all metadata from database to images
      */
