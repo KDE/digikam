@@ -55,8 +55,24 @@ public:
      */
     QList<Album*> selectedAlbums() const;
 
+    /** Reset all Physical and Tag Albums selection
+     */
+    void resetSelection();
+    
+    /** Select Physical Album from list. If singleSelection is true, only this one is 
+     *  selected from tree-view and all others are deselected */
+    void setPAlbumSelected(Album* const album, bool singleSelection=true);
+
+    /** Select Tag Album from list. If singleSelection is true, only this one is 
+     *  selected from tree-view and all others are deselected */
+    void setTAlbumSelected(Album* const album, bool singleSelection=true);
+    
     void loadState();
     void saveState();
+    
+Q_SIGNALS:
+    
+    void signalSelectionChanged();
 
 private Q_SLOTS:
 

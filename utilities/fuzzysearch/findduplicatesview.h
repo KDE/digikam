@@ -64,21 +64,14 @@ private Q_SLOTS:
     void slotDuplicatesAlbumActived(QTreeWidgetItem*, int);
     void slotComplete();
     void slotUpdateFingerPrints();
-
-    void slotAlbumSelectionChanged(Album*, Qt::CheckState);
-    void slotTagSelectionChanged(Album*, Qt::CheckState);
-    void slotUpdateAlbumsAndTags();
-
+    void slotCheckForValidSettings();
+    
 private:
 
     void enableControlWidgets(bool);
-    bool checkForValidSettings();
 
     void updateAlbumsBox();
     void updateTagsBox();
-
-    bool validAlbumSettings();
-    bool validTagSettings();
 
     void resetAlbumsAndTags();
 
