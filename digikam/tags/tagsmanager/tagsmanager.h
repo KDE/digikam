@@ -22,6 +22,7 @@
  * ============================================================ */
 #include <kdialog.h>
 #include <qvarlengtharray.h>
+#include <boost/concept_check.hpp>
 
 namespace Digikam
 {
@@ -138,6 +139,8 @@ private Q_SLOTS:
      *                               interface
      */
     void slotSyncNepomuk();
+
+    void slotForkTags();
 
 private:
 

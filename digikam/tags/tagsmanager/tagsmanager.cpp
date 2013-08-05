@@ -118,7 +118,8 @@ TagsManager::TagsManager(TagModel* model)
 
     /*----------------------------Connects---------------------------*/
 
-    connect(d->tagFolderView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
+    connect(d->tagFolderView->selectionModel(),
+            SIGNAL(currentChanged(QModelIndex,QModelIndex)),
             this, SLOT(slotSelectionChanged()));
 
     connect(this, SIGNAL(signalSelectionChanged(TAlbum*)),
@@ -152,8 +153,11 @@ void TagsManager::setupUi(KDialog *Dialog)
      d->tagPixmap->setPixmap(KIcon("tag").pixmap(30,30));
 
      d->digikamPixmap = new QLabel();
-     QPixmap dpix (KStandardDirs::locate("data", "digikam/about/top-left-digikam.png"));
-     d->digikamPixmap->setPixmap(dpix.scaled(40,40,Qt::KeepAspectRatio, Qt::SmoothTransformation));
+     QPixmap dpix (KStandardDirs::locate("data",
+                                         "digikam/about/top-left-digikam.png"));
+     d->digikamPixmap->setPixmap(dpix.scaled(40,40,
+                                             Qt::KeepAspectRatio,
+                                             Qt::SmoothTransformation));
      d->digikamPixmap->setMaximumHeight(40);
      d->digikamPixmap->setScaledContents(true);
 
@@ -161,7 +165,9 @@ void TagsManager::setupUi(KDialog *Dialog)
 
      d->searchBar  = new SearchTextBar(this, "DigikamViewTagSearchBar");
      d->searchBar->setHighlightOnResult(true);
-     d->searchBar->setModel(d->tagModel, AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
+     d->searchBar->setModel(d->tagModel,
+                            AbstractAlbumModel::AlbumIdRole,
+                            AbstractAlbumModel::AlbumTitleRole);
      d->searchBar->setMaximumWidth(200);
      d->searchBar->setFilterModel(d->tagFolderView->albumFilterModel());
 
@@ -250,11 +256,8 @@ void TagsManager::slotItemChanged()
 
 void TagsManager::slotAddAction()
 {
-    QModelIndexList selected = d->tagFolderView->selectionModel()->selectedIndexes();
 
-    if(selected.isEmpty())
-        return;
-    TAlbum* parent = static_cast<TAlbum*>(d->tagFolderView->albumForIndex(selected.at(0)));
+    TAlbum* parent = d->tagFolderView->currentAlbum();
     QString      title, icon;
     QKeySequence ks;
 
@@ -388,19 +391,20 @@ void TagsManager::setupActions()
 
     /** organize group **/
     d->organizeAction   = new KActionMenu(KIcon("autocorrection"),
-                                           i18n("Organize"),this);
+                                          i18n("Organize"),this);
     d->organizeAction->setDelayed(false);
 
     KAction* resetIcon     = new KAction(KIcon("view-refresh"),
-                                          i18n("Reset tag Icon"), this);
+                                         i18n("Reset tag Icon"), this);
     KAction* createTagAddr = new KAction(KIcon("tag-addressbook"),
-                                          i18n("Create Tag from Addess Book"), this);
+                                         i18n("Create Tag from Addess Book"),
+                                         this);
     KAction* invSel        = new KAction(KIcon(),
-                                          i18n("Invert Selection"), this);
+                                         i18n("Invert Selection"), this);
     KAction* expandTree    = new KAction(KIcon("format-indent-more"),
-                                          i18n("Expand Tag Tree"), this);
+                                         i18n("Expand Tag Tree"), this);
     KAction* expandSel     = new KAction(KIcon("format-indent-more"),
-                                          i18n("Expand Selected Nodes"), this);
+                                         i18n("Expand Selected Nodes"), this);
 
     connect(resetIcon, SIGNAL(triggered()),
             this, SLOT(slotResetTagIcon()));
@@ -424,7 +428,8 @@ void TagsManager::setupActions()
     d->organizeAction->addAction(expandSel);
 
     /** Sync & Export Group **/
-    d->syncexportAction = new KActionMenu(KIcon("server-database"),i18n("Sync &Export"),this);
+    d->syncexportAction = new KActionMenu(KIcon("server-database"),
+                                          i18n("Sync &Export"),this);
     d->syncexportAction->setDelayed(false);
 
     KAction* wrDbImg       = new KAction(KIcon("view-refresh"),
@@ -459,21 +464,31 @@ void TagsManager::setupActions()
     d->syncexportAction->addAction(exportToKipi);
     d->syncexportAction->addAction(syncNepomuk);
 
+    /**
+     * For testing only
+     */
+    KAction* forkTags = new KAction(KIcon(),"Create a very big tag tree)",this);
+
+    connect(forkTags, SIGNAL(triggered()), this,
+            SLOT(slotForkTags()));
+
     d->mainToolbar->addAction(d->addAction);
     d->mainToolbar->addAction(d->delAction);
     d->mainToolbar->addAction(d->organizeAction);
     d->mainToolbar->addAction(d->syncexportAction);
+    d->mainToolbar->addAction(forkTags);
     d->treeWindow->addToolBar(d->mainToolbar);
-
 
     /**
      * Right Toolbar with vertical properties button
      */
     d->rightToolBar = new KMultiTabBar(KMultiTabBar::Right);
-    d->rightToolBar->appendTab(KIcon("tag-properties").pixmap(10,10),0,"Tag Properties");
+    d->rightToolBar->appendTab(KIcon("tag-properties").pixmap(10,10),
+                               0,"Tag Properties");
     d->rightToolBar->setStyle(KMultiTabBar::KDEV3ICON);
 
-    connect(d->rightToolBar->tab(0),SIGNAL(clicked()),this, SLOT(slotOpenProperties()));
+    connect(d->rightToolBar->tab(0),SIGNAL(clicked()),
+            this, SLOT(slotOpenProperties()));
 }
 
 void TagsManager::slotResetTagIcon()
@@ -498,7 +513,11 @@ void TagsManager::slotExpandTree()
 
 void TagsManager::slotExpandSelected()
 {
-
+    QModelIndexList list = d->tagFolderView->selectionModel()->selectedIndexes();
+    foreach(QModelIndex index, list)
+    {
+        d->tagFolderView->expand(index);
+    }
 }
 
 void TagsManager::slotWriteToImg()
@@ -524,6 +543,30 @@ void TagsManager::slotExportKipi()
 void TagsManager::slotSyncNepomuk()
 {
 
+}
+
+void TagsManager::slotForkTags()
+{
+    int numTags = 10;
+    TAlbum* parent = d->tagFolderView->currentAlbum();
+    QMap<QString, QString> errMap;
+
+    for(int it =0; it< numTags; it++)
+    {
+        QString      title, icon;
+        QKeySequence ks;
+        icon = parent->icon();
+        title = parent->title() + QString::number(it);
+        AlbumList tList = TagEditDlg::createTAlbum(parent, title, icon, ks,
+                                                   errMap);
+        for(int jt = 0 ; jt < numTags; jt++)
+        {
+            QString childname = title + "H" + QString::number(jt);
+            AlbumList jList = TagEditDlg::createTAlbum((TAlbum*)tList.first(),
+                                                       childname,
+                                                       icon, ks, errMap);
+        }
+    }
 }
 
 } // namespace Digikam
