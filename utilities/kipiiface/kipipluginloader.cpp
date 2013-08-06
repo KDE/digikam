@@ -149,15 +149,15 @@ void KipiPluginLoader::Private::loadPlugins()
 
     if(!albumList.isEmpty())
     {
-        kipiInterface->slotCurrentAlbumChanged(albumList.first());
+        kipiInterface->slotCurrentAlbumChanged(albumList);
     }
     else
     {
-        kipiInterface->slotCurrentAlbumChanged(0);
+        kipiInterface->slotCurrentAlbumChanged(QList<Album*>());
     }
 
-    parent->connect(AlbumManager::instance(), SIGNAL(signalAlbumCurrentChanged(Album*)),
-                    kipiInterface, SLOT(slotCurrentAlbumChanged(Album*)));
+    parent->connect(AlbumManager::instance(), SIGNAL(signalAlbumCurrentChanged(QList<Album*>)),
+                    kipiInterface, SLOT(slotCurrentAlbumChanged(QList<Album*>)));
 }
 
 QString KipiPluginLoader::Private::categoryName(Category cat) const

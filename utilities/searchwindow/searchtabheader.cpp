@@ -504,7 +504,7 @@ void SearchTabHeader::saveSearch()
 
     SAlbum* newAlbum = AlbumManager::instance()->createSAlbum(name, d->currentAlbum->searchType(),
                                                               d->currentAlbum->query());
-    emit searchShallBeSelected(newAlbum);
+    emit searchShallBeSelected(QList<Album*>() << newAlbum);
 }
 
 void SearchTabHeader::storedKeywordChanged()
@@ -523,7 +523,7 @@ void SearchTabHeader::storedKeywordChanged()
     if (d->currentAlbum)
     {
         AlbumManager::instance()->updateSAlbum(d->currentAlbum, queryFromKeywords(keywords));
-        emit searchShallBeSelected(d->currentAlbum);
+        emit searchShallBeSelected(QList<Album*>() << d->currentAlbum);
     }
 }
 
@@ -558,7 +558,7 @@ void SearchTabHeader::advancedSearchEdited(int id, const QString& query)
         if (album)
         {
             AlbumManager::instance()->updateSAlbum(album, query, album->title(), type);
-            emit searchShallBeSelected(album);
+            emit searchShallBeSelected(QList<Album*>() << album);
         }
     }
 }
@@ -581,7 +581,7 @@ void SearchTabHeader::setCurrentSearch(DatabaseSearch::Type type, const QString&
 
     if (selectCurrentAlbum)
     {
-        emit searchShallBeSelected(album);
+        emit searchShallBeSelected(QList<Album*>() << album);
     }
 }
 

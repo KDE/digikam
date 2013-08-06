@@ -889,8 +889,8 @@ SearchSideBarWidget::SearchSideBarWidget(QWidget* const parent, SearchModel* con
     connect(d->searchTreeView, SIGNAL(currentAlbumChanged(Album*)),
             d->searchTabHeader, SLOT(selectedSearchChanged(Album*)));
 
-    connect(d->searchTabHeader, SIGNAL(searchShallBeSelected(SAlbum*)),
-            d->searchTreeView, SLOT(setCurrentAlbum(SAlbum*)));
+    connect(d->searchTabHeader, SIGNAL(searchShallBeSelected(QList<Album*>)),
+            d->searchTreeView, SLOT(setCurrentAlbums(QList<Album*>)));
 }
 
 SearchSideBarWidget::~SearchSideBarWidget()

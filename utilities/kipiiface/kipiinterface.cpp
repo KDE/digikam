@@ -278,9 +278,9 @@ void KipiInterface::slotSelectionChanged(int count)
     emit selectionChanged(count);
 }
 
-void KipiInterface::slotCurrentAlbumChanged(Album* album)
+void KipiInterface::slotCurrentAlbumChanged(QList<Album*> albums)
 {
-    emit currentAlbumChanged(album != 0);
+    emit currentAlbumChanged(!(albums.isEmpty()));
 }
 
 void KipiInterface::thumbnail(const KUrl& url, int /*size*/)
