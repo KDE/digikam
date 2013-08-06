@@ -45,7 +45,6 @@
 #include <kdialog.h>
 #include <khbox.h>
 #include <kinputdialog.h>
-#include <qt4/QtCore/qvarlengtharray.h>
 
 // Local includes
 
