@@ -50,7 +50,7 @@ MaintenanceSettings::MaintenanceSettings()
     
     metadataSync       = false;
     syncDirection      = MetadataSynchronizer::WriteFromDatabaseToFile;
-};
+}
 
 MaintenanceSettings::~MaintenanceSettings()
 {
