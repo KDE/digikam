@@ -1,28 +1,36 @@
 DONE:
-  1. Tag Manager GUI
-  2. Add Option
-  3. Del Option with multi-selection(tag manager option & context menu version)
-  4. Tag properties
-  5. Enable multi-drop on tree view
-  6. Custom context menu for single & multiple selection
-  7. Port current Album to QList<Album*>
-  8. Port ImageAlbumModel to QList<Album*>
-  9. Port HistoryItem to QList<Album*>
-  10. Fix AlbumHistory: slotAlbumSelected, slotCurrentAlbumChanged, slot currentChanged, slotImagechanged
-  11. Selection is not cleared on moving Forward/backward
-  12. Images on view are not displayed after navigating backward/forward
+    1. Tag Manager GUI
+    2. Add Option
+    3. Del Option with multi-selection(tag manager option & context menu version)
+    4. Tag properties
+    5. Enable multi-drop on tree view
+    6. Custom context menu for single & multiple selection
+    7. Port current Album to QList<Album*>
+    8. Port ImageAlbumModel to QList<Album*>
+    9. Port HistoryItem to QList<Album*>
+    10. Fix AlbumHistory: slotAlbumSelected, slotCurrentAlbumChanged, slot currentChanged, slotImagechanged
+    11. Selection is not cleared on moving Forward/backward
+    12. Images on view are not displayed after navigating backward/forward
 
 BUGS:
-  1. Tag Properties don't save changes
+    1. Tag Properties don't save changes
 
 
 TODO:
-  1. Patch views to support multiple tags
-  2. Add custom list for tagmanager
-  3. Port Nepomuk
-  5. Add database options
-  6. core/libs/models/imagealbummodel.cpp:193 TODO: treat root album on QList
-  7. To be continued
+    1. Patch views to support multiple tags
+    2. Add custom list for tagmanager
+    3. Port Nepomuk
+    5. Add database options
+    6. core/libs/models/imagealbummodel.cpp:193 TODO: treat root album on QList
+    7. To be continued
 
 DEAD CODE:
-   1. Albumtreeview.cpp 306-309 deleting this 2 connects doesn't affect digikam behaviour
+    1. Albumtreeview.cpp 306-309 deleting this 2 connects doesn't affect digikam behaviour
+
+Gilles suggestions:
+    1. Tag Manager layout change ( need to be discussed ???)
+    2. Add tooltips for menu actions
+    3. Move Tag Properties button from right sidebar
+    4. Add DLogoAction
+    5. Hide root album from Album Tree and Tag Tree
+    6. Drag-n-drop images on tag tree will assign multiple tags to images
