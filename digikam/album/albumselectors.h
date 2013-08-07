@@ -70,6 +70,8 @@ public:
      *  selected from tree-view and all others are deselected */
     void setTAlbumSelected(Album* const album, bool singleSelection=true);
 
+public Q_SLOTS:
+    
     /** Called in constructor. Restore previous settings saved in configuration file.
     */
     void loadState();
@@ -85,6 +87,7 @@ Q_SIGNALS:
 private Q_SLOTS:
 
     void slotUpdateClearButtons();
+    void slotWholeCollection(bool);
 
 private:
 
