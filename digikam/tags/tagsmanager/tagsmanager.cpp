@@ -55,6 +55,7 @@
 #include "searchtextbar.h"
 #include "tageditdlg.h"
 #include "albumdb.h"
+#include "dlogoaction.h"
 
 namespace Digikam
 {
@@ -99,7 +100,7 @@ public:
     KAction*        tagProperties;
     KAction*        addAction;
     KAction*        delAction;
-    TagList*      listView;
+    TagList*        listView;
 
     TagPropWidget*  tagPropWidget;
 
@@ -107,13 +108,12 @@ public:
 };
 
 TagsManager::TagsManager(TagModel* model)
-    : KDialog(0), d(new PrivateTagMngr())
+    : KMainWindow(0), d(new PrivateTagMngr())
 {
 
     /** No buttons **/
     d->tagModel = model;
     d->tagModel->setCheckable(false);
-    this->setButtons(0x00);
 
     setupUi(this);
 
@@ -137,30 +137,18 @@ TagsManager::~TagsManager()
     delete d;
 }
 
-void TagsManager::setupUi(KDialog *Dialog)
+void TagsManager::setupUi(KMainWindow *Dialog)
 {
 
      Dialog->resize(972, 722);
      Dialog->setWindowTitle(i18n("Tags Manager"));
 
-     QVBoxLayout* mainLayout = new QVBoxLayout();
-
-     /** Tag Pixmap, search and digikam.org logo **/
-     QHBoxLayout* firstLine = new QHBoxLayout();
+     QHBoxLayout* mainLayout = new QHBoxLayout();
 
      d->tagPixmap = new QLabel();
      d->tagPixmap->setText("Tag Pixmap");
      d->tagPixmap->setMaximumWidth(40);
      d->tagPixmap->setPixmap(KIcon("tag").pixmap(30,30));
-
-     d->digikamPixmap = new QLabel();
-     QPixmap dpix (KStandardDirs::locate("data",
-                                         "digikam/about/top-left-digikam.png"));
-     d->digikamPixmap->setPixmap(dpix.scaled(40,40,
-                                             Qt::KeepAspectRatio,
-                                             Qt::SmoothTransformation));
-     d->digikamPixmap->setMaximumHeight(40);
-     d->digikamPixmap->setScaledContents(true);
 
      d->tagMngrView = new TagMngrTreeView(this,d->tagModel);
 
@@ -172,24 +160,7 @@ void TagsManager::setupUi(KDialog *Dialog)
      d->searchBar->setMaximumWidth(200);
      d->searchBar->setFilterModel(d->tagMngrView->albumFilterModel());
 
-     QHBoxLayout* tempLayout = new QHBoxLayout();
-     tempLayout->setAlignment(Qt::AlignLeft);
-     tempLayout->addWidget(d->tagPixmap);
-     tempLayout->addWidget(d->searchBar);
-     firstLine->addLayout(tempLayout);
-     firstLine->addWidget(d->digikamPixmap);
 
-     d->tagmngrLabel = new QLabel(Dialog);
-     d->tagmngrLabel->setObjectName(QString::fromUtf8("label"));
-     d->tagmngrLabel->setText(i18n("Tags Manager"));
-     d->tagmngrLabel->setAlignment(Qt::AlignCenter);
-     QFont font2;
-     font2.setPointSize(12);
-     font2.setBold(true);
-     font2.setWeight(75);
-     d->tagmngrLabel->setFont(font2);
-     d->tagmngrLabel->setAutoFillBackground(true);
-     d->tagmngrLabel->setMinimumHeight(30);
 
      /** Tree Widget & Actions + Tag Properties sidebar **/
 
@@ -205,30 +176,20 @@ void TagsManager::setupUi(KDialog *Dialog)
      d->treeWinLayout->addWidget(d->tagPropWidget,3);
      d->tagPropWidget->hide();
 
-     /** Tag List and Tag Manager Title **/
-
-     QHBoxLayout* thirdLine = new QHBoxLayout();
      d->listView = new TagList(d->tagMngrView,Dialog);
      d->listView->setMaximumWidth(300);
 
-     QVBoxLayout* listLayout = new QVBoxLayout();
-     listLayout->addWidget(d->tagmngrLabel);
-     listLayout->addWidget(d->listView);
-
-
      QWidget* treeCentralW = new QWidget(this);
      treeCentralW->setLayout(d->treeWinLayout);
-
      d->treeWindow->setCentralWidget(treeCentralW);
 
-     thirdLine->addLayout(listLayout,2);
-     thirdLine->addWidget(d->treeWindow,9);
-     thirdLine->addWidget(d->rightToolBar);
+     mainLayout->addWidget(d->listView,2);
+     mainLayout->addWidget(d->treeWindow,9);
+     mainLayout->addWidget(d->rightToolBar);
 
-     mainLayout->addLayout(firstLine);
-     mainLayout->addLayout(thirdLine);
-
-     this->mainWidget()->setLayout(mainLayout);
+     QWidget* centraW = new QWidget(this);
+     centraW->setLayout(mainLayout);
+     this->setCentralWidget(centraW);
 
 }
 
@@ -386,6 +347,20 @@ void TagsManager::setupActions()
 {
     d->mainToolbar = new KToolBar(d->treeWindow);
 
+    QHBoxLayout* tempLayout = new QHBoxLayout();
+    tempLayout->addWidget(d->tagPixmap);
+    tempLayout->addWidget(d->searchBar);
+
+    QWidget* searchWidget = new QWidget(this);
+    searchWidget->setLayout(tempLayout);
+
+    QWidgetAction* searchAction = new QWidgetAction(this);
+    searchAction->setDefaultWidget(searchWidget);
+
+    d->mainToolbar->addAction(searchAction);
+
+    d->mainToolbar->addSeparator();
+
     d->addAction = new KAction(KIcon("list-add"),i18n(""),d->treeWindow);
 
     d->delAction = new KAction(KIcon("list-remove"),i18n(""),d->treeWindow);
@@ -478,7 +453,8 @@ void TagsManager::setupActions()
     d->mainToolbar->addAction(d->organizeAction);
     d->mainToolbar->addAction(d->syncexportAction);
     d->mainToolbar->addAction(forkTags);
-    d->treeWindow->addToolBar(d->mainToolbar);
+    d->mainToolbar->addAction(new DLogoAction(this));
+    this->addToolBar(d->mainToolbar);
 
     /**
      * Right Toolbar with vertical properties button

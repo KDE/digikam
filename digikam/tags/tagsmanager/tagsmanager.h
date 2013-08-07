@@ -20,9 +20,7 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-#include <kdialog.h>
-#include <qvarlengtharray.h>
-#include <boost/concept_check.hpp>
+#include <kmainwindow.h>
 
 namespace Digikam
 {
@@ -30,7 +28,7 @@ namespace Digikam
 class TagModel;
 class TAlbum;
 
-class TagsManager : public KDialog
+class TagsManager : public KMainWindow
 {
     Q_OBJECT
 
@@ -42,7 +40,7 @@ public:
      * @brief setupUi   setup all gui elements for Tag Manager
      * @param Dialog    parent dialog
      */
-    void setupUi(KDialog *Dialog);
+    void setupUi(KMainWindow *Dialog);
 
 
 Q_SIGNALS:
