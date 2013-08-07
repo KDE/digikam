@@ -452,7 +452,13 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
     else if (DTagListDrag::canDecode(e->mimeData()))
     {
         QList<int> tagIDs;
-        DTagListDrag::decode(e->mimeData(), tagIDs);
+        bool isDecoded = DTagListDrag::decode(e->mimeData(), tagIDs);
+
+        if(!isDecoded)
+        {
+            kDebug() << "Error: Deconding failed!";
+            return false;
+        }
 
         KMenu popMenu(view);
 

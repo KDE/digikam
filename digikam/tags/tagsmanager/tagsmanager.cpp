@@ -68,9 +68,7 @@ public:
 
     PrivateTagMngr()
     {
-        tagmngrLabel    = 0;
         tagPixmap       = 0;
-        digikamPixmap   = 0;
         searchBar       = 0;
         treeWinLayout   = 0;
         treeWindow      = 0;
@@ -82,12 +80,12 @@ public:
         addAction       = 0;
         delAction       = 0;
         listView        = 0;
+        tagPropWidget   = 0;
+        tagMngrView     = 0;
     }
 
     TagMngrTreeView*  tagMngrView;
-    QLabel*         tagmngrLabel;
     QLabel*         tagPixmap;
-    QLabel*         digikamPixmap;
     SearchTextBar*  searchBar;
 
 
@@ -100,10 +98,9 @@ public:
     KAction*        tagProperties;
     KAction*        addAction;
     KAction*        delAction;
+
     TagList*        listView;
-
     TagPropWidget*  tagPropWidget;
-
     TagModel*       tagModel;
 };
 

@@ -54,6 +54,7 @@ public:
         resetIconButton = 0;
         topLabel        = 0;
         keySeqWidget    = 0;
+        mainRootAlbum   = 0;
         create          = false;
     }
 
@@ -157,7 +158,11 @@ TagPropWidget::TagPropWidget(QWidget* const parent)
 void TagPropWidget::slotSelectionChanged(TAlbum* album)
 {
     if(!album)
+    {
         kDebug() << "Error! No valid pointer for TAlbum";
+        return;
+    }
+
     d->mainRootAlbum = album;
     d->titleEdit->setText(album->title());
     d->icon = album->icon();

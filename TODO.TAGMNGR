@@ -28,9 +28,9 @@ DEAD CODE:
     1. Albumtreeview.cpp 306-309 deleting this 2 connects doesn't affect digikam behaviour
 
 Gilles suggestions:
-    1. Tag Manager layout change ( need to be discussed ???)
+    1. [DONE]Tag Manager layout change
     2. Add tooltips for menu actions
     3. Move Tag Properties button from right sidebar
-    4. Add DLogoAction
+    4. [DONE]Add DLogoAction
     5. Hide root album from Album Tree and Tag Tree
     6. Drag-n-drop images on tag tree will assign multiple tags to images
