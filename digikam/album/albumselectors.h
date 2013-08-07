@@ -40,6 +40,9 @@ class AlbumSelectors : public QWidget
 
 public:
 
+    /** Default Contructor. 'label' is front text of label which title widget. 'configName' is name used to store 
+     * Albums configuration in settings file. 'parent' is parent widget.
+     */
     explicit AlbumSelectors(const QString& label, const QString& configName, QWidget* const parent = 0);
     ~AlbumSelectors();
 
@@ -58,7 +61,7 @@ public:
     /** Reset all Physical and Tag Albums selection
      */
     void resetSelection();
-    
+
     /** Select Physical Album from list. If singleSelection is true, only this one is 
      *  selected from tree-view and all others are deselected */
     void setPAlbumSelected(Album* const album, bool singleSelection=true);
@@ -66,12 +69,17 @@ public:
     /** Select Tag Album from list. If singleSelection is true, only this one is 
      *  selected from tree-view and all others are deselected */
     void setTAlbumSelected(Album* const album, bool singleSelection=true);
-    
+
+    /** Called in constructor. Restore previous settings saved in configuration file.
+    */
     void loadState();
+
+    /** Save settings in configuration file.
+     */
     void saveState();
-    
+
 Q_SIGNALS:
-    
+
     void signalSelectionChanged();
 
 private Q_SLOTS:
