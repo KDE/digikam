@@ -259,7 +259,7 @@ void Canvas::reset()
 
 void Canvas::load(const QString& filename, IOFileSettings* const IOFileSettings)
 {
-    qDebug()<<"Canvas::load";
+    //qDebug()<<"Canvas::load";
     reset();
 
     emit signalPrepareToLoad();
@@ -268,7 +268,7 @@ void Canvas::load(const QString& filename, IOFileSettings* const IOFileSettings)
 
 void Canvas::slotImageLoaded(const QString& filePath, bool success)
 {
-    qDebug()<<"Canvas::slotImageLoaded";
+    //qDebug()<<"Canvas::slotImageLoaded";
     d->im->zoom(d->zoom);
 
     if (d->autoZoom || d->initialZoom)
@@ -413,7 +413,7 @@ double Canvas::calcAutoZoomFactor() const
 
 void Canvas::updateAutoZoom()
 {
-    qDebug()<<"Canvas::calcAutoZoomFactor";
+    qDebug()<<"Canvas::updateAutoZoom";
     d->zoom = calcAutoZoomFactor();
     d->im->zoom(d->zoom);
     emit signalZoomChanged(d->zoom);
@@ -662,7 +662,6 @@ void Canvas::paintViewport(const QRect& er, bool antialias)
 
 void Canvas::contentsMousePressEvent(QMouseEvent* e)
 {
-    qDebug()<<"Canvas::contentsMousePressEvent";
     if (!e || e->button() == Qt::RightButton)
     {
         return;
@@ -753,7 +752,6 @@ void Canvas::contentsMousePressEvent(QMouseEvent* e)
 
 void Canvas::contentsMouseMoveEvent(QMouseEvent* e)
 {
-    qDebug()<<"Canvas::contentsMouseMoveEvent";
     if (!e)
     {
         return;
@@ -955,7 +953,6 @@ void Canvas::contentsMouseMoveEvent(QMouseEvent* e)
 
 void Canvas::contentsMouseReleaseEvent(QMouseEvent* e)
 {
-    qDebug()<<"Canvas::contentsMouseReleaseEvent";
     if (!e)
     {
         return;
@@ -1013,7 +1010,6 @@ void Canvas::contentsMouseReleaseEvent(QMouseEvent* e)
 
 void Canvas::contentsWheelEvent(QWheelEvent* e)
 {
-    qDebug()<<"Canvas::contentsWheelEvent";
     e->accept();
 
     if (e->modifiers() & Qt::ShiftModifier)
