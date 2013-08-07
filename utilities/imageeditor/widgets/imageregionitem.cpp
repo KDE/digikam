@@ -63,17 +63,21 @@ public:
     QPolygon  hightlightPoints;
     bool      onMouseMovePreviewToggled;
     ImageRegionWidget* view;
+    ImageIface* iface;
 };
 
 ImageRegionItem::ImageRegionItem(ImageRegionWidget *widget):
     d_ptr(new Private)
 {
-    setAcceptHoverEvents(true);
     d_ptr->view = widget;
+    d_ptr->iface = new ImageIface;
+    setImage(d_ptr->iface->original()->copy());
+    setAcceptHoverEvents(true);
 }
 
 ImageRegionItem::~ImageRegionItem()
 {
+    delete d_ptr->iface;
     delete d_ptr;
 }
 
@@ -84,8 +88,8 @@ QRect ImageRegionItem::getImageRegion()
 
 void ImageRegionItem::setTargetImage(const DImg& img)
 {
-    qDebug()<<"setTargetImage";
     d_ptr->targetImage = img;
+    d_ptr->targetPix = d_ptr->iface->convertToPixmap(d_ptr->targetImage);
     update();
 }
 
@@ -184,7 +188,6 @@ void ImageRegionItem::paintExtraData(QPainter* p)
                  (d_ptr->renderingPreviewMode == PreviewToolBar::PreviewToggleOnMouseOver && d_ptr->onMouseMovePreviewToggled))
         {
             p->drawPixmap(d_ptr->drawRect.x(), d_ptr->drawRect.y(), d_ptr->targetPix, 0, 0, d_ptr->drawRect.width(), d_ptr->drawRect.height());
-            qDebug()<<"target image drawn";
 
             if (d_ptr->renderingPreviewMode == PreviewToolBar::PreviewTargetImage ||
                 d_ptr->renderingPreviewMode == PreviewToolBar::PreviewToggleOnMouseOver)

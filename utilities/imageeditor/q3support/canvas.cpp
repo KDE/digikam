@@ -259,6 +259,7 @@ void Canvas::reset()
 
 void Canvas::load(const QString& filename, IOFileSettings* const IOFileSettings)
 {
+    qDebug()<<"Canvas::load";
     reset();
 
     emit signalPrepareToLoad();
@@ -267,6 +268,7 @@ void Canvas::load(const QString& filename, IOFileSettings* const IOFileSettings)
 
 void Canvas::slotImageLoaded(const QString& filePath, bool success)
 {
+    qDebug()<<"Canvas::slotImageLoaded";
     d->im->zoom(d->zoom);
 
     if (d->autoZoom || d->initialZoom)
@@ -297,6 +299,7 @@ void Canvas::slotImageLoaded(const QString& filePath, bool success)
 
 void Canvas::applyTransform(const IccTransform& t)
 {
+    qDebug()<<"Canvas::applyTransform";
     IccTransform transform(t);
 
     if (transform.willHaveEffect())
@@ -395,6 +398,7 @@ void Canvas::makeDefaultEditingCanvas()
 
 double Canvas::calcAutoZoomFactor() const
 {
+    qDebug()<<"Canvas::calcAutoZoomFactor";
     if (!d->im->imageValid())
     {
         return d->zoom;
@@ -409,6 +413,7 @@ double Canvas::calcAutoZoomFactor() const
 
 void Canvas::updateAutoZoom()
 {
+    qDebug()<<"Canvas::calcAutoZoomFactor";
     d->zoom = calcAutoZoomFactor();
     d->im->zoom(d->zoom);
     emit signalZoomChanged(d->zoom);
@@ -416,6 +421,7 @@ void Canvas::updateAutoZoom()
 
 void Canvas::updateContentsSize(bool deleteRubber)
 {
+    qDebug()<<"Canvas::updateContentsSize";
     viewport()->setUpdatesEnabled(false);
 
     if (deleteRubber && d->rubber->isActive())
@@ -481,6 +487,7 @@ void Canvas::updateContentsSize(bool deleteRubber)
 
 void Canvas::resizeEvent(QResizeEvent* e)
 {
+    qDebug()<<"Canvas::resizeEvent";
     if (!e)
     {
         return;
@@ -505,6 +512,7 @@ void Canvas::resizeEvent(QResizeEvent* e)
 
 void Canvas::viewportPaintEvent(QPaintEvent* e)
 {
+    qDebug()<<"Canvas::viewportPaintEvent";
     QRect er(e->rect());
     er = QRect(qMax(er.x()      - 1, 0),
                qMax(er.y()      - 1, 0),
@@ -516,6 +524,7 @@ void Canvas::viewportPaintEvent(QPaintEvent* e)
 
 void Canvas::paintViewport(const QRect& er, bool antialias)
 {
+    qDebug()<<"Canvas::paintViewport";
     QRect o_cr(viewportToContents(er.topLeft()), viewportToContents(er.bottomRight()));
     QRect cr = o_cr;
 
@@ -653,6 +662,7 @@ void Canvas::paintViewport(const QRect& er, bool antialias)
 
 void Canvas::contentsMousePressEvent(QMouseEvent* e)
 {
+    qDebug()<<"Canvas::contentsMousePressEvent";
     if (!e || e->button() == Qt::RightButton)
     {
         return;
@@ -743,6 +753,7 @@ void Canvas::contentsMousePressEvent(QMouseEvent* e)
 
 void Canvas::contentsMouseMoveEvent(QMouseEvent* e)
 {
+    qDebug()<<"Canvas::contentsMouseMoveEvent";
     if (!e)
     {
         return;
@@ -944,6 +955,7 @@ void Canvas::contentsMouseMoveEvent(QMouseEvent* e)
 
 void Canvas::contentsMouseReleaseEvent(QMouseEvent* e)
 {
+    qDebug()<<"Canvas::contentsMouseReleaseEvent";
     if (!e)
     {
         return;
@@ -1001,6 +1013,7 @@ void Canvas::contentsMouseReleaseEvent(QMouseEvent* e)
 
 void Canvas::contentsWheelEvent(QWheelEvent* e)
 {
+    qDebug()<<"Canvas::contentsWheelEvent";
     e->accept();
 
     if (e->modifiers() & Qt::ShiftModifier)
@@ -1060,6 +1073,7 @@ bool Canvas::exifRotated() const
 
 double Canvas::snapZoom(double zoom) const
 {
+    qDebug()<<"Canvas::snapZoom"<<zoom;
     // If the zoom value gets changed from d->zoom to zoom
     // across 50%, 100% or fit-to-window, then return the
     // the corresponding special value. Otherwise zoom is returned unchanged.
@@ -1118,6 +1132,7 @@ void Canvas::slotDecreaseZoom()
 
 void Canvas::setZoomFactorSnapped(double zoom)
 {
+    qDebug()<<"Canvas::setZoomFactorSnapped";
     double fit = calcAutoZoomFactor();
 
     if (fabs(zoom - fit) < 0.05)
@@ -1189,6 +1204,7 @@ void Canvas::setZoomFactor(double zoom)
 
 void Canvas::fitToSelect()
 {
+    qDebug()<<"Canvas::fitToSelect";
     QRect sel = d->im->getSelectedArea();
 
     if (!sel.size().isNull())
@@ -1287,6 +1303,7 @@ void Canvas::slotAutoCrop()
 
 void Canvas::slotCrop()
 {
+    qDebug()<<"Canvas::slotCrop()";
     QRect sel = d->im->getSelectedArea();
 
     if (sel.size().isNull())   // No current selection.

@@ -87,7 +87,6 @@ private:
     double zoomFactor() const;
 
 Q_SIGNALS:
-
     void signalOriginalClipFocusChanged();
     void signalCapturedPointFromOriginal(const Digikam::DColor&, const QPoint&);
     void signalContentsMovedEvent(bool);

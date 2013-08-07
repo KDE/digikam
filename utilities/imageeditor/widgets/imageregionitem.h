@@ -34,11 +34,13 @@
 #include "digikam_export.h"
 #include "dimg.h"
 #include "imageregionwidget.h"
+#include "imageiface.h"
 
 namespace Digikam
 {
 
 class DImg;
+class ImageIface;
 
 class DIGIKAM_EXPORT ImageRegionItem : public GraphicsDImgItem
 {
@@ -51,7 +53,7 @@ public:
     void setTargetImage(const DImg& img);
     void setHighLightPoints(const QPolygon& pointsList);
     void setRenderingPreviewMode(int mode);
-    void paintExtraData(QPainter* p);
+    void paintExtraData(QPainter* painter);
     QRect getImageRegion();
     void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget);
     void hoverEnterEvent ( QGraphicsSceneHoverEvent * );

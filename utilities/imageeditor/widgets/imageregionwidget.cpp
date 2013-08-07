@@ -41,7 +41,6 @@
 #include "previewtoolbar.h"
 #include "previewlayout.h"
 #include "imageregionitem.h"
-#include "imageiface.h"
 
 namespace Digikam
 {
@@ -55,8 +54,7 @@ public:
         onMouseMovePreviewToggled(true),
         capturePtMode(false),
         renderingPreviewMode(PreviewToolBar::PreviewBothImagesVertCont),
-        oldRenderingPreviewMode(PreviewToolBar::PreviewBothImagesVertCont),
-        iface(0)
+        oldRenderingPreviewMode(PreviewToolBar::PreviewBothImagesVertCont)
     {
     }
 
@@ -69,15 +67,12 @@ public:
     QPolygon    hightlightPoints;
     
     ImageRegionItem* item;
-    ImageIface* iface;
 };
 
 ImageRegionWidget::ImageRegionWidget(QWidget* const parent)
     : GraphicsDImgView(parent), d_ptr(new Private)
 {
-    d_ptr->iface = new ImageIface;
     d_ptr->item = new ImageRegionItem(this);
-    d_ptr->item->setImage(d_ptr->iface->original()->copy());
     setItem(d_ptr->item);
 
     setAttribute(Qt::WA_DeleteOnClose);
@@ -100,7 +95,6 @@ ImageRegionWidget::ImageRegionWidget(QWidget* const parent)
 
 ImageRegionWidget::~ImageRegionWidget()
 {
-    delete d_ptr->iface;
     delete d_ptr->item;
     delete d_ptr;
 }
