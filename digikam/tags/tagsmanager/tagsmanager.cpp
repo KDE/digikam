@@ -61,6 +61,7 @@
 namespace Digikam
 {
 
+QPointer<TagsManager> TagsManager::internalPtr = QPointer<TagsManager>();
 
 class TagsManager::PrivateTagMngr
 {
@@ -105,12 +106,12 @@ public:
     TagModel*       tagModel;
 };
 
-TagsManager::TagsManager(TagModel* model)
+TagsManager::TagsManager()
     : KMainWindow(0), d(new PrivateTagMngr())
 {
 
     /** No buttons **/
-    d->tagModel = model;
+    d->tagModel = new TagModel(AbstractAlbumModel::IncludeRootAlbum, this);;
     d->tagModel->setCheckable(false);
 
     setupUi(this);
@@ -132,7 +133,17 @@ TagsManager::TagsManager(TagModel* model)
 
 TagsManager::~TagsManager()
 {
+    delete d->tagModel;
     delete d;
+}
+
+TagsManager* TagsManager::instance()
+{
+    if(TagsManager::internalPtr.isNull())
+    {
+        TagsManager::internalPtr = new TagsManager();
+    }
+    return TagsManager::internalPtr;
 }
 
 void TagsManager::setupUi(KMainWindow *Dialog)
@@ -538,11 +549,12 @@ void TagsManager::slotInvertSel()
     QItemSelectionModel* model = d->tagMngrView->selectionModel();
     QModelIndexList selected = model->selectedIndexes();
 
-    QModelIndexList invertedSel;
-
     QQueue<QModelIndex> greyNodes;
+    bool currentSet = false;
 
     greyNodes.append(root);
+
+    model->clearSelection();
 
     while(!greyNodes.isEmpty())
     {
@@ -558,7 +570,16 @@ void TagsManager::slotInvertSel()
         {
             if(!selected.contains(child))
             {
-                invertedSel.append(child);
+                if(!currentSet)
+                {
+                    /**
+                     * Must set a new current item when inverting selection
+                     * it should be done only once
+                     */
+                    d->tagMngrView->setCurrentIndex(child);
+                    currentSet = true;
+                }
+                model->select(child, model->Select);
             }
             if(d->tagMngrView->isExpanded(child))
             {
@@ -567,16 +588,6 @@ void TagsManager::slotInvertSel()
             child = current.child(it++,0);
         }
     }
-
-    model->clearSelection();
-
-    d->tagMngrView->setCurrentIndex(invertedSel.first());
-
-    foreach(QModelIndex index, invertedSel)
-    {
-        model->select(index, model->Select);
-    }
-
 }
 
 void TagsManager::slotWriteToImg()

@@ -1223,8 +1223,10 @@ void ImageDescEditTab::slotImageTagsChanged(qlonglong imageId)
 
 void ImageDescEditTab::slotOpenTagsManager()
 {
-    TagsManager* tm = new TagsManager(d->tagModel);
-    tm->show();
+    TagsManager* tagMngr = TagsManager::instance();
+    tagMngr->show();
+    tagMngr->activateWindow();
+    tagMngr->raise();
 }
 void ImageDescEditTab::slotImagesChanged(int albumId)
 {

@@ -21,6 +21,7 @@
  *
  * ============================================================ */
 #include <kmainwindow.h>
+#include <QPointer>
 
 namespace Digikam
 {
@@ -33,7 +34,7 @@ class TagsManager : public KMainWindow
     Q_OBJECT
 
 public:
-    TagsManager(TagModel* model = 0);
+    TagsManager();
     ~TagsManager();
 
     /**
@@ -42,6 +43,8 @@ public:
      */
     void setupUi(KMainWindow *Dialog);
 
+    static QPointer<TagsManager> internalPtr;
+    static TagsManager* instance();
 
 Q_SIGNALS:
     void signalSelectionChanged(TAlbum* album);
