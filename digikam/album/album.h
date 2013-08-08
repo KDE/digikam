@@ -46,6 +46,11 @@
 namespace Digikam
 {
 
+/** Album list type definition.
+ */
+class Album;
+typedef QList<Album*> AlbumList;    
+    
 /**
  * \class Album
  * \brief Abstract base class for all album types
@@ -102,7 +107,7 @@ public:
     /**
      * @return a list of all child Albums
      */
-    QList<Album*>  childAlbums(bool recursive = false);
+    AlbumList childAlbums(bool recursive = false);
 
     /**
      * @return a list of all child Albums

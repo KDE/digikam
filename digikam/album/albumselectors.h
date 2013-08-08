@@ -29,6 +29,10 @@
 
 #include <QWidget>
 
+// Local incudes.
+
+#include "album.h"
+
 namespace Digikam
 {
 
@@ -48,15 +52,15 @@ public:
 
     /** Return list of Physical Albums selected.
      */
-    QList<Album*> selectedPAlbums() const;
+    AlbumList selectedPAlbums() const;
 
     /** Return list of Tag Albums selected.
      */
-    QList<Album*> selectedTAlbums() const;
+    AlbumList selectedTAlbums() const;
 
     /** Return list of Physical and Tag Albums selected.
      */
-    QList<Album*> selectedAlbums() const;
+    AlbumList selectedAlbums() const;
 
     /** Reset all Physical and Tag Albums selection.
      */

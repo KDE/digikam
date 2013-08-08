@@ -183,9 +183,9 @@ void AlbumSelectors::slotUpdateClearButtons()
     emit signalSelectionChanged();
 }
 
-QList<Album*> AlbumSelectors::selectedAlbums() const
+AlbumList AlbumSelectors::selectedAlbums() const
 {
-    QList<Album*> albums;
+    AlbumList albums;
     albums << selectedPAlbums();
     albums << selectedTAlbums();
     return albums;
@@ -196,9 +196,9 @@ bool AlbumSelectors::wholeAlbumsCollection() const
     return d->wholePalbums->isChecked();
 }
 
-QList<Album*> AlbumSelectors::selectedPAlbums() const
+AlbumList AlbumSelectors::selectedPAlbums() const
 {
-    QList<Album*> albums;
+    AlbumList albums;
     
     if (wholeAlbumsCollection())
     {
@@ -217,9 +217,9 @@ bool AlbumSelectors::wholeTagsCollection() const
     return d->wholeTalbums->isChecked();
 }
 
-QList<Album*> AlbumSelectors::selectedTAlbums() const
+AlbumList AlbumSelectors::selectedTAlbums() const
 {
-    QList<Album*> albums;
+    AlbumList albums;
     
     if (wholeTagsCollection())
     {
