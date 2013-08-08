@@ -113,18 +113,13 @@ private Q_SLOTS:
     void slotWipeAll();
 
     /**
-     * @brief slotExportKipi      - connected to exportToKipi action and
-     *                              images that correspond to selected tags
-     *                              will be exported to kipi-plugins
-     */
-    void slotExportKipi();
-
-    /**
-     * @brief slotSyncNepomuk      - coonected to syncNepomuk action and
+     * @brief slotNepomukToDb     - coonected to syncNepomuk action and
      *                               will sync all Database tags with nepomuk
      *                               interface
      */
-    void slotSyncNepomuk();
+    void slotNepomukToDb();
+
+    void slotDbToNepomuk();
 
     void slotForkTags();
 

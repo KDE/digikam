@@ -178,7 +178,8 @@ public:
         tagModel(0),
         openTagMngr(0),
         tagSearchBar(0),
-        tagFolderView(0)
+        tagFolderView(0),
+        tagMngr(0)
     {
     }
 
@@ -186,7 +187,7 @@ public:
     KPushButton*   openTagMngr;
     SearchTextBar* tagSearchBar;
     TagFolderView* tagFolderView;
-    TagsManager*   tagMngr;
+    QPointer<TagsManager>   tagMngr;
 };
 
 TagViewSideBarWidget::TagViewSideBarWidget(QWidget* const parent, TagModel* const model)
