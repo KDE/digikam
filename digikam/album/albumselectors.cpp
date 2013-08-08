@@ -191,11 +191,16 @@ QList<Album*> AlbumSelectors::selectedAlbums() const
     return albums;
 }
 
+bool AlbumSelectors::wholeAlbumsCollection() const
+{
+    return d->wholePalbums->isChecked();
+}
+
 QList<Album*> AlbumSelectors::selectedPAlbums() const
 {
     QList<Album*> albums;
     
-    if (d->wholePalbums->isChecked())
+    if (wholeAlbumsCollection())
     {
         albums << AlbumManager::instance()->allPAlbums();
     }
@@ -207,11 +212,16 @@ QList<Album*> AlbumSelectors::selectedPAlbums() const
     return albums;
 }
 
+bool AlbumSelectors::wholeTagsCollection() const
+{
+    return d->wholeTalbums->isChecked();
+}
+
 QList<Album*> AlbumSelectors::selectedTAlbums() const
 {
     QList<Album*> albums;
     
-    if (d->wholeTalbums->isChecked())
+    if (wholeTagsCollection())
     {
         albums << AlbumManager::instance()->allTAlbums();
     }
@@ -259,16 +269,16 @@ void AlbumSelectors::loadState()
     
     slotUpdateClearButtons();
 
-    slotWholePalbums(d->wholePalbums->isChecked());
-    slotWholeTalbums(d->wholeTalbums->isChecked());
+    slotWholePalbums(wholeAlbumsCollection());
+    slotWholeTalbums(wholeTagsCollection());
 }
 
 void AlbumSelectors::saveState()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configName);
-    group.writeEntry(d->configUseWholePAlbumsEntry, d->wholePalbums->isChecked());
-    group.writeEntry(d->configUseWholeTAlbumsEntry, d->wholeTalbums->isChecked());
+    group.writeEntry(d->configUseWholePAlbumsEntry, wholeAlbumsCollection());
+    group.writeEntry(d->configUseWholeTAlbumsEntry, wholeTagsCollection());
     
     d->albumSelectCB->view()->saveState();
     d->tagSelectCB->view()->saveState();
