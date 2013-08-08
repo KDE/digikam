@@ -102,7 +102,6 @@ AntiVignettingTool::AntiVignettingTool(QObject* const parent)
 
     d->settingsView = new AntiVignettingSettings(d->gboxSettings->plainPage());
     setToolSettings(d->gboxSettings);
-    init();
 
     // -------------------------------------------------------------
 

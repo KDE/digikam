@@ -191,7 +191,6 @@ BlurFXTool::BlurFXTool(QObject* const parent)
     setPreviewModeMask(PreviewToolBar::AllPreviewModes);
     setToolSettings(d->gboxSettings);
     setToolView(d->previewWidget);
-    init();
 }
 
 BlurFXTool::~BlurFXTool()

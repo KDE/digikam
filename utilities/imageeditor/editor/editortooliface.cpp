@@ -147,6 +147,8 @@ void EditorToolIface::loadTool(EditorTool* const tool)
 
     connect(d->tool, SIGNAL(okClicked()),
             this, SLOT(slotToolApplied()));
+
+    d->tool->init();
 }
 
 void EditorToolIface::unLoadTool()

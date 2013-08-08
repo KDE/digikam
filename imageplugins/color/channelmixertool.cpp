@@ -134,7 +134,6 @@ ChannelMixerTool::ChannelMixerTool(QObject* const parent)
     vbox->setSpacing(0);
 
     setToolSettings(d->gboxSettings);
-    init();
 
     // -------------------------------------------------------------
 

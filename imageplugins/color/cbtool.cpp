@@ -88,6 +88,7 @@ CBTool::CBTool(QObject* const parent)
     setObjectName("colorbalance");
     setToolName(i18n("Color Balance"));
     setToolIcon(SmallIcon("adjustrgb"));
+    setInitPreview(true);
 
     d->previewWidget = new ImageRegionWidget;
     setToolView(d->previewWidget);
@@ -104,7 +105,6 @@ CBTool::CBTool(QObject* const parent)
 
     d->cbSettings = new CBSettings(d->gboxSettings->plainPage());
     setToolSettings(d->gboxSettings);
-    init();
 
     // -------------------------------------------------------------
 
@@ -113,8 +113,6 @@ CBTool::CBTool(QObject* const parent)
 
     connect(d->previewWidget, SIGNAL(signalResized()),
             this, SLOT(slotPreview()));
-
-    slotTimer();
 }
 
 CBTool::~CBTool()

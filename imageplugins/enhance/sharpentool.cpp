@@ -107,8 +107,6 @@ SharpenTool::SharpenTool(QObject* const parent)
 
     connect(d->sharpSettings, SIGNAL(signalSettingsChanged()),
             this, SLOT(slotSettingsChanged()));
-
-    init();
 }
 
 SharpenTool::~SharpenTool()

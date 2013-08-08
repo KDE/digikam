@@ -186,7 +186,6 @@ LensDistortionTool::LensDistortionTool(QObject* const parent)
     gridSettings->setSpacing(d->gboxSettings->spacingHint());
 
     setToolSettings(d->gboxSettings);
-    init();
 
     // -------------------------------------------------------------
 
