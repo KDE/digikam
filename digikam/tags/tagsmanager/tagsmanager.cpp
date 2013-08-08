@@ -23,6 +23,7 @@
 
 /** Qt includes **/
 #include <QtAlgorithms>
+#include <QQueue>
 #include <QTreeView>
 #include <QtGui/QHeaderView>
 #include <QtGui/QLabel>
@@ -510,7 +511,20 @@ void TagsManager::setupActions()
 
 void TagsManager::slotResetTagIcon()
 {
+    QString errMsg;
 
+    QList<Album*> selected = d->tagMngrView->selectedTags();
+    QString icon = QString("tag");
+    QList<Album*>::iterator it;
+
+    for(it = selected.begin(); it != selected.end(); ++it )
+    {
+        TAlbum* tag = dynamic_cast<TAlbum*>(*it);
+        if (!AlbumManager::instance()->updateTAlbumIcon(tag, icon, 0, errMsg))
+        {
+            KMessageBox::error(0, errMsg);
+        }
+    }
 }
 
 void TagsManager::slotCreateTagAddr()
@@ -520,6 +534,48 @@ void TagsManager::slotCreateTagAddr()
 
 void TagsManager::slotInvertSel()
 {
+    QModelIndex root = d->tagMngrView->model()->index(0,0);
+    QItemSelectionModel* model = d->tagMngrView->selectionModel();
+    QModelIndexList selected = model->selectedIndexes();
+
+    QModelIndexList invertedSel;
+
+    QQueue<QModelIndex> greyNodes;
+
+    greyNodes.append(root);
+
+    while(!greyNodes.isEmpty())
+    {
+        QModelIndex current = greyNodes.dequeue();
+        if(!(current.isValid()))
+        {
+            continue;
+        }
+        int it = 0;
+        QModelIndex child = current.child(it++,0);
+
+        while(child.isValid())
+        {
+            if(!selected.contains(child))
+            {
+                invertedSel.append(child);
+            }
+            if(d->tagMngrView->isExpanded(child))
+            {
+                greyNodes.enqueue(child);
+            }
+            child = current.child(it++,0);
+        }
+    }
+
+    model->clearSelection();
+
+    d->tagMngrView->setCurrentIndex(invertedSel.first());
+
+    foreach(QModelIndex index, invertedSel)
+    {
+        model->select(index, model->Select);
+    }
 
 }
 
