@@ -87,7 +87,8 @@ Q_SIGNALS:
 private Q_SLOTS:
 
     void slotUpdateClearButtons();
-    void slotWholeCollection(bool);
+    void slotWholePalbums(bool);
+    void slotWholeTalbums(bool);
 
 private:
 
