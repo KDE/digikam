@@ -114,7 +114,6 @@ SetupTemplate::SetupTemplate(QWidget* const parent)
     note->setOpenExternalLinks(true);
     note->setWordWrap(true);
     note->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
-    note->setFont(KGlobalSettings::smallestReadableFont());
 
     // -------------------------------------------------------------
 

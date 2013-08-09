@@ -3,10 +3,11 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2009-28-04
- * Description : first run assistant dialog
+ * Date        : 2010-10-09
+ * Description : A widget to select Physical or virtual albums with combo-box
  *
- * Copyright (C) 2009-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2012-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,26 +22,35 @@
  *
  * ============================================================ */
 
-#ifndef OPENFILE_PAGE_H
-#define OPENFILE_PAGE_H
+#ifndef ALBUMSELECTORS_H
+#define ALBUMSELECTORS_H
 
-// Local includes
+// Qt includes
 
-#include "assistantdlgpage.h"
+#include <QWidget>
 
 namespace Digikam
 {
 
-class OpenFilePage : public AssistantDlgPage
+class Album;
+
+class AlbumSelectors : public QWidget
 {
     Q_OBJECT
 
 public:
 
-    explicit OpenFilePage(KAssistantDialog* const dlg);
-    ~OpenFilePage();
+    explicit AlbumSelectors(const QString& label, const QString& configName, QWidget* const parent = 0);
+    ~AlbumSelectors();
 
-    void saveSettings();
+    QList<Album*> selectedAlbums() const;
+
+    void loadState();
+    void saveState();
+
+private Q_SLOTS:
+
+    void slotUpdateClearButtons();
 
 private:
 
@@ -48,6 +58,6 @@ private:
     Private* const d;
 };
 
-}   // namespace Digikam
+} // namespace Digikam
 
-#endif /* OPENFILE_PAGE_H */
+#endif // ALBUMSELECTORS_H

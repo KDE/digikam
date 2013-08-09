@@ -95,7 +95,6 @@ void DatabaseWidget::setupMainArea()
                                                  "<p>Note: a remote file system, such as NFS, cannot be used here.</p><p></p>"),
                                             dbPathBox);
     d->databasePathLabel->setWordWrap(true);
-    d->databasePathLabel->setFont(KGlobalSettings::smallestReadableFont());
 
     databasePathEdit                                 = new KUrlRequester(dbPathBox);
     databasePathEdit->setMode(KFile::Directory | KFile::LocalOnly);

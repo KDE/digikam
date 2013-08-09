@@ -6,7 +6,7 @@
  * Date        : 2011-02-14
  * Description : pick label widget
  *
- * Copyright (C) 2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2011-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -53,7 +53,7 @@ class DIGIKAM_EXPORT PickLabelWidget : public KVBox
 
 public:
 
-    explicit PickLabelWidget(QWidget* parent=0);
+    explicit PickLabelWidget(QWidget* const parent=0);
     virtual ~PickLabelWidget();
 
     /**
@@ -95,8 +95,8 @@ private:
 
 private:
 
-    class PickLabelWidgetPriv;
-    PickLabelWidgetPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 // ------------------------------------------------------------------------------
@@ -107,7 +107,7 @@ class DIGIKAM_EXPORT PickLabelSelector : public QPushButton
 
 public:
 
-    explicit PickLabelSelector(QWidget* parent=0);
+    explicit PickLabelSelector(QWidget* const parent=0);
     virtual ~PickLabelSelector();
 
     void setPickLabel(PickLabel label);
@@ -125,8 +125,8 @@ private Q_SLOTS:
 
 private:
 
-    class PickLabelSelectorPriv;
-    PickLabelSelectorPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 // ------------------------------------------------------------------------------
@@ -137,7 +137,7 @@ class DIGIKAM_EXPORT PickLabelMenuAction : public KActionMenu
 
 public:
 
-    explicit PickLabelMenuAction(QMenu* parent=0);
+    explicit PickLabelMenuAction(QMenu* const parent=0);
     virtual ~PickLabelMenuAction();
 
 Q_SIGNALS:

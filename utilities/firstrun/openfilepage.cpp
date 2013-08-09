@@ -6,7 +6,7 @@
  * Date        : 2009-28-04
  * Description : first run assistant dialog
  *
- * Copyright (C) 2009-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -46,11 +46,11 @@
 namespace Digikam
 {
 
-class OpenFilePage::OpenFilePagePriv
+class OpenFilePage::Private
 {
 public:
 
-    OpenFilePagePriv() :
+    Private() :
         openAsPreview(0),
         openInEditor(0),
         openFileBehavior(0)
@@ -63,19 +63,19 @@ public:
     QButtonGroup* openFileBehavior;
 };
 
-OpenFilePage::OpenFilePage(KAssistantDialog* dlg)
+OpenFilePage::OpenFilePage(KAssistantDialog* const dlg)
     : AssistantDlgPage(dlg, i18n("<b>Configure Open File Behavior</b>")),
-      d(new OpenFilePagePriv)
+      d(new Private)
 {
-    KVBox* vbox    = new KVBox(this);
-    QLabel* label1 = new QLabel(vbox);
+    KVBox* const vbox    = new KVBox(this);
+    QLabel* const label1 = new QLabel(vbox);
     label1->setWordWrap(true);
     label1->setText(i18n("<qt>"
                          "<p>Specify how images should be opened when right-clicked on in the icon view:</p>"
                          "</qt>"));
 
-    QWidget* btns       = new QWidget(vbox);
-    QVBoxLayout* vlay   = new QVBoxLayout(btns);
+    QWidget* const btns     = new QWidget(vbox);
+    QVBoxLayout* const vlay = new QVBoxLayout(btns);
 
     d->openFileBehavior = new QButtonGroup(btns);
     d->openAsPreview    = new QRadioButton(btns);
@@ -92,7 +92,7 @@ OpenFilePage::OpenFilePage(KAssistantDialog* dlg)
     vlay->setMargin(KDialog::spacingHint());
     vlay->setSpacing(KDialog::spacingHint());
 
-    QLabel* label2 = new QLabel(vbox);
+    QLabel* const label2 = new QLabel(vbox);
     label2->setWordWrap(true);
     label2->setText(i18n("<qt>"
                          "<p><i>Note:</i> using a preview is always faster than using the editor, "
@@ -103,9 +103,7 @@ OpenFilePage::OpenFilePage(KAssistantDialog* dlg)
                          "</qt>"));
 
     setPageWidget(vbox);
-
-    QPixmap leftPix = KStandardDirs::locate("data", "digikam/data/assistant-openfile.png");
-    setLeftBottomPix(leftPix.scaledToWidth(128, Qt::SmoothTransformation));
+    setLeftBottomPix(KIconLoader::global()->loadIcon("editimage", KIconLoader::NoGroup, KIconLoader::SizeEnormous));
 }
 
 OpenFilePage::~OpenFilePage()

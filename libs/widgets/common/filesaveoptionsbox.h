@@ -7,7 +7,7 @@
  * Description : a stack of widgets to set image file save
  *               options into image editor.
  *
- * Copyright (C) 2007-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -53,7 +53,7 @@ public:
      *
      * @param parent parent for Qt's parent child mechanism
      */
-    explicit FileSaveOptionsBox(QWidget* parent=0);
+    explicit FileSaveOptionsBox(QWidget* const parent=0);
 
     /**
      * Destructor.
@@ -72,8 +72,7 @@ public:
      * @return file format guessed from the file name or the given fallback
      *         format if no format could be guessed based on the file name
      */
-    DImg::FORMAT discoverFormat(const QString& filename,
-                                DImg::FORMAT fallback = DImg::NONE);
+    DImg::FORMAT discoverFormat(const QString& filename, DImg::FORMAT fallback = DImg::NONE);
 
     /**
      * Call this method immediately after creation of the file dialog with this
@@ -81,7 +80,7 @@ public:
      *
      * @param dialog the file dialog this options widget is used for.
      */
-    void setDialog(KFileDialog* dialog);
+    void setDialog(KFileDialog* const dialog);
 
     /**
      * Sets a filter used for the dialog that is used to automatically select
@@ -105,8 +104,8 @@ private:
 
 private:
 
-    class FileSaveOptionsBoxPriv;
-    FileSaveOptionsBoxPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam
