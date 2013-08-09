@@ -37,7 +37,6 @@
 
 // Local includes
 
-#include "album.h"
 #include "albummanager.h"
 #include "collectionscanner.h"
 #include "imageinfojob.h"
@@ -72,19 +71,15 @@ public:
     MetadataSynchronizer::SyncDirection direction;
 };
 
-MetadataSynchronizer::MetadataSynchronizer(SyncDirection direction, ProgressItem* const parent)
+MetadataSynchronizer::MetadataSynchronizer(const AlbumList& list, SyncDirection direction, ProgressItem* const parent)
     : MaintenanceTool("MetadataSynchronizer", parent),
       d(new Private)
 {
-    d->palbumList = AlbumManager::instance()->allPAlbums();
-    d->direction  = direction;
-}
+    if (list.isEmpty())
+        d->palbumList = AlbumManager::instance()->allPAlbums();
+    else 
+        d->palbumList = list;
 
-MetadataSynchronizer::MetadataSynchronizer(Album* const album, SyncDirection direction, ProgressItem* const parent)
-    : MaintenanceTool("MetadataSynchronizer", parent),
-      d(new Private)
-{
-    d->palbumList.append(album);
     d->direction = direction;
 }
 

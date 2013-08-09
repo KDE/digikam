@@ -26,6 +26,7 @@
 
 // Local includes
 
+#include "album.h"
 #include "imageinfo.h"
 #include "maintenancetool.h"
 
@@ -48,15 +49,11 @@ public:
 
 public:
 
-    /** Constructor which sync all pictures metadata pictures from whole Albums collection
+    /** Constructor which sync all pictures metadata from an Albums list. If list is empty, whole Albums collection is procressed.
      */
-    explicit MetadataSynchronizer(SyncDirection direction, ProgressItem* const parent = 0);
+    explicit MetadataSynchronizer(const AlbumList& list=AlbumList(), SyncDirection direction = WriteFromDatabaseToFile, ProgressItem* const parent = 0);
 
-    /** Constructor which sync all pictures metadata from an Album
-     */
-    explicit MetadataSynchronizer(Album* const album, SyncDirection direction = WriteFromDatabaseToFile, ProgressItem* const parent = 0);
-
-    /** Constructor which sync all pictures metadata from an images list
+    /** Constructor which sync all pictures metadata from an Images list
      */
     explicit MetadataSynchronizer(const ImageInfoList& list, SyncDirection = WriteFromDatabaseToFile, ProgressItem* const parent = 0);
 

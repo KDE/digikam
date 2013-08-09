@@ -49,6 +49,7 @@
 // Local includes
 
 #include "setup.h"
+#include "albumselectors.h"
 #include "facescansettings.h"
 #include "metadatasynchronizer.h"
 
@@ -69,6 +70,7 @@ public:
         Duplicates,
         FaceManagement,
         MetadataSync,
+
         Stretch
     };
 
@@ -86,7 +88,8 @@ public:
         vbox(0),
         hbox3(0),
         similarity(0),
-        expanderBox(0)
+        expanderBox(0),
+        albumSelectors(0)
     {
     }
 
@@ -115,6 +118,7 @@ public:
     KHBox*               hbox3;
     KIntNumInput*        similarity;
     RExpanderBox*        expanderBox;
+    AlbumSelectors*      albumSelectors;
 };
 
 const QString MaintenanceDlg::Private::configGroupName("MaintenanceDlg Settings");
@@ -148,12 +152,13 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
                        .scaled(48, 48, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
     d->title                = new QLabel(i18n("<qt><b>Select Maintenance Operations to Process</b></qt>"), page);
+    d->albumSelectors       = new AlbumSelectors(i18nc("@label", "Process items from:"), d->configGroupName);
     d->expanderBox          = new RExpanderBox(page);
-    KSeparator* const line  = new KSeparator(Qt::Horizontal);
 
     // --------------------------------------------------------------------------------------
 
-    d->expanderBox->insertItem(Private::NewItems, new QLabel(i18n("<qt><i>no option</i></qt>")),
+    d->expanderBox->insertItem(Private::NewItems, new QLabel(i18n("<qt>No option<br>"
+                               "<i>Note: only Albums Collection are processed by this tool.</i></qt>")),
                                SmallIcon("view-refresh"), i18n("Scan for new items"), "NewItems", false);
     d->expanderBox->setCheckBoxVisible(Private::NewItems, true);
 
@@ -222,14 +227,16 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
 
     // --------------------------------------------------------------------------------------
 
-    grid->addWidget(d->logo,        0, 0, 1, 1);
-    grid->addWidget(d->title,       0, 1, 1, 1);
-    grid->addWidget(line,           1, 1, 1, 1);
-    grid->addWidget(d->expanderBox, 2, 0, 3, 2);
+    grid->addWidget(d->logo,                        0, 0, 1, 1);
+    grid->addWidget(d->title,                       0, 1, 1, 1);
+    grid->addWidget(new KSeparator(Qt::Horizontal), 1, 1, 1, 1);
+    grid->addWidget(d->albumSelectors,              2, 1, 1, 1);
+    grid->addWidget(new KSeparator(Qt::Horizontal), 3, 1, 1, 1);
+    grid->addWidget(d->expanderBox,                 4, 0, 3, 2);
     grid->setSpacing(spacingHint());
     grid->setMargin(0);
     grid->setColumnStretch(1, 10);
-    grid->setRowStretch(2, 10);
+    grid->setRowStretch(4, 10);
 
     // --------------------------------------------------------------------------------------
 
@@ -260,6 +267,10 @@ void MaintenanceDlg::slotOk()
 MaintenanceSettings MaintenanceDlg::settings() const
 {
     MaintenanceSettings prm;
+    prm.wholeAlbums                         = d->albumSelectors->wholeAlbumsCollection();
+    prm.wholeTags                           = d->albumSelectors->wholeTagsCollection();
+    prm.albums                              = d->albumSelectors->selectedPAlbums();
+    prm.tags                                = d->albumSelectors->selectedTAlbums();
     prm.newItems                            = d->expanderBox->isChecked(Private::NewItems);
     prm.thumbnails                          = d->expanderBox->isChecked(Private::Thumbnails);
     prm.scanThumbs                          = d->scanThumbs->isChecked();
@@ -269,6 +280,7 @@ MaintenanceSettings MaintenanceDlg::settings() const
     prm.similarity                          = d->similarity->value();
     prm.faceManagement                      = d->expanderBox->isChecked(Private::FaceManagement);
     prm.faceSettings.alreadyScannedHandling = (FaceScanSettings::AlreadyScannedHandling)d->faceScannedHandling->currentIndex();
+    prm.faceSettings.albums                 = d->albumSelectors->selectedAlbums();
     prm.metadataSync                        = d->expanderBox->isChecked(Private::MetadataSync);
     prm.syncDirection                       = d->syncDirection->currentIndex();
     return prm;
@@ -279,6 +291,7 @@ void MaintenanceDlg::readSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
     d->expanderBox->readSettings(group);
+    d->albumSelectors->loadState();
 
     MaintenanceSettings prm;
 
@@ -305,6 +318,7 @@ void MaintenanceDlg::writeSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
     d->expanderBox->writeSettings(group);
+    d->albumSelectors->saveState();
 
     MaintenanceSettings prm   = settings();
 

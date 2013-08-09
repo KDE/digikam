@@ -287,19 +287,7 @@ void FindDuplicatesView::slotFindDuplicates()
     slotClear();
     enableControlWidgets(false);
 
-    QStringList albumsIdList, tagsIdList;
-
-    foreach(const Album* const album, d->albumSelectors->selectedPAlbums())
-    {
-        albumsIdList << QString::number(album->id());
-    }
-
-    foreach(const Album* const album, d->albumSelectors->selectedTAlbums())
-    {
-        tagsIdList << QString::number(album->id());
-    }
-
-    DuplicatesFinder* const finder = new DuplicatesFinder(albumsIdList, tagsIdList, d->similarity->value());
+    DuplicatesFinder* const finder = new DuplicatesFinder(d->albumSelectors->selectedPAlbums(), d->albumSelectors->selectedTAlbums(), d->similarity->value());
 
     connect(finder, SIGNAL(signalComplete()),
             this, SLOT(slotComplete()));

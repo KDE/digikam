@@ -1,9 +1,9 @@
-Tools                    Process albums list                     Process whole collection    
+Tools                    Process albums list                     Process whole collection
 
 
-DuplicatesFinders            YES (QStringList of album Id)                YES
-FaceDetector                 YES (QList<Album*>)                          NO
-FingerprintsGenerator        NO                                           YES
-MetadataSynchronizer         NO                                           YES
 NewItemsFinder               YES (QStringList of album path)              YES
-ThumbsGenerator              NO                                           YES
+ThumbsGenerator              YES (AlbumList)                              YES
+FingerprintsGenerator        YES (AlbumList)                              YES
+DuplicatesFinders            YES (AlbumList)                              YES
+FaceDetector                 YES (AlbumList)                              NO
+MetadataSynchronizer         YES (AlbumList)                              YES
