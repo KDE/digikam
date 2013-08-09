@@ -4,6 +4,7 @@ digiKam 3.4.0- Release date: 2013-09-01
 NEW FEATURES:
 
 MaintenanceTool : add new options to select ALbums and Tags to process.
+MaintenanceTool : add multi-threading and multi-core CPU support for Metadata Synchronizer tool.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
