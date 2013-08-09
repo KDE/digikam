@@ -64,11 +64,13 @@ private Q_SLOTS:
     void slotStart();
     void slotParseAlbums();
     void slotAlbumParsed(const ImageInfoList&);
+    void slotAdvance();
     void slotOneAlbumIsComplete();
     void slotCancel();
 
 private:
 
+    void init(SyncDirection direction);
     void parseList();
     void parsePicture();
     void processOneAlbum();
