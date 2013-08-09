@@ -907,6 +907,12 @@ void DigikamView::slotNewDuplicatesSearch(Album* album)
     d->fuzzySearchSideBar->newDuplicatesSearch(album);
 }
 
+void DigikamView::slotNewQualitySort(Album* album)
+{
+    slotLeftSideBarActivate(d->fuzzySearchSideBar);
+    d->fuzzySearchSideBar->newDuplicatesSearch(album);
+}
+
 void DigikamView::slotAlbumsCleared()
 {
     emit signalAlbumSelected(false);

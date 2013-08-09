@@ -146,6 +146,7 @@
 #include "thumbsgenerator.h"
 #include "kipipluginloader.h"
 #include "imagepluginloader.h"
+#include "qualityscandialog.h"
 
 #ifdef USE_SCRIPT_IFACE
 #include "scriptiface.h"
@@ -1257,7 +1258,14 @@ void DigikamApp::setupActions()
     actionCollection()->addAction("find_duplicates", duplicatesAction);
 
     // -----------------------------------------------------------
+    
+    KAction* qualityAction = new KAction(KIcon("tools-wizard"), i18n("Sort by Quality"), this);
+    qualityAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_Q));
+    connect(qualityAction, SIGNAL(triggered()), d->view, SLOT(slotNewQualitySort()));
+    actionCollection()->addAction("sort_quality", qualityAction);
 
+    // -----------------------------------------------------------
+    
     KAction* databaseMigrationAction = new KAction(KIcon("server-database"), i18n("Database Migration..."), this);
     connect(databaseMigrationAction, SIGNAL(triggered()), this, SLOT(slotDatabaseMigration()));
     actionCollection()->addAction("database_migration", databaseMigrationAction);
@@ -2466,6 +2474,25 @@ void DigikamApp::slotDatabaseMigration()
 {
     MigrationDlg dlg(this);
     dlg.exec();
+}
+
+void DigikamApp::slotQuality()
+{
+    QualityScanDialog* qdlg = QualityScanDialog(this);
+    if (qdlg->exec() == QDialog::Accepted)
+    {
+        d->qualityAction->setEnabled(false);
+
+        /*
+        MaintenanceMngr* mngr = new MaintenanceMngr(this);
+
+        connect(mngr, SIGNAL(signalComplete()),
+                this, SLOT(slotMaintenanceDone()));
+
+        mngr->setSettings(dlg->settings());
+        */
+        
+    }
 }
 
 void DigikamApp::slotMaintenance()
