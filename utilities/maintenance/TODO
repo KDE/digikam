@@ -1,9 +1,0 @@
-Tools                    Process albums list                     Process whole collection
-
-
-NewItemsFinder               YES (QStringList of album path)              YES
-ThumbsGenerator              YES (AlbumList)                              YES
-FingerprintsGenerator        YES (AlbumList)                              YES
-DuplicatesFinders            YES (AlbumList)                              YES
-FaceDetector                 YES (AlbumList)                              NO
-MetadataSynchronizer         YES (AlbumList)                              YES
