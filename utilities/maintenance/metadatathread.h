@@ -70,11 +70,6 @@ Q_SIGNALS:
 private Q_SLOTS:
 
     void slotThreadFinished();
-
-private:
-
-    class Private;
-    Private* const d;
 };
 
 }  // namespace Digikam

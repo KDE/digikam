@@ -31,7 +31,6 @@
 
 // Local includes
 
-#include "config-digikam.h"
 #include "metadatatask.h"
 
 using namespace Solid;
@@ -39,19 +38,8 @@ using namespace Solid;
 namespace Digikam
 {
 
-class MetadataThread::Private
-{
-public:
-
-    Private()
-    {
-    }
-};
-
-// --------------------------------------------------------------------------------------
-
 MetadataThread::MetadataThread(QObject* const parent)
-    : RActionThreadBase(parent), d(new Private)
+    : RActionThreadBase(parent)
 {
     connect(this, SIGNAL(finished()),
             this, SLOT(slotThreadFinished()));
@@ -62,8 +50,6 @@ MetadataThread::~MetadataThread()
     cancel();
 
     wait();
-
-    delete d;
 }
 
 void MetadataThread::setUseMultiCore(const bool b)
