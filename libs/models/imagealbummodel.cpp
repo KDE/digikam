@@ -31,7 +31,6 @@
 
 #include <kio/job.h>
 #include <kdebug.h>
-#include <boost/concept_check.hpp>
 
 // Local includes
 
@@ -183,7 +182,7 @@ void ImageAlbumModel::openAlbum(QList<Album*> albums)
         if((*it))
             d->currentAlbums.append(*it);
     }
-    emit listedAlbumChanged(d->currentAlbums);
+    //emit listedAlbumChanged(d->currentAlbums);
     refresh();
 }
 
@@ -221,7 +220,7 @@ void ImageAlbumModel::incrementalRefresh()
     // -> ImageModel::requestIncrementalRefresh -> waits until model is ready, maybe immediately
     // -> to this method via SIGNAL(readyForIncrementalRefresh())
 
-    if (!d->currentAlbums.isEmpty())
+    if (d->currentAlbums.isEmpty())
     {
         return;
     }
@@ -415,7 +414,7 @@ void ImageAlbumModel::slotData(KIO::Job* job, const QByteArray& data)
 
 void ImageAlbumModel::slotImageChange(const ImageChangeset& changeset)
 {
-    if (!d->currentAlbums.isEmpty())
+    if (d->currentAlbums.isEmpty())
     {
         return;
     }

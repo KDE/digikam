@@ -74,9 +74,9 @@ public Q_SLOTS:
 
     void setSpecialTagListing(const QString& specialListing);
 
-Q_SIGNALS:
+//Q_SIGNALS:
 
-    void listedAlbumChanged(QList<Album*> album);
+    //void listedAlbumChanged(QList<Album*> album);
 
 protected Q_SLOTS:
 

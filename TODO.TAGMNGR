@@ -15,6 +15,7 @@ DONE:
     14. Tag Manager layout change (Gilles suggestions)
     15. Use DLogoAction (Gilles suggestions)
     16. Add tooltips to menu actions (Gilles suggestions)
+    17. Tag Properties don't save changes
 
 BUGS:
     1. Tag Properties don't save changes
@@ -29,6 +30,7 @@ TODO:
 
 DEAD CODE:
     1. Albumtreeview.cpp 306-309 deleting this 2 connects doesn't affect digikam behaviour
+    2. listedAlbumChanged(QList<Album*> album); in imagealbummodel.cpp
 
 Gilles suggestions:
     1. [DONE]Tag Manager layout change
