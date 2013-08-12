@@ -39,7 +39,7 @@ namespace Digikam
 {
 
 MetadataThread::MetadataThread(QObject* const parent)
-    : RActionThreadBase(parent)
+    : RActionThreadBase(parent), tagsOnly(false)
 {
     connect(this, SIGNAL(finished()),
             this, SLOT(slotThreadFinished()));
@@ -64,6 +64,10 @@ void MetadataThread::setUseMultiCore(const bool b)
     }
 }
 
+void MetadataThread::setTagsOnly(bool value)
+{
+    this->tagsOnly = value;
+}
 void MetadataThread::processItems(const ImageInfoList& items, MetadataSynchronizer::SyncDirection dir)
 {
     JobCollection* const collection = new JobCollection();
@@ -72,6 +76,7 @@ void MetadataThread::processItems(const ImageInfoList& items, MetadataSynchroniz
     {
         MetadataTask* const t = new MetadataTask();
         t->setItem(items.at(i), dir);
+        t->setTagsOnly(this->tagsOnly);
 
         connect(t, SIGNAL(signalFinished()),
                 this, SIGNAL(signalAdvance()));

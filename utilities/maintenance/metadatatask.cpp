@@ -45,9 +45,11 @@ public:
     {
         cancel    = false;
         direction = MetadataSynchronizer::WriteFromDatabaseToFile;
+        tagsOnly  = false;
     }
 
     bool                                cancel;
+    bool                                tagsOnly;
 
     ImageInfo                           item;
     MetadataSynchronizer::SyncDirection direction;
@@ -72,6 +74,10 @@ void MetadataTask::setItem(const ImageInfo& item, MetadataSynchronizer::SyncDire
     d->direction = dir;
 }
 
+void MetadataTask::setTagsOnly(bool value)
+{
+    d->tagsOnly = value;
+}
 void MetadataTask::slotCancel()
 {
     d->cancel = true;
@@ -83,11 +89,13 @@ void MetadataTask::run()
     {
         return;
     }
-    
+    if(d->tagsOnly)
+        kDebug() << "Tags Only+++++++++++++++++++++++++++";
+
     if (d->direction == MetadataSynchronizer::WriteFromDatabaseToFile)
     {
         MetadataHub fileHub;
-        
+
         // read in from database
         fileHub.load(d->item);
 

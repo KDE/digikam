@@ -52,6 +52,7 @@ public:
     ~MetadataTask();
 
     void setItem(const ImageInfo& item, MetadataSynchronizer::SyncDirection dir);
+    void setTagsOnly(bool value);
 
 Q_SIGNALS:
 

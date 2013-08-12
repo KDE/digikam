@@ -57,6 +57,7 @@
 #include "tageditdlg.h"
 #include "albumdb.h"
 #include "dlogoaction.h"
+#include "metadatasynchronizer.h"
 
 namespace Digikam
 {
@@ -586,12 +587,16 @@ void TagsManager::slotInvertSel()
 
 void TagsManager::slotWriteToImg()
 {
-
+    MetadataSynchronizer* tool = new MetadataSynchronizer(AlbumList(), MetadataSynchronizer::WriteFromDatabaseToFile);
+    tool->setTagsOnly(true);
+    tool->start();
 }
 
 void TagsManager::slotReadFromImg()
 {
-
+    MetadataSynchronizer* tool = new MetadataSynchronizer(AlbumList(), MetadataSynchronizer::ReadFromFileToDatabase);
+    tool->setTagsOnly(true);
+    tool->start();
 }
 
 void TagsManager::slotWipeAll()

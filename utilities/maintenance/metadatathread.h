@@ -49,6 +49,8 @@ public:
 
     void setUseMultiCore(const bool b);
 
+    void setTagsOnly(const bool value);
+
     void processItems(const ImageInfoList& items, MetadataSynchronizer::SyncDirection dir);
 
     void cancel();
@@ -70,6 +72,12 @@ Q_SIGNALS:
 private Q_SLOTS:
 
     void slotThreadFinished();
+
+private:
+    /**
+     * Tags Manager require only tag sync
+     */
+    bool tagsOnly;
 };
 
 }  // namespace Digikam
