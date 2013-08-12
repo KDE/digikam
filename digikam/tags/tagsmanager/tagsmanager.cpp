@@ -119,11 +119,8 @@ TagsManager::TagsManager()
     /*----------------------------Connects---------------------------*/
 
     connect(d->tagMngrView->selectionModel(),
-            SIGNAL(currentChanged(QModelIndex,QModelIndex)),
+            SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
             this, SLOT(slotSelectionChanged()));
-
-    connect(this, SIGNAL(signalSelectionChanged(TAlbum*)),
-            d->tagPropWidget, SLOT(slotSelectionChanged(TAlbum*)));
 
     connect(d->addAction, SIGNAL(triggered()), this, SLOT(slotAddAction()));
 
@@ -214,10 +211,7 @@ void TagsManager::slotOpenProperties()
 
 void TagsManager::slotSelectionChanged()
 {
-    TAlbum* currentAl = d->tagMngrView->currentAlbum();
-    /** When deleting a tag, current Album is not valid **/
-    if(currentAl)
-        emit signalSelectionChanged(currentAl);
+    d->tagPropWidget->slotSelectionChanged(d->tagMngrView->selectedTags());
 }
 
 void TagsManager::slotItemChanged()

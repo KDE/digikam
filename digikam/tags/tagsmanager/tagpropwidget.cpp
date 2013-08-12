@@ -34,9 +34,11 @@
 #include <kicon.h>
 #include <kiconloader.h>
 #include <kicondialog.h>
+#include <kmessagebox.h>
 
 #include "searchtextbar.h"
 #include "album.h"
+#include "albummanager.h"
 #include "tagsactionmngr.h"
 #include "syncjob.h"
 
@@ -54,11 +56,8 @@ public:
         resetIconButton = 0;
         topLabel        = 0;
         keySeqWidget    = 0;
-        mainRootAlbum   = 0;
-        create          = false;
+        changed         = false;
     }
-
-    bool                create;
 
     QLabel*             topLabel;
 
@@ -66,9 +65,13 @@ public:
 
     QPushButton*        iconButton;
     QPushButton*        resetIconButton;
-    TAlbum*             mainRootAlbum;
+    QPushButton*        saveButton;
+    QPushButton*        discardButton;
+    QList<TAlbum*>      selectedAlbums;
     KKeySequenceWidget* keySeqWidget;
     SearchTextBar*      titleEdit;
+    bool                changed;
+
 };
 
 TagPropWidget::TagPropWidget(QWidget* const parent)
@@ -91,7 +94,8 @@ TagPropWidget::TagPropWidget(QWidget* const parent)
     QLabel* const titleLabel = new QLabel(this);
     titleLabel->setText(i18n("&Title:"));
 
-    d->titleEdit = new SearchTextBar(this, "TagEditDlgTitleEdit", i18n("Enter tag name here..."));
+    d->titleEdit = new SearchTextBar(this, "TagEditDlgTitleEdit",
+                                     i18n("Enter tag name here..."));
     d->titleEdit->setCaseSensitive(false);
     titleLabel->setBuddy(d->titleEdit);
 
@@ -109,9 +113,6 @@ TagPropWidget::TagPropWidget(QWidget* const parent)
 
     d->resetIconButton = new QPushButton(KIcon("view-refresh"),
                                          i18n("Reset"), this);
-    connect(d->resetIconButton, SIGNAL(clicked()),
-            this,SLOT(slotIconResetClicked()));
-
 
     QLabel* const kscTextLabel = new QLabel(this);
     kscTextLabel->setText(i18n("&Shortcut:"));
@@ -123,10 +124,11 @@ TagPropWidget::TagPropWidget(QWidget* const parent)
     QLabel* const tipLabel2 = new QLabel(this);
     tipLabel2->setTextFormat(Qt::RichText);
     tipLabel2->setWordWrap(true);
-    tipLabel2->setText(i18n("<p><b>Note</b>: this shortcut can be used to assign or unassign tag to items.</p>"));
+    tipLabel2->setText(i18n("<p><b>Note</b>: this shortcut can be used"
+                            "to assign or unassign tag to items.</p>"));
 
-    QPushButton* saveButton = new QPushButton("Save");
-    QPushButton* discardButton = new QPushButton("Discard");
+    d->saveButton = new QPushButton("Save");
+    d->discardButton = new QPushButton("Discard");
 
     // --------------------------------------------------------
 
@@ -142,8 +144,8 @@ TagPropWidget::TagPropWidget(QWidget* const parent)
     grid->addWidget(kscTextLabel,       5, 0, 1, 1);
     grid->addWidget(d->keySeqWidget,    5, 1, 1, 3);
     grid->addWidget(tipLabel2,          6, 0, 1, 4);
-    grid->addWidget(saveButton,         7, 0, 1, 1);
-    grid->addWidget(discardButton,      7, 1, 1, 1);
+    grid->addWidget(d->saveButton,      7, 0, 1, 1);
+    grid->addWidget(d->discardButton,   7, 1, 1, 1);
     grid->setRowStretch(8, 10);
     grid->setColumnStretch(3, 10);
     grid->setMargin(0);
@@ -153,31 +155,95 @@ TagPropWidget::TagPropWidget(QWidget* const parent)
 
     connect(d->iconButton, SIGNAL(clicked()),
             this, SLOT(slotIconChanged()));
+    connect(d->titleEdit, SIGNAL(textEdited(QString)),
+            this, SLOT(slotDataChanged()));
+    connect(d->resetIconButton, SIGNAL(clicked()),
+            this,SLOT(slotIconResetClicked()));
+    connect(d->keySeqWidget, SIGNAL(keySequenceChanged(QKeySequence)),
+            this, SLOT(slotDataChanged()));
+    connect(d->saveButton, SIGNAL(clicked()),
+            this, SLOT(slotSaveChanges()));
+    connect(d->discardButton, SIGNAL(clicked()),
+            this, SLOT(slotDiscardChanges()));
+
+    enableItems(TagPropWidget::DisabledAll);
 }
 
-void TagPropWidget::slotSelectionChanged(TAlbum* album)
+void TagPropWidget::slotSelectionChanged(QList<Album*> albums)
 {
-    if(!album)
+
+    if(albums.isEmpty())
     {
-        kDebug() << "Error! No valid pointer for TAlbum";
+        enableItems(TagPropWidget::DisabledAll);
         return;
     }
 
-    d->mainRootAlbum = album;
-    d->titleEdit->setText(album->title());
-    d->icon = album->icon();
-    d->iconButton->setIcon(SyncJob::getTagThumbnail(album));
+    if(d->changed)
+    {
+        int rez = KMessageBox::questionYesNo(this,
+                                             i18n("Previous tags were changed. "
+                                                "Save changes? "));
+        if(rez == KMessageBox::Yes)
+        {
+            slotSaveChanges();
+        }
+        d->changed = false;
+    }
+    if(albums.size() == 1)
+    {
+        TAlbum* album = dynamic_cast<TAlbum*>(albums.first());
+        if(!album)
+        {
+            return;
+        }
+        QString Seq = album->property(TagPropertyName::tagKeyboardShortcut());
+        d->selectedAlbums.clear();
+        d->selectedAlbums.append(album);
+        d->titleEdit->setText(album->title());
+        d->icon = album->icon();
+        d->iconButton->setIcon(SyncJob::getTagThumbnail(album));
+        d->keySeqWidget->setKeySequence(Seq);
+
+        enableItems(TagPropWidget::EnabledAll);
+    }
+    else
+    {
+        d->selectedAlbums.clear();
+        QList<Album*>::iterator it;
+        for(it = albums.begin(); it != albums.end(); ++it)
+        {
+            TAlbum* temp = dynamic_cast<TAlbum*>(*it);
+            d->selectedAlbums.append(temp);
+        }
+        d->titleEdit->clear();
+        d->icon.clear();
+        d->iconButton->setIcon(KIcon());
+        d->keySeqWidget->clearKeySequence();
+        enableItems(TagPropWidget::IconOnly);
+    }
+
+    d->changed = false;
 }
 
 void TagPropWidget::slotIconResetClicked()
 {
+    if(d->icon.isEmpty() || d->icon == QString("tag"))
+    {
+        return;
+    }
+
+    d->changed = true;
     d->icon = QString("tag");
-    d->iconButton->setIcon(KIconLoader::global()->loadIcon(d->icon, KIconLoader::NoGroup, 20));
+    d->iconButton->setIcon(KIconLoader::global()->loadIcon(d->icon,
+                                                           KIconLoader::NoGroup,
+                                                           20));
 }
 void TagPropWidget::slotIconChanged()
 {
+    d->changed = true;
     KIconDialog dlg(this);
-    dlg.setup(KIconLoader::NoGroup, KIconLoader::Application, false, 20, false, false, false);
+    dlg.setup(KIconLoader::NoGroup, KIconLoader::Application, false,
+              20, false, false, false);
     QString icon = dlg.openDialog();
 
     if (icon.isEmpty() || icon == d->icon)
@@ -186,6 +252,121 @@ void TagPropWidget::slotIconChanged()
     }
 
     d->icon = icon;
-    d->iconButton->setIcon(KIconLoader::global()->loadIcon(d->icon, KIconLoader::NoGroup, 20));
+    d->iconButton->setIcon(KIconLoader::global()->loadIcon(d->icon,
+                                                           KIconLoader::NoGroup,
+                                                           20));
 }
+
+void TagPropWidget::slotDataChanged()
+{
+    d->changed = true;
+}
+
+void TagPropWidget::slotSaveChanges()
+{
+    if(d->selectedAlbums.size() == 1)
+    {
+        QString title = d->titleEdit->text();
+        TAlbum* tag = d->selectedAlbums.first();
+        QString icon = d->icon;
+        QKeySequence ks = d->keySeqWidget->keySequence();
+
+        if (tag && tag->title() != title)
+        {
+            QString errMsg;
+
+            if (!AlbumManager::instance()->renameTAlbum(tag, title, errMsg))
+            {
+                KMessageBox::error(0, errMsg);
+            }
+        }
+
+        if (tag && tag->icon() != icon)
+        {
+            QString errMsg;
+
+            if (!AlbumManager::instance()->updateTAlbumIcon(tag, icon, 0, errMsg))
+            {
+                KMessageBox::error(0, errMsg);
+            }
+        }
+
+        if (tag && tag->property(TagPropertyName::tagKeyboardShortcut()) != ks.toString())
+        {
+            TagsActionMngr::defaultManager()->updateTagShortcut(tag->id(), ks);
+        }
+    }
+    else
+    {
+        QList<TAlbum*>::iterator it;
+        for(it = d->selectedAlbums.begin(); it != d->selectedAlbums.end(); ++it)
+        {
+            TAlbum* tag = *it;
+            if (tag && tag->icon() != d->icon)
+            {
+                QString errMsg;
+
+                if (!AlbumManager::instance()->updateTAlbumIcon(tag, d->icon,
+                                                                0, errMsg))
+                {
+                    KMessageBox::error(0, errMsg);
+                }
+            }
+        }
+    }
+    d->changed = false;
+}
+void TagPropWidget::slotDiscardChanges()
+{
+    if(d->selectedAlbums.size() == 1)
+    {
+        TAlbum* album = d->selectedAlbums.first();
+        QString Seq = album->property(TagPropertyName::tagKeyboardShortcut());
+
+        d->titleEdit->setText(album->title());
+        d->icon = album->icon();
+        d->iconButton->setIcon(SyncJob::getTagThumbnail(album));
+        d->keySeqWidget->setKeySequence(Seq);
+    }
+    else
+    {
+        d->icon.clear();
+    }
+    d->changed = false;
+}
+
+void TagPropWidget::enableItems(TagPropWidget::ItemsEnable value)
+{
+
+    bool val = false;
+    bool iconEnable = false;
+
+    if(value == TagPropWidget::DisabledAll)
+    {
+        val = false;
+        iconEnable = false;
+    }
+
+    if(value == TagPropWidget::EnabledAll)
+    {
+        val = true;
+        iconEnable = true;
+    }
+
+    if(value == TagPropWidget::IconOnly)
+    {
+        val = false;
+        iconEnable = true;
+    }
+
+    d->titleEdit->setEnabled(val);
+    d->keySeqWidget->setEnabled(val);
+
+    d->resetIconButton->setEnabled(iconEnable);
+    d->iconButton->setEnabled(iconEnable);
+    d->saveButton->setEnabled(iconEnable);
+    d->discardButton->setEnabled(iconEnable);
+
+}
+
 }

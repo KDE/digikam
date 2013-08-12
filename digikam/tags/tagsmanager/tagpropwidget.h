@@ -30,7 +30,7 @@
 namespace Digikam
 {
 
-class TAlbum;
+class Album;
 
 class TagPropWidget : public QWidget
 {
@@ -39,13 +39,27 @@ class TagPropWidget : public QWidget
 public:
     TagPropWidget(QWidget* const parent);
 
+    enum ItemsEnable { DisabledAll, EnabledAll, IconOnly};
+
 public Q_SLOTS:
-    void slotSelectionChanged(TAlbum* album);
+    void slotSelectionChanged(QList<Album*> albums);
 private Q_SLOTS:
     void slotIconResetClicked();
     void slotIconChanged();
+    void slotDataChanged();
+    void slotSaveChanges();
+    void slotDiscardChanges();
 
 private:
+
+    /**
+     * @brief enableItems - enable items based on selection.
+     *                      If no item is selected, disable all,
+     *                      if one item selected, enable all,
+     *                      if multiple selected, enable icon & icon button
+     */
+    void enableItems(ItemsEnable value);
+
     class PrivateTagProp;
     PrivateTagProp* d;
 };
