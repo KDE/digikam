@@ -35,8 +35,6 @@
 
 // Local includes
 
-#include "statesavingobject.h"
-#include "qualityscansettings.h"
 
 namespace Digikam
 {
@@ -78,4 +76,4 @@ private:
 
 } // namespace Digikam
 
-#endif // FACESCANDIALOG_H
+#endif // QUALITYSCANDIALOG_H
