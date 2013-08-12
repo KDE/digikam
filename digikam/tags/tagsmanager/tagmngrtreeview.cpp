@@ -24,6 +24,7 @@
  * ============================================================ */
 
 #include <QModelIndex>
+#include <QQueue>
 
 #include "tagmngrtreeview.h"
 
@@ -63,8 +64,39 @@ void TagMngrTreeView::slotExpandSelected()
 
 void TagMngrTreeView::slotExpandTree()
 {
-    d->expandLevel++;
-    expandToDepth(d->expandLevel);
+    QModelIndex root = this->model()->index(0,0);
+    QItemSelectionModel* model = this->selectionModel();
+    QModelIndexList selected = model->selectedIndexes();
+
+    QQueue<QModelIndex> greyNodes;
+
+    greyNodes.append(root);
+
+    while(!greyNodes.isEmpty())
+    {
+        QModelIndex current = greyNodes.dequeue();
+
+        if(!(current.isValid()))
+        {
+            continue;
+        }
+        int it = 0;
+        QModelIndex child = current.child(it++,0);
+
+        while(child.isValid())
+        {
+
+            if(this->isExpanded(child))
+            {
+                greyNodes.enqueue(child);
+            }
+            else
+            {
+                expand(child);
+            }
+            child = current.child(it++,0);
+        }
+    }
 }
 
 } // namespace Digikam
