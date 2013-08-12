@@ -43,6 +43,7 @@
 #include "showfotothumbnailbar.h"
 //#include "albummanager.h"
 #include "showfotoiteminfo.h"
+#include "showfotothumbnailmodel.h"
 
 namespace ShowFoto
 {
@@ -58,7 +59,7 @@ void ShowfotoDelegate::ShowfotoDelegatePrivate::clearRects()
     resolutionRect       = QRect(0, 0, 0, 0);
     sizeRect             = QRect(0, 0, 0, 0);
 //  downloadRect         = QRect(0, 0, 0, 0);
-//  lockRect             = QRect(0, 0, 0, 0);
+    lockRect             = QRect(0, 0, 0, 0);
     tagRect              = QRect(0, 0, 0, 0);
     ratingRect           = QRect(0, 0, 0, 0);
     imageInformationRect = QRect(0, 0, 0, 0);
@@ -69,11 +70,13 @@ void ShowfotoDelegate::ShowfotoDelegatePrivate::clearRects()
 ShowfotoDelegate::ShowfotoDelegate(QObject* const parent)
     : ItemViewShowfotoDelegate(*new ShowfotoDelegatePrivate, parent)
 {
+    qDebug()<< "showfotoDelegate Constructor";
 }
 
 ShowfotoDelegate::ShowfotoDelegate(ShowfotoDelegate::ShowfotoDelegatePrivate& dd, QObject* const parent)
     : ItemViewShowfotoDelegate(dd, parent)
 {
+    qDebug()<< "showfotoDelegate Constructor";
 }
 
 ShowfotoDelegate::~ShowfotoDelegate()
@@ -201,6 +204,11 @@ QRect ShowfotoDelegate::groupIndicatorRect() const
 //    Q_D(const ShowfotoDelegate);
 //    return d->lockRect;
 //}
+
+void ShowfotoDelegate::prepareThumbnails(ShowfotoThumbnailModel* thumbModel, const QList<QModelIndex>& indexes)
+{
+    thumbModel->prepareThumbnails(indexes, thumbnailSize());
+}
 
 QPixmap ShowfotoDelegate::retrieveThumbnailPixmap(const QModelIndex& index, int thumbnailSize)
 {
@@ -474,6 +482,12 @@ void ShowfotoDelegate::modelChanged()
     setModel(d->currentView ? d->currentView->model() : 0);
 }
 
+QRect ShowfotoDelegate::lockIndicatorRect() const
+{
+    Q_D(const ShowfotoDelegate);
+    return d->lockRect;
+}
+
 void ShowfotoDelegate::modelContentsChanged()
 {
     clearModelDataCaches();
@@ -574,6 +588,7 @@ void ShowfotoThumbnailDelegatePrivate::init(ShowfotoThumbnailDelegate* const q)
 ShowfotoThumbnailDelegate::ShowfotoThumbnailDelegate(ShowfotoThumbnailBar* const parent)
     : ShowfotoDelegate(*new ShowfotoThumbnailDelegatePrivate, parent)
 {
+    qDebug() << "Thumbnail delegate constructor";
     Q_D(ShowfotoThumbnailDelegate);
     d->init(this);
 }
@@ -671,10 +686,10 @@ void ShowfotoThumbnailDelegate::updateRects()
 
 // --- ShowfotoNormalDelegate -----------------------------------------------------------------------
 
-void ShowfotoNormalDelegatePrivate::init(ShowfotoNormalDelegate* const q/*, ShowfotoThumbnailBar* const parent*/)
+void ShowfotoNormalDelegatePrivate::init(ShowfotoNormalDelegate* const q, ShowfotoThumbnailBar* const parent)
 {
     //categoryDrawer = new ShowfotoCategoryDrawer(parent);
-
+    Q_UNUSED(parent);
     QObject::connect(ShowfotoSettings::instance(), SIGNAL(setupChanged()),
                      q, SLOT(slotSetupChanged()));
 }
@@ -685,7 +700,7 @@ ShowfotoNormalDelegate::ShowfotoNormalDelegate(ShowfotoThumbnailBar* const paren
     : ShowfotoDelegate(*new ShowfotoNormalDelegatePrivate, parent)
 {
     Q_D(ShowfotoNormalDelegate);
-    d->init(this/*, parent*/);
+    d->init(this, parent);
 }
 
 ShowfotoNormalDelegate::ShowfotoNormalDelegate(ShowfotoNormalDelegatePrivate& dd, ShowfotoThumbnailBar* const parent)
@@ -693,7 +708,7 @@ ShowfotoNormalDelegate::ShowfotoNormalDelegate(ShowfotoNormalDelegatePrivate& dd
 {
 
     Q_D(ShowfotoNormalDelegate);
-    d->init(this/*, parent*/);
+    d->init(this, parent);
 }
 
 ShowfotoNormalDelegate::~ShowfotoNormalDelegate()

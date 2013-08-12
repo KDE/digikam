@@ -3,10 +3,10 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2012-07-5
+ * Date        : 2013-07-05
  * Description : Qt model for Showfoto entries
  *
- * Copyright (C) 2012 by Mohamed Anwer <mohammed dot ahmed dot anwer at gmail dot com>
+ * Copyright (C) 2013 by Mohamed Anwer <mohammed dot ahmed dot anwer at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -46,7 +46,6 @@ public:
         incrementalRefreshRequested = false;
         sendRemovalSignals          = false;
         incrementalUpdater          = 0;
-        Loader                      = 0;
 
     }
 
@@ -61,7 +60,6 @@ public:
 public:
 
     ShowfotoItemInfoList                      infos;
-    ShowfotoItemLoader*                       Loader;
     QHash<qlonglong, int>                     idHash;
     QHash<QString, qlonglong>                 fileUrlHash;
 
@@ -328,6 +326,8 @@ QList<QModelIndex> ShowfotoImageModel::indexesForUrl(const KUrl& fileUrl) const
         QList<QModelIndex> indexes;
         const int          size = d->infos.size();
 
+        qDebug() << "size:: " ;
+        qDebug() << d->infos.size();
         for (int i = 0; i < size; i++)
         {
             if (d->infos.at(i).url == fileUrl)
@@ -624,6 +624,7 @@ void ShowfotoImageModel::publiciseInfos(const QList<ShowfotoItemInfo>& infos)
         }
     }
     endInsertRows();
+    qDebug() << "end insert rows ran";
     emit itemInfosAdded(infos);
 }
 

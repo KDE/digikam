@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="205" name="showfoto" >
+<gui version="200" name="showfoto" >
 
 <MenuBar>
 
@@ -44,6 +44,8 @@
         <Action name="editorwindow_zoomfit2window" />
         <Action name="editorwindow_zoomfit2select" />
         <Separator/>
+        <Action name="editorwindow_showthumbs" />
+        <Separator/>
         <Action name="editorwindow_underexposure" />
         <Action name="editorwindow_overexposure" />
         <Action name="editorwindow_cmview" />
@@ -64,7 +66,6 @@
         <Action name="editorwindow_flip_vert" />
         <Separator/>
         <Action name="editorwindow_crop" />
-        <Action name="editorwindow_autocrop" />
         <Action name="editorwindow_resize" />
     </Menu>
 
@@ -75,11 +76,10 @@
     </Menu>
 
     <Menu name="help" ><text>&amp;Help</text>
-        <Action name="help_rawcameralist"/>
-        <Action name="help_librariesinfo"/>
-        <Separator/>
-        <Action name="help_donatemoney" />
-        <Action name="help_contribute" />
+        <Action name="editorwindow_rawcameralist"/>
+        <Action name="editorwindow_librariesinfo"/>
+        <Action name="editorwindow_donatemoney" />
+        <Action name="editorwindow_contribute" />
     </Menu>
 
     <Merge/>
@@ -89,7 +89,6 @@
         <Action name="options_show_menubar"/>
         <Action name="options_show_statusbar"/>
         <Action name="options_show_toolbar"/>
-        <Action name="editorwindow_showthumbs" />
         <Separator/>
         <Action name="theme_menu" />
         <Action name="options_configure_keybinding" />

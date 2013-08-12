@@ -34,6 +34,7 @@
 // Local includes
 
 #include "showfotoimagemodel.h"
+#include "showfotothumbnailmodel.h"
 #include "showfotoitemsortsettings.h"
 
 namespace ShowFoto

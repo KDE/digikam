@@ -18,15 +18,20 @@ SET(showfoto_SRCS
     ${libshowfotosetup_SRCS}
     
     thumbbar/showfotoiteminfo.cpp
-    thumbbar/showfotoitemloader.cpp
     thumbbar/showfotoimagemodel.cpp
     thumbbar/showfotothumbnailmodel.cpp
-    thumbbar/showfotoitemsortsettings.cpp
     thumbbar/showfotofiltermodel.cpp
-    thumbbar/itemviewshowfotodelegate.cpp
+    thumbbar/showfotomodel.cpp
+    thumbbar/showfotoitemsortsettings.cpp
     thumbbar/showfotosettings.cpp
+    thumbbar/itemviewshowfotodelegate.cpp
     thumbbar/showfotodelegate.cpp
+    thumbbar/showfototooltipfiller.cpp
+    thumbbar/showfotooverlays.cpp
+    thumbbar/showfotodragdrop.cpp
+    thumbbar/showfotocategorizedview.cpp
     thumbbar/showfotothumbnailbar.cpp
+    
     main/main.cpp
     main/showfoto.cpp
    )

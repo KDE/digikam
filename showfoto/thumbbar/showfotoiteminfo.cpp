@@ -64,9 +64,11 @@ bool ShowfotoItemInfo::operator==(const ShowfotoItemInfo& info) const
     bool b2  = name             == info.name;
     bool b3  = folder           == info.folder;
     bool b4  = mime             == info.mime;
-    bool b5 = id                == info.id;
+    bool b5  = id               == info.id;
+    bool b6  = rating           == info.rating;
+    bool b7  = photoInfo        == info.photoInfo;
 
-    return b1 && b2 && b3 && b4 && b5;
+    return b1 && b2 && b3 && b4 && b5 && b6 && b7;
 }
 
 bool ShowfotoItemInfo::operator!=(const ShowfotoItemInfo& info) const
@@ -82,6 +84,8 @@ QDataStream& operator<<(QDataStream& ds, const ShowfotoItemInfo& info)
     ds << info.mime;
     ds << info.size;
     ds << info.id;
+    ds << info.rating;
+    ds << info.photoInfo;
 
     return ds;
 }
@@ -93,6 +97,8 @@ QDataStream& operator>>(QDataStream& ds, ShowfotoItemInfo& info)
     ds >> info.mime;
     ds >> info.size;
     ds >> info.id;
+    ds >> info.rating;
+    ds >> info.photoInfo;
 
     return ds;
 }

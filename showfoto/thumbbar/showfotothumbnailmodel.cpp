@@ -24,34 +24,95 @@
 #include "showfotothumbnailmodel.moc"
 
 #include "QDebug"
+#include "kdebug.h"
+#include "QFileInfo"
 
+#include <kdebug.h>
+#include <kcodecs.h>
+#include <kio/global.h>
+#include <klocale.h>
+#include <kmimetype.h>
+#include <solid/device.h>
+#include <solid/storageaccess.h>
+#include <solid/storagedrive.h>
+#include <solid/storagevolume.h>
+
+// LibKDcraw includes
+
+#include <libkdcraw/kdcraw.h>
+
+#include "dimg.h"
+#include "dmetadata.h"
+#include "imagescanner.h"
+
+#include "thumbnailsize.h"
+#include "thumbnailloadthread.h"
+#include "loadingdescription.h"
+
+using namespace Digikam;
 namespace ShowFoto {
 
 class ShowfotoThumbnailModel::Private
 {
 public:
-    Private() :
-        loader(0),
+
+        Private() :
+        thread(0),
+        preloadThread(0),
         thumbSize(0),
         lastGlobalThumbSize(0),
+        preloadThumbSize(0),
         emitDataChanged(true)
     {
+            maxThumbSize = 256;
     }
 
-    ShowfotoItemLoader* loader;
-    ThumbnailSize       thumbSize;
-    ThumbnailSize       lastGlobalThumbSize;
-    bool                emitDataChanged;
+    ThumbnailLoadThread*   thread;
+    ThumbnailLoadThread*   preloadThread;
+    ThumbnailSize          thumbSize;
+    ThumbnailSize          lastGlobalThumbSize;
+    ThumbnailSize          preloadThumbSize;
+    QRect                  detailRect;
+    int                    maxThumbSize;
+    bool                   emitDataChanged;
+
+    int preloadThumbnailSize() const
+    {
+        if (preloadThumbSize.size())
+        {
+            return preloadThumbSize.size();
+        }
+
+        return thumbSize.size();
+    }
 };
 
-ShowfotoThumbnailModel::ShowfotoThumbnailModel(QObject *parent)
+ShowfotoThumbnailModel::ShowfotoThumbnailModel(QObject* parent)
     : ShowfotoImageModel(parent), d(new Private)
 {
+    connect(this,SIGNAL(signalThumbInfo(ShowfotoItemInfo,QImage)),
+            this,SLOT(slotThumbInfoLoaded(ShowfotoItemInfo,QImage)));
+
+    setKeepsFileUrlCache(true);
 }
 
 ShowfotoThumbnailModel::~ShowfotoThumbnailModel()
 {
+    delete d->preloadThread;
     delete d;
+}
+
+void ShowfotoThumbnailModel::setThumbnailLoadThread(ThumbnailLoadThread* thread)
+{
+    d->thread = thread;
+
+    connect(d->thread, SIGNAL(signalThumbnailLoaded(LoadingDescription,QPixmap)),
+            this, SLOT(slotThumbnailLoaded(LoadingDescription,QPixmap)));
+}
+
+ThumbnailLoadThread* ShowfotoThumbnailModel::thumbnailLoadThread() const
+{
+    return d->thread;
 }
 
 ThumbnailSize ShowfotoThumbnailModel::thumbnailSize() const
@@ -59,41 +120,142 @@ ThumbnailSize ShowfotoThumbnailModel::thumbnailSize() const
     return d->thumbSize;
 }
 
+void ShowfotoThumbnailModel::setThumbnailSize(const ThumbnailSize& size)
+{
+    d->lastGlobalThumbSize = size;
+    d->thumbSize = size;
+}
+
+void ShowfotoThumbnailModel::setPreloadThumbnailSize(const ThumbnailSize& size)
+{
+    d->preloadThumbSize = size;
+}
+
 void ShowfotoThumbnailModel::setEmitDataChanged(bool emitSignal)
 {
     d->emitDataChanged = emitSignal;
 }
 
-void ShowfotoThumbnailModel::setLoader(ShowfotoItemLoader* Loader)
+void ShowfotoThumbnailModel::setPreloadThumbnails(bool preload)
 {
-    d->loader = Loader;
+    if (preload)
+    {
+        if (!d->preloadThread)
+        {
+            d->preloadThread = new ThumbnailLoadThread;
+            d->preloadThread->setPixmapRequested(false);
+            d->preloadThread->setPriority(QThread::LowestPriority);
+        }
+
+        connect(this, SIGNAL(allRefreshingFinished()),
+                this, SLOT(preloadAllThumbnails()));
+    }
+    else
+    {
+        delete d->preloadThread;
+        d->preloadThread = 0;
+        disconnect(this, SIGNAL(allRefreshingFinished()),
+                   this, SLOT(preloadAllThumbnails()));
+    }
+}
+
+void ShowfotoThumbnailModel::prepareThumbnails(const QList<QModelIndex>& indexesToPrepare)
+{
+    prepareThumbnails(indexesToPrepare, d->thumbSize);
+}
+
+void ShowfotoThumbnailModel::prepareThumbnails(const QList<QModelIndex>& indexesToPrepare, const ThumbnailSize& thumbSize)
+{
+    if (!d->thread)
+    {
+        return;
+    }
+
+    QStringList fileUrls;
+    foreach(const QModelIndex& index, indexesToPrepare)
+    {
+        fileUrls << showfotoItemInfoRef(index).url.prettyUrl();
+    }
+    d->thread->findGroup(fileUrls, thumbSize.size());
+}
+
+void ShowfotoThumbnailModel::preloadThumbnails(const QList<ShowfotoItemInfo>& infos)
+{
+    if (!d->preloadThread)
+    {
+        return;
+    }
+
+    QStringList fileUrls;
+    foreach(const ShowfotoItemInfo& info, infos)
+    {
+        fileUrls << info.url.prettyUrl();
+    }
+    d->preloadThread->stopAllTasks();
+    d->preloadThread->pregenerateGroup(fileUrls, d->preloadThumbnailSize());
+}
+
+void ShowfotoThumbnailModel::preloadThumbnails(const QList<QModelIndex>& infos)
+{
+    if (!d->preloadThread)
+    {
+        return;
+    }
+
+    QStringList fileUrls;
+    foreach(const QModelIndex& index, infos)
+    {
+        fileUrls << showfotoItemInfoRef(index).url.prettyUrl();
+    }
+    d->preloadThread->stopAllTasks();
+    d->preloadThread->pregenerateGroup(fileUrls, d->preloadThumbnailSize());
+}
+
+void ShowfotoThumbnailModel::preloadAllThumbnails()
+{
+    preloadThumbnails(showfotoItemInfos());
+}
+
+void ShowfotoThumbnailModel::showfotoItemInfosCleared()
+{
+    if (d->preloadThread)
+    {
+        d->preloadThread->stopAllTasks();
+    }
 }
 
 QVariant ShowfotoThumbnailModel::data(const QModelIndex& index, int role) const
 {
-    if (role == ThumbnailRole && d->loader && index.isValid())
+
+    if (role == ThumbnailRole && d->thread && index.isValid())
     {
+        QPixmap   thumbnail;
+        QImage    thumbnailImage;
         ShowfotoItemInfo info = showfotoItemInfo(index);
-        QString          path = info.url.prettyUrl();
-        CachedItem       item;
+        QString   url = info.url.prettyUrl();
+        QString   folder = info .folder;
+        QString   itemName = info.name;
 
-        if (info.isNull() || path.isEmpty())
+        if (info.isNull() || url.isEmpty())
         {
-            return QVariant(d->loader->mimeTypeThumbnail(path, d->thumbSize.size()));
+            return QVariant(QVariant::Pixmap);
         }
 
-        bool thumbChanged = false;
-        if(d->thumbSize != d->lastGlobalThumbSize)
+        if (!d->detailRect.isNull())
         {
-            thumbChanged = true;
+            if (pixmapForItem(url,thumbnail))
+            {
+                return thumbnail;
+            }
+        }
+        else if(getThumbnail(folder,itemName,thumbnailImage))
+        {
+            thumbnailImage = thumbnailImage.scaled(d->thumbSize.size(),d->thumbSize.size(),Qt::KeepAspectRatio);
+            emit signalThumbInfo(info,thumbnailImage);
+            return thumbnailImage;
         }
 
-        if (d->loader->loadThumbnailForItem(info, item, d->thumbSize, thumbChanged))
-        {
-            return QVariant(item.second);
-        }
-
-        return QVariant(d->loader->mimeTypeThumbnail(path, d->thumbSize.size()));
+        return QVariant(QVariant::Pixmap);
     }
 
     return ShowfotoImageModel::data(index, role);
@@ -107,6 +269,7 @@ bool ShowfotoThumbnailModel::setData(const QModelIndex& index, const QVariant& v
         {
             case QVariant::Invalid:
                 d->thumbSize  = d->lastGlobalThumbSize;
+                d->detailRect = QRect();
                 break;
 
             case QVariant::Int:
@@ -117,8 +280,19 @@ bool ShowfotoThumbnailModel::setData(const QModelIndex& index, const QVariant& v
                 }
                 else
                 {
-                    d->lastGlobalThumbSize = d->thumbSize;
                     d->thumbSize = value.toInt();
+                }
+                break;
+
+            case QVariant::Rect:
+
+                if (value.isNull())
+                {
+                    d->detailRect = QRect();
+                }
+                else
+                {
+                    d->detailRect = value.toRect();
                 }
                 break;
 
@@ -130,11 +304,8 @@ bool ShowfotoThumbnailModel::setData(const QModelIndex& index, const QVariant& v
     return ShowfotoImageModel::setData(index, value, role);
 }
 
-
 void ShowfotoThumbnailModel::slotThumbnailLoaded(const LoadingDescription& loadingDescription, const QPixmap& thumb)
 {
-    qDebug() << "got desc and thumb";
-    qDebug() << loadingDescription.filePath;
     if (thumb.isNull())
     {
         return;
@@ -159,5 +330,135 @@ void ShowfotoThumbnailModel::slotThumbnailLoaded(const LoadingDescription& loadi
     }
 }
 
+
+bool ShowfotoThumbnailModel::pixmapForItem(QString url, QPixmap& pix) const
+{
+    if (d->thumbSize.size() > d->maxThumbSize)
+    {
+        //TODO: Install a widget maximum size to prevent this situation
+        bool hasPixmap = d->thread->find(url, pix, d->maxThumbSize);
+
+        if (hasPixmap)
+        {
+            qDebug() << "Thumbbar: Requested thumbnail size" << d->thumbSize.size()
+                       << "is larger than the maximum thumbnail size" << d->maxThumbSize
+                       << ". Returning a scaled-up image.";
+            pix = pix.scaled(d->thumbSize.size(), d->thumbSize.size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    else
+    {
+        return d->thread->find(url, pix, d->thumbSize.size());
+    }
+}
+
+bool ShowfotoThumbnailModel::getThumbnail(const QString& folder, const QString& itemName, QImage& thumbnail) const
+{
+    QString path = folder + QString("/") + itemName;
+
+    // Try to get preview from Exif data (good quality). Can work with Raw files
+
+    DMetadata metadata(path);
+    metadata.getImagePreview(thumbnail);
+
+    if (!thumbnail.isNull())
+    {
+        return true;
+    }
+
+    // RAW files : try to extract embedded thumbnail using libkdcraw
+
+    KDcrawIface::KDcraw::loadRawPreview(thumbnail, path);
+
+    if (!thumbnail.isNull())
+    {
+        return true;
+    }
+
+    KSharedConfig::Ptr config  = KGlobal::config();
+    KConfigGroup group         = config->group("Camera Settings");
+    bool turnHighQualityThumbs = group.readEntry("TurnHighQualityThumbs", false);
+
+    // Try to get thumbnail from Exif data (poor quality).
+    if(!turnHighQualityThumbs)
+    {
+        thumbnail = metadata.getExifThumbnail(true);
+
+        if (!thumbnail.isNull())
+        {
+            return true;
+        }
+    }
+
+    // THM files: try to get thumbnail from '.thm' files if we didn't manage to get
+    // thumbnail from Exif. Any cameras provides *.thm files like JPEG files with RAW files.
+    // Using this way is always speed up than ultimate loading using DImg.
+    // Note: the thumbnail extracted with this method can be in poor quality.
+    // 2006/27/01 - Gilles - Tested with my Minolta Dynax 5D USM camera.
+
+    QFileInfo fi(path);
+
+    if (thumbnail.load(folder + QString("/") + fi.baseName() + QString(".thm")))        // Lowercase
+    {
+        if (!thumbnail.isNull())
+        {
+            return true;
+        }
+    }
+    else if (thumbnail.load(folder + QString("/") + fi.baseName() + QString(".THM")))   // Uppercase
+    {
+        if (!thumbnail.isNull())
+        {
+            return true;
+        }
+    }
+
+    // Finally, we trying to get thumbnail using DImg API (slow).
+
+    kDebug() << "Use DImg loader to get thumbnail from : " << path;
+
+    DImg dimgThumb(path);
+
+    if (!dimgThumb.isNull())
+    {
+        thumbnail = dimgThumb.copyQImage();
+        return true;
+    }
+
+    return false;
+}
+
+void ShowfotoThumbnailModel::slotThumbInfoLoaded(const ShowfotoItemInfo& info, const QImage& thumbnailImage)
+{
+    QImage thumbnail = thumbnailImage;
+
+    if(thumbnail.isNull())
+    {
+        thumbnail = QImage();
+    }
+
+    foreach(const QModelIndex& index, indexesForUrl(info.url))
+    {
+        if (thumbnail.isNull())
+        {
+            emit thumbnailFailed(index, d->thumbSize.size());
+        }
+        else
+        {
+            emit thumbnailAvailable(index, d->thumbSize.size());
+
+            if (d->emitDataChanged)
+            {
+                emit dataChanged(index, index);
+            }
+        }
+    }
+
+}
 
 } // namespace ShowFoto

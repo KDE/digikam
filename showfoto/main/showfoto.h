@@ -35,6 +35,7 @@
 // Local includes
 
 #include "editorwindow.h"
+#include "thumbbar/showfotoiteminfo.h"
 
 class KJob;
 
@@ -108,7 +109,7 @@ private Q_SLOTS:
     void slotFilePrint();
 
     void slotOpenFile();
-    void slotOpenUrl(const KUrl&);
+    void slotOpenUrl(const ShowfotoItemInfo& info);
     void slotOpenFolder(const KUrl&);
     void slotOpenFilesInFolder();
     void slotDeleteCurrentItem();
@@ -127,18 +128,18 @@ private Q_SLOTS:
     void slotRevert();
 
     //new slots
-    void slotSetSelected(KUrl url);
-    void slotSetCurrentItem();
-    void slotNewThumbItem(KUrl url);
     void slotLastDirectory(KUrl::List::const_iterator);
     void slotSorry();
     void slotToggleNav(int i);
     void slotToggleActions(bool b);
+    void slotDroppedItems(QList<ShowfotoItemInfo>);
 
 Q_SIGNALS:
     void signalLoadCurrentItem(const KUrl::List& urlList);
     void signalOpenFolder(const KUrl&);
     void signalOpenFile(const KUrl::List& urls);
+    void signalInfoList(ShowfotoItemInfoList&);
+    
 
 private:
 

@@ -66,7 +66,7 @@ public:
     QRect                  resolutionRect;
     QRect                  sizeRect;
 //  QRect                  downloadRect;
-//  QRect                  lockRect;
+    QRect                  lockRect;
     QRect                  tagRect;
     QRect                  imageInformationRect;
     QRect                  pickLabelRect;
@@ -78,7 +78,6 @@ public:
     bool                   ratingOverThumbnail;
 
     QCache<int, QRect>     actualPixmapRectCache;
-//  ShowfotoCategoryDrawer*  categoryDrawer;
 
     ShowfotoThumbnailBar* currentView;
     QAbstractItemModel*    currentModel;
@@ -124,7 +123,7 @@ public:
     {
     }
 
-    void init(ShowfotoNormalDelegate* const q/*, ShowfotoThumbnailBar* const parent*/);
+    void init(ShowfotoNormalDelegate* const q, ShowfotoThumbnailBar* const parent);
 };
 
 } // namespace Digikam

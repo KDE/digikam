@@ -29,6 +29,8 @@
 #include "showfotoimagemodel.h"
 #include "thumbnailsize.h"
 #include "loadingdescription.h"
+#include "thumbnailloadthread.h"
+using namespace Digikam;
 
 namespace ShowFoto {
 
@@ -39,22 +41,27 @@ class ShowfotoThumbnailModel : public ShowfotoImageModel
     Q_OBJECT
 
 public:
+
     /**
-     *  An ThumbnailModel that supports thumbnail loading.
+     *  An ImageModel that supports thumbnail loading.
      *  You need to set a ThumbnailLoadThread to enable thumbnail loading.
      *  Adjust the thumbnail size to your needs.
-     *  Note that setKeepsFilePathCache is enabled per default.
+     *  Note that setKeepsFilePatindexesForPathhCache is enabled per default.
      */
     explicit ShowfotoThumbnailModel(QObject* parent);
     ~ShowfotoThumbnailModel();
 
-    void setLoader(ShowfotoItemLoader* Loader);
+    /** Enable thumbnail loading and set the thread that shall be used.
+     *  The thumbnail size of this thread will be adjusted.
+     */
+    void setThumbnailLoadThread(ThumbnailLoadThread* thread);
+    ThumbnailLoadThread* thumbnailLoadThread() const;
 
     /// Set the thumbnail size to use
     void setThumbnailSize(const ThumbnailSize& thumbSize);
 
-    /// Get the thumbnail size
-    ThumbnailSize thumbnailSize() const;
+    /// If you want to fix a size for preloading, do it here.
+    void setPreloadThumbnailSize(const ThumbnailSize& thumbSize);
 
     void setExifRotate(bool rotate);
 
@@ -64,6 +71,15 @@ public:
      *  Default is true.
      */
     void setEmitDataChanged(bool emitSignal);
+
+    /**
+     * Enable preloading of thumbnails:
+     * If preloading is enabled, for every entry in the model a thumbnail generation is started.
+     * Default: false.
+     */
+    void setPreloadThumbnails(bool preload);
+
+    ThumbnailSize thumbnailSize() const;
 
     /**
      *  Handles the ThumbnailRole.
@@ -80,15 +96,46 @@ public:
      */
     virtual bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::DisplayRole);
 
+    bool pixmapForItem(QString url, QPixmap& pix) const;
+    bool getThumbnail(const QString& folder, const QString& itemName, QImage& thumbnail) const;
+
+public Q_SLOTS:
+
+    /** Prepare the thumbnail loading for the given indexes
+     */
+    void prepareThumbnails(const QList<QModelIndex>& indexesToPrepare);
+    void prepareThumbnails(const QList<QModelIndex>& indexesToPrepare, const ThumbnailSize& thumbSize);
+
+    /**
+     *  Preload thumbnail for the given infos resp. indexes.
+     *  Note: Use setPreloadThumbnails to automatically preload all entries in the model.
+     *  Note: This only ensures thumbnail generation. It is not guaranteed that pixmaps
+     *  are stored in the cache. For thumbnails that are expect to be drawn immediately,
+     *  include them in prepareThumbnails().
+     *  Note: Stops preloading of previously added thumbnails.
+     */
+    void preloadThumbnails(const QList<ShowfotoItemInfo>&);
+    void preloadThumbnails(const QList<QModelIndex>&);
+    void preloadAllThumbnails();
+
+    void slotThumbInfoLoaded(const ShowfotoItemInfo& info, const QImage& thumbnailImage);
 Q_SIGNALS:
 
     void thumbnailAvailable(const QModelIndex& index, int requestedSize);
     void thumbnailFailed(const QModelIndex& index, int requestedSize);
 
-public Q_SLOTS:
+    void signalThumbInfo(const ShowfotoItemInfo& info,const QImage& thumbnailImage) const;
+
+protected:
+
+    void showfotoItemInfosCleared();
+
+protected Q_SLOTS:
+
     void slotThumbnailLoaded(const LoadingDescription& loadingDescription, const QPixmap& thumb);
 
 private:
+
     class Private;
     Private* const d;
 };

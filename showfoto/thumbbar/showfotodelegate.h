@@ -37,6 +37,7 @@ namespace ShowFoto {
 class ShowfotoThumbnailBar;
 class ShowfotoThumbnailDelegatePrivate;
 class ShowfotoNormalDelegatePrivate;
+class ShowfotoFilterModel;
 
 class ShowfotoDelegate : public ItemViewShowfotoDelegate
 {
@@ -52,7 +53,6 @@ public:
     QRect tagsRect() const;
     QRect actualPixmapRect(const QModelIndex& index) const;
     QRect groupIndicatorRect() const;
-    QRect downloadIndicatorRect() const;
     QRect lockIndicatorRect() const;
 
     int calculatethumbSizeToFit(int ws);
@@ -75,6 +75,10 @@ public:
      * the given index from the given index, which must adhere to ShowfotoThumbnailModel semantics.
      */
     static QPixmap retrieveThumbnailPixmap(const QModelIndex& index, int thumbnailSize);
+
+    /** Call this from a paint event, with all indexes expected to be painted immediately,
+     *  so that thumbnails become available in order. */
+    void prepareThumbnails(ShowfotoThumbnailModel* thumbModel, const QList<QModelIndex>& indexes);
 
 public:
 

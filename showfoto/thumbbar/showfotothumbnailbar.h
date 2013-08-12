@@ -25,19 +25,12 @@
 #define SHOWFOTOTHUMBNAILBAR_H
 
 //Local Includes
-#include "dcategorizedview.h"
-#include "showfotoimagemodel.h"
-#include "showfotothumbnailmodel.h"
-#include "showfotofiltermodel.h"
-#include "showfotoiteminfo.h"
-#include "showfotodelegate.h"
-#include "imagedelegateoverlay.h"
 
-using namespace Digikam;
+#include "showfotocategorizedview.h"
 
 namespace ShowFoto {
 
-class ShowfotoThumbnailBar : public DCategorizedView
+class ShowfotoThumbnailBar : public ShowfotoCategorizedView
 {
     Q_OBJECT
 
@@ -46,10 +39,8 @@ public:
     explicit ShowfotoThumbnailBar(QWidget* const parent = 0);
     ~ShowfotoThumbnailBar();
 
-    void setModels(ShowfotoImageModel* model, ShowfotoSortFilterModel* filterModel);
-
     /**
-     * This installs a duplicate filter model, if the ShowfotoImageModel may contain duplicates.
+     * This installs a duplicate filter model, if the ShwofotoImageModel may contain duplicates.
      * Otherwise, just use setModels().
      */
     void setModelsFiltered(ShowfotoImageModel* model, ShowfotoSortFilterModel* filterModel);
@@ -64,32 +55,12 @@ public:
     void setFlow(QListView::Flow newFlow);
 
     void installRatingOverlay();
-
-    ShowfotoImageModel* showfotoImageModel() const;
-    ShowfotoSortFilterModel* showfotoSortFilterModel() const;
-    ShowfotoFilterModel* showfotoFilterModel() const;
-    ShowfotoThumbnailModel* showfotoThumbnailModel() const;
-    QSortFilterProxyModel* filterModel() const;
-    ShowfotoDelegate* delegate() const;
-
-    void setItemDelegate(ShowfotoDelegate* delegate);
-    ThumbnailSize thumbnailSize() const;
-    void scrollToStoredItem();
+    ShowfotoItemInfo findItemByUrl(const KUrl url);
 
 public Q_SLOTS:
 
-    //TODO: make sure that you won't use ratings
-    //void assignRating(const QList<QModelIndex>& index, int rating);
+    void assignRating(const QList<QModelIndex>& index, int rating);
     void slotDockLocationChanged(Qt::DockWidgetArea area);
-
-protected Q_SLOTS:
-
-    void slotShowfotoItemInfosAdded();
-
-Q_SIGNALS:
-
-    /// Emitted when a new model is set
-    void modelChanged();
 
 protected:
 
@@ -100,7 +71,7 @@ private:
 
     class Private;
     Private* const d;
-    
 };
+
 }
 #endif // SHOWFOTOTHUMBNAILBAR_H

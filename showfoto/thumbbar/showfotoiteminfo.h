@@ -30,6 +30,9 @@
 
 #include "kurl.h"
 
+#include "infocontainer.h"
+using namespace Digikam;
+
 class QDataStream;
 
 namespace ShowFoto
@@ -67,6 +70,9 @@ public:
 
     /// Unique image id
     qlonglong          id;
+
+    PhotoInfoContainer photoInfo;
+    int                rating;
 
 };
 
