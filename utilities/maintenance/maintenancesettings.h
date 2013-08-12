@@ -30,6 +30,7 @@
 
 // Local includes
 
+#include "album.h"
 #include "facescansettings.h"
 #include "metadatasynchronizer.h"
 
@@ -45,6 +46,12 @@ public:
     virtual ~MaintenanceSettings();
 
 public:
+
+    bool             wholeAlbums;
+    bool             wholeTags;
+
+    AlbumList        albums;
+    AlbumList        tags;
 
     /// Find new items on whole collection
     bool             newItems;

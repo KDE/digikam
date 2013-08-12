@@ -92,6 +92,7 @@ BWSepiaTool::BWSepiaTool(QObject* const parent)
     setToolName(i18n("Black and White"));
     setToolIcon(SmallIcon("bwtonal"));
     setToolHelp("blackandwhitetool.anchor");
+    setInitPreview(true);
 
     // -------------------------------------------------------------
 
@@ -114,7 +115,6 @@ BWSepiaTool::BWSepiaTool(QObject* const parent)
     d->bwsepiaSettings = new BWSepiaSettings(d->gboxSettings->plainPage(), iface.original());
 
     setToolSettings(d->gboxSettings);
-    init();
 
     // -------------------------------------------------------------
 
@@ -123,8 +123,6 @@ BWSepiaTool::BWSepiaTool(QObject* const parent)
 
     connect(d->previewWidget, SIGNAL(signalResized()),
             this, SLOT(slotPreview()));
-
-    slotTimer();
 }
 
 BWSepiaTool::~BWSepiaTool()

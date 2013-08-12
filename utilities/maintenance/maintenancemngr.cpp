@@ -150,7 +150,7 @@ void MaintenanceMngr::slotToolCanceled(ProgressItem* tool)
 {
     if (tool == dynamic_cast<ProgressItem*>(d->newItemsFinder)        ||
         tool == dynamic_cast<ProgressItem*>(d->thumbsGenerator)       ||
-        tool == dynamic_cast<ProgressItem*>(d->fingerPrintsGenerator) || 
+        tool == dynamic_cast<ProgressItem*>(d->fingerPrintsGenerator) ||
         tool == dynamic_cast<ProgressItem*>(d->duplicatesFinder)      ||
         tool == dynamic_cast<ProgressItem*>(d->faceDetector)          ||
         tool == dynamic_cast<ProgressItem*>(d->metadataSynchronizer))
@@ -162,10 +162,27 @@ void MaintenanceMngr::slotToolCanceled(ProgressItem* tool)
 void MaintenanceMngr::stage1()
 {
     kDebug() << "stage1";
-    
+
     if (d->settings.newItems)
     {
-        d->newItemsFinder = new NewItemsFinder();
+        if (d->settings.wholeAlbums)
+        {
+            d->newItemsFinder = new NewItemsFinder();
+        }
+        else
+        {
+            QStringList paths;
+
+            foreach(Album* const a, d->settings.albums)
+            {
+                PAlbum* const pa = dynamic_cast<PAlbum*>(a);
+                if (pa)
+                    paths << pa->folderPath();
+            }
+
+            d->newItemsFinder = new NewItemsFinder(NewItemsFinder::ScheduleCollectionScan, paths);
+        }
+
         d->newItemsFinder->setNotificationEnabled(false);
         d->newItemsFinder->start();
     }
@@ -181,8 +198,12 @@ void MaintenanceMngr::stage2()
 
     if (d->settings.thumbnails)
     {
-        bool rebuildAll    = (d->settings.scanThumbs == false);
-        d->thumbsGenerator = new ThumbsGenerator(rebuildAll);
+        bool rebuildAll = (d->settings.scanThumbs == false);
+        AlbumList list;
+        list << d->settings.albums;
+        list << d->settings.tags;
+
+        d->thumbsGenerator = new ThumbsGenerator(rebuildAll, list);
         d->thumbsGenerator->setNotificationEnabled(false);
         d->thumbsGenerator->start();
     }
@@ -198,8 +219,12 @@ void MaintenanceMngr::stage3()
 
     if (d->settings.fingerPrints)
     {
-        bool rebuildAll          = (d->settings.scanFingerPrints == false);
-        d->fingerPrintsGenerator = new FingerPrintsGenerator(rebuildAll);
+        bool rebuildAll = (d->settings.scanFingerPrints == false);
+        AlbumList list;
+        list << d->settings.albums;
+        list << d->settings.tags;
+
+        d->fingerPrintsGenerator = new FingerPrintsGenerator(rebuildAll, list);
         d->fingerPrintsGenerator->setNotificationEnabled(false);
         d->fingerPrintsGenerator->start();
     }
@@ -215,7 +240,7 @@ void MaintenanceMngr::stage4()
 
     if (d->settings.duplicates)
     {
-        d->duplicatesFinder = new DuplicatesFinder(d->settings.similarity);
+        d->duplicatesFinder = new DuplicatesFinder(d->settings.albums, d->settings.tags, d->settings.similarity);
         d->duplicatesFinder->setNotificationEnabled(false);
         d->duplicatesFinder->start();
     }
@@ -247,7 +272,10 @@ void MaintenanceMngr::stage6()
 
     if (d->settings.metadataSync)
     {
-        d->metadataSynchronizer = new MetadataSynchronizer(MetadataSynchronizer::SyncDirection(d->settings.syncDirection));
+        AlbumList list;
+        list << d->settings.albums;
+        list << d->settings.tags;
+        d->metadataSynchronizer = new MetadataSynchronizer(list, MetadataSynchronizer::SyncDirection(d->settings.syncDirection));
         d->metadataSynchronizer->setNotificationEnabled(false);
         d->metadataSynchronizer->start();
     }
@@ -261,6 +289,7 @@ void MaintenanceMngr::done()
 {
     d->running   = false;
     QTime now, t = now.addMSecs(d->duration.elapsed());
+
     // Pop-up a message to bring user when all is done.
     KNotificationWrapper("digiKam Maintenance", // not i18n
                          i18n("All operations are done.\nDuration: %1", t.toString()),

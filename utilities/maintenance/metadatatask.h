@@ -3,10 +3,10 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2008-05-16
- * Description : finger-prints generator
+ * Date        : 2013-08-09
+ * Description : Thread actions task for metadata synchronizer.
  *
- * Copyright (C) 2008-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,40 +21,49 @@
  *
  * ============================================================ */
 
-#ifndef FINGERPRINTSGENERATOR_H
-#define FINGERPRINTSGENERATOR_H
+#ifndef METADATA_TASK_H
+#define METADATA_TASK_H
+
+// Qt includes
+
+#include <QThread>
+
+// KDE includes
+
+#include <threadweaver/Job.h>
 
 // Local includes
 
-#include "album.h"
-#include "maintenancetool.h"
+#include "imageinfo.h"
+#include "metadatasynchronizer.h"
+
+using namespace ThreadWeaver;
 
 namespace Digikam
 {
 
-class DImg;
-class LoadingDescription;
-
-class FingerPrintsGenerator : public MaintenanceTool
+class MetadataTask : public Job
 {
     Q_OBJECT
 
 public:
 
-    /** Constructor using AlbumList as argument. If list is empty, whole Albums collection is processed.
-     */
-    explicit FingerPrintsGenerator(const bool rebuildAll, const AlbumList& list=AlbumList(), ProgressItem* const parent = 0);
-    ~FingerPrintsGenerator();
+    MetadataTask();
+    ~MetadataTask();
 
-private:
+    void setItem(const ImageInfo& item, MetadataSynchronizer::SyncDirection dir);
 
-    void processOne();
+Q_SIGNALS:
 
-private Q_SLOTS:
+    void signalFinished();
 
-    void slotStart();
-    void slotDone();
-    void slotGotImagePreview(const LoadingDescription&, const DImg&);
+public Q_SLOTS:
+
+    void slotCancel();
+
+protected:
+
+    void run();
 
 private:
 
@@ -64,4 +73,4 @@ private:
 
 }  // namespace Digikam
 
-#endif /* FINGERPRINTSGENERATOR_H */
+#endif /* METADATA_TASK_H */

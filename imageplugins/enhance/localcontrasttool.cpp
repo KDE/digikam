@@ -114,7 +114,6 @@ LocalContrastTool::LocalContrastTool(QObject* const parent)
 
     d->settingsView = new LocalContrastSettings(d->gboxSettings->plainPage());
     setToolSettings(d->gboxSettings);
-    init();
 
     // -------------------------------------------------------------
 

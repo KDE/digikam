@@ -37,7 +37,6 @@
 
 // Local includes
 
-#include "album.h"
 #include "albummanager.h"
 #include "imagelister.h"
 #include "knotificationwrapper.h"
@@ -63,24 +62,26 @@ public:
     Job*        job;
 };
 
-DuplicatesFinder::DuplicatesFinder(const QStringList& albumsIdList, const QStringList& tagsIdList, int similarity, ProgressItem* const parent)
+DuplicatesFinder::DuplicatesFinder(const AlbumList& albums, const AlbumList& tags, int similarity, ProgressItem* const parent)
     : MaintenanceTool("DuplicatesFinder", parent),
       d(new Private)
 {
     d->similarity   = similarity;
-    d->albumsIdList = albumsIdList;
-    d->tagsIdList   = tagsIdList;
+
+    foreach(Album* const a, albums)
+        d->albumsIdList << QString::number(a->id());
+
+    foreach(Album* const a, tags)
+        d->tagsIdList << QString::number(a->id());
 }
 
 DuplicatesFinder::DuplicatesFinder(const int similarity, ProgressItem* const parent)
     : MaintenanceTool("DuplicatesFinder", parent),
       d(new Private)
 {
-    d->similarity        = similarity;
-    AlbumList palbumList = AlbumManager::instance()->allPAlbums();
-    QStringList albumsIdList;
+    d->similarity = similarity;
 
-    foreach(Album* const a, palbumList)
+    foreach(Album* const a, AlbumManager::instance()->allPAlbums())
         d->albumsIdList << QString::number(a->id());
 }
 
