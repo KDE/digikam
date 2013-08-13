@@ -222,7 +222,7 @@ void MaintenanceMngr::slotToolCanceled(ProgressItem* tool)
 {
     if (tool == dynamic_cast<ProgressItem*>(d->newItemsFinder)        ||
         tool == dynamic_cast<ProgressItem*>(d->thumbsGenerator)       ||
-        tool == dynamic_cast<ProgressItem*>(d->fingerPrintsGenerator) || 
+        tool == dynamic_cast<ProgressItem*>(d->fingerPrintsGenerator) ||
         tool == dynamic_cast<ProgressItem*>(d->duplicatesFinder)      ||
         tool == dynamic_cast<ProgressItem*>(d->faceDetector)          ||
         tool == dynamic_cast<ProgressItem*>(d->metadataSynchronizer))
@@ -234,11 +234,32 @@ void MaintenanceMngr::slotToolCanceled(ProgressItem* tool)
 void MaintenanceMngr::stage1()
 {
     kDebug() << "stage1";
-    
+
     if (d->settings.newItems)
     {
+<<<<<<< HEAD
         d->newItemsFinder = new NewItemsFinder();
 >>>>>>> master
+=======
+        if (d->settings.wholeAlbums)
+        {
+            d->newItemsFinder = new NewItemsFinder();
+        }
+        else
+        {
+            QStringList paths;
+
+            foreach(Album* const a, d->settings.albums)
+            {
+                PAlbum* const pa = dynamic_cast<PAlbum*>(a);
+                if (pa)
+                    paths << pa->folderPath();
+            }
+
+            d->newItemsFinder = new NewItemsFinder(NewItemsFinder::ScheduleCollectionScan, paths);
+        }
+
+>>>>>>> 606db1c6a50ab5644f6870d6050f9bb49911197d
         d->newItemsFinder->setNotificationEnabled(false);
         d->newItemsFinder->start();
     }
@@ -255,16 +276,22 @@ void MaintenanceMngr::stage2()
     if (d->settings.thumbnails)
     {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 606db1c6a50ab5644f6870d6050f9bb49911197d
         bool rebuildAll = (d->settings.scanThumbs == false);
         AlbumList list;
         list << d->settings.albums;
         list << d->settings.tags;
 
         d->thumbsGenerator = new ThumbsGenerator(rebuildAll, list);
+<<<<<<< HEAD
 =======
         bool rebuildAll    = (d->settings.scanThumbs == false);
         d->thumbsGenerator = new ThumbsGenerator(rebuildAll);
 >>>>>>> master
+=======
+>>>>>>> 606db1c6a50ab5644f6870d6050f9bb49911197d
         d->thumbsGenerator->setNotificationEnabled(false);
         d->thumbsGenerator->start();
     }
@@ -281,16 +308,22 @@ void MaintenanceMngr::stage3()
     if (d->settings.fingerPrints)
     {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 606db1c6a50ab5644f6870d6050f9bb49911197d
         bool rebuildAll = (d->settings.scanFingerPrints == false);
         AlbumList list;
         list << d->settings.albums;
         list << d->settings.tags;
 
         d->fingerPrintsGenerator = new FingerPrintsGenerator(rebuildAll, list);
+<<<<<<< HEAD
 =======
         bool rebuildAll          = (d->settings.scanFingerPrints == false);
         d->fingerPrintsGenerator = new FingerPrintsGenerator(rebuildAll);
 >>>>>>> master
+=======
+>>>>>>> 606db1c6a50ab5644f6870d6050f9bb49911197d
         d->fingerPrintsGenerator->setNotificationEnabled(false);
         d->fingerPrintsGenerator->start();
     }
@@ -307,10 +340,14 @@ void MaintenanceMngr::stage4()
     if (d->settings.duplicates)
     {
 <<<<<<< HEAD
+<<<<<<< HEAD
         d->duplicatesFinder = new DuplicatesFinder(d->settings.albums, d->settings.tags, d->settings.similarity);
 =======
         d->duplicatesFinder = new DuplicatesFinder(d->settings.similarity);
 >>>>>>> master
+=======
+        d->duplicatesFinder = new DuplicatesFinder(d->settings.albums, d->settings.tags, d->settings.similarity);
+>>>>>>> 606db1c6a50ab5644f6870d6050f9bb49911197d
         d->duplicatesFinder->setNotificationEnabled(false);
         d->duplicatesFinder->start();
     }
@@ -343,13 +380,19 @@ void MaintenanceMngr::stage6()
     if (d->settings.metadataSync)
     {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 606db1c6a50ab5644f6870d6050f9bb49911197d
         AlbumList list;
         list << d->settings.albums;
         list << d->settings.tags;
         d->metadataSynchronizer = new MetadataSynchronizer(list, MetadataSynchronizer::SyncDirection(d->settings.syncDirection));
+<<<<<<< HEAD
 =======
         d->metadataSynchronizer = new MetadataSynchronizer(MetadataSynchronizer::SyncDirection(d->settings.syncDirection));
 >>>>>>> master
+=======
+>>>>>>> 606db1c6a50ab5644f6870d6050f9bb49911197d
         d->metadataSynchronizer->setNotificationEnabled(false);
         d->metadataSynchronizer->start();
     }

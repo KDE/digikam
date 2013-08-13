@@ -9,6 +9,9 @@ MaintenanceTool : add multi-threading and multi-core CPU support for Metadata Sy
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 606db1c6a50ab5644f6870d6050f9bb49911197d
 001 ==> 276092 - Change defaults for noise reduction.
 002 ==> 323271 - Face Recognition doesn't work.
 003 ==> 323253 - When face tag scanning, digikam exhausts all memory on computer.
@@ -16,6 +19,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 005 ==> 323165 - Delete pictures and folders are not removed from table-view
 006 ==> 
 
+<<<<<<< HEAD
 =======
 001 ==> 319853 - Untranslatable strings in timeline tab.
 002 ==> 277429 - Write out face rectangles to XMP file.
@@ -56,3 +60,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 037 ==> 306246 - Add new maintainance option to update DB using image metadata.
 038 ==> 
 >>>>>>> master
+=======
+>>>>>>> 606db1c6a50ab5644f6870d6050f9bb49911197d

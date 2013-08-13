@@ -31,9 +31,13 @@
 #include <QGridLayout>
 #include <QLabel>
 <<<<<<< HEAD
+<<<<<<< HEAD
 #include <QCheckBox>
 =======
 >>>>>>> master
+=======
+#include <QCheckBox>
+>>>>>>> 606db1c6a50ab5644f6870d6050f9bb49911197d
 
 // KDE includes
 
@@ -41,17 +45,25 @@
 #include <klocale.h>
 #include <kstandardguiitem.h>
 <<<<<<< HEAD
+<<<<<<< HEAD
 #include <kconfig.h>
 =======
 >>>>>>> master
+=======
+#include <kconfig.h>
+>>>>>>> 606db1c6a50ab5644f6870d6050f9bb49911197d
 
 // Local includes
 
 #include "albummodel.h"
 <<<<<<< HEAD
+<<<<<<< HEAD
 #include "albummanager.h"
 =======
 >>>>>>> master
+=======
+#include "albummanager.h"
+>>>>>>> 606db1c6a50ab5644f6870d6050f9bb49911197d
 #include "albumselectcombobox.h"
 #include "albumtreeview.h"
 #include "searchutilities.h"
@@ -87,6 +99,9 @@ public:
         albumClearButton = 0;
         tagClearButton   = 0;
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 606db1c6a50ab5644f6870d6050f9bb49911197d
         wholePalbums     = 0;
         wholeTalbums     = 0;
         titleLabel       = 0;
@@ -99,11 +114,14 @@ public:
     QCheckBox*                   wholePalbums;
     QCheckBox*                   wholeTalbums;
     QLabel*                      titleLabel;
+<<<<<<< HEAD
 =======
     }
 
     QString                      configName;
 >>>>>>> master
+=======
+>>>>>>> 606db1c6a50ab5644f6870d6050f9bb49911197d
 
     AlbumTreeViewSelectComboBox* albumSelectCB;
     TagTreeViewSelectComboBox*   tagSelectCB;
@@ -112,25 +130,37 @@ public:
 };
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 const QString AlbumSelectors::Private::configUseWholePAlbumsEntry("UseWholePAlbumsEntry");
 const QString AlbumSelectors::Private::configUseWholeTAlbumsEntry("UseWholeTAlbumsEntry");
 
 =======
 >>>>>>> master
+=======
+const QString AlbumSelectors::Private::configUseWholePAlbumsEntry("UseWholePAlbumsEntry");
+const QString AlbumSelectors::Private::configUseWholeTAlbumsEntry("UseWholeTAlbumsEntry");
+
+>>>>>>> 606db1c6a50ab5644f6870d6050f9bb49911197d
 AlbumSelectors::AlbumSelectors(const QString& label, const QString& configName, QWidget* const parent)
     : QWidget(parent), d(new Private)
 {
     d->configName                         = configName;
     QGridLayout* const selectAlbumsLayout = new QGridLayout(this);
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 606db1c6a50ab5644f6870d6050f9bb49911197d
     d->titleLabel                         = new QLabel(label);
 
     d->wholePalbums     = new QCheckBox(i18n("Whole albums collection"), this);
     d->albumSelectCB    = new AlbumTreeViewSelectComboBox(this);
+<<<<<<< HEAD
 =======
     QLabel* const includeAlbumsLabel      = new QLabel(label);
     d->albumSelectCB                      = new AlbumTreeViewSelectComboBox(this);
 >>>>>>> master
+=======
+>>>>>>> 606db1c6a50ab5644f6870d6050f9bb49911197d
     //d->albumSelectCB->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     d->albumSelectCB->setToolTip(i18nc("@info:tooltip", "Select all albums that should be processed."));
     d->albumSelectCB->setDefaultModel();
@@ -141,9 +171,13 @@ AlbumSelectors::AlbumSelectors(const QString& label, const QString& configName, 
     d->albumClearButton->setToolTip(i18nc("@info:tooltip", "Reset selected albums"));
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     d->wholeTalbums     = new QCheckBox(i18n("Whole tags collection"), this);
 =======
 >>>>>>> master
+=======
+    d->wholeTalbums     = new QCheckBox(i18n("Whole tags collection"), this);
+>>>>>>> 606db1c6a50ab5644f6870d6050f9bb49911197d
     d->tagSelectCB      = new TagTreeViewSelectComboBox(this);
     //d->tagSelectCB->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     d->tagSelectCB->setToolTip(i18nc("@info:tooltip", "Select all tags that should be processed."));
@@ -155,6 +189,9 @@ AlbumSelectors::AlbumSelectors(const QString& label, const QString& configName, 
     d->tagClearButton->setToolTip(i18nc("@info:tooltip", "Reset selected tags"));
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 606db1c6a50ab5644f6870d6050f9bb49911197d
     selectAlbumsLayout->addWidget(d->titleLabel,       0, 0, 1, 2);
     selectAlbumsLayout->addWidget(d->wholePalbums,     1, 0, 1, 2);
     selectAlbumsLayout->addWidget(d->albumSelectCB,    2, 0);
@@ -170,6 +207,7 @@ AlbumSelectors::AlbumSelectors(const QString& label, const QString& configName, 
     connect(d->wholeTalbums, SIGNAL(toggled(bool)),
             this, SLOT(slotWholeTalbums(bool)));
     
+<<<<<<< HEAD
 =======
     selectAlbumsLayout->addWidget(includeAlbumsLabel,  0, 0, 1, 2);
     selectAlbumsLayout->addWidget(d->albumSelectCB,    1, 0);
@@ -179,6 +217,8 @@ AlbumSelectors::AlbumSelectors(const QString& label, const QString& configName, 
     selectAlbumsLayout->setRowStretch(3, 1);
 
 >>>>>>> master
+=======
+>>>>>>> 606db1c6a50ab5644f6870d6050f9bb49911197d
     connect(d->albumSelectCB->view()->albumModel(), SIGNAL(checkStateChanged(Album*,Qt::CheckState)),
             this, SLOT(slotUpdateClearButtons()));
 
@@ -193,11 +233,14 @@ AlbumSelectors::AlbumSelectors(const QString& label, const QString& configName, 
     d->tagSelectCB->view()->setEntryPrefix("TagComboBox-");
     d->tagSelectCB->view()->setRestoreCheckState(true);
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
     loadState();
 
     slotUpdateClearButtons();
 >>>>>>> master
+=======
+>>>>>>> 606db1c6a50ab5644f6870d6050f9bb49911197d
 }
 
 AlbumSelectors::~AlbumSelectors()
@@ -206,6 +249,9 @@ AlbumSelectors::~AlbumSelectors()
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 606db1c6a50ab5644f6870d6050f9bb49911197d
 void AlbumSelectors::slotWholePalbums(bool b)
 {
     d->albumSelectCB->setEnabled(!b);
@@ -218,13 +264,19 @@ void AlbumSelectors::slotWholeTalbums(bool b)
     d->tagClearButton->setEnabled(!b);
 }
 
+<<<<<<< HEAD
 =======
 >>>>>>> master
+=======
+>>>>>>> 606db1c6a50ab5644f6870d6050f9bb49911197d
 void AlbumSelectors::slotUpdateClearButtons()
 {
     d->albumClearButton->animateVisible(!d->albumSelectCB->model()->checkedAlbums().isEmpty());
     d->tagClearButton->animateVisible(!d->tagSelectCB->model()->checkedAlbums().isEmpty());
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 606db1c6a50ab5644f6870d6050f9bb49911197d
 
     emit signalSelectionChanged();
 }
@@ -256,6 +308,7 @@ AlbumList AlbumSelectors::selectedPAlbums() const
     }
     
     return albums;
+<<<<<<< HEAD
 }
 
 bool AlbumSelectors::wholeTagsCollection() const
@@ -318,46 +371,108 @@ void AlbumSelectors::loadState()
     slotWholePalbums(wholeAlbumsCollection());
     slotWholeTalbums(wholeTagsCollection());
 =======
+=======
+>>>>>>> 606db1c6a50ab5644f6870d6050f9bb49911197d
 }
 
-QList<Album*> AlbumSelectors::selectedAlbums() const
+bool AlbumSelectors::wholeTagsCollection() const
 {
-    QList<Album*> albums;
-    albums << d->albumSelectCB->model()->checkedAlbums();
-    albums << d->tagSelectCB->model()->checkedAlbums();
+    return d->wholeTalbums->isChecked();
+}
 
-    kDebug() << albums;
+AlbumList AlbumSelectors::selectedTAlbums() const
+{
+    AlbumList albums;
+    
+    if (wholeTagsCollection())
+    {
+        albums << AlbumManager::instance()->allTAlbums();
+    }
+    else
+    {
+        albums << d->tagSelectCB->model()->checkedAlbums();
+    }
+    
     return albums;
+}
+
+void AlbumSelectors::setPAlbumSelected(Album* const album, bool singleSelection)
+{
+    if (!album)
+        return;
+
+    if (singleSelection) 
+        d->albumSelectCB->model()->resetCheckedAlbums();
+
+    d->albumSelectCB->model()->setChecked(album, true);
+    d->wholePalbums->setChecked(false);
+}
+
+void AlbumSelectors::setTAlbumSelected(Album* const album, bool singleSelection)
+{
+    if (!album)
+        return;
+
+    if (singleSelection) 
+        d->tagSelectCB->model()->resetCheckedAlbums();
+
+    d->tagSelectCB->model()->setChecked(album, true);
+    d->wholeTalbums->setChecked(false);
 }
 
 void AlbumSelectors::loadState()
 {
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group(d->configName);
+    d->wholePalbums->setChecked(group.readEntry(d->configUseWholePAlbumsEntry, true));    
+    d->wholeTalbums->setChecked(group.readEntry(d->configUseWholeTAlbumsEntry, true));    
+    
     d->albumSelectCB->view()->loadState();
     d->tagSelectCB->view()->loadState();
+<<<<<<< HEAD
 >>>>>>> master
+=======
+    
+    slotUpdateClearButtons();
+
+    slotWholePalbums(wholeAlbumsCollection());
+    slotWholeTalbums(wholeTagsCollection());
+>>>>>>> 606db1c6a50ab5644f6870d6050f9bb49911197d
 }
 
 void AlbumSelectors::saveState()
 {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 606db1c6a50ab5644f6870d6050f9bb49911197d
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configName);
     group.writeEntry(d->configUseWholePAlbumsEntry, wholeAlbumsCollection());
     group.writeEntry(d->configUseWholeTAlbumsEntry, wholeTagsCollection());
     
+<<<<<<< HEAD
 =======
 >>>>>>> master
+=======
+>>>>>>> 606db1c6a50ab5644f6870d6050f9bb49911197d
     d->albumSelectCB->view()->saveState();
     d->tagSelectCB->view()->saveState();
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 606db1c6a50ab5644f6870d6050f9bb49911197d
 void AlbumSelectors::resetSelection()
 {
     d->albumSelectCB->model()->resetCheckedAlbums();
     d->tagSelectCB->model()->resetCheckedAlbums();
 }
 
+<<<<<<< HEAD
 =======
 >>>>>>> master
+=======
+>>>>>>> 606db1c6a50ab5644f6870d6050f9bb49911197d
 } // namespace Digikam
