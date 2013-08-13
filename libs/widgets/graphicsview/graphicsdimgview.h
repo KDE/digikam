@@ -73,7 +73,6 @@ public:
     int  contentsX() const;
     int  contentsY() const;
     void setContentsPos(int x, int y);
-    bool movingInProgress();
 
 Q_SIGNALS:
 

@@ -421,7 +421,7 @@ void Canvas::updateAutoZoom()
 
 void Canvas::updateContentsSize(bool deleteRubber)
 {
-    qDebug()<<"Canvas::updateContentsSize";
+    qDebug()<<"Canvas::updateContentsSize deleteRubber"<<deleteRubber;
     viewport()->setUpdatesEnabled(false);
 
     if (deleteRubber && d->rubber->isActive())

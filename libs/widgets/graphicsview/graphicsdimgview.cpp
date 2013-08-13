@@ -122,11 +122,6 @@ DImgPreviewItem* GraphicsDImgView::previewItem() const
     return dynamic_cast<DImgPreviewItem*>(item());
 }
 
-bool GraphicsDImgView::movingInProgress()
-{
-    return d->movingInProgress;
-}
-
 SinglePhotoPreviewLayout* GraphicsDImgView::layout() const
 {
     return d->layout;
