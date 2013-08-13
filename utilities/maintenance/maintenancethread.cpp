@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2013-08-09
- * Description : Thread actions manager for metadata synchronizer.
+ * Description : Thread actions manager for maintenance tools.
  *
  * Copyright (C) 2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "metadatathread.moc"
+#include "maintenancethread.moc"
 
 // KDE includes
 
@@ -38,21 +38,21 @@ using namespace Solid;
 namespace Digikam
 {
 
-MetadataThread::MetadataThread(QObject* const parent)
-    : RActionThreadBase(parent), tagsOnly(false)
+
+MaintenanceThread::MaintenanceThread(QObject* const parent)
+    : RActionThreadBase(parent)
 {
     connect(this, SIGNAL(finished()),
             this, SLOT(slotThreadFinished()));
 }
 
-MetadataThread::~MetadataThread()
+MaintenanceThread::~MaintenanceThread()
 {
     cancel();
-
     wait();
 }
 
-void MetadataThread::setUseMultiCore(const bool b)
+void MaintenanceThread::setUseMultiCore(const bool b)
 {
     if (!b)
     {
@@ -64,33 +64,47 @@ void MetadataThread::setUseMultiCore(const bool b)
     }
 }
 
-void MetadataThread::setTagsOnly(bool value)
-{
-    this->tagsOnly = value;
-}
-void MetadataThread::processItems(const ImageInfoList& items, MetadataSynchronizer::SyncDirection dir)
+void MaintenanceThread::processItems(const ImageInfoList& items, Mode mode, Settings set)
 {
     JobCollection* const collection = new JobCollection();
 
     for(int i=0; i < items.size(); i++)
     {
-        MetadataTask* const t = new MetadataTask();
-        t->setItem(items.at(i), dir);
-        t->setTagsOnly(this->tagsOnly);
+        switch(mode)
+        {
+            case ThumbsGenerator:
+                //TODO
 
-        connect(t, SIGNAL(signalFinished()),
-                this, SIGNAL(signalAdvance()));
+                break;
 
-        connect(this, SIGNAL(signalCanceled()),
-                t, SLOT(slotCancel()), Qt::QueuedConnection);
+            case FingerprintsGenerator:
+                //TODO
 
-        collection->addJob(t);
+                break;
+
+            default:  // MetadataSynchronizer
+
+                MetadataTask* const t                   = new MetadataTask();
+                MetadataSynchronizer::SyncDirection dir = (MetadataSynchronizer::SyncDirection)set.value("SyncDirection", MetadataSynchronizer::WriteFromDatabaseToFile).toInt();
+                bool tagsOnly = set.value("TagsOnly",false).toBool();
+                t->setItem(items.at(i), dir);
+                t->setTagsOnly(tagsOnly);
+
+                connect(t, SIGNAL(signalFinished()),
+                        this, SIGNAL(signalAdvance()));
+
+                connect(this, SIGNAL(signalCanceled()),
+                        t, SLOT(slotCancel()), Qt::QueuedConnection);
+
+                collection->addJob(t);
+                break;
+        }
     }
 
     appendJob(collection);
 }
 
-void MetadataThread::cancel()
+void MaintenanceThread::cancel()
 {
     if (isRunning())
         emit signalCanceled();
@@ -98,7 +112,7 @@ void MetadataThread::cancel()
     RActionThreadBase::cancel();
 }
 
-void MetadataThread::slotThreadFinished()
+void MaintenanceThread::slotThreadFinished()
 {
     if (isEmpty())
     {
