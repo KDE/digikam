@@ -20,7 +20,9 @@
 #include "albummanager.h"
 #include "digikamapp.h"
 #include "digikamview.h"
+
 using namespace Digikam;
+
 namespace ShowFoto
 {
 
@@ -118,12 +120,12 @@ static DropAction groupAction(const QDropEvent*, QWidget* view)
 
 bool ShowfotoDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDropEvent* e, const QModelIndex& droppedOn)
 {
-    ShowfotoCategorizedView* const view = static_cast<ShowfotoCategorizedView*>(abstractview);
+//    ShowfotoCategorizedView* const view = static_cast<ShowfotoCategorizedView*>(abstractview);
 
-    if (accepts(e, droppedOn) == Qt::IgnoreAction)
-    {
-        return false;
-    }
+//    if (accepts(e, droppedOn) == Qt::IgnoreAction)
+//    {
+//        return false;
+//    }
 
 //    if (DItemDrag::canDecode(e->mimeData()))
 //    {

@@ -233,7 +233,11 @@ ShowFoto::~ShowFoto()
     Digikam::ThumbnailLoadThread::cleanUp();
     Digikam::LoadingCacheInterface::cleanUp();
 
+
+
     delete m_imagePluginLoader;
+    delete d->model;
+    delete d->filterModel;
     delete d->thumbBar;
     delete d->rightSideBar;
     delete d->thumbLoadThread;
@@ -329,7 +333,7 @@ void ShowFoto::setupConnections()
             this, SLOT(slotOpenFolder(KUrl)));
 
     connect(this, SIGNAL(signalOpenFile(KUrl::List)),
-            this, SLOT(slotOpenFile(KUrl::List)));
+            this, SLOT(slotOpenFile()));
 
     connect(this,SIGNAL(signalInfoList(ShowfotoItemInfoList&)),
             d->model,SLOT(reAddShowfotoItemInfos(ShowfotoItemInfoList&)));
