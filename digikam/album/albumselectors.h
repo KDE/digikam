@@ -29,10 +29,13 @@
 
 #include <QWidget>
 
+<<<<<<< HEAD
 // Local incudes.
 
 #include "album.h"
 
+=======
+>>>>>>> master
 namespace Digikam
 {
 
@@ -44,6 +47,7 @@ class AlbumSelectors : public QWidget
 
 public:
 
+<<<<<<< HEAD
     /** Default Contructor. 'label' is front text of label which title widget. 'configName' is name used to store 
      *  Albums configuration in settings file. 'parent' is parent widget.
      */
@@ -103,6 +107,19 @@ private Q_SLOTS:
     void slotUpdateClearButtons();
     void slotWholePalbums(bool);
     void slotWholeTalbums(bool);
+=======
+    explicit AlbumSelectors(const QString& label, const QString& configName, QWidget* const parent = 0);
+    ~AlbumSelectors();
+
+    QList<Album*> selectedAlbums() const;
+
+    void loadState();
+    void saveState();
+
+private Q_SLOTS:
+
+    void slotUpdateClearButtons();
+>>>>>>> master
 
 private:
 
