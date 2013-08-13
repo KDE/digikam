@@ -801,6 +801,104 @@ bool MetadataHub::write(DImg& image, WriteMode writeMode, const MetadataSettings
     return write(metadata, writeMode, settings);
 }
 
+bool MetadataHub::writeTags(const QString& filePath,
+                            MetadataHub::WriteMode writeMode,
+                            const MetadataSettingsContainer& settings)
+{
+    applyChangeNotifications();
+
+    // if no DMetadata object is needed at all, don't construct one -
+    // important optimization if writing to file is turned off in setup!
+    if (!willWriteMetadata(writeMode, settings))
+    {
+        return false;
+    }
+
+    DMetadata metadata(filePath);
+    bool saveTags ,dirty = false;
+    bool saveFaces = settings.saveFaceTags;
+
+    if (settings.saveTags)
+    {
+        saveTags = false;
+
+        // find at least one tag to write
+        for (QMap<int, TagStatus>::iterator it = d->tags.begin(); it != d->tags.end(); ++it)
+        {
+            if (it.value() == MetadataAvailable)
+            {
+                saveTags = true;
+                break;
+            }
+        }
+    }
+
+    if(saveFaces)
+        metadata.setImageFacesMap(d->faceTagsList,true);
+    else
+        metadata.setImageFacesMap(d->faceTagsList,false);
+
+    if (saveTags)
+    {
+        // Store tag paths as Iptc keywords tags.
+
+        // DatabaseMode == ManagedTags is assumed.
+        // To fix this constraint (not needed currently), an oldKeywords parameter is needed
+
+        // create list of keywords to be added and to be removed
+        QStringList tagsPathList, oldKeywords, newKeywords;
+        metadata.getImageTagsPath(tagsPathList);
+
+        for (QMap<int, TagStatus>::iterator it = d->tags.begin(); it != d->tags.end(); ++it)
+        {
+            if (!TagsCache::instance()->canBeWrittenToMetadata(it.key()))
+            {
+                continue;
+            }
+
+            // it is important that MetadataDisjoint keywords are not touched
+            if (it.value() == MetadataAvailable)
+            {
+                // This works for single and multiple selection.
+                // In both situations, tags which had originally been loaded
+                // have explicitly been removed with setTag.
+                QString tagName = TagsCache::instance()->tagName(it.key());
+                QString tagPath = TagsCache::instance()->tagPath(it.key(),
+                                                                 TagsCache::NoLeadingSlash);
+
+                if (it.value().hasTag)
+                {
+                    if (!tagsPathList.contains(tagPath))
+                    {
+                        tagsPathList << tagPath;
+                    }
+
+                    newKeywords << tagName;
+                }
+                else
+                {
+                    tagsPathList.removeAll(tagPath);
+                    oldKeywords << tagName;
+                }
+            }
+        }
+
+        // NOTE: See B.K.O #175321 : we remove all old keyword from IPTC and XMP before to
+        // synchronize metadata, else contents is not coherent.
+
+        // We set Iptc keywords using tags name.
+        dirty |= metadata.setIptcKeywords(oldKeywords, newKeywords);
+
+        // We add Xmp keywords using tags name.
+        dirty |= metadata.removeXmpKeywords(oldKeywords);
+        dirty |= metadata.setXmpKeywords(newKeywords);
+
+        // We set Tags Path list in digiKam Xmp private namespace using tags path.
+        dirty |= metadata.setImageTagsPath(tagsPathList);
+    }
+        return dirty;
+}
+
 bool MetadataHub::willWriteMetadata(WriteMode writeMode, const MetadataSettingsContainer& settings) const
 {
     // This is the same logic as in write(DMetadata) but without actually writing.

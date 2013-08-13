@@ -89,8 +89,6 @@ void MetadataTask::run()
     {
         return;
     }
-    if(d->tagsOnly)
-        kDebug() << "Tags Only+++++++++++++++++++++++++++";
 
     if (d->direction == MetadataSynchronizer::WriteFromDatabaseToFile)
     {
@@ -100,7 +98,14 @@ void MetadataTask::run()
         fileHub.load(d->item);
 
         // write out to file DMetadata
-        fileHub.write(d->item.filePath());
+        if(d->tagsOnly)
+        {
+            fileHub.writeTags(d->item.filePath());
+        }
+        else
+        {
+            fileHub.write(d->item.filePath());
+        }
     }
     else // MetadataSynchronizer::ReadFromFileToDatabase
     {
