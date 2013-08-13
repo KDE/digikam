@@ -28,16 +28,8 @@ namespace Digikam
 
 MaintenanceSettings::MaintenanceSettings()
 {
-<<<<<<< HEAD
-<<<<<<< HEAD
     wholeAlbums      = true;
     wholeTags        = true;
-=======
->>>>>>> master
-=======
-    wholeAlbums      = true;
-    wholeTags        = true;
->>>>>>> 606db1c6a50ab5644f6870d6050f9bb49911197d
     newItems         = false;
     thumbnails       = false;
     scanThumbs       = false;
@@ -57,10 +49,6 @@ MaintenanceSettings::~MaintenanceSettings()
 //! kDebug() stream operator. Writes property @a s to the debug output in a nicely formatted way.
 QDebug operator<<(QDebug dbg, const MaintenanceSettings& s)
 {
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 606db1c6a50ab5644f6870d6050f9bb49911197d
     dbg.nospace() << endl;
     dbg.nospace() << "wholeAlbums         : " << s.wholeAlbums << endl;
     dbg.nospace() << "wholeTags           : " << s.wholeTags << endl;
@@ -77,22 +65,6 @@ QDebug operator<<(QDebug dbg, const MaintenanceSettings& s)
     dbg.nospace() << "faceScannedHandling : " << s.faceSettings.alreadyScannedHandling << endl;
     dbg.nospace() << "metadataSync        : " << s.metadataSync << endl;
     dbg.nospace() << "syncDirection       : " << s.syncDirection << endl;
-<<<<<<< HEAD
-=======
-    dbg.nospace() << "newItems            : " << s.newItems;
-    dbg.nospace() << "thumbnails          : " << s.thumbnails;
-    dbg.nospace() << "scanThumbs          : " << s.scanThumbs;
-    dbg.nospace() << "fingerPrints        : " << s.fingerPrints;
-    dbg.nospace() << "scanFingerPrints    : " << s.scanFingerPrints;
-    dbg.nospace() << "duplicates          : " << s.duplicates;
-    dbg.nospace() << "similarity          : " << s.similarity;
-    dbg.nospace() << "faceManagement      : " << s.faceManagement;
-    dbg.nospace() << "faceScannedHandling : " << s.faceSettings.alreadyScannedHandling;
-    dbg.nospace() << "metadataSync        : " << s.metadataSync;
-    dbg.nospace() << "syncDirection       : " << s.syncDirection;
->>>>>>> master
-=======
->>>>>>> 606db1c6a50ab5644f6870d6050f9bb49911197d
     return dbg.space();
 }
 

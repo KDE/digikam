@@ -653,25 +653,11 @@ void AlbumSettings::readSettings()
 
     group = generalConfigGroup();
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 606db1c6a50ab5644f6870d6050f9bb49911197d
     d->showSplash                = group.readEntry(d->configShowSplashEntry,                                  true);
     d->useTrash                  = group.readEntry(d->configUseTrashEntry,                                    true);
     d->showTrashDeleteDialog     = group.readEntry(d->configShowTrashDeleteDialogEntry,                       true);
     d->showPermanentDeleteDialog = group.readEntry(d->configShowPermanentDeleteDialogEntry,                   true);
     d->sidebarApplyDirectly      = group.readEntry(d->configApplySidebarChangesDirectlyEntry,                 false);
-<<<<<<< HEAD
-=======
-    d->showSplash                = group.readEntry(d->configShowSplashEntry,                      true);
-    d->useTrash                  = group.readEntry(d->configUseTrashEntry,                        true);
-    d->showTrashDeleteDialog     = group.readEntry(d->configShowTrashDeleteDialogEntry,           true);
-    d->showPermanentDeleteDialog = group.readEntry(d->configShowPermanentDeleteDialogEntry,       true);
-    d->sidebarApplyDirectly      = group.readEntry(d->configApplySidebarChangesDirectlyEntry,     false);
->>>>>>> master
-=======
->>>>>>> 606db1c6a50ab5644f6870d6050f9bb49911197d
     d->stringComparisonType      = (StringComparisonType) group.readEntry(d->configStringComparisonTypeEntry, (int) Natural);
     setApplicationStyle(group.readEntry(d->configApplicationStyleEntry, kapp->style()->objectName()));
     

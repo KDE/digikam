@@ -77,10 +77,6 @@ ThumbsGenerator::ThumbsGenerator(const bool rebuildAll, const AlbumList& list, P
     : MaintenanceTool("ThumbsGenerator", parent),
       d(new Private)
 {
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 606db1c6a50ab5644f6870d6050f9bb49911197d
     d->albumList = list;
     init(rebuildAll);
 }
@@ -95,11 +91,6 @@ ThumbsGenerator::ThumbsGenerator(const bool rebuildAll, int albumId, ProgressIte
 
 void ThumbsGenerator::init(const bool rebuildAll)
 {
-<<<<<<< HEAD
-=======
->>>>>>> master
-=======
->>>>>>> 606db1c6a50ab5644f6870d6050f9bb49911197d
     setLabel(i18n("Thumbs"));
     ProgressManager::addProgressItem(this);
 

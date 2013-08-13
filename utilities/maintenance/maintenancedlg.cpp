@@ -70,14 +70,7 @@ public:
         Duplicates,
         FaceManagement,
         MetadataSync,
-<<<<<<< HEAD
-<<<<<<< HEAD
 
-=======
->>>>>>> master
-=======
-
->>>>>>> 606db1c6a50ab5644f6870d6050f9bb49911197d
         Stretch
     };
 
@@ -287,14 +280,7 @@ MaintenanceSettings MaintenanceDlg::settings() const
     prm.similarity                          = d->similarity->value();
     prm.faceManagement                      = d->expanderBox->isChecked(Private::FaceManagement);
     prm.faceSettings.alreadyScannedHandling = (FaceScanSettings::AlreadyScannedHandling)d->faceScannedHandling->currentIndex();
-<<<<<<< HEAD
-<<<<<<< HEAD
     prm.faceSettings.albums                 = d->albumSelectors->selectedAlbums();
-=======
->>>>>>> master
-=======
-    prm.faceSettings.albums                 = d->albumSelectors->selectedAlbums();
->>>>>>> 606db1c6a50ab5644f6870d6050f9bb49911197d
     prm.metadataSync                        = d->expanderBox->isChecked(Private::MetadataSync);
     prm.syncDirection                       = d->syncDirection->currentIndex();
     return prm;
