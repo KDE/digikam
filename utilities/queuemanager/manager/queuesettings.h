@@ -6,7 +6,7 @@
  * Date        : 2009-02-21
  * Description : Queue common settings container.
  *
- * Copyright (C) 2009-2012 Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2013 Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -66,6 +66,7 @@ public:
 
     QueueSettings()
     {
+        useMultiCoreCPU    = false;
         exifSetOrientation = true;
         useOrgAlbum        = true;
         conflictRule       = DIFFNAME;
@@ -75,6 +76,8 @@ public:
 
 public:
 
+    bool                useMultiCoreCPU;
+    
     /// Setting managed through Metadata control panel.
     bool                exifSetOrientation;
 

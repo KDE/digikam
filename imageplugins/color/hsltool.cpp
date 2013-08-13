@@ -88,6 +88,7 @@ HSLTool::HSLTool(QObject* const parent)
     setToolName(i18n("Hue / Saturation / Lightness"));
     setToolIcon(SmallIcon("adjusthsl"));
     setToolHelp("hsladjusttool.anchor");
+    setInitPreview(true);
 
     d->previewWidget = new ImageRegionWidget;
     setToolView(d->previewWidget);
@@ -106,7 +107,6 @@ HSLTool::HSLTool(QObject* const parent)
 
     d->hslSettings = new HSLSettings(d->gboxSettings->plainPage());
     setToolSettings(d->gboxSettings);
-    init();
 
     // -------------------------------------------------------------
 
@@ -115,8 +115,6 @@ HSLTool::HSLTool(QObject* const parent)
 
     connect(d->hslSettings, SIGNAL(signalSettingsChanged()),
             this, SLOT(slotTimer()));
-
-    slotTimer();
 }
 
 HSLTool::~HSLTool()

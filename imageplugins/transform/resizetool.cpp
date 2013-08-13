@@ -287,7 +287,6 @@ ResizeTool::ResizeTool(QObject* const parent)
     d->gboxSettings->plainPage()->setLayout(grid2);
 
     setToolSettings(d->gboxSettings);
-    init();
 
     // -------------------------------------------------------------
 

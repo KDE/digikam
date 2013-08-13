@@ -27,6 +27,7 @@
 // Qt includes
 
 #include <QTime>
+#include <QTimer>
 
 // KDE includes
 
@@ -74,7 +75,8 @@ void MaintenanceTool::setNotificationEnabled(bool b)
 
 void MaintenanceTool::start()
 {
-    slotStart();
+    // We delay start to be sure that eventloop connect signals and slots in top level.
+    QTimer::singleShot(0, this, SLOT(slotStart()));
 }
 
 void MaintenanceTool::slotStart()

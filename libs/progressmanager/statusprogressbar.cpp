@@ -4,10 +4,11 @@
  * http://www.digikam.org
  *
  * Date        : 2007-01-24
- * Description : a progress bar used to display file access
+ * Description : a progress bar used to display action
  *               progress or a text in status bar.
+ *               Progress events are dispatched to ProgressManager.
  *
- * Copyright (C) 2007-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -46,7 +47,7 @@
 namespace Digikam
 {
 
-class StatusProgressBar::StatusProgressBarPriv
+class StatusProgressBar::Private
 {
 
 public:
@@ -57,7 +58,7 @@ public:
         ProgressBar
     };
 
-    StatusProgressBarPriv() :
+    Private() :
         notify(false),
         progressWidget(0),
         cancelButton(0),
@@ -79,17 +80,17 @@ public:
     KSqueezedTextLabel* textLabel;
 };
 
-StatusProgressBar::StatusProgressBar(QWidget* parent)
-    : QStackedWidget(parent), d(new StatusProgressBarPriv)
+StatusProgressBar::StatusProgressBar(QWidget* const parent)
+    : QStackedWidget(parent), d(new Private)
 {
     setAttribute(Qt::WA_DeleteOnClose);
     setFocusPolicy(Qt::NoFocus);
 
-    d->textLabel      = new KSqueezedTextLabel(this);
-    d->progressWidget = new QWidget(this);
-    QHBoxLayout* hBox = new QHBoxLayout(d->progressWidget);
-    d->progressBar    = new QProgressBar(d->progressWidget);
-    d->cancelButton   = new QPushButton(d->progressWidget);
+    d->textLabel            = new KSqueezedTextLabel(this);
+    d->progressWidget       = new QWidget(this);
+    QHBoxLayout* const hBox = new QHBoxLayout(d->progressWidget);
+    d->progressBar          = new QProgressBar(d->progressWidget);
+    d->cancelButton         = new QPushButton(d->progressWidget);
     d->cancelButton->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
     d->cancelButton->setFocusPolicy(Qt::NoFocus);
     d->cancelButton->setIcon(SmallIcon("dialog-cancel"));
@@ -104,8 +105,8 @@ StatusProgressBar::StatusProgressBar(QWidget* parent)
     hBox->setMargin(0);
     hBox->setSpacing(0);
 
-    insertWidget(StatusProgressBarPriv::TextLabel,   d->textLabel);
-    insertWidget(StatusProgressBarPriv::ProgressBar, d->progressWidget);
+    insertWidget(Private::TextLabel,   d->textLabel);
+    insertWidget(Private::ProgressBar, d->progressWidget);
 
     connect(d->cancelButton, SIGNAL(clicked()),
             this, SIGNAL(signalCancelButtonPressed()) );
@@ -150,7 +151,7 @@ void StatusProgressBar::setProgressValue(int v)
 
     if (d->notify)
     {
-        ProgressItem* item = currentProgressItem();
+        ProgressItem* const item = currentProgressItem();
         if (item)
         {
             item->setCompletedItems(v);
@@ -170,7 +171,7 @@ void StatusProgressBar::setProgressTotalSteps(int v)
 
     if (d->notify)
     {
-        ProgressItem* item = currentProgressItem();
+        ProgressItem* const item = currentProgressItem();
         if (item)
             item->setTotalItems(v);
     }
@@ -183,7 +184,7 @@ void StatusProgressBar::setProgressText(const QString& text)
 
     if (d->notify)
     {
-        ProgressItem* item = currentProgressItem();
+        ProgressItem* const item = currentProgressItem();
         if (item)
             item->setStatus(text);
     }
@@ -193,13 +194,13 @@ void StatusProgressBar::progressBarMode(int mode, const QString& text)
 {
     if (mode == TextMode)
     {
-        setCurrentIndex(StatusProgressBarPriv::TextLabel);
+        setCurrentIndex(Private::TextLabel);
         setProgressValue(0);
         setText(text);
 
         if (d->notify)
         {
-            ProgressItem* item = currentProgressItem();
+            ProgressItem* const item = currentProgressItem();
             if (item)
                 item->setComplete();
         }
@@ -207,43 +208,50 @@ void StatusProgressBar::progressBarMode(int mode, const QString& text)
     else if (mode == ProgressBarMode)
     {
         d->cancelButton->hide();
-        setCurrentIndex(StatusProgressBarPriv::ProgressBar);
+        setCurrentIndex(Private::ProgressBar);
         setProgressText(text);
 
         if (d->notify)
         {
-            ProgressItem* item = ProgressManager::createProgressItem(d->title, QString(), false, !d->icon.isNull());
+            ProgressItem* const item = ProgressManager::createProgressItem(d->title, QString(), false, !d->icon.isNull());
             item->setTotalItems(d->progressBar->maximum());
             item->setCompletedItems(d->progressBar->value());
-            if (!d->icon.isNull()) item->setThumbnail(d->icon);
+            
+            if (!d->icon.isNull())
+                item->setThumbnail(d->icon);
+            
             connect(item, SIGNAL(progressItemCanceled(ProgressItem*)),
                     this, SIGNAL(signalCancelButtonPressed()));
-            d->progressId      = item->id();
+            
+            d->progressId = item->id();
         }
     }
     else // CancelProgressBarMode
     {
         d->cancelButton->show();
-        setCurrentIndex(StatusProgressBarPriv::ProgressBar);
+        setCurrentIndex(Private::ProgressBar);
         setProgressText(text);
 
         if (d->notify)
         {
-            ProgressItem* item = ProgressManager::createProgressItem(d->title, QString(), true, !d->icon.isNull());
+            ProgressItem* const item = ProgressManager::createProgressItem(d->title, QString(), true, !d->icon.isNull());
             item->setTotalItems(d->progressBar->maximum());
             item->setCompletedItems(d->progressBar->value());
-            if (!d->icon.isNull()) item->setThumbnail(d->icon);
+            
+            if (!d->icon.isNull())
+                item->setThumbnail(d->icon);
+            
             connect(item, SIGNAL(progressItemCanceled(ProgressItem*)),
                     this, SIGNAL(signalCancelButtonPressed()));
-            d->progressId      = item->id();
+            
+            d->progressId = item->id();
         }
     }
 }
 
 ProgressItem* StatusProgressBar::currentProgressItem() const
 {
-    kDebug() << d->progressId;
-    return ProgressManager::instance()->findItembyId(d->progressId);
+    return (ProgressManager::instance()->findItembyId(d->progressId));
 }
 
 }  // namespace Digikam

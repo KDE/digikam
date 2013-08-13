@@ -6,7 +6,7 @@
  * Date        : 2009-28-04
  * Description : first run assistant dialog
  *
- * Copyright (C) 2009-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -52,11 +52,11 @@
 namespace Digikam
 {
 
-class CollectionPage::CollectionPagePriv
+class CollectionPage::Private
 {
 public:
 
-    CollectionPagePriv() :
+    Private() :
         dbPathEdited(false),
         rootAlbumPathRequester(0),
         dbPathRequester(0)
@@ -72,12 +72,12 @@ public:
     KUrlRequester* dbPathRequester;
 };
 
-CollectionPage::CollectionPage(KAssistantDialog* dlg)
+CollectionPage::CollectionPage(KAssistantDialog* const dlg)
     : AssistantDlgPage(dlg, i18n("<b>Configure where images and metadata are stored</b>")),
-      d(new CollectionPagePriv)
+      d(new Private)
 {
-    QWidget* widget      = new QWidget(this);
-    QVBoxLayout* vlayout = new QVBoxLayout(widget);
+    QWidget* const widget      = new QWidget(this);
+    QVBoxLayout* const vlayout = new QVBoxLayout(widget);
 
     QString picturesPath;
 #if KDE_IS_VERSION(4,1,61)
@@ -95,7 +95,7 @@ CollectionPage::CollectionPage(KAssistantDialog* dlg)
                                                 "include the slash in the translation", "/Pictures");
     }
 
-    QLabel* textLabel1 = new QLabel(widget);
+    QLabel* const textLabel1 = new QLabel(widget);
     textLabel1->setWordWrap(true);
 #ifndef _WIN32
     textLabel1->setText(i18n("<p>Please enter a location where you want to store your images.</p> "
@@ -117,7 +117,7 @@ CollectionPage::CollectionPage(KAssistantDialog* dlg)
     d->rootAlbumPathRequester->setMode(KFile::Directory | KFile::LocalOnly);
     d->rootAlbumPathRequester->setUrl(picturesPath);
 
-    QLabel* textLabel3 = new QLabel(widget);
+    QLabel* const textLabel3 = new QLabel(widget);
     textLabel3->setWordWrap(true);
     textLabel3->setText(i18n("<p>digiKam stores information and metadata about your images in a database file. "
                              "Please set the location of this file or accept the default.</p>"
@@ -137,9 +137,7 @@ CollectionPage::CollectionPage(KAssistantDialog* dlg)
     vlayout->setSpacing(KDialog::spacingHint());
 
     setPageWidget(widget);
-
-    QPixmap leftPix = KStandardDirs::locate("data", "digikam/data/assistant-collection.png");
-    setLeftBottomPix(leftPix.scaledToWidth(128, Qt::SmoothTransformation));
+    setLeftBottomPix(KIconLoader::global()->loadIcon("server-database", KIconLoader::NoGroup, KIconLoader::SizeEnormous));
 
     connect(d->rootAlbumPathRequester, SIGNAL(urlSelected(KUrl)),
             this, SLOT(slotAlbumRootChanged(KUrl)));
@@ -218,14 +216,14 @@ bool CollectionPage::checkRootAlbum(QString& rootAlbumFolder)
 
 #endif
 
-    /*
+/*
     if (KUrl(rootAlbumFolder).equals(KUrl(QDir::homePath()), KUrl::CompareWithoutFragment))
     {
         KMessageBox::sorry(this, i18n("digiKam will not use your home folder as the "
                                       "root album. Please select another location."));
         return false;
     }
-    */
+*/
 
     QDir targetPath(rootAlbumFolder);
 
@@ -295,14 +293,14 @@ bool CollectionPage::checkDatabase(QString& dbFolder)
 
 #endif
 
-    /*
+/*
     if (KUrl(dbFolder).equals(KUrl(QDir::homePath()), KUrl::CompareWithoutFragment))
     {
         KMessageBox::sorry(this, i18n("digiKam cannot use your home folder as "
                                       "database file path."));
         return false;
     }
-    */
+*/
 
     QDir targetPath(dbFolder);
 

@@ -7,7 +7,7 @@
  * Description : Albums manager interface.
  *
  * Copyright (C) 2004 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -41,6 +41,7 @@
 
 // Local includes
 
+#include "album.h"
 #include "albuminfo.h"
 #include "databaseparameters.h"
 #include "digikam_export.h"
@@ -48,28 +49,22 @@
 class QDate;
 
 class KJob;
+
 namespace KIO
 {
-class Job;
+    class Job;
 }
 
 namespace Digikam
 {
 
-class CollectionLocation;
-class Album;
-class PAlbum;
-class TAlbum;
-class DAlbum;
-class SAlbum;
 class FAlbum;
+class CollectionLocation;
 class AlbumChangeset;
 class TagChangeset;
 class SearchChangeset;
 class CollectionImageChangeset;
 class ImageTagChangeset;
-
-typedef QList<Album*> AlbumList;
 
 /**
  * \class AlbumManager

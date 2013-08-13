@@ -39,7 +39,6 @@
 
 // Local includes
 
-#include "album.h"
 #include "albumdb.h"
 #include "albuminfo.h"
 #include "albummanager.h"
@@ -61,34 +60,45 @@ public:
 
     Private() :
         rebuildAll(true),
-        albumId(-1),
         thumbLoadThread(0)
     {
     }
 
     bool                 rebuildAll;
 
-    int                  albumId;
+    AlbumList            albumList;
 
     QStringList          allPicturesPath;
 
     ThumbnailLoadThread* thumbLoadThread;
 };
 
-ThumbsGenerator::ThumbsGenerator(bool rebuildAll, int albumId, ProgressItem* const parent)
+ThumbsGenerator::ThumbsGenerator(const bool rebuildAll, const AlbumList& list, ProgressItem* const parent)
     : MaintenanceTool("ThumbsGenerator", parent),
       d(new Private)
 {
+    d->albumList = list;
+    init(rebuildAll);
+}
+
+ThumbsGenerator::ThumbsGenerator(const bool rebuildAll, int albumId, ProgressItem* const parent)
+    : MaintenanceTool("ThumbsGenerator", parent),
+      d(new Private)
+{
+    d->albumList.append(AlbumManager::instance()->findPAlbum(albumId));
+    init(rebuildAll);
+}
+
+void ThumbsGenerator::init(const bool rebuildAll)
+{
+    setLabel(i18n("Thumbs"));
     ProgressManager::addProgressItem(this);
 
-    d->thumbLoadThread = ThumbnailLoadThread::defaultThread();
     d->rebuildAll      = rebuildAll;
-    d->albumId         = albumId;
+    d->thumbLoadThread = ThumbnailLoadThread::defaultThread();
 
     connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(LoadingDescription,QPixmap)),
             this, SLOT(slotGotThumbnail(LoadingDescription,QPixmap)));
-
-    setLabel(i18n("Thumbs"));
 }
 
 ThumbsGenerator::~ThumbsGenerator()
@@ -100,20 +110,13 @@ void ThumbsGenerator::slotStart()
 {
     MaintenanceTool::slotStart();
 
-    // Get all digiKam albums collection pictures path.
-    AlbumList palbumList;
-
-    if (d->albumId == -1)
+    if (d->albumList.isEmpty())
     {
-        palbumList  = AlbumManager::instance()->allPAlbums();
-    }
-    else
-    {
-        palbumList.append(AlbumManager::instance()->findPAlbum(d->albumId));
+        d->albumList = AlbumManager::instance()->allPAlbums();
     }
 
-    for (AlbumList::const_iterator it = palbumList.constBegin();
-         !canceled() && (it != palbumList.constEnd()); ++it)
+    for (AlbumList::const_iterator it = d->albumList.constBegin();
+         !canceled() && (it != d->albumList.constEnd()); ++it)
     {
         if (!(*it))
         {

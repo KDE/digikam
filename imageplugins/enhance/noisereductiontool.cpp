@@ -91,8 +91,6 @@ NoiseReductionTool::NoiseReductionTool(QObject* const parent)
 
     connect(d->nrSettings, SIGNAL(signalEstimateNoise()),
             this, SLOT(slotEstimateNoise()));
-
-    init();
 }
 
 NoiseReductionTool::~NoiseReductionTool()

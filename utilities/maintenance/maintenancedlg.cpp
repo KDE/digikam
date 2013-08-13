@@ -42,14 +42,16 @@
 #include <kiconloader.h>
 #include <kstandarddirs.h>
 #include <knuminput.h>
-#include <khbox.h>
+#include <kvbox.h>
 #include <kseparator.h>
 #include <kconfig.h>
 
 // Local includes
 
 #include "setup.h"
+#include "albumselectors.h"
 #include "facescansettings.h"
+#include "metadatasynchronizer.h"
 
 using namespace KDcrawIface;
 
@@ -66,8 +68,9 @@ public:
         Thumbnails,
         FingerPrints,
         Duplicates,
-        Metadata,
-        FaceDetection,
+        FaceManagement,
+        MetadataSync,
+
         Stretch
     };
 
@@ -78,13 +81,15 @@ public:
         title(0),
         scanThumbs(0),
         scanFingerPrints(0),
-        metadataSetup(0),
         faceScannedHandling(0),
+        metadataSetup(0),
+        syncDirection(0),
         hbox(0),
-        hbox2(0),
+        vbox(0),
         hbox3(0),
         similarity(0),
-        expanderBox(0)
+        expanderBox(0),
+        albumSelectors(0)
     {
     }
 
@@ -96,21 +101,24 @@ public:
     static const QString configScanFingerPrints;
     static const QString configDuplicates;
     static const QString configSimilarity;
-    static const QString configMetadata;
-    static const QString configFaceDetection;
+    static const QString configFaceManagement;
     static const QString configFaceScannedHandling;
+    static const QString configMetadataSync;
+    static const QString configSyncDirection;
 
     QLabel*              logo;
     QLabel*              title;
     QCheckBox*           scanThumbs;
     QCheckBox*           scanFingerPrints;
-    QPushButton*         metadataSetup;
     QComboBox*           faceScannedHandling;
+    QPushButton*         metadataSetup;
+    QComboBox*           syncDirection;
     KHBox*               hbox;
-    KHBox*               hbox2;
+    KVBox*               vbox;
     KHBox*               hbox3;
     KIntNumInput*        similarity;
     RExpanderBox*        expanderBox;
+    AlbumSelectors*      albumSelectors;
 };
 
 const QString MaintenanceDlg::Private::configGroupName("MaintenanceDlg Settings");
@@ -121,9 +129,10 @@ const QString MaintenanceDlg::Private::configFingerPrints("FingerPrints");
 const QString MaintenanceDlg::Private::configScanFingerPrints("ScanFingerPrints");
 const QString MaintenanceDlg::Private::configDuplicates("Duplicates");
 const QString MaintenanceDlg::Private::configSimilarity("Similarity");
-const QString MaintenanceDlg::Private::configMetadata("Metadata");
-const QString MaintenanceDlg::Private::configFaceDetection("FaceDetection");
+const QString MaintenanceDlg::Private::configFaceManagement("FaceManagement");
 const QString MaintenanceDlg::Private::configFaceScannedHandling("FaceScannedHandling");
+const QString MaintenanceDlg::Private::configMetadataSync("MetadataSync");
+const QString MaintenanceDlg::Private::configSyncDirection("SyncDirection");
 
 MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
     : KDialog(parent), d(new Private)
@@ -143,12 +152,13 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
                        .scaled(48, 48, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
     d->title                = new QLabel(i18n("<qt><b>Select Maintenance Operations to Process</b></qt>"), page);
+    d->albumSelectors       = new AlbumSelectors(i18nc("@label", "Process items from:"), d->configGroupName);
     d->expanderBox          = new RExpanderBox(page);
-    KSeparator* const line  = new KSeparator(Qt::Horizontal);
 
     // --------------------------------------------------------------------------------------
 
-    d->expanderBox->insertItem(Private::NewItems, new QLabel(i18n("<qt><i>no option</i></qt>")),
+    d->expanderBox->insertItem(Private::NewItems, new QLabel(i18n("<qt>No option<br>"
+                               "<i>Note: only Albums Collection are processed by this tool.</i></qt>")),
                                SmallIcon("view-refresh"), i18n("Scan for new items"), "NewItems", false);
     d->expanderBox->setCheckBoxVisible(Private::NewItems, true);
 
@@ -182,41 +192,51 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
 
     // --------------------------------------------------------------------------------------
 
-    d->hbox2              = new KHBox;
-    new QLabel(i18n("Check metadata setup panel for details: "), d->hbox2);
-    QWidget* const space2 = new QWidget(d->hbox2);
-    d->hbox2->setStretchFactor(space2, 10);
-    d->metadataSetup      = new QPushButton(i18n("Settings..."), d->hbox2);
-    d->expanderBox->insertItem(Private::Metadata, d->hbox2, SmallIcon("run-build-file"),
-                               i18n("Sync image metadata with Database"), "Metadata", false);
-    d->expanderBox->setCheckBoxVisible(Private::Metadata, true);
-
-    // --------------------------------------------------------------------------------------
-
     d->hbox3               = new KHBox;
     new QLabel(i18n("Faces data management: "), d->hbox3);
     QWidget* const space3  = new QWidget(d->hbox3);
-    d->hbox2->setStretchFactor(space3, 10);
+    d->hbox3->setStretchFactor(space3, 10);
     d->faceScannedHandling = new QComboBox(d->hbox3);
     d->faceScannedHandling->addItem(i18n("Skip images already scanned"),          FaceScanSettings::Skip);
     d->faceScannedHandling->addItem(i18n("Scan again and merge results"),         FaceScanSettings::Merge);
     d->faceScannedHandling->addItem(i18n("Clear unconfirmed results and rescan"), FaceScanSettings::Rescan);
-    d->expanderBox->insertItem(Private::FaceDetection, d->hbox3, SmallIcon("edit-image-face-detect"),
-                               i18n("Face Detection"), "FaceDetection", false);
-    d->expanderBox->setCheckBoxVisible(Private::FaceDetection, true);
+    d->expanderBox->insertItem(Private::FaceManagement, d->hbox3, SmallIcon("edit-image-face-detect"),
+                               i18n("Detect and recognize Faces"), "FaceManagement", false);
+    d->expanderBox->setCheckBoxVisible(Private::FaceManagement, true);
 
+    // --------------------------------------------------------------------------------------
+
+    d->vbox              = new KVBox;
+    KHBox* const hbox21  = new KHBox(d->vbox);
+    new QLabel(i18n("Sync Direction: "), hbox21);
+    QWidget* const space4  = new QWidget(hbox21);
+    hbox21->setStretchFactor(space4, 10);
+    d->syncDirection = new QComboBox(hbox21);
+    d->syncDirection->addItem(i18n("From database to image metadata"), MetadataSynchronizer::WriteFromDatabaseToFile);
+    d->syncDirection->addItem(i18n("From image metadata to database"), MetadataSynchronizer::ReadFromFileToDatabase);
+
+    KHBox* const hbox22  = new KHBox(d->vbox);
+    new QLabel(i18n("Check metadata setup panel for details: "), hbox22);
+    QWidget* const space2 = new QWidget(hbox22);
+    hbox22->setStretchFactor(space2, 10);
+    d->metadataSetup      = new QPushButton(i18n("Settings..."), hbox22);
+    d->expanderBox->insertItem(Private::MetadataSync, d->vbox, SmallIcon("run-build-file"),
+                               i18n("Sync Metadata and Database"), "MetadataSync", false);
+    d->expanderBox->setCheckBoxVisible(Private::MetadataSync, true);
     d->expanderBox->insertStretch(Private::Stretch);
 
     // --------------------------------------------------------------------------------------
 
-    grid->addWidget(d->logo,        0, 0, 1, 1);
-    grid->addWidget(d->title,       0, 1, 1, 1);
-    grid->addWidget(line,           1, 1, 1, 1);
-    grid->addWidget(d->expanderBox, 2, 0, 3, 2);
+    grid->addWidget(d->logo,                        0, 0, 1, 1);
+    grid->addWidget(d->title,                       0, 1, 1, 1);
+    grid->addWidget(new KSeparator(Qt::Horizontal), 1, 1, 1, 1);
+    grid->addWidget(d->albumSelectors,              2, 1, 1, 1);
+    grid->addWidget(new KSeparator(Qt::Horizontal), 3, 1, 1, 1);
+    grid->addWidget(d->expanderBox,                 4, 0, 3, 2);
     grid->setSpacing(spacingHint());
     grid->setMargin(0);
     grid->setColumnStretch(1, 10);
-    grid->setRowStretch(2, 10);
+    grid->setRowStretch(4, 10);
 
     // --------------------------------------------------------------------------------------
 
@@ -247,6 +267,10 @@ void MaintenanceDlg::slotOk()
 MaintenanceSettings MaintenanceDlg::settings() const
 {
     MaintenanceSettings prm;
+    prm.wholeAlbums                         = d->albumSelectors->wholeAlbumsCollection();
+    prm.wholeTags                           = d->albumSelectors->wholeTagsCollection();
+    prm.albums                              = d->albumSelectors->selectedPAlbums();
+    prm.tags                                = d->albumSelectors->selectedTAlbums();
     prm.newItems                            = d->expanderBox->isChecked(Private::NewItems);
     prm.thumbnails                          = d->expanderBox->isChecked(Private::Thumbnails);
     prm.scanThumbs                          = d->scanThumbs->isChecked();
@@ -254,9 +278,11 @@ MaintenanceSettings MaintenanceDlg::settings() const
     prm.scanFingerPrints                    = d->scanFingerPrints->isChecked();
     prm.duplicates                          = d->expanderBox->isChecked(Private::Duplicates);
     prm.similarity                          = d->similarity->value();
-    prm.metadata                            = d->expanderBox->isChecked(Private::Metadata);
-    prm.faceDetection                       = d->expanderBox->isChecked(Private::FaceDetection);
+    prm.faceManagement                      = d->expanderBox->isChecked(Private::FaceManagement);
     prm.faceSettings.alreadyScannedHandling = (FaceScanSettings::AlreadyScannedHandling)d->faceScannedHandling->currentIndex();
+    prm.faceSettings.albums                 = d->albumSelectors->selectedAlbums();
+    prm.metadataSync                        = d->expanderBox->isChecked(Private::MetadataSync);
+    prm.syncDirection                       = d->syncDirection->currentIndex();
     return prm;
 }
 
@@ -265,19 +291,21 @@ void MaintenanceDlg::readSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
     d->expanderBox->readSettings(group);
+    d->albumSelectors->loadState();
 
     MaintenanceSettings prm;
 
-    d->expanderBox->setChecked(Private::NewItems,      group.readEntry(d->configNewItems,      prm.newItems));
-    d->expanderBox->setChecked(Private::Thumbnails,    group.readEntry(d->configThumbnails,    prm.thumbnails));
-    d->scanThumbs->setChecked(group.readEntry(d->configScanThumbs,                             prm.scanThumbs));
-    d->expanderBox->setChecked(Private::FingerPrints,  group.readEntry(d->configFingerPrints,  prm.fingerPrints));
-    d->scanFingerPrints->setChecked(group.readEntry(d->configScanFingerPrints,                 prm.scanFingerPrints));
-    d->expanderBox->setChecked(Private::Duplicates,    group.readEntry(d->configDuplicates,    prm.duplicates));
-    d->similarity->setValue(group.readEntry(d->configSimilarity,                               prm.similarity));
-    d->expanderBox->setChecked(Private::Metadata,      group.readEntry(d->configMetadata,      prm.metadata));
-    d->expanderBox->setChecked(Private::FaceDetection, group.readEntry(d->configFaceDetection, prm.faceDetection));
-    d->faceScannedHandling->setCurrentIndex(group.readEntry(d->configFaceScannedHandling,      (int)prm.faceSettings.alreadyScannedHandling));
+    d->expanderBox->setChecked(Private::NewItems,       group.readEntry(d->configNewItems,       prm.newItems));
+    d->expanderBox->setChecked(Private::Thumbnails,     group.readEntry(d->configThumbnails,     prm.thumbnails));
+    d->scanThumbs->setChecked(group.readEntry(d->configScanThumbs,                               prm.scanThumbs));
+    d->expanderBox->setChecked(Private::FingerPrints,   group.readEntry(d->configFingerPrints,   prm.fingerPrints));
+    d->scanFingerPrints->setChecked(group.readEntry(d->configScanFingerPrints,                   prm.scanFingerPrints));
+    d->expanderBox->setChecked(Private::Duplicates,     group.readEntry(d->configDuplicates,     prm.duplicates));
+    d->similarity->setValue(group.readEntry(d->configSimilarity,                                 prm.similarity));
+    d->expanderBox->setChecked(Private::FaceManagement, group.readEntry(d->configFaceManagement, prm.faceManagement));
+    d->faceScannedHandling->setCurrentIndex(group.readEntry(d->configFaceScannedHandling,        (int)prm.faceSettings.alreadyScannedHandling));
+    d->expanderBox->setChecked(Private::MetadataSync,   group.readEntry(d->configMetadataSync,   prm.metadataSync));
+    d->syncDirection->setCurrentIndex(group.readEntry(d->configSyncDirection,                    prm.syncDirection));
 
     for (int i = Private::NewItems ; i < Private::Stretch ; ++i)
     {
@@ -290,6 +318,7 @@ void MaintenanceDlg::writeSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
     d->expanderBox->writeSettings(group);
+    d->albumSelectors->saveState();
 
     MaintenanceSettings prm   = settings();
 
@@ -300,9 +329,10 @@ void MaintenanceDlg::writeSettings()
     group.writeEntry(d->configScanFingerPrints,    prm.scanFingerPrints);
     group.writeEntry(d->configDuplicates,          prm.duplicates);
     group.writeEntry(d->configSimilarity,          prm.similarity);
-    group.writeEntry(d->configMetadata,            prm.metadata);
-    group.writeEntry(d->configFaceDetection,       prm.faceDetection);
+    group.writeEntry(d->configFaceManagement,      prm.faceManagement);
     group.writeEntry(d->configFaceScannedHandling, (int)prm.faceSettings.alreadyScannedHandling);
+    group.writeEntry(d->configMetadataSync,        prm.metadataSync);
+    group.writeEntry(d->configSyncDirection,       prm.syncDirection);
 }
 
 void MaintenanceDlg::slotItemToggled(int index, bool b)
@@ -321,12 +351,12 @@ void MaintenanceDlg::slotItemToggled(int index, bool b)
             d->hbox->setEnabled(b);
             break;
 
-        case Private::Metadata:
-            d->hbox2->setEnabled(b);
+        case Private::FaceManagement:
+            d->hbox3->setEnabled(b);
             break;
 
-        case Private::FaceDetection:
-            d->hbox3->setEnabled(b);
+        case Private::MetadataSync:
+            d->vbox->setEnabled(b);
             break;
 
         default :  // NewItems

@@ -200,7 +200,7 @@ bool WorkflowManager::save()
     }
 
     QDomDocument doc("queuelist");
-    doc.setContent(QString("<!DOCTYPE XMLQueueList><queuelist version=\"1.0\" client=\"digikam\" encoding=\"UTF-8\"/>"));
+    doc.setContent(QString("<!DOCTYPE XMLQueueList><queuelist version=\"2.0\" client=\"digikam\" encoding=\"UTF-8\"/>"));
     QDomElement docElem = doc.documentElement();
 
     {
@@ -228,6 +228,10 @@ bool WorkflowManager::save()
             data.setAttribute(QString::fromLatin1("value"), q.qSettings.useOrgAlbum);
             elm.appendChild(data);
 
+            data = doc.createElement(QString::fromLatin1("usemulticorecpu"));
+            data.setAttribute(QString::fromLatin1("value"), q.qSettings.useMultiCoreCPU);
+            elm.appendChild(data);
+            
             data = doc.createElement(QString::fromLatin1("workingurl"));
             data.setAttribute(QString::fromLatin1("value"), q.qSettings.workingUrl.path());
             elm.appendChild(data);
@@ -376,6 +380,10 @@ bool WorkflowManager::load(QStringList& failed)
             else if (name2 == "useoriginalalbum")
             {
                 q.qSettings.useOrgAlbum = (bool)val2.toUInt(&ok);
+            }
+            else if (name2 == "usemulticorecpu")
+            {
+                q.qSettings.useMultiCoreCPU = (bool)val2.toUInt(&ok);
             }
             else if (name2 == "workingurl")
             {

@@ -95,6 +95,7 @@ BCGTool::BCGTool(QObject* const parent)
     setToolIcon(SmallIcon("contrast"));
     setToolHelp("bcgadjusttool.anchor");
     setToolCategory(FilterAction::ReproducibleFilter);
+    setInitPreview(true);
 
     d->previewWidget = new ImageRegionWidget;
     setToolView(d->previewWidget);
@@ -114,7 +115,6 @@ BCGTool::BCGTool(QObject* const parent)
 
     d->settingsView = new BCGSettings(d->gboxSettings->plainPage());
     setToolSettings(d->gboxSettings);
-    init();
 
     // -------------------------------------------------------------
 
@@ -123,8 +123,6 @@ BCGTool::BCGTool(QObject* const parent)
 
     connect(d->previewWidget, SIGNAL(signalResized()),
             this, SLOT(slotPreview()));
-
-    slotTimer();
 }
 
 BCGTool::~BCGTool()

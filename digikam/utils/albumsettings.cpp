@@ -72,7 +72,6 @@ public:
         showTrashDeleteDialog(false),
         showPermanentDeleteDialog(false),
         sidebarApplyDirectly(false),
-        scanAtStart(false),
         iconShowName(false),
         iconShowSize(false),
         iconShowDate(false),
@@ -228,8 +227,6 @@ public:
     bool                                showPermanentDeleteDialog;
     // metadata setting
     bool                                sidebarApplyDirectly;
-    // database setting
-    bool                                scanAtStart;
 
     // icon view settings
     bool                                iconShowName;
@@ -413,7 +410,6 @@ const QString AlbumSettings::Private::configUseTrashEntry("Use Trash");
 const QString AlbumSettings::Private::configShowTrashDeleteDialogEntry("Show Trash Delete Dialog");
 const QString AlbumSettings::Private::configShowPermanentDeleteDialogEntry("Show Permanent Delete Dialog");
 const QString AlbumSettings::Private::configApplySidebarChangesDirectlyEntry("Apply Sidebar Changes Directly");
-const QString AlbumSettings::Private::configScanAtStartEntry("Scan At Start");
 const QString AlbumSettings::Private::configSyncNepomuktoDigikamEntry("Sync Nepomuk to Digikam");
 const QString AlbumSettings::Private::configSyncDigikamtoNepomukEntry("Sync Digikam to Nepomuk");
 const QString AlbumSettings::Private::configStringComparisonTypeEntry("String Comparison Type");
@@ -657,14 +653,14 @@ void AlbumSettings::readSettings()
 
     group = generalConfigGroup();
 
-    d->showSplash                = group.readEntry(d->configShowSplashEntry,                      true);
-    d->useTrash                  = group.readEntry(d->configUseTrashEntry,                        true);
-    d->showTrashDeleteDialog     = group.readEntry(d->configShowTrashDeleteDialogEntry,           true);
-    d->showPermanentDeleteDialog = group.readEntry(d->configShowPermanentDeleteDialogEntry,       true);
-    d->sidebarApplyDirectly      = group.readEntry(d->configApplySidebarChangesDirectlyEntry,     false);
-    d->scanAtStart               = group.readEntry(d->configScanAtStartEntry,                     true);
+    d->showSplash                = group.readEntry(d->configShowSplashEntry,                                  true);
+    d->useTrash                  = group.readEntry(d->configUseTrashEntry,                                    true);
+    d->showTrashDeleteDialog     = group.readEntry(d->configShowTrashDeleteDialogEntry,                       true);
+    d->showPermanentDeleteDialog = group.readEntry(d->configShowPermanentDeleteDialogEntry,                   true);
+    d->sidebarApplyDirectly      = group.readEntry(d->configApplySidebarChangesDirectlyEntry,                 false);
     d->stringComparisonType      = (StringComparisonType) group.readEntry(d->configStringComparisonTypeEntry, (int) Natural);
-
+    setApplicationStyle(group.readEntry(d->configApplicationStyleEntry, kapp->style()->objectName()));
+    
     // ---------------------------------------------------------------------
 
     d->databaseParams.readFromConfig();
@@ -687,8 +683,6 @@ void AlbumSettings::readSettings()
 
     group                    = config->group(d->configGroupFaceDetection);
     d->faceDetectionAccuracy = group.readEntry(d->configFaceDetectionAccuracyEntry, double(0.8));
-
-    setApplicationStyle(group.readEntry(d->configApplicationStyleEntry, kapp->style()->objectName()));
 
     emit setupChanged();
     emit recurseSettingsChanged();
@@ -782,8 +776,8 @@ void AlbumSettings::saveSettings()
     group.writeEntry(d->configShowTrashDeleteDialogEntry,        d->showTrashDeleteDialog);
     group.writeEntry(d->configShowPermanentDeleteDialogEntry,    d->showPermanentDeleteDialog);
     group.writeEntry(d->configApplySidebarChangesDirectlyEntry,  d->sidebarApplyDirectly);
-    group.writeEntry(d->configScanAtStartEntry,                  d->scanAtStart);
     group.writeEntry(d->configStringComparisonTypeEntry,         (int) d->stringComparisonType);
+    group.writeEntry(d->configApplicationStyleEntry,             d->applicationStyle);
 
     // ---------------------------------------------------------------------
 
@@ -808,7 +802,6 @@ void AlbumSettings::saveSettings()
     group = config->group(d->configGroupFaceDetection);
 
     group.writeEntry(d->configFaceDetectionAccuracyEntry, d->faceDetectionAccuracy);
-    group.writeEntry(d->configApplicationStyleEntry,      d->applicationStyle);
 
     config->sync();
 }
@@ -837,16 +830,6 @@ void AlbumSettings::setShowSplashScreen(bool val)
 bool AlbumSettings::getShowSplashScreen() const
 {
     return d->showSplash;
-}
-
-void AlbumSettings::setScanAtStart(bool val)
-{
-    d->scanAtStart = val;
-}
-
-bool AlbumSettings::getScanAtStart() const
-{
-    return d->scanAtStart;
 }
 
 void AlbumSettings::setAlbumCategoryNames(const QStringList& list)

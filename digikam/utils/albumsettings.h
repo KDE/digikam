@@ -109,9 +109,6 @@ public:
     void setShowSplashScreen(bool val);
     bool getShowSplashScreen() const;
 
-    void setScanAtStart(bool val);
-    bool getScanAtStart() const;
-
     void setAlbumCategoryNames(const QStringList& list);
     QStringList getAlbumCategoryNames() const;
 

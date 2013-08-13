@@ -26,6 +26,7 @@
 
 // Local includes
 
+#include "album.h"
 #include "maintenancetool.h"
 
 namespace Digikam
@@ -40,7 +41,9 @@ class FingerPrintsGenerator : public MaintenanceTool
 
 public:
 
-    explicit FingerPrintsGenerator(const bool rebuildAll, ProgressItem* const parent = 0);
+    /** Constructor using AlbumList as argument. If list is empty, whole Albums collection is processed.
+     */
+    explicit FingerPrintsGenerator(const bool rebuildAll, const AlbumList& list=AlbumList(), ProgressItem* const parent = 0);
     ~FingerPrintsGenerator();
 
 private:
