@@ -340,7 +340,7 @@ bool ShowfotoThumbnailModel::pixmapForItem(QString url, QPixmap& pix) const
 
         if (hasPixmap)
         {
-            qDebug() << "Thumbbar: Requested thumbnail size" << d->thumbSize.size()
+            kWarning() << "Thumbbar: Requested thumbnail size" << d->thumbSize.size()
                        << "is larger than the maximum thumbnail size" << d->maxThumbSize
                        << ". Returning a scaled-up image.";
             pix = pix.scaled(d->thumbSize.size(), d->thumbSize.size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);

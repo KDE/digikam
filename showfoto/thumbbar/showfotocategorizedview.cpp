@@ -11,34 +11,35 @@
 #include "showfototooltipfiller.h"
 #include "thumbnailloadthread.h"
 #include "showfotosettings.h"
+#include "imageselectionoverlay.h"
 
 using namespace Digikam;
 
 namespace ShowFoto {
 
-//TODO:
-//class ShowfotoItemViewToolTip : public ItemViewToolTip
-//{
-//public:
 
-//    explicit ShowfotoItemViewToolTip(ShowfotoCategorizedView* const view)
-//        : ItemViewToolTip(view)
-//    {
-//    }
+class ShowfotoItemViewToolTip : public ItemViewToolTip
+{
+public:
 
-//    ShowfotoCategorizedView* view() const
-//    {
-//        return static_cast<ShowfotoCategorizedView*>(ItemViewToolTip::view());
-//    }
+    explicit ShowfotoItemViewToolTip(ShowfotoCategorizedView* const view)
+        : ItemViewToolTip(view)
+    {
+    }
 
-//protected:
+    ShowfotoCategorizedView* view() const
+    {
+        return static_cast<ShowfotoCategorizedView*>(ItemViewToolTip::view());
+    }
 
-//    virtual QString tipContents()
-//    {
-//        ShowfotoItemInfo info = ShowfotoImageModel::retrieveShowfotoItemInfo(currentIndex());
-//        return ShowfotoToolTipFiller::ShowfotoItemInfoTipContents(info);
-//    }
-//};
+protected:
+
+    virtual QString tipContents()
+    {
+        ShowfotoItemInfo info = ShowfotoImageModel::retrieveShowfotoItemInfo(currentIndex());
+        return ShowfotoToolTipFiller::ShowfotoItemInfoTipContents(info);
+    }
+};
 
 class ShowfotoCategorizedView::Private
 {
@@ -71,7 +72,7 @@ public:
 ShowfotoCategorizedView::ShowfotoCategorizedView(QWidget* const parent)
     : DCategorizedView(parent), d(new Private)
 {
-    //setToolTip(new ShowfotoItemViewToolTip(this));
+    setToolTip(new ShowfotoItemViewToolTip(this));
 
     LoadingCacheInterface::connectToSignalFileChanged(this,
             SLOT(slotFileChanged(QString)));

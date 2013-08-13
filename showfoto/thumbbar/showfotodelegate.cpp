@@ -70,13 +70,11 @@ void ShowfotoDelegate::ShowfotoDelegatePrivate::clearRects()
 ShowfotoDelegate::ShowfotoDelegate(QObject* const parent)
     : ItemViewShowfotoDelegate(*new ShowfotoDelegatePrivate, parent)
 {
-    qDebug()<< "showfotoDelegate Constructor";
 }
 
 ShowfotoDelegate::ShowfotoDelegate(ShowfotoDelegate::ShowfotoDelegatePrivate& dd, QObject* const parent)
     : ItemViewShowfotoDelegate(dd, parent)
 {
-    qDebug()<< "showfotoDelegate Constructor";
 }
 
 ShowfotoDelegate::~ShowfotoDelegate()
@@ -264,30 +262,29 @@ void ShowfotoDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, co
         const_cast<ShowfotoDelegate*>(this)->updateActualPixmapRect(index, actualPixmapRect);
     }
 
-    //TODO : make sure that you won't need color label
-//    if (!d->ratingRect.isNull())
-//    {
-//        drawRating(p, index, d->ratingRect, info.rating, isSelected);
-//    }
+    if (!d->ratingRect.isNull())
+    {
+        drawRating(p, index, d->ratingRect, info.rating, isSelected);
+    }
 
-//    // Draw Color Label rectangle
+    // Draw Color Label rectangle
 //    drawColorLabelRect(p, option, isSelected, info.colorLabel);
 
     p->setPen(isSelected ? kapp->palette().color(QPalette::HighlightedText)
                          : kapp->palette().color(QPalette::Text));
 
-    /*
-    // If there is ImageHistory present, paint a small icon over the thumbnail to indicate that this is derived image
-    if (info.hasImageHistory())
-    {
-        p->drawPixmap(d->pixmapRect.right()-24, d->pixmapRect.bottom()-24, KIcon("svn_switch").pixmap(22, 22));
-    }
-    */
 
-//    if (!d->nameRect.isNull())
+//    // If there is ImageHistory present, paint a small icon over the thumbnail to indicate that this is derived image
+//    if (info.hasImageHistory())
 //    {
-//        drawName(p, d->nameRect, info.downloadName);
+//        p->drawPixmap(d->pixmapRect.right()-24, d->pixmapRect.bottom()-24, KIcon("svn_switch").pixmap(22, 22));
 //    }
+
+
+    if (!d->nameRect.isNull())
+    {
+        drawName(p, d->nameRect, info.name);
+    }
 
 //    if (!d->dateRect.isNull())
 //    {
@@ -315,7 +312,7 @@ void ShowfotoDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, co
 //        drawImageSize(p, d->resolutionRect, dimensions);
 //    }
 
-    //TODO: Implement grouping in Showfoto tool.
+    //TODO: Implement grouping in Showfoto
     /*if (!d->groupRect.isNull())
     {
         drawGroupIndicator(p, d->groupRect, info.numberOfGroupedImages(),
@@ -588,7 +585,6 @@ void ShowfotoThumbnailDelegatePrivate::init(ShowfotoThumbnailDelegate* const q)
 ShowfotoThumbnailDelegate::ShowfotoThumbnailDelegate(ShowfotoThumbnailBar* const parent)
     : ShowfotoDelegate(*new ShowfotoThumbnailDelegatePrivate, parent)
 {
-    qDebug() << "Thumbnail delegate constructor";
     Q_D(ShowfotoThumbnailDelegate);
     d->init(this);
 }

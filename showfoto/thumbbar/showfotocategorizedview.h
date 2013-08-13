@@ -72,6 +72,7 @@ public:
     void addOverlay(ImageDelegateOverlay* overlay, ShowfotoDelegate* delegate = 0);
     void removeOverlay(ImageDelegateOverlay* overlay);
 
+    //TODO: Implement This
 //    void addSelectionOverlay(ShowfotoDelegate* delegate = 0);
 
     ThumbnailSize thumbnailSize() const;

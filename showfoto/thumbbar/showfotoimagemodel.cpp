@@ -326,8 +326,6 @@ QList<QModelIndex> ShowfotoImageModel::indexesForUrl(const KUrl& fileUrl) const
         QList<QModelIndex> indexes;
         const int          size = d->infos.size();
 
-        qDebug() << "size:: " ;
-        qDebug() << d->infos.size();
         for (int i = 0; i < size; i++)
         {
             if (d->infos.at(i).url == fileUrl)
@@ -536,7 +534,6 @@ void ShowfotoImageModel::appendInfos(const QList<ShowfotoItemInfo>& infos)
 
 void ShowfotoImageModel::reAddShowfotoItemInfos(ShowfotoItemInfoList& infos)
 {
-    qDebug() << "hey I got the list now";
     publiciseInfos(infos);
 }
 
@@ -624,7 +621,6 @@ void ShowfotoImageModel::publiciseInfos(const QList<ShowfotoItemInfo>& infos)
         }
     }
     endInsertRows();
-    qDebug() << "end insert rows ran";
     emit itemInfosAdded(infos);
 }
 

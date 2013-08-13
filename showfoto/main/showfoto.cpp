@@ -12,6 +12,7 @@
  * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C) 2005-2006 by Tom Albers <tomalbers at kde dot nl>
  * Copyright (C) 2008      by Arnd Baecker <arnd dot baecker at web dot de>
+ * Copyright (C) 2013      by Mohamed Anwer <mohammed dot ahmed dot anwer at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -124,6 +125,7 @@ extern "C"
 #include "uifilevalidator.h"
 #include "knotificationwrapper.h"
 #include "thumbbar/showfotosettings.h"
+#include "thumbbar/showfotodelegate.h"
 #include "showfoto_p.h"
 
 namespace ShowFoto
@@ -383,7 +385,7 @@ void ShowFoto::setupUserArea()
     // is found, it is honored and deleted. The state will from than on be saved
     // by viewContainers built-in mechanism.
     Qt::DockWidgetArea dockArea    = Qt::LeftDockWidgetArea;
-    Qt::Orientation    orientation = Qt::Vertical;
+//    Qt::Orientation    orientation = Qt::Vertical;
 
     if (group.hasKey("HorizontalThumbbar"))
     {
@@ -391,18 +393,10 @@ void ShowFoto::setupUserArea()
         {
             // Horizontal thumbbar layout
             dockArea    = Qt::TopDockWidgetArea;
-            orientation = Qt::Horizontal;
+//            orientation = Qt::Horizontal;
         }
 
         group.deleteEntry("HorizontalThumbbar");
-    }
-    else if(group.hasKey("VerticalThumbbar"))
-    {
-        if(group.readEntry("VerticalThumbbar", true))
-        {
-            dockArea = Qt::LeftDockWidgetArea;
-            orientation = Qt::Vertical;
-        }
     }
 
     // The thumb bar is placed in a detachable/dockable widget.
@@ -415,6 +409,7 @@ void ShowFoto::setupUserArea()
     d->thumbBarDock->setWidget(d->thumbBar);
     viewContainer->addDockWidget(dockArea, d->thumbBarDock);
     d->thumbBarDock->setFloating(false);
+
 //    d->thumbBar->setToolTip(new ItemViewToolTip(d->thumbBar));
 
     d->model = new ShowfotoModel(d->thumbBar);
@@ -428,10 +423,6 @@ void ShowFoto::setupUserArea()
     //d->filterModel->setSortOrder((ShowfotoItemSortSettings::SortRole)ShowfotoSettings::instance()->getImageSortOrder());
     d->filterModel->sort(0);
 
-    //d->dragDropHandler = new ShowfotoDragDropHandler(d->model);
-
-    //d->model->setDragDropHandler(d->dragDropHandler);
-
     d->thumbBar->setModels(d->model, d->filterModel);
     d->thumbBar->setSelectionMode(QAbstractItemView::SingleSelection);
     d->thumbBar->installRatingOverlay();
@@ -439,6 +430,11 @@ void ShowFoto::setupUserArea()
 
     viewContainer->setAutoSaveSettings("ImageViewer Thumbbar", true);
     d->thumbBarDock->reInitialize();
+
+
+    //    TODO: Implement selection overlay
+    //    d->normalDelegate = new ShowfotoNormalDelegate(d->thumbBar);
+    //    d->thumbBar->addSelectionOverlay(d->normalDelegate);
 
     setCentralWidget(widget);
 }
@@ -591,10 +587,11 @@ void ShowFoto::slotOpenFile()
             iteminfo.size = fi.size();
             iteminfo.url  = fi.filePath();
             iteminfo.folder = fi.path();
-            d->infoList.append(iteminfo);//TODO:createinfo list
+            d->infoList.append(iteminfo);
             i++;
         }
         emit signalInfoList(d->infoList);
+        slotOpenUrl(d->infoList.at(0));
     }
 }
 
@@ -773,50 +770,53 @@ void ShowFoto::slotFirst()
     }
 
     d->thumbBar->scrollToTop();
-//    d->thumbBar = d->thumbBar->firstItem();
+    d->thumbBar->setCurrentInfo(d->infoList.at(0));
+    slotOpenUrl(d->infoList.at(0));
 }
 
 void ShowFoto::slotLast()
 {
-//    if (d->currentItem && !promptUserSave(d->currentItem->url()))
-//    {
-//        return;
-//    }
+    if (!d->thumbBar->currentInfo().isNull() && !promptUserSave(d->thumbBar->currentUrl()))
+    {
+        return;
+    }
 
-//    d->thumbBar->setSelected( d->thumbBar->lastItem() );
-//    d->currentItem = d->thumbBar->lastItem();
+    d->thumbBar->scrollToBottom();
+    d->thumbBar->setCurrentInfo(d->infoList.last());
+    slotOpenUrl(d->infoList.last());
 }
 
 void ShowFoto::slotForward()
 {
-//    if (d->currentItem && !promptUserSave(d->currentItem->url()))
-//    {
-//        return;
-//    }
+    if (!d->thumbBar->currentInfo().isNull() && !promptUserSave(d->thumbBar->currentUrl()))
+    {
+        return;
+    }
 
-//    Digikam::ThumbBarItem* curr = d->thumbBar->currentItem();
+    bool currentIsNull = d->thumbBar->currentInfo().isNull();
 
-//    if (curr && curr->next())
-//    {
-//        d->thumbBar->setSelected(curr->next());
-//        d->currentItem = d->thumbBar->currentItem();
-//    }
+    if (!currentIsNull)
+    {
+         d->thumbBar->setCurrentInfo(d->thumbBar->nextInfo(d->thumbBar->currentInfo()));
+         slotOpenUrl(d->thumbBar->currentInfo());
+    }
 }
 
 void ShowFoto::slotBackward()
 {
-//    if (d->currentItem && !promptUserSave(d->currentItem->url()))
-//    {
-//        return;
-//    }
+    if (!d->thumbBar->currentInfo().isNull() && !promptUserSave(d->thumbBar->currentUrl()))
+    {
+        return;
+    }
 
-//    Digikam::ThumbBarItem* curr = d->thumbBar->currentItem();
+    bool currentIsNull = d->thumbBar->currentInfo().isNull();
 
-//    if (curr && curr->prev())
-//    {
-//        d->thumbBar->setSelected(curr->prev());
-//        d->currentItem = d->thumbBar->currentItem();
-//    }
+    if (!currentIsNull)
+    {
+         d->thumbBar->setCurrentInfo(d->thumbBar->previousInfo(d->thumbBar->currentInfo()));
+         slotOpenUrl(d->thumbBar->currentInfo());
+    }
+
 }
 
 void ShowFoto::toggleNavigation(int index)
@@ -908,7 +908,7 @@ void ShowFoto::saveIsComplete()
 
 void ShowFoto::saveAsIsComplete()
 {
-//    resetOriginSwitchFile();
+    resetOriginSwitchFile();
 //    Digikam::LoadingCacheInterface::putImage(m_savingContext.destinationURL.toLocalFile(), m_canvas->currentImage());
 
 //    // Add the file to the list of thumbbar images if it's not there already
@@ -1009,52 +1009,32 @@ void ShowFoto::slotDeleteCurrentItem()
 
 void ShowFoto::slotDeleteCurrentItemResult(KJob* job)
 {
-//    if (job->error() != 0)
-//    {
-//        QString errMsg(job->errorString());
-//        KMessageBox::error(this, errMsg);
-//        return;
-//    }
+    if (job->error() != 0)
+    {
+        QString errMsg(job->errorString());
+        KMessageBox::error(this, errMsg);
+        return;
+    }
 
-//    // No error, remove item in thumbbar.
-
-//    Digikam::ThumbBarItem* item2remove = d->currentItem;
-//    Digikam::ThumbBarItem* nextItem    = 0;
-
-//    for (Digikam::ThumbBarItem* item = d->thumbBar->firstItem(); item; item = item->next())
-//    {
-//        if (item->url().equals(item2remove->url()))
-//        {
-//            // Find item next to the current item
-//            nextItem = item->next();
-//            d->thumbBar->removeItem(item);
-//            d->currentItem = 0;
-//            break;
-//        }
-//    }
-
-//    d->itemsNb = d->thumbBar->countItems();
+    // No error, remove item in thumbbar.
+    d->model->removeShowfotoItemInfo(d->thumbBar->currentInfo());
 
 //    // Disable menu actions and SideBar if no current image.
 
-//    if ( d->itemsNb == 0 )
-//    {
-//        emit signalNoCurrentItem();
-//        slotUpdateItemInfo();
-//        toggleActions(false);
-//        m_canvas->load(QString(), m_IOFileSettings);
-//    }
-//    else
-//    {
-//        // If there is an image after the deleted one, make that selected.
-//        if (nextItem)
-//        {
-//            d->thumbBar->setSelected(nextItem);
-//        }
+    d->itemsNb = d->thumbBar->showfotoItemInfos().size();
 
-//        d->currentItem = d->thumbBar->currentItem();
-//        slotOpenUrl(d->currentItem->url());
-//    }
+    if ( d->itemsNb == 0 )
+    {
+        slotUpdateItemInfo();
+        toggleActions(false);
+        m_canvas->load(QString(), m_IOFileSettings);
+    }
+    else
+    {
+        // If there is an image after the deleted one, make that selected.
+
+        slotOpenUrl(d->thumbBar->currentInfo());
+    }
 }
 
 void ShowFoto::slotContextMenu()
@@ -1064,47 +1044,47 @@ void ShowFoto::slotContextMenu()
 
 void ShowFoto::slideShow(Digikam::SlideShowSettings& settings)
 {
-//    if (!d->thumbBar->showfotoItemInfos().size())
-//    {
-//        return;
-//    }
+    if (!d->thumbBar->showfotoItemInfos().size())
+    {
+        return;
+    }
 
-//    settings.exifRotate = Digikam::MetadataSettings::instance()->settings().exifRotate;
-//    settings.fileList   = d->thumbBar->itemsUrls();
-//    int   i             = 0;
-//    float cnt           = settings.fileList.count();
-//    m_cancelSlideShow   = false;
-//    Digikam::DMetadata meta;
+    settings.exifRotate = Digikam::MetadataSettings::instance()->settings().exifRotate;
+    settings.fileList   = d->thumbBar->urls();
+    int   i             = 0;
+    float cnt           = settings.fileList.count();
+    m_cancelSlideShow   = false;
+    Digikam::DMetadata meta;
 
-//    m_nameLabel->progressBarMode(Digikam::StatusProgressBar::CancelProgressBarMode,
-//                                 i18n("Preparing slideshow. Please wait..."));
+    m_nameLabel->progressBarMode(Digikam::StatusProgressBar::CancelProgressBarMode,
+                                 i18n("Preparing slideshow. Please wait..."));
 
-//    for (KUrl::List::ConstIterator it = settings.fileList.constBegin() ;
-//         !m_cancelSlideShow && (it != settings.fileList.constEnd()) ; ++it)
-//    {
-//        Digikam::SlidePictureInfo pictInfo;
-//        meta.load((*it).toLocalFile());
-//        pictInfo.comment   = meta.getImageComments()[QString("x-default")].caption;
-//        pictInfo.photoInfo = meta.getPhotographInformation();
-//        settings.pictInfoMap.insert(*it, pictInfo);
+    for (KUrl::List::ConstIterator it = settings.fileList.constBegin() ;
+         !m_cancelSlideShow && (it != settings.fileList.constEnd()) ; ++it)
+    {
+        Digikam::SlidePictureInfo pictInfo;
+        meta.load((*it).toLocalFile());
+        pictInfo.comment   = meta.getImageComments()[QString("x-default")].caption;
+        pictInfo.photoInfo = meta.getPhotographInformation();
+        settings.pictInfoMap.insert(*it, pictInfo);
 
-//        m_nameLabel->setProgressValue((int)((i++/cnt)*100.0f));
-//        kapp->processEvents();
-//    }
+        m_nameLabel->setProgressValue((int)((i++/cnt)*100.0f));
+        kapp->processEvents();
+    }
 
-//    m_nameLabel->progressBarMode(Digikam::StatusProgressBar::TextMode, QString());
+    m_nameLabel->progressBarMode(Digikam::StatusProgressBar::TextMode, QString());
 
-//    if (!m_cancelSlideShow)
-//    {
-//        Digikam::SlideShow* const slide = new Digikam::SlideShow(settings);
+    if (!m_cancelSlideShow)
+    {
+        Digikam::SlideShow* const slide = new Digikam::SlideShow(settings);
 
-//        if (settings.startWithCurrent)
-//        {
-//            slide->setCurrent(d->currentItem->url());
-//        }
+        if (settings.startWithCurrent)
+        {
+            slide->setCurrent(d->thumbBar->currentUrl());
+        }
 
-//        slide->show();
-//    }
+        slide->show();
+    }
 }
 
 void ShowFoto::slotRevert()
@@ -1161,7 +1141,6 @@ void ShowFoto::slotToggleActions(bool b)
 
 void ShowFoto::openFolder(const KUrl& url)
 {
-    qDebug()<< "I got the url";
     if (!url.isValid() || !url.isLocalFile())
     {
         return;
@@ -1295,8 +1274,8 @@ void ShowFoto::openFolder(const KUrl& url)
         i++;
     }
 
-    qDebug()<< "signal emmited with the list";
     emit signalInfoList(d->infoList);
+    slotOpenUrl(d->infoList.at(0));
 
 }
 

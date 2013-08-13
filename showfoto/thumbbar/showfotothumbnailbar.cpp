@@ -31,6 +31,7 @@
 #include "showfotofiltermodel.h"
 #include "showfotosettings.h"
 #include "showfotooverlays.h"
+#include "showfotodragdrop.h"
 
 namespace ShowFoto {
 
@@ -57,12 +58,10 @@ ShowfotoThumbnailBar::ShowfotoThumbnailBar(QWidget* const parent)
     setScrollStepGranularity(5);
     setScrollBarPolicy(Qt::ScrollBarAlwaysOn);
 
+//    showfotoImageModel()->setDragDropHandler(new ShowfotoDragDropHandler(showfotoImageModel()));
     setDragEnabled(true);
     setAcceptDrops(true);
     setDropIndicatorShown(false);
-
-    //TODO: Implement Showfoto Tool settings
-    //setToolTipEnabled(ShowfotoSettings::instance()->showToolTipsIsValid());
 
     connect(ShowfotoSettings::instance(), SIGNAL(setupChanged()),
             this, SLOT(slotSetupChanged()));
