@@ -36,8 +36,6 @@
 namespace Digikam
 {
 
-class LoadingDescription;
-
 class ThumbsGenerator : public MaintenanceTool
 {
     Q_OBJECT
@@ -56,12 +54,12 @@ public:
 private:
 
     void init(const bool rebuildAll);
-    void processOne();
 
 private Q_SLOTS:
 
     void slotStart();
-    void slotGotThumbnail(const LoadingDescription&, const QPixmap&);
+    void slotCancel();
+    void slotAdvance(const QPixmap&);
 
 private:
 

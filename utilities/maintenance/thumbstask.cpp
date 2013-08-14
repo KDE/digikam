@@ -3,8 +3,8 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2013-08-09
- * Description : Thread actions task for metadata synchronizer.
+ * Date        : 2013-08-14
+ * Description : Thread actions task for thumbs generator.
  *
  * Copyright (C) 2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "metadatatask.moc"
+#include "thumbstask.moc"
 
 // KDE includes
 
@@ -30,76 +30,72 @@
 
 // Local includes
 
-#include "collectionscanner.h"
-#include "metadatahub.h"
+#include "thumbnailloadthread.h"
+#include "thumbnailsize.h"
 
 namespace Digikam
 {
 
-class MetadataTask::Private
+class ThumbsTask::Private
 {
 public:
 
     Private()
     {
-        cancel    = false;
-        direction = MetadataSynchronizer::WriteFromDatabaseToFile;
+        cancel          = false;
+        thumbLoadThread = ThumbnailLoadThread::defaultThread();
     }
 
-    bool                                cancel;
+    bool                 cancel;
 
-    ImageInfo                           item;
-    MetadataSynchronizer::SyncDirection direction;
+    QString              path;
+    ThumbnailLoadThread* thumbLoadThread;
 };
 
 // -------------------------------------------------------
 
-MetadataTask::MetadataTask()
+ThumbsTask::ThumbsTask()
     : Job(0), d(new Private)
 {
+    connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(LoadingDescription, QPixmap)),
+            this, SLOT(slotGotThumbnail(LoadingDescription, QPixmap)));
 }
 
-MetadataTask::~MetadataTask()
+ThumbsTask::~ThumbsTask()
 {
     slotCancel();
     delete d;
 }
 
-void MetadataTask::setItem(const ImageInfo& item, MetadataSynchronizer::SyncDirection dir)
+void ThumbsTask::setItem(const QString& path)
 {
-    d->item      = item;
-    d->direction = dir;
+    d->path = path;
 }
 
-void MetadataTask::slotCancel()
+void ThumbsTask::slotCancel()
 {
     d->cancel = true;
 }
 
-void MetadataTask::run()
+void ThumbsTask::run()
 {
     if(d->cancel)
     {
         return;
     }
 
-    if (d->direction == MetadataSynchronizer::WriteFromDatabaseToFile)
-    {
-        MetadataHub fileHub;
+    d->thumbLoadThread->deleteThumbnail(d->path);
+    d->thumbLoadThread->find(d->path);
+}
 
-        // read in from database
-        fileHub.load(d->item);
-
-        // write out to file DMetadata
-        fileHub.write(d->item.filePath());
-    }
-    else // MetadataSynchronizer::ReadFromFileToDatabase
+void ThumbsTask::slotGotThumbnail(const LoadingDescription& desc, const QPixmap& pix)
+{
+    if (d->path != desc.filePath)
     {
-        CollectionScanner scanner;
-        scanner.scanFile(d->item, CollectionScanner::Rescan);
+        return;
     }
 
-    emit signalFinished();
+    emit signalFinished(pix);
 }
 
 }  // namespace Digikam
