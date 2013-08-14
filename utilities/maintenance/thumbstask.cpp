@@ -79,23 +79,19 @@ void ThumbsTask::slotCancel()
 
 void ThumbsTask::run()
 {
-    if(d->cancel)
+    if(!d->cancel)
     {
-        return;
+        d->thumbLoadThread->deleteThumbnail(d->path);
+        d->thumbLoadThread->find(d->path);
     }
-
-    d->thumbLoadThread->deleteThumbnail(d->path);
-    d->thumbLoadThread->find(d->path);
 }
 
 void ThumbsTask::slotGotThumbnail(const LoadingDescription& desc, const QPixmap& pix)
 {
-    if (d->path != desc.filePath)
+    if (d->path == desc.filePath)
     {
-        return;
+        emit signalFinished(pix);
     }
-
-    emit signalFinished(pix);
 }
 
 }  // namespace Digikam
