@@ -48,8 +48,6 @@ public:
     explicit QualityScanDialog(QWidget* const parent = 0);
     ~QualityScanDialog();
 
-    QualityScanSettings settings() const;
-
 protected:
 
     void doLoadState();
