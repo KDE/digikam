@@ -30,12 +30,11 @@
 
 // Local includes
 
+#include "album.h"
 #include "maintenancetool.h"
 
 namespace Digikam
 {
-
-class LoadingDescription;
 
 class ThumbsGenerator : public MaintenanceTool
 {
@@ -43,17 +42,24 @@ class ThumbsGenerator : public MaintenanceTool
 
 public:
 
-    explicit ThumbsGenerator(bool rebuildAll = true, int albumId = -1, ProgressItem* const parent = 0);
+    /** Constructor using Album Id as argument. If Id = -1, whole Albums collection is processed.
+     */
+    explicit ThumbsGenerator(const bool rebuildAll = true, int albumId=-1, ProgressItem* const parent = 0);
+
+    /** Constructor using AlbumList as argument. If list is empty, whole Albums collection is processed.
+     */
+    ThumbsGenerator(const bool rebuildAll = true, const AlbumList& list=AlbumList(), ProgressItem* const parent = 0);
     ~ThumbsGenerator();
 
 private:
 
-    void processOne();
+    void init(const bool rebuildAll);
 
 private Q_SLOTS:
 
     void slotStart();
-    void slotGotThumbnail(const LoadingDescription&, const QPixmap&);
+    void slotCancel();
+    void slotAdvance(const QPixmap&);
 
 private:
 

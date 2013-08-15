@@ -1,48 +1,17 @@
 *****************************************************************************************************
-digiKam 3.3.0-beta3- Release date: 2013-06-30
+digiKam 3.4.0 - Release date: 2013-09-01
 
 NEW FEATURES:
 
-Faces Managament : Better management of Picasa Face Tags import/export through metadata
-Faces Management : New Face Recognition engine based on OpenTLD.
+MaintenanceTool : add new options to select ALbums and Tags to process.
+MaintenanceTool : add multi-threading and multi-core CPU support for Metadata Synchronizer tool.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
-001 ==> 319853 - Untranslatable strings in timeline tab.
-002 ==> 277429 - Write out face rectangles to XMP file.
-003 ==> 314509 - Read face tags created by Picasa [patch].
-004 ==> 319731 - digiKam crashes when trying to decode Panasonic Raw (.rw2).
-005 ==> 308489 - Raw image development produces artifacts in digikam 3.0.0-beta 2.
-006 ==> 305382 - Editing RAW gives artefacts with Bilinear quality.
-007 ==> 320049 - Libkdcraw is crashing on decoding some sigma raw files.
-008 ==> 320351 - Request camera support for Sony A77.
-009 ==> 320371 - Panels not hidden when they should be.
-010 ==> 320016 - Full-screen options are not applied after restarting digiKam.
-011 ==> 319876 - Panels state changed after exit from full screen mode.
-012 ==> 320462 - Button for resetting curve in RAW import tool is very small.
-013 ==> 320714 - Build failed.
-014 ==> 320794 - Libkdcraw uses obsolete libraw library.
-015 ==> 320891 - Missing space in Face Tags(including face rectangles).
-016 ==> 290961 - digiKam crashes after closing the configure dialog.
-017 ==> 192258 - Starting takes long time.
-018 ==> 285821 - Once installed, DK does not start.
-019 ==> 319267 - Libkdcraw contains invalid icc profiles, applications fail to save png file with libpng-1.6.x.
-020 ==> 314033 - Crashed when attempting to vie images in folders.
-021 ==> 320763 - Build failed.
-022 ==> 204138 - Possibility to extract JPEG previews from RAW files during camera import.
-023 ==> 261907 - digiKam empty context menus (relevant of default KDE widget style for Windows set to CDE instead Oxygen).
-024 ==> 249387 - Showfoto 1.1.0 crash when saving JPEG in WinVista64.
-025 ==> 262186 - "Save file is completed" notification cannot be turned off.
-026 ==> 321296 - opencv error message during face scan.
-027 ==> 304002 - Segfault when using inpainting.
-028 ==> 319632 - digiKam crashes when in-painting applied to photo.
-029 ==> 322213 - when renaming files by date, the "format settings" link incorrectly links to doc.trolltech.com.
-030 ==> 322656 - When opening a pic, dark areas show artefacts.
-031 ==> 302904 - Import photos causes progress manager to pop up.
-032 ==> 297614 - Maintenance tool disabled after running some tasks.
-033 ==> 295256 - Indicator missing while digiKam is filling the maintenance queue.
-034 ==> 295255 - Running maintenance twice results in error.
-035 ==> 320121 - if running maintenance, "rebuild thumbnails", digiKam hangs endlessly.
-036 ==> 306282 - Improvements for maintenance tool.
-037 ==> 306246 - Add new maintainance option to update DB using image metadata.
-038 ==> 
+001 ==> 276092 - Change defaults for noise reduction.
+002 ==> 323271 - Face Recognition doesn't work.
+003 ==> 323253 - When face tag scanning, digikam exhausts all memory on computer.
+004 ==> 318198 - Failed to process item - rw2 to jpeg batch queue manager conversion.
+005 ==> 323165 - Delete pictures and folders are not removed from table-view
+006 ==> 323498 - (Some) Image Editor Color tools hang when starting them.
+007 ==> 

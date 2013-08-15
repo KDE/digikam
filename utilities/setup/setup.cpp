@@ -544,7 +544,7 @@ void Setup::okClicked()
             return;
         }
 
-        new ThumbsGenerator();
+        new ThumbsGenerator(true, -1);
     }
 
     accept();

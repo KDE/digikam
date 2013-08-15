@@ -142,8 +142,6 @@ LensAutoFixTool::LensAutoFixTool(QObject* const parent)
 
     connect(d->showGrid, SIGNAL(toggled(bool)),
             this, SLOT(slotTimer()));
-
-    init();
 }
 
 LensAutoFixTool::~LensAutoFixTool()

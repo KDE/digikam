@@ -152,8 +152,6 @@ ProfileConversionTool::ProfileConversionTool(QObject* const parent)
     setToolView(d->previewWidget);
     setPreviewModeMask(PreviewToolBar::AllPreviewModes);
 
-    init();
-
     // -------------------------------------------------------------
 
     connect(d->previewWidget, SIGNAL(signalOriginalClipFocusChanged()),

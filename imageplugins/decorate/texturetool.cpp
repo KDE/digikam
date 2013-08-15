@@ -170,7 +170,6 @@ TextureTool::TextureTool(QObject* const parent)
     setToolSettings(d->gboxSettings);
     setToolView(d->previewWidget);
     setPreviewModeMask(PreviewToolBar::AllPreviewModes);
-    init();
 
     // -------------------------------------------------------------
 

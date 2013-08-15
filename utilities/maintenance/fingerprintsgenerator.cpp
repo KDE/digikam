@@ -41,7 +41,6 @@
 // Local includes
 
 #include "dimg.h"
-#include "album.h"
 #include "albumdb.h"
 #include "albummanager.h"
 #include "databaseaccess.h"
@@ -67,18 +66,21 @@ public:
 
     QStringList        allPicturesPath;
 
+    AlbumList          albumList;
+
     PreviewLoadThread* previewLoadThread;
 
     HaarIface          haarIface;
 };
 
-FingerPrintsGenerator::FingerPrintsGenerator(const bool rebuildAll, ProgressItem* const parent)
+FingerPrintsGenerator::FingerPrintsGenerator(const bool rebuildAll, const AlbumList& list, ProgressItem* const parent)
     : MaintenanceTool("FingerPrintsGenerator", parent),
       d(new Private)
 {
     setLabel(i18n("Finger-prints"));
     ProgressManager::addProgressItem(this);
 
+    d->albumList         = list;
     d->rebuildAll        = rebuildAll;
     d->previewLoadThread = new PreviewLoadThread();
 
@@ -95,21 +97,30 @@ void FingerPrintsGenerator::slotStart()
 {
     MaintenanceTool::slotStart();
 
-    const AlbumList palbumList = AlbumManager::instance()->allPAlbums();
+    if (d->albumList.isEmpty())
+    {
+        d->albumList = AlbumManager::instance()->allPAlbums();
+    }
 
     // Get all digiKam albums collection pictures path, depending of d->rebuildAll flag.
 
-    if (d->rebuildAll)
+    for (AlbumList::ConstIterator it = d->albumList.constBegin();
+         !canceled() && (it != d->albumList.constEnd()); ++it)
     {
-        for (AlbumList::ConstIterator it = palbumList.constBegin();
-             !canceled() && (it != palbumList.constEnd()); ++it)
+        d->allPicturesPath += DatabaseAccess().db()->getItemURLsInAlbum((*it)->id());
+
+        if (!d->rebuildAll)
         {
-            d->allPicturesPath += DatabaseAccess().db()->getItemURLsInAlbum((*it)->id());
+            QStringList dirty = DatabaseAccess().db()->getDirtyOrMissingFingerprintURLs();
+
+            foreach(QString path, dirty)
+            {
+                if (dirty.contains(path))
+                {
+                    d->allPicturesPath.removeAll(path);
+                }
+            }
         }
-    }
-    else
-    {
-        d->allPicturesPath = DatabaseAccess().db()->getDirtyOrMissingFingerprintURLs();
     }
 
     if (d->allPicturesPath.isEmpty())

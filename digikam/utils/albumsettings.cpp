@@ -653,13 +653,14 @@ void AlbumSettings::readSettings()
 
     group = generalConfigGroup();
 
-    d->showSplash                = group.readEntry(d->configShowSplashEntry,                      true);
-    d->useTrash                  = group.readEntry(d->configUseTrashEntry,                        true);
-    d->showTrashDeleteDialog     = group.readEntry(d->configShowTrashDeleteDialogEntry,           true);
-    d->showPermanentDeleteDialog = group.readEntry(d->configShowPermanentDeleteDialogEntry,       true);
-    d->sidebarApplyDirectly      = group.readEntry(d->configApplySidebarChangesDirectlyEntry,     false);
+    d->showSplash                = group.readEntry(d->configShowSplashEntry,                                  true);
+    d->useTrash                  = group.readEntry(d->configUseTrashEntry,                                    true);
+    d->showTrashDeleteDialog     = group.readEntry(d->configShowTrashDeleteDialogEntry,                       true);
+    d->showPermanentDeleteDialog = group.readEntry(d->configShowPermanentDeleteDialogEntry,                   true);
+    d->sidebarApplyDirectly      = group.readEntry(d->configApplySidebarChangesDirectlyEntry,                 false);
     d->stringComparisonType      = (StringComparisonType) group.readEntry(d->configStringComparisonTypeEntry, (int) Natural);
-
+    setApplicationStyle(group.readEntry(d->configApplicationStyleEntry, kapp->style()->objectName()));
+    
     // ---------------------------------------------------------------------
 
     d->databaseParams.readFromConfig();
@@ -682,8 +683,6 @@ void AlbumSettings::readSettings()
 
     group                    = config->group(d->configGroupFaceDetection);
     d->faceDetectionAccuracy = group.readEntry(d->configFaceDetectionAccuracyEntry, double(0.8));
-
-    setApplicationStyle(group.readEntry(d->configApplicationStyleEntry, kapp->style()->objectName()));
 
     emit setupChanged();
     emit recurseSettingsChanged();
@@ -778,6 +777,7 @@ void AlbumSettings::saveSettings()
     group.writeEntry(d->configShowPermanentDeleteDialogEntry,    d->showPermanentDeleteDialog);
     group.writeEntry(d->configApplySidebarChangesDirectlyEntry,  d->sidebarApplyDirectly);
     group.writeEntry(d->configStringComparisonTypeEntry,         (int) d->stringComparisonType);
+    group.writeEntry(d->configApplicationStyleEntry,             d->applicationStyle);
 
     // ---------------------------------------------------------------------
 
@@ -802,7 +802,6 @@ void AlbumSettings::saveSettings()
     group = config->group(d->configGroupFaceDetection);
 
     group.writeEntry(d->configFaceDetectionAccuracyEntry, d->faceDetectionAccuracy);
-    group.writeEntry(d->configApplicationStyleEntry,      d->applicationStyle);
 
     config->sync();
 }

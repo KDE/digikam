@@ -37,11 +37,9 @@
 
 // Local includes
 
-#include "album.h"
 #include "albummanager.h"
-#include "collectionscanner.h"
 #include "imageinfojob.h"
-#include "metadatahub.h"
+#include "maintenancethread.h"
 
 namespace Digikam
 {
@@ -52,13 +50,11 @@ class MetadataSynchronizer::Private
 public:
 
     Private() :
-        imageInfoIndex(0),
         imageInfoJob(0),
+        thread(0),
         direction(MetadataSynchronizer::WriteFromDatabaseToFile)
     {
     }
-
-    int                                 imageInfoIndex;
 
     AlbumList                           palbumList;
     AlbumList::Iterator                 albumsIt;
@@ -67,25 +63,21 @@ public:
 
     ImageInfoList                       imageInfoList;
 
-    CollectionScanner                   scanner;
+    MaintenanceThread*                  thread;
 
     MetadataSynchronizer::SyncDirection direction;
 };
 
-MetadataSynchronizer::MetadataSynchronizer(SyncDirection direction, ProgressItem* const parent)
+MetadataSynchronizer::MetadataSynchronizer(const AlbumList& list, SyncDirection direction, ProgressItem* const parent)
     : MaintenanceTool("MetadataSynchronizer", parent),
       d(new Private)
 {
-    d->palbumList = AlbumManager::instance()->allPAlbums();
-    d->direction  = direction;
-}
+    if (list.isEmpty())
+        d->palbumList = AlbumManager::instance()->allPAlbums();
+    else 
+        d->palbumList = list;
 
-MetadataSynchronizer::MetadataSynchronizer(Album* const album, SyncDirection direction, ProgressItem* const parent)
-    : MaintenanceTool("MetadataSynchronizer", parent),
-      d(new Private)
-{
-    d->palbumList.append(album);
-    d->direction = direction;
+    init(direction);
 }
 
 MetadataSynchronizer::MetadataSynchronizer(const ImageInfoList& list, SyncDirection direction, ProgressItem* const parent)
@@ -93,10 +85,22 @@ MetadataSynchronizer::MetadataSynchronizer(const ImageInfoList& list, SyncDirect
       d(new Private)
 {
     d->imageInfoList = list;
-    d->direction     = direction;
+    init(direction);
 }
 
 // Common methods ----------------------------------------------------------------------------
+
+void MetadataSynchronizer::init(SyncDirection direction)
+{
+    d->direction = direction;
+    d->thread    = new MaintenanceThread(this);
+
+    connect(d->thread, SIGNAL(signalCompleted()),
+            this, SLOT(slotDone()));
+
+    connect(d->thread, SIGNAL(signalAdvance()),
+            this, SLOT(slotAdvance()));
+}
 
 void MetadataSynchronizer::slotStart()
 {
@@ -127,6 +131,7 @@ MetadataSynchronizer::~MetadataSynchronizer()
 void MetadataSynchronizer::slotCancel()
 {
     d->imageInfoJob->stop();
+    d->thread->cancel();
     MaintenanceTool::slotCancel();
 }
 
@@ -185,36 +190,14 @@ void MetadataSynchronizer::parseList()
 
     setTotalItems(d->imageInfoList.count());
 
-    while (d->imageInfoIndex != d->imageInfoList.size() && !canceled())
-    {
-        parsePicture();
-        kapp->processEvents();
-    }
-
-    MaintenanceTool::slotDone();
+    d->thread->setUseMultiCore(true);
+    d->thread->syncMetadata(d->imageInfoList, d->direction);
+    d->thread->start();
 }
 
-// TODO : use multithreading to process this method.
-void MetadataSynchronizer::parsePicture()
+void MetadataSynchronizer::slotAdvance()
 {
-    ImageInfo   info = d->imageInfoList.at(d->imageInfoIndex);
-    MetadataHub fileHub;
-
-    if (d->direction == WriteFromDatabaseToFile)
-    {
-        // read in from database
-        fileHub.load(info);
-
-        // write out to file DMetadata
-        fileHub.write(info.filePath());
-    }
-    else
-    {
-        d->scanner.scanFile(info, CollectionScanner::Rescan);
-    }
-
     advance(1);
-    d->imageInfoIndex++;
 }
 
 }  // namespace Digikam
