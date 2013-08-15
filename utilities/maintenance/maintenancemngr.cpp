@@ -144,6 +144,11 @@ void MaintenanceMngr::slotToolCompleted(ProgressItem* tool)
         d->metadataSynchronizer = 0;
         done();
     }
+    else if (tool == dynamic_cast<ProgressItem*>(d->imageQualitySorter))
+    {
+        d->metadataSynchronizer = 0;
+        done();
+    }
 }
 
 void MaintenanceMngr::slotToolCanceled(ProgressItem* tool)
@@ -153,7 +158,8 @@ void MaintenanceMngr::slotToolCanceled(ProgressItem* tool)
         tool == dynamic_cast<ProgressItem*>(d->fingerPrintsGenerator) ||
         tool == dynamic_cast<ProgressItem*>(d->duplicatesFinder)      ||
         tool == dynamic_cast<ProgressItem*>(d->faceDetector)          ||
-        tool == dynamic_cast<ProgressItem*>(d->metadataSynchronizer))
+        tool == dynamic_cast<ProgressItem*>(d->metadataSynchronizer) ||
+        tool == dynamic_cast<ProgressItem*>(d->imageQualitySorter))
     {
         cancel();
     }
@@ -278,6 +284,24 @@ void MaintenanceMngr::stage6()
         d->metadataSynchronizer = new MetadataSynchronizer(list, MetadataSynchronizer::SyncDirection(d->settings.syncDirection));
         d->metadataSynchronizer->setNotificationEnabled(false);
         d->metadataSynchronizer->start();
+    }
+    else
+    {
+        stage7();
+    }
+}
+
+void MaintenanceMngr::stage7()
+{
+    kDebug() << "stage7";
+
+    if (d->settings.imageQualitySorter)
+    {
+      /*
+        d->imageQualitySorter= new QualitySorter(d->settings.imageQualitySorter);
+        d->imageQualitySorter->setNotificationEnabled(false);
+        d->imageQualitySorter->start();
+      */
     }
     else
     {
