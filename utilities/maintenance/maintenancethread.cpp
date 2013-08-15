@@ -64,44 +64,35 @@ void MaintenanceThread::setUseMultiCore(const bool b)
     }
 }
 
-void MaintenanceThread::processItems(const ImageInfoList& items, Mode mode, Settings set)
+void MaintenanceThread::syncMetadata(const ImageInfoList& items, MetadataSynchronizer::SyncDirection dir)
 {
     JobCollection* const collection = new JobCollection();
 
     for(int i=0; i < items.size(); i++)
     {
-        switch(mode)
-        {
-            case ThumbsGenerator:
-                //TODO
+        MetadataTask* const t = new MetadataTask();
+        t->setItem(items.at(i), dir);
 
-                break;
+        connect(t, SIGNAL(signalFinished()),
+                this, SIGNAL(signalAdvance()));
 
-            case FingerprintsGenerator:
-                //TODO
+        connect(this, SIGNAL(signalCanceled()),
+                t, SLOT(slotCancel()), Qt::QueuedConnection);
 
-                break;
-
-            default:  // MetadataSynchronizer
-
-                MetadataTask* const t                   = new MetadataTask();
-                MetadataSynchronizer::SyncDirection dir = (MetadataSynchronizer::SyncDirection)set.value("SyncDirection", MetadataSynchronizer::WriteFromDatabaseToFile).toInt();
-                bool tagsOnly = set.value("TagsOnly",false).toBool();
-                t->setItem(items.at(i), dir);
-                t->setTagsOnly(tagsOnly);
-
-                connect(t, SIGNAL(signalFinished()),
-                        this, SIGNAL(signalAdvance()));
-
-                connect(this, SIGNAL(signalCanceled()),
-                        t, SLOT(slotCancel()), Qt::QueuedConnection);
-
-                collection->addJob(t);
-                break;
-        }
+        collection->addJob(t);
     }
 
     appendJob(collection);
+}
+
+void MaintenanceThread::generateThumbs(const QStringList& paths)
+{
+    // TODO
+}
+
+void MaintenanceThread::generateFingerprints(const QStringList& paths)
+{
+    // TODO
 }
 
 void MaintenanceThread::cancel()

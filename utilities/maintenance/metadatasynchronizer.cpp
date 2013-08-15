@@ -198,12 +198,7 @@ void MetadataSynchronizer::parseList()
     setTotalItems(d->imageInfoList.count());
 
     d->thread->setUseMultiCore(true);
-
-    MaintenanceThread::Settings set;
-    set.insert("SyncDirection", d->direction);
-    set.insert("TagsOnly",      d->tagsOnly);
-
-    d->thread->processItems(d->imageInfoList, MaintenanceThread::MetadataSynchronizer, set);
+    d->thread->syncMetadata(d->imageInfoList, d->direction);
     d->thread->start();
 }
 

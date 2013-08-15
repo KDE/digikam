@@ -44,24 +44,14 @@ class MaintenanceThread : public RActionThreadBase
 
 public:
 
-    enum Mode
-    {
-        ThumbsGenerator = 0,
-        FingerprintsGenerator,
-        MetadataSynchronizer,
-
-    };
-
-    typedef QMap<QString, QVariant> Settings;
-
-public:
-
     explicit MaintenanceThread(QObject* const parent);
     ~MaintenanceThread();
 
     void setUseMultiCore(const bool b);
 
-    void processItems(const ImageInfoList& items, Mode mode, Settings set);
+    void syncMetadata(const ImageInfoList& items, MetadataSynchronizer::SyncDirection dir);
+    void generateThumbs(const QStringList& paths);
+    void generateFingerprints(const QStringList& paths);
 
     void cancel();
 
