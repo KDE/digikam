@@ -26,12 +26,36 @@
 #include "tagfolderview.h"
 
 namespace Digikam {
+
+class TagsManager;
+
 class TagMngrTreeView : public TagFolderView
 {
     Q_OBJECT
 public:
-    TagMngrTreeView(QWidget* parent, TagModel* model);
+    TagMngrTreeView(TagsManager* parent, TagModel* model);
     virtual ~TagMngrTreeView();
+
+protected:
+
+    /**
+     * @brief setContexMenuItems -  Reimplemented method from TagsFolderView.
+     *                              Will set custom actions for Tags Manager.
+     *                              Some actions are also available in toolbar
+     *
+     * @param chm                - ContextMenuHelper class to help setting some
+     *                             basic actions
+     * @param albums             - List of currently selected albums
+     */
+    virtual void setContexMenuItems(ContextMenuHelper& cmh, QList< TAlbum* > albums);
+
+    /**
+     * Reimplement contextMenuEvent from AbstractAlbumTree to support multiple
+     * selection
+     *
+     * @param event context menu event triggered by right click
+     */
+    void contextMenuEvent(QContextMenuEvent* event);
 
 public Q_SLOTS:
 

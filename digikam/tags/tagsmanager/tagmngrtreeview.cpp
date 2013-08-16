@@ -26,7 +26,14 @@
 #include <QModelIndex>
 #include <QQueue>
 
+#include "kdebug.h"
+#include "kmenu.h"
+#include "kaction.h"
+
 #include "tagmngrtreeview.h"
+#include "contextmenuhelper.h"
+#include "tagsmanager.h"
+
 
 namespace Digikam {
 
@@ -36,23 +43,90 @@ class TagMngrTreeView::TagMngrTreeViewPriv
 public:
     TagMngrTreeViewPriv()
     {
-        expandLevel = 0;
+        tagMngr = 0;
     }
 
-    int expandLevel;
+    TagsManager* tagMngr;
 };
 
-TagMngrTreeView::TagMngrTreeView(QWidget* parent, TagModel* model)
+TagMngrTreeView::TagMngrTreeView(TagsManager* parent, TagModel* model)
                 : TagFolderView(parent, model), d(new TagMngrTreeViewPriv())
 {
-
+    d->tagMngr = parent;
 }
 
 TagMngrTreeView::~TagMngrTreeView()
 {
 
 }
+void TagMngrTreeView::contextMenuEvent(QContextMenuEvent* event)
+{
 
+    QModelIndexList selectedItems = selectionModel()->selectedIndexes();
+
+    qSort(selectedItems.begin(),selectedItems.end());
+    QList<TAlbum*> items;
+
+    foreach(QModelIndex mIndex, selectedItems)
+    {
+        TAlbum* temp = static_cast<TAlbum*>(albumForIndex(mIndex));
+        items.push_back(temp);
+    }
+
+    /**
+     * Append root tag if no nodes are selected
+     */
+    if(items.isEmpty())
+    {
+        QModelIndex root = this->model()->index(0,0);
+        items.append(static_cast<TAlbum*>(albumForIndex(root)));
+    }
+    KMenu popmenu(this);
+    popmenu.addTitle(contextMenuIcon(), contextMenuTitle());
+    ContextMenuHelper cmhelper(&popmenu);
+
+    setContexMenuItems(cmhelper, items);
+
+    QAction* const choice = cmhelper.exec(QCursor::pos());
+    Q_UNUSED(choice);
+    Q_UNUSED(event);
+
+}
+
+void TagMngrTreeView::setContexMenuItems(ContextMenuHelper& cmh, QList< TAlbum* > albums)
+{
+    if(albums.size() == 1)
+    {
+        TAlbum* tag = dynamic_cast<TAlbum*> (albums.first());
+
+        if (!tag)
+        {
+            return;
+        }
+
+        cmh.addActionNewTag(tagModificationHelper(), tag);
+    }
+
+    cmh.addActionDeleteTags(tagModificationHelper(),albums);
+    cmh.addSeparator();
+
+    KAction* resetIcon     = new KAction(KIcon("view-refresh"),
+                                         i18n("Reset tag Icon"), this);
+
+    KAction* invSel        = new KAction(KIcon(),
+                                         i18n("Invert Selection"), this);
+
+    KAction* expandTree    = new KAction(KIcon("format-indent-more"),
+                                         i18n("Expand Tag Tree"), this);
+
+    KAction* expandSel     = new KAction(KIcon("format-indent-more"),
+                                         i18n("Expand Selected Nodes"), this);
+
+    cmh.addAction(resetIcon,d->tagMngr, SLOT(slotResetTagIcon()), false);
+    cmh.addAction(invSel, d->tagMngr, SLOT(slotInvertSel()), false);
+    cmh.addAction(expandTree, this, SLOT(slotExpandTree()),false);
+    cmh.addAction(expandSel, this , SLOT(slotExpandSelected()), false);
+}
 void TagMngrTreeView::slotExpandSelected()
 {
     QModelIndexList list = selectionModel()->selectedIndexes();
