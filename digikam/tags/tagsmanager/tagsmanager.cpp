@@ -587,20 +587,91 @@ void TagsManager::slotInvertSel()
 
 void TagsManager::slotWriteToImg()
 {
-    MetadataSynchronizer* tool = new MetadataSynchronizer(AlbumList(), MetadataSynchronizer::WriteFromDatabaseToFile);
+    int result = KMessageBox::warningContinueCancel(this,
+                                                    i18n("This operation can take long time "
+                                                         "depending on collection size.\n"
+                                                         "Do you want to continue?"
+                                                    ));
+
+    if (result != KMessageBox::Continue)
+    {
+        return;
+    }
+    MetadataSynchronizer* tool = new MetadataSynchronizer(AlbumList(),
+                                                          MetadataSynchronizer::WriteFromDatabaseToFile);
     tool->setTagsOnly(true);
     tool->start();
 }
 
 void TagsManager::slotReadFromImg()
 {
-    MetadataSynchronizer* tool = new MetadataSynchronizer(AlbumList(), MetadataSynchronizer::ReadFromFileToDatabase);
+    int result = KMessageBox::warningContinueCancel(this,
+                                                    i18n("This operation can take long time "
+                                                         "depending on collection size.\n"
+                                                         "Do you want to continue?"
+                                                    ));
+
+    if (result != KMessageBox::Continue)
+    {
+        return;
+    }
+    MetadataSynchronizer* tool = new MetadataSynchronizer(AlbumList(),
+                                                          MetadataSynchronizer::ReadFromFileToDatabase);
     tool->setTagsOnly(true);
     tool->start();
 }
 
 void TagsManager::slotWipeAll()
 {
+    int result = KMessageBox::warningContinueCancel(this,
+                                                    i18n("This operation will wipe all tags "
+                                                         "from database and will write changes "
+                                                         "to image metadata.\n"
+                                                         "Do you want to continue?"
+                                                    ));
+
+    if (result != KMessageBox::Continue)
+    {
+        return;
+    }
+    result = KMessageBox::warningContinueCancel(this,
+                                                i18n("This operation can take long time "
+                                                     "depending on collection size.\n"
+                                                     "Do you want to continue?"
+                                                    ));
+
+    if (result != KMessageBox::Continue)
+    {
+        return;
+    }
+
+    AlbumPointerList<TAlbum> tagList;
+    QModelIndex root = d->tagMngrView->model()->index(0,0);
+    int iter = 0;
+    QModelIndex child = root.child(iter++,0);
+
+    while(child.isValid())
+    {
+        tagList <<  AlbumPointer<TAlbum>(d->tagMngrView->albumForIndex(child));
+        child = root.child(iter++,0);
+    }
+
+    AlbumPointerList<TAlbum>::iterator it;
+    for(it = tagList.begin(); it != tagList.end(); ++it)
+    {
+        QString errMsg;
+        if (!AlbumManager::instance()->deleteTAlbum(*it, errMsg))
+        {
+            KMessageBox::error(0, errMsg);
+        }
+    }
+
+    /** Write all changes to file **/
+
+    MetadataSynchronizer* tool = new MetadataSynchronizer(AlbumList(),
+                                                          MetadataSynchronizer::WriteFromDatabaseToFile);
+    tool->setTagsOnly(true);
+    tool->start();
 
 }
 
