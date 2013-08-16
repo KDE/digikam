@@ -101,8 +101,9 @@ void ThumbsGenerator::init(const bool rebuildAll)
     d->rebuildAll = rebuildAll;
     d->thread     = new MaintenanceThread(this);
 
-    connect(d->thread, SIGNAL(signalCompleted()),
-            this, SLOT(slotDone()));
+    // NOTE: A part of finger-print task is done outside dedicated thread. We need to wait until it.
+    //       So we don't use MaintenanceThread::signalCompleted() to know if task is complete. 
+    //       We will check if all process items are done through slotAdvance().
 
     connect(d->thread, SIGNAL(signalAdvance(QPixmap)),
             this, SLOT(slotAdvance(QPixmap)));
@@ -190,7 +191,8 @@ void ThumbsGenerator::slotStart()
 void ThumbsGenerator::slotAdvance(const QPixmap& pix)
 {
     setThumbnail(pix);
-    advance(1);
+    if (advance(1))
+        slotDone();
 }
 
 }  // namespace Digikam

@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2013-08-14
- * Description : Thread actions task for thumbs generator.
+ * Description : Thread actions task for finger-prints generator.
  *
  * Copyright (C) 2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "thumbstask.moc"
+#include "fingerprintstask.moc"
 
 // KDE includes
 
@@ -32,66 +32,78 @@
 
 #include "thumbnailloadthread.h"
 #include "thumbnailsize.h"
+#include "dimg.h"
+#include "haar.h"
+#include "haariface.h"
+#include "previewloadthread.h"
 
 namespace Digikam
 {
 
-class ThumbsTask::Private
+class FingerprintsTask::Private
 {
 public:
 
     Private()
     {
-        cancel          = false;
-        thumbLoadThread = ThumbnailLoadThread::defaultThread();
+        cancel            = false;
+        previewLoadThread = new PreviewLoadThread();
     }
 
-    bool                 cancel;
+    bool               cancel;
 
-    QString              path;
-    ThumbnailLoadThread* thumbLoadThread;
+    QString            path;
+
+    PreviewLoadThread* previewLoadThread;
+    HaarIface          haarIface;
 };
 
 // -------------------------------------------------------
 
-ThumbsTask::ThumbsTask()
+FingerprintsTask::FingerprintsTask()
     : Job(0), d(new Private)
 {
-    connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(LoadingDescription, QPixmap)),
-            this, SLOT(slotGotThumbnail(LoadingDescription, QPixmap)),
-            Qt::QueuedConnection);
+    connect(d->previewLoadThread, SIGNAL(signalImageLoaded(LoadingDescription, DImg)),
+            this, SLOT(slotGotImagePreview(LoadingDescription, DImg)));
 }
 
-ThumbsTask::~ThumbsTask()
+FingerprintsTask::~FingerprintsTask()
 {
     slotCancel();
     delete d;
 }
 
-void ThumbsTask::setItem(const QString& path)
+void FingerprintsTask::setItem(const QString& path)
 {
     d->path = path;
 }
 
-void ThumbsTask::slotCancel()
+void FingerprintsTask::slotCancel()
 {
     d->cancel = true;
 }
 
-void ThumbsTask::run()
+void FingerprintsTask::run()
 {
     if(!d->cancel)
     {
-        d->thumbLoadThread->deleteThumbnail(d->path);
-        d->thumbLoadThread->find(d->path);
+        LoadingDescription description(d->path, HaarIface::preferredSize(), LoadingDescription::ConvertToSRGB);
+        description.rawDecodingSettings.rawPrm.sixteenBitsImage = false;
+        d->previewLoadThread->load(description);
     }
 }
 
-void ThumbsTask::slotGotThumbnail(const LoadingDescription& desc, const QPixmap& pix)
+void FingerprintsTask::slotGotImagePreview(const LoadingDescription& desc, const DImg& img)
 {
     if (d->path == desc.filePath)
     {
-        kDebug() << desc.filePath;
+        if (!img.isNull())
+        {
+            // compute Haar fingerprint
+            d->haarIface.indexImage(desc.filePath, img);
+        }
+
+        QPixmap pix = DImg(img).smoothScale(22, 22, Qt::KeepAspectRatio).convertToPixmap();
         emit signalFinished(pix);
     }
 }
