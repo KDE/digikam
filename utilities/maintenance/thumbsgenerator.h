@@ -26,7 +26,7 @@
 
 // Qt includes
 
-#include <QPixmap>
+#include <QImage>
 
 // Local includes
 
@@ -59,7 +59,7 @@ private Q_SLOTS:
 
     void slotStart();
     void slotCancel();
-    void slotAdvance(const QPixmap&);
+    void slotAdvance(const QImage&);
 
 private:
 

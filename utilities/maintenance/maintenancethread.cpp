@@ -95,8 +95,8 @@ void MaintenanceThread::generateThumbs(const QStringList& paths)
         ThumbsTask* const t = new ThumbsTask();
         t->setItem(paths.at(i));
 
-        connect(t, SIGNAL(signalFinished(QPixmap)),
-                this, SIGNAL(signalAdvance(QPixmap)));
+        connect(t, SIGNAL(signalFinished(QImage)),
+                this, SIGNAL(signalAdvance(QImage)));
 
         connect(this, SIGNAL(signalCanceled()),
                 t, SLOT(slotCancel()), Qt::QueuedConnection);
