@@ -108,6 +108,11 @@ void ThumbsGenerator::init(const bool rebuildAll)
             this, SLOT(slotAdvance(QImage)));
 }
 
+void ThumbsGenerator::setUseMultiCoreCPU(bool b)
+{
+    d->thread->setUseMultiCore(b);
+}
+
 void ThumbsGenerator::slotCancel()
 {
     d->thread->cancel();
@@ -182,7 +187,6 @@ void ThumbsGenerator::slotStart()
 
     setTotalItems(d->allPicturesPath.count());
 
-    d->thread->setUseMultiCore(true);
     d->thread->generateThumbs(d->allPicturesPath);
     d->thread->start();
 }

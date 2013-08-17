@@ -93,6 +93,11 @@ FingerPrintsGenerator::~FingerPrintsGenerator()
     delete d;
 }
 
+void FingerPrintsGenerator::setUseMultiCoreCPU(bool b)
+{
+    d->thread->setUseMultiCore(b);
+}
+
 void FingerPrintsGenerator::slotCancel()
 {
     d->thread->cancel();

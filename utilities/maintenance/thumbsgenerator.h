@@ -51,6 +51,8 @@ public:
     ThumbsGenerator(const bool rebuildAll = true, const AlbumList& list=AlbumList(), ProgressItem* const parent = 0);
     ~ThumbsGenerator();
 
+    void setUseMultiCoreCPU(bool b);
+
 private:
 
     void init(const bool rebuildAll);

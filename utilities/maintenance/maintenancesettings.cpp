@@ -30,6 +30,7 @@ MaintenanceSettings::MaintenanceSettings()
 {
     wholeAlbums      = true;
     wholeTags        = true;
+    useMutiCoreCPU   = false;
     newItems         = false;
     thumbnails       = false;
     scanThumbs       = false;
@@ -54,6 +55,7 @@ QDebug operator<<(QDebug dbg, const MaintenanceSettings& s)
     dbg.nospace() << "wholeTags           : " << s.wholeTags << endl;
     dbg.nospace() << "Albums              : " << s.albums.count() << endl;
     dbg.nospace() << "Tags                : " << s.tags.count() << endl;
+    dbg.nospace() << "useMutiCoreCPU      : " << s.useMutiCoreCPU << endl;
     dbg.nospace() << "newItems            : " << s.newItems << endl;
     dbg.nospace() << "thumbnails          : " << s.thumbnails << endl;
     dbg.nospace() << "scanThumbs          : " << s.scanThumbs << endl;

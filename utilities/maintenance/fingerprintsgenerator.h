@@ -45,6 +45,8 @@ public:
     explicit FingerPrintsGenerator(const bool rebuildAll, const AlbumList& list=AlbumList(), ProgressItem* const parent = 0);
     ~FingerPrintsGenerator();
 
+    void setUseMultiCoreCPU(bool b);
+
 private:
 
     void processOne();

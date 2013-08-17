@@ -65,11 +65,11 @@ public:
         metadataSynchronizer  = 0;
     }
 
-    bool                running;
+    bool                   running;
 
-    QTime               duration;
+    QTime                  duration;
 
-    MaintenanceSettings settings;
+    MaintenanceSettings    settings;
 
     NewItemsFinder*        newItemsFinder;
     ThumbsGenerator*       thumbsGenerator;
@@ -205,6 +205,7 @@ void MaintenanceMngr::stage2()
 
         d->thumbsGenerator = new ThumbsGenerator(rebuildAll, list);
         d->thumbsGenerator->setNotificationEnabled(false);
+        d->thumbsGenerator->setUseMultiCoreCPU(d->settings.useMutiCoreCPU);
         d->thumbsGenerator->start();
     }
     else
@@ -226,6 +227,7 @@ void MaintenanceMngr::stage3()
 
         d->fingerPrintsGenerator = new FingerPrintsGenerator(rebuildAll, list);
         d->fingerPrintsGenerator->setNotificationEnabled(false);
+        d->fingerPrintsGenerator->setUseMultiCoreCPU(d->settings.useMutiCoreCPU);
         d->fingerPrintsGenerator->start();
     }
     else
@@ -256,7 +258,8 @@ void MaintenanceMngr::stage5()
 
     if (d->settings.faceManagement)
     {
-        d->faceDetector = new FaceDetector(d->settings.faceSettings);
+        d->settings.faceSettings.useFullCpu = d->settings.useMutiCoreCPU;
+        d->faceDetector                     = new FaceDetector(d->settings.faceSettings);
         d->faceDetector->setNotificationEnabled(false);
         d->faceDetector->start();
     }
@@ -277,6 +280,7 @@ void MaintenanceMngr::stage6()
         list << d->settings.tags;
         d->metadataSynchronizer = new MetadataSynchronizer(list, MetadataSynchronizer::SyncDirection(d->settings.syncDirection));
         d->metadataSynchronizer->setNotificationEnabled(false);
+        d->metadataSynchronizer->setUseMultiCoreCPU(d->settings.useMutiCoreCPU);
         d->metadataSynchronizer->start();
     }
     else

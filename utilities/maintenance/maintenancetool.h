@@ -52,6 +52,10 @@ public:
 
     void start();
 
+    /** Re-implement this method if your tool is able to use multi-core CPU to process item in parallel
+     */
+    virtual void setUseMultiCoreCPU(bool) {};
+
 Q_SIGNALS:
 
     /** Emit when process is done (not canceled).
