@@ -7,7 +7,7 @@
  * Description : Multithreaded loader for thumbnails
  *
  * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -55,14 +55,14 @@
 namespace Digikam
 {
 
-ThumbnailLoadingTask::ThumbnailLoadingTask(LoadSaveThread* thread, const LoadingDescription& description)
+ThumbnailLoadingTask::ThumbnailLoadingTask(LoadSaveThread* const thread, const LoadingDescription& description)
     : SharedLoadingTask(thread, description, LoadSaveThread::AccessModeRead,
                         LoadingTaskStatusLoading)
 {
     // Thread must be a ThumbnailLoadThread, crashes otherwise.
     // Not a clean but pragmatic solution.
-    ThumbnailLoadThread* thumbThread = static_cast<ThumbnailLoadThread*>(thread);
-    m_creator = thumbThread->thumbnailCreator();
+    ThumbnailLoadThread* const thumbThread = static_cast<ThumbnailLoadThread*>(thread);
+    m_creator                              = thumbThread->thumbnailCreator();
 }
 
 void ThumbnailLoadingTask::execute()
@@ -94,12 +94,12 @@ void ThumbnailLoadingTask::execute()
         return;
     }
 
-    LoadingCache* cache = LoadingCache::cache();
+    LoadingCache* const cache = LoadingCache::cache();
     {
         LoadingCache::CacheLock lock(cache);
 
         // find possible cached images
-        const QImage* cachedImage = cache->retrieveThumbnail(m_loadingDescription.cacheKey());
+        const QImage* const cachedImage = cache->retrieveThumbnail(m_loadingDescription.cacheKey());
 
         if (cachedImage)
         {
@@ -200,7 +200,7 @@ void ThumbnailLoadingTask::execute()
         // dispatch image to all listeners, including this
         for (int i=0; i<m_listeners.count(); ++i)
         {
-            ThumbnailLoadingTask* task = dynamic_cast<ThumbnailLoadingTask*>(m_listeners.at(i));
+            ThumbnailLoadingTask* const task = dynamic_cast<ThumbnailLoadingTask*>(m_listeners.at(i));
 
             if (task)
             {
@@ -253,19 +253,25 @@ void ThumbnailLoadingTask::postProcess()
     switch (m_loadingDescription.postProcessingParameters.colorManagement)
     {
         case LoadingDescription::NoColorConversion:
+        {
             break;
+        }
         case LoadingDescription::ConvertToSRGB:
+        {
             // Thumbnails are stored in sRGB
             break;
+        }
         case LoadingDescription::ConvertForDisplay:
         {
             IccManager::transformForDisplay(m_qimage, m_loadingDescription.postProcessingParameters.profile());
             break;
         }
         default:
+        {
             kError() << "Unsupported postprocessing parameter for thumbnail loading:"
                      << m_loadingDescription.postProcessingParameters.colorManagement;
             break;
+        }
     }
 }
 

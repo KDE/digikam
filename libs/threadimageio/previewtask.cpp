@@ -7,7 +7,7 @@
  * Description : Multithreaded loader for previews
  *
  * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -65,7 +65,7 @@ void PreviewLoadingTask::execute()
         return;
     }
 
-    LoadingCache* cache = LoadingCache::cache();
+    LoadingCache* const cache = LoadingCache::cache();
     {
         LoadingCache::CacheLock lock(cache);
 
@@ -203,9 +203,11 @@ void PreviewLoadingTask::execute()
     DImg::FORMAT format = DImg::fileFormat(m_loadingDescription.filePath);
     KExiv2Iface::KExiv2Previews previews(m_loadingDescription.filePath);
     QSize originalSize = previews.originalSize();
+
     if (!originalSize.isValid() && format == DImg::RAW)
     {
         DcrawInfoContainer container;
+
         if (KDcrawIface::KDcraw::rawFileIdentify(container, m_loadingDescription.filePath))
         {
             originalSize = container.imageSize;
@@ -216,11 +218,13 @@ void PreviewLoadingTask::execute()
     {
         int sizeLimit      = -1;
         int bestSize       = qMax(originalSize.width(), originalSize.height());
+
         // for RAWs, the alternative is the half preview, so best size is already originalSize / 2
         if (format == DImg::RAW)
         {
             bestSize /= 2;
         }
+
         if (m_loadingDescription.previewParameters.fastButLarge())
         {
             if (format == DImg::RAW)
@@ -255,9 +259,10 @@ void PreviewLoadingTask::execute()
             // Try libraw preview loading, it may support some more raws
             QImage kdcrawPreview;
             KDcrawIface::KDcraw::loadEmbeddedPreview(kdcrawPreview, m_loadingDescription.filePath);
+
             if (!kdcrawPreview.isNull() && qMax(kdcrawPreview.width(), kdcrawPreview.height()) >= sizeLimit)
             {
-                qimage = kdcrawPreview;
+                qimage              = kdcrawPreview;
                 fromEmbeddedPreview = true;
             }
             else
@@ -342,10 +347,11 @@ void PreviewLoadingTask::execute()
             // Try libraw preview loading, it may support some more raws
             QImage kdcrawPreview;
             KDcrawIface::KDcraw::loadEmbeddedPreview(kdcrawPreview, m_loadingDescription.filePath);
+
             if (!kdcrawPreview.isNull()
                 && kdcrawPreview.width() >= acceptableWidth &&  kdcrawPreview.height() >= acceptableHeight)
             {
-                qimage = kdcrawPreview;
+                qimage              = kdcrawPreview;
                 fromEmbeddedPreview = true;
             }
             else
@@ -453,7 +459,7 @@ void PreviewLoadingTask::execute()
         // dispatch image to all listeners, including this
         for (int i = 0; i < m_listeners.count(); ++i)
         {
-            LoadingProcessListener* l = m_listeners[i];
+            LoadingProcessListener* const l = m_listeners[i];
 
             if (l->accessMode() == LoadSaveThread::AccessModeReadWrite)
             {
