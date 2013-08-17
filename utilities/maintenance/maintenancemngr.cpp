@@ -258,6 +258,7 @@ void MaintenanceMngr::stage5()
 
     if (d->settings.faceManagement)
     {
+        // NOTE : Use multi-core CPU option is passed through FaceScanSettings
         d->settings.faceSettings.useFullCpu = d->settings.useMutiCoreCPU;
         d->faceDetector                     = new FaceDetector(d->settings.faceSettings);
         d->faceDetector->setNotificationEnabled(false);
