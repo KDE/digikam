@@ -187,8 +187,11 @@ void PreviewLoadingTask::execute()
         }
 
         postProcess();
-        m_thread->taskHasFinished();
-        m_thread->imageLoaded(m_resultLoadingDescription, m_img);
+        if (m_thread)
+        {
+            m_thread->taskHasFinished();
+            m_thread->imageLoaded(m_resultLoadingDescription, m_img);
+        }
         return;
     }
 
@@ -476,7 +479,11 @@ void PreviewLoadingTask::execute()
 
         for (int i = 0; i < m_listeners.count(); ++i)
         {
-            m_listeners[i]->loadSaveNotifier()->imageLoaded(m_loadingDescription, m_img);
+            LoadSaveNotifier* notifier = m_listeners[i]->loadSaveNotifier();
+            if (notifier)
+            {
+                notifier->imageLoaded(m_loadingDescription, m_img);
+            }
         }
 
         // remove myself from list of listeners
@@ -495,8 +502,11 @@ void PreviewLoadingTask::execute()
     }
 
     // again: following the golden rule to avoid deadlocks, do this when CacheLock is not held
-    m_thread->taskHasFinished();
-    m_thread->imageLoaded(m_loadingDescription, m_img);
+    if (m_thread)
+    {
+        m_thread->taskHasFinished();
+        m_thread->imageLoaded(m_loadingDescription, m_img);
+    }
 }
 
 bool PreviewLoadingTask::needToScale(const QSize& imageSize, int previewSize)

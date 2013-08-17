@@ -73,8 +73,11 @@ public:
     /// Optionally, set the displaying widget for color management
     void setDisplayingWidget(QWidget* const widget);
 
+    static DImg loadSynchronously(const QString& filePath, int size, QWidget* displayingWidget = 0);
+
 protected:
 
+    static LoadingDescription createLoadingDescription(const QString& filePath, int size, QWidget* displayingWidget);
     LoadingDescription createLoadingDescription(const QString& filePath, int size);
 
 protected:

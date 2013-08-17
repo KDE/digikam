@@ -164,6 +164,8 @@ public:
     virtual LoadSaveNotifier* loadSaveNotifier();
     virtual LoadSaveThread::AccessMode accessMode();
 
+    DImg img() { return m_img; }
+
 protected:
 
     bool                           m_completed;
