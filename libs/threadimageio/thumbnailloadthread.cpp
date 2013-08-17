@@ -950,7 +950,7 @@ void ThumbnailLoadThread::deleteThumbnail(const QString& filePath)
     creator.deleteThumbnailsFromDisk(filePath);
 }
 
-// --- ThumbnailImageCatcher
+// --- ThumbnailImageCatcher ---------------------------------------------------------
 
 class ThumbnailImageCatcherResult
 {
@@ -973,16 +973,21 @@ public:
     bool               received;
 };
 
-enum ThumbnailImageCatcherState
-{
-    Inactive,
-    Accepting,
-    Waiting,
-    Quitting
-};
+// -------------------------------------
 
 class ThumbnailImageCatcher::Private
 {
+
+public:
+
+    enum ThumbnailImageCatcherState
+    {
+        Inactive,
+        Accepting,
+        Waiting,
+        Quitting
+    };
+
 public:
 
     Private()
@@ -1007,6 +1012,46 @@ public:
     QMutex                             mutex;
     QWaitCondition                     condVar;
 };
+
+void ThumbnailImageCatcher::Private::reset()
+{
+    intermediate.clear();
+    tasks.clear();
+
+    if (active)
+    {
+        state = Accepting;
+    }
+    else
+    {
+        state = Inactive;
+    }
+}
+
+void ThumbnailImageCatcher::Private::harvest(const LoadingDescription& description, const QImage& image)
+{
+    // called under lock
+    bool finished = true;
+
+    for (int i=0; i<tasks.size(); ++i)
+    {
+        ThumbnailImageCatcherResult& task = tasks[i];
+
+        if (task.description == description)
+        {
+            task.image    = image;
+            task.received = true;
+        }
+
+        finished = finished && task.received;
+    }
+
+    if (finished)
+    {
+        state = Quitting;
+        condVar.wakeOne();
+    }
+}
 
 ThumbnailImageCatcher::ThumbnailImageCatcher(QObject* const parent)
     : QObject(parent), d(new Private)
@@ -1036,7 +1081,7 @@ void ThumbnailImageCatcher::setThumbnailLoadThread(ThumbnailLoadThread* const th
         return;
     }
 
-    d->state = Inactive;
+    d->state = Private::Inactive;
 
     if (d->thread)
     {
@@ -1080,50 +1125,10 @@ void ThumbnailImageCatcher::cancel()
 {
     QMutexLocker lock(&d->mutex);
 
-    if (d->state == Waiting)
+    if (d->state == Private::Waiting)
     {
-        d->state = Quitting;
+        d->state = Private::Quitting;
         d->condVar.wakeOne();
-    }
-}
-
-void ThumbnailImageCatcher::Private::reset()
-{
-    intermediate.clear();
-    tasks.clear();
-
-    if (active)
-    {
-        state = Accepting;
-    }
-    else
-    {
-        state = Inactive;
-    }
-}
-
-void ThumbnailImageCatcher::Private::harvest(const LoadingDescription& description, const QImage& image)
-{
-    // called under lock
-    bool finished = true;
-
-    for (int i=0; i<tasks.size(); ++i)
-    {
-        ThumbnailImageCatcherResult& task = tasks[i];
-
-        if (task.description == description)
-        {
-            task.image    = image;
-            task.received = true;
-        }
-
-        finished = finished && task.received;
-    }
-
-    if (finished)
-    {
-        state = Quitting;
-        condVar.wakeOne();
     }
 }
 
@@ -1135,15 +1140,15 @@ void ThumbnailImageCatcher::slotThumbnailLoaded(const LoadingDescription& descri
 
     switch (d->state)
     {
-        case Inactive:
+        case Private::Inactive:
             break;
-        case Accepting:
+        case Private::Accepting:
             d->intermediate << ThumbnailImageCatcherResult(description, image);
             break;
-        case Waiting:
+        case Private::Waiting:
             d->harvest(description, image);
             break;
-        case Quitting:
+        case Private::Quitting:
             break;
     }
 }
@@ -1170,7 +1175,7 @@ QList<QImage> ThumbnailImageCatcher::waitForThumbnails()
     }
 
     QMutexLocker lock(&d->mutex);
-    d->state = Waiting;
+    d->state = Private::Waiting;
 
     // first, handle results received between request and calling this method
     foreach(const ThumbnailImageCatcherResult& result, d->intermediate)
@@ -1181,7 +1186,7 @@ QList<QImage> ThumbnailImageCatcher::waitForThumbnails()
     d->intermediate.clear();
 
     // Now wait for the rest to arrive. If already finished, state will be Quitting
-    while (d->state == Waiting)
+    while (d->state == Private::Waiting)
     {
         d->condVar.wait(&d->mutex);
     }
