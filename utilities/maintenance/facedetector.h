@@ -47,6 +47,8 @@ public:
     explicit FaceDetector(const FaceScanSettings& settings, ProgressItem* const parent = 0);
     ~FaceDetector();
 
+    // NOTE : Use multi-core CPU option is passed through FaceScanSettings
+
 private Q_SLOTS:
 
     void slotStart();

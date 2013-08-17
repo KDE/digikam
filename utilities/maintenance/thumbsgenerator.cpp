@@ -45,10 +45,9 @@
 #include "albumsettings.h"
 #include "databaseaccess.h"
 #include "imageinfo.h"
-#include "thumbnailloadthread.h"
-#include "thumbnailsize.h"
 #include "thumbnaildatabaseaccess.h"
 #include "thumbnaildb.h"
+#include "maintenancethread.h"
 #include "config-digikam.h"
 
 namespace Digikam
@@ -60,17 +59,17 @@ public:
 
     Private() :
         rebuildAll(true),
-        thumbLoadThread(0)
+        thread(0)
     {
     }
 
-    bool                 rebuildAll;
+    bool               rebuildAll;
 
-    AlbumList            albumList;
+    AlbumList          albumList;
 
-    QStringList          allPicturesPath;
+    QStringList        allPicturesPath;
 
-    ThumbnailLoadThread* thumbLoadThread;
+    MaintenanceThread* thread;
 };
 
 ThumbsGenerator::ThumbsGenerator(const bool rebuildAll, const AlbumList& list, ProgressItem* const parent)
@@ -89,21 +88,35 @@ ThumbsGenerator::ThumbsGenerator(const bool rebuildAll, int albumId, ProgressIte
     init(rebuildAll);
 }
 
+ThumbsGenerator::~ThumbsGenerator()
+{
+    delete d;
+}
+
 void ThumbsGenerator::init(const bool rebuildAll)
 {
     setLabel(i18n("Thumbs"));
     ProgressManager::addProgressItem(this);
 
-    d->rebuildAll      = rebuildAll;
-    d->thumbLoadThread = ThumbnailLoadThread::defaultThread();
+    d->rebuildAll = rebuildAll;
+    d->thread     = new MaintenanceThread(this);
 
-    connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(LoadingDescription,QPixmap)),
-            this, SLOT(slotGotThumbnail(LoadingDescription,QPixmap)));
+    connect(d->thread, SIGNAL(signalCompleted()),
+            this, SLOT(slotDone()));
+
+    connect(d->thread, SIGNAL(signalAdvance(QImage)),
+            this, SLOT(slotAdvance(QImage)));
 }
 
-ThumbsGenerator::~ThumbsGenerator()
+void ThumbsGenerator::setUseMultiCoreCPU(bool b)
 {
-    delete d;
+    d->thread->setUseMultiCore(b);
+}
+
+void ThumbsGenerator::slotCancel()
+{
+    d->thread->cancel();
+    MaintenanceTool::slotCancel();
 }
 
 void ThumbsGenerator::slotStart()
@@ -173,56 +186,15 @@ void ThumbsGenerator::slotStart()
     }
 
     setTotalItems(d->allPicturesPath.count());
-    processOne();
+
+    d->thread->generateThumbs(d->allPicturesPath);
+    d->thread->start();
 }
 
-void ThumbsGenerator::processOne()
+void ThumbsGenerator::slotAdvance(const QImage& img)
 {
-    if (canceled())
-    {
-        slotCancel();
-        return;
-    }
-
-    if (d->allPicturesPath.isEmpty())
-    {
-        slotDone();
-        return;
-    }
-
-    QString path = d->allPicturesPath.first();
-    d->thumbLoadThread->deleteThumbnail(path);
-    d->thumbLoadThread->find(path);
-}
-
-void ThumbsGenerator::slotGotThumbnail(const LoadingDescription& desc, const QPixmap& pix)
-{
-    if (d->allPicturesPath.isEmpty())
-    {
-        return;
-    }
-
-    if (d->allPicturesPath.first() != desc.filePath)
-    {
-        return;
-    }
-
-    setThumbnail(pix);
+    setThumbnail(QPixmap::fromImage(img));
     advance(1);
-
-    if (!d->allPicturesPath.isEmpty())
-    {
-        d->allPicturesPath.removeFirst();
-    }
-
-    if (d->allPicturesPath.isEmpty())
-    {
-        slotDone();
-    }
-    else
-    {
-        processOne();
-    }
 }
 
 }  // namespace Digikam

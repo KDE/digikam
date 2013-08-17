@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2013-08-09
- * Description : Thread actions manager for metadata synchronizer.
+ * Description : Thread actions manager for maintenance tools.
  *
  * Copyright (C) 2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "metadatathread.moc"
+#include "maintenancethread.moc"
 
 // KDE includes
 
@@ -32,27 +32,28 @@
 // Local includes
 
 #include "metadatatask.h"
+#include "thumbstask.h"
+#include "fingerprintstask.h"
 
 using namespace Solid;
 
 namespace Digikam
 {
 
-MetadataThread::MetadataThread(QObject* const parent)
+MaintenanceThread::MaintenanceThread(QObject* const parent)
     : RActionThreadBase(parent)
 {
     connect(this, SIGNAL(finished()),
             this, SLOT(slotThreadFinished()));
 }
 
-MetadataThread::~MetadataThread()
+MaintenanceThread::~MaintenanceThread()
 {
     cancel();
-
     wait();
 }
 
-void MetadataThread::setUseMultiCore(const bool b)
+void MaintenanceThread::setUseMultiCore(const bool b)
 {
     if (!b)
     {
@@ -64,7 +65,7 @@ void MetadataThread::setUseMultiCore(const bool b)
     }
 }
 
-void MetadataThread::processItems(const ImageInfoList& items, MetadataSynchronizer::SyncDirection dir)
+void MaintenanceThread::syncMetadata(const ImageInfoList& items, MetadataSynchronizer::SyncDirection dir)
 {
     JobCollection* const collection = new JobCollection();
 
@@ -85,7 +86,49 @@ void MetadataThread::processItems(const ImageInfoList& items, MetadataSynchroniz
     appendJob(collection);
 }
 
-void MetadataThread::cancel()
+void MaintenanceThread::generateThumbs(const QStringList& paths)
+{
+    JobCollection* const collection = new JobCollection();
+
+    for(int i=0; i < paths.size(); i++)
+    {
+        ThumbsTask* const t = new ThumbsTask();
+        t->setItem(paths.at(i));
+
+        connect(t, SIGNAL(signalFinished(QImage)),
+                this, SIGNAL(signalAdvance(QImage)));
+
+        connect(this, SIGNAL(signalCanceled()),
+                t, SLOT(slotCancel()), Qt::QueuedConnection);
+
+        collection->addJob(t);
+    }
+
+    appendJob(collection);
+}
+
+void MaintenanceThread::generateFingerprints(const QStringList& paths)
+{
+    JobCollection* const collection = new JobCollection();
+
+    for(int i=0; i < paths.size(); i++)
+    {
+        FingerprintsTask* const t = new FingerprintsTask();
+        t->setItem(paths.at(i));
+
+        connect(t, SIGNAL(signalFinished(QPixmap)),
+                this, SIGNAL(signalAdvance(QPixmap)));
+
+        connect(this, SIGNAL(signalCanceled()),
+                t, SLOT(slotCancel()), Qt::QueuedConnection);
+
+        collection->addJob(t);
+    }
+
+    appendJob(collection);
+}
+
+void MaintenanceThread::cancel()
 {
     if (isRunning())
         emit signalCanceled();
@@ -93,7 +136,7 @@ void MetadataThread::cancel()
     RActionThreadBase::cancel();
 }
 
-void MetadataThread::slotThreadFinished()
+void MaintenanceThread::slotThreadFinished()
 {
     if (isEmpty())
     {

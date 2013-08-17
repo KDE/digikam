@@ -39,7 +39,7 @@
 
 #include "albummanager.h"
 #include "imageinfojob.h"
-#include "metadatathread.h"
+#include "maintenancethread.h"
 
 namespace Digikam
 {
@@ -62,8 +62,8 @@ public:
     ImageInfoJob*                       imageInfoJob;
 
     ImageInfoList                       imageInfoList;
-    
-    MetadataThread*                     thread;
+
+    MaintenanceThread*                  thread;
 
     MetadataSynchronizer::SyncDirection direction;
 };
@@ -93,13 +93,18 @@ MetadataSynchronizer::MetadataSynchronizer(const ImageInfoList& list, SyncDirect
 void MetadataSynchronizer::init(SyncDirection direction)
 {
     d->direction = direction;
-    d->thread    = new MetadataThread(this);
-    
+    d->thread    = new MaintenanceThread(this);
+
     connect(d->thread, SIGNAL(signalCompleted()),
             this, SLOT(slotDone()));
-    
+
     connect(d->thread, SIGNAL(signalAdvance()),
             this, SLOT(slotAdvance()));
+}
+
+void MetadataSynchronizer::setUseMultiCoreCPU(bool b)
+{
+    d->thread->setUseMultiCore(b);
 }
 
 void MetadataSynchronizer::slotStart()
@@ -191,7 +196,7 @@ void MetadataSynchronizer::parseList()
     setTotalItems(d->imageInfoList.count());
 
     d->thread->setUseMultiCore(true);
-    d->thread->processItems(d->imageInfoList, d->direction);
+    d->thread->syncMetadata(d->imageInfoList, d->direction);
     d->thread->start();
 }
 

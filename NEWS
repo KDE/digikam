@@ -1,5 +1,5 @@
 *****************************************************************************************************
-digiKam 3.4.0- Release date: 2013-09-01
+digiKam 3.4.0 - Release date: 2013-09-01
 
 NEW FEATURES:
 
@@ -13,5 +13,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 003 ==> 323253 - When face tag scanning, digikam exhausts all memory on computer.
 004 ==> 318198 - Failed to process item - rw2 to jpeg batch queue manager conversion.
 005 ==> 323165 - Delete pictures and folders are not removed from table-view
-006 ==> 
-
+006 ==> 323498 - (Some) Image Editor Color tools hang when starting them.
+007 ==> 
