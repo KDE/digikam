@@ -98,6 +98,11 @@ void PreviewLoadThread::setDisplayingWidget(QWidget* const widget)
 DImg PreviewLoadThread::loadSynchronously(const QString& filePath, int size, QWidget* displayingWidget)
 {
     LoadingDescription description = createLoadingDescription(filePath, size, displayingWidget);
+    return loadSynchronously(description);
+}
+
+DImg PreviewLoadThread::loadSynchronously(const LoadingDescription& description)
+{
     PreviewLoadingTask task(0, description);
     task.execute();
     return task.img();

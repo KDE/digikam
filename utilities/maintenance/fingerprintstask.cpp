@@ -30,8 +30,6 @@
 
 // Local includes
 
-#include "thumbnailloadthread.h"
-#include "thumbnailsize.h"
 #include "dimg.h"
 #include "haar.h"
 #include "haariface.h"
@@ -46,16 +44,12 @@ public:
 
     Private()
     {
-        cancel            = false;
-        previewLoadThread = new PreviewLoadThread();
+        cancel = false;
     }
 
-    bool               cancel;
-
-    QString            path;
-
-    PreviewLoadThread* previewLoadThread;
-    HaarIface          haarIface;
+    bool      cancel;
+    HaarIface haarIface;
+    QString   path;
 };
 
 // -------------------------------------------------------
@@ -63,8 +57,6 @@ public:
 FingerprintsTask::FingerprintsTask()
     : Job(0), d(new Private)
 {
-    connect(d->previewLoadThread, SIGNAL(signalImageLoaded(LoadingDescription, DImg)),
-            this, SLOT(slotGotImagePreview(LoadingDescription, DImg)));
 }
 
 FingerprintsTask::~FingerprintsTask()
@@ -88,23 +80,20 @@ void FingerprintsTask::run()
     if(!d->cancel)
     {
         LoadingDescription description(d->path, HaarIface::preferredSize(), LoadingDescription::ConvertToSRGB);
-        description.rawDecodingSettings.rawPrm.sixteenBitsImage = false;
-        d->previewLoadThread->load(description);
-    }
-}
+        description.rawDecodingSettings.optimizeTimeLoading();
+        description.rawDecodingSettings.rawPrm.sixteenBitsImage   = false;
+        description.rawDecodingSettings.rawPrm.halfSizeColorImage = true;
+        description.rawDecodingHint                               = LoadingDescription::RawDecodingTimeOptimized;
+        DImg dimg = PreviewLoadThread::loadSynchronously(description);
 
-void FingerprintsTask::slotGotImagePreview(const LoadingDescription& desc, const DImg& img)
-{
-    if (d->path == desc.filePath)
-    {
-        if (!img.isNull())
+        if (!dimg.isNull())
         {
             // compute Haar fingerprint
-            d->haarIface.indexImage(desc.filePath, img);
+            d->haarIface.indexImage(d->path, dimg);
         }
 
-        QPixmap pix = DImg(img).smoothScale(22, 22, Qt::KeepAspectRatio).convertToPixmap();
-        emit signalFinished(pix);
+        QImage qimg = dimg.smoothScale(22, 22, Qt::KeepAspectRatio).copyQImage();
+        emit signalFinished(qimg);
     }
 }
 

@@ -74,6 +74,7 @@ public:
     void setDisplayingWidget(QWidget* const widget);
 
     static DImg loadSynchronously(const QString& filePath, int size, QWidget* displayingWidget = 0);
+    static DImg loadSynchronously(const LoadingDescription& description);
 
 protected:
 

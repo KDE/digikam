@@ -63,7 +63,6 @@ Q_SIGNALS:
      */
     void signalAdvance();
     void signalAdvance(const QImage&);
-    void signalAdvance(const QPixmap&);
 
     /** Emit when a items list have been fully processed.
      */

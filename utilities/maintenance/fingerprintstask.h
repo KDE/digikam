@@ -54,7 +54,7 @@ public:
 
 Q_SIGNALS:
 
-    void signalFinished(const QPixmap&);
+    void signalFinished(const QImage&);
 
 public Q_SLOTS:
 
@@ -63,10 +63,6 @@ public Q_SLOTS:
 protected:
 
     void run();
-
-private Q_SLOTS:
-
-    void slotGotImagePreview(const LoadingDescription&, const DImg&);
 
 private:
 

@@ -80,12 +80,11 @@ FingerPrintsGenerator::FingerPrintsGenerator(const bool rebuildAll, const AlbumL
     d->rebuildAll = rebuildAll;
     d->thread     = new MaintenanceThread(this);
 
-    // NOTE: A part of finger-print task is done outside dedicated thread. We need to wait until it.
-    //       So we don't use MaintenanceThread::signalCompleted() to know if task is complete. 
-    //       We will check if all process items are done through slotAdvance().
+    connect(d->thread, SIGNAL(signalCompleted()),
+            this, SLOT(slotDone()));
 
-    connect(d->thread, SIGNAL(signalAdvance(QPixmap)),
-            this, SLOT(slotAdvance(QPixmap)));
+    connect(d->thread, SIGNAL(signalAdvance(QImage)),
+            this, SLOT(slotAdvance(QImage)));
 }
 
 FingerPrintsGenerator::~FingerPrintsGenerator()
@@ -147,11 +146,10 @@ void FingerPrintsGenerator::slotStart()
     d->thread->start();
 }
 
-void FingerPrintsGenerator::slotAdvance(const QPixmap& pix)
+void FingerPrintsGenerator::slotAdvance(const QImage& img)
 {
-    setThumbnail(pix);
-    if (advance(1))
-        slotDone();
+    setThumbnail(QPixmap::fromImage(img));
+    advance(1);
 }
 
 void FingerPrintsGenerator::slotDone()
