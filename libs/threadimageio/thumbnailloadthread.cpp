@@ -952,40 +952,36 @@ void ThumbnailLoadThread::deleteThumbnail(const QString& filePath)
 
 // --- ThumbnailImageCatcher ---------------------------------------------------------
 
-class ThumbnailImageCatcherResult
-{
-public:
-
-    ThumbnailImageCatcherResult(const LoadingDescription& d)
-        : description(d), received(false)
-    {
-    }
-
-    ThumbnailImageCatcherResult(const LoadingDescription& d, const QImage& image)
-        : image(image), description(d), received(true)
-    {
-    }
-
-public:
-
-    QImage             image;
-    LoadingDescription description;
-    bool               received;
-};
-
-// -------------------------------------
-
 class ThumbnailImageCatcher::Private
 {
 
 public:
 
-    enum ThumbnailImageCatcherState
+    enum CatcherState
     {
         Inactive,
         Accepting,
         Waiting,
         Quitting
+    };
+
+public:
+
+    class CatcherResult
+    {
+    public:
+
+        CatcherResult(const LoadingDescription& d)
+            : description(d), received(false) {}
+
+        CatcherResult(const LoadingDescription& d, const QImage& image)
+            : image(image), description(d), received(true){}
+
+    public:
+
+        QImage             image;
+        LoadingDescription description;
+        bool               received;
     };
 
 public:
@@ -1002,15 +998,15 @@ public:
 
 public:
 
-    ThumbnailImageCatcherState         state;
+    CatcherState                  state;
 
-    bool                               active;
-    ThumbnailLoadThread*               thread;
-    QList<ThumbnailImageCatcherResult> tasks;
-    QList<ThumbnailImageCatcherResult> intermediate;
+    bool                          active;
+    ThumbnailLoadThread*          thread;
+    QList<Private::CatcherResult> tasks;
+    QList<Private::CatcherResult> intermediate;
 
-    QMutex                             mutex;
-    QWaitCondition                     condVar;
+    QMutex                        mutex;
+    QWaitCondition                condVar;
 };
 
 void ThumbnailImageCatcher::Private::reset()
@@ -1035,7 +1031,7 @@ void ThumbnailImageCatcher::Private::harvest(const LoadingDescription& descripti
 
     for (int i=0; i<tasks.size(); ++i)
     {
-        ThumbnailImageCatcherResult& task = tasks[i];
+        Private::CatcherResult& task = tasks[i];
 
         if (task.description == description)
         {
@@ -1143,7 +1139,7 @@ void ThumbnailImageCatcher::slotThumbnailLoaded(const LoadingDescription& descri
         case Private::Inactive:
             break;
         case Private::Accepting:
-            d->intermediate << ThumbnailImageCatcherResult(description, image);
+            d->intermediate << Private::CatcherResult(description, image);
             break;
         case Private::Waiting:
             d->harvest(description, image);
@@ -1178,7 +1174,7 @@ QList<QImage> ThumbnailImageCatcher::waitForThumbnails()
     d->state = Private::Waiting;
 
     // first, handle results received between request and calling this method
-    foreach(const ThumbnailImageCatcherResult& result, d->intermediate)
+    foreach(const Private::CatcherResult& result, d->intermediate)
     {
         d->harvest(result.description, result.image);
     }
@@ -1193,7 +1189,7 @@ QList<QImage> ThumbnailImageCatcher::waitForThumbnails()
 
     QList<QImage> result;
 
-    foreach(const ThumbnailImageCatcherResult& task, d->tasks)
+    foreach(const Private::CatcherResult& task, d->tasks)
     {
         result << task.image;
     }
