@@ -203,7 +203,6 @@ DistortionFXTool::DistortionFXTool(QObject* const parent)
     // -------------------------------------------------------------
 
     setToolSettings(d->gboxSettings);
-    init();
 
     // -------------------------------------------------------------
 

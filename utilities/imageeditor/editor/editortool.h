@@ -54,7 +54,13 @@ public:
     explicit EditorTool(QObject* const parent);
     virtual ~EditorTool();
 
+    /** Caller by editor tool interface to initialized tool when all is ready, through slotInit().
+     */
     void init();
+
+    /** Set this option to on if you want to call slotPreview() in slotInit() at tool startup.
+     */
+    void setInitPreview(bool b);
 
     QString                toolHelp()     const;
     QString                toolName()     const;

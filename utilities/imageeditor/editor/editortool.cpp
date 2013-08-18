@@ -54,6 +54,7 @@ class EditorTool::Private
 public:
 
     Private() :
+        initPreview(false),
         version(0),
         view(0),
         timer(0),
@@ -62,6 +63,7 @@ public:
     {
     }
 
+    bool                   initPreview;
     QString                helpAnchor;
     QString                name;
     int                    version;
@@ -94,6 +96,11 @@ EditorTool::~EditorTool()
 void EditorTool::init()
 {
     QTimer::singleShot(0, this, SLOT(slotInit()));
+}
+
+void EditorTool::setInitPreview(bool b)
+{
+    d->initPreview = b;
 }
 
 QPixmap EditorTool::toolIcon() const
@@ -211,6 +218,9 @@ void EditorTool::slotInit()
     // Unlock signals from preview and settings widgets when init is done.
     d->view->blockSignals(false);
     d->settings->blockSignals(false);
+
+    if (d->initPreview)
+        slotTimer();
 }
 
 void EditorTool::setToolHelp(const QString& anchor)

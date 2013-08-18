@@ -34,6 +34,7 @@
 
 // Local includes
 
+#include "album.h"
 #include "maintenancetool.h"
 
 namespace Digikam
@@ -45,8 +46,11 @@ class DuplicatesFinder : public MaintenanceTool
 
 public:
 
-    DuplicatesFinder(const QStringList& albumsIdList, const QStringList& tagsIdList, int similarity = 90, ProgressItem* const parent = 0);
-    /// Version to find all duplicates over whole collections
+    /** Version to find all duplicates over a specific list to PAlbums and TAlbums
+     */
+    DuplicatesFinder(const AlbumList& albums, const AlbumList& tags, int similarity = 90, ProgressItem* const parent = 0);
+    /** Version to find all duplicates over whole collections
+     */
     explicit DuplicatesFinder(const int similarity = 90, ProgressItem* const parent = 0);
     ~DuplicatesFinder();
 

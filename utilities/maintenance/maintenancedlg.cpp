@@ -49,6 +49,7 @@
 // Local includes
 
 #include "setup.h"
+#include "albumselectors.h"
 #include "facescansettings.h"
 #include "metadatasynchronizer.h"
 
@@ -69,6 +70,7 @@ public:
         Duplicates,
         FaceManagement,
         MetadataSync,
+
         Stretch
     };
 
@@ -79,6 +81,7 @@ public:
         title(0),
         scanThumbs(0),
         scanFingerPrints(0),
+        useMutiCoreCPU(0),
         faceScannedHandling(0),
         metadataSetup(0),
         syncDirection(0),
@@ -86,11 +89,13 @@ public:
         vbox(0),
         hbox3(0),
         similarity(0),
-        expanderBox(0)
+        expanderBox(0),
+        albumSelectors(0)
     {
     }
 
     static const QString configGroupName;
+    static const QString configUseMutiCoreCPU;
     static const QString configNewItems;
     static const QString configThumbnails;
     static const QString configScanThumbs;
@@ -107,6 +112,7 @@ public:
     QLabel*              title;
     QCheckBox*           scanThumbs;
     QCheckBox*           scanFingerPrints;
+    QCheckBox*           useMutiCoreCPU;
     QComboBox*           faceScannedHandling;
     QPushButton*         metadataSetup;
     QComboBox*           syncDirection;
@@ -115,9 +121,11 @@ public:
     KHBox*               hbox3;
     KIntNumInput*        similarity;
     RExpanderBox*        expanderBox;
+    AlbumSelectors*      albumSelectors;
 };
 
 const QString MaintenanceDlg::Private::configGroupName("MaintenanceDlg Settings");
+const QString MaintenanceDlg::Private::configUseMutiCoreCPU("UseMutiCoreCPU");
 const QString MaintenanceDlg::Private::configNewItems("NewItems");
 const QString MaintenanceDlg::Private::configThumbnails("Thumbnails");
 const QString MaintenanceDlg::Private::configScanThumbs("ScanThumbs");
@@ -148,12 +156,14 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
                        .scaled(48, 48, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
     d->title                = new QLabel(i18n("<qt><b>Select Maintenance Operations to Process</b></qt>"), page);
+    d->albumSelectors       = new AlbumSelectors(i18nc("@label", "Process items from:"), d->configGroupName, page);
+    d->useMutiCoreCPU       = new QCheckBox(i18nc("@option:check", "Work on all processor cores"), page);
     d->expanderBox          = new RExpanderBox(page);
-    KSeparator* const line  = new KSeparator(Qt::Horizontal);
 
     // --------------------------------------------------------------------------------------
 
-    d->expanderBox->insertItem(Private::NewItems, new QLabel(i18n("<qt><i>no option</i></qt>")),
+    d->expanderBox->insertItem(Private::NewItems, new QLabel(i18n("<qt>No option<br>"
+                               "<i>Note: only Albums Collection are processed by this tool.</i></qt>")),
                                SmallIcon("view-refresh"), i18n("Scan for new items"), "NewItems", false);
     d->expanderBox->setCheckBoxVisible(Private::NewItems, true);
 
@@ -222,14 +232,17 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
 
     // --------------------------------------------------------------------------------------
 
-    grid->addWidget(d->logo,        0, 0, 1, 1);
-    grid->addWidget(d->title,       0, 1, 1, 1);
-    grid->addWidget(line,           1, 1, 1, 1);
-    grid->addWidget(d->expanderBox, 2, 0, 3, 2);
+    grid->addWidget(d->logo,                        0, 0, 1, 1);
+    grid->addWidget(d->title,                       0, 1, 1, 1);
+    grid->addWidget(new KSeparator(Qt::Horizontal), 1, 1, 1, 1);
+    grid->addWidget(d->albumSelectors,              2, 1, 1, 1);
+    grid->addWidget(d->useMutiCoreCPU,              3, 1, 1, 1);
+    grid->addWidget(new KSeparator(Qt::Horizontal), 4, 1, 1, 1);
+    grid->addWidget(d->expanderBox,                 5, 0, 3, 2);
     grid->setSpacing(spacingHint());
     grid->setMargin(0);
     grid->setColumnStretch(1, 10);
-    grid->setRowStretch(2, 10);
+    grid->setRowStretch(5, 10);
 
     // --------------------------------------------------------------------------------------
 
@@ -260,6 +273,11 @@ void MaintenanceDlg::slotOk()
 MaintenanceSettings MaintenanceDlg::settings() const
 {
     MaintenanceSettings prm;
+    prm.wholeAlbums                         = d->albumSelectors->wholeAlbumsCollection();
+    prm.wholeTags                           = d->albumSelectors->wholeTagsCollection();
+    prm.albums                              = d->albumSelectors->selectedPAlbums();
+    prm.tags                                = d->albumSelectors->selectedTAlbums();
+    prm.useMutiCoreCPU                      = d->useMutiCoreCPU->isChecked();
     prm.newItems                            = d->expanderBox->isChecked(Private::NewItems);
     prm.thumbnails                          = d->expanderBox->isChecked(Private::Thumbnails);
     prm.scanThumbs                          = d->scanThumbs->isChecked();
@@ -269,6 +287,7 @@ MaintenanceSettings MaintenanceDlg::settings() const
     prm.similarity                          = d->similarity->value();
     prm.faceManagement                      = d->expanderBox->isChecked(Private::FaceManagement);
     prm.faceSettings.alreadyScannedHandling = (FaceScanSettings::AlreadyScannedHandling)d->faceScannedHandling->currentIndex();
+    prm.faceSettings.albums                 = d->albumSelectors->selectedAlbums();
     prm.metadataSync                        = d->expanderBox->isChecked(Private::MetadataSync);
     prm.syncDirection                       = d->syncDirection->currentIndex();
     return prm;
@@ -279,9 +298,11 @@ void MaintenanceDlg::readSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
     d->expanderBox->readSettings(group);
+    d->albumSelectors->loadState();
 
     MaintenanceSettings prm;
 
+    d->useMutiCoreCPU->setChecked(group.readEntry(d->configUseMutiCoreCPU,                       prm.useMutiCoreCPU));
     d->expanderBox->setChecked(Private::NewItems,       group.readEntry(d->configNewItems,       prm.newItems));
     d->expanderBox->setChecked(Private::Thumbnails,     group.readEntry(d->configThumbnails,     prm.thumbnails));
     d->scanThumbs->setChecked(group.readEntry(d->configScanThumbs,                               prm.scanThumbs));
@@ -305,9 +326,11 @@ void MaintenanceDlg::writeSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
     d->expanderBox->writeSettings(group);
+    d->albumSelectors->saveState();
 
     MaintenanceSettings prm   = settings();
 
+    group.writeEntry(d->configUseMutiCoreCPU,      prm.useMutiCoreCPU);
     group.writeEntry(d->configNewItems,            prm.newItems);
     group.writeEntry(d->configThumbnails,          prm.thumbnails);
     group.writeEntry(d->configScanThumbs,          prm.scanThumbs);

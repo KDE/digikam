@@ -203,7 +203,6 @@ ShearTool::ShearTool(QObject* const parent)
     // -------------------------------------------------------------
 
     setToolSettings(d->gboxSettings);
-    init();
 
     // -------------------------------------------------------------
 

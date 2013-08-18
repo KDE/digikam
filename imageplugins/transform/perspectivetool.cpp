@@ -192,7 +192,6 @@ PerspectiveTool::PerspectiveTool(QObject* const parent)
     // -------------------------------------------------------------
 
     setToolSettings(d->gboxSettings);
-    init();
 
     // -------------------------------------------------------------
 

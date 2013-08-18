@@ -88,7 +88,6 @@ BorderTool::BorderTool(QObject* const parent)
     d->gboxSettings = new EditorToolSettings;
     d->settingsView = new BorderSettings(d->gboxSettings->plainPage());
     setToolSettings(d->gboxSettings);
-    init();
 
     // -------------------------------------------------------------
 

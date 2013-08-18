@@ -161,7 +161,6 @@ RainDropTool::RainDropTool(QObject* const parent)
     // -------------------------------------------------------------
 
     setToolSettings(d->gboxSettings);
-    init();
 }
 
 RainDropTool::~RainDropTool()

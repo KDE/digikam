@@ -452,7 +452,6 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject* const parent)
     grid->setSpacing(d->gboxSettings->spacingHint());
 
     setToolSettings(d->gboxSettings);
-    init();
 
     // -------------------------------------------------------------
 

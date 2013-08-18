@@ -29,6 +29,10 @@
 
 #include <QWidget>
 
+// Local incudes.
+
+#include "album.h"
+
 namespace Digikam
 {
 
@@ -40,17 +44,65 @@ class AlbumSelectors : public QWidget
 
 public:
 
+    /** Default Contructor. 'label' is front text of label which title widget. 'configName' is name used to store 
+     *  Albums configuration in settings file. 'parent' is parent widget.
+     */
     explicit AlbumSelectors(const QString& label, const QString& configName, QWidget* const parent = 0);
     ~AlbumSelectors();
 
-    QList<Album*> selectedAlbums() const;
+    /** Return list of Physical Albums selected.
+     */
+    AlbumList selectedPAlbums() const;
 
+    /** Return list of Tag Albums selected.
+     */
+    AlbumList selectedTAlbums() const;
+
+    /** Return list of Physical and Tag Albums selected.
+     */
+    AlbumList selectedAlbums() const;
+
+    /** Reset all Physical and Tag Albums selection.
+     */
+    void resetSelection();
+
+    /** Select Physical Album from list. If singleSelection is true, only this one is 
+     *  selected from tree-view and all others are deselected.
+     */
+    void setPAlbumSelected(Album* const album, bool singleSelection=true);
+
+    /** Select Tag Album from list. If singleSelection is true, only this one is 
+     *  selected from tree-view and all others are deselected.
+     */
+    void setTAlbumSelected(Album* const album, bool singleSelection=true);
+    
+    /** Return true if whole Albums collection option is checked.
+     */
+    bool wholeAlbumsCollection() const;
+
+    /** Return true if whole Tags collection option is checked.
+     */
+    bool wholeTagsCollection() const;
+
+public Q_SLOTS:
+    
+    /** Called in constructor. Restore previous settings saved in configuration file.
+    */
     void loadState();
+
+    /** Save settings in configuration file. Must be called explicitly by host implementation.
+     */
     void saveState();
+
+Q_SIGNALS:
+
+    void signalSelectionChanged();
 
 private Q_SLOTS:
 
     void slotUpdateClearButtons();
+    void slotWholePalbums(bool);
+    void slotWholeTalbums(bool);
 
 private:
 
