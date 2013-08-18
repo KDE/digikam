@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2013-08-09
- * Description : Thread actions manager for metadata synchronizer.
+ * Description : Thread actions manager for maintenance tools.
  *
  * Copyright (C) 2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef METADATA_THREAD_H
-#define METADATA_THREAD_H
+#ifndef MAINTENANCE_THREAD_H
+#define MAINTENANCE_THREAD_H
 
 // Libkdcraw includes
 
@@ -33,23 +33,27 @@
 #include "metadatasynchronizer.h"
 #include "imageinfo.h"
 
+class QImage;
+
 using namespace KDcrawIface;
 
 namespace Digikam
 {
 
-class MetadataThread : public RActionThreadBase
+class MaintenanceThread : public RActionThreadBase
 {
     Q_OBJECT
 
 public:
 
-    explicit MetadataThread(QObject* const parent);
-    ~MetadataThread();
+    explicit MaintenanceThread(QObject* const parent);
+    ~MaintenanceThread();
 
     void setUseMultiCore(const bool b);
 
-    void processItems(const ImageInfoList& items, MetadataSynchronizer::SyncDirection dir);
+    void syncMetadata(const ImageInfoList& items, MetadataSynchronizer::SyncDirection dir);
+    void generateThumbs(const QStringList& paths);
+    void generateFingerprints(const QStringList& paths);
 
     void cancel();
 
@@ -58,6 +62,7 @@ Q_SIGNALS:
     /** Emit when an item have been processed.
      */
     void signalAdvance();
+    void signalAdvance(const QImage&);
 
     /** Emit when a items list have been fully processed.
      */
@@ -74,4 +79,4 @@ private Q_SLOTS:
 
 }  // namespace Digikam
 
-#endif /* METADATA_THREAD_H */
+#endif /* MAINTENANCE_THREAD_H */

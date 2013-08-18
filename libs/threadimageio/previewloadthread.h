@@ -43,7 +43,7 @@ public:
      * The default loading policy, for the typical usage in a preview widget,
      * always stops any previous tasks and loads the new task as soon as possible.
      */
-    explicit PreviewLoadThread(QObject* parent = 0);
+    explicit PreviewLoadThread(QObject* const parent = 0);
 
     /**
      * Load a preview that is optimized for fast loading.
@@ -71,10 +71,14 @@ public:
     void load(const LoadingDescription& description);
 
     /// Optionally, set the displaying widget for color management
-    void setDisplayingWidget(QWidget* widget);
+    void setDisplayingWidget(QWidget* const widget);
+
+    static DImg loadSynchronously(const QString& filePath, int size, const IccProfile& profile = IccProfile());
+    static DImg loadSynchronously(const LoadingDescription& description);
 
 protected:
 
+    static LoadingDescription createLoadingDescription(const QString& filePath, int size, const IccProfile& profile);
     LoadingDescription createLoadingDescription(const QString& filePath, int size);
 
 protected:

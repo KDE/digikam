@@ -32,7 +32,6 @@
 
 #include "collectionscanner.h"
 #include "metadatahub.h"
-#include "imageinfo.h"
 
 namespace Digikam
 {
@@ -83,11 +82,11 @@ void MetadataTask::run()
     {
         return;
     }
-    
+
     if (d->direction == MetadataSynchronizer::WriteFromDatabaseToFile)
     {
         MetadataHub fileHub;
-        
+
         // read in from database
         fileHub.load(d->item);
 
