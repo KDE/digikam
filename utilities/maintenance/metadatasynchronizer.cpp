@@ -109,6 +109,11 @@ void MetadataSynchronizer::init(SyncDirection direction)
             this, SLOT(slotAdvance()));
 }
 
+void MetadataSynchronizer::setUseMultiCoreCPU(bool b)
+{
+    d->thread->setUseMultiCore(b);
+}
+
 void MetadataSynchronizer::slotStart()
 {
     MaintenanceTool::slotStart();

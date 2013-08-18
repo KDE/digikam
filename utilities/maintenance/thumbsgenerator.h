@@ -26,7 +26,7 @@
 
 // Qt includes
 
-#include <QPixmap>
+#include <QImage>
 
 // Local includes
 
@@ -35,8 +35,6 @@
 
 namespace Digikam
 {
-
-class LoadingDescription;
 
 class ThumbsGenerator : public MaintenanceTool
 {
@@ -53,15 +51,17 @@ public:
     ThumbsGenerator(const bool rebuildAll = true, const AlbumList& list=AlbumList(), ProgressItem* const parent = 0);
     ~ThumbsGenerator();
 
+    void setUseMultiCoreCPU(bool b);
+
 private:
 
     void init(const bool rebuildAll);
-    void processOne();
 
 private Q_SLOTS:
 
     void slotStart();
-    void slotGotThumbnail(const LoadingDescription&, const QPixmap&);
+    void slotCancel();
+    void slotAdvance(const QImage&);
 
 private:
 

@@ -81,6 +81,7 @@ public:
         title(0),
         scanThumbs(0),
         scanFingerPrints(0),
+        useMutiCoreCPU(0),
         faceScannedHandling(0),
         metadataSetup(0),
         syncDirection(0),
@@ -94,6 +95,7 @@ public:
     }
 
     static const QString configGroupName;
+    static const QString configUseMutiCoreCPU;
     static const QString configNewItems;
     static const QString configThumbnails;
     static const QString configScanThumbs;
@@ -110,6 +112,7 @@ public:
     QLabel*              title;
     QCheckBox*           scanThumbs;
     QCheckBox*           scanFingerPrints;
+    QCheckBox*           useMutiCoreCPU;
     QComboBox*           faceScannedHandling;
     QPushButton*         metadataSetup;
     QComboBox*           syncDirection;
@@ -122,6 +125,7 @@ public:
 };
 
 const QString MaintenanceDlg::Private::configGroupName("MaintenanceDlg Settings");
+const QString MaintenanceDlg::Private::configUseMutiCoreCPU("UseMutiCoreCPU");
 const QString MaintenanceDlg::Private::configNewItems("NewItems");
 const QString MaintenanceDlg::Private::configThumbnails("Thumbnails");
 const QString MaintenanceDlg::Private::configScanThumbs("ScanThumbs");
@@ -152,7 +156,8 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
                        .scaled(48, 48, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
     d->title                = new QLabel(i18n("<qt><b>Select Maintenance Operations to Process</b></qt>"), page);
-    d->albumSelectors       = new AlbumSelectors(i18nc("@label", "Process items from:"), d->configGroupName);
+    d->albumSelectors       = new AlbumSelectors(i18nc("@label", "Process items from:"), d->configGroupName, page);
+    d->useMutiCoreCPU       = new QCheckBox(i18nc("@option:check", "Work on all processor cores"), page);
     d->expanderBox          = new RExpanderBox(page);
 
     // --------------------------------------------------------------------------------------
@@ -231,12 +236,13 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
     grid->addWidget(d->title,                       0, 1, 1, 1);
     grid->addWidget(new KSeparator(Qt::Horizontal), 1, 1, 1, 1);
     grid->addWidget(d->albumSelectors,              2, 1, 1, 1);
-    grid->addWidget(new KSeparator(Qt::Horizontal), 3, 1, 1, 1);
-    grid->addWidget(d->expanderBox,                 4, 0, 3, 2);
+    grid->addWidget(d->useMutiCoreCPU,              3, 1, 1, 1);
+    grid->addWidget(new KSeparator(Qt::Horizontal), 4, 1, 1, 1);
+    grid->addWidget(d->expanderBox,                 5, 0, 3, 2);
     grid->setSpacing(spacingHint());
     grid->setMargin(0);
     grid->setColumnStretch(1, 10);
-    grid->setRowStretch(4, 10);
+    grid->setRowStretch(5, 10);
 
     // --------------------------------------------------------------------------------------
 
@@ -271,6 +277,7 @@ MaintenanceSettings MaintenanceDlg::settings() const
     prm.wholeTags                           = d->albumSelectors->wholeTagsCollection();
     prm.albums                              = d->albumSelectors->selectedPAlbums();
     prm.tags                                = d->albumSelectors->selectedTAlbums();
+    prm.useMutiCoreCPU                      = d->useMutiCoreCPU->isChecked();
     prm.newItems                            = d->expanderBox->isChecked(Private::NewItems);
     prm.thumbnails                          = d->expanderBox->isChecked(Private::Thumbnails);
     prm.scanThumbs                          = d->scanThumbs->isChecked();
@@ -295,6 +302,7 @@ void MaintenanceDlg::readSettings()
 
     MaintenanceSettings prm;
 
+    d->useMutiCoreCPU->setChecked(group.readEntry(d->configUseMutiCoreCPU,                       prm.useMutiCoreCPU));
     d->expanderBox->setChecked(Private::NewItems,       group.readEntry(d->configNewItems,       prm.newItems));
     d->expanderBox->setChecked(Private::Thumbnails,     group.readEntry(d->configThumbnails,     prm.thumbnails));
     d->scanThumbs->setChecked(group.readEntry(d->configScanThumbs,                               prm.scanThumbs));
@@ -322,6 +330,7 @@ void MaintenanceDlg::writeSettings()
 
     MaintenanceSettings prm   = settings();
 
+    group.writeEntry(d->configUseMutiCoreCPU,      prm.useMutiCoreCPU);
     group.writeEntry(d->configNewItems,            prm.newItems);
     group.writeEntry(d->configThumbnails,          prm.thumbnails);
     group.writeEntry(d->configScanThumbs,          prm.scanThumbs);

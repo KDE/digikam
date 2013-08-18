@@ -32,7 +32,6 @@
 
 #include "collectionscanner.h"
 #include "metadatahub.h"
-#include "imageinfo.h"
 
 namespace Digikam
 {

@@ -1098,6 +1098,7 @@ void CollectionScanner::scanFileNormal(const QFileInfo& fi, const ItemScanInfo& 
     if (scanInfo.modificationDate.isNull() || 
         (hasAnyHint && d->hints->hasRescanHint(scanInfo.id)) )
     {
+        if (hasAnyHint)
         {
             QWriteLocker locker(&d->hints->lock);
             d->hints->rescanItemHints.remove(scanInfo.id);

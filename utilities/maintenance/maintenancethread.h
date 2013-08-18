@@ -33,6 +33,8 @@
 #include "metadatasynchronizer.h"
 #include "imageinfo.h"
 
+class QImage;
+
 using namespace KDcrawIface;
 
 namespace Digikam
@@ -60,6 +62,7 @@ Q_SIGNALS:
     /** Emit when an item have been processed.
      */
     void signalAdvance();
+    void signalAdvance(const QImage&);
 
     /** Emit when a items list have been fully processed.
      */

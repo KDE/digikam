@@ -61,6 +61,8 @@ public:
 
     ~MetadataSynchronizer();
 
+    void setUseMultiCoreCPU(bool b);
+
 private Q_SLOTS:
 
     void slotStart();
