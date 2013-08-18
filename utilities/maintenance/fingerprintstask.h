@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2013-08-14
- * Description : Thread actions task for thumbs generator.
+ * Description : Thread actions task for finger-prints generator.
  *
  * Copyright (C) 2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -21,12 +21,12 @@
  *
  * ============================================================ */
 
-#ifndef THUMBS_TASK_H
-#define THUMBS_TASK_H
+#ifndef FINGERPRINTS_TASK_H
+#define FINGERPRINTS_TASK_H
 
 // Qt includes
 
-#include <QImage>
+#include <QPixmap>
 #include <QThread>
 
 // KDE includes
@@ -39,15 +39,16 @@ namespace Digikam
 {
 
 class LoadingDescription;
+class DImg;
 
-class ThumbsTask : public Job
+class FingerprintsTask : public Job
 {
     Q_OBJECT
 
 public:
 
-    ThumbsTask();
-    ~ThumbsTask();
+    FingerprintsTask();
+    ~FingerprintsTask();
 
     void setItem(const QString& path);
 
@@ -71,4 +72,4 @@ private:
 
 }  // namespace Digikam
 
-#endif /* THUMBS_TASK_H */
+#endif /* FINGERPRINTS_TASK_H */

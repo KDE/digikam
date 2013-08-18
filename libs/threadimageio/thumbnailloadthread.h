@@ -7,7 +7,7 @@
  * Description : Thumbnail loading
  *
  * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2008-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -49,7 +49,7 @@ class DIGIKAM_EXPORT ThumbnailLoadThread : public ManagedLoadSaveThread
 
 public:
 
-    explicit ThumbnailLoadThread(QObject* parent = 0);
+    explicit ThumbnailLoadThread(QObject* const parent = 0);
     ~ThumbnailLoadThread();
 
     /**
@@ -69,13 +69,13 @@ public:
      * This need not be called, then the FreeDesktop standard is used.
      * You can optionally provide a thumbnail info provider.
      */
-    static void initializeThumbnailDatabase(const DatabaseParameters& params, ThumbnailInfoProvider* provider = 0);
+    static void initializeThumbnailDatabase(const DatabaseParameters& params, ThumbnailInfoProvider* const provider = 0);
 
     /**
      * For color management, this sets the widget the thumbnails will be color managed for.
      * (currently it is only possible to set one global widget)
      */
-    static void setDisplayingWidget(QWidget* widget);
+    static void setDisplayingWidget(QWidget* const widget);
 
     /**
      * Find a thumbnail.
@@ -264,8 +264,8 @@ private Q_SLOTS:
 
 private:
 
-    class ThumbnailLoadThreadPriv;
-    ThumbnailLoadThreadPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 // --------------------------------------------------------------------------------------------------
@@ -286,12 +286,12 @@ public:
      *  Note: Not meant for loading QPixmap thumbnails.
      */
 
-    explicit ThumbnailImageCatcher(QObject* parent = 0);
-    explicit ThumbnailImageCatcher(ThumbnailLoadThread* thread, QObject* parent = 0);
+    explicit ThumbnailImageCatcher(QObject* const parent = 0);
+    explicit ThumbnailImageCatcher(ThumbnailLoadThread* const thread, QObject* const parent = 0);
     ~ThumbnailImageCatcher();
 
     ThumbnailLoadThread* thread() const;
-    void setThumbnailLoadThread(ThumbnailLoadThread* thread);
+    void setThumbnailLoadThread(ThumbnailLoadThread* const thread);
 
     /**
      * After requesting a thumbnail from the thread, call enqueue()
@@ -327,8 +327,8 @@ protected Q_SLOTS:
 
 private:
 
-    class ThumbnailImageCatcherPriv;
-    ThumbnailImageCatcherPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }   // namespace Digikam

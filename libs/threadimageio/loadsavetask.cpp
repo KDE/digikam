@@ -349,11 +349,11 @@ void SharedLoadingTask::progressInfo(const DImg* const, float progress)
 
         for (int i=0; i<m_listeners.size(); ++i)
         {
-            LoadingProcessListener* l = m_listeners[i];
-
-            if (l->querySendNotifyEvent())
+            LoadingProcessListener* l  = m_listeners[i];
+            LoadSaveNotifier* notifier = l->loadSaveNotifier();
+            if (notifier && l->querySendNotifyEvent())
             {
-                l->loadSaveNotifier()->loadingProgress(m_loadingDescription, progress);
+                notifier->loadingProgress(m_loadingDescription, progress);
             }
         }
     }
@@ -436,7 +436,7 @@ void SharedLoadingTask::notifyNewLoadingProcess(LoadingProcess* process, const L
 
 bool SharedLoadingTask::querySendNotifyEvent()
 {
-    return m_thread->querySendNotifyEvent();
+    return m_thread && m_thread->querySendNotifyEvent();
 }
 
 LoadSaveNotifier* SharedLoadingTask::loadSaveNotifier()

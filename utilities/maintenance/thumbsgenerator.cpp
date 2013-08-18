@@ -104,8 +104,13 @@ void ThumbsGenerator::init(const bool rebuildAll)
     connect(d->thread, SIGNAL(signalCompleted()),
             this, SLOT(slotDone()));
 
-    connect(d->thread, SIGNAL(signalAdvance(QPixmap)),
-            this, SLOT(slotAdvance(QPixmap)));
+    connect(d->thread, SIGNAL(signalAdvance(QImage)),
+            this, SLOT(slotAdvance(QImage)));
+}
+
+void ThumbsGenerator::setUseMultiCoreCPU(bool b)
+{
+    d->thread->setUseMultiCore(b);
 }
 
 void ThumbsGenerator::slotCancel()
@@ -182,14 +187,13 @@ void ThumbsGenerator::slotStart()
 
     setTotalItems(d->allPicturesPath.count());
 
-    d->thread->setUseMultiCore(true);
     d->thread->generateThumbs(d->allPicturesPath);
     d->thread->start();
 }
 
-void ThumbsGenerator::slotAdvance(const QPixmap& pix)
+void ThumbsGenerator::slotAdvance(const QImage& img)
 {
-    setThumbnail(pix);
+    setThumbnail(QPixmap::fromImage(img));
     advance(1);
 }
 

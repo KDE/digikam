@@ -53,7 +53,10 @@ public:
     AlbumList        albums;
     AlbumList        tags;
 
-    /// Find new items on whole collection
+    /// Use Multi-core CPU to process items.
+    bool             useMutiCoreCPU;
+
+    /// Find new items on whole collection.
     bool             newItems;
 
     /// Generate thumbnails
@@ -71,14 +74,14 @@ public:
     /// Similarity between items to compare, in percents.
     int              similarity;
 
-    /// Scan for faces
+    /// Scan for faces.
     bool             faceManagement;
-    /// Face detection settings
+    /// Face detection settings.
     FaceScanSettings faceSettings;
 
-    /// Sync metadata and DB
+    /// Sync metadata and DB.
     bool             metadataSync;
-    /// Sync direction (image metadata <-> DB)
+    /// Sync direction (image metadata <-> DB).
     int              syncDirection;
     
     ///Perform Image Quality Sorting
