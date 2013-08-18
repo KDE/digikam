@@ -141,12 +141,12 @@ void MaintenanceMngr::slotToolCompleted(ProgressItem* tool)
         d->faceDetector = 0;
         stage6();
     }
-    else if (tool == dynamic_cast<ProgressItem*>(d->metadataSynchronizer))
+   else if (tool == dynamic_cast<ProgressItem*>(d->imageQualitySorter))
     {
-        d->metadataSynchronizer = 0;
-        done();
+        d->imageQualitySorter = 0;
+        stage7();
     }
-    else if (tool == dynamic_cast<ProgressItem*>(d->imageQualitySorter))
+    else if (tool == dynamic_cast<ProgressItem*>(d->metadataSynchronizer))
     {
         d->metadataSynchronizer = 0;
         done();
@@ -160,8 +160,8 @@ void MaintenanceMngr::slotToolCanceled(ProgressItem* tool)
         tool == dynamic_cast<ProgressItem*>(d->fingerPrintsGenerator) ||
         tool == dynamic_cast<ProgressItem*>(d->duplicatesFinder)      ||
         tool == dynamic_cast<ProgressItem*>(d->faceDetector)          ||
-        tool == dynamic_cast<ProgressItem*>(d->metadataSynchronizer) ||
-        tool == dynamic_cast<ProgressItem*>(d->imageQualitySorter))
+        tool == dynamic_cast<ProgressItem*>(d->imageQualitySorter) ||
+        tool == dynamic_cast<ProgressItem*>(d->metadataSynchronizer))
     {
         cancel();
     }
@@ -282,6 +282,25 @@ void MaintenanceMngr::stage6()
 {
     kDebug() << "stage6";
 
+    if (d->settings.imageQualitySorter)
+    {
+      /*
+        d->imageQualitySorter= new QualitySorter(d->settings.imageQualitySorter);
+        d->imageQualitySorter->setNotificationEnabled(false);
+        d->imageQualitySorter->start();
+      */
+    }
+    else
+    {
+        stage7();
+    }
+}
+
+
+void MaintenanceMngr::stage7()
+{
+    kDebug() << "stage6";
+
     if (d->settings.metadataSync)
     {
         AlbumList list;
@@ -291,24 +310,6 @@ void MaintenanceMngr::stage6()
         d->metadataSynchronizer->setNotificationEnabled(false);
         d->metadataSynchronizer->setUseMultiCoreCPU(d->settings.useMutiCoreCPU);
         d->metadataSynchronizer->start();
-    }
-    else
-    {
-        stage7();
-    }
-}
-
-void MaintenanceMngr::stage7()
-{
-    kDebug() << "stage7";
-
-    if (d->settings.imageQualitySorter)
-    {
-      /*
-        d->imageQualitySorter= new QualitySorter(d->settings.imageQualitySorter);
-        d->imageQualitySorter->setNotificationEnabled(false);
-        d->imageQualitySorter->start();
-      */
     }
     else
     {
