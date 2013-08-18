@@ -123,7 +123,6 @@ ColorFxTool::ColorFxTool(QObject* const parent)
 
     d->settingsView = new ColorFXSettings(d->gboxSettings->plainPage());
     setToolSettings(d->gboxSettings);
-    init();
 
     // -------------------------------------------------------------
 

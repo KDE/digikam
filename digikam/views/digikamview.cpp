@@ -1462,7 +1462,8 @@ void DigikamView::slotAlbumWriteMetadata()
     {
         return;
     }
-    MetadataSynchronizer* const tool = new MetadataSynchronizer(album, MetadataSynchronizer::WriteFromDatabaseToFile);
+
+    MetadataSynchronizer* const tool = new MetadataSynchronizer(AlbumList() << album, MetadataSynchronizer::WriteFromDatabaseToFile);
     tool->start();
 }
 
@@ -1474,23 +1475,22 @@ void DigikamView::slotAlbumReadMetadata()
     {
         return;
     }
-    MetadataSynchronizer* const tool = new MetadataSynchronizer(album, MetadataSynchronizer::ReadFromFileToDatabase);
+
+    MetadataSynchronizer* const tool = new MetadataSynchronizer(AlbumList() << album, MetadataSynchronizer::ReadFromFileToDatabase);
     tool->start();
 }
 
 void DigikamView::slotImageWriteMetadata()
 {
-    const ImageInfoList selected = selectedInfoList();
-    MetadataSynchronizer* const tool = new MetadataSynchronizer(
-            selected, MetadataSynchronizer::WriteFromDatabaseToFile);
+    const ImageInfoList selected     = selectedInfoList();
+    MetadataSynchronizer* const tool = new MetadataSynchronizer(selected, MetadataSynchronizer::WriteFromDatabaseToFile);
     tool->start();
 }
 
 void DigikamView::slotImageReadMetadata()
 {
-    const ImageInfoList selected = selectedInfoList();
-    MetadataSynchronizer* const tool = new MetadataSynchronizer(
-            selected, MetadataSynchronizer::ReadFromFileToDatabase);
+    const ImageInfoList selected     = selectedInfoList();
+    MetadataSynchronizer* const tool = new MetadataSynchronizer(selected, MetadataSynchronizer::ReadFromFileToDatabase);
     tool->start();
 }
 
@@ -1498,7 +1498,7 @@ void DigikamView::slotImageReadMetadata()
 
 void DigikamView::slotEscapePreview()
 {
-    if (viewMode() == StackedView::IconViewMode ||
+    if (viewMode() == StackedView::IconViewMode  ||
         viewMode() == StackedView::MapWidgetMode ||
         viewMode() == StackedView::TableViewMode ||
         viewMode() == StackedView::WelcomePageMode)

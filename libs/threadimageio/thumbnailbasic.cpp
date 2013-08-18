@@ -7,7 +7,7 @@
  * Description : Loader for thumbnails
  *
  * Copyright (C) 2003-2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2003-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2003-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -125,9 +125,9 @@ QImage ThumbnailCreator::loadPNG(const QString& path) const
     int          bit_depth, color_type, interlace_type;
     QImage       qimage;
 
-    has_alpha = 0;
-    has_grey  = 0;
-    FILE* f   = fopen(path.toLatin1(), "rb");
+    has_alpha     = 0;
+    has_grey      = 0;
+    FILE* const f = fopen(path.toLatin1(), "rb");
 
     if (!f)
     {

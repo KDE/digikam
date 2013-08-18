@@ -88,9 +88,9 @@ public:
 
     enum FuzzySearchTab
     {
-        SIMILARS = 0,
-        SKETCH,
-        DUPLICATES
+        DUPLICATES = 0,
+        SIMILARS,
+        SKETCH
     };
 
 public:
@@ -222,9 +222,9 @@ FuzzySearchView::FuzzySearchView(SearchModel* const searchModel,
     d->findDuplicatesPanel     = new FindDuplicatesView();
 
     d->tabWidget               = new KTabWidget();
+    d->tabWidget->insertTab(Private::DUPLICATES, d->findDuplicatesPanel, i18n("Duplicates"));
     d->tabWidget->insertTab(Private::SIMILARS,   imagePanel,             i18n("Image"));
     d->tabWidget->insertTab(Private::SKETCH,     sketchPanel,            i18n("Sketch"));
-    d->tabWidget->insertTab(Private::DUPLICATES, d->findDuplicatesPanel, i18n("Duplicates"));
 
     // ---------------------------------------------------------------
 
@@ -560,7 +560,7 @@ void FuzzySearchView::doLoadState()
 {
     KConfigGroup group = getConfigGroup();
 
-    d->tabWidget->setCurrentIndex(group.readEntry(entryName(d->configTabEntry),                (int)Private::SKETCH));
+    d->tabWidget->setCurrentIndex(group.readEntry(entryName(d->configTabEntry),                (int)Private::DUPLICATES));
     d->penSize->setValue(group.readEntry(entryName(d->configPenSketchSizeEntry),               10));
     d->resultsSketch->setValue(group.readEntry(entryName(d->configResultSketchItemsEntry),     10));
     d->hsSelector->setHue(group.readEntry(entryName(d->configPenSketchHueEntry),               180));

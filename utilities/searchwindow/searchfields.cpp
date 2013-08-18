@@ -2258,7 +2258,7 @@ void SearchFieldAlbum::read(SearchXmlCachingReader& reader)
 
 void SearchFieldAlbum::write(SearchXmlWriter& writer)
 {
-    QList<Album*> checkedAlbums = m_model->checkedAlbums();
+    AlbumList checkedAlbums = m_model->checkedAlbums();
 
     if (checkedAlbums.isEmpty())
     {
@@ -2267,7 +2267,7 @@ void SearchFieldAlbum::write(SearchXmlWriter& writer)
 
     QList<int> albumIds;
 
-    foreach(Album* album, checkedAlbums)
+    foreach(Album* const album, checkedAlbums)
     {
         albumIds << album->id();
     }

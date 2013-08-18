@@ -29,12 +29,6 @@
 // Qt includes
 
 #include <QWidget>
-#include <QPixmap>
-#include <QTreeWidget>
-
-// Local includes
-
-#include "thumbnailloadthread.h"
 
 class QTreeWidgetItem;
 
@@ -70,48 +64,16 @@ private Q_SLOTS:
     void slotDuplicatesAlbumActived(QTreeWidgetItem*, int);
     void slotComplete();
     void slotUpdateFingerPrints();
-
-    void slotAlbumSelectionChanged(Album*, Qt::CheckState);
-    void slotTagSelectionChanged(Album*, Qt::CheckState);
-    void slotUpdateAlbumsAndTags();
-
+    void slotCheckForValidSettings();
+    
 private:
 
     void enableControlWidgets(bool);
-    bool checkForValidSettings();
 
     void updateAlbumsBox();
     void updateTagsBox();
 
-    bool validAlbumSettings();
-    bool validTagSettings();
-
     void resetAlbumsAndTags();
-
-private:
-
-    class Private;
-    Private* const d;
-};
-
-// --------------------------------------------------------------------------------------------------------
-
-class FindDuplicatesAlbum : public QTreeWidget
-{
-    Q_OBJECT
-
-public:
-
-    explicit FindDuplicatesAlbum(QWidget* const parent = 0);
-    virtual ~FindDuplicatesAlbum();
-
-private :
-
-    void drawRow(QPainter* p, const QStyleOptionViewItem& opt, const QModelIndex& index) const;
-
-private Q_SLOTS:
-
-    void slotThumbnailLoaded(const LoadingDescription&, const QPixmap&);
 
 private:
 

@@ -94,6 +94,7 @@ WhiteBalanceTool::WhiteBalanceTool(QObject* const parent)
     setObjectName("whitebalance");
     setToolName(i18n("White Balance"));
     setToolIcon(SmallIcon("whitebalance"));
+    setInitPreview(true);
 
     // -------------------------------------------------------------
 
@@ -116,7 +117,6 @@ WhiteBalanceTool::WhiteBalanceTool(QObject* const parent)
 
     d->settingsView = new WBSettings(d->gboxSettings->plainPage());
     setToolSettings(d->gboxSettings);
-    init();
 
     // -------------------------------------------------------------
 
@@ -138,7 +138,6 @@ WhiteBalanceTool::WhiteBalanceTool(QObject* const parent)
     connect(d->previewWidget, SIGNAL(spotPositionChangedFromTarget(Digikam::DColor,QPoint)),
             this, SLOT(slotColorSelectedFromTarget(Digikam::DColor)));
 */
-    slotTimer();
 }
 
 WhiteBalanceTool::~WhiteBalanceTool()

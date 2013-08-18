@@ -140,7 +140,6 @@ CharcoalTool::CharcoalTool(QObject* const parent)
     setPreviewModeMask(PreviewToolBar::AllPreviewModes);
     setToolSettings(d->gboxSettings);
     setToolView(d->previewWidget);
-    init();
 }
 
 CharcoalTool::~CharcoalTool()

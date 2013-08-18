@@ -26,13 +26,13 @@
 
 // Local includes
 
+#include "album.h"
 #include "maintenancetool.h"
+
+class QImage;
 
 namespace Digikam
 {
-
-class DImg;
-class LoadingDescription;
 
 class FingerPrintsGenerator : public MaintenanceTool
 {
@@ -40,8 +40,12 @@ class FingerPrintsGenerator : public MaintenanceTool
 
 public:
 
-    explicit FingerPrintsGenerator(const bool rebuildAll, ProgressItem* const parent = 0);
+    /** Constructor using AlbumList as argument. If list is empty, whole Albums collection is processed.
+     */
+    explicit FingerPrintsGenerator(const bool rebuildAll, const AlbumList& list=AlbumList(), ProgressItem* const parent = 0);
     ~FingerPrintsGenerator();
+
+    void setUseMultiCoreCPU(bool b);
 
 private:
 
@@ -51,7 +55,8 @@ private Q_SLOTS:
 
     void slotStart();
     void slotDone();
-    void slotGotImagePreview(const LoadingDescription&, const DImg&);
+    void slotCancel();
+    void slotAdvance(const QImage&);
 
 private:
 
