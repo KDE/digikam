@@ -80,6 +80,9 @@ public:
     bool             metadataSync;
     /// Sync direction (image metadata <-> DB)
     int              syncDirection;
+    
+    ///Perform Image Quality Sorting
+    int imageQualitySorter;
 };
 
 //! kDebug() stream operator. Writes property @a s to the debug output in a nicely formatted way.

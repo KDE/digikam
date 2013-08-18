@@ -63,6 +63,7 @@ public:
         duplicatesFinder      = 0;
         faceDetector          = 0;
         metadataSynchronizer  = 0;
+        imageQualitySorter  =0;
     }
 
     bool                running;
@@ -77,6 +78,7 @@ public:
     DuplicatesFinder*      duplicatesFinder;
     FaceDetector*          faceDetector;
     MetadataSynchronizer*  metadataSynchronizer;
+    FaceDetector* imageQualitySorter;   //TODO: Use imageQualitySorter function. Using FaceDetector temporarily
 };
 
 MaintenanceMngr::MaintenanceMngr(QObject* const parent)

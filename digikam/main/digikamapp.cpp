@@ -1261,7 +1261,7 @@ void DigikamApp::setupActions()
     
     KAction* qualityAction = new KAction(KIcon("tools-wizard"), i18n("Sort by Quality"), this);
     qualityAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_Q));
-    connect(qualityAction, SIGNAL(triggered()), d->view, SLOT(slotNewQualitySort()));
+    connect(qualityAction, SIGNAL(triggered()), d->view, SLOT(slotQualitySort()));
     actionCollection()->addAction("sort_quality", qualityAction);
 
     // -----------------------------------------------------------
@@ -2478,17 +2478,17 @@ void DigikamApp::slotDatabaseMigration()
 
 void DigikamApp::slotQuality()
 {
-    QualityScanDialog* qdlg = QualityScanDialog(this);
+    QualityScanDialog* qdlg =new QualityScanDialog(this);
     if (qdlg->exec() == QDialog::Accepted)
     {
         d->qualityAction->setEnabled(false);
 
-        /*
+
         MaintenanceMngr* mngr = new MaintenanceMngr(this);
 
         connect(mngr, SIGNAL(signalComplete()),
                 this, SLOT(slotMaintenanceDone()));
-
+        /*
         mngr->setSettings(dlg->settings());
         */
         

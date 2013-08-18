@@ -22,6 +22,7 @@
  *
  * ============================================================ */
 
+#include "qualityscandialog.moc"
 
 #include <QApplication>
 #include <QCheckBox>
@@ -53,13 +54,13 @@
 #include "albumsettings.h"
 #include "albumtreeview.h"
 #include "searchutilities.h"
+
 namespace Digikam
-{
-  
+{  
 class ButtonExtendedLabel : public QLabel
 {
 public:
-
+dfgfdgdgd
     explicit ButtonExtendedLabel(QWidget* const parent = 0)
         : QLabel(parent), m_button(0)
     {
@@ -443,4 +444,5 @@ void QualityScanDialog::setupUi()
     // ---
 
     setDetailsWidget(d->tabWidget);
+}
 }

@@ -1225,7 +1225,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
        
     SET(libimgqsort_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imgqsort/qualityscandialog.cpp 
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imgqsort/qualityscandialog.h 
        )
        
 

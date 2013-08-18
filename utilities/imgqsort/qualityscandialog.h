@@ -39,7 +39,7 @@
 namespace Digikam
 {
 
-class QualityScanDialog : public KDialog, public StateSavingObject
+class QualityScanDialog : public KDialog
 {
     Q_OBJECT
 
