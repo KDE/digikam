@@ -33,6 +33,7 @@
 
 #include "metadatatask.h"
 #include "thumbstask.h"
+#include "fingerprintstask.h"
 
 using namespace Solid;
 
@@ -94,8 +95,8 @@ void MaintenanceThread::generateThumbs(const QStringList& paths)
         ThumbsTask* const t = new ThumbsTask();
         t->setItem(paths.at(i));
 
-        connect(t, SIGNAL(signalFinished(QPixmap)),
-                this, SIGNAL(signalAdvance(QPixmap)));
+        connect(t, SIGNAL(signalFinished(QImage)),
+                this, SIGNAL(signalAdvance(QImage)));
 
         connect(this, SIGNAL(signalCanceled()),
                 t, SLOT(slotCancel()), Qt::QueuedConnection);
@@ -106,9 +107,25 @@ void MaintenanceThread::generateThumbs(const QStringList& paths)
     appendJob(collection);
 }
 
-void MaintenanceThread::generateFingerprints(const QStringList& /*paths*/)
+void MaintenanceThread::generateFingerprints(const QStringList& paths)
 {
-    // TODO
+    JobCollection* const collection = new JobCollection();
+
+    for(int i=0; i < paths.size(); i++)
+    {
+        FingerprintsTask* const t = new FingerprintsTask();
+        t->setItem(paths.at(i));
+
+        connect(t, SIGNAL(signalFinished(QImage)),
+                this, SIGNAL(signalAdvance(QImage)));
+
+        connect(this, SIGNAL(signalCanceled()),
+                t, SLOT(slotCancel()), Qt::QueuedConnection);
+
+        collection->addJob(t);
+    }
+
+    appendJob(collection);
 }
 
 void MaintenanceThread::cancel()

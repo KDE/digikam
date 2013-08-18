@@ -26,7 +26,7 @@
 
 // Qt includes
 
-#include <QPixmap>
+#include <QImage>
 
 // Local includes
 
@@ -51,6 +51,8 @@ public:
     ThumbsGenerator(const bool rebuildAll = true, const AlbumList& list=AlbumList(), ProgressItem* const parent = 0);
     ~ThumbsGenerator();
 
+    void setUseMultiCoreCPU(bool b);
+
 private:
 
     void init(const bool rebuildAll);
@@ -59,7 +61,7 @@ private Q_SLOTS:
 
     void slotStart();
     void slotCancel();
-    void slotAdvance(const QPixmap&);
+    void slotAdvance(const QImage&);
 
 private:
 

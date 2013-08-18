@@ -219,8 +219,8 @@ QueueSettingsView::QueueSettingsView(QWidget* const parent)
     vlay->addWidget(d->overwriteButton);
     vlay->setMargin(0);
     vlay->setSpacing(0);
-    
-    d->useMutiCoreCPU          = new QCheckBox(i18n("Use multi-core CPU to increase speed"), panel);
+
+    d->useMutiCoreCPU          = new QCheckBox(i18nc("@option:check", "Work on all processor cores"), panel);
     d->useMutiCoreCPU->setWhatsThis(i18n("Turn on this option to use all CPU core from your computer "
                                          "to process more than one item from a queue at the same time."));
     // -------------

@@ -42,14 +42,13 @@ public:
 
     Private()
     {
-        cancel          = false;
         thumbLoadThread = ThumbnailLoadThread::defaultThread();
+        catcher         = 0;
     }
 
-    bool                 cancel;
-
-    QString              path;
-    ThumbnailLoadThread* thumbLoadThread;
+    QString                path;
+    ThumbnailLoadThread*   thumbLoadThread;
+    ThumbnailImageCatcher* catcher;
 };
 
 // -------------------------------------------------------
@@ -57,8 +56,7 @@ public:
 ThumbsTask::ThumbsTask()
     : Job(0), d(new Private)
 {
-    connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(LoadingDescription, QPixmap)),
-            this, SLOT(slotGotThumbnail(LoadingDescription, QPixmap)));
+    d->catcher = new ThumbnailImageCatcher(d->thumbLoadThread, this);
 }
 
 ThumbsTask::~ThumbsTask()
@@ -74,24 +72,21 @@ void ThumbsTask::setItem(const QString& path)
 
 void ThumbsTask::slotCancel()
 {
-    d->cancel = true;
+    d->catcher->cancel();
 }
 
 void ThumbsTask::run()
 {
-    if(!d->cancel)
-    {
-        d->thumbLoadThread->deleteThumbnail(d->path);
-        d->thumbLoadThread->find(d->path);
-    }
-}
+    d->catcher->setActive(true);
 
-void ThumbsTask::slotGotThumbnail(const LoadingDescription& desc, const QPixmap& pix)
-{
-    if (d->path == desc.filePath)
-    {
-        emit signalFinished(pix);
-    }
+    d->catcher->thread()->deleteThumbnail(d->path);
+    d->catcher->thread()->find(d->path);
+    d->catcher->enqueue();
+
+    QList<QImage> images = d->catcher->waitForThumbnails();
+    d->catcher->setActive(false);
+
+    emit signalFinished(images.first());
 }
 
 }  // namespace Digikam
