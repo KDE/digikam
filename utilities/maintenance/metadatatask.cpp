@@ -112,7 +112,7 @@ void MetadataTask::run()
         scanner.scanFile(d->item, CollectionScanner::Rescan);
     }
 
-    emit signalFinished();
+    emit signalFinished(QImage());
 }
 
 }  // namespace Digikam

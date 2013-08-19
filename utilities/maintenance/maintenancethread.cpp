@@ -75,8 +75,8 @@ void MaintenanceThread::syncMetadata(const ImageInfoList& items, MetadataSynchro
         MetadataTask* const t = new MetadataTask();
         t->setItem(items.at(i), dir);
 
-        connect(t, SIGNAL(signalFinished()),
-                this, SIGNAL(signalAdvance()));
+        connect(t, SIGNAL(signalFinished(QImage)),
+                this, SIGNAL(signalAdvance(QImage)));
 
         connect(this, SIGNAL(signalCanceled()),
                 t, SLOT(slotCancel()), Qt::QueuedConnection);
