@@ -34,7 +34,7 @@
 #include "metadatatask.h"
 #include "thumbstask.h"
 #include "fingerprintstask.h"
-#include "imgqtask.h"
+#include "imagequalitytask.h"
 #include "imagequalitysettings.h"
 
 using namespace Solid;
@@ -136,7 +136,7 @@ void MaintenanceThread::sortByImageQuality(const QStringList& paths, const Image
 
     for(int i=0; i < paths.size(); i++)
     {
-        ImgQTask* const t = new ImgQTask();
+        ImageQualityTask* const t = new ImageQualityTask();
         t->setItem(paths.at(i), quality);
 
         connect(t, SIGNAL(signalFinished(QImage)),

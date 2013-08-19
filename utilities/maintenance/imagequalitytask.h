@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef IMGQ_TASK_H
-#define IMGQ_TASK_H
+#ifndef IMAGEQUALITYTASK_H
+#define IMAGEQUALITYTASK_H
 
 // Qt includes
 
@@ -40,14 +40,14 @@ namespace Digikam
 
 class ImageQualitySettings;
     
-class ImgQTask : public Job
+class ImageQualityTask : public Job
 {
     Q_OBJECT
 
 public:
 
-    ImgQTask();
-    ~ImgQTask();
+    ImageQualityTask();
+    ~ImageQualityTask();
 
     void setItem(const QString& path, const ImageQualitySettings& quality);
 
@@ -71,4 +71,4 @@ private:
 
 }  // namespace Digikam
 
-#endif /* IMGQ_TASK_H */
+#endif /* IMAGEQUALITYTASK_H */

@@ -1276,7 +1276,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/fingerprintstask.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/imagequalitysorter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/imagequalitysettings.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/imgqtask.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/imagequalitytask.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/maintenancedlg.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/maintenancemngr.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/maintenancetool.cpp

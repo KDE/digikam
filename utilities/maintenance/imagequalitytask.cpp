@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "imgqtask.moc"
+#include "imagequalitytask.moc"
 
 // KDE includes
 
@@ -37,7 +37,7 @@
 namespace Digikam
 {
 
-class ImgQTask::Private
+class ImageQualityTask::Private
 {
 public:
 
@@ -53,29 +53,29 @@ public:
 
 // -------------------------------------------------------
 
-ImgQTask::ImgQTask()
+ImageQualityTask::ImageQualityTask()
     : Job(0), d(new Private)
 {
 }
 
-ImgQTask::~ImgQTask()
+ImageQualityTask::~ImageQualityTask()
 {
     slotCancel();
     delete d;
 }
 
-void ImgQTask::setItem(const QString& path, const ImageQualitySettings& quality)
+void ImageQualityTask::setItem(const QString& path, const ImageQualitySettings& quality)
 {
     d->path    = path;
     d->quality = quality;
 }
 
-void ImgQTask::slotCancel()
+void ImageQualityTask::slotCancel()
 {
     d->cancel = true;
 }
 
-void ImgQTask::run()
+void ImageQualityTask::run()
 {
     if(!d->cancel)
     {
