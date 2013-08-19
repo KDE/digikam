@@ -98,7 +98,7 @@ void MetadataSynchronizer::init(SyncDirection direction)
     connect(d->thread, SIGNAL(signalCompleted()),
             this, SLOT(slotDone()));
 
-    connect(d->thread, SIGNAL(signalAdvance()),
+    connect(d->thread, SIGNAL(signalAdvance(QImage)),
             this, SLOT(slotAdvance()));
 }
 
