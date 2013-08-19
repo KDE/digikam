@@ -319,6 +319,8 @@ MaintenanceSettings MaintenanceDlg::settings() const
     prm.faceManagement                      = d->expanderBox->isChecked(Private::FaceManagement);
     prm.faceSettings.alreadyScannedHandling = (FaceScanSettings::AlreadyScannedHandling)d->faceScannedHandling->currentIndex();
     prm.faceSettings.albums                 = d->albumSelectors->selectedAlbums();
+    prm.qualitySort                         = d->expanderBox->isChecked(Private::ImageQualitySorter);
+    prm.quality                             = d->quality->currentIndex();
     prm.metadataSync                        = d->expanderBox->isChecked(Private::MetadataSync);
     prm.syncDirection                       = d->syncDirection->currentIndex();
     return prm;
@@ -333,18 +335,22 @@ void MaintenanceDlg::readSettings()
 
     MaintenanceSettings prm;
 
-    d->useMutiCoreCPU->setChecked(group.readEntry(d->configUseMutiCoreCPU,                       prm.useMutiCoreCPU));
-    d->expanderBox->setChecked(Private::NewItems,       group.readEntry(d->configNewItems,       prm.newItems));
-    d->expanderBox->setChecked(Private::Thumbnails,     group.readEntry(d->configThumbnails,     prm.thumbnails));
-    d->scanThumbs->setChecked(group.readEntry(d->configScanThumbs,                               prm.scanThumbs));
-    d->expanderBox->setChecked(Private::FingerPrints,   group.readEntry(d->configFingerPrints,   prm.fingerPrints));
-    d->scanFingerPrints->setChecked(group.readEntry(d->configScanFingerPrints,                   prm.scanFingerPrints));
-    d->expanderBox->setChecked(Private::Duplicates,     group.readEntry(d->configDuplicates,     prm.duplicates));
-    d->similarity->setValue(group.readEntry(d->configSimilarity,                                 prm.similarity));
-    d->expanderBox->setChecked(Private::FaceManagement, group.readEntry(d->configFaceManagement, prm.faceManagement));
-    d->faceScannedHandling->setCurrentIndex(group.readEntry(d->configFaceScannedHandling,        (int)prm.faceSettings.alreadyScannedHandling));
-    d->expanderBox->setChecked(Private::MetadataSync,   group.readEntry(d->configMetadataSync,   prm.metadataSync));
-    d->syncDirection->setCurrentIndex(group.readEntry(d->configSyncDirection,                    prm.syncDirection));
+    d->useMutiCoreCPU->setChecked(group.readEntry(d->configUseMutiCoreCPU,                               prm.useMutiCoreCPU));
+    d->expanderBox->setChecked(Private::NewItems,           group.readEntry(d->configNewItems,           prm.newItems));
+    d->expanderBox->setChecked(Private::Thumbnails,         group.readEntry(d->configThumbnails,         prm.thumbnails));
+    d->scanThumbs->setChecked(group.readEntry(d->configScanThumbs,                                       prm.scanThumbs));
+    d->expanderBox->setChecked(Private::FingerPrints,       group.readEntry(d->configFingerPrints,       prm.fingerPrints));
+    d->scanFingerPrints->setChecked(group.readEntry(d->configScanFingerPrints,                           prm.scanFingerPrints));
+    d->expanderBox->setChecked(Private::Duplicates,         group.readEntry(d->configDuplicates,         prm.duplicates));
+    d->similarity->setValue(group.readEntry(d->configSimilarity,                                         prm.similarity));
+    d->expanderBox->setChecked(Private::FaceManagement,     group.readEntry(d->configFaceManagement,     prm.faceManagement));
+    d->faceScannedHandling->setCurrentIndex(group.readEntry(d->configFaceScannedHandling,                (int)prm.faceSettings.alreadyScannedHandling));
+    d->expanderBox->setChecked(Private::MetadataSync,       group.readEntry(d->configMetadataSync,       prm.metadataSync));
+    d->syncDirection->setCurrentIndex(group.readEntry(d->configSyncDirection,                            prm.syncDirection));
+    d->expanderBox->setChecked(Private::ImageQualitySorter, group.readEntry(d->configImageQualitySorter, prm.qualitySort));
+    d->quality->setCurrentIndex(group.readEntry(d->configQuality,                                        prm.quality));
+    d->expanderBox->setChecked(Private::MetadataSync,       group.readEntry(d->configMetadataSync,       prm.metadataSync));
+    d->syncDirection->setCurrentIndex(group.readEntry(d->configSyncDirection,                            prm.syncDirection));
 
     for (int i = Private::NewItems ; i < Private::Stretch ; ++i)
     {
@@ -371,6 +377,8 @@ void MaintenanceDlg::writeSettings()
     group.writeEntry(d->configSimilarity,          prm.similarity);
     group.writeEntry(d->configFaceManagement,      prm.faceManagement);
     group.writeEntry(d->configFaceScannedHandling, (int)prm.faceSettings.alreadyScannedHandling);
+    group.writeEntry(d->configImageQualitySorter,  prm.qualitySort);
+    group.writeEntry(d->configQuality,             prm.quality);
     group.writeEntry(d->configMetadataSync,        prm.metadataSync);
     group.writeEntry(d->configSyncDirection,       prm.syncDirection);
 }
@@ -395,8 +403,12 @@ void MaintenanceDlg::slotItemToggled(int index, bool b)
             d->hbox3->setEnabled(b);
             break;
 
-        case Private::MetadataSync:
+        case Private::ImageQualitySorter:
             d->vbox->setEnabled(b);
+            break;
+            
+        case Private::MetadataSync:
+            d->vbox2->setEnabled(b);
             break;
 
         default :  // NewItems
