@@ -37,7 +37,6 @@
 #include "albumdb.h"
 #include "albummanager.h"
 #include "databaseaccess.h"
-#include "metadatasettings.h"
 #include "maintenancethread.h"
 
 namespace Digikam
@@ -49,24 +48,23 @@ public:
 
     Private() :
         rebuildAll(true),
-        quality(0),             // FIXME : use right default value here.
         thread(0)
     {
     }
 
-    bool               rebuildAll;
+    bool                 rebuildAll;
     
-    int                quality;
+    ImageQualitySettings quality;
 
-    QStringList        allPicturesPath;
+    QStringList          allPicturesPath;
 
-    AlbumList          albumList;
+    AlbumList            albumList;
 
-    MaintenanceThread* thread;
+    MaintenanceThread*   thread;
 };
 
 ImageQualitySorter::ImageQualitySorter(const bool rebuildAll, const AlbumList& list,
-                                       int const quality, ProgressItem* const parent)
+                                       const ImageQualitySettings& quality, ProgressItem* const parent)
     : MaintenanceTool("ImageQualitySorter", parent),
       d(new Private)
 {

@@ -32,6 +32,7 @@
 
 #include "album.h"
 #include "facescansettings.h"
+#include "imagequalitysettings.h"
 #include "metadatasynchronizer.h"
 
 namespace Digikam
@@ -47,47 +48,47 @@ public:
 
 public:
 
-    bool             wholeAlbums;
-    bool             wholeTags;
+    bool                 wholeAlbums;
+    bool                 wholeTags;
 
-    AlbumList        albums;
-    AlbumList        tags;
+    AlbumList            albums;
+    AlbumList            tags;
 
     /// Use Multi-core CPU to process items.
-    bool             useMutiCoreCPU;
+    bool                 useMutiCoreCPU;
 
     /// Find new items on whole collection.
-    bool             newItems;
+    bool                 newItems;
 
     /// Generate thumbnails
-    bool             thumbnails;
+    bool                 thumbnails;
     /// Rebuild all thumbnails or only scan missing items.
-    bool             scanThumbs;
+    bool                 scanThumbs;
 
     /// Generate finger-prints
-    bool             fingerPrints;
+    bool                 fingerPrints;
     /// Rebuild all fingerprints or only scan missing items.
-    bool             scanFingerPrints;
+    bool                 scanFingerPrints;
 
     /// Scan for new items
-    bool             duplicates;
+    bool                 duplicates;
     /// Similarity between items to compare, in percents.
-    int              similarity;
+    int                  similarity;
 
     /// Scan for faces.
-    bool             faceManagement;
+    bool                 faceManagement;
     /// Face detection settings.
-    FaceScanSettings faceSettings;
+    FaceScanSettings     faceSettings;
 
     /// Perform Image Quality Sorting.
-    bool             qualitySort;
+    bool                 qualitySort;
     /// Image Quality Sorting Settings.
-    int              quality;
+    ImageQualitySettings quality;
     
     /// Sync metadata and DB.
-    bool             metadataSync;
+    bool                 metadataSync;
     /// Sync direction (image metadata <-> DB).
-    int              syncDirection;
+    int                  syncDirection;
 };
 
 //! kDebug() stream operator. Writes property @a s to the debug output in a nicely formatted way.

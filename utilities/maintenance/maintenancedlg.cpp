@@ -51,6 +51,7 @@
 #include "setup.h"
 #include "albumselectors.h"
 #include "facescansettings.h"
+#include "imagequalitysettings.h"
 #include "metadatasynchronizer.h"
 
 using namespace KDcrawIface;
@@ -107,7 +108,6 @@ public:
     static const QString configFaceManagement;
     static const QString configFaceScannedHandling;
     static const QString configImageQualitySorter;
-    static const QString configQuality;
     static const QString configMetadataSync;
     static const QString configSyncDirection;
 
@@ -120,7 +120,6 @@ public:
     QPushButton*         metadataSetup;
     QPushButton*         qualitySetup;
     QComboBox*           syncDirection;
-    QComboBox*           quality;
     KHBox*               hbox;
     KVBox*               vbox;
     KVBox*               vbox2;
@@ -142,7 +141,6 @@ const QString MaintenanceDlg::Private::configSimilarity("Similarity");
 const QString MaintenanceDlg::Private::configFaceManagement("FaceManagement");
 const QString MaintenanceDlg::Private::configFaceScannedHandling("FaceScannedHandling");
 const QString MaintenanceDlg::Private::configImageQualitySorter("ImageQualitySorter");
-const QString MaintenanceDlg::Private::configQuality("Quality");
 const QString MaintenanceDlg::Private::configMetadataSync("MetadataSync");
 const QString MaintenanceDlg::Private::configSyncDirection("SyncDirection");
 
@@ -220,14 +218,6 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
     // --------------------------------------------------------------------------------------
 
     d->vbox              = new KVBox;
-    KHBox* const hbox11  = new KHBox(d->vbox);
-    new QLabel(i18n("Quality: "), hbox11);
-    QWidget* const space4  = new QWidget(hbox11);
-    hbox11->setStretchFactor(space4, 10);
-    d->quality = new QComboBox(hbox11);
-    d->quality->addItem(i18n("Quality 1"), 0);  // FIXME : list all right quality settings here.
-    d->quality->addItem(i18n("Quality 2"), 1);
-
     KHBox* const hbox12  = new KHBox(d->vbox);
     new QLabel(i18n("Check quality sorter setup panel for details: "), hbox12);
     QWidget* const space2 = new QWidget(hbox12);
@@ -320,7 +310,9 @@ MaintenanceSettings MaintenanceDlg::settings() const
     prm.faceSettings.alreadyScannedHandling = (FaceScanSettings::AlreadyScannedHandling)d->faceScannedHandling->currentIndex();
     prm.faceSettings.albums                 = d->albumSelectors->selectedAlbums();
     prm.qualitySort                         = d->expanderBox->isChecked(Private::ImageQualitySorter);
-    prm.quality                             = d->quality->currentIndex();
+    ImageQualitySettings imgq;
+    imgq.readFromConfig();
+    prm.quality                             = imgq;
     prm.metadataSync                        = d->expanderBox->isChecked(Private::MetadataSync);
     prm.syncDirection                       = d->syncDirection->currentIndex();
     return prm;
@@ -348,7 +340,6 @@ void MaintenanceDlg::readSettings()
     d->expanderBox->setChecked(Private::MetadataSync,       group.readEntry(d->configMetadataSync,       prm.metadataSync));
     d->syncDirection->setCurrentIndex(group.readEntry(d->configSyncDirection,                            prm.syncDirection));
     d->expanderBox->setChecked(Private::ImageQualitySorter, group.readEntry(d->configImageQualitySorter, prm.qualitySort));
-    d->quality->setCurrentIndex(group.readEntry(d->configQuality,                                        prm.quality));
     d->expanderBox->setChecked(Private::MetadataSync,       group.readEntry(d->configMetadataSync,       prm.metadataSync));
     d->syncDirection->setCurrentIndex(group.readEntry(d->configSyncDirection,                            prm.syncDirection));
 
@@ -378,7 +369,6 @@ void MaintenanceDlg::writeSettings()
     group.writeEntry(d->configFaceManagement,      prm.faceManagement);
     group.writeEntry(d->configFaceScannedHandling, (int)prm.faceSettings.alreadyScannedHandling);
     group.writeEntry(d->configImageQualitySorter,  prm.qualitySort);
-    group.writeEntry(d->configQuality,             prm.quality);
     group.writeEntry(d->configMetadataSync,        prm.metadataSync);
     group.writeEntry(d->configSyncDirection,       prm.syncDirection);
 }

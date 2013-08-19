@@ -35,6 +35,7 @@
 #include "thumbstask.h"
 #include "fingerprintstask.h"
 #include "imgqtask.h"
+#include "imagequalitysettings.h"
 
 using namespace Solid;
 
@@ -129,7 +130,7 @@ void MaintenanceThread::generateFingerprints(const QStringList& paths)
     appendJob(collection);
 }
 
-void MaintenanceThread::sortByImageQuality(const QStringList& paths, int const quality)
+void MaintenanceThread::sortByImageQuality(const QStringList& paths, const ImageQualitySettings& quality)
 {
     JobCollection* const collection = new JobCollection();
 

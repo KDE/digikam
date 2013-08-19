@@ -32,6 +32,7 @@
 
 #include "dimg.h"
 #include "previewloadthread.h"
+#include "imagequalitysettings.h"
 
 namespace Digikam
 {
@@ -43,12 +44,11 @@ public:
     Private()
     {
         cancel  = false;
-        quality = 0;     // FIXME : set right default value.
     }
 
-    bool      cancel;
-    int       quality;
-    QString   path;
+    bool                 cancel;
+    ImageQualitySettings quality;
+    QString              path;
 };
 
 // -------------------------------------------------------
@@ -64,7 +64,7 @@ ImgQTask::~ImgQTask()
     delete d;
 }
 
-void ImgQTask::setItem(const QString& path, int const quality)
+void ImgQTask::setItem(const QString& path, const ImageQualitySettings& quality)
 {
     d->path    = path;
     d->quality = quality;

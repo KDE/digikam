@@ -28,6 +28,7 @@
 
 #include "album.h"
 #include "maintenancetool.h"
+#include "imagequalitysettings.h"
 
 class QImage;
 
@@ -44,7 +45,8 @@ public:
      *  FIXME : set right quality default value.
      */
     explicit ImageQualitySorter(const bool rebuildAll, const AlbumList& list=AlbumList(),
-                                int const quality=0, ProgressItem* const parent = 0);
+                                const ImageQualitySettings& quality=ImageQualitySettings(),
+                                ProgressItem* const parent = 0);
     ~ImageQualitySorter();
 
     void setUseMultiCoreCPU(bool b);

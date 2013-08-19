@@ -40,7 +40,6 @@ MaintenanceSettings::MaintenanceSettings()
     similarity         = 90;
     faceManagement     = false;
     qualitySort        = false;
-    quality            = 0;      // FIXME : set right default value. 
     metadataSync       = false;
     syncDirection      = MetadataSynchronizer::WriteFromDatabaseToFile;
 };

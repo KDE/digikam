@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2013-08-19
- * Description : Thread actions task for image quality sorter.
+ * Description : Image quality Settings Container.
  *
  * Copyright (C) 2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -21,54 +21,45 @@
  *
  * ============================================================ */
 
-#ifndef IMGQ_TASK_H
-#define IMGQ_TASK_H
+#ifndef IMAGEQUALITYSETTINGS_H
+#define IMAGEQUALITYSETTINGS_H
 
 // Qt includes
 
-#include <QImage>
-#include <QThread>
+#include <QDebug>
 
-// KDE includes
-
-#include <threadweaver/Job.h>
-
-using namespace ThreadWeaver;
+class KConfigGroup;
 
 namespace Digikam
 {
 
-class ImageQualitySettings;
-    
-class ImgQTask : public Job
+class ImageQualitySettings
 {
-    Q_OBJECT
+public:
+
+    ImageQualitySettings();
+    virtual ~ImageQualitySettings();
 
 public:
 
-    ImgQTask();
-    ~ImgQTask();
+    void readFromConfig();
+    void writeToConfig();
 
-    void setItem(const QString& path, const ImageQualitySettings& quality);
+public:
 
-Q_SIGNALS:
-
-    void signalFinished(const QImage&);
-
-public Q_SLOTS:
-
-    void slotCancel();
-
-protected:
-
-    void run();
-
-private:
-
-    class Private;
-    Private* const d;
+    int  speed;
+    
+    bool detectBlur;
+    bool detectNoise;
+    bool detectCompression;
+    bool lowQRejected;
+    bool mediumQPending;
+    bool highQAccepted;
 };
+
+//! kDebug() stream operator. Writes property @a s to the debug output in a nicely formatted way.
+QDebug operator<<(QDebug dbg, const ImageQualitySettings& s);
 
 }  // namespace Digikam
 
-#endif /* IMGQ_TASK_H */
+#endif  // IMAGEQUALITYSETTINGS_H
