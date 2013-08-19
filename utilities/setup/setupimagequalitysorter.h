@@ -3,11 +3,11 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        :
- * Description :
+ * Date        : 2013-08-19
+ * Description : Image Quality setup page
  *
- * Copyright (C) 2013-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2013-2014 by Gowtham Ashok <gwty93 at gmail dot com>
+ * Copyright (C) 2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2013 by Gowtham Ashok <gwty93 at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -22,17 +22,12 @@
  *
  * ============================================================ */
 
-
 #ifndef SETUPIMAGEQUALITYSORTER_H
 #define SETUPIMAGEQUALITYSORTER_H
 
 // Qt includes
 
 #include <QScrollArea>
-
-// Local includes
-
-#include "digikam_export.h"
 
 namespace Digikam
 {
@@ -47,10 +42,6 @@ public:
     ~SetupImageQualitySorter();
 
     void applySettings();
-
-public slots:
-
-    void slotSetUnchecked(int);
 
 private:
 
