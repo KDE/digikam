@@ -117,7 +117,7 @@ public:
         rawPage(0),
         iofilesPage(0),
         slideshowPage(0),
-        ImagequalitysorterPage(0),
+        imageQualitySorterPage(0),
         iccPage(0),
         cameraPage(0),
         //faceTagsPage(0),
@@ -131,55 +131,55 @@ public:
     {
     }
 
-    KPageWidgetItem*    page_database;
-    KPageWidgetItem*    page_collections;
-    KPageWidgetItem*    page_albumView;
-    KPageWidgetItem*    page_tooltip;
-    KPageWidgetItem*    page_metadata;
-    KPageWidgetItem*    page_template;
-    KPageWidgetItem*    page_category;
-    KPageWidgetItem*    page_mime;
-    KPageWidgetItem*    page_lighttable;
-    KPageWidgetItem*    page_editor;
-    KPageWidgetItem*    page_raw;
-    KPageWidgetItem*    page_iofiles;
-    KPageWidgetItem*    page_slideshow;
-    KPageWidgetItem*    page_imagequalitysorter;
-    KPageWidgetItem*    page_icc;
-    KPageWidgetItem*    page_camera;
-    KPageWidgetItem*    page_misc;
-    KPageWidgetItem*    page_plugins;
+    KPageWidgetItem*         page_database;
+    KPageWidgetItem*         page_collections;
+    KPageWidgetItem*         page_albumView;
+    KPageWidgetItem*         page_tooltip;
+    KPageWidgetItem*         page_metadata;
+    KPageWidgetItem*         page_template;
+    KPageWidgetItem*         page_category;
+    KPageWidgetItem*         page_mime;
+    KPageWidgetItem*         page_lighttable;
+    KPageWidgetItem*         page_editor;
+    KPageWidgetItem*         page_raw;
+    KPageWidgetItem*         page_iofiles;
+    KPageWidgetItem*         page_slideshow;
+    KPageWidgetItem*         page_imagequalitysorter;
+    KPageWidgetItem*         page_icc;
+    KPageWidgetItem*         page_camera;
+    KPageWidgetItem*         page_misc;
+    KPageWidgetItem*         page_plugins;
 #ifdef USE_SCRIPT_IFACE
-    KPageWidgetItem*    page_scriptmanager;
+    KPageWidgetItem*         page_scriptmanager;
 #endif
-    KPageWidgetItem*    page_facetags;
-    KPageWidgetItem*    page_versioning;
+    KPageWidgetItem*         page_facetags;
+    KPageWidgetItem*         page_versioning;
 
-    SetupDatabase*      databasePage;
-    SetupCollections*   collectionsPage;
-    SetupAlbumView*     albumViewPage;
-    SetupToolTip*       tooltipPage;
-    SetupMetadata*      metadataPage;
-    SetupTemplate*      templatePage;
-    SetupCategory*      categoryPage;
-    SetupMime*          mimePage;
-    SetupLightTable*    lighttablePage;
-    SetupEditor*        editorPage;
-    SetupRaw*           rawPage;
-    SetupIOFiles*       iofilesPage;
-    SetupSlideShow*     slideshowPage;
-    SetupImageQualitySorter* ImagequalitysorterPage;
-    SetupICC*           iccPage;
-    SetupCamera*        cameraPage;
-    SetupMisc*          miscPage;
-    ConfigWidget*       pluginsPage;
+    SetupDatabase*           databasePage;
+    SetupCollections*        collectionsPage;
+    SetupAlbumView*          albumViewPage;
+    SetupToolTip*            tooltipPage;
+    SetupMetadata*           metadataPage;
+    SetupTemplate*           templatePage;
+    SetupCategory*           categoryPage;
+    SetupMime*               mimePage;
+    SetupLightTable*         lighttablePage;
+    SetupEditor*             editorPage;
+    SetupRaw*                rawPage;
+    SetupIOFiles*            iofilesPage;
+    SetupSlideShow*          slideshowPage;
+    SetupImageQualitySorter* imageQualitySorterPage;
+    SetupICC*                iccPage;
+    SetupCamera*             cameraPage;
+    SetupMisc*               miscPage;
+    ConfigWidget*            pluginsPage;
 #ifdef USE_SCRIPT_IFACE
-    SetupScriptManager* scriptManagerPage;
+    SetupScriptManager*      scriptManagerPage;
 #endif
     //SetupFaceTags*      faceTagsPage;
-    SetupVersioning*    versioningPage;
+    SetupVersioning*         versioningPage;
 
-    SearchTextBar*      pluginFilter;
+    SearchTextBar*           pluginFilter;
 
 public:
 
@@ -294,13 +294,8 @@ Setup::Setup(QWidget* const parent)
                                       "<i>Customize slideshow settings</i></qt>"));
     d->page_slideshow->setIcon(KIcon("view-presentation"));
 
-    d->ImagequalitysorterPage = new SetupImageQualitySorter();
-    d->page_imagequalitysorter = addPage(d->ImagequalitysorterPage,i18n("Image Quality Sorter"));
-    d->page_imagequalitysorter->setHeader(i18n("<qt>Image Quality Sorter Settings<br/>"));
-    d->page_imagequalitysorter->setIcon(KIcon("digiKam"));
-
-    d->ImagequalitysorterPage = new SetupImageQualitySorter();
-    d->page_imagequalitysorter = addPage(d->ImagequalitysorterPage,i18n("Image Quality Sorter"));
+    d->imageQualitySorterPage = new SetupImageQualitySorter();
+    d->page_imagequalitysorter = addPage(d->imageQualitySorterPage, i18n("Image Quality Sorter"));
     d->page_imagequalitysorter->setHeader(i18n("<qt>Image Quality Sorter Settings<br/>"));
     d->page_imagequalitysorter->setIcon(KIcon("digiKam"));
 
@@ -516,6 +511,7 @@ void Setup::okClicked()
     d->rawPage->applySettings();
     d->iofilesPage->applySettings();
     d->slideshowPage->applySettings();
+    d->imageQualitySorterPage->applySettings();
     d->iccPage->applySettings();
     d->miscPage->applySettings();
     d->pluginsPage->apply();
@@ -638,6 +634,11 @@ Setup::Page Setup::activePageIndex() const
         return SlideshowPage;
     }
 
+    if (cur == d->page_imagequalitysorter)
+    {
+        return ImageQualityPage;
+    }
+        
     if (cur == d->page_icc)
     {
         return ICCPage;
@@ -723,6 +724,9 @@ KPageWidgetItem* Setup::Private::pageItem(Setup::Page page) const
         case Setup::SlideshowPage:
             return page_slideshow;
 
+        case Setup::ImageQualityPage:
+            return page_imagequalitysorter;
+            
         case Setup::ICCPage:
             return page_icc;
 
