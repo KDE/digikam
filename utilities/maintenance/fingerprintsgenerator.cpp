@@ -27,16 +27,11 @@
 // Qt includes
 
 #include <QString>
-#include <QTimer>
-#include <QDir>
-#include <QFileInfo>
 
 // KDE includes
 
-#include <kcodecs.h>
 #include <klocale.h>
 #include <kconfig.h>
-#include <kstandardguiitem.h>
 
 // Local includes
 
@@ -44,7 +39,6 @@
 #include "albumdb.h"
 #include "albummanager.h"
 #include "databaseaccess.h"
-#include "metadatasettings.h"
 #include "maintenancethread.h"
 
 namespace Digikam
@@ -141,7 +135,6 @@ void FingerPrintsGenerator::slotStart()
 
     setTotalItems(d->allPicturesPath.count());
 
-    d->thread->setUseMultiCore(true);
     d->thread->generateFingerprints(d->allPicturesPath);
     d->thread->start();
 }
