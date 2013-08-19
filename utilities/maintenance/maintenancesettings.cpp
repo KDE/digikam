@@ -28,19 +28,21 @@ namespace Digikam
 
 MaintenanceSettings::MaintenanceSettings()
 {
-    wholeAlbums      = true;
-    wholeTags        = true;
-    useMutiCoreCPU   = false;
-    newItems         = false;
-    thumbnails       = false;
-    scanThumbs       = false;
-    fingerPrints     = false;
-    scanFingerPrints = false;
-    duplicates       = false;
-    similarity       = 90;
-    faceManagement   = false;
-    metadataSync     = false;
-    syncDirection    = MetadataSynchronizer::WriteFromDatabaseToFile;
+    wholeAlbums        = true;
+    wholeTags          = true;
+    useMutiCoreCPU     = false;
+    newItems           = false;
+    thumbnails         = false;
+    scanThumbs         = false;
+    fingerPrints       = false;
+    scanFingerPrints   = false;
+    duplicates         = false;
+    similarity         = 90;
+    faceManagement     = false;
+    qualitySort        = false;
+    imageQualitySorter = 0;      // FIXME : set right default value. 
+    metadataSync       = false;
+    syncDirection      = MetadataSynchronizer::WriteFromDatabaseToFile;
 };
 
 MaintenanceSettings::~MaintenanceSettings()
@@ -65,6 +67,8 @@ QDebug operator<<(QDebug dbg, const MaintenanceSettings& s)
     dbg.nospace() << "similarity          : " << s.similarity << endl;
     dbg.nospace() << "faceManagement      : " << s.faceManagement << endl;
     dbg.nospace() << "faceScannedHandling : " << s.faceSettings.alreadyScannedHandling << endl;
+    dbg.nospace() << "qualitySort         : " << s.qualitySort << endl;
+    dbg.nospace() << "imageQualitySorter  : " << s.imageQualitySorter << endl;
     dbg.nospace() << "metadataSync        : " << s.metadataSync << endl;
     dbg.nospace() << "syncDirection       : " << s.syncDirection << endl;
     return dbg.space();

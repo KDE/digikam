@@ -79,13 +79,15 @@ public:
     /// Face detection settings.
     FaceScanSettings faceSettings;
 
+    /// Perform Image Quality Sorting.
+    bool             qualitySort;
+    /// Image Quality Sorting Settings.
+    int              imageQualitySorter;
+    
     /// Sync metadata and DB.
     bool             metadataSync;
     /// Sync direction (image metadata <-> DB).
     int              syncDirection;
-    
-    ///Perform Image Quality Sorting
-    int imageQualitySorter;
 };
 
 //! kDebug() stream operator. Writes property @a s to the debug output in a nicely formatted way.
