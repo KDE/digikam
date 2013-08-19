@@ -3,10 +3,10 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2012-01-30
- * Description : maintenance dialog
+ * Date        : 2013-08-19
+ * Description : Thread actions task for image quality sorter.
  *
- * Copyright (C) 2012-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,43 +21,45 @@
  *
  * ============================================================ */
 
-#ifndef MAINTENANCEDLG_H
-#define MAINTENANCEDLG_H
+#ifndef IMGQ_TASK_H
+#define IMGQ_TASK_H
+
+// Qt includes
+
+#include <QImage>
+#include <QThread>
 
 // KDE includes
 
-#include <kdialog.h>
+#include <threadweaver/Job.h>
 
-// Local includes
-
-#include "digikam_export.h"
-#include "maintenancesettings.h"
+using namespace ThreadWeaver;
 
 namespace Digikam
 {
 
-class MaintenanceDlg : public KDialog
+class ImgQTask : public Job
 {
     Q_OBJECT
 
 public:
 
-    explicit MaintenanceDlg(QWidget* const parent = 0);
-    ~MaintenanceDlg();
+    ImgQTask();
+    ~ImgQTask();
 
-    MaintenanceSettings settings() const;
+    void setItem(const QString& path, int const quality);
 
-private Q_SLOTS:
+Q_SIGNALS:
 
-    void slotItemToggled(int index, bool b);
-    void slotMetadataSetup();
-    void slotQualitySetup();
-    void slotOk();
+    void signalFinished(const QImage&);
 
-private:
+public Q_SLOTS:
 
-    void writeSettings();
-    void readSettings();
+    void slotCancel();
+
+protected:
+
+    void run();
 
 private:
 
@@ -67,4 +69,4 @@ private:
 
 }  // namespace Digikam
 
-#endif  // MAINTENANCEDLG_H
+#endif /* IMGQ_TASK_H */

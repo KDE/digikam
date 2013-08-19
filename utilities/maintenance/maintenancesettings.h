@@ -82,7 +82,7 @@ public:
     /// Perform Image Quality Sorting.
     bool             qualitySort;
     /// Image Quality Sorting Settings.
-    int              imageQualitySorter;
+    int              quality;
     
     /// Sync metadata and DB.
     bool             metadataSync;

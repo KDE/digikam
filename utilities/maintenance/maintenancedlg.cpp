@@ -69,6 +69,7 @@ public:
         FingerPrints,
         Duplicates,
         FaceManagement,
+        ImageQualitySorter,
         MetadataSync,
 
         Stretch
@@ -105,6 +106,8 @@ public:
     static const QString configSimilarity;
     static const QString configFaceManagement;
     static const QString configFaceScannedHandling;
+    static const QString configImageQualitySorter;
+    static const QString configQuality;
     static const QString configMetadataSync;
     static const QString configSyncDirection;
 
@@ -115,9 +118,12 @@ public:
     QCheckBox*           useMutiCoreCPU;
     QComboBox*           faceScannedHandling;
     QPushButton*         metadataSetup;
+    QPushButton*         qualitySetup;
     QComboBox*           syncDirection;
+    QComboBox*           quality;
     KHBox*               hbox;
     KVBox*               vbox;
+    KVBox*               vbox2;
     KHBox*               hbox3;
     KIntNumInput*        similarity;
     RExpanderBox*        expanderBox;
@@ -135,6 +141,8 @@ const QString MaintenanceDlg::Private::configDuplicates("Duplicates");
 const QString MaintenanceDlg::Private::configSimilarity("Similarity");
 const QString MaintenanceDlg::Private::configFaceManagement("FaceManagement");
 const QString MaintenanceDlg::Private::configFaceScannedHandling("FaceScannedHandling");
+const QString MaintenanceDlg::Private::configImageQualitySorter("ImageQualitySorter");
+const QString MaintenanceDlg::Private::configQuality("Quality");
 const QString MaintenanceDlg::Private::configMetadataSync("MetadataSync");
 const QString MaintenanceDlg::Private::configSyncDirection("SyncDirection");
 
@@ -212,20 +220,40 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
     // --------------------------------------------------------------------------------------
 
     d->vbox              = new KVBox;
-    KHBox* const hbox21  = new KHBox(d->vbox);
+    KHBox* const hbox11  = new KHBox(d->vbox);
+    new QLabel(i18n("Quality: "), hbox11);
+    QWidget* const space4  = new QWidget(hbox11);
+    hbox11->setStretchFactor(space4, 10);
+    d->syncDirection = new QComboBox(hbox11);
+    d->syncDirection->addItem(i18n("Quality 1"), 0);  // FIXME : list all right quality settings here.
+    d->syncDirection->addItem(i18n("Quality 2"), 1);
+
+    KHBox* const hbox12  = new KHBox(d->vbox);
+    new QLabel(i18n("Check quality sorter setup panel for details: "), hbox12);
+    QWidget* const space2 = new QWidget(hbox12);
+    hbox12->setStretchFactor(space2, 10);
+    d->qualitySetup       = new QPushButton(i18n("Settings..."), hbox12);
+    d->expanderBox->insertItem(Private::ImageQualitySorter, d->vbox, SmallIcon("run-build-file"),
+                               i18n("Image Quality Sorter"), "ImageQualitySorter", false);
+    d->expanderBox->setCheckBoxVisible(Private::ImageQualitySorter, true);
+    
+    // --------------------------------------------------------------------------------------
+
+    d->vbox2             = new KVBox;
+    KHBox* const hbox21  = new KHBox(d->vbox2);
     new QLabel(i18n("Sync Direction: "), hbox21);
-    QWidget* const space4  = new QWidget(hbox21);
-    hbox21->setStretchFactor(space4, 10);
+    QWidget* const space5  = new QWidget(hbox21);
+    hbox21->setStretchFactor(space5, 10);
     d->syncDirection = new QComboBox(hbox21);
     d->syncDirection->addItem(i18n("From database to image metadata"), MetadataSynchronizer::WriteFromDatabaseToFile);
     d->syncDirection->addItem(i18n("From image metadata to database"), MetadataSynchronizer::ReadFromFileToDatabase);
 
-    KHBox* const hbox22  = new KHBox(d->vbox);
+    KHBox* const hbox22  = new KHBox(d->vbox2);
     new QLabel(i18n("Check metadata setup panel for details: "), hbox22);
-    QWidget* const space2 = new QWidget(hbox22);
-    hbox22->setStretchFactor(space2, 10);
+    QWidget* const space6 = new QWidget(hbox22);
+    hbox22->setStretchFactor(space6, 10);
     d->metadataSetup      = new QPushButton(i18n("Settings..."), hbox22);
-    d->expanderBox->insertItem(Private::MetadataSync, d->vbox, SmallIcon("run-build-file"),
+    d->expanderBox->insertItem(Private::MetadataSync, d->vbox2, SmallIcon("run-build-file"),
                                i18n("Sync Metadata and Database"), "MetadataSync", false);
     d->expanderBox->setCheckBoxVisible(Private::MetadataSync, true);
     d->expanderBox->insertStretch(Private::Stretch);
@@ -254,7 +282,10 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
 
     connect(d->metadataSetup, SIGNAL(clicked()),
             this, SLOT(slotMetadataSetup()));
-
+    
+    connect(d->qualitySetup, SIGNAL(clicked()),
+            this, SLOT(slotQualitySetup()));
+    
     setMinimumSize(500, 350);
     adjustSize();
     readSettings();
@@ -376,6 +407,11 @@ void MaintenanceDlg::slotItemToggled(int index, bool b)
 void MaintenanceDlg::slotMetadataSetup()
 {
     Setup::execSinglePage(this, Setup::MetadataPage);
+}
+
+void MaintenanceDlg::slotQualitySetup()
+{
+    Setup::execSinglePage(this, Setup::ImageQualityPage);
 }
 
 }  // namespace Digikam

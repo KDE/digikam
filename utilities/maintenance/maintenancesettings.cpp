@@ -40,7 +40,7 @@ MaintenanceSettings::MaintenanceSettings()
     similarity         = 90;
     faceManagement     = false;
     qualitySort        = false;
-    imageQualitySorter = 0;      // FIXME : set right default value. 
+    quality            = 0;      // FIXME : set right default value. 
     metadataSync       = false;
     syncDirection      = MetadataSynchronizer::WriteFromDatabaseToFile;
 };
@@ -68,7 +68,7 @@ QDebug operator<<(QDebug dbg, const MaintenanceSettings& s)
     dbg.nospace() << "faceManagement      : " << s.faceManagement << endl;
     dbg.nospace() << "faceScannedHandling : " << s.faceSettings.alreadyScannedHandling << endl;
     dbg.nospace() << "qualitySort         : " << s.qualitySort << endl;
-    dbg.nospace() << "imageQualitySorter  : " << s.imageQualitySorter << endl;
+    dbg.nospace() << "quality             : " << s.quality << endl;
     dbg.nospace() << "metadataSync        : " << s.metadataSync << endl;
     dbg.nospace() << "syncDirection       : " << s.syncDirection << endl;
     return dbg.space();

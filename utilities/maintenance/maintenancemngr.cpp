@@ -42,6 +42,7 @@
 #include "thumbsgenerator.h"
 #include "fingerprintsgenerator.h"
 #include "duplicatesfinder.h"
+#include "imagequalitysorter.h"
 #include "metadatasynchronizer.h"
 #include "facedetector.h"
 #include "knotificationwrapper.h"
@@ -78,7 +79,7 @@ public:
     DuplicatesFinder*      duplicatesFinder;
     FaceDetector*          faceDetector;
     MetadataSynchronizer*  metadataSynchronizer;
-    FaceDetector*          imageQualitySorter;   //TODO: Use imageQualitySorter function. Using FaceDetector temporarily
+    ImageQualitySorter*    imageQualitySorter;
 };
 
 MaintenanceMngr::MaintenanceMngr(QObject* const parent)
@@ -282,13 +283,17 @@ void MaintenanceMngr::stage6()
 {
     kDebug() << "stage6";
 
-    if (d->settings.imageQualitySorter)
+    if (d->settings.qualitySort)
     {
-      /*
-        d->imageQualitySorter= new QualitySorter(d->settings.imageQualitySorter);
+        bool rebuildAll = (d->settings.scanFingerPrints == false);
+        AlbumList list;
+        list << d->settings.albums;
+        list << d->settings.tags;
+
+        d->imageQualitySorter = new ImageQualitySorter(rebuildAll, list, d->settings.quality);
         d->imageQualitySorter->setNotificationEnabled(false);
+        d->imageQualitySorter->setUseMultiCoreCPU(d->settings.useMutiCoreCPU);
         d->imageQualitySorter->start();
-      */
     }
     else
     {
