@@ -223,7 +223,7 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
     QWidget* const space2 = new QWidget(hbox12);
     hbox12->setStretchFactor(space2, 10);
     d->qualitySetup       = new QPushButton(i18n("Settings..."), hbox12);
-    d->expanderBox->insertItem(Private::ImageQualitySorter, d->vbox, SmallIcon("run-build-file"),
+    d->expanderBox->insertItem(Private::ImageQualitySorter, d->vbox, SmallIcon("flag-green"),
                                i18n("Image Quality Sorter"), "ImageQualitySorter", false);
     d->expanderBox->setCheckBoxVisible(Private::ImageQualitySorter, true);
     

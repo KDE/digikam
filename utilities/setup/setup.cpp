@@ -297,7 +297,7 @@ Setup::Setup(QWidget* const parent)
     d->imageQualitySorterPage = new SetupImageQualitySorter();
     d->page_imagequalitysorter = addPage(d->imageQualitySorterPage, i18n("Image Quality Sorter"));
     d->page_imagequalitysorter->setHeader(i18n("<qt>Image Quality Sorter Settings<br/>"));
-    d->page_imagequalitysorter->setIcon(KIcon("digiKam"));
+    d->page_imagequalitysorter->setIcon(KIcon("flag-green"));
 
     d->cameraPage  = new SetupCamera();
     d->page_camera = addPage(d->cameraPage, i18n("Cameras"));
