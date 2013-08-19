@@ -2478,6 +2478,7 @@ void DigikamApp::slotDatabaseMigration()
 
 void DigikamApp::slotQuality()
 {
+/*    
     QualityScanDialog* qdlg =new QualityScanDialog(this);
     if (qdlg->exec() == QDialog::Accepted)
     {
@@ -2488,11 +2489,10 @@ void DigikamApp::slotQuality()
 
         connect(mngr, SIGNAL(signalComplete()),
                 this, SLOT(slotMaintenanceDone()));
-        /*
+
         mngr->setSettings(dlg->settings());
-        */
-        
     }
+*/
 }
 
 void DigikamApp::slotMaintenance()
