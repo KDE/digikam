@@ -224,9 +224,9 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
     new QLabel(i18n("Quality: "), hbox11);
     QWidget* const space4  = new QWidget(hbox11);
     hbox11->setStretchFactor(space4, 10);
-    d->syncDirection = new QComboBox(hbox11);
-    d->syncDirection->addItem(i18n("Quality 1"), 0);  // FIXME : list all right quality settings here.
-    d->syncDirection->addItem(i18n("Quality 2"), 1);
+    d->quality = new QComboBox(hbox11);
+    d->quality->addItem(i18n("Quality 1"), 0);  // FIXME : list all right quality settings here.
+    d->quality->addItem(i18n("Quality 2"), 1);
 
     KHBox* const hbox12  = new KHBox(d->vbox);
     new QLabel(i18n("Check quality sorter setup panel for details: "), hbox12);
