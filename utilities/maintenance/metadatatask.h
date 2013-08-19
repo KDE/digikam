@@ -55,7 +55,7 @@ public:
 
 Q_SIGNALS:
 
-    void signalFinished();
+    void signalFinished(QImage());
 
 public Q_SLOTS:
 
