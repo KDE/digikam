@@ -123,14 +123,16 @@ void ImageQualitySorter::slotStart()
         {
             foreach(QString path, aPaths)
             {
-                if (!dirty.contains(path))
+                if (dirty.contains(path))
                 {
-                    aPaths.removeAll(path);
+                    d->allPicturesPath += path;
                 }
             }
         }
-
-        d->allPicturesPath += aPaths;        
+        else
+        {
+            d->allPicturesPath += aPaths;
+        }     
     }
 
     if (d->allPicturesPath.isEmpty())
