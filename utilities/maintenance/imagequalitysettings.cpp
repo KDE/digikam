@@ -34,13 +34,14 @@ namespace Digikam
 
 ImageQualitySettings::ImageQualitySettings()
 {
-    speed              = 1;
+    enableSorter       = false;
     detectBlur         = true;
     detectNoise        = true;
     detectCompression  = true;
     lowQRejected       = true;
     mediumQPending     = true;
     highQAccepted      = true;
+    speed              = 1;
 }
 
 ImageQualitySettings::~ImageQualitySettings()
@@ -51,41 +52,44 @@ void ImageQualitySettings::readFromConfig()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("Image Quality Settings");
-    
-    speed             = group.readEntry("Speed",              1);
+
+    enableSorter      = group.readEntry("Enable Sorter",      false);    
     detectBlur        = group.readEntry("Detect Blur",        true);
     detectNoise       = group.readEntry("Detect Noise",       true);
     detectCompression = group.readEntry("Detect Compression", true);
     lowQRejected      = group.readEntry("LowQ Rejected",      true);
     mediumQPending    = group.readEntry("MediumQ Pending",    true);
     highQAccepted     = group.readEntry("HighQ Accepted",     true);
+    speed             = group.readEntry("Speed",              1);
 }
 
 void ImageQualitySettings::writeToConfig()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("Image Quality Settings");
-    
-    group.writeEntry("Speed",              speed);
+
+    group.writeEntry("Enable Sorter",      enableSorter);    
     group.writeEntry("Detect Blur",        detectBlur);
     group.writeEntry("Detect Noise",       detectNoise);
     group.writeEntry("Detect Compression", detectCompression);
     group.writeEntry("LowQ Rejected",      lowQRejected);
     group.writeEntry("MediumQ Pending",    mediumQPending);
     group.writeEntry("HighQ Accepted",     highQAccepted);
+    group.writeEntry("Speed",              speed);
 }
 
 QDebug operator<<(QDebug dbg, const ImageQualitySettings& s)
 {
     dbg.nospace() << endl;
-    dbg.nospace() << "Speed             : " << s.speed << endl;
+    dbg.nospace() << "EnableSorter      : " << s.enableSorter << endl;
     dbg.nospace() << "DetectBlur        : " << s.detectBlur << endl;
     dbg.nospace() << "DetectNoise       : " << s.detectNoise << endl;
     dbg.nospace() << "DetectCompression : " << s.detectCompression << endl;
     dbg.nospace() << "LowQRejected      : " << s.lowQRejected << endl;
     dbg.nospace() << "MediumQPending    : " << s.mediumQPending << endl;
     dbg.nospace() << "HighQAccepted     : " << s.highQAccepted << endl;
-
+    dbg.nospace() << "Speed             : " << s.speed << endl;
+    
     return dbg.space();
 }
 

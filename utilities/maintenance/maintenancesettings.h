@@ -82,6 +82,8 @@ public:
 
     /// Perform Image Quality Sorting.
     bool                 qualitySort;
+    /// Assign Pick Labels for all items or only scan missing items.
+    bool                 scanQuality;
     /// Image Quality Sorting Settings.
     ImageQualitySettings quality;
     

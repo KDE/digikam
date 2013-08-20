@@ -283,9 +283,9 @@ void MaintenanceMngr::stage6()
 {
     kDebug() << "stage6";
 
-    if (d->settings.qualitySort)
+    if (d->settings.qualitySort && d->settings.quality.enableSorter)
     {
-        bool rebuildAll = (d->settings.scanFingerPrints == false);
+        bool rebuildAll = (d->settings.scanQuality == false);
         AlbumList list;
         list << d->settings.albums;
         list << d->settings.tags;

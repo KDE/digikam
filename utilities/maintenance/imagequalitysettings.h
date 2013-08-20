@@ -47,14 +47,15 @@ public:
 
 public:
 
-    int  speed;
-    
+    bool enableSorter;
     bool detectBlur;
     bool detectNoise;
     bool detectCompression;
     bool lowQRejected;
     bool mediumQPending;
     bool highQAccepted;
+
+    int  speed;
 };
 
 //! kDebug() stream operator. Writes property @a s to the debug output in a nicely formatted way.
