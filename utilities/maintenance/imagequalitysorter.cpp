@@ -33,10 +33,12 @@
 
 // Local includes
 
+#include "globals.h"
 #include "dimg.h"
 #include "albumdb.h"
 #include "albummanager.h"
 #include "databaseaccess.h"
+#include "tagscache.h"
 #include "maintenancethread.h"
 
 namespace Digikam
@@ -108,26 +110,27 @@ void ImageQualitySorter::slotStart()
         d->albumList = AlbumManager::instance()->allPAlbums();
     }
 
+    QStringList dirty = DatabaseAccess().db()->getItemsURLsWithTag(TagsCache::instance()->tagForPickLabel(NoPickLabel));
+    
     // Get all digiKam albums collection pictures path, depending of d->rebuildAll flag.
 
     for (AlbumList::ConstIterator it = d->albumList.constBegin();
          !canceled() && (it != d->albumList.constEnd()); ++it)
     {
-        d->allPicturesPath += DatabaseAccess().db()->getItemURLsInAlbum((*it)->id());
+        QStringList aPaths = DatabaseAccess().db()->getItemURLsInAlbum((*it)->id());
 
         if (!d->rebuildAll)
         {
-            // TODO : Add a new method to get items list with no pick label assigned in DB.
-            /*QStringList dirty = DatabaseAccess().db()->getDirtyOrMissingFingerprintURLs();
-
-            foreach(QString path, dirty)
+            foreach(QString path, aPaths)
             {
-                if (dirty.contains(path))
+                if (!dirty.contains(path))
                 {
-                    d->allPicturesPath.removeAll(path);
+                    aPaths.removeAll(path);
                 }
-            }*/
+            }
         }
+
+        d->allPicturesPath += aPaths;        
     }
 
     if (d->allPicturesPath.isEmpty())
