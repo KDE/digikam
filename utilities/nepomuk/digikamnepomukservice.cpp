@@ -21,6 +21,111 @@
  *
  * ============================================================ */
 
+#include "digikamnepomukservice.moc"
+
+#include <QTimer>
+#include "Nepomuk2/Tag"
+#include "Nepomuk2/ResourceWatcher"
+#include "Nepomuk2/ResourceManager"
+#include "Nepomuk2/Service"
+
+
+#include "kpluginfactory.h"
+#include "kdebug.h"
+
+
+namespace Digikam {
+
+enum WatchedNepomukProperty
+{
+    NaoRating,
+    NaoDescription,
+    NaoTags
+};
+
+class DkNepomukService::NepomukServicePriv
+{
+public:
+
+    NepomukServicePriv() :
+        syncToDigikam(false),
+        syncToNepomuk(false),
+        isConnected(false),
+        changingDB(false),
+        changingNepomuk(false),
+        fullSyncJobs(0),
+        nepomukChangeTimer(0),
+        cleanIgnoreListTimer(0)
+    {
+    }
+
+    bool                                     syncToDigikam;
+    bool                                     syncToNepomuk;
+    bool                                     isConnected;
+    bool                                     changingDB;
+    bool                                     changingNepomuk;
+    int                                      fullSyncJobs;
+    QTimer*                                  nepomukChangeTimer;
+    QTimer*                                  cleanIgnoreListTimer;
+    QMultiHash<QUrl, WatchedNepomukProperty> ignoreUris;
+
+    bool checkIgnoreUris(const QUrl& url, WatchedNepomukProperty property)
+    {
+        QHash<QUrl, WatchedNepomukProperty>::iterator it;
+        it = ignoreUris.find(url, property);
+
+        if (it != ignoreUris.end())
+        {
+            ignoreUris.erase(it);
+            return true;
+        }
+
+        return false;
+    }
+
+    void addIgnoreUri(const QUrl& url, WatchedNepomukProperty property)
+    {
+        //if (!ignoreUris.contains(url, property))
+        ignoreUris.insert(url, property);
+
+        // always restart timer
+        cleanIgnoreListTimer->start();
+    }
+
+    void triggerSyncToDigikam()
+    {
+        if (!nepomukChangeTimer->isActive())
+        {
+            nepomukChangeTimer->start();
+        }
+    }
+};
+
+DkNepomukService::DkNepomukService(QObject* parent, const QVariantList&)
+               : Nepomuk2::Service(parent, true)
+{
+    Nepomuk2::ResourceManager::instance()->init();
+}
+
+DkNepomukService::~DkNepomukService()
+{
+
+}
+
+
+void DkNepomukService::getNepomukTags()
+{
+    QList<Nepomuk2::Tag> tags = Nepomuk2::Tag::allTags();
+
+    kDebug() << "Got" << tags.size() << "tags from Nepomuk";
+
+}
+
+} // namespace Digikam
+
+NEPOMUK_EXPORT_SERVICE( Digikam::DkNepomukService, "digikamnepomukservice")
+
+
 #if 0
 // The digikam nepomuk implementation is not only buggy, but based on nepomuk
 // API which is now deprecated/unfunctional and or removed.
@@ -83,70 +188,7 @@
 namespace Digikam
 {
 
-enum WatchedNepomukProperty
-{
-    NaoRating,
-    NaoDescription,
-    NaoTags
-};
 
-class NepomukService::NepomukServicePriv
-{
-public:
-
-    NepomukServicePriv() :
-        syncToDigikam(false),
-        syncToNepomuk(false),
-        isConnected(false),
-        changingDB(false),
-        changingNepomuk(false),
-        fullSyncJobs(0),
-        nepomukChangeTimer(0),
-        cleanIgnoreListTimer(0)
-    {
-    }
-
-    bool                                     syncToDigikam;
-    bool                                     syncToNepomuk;
-    bool                                     isConnected;
-    bool                                     changingDB;
-    bool                                     changingNepomuk;
-    int                                      fullSyncJobs;
-    QTimer*                                  nepomukChangeTimer;
-    QTimer*                                  cleanIgnoreListTimer;
-    QMultiHash<QUrl, WatchedNepomukProperty> ignoreUris;
-
-    bool checkIgnoreUris(const QUrl& url, WatchedNepomukProperty property)
-    {
-        QHash<QUrl, WatchedNepomukProperty>::iterator it;
-        it = ignoreUris.find(url, property);
-
-        if (it != ignoreUris.end())
-        {
-            ignoreUris.erase(it);
-            return true;
-        }
-
-        return false;
-    }
-
-    void addIgnoreUri(const QUrl& url, WatchedNepomukProperty property)
-    {
-        //if (!ignoreUris.contains(url, property))
-        ignoreUris.insert(url, property);
-
-        // always restart timer
-        cleanIgnoreListTimer->start();
-    }
-
-    void triggerSyncToDigikam()
-    {
-        if (!nepomukChangeTimer->isActive())
-        {
-            nepomukChangeTimer->start();
-        }
-    }
-};
 
 class ChangingDB
 {

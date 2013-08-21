@@ -208,7 +208,7 @@ IF (NEPOMUK_FOUND)
                           ${KDCRAW_LIBRARIES}
                           ${SOPRANO_CLIENT_LIBRARIES}
                           ${SOPRANO_LIBRARIES}
-                          ${NEPOMUK_LIBRARIES}
+                          ${NEPOMUK_CORE_LIBRARY}
 
                           digikamcore
                           digikamdatabase
@@ -293,9 +293,9 @@ TARGET_LINK_LIBRARIES(digikam
         queuemanager
 
         importui
-        
+
         ${OpenCV_LIBRARIES}
-        
+
         # See B.K.O #258931: libgphoto2 library must be the last arg for linker.
         ${GPHOTO2_LIBRARIES}
 )

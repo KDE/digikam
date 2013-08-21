@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#if 0
+
 // The digikam nepomuk implementation is not only buggy, but based on nepomuk
 // API which is now deprecated/unfunctional and or removed.
 // In short, it needs to be rewritten.
@@ -40,7 +40,7 @@
 
 #include <ksharedconfig.h>
 #include <kurl.h>
-#include <Nepomuk/Service>
+#include <Nepomuk2/Service>
 
 // Local includes
 
@@ -55,6 +55,29 @@ namespace Soprano
 class Statement;
 }
 
+namespace Digikam
+{
+
+class DkNepomukService : public Nepomuk2::Service
+{
+    Q_OBJECT
+    Q_CLASSINFO("D-Bus Interface", "org.kde.digikam.DigikamNepomukService")
+public:
+
+    DkNepomukService(QObject* parent, const QVariantList&);
+    ~DkNepomukService();
+
+    void getNepomukTags();
+
+private:
+    class NepomukServicePriv;
+    NepomukServicePriv* d;
+};
+
+}
+#endif
+
+#if 0
 namespace Digikam
 {
 
@@ -151,4 +174,3 @@ private:
 } // namespace Digikam
 
 #endif // DIGIKAMNEPOMUKSERVICE_H
-#endif
