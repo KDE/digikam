@@ -44,7 +44,6 @@
 #include <kstandarddirs.h>
 #include <knuminput.h>
 #include <kvbox.h>
-#include <kseparator.h>
 #include <kconfig.h>
 
 // Local includes
@@ -66,7 +65,8 @@ public:
 
     enum Operation
     {
-        NewItems = 0,
+        Options = 0,
+        NewItems,
         Thumbnails,
         FingerPrints,
         Duplicates,
@@ -172,11 +172,15 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
     d->logo                 = new QLabel(page);
     d->logo->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
                        .scaled(48, 48, Qt::KeepAspectRatio, Qt::SmoothTransformation));
-
     d->title                = new QLabel(i18n("<qt><b>Select Maintenance Operations to Process</b></qt>"), page);
-    d->albumSelectors       = new AlbumSelectors(i18nc("@label", "Process items from:"), d->configGroupName, page);
-    d->useMutiCoreCPU       = new QCheckBox(i18nc("@option:check", "Work on all processor cores"), page);
     d->expanderBox          = new RExpanderBox(page);
+
+    // --------------------------------------------------------------------------------------
+
+    KVBox* const options    = new KVBox;
+    d->albumSelectors       = new AlbumSelectors(i18nc("@label", "Process items from:"), d->configGroupName, options);
+    d->useMutiCoreCPU       = new QCheckBox(i18nc("@option:check", "Work on all processor cores"), options);
+    d->expanderBox->insertItem(Private::Options, options, SmallIcon("configure"), i18n("Common Options"), "Options", true);
 
     // --------------------------------------------------------------------------------------
 
@@ -229,17 +233,17 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
 
     // --------------------------------------------------------------------------------------
 
-    d->vbox             = new KVBox;
-    KHBox* const hbox11 = new KHBox(d->vbox);
+    d->vbox               = new KVBox;
+    KHBox* const hbox11   = new KHBox(d->vbox);
     new QLabel(i18n("Scan Mode: "), hbox11);
     QWidget* const space7  = new QWidget(hbox11);
     hbox11->setStretchFactor(space7, 10);
 
-    d->qualityScanMode  = new QComboBox(hbox11);
+    d->qualityScanMode    = new QComboBox(hbox11);
     d->qualityScanMode->addItem(i18n("Clean all and re-scan"),  ImageQualitySorter::AllItems);
     d->qualityScanMode->addItem(i18n("Scan non-assigned only"), ImageQualitySorter::NonAssignedItems);
 
-    KHBox* const hbox12  = new KHBox(d->vbox);
+    KHBox* const hbox12   = new KHBox(d->vbox);
     new QLabel(i18n("Check quality sorter setup panel for details: "), hbox12);
     QWidget* const space2 = new QWidget(hbox12);
     hbox12->setStretchFactor(space2, 10);
@@ -250,16 +254,16 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
 
     // --------------------------------------------------------------------------------------
 
-    d->vbox2             = new KVBox;
-    KHBox* const hbox21  = new KHBox(d->vbox2);
+    d->vbox2              = new KVBox;
+    KHBox* const hbox21   = new KHBox(d->vbox2);
     new QLabel(i18n("Sync Direction: "), hbox21);
-    QWidget* const space5  = new QWidget(hbox21);
+    QWidget* const space5 = new QWidget(hbox21);
     hbox21->setStretchFactor(space5, 10);
-    d->syncDirection = new QComboBox(hbox21);
+    d->syncDirection      = new QComboBox(hbox21);
     d->syncDirection->addItem(i18n("From database to image metadata"), MetadataSynchronizer::WriteFromDatabaseToFile);
     d->syncDirection->addItem(i18n("From image metadata to database"), MetadataSynchronizer::ReadFromFileToDatabase);
 
-    KHBox* const hbox22  = new KHBox(d->vbox2);
+    KHBox* const hbox22   = new KHBox(d->vbox2);
     new QLabel(i18n("Check metadata setup panel for details: "), hbox22);
     QWidget* const space6 = new QWidget(hbox22);
     hbox22->setStretchFactor(space6, 10);
@@ -273,10 +277,6 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
 
     grid->addWidget(d->logo,                        0, 0, 1, 1);
     grid->addWidget(d->title,                       0, 1, 1, 1);
-    grid->addWidget(new KSeparator(Qt::Horizontal), 1, 1, 1, 1);
-    grid->addWidget(d->albumSelectors,              2, 1, 1, 1);
-    grid->addWidget(d->useMutiCoreCPU,              3, 1, 1, 1);
-    grid->addWidget(new KSeparator(Qt::Horizontal), 4, 1, 1, 1);
     grid->addWidget(d->expanderBox,                 5, 0, 3, 2);
     grid->setSpacing(spacingHint());
     grid->setMargin(0);
