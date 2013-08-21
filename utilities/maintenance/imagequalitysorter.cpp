@@ -55,7 +55,7 @@ public:
     }
 
     bool                 rebuildAll;
-    
+
     ImageQualitySettings quality;
 
     QStringList          allPicturesPath;
@@ -110,8 +110,9 @@ void ImageQualitySorter::slotStart()
         d->albumList = AlbumManager::instance()->allPAlbums();
     }
 
+    // Get all item in DB which do not have any Pick Label assigned.
     QStringList dirty = DatabaseAccess().db()->getItemsURLsWithTag(TagsCache::instance()->tagForPickLabel(NoPickLabel));
-    
+
     // Get all digiKam albums collection pictures path, depending of d->rebuildAll flag.
 
     for (AlbumList::ConstIterator it = d->albumList.constBegin();
@@ -132,7 +133,7 @@ void ImageQualitySorter::slotStart()
         else
         {
             d->allPicturesPath += aPaths;
-        }     
+        }
     }
 
     if (d->allPicturesPath.isEmpty())

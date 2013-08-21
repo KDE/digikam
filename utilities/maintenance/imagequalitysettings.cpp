@@ -53,7 +53,7 @@ void ImageQualitySettings::readFromConfig()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("Image Quality Settings");
 
-    enableSorter      = group.readEntry("Enable Sorter",      false);    
+    enableSorter      = group.readEntry("Enable Sorter",      false);
     detectBlur        = group.readEntry("Detect Blur",        true);
     detectNoise       = group.readEntry("Detect Noise",       true);
     detectCompression = group.readEntry("Detect Compression", true);
@@ -68,7 +68,7 @@ void ImageQualitySettings::writeToConfig()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("Image Quality Settings");
 
-    group.writeEntry("Enable Sorter",      enableSorter);    
+    group.writeEntry("Enable Sorter",      enableSorter);
     group.writeEntry("Detect Blur",        detectBlur);
     group.writeEntry("Detect Noise",       detectNoise);
     group.writeEntry("Detect Compression", detectCompression);

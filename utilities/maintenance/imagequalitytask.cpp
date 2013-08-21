@@ -86,15 +86,20 @@ void ImageQualityTask::run()
         description.rawDecodingSettings.rawPrm.sixteenBitsImage   = false;
         description.rawDecodingSettings.rawPrm.halfSizeColorImage = true;
         description.rawDecodingHint                               = LoadingDescription::RawDecodingTimeOptimized;
-        DImg dimg = PreviewLoadThread::loadSynchronously(description);
+        DImg dimg                                                 = PreviewLoadThread::loadSynchronously(description);
 
         if(d->cancel)
             return;
 
         if (!dimg.isNull())
         {
-            // TODO : run here Quality analysis backend and store Pick Label result to DB
-            // Warning : all code here run in a separated thread must be re-entrant.
+            // TODO : run here Quality analysis backend and store Pick Label result to DB.
+            // Backend Input : d->quality as Quality analysis settings,
+            //                 dimg       as reduced size image data to parse,
+            //                 d->path    as file path to patch DB properties.
+            // Result        : Backend must scan Quality of image depending of settings and compute a Quality estimation accordingly.
+            //                 Finaly, using file path, DB Pick Label properties must be assigned through ImageInfo interface.
+            // Warning       : All code here will run in a separated thread must be re-entrant.
         }
 
         // Dispatch progress to Progress Manager
