@@ -345,6 +345,22 @@ public:
     CollectionScannerObserver*                    observer;
 };
 
+void CollectionScanner::Private::finishScanner(ImageScanner& scanner)
+{
+    // Perform the actual write operation to the database
+    {
+        DatabaseOperationGroup group;
+        scanner.commit();
+    }
+
+    if (recordHistoryIds && scanner.hasHistoryToResolve())
+    {
+        needResolveHistorySet << scanner.id();
+    }
+}
+
+// --------------------------------------------------------------------------
+
 CollectionScanner::CollectionScanner()
     : d(new Private)
 {
@@ -545,7 +561,7 @@ void CollectionScanner::finishCompleteScan(const QStringList& albumPaths)
     foreach(const QString& path, sortedPaths)
     {
         CollectionLocation location = CollectionManager::instance()->locationForPath(path);
-        QString album = CollectionManager::instance()->album(path);
+        QString album               = CollectionManager::instance()->album(path);
 
         if (album == "/")
         {
@@ -698,6 +714,7 @@ qlonglong CollectionScanner::scanFile(const QString& filePath, FileScanMode mode
     }
 
     QString album = CollectionManager::instance()->album(dirPath);
+
     return scanFile(albumRoot, album, info.fileName(), mode);
 }
 
@@ -1006,8 +1023,7 @@ void CollectionScanner::scanAlbum(const CollectionLocation& location, const QStr
         emit startScanningAlbum(location.albumRootPath(), album);
     }
 
-    int albumID = checkAlbum(location, album);
-
+    int albumID                   = checkAlbum(location, album);
     QList<ItemScanInfo> scanInfos = DatabaseAccess().db()->getItemScanInfos(albumID);
 
     // create a hash filename -> index in list
@@ -1133,6 +1149,7 @@ void CollectionScanner::scanFileNormal(const QFileInfo& fi, const ItemScanInfo& 
             QWriteLocker locker(&d->hints->lock);
             d->hints->rescanItemHints.remove(scanInfo.id);
         }
+        
         rescanFile(fi, scanInfo);
 
         return;
@@ -1143,6 +1160,7 @@ void CollectionScanner::scanFileNormal(const QFileInfo& fi, const ItemScanInfo& 
             QWriteLocker locker(&d->hints->lock);
             d->hints->modifiedItemHints.remove(scanInfo.id);
         }
+        
         scanModifiedFile(fi, scanInfo);
 
         return;
@@ -1162,6 +1180,7 @@ void CollectionScanner::scanFileNormal(const QFileInfo& fi, const ItemScanInfo& 
             }
 
             scanFileUpdateHashReuseThumbnail(fi, scanInfo, true);
+
             return;
         }
     }
@@ -1172,6 +1191,7 @@ void CollectionScanner::scanFileNormal(const QFileInfo& fi, const ItemScanInfo& 
             && fi.size() == scanInfo.fileSize)
         {
             scanFileUpdateHashReuseThumbnail(fi, scanInfo, false);
+            
             return;
         }
     }
@@ -1180,20 +1200,6 @@ void CollectionScanner::scanFileNormal(const QFileInfo& fi, const ItemScanInfo& 
         || fi.size() != scanInfo.fileSize)
     {
         scanModifiedFile(fi, scanInfo);
-    }
-}
-
-void CollectionScanner::Private::finishScanner(ImageScanner& scanner)
-{
-    // Perform the actual write operation to the database
-    {
-        DatabaseOperationGroup group;
-        scanner.commit();
-    }
-
-    if (recordHistoryIds && scanner.hasHistoryToResolve())
-    {
-        needResolveHistorySet << scanner.id();
     }
 }
 
@@ -1243,6 +1249,7 @@ qlonglong CollectionScanner::scanNewFile(const QFileInfo& info, int albumId)
     }
 
     d->finishScanner(scanner);
+
     return scanner.id();
 }
 
@@ -1257,6 +1264,7 @@ qlonglong CollectionScanner::scanNewFileFullScan(const QFileInfo& info, int albu
     scanner.setCategory(category(info));
     scanner.newFileFullScan(albumId);
     d->finishScanner(scanner);
+
     return scanner.id();
 }
 
@@ -1331,8 +1339,8 @@ void CollectionScanner::copyFileProperties(const ImageInfo& source, const ImageI
     {
         return;
     }
-    ImageInfo dest(d);
 
+    ImageInfo dest(d);
     DatabaseOperationGroup group;
 
     kDebug() << "Copying properties from" << source.id() << "to" << dest.id();
@@ -1460,6 +1468,7 @@ void CollectionScanner::historyScanningStage2(const QList<qlonglong>& ids)
         {
             QList<qlonglong> needTaggingIds;
             ImageScanner::resolveImageHistory(id, &needTaggingIds);
+
             foreach(qlonglong needTag, needTaggingIds)
             {
                 d->needTaggingHistorySet << needTag;
