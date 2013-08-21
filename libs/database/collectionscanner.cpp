@@ -6,7 +6,7 @@
  * Date        : 2007-03-21
  * Description : Collection scanning to database.
  *
- * Copyright (C) 2005 by Renchi Raju <renchi dot raju at gmail dot com>
+ * Copyright (C) 2005      by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C) 2005-2006 by Tom Albers <tomalbers@kde.nl>
  * Copyright (C) 2007-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
@@ -77,15 +77,22 @@ class NewlyAppearedFile
 
 public:
 
-    NewlyAppearedFile() : albumId(0) {}
+    NewlyAppearedFile() : albumId(0)
+    {
+    }
+
     NewlyAppearedFile(int albumId, const QString& fileName)
-        : albumId(albumId), fileName(fileName) {}
+        : albumId(albumId), fileName(fileName)
+    {
+    }
 
     bool operator==(const NewlyAppearedFile& other) const
     {
-        return albumId == other.albumId && fileName == other.fileName;
+        return (albumId == other.albumId) && (fileName == other.fileName);
     }
 
+public:
+    
     int     albumId;
     QString fileName;
 };
@@ -112,6 +119,7 @@ static bool modificationDateEquals(const QDateTime& a, const QDateTime& b)
             return false;
         }
     }
+
     return true;
 }
 
@@ -128,7 +136,25 @@ public:
 
     virtual void clear();
 
-    QReadWriteLock lock;
+    bool hasAnyNormalHint(qlonglong id)
+    {
+        QReadLocker locker(&lock);
+
+        return modifiedItemHints.contains(id)          || 
+               rescanItemHints.contains(id)            ||
+               metadataAboutToAdjustHints.contains(id) || 
+               metadataAdjustedHints.contains(id);
+    }
+
+    bool hasAlbumHints()                            { QReadLocker locker(&lock); return !albumHints.isEmpty();                   }
+    bool hasModificationHint(qlonglong id)          { QReadLocker locker(&lock); return modifiedItemHints.contains(id);          }
+    bool hasRescanHint(qlonglong id)                { QReadLocker locker(&lock); return rescanItemHints.contains(id);            }
+    bool hasMetadataAboutToAdjustHint(qlonglong id) { QReadLocker locker(&lock); return metadataAboutToAdjustHints.contains(id); }
+    bool hasMetadataAdjustedHint(qlonglong id)      { QReadLocker locker(&lock); return metadataAdjustedHints.contains(id);      }
+
+public:
+    
+    QReadWriteLock                                                        lock;
 
     QHash<CollectionScannerHints::DstPath, CollectionScannerHints::Album> albumHints;
     QHash<NewlyAppearedFile, qlonglong>                                   itemHints;
@@ -136,101 +162,12 @@ public:
     QSet<qlonglong>                                                       rescanItemHints;
     QHash<qlonglong, QDateTime>                                           metadataAboutToAdjustHints;
     QHash<qlonglong, QDateTime>                                           metadataAdjustedHints;
-
-    bool hasAlbumHints() { QReadLocker locker(&lock); return !albumHints.isEmpty(); }
-
-    bool hasAnyNormalHint(qlonglong id)
-    {
-        QReadLocker locker(&lock);
-        return modifiedItemHints.contains(id) || rescanItemHints.contains(id) ||
-               metadataAboutToAdjustHints.contains(id) || metadataAdjustedHints.contains(id);
-    }
-    bool hasModificationHint(qlonglong id) { QReadLocker locker(&lock); return modifiedItemHints.contains(id); }
-    bool hasRescanHint(qlonglong id)       { QReadLocker locker(&lock); return rescanItemHints.contains(id); }
-    bool hasMetadataAboutToAdjustHint(qlonglong id) { QReadLocker locker(&lock); return metadataAboutToAdjustHints.contains(id); }
-    bool hasMetadataAdjustedHint(qlonglong id)      { QReadLocker locker(&lock); return metadataAdjustedHints.contains(id); }
 };
-
-class CollectionScanner::CollectionScannerPriv
-{
-
-public:
-
-    CollectionScannerPriv() :
-        wantSignals(false),
-        needTotalFiles(false),
-        hints(0),
-        updatingHashHint(false),
-        recordHistoryIds(false),
-        deferredFileScanning(false),
-        observer(0)
-    {
-    }
-
-public:
-
-    void resetRemovedItemsTime()
-    {
-        removedItemsTime = QDateTime();
-    }
-    void removedItems()
-    {
-        removedItemsTime = QDateTime::currentDateTime();
-    }
-
-    inline bool checkObserver()
-    {
-        if (observer)
-        {
-            return observer->continueQuery();
-        }
-
-        return true;
-    }
-
-    inline bool checkDeferred(const QFileInfo& info)
-    {
-        if (deferredFileScanning)
-        {
-            deferredAlbumPaths << info.path();
-            return true;
-        }
-        return false;
-    }
-
-    void finishScanner(ImageScanner& scanner);
-
-public:
-
-    QSet<QString>                                                         nameFilters;
-    QSet<QString>                                                         imageFilterSet;
-    QSet<QString>                                                         videoFilterSet;
-    QSet<QString>                                                         audioFilterSet;
-    QList<int>                                                            scannedAlbums;
-    bool                                                                  wantSignals;
-    bool                                                                  needTotalFiles;
-
-    QDateTime                                                             removedItemsTime;
-
-    CollectionScannerHintContainerImplementation*                         hints;
-    QHash<int, int>                                                       establishedSourceAlbums;
-    bool                                                                  updatingHashHint;
-
-    bool                                                                  recordHistoryIds;
-    QSet<qlonglong>                                                       needResolveHistorySet;
-    QSet<qlonglong>                                                       needTaggingHistorySet;
-
-    bool                                                                  deferredFileScanning;
-    QSet<QString>                                                         deferredAlbumPaths;
-
-    CollectionScannerObserver*                                            observer;
-};
-
-// ---
 
 void CollectionScannerHintContainerImplementation::recordHints(const QList<AlbumCopyMoveHint>& hints)
 {
     QWriteLocker locker(&lock);
+
     foreach(const AlbumCopyMoveHint& hint, hints)
     {
         // automagic casting to src and dst
@@ -241,6 +178,7 @@ void CollectionScannerHintContainerImplementation::recordHints(const QList<Album
 void CollectionScannerHintContainerImplementation::recordHints(const QList<ItemCopyMoveHint>& hints)
 {
     QWriteLocker locker(&lock);
+
     foreach(const ItemCopyMoveHint& hint, hints)
     {
         QList<qlonglong> ids = hint.srcIds();
@@ -256,6 +194,7 @@ void CollectionScannerHintContainerImplementation::recordHints(const QList<ItemC
 void CollectionScannerHintContainerImplementation::recordHints(const QList<ItemChangeHint>& hints)
 {
     QWriteLocker locker(&lock);
+
     foreach(const ItemChangeHint& hint, hints)
     {
         const QList<qlonglong>& ids = hint.ids();
@@ -279,6 +218,7 @@ void CollectionScannerHintContainerImplementation::recordHint(const ItemMetadata
     if (hint.isAboutToEdit())
     {
         ImageInfo info(hint.id());
+        
         if (!
             (modificationDateEquals(hint.modificationDate(), info.modDateTime())
              && hint.fileSize() == info.fileSize())
@@ -288,6 +228,7 @@ void CollectionScannerHintContainerImplementation::recordHint(const ItemMetadata
             // or, in case of multiple edits, there is already a hint with an older date, then all is fine.
             return;
         }
+
         QWriteLocker locker(&lock);
         metadataAboutToAdjustHints[hint.id()] = hint.modificationDate();
     }
@@ -295,10 +236,12 @@ void CollectionScannerHintContainerImplementation::recordHint(const ItemMetadata
     {
         QWriteLocker locker(&lock);
         QHash<qlonglong, QDateTime>::iterator it = metadataAboutToAdjustHints.find(hint.id());
+
         if (it == metadataAboutToAdjustHints.end())
         {
             return;
         }
+
         QDateTime date = it.value();
         metadataAboutToAdjustHints.erase(it);
 
@@ -323,10 +266,87 @@ void CollectionScannerHintContainerImplementation::clear()
     metadataAdjustedHints.clear();
 }
 
-// -------
+// --------------------------------------------------------------------
+
+class CollectionScanner::Private
+{
+
+public:
+
+    Private() :
+        wantSignals(false),
+        needTotalFiles(false),
+        hints(0),
+        updatingHashHint(false),
+        recordHistoryIds(false),
+        deferredFileScanning(false),
+        observer(0)
+    {
+    }
+
+public:
+
+    void resetRemovedItemsTime()
+    {
+        removedItemsTime = QDateTime();
+    }
+
+    void removedItems()
+    {
+        removedItemsTime = QDateTime::currentDateTime();
+    }
+
+    inline bool checkObserver()
+    {
+        if (observer)
+        {
+            return observer->continueQuery();
+        }
+
+        return true;
+    }
+
+    inline bool checkDeferred(const QFileInfo& info)
+    {
+        if (deferredFileScanning)
+        {
+            deferredAlbumPaths << info.path();
+            return true;
+        }
+
+        return false;
+    }
+
+    void finishScanner(ImageScanner& scanner);
+
+public:
+
+    QSet<QString>                                 nameFilters;
+    QSet<QString>                                 imageFilterSet;
+    QSet<QString>                                 videoFilterSet;
+    QSet<QString>                                 audioFilterSet;
+    QList<int>                                    scannedAlbums;
+    bool                                          wantSignals;
+    bool                                          needTotalFiles;
+
+    QDateTime                                     removedItemsTime;
+
+    CollectionScannerHintContainerImplementation* hints;
+    QHash<int, int>                               establishedSourceAlbums;
+    bool                                          updatingHashHint;
+
+    bool                                          recordHistoryIds;
+    QSet<qlonglong>                               needResolveHistorySet;
+    QSet<qlonglong>                               needTaggingHistorySet;
+
+    bool                                          deferredFileScanning;
+    QSet<QString>                                 deferredAlbumPaths;
+
+    CollectionScannerObserver*                    observer;
+};
 
 CollectionScanner::CollectionScanner()
-    : d(new CollectionScannerPriv)
+    : d(new Private)
 {
 }
 
@@ -350,7 +370,7 @@ CollectionScannerHintContainer* CollectionScanner::createHintContainer()
     return new CollectionScannerHintContainerImplementation;
 }
 
-void CollectionScanner::setHintContainer(CollectionScannerHintContainer* container)
+void CollectionScanner::setHintContainer(CollectionScannerHintContainer* const container)
 {
     // the API specs require the object given here to be created by createContainer, so we can cast.
     d->hints = static_cast<CollectionScannerHintContainerImplementation*>(container);
@@ -379,7 +399,7 @@ void CollectionScanner::loadNameFilters()
     d->nameFilters = d->imageFilterSet + d->audioFilterSet + d->videoFilterSet;
 }
 
-void CollectionScanner::setObserver(CollectionScannerObserver* observer)
+void CollectionScanner::setObserver(CollectionScannerObserver* const observer)
 {
     d->observer = observer;
 }
@@ -414,6 +434,7 @@ void CollectionScanner::completeScan()
     {
         // count for progress info
         int count = 0;
+
         foreach(const CollectionLocation& location, allLocations)
         {
             count += countItemsInFolder(location.albumRootPath());
@@ -458,6 +479,7 @@ void CollectionScanner::completeScan()
         emit cancelled();
         return;
     }
+
     if (d->deferredFileScanning)
     {
         kDebug() << "Complete scan (file scanning deferred) took:" << time.elapsed() << "msecs.";
@@ -496,6 +518,7 @@ void CollectionScanner::finishCompleteScan(const QStringList& albumPaths)
     QStringList sortedPaths = albumPaths;
     qSort(sortedPaths);
     QStringList::iterator it, it2;
+
     for (it = sortedPaths.begin(); it != sortedPaths.end(); )
     {
         // remove all following entries as long as they have the same beginning (= are subalbums)
@@ -510,6 +533,7 @@ void CollectionScanner::finishCompleteScan(const QStringList& albumPaths)
     {
         // count for progress info
         int count = 0;
+
         foreach(const QString& path, sortedPaths)
         {
             count += countItemsInFolder(path);
@@ -522,6 +546,7 @@ void CollectionScanner::finishCompleteScan(const QStringList& albumPaths)
     {
         CollectionLocation location = CollectionManager::instance()->locationForPath(path);
         QString album = CollectionManager::instance()->album(path);
+
         if (album == "/")
         {
             scanAlbumRoot(location);
@@ -572,7 +597,7 @@ void CollectionScanner::completeScanCleanupPart()
 void CollectionScanner::partialScan(const QString& filePath)
 {
     QString albumRoot = CollectionManager::instance()->albumRootPath(filePath);
-    QString album = CollectionManager::instance()->album(filePath);
+    QString album     = CollectionManager::instance()->album(filePath);
     partialScan(albumRoot, album);
 }
 
@@ -623,6 +648,7 @@ void CollectionScanner::partialScan(const QString& albumRoot, const QString& alb
     {
         QReadLocker locker(&d->hints->lock);
         QHash<CollectionScannerHints::DstPath, CollectionScannerHints::Album>::const_iterator it;
+
         for (it = d->hints->albumHints.constBegin(); it != d->hints->albumHints.constEnd(); ++it)
         {
             if (it.key().albumRootId == location.id())
@@ -793,6 +819,7 @@ void CollectionScanner::scanAlbumRoot(const CollectionLocation& location)
 void CollectionScanner::scanForStaleAlbums(const QList<CollectionLocation>& locations)
 {
     QList<int> locationIdsToScan;
+
     foreach(const CollectionLocation& location, locations)
     {
         locationIdsToScan << location.id();
@@ -860,6 +887,7 @@ void CollectionScanner::scanForStaleAlbums(const QList<int>& locationIdsToScan)
         // go through all album copy/move hints
         QHash<CollectionScannerHints::DstPath, CollectionScannerHints::Album>::const_iterator it;
         int toBeDeletedIndex;
+
         for (it = albumHints.constBegin(); it != albumHints.constEnd(); ++it)
         {
             // if the src entry of a hint is found in toBeDeleted, we have a move/rename, no copy. Handle these here.
@@ -867,6 +895,7 @@ void CollectionScanner::scanForStaleAlbums(const QList<int>& locationIdsToScan)
 
             // We must double check that not, for some reason, the target album has already been scanned.
             QList<AlbumShortInfo>::const_iterator it2;
+
             for (it2 = albumList.constBegin(); it2 != albumList.constEnd(); ++it2)
             {
                 if (it2->albumRootId == it.key().albumRootId
@@ -912,6 +941,7 @@ void CollectionScanner::safelyRemoveAlbums(const QList<int>& albumIds)
     // Make album orphan (no album root, keep entries until next application start)
     DatabaseAccess access;
     DatabaseTransaction transaction(&access);
+
     foreach(int albumId, albumIds)
     {
         QList<qlonglong> ids = access.db()->getItemIDsInAlbum(albumId);
@@ -1104,6 +1134,7 @@ void CollectionScanner::scanFileNormal(const QFileInfo& fi, const ItemScanInfo& 
             d->hints->rescanItemHints.remove(scanInfo.id);
         }
         rescanFile(fi, scanInfo);
+
         return;
     }
     else if (hasAnyHint && d->hints->hasModificationHint(scanInfo.id))
@@ -1113,6 +1144,7 @@ void CollectionScanner::scanFileNormal(const QFileInfo& fi, const ItemScanInfo& 
             d->hints->modifiedItemHints.remove(scanInfo.id);
         }
         scanModifiedFile(fi, scanInfo);
+
         return;
     }
     else if (hasAnyHint) // metadata adjustment hints
@@ -1128,6 +1160,7 @@ void CollectionScanner::scanFileNormal(const QFileInfo& fi, const ItemScanInfo& 
                 QWriteLocker locker(&d->hints->lock);
                 d->hints->metadataAdjustedHints.remove(scanInfo.id);
             }
+
             scanFileUpdateHashReuseThumbnail(fi, scanInfo, true);
             return;
         }
@@ -1150,7 +1183,7 @@ void CollectionScanner::scanFileNormal(const QFileInfo& fi, const ItemScanInfo& 
     }
 }
 
-void CollectionScanner::CollectionScannerPriv::finishScanner(ImageScanner& scanner)
+void CollectionScanner::Private::finishScanner(ImageScanner& scanner)
 {
     // Perform the actual write operation to the database
     {
@@ -1176,6 +1209,7 @@ qlonglong CollectionScanner::scanNewFile(const QFileInfo& info, int albumId)
 
     // Check copy/move hints for single items
     qlonglong srcId = 0;
+
     if (d->hints)
     {
         QReadLocker locker(&d->hints->lock);
@@ -1241,7 +1275,7 @@ void CollectionScanner::scanModifiedFile(const QFileInfo& info, const ItemScanIn
 
 void CollectionScanner::scanFileUpdateHashReuseThumbnail(const QFileInfo& info, const ItemScanInfo& scanInfo, bool fileWasEdited)
 {
-    QString oldHash = scanInfo.uniqueHash;
+    QString oldHash   = scanInfo.uniqueHash;
     qlonglong oldSize = scanInfo.fileSize;
 
     // same code as scanModifiedFile
@@ -1249,8 +1283,9 @@ void CollectionScanner::scanFileUpdateHashReuseThumbnail(const QFileInfo& info, 
     scanner.setCategory(category(info));
     scanner.fileModified();
 
-    QString newHash = scanner.itemScanInfo().uniqueHash;
+    QString newHash   = scanner.itemScanInfo().uniqueHash;
     qlonglong newSize = scanner.itemScanInfo().fileSize;
+
     if (ThumbnailDatabaseAccess::isInitialized())
     {
         if (fileWasEdited)
@@ -1259,6 +1294,7 @@ void CollectionScanner::scanFileUpdateHashReuseThumbnail(const QFileInfo& info, 
             // We need to add a link the the thumbnail data with the new hash/file size _and_ adjust
             // the file modification date in the data table.
             DatabaseThumbnailInfo thumbDbInfo = ThumbnailDatabaseAccess().db()->findByHash(oldHash, oldSize);
+
             if (thumbDbInfo.id != -1)
             {
                 ThumbnailDatabaseAccess().db()->insertUniqueHash(newHash, newSize, thumbDbInfo.id);
@@ -1302,11 +1338,12 @@ void CollectionScanner::copyFileProperties(const ImageInfo& source, const ImageI
     kDebug() << "Copying properties from" << source.id() << "to" << dest.id();
 
     // Rating, creation dates
-    DatabaseFields::ImageInformation imageInfoFields =
-        DatabaseFields::Rating |
-        DatabaseFields::CreationDate |
-        DatabaseFields::DigitizationDate;
+    DatabaseFields::ImageInformation imageInfoFields = DatabaseFields::Rating       |
+                                                       DatabaseFields::CreationDate |
+                                                       DatabaseFields::DigitizationDate;
+
     QVariantList imageInfos = DatabaseAccess().db()->getImageInformation(source.id(), imageInfoFields);
+
     if (!imageInfos.isEmpty())
     {
         DatabaseAccess().db()->changeImageInformation(dest.id(), imageInfos, imageInfoFields);
@@ -1317,6 +1354,7 @@ void CollectionScanner::copyFileProperties(const ImageInfo& source, const ImageI
     {
         dest.setTag(tagId);
     }
+
     // Copy color and pick label
     dest.setPickLabel(source.pickLabel());
     dest.setColorLabel(source.colorLabel());
@@ -1324,6 +1362,7 @@ void CollectionScanner::copyFileProperties(const ImageInfo& source, const ImageI
 
     // GPS data
     QVariantList positionData = DatabaseAccess().db()->getImagePosition(source.id(), DatabaseFields::ImagePositionsAll);
+
     if (!positionData.isEmpty())
     {
         DatabaseAccess().db()->addImagePosition(dest.id(), positionData, DatabaseFields::ImagePositionsAll);
@@ -1379,7 +1418,7 @@ void CollectionScanner::completeHistoryScanning()
     QList<qlonglong> ids = DatabaseAccess().db()->getItemIDsInTag(needResolvingTag);
     historyScanningStage2(ids);
 
-    ids = DatabaseAccess().db()->getItemIDsInTag(needTaggingTag);
+    ids                  = DatabaseAccess().db()->getItemIDsInTag(needTaggingTag);
     kDebug() << "items to tag" << ids;
     historyScanningStage3(ids);
 }
@@ -1466,7 +1505,7 @@ int CollectionScanner::countItemsInFolder(const QString& directory)
 
     for (fi = list.constBegin(); fi != list.constEnd(); ++fi)
     {
-        if ( fi->isDir() &&
+        if ( fi->isDir()           &&
              fi->fileName() != "." &&
              fi->fileName() != "..")
         {

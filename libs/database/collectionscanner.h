@@ -6,7 +6,7 @@
  * Date        : 2007-03-21
  * Description : Collection scanning to database.
  *
- * Copyright (C) 2005 by Renchi Raju <renchi dot raju at gmail dot com>
+ * Copyright (C) 2005      by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C) 2005-2006 by Tom Albers <tomalbers@kde.nl>
  * Copyright (C) 2007-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
@@ -66,6 +66,8 @@ public:
 
     virtual void clear() = 0;
 };
+
+// ------------------------------------------------------------------------------
 
 class DIGIKAM_DATABASE_EXPORT CollectionScanner : public QObject
 {
@@ -155,7 +157,7 @@ public:
      * The Container set in setHintContainer must be one created by createContainer.
      */
     static CollectionScannerHintContainer* createHintContainer();
-    void setHintContainer(CollectionScannerHintContainer* container);
+    void setHintContainer(CollectionScannerHintContainer* const container);
     void setUpdateHashHint(bool hint = true);
 
     /**
@@ -182,7 +184,7 @@ public:
     /**
      * Set an observer to be able to cancel a running scan
      */
-    void setObserver(CollectionScannerObserver* observer);
+    void setObserver(CollectionScannerObserver* const observer);
 
     /**
      * When a file is derived from another file, typically through editing,
@@ -271,8 +273,8 @@ protected:
 
 private:
 
-    class CollectionScannerPriv;
-    CollectionScannerPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam
