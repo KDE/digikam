@@ -415,6 +415,7 @@ RegionFrameItem::~RegionFrameItem()
 
 void RegionFrameItem::setHudWidget(QWidget* const widget, Qt::WindowFlags wFlags)
 {
+    qDebug()<<"RegionFrameItem::setHudWidget";
     QGraphicsProxyWidget* const proxy = new QGraphicsProxyWidget(0, wFlags);
     /*
      * This is utterly undocumented magic. If you add a normal widget directly,
@@ -440,6 +441,7 @@ void RegionFrameItem::setHudWidget(QWidget* const widget, Qt::WindowFlags wFlags
 
 void RegionFrameItem::setHudWidget(QGraphicsWidget* const hudWidget)
 {
+    qDebug()<<"RegionFrameItem::setHudWidget";
     if (d->hudWidget == hudWidget)
     {
         return;
@@ -467,6 +469,7 @@ QGraphicsWidget* RegionFrameItem::hudWidget() const
 
 void RegionFrameItem::setFlags(Flags flags)
 {
+    qDebug()<<"RegionFrameItem::setFlags";
     if (d->flags == flags)
     {
         return;
