@@ -1724,7 +1724,7 @@ ImageInfo::DatabaseFieldsHashRaw ImageInfo::getDatabaseFieldsRaw(const DatabaseF
         const DatabaseFields::VideoMetadata requestedVideoMetadata = requestedSet.getVideoMetadata();
 
         const DatabaseFields::VideoMetadata missingVideoMetadata = requestedVideoMetadata & ~m_data->videoMetadataCached;
-        kDebug()<<QString("videometadata: requested: %1 missing: %3").arg(requestedVideoMetadata, 0, 16).arg(missingVideoMetadata, 0, 16);
+//         kDebug()<<QString("videometadata: requested: %1 missing: %3").arg(requestedVideoMetadata, 0, 16).arg(missingVideoMetadata, 0, 16);
         if (missingVideoMetadata)
         {
             const QVariantList fieldValues = DatabaseAccess().db()->getVideoMetadata(m_data->id, missingVideoMetadata);
@@ -1756,7 +1756,7 @@ ImageInfo::DatabaseFieldsHashRaw ImageInfo::getDatabaseFieldsRaw(const DatabaseF
         const DatabaseFields::ImageMetadata requestedImageMetadata = requestedSet.getImageMetadata();
 
         const DatabaseFields::ImageMetadata missingImageMetadata = requestedImageMetadata & ~m_data->imageMetadataCached;
-        kDebug()<<QString("imagemetadata: requested: %1 missing: %3").arg(requestedImageMetadata, 0, 16).arg(missingImageMetadata, 0, 16);
+//         kDebug()<<QString("imagemetadata: requested: %1 missing: %3").arg(requestedImageMetadata, 0, 16).arg(missingImageMetadata, 0, 16);
         if (missingImageMetadata)
         {
             const QVariantList fieldValues = DatabaseAccess().db()->getImageMetadata(m_data->id, missingImageMetadata);
