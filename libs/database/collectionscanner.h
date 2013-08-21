@@ -6,7 +6,7 @@
  * Date        : 2007-03-21
  * Description : Collection scanning to database.
  *
- * Copyright (C) 2005 by Renchi Raju <renchi dot raju at gmail dot com>
+ * Copyright (C) 2005      by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C) 2005-2006 by Tom Albers <tomalbers@kde.nl>
  * Copyright (C) 2007-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
@@ -66,6 +66,8 @@ public:
 
     virtual void clear() = 0;
 };
+
+// ------------------------------------------------------------------------------
 
 class DIGIKAM_DATABASE_EXPORT CollectionScanner : public QObject
 {
@@ -155,7 +157,7 @@ public:
      * The Container set in setHintContainer must be one created by createContainer.
      */
     static CollectionScannerHintContainer* createHintContainer();
-    void setHintContainer(CollectionScannerHintContainer* container);
+    void setHintContainer(CollectionScannerHintContainer* const container);
     void setUpdateHashHint(bool hint = true);
 
     /**
@@ -182,7 +184,7 @@ public:
     /**
      * Set an observer to be able to cancel a running scan
      */
-    void setObserver(CollectionScannerObserver* observer);
+    void setObserver(CollectionScannerObserver* const observer);
 
     /**
      * When a file is derived from another file, typically through editing,
@@ -196,29 +198,6 @@ public:
      * (or update requiring a rescan)
      */
     static bool databaseInitialScanDone();
-
-protected:
-
-    void completeScanCleanupPart();
-    void mainEntryPoint(bool complete);
-    void scanForStaleAlbums(const QList<CollectionLocation>& locations);
-    void scanForStaleAlbums(const QList<int>& locationIdsToScan);
-    void scanAlbumRoot(const CollectionLocation& location);
-    void scanAlbum(const CollectionLocation& location, const QString& album);
-    int checkAlbum(const CollectionLocation& location, const QString& album);
-    qlonglong scanFile(const QFileInfo& fi, int albumId, qlonglong id, FileScanMode mode);
-    void scanExistingFile(const QFileInfo& fi, qlonglong id);
-    void scanFileNormal(const QFileInfo& info, const ItemScanInfo& scanInfo);
-    qlonglong scanNewFile(const QFileInfo& info, int albumId);
-    qlonglong scanNewFileFullScan(const QFileInfo& info, int albumId);
-    void scanModifiedFile(const QFileInfo& info, const ItemScanInfo& scanInfo);
-    void scanFileUpdateHashReuseThumbnail(const QFileInfo& fi, const ItemScanInfo& scanInfo, bool fileWasEdited);
-    void rescanFile(const QFileInfo& info, const ItemScanInfo& scanInfo);
-    void itemsWereRemoved(const QList<qlonglong> &removedIds);
-    void completeHistoryScanning();
-    void finishHistoryScanning();
-    void historyScanningStage2(const QList<qlonglong>& ids);
-    void historyScanningStage3(const QList<qlonglong>& ids);
 
 Q_SIGNALS:
 
@@ -257,8 +236,26 @@ Q_SIGNALS:
      * Emitted when the observer told to cancel the scan
      */
     void cancelled();
-
+    
 protected:
+
+    void completeScanCleanupPart();
+    void mainEntryPoint(bool complete);
+    void scanForStaleAlbums(const QList<CollectionLocation>& locations);
+    void scanForStaleAlbums(const QList<int>& locationIdsToScan);
+    void scanAlbumRoot(const CollectionLocation& location);
+    void scanAlbum(const CollectionLocation& location, const QString& album);
+    int  checkAlbum(const CollectionLocation& location, const QString& album);
+    void scanExistingFile(const QFileInfo& fi, qlonglong id);
+    void scanFileNormal(const QFileInfo& info, const ItemScanInfo& scanInfo);
+    void scanModifiedFile(const QFileInfo& info, const ItemScanInfo& scanInfo);
+    void scanFileUpdateHashReuseThumbnail(const QFileInfo& fi, const ItemScanInfo& scanInfo, bool fileWasEdited);
+    void rescanFile(const QFileInfo& info, const ItemScanInfo& scanInfo);
+    void itemsWereRemoved(const QList<qlonglong> &removedIds);
+    void completeHistoryScanning();
+    void finishHistoryScanning();
+    void historyScanningStage2(const QList<qlonglong>& ids);
+    void historyScanningStage3(const QList<qlonglong>& ids);
 
     void markDatabaseAsScanned();
     void updateRemovedItemsTime();
@@ -268,11 +265,15 @@ protected:
     void loadNameFilters();
     int countItemsInFolder(const QString& directory);
     DatabaseItem::Category category(const QFileInfo& info);
+    
+    qlonglong scanFile(const QFileInfo& fi, int albumId, qlonglong id, FileScanMode mode);
+    qlonglong scanNewFile(const QFileInfo& info, int albumId);
+    qlonglong scanNewFileFullScan(const QFileInfo& info, int albumId);
 
 private:
 
-    class CollectionScannerPriv;
-    CollectionScannerPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam
