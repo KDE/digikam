@@ -127,11 +127,6 @@ private Q_SLOTS:
     void slotContextMenu();
     void slotRevert();
 
-    //new slots
-    void slotLastDirectory(KUrl::List::const_iterator);
-    void slotSorry();
-    void slotToggleNav(int i);
-    void slotToggleActions(bool b);
     void slotDroppedItems(QList<ShowfotoItemInfo>);
 
 Q_SIGNALS:

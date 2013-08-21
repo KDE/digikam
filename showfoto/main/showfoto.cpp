@@ -1115,29 +1115,6 @@ bool ShowFoto::saveNewVersionInFormat(const QString&)
     return false;
 }
 
-//new slots
-
-
-void ShowFoto::slotLastDirectory(KUrl::List::ConstIterator it)
-{
-   d->lastOpenedDirectory = (*it);
-}
-
-void ShowFoto::slotSorry()
-{
-    KMessageBox::sorry(this, i18n("There are no images in this folder."));
-}
-
-void ShowFoto::slotToggleNav(int i)
-{
-    toggleNavigation(i);
-}
-
-void ShowFoto::slotToggleActions(bool b)
-{
-    toggleActions(b);
-}
-
 void ShowFoto::openFolder(const KUrl& url)
 {
     if (!url.isValid() || !url.isLocalFile())
