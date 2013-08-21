@@ -97,6 +97,7 @@ void WelcomePageView::slotUrlOpen(const KUrl& url)
 QString WelcomePageView::infoPage() const
 {
     QStringList newFeatures;
+    newFeatures << i18n("New Faces Recognition engine;");
     newFeatures << i18n("New Table-View view mode dedicated to show album items in a list view;");
     newFeatures << i18n("New tool to Auto-Crop image based on black hole borders detection;");
     newFeatures << i18n("New Aspect Ratio information displayed in icon-view and tooltips;");

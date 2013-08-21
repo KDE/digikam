@@ -45,6 +45,7 @@
 #include "metadatasynchronizer.h"
 #include "facedetector.h"
 #include "knotificationwrapper.h"
+#include "progressmanager.h"
 
 namespace Digikam
 {
@@ -55,19 +56,37 @@ public:
 
     Private()
     {
-        running = false;
+        running               = false;
+        newItemsFinder        = 0;
+        thumbsGenerator       = 0;
+        fingerPrintsGenerator = 0;
+        duplicatesFinder      = 0;
+        faceDetector          = 0;
+        metadataSynchronizer  = 0;
     }
 
-    bool                running;
+    bool                   running;
 
-    QTime               duration;
+    QTime                  duration;
 
-    MaintenanceSettings settings;
+    MaintenanceSettings    settings;
+
+    NewItemsFinder*        newItemsFinder;
+    ThumbsGenerator*       thumbsGenerator;
+    FingerPrintsGenerator* fingerPrintsGenerator;
+    DuplicatesFinder*      duplicatesFinder;
+    FaceDetector*          faceDetector;
+    MetadataSynchronizer*  metadataSynchronizer;
 };
 
 MaintenanceMngr::MaintenanceMngr(QObject* const parent)
     : QObject(parent), d(new Private)
 {
+    connect(ProgressManager::instance(), SIGNAL(progressItemCompleted(ProgressItem*)),
+            this, SLOT(slotToolCompleted(ProgressItem*)));
+
+    connect(ProgressManager::instance(), SIGNAL(progressItemCanceled(ProgressItem*)),
+            this, SLOT(slotToolCanceled(ProgressItem*)));
 }
 
 MaintenanceMngr::~MaintenanceMngr()
@@ -83,153 +102,199 @@ bool MaintenanceMngr::isRunning() const
 void MaintenanceMngr::setSettings(const MaintenanceSettings& settings)
 {
     d->settings = settings;
-    kDebug() << "settings.newItems            : " << d->settings.newItems;
-    kDebug() << "settings.thumbnails          : " << d->settings.thumbnails;
-    kDebug() << "settings.scanThumbs          : " << d->settings.scanThumbs;
-    kDebug() << "settings.fingerPrints        : " << d->settings.fingerPrints;
-    kDebug() << "settings.scanFingerPrints    : " << d->settings.scanFingerPrints;
-    kDebug() << "settings.duplicates          : " << d->settings.duplicates;
-    kDebug() << "settings.similarity          : " << d->settings.similarity;
-    kDebug() << "settings.metadata            : " << d->settings.metadata;
-    kDebug() << "settings.facedetection       : " << d->settings.faceDetection;
-    kDebug() << "settings.faceScannedHandling : " << d->settings.faceSettings.alreadyScannedHandling;
+    kDebug() << d->settings;
 
     d->duration.start();
-    slotStage1();
+    stage1();
 }
 
-void MaintenanceMngr::slotStage1()
+void MaintenanceMngr::slotToolCompleted(ProgressItem* tool)
 {
+    // At each stage, relevant tool instance is set to zero to prevent redondant call to this slot
+    // from ProgressManager. This will disable multiple triggering in this method.
+    // There is no memory leak. Each tool instance are delete later by ProgressManager.
+
+    if (tool == dynamic_cast<ProgressItem*>(d->newItemsFinder))
+    {
+        d->newItemsFinder = 0;
+        stage2();
+    }
+    else if (tool == dynamic_cast<ProgressItem*>(d->thumbsGenerator))
+    {
+        d->thumbsGenerator = 0;
+        stage3();
+    }
+    else if (tool == dynamic_cast<ProgressItem*>(d->fingerPrintsGenerator))
+    {
+        d->fingerPrintsGenerator = 0;
+        stage4();
+    }
+    else if (tool == dynamic_cast<ProgressItem*>(d->duplicatesFinder))
+    {
+        d->duplicatesFinder = 0;
+        stage5();
+    }
+    else if (tool == dynamic_cast<ProgressItem*>(d->faceDetector))
+    {
+        d->faceDetector = 0;
+        stage6();
+    }
+    else if (tool == dynamic_cast<ProgressItem*>(d->metadataSynchronizer))
+    {
+        d->metadataSynchronizer = 0;
+        done();
+    }
+}
+
+void MaintenanceMngr::slotToolCanceled(ProgressItem* tool)
+{
+    if (tool == dynamic_cast<ProgressItem*>(d->newItemsFinder)        ||
+        tool == dynamic_cast<ProgressItem*>(d->thumbsGenerator)       ||
+        tool == dynamic_cast<ProgressItem*>(d->fingerPrintsGenerator) ||
+        tool == dynamic_cast<ProgressItem*>(d->duplicatesFinder)      ||
+        tool == dynamic_cast<ProgressItem*>(d->faceDetector)          ||
+        tool == dynamic_cast<ProgressItem*>(d->metadataSynchronizer))
+    {
+        cancel();
+    }
+}
+
+void MaintenanceMngr::stage1()
+{
+    kDebug() << "stage1";
+
     if (d->settings.newItems)
     {
-        NewItemsFinder* const tool = new NewItemsFinder();
-        tool->setNotificationEnabled(false);
+        if (d->settings.wholeAlbums)
+        {
+            d->newItemsFinder = new NewItemsFinder();
+        }
+        else
+        {
+            QStringList paths;
 
-        connect(tool, SIGNAL(signalComplete()),
-                this, SLOT(slotStage2()));
+            foreach(Album* const a, d->settings.albums)
+            {
+                PAlbum* const pa = dynamic_cast<PAlbum*>(a);
+                if (pa)
+                    paths << pa->folderPath();
+            }
 
-        connect(tool, SIGNAL(progressItemCanceled(QString)),
-                this, SLOT(slotCancel()));
+            d->newItemsFinder = new NewItemsFinder(NewItemsFinder::ScheduleCollectionScan, paths);
+        }
 
-        tool->start();
+        d->newItemsFinder->setNotificationEnabled(false);
+        d->newItemsFinder->start();
     }
     else
     {
-        slotStage2();
+        stage2();
     }
 }
 
-void MaintenanceMngr::slotStage2()
+void MaintenanceMngr::stage2()
 {
+    kDebug() << "stage2";
+
     if (d->settings.thumbnails)
     {
-        bool rebuildAll             = d->settings.scanThumbs == false;
-        ThumbsGenerator* const tool = new ThumbsGenerator(rebuildAll);
-        tool->setNotificationEnabled(false);
+        bool rebuildAll = (d->settings.scanThumbs == false);
+        AlbumList list;
+        list << d->settings.albums;
+        list << d->settings.tags;
 
-        connect(tool, SIGNAL(signalComplete()),
-                this, SLOT(slotStage3()));
-
-        connect(tool, SIGNAL(progressItemCanceled(QString)),
-                this, SLOT(slotCancel()));
-
-        tool->start();
+        d->thumbsGenerator = new ThumbsGenerator(rebuildAll, list);
+        d->thumbsGenerator->setNotificationEnabled(false);
+        d->thumbsGenerator->setUseMultiCoreCPU(d->settings.useMutiCoreCPU);
+        d->thumbsGenerator->start();
     }
     else
     {
-        slotStage3();
+        stage3();
     }
 }
 
-void MaintenanceMngr::slotStage3()
+void MaintenanceMngr::stage3()
 {
+    kDebug() << "stage3";
+
     if (d->settings.fingerPrints)
     {
-        bool rebuildAll                   = d->settings.scanFingerPrints == false;
-        FingerPrintsGenerator* const tool = new FingerPrintsGenerator(rebuildAll);
-        tool->setNotificationEnabled(false);
+        bool rebuildAll = (d->settings.scanFingerPrints == false);
+        AlbumList list;
+        list << d->settings.albums;
+        list << d->settings.tags;
 
-        connect(tool, SIGNAL(signalComplete()),
-                this, SLOT(slotStage4()));
-
-        connect(tool, SIGNAL(progressItemCanceled(QString)),
-                this, SLOT(slotCancel()));
-
-        tool->start();
+        d->fingerPrintsGenerator = new FingerPrintsGenerator(rebuildAll, list);
+        d->fingerPrintsGenerator->setNotificationEnabled(false);
+        d->fingerPrintsGenerator->setUseMultiCoreCPU(d->settings.useMutiCoreCPU);
+        d->fingerPrintsGenerator->start();
     }
     else
     {
-        slotStage4();
+        stage4();
     }
 }
 
-void MaintenanceMngr::slotStage4()
+void MaintenanceMngr::stage4()
 {
+    kDebug() << "stage4";
+
     if (d->settings.duplicates)
     {
-        DuplicatesFinder* const tool = new DuplicatesFinder(d->settings.similarity);
-        tool->setNotificationEnabled(false);
-
-        connect(tool, SIGNAL(signalComplete()),
-                this, SLOT(slotStage5()));
-
-        connect(tool, SIGNAL(progressItemCanceled(QString)),
-                this, SLOT(slotCancel()));
-
-        tool->start();
+        d->duplicatesFinder = new DuplicatesFinder(d->settings.albums, d->settings.tags, d->settings.similarity);
+        d->duplicatesFinder->setNotificationEnabled(false);
+        d->duplicatesFinder->start();
     }
     else
     {
-        slotStage5();
+        stage5();
     }
 }
 
-void MaintenanceMngr::slotStage5()
+void MaintenanceMngr::stage5()
 {
-    if (d->settings.metadata)
+    kDebug() << "stage5";
+
+    if (d->settings.faceManagement)
     {
-        MetadataSynchronizer* const tool = new MetadataSynchronizer(MetadataSynchronizer::WriteFromDatabaseToFile);
-        tool->setNotificationEnabled(false);
-
-        connect(tool, SIGNAL(signalComplete()),
-                this, SLOT(slotStage6()));
-
-        connect(tool, SIGNAL(progressItemCanceled(QString)),
-                this, SLOT(slotCancel()));
-
-        tool->start();
+        // NOTE : Use multi-core CPU option is passed through FaceScanSettings
+        d->settings.faceSettings.useFullCpu = d->settings.useMutiCoreCPU;
+        d->faceDetector                     = new FaceDetector(d->settings.faceSettings);
+        d->faceDetector->setNotificationEnabled(false);
+        d->faceDetector->start();
     }
     else
     {
-        slotStage6();
+        stage6();
     }
 }
 
-void MaintenanceMngr::slotStage6()
+void MaintenanceMngr::stage6()
 {
-    if (d->settings.faceDetection)
+    kDebug() << "stage6";
+
+    if (d->settings.metadataSync)
     {
-        FaceDetector* const tool = new FaceDetector(d->settings.faceSettings);
-        tool->setNotificationEnabled(false);
-
-        connect(tool, SIGNAL(signalComplete()),
-                this, SLOT(slotDone()));
-
-        connect(tool, SIGNAL(progressItemCanceled(QString)),
-                this, SLOT(slotCancel()));
-
-        tool->start();
+        AlbumList list;
+        list << d->settings.albums;
+        list << d->settings.tags;
+        d->metadataSynchronizer = new MetadataSynchronizer(list, MetadataSynchronizer::SyncDirection(d->settings.syncDirection));
+        d->metadataSynchronizer->setNotificationEnabled(false);
+        d->metadataSynchronizer->setUseMultiCoreCPU(d->settings.useMutiCoreCPU);
+        d->metadataSynchronizer->start();
     }
     else
     {
-        slotDone();
+        done();
     }
 }
 
-void MaintenanceMngr::slotDone()
+void MaintenanceMngr::done()
 {
     d->running   = false;
     QTime now, t = now.addMSecs(d->duration.elapsed());
+
     // Pop-up a message to bring user when all is done.
     KNotificationWrapper("digiKam Maintenance", // not i18n
                          i18n("All operations are done.\nDuration: %1", t.toString()),
@@ -238,7 +303,7 @@ void MaintenanceMngr::slotDone()
     emit signalComplete();
 }
 
-void MaintenanceMngr::slotCancel()
+void MaintenanceMngr::cancel()
 {
     d->running = false;
     emit signalComplete();

@@ -26,6 +26,7 @@
 
 // Local includes
 
+#include "album.h"
 #include "imageinfo.h"
 #include "maintenancetool.h"
 
@@ -42,33 +43,36 @@ public:
 
     enum SyncDirection
     {
-        WriteFromDatabaseToFile,
+        WriteFromDatabaseToFile = 0,
         ReadFromFileToDatabase
     };
 
 public:
 
-    /** Constructor which sync all pictures metadata pictures from whole Albums collection */
-    explicit MetadataSynchronizer(SyncDirection direction, ProgressItem* const parent = 0);
+    /** Constructor which sync all pictures metadata from an Albums list. If list is empty, whole Albums collection is procressed.
+     */
+    explicit MetadataSynchronizer(const AlbumList& list=AlbumList(), SyncDirection direction = WriteFromDatabaseToFile, ProgressItem* const parent = 0);
 
-    /** Constructor which sync all pictures metadata from an Album */
-    explicit MetadataSynchronizer(Album* const album, SyncDirection direction = WriteFromDatabaseToFile, ProgressItem* const parent = 0);
-
-    /** Constructor which sync all pictures metadata from an images list */
+    /** Constructor which sync all pictures metadata from an Images list
+     */
     explicit MetadataSynchronizer(const ImageInfoList& list, SyncDirection = WriteFromDatabaseToFile, ProgressItem* const parent = 0);
 
     ~MetadataSynchronizer();
+
+    void setUseMultiCoreCPU(bool b);
 
 private Q_SLOTS:
 
     void slotStart();
     void slotParseAlbums();
     void slotAlbumParsed(const ImageInfoList&);
+    void slotAdvance();
     void slotOneAlbumIsComplete();
     void slotCancel();
 
 private:
 
+    void init(SyncDirection direction);
     void parseList();
     void parsePicture();
     void processOneAlbum();

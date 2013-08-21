@@ -173,6 +173,7 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* const parent)
     setObjectName("adjustlevels");
     setToolName(i18n("Adjust Levels"));
     setToolIcon(SmallIcon("adjustlevels"));
+    setInitPreview(true);
 
     ImageIface iface;
     d->originalImage = iface.original();
@@ -350,7 +351,6 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* const parent)
     // -------------------------------------------------------------
 
     setToolSettings(d->gboxSettings);
-    init();
 
     // -------------------------------------------------------------
     // Channels and scale selection slots.
@@ -405,8 +405,6 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* const parent)
 
     connect(d->pickerColorButtonGroup, SIGNAL(buttonReleased(int)),
             this, SLOT(slotPickerColorButtonActived(int)));
-
-    slotTimer();
 }
 
 AdjustLevelsTool::~AdjustLevelsTool()

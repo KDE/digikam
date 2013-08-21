@@ -78,7 +78,6 @@ RawImport::RawImport(const KUrl& url, QObject* const parent)
     setProgressMessage(i18n("Post Processing"));
     setToolView(d->previewWidget);
     setToolSettings(d->settingsBox);
-    init();
 }
 
 RawImport::~RawImport()

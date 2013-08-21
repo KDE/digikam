@@ -739,8 +739,6 @@ bool DMetadata::setImagePickLabel(int pickId) const
         return false;
     }
 
-    // Set standard XMP rating tag.
-
     if (supportXmp())
     {
         if (!setXmpTagString("Xmp.digiKam.PickLabel", QString::number(pickId)))
@@ -766,8 +764,6 @@ bool DMetadata::setImageColorLabel(int colorId) const
     {
         return false;
     }
-
-    // Set standard XMP rating tag.
 
     if (supportXmp())
     {
@@ -1351,9 +1347,7 @@ bool DMetadata::getImageFacesMap(QMap<QString,QVariant>& faces) const
 
 bool DMetadata::setImageFacesMap(QMap< QString, QVariant >& facesPath, bool write) const
 {
-    qDebug() << "Setting Faces Map";
 #if KEXIV2_VERSION >= 0x020301
-    qDebug() << "Setting Faces Map 2";
     QString qxmpTagName("Xmp.mwg-rs.Regions/mwg-rs:RegionList");
     QString nameTagKey = qxmpTagName + QString("[%1]/mwg-rs:Name");
     QString typeTagKey = qxmpTagName + QString("[%1]/mwg-rs:Type");
@@ -1423,6 +1417,8 @@ bool DMetadata::setImageFacesMap(QMap< QString, QVariant >& facesPath, bool writ
 
     return ok;
 #else
+    Q_UNUSED(facesPath);
+    Q_UNUSED(write);
     return false;
 #endif
 }

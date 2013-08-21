@@ -99,9 +99,9 @@ Album* Album::prev() const
     return m_prev;
 }
 
-QList< Album* > Album::childAlbums(bool recursive)
+AlbumList Album::childAlbums(bool recursive)
 {
-    QList<Album*> childList;
+    AlbumList childList;
 
     for (Album* child = this->firstChild(); child; child = child->next())
     {
@@ -120,7 +120,7 @@ QList< int > Album::childAlbumIds(bool recursive)
 {
     QList <int> ids;
 
-    QList<Album*> childList = this->childAlbums(recursive);
+    AlbumList childList = this->childAlbums(recursive);
 
     QListIterator<Album*> it(childList);
 
@@ -206,9 +206,9 @@ void Album::removeChild(Album* const child)
 
 void Album::clear()
 {
-    m_clearing   = true;
-    Album* child = m_firstChild;
-    Album* nextChild;
+    m_clearing       = true;
+    Album* child     = m_firstChild;
+    Album* nextChild = 0;
 
     while (child)
     {

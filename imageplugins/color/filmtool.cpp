@@ -167,6 +167,7 @@ FilmTool::FilmTool(QObject* const parent)
     setObjectName("film");
     setToolName(i18n("Color Negative Film"));
     setToolIcon(SmallIcon("colorneg"));
+    setInitPreview(true);
 
     ImageIface iface;
     d->originalImage = iface.original();
@@ -324,7 +325,6 @@ FilmTool::FilmTool(QObject* const parent)
     // -------------------------------------------------------------
 
     setToolSettings(d->gboxSettings);
-    init();
 
     // Button Slots -------------------------------------------------
 
@@ -356,8 +356,6 @@ FilmTool::FilmTool(QObject* const parent)
 
     connect(d->colorBalanceInput, SIGNAL(stateChanged(int)),
             this, SLOT(slotColorBalanceStateChanged(int)));
-
-    slotTimer();
 }
 
 FilmTool::~FilmTool()

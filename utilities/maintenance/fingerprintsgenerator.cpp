@@ -27,28 +27,19 @@
 // Qt includes
 
 #include <QString>
-#include <QTimer>
-#include <QDir>
-#include <QFileInfo>
 
 // KDE includes
 
-#include <kcodecs.h>
 #include <klocale.h>
 #include <kconfig.h>
-#include <kstandardguiitem.h>
 
 // Local includes
 
 #include "dimg.h"
-#include "album.h"
 #include "albumdb.h"
 #include "albummanager.h"
 #include "databaseaccess.h"
-#include "haar.h"
-#include "haariface.h"
-#include "previewloadthread.h"
-#include "metadatasettings.h"
+#include "maintenancethread.h"
 
 namespace Digikam
 {
@@ -59,7 +50,7 @@ public:
 
     Private() :
         rebuildAll(true),
-        previewLoadThread(0)
+        thread(0)
     {
     }
 
@@ -67,24 +58,27 @@ public:
 
     QStringList        allPicturesPath;
 
-    PreviewLoadThread* previewLoadThread;
+    AlbumList          albumList;
 
-    HaarIface          haarIface;
+    MaintenanceThread* thread;
 };
 
-FingerPrintsGenerator::FingerPrintsGenerator(const bool rebuildAll, ProgressItem* const parent)
+FingerPrintsGenerator::FingerPrintsGenerator(const bool rebuildAll, const AlbumList& list, ProgressItem* const parent)
     : MaintenanceTool("FingerPrintsGenerator", parent),
       d(new Private)
 {
+    setLabel(i18n("Finger-prints"));
     ProgressManager::addProgressItem(this);
 
-    d->rebuildAll        = rebuildAll;
-    d->previewLoadThread = new PreviewLoadThread();
+    d->albumList  = list;
+    d->rebuildAll = rebuildAll;
+    d->thread     = new MaintenanceThread(this);
 
-    connect(d->previewLoadThread, SIGNAL(signalImageLoaded(LoadingDescription,DImg)),
-            this, SLOT(slotGotImagePreview(LoadingDescription,DImg)));
+    connect(d->thread, SIGNAL(signalCompleted()),
+            this, SLOT(slotDone()));
 
-    setLabel(i18n("Finger-prints"));
+    connect(d->thread, SIGNAL(signalAdvance(QImage)),
+            this, SLOT(slotAdvance(QImage)));
 }
 
 FingerPrintsGenerator::~FingerPrintsGenerator()
@@ -92,25 +86,49 @@ FingerPrintsGenerator::~FingerPrintsGenerator()
     delete d;
 }
 
+void FingerPrintsGenerator::setUseMultiCoreCPU(bool b)
+{
+    d->thread->setUseMultiCore(b);
+}
+
+void FingerPrintsGenerator::slotCancel()
+{
+    d->thread->cancel();
+    MaintenanceTool::slotCancel();
+}
+
 void FingerPrintsGenerator::slotStart()
 {
     MaintenanceTool::slotStart();
 
-    const AlbumList palbumList = AlbumManager::instance()->allPAlbums();
+    if (d->albumList.isEmpty())
+    {
+        d->albumList = AlbumManager::instance()->allPAlbums();
+    }
+
+    QStringList dirty = DatabaseAccess().db()->getDirtyOrMissingFingerprintURLs();
 
     // Get all digiKam albums collection pictures path, depending of d->rebuildAll flag.
 
-    if (d->rebuildAll)
+    for (AlbumList::ConstIterator it = d->albumList.constBegin();
+         !canceled() && (it != d->albumList.constEnd()); ++it)
     {
-        for (AlbumList::ConstIterator it = palbumList.constBegin();
-             !canceled() && (it != palbumList.constEnd()); ++it)
+        QStringList aPaths = DatabaseAccess().db()->getItemURLsInAlbum((*it)->id());
+
+        if (!d->rebuildAll)
         {
-            d->allPicturesPath += DatabaseAccess().db()->getItemURLsInAlbum((*it)->id());
+            foreach(QString path, aPaths)
+            {
+                if (dirty.contains(path))
+                {
+                    d->allPicturesPath += path;
+                }
+            }
         }
-    }
-    else
-    {
-        d->allPicturesPath = DatabaseAccess().db()->getDirtyOrMissingFingerprintURLs();
+        else
+        {
+            d->allPicturesPath += aPaths;
+        }
     }
 
     if (d->allPicturesPath.isEmpty())
@@ -120,64 +138,15 @@ void FingerPrintsGenerator::slotStart()
     }
 
     setTotalItems(d->allPicturesPath.count());
-    processOne();
+
+    d->thread->generateFingerprints(d->allPicturesPath);
+    d->thread->start();
 }
 
-void FingerPrintsGenerator::processOne()
+void FingerPrintsGenerator::slotAdvance(const QImage& img)
 {
-    if (canceled())
-    {
-        slotCancel();
-        return;
-    }
-
-    if (d->allPicturesPath.isEmpty())
-    {
-        slotDone();
-        return;
-    }
-
-    QString path                                            = d->allPicturesPath.first();
-    LoadingDescription description(path, HaarIface::preferredSize(), LoadingDescription::ConvertToSRGB);
-    description.rawDecodingSettings.rawPrm.sixteenBitsImage = false;
-    d->previewLoadThread->load(description);
-}
-
-void FingerPrintsGenerator::slotGotImagePreview(const LoadingDescription& desc, const DImg& img)
-{
-    if (d->allPicturesPath.isEmpty())
-    {
-        return;
-    }
-
-    if (d->allPicturesPath.first() != desc.filePath)
-    {
-        return;
-    }
-
-    if (!img.isNull())
-    {
-        // compute Haar fingerprint
-        d->haarIface.indexImage(desc.filePath, img);
-    }
-
-    QPixmap pix = DImg(img).smoothScale(22, 22, Qt::KeepAspectRatio).convertToPixmap();
-    setThumbnail(pix);
+    setThumbnail(QPixmap::fromImage(img));
     advance(1);
-
-    if (!d->allPicturesPath.isEmpty())
-    {
-        d->allPicturesPath.removeFirst();
-    }
-
-    if (d->allPicturesPath.isEmpty())
-    {
-        slotDone();
-    }
-    else
-    {
-        processOne();
-    }
 }
 
 void FingerPrintsGenerator::slotDone()

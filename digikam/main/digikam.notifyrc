@@ -606,6 +606,7 @@ Action=Popup
 
 [Event/DuplicatesFinder]
 Name=Update of duplicates items in database complete
+Name[bs]=Ažuriranje baze duplih objekata završeno
 Name[ca]=Actualització completada de la base de dades d'elements duplicats
 Name[ca@valencia]=Actualització completada de la base de dades d'elements duplicats
 Name[cs]=Aktualizace duplicitních položek v databázi dokončena
@@ -638,6 +639,7 @@ Name[x-test]=xxUpdate of duplicates items in database completexx
 Name[zh_CN]=更新人脸识别数据库重复内容完成
 Name[zh_TW]=資料庫內重覆項目更新完成
 Comment=The update of the duplicates items in database has completed.
+Comment[bs]=Ažuriranje baze duplih objekata u bazi je završeno.
 Comment[ca]=L'actualització de la base de dades d'elements duplicats ha finalitzat.
 Comment[ca@valencia]=L'actualització de la base de dades d'elements duplicats ha finalitzat.
 Comment[cs]=Aktualizace duplicitních položek v databázi byla dokončena.
@@ -672,6 +674,7 @@ Action=Popup
 
 [Event/NewItemsFinder]
 Name=Find of new items in database complete
+Name[bs]=Traženje novih objekata u bazi je završeno
 Name[ca]=Actualització completada de la base d'elements nous
 Name[ca@valencia]=Actualització completada de la base d'elements nous
 Name[cs]=Hledání nových položek v databázi dokončeno
@@ -703,6 +706,7 @@ Name[x-test]=xxFind of new items in database completexx
 Name[zh_CN]=查找数据库新内容完成
 Name[zh_TW]=找出資料庫內的新項目完成
 Comment=The scan of the new items in database has completed.
+Comment[bs]=Traženje novih objekata u bazi je završeno.
 Comment[ca]=L'actualització de la base de dades d'elements nous ha finalitzat.
 Comment[ca@valencia]=L'actualització de la base de dades d'elements nous ha finalitzat.
 Comment[cs]=Prohledávání nových položek v databázi bylo dokončeno.

@@ -1048,8 +1048,9 @@ void ImportUI::slotBusy(bool val)
         slotNewSelection(d->view->selectedUrls().count() > 0);
 
         m_animLogo->stop();
-        d->statusProgressBar->setNotify(false);
-
+        d->statusProgressBar->setProgressValue(0);
+        d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode, i18n("Ready"));
+        
         // like WDestructiveClose, but after camera controller operation has safely finished
         if (d->closed)
         {
@@ -1575,7 +1576,7 @@ void ImportUI::slotDownloaded(const QString& folder, const QString& file, int st
     {
         if (d->deleteAfter)
         {
-            // No need passive pop-up here, because wil ask to confirm items deletion with dialog.
+            // No need passive pop-up here, because we will ask to confirm items deletion with dialog.
             deleteItems(true, true);
         }
         else

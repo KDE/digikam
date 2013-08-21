@@ -33,11 +33,11 @@
 namespace Digikam
 {
 
-class StateSavingObject::StateSavingObjectPriv
+class StateSavingObject::Private
 {
 public:
 
-    StateSavingObjectPriv() :
+    Private() :
         host(0),
         group(),
         prefix(),
@@ -64,7 +64,7 @@ public:
         for (QObjectList::const_iterator childIt = children.constBegin();
              childIt != children.constEnd(); ++childIt)
         {
-            StateSavingObject* const statefulChild = dynamic_cast<StateSavingObject*> (*childIt);
+            StateSavingObject* const statefulChild = dynamic_cast<StateSavingObject*>(*childIt);
 
             if (statefulChild)
             {
@@ -109,7 +109,7 @@ public:
             for (QObjectList::const_iterator childIt = host->children().begin();
                  childIt != host->children().end(); ++childIt)
             {
-                StateSavingObject* const statefulChild = dynamic_cast<StateSavingObject*> (*childIt);
+                StateSavingObject* const statefulChild = dynamic_cast<StateSavingObject*>(*childIt);
 
                 if (statefulChild)
                 {
@@ -141,7 +141,7 @@ public:
 };
 
 StateSavingObject::StateSavingObject(QObject* const host) :
-    d(new StateSavingObjectPriv)
+    d(new Private)
 {
     d->host = host;
     // we cannot safely create the default config group here, because the host

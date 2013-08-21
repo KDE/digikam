@@ -24,9 +24,9 @@
 #ifndef FACESCANSETTINGS_H
 #define FACESCANSETTINGS_H
 
-// Qt includes
+// Local includes
 
-#include <QList>
+#include "album.h"
 
 namespace Digikam
 {
@@ -70,7 +70,7 @@ public:
     double                 accuracy;
 
     // albums to scan
-    QList<Album*>          albums;
+    AlbumList              albums;
 
     ScanTask               task;
 

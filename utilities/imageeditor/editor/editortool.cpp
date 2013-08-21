@@ -54,6 +54,7 @@ class EditorTool::Private
 public:
 
     Private() :
+        initPreview(false),
         version(0),
         view(0),
         timer(0),
@@ -62,6 +63,7 @@ public:
     {
     }
 
+    bool                   initPreview;
     QString                helpAnchor;
     QString                name;
     int                    version;
@@ -94,6 +96,11 @@ EditorTool::~EditorTool()
 void EditorTool::init()
 {
     QTimer::singleShot(0, this, SLOT(slotInit()));
+}
+
+void EditorTool::setInitPreview(bool b)
+{
+    d->initPreview = b;
 }
 
 QPixmap EditorTool::toolIcon() const
@@ -211,6 +218,9 @@ void EditorTool::slotInit()
     // Unlock signals from preview and settings widgets when init is done.
     d->view->blockSignals(false);
     d->settings->blockSignals(false);
+
+    if (d->initPreview)
+        slotTimer();
 }
 
 void EditorTool::setToolHelp(const QString& anchor)
@@ -399,6 +409,19 @@ DImgThreadedFilter* EditorToolThreaded::filter() const
     return d->threadedFilter;
 }
 
+void EditorToolThreaded::slotInit()
+{
+    EditorTool::slotInit();
+    
+    QWidget* const view = toolView();
+    
+    if (dynamic_cast<ImageGuideWidget*>(view) || dynamic_cast<ImageRegionWidget*>(view))
+    {
+        connect(view, SIGNAL(signalResized()),
+                this, SLOT(slotResized()));
+    }
+}
+
 void EditorToolThreaded::setFilter(DImgThreadedFilter* const filter)
 {
     delete d->threadedFilter;
@@ -564,20 +587,8 @@ void EditorToolThreaded::slotAnalyserFinished(bool success)
     }
     else
     {
-
         kDebug() << "Analys " << toolName() << " failed...";
         slotAbort();
-    }
-}
-
-void EditorToolThreaded::setToolView(QWidget* const view)
-{
-    EditorTool::setToolView(view);
-
-    if (dynamic_cast<ImageGuideWidget*>(view) || dynamic_cast<ImageRegionWidget*>(view))
-    {
-        connect(view, SIGNAL(signalResized()),
-                this, SLOT(slotResized()));
     }
 }
 

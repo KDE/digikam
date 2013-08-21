@@ -168,7 +168,8 @@ bool TagRegion::intersects(const TagRegion& other, double fraction)
             else
             {
                 QRect i = r.intersected(r2);
-                return (double(i.width() * i.height()) / double(r.width() * r.height())) > fraction;
+
+                return ( (double(i.width() * i.height()) / double(r.width() * r.height())) > fraction );
             }
         }
     }
@@ -183,8 +184,9 @@ QRect TagRegion::mapToOriginalSize(const QSize& fullImageSize, const QSize& redu
         return reducedSizeDetail;
     }
 
-    double ratioWidth = double(fullImageSize.width()) / double(reducedImageSize.width());
+    double ratioWidth  = double(fullImageSize.width())  / double(reducedImageSize.width());
     double ratioHeight = double(fullImageSize.height()) / double(reducedImageSize.height());
+
     return QRectF(reducedSizeDetail.x() * ratioWidth,
                   reducedSizeDetail.y() * ratioHeight,
                   reducedSizeDetail.width() * ratioWidth,
@@ -198,11 +200,12 @@ QRect TagRegion::mapFromOriginalSize(const QSize& fullImageSize, const QSize& re
         return fullSizeDetail;
     }
 
-    double ratioWidth = double(reducedImageSize.width()) / double(fullImageSize.width());
+    double ratioWidth  = double(reducedImageSize.width())  / double(fullImageSize.width());
     double ratioHeight = double(reducedImageSize.height()) / double(fullImageSize.height());
-    return QRectF(fullSizeDetail.x() * ratioWidth,
-                  fullSizeDetail.y() * ratioHeight,
-                  fullSizeDetail.width() * ratioWidth,
+
+    return QRectF(fullSizeDetail.x()      * ratioWidth,
+                  fullSizeDetail.y()      * ratioHeight,
+                  fullSizeDetail.width()  * ratioWidth,
                   fullSizeDetail.height() * ratioHeight).toRect();
 }
 
@@ -218,9 +221,9 @@ QRect TagRegion::mapFromOriginalSize(const DImg& reducedSizeImage, const QRect& 
 
 QRect TagRegion::relativeToAbsolute(const QRectF& region, const QSize& fullSize)
 {
-    return QRectF(region.x() * fullSize.width(),
-                  region.y() * fullSize.height(),
-                  region.width() * fullSize.width(),
+    return QRectF(region.x()      * fullSize.width(),
+                  region.y()      * fullSize.height(),
+                  region.width()  * fullSize.width(),
                   region.height() * fullSize.height()).toRect();
 }
 
@@ -231,9 +234,9 @@ QRect TagRegion::relativeToAbsolute(const QRectF& region, const DImg& reducedSiz
 
 QRectF TagRegion::absoluteToRelative(const QRect& region, const QSize& fullSize)
 {
-    return QRectF((qreal)region.x() / (qreal)fullSize.width(),
-                  (qreal)region.y() / (qreal)fullSize.height(),
-                  (qreal)region.width() / (qreal)fullSize.width(),
+    return QRectF((qreal)region.x()      / (qreal)fullSize.width(),
+                  (qreal)region.y()      / (qreal)fullSize.height(),
+                  (qreal)region.width()  / (qreal)fullSize.width(),
                   (qreal)region.height() / (qreal)fullSize.height());
 }
 
@@ -258,6 +261,7 @@ QRect TagRegion::ajustToRotatedImg(const QRect& region, const QSize &fullSize, i
         neww = h;
         newh = w;
     }
+
     return QRect(newx,newy,neww,newh);
 }
 

@@ -42,7 +42,7 @@ class DIGIKAM_EXPORT AbstractItemDragDropHandler : public QObject
 {
 public:
 
-    explicit AbstractItemDragDropHandler(QAbstractItemModel* model);
+    explicit AbstractItemDragDropHandler(QAbstractItemModel* const model);
     virtual ~AbstractItemDragDropHandler() {}
 
     QAbstractItemModel* model() const;

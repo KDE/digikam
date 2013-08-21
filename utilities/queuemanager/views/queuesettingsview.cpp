@@ -90,6 +90,7 @@ public:
         extractJPEGButton(0),
         demosaicingButton(0),
         useOrgAlbum(0),
+        useMutiCoreCPU(0),
         albumSel(0),
         advancedRenameManager(0),
         advancedRenameWidget(0),
@@ -112,6 +113,7 @@ public:
     QRadioButton*          demosaicingButton;
 
     QCheckBox*             useOrgAlbum;
+    QCheckBox*             useMutiCoreCPU;
 
     AlbumSelectWidget*     albumSel;
 
@@ -188,7 +190,7 @@ QueueSettingsView::QueueSettingsView(QWidget* const parent)
     QWidget* const rawLoadingBox = new QWidget(panel);
     QVBoxLayout* const vlay2     = new QVBoxLayout(rawLoadingBox);
     d->rawLoadingButtonGroup     = new QButtonGroup(rawLoadingBox);
-    d->demosaicingButton         = new QRadioButton(i18n("Perform RAW demosaicing"),          rawLoadingBox);
+    d->demosaicingButton         = new QRadioButton(i18n("Perform RAW demosaicing"),           rawLoadingBox);
     d->extractJPEGButton         = new QRadioButton(i18n("Extract embedded preview (faster)"), rawLoadingBox);
     d->rawLoadingButtonGroup->addButton(d->extractJPEGButton, QueueSettings::USEEMBEDEDJPEG);
     d->rawLoadingButtonGroup->addButton(d->demosaicingButton, QueueSettings::DEMOSAICING);
@@ -218,12 +220,16 @@ QueueSettingsView::QueueSettingsView(QWidget* const parent)
     vlay->setMargin(0);
     vlay->setSpacing(0);
 
+    d->useMutiCoreCPU          = new QCheckBox(i18nc("@option:check", "Work on all processor cores"), panel);
+    d->useMutiCoreCPU->setWhatsThis(i18n("Turn on this option to use all CPU core from your computer "
+                                         "to process more than one item from a queue at the same time."));
     // -------------
 
     layout->addWidget(d->rawLoadingLabel);
     layout->addWidget(rawLoadingBox);
     layout->addWidget(d->conflictLabel);
     layout->addWidget(conflictBox);
+    layout->addWidget(d->useMutiCoreCPU);
     layout->setMargin(KDialog::spacingHint());
     layout->setSpacing(KDialog::spacingHint());
     layout->addStretch();
@@ -244,6 +250,9 @@ QueueSettingsView::QueueSettingsView(QWidget* const parent)
     connect(d->useOrgAlbum, SIGNAL(toggled(bool)),
             this, SLOT(slotSettingsChanged()));
 
+    connect(d->useMutiCoreCPU, SIGNAL(toggled(bool)),
+            this, SLOT(slotSettingsChanged()));
+        
     connect(d->albumSel, SIGNAL(itemSelectionChanged()),
             this, SLOT(slotSettingsChanged()));
 
@@ -297,6 +306,7 @@ void QueueSettingsView::slotResetSettings()
 {
     blockSignals(true);
     d->useOrgAlbum->setChecked(true);
+    d->useMutiCoreCPU->setChecked(false);
     // TODO: reset d->albumSel
     d->renamingButtonGroup->button(QueueSettings::USEORIGINAL)->setChecked(true);
     d->conflictButtonGroup->button(QueueSettings::DIFFNAME)->setChecked(true);
@@ -310,6 +320,7 @@ void QueueSettingsView::slotResetSettings()
 void QueueSettingsView::slotQueueSelected(int, const QueueSettings& settings, const AssignedBatchTools&)
 {
     d->useOrgAlbum->setChecked(settings.useOrgAlbum);
+    d->useMutiCoreCPU->setChecked(settings.useMultiCoreCPU);
     d->albumSel->setEnabled(!settings.useOrgAlbum);
     d->albumSel->setCurrentAlbumUrl(settings.workingUrl);
 
@@ -333,6 +344,7 @@ void QueueSettingsView::slotSettingsChanged()
 
     d->albumSel->setEnabled(!d->useOrgAlbum->isChecked());
     settings.useOrgAlbum         = d->useOrgAlbum->isChecked();
+    settings.useMultiCoreCPU     = d->useMutiCoreCPU->isChecked();
     settings.workingUrl          = d->albumSel->currentAlbumUrl();
 
     settings.renamingRule        = (QueueSettings::RenamingRule)d->renamingButtonGroup->checkedId();

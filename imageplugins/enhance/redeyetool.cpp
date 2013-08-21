@@ -211,7 +211,6 @@ RedEyeTool::RedEyeTool(QObject* const parent)
     // -------------------------------------------------------------
 
     setToolSettings(d->gboxSettings);
-    init();
 
     // -------------------------------------------------------------
 

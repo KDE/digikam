@@ -86,6 +86,7 @@ EmbossTool::EmbossTool(QObject* const parent)
     setObjectName("emboss");
     setToolName(i18n("Emboss"));
     setToolIcon(SmallIcon("embosstool"));
+    setInitPreview(true);
 
     // -------------------------------------------------------------
 
@@ -116,7 +117,6 @@ EmbossTool::EmbossTool(QObject* const parent)
     setToolSettings(d->gboxSettings);
     setToolView(d->previewWidget);
     setPreviewModeMask(PreviewToolBar::AllPreviewModes);
-    init();
 
     // -------------------------------------------------------------
 
@@ -125,10 +125,6 @@ EmbossTool::EmbossTool(QObject* const parent)
 
     connect(d->depthInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotTimer()));
-
-    // -------------------------------------------------------------
-
-    slotTimer();
 }
 
 EmbossTool::~EmbossTool()

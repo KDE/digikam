@@ -65,18 +65,18 @@ public:
 
 public:
 
-    explicit VisibilityController(QObject* parent);
+    explicit VisibilityController(QObject* const parent);
     ~VisibilityController();
 
     /** Set the widget containing the widgets added to this controller */
-    void setContainerWidget(QWidget* widget);
+    void setContainerWidget(QWidget* const widget);
 
     /** Add a widget to this controller */
-    void addWidget(QWidget* widget);
+    void addWidget(QWidget* const widget);
 
     /** Add an object implementing the VisibilityObject interface.
      *  You can use this if you have your widgets grouped in intermediate objects. */
-    void addObject(VisibilityObject* object);
+    void addObject(VisibilityObject* const object);
 
     /** Returns true if the contained objects are visible or becoming visible */
     bool isVisible() const;
@@ -99,8 +99,8 @@ protected:
 
 private:
 
-    class VisibilityControllerPriv;
-    VisibilityControllerPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

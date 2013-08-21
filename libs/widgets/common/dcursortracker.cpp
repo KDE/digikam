@@ -7,7 +7,7 @@
  * Description : A tool tip widget which follows cursor movements.
  *               Tool tip content is displayed without delay.
  *
- * Copyright (C) 2007-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -42,12 +42,12 @@
 namespace Digikam
 {
 
-class DCursorTrackerPriv
+class DCursorTracker::Private
 {
 
 public:
 
-    DCursorTrackerPriv()
+    Private()
     {
         keepOpen      = false;
         enable        = true;
@@ -62,14 +62,13 @@ public:
     QPointer<QWidget> parent;
 };
 
-DCursorTracker::DCursorTracker(const QString& txt, QWidget* parent, Qt::Alignment align)
-    : QLabel(txt, parent, Qt::ToolTip), d(new DCursorTrackerPriv)
+DCursorTracker::DCursorTracker(const QString& txt, QWidget* const parent, Qt::Alignment align)
+    : QLabel(txt, parent, Qt::ToolTip), d(new Private)
 {
-    d->parent = parent;
+    d->alignment = align;
+    d->parent    = parent;
     d->parent->setMouseTracking(true);
     d->parent->installEventFilter(this);
-
-    d->alignment = align;
 
     d->autoHideTimer = new QTimer(this);
     d->autoHideTimer->setSingleShot(true);
@@ -129,7 +128,7 @@ void DCursorTracker::slotAutoHide()
 
 bool DCursorTracker::eventFilter(QObject* object, QEvent* e)
 {
-    QWidget* widget = static_cast<QWidget*>(object);
+    QWidget* const widget = static_cast<QWidget*>(object);
 
     switch (e->type())
     {
@@ -168,7 +167,7 @@ bool DCursorTracker::eventFilter(QObject* object, QEvent* e)
     return false;
 }
 
-void DCursorTracker::moveToParent(QWidget* parent)
+void DCursorTracker::moveToParent(QWidget* const parent)
 {
     if (!parent)
     {
@@ -184,6 +183,7 @@ void DCursorTracker::moveToParent(QWidget* parent)
             move(p.x(), (y < 0) ? (p.y() + parent->height()) : y);
             break;
         }
+
         case Qt::AlignRight:
         {
             QPoint p = parent->mapToGlobal(QPoint(parent->width(), 0));
@@ -191,6 +191,7 @@ void DCursorTracker::moveToParent(QWidget* parent)
             move(p.x()-width(), (y < 0) ? (p.y() + parent->height()) : y);
             break;
         }
+
         case Qt::AlignCenter:
         default:
         {
@@ -208,7 +209,7 @@ bool DCursorTracker::canBeDisplayed()
 }
 
 
-DTipTracker::DTipTracker(const QString& txt, QWidget* parent, Qt::Alignment align)
+DTipTracker::DTipTracker(const QString& txt, QWidget* const parent, Qt::Alignment align)
     : DCursorTracker(txt, parent, align)
 {
     setPalette(QToolTip::palette());

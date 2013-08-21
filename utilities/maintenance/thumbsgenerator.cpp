@@ -39,17 +39,15 @@
 
 // Local includes
 
-#include "album.h"
 #include "albumdb.h"
 #include "albuminfo.h"
 #include "albummanager.h"
 #include "albumsettings.h"
 #include "databaseaccess.h"
 #include "imageinfo.h"
-#include "thumbnailloadthread.h"
-#include "thumbnailsize.h"
 #include "thumbnaildatabaseaccess.h"
 #include "thumbnaildb.h"
+#include "maintenancethread.h"
 #include "config-digikam.h"
 
 namespace Digikam
@@ -61,34 +59,33 @@ public:
 
     Private() :
         rebuildAll(true),
-        albumId(-1),
-        thumbLoadThread(0)
+        thread(0)
     {
     }
 
-    bool                 rebuildAll;
+    bool               rebuildAll;
 
-    int                  albumId;
+    AlbumList          albumList;
 
-    QStringList          allPicturesPath;
+    QStringList        allPicturesPath;
 
-    ThumbnailLoadThread* thumbLoadThread;
+    MaintenanceThread* thread;
 };
 
-ThumbsGenerator::ThumbsGenerator(bool rebuildAll, int albumId, ProgressItem* const parent)
+ThumbsGenerator::ThumbsGenerator(const bool rebuildAll, const AlbumList& list, ProgressItem* const parent)
     : MaintenanceTool("ThumbsGenerator", parent),
       d(new Private)
 {
-    ProgressManager::addProgressItem(this);
+    d->albumList = list;
+    init(rebuildAll);
+}
 
-    d->thumbLoadThread = ThumbnailLoadThread::defaultThread();
-    d->rebuildAll      = rebuildAll;
-    d->albumId         = albumId;
-
-    connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(LoadingDescription,QPixmap)),
-            this, SLOT(slotGotThumbnail(LoadingDescription,QPixmap)));
-
-    setLabel(i18n("Thumbs"));
+ThumbsGenerator::ThumbsGenerator(const bool rebuildAll, int albumId, ProgressItem* const parent)
+    : MaintenanceTool("ThumbsGenerator", parent),
+      d(new Private)
+{
+    d->albumList.append(AlbumManager::instance()->findPAlbum(albumId));
+    init(rebuildAll);
 }
 
 ThumbsGenerator::~ThumbsGenerator()
@@ -96,24 +93,43 @@ ThumbsGenerator::~ThumbsGenerator()
     delete d;
 }
 
+void ThumbsGenerator::init(const bool rebuildAll)
+{
+    setLabel(i18n("Thumbs"));
+    ProgressManager::addProgressItem(this);
+
+    d->rebuildAll = rebuildAll;
+    d->thread     = new MaintenanceThread(this);
+
+    connect(d->thread, SIGNAL(signalCompleted()),
+            this, SLOT(slotDone()));
+
+    connect(d->thread, SIGNAL(signalAdvance(QImage)),
+            this, SLOT(slotAdvance(QImage)));
+}
+
+void ThumbsGenerator::setUseMultiCoreCPU(bool b)
+{
+    d->thread->setUseMultiCore(b);
+}
+
+void ThumbsGenerator::slotCancel()
+{
+    d->thread->cancel();
+    MaintenanceTool::slotCancel();
+}
+
 void ThumbsGenerator::slotStart()
 {
     MaintenanceTool::slotStart();
 
-    // Get all digiKam albums collection pictures path.
-    AlbumList palbumList;
-
-    if (d->albumId == -1)
+    if (d->albumList.isEmpty())
     {
-        palbumList  = AlbumManager::instance()->allPAlbums();
-    }
-    else
-    {
-        palbumList.append(AlbumManager::instance()->findPAlbum(d->albumId));
+        d->albumList = AlbumManager::instance()->allPAlbums();
     }
 
-    for (AlbumList::const_iterator it = palbumList.constBegin();
-         !canceled() && (it != palbumList.constEnd()); ++it)
+    for (AlbumList::const_iterator it = d->albumList.constBegin();
+         !canceled() && (it != d->albumList.constEnd()); ++it)
     {
         if (!(*it))
         {
@@ -170,56 +186,15 @@ void ThumbsGenerator::slotStart()
     }
 
     setTotalItems(d->allPicturesPath.count());
-    processOne();
+
+    d->thread->generateThumbs(d->allPicturesPath);
+    d->thread->start();
 }
 
-void ThumbsGenerator::processOne()
+void ThumbsGenerator::slotAdvance(const QImage& img)
 {
-    if (canceled())
-    {
-        slotCancel();
-        return;
-    }
-
-    if (d->allPicturesPath.isEmpty())
-    {
-        slotDone();
-        return;
-    }
-
-    QString path = d->allPicturesPath.first();
-    d->thumbLoadThread->deleteThumbnail(path);
-    d->thumbLoadThread->find(path);
-}
-
-void ThumbsGenerator::slotGotThumbnail(const LoadingDescription& desc, const QPixmap& pix)
-{
-    if (d->allPicturesPath.isEmpty())
-    {
-        return;
-    }
-
-    if (d->allPicturesPath.first() != desc.filePath)
-    {
-        return;
-    }
-
-    setThumbnail(pix);
+    setThumbnail(QPixmap::fromImage(img));
     advance(1);
-
-    if (!d->allPicturesPath.isEmpty())
-    {
-        d->allPicturesPath.removeFirst();
-    }
-
-    if (d->allPicturesPath.isEmpty())
-    {
-        slotDone();
-    }
-    else
-    {
-        processOne();
-    }
 }
 
 }  // namespace Digikam

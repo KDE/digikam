@@ -74,6 +74,7 @@ public:
         libsInfoAction         = 0;
         about                  = 0;
         dbStatAction           = 0;
+        anim                   = 0;
     }
 
 public:
@@ -119,7 +120,7 @@ public:
     /** Store previous visibility of statusbar before ful-screen mode.
      */
     bool                     statusbarVisibility;
-    
+
     // Common Help actions
     KAction*                 dbStatAction;
     KAction*                 libsInfoAction;
