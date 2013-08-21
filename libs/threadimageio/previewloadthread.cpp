@@ -41,6 +41,11 @@ PreviewLoadThread::PreviewLoadThread(QObject* const parent)
 
 LoadingDescription PreviewLoadThread::createLoadingDescription(const QString& filePath, int size)
 {
+    return createLoadingDescription(filePath, size, IccManager::displayProfile(m_displayingWidget));
+}
+
+LoadingDescription PreviewLoadThread::createLoadingDescription(const QString& filePath, int size, const IccProfile& displayProfile)
+{
     LoadingDescription description(filePath, size);
 
     if (DImg::fileFormat(filePath) == DImg::RAW)
@@ -56,7 +61,14 @@ LoadingDescription PreviewLoadThread::createLoadingDescription(const QString& fi
     if (settings.enableCM && settings.useManagedPreviews)
     {
         description.postProcessingParameters.colorManagement = LoadingDescription::ConvertForDisplay;
-        description.postProcessingParameters.setProfile(IccManager::displayProfile(m_displayingWidget));
+        if (displayProfile.isNull())
+        {
+            description.postProcessingParameters.setProfile(IccProfile::sRGB());
+        }
+        else
+        {
+            description.postProcessingParameters.setProfile(displayProfile);
+        }
     }
 
     return description;
@@ -88,6 +100,19 @@ void PreviewLoadThread::load(const LoadingDescription& description)
 void PreviewLoadThread::setDisplayingWidget(QWidget* const widget)
 {
     m_displayingWidget = widget;
+}
+
+DImg PreviewLoadThread::loadSynchronously(const QString& filePath, int size, const IccProfile& profile)
+{
+    LoadingDescription description = createLoadingDescription(filePath, size, profile);
+    return loadSynchronously(description);
+}
+
+DImg PreviewLoadThread::loadSynchronously(const LoadingDescription& description)
+{
+    PreviewLoadingTask task(0, description);
+    task.execute();
+    return task.img();
 }
 
 }   // namespace Digikam

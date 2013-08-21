@@ -74,8 +74,8 @@ void MaintenanceThread::syncMetadata(const ImageInfoList& items, MetadataSynchro
         MetadataTask* const t = new MetadataTask();
         t->setItem(items.at(i), dir);
 
-        connect(t, SIGNAL(signalFinished()),
-                this, SIGNAL(signalAdvance()));
+        connect(t, SIGNAL(signalFinished(QImage)),
+                this, SIGNAL(signalAdvance(QImage)));
 
         connect(this, SIGNAL(signalCanceled()),
                 t, SLOT(slotCancel()), Qt::QueuedConnection);
@@ -116,8 +116,8 @@ void MaintenanceThread::generateFingerprints(const QStringList& paths)
         FingerprintsTask* const t = new FingerprintsTask();
         t->setItem(paths.at(i));
 
-        connect(t, SIGNAL(signalFinished(QPixmap)),
-                this, SIGNAL(signalAdvance(QPixmap)));
+        connect(t, SIGNAL(signalFinished(QImage)),
+                this, SIGNAL(signalAdvance(QImage)));
 
         connect(this, SIGNAL(signalCanceled()),
                 t, SLOT(slotCancel()), Qt::QueuedConnection);

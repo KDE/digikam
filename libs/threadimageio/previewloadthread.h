@@ -73,8 +73,12 @@ public:
     /// Optionally, set the displaying widget for color management
     void setDisplayingWidget(QWidget* const widget);
 
+    static DImg loadSynchronously(const QString& filePath, int size, const IccProfile& profile = IccProfile());
+    static DImg loadSynchronously(const LoadingDescription& description);
+
 protected:
 
+    static LoadingDescription createLoadingDescription(const QString& filePath, int size, const IccProfile& profile);
     LoadingDescription createLoadingDescription(const QString& filePath, int size);
 
 protected:

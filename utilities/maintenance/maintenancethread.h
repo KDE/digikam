@@ -59,11 +59,9 @@ public:
 
 Q_SIGNALS:
 
-    /** Emit when an item have been processed.
+    /** Emit when an item have been processed. QImage can be used to pass item thumbnail processed.
      */
-    void signalAdvance();
     void signalAdvance(const QImage&);
-    void signalAdvance(const QPixmap&);
 
     /** Emit when a items list have been fully processed.
      */

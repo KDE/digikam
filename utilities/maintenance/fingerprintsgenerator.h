@@ -29,7 +29,7 @@
 #include "album.h"
 #include "maintenancetool.h"
 
-class QPixmap;
+class QImage;
 
 namespace Digikam
 {
@@ -56,7 +56,7 @@ private Q_SLOTS:
     void slotStart();
     void slotDone();
     void slotCancel();
-    void slotAdvance(const QPixmap&);
+    void slotAdvance(const QImage&);
 
 private:
 

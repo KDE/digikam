@@ -42,12 +42,10 @@ public:
 
     Private()
     {
-        thumbLoadThread = ThumbnailLoadThread::defaultThread();
-        catcher         = 0;
+        catcher = 0;
     }
 
     QString                path;
-    ThumbnailLoadThread*   thumbLoadThread;
     ThumbnailImageCatcher* catcher;
 };
 
@@ -56,7 +54,7 @@ public:
 ThumbsTask::ThumbsTask()
     : Job(0), d(new Private)
 {
-    d->catcher = new ThumbnailImageCatcher(d->thumbLoadThread, this);
+    d->catcher = new ThumbnailImageCatcher(ThumbnailLoadThread::defaultThread(), this);
 }
 
 ThumbsTask::~ThumbsTask()
