@@ -24,6 +24,7 @@
 #include "showfotothumbnailbar.h"
 
 #include "KDebug"
+#include "QTimer"
 
 // Local includes
 
@@ -32,6 +33,10 @@
 #include "showfotosettings.h"
 #include "showfotooverlays.h"
 #include "showfotodragdrop.h"
+#include "itemviewtooltip.h"
+#include "showfototooltipfiller.h"
+#include "showfotocategorizedview.h"
+#include "imageselectionoverlay.h"
 
 namespace ShowFoto {
 
@@ -45,7 +50,7 @@ public:
         duplicatesFilter = 0;
     }
 
-    Qt::ScrollBarPolicy            scrollPolicy;
+    Qt::ScrollBarPolicy              scrollPolicy;
     NoDuplicatesShowfotoFilterModel* duplicatesFilter;
 };
 
@@ -58,10 +63,11 @@ ShowfotoThumbnailBar::ShowfotoThumbnailBar(QWidget* const parent)
     setScrollStepGranularity(5);
     setScrollBarPolicy(Qt::ScrollBarAlwaysOn);
 
-//    showfotoImageModel()->setDragDropHandler(new ShowfotoDragDropHandler(showfotoImageModel()));
     setDragEnabled(true);
     setAcceptDrops(true);
     setDropIndicatorShown(false);
+
+    setToolTipEnabled(ShowfotoSettings::instance()->showToolTipsIsValid());
 
     connect(ShowfotoSettings::instance(), SIGNAL(setupChanged()),
             this, SLOT(slotSetupChanged()));
@@ -108,6 +114,12 @@ void ShowfotoThumbnailBar::slotDockLocationChanged(Qt::DockWidgetArea area)
 
     scrollTo(currentIndex());
 }
+
+//TODO:
+//void ShowfotoThumbnailBar::addSelectionOverlay(ShowfotoDelegate* delegate)
+//{
+//    addOverlay(new ImageSelectionOverlay(this), delegate);
+//}
 
 void ShowfotoThumbnailBar::setScrollBarPolicy(Qt::ScrollBarPolicy policy)
 {

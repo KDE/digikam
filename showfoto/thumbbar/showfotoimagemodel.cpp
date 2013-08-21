@@ -104,6 +104,7 @@ ShowfotoImageModel::ShowfotoImageModel(QObject* const parent)
     : QAbstractListModel(parent),
       d(new Private)
 {
+    d->incrementalUpdater = new ShowfotoImageModelIncrementalUpdater(d);
 }
 
 
@@ -592,8 +593,6 @@ void ShowfotoImageModel::cleanSituationChecks()
         emit allRefreshingFinished();
     }
 }
-
-
 
 void ShowfotoImageModel::publiciseInfos(const QList<ShowfotoItemInfo>& infos)
 {

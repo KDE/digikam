@@ -17,7 +17,6 @@ using namespace Digikam;
 
 namespace ShowFoto {
 
-
 class ShowfotoItemViewToolTip : public ItemViewToolTip
 {
 public:

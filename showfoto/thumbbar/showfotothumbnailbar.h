@@ -30,6 +30,8 @@
 
 namespace ShowFoto {
 
+class ShowfotoItemViewToolTip;
+
 class ShowfotoThumbnailBar : public ShowfotoCategorizedView
 {
     Q_OBJECT
@@ -56,6 +58,9 @@ public:
 
     void installRatingOverlay();
     ShowfotoItemInfo findItemByUrl(const KUrl url);
+
+    //Implement this function
+    //void addSelectionOverlay(ShowfotoDelegate* delegate);
 
 public Q_SLOTS:
 

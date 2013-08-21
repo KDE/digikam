@@ -663,19 +663,19 @@ bool ShowfotoSettings::showToolTipsIsValid() const
 {
     if (d->showToolTips)
     {
-        if (d->tooltipShowFileName   ||
-            d->tooltipShowFileDate   ||
-            d->tooltipShowFileSize   ||
-            d->tooltipShowImageType  ||
-            d->tooltipShowImageDim   ||
-            d->tooltipShowPhotoMake  ||
-            d->tooltipShowPhotoFocal ||
-            d->tooltipShowPhotoExpo  ||
-            d->tooltipShowPhotoFlash ||
-            d->tooltipShowPhotoWb    ||
-            d->tooltipShowFolderName ||
-            d->tooltipShowLabelRating) /*||
-            d->tooltipShowTags)*/
+        if (d->tooltipShowFileName)  // ||
+            //d->tooltipShowFileDate)   ||
+//            d->tooltipShowFileSize   ||
+//            d->tooltipShowImageType  ||
+//            d->tooltipShowImageDim   ||
+//            d->tooltipShowPhotoMake  ||
+//            d->tooltipShowPhotoFocal ||
+//            d->tooltipShowPhotoExpo  ||
+//            d->tooltipShowPhotoFlash ||
+//            d->tooltipShowPhotoWb    ||
+//            d->tooltipShowFolderName ||
+//            d->tooltipShowLabelRating ||
+//            d->tooltipShowTags)
         {
             return true;
         }

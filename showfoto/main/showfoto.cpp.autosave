@@ -411,7 +411,6 @@ void ShowFoto::setupUserArea()
 
     d->filterModel->setCategorizationMode(ShowfotoItemSortSettings::NoCategories);
     d->filterModel->setSortRole((ShowfotoItemSortSettings::SortRole)ShowfotoSettings::instance()->getImageSortOrder());
-    //d->filterModel->setSortOrder((ShowfotoItemSortSettings::SortRole)ShowfotoSettings::instance()->getImageSortOrder());
     d->filterModel->sort(0);
 
     d->thumbBar->setModels(d->model, d->filterModel);

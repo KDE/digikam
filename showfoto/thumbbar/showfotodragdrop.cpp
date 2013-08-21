@@ -230,4 +230,4 @@ ShowfotoImageModel* ShowfotoDragDropHandler::model() const
     return static_cast<ShowfotoImageModel*>(m_model);
 }
 
-} // namespace Digikam
+} // namespace ShowFoto
