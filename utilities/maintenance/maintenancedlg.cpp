@@ -30,6 +30,7 @@
 #include <QCheckBox>
 #include <QGridLayout>
 #include <QComboBox>
+#include <QScrollArea>
 
 // Libkdcraw includes
 
@@ -156,8 +157,15 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
     setButtons(Ok | Help | Cancel);
     setDefaultButton(Cancel);
 
-    QWidget* const page     = new QWidget(this);
-    setMainWidget(page);
+    QScrollArea* const main = new QScrollArea(this);
+    QWidget* const page     = new QWidget(main->viewport());
+    main->setWidget(page);
+    main->setWidgetResizable(true);
+    main->setAutoFillBackground(false);
+    main->viewport()->setAutoFillBackground(false);
+    page->setAutoFillBackground(false);
+    
+    setMainWidget(main);
 
     QGridLayout* const grid = new QGridLayout(page);
 
@@ -230,7 +238,7 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
     d->qualityScanMode  = new QComboBox(hbox11);
     d->qualityScanMode->addItem(i18n("Clean all and re-scan"),  ImageQualitySorter::AllItems);
     d->qualityScanMode->addItem(i18n("Scan non-assigned only"), ImageQualitySorter::NonAssignedItems);
-    
+
     KHBox* const hbox12  = new KHBox(d->vbox);
     new QLabel(i18n("Check quality sorter setup panel for details: "), hbox12);
     QWidget* const space2 = new QWidget(hbox12);
@@ -239,7 +247,7 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
     d->expanderBox->insertItem(Private::ImageQualitySorter, d->vbox, SmallIcon("flag-green"),
                                i18n("Image Quality Sorter"), "ImageQualitySorter", false);
     d->expanderBox->setCheckBoxVisible(Private::ImageQualitySorter, true);
-    
+
     // --------------------------------------------------------------------------------------
 
     d->vbox2             = new KVBox;
@@ -285,12 +293,12 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
 
     connect(d->metadataSetup, SIGNAL(clicked()),
             this, SLOT(slotMetadataSetup()));
-    
+
     connect(d->qualitySetup, SIGNAL(clicked()),
             this, SLOT(slotQualitySetup()));
+
+    // --------------------------------------------------------------------------------------
     
-    setMinimumSize(500, 350);
-    adjustSize();
     readSettings();
 }
 
@@ -362,6 +370,8 @@ void MaintenanceDlg::readSettings()
     {
         slotItemToggled(i, d->expanderBox->isChecked(i));
     }
+    
+    restoreDialogSize(group);
 }
 
 void MaintenanceDlg::writeSettings()
@@ -387,6 +397,8 @@ void MaintenanceDlg::writeSettings()
     group.writeEntry(d->configQualityScanMode,     prm.qualityScanMode);
     group.writeEntry(d->configMetadataSync,        prm.metadataSync);
     group.writeEntry(d->configSyncDirection,       prm.syncDirection);
+    
+    saveDialogSize(group);
 }
 
 void MaintenanceDlg::slotItemToggled(int index, bool b)
@@ -412,7 +424,7 @@ void MaintenanceDlg::slotItemToggled(int index, bool b)
         case Private::ImageQualitySorter:
             d->vbox->setEnabled(b);
             break;
-            
+
         case Private::MetadataSync:
             d->vbox2->setEnabled(b);
             break;
