@@ -34,6 +34,7 @@
 #include "facescansettings.h"
 #include "imagequalitysettings.h"
 #include "metadatasynchronizer.h"
+#include "imagequalitysorter.h"
 
 namespace Digikam
 {
@@ -82,8 +83,8 @@ public:
 
     /// Perform Image Quality Sorting.
     bool                 qualitySort;
-    /// Assign Pick Labels for all items or only scan missing items.
-    bool                 scanQuality;
+    /// Mode to assign Pick Labels to items.
+    int                  qualityScanMode;
     /// Image Quality Sorting Settings.
     ImageQualitySettings quality;
     

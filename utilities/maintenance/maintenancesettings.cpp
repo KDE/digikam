@@ -46,7 +46,7 @@ MaintenanceSettings::MaintenanceSettings()
     faceManagement     = false;
     
     qualitySort        = false;
-    scanQuality        = true;   // NOTE: turn on by default to prevent clearing whole Pick Labels from Collection
+    qualityScanMode    = true;   // NOTE: turn on by default to prevent clearing whole Pick Labels from Collection
     
     metadataSync       = false;
     syncDirection      = MetadataSynchronizer::WriteFromDatabaseToFile;
@@ -76,7 +76,7 @@ QDebug operator<<(QDebug dbg, const MaintenanceSettings& s)
     dbg.nospace() << "faceScannedHandling : " << s.faceSettings.alreadyScannedHandling << endl;
     dbg.nospace() << "qualitySort         : " << s.qualitySort << endl;
     dbg.nospace() << "quality             : " << s.quality << endl;
-    dbg.nospace() << "scanQuality         : " << s.scanQuality << endl;
+    dbg.nospace() << "qualityScanMode     : " << s.qualityScanMode << endl;
     dbg.nospace() << "metadataSync        : " << s.metadataSync << endl;
     dbg.nospace() << "syncDirection       : " << s.syncDirection << endl;
     return dbg.space();

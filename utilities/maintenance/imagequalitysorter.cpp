@@ -49,12 +49,12 @@ class ImageQualitySorter::Private
 public:
 
     Private() :
-        rebuildAll(true),
+        mode(ImageQualitySorter::NonAssignedItems),
         thread(0)
     {
     }
 
-    bool                 rebuildAll;
+    QualityScanMode      mode;
 
     ImageQualitySettings quality;
 
@@ -65,7 +65,7 @@ public:
     MaintenanceThread*   thread;
 };
 
-ImageQualitySorter::ImageQualitySorter(const bool rebuildAll, const AlbumList& list,
+ImageQualitySorter::ImageQualitySorter(QualityScanMode mode, const AlbumList& list,
                                        const ImageQualitySettings& quality, ProgressItem* const parent)
     : MaintenanceTool("ImageQualitySorter", parent),
       d(new Private)
@@ -73,7 +73,7 @@ ImageQualitySorter::ImageQualitySorter(const bool rebuildAll, const AlbumList& l
     setLabel(i18n("Image Quality Sorter"));
     ProgressManager::addProgressItem(this);
 
-    d->rebuildAll = rebuildAll;
+    d->mode       = mode;
     d->albumList  = list;
     d->quality    = quality;
     d->thread     = new MaintenanceThread(this);
@@ -120,7 +120,7 @@ void ImageQualitySorter::slotStart()
     {
         QStringList aPaths = DatabaseAccess().db()->getItemURLsInAlbum((*it)->id());
 
-        if (!d->rebuildAll)
+        if (d->mode == NonAssignedItems)
         {
             foreach(QString path, aPaths)
             {
@@ -130,7 +130,7 @@ void ImageQualitySorter::slotStart()
                 }
             }
         }
-        else
+        else  // AllItems
         {
             d->allPicturesPath += aPaths;
         }
