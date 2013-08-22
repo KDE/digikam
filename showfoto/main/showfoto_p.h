@@ -4,13 +4,13 @@
 #include "showfoto.h"
 #include "thumbbar.h"
 #include "QDir"
-#include "thumbbar/showfotoiteminfo.h"
-#include "thumbbar/showfotothumbnailbar.h"
-#include "thumbbar/showfotomodel.h"
+#include "showfotoiteminfo.h"
+#include "showfotothumbnailbar.h"
+#include "showfotomodel.h"
 #include "splashscreen.h"
 #include "imagepropertiessidebar.h"
-#include "thumbbar/showfotodragdrop.h"
-#include "thumbbar/showfotodelegate.h"
+#include "showfotodragdrop.h"
+#include "showfotodelegate.h"
 
 namespace ShowFoto {
 

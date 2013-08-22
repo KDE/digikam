@@ -123,9 +123,9 @@ extern "C"
 #include "thumbnailsize.h"
 #include "uifilevalidator.h"
 #include "knotificationwrapper.h"
-#include "thumbbar/showfotosettings.h"
-#include "thumbbar/showfotodelegate.h"
-#include "thumbbar/showfotocategorizedview.h"
+#include "showfotosettings.h"
+#include "showfotodelegate.h"
+#include "showfotocategorizedview.h"
 #include "showfoto_p.h"
 
 namespace ShowFoto

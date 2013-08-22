@@ -3,8 +3,8 @@ SET_DEBUG_AREA_CODE(${AREA_CODE_SHOWFOTO})
 # We need to include the setup dir for showfoto BEFORE the other include dirs,
 # otherwise the one from the "utilities" dir will be used
 INCLUDE_DIRECTORIES(BEFORE
+        ${CMAKE_CURRENT_SOURCE_DIR}/thumbbar
         ${CMAKE_CURRENT_SOURCE_DIR}/setup
-	${CMAKE_CURRENT_SOURCE_DIR}/thumbbar
         ${CMAKE_CURRENT_SOURCE_DIR}/main
 )
 
