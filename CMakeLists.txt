@@ -1514,6 +1514,9 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/tagsmanager/tagpropwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/tagsmanager/taglist.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/tagsmanager/tagmngrtreeview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/tagsmanager/models/tagmngrlistview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/tagsmanager/models/tagmngrlistmodel.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/tagsmanager/models/tagmngrlistitem.cpp
 
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/utils/albumsettings.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/utils/contextmenuhelper.cpp
@@ -1581,6 +1584,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/models
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/tagsmanager
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/tagsmanager/models
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/utils
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views
         ${CMAKE_CURRENT_SOURCE_DIR}/imageplugins
