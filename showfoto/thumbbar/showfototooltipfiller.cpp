@@ -72,12 +72,12 @@ QString ShowfotoToolTipFiller::ShowfotoItemInfoTipContents(const ShowfotoItemInf
             tip += info.name + cnt.cellEnd;
         }
 
-//        if (settings->getToolTipsShowFileDate())
-//        {
-//            QDateTime createdDate  = info.ctime;
-//            str                     = KGlobal::locale()->formatDateTime(createdDate, KLocale::ShortDate, true);
-//            tip                    += cnt.cellBeg + i18n("Date:") + cnt.cellMid + str + cnt.cellEnd;
-//        }
+        if (settings->getToolTipsShowFileDate())
+        {
+            QDateTime createdDate  = info.ctime;
+            str                     = KGlobal::locale()->formatDateTime(createdDate, KLocale::ShortDate, true);
+            tip                    += cnt.cellBeg + i18n("Date:") + cnt.cellMid + str + cnt.cellEnd;
+        }
 
         if (settings->getToolTipsShowFileSize())
         {
@@ -89,28 +89,25 @@ QString ShowfotoToolTipFiller::ShowfotoItemInfoTipContents(const ShowfotoItemInf
 
         QSize dims;
 
-        if (settings->getToolTipsShowImageType())
-        {
+
             tip += cnt.cellBeg + i18n("Type:") + cnt.cellMid + info.mime + cnt.cellEnd;
-        }
 
-//        if (settings->getToolTipsShowImageDim())
-//        {
-//            if (info.width == 0 || info.height == 0 || info.width == -1 || info.height == -1)
-//            {
-//                str = i18nc("unknown / invalid image dimension",
-//                            "Unknown");
-//            }
-//            else
-//            {
-//                QString mpixels;
-//                mpixels.setNum(info.width*info.height/1000000.0, 'f', 2);
-//                str = i18nc("width x height (megapixels Mpx)", "%1x%2 (%3Mpx)",
-//                            info.width, info.height, mpixels);
-//            }
 
-//            tip += cnt.cellBeg + i18n("Dimensions:") + cnt.cellMid + str + cnt.cellEnd;
-//        }
+            if (info.width == 0 || info.height == 0 || info.width == -1 || info.height == -1)
+            {
+                str = i18nc("unknown / invalid image dimension",
+                            "Unknown");
+            }
+            else
+            {
+                QString mpixels;
+                mpixels.setNum(info.width*info.height/1000000.0, 'f', 2);
+                str = i18nc("width x height (megapixels Mpx)", "%1x%2 (%3Mpx)",
+                            info.width, info.height, mpixels);
+            }
+
+            tip += cnt.cellBeg + i18n("Dimensions:") + cnt.cellMid + str + cnt.cellEnd;
+
     }
 
     // -- Photograph Info -----------------------------------------------------------------------

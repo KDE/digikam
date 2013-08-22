@@ -118,7 +118,7 @@ static DropAction groupAction(const QDropEvent*, QWidget* view)
 }
 */
 
-bool ShowfotoDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDropEvent* e, const QModelIndex& droppedOn)
+bool ShowfotoDragDropHandler::dropEvent(QAbstractItemView* /*abstractview*/, const QDropEvent* /*e*/, const QModelIndex& /*droppedOn*/)
 {
 //    ShowfotoCategorizedView* const view = static_cast<ShowfotoCategorizedView*>(abstractview);
 
@@ -164,7 +164,7 @@ bool ShowfotoDragDropHandler::dropEvent(QAbstractItemView* abstractview, const Q
     return false;
 }
 
-Qt::DropAction ShowfotoDragDropHandler::accepts(const QDropEvent* e, const QModelIndex& /*dropIndex*/)
+Qt::DropAction ShowfotoDragDropHandler::accepts(const QDropEvent* /*e*/, const QModelIndex& /*dropIndex*/)
 {
 //    if (Digikam::DItemDrag::canDecode(e->mimeData()) || KUrl::List::canDecode(e->mimeData()))
 //    {

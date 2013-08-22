@@ -123,9 +123,9 @@ extern "C"
 #include "thumbnailsize.h"
 #include "uifilevalidator.h"
 #include "knotificationwrapper.h"
-#include "showfotosettings.h"
-#include "showfotodelegate.h"
-#include "showfotocategorizedview.h"
+#include "thumbbar/showfotosettings.h"
+#include "thumbbar/showfotodelegate.h"
+#include "thumbbar/showfotocategorizedview.h"
 #include "showfoto_p.h"
 
 namespace ShowFoto
@@ -563,6 +563,7 @@ void ShowFoto::slotOpenFile()
 
         ShowfotoItemInfoList infos;
         ShowfotoItemInfo iteminfo;
+        DMetadata meta;
         int i = 0;
         for (KUrl::List::const_iterator it = urls.constBegin();
              it != urls.constEnd(); ++it)
@@ -574,6 +575,11 @@ void ShowFoto::slotOpenFile()
             iteminfo.size = fi.size();
             iteminfo.url  = fi.filePath();
             iteminfo.folder = fi.path();
+            meta.load(fi.filePath());
+            iteminfo.ctime = meta.getImageDateTime();
+            iteminfo.width = meta.getImageDimensions().width();
+            iteminfo.height = meta.getImageDimensions().height();
+            iteminfo.photoInfo = meta.getPhotographInformation();
             infos.append(iteminfo);
             i++;
         }
@@ -1232,6 +1238,7 @@ void ShowFoto::openFolder(const KUrl& url)
 
     QFileInfoList::const_iterator fi;
     ShowfotoItemInfo iteminfo;
+    DMetadata meta;
     int i = 0;
 
     // And open all items in image editor.
@@ -1245,6 +1252,11 @@ void ShowFoto::openFolder(const KUrl& url)
         iteminfo.size = (*fi).size();
         iteminfo.folder = (*fi).path();
         iteminfo.url = (*fi).filePath();
+        meta.load((*fi).filePath());
+        iteminfo.ctime = meta.getImageDateTime();
+        iteminfo.width = meta.getImageDimensions().width();
+        iteminfo.height = meta.getImageDimensions().height();
+        iteminfo.photoInfo = meta.getPhotographInformation();
         d->infoList.append(iteminfo);
 
         i++;

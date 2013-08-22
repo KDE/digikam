@@ -74,6 +74,9 @@ public:
     PhotoInfoContainer photoInfo;
     int                rating;
 
+    QDateTime          ctime;
+    int                width;                // Image width in pixels
+    int                height;               // Image height in pixels
 };
 
 QDataStream& operator<<(QDataStream&, const ShowfotoItemInfo&);

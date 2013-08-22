@@ -255,9 +255,9 @@ void ShowfotoSettings::init()
     d->toolTipsFont                 = KGlobalSettings::generalFont();
     d->showToolTips                 = false;
     d->tooltipShowFileName          = true;
-    d->tooltipShowFileDate          = false;
-    d->tooltipShowFileSize          = false;
-    d->tooltipShowImageType         = false;
+    d->tooltipShowFileDate          = true;
+    d->tooltipShowFileSize          = true;
+    d->tooltipShowImageType         = true;
     d->tooltipShowImageDim          = true;
     d->tooltipShowPhotoMake         = true;
     d->tooltipShowPhotoFocal        = true;
@@ -663,25 +663,25 @@ bool ShowfotoSettings::showToolTipsIsValid() const
 {
     if (d->showToolTips)
     {
-        if (d->tooltipShowFileName)  // ||
-            //d->tooltipShowFileDate)   ||
-//            d->tooltipShowFileSize   ||
-//            d->tooltipShowImageType  ||
-//            d->tooltipShowImageDim   ||
-//            d->tooltipShowPhotoMake  ||
-//            d->tooltipShowPhotoFocal ||
-//            d->tooltipShowPhotoExpo  ||
-//            d->tooltipShowPhotoFlash ||
-//            d->tooltipShowPhotoWb    ||
-//            d->tooltipShowFolderName ||
-//            d->tooltipShowLabelRating ||
-//            d->tooltipShowTags)
+        if (d->tooltipShowFileName   ||
+            d->tooltipShowFileDate   ||
+            d->tooltipShowFileSize   ||
+            d->tooltipShowImageType  ||
+            d->tooltipShowImageDim   ||
+            d->tooltipShowPhotoMake  ||
+            d->tooltipShowPhotoFocal ||
+            d->tooltipShowPhotoExpo  ||
+            d->tooltipShowPhotoFlash ||
+            d->tooltipShowPhotoWb    ||
+            d->tooltipShowFolderName ||
+            d->tooltipShowLabelRating ||
+            d->tooltipShowTags)
         {
             return true;
         }
     }
-
-    return false;
+    qDebug()<< "false";
+    return true;
 }
 
 void ShowfotoSettings::setShowThumbbar(bool val)
