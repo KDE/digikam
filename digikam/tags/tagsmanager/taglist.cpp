@@ -25,12 +25,15 @@
 #include <QVBoxLayout>
 #include <QListWidget>
 #include <QPushButton>
+#include <QVariant>
 
 #include <kdebug.h>
 
 #include "taglist.h"
 #include "albumtreeview.h"
 #include "tagfolderview.h"
+#include "tagmngrlistmodel.h"
+#include "tagmngrlistview.h"
 
 namespace Digikam {
 
@@ -39,14 +42,17 @@ class TagList::TagListPriv
 public:
     TagListPriv()
     {
-        addButton   = 0;
-        tagList     = 0;
-        treeView    = 0;
+        addButton       = 0;
+        tagList         = 0;
+        tagListModel    = 0;
+        treeView        = 0;
     }
 
-    QPushButton*    addButton;
-    QListWidget*    tagList;
-    TagFolderView*  treeView;
+    QPushButton*        addButton;
+    TagMngrListView*    tagList;
+    TagMngrListModel*   tagListModel;
+    TagFolderView*      treeView;
+
 };
 
 TagList::TagList(TagFolderView* treeView, QWidget* parent)
@@ -56,10 +62,11 @@ TagList::TagList(TagFolderView* treeView, QWidget* parent)
 
     QVBoxLayout* layout = new QVBoxLayout();
     d->addButton    = new QPushButton("(+)");
-    d->tagList      = new QListWidget(this);
+    d->tagList      = new TagMngrListView(this);
+    d->tagListModel = new TagMngrListModel(QString("All Tags"));
 
-    d->tagList->addItem("All Tags");
-    d->tagList->setCurrentRow(0);
+    d->tagList->setModel(d->tagListModel);
+    d->tagList->setSpacing(3);
 
     layout->addWidget(d->addButton);
     layout->addWidget(d->tagList);
@@ -86,8 +93,7 @@ void TagList::slotAddPressed()
 
     TAlbum* album = static_cast<TAlbum*>(d->treeView->albumForIndex(selected.first()));
 
-    d->tagList->addItem(album->title());
-    d->tagList->setCurrentRow(d->tagList->count()-1);
+    d->tagListModel->addItem(QVariant(album->title()));
 
 }
 

@@ -39,6 +39,12 @@ public:
     ~TagMngrListModel();
 
     /**
+     * @brief addItem   - add new item to list
+     * @param value     - usually a QString with displayed name
+     */
+    void addItem(QVariant value);
+
+    /**
      * Standard methods to be implemented when subcassing QAbstractItemModel
      */
     QVariant data(const QModelIndex &index, int role) const;

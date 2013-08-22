@@ -40,6 +40,13 @@ TagMngrListModel::~TagMngrListModel()
     delete rootItem;
 }
 
+void TagMngrListModel::addItem(QVariant value)
+{
+    emit layoutAboutToBeChanged();
+    rootItem->appendChild(new ListItem(QList<QVariant>() << value, rootItem));
+    emit layoutChanged();
+}
+
 int TagMngrListModel::columnCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
@@ -168,12 +175,17 @@ QVariant TagMngrListModel::data(const QModelIndex &index, int role) const
 
     if(role == Qt::SizeHintRole)
         return QSize(30,30);
-    if (role != Qt::DisplayRole)
-        return QVariant();
 
-    ListItem *item = static_cast<ListItem*>(index.internalPointer());
+    if(role == Qt::DisplayRole)
+    {
+        ListItem *item = static_cast<ListItem*>(index.internalPointer());
+        return item->data(index.column());
+    }
 
-    return item->data(index.column());
+    if(role == Qt::TextAlignmentRole)
+        return Qt::AlignCenter;
+
+    return QVariant();
 }
 
 Qt::ItemFlags TagMngrListModel::flags(const QModelIndex &index) const
