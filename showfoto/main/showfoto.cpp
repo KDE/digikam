@@ -218,9 +218,15 @@ ShowFoto::ShowFoto(const KUrl::List& urlList)
 
     d->rightSideBar->loadState();
 
+    //--------------------------------------------------
+
+    d->thumbBarDock->reInitialize();
+
     // -- Load current items ---------------------------
 
-//    emit signalLoadCurrentItem(urlList);
+    emit slotOpenFilesInFolder();
+
+
 }
 
 ShowFoto::~ShowFoto()
@@ -415,14 +421,10 @@ void ShowFoto::setupUserArea()
 
     d->thumbBar->setModels(d->model, d->filterModel);
     d->thumbBar->setSelectionMode(QAbstractItemView::SingleSelection);
-    d->thumbBar->installRatingOverlay();
     d->thumbBar->setModelsFiltered(d->model,d->filterModel);
-    d->thumbBar->setFlow(QListView::TopToBottom);
 
     viewContainer->setAutoSaveSettings("ImageViewer Thumbbar", true);
 
-
-    d->thumbBarDock->reInitialize();
 //        TODO: Implement selection overlay
 //        d->normalDelegate = new ShowfotoNormalDelegate(d->thumbBar);
 //        d->thumbBar->addSelectionOverlay(d->normalDelegate);
@@ -529,23 +531,6 @@ void ShowFoto::applySettings()
         m_fileDeleteAction->setIcon(KIcon("edit-delete"));
         m_fileDeleteAction->setText(i18n("Delete File"));
     }
-
-//    ThumbBarToolTipSettings settings;
-//    settings.showToolTips   = group.readEntry("Show ToolTips",             true);
-//    settings.font           = group.readEntry("ToolTips Font",             KGlobalSettings::generalFont());
-//    settings.showFileName   = group.readEntry("ToolTips Show File Name",   true);
-//    settings.showFileDate   = group.readEntry("ToolTips Show File Date",   false);
-//    settings.showFileSize   = group.readEntry("ToolTips Show File Size",   false);
-//    settings.showImageType  = group.readEntry("ToolTips Show Image Type",  false);
-//    settings.showImageDim   = group.readEntry("ToolTips Show Image Dim",   true);
-//    settings.showPhotoMake  = group.readEntry("ToolTips Show Photo Make",  true);
-//    settings.showPhotoDate  = group.readEntry("ToolTips Show Photo Date",  true);
-//    settings.showPhotoFocal = group.readEntry("ToolTips Show Photo Focal", true);
-//    settings.showPhotoExpo  = group.readEntry("ToolTips Show Photo Expo",  true);
-//    settings.showPhotoMode  = group.readEntry("ToolTips Show Photo Mode",  true);
-//    settings.showPhotoFlash = group.readEntry("ToolTips Show Photo Flash", false);
-//    settings.showPhotoWB    = group.readEntry("ToolTips Show Photo WB",    false);
-//    d->thumbBar->setToolTipSettings(settings);
 }
 
 void ShowFoto::slotOpenFile()

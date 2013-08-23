@@ -87,8 +87,6 @@ QString ShowfotoToolTipFiller::ShowfotoItemInfoTipContents(const ShowfotoItemInf
             tip += str + cnt.cellEnd;
         }
 
-        QSize dims;
-
 
             tip += cnt.cellBeg + i18n("Type:") + cnt.cellMid + info.mime + cnt.cellEnd;
 

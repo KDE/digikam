@@ -73,7 +73,7 @@ ShowfotoThumbnailBar::ShowfotoThumbnailBar(QWidget* const parent)
             this, SLOT(slotSetupChanged()));
 
     slotSetupChanged();
-    setFlow(LeftToRight);
+//    setFlow(TopToBottom);
 }
 
 ShowfotoThumbnailBar::~ShowfotoThumbnailBar()

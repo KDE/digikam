@@ -680,7 +680,6 @@ bool ShowfotoSettings::showToolTipsIsValid() const
             return true;
         }
     }
-    qDebug()<< "false";
     return true;
 }
 
