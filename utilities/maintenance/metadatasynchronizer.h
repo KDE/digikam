@@ -43,7 +43,7 @@ public:
 
     enum SyncDirection
     {
-        WriteFromDatabaseToFile = 1,
+        WriteFromDatabaseToFile = 0,
         ReadFromFileToDatabase
     };
 
