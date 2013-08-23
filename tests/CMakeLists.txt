@@ -268,15 +268,15 @@ SET(databasefieldstest_SRCS
     databasefieldstest.cpp
    )
 
-KDE4_ADD_UNIT_TEST(databasefieldstest ${databasefieldstest_SRCS})
+#KDE4_ADD_UNIT_TEST(databasefieldstest ${databasefieldstest_SRCS})
 
-TARGET_LINK_LIBRARIES(databasefieldstest
-                      ${KDE4_KDECORE_LIBS}
-                      ${QT_QTGUI_LIBRARY}
-                      ${QT_QTTEST_LIBRARY}
-                      ${KEXIV2_LIBRARIES}
-                      digikamcore
-                     )
+#TARGET_LINK_LIBRARIES(databasefieldstest
+#                      ${KDE4_KDECORE_LIBS}
+#                      ${QT_QTGUI_LIBRARY}
+#                      ${QT_QTTEST_LIBRARY}
+#                      ${KEXIV2_LIBRARIES}
+#                      digikamcore
+#                     )
 
 #------------------------------------------------------------------------
 
