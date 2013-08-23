@@ -47,7 +47,7 @@ ImageQualitySettings::ImageQualitySettings()
 ImageQualitySettings::~ImageQualitySettings()
 {
 }
-    
+
 void ImageQualitySettings::readFromConfig()
 {
     KSharedConfig::Ptr config = KGlobal::config();
@@ -89,7 +89,7 @@ QDebug operator<<(QDebug dbg, const ImageQualitySettings& s)
     dbg.nospace() << "MediumQPending    : " << s.mediumQPending << endl;
     dbg.nospace() << "HighQAccepted     : " << s.highQAccepted << endl;
     dbg.nospace() << "Speed             : " << s.speed << endl;
-    
+
     return dbg.space();
 }
 

@@ -46,7 +46,7 @@ public:
         AllItems = 0,        // Clean all Pick Labels assignements and re-scan all items.
         NonAssignedItems     // Scan only items with no Pick Labels assigned.
     };
-    
+
 public:
 
     /** Constructor using AlbumList as argument. If list is empty, whole Albums collection is processed.

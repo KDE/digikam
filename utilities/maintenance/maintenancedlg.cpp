@@ -164,7 +164,7 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
     main->setAutoFillBackground(false);
     main->viewport()->setAutoFillBackground(false);
     page->setAutoFillBackground(false);
-    
+
     setMainWidget(main);
 
     QGridLayout* const grid = new QGridLayout(page);
@@ -298,7 +298,7 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
             this, SLOT(slotQualitySetup()));
 
     // --------------------------------------------------------------------------------------
-    
+
     readSettings();
 }
 
@@ -331,7 +331,7 @@ MaintenanceSettings MaintenanceDlg::settings() const
     prm.faceSettings.alreadyScannedHandling = (FaceScanSettings::AlreadyScannedHandling)d->faceScannedHandling->itemData(d->syncDirection->currentIndex()).toInt();
     prm.faceSettings.albums                 = d->albumSelectors->selectedAlbums();
     prm.qualitySort                         = d->expanderBox->isChecked(Private::ImageQualitySorter);
-    prm.qualityScanMode                     = d->qualityScanMode->currentIndex();
+    prm.qualityScanMode                     = d->qualityScanMode->itemData(d->syncDirection->currentIndex()).toInt();
     ImageQualitySettings imgq;
     imgq.readFromConfig();
     prm.quality                             = imgq;

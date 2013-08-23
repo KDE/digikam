@@ -39,7 +39,7 @@ namespace Digikam
 {
 
 class ImageQualitySettings;
-    
+
 class ImageQualityTask : public Job
 {
     Q_OBJECT
