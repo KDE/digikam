@@ -223,6 +223,20 @@ void LightTableThumbBar::setItems(const ImageInfoList& list)
     }
 }
 
+void LightTableThumbBar::slotDockLocationChanged(Qt::DockWidgetArea area)
+{
+    if (area == Qt::LeftDockWidgetArea || area == Qt::RightDockWidgetArea)
+    {
+        setFlow(TopToBottom);
+    }
+    else
+    {
+        setFlow(LeftToRight);
+    }
+
+    scrollTo(currentIndex());
+}
+
 void LightTableThumbBar::clear()
 {
     d->imageInfoModel->clearImageInfos();

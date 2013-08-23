@@ -298,6 +298,10 @@ void LightTableWindow::setupUserArea()
     // Restore the previous state. This doesn't emit the proper signals to the
     // dock widget, so it has to be manually reinitialized.
     viewContainer->setAutoSaveSettings("LightTable Thumbbar", true);
+
+    connect(d->barViewDock, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)),
+            d->thumbView, SLOT(slotDockLocationChanged(Qt::DockWidgetArea)));
+
     d->barViewDock->reInitialize();
 
     setCentralWidget(mainW);

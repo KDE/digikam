@@ -224,8 +224,7 @@ ShowFoto::ShowFoto(const KUrl::List& urlList)
 
     // -- Load current items ---------------------------
 
-    emit slotOpenFilesInFolder();
-
+//    emit slotOpenFilesInFolder();
 
 }
 
@@ -410,7 +409,7 @@ void ShowFoto::setupUserArea()
 
 
     d->model = new ShowfotoModel(d->thumbBar);
-    d->model->setThumbnailLoadThread(d->thumbLoadThread);
+    d->model->setThumbnailLoadThread(ThumbnailLoadThread::defaultThread());
 
     d->filterModel = new ShowfotoFilterModel(d->thumbBar);
     d->filterModel->setSourceShowfotoModel(d->model);
@@ -960,7 +959,6 @@ bool ShowFoto::saveAs()
     }
 
     return ( startingSaveAs(d->thumbBar->currentUrl()) );
-    /*TODO: remove this line*/ return true;
 }
 
 void ShowFoto::slotDeleteCurrentItem()
