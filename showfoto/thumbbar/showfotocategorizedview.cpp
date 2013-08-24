@@ -80,7 +80,7 @@ ShowfotoCategorizedView::ShowfotoCategorizedView(QWidget* const parent)
             SLOT(slotFileChanged(QString)));
 
     d->delayedEnterTimer = new QTimer(this);
-    d->delayedEnterTimer->setInterval(1000);
+    d->delayedEnterTimer->setInterval(10);
     d->delayedEnterTimer->setSingleShot(false);
 
     connect(d->delayedEnterTimer, SIGNAL(timeout()),

@@ -59,11 +59,11 @@ ShowfotoThumbnailBar::ShowfotoThumbnailBar(QWidget* const parent)
     setItemDelegate(new ShowfotoThumbnailDelegate(this));
     setSpacing(3);
     setUsePointingHandCursor(false);
-    setScrollStepGranularity(5);
+    setScrollStepGranularity(3);
     setScrollBarPolicy(Qt::ScrollBarAlwaysOn);
 
-    setDragEnabled(true);
-    setAcceptDrops(true);
+    setDragEnabled(false);
+    setAcceptDrops(false);
     setDropIndicatorShown(false);
 
     slotSetupChanged();
@@ -162,8 +162,6 @@ void ShowfotoThumbnailBar::setFlow(QListView::Flow flow)
 
 void ShowfotoThumbnailBar::slotSetupChanged()
 {
-//    setToolTipEnabled(ShowfotoSettings::instance()->showToolTipsIsValid());
-
     ShowfotoCategorizedView::slotSetupChanged();
 }
 

@@ -743,9 +743,9 @@ void ShowFoto::slotFirst()
         return;
     }
 
-    d->thumbBar->scrollToTop();
-    d->thumbBar->setCurrentInfo(d->infoList.at(0));
-    slotOpenUrl(d->infoList.at(0));
+    d->thumbBar->toFirstIndex();
+    d->thumbBar->setCurrentInfo(d->thumbBar->showfotoItemInfos().first());
+    slotOpenUrl(d->thumbBar->showfotoItemInfos().first());
 }
 
 void ShowFoto::slotLast()
@@ -755,9 +755,9 @@ void ShowFoto::slotLast()
         return;
     }
 
-    d->thumbBar->scrollToBottom();
-    d->thumbBar->setCurrentInfo(d->infoList.last());
-    slotOpenUrl(d->infoList.last());
+    d->thumbBar->toLastIndex();
+    d->thumbBar->setCurrentInfo(d->thumbBar->showfotoItemInfos().last());
+    slotOpenUrl(d->thumbBar->showfotoItemInfos().last());
 }
 
 void ShowFoto::slotForward()

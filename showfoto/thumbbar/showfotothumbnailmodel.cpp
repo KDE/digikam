@@ -26,6 +26,7 @@
 #include "QDebug"
 #include "kdebug.h"
 #include "QFileInfo"
+#include "QCache"
 
 #include <kdebug.h>
 #include <kcodecs.h>
@@ -229,26 +230,24 @@ QVariant ShowfotoThumbnailModel::data(const QModelIndex& index, int role) const
 
     if (role == ThumbnailRole && d->thread && index.isValid())
     {
-        QPixmap   thumbnail;
         QImage    thumbnailImage;
+        QPixmap   pixmap;
         ShowfotoItemInfo info = showfotoItemInfo(index);
-        QString   url = info.url.prettyUrl();
-        QString   folder = info .folder;
-        QString   itemName = info.name;
+        QString url = info.url.prettyUrl();
+        QString path = info.folder + QString("/") + info.name;
 
         if (info.isNull() || url.isEmpty())
         {
             return QVariant(QVariant::Pixmap);
         }
 
-        if (!d->detailRect.isNull())
+        if(pixmapForItem(path,pixmap))
         {
-            if (pixmapForItem(url,thumbnail))
-            {
-                return thumbnail;
-            }
+            return pixmap;
         }
-        else if(getThumbnail(folder,itemName,thumbnailImage))
+
+        //if pixmapForItem Failed
+        if(getThumbnail(info,thumbnailImage))
         {
             thumbnailImage = thumbnailImage.scaled(d->thumbSize.size(),d->thumbSize.size(),Qt::KeepAspectRatio);
             emit signalThumbInfo(info,thumbnailImage);
@@ -330,36 +329,9 @@ void ShowfotoThumbnailModel::slotThumbnailLoaded(const LoadingDescription& loadi
     }
 }
 
-
-bool ShowfotoThumbnailModel::pixmapForItem(QString url, QPixmap& pix) const
+bool ShowfotoThumbnailModel::getThumbnail(const ShowfotoItemInfo itemInfo, QImage& thumbnail) const
 {
-    if (d->thumbSize.size() > d->maxThumbSize)
-    {
-        //TODO: Install a widget maximum size to prevent this situation
-        bool hasPixmap = d->thread->find(url, pix, d->maxThumbSize);
-
-        if (hasPixmap)
-        {
-            kWarning() << "Thumbbar: Requested thumbnail size" << d->thumbSize.size()
-                       << "is larger than the maximum thumbnail size" << d->maxThumbSize
-                       << ". Returning a scaled-up image.";
-            pix = pix.scaled(d->thumbSize.size(), d->thumbSize.size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-    else
-    {
-        return d->thread->find(url, pix, d->thumbSize.size());
-    }
-}
-
-bool ShowfotoThumbnailModel::getThumbnail(const QString& folder, const QString& itemName, QImage& thumbnail) const
-{
-    QString path = folder + QString("/") + itemName;
+    QString path = itemInfo.folder + QString("/") + itemInfo.name;
 
     // Try to get preview from Exif data (good quality). Can work with Raw files
 
@@ -403,14 +375,14 @@ bool ShowfotoThumbnailModel::getThumbnail(const QString& folder, const QString& 
 
     QFileInfo fi(path);
 
-    if (thumbnail.load(folder + QString("/") + fi.baseName() + QString(".thm")))        // Lowercase
+    if (thumbnail.load(itemInfo.folder + QString("/") + fi.baseName() + QString(".thm")))        // Lowercase
     {
         if (!thumbnail.isNull())
         {
             return true;
         }
     }
-    else if (thumbnail.load(folder + QString("/") + fi.baseName() + QString(".THM")))   // Uppercase
+    else if (thumbnail.load(itemInfo.folder + QString("/") + fi.baseName() + QString(".THM")))   // Uppercase
     {
         if (!thumbnail.isNull())
         {
@@ -431,6 +403,53 @@ bool ShowfotoThumbnailModel::getThumbnail(const QString& folder, const QString& 
     }
 
     return false;
+}
+
+bool ShowfotoThumbnailModel::pixmapForItem(QString url, QPixmap& pix) const
+
+{
+
+    if (d->thumbSize.size() > d->maxThumbSize)
+
+    {
+
+        //TODO: Install a widget maximum size to prevent this situation
+
+        bool hasPixmap = d->thread->find(url, pix, d->maxThumbSize);
+
+        if (hasPixmap)
+
+        {
+
+            kWarning() << "Thumbbar: Requested thumbnail size" << d->thumbSize.size()
+
+                       << "is larger than the maximum thumbnail size" << d->maxThumbSize
+
+                       << ". Returning a scaled-up image.";
+
+            pix = pix.scaled(d->thumbSize.size(), d->thumbSize.size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+
+            return true;
+
+        }
+
+        else
+
+        {
+
+            return false;
+
+        }
+    }
+
+    else
+
+    {
+
+        return d->thread->find(url, pix, d->thumbSize.size());
+
+    }
+
 }
 
 void ShowfotoThumbnailModel::slotThumbInfoLoaded(const ShowfotoItemInfo& info, const QImage& thumbnailImage)
