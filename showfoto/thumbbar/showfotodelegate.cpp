@@ -201,10 +201,10 @@ QRect ShowfotoDelegate::groupIndicatorRect() const
 //    return d->lockRect;
 //}
 
-void ShowfotoDelegate::prepareThumbnails(ShowfotoThumbnailModel* thumbModel, const QList<QModelIndex>& indexes)
-{
-    thumbModel->prepareThumbnails(indexes, thumbnailSize());
-}
+//void ShowfotoDelegate::prepareThumbnails(ShowfotoThumbnailModel* thumbModel, const QList<QModelIndex>& indexes)
+//{
+//    thumbModel->prepareThumbnails(indexes, thumbnailSize());
+//}
 
 QPixmap ShowfotoDelegate::retrieveThumbnailPixmap(const QModelIndex& index, int thumbnailSize)
 {

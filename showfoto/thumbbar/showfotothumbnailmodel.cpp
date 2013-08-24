@@ -137,86 +137,6 @@ void ShowfotoThumbnailModel::setEmitDataChanged(bool emitSignal)
     d->emitDataChanged = emitSignal;
 }
 
-void ShowfotoThumbnailModel::setPreloadThumbnails(bool preload)
-{
-    if (preload)
-    {
-        if (!d->preloadThread)
-        {
-            d->preloadThread = new ThumbnailLoadThread;
-            d->preloadThread->setPixmapRequested(false);
-            d->preloadThread->setPriority(QThread::LowestPriority);
-        }
-
-        connect(this, SIGNAL(allRefreshingFinished()),
-                this, SLOT(preloadAllThumbnails()));
-    }
-    else
-    {
-        delete d->preloadThread;
-        d->preloadThread = 0;
-        disconnect(this, SIGNAL(allRefreshingFinished()),
-                   this, SLOT(preloadAllThumbnails()));
-    }
-}
-
-void ShowfotoThumbnailModel::prepareThumbnails(const QList<QModelIndex>& indexesToPrepare)
-{
-    prepareThumbnails(indexesToPrepare, d->thumbSize);
-}
-
-void ShowfotoThumbnailModel::prepareThumbnails(const QList<QModelIndex>& indexesToPrepare, const ThumbnailSize& thumbSize)
-{
-    if (!d->thread)
-    {
-        return;
-    }
-
-    QStringList fileUrls;
-    foreach(const QModelIndex& index, indexesToPrepare)
-    {
-        fileUrls << showfotoItemInfoRef(index).url.prettyUrl();
-    }
-    d->thread->findGroup(fileUrls, thumbSize.size());
-}
-
-void ShowfotoThumbnailModel::preloadThumbnails(const QList<ShowfotoItemInfo>& infos)
-{
-    if (!d->preloadThread)
-    {
-        return;
-    }
-
-    QStringList fileUrls;
-    foreach(const ShowfotoItemInfo& info, infos)
-    {
-        fileUrls << info.url.prettyUrl();
-    }
-    d->preloadThread->stopAllTasks();
-    d->preloadThread->pregenerateGroup(fileUrls, d->preloadThumbnailSize());
-}
-
-void ShowfotoThumbnailModel::preloadThumbnails(const QList<QModelIndex>& infos)
-{
-    if (!d->preloadThread)
-    {
-        return;
-    }
-
-    QStringList fileUrls;
-    foreach(const QModelIndex& index, infos)
-    {
-        fileUrls << showfotoItemInfoRef(index).url.prettyUrl();
-    }
-    d->preloadThread->stopAllTasks();
-    d->preloadThread->pregenerateGroup(fileUrls, d->preloadThumbnailSize());
-}
-
-void ShowfotoThumbnailModel::preloadAllThumbnails()
-{
-    preloadThumbnails(showfotoItemInfos());
-}
-
 void ShowfotoThumbnailModel::showfotoItemInfosCleared()
 {
     if (d->preloadThread)
@@ -392,15 +312,15 @@ bool ShowfotoThumbnailModel::getThumbnail(const ShowfotoItemInfo itemInfo, QImag
 
     // Finally, we trying to get thumbnail using DImg API (slow).
 
-    kDebug() << "Use DImg loader to get thumbnail from : " << path;
+//    kDebug() << "Use DImg loader to get thumbnail from : " << path;
 
-    DImg dimgThumb(path);
+//    DImg dimgThumb(path);
 
-    if (!dimgThumb.isNull())
-    {
-        thumbnail = dimgThumb.copyQImage();
-        return true;
-    }
+//    if (!dimgThumb.isNull())
+//    {
+//        thumbnail = dimgThumb.copyQImage();
+//        return true;
+//    }
 
     return false;
 }
