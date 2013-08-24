@@ -286,10 +286,10 @@ MaintenanceSettings MaintenanceDlg::settings() const
     prm.duplicates                          = d->expanderBox->isChecked(Private::Duplicates);
     prm.similarity                          = d->similarity->value();
     prm.faceManagement                      = d->expanderBox->isChecked(Private::FaceManagement);
-    prm.faceSettings.alreadyScannedHandling = (FaceScanSettings::AlreadyScannedHandling)d->faceScannedHandling->currentIndex();
+    prm.faceSettings.alreadyScannedHandling = (FaceScanSettings::AlreadyScannedHandling)d->faceScannedHandling->itemData(d->syncDirection->currentIndex()).toInt();
     prm.faceSettings.albums                 = d->albumSelectors->selectedAlbums();
     prm.metadataSync                        = d->expanderBox->isChecked(Private::MetadataSync);
-    prm.syncDirection                       = d->syncDirection->currentIndex();
+    prm.syncDirection                       = d->syncDirection->itemData(d->syncDirection->currentIndex()).toInt();
     return prm;
 }
 
