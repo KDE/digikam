@@ -2,6 +2,10 @@
 
 #include "QTimer"
 #include "kdebug.h"
+#include <kglobal.h>
+#include <kglobalsettings.h>
+#include <kconfig.h>
+#include <kconfiggroup.h>
 
 #include "loadingcacheinterface.h"
 #include "imageselectionoverlay.h"
@@ -10,7 +14,6 @@
 #include "showfotodelegate.h"
 #include "showfototooltipfiller.h"
 #include "thumbnailloadthread.h"
-#include "showfotosettings.h"
 #include "imageselectionoverlay.h"
 
 using namespace Digikam;
@@ -489,12 +492,12 @@ void ShowfotoCategorizedView::slotDelayedEnter()
     {
         emit DigikamKCategorizedView::entered(mouseIndex);
     }
-}
 
-//void ShowfotoCategorizedView::addSelectionOverlay(ShowfotoDelegate* delegate)
-//{
-//    addOverlay(new Digikam::ImageSelectionOverlay(this), delegate);
-//}
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group("ImageViewer Settings");
+
+    setToolTipEnabled(group.readEntry("Show ToolTips",             true));
+}
 
 void ShowfotoCategorizedView::scrollToStoredItem()
 {

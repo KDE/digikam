@@ -39,9 +39,7 @@
 
 #include "showfotoimagemodel.h"
 #include "showfotofiltermodel.h"
-#include "showfotosettings.h"
 #include "showfotothumbnailbar.h"
-//#include "albummanager.h"
 #include "showfotoiteminfo.h"
 #include "showfotothumbnailmodel.h"
 
@@ -576,8 +574,7 @@ int ShowfotoDelegate::calculatethumbSizeToFit(int ws)
 
 void ShowfotoThumbnailDelegatePrivate::init(ShowfotoThumbnailDelegate* const q)
 {
-    QObject::connect(ShowfotoSettings::instance(), SIGNAL(setupChanged()),
-                     q, SLOT(slotSetupChanged()));
+    Q_UNUSED(q);
 }
 
 // ------------------------------------------------------------------------------------------------
@@ -662,13 +659,13 @@ void ShowfotoThumbnailDelegate::updateRects()
 
     d->pixmapRect      = QRect(d->margin, d->margin, d->contentWidth, d->contentWidth);
     d->rect            = QRect(0, 0, d->contentWidth + 2*d->margin, d->contentWidth + 2*d->margin);
-    d->drawImageFormat = ShowfotoSettings::instance()->getIconShowImageFormat();
+//    d->drawImageFormat = ShowfotoSettings::instance()->getIconShowImageFormat();
 
-    if (ShowfotoSettings::instance()->getIconShowRating())
-    {
-        int top       = d->rect.bottom() - d->margin - d->starPolygonSize.height() - 2;
-        d->ratingRect = QRect(d->margin, top, d->contentWidth, d->starPolygonSize.height());
-    }
+//    if (ShowfotoSettings::instance()->getIconShowRating())
+//    {
+//        int top       = d->rect.bottom() - d->margin - d->starPolygonSize.height() - 2;
+//        d->ratingRect = QRect(d->margin, top, d->contentWidth, d->starPolygonSize.height());
+//    }
 
     if (d->flow == QListView::LeftToRight)
     {
@@ -686,12 +683,11 @@ void ShowfotoNormalDelegatePrivate::init(ShowfotoNormalDelegate* const q, Showfo
 {
     //categoryDrawer = new ShowfotoCategoryDrawer(parent);
     Q_UNUSED(parent);
-    QObject::connect(ShowfotoSettings::instance(), SIGNAL(setupChanged()),
-                     q, SLOT(slotSetupChanged()));
+    Q_UNUSED(q);
 }
 
 // ------------------------------------------------------------------------------------------------
-//TODO : categorized view
+
 ShowfotoNormalDelegate::ShowfotoNormalDelegate(ShowfotoThumbnailBar* const parent)
     : ShowfotoDelegate(*new ShowfotoNormalDelegatePrivate, parent)
 {
@@ -719,8 +715,8 @@ void ShowfotoNormalDelegate::updateRects()
     d->pixmapRect                              = QRect(d->margin, y, d->contentWidth, d->contentWidth);
     y                                          = d->pixmapRect.bottom();
     d->imageInformationRect                    = QRect(d->margin, y, d->contentWidth, 0);
-    const ShowfotoSettings* const ShowfotoSettings = ShowfotoSettings::instance();
-    d->drawImageFormat                         = ShowfotoSettings->getIconShowImageFormat();
+//    const ShowfotoSettings* const ShowfotoSettings = ShowfotoSettings::instance();
+//    d->drawImageFormat                         = ShowfotoSettings->getIconShowImageFormat();
     const int iconSize                         = KIconLoader::SizeSmall;
 
     d->pickLabelRect   = QRect(d->margin, y, iconSize, iconSize);
@@ -728,23 +724,23 @@ void ShowfotoNormalDelegate::updateRects()
 //    d->downloadRect    =  QRect(d->contentWidth - iconSize - 14, d->pixmapRect.top(), iconSize, iconSize);
 //    d->lockRect        =  QRect(d->contentWidth - iconSize + 2, d->pixmapRect.top(), iconSize, iconSize);
 
-    if (ShowfotoSettings->getIconShowRating())
-    {
-        d->ratingRect = QRect(d->margin, y, d->contentWidth, d->starPolygonSize.height());
-        y             = d->ratingRect.bottom();
-    }
+//    if (ShowfotoSettings->getIconShowRating())
+//    {
+//        d->ratingRect = QRect(d->margin, y, d->contentWidth, d->starPolygonSize.height());
+//        y             = d->ratingRect.bottom();
+//    }
 
-    if (ShowfotoSettings->getIconShowName())
-    {
-        d->nameRect = QRect(d->margin, y, d->contentWidth-d->margin, d->oneRowRegRect.height());
-        y           = d->nameRect.bottom();
-    }
+//    if (ShowfotoSettings->getIconShowName())
+//    {
+//        d->nameRect = QRect(d->margin, y, d->contentWidth-d->margin, d->oneRowRegRect.height());
+//        y           = d->nameRect.bottom();
+//    }
 
-    if (ShowfotoSettings->getIconShowDate())
-    {
-        d->dateRect = QRect(d->margin, y, d->contentWidth, d->oneRowXtraRect.height());
-        y           = d->dateRect.bottom();
-    }
+//    if (ShowfotoSettings->getIconShowDate())
+//    {
+//        d->dateRect = QRect(d->margin, y, d->contentWidth, d->oneRowXtraRect.height());
+//        y           = d->dateRect.bottom();
+//    }
 
     //TODO: Add resolution entry in ShowfotoSettings.
     /*if (ShowfotoSettings->getIconShowResolution())
@@ -753,17 +749,17 @@ void ShowfotoNormalDelegate::updateRects()
         y                 = d->resolutionRect.bottom() ;
     }*/
 
-    if (ShowfotoSettings->getIconShowSize())
-    {
-        d->sizeRect = QRect(d->margin, y, d->contentWidth, d->oneRowXtraRect.height());
-        y           = d->sizeRect.bottom();
-    }
+//    if (ShowfotoSettings->getIconShowSize())
+//    {
+//        d->sizeRect = QRect(d->margin, y, d->contentWidth, d->oneRowXtraRect.height());
+//        y           = d->sizeRect.bottom();
+//    }
 
-    if (ShowfotoSettings->getIconShowTags())
-    {
-        d->tagRect = QRect(d->margin, y, d->contentWidth, d->oneRowComRect.height());
-        y          = d->tagRect.bottom();
-    }
+//    if (ShowfotoSettings->getIconShowTags())
+//    {
+//        d->tagRect = QRect(d->margin, y, d->contentWidth, d->oneRowComRect.height());
+//        y          = d->tagRect.bottom();
+//    }
 
     d->imageInformationRect.setBottom(y);
 

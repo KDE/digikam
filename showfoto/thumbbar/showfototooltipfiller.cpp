@@ -34,10 +34,11 @@
 #include <kfileitem.h>
 #include <kglobal.h>
 #include <kdeversion.h>
+#include <kglobalsettings.h>
+#include <kconfig.h>
+#include <kconfiggroup.h>
 
 // Local includes
-
-#include "showfotosettings.h"
 #include "ditemtooltip.h"
 #include "showfotoiteminfo.h"
 
@@ -49,37 +50,38 @@ namespace ShowFoto
 QString ShowfotoToolTipFiller::ShowfotoItemInfoTipContents(const ShowfotoItemInfo& info)
 {
     QString str;
-    ShowfotoSettings* const settings = ShowfotoSettings::instance();
-    DToolTipStyleSheet cnt(settings->getToolTipsFont());
+    KSharedConfigPtr config         = KGlobal::config();
+    KConfigGroup group              = config->group("ImageViewer Settings");
+    DToolTipStyleSheet cnt(group.readEntry("ToolTips Font"));
 
     PhotoInfoContainer photoInfo   = info.photoInfo;
     QString tip                    = cnt.tipHeader;
 
     // -- File properties ----------------------------------------------
 
-    if (settings->getToolTipsShowFileName()  ||
-        settings->getToolTipsShowFileDate()  ||
-        settings->getToolTipsShowFileSize()  ||
-        settings->getToolTipsShowImageType() ||
-        settings->getToolTipsShowImageDim())
+    if (group.readEntry("ToolTips Show File Name",         true)   ||
+        group.readEntry("ToolTips Show File Date",         false)  ||
+        group.readEntry("ToolTips Show File Size",         false)  ||
+        group.readEntry("ToolTips Show File Type",        false)  ||
+        group.readEntry("ToolTips Show File Dim",         true) )
     {
         tip += cnt.headBeg + i18n("File Properties") + cnt.headEnd;
 
-        if (settings->getToolTipsShowFileName())
+        if (group.readEntry("ToolTips Show File Name",         true))
         {
             tip += cnt.cellBeg + i18nc("filename",
                                        "Name:") + cnt.cellMid;
             tip += info.name + cnt.cellEnd;
         }
 
-        if (settings->getToolTipsShowFileDate())
+        if (group.readEntry("ToolTips Show File Date",         false))
         {
-            QDateTime createdDate  = info.ctime;
+            QDateTime createdDate  = info.dtime;
             str                     = KGlobal::locale()->formatDateTime(createdDate, KLocale::ShortDate, true);
             tip                    += cnt.cellBeg + i18n("Date:") + cnt.cellMid + str + cnt.cellEnd;
         }
 
-        if (settings->getToolTipsShowFileSize())
+        if (group.readEntry("ToolTips Show File Size",         false))
         {
             tip += cnt.cellBeg + i18n("Size:") + cnt.cellMid;
             QString localeFileSize = KGlobal::locale()->formatNumber(info.size, 0);
@@ -87,10 +89,13 @@ QString ShowfotoToolTipFiller::ShowfotoItemInfoTipContents(const ShowfotoItemInf
             tip += str + cnt.cellEnd;
         }
 
-
+        if(group.readEntry("ToolTips Show Image Type",         true))
+        {
             tip += cnt.cellBeg + i18n("Type:") + cnt.cellMid + info.mime + cnt.cellEnd;
+        }
 
-
+        if(group.readEntry("ToolTips Show Image Dim",         false))
+        {
             if (info.width == 0 || info.height == 0 || info.width == -1 || info.height == -1)
             {
                 str = i18nc("unknown / invalid image dimension",
@@ -105,24 +110,25 @@ QString ShowfotoToolTipFiller::ShowfotoItemInfoTipContents(const ShowfotoItemInf
             }
 
             tip += cnt.cellBeg + i18n("Dimensions:") + cnt.cellMid + str + cnt.cellEnd;
-
+        }
     }
 
     // -- Photograph Info -----------------------------------------------------------------------
     // NOTE: these info require \"Use File Metadata\" option from Camera Setup Behavior page.
 
-    if (settings->getToolTipsShowPhotoMake()  ||
-        settings->getToolTipsShowPhotoFocal() ||
-        settings->getToolTipsShowPhotoExpo()  ||
-        settings->getToolTipsShowPhotoFlash() ||
-        settings->getToolTipsShowPhotoWB())
+    if (group.readEntry("ToolTips Show Photo Make",  true)  ||
+        group.readEntry("ToolTips Show Photo Focal", true) ||
+        group.readEntry("ToolTips Show Photo Expo",  true)  ||
+        group.readEntry("ToolTips Show Photo Flash", false) ||
+        group.readEntry("ToolTips Show Photo WB",    false) ||
+        group.readEntry("ToolTips Show Photo Date",  true))
     {
         if (!photoInfo.isNull())
         {
             QString metaStr;
             tip += cnt.headBeg + i18n("Photograph Properties") + cnt.headEnd;
 
-            if (settings->getToolTipsShowPhotoMake())
+            if (group.readEntry("ToolTips Show Photo Make",  true))
             {
                 str = QString("%1 / %2").arg(photoInfo.make.isEmpty() ? cnt.unavailable : photoInfo.make)
                       .arg(photoInfo.model.isEmpty() ? cnt.unavailable : photoInfo.model);
@@ -135,7 +141,22 @@ QString ShowfotoToolTipFiller::ShowfotoItemInfoTipContents(const ShowfotoItemInf
                 metaStr += cnt.cellBeg + i18n("Make/Model:") + cnt.cellMid + Qt::escape(str) + cnt.cellEnd;
             }
 
-            if (settings->getToolTipsShowPhotoFocal())
+            if (group.readEntry("ToolTips Show Photo Date",  true))
+            {
+                if (info.ctime.isValid())
+                {
+                    QDateTime createdDate  = info.ctime;
+                    str                     = KGlobal::locale()->formatDateTime(createdDate, KLocale::ShortDate, true);
+                    tip                    += cnt.cellBeg + i18n("Date:") + cnt.cellMid + str + cnt.cellEnd;
+                }
+                else
+                {
+                    metaStr += cnt.cellBeg + i18nc("creation date of the image",
+                                                   "Created:") + cnt.cellMid + Qt::escape(cnt.unavailable) + cnt.cellEnd;
+                }
+            }
+
+            if (group.readEntry("ToolTips Show Photo Focal", true))
             {
                 str = photoInfo.aperture.isEmpty() ? cnt.unavailable : photoInfo.aperture;
 
@@ -156,7 +177,7 @@ QString ShowfotoToolTipFiller::ShowfotoItemInfoTipContents(const ShowfotoItemInf
                 metaStr += cnt.cellBeg + i18n("Aperture/Focal:") + cnt.cellMid + Qt::escape(str) + cnt.cellEnd;
             }
 
-            if (settings->getToolTipsShowPhotoExpo())
+            if (group.readEntry("ToolTips Show Photo Expo",  true))
             {
                 str = QString("%1 / %2").arg(photoInfo.exposureTime.isEmpty() ? cnt.unavailable : photoInfo.exposureTime)
                       .arg(photoInfo.sensitivity.isEmpty() ? cnt.unavailable : i18n("%1 ISO",photoInfo.sensitivity));
@@ -169,7 +190,7 @@ QString ShowfotoToolTipFiller::ShowfotoItemInfoTipContents(const ShowfotoItemInf
                 metaStr += cnt.cellBeg + i18n("Exposure/Sensitivity:") + cnt.cellMid + Qt::escape(str) + cnt.cellEnd;
             }
 
-            if (settings->getToolTipsShowPhotoFlash())
+            if (group.readEntry("ToolTips Show Photo Flash", false))
             {
                 str = photoInfo.flash.isEmpty() ? cnt.unavailable : photoInfo.flash;
 
@@ -182,7 +203,7 @@ QString ShowfotoToolTipFiller::ShowfotoItemInfoTipContents(const ShowfotoItemInf
                                                "Flash:") + cnt.cellMid + Qt::escape(str) + cnt.cellEnd;
             }
 
-            if (settings->getToolTipsShowPhotoWB())
+            if (group.readEntry("ToolTips Show Photo WB",    false))
             {
                 str = photoInfo.whiteBalance.isEmpty() ? cnt.unavailable : photoInfo.whiteBalance;
 

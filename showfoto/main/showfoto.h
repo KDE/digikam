@@ -127,8 +127,6 @@ private Q_SLOTS:
     void slotContextMenu();
     void slotRevert();
 
-    void slotDroppedItems(QList<ShowfotoItemInfo>);
-
 Q_SIGNALS:
     void signalLoadCurrentItem(const KUrl::List& urlList);
     void signalOpenFolder(const KUrl&);

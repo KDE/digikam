@@ -30,7 +30,6 @@
 
 #include "showfotodelegate.h"
 #include "showfotofiltermodel.h"
-#include "showfotosettings.h"
 #include "showfotooverlays.h"
 #include "showfotodragdrop.h"
 #include "itemviewtooltip.h"
@@ -67,13 +66,7 @@ ShowfotoThumbnailBar::ShowfotoThumbnailBar(QWidget* const parent)
     setAcceptDrops(true);
     setDropIndicatorShown(false);
 
-    setToolTipEnabled(ShowfotoSettings::instance()->showToolTipsIsValid());
-
-    connect(ShowfotoSettings::instance(), SIGNAL(setupChanged()),
-            this, SLOT(slotSetupChanged()));
-
     slotSetupChanged();
-//    setFlow(TopToBottom);
 }
 
 ShowfotoThumbnailBar::~ShowfotoThumbnailBar()
@@ -114,12 +107,6 @@ void ShowfotoThumbnailBar::slotDockLocationChanged(Qt::DockWidgetArea area)
 
     scrollTo(currentIndex());
 }
-
-//TODO:
-//void ShowfotoThumbnailBar::addSelectionOverlay(ShowfotoDelegate* delegate)
-//{
-//    addOverlay(new ImageSelectionOverlay(this), delegate);
-//}
 
 void ShowfotoThumbnailBar::setScrollBarPolicy(Qt::ScrollBarPolicy policy)
 {
@@ -175,8 +162,7 @@ void ShowfotoThumbnailBar::setFlow(QListView::Flow flow)
 
 void ShowfotoThumbnailBar::slotSetupChanged()
 {
-    setToolTipEnabled(ShowfotoSettings::instance()->showToolTipsIsValid());
-    setFont(ShowfotoSettings::instance()->getIconViewFont());
+//    setToolTipEnabled(ShowfotoSettings::instance()->showToolTipsIsValid());
 
     ShowfotoCategorizedView::slotSetupChanged();
 }

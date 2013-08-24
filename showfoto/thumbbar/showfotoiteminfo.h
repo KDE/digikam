@@ -74,7 +74,8 @@ public:
     PhotoInfoContainer photoInfo;
     int                rating;
 
-    QDateTime          ctime;
+    QDateTime          dtime;                // creation time on disk
+    QDateTime          ctime;                // camera date stamp
     int                width;                // Image width in pixels
     int                height;               // Image height in pixels
 };

@@ -123,7 +123,6 @@ extern "C"
 #include "thumbnailsize.h"
 #include "uifilevalidator.h"
 #include "knotificationwrapper.h"
-#include "thumbbar/showfotosettings.h"
 #include "thumbbar/showfotodelegate.h"
 #include "thumbbar/showfotocategorizedview.h"
 #include "showfoto_p.h"
@@ -224,7 +223,7 @@ ShowFoto::ShowFoto(const KUrl::List& urlList)
 
     // -- Load current items ---------------------------
 
-//    emit slotOpenFilesInFolder();
+//    slotOpenFilesInFolder();
 
 }
 
@@ -325,14 +324,8 @@ void ShowFoto::setupConnections()
     connect(d->thumbBar, SIGNAL(showfotoItemInfoActivated(const ShowfotoItemInfo&)),
             this, SLOT(slotOpenUrl(const ShowfotoItemInfo&)));
 
-//    connect(d->thumbBar, SIGNAL(signalItemAdded()),
-//            this, SLOT(slotUpdateItemInfo()));
-
     connect(this, SIGNAL(signalSelectionChanged(QRect)),
             d->rightSideBar, SLOT(slotImageSelectionChanged(QRect)));
-
-//    connect(d->loader, SIGNAL(signalNoCurrentItem()),
-//            d->rightSideBar, SLOT(slotNoCurrentItem()));
 
     connect(this, SIGNAL(signalOpenFolder(KUrl)),
             this, SLOT(slotOpenFolder(KUrl)));
@@ -348,12 +341,6 @@ void ShowFoto::setupConnections()
 
     connect(d->thumbBarDock, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)),
             d->thumbBar, SLOT(slotDockLocationChanged(Qt::DockWidgetArea)));
-
-//    connect(d->dragDropHandler, SIGNAL(imageInfosDropped(QList<ShowfotoItemInfo>)),
-//            this, SLOT(slotDroppedItems(QList<ShowfotoItemInfo>)));
-
-//    connect(d->model, SIGNAL(itemInfosAdded(QList<ShowfotoItemInfo>)),
-//            d->thumbBar, SIGNAL(signalContentChanged()));
 }
 
 void ShowFoto::setupUserArea()
@@ -409,13 +396,13 @@ void ShowFoto::setupUserArea()
 
 
     d->model = new ShowfotoModel(d->thumbBar);
-    d->model->setThumbnailLoadThread(ThumbnailLoadThread::defaultThread());
+    d->model->setThumbnailLoadThread(ThumbnailLoadThread::defaultIconViewThread());
 
     d->filterModel = new ShowfotoFilterModel(d->thumbBar);
     d->filterModel->setSourceShowfotoModel(d->model);
 
     d->filterModel->setCategorizationMode(ShowfotoItemSortSettings::NoCategories);
-    d->filterModel->setSortRole((ShowfotoItemSortSettings::SortRole)ShowfotoSettings::instance()->getImageSortOrder());
+    //d->filterModel->setSortRole((ShowfotoItemSortSettings::SortRole)ShowfotoSettings::instance()->getImageSortOrder());
     d->filterModel->sort(0);
 
     d->thumbBar->setModels(d->model, d->filterModel);
@@ -543,8 +530,6 @@ void ShowFoto::slotOpenFile()
 
     if (!urls.isEmpty())
     {
-        //d->thumbBar->clear();
-
         ShowfotoItemInfoList infos;
         ShowfotoItemInfo iteminfo;
         DMetadata meta;
@@ -559,6 +544,7 @@ void ShowFoto::slotOpenFile()
             iteminfo.size = fi.size();
             iteminfo.url  = fi.filePath();
             iteminfo.folder = fi.path();
+            iteminfo.dtime = fi.created();
             meta.load(fi.filePath());
             iteminfo.ctime = meta.getImageDateTime();
             iteminfo.width = meta.getImageDimensions().width();
@@ -725,7 +711,6 @@ void ShowFoto::slotOpenFolder(const KUrl& url)
     {
         return;
     }
-    //TODO: Replace this with previewView
     m_canvas->load(QString(), m_IOFileSettings);
     d->thumbBar->showfotoItemInfos().clear();
     emit signalNoCurrentItem();
@@ -1228,13 +1213,13 @@ void ShowFoto::openFolder(const KUrl& url)
 
     for (fi = fileinfolist.constBegin(); fi != fileinfolist.constEnd(); ++fi)
     {
-        //emit signalNewThumbItem(KUrl(fi->filePath()));
         iteminfo.id = 1 + i;
         iteminfo.name = (*fi).fileName();
         iteminfo.mime = (*fi).suffix();
         iteminfo.size = (*fi).size();
         iteminfo.folder = (*fi).path();
         iteminfo.url = (*fi).filePath();
+        iteminfo.dtime = (*fi).created();
         meta.load((*fi).filePath());
         iteminfo.ctime = meta.getImageDateTime();
         iteminfo.width = meta.getImageDimensions().width();
@@ -1250,10 +1235,5 @@ void ShowFoto::openFolder(const KUrl& url)
 
 }
 
-void ShowFoto::slotDroppedItems(QList<ShowfotoItemInfo> lst)
-{
-    d->infoList << lst;
-    //TODO: add method to open the new list with url
-}
 
 }   // namespace ShowFoto
