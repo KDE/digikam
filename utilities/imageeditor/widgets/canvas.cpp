@@ -231,7 +231,9 @@ void Canvas::load(const QString& filename, IOFileSettings* const IOFileSettings)
 
 void Canvas::slotImageLoaded(const QString& filePath, bool success)
 {
-    qDebug()<<"Canvas::slotImageLoaded()";
+    d_ptr->canvasItem->setImage(d_ptr->canvasItem->im()->getImg()->copyImageData());
+
+    d_ptr->canvasItem->zoomSettings()->setZoomFactor(d_ptr->zoom);
     d_ptr->canvasItem->im()->zoom(d_ptr->zoom);
 
     if (d_ptr->autoZoom || d_ptr->initialZoom)
@@ -376,7 +378,7 @@ void Canvas::updateAutoZoom()
 {
     d_ptr->zoom = calcAutoZoomFactor();
     d_ptr->canvasItem->zoomSettings()->setZoomFactor(d_ptr->zoom);
-    d_ptr->canvasItem->im()->zoom(d_ptr->zoom);
+
     emit signalZoomChanged(d_ptr->zoom);
 }
 
@@ -577,13 +579,9 @@ void Canvas::setZoomFactor(double zoom)
         emit signalToggleOffFitToWindow();
     }
 
-    // Zoom using center of canvas and given zoom factor.
+    // TODO: Zoom using center of canvas.
 
-    /*double cpx = contentsX() + visibleWidth()  / 2.0;
-    double cpy = contentsY() + visibleHeight() / 2.0;
-
-    cpx        = cpx * d_ptr->zoom;
-    cpy        = cpy * d_ptr->zoom;*/
+    d_ptr->canvasItem->clearCache();
 
     d_ptr->zoom    = zoom;
 
@@ -591,17 +589,12 @@ void Canvas::setZoomFactor(double zoom)
     d_ptr->canvasItem->im()->zoom(d_ptr->zoom);
     updateContentsSize(false);
 
-//     viewport()->setUpdatesEnabled(false);
-//    center((int)(cpx * d_ptr->zoom),
-//           (int)(cpy * d_ptr->zoom));
-//     viewport()->setUpdatesEnabled(true);
-//     viewport()->update();
-
     emit signalZoomChanged(d_ptr->zoom);
 }
 
 void Canvas::fitToSelect()
 {
+    qDebug()<<"Canvas::fitToSelect()";
     QRect sel = d_ptr->canvasItem->im()->getSelectedArea();
 
     if (!sel.size().isNull())
@@ -618,6 +611,8 @@ void Canvas::fitToSelect()
         d_ptr->autoZoom      = false;
 
         emit signalToggleOffFitToWindow();
+
+        d_ptr->canvasItem->zoomSettings()->setZoomFactor(d_ptr->zoom);
         d_ptr->canvasItem->im()->zoom(d_ptr->zoom);
         updateContentsSize(true);
 
@@ -642,6 +637,7 @@ void Canvas::toggleFitToWindow()
 
 void Canvas::setFitToWindow(bool fit)
 {
+    qDebug()<<"Canvas::setFitToWindow";
     d_ptr->autoZoom = fit;
 
     if (d_ptr->autoZoom)
@@ -651,6 +647,7 @@ void Canvas::setFitToWindow(bool fit)
     else
     {
         d_ptr->zoom = 1.0;
+        d_ptr->canvasItem->zoomSettings()->setZoomFactor(d_ptr->zoom);
         emit signalZoomChanged(d_ptr->zoom);
     }
 
@@ -841,12 +838,12 @@ void Canvas::slotCopy()
 
 void Canvas::slotModified()
 {
+    qDebug()<<"Canvas::slotModified()";
     if (d_ptr->autoZoom)
     {
         updateAutoZoom();
     }
 
-    d_ptr->canvasItem->zoomSettings()->setZoomFactor(d_ptr->zoom);
     d_ptr->canvasItem->im()->zoom(d_ptr->zoom);
 
     updateContentsSize(true);

@@ -151,7 +151,7 @@ QRect ImageRegionWidget::getOriginalImageRegionToRender() const
 {
     QRect r = d_ptr->item->getImageRegion();
 
-    int x = (int)((double)r.x() / zoomFactor());    viewport()->update();
+    int x = (int)((double)r.x() / zoomFactor());
     int y = (int)((double)r.y() / zoomFactor());
     int w = (int)((double)r.width() / zoomFactor());
     int h = (int)((double)r.height() / zoomFactor());

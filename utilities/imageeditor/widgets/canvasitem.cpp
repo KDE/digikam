@@ -87,15 +87,12 @@ void CanvasItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* option
 
     if (d_ptr->im->getImg())
     {
-        setImage(d_ptr->im->getImg()->copyImageData());
         QRect   pixSourceRect;
         QSize   completeSize = boundingRect().size().toSize();
         DImg    scaledImage;
         d_ptr->drawRect = boundingRect().toAlignedRect();
-
         scaledImage = d_ptr->im->getImg()->smoothScale(completeSize.width(), completeSize.height(), Qt::IgnoreAspectRatio);
 
-        qDebug()<<"zoomFactor:"<<d->zoomSettings.zoomFactor();
         if (d->cachedPixmaps.find(d_ptr->drawRect, &d_ptr->pix, &pixSourceRect))
         {
             if (pixSourceRect.isNull())
