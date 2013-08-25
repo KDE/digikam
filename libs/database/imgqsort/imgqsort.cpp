@@ -89,7 +89,7 @@ ImgQSort::~ImgQSort()
     delete d;
 }
 
-PickLabel ImgQSort::startAnalyse(const DImg& img)
+PickLabel ImgQSort::analyseQuality(const DImg& img)
 {
     d->image = img;
 
