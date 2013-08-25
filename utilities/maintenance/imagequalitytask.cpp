@@ -33,6 +33,7 @@
 #include "dimg.h"
 #include "previewloadthread.h"
 #include "imagequalitysettings.h"
+//#include "imgqsort.h"
 
 namespace Digikam
 {
