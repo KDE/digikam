@@ -25,30 +25,27 @@
 #ifndef IMGQSORT_H
 #define IMGQSORT_H
 
-// Qt includes
-
-#include <QString>
-
 // Local includes
 
 #include "digikam_export.h"
 #include "dimg.h"
-#include "dimgthreadedanalyser.h"
+#include "globals.h"
 
 namespace Digikam
 {
-class DIGIKAM_EXPORT ImgQSort : public DImgThreadedAnalyser
+
+class DIGIKAM_EXPORT ImgQSort
 {
 public:
 
     /** Standard constructor with image container to parse
      */
-    explicit ImgQSort(DImg* const img, QObject* const parent=0);
+    explicit ImgQSort();
     ~ImgQSort();
 
-    /** Perform  quality estimation
+    /** Perform  quality estimation and return Pick Label value accordingly.
      */
-    void startAnalyse();
+    PickLabel analyseQuality(const DImg& img);
 
 private:
 

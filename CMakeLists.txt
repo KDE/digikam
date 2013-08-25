@@ -1602,6 +1602,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/core
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/haar
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imgqsort
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imagehistory
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/faces
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs

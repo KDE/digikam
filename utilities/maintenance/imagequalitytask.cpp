@@ -33,7 +33,8 @@
 #include "dimg.h"
 #include "previewloadthread.h"
 #include "imagequalitysettings.h"
-//#include "imgqsort.h"
+#include "imgqsort.h"
+#include "imageinfo.h"
 
 namespace Digikam
 {
@@ -94,8 +95,6 @@ void ImageQualityTask::run()
 
         if (!dimg.isNull())
         {
-            //ImgQSort imgqsort(&dimg);
-            //imgqsort::startAnalyse();
             // TODO : run here Quality analysis backend and store Pick Label result to DB.
             // Backend Input : d->quality as Quality analysis settings,
             //                 dimg       as reduced size image data to parse,
@@ -104,6 +103,12 @@ void ImageQualityTask::run()
             //                 Finaly, using file path, DB Pick Label properties must be assigned through ImageInfo interface.
             // Warning       : All code here will run in a separated thread and must be re-entrant/thread-safe. Only pure computation
             //                 must be processed. GUI calls are prohibited. ImageInfo and DImg can be used safety in thread.
+
+            ImgQSort imgqsort;
+            PickLabel pick = imgqsort.analyseQuality(dimg);
+
+            ImageInfo info(d->path);
+            info.setPickLabel(pick);
         }
 
         // Dispatch progress to Progress Manager

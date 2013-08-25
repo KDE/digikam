@@ -28,13 +28,7 @@
 
 #include <cmath>
 #include <cfloat>
-#include <iostream>
 #include <cstdio>
-
-// Qt includes.
-
-#include <QTextStream>
-#include <QFile>
 
 // Kde include
 
@@ -48,6 +42,7 @@
 #include "opencv2/imgproc/imgproc.hpp"
 
 using namespace cv;
+
 namespace Digikam
 {
 
@@ -64,10 +59,10 @@ public:
         kernel_size  = 3;
     };
 
-    Mat     src;
-    Mat     src_gray;
-    Mat     dst;
-    Mat     detected_edges;
+    Mat       src;
+    Mat       src_gray;
+    Mat       dst;
+    Mat       detected_edges;
 
     int const max_lowThreshold;
 
@@ -76,10 +71,12 @@ public:
     int       kernel_size;
 
     double    lowThreshold;
+
+    DImg      image;
 };
 
-ImgQSort::ImgQSort(DImg*  img, QObject* const parent)
-    : DImgThreadedAnalyser(img, parent, "ImgQSort"), d(new Private)
+ImgQSort::ImgQSort()
+    : d(new Private)
 {
     //TODO: Using full image at present. Uncomment to set the window size.
     //int w = (img->width()  > d->size) ? d->size : img->width();
@@ -92,15 +89,28 @@ ImgQSort::~ImgQSort()
     delete d;
 }
 
+PickLabel ImgQSort::startAnalyse(const DImg& img)
+{
+    d->image = img;
+
+    kDebug() << "Amount of Blur present in image is ";
+    kDebug() << blurdetector();
+    kDebug() << "Amount of Noise present in image is ";
+    kDebug() << noisedetector();
+
+    // FIXME
+    return NoPickLabel;
+}
+
 void ImgQSort::readImage()
 {
     MixerContainer settings;
     settings.bMonochrome = true;
 
-    MixerFilter mixer(&m_orgImage, 0L, settings);
+    MixerFilter mixer(&d->image, 0L, settings);
     mixer.startFilterDirectly();
 
-    m_orgImage.putImageData(mixer.getTargetImage().bits());
+    d->image.putImageData(mixer.getTargetImage().bits());
 }
 
 /**
@@ -123,10 +133,10 @@ void ImgQSort::CannyThreshold(int, void*) const
 
 double ImgQSort::blurdetector() const
 {
-    d->lowThreshold=0.4;
-    double average;
-    double maxval=0;
-    double blurresult;
+    d->lowThreshold   = 0.4;
+    double average    = 0.0;
+    double maxval     = 0.0;
+    double blurresult = 0.0;
 
     // Create a matrix of the same type and size as src (for dst)
     d->dst.create( d->src.size(), d->src.type() );
@@ -136,17 +146,17 @@ double ImgQSort::blurdetector() const
 
     ImgQSort::CannyThreshold(0, 0);
 
-    average    = mean(d->detected_edges)[0];
+    average           = mean(d->detected_edges)[0];
     int* const maxIdx = (int* )malloc(sizeof(d->detected_edges));
     minMaxIdx(d->detected_edges, 0, &maxval, 0, maxIdx);
 
     blurresult=average/maxval;
-    kDebug()<<"The average of the edge intensity is ";
-    kDebug()<<average;
-    kDebug()<<"The maximum of the edge intensity is ";
-    kDebug()<<maxval;
-    kDebug()<<"The result of the edge intensity is ";
-    kDebug()<<blurresult;
+    kDebug() << "The average of the edge intensity is ";
+    kDebug() << average;
+    kDebug() << "The maximum of the edge intensity is ";
+    kDebug() << maxval;
+    kDebug() << "The result of the edge intensity is ";
+    kDebug() << blurresult;
 
     return blurresult;
 }
@@ -154,10 +164,10 @@ double ImgQSort::blurdetector() const
 double ImgQSort::noisedetector() const
 {
 
-    d->lowThreshold=0.035;   //given in research paper for noise. Variable parameter
-    double noiseresult;
-    double average;
-    double maxval=0;
+    d->lowThreshold    = 0.035;   //given in research paper for noise. Variable parameter
+    double noiseresult = 0.0;
+    double average     = 0.0;
+    double maxval      = 0.0;
 
     if ( !d->src.data )
     {
@@ -173,30 +183,23 @@ double ImgQSort::noisedetector() const
     // Apply Canny Edge Detector to get the edges
     CannyThreshold(0, 0);
 
-    average=mean(d->detected_edges)[0];
-    int* maxIdx=(int* )malloc(sizeof(d->detected_edges));
+    average     = mean(d->detected_edges)[0];
+    int* maxIdx = (int* )malloc(sizeof(d->detected_edges));
 
     // To find the maximum edge intensity value
 
     minMaxIdx(d->detected_edges, 0, &maxval, 0, maxIdx);
 
-    noiseresult=average/maxval;
-    kDebug()<<"The average of the edge intensity is ";
-    kDebug()<<average;
-    kDebug()<<"The maximum of the edge intensity is ";
-    kDebug()<<maxval;
-    kDebug()<<"The result of the edge intensity is ";
-    kDebug()<<noiseresult;
+    noiseresult = average/maxval;
+
+    kDebug() << "The average of the edge intensity is ";
+    kDebug() << average;
+    kDebug() << "The maximum of the edge intensity is ";
+    kDebug() << maxval;
+    kDebug() << "The result of the edge intensity is ";
+    kDebug() << noiseresult;
 
     return noiseresult;
-}
-
-void ImgQSort::startAnalyse()
-{
-    kDebug()<<"Amount of Blur present in image is ";
-    kDebug()<<blurdetector();
-    kDebug()<<"Amount of Noise present in image is ";
-    kDebug()<<noisedetector();
 }
 
 }  // namespace Digikam
