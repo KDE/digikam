@@ -125,7 +125,9 @@ private Q_SLOTS:
     void slotDbToNepomuk();
 
     void slotForkTags();
+protected:
 
+    void closeEvent(QCloseEvent* event);
 private:
 
     void setupActions();

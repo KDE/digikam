@@ -20,8 +20,12 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
+#include <QStringList>
+#include <QSize>
+#include <QBrush>
+#include <QMimeData>
 
-#include <QtGui>
+#include <kdebug.h>
 
 #include "tagmngrlistitem.h"
 #include "tagmngrlistmodel.h"
@@ -45,6 +49,11 @@ void TagMngrListModel::addItem(QVariant value)
     emit layoutAboutToBeChanged();
     rootItem->appendChild(new ListItem(QList<QVariant>() << value, rootItem));
     emit layoutChanged();
+}
+
+QList< ListItem* > TagMngrListModel::allItems()
+{
+    return rootItem->allChildren();
 }
 
 int TagMngrListModel::columnCount(const QModelIndex &parent) const
@@ -72,7 +81,7 @@ bool TagMngrListModel::setData(const QModelIndex &index, const QVariant &value, 
 
     if(!parent)
     {
-        qDebug() << "No node found";
+        kDebug() << "No node found";
         return false;
     }
     QList<QVariant> itemDa;
@@ -90,8 +99,8 @@ QMimeData *TagMngrListModel::mimeData(const QModelIndexList& indexes) const
     QDataStream stream(&encodedData, QIODevice::WriteOnly);
     foreach(const QModelIndex &index, indexes)
     {
-        if(index.isValid()){
-            qDebug() << "Exporting index" << index.row();
+        if(index.isValid())
+        {
             stream << index.row();
         }
     }
@@ -126,9 +135,10 @@ bool TagMngrListModel::dropMimeData(const QMimeData *data, Qt::DropAction action
         stream >> itemPoz;
         newItems << rootItem->child(itemPoz);
         if(itemPoz < row)
+        {
             temp++;
+        }
         toRemove.append(itemPoz);
-        qDebug() << "Append " << rootItem->child(itemPoz)->data(Qt::DisplayRole);
 
     }
 
@@ -137,7 +147,6 @@ bool TagMngrListModel::dropMimeData(const QMimeData *data, Qt::DropAction action
 
     for(QList<int>::Iterator itr = toRemove.end() -1 ; itr != toRemove.begin() -1 ; --itr)
     {
-        qDebug() << "Deleteting item" << *itr;
         rootItem->deleteChild(*itr);
     }
 
@@ -148,19 +157,15 @@ bool TagMngrListModel::dropMimeData(const QMimeData *data, Qt::DropAction action
         finalItems.append(rootItem->child(it));
         if(it == row)
         {
-            rootItem->childItems.append(newItems);
+            finalItems.append(newItems);
         }
     }
 
-    rootItem->childItems.clear();
-    rootItem->childItems.append(finalItems);
+    rootItem->removeAll();
+    rootItem->appendList(finalItems);
 
     emit layoutChanged();
 
-    for(int i =0; i< rootItem->childCount(); i++)
-    {
-        qDebug() << rootItem->child(i)->data(Qt::DisplayRole);
-    }
     return true;
 }
 

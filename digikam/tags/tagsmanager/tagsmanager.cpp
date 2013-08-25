@@ -131,6 +131,7 @@ TagsManager::TagsManager()
 
 TagsManager::~TagsManager()
 {
+    kDebug() << "Deleting tags manager";
     delete d->tagModel;
     delete d;
 }
@@ -347,173 +348,7 @@ void TagsManager::slotDeleteAction()
         }
 }
 
-void TagsManager::setupActions()
-{
-    d->mainToolbar = new KToolBar(d->treeWindow);
 
-    QHBoxLayout* tempLayout = new QHBoxLayout();
-    tempLayout->addWidget(d->tagPixmap);
-    tempLayout->addWidget(d->searchBar);
-
-    QWidget* searchWidget = new QWidget(this);
-    searchWidget->setLayout(tempLayout);
-
-    QWidgetAction* searchAction = new QWidgetAction(this);
-    searchAction->setDefaultWidget(searchWidget);
-
-    d->mainToolbar->addAction(searchAction);
-
-    d->mainToolbar->addSeparator();
-
-    d->addAction = new KAction(KIcon("list-add"),i18n(""),d->treeWindow);
-
-    d->delAction = new KAction(KIcon("list-remove"),i18n(""),d->treeWindow);
-
-    /** organize group **/
-    d->organizeAction   = new KActionMenu(KIcon("autocorrection"),
-                                          i18n("Organize"),this);
-    d->organizeAction->setDelayed(false);
-
-    KAction* resetIcon     = new KAction(KIcon("view-refresh"),
-                                         i18n("Reset tag Icon"), this);
-
-    KAction* createTagAddr = new KAction(KIcon("tag-addressbook"),
-                                         i18n("Create Tag from Addess Book"),
-                                         this);
-    KAction* invSel        = new KAction(KIcon(),
-                                         i18n("Invert Selection"), this);
-
-    KAction* expandTree    = new KAction(KIcon("format-indent-more"),
-                                         i18n("Expand Tag Tree"), this);
-
-    KAction* expandSel     = new KAction(KIcon("format-indent-more"),
-                                         i18n("Expand Selected Nodes"), this);
-
-    /** Tool tips  **/
-    d->addAction->setHelpText(i18n("Add new tag to current tag. "
-                                  "Current tag is last clicked tag"));
-
-    d->delAction->setHelpText(i18n("Delete selected items. "
-                                  "Also work with multiple items, "
-                                  "but won't delete the root tag"));
-
-    resetIcon->setHelpText(i18n("Reset icon to selected tags. "
-                               "Works with multiple selection" ));
-
-    invSel->setHelpText(i18n("Invert selection. "
-                            "Only visible items will be selected"));
-
-    expandTree->setHelpText(i18n("Expand tag tree by one level"));
-
-    expandSel->setHelpText(i18n("Selected items will be expanded"));
-
-    connect(resetIcon, SIGNAL(triggered()),
-            this, SLOT(slotResetTagIcon()));
-
-    connect(createTagAddr, SIGNAL(triggered()),
-            this, SLOT(slotCreateTagAddr()));
-
-    connect(invSel, SIGNAL(triggered()),
-            this, SLOT(slotInvertSel()));
-
-    connect(expandTree, SIGNAL(triggered()),
-            d->tagMngrView, SLOT(slotExpandTree()));
-
-    connect(expandSel, SIGNAL(triggered()),
-            d->tagMngrView, SLOT(slotExpandSelected()));
-
-    d->organizeAction->addAction(resetIcon);
-    d->organizeAction->addAction(createTagAddr);
-    d->organizeAction->addAction(invSel);
-    d->organizeAction->addAction(expandTree);
-    d->organizeAction->addAction(expandSel);
-
-    /** Sync & Export Group **/
-    d->syncexportAction = new KActionMenu(KIcon("server-database"),
-                                          i18n("Sync &Export"),this);
-    d->syncexportAction->setDelayed(false);
-
-    KAction* wrDbImg        = new KAction(KIcon("view-refresh"),
-                                          i18n("Write Tags from Database "
-                                              "to Image"), this);
-
-    KAction* readTags       = new KAction(KIcon("tag-new"),
-                                          i18n("Read Tags from Image"), this);
-
-    KAction* wipeAll        = new KAction(KIcon("draw-eraser"),
-                                          i18n("Wipe all tags from Database "
-                                              "and read from images"), this);
-
-    KAction* DbToNepomuk    = new KAction(KIcon("nepomuk"),
-                                          i18n("Sync Database with Nepomuk"),
-                                          this);
-
-    KAction* NepomukToDb    = new KAction(KIcon("nepomuk"),
-                                          i18n("Sync Nepomuk to Database"), this);
-
-
-    wrDbImg->setHelpText(i18n("Write Tags Metadata to Image."));
-
-    readTags->setHelpText(i18n("Read tags from Images into Database"
-                              "Existing tags won't be affected"));
-
-    wipeAll->setHelpText(i18n("Delete all tags from database. "
-                             "Proceed with caution."));
-
-    DbToNepomuk->setHelpText(i18n("Export all tags from Database to Nepomuk. "
-                                 "Digikam with nepomuk support is required "));
-
-    NepomukToDb->setHelpText(i18n("Import tags from Nepomuk."
-                                 "Digikam with nepomuk support is required" ));
-
-    connect(wrDbImg, SIGNAL(triggered()),
-            this, SLOT(slotWriteToImg()));
-
-    connect(readTags, SIGNAL(triggered()),
-            this, SLOT(slotReadFromImg()));
-
-    connect(wipeAll, SIGNAL(triggered()),
-            this, SLOT(slotWipeAll()));
-
-    connect(DbToNepomuk, SIGNAL(triggered()),
-            this, SLOT(slotNepomukToDb()));
-
-    connect(NepomukToDb, SIGNAL(triggered()),
-            this, SLOT(slotNepomukToDb()));
-
-    d->syncexportAction->addAction(wrDbImg);
-    d->syncexportAction->addAction(readTags);
-    d->syncexportAction->addAction(wipeAll);
-    d->syncexportAction->addAction(DbToNepomuk);
-    d->syncexportAction->addAction(NepomukToDb);
-
-    /**
-     * For testing only
-     */
-    KAction* forkTags = new KAction(KIcon(),"Create a very big tag tree)",this);
-
-    connect(forkTags, SIGNAL(triggered()), this,
-            SLOT(slotForkTags()));
-
-    d->mainToolbar->addAction(d->addAction);
-    d->mainToolbar->addAction(d->delAction);
-    d->mainToolbar->addAction(d->organizeAction);
-    d->mainToolbar->addAction(d->syncexportAction);
-    d->mainToolbar->addAction(forkTags);
-    d->mainToolbar->addAction(new DLogoAction(this));
-    this->addToolBar(d->mainToolbar);
-
-    /**
-     * Right Toolbar with vertical properties button
-     */
-    d->rightToolBar = new KMultiTabBar(KMultiTabBar::Right);
-    d->rightToolBar->appendTab(KIcon("tag-properties").pixmap(10,10),
-                               0,"Tag Properties");
-    d->rightToolBar->setStyle(KMultiTabBar::KDEV3ICON);
-
-    connect(d->rightToolBar->tab(0),SIGNAL(clicked()),
-            this, SLOT(slotOpenProperties()));
-}
 
 void TagsManager::slotResetTagIcon()
 {
@@ -713,4 +548,177 @@ void TagsManager::slotForkTags()
     }
 }
 
+void TagsManager::closeEvent(QCloseEvent* event)
+{
+    d->listView->saveSettings();
+    KMainWindow::closeEvent(event);
+}
+
+void TagsManager::setupActions()
+{
+    d->mainToolbar = new KToolBar(d->treeWindow);
+
+    QHBoxLayout* tempLayout = new QHBoxLayout();
+    tempLayout->addWidget(d->tagPixmap);
+    tempLayout->addWidget(d->searchBar);
+
+    QWidget* searchWidget = new QWidget(this);
+    searchWidget->setLayout(tempLayout);
+
+    QWidgetAction* searchAction = new QWidgetAction(this);
+    searchAction->setDefaultWidget(searchWidget);
+
+    d->mainToolbar->addAction(searchAction);
+
+    d->mainToolbar->addSeparator();
+
+    d->addAction = new KAction(KIcon("list-add"),i18n(""),d->treeWindow);
+
+    d->delAction = new KAction(KIcon("list-remove"),i18n(""),d->treeWindow);
+
+    /** organize group **/
+    d->organizeAction   = new KActionMenu(KIcon("autocorrection"),
+                                          i18n("Organize"),this);
+    d->organizeAction->setDelayed(false);
+
+    KAction* resetIcon     = new KAction(KIcon("view-refresh"),
+                                         i18n("Reset tag Icon"), this);
+
+    KAction* createTagAddr = new KAction(KIcon("tag-addressbook"),
+                                         i18n("Create Tag from Addess Book"),
+                                         this);
+    KAction* invSel        = new KAction(KIcon(),
+                                         i18n("Invert Selection"), this);
+
+    KAction* expandTree    = new KAction(KIcon("format-indent-more"),
+                                         i18n("Expand Tag Tree"), this);
+
+    KAction* expandSel     = new KAction(KIcon("format-indent-more"),
+                                         i18n("Expand Selected Nodes"), this);
+
+    /** Tool tips  **/
+    d->addAction->setHelpText(i18n("Add new tag to current tag. "
+                                  "Current tag is last clicked tag"));
+
+    d->delAction->setHelpText(i18n("Delete selected items. "
+                                  "Also work with multiple items, "
+                                  "but won't delete the root tag"));
+
+    resetIcon->setHelpText(i18n("Reset icon to selected tags. "
+                               "Works with multiple selection" ));
+
+    invSel->setHelpText(i18n("Invert selection. "
+                            "Only visible items will be selected"));
+
+    expandTree->setHelpText(i18n("Expand tag tree by one level"));
+
+    expandSel->setHelpText(i18n("Selected items will be expanded"));
+
+    connect(resetIcon, SIGNAL(triggered()),
+            this, SLOT(slotResetTagIcon()));
+
+    connect(createTagAddr, SIGNAL(triggered()),
+            this, SLOT(slotCreateTagAddr()));
+
+    connect(invSel, SIGNAL(triggered()),
+            this, SLOT(slotInvertSel()));
+
+    connect(expandTree, SIGNAL(triggered()),
+            d->tagMngrView, SLOT(slotExpandTree()));
+
+    connect(expandSel, SIGNAL(triggered()),
+            d->tagMngrView, SLOT(slotExpandSelected()));
+
+    d->organizeAction->addAction(resetIcon);
+    d->organizeAction->addAction(createTagAddr);
+    d->organizeAction->addAction(invSel);
+    d->organizeAction->addAction(expandTree);
+    d->organizeAction->addAction(expandSel);
+
+    /** Sync & Export Group **/
+    d->syncexportAction = new KActionMenu(KIcon("server-database"),
+                                          i18n("Sync &Export"),this);
+    d->syncexportAction->setDelayed(false);
+
+    KAction* wrDbImg        = new KAction(KIcon("view-refresh"),
+                                          i18n("Write Tags from Database "
+                                              "to Image"), this);
+
+    KAction* readTags       = new KAction(KIcon("tag-new"),
+                                          i18n("Read Tags from Image"), this);
+
+    KAction* wipeAll        = new KAction(KIcon("draw-eraser"),
+                                          i18n("Wipe all tags from Database "
+                                              "and read from images"), this);
+
+    KAction* DbToNepomuk    = new KAction(KIcon("nepomuk"),
+                                          i18n("Sync Database with Nepomuk"),
+                                          this);
+
+    KAction* NepomukToDb    = new KAction(KIcon("nepomuk"),
+                                          i18n("Sync Nepomuk to Database"), this);
+
+
+    wrDbImg->setHelpText(i18n("Write Tags Metadata to Image."));
+
+    readTags->setHelpText(i18n("Read tags from Images into Database"
+                              "Existing tags won't be affected"));
+
+    wipeAll->setHelpText(i18n("Delete all tags from database. "
+                             "Proceed with caution."));
+
+    DbToNepomuk->setHelpText(i18n("Export all tags from Database to Nepomuk. "
+                                 "Digikam with nepomuk support is required "));
+
+    NepomukToDb->setHelpText(i18n("Import tags from Nepomuk."
+                                 "Digikam with nepomuk support is required" ));
+
+    connect(wrDbImg, SIGNAL(triggered()),
+            this, SLOT(slotWriteToImg()));
+
+    connect(readTags, SIGNAL(triggered()),
+            this, SLOT(slotReadFromImg()));
+
+    connect(wipeAll, SIGNAL(triggered()),
+            this, SLOT(slotWipeAll()));
+
+    connect(DbToNepomuk, SIGNAL(triggered()),
+            this, SLOT(slotNepomukToDb()));
+
+    connect(NepomukToDb, SIGNAL(triggered()),
+            this, SLOT(slotNepomukToDb()));
+
+    d->syncexportAction->addAction(wrDbImg);
+    d->syncexportAction->addAction(readTags);
+    d->syncexportAction->addAction(wipeAll);
+    d->syncexportAction->addAction(DbToNepomuk);
+    d->syncexportAction->addAction(NepomukToDb);
+
+    /**
+     * For testing only
+     */
+    KAction* forkTags = new KAction(KIcon(),"Create a very big tag tree)",this);
+
+    connect(forkTags, SIGNAL(triggered()), this,
+            SLOT(slotForkTags()));
+
+    d->mainToolbar->addAction(d->addAction);
+    d->mainToolbar->addAction(d->delAction);
+    d->mainToolbar->addAction(d->organizeAction);
+    d->mainToolbar->addAction(d->syncexportAction);
+    d->mainToolbar->addAction(forkTags);
+    d->mainToolbar->addAction(new DLogoAction(this));
+    this->addToolBar(d->mainToolbar);
+
+    /**
+     * Right Toolbar with vertical properties button
+     */
+    d->rightToolBar = new KMultiTabBar(KMultiTabBar::Right);
+    d->rightToolBar->appendTab(KIcon("tag-properties").pixmap(10,10),
+                               0,"Tag Properties");
+    d->rightToolBar->setStyle(KMultiTabBar::KDEV3ICON);
+
+    connect(d->rightToolBar->tab(0),SIGNAL(clicked()),
+            this, SLOT(slotOpenProperties()));
+}
 } // namespace Digikam

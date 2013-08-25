@@ -38,16 +38,17 @@ public:
     ListItem *child(int row);
     int childCount() const;
     void deleteChild(int row);
-    void deleteAll();
+    void removeAll();
     void appendList(QList<ListItem*> items);
     int columnCount() const;
     QVariant data(int column) const;
     void setData(QList<QVariant> &data);
     int row() const;
     ListItem *parent();
-    QList<ListItem*> childItems;
+    QList<ListItem*> allChildren() { return childItems; }
 private:
 
+    QList<ListItem*> childItems;
     QList<QVariant> itemData;
     ListItem *parentItem;
 };

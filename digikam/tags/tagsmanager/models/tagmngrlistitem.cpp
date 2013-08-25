@@ -56,6 +56,11 @@ void ListItem::deleteChild(int row)
     return childItems.removeAt(row);
 }
 
+void ListItem::removeAll()
+{
+    childItems.clear();
+}
+
 void ListItem::appendList(QList<ListItem*> items)
 {
     childItems.append(items);

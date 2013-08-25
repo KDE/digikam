@@ -44,6 +44,7 @@ public:
      */
     void addItem(QVariant value);
 
+    QList<ListItem*> allItems();
     /**
      * Standard methods to be implemented when subcassing QAbstractItemModel
      */

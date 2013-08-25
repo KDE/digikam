@@ -36,6 +36,16 @@ public:
     TagList(TagFolderView* treeView, QWidget* parent);
     ~TagList();
 
+    /**
+     * @brief saveSettings   - save settings to digiKam_tagsmanagerrc KConfig
+     */
+    void saveSettings();
+
+    /**
+     * @brief restoreSettings - read settings from digikam_tagsmanagerrc
+     *                          config and populate model with data
+     */
+    void restoreSettings();
 private Q_SLOTS:
     void slotAddPressed();
 
