@@ -561,9 +561,9 @@ void ShowFoto::slotOpenFile()
         }
         else
         {
-            d->infoList.clear();
-            emit signalInfoList(infos);
-            d->infoList= d->model->showfotoItemInfos();
+            d->infoList<<infos;
+            d->model->clearShowfotoItemInfos();
+            emit signalInfoList(d->infoList);
         }
 
         slotOpenUrl(d->infoList.first());
@@ -771,7 +771,7 @@ void ShowFoto::slotForward()
 
     if (!currentIsNull)
     {
-         d->thumbBar->setCurrentInfo(d->thumbBar->nextInfo(d->thumbBar->currentInfo()));
+         d->thumbBar->toNextIndex();
          slotOpenUrl(d->thumbBar->currentInfo());
     }
 }
@@ -787,7 +787,7 @@ void ShowFoto::slotBackward()
 
     if (!currentIsNull)
     {
-         d->thumbBar->setCurrentInfo(d->thumbBar->previousInfo(d->thumbBar->currentInfo()));
+         d->thumbBar->toPreviousIndex();
          slotOpenUrl(d->thumbBar->currentInfo());
     }
 
