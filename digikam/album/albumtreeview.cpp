@@ -399,8 +399,10 @@ void AbstractAlbumTreeView::slotSearchTextSettingsAboutToChange(bool searched, b
 
         // also backup the last selected album in case this didn't work via the
         // slot
-        Album* const current = selectedAlbums<Album>(selectionModel(), m_albumFilterModel).first();
-        d->lastSelectedAlbum = current;
+        QList<Album*> selList = selectedAlbums<Album>(selectionModel(),
+                                                      m_albumFilterModel);
+        if(!(selList.isEmpty()))
+        d->lastSelectedAlbum = selList.first();
     }
 }
 
