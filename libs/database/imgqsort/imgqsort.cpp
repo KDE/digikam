@@ -41,7 +41,6 @@
 // Local includes
 
 #include "nrestimate.h"
-#include "nrfilter.h"
 #include "libopencv.h"
 #include "mixerfilter.h"
 
@@ -132,6 +131,50 @@ double ImgQSort::blurdetector()
     return blurresult;
 }
 
+double ImgQSort::noisedetector()
+{
+  
+int lowThreshold=0.035;   //given in research paper for noise. Variable parameter
+
+void CannyThreshold(int, void*)
+{
+    // Canny detector
+    Canny( detected_edges, detected_edges, lowThreshold, lowThreshold*ratio, kernel_size );
+    // Using Canny's output as a mask, we display our result
+    dst = Scalar::all(0);
+    src.copyTo( dst, detected_edges);
+}
+
+    if ( !src.data )
+    {
+        return -1;
+    }
+
+    // Create a matrix of the same type and size as src (for dst)
+    dst.create( src.size(), src.type() );
+
+    // Convert the image to grayscale
+    cvtColor( src, src_gray, CV_BGR2GRAY );
+
+    // Apply Canny Edge Detector to get the edges
+    CannyThreshold(0, 0);
+
+    double average=mean(detected_edges)[0];
+    double maxval;
+    int* maxIdx=(int* )malloc(sizeof(detected_edges));
+
+    // To find the maximum edge intensity value
+
+    minMaxIdx(detected_edges, 0, &maxval, 0, maxIdx);
+
+    double blurresult=average/maxval;
+    cout<<"The average of the edge intensity is "<<average<<std::endl;
+    cout<<"The maximum of the edge intensity is "<<maxval<<std::endl;
+    cout<<"The result of the edge intensity is "<<noiseresult<<std::endl;
+
+    return noiseresult;
+}
+  
 void ImgQSort::startAnalyse()
 {
   double amount_of_blur=blurdetector();
