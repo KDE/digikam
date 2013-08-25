@@ -45,7 +45,9 @@
 #include "nrestimate.h"
 #include "libopencv.h"
 #include "mixerfilter.h"
+#include "opencv2/imgproc/imgproc.hpp"
 
+using namespace cv;
 namespace Digikam
 {
 
@@ -62,10 +64,10 @@ public:
         kernel_size  = 3;
     };
 
-    CvMat     src;
-    CvMat     src_gray;
-    CvMat     dst;
-    CvMat     detected_edges;
+    Mat     src;
+    Mat     src_gray;
+    Mat     dst;
+    Mat     detected_edges;
 
     int const max_lowThreshold;
 
@@ -76,7 +78,7 @@ public:
     double    lowThreshold;
 };
 
-ImgQSort::ImgQSort(DImg* const img, QObject* const parent)
+ImgQSort::ImgQSort(DImg*  img, QObject* const parent)
     : DImgThreadedAnalyser(img, parent, "ImgQSort"), d(new Private)
 {
     //TODO: Using full image at present. Uncomment to set the window size.
@@ -105,98 +107,96 @@ void ImgQSort::readImage()
  * @function CannyThreshold
  * @brief Trackbar callback - Canny thresholds input with a ratio 1:3
  */
-void ImgQSort::CannyThreshold(int, void*)
+void ImgQSort::CannyThreshold(int, void*) const
 {
-/** FIXME
     // Reduce noise with a kernel 3x3
-    blur( src_gray, detected_edges, Size(3,3) );
+    blur(d->src_gray, d->detected_edges, Size(3,3) );
 
     // Canny detector
-    Canny( detected_edges, detected_edges, lowThreshold, lowThreshold*ratio, kernel_size );
+    Canny(d->detected_edges, d->detected_edges, d->lowThreshold, d->lowThreshold*d->ratio,d-> kernel_size );
 
     // Using Canny's output as a mask, we display our result
-    dst = Scalar::all(0);
+    d->dst = Scalar::all(0);
 
-    src.copyTo( dst, detected_edges);
-*/
+    d->src.copyTo(d-> dst, d->detected_edges);
 }
 
 double ImgQSort::blurdetector() const
 {
-/* FIXME
-    // Load an image
-    src = imread( argv[1] );
+    d->lowThreshold=0.4;
+    double average;
+    double maxval=0;
+    double blurresult;
 
     // Create a matrix of the same type and size as src (for dst)
-    dst.create( src.size(), src.type() );
+    d->dst.create( d->src.size(), d->src.type() );
 
     // Convert the image to grayscale
-    cvtColor( src, src_gray, CV_BGR2GRAY );
+    cvtColor( d->src, d->src_gray, CV_BGR2GRAY );
 
     ImgQSort::CannyThreshold(0, 0);
 
-    double average    = mean(detected_edges)[0];
-    double maxval     = 0;
-    int* const maxIdx = (int* )malloc(sizeof(detected_edges));
-    minMaxIdx(detected_edges, 0, &maxval, 0, maxIdx);
+    average    = mean(d->detected_edges)[0];
+    int* const maxIdx = (int* )malloc(sizeof(d->detected_edges));
+    minMaxIdx(d->detected_edges, 0, &maxval, 0, maxIdx);
 
-    double blurresult=average/maxval;
-    KDebug() << "The average of the edge intensity is " << average;
-    KDebug() << "The maximum of the edge intensity is " << maxval;
-    KDebug() << "The result of the edge intensity is "  << blurresult;
+    blurresult=average/maxval;
+    kDebug()<<"The average of the edge intensity is ";
+    kDebug()<<average;
+    kDebug()<<"The maximum of the edge intensity is ";
+    kDebug()<<maxval;
+    kDebug()<<"The result of the edge intensity is ";
+    kDebug()<<blurresult;
 
     return blurresult;
-*/
-    return 0.0;
 }
 
-double ImgQSort::noisedetector()
+double ImgQSort::noisedetector() const
 {
-  
-int lowThreshold=0.035;   //given in research paper for noise. Variable parameter
 
-void CannyThreshold(int, void*)
-{
-    // Canny detector
-    Canny( detected_edges, detected_edges, lowThreshold, lowThreshold*ratio, kernel_size );
-    // Using Canny's output as a mask, we display our result
-    dst = Scalar::all(0);
-    src.copyTo( dst, detected_edges);
-}
+    d->lowThreshold=0.035;   //given in research paper for noise. Variable parameter
+    double noiseresult;
+    double average;
+    double maxval=0;
 
-    if ( !src.data )
+    if ( !d->src.data )
     {
         return -1;
     }
 
     // Create a matrix of the same type and size as src (for dst)
-    dst.create( src.size(), src.type() );
+    d->dst.create(d-> src.size(), d->src.type() );
 
     // Convert the image to grayscale
-    cvtColor( src, src_gray, CV_BGR2GRAY );
+    cvtColor(d-> src, d->src_gray, CV_BGR2GRAY );
 
     // Apply Canny Edge Detector to get the edges
     CannyThreshold(0, 0);
 
-    double average=mean(detected_edges)[0];
-    double maxval;
-    int* maxIdx=(int* )malloc(sizeof(detected_edges));
+    average=mean(d->detected_edges)[0];
+    int* maxIdx=(int* )malloc(sizeof(d->detected_edges));
 
     // To find the maximum edge intensity value
 
-    minMaxIdx(detected_edges, 0, &maxval, 0, maxIdx);
+    minMaxIdx(d->detected_edges, 0, &maxval, 0, maxIdx);
 
-    double blurresult=average/maxval;
-    cout<<"The average of the edge intensity is "<<average<<std::endl;
-    cout<<"The maximum of the edge intensity is "<<maxval<<std::endl;
-    cout<<"The result of the edge intensity is "<<noiseresult<<std::endl;
+    noiseresult=average/maxval;
+    kDebug()<<"The average of the edge intensity is ";
+    kDebug()<<average;
+    kDebug()<<"The maximum of the edge intensity is ";
+    kDebug()<<maxval;
+    kDebug()<<"The result of the edge intensity is ";
+    kDebug()<<noiseresult;
 
     return noiseresult;
 }
-  
+
 void ImgQSort::startAnalyse()
 {
-    double amount_of_blur = blurdetector();
+    kDebug()<<"Amount of Blur present in image is ";
+    kDebug()<<blurdetector();
+    kDebug()<<"Amount of Noise present in image is ";
+    kDebug()<<noisedetector();
 }
 
 }  // namespace Digikam

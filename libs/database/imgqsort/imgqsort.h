@@ -57,8 +57,9 @@ private:
      */
     void readImage();
 
-    void   CannyThreshold(int, void*);
+    void   CannyThreshold(int, void*) const;
     double blurdetector() const;
+    double noisedetector() const;
 
 private:
 
