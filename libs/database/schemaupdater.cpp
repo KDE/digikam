@@ -435,7 +435,7 @@ bool SchemaUpdater::makeUpdates()
                                     "mailing list. As well, please have a look at what digiKam prints on the console. ",
                                     QString("digikam3.db"), QString("digikam4.db"), currentDBFile.dir().path());
 
-            if (!endWrapSchemaUpdateStep(updateV4toV6(), errorMsg))
+            if (!endWrapSchemaUpdateStep(updateV4toV7(), errorMsg))
             {
                 return false;
             }
@@ -665,6 +665,8 @@ bool SchemaUpdater::updateToVersion(int targetVersion)
         case 7:
             // Digikam for database version 5 and 6 can work with version 7, though not using the support for video files.
             return performUpdateToVersion("UpdateSchemaFromV6ToV7", 7, 5);
+        // NOTE: If you add a new update step, please check the d->currentVersion at the bottom of updateV4toV7
+            // If the update already comes with createTables, createTriggers, we dont need the extra update here
         default:
             kError() << "Unsupported update to version" << targetVersion;
             return false;
@@ -811,9 +813,9 @@ static QStringList cleanUserFilterString(const QString& filterString)
     return filterList;
 }
 
-bool SchemaUpdater::updateV4toV6()
+bool SchemaUpdater::updateV4toV7()
 {
-    kDebug() << "updateV4toV6";
+    kDebug() << "updateV4toV7";
 
     if (d->observer)
     {
@@ -1208,7 +1210,7 @@ bool SchemaUpdater::updateV4toV6()
     }
 
     d->currentRequiredVersion = 5;
-    d->currentVersion = 6;
+    d->currentVersion = 7;
     kDebug() << "Returning true from updating to 5";
     return true;
 }
