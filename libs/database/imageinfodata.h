@@ -8,6 +8,7 @@
  *
  * Copyright (C) 2007-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C)      2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2013 by Michael G. Hansen <mike at mghansen dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -118,9 +119,9 @@ public:
     double                 latitude;
     double                 altitude;
 
-    // number of grouped images, if this is group leader
+    //! number of grouped images, if this is group leader
     int                    groupedImages;
-    // group leader, if the is grouped
+    //! group leader, if the image is grouped
     qlonglong              groupImage;
 
     bool                   hasCoordinates         : 1;
@@ -143,6 +144,17 @@ public:
     bool                   groupImageCached       : 1;
 
     bool                   invalid                : 1;
+
+    // These two are initially true because we assume the data is there.
+    // Once we query the data and find out it is missing, we set them to false.
+    bool                   hasVideoMetadata       : 1;
+    bool                   hasImageMetadata       : 1;
+
+    DatabaseFields::VideoMetadataMinSizeType videoMetadataCached;
+    DatabaseFields::ImageMetadataMinSizeType imageMetadataCached;
+
+    typedef DatabaseFields::Hash<QVariant> DatabaseFieldsHashRaw;
+    DatabaseFieldsHashRaw databaseFieldsHashRaw;
 };
 
 }  // namespace Digikam

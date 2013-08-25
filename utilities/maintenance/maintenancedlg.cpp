@@ -30,6 +30,7 @@
 #include <QCheckBox>
 #include <QGridLayout>
 #include <QComboBox>
+#include <QScrollArea>
 
 // Libkdcraw includes
 
@@ -43,7 +44,6 @@
 #include <kstandarddirs.h>
 #include <knuminput.h>
 #include <kvbox.h>
-#include <kseparator.h>
 #include <kconfig.h>
 
 // Local includes
@@ -65,7 +65,8 @@ public:
 
     enum Operation
     {
-        NewItems = 0,
+        Options = 0,
+        NewItems,
         Thumbnails,
         FingerPrints,
         Duplicates,
@@ -156,19 +157,30 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
     setButtons(Ok | Help | Cancel);
     setDefaultButton(Cancel);
 
-    QWidget* const page     = new QWidget(this);
-    setMainWidget(page);
+    QScrollArea* const main = new QScrollArea(this);
+    QWidget* const page     = new QWidget(main->viewport());
+    main->setWidget(page);
+    main->setWidgetResizable(true);
+    main->setAutoFillBackground(false);
+    main->viewport()->setAutoFillBackground(false);
+    page->setAutoFillBackground(false);
+
+    setMainWidget(main);
 
     QGridLayout* const grid = new QGridLayout(page);
 
     d->logo                 = new QLabel(page);
     d->logo->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
                        .scaled(48, 48, Qt::KeepAspectRatio, Qt::SmoothTransformation));
-
     d->title                = new QLabel(i18n("<qt><b>Select Maintenance Operations to Process</b></qt>"), page);
-    d->albumSelectors       = new AlbumSelectors(i18nc("@label", "Process items from:"), d->configGroupName, page);
-    d->useMutiCoreCPU       = new QCheckBox(i18nc("@option:check", "Work on all processor cores"), page);
     d->expanderBox          = new RExpanderBox(page);
+
+    // --------------------------------------------------------------------------------------
+
+    KVBox* const options    = new KVBox;
+    d->albumSelectors       = new AlbumSelectors(i18nc("@label", "Process items from:"), d->configGroupName, options);
+    d->useMutiCoreCPU       = new QCheckBox(i18nc("@option:check", "Work on all processor cores"), options);
+    d->expanderBox->insertItem(Private::Options, options, SmallIcon("configure"), i18n("Common Options"), "Options", true);
 
     // --------------------------------------------------------------------------------------
 
@@ -221,17 +233,17 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
 
     // --------------------------------------------------------------------------------------
 
-    d->vbox             = new KVBox;
-    KHBox* const hbox11 = new KHBox(d->vbox);
+    d->vbox               = new KVBox;
+    KHBox* const hbox11   = new KHBox(d->vbox);
     new QLabel(i18n("Scan Mode: "), hbox11);
     QWidget* const space7  = new QWidget(hbox11);
     hbox11->setStretchFactor(space7, 10);
 
-    d->qualityScanMode  = new QComboBox(hbox11);
+    d->qualityScanMode    = new QComboBox(hbox11);
     d->qualityScanMode->addItem(i18n("Clean all and re-scan"),  ImageQualitySorter::AllItems);
     d->qualityScanMode->addItem(i18n("Scan non-assigned only"), ImageQualitySorter::NonAssignedItems);
-    
-    KHBox* const hbox12  = new KHBox(d->vbox);
+
+    KHBox* const hbox12   = new KHBox(d->vbox);
     new QLabel(i18n("Check quality sorter setup panel for details: "), hbox12);
     QWidget* const space2 = new QWidget(hbox12);
     hbox12->setStretchFactor(space2, 10);
@@ -239,19 +251,19 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
     d->expanderBox->insertItem(Private::ImageQualitySorter, d->vbox, SmallIcon("flag-green"),
                                i18n("Image Quality Sorter"), "ImageQualitySorter", false);
     d->expanderBox->setCheckBoxVisible(Private::ImageQualitySorter, true);
-    
+
     // --------------------------------------------------------------------------------------
 
-    d->vbox2             = new KVBox;
-    KHBox* const hbox21  = new KHBox(d->vbox2);
+    d->vbox2              = new KVBox;
+    KHBox* const hbox21   = new KHBox(d->vbox2);
     new QLabel(i18n("Sync Direction: "), hbox21);
-    QWidget* const space5  = new QWidget(hbox21);
+    QWidget* const space5 = new QWidget(hbox21);
     hbox21->setStretchFactor(space5, 10);
-    d->syncDirection = new QComboBox(hbox21);
+    d->syncDirection      = new QComboBox(hbox21);
     d->syncDirection->addItem(i18n("From database to image metadata"), MetadataSynchronizer::WriteFromDatabaseToFile);
     d->syncDirection->addItem(i18n("From image metadata to database"), MetadataSynchronizer::ReadFromFileToDatabase);
 
-    KHBox* const hbox22  = new KHBox(d->vbox2);
+    KHBox* const hbox22   = new KHBox(d->vbox2);
     new QLabel(i18n("Check metadata setup panel for details: "), hbox22);
     QWidget* const space6 = new QWidget(hbox22);
     hbox22->setStretchFactor(space6, 10);
@@ -265,10 +277,6 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
 
     grid->addWidget(d->logo,                        0, 0, 1, 1);
     grid->addWidget(d->title,                       0, 1, 1, 1);
-    grid->addWidget(new KSeparator(Qt::Horizontal), 1, 1, 1, 1);
-    grid->addWidget(d->albumSelectors,              2, 1, 1, 1);
-    grid->addWidget(d->useMutiCoreCPU,              3, 1, 1, 1);
-    grid->addWidget(new KSeparator(Qt::Horizontal), 4, 1, 1, 1);
     grid->addWidget(d->expanderBox,                 5, 0, 3, 2);
     grid->setSpacing(spacingHint());
     grid->setMargin(0);
@@ -285,12 +293,12 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
 
     connect(d->metadataSetup, SIGNAL(clicked()),
             this, SLOT(slotMetadataSetup()));
-    
+
     connect(d->qualitySetup, SIGNAL(clicked()),
             this, SLOT(slotQualitySetup()));
-    
-    setMinimumSize(500, 350);
-    adjustSize();
+
+    // --------------------------------------------------------------------------------------
+
     readSettings();
 }
 
@@ -320,15 +328,15 @@ MaintenanceSettings MaintenanceDlg::settings() const
     prm.duplicates                          = d->expanderBox->isChecked(Private::Duplicates);
     prm.similarity                          = d->similarity->value();
     prm.faceManagement                      = d->expanderBox->isChecked(Private::FaceManagement);
-    prm.faceSettings.alreadyScannedHandling = (FaceScanSettings::AlreadyScannedHandling)d->faceScannedHandling->currentIndex();
+    prm.faceSettings.alreadyScannedHandling = (FaceScanSettings::AlreadyScannedHandling)d->faceScannedHandling->itemData(d->syncDirection->currentIndex()).toInt();
     prm.faceSettings.albums                 = d->albumSelectors->selectedAlbums();
     prm.qualitySort                         = d->expanderBox->isChecked(Private::ImageQualitySorter);
-    prm.qualityScanMode                     = d->qualityScanMode->currentIndex();
+    prm.qualityScanMode                     = d->qualityScanMode->itemData(d->syncDirection->currentIndex()).toInt();
     ImageQualitySettings imgq;
     imgq.readFromConfig();
     prm.quality                             = imgq;
     prm.metadataSync                        = d->expanderBox->isChecked(Private::MetadataSync);
-    prm.syncDirection                       = d->syncDirection->currentIndex();
+    prm.syncDirection                       = d->syncDirection->itemData(d->syncDirection->currentIndex()).toInt();
     return prm;
 }
 
@@ -362,6 +370,8 @@ void MaintenanceDlg::readSettings()
     {
         slotItemToggled(i, d->expanderBox->isChecked(i));
     }
+    
+    restoreDialogSize(group);
 }
 
 void MaintenanceDlg::writeSettings()
@@ -387,6 +397,8 @@ void MaintenanceDlg::writeSettings()
     group.writeEntry(d->configQualityScanMode,     prm.qualityScanMode);
     group.writeEntry(d->configMetadataSync,        prm.metadataSync);
     group.writeEntry(d->configSyncDirection,       prm.syncDirection);
+    
+    saveDialogSize(group);
 }
 
 void MaintenanceDlg::slotItemToggled(int index, bool b)
@@ -412,7 +424,7 @@ void MaintenanceDlg::slotItemToggled(int index, bool b)
         case Private::ImageQualitySorter:
             d->vbox->setEnabled(b);
             break;
-            
+
         case Private::MetadataSync:
             d->vbox2->setEnabled(b);
             break;

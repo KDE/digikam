@@ -100,7 +100,8 @@ void ImageQualityTask::run()
             //                 d->path    as file path to patch DB properties.
             // Result        : Backend must scan Quality of image depending of settings and compute a Quality estimation accordingly.
             //                 Finaly, using file path, DB Pick Label properties must be assigned through ImageInfo interface.
-            // Warning       : All code here will run in a separated thread must be re-entrant.
+            // Warning       : All code here will run in a separated thread and must be re-entrant/thread-safe. Only pure computation
+            //                 must be processed. GUI calls are prohibited. ImageInfo and DImg can be used safety in thread.
         }
 
         // Dispatch progress to Progress Manager

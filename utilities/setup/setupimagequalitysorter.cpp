@@ -97,7 +97,7 @@ SetupImageQualitySorter::SetupImageQualitySorter(QWidget* const parent)
     d->enableSorter = new QCheckBox(i18n("Enable Image Quality Sorting"), panel);
     d->enableSorter->setWhatsThis(i18n("Enabled this option to assign automatically Pick Labels based on image quality."));
 
-    d->optionsView   = new KVBox(panel);
+    d->optionsView  = new KVBox(panel);
 
     layout->addWidget(d->enableSorter);
     layout->addWidget(d->optionsView);
@@ -126,10 +126,10 @@ SetupImageQualitySorter::SetupImageQualitySorter(QWidget* const parent)
     d->setRejected = new QCheckBox(i18n("Assign 'Rejected' Label to Low Quality Pictures"), hlay1);
     d->setRejected->setWhatsThis(i18n("Low quality images detected by blur, noise, and compression analysis will be assigned to Rejected label."));
     
-    QWidget* const hspace1 = new QWidget(hlay1);
+    QWidget* const hspace1  = new QWidget(hlay1);
     hlay1->setStretchFactor(hspace1, 10);
     
-    QLabel* const workIcon1     = new QLabel(hlay1);
+    QLabel* const workIcon1 = new QLabel(hlay1);
     workIcon1->setPixmap(SmallIcon("flag-red"));
 
     // ------------------------------------------------------------------------------
@@ -139,10 +139,10 @@ SetupImageQualitySorter::SetupImageQualitySorter(QWidget* const parent)
     d->setPending = new QCheckBox(i18n("Assign 'Pending' Label to Medium Quality Pictures"), hlay2);
     d->setPending->setWhatsThis(i18n("Medium quality images detected by blur, noise, and compression analysis will be assigned to Pending label."));
     
-    QWidget* const hspace2 = new QWidget(hlay2);
+    QWidget* const hspace2  = new QWidget(hlay2);
     hlay2->setStretchFactor(hspace2, 10);
     
-    QLabel* const workIcon2     = new QLabel(hlay2);
+    QLabel* const workIcon2 = new QLabel(hlay2);
     workIcon2->setPixmap(SmallIcon("flag-yellow"));
 
     // ------------------------------------------------------------------------------
@@ -152,13 +152,13 @@ SetupImageQualitySorter::SetupImageQualitySorter(QWidget* const parent)
     d->setAccepted = new QCheckBox(i18n("Assign 'Accepted' Label to High Quality Pictures"), hlay3);
     d->setAccepted->setWhatsThis(i18n("High quality images detected by blur, noise, and compression analysis will be assigned to Accepted label."));
 
-    QWidget* const hspace3 = new QWidget(hlay3);
+    QWidget* const hspace3  = new QWidget(hlay3);
     hlay3->setStretchFactor(hspace3, 10);
 
-    QLabel* const workIcon3     = new QLabel(hlay3);
+    QLabel* const workIcon3 = new QLabel(hlay3);
     workIcon3->setPixmap(SmallIcon("flag-green"));
     
-    QWidget* const vspace = new QWidget(d->optionsView);
+    QWidget* const vspace   = new QWidget(d->optionsView);
     d->optionsView->setStretchFactor(vspace, 10);
 
     // ------------------------------------------------------------------------------
