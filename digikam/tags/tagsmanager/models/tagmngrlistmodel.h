@@ -35,7 +35,7 @@ class TagMngrListModel : public QAbstractItemModel
     Q_OBJECT
 
 public:
-    TagMngrListModel(const QString &data, QObject *parent = 0);
+    TagMngrListModel(QObject *parent = 0);
     ~TagMngrListModel();
 
     /**
@@ -44,7 +44,12 @@ public:
      */
     void addItem(QVariant value);
 
+    /**
+     * @brief allItems  - return all items from List, usually to be saved
+     *                    in KConfig
+     */
     QList<ListItem*> allItems();
+
     /**
      * Standard methods to be implemented when subcassing QAbstractItemModel
      */
@@ -77,7 +82,6 @@ public:
                       int row, int column, const QModelIndex &parent);
 
 private:
-    void setupModelData(const QStringList &lines);
 
     ListItem *rootItem;
 };

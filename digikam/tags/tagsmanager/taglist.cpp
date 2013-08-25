@@ -62,9 +62,10 @@ TagList::TagList(TagFolderView* treeView, QWidget* parent)
     d->treeView     = treeView;
 
     QVBoxLayout* layout = new QVBoxLayout();
-    d->addButton    = new QPushButton("(+)");
+    d->addButton    = new QPushButton(i18n("Add to List"));
+    d->addButton->setToolTip(i18n("Add selected tags to Quick Access List"));
     d->tagList      = new TagMngrListView(this);
-    d->tagListModel = new TagMngrListModel(QString("All Tags"));
+    d->tagListModel = new TagMngrListModel();
 
     d->tagList->setModel(d->tagListModel);
     d->tagList->setSelectionMode(QAbstractItemView::ExtendedSelection);
@@ -92,7 +93,6 @@ TagList::~TagList()
 
 void TagList::saveSettings()
 {
-    kDebug() << "Saving settings .... +++++++++++++++++++";
     KConfig conf("digikam_tagsmanagerrc");
     conf.deleteGroup("List Content");
 
@@ -118,16 +118,17 @@ void TagList::restoreSettings()
     int size = group.readEntry("Size", -1);
 
     /**
-     * If it only contains All tags, do not add anything
+     * If config is empty add generic All Tags
      */
     if(size < 2)
+    {
+        d->tagListModel->addItem(QVariant("All Tags"));
         return;
+    }
 
-    /** Skip first "All Tags" element **/
-    for(int it = 1; it < size; it++)
+    for(int it = 0; it < size; it++)
     {
         QString data = group.readEntry(QString("item%1").arg(it), "");
-        kDebug() << "+++++ Reading string" << data;
         if(data.isEmpty())
             continue;
 

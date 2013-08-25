@@ -60,7 +60,6 @@ void TagMngrListView::dragEnterEvent(QDragEnterEvent *event)
 
 void TagMngrListView::dropEvent(QDropEvent *e)
 {
-    qDebug() << e->mimeData();
 
     QModelIndex index = indexVisuallyAt(e->pos());
     TagMngrListModel* tagmodel = dynamic_cast<TagMngrListModel*>(this->model());

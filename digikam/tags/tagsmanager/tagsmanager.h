@@ -45,6 +45,7 @@ public:
 
     static QPointer<TagsManager> internalPtr;
     static TagsManager* instance();
+    static bool isCreated() { return !(internalPtr.isNull()); }
 
 Q_SIGNALS:
     void signalSelectionChanged(TAlbum* album);

@@ -131,7 +131,8 @@ TagsManager::TagsManager()
 
 TagsManager::~TagsManager()
 {
-    kDebug() << "Deleting tags manager";
+    delete d->listView;
+    delete d->tagMngrView;
     delete d->tagModel;
     delete d;
 }

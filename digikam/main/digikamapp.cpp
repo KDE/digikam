@@ -146,6 +146,7 @@
 #include "thumbsgenerator.h"
 #include "kipipluginloader.h"
 #include "imagepluginloader.h"
+#include "tagsmanager.h"
 
 #ifdef USE_SCRIPT_IFACE
 #include "scriptiface.h"
@@ -336,6 +337,10 @@ DigikamApp::~DigikamApp()
         QueueMgrWindow::queueManagerWindow()->close();
     }
 
+    if(TagsManager::isCreated())
+    {
+        TagsManager::instance()->close();
+    }
     delete d->view;
 
     AlbumSettings::instance()->setRecurseAlbums(d->recurseAlbumsAction->isChecked());

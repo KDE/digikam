@@ -30,13 +30,12 @@
 #include "tagmngrlistitem.h"
 #include "tagmngrlistmodel.h"
 
-TagMngrListModel::TagMngrListModel(const QString &data, QObject *parent)
+TagMngrListModel::TagMngrListModel(QObject* parent)
     : QAbstractItemModel(parent)
 {
     QList<QVariant> rootData;
-    rootData << "Title" << "Summary";
+    rootData << "Quick List";
     rootItem = new ListItem(rootData);
-    setupModelData(data.split(QString("\n")));
 }
 
 TagMngrListModel::~TagMngrListModel()
@@ -259,15 +258,3 @@ int TagMngrListModel::rowCount(const QModelIndex &parent) const
     return parentItem->childCount();
 }
 
-void TagMngrListModel::setupModelData(const QStringList &lines)
-{
-    /** Append a new item to the current parent's list of children. **/
-    QStringList::const_iterator it;
-    for(it = lines.constBegin(); it != lines.constEnd(); ++it)
-    {
-        QList<QVariant> text;
-        text << QVariant(*it);
-        rootItem->appendChild(new ListItem(text, rootItem));
-    }
-
-}
