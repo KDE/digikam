@@ -3,11 +3,11 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 
- * Description :
+ * Date        : 25/08/2013
+ * Description : Image Quality Sorter
  *
- * Copyright (C) 2013-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2013-2014 by Gowtham Ashok <gwty93 at gmail dot com>
+ * Copyright (C) 2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2013 by Gowtham Ashok <gwty93 at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -50,7 +50,6 @@ public:
      */
     void startAnalyse();
 
-
 private:
 
     /** Internal method dedicated to convert DImg pixels from integer values to float values.
@@ -66,4 +65,4 @@ private:
 
 }  // namespace Digikam
 
-#endif /* IMGQSORT_H */z
+#endif /* IMGQSORT_H */

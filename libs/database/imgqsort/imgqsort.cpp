@@ -3,11 +3,11 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 
- * Description :
+ * Date        : 25/08/2013
+ * Description : Image Quality Sorter
  *
- * Copyright (C) 2013-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2013-2014 by Gowtham Ashok <gwty93 at gmail dot com>
+ * Copyright (C) 2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2013 by Gowtham Ashok <gwty93 at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -53,15 +53,27 @@ class ImgQSort::Private
 public:
 
     Private() :
-// Global variables
-Mat src, src_gray;
-Mat dst, detected_edges;
+        max_lowThreshold(100)
+    {
+        edgeThresh   = 1;
+        lowThreshold = 0.4;   // given in research paper
+        ratio        = 3;
+        kernel_size  = 3;
+    };
 
-int edgeThresh = 1;
-int lowThreshold=0.4;   //given in research paper
-int const max_lowThreshold = 100;
-int ratio = 3;
-int kernel_size = 3;
+    Mat       src;
+    Mat       src_gray;
+    Mat       dst;
+    Mat       detected_edges;
+
+    int const max_lowThreshold;
+
+    int       edgeThresh;
+    int       ratio;
+    int       kernel_size;
+
+    double lowThreshold;
+};
 
 ImgQSort::ImgQSort(DImg* const img, QObject* const parent)
     : DImgThreadedAnalyser(parent, "ImgQSort"), d(new Private)
@@ -87,8 +99,7 @@ void ImgQSort::readImage() const
     img.putImageData(mixer.getTargetImage().bits());
 }
 
-
-/*
+/**
  * @function CannyThreshold
  * @brief Trackbar callback - Canny thresholds input with a ratio 1:3
  */
@@ -125,14 +136,16 @@ double ImgQSort::blurdetector()
     minMaxIdx(detected_edges, 0, &maxval, 0, maxIdx);
 
     double blurresult=average/maxval;
-    KDebug() <<"The average of the edge intensity is "<<average;
-    KDebug() <<"The maximum of the edge intensity is "<<maxval;
-    KDebug() <<"The result of the edge intensity is "<<blurresult;
-    
+    KDebug() <<"The average of the edge intensity is " << average;
+    KDebug() <<"The maximum of the edge intensity is " << maxval;
+    KDebug() <<"The result of the edge intensity is "  << blurresult;
+
     return blurresult;
 }
 
 void ImgQSort::startAnalyse()
 {
-  double amount_of_blur=blurdetector();
+    double amount_of_blur=blurdetector();
 }
+
+}  // namespace Digikam
