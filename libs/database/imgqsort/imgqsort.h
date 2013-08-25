@@ -55,7 +55,10 @@ private:
     /** Internal method dedicated to convert DImg pixels from integer values to float values.
      *  These ones will by used internally by ImgQSort through OpenCV API.
      */
-    void readImage() const;
+    void readImage();
+
+    void   CannyThreshold(int, void*);
+    double blurdetector() const;
 
 private:
 

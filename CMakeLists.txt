@@ -1222,12 +1222,12 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/facemanagement/facescandialog.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/facemanagement/assignnamewidget.cpp
        )
-       
+
     SET(libimgqsort_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imgqsort/qualityscandialog.cpp 
+#        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imgqsort/qualityscandialog.cpp 
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imgqsort/imgqsort.cpp
        )
-       
+
 
     SET(libfirstrun_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/firstrun/assistantdlg.cpp

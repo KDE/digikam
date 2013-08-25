@@ -22,6 +22,8 @@
  *
  * ============================================================ */
 
+#include "imgqsort.h"
+
 // C++ includes
 
 #include <cmath>
@@ -61,10 +63,10 @@ public:
         kernel_size  = 3;
     };
 
-    Mat       src;
-    Mat       src_gray;
-    Mat       dst;
-    Mat       detected_edges;
+    CvMat     src;
+    CvMat     src_gray;
+    CvMat     dst;
+    CvMat     detected_edges;
 
     int const max_lowThreshold;
 
@@ -72,11 +74,11 @@ public:
     int       ratio;
     int       kernel_size;
 
-    double lowThreshold;
+    double    lowThreshold;
 };
 
 ImgQSort::ImgQSort(DImg* const img, QObject* const parent)
-    : DImgThreadedAnalyser(parent, "ImgQSort"), d(new Private)
+    : DImgThreadedAnalyser(img, parent, "ImgQSort"), d(new Private)
 {
     //TODO: Using full image at present. Uncomment to set the window size.
     //int w = (img->width()  > d->size) ? d->size : img->width();
@@ -89,14 +91,15 @@ ImgQSort::~ImgQSort()
     delete d;
 }
 
-void ImgQSort::readImage() const
+void ImgQSort::readImage()
 {
+    MixerContainer settings;
     settings.bMonochrome = true;
 
-    MixerFilter mixer(&img, 0L, settings);
+    MixerFilter mixer(&m_orgImage, 0L, settings);
     mixer.startFilterDirectly();
 
-    img.putImageData(mixer.getTargetImage().bits());
+    m_orgImage.putImageData(mixer.getTargetImage().bits());
 }
 
 /**
@@ -105,6 +108,7 @@ void ImgQSort::readImage() const
  */
 void ImgQSort::CannyThreshold(int, void*)
 {
+/** FIXME
     // Reduce noise with a kernel 3x3
     blur( src_gray, detected_edges, Size(3,3) );
 
@@ -115,10 +119,12 @@ void ImgQSort::CannyThreshold(int, void*)
     dst = Scalar::all(0);
 
     src.copyTo( dst, detected_edges);
+*/
 }
 
-double ImgQSort::blurdetector()
+double ImgQSort::blurdetector() const
 {
+/* FIXME
     // Load an image
     src = imread( argv[1] );
 
@@ -130,22 +136,24 @@ double ImgQSort::blurdetector()
 
     ImgQSort::CannyThreshold(0, 0);
 
-    double average=mean(detected_edges)[0];
-    double maxval;
-    int* maxIdx=(int* )malloc(sizeof(detected_edges));
+    double average    = mean(detected_edges)[0];
+    double maxval     = 0;
+    int* const maxIdx = (int* )malloc(sizeof(detected_edges));
     minMaxIdx(detected_edges, 0, &maxval, 0, maxIdx);
 
     double blurresult=average/maxval;
-    KDebug() <<"The average of the edge intensity is " << average;
-    KDebug() <<"The maximum of the edge intensity is " << maxval;
-    KDebug() <<"The result of the edge intensity is "  << blurresult;
+    KDebug() << "The average of the edge intensity is " << average;
+    KDebug() << "The maximum of the edge intensity is " << maxval;
+    KDebug() << "The result of the edge intensity is "  << blurresult;
 
     return blurresult;
+*/
+    return 0.0;
 }
 
 void ImgQSort::startAnalyse()
 {
-    double amount_of_blur=blurdetector();
+    double amount_of_blur = blurdetector();
 }
 
 }  // namespace Digikam
