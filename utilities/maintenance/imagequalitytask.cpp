@@ -94,6 +94,8 @@ void ImageQualityTask::run()
 
         if (!dimg.isNull())
         {
+            //ImgQSort imgqsort(&dimg);
+            //imgqsort::startAnalyse();
             // TODO : run here Quality analysis backend and store Pick Label result to DB.
             // Backend Input : d->quality as Quality analysis settings,
             //                 dimg       as reduced size image data to parse,
