@@ -93,6 +93,7 @@ ImgQSort::~ImgQSort()
 PickLabel ImgQSort::analyseQuality(const DImg& img)
 {
     d->image     = img;
+    readImage();
 
     double blur  = blurdetector();
     kDebug() << "Amount of Blur present in image is  : " << blur;
@@ -113,6 +114,7 @@ void ImgQSort::readImage()
     mixer.startFilterDirectly();
 
     d->image.putImageData(mixer.getTargetImage().bits());
+    d->src_gray = cvCreateMat(d->image.numPixels(), 1, CV_8UC1);
 }
 
 /**
@@ -139,12 +141,8 @@ double ImgQSort::blurdetector() const
     double average    = 0.0;
     double maxval     = 0.0;
     double blurresult = 0.0;
-
     // Create a matrix of the same type and size as src (for dst)
     d->dst.create( d->src.size(), d->src.type() );
-
-    // Convert the image to grayscale
-    cvtColor( d->src, d->src_gray, CV_BGR2GRAY );
 
     ImgQSort::CannyThreshold(0, 0);
 
@@ -175,9 +173,6 @@ double ImgQSort::noisedetector() const
 
     // Create a matrix of the same type and size as src (for dst)
     d->dst.create(d-> src.size(), d->src.type() );
-
-    // Convert the image to grayscale
-    cvtColor(d-> src, d->src_gray, CV_BGR2GRAY );
 
     // Apply Canny Edge Detector to get the edges
     CannyThreshold(0, 0);
