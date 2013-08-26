@@ -98,11 +98,11 @@ public:
         flow                = QListView::LeftToRight;
 
         // switch off drawing of frames
-        drawMouseOverFrame  = false;
+        drawMouseOverFrame  = true;
         drawFocusFrame      = false;
 
         // switch off composing rating over background
-        ratingOverThumbnail = true;
+        ratingOverThumbnail = false;
     }
 
     void init(ShowfotoThumbnailDelegate* const q);

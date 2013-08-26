@@ -34,7 +34,6 @@ using namespace Digikam;
 
 namespace ShowFoto {
 
-//class ShowfotoCategoryDrawer;
 class ShowfotoFilterModel;
 class ShowfotoImageModel;
 class ItemViewShowfotoDelegatePrivate;

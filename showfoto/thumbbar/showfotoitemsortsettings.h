@@ -24,10 +24,12 @@
 #ifndef SHOWFOTOITEMSORTSETTINGS_H
 #define SHOWFOTOITEMSORTSETTINGS_H
 
-//KDE Includes
+//KDE includes
+
 #include <kstringhandler.h>
 
-//Local Includes
+//Local includes
+
 #include "showfotoiteminfo.h"
 
 namespace ShowFoto {

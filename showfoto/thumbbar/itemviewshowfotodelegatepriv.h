@@ -26,7 +26,6 @@
 
 // Qt includes
 
-#include <QCache>
 #include <QFont>
 #include <QPainter>
 #include <QPolygon>

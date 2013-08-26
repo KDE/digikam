@@ -26,7 +26,6 @@
 
 // Qt includes
 
-#include <QCache>
 #include <QPainter>
 #include <QRect>
 
@@ -260,10 +259,10 @@ void ShowfotoDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, co
         const_cast<ShowfotoDelegate*>(this)->updateActualPixmapRect(index, actualPixmapRect);
     }
 
-    if (!d->ratingRect.isNull())
-    {
-        drawRating(p, index, d->ratingRect, info.rating, isSelected);
-    }
+//    if (!d->ratingRect.isNull())
+//    {
+//        drawRating(p, index, d->ratingRect, info.rating, isSelected);
+//    }
 
     // Draw Color Label rectangle
 //    drawColorLabelRect(p, option, isSelected, info.colorLabel);
@@ -661,7 +660,7 @@ void ShowfotoThumbnailDelegate::updateRects()
     d->rect            = QRect(0, 0, d->contentWidth + 2*d->margin, d->contentWidth + 2*d->margin);
 //    d->drawImageFormat = ShowfotoSettings::instance()->getIconShowImageFormat();
 
-//    if (ShowfotoSettings::instance()->getIconShowRating())
+//    if (true)
 //    {
 //        int top       = d->rect.bottom() - d->margin - d->starPolygonSize.height() - 2;
 //        d->ratingRect = QRect(d->margin, top, d->contentWidth, d->starPolygonSize.height());

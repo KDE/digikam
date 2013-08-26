@@ -24,6 +24,8 @@
 #ifndef SHOWFOTODELEGATE_H
 #define SHOWFOTODELEGATE_H
 
+// Qt includes
+
 #include <qglobal.h>
 #include <QListView>
 

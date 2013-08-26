@@ -21,6 +21,8 @@
  *
  * ============================================================ */
 
+// Local includes
+
 #include "showfotofiltermodel.h"
 #include "showfotoiteminfo.h"
 

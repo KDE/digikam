@@ -30,6 +30,7 @@
 #include "thumbnailsize.h"
 #include "loadingdescription.h"
 #include "thumbnailloadthread.h"
+
 using namespace Digikam;
 
 namespace ShowFoto {

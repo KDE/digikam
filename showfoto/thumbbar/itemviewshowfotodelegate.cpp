@@ -25,22 +25,15 @@
 
 // Qt includes
 
-#include <QCache>
 #include <QPainter>
-#include <QIcon>
 
 // KDE includes
 
-#include <kglobal.h>
 #include <kio/global.h>
-#include <klocale.h>
-#include <kiconloader.h>
-#include <kdebug.h>
 #include <kapplication.h>
 
 // Local includes
 
-#include "imagedelegateoverlay.h"
 #include "thememanager.h"
 #include "imagescanner.h"
 #include "showfotoiteminfo.h"

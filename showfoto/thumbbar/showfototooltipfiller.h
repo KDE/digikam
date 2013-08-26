@@ -4,9 +4,9 @@
  * http://www.digikam.org
  *
  * Date        : 09-08-2013
- * Description : Showfoto icon view tool tip
+ * Description : Showfoto tool tip filler
  *
- *Copyright (C) 2013 by Mohamed Anwer <mohammed dot ahmed dot anwer at gmail dot com>
+ * Copyright (C) 2013 by Mohamed Anwer <mohammed dot ahmed dot anwer at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -25,7 +25,6 @@
 #define SHOWFOTOTOOLTIPFILLER_H
 
 #include "QString"
-#include "filteraction.h"
 
 namespace ShowFoto {
 

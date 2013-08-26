@@ -23,29 +23,20 @@
 
 #include "showfotothumbnailmodel.moc"
 
-#include "QDebug"
-#include "kdebug.h"
-#include "QFileInfo"
-#include "QCache"
+// KDE includes
 
 #include <kdebug.h>
-#include <kcodecs.h>
 #include <kio/global.h>
 #include <klocale.h>
-#include <kmimetype.h>
-#include <solid/device.h>
-#include <solid/storageaccess.h>
-#include <solid/storagedrive.h>
-#include <solid/storagevolume.h>
 
 // LibKDcraw includes
 
 #include <libkdcraw/kdcraw.h>
 
-#include "dimg.h"
+// Local includes
+
 #include "dmetadata.h"
 #include "imagescanner.h"
-
 #include "thumbnailsize.h"
 #include "thumbnailloadthread.h"
 #include "loadingdescription.h"

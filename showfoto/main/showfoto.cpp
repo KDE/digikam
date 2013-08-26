@@ -396,7 +396,7 @@ void ShowFoto::setupUserArea()
 
 
     d->model = new ShowfotoModel(d->thumbBar);
-    d->model->setThumbnailLoadThread(ThumbnailLoadThread::defaultIconViewThread());
+    d->model->setThumbnailLoadThread(d->thumbLoadThread);
 
     d->filterModel = new ShowfotoFilterModel(d->thumbBar);
     d->filterModel->setSourceShowfotoModel(d->model);
@@ -1206,6 +1206,7 @@ void ShowFoto::openFolder(const KUrl& url)
 
     QFileInfoList::const_iterator fi;
     ShowfotoItemInfo iteminfo;
+    ShowfotoItemInfoList infos;
     DMetadata meta;
     int i = 0;
 
@@ -1225,12 +1226,23 @@ void ShowFoto::openFolder(const KUrl& url)
         iteminfo.width = meta.getImageDimensions().width();
         iteminfo.height = meta.getImageDimensions().height();
         iteminfo.photoInfo = meta.getPhotographInformation();
-        d->infoList.append(iteminfo);
+        infos.append(iteminfo);
 
         i++;
     }
 
-    emit signalInfoList(d->infoList);
+    if(d->infoList.isEmpty())
+    {
+        d->infoList=infos;
+        emit signalInfoList(d->infoList);
+    }
+    else
+    {
+        d->infoList<<infos;
+        d->model->clearShowfotoItemInfos();
+        emit signalInfoList(d->infoList);
+    }
+
     slotOpenUrl(d->infoList.at(0));
 
 }

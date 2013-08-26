@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 09-08-2013
- * Description : Showfoto icon view tool tip
+ * Description : Showfoto tool tip filler
  *
  *Copyright (C) 2013 by Mohamed Anwer <mohammed dot ahmed dot anwer at gmail dot com>
  *
@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-
 #include "showfototooltipfiller.h"
 
 // Qt includes
@@ -30,15 +29,12 @@
 
 // KDE includes
 
-#include <klocale.h>
 #include <kfileitem.h>
-#include <kglobal.h>
-#include <kdeversion.h>
 #include <kglobalsettings.h>
-#include <kconfig.h>
 #include <kconfiggroup.h>
 
 // Local includes
+
 #include "ditemtooltip.h"
 #include "showfotoiteminfo.h"
 

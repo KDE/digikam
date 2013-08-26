@@ -24,13 +24,20 @@
 #ifndef SHOWFOTOITEMINFO_H
 #define SHOWFOTOITEMINFO_H
 
+// Qt includes
+
 #include <QList>
 #include <QByteArray>
 #include <QDebug>
 
+// KDE includes
+
 #include "kurl.h"
 
+// Local includes
+
 #include "infocontainer.h"
+
 using namespace Digikam;
 
 class QDataStream;
