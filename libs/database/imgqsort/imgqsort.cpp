@@ -39,8 +39,9 @@
 #include "nrestimate.h"
 #include "libopencv.h"
 #include "mixerfilter.h"
-#include "opencv2/imgproc/imgproc.hpp"
 
+// FIXME : these lines must moved to libopencv.h
+#include "opencv2/imgproc/imgproc.hpp"
 using namespace cv;
 
 namespace Digikam
@@ -150,20 +151,17 @@ double ImgQSort::blurdetector() const
     int* const maxIdx = (int* )malloc(sizeof(d->detected_edges));
     minMaxIdx(d->detected_edges, 0, &maxval, 0, maxIdx);
 
-    blurresult=average/maxval;
-    kDebug() << "The average of the edge intensity is ";
-    kDebug() << average;
-    kDebug() << "The maximum of the edge intensity is ";
-    kDebug() << maxval;
-    kDebug() << "The result of the edge intensity is ";
-    kDebug() << blurresult;
+    blurresult        = average / maxval;
+
+    kDebug() << "The average of the edge intensity is " << average;
+    kDebug() << "The maximum of the edge intensity is " << maxval;
+    kDebug() << "The result of the edge intensity is "  << blurresult;
 
     return blurresult;
 }
 
 double ImgQSort::noisedetector() const
 {
-
     d->lowThreshold    = 0.035;   //given in research paper for noise. Variable parameter
     double noiseresult = 0.0;
     double average     = 0.0;
@@ -171,7 +169,7 @@ double ImgQSort::noisedetector() const
 
     if ( !d->src.data )
     {
-        return -1;
+        return -1.0;
     }
 
     // Create a matrix of the same type and size as src (for dst)
@@ -184,7 +182,7 @@ double ImgQSort::noisedetector() const
     CannyThreshold(0, 0);
 
     average     = mean(d->detected_edges)[0];
-    int* maxIdx = (int* )malloc(sizeof(d->detected_edges));
+    int* maxIdx = new int[sizeof(d->detected_edges)];
 
     // To find the maximum edge intensity value
 
@@ -198,6 +196,8 @@ double ImgQSort::noisedetector() const
     kDebug() << maxval;
     kDebug() << "The result of the edge intensity is ";
     kDebug() << noiseresult;
+
+    delete [] maxIdx;
 
     return noiseresult;
 }
