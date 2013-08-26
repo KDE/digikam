@@ -92,12 +92,13 @@ ImgQSort::~ImgQSort()
 
 PickLabel ImgQSort::analyseQuality(const DImg& img)
 {
-    d->image = img;
+    d->image     = img;
 
-    kDebug() << "Amount of Blur present in image is ";
-    kDebug() << blurdetector();
-    kDebug() << "Amount of Noise present in image is ";
-    kDebug() << noisedetector();
+    double blur  = blurdetector();
+    kDebug() << "Amount of Blur present in image is  : " << blur;
+    
+    double noise = noisedetector();
+    kDebug() << "Amount of Noise present in image is : " << noise;
 
     // FIXME
     return NoPickLabel;
