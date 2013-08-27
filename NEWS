@@ -3,8 +3,9 @@ digiKam 3.4.0 - Release date: 2013-09-01
 
 NEW FEATURES:
 
-MaintenanceTool : add new options to select ALbums and Tags to process.
-MaintenanceTool : add multi-threading and multi-core CPU support for Metadata Synchronizer tool.
+MaintenanceTool : add new options to select Albums and Tags to process.
+MaintenanceTool : add multi-threading and multi-core CPU support for Metadata Synchronizer, Thumbs Generator,
+                  and Fingerprint Generator tools.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
@@ -15,4 +16,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 005 ==> 323165 - Delete pictures and folders are not removed from table-view
 006 ==> 323498 - (Some) Image Editor Color tools hang when starting them.
 007 ==> 323062 - digikam (core): Schema update to V 7 failed!
-008 ==> 
+008 ==> 268688 - Write metadata to all images does not remove obsolete tags.
+009 ==> 
+
