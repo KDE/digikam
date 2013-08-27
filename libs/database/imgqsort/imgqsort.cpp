@@ -40,8 +40,6 @@
 #include "libopencv.h"
 #include "mixerfilter.h"
 
-// FIXME : these lines must moved to libopencv.h
-#include "opencv2/imgproc/imgproc.hpp"
 using namespace cv;
 
 namespace Digikam
@@ -59,10 +57,8 @@ public:
         ratio        = 3;
         kernel_size  = 3;
     };
-
-    Mat       src;
+    
     Mat       src_gray;
-    Mat       dst;
     Mat       detected_edges;
 
     int const max_lowThreshold;
@@ -129,21 +125,15 @@ void ImgQSort::CannyThreshold(int, void*) const
     // Canny detector
     Canny(d->detected_edges, d->detected_edges, d->lowThreshold, d->lowThreshold*d->ratio,d-> kernel_size );
 
-    // Using Canny's output as a mask, we display our result
-    d->dst = Scalar::all(0);
-
-    d->src.copyTo(d-> dst, d->detected_edges);
 }
 
 double ImgQSort::blurdetector() const
 {
     d->lowThreshold   = 0.4;
+ //   d->ratio    =3;
     double average    = 0.0;
     double maxval     = 0.0;
     double blurresult = 0.0;
-    // Create a matrix of the same type and size as src (for dst)
-    d->dst.create( d->src.size(), d->src.type() );
-
     ImgQSort::CannyThreshold(0, 0);
 
     average           = mean(d->detected_edges)[0];
@@ -161,18 +151,11 @@ double ImgQSort::blurdetector() const
 
 double ImgQSort::noisedetector() const
 {
-    d->lowThreshold    = 0.035;   //given in research paper for noise. Variable parameter
+    d->lowThreshold    = 0.0005;   //given in research paper for noise. Variable parameter
+ //   d->ratio    =1;
     double noiseresult = 0.0;
     double average     = 0.0;
     double maxval      = 0.0;
-
-    if ( !d->src.data )
-    {
-        return -1.0;
-    }
-
-    // Create a matrix of the same type and size as src (for dst)
-    d->dst.create(d-> src.size(), d->src.type() );
 
     // Apply Canny Edge Detector to get the edges
     CannyThreshold(0, 0);
@@ -186,12 +169,9 @@ double ImgQSort::noisedetector() const
 
     noiseresult = average/maxval;
 
-    kDebug() << "The average of the edge intensity is ";
-    kDebug() << average;
-    kDebug() << "The maximum of the edge intensity is ";
-    kDebug() << maxval;
-    kDebug() << "The result of the edge intensity is ";
-    kDebug() << noiseresult;
+    kDebug() << "The average of the edge intensity is " << average;
+    kDebug() << "The maximum of the edge intensity is " << maxval;
+    kDebug() << "The result of the edge intensity is "  << noiseresult;
 
     delete [] maxIdx;
 
