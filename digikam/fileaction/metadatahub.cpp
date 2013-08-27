@@ -709,7 +709,7 @@ bool MetadataHub::write(DMetadata& metadata, WriteMode writeMode, const Metadata
 
         // create list of keywords to be added and to be removed
         QStringList tagsPathList, oldKeywords, newKeywords;
-        metadata.getImageTagsPath(tagsPathList);
+        //metadata.getImageTagsPath(tagsPathList);
 
         for (QMap<int, TagStatus>::iterator it = d->tags.begin(); it != d->tags.end(); ++it)
         {
