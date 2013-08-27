@@ -53,6 +53,7 @@ public:
     TagMngrListView*    tagList;
     TagMngrListModel*   tagListModel;
     TagFolderView*      treeView;
+    QMap<int, QList<ListItem*> > tagMap;
 
 };
 
@@ -80,6 +81,11 @@ TagList::TagList(TagFolderView* treeView, QWidget* parent)
     connect(d->addButton, SIGNAL(clicked()),
             this, SLOT(slotAddPressed()));
 
+    connect(d->tagList->selectionModel(),
+            SIGNAL(currentChanged(QModelIndex,QModelIndex)),
+            this,
+            SLOT(slotSelectionChanged()));
+
     restoreSettings();
     this->setLayout(layout);
 }
@@ -99,12 +105,18 @@ void TagList::saveSettings()
     KConfigGroup group = conf.group("List Content");
 
     QList<ListItem*> currentItems = d->tagListModel->allItems();
-    group.writeEntry("Size", currentItems.count());
+    group.writeEntry("Size", currentItems.count()-1);
 
-    for(int it = 0; it < currentItems.size(); it++)
+    for(int it = 1; it < currentItems.size(); it++)
     {
-        group.writeEntry(QString("item%1").arg(it),
-                         currentItems.at(it)->data(Qt::DisplayRole));
+        QList<int> ids = currentItems.at(it)->getTagIds();
+        QString saveData;
+        for(int jt = 0; jt < ids.size(); jt++)
+        {
+            saveData.append(QString::number(ids.at(jt)) + " ");
+        }
+        group.writeEntry(QString("item%1").arg(it-1),
+                         saveData);
     }
 
 }
@@ -120,9 +132,9 @@ void TagList::restoreSettings()
     /**
      * If config is empty add generic All Tags
      */
-    if(size < 2)
+    d->tagListModel->addItem(QList<QVariant>() << QVariant("All Tags"));
+    if(size == 0)
     {
-        d->tagListModel->addItem(QVariant("All Tags"));
         return;
     }
 
@@ -132,7 +144,15 @@ void TagList::restoreSettings()
         if(data.isEmpty())
             continue;
 
-        d->tagListModel->addItem(QVariant(data));
+        QStringList ids = data.split(" ", QString::SkipEmptyParts);
+        TAlbum* item = AlbumManager::instance()->findTAlbum(ids.first().toInt());
+        QList<QVariant> itemData;
+        itemData << item->title();
+        itemData << QBrush(Qt::cyan, Qt::Dense2Pattern);
+        itemData << item->id();
+
+        ListItem* listItem = d->tagListModel->addItem(itemData);
+        d->tagMap[item->id()].append(listItem);
     }
 }
 
@@ -147,8 +167,21 @@ void TagList::slotAddPressed()
 
     TAlbum* album = static_cast<TAlbum*>(d->treeView->albumForIndex(selected.first()));
 
-    d->tagListModel->addItem(QVariant(album->title()));
+    QList<QVariant> itemData;
+    itemData << album->title();
+    itemData << QBrush(Qt::cyan, Qt::Dense2Pattern);
+    itemData << album->id();
+    d->tagListModel->addItem(itemData);
 
+}
+
+void TagList::slotSelectionChanged()
+{
+    QModelIndex index = d->tagList->currentIndex();
+
+    ListItem* item = static_cast<ListItem*>(index.internalPointer());
+
+    kDebug() << item->data(Qt::DisplayRole);
 }
 
 }

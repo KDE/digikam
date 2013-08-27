@@ -40,9 +40,11 @@ public:
 
     /**
      * @brief addItem   - add new item to list
-     * @param value     - usually a QString with displayed name
+     * @param values    - A list of data for item: Name as QString, QBrush as
+     *                    background and qlonglong as id
+     * @return          - pointer to newly created listitem
      */
-    void addItem(QVariant value);
+    ListItem* addItem(QList<QVariant> values);
 
     /**
      * @brief allItems  - return all items from List, usually to be saved

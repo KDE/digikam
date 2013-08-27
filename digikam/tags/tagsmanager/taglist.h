@@ -49,6 +49,8 @@ public:
 private Q_SLOTS:
     void slotAddPressed();
 
+    void slotSelectionChanged();
+
 private:
     class TagListPriv;
 

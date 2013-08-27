@@ -46,10 +46,13 @@ public:
     int row() const;
     ListItem *parent();
     QList<ListItem*> allChildren() { return childItems; }
+    QList<int> getTagIds() const { return tagIds; }
+
 private:
 
     QList<ListItem*> childItems;
     QList<QVariant> itemData;
+    QList<int> tagIds;
     ListItem *parentItem;
 };
 

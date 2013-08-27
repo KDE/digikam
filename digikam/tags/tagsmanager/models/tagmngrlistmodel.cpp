@@ -43,11 +43,14 @@ TagMngrListModel::~TagMngrListModel()
     delete rootItem;
 }
 
-void TagMngrListModel::addItem(QVariant value)
+ListItem* TagMngrListModel::addItem(QList<QVariant> values)
 {
     emit layoutAboutToBeChanged();
-    rootItem->appendChild(new ListItem(QList<QVariant>() << value, rootItem));
+    ListItem* item = new ListItem(values, rootItem);
+    rootItem->appendChild(item);
     emit layoutChanged();
+
+    return item;
 }
 
 QList< ListItem* > TagMngrListModel::allItems()

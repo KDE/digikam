@@ -29,6 +29,8 @@ ListItem::ListItem(const QList<QVariant> &data, ListItem *parent)
 {
     parentItem = parent;
     itemData = data;
+    if(data.size() == 3)
+        tagIds.append(data.at(2).toInt());
 }
 
 ListItem::~ListItem()
