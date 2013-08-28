@@ -71,8 +71,6 @@ public:
     public:
 
         qlonglong imageId;
-        DatabaseFields::Set cachedDatabaseFields;
-        DatabaseFieldsHashRaw databaseFields;
         Item* parent;
         QList<Item*> children;
 

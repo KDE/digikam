@@ -27,16 +27,11 @@
 // Qt includes
 
 #include <QString>
-#include <QTimer>
-#include <QDir>
-#include <QFileInfo>
 
 // KDE includes
 
-#include <kcodecs.h>
 #include <klocale.h>
 #include <kconfig.h>
-#include <kstandardguiitem.h>
 
 // Local includes
 
@@ -44,7 +39,6 @@
 #include "albumdb.h"
 #include "albummanager.h"
 #include "databaseaccess.h"
-#include "metadatasettings.h"
 #include "maintenancethread.h"
 
 namespace Digikam
@@ -112,24 +106,28 @@ void FingerPrintsGenerator::slotStart()
         d->albumList = AlbumManager::instance()->allPAlbums();
     }
 
+    QStringList dirty = DatabaseAccess().db()->getDirtyOrMissingFingerprintURLs();
+
     // Get all digiKam albums collection pictures path, depending of d->rebuildAll flag.
 
     for (AlbumList::ConstIterator it = d->albumList.constBegin();
          !canceled() && (it != d->albumList.constEnd()); ++it)
     {
-        d->allPicturesPath += DatabaseAccess().db()->getItemURLsInAlbum((*it)->id());
+        QStringList aPaths = DatabaseAccess().db()->getItemURLsInAlbum((*it)->id());
 
         if (!d->rebuildAll)
         {
-            QStringList dirty = DatabaseAccess().db()->getDirtyOrMissingFingerprintURLs();
-
-            foreach(QString path, dirty)
+            foreach(QString path, aPaths)
             {
                 if (dirty.contains(path))
                 {
-                    d->allPicturesPath.removeAll(path);
+                    d->allPicturesPath += path;
                 }
             }
+        }
+        else
+        {
+            d->allPicturesPath += aPaths;
         }
     }
 
@@ -141,7 +139,6 @@ void FingerPrintsGenerator::slotStart()
 
     setTotalItems(d->allPicturesPath.count());
 
-    d->thread->setUseMultiCore(true);
     d->thread->generateFingerprints(d->allPicturesPath);
     d->thread->start();
 }

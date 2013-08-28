@@ -8,6 +8,7 @@
  *
  * Copyright (C) 2007-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C)      2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C)      2013 by Michael G. Hansen <mike at mghansen dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -307,6 +308,22 @@ void ImageInfoCache::slotImageChanged(const ImageChangeset& changeset)
             {
                 (*it)->groupedImagesCached = false;
                 (*it)->groupImageCached    = false;
+            }
+
+            if (changes.hasFieldsFromVideoMetadata())
+            {
+                const DatabaseFields::VideoMetadata changedVideoMetadata = changes.getVideoMetadata();
+                (*it)->videoMetadataCached&=~changedVideoMetadata;
+
+                (*it)->databaseFieldsHashRaw.removeAllFields(changedVideoMetadata);
+            }
+
+            if (changes.hasFieldsFromImageMetadata())
+            {
+                const DatabaseFields::ImageMetadata changedImageMetadata = changes.getImageMetadata();
+                (*it)->imageMetadataCached&=~changedImageMetadata;
+
+                (*it)->databaseFieldsHashRaw.removeAllFields(changedImageMetadata);
             }
         }
     }
