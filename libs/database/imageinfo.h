@@ -9,6 +9,7 @@
  * Copyright (C) 2005      by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C) 2007-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2009-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2013 by Michael G. Hansen <mike at mghansen dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -44,6 +45,7 @@
 #include "dshareddata.h"
 #include "databaseurl.h"
 #include "imageinfolist.h"
+#include "databasefields.h"
 
 namespace Digikam
 {
@@ -379,6 +381,14 @@ public:
     VideoMetadataContainer videoMetadataContainer() const;
     PhotoInfoContainer     photoInfoContainer()     const;
     VideoInfoContainer     videoInfoContainer()     const;
+
+    typedef DatabaseFields::Hash<QVariant> DatabaseFieldsHashRaw;
+
+    /**
+     * @todo Supports only VideoMetadataField and ImageMetadataField values for now.
+     */
+    DatabaseFieldsHashRaw getDatabaseFieldsRaw(const DatabaseFields::Set& requestedSet) const;
+    QVariant getDatabaseFieldRaw(const DatabaseFields::Set& requestedField) const;
 
     /**
      * Retrieve metadata template information about the image.

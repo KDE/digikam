@@ -181,11 +181,6 @@ IccProfile IccProfile::adobeRGB()
         path = KStandardDirs::locate("data", "libkdcraw/profiles/compatibleWithAdobeRGB1998.icc");
     }
 
-    if (path.isEmpty()) // this one has a wrong whitepoint. Remove when sufficiently recent libkdcraw is a digikam dependency.
-    {
-        path = KStandardDirs::locate("data", "libkdcraw/profiles/adobergb.icm");
-    }
-
     return IccProfile(path);
 }
 
@@ -198,13 +193,6 @@ IccProfile IccProfile::proPhotoRGB()
 {
     return IccProfile("data", "libkdcraw/profiles/prophoto.icm");
 }
-
-/*
-IccProfile IccProfile::appleRGB()
-{
-    return IccProfile("data", "libkdcraw/profiles/applergb.icm");
-}
-*/
 
 QList<IccProfile> IccProfile::defaultProfiles()
 {

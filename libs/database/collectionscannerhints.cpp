@@ -350,5 +350,4 @@ const ItemMetadataAdjustmentHint& ItemMetadataAdjustmentHint::operator>>(QDBusAr
     return *this;
 }
 
-
 } // namespace Digikam

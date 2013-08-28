@@ -9,6 +9,7 @@
  * Copyright (C) 2005      by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C) 2007-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2009-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C)      2013 by Michael G. Hansen <mike at mghansen dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -62,6 +63,105 @@
 
 namespace Digikam
 {
+
+namespace
+{
+
+MetadataInfo::Field DatabaseVideoMetadataFieldsToMetadataInfoField(const DatabaseFields::VideoMetadata videoMetadataField)
+{
+    switch (videoMetadataField)
+    {
+        case DatabaseFields::AspectRatio:
+            return MetadataInfo::AspectRatio;
+
+        case DatabaseFields::AudioBitRate:
+            return MetadataInfo::AudioBitRate;
+
+        case DatabaseFields::AudioChannelType:
+            return MetadataInfo::AudioChannelType;
+
+        case DatabaseFields::AudioCompressor:
+            return MetadataInfo::AudioCompressor;
+
+        case DatabaseFields::Duration:
+            return MetadataInfo::Duration;
+
+        case DatabaseFields::FrameRate:
+            return MetadataInfo::FrameRate;
+
+        case DatabaseFields::VideoCodec:
+            return MetadataInfo::VideoCodec;
+
+        default:
+            break;
+    }
+
+    /// @todo Invalid request...
+    return MetadataInfo::Field();
+}
+
+MetadataInfo::Field DatabaseImageMetadataFieldsToMetadataInfoField(const DatabaseFields::ImageMetadata imageMetadataField)
+{
+    switch (imageMetadataField)
+    {
+        case DatabaseFields::Make:
+            return MetadataInfo::Make;
+
+        case DatabaseFields::Model:
+            return MetadataInfo::Model;
+
+        case DatabaseFields::Lens:
+            return MetadataInfo::Lens;
+
+        case DatabaseFields::Aperture:
+            return MetadataInfo::Aperture;
+
+        case DatabaseFields::FocalLength:
+            return MetadataInfo::FocalLength;
+
+        case DatabaseFields::FocalLength35:
+            return MetadataInfo::FocalLengthIn35mm;
+
+        case DatabaseFields::ExposureTime:
+            return MetadataInfo::ExposureTime;
+
+        case DatabaseFields::ExposureProgram:
+            return MetadataInfo::ExposureProgram;
+
+        case DatabaseFields::ExposureMode:
+            return MetadataInfo::ExposureMode;
+
+        case DatabaseFields::Sensitivity:
+            return MetadataInfo::Sensitivity;
+
+        case DatabaseFields::FlashMode:
+            return MetadataInfo::FlashMode;
+
+        case DatabaseFields::WhiteBalance:
+            return MetadataInfo::WhiteBalance;
+
+        case DatabaseFields::WhiteBalanceColorTemperature:
+            return MetadataInfo::WhiteBalanceColorTemperature;
+
+        case DatabaseFields::MeteringMode:
+            return MetadataInfo::MeteringMode;
+
+        case DatabaseFields::SubjectDistance:
+            return MetadataInfo::SubjectDistance;
+
+        case DatabaseFields::SubjectDistanceCategory:
+            return MetadataInfo::SubjectDistanceCategory;
+
+        default:
+            break;
+    }
+
+    /// @todo Invalid request...
+    return MetadataInfo::Field();
+}
+
+
+}
 
 ImageInfoStatic* ImageInfoStatic::m_instance = 0;
 
@@ -125,6 +225,11 @@ ImageInfoData::ImageInfoData()
     groupImageCached       = false;
 
     invalid                = false;
+
+    videoMetadataCached    = DatabaseFields::VideoMetadataNone;
+    imageMetadataCached    = DatabaseFields::ImageMetadataNone;
+    hasVideoMetadata       = true;
+    hasImageMetadata       = true;
 }
 
 ImageInfoData::~ImageInfoData()
@@ -165,6 +270,11 @@ ImageInfo::ImageInfo(const ImageListerRecord& record)
     // field is only signed 32 bit in the protocol. -1 indicates value is larger, reread
     m_data->fileSizeCached         = m_data->fileSize != -1;
     m_data->imageSizeCached        = true;
+    m_data->videoMetadataCached    = DatabaseFields::VideoMetadataNone;
+    m_data->imageMetadataCached    = DatabaseFields::ImageMetadataNone;
+    m_data->hasVideoMetadata       = true;
+    m_data->hasImageMetadata       = true;
+    m_data->databaseFieldsHashRaw.clear();
 
     if (newlyCreated)
     {
@@ -1180,7 +1290,90 @@ ImageMetadataContainer ImageInfo::imageMetadataContainer() const
     }
 
     ImageMetadataContainer container;
-    ImageScanner::fillMetadataContainer(m_data->id, &container);
+    const DatabaseFieldsHashRaw rawVideoMetadata = getDatabaseFieldsRaw(DatabaseFields::ImageMetadataAll);
+    bool allFieldsNull = true;
+    for (DatabaseFields::ImageMetadataIterator it; !it.atEnd(); ++it)
+    {
+        const QVariant fieldValue = rawVideoMetadata.value(*it);
+
+        allFieldsNull&=fieldValue.isNull();
+
+        if (!fieldValue.isNull())
+        {
+            const MetadataInfo::Field mdField = DatabaseImageMetadataFieldsToMetadataInfoField(*it);
+            const QString fieldString = DMetadata::valueToString(fieldValue, mdField);
+
+            switch (*it)
+            {
+                case DatabaseFields::Make:
+                    container.make = fieldString;
+                    break;
+
+                case DatabaseFields::Model:
+                    container.model = fieldString;
+                    break;
+
+                case DatabaseFields::Lens:
+                    container.lens = fieldString;
+                    break;
+
+                case DatabaseFields::Aperture:
+                    container.aperture = fieldString;
+                    break;
+
+                case DatabaseFields::FocalLength:
+                    container.focalLength = fieldString;
+                    break;
+
+                case DatabaseFields::FocalLength35:
+                    container.focalLength35 = fieldString;
+                    break;
+
+                case DatabaseFields::ExposureTime:
+                    container.exposureTime = fieldString;
+                    break;
+
+                case DatabaseFields::ExposureProgram:
+                    container.exposureProgram = fieldString;
+                    break;
+
+                case DatabaseFields::ExposureMode:
+                    container.exposureMode = fieldString;
+                    break;
+
+                case DatabaseFields::Sensitivity:
+                    container.sensitivity = fieldString;
+                    break;
+
+                case DatabaseFields::FlashMode:
+                    container.flashMode = fieldString;
+                    break;
+
+                case DatabaseFields::WhiteBalance:
+                    container.whiteBalance = fieldString;
+                    break;
+
+                case DatabaseFields::WhiteBalanceColorTemperature:
+                    container.whiteBalanceColorTemperature = fieldString;
+                    break;
+
+                case DatabaseFields::SubjectDistance:
+                    container.subjectDistance = fieldString;
+                    break;
+
+                case DatabaseFields::SubjectDistanceCategory:
+                    container.subjectDistanceCategory = fieldString;
+                    break;
+
+                default:
+                    break;
+            }
+        }
+    }
+
+    // store whether we have at least one valid field
+    container.allFieldsNull = allFieldsNull;
+
     return container;
 }
 
@@ -1192,7 +1385,59 @@ VideoMetadataContainer ImageInfo::videoMetadataContainer() const
     }
 
     VideoMetadataContainer container;
-    ImageScanner::fillVideoMetadataContainer(m_data->id, &container);
+    const DatabaseFieldsHashRaw rawVideoMetadata = getDatabaseFieldsRaw(DatabaseFields::VideoMetadataAll);
+
+    bool allFieldsNull = true;
+    for (DatabaseFields::VideoMetadataIterator it; !it.atEnd(); ++it)
+    {
+        const QVariant fieldValue = rawVideoMetadata.value(*it);
+
+        allFieldsNull&=fieldValue.isNull();
+
+        if (!fieldValue.isNull())
+        {
+            const MetadataInfo::Field mdField = DatabaseVideoMetadataFieldsToMetadataInfoField(*it);
+            const QString fieldString = DMetadata::valueToString(fieldValue, mdField);
+
+            switch (*it)
+            {
+                case DatabaseFields::AspectRatio:
+                    container.aspectRatio = fieldString;
+                    break;
+
+                case DatabaseFields::AudioBitRate:
+                    container.audioBitRate = fieldString;
+                    break;
+
+                case DatabaseFields::AudioChannelType:
+                    container.audioChannelType = fieldString;
+                    break;
+
+                case DatabaseFields::AudioCompressor:
+                    container.audioCompressor = fieldString;
+                    break;
+
+                case DatabaseFields::Duration:
+                    container.duration = fieldString;
+                    break;
+
+                case DatabaseFields::FrameRate:
+                    container.frameRate = fieldString;
+                    break;
+
+                case DatabaseFields::VideoCodec:
+                    container.videoCodec = fieldString;
+                    break;
+
+                default:
+                    break;
+            }
+        }
+    }
+
+    // store whether we have at least one valid field
+    container.allFieldsNull = allFieldsNull;
+
     return container;
 }
 
@@ -1462,6 +1707,107 @@ QDebug& operator<<(QDebug& stream, const ImageInfo& info)
 {
     return stream << "ImageInfo [id = " << info.id() << ", databaseurl = "
                   << info.databaseUrl() << "]";
+}
+
+ImageInfo::DatabaseFieldsHashRaw ImageInfo::getDatabaseFieldsRaw(const DatabaseFields::Set& requestedSet) const
+{
+    if (!m_data)
+    {
+        return DatabaseFieldsHashRaw();
+    }
+
+    // keep the system locked to make sure all fields are taken from the same cache state
+    /// @todo Actually we need a read-write-lock, but we only have a write lock.
+    ImageInfoWriteLocker writeLocker;
+    if (requestedSet.hasFieldsFromVideoMetadata() && m_data->hasVideoMetadata)
+    {
+        const DatabaseFields::VideoMetadata requestedVideoMetadata = requestedSet.getVideoMetadata();
+
+        const DatabaseFields::VideoMetadata missingVideoMetadata = requestedVideoMetadata & ~m_data->videoMetadataCached;
+//         kDebug()<<QString("videometadata: requested: %1 missing: %3").arg(requestedVideoMetadata, 0, 16).arg(missingVideoMetadata, 0, 16);
+        if (missingVideoMetadata)
+        {
+            const QVariantList fieldValues = DatabaseAccess().db()->getVideoMetadata(m_data->id, missingVideoMetadata);
+
+            if (fieldValues.isEmpty())
+            {
+                m_data.constCastData()->hasVideoMetadata = false;
+                m_data.constCastData()->databaseFieldsHashRaw.removeAllFields(DatabaseFields::VideoMetadataAll);
+                m_data.constCastData()->videoMetadataCached = DatabaseFields::VideoMetadataNone;
+            }
+            else
+            {
+                int fieldsIndex = 0;
+                for (DatabaseFields::VideoMetadataIteratorSetOnly it(missingVideoMetadata); !it.atEnd(); ++it)
+                {
+                    const QVariant fieldValue = fieldValues.at(fieldsIndex);
+                    ++fieldsIndex;
+
+                    m_data.constCastData()->databaseFieldsHashRaw.insertField(*it, fieldValue);
+                }
+
+                m_data.constCastData()->videoMetadataCached|=missingVideoMetadata;
+            }
+        }
+    }
+
+    if (requestedSet.hasFieldsFromImageMetadata() && m_data->hasImageMetadata)
+    {
+        const DatabaseFields::ImageMetadata requestedImageMetadata = requestedSet.getImageMetadata();
+
+        const DatabaseFields::ImageMetadata missingImageMetadata = requestedImageMetadata & ~m_data->imageMetadataCached;
+//         kDebug()<<QString("imagemetadata: requested: %1 missing: %3").arg(requestedImageMetadata, 0, 16).arg(missingImageMetadata, 0, 16);
+        if (missingImageMetadata)
+        {
+            const QVariantList fieldValues = DatabaseAccess().db()->getImageMetadata(m_data->id, missingImageMetadata);
+
+            if (fieldValues.isEmpty())
+            {
+                m_data.constCastData()->hasImageMetadata = false;
+                m_data.constCastData()->databaseFieldsHashRaw.removeAllFields(DatabaseFields::ImageMetadataAll);
+                m_data.constCastData()->imageMetadataCached = DatabaseFields::ImageMetadataNone;
+            }
+            else
+            {
+                int fieldsIndex = 0;
+                for (DatabaseFields::ImageMetadataIteratorSetOnly it(missingImageMetadata); !it.atEnd(); ++it)
+                {
+                    const QVariant fieldValue = fieldValues.at(fieldsIndex);
+                    ++fieldsIndex;
+
+                    m_data.constCastData()->databaseFieldsHashRaw.insertField(*it, fieldValue);
+                }
+
+                m_data.constCastData()->imageMetadataCached|=missingImageMetadata;
+            }
+        }
+    }
+
+    // We always return all fields, the caller can just retrieve the ones he needs.
+    return m_data->databaseFieldsHashRaw;
+}
+
+QVariant ImageInfo::getDatabaseFieldRaw(const DatabaseFields::Set& requestedField) const
+{
+    DatabaseFieldsHashRaw rawHash = getDatabaseFieldsRaw(requestedField);
+
+    if (requestedField.hasFieldsFromImageMetadata())
+    {
+        const DatabaseFields::ImageMetadata requestedFieldFlag = requestedField;
+        const QVariant value = rawHash.value(requestedFieldFlag);
+
+        return value;
+    }
+
+    if (requestedField.hasFieldsFromVideoMetadata())
+    {
+        const DatabaseFields::VideoMetadata requestedFieldFlag = requestedField;
+        const QVariant value = rawHash.value(requestedFieldFlag);
+
+        return value;
+    }
+
+    return QVariant();
 }
 
 }  // namespace Digikam

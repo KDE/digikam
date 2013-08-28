@@ -8,6 +8,7 @@
  *
  * Copyright (C) 2007-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2011-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2013 by Michael G. Hansen <mike at mghansen dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -24,6 +25,10 @@
 
 #ifndef DATABASEFIELDS_H
 #define DATABASEFIELDS_H
+
+// C++ includes
+
+#include <stdint.h>
 
 // Qt includes
 
@@ -58,6 +63,7 @@ enum ImagesField
     ImagesFirst        = Album,
     ImagesLast         = UniqueHash
 };
+typedef uint8_t ImagesMinSizeType;
 
 enum ImageInformationField
 {
@@ -87,6 +93,7 @@ enum ImageInformationField
     ImageInformationFirst = Rating,
     ImageInformationLast  = PickLabel
 };
+typedef uint16_t ImageInformationMinSizeType;
 
 enum ImageMetadataField
 {
@@ -126,6 +133,7 @@ enum ImageMetadataField
     ImageMetadataFirst           = Make,
     ImageMetadataLast            = SubjectDistanceCategory
 };
+typedef uint16_t ImageMetadataMinSizeType;
 
 enum ImagePositionsField
 {
@@ -153,6 +161,7 @@ enum ImagePositionsField
     ImagePositionsFirst = Latitude,
     ImagePositionsLast  = PositionDescription
 };
+typedef uint16_t ImagePositionsMinSizeType;
 
 enum ImageCommentsField
 {
@@ -170,6 +179,7 @@ enum ImageCommentsField
     ImageCommentsFirst = CommentType,
     ImageCommentsLast  = Comment
 };
+typedef uint8_t ImageCommentsMinSizeType;
 
 enum ImageHistoryInfoField
 {
@@ -183,6 +193,7 @@ enum ImageHistoryInfoField
     ImageHistoryInfoFirst = ImageUUID,
     ImageHistoryInfoLast  = ImageRelations
 };
+typedef uint8_t ImageHistoryInfoMinSizeType;
 
 enum VideoMetadataField
 {
@@ -204,6 +215,7 @@ enum VideoMetadataField
     VideoMetadataFirst           = AspectRatio,
     VideoMetadataLast            = VideoCodec
 };
+typedef uint8_t VideoMetadataMinSizeType;
 
 Q_DECLARE_FLAGS(Images, ImagesField)
 Q_DECLARE_FLAGS(ImageInformation, ImageInformationField)
@@ -213,25 +225,104 @@ Q_DECLARE_FLAGS(ImagePositions, ImagePositionsField)
 Q_DECLARE_FLAGS(ImageHistoryInfo, ImageHistoryInfoField)
 Q_DECLARE_FLAGS(VideoMetadata, VideoMetadataField)
 
+template<typename FieldName> class FieldMetaInfo { };
+#define DECLARE_FIELDMETAINFO(FieldName)                            \
+    template<> class FieldMetaInfo <FieldName> { public:            \
+        static const FieldName##Field First = FieldName##First;     \
+        static const FieldName##Field Last = FieldName##Last;       \
+        typedef FieldName##MinSizeType MinSizeType;                 \
+        inline static MinSizeType toMinSizeType(const FieldName value) { return MinSizeType(value); } \
+        inline static FieldName fromMinSizeType(const MinSizeType value) { return FieldName(value); } \
+    };
+
+DECLARE_FIELDMETAINFO(Images)
+DECLARE_FIELDMETAINFO(ImageInformation)
+DECLARE_FIELDMETAINFO(ImageMetadata)
+DECLARE_FIELDMETAINFO(ImageComments)
+DECLARE_FIELDMETAINFO(ImagePositions)
+DECLARE_FIELDMETAINFO(ImageHistoryInfo)
+DECLARE_FIELDMETAINFO(VideoMetadata)
+
 /**
  * You can iterate over each of the Enumerations defined above:
  * ImagesIterator, ImageMetadataIterator etc.
  * for (ImagesIterator it; !it.atEnd(); ++it) {}
  */
 
-#define DATABASEFIELDS_ENUM_ITERATOR(Flag)            \
-                                                      \
-class Flag##Iterator                                  \
-{                                                     \
-    int i;                                            \
-                                                      \
-public:                                               \
-                                                      \
-    Flag##Iterator()       { i = Flag##First;       } \
-    bool atEnd()           { return i > Flag##Last; } \
-    void operator++()      { i = (i << 1);          } \
-    Flag operator*() const { return (Flag)i;        } \
+template<typename FieldName> class DatabaseFieldsEnumIterator
+{
+private:
+    int i;
+
+public:
+    DatabaseFieldsEnumIterator()
+      : i(FieldMetaInfo<FieldName>::First)
+    {
+    }
+
+    bool atEnd() const
+    {
+        return i > FieldMetaInfo<FieldName>::Last;
+    }
+
+    void operator++()
+    {
+        i = (i << 1);
+    }
+
+    FieldName operator*() const
+    {
+        return FieldName(i);
+    }
 };
+
+/**
+ * An iterator that iterates only over the flags which are set
+ */
+template<typename FieldName> class DatabaseFieldsEnumIteratorSetOnly
+{
+private:
+    DatabaseFieldsEnumIterator<FieldName> i;
+    const FieldName values;
+
+public:
+
+    DatabaseFieldsEnumIteratorSetOnly(const FieldName setValues)
+      : i(),
+        values(setValues)
+    {
+        if (! (*i & values) )
+        {
+            operator++();
+        }
+    }
+
+    bool atEnd() const
+    {
+        return i.atEnd();
+    }
+
+    void operator++()
+    {
+        while (!i.atEnd())
+        {
+            ++i;
+            if (*i & values)
+            {
+                break;
+            }
+        }
+    }
+
+    FieldName operator*() const
+    {
+        return *i;
+    }
+};
+
+#define DATABASEFIELDS_ENUM_ITERATOR(Flag)                                      \
+    typedef DatabaseFieldsEnumIterator<Flag> Flag##Iterator;                    \
+    typedef DatabaseFieldsEnumIteratorSetOnly<Flag> Flag##IteratorSetOnly;
 
 DATABASEFIELDS_ENUM_ITERATOR(Images)
 DATABASEFIELDS_ENUM_ITERATOR(ImageInformation)
@@ -260,7 +351,8 @@ Q_DECLARE_FLAGS(CustomEnum, CustomEnumFlags)
     inline Flag operator^(Flag f) const     { return variable.operator^(f);  } \
     inline Flag operator&(Flag f) const     { return variable.operator&(f);  } \
     inline operator Flag() const            { return variable;               } \
-    inline bool hasFieldsFrom##Flag() const { return variable & Flag##All;   }
+    inline bool hasFieldsFrom##Flag() const { return variable & Flag##All;   } \
+    inline Flag get##Flag() const           { return variable;               }
 
 /**
  * This class provides a set of all DatabasFields enums,
@@ -372,7 +464,17 @@ private:
 };
 
 #define DATABASEFIELDS_HASH_DECLARE_METHODS(Key, method)                                                                            \
+    void insertField(const Key& key, const T& value)           { QHash<unsigned int, T>::insert(method(key), value);              } \
     int remove(const Key& key)                                 { return QHash<unsigned int, T>::remove(method(key));              } \
+    int removeAllFields(const Key& key)                                                                                             \
+    {                                                                                                                               \
+        int removedCount = 0;                                                                                                       \
+        for (DatabaseFieldsEnumIteratorSetOnly<Key> it(key); !it.atEnd(); ++it)                                                     \
+        {                                                                                                                           \
+            removedCount+=remove(*it);                                                                                              \
+        }                                                                                                                           \
+        return removedCount;                                                                                                        \
+    }                                                                                                                               \
     T take(const Key& key)                                     { return QHash<unsigned int, T>::take(method(key));                } \
                                                                                                                                     \
     bool contains(const Key& key) const                        { return QHash<unsigned int, T>::contains(method(key));            } \

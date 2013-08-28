@@ -3037,7 +3037,7 @@ QStringList DMetadata::getXmpKeywords() const
 
 bool DMetadata::setXmpKeywords(const QStringList& newKeywords, bool setProgramName) const
 {
-    return addToXmpTagStringBag("Xmp.dc.subject", newKeywords, setProgramName);
+    return setXmpTagStringBag("Xmp.dc.subject", newKeywords, setProgramName);
 }
 
 bool DMetadata::removeXmpKeywords(const QStringList& keywordsToRemove, bool setProgramName)

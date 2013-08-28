@@ -48,7 +48,6 @@ public:
     }
 
     bool      cancel;
-    HaarIface haarIface;
     QString   path;
 };
 
@@ -86,10 +85,14 @@ void FingerprintsTask::run()
         description.rawDecodingHint                               = LoadingDescription::RawDecodingTimeOptimized;
         DImg dimg = PreviewLoadThread::loadSynchronously(description);
 
+        if(d->cancel)
+            return;
+
         if (!dimg.isNull())
         {
-            // compute Haar fingerprint
-            d->haarIface.indexImage(d->path, dimg);
+            // compute Haar fingerprint and store it to DB
+            HaarIface haarIface;
+            haarIface.indexImage(d->path, dimg);
         }
 
         QImage qimg = dimg.smoothScale(22, 22, Qt::KeepAspectRatio).copyQImage();
