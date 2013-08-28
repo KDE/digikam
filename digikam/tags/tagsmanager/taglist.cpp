@@ -31,10 +31,10 @@
 
 #include "taglist.h"
 #include "albumtreeview.h"
-#include "tagfolderview.h"
+#include "tagmngrtreeview.h"
 #include "tagmngrlistmodel.h"
 #include "tagmngrlistview.h"
-#include <tagmngrlistitem.h>
+#include "tagmngrlistitem.h"
 
 namespace Digikam {
 
@@ -52,12 +52,12 @@ public:
     QPushButton*        addButton;
     TagMngrListView*    tagList;
     TagMngrListModel*   tagListModel;
-    TagFolderView*      treeView;
+    TagMngrTreeView*      treeView;
     QMap<int, QList<ListItem*> > tagMap;
 
 };
 
-TagList::TagList(TagFolderView* treeView, QWidget* parent)
+TagList::TagList(TagMngrTreeView* treeView, QWidget* parent)
         : QWidget(parent), d(new TagListPriv())
 {
     d->treeView     = treeView;
@@ -181,7 +181,10 @@ void TagList::slotSelectionChanged()
 
     ListItem* item = static_cast<ListItem*>(index.internalPointer());
 
-    kDebug() << item->data(Qt::DisplayRole);
+    TagsManagerFilterModel* filterModel = d->treeView->getFilterModel();
+
+    filterModel->setQuickListTags(item->getTagIds());
+
 }
 
 }

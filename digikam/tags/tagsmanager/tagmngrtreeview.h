@@ -36,6 +36,14 @@ public:
     TagMngrTreeView(TagsManager* parent, TagModel* model);
     virtual ~TagMngrTreeView();
 
+    /**
+     * @brief setAlbumFilterModel - reimplement from AbstractAlbumTree
+     */
+    void setAlbumFilterModel(TagsManagerFilterModel* filteredModel,
+                             CheckableAlbumFilterModel* filterModel);
+
+    TagsManagerFilterModel* getFilterModel() { return m_tfilteredModel; }
+
 protected:
 
     /**
@@ -50,12 +58,14 @@ protected:
     virtual void setContexMenuItems(ContextMenuHelper& cmh, QList< TAlbum* > albums);
 
     /**
-     * Reimplement contextMenuEvent from AbstractAlbumTree to support multiple
-     * selection
+     * @brief contextMenuEvent   - Reimplement contextMenuEvent from AbstractAlbumTree
+     *                             to support multiple selection
      *
      * @param event context menu event triggered by right click
      */
     void contextMenuEvent(QContextMenuEvent* event);
+
+    TagsManagerFilterModel* m_tfilteredModel;
 
 public Q_SLOTS:
 

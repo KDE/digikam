@@ -27,13 +27,13 @@
 namespace Digikam
 {
 
-class TagFolderView;
+class TagMngrTreeView;
 class TagList : public QWidget
 {
     Q_OBJECT
 
 public:
-    TagList(TagFolderView* treeView, QWidget* parent);
+    TagList(TagMngrTreeView* treeView, QWidget* parent);
     ~TagList();
 
     /**

@@ -53,6 +53,8 @@ TagMngrTreeView::TagMngrTreeView(TagsManager* parent, TagModel* model)
                 : TagFolderView(parent, model), d(new TagMngrTreeViewPriv())
 {
     d->tagMngr = parent;
+    setAlbumFilterModel(new TagsManagerFilterModel(this), albumFilterModel());
+    expand(albumFilterModel()->rootAlbumIndex());
 }
 
 TagMngrTreeView::~TagMngrTreeView()
@@ -91,6 +93,14 @@ void TagMngrTreeView::contextMenuEvent(QContextMenuEvent* event)
     Q_UNUSED(choice);
     Q_UNUSED(event);
 
+}
+
+void TagMngrTreeView::setAlbumFilterModel(TagsManagerFilterModel* filteredModel,
+                                          CheckableAlbumFilterModel* filterModel)
+{
+    m_tfilteredModel = filteredModel;
+    //AbstractCheckableAlbumTreeView::setAlbumFilterModel(albumFilterModel());
+    albumFilterModel()->setSourceFilterModel(m_tfilteredModel);
 }
 
 void TagMngrTreeView::setContexMenuItems(ContextMenuHelper& cmh, QList< TAlbum* > albums)
