@@ -29,6 +29,8 @@
 
 class QPoint;
 
+namespace Digikam {
+
 class TagMngrListView : public QListView
 {
     Q_OBJECT
@@ -49,5 +51,7 @@ protected:
 public slots:
 
 };
+
+} // namespace Digikam
 
 #endif // TAGMNGRLISTVIEW_H

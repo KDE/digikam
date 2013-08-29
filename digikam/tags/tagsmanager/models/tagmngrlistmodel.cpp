@@ -30,6 +30,8 @@
 #include "tagmngrlistitem.h"
 #include "tagmngrlistmodel.h"
 
+namespace Digikam {
+
 TagMngrListModel::TagMngrListModel(QObject* parent)
     : QAbstractItemModel(parent)
 {
@@ -177,16 +179,13 @@ QVariant TagMngrListModel::data(const QModelIndex &index, int role) const
     if (!index.isValid())
         return QVariant();
 
-    if(role == Qt::BackgroundRole)
-        return QVariant(QBrush(Qt::cyan, Qt::Dense2Pattern));
-
     if(role == Qt::SizeHintRole)
         return QSize(30,30);
 
-    if(role == Qt::DisplayRole)
+    if(role == Qt::DisplayRole || role == Qt::BackgroundRole)
     {
         ListItem *item = static_cast<ListItem*>(index.internalPointer());
-        return item->data(index.column());
+        return item->data(role);
     }
 
     if(role == Qt::TextAlignmentRole)
@@ -261,3 +260,4 @@ int TagMngrListModel::rowCount(const QModelIndex &parent) const
     return parentItem->childCount();
 }
 
+} // namespace Digikam

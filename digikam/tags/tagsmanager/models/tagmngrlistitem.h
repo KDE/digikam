@@ -27,6 +27,8 @@
 #include <QList>
 #include <QVariant>
 
+namespace Digikam {
+
 class ListItem
 {
 public:
@@ -56,4 +58,5 @@ private:
     ListItem *parentItem;
 };
 
+} // namespace Digikam
 #endif

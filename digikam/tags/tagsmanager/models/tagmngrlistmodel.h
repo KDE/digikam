@@ -28,6 +28,8 @@
 #include <QModelIndex>
 #include <QVariant>
 
+namespace Digikam {
+
 class ListItem;
 
 class TagMngrListModel : public QAbstractItemModel
@@ -74,7 +76,7 @@ public:
     bool setData(const QModelIndex &index, const QVariant &value, int role);
 
     /**
-     * Reimplemented methods for handling drag-n-drop, encoding and deconding
+     * Reimplemented methods for handling drag-n-drop, encoding and decoding
      * mime types
      */
     Qt::DropActions supportedDropActions() const;
@@ -88,5 +90,6 @@ private:
     ListItem *rootItem;
 };
 
+} // namespace Digikam
 
 #endif // LISTMODEL_H

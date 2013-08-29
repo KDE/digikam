@@ -31,6 +31,8 @@
 #include "tagmngrlistmodel.h"
 
 
+namespace Digikam {
+
 TagMngrListView::TagMngrListView(QWidget *parent) :
     QListView(parent)
 {
@@ -83,3 +85,5 @@ QModelIndex TagMngrListView::indexVisuallyAt(const QPoint& p)
 
     return QModelIndex();
 }
+
+} // namespace Digikam

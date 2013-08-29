@@ -132,7 +132,8 @@ void TagList::restoreSettings()
     /**
      * If config is empty add generic All Tags
      */
-    d->tagListModel->addItem(QList<QVariant>() << QVariant("All Tags"));
+    d->tagListModel->addItem(QList<QVariant>()
+                             << QBrush(Qt::cyan, Qt::Dense2Pattern));
     if(size == 0)
     {
         return;
@@ -147,13 +148,15 @@ void TagList::restoreSettings()
         QStringList ids = data.split(" ", QString::SkipEmptyParts);
         TAlbum* item = AlbumManager::instance()->findTAlbum(ids.first().toInt());
         QList<QVariant> itemData;
-        itemData << item->title();
         itemData << QBrush(Qt::cyan, Qt::Dense2Pattern);
         itemData << item->id();
 
         ListItem* listItem = d->tagListModel->addItem(itemData);
         d->tagMap[item->id()].append(listItem);
     }
+    /** All Tags item should be selected **/
+    QModelIndex rootIndex = d->tagList->model()->index(0,0);
+    d->tagList->setCurrentIndex(rootIndex);
 }
 
 void TagList::slotAddPressed()
@@ -168,7 +171,6 @@ void TagList::slotAddPressed()
     TAlbum* album = static_cast<TAlbum*>(d->treeView->albumForIndex(selected.first()));
 
     QList<QVariant> itemData;
-    itemData << album->title();
     itemData << QBrush(Qt::cyan, Qt::Dense2Pattern);
     itemData << album->id();
     d->tagListModel->addItem(itemData);

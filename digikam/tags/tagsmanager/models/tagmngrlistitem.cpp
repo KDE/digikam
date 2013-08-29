@@ -23,14 +23,22 @@
 
 #include <QStringList>
 
+#include <klocale.h>
+
 #include "tagmngrlistitem.h"
+#include "albummanager.h"
+#include "album.h"
+
+
+namespace Digikam {
 
 ListItem::ListItem(const QList<QVariant> &data, ListItem *parent)
 {
     parentItem = parent;
-    itemData = data;
-    if(data.size() == 3)
-        tagIds.append(data.at(2).toInt());
+    itemData.append(data);
+
+    if(data.size() > 1)
+        tagIds.append(data.at(1).toInt());
 }
 
 ListItem::~ListItem()
@@ -73,9 +81,32 @@ int ListItem::columnCount() const
     return itemData.count();
 }
 
-QVariant ListItem::data(int column) const
+QVariant ListItem::data(int role) const
 {
-    return itemData.value(column);
+    //return itemData.value(column);
+    switch(role)
+    {
+        case Qt::DisplayRole:
+        {
+            QString display;
+            foreach(int tagId, tagIds)
+            {
+                TAlbum* album = AlbumManager::instance()->findTAlbum(tagId);
+                display.append(album->title());
+                if(display.size() > 50)
+                    break;
+            }
+            if(display.isEmpty())
+                display.append(i18n("All Tags"));
+            return QVariant(display);
+        }
+        case Qt::BackgroundRole:
+        {
+            return itemData.first();
+        }
+        default:
+            return QVariant();
+    }
 }
 
 void ListItem::setData(QList<QVariant> &data)
@@ -95,3 +126,5 @@ int ListItem::row() const
 
     return 0;
 }
+
+} // namespace Digikam
