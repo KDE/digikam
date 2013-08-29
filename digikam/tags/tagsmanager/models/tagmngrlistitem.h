@@ -32,10 +32,12 @@ namespace Digikam {
 class ListItem
 {
 public:
-    ListItem(const QList<QVariant> &data, ListItem *parent = 0);
+    ListItem(QList<QVariant> &data, ListItem *parent = 0);
     ~ListItem();
 
     void appendChild(ListItem *child);
+
+    void removeTagId(int tagId);
 
     ListItem *child(int row);
     int childCount() const;
@@ -55,6 +57,7 @@ private:
     QList<ListItem*> childItems;
     QList<QVariant> itemData;
     QList<int> tagIds;
+    QList<int> tagsToDel;
     ListItem *parentItem;
 };
 

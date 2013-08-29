@@ -692,8 +692,14 @@ bool TagsManagerFilterModel::matches(Album* album) const
     for(QSet<int>::const_iterator it = m_keywords.begin(); it != m_keywords.end(); ++it)
     {
         TAlbum* talbum = AlbumManager::instance()->findTAlbum(*it);
+        if(!talbum)
+        {
+            continue;
+        }
         if(talbum->title().contains(album->title()))
+        {
             dirty = true;
+        }
     }
 
     return dirty;

@@ -32,13 +32,17 @@
 
 namespace Digikam {
 
-ListItem::ListItem(const QList<QVariant> &data, ListItem *parent)
+ListItem::ListItem(QList<QVariant> &data, ListItem *parent)
 {
     parentItem = parent;
     itemData.append(data);
 
-    if(data.size() > 1)
-        tagIds.append(data.at(1).toInt());
+    data.pop_front();
+
+    foreach(QVariant val, data)
+    {
+        tagIds.append(val.toInt());
+    }
 }
 
 ListItem::~ListItem()
@@ -49,6 +53,11 @@ ListItem::~ListItem()
 void ListItem::appendChild(ListItem *item)
 {
     childItems.append(item);
+}
+
+void ListItem::removeTagId(int tagId)
+{
+    tagIds.removeOne(tagId);
 }
 
 ListItem *ListItem::child(int row)
@@ -83,21 +92,27 @@ int ListItem::columnCount() const
 
 QVariant ListItem::data(int role) const
 {
-    //return itemData.value(column);
     switch(role)
     {
         case Qt::DisplayRole:
+        case Qt::ToolTipRole:
         {
             QString display;
             foreach(int tagId, tagIds)
             {
                 TAlbum* album = AlbumManager::instance()->findTAlbum(tagId);
-                display.append(album->title());
-                if(display.size() > 50)
+                if(!album)
+                {
+                    continue;
+                }
+                display.append(album->title()+ ", ");
+                if(role == Qt::DisplayRole && display.size() > 30)
                     break;
             }
             if(display.isEmpty())
                 display.append(i18n("All Tags"));
+            else
+                display.remove(display.size()-2, 2);
             return QVariant(display);
         }
         case Qt::BackgroundRole:

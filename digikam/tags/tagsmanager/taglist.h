@@ -28,6 +28,8 @@ namespace Digikam
 {
 
 class TagMngrTreeView;
+class Album;
+
 class TagList : public QWidget
 {
     Q_OBJECT
@@ -50,6 +52,8 @@ private Q_SLOTS:
     void slotAddPressed();
 
     void slotSelectionChanged();
+
+    void slotTagDeleted(Album* album);
 
 private:
     class TagListPriv;

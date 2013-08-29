@@ -182,16 +182,11 @@ QVariant TagMngrListModel::data(const QModelIndex &index, int role) const
     if(role == Qt::SizeHintRole)
         return QSize(30,30);
 
-    if(role == Qt::DisplayRole || role == Qt::BackgroundRole)
-    {
-        ListItem *item = static_cast<ListItem*>(index.internalPointer());
-        return item->data(role);
-    }
-
     if(role == Qt::TextAlignmentRole)
         return Qt::AlignCenter;
 
-    return QVariant();
+    ListItem *item = static_cast<ListItem*>(index.internalPointer());
+    return item->data(role);
 }
 
 Qt::ItemFlags TagMngrListModel::flags(const QModelIndex &index) const

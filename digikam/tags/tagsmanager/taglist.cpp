@@ -86,6 +86,9 @@ TagList::TagList(TagMngrTreeView* treeView, QWidget* parent)
             this,
             SLOT(slotSelectionChanged()));
 
+    connect(AlbumManager::instance(), SIGNAL(signalAlbumDeleted(Album*)),
+            this, SLOT(slotTagDeleted(Album*)));
+
     restoreSettings();
     this->setLayout(layout);
 }
@@ -146,15 +149,28 @@ void TagList::restoreSettings()
             continue;
 
         QStringList ids = data.split(" ", QString::SkipEmptyParts);
-        TAlbum* item = AlbumManager::instance()->findTAlbum(ids.first().toInt());
         QList<QVariant> itemData;
         itemData << QBrush(Qt::cyan, Qt::Dense2Pattern);
-        itemData << item->id();
+
+        foreach(QString tagId, ids)
+        {
+            TAlbum* item = AlbumManager::instance()->findTAlbum(tagId.toInt());
+            if(item)
+            {
+                itemData << item->id();
+            }
+        }
 
         ListItem* listItem = d->tagListModel->addItem(itemData);
-        d->tagMap[item->id()].append(listItem);
+        /** Use this map to find all List Items that contain specific tag
+         *  usually to remove deleted tag
+         */
+        foreach(int tagId, listItem->getTagIds())
+        {
+            d->tagMap[tagId].append(listItem);
+        }
     }
-    /** All Tags item should be selected **/
+    /** "All Tags" item should be selected **/
     QModelIndex rootIndex = d->tagList->model()->index(0,0);
     d->tagList->setCurrentIndex(rootIndex);
 }
@@ -162,18 +178,28 @@ void TagList::restoreSettings()
 void TagList::slotAddPressed()
 {
     QModelIndexList selected = d->treeView->selectionModel()->selectedIndexes();
-    /**
-     * Figure out how to implement multiple selection
-     */
+
     if(selected.isEmpty())
         return;
 
-    TAlbum* album = static_cast<TAlbum*>(d->treeView->albumForIndex(selected.first()));
-
     QList<QVariant> itemData;
     itemData << QBrush(Qt::cyan, Qt::Dense2Pattern);
-    itemData << album->id();
-    d->tagListModel->addItem(itemData);
+
+    foreach(QModelIndex index, selected)
+    {
+        TAlbum* album = static_cast<TAlbum*>(d->treeView->albumForIndex(index));
+        kDebug() << "Adding to list " << album->title();
+        itemData << album->id();
+    }
+    ListItem* listItem = d->tagListModel->addItem(itemData);
+
+    /** Use this map to find all List Items that contain specific tag
+     *  usually to remove deleted tag
+     */
+    foreach(int tagId, listItem->getTagIds())
+    {
+        d->tagMap[tagId].append(listItem);
+    }
 
 }
 
@@ -187,6 +213,23 @@ void TagList::slotSelectionChanged()
 
     filterModel->setQuickListTags(item->getTagIds());
 
+}
+
+void TagList::slotTagDeleted(Album* album)
+{
+    TAlbum* talbum = dynamic_cast<TAlbum*>(album);
+
+    if(!talbum)
+        return;
+;
+    int delId = talbum->id();
+
+    QList<ListItem*> items = d->tagMap[delId];
+
+    foreach(ListItem* item, items)
+    {
+        item->removeTagId(delId);
+    }
 }
 
 }

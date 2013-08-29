@@ -559,16 +559,13 @@ void TagsManager::setupActions()
 {
     d->mainToolbar = new KToolBar(d->treeWindow);
 
-    QHBoxLayout* tempLayout = new QHBoxLayout();
-    tempLayout->addWidget(d->tagPixmap);
-    tempLayout->addWidget(d->searchBar);
-
-    QWidget* searchWidget = new QWidget(this);
-    searchWidget->setLayout(tempLayout);
+    QWidgetAction* pixMapAction = new QWidgetAction(this);
+    pixMapAction->setDefaultWidget(d->tagPixmap);
 
     QWidgetAction* searchAction = new QWidgetAction(this);
-    searchAction->setDefaultWidget(searchWidget);
+    searchAction->setDefaultWidget(d->searchBar);
 
+    d->mainToolbar->addAction(pixMapAction);
     d->mainToolbar->addAction(searchAction);
 
     d->mainToolbar->addSeparator();
