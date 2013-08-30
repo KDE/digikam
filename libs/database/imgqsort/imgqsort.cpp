@@ -39,6 +39,7 @@
 #include "nrestimate.h"
 #include "libopencv.h"
 #include "mixerfilter.h"
+#include "nrfilter.h"
 
 using namespace cv;
 
@@ -50,18 +51,29 @@ class ImgQSort::Private
 public:
 
     Private() :
-        max_lowThreshold(100)
+        clusterCount(30),
+        size(512)
     {
+        for (int c = 0 ; c < 3; c++)
+        {
+            fimg[c] = 0;
+        }
+
         edgeThresh   = 1;
         lowThreshold = 0.4;   // given in research paper
         ratio        = 3;
         kernel_size  = 3;
-    };
-    
+    }
+
+
+
+    float*      fimg[3];
+    const uint  clusterCount;
+    const uint  size;   // Size of squared original image.
+
+
     Mat       src_gray;
     Mat       detected_edges;
-
-    int const max_lowThreshold;
 
     int       edgeThresh;
     int       ratio;
@@ -70,6 +82,7 @@ public:
     double    lowThreshold;
 
     DImg      image;
+    DImg      neimage;          //noise estimation image[ for color]
 };
 
 ImgQSort::ImgQSort()
@@ -86,14 +99,28 @@ ImgQSort::~ImgQSort()
     delete d;
 }
 
+//FIXME: This may cause threading issues in noisedetector()
+bool ImgQSort::runningFlag() const
+{
+    return true;
+}
 PickLabel ImgQSort::analyseQuality(const DImg& img)
 {
+
+    //for ImgQNREstimate
+    // Use the Top/Left corner of 256x256 pixels to analys noise contents from image.
+    // This will speed-up computation time with OpenCV
     d->image     = img;
+    d->neimage = img;
     readImage();
 
+//FIXME: NaN [0/0] occurs in some images. Should be avoided
+//returns blur value between 0 and 1
     double blur  = blurdetector();
     kDebug() << "Amount of Blur present in image is  : " << blur;
-    
+
+//FIXME: Some images give outputs such as -9.43183e+21.
+//returns noise value between 0 and 1
     double noise = noisedetector();
     kDebug() << "Amount of Noise present in image is : " << noise;
 
@@ -111,6 +138,30 @@ void ImgQSort::readImage()
 
     d->image.putImageData(mixer.getTargetImage().bits());
     d->src_gray = cvCreateMat(d->image.numPixels(), 1, CV_8UC1);
+
+    if (1)      //noise detection. insert if condition here
+    {
+        DColor col;
+
+        for (int c = 0; runningFlag() && (c < 3); c++)
+        {
+            d->fimg[c] = new float[d->neimage.numPixels()];
+        }
+
+        int j = 0;
+
+        for (uint y = 0; runningFlag() && (y < d->neimage.height()); y++)
+        {
+            for (uint x = 0; runningFlag() && (x < d->neimage.width()); x++)
+            {
+                col           = d->neimage.getPixelColor(x, y);
+                d->fimg[0][j] = col.red();
+                d->fimg[1][j] = col.green();
+                d->fimg[2][j] = col.blue();
+                j++;
+            }
+        }
+    }
 }
 
 /**
@@ -130,7 +181,7 @@ void ImgQSort::CannyThreshold(int, void*) const
 double ImgQSort::blurdetector() const
 {
     d->lowThreshold   = 0.4;
- //   d->ratio    =3;
+    d->ratio    =3;
     double average    = 0.0;
     double maxval     = 0.0;
     double blurresult = 0.0;
@@ -151,29 +202,293 @@ double ImgQSort::blurdetector() const
 
 double ImgQSort::noisedetector() const
 {
-    d->lowThreshold    = 0.0005;   //given in research paper for noise. Variable parameter
- //   d->ratio    =1;
+
     double noiseresult = 0.0;
-    double average     = 0.0;
-    double maxval      = 0.0;
 
-    // Apply Canny Edge Detector to get the edges
-    CannyThreshold(0, 0);
+    //--convert fimg to CvMat*-------------------------------------------------------------------------------
 
-    average     = mean(d->detected_edges)[0];
-    int* maxIdx = new int[sizeof(d->detected_edges)];
+    // convert the image into YCrCb color model
+    NRFilter::srgb2ycbcr(d->fimg, d->neimage.numPixels());
 
-    // To find the maximum edge intensity value
+    // One dimentional CvMat which stores the image
+    CvMat* points    = cvCreateMat(d->neimage.numPixels(), 3, CV_32FC1);
 
-    minMaxIdx(d->detected_edges, 0, &maxval, 0, maxIdx);
+    // matrix to store the index of the clusters
+    CvMat* clusters  = cvCreateMat(d->neimage.numPixels(), 1, CV_32SC1);
 
-    noiseresult = average/maxval;
+    // pointer variable to handle the CvMat* points (the image in CvMat format)
+    float* pointsPtr = (float*)points->data.ptr;
 
-    kDebug() << "The average of the edge intensity is " << average;
-    kDebug() << "The maximum of the edge intensity is " << maxval;
-    kDebug() << "The result of the edge intensity is "  << noiseresult;
+    for (uint x=0 ; runningFlag() && (x < d->neimage.numPixels()) ; x++)
+    {
+        for (int y=0 ; runningFlag() && (y < 3) ; y++)
+        {
+            *pointsPtr++ = (float)d->fimg[y][x];
+        }
+    }
 
-    delete [] maxIdx;
+    // Array to store the centers of the clusters
+    CvArr* centers = 0;
+
+    kDebug() << "Everything ready for the cvKmeans2 or as it seems to";
+
+    //-- KMEANS ---------------------------------------------------------------------------------------------
+
+    if (runningFlag())
+    {
+        cvKMeans2(points, d->clusterCount, clusters,
+                  cvTermCriteria(CV_TERMCRIT_EPS + CV_TERMCRIT_ITER, 10, 1.0), 3, 0, 0, centers, 0);
+    }
+
+    kDebug() << "cvKmeans2 successfully run";
+
+    //-- Divide into cluster->columns, sample->rows, in matrix standard deviation ---------------------------
+
+    QScopedArrayPointer<int> rowPosition(new int[d->clusterCount]);
+
+    //the row position array would just make the hold the number of elements in each cluster
+
+    for (uint i=0 ; runningFlag() && (i < d->clusterCount) ; i++)
+    {
+        //initializing the cluster count array
+        rowPosition[i] = 0;
+    }
+
+    int rowIndex, columnIndex;
+
+    for (uint i=0 ; runningFlag() && (i < d->neimage.numPixels()) ; i++)
+    {
+        columnIndex = clusters->data.i[i];
+        rowPosition[columnIndex]++;
+    }
+
+    kDebug() << "array indexed, and ready to find maximum";
+
+    //-- Finding maximum of the rowPosition array ------------------------------------------------------------
+
+    int max = rowPosition[0];
+
+    for (uint i=1 ; runningFlag() && (i < d->clusterCount) ; i++)
+    {
+        if (rowPosition[i] > max)
+        {
+            max = rowPosition[i];
+        }
+    }
+
+    QString maxString;
+    maxString.append(QString::number(max));
+
+    kDebug() << QString("maximum declared = %1").arg(maxString);
+
+    //-- Divide and conquer ---------------------------------------------------------------------------------
+
+    CvMat* sd = 0;
+
+    if (runningFlag())
+    {
+        sd = cvCreateMat(max, (d->clusterCount * points->cols), CV_32FC1);
+    }
+
+    //-- Initialize the rowPosition array -------------------------------------------------------------------
+
+    QScopedArrayPointer<int> rPosition(new int[d->clusterCount]);
+
+    for (uint i=0 ; runningFlag() && (i < d->clusterCount) ; i++)
+    {
+        rPosition[i] = 0;
+    }
+
+    float* ptr = 0;
+
+    if (runningFlag())
+    {
+        ptr = (float*)sd->data.ptr;
+    }
+
+    kDebug() << "The rowPosition array is ready!";
+
+    for (uint i=0 ; runningFlag() && (i < d->neimage.numPixels()) ; i++)
+    {
+        columnIndex = clusters->data.i[i];
+        rowIndex    = rPosition[columnIndex];
+
+        //moving to the right row
+        ptr         = (float*)(sd->data.ptr + rowIndex*(sd->step));
+
+        //moving to the right column
+        for (int j=0 ; runningFlag() && (j < columnIndex) ; j++)
+        {
+            for (int z=0 ; runningFlag() && (z < (points->cols)) ; z++)
+            {
+                ptr++;
+            }
+        }
+
+        for (int z=0 ; runningFlag() && (z < (points->cols)) ; z++)
+        {
+            *ptr++ = cvGet2D(points, i, z).val[0];
+        }
+
+        rPosition[columnIndex] = rPosition[columnIndex] + 1;
+    }
+
+    kDebug() << "sd matrix creation over!";
+
+    //-- This part of the code would involve the sd matrix and make the mean and the std of the data -------------------
+
+    CvScalar std;
+    CvScalar mean;
+    CvMat*   meanStore    = 0;
+    CvMat*   stdStore     = 0;
+    float*   meanStorePtr = 0;
+    float*   stdStorePtr  = 0;
+    int      totalcount   = 0; // Number of non-empty clusters
+
+    if (runningFlag())
+    {
+        meanStore    = cvCreateMat(d->clusterCount, points->cols, CV_32FC1);
+        stdStore     = cvCreateMat(d->clusterCount, points->cols, CV_32FC1);
+        meanStorePtr = (float*)(meanStore->data.ptr);
+        stdStorePtr  = (float*)(stdStore->data.ptr);
+    }
+
+    for (int i=0 ; runningFlag() && (i < sd->cols) ; i++)
+    {
+        if (runningFlag() && (rowPosition[(i/points->cols)] >= 1))
+        {
+            CvMat* workingArr = cvCreateMat(rowPosition[(i / points->cols)], 1, CV_32FC1);
+            ptr               = (float*)(workingArr->data.ptr);
+
+            for (int j=0 ; runningFlag() && (j < rowPosition[(i / (points->cols))]) ; j++)
+            {
+                *ptr++ = cvGet2D(sd, j, i).val[0];
+            }
+
+            cvAvgSdv(workingArr, &mean, &std);
+            *meanStorePtr++ = (float)mean.val[0];
+            *stdStorePtr++  = (float)std.val[0];
+            totalcount++;
+            cvReleaseMat(&workingArr);
+        }
+    }
+
+    kDebug() << "Make the mean and the std of the data";
+
+    // -----------------------------------------------------------------------------------------------------------------
+
+    if (runningFlag())
+    {
+        meanStorePtr = (float*)meanStore->data.ptr;
+        stdStorePtr  = (float*)stdStore->data.ptr;
+    }
+
+    kDebug() << "Done with the basic work of storing the mean and the std";
+
+    //-- Calculating weighted mean, and weighted std -----------------------------------------------------------
+
+    QString info;
+    float   weightedMean = 0.0f;
+    float   weightedStd  = 0.0f;
+    float   datasd[3]    = {0.0f, 0.0f, 0.0f};
+
+    for (int j=0 ; runningFlag() && (j < points->cols) ; j++)
+    {
+        meanStorePtr = (float*)meanStore->data.ptr;
+        stdStorePtr  = (float*)stdStore->data.ptr;
+
+        for (int moveToChannel=0 ; moveToChannel <= j ; moveToChannel++)
+        {
+            meanStorePtr++;
+            stdStorePtr++;
+        }
+
+        for (uint i=0 ; i < d->clusterCount ; i++)
+        {
+            if (rowPosition[i] >= 1)
+            {
+                weightedMean += (*meanStorePtr) * rowPosition[i];
+                weightedStd  += (*stdStorePtr)  * rowPosition[i];
+                meanStorePtr += points->cols;
+                stdStorePtr  += points->cols;
+            }
+        }
+
+        weightedMean = weightedMean / (d->neimage.numPixels());
+        weightedStd  = weightedStd  / (d->neimage.numPixels());
+        datasd[j]    = weightedStd;
+
+        info.append("\n\nChannel: ");
+        info.append(QString::number(j));
+        info.append("\nWeighted Mean: ");
+        info.append(QString::number(weightedMean));
+        info.append("\nWeighted Standard Deviation: ");
+        info.append(QString::number(weightedStd));
+    }
+
+
+    kDebug() << "Info : " << info;
+
+    // -- adaptation ---------------------------------------------------------------------------------------
+    if (runningFlag())
+    {
+        // for 16 bits images only
+        if (d->neimage.sixteenBit())
+        {
+            for (int i=0 ; i < points->cols ; i++)
+            {
+                datasd[i] = datasd[i] / 256;
+            }
+        }
+
+        noiseresult= ((datasd[0]/2)+(datasd[1]/2)+(datasd[2]/2))/3;
+
+        kDebug() << "All is completed";
+
+        //-- releasing matrices and closing files ----------------------------------------------------------------------
+
+        cvReleaseMat(&sd);
+        cvReleaseMat(&stdStore);
+        cvReleaseMat(&meanStore);
+        cvReleaseMat(&points);
+        cvReleaseMat(&clusters);
+
+        for (uint i = 0; i < 3; i++)
+        {
+            delete [] d->fimg[i];
+        }
+
+
+        /*
+        //My original algorithm. lowThreshold should be adjusted precisely for this to work
+        
+        kDebug()<<"Estimated noise is "<<nre.settings();
+        d->lowThreshold    = 0.0005;   //given in research paper for noise. Variable parameter
+        //   d->ratio    =1;
+        double noiseresult = 0.0;
+        double average     = 0.0;
+        double maxval      = 0.0;
+
+        // Apply Canny Edge Detector to get the edges
+        CannyThreshold(0, 0);
+
+        average     = mean(d->detected_edges)[0];
+        int* maxIdx = new int[sizeof(d->detected_edges)];
+        // To find the maximum edge intensity value
+
+        minMaxIdx(d->detected_edges, 0, &maxval, 0, maxIdx);
+
+        noiseresult = average/maxval;
+
+        kDebug() << "The average of the edge intensity is " << average;
+        kDebug() << "The maximum of the edge intensity is " << maxval;
+        kDebug() << "The result of the edge intensity is "  << noiseresult;
+
+        delete [] maxIdx;
+
+        */
+
+    }
 
     return noiseresult;
 }
