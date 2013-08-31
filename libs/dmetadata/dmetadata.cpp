@@ -476,6 +476,12 @@ int DMetadata::getImageColorLabel() const
     {
         QString value = getXmpTagString("Xmp.digiKam.ColorLabel", false);
 
+        if (value.isEmpty())
+        {
+            // Nikon NX use this XMP tags to store Color Labels
+            value = getXmpTagString("Xmp.photoshop.Urgency", false);
+        }
+
         if (!value.isEmpty())
         {
             bool ok      = false;
@@ -768,6 +774,12 @@ bool DMetadata::setImageColorLabel(int colorId) const
     if (supportXmp())
     {
         if (!setXmpTagString("Xmp.digiKam.ColorLabel", QString::number(colorId)))
+        {
+            return false;
+        }
+
+        // Nikon NX use this XMP tags to store Color Labels
+        if (!setXmpTagString("Xmp.photoshop.Urgency", QString::number(colorId)))
         {
             return false;
         }
