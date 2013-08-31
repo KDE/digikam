@@ -67,22 +67,22 @@ public:
 
 
 
-    float*      fimg[3];
-    const uint  clusterCount;
-    const uint  size;   // Size of squared original image.
+    float*     fimg[3];
+    const uint clusterCount;
+    const uint size;   // Size of squared original image.
 
 
-    Mat       src_gray;
-    Mat       detected_edges;
+    Mat        src_gray;
+    Mat        detected_edges;
 
-    int       edgeThresh;
-    int       ratio;
-    int       kernel_size;
+    int        edgeThresh;
+    int        ratio;
+    int        kernel_size;
 
-    double    lowThreshold;
+    double     lowThreshold;
 
-    DImg      image;
-    DImg      neimage;          //noise estimation image[ for color]
+    DImg       image;
+    DImg       neimage;          //noise estimation image[ for color]
 };
 
 ImgQSort::ImgQSort()
@@ -104,23 +104,24 @@ bool ImgQSort::runningFlag() const
 {
     return true;
 }
+
 PickLabel ImgQSort::analyseQuality(const DImg& img)
 {
 
     //for ImgQNREstimate
     // Use the Top/Left corner of 256x256 pixels to analys noise contents from image.
     // This will speed-up computation time with OpenCV
-    d->image     = img;
+    d->image   = img;
     d->neimage = img;
     readImage();
 
-//FIXME: NaN [0/0] occurs in some images. Should be avoided
-//returns blur value between 0 and 1
+    //FIXME: NaN [0/0] occurs in some images. Should be avoided
+    //       returns blur value between 0 and 1
     double blur  = blurdetector();
     kDebug() << "Amount of Blur present in image is  : " << blur;
 
-//FIXME: Some images give outputs such as -9.43183e+21.
-//returns noise value between 0 and 1
+    //FIXME: Some images give outputs such as -9.43183e+21.
+    //       returns noise value between 0 and 1
     double noise = noisedetector();
     kDebug() << "Amount of Noise present in image is : " << noise;
 
@@ -164,10 +165,6 @@ void ImgQSort::readImage()
     }
 }
 
-/**
- * @function CannyThreshold
- * @brief Trackbar callback - Canny thresholds input with a ratio 1:3
- */
 void ImgQSort::CannyThreshold(int, void*) const
 {
     // Reduce noise with a kernel 3x3
@@ -181,14 +178,14 @@ void ImgQSort::CannyThreshold(int, void*) const
 double ImgQSort::blurdetector() const
 {
     d->lowThreshold   = 0.4;
-    d->ratio    =3;
+    d->ratio          = 3;
     double average    = 0.0;
     double maxval     = 0.0;
     double blurresult = 0.0;
     ImgQSort::CannyThreshold(0, 0);
 
     average           = mean(d->detected_edges)[0];
-    int* const maxIdx = (int* )malloc(sizeof(d->detected_edges));
+    int* const maxIdx = new int[sizeof(d->detected_edges)];  // FIXME: never free ==> memory leak ?
     minMaxIdx(d->detected_edges, 0, &maxval, 0, maxIdx);
 
     blurresult        = average / maxval;
@@ -202,7 +199,6 @@ double ImgQSort::blurdetector() const
 
 double ImgQSort::noisedetector() const
 {
-
     double noiseresult = 0.0;
 
     //--convert fimg to CvMat*-------------------------------------------------------------------------------
@@ -388,9 +384,9 @@ double ImgQSort::noisedetector() const
     //-- Calculating weighted mean, and weighted std -----------------------------------------------------------
 
     QString info;
-    float   weightedMean = 0.0f;
-    float   weightedStd  = 0.0f;
-    float   datasd[3]    = {0.0f, 0.0f, 0.0f};
+    float   weightedMean = 0.0F;
+    float   weightedStd  = 0.0F;
+    float   datasd[3]    = {0.0F, 0.0F, 0.0F};
 
     for (int j=0 ; runningFlag() && (j < points->cols) ; j++)
     {
@@ -426,10 +422,10 @@ double ImgQSort::noisedetector() const
         info.append(QString::number(weightedStd));
     }
 
-
     kDebug() << "Info : " << info;
 
     // -- adaptation ---------------------------------------------------------------------------------------
+
     if (runningFlag())
     {
         // for 16 bits images only
@@ -441,7 +437,7 @@ double ImgQSort::noisedetector() const
             }
         }
 
-        noiseresult= ((datasd[0]/2)+(datasd[1]/2)+(datasd[2]/2))/3;
+        noiseresult = ((datasd[0]/2)+(datasd[1]/2)+(datasd[2]/2))/3;
 
         kDebug() << "All is completed";
 
@@ -458,10 +454,9 @@ double ImgQSort::noisedetector() const
             delete [] d->fimg[i];
         }
 
-
-        /*
+/*
         //My original algorithm. lowThreshold should be adjusted precisely for this to work
-        
+
         kDebug()<<"Estimated noise is "<<nre.settings();
         d->lowThreshold    = 0.0005;   //given in research paper for noise. Variable parameter
         //   d->ratio    =1;
@@ -485,9 +480,7 @@ double ImgQSort::noisedetector() const
         kDebug() << "The result of the edge intensity is "  << noiseresult;
 
         delete [] maxIdx;
-
-        */
-
+*/
     }
 
     return noiseresult;

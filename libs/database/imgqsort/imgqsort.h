@@ -54,10 +54,16 @@ private:
      */
     void readImage();
 
+
+    /**
+    * @function CannyThreshold
+    * @brief Trackbar callback - Canny thresholds input with a ratio 1:3
+    */
     void   CannyThreshold(int, void*) const;
+
     double blurdetector() const;
     double noisedetector() const;
-    bool runningFlag() const;
+    bool   runningFlag() const;
 
 private:
 
