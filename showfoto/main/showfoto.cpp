@@ -56,6 +56,7 @@ extern "C"
 #include <QProgressBar>
 #include <QSplitter>
 #include <QVBoxLayout>
+#include <QLineEdit>
 
 // KDE includes
 
@@ -223,8 +224,7 @@ ShowFoto::ShowFoto(const KUrl::List& urlList)
 
     // -- Load current items ---------------------------
 
-//    slotOpenFilesInFolder();
-
+    slotOpenFilesInFolder();
 }
 
 ShowFoto::~ShowFoto()

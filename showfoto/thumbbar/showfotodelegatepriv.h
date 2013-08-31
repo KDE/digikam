@@ -98,7 +98,7 @@ public:
         flow                = QListView::LeftToRight;
 
         // switch off drawing of frames
-        drawMouseOverFrame  = true;
+        drawMouseOverFrame  = false;
         drawFocusFrame      = false;
 
         // switch off composing rating over background
