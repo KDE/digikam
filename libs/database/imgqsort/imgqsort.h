@@ -63,6 +63,7 @@ private:
 
     double blurdetector() const;
     double noisedetector() const;
+    int compressiondetector() const;
     bool   runningFlag() const;
 
 private:

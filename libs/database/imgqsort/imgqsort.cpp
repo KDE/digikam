@@ -124,6 +124,9 @@ PickLabel ImgQSort::analyseQuality(const DImg& img)
     //       returns noise value between 0 and 1
     double noise = noisedetector();
     kDebug() << "Amount of Noise present in image is : " << noise;
+    
+    int compressionlevel= compressiondetector();
+    kDebug() << "Amount of compression artifacts present in image is : "<< compressionlevel;
 
     // FIXME
     return NoPickLabel;
@@ -484,6 +487,135 @@ double ImgQSort::noisedetector() const
     }
 
     return noiseresult;
+}
+
+
+int ImgQSort::compressiondetector() const
+{
+    //FIXME: set threshold value to an acceptable standard to get the number of blocking artifacts
+    const int THRESHOLD = 30;
+    const int block_size = 8;
+    int countblocks=0;
+    int number_of_blocks=0;
+    int sum=0;
+    vector<int> average_bottom,average_middle,average_top;
+    
+    //go through 8 blocks at a time horizontally
+    //iterating through columns
+    for (int i = 0; i < d->src_gray.rows; i++)
+    {
+        //calculating intensity of top column
+        for (int j = 0; j < d->src_gray.cols; j+=8)
+        {
+            sum=0;
+
+            for (int k=j; k<block_size; k++)
+            {
+                sum += (int)d->src_gray.at<uchar>(i, j);
+            }
+
+            average_top.push_back(sum/8);
+        }
+
+        //calculating intensity of middle column
+        for (int j = 0; j < d->src_gray.cols; j+=8)
+        {
+            sum=0;
+
+            for (int k=j; k<block_size; k++)
+            {
+                sum += (int)d->src_gray.at<uchar>(i+1, j);
+            }
+
+            average_middle.push_back(sum/8);
+        }
+
+        //calculating intensity of bottom column
+        countblocks=0;
+
+        for (int j = 0; j < d->src_gray.cols; j+=8)
+        {
+            sum=0;
+
+            for (int k=j; k<block_size; k++)
+            {
+                sum += (int)d->src_gray.at<uchar>(i+2, j);
+            }
+            average_bottom.push_back(sum/8);
+            countblocks++;
+        }
+
+        //check if the average intensity of 8 blocks in the top, middle and bottom rows are equal. If so increment number_of_blocks
+        for (int j=0; j<countblocks; j++)
+        {
+            if ((average_middle[j]==(average_top[j]+average_bottom[j])/2) && average_middle[j]>THRESHOLD)
+            {
+                number_of_blocks++;
+            }
+        }
+
+    }
+
+    average_bottom.clear();
+    average_middle.clear();
+    average_top.clear();
+
+    //iterating through rows
+
+    for (int j= 0; j < d->src_gray.cols; j++)
+    {
+        //calculating intensity of top row
+        for (int i = 0; i< d->src_gray.rows; i+=8)
+        {
+            sum=0;
+
+            for (int k=i; k<block_size; k++)
+            {
+                sum += (int)d->src_gray.at<uchar>(i, j);
+            }
+
+            average_top.push_back(sum/8);
+        }
+
+        //calculating intensity of middle row
+        for (int i= 0; i< d->src_gray.rows; i+=8)
+        {
+            sum=0;
+
+            for (int k=i; k<block_size; k++)
+            {
+                sum += (int)d->src_gray.at<uchar>(i, j+1);
+            }
+
+            average_middle.push_back(sum/8);
+        }
+
+        //calculating intensity of bottom row
+        countblocks=0;
+
+        for (int i = 0; i< d->src_gray.rows; i+=8)
+        {
+            sum=0;
+
+            for (int k=i; k<block_size; k++)
+            {
+                sum += (int)d->src_gray.at<uchar>(i, j+2);
+            }
+
+            average_bottom.push_back(sum/8);
+            countblocks++;
+        }
+
+        //check if the average intensity of 8 blocks in the top, middle and bottom rows are equal. If so increment number_of_blocks
+        for (int i=0; i<countblocks; i++)
+        {
+            if ((average_middle[i]==(average_top[i]+average_bottom[i])/2) && average_middle[i]>THRESHOLD)
+            {
+                number_of_blocks++;
+            }
+        }
+}
+return number_of_blocks;
 }
 
 }  // namespace Digikam
