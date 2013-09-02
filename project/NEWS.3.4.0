@@ -19,5 +19,3 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 007 ==> 323062 - digikam (core): Schema update to V 7 failed!
 008 ==> 268688 - Write metadata to all images does not remove obsolete tags.
 009 ==> 324375 - XMP Metadata tab shows "Label" set by VIewNX, but Filter does not recognize.
-010 ==> 
-
