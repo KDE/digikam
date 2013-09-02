@@ -54,6 +54,8 @@ public:
      */
     QList<ListItem*> allItems();
 
+    void deleteItem(ListItem* item);
+
     /**
      * Standard methods to be implemented when subcassing QAbstractItemModel
      */
@@ -84,6 +86,7 @@ public:
     QMimeData* mimeData(const QModelIndexList &indexes) const;
     bool dropMimeData(const QMimeData *data, Qt::DropAction action,
                       int row, int column, const QModelIndex &parent);
+
 
 private:
 

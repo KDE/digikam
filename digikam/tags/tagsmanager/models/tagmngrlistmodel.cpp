@@ -60,6 +60,12 @@ QList< ListItem* > TagMngrListModel::allItems()
     return rootItem->allChildren();
 }
 
+void TagMngrListModel::deleteItem(ListItem* item)
+{
+    emit layoutAboutToBeChanged();
+    rootItem->deleteChild(item);
+    emit layoutChanged();
+}
 int TagMngrListModel::columnCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);

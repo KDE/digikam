@@ -42,6 +42,7 @@ public:
     ListItem *child(int row);
     int childCount() const;
     void deleteChild(int row);
+    void deleteChild(ListItem* item) { childItems.removeOne(item); }
     void removeAll();
     void appendList(QList<ListItem*> items);
     int columnCount() const;

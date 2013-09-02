@@ -27,8 +27,15 @@
 #include <QMimeData>
 
 #include <kdebug.h>
+#include <kmenu.h>
+#include <kaction.h>
+#include <kicon.h>
+#include <klocale.h>
+
+#include "contextmenuhelper.h"
 #include "tagmngrlistview.h"
 #include "tagmngrlistmodel.h"
+#include "tagmngrlistitem.h"
 
 
 namespace Digikam {
@@ -53,11 +60,6 @@ void TagMngrListView::startDrag(Qt::DropActions supportedActions)
     QDrag* drag = new QDrag(this);
     drag->setMimeData(data);
     drag->exec(supportedActions, Qt::IgnoreAction);
-}
-void TagMngrListView::dragEnterEvent(QDragEnterEvent *event)
-{
-    setState(DraggingState);
-    event->accept();
 }
 
 void TagMngrListView::dropEvent(QDropEvent *e)
@@ -86,4 +88,33 @@ QModelIndex TagMngrListView::indexVisuallyAt(const QPoint& p)
     return QModelIndex();
 }
 
+void TagMngrListView::contextMenuEvent(QContextMenuEvent* event)
+{
+    Q_UNUSED(event);
+
+    KMenu popmenu(this);
+    ContextMenuHelper cmhelper(&popmenu);
+
+    KAction* delAction = new KAction(KIcon("user-trash"),
+                                     i18n("Delete Selected"),this);
+    cmhelper.addAction(delAction, this, SLOT(slotDeleteSelected()),false);
+
+    cmhelper.exec(QCursor::pos());
+}
+
+void TagMngrListView::slotDeleteSelected()
+{
+    QModelIndexList sel = this->selectionModel()->selectedIndexes();
+
+    if(sel.isEmpty())
+        return;
+
+    TagMngrListModel* tagmodel = dynamic_cast<TagMngrListModel*>(this->model());
+
+    foreach(QModelIndex index, sel)
+    {
+        ListItem* item = static_cast<ListItem*>(index.internalPointer());
+        tagmodel->deleteItem(item);
+    }
+}
 } // namespace Digikam
