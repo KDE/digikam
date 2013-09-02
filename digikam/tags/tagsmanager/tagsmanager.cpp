@@ -31,6 +31,7 @@
 #include <QtGui/QListView>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
+#include <QDesktopWidget>
 
 /** KDE includes **/
 #include <kdebug.h>
@@ -127,6 +128,10 @@ TagsManager::TagsManager()
 
     connect(d->delAction, SIGNAL(triggered()), this, SLOT(slotDeleteAction()));
 
+
+    /** Set KMainWindow in center of the screen **/
+    this->move(QApplication::desktop()->screen()->rect().center()
+               - this->rect().center());
 }
 
 TagsManager::~TagsManager()
