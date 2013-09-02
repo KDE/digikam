@@ -18,5 +18,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 006 ==> 323498 - (Some) Image Editor Color tools hang when starting them.
 007 ==> 323062 - digikam (core): Schema update to V 7 failed!
 008 ==> 268688 - Write metadata to all images does not remove obsolete tags.
-009 ==> 
+009 ==> 324375 - XMP Metadata tab shows "Label" set by VIewNX, but Filter does not recognize.
+010 ==> 
 
