@@ -30,6 +30,11 @@
 #include <cfloat>
 #include <cstdio>
 
+// Qt includes.
+
+#include <QTextStream>
+#include <QFile>
+
 // Kde include
 
 #include <kdebug.h>
@@ -83,6 +88,8 @@ public:
 
     DImg       image;
     DImg       neimage;          //noise estimation image[ for color]
+
+    QString     path;   // Path to host result file
 };
 
 ImgQSort::ImgQSort()
@@ -107,6 +114,8 @@ bool ImgQSort::runningFlag() const
 
 PickLabel ImgQSort::analyseQuality(const DImg& img)
 {
+    QString logFile = "imgqsortresult.txt";
+    QFile filems(logFile);
 
     //for ImgQNREstimate
     // Use the Top/Left corner of 256x256 pixels to analys noise contents from image.
@@ -124,9 +133,18 @@ PickLabel ImgQSort::analyseQuality(const DImg& img)
     //       returns noise value between 0 and 1
     double noise = noisedetector();
     kDebug() << "Amount of Noise present in image is : " << noise;
-    
+
     int compressionlevel= compressiondetector();
     kDebug() << "Amount of compression artifacts present in image is : "<< compressionlevel;
+
+    if (filems.open(QIODevice::Append | QIODevice::Text))
+    {
+        QTextStream oms(&filems);
+        oms<<"File:"<<img.originalFilePath()<<"\n";
+        oms << "Blur Present:"<<blur<<"\n";
+        oms << "Noise Present:"<<noise<<"\n";
+        oms << "Compression Present:"<<compressionlevel<<"\n";
+    }
 
     // FIXME
     return NoPickLabel;
@@ -457,33 +475,33 @@ double ImgQSort::noisedetector() const
             delete [] d->fimg[i];
         }
 
-/*
-        //My original algorithm. lowThreshold should be adjusted precisely for this to work
+        /*
+                //My original algorithm. lowThreshold should be adjusted precisely for this to work
 
-        kDebug()<<"Estimated noise is "<<nre.settings();
-        d->lowThreshold    = 0.0005;   //given in research paper for noise. Variable parameter
-        //   d->ratio    =1;
-        double noiseresult = 0.0;
-        double average     = 0.0;
-        double maxval      = 0.0;
+                kDebug()<<"Estimated noise is "<<nre.settings();
+                d->lowThreshold    = 0.0005;   //given in research paper for noise. Variable parameter
+                //   d->ratio    =1;
+                double noiseresult = 0.0;
+                double average     = 0.0;
+                double maxval      = 0.0;
 
-        // Apply Canny Edge Detector to get the edges
-        CannyThreshold(0, 0);
+                // Apply Canny Edge Detector to get the edges
+                CannyThreshold(0, 0);
 
-        average     = mean(d->detected_edges)[0];
-        int* maxIdx = new int[sizeof(d->detected_edges)];
-        // To find the maximum edge intensity value
+                average     = mean(d->detected_edges)[0];
+                int* maxIdx = new int[sizeof(d->detected_edges)];
+                // To find the maxim1um edge intensity value
 
-        minMaxIdx(d->detected_edges, 0, &maxval, 0, maxIdx);
+                minMaxIdx(d->detected_edges, 0, &maxval, 0, maxIdx);
 
-        noiseresult = average/maxval;
+                noiseresult = average/maxval;
 
-        kDebug() << "The average of the edge intensity is " << average;
-        kDebug() << "The maximum of the edge intensity is " << maxval;
-        kDebug() << "The result of the edge intensity is "  << noiseresult;
+                kDebug() << "The average of the edge intensity is " << average;
+                kDebug() << "The maximum of the edge intensity is " << maxval;
+                kDebug() << "The result of the edge intensity is "  << noiseresult;
 
-        delete [] maxIdx;
-*/
+                delete [] maxIdx;
+        */
     }
 
     return noiseresult;
@@ -499,7 +517,7 @@ int ImgQSort::compressiondetector() const
     int number_of_blocks=0;
     int sum=0;
     vector<int> average_bottom,average_middle,average_top;
-    
+
     //go through 8 blocks at a time horizontally
     //iterating through columns
     for (int i = 0; i < d->src_gray.rows; i++)
@@ -541,6 +559,7 @@ int ImgQSort::compressiondetector() const
             {
                 sum += (int)d->src_gray.at<uchar>(i+2, j);
             }
+
             average_bottom.push_back(sum/8);
             countblocks++;
         }
@@ -607,6 +626,7 @@ int ImgQSort::compressiondetector() const
         }
 
         //check if the average intensity of 8 blocks in the top, middle and bottom rows are equal. If so increment number_of_blocks
+
         for (int i=0; i<countblocks; i++)
         {
             if ((average_middle[i]==(average_top[i]+average_bottom[i])/2) && average_middle[i]>THRESHOLD)
@@ -614,8 +634,9 @@ int ImgQSort::compressiondetector() const
                 number_of_blocks++;
             }
         }
-}
-return number_of_blocks;
+    }
+
+    return number_of_blocks;
 }
 
 }  // namespace Digikam
