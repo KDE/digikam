@@ -66,7 +66,7 @@ TagList::TagList(TagMngrTreeView* treeView, QWidget* parent)
     d->addButton    = new QPushButton(i18n("Add to List"));
     d->addButton->setToolTip(i18n("Add selected tags to Quick Access List"));
     d->tagList      = new TagMngrListView(this);
-    d->tagListModel = new TagMngrListModel();
+    d->tagListModel = new TagMngrListModel(this);
 
     d->tagList->setModel(d->tagListModel);
     d->tagList->setSelectionMode(QAbstractItemView::ExtendedSelection);
@@ -137,7 +137,8 @@ void TagList::restoreSettings()
      */
     d->tagListModel->addItem(QList<QVariant>()
                              << QBrush(Qt::cyan, Qt::Dense2Pattern));
-    if(size == 0)
+
+    if(size == 0 || size < 0)
     {
         return;
     }
@@ -188,7 +189,6 @@ void TagList::slotAddPressed()
     foreach(QModelIndex index, selected)
     {
         TAlbum* album = static_cast<TAlbum*>(d->treeView->albumForIndex(index));
-        kDebug() << "Adding to list " << album->title();
         itemData << album->id();
     }
     ListItem* listItem = d->tagListModel->addItem(itemData);
@@ -229,7 +229,25 @@ void TagList::slotTagDeleted(Album* album)
     foreach(ListItem* item, items)
     {
         item->removeTagId(delId);
+        if(item->getTagIds().isEmpty())
+        {
+            d->tagListModel->deleteItem(item);
+            d->tagMap[delId].removeOne(item);
+        }
     }
 }
 
+void TagList::slotDeleteSelected()
+{
+    QModelIndexList sel = d->tagList->selectionModel()->selectedIndexes();
+
+    if(sel.isEmpty())
+        return;
+
+    foreach(QModelIndex index, sel)
+    {
+        ListItem* item = static_cast<ListItem*>(index.internalPointer());
+        d->tagListModel->deleteItem(item);
+    }
+}
 }

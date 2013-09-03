@@ -55,6 +55,8 @@ private Q_SLOTS:
 
     void slotTagDeleted(Album* album);
 
+    void slotDeleteSelected();
+
 private:
     class TagListPriv;
 

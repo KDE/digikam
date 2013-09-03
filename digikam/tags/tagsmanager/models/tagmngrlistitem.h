@@ -50,8 +50,11 @@ public:
     void setData(QList<QVariant> &data);
     int row() const;
     ListItem *parent();
+
     QList<ListItem*> allChildren() { return childItems; }
     QList<int> getTagIds() const { return tagIds; }
+    bool containsItem(ListItem* item);
+    bool equal(ListItem* item);
 
 private:
 

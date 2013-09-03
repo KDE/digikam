@@ -49,7 +49,11 @@ ListItem* TagMngrListModel::addItem(QList<QVariant> values)
 {
     emit layoutAboutToBeChanged();
     ListItem* item = new ListItem(values, rootItem);
-    rootItem->appendChild(item);
+    if(!(rootItem->containsItem(item)))
+    {
+        rootItem->appendChild(item);
+    }
+
     emit layoutChanged();
 
     return item;

@@ -37,6 +37,7 @@
 #include "tagmngrlistview.h"
 #include "tagmngrlistmodel.h"
 #include "tagmngrlistitem.h"
+#include <taglist.h>
 
 
 namespace Digikam {
@@ -75,14 +76,18 @@ void TagMngrListView::dropEvent(QDropEvent *e)
     QList<int> toSel = tagmodel->getDragNewSelection();
 
     if(toSel.size() != 2)
+    {
         return;
+    }
 
     QItemSelectionModel* model = this->selectionModel();
+
     model->clearSelection();
+    this->setCurrentIndex(tagmodel->index(toSel.first()+1,0));
 
     for(int it = toSel.first()+1; it <= toSel.last(); ++it)
     {
-        model->select(this->model()->index(it,0), model->Select);
+        model->select(tagmodel->index(it,0), model->Select);
     }
 
 }
@@ -109,9 +114,16 @@ void TagMngrListView::contextMenuEvent(QContextMenuEvent* event)
     KMenu popmenu(this);
     ContextMenuHelper cmhelper(&popmenu);
 
+    TagList* tagList = dynamic_cast<TagList*>(this->parent());
+
+    if(!tagList)
+    {
+        return;
+    }
+
     KAction* delAction = new KAction(KIcon("user-trash"),
                                      i18n("Delete Selected"),this);
-    cmhelper.addAction(delAction, this, SLOT(slotDeleteSelected()),false);
+    cmhelper.addAction(delAction, tagList, SLOT(slotDeleteSelected()),false);
 
     cmhelper.exec(QCursor::pos());
 }

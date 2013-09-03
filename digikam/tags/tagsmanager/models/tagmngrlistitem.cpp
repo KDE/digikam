@@ -24,6 +24,7 @@
 #include <QStringList>
 
 #include <klocale.h>
+#include <kdebug.h>
 
 #include "tagmngrlistitem.h"
 #include "albummanager.h"
@@ -142,4 +143,21 @@ int ListItem::row() const
     return 0;
 }
 
+bool ListItem::containsItem(ListItem* item)
+{
+    /** We need to compare items and not pointers **/
+    for(int it=0; it < childItems.size(); ++it)
+    {
+        if(item->equal(childItems.at(it)))
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool ListItem::equal(ListItem* item)
+{
+    return (this->tagIds) == (item->getTagIds());
+}
 } // namespace Digikam
