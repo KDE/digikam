@@ -87,10 +87,12 @@ public:
     bool dropMimeData(const QMimeData *data, Qt::DropAction action,
                       int row, int column, const QModelIndex &parent);
 
+    QList<int> getDragNewSelection() { return dragNewSelection; }
 
 private:
 
     ListItem *rootItem;
+    QList<int> dragNewSelection;
 };
 
 } // namespace Digikam

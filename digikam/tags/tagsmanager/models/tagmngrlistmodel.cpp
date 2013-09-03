@@ -155,7 +155,7 @@ bool TagMngrListModel::dropMimeData(const QMimeData *data, Qt::DropAction action
     row-=temp;
     emit layoutAboutToBeChanged();
 
-    for(QList<int>::Iterator itr = toRemove.end() -1 ; itr != toRemove.begin() -1 ; --itr)
+    for(QList<int>::iterator itr = toRemove.end() -1 ; itr != toRemove.begin() -1 ; --itr)
     {
         rootItem->deleteChild(*itr);
     }
@@ -168,6 +168,12 @@ bool TagMngrListModel::dropMimeData(const QMimeData *data, Qt::DropAction action
         if(it == row)
         {
             finalItems.append(newItems);
+            /** After drag-n-drop selection is messed up, store the interval were
+             *  new items are and TagsMngrListView will update seelction
+             */
+            dragNewSelection.clear();
+            dragNewSelection << row;
+            dragNewSelection << row + newItems.size();
         }
     }
 

@@ -25,6 +25,7 @@
 #include <QDragEnterEvent>
 #include <QDropEvent>
 #include <QMimeData>
+#include <QItemSelectionModel>
 
 #include <kdebug.h>
 #include <kmenu.h>
@@ -68,8 +69,21 @@ void TagMngrListView::dropEvent(QDropEvent *e)
     QModelIndex index = indexVisuallyAt(e->pos());
     TagMngrListModel* tagmodel = dynamic_cast<TagMngrListModel*>(this->model());
 
-    tagmodel->dropMimeData(e->mimeData(),e->dropAction(),index.row(),
+    tagmodel->dropMimeData(e->mimeData(),e->dropAction(), index.row(),
                            index.column(),index.parent());
+
+    QList<int> toSel = tagmodel->getDragNewSelection();
+
+    if(toSel.size() != 2)
+        return;
+
+    QItemSelectionModel* model = this->selectionModel();
+    model->clearSelection();
+
+    for(int it = toSel.first()+1; it <= toSel.last(); ++it)
+    {
+        model->select(this->model()->index(it,0), model->Select);
+    }
 
 }
 
