@@ -499,8 +499,8 @@ void ContextMenuHelper::addRemoveTagsMenu(const imageIds &ids)
     d->parent->addMenu(removeTagsPopup);
 
     // Performance: Only check for tags if there are <250 images selected
-    // Also disable the remove Tag popup menu, if there are no tags at all.
-    if (ids.count() > 250 || !DatabaseAccess().db()->hasTags(ids))
+    // Otherwise enable it regardless if there are tags or not
+    if (ids.count() < 250 && !DatabaseAccess().db()->hasTags(ids))
     {
         removeTagsPopup->menuAction()->setEnabled(false);
     }
