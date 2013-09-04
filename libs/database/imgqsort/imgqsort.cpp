@@ -46,6 +46,9 @@
 #include "mixerfilter.h"
 #include "nrfilter.h"
 
+// To switch on/off log trace file.
+#define TRACE 1
+
 using namespace cv;
 
 namespace Digikam
@@ -70,12 +73,9 @@ public:
         kernel_size  = 3;
     }
 
-
-
     float*     fimg[3];
     const uint clusterCount;
     const uint size;   // Size of squared original image.
-
 
     Mat        src_gray;
     Mat        detected_edges;
@@ -114,37 +114,37 @@ bool ImgQSort::runningFlag() const
 
 PickLabel ImgQSort::analyseQuality(const DImg& img)
 {
-    QString logFile = "imgqsortresult.txt";
-    QFile filems(logFile);
-
-    //for ImgQNREstimate
+    // For ImgQNREstimate
     // Use the Top/Left corner of 256x256 pixels to analys noise contents from image.
-    // This will speed-up computation time with OpenCV
+    // This will speed-up computation time with OpenCV.
     d->image   = img;
     d->neimage = img;
     readImage();
 
-    //FIXME: NaN [0/0] occurs in some images. Should be avoided
-    //       returns blur value between 0 and 1
-    double blur  = blurdetector();
+    //FIXME: NaN [0/0] occurs in some images. Should be avoided.
+    //       Returns blur value between 0 and 1.
+    double blur          = blurdetector();
     kDebug() << "Amount of Blur present in image is  : " << blur;
 
     //FIXME: Some images give outputs such as -9.43183e+21.
-    //       returns noise value between 0 and 1
-    double noise = noisedetector();
+    //       Returns noise value between 0 and 1.
+    double noise         = noisedetector();
     kDebug() << "Amount of Noise present in image is : " << noise;
 
-    int compressionlevel= compressiondetector();
-    kDebug() << "Amount of compression artifacts present in image is : "<< compressionlevel;
+    int compressionlevel = compressiondetector();
+    kDebug() << "Amount of compression artifacts present in image is : " << compressionlevel;
 
+#ifdef TRACE
+    QFile filems("imgqsortresult.txt");
     if (filems.open(QIODevice::Append | QIODevice::Text))
     {
         QTextStream oms(&filems);
-        oms<<"File:"<<img.originalFilePath()<<"\n";
-        oms << "Blur Present:"<<blur<<"\n";
-        oms << "Noise Present:"<<noise<<"\n";
-        oms << "Compression Present:"<<compressionlevel<<"\n";
+        oms << "File:" << img.originalFilePath() << endl;
+        oms << "Blur Present:" << blur << endl;
+        oms << "Noise Present:" << noise << endl;
+        oms << "Compression Present:" << compressionlevel << endl;
     }
+#endif
 
     // FIXME
     return NoPickLabel;
@@ -161,7 +161,7 @@ void ImgQSort::readImage()
     d->image.putImageData(mixer.getTargetImage().bits());
     d->src_gray = cvCreateMat(d->image.numPixels(), 1, CV_8UC1);
 
-    if (1)      //noise detection. insert if condition here
+    if (1)      // TODO: noise detection. insert if condition here
     {
         DColor col;
 
@@ -188,12 +188,11 @@ void ImgQSort::readImage()
 
 void ImgQSort::CannyThreshold(int, void*) const
 {
-    // Reduce noise with a kernel 3x3
+    // Reduce noise with a kernel 3x3.
     blur(d->src_gray, d->detected_edges, Size(3,3) );
 
-    // Canny detector
+    // Canny detector.
     Canny(d->detected_edges, d->detected_edges, d->lowThreshold, d->lowThreshold*d->ratio,d-> kernel_size );
-
 }
 
 double ImgQSort::blurdetector() const
@@ -224,16 +223,16 @@ double ImgQSort::noisedetector() const
 
     //--convert fimg to CvMat*-------------------------------------------------------------------------------
 
-    // convert the image into YCrCb color model
+    // Convert the image into YCrCb color model.
     NRFilter::srgb2ycbcr(d->fimg, d->neimage.numPixels());
 
-    // One dimentional CvMat which stores the image
+    // One dimentional CvMat which stores the image.
     CvMat* points    = cvCreateMat(d->neimage.numPixels(), 3, CV_32FC1);
 
-    // matrix to store the index of the clusters
+    // Matrix to store the index of the clusters.
     CvMat* clusters  = cvCreateMat(d->neimage.numPixels(), 1, CV_32SC1);
 
-    // pointer variable to handle the CvMat* points (the image in CvMat format)
+    // Pointer variable to handle the CvMat* points (the image in CvMat format).
     float* pointsPtr = (float*)points->data.ptr;
 
     for (uint x=0 ; runningFlag() && (x < d->neimage.numPixels()) ; x++)
@@ -244,7 +243,7 @@ double ImgQSort::noisedetector() const
         }
     }
 
-    // Array to store the centers of the clusters
+    // Array to store the centers of the clusters.
     CvArr* centers = 0;
 
     kDebug() << "Everything ready for the cvKmeans2 or as it seems to";
@@ -263,11 +262,11 @@ double ImgQSort::noisedetector() const
 
     QScopedArrayPointer<int> rowPosition(new int[d->clusterCount]);
 
-    //the row position array would just make the hold the number of elements in each cluster
+    // The row position array would just make the hold the number of elements in each cluster.
 
     for (uint i=0 ; runningFlag() && (i < d->clusterCount) ; i++)
     {
-        //initializing the cluster count array
+        // Initializing the cluster count array.
         rowPosition[i] = 0;
     }
 
@@ -330,10 +329,12 @@ double ImgQSort::noisedetector() const
         columnIndex = clusters->data.i[i];
         rowIndex    = rPosition[columnIndex];
 
-        //moving to the right row
+        // Moving to the right row.
+
         ptr         = (float*)(sd->data.ptr + rowIndex*(sd->step));
 
-        //moving to the right column
+        // Moving to the right column.
+
         for (int j=0 ; runningFlag() && (j < columnIndex) ; j++)
         {
             for (int z=0 ; runningFlag() && (z < (points->cols)) ; z++)
@@ -360,7 +361,7 @@ double ImgQSort::noisedetector() const
     CvMat*   stdStore     = 0;
     float*   meanStorePtr = 0;
     float*   stdStorePtr  = 0;
-    int      totalcount   = 0; // Number of non-empty clusters
+    int      totalcount   = 0; // Number of non-empty clusters.
 
     if (runningFlag())
     {
@@ -449,7 +450,8 @@ double ImgQSort::noisedetector() const
 
     if (runningFlag())
     {
-        // for 16 bits images only
+        // For 16 bits images only.
+
         if (d->neimage.sixteenBit())
         {
             for (int i=0 ; i < points->cols ; i++)
@@ -475,33 +477,33 @@ double ImgQSort::noisedetector() const
             delete [] d->fimg[i];
         }
 
-        /*
-                //My original algorithm. lowThreshold should be adjusted precisely for this to work
+/*
+        // NOTE: My original algorithm. lowThreshold should be adjusted precisely for this to work.
 
-                kDebug()<<"Estimated noise is "<<nre.settings();
-                d->lowThreshold    = 0.0005;   //given in research paper for noise. Variable parameter
-                //   d->ratio    =1;
-                double noiseresult = 0.0;
-                double average     = 0.0;
-                double maxval      = 0.0;
+        kDebug()<<"Estimated noise is "<< nre.settings();
+        d->lowThreshold    = 0.0005;   // Given in research paper for noise. Variable parameter
+        //   d->ratio    = 1;
+        double noiseresult = 0.0;
+        double average     = 0.0;
+        double maxval      = 0.0;
 
-                // Apply Canny Edge Detector to get the edges
-                CannyThreshold(0, 0);
+        // Apply Canny Edge Detector to get the edges
+        CannyThreshold(0, 0);
 
-                average     = mean(d->detected_edges)[0];
-                int* maxIdx = new int[sizeof(d->detected_edges)];
-                // To find the maxim1um edge intensity value
+        average     = mean(d->detected_edges)[0];
+        int* maxIdx = new int[sizeof(d->detected_edges)];
+        
+        // To find the maxim1um edge intensity value
+        minMaxIdx(d->detected_edges, 0, &maxval, 0, maxIdx);
 
-                minMaxIdx(d->detected_edges, 0, &maxval, 0, maxIdx);
+        noiseresult = average/maxval;
 
-                noiseresult = average/maxval;
+        kDebug() << "The average of the edge intensity is " << average;
+        kDebug() << "The maximum of the edge intensity is " << maxval;
+        kDebug() << "The result of the edge intensity is "  << noiseresult;
 
-                kDebug() << "The average of the edge intensity is " << average;
-                kDebug() << "The maximum of the edge intensity is " << maxval;
-                kDebug() << "The result of the edge intensity is "  << noiseresult;
-
-                delete [] maxIdx;
-        */
+        delete [] maxIdx;
+*/
     }
 
     return noiseresult;
@@ -511,21 +513,23 @@ double ImgQSort::noisedetector() const
 int ImgQSort::compressiondetector() const
 {
     //FIXME: set threshold value to an acceptable standard to get the number of blocking artifacts
-    const int THRESHOLD = 30;
+    const int THRESHOLD  = 30;
     const int block_size = 8;
-    int countblocks=0;
-    int number_of_blocks=0;
-    int sum=0;
-    vector<int> average_bottom,average_middle,average_top;
+    int countblocks      = 0;
+    int number_of_blocks = 0;
+    int sum              = 0;
+    vector<int> average_bottom, average_middle, average_top;
 
-    //go through 8 blocks at a time horizontally
-    //iterating through columns
+    // Go through 8 blocks at a time horizontally
+    // iterating through columns.
+
     for (int i = 0; i < d->src_gray.rows; i++)
     {
-        //calculating intensity of top column
+        // Calculating intensity of top column.
+
         for (int j = 0; j < d->src_gray.cols; j+=8)
         {
-            sum=0;
+            sum = 0;
 
             for (int k=j; k<block_size; k++)
             {
@@ -535,10 +539,11 @@ int ImgQSort::compressiondetector() const
             average_top.push_back(sum/8);
         }
 
-        //calculating intensity of middle column
+        // Calculating intensity of middle column.
+
         for (int j = 0; j < d->src_gray.cols; j+=8)
         {
-            sum=0;
+            sum = 0;
 
             for (int k=j; k<block_size; k++)
             {
@@ -548,12 +553,13 @@ int ImgQSort::compressiondetector() const
             average_middle.push_back(sum/8);
         }
 
-        //calculating intensity of bottom column
-        countblocks=0;
+        // Calculating intensity of bottom column.
+
+        countblocks = 0;
 
         for (int j = 0; j < d->src_gray.cols; j+=8)
         {
-            sum=0;
+            sum = 0;
 
             for (int k=j; k<block_size; k++)
             {
@@ -564,29 +570,32 @@ int ImgQSort::compressiondetector() const
             countblocks++;
         }
 
-        //check if the average intensity of 8 blocks in the top, middle and bottom rows are equal. If so increment number_of_blocks
+        // Check if the average intensity of 8 blocks in the top, middle and bottom rows are equal.
+        // If so increment number_of_blocks.
+
         for (int j=0; j<countblocks; j++)
         {
-            if ((average_middle[j]==(average_top[j]+average_bottom[j])/2) && average_middle[j]>THRESHOLD)
+            if ((average_middle[j] == (average_top[j]+average_bottom[j])/2) && 
+                 average_middle[j] > THRESHOLD)
             {
                 number_of_blocks++;
             }
         }
-
     }
 
     average_bottom.clear();
     average_middle.clear();
     average_top.clear();
 
-    //iterating through rows
+    // Iterating through rows.
 
     for (int j= 0; j < d->src_gray.cols; j++)
     {
-        //calculating intensity of top row
+        // Calculating intensity of top row.
+
         for (int i = 0; i< d->src_gray.rows; i+=8)
         {
-            sum=0;
+            sum = 0;
 
             for (int k=i; k<block_size; k++)
             {
@@ -596,10 +605,11 @@ int ImgQSort::compressiondetector() const
             average_top.push_back(sum/8);
         }
 
-        //calculating intensity of middle row
+        // Calculating intensity of middle row.
+
         for (int i= 0; i< d->src_gray.rows; i+=8)
         {
-            sum=0;
+            sum = 0;
 
             for (int k=i; k<block_size; k++)
             {
@@ -609,12 +619,13 @@ int ImgQSort::compressiondetector() const
             average_middle.push_back(sum/8);
         }
 
-        //calculating intensity of bottom row
+        // Calculating intensity of bottom row.
+
         countblocks=0;
 
         for (int i = 0; i< d->src_gray.rows; i+=8)
         {
-            sum=0;
+            sum = 0;
 
             for (int k=i; k<block_size; k++)
             {
@@ -625,11 +636,13 @@ int ImgQSort::compressiondetector() const
             countblocks++;
         }
 
-        //check if the average intensity of 8 blocks in the top, middle and bottom rows are equal. If so increment number_of_blocks
+        // Check if the average intensity of 8 blocks in the top, middle and bottom rows are equal. 
+        // If so increment number_of_blocks.
 
         for (int i=0; i<countblocks; i++)
         {
-            if ((average_middle[i]==(average_top[i]+average_bottom[i])/2) && average_middle[i]>THRESHOLD)
+            if ((average_middle[i] == (average_top[i]+average_bottom[i])/2) && 
+                 average_middle[i] > THRESHOLD)
             {
                 number_of_blocks++;
             }
