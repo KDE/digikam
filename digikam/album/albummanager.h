@@ -684,6 +684,7 @@ private Q_SLOTS:
      * Scan dates from the database (via IOSlave) and
      * updates the DAlbums.
      */
+    void scanDAlbumsScheduled();
     void scanDAlbums();
 
     void getAlbumItemsCount();
