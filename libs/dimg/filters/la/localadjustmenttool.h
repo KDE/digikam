@@ -3,7 +3,7 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2012-10-18
+ * Date        : 2012-07-22
  * Description : Auto Crop analyser
  *
  * Copyright (C) 2013 by Sayantan Datta <sayantan dot knz at gmail dot com>
@@ -39,7 +39,7 @@
 
 namespace Digikam
 {
-    
+
     class DIGIKAM_EXPORT LocalAdjustments : public DImgThreadedAnalyser
     {
     public:
@@ -74,15 +74,49 @@ namespace Digikam
          */
         //QImage getSelection(int outerRadius, QPoint origCenter);
 
+
+        /**
+         *  Returns a DImg of the selection with the soft edge, uses DImg
+         *  for support of 16bit images.
+         */
+        DImg getDImgSoftSelection();
+
+        /**
+         * @brief makes the color selection of the center point and the color
+         * of all the pixels of the selection. Changes the alpha value of the
+         * selection.
+         */
+
+        DImg getDImgColorSelection();
         /** Returns the file, after applying the selection Image on the
          *  original image, to produce the output.
          */
         DImg applySelection(DImg* selection);
 
+        /**
+         * Applies the DImg selection on the parent photo. Uses normal
+         * blending. ##INCOMPLETE##
+         */
+        DImg applyDImgSelection(DImg& selection);
         //DImg* applySelection(QString path);
-        //overloaded function, provide path to layer, instead of layer QImage
+
+
+        /**
+         * @brief changeBrightness increases or decreases brightness, takes in
+         * a value -255 to 255
+         * @param brightness integer ranging from -255 to 255 (even for 16bit images)
+         */
+        //void changeBrightness(int brightness);
+
+        /**
+         * @brief printHSL
+         * prints the HSL values of the pixels in a file. Check for study only
+         * @param image
+         */
+        //void printHSL(DImg image);
+
     private :
-        
+
         /** returns the circular selection with color
          *  QImage source is the original image from which the selection is to be made
          *  int outerRadius is the human input value of Outer Radius (value >=0)
@@ -90,7 +124,7 @@ namespace Digikam
          *  QImage getcolorSelection(QImage selection, QPoint selectionCenter);
          */
         QImage getcolorSelection(QImage selection, QPoint selectionCenter);
-        
+
         /** Returns the blurred/soft edge selection
          *  QImage selection is the hard selection
          *  int innerRadius determines the radius inside which alpha values are 255
@@ -98,31 +132,34 @@ namespace Digikam
          *  QPoint selectionCenter determines the center of the selection with respect to the original Image
          */
         QImage getSoftSelection(QImage source, int innerRadius, int outerRadius, QPoint origCenter);
-        
+
         QImage createLayer(QImage selection);
-        
+
+        DImg createDImgLayer();
         /** Image Conversions */
         void srgb2lch(float fimg[][4], int size);
-        
+
         void srgb2lab(float fimg[][4], int size);
-        
+
         void srgb2xyz(float fimg[][4], int size);
-        
+
         void xyz2srgb(float fimg[][4], int size);
-        
+
         void lab2srgb(float fimg[][4], int size);
-        
+
+        //void srgb2hsv(float fimg[][4], int size);
+
         /** To calculate differences between pixels of a image, and a particular
          *  reference array. Stores the output in the float* difference array
          */
         void colorDifference(float fimg[][4], float reference[4], float* difference, int size);
-        
+
     private :
-        
+
         class Private;
         Private* d;
     };
-    
+
 }   //  namespace Digikam
 
 #endif /*LOCALADJUSTMENTTOOL_H*/

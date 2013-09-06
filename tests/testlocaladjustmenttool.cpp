@@ -98,7 +98,8 @@ int main(int argc, char** argv)
         qDebug() << "Radius       : "<<radius;
         LocalAdjustments la(&img, x, y, radius);
         la.startFilterDirectly();
-        DImg selection=la.getSelection();
+        DImg selection=la.getDImgSoftSelection();
+        selection = la.getDImgColorSelection();
         selection.save(selectionFilePath,"PNG");
     }
     
@@ -115,7 +116,7 @@ int main(int argc, char** argv)
         la.startFilterDirectly();
         QFileInfo maskPath(argv[3]);
         DImg selection(maskPath.filePath(), 0, DRawDecoding(settings));
-        DImg output = la.applySelection(&selection);
+        DImg output = la.applyDImgSelection(selection);
         output.save(outFilePath, "PNG");
     }
 //     kDebug() << "Cropped image area: " << rect;
