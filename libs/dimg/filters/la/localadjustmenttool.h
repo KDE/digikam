@@ -115,6 +115,19 @@ namespace Digikam
          */
         //void printHSL(DImg image);
 
+        /**
+         * @brief changeRGBA
+         * all the parameters are values ranging from -100.0 to 100.0
+         * @param r - red component
+         * @param g - green component
+         * @param b - blue component
+         * @param a - alpha component
+         * @return
+         */
+        void changeRGBA(double r, double g, double b, double a);
+
+        DImg getModifiedSelection(double r, double g, double b, double a);
+
     private :
 
         /** returns the circular selection with color

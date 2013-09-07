@@ -62,6 +62,7 @@ int main(int argc, char** argv)
         qDebug() << "Usage: ";
         qDebug() << "To extract selection : -e <image> <centerX> <centerY> <radius>";
         qDebug() << "To apply selection   : -a <image> <selection> <centerX> <centerY> <radius>";
+//        qDebug() << "To modify selection  : -m <image> <selection> <red> <green> <blue> <alpha>\n\t\t\t\t\tThe 4 parameters range from -100.0 to +100.0";
         return -1;
     }
     
@@ -70,6 +71,7 @@ int main(int argc, char** argv)
     QFileInfo input(argv[2]);
     QString   outFilePath(input.baseName() + QString(".modified.png"));
     QString   selectionFilePath(input.baseName() + QString(".selection.png"));
+    QString   modifiedSelectionFilePath(input.baseName() + QString(".modSelection.png"));
     
     RawDecodingSettings settings;
     settings.halfSizeColorImage    = false;
@@ -101,6 +103,10 @@ int main(int argc, char** argv)
         DImg selection=la.getDImgSoftSelection();
         selection = la.getDImgColorSelection();
         selection.save(selectionFilePath,"PNG");
+
+        //to test modify
+        selection = la.getModifiedSelection(0.0, 0.0, 0.0, 0.0);
+        selection.save(modifiedSelectionFilePath,"PNG");
     }
     
     if ( choice == "-a" )
@@ -119,6 +125,19 @@ int main(int argc, char** argv)
         DImg output = la.applyDImgSelection(selection);
         output.save(outFilePath, "PNG");
     }
+//    if ( choice == "-m")
+//    {
+//        qDebug() << "Modify the selection";
+//        QString temp(argv[3]);
+//        double red     = temp.toDouble();
+//        temp           = argv[4];
+//        double blue    = temp.toDouble();
+//        temp           = argv[5];
+//        double green   = temp.toDouble();
+//        temp           = argv[6];
+//        double alpha   = temp.toDouble();
+
+//    }
 //     kDebug() << "Cropped image area: " << rect;
 //     
 //     img.crop(rect);
