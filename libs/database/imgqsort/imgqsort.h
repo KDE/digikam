@@ -61,6 +61,7 @@ private:
     void   CannyThreshold(int, void*) const;
 
     double blurdetector()        const;
+    short blurdetector2()       const;
     double noisedetector()       const;
     int    compressiondetector() const;
     bool   runningFlag()         const;

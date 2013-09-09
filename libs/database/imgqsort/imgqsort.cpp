@@ -95,7 +95,6 @@ public:
 ImgQSort::ImgQSort()
     : d(new Private)
 {
-    //TODO: Using full image at present. Uncomment to set the window size.
     //int w = (img->width()  > d->size) ? d->size : img->width();
     //int h = (img->height() > d->size) ? d->size : img->height();
     //setOriginalImage(img->copy(0, 0, w, h));
@@ -121,12 +120,15 @@ PickLabel ImgQSort::analyseQuality(const DImg& img)
     d->neimage = img;
     readImage();
 
-    //FIXME: NaN [0/0] occurs in some images. Should be avoided.
     //       Returns blur value between 0 and 1.
+    //If NaN is returned just assign NoPickLabel
     double blur          = blurdetector();
     kDebug() << "Amount of Blur present in image is  : " << blur;
 
-    //FIXME: Some images give outputs such as -9.43183e+21.
+    short blur2           = blurdetector2();
+    kDebug() << "Amount of Blur present in image [using LoG Filter] is : " << blur2;
+
+    //Some images give very low noise value. Assign NoPickLabel in that case.
     //       Returns noise value between 0 and 1.
     double noise         = noisedetector();
     kDebug() << "Amount of Noise present in image is : " << noise;
@@ -136,14 +138,17 @@ PickLabel ImgQSort::analyseQuality(const DImg& img)
 
 #ifdef TRACE
     QFile filems("imgqsortresult.txt");
+
     if (filems.open(QIODevice::Append | QIODevice::Text))
     {
         QTextStream oms(&filems);
         oms << "File:" << img.originalFilePath() << endl;
         oms << "Blur Present:" << blur << endl;
+        oms << "Blur Present(using LoG filter):"<< blur2 << endl;
         oms << "Noise Present:" << noise << endl;
         oms << "Compression Present:" << compressionlevel << endl;
     }
+
 #endif
 
     // FIXME
@@ -215,6 +220,47 @@ double ImgQSort::blurdetector() const
     kDebug() << "The result of the edge intensity is "  << blurresult;
 
     return blurresult;
+}
+
+short ImgQSort::blurdetector2() const
+{
+    //Algorithm using Laplacian of Gaussian Filter to detect blur.
+    Mat out;
+    Mat noise_free;
+    kDebug() << "Algorithm using LoG Filter started " <<endl;
+
+    //to remove noise from the image
+    GaussianBlur(d->src_gray, noise_free, Size(3,3), 0, 0, BORDER_DEFAULT );
+
+    // aperture size of 1 corresponds to the correct matrix
+    int kernel_size = 3;
+    int scale = 1;
+    int delta = 0;
+    int ddepth = CV_16S;
+
+    Laplacian(noise_free, out, ddepth, kernel_size, scale, delta, BORDER_DEFAULT );
+
+    //noise_free The input image without noise.
+    //out: Destination (output) image
+    //ddepth: Depth of the destination image. Since our input is CV_8U we define ddepth = CV_16S to avoid overflow
+    //kernel_size: The kernel size of the Sobel operator to be applied internally. We use 3 ihere
+
+    short maxLap = -32767;
+
+    for (int i = 0; i < out.rows; i++)
+    {
+        for (int j = 0; j < out.cols; j++)
+        {
+            short value=out.at<short>(i,j);
+
+            if (value>maxLap)
+            {
+                maxLap=value ;
+            }
+        }
+    }
+
+    return maxLap;
 }
 
 double ImgQSort::noisedetector() const
@@ -353,7 +399,7 @@ double ImgQSort::noisedetector() const
 
     kDebug() << "sd matrix creation over!";
 
-    //-- This part of the code would involve the sd matrix and make the mean and the std of the data -------------------
+    //-- This part of the code would involve the sd matrix and make the mean and the std of the data -------------
 
     CvScalar std;
     CvScalar mean;
@@ -477,33 +523,33 @@ double ImgQSort::noisedetector() const
             delete [] d->fimg[i];
         }
 
-/*
-        // NOTE: My original algorithm. lowThreshold should be adjusted precisely for this to work.
+        /*
+                // NOTE: My original algorithm. lowThreshold should be adjusted precisely for this to work.
 
-        kDebug()<<"Estimated noise is "<< nre.settings();
-        d->lowThreshold    = 0.0005;   // Given in research paper for noise. Variable parameter
-        //   d->ratio    = 1;
-        double noiseresult = 0.0;
-        double average     = 0.0;
-        double maxval      = 0.0;
+                kDebug()<<"Estimated noise is "<< nre.settings();
+                d->lowThreshold    = 0.0005;   // Given in research paper for noise. Variable parameter
+                //   d->ratio    = 1;
+                double noiseresult = 0.0;
+                double average     = 0.0;
+                double maxval      = 0.0;
 
-        // Apply Canny Edge Detector to get the edges
-        CannyThreshold(0, 0);
+                // Apply Canny Edge Detector to get the edges
+                CannyThreshold(0, 0);
 
-        average     = mean(d->detected_edges)[0];
-        int* maxIdx = new int[sizeof(d->detected_edges)];
-        
-        // To find the maxim1um edge intensity value
-        minMaxIdx(d->detected_edges, 0, &maxval, 0, maxIdx);
+                average     = mean(d->detected_edges)[0];
+                int* maxIdx = new int[sizeof(d->detected_edges)];
 
-        noiseresult = average/maxval;
+                // To find the maxim1um edge intensity value
+                minMaxIdx(d->detected_edges, 0, &maxval, 0, maxIdx);
 
-        kDebug() << "The average of the edge intensity is " << average;
-        kDebug() << "The maximum of the edge intensity is " << maxval;
-        kDebug() << "The result of the edge intensity is "  << noiseresult;
+                noiseresult = average/maxval;
 
-        delete [] maxIdx;
-*/
+                kDebug() << "The average of the edge intensity is " << average;
+                kDebug() << "The maximum of the edge intensity is " << maxval;
+                kDebug() << "The result of the edge intensity is "  << noiseresult;
+
+                delete [] maxIdx;
+        */
     }
 
     return noiseresult;
@@ -575,8 +621,8 @@ int ImgQSort::compressiondetector() const
 
         for (int j=0; j<countblocks; j++)
         {
-            if ((average_middle[j] == (average_top[j]+average_bottom[j])/2) && 
-                 average_middle[j] > THRESHOLD)
+            if ((average_middle[j] == (average_top[j]+average_bottom[j])/2) &&
+                average_middle[j] > THRESHOLD)
             {
                 number_of_blocks++;
             }
@@ -636,13 +682,13 @@ int ImgQSort::compressiondetector() const
             countblocks++;
         }
 
-        // Check if the average intensity of 8 blocks in the top, middle and bottom rows are equal. 
+        // Check if the average intensity of 8 blocks in the top, middle and bottom rows are equal.
         // If so increment number_of_blocks.
 
         for (int i=0; i<countblocks; i++)
         {
-            if ((average_middle[i] == (average_top[i]+average_bottom[i])/2) && 
-                 average_middle[i] > THRESHOLD)
+            if ((average_middle[i] == (average_top[i]+average_bottom[i])/2) &&
+                average_middle[i] > THRESHOLD)
             {
                 number_of_blocks++;
             }
