@@ -217,7 +217,7 @@ void ImgQSort::readImage()
     d->image.putImageData(mixer.getTargetImage().bits());
     d->src_gray = cvCreateMat(d->image.numPixels(), 1, CV_8UC1);
 
-    if (1)      // TODO: noise detection. insert if condition here
+    if (d->imq.detectNoise==true)
     {
         DColor col;
 
