@@ -38,6 +38,9 @@
 // Kde include
 
 #include <kdebug.h>
+#include <kconfiggroup.h>
+#include <ksharedconfig.h>
+#include <kglobal.h>
 
 // Local includes
 
@@ -45,6 +48,7 @@
 #include "libopencv.h"
 #include "mixerfilter.h"
 #include "nrfilter.h"
+#include "imagequalitysettings.h"
 
 // To switch on/off log trace file.
 #define TRACE 1
@@ -89,12 +93,29 @@ public:
     DImg       image;
     DImg       neimage;          //noise estimation image[ for color]
 
+    ImageQualitySettings imq;
+
     QString     path;   // Path to host result file
 };
 
 ImgQSort::ImgQSort()
     : d(new Private)
 {
+
+    //reading settings
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group("Image Quality Settings");
+
+    d->imq.enableSorter      = group.readEntry("Enable Sorter",      false);
+    d->imq.detectBlur        = group.readEntry("Detect Blur",        true);
+    d->imq.detectNoise       = group.readEntry("Detect Noise",       true);
+    d->imq.detectCompression = group.readEntry("Detect Compression", true);
+    d->imq.lowQRejected      = group.readEntry("LowQ Rejected",      true);
+    d->imq.mediumQPending    = group.readEntry("MediumQ Pending",    true);
+    d->imq.highQAccepted     = group.readEntry("HighQ Accepted",     true);
+    d->imq.speed             = group.readEntry("Speed",              1);
+
+    //commented out option to use only part of image for computation
     //int w = (img->width()  > d->size) ? d->size : img->width();
     //int h = (img->height() > d->size) ? d->size : img->height();
     //setOriginalImage(img->copy(0, 0, w, h));
@@ -114,27 +135,45 @@ bool ImgQSort::runningFlag() const
 PickLabel ImgQSort::analyseQuality(const DImg& img)
 {
     // For ImgQNREstimate
-    // Use the Top/Left corner of 256x256 pixels to analys noise contents from image.
+    // Use the Top/Left corner of 256x256 pixels to analyse noise contents from image.
     // This will speed-up computation time with OpenCV.
     d->image   = img;
     d->neimage = img;
     readImage();
 
-    //       Returns blur value between 0 and 1.
-    //If NaN is returned just assign NoPickLabel
-    double blur          = blurdetector();
-    kDebug() << "Amount of Blur present in image is  : " << blur;
+    double blur=0.0;
+    short blur2=0;
+    double noise=0.0;
+    int compressionlevel=0;
 
-    short blur2           = blurdetector2();
-    kDebug() << "Amount of Blur present in image [using LoG Filter] is : " << blur2;
+    //If blur option is selected in settings, run the algorithms
+    if (d->imq.detectBlur==true)
+    {
+        //Returns blur value between 0 and 1.
+        //If NaN is returned just assign NoPickLabel
+        blur          = blurdetector();
+        kDebug() << "Amount of Blur present in image is  : " << blur;
 
-    //Some images give very low noise value. Assign NoPickLabel in that case.
-    //       Returns noise value between 0 and 1.
-    double noise         = noisedetector();
-    kDebug() << "Amount of Noise present in image is : " << noise;
+        //Returns blur value between 1 and 32767.
+        //If 1 is returned just assign NoPickLabel
+        blur2           = blurdetector2();
+        kDebug() << "Amount of Blur present in image [using LoG Filter] is : " << blur2;
+    }
 
-    int compressionlevel = compressiondetector();
-    kDebug() << "Amount of compression artifacts present in image is : " << compressionlevel;
+    if (d->imq.detectNoise==true)
+    {
+        //Some images give very low noise value. Assign NoPickLabel in that case.
+        //Returns noise value between 0 and 1.
+        noise         = noisedetector();
+        kDebug() << "Amount of Noise present in image is : " << noise;
+    }
+
+    if (d->imq.detectCompression==true)
+    {
+        //Returns number of blocks in the image.
+        compressionlevel = compressiondetector();
+        kDebug() << "Amount of compression artifacts present in image is : " << compressionlevel;
+    }
 
 #ifdef TRACE
     QFile filems("imgqsortresult.txt");
@@ -143,10 +182,22 @@ PickLabel ImgQSort::analyseQuality(const DImg& img)
     {
         QTextStream oms(&filems);
         oms << "File:" << img.originalFilePath() << endl;
-        oms << "Blur Present:" << blur << endl;
-        oms << "Blur Present(using LoG filter):"<< blur2 << endl;
-        oms << "Noise Present:" << noise << endl;
-        oms << "Compression Present:" << compressionlevel << endl;
+
+        if (d->imq.detectBlur==true)
+        {
+            oms << "Blur Present:" << blur << endl;
+            oms << "Blur Present(using LoG filter):"<< blur2 << endl;
+        }
+
+        if (d->imq.detectNoise==true)
+        {
+            oms << "Noise Present:" << noise << endl;
+        }
+
+        if (d->imq.detectCompression==true)
+        {
+            oms << "Compression Present:" << compressionlevel << endl;
+        }
     }
 
 #endif
