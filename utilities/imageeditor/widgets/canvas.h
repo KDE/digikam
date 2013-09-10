@@ -157,6 +157,7 @@ public Q_SLOTS:
 
 protected:
     void keyPressEvent(QKeyEvent*);
+    void addRegionItem();
 
 private:
     void updateAutoZoom();
@@ -173,6 +174,10 @@ private Q_SLOTS:
     void slotZoomChanged(double);
     void slotPanIconSelectionMoved(const QRect&, bool);
     void slotPanIconHidden();
+    void slotAddItemStarted(const QPointF& pos);
+    void slotAddItemMoving(const QRectF& rect);
+    void slotAddItemFinished(const QRectF& rect);
+    void cancelAddItem();
     
 private:
 

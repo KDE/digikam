@@ -51,8 +51,8 @@ public:
     Private()
         
     {
-        im       = 0;
-        view     = 0;
+        im         = 0;
+        view       = 0;
     }
 
     EditorCore*      im;

@@ -56,6 +56,8 @@
 #include "canvasitem.h"
 #include "previewlayout.h"
 #include "imagezoomsettings.h"
+#include "regionframeitem.h"
+#include "clickdragreleaseitem.h"
 
 namespace Digikam
 {
@@ -85,11 +87,12 @@ public:
         panIconPopup     = 0;
         cornerButton     = 0;
         parent           = 0;
-        //rubber           = 0;
         autoZoom         = false;
         fullScreen       = false;
         zoom             = 1.0;
         initialZoom      = true;
+        regionItem       = 0;
+        wrapItem         = 0;
     }
 
     bool                     autoZoom;
@@ -131,6 +134,9 @@ public:
     QString                  errorMessage;
     
     CanvasItem*              canvasItem;
+
+    RegionFrameItem*         regionItem;
+    ClickDragReleaseItem*    wrapItem;
 };
 
 Canvas::Canvas(QWidget* const parent)
@@ -158,6 +164,9 @@ Canvas::Canvas(QWidget* const parent)
     viewport()->setMouseTracking(false);
     setFrameStyle(QFrame::NoFrame);
     setFocusPolicy(Qt::ClickFocus);
+
+    //d_ptr->wrapItem = new ClickDragReleaseItem(d_ptr->canvasItem);
+    addRegionItem();
 
     // ------------------------------------------------------------
 
@@ -196,6 +205,10 @@ Canvas::Canvas(QWidget* const parent)
 
 Canvas::~Canvas()
 {
+    if (d_ptr->regionItem)
+    {
+        delete d_ptr->regionItem;
+    }
     delete d_ptr->canvasItem;
     delete d_ptr;
 }
@@ -232,9 +245,7 @@ void Canvas::load(const QString& filename, IOFileSettings* const IOFileSettings)
 void Canvas::slotImageLoaded(const QString& filePath, bool success)
 {
     d_ptr->canvasItem->setImage(d_ptr->canvasItem->im()->getImg()->copyImageData());
-
     d_ptr->canvasItem->zoomSettings()->setZoomFactor(d_ptr->zoom);
-    d_ptr->canvasItem->im()->zoom(d_ptr->zoom);
 
     if (d_ptr->autoZoom || d_ptr->initialZoom)
     {
@@ -255,7 +266,7 @@ void Canvas::slotImageLoaded(const QString& filePath, bool success)
 
     updateContentsSize(true);
 
-//     viewport()->update();
+    viewport()->update();
 
     emit signalZoomChanged(d_ptr->zoom);
 
@@ -273,7 +284,7 @@ void Canvas::applyTransform(const IccTransform& t)
     else
     {
         d_ptr->canvasItem->im()->updateColorManagement();
-//         viewport()->update();
+        viewport()->update();
     }
 }
 
@@ -326,11 +337,13 @@ QString Canvas::currentImageFilePath() const
 
 int Canvas::imageWidth() const
 {
+    qDebug()<<"imageWidth"<<d_ptr->canvasItem->im()->origWidth();
     return d_ptr->canvasItem->im()->origWidth();
 }
 
 int Canvas::imageHeight() const
 {
+    qDebug()<<"imageHeight"<<d_ptr->canvasItem->im()->origHeight();
     return d_ptr->canvasItem->im()->origHeight();
 }
 
@@ -377,6 +390,7 @@ double Canvas::calcAutoZoomFactor() const
 void Canvas::updateAutoZoom()
 {
     d_ptr->zoom = calcAutoZoomFactor();
+    qDebug()<<"updateAutoZoom"<<d_ptr->zoom;
     d_ptr->canvasItem->zoomSettings()->setZoomFactor(d_ptr->zoom);
 
     emit signalZoomChanged(d_ptr->zoom);
@@ -409,10 +423,10 @@ void Canvas::updateContentsSize(bool deleteRubber)
         }
     //}
 
-    /*int wZ = d_ptr->canvasItem->im()->width();
+/*    int wZ = d_ptr->canvasItem->im()->width();
     int hZ = d_ptr->canvasItem->im()->height();
 
-    if (visibleWidth() > wZ || visibleHeight() > hZ)
+    if (visibleWidth() > wZ || visibleHeight() > hZ)updateWidgetPosition();
     {
         // Center the image
         int centerx   = contentsRect().width()  / 2;
@@ -440,7 +454,7 @@ void Canvas::updateContentsSize(bool deleteRubber)
         int hSel  = (int)(sel.height() *  d_ptr->zoom);
         QRect rubberRect(xSel, ySel, wSel, hSel);
         rubberRect.translate(d_ptr->pixmapRect.x(), d_ptr->pixmapRect.y());
-        //d_ptr->rubber->setRectOnViewport(rubberRect);
+        d_ptr->rubber->setRectOnViewport(rubberRect);
     }*/
 
     //resizeContents(wZ, hZ);
@@ -474,6 +488,7 @@ bool Canvas::exifRotated() const
 
 double Canvas::snapZoom(double zoom) const
 {
+    qDebug()<<"Canvas::snapZoom"<<zoom;
     // If the zoom value gets changed from d_ptr->zoom to zoom
     // across 50%, 100% or fit-to-window, then return the
     // the corresponding special value. Otherwise zoom is returned unchanged.
@@ -586,7 +601,6 @@ void Canvas::setZoomFactor(double zoom)
     d_ptr->zoom    = zoom;
 
     d_ptr->canvasItem->zoomSettings()->setZoomFactor(d_ptr->zoom);
-    d_ptr->canvasItem->im()->zoom(d_ptr->zoom);
     updateContentsSize(false);
 
     emit signalZoomChanged(d_ptr->zoom);
@@ -613,13 +627,12 @@ void Canvas::fitToSelect()
         emit signalToggleOffFitToWindow();
 
         d_ptr->canvasItem->zoomSettings()->setZoomFactor(d_ptr->zoom);
-        d_ptr->canvasItem->im()->zoom(d_ptr->zoom);
         updateContentsSize(true);
 
 //         viewport()->setUpdatesEnabled(false);
         centerOn(cpx * d_ptr->zoom, cpy * d_ptr->zoom);
 //         viewport()->setUpdatesEnabled(true);
-//         viewport()->update();
+        viewport()->update();
 
         emit signalZoomChanged(d_ptr->zoom);
     }
@@ -632,7 +645,8 @@ bool Canvas::fitToWindow() const
 
 void Canvas::toggleFitToWindow()
 {
-    setFitToWindow(!d_ptr->autoZoom);
+    qDebug()<<"Canvas::toggleFitToWindow()";
+    //setFitToWindow(!d_ptr->autoZoom);
 }
 
 void Canvas::setFitToWindow(bool fit)
@@ -651,10 +665,8 @@ void Canvas::setFitToWindow(bool fit)
         emit signalZoomChanged(d_ptr->zoom);
     }
 
-    d_ptr->canvasItem->im()->zoom(d_ptr->zoom);
     updateContentsSize(false);
     slotZoomChanged(d_ptr->zoom);
-//     viewport()->update();
 }
 
 void Canvas::slotRotate90()
@@ -714,32 +726,32 @@ void Canvas::setBackgroundColor(const QColor& color)
     }
 
     d_ptr->bgColor = color;
-//     viewport()->update();
+    viewport()->update();
 }
 
 void Canvas::setICCSettings(const ICCSettingsContainer& cmSettings)
 {
     ICCSettingsContainer old = d_ptr->canvasItem->im()->getICCSettings();
     d_ptr->canvasItem->im()->setICCSettings(cmSettings);
-//     viewport()->update();
+    viewport()->update();
 }
 
 void Canvas::setSoftProofingEnabled(bool enable)
 {
     d_ptr->canvasItem->im()->setSoftProofingEnabled(enable);
-//     viewport()->update();
+    viewport()->update();
 }
 
 void Canvas::setExposureSettings(ExposureSettingsContainer* const expoSettings)
 {
     d_ptr->canvasItem->im()->setExposureSettings(expoSettings);
-//     viewport()->update();
+    viewport()->update();
 }
 
 void Canvas::setExifOrient(bool exifOrient)
 {
     d_ptr->canvasItem->im()->setExifOrient(exifOrient);
-//     viewport()->update();
+    viewport()->update();
 }
 
 void Canvas::slotRestore()
@@ -844,10 +856,8 @@ void Canvas::slotModified()
         updateAutoZoom();
     }
 
-    d_ptr->canvasItem->im()->zoom(d_ptr->zoom);
-
     updateContentsSize(true);
-//     viewport()->update();
+    viewport()->update();
 
     // To be sure than corner widget used to pan image will be hide/show
     // accordingly with new image size (if changed).
@@ -912,6 +922,7 @@ void Canvas::slotPanIconSelectionMoved(const QRect& r, bool b)
 void Canvas::slotZoomChanged(double /*zoom*/)
 {
     //updateScrollBars();
+    qDebug()<<"slotZoomChanged";
 
     if (horizontalScrollBar()->isVisible() || verticalScrollBar()->isVisible())
     {
@@ -928,7 +939,7 @@ void Canvas::slotSelectAll()
     //d_ptr->rubber->setRectOnContents(d_ptr->pixmapRect);
     d_ptr->pressedMoved = true;
     viewport()->setMouseTracking(true);
-//     viewport()->update();
+    viewport()->update();
 
     if (d_ptr->canvasItem->im()->imageValid())
     {
@@ -939,7 +950,7 @@ void Canvas::slotSelectAll()
 void Canvas::slotSelectNone()
 {
     //reset();
-//     viewport()->update();
+    viewport()->update();
 }
 
 void Canvas::keyPressEvent(QKeyEvent* e)
@@ -987,6 +998,73 @@ void Canvas::keyPressEvent(QKeyEvent* e)
             e->ignore();
             break;
         }
+    }
+}
+
+void Canvas::addRegionItem()
+{
+    if (d_ptr->regionItem)
+    {
+        return;
+    }
+
+    if (!d_ptr->wrapItem)
+    {
+        d_ptr->wrapItem = new ClickDragReleaseItem(d_ptr->canvasItem);
+    }
+
+    d_ptr->wrapItem->setFocus();
+    setFocus();
+
+    connect(d_ptr->wrapItem, SIGNAL(started(QPointF)),
+            this, SLOT(slotAddItemStarted(QPointF)));
+
+    connect(d_ptr->wrapItem, SIGNAL(moving(QRectF)),
+            this, SLOT(slotAddItemMoving(QRectF)));
+
+    connect(d_ptr->wrapItem, SIGNAL(finished(QRectF)),
+            this, SLOT(slotAddItemFinished(QRectF)));
+
+    connect(d_ptr->wrapItem, SIGNAL(cancelled()),
+            this, SLOT(cancelAddItem()));
+}
+
+void Canvas::slotAddItemStarted(const QPointF& pos)
+{
+    Q_UNUSED(pos);
+}
+
+void Canvas::slotAddItemMoving(const QRectF& rect)
+{
+    if (d_ptr->regionItem)
+    {
+        delete d_ptr->regionItem;
+    }
+    d_ptr->regionItem = new RegionFrameItem(d_ptr->canvasItem);
+    d_ptr->regionItem->setRectInSceneCoordinates(rect);
+}
+
+void Canvas::slotAddItemFinished(const QRectF& rect)
+{
+    if (d_ptr->regionItem)
+    {
+        d_ptr->regionItem->setRectInSceneCoordinates(rect);
+        //d_ptr->wrapItem->stackBefore(d_ptr->canvasItem);
+    }
+
+    cancelAddItem();
+}
+
+void Canvas::cancelAddItem()
+{
+    //delete d_ptr->regionItem;
+    //d_ptr->regionItem = 0;
+
+    if (d_ptr->wrapItem)
+    {
+        this->scene()->removeItem(d_ptr->wrapItem);
+        d_ptr->wrapItem->deleteLater();
+        d_ptr->wrapItem = 0;
     }
 }
 
