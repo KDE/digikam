@@ -222,6 +222,7 @@ public:
     KAction*                            newTagAction;
     KAction*                            deleteTagAction;
     KAction*                            editTagAction;
+    KAction*                            assignTagAction;
 
     // Image Actions
     KSelectAction*                      imageViewSelectionAction;
