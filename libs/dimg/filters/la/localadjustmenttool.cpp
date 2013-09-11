@@ -65,6 +65,74 @@
 namespace Digikam
 {
 
+LAContainer::LAContainer()
+{
+    red                  = 0;
+    blue                 = 0;
+    green                = 0;
+    alpha                = 0;
+    hue                  = 0;
+    saturation           = 0;
+    vibrance             = 0;
+    lightness            = 0;
+    radius               = 0;
+    center.setX(0);
+    center.setY(0);
+    selectionCenter.setX(0);
+    selectionCenter.setY(0);
+//    selection            = NULL;
+//    modSelection;
+}
+
+LAContainer::LAContainer(DImg part)
+{
+    red                  = 0;
+    blue                 = 0;
+    green                = 0;
+    alpha                = 0;
+    hue                  = 0;
+    saturation           = 0;
+    vibrance             = 0;
+    lightness            = 0;
+    radius               = 0;
+    center.setX(0);
+    center.setY(0);
+    selectionCenter.setX(0);
+    selectionCenter.setY(0);
+    selection            = part;
+//    modSelection;
+}
+
+LAContainer::~LAContainer()
+{
+}
+
+QDebug operator<<(QDebug dbg, const LAContainer& inf)
+{
+    dbg.nospace() << "center:"
+                  << inf.center << ", ";
+    dbg.nospace() << "Selection Center:"
+                  << inf.selectionCenter << ", ";
+    dbg.nospace() << "Radius:"
+                  << inf.radius << ", ";
+    dbg.nospace() << "Red: "
+                  << inf.red << ", ";
+    dbg.nospace() << "Blue: "
+                  << inf.blue << ", ";
+    dbg.nospace() << "Green: "
+                  << inf.green << ", ";
+    dbg.nospace() << "Hue: "
+                  << inf.hue << ", ";
+    dbg.nospace() << "Saturation: "
+                  << inf.saturation << ", ";
+    dbg.nospace() << "Vibrance: "
+                  << inf.vibrance << ", ";
+    dbg.nospace() << "Lightness: "
+                  << inf.lightness;
+    return dbg.space();
+}
+
+
 class LocalAdjustments::Private
 {
 public:
@@ -77,8 +145,33 @@ public:
     int centerX;
     int centerY;
     int radius;
+    LAContainer sln[20];    //keep a maximum limit of 20 selections for work.
+    int count;              //to keep a count of the next selection would be
 };
 
+
+LocalAdjustments::LocalAdjustments(DImg* const img, QObject* const parent)
+: DImgThreadedAnalyser(parent, "LocalAdjustments"), d(new Private)
+{
+    d->count = 0;
+    setOriginalImage(*img);
+}
+
+
+/*
+LocalAdjustments::LocalAdjustments(DImg *const orgImage, int n, LAContainer lac[], QObject *const parent)
+: DImgThreadedAnalyser(parent, "LocalAdjustments"), d(new Private)
+{
+    setOriginalImage(*orgImage);
+    for ( int i = 0 ; i < n ; i++)
+    {
+        d->sln[i] = lac[i];
+    }
+    d->count = n;
+}
+*/
+
+/**
 LocalAdjustments::LocalAdjustments(DImg* const img, int x, int y, int radius, QObject* const parent)
 : DImgThreadedAnalyser(parent, "LocalAdjustments"), d(new Private)
 {
@@ -87,16 +180,105 @@ LocalAdjustments::LocalAdjustments(DImg* const img, int x, int y, int radius, QO
     d->centerY = y;
     d->radius  = radius;
 }
+*/
 
 LocalAdjustments::~LocalAdjustments()
 {
     delete d;
 }
 
+int LocalAdjustments::addSelection(LAContainer lac)
+{
+    d->sln[d->count] = lac;
+    createSelection(&(d->sln[d->count]));
+    d->count++;
+    return (d->count - 1);
+}
+
+void LocalAdjustments::createSelection(LAContainer *lac)
+{
+    //function yet to be made.
+}
+
+void LocalAdjustments::createSelection(int index)
+{
+    /**
+        d->centerX              = d->sln[index].center.x();
+        d->centerY              = d->sln[index].center.x();
+        d->radius               = d->sln[index].radius;
+        d->selectionCenter      = centerSelection();
+        */
+    d->sln[index].selectionCenter           = centerSelection(d->sln[index].center.x() , d->sln[index].center.y() , d->sln[index].radius );
+    d->sln[index].selection                 = getDImgSoftSelection(d->sln[index].center, d->sln[index].selectionCenter, d->sln[index].radius);
+    DImg temp                               = d->sln[index].selection;
+    d->sln[index].selection                 = getDImgColorSelection(temp, d->sln[index].selectionCenter );
+}
+
+//void LocalAdjustments::filterImage()
+//{
+//    int i;
+//    for (i = 0 ; (i < d->count) && (i < 20); i ++ )
+//    {
+//        createSelection(i);
+//    }
+//}
+
 void LocalAdjustments::startAnalyse()
 {
     //fill the d->selection and the selectionCenter
-    d->selectionCenter = centerSelection();
+
+    //d->selectionCenter = centerSelection();
+    int i;
+    for (i = 0 ; (i < d->count) && (i < 20); i ++ )
+    {
+        createSelection(i);
+    }
+
+    //color modify the selections based on RGBA
+
+
+}
+
+QPoint LocalAdjustments::centerSelection(int x, int y, int radius)
+{
+    QImage img         = m_orgImage.copyQImage();
+    int outerRadius    = radius;
+    QPoint origCenter;
+    origCenter.setX(x);
+    origCenter.setY(y);
+    if (outerRadius == 0)
+    {
+        return origCenter;
+    }
+    int leftlimit   = origCenter.x() - outerRadius;
+    int rightlimit  = origCenter.x() + outerRadius - 1;
+    int toplimit    = origCenter.y() - outerRadius;
+    int bottomlimit = origCenter.y() + outerRadius - 1;
+    QPoint sCenter;
+
+    //-----Check if borders exceed image boundaries
+    if (leftlimit < 0 )
+    {
+        leftlimit = 0;
+    }
+    if (rightlimit >= img.width())
+    {
+        rightlimit = img.width()-1;
+    }
+    if (toplimit < 0 )
+    {
+        toplimit = 0;
+    }
+    if ( bottomlimit >= img.height())
+    {
+        bottomlimit = img.height() -1;
+    }
+
+    sCenter.setX(origCenter.x()-leftlimit);
+    sCenter.setY(origCenter.y()-toplimit);
+    qDebug() << "scenter X = " << sCenter.x();
+    qDebug() << "scenter Y = " << sCenter.y();
+    return sCenter;
 }
 
 QPoint LocalAdjustments::centerSelection()
@@ -141,6 +323,10 @@ QPoint LocalAdjustments::centerSelection()
     return sCenter;
 }
 
+DImg LocalAdjustments::getSelection(int index)
+{
+    return d->sln[index].selection;
+}
 
 DImg LocalAdjustments::getSelection()
 {
@@ -369,6 +555,211 @@ DImg LocalAdjustments::getDImgSoftSelection()
     return mask;
 }
 
+DImg LocalAdjustments::getDImgSoftSelection(QPoint origCenter, QPoint selectionCenter, int radius)
+{
+    uint i          = 0;      //loop variables
+    uint j          = 0;      //loop variables
+    uint x          = 0;      //loop variables
+    uint y          = 0;      //loop variables
+    int innerRadius = 0.7 * radius;
+    int outerRadius = radius;
+    int leftlimit   = origCenter.x() - outerRadius;
+    int rightlimit  = origCenter.x() + outerRadius - 1;
+    int toplimit    = origCenter.y() - outerRadius;
+    int bottomlimit = origCenter.y() + outerRadius - 1;
+    int width = m_orgImage.width();
+    int height = m_orgImage.height();
+    QRect crop;
+    QSize size;
+
+    //---- Fixing out of bounds for the boudaries -----------------------------
+
+    if (leftlimit < 0 )
+    {
+        leftlimit = 0;
+    }
+    if (rightlimit >= width)
+    {
+        rightlimit = width - 1;
+    }
+    if (toplimit < 0 )
+    {
+        toplimit = 0;
+    }
+    if ( bottomlimit >= height)
+    {
+        bottomlimit = height - 1;
+    }
+
+    //---- Setting up Crop ----------------------------------------------------
+
+    QPoint p1;
+    p1.setX(leftlimit);
+    p1.setY(toplimit);
+    QPoint p2;
+    p2.setX(rightlimit);
+    p2.setY(bottomlimit);
+    crop.setTopLeft(p1);
+    crop.setBottomRight(p2);
+
+    //---- Fixing the size of the QSize size -----------------------------------
+
+    size.setHeight(bottomlimit-toplimit+1);
+    size.setWidth(rightlimit - leftlimit + 1);
+    qDebug() << "Rect : "<<crop;
+
+//    DImg mask(crop.width(), crop.height(), m_orgImage.sixteenBit(), true, 0, true);
+    DImg mask(m_orgImage.width() , m_orgImage.height(), m_orgImage.sixteenBit(), true, 0, true);
+//    DImg mask = m_orgImage;
+    mask.crop(crop);
+
+    //---- Copy the m_orgImage data to mask -----------------------------------
+
+    uint iStart = crop.topLeft().x();
+    uint iStop  = crop.topRight().x();
+    uint jStart = crop.topLeft().y();
+    uint jStop  = crop.bottomRight().y();
+
+    qDebug() << "crop.topLeft().x()    = " << crop.topLeft().x();
+    qDebug() << "crop.topRight().x()   = " << crop.topRight().x();
+    qDebug() << "crop.topLeft().y()    = " << crop.topLeft().y();
+    qDebug() << "crop.bottomLeft().y() = " << crop.bottomLeft().y();
+
+    QFile file("check data.txt");
+    file.open(QIODevice::WriteOnly | QIODevice::Text);
+    QTextStream out(&file);
+    out << "This file is generated by Qt\n";
+
+    //testing the basic fill command
+    DColor fill;
+    fill.setRed(255);
+    fill.setBlue(255);
+    fill.setGreen(255);
+    fill.setAlpha(100);
+
+    mask.fill(fill);
+
+
+    for ( i = iStart , x = 0  ; i <= iStop ; i++ , x++ )
+    {
+        for ( j = jStart , y = 0 ; j <= jStop; j++ , y++)
+        {
+            DColor pixel = m_orgImage.getPixelColor(i,j);
+            DColor setPixel;
+            setPixel.setRed(pixel.red());
+            setPixel.setGreen(pixel.green());
+            setPixel.setBlue(pixel.blue());
+            setPixel.setAlpha(pixel.alpha());
+            out << "m_orgImage (i,j) " << i << "\t" << j << "\t" << pixel.red() << "\t" << pixel.green() << "\t" << pixel.blue() << "\t" << pixel.alpha() << "\n";//<< "\t mask : " << x << "\t" << y << "\n";
+            //out << "VAlue = " << pixel.red() << "\t" << pixel.green() << "\t" << pixel.blue() << "\t" << pixel.alpha() << "\n";
+            mask.setPixelColor(x,y,setPixel);
+        }
+    }
+
+    mask.save("Trymefirst.png","PNG");
+//    return mask;
+
+    //---- Make the circular selection ------------------------------------------
+
+    qDebug() << "selection Center is  : " << selectionCenter;
+    int centerx            = selectionCenter.x();
+    int centery            = selectionCenter.y();
+    uint sz                 = mask.height() * mask.width();
+    float diffRadius       = outerRadius - innerRadius;
+    int limit              = (m_orgImage.sixteenBit() ? 65535 : 255 );
+    //int r;          //red
+    //int g;          //green
+    //int b;          //blue
+    float a;        //alpha value temp
+    DColor col;     //to store color of a pixel
+    float distance; //to store the value of distance between variables
+    float fimg[sz] [4];
+    qDebug() << "outerRadius = " << outerRadius;
+    qDebug() << "innerRadius = " << innerRadius;
+    qDebug() << "Limit is " << limit;
+
+    //--- check for proper data transfer
+
+    qDebug() << " Working properly, all variables initialized";
+
+    x = 0;
+    for (i = 0; (i < mask.width()); i++)
+    {
+        for (j = 0; (j < mask.height()); j++)
+        {
+            col           = mask.getPixelColor(i, j);
+            fimg[x][0] = col.red();
+            fimg[x][1] = col.green();
+            fimg[x][2] = col.blue();
+            fimg[x][3] = col.alpha();
+            x++;
+        }
+    }
+    qDebug() << "X is " << x << "; Size is " << sz;
+
+    qDebug() << "mask.height()" << mask.height();
+    qDebug() << "mask.width()" << mask.width();
+
+    x = 0;
+    for (i = 0; runningFlag() && (i < mask.width()); i++)
+    {
+        for (j = 0; runningFlag() && (j < mask.height()); j++)
+        {
+            //if distance > outer radius, make alpha = zero
+//            distance=(i-centery)*(i-centery)+(j-centerx)*(j-centerx);
+            distance=(j-centery)*(j-centery)+(i-centerx)*(i-centerx);
+            distance=qSqrt(distance);
+            if (distance < outerRadius)
+            {
+                if (distance <= innerRadius)
+                {
+                    //mask.setPixel(j,i,QColor(r,g,b,255).rgba());
+                    fimg[x][3] = limit;
+                }
+                else
+                {
+                    a = (diffRadius-(distance-innerRadius))/diffRadius;
+                    a = a * limit;
+                    //**** UNCOMMENT FOR CHECK (next line) ***
+                    //                    qDebug() << "Alpha Value = " << a;
+                    //mask.setPixel(j,i,QColor(r,g,b,((int)(qFloor(a)))).rgba());
+                    fimg[x][3] = a;
+                }
+            }
+            else
+            {
+                fimg[x][3] = 0;
+            }
+            out << "Distance  = " << distance << "; alpha value  = " << ((int)qFloor(fimg[x][3])) << "\n";
+            x++;
+        }
+    }
+    //Q_ASSERT(check);
+
+
+    bool sixteenBit=false;
+    if (limit == 65535)
+    {
+        col.setSixteenBit(true);
+        sixteenBit = true;
+    }
+    x = 0;
+    for ( i = 0 ; i<mask.width() ; i++ )
+    {
+        for ( j=0 ; j<mask.height() ; j++ )
+        {
+            DColor pixel(fimg[x][0],fimg[x][1],fimg[x][2],(int)(qFloor(fimg[x][3])),sixteenBit);
+            out << "VAlue = " << fimg[x][0] << " " << fimg[x][1] << " " << fimg[x][2] << " " << (int)(qFloor(fimg[x][3])) << "\n";
+            mask.setPixelColor( i, j, pixel);
+            x++;
+        }
+    }
+    mask.save("Circular Selection.png","PNG");
+    //d->selection = mask;
+    //save new file, save it as "testingDImg2.txt"
+    return mask;
+}
+
 DImg LocalAdjustments::getDImgColorSelection()
 {
     //---- Color Selection ---------------------------------------------------
@@ -450,6 +841,154 @@ DImg LocalAdjustments::getDImgColorSelection()
     qDebug() << "Selection Center X = " << d->selectionCenter.x();
     qDebug() << "Selection Center Y = " << d->selectionCenter.y();
     DColor col = mask.getPixelColor(d->selectionCenter.x(), d->selectionCenter.y());
+    qDebug() << "col value : " << col.red() << "\t" << col.green() << "\t" << col.blue() << "\t" << col.alpha();
+
+    for ( i = 0 ; i < 4 ; i++)
+    {
+        reference[i] = fimg[n][i];
+    }
+    qDebug() << "New Reference Values : ";
+    qDebug() << reference[0] << "\t" << reference[1] << "\t" << reference[2] << "\t" << reference[3];
+    colorDifference(fimg,reference,difference,sz);
+
+    //-----We convert the whole Image back to SRGB-----------------------------
+
+    lab2srgb(fimg,sz);
+    for ( i=0; i<sz; i++)
+    {
+        for (j=0 ; j<4 ; j++)
+        {
+            fimg[i][j] = fimg[i][j] * limit;
+        }
+    }
+    x=0;
+    for (i=0;i<mask.width(); i++)
+    {
+        for(j=0;j<mask.height();j++)
+        {
+//            c=QColor::fromRgba(selection.pixel(j,i));
+//            for (k = 0; k < 3 ; k++)
+//            {
+//                fimg[x][k] = fimg[x][k] * limit;
+//            }
+            if (difference[x]<0.2)
+            {
+                fimg[x][3] = fimg[x][3] * (0.2 - difference[x]) * 5;
+//                selection.setPixel(j,i,QColor(((int)(fimg[x][0]*limit)),((int)(fimg[x][1]*limit)),((int)(fimg[x][2]*limit)),(fimg[x][3]*limit*(0.2-difference[x])*5)).rgba());
+            }
+            else
+            {
+                fimg[x][3] = 0;
+//                selection.setPixel(j,i,QColor(((int)(fimg[x][0]*limit)),((int)(fimg[x][1]*limit)),((int)(fimg[x][2]*limit)),0).rgba());
+            }
+            print << "difference[x] = " << difference[x] << "\t\tAlpha value multiplier" << (limit * (0.2 - difference[x]) * 5) << "\n";
+            x++;
+        }
+    }
+
+    // ---- convert fimg to DImg
+    //we will refill mask
+
+    x = 0;
+    for ( i = 0 ; i<mask.width() ; i++ )
+    {
+        for ( j=0 ; j<mask.height() ; j++ )
+        {
+            DColor pixel((int)fimg[x][0], (int) fimg[x][1],(int) fimg[x][2],(int)(qFloor(fimg[x][3])),sixteenBit);
+            print << "VAlue = " << (int) fimg[x][0] << "\t" << (int) fimg[x][1] << "\t" << (int) fimg[x][2] << "\t" << (int)(qFloor(fimg[x][3])) << "\n";
+            mask.setPixelColor( i, j, pixel);
+            x++;
+        }
+    }
+
+    // ---- Test Save ---------------------------------------------------------
+    bool istrue=mask.save("Localadj DImg Circular.png","PNG");
+    qDebug() << "Check for good save : " << istrue;
+
+    return mask;
+}
+
+DImg LocalAdjustments::getDImgColorSelection(DImg &selection, QPoint selectionCenter)
+{
+    //---- Color Selection ---------------------------------------------------
+    uint i,j,x;
+    uint sz;
+    DImg mask = selection;
+    sz = mask.width() * mask.height();
+    float fimg[sz][4];
+    int n = (selectionCenter.y() * mask.width()) + selectionCenter.x();
+    int limit = (m_orgImage.sixteenBit() ? 65535 : 255 );
+    float difference[sz];
+
+    QFile checkfile("testingColor.txt");
+    checkfile.open(QIODevice::WriteOnly | QIODevice::Text);
+    QTextStream print(&checkfile);
+    print << "This file is generated by Qt\n";
+
+    //---- Fill the fimg array ------------------------------------------------
+
+    mask.save("colorSelectionInit.png","PNG");
+    x = 0;
+    for (i = 0; (i < mask.width()); i++)
+    {
+        for (j = 0; (j < mask.height()); j++)
+        {
+            if ( (i == selectionCenter.x() ) && (j == selectionCenter.y()))
+            {
+                qDebug() << "found the correct n = " << x;
+            }
+            DColor col = mask.getPixelColor(i, j);
+            fimg[x][0] = col.red();
+            fimg[x][1] = col.green();
+            fimg[x][2] = col.blue();
+            fimg[x][3] = col.alpha();
+            print << fimg[x][0] << "\t" << fimg[x][1] << "\t" << fimg[x][2] << "\t" << fimg[x][3] << "\n";
+            x++;
+        }
+    }
+
+    qDebug() << "========= In Color Selection Function =========";
+    qDebug() << "X is " << x << "; Size is " << sz;
+    qDebug() << "Limit = " << limit;
+
+    //---- Convert the fimg[sz][4] to values from 0 to 1
+    for ( i = 0 ; i < sz ; i ++ )
+    {
+        for ( j = 0 ; j < 4 ; j++)
+        {
+            fimg[i][j] = fimg[i][j] / limit;
+        }
+    }
+
+    //---- set up sixteenBit for sixteenBit data
+    bool sixteenBit=false;
+    if (limit == 65535)
+    {
+        sixteenBit = true;
+    }
+
+    //-----We convert the whole image to CIELAB -------------------------------
+    qDebug() << "n = " << n;
+    srgb2lab(fimg,sz);
+
+    //store the lab values in some file (say labme.txt)
+    QFile fileLab("labme.txt");
+    fileLab.open(QIODevice::WriteOnly | QIODevice::Text);
+    QTextStream outLab(&fileLab);
+    for (i=0; i<sz; i++)
+    {
+        outLab << fimg[i][0] << "\t" << fimg[i][1] << "\t" << fimg[i][2] << "\t" << fimg[i][3]<<"\n";
+    }
+    fileLab.close();
+    qDebug() << "After conversion:";
+
+    //-----Comparing with Center Pixel ----------------------------------------
+    //Here we consider the central pixel, i.e. center, we take the color of those pixels
+    float reference[4];
+    //test check of the selectionCenter values
+    qDebug() << "Selection Center X = " << selectionCenter.x();
+    qDebug() << "Selection Center Y = " << selectionCenter.y();
+    DColor col = mask.getPixelColor(selectionCenter.x(), selectionCenter.y());
     qDebug() << "col value : " << col.red() << "\t" << col.green() << "\t" << col.blue() << "\t" << col.alpha();
 
     for ( i = 0 ; i < 4 ; i++)
@@ -1223,7 +1762,16 @@ void LocalAdjustments::srgb2hsv(float fimg[][4], int size)
 }
 */
 
-void LocalAdjustments::changeRGBA(double r, double g, double b, double a)
+void LocalAdjustments::changeAllRGBA()
+{
+    int i;
+    for( i = 0 ; i < d->count ; i++)
+    {
+        changeSingleRGBA(i);
+    }
+}
+
+void LocalAdjustments::changeSingleRGBA(int index)
 {
     //changes the selection to the given parameters.
 
@@ -1244,19 +1792,19 @@ void LocalAdjustments::changeRGBA(double r, double g, double b, double a)
 //    qDebug() << "In actual function : " << r << "\t" <<  g << "\t" <<  b << "\t" << a;
     if (sixteenBit)
     {
-        intR  = (int) (( r / 100.0 ) * 65535.0);
-        intB  = (int) (( b / 100.0 ) * 65535.0);
-        intG  = (int) (( g / 100.0 ) * 65535.0);
-        intA  = (int) (( a / 100.0 ) * 65535.0);
         limit = 65535;
+        intR  = (int) (( d->sln[index].red   / 100.0 ) * limit);
+        intB  = (int) (( d->sln[index].blue  / 100.0 ) * limit);
+        intG  = (int) (( d->sln[index].green / 100.0 ) * limit);
+        intA  = (int) (( d->sln[index].alpha / 100.0 ) * limit);
     }
     else
     {
-        intR  = (int) (( r / 100.0 ) * 255.0);
-        intB  = (int) (( b / 100.0 ) * 255.0);
-        intG  = (int) (( g / 100.0 ) * 255.0);
-        intA  = (int) (( a / 100.0) * 255.0);
         limit = 255;
+        intR  = (int) (( d->sln[index].red   / 100.0 ) * limit);
+        intB  = (int) (( d->sln[index].blue  / 100.0 ) * limit);
+        intG  = (int) (( d->sln[index].green / 100.0 ) * limit);
+        intA  = (int) (( d->sln[index].alpha / 100.0 ) * limit);
     }
 
 //    qDebug() << "intR = " << intR;
@@ -1270,13 +1818,15 @@ void LocalAdjustments::changeRGBA(double r, double g, double b, double a)
     QTextStream out(&file);
     out << "This file is generated by Qt\n";
 
+    d->sln[index].modSelection = d->sln[index].selection;
+
     //-- Apply the values on every pixel with a boundary check
 
-    for ( i = 0 ; i < d->selection.width() ; i++)
+    for ( i = 0 ; i < d->sln[index].selection.width() ; i++)
     {
-        for ( j = 0 ; j <d->selection.height() ; j++)
+        for ( j = 0 ; j < d->sln[index].selection.height() ; j++)
         {
-            col = d->selection.getPixelColor(i,j);
+            col = d->sln[index].selection.getPixelColor(i,j);
             tempR = col.red();
             tempG = col.green();
             tempB = col.blue();
@@ -1327,19 +1877,26 @@ void LocalAdjustments::changeRGBA(double r, double g, double b, double a)
             col.setBlue(tempB);
             col.setGreen(tempG);
             col.setAlpha(tempA);
-            d->selection.setPixelColor(i,j,col);
+            d->sln[index].modSelection.setPixelColor(i,j,col);
         }
     }
     file.close();
 }
 
+DImg LocalAdjustments::getModifiedSelection(int index)
+{
+    changeSingleRGBA(index);
+    return d->sln[index].modSelection;
+}
+
+/*
 DImg LocalAdjustments::getModifiedSelection(double r, double g, double b, double a)
 {
 //    qDebug() << "wrapper function says " << r << "\t" <<  g << "\t" <<  b << "\t" << a;
     changeRGBA(r,g,b,a);
     return d->selection;
 }
-
+*/
 //DImg* LocalAdjustments::applySelection(QString path)
 //{
 //    //we load the image, and send it to the QImage applySelection(QImage layer, QPoint origCenter, QPoint selcCenter)

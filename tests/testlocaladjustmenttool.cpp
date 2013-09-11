@@ -29,6 +29,7 @@
 #include <QRect>
 #include <QImage>
 #include <QPoint>
+#include <iostream>
 
 // KDE includes
 
@@ -48,6 +49,7 @@
 using namespace Digikam;
 using namespace KExiv2Iface;
 using namespace KDcrawIface;
+using namespace std;
 
 int main(int argc, char** argv)
 {
@@ -98,19 +100,56 @@ int main(int argc, char** argv)
         int radius = temp.toInt();
         qDebug() << "Center point : ("<<x<<" , "<<y<<")";
         qDebug() << "Radius       : "<<radius;
-        LocalAdjustments la(&img, x, y, radius);
+
+        double r,g,b,a;
+        cout << "Enter value of r : ";
+        cin >> r;
+        cout << "Enter value of g : ";
+        cin >> g;
+        cout << "Enter value of b : ";
+        cin >> b;
+        cout << "Enter value of a : ";
+        cin >> a;
+
+        LAContainer lac;
+        lac.center.setX(x);
+        lac.center.setY(y);
+        lac.radius = radius;
+        lac.red    = r;
+        lac.blue   = b;
+        lac.green  = g;
+        lac.alpha  = a;
+
+        LocalAdjustments la(&img);
+        la.addSelection(lac);
         la.startFilterDirectly();
-        DImg selection=la.getDImgSoftSelection();
-        selection = la.getDImgColorSelection();
+        DImg selection = la.getSelection(0);
         selection.save(selectionFilePath,"PNG");
 
+//        LocalAdjustments la(&img, x, y, radius);
+//        la.startFilterDirectly();
+//        DImg selection=la.getDImgSoftSelection();
+//        selection = la.getDImgColorSelection();
+
+//        LAContainer lac[1];
+//        lac[0].center.setX(x);
+//        lac[0].center.setY(y);
+//        lac[0].radius = radius;
+//        LocalAdjustments la(&img, 1, lac);
+//        la.filterImage();
+////        la.startAnalyse();
+//        DImg selection = la.getSelection(0);
+//        selection.save(selectionFilePath,"PNG");
+
         //to test modify
-        selection = la.getModifiedSelection(0.0, 0.0, 0.0, 0.0);
+//        selection = la.getModifiedSelection(0.0, 0.0, 0.0, 0.0);
+        selection = la.getModifiedSelection(0);
         selection.save(modifiedSelectionFilePath,"PNG");
     }
-    
+
     if ( choice == "-a" )
     {
+        /*
         //attach selection to image
         QString temp(argv[4]);
         int x      = temp.toInt();
@@ -124,6 +163,7 @@ int main(int argc, char** argv)
         DImg selection(maskPath.filePath(), 0, DRawDecoding(settings));
         DImg output = la.applyDImgSelection(selection);
         output.save(outFilePath, "PNG");
+        */
     }
 //    if ( choice == "-m")
 //    {
