@@ -72,14 +72,6 @@ public:
     {
         pressedMoved     = false;
         pressedMoving    = false;
-        ltActive         = false;
-        rtActive         = false;
-        lbActive         = false;
-        rbActive         = false;
-        lsActive         = false;
-        rsActive         = false;
-        bsActive         = false;
-        tsActive         = false;
         dragActive       = false;
         midButtonPressed = false;
         midButtonX       = 0;
@@ -210,14 +202,12 @@ Canvas::~Canvas()
 
 void Canvas::resetImage()
 {
-    qDebug()<<"resetImage";
     reset();
     d_ptr->canvasItem->im()->resetImage();
 }
 
 void Canvas::reset()
 {
-    qDebug()<<"reset";
     if (d_ptr->regionItem && d_ptr->regionItem->isVisible())
     {
         d_ptr->regionItem->setVisible(false);
@@ -234,9 +224,7 @@ void Canvas::reset()
 
 void Canvas::load(const QString& filename, IOFileSettings* const IOFileSettings)
 {
-    qDebug()<<"load";
     reset();
-    //qDebug()<<"reset success";
     emit signalPrepareToLoad();
     d_ptr->canvasItem->im()->load(filename, IOFileSettings);
 }
@@ -336,13 +324,11 @@ QString Canvas::currentImageFilePath() const
 
 int Canvas::imageWidth() const
 {
-    qDebug()<<"imageWidth"<<d_ptr->canvasItem->im()->origWidth();
     return d_ptr->canvasItem->im()->origWidth();
 }
 
 int Canvas::imageHeight() const
 {
-    qDebug()<<"imageHeight"<<d_ptr->canvasItem->im()->origHeight();
     return d_ptr->canvasItem->im()->origHeight();
 }
 
@@ -389,7 +375,6 @@ double Canvas::calcAutoZoomFactor() const
 void Canvas::updateAutoZoom()
 {
     d_ptr->zoom = calcAutoZoomFactor();
-    qDebug()<<"updateAutoZoom"<<d_ptr->zoom;
     d_ptr->canvasItem->zoomSettings()->setZoomFactor(d_ptr->zoom);
 
     emit signalZoomChanged(d_ptr->zoom);
@@ -403,46 +388,17 @@ void Canvas::updateContentsSize(bool deleteRubber)
     //if (deleteRubber && d_ptr->rubber->isActive())
     //{
     //    d_ptr->rubber->setActive(false);
-        d_ptr->ltActive     = false;
-        d_ptr->rtActive     = false;
-        d_ptr->lbActive     = false;
-        d_ptr->rbActive     = false;
-        d_ptr->lsActive     = false;
-        d_ptr->rsActive     = false;
-        d_ptr->bsActive     = false;
-        d_ptr->tsActive     = false;
-        d_ptr->dragActive   = false;
-        d_ptr->pressedMoved = false;
-        viewport()->unsetCursor();
-        viewport()->setMouseTracking(false);
+    viewport()->unsetCursor();
+    viewport()->setMouseTracking(false);
 
-        if (d_ptr->canvasItem->im()->imageValid())
-        {
-            emit signalSelected(false);
-        }
+    if (d_ptr->canvasItem->im()->imageValid())
+    {
+        emit signalSelected(false);
+    }
     //}
 
-/*    int wZ = d_ptr->canvasItem->im()->width();
-    int hZ = d_ptr->canvasItem->im()->height();
-
-    if (visibleWidth() > wZ || visibleHeight() > hZ)updateWidgetPosition();
-    {
-        // Center the image
-        int centerx   = contentsRect().width()  / 2;
-        int centery   = contentsRect().height() / 2;
-        int xoffset   = int(centerx - wZ / 2);
-        int yoffset   = int(centery - hZ / 2);
-        xoffset       = qMax(xoffset, 0);
-        yoffset       = qMax(yoffset, 0);
-        d_ptr->pixmapRect = QRect(xoffset, yoffset, wZ, hZ);
-    }
-    else
-    {
-        d_ptr->pixmapRect = QRect(0, 0, wZ, hZ);
-    }*/
-
-    //resizeContents(wZ, hZ);
-    viewport()->setUpdatesEnabled(true);
+    setSceneRect(d_ptr->canvasItem->boundingRect());
+    viewport()->setUpdatesEnabled(true); //necessary
 }
 
 bool Canvas::maxZoom() const
@@ -472,7 +428,6 @@ bool Canvas::exifRotated() const
 
 double Canvas::snapZoom(double zoom) const
 {
-    qDebug()<<"Canvas::snapZoom"<<zoom;
     // If the zoom value gets changed from d_ptr->zoom to zoom
     // across 50%, 100% or fit-to-window, then return the
     // the corresponding special value. Otherwise zoom is returned unchanged.
@@ -592,7 +547,6 @@ void Canvas::setZoomFactor(double zoom)
 
 void Canvas::fitToSelect()
 {
-    qDebug()<<"Canvas::fitToSelect()";
     QRect sel = d_ptr->canvasItem->im()->getSelectedArea();
 
     if (!sel.size().isNull())
@@ -629,13 +583,11 @@ bool Canvas::fitToWindow() const
 
 void Canvas::toggleFitToWindow()
 {
-    qDebug()<<"Canvas::toggleFitToWindow()";
-    //setFitToWindow(!d_ptr->autoZoom);
+    setFitToWindow(!d_ptr->autoZoom);
 }
 
 void Canvas::setFitToWindow(bool fit)
 {
-    qDebug()<<"Canvas::setFitToWindow";
     d_ptr->autoZoom = fit;
 
     if (d_ptr->autoZoom)
@@ -834,7 +786,6 @@ QRect Canvas::calcSelectedArea() const
 
 void Canvas::slotModified()
 {
-    qDebug()<<"Canvas::slotModified()";
     if (d_ptr->autoZoom)
     {
         updateAutoZoom();
@@ -905,9 +856,6 @@ void Canvas::slotPanIconSelectionMoved(const QRect& r, bool b)
 
 void Canvas::slotZoomChanged(double /*zoom*/)
 {
-    //updateScrollBars();
-    qDebug()<<"slotZoomChanged";
-
     if (horizontalScrollBar()->isVisible() || verticalScrollBar()->isVisible())
     {
         d_ptr->cornerButton->show();
@@ -987,13 +935,6 @@ void Canvas::keyPressEvent(QKeyEvent* e)
 
 void Canvas::addRegionItem()
 {
-    qDebug()<<"addRegionItem()";
-/*    if (d_ptr->regionItem)
-    {
-        qDebug()<<"regionItem is already there";
-        return;
-    }*/
-
     if (!d_ptr->wrapItem)
     {
         d_ptr->wrapItem = new ClickDragReleaseItem(d_ptr->canvasItem);
