@@ -160,13 +160,15 @@ protected:
     void addRegionItem();
 
 private:
-    void updateAutoZoom();
-    void updateContentsSize(bool deleteRubber);
+    void   updateAutoZoom();
+    void   updateContentsSize(bool deleteRubber);
     double calcAutoZoomFactor() const;
+    QRect  calcSelectedArea() const;
+    void   reset();
 
 private Q_SLOTS:
 
-    //void slotSelected();
+    void slotSelected();
     void slotModified();
     void slotImageLoaded(const QString& filePath, bool success);
     void slotImageSaved(const QString& filePath, bool success);

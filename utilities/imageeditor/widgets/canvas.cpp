@@ -165,7 +165,6 @@ Canvas::Canvas(QWidget* const parent)
     setFrameStyle(QFrame::NoFrame);
     setFocusPolicy(Qt::ClickFocus);
 
-    //d_ptr->wrapItem = new ClickDragReleaseItem(d_ptr->canvasItem);
     addRegionItem();
 
     // ------------------------------------------------------------
@@ -205,39 +204,39 @@ Canvas::Canvas(QWidget* const parent)
 
 Canvas::~Canvas()
 {
-    if (d_ptr->regionItem)
-    {
-        delete d_ptr->regionItem;
-    }
     delete d_ptr->canvasItem;
     delete d_ptr;
 }
 
 void Canvas::resetImage()
 {
-    //reset();
+    qDebug()<<"resetImage";
+    reset();
     d_ptr->canvasItem->im()->resetImage();
 }
 
-// void Canvas::reset()
-// {
-//     if (d_ptr->rubber->isActive())
-//     {
-//         d_ptr->rubber->setActive(false);
-// 
-//         if (d_ptr->canvasItem->im()->imageValid())
-//         {
-//             emit signalSelected(false);
-//         }
-//     }
-// 
-//     d_ptr->errorMessage.clear();
-// }
+void Canvas::reset()
+{
+    qDebug()<<"reset";
+    if (d_ptr->regionItem && d_ptr->regionItem->isVisible())
+    {
+        d_ptr->regionItem->setVisible(false);
+
+        if (d_ptr->canvasItem->im()->imageValid())
+        {
+            emit signalSelected(false);
+        }
+    }
+
+    addRegionItem();
+    d_ptr->errorMessage.clear();
+}
 
 void Canvas::load(const QString& filename, IOFileSettings* const IOFileSettings)
 {
-    //reset();
-    qDebug()<<"Canvas::load()";
+    qDebug()<<"load";
+    reset();
+    //qDebug()<<"reset success";
     emit signalPrepareToLoad();
     d_ptr->canvasItem->im()->load(filename, IOFileSettings);
 }
@@ -440,21 +439,6 @@ void Canvas::updateContentsSize(bool deleteRubber)
     else
     {
         d_ptr->pixmapRect = QRect(0, 0, wZ, hZ);
-    }
-
-    // always restrict rubberband to area covered by image
-    //d_ptr->rubber->setRestrictionOnContents(d_ptr->pixmapRect);
-
-    if (!deleteRubber && d_ptr->rubber->isActive())
-    {
-        QRect sel = d_ptr->canvasItem->im()->getSelectedArea();
-        int xSel  = (int)(sel.x()      *  d_ptr->zoom);
-        int ySel  = (int)(sel.y()      *  d_ptr->zoom);
-        int wSel  = (int)(sel.width()  *  d_ptr->zoom);
-        int hSel  = (int)(sel.height() *  d_ptr->zoom);
-        QRect rubberRect(xSel, ySel, wSel, hSel);
-        rubberRect.translate(d_ptr->pixmapRect.x(), d_ptr->pixmapRect.y());
-        d_ptr->rubber->setRectOnViewport(rubberRect);
     }*/
 
     //resizeContents(wZ, hZ);
@@ -801,52 +785,52 @@ void Canvas::slotCopy()
     QApplication::restoreOverrideCursor();
 }
 
-// void Canvas::slotSelected()
-// {
-//     QRect sel = QRect(0, 0, 0, 0);
-// 
-//     if (d_ptr->rubber->isActive() && d_ptr->pressedMoved)
-//     {
-//         sel = calcSelectedArea();
-//     }
-// 
-//     d_ptr->canvasItem->im()->setSelectedArea(sel);
-// }
+void Canvas::slotSelected()
+{
+    QRect sel = QRect(0, 0, 0, 0);
 
-// QRect Canvas::calcSelectedArea() const
-// {
-//     int x = 0, y = 0, w = 0, h = 0;
-//     QRect r(d_ptr->rubber->rubberBandAreaOnContents());
-// 
-//     if (r.isValid())
-//     {
-//         r.translate(- d_ptr->pixmapRect.x(), - d_ptr->pixmapRect.y());
-// 
-//         x = (int)((double)r.x()  / d_ptr->zoom);
-//         y = (int)((double)r.y()  / d_ptr->zoom);
-//         w = (int)((double)r.width()  / d_ptr->zoom);
-//         h = (int)((double)r.height()  / d_ptr->zoom);
-// 
-//         x = qMin(imageWidth(),  qMax(x, 0));
-//         y = qMin(imageHeight(), qMax(y, 0));
-//         w = qMin(imageWidth(),  qMax(w, 0));
-//         h = qMin(imageHeight(), qMax(h, 0));
-// 
-//         // Avoid empty selection by rubberband - at least mark one pixel
-//         // At high zoom factors, the rubberband may operate at subpixel level!
-//         if (w == 0)
-//         {
-//             w = 1;
-//         }
-// 
-//         if (h == 0)
-//         {
-//             h = 1;
-//         }
-//     }
-// 
-//     return QRect(x, y, w, h);
-// }
+    if (d_ptr->regionItem && d_ptr->pressedMoved)
+    {
+        sel = calcSelectedArea();
+    }
+
+    d_ptr->canvasItem->im()->setSelectedArea(sel);
+}
+
+QRect Canvas::calcSelectedArea() const
+{
+    int x = 0, y = 0, w = 0, h = 0;
+    QRect r(d_ptr->regionItem->boundingRect().toRect());
+
+    if (r.isValid())
+    {
+        //r.translate(- d->pixmapRect.x(), - d->pixmapRect.y());
+
+        x = (int)((double)r.x()      / d_ptr->zoom);
+        y = (int)((double)r.y()      / d_ptr->zoom);
+        w = (int)((double)r.width()  / d_ptr->zoom);
+        h = (int)((double)r.height() / d_ptr->zoom);
+
+        x = qMin(imageWidth(),  qMax(x, 0));
+        y = qMin(imageHeight(), qMax(y, 0));
+        w = qMin(imageWidth(),  qMax(w, 0));
+        h = qMin(imageHeight(), qMax(h, 0));
+
+        // Avoid empty selection by rubberband - at least mark one pixel
+        // At high zoom factors, the rubberband may operate at subpixel level!
+        if (w == 0)
+        {
+            w = 1;
+        }
+
+        if (h == 0)
+        {
+            h = 1;
+        }
+    }
+
+    return QRect(x, y, w, h);
+}
 
 void Canvas::slotModified()
 {
@@ -936,7 +920,7 @@ void Canvas::slotZoomChanged(double /*zoom*/)
 
 void Canvas::slotSelectAll()
 {
-    //d_ptr->rubber->setRectOnContents(d_ptr->pixmapRect);
+    d_ptr->regionItem->setRectInSceneCoordinates(d_ptr->canvasItem->boundingRect());
     d_ptr->pressedMoved = true;
     viewport()->setMouseTracking(true);
     viewport()->update();
@@ -949,7 +933,7 @@ void Canvas::slotSelectAll()
 
 void Canvas::slotSelectNone()
 {
-    //reset();
+    reset();
     viewport()->update();
 }
 
@@ -1003,10 +987,12 @@ void Canvas::keyPressEvent(QKeyEvent* e)
 
 void Canvas::addRegionItem()
 {
-    if (d_ptr->regionItem)
+    qDebug()<<"addRegionItem()";
+/*    if (d_ptr->regionItem)
     {
+        qDebug()<<"regionItem is already there";
         return;
-    }
+    }*/
 
     if (!d_ptr->wrapItem)
     {
@@ -1057,9 +1043,6 @@ void Canvas::slotAddItemFinished(const QRectF& rect)
 
 void Canvas::cancelAddItem()
 {
-    //delete d_ptr->regionItem;
-    //d_ptr->regionItem = 0;
-
     if (d_ptr->wrapItem)
     {
         this->scene()->removeItem(d_ptr->wrapItem);
