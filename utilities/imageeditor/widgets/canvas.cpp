@@ -56,8 +56,8 @@
 #include "canvasitem.h"
 #include "previewlayout.h"
 #include "imagezoomsettings.h"
-#include "regionframeitem.h"
 #include "clickdragreleaseitem.h"
+#include "rubberitem.h"
 
 namespace Digikam
 {
@@ -70,8 +70,6 @@ public:
     Private() :
        minZoom(0.1), maxZoom(12.0), zoomMultiplier(1.2)
     {
-        pressedMoved     = false;
-        pressedMoving    = false;
         dragActive       = false;
         midButtonPressed = false;
         midButtonX       = 0;
@@ -83,14 +81,12 @@ public:
         fullScreen       = false;
         zoom             = 1.0;
         initialZoom      = true;
-        regionItem       = 0;
+        rubber       = 0;
         wrapItem         = 0;
     }
 
     bool                     autoZoom;
     bool                     fullScreen;
-    bool                     pressedMoved;
-    bool                     pressedMoving;
     bool                     ltActive;
     bool                     rtActive;
     bool                     lbActive;
@@ -127,7 +123,7 @@ public:
     
     CanvasItem*              canvasItem;
 
-    RegionFrameItem*         regionItem;
+    RubberItem*              rubber;
     ClickDragReleaseItem*    wrapItem;
 };
 
@@ -157,7 +153,7 @@ Canvas::Canvas(QWidget* const parent)
     setFrameStyle(QFrame::NoFrame);
     setFocusPolicy(Qt::ClickFocus);
 
-    addRegionItem();
+    addRubber();
 
     // ------------------------------------------------------------
 
@@ -188,8 +184,8 @@ Canvas::Canvas(QWidget* const parent)
     connect(d_ptr->canvasItem->im(), SIGNAL(signalSavingProgress(QString,float)),
             this, SIGNAL(signalSavingProgress(QString,float)));
 
-//     connect(this, SIGNAL(signalSelected(bool)),
-//             this, SLOT(slotSelected()));
+    connect(this, SIGNAL(signalSelected(bool)),
+            this, SLOT(slotSelected()));
 
     layout()->fitToWindow();
 }
@@ -208,9 +204,9 @@ void Canvas::resetImage()
 
 void Canvas::reset()
 {
-    if (d_ptr->regionItem && d_ptr->regionItem->isVisible())
+    if (d_ptr->rubber && d_ptr->rubber->isVisible())
     {
-        d_ptr->regionItem->setVisible(false);
+        d_ptr->rubber->setVisible(false);
 
         if (d_ptr->canvasItem->im()->imageValid())
         {
@@ -218,7 +214,7 @@ void Canvas::reset()
         }
     }
 
-    addRegionItem();
+    addRubber();
     d_ptr->errorMessage.clear();
 }
 
@@ -741,7 +737,7 @@ void Canvas::slotSelected()
 {
     QRect sel = QRect(0, 0, 0, 0);
 
-    if (d_ptr->regionItem && d_ptr->pressedMoved)
+    if (d_ptr->rubber)
     {
         sel = calcSelectedArea();
     }
@@ -752,11 +748,11 @@ void Canvas::slotSelected()
 QRect Canvas::calcSelectedArea() const
 {
     int x = 0, y = 0, w = 0, h = 0;
-    QRect r(d_ptr->regionItem->boundingRect().toRect());
+    QRect r(d_ptr->rubber->boundingRect().toAlignedRect());
 
     if (r.isValid())
     {
-        //r.translate(- d->pixmapRect.x(), - d->pixmapRect.y());
+        r.translate((int)d_ptr->rubber->x(), (int)d_ptr->rubber->y());
 
         x = (int)((double)r.x()      / d_ptr->zoom);
         y = (int)((double)r.y()      / d_ptr->zoom);
@@ -868,8 +864,7 @@ void Canvas::slotZoomChanged(double /*zoom*/)
 
 void Canvas::slotSelectAll()
 {
-    d_ptr->regionItem->setRectInSceneCoordinates(d_ptr->canvasItem->boundingRect());
-    d_ptr->pressedMoved = true;
+    d_ptr->rubber->setRectInSceneCoordinates(d_ptr->canvasItem->boundingRect());
     viewport()->setMouseTracking(true);
     viewport()->update();
 
@@ -933,7 +928,7 @@ void Canvas::keyPressEvent(QKeyEvent* e)
     }
 }
 
-void Canvas::addRegionItem()
+void Canvas::addRubber()
 {
     if (!d_ptr->wrapItem)
     {
@@ -963,19 +958,20 @@ void Canvas::slotAddItemStarted(const QPointF& pos)
 
 void Canvas::slotAddItemMoving(const QRectF& rect)
 {
-    if (d_ptr->regionItem)
+    if (d_ptr->rubber)
     {
-        delete d_ptr->regionItem;
+        delete d_ptr->rubber;
     }
-    d_ptr->regionItem = new RegionFrameItem(d_ptr->canvasItem);
-    d_ptr->regionItem->setRectInSceneCoordinates(rect);
+    d_ptr->rubber = new RubberItem(d_ptr->canvasItem);
+    d_ptr->rubber->setCanvas(this);
+    d_ptr->rubber->setRectInSceneCoordinates(rect);
 }
 
 void Canvas::slotAddItemFinished(const QRectF& rect)
 {
-    if (d_ptr->regionItem)
+    if (d_ptr->rubber)
     {
-        d_ptr->regionItem->setRectInSceneCoordinates(rect);
+        d_ptr->rubber->setRectInSceneCoordinates(rect);
         //d_ptr->wrapItem->stackBefore(d_ptr->canvasItem);
     }
 
@@ -990,6 +986,7 @@ void Canvas::cancelAddItem()
         d_ptr->wrapItem->deleteLater();
         d_ptr->wrapItem = 0;
     }
+    emit signalSelected(true);
 }
 
 }  // namespace Digikam

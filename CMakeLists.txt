@@ -1081,6 +1081,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/widgets/previewlist.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/widgets/imageregionwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/widgets/imageregionitem.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/widgets/rubberitem.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/widgets/canvas.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/widgets/canvasitem.cpp
 

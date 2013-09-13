@@ -154,10 +154,11 @@ public Q_SLOTS:
 
     void slotSelectAll();
     void slotSelectNone();
+    void slotSelected();
 
 protected:
     void keyPressEvent(QKeyEvent*);
-    void addRegionItem();
+    void addRubber();
 
 private:
     void   updateAutoZoom();
@@ -168,7 +169,6 @@ private:
 
 private Q_SLOTS:
 
-    void slotSelected();
     void slotModified();
     void slotImageLoaded(const QString& filePath, bool success);
     void slotImageSaved(const QString& filePath, bool success);
