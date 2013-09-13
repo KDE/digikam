@@ -105,7 +105,7 @@ void ImageQualityTask::run()
             //                 must be processed. GUI calls are prohibited. ImageInfo and DImg can be used safety in thread.
 
             ImgQSort imgqsort;
-            PickLabel pick = imgqsort.analyseQuality(dimg);
+            PickLabel pick = imgqsort.analyseQuality(dimg,d->quality);
 
             ImageInfo info(d->path);
             info.setPickLabel(pick);

@@ -30,6 +30,7 @@
 #include "digikam_export.h"
 #include "dimg.h"
 #include "globals.h"
+#include "imagequalitysettings.h"
 
 namespace Digikam
 {
@@ -45,7 +46,7 @@ public:
 
     /** Perform  quality estimation and return Pick Label value accordingly.
      */
-    PickLabel analyseQuality(const DImg& img);
+    PickLabel analyseQuality(const DImg& img, ImageQualitySettings imq);
 
 private:
 

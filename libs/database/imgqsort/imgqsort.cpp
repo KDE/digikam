@@ -38,9 +38,6 @@
 // Kde include
 
 #include <kdebug.h>
-#include <kconfiggroup.h>
-#include <ksharedconfig.h>
-#include <kglobal.h>
 
 // Local includes
 
@@ -95,26 +92,15 @@ public:
 
     ImageQualitySettings imq;
 
+    double blurrejected;
+    double blur;
+
     QString     path;   // Path to host result file
 };
 
 ImgQSort::ImgQSort()
     : d(new Private)
 {
-
-    //reading settings
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("Image Quality Settings");
-
-    d->imq.enableSorter      = group.readEntry("Enable Sorter",      false);
-    d->imq.detectBlur        = group.readEntry("Detect Blur",        true);
-    d->imq.detectNoise       = group.readEntry("Detect Noise",       true);
-    d->imq.detectCompression = group.readEntry("Detect Compression", true);
-    d->imq.lowQRejected      = group.readEntry("LowQ Rejected",      true);
-    d->imq.mediumQPending    = group.readEntry("MediumQ Pending",    true);
-    d->imq.highQAccepted     = group.readEntry("HighQ Accepted",     true);
-    d->imq.speed             = group.readEntry("Speed",              1);
-
     //commented out option to use only part of image for computation
     //int w = (img->width()  > d->size) ? d->size : img->width();
     //int h = (img->height() > d->size) ? d->size : img->height();
@@ -132,11 +118,22 @@ bool ImgQSort::runningFlag() const
     return true;
 }
 
-PickLabel ImgQSort::analyseQuality(const DImg& img)
+PickLabel ImgQSort::analyseQuality(const DImg& img, ImageQualitySettings imq)
 {
     // For ImgQNREstimate
     // Use the Top/Left corner of 256x256 pixels to analyse noise contents from image.
     // This will speed-up computation time with OpenCV.
+
+    //reading settings
+    d->imq.detectBlur        = imq.detectBlur;
+    d->imq.detectNoise       = imq.detectNoise;
+    d->imq.detectCompression = imq.detectCompression;
+    d->imq.lowQRejected      = imq.lowQRejected;
+    d->imq.mediumQPending    = imq.mediumQPending;
+    d->imq.highQAccepted     = imq.highQAccepted;
+    d->imq.speed             = imq.speed;
+
+
     d->image   = img;
     d->neimage = img;
     readImage();
@@ -201,6 +198,7 @@ PickLabel ImgQSort::analyseQuality(const DImg& img)
     }
 
 #endif
+
 
     // FIXME
     return NoPickLabel;
