@@ -158,8 +158,9 @@ public Q_SLOTS:
 
 protected:
     void keyPressEvent(QKeyEvent*);
-    void mousePressEvent(QMouseEvent* event);
+    void mousePressEvent(QMouseEvent*);
     void addRubber();
+    void wheelEvent(QWheelEvent*);
 
 private:
     void   updateAutoZoom();

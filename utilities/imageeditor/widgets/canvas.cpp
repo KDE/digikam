@@ -465,6 +465,7 @@ void Canvas::slotIncreaseZoom()
 
     double zoom = d_ptr->zoom * d_ptr->zoomMultiplier;
     zoom        = snapZoom(zoom);
+    qDebug()<<"slotIncreaseZoom()"<<zoom;
     setZoomFactor(zoom);
 }
 
@@ -883,21 +884,21 @@ void Canvas::slotSelectNone()
     viewport()->update();
 }
 
-void Canvas::keyPressEvent(QKeyEvent* e)
+void Canvas::keyPressEvent(QKeyEvent* event)
 {
-    if (!e)
+    if (!event)
     {
         return;
     }
 
     int mult = 1;
 
-    if ((e->modifiers() & Qt::ControlModifier))
+    if ((event->modifiers() & Qt::ControlModifier))
     {
         mult = 10;
     }
 
-    switch (e->key())
+    switch (event->key())
     {
         case Qt::Key_Right:
         {
@@ -925,7 +926,7 @@ void Canvas::keyPressEvent(QKeyEvent* e)
 
         default:
         {
-            e->ignore();
+            event->ignore();
             break;
         }
     }
@@ -1009,6 +1010,40 @@ void Canvas::mousePressEvent(QMouseEvent* event)
         addRubber();
     }
 
+}
+
+void Canvas::wheelEvent(QWheelEvent* event)
+{
+    event->accept();
+
+    if (event->modifiers() & Qt::ShiftModifier)
+    {
+        if (event->delta() < 0)
+        {
+            emit signalShowNextImage();
+        }
+        else if (event->delta() > 0)
+        {
+            emit signalShowPrevImage();
+        }
+
+        return;
+    }
+    else if (event->modifiers() & Qt::ControlModifier)
+    {
+        if (event->delta() < 0)
+        {
+            slotDecreaseZoom();
+        }
+        else if (event->delta() > 0)
+        {
+            slotIncreaseZoom();
+        }
+
+        return;
+    }
+
+    GraphicsDImgView::wheelEvent(event);
 }
 
 }  // namespace Digikam
