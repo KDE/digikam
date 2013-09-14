@@ -748,32 +748,35 @@ void Canvas::slotSelected()
 QRect Canvas::calcSelectedArea() const
 {
     int x = 0, y = 0, w = 0, h = 0;
-    QRect r(d_ptr->rubber->boundingRect().toAlignedRect());
-
-    if (r.isValid())
+    if (d_ptr->rubber && d_ptr->rubber->isVisible())
     {
-        r.translate((int)d_ptr->rubber->x(), (int)d_ptr->rubber->y());
+        QRect r(d_ptr->rubber->boundingRect().toAlignedRect());
 
-        x = (int)((double)r.x()      / d_ptr->zoom);
-        y = (int)((double)r.y()      / d_ptr->zoom);
-        w = (int)((double)r.width()  / d_ptr->zoom);
-        h = (int)((double)r.height() / d_ptr->zoom);
-
-        x = qMin(imageWidth(),  qMax(x, 0));
-        y = qMin(imageHeight(), qMax(y, 0));
-        w = qMin(imageWidth(),  qMax(w, 0));
-        h = qMin(imageHeight(), qMax(h, 0));
-
-        // Avoid empty selection by rubberband - at least mark one pixel
-        // At high zoom factors, the rubberband may operate at subpixel level!
-        if (w == 0)
+        if (r.isValid())
         {
-            w = 1;
-        }
+            r.translate((int)d_ptr->rubber->x(), (int)d_ptr->rubber->y());
 
-        if (h == 0)
-        {
-            h = 1;
+            x = (int)((double)r.x()      / d_ptr->zoom);
+            y = (int)((double)r.y()      / d_ptr->zoom);
+            w = (int)((double)r.width()  / d_ptr->zoom);
+            h = (int)((double)r.height() / d_ptr->zoom);
+
+            x = qMin(imageWidth(),  qMax(x, 0));
+            y = qMin(imageHeight(), qMax(y, 0));
+            w = qMin(imageWidth(),  qMax(w, 0));
+            h = qMin(imageHeight(), qMax(h, 0));
+
+            // Avoid empty selection by rubberband - at least mark one pixel
+            // At high zoom factors, the rubberband may operate at subpixel level!
+            if (w == 0)
+            {
+                w = 1;
+            }
+
+            if (h == 0)
+            {
+                h = 1;
+            }
         }
     }
 
@@ -987,6 +990,25 @@ void Canvas::cancelAddItem()
         d_ptr->wrapItem = 0;
     }
     emit signalSelected(true);
+}
+
+void Canvas::mousePressEvent(QMouseEvent* event)
+{
+    GraphicsDImgView::mousePressEvent(event);
+    QPoint p(event->pos());
+    QRect r = calcSelectedArea();
+    if (d_ptr->rubber && d_ptr->rubber->isVisible()
+            && !(p.x() > r.left() && p.x() < r.right()
+            && p.y() > r.top() && p.y() < r.bottom()))
+    {
+        d_ptr->rubber->setVisible(false);
+        addRubber();
+    }
+    else
+    {
+        addRubber();
+    }
+
 }
 
 }  // namespace Digikam

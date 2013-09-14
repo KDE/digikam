@@ -158,6 +158,7 @@ public Q_SLOTS:
 
 protected:
     void keyPressEvent(QKeyEvent*);
+    void mousePressEvent(QMouseEvent* event);
     void addRubber();
 
 private:
